@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
+<reference id="body2" xml:lang="en-us">
+   <title>Body elements</title>
+   <refbody>
+      <section>
+         <p>The body elements support the most common types of content authoring for
+topics: paragraphs, lists, phrases, figures, and other common types of exhibits
+in a document.<indexterm>Body elements</indexterm>
+         
+         
+         
+         </p>
+      </section>
+   </refbody>
+</reference>

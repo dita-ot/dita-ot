@@ -1,0 +1,116 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
+<reference id="sl" xml:lang="en-us">
+   <title>
+      <keyword>sl</keyword>
+   </title>
+   <shortdesc>The &lt;<keyword>sl</keyword>&gt; element contains a simple list of
+items of short, phrase-like content, such as in documenting the materials
+in a kit or package.</shortdesc>
+   <prolog>
+      <metadata>
+         <keywords>
+            <indexterm>sl (simple list)</indexterm>
+            <indexterm>simple
+list (sl)</indexterm>
+            <indexterm>Body elements<indexterm>sl (simple list)</indexterm>
+            </indexterm>
+            <indexterm>sl (simple list)</indexterm>
+         </keywords>
+      </metadata>
+   </prolog>
+   <refbody>
+      <refsyn>
+         <title>Contained by</title>
+         <xref href="body.xml">body</xref> ,
+ <xref href="section.xml">section</xref> ,  <xref href="example.xml">example</xref> ,  <xref href="desc.xml">desc</xref> ,
+ <xref href="p.xml">p</xref> ,  <xref href="note.xml">note</xref> ,
+ <xref href="lq.xml">lq</xref> ,  <xref href="li.xml">li</xref> ,
+ <xref href="itemgroup.xml">itemgroup</xref> ,  <xref href="dd.xml">dd</xref> ,  <xref href="fig.xml">fig</xref> ,
+ <xref href="stentry.xml">stentry</xref> ,  <xref href="draft-comment.xml">draft-comment</xref> ,  <xref href="fn.xml">fn</xref> ,
+ <xref href="linkinfo.xml">linkinfo</xref> ,  <xref href="entry.xml">entry</xref> ,  <xref href="conbody.xml">conbody</xref> ,
+ <xref href="prereq.xml">prereq</xref> ,  <xref href="context.xml">context</xref> ,  <xref href="info.xml">info</xref> ,
+ <xref href="tutorialinfo.xml">tutorialinfo</xref> ,  <xref href="stepxmp.xml">stepxmp</xref> ,  <xref href="choptionhd.xml">choptionhd</xref> ,  <xref href="chdeschd.xml">chdeschd</xref> ,
+ <xref href="choption.xml">choption</xref> ,  <xref href="chdesc.xml">chdesc</xref> ,  <xref href="stepresult.xml">stepresult</xref> ,
+ <xref href="result.xml">result</xref> ,  <xref href="postreq.xml">postreq</xref> ,  <xref href="refsyn.xml">refsyn</xref> ,
+ <xref href="propdesc.xml">propdesc</xref> ,  <xref href="pd.xml">pd</xref>
+      </refsyn>
+      <refsyn>
+         <title>Contains</title>
+         <xref href="sli.xml">sli</xref>
+      </refsyn>
+      <section>
+         <title>Attributes</title>
+         <simpletable relcolwidth="2* 3* 1* 1* 1*" id="sl_attr">
+            <sthead>
+               <stentry>Name</stentry>
+               <stentry>Description</stentry>
+               <stentry>Data Type</stentry>
+               <stentry>Default Value</stentry>
+               <stentry>Required?</stentry>
+            </sthead>
+            <strow conref="commonLRdefs.xml#commonLRdefs/compact">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/spectitle">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/univ-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/outputclass">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/global-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/class">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+         </simpletable>
+      </section>
+      <example>
+         <p>In a reference topic discussing related modules, the following
+sample markup could be used:<codeblock>&lt;section&gt;&lt;title&gt;Messages&lt;/title&gt;
+ &lt;p&gt;Messages from the ags_open module are identical with messages from:&lt;/p&gt;
+ &lt;sl&gt;
+  &lt;sli&gt;ags_read&lt;/sli&gt;
+  &lt;sli&gt;ags_write&lt;/sli&gt;
+  &lt;sli&gt;ags_close&lt;/sli&gt;
+ &lt;/sl&gt;
+&lt;/section&gt;</codeblock>
+         
+         
+         </p>
+      </example>
+   </refbody>
+</reference>

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE reference
+  PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd">
+<reference id="othermeta" xml:lang="en-us">
+   <title>
+      <keyword>othermeta</keyword>
+   </title>
+   <shortdesc>The &lt;<keyword>othermeta</keyword>&gt; element can be used to identify
+properties not otherwise included in &lt;<keyword>metadata</keyword>&gt; and
+assign  name/content values to those properties. The name attribute identifies
+the property and the content attribute specifies the property's value. The
+values in this attribute are output as HTML metadata elements, and have no
+defined meaning for other possible outputs such as PDF.</shortdesc>
+   <prolog>
+      <metadata>
+         <keywords>
+            <indexterm>othermeta</indexterm>
+            <indexterm>Prolog
+elements<indexterm>othermeta</indexterm>
+            </indexterm>
+            <indexterm>othermeta</indexterm>
+         </keywords>
+      </metadata>
+   </prolog>
+   <refbody>
+      <refsyn>
+         <title>Contained by</title>
+         <xref href="metadata.xml">metadata</xref>
+      </refsyn>
+      <refsyn>
+         <title>Contains</title> no content</refsyn>
+      <section>
+         <title>Attributes</title>
+         <simpletable relcolwidth="2* 3* 1* 1* 1*" id="othermeta_attr">
+            <sthead>
+               <stentry>Name</stentry>
+               <stentry>Description</stentry>
+               <stentry>Data Type</stentry>
+               <stentry>Default Value</stentry>
+               <stentry>Required?</stentry>
+            </sthead>
+            <strow conref="commonLRdefs.xml#commonLRdefs/name">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/content">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/translate-content">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/select-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/global-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/class">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+         </simpletable>
+      </section>
+      <example>
+         <pre>&lt;othermeta name="ThreadWidthSystem" content="metric"/&gt;</pre>
+      </example>
+   </refbody>
+</reference>

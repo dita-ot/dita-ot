@@ -1,0 +1,91 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
+<reference id="propdesc" xml:lang="en-us">
+   <title>
+      <keyword>propdesc</keyword>
+   </title>
+   <shortdesc>The &lt;<keyword>propdesc</keyword>&gt; element is used to provide a short description
+of the property type and its listed values (or just the value).</shortdesc>
+   <prolog>
+      <metadata>
+         <keywords>
+            <indexterm>propdesc</indexterm>
+            <indexterm>Reference
+elements<indexterm>propdesc</indexterm>
+            </indexterm>
+            <indexterm>propdesc</indexterm>
+         </keywords>
+      </metadata>
+   </prolog>
+   <refbody>
+      <refsyn>
+         <title>Contained by</title>
+         <xref href="property.xml">property</xref>
+      </refsyn>
+      <refsyn>
+         <title>Contains</title> text data or <xref href="ph.xml">ph</xref> or <xref href="term.xml">term</xref> or <xref href="xref.xml">xref</xref> or <xref href="cite.xml">cite</xref> or <xref href="q.xml">q</xref> or <xref href="boolean.xml">boolean</xref> or <xref href="state.xml">state</xref> or <xref href="keyword.xml">keyword</xref> or <xref href="tm.xml">tm</xref> or <xref href="p.xml">p</xref> or <xref href="lq.xml">lq</xref> or <xref href="note.xml">note</xref> or <xref href="dl.xml">dl</xref> or <xref href="ul.xml">ul</xref> or <xref href="ol.xml">ol</xref> or <xref href="sl.xml">sl</xref> or <xref href="pre.xml">pre</xref> or <xref href="lines.xml">lines</xref> or <xref href="image.xml">image</xref>
+      </refsyn>
+      <section>
+         <title>Attributes</title>
+         <simpletable relcolwidth="2* 3* 1* 1* 1*" id="propdesc_attr">
+            <sthead>
+               <stentry>Name</stentry>
+               <stentry>Description</stentry>
+               <stentry>Data Type</stentry>
+               <stentry>Default Value</stentry>
+               <stentry>Required?</stentry>
+            </sthead>
+            <strow conref="commonLRdefs.xml#commonLRdefs/univ-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/specentry">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/outputclass">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/global-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/class">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+         </simpletable>
+      </section>
+      <example>
+         <pre>&lt;properties&gt;
+  &lt;property&gt;
+    &lt;proptype&gt;type&lt;/proptype&gt;
+    &lt;propvalue&gt;value&lt;/propvalue&gt;
+    <b>&lt;propdesc&gt;</b>description<b>&lt;/propdesc&gt;</b>
+  &lt;/property&gt;
+&lt;/properties&gt;
+</pre>
+      </example>
+   </refbody>
+</reference>

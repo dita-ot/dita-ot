@@ -1,0 +1,127 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
+<reference id="substep" xml:lang="en-us">
+   <title>
+      <keyword>substep</keyword>
+   </title>
+   <shortdesc>A &lt;<keyword>substep</keyword>&gt; element has the same structure
+as a &lt;<keyword>step</keyword>&gt;, except that it does not allow
+lists of choices or substeps within it, in order to prevent unlimited nesting
+of steps.</shortdesc>
+   <prolog>
+      <metadata>
+         <keywords>
+            <indexterm>substep</indexterm>
+            <indexterm>Task elements<indexterm>substep</indexterm>
+            </indexterm>
+            <indexterm>substep</indexterm>
+         </keywords>
+      </metadata>
+   </prolog>
+   <refbody>
+      <refsyn>
+         <title>Contained by</title>
+         <xref href="substeps.xml">substeps</xref>
+      </refsyn>
+      <refsyn>
+         <title>Contains</title>
+         <xref href="cmd.xml">cmd</xref> then ( <xref href="info.xml">info</xref> or <xref href="tutorialinfo.xml">tutorialinfo</xref> or <xref href="stepxmp.xml">stepxmp</xref> ) (0 or more) then ( <xref href="stepresult.xml">stepresult</xref> ) (optional) </refsyn>
+      <section>
+         <title>Attributes</title>
+         <simpletable relcolwidth="2* 3* 1* 1* 1*" id="substep_attr">
+            <sthead>
+               <stentry>Name</stentry>
+               <stentry>Description</stentry>
+               <stentry>Data Type</stentry>
+               <stentry>Default Value</stentry>
+               <stentry>Required?</stentry>
+            </sthead>
+            <strow conref="commonLRdefs.xml#commonLRdefs/importance-optreq">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow>
+               <stentry>%select-atts;</stentry>
+               <stentry>A set of related attributes, described at <xref href="select-atts.xml">select-atts</xref>. <note>For this element, the attribute <i>
+                        
+                        
+                        <keyword>importance</keyword>
+                     
+                     
+                     </i> has
+only the values <q>required</q> and <q>optional.</q>
+                  
+                  
+                  </note>
+               
+               
+               </stentry>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/id-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/translate">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/xmllang">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/outputclass">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/global-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/class">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+         </simpletable>
+      </section>
+      <example>
+         <codeblock>&lt;substeps&gt;
+&lt;substep&gt;&lt;cmd&gt;Hold pencil in a steady, level position.&lt;/cmd&gt;&lt;/substep&gt;
+&lt;substep&gt;&lt;cmd&gt;Turn handle until resistance diminishes.&lt;/cmd&gt;
+&lt;info&gt;Note: initially, it may be somewhat difficult to turn the handle if 
+pencil has never been sharpened before.&lt;/info&gt;&lt;/substep&gt;
+&lt;substep&gt;&lt;cmd&gt;To determine if pencil is sharp, remove it from the sharpener 
+and inspect the tip.&lt;/cmd&gt;&lt;/substep&gt;
+&lt;/substeps&gt;
+</codeblock>
+      </example>
+   </refbody>
+</reference>

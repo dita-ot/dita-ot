@@ -1,0 +1,164 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
+<reference id="simpletable" xml:lang="en-us">
+   <title>
+      <keyword>simpletable</keyword>
+   </title>
+   <shortdesc>The &lt;<keyword>simpletable</keyword>&gt; element is used for tables
+that are regular in structure and do not need a caption. Choose the simple
+table element when you want to show information in regular rows and columns.
+For example, multi-column tabular data such as phone directory listings or
+parts lists are good candidates for simpletable. Another good use of simpletable
+is for information that seems to beg for a "three-part definition list"—just
+use the keycol attribute to indicate which column represents the "key" or
+term-like column of your structure. </shortdesc>
+   <prolog>
+      <metadata>
+         <keywords>
+            <indexterm>simpletable</indexterm>
+            <indexterm>Table
+elements<indexterm>simpletable</indexterm>
+            </indexterm>
+            <indexterm>simpletable</indexterm>
+         </keywords>
+      </metadata>
+   </prolog>
+   <refbody>
+      <section>
+         <note type="other" othertype="DITA insight">This
+close match of simpletable to tabular, regular data makes simpletable suitable
+as the basis for specialized structures such as <xref href="properties.xml">properties</xref> (for programming information) and <xref href="choicetable.xml">choice tables</xref> (for tasks).</note>
+      </section>
+      <refsyn>
+         <title>Contained by</title>
+         <xref href="body.xml">body</xref> ,  <xref href="section.xml">section</xref> ,  <xref href="example.xml">example</xref> ,
+ <xref href="p.xml">p</xref> ,  <xref href="note.xml">note</xref> ,
+ <xref href="lq.xml">lq</xref> ,  <xref href="li.xml">li</xref> ,
+ <xref href="itemgroup.xml">itemgroup</xref> ,  <xref href="dd.xml">dd</xref> ,  <xref href="fig.xml">fig</xref> ,
+ <xref href="draft-comment.xml">draft-comment</xref> ,  <xref href="conbody.xml">conbody</xref> ,  <xref href="prereq.xml">prereq</xref> ,  <xref href="context.xml">context</xref> ,
+ <xref href="info.xml">info</xref> ,  <xref href="tutorialinfo.xml">tutorialinfo</xref> ,  <xref href="stepxmp.xml">stepxmp</xref> ,
+ <xref href="stepresult.xml">stepresult</xref> ,  <xref href="result.xml">result</xref> ,  <xref href="postreq.xml">postreq</xref> ,
+ <xref href="refbody.xml">refbody</xref> ,  <xref href="refsyn.xml">refsyn</xref> ,  <xref href="pd.xml">pd</xref>
+      </refsyn>
+      <refsyn>
+         <title>Contains</title> ( <xref href="sthead.xml">sthead</xref> ) (optional)
+then ( <xref href="strow.xml">strow</xref> ) (one or more) </refsyn>
+      <section>
+         <title>Attributes</title>
+         <simpletable relcolwidth="2* 3* 1* 1* 1*" id="simpletable_attr">
+            <sthead>
+               <stentry>Name</stentry>
+               <stentry>Description</stentry>
+               <stentry>Data Type</stentry>
+               <stentry>Default Value</stentry>
+               <stentry>Required?</stentry>
+            </sthead>
+            <strow conref="commonLRdefs.xml#commonLRdefs/relcolwidth">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/keycol">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/refcols">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/display-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/univ-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/spectitle">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/outputclass">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/global-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/class">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+         </simpletable>
+      </section>
+      <example>Create this table using the markup example that follows:<simpletable relcolwidth="2* 2*">
+            <sthead>
+               <stentry>Type style</stentry>
+               <stentry>Elements used</stentry>
+            </sthead>
+            <strow>
+               <stentry>Bold</stentry>
+               <stentry>b</stentry>
+            </strow>
+            <strow>
+               <stentry>Italic</stentry>
+               <stentry>i</stentry>
+            </strow>
+            <strow>
+               <stentry>Underlined</stentry>
+               <stentry>u</stentry>
+            </strow>
+         </simpletable>
+         <codeblock>&lt;simpletable&gt;
+ &lt;sthead&gt;
+  &lt;stentry&gt;Type style&lt;/stentry&gt;
+  &lt;stentry&gt;Elements used&lt;/stentry&gt;
+ &lt;/sthead&gt;
+ &lt;strow&gt;
+  &lt;stentry&gt;Bold&lt;/stentry&gt;
+  &lt;stentry&gt;b&lt;/stentry&gt;
+ &lt;/strow&gt;
+ &lt;strow&gt;
+  &lt;stentry&gt;Italic&lt;/stentry&gt;
+  &lt;stentry&gt;i&lt;/stentry&gt;
+ &lt;/strow&gt;
+ &lt;strow&gt;
+  &lt;stentry&gt;Underlined&lt;/stentry&gt;
+  &lt;stentry&gt;u&lt;/stentry&gt;
+ &lt;/strow&gt;
+&lt;/simpletable&gt;</codeblock>
+      </example>
+   </refbody>
+</reference>

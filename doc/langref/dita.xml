@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
+<reference id="dita" xml:lang="en-us">
+   <title>
+      <keyword>dita</keyword>
+   </title>
+   <shortdesc>The &lt;<keyword>dita</keyword>&gt; element provides a top-level container
+for multiple topics when you create documents using the ditabase DTD. The
+&lt;<keyword>dita</keyword>&gt; element lets you create any sequence of concept,
+task, and reference topics, and the ditabase DTD lets you further nest these
+topic types inside each other. The &lt;<keyword>dita</keyword>&gt; element has
+no particular output implications; it simply allows you to create multiple
+topics of different types at the same level in a single document.</shortdesc>
+   <prolog>
+      <metadata>
+         <keywords>
+            <indexterm>dita</indexterm>
+            <indexterm>Compound
+topics</indexterm>
+         </keywords>
+      </metadata>
+   </prolog>
+   <refbody>
+      <refsyn>
+         <title>Contained by</title>No parent content.</refsyn>
+      <refsyn>
+         <title>Contains</title>
+         <xref href="topic.xml">topic</xref> or <xref href="concept.xml">concept</xref> or <xref href="task.xml">task</xref> or <xref href="reference.xml">reference</xref>
+      </refsyn>
+      <section>
+         <title>Attributes</title>
+         <simpletable relcolwidth="2* 3* 1* 1* 1*" id="dita_attr">
+            <sthead>
+               <stentry>Name</stentry>
+               <stentry>Description</stentry>
+               <stentry>Data Type</stentry>
+               <stentry>Default Value</stentry>
+               <stentry>Required?</stentry>
+            </sthead>
+            <strow conref="commonLRdefs.xml#commonLRdefs/global-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+         </simpletable>
+      </section>
+      <example>
+         <pre>&lt;dita&gt;
+  &lt;concept id="batintro"&gt;...&lt;/concept&gt;
+  &lt;reference id="batparts"&gt;...&lt;/reference&gt;
+  &lt;task id="batfeeding"&gt;...&lt;/task&gt;
+  &lt;task id="battraining"&gt;...&lt;/task&gt;
+  &lt;task id="batcleanup"&gt;...&lt;/task&gt;
+&lt;/dita&gt;</pre>
+      </example>
+   </refbody>
+</reference>

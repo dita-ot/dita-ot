@@ -1,0 +1,79 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
+<reference id="prodinfo" xml:lang="en-us">
+   <title>
+      <keyword>prodinfo</keyword>
+   </title>
+   <shortdesc>The &lt;<keyword>prodinfo</keyword>&gt; metadata element
+in the prolog contains information about the product or products that are
+the subject matter of the current topic.</shortdesc>
+   <prolog>
+      <metadata>
+         <keywords>
+            <indexterm>prodinfo</indexterm>
+            <indexterm>Prolog
+elements<indexterm>prodinfo</indexterm>
+            </indexterm>
+            <indexterm>prodinfo</indexterm>
+         </keywords>
+      </metadata>
+   </prolog>
+   <refbody>
+      <refsyn>
+         <title>Contained by</title>
+         <xref href="metadata.xml">metadata</xref>
+      </refsyn>
+      <refsyn>
+         <title>Contains</title>
+         <xref href="prodname.xml">prodname</xref> then <xref href="vrmlist.xml">vrmlist</xref> then ( <xref href="brand.xml">brand</xref> or <xref href="series.xml">series</xref> or <xref href="platform.xml">platform</xref> or <xref href="prognum.xml">prognum</xref> or <xref href="featnum.xml">featnum</xref> or <xref href="component.xml">component</xref> ) (0 or more) </refsyn>
+      <section>
+         <title>Attributes</title>
+         <simpletable relcolwidth="2* 3* 1* 1* 1*" id="prodinfo_attr">
+            <sthead>
+               <stentry>Name</stentry>
+               <stentry>Description</stentry>
+               <stentry>Data Type</stentry>
+               <stentry>Default Value</stentry>
+               <stentry>Required?</stentry>
+            </sthead>
+            <strow conref="commonLRdefs.xml#commonLRdefs/select-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/global-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/class">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+         </simpletable>
+      </section>
+      <example>
+         <codeblock>&lt;prolog&gt;
+ &lt;metadata&gt;
+  <b>&lt;prodinfo&gt;</b>
+   &lt;prodname&gt;Transcription Assistant&lt;/prodname&gt;
+    &lt;vrmlist&gt;&lt;vrm version="1" release="3" modification="1"/&gt;&lt;/vrmlist&gt;
+   &lt;platform&gt;AIX&lt;/platform&gt;
+  <b>&lt;/prodinfo&gt;</b>
+ &lt;/metadata&gt;
+&lt;/prolog&gt;</codeblock>
+      </example>
+   </refbody>
+</reference>

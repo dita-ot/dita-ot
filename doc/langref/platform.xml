@@ -1,0 +1,71 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
+<reference id="platform" xml:lang="en-us">
+   <title>
+      <keyword>platform</keyword>
+   </title>
+   <shortdesc>The &lt;<keyword>platform</keyword>&gt; metadata element contains a description
+of the operating system and/or hardware related to the product being described
+by the &lt;<keyword>prodinfo</keyword>&gt; element.</shortdesc>
+   <prolog>
+      <metadata>
+         <keywords>
+            <indexterm>platform</indexterm>
+            <indexterm>Prolog
+elements<indexterm>platform</indexterm>
+            </indexterm>
+            <indexterm>platform</indexterm>
+         </keywords>
+      </metadata>
+   </prolog>
+   <refbody>
+      <refsyn>
+         <title>Contained by</title>
+         <xref href="prodinfo.xml">prodinfo</xref>
+      </refsyn>
+      <refsyn>
+         <title>Contains</title> text data </refsyn>
+      <section>
+         <title>Attributes</title>
+         <simpletable relcolwidth="2* 3* 1* 1* 1*" id="platform_attr">
+            <sthead>
+               <stentry>Name</stentry>
+               <stentry>Description</stentry>
+               <stentry>Data Type</stentry>
+               <stentry>Default Value</stentry>
+               <stentry>Required?</stentry>
+            </sthead>
+            <strow conref="commonLRdefs.xml#commonLRdefs/global-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/class">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+         </simpletable>
+      </section>
+      <example>
+         <codeblock>&lt;prolog&gt;
+ &lt;metadata&gt;
+  &lt;prodinfo&gt;
+   &lt;prodname&gt;Transcription Assistant&lt;/prodname&gt;
+   &lt;vrmlist&gt;&lt;vrm version="1" release="3" modification="1"/&gt;&lt;/vrmlist&gt;
+   <b>&lt;platform&gt;AIX&lt;/platform&gt;</b>
+  &lt;/prodinfo&gt;
+ &lt;/metadata&gt;
+&lt;/prolog&gt;</codeblock>
+      </example>
+   </refbody>
+</reference>

@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE topic PUBLIC "-//IBM//DTD DITA Topic//EN" "../dtd/topic.dtd">
+<topic id="ditareleasehistory">
+  <title>DITA release history</title>
+  <shortdesc>This document lists major changes and new features by release. Latest release news is added at the top of this document.</shortdesc>
+  <body>
+    <section>
+      <title>DITA Open Source Toolkit 1.0</title>
+      <p>The initial release of the Open Sourced DITA Toolkit introduces major architectural changes from the previous, developerWorks version of the Toolkit. New features in this release are:<ol>
+          <li>A new, Java-based processing architecture that supports single-threaded execution throughout.</li>
+          <li>Ant-based orchestration of the processing environment, from preprocessing to transformation to any required post-processing.</li>
+          <li>A pre-processor core that supports conditional processing and conref resolution.</li>
+          <li>Map-driven processing that generates links for transformed topics.</li>
+          <li>A new DITA to HTML transform that replaces the previous topic2html_Impl.xsl core transform. This new core is based on requirements for high-volume usage within IBM for the past several years.</li>
+        </ol></p>
+      <p>Ant-driven processing means that you can integrate the DITA processing tools into a seamless pipeline within supportive environments such as Eclipse.</p>
+      <p>The DTDs and Schemas in this version are based on those in the previous dita132 package with bug fixes. The DITA OS Toolkit will later support the OASIS 1.0 specification in its public review form.</p>
+    </section>
+    <section>
+      <title>DITA history on developerWorks (pre-Open Source)</title>
+      <p>Versions of the toolkit prior to Open Source are in the developerWorks XML Zone at this address: <xref href="http://www-106.ibm.com/developerworks/xml/library/x-dita6/x-dita_downloads.html" format="html">DITA Downloads</xref> Change logs for those versions are within the Readme files in each distribution.</p>
+    </section>
+  </body>
+</topic>
+

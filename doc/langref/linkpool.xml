@@ -1,0 +1,149 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
+<reference id="linkpool" xml:lang="en-us">
+   <title>
+      <keyword>linkpool</keyword>
+   </title>
+   <shortdesc>The &lt;<keyword>linkpool</keyword>&gt; element defines a group of links that have
+common characteristics, such as type or audience or source. Within &lt;<keyword>linkpool</keyword>&gt;,
+the organization of links on final output is determined by the output process,
+not by the order that the links actually occur in the DITA topic file.</shortdesc>
+   <prolog>
+      <metadata>
+         <keywords>
+            <indexterm>linkpool</indexterm>
+            <indexterm>Related
+Links elements<indexterm>linkpool</indexterm>
+            </indexterm>
+            <indexterm>linkpool</indexterm>
+         </keywords>
+      </metadata>
+   </prolog>
+   <refbody>
+      <section>
+         <p>There
+are two ways to organize related information links: add them all in no particular
+order and let the output formatting processor sort them using the &lt;<keyword>linkpool</keyword>&gt; or &lt;<keyword>related-links</keyword>&gt; elements,
+or pre-group them using one or more &lt;<keyword>linklist</keyword>&gt; elements. When you
+pre-group them using &lt;<keyword>linklist</keyword>&gt;, then the order of the links as
+you created them is preserved during the output formatting process.</p>
+         <p>Attributes
+set on &lt;<keyword>linkpool</keyword>&gt; are inherited by its descendants. For example,
+if you've got a &lt;<keyword>linkpool</keyword>&gt; that contains all external links, you
+can set <i>
+               
+               
+               <keyword>scope="external"</keyword>
+            
+            
+            </i> on that outer&lt;<keyword>linkpool</keyword>&gt; element
+and thereby leave it off the nested content of the element.</p>
+      </section>
+      <refsyn>
+         <title>Contained by</title>
+         <xref href="related-links.xml">related-links</xref> ,
+ <xref href="linkpool.xml">linkpool</xref>
+      </refsyn>
+      <refsyn>
+         <title>Contains</title>
+         <xref href="linkpool.xml">linkpool</xref> or <xref href="link.xml">link</xref>
+      </refsyn>
+      <section>
+         <title>Attributes</title>
+         <simpletable relcolwidth="2* 3* 1* 1* 1*" id="linkpool_attr">
+            <sthead>
+               <stentry>Name</stentry>
+               <stentry>Description</stentry>
+               <stentry>Data Type</stentry>
+               <stentry>Default Value</stentry>
+               <stentry>Required?</stentry>
+            </sthead>
+            <strow conref="commonLRdefs.xml#commonLRdefs/collection-type">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/duplicates">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/mapkeyref">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/rel-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/select-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/format">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/scope">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/outputclass">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/global-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/class">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+         </simpletable>
+      </section>
+      <example>
+         <codeblock>&lt;related-links&gt;
+&lt;linkpool collection-type="family" type="task"&gt;
+&lt;link href="generalfaq.html#installing" role="parent"&gt;
+&lt;linktext&gt;Installing the eReview client&lt;/linktext&gt;&lt;/link&gt;
+&lt;link href="register.html#newuser" role="sibling"&gt;
+&lt;linktext&gt;Register as new eReview user&lt;/linktext&gt;&lt;/link&gt;
+&lt;/linkpool&gt;
+&lt;/related-links&gt;</codeblock>
+      </example>
+   </refbody>
+</reference>

@@ -1,0 +1,139 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
+<reference id="topicref-atts-no-toc" xml:lang="en-us">
+   <title>
+      <keyword>%topicref-atts-no-toc;</keyword>
+   </title>
+   <shortdesc>The %topicref-atts-no-toc; parameter entity represents the set of
+attributes used in the <ph>
+         <xref href="reltable.xml">reltable</xref>
+      </ph> map
+element. The set is similar to those documented in <ph>
+         <xref href="topicref-atts.xml">topicref-atts</xref>
+      </ph> but for &lt;<keyword>reltable</keyword>&gt;
+the <i>
+         
+         
+         <keyword>toc</keyword>
+      
+      
+      </i> attribute defaults to <q>no</q>. For the
+other elements that use the %topicref-atts; group declaration, the <i>
+         
+         
+         <keyword>toc</keyword>
+      
+      
+      </i> attribute
+doesn't have a default; they can inherit their <i>
+         
+         
+         <keyword>toc</keyword>
+      
+      
+      </i> value
+from the nearest container, otherwise it functions upon output as if set to <q>yes</q>.</shortdesc>
+   <prolog>
+      <metadata>
+         <keywords>
+            <indexterm>%topicref-atts-no-toc</indexterm>
+            <indexterm>Commonly
+Referenced Objects elements<indexterm>%topicref-atts-no-toc</indexterm>
+            </indexterm>
+            <indexterm>%topicref-atts-no-toc</indexterm>
+         </keywords>
+      </metadata>
+   </prolog>
+   <refbody>
+      <refsyn>
+         <title>Contained by</title>Used in the map DTD.</refsyn>
+      <refsyn>
+         <title>Contains</title>Declarations for attributes.</refsyn>
+      <section>
+         <title>Attributes</title>
+         <simpletable relcolwidth="2* 3* 1* 1* 1*" id="topicref-atts-no-toc_attr">
+            <sthead>
+               <stentry>Name</stentry>
+               <stentry>Description</stentry>
+               <stentry>Data Type</stentry>
+               <stentry>Default Value</stentry>
+               <stentry>Required?</stentry>
+            </sthead>
+            <strow conref="commonLRdefs.xml#commonLRdefs/collection-type">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/type">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/locktitle">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/format">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/linking">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/print">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/search">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/chunk">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+         </simpletable>
+      </section>
+      <example>
+         <draft-comment author="Don Day" disposition="open">
+            
+            
+            <b>Note
+to myself:</b>
+            
+            
+            <filepath> need to develop an example for this!</filepath>
+         
+         
+         </draft-comment>
+      </example>
+   </refbody>
+</reference>

@@ -1,0 +1,86 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
+<reference id="source" xml:lang="en-us">
+   <title>
+      <keyword>source</keyword>
+   </title>
+   <shortdesc>The &lt;<keyword>source</keyword>&gt; element contains a reference
+to a resource from which the present topic is derived, either completely or
+in part. The element can contain a description of the resource; the <i>
+         
+         
+         <keyword>href</keyword>
+      
+      
+      </i> reference
+can be a string or a URL that points to it.</shortdesc>
+   <prolog>
+      <metadata>
+         <keywords>
+            <indexterm>source</indexterm>
+            <indexterm>Prolog
+elements<indexterm>source</indexterm>
+            </indexterm>
+            <indexterm>source</indexterm>
+         </keywords>
+      </metadata>
+   </prolog>
+   <refbody>
+      <refsyn>
+         <title>Contained by</title>
+         <xref href="prolog.xml">prolog</xref>
+      </refsyn>
+      <refsyn>
+         <title>Contains</title> text data </refsyn>
+      <section>
+         <title>Attributes</title>
+         <simpletable relcolwidth="2* 3* 1* 1* 1*" id="source_attr">
+            <sthead>
+               <stentry>Name</stentry>
+               <stentry>Description</stentry>
+               <stentry>Data Type</stentry>
+               <stentry>Default Value</stentry>
+               <stentry>Required?</stentry>
+            </sthead>
+            <strow conref="commonLRdefs.xml#commonLRdefs/href-source">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/keyref">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/global-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/class">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+         </simpletable>
+      </section>
+      <example>
+         <pre>&lt;prolog&gt;
+ &lt;source href="http://www.ibm.com"&gt;Somewhere, someplace&lt;/source&gt;
+&lt;/prolog&gt;</pre>
+      </example>
+   </refbody>
+</reference>

@@ -1,0 +1,79 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
+<reference id="global-atts" xml:lang="en-us">
+   <title>
+      <keyword>%global-atts;</keyword>
+   </title>
+   <shortdesc>Debugging attributes, normally hidden from authoring view.</shortdesc>
+   <refbody>
+      <section>
+         <draft-comment>
+            
+            
+            <note type="other" othertype="External-best practice for implementation">These attributes
+are intended to store debugging information during intermediate processing,
+to relate error results to source locations for authors. The suggested best
+practice for implementation is to use <filepath>xtrf</filepath> (xml-trace-filename)
+to store the original source filename through intermediate processing steps,
+and use <filepath>xtrc</filepath> ( xml-trace-counter) to store an element
+counter for repositioning authoring tools at the originating error location.</note>
+         
+         
+         </draft-comment>
+      </section>
+      <refsyn>
+         <title>Contained by</title>[unknown for this context]</refsyn>
+      <refsyn>
+         <title>Contains</title>Declarations for processing attributes that are globally available
+on all DITA elements.</refsyn>
+      <section>
+         <title>Attributes</title>
+         <simpletable relcolwidth="2* 3* 1* 1* 1*" id="global-atts_attr">
+            <sthead>
+               <stentry>Name</stentry>
+               <stentry>Description</stentry>
+               <stentry>Data Type</stentry>
+               <stentry>Default Value</stentry>
+               <stentry>Required?</stentry>
+            </sthead>
+            <strow>
+               <stentry>xtrf</stentry>
+               <stentry>xml-trace-filename, the original filename</stentry>
+               <stentry>CDATA</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <state name="reqval" value="NA"/>
+               
+               
+               </stentry>
+            </strow>
+            <strow>
+               <stentry>xtrc</stentry>
+               <stentry>xml-trace-counter, an element counter for repositioning editors at
+a known edit location</stentry>
+               <stentry>CDATA</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+               
+               
+               </stentry>
+            </strow>
+         </simpletable>
+      </section>
+      <example>
+         <p>These attributes are normally hidden from authors and exposed
+only to processing tools or editor macros. Values used in these attributes
+may be implementation-dependent.</p>
+      </example>
+   </refbody>
+</reference>

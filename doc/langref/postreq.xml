@@ -1,0 +1,79 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
+<reference id="postreq" xml:lang="en-us">
+   <title>
+      <keyword>postreq</keyword>
+   </title>
+   <shortdesc>The &lt;<keyword>postreq</keyword>&gt; element describes steps or tasks
+that the user should do after the successful completion of the current task.
+It is often supported by links to the next task or tasks in the &lt;<keyword>related-links</keyword>&gt;
+section.</shortdesc>
+   <prolog>
+      <metadata>
+         <keywords>
+            <indexterm>postreq</indexterm>
+            <indexterm>Task elements<indexterm>postreq</indexterm>
+            </indexterm>
+            <indexterm>postreq</indexterm>
+         </keywords>
+      </metadata>
+   </prolog>
+   <refbody>
+      <refsyn>
+         <title>Contained by</title>
+         <xref href="taskbody.xml">taskbody</xref>
+      </refsyn>
+      <refsyn>
+         <title>Contains</title> text data or <xref href="ph.xml">ph</xref> or <xref href="term.xml">term</xref> or <xref href="xref.xml">xref</xref> or <xref href="cite.xml">cite</xref> or <xref href="q.xml">q</xref> or <xref href="boolean.xml">boolean</xref> or <xref href="state.xml">state</xref> or <xref href="keyword.xml">keyword</xref> or <xref href="tm.xml">tm</xref> or <xref href="p.xml">p</xref> or <xref href="lq.xml">lq</xref> or <xref href="note.xml">note</xref> or <xref href="dl.xml">dl</xref> or <xref href="ul.xml">ul</xref> or <xref href="ol.xml">ol</xref> or <xref href="sl.xml">sl</xref> or <xref href="pre.xml">pre</xref> or <xref href="lines.xml">lines</xref> or <xref href="fig.xml">fig</xref> or <xref href="image.xml">image</xref> or <xref href="object.xml">object</xref> or <xref href="table.xml">table</xref> or <xref href="simpletable.xml">simpletable</xref> or <xref href="draft-comment.xml">draft-comment</xref> or <xref href="required-cleanup.xml">required-cleanup</xref> or <xref href="fn.xml">fn</xref> or <xref href="indextermref.xml">indextermref</xref> or <xref href="indexterm.xml">indexterm</xref>
+      </refsyn>
+      <section>
+         <title>Attributes</title>
+         <simpletable relcolwidth="2* 3* 1* 1* 1*" id="postreq_attr">
+            <sthead>
+               <stentry>Name</stentry>
+               <stentry>Description</stentry>
+               <stentry>Data Type</stentry>
+               <stentry>Default Value</stentry>
+               <stentry>Required?</stentry>
+            </sthead>
+            <strow conref="commonLRdefs.xml#commonLRdefs/univ-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/outputclass">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/global-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/class">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+         </simpletable>
+      </section>
+      <example>
+         <pre>&lt;postreq&gt;Notify the proctor upon completing this self-test.&lt;/postreq&gt; 
+</pre>
+      </example>
+   </refbody>
+</reference>

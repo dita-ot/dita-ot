@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en" xml:lang="en">
+<head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+<meta name="copyright" content="(C) Copyright 2005" />
+<meta name="DC.rights.owner" content="(C) Copyright 2005" />
+<meta content="public" name="security" />
+<meta content="index,follow" name="Robots" />
+<meta http-equiv="PICS-Label" content='(PICS-1.1 "http://www.icra.org/ratingsv02.html" l gen true r (cz 1 lz 1 nz 1 oz 1 vz 1) "http://www.rsac.org/ratingsv01.html" l gen true r (n 0 s 0 v 0 l 0) "http://www.classify.org/safesurf/" l gen true r (SS~~000 1))' />
+<meta content="topic" name="DC.Type" />
+<meta name="DC.Title" content="DITA XML Schema Readme" />
+<meta name="abstract" content="This document describes the release notes and usage of the experimental DITA XML Schema on developerWorks." />
+<meta name="description" content="This document describes the release notes and usage of the experimental DITA XML Schema on developerWorks." />
+<meta content="XHTML" name="DC.Format" />
+<meta content="xsreadme" name="DC.Identifier" />
+<meta content="en" name="DC.Language" />
+<link href="commonltr.css" type="text/css" rel="stylesheet" />
+<title>DITA XML Schema Readme </title>
+</head>
+<body id="xsreadme"><a name="xsreadme"><!-- --></a>
+
+
+  <h1 class="topictitle1">DITA XML Schema Readme </h1>
+
+  
+  <div><p>This document describes the release notes and usage of the experimental DITA XML Schema on developerWorks<sup>®</sup>.</p>
+
+    <p>This DITA release includes an implementation of the topic architecture in XML Schema. The DTDs are still the canonical representation of DITA. The design pattern for the DITA Schemas is based on the W3C XML Schema 1.0 Specification and may be subject to change in the future.</p>
+
+    <p>The specialization process and design pattern for the DITA XML Schema are still being developed and refined. As such, the specialization process stated below should not interpreted as "the definitive process", but simply one method to specialize information types and domains. </p>
+
+    <p>A public mailing/discussion list to support users of DITA is available at <a href="http://groups.yahoo.com/group/dita-users/" target="_blank">Yahoo!Groups 'dita-users'</a></p>
+
+  </div>
+
+  <div class="nested1" id="xsusing"><a name="xsusing"><!-- --></a>
+    <h2 class="topictitle2">Using DITA XML Schemas</h2>
+
+    <div>
+      <p>There are a number of tools available to create, validate, or transform DITA XML Schemas. Here is a small list:</p>
+
+      <ul>
+        <li>WebSphere<sup>®</sup> Studio Advanced Developer 5.1</li>
+
+        <li>Xerces 2.6.X</li>
+
+        <li>Saxon-SA 8.X</li>
+
+      </ul>
+
+      <p>You can invoke Xerces XML document validation using SAX or DOM via the command-line:</p>
+
+      <pre> java sax.Counter -v -s [xmlDocument]
+ java dom.Counter -v -s [xmlDocument]</pre>
+
+    </div>
+
+  </div>
+
+  <div class="nested1" id="xsinfo"><a name="xsinfo"><!-- --></a>
+    <h2 class="topictitle2">Information for DITA XML Schema</h2>
+
+    <div>
+      <p>The DITA XML Schema architecture attempts to follow the naming convention established in the current DITA DTD architecture. Each element has its own named content model, i.e., topic.class for the topic element. Attributes that have an enumerated list of values in the DTD have their own class too, such as importance-att.class for the attribute important. </p>
+
+      <ul>
+        <li>All the elements in the base topic module are global. This will allow any element to be specialized.</li>
+
+        <li>All the attributes are local to the element's content model, except for the class attribute.</li>
+
+        <li>All the parametric entities in the DTD are named element groups with the same name as the DTD, such as basic.ph and ph.cnt.</li>
+
+        <li>All elements in specialized schema module are declared globally as abstracted elements, except for the root element. The specialized element must also be declared locally in the derived content models.</li>
+
+      </ul>
+
+      <p>This version of the DITA XML Schema does not use W3C XML Schema inheritance to model the DITA Architecture. In previous attempts to use the more efficient inheritance model, various Schema processors have implemented the "particle restriction" rules inconsistently. In order to have the same functionality as substitutionGroups without inheritance, a new layer was added to the design pattern. </p>
+
+    </div>
+
+  </div>
+
+  <div class="nested1" id="xsspec"><a name="xsspec"><!-- --></a>
+    <h2 class="topictitle2">XML Schema Specialization</h2>
+
+    <div>
+      <div class="section"><h4 class="sectiontitle">Creating a New Information Type</h4>
+        
+        <p>Here are some simple steps that will make specialization easier according to the present design pattern:</p>
+
+        <ol>
+          <li>Create a new information type schema document.<p>This schema document is a shell for the new information type. In it one includes parent information types and existing or new domains.</p>
+<ul>
+              <li>Copy the contents of the parent specialization into the new *.xsd file.</li>
+
+              <li>Add an include statement for the *.mod in the XML Schema document.<pre>&lt;xs:include schemaLocation="mySpec.mod" /&gt;</pre>
+</li>
+
+            </ul>
+</li>
+
+          <li>Create a new information type module. <ul>
+              <li>Create a new global element. </li>
+
+            </ul>
+<ul>
+              <li>Create a new content model for the element. For most elements the following template will do.<pre>    &lt;xs:complexType name="myElement.class" mixed="true" &gt;
+      
+    &lt;/xs:complexType&gt;</pre>
+</li>
+
+            </ul>
+<ul>
+              <li>Copy the content of the parent element's content model–everything between the elements &lt;xs:choice&gt;, &lt;xs:sequence&gt;, or &lt;xs:all&gt;–into the new element's content model. For example:<pre>    &lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;
+
+    &lt;/xs:choice&gt;</pre>
+</li>
+
+              <li>Modify the class attribute default value. <div class="p"><pre>&lt;xs:attribute ref="class" default="- topic/ph mySpec/mySpecElement "/&gt; </pre>
+The class attribute value starts and ends with white space, and contains a list of blank-delimited values. Each value has two parts: The first part identifies a topic type, and the second part (after a /) identifies an element type. The class attribute must include a mapping for every topic type in the specialized type's ancestry, even those in which no element renaming occurred</div>
+</li>
+
+              <li>
+                <strong>Optional: modify the element content model.</strong>
+              </li>
+
+            </ul>
+</li>
+
+          <li>Create a new information type group document, for example, mySpec.grp .<p>This file is a new part of the specialization for this release. The main reason for this new file is to support mimic schema inheritance without using the inheritance model in W3C XML Schema 1.0 specification. The process is very similar to the DITA DTD design pattern. Each element has its owned named group content model.</p>
+<p>Each information type has its own *.grp file. In it one defines a new group for each new specialized element in the information type. <strong>More will be explained </strong></p>
+<div class="p">
+              <pre> &lt;xs:group name="myElement"&gt;
+   &lt;xs:sequence&gt;
+     &lt;xs:element ref="myElement" /&gt;
+   &lt;/xs:sequence&gt;
+ &lt;/xs:group&gt;</pre>
+
+            </div>
+</li>
+
+          <li>Create a new 'domains document' for the information type, for example meSpec_domains.mod .<div class="p">A domain specialization 'domains document' lists the specialized elements provided by the domain for a base element. The 'domains document' is used to redefine the information type group document. For example: <pre>&lt;xs:redefine schemaLocation="mySpec.grp" /&gt;
+&lt;xs:group name="keyword"&gt;
+  &lt;xs:choice&gt;
+    &lt;xs:group ref="keyword"/&gt;
+    &lt;xs:group ref="md-d-keyword" /&gt;
+  &lt;/xs:choice&gt;
+&lt;/xs:group&gt;</pre>
+<strong>balh</strong></div>
+</li>
+
+        </ol>
+
+      </div>
+
+      <div class="section"><h4 class="sectiontitle">Creating a new Domain</h4>
+        
+        <ol>
+          <li>Create a new schema document for the new domain. For example, myDomain-domain.mod .<ul>
+              <li>Create a new global element. </li>
+
+              <li>Create a new content model for the element. For most elements the following template will do.<pre>    &lt;xs:complexType name="myDomainElement.class" mixed="true" &gt;
+      
+    &lt;/xs:complexType&gt;</pre>
+</li>
+
+            </ul>
+<ul>
+              <li>Copy the content of the parent element's content model, every thing between the elements &lt;xs:choice&gt;, &lt;xs:sequence&gt;, or &lt;xs:all&gt;, into the new element's content model. For example:<pre>    &lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;
+
+    &lt;/xs:choice&gt;</pre>
+</li>
+
+            </ul>
+<ul>
+              <li>Create a named group that will contain the new domain elements that will be used.<div class="p">
+                  <pre>&lt;xs:group name="md-d-pre"&gt;
+    &lt;xs:choice&gt;
+        &lt;xs:element ref="myDomainElement"/&gt;
+    &lt;/xs:choice &gt;
+&lt;/xs:group &gt;</pre>
+
+                </div>
+</li>
+
+            </ul>
+</li>
+
+          <li>Modify the class attribute default value.<div class="p"><pre>&lt;xs:attribute ref="class" default="+ topic/pre md-d/myDomainElement "&gt;</pre>
+For a domain element, the value of the class attribute must start with a plus sign. Elements provided by domains should be qualified by the domain identifier.</div>
+</li>
+
+        </ol>
+
+      </div>
+
+      <div class="section"><h4 class="sectiontitle">Integrating a Domain in an Information Type Shell Document</h4>
+        
+        <div class="p">There are two types of domain specializations which can be added to an information type: <ul>
+            <li>A new domain</li>
+
+            <li>A new domain specialized from an existing domain.</li>
+
+          </ul>
+</div>
+
+        <p>Each type domain specialization integrates slightly differently with the information type shell document. </p>
+
+        <ol>
+          <li>Include the domain module in the information type shell document, for example mySpec.xsd .</li>
+
+          <li>Create a new 'domains document' for the information type, for example meSpec_domains.mod .<ul>
+              <li>If the domain to be added <u>is not</u> a specialization of another domain:<ol type="a">
+                  <li>Copy the contents from topic_domains.mod (or similar 'domains document' that already integrate domain of interest) into a new 'domains document'. For example, mySpec_domains.mod .</li>
+
+                  <li>Add the named groups (md-d-pre) from the new domain to the appropriate named group in the 'domains document'.<pre>&lt;xs:redefine schemaLocation="mySpec.grp" /&gt;
+&lt;xs:group name="pre"&gt;
+  &lt;xs:choice&gt;
+    &lt;xs:group ref="pre"/&gt;
+    &lt;xs:group ref="md-d-pre" /&gt;
+  &lt;/xs:choice&gt;
+&lt;/xs:group&gt;</pre>
+</li>
+
+                </ol>
+</li>
+
+              <li>If the domain to be added <u>is</u> a specialization of another domain:<ol type="a">
+                  <li>Create a new 'domains document' for the information type, for example mySpec_domains.mod .</li>
+
+                  <li>Include the new 'domains document' in the information type shell document<pre>&lt;xs:include schemaLocation="mySpec_domains.mod" /&gt;</pre>
+</li>
+
+                  <li>Remove the topic_domains.mod (or relevant 'domains document') and parent domain from the information type shell document and copy the new 'domains document.</li>
+
+                  <li>Use the redefine mechanism to add the new domain element to parent name group content model.<pre>&lt;xs:include schemaLocation="topic_domains.mod"/&gt;
+&lt;xs:redefine  schemaLocation="ui-domain.mod"&gt;
+  &lt;xs:group name="ui-d-ph"&gt;
+    &lt;xs:choice&gt;
+        &lt;xs:group ref="ui-d-ph"/&gt;
+        &lt;xs:group ref="md-d-mydomainelt" /&gt;
+     &lt;/xs:choice&gt;
+  &lt;/xs:group&gt;
+&lt;/xs:redefine&gt;</pre>
+</li>
+
+                </ol>
+</li>
+
+            </ul>
+</li>
+
+        </ol>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="nested1" id="xsjava"><a name="xsjava"><!-- --></a>
+    <h2 class="topictitle2">Validate XML Schema using Java</h2>
+
+    <div>
+      <div class="section"><h4 class="sectiontitle">Using Sun Java™ Development Kit (JDK)1.4.X and Xerces 2.6.X</h4>
+        
+        <p>The Sun JDK 1.4.X has a built-in XML parser as part of the distribution. It is called Crimson. Unfortunately, Sun's Crimson parser only supports DTD validation. </p>
+
+        <p>Sun provides a mechanism to override the classes in the JDK. It's called the <a href="http://java.sun.com/j2se/1.4.1/docs/guide/standards/" target="_blank">Endorsed Standards Override Mechanism</a></p>
+
+        <p>For example, copy a version of the xercesImpl.jar and xml-apis.jar to &lt;java_home&gt;/jre/lib/endorsed. Here &lt;java-home&gt; refers to the directory where the Sun JDK is installed. Check the Xerces version via the included Version application using the following command-line syntax.</p>
+
+        <pre>java -Dorg.xml.sax.driver=org.apache.xerces.parsers.SAXParser org.apache.xerces.impl.Version
+  </pre>
+
+        <div class="note"><span class="notetitle">Note: </span>Java 2 Platform, Standard Edition (J2SE) 5.0 and IBM Developer Kit includes Xerces 2.6.2 as the built-in XML parser.</div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="nested1" id="xsvalidate"><a name="xsvalidate"><!-- --></a>
+    <h2 class="topictitle2">Java Application - ValidateXMLDoc</h2>
+
+    <div>
+      <p>You can use the Java application ValidateXMLDoc to validate an XML document using an external XML Schema. The XML parser must support <a href="http://java.sun.com/xml/jaxp/faq.html" target="_blank">JAXP 1.2.</a>. In Xerces' case, version 2.6.x. For example:</p>
+
+      <pre>java ValidateXMLDoc ../DITA-XS-readme.xml -s ditabase.xsd
+
+Usage: java ValidateXMLDoc xmlDoc [options]
+-----------------------------------------------------------------------------------------------------------
+The application will attempt to validate the instance document using the DOCTYPE value by default.
+options:
+-s             Validate the instance document using the defined noNamespaceSchemaLocation value.
+[xmlSchema]    Validate instance document using an external XML Schema
+
+URI: The location of an external no namespace XML Schema relative to the xml document.
+       This will override the DTD/XML Schema that is
+       defined in the XML document"
+-----------------------------------------------------------------------------------------------------------</pre>
+
+    </div>
+
+  </div>
+
+  <div class="nested1" id="xstransform"><a name="xstransform"><!-- --></a>
+    <h2 class="topictitle2">Java Application - TransformUsingXMLSchema</h2>
+
+    <div>
+      <p>The Java application TransformUsingXMLSchema is used to transform an XML document using XML Schema validation. Most transform engines use DTD validation by default to build an in-memory document. The transformation engines need explicit instruction to use XML Schema validation instead of DTDs. The xsi:noNamespaceSchemaLocation attribute must be specified in the XML document for the application to works as expected. For example:</p>
+
+      <pre>java TransformUsingXMLSchema ../lawnmower.xml ../../xsl\topic2html.xsl ../lawnmower.html
+
+Usage: java TransformUsingXMLSchema xmlDoc xsltDoc htmlDoc
+-----------------------------------------------------------------------------------------------------------
+xmlDoc:       The external URI location of an XML document to transform
+xmlSchema: The external URI location of an XSL stylesheet
+htmlDoc:      The external URI location to write the resultant HTML document
+-----------------------------------------------------------------------------------------------------------</pre>
+
+      <div class="note"><span class="notetitle">Note: </span>The implied value for the class attribute, defined in the schema, is necessary for DITA XSLT scripts to work properly. If you see no output, or text-only output, this is usually an indication that the class attribute's default value has not been provided during parsing. Use the normalize.xsl transform to check the output of the parser: if the class attribute is missing, or the value is not bounded at the end by a space, the transforms cannot do class-based matching properly. </div>
+
+      <p><br />
+Eric Sirois<br />
+<a href="mailto:esirois@ca.ibm.com" target="_blank">esirois@ca.ibm.com</a><br />
+IBM Corporation</p>
+
+      <p>Java is a registered trademark of Sun Microsystems, Inc..</p>
+
+    </div>
+
+  </div>
+
+
+</body>
+</html>

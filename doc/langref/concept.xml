@@ -1,0 +1,132 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
+<reference id="concept" xml:lang="en-us">
+   <title>
+      <keyword>concept</keyword>
+   </title>
+   <shortdesc>The &lt;<keyword>concept</keyword>&gt; element is the top-level
+element for a topic that answers the question <q>what is?</q> Concepts provide
+background information that users must know before they can successfully work
+with a product or interface. Often, a concept is an extended definition of
+a major abstraction such as a process or function. It might also have an example
+or a graphic, but generally the structure of a concept is fairly simple.</shortdesc>
+   <prolog>
+      <metadata>
+         <keywords>
+            <indexterm>concept</indexterm>
+            <indexterm>Concept
+elements<indexterm>concept</indexterm>
+            </indexterm>
+            <indexterm>concept</indexterm>
+         </keywords>
+      </metadata>
+   </prolog>
+   <refbody>
+      <refsyn>
+         <title>Contained by</title>
+         <xref href="dita.xml">dita</xref>
+      </refsyn>
+      <refsyn>
+         <title>Contains</title>
+         <xref href="title.xml">title</xref> then ( <xref href="titlealts.xml">titlealts</xref> ) (optional) then ( <xref href="shortdesc.xml">shortdesc</xref> ) (optional) then ( <xref href="prolog.xml">prolog</xref> ) (optional) then <xref href="conbody.xml">conbody</xref> then ( <xref href="related-links.xml">related-links</xref> )
+(optional) then ( <xref href="topic.xml">topic</xref> ) (0 or
+more) </refsyn>
+      <section>
+         <title>Attributes</title>
+         <simpletable relcolwidth="2* 3* 1* 1* 1*" id="concept_attr">
+            <sthead>
+               <stentry>Name</stentry>
+               <stentry>Description</stentry>
+               <stentry>Data Type</stentry>
+               <stentry>Default Value</stentry>
+               <stentry>Required?</stentry>
+            </sthead>
+            <strow conref="commonLRdefs.xml#commonLRdefs/id">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/conref-topic">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/select-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/outputclass">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/xmllang">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/DTDVersion">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/domains">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/global-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/class">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+         </simpletable>
+      </section>
+      <example>
+         <pre>&lt;concept id="concept"&gt;
+ &lt;title&gt;Introduction to Bird Calling&lt;/title&gt;
+ &lt;conbody&gt;
+  &lt;p&gt;If you wish to attract more birds to your Acme Bird Feeder,
+learn the art of bird calling.  Bird calling is an efficient way
+to alert more birds to the presence of your bird feeder.&lt;/p&gt;
+  &lt;example&gt;
+   &lt;p&gt;Bird calling requires learning:&lt;/p&gt;
+   &lt;ul&gt;
+    &lt;li&gt;Popular and classical bird songs&lt;/li&gt;
+    &lt;li&gt;How to whistle like a bird&lt;/li&gt;
+   &lt;/ul&gt;
+  &lt;/example&gt;
+ &lt;/conbody&gt;
+&lt;/concept&gt;</pre>
+      </example>
+   </refbody>
+</reference>

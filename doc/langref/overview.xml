@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
+<reference id="langrefintro" xml:lang="en-us">
+  <title>DITA Language Reference overview</title>
+  <refbody>
+    <section>
+      <p>The design of the Darwin Information Typing Architecture (DITA) is based on deriving multiple information types, or <i>
+          <apiname>info-types</apiname>
+        </i>, from a common, generic topic. This language reference describes the elements that comprise the topic DTD and its initial, info-typed descendents: concept, reference, and task.<indexterm>DITA Language Reference overview</indexterm></p>
+      <p>The elements that make up the DITA design represent a set of different authoring concerns:</p>
+      <ul>
+        <li>The main components of a topic, concept, reference, or task document,</li>
+        <li>The common elements available for creating content within the body of a topic,</li>
+        <li>The elements that make up the two types of tables in DITA,</li>
+        <li>Elements that represent different subject domains,</li>
+        <li>Elements that appear in many contexts,</li>
+        <li>The elements contained in the prolog of a topic,</li>
+        <li>The elements contained in the related-links part of a topic,</li>
+        <li>Elements that are available for further specialization,</li>
+        <li>Commonly referenced descriptions,</li>
+        <li>and elements contained in a DITA map.</li>
+      </ul>
+      <p>In addition, this reference also describes elements that are used to manage DITA topics, either for convenience in editing or for production as sets of topics for particular kinds of deliverables.</p>
+    </section>
+  </refbody>
+</reference>
+

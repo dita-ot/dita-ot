@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
+<reference id="keyrefprocessing" xml:lang="en-us">
+   <title>keyref processing</title>
+   <refbody>
+      <section>
+         <title>Design note:</title> The intent of keyref is to provide indirection
+to linking information as an alternative to using href for hardcoded paths
+directly in your content. When you use keyref, you allow different processes
+to form the linking relationship in different ways: for example, a reviewing
+process might look up internal address and phone number information for the
+author, while a publishing process might look up a company address and feedback
+email address.<p>This functionality is not yet supported in DITA processing.</p>
+      </section>
+   </refbody>
+</reference>

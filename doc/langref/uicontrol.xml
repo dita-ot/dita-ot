@@ -1,0 +1,100 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
+<reference id="uicontrol" xml:lang="en-us">
+   <title>
+      <keyword>uicontrol</keyword>
+   </title>
+   <shortdesc>The user interface control (&lt;<keyword>uicontrol</keyword>&gt;) element represents
+a button, entry field, menu item, or other object that allows the user to
+control the interface. This could also include a menu or dialog. For example,
+use the &lt;<keyword>uicontrol</keyword>&gt; element inside a &lt;<keyword>menucascade</keyword>&gt; element
+when the menu item is nested, such as <menucascade>
+         
+         
+         <uicontrol>File</uicontrol>
+
+         
+         
+         <uicontrol>New</uicontrol>
+      
+      
+      </menucascade>. This element is part
+of the DITA user interface domain, a special set of DITA elements designed
+to document user interface tasks, concepts and reference information.</shortdesc>
+   <prolog>
+      <metadata>
+         <keywords>
+            <indexterm>uicontrol
+(user interface control)</indexterm>
+            <indexterm>user interface control (uicontrol)</indexterm>
+            <indexterm>Domain
+elements<indexterm>uicontrol</indexterm>
+            </indexterm>
+            <indexterm>uicontrol</indexterm>
+         </keywords>
+      </metadata>
+   </prolog>
+   <refbody>
+      <refsyn>
+         <title>Contained by</title>
+         <xref href="menucascade.xml">menucascade</xref>;
+the same contexts as <xref href="ph.xml">ph</xref>
+      </refsyn>
+      <refsyn>
+         <title>Contains</title> text data or <xref href="image.xml">image</xref> or <xref href="shortcut.xml">shortcut</xref>
+      </refsyn>
+      <section>
+         <title>Attributes</title>
+         <simpletable relcolwidth="2* 3* 1* 1* 1*" id="uicontrol_attr">
+            <sthead>
+               <stentry>Name</stentry>
+               <stentry>Description</stentry>
+               <stentry>Data Type</stentry>
+               <stentry>Default Value</stentry>
+               <stentry>Required?</stentry>
+            </sthead>
+            <strow conref="commonLRdefs.xml#commonLRdefs/keyref">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/univ-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/outputclass">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/global-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/class">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+         </simpletable>
+      </section>
+      <example>Press the <b>&lt;uicontrol&gt;</b>OK<b>&lt;/uicontrol&gt;</b> button.</example>
+   </refbody>
+</reference>

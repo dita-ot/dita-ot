@@ -1,0 +1,94 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
+<reference id="plentry" xml:lang="en-us">
+  <title>
+    <keyword>plentry</keyword>
+  </title>
+  <shortdesc>The parameter list entry element (&lt;plentry&gt;) contains one or more parameter terms and definitions (pd and pt). This element is part of the DITA programming domain, a special set of DITA elements designed to document programming tasks, concepts and reference information.</shortdesc>
+  <prolog>
+    <metadata>
+      <keywords>
+        <indexterm>plentry (parameter list entry)</indexterm>
+        <indexterm>parameter list entry (plentry)</indexterm>
+        <indexterm>Domain elements<indexterm>plentry</indexterm></indexterm>
+        <indexterm>plentry</indexterm>
+      </keywords>
+    </metadata>
+  </prolog>
+  <refbody>
+    <refsyn>
+      <title>Contained by</title>
+      <xref href="parml.xml">parml</xref>
+    </refsyn>
+    <refsyn><title>Contains</title> ( <xref href="pt.xml">pt</xref> ) (one or more) then ( <xref href="pd.xml">pd</xref> ) (one or more)</refsyn>
+    <section>
+      <title>Attributes</title>
+      <simpletable relcolwidth="2* 3* 1* 1* 1*" id="plentry_attr">
+        <sthead>
+          <stentry>Name</stentry>
+          <stentry>Description</stentry>
+          <stentry>Data Type</stentry>
+          <stentry>Default Value</stentry>
+          <stentry>Required?</stentry>
+        </sthead>
+        <strow conref="commonLRdefs.xml#commonLRdefs/univ-atts">
+          <stentry/>
+          <stentry/>
+          <stentry/>
+          <stentry/>
+          <stentry/>
+        </strow>
+        <strow conref="commonLRdefs.xml#commonLRdefs/outputclass">
+          <stentry/>
+          <stentry/>
+          <stentry/>
+          <stentry/>
+          <stentry/>
+        </strow>
+        <strow conref="commonLRdefs.xml#commonLRdefs/global-atts">
+          <stentry/>
+          <stentry/>
+          <stentry/>
+          <stentry/>
+          <stentry/>
+        </strow>
+        <strow conref="commonLRdefs.xml#commonLRdefs/class">
+          <stentry/>
+          <stentry/>
+          <stentry/>
+          <stentry/>
+          <stentry/>
+        </strow>
+      </simpletable>
+    </section>
+    <example><title>Markup Example</title>This code example is a basic method signature:<codeblock>returnType methodName(pList1, pList2) {</codeblock>where<parml>
+        <plentry>
+          <pt>pList1</pt>
+          <pd>is the first variable declaration passed to methodName</pd>
+        </plentry>
+        <plentry>
+          <pt>pList2</pt>
+          <pd>is the second variable declaration passed to methodName</pd>
+        </plentry>
+      </parml><codeblock spectitle="Markup Equivalent
+">This code example is a basic method signature:
+&lt;codeblock&gt;returnType methodName(pList1, pList2) {&lt;/codeblock&gt;
+where
+&lt;parml&gt;
+ <b>&lt;plentry&gt;</b>
+  &lt;pt&gt;pList1&lt;/pt&gt;
+  &lt;pd&gt;is the first variable declaration passed to methodName&lt;/pd&gt;
+ <b>&lt;/plentry&gt;
+   &lt;plentry&gt;</b>
+  &lt;pt&gt;pList2&lt;/pt&gt;
+  &lt;pd&gt;is the second variable declaration passed to methodName&lt;/pd&gt;
+ <b>&lt;/plentry&gt;</b>
+&lt;/parml&gt;</codeblock></example>
+  </refbody>
+</reference>
+

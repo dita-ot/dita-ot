@@ -1,0 +1,74 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
+<reference id="shortdesc" xml:lang="en-us">
+   <title>
+      <keyword>shortdesc</keyword>
+   </title>
+   <shortdesc>The short description (&lt;<keyword>shortdesc</keyword>&gt;) element
+occurs between the topic title and the topic body, as the initial paragraph-like
+content of a topic. The short description, which represents the purpose or
+theme of the topic, is also intended to be used as a link preview
+and for searching.</shortdesc>
+   <refbody>
+      <refsyn>
+         <title>Contained by</title>
+         <xref href="topic.xml">topic</xref> ,  <xref href="concept.xml">concept</xref> ,  <xref href="task.xml">task</xref> ,
+ <xref href="reference.xml">reference</xref>
+      </refsyn>
+      <refsyn>
+         <title>Contains</title> text data or <xref href="ph.xml">ph</xref> or <xref href="term.xml">term</xref> or <xref href="q.xml">q</xref> or <xref href="boolean.xml">boolean</xref> or <xref href="state.xml">state</xref> or <xref href="keyword.xml">keyword</xref> or <xref href="tm.xml">tm</xref> or <xref href="image.xml">image</xref>
+      </refsyn>
+      <section>
+         <title>Attributes</title>
+         <simpletable relcolwidth="2* 3* 1* 1* 1*" id="shortdesc_attr">
+            <sthead>
+               <stentry>Name</stentry>
+               <stentry>Description</stentry>
+               <stentry>Data Type</stentry>
+               <stentry>Default Value</stentry>
+               <stentry>Required?</stentry>
+            </sthead>
+            <strow conref="commonLRdefs.xml#commonLRdefs/id-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/outputclass">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/global-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/class">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+         </simpletable>
+      </section>
+      <example>
+         <codeblock>&lt;task id="abstractexample"&gt;
+   &lt;title&gt;Abstract Example&lt;/title&gt;
+      &lt;shortdesc&gt;This documentation addresses messages...&lt;/shortdesc&gt;
+   &lt;taskbody&gt;...&lt;/taskbody&gt;
+&lt;/task&gt;</codeblock>
+      </example>
+   </refbody>
+</reference>

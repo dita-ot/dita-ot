@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE reference
+  PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd">
+<reference id="outputclassprocessing" xml:lang="en-us">
+   <title>outputclass processing</title>
+   <refbody>
+      <section>
+         <p>During transformation from XML to HTML, the value
+of outputclass is output instead of the class name ordinarily generated for
+the element.  This new class can then be used by a CSS stylesheet to apply
+alternate formatting rules to the output HTML document.</p>
+         <p> For example,
+if a paragraph element is normally rendered in regular font but a bold paragraph
+is required, you could put boldpara as a value for the outputclass attribute,
+and then write a CSS stylesheet that applies bold formatting to result elements
+that will have that class value (for example, <codeph>.boldpara {font-weight:
+bold; display: block;}</codeph>). The paragraph is then displayed as bold
+when you view the HTML output using your CSS in a web browser. </p>
+      </section>
+   </refbody>
+</reference>

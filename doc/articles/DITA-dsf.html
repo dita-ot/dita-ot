@@ -1,0 +1,892 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+<meta name="copyright" content="(C) Copyright 2005" />
+<meta name="DC.rights.owner" content="(C) Copyright 2005" />
+<meta content="public" name="security" />
+<meta content="index,follow" name="Robots" />
+<meta http-equiv="PICS-Label" content='(PICS-1.1 "http://www.icra.org/ratingsv02.html" l gen true r (cz 1 lz 1 nz 1 oz 1 vz 1) "http://www.rsac.org/ratingsv01.html" l gen true r (n 0 s 0 v 0 l 0) "http://www.classify.org/safesurf/" l gen true r (SS~~000 1))' />
+<meta content="topic" name="DC.Type" />
+<meta name="DC.Title" content="Specializing topic types in DITA" />
+<meta name="abstract" content="The Darwin Information Typing Architecture (DITA) provides a way for documentation authors and architects to create collections of typed topics that can be easily assembled into various delivery contexts. Topic specialization is the process by which authors and architects can define topic types, while maintaining compatibility with existing style sheets, transforms, and processes. The new topic types are defined as an extension, or delta, relative to an existing topic type, thereby reducing the work necessary to define and maintain the new type." />
+<meta name="description" content="The Darwin Information Typing Architecture (DITA) provides a way for documentation authors and architects to create collections of typed topics that can be easily assembled into various delivery contexts. Topic specialization is the process by which authors and architects can define topic types, while maintaining compatibility with existing style sheets, transforms, and processes. The new topic types are defined as an extension, or delta, relative to an existing topic type, thereby reducing the work necessary to define and maintain the new type." />
+<meta content="General" name="DC.Coverage" />
+<meta content="Darwin Information Typing Architecture, DITA, XML, topic, information architecture, architectural forms, specialization, information type, document type, DTD, document metadata, documentation, technical writing, user assistance, helps" name="DC.subject" />
+<meta content="Darwin Information Typing Architecture, DITA, XML, topic, information architecture, architectural forms, specialization, information type, document type, DTD, document metadata, documentation, technical writing, user assistance, helps" name="keywords" />
+<meta content="Michael Priestley; IBM Corporation; Toronto, Canada; mpriestl@ca.ibm.com; Michael Priestley is an information developer for the IBM Toronto Software Development Laboratory. He has written numerous papers on subjects such as hypertext navigation, singlesourcing, and interfaces to dynamic documents. He is currently working on XML and XSL for help and documentation management." name="DC.Creator" />
+<meta content="23 February 2001" name="DC.Date.Created" />
+<meta content="XHTML" name="DC.Format" />
+<meta content="specarch" name="DC.Identifier" />
+<meta content="en-us" name="DC.Language" />
+<link href="commonltr.css" type="text/css" rel="stylesheet" />
+<title>Specializing topic types in DITA</title>
+</head>
+<body id="specarch"><a name="specarch"><!-- --></a>
+
+
+  <h1 class="topictitle1">Specializing topic types in DITA</h1>
+
+  
+  
+  <div><p>The Darwin Information Typing Architecture (DITA) provides a way for documentation authors and architects to create collections of typed topics that can be easily assembled into various delivery contexts. Topic specialization is the process by which authors and architects can define topic types, while maintaining compatibility with existing style sheets, transforms, and processes. The new topic types are defined as an extension, or delta, relative to an existing topic type, thereby reducing the work necessary to define and maintain the new type.</p>
+
+    <p>The point of the XML-based Darwin Information Typing Architecture (DITA) is to create modular technical documents that are easy to reuse with varied display and delivery mechanisms, such as helpsets, manuals, hierarchical summaries for small-screen devices, and so on. This article explains how to put the DITA principles into practice with regards to the creation of a DTD and transforms that will support your particular information types, rather than just using the base DITA set of concept, task, and reference. </p>
+
+    <p>Topic specialization is the process by which authors and architects define new topic types, while maintaining compatibility with existing style sheets, transforms, and processes. The new topic types are defined as an extension, or delta, relative to an existing topic type, thereby reducing the work necessary to define and maintain the new type. </p>
+
+    <p>The examples used in this paper use XML DTD syntax and XSLT; if you need background on these subjects, see Resources. </p>
+
+  </div>
+
+  <div class="nested1" id="archcontext"><a name="archcontext"><!-- --></a>
+    <h2 class="topictitle2">Architectural context </h2>
+
+    <div>
+      <p>In SGML, architectural forms are a classic way to provide mappings from one document type to another. Specialization is an architectural-forms-like solution to a more constrained problem: providing mappings from a more specific topic type to a more general topic type. Because the specific topic type is developed with the general topic type in mind, specialization can ignore many of the thornier problems that architectural forms address. This constrained domain makes specialization processes relatively easy to implement and maintain. Specialization also provides support for multi-level or hierarchical specializations, which allow more general topic types to serve as the common denominator for different specialized types. </p>
+
+      <p>The specialization process was created to work with DITA, although its principles and processes apply to other domains as well. This will make more sense if you consider an example: Given specialization and a generic DTD such as HTML, you can create a new document type (call it MyHTML). In MyHTML you could enforce site standards for your company, including specific rules about forms layout, heading levels, and use of font and blink tags. In addition, you could provide more specific structures for product and ordering information, to enable search engines and other applications to use the data more effectively. </p>
+
+      <p>Specialization lets MyHTML be defined as an extension of the HTML DTD, declaring new element types only as necessary and referencing HTML's DTD for shared elements. Wherever MyHTML declares a new element, it includes a mapping back to an existing HTML element. This mapping allows the creation of style sheets and transforms for HTML that operate equally well on MyHTML documents. When you want to handle a structure differently (for example, to format product information in a particular way), you can define a new style sheet or transform that holds the extending behavior, and then import the standard style sheet or transform to handle the rest. In other words, new behavior is added as extensions to the original style sheet, in the same way that new constraints were added as extensions to the original DTD or schema. </p>
+
+    </div>
+
+  </div>
+
+  <div class="nested1" id="specinfotypes"><a name="specinfotypes"><!-- --></a>
+    <h2 class="topictitle2">Specializing information types</h2>
+
+    <div>
+      <p>The Darwin Information Typing Architecture is less about document types than information types. A document is considered to be made up of a number of topics, each with its own information type. A topic is, simply, a chunk of information consisting of a heading and some text, optionally divided into sections. The information type describes the content of the topic: for example, the type of a given topic might be "concept" or "task." </p>
+
+      <p>DITA has three types of topic: a generic topic, or information-typed concept, task, and reference topics. Concept, task, and reference topics can all be considered specializations of topic: </p>
+
+      <img src="image/basediag.gif" height="74" width="300" alt="Base information types" />
+      <p>Additional information types can be added to the architecture as specializations of any of these three basic types, or as a peer specialization directly off of topic; and any of these additional specializations can in turn be specialized: </p>
+
+      <img src="image/manydiag.gif" height="253" width="494" alt="Specialized information types" />
+      <p>Each new information type is defined as an extension of an existing information type: the specializing type inherits, without duplication, any common structures; and the specializing type provides a mapping between its new elements and the general type's existing elements. Each information type is defined in its own DTD module, which defines only the new elements for that type. A document that consists of exactly one information type (for example, a task document in a help web) has a document type defined by all the modules in the information type's specialization hierarchy (for example, task.mod and topic.mod). A document type with multiple information types (for example, a book consisting of concepts, tasks, and reference topics) includes the modules for each of the information types used, as well as the modules for their ancestors (concept.mod, task.mod, reference.mod, plus their ancestor topic.mod). </p>
+
+      <div class="p">Because of the separation of information types into modules, you can define new information types without affecting ancestor types. This separation gives you the following benefits: <ul>
+          <li>Reduces maintenance costs: each authoring group maintains only the elements that it uniquely requires</li>
+
+          <li>Increases compatibility: the core information types can be centrally maintained, and changes to the core types are reflected in all specializing types</li>
+
+          <li>Distributes control: reusability is controlled by the reuser, instead of by the author; adding a new type does not affect the maintenance of the core type, and does not affect other users of different types</li>
+
+        </ul>
+ Any information-typed topic belongs to multiple types. For example, an API description is, in more general terms, a reference topic.</div>
+
+    </div>
+
+  </div>
+
+  <div class="nested1" id="refxmp"><a name="refxmp"><!-- --></a>
+    <h2 class="topictitle2">Specialization example: Reference topic</h2>
+
+    <div>
+      <p>Consider the specialization hierarchy for a reference topic:</p>
+
+      <img src="image/reftopicdiag.gif" height="89" width="230" alt="Reference topic specialization hierarchy" />
+      <div class="section">
+        <p>Table 1 expresses the relationship between the general elements in topic and the specific elements in reference. Within the table, the columns, rows, and cells indicate information types, element mappings, and elements. Table 2 explains the relationships in detail to help you interpret Table 1. </p>
+
+        
+<div class="tablenoborder"><table summary="" cellspacing="0" cellpadding="4" frame="border" border="1" rules="all"><caption>Table 1. Relationships between topic and a specialization based on it </caption>
+            
+            
+            <thead align="left">
+              <tr>
+                <th valign="top" width="NaN%" id="N1019E"> Topic </th>
+
+                <th valign="top" width="NaN%" id="N101A5"> Reference</th>
+
+              </tr>
+
+            </thead>
+
+            <tbody>
+              <tr>
+                <td valign="top" width="NaN%" headers="N1019E ">(topic.mod) </td>
+
+                <td valign="top" width="NaN%" headers="N101A5 "> (reference.mod)</td>
+
+              </tr>
+
+              <tr>
+                <td valign="top" width="NaN%" headers="N1019E "> topic </td>
+
+                <td valign="top" width="NaN%" headers="N101A5 "> reference </td>
+
+              </tr>
+
+              <tr>
+                <td valign="top" width="NaN%" headers="N1019E "> title </td>
+
+                <td valign="top" width="NaN%" headers="N101A5 ">&nbsp;</td>
+
+              </tr>
+
+              <tr>
+                <td valign="top" width="NaN%" headers="N1019E "> body </td>
+
+                <td valign="top" width="NaN%" headers="N101A5 "> refbody </td>
+
+              </tr>
+
+              <tr>
+                <td rowspan="2" valign="top" width="NaN%" headers="N1019E ">simpletable</td>
+
+                <td valign="top" width="NaN%" headers="N101A5 ">properties</td>
+
+              </tr>
+
+              <tr>
+                <td valign="top" width="NaN%" headers="N1019E ">&nbsp;</td>
+
+              </tr>
+
+              <tr>
+                <td rowspan="2" valign="top" width="NaN%" headers="N1019E "> section </td>
+
+                <td valign="top" width="NaN%" headers="N101A5 "> refsyn</td>
+
+              </tr>
+
+              <tr>
+                <td valign="top" width="NaN%" headers="N1019E ">&nbsp;</td>
+
+              </tr>
+
+            </tbody>
+
+          </table>
+</div>
+
+        <dl>
+          
+            <dt><strong>Structure</strong></dt>
+
+            <dd><strong>Associations</strong></dd>
+
+          
+          
+            <dt class="dlterm">Columns</dt>
+
+            <dd>The <strong>Topic</strong> column shows basic <span class="filepath">topic</span> structure, which comprises a title and body with optional sections, as declared in a DTD module called <kbd class="userinput">topic.mod</kbd> . The <strong>Reference</strong> column shows a more specialized structure, with <span class="filepath">reference</span> replacing <span class="filepath">topic</span>, <span class="filepath">refbody</span> replacing <span class="filepath">body</span>, and <span class="filepath">refsyn</span> replacing <span class="filepath">section</span>; these new elements are declared in a DTD module called <kbd class="userinput">reference.mod</kbd> .</dd>
+
+          
+          
+            <dt class="dlterm">Rows</dt>
+
+            <dd>Each row represents a mapping between the elements in that row. The elements in the <strong>Reference</strong> column specialize the elements in the <strong>Topic</strong> column. Each general element also serves as a category for more specialized elements in the same row. For example, <span class="filepath">reference</span>'s <span class="filepath">refsyn</span> is a kind of <span class="filepath">section</span>.</dd>
+
+          
+          
+            <dt class="dlterm">Cells</dt>
+
+            <dd>Each cell in a column represents the following possibilities in relation to the cell to its left: <ul>
+                <li>A blank cell: The element in the cell to the left is reused as-is. For example, a <span class="filepath">reference</span><span class="filepath">title</span> is the same as a <span class="filepath">topic</span><span class="filepath">title</span>, and <span class="filepath">topic</span>'s declaration of the <span class="filepath">title</span> element can be used by <span class="filepath">reference</span>.</li>
+
+                <li>A full cell: An element that is specific to the current type replaces the more general element to the left. For example, in <span class="filepath">reference</span> , <span class="filepath">refbody</span> replaces the more general <span class="filepath">body</span>.</li>
+
+                <li>A split row with a blank cell: The new specializations are in addition to the more general element, which remains available in the specialized type. For example, <span class="filepath">reference</span> adds properties as a special type of simpletable ( <span class="filepath">dl</span>), but the general kind of <span class="filepath">simpletable</span> remains available in <span class="filepath">reference</span>.</li>
+
+              </ul>
+</dd>
+
+          
+        </dl>
+
+      </div>
+
+      <div class="section"><h4 class="sectiontitle">The reference type module</h4>
+        
+        <p>Listing 1 illustrates not the actual <kbd class="userinput">reference.mod</kbd> content, but a simplified version based on Table 1. The use of entities in the content models support domain specialization, as described in the domain specialization article.</p>
+
+        <div style="margin-bottom: 0;"><strong>Listing 1. reference.mod</strong></div><pre>&lt;!ELEMENT reference ((%title;), (%prolog;)?, (%refbody;),(%info-types;)* )&gt; 
+&lt;!ELEMENT refbody (%section; | refsyn | %simpletable; | properties)*&gt;
+&lt;!ELEMENT properties ((%sthead;)?, (%strow;)+) &gt; 
+&lt;!ELEMENT refsyn (%section;)* &gt; </pre>
+
+        <p>Most of the content models declared here depend on elements or entities declared in <kbd class="userinput">topic.mod</kbd>. Therefore, if <span class="filepath">topic</span>'s structure is enhanced or changed, most of the changes will be picked up by <span class="filepath">reference</span> automatically. Also the definition of <span class="filepath">reference</span> remains simple: it doesn't have to redeclare any of the content that it shares with <span class="filepath">topic</span>.</p>
+
+      </div>
+
+      <div class="section"><h4 class="sectiontitle">Adding specialization attributes</h4>
+        
+        <p>To expose the element mappings, we add an attribute to each element that shows its mappings to more general types.</p>
+
+        <div style="margin-bottom: 0;"><strong>Listing 2. reference.mod (part 2)</strong></div><pre>&lt;!ATTLIST reference class CDATA "- topic/topic reference/reference "&gt;
+&lt;!ATTLIST refbody class CDATA "- topic/body reference/refbody "&gt;
+&lt;!ATTLIST properties class CDATA "- topic/simpletable reference/properties "&gt; 
+&lt;!ATTLIST refsyn class CDATA "- topic/section reference/refsyn "&gt;    </pre>
+
+        <p>Later on, we'll talk about how to take advantage of these attributes when you write an XSL transform. See the appendix for a more in-depth description of the class attribute. </p>
+
+      </div>
+
+      <div class="section"><h4 class="sectiontitle">Creating an authoring DTD</h4>
+        
+        <p>Now that we've defined the type module (which declares the newly typed elements and their attributes) and added specialization attributes (which map the new type to its ancestors), we can assemble an authoring DTD.</p>
+
+        <div style="margin-bottom: 0;"><strong>Listing 3. reference.dtd</strong></div><pre>
+&lt;!--Redefine the infotype entity to exclude other topic types--&gt; 
+&lt;!ENTITY % info-types "reftopic"&gt;
+&lt;!--Embed topic to get generic elements --&gt; 
+&lt;!ENTITY % topic-type SYSTEM "topic.mod"&gt; 
+%topic-type; 
+&lt;!--Embed reference to get specific elements --&gt; 
+&lt;!ENTITY % reference-type SYSTEM "reference.mod"&gt; 
+%reference-type; 
+</pre>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="nested1" id="APIxmp"><a name="APIxmp"><!-- --></a>
+    <h2 class="topictitle2">Specialization example: API description</h2>
+
+    <div>
+      <p>Now let's create a more specialized information type: API descriptions, which are a kind of (and therefore specialization of) reference topic:</p>
+
+      <div class="fignone"><span class="figcap">Figure 1. A more specialized information type, API description </span>
+        
+        <img src="image/APIdescdiag.gif" height="192" width="286" alt="API description specialization hierarchy" />
+      </div>
+
+      <p>Table 3 shows part of the specialization for an information type called <span class="filepath">APIdesc</span>, for API description. As before, each column represents an information type, with specialization occurring from left to right. That is, each information type is a specialization of its neighbor to the left. Each row represents a set of mapped elements, with more specific elements to the right mapping to more general equivalents to the left.</p>
+
+      <div class="section">
+        <p>As before, each cell specializes the contents of the cell to its left:</p>
+
+        <ul>
+          <li>A blank cell: The element to the left is picked up by the new type unchanged. For example, <span class="filepath">simpletable</span> and <span class="filepath">refsyn</span> are available in an API description.</li>
+
+          <li>A full cell: The element to the left is replaced by a more specific one. For example, <span class="filepath">APIname</span> replaces <span class="filepath">title</span>.</li>
+
+          <li>A split row with a blank cell: New elements are added to the elements on the left. For example, the API description adds a <span class="filepath">usage</span> section as a peer of the <span class="filepath">refsyn</span> and <span class="filepath">section</span> elements.</li>
+
+        </ul>
+
+        
+<div class="tablenoborder"><table summary="" cellspacing="0" cellpadding="4" frame="border" border="1" rules="all"><caption>Table 2. Summary of APIdesc specialization</caption>
+            
+            
+            
+            <thead align="left">
+              <tr>
+                <th valign="top" width="NaN%" id="N10494"> Topic</th>
+
+                <th valign="top" width="NaN%" id="N1049B"> Reference</th>
+
+                <th valign="top" width="NaN%" id="N104A2"> APIdesc</th>
+
+              </tr>
+
+            </thead>
+
+            <tbody>
+              <tr>
+                <td valign="top" width="NaN%" headers="N10494 "> (topic.mod) </td>
+
+                <td valign="top" width="NaN%" headers="N1049B "> (reference.mod)</td>
+
+                <td valign="top" width="NaN%" headers="N104A2 "> (APIdesc.mod)</td>
+
+              </tr>
+
+              <tr>
+                <td valign="top" width="NaN%" headers="N10494 "> topic </td>
+
+                <td valign="top" width="NaN%" headers="N1049B "> reference </td>
+
+                <td valign="top" width="NaN%" headers="N104A2 "> APIdesc </td>
+
+              </tr>
+
+              <tr>
+                <td valign="top" width="NaN%" headers="N10494 "> title </td>
+
+                <td valign="top" width="NaN%" headers="N1049B ">&nbsp;</td>
+
+                <td valign="top" width="NaN%" headers="N104A2 "> APIname </td>
+
+              </tr>
+
+              <tr>
+                <td valign="top" width="NaN%" headers="N10494 "> body </td>
+
+                <td valign="top" width="NaN%" headers="N1049B "> refbody </td>
+
+                <td valign="top" width="NaN%" headers="N104A2 "> APIbody </td>
+
+              </tr>
+
+              <tr>
+                <td rowspan="2" valign="top" width="NaN%" headers="N10494 ">simpletable</td>
+
+                <td valign="top" width="NaN%" headers="N1049B ">properties</td>
+
+                <td valign="top" width="NaN%" headers="N104A2 ">parameters</td>
+
+              </tr>
+
+              <tr>
+                <td valign="top" width="NaN%" headers="N10494 ">&nbsp;</td>
+
+                <td valign="top" width="NaN%" headers="N1049B ">&nbsp;</td>
+
+              </tr>
+
+              <tr>
+                <td rowspan="3" valign="top" width="NaN%" headers="N10494 "> section </td>
+
+                <td valign="top" width="NaN%" headers="N1049B "> refsyn</td>
+
+                <td valign="top" width="NaN%" headers="N104A2 ">&nbsp;</td>
+
+              </tr>
+
+              <tr>
+                <td rowspan="2" valign="top" width="NaN%" headers="N10494 ">&nbsp;</td>
+
+                <td valign="top" width="NaN%" headers="N1049B ">&nbsp;</td>
+
+              </tr>
+
+              <tr>
+                <td valign="top" width="NaN%" headers="N10494 ">usage</td>
+
+              </tr>
+
+            </tbody>
+
+          </table>
+</div>
+
+      </div>
+
+      <div class="section"><h4 class="sectiontitle">The APIdesc module</h4>
+        
+        <p>Here you can see that the content for an API description is actually much more restricted than the content of a general reference topic. The sequence of <span class="filepath">syntax</span>, then <span class="filepath">usage</span>, then <span class="filepath">parameters</span> is now imposed, followed by optional additional sections. This sequence is a subset of the allowable structures in a reference topic, which allows any sequence of syntax, properties, and sections. In addition, the label for the <span class="filepath">usage</span> section is now fixed as <span class="filepath">Usage</span>, taking advantage of the spectitle attribute of section (which is there for exactly this kind of usage): with the spectitle attribute providing the section title, we can also get rid of the title element in usage's content model, making use of the predefined section.notitle.cnt entity.</p>
+
+        <div style="margin-bottom: 0;"><strong>APIdesc.mod</strong></div><pre>
+&lt;!ELEMENT APIdesc (APIname, (%prolog;)?, APIbody,(%info-types;)* )&gt; 
+&lt;!ELEMENT APIname (%title.cnt;)*&gt;
+&lt;!ELEMENT APIbody (refsyn,usage,parameters,(%section;)*)&gt; 
+&lt;!ELEMENT usage (%section.notitle.cnt;)* &gt; 
+&lt;!ATTLIST usage spectitle CDATA #FIXED "Usage"&gt; 
+&lt;!ELEMENT parameters ((%sthead;)?, (%strow;)+)&gt;</pre>
+
+      </div>
+
+      <div class="section"><h4 class="sectiontitle">Adding specialization attributes</h4>
+        
+        <p>Every new element now has a mapping to all its ancestor elements. </p>
+
+        <div style="margin-bottom: 0;"><strong>APIdesc.mod (part 2)</strong></div><pre>
+&lt;!ATTLIST APIdesc class CDATA "- topic/topic reference/reference APIdesc/APIdesc " &gt;
+&lt;!ATTLIST APIname spec CDATA "- topic/title reference/title APIdesc/APIname " &gt;
+&lt;!ATTLIST APIbody spec CDATA "- topic/body reference/refbody APIdesc/APIbody" &gt;
+&lt;!ATTLIST parameters spec CDATA "- topic/simpletable reference/properties APIdesc/parameters "&gt; 
+&lt;!ATTLIST usage spec CDATA "- topic/section reference/section APIdesc/usage "&gt;
+</pre>
+
+        <p>Note that <span class="filepath">APIname</span> explicitly identifies its equivalent in both reference and topic, even though they are the same (title) in both cases. In the same way, usage explicitly maps to section in both reference and topic. This explicit identification makes it easier for processes to keep track of complex mappings. Even if you had a specialization hierarchy 10 levels deep or more, the attributes would still allow unambiguous mappings to each ancestor information type.</p>
+
+      </div>
+
+      <div class="section"><h4 class="sectiontitle">Authoring DTDs</h4>
+        
+        <p>Now that we've defined the type module (which declares the newly typed elements and their attributes) and added specialization attributes (which map the new type to its ancestors), we can assemble an authoring DTD.</p>
+
+        <div style="margin-bottom: 0;"><strong>APIdesc.dtd</strong></div><pre>
+&lt;!--Redefine the infotype entity to exclude other topic types--&gt;
+&lt;!ENTITY % info-types "APIdesc"&gt;
+&lt;!--Embed topic to get generic elements --&gt; 
+&lt;!ENTITY % topic-type SYSTEM "topic.mod"&gt; 
+%topic-type; 
+&lt;!--Embed reference to get more specific elements --&gt; 
+&lt;!ENTITY % reference-type SYSTEM "reference.mod"&gt; 
+%reftopic-type; 
+&lt;!--Embed APIdesc to get most specific elements --&gt; 
+&lt;!ENTITY % APIdesc-type SYSTEM "APIdesc.mod"&gt; 
+%APIdesc-type;
+</pre>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="nested1" id="xformover"><a name="xformover"><!-- --></a>
+    <h2 class="topictitle2">Working with specialization</h2>
+
+    <div>
+      <p>After a specialized type has been defined the necessary attributes have been declared, they can provide the basis for the following operations:</p>
+
+      <ul>
+        <li>Applying a general style sheet or transform to a specialized topic type</li>
+
+        <li>Generalizing a topic of a specialized type (transforming it into a more generic topic type)</li>
+
+        <li>Specializing a topic of a general type (transforming it into a more specific topic type - to be used only when a topic was originally authored in specialized form, and has gone through a general stage without breaking the constraints of its original form) </li>
+
+      </ul>
+
+    </div>
+
+    <div class="nested2" id="genxforms"><a name="genxforms"><!-- --></a>
+      <h3 class="topictitle3">Applying general style sheets or transforms</h3>
+
+      <div>
+        <p>Because content written in a new information type (such as <span class="filepath">APIdesc</span>) has mappings to equivalent or less restrictive structures in preexisting information types (such as <span class="filepath">reference</span> and <span class="filepath">topic</span>), the preexisting transforms and processes can be safely applied to the new content. By default, each specialized element in the new information type will be treated as an instance of its general equivalent. For example, in <span class="filepath">APIdesc</span> the <span class="filepath">&lt;usage&gt;</span> element will be treated as a topic <span class="filepath">&lt;section&gt;</span> element that happens to have the fixed label <span class="filepath">"Usage"</span>.</p>
+
+        <p>To override this default behavior, an author can simply create a new, more specific rule for that element type, and then import the default style sheet or transform, thus extending the behavior without directly editing the original style sheet or transform. This reuse by reference reduces maintenance costs (each site maintains only the rules it uniquely requires) and increases consistency (because the core transform rules can be centrally maintained, and changes to the core rules will be reflected in all other tranforms that import them). Control over reuse has moved from the author of the transform to the reuser of the transform.</p>
+
+        <p>The rest of this section assumes knowledge of XSLT, the XSL Transformations language.</p>
+
+      </div>
+
+      <div class="nested3" id="genxform_reqs"><a name="genxform_reqs"><!-- --></a>
+        <h4 class="topictitle4">Requirements</h4>
+
+        <div>
+          <p>This process works only if the general transforms have been enabled to handle specialized elements, and if the specialized elements include enough information for the general transform to handle them.</p>
+
+          <div class="section"><h4 class="sectiontitle">Requirement 1: mapping attributes</h4>
+            
+            <p>To provide the specialization information, you need to add specialization attributes, as outlined previously. After you include the attributes in your documents, they are ready to be processed by specialization-aware transforms.</p>
+
+          </div>
+
+          <div class="section"><h4 class="sectiontitle">Requirement 2: specialization-aware transforms</h4>
+            
+            <p>For the transform, you need template rules that check for a match against both the element name and the attribute value. </p>
+
+            <div style="margin-bottom: 0;"><strong>The specialization-aware interface</strong></div><pre>&lt;xsl:template match="*[contains(@class," topic/simpletable "]"&gt; 
+&lt;!--matches any element that has a class attribute that mentions
+     topic/simpletable--&gt; 
+&lt;!--do something--&gt; 
+&lt;/xsl:template&gt;
+
+</pre>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="nested3" id="xformoverride_xmp"><a name="xformoverride_xmp"><!-- --></a>
+        <h4 class="topictitle4">Example: overriding a transform</h4>
+
+        <div>
+          <p>To override the general transform for a specific element, the author of a new information type can create a transform that declares the new behavior for the specific element and imports the general transform to provide default behavior for the other elements. </p>
+
+          <p>For example, an <span class="filepath">APIdesc</span> specialized transform could allow default handling for all specialized elements except <span class="filepath">parameters</span>:</p>
+
+          <div style="margin-bottom: 0;"><strong>A specialized transformation for APIdesc</strong></div><pre>
+&lt;xsl:import href="general-transform.xsl"/&gt;
+&lt;xsl:template match="*[contains(@class," APIdesc/parameters "]"&gt;
+ &lt;!--do something--&gt; 
+&lt;xsl:apply-templates/&gt;
+&lt;/xsl:template&gt;
+</pre>
+
+          <p>Both the preexisting <span class="filepath">reference</span><span class="filepath">properties</span> template rule and the new <span class="filepath">parameters</span> template rule match when they encounter a <span class="filepath">parameters</span> element (because the <span class="filepath">parameters</span> element is a specialized type of <span class="filepath">reference</span><span class="filepath">properties</span> element), and its class attribute contains both values). However, because the <span class="filepath">parameters</span> template is in the <em>importing</em> style sheet, the new template takes precedence.</p>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="nested2" id="xformgeneralize"><a name="xformgeneralize"><!-- --></a>
+      <h3 class="topictitle3">Generalizing a topic</h3>
+
+      <div>
+        <p>Because a specialized information type is also an instance of its ancestor types (an <span class="filepath">APIdesc</span> is a <span class="filepath">reference topic</span> is a <span class="filepath">topic</span>), you can safely transform a specialized topic to one of its more generic ancestors. This upward compatibility is useful when you want to combine sets of documentation from two sources, each of which has specialized differently. The ancestor type provides a common denominator that both can be safely transformed to. This compatibility may also be useful when you have to feed topics through processes that are not specialization-aware. For example, a publication center that charges per document type or uses non-DTD-aware processes could be sent a generalized set of documents, so that they only support one document type or set of markup. However, wherever possible, you should use specialization-aware processes and transforms, so that you can avoid generalizing and process your documents in their more descriptive, specialized form.</p>
+
+        <p>To safely generalize a topic, you need a way to map from your information type to the target information type. You also need a way to preserve the original type in case you need round-tripping later.</p>
+
+        <p>The <span class="filepath">class</span> attribute that was introduced previously serves two purposes. It provices:</p>
+
+        <ul>
+          <li>The information needed to map.</li>
+
+          <li>A way to preserve the information to allow round-tripping. </li>
+
+        </ul>
+
+        <p>Each level of specialization has its own set of class attributes, which in the end provide the full specialization hierarchy for all specialized elements. </p>
+
+        <p>Consider the <span class="filepath">APIdesc</span> topic in Listing 11:</p>
+
+        <div style="margin-bottom: 0;"><strong>A sample topic from APIdesc</strong></div><pre>
+&lt;APIdesc&gt; 
+ &lt;APIname&gt;AnAPI&lt;/APIname&gt;
+ &lt;APIbody&gt; 
+  &lt;refsyn&gt;AnAPI (parm1, parm2)&lt;/refsyn&gt;
+  &lt;usage spectitle="Usage"&gt;Use AnAPI to pass parameters to your process.
+  &lt;/usage&gt; 
+  &lt;parameters &gt;
+  ...
+  &lt;/parameters&gt;
+ &lt;/APIbody&gt; 
+&lt;/APIdesc&gt;
+</pre>
+
+        <p>With the class attributes exposed (all values are provided as defaults by the DTD):</p>
+
+        <div style="margin-bottom: 0;"><strong>The same sample topic from APIdesc, including the class attributes</strong></div><pre>
+&lt;APIdesc class="- topic/topic reference/reference APIdesc/APIdesc "&gt; 
+ &lt;APIname class="- topic/title reference/title APIdesc/APIname "&gt;AnAPI
+ &lt;/APIname&gt;
+ &lt;APIbody class="- topic/body reference/refbody APIdesc/APIbody "&gt;
+  &lt;refsyn class="- topic/section reference/refsyn "&gt;AnAPI(parm1,
+  parm2)&lt;/refsyn&gt; 
+  &lt;usage class="- topic/section reference/section APIdesc/usage "
+  spectitle="Usage"&gt;
+   &lt;p class="- topic/p "&gt;Use AnAPI to pass parameters to your process.&lt;/p&gt;
+  &lt;/usage&gt; 
+  &lt;parameters class="topic/simpletable reference/properties APIdesc/parameters "&gt;
+  ...
+  &lt;/parameters&gt;
+ &lt;/APIbody&gt; 
+&lt;/APIdesc&gt;
+</pre>
+
+        <p>From here, a single template rule can transform the entire <span class="filepath">APIdesc</span> topic to either a <span class="filepath">reference</span> or a generic <span class="filepath">topic</span>. The template rule simply looks in the <span class="filepath">class</span> attribute for the ancestor element name, and renames the current element to match.</p>
+
+        <p>After a transform to topic, it should look something like Listing 13:</p>
+
+        <div style="margin-bottom: 0;"><strong>A transformed topic from APIdesc</strong></div><pre>&lt;topic class="- topic/topic reference/reference APIdesc/APIdesc "&gt; 
+ &lt;title class="- topic/title reference/title APIdesc/APIname "&gt;AnAPI
+ &lt;/title&gt;
+ &lt;body class="- topic/body reference/refbody APIdesc/APIbody "&gt;
+  &lt;section class="- topic/section reference/refsyn "&gt;AnAPI(parm1,
+  parm2)&lt;/section&gt; 
+  &lt;section class="- topic/section reference/section APIdesc/usage "
+  spectitle="Usage"&gt;
+   &lt;p class="- topic/p "&gt;Use AnAPI to pass parameters to your process.&lt;/p&gt;
+  &lt;/section&gt; 
+  &lt;simpletable class="topic/simpletable reference/properties APIdesc/parameters "&gt;
+  ...
+  &lt;/simpletable&gt;
+ &lt;/body&gt; 
+&lt;/topic&gt;
+</pre>
+
+        <p>Even after generalization, specialization-aware transforms can continue to treat the topic as an <span class="filepath">APIdesc</span>, because the transforms can look in the <span class="filepath">class</span> attribute for information about the element type hierarchy.</p>
+
+        <p>From here, it is possible to round-trip by reversing the transformation (looking in the <span class="filepath">class</span> attribute for the specializing element name, and renaming the current element to match). Whenever the <span class="filepath">class</span> attribute doesn't list the target (the first <span class="filepath">section</span> has no <span class="filepath">APIdesc</span> value), the element is changed to the last value listed (so the first <span class="filepath">section</span> becomes, accurately, a <span class="filepath">refsyn</span>).</p>
+
+        <p>However, if anyone changes the structure of the content while it is a generic <span class="filepath">topic</span> (as by changing the order of sections), the result might not be valid anymore under the specialized information type (which in the<span class="filepath">APIdesc</span> case enforces a particular sequence of information in the <span class="filepath">APIbody</span>). So although mapping to a more general type is always safe, mapping back to a specialized type can be problematic: The specialized type has more rules, which make the content specialized. But those rules aren't enforced while the content is encoded more generally.</p>
+
+      </div>
+
+    </div>
+
+    <div class="nested2" id="xformspecialize"><a name="xformspecialize"><!-- --></a>
+      <h3 class="topictitle3">Specializing a topic</h3>
+
+      <div>
+        <p>It is relatively trivial to specialize a general topic if the content was originally authored as a specialized type. However, a more complex case can result if you have authored content at a general level that you now want to type more precisely.</p>
+
+        <p>For example, suppose that you create a set of reference topics. Then, having analyzed your content, you realize that you have a consistent pattern. Now you want to enforce this pattern and describe it with a specialized information type (for example, API descriptions). In order to specialize, you need to first create the target DTD and then add enough information to your content to allow it to be migrated. </p>
+
+        <p>You can put the specializing information in either of two places:</p>
+
+        <ul>
+          <li>Add it to the <span class="filepath">class</span> attribute. You need to be careful to get the order correct, and include all ancestor type values.</li>
+
+          <li>Or give the name of the target element in an <span class="filepath">outputclass</span> attribute, migrate based on that value, and add the <span class="filepath">class</span> attribute values afterward.</li>
+
+        </ul>
+
+        <p>In either case, before migration you can run a validation transform that looks for the appropriate attribute, then checks that the content of the element will be valid under the specialized content model. You can use a tool like Schematron to generate both the validating transform and the migrating transform, or you can migrate first and use the specialized DTD to validate that the migration was successful. </p>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="nested1" id="schemas"><a name="schemas"><!-- --></a>
+    <h2 class="topictitle2">Specializing with schemas</h2>
+
+    <div>
+      <p>Like the XML DTD syntax, the XML Schema language is a way of defining a vocabulary (elements and attributes) and a set of constraints on that vocabulary (such as content models, or fixed vs. implied attributes). It has a built-in specialization mechanism, which includes the capability to restrict allowable specializations. Using the XML Schema language instead of DTDs would make it much easier to validate that specialized information types represent valid subsets of generic types, which ensures smooth processing by generic translation and publishing transforms. </p>
+
+      <div class="p">Unlike DTDs, XML schemas are expressed as XML documents. As a result, they can be processed in ways that DTDs cannot. For example, we can maintain a single XML schema and then use XSL to generate two versions: <ul>
+          <li>An authoring version of it that eliminates any fixed attributes and any overridden elements</li>
+
+          <li>A processor-ready version of it that includes the class attributes that drive the translation and publishing transforms</li>
+
+        </ul>
+</div>
+
+      <p>However, XML schemas are not yet popular enough to adopt wholeheartedly. The main problems are a lack of authoring tools, and incompatibilities between the implementations of an evolving standard. These problems should be remedied by the industry over the next year or so, as the standard is finalized and schemas become more widely adopted and supported.</p>
+
+    </div>
+
+  </div>
+
+  <div class="nested1" id="summary"><a name="summary"><!-- --></a>
+    <h2 class="topictitle2">Summary</h2>
+
+    <div>
+      <p>You can create a specialized information type by using this general procedure:</p>
+
+      <ol>
+        <li>Identify the elements that you need.</li>
+
+        <li>Identify the mapping to elements of a more general type.</li>
+
+        <li>Verify that the content models of specialized elements are more restrictive than their general equivalents.</li>
+
+        <li>Create a type module file that holds your specialized element and attribute declarations (including the <span class="filepath">class</span> attribute).</li>
+
+        <li>Create an authoring DTD file that imports the appropriate type modules.</li>
+
+      </ol>
+
+      <p>You can create specialized XSL transforms by using this general procedure:</p>
+
+      <ol>
+        <li>Create a new transform for your information type.</li>
+
+        <li>Import the existing transform that you want to extend.</li>
+
+        <li>Identify the elements that you need to treat specially.</li>
+
+        <li>Add template rules that match those elements, based on their <span class="filepath">class</span> attribute content.</li>
+
+      </ol>
+
+    </div>
+
+  </div>
+
+  <div class="nested1" id="specrules"><a name="specrules"><!-- --></a>
+    <h2 class="topictitle2">Appendix: Rules for specialization</h2>
+
+    <div>
+      <p>Although you could create a new element equivalent for any tag in a general DTD, this work is useless to you as an author unless the content models that would include the tag are also specialized. In the <span class="filepath">APIdesc</span> example, the <span class="filepath">parameters</span> element is not valid content anywhere in <span class="filepath">topic</span> or <span class="filepath">reference</span>. For it to be used, you need to create valid contexts for parameters, all the way up to the topic-level container. To expose the <span class="filepath">parameters</span> element to your authors, you need to specialize the following parts:</p>
+
+      <ul>
+        <li>A <span class="filepath">body</span> element, to allow parameters as valid content (giving us <span class="filepath">APIbody</span>)</li>
+
+        <li>A <span class="filepath">topic</span> element, to allow the specialized body (giving us <span class="filepath">APIdesc</span>)</li>
+
+      </ul>
+
+      <p>This domino effect can be avoided by using domain specialization. If you truly just want to add some new variant structures to an existing information type, use domain specialization instead of topic specialization (see <a href="DITA-domains.html" target="_blank">Specializing domains in DITA</a>).</p>
+
+      <p>To ensure that the specialized elements are more constrained than their general equivalents (that is, that they allow a proper subset of the structures that the general equivalent allows), you need to look at the content model of the general element. You can safely change the content model of your specialized element as shown in Table A: </p>
+
+      
+<div class="tablenoborder"><table summary="" cellspacing="0" cellpadding="4" frame="border" border="1" rules="all"><caption>Table 3. Summary of specialization rules </caption>
+          
+          
+          
+          <thead align="left">
+            <tr>
+              <th valign="top" width="16.051364365971107%" id="N109C6">Content type</th>
+
+              <th valign="top" width="24.398073836276083%" id="N109CD">Allowed specialization</th>
+
+              <th valign="top" width="59.5505617977528%" id="N109D4">Example (Special specializing General)</th>
+
+            </tr>
+
+          </thead>
+
+          <tbody>
+            <tr>
+              <td valign="top" width="16.051364365971107%" headers="N109C6 ">Required</td>
+
+              <td valign="top" width="24.398073836276083%" headers="N109CD ">Rename only</td>
+
+              <td valign="top" width="59.5505617977528%" headers="N109D4 ">
+                <pre>&lt;!ELEMENT General(a)&gt;</pre>
+
+                <pre>&lt;!ELEMENT Special(a.1)&gt;</pre>
+
+              </td>
+
+            </tr>
+
+            <tr>
+              <td valign="top" width="16.051364365971107%" headers="N109C6 ">Optional (?)</td>
+
+              <td valign="top" width="24.398073836276083%" headers="N109CD ">Rename, make required, or delete</td>
+
+              <td valign="top" width="59.5505617977528%" headers="N109D4 ">
+                <pre>&lt;!ELEMENT General(a?)&gt;</pre>
+
+                <pre>&lt;!ELEMENT Special(a.1?)&gt;
+&lt;!ELEMENT Special(a.1)&gt;
+&lt;!ELEMENT Special EMPTY&gt;</pre>
+
+              </td>
+
+            </tr>
+
+            <tr>
+              <td valign="top" width="16.051364365971107%" headers="N109C6 ">One or more (+)</td>
+
+              <td valign="top" width="24.398073836276083%" headers="N109CD ">Rename, make required, split into a required element plus others, split into one or more elements plus others.</td>
+
+              <td valign="top" width="59.5505617977528%" headers="N109D4 ">
+                <pre>&lt;!ELEMENT General(a+)&gt;</pre>
+
+                <pre>&lt;!ELEMENT Special(a.1+)&gt;
+&lt;!ELEMENT Special(a.1)&gt;
+&lt;!ELEMENT Special(a.1,a.2,a.3+,a.4*)&gt;
+&lt;!ELEMENT Special(a.1+,a.2,a.3*)&gt;</pre>
+
+              </td>
+
+            </tr>
+
+            <tr>
+              <td valign="top" width="16.051364365971107%" headers="N109C6 ">Zero or more (*)</td>
+
+              <td valign="top" width="24.398073836276083%" headers="N109CD ">Rename, make required, make optional, split into a required element plus others, split into an optional element plus others, split into one-or-more plus others, split into zero-or-more plus others, or delete</td>
+
+              <td valign="top" width="59.5505617977528%" headers="N109D4 ">
+                <pre>&lt;!ELEMENT General(a*)&gt;</pre>
+
+                <pre>&lt;!ELEMENT Special(a.1*)&gt;
+&lt;!ELEMENT Special(a.1)&gt;
+&lt;!ELEMENT Special(a.1?)&gt;
+&lt;!ELEMENT Special(a.1,a.2,a.3+,a.4*)&gt;
+&lt;!ELEMENT Special(a.1?,a.2,a.3+,a.4*)&gt;
+&lt;!ELEMENT Special(a.1+,a.2,a.3*)&gt;
+&lt;!ELEMENT Special(a.1*,a.2?,a.3*)&gt;
+&lt;!ELEMENT Special EMPTY&gt;</pre>
+
+              </td>
+
+            </tr>
+
+            <tr>
+              <td valign="top" width="16.051364365971107%" headers="N109C6 ">Either-or</td>
+
+              <td valign="top" width="24.398073836276083%" headers="N109CD ">Rename, or choose one</td>
+
+              <td valign="top" width="59.5505617977528%" headers="N109D4 ">
+                <pre>&lt;!ELEMENT General (a|b)&gt;</pre>
+
+                <pre>&lt;!ELEMENT Special (a.1|b.1)&gt;
+&lt;!ELEMENT Special (a.1)&gt;</pre>
+
+              </td>
+
+            </tr>
+
+          </tbody>
+
+        </table>
+</div>
+
+      <div class="section"><h4 class="sectiontitle">Extended example</h4>
+        
+        <p>You have a general element <span class="filepath">General</span>, with the content model <span class="filepath">(a,b?,(c|d+))</span>. This definition means that a <span class="filepath">General</span> always contains element <span class="filepath"> a</span>, optionally followed by element <span class="filepath">b</span>, and always ends with either <span class="filepath">c</span> or one or more <span class="filepath">d</span>'s.</p>
+
+        <div style="margin-bottom: 0;"><strong>The content model for the general element General</strong></div><pre>&lt;!ELEMENT General (a,b?,(c|d+))&gt;</pre>
+
+        <p>When you specialize <span class="filepath">General</span> to create <span class="filepath">Special</span>, its content model must be the same or more restrictive: It cannot allow more things than <span class="filepath">General</span> did, or you will not be able to map upward, or guarantee the correct behavior of general processes, transforms, or style sheets.</p>
+
+        <p>Leaving aside renaming (which is always allowed, and simply means that you are also specializing some of the elements that <span class="filepath">Special</span> can contain), here are some valid changes that you could make to the content model of <span class="filepath">Special</span>, resulting in the same or more restrictive content rules:</p>
+
+        <div style="margin-bottom: 0;"><strong>A valid change to the model Special, making b mandatory</strong></div><pre>&lt;!ELEMENT Special (a,b,(c|d))&gt;</pre>
+
+        <p><span class="filepath">Special</span> now requires <span class="filepath">b</span> to be present, instead of optional, and allows only one <span class="filepath">d</span>. It safely maps to <span class="filepath">General</span>.</p>
+
+        <div style="margin-bottom: 0;"><strong>A valid change to the model Special, making c mandatory and disallowing d</strong></div><pre>&lt;!ELEMENT Special (a,b?,c)&gt;</pre>
+
+        <p><span class="filepath">Special</span> now requires <span class="filepath">c</span> to be present, and no longer allows <span class="filepath">d</span>. It safely maps to <span class="filepath">General</span>.</p>
+
+        <div style="margin-bottom: 0;"><strong>A valid change to the model Special, making three specializations of d mandatory</strong></div><pre>&lt;!ELEMENT Special (a,b?,d1,d2,d3)&gt;</pre>
+
+        <p><span class="filepath">Special</span> now requires three specializations of <span class="filepath">d</span> to be present, and does not allow <span class="filepath">c</span>. It safely maps to <span class="filepath">General</span>.</p>
+
+      </div>
+
+      <div class="section"><h4 class="sectiontitle">Details of the class attribute</h4>
+        
+        <p>Every element must have a class attribute. The class attribute starts and ends with white space, and contains a list of blank-delimited values. Each value has two parts: the first part identifies a topic type, and the second part (after a /) identifies an element type. The class attribute value should be declared as a default attribute value in the DTD. Generally, it should not be modified by the author. </p>
+
+        <p>Example: </p>
+
+        <pre>&lt;appstep class="- topic/li task:step bctask/appstep "&gt;A specialized step&lt;/appstep&gt;</pre>
+
+        <p>When a specialized type declares new elements, it must provide a class attribute for the new element. The class attribute must include a mapping for every topic type in the specialized type's ancestry, even those in which no element renaming occurred. The mapping should start with topic, and finish with the current element type. </p>
+
+        <p>Example: </p>
+
+        <pre>&lt;appname class="- topic/kwd task/kwd bctask/appname "&gt; </pre>
+
+        <p>This is necessary so that generalizing and specializing transforms can map values simply and accurately. For example, if task/kwd was missing as a value, and I decided to map this bctask up to a task topic, then the transform would have to guess whether to map to kwd (appropriate if task is more general, which it is) or leave as appname (appropriate if task were more specialized, which it isn't). By always providing mappings for more general values, we can then apply the simple rule that missing mappings must by default be to more specialized values, which means the last value in the list is appropriate. While this example is trivial, more complicated hierarchies (say, five levels deep, with renaming occurring at two and four only) make this kind of mapping essential.</p>
+
+        <p>A specialized type does not need to change the class attribute for elements that it does not specialize, but simply reuses by reference from more generic levels. For example, since task and bctask use the p element without specializing it, they don't need to declare mappings for it.</p>
+
+        <p>A specialized type only declares class attributes for the elements that it uniquely declares. It does not need to declare class attributes for elements that it reuses or inherits. </p>
+
+      </div>
+
+      <div class="section"><h4 class="sectiontitle">Using the class attribute</h4>
+        
+        <p>Applying an XSLT template based on class attribute values allows a transform to be applied to whole branches of element types, instead of just a single element type.</p>
+
+        <p>Wherever you would check for element name (any XPath statement that contains an element name value), you need to enhance this to instead check the contents of the element's class attribute. Even if the element is unrecognized, the class attribute can let the transform know that the element belongs to a class of known elements, and can be safely treated according to their rules.</p>
+
+        <p>Example:</p>
+
+        <pre>
+&lt;xsl:template match="*[contains(@class,' topic/li ')]"&gt;
+This match statement will work on any li element it encounters. It will also work on step and appstep elements, even though it doesn't know what they are specifically, because the class attribute tells the template what they are generally.
+&lt;xsl:template match="*[contains(@class,' task/step ')]"&gt;
+</pre>
+
+        <p>This match statement won't work on generic li elements, but it will work on both step elements and appstep elements; even though it doesn't know what an appstep is, it knows to treat it like a step.</p>
+
+        <p>Be sure to include a leading and trailing blank in your class attribute string check. Otherwise you could get false matches (without the blanks, 'task/step' would match on 'notatask/stepaway', when it shouldn't).</p>
+
+      </div>
+
+      <div class="section"><h4 class="sectiontitle">The class attribute in domains specialization</h4>
+        
+        <p>When you create a domains specialization, the new elements still need a class attribute, but should start with a "+" instead of a "-". This signals any generalization transforms to treat the element differently: a domains-aware generalization transform may have different logic for handling domains than for handling topic specializations. </p>
+
+        <p>Domain specializations should be derived either from topic (the root topic type), or from another domain specialization. Do not create a domain by specializing an already specialized topic type: this can result in unpredictable generalization behavior, and is not currently supported by the architecture. </p>
+
+      </div>
+
+      <div class="section"><h4 class="sectiontitle">Notices</h4>
+        
+        <blockquote>
+          <p>© Copyright International Business Machines Corp., 2002, 2003. All rights reserved.</p>
+
+          <p>The information provided in this document has not been submitted to any formal IBM test and is distributed "AS IS," without warranty of any kind, either express or implied. The use of this information or the implementation of any of these techniques described in this document is the reader's responsibility and depends on the reader's ability to evaluate and integrate them into their operating environment. Readers attempting to adapt these techniques to their own environments do so at their own risk. </p>
+
+        </blockquote>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+</body>
+</html>

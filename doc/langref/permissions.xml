@@ -1,0 +1,73 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
+<reference id="permissions" xml:lang="en-us">
+   <title>
+      <keyword>permissions</keyword>
+   </title>
+   <shortdesc>The &lt;<keyword>permissions</keyword>&gt; empty prolog element can
+indicate any preferred controls for access to a topic. Topics
+can be filtered based on the permissions element. This capability depends
+on your output formatting process.</shortdesc>
+   <prolog>
+      <metadata>
+         <keywords>
+            <indexterm>permissions</indexterm>
+            <indexterm>Prolog
+elements<indexterm>permissions</indexterm>
+            </indexterm>
+            <indexterm>permissions</indexterm>
+         </keywords>
+      </metadata>
+   </prolog>
+   <refbody>
+      <refsyn>
+         <title>Contained by</title>
+         <xref href="prolog.xml">prolog</xref>
+      </refsyn>
+      <refsyn>
+         <title>Contains</title> no content</refsyn>
+      <section>
+         <title>Attributes</title>
+         <simpletable relcolwidth="2* 3* 1* 1* 1*" id="permissions_attr">
+            <sthead>
+               <stentry>Name</stentry>
+               <stentry>Description</stentry>
+               <stentry>Data Type</stentry>
+               <stentry>Default Value</stentry>
+               <stentry>Required?</stentry>
+            </sthead>
+            <strow conref="commonLRdefs.xml#commonLRdefs/view">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/global-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/class">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+         </simpletable>
+      </section>
+      <example>
+         <codeblock>&lt;prolog&gt;
+&lt;permissions view="entitled"/&gt;
+...</codeblock>
+      </example>
+   </refbody>
+</reference>

@@ -1,0 +1,104 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
+<reference id="topichead" xml:lang="en-us">
+   <title>
+      <keyword>topichead</keyword>
+   </title>
+   <shortdesc>The &lt;<keyword>topichead</keyword>&gt; element provides a title-only
+entry in a navigation map, as an alternative to the fully-linked
+title provided by the &lt;<keyword>topicref</keyword>&gt; element.</shortdesc>
+   <refbody>
+      <section/>
+      <refsyn>
+         <title>Contained by</title>
+      </refsyn>
+      <refsyn>
+         <title>Contains</title> ( <xref href="topicmeta.xml">topicmeta</xref> ) (optional)
+then ( <xref href="topicref.xml">topicref</xref> or <xref href="navref.xml">navref</xref> or <xref href="anchor.xml">anchor</xref> )
+(0 or more) </refsyn>
+      <section>
+         <title>Attributes</title>
+         <simpletable relcolwidth="2* 3* 1* 1* 1*" id="topichead_attr">
+            <sthead>
+               <stentry>Name</stentry>
+               <stentry>Description</stentry>
+               <stentry>Data Type</stentry>
+               <stentry>Default Value</stentry>
+               <stentry>Required?</stentry>
+            </sthead>
+            <strow conref="commonLRdefs.xml#commonLRdefs/navtitle">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/id">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/conref">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/topicref-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/select-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/global-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/class">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+         </simpletable>
+      </section>
+      <example>
+         <p>The following markup, for HTML Help output, will produce a book
+icon that expands into a nested set when toggled.<codeblock>&lt;map title="DITA Reference"&gt;
+ &lt;topicref href="anchor.xml" type="topic"&gt;&lt;/topicref&gt;
+ &lt;topicref href="apiname.xml" type="topic"&gt;&lt;/topicref&gt;
+ &lt;topicref href="audience.xml" type="topic"&gt;&lt;/topicref&gt;
+ &lt;topicref href="author.xml" type="topic"&gt;&lt;/topicref&gt;
+ <b>&lt;topichead navtitle="Parameter Entity elements"&gt;</b>
+  &lt;topicref href="global-atts.xml" type="topic"&gt;&lt;/topicref&gt;
+  &lt;topicref href="select-atts.xml" type="topic"&gt;&lt;/topicref&gt;
+  &lt;topicref href="univ-atts.xml" type="topic"&gt;&lt;/topicref&gt;
+  &lt;topicref href="topicref-atts.xml" type="topic"&gt;&lt;/topicref&gt;
+ <b>&lt;/topichead&gt;</b>
+&lt;/map&gt;</codeblock>
+         
+         
+         </p>
+      </example>
+   </refbody>
+</reference>

@@ -1,0 +1,79 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
+<reference id="navref" xml:lang="en-us">
+   <title>
+      <keyword>navref</keyword>
+   </title>
+   <shortdesc>The &lt;<keyword>navref</keyword>&gt; element references a map file from within
+a map file.  The reference is resolved at runtime for Eclipse navigation,
+typically to pull together the navigation for multiple components into a product
+navigation. <ph conref="commonLRdefs.xml#commonLRdefs/only4eclipse"/>
+   
+   
+   </shortdesc>
+   <prolog>
+      <metadata>
+         <keywords>
+            <indexterm>navref</indexterm>
+            <indexterm xml:lang="en-us">Map elements<indexterm>navref</indexterm>
+            </indexterm>
+            <indexterm>navref</indexterm>
+         </keywords>
+      </metadata>
+   </prolog>
+   <refbody>
+      <refsyn>
+         <title>Contained by</title>
+         <xref href="map.xml">map</xref> ,  <xref href="topicref.xml">topicref</xref> ,  <xref href="topichead.xml">topichead</xref> ,
+ <xref href="topicgroup.xml">topicgroup</xref>
+      </refsyn>
+      <refsyn>
+         <title>Contains</title> no content</refsyn>
+      <section>
+         <title>Attributes</title>
+         <simpletable relcolwidth="2* 3* 1* 1* 1*" id="navref_attr">
+            <sthead>
+               <stentry>Name</stentry>
+               <stentry>Description</stentry>
+               <stentry>Data Type</stentry>
+               <stentry>Default Value</stentry>
+               <stentry>Required?</stentry>
+            </sthead>
+            <strow conref="commonLRdefs.xml#commonLRdefs/mapref">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/global-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/class">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+         </simpletable>
+      </section>
+      <example>In this example, the map titled "MyComponent tasks" references the
+maps "othermap2.ditamap" and "othermap3.ditamap".<codeblock>&lt;map title="MyComponent tasks"&gt;
+&lt;topicref navtitle="Start here" href="" toc="yes"&gt; Start here
+&lt;navref mapref="../com.ibm.xml.doc/othermap1.ditamap"/&gt;
+&lt;navref mapref="../com.ibm.xml.doc/othermap2.ditamap"/&gt;
+&lt;/topicref&gt;
+&lt;/map&gt;</codeblock>
+      </example>
+   </refbody>
+</reference>

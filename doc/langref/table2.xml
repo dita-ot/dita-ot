@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
+<reference id="table2" xml:lang="en-us">
+   <title>Table elements</title>
+   <refbody>
+      <section>
+         <p>DITA topics support two types of tables. One is the most common table format
+used in industry, the &lt;<apiname>CALS table</apiname>&gt; (or more recently known also
+as the Oasis Table Exchange Model). The CALS table supports the spanning of
+multiple rows or columns for special layout or organizational needs, and provides
+a wide variety of controls over the display properties of the data and even
+the table structure itself.<indexterm>Table elements</indexterm>
+         
+         </p>
+         <p>The other table structure in DITA is called &lt;<apiname>simpletable</apiname>&gt;. As
+the name implies, it is structurally less sophisticated than the CALS table,
+and can be used as a very simple, regular table for which close control of
+formatting is not as important. However, the main advantage of simpletable
+is for describing lists of data with regular headings, such as telephone directory
+listings, display adapter configuration data, or API properties. If you have
+ever needed a "three-part definition list," simpletable is used for that purpose.</p>
+         <p>Upon output, the CALS table is often fully reproduced using presentation
+hints contained in the markup itself (such as specific column widths or span
+controls). The simpletable has a similar, table-like output, but it is more
+adaptable for dynamic, in-browser data viewports that show one set (row or
+column) of information at a time, with controls for "paging" through the data.</p>
+      </section>
+   </refbody>
+</reference>

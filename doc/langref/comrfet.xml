@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
+<reference id="comrfet" xml:lang="en-us">
+   <title>Commonly referenced descriptions</title>
+   <refbody>
+      <section>
+         <p>Several parts of a language reference are common between many
+locations, such as the descriptions for the selection and property attributes
+of DITA elements. These are described as sets to reduce unnecessary duplication
+of common information. The technique you use to reference this common information
+within the various topics of this language reference is a model for how you
+can likewise maintain oft-reused information in a single location. <indexterm>Commonly
+referenced descriptions</indexterm>
+         
+         
+         </p>
+      </section>
+   </refbody>
+</reference>

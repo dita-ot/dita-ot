@@ -1,0 +1,95 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
+<reference id="varname" xml:lang="en-us">
+   <title>
+      <keyword>varname</keyword>
+   </title>
+   <shortdesc>The variable name (&lt;<keyword>varname</keyword>&gt;) element defines a variable
+that must be supplied to a software application. The variable name element
+is very similar to the variable (var) element, but variable name is used outside
+of syntax diagrams, possibly within a message or API description to describe
+a system variable or environment variable. This element is part of the DITA
+software domain, a special set of DITA elements designed to document software
+tasks, concepts and reference information.</shortdesc>
+   <prolog>
+      <metadata>
+         <keywords>
+            <indexterm>varname (variable name)</indexterm>
+            <indexterm>variable
+name (varname)</indexterm>
+            <indexterm>Domain elements<indexterm>varname (variable
+name)</indexterm>
+            </indexterm>
+            <indexterm>varname (variable
+name)</indexterm>
+         </keywords>
+      </metadata>
+   </prolog>
+   <refbody>
+      <refsyn>
+         <title>Contained by</title>
+         <xref href="msgph.xml">msgph</xref> ,  <xref href="msgblock.xml">msgblock</xref> ,  <xref href="filepath.xml">filepath</xref> ,
+ <xref href="userinput.xml">userinput</xref> ,  <xref href="systemoutput.xml">systemoutput</xref>; the same contexts as <xref href="keyword.xml">keyword</xref>
+      </refsyn>
+      <refsyn>
+         <title>Contains</title> text data </refsyn>
+      <section>
+         <title>Attributes</title>
+         <simpletable relcolwidth="2* 3* 1* 1* 1*" id="varname_attr">
+            <sthead>
+               <stentry>Name</stentry>
+               <stentry>Description</stentry>
+               <stentry>Data Type</stentry>
+               <stentry>Default Value</stentry>
+               <stentry>Required?</stentry>
+            </sthead>
+            <strow conref="commonLRdefs.xml#commonLRdefs/keyref">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/univ-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/outputclass">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/global-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/class">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+         </simpletable>
+      </section>
+      <example>
+         <codeblock>&lt;filepath&gt;
+  &lt;varname&gt;install-dir&lt;/varname&gt;\projects\working\&lt;varname&gt;project-dir&lt;/varname&gt;
+       \source\&lt;varname&gt;filename&lt;/varname&gt;.java
+&lt;/filepath&gt;</codeblock>
+      </example>
+   </refbody>
+</reference>

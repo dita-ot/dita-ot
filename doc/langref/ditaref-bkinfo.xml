@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
+<!DOCTYPE bkinfo PUBLIC "-//IBM//DTD DITA BookInfo//EN" "../../demo/book/bkinfo.dtd">
+<bkinfo id="ditaref-bkinfo">
+  <title>DITA Language Reference</title>
+  <bktitlealts>
+      <bksubtitle>Learning your way around DITA markup</bksubtitle>
+  </bktitlealts>
+  <bkabstract>A list of all DITA elements organized alphabetically.</bkabstract>
+  <bkinfobody>
+    <bkrights>
+      <bkcopyrfirst><year>2001</year></bkcopyrfirst>
+      <bkcopyrlast><year>2004</year></bkcopyrlast>
+	  <bkowner>
+	    <organization>
+		  <orgname>IBM Corporation</orgname>
+		  <address>New Orchard Road
+Armonk, New York 10504</address>
+		  <phone>914-499-1900</phone>
+		  <resource href="http://www.ibm.com/" format="html"/>
+		</organization>
+	  </bkowner>
+       <summary>(C) Copyright IBM Corp. 2001, 2004</summary>
+   </bkrights>
+  </bkinfobody>
+</bkinfo>

@@ -1,0 +1,94 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
+<reference id="delim" xml:lang="en-us">
+   <title>
+      <keyword>delim</keyword>
+   </title>
+   <shortdesc>Within a syntax definition, the delimiter (&lt;delim&gt;) element defines
+a character marking the beginning or end of a section or part of the complete
+syntax. Typical delimiter characters are the parenthesis, comma, tab, vertical
+bar or other special characters. This element is part of the DITA programming
+domain, a special set of DITA elements designed to document programming tasks,
+concepts and reference information.</shortdesc>
+   <prolog>
+      <metadata>
+         <keywords>
+            <indexterm>delim (syntax delimiter)</indexterm>
+            <indexterm>syntax
+delimiter (delim)</indexterm>
+            <indexterm>Domains elements<indexterm>delim</indexterm>
+            </indexterm>
+            <indexterm>delim</indexterm>
+         </keywords>
+      </metadata>
+   </prolog>
+   <refbody>
+      <refsyn>
+         <title>Contained by</title>
+         <xref href="synph.xml">synph</xref> ,  <xref href="groupseq.xml">groupseq</xref> ,  <xref href="groupchoice.xml">groupchoice</xref> ,
+ <xref href="groupcomp.xml">groupcomp</xref>
+      </refsyn>
+      <refsyn>
+         <title>Contains</title> text data </refsyn>
+      <section>
+         <title>Attributes</title>
+         <simpletable relcolwidth="2* 3* 1* 1* 1*" id="delim_attr">
+            <sthead>
+               <stentry>Name</stentry>
+               <stentry>Description</stentry>
+               <stentry>Data Type</stentry>
+               <stentry>Default Value</stentry>
+               <stentry>Required?</stentry>
+            </sthead>
+            <strow conref="commonLRdefs.xml#commonLRdefs/importance-optreq">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/univ-atts-no-importance">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/outputclass">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/global-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/class">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+         </simpletable>
+      </section>
+      <example>
+         <pre>&lt;syntaxdiagram&gt;
+ &lt;title&gt;Adding&lt;/title&gt;
+ &lt;groupseq&gt;&lt;kwd&gt;1&lt;/kwd&gt;&lt;oper&gt;+&lt;/oper&gt;&lt;var&gt;two&lt;/var&gt;<b>&lt;delim&gt;</b>=<b>&lt;/delim&gt;</b>
+ &lt;kwd&gt;something&lt;/kwd&gt;
+&lt;/groupseq&gt;
+&lt;/syntaxdiagram&gt;</pre>
+      </example>
+   </refbody>
+</reference>

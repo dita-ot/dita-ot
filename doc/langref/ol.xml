@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE reference
+  PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd">
+<reference id="ol" xml:lang="en-us">
+   <title>
+      <keyword>ol</keyword>
+   </title>
+   <shortdesc>An ordered list (&lt;ol&gt;) is a list of items sorted by sequence or
+order of importance.</shortdesc>
+   <prolog>
+      <metadata>
+         <keywords>
+            <indexterm>ol</indexterm>
+            <indexterm>Body elements<indexterm>ol</indexterm>
+            </indexterm>
+            <indexterm>ol</indexterm>
+         </keywords>
+      </metadata>
+   </prolog>
+   <refbody>
+      <refsyn>
+         <title>Contained by</title>
+         <xref href="body.xml">body</xref> ,  <xref href="section.xml">section</xref> ,  <xref href="example.xml">example</xref> ,
+ <xref href="desc.xml">desc</xref> ,  <xref href="p.xml">p</xref> ,
+ <xref href="note.xml">note</xref> ,  <xref href="lq.xml">lq</xref> ,
+ <xref href="li.xml">li</xref> ,  <xref href="itemgroup.xml">itemgroup</xref> ,  <xref href="dd.xml">dd</xref> ,
+ <xref href="fig.xml">fig</xref> ,  <xref href="stentry.xml">stentry</xref> ,  <xref href="draft-comment.xml">draft-comment</xref> ,
+ <xref href="fn.xml">fn</xref> ,  <xref href="linkinfo.xml">linkinfo</xref> ,  <xref href="entry.xml">entry</xref> ,
+ <xref href="conbody.xml">conbody</xref> ,  <xref href="prereq.xml">prereq</xref> ,  <xref href="context.xml">context</xref> ,
+ <xref href="info.xml">info</xref> ,  <xref href="tutorialinfo.xml">tutorialinfo</xref> ,  <xref href="stepxmp.xml">stepxmp</xref> ,
+ <xref href="choptionhd.xml">choptionhd</xref> ,  <xref href="chdeschd.xml">chdeschd</xref> ,  <xref href="choption.xml">choption</xref> ,
+ <xref href="chdesc.xml">chdesc</xref> ,  <xref href="stepresult.xml">stepresult</xref> ,  <xref href="result.xml">result</xref> ,
+ <xref href="postreq.xml">postreq</xref> ,  <xref href="refsyn.xml">refsyn</xref> ,  <xref href="propdesc.xml">propdesc</xref> ,
+ <xref href="pd.xml">pd</xref>
+      </refsyn>
+      <refsyn>
+         <title>Contains</title>
+         <xref href="li.xml">li</xref>
+      </refsyn>
+      <section>
+         <title>Attributes</title>
+         <simpletable relcolwidth="2* 3* 1* 1* 1*" id="ol_attr">
+            <sthead>
+               <stentry>Name</stentry>
+               <stentry>Description</stentry>
+               <stentry>Data Type</stentry>
+               <stentry>Default Value</stentry>
+               <stentry>Required?</stentry>
+            </sthead>
+            <strow conref="commonLRdefs.xml#commonLRdefs/compact">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/spectitle">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/univ-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/outputclass">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/global-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/class">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+         </simpletable>
+      </section>
+      <example>
+         <codeblock>Here are the colors of the rainbow in order of appearance from top to bottom:
+&lt;ol&gt;
+&lt;li&gt;Red&lt;/li&gt;
+&lt;li&gt;Orange&lt;/li&gt;
+&lt;li&gt;Yellow&lt;/li&gt;
+&lt;li&gt;Green&lt;/li&gt;
+&lt;li&gt;Blue&lt;/li&gt;
+&lt;li&gt;Indigo&lt;/li&gt;
+&lt;li&gt;Violet&lt;/li&gt;
+&lt;/ol&gt;</codeblock>
+      </example>
+   </refbody>
+</reference>

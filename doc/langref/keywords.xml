@@ -1,0 +1,91 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
+<reference id="keywords" xml:lang="en-us">
+   <title>
+      <keyword>keywords</keyword>
+   </title>
+   <shortdesc>The &lt;<keyword>keywords</keyword>&gt; element contains a list of keyword
+entries (using <ph>
+         <xref href="indexterm.xml">indexterm</xref>
+      </ph> or <ph>
+         <xref href="keyword.xml">keyword</xref>
+      </ph> markup) that can be used by
+a search engine. </shortdesc>
+   <prolog>
+      <metadata>
+         <keywords>
+            <indexterm>keywords</indexterm>
+            <indexterm>Prolog elements<indexterm>keywords</indexterm>
+            </indexterm>
+            <indexterm>keywords</indexterm>
+         </keywords>
+      </metadata>
+   </prolog>
+   <refbody>
+      <section>
+         <p>When DITA topics are output to XHTML, any &lt;<keyword>keyword</keyword>&gt;
+or &lt;<keyword>indexterm</keyword>&gt; elements in the &lt;<keyword>keywords</keyword>&gt;
+element are placed in the Web page metadata. In addition, any index terms
+in this context are also used for supported index processing (for example,
+for print versions).</p>
+      </section>
+      <refsyn>
+         <title>Contained by</title>
+         <xref href="metadata.xml">metadata</xref>
+      </refsyn>
+      <refsyn>
+         <title>Contains</title>
+         <xref href="indexterm.xml">indexterm</xref> or <xref href="keyword.xml">keyword</xref>
+      </refsyn>
+      <section>
+         <title>Attributes</title>
+         <simpletable relcolwidth="2* 3* 1* 1* 1*" id="keywords_attr">
+            <sthead>
+               <stentry>Name</stentry>
+               <stentry>Description</stentry>
+               <stentry>Data Type</stentry>
+               <stentry>Default Value</stentry>
+               <stentry>Required?</stentry>
+            </sthead>
+            <strow conref="commonLRdefs.xml#commonLRdefs/select-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/global-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/class">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+         </simpletable>
+      </section>
+      <example>
+         <p>The following example is metadata from an installation task:</p>
+         <codeblock>&lt;prolog&gt;
+ &lt;keywords&gt;
+  &lt;keyword&gt;installing&lt;/keyword&gt;
+  &lt;keyword&gt;uninstalling&lt;/keyword&gt;
+  &lt;keyword&gt;prerequisites&lt;/keyword&gt; 
+  &lt;keyword&gt;helps&lt;/keyword&gt;
+  &lt;keyword&gt;wizards&lt;/keyword&gt;
+ &lt;/keywords&gt;
+&lt;/prolog&gt;</codeblock>
+      </example>
+   </refbody>
+</reference>

@@ -1,0 +1,83 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
+<reference id="relrow" xml:lang="en-us">
+   <title>
+      <keyword>relrow</keyword>
+   </title>
+   <shortdesc>A &lt;<keyword>relrow</keyword>&gt; is a row in the relationship table.
+This creates a relationship between the cells in the row, which will end up
+expressed as links among the &lt;<keyword>topicref</keyword>&gt; elements in
+the cells.</shortdesc>
+   <prolog>
+      <metadata>
+         <keywords>
+            <indexterm>relrow</indexterm>
+            <indexterm>Map elements<indexterm>relrow</indexterm>
+            </indexterm>
+            <indexterm>relrow</indexterm>
+         </keywords>
+      </metadata>
+   </prolog>
+   <refbody>
+      <refsyn>
+         <title>Contained by</title>
+         <xref href="reltable.xml">reltable</xref>
+      </refsyn>
+      <refsyn>
+         <title>Contains</title>
+         <xref href="relcell.xml">relcell</xref>
+      </refsyn>
+      <section>
+         <title>Attributes</title>
+         <simpletable relcolwidth="2* 3* 1* 1* 1*" id="relrow_attr">
+            <sthead>
+               <stentry>Name</stentry>
+               <stentry>Description</stentry>
+               <stentry>Data Type</stentry>
+               <stentry>Default Value</stentry>
+               <stentry>Required?</stentry>
+            </sthead>
+            <strow conref="commonLRdefs.xml#commonLRdefs/global-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/class">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+         </simpletable>
+      </section>
+      <example>In this example, a relationship table is defined with three columns;
+one for "concept", one for "task", and one for "reference". Three cells are
+defined within one row. The first cell contains one concept topic: batsonar.xml.
+The second cell contains two task topics: batcaring.xml and batfeeding.xml.
+The third cell contains two reference topics: batguano.xml and bathistory.xml. <codeblock>&lt;map&gt;
+ &lt;reltable&gt;
+  &lt;relheader&gt;
+   &lt;relcolspec type="concept"&gt;
+   &lt;relcolspec type="task"&gt;
+   &lt;relcolspec type="reference"&gt;
+  &lt;/relheader&gt;
+  &lt;relrow&gt;
+   &lt;relcell&gt;&lt;topicref href="batsonar.xml"/&gt;&lt;/relcell&gt;
+   &lt;relcell&gt;&lt;topicref href="batcaring.xml"/&gt;&lt;topicref
+   href="batfeeding.xml"/&gt;&lt;/relcell&gt;
+   &lt;relcell&gt;&lt;topicref href="batguano.xml"/&gt;&lt;topicref
+   href="bathistory.xml"/&gt;&lt;/relcell&gt;
+  &lt;/relrow&gt;
+ &lt;/reltable&gt;
+&lt;/map&gt;</codeblock>
+      </example>
+   </refbody>
+</reference>

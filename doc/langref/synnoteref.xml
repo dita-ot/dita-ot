@@ -1,0 +1,89 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
+<reference id="synnoteref" xml:lang="en-us">
+   <title>
+      <keyword>synnoteref</keyword>
+   </title>
+   <shortdesc>The syntax note (&lt;<keyword>synnoteref</keyword>&gt;) reference element references
+a syntax note element (&lt;<keyword>synnote</keyword>&gt;) that has already been defined
+elsewhere in the topic. The same notation can be used in more than one syntax
+definition. The syntax note reference element is part of the DITA programming
+domain, a special set of DITA elements designed to document programming tasks,
+concepts and reference information.</shortdesc>
+   <prolog>
+      <metadata>
+         <keywords>
+            <indexterm>synnoteref</indexterm>
+            <indexterm>Domain
+elements<indexterm>synnoteref</indexterm>
+            </indexterm>
+            <indexterm>synnoteref</indexterm>
+         </keywords>
+      </metadata>
+   </prolog>
+   <refbody>
+      <refsyn>
+         <title>Contained by</title>
+         <xref href="syntaxdiagram.xml">syntaxdiagram</xref> ,
+ <xref href="synblk.xml">synblk</xref> ,  <xref href="groupseq.xml">groupseq</xref> ,  <xref href="groupchoice.xml">groupchoice</xref> ,
+ <xref href="groupcomp.xml">groupcomp</xref> ,  <xref href="fragment.xml">fragment</xref>
+      </refsyn>
+      <refsyn>
+         <title>Contains</title> no content</refsyn>
+      <section>
+         <title>Attributes</title>
+         <simpletable relcolwidth="2* 3* 1* 1* 1*" id="synnoteref_attr">
+            <sthead>
+               <stentry>Name</stentry>
+               <stentry>Description</stentry>
+               <stentry>Data Type</stentry>
+               <stentry>Default Value</stentry>
+               <stentry>Required?</stentry>
+            </sthead>
+            <strow conref="commonLRdefs.xml#commonLRdefs/href">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/univ-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/outputclass">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/global-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/class">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+         </simpletable>
+      </section>
+      <example>
+         <pre>&lt;synnoteref href="#syntaxdiagram/mysyn"/&gt;
+</pre> </example>
+   </refbody>
+</reference>

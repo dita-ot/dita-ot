@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE map PUBLIC "-//IBM//DTD DITA Map//EN" "../dtd/map.dtd">
+<map title="DITA Readme map" id="mainDITAreadme">
+  <topicref href="DITA-readme.xml" collection-type="family" navtitle="DITA-OT introduction" locktitle="yes">
+    <topicref href="DITA-changes.xml" navtitle="Release history"/>
+    <topicref href="DITA-futures.xml" navtitle="Future"/>
+    <topicref href="DITA-installing.xml" navtitle="Installation"/>
+    <topicref href="DITA-usingtransforms.xml" navtitle="Using transformation"/>    
+    <topicref href="DITA-ant.xml" navtitle="Building output with Ant"/>
+    <topicref href="DITA-tested.xml" navtitle="Tested platforms and tools"/>
+    <topicref href="DITA-tweaks.xml" navtitle="Tweak information"/>
+    <topicref href="DITA-XS-readme.xml"/>
+  </topicref>
+  <topichead navtitle="Articles">
+    <topicref conref="articles/DITA-articles.ditamap#DITA-rm">
+      <?Pub Caret?>    </topicref>
+  </topichead>
+</map>
+

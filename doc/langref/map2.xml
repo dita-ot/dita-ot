@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
+<reference id="body2map2" xml:lang="en-us">
+   <title>Map elements</title>
+   <refbody>
+      <section>
+         <p>A map describes the relationships among a set of DITA topics. The following
+are some examples of relationships that can be described in a map:<indexterm>Map
+elements</indexterm>
+         
+         </p>
+         <ul>
+
+            
+            <li>Hierarchical (Parent/Child). Nested topics create a hierarchical relationship.
+The topic that does the nesting is the parent, and the topics that are nested
+are the children.</li>
+
+            
+            <li>Ordered. Child topics can be labeled as having an ordered relationship,
+which means they are referenced in a definite sequence.</li>
+
+            
+            <li>Family. Child topics can be labeled as having a family relationship, which
+means they all refer to each other.</li>
+
+         
+         </ul>
+         <p>The relationships defined in a map can be used to create a Table of Contents
+(TOC), aggregate topics into a PDF document, or to create links between topics
+in output.</p>
+      </section>
+   </refbody>
+</reference>

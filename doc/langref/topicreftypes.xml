@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
+<reference id="topicreftypes" xml:lang="en-us">
+   <title>
+      <keyword>%topicreftypes;</keyword>
+   </title>
+   <refbody>
+      <refsyn>
+         <title>Contained by</title>Used in the topic DTD.</refsyn>
+      <refsyn>
+         <title>Contains</title>Declarations for attributes. <xref href="topic.xml">topic</xref> or <xref href="concept.xml">concept</xref> or <xref href="task.xml">task</xref> or <xref href="reference.xml">reference</xref> or <xref href="external.xml">external</xref> or <xref href="local.xml">local</xref>
+      </refsyn>
+      <section>
+         <title>Attributes</title>
+         <state name="IsAttlist" value="NA"/>
+      </section>
+      <example><!-- optional content --></example>
+   </refbody>
+</reference>

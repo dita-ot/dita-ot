@@ -1,0 +1,86 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
+<reference id="prereq" xml:lang="en-us">
+   <title>
+      <keyword>prereq</keyword>
+   </title>
+   <shortdesc>The pre-requisite (&lt;<keyword>prereq</keyword>&gt;) section of a task
+should document things the user needs to know or do before starting the current
+task. Prerequisite links will be placed in a list after the related-links
+section; on output the &lt;<keyword>prereq</keyword>&gt; links from the related-links
+section are added to the &lt;<keyword>prereq</keyword>&gt; section.</shortdesc>
+   <prolog>
+      <metadata>
+         <keywords>
+            <indexterm>prereq</indexterm>
+            <indexterm>Task
+elements<indexterm>prereq</indexterm>
+            </indexterm>
+            <indexterm>prereq</indexterm>
+         </keywords>
+      </metadata>
+   </prolog>
+   <refbody>
+      <refsyn>
+         <title>Contained by</title>
+         <xref href="taskbody.xml">taskbody</xref>
+      </refsyn>
+      <refsyn>
+         <title>Contains</title> text data or <xref href="ph.xml">ph</xref> or <xref href="term.xml">term</xref> or <xref href="xref.xml">xref</xref> or <xref href="cite.xml">cite</xref> or <xref href="q.xml">q</xref> or <xref href="boolean.xml">boolean</xref> or <xref href="state.xml">state</xref> or <xref href="keyword.xml">keyword</xref> or <xref href="tm.xml">tm</xref> or <xref href="p.xml">p</xref> or <xref href="lq.xml">lq</xref> or <xref href="note.xml">note</xref> or <xref href="dl.xml">dl</xref> or <xref href="ul.xml">ul</xref> or <xref href="ol.xml">ol</xref> or <xref href="sl.xml">sl</xref> or <xref href="pre.xml">pre</xref> or <xref href="lines.xml">lines</xref> or <xref href="fig.xml">fig</xref> or <xref href="image.xml">image</xref> or <xref href="object.xml">object</xref> or <xref href="table.xml">table</xref> or <xref href="simpletable.xml">simpletable</xref> or <xref href="draft-comment.xml">draft-comment</xref> or <xref href="required-cleanup.xml">required-cleanup</xref> or <xref href="fn.xml">fn</xref> or <xref href="indextermref.xml">indextermref</xref> or <xref href="indexterm.xml">indexterm</xref>
+      </refsyn>
+      <section>
+         <title>Attributes</title>
+         <simpletable relcolwidth="2* 3* 1* 1* 1*" id="prereq_attr">
+            <sthead>
+               <stentry>Name</stentry>
+               <stentry>Description</stentry>
+               <stentry>Data Type</stentry>
+               <stentry>Default Value</stentry>
+               <stentry>Required?</stentry>
+            </sthead>
+            <strow conref="commonLRdefs.xml#commonLRdefs/univ-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/outputclass">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/global-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/class">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+         </simpletable>
+      </section>
+      <example>
+         <codeblock>&lt;task id="sqlj"&gt;
+ &lt;title&gt;Creating an SQLJ file&lt;/title&gt;
+ &lt;taskbody&gt;
+  &lt;prereq&gt;Before creating a new SQLJ file, you must 
+  log in to the SQLJ server.&lt;/prereq&gt;
+ &lt;/taskbody&gt;
+&lt;/task&gt;</codeblock>
+      </example>
+   </refbody>
+</reference>

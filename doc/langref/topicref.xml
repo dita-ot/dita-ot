@@ -1,0 +1,165 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
+<reference id="topicref" xml:lang="en-us">
+   <title>
+      <keyword>topicref</keyword>
+   </title>
+   <shortdesc>The &lt;<keyword>topicref</keyword>&gt; element designates a topic (such as a concept,
+task, or reference) as a link in a DITA map. A &lt;<keyword>topicref</keyword>&gt; can contain
+other&lt;<keyword>topicref</keyword>&gt; elements, allowing you to express navigation or
+table-of-contents hierarchies, as well as implying relationships between the
+containing &lt;<keyword>topicref</keyword>&gt; and its children. You can set the collection-type
+of a container &lt;<keyword>topicref</keyword>&gt; to determine how its children
+are related to each other. Relationships end up expressed as links in the
+output (with each participant in a relationship having links to the other
+participants). </shortdesc>
+   <prolog>
+      <metadata>
+         <keywords>
+            <indexterm>topicref<indexterm>Map
+elements<indexterm>topicref</indexterm>
+               </indexterm>
+            </indexterm>
+            <indexterm>Map
+elements<indexterm>topicref</indexterm>
+            </indexterm>
+            <indexterm>topicref</indexterm>
+         </keywords>
+      </metadata>
+   </prolog>
+   <refbody>
+      <section>
+         <p>You can fine tune the output from your map by setting different
+attributes on topicrefs: for example, the <i>
+               
+               
+               <keyword>linking</keyword>
+            
+            
+            </i> attribute controls
+how its relationships to other topicrefs are expressed as links, and the <i>
+               
+               
+               <keyword>toc</keyword>
+            
+            
+            </i> attribute
+controls whether the topicref shows up in TOC or navigation output.</p>
+      </section>
+      <refsyn>
+         <title>Contained by</title>
+         <xref href="map.xml">map</xref> ,  <xref href="topicref.xml">topicref</xref> ,  <xref href="relcell.xml">relcell</xref> ,
+ <xref href="topichead.xml">topichead</xref> ,  <xref href="topicgroup.xml">topicgroup</xref>
+      </refsyn>
+      <refsyn>
+         <title>Contains</title> ( <xref href="topicmeta.xml">topicmeta</xref> ) (optional)
+then ( <xref href="topicref.xml">topicref</xref> or <xref href="navref.xml">navref</xref> or <xref href="anchor.xml">anchor</xref> )
+(0 or more) </refsyn>
+      <section>
+         <title>Attributes</title>
+         <simpletable relcolwidth="2* 3* 1* 1* 1*" id="topicref_attr">
+            <sthead>
+               <stentry>Name</stentry>
+               <stentry>Description</stentry>
+               <stentry>Data Type</stentry>
+               <stentry>Default Value</stentry>
+               <stentry>Required?</stentry>
+            </sthead>
+            <strow conref="commonLRdefs.xml#commonLRdefs/navtitle">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/id">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/href">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/keyref">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/query">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/conref-topicref">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/copy-to">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/topicref-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/select-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/global-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/class">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+         </simpletable>
+      </section>
+      <example>In this example, there are six topicrefs. They are nested and have
+a hierarchical relationship. Bats.xml is the parent topic and the other topics
+are its children.<codeblock>&lt;map title="Bats" Bats
+ &lt;topicref href="bats.xml" type="topic"&gt;
+  &lt;topicref href="batcaring.xml" type="task"&gt;&lt;/topicref&gt;
+  &lt;topicref href="batfeeding.xml" type="task"&gt;&lt;/topicref&gt;
+  &lt;topicref href="batsonar.xml" type="concept"&gt;&lt;/topicref&gt;
+  &lt;topicref href="batguano.xml" type="reference"&gt;&lt;/topicref&gt;
+  &lt;topicref href="bathistory.xml" type="reference"&gt;&lt;/topicref&gt;
+ &lt;/topicref&gt;
+&lt;/map&gt;</codeblock>
+      </example>
+   </refbody>
+</reference>

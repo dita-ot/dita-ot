@@ -1,0 +1,89 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
+<reference id="substeps" xml:lang="en-us">
+   <title>
+      <keyword>substeps</keyword>
+   </title>
+   <shortdesc>The &lt;<keyword>substeps</keyword>&gt; element allows you to break
+a step down into a series of separate actions, and should be used only if
+necessary. Try to describe the steps of a task in a single level of steps.
+If you need to use more than one level of substep nesting, you should probably
+rewrite the task to simplify it.</shortdesc>
+   <prolog>
+      <metadata>
+         <keywords>
+            <indexterm>substeps</indexterm>
+            <indexterm>Task
+elements<indexterm>substeps</indexterm>
+            </indexterm>
+            <indexterm>substeps</indexterm>
+         </keywords>
+      </metadata>
+   </prolog>
+   <refbody>
+      <refsyn>
+         <title>Contained by</title>
+         <xref href="step.xml">step</xref>
+      </refsyn>
+      <refsyn>
+         <title>Contains</title>
+         <xref href="substep.xml">substep</xref>
+      </refsyn>
+      <section>
+         <title>Attributes</title>
+         <simpletable relcolwidth="2* 3* 1* 1* 1*" id="substeps_attr">
+            <sthead>
+               <stentry>Name</stentry>
+               <stentry>Description</stentry>
+               <stentry>Data Type</stentry>
+               <stentry>Default Value</stentry>
+               <stentry>Required?</stentry>
+            </sthead>
+            <strow conref="commonLRdefs.xml#commonLRdefs/univ-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/outputclass">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/global-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/class">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+         </simpletable>
+      </section>
+      <example>
+         <codeblock>&lt;substeps&gt;
+&lt;substep&gt;&lt;cmd&gt;Hold pencil in a steady, level position.&lt;/cmd&gt;&lt;/substep&gt;
+&lt;substep&gt;&lt;cmd&gt;Turn handle until resistance diminishes.&lt;/cmd&gt;
+&lt;info&gt;Note: initially, it may be somewhat difficult to turn the handle if 
+pencil has never been sharpened before.&lt;/info&gt;&lt;/substep&gt;
+&lt;substep&gt;&lt;cmd&gt;To determine if pencil is sharp, remove it from the sharpener 
+and inspect the tip.&lt;/cmd&gt;&lt;/substep&gt;
+&lt;/substeps&gt;
+</codeblock>
+      </example>
+   </refbody>
+</reference>

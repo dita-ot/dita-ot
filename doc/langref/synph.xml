@@ -1,0 +1,88 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
+<reference id="synph" xml:lang="en-us">
+   <title>
+      <keyword>synph</keyword>
+   </title>
+   <shortdesc>The syntax phrase (&lt;synph&gt;) element is a container for syntax
+definition elements. It is used when a complete syntax definition is not needed,
+but some of the syntax elements, such as kwd, oper, delim, are used within
+the text flow of the topic content. This element is part of the DITA programming
+domain, a special set of DITA elements designed to document programming tasks,
+concepts and reference information.</shortdesc>
+   <prolog>
+      <metadata>
+         <keywords>
+            <indexterm>synph</indexterm>
+            <indexterm>Domain
+elements<indexterm>synph</indexterm>
+            </indexterm>
+            <indexterm>synph</indexterm>
+         </keywords>
+      </metadata>
+   </prolog>
+   <refbody>
+      <refsyn>
+         <title>Contained by</title>
+         <xref href="synph.xml">synph</xref>; the same
+contexts as <xref href="ph.xml">ph</xref>
+      </refsyn>
+      <refsyn>
+         <title>Contains</title> text data or <xref href="codeph.xml">codeph</xref> or <xref href="option.xml">option</xref> or <xref href="parmname.xml">parmname</xref> or <xref href="var.xml">var</xref> or <xref href="kwd.xml">kwd</xref> or <xref href="oper.xml">oper</xref> or <xref href="delim.xml">delim</xref> or <xref href="sep.xml">sep</xref> or <xref href="synph.xml">synph</xref>
+      </refsyn>
+      <section>
+         <title>Attributes</title>
+         <simpletable relcolwidth="2* 3* 1* 1* 1*" id="synph_attr">
+            <sthead>
+               <stentry>Name</stentry>
+               <stentry>Description</stentry>
+               <stentry>Data Type</stentry>
+               <stentry>Default Value</stentry>
+               <stentry>Required?</stentry>
+            </sthead>
+            <strow conref="commonLRdefs.xml#commonLRdefs/univ-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/outputclass">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/global-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/class">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+         </simpletable>
+      </section>
+      <example>
+         <pre>
+            
+            
+            <b>&lt;synph&gt;</b>&lt;kwd&gt;format&lt;/kwd&gt; &lt;var&gt;volumename&lt;/var&gt;<b>&lt;/synph&gt;</b>
+
+         
+         
+         </pre> </example>
+   </refbody>
+</reference>

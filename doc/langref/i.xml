@@ -1,0 +1,78 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
+<reference id="i" xml:lang="en-us">
+   <title>
+      <keyword>i</keyword>
+   </title>
+   <shortdesc>The italic (&lt;i&gt;) element is used to apply italic highlighting
+to the content of the element. Use this element only when there
+is not some other more proper tag. For example, for specific items such as
+GUI controls, use the <ph>
+         <xref href="uicontrol.xml">uicontrol</xref>
+      </ph> tag.
+Italic highlighting generally means a font that is slanted for emphasis, but
+this may vary depending on your output formatting process. This element is
+part of the DITA highlighting domain.</shortdesc>
+   <prolog>
+      <metadata>
+         <keywords>
+            <indexterm>i (italic)</indexterm>
+            <indexterm>italic
+(i)</indexterm>
+            <indexterm>Domain elements<indexterm>i (italic)</indexterm>
+            </indexterm>
+            <indexterm>i (italic)</indexterm>
+         </keywords>
+      </metadata>
+   </prolog>
+   <refbody>
+      <refsyn>
+         <title>Contained by</title>All contexts where <xref href="ph.xml">ph</xref> is
+valid.</refsyn>
+      <refsyn>
+         <title>Contains</title> text data or <xref href="ph.xml">ph</xref> or <xref href="term.xml">term</xref> or <xref href="xref.xml">xref</xref> or <xref href="cite.xml">cite</xref> or <xref href="q.xml">q</xref> or <xref href="boolean.xml">boolean</xref> or <xref href="state.xml">state</xref> or <xref href="keyword.xml">keyword</xref> or <xref href="tm.xml">tm</xref>
+      </refsyn>
+      <section>
+         <title>Attributes</title>
+         <simpletable relcolwidth="2* 3* 1* 1* 1*" id="i_attr">
+            <sthead>
+               <stentry>Name</stentry>
+               <stentry>Description</stentry>
+               <stentry>Data Type</stentry>
+               <stentry>Default Value</stentry>
+               <stentry>Required?</stentry>
+            </sthead>
+            <strow conref="commonLRdefs.xml#commonLRdefs/univ-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/global-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/class">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+         </simpletable>
+      </section>
+      <example>
+         <codeblock>&lt;p&gt;Unplug the unit &lt;i&gt;before&lt;/i&gt; placing the metal screwdriver
+against the terminal screw.&lt;/p&gt;</codeblock>
+      </example>
+   </refbody>
+</reference>

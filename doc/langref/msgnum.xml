@@ -1,0 +1,86 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
+<reference id="msgnum" xml:lang="en-us">
+   <title>
+      <keyword>msgnum</keyword>
+   </title>
+   <shortdesc>The message number (&lt;<keyword>msgnum</keyword>&gt;) element contains the number
+of a message produced by an application or program. This element is part of
+the DITA software domain, a special set of DITA elements designed to document
+software tasks, concepts and reference information.</shortdesc>
+   <prolog>
+      <metadata>
+         <keywords>
+            <indexterm>msgnum</indexterm>
+            <indexterm>Domain
+elements<indexterm>msgnum</indexterm>
+            </indexterm>
+            <indexterm>msgnum</indexterm>
+         </keywords>
+      </metadata>
+   </prolog>
+   <refbody>
+      <refsyn>
+         <title>Contained by</title>
+         <xref href="msgph.xml">msgph</xref> ,  <xref href="msgblock.xml">msgblock</xref>; the same contexts as <xref href="keyword.xml">keyword</xref>
+      </refsyn>
+      <refsyn>
+         <title>Contains</title> text data </refsyn>
+      <section>
+         <title>Attributes</title>
+         <simpletable relcolwidth="2* 3* 1* 1* 1*" id="msgnum_attr">
+            <sthead>
+               <stentry>Name</stentry>
+               <stentry>Description</stentry>
+               <stentry>Data Type</stentry>
+               <stentry>Default Value</stentry>
+               <stentry>Required?</stentry>
+            </sthead>
+            <strow conref="commonLRdefs.xml#commonLRdefs/keyref">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/univ-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/outputclass">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/global-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/class">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+         </simpletable>
+      </section>
+      <example>
+         <pre>&lt;p&gt;A server log entry of &lt;msgnum&gt;I:0&lt;/msgnum&gt; is equivalent to the
+text message, &lt;msgph&gt;informational: successful&lt;/msgph&gt;.&lt;/p&gt;</pre>
+      </example>
+   </refbody>
+</reference>

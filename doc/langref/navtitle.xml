@@ -1,0 +1,78 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
+<reference id="navtitle" xml:lang="en-us">
+   <title>
+      <keyword>navtitle</keyword>
+   </title>
+   <shortdesc>The navigation title (&lt;<keyword>navtitle</keyword>&gt;) element is one of a
+set of alternate titles that can be included inside the &lt;<keyword>titlealts</keyword>&gt; element.
+This navigation title may differ from the first level heading that shows in
+the main browser window. Use &lt;<keyword>navtitle</keyword>&gt; when the actual title of
+the topic isn't appropriate for use in navigation panes or online contents
+(for example, because the actual title is too long or needs stated in terse,
+imperative voice in the navigation).</shortdesc>
+   <prolog>
+      <metadata>
+         <keywords>
+            <indexterm>navtitle</indexterm>
+            <indexterm>Topic
+elements<indexterm>navtitle</indexterm>
+            </indexterm>
+            <indexterm>navtitle</indexterm>
+         </keywords>
+      </metadata>
+   </prolog>
+   <refbody>
+      <refsyn>
+         <title>Contained by</title>
+         <xref href="titlealts.xml">titlealts</xref>
+      </refsyn>
+      <refsyn>
+         <title>Contains</title> text data </refsyn>
+      <section>
+         <title>Attributes</title>
+         <simpletable relcolwidth="2* 3* 1* 1* 1*" id="navtitle_attr">
+            <sthead>
+               <stentry>Name</stentry>
+               <stentry>Description</stentry>
+               <stentry>Data Type</stentry>
+               <stentry>Default Value</stentry>
+               <stentry>Required?</stentry>
+            </sthead>
+            <strow conref="commonLRdefs.xml#commonLRdefs/id-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/global-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/class">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+         </simpletable>
+      </section>
+      <example>
+         <codeblock>&lt;task id=progexample"&gt;
+ &lt;title&gt;Publishing a DITA information set in PDF&lt;/title&gt;
+  &lt;titlealts&gt;&lt;navtitle&gt;Publishing in PDF&lt;/navtitle&gt;&lt;/titlealts&gt;
+ &lt;taskbody&gt; . . . &lt;/taskbody&gt;
+&lt;/task&gt;</codeblock>
+      </example>
+   </refbody>
+</reference>

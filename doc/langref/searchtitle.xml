@@ -1,0 +1,80 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
+<reference id="searchtitle" xml:lang="en-us">
+   <title>
+      <keyword>searchtitle</keyword>
+   </title>
+   <shortdesc>When your DITA topic is transformed to XHTML, the &lt;<keyword>searchtitle</keyword>&gt; element
+is used to create a title element at the top of the resulting HTML file. This
+title is normally used in search result summaries by some search engines,
+such as that in Eclipse (<ph>
+         <xref href="http://eclipse.org" scope="external" format="html">http://eclipse.org</xref>
+      </ph>);
+if not set, the XHTML's title element defaults to the source topic's title
+content (which may not be as well optimized for search summaries)</shortdesc>
+   <prolog>
+      <metadata>
+         <keywords>
+            <indexterm>searchtitle</indexterm>
+            <indexterm>Topic
+elements<indexterm>searchtitle</indexterm>
+            </indexterm>
+            <indexterm>searchtitle</indexterm>
+         </keywords>
+      </metadata>
+   </prolog>
+   <refbody>
+      <section/>
+      <refsyn>
+         <title>Contained by</title>
+         <xref href="titlealts.xml">titlealts</xref>
+      </refsyn>
+      <refsyn>
+         <title>Contains</title> text data </refsyn>
+      <section>
+         <title>Attributes</title>
+         <simpletable relcolwidth="2* 3* 1* 1* 1*" id="searchtitle_attr">
+            <sthead>
+               <stentry>Name</stentry>
+               <stentry>Description</stentry>
+               <stentry>Data Type</stentry>
+               <stentry>Default Value</stentry>
+               <stentry>Required?</stentry>
+            </sthead>
+            <strow conref="commonLRdefs.xml#commonLRdefs/id-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/global-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/class">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+         </simpletable>
+      </section>
+      <example>
+         <codeblock>&lt;task id="progexample"&gt;
+ &lt;title&gt;Programming Example&lt;/title&gt;
+  &lt;titlealts&gt;&lt;searchtitle&gt;Example of Required Programming&lt;/searchtitle&gt;&lt;/titlealts&gt;
+ &lt;taskbody&gt; . . . &lt;/taskbody&gt;
+&lt;/task&gt;</codeblock>
+      </example>
+   </refbody>
+</reference>

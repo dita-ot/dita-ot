@@ -1,0 +1,120 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
+<reference id="fragref" xml:lang="en-us">
+   <title>
+      <keyword>fragref</keyword>
+   </title>
+   <shortdesc>The fragment reference (&lt;<keyword>fragref</keyword>&gt;) element provides a
+logical reference to a syntax definition fragment so that you can reference
+a syntax fragment multiple times. This element is part of the DITA programming
+domain, a special set of DITA elements designed to document programming tasks,
+concepts and reference information.</shortdesc>
+   <prolog>
+      <metadata>
+         <keywords>
+            <indexterm>fragref (fragment reference)</indexterm>
+            <indexterm>fragment
+reference (fragref)</indexterm>
+            <indexterm>Domain elements<indexterm>fragref</indexterm>
+            </indexterm>
+            <indexterm>fragref</indexterm>
+         </keywords>
+      </metadata>
+   </prolog>
+   <refbody>
+      <refsyn>
+         <title>Contained by</title>
+         <xref href="syntaxdiagram.xml">syntaxdiagram</xref> ,
+ <xref href="synblk.xml">synblk</xref> ,  <xref href="groupseq.xml">groupseq</xref> ,  <xref href="groupchoice.xml">groupchoice</xref> ,
+ <xref href="groupcomp.xml">groupcomp</xref> ,  <xref href="fragment.xml">fragment</xref>
+      </refsyn>
+      <refsyn>
+         <title>Contains</title> text data or <xref href="ph.xml">ph</xref> or <xref href="term.xml">term</xref> or <xref href="q.xml">q</xref> or <xref href="boolean.xml">boolean</xref> or <xref href="state.xml">state</xref> or <xref href="keyword.xml">keyword</xref> or <xref href="tm.xml">tm</xref>
+      </refsyn>
+      <section>
+         <title>Attributes</title>
+         <simpletable relcolwidth="2* 3* 1* 1* 1*" id="fragref_attr">
+            <sthead>
+               <stentry>Name</stentry>
+               <stentry>Description</stentry>
+               <stentry>Data Type</stentry>
+               <stentry>Default Value</stentry>
+               <stentry>Required?</stentry>
+            </sthead>
+            <strow conref="commonLRdefs.xml#commonLRdefs/href-fragref">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/importance-optreq">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/univ-atts-no-importance">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/outputclass">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/global-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/class">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+         </simpletable>
+      </section>
+      <example>This markup example:<pre>&lt;syntaxdiagram frame="none"&gt;
+ &lt;title&gt;CopyFile&lt;/title&gt;
+ &lt;groupseq&gt;&lt;kwd&gt;COPYF&lt;/kwd&gt;&lt;/groupseq&gt;
+ &lt;groupcomp&gt;&lt;var&gt;input-filename&lt;/var&gt;&lt;kwd&gt;*INFILE&lt;/kwd&gt;&lt;/groupcomp&gt;
+ &lt;groupseq&gt;&lt;var&gt;output-filename&lt;/var&gt;&lt;kwd&gt;*OUTFILE&lt;/kwd&gt;&lt;/groupseq&gt;
+ <b>&lt;fragref href="#syntax/overlay"&gt;&lt;/fragref&gt;</b>
+ &lt;groupchoice&gt;&lt;var&gt;input-filename&lt;/var&gt;&lt;kwd&gt;*INFILE&lt;/kwd&gt;&lt;/groupchoice&gt;
+ &lt;groupchoice&gt;&lt;var&gt;output-filename&lt;/var&gt;&lt;kwd&gt;*OUTFILE&lt;/kwd&gt;&lt;/groupchoice&gt;
+ &lt;fragment id="overlay"&gt;
+  &lt;title&gt;Overlay&lt;/title&gt;
+  &lt;groupchoice&gt;&lt;kwd&gt;*OVERLAP&lt;/kwd&gt;&lt;kwd&gt;*Prompt&lt;/kwd&gt;&lt;/groupchoice&gt;
+ &lt;/fragment&gt;
+&lt;/syntaxdiagram&gt;
+</pre>produces the following output:<pre>CopyFile
+
+&gt;&gt;-COPYF--input-filename*INFILE--output-filename--*OUTFILE------&gt;
+
+&gt;--| Overlay |--+-input-filename-+--+-output-filename-+--------&gt;&lt;
+                '-*INFILE--------'  '-*OUTFILE--------'
+
+Overlay
+
+|--+-*OVERLAP-+-------------------------------------------------|
+   '-*Prompt--'
+</pre>
+      </example>
+   </refbody>
+</reference>

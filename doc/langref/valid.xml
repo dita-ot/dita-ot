@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
+<reference id="valid" xml:lang="en-us">
+   <title>Miscellaneous elements</title>
+   <refbody>
+      <section>
+         <p>Most DITA elements represent discourse, or information that is placed exactly
+as entered. However, there are also types of information that are usually
+authored in context with a thought or issue, but upon output, the content
+might be relocated, suppressed, or used only for purposes such as inline annotations
+for drafts. These elements include footnotes, index entries, draft comments,
+and special cleanup containers that can hold migrated data that still needs
+a writer's intervention to get into the right place.<indexterm>Miscellaneous
+elements</indexterm>
+         
+         </p>
+      </section>
+   </refbody>
+</reference>

@@ -1,0 +1,143 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
+<reference id="related-links" xml:lang="en-us">
+   <title>
+      <keyword>related-links</keyword>
+   </title>
+   <shortdesc>The related information links of a topic (&lt;<keyword>related-links</keyword>&gt;
+element) are stored in a special section following the body of the topic.
+After a topic is processed into it final output form, the related links are
+usually displayed at the end of the topic, although some Web-based help systems
+might display them in a separate navigation frame.</shortdesc>
+   <refbody>
+      <section>
+         <p>Prerequisite links are
+an exception (that is, in which <i>
+               
+               
+               <keyword>importance</keyword>="required"</i> and
+the role is compatible–not ancestor/parent/child/descendant/next). These get
+sorted after the &lt;<keyword>shortdesc</keyword>&gt; (all topics) or after the
+&lt;<keyword>prereq</keyword>&gt; section (for tasks).</p>
+         <note type="other" othertype="Processing notes">
+            
+            
+            <ol>
+
+               
+               
+               <li>PDF output ignores hierarchical links, for example ancestor/parent/child/descendant/next/previous/sibling.</li>
+
+               
+               
+               <li>Links not in a &lt;<keyword>linklist</keyword>&gt; will be sorted on output
+based on type, role, and importance.</li>
+
+               
+               
+               <li>The value of the <i>
+                     
+                     
+                     <keyword>format</keyword>
+                  
+                  
+                  </i> attribute defaults to <q>dita</q> unless
+the attribute <i>
+                     
+                     
+                     <keyword>scope</keyword>="external",</i> when format is assumed
+to be not-dita.</li>
+
+            
+            
+            </ol>
+         
+         
+         </note>
+      </section>
+      <refsyn>
+         <title>Contained by</title>
+         <xref href="topic.xml">topic</xref> ,  <xref href="concept.xml">concept</xref> ,  <xref href="task.xml">task</xref> ,
+ <xref href="reference.xml">reference</xref>
+      </refsyn>
+      <refsyn>
+         <title>Contains</title>
+         <xref href="link.xml">link</xref> or <xref href="linklist.xml">linklist</xref> or <xref href="linkpool.xml">linkpool</xref>
+      </refsyn>
+      <section>
+         <title>Attributes</title>
+         <simpletable relcolwidth="2* 3* 1* 1* 1*" id="related-links_attr">
+            <sthead>
+               <stentry>Name</stentry>
+               <stentry>Description</stentry>
+               <stentry>Data Type</stentry>
+               <stentry>Default Value</stentry>
+               <stentry>Required?</stentry>
+            </sthead>
+            <strow conref="commonLRdefs.xml#commonLRdefs/rel-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/select-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/format">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/scope">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/outputclass">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/global-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/class">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+         </simpletable>
+      </section>
+      <example>
+         <codeblock>&lt;task id="sqlj"&gt;
+ &lt;title&gt;Creating an SQLJ file&lt;/title&gt;
+ &lt;taskbody&gt;...&lt;/taskbody&gt;
+ &lt;related-links&gt;
+  &lt;link href="#concept"&gt;&lt;linktext&gt;Some little concept&lt;/linktext&gt;&lt;/link&gt;
+ &lt;/related-links&gt;
+&lt;/task&gt;</codeblock><!--at some point probably worthwhile factoring the example out into a separate file and linking to it - it's large enough to stand alone, and is getting used frequently-->
+      </example>
+   </refbody>
+</reference>

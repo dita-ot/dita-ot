@@ -1,0 +1,101 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
+<reference id="taskbody" xml:lang="en-us">
+   <title>
+      <keyword>taskbody</keyword>
+   </title>
+   <shortdesc>The &lt;<keyword>taskbody</keyword>&gt; element is the main body-level
+element inside a task topic. A task body has a very specific structure, with
+the following elements in this order: &lt;<keyword>prereq</keyword>&gt;, &lt;<keyword>context</keyword>&gt;,
+&lt;<keyword>steps</keyword>&gt;, &lt;<keyword>result</keyword>, &lt;<keyword>example</keyword>&gt;
+and &lt;<keyword>postreq</keyword>&gt;. Each of the body sections are optional.</shortdesc>
+   <prolog>
+      <metadata>
+         <keywords>
+            <indexterm>taskbody</indexterm>
+            <indexterm>Task
+elements<indexterm>taskbody</indexterm>
+            </indexterm>
+            <indexterm>taskbody</indexterm>
+         </keywords>
+      </metadata>
+   </prolog>
+   <refbody>
+      <refsyn>
+         <title>Contained by</title>
+         <xref href="task.xml">task</xref>
+      </refsyn>
+      <refsyn>
+         <title>Contains</title> ( <xref href="prereq.xml">prereq</xref> ) (optional)
+then ( <xref href="context.xml">context</xref> ) (optional)
+then ( <xref href="steps.xml">steps</xref> or <xref href="steps-unordered.xml">steps-unordered</xref> ) (optional) then ( <xref href="result.xml">result</xref> ) (optional) then ( <xref href="example.xml">example</xref> )
+(optional) then ( <xref href="postreq.xml">postreq</xref> )
+(optional) </refsyn>
+      <section>
+         <title>Attributes</title>
+         <simpletable relcolwidth="2* 3* 1* 1* 1*" id="taskbody_attr">
+            <sthead>
+               <stentry>Name</stentry>
+               <stentry>Description</stentry>
+               <stentry>Data Type</stentry>
+               <stentry>Default Value</stentry>
+               <stentry>Required?</stentry>
+            </sthead>
+            <strow conref="commonLRdefs.xml#commonLRdefs/univ-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/outputclass">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/global-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/class">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+         </simpletable>
+      </section>
+      <example>
+         <codeblock>&lt;task id=sqlj&gt;
+ &lt;title&gt;Creating an SQLJ file&lt;/title&gt;
+ &lt;taskbody&gt;
+  &lt;context&gt;Once you have set up SQLJ, you need to create a new SQLJ file.
+  &lt;/context&gt;
+  &lt;steps&gt;
+   &lt;step&gt;&lt;cmd&gt;In a text editor, create a new file.&lt;/cmd&gt;&lt;/step&gt;
+   &lt;step&gt;&lt;cmd&gt;Add your Java source code and SQLJ statements.&lt;/cmd&gt;&lt;/step&gt;
+   &lt;step&gt;&lt;cmd&gt;Save your file with an .sqlj extension and close the 
+   editor.&lt;/cmd&gt;&lt;/step&gt;
+  &lt;/steps&gt;
+  &lt;postreq&gt;
+   &lt;p&gt;Once you have created a new .sqlj file, import the file into
+   your project and translate the file.&lt;/p&gt;
+   &lt;p&gt;For information on SQLJ syntax, contact your database vendor or
+   see &lt;xref href="web.ansi.org/public/std_info.html" type="external"/&gt;.&lt;/p&gt;
+  &lt;/postreq&gt;
+ &lt;/taskbody&gt;
+&lt;/task&gt; </codeblock>
+      </example>
+   </refbody>
+</reference>

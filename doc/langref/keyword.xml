@@ -1,0 +1,124 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
+<reference id="keyword" xml:lang="en-us">
+   <title>
+      <keyword>keyword</keyword>
+   </title>
+   <shortdesc>The &lt;<keyword>keyword</keyword>&gt; element identifies a keyword
+or token, such as a single value from an enumerated list, the name of a command
+or parameter, or a lookup key for a message (contrast with <ph>
+         <xref href="term.xml">term</xref>
+      </ph>). </shortdesc>
+   <prolog>
+      <metadata>
+         <keywords>
+            <indexterm>keyword</indexterm>
+            <indexterm>Body
+elements<indexterm>keyword</indexterm>
+            </indexterm>
+            <indexterm>keyword</indexterm>
+         </keywords>
+      </metadata>
+   </prolog>
+   <refbody>
+      <section>
+         <p>Specialized elements derived from &lt;<keyword>keyword</keyword>&gt;
+may also have extended processing, such as different formatting or automatic
+indexing. If the <i>
+               
+               
+               <keyword>keyref</keyword>
+            
+            
+            </i> attribute is used, the keyword
+can be turned into a hyperlink on output (not currently supported).</p>
+         <p>When
+DITA topics are output to XHTML, any &lt;<keyword>keyword</keyword>&gt; or &lt;<keyword>indexterm</keyword>&gt;
+elements in the &lt;<keyword>keywords</keyword>&gt; element are placed in the
+Web page metadata. In addition, any index terms in this context are also used
+for supported index processing (for example, for print versions).</p>
+      </section>
+      <refsyn>
+         <title>Contained by</title>
+         <xref href="title.xml">title</xref> ,  <xref href="shortdesc.xml">shortdesc</xref> ,  <xref href="section.xml">section</xref> ,
+ <xref href="example.xml">example</xref> ,  <xref href="desc.xml">desc</xref> ,  <xref href="p.xml">p</xref> ,  <xref href="note.xml">note</xref> ,  <xref href="lq.xml">lq</xref> ,
+ <xref href="q.xml">q</xref> ,  <xref href="sli.xml">sli</xref> ,
+ <xref href="li.xml">li</xref> ,  <xref href="itemgroup.xml">itemgroup</xref> ,  <xref href="dthd.xml">dthd</xref> ,
+ <xref href="ddhd.xml">ddhd</xref> ,  <xref href="dt.xml">dt</xref> ,
+ <xref href="dd.xml">dd</xref> ,  <xref href="figgroup.xml">figgroup</xref> ,  <xref href="pre.xml">pre</xref> ,
+ <xref href="lines.xml">lines</xref> ,  <xref href="ph.xml">ph</xref> ,  <xref href="stentry.xml">stentry</xref> ,
+ <xref href="draft-comment.xml">draft-comment</xref> ,  <xref href="fn.xml">fn</xref> ,  <xref href="cite.xml">cite</xref> ,
+ <xref href="xref.xml">xref</xref> ,  <xref href="linkinfo.xml">linkinfo</xref> ,  <xref href="entry.xml">entry</xref> ,
+ <xref href="keywords.xml">keywords</xref> ,  <xref href="prereq.xml">prereq</xref> ,  <xref href="context.xml">context</xref> ,
+ <xref href="cmd.xml">cmd</xref> ,  <xref href="info.xml">info</xref> ,
+ <xref href="tutorialinfo.xml">tutorialinfo</xref> ,  <xref href="stepxmp.xml">stepxmp</xref> ,  <xref href="choice.xml">choice</xref> ,  <xref href="choptionhd.xml">choptionhd</xref> ,
+ <xref href="chdeschd.xml">chdeschd</xref> ,  <xref href="choption.xml">choption</xref> ,  <xref href="chdesc.xml">chdesc</xref> ,
+ <xref href="stepresult.xml">stepresult</xref> ,  <xref href="result.xml">result</xref> ,  <xref href="postreq.xml">postreq</xref> ,
+ <xref href="refsyn.xml">refsyn</xref> ,  <xref href="proptype.xml">proptype</xref> ,  <xref href="propvalue.xml">propvalue</xref> ,
+ <xref href="propdesc.xml">propdesc</xref> ,  <xref href="screen.xml">screen</xref> ,  <xref href="b.xml">b</xref> ,
+ <xref href="u.xml">u</xref> ,  <xref href="i.xml">i</xref> ,
+ <xref href="tt.xml">tt</xref> ,  <xref href="sup.xml">sup</xref> ,
+ <xref href="sub.xml">sub</xref> ,  <xref href="codeph.xml">codeph</xref> ,  <xref href="codeblock.xml">codeblock</xref> ,
+ <xref href="pt.xml">pt</xref> ,  <xref href="pd.xml">pd</xref> ,
+ <xref href="fragref.xml">fragref</xref> ,  <xref href="synnote.xml">synnote</xref>
+      </refsyn>
+      <refsyn>
+         <title>Contains</title> text data </refsyn>
+      <section>
+         <title>Attributes</title>
+         <simpletable relcolwidth="2* 3* 1* 1* 1*" id="keyword_attr">
+            <sthead>
+               <stentry>Name</stentry>
+               <stentry>Description</stentry>
+               <stentry>Data Type</stentry>
+               <stentry>Default Value</stentry>
+               <stentry>Required?</stentry>
+            </sthead>
+            <strow conref="commonLRdefs.xml#commonLRdefs/keyref-keyword">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/univ-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/outputclass">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/global-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/class">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+         </simpletable>
+      </section>
+      <example>
+         <codeblock>&lt;p&gt;The &lt;keyword&gt;assert&lt;/keyword&gt; pragma statement allows messages to be passed
+to the emulator, pre-compiler, etc.. </codeblock>
+      </example>
+   </refbody>
+</reference>

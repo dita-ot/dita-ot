@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../dtd/reference.dtd">
+<reference id="ditareadme">
+  <title>The DITA Open Toolkit</title>
+  <shortdesc>The DITA Open Toolkit is a reference implementation of the OASIS DITA Technical Committee&apos;s specification for DITA DTDs and Schemas. The Toolkit transforms DITA content (maps and topics) into deliverable formats, including: XHTML, Eclipse Help, HTML Help, and JavaHelp.</shortdesc>
+  <refbody/>
+</reference>
+

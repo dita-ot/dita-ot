@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='utf-8'?>
+<?xml-stylesheet href="../xsl/ditaview_shell.xsl" type="text/xsl"?>
+<!DOCTYPE concept PUBLIC "-//IBM//DTD DITA Concept//EN" "../../dtd/concept.dtd" []>
+<concept id="tip-infotype">
+  <title>What is a tip?</title>
+  <conbody>
+    <p>In DITA, a tip is type of note.</p>
+  </conbody>
+</concept>
+

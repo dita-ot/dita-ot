@@ -1,0 +1,68 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
+<reference id="linktext" xml:lang="en-us">
+   <title>
+      <keyword>linktext</keyword>
+   </title>
+   <shortdesc>The &lt;<keyword>linktext</keyword>&gt; element provides the literal
+label or line of text for a link. In most cases, the text of a link can be
+resolved during processing by cross reference with the target
+resource. Use the &lt;<keyword>linktext</keyword>&gt; element only when the target
+cannot be reached, such as when it is a peer or external link.</shortdesc>
+   <prolog>
+      <metadata>
+         <keywords>
+            <indexterm>linktext</indexterm>
+            <indexterm>Related
+Links elements<indexterm>linktext</indexterm>
+            </indexterm>
+            <indexterm>linktext</indexterm>
+         </keywords>
+      </metadata>
+   </prolog>
+   <refbody>
+      <refsyn>
+         <title>Contained by</title>
+         <xref href="link.xml">link</xref>
+      </refsyn>
+      <refsyn>
+         <title>Contains</title> text data </refsyn>
+      <section>
+         <title>Attributes</title>
+         <simpletable relcolwidth="2* 3* 1* 1* 1*" id="linktext_attr">
+            <sthead>
+               <stentry>Name</stentry>
+               <stentry>Description</stentry>
+               <stentry>Data Type</stentry>
+               <stentry>Default Value</stentry>
+               <stentry>Required?</stentry>
+            </sthead>
+            <strow conref="commonLRdefs.xml#commonLRdefs/global-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/class">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+         </simpletable>
+      </section>
+      <example>
+         <codeblock>&lt;link href="tzover.htm#accsqlj"&gt;
+ &lt;linktext&gt;Accessing relational data with SQLJ&lt;/linktext&gt;
+&lt;/link&gt;
+</codeblock>
+      </example>
+   </refbody>
+</reference>

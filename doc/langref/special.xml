@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
+<reference id="special" xml:lang="en-us">
+   <title>Specialization elements</title>
+   <refbody>
+      <section>
+         <p>Several DITA elements exist either for architectural reasons
+or for support of specialized markup yet to be designed. Although there is
+little need to use these elements unless you are directed to, some of them,
+such as &lt;<apiname>boolean</apiname>&gt; and &lt;<apiname>state</apiname>&gt;, can be used if your content
+makes use of these semantic distinctions. A discussion of signals on a gate
+of an integrated logic circuit, for example, might use the state element to
+represent either on or off conditions of that gate.<indexterm>Specialization
+elements</indexterm>
+         
+         </p>
+      </section>
+   </refbody>
+</reference>

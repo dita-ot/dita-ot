@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE reference
+  PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd">
+<reference id="object" xml:lang="en-us">
+   <title>
+      <keyword>object</keyword>
+   </title>
+   <shortdesc>DITA's &lt;<keyword>object</keyword>&gt; element corresponds to the
+HTML &lt;<keyword>object</keyword>&gt; element. The &lt;<keyword>object</keyword>&gt;
+element allows authors to include animated images, applets, plug-ins, ActiveX
+controls, video clips, and other multimedia objects in a topic for rendering
+after transformation to HTML.</shortdesc>
+   <prolog>
+      <metadata>
+         <keywords>
+            <indexterm>object</indexterm>
+            <indexterm>Body
+elements<indexterm>object</indexterm>
+            </indexterm>
+            <indexterm>object</indexterm>
+         </keywords>
+      </metadata>
+   </prolog>
+   <refbody>
+      <refsyn>
+         <title>Contained by</title>
+         <xref href="body.xml">body</xref> ,  <xref href="section.xml">section</xref> ,  <xref href="example.xml">example</xref> ,
+ <xref href="p.xml">p</xref> ,  <xref href="note.xml">note</xref> ,
+ <xref href="lq.xml">lq</xref> ,  <xref href="li.xml">li</xref> ,
+ <xref href="itemgroup.xml">itemgroup</xref> ,  <xref href="dd.xml">dd</xref> ,  <xref href="fig.xml">fig</xref> ,
+ <xref href="stentry.xml">stentry</xref> ,  <xref href="draft-comment.xml">draft-comment</xref> ,  <xref href="fn.xml">fn</xref> ,
+ <xref href="entry.xml">entry</xref> ,  <xref href="conbody.xml">conbody</xref> ,  <xref href="prereq.xml">prereq</xref> ,
+ <xref href="context.xml">context</xref> ,  <xref href="info.xml">info</xref> ,  <xref href="tutorialinfo.xml">tutorialinfo</xref> ,
+ <xref href="stepxmp.xml">stepxmp</xref> ,  <xref href="choptionhd.xml">choptionhd</xref> ,  <xref href="chdeschd.xml">chdeschd</xref> ,
+ <xref href="choption.xml">choption</xref> ,  <xref href="chdesc.xml">chdesc</xref> ,  <xref href="stepresult.xml">stepresult</xref> ,
+ <xref href="result.xml">result</xref> ,  <xref href="postreq.xml">postreq</xref> ,  <xref href="refsyn.xml">refsyn</xref> ,
+ <xref href="pd.xml">pd</xref>
+      </refsyn>
+      <refsyn>
+         <title>Contains</title> ( <xref href="desc.xml">desc</xref> ) (optional)
+then ( <xref href="param.xml">param</xref> ) (0 or more) </refsyn>
+      <section>
+         <title>Attributes</title>
+         <simpletable relcolwidth="2* 3* 1* 1* 1*" id="object_attr">
+            <sthead>
+               <stentry>Name</stentry>
+               <stentry>Description</stentry>
+               <stentry>Data Type</stentry>
+               <stentry>Default Value</stentry>
+               <stentry>Required?</stentry>
+            </sthead>
+            <strow conref="commonLRdefs.xml#commonLRdefs/declare">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/classid">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/codebase">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/data">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/type-object">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/codetype">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/archive">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/standby">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/height">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/width">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/usemap">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/name">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/tabindex">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/longdescref">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/univ-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/outputclass">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/global-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/class">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+         </simpletable>
+      </section>
+      <example>Output processors may need to modify data to enable compatible function
+across various browsers, so these examples are only representative:<pre>&lt;p&gt;Cutting the keys from the system unit:&lt;/p&gt;
+&lt;object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"
+ codebase="http://download.macromedia.com/pub/shockwave/cabs/
+flash/swflash.cab#version=6,0,0,0"
+ data="cutkey370.swf"
+ type="application/x-shockwave-flash"
+ height="280"
+ width="370"
+ id="cutkey370"&gt;
+ &lt;desc&gt;A description of the task&lt;/desc&gt;
+ &lt;param name="movie" value="cutkey370.swf"/&gt;
+ &lt;param name="quality" value="high"/&gt;
+ &lt;param name="bgcolor" value="#FFFFFF"/&gt;
+&lt;/object&gt;
+</pre>
+         <pre>&lt;p&gt;What's EIM?&lt;/p&gt;
+&lt;object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"
+ codebase="http://download.macromedia.com/pub/shockwave/cabs/
+flash/swflash.cab#version=6,0,0,0"
+ data="eim.swf"
+ height="400"
+ width="500"
+ id="eim"&gt;
+ &lt;desc&gt;Some great, glorious info&lt;/desc&gt;
+ &lt;param name="movie" value="eim.swf"/&gt;
+ &lt;param name="quality" value="high"/&gt;
+ &lt;param name="bgcolor" value="#FFFFFF"/&gt;
+ &lt;param name="pluginspace"
+ value="http://www.macromedia.com/go/getflashplayer"/&gt;
+&lt;/object&gt;</pre>
+      </example>
+   </refbody>
+</reference>

@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
+<reference id="prophead">
+  <title>prophead</title>
+  <shortdesc>The prophead element supports regular headings for the properties element.</shortdesc>
+  <refbody>
+    <section>
+      <p>more about this element</p>
+    </section>
+    <section class="- topic/section "><title>Contains</title>propdeschd, proptypehd, propvaluehd</section>
+    <section class="- topic/section "><title>Contained by</title>Allowed in the properties element of the reference infotype.</section>
+    <section class="- topic/section "><title>Attributes</title>Same as for strow.</section>
+    <section class="- topic/section ">
+      <title>Examples</title>
+      <p>A properties section with a prophead looks like:</p>
+    </section>
+    <properties>
+      <prophead>
+        <proptypehd>Type&quot;</proptypehd>
+        <propvaluehd>Value&quot;</propvaluehd>
+        <propdeschd>Description&quot;</propdeschd>
+      </prophead>
+      <property>
+        <proptype>integer</proptype>
+        <propvalue>42</propvalue>
+        <propdesc>The answer to all the questions in the universe.</propdesc>
+      </property>
+      <property class="- topic/strow  reference/property ">
+        <proptype>keyword</proptype>
+        <propvalue>default, rect, circle, poly</propvalue>
+        <propdesc>The values allowed for an image map shape.</propdesc>
+      </property>
+    </properties>
+  </refbody>
+</reference>
+

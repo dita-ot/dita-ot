@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
+<reference id="imagemap">
+  <title>imagemap</title>
+  <shortdesc>The imagemap element supports the basic functionality of the HTML <q>client-side</q> image map markup.</shortdesc>
+  <refbody>
+    <section>
+      <p>An HTML client-side image map binds an image to the navigation structure (the &quot;map&quot;) by means of an id association from the map to the image. In contrast, the DITA version of imagemap markup simply includes the target image as the first required element in the markup, followed by a sequence of area elements that represent the links associated with the contained image.</p>
+      <p class="- topic/p ">An imagemap structure can be output either to a standard HTML image map or to alternative forms of navigation (such as table-based image maps). When output as PDF, the minimal form would be to represent at least the image; advanced PDF output processors should be able to provide equivalent region-oriented hyperlinks.</p>
+    </section>
+    <section><title>Contains</title>image (required), <xref href="area.xml" format="xml">area</xref> (one or more)</section>
+    <section><title>Contained by</title>Allowed in the same contexts as fig.</section>
+    <section><title>Attributes</title>Same as for fig.</section>
+    <section>
+      <title>Examples</title>
+      <p>A simple imagemap looks like this (note that the rendering will depend on how this markup is supported for particular output formats):</p>
+      <imagemap>
+        <image href="tip-ing.jpg" height="12" width="21"/>
+        <area>
+          <shape>rect</shape>
+          <coords>0,0,21,12</coords>
+          <xref href="tip.xml"/>
+        </area>
+      </imagemap>
+      <p>The values for use in the shape and coords elements must follow the guidelines defined for image maps in HTML 4.1, <xref href="http://www.w3.org/TR/html401/struct/objects.html#edef-MAP" scope="external" format="html">at http://www.w3.org/TR/html401/struct/objects.html#edef-MAP</xref></p>
+      <p>The markup for this example looks like this:</p>
+      <codeblock>&lt;imagemap&gt;
+  &lt;image href=&quot;tip-ing.jpg&quot; height=&quot;12&quot; width=&quot;21&quot;/&gt;
+  &lt;area&gt;
+    &lt;shape&gt;rect&lt;/shape&gt;
+    &lt;coords&gt;0,0,21,12&lt;/coords&gt;
+    &lt;xref href=&quot;tip.xml&quot;/&gt;
+  &lt;/area&gt;
+&lt;/imagemap&gt; </codeblock>
+      <p>For additional information about HTML 4.1 image maps, see:<ol>
+          <li>
+            <xref href="http://www.w3.org/TR/html401/struct/objects.html#edef-MAP" scope="external" format="html">at http://www.w3.org/TR/html401/struct/objects.html#edef-MAP</xref>
+          </li>
+          <li>
+            <xref href="http://www.alistapart.com/articles/imagemap/" scope="external" format="html">Night of the Image Map, http://www.alistapart.com/articles/imagemap/</xref>
+          </li>
+        </ol></p>
+    </section>
+  </refbody>
+</reference>
+

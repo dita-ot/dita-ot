@@ -1,0 +1,72 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
+<reference id="choice" xml:lang="en-us">
+   <title>
+      <keyword>choice</keyword>
+   </title>
+   <shortdesc>Each &lt;<keyword>choice</keyword>&gt; element describes one way that
+the user could accomplish the current step.</shortdesc>
+   <prolog>
+      <metadata>
+         <keywords>
+            <indexterm>choice</indexterm>
+            <indexterm>Task
+elements<indexterm>choice</indexterm>
+            </indexterm>
+            <indexterm>choice</indexterm>
+         </keywords>
+      </metadata>
+   </prolog>
+   <refbody>
+      <refsyn>
+         <title>Contained by</title>
+         <xref href="choices.xml">choices</xref>
+      </refsyn>
+      <refsyn>
+         <title>Contains</title> text data or <xref href="ph.xml">ph</xref> or <xref href="term.xml">term</xref> or <xref href="xref.xml">xref</xref> or <xref href="cite.xml">cite</xref> or <xref href="q.xml">q</xref> or <xref href="boolean.xml">boolean</xref> or <xref href="state.xml">state</xref> or <xref href="keyword.xml">keyword</xref> or <xref href="tm.xml">tm</xref>
+      </refsyn>
+      <section>
+         <title>Attributes</title>
+         <simpletable relcolwidth="2* 3* 1* 1* 1*" id="choice_attr">
+            <sthead>
+               <stentry>Name</stentry>
+               <stentry>Description</stentry>
+               <stentry>Data Type</stentry>
+               <stentry>Default Value</stentry>
+               <stentry>Required?</stentry>
+            </sthead>
+            <strow conref="commonLRdefs.xml#commonLRdefs/global-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/class">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+         </simpletable>
+      </section>
+      <example>
+         <codeblock>&lt;step&gt;&lt;cmd&gt;Choose a server.&lt;/cmd&gt;
+ &lt;choices&gt;
+  <b>&lt;choice&gt;</b>If you have a remote server you want to test on, type the
+IP address or hostname of the server here.<b>&lt;/choice&gt;</b>
+  
+            
+            
+            <b>&lt;choice&gt;</b>If you want to do local testing, just type localhost.<b>&lt;/choice&gt;</b>
+ &lt;/choices&gt;
+&lt;/step&gt;</codeblock>
+      </example>
+   </refbody>
+</reference>

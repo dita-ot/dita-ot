@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
+<reference id="relatedl" xml:lang="en-us">
+   <title>Related links elements</title>
+   <refbody>
+      <section>
+         <p>The related-links section of DITA topics is a special structure that supports
+the navigational rules from a topic to its related neighbor topics, whether
+parent/child relationships (hierarchy), sibling relationships (browse sequences),
+types (collections), and whether the link is internal or external to the set.<indexterm>Related
+Links elements</indexterm>
+         
+         </p>
+         <p>Links are different from cross-references in that cross-references occur
+only within the body of a topic and can target any element in this or other
+topics; links only represent topic-to-topic connections.</p>
+      </section>
+   </refbody>
+</reference>

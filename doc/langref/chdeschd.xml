@@ -1,0 +1,97 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
+<reference id="chdeschd" xml:lang="en-us">
+   <title>
+      <keyword>chdeschd</keyword>
+   </title>
+   <shortdesc>The &lt;<keyword>chdeschd</keyword>&gt; option provides a specific label for the
+list of descriptions of options that a user must choose to accomplish a step
+of a task. The default label overridden by &lt;<keyword>chdeschd</keyword>&gt; is <b>Description</b>.</shortdesc>
+   <prolog>
+      <metadata>
+         <keywords>
+            <indexterm>chdeschd</indexterm>
+            <indexterm>Task
+elements<indexterm>chdeschd (choice description alternate heading)</indexterm>
+            </indexterm>
+            <indexterm>chdeschd (choice description alternate heading)</indexterm>
+         </keywords>
+      </metadata>
+   </prolog>
+   <refbody>
+      <refsyn>
+         <title>Contained by</title>
+         <xref href="chhead.xml">chhead</xref>
+      </refsyn>
+      <refsyn>
+         <title>Contains</title> text data or <xref href="ph.xml">ph</xref> or <xref href="term.xml">term</xref> or <xref href="xref.xml">xref</xref> or <xref href="cite.xml">cite</xref> or <xref href="q.xml">q</xref> or <xref href="boolean.xml">boolean</xref> or <xref href="state.xml">state</xref> or <xref href="keyword.xml">keyword</xref> or <xref href="tm.xml">tm</xref> or <xref href="p.xml">p</xref> or <xref href="lq.xml">lq</xref> or <xref href="note.xml">note</xref> or <xref href="dl.xml">dl</xref> or <xref href="ul.xml">ul</xref> or <xref href="ol.xml">ol</xref> or <xref href="sl.xml">sl</xref> or <xref href="pre.xml">pre</xref> or <xref href="lines.xml">lines</xref> or <xref href="fig.xml">fig</xref> or <xref href="image.xml">image</xref> or <xref href="object.xml">object</xref> or <xref href="draft-comment.xml">draft-comment</xref> or <xref href="required-cleanup.xml">required-cleanup</xref> or <xref href="fn.xml">fn</xref> or <xref href="indextermref.xml">indextermref</xref> or <xref href="indexterm.xml">indexterm</xref>
+      </refsyn>
+      <section>
+         <title>Attributes</title>
+         <simpletable relcolwidth="2* 3* 1* 1* 1*" id="chdeschd_attr">
+            <sthead>
+               <stentry>Name</stentry>
+               <stentry>Description</stentry>
+               <stentry>Data Type</stentry>
+               <stentry>Default Value</stentry>
+               <stentry>Required?</stentry>
+            </sthead>
+            <strow conref="commonLRdefs.xml#commonLRdefs/univ-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/specentry">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/outputclass">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/global-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/class">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+         </simpletable>
+      </section>
+      <example>
+         <pre>&lt;step&gt;&lt;cmd&gt;Then this&lt;/cmd&gt;
+ &lt;choicetable&gt;
+  &lt;chhead&gt;
+   &lt;choptionhd&gt;Do something&lt;/choptionhd&gt;
+   <b>&lt;chdeschd&gt;</b>Or Else this<b>&lt;/chdeschd&gt;</b>
+  &lt;/chhead&gt;
+  &lt;chrow&gt;&lt;choption&gt;Do this&lt;/choption&gt;
+     &lt;chdesc&gt;and this will happen&lt;/chdesc&gt;&lt;/chrow&gt;
+  &lt;chrow&gt;&lt;choption&gt;Do that&lt;/choption&gt;
+     &lt;chdesc&gt;and that will happen&lt;/chdesc&gt;&lt;/chrow&gt;
+ &lt;/choicetable&gt;
+&lt;/step&gt;
+</pre>
+      </example>
+   </refbody>
+</reference>

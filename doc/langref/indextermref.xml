@@ -1,0 +1,95 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
+<reference id="indextermref" xml:lang="en-us">
+   <title>
+      <keyword>indextermref</keyword>
+   </title>
+   <shortdesc>An &lt;<keyword>indextermref</keyword>&gt; is a reference to an index entry in
+a lookup table used by the indexing process. If you want to create index markers
+pointing to referenced items, but only want page numbers instead of separate
+index entries to be generated, use the index term reference &lt;indextermref&gt;
+element. This adds the page number of the reference to the index without creating
+a separate index entry. </shortdesc>
+   <prolog>
+      <metadata>
+         <keywords>
+            <indexterm>indextermref</indexterm>
+            <indexterm>Miscellaneous
+elements<indexterm>indextermref</indexterm>
+            </indexterm>
+            <indexterm>indextermref</indexterm>
+         </keywords>
+      </metadata>
+   </prolog>
+   <refbody>
+      <section>
+         <note>Not currently supported in DITA processing.</note>
+      </section>
+      <refsyn>
+         <title>Contained by</title>
+         <xref href="section.xml">section</xref> ,  <xref href="example.xml">example</xref> ,  <xref href="p.xml">p</xref> ,
+ <xref href="note.xml">note</xref> ,  <xref href="lq.xml">lq</xref> ,
+ <xref href="sli.xml">sli</xref> ,  <xref href="li.xml">li</xref> ,
+ <xref href="itemgroup.xml">itemgroup</xref> ,  <xref href="dd.xml">dd</xref> ,  <xref href="pre.xml">pre</xref> ,
+ <xref href="lines.xml">lines</xref> ,  <xref href="ph.xml">ph</xref> ,  <xref href="stentry.xml">stentry</xref> ,
+ <xref href="entry.xml">entry</xref> ,  <xref href="prereq.xml">prereq</xref> ,  <xref href="context.xml">context</xref> ,
+ <xref href="cmd.xml">cmd</xref> ,  <xref href="info.xml">info</xref> ,
+ <xref href="tutorialinfo.xml">tutorialinfo</xref> ,  <xref href="stepxmp.xml">stepxmp</xref> ,  <xref href="choptionhd.xml">choptionhd</xref> ,  <xref href="chdeschd.xml">chdeschd</xref> ,
+ <xref href="choption.xml">choption</xref> ,  <xref href="chdesc.xml">chdesc</xref> ,  <xref href="stepresult.xml">stepresult</xref> ,
+ <xref href="result.xml">result</xref> ,  <xref href="postreq.xml">postreq</xref> ,  <xref href="refsyn.xml">refsyn</xref> ,
+ <xref href="proptype.xml">proptype</xref> ,  <xref href="propvalue.xml">propvalue</xref> ,  <xref href="screen.xml">screen</xref> ,
+ <xref href="codeblock.xml">codeblock</xref> ,  <xref href="pd.xml">pd</xref>
+      </refsyn>
+      <refsyn>
+         <title>Contains</title> no content</refsyn>
+      <section>
+         <title>Attributes</title>
+         <simpletable relcolwidth="2* 3* 1* 1* 1*" id="indextermref_attr">
+            <sthead>
+               <stentry>Name</stentry>
+               <stentry>Description</stentry>
+               <stentry>Data Type</stentry>
+               <stentry>Default Value</stentry>
+               <stentry>Required?</stentry>
+            </sthead>
+            <strow conref="commonLRdefs.xml#commonLRdefs/keyref-indextermref">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/univ-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/global-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/class">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+         </simpletable>
+      </section>
+      <example>
+         <codeblock>&lt;p&gt;Use &lt;indextermref keyref="yellow"/&gt; lemon zest to add a tangy citrus 
+flavor to the cake icing.&lt;/p&gt;</codeblock>
+      </example>
+   </refbody>
+</reference>

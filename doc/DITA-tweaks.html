@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+<meta name="copyright" content="(C) Copyright 2005" />
+<meta name="DC.rights.owner" content="(C) Copyright 2005" />
+<meta content="public" name="security" />
+<meta content="index,follow" name="Robots" />
+<meta http-equiv="PICS-Label" content='(PICS-1.1 "http://www.icra.org/ratingsv02.html" l gen true r (cz 1 lz 1 nz 1 oz 1 vz 1) "http://www.rsac.org/ratingsv01.html" l gen true r (n 0 s 0 v 0 l 0) "http://www.classify.org/safesurf/" l gen true r (SS~~000 1))' />
+<meta content="topic" name="DC.Type" />
+<meta name="DC.Title" content="Controls, parameters, tweaks, and gizmos for dita2htmlImpl.xsl" />
+<meta name="abstract" content="No one transform is ever able to meet your requirements off the shelf. DITA transforms support a number of ways to customize or enhance the output without having to modify core transforms directly." />
+<meta name="description" content="No one transform is ever able to meet your requirements off the shelf. DITA transforms support a number of ways to customize or enhance the output without having to modify core transforms directly." />
+<meta content="XHTML" name="DC.Format" />
+<meta content="tweaks" name="DC.Identifier" />
+<link href="commonltr.css" type="text/css" rel="stylesheet" />
+<title>Controls, parameters, tweaks, and gizmos for dita2htmlImpl.xsl</title>
+</head>
+<body id="tweaks"><a name="tweaks"><!-- --></a>
+
+
+  <h1 class="topictitle1">Controls, parameters, tweaks, and gizmos for dita2htmlImpl.xsl</h1>
+
+  
+  <div><p>No one transform is ever able to meet your requirements off the shelf. DITA transforms support a number of ways to customize or enhance the output without having to modify core transforms directly.</p>
+
+    <p>To change the way the main processor, <span class="filepath">dita2htmlImpl.xsl</span>, produces XHTML output, you can work with the following variables and parameters.</p>
+
+    <p>If you need to make code changes to <span class="filepath">dita2htmlImpl.xsl</span> to change a variable value, the preferred mechanism is to create an override transform and place your changed code there. Editing any of the DITA distribution files directly is not recommended in case of package updates that might wipe out your changes! The file <span class="filepath">dita2xhtml.xsl</span> in the xsl directory is an example of an override transform: copy it to a new filename and add your XSLT changes within the copy. Making edit changes to XSLT transforms is outside the scope of this document; please refer to a good XSLT reference for guidance!</p>
+
+    <div class="note"><span class="notetitle">Note: </span>You are responsible for any changes you make with DITA transforms! If you need help, the <a href="news://news.software.ibm.com/ibm.software.developerworks.xml.xml">DITA forum on developerWorks</a> may be a useful resource.</div>
+
+  </div>
+
+  <div class="nested1" id="globalvars"><a name="globalvars"><!-- --></a>
+    <h2 class="topictitle2">Global variable declarations</h2>
+
+    <div>
+      <p>To change the values of the following global variable declarations to meet your publication requirements, copy the appropriate XSL directive into an override stylesheet which imports <span class="filepath">dita2htmlImpl.xsl</span> and make your editing changes there.</p>
+
+      <table summary="" cellspacing="0" cellpadding="4" border="1" class="simpletableborder">
+        <tr>
+          <th valign="bottom" align="left" id="N10075" width="20%">Variable name</th>
+
+          <th valign="bottom" align="left" id="N1007B" width="50%">Explanation</th>
+
+          <th valign="bottom" align="left" id="N10081" width="30%">Default Value</th>
+
+        </tr>
+
+        <tr>
+          <td valign="top" headers="N10075">afill</td>
+
+          <td valign="top" headers="N1007B">Filler for A-name anchors (link-to points that have no data content in and of themselves; some browsers fail to link if a named anchor has no text)</td>
+
+          <td valign="top" headers="N10081">null string (could be a space character, &amp;nbsp;, &amp;#160;, etc.)</td>
+
+        </tr>
+
+      </table>
+
+      <p>For example, copy the afiil variable declaration into your override stylesheet and change the content to represent the actual copyright owner of <em>your</em> content (this string will be copied into the result HTML document as a comment):</p>
+
+      <pre>&lt;xsl:variable name="afill"&gt;&amp;nbsp;&lt;/xsl:variable&gt;
+</pre>
+
+    </div>
+
+  </div>
+
+  <div class="nested1" id="extparmdefs"><a name="extparmdefs"><!-- --></a>
+    <h2 class="topictitle2">Default values for externally modifiable parameters</h2>
+
+    <div>
+      <p>These default values can be changed at run time by using the parameter-passing syntax of your XSLT processor (if it supports command-line parameters). If your processor does not support parameter-passing on the command line, copy the XSL directives you wish to change into an override XSLT stylesheet, change the values as needed, and import <span class="filepath">dita2htmlImpl.xsl</span> at the top of this new stylesheet. <span class="filepath">dita2xhtml.xsl</span> is an example of an override stylesheet that you can copy and modify as needed.</p>
+
+      <table summary="" cellspacing="0" cellpadding="4" border="1" class="simpletableborder">
+        <tr>
+          <th valign="bottom" align="left" id="N100E7" width="20%">Parameter name</th>
+
+          <th valign="bottom" align="left" id="N100ED" width="60%">Explanation</th>
+
+          <th valign="bottom" align="left" id="N100F3" width="20%">Default value</th>
+
+        </tr>
+
+        <tr>
+          <td valign="top" headers="N100E7">dita-css</td>
+
+          <td valign="top" headers="N100ED">Default CSS filename parameter, usually the name of your site's overall stylesheet.</td>
+
+          <td valign="top" headers="N100F3">
+            <span class="q">"commonltr.css"</span>
+          </td>
+
+        </tr>
+
+        <tr>
+          <td valign="top" headers="N100E7">bidi-dita-css</td>
+
+          <td valign="top" headers="N100ED">Default CSS filename parameter for bi-direction language, usually the name of your site's overall stylesheet.</td>
+
+          <td valign="top" headers="N100F3">
+            <span class="q">"commonrtl.css"</span>
+          </td>
+
+        </tr>
+
+        <tr>
+          <td valign="top" headers="N100E7">CSS</td>
+
+          <td valign="top" headers="N100ED">User's CSS filename parameter. <p>This can be the name of a stylesheet used by one or more topics within an overall group. This stylesheet can use the CSS cascade effect to modify existing properties or it can override or define new properties.</p>
+</td>
+
+          <td valign="top" headers="N100F3">(null)</td>
+
+        </tr>
+
+        <tr>
+          <td valign="top" headers="N100E7">CSSPATH</td>
+
+          <td valign="top" headers="N100ED">Default CSS path parameter.<p>This specifies a path for the cascading style sheet (CSS). This allows you to place the CSS in one place and have several different topics point to it. If no CSSPATH is specified, the CSS is assumed to be in the same directory as the XHTML.</p>
+</td>
+
+          <td valign="top" headers="N100F3"> (null) </td>
+
+        </tr>
+
+        <tr>
+          <td valign="top" headers="N100E7">HDF</td>
+
+          <td valign="top" headers="N100ED">The file name containing XHTML to be placed in the HEAD area</td>
+
+          <td valign="top" headers="N100F3"> (null)</td>
+
+        </tr>
+
+        <tr>
+          <td valign="top" headers="N100E7">HDR</td>
+
+          <td valign="top" headers="N100ED">The file name containing XHTML to be placed in the BODY running-heading area</td>
+
+          <td valign="top" headers="N100F3"> (null)</td>
+
+        </tr>
+
+        <tr>
+          <td valign="top" headers="N100E7">FTR</td>
+
+          <td valign="top" headers="N100ED">The file name containing XHTML to be placed in the BODY running-footing area</td>
+
+          <td valign="top" headers="N100F3"> (null)</td>
+
+        </tr>
+
+        <tr>
+          <td valign="top" headers="N100E7">ARTLBL</td>
+
+          <td valign="top" headers="N100ED">Default "output artwork filenames" processing parameter; <span class="q">"no"</span>and <span class="q">"yes"</span>are valid values; non-<span class="q">"yes"</span> is ignored.</td>
+
+          <td valign="top" headers="N100F3">
+            <span class="q">"no"</span>
+          </td>
+
+        </tr>
+
+        <tr>
+          <td valign="top" headers="N100E7">DRAFT </td>
+
+          <td valign="top" headers="N100ED">Default "hide draft &amp; cleanup content" processing parameter (<span class="q">"no"</span>= hide them); <span class="q">"no"</span> and <span class="q">"yes"</span> are valid values; non-<span class="q">"yes"</span> is ignored.</td>
+
+          <td valign="top" headers="N100F3">
+            <span class="q">"no"</span>
+          </td>
+
+        </tr>
+
+        <tr>
+          <td valign="top" headers="N100E7">INDEXSHOW</td>
+
+          <td valign="top" headers="N100ED">Default "hide index entries" processing parameter (<span class="q">"no"</span> = hide them); <span class="q">"no"</span> and <span class="q">"yes"</span> are valid values; non-<span class="q">"yes"</span> is ignored.</td>
+
+          <td valign="top" headers="N100F3">
+            <span class="q">"no"</span>
+          </td>
+
+        </tr>
+
+        <tr>
+          <td valign="top" headers="N100E7">YEAR</td>
+
+          <td valign="top" headers="N100ED">The year for the copyright.</td>
+
+          <td valign="top" headers="N100F3">
+            <span class="q">"2005l"</span>
+          </td>
+
+        </tr>
+
+        <tr>
+          <td valign="top" headers="N100E7">OUTEXT</td>
+
+          <td valign="top" headers="N100ED">Default "output extension" processing parameter; <span class="q">"htm"</span> and <span class="q">"html"</span> are valid values.</td>
+
+          <td valign="top" headers="N100F3">
+            <span class="q">"html"</span>
+          </td>
+
+        </tr>
+
+        <tr>
+          <td valign="top" headers="N100E7">WORKDIR</td>
+
+          <td valign="top" headers="N100ED">The working directory, relative to the stylesheet, that contains the document being transformed. Needed as a directory prefix for the @conref and @href <span class="q">"document()"</span> function calls.</td>
+
+          <td valign="top" headers="N100F3">
+            <span class="q">"./"</span>
+          </td>
+
+        </tr>
+
+        <tr>
+          <td valign="top" headers="N100E7">PATH2PROJ</td>
+
+          <td valign="top" headers="N100ED">The path back to the project. Used for c.gif, delta.gif, css to allow user's to have these files in 1 location.</td>
+
+          <td valign="top" headers="N100F3"> (null)</td>
+
+        </tr>
+
+        <tr>
+          <td valign="top" headers="N100E7">FILENAME</td>
+
+          <td valign="top" headers="N100ED">The file name (file name and extension only - no path) of the document being transformed. Needed to help form debugging messages.<div class="note"><span class="notetitle">Note: </span>This value is not inherent to the XSLT processor; typically, your calling exec will pass the input filename to the processor's command line as a parameter. Any resulting debugging messages will echo the filename.</div>
+</td>
+
+          <td valign="top" headers="N100F3"> (null)</td>
+
+        </tr>
+
+        <tr>
+          <td valign="top" headers="N100E7">FILTERFILE</td>
+
+          <td valign="top" headers="N100ED">The file name containing filter/flagging/revision information.</td>
+
+          <td valign="top" headers="N100F3"> (null)</td>
+
+        </tr>
+
+        <tr>
+          <td valign="top" headers="N100E7">DBG</td>
+
+          <td valign="top" headers="N100ED">Debug mode - enables XSL debugging xsl-messages. Needed to help form debugging messages. <span class="q">"no"</span> and <span class="q">"yes"</span> are valid values; non-<span class="q">"yes"</span> is ignored.</td>
+
+          <td valign="top" headers="N100F3">
+            <span class="q">"no"</span>
+          </td>
+
+        </tr>
+
+        <tr>
+          <td valign="top" headers="N100E7">DITAEXT</td>
+
+          <td valign="top" headers="N100ED">DITAEXT file extension name of dita topic file.</td>
+
+          <td valign="top" headers="N100F3"> (null)</td>
+
+        </tr>
+
+      </table>
+
+      <p>For example, the following sample invocation shows how to turn on draft mode using the Saxon XSLT processor:</p>
+
+      <pre>c:pkg\dita12\doc&gt;saxon -o abc.htm dita-tweaks.xml ..\xsl\dita2htmlImpl.xsl DRAFT=yes</pre>
+
+      <p>The effect of this parameter will be to show the content of all <samp class="codeph">&lt;draft-comment&gt;</samp> and <samp class="codeph">&lt;required-cleanup&gt;</samp> elements with highly visible styling for use by reviewers.</p>
+
+      <div class="note"><span class="notetitle">Note: </span>To invoke a process using parameters, please check the documentation for your XSLT processor. Most current XSLT 1.0 processors support a non-standard command line interface for parameters. </div>
+
+      <div class="note"><span class="notetitle">Note: </span>Parametric tweaks cannot be applied from internal stylesheet links (that is, the <samp class="codeph">&lt;?xml-stylesheet ...?&gt;</samp> processing instruction) as such associations do not provide a way to pass parameters, even if a browser-specific renderer is capable of using such data. To cause a browser-based view to show something ordinarily affected by a command-line parameter, such as the DRAFT="yes" effect, embed the alternative value directly in the override stylesheet that is named in the stylesheet processing instruction:<pre>&lt;xsl:param name="DRAFT" select="'yes'"/&gt;</pre>
+</div>
+
+    </div>
+
+  </div>
+
+  <div class="nested1" id="mrstubbs"><a name="mrstubbs"><!-- --></a>
+    <h2 class="topictitle2">Stubs for user-provided override extensions</h2>
+
+    <div>
+      <p>The <span class="filepath">dita2htmlImpl.xsl</span> stylesheet provides code stubs that extend the appearance of your HTML result document. If you copy these stubs into your override stylesheet and provide your own code within them, the result content will be pasted into appropriate parts of the overall HTML page.</p>
+
+      <p>Regions that can be modified by these stubs include header, footer, topic-top blurbs (a common location for mini-contents boxes), self-contained scripts (such as JavaScript used commonly for DHTML support), self-contained styles, <span>flagging based on property value matches, </span>panel titles and prefixes for panel titles (to auto-generate explicit bookmarks for your users). See the section of <span class="filepath">dita2htmlImpl.xsl</span> called <span class="q">"start of override stubs"</span> for the examples of mostly-empty stubs that you can modify.</p>
+
+      <p>For example, copy the following template rule into an override file, such as a copy of <span class="filepath">dita2xhtml.xsl</span>, to cause a "mini-table of contents" to be generated at the top of a topic that directly nests child topics:</p>
+
+      <pre>
+&lt;!-- override for main stub --&gt;
+&lt;xsl:template name="gen-user-sidetoc"&gt;
+  &lt;!-- if there are nested topics... --&gt;
+  &lt;xsl:if test="descendant::*[contains(@class,' topic/topic ')]"&gt;
+    &lt;p&gt;
+      &lt;table width="150" align="right" border="1" frame="box" rules="none"&gt;
+        &lt;tr&gt;&lt;td height="5" bgcolor="#0033CC" align="center"&gt;
+            &lt;b&gt;&lt;font color="#FFFFFF"&gt;Contents:&lt;/font&gt;&lt;/b&gt;&lt;/td&gt;
+        &lt;/tr&gt;
+
+
+
+        &lt;xsl:for-each select="descendant::*[contains(@class,' topic/topic ')]"&gt;
+          &lt;xsl:variable name="ttext"&gt;&lt;xsl:value-of select="*[contains(@class,' topic/title ')]"/&gt;&lt;/xsl:variable&gt;
+          &lt;tr&gt;&lt;td class="toc"&gt;- &lt;a href="#{generate-id()}"&gt;&lt;xsl:value-of select="$ttext"/&gt;&lt;/a&gt;
+            &lt;!--recursive call for subtopics here"/--&gt;
+          &lt;/td&gt;&lt;/tr&gt;
+        &lt;/xsl:for-each&gt;
+      &lt;/table&gt;
+    &lt;/p&gt;
+  &lt;/xsl:if&gt;
+&lt;/xsl:template&gt;
+</pre>
+
+      <div class="remember"><span class="remembertitle">Remember: </span> Do your modifications on copies of stylesheets so that you can fall back on the original!</div>
+
+      <div class="section"><h4 class="sectiontitle">Testing some tweaks</h4>
+        
+        <p>This section makes use of several tweak-controllable features. It contains a draft comment, a required cleanup container, a figure whose title can be shifted over or under the figure upon output, and a section title that can be augmented with a graphical <span class="q">"information navigation icon"</span> or <em>ing</em> (see do-place-ing under <a href="#behavior">#behavior</a>).</p>
+
+        <div class="note"><span class="notetitle">Note: </span>This document will appear differently depending on which stylesheet you use to view it. If you view or process it with a standard shell (dita2xhtml.xsl or dita2fo_shell.xsl), the special features will not be turned on. But if you process it into HTML (or view it directly in IE6) using the myoverrides.xsl demo stylesheet the special features WILL be enabled, and cause differences in the rendering of the output. </div>
+
+        <div class="tip"><span class="tiptitle">Tip: </span>If you code your note type as "tip" and turn on the do-place-ing behavior, as with this note, the output should include a graphical icon alongside the text label.</div>
+
+        
+        <a href="#fntarg_1" name="fnsrc_1"><sup>^</sup></a>
+        <div class="figborder"><span class="figcap">Figure 1. This is a <em>wild</em> title</span>. <span class="figdesc">A good <em>figure</em> doesn't need a thousand words unless it is a technical description, in which case you probably can't say enough.</span>
+          
+          
+          <img src="../doc/articles/image/basediag.gif" height="74" width="300" />
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+<div class="p"><a name="fntarg_1" href="#fnsrc_1"><sup>^</sup></a>  This is a footnote with a special callout character.</div>
+</body>
+</html>

@@ -1,0 +1,98 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
+<reference id="var" xml:lang="en-us">
+   <title>
+      <keyword>var</keyword>
+   </title>
+   <shortdesc>Within a syntax definition, the &lt;<keyword>var</keyword>&gt; element
+defines a variable for which the user must supply content, such as their user
+name or password. It is represented in output in an italic font.
+This element is part of the DITA programming domain, a special set of DITA
+elements designed to document programming tasks, concepts and reference information.</shortdesc>
+   <prolog>
+      <metadata>
+         <keywords>
+            <indexterm>var
+(syntax diagram variable)</indexterm>
+            <indexterm>syntax diagram variable (var)</indexterm>
+            <indexterm>variable,
+syntax diagram (var)</indexterm>
+            <indexterm>Domain elements<indexterm>var (syntax
+diagram variable)</indexterm>
+            </indexterm>
+            <indexterm>var (syntax
+diagram variable)</indexterm>
+         </keywords>
+      </metadata>
+   </prolog>
+   <refbody>
+      <refsyn>
+         <title>Contained by</title>
+         <xref href="synph.xml">synph</xref> ,  <xref href="groupseq.xml">groupseq</xref> ,  <xref href="groupchoice.xml">groupchoice</xref> ,
+ <xref href="groupcomp.xml">groupcomp</xref>
+      </refsyn>
+      <refsyn>
+         <title>Contains</title> text data </refsyn>
+      <section>
+         <title>Attributes</title>
+         <simpletable relcolwidth="2* 3* 1* 1* 1*" id="var_attr">
+            <sthead>
+               <stentry>Name</stentry>
+               <stentry>Description</stentry>
+               <stentry>Data Type</stentry>
+               <stentry>Default Value</stentry>
+               <stentry>Required?</stentry>
+            </sthead>
+            <strow conref="commonLRdefs.xml#commonLRdefs/importance-var">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/univ-atts-no-importance">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/outputclass">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/global-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/class">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+         </simpletable>
+      </section>
+      <example> <pre>&lt;syntaxdiagram frame="bottom"&gt;
+ &lt;title&gt;CopyFile&lt;/title&gt;
+ &lt;groupseq&gt;&lt;kwd&gt;COPYF&lt;/kwd&gt;&lt;/groupseq&gt;
+ &lt;groupcomp&gt;<b>&lt;var&gt;</b>input-filename<b>&lt;/var&gt;</b>&lt;kwd&gt;*INFILE&lt;/kwd&gt;&lt;/groupcomp&gt;
+ &lt;groupseq&gt;<b>&lt;var&gt;</b>output-filename<b>&lt;/var&gt;</b>&lt;kwd&gt;*OUTFILE&lt;/kwd&gt;&lt;/groupseq&gt;
+ &lt;groupchoice&gt;<b>&lt;var&gt;</b>input-filename<b>&lt;/var&gt;</b>&lt;kwd&gt;*INFILE&lt;/kwd&gt;&lt;/groupchoice&gt;
+ &lt;groupchoice&gt;<b>&lt;var&gt;</b>output-filename<b>&lt;/var&gt;</b>&lt;kwd&gt;*OUTFILE&lt;/kwd&gt;&lt;/groupchoice&gt;
+&lt;/syntaxdiagram&gt;</pre>
+      </example>
+   </refbody>
+</reference>

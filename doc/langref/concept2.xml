@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
+<reference id="concept2" xml:lang="en-us">
+   <title>Concept elements</title>
+   <refbody>
+      <section>
+         <p>Use the concept topic to introduce the background or overview information
+for tasks or reference topics. The concept topic has the restriction
+that following a section or example, only other sections or examples are permitted
+as content. This particular topic is a concept topic.<indexterm>Concept elements</indexterm>
+         
+         </p>
+      </section>
+   </refbody>
+</reference>

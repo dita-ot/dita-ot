@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
+<reference id="domain" xml:lang="en-us">
+   <title>Domain elements</title>
+   <refbody>
+      <section>
+         <p>The base release of the DITA authoring DTDs includes specialized content
+elements from four particular subject domains:<indexterm>Domains elements</indexterm>
+         
+         </p>
+         <ol>
+
+            
+            <li>programming related terms and structures</li>
+
+            
+            <li>software related terms and structures</li>
+
+            
+            <li>user interface related terms and structures</li>
+
+            
+            <li>common word-processor like capabilities (to support the correct typographic
+convention for as-yet-unintroduced domain vocabulary)</li>
+
+         
+         </ol>
+      </section>
+   </refbody>
+</reference>

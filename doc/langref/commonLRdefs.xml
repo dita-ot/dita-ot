@@ -1,0 +1,4905 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
+<reference id="commonLRdefs" xml:lang="en-us">
+   <title>
+      <keyword>Common content for Language Reference</keyword>
+   </title>
+   <shortdesc>This topic documents the common definitions for attributes that
+appear within the DITA DTDs, and provides the content for reuse within the
+individual element descriptions of the <ph>
+         <cite>DITA Language Reference</cite>
+      </ph>.</shortdesc>
+   <refbody>
+      <section>
+         <p>Writers,
+please ensure that explanations are generic in nature. For example, references
+to specific instances of SGML such as DocBook or IBMIDDoc may not be meaningful
+to all readers.  To avoid naming specific products, refer to them generically
+as "validating XML editors," and so on. Not all DITA users will implement
+DITA the same way  or have the same markup language background when reading
+DITA documentation!</p>
+         <draft-comment>
+            
+            
+            <note type="other" othertype="Comments from UCD reviews">
+               
+               
+               <p>Add
+a primary term with each element name into each elementref.  Under the following
+primary terms, add the appropriate elements as secondary terms:</p>
+               
+               
+               <sl>
+                  
+                  
+                  <sli>commonly-referenced
+terms </sli>
+                  
+                  
+                  <sli>topic elements </sli>
+                  
+                  
+                  <sli>concept elements </sli>
+                  
+                  
+                  <sli>task
+elements </sli>
+                  
+                  
+                  <sli>reference elements </sli>
+                  
+                  
+                  <sli>prolog elements </sli>
+                  
+                  
+                  <sli>body
+elements </sli>
+                  
+                  
+                  <sli>related-link elements </sli>
+                  
+                  
+                  <sli>table elements </sli>
+
+                  
+                  
+                  <sli>elements valid in many places </sli>
+                  
+                  
+                  <sli>domain elements </sli>
+                  
+                  
+                  <sli>specialization
+elements </sli>
+                  
+                  
+                  <sli>map elements</sli>
+               
+               
+               </sl>
+               
+               
+               <p>In addition, if any discourse
+seems to have content that can be usefully indexed, we'll do so based on the
+value of the information (ie, entries will point to useful information).</p>
+            
+            
+            </note>
+            
+            
+            <note type="other" othertype="Authoring convention">Use <tt>&amp;lt;&lt;apiname&gt;element&lt;/apiname&gt;&amp;gt;</tt> and <tt>&lt;i&gt;&lt;apiname&gt;attr&lt;/apiname&gt;&lt;/i&gt;</tt> for future domain specialization. (Don has been using &lt;term&gt;element&lt;/term&gt;
+and &lt;i&gt;attribute&lt;/i&gt;)</note>
+         
+         
+         </draft-comment>
+         <note id="abouturls">All
+DITA linking attributes defined as allowing URLs are defined as CDATA but
+should follow standard URL syntax (CDATA is used for now because DTDs cannot
+enforce a URL datatype).  They are used literally in transforms, therefore
+the integrity of the link is up to the author.</note>
+         <note type="other" othertype="Phrase common data">
+            
+            
+            <ul>
+
+               
+               
+               <li>
+                  
+                  
+                  <ph id="propertyvalueattr">  This is a property attribute which supports
+conditional processing for filtering or flagging.</ph>
+               
+               
+               </li>
+
+               
+               
+               <li>
+                  
+                  
+                  <ph id="only4eclipse">This element is for runtime resolution of references,
+and is for navigation only.    <b>It is currently only supported by Eclipse
+output.</b>
+                  
+                  
+                  </ph>
+               
+               
+               </li>
+
+            
+            
+            </ul>
+         
+         
+         </note>
+         <note type="other" othertype="Planned for later use">
+            
+            
+            <ul>
+
+               
+               
+               <li>Not intended for direct use by authors.</li>
+
+               
+               
+               <li>This element is part of the DITA highlighting domain.</li>
+
+               
+               
+               <li>This element is part of the DITA programming domain, a special set of
+DITA elements designed to document programming tasks, concepts and reference
+information.</li>
+
+               
+               
+               <li>This element is part of the DITA software domain, a special set of DITA
+elements designed to document software tasks, concepts and reference information.</li>
+
+            
+            
+            </ul>
+         
+         
+         </note>
+         <note type="other" othertype="Use to extend conref discussions" id="conrefexplanation">SGML
+users may recognize that this is very similar to the conref mechanism in SGML
+(call CONLOC in IBMIDDoc) that uses only an empty start tag to indicate the
+placement of the referenced element. However, the rules of XML do not allow
+us to do conref as easily as the SGML standard permitted. Even when you have
+a conref attribute to pull in content, the element using conref must be valid
+within the document. In the case of a table, for example, the table element
+requires a tgroup child, which requires tbody, which requires at least one
+row, which requires at least one entry. In addition, the tgroup element requires
+the cols attribute to be specified. You will have to insert all of these elements
+in your source file, even though they will be discarded during processing.
+Validating editors will insert all of the required elements, although you
+may still need to ensure that required attributes contain at least a throwaway
+value.</note>
+         <note type="other" othertype="Designers explanation for no-topic-nesting">Pertaining
+to the following declaration in topic.mod:<codeblock>&lt;!ELEMENT topic (%title;, (%titlealts;)?, (%shortdesc;)?, (%prolog;)?, %body;, (%related-links;)?, 
+                (%topic-info-types;)* )&gt;
+</codeblock> if the parameter entity topic-info-types in topic.dtd were declared
+as<codeblock>&lt;!ENTITY % topic-info-types "no-topic-nesting"&gt;</codeblock>then
+the resulting authoring DTD would not allow the nesting of any child topics.
+As far as the DTD is concerned, this empty element takes the place of any
+nested topics. Using a null value for a parameter entity value is not allowed
+in DTD syntax, therefore the architecture provides this empty element as a
+required token in the syntax.</note>
+      </section><!--===== THIS IS THE START OF SUPPORTED ATTRIBUTE DEFINITIONS USED BY CONREF IN MANY PLACES =====-->
+      <section>
+         <title>Attribute common data</title>
+         <simpletable relcolwidth="3* 9* 3* 3* 2*">
+            <sthead>
+               <stentry>Name</stentry>
+               <stentry>Description</stentry>
+               <stentry>Data Type</stentry>
+               <stentry>Default Value</stentry>
+               <stentry>Required?</stentry>
+            </sthead>
+            <strow id="TBD">
+               <stentry><!--ATTRIBUTE NAME-->TBD</stentry>
+               <stentry><!--ATTRIBUTE DESCRIPTION-->This attribute has not been documented
+yet</stentry>
+               <stentry><!--ATTRIBUTE TYPE-->CDATA</stentry>
+               <stentry><!--ATTRIBUTE DEFAULT VALUE-->#IMPLIED</stentry>
+               <stentry>
+<!--ATTRIBUTE REQUIRED?-->
+
+                  
+                  
+                  <state name="reqval" value="NA"/>
+               
+               
+               </stentry>
+            </strow>
+            <strow id="display-atts">
+               <stentry>%display-atts; (scale, frame, expanse)</stentry>
+               <stentry>A set of related attributes, described at <xref href="display-atts.xml"><!-- optional content --></xref>
+               
+               
+               </stentry>
+               <stentry>parameter entity</stentry>
+               <stentry>
+                  
+                  
+                  <ph>
+                     
+                     
+                     <i>
+                        
+                        
+                        <keyword>PE not applicable</keyword>
+                     
+                     
+                     </i>
+                  
+                  
+                  </ph>
+               
+               
+               </stentry>
+               <stentry>
+                  
+                  
+                  <state name="reqval" value="NA"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="global-atts">
+               <stentry>%global-atts; (xtrf, xtrc)</stentry>
+               <stentry>A set of related attributes, described at <xref href="global-atts.xml"><!-- optional content --></xref>
+               
+               
+               </stentry>
+               <stentry>parameter entity</stentry>
+               <stentry>
+                  
+                  
+                  <ph>
+                     
+                     
+                     <i>
+                        
+                        
+                        <keyword>PE not applicable</keyword>
+                     
+                     
+                     </i>
+                  
+                  
+                  </ph>
+               
+               
+               </stentry>
+               <stentry>
+                  
+                  
+                  <state name="reqval" value="NA"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="id-atts">
+               <stentry>%id-atts; (id, conref)</stentry>
+               <stentry>A set of related attributes, described at <xref href="id-atts.xml"><!-- optional content --></xref>
+               
+               
+               </stentry>
+               <stentry>parameter entity</stentry>
+               <stentry>
+                  
+                  
+                  <ph>
+                     
+                     
+                     <i>
+                        
+                        
+                        <keyword>PE not applicable</keyword>
+                     
+                     
+                     </i>
+                  
+                  
+                  </ph>
+               
+               
+               </stentry>
+               <stentry>
+                  
+                  
+                  <state name="reqval" value="NA"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="rel-atts">
+               <stentry>%rel-atts; (type, role, otherrole)</stentry>
+               <stentry>A set of related attributes, described at <xref href="rel-atts.xml"><!-- optional content --></xref>
+               
+               
+               </stentry>
+               <stentry>parameter entity</stentry>
+               <stentry>
+                  
+                  
+                  <ph>
+                     
+                     
+                     <i>
+                        
+                        
+                        <keyword>PE not applicable</keyword>
+                     
+                     
+                     </i>
+                  
+                  
+                  </ph>
+               
+               
+               </stentry>
+               <stentry>
+                  
+                  
+                  <state name="reqval" value="NA"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="select-atts">
+               <stentry>%select-atts; (platform, product, audience, otherprops, importance,
+rev, status)</stentry>
+               <stentry>A set of related attributes, described at <xref href="select-atts.xml"><!-- optional content --></xref>
+               
+               
+               </stentry>
+               <stentry>parameter entity</stentry>
+               <stentry>
+                  
+                  
+                  <ph>
+                     
+                     
+                     <i>
+                        
+                        
+                        <keyword>PE not applicable</keyword>
+                     
+                     
+                     </i>
+                  
+                  
+                  </ph>
+               
+               
+               </stentry>
+               <stentry>
+                  
+                  
+                  <state name="reqval" value="NA"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="topicref-atts">
+               <stentry>%topicref-atts; (collection-type, type, locktitle, format, linking,
+toc, print, search, chunk)</stentry>
+               <stentry>A set of related attributes. See <xref href="topicref-atts.xml"><!-- optional content --></xref>.</stentry>
+               <stentry>parameter entity</stentry>
+               <stentry>
+                  
+                  
+                  <ph>
+                     
+                     
+                     <i>
+                        
+                        
+                        <keyword>PE not applicable</keyword>
+                     
+                     
+                     </i>
+                  
+                  
+                  </ph>
+               
+               
+               </stentry>
+               <stentry>
+                  
+                  
+                  <state name="reqval" value="NA"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="topicref-atts-no-toc">
+               <stentry>%topicref-atts-no-toc; (collection-type, type, locktitle, format,
+linking, print, search, chunk)</stentry>
+               <stentry>A related set of attributes. See <xref href="topicref-atts-no-toc.xml"><!-- optional content --></xref>.</stentry>
+               <stentry>parameter entity</stentry>
+               <stentry>
+                  
+                  
+                  <ph>
+                     
+                     
+                     <i>
+                        
+                        
+                        <keyword>PE not applicable</keyword>
+                     
+                     
+                     </i>
+                  
+                  
+                  </ph>
+               
+               
+               </stentry>
+               <stentry>
+                  
+                  
+                  <state name="reqval" value="NA"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="univ-atts">
+               <stentry>%univ-atts; (%select-atts;, %id-atts;, translate, xml:lang)</stentry>
+               <stentry>A set of related attributes, described at <xref href="univ-atts.xml"><!-- optional content --></xref>
+               
+               
+               </stentry>
+               <stentry>parameter entity</stentry>
+               <stentry>
+                  
+                  
+                  <ph>
+                     
+                     
+                     <i>
+                        
+                        
+                        <keyword>PE not applicable</keyword>
+                     
+                     
+                     </i>
+                  
+                  
+                  </ph>
+               
+               
+               </stentry>
+               <stentry>
+                  
+                  
+                  <state name="reqval" value="NA"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="univ-atts-no-importance">
+               <stentry>%univ-atts-no-importance</stentry>
+               <stentry>A set of related attributes, described at <xref href="univ-atts.xml"><!-- optional content --></xref>, but without the importance
+attribute</stentry>
+               <stentry>parameter entity</stentry>
+               <stentry>
+                  
+                  
+                  <ph>
+                     
+                     
+                     <i>
+                        
+                        
+                        <keyword>PE not applicable</keyword>
+                     
+                     
+                     </i>
+                  
+                  
+                  </ph>
+               
+               
+               </stentry>
+               <stentry>
+                  
+                  
+                  <state name="reqval" value="NA"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="align-image">
+               <stentry>align</stentry>
+               <stentry>Controls the horizontal alignment of an image when placement is specified
+as "break." Allowable values (processor-validated) are: <keyword>left</keyword>, <keyword>right</keyword>, <keyword>center</keyword>,
+and <keyword>current</keyword>.<indexterm id="att-align-image">align attribute<indexterm>image</indexterm>
+                  </indexterm>
+               
+               
+               </stentry>
+               <stentry>CDATA</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+               
+               
+               </stentry>
+            </strow>
+            <strow id="align">
+               <stentry>align</stentry>
+               <stentry>Describes the alignment of text in a table column.  Allowable values
+are:<dl>
+                     
+                     
+                     <dlentry>
+
+                        
+                        
+                        <dt>left</dt>
+
+                        
+                        
+                        <dd>Indicates left alignment of the text.</dd>
+
+                     
+                     
+                     </dlentry>
+                     
+                     
+                     <dlentry>
+
+                        
+                        
+                        <dt>right</dt>
+
+                        
+                        
+                        <dd>Indicates right alignment of the text.</dd>
+
+                     
+                     
+                     </dlentry>
+                     
+                     
+                     <dlentry>
+
+                        
+                        
+                        <dt>center</dt>
+
+                        
+                        
+                        <dd>Indicates center alignment of the text.</dd>
+
+                     
+                     
+                     </dlentry>
+                     
+                     
+                     <dlentry>
+
+                        
+                        
+                        <dt>justify</dt>
+
+                        
+                        
+                        <dd>Justifies the contents to both the left and the right.</dd>
+
+                     
+                     
+                     </dlentry>
+                  
+                  
+                  </dl>
+                  
+                  
+                  <indexterm id="att-align">align attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>(left | right | center | justify | char)</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="alt">
+               <stentry>alt</stentry>
+               <stentry>Alternative text that describes the image to provide accessibility
+to page readers, or provides a text description when an image cannot be displayed
+by the user's software.<indexterm id="att-alt">alt attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>CDATA</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="anchorref">
+               <stentry>anchorref</stentry>
+               <stentry>Identifies a location within another map file where this map will
+be anchored (referenced). For example, "anchorref=map1.ditamap/a1" causes
+this map to be referenced from within the map1.ditamap file at anchor point
+a1.<indexterm id="att-anchorref">anchorref attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>CDATA</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="appname">
+               <stentry>appname</stentry>
+               <stentry>Contains the name of the application with which the topic is associated. <indexterm id="att-appname">appname attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>CDATA</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="archive">
+               <stentry>archive</stentry>
+               <stentry>Specifies a space-separated list of URLs indicating resources needed
+by the object. These resources may include those URLs specified by the classid
+and data attributes. Preloading these resources usually results in faster
+loadtimes for objects. The URLs in the list should be relative to the URL
+specified in the codebase attribute.<indexterm id="att-archive">archive attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>CDATA</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="audience">
+               <stentry>audience</stentry>
+               <stentry>Indicates the intended audience for the element.<ph conref="#commonLRdefs/propertyvalueattr"/> 
+                  
+                  
+                  <indexterm id="att-audience">audience attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>CDATA </stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="author">
+               <stentry>author</stentry>
+               <stentry>Designates the originator of the draft comment.<indexterm id="att-author">author
+attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>CDATA</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="callout">
+               <stentry>callout</stentry>
+               <stentry>Specifies what character is used for the footnote link, for example
+a number or an alpha character. Numbers are the default. You could also specify
+a graphic for the footnote callout during output processing.<indexterm id="att-callout">callout
+attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>CDATA</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="chunk">
+               <stentry>chunk</stentry>
+               <stentry>Currently not used.<indexterm id="att-chunk">chunk attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>CDATA</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="class">
+               <stentry>class</stentry>
+               <stentry>
+                  
+                  
+                  <i>
+                     
+                     
+                     <keyword>Not for use by authors. If an editor displays class attribute
+values, do not edit them.</keyword>
+                  
+                  
+                  </i> The class attribute supports specialization.
+Its predefined values help the output transforms work correctly with ranges
+of related content.<indexterm id="att-class">class attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>CDATA</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+               
+               
+               </stentry>
+            </strow>
+            <strow id="classid">
+               <stentry>classid</stentry>
+               <stentry>Contains a URL that specifies the location of an object's implementation.
+It can be used together with the data attribute which is specified relative
+to the value of the codebase attribute.<indexterm id="att-classid">classid
+attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>CDATA</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="codebase">
+               <stentry>codebase</stentry>
+               <stentry>Specifies the base path (a URL) used for resolving the URL values
+given for classid, data, and archive attributes. If codebase is not set, the
+default is the base URL of the current document.<indexterm id="att-codebase">codebase
+attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>CDATA</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="codetype">
+               <stentry>codetype</stentry>
+               <stentry>Indicates the content type for the data specified by the classid
+attribute. This attribute should be set when the classid attribute is set
+to avoid loading unsupported content types. If this attribute value is not
+set, the default is the value of the type attribute.<indexterm id="att-codetype">codetype
+attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>CDATA</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="collection-type">
+               <stentry>collection-type</stentry>
+               <stentry>Collection types describe how links relate to each other. A family
+represents a tight grouping in which each of the referenced topics not only
+relates to the current topic but also relate to each other. Allowed values
+are: unordered sequence choice family.<ph product="idwb38"> Should you see
+the value "tree" in a pulldown list, it is not supported.</ph>
+                  
+                  
+                  <indexterm id="att-collection-type">collection-type
+attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>(unordered|sequence|choice|family)</stentry>
+               <stentry>
+                  
+                  
+                  <q>unordered</q>
+               
+               
+               </stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+               
+               
+               </stentry>
+            </strow>
+            <strow id="colname">
+               <stentry>colname</stentry>
+               <stentry>Specifies the table column name in which an entry is found.<indexterm id="att-colname">colname attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>NMTOKEN</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="colnum">
+               <stentry>colnum</stentry>
+               <stentry>Indicates the number of a column in the table, counting from the
+first logical column to the last column.<indexterm id="att-colnum">colnum
+attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>NMTOKEN</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="cols">
+               <stentry>cols</stentry>
+               <stentry>Indicates the number of columns in a &lt;tgroup&gt; in a table.<indexterm id="att-cols">cols attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>NMTOKEN</stentry>
+               <stentry>#REQUIRED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="colsep">
+               <stentry>colsep</stentry>
+               <stentry>Column separator. A value of 0 indicates no separators; 1 indicates
+separators.<indexterm id="att-colsep">colsep attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>NMTOKEN</stentry>
+               <stentry>
+                  
+                  
+                  <q>0</q>
+               
+               
+               </stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="colwidth">
+               <stentry>colwidth</stentry>
+               <stentry>Describes the column width.<indexterm id="att-colwidth">colwidth
+attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>CDATA</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="compact">
+               <stentry>compact</stentry>
+               <stentry>Indicates close vertical spacing between the list items. Expanded
+spacing is the default value. The output result of compact spacing depends
+on the processor or browser. Allowed values are:<dl>
+                     
+                     
+                     <dlentry>
+
+                        
+                        
+                        <dt>yes</dt>
+
+                        
+                        
+                        <dd>Indicates compact spacing.</dd>
+
+                     
+                     
+                     </dlentry>
+                     
+                     
+                     <dlentry>
+
+                        
+                        
+                        <dt>no</dt>
+
+                        
+                        
+                        <dd>Indicates expanded spacing.</dd>
+
+                     
+                     
+                     </dlentry>
+                  
+                  
+                  </dl><!--Consider having the default set by the content (eg, if there are blocks in the lists, then make them uncompact by default)-->
+                  
+                  
+                  <indexterm id="att-compact">compact attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>(yes | no)</stentry>
+               <stentry>
+                  
+                  
+                  <q>yes</q>
+               
+               
+               </stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+               
+               
+               </stentry>
+            </strow>
+            <strow id="conref-topic">
+               <stentry>conref<!--description for conref to a topic--></stentry>
+               <stentry>This attribute is used to reference an ID on a topic that can be
+reused. For example, you could create a series of topics in a compound (dita)
+or nested context for authoring convenience and then reference each topic
+individually into a new target location. During output processing, a lookup
+process will pull the contents of the first topic into the calling topic markup
+that has the conref attribute. <p>The conref value follows the same conventions
+as HTML for normal file links.  To refer to target content in a different
+file, put the full URL of that topic before the # character.</p>
+                  
+                  
+                  <pre>Target elsewhere in the same file: conref="#topicid"
+In different file: conref="filename.xml"
+In different compound file: conref="filename.xml#topicid"</pre>
+                  
+                  
+                  <indexterm id="att-conref-topic">conref attribute<indexterm>topic</indexterm>
+                  </indexterm>
+               
+               
+               </stentry>
+               <stentry>CDATA</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+               
+               
+               </stentry>
+            </strow>
+            <strow id="conref-element">
+               <stentry>conref<!--description for conref to an element--></stentry>
+               <stentry>This attribute is used to reference an ID on content that can be
+reused. For example, you could create a &lt;note&gt; in a topic and then reference
+its ID (using conref) from a &lt;note&gt; in another topic. During output processing,
+a lookup process will pull the contents of the first note into the note that
+has the conref attribute. <p>The conref value follows the same conventions
+as HTML for what HTML calls a "fragment identifier"—a required "#" separator
+separates an optional filename from the fully qualified id (in the form <codeph>topicid/elementid</codeph>).
+ To refer to target content in a different file, put the full URL of that
+topic before the # character.</p>
+                  
+                  
+                  <pre>Local target: conref="#topicid/elementid"
+In different file: conref="filename.xml#topicid/elementid"</pre>
+                  
+                  
+                  <indexterm id="att-conref-element">conref attribute<indexterm>element</indexterm>
+                  </indexterm>
+               
+               
+               </stentry>
+               <stentry>CDATA</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+               
+               
+               </stentry>
+            </strow>
+            <strow id="conref-topicref">
+               <stentry>conref</stentry>
+               <stentry>[TO BE DEVELOPED--description for conref to a topicref]<indexterm id="att-conref-topicref">conref attribute<indexterm>topicref</indexterm>
+                  </indexterm>
+               
+               
+               </stentry>
+               <stentry>CDATA</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+               
+               
+               </stentry>
+            </strow>
+            <strow id="conref">
+               <stentry>conref</stentry>
+               <stentry>This attribute is used to reference an ID on content that can be
+reused. For example, you could create a &lt;note&gt; in a topic and then reference
+its ID (using conref) from a &lt;note&gt; in another topic. During output processing,
+a lookup process will pull the contents of the first note into the note that
+has the conref attribute. <p>The conref value follows the same conventions
+as HTML for what HTML calls a "fragment identifier"—a required "#" separator
+separates an optional filename from the fully qualified id (in the form <codeph>topicid/elementid</codeph>).
+ To refer to target content in a different file, put the full URL of that
+topic before the # character.</p>
+                  
+                  
+                  <pre>Local target: conref="#topicid/elementid"
+Different file: conref="filename.xml#topicid"
+In different file: conref="filename.xml#topicid/elementid"</pre>
+                  
+                  
+                  <indexterm id="att-conref">conref attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>CDATA</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+               
+               
+               </stentry>
+            </strow>
+            <strow id="content">
+               <stentry>content</stentry>
+               <stentry>The value for the property named in the name attribute.<indexterm id="att-content">content attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>CDATA</stentry>
+               <stentry>#REQUIRED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+               
+               
+               </stentry>
+            </strow>
+            <strow id="copy-to">
+               <stentry>copy-to</stentry>
+               <stentry>Use the copy-to attribute on the &lt;<keyword>topicref</keyword>&gt;
+element to provide a different file name for a particular instance of the
+topic in the map (for example, to separate out the different versions of the
+topic, rather than combining them on output). The links and navigation associated
+with that instance will point to a copy of the topic with the file name you
+specified. <note>The copied files will appear in search results as near-duplicates
+of the original, with only their related links serving to differentiate them.</note>
+                  
+                  
+                  <indexterm id="att-copy-to">copy-to attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>CDATA</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+               
+               
+               </stentry>
+            </strow>
+            <strow id="data">
+               <stentry>data</stentry>
+               <stentry>Contains a reference to the location of an object's data. If this
+attribute is a URL, it is specified relative to the value of the codebase
+attribute. If this attribute is set, the type attribute should also be set.<indexterm id="att-data">data attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>CDATA</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+               
+               
+               </stentry>
+            </strow>
+            <strow id="date">
+               <stentry>date</stentry>
+               <stentry>The document creation date.  Enter the date as YYYY-MM-DD where YYYY
+  is the year, MM is the month from 01 to 12, and DD is the day from 01-31.
+ See <xref href="http://www.cl.cam.ac.uk/~mgk25/iso-time.html" format="html" scope="external">A Summary of the International Standard Date and Time Notation</xref> for
+background.<indexterm id="att-date">date attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>CDATA</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="declare">
+               <stentry>declare</stentry>
+               <stentry>When this attribute is set to declare, the current object definition
+is a declaration only. The object must be instantiated by a later nested object
+definition referring to this declaration.<indexterm id="att-declare">declare
+attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>
+                  
+                  
+                  <b>
+                     
+                     
+                     <i>
+                        
+                        
+                        <keyword><!-- optional content --></keyword>
+                     
+                     
+                     </i>
+                  
+                  
+                  </b>
+               
+               
+               </stentry>
+               <stentry>
+                  
+                  
+                  <ph>
+                     
+                     
+                     <tt>
+                        
+                        
+                        <u><!-- optional content --></u>
+                     
+                     
+                     </tt>
+                  
+                  
+                  </ph>
+               
+               
+               </stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="disposition">
+               <stentry>disposition</stentry>
+               <stentry>Status of the draft comment. Values can be issue, open, accepted,
+rejected, deferred, duplicate, reopened, unassigned, or completed.<indexterm id="att-disposition">disposition attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>CDATA</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="domains">
+               <stentry>domains</stentry>
+               <stentry>Indicates the specialized domains that are included in the DTD.<indexterm id="att-domains">domains attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>CDATA</stentry>
+               <stentry>
+                  
+                  
+                  <ph>ui-d hi-d pr-d sw-d</ph>
+               
+               
+               </stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="DTDVersion">
+               <stentry>DTDVersion</stentry>
+               <stentry>Designates the version of the DTD that is in use.<indexterm id="att-DTDVersion">DTDVersion
+attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>CDATA</stentry>
+               <stentry>
+                  
+                  
+                  <q>V1.1.0</q> (version dependent; will increase)</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="yes"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="duplicates">
+               <stentry>duplicates</stentry>
+               <stentry>Specifies whether or not duplicate links will be filtered out of
+a linklist. Allowable values are: "yes" (allow duplicate links), or "no" (filter
+out duplicate links). In general, duplicate links in linklists are preserved,
+all other duplicates in other contexts are removed. Note that links are regarded
+as duplicates only if their content plus all attributes match. Currently not
+supported in DITA processing.<indexterm id="att-duplicates">duplicates attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>The attribute value is ignored. The actual function is currently
+processor-dependent.</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="expanse">
+               <stentry>expanse</stentry>
+               <stentry>Determines the horizontal placement of the element. <p>For PDF, allowable
+values are: "page" places the element on the left page margin; "column" aligns
+the element with the current column margin; "textline" aligns the element
+with the left margin of the current text line and takes indention into account.</p>
+                  
+                  
+                  <p>For
+XHTML, allowable values are textline only. The table surrounds the table data.
+Column and page set the table width to 100%.</p><!--DITA processing for XHTML output supports only top, bottom, and topbot rules ??-->
+                  
+                  
+                  <indexterm id="att-expanse">expanse attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry> (page|column|textline) </stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="experiencelevel">
+               <stentry>experiencelevel</stentry>
+               <stentry>Indicates the level of experience the audience is assumed to possess.
+Different audiences may have different experience levels with respect to the
+same topic; for example, a topic may require general knowledge from a programmer,
+but expert knowledge from a user. Allowable values are:<dl>
+                     
+                     
+                     <dlentry>
+
+                        
+                        
+                        <dt>novice</dt>
+
+                        
+                        
+                        <dd>A first time user.</dd>
+
+                     
+                     
+                     </dlentry>
+                     
+                     
+                     <dlentry>
+
+                        
+                        
+                        <dt>general</dt>
+
+                        
+                        
+                        <dd>The most common user.</dd>
+
+                     
+                     
+                     </dlentry>
+                     
+                     
+                     <dlentry>
+
+                        
+                        
+                        <dt>expert</dt>
+
+                        
+                        
+                        <dd>An experienced user.</dd>
+
+                     
+                     
+                     </dlentry>
+                  
+                  
+                  </dl>
+                  
+                  
+                  <indexterm id="att-experiencelevel">experiencelevel attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>(novice | general | expert)</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="expiry">
+               <stentry>expiry</stentry>
+               <stentry>The date when the information should be retired or refreshed, entered
+as YYYY-MM-DD, where YYYY is the year, MM is the month from 01 to 12, and
+DD is the day from 01-31.<indexterm id="att-expiry">expiry attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>CDATA</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="format">
+               <stentry>format</stentry>
+               <stentry>The format attribute identifies the format of the resource being
+cross referenced. The default format is dita.<p>Allowable values are:</p>
+                  
+                  
+                  <dl>
+
+                     
+                     
+                     <dlentry>
+
+                        
+                        
+                        <dt>dita</dt>
+
+                        
+                        
+                        <dd>The format of the linked-to resource is native DITA. Unless otherwise
+specified, the corresponding default type will be treated as "topic."</dd>
+
+                     
+                     
+                     </dlentry>
+                     
+                     
+                     <dlentry>
+
+                        
+                        
+                        <dt>html</dt>
+
+                        
+                        
+                        <dd>The format of the linked-to resource is HTML or XHTML.</dd>
+
+                     
+                     
+                     </dlentry>
+                     
+                     
+                     <dlentry>
+
+                        
+                        
+                        <dt>pdf</dt>
+
+                        
+                        
+                        <dd>The format of the linked-to resource is PDF (opens a new window).</dd>
+
+                     
+                     
+                     </dlentry>
+                     
+                     
+                     <dlentry>
+
+                        
+                        
+                        <dt>(no value)</dt>
+
+                        
+                        
+                        <dd>Defaults to "dita"</dd>
+
+                     
+                     
+                     </dlentry>
+                     
+                     
+                     <dlentry>
+
+                        
+                        
+                        <dt>(for anything else)</dt>
+
+                        
+                        
+                        <dd>Use the file extension without the "." (for example, in a link to file
+"readme.txt", use "txt" as the value)</dd>
+
+                     
+                     
+                     </dlentry>
+                  
+                  
+                  </dl>
+                  
+                  
+                  <indexterm id="att-format">format attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>CDATA</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="frame">
+               <stentry>frame</stentry>
+               <stentry>Specifies which portion of a border should surround the element.
+Allowable values are:<dl>
+                     
+                     
+                     <dlentry>
+
+                        
+                        
+                        <dt>top</dt>
+
+                        
+                        
+                        <dd>Draw a line before the element</dd>
+
+                     
+                     
+                     </dlentry>
+                     
+                     
+                     <dlentry>
+
+                        
+                        
+                        <dt>bottom</dt>
+
+                        
+                        
+                        <dd>Draw a line after the element</dd>
+
+                     
+                     
+                     </dlentry>
+                     
+                     
+                     <dlentry>
+
+                        
+                        
+                        <dt>topbot</dt>
+
+                        
+                        
+                        <dd>Draw a line both before and after the element</dd>
+
+                     
+                     
+                     </dlentry>
+                     
+                     
+                     <dlentry>
+
+                        
+                        
+                        <dt>all</dt>
+
+                        
+                        
+                        <dd>Draw a box around the element</dd>
+
+                     
+                     
+                     </dlentry>
+                     
+                     
+                     <dlentry>
+
+                        
+                        
+                        <dt>sides</dt>
+
+                        
+                        
+                        <dd>Draw a line at each side of the element</dd>
+
+                     
+                     
+                     </dlentry>
+                     
+                     
+                     <dlentry>
+
+                        
+                        
+                        <dt>none</dt>
+
+                        
+                        
+                        <dd>Don't draw any lines around this element</dd>
+
+                     
+                     
+                     </dlentry>
+                  
+                  
+                  </dl>
+                  
+                  
+                  <ph otherprops="outputlimits">DITA processing for XHTML output
+supports only top, bottom, and topbot rules.</ph>
+                  
+                  
+                  <indexterm id="att-frame">frame
+attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>(top | bottom | topbot | all | sides | none)</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="golive">
+               <stentry>golive</stentry>
+               <stentry>The publication or general availability (GA) date, entered as YYYY-MM-DD,
+where YYYY is the year, MM is the month from 01 to 12, and DD is the day from
+01-31.<indexterm id="att-golive">golive attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>CDATA</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="height">
+               <stentry>height</stentry>
+               <stentry>Indicates the maximum height of an image.<indexterm id="att-height">height
+attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>NMTOKEN</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="href">
+               <stentry>href</stentry>
+               <stentry>A hyperlink to an external Web page (URL) or to another topic in
+the same file or in another file. The href attribute identifies the destination
+of the cross-reference link using conventional URL syntax:<pre>href="http://www.xxx.com" format="html"
+href="myfile.xml" type="concept"
+   (or task, reference, or topic)
+href="myfile.xml#topicid/figid" type="fig"
+   (or table, fn, or section)
+href="mything.pdf" format="pdf"</pre>
+                  
+                  
+                  <p>If the URL contains
+an ampersand character, the ampersand symbol (&amp;amp;) should be used to
+indicate that character</p>
+                  
+                  
+                  <indexterm id="att-href">href attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>CDATA</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+               
+               
+               </stentry>
+            </strow>
+            <strow id="href-defining">
+               <stentry>href</stentry>
+               <stentry>A hyperlink representing a resource that defines the person or company
+named in the parent element. Typically you would use this attribute to cite
+the URL for the named entity's <q>home page.</q> The href attribute identifies
+the destination of the resource using conventional URL syntax:<pre>href="http://www.seuss.org/seuss/seuss.bio.html"
+href="http://www.amazon.com/exec/obidos/ISBN=039480001X/
+   thedrseusswebpagA"</pre>
+                  
+                  
+                  <indexterm id="att-href-defining">href attribute<indexterm>defining</indexterm>
+                  </indexterm>
+               
+               
+               </stentry>
+               <stentry>CDATA</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+               
+               
+               </stentry>
+            </strow>
+            <strow id="href-fragref">
+               <stentry>href</stentry>
+               <stentry>A reference to a syntax diagram fragment element. The href attribute
+uses conventional URL syntax to point to the ID of the matching syntax diagram
+fragment:<pre>href="#topicid/fragmentid"</pre>
+                  
+                  
+                  <indexterm id="att-href-fragref">href
+attribute<indexterm>fragref</indexterm>
+                  </indexterm>
+               
+               
+               </stentry>
+               <stentry>CDATA</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+               
+               
+               </stentry>
+            </strow>
+            <strow id="href-image">
+               <stentry>href</stentry>
+               <stentry>The relative path or URL to the GIF or JPEG image. The href attribute
+uses conventional URL syntax to point to the resource:<pre>href="../images/construction.gif"</pre>
+                  
+                  
+                  <indexterm id="att-href-image">href attribute<indexterm>image</indexterm>
+                  </indexterm>
+               
+               
+               </stentry>
+               <stentry>CDATA</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+               
+               
+               </stentry>
+            </strow>
+            <strow id="href-lq">
+               <stentry>href</stentry>
+               <stentry>A hyperlink representing a bibliographic citation to resources that
+can be accessed by browsers (meaning a URL). See <xref href="keyrefprocessing.xml">keyref processing</xref> for information about alternate
+ways to indicate other, non Web-accessible bibliographic resources. The href
+attribute identifies the destination of the resource using conventional URL
+syntax:<pre>href="http://www.xxx.com" format="html"
+href="myfile.xml" type="concept"  (or task, reference, or topic)
+href="myfile.xml#topicid/figid" type="fig"  (or table, fn, or
+  section)
+href="mything.pdf" format="pdf"</pre>
+                  
+                  
+                  <indexterm id="att-href-lq">href attribute<indexterm>lq</indexterm>
+                  </indexterm>
+               
+               
+               </stentry>
+               <stentry>CDATA</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+               
+               
+               </stentry>
+            </strow>
+            <strow id="href-source">
+               <stentry>href</stentry>
+               <stentry>A hyperlink representing an external Web resource (URL)  from which
+the present resource is derived. The href attribute identifies the destination
+of the resource using conventional URL syntax:<pre>href="http://www.xxx.com" format="html"
+href="myfile.xml" type="concept"  (or task, reference, or topic)
+href="myfile.xml#topicid/figid" type="fig"  (or table, fn, or
+  section)
+
+href="mything.pdf" format="pdf"</pre>
+                  
+                  
+                  <indexterm id="att-href-source">href
+attribute<indexterm>source</indexterm>
+                  </indexterm>
+               
+               
+               </stentry>
+               <stentry>CDATA</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+               
+               
+               </stentry>
+            </strow>
+            <strow id="id">
+               <stentry>id</stentry>
+               <stentry>An anchor point. This ID is the target for references by link, xref,
+and conref, and for external applications that refer to DITA content..<indexterm id="att-id">id attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>ID</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="id-map">
+               <stentry>id</stentry>
+               <stentry>This attribute is only used for debugging purposes to tell where
+generated links came from.<indexterm id="att-idmap">id attribute<indexterm>map</indexterm>
+                  </indexterm>
+               
+               
+               </stentry>
+               <stentry>ID</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="importance-optreq">
+               <stentry>importance </stentry>
+               <stentry>The attribute indicates whether the element it modifies is <keyword>optional</keyword> or <keyword>required</keyword>. <ph conref="#commonLRdefs/propertyvalueattr"/>
+                  
+                  
+                  <indexterm id="att-importance-optreq">importance
+attribute<indexterm>optreq</indexterm>
+                  </indexterm>
+               
+               
+               </stentry>
+               <stentry>optional | required</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+               
+               
+               </stentry>
+            </strow>
+            <strow id="importance-var">
+               <stentry>importance</stentry>
+               <stentry>The attribute indicates whether a variable is <keyword>optional</keyword>,
+ <keyword>required</keyword>, or <keyword>default</keyword>. <ph conref="#commonLRdefs/propertyvalueattr"/>
+                  
+                  
+                  <indexterm id="att-importance-var">importance attribute<indexterm>var</indexterm>
+                  </indexterm>
+               
+               
+               </stentry>
+               <stentry>optional | required | default</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+               
+               
+               </stentry>
+            </strow>
+            <strow id="importance">
+               <stentry>importance</stentry>
+               <stentry>A range of values that describe an importance or priority attributed
+to an element. For example, in steps of a task, the attribute indicates whether
+a step is optional or required. In other contexts or specializations, other
+values are possible.<ph conref="#commonLRdefs/propertyvalueattr"/> Allowable
+values are: <keyword>obsolete</keyword>, <keyword>deprecated</keyword>,  <keyword>optional</keyword>,
+ <keyword>default</keyword>,  <keyword>low</keyword>,  <keyword>normal</keyword>,
+ <keyword>high</keyword>,  <keyword>recommended</keyword>,  <keyword>required</keyword>,
+ <keyword>urgent</keyword>.<indexterm id="att-importance">importance attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>obsolete | deprecated | optional | default | low | normal | high
+| recommended | required | urgent</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+               
+               
+               </stentry>
+            </strow>
+            <strow id="job">
+               <stentry>job</stentry>
+               <stentry>Indicates the high-level task the audience for the topic is trying
+to accomplish. Different audiences may read the same topic in terms of different
+high-level tasks; for example, an administrator may read the topic while administering,
+while a programmer may read the same topic while customizing. Allowable values
+are: <keyword>installing</keyword>, <keyword>customizing</keyword>, <keyword>administering</keyword>, <keyword> programming</keyword>, <keyword> using</keyword>, <keyword>maintaining</keyword>, <keyword>troubleshooting</keyword>, <keyword>evaluating</keyword>, <keyword>planning</keyword>, <keyword>migrating</keyword>, <keyword>other</keyword>.<indexterm id="att-job">job attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>installing | customizing | administering | programming | using |
+maintaining | troubleshooting | evaluating | planning | migrating |  other</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+               
+               
+               </stentry>
+            </strow>
+            <strow id="keycol">
+               <stentry>keycol</stentry>
+               <stentry>Defines the column that will be used for row headings. No value indicates
+no key column. When present, the numerical value causes the specified column
+to be highlighted as a vertical header.<indexterm id="att-keycol">keycol attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>NMTOKEN</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="keyref">
+               <stentry>keyref</stentry>
+               <stentry>Currently not implemented in DITA processors. Provides a key that
+a process can use to look up associated information.<indexterm id="att-keyref">keyref
+attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>NMTOKEN</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="keyref-cite">
+               <stentry>keyref</stentry>
+               <stentry>Currently not implemented in DITA processors. Provides a key that
+a process can use to look up the location of the cited material, and potentially
+create a link to it.<indexterm id="att-keyref-cite">keyref attribute<indexterm>cite</indexterm>
+                  </indexterm>
+               
+               
+               </stentry>
+               <stentry>NMTOKEN</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="keyref-author">
+               <stentry>keyref</stentry>
+               <stentry>Currently not implemented in DITA processors. Provides a key that
+a process can use to look up the path to author information, and potentially
+create a link to it. <indexterm id="att-keyref-author">keyref attribute<indexterm>author</indexterm>
+                  </indexterm>
+               
+               
+               </stentry>
+               <stentry>NMTOKEN</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="keyref-cmd">
+               <stentry>keyref</stentry>
+               <stentry>Currently not implemented in DITA processors. Provides a key that
+a process can use to associate the &lt;<keyword>cmd</keyword>&gt; with another
+task that provides more details for that particular step.<indexterm id="att-keyref-cmd">keyref
+attribute<indexterm>cmd</indexterm>
+                  </indexterm>
+               
+               
+               </stentry>
+               <stentry>NMTOKEN</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+               
+               
+               </stentry>
+            </strow>
+            <strow id="keyref-cmdname">
+               <stentry>keyref</stentry>
+               <stentry>Currently not implemented in DITA processors. Provides a key that
+a process can use to associate the &lt;<keyword>cmdname</keyword>&gt; with the
+reference topic for the command, if the command name itself isn't sufficient.<indexterm id="att-keyref-cmdname">keyref attribute<indexterm>cmdname</indexterm>
+                  </indexterm>
+               
+               
+               </stentry>
+               <stentry>NMTOKEN</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="keyref-dt">
+               <stentry>keyref</stentry>
+               <stentry>Currently not implemented in DITA processors. Provides a key that
+a process can use to associate the &lt;<keyword>term</keyword>&gt; with a topic
+elsewhere (such as a related reference or concept).<indexterm id="att-keyref-dt">keyref
+attribute<indexterm>dt</indexterm>
+                  </indexterm>
+               
+               
+               </stentry>
+               <stentry>NMTOKEN</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+               
+               
+               </stentry>
+            </strow>
+            <strow id="keyref-image">
+               <stentry>keyref</stentry>
+               <stentry>Currently not implemented in DITA processors. Provides a key that
+a process can use to refer to the &lt;<keyword>image</keyword>&gt; by a key rather
+than referencing it directly.<!--MP: I think there was a good short description of the basic "alternate to href" use somewhere in the old langref-->
+                  <indexterm id="att-keyref-image">keyref attribute<indexterm>image</indexterm>
+                  </indexterm>
+               
+               
+               </stentry>
+               <stentry>NMTOKEN</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+               
+               
+               </stentry>
+            </strow>
+            <strow id="keyref-indextermref">
+               <stentry>keyref</stentry>
+               <stentry>Currently not implemented in DITA processors. Provides a key that
+a process can use to point to an &lt;<keyword>indexterm</keyword>&gt; and to
+change what it points to for different contexts.<!--keyref here is a pointer to an indexterm, using the keyref mechanism so that you can use the indirection to change what it points to for different contexts--> <indexterm id="att-keyref-indextermref">keyref attribute<indexterm>indextermref</indexterm>
+                  </indexterm>
+               
+               
+               </stentry>
+               <stentry>NMTOKEN</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+               
+               
+               </stentry>
+            </strow>
+            <strow id="keyref-keyword">
+               <stentry>keyref</stentry>
+               <stentry>Currently not implemented in DITA processors. Provides a key that
+a process can use to associate the &lt;<keyword>keyword</keyword>&gt; with another
+topic that provides more details for that particular keyword.<indexterm id="att-keyref-keyword">keyref
+attribute<indexterm>keyword</indexterm>
+                  </indexterm>
+               
+               
+               </stentry>
+               <stentry>NMTOKEN</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+               
+               
+               </stentry>
+            </strow>
+            <strow id="keyref-kwd">
+               <stentry>keyref</stentry>
+               <stentry>Currently not implemented in DITA processors. Provides a key that
+a process can use to associate the &lt;<keyword>kwd</keyword>&gt; with another
+topic that provides more details for that particular keyword.<indexterm id="att-keyref-kwd">keyref
+attribute<indexterm>kwd</indexterm>
+                  </indexterm>
+               
+               
+               </stentry>
+               <stentry>NMTOKEN</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+               
+               
+               </stentry>
+            </strow>
+            <strow id="linking">
+               <stentry>linking</stentry>
+               <stentry>Defines some specific linking characteristics of a topic.<dl>
+                     
+                     
+                     <dlentry>
+
+                        
+                        
+                        <dt>targetonly</dt>
+
+                        
+                        
+                        <dd>A topic can only be linked to and cannot link to other topics.</dd>
+
+                     
+                     
+                     </dlentry>
+                     
+                     
+                     <dlentry>
+
+                        
+                        
+                        <dt>sourceonly</dt>
+
+                        
+                        
+                        <dd>A topic cannot be linked to but can link to other topics.</dd>
+
+                     
+                     
+                     </dlentry>
+                     
+                     
+                     <dlentry>
+
+                        
+                        
+                        <dt>normal</dt>
+
+                        
+                        
+                        <dd>A topic can be linked to and can link to other topics. Use this to override
+the linking value of a parent topic.</dd>
+
+                     
+                     
+                     </dlentry>
+                     
+                     
+                     <dlentry>
+
+                        
+                        
+                        <dt>none</dt>
+
+                        
+                        
+                        <dd>A topic cannot be linked to or link to other topics.</dd>
+
+                     
+                     
+                     </dlentry>
+                  
+                  
+                  </dl>
+                  
+                  
+                  <indexterm id="att-linking">linking attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>(targetonly | sourceonly | normal | none)</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="lockmeta">
+               <stentry>lockmeta</stentry>
+               <stentry>Currently unsupported. Defaults to "yes".<indexterm id="att-lockmeta">lockmeta
+attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>(yes | no)</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="locktitle">
+               <stentry>locktitle</stentry>
+               <stentry>This attribute makes sure the <i>
+                     
+                     
+                     <keyword>navtitle</keyword>
+                  
+                  
+                  </i> attribute
+is used if it is present; if <i>
+                     
+                     
+                     <keyword>locktitle</keyword>
+                  
+                  
+                  </i> isn't set
+to <q>yes</q>, the <i>
+                     
+                     
+                     <keyword>navtitle</keyword>
+                  
+                  
+                  </i> attribute is ignored
+and text is retrieved from the target<dl>
+                     
+                     
+                     <dlentry>
+
+                        
+                        
+                        <dt>yes</dt>
+
+                        
+                        
+                        <dd>The navtitle in the map is used.</dd>
+
+                     
+                     
+                     </dlentry>
+                     
+                     
+                     <dlentry>
+
+                        
+                        
+                        <dt>no</dt>
+
+                        
+                        
+                        <dd>Default. The navtitle or title of the topic is used.</dd>
+
+                     
+                     
+                     </dlentry>
+                  
+                  
+                  </dl>
+                  
+                  
+                  <indexterm id="att-locktitle">locktitle attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>(yes | no)</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="longdescref">
+               <stentry>longdescref</stentry>
+               <stentry>A reference to a textual description of the graphic.  This attribute
+supports creating accessible content.<indexterm id="att-longdescref">longdescref
+attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>CDATA</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="mapkeyref">
+               <stentry>mapkeyref</stentry>
+               <stentry>Identifies the map, if any, from which the &lt;<keyword>linklist</keyword>&gt;
+and its links are derived. This would be automatically generated by the same
+process that created the map from the &lt;<keyword>linklist</keyword>&gt;, as
+a way to identify which map the links came from. If the &lt;<keyword>linklist</keyword>&gt;
+is manually created by the author in the &lt;<keyword>related-links</keyword>&gt;
+section,, there is no need to use this attribute.<!--actually is supported, as documented (ie, doesn't apply to linklist, and is never seen in linkpool since it's added to an intermediate file we don't currently preserve)--> <indexterm id="att-mapkeyref">mapkeyref attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>CDATA</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+               
+               
+               </stentry>
+            </strow>
+            <strow id="mapref">
+               <stentry>mapref</stentry>
+               <stentry>Specifies the URL (local filename, at least) of the map file to reference. <ph conref="#commonLRdefs/only4eclipse"/>
+                  
+                  
+                  <indexterm id="att-mapref">mapref
+attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>CDATA</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+               
+               
+               </stentry>
+            </strow>
+            <strow id="modification">
+               <stentry>modification</stentry>
+               <stentry>Indicates when the product described in this topic was last modified.<indexterm id="att-modification">modification attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>CDATA</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+               
+               
+               </stentry>
+            </strow>
+            <strow id="modified">
+               <stentry>modified</stentry>
+               <stentry>The last modification date, entered as YYYY-MM-DD, where YYYY is
+the year, MM is the month from 01 to 12, and DD is the day from 01-31.<indexterm id="att-modified">modified attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>CDATA</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="morerows">
+               <stentry>morerows</stentry>
+               <stentry>Specifies the number of additional rows to add in a vertical span. <indexterm id="att-morerows">morerows attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>NMTOKEN</stentry>
+               <stentry>
+                  
+                  
+                  <q>0</q>
+               
+               
+               </stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="name">
+               <stentry>name</stentry>
+               <stentry>Submit the object as part of a form.<indexterm id="att-name">name
+attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>CDATA</stentry>
+               <stentry>#REQUIRED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="yes"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="name-audience">
+               <stentry>name</stentry>
+               <stentry>Used to associate the audience element with values used in the audience
+attribute<indexterm id="att-name-audience">name attribute<indexterm>audience</indexterm>
+                  </indexterm>
+               
+               
+               </stentry>
+               <stentry>CDATA</stentry>
+               <stentry>#REQUIRED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="yes"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="nameend">
+               <stentry>nameend</stentry>
+               <stentry>Specifies the last logical column that is included in a horizontal
+span.<indexterm id="att-nameend">nameend attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>NMTOKEN</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="namest">
+               <stentry>namest</stentry>
+               <stentry>Specifies the first logical column that is included in a horizontal
+span.<indexterm id="att-namest">namest attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>NMTOKEN</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="navtitle">
+               <stentry>navtitle</stentry>
+               <stentry>Specifies the title of a container in a toc.<indexterm id="att-navtitle">navtitle
+attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>CDATA</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="otherjob">
+               <stentry>otherjob</stentry>
+               <stentry>If the job attribute value is "other" the value of this attribute
+is used to identify a kind of job other than the default ones provided by
+the job attribute.  <indexterm id="att-otherjob">otherjob attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>CDATA</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="otherprops">
+               <stentry>otherprops</stentry>
+               <stentry>This attribute can be used for any other properties that might be
+needed to describe an audience, or to provide selection criteria for the element.<indexterm id="att-otherprops">otherprops attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>CDATA</stentry>
+               <stentry> #IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="otherrole">
+               <stentry>otherrole</stentry>
+               <stentry>Indicates an alternate role. This value is used when the role attribute
+is set to other.<indexterm id="att-otherrole">otherrole attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>CDATA</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="othertype-audience">
+               <stentry>othertype</stentry>
+               <stentry>Indicates an alternate audience type, when the type is not available
+in the type attribute value list. This value is used as the user-provided
+audience when the type attribute value is set to "other."<indexterm id="att-othertype">othertype
+attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>CDATA</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="othertype-note">
+               <stentry>othertype</stentry>
+               <stentry>Indicates an alternate note type, when the type is not available
+in the type attribute value list. This value is used as the user-provided
+note title when the type attribute value is set to "other."<indexterm id="att-othertype-note">othertype
+attribute<indexterm>note</indexterm>
+                  </indexterm>
+               
+               
+               </stentry>
+               <stentry>CDATA</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="outputclass">
+               <stentry>outputclass</stentry>
+               <stentry>Designates an element style in a local Cascading Style Sheet (CSS)
+to override whatever style is normally applied. See <xref href="outputclassprocessing.xml"/> for more information.<indexterm id="att-outputclass">outputclass
+attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>CDATA</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="placement">
+               <stentry>placement</stentry>
+               <stentry>Indicates whether an image should be displayed inline or separated
+from the surrounding text. The default is inline. Allowable values are: inline
+or break.<indexterm id="att-placement">placement attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>CDATA</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="platform">
+               <stentry>platform</stentry>
+               <stentry>Indicates operating system and hardware.<ph conref="#commonLRdefs/propertyvalueattr"/>
+                  
+                  
+                  <indexterm id="att-platform">platform attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>CDATA</stentry>
+               <stentry> #IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="print">
+               <stentry>print</stentry>
+               <stentry>Specifies whether the topic should be included in a portable document
+format (PDF) file.<dl>
+                     
+                     
+                     <dlentry>
+
+                        
+                        
+                        <dt>yes</dt>
+
+                        
+                        
+                        <dd>Include the topic in a PDF file.</dd>
+
+                     
+                     
+                     </dlentry>
+                     
+                     
+                     <dlentry>
+
+                        
+                        
+                        <dt>no</dt>
+
+                        
+                        
+                        <dd>Do not include the topic in a PDF file.</dd>
+
+                     
+                     
+                     </dlentry>
+                  
+                  
+                  </dl>
+                  
+                  
+                  <indexterm id="att-print">print attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>(yes | no)</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="product">
+               <stentry>product</stentry>
+               <stentry>Contains the name of the product to which the topic applies.<ph conref="#commonLRdefs/propertyvalueattr"/>
+                  
+                  
+                  <indexterm id="att-product">product attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>CDATA</stentry>
+               <stentry> #IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+               
+               
+               </stentry>
+            </strow>
+            <strow id="query">
+               <stentry>query</stentry>
+               <stentry>Lists query criteria for topicref, or uses topicref's metadata as
+query criteria. The query pulls in matching topics under the current one if
+the title is present, or replaces the current location if title is not present.<indexterm id="att-query">query attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>CDATA</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+               
+               
+               </stentry>
+            </strow>
+            <strow id="refcols">
+               <stentry>refcols</stentry>
+               <stentry>Designates columns that contain references, and are candidates for
+automated linking (not currently supported). Columns are identified by a comma-delimited
+list of numbers (for example: <codeph>1,3</codeph>).<indexterm id="att-refcols">refcols
+attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>NMTOKENS</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+               
+               
+               </stentry>
+            </strow>
+            <strow id="reftitle">
+               <stentry>reftitle</stentry>
+               <stentry>The title of the document or topic being quoted.<indexterm id="att-reftitle">reftitle
+attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>CDATA</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="relcolwidth">
+               <stentry>relcolwidth</stentry>
+               <stentry>A relative value to specify the width of a column in relationship
+to the width of the other columns <b>for print output</b>. The values are
+totaled and made a percent.  For example:  <codeblock>relcolwidth="1* 2* 3*"</codeblock> 
+causes widths of 16.7%, 33.3%, and 66.7%.  <codeblock>relcolwidth="90* 150*"</codeblock> causes
+width of 37.5% and 62.5%.<indexterm id="att-relcolwidth">relcolwidth attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>CDATA</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="release">
+               <stentry>release</stentry>
+               <stentry>Contains the product release identifier.<indexterm id="att-release">release
+attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>CDATA</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="remap">
+               <stentry>remap</stentry>
+               <stentry>Indicates the element that the contents of the required-cleanup element
+were mapped from (provides an idea about what the new intent should be).<indexterm id="att-remap">remap attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>CDATA</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="rev">
+               <stentry>rev</stentry>
+               <stentry>Indicates revision level of an element. It is useful for flagging
+outputs based on revision.<ph conref="#commonLRdefs/propertyvalueattr"/>
+                  
+                  
+                  <indexterm id="att-rev">rev attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>CDATA </stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="role">
+               <stentry>role</stentry>
+               <stentry>The role attribute defines the role the target topic plays in relationship
+with the current topic. For example, in a parent/child relationship, the role
+would be "parent" when the target is the parent of the current topic, and
+"child" when the target is the child of the current topic. This structure
+could be used to sort and classify links at display time. <p>Allowable values
+are: </p>
+                  
+                  
+                  <dl>
+                     
+                     
+                     <dlentry>
+
+                        
+                        
+                        <dt>parent</dt>
+
+                        
+                        
+                        <dd>Indicates a link to a topic that is a parent of the current topic.</dd>
+
+                     
+                     
+                     </dlentry>
+                     
+                     
+                     <dlentry>
+
+                        
+                        
+                        <dt>child</dt>
+
+                        
+                        
+                        <dd>Indicates a link to a direct child such as a directly nested or dependent
+topic.</dd>
+
+                     
+                     
+                     </dlentry>
+                     
+                     
+                     <dlentry>
+
+                        
+                        
+                        <dt>sibling</dt>
+
+                        
+                        
+                        <dd>Iindicates a link between two children of the same parent topic.</dd>
+
+                     
+                     
+                     </dlentry>
+                     
+                     
+                     <dlentry>
+
+                        
+                        
+                        <dt>friend</dt>
+
+                        
+                        
+                        <dd>Indicates a link to a similar topic that is not necessarily part of the
+same hierarchy.</dd>
+
+                     
+                     
+                     </dlentry>
+                     
+                     
+                     <dlentry>
+
+                        
+                        
+                        <dt>next</dt>
+
+                        
+                        
+                        <dd>Indicates a link to the next topic in a sequence.</dd>
+
+                     
+                     
+                     </dlentry>
+                     
+                     
+                     <dlentry>
+
+                        
+                        
+                        <dt>previous</dt>
+
+                        
+                        
+                        <dd>Indicates a link to the previous topic in a sequence.</dd>
+
+                     
+                     
+                     </dlentry>
+                     
+                     
+                     <dlentry>
+
+                        
+                        
+                        <dt>cousin</dt>
+
+                        
+                        
+                        <dd>Indicates a link to another topic in the same hierarchy that is not a
+parent, child, sibling, next, or previous.</dd>
+
+                     
+                     
+                     </dlentry>
+                     
+                     
+                     <dlentry>
+
+                        
+                        
+                        <dt>ancestor</dt>
+
+                        
+                        
+                        <dd>Indicates a link to a topic above the parent topic.</dd>
+
+                     
+                     
+                     </dlentry>
+                     
+                     
+                     <dlentry>
+
+                        
+                        
+                        <dt>descendent</dt>
+
+                        
+                        
+                        <dd>Indicates a link to a topic below a child topic.</dd>
+
+                     
+                     
+                     </dlentry>
+                     
+                     
+                     <dlentry>
+
+                        
+                        
+                        <dt>sample</dt>
+
+                        
+                        
+                        <dd>Deprecated.</dd>
+
+                     
+                     
+                     </dlentry>
+                     
+                     
+                     <dlentry>
+
+                        
+                        
+                        <dt>external</dt>
+
+                        
+                        
+                        <dd>Deprecated--use the scope="external" attribute to indicate external links..</dd>
+
+                     
+                     
+                     </dlentry>
+                     
+                     
+                     <dlentry>
+
+                        
+                        
+                        <dt>other</dt>
+
+                        
+                        
+                        <dd>Indicates any other kind of relationship or role. Enter that role as the
+value for the otherrole attribute.</dd>
+
+                     
+                     
+                     </dlentry>
+                  
+                  
+                  </dl>
+                  
+                  
+                  <indexterm id="att-role">role attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry> (parent | child | sibling | friend | next | previous | cousin |
+ancestor | descendant | <i>
+                     
+                     
+                     <keyword>sample | external | [deprecated]</keyword>
+                  
+                  
+                  </i> other) </stentry>
+               <stentry>
+                  
+                  
+                  <q>friend</q>
+               
+               
+               </stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="rowheader">
+               <stentry>rowheader</stentry>
+               <stentry>This attribute specifies whether the content of the first column
+in a table contains row headings. In the same way that a column header introduces
+a table column, the row header introduces the table row. This attribute makes
+tables whose first column contains row headings more readable on output. Allowable
+values are:<dl>
+                     
+                     
+                     <dlentry>
+
+                        
+                        
+                        <dt>firstcol</dt>
+
+                        
+                        
+                        <dd>The first column contains the row headings.</dd>
+
+                     
+                     
+                     </dlentry>
+                     
+                     
+                     <dlentry>
+
+                        
+                        
+                        <dt>norowheader</dt>
+
+                        
+                        
+                        <dd>Indicates that no column contains row headings.  This is the default.</dd>
+
+                     
+                     
+                     </dlentry>
+                  
+                  
+                  </dl>
+                  
+                  
+                  <indexterm id="att-rowheader">rowheader attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>(firstCol | norowheader)</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="rowsep">
+               <stentry>rowsep</stentry>
+               <stentry>Row separator. A value of 0 indiates no separators; 1 indicates separators.<indexterm id="att-rowsep">rowsep attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>NMTOKEN</stentry>
+               <stentry>
+                  
+                  
+                  <q>0</q>
+               
+               
+               </stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="scale">
+               <stentry>scale</stentry>
+               <stentry>Specifies a percentage, selected from an enumerated list, that is
+used to resize fonts  in relation to the normal text size. <ph otherprops="outputlimits">DITA
+processing does not support this attribute for XHTML output.</ph>
+                  
+                  
+                  <indexterm id="att-scale">scale attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>(50|60|70|80|90|100|110|120|140|160|180|200)</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+               
+               
+               </stentry>
+            </strow>
+            <strow id="scope">
+               <stentry>scope</stentry>
+               <stentry>The scope attribute identifies the closeness of the relationship
+between the current topic and the target resource. Set scope to <codeph>local</codeph> when
+the resource is part of the current set of content, and should be accessed
+and copied to the output directory. Set scope to <codeph>peer</codeph> when
+the resource is part of the current set of content but is not accessible at
+build time. Set scope to <codeph>external</codeph> when the resource is not
+part of the current information set and should open in a new browser window.
+The default is <codeph>local</codeph>.<indexterm id="att-scope">scope attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>(local | peer | external)</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+               
+               
+               </stentry>
+            </strow>
+            <strow id="search">
+               <stentry>search</stentry>
+               <stentry>Currently not used.<dl>
+                     
+                     
+                     <dlentry>
+
+                        
+                        
+                        <dt>yes</dt>
+
+                        
+                        
+                        <dd><!-- optional content --></dd>
+
+                     
+                     
+                     </dlentry>
+                     
+                     
+                     <dlentry>
+
+                        
+                        
+                        <dt>no</dt>
+
+                        
+                        
+                        <dd><!-- optional content --></dd>
+
+                     
+                     
+                     </dlentry>
+                  
+                  
+                  </dl>
+                  
+                  
+                  <indexterm id="att-search">search attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>(yes | no)</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="spanname">
+               <stentry>spanname</stentry>
+               <stentry>Indicates the name and definition of a horizontal span.<indexterm id="att-spanname">spanname attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>NMTOKEN</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="specentry">
+               <stentry>specentry</stentry>
+               <stentry>The specialized entry attribute allows architects of specialized
+DTDs to define a fixed or default header title for a specialized stentry element.
+Not intended for direct use by authors.<indexterm id="att-specentry">specentry
+attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>CDATA</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="spectitle">
+               <stentry>spectitle</stentry>
+               <stentry>The specialized title attribute allows architects of specialized
+DTDs to define a fixed or default title for a specialized element. Not intended
+for direct use by authors.<indexterm id="att-spectitle">spectitle attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>CDATA</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="standby">
+               <stentry>standby</stentry>
+               <stentry>Contains a message to be displayed while an object is loading.<indexterm id="att-standby">standby attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>CDATA</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="state">
+               <stentry>state</stentry>
+               <stentry>The state of the boolean element. Allowable values are: yes no<indexterm id="att-state">state attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>CDATA</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="status">
+               <stentry>status</stentry>
+               <stentry>The status of the current element.<ph conref="#commonLRdefs/propertyvalueattr"/> Allowable
+values are: new changed deleted unchanged<indexterm id="att-status">status
+attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>CDATA</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="tabindex">
+               <stentry>tabindex</stentry>
+               <stentry>Position the object in tabbing order.<indexterm id="att-tabindex">tabindex
+attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>NMTOKEN</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="time">
+               <stentry>time</stentry>
+               <stentry>Describes when the draft comment was created.<indexterm id="att-time">time
+attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>CDATA</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="title">
+               <stentry>title</stentry>
+               <stentry>An identifying title for this element.<indexterm id="att-title">title
+attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>CDATA</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="tmclass">
+               <stentry>tmclass</stentry>
+               <stentry>Classification of the trademark (is it an IBM trademark, IBM subsidiary
+trademark, etc). Values can include IBM, IBMSUB, SPECIAL and OTHER.<indexterm id="att-tmclass">tmclass attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>CDATA</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="tmowner">
+               <stentry>tmowner</stentry>
+               <stentry>The trademark owner, for example "IBM Corporation."<indexterm id="att-tmowner">tmowner
+attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>CDATA</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="tmtype">
+               <stentry>tmtype</stentry>
+               <stentry>The trademark type: trademark, registered trademark, or service mark<indexterm id="att-tmtype">tmtype attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>CDATA</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="toc">
+               <stentry>toc</stentry>
+               <stentry>Specifies whether a topic appears in the table of contents (toc).
+This value is set to no.<indexterm id="att-toc">toc attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry><!-- optional content --></stentry>
+               <stentry><!-- optional content --></stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="trademark">
+               <stentry>trademark</stentry>
+               <stentry>The trademarked term<indexterm id="att-trademark">trademark attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>CDATA</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="translate">
+               <stentry>translate</stentry>
+               <stentry>Indicates whether the content of the element should be translated
+or not.<indexterm id="att-translate">translate attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>yes | no</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+               
+               
+               </stentry>
+            </strow>
+            <strow id="translate-content">
+               <stentry>translate-content</stentry>
+               <stentry>Indicates whether the content attribute of the defined metadata property
+should be translated or not.<indexterm id="att-translate-content">translate-content
+attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>yes | no</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+               
+               
+               </stentry>
+            </strow>
+            <strow id="type">
+               <stentry>type</stentry>
+               <stentry>Describes the target of a cross-reference and may generate cross-reference
+text based on that description. <p>Allowed values are: </p>
+                  
+                  
+                  <dl>
+                     
+                     
+                     <dlentry>
+
+                        
+                        
+                        <dt>fig</dt>
+
+                        
+                        
+                        <dd>Indicates a link to a figure.</dd>
+
+                     
+                     
+                     </dlentry>
+                     
+                     
+                     <dlentry>
+
+                        
+                        
+                        <dt>table</dt>
+
+                        
+                        
+                        <dd>Indicates a link to a table.</dd>
+
+                     
+                     
+                     </dlentry>
+                     
+                     
+                     <dlentry>
+
+                        
+                        
+                        <dt>li</dt>
+
+                        
+                        
+                        <dd>Indicates a link to an ordered list item.</dd>
+
+                     
+                     
+                     </dlentry>
+                     
+                     
+                     <dlentry>
+
+                        
+                        
+                        <dt>fn</dt>
+
+                        
+                        
+                        <dd>Indicates a link to a footnote.</dd>
+
+                     
+                     
+                     </dlentry>
+                     
+                     
+                     <dlentry>
+
+                        
+                        
+                        <dt>section</dt>
+
+                        
+                        
+                        <dd>"section" indicates a link to a section.</dd>
+
+                     
+                     
+                     </dlentry>
+                     
+                     
+                     <dlentry>
+
+                        
+                        
+                        <dt>concept, task, reference, topic</dt>
+
+                        
+                        
+                        <dd>Cross-reference to a topic type.</dd>
+
+                     
+                     
+                     </dlentry>
+                     
+                     
+                     <dlentry>
+
+                        
+                        
+                        <dt>other</dt>
+
+                        
+                        
+                        <dd>Indicates a cross-reference to an alternate topic information type (currently
+unsupported).</dd>
+
+                     
+                     
+                     </dlentry>
+                  
+                  
+                  </dl>
+                  
+                  
+                  <note>Valid types for &lt;<keyword>link</keyword>&gt; include
+topic, concept, task, and reference. Valid types for &lt;<keyword>xref</keyword>&gt;
+also include fig, figgroup, table, li, fn, and section.</note>
+                  
+                  
+                  <note>The values <b>external</b> and <b>local</b> are
+deprecated for this attribute, and will be removed in later versions of the
+DTDs. Use the <i>
+                        
+                        
+                        <keyword>scope</keyword>
+                     
+                     
+                     </i> attribute instead to specify
+these linking semantics.</note>
+                  
+                  
+                  <indexterm id="att-type">type attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>CDATA</stentry>
+               <stentry>#IMPLIED (Processed as if the target were of type <q>topic.</q>)</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+               
+               
+               </stentry>
+            </strow>
+            <strow id="type-audience">
+               <stentry>type</stentry>
+               <stentry>Indicates the kind of person for whom the content of the topic is
+intended. Allowable values are:<dl>
+                     
+                     
+                     <dlentry>
+
+                        
+                        
+                        <dt>user</dt>
+
+                        
+                        
+                        <dd>A user of the product</dd>
+
+                     
+                     
+                     </dlentry>
+                     
+                     
+                     <dlentry>
+
+                        
+                        
+                        <dt>purchaser</dt>
+
+                        
+                        
+                        <dd>A product purchaser</dd>
+
+                     
+                     
+                     </dlentry>
+                     
+                     
+                     <dlentry>
+
+                        
+                        
+                        <dt>administrator</dt>
+
+                        
+                        
+                        <dd>A product administrator</dd>
+
+                     
+                     
+                     </dlentry>
+                     
+                     
+                     <dlentry>
+
+                        
+                        
+                        <dt>programmer</dt>
+
+                        
+                        
+                        <dd>A programmer</dd>
+
+                     
+                     
+                     </dlentry>
+                     
+                     
+                     <dlentry>
+
+                        
+                        
+                        <dt>executive</dt>
+
+                        
+                        
+                        <dd>An executive</dd>
+
+                     
+                     
+                     </dlentry>
+                     
+                     
+                     <dlentry>
+
+                        
+                        
+                        <dt>services</dt>
+
+                        
+                        
+                        <dd>Someone who provides services related to the product</dd>
+
+                     
+                     
+                     </dlentry>
+                     
+                     
+                     <dlentry>
+
+                        
+                        
+                        <dt>other</dt>
+
+                        
+                        
+                        <dd>Use the value specified by the othertype attribute</dd>
+
+                     
+                     
+                     </dlentry>
+                  
+                  
+                  </dl>
+                  
+                  
+                  <indexterm id="att-type-audience">type attribute<indexterm>audience</indexterm>
+                  </indexterm>
+               
+               
+               </stentry>
+               <stentry>(user | purchaser | administrator | programmer | executive | services
+| other)</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="type-author">
+               <stentry>type</stentry>
+               <stentry>Indicates the primary author of the content. Allowable values are:<dl>
+
+                     
+                     
+                     <dlentry>
+
+                        
+                        
+                        <dt>creator</dt>
+
+                        
+                        
+                        <dd>The primary or original author of the content.</dd>
+
+                     
+                     
+                     </dlentry>
+                     
+                     
+                     <dlentry>
+
+                        
+                        
+                        <dt>contributor</dt>
+
+                        
+                        
+                        <dd>An additional author who is not primary.</dd>
+
+                     
+                     
+                     </dlentry>
+                  
+                  
+                  </dl>
+                  
+                  
+                  <indexterm id="att-type-author">type attribute<indexterm>author</indexterm>
+                  </indexterm>
+               
+               
+               </stentry>
+               <stentry>(author | contributor)</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+               
+               
+               </stentry>
+            </strow>
+            <strow id="type-copyright">
+               <stentry>type</stentry>
+               <stentry>Indicates the legal status of the copyright holder. Allowable values
+are:<dl>
+                     
+                     
+                     <dlentry>
+
+                        
+                        
+                        <dt>primary</dt>
+
+                        
+                        
+                        <dd>The copyright holder with first claim on the copyright</dd>
+
+                     
+                     
+                     </dlentry>
+                     
+                     
+                     <dlentry>
+
+                        
+                        
+                        <dt>secondary</dt>
+
+                        
+                        
+                        <dd>An additional copyright holder who is not primary</dd>
+
+                     
+                     
+                     </dlentry>
+                  
+                  
+                  </dl>
+                  
+                  
+                  <indexterm id="att-type-copyright">type attribute<indexterm>copyright</indexterm>
+                  </indexterm>
+               
+               
+               </stentry>
+               <stentry>(primary | secondary)</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+               
+               
+               </stentry>
+            </strow>
+            <strow id="type-note">
+               <stentry>type</stentry>
+               <stentry>Defines the type of a note. For example, if the note is a tip, the
+word <b>Tip</b> is used to draw the reader's attention to it. If type is set
+to other, the value of the othertype attribute is used. If you use othertype,
+there needs to be a stylesheet or transform override that does something with
+the information, or it will be ignored. Allowable values for the type attribute
+are:<dl>
+                     
+                     
+                     <dlentry>
+
+                        
+                        
+                        <dt>note</dt>
+
+                        
+                        
+                        <dd>This is just a note.</dd>
+
+                     
+                     
+                     </dlentry>
+                     
+                     
+                     <dlentry>
+
+                        
+                        
+                        <dt>attention</dt>
+
+                        
+                        
+                        <dd>Please pay extra attention to this note.</dd>
+
+                     
+                     
+                     </dlentry>
+                     
+                     
+                     <dlentry>
+
+                        
+                        
+                        <dt>caution</dt>
+
+                        
+                        
+                        <dd>Care is required when proceeding. For example: <codeblock>&lt;note type="caution"&gt;Contents may be erased.&lt;/note&gt;</codeblock>produces:<note type="caution">You may reformat your hard drive.</note>
+                        
+                        
+                        </dd>
+
+                     
+                     
+                     </dlentry>
+                     
+                     
+                     <dlentry>
+
+                        
+                        
+                        <dt>danger</dt>
+
+                        
+                        
+                        <dd>Important! Be aware of this before doing anything else. For example:<codeblock>&lt;note type="danger"&gt;You may hurt yourself!&lt;/note&gt;</codeblock>produces:<note type="danger">You may hurt yourself!</note>
+                        
+                        
+                        </dd>
+
+                     
+                     
+                     </dlentry>
+                     
+                     
+                     <dlentry>
+
+                        
+                        
+                        <dt>fastpath</dt>
+
+                        
+                        
+                        <dd>This note will speed you on your way.</dd>
+
+                     
+                     
+                     </dlentry>
+                     
+                     
+                     <dlentry>
+
+                        
+                        
+                        <dt>important</dt>
+
+                        
+                        
+                        <dd>This note is important.</dd>
+
+                     
+                     
+                     </dlentry>
+                     
+                     
+                     <dlentry>
+
+                        
+                        
+                        <dt>remember</dt>
+
+                        
+                        
+                        <dd>Don't forget to do what this note says.</dd>
+
+                     
+                     
+                     </dlentry>
+                     
+                     
+                     <dlentry>
+
+                        
+                        
+                        <dt>restriction</dt>
+
+                        
+                        
+                        <dd>You can't do what this note says.</dd>
+
+                     
+                     
+                     </dlentry>
+                     
+                     
+                     <dlentry>
+
+                        
+                        
+                        <dt>tip</dt>
+
+                        
+                        
+                        <dd>This is a fine little tip.</dd>
+
+                     
+                     
+                     </dlentry>
+                     
+                     
+                     <dlentry>
+
+                        
+                        
+                        <dt>other</dt>
+
+                        
+                        
+                        <dd>This is something other than a normal note.</dd>
+
+                     
+                     
+                     </dlentry>
+                  
+                  
+                  </dl>
+                  
+                  
+                  <indexterm id="att-type-note">type attribute<indexterm>note</indexterm>
+                  </indexterm>
+               
+               
+               </stentry>
+               <stentry>(note | tip | fastpath | restriction | important | remember | attention
+| caution | danger | other)</stentry>
+               <stentry>
+                  
+                  
+                  <q>note</q>
+               
+               
+               </stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+               
+               
+               </stentry>
+            </strow>
+            <strow id="type-lq">
+               <stentry>type</stentry>
+               <stentry>Indicates the location of the source of the quote. Allowable values
+are:<dl>
+                     
+                     
+                     <dlentry>
+
+                        
+                        
+                        <dt>external</dt>
+
+                        
+                        
+                        <dd>the href is to a Web site</dd>
+
+                     
+                     
+                     </dlentry>
+                     
+                     
+                     <dlentry>
+
+                        
+                        
+                        <dt>internal</dt>
+
+                        
+                        
+                        <dd>the href is to a DITA topic</dd>
+
+                     
+                     
+                     </dlentry>
+                     
+                     
+                     <dlentry>
+
+                        
+                        
+                        <dt>bibliographic</dt>
+
+                        
+                        
+                        <dd>the href is to a specialized bibliographic topic. Currently not supported
+in DITA.</dd>
+
+                     
+                     
+                     </dlentry>
+                  
+                  
+                  </dl>
+                  
+                  
+                  <indexterm id="att-type-lq">type attribute<indexterm>lq</indexterm>
+                  </indexterm>
+               
+               
+               </stentry>
+               <stentry>(external | internal | bibliographic)</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+               
+               
+               </stentry>
+            </strow>
+            <strow id="type-object">
+               <stentry>type</stentry>
+               <stentry>Indicates the content type for the data specified by the data attribute.
+This attribute should be set when the data attribute is set to avoid loading
+unsupported content types.<indexterm id="att-type-object">type attribute<indexterm>object</indexterm>
+                  </indexterm>
+               
+               
+               </stentry>
+               <stentry>CDATA</stentry>
+               <stentry>#IMPLIED (No default type)</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+               
+               
+               </stentry>
+            </strow>
+            <strow id="type-param">
+               <stentry>type</stentry>
+               <stentry>This attribute specifies the content type of the resource designated
+by the value attribute only in the case where <varname>valuetype</varname> is
+set to <q>ref</q>. This attribute thus specifies for the user agent, the type
+of values that will be found at the URI designated by value.<indexterm id="att-type-param">type
+attribute<indexterm>param</indexterm>
+                  </indexterm>
+               
+               
+               </stentry>
+               <stentry>CDATA</stentry>
+               <stentry>#IMPLIED (No default type)</stentry>
+               <stentry/>
+            </strow>
+            <strow id="usemap">
+               <stentry>usemap</stentry>
+               <stentry>Indicates that a client-side image map is to be used. An image map
+specifies active geometric regions of an included object and assigns a link
+to each region. When a link is selected, a document may be retrieved or a
+program may run on the server.<indexterm id="att-usemap">usemap attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>CDATA</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+               
+               
+               </stentry>
+            </strow>
+            <strow id="valign">
+               <stentry>valign</stentry>
+               <stentry>Indicates the vertical alignment of text in a table entry (cell).
+ Allowable values are:<dl>
+                     
+                     
+                     <dlentry>
+
+                        
+                        
+                        <dt>top</dt>
+
+                        
+                        
+                        <dd>Align the text to the top of the table entry (cell).</dd>
+
+                     
+                     
+                     </dlentry>
+                     
+                     
+                     <dlentry>
+
+                        
+                        
+                        <dt>bottom</dt>
+
+                        
+                        
+                        <dd>Align the text to the bottom of the table entry (cell).</dd>
+
+                     
+                     
+                     </dlentry>
+                     
+                     
+                     <dlentry>
+
+                        
+                        
+                        <dt>middle</dt>
+
+                        
+                        
+                        <dd>Align the text to the middle of the table entry (cell).</dd>
+
+                     
+                     
+                     </dlentry>
+                  
+                  
+                  </dl>
+                  
+                  
+                  <indexterm id="att-valign">valign attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>(top | bottom | middle)</stentry>
+               <stentry>
+                  
+                  
+                  <q>top</q>
+               
+               
+               </stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="value">
+               <stentry>value</stentry>
+               <stentry>Specifies the value of a run-time parameter specified by the name
+attribute.<indexterm id="att-value">value attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>CDATA</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="valuetype">
+               <stentry>valuetype</stentry>
+               <stentry>Specifies the type of the value attribute. Allowed values are: data,
+ref or object. A value of data means that the value will be evaluated and
+passed to the object's implementation as a string.  A value of ref indicates
+that the value of valuetype is a URL that designates a resource where run-time
+values are stored. This allows support tools to identify URLs that are given
+as parameters.  A value of object indicates that the value of valuetype is
+an identifier that refers to an object declaration in the document. The identifier
+must be the value of the ID attribute set for the declared object element.<indexterm id="att-valuetype">valuetype attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>CDATA</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="version">
+               <stentry>version</stentry>
+               <stentry>Indicates the released version number of the product(s) that the
+document describes.<indexterm id="att-version">version attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>CDATA</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="view">
+               <stentry>view</stentry>
+               <stentry>Defines the classifications of viewers allowed to view the document.
+ Allowable values are:<dl>
+                     
+                     
+                     <dlentry>
+
+                        
+                        
+                        <dt>internal</dt>
+
+                        
+                        
+                        <dd>For internal use only.</dd>
+
+                     
+                     
+                     </dlentry>
+                     
+                     
+                     <dlentry>
+
+                        
+                        
+                        <dt>classified</dt>
+
+                        
+                        
+                        <dd>For a certain group, only.</dd>
+
+                     
+                     
+                     </dlentry>
+                     
+                     
+                     <dlentry>
+
+                        
+                        
+                        <dt>all</dt>
+
+                        
+                        
+                        <dd>The world.</dd>
+
+                     
+                     
+                     </dlentry>
+                     
+                     
+                     <dlentry>
+
+                        
+                        
+                        <dt>entitled</dt>
+
+                        
+                        
+                        <dd>Special folks, only.</dd>
+
+                     
+                     
+                     </dlentry>
+                  
+                  
+                  </dl>
+                  
+                  
+                  <indexterm id="att-view">view attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>(internal | classified | all | entitled)</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="width">
+               <stentry>width</stentry>
+               <stentry>Indicates the maximum width of an image.<indexterm id="att-width">width
+attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>NMTOKEN</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="workflow">
+               <stentry>workflow</stentry>
+               <stentry>Defines what stage the topic is in, and who currently has control
+of the document in terms of its lifecycle (from being authored through being
+published). Allowable values are:<dl>
+                     
+                     
+                     <dlentry>
+
+                        
+                        
+                        <dt>author</dt>
+
+                        
+                        
+                        <dd>The topic is being authored.</dd>
+
+                     
+                     
+                     </dlentry>
+                     
+                     
+                     <dlentry>
+
+                        
+                        
+                        <dt>editor</dt>
+
+                        
+                        
+                        <dd>The topic is being edited.</dd>
+
+                     
+                     
+                     </dlentry>
+                     
+                     
+                     <dlentry>
+
+                        
+                        
+                        <dt>reviewer</dt>
+
+                        
+                        
+                        <dd>The topic is being reviewed.</dd>
+
+                     
+                     
+                     </dlentry>
+                     
+                     
+                     <dlentry>
+
+                        
+                        
+                        <dt>publisher</dt>
+
+                        
+                        
+                        <dd>The topic is ready for publishing, or has been published (released).</dd>
+
+                     
+                     
+                     </dlentry>
+                  
+                  
+                  </dl>
+                  
+                  
+                  <indexterm id="att-workflow">workflow attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>(author | editor | reviewer | publisher)</stentry>
+               <stentry>
+                  
+                  
+                  <q>author</q>
+               
+               
+               </stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="xmllang">
+               <stentry>xml:lang</stentry>
+               <stentry>Specifies the language of the element content. When no xml:lang value
+is supplied, the default value of English is assumed. For example, if there
+is a note element with the attribute xml:lang set to the value "es-es," then
+the label on the note, which is normally output as "Note" is now output in
+Spanish as "Nota." A list of supported values is given in <xref href="xmllangvalues.xml">xml:lang values</xref>.<indexterm id="att-xmllang">xml:lang
+attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>NMTOKEN</stentry>
+               <stentry>
+                  
+                  
+                  <ph>#IMPLIED<!--ar-eg | nl-be | fr-be | pt-br | bg-bg | ca-es | en-ca | fr-ca | hr-hr | cs-cz | da-dk | nl-nl | en-us | et-ee | fi-fi | fr-fr | de-de | el-gr | he-il | hu-hu | is-is | it-it | ja-jp | ko-kr | lv-lv | lt-lt | mk-mk | no-no | pl-pl | pt-pt | ro-ro| ru-ru | zh-cn | sr-sp | fr-ch | de-ch | it-ch | sk-sk | sl-si | es-es | sv-se | zh-tw | th-th | tr-tr | en-gb--></ph> 
+               
+               
+               </stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+            <strow id="xmlspace">
+               <stentry>xml:space</stentry>
+               <stentry>This attribute is provided on &lt;<keyword>pre</keyword>&gt;, &lt;<keyword>lines</keyword>&gt;,
+and on elements derived from them.  It ensures that parsers in editors and
+transforms respect the line-end characters that are part of the data in those
+elements.  It is intended to be part of the default properties of these elements,
+and not for authors to change or delete.<indexterm id="att-xmlspace">xml:space
+attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>(preserve)</stentry>
+               <stentry>#FIXED 'preserve'</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="yes"/>
+               
+               
+               </stentry>
+            </strow>
+            <strow id="year">
+               <stentry>year</stentry>
+               <stentry>The year in YYYY format. See <xref href="http://www.cl.cam.ac.uk/~mgk25/iso-time.html" format="html" scope="external">A Summary of the International Standard Date
+and Time Notation</xref> for background.<indexterm id="att-year">year attribute</indexterm>
+               
+               
+               </stentry>
+               <stentry>CDATA</stentry>
+               <stentry>#IMPLIED</stentry>
+               <stentry>
+                  
+                  
+                  <boolean state="no"/>
+<!-- optional content -->
+
+               
+               
+               </stentry>
+            </strow>
+         </simpletable>
+      </section>
+   </refbody>
+</reference>

@@ -1,0 +1,143 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
+<reference id="reference" xml:lang="en-us">
+   <title>
+      <keyword>reference</keyword>
+   </title>
+   <shortdesc>The &lt;<keyword>reference</keyword>&gt; element defines a top-level container
+for a reference topic. Reference topics document programming constructs or
+facts about a product. Examples of reference topics include language elements,
+class descriptions, commands, functions, statements, protocols, types, declarators,
+operands, and API information, which provide quick access to facts, but no
+explanation of concepts or procedures. Reference topics have the same high-level
+structure as any other topic type, with a title, short description, and body.
+Within the body, reference topics are typically organized into one or more
+sections, property lists, and tables. The reference topic type provides general
+rules that apply to all kinds of reference information, using elements like &lt;<keyword>refsyn</keyword>&gt; for
+syntax or signatures, and &lt;<keyword>properties</keyword>&gt; for lists of properties
+and values.</shortdesc>
+   <prolog>
+      <metadata>
+         <keywords>
+            <indexterm>reference</indexterm>
+            <indexterm>Reference elements<indexterm>reference</indexterm>
+            </indexterm>
+            <indexterm>reference</indexterm>
+         </keywords>
+      </metadata>
+   </prolog>
+   <refbody>
+      <refsyn>
+         <title>Contained by</title>
+         <xref href="dita.xml">dita</xref>
+      </refsyn>
+      <refsyn>
+         <title>Contains</title>
+         <xref href="title.xml">title</xref> then ( <xref href="titlealts.xml">titlealts</xref> ) (optional) then ( <xref href="shortdesc.xml">shortdesc</xref> ) (optional) then ( <xref href="prolog.xml">prolog</xref> ) (optional) then <xref href="refbody.xml">refbody</xref> then ( <xref href="related-links.xml">related-links</xref> )
+(optional) then ( <xref href="topic.xml">topic</xref> ) (0 or
+more) </refsyn>
+      <section>
+         <title>Attributes</title>
+         <simpletable relcolwidth="2* 3* 1* 1* 1*" id="reference_attr">
+            <sthead>
+               <stentry>Name</stentry>
+               <stentry>Description</stentry>
+               <stentry>Data Type</stentry>
+               <stentry>Default Value</stentry>
+               <stentry>Required?</stentry>
+            </sthead>
+            <strow conref="commonLRdefs.xml#commonLRdefs/id">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/conref-topic">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/select-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/outputclass">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/xmllang">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/DTDVersion">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/domains">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/global-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/class">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+         </simpletable>
+      </section>
+      <example>
+         <codeblock>&lt;?xml version="1.0"?&gt;
+&lt;!DOCTYPE reference SYSTEM "../../build/dita/dtd/reference.dtd"&gt;
+&lt;reference id="refexample"&gt;
+ &lt;title&gt;A reference topic/title&gt;
+ &lt;refbody&gt;
+  &lt;refsyn&gt;Describe command or api syntax here, possibly
+  using &amp;lt;synph&gt; or &amp;lt;syntax&gt; markup for explicit 
+  definition of syntax or prototype construction.
+  &lt;/refsyn&gt;
+  &lt;section&gt;
+   &lt;title&gt;Some section title&lt;/title&gt;
+  &lt;/section&gt;
+  &lt;properties&gt;
+   &lt;property&gt;
+    &lt;proptype&gt;type&lt;/proptype&gt;
+    &lt;propvalue&gt;value&lt;/propvalue&gt;
+    &lt;propdesc&gt;description&lt;/propdesc&gt;
+   &lt;/property&gt;
+  &lt;/properties&gt;
+ &lt;/refbody&gt;
+&lt;/reference&gt;</codeblock>
+      </example>
+   </refbody>
+</reference>

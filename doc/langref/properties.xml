@@ -1,0 +1,124 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
+<reference id="properties" xml:lang="en-us">
+  <title>
+    <keyword>properties</keyword>
+  </title>
+  <shortdesc>The &lt;<keyword>properties</keyword>&gt; element gives a list of properties for the subject of the current topic, for example whether a class is public or protected. Each property can include the type, value, and a description. The typical rendering is usually in a table-like format. To represent multiple values for a type, just create additional property elements and use only the &lt;<keyword>propvalue</keyword>&gt; element (and &lt;<keyword>propdesc</keyword>&gt; when needed) for each successive value.</shortdesc>
+  <prolog>
+    <metadata>
+      <keywords>
+        <indexterm>properties</indexterm>
+        <indexterm>Reference elements<indexterm>properties</indexterm></indexterm>
+        <indexterm>properties</indexterm>
+      </keywords>
+    </metadata>
+  </prolog>
+  <refbody>
+    <refsyn>
+      <title>Contained by</title>
+      <xref href="refbody.xml">refbody</xref>
+    </refsyn>
+    <refsyn>
+      <title>Contains</title>
+      <xref href="property.xml">property</xref>
+    </refsyn>
+    <section>
+      <title>Attributes</title>
+      <simpletable relcolwidth="2* 3* 1* 1* 1*" id="properties_attr">
+        <sthead>
+          <stentry>Name</stentry>
+          <stentry>Description</stentry>
+          <stentry>Data Type</stentry>
+          <stentry>Default Value</stentry>
+          <stentry>Required?</stentry>
+        </sthead>
+        <strow conref="commonLRdefs.xml#commonLRdefs/relcolwidth">
+          <stentry/>
+          <stentry/>
+          <stentry/>
+          <stentry/>
+          <stentry/>
+        </strow>
+        <strow conref="commonLRdefs.xml#commonLRdefs/keycol">
+          <stentry/>
+          <stentry/>
+          <stentry/>
+          <stentry/>
+          <stentry/>
+        </strow>
+        <strow conref="commonLRdefs.xml#commonLRdefs/refcols">
+          <stentry/>
+          <stentry/>
+          <stentry/>
+          <stentry/>
+          <stentry/>
+        </strow>
+        <strow conref="commonLRdefs.xml#commonLRdefs/display-atts">
+          <stentry/>
+          <stentry/>
+          <stentry/>
+          <stentry/>
+          <stentry/>
+        </strow>
+        <strow conref="commonLRdefs.xml#commonLRdefs/univ-atts">
+          <stentry/>
+          <stentry/>
+          <stentry/>
+          <stentry/>
+          <stentry/>
+        </strow>
+        <strow conref="commonLRdefs.xml#commonLRdefs/spectitle">
+          <stentry/>
+          <stentry/>
+          <stentry/>
+          <stentry/>
+          <stentry/>
+        </strow>
+        <strow conref="commonLRdefs.xml#commonLRdefs/outputclass">
+          <stentry/>
+          <stentry/>
+          <stentry/>
+          <stentry/>
+          <stentry/>
+        </strow>
+        <strow conref="commonLRdefs.xml#commonLRdefs/global-atts">
+          <stentry/>
+          <stentry/>
+          <stentry/>
+          <stentry/>
+          <stentry/>
+        </strow>
+        <strow conref="commonLRdefs.xml#commonLRdefs/class">
+          <stentry/>
+          <stentry/>
+          <stentry/>
+          <stentry/>
+          <stentry/>
+        </strow>
+      </simpletable>
+    </section>
+    <example>
+      <pre><b>&lt;properties&gt;</b>
+  &lt;property&gt;
+    &lt;proptype&gt;color&lt;/proptype&gt;
+      &lt;propvalue&gt;red&lt;/propvalue&gt;
+        &lt;propdesc&gt;depicts anger&lt;/propdesc&gt;
+  &lt;/property&gt;
+  &lt;property&gt;
+      &lt;propvalue&gt;green&lt;/propvalue&gt;
+        &lt;propdesc&gt;depicts permission&lt;/propdesc&gt;
+  &lt;/property&gt;
+<b>&lt;/properties&gt;</b>
+         
+         
+         </pre>
+    </example>
+  </refbody>
+</reference>
+

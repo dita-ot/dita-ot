@@ -1,0 +1,186 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
+<reference id="example" xml:lang="en-us">
+   <title>
+      <keyword>example</keyword>
+   </title>
+   <shortdesc>The &lt;<keyword>example</keyword>&gt; element is a section with the
+specific role of containing examples that illustrate or support the current
+topic.  The &lt;<keyword>example</keyword>&gt; element has the same content model
+as &lt;<keyword>section</keyword>&gt;. </shortdesc>
+   <prolog>
+      <metadata>
+         <keywords>
+            <indexterm>example</indexterm>
+            <indexterm>Topic
+elements<indexterm>example</indexterm>
+            </indexterm>
+            <indexterm>example</indexterm>
+         </keywords>
+      </metadata>
+   </prolog>
+   <refbody>
+      <section>
+         <note>The &lt;<keyword>example</keyword>&gt;
+element represents much more than IBMIDDoc's &lt;<keyword>xmp</keyword>&gt; element.
+DITA uses &lt;<keyword>example</keyword>&gt; to contain both discussion and sample
+code or outputs, whereas in &lt;<keyword>xmp</keyword>&gt;, only the example
+data is supported. Hence, in a DITA topic, to represent programming code and
+results within the discussion in an example, use the &lt;<keyword>codeblock</keyword>&gt;
+and &lt;<keyword>systemoutput</keyword>&gt; elements. For lines
+of text, use the &lt;<keyword>lines</keyword>&gt; element. For pre-formatted
+text such as email headers, use the &lt;<keyword>pre</keyword>&gt; element.</note>
+      </section>
+      <refsyn>
+         <title>Contained by</title>
+         <xref href="body.xml">body</xref> ,  <xref href="conbody.xml">conbody</xref> ,  <xref href="taskbody.xml">taskbody</xref> ,
+ <xref href="refbody.xml">refbody</xref>
+      </refsyn>
+      <refsyn>
+         <title>Contains</title> text data or <xref href="ph.xml">ph</xref> or <xref href="term.xml">term</xref> or <xref href="xref.xml">xref</xref> or <xref href="cite.xml">cite</xref> or <xref href="q.xml">q</xref> or <xref href="boolean.xml">boolean</xref> or <xref href="state.xml">state</xref> or <xref href="keyword.xml">keyword</xref> or <xref href="tm.xml">tm</xref> or <xref href="p.xml">p</xref> or <xref href="lq.xml">lq</xref> or <xref href="note.xml">note</xref> or <xref href="dl.xml">dl</xref> or <xref href="ul.xml">ul</xref> or <xref href="ol.xml">ol</xref> or <xref href="sl.xml">sl</xref> or <xref href="pre.xml">pre</xref> or <xref href="lines.xml">lines</xref> or <xref href="fig.xml">fig</xref> or <xref href="image.xml">image</xref> or <xref href="object.xml">object</xref> or <xref href="table.xml">table</xref> or <xref href="simpletable.xml">simpletable</xref> or <xref href="title.xml">title</xref> or <xref href="draft-comment.xml">draft-comment</xref> or <xref href="required-cleanup.xml">required-cleanup</xref> or <xref href="fn.xml">fn</xref> or <xref href="indextermref.xml">indextermref</xref> or <xref href="indexterm.xml">indexterm</xref>
+      </refsyn>
+      <section>
+         <title>Attributes</title>
+         <simpletable relcolwidth="2* 3* 1* 1* 1*" id="example_attr">
+            <sthead>
+               <stentry>Name</stentry>
+               <stentry>Description</stentry>
+               <stentry>Data Type</stentry>
+               <stentry>Default Value</stentry>
+               <stentry>Required?</stentry>
+            </sthead>
+            <strow conref="commonLRdefs.xml#commonLRdefs/spectitle">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/univ-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/outputclass">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/global-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/class">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+         </simpletable>
+      </section>
+      <example>
+         <p>This example section is used in the DITA element references to
+demonstrate one or more ways of using DITA elements. For example, the codeblock
+element supports program listings:<codeblock>/* simple CSS */
+bold {font-weight: bold;}</codeblock>whereas the lines element represents
+textual productions such as poetry:<lines>I think that I shall never see
+A poem lovely as a tree.
+...
+Poems are made by fools like me,
+But only God can make a tree.
+
+Joyce Kilmer
+<cite>Trees</cite>
+            
+            
+            </lines>
+         
+         
+         </p>
+         <p>Another common structure supported by the
+example element is the familiar command prototype followed by parameters:</p>
+         <lq>To
+format a hard drive, use the <synph>
+               
+               
+               <kwd>format</kwd>
+               
+               
+               <var>volume</var> 
+               
+               
+               <parmname>/fs:</parmname>
+               
+               
+               <var>file-system</var>
+            
+            
+            </synph> command,
+where<dl>
+               
+               
+               <dlentry>
+
+                  
+                  
+                  <dt>
+                     
+                     
+                     <varname>volume</varname>
+                  
+                  
+                  </dt>
+
+                  
+                  
+                  <dd>specifies the resource to be formatted</dd>
+
+               
+               
+               </dlentry>
+               
+               
+               <dlentry>
+
+                  
+                  
+                  <dt>
+                     
+                     
+                     <parmname>/fs:</parmname>
+                     
+                     
+                     <varname>file-system</varname>
+                  
+                  
+                  </dt>
+
+                  
+                  
+                  <dd>specifies the file system format to create (FAT32, NTFS, etc.)</dd>
+
+               
+               
+               </dlentry>
+            
+            
+            </dl>
+         
+         
+         </lq>
+      </example>
+   </refbody>
+</reference>

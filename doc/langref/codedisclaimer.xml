@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE topic PUBLIC "-//IBM//DTD DITA Topic//EN"
+ "../../dtd/topic.dtd">
+<!--ArborText, Inc., 1988-2001, v.4002-->
+<?Pub Inc?>
+<topic id="codedisclaimer">
+<title>Code disclaimer information</title>
+<body>
+<p>This document contains programming examples.</p>
+<p>IBM grants you a nonexclusive copyright license to use all programming
+code examples from which you can generate similar function tailored to your
+own specific needs.</p>
+<p>All sample code is provided by IBM for illustrative purposes only. These
+examples have not been thoroughly tested under all conditions. IBM, therefore,
+cannot guarantee or imply reliability, serviceability, or function of these
+programs.</p>
+<p>All programs contained herein are provided to you "AS IS"
+without any warranties of any kind. The implied warranties of non-infringement,
+merchantability and fitness for a particular purpose are expressly disclaimed.</p>
+</body>
+</topic>
+<?Pub *0000000989?>
+

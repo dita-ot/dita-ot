@@ -1,0 +1,76 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
+<reference id="component" xml:lang="en-us">
+   <title>
+      <keyword>component</keyword>
+   </title>
+   <shortdesc>The &lt;<keyword>component</keyword>&gt; element describes the component
+of the product that this topic is concerned with. For example, a product might
+be made up of many components, each of which is installable separately. Components
+might also be shared by several products so that the same component is available
+for installation with many products. This identification can be used to check
+cross-component dependencies when some components are installed, but not others.
+It could also be used to make sure that topics are hidden, removed, or flagged
+in some way when the component they describe isn't installed. Such process-control
+logic is not currently supported in DITA processing.</shortdesc>
+   <prolog>
+      <metadata>
+         <keywords>
+            <indexterm>component</indexterm>
+            <indexterm>Prolog
+elements<indexterm>component</indexterm>
+            </indexterm>
+            <indexterm>component</indexterm>
+         </keywords>
+      </metadata>
+   </prolog>
+   <refbody>
+      <refsyn>
+         <title>Contained by</title>
+         <xref href="prodinfo.xml">prodinfo</xref>
+      </refsyn>
+      <refsyn>
+         <title>Contains</title> text data </refsyn>
+      <section>
+         <title>Attributes</title>
+         <simpletable relcolwidth="2* 3* 1* 1* 1*" id="component_attr">
+            <sthead>
+               <stentry>Name</stentry>
+               <stentry>Description</stentry>
+               <stentry>Data Type</stentry>
+               <stentry>Default Value</stentry>
+               <stentry>Required?</stentry>
+            </sthead>
+            <strow conref="commonLRdefs.xml#commonLRdefs/global-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/class">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+         </simpletable>
+      </section>
+      <example>
+         <pre>&lt;prodinfo&gt;
+ &lt;prodname&gt;BatCom&lt;/prodname&gt;
+ &lt;vrmlist&gt;
+  &lt;vrm version="v5r2"/&gt;
+ &lt;/vrmlist&gt;
+ <b>&lt;component&gt;</b>TCP/IP<b>&lt;/component&gt;</b>
+&lt;/prodinfo&gt;
+</pre>
+      </example>
+   </refbody>
+</reference>

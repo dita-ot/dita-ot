@@ -1,0 +1,94 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
+<reference id="topicmeta" xml:lang="en-us">
+   <title>
+      <keyword>topicmeta</keyword>
+   </title>
+   <shortdesc>The &lt;<keyword>topicmeta</keyword>&gt; element defines the metadata that applies
+to a topic and the topic's children. When creating links, it can also be used
+to override the title and short description of the topic. In addition, it
+can insert index entries through the &lt;<keyword>keywords</keyword>&gt; element..</shortdesc>
+   <prolog>
+      <metadata>
+         <keywords>
+            <indexterm>topicmeta</indexterm>
+            <indexterm>Map
+elements<indexterm>topicmeta</indexterm>
+            </indexterm>
+            <indexterm>topicmeta</indexterm>
+         </keywords>
+      </metadata>
+   </prolog>
+   <refbody>
+      <refsyn>
+         <title>Contained by</title>
+         <xref href="map.xml">map</xref> ,  <xref href="topicref.xml">topicref</xref> ,  <xref href="reltable.xml">reltable</xref> ,
+ <xref href="relcolspec.xml">relcolspec</xref> ,  <xref href="topichead.xml">topichead</xref> ,  <xref href="topicgroup.xml">topicgroup</xref>
+      </refsyn>
+      <refsyn>
+         <title>Contains</title> ( <xref href="linktext.xml">linktext</xref> ) (optional)
+then ( <xref href="searchtitle.xml">searchtitle</xref> ) (optional)
+then ( <xref href="shortdesc.xml">shortdesc</xref> ) (optional)
+then ( <xref href="author.xml">author</xref> ) (0 or more) then
+( <xref href="source.xml">source</xref> ) (optional) then ( <xref href="publisher.xml">publisher</xref> ) (optional) then ( <xref href="copyright.xml">copyright</xref> ) (0 or more) then ( <xref href="critdates.xml">critdates</xref> ) (optional) then ( <xref href="permissions.xml">permissions</xref> ) (optional) then
+( <xref href="audience.xml">audience</xref> ) (0 or more) then
+( <xref href="category.xml">category</xref> ) (0 or more) then
+( <xref href="keywords.xml">keywords</xref> ) (0 or more) then
+( <xref href="prodinfo.xml">prodinfo</xref> ) (0 or more) then
+( <xref href="othermeta.xml">othermeta</xref> ) (0 or more)
+then ( <xref href="resourceid.xml">resourceid</xref> ) (0 or
+more) </refsyn>
+      <section>
+         <title>Attributes</title>
+         <simpletable relcolwidth="2* 3* 1* 1* 1*" id="topicmeta_attr">
+            <sthead>
+               <stentry>Name</stentry>
+               <stentry>Description</stentry>
+               <stentry>Data Type</stentry>
+               <stentry>Default Value</stentry>
+               <stentry>Required?</stentry>
+            </sthead>
+            <strow conref="commonLRdefs.xml#commonLRdefs/lockmeta">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/global-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/class">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+         </simpletable>
+      </section>
+      <example>In this example, the metadata defined by the metadata element applies
+to the associated &lt;<keyword>topicref</keyword>&gt; (<filepath>bats.xml</filepath>) and
+all of its children. The &lt;<keyword>topicmeta</keyword>&gt; element contains an audience
+definition which indicates that <filepath>bats.xml</filepath> and its children
+are of interest to experienced programmers who are troubleshooting. <codeblock>&lt;map&gt;
+ &lt;topicref href="bats.xml"&gt;
+  &lt;topicmeta&gt;
+   &lt;audience type="programmer" job="troubleshooting" experiencelevel="expert"/&gt;
+  &lt;/topicmeta&gt;
+  &lt;topicref href="batcaring.xml"&gt;&lt;/topicref&gt;
+  &lt;topicref href="batfeeding.xml"&gt;&lt;/topciref&gt;
+ &lt;/topicref&gt;
+&lt;/map&gt;</codeblock>
+      </example>
+   </refbody>
+</reference>

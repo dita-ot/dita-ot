@@ -1,0 +1,125 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
+<reference id="link" xml:lang="en-us">
+   <title>
+      <keyword>link</keyword>
+   </title>
+   <shortdesc>The &lt;<keyword>link</keyword>&gt; element defines a relationship
+to another topic. Links represent the types and roles of topics
+in a web of information, and therefore represent navigational links within
+that web. The parent structures of link allow authors to define named groups
+and even sort orders that can be applied to sets of links.  </shortdesc>
+   <prolog>
+      <metadata>
+         <keywords>
+            <indexterm>link</indexterm>
+            <indexterm>Related
+Links elements<indexterm>link</indexterm>
+            </indexterm>
+            <indexterm>link</indexterm>
+         </keywords>
+      </metadata>
+   </prolog>
+   <refbody>
+      <section/>
+      <refsyn>
+         <title>Contained by</title>
+         <xref href="related-links.xml">related-links</xref> ,
+ <xref href="linklist.xml">linklist</xref> ,  <xref href="linkpool.xml">linkpool</xref>
+      </refsyn>
+      <refsyn>
+         <title>Contains</title> ( <xref href="linktext.xml">linktext</xref> ) (optional)
+then ( <xref href="desc.xml">desc</xref> ) (optional) </refsyn>
+      <section>
+         <title>Attributes</title>
+         <simpletable relcolwidth="2* 3* 1* 1* 1*" id="link_attr">
+            <sthead>
+               <stentry>Name</stentry>
+               <stentry>Description</stentry>
+               <stentry>Data Type</stentry>
+               <stentry>Default Value</stentry>
+               <stentry>Required?</stentry>
+            </sthead>
+            <strow conref="commonLRdefs.xml#commonLRdefs/href">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/keyref">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/rel-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/select-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/format">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/scope">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/outputclass">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/global-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/class">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+         </simpletable>
+      </section>
+      <example>
+         <codeblock>&lt;related-links&gt;
+&lt;linklist&gt;&lt;title&gt;Related Concepts&lt;/title&gt;
+&lt;link href="czover.htm#sqljsupp"&gt;
+&lt;linktext&gt;SQLJ support in VisualAge for Java&lt;/linktext&gt;&lt;/link&gt;
+&lt;link href="czesqlj.htm#sqljemb&gt;
+&lt;linktext&gt;Embedded SQLJ&lt;/linktext&gt;&lt;/link&gt;
+&lt;/linklist&gt;
+&lt;related-links&gt;
+</codeblock>
+      </example>
+   </refbody>
+</reference>

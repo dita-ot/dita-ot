@@ -1,0 +1,188 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
+<reference id="dl" xml:lang="en-us">
+   <title>
+      <keyword>dl</keyword>
+   </title>
+   <shortdesc>A definition list (&lt;<keyword>dl</keyword>&gt;) is a list of terms and corresponding
+definitions.  The term (&lt;<keyword>dt</keyword>&gt;) is usually flush left.  The description
+or definition (&lt;<keyword>dt</keyword>&gt;) is usually either indented and
+on the next line, or on the same line to the right of the term.</shortdesc>
+   <prolog>
+      <metadata>
+         <keywords>
+            <indexterm>dl (definition list)</indexterm>
+            <indexterm>definition
+list (dl)</indexterm>
+            <indexterm>Body elements<indexterm>dl</indexterm>
+            </indexterm>
+            <indexterm>dl</indexterm>
+         </keywords>
+      </metadata>
+   </prolog>
+   <refbody>
+      <section>
+         <p>You
+can also provide an optional heading for the terms and definitions, using
+the &lt;<keyword>dlhead</keyword>&gt; element, which contains header elements for those
+columns.  The default formatting for the &lt;<keyword>dlhead</keyword>&gt; looks like a
+table with a heading row.</p>
+      </section>
+      <refsyn>
+         <title>Contained by</title>
+         <xref href="body.xml">body</xref> ,  <xref href="section.xml">section</xref> ,  <xref href="example.xml">example</xref> ,
+ <xref href="desc.xml">desc</xref> ,  <xref href="p.xml">p</xref> ,
+ <xref href="note.xml">note</xref> ,  <xref href="lq.xml">lq</xref> ,
+ <xref href="li.xml">li</xref> ,  <xref href="itemgroup.xml">itemgroup</xref> ,  <xref href="dd.xml">dd</xref> ,
+ <xref href="fig.xml">fig</xref> ,  <xref href="stentry.xml">stentry</xref> ,  <xref href="draft-comment.xml">draft-comment</xref> ,
+ <xref href="fn.xml">fn</xref> ,  <xref href="linkinfo.xml">linkinfo</xref> ,  <xref href="entry.xml">entry</xref> ,
+ <xref href="conbody.xml">conbody</xref> ,  <xref href="prereq.xml">prereq</xref> ,  <xref href="context.xml">context</xref> ,
+ <xref href="info.xml">info</xref> ,  <xref href="tutorialinfo.xml">tutorialinfo</xref> ,  <xref href="stepxmp.xml">stepxmp</xref> ,
+ <xref href="choptionhd.xml">choptionhd</xref> ,  <xref href="chdeschd.xml">chdeschd</xref> ,  <xref href="choption.xml">choption</xref> ,
+ <xref href="chdesc.xml">chdesc</xref> ,  <xref href="stepresult.xml">stepresult</xref> ,  <xref href="result.xml">result</xref> ,
+ <xref href="postreq.xml">postreq</xref> ,  <xref href="refsyn.xml">refsyn</xref> ,  <xref href="propdesc.xml">propdesc</xref> ,
+ <xref href="pd.xml">pd</xref>
+      </refsyn>
+      <refsyn>
+         <title>Contains</title> ( <xref href="dlhead.xml">dlhead</xref> ) (optional)
+then ( <xref href="dlentry.xml">dlentry</xref> ) (one or more) </refsyn>
+      <section>
+         <title>Attributes</title>
+         <simpletable relcolwidth="2* 3* 1* 1* 1*" id="dl_attr">
+            <sthead>
+               <stentry>Name</stentry>
+               <stentry>Description</stentry>
+               <stentry>Data Type</stentry>
+               <stentry>Default Value</stentry>
+               <stentry>Required?</stentry>
+            </sthead>
+            <strow conref="commonLRdefs.xml#commonLRdefs/compact">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/univ-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/spectitle">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/outputclass">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/global-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/class">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+         </simpletable>
+      </section>
+      <example>
+         <codeblock>&lt;dl&gt;
+&lt;dlentry&gt;
+&lt;dt&gt;Bytes returned&lt;/dt&gt;
+&lt;dd&gt;The number of bytes of data returned.&lt;/dd&gt;
+&lt;/dlentry&gt;
+&lt;dlentry&gt;
+&lt;dt&gt;Bytes available&lt;/dt&gt;
+&lt;dd&gt;The number of bytes of data available to be returned.&lt;/dd&gt;
+&lt;/dlentry&gt;
+&lt;dlentry&gt;&lt;dt&gt;Handle&lt;/dt&gt;
+&lt;dd&gt;The returned handle value&lt;/dd&gt;
+&lt;/dlentry&gt;
+&lt;/dl&gt;</codeblock>
+         <note type="note" product="idwb38">In the final output
+(PDF, XHTML, etc), the default appearance of text-only definition terms is
+bold. The only time they are not bold is if you have added some tagging to
+the definition term. Here is an example of when the definition term would
+not be bold in the output:<pre>...
+&lt;dlentry&gt;&lt;dt&gt;Property One: &lt;varname&gt;value&lt;/varname&gt;&lt;/dt&gt;
+&lt;dd&gt;The first property.&lt;/dd&gt;
+&lt;/dlentry&gt;
+...</pre>The bold effect is removed so that "value" will not be bold. To make
+the phrase "Property One:" bold, you must add specific markup around it:<pre>...
+&lt;dlentry&gt;&lt;dt&gt;&lt;b&gt;Property One:&lt;/b&gt; &lt;varname&gt;value&lt;/varname&gt;&lt;/dt&gt;
+&lt;dd&gt;The first property.&lt;/dd&gt;
+&lt;/dlentry&gt;
+...</pre>These examples are both represented in the following literal definition
+list. The appearance here is typical of expected DITA output as XHTML or PDF:<dl>
+
+               
+               
+               <dlentry>
+
+                  
+                  
+                  <dt>Property One: <varname>value</varname>
+                  
+                  
+                  </dt>
+
+                  
+                  
+                  <dd>The first property.</dd>
+
+               
+               
+               </dlentry>
+               
+               
+               <dlentry>
+
+                  
+                  
+                  <dt>
+                     
+                     
+                     <b>Property One:</b> 
+                     
+                     
+                     <varname>value</varname>
+                  
+                  
+                  </dt>
+
+                  
+                  
+                  <dd>The first property.</dd>
+
+               
+               
+               </dlentry>
+            
+            
+            </dl>
+         
+         
+         </note>
+      </example>
+   </refbody>
+</reference>

@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
+<reference id="progd" xml:lang="en-us">
+   <title>Programming elements</title>
+   <refbody>
+      <section>
+         <p>The programming domains elements are used to define the syntax and to give
+examples of programming languages.<indexterm>Domains elements<indexterm>programming
+elements</indexterm>
+            </indexterm>
+            
+            <indexterm>programming elements</indexterm>
+         
+         </p>
+      </section>
+   </refbody>
+</reference>

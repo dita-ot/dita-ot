@@ -1,0 +1,121 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
+<reference id="required-cleanup" xml:lang="en-us">
+   <title>
+      <keyword>required-cleanup</keyword>
+   </title>
+   <shortdesc>A &lt;<keyword>required-cleanup</keyword>&gt; element is used as a placeholder
+for migrated elements that cannot be appropriately tagged without manual intervention.
+As the element name implies, the intent for authors is to clean up the contained
+material and eventually get rid of the &lt;<keyword>required-cleanup</keyword>&gt; element.
+Authors should not insert this element into documents. </shortdesc>
+   <prolog>
+      <metadata>
+         <keywords>
+            <indexterm>required-cleanup</indexterm>
+            <indexterm>Specialization
+elements<indexterm>required-cleanup</indexterm>
+            </indexterm>
+            <indexterm>required-cleanup</indexterm>
+         </keywords>
+      </metadata>
+   </prolog>
+   <refbody>
+      <section>
+         <note>Because the content
+of &lt;<keyword>required-cleanup</keyword>&gt; is not considered to be verified data, <b>DITA
+processors are required to strip this element from output by default.</b> A
+runtime flag <i>
+               
+               
+               <keyword>may</keyword>
+            
+            
+            </i> be provided to allow a draft view of migrated content
+in context.</note>
+      </section>
+      <refsyn>
+         <title>Contained by</title>
+         <xref href="body.xml">body</xref> ,  <xref href="section.xml">section</xref> ,  <xref href="example.xml">example</xref> ,
+ <xref href="p.xml">p</xref> ,  <xref href="note.xml">note</xref> ,
+ <xref href="lq.xml">lq</xref> ,  <xref href="sli.xml">sli</xref> ,
+ <xref href="li.xml">li</xref> ,  <xref href="itemgroup.xml">itemgroup</xref> ,  <xref href="dd.xml">dd</xref> ,
+ <xref href="pre.xml">pre</xref> ,  <xref href="lines.xml">lines</xref> ,  <xref href="ph.xml">ph</xref> ,
+ <xref href="stentry.xml">stentry</xref> ,  <xref href="entry.xml">entry</xref> ,  <xref href="conbody.xml">conbody</xref> ,
+ <xref href="prereq.xml">prereq</xref> ,  <xref href="context.xml">context</xref> ,  <xref href="cmd.xml">cmd</xref> ,
+ <xref href="info.xml">info</xref> ,  <xref href="tutorialinfo.xml">tutorialinfo</xref> ,  <xref href="stepxmp.xml">stepxmp</xref> ,
+ <xref href="choptionhd.xml">choptionhd</xref> ,  <xref href="chdeschd.xml">chdeschd</xref> ,  <xref href="choption.xml">choption</xref> ,
+ <xref href="chdesc.xml">chdesc</xref> ,  <xref href="stepresult.xml">stepresult</xref> ,  <xref href="result.xml">result</xref> ,
+ <xref href="postreq.xml">postreq</xref> ,  <xref href="refsyn.xml">refsyn</xref> ,  <xref href="proptype.xml">proptype</xref> ,
+ <xref href="propvalue.xml">propvalue</xref> ,  <xref href="screen.xml">screen</xref> ,  <xref href="codeblock.xml">codeblock</xref> ,
+ <xref href="pd.xml">pd</xref>
+      </refsyn>
+      <refsyn>
+         <title>Contains</title> any content</refsyn>
+      <section>
+         <title>Attributes</title>
+         <simpletable relcolwidth="2* 3* 1* 1* 1*" id="required-cleanup_attr">
+            <sthead>
+               <stentry>Name</stentry>
+               <stentry>Description</stentry>
+               <stentry>Data Type</stentry>
+               <stentry>Default Value</stentry>
+               <stentry>Required?</stentry>
+            </sthead>
+            <strow conref="commonLRdefs.xml#commonLRdefs/remap">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/univ-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/outputclass">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/global-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/class">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+         </simpletable>
+      </section>
+      <example>
+         <p>Presuming an original HTML document had contained some content
+within a &lt;<keyword>center</keyword>&gt; tag (for which there is no clear migrational
+equivalent in DITA), the following might be the result that is valid within
+an XML editor, but which requires an author to decide how to better tag or
+revise this original content:</p>
+         <codeblock>&lt;section&gt;
+  &lt;title&gt;Some section title&lt;/title&gt;
+  &lt;required-cleanup remap="center"&gt;Some original content migrated
+  from a &amp;lt;center&gt; tag.&lt;/required-cleanup&gt;
+&lt;/section&gt;
+</codeblock>
+      </example>
+   </refbody>
+</reference>

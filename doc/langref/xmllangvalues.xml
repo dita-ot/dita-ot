@@ -1,0 +1,163 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
+<reference id="ixmllangvalues" xml:lang="en-us">
+  <title>xml:lang values</title>
+  <refbody>
+    <section>The allowed xml:lang values are based on ISO-3166 Country Codes and RFC 3066 Language Codes (see <xref href="http://www.w3.org/International/O-HTML-tags" format="html" scope="external">W3C: Language tagging in HTML and XML</xref>).</section>
+    <section>
+      <title>xml:lang values</title>
+      <simpletable relcolwidth="2* 2* 2* 2*">
+        <sthead>
+          <stentry>Value</stentry>
+          <stentry>Language</stentry>
+          <stentry>Value</stentry>
+          <stentry>Language</stentry>
+        </sthead>
+        <strow>
+          <stentry>ar-eg</stentry>
+          <stentry>Arabic</stentry>
+          <stentry>nl-be</stentry>
+          <stentry>Belgian Dutch</stentry>
+        </strow>
+        <strow>
+          <stentry>fr-be</stentry>
+          <stentry>Belgian French</stentry>
+          <stentry>pt-br</stentry>
+          <stentry>Brazilian Portuguese</stentry>
+        </strow>
+        <strow>
+          <stentry>bg-bg</stentry>
+          <stentry>Bulgarian</stentry>
+          <stentry>ca-es</stentry>
+          <stentry>Catalan</stentry>
+        </strow>
+        <strow>
+          <stentry>en-ca</stentry>
+          <stentry>Canadian English</stentry>
+          <stentry>fr-ca</stentry>
+          <stentry>Canadian French</stentry>
+        </strow>
+        <strow>
+          <stentry>hr-hr</stentry>
+          <stentry>Croatian</stentry>
+          <stentry>cs-cz</stentry>
+          <stentry>Czech</stentry>
+        </strow>
+        <strow>
+          <stentry>da-dk</stentry>
+          <stentry>Danish</stentry>
+          <stentry>nl-nl</stentry>
+          <stentry>Dutch</stentry>
+        </strow>
+        <strow>
+          <stentry>en-us</stentry>
+          <stentry>US English</stentry>
+          <stentry>et-ee</stentry>
+          <stentry>Estonian</stentry>
+        </strow>
+        <strow>
+          <stentry>fi-fi</stentry>
+          <stentry>Finnish</stentry>
+          <stentry>fr-fr</stentry>
+          <stentry>French</stentry>
+        </strow>
+        <strow>
+          <stentry>de-de</stentry>
+          <stentry>German</stentry>
+          <stentry>el-gr</stentry>
+          <stentry>Greek</stentry>
+        </strow>
+        <strow>
+          <stentry>he-il</stentry>
+          <stentry>Hebrew</stentry>
+          <stentry>hu-hu</stentry>
+          <stentry>Hungarian</stentry>
+        </strow>
+        <strow>
+          <stentry>is-is</stentry>
+          <stentry>Icelandic</stentry>
+          <stentry>it-it</stentry>
+          <stentry>Italian</stentry>
+        </strow>
+        <strow>
+          <stentry>ja-jp</stentry>
+          <stentry>Japanese</stentry>
+          <stentry>ko-lr</stentry>
+          <stentry>Korean</stentry>
+        </strow>
+        <strow>
+          <stentry>lv-lv</stentry>
+          <stentry>Latvian</stentry>
+          <stentry>lt-lt</stentry>
+          <stentry>Lithuanian</stentry>
+        </strow>
+        <strow>
+          <stentry>mk-mk</stentry>
+          <stentry>Macedonian</stentry>
+          <stentry>no-no</stentry>
+          <stentry>Norwegian</stentry>
+        </strow>
+        <strow>
+          <stentry>pl-pl</stentry>
+          <stentry>Polish</stentry>
+          <stentry>pt-pt</stentry>
+          <stentry>Portuguese</stentry>
+        </strow>
+        <strow>
+          <stentry>ro-ro</stentry>
+          <stentry>Romanian</stentry>
+          <stentry>ru-ru</stentry>
+          <stentry>Russian</stentry>
+        </strow>
+        <strow>
+          <stentry>zh-cn</stentry>
+          <stentry>Simplified Chinese</stentry>
+          <stentry>sr-sp</stentry>
+          <stentry>Serbian</stentry>
+        </strow>
+        <strow>
+          <stentry>fr-ch</stentry>
+          <stentry>Swiss French</stentry>
+          <stentry>de-ch</stentry>
+          <stentry>Swiss German</stentry>
+        </strow>
+        <strow>
+          <stentry>it-ch</stentry>
+          <stentry>Swiss Italian</stentry>
+          <stentry>sk-sk</stentry>
+          <stentry>Slovak</stentry>
+        </strow>
+        <strow>
+          <stentry>sl-si</stentry>
+          <stentry>Slovenian</stentry>
+          <stentry>es-es</stentry>
+          <stentry>Spanish</stentry>
+        </strow>
+        <strow>
+          <stentry>sv-se</stentry>
+          <stentry>Swedish</stentry>
+          <stentry>zh-tw</stentry>
+          <stentry>Traditional Chinese</stentry>
+        </strow>
+        <strow>
+          <stentry>th-th</stentry>
+          <stentry>Thai</stentry>
+          <stentry>tr-tr</stentry>
+          <stentry>Turkish</stentry>
+        </strow>
+        <strow>
+          <stentry>en-gb</stentry>
+          <stentry>UK English</stentry>
+          <stentry> </stentry>
+          <stentry> </stentry>
+        </strow>
+      </simpletable>
+    </section>
+  </refbody>
+</reference>
+

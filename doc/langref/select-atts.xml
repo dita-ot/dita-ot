@@ -1,0 +1,145 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
+<reference id="select-atts" xml:lang="en-us">
+   <title>
+      <keyword>%select-atts;</keyword>
+   </title>
+   <shortdesc>Attributes
+that support both filtering and flagging include <i>
+         
+         
+         <keyword>platform</keyword>
+      
+      
+      </i>, <i>
+         
+         
+         <keyword>product</keyword>
+      
+      
+      </i>, <i>
+         
+         
+         <keyword>audience</keyword>
+      
+      
+      </i>, and <i>
+         
+         
+         <keyword>otherprops</keyword>
+      
+      
+      </i>. Attribute <i>
+         
+         
+         <keyword>rev</keyword>
+      
+      
+      </i> only
+lets you flag information that matches a run-time parameter. Attribute <i>
+         
+         
+         <keyword>importance</keyword>
+      
+      
+      </i> currently
+provides output effects only for steps (where only the values "optional" and
+"required" are supported).</shortdesc>
+   <prolog>
+      <metadata>
+         <keywords>
+            <indexterm>%select-atts</indexterm>
+            <indexterm>Commonly
+Referenced Objects elements<indexterm>%select-atts</indexterm>
+            </indexterm>
+            <indexterm>%select-atts</indexterm>
+         </keywords>
+      </metadata>
+   </prolog>
+   <refbody>
+      <section/>
+      <refsyn>
+         <title>Contained by</title>Used in the topic DTD.</refsyn>
+      <refsyn>
+         <title>Contains</title>Declarations for attributes. </refsyn>
+      <section id="select-atts_attr">
+         <title>Attributes</title>
+         <simpletable relcolwidth="2* 3* 1* 1* 1*">
+            <sthead>
+               <stentry>Name</stentry>
+               <stentry>Description</stentry>
+               <stentry>Data Type</stentry>
+               <stentry>Default Value</stentry>
+               <stentry>Required?</stentry>
+            </sthead>
+            <strow conref="commonLRdefs.xml#commonLRdefs/platform">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/product">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/audience">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/otherprops">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/importance">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/rev">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/status">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+         </simpletable>
+      </section>
+      <example>
+         <p>The %select-atts; parameter entity is used within the DITA dtds
+as a common definition for attributes available to most elements for you to
+enable the content for improved retrieveability or for selection. Not all
+of these capabilities have been provided yet for DITA topic processing. Some
+typical examples include:</p>
+         <codeblock>The &lt;keyword platform="Linux"&gt;chmod&lt;/keyword&gt; command...
+&lt;ph product="Whiteknuckle Handsoap"&gt;Amalgamated Cleansers get the grime!&lt;/ph&gt;
+&lt;msgph audience="programmer"&gt;Divide by -1 error.&lt;/msgph&gt;
+&lt;ph otherprops="java"&gt;When using Java, use the 
+  &lt;apiname&gt;com.ibm.obscureclass&lt;/apiname&gt; to calculate the value.&lt;/ph&gt;
+&lt;p importance="recommended" rev="3.2"&gt;Update anti-virus software often.&lt;/p&gt;</codeblock>
+      </example>
+   </refbody>
+</reference>

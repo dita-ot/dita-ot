@@ -1,0 +1,178 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
+<reference id="table" xml:lang="en-us">
+   <title>
+      <keyword>table</keyword>
+   </title>
+   <shortdesc>The &lt;<keyword>table</keyword>&gt; element organizes arbitrarily complex
+relationships of tabular information. This standard table markup allows column
+or row spanning and table captions or descriptions. A optional title allowed
+inside the table element provides a caption to describe the table.
+See <ph>
+         <xref href="simpletable.xml">simpletable</xref>
+      </ph> for a simplified
+table model that can be specialized to represent more regular relationships
+of data.</shortdesc>
+   <prolog>
+      <metadata>
+         <keywords>
+            <indexterm>table</indexterm>
+            <indexterm>Table elements<indexterm>table</indexterm>
+            </indexterm>
+            <indexterm>table</indexterm>
+         </keywords>
+      </metadata>
+   </prolog>
+   <refbody>
+      <refsyn>
+         <title>Contained by</title>
+         <xref href="body.xml">body</xref> ,  <xref href="section.xml">section</xref> ,  <xref href="example.xml">example</xref> ,
+ <xref href="p.xml">p</xref> ,  <xref href="note.xml">note</xref> ,
+ <xref href="lq.xml">lq</xref> ,  <xref href="li.xml">li</xref> ,
+ <xref href="itemgroup.xml">itemgroup</xref> ,  <xref href="dd.xml">dd</xref> ,  <xref href="draft-comment.xml">draft-comment</xref> ,
+ <xref href="conbody.xml">conbody</xref> ,  <xref href="prereq.xml">prereq</xref> ,  <xref href="context.xml">context</xref> ,
+ <xref href="info.xml">info</xref> ,  <xref href="tutorialinfo.xml">tutorialinfo</xref> ,  <xref href="stepxmp.xml">stepxmp</xref> ,
+ <xref href="stepresult.xml">stepresult</xref> ,  <xref href="result.xml">result</xref> ,  <xref href="postreq.xml">postreq</xref> ,
+ <xref href="refbody.xml">refbody</xref> ,  <xref href="refsyn.xml">refsyn</xref> ,  <xref href="pd.xml">pd</xref>
+      </refsyn>
+      <refsyn>
+         <title>Contains</title> ( ( <xref href="title.xml">title</xref> ) (optional)
+then ( <xref href="desc.xml">desc</xref> ) (optional) ) (optional)
+then ( <xref href="tgroup.xml">tgroup</xref> ) (one or more) </refsyn>
+      <section>
+         <title>Attributes</title>
+         <simpletable relcolwidth="2* 3* 1* 1* 1*" id="table_attr">
+            <sthead>
+               <stentry>Name</stentry>
+               <stentry>Description</stentry>
+               <stentry>Data Type</stentry>
+               <stentry>Default Value</stentry>
+               <stentry>Required?</stentry>
+            </sthead>
+            <strow conref="commonLRdefs.xml#commonLRdefs/display-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/colsep">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/rowsep">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/rowheader">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/outputclass">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/univ-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/global-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/class">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+         </simpletable>
+      </section>
+      <example>
+         <table frame="all">
+            <tgroup cols="2">
+               <colspec colname="col1" colwidth="3*"/>
+               <colspec colname="col2" colwidth="2*"/>
+               <thead>
+                  <row>
+                     <entry valign="top" colname="col1">Animal</entry>
+                     <entry valign="top" colname="col2">Gestation Period</entry>
+                  </row>
+               </thead>
+               <tbody>
+                  <row>
+                     <entry colname="col1">Elephant (African and Asian)</entry>
+                     <entry colname="col2">19-22 months</entry>
+                  </row>
+                  <row>
+                     <entry colname="col1">Giraffe</entry>
+                     <entry colname="col2">15 months</entry>
+                  </row>
+                  <row>
+                     <entry colname="col1">Rhinoceros</entry>
+                     <entry colname="col2">14-16 months</entry>
+                  </row>
+                  <row>
+                     <entry colname="col1">Hippopotamus</entry>
+                     <entry colname="col2">7 1/2 months</entry>
+                  </row>
+               </tbody>
+            </tgroup>
+         </table>
+         <codeblock>&lt;table frame="all"&gt;
+ &lt;tgroup cols="2"&gt;
+  &lt;colspec colname="col1" colwidth="3*"/&gt;
+  &lt;colspec colname="col2"colwidth="2*"/&gt;
+  &lt;thead&gt;
+   &lt;row&gt;
+    &lt;entry valign="top"&gt;Animal&lt;/entry&gt;
+    &lt;entry valign="top"&gt;Gestation Period&lt;/entry&gt;
+   &lt;/row&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+   &lt;row&gt;
+    &lt;entry colname="col1"&gt;Elephant (African and Asian)&lt;/entry&gt;
+    &lt;entry colname="col2"&gt;19-22 months&lt;/entry&gt;
+   &lt;/row&gt;
+   &lt;row&gt;
+    &lt;entry colname="col1"&gt;Giraffe&lt;/entry&gt;
+    &lt;entry colname="col2"&gt;15 months&lt;/entry&gt;
+   &lt;/row&gt;
+   &lt;row&gt;
+    &lt;entry colname="col1"&gt;Rhinoceros&lt;/entry&gt;
+    &lt;entry colname="col2"&gt;14-16 months&lt;/entry&gt;
+   &lt;/row&gt;
+   &lt;row&gt;
+    &lt;entry colname="col1"&gt;Hippopotamus&lt;/entry&gt;
+    &lt;entry colname="col2"&gt;7 1/2 months&lt;/entry&gt;
+   &lt;/row&gt;
+  &lt;/tbody&gt;
+ &lt;/tgroup&gt;
+&lt;/table&gt;</codeblock>
+      </example>
+   </refbody>
+</reference>

@@ -1,0 +1,256 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
+<reference id="colspec" xml:lang="en-us">
+   <title>
+      <keyword>colspec</keyword>
+   </title>
+   <shortdesc>The &lt;<keyword>colspec</keyword>&gt; element contains a column specification
+for a table, including assigning a column name and number, cell content alignment,
+and column width.</shortdesc>
+   <prolog>
+      <metadata>
+         <keywords>
+            <indexterm>colspec</indexterm>
+            <indexterm>Table elements<indexterm>colspec</indexterm>
+            </indexterm>
+            <indexterm>colspec</indexterm>
+         </keywords>
+      </metadata>
+   </prolog>
+   <refbody>
+      <refsyn>
+         <title>Contained by</title>
+         <xref href="tgroup.xml">tgroup</xref> ,  <xref href="thead.xml">thead</xref> ,  <xref href="tfoot.xml">tfoot</xref>
+      </refsyn>
+      <refsyn>
+         <title>Contains</title> no content</refsyn>
+      <section>
+         <title>Attributes</title>
+         <simpletable relcolwidth="2* 3* 1* 1* 1*" id="colspec_attr">
+            <sthead>
+               <stentry>Name</stentry>
+               <stentry>Description</stentry>
+               <stentry>Data Type</stentry>
+               <stentry>Default Value</stentry>
+               <stentry>Required?</stentry>
+            </sthead>
+            <strow conref="commonLRdefs.xml#commonLRdefs/colnum">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/colname">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/align">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/colwidth">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/colsep">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/rowsep">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/global-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/class">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+         </simpletable>
+      </section>
+      <example>
+         <p>Tagging for this table is shown below.<table>
+
+               
+               
+               <tgroup cols="2">
+
+
+                  
+                  
+                  <colspec colname="COLSPEC0" colwidth="121*"/>
+                  
+                  
+                  <colspec colname="COLSPEC1" colwidth="76*"/>
+
+                  
+                  
+                  <thead>
+
+                     
+                     
+                     <row>
+
+                        
+                        
+                        <entry colname="COLSPEC0" valign="top">Animal</entry>
+
+                        
+                        
+                        <entry colname="COLSPEC1" valign="top">Gestation</entry>
+
+                     
+                     
+                     </row>
+
+                  
+                  
+                  </thead>
+
+                  
+                  
+                  <tbody>
+
+                     
+                     
+                     <row>
+
+                        
+                        
+                        <entry>Elephant (African and Asian)</entry>
+
+                        
+                        
+                        <entry>19-22 months</entry>
+
+                     
+                     
+                     </row>
+
+                     
+                     
+                     <row>
+
+                        
+                        
+                        <entry>Giraffe</entry>
+
+                        
+                        
+                        <entry>15 months</entry>
+
+                     
+                     
+                     </row>
+
+                     
+                     
+                     <row>
+
+                        
+                        
+                        <entry>Rhinoceros</entry>
+
+                        
+                        
+                        <entry>14-16 months</entry>
+
+                     
+                     
+                     </row>
+
+                     
+                     
+                     <row>
+
+                        
+                        
+                        <entry>Hippopotamus</entry>
+
+                        
+                        
+                        <entry>7 1/2 months</entry>
+
+                     
+                     
+                     </row>
+
+                  
+                  
+                  </tbody>
+
+               
+               
+               </tgroup>
+
+            
+            
+            </table>
+         
+         
+         </p>
+         <codeblock>&lt;table&gt;
+&lt;tgroup cols="2"&gt;
+<b>&lt;colspec colname="COLSPEC0" colwidth="121*"/&gt;</b>
+
+            
+            
+            <b>&lt;colspec colname="COLSPEC1" colwidth="76*"/&gt;</b>
+&lt;thead&gt;
+&lt;row&gt;
+&lt;entry colname="COLSPEC0" valign="top"&gt;Animal&lt;/entry&gt;
+&lt;entry colname="COLSPEC1" valign="top"&gt;Gestation&lt;/entry&gt;
+&lt;/row&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;row&gt;
+&lt;entry&gt;Elephant (African and Asian)&lt;/entry&gt;
+&lt;entry&gt;19-22 months&lt;/entry&gt;
+&lt;/row&gt;
+&lt;row&gt;
+&lt;entry&gt;Giraffe&lt;/entry&gt;
+&lt;entry&gt;15 months&lt;/entry&gt;
+&lt;/row&gt;
+&lt;row&gt;
+&lt;entry&gt;Rhinoceros&lt;/entry&gt;
+&lt;entry&gt;14-16 months&lt;/entry&gt;
+&lt;/row&gt;
+&lt;row&gt;
+&lt;entry&gt;Hippopotamus&lt;/entry&gt;
+&lt;entry&gt;7 1/2 months&lt;/entry&gt;
+&lt;/row&gt;
+&lt;/tbody&gt;
+&lt;/tgroup&gt;
+&lt;/table&gt;</codeblock>
+      </example>
+   </refbody>
+</reference>

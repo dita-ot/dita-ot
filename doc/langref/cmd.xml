@@ -1,0 +1,92 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
+<reference id="cmd" xml:lang="en-us">
+   <title>
+      <keyword>cmd</keyword>
+   </title>
+   <shortdesc>The command (&lt;<keyword>cmd</keyword>&gt;) element is required as the first element
+inside a &lt;<keyword>step</keyword>&gt;. It provides the active voice instruction to the
+user for completing the step, and should not be more than one sentence. If
+the step needs additional explanation, this can follow the &lt;<keyword>cmd</keyword>&gt; element
+inside an <ph>
+         <xref href="info.xml">info</xref>
+      </ph> element.</shortdesc>
+   <prolog>
+      <metadata>
+         <keywords>
+            <indexterm>cmd
+(step command)</indexterm>
+            <indexterm>step command (cmd)</indexterm>
+            <indexterm>Task
+elements<indexterm>cmd</indexterm>
+            </indexterm>
+            <indexterm>cmd</indexterm>
+         </keywords>
+      </metadata>
+   </prolog>
+   <refbody>
+      <refsyn>
+         <title>Contained by</title>
+         <xref href="step.xml">step</xref> ,  <xref href="substep.xml">substep</xref>
+      </refsyn>
+      <refsyn>
+         <title>Contains</title> text data or <xref href="ph.xml">ph</xref> or <xref href="term.xml">term</xref> or <xref href="xref.xml">xref</xref> or <xref href="cite.xml">cite</xref> or <xref href="q.xml">q</xref> or <xref href="boolean.xml">boolean</xref> or <xref href="state.xml">state</xref> or <xref href="keyword.xml">keyword</xref> or <xref href="tm.xml">tm</xref> or <xref href="image.xml">image</xref> or <xref href="draft-comment.xml">draft-comment</xref> or <xref href="required-cleanup.xml">required-cleanup</xref> or <xref href="fn.xml">fn</xref> or <xref href="indextermref.xml">indextermref</xref> or <xref href="indexterm.xml">indexterm</xref>
+      </refsyn>
+      <section>
+         <title>Attributes</title>
+         <simpletable relcolwidth="2* 3* 1* 1* 1*" id="cmd_attr">
+            <sthead>
+               <stentry>Name</stentry>
+               <stentry>Description</stentry>
+               <stentry>Data Type</stentry>
+               <stentry>Default Value</stentry>
+               <stentry>Required?</stentry>
+            </sthead>
+            <strow conref="commonLRdefs.xml#commonLRdefs/keyref-cmd">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/univ-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/outputclass">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/global-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/class">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+         </simpletable>
+      </section>
+      <example>
+         <codeblock>&lt;step&gt;&lt;cmd&gt;In a text editor, create a new file.&lt;/cmd&gt;&lt;/step&gt;
+</codeblock>
+      </example>
+   </refbody>
+</reference>

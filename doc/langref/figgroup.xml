@@ -1,0 +1,78 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
+<reference id="figgroup" xml:lang="en-us">
+   <title>
+      <keyword>figgroup</keyword>
+   </title>
+   <shortdesc>The &lt;<keyword>figgroup</keyword>&gt; element is used only for specialization
+at this time. Figure groups can be used to contain multiple cross-references,
+footnotes or keywords, but not multipart images. Multipart images in DITA
+should be represented by a suitable media type displayed by the &lt;<keyword>object</keyword>&gt;
+element.</shortdesc>
+   <prolog>
+      <metadata>
+         <keywords>
+            <indexterm>figgroup</indexterm>
+            <indexterm>Body elements<indexterm>figgroup</indexterm>
+            </indexterm>
+            <indexterm>figgroup</indexterm>
+         </keywords>
+      </metadata>
+   </prolog>
+   <refbody>
+      <refsyn>
+         <title>Contained by</title>
+         <xref href="fig.xml">fig</xref> ,  <xref href="figgroup.xml">figgroup</xref>
+      </refsyn>
+      <refsyn>
+         <title>Contains</title> ( <xref href="title.xml">title</xref> ) (optional)
+then ( <xref href="figgroup.xml">figgroup</xref> or <xref href="xref.xml">xref</xref> or <xref href="fn.xml">fn</xref> or <xref href="ph.xml">ph</xref> or <xref href="keyword.xml">keyword</xref> )
+(0 or more) </refsyn>
+      <section>
+         <title>Attributes</title>
+         <simpletable relcolwidth="2* 3* 1* 1* 1*" id="figgroup_attr">
+            <sthead>
+               <stentry>Name</stentry>
+               <stentry>Description</stentry>
+               <stentry>Data Type</stentry>
+               <stentry>Default Value</stentry>
+               <stentry>Required?</stentry>
+            </sthead>
+            <strow conref="commonLRdefs.xml#commonLRdefs/univ-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/outputclass">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/global-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/class">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+         </simpletable>
+      </section>
+      <example><!-- optional content --></example>
+   </refbody>
+</reference>

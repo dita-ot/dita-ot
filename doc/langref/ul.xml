@@ -1,0 +1,114 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
+<reference id="ul" xml:lang="en-us">
+   <title>
+      <keyword>ul</keyword>
+   </title>
+   <shortdesc>In an unordered list (&lt;ul&gt;), the order of the list items is
+not significant. List items are typically styled on output with a "bullet"
+character, depending on nesting level.</shortdesc>
+   <prolog>
+      <metadata>
+         <keywords>
+            <indexterm>ul (unordered list)</indexterm>
+            <indexterm>unordered
+list (ol)</indexterm>
+            <indexterm>Body elements<indexterm>ul (unordered list)</indexterm>
+            </indexterm>
+            <indexterm>ul (unordered list)</indexterm>
+         </keywords>
+      </metadata>
+   </prolog>
+   <refbody>
+      <section/>
+      <refsyn>
+         <title>Contained by</title>
+         <xref href="body.xml">body</xref> ,  <xref href="section.xml">section</xref> ,  <xref href="example.xml">example</xref> ,
+ <xref href="desc.xml">desc</xref> ,  <xref href="p.xml">p</xref> ,
+ <xref href="note.xml">note</xref> ,  <xref href="lq.xml">lq</xref> ,
+ <xref href="li.xml">li</xref> ,  <xref href="itemgroup.xml">itemgroup</xref> ,  <xref href="dd.xml">dd</xref> ,
+ <xref href="fig.xml">fig</xref> ,  <xref href="stentry.xml">stentry</xref> ,  <xref href="draft-comment.xml">draft-comment</xref> ,
+ <xref href="fn.xml">fn</xref> ,  <xref href="linkinfo.xml">linkinfo</xref> ,  <xref href="entry.xml">entry</xref> ,
+ <xref href="conbody.xml">conbody</xref> ,  <xref href="prereq.xml">prereq</xref> ,  <xref href="context.xml">context</xref> ,
+ <xref href="info.xml">info</xref> ,  <xref href="tutorialinfo.xml">tutorialinfo</xref> ,  <xref href="stepxmp.xml">stepxmp</xref> ,
+ <xref href="choptionhd.xml">choptionhd</xref> ,  <xref href="chdeschd.xml">chdeschd</xref> ,  <xref href="choption.xml">choption</xref> ,
+ <xref href="chdesc.xml">chdesc</xref> ,  <xref href="stepresult.xml">stepresult</xref> ,  <xref href="result.xml">result</xref> ,
+ <xref href="postreq.xml">postreq</xref> ,  <xref href="refsyn.xml">refsyn</xref> ,  <xref href="propdesc.xml">propdesc</xref> ,
+ <xref href="pd.xml">pd</xref>
+      </refsyn>
+      <refsyn>
+         <title>Contains</title>
+         <xref href="li.xml">li</xref>
+      </refsyn>
+      <section>
+         <title>Attributes</title>
+         <simpletable relcolwidth="2* 3* 1* 1* 1*" id="ul_attr">
+            <sthead>
+               <stentry>Name</stentry>
+               <stentry>Description</stentry>
+               <stentry>Data Type</stentry>
+               <stentry>Default Value</stentry>
+               <stentry>Required?</stentry>
+            </sthead>
+            <strow conref="commonLRdefs.xml#commonLRdefs/compact">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/spectitle">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/univ-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/outputclass">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/global-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/class">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+         </simpletable>
+      </section>
+      <example>
+         <codeblock>&lt;ul&gt;
+ &lt;li&gt;This is an item in an unordered list.&lt;/li&gt;
+ &lt;li&gt;To separate it from other items in the list, the
+ formatter puts a bullet beside it.&lt;/li&gt;
+ &lt;li&gt;The following paragraph, contained in the list item
+ element, is part of the list item which contains it.
+ &lt;p&gt;This is the contained paragraph.&lt;/p&gt;&lt;/li&gt;
+ &lt;li&gt;This is the last list item in our unordered list.&lt;/li&gt;
+&lt;/ul&gt;</codeblock>
+      </example>
+   </refbody>
+</reference>

@@ -1,0 +1,384 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+<meta name="copyright" content="(C) Copyright 2005" />
+<meta name="DC.rights.owner" content="(C) Copyright 2005" />
+<meta content="public" name="security" />
+<meta content="index,follow" name="Robots" />
+<meta http-equiv="PICS-Label" content='(PICS-1.1 "http://www.icra.org/ratingsv02.html" l gen true r (cz 1 lz 1 nz 1 oz 1 vz 1) "http://www.rsac.org/ratingsv01.html" l gen true r (n 0 s 0 v 0 l 0) "http://www.classify.org/safesurf/" l gen true r (SS~~000 1))' />
+<meta content="topic" name="DC.Type" />
+<meta name="DC.Title" content="How to define a formal information architecture with DITA map domains" />
+<meta name="abstract" content="The benefits of formal information typing are well known for the content of topics, but collections of topics also benefit from formal organizing structure. Such formal structures guide authors while they assemble collections of topics and ensure consistent large-scale patterns of information for the user. Using DITA map domains, a designer can define a formal information architecture that can be reused in many deliverables." />
+<meta name="description" content="The benefits of formal information typing are well known for the content of topics, but collections of topics also benefit from formal organizing structure. Such formal structures guide authors while they assemble collections of topics and ensure consistent large-scale patterns of information for the user. Using DITA map domains, a designer can define a formal information architecture that can be reused in many deliverables." />
+<meta content="XHTML" name="DC.Format" />
+<meta content="dita-mapdomains" name="DC.Identifier" />
+<link href="commonltr.css" type="text/css" rel="stylesheet" />
+<title>How to define a formal information architecture with DITA map domains</title>
+</head>
+<body>
+
+
+  <div class="nested0" id="dita-mapdomains"><a name="dita-mapdomains"><!-- --></a>
+    <h1 class="topictitle1">How to define a formal information architecture with DITA map domains</h1>
+
+    
+    <div><p>The benefits of formal information typing are well known for the content of topics, but collections of topics also benefit from formal organizing structure. Such formal structures guide authors while they assemble collections of topics and ensure consistent large-scale patterns of information for the user. Using DITA map domains, a designer can define a formal information architecture that can be reused in many deliverables. </p>
+
+      <p>This article explains the design technique for creating DITA map domains. As an example, the article walks through the definition for assembling a set of topics as a how-to. Such a how-to could be one reusable design component within an information architecture.</p>
+
+    </div>
+
+    <div class="nested1" id="informationArchitecture"><a name="informationArchitecture"><!-- --></a>
+      <h2 class="topictitle2">Formal information architecture</h2>
+
+      <div>
+        <p>Information architecture can be summarized as the design discipline that organizes information and its navigation so an audience can acquire knowledge easily and efficiently. For instance, the information architecture of a web site often provides a hierarchy of web pages for drilling down from general to detailed information, different types of web pages for different purposes such as news and documentation, and so on. </p>
+
+        <p>An information architecture is subliminal when it works well. The lack of information architecture is glaring when it works poorly. The user cannot find information or, even worse, cannot recognize or assimilate information when by chance it is encountered. You probably have experience with websites that are poorly organized or uneven in their approach, so that conventions learned in part of the website have no application elsewhere. Extracting knowledge from such information resources is exhausting, and you quickly abandon the effort and seek the information elsewhere.</p>
+
+        <p>Currently, information architects work by defining the architecture through guidelines and instructions to the writer. A better approach is to formalize the architecture through an XML design that is validated by the XML editor or parser. This formal approach has the following benefits:</p>
+
+        <ul>
+          <li>Authors receive guidance from the markup while working.</li>
+
+          <li>Information with the same purpose is consistent across deliverables.</li>
+
+          <li>Information for a purpose is complete.</li>
+
+          <li>Processing can rely on the structure of the information and operate on the declared semantics of the information.</li>
+
+        </ul>
+
+        <p>The following drawings illustrate the gain in clarity and consistency by applying a design to produce a formal information architecture:</p>
+
+        
+<div class="tablenoborder"><table summary="" cellspacing="0" cellpadding="4" frame="void" border="1" rules="all">
+            <thead align="left">
+              <tr>
+                <th valign="top" id="N10086">Casual architecture</th>
+
+                <th valign="top" id="N1008C">Applied design</th>
+
+                <th valign="top" id="N10092">Formal architecture</th>
+
+              </tr>
+
+            </thead>
+
+            <tbody>
+              <tr>
+                <td valign="top" headers="N10086 ">
+                  <img src="image/infoarch1.gif" height="185" width="180" alt="Topics in any arrangement" />
+                </td>
+
+                <td valign="top" headers="N1008C ">
+                  <img src="image/infoarch2.gif" height="65" width="124" alt="Topic collection type" />
+                </td>
+
+                <td valign="top" headers="N10092 ">
+                  <img src="image/infoarch3.gif" height="162" width="156" alt="Topics in formal arrangement" />
+                </td>
+
+              </tr>
+
+            </tbody>
+
+          </table>
+</div>
+
+        <p>In short, the formal design acts as a kind of blueprint to be fullfilled by the writer. </p>
+
+      </div>
+
+    </div>
+
+    <div class="nested1" id="mapBackground"><a name="mapBackground"><!-- --></a>
+      <h2 class="topictitle2">Specializing topics and maps</h2>
+
+      <div>
+        <p>DITA supports the definition of a formal information architecture through topics and map types. The topic type defines the information architecture within topics (the micro level) while the map type defines the information architecture across topics (the macro level).</p>
+
+        <p>The base topic and map types are general and flexible so they can accomodate a wide variety of readable information. You specialize these general types to define the restricted types required for your information architecture. </p>
+
+        <dl>
+          
+            <dt class="dlterm">Topic</dt>
+
+            <dd>The topic type mandates the structure for the content of a topic. For instance, the DITA distribution includes a task type that mandates a list of steps as part of the topic content. This specialized topic type provides guidance to the author and ensures the consistency of all task topics. Processing can rely on this consistency and semantic precision. For instance, the processing for the task type could format the task steps as checkable boxes.</dd>
+
+          
+          
+            <dt class="dlterm">Map</dt>
+
+            <dd>The map type mandates the structure for a collection of topics. A map can define the navigation hierarchy for a help system or the sequence and nesting of topics in a book. For instance, the DITA distribution includes a bookmap demo that mandates a sequence of preface, chapter, and appendix roles for the top-level topics. This specialized map type ensures that the collection of topics conforms to a basic book structure.</dd>
+
+          
+        </dl>
+
+        <p>Without formal types, the information architecture is defined only through editorial guidelines. Different authors may interpret or conform to the guidelines in varying degrees, resulting in inconsistency and impredictability. By contrast, the formal types ensure that the design that can be repeated for many deliverables. </p>
+
+      </div>
+
+    </div>
+
+    <div class="nested1" id="formalCollection"><a name="formalCollection"><!-- --></a>
+      <h2 class="topictitle2">The how-to collection</h2>
+
+      <div>
+        <p>One typical purpose for a collection of topics is explain how to accomplish a specific goal. A how-to assembles the relevant topics and arranges them in a typical sequence for one way to reach that goal. A standard design pattern for the how-to collection might consist of an introduction topic, some background concepts, some task and example topics, and a summary. </p>
+
+        <p>A help system or book might have several how-tos, for instance, on setting up web authentication, reading a database from a web application, and so on. Or, a web provider might publish an ongoing series of how-to articles on technical subjects. Thus, designing a formal how-to pattern would be useful so that all how-tos are consistent regardless of the writer.</p>
+
+        <p>Note that formalizing a collection doesn't prevent topic reuse but, instead, guides topic reuse so that appropriate types of topics are used at positions within the collection. For example, in the how-to, concept topics will appear only as background before the tasks rather than in the middle of the how-to.</p>
+
+      </div>
+
+    </div>
+
+    <div class="nested1" id="mapSpecialization"><a name="mapSpecialization"><!-- --></a>
+      <h2 class="topictitle2">Map specialization</h2>
+
+      <div>
+        <p>Among the many capabilities added to maps by DITA 1.3 is specialization through map domains. Instead of packaging specializations of elements for topic content, however, you specialize elements for map content, typically the<samp class="codeph">topicref</samp>. The specialized <samp class="codeph">topicref</samp>element lets authors specify semantics or constraints on collections of topics. By packaging the <samp class="codeph">topicref</samp> specializations as a map domain rather than as a map type, you can reuse the formal collection design in many different map types.</p>
+
+        <p>A specialized <samp class="codeph">topicref</samp>can be used for the following purposes:</p>
+
+        <ul>
+          <li>To restrict the references to topics of a specialized type. For instance, a <samp class="codeph">conceptref</samp> refers only to concept topics (including specialized concepts).</li>
+
+          <li>To assign a topic a topic to a role within a collection. For instance, the topic identified by a <samp class="codeph">summaryref</samp> could provide the concluding explanation for a collection.</li>
+
+          <li>To restrict the contents of the collection, requiring specific topic types or requiring topics to act in specific roles at specified positions within the collection. </li>
+
+        </ul>
+
+        <p>Drawing on all of these capabilities, we can define a formal structure for a how-to collection. </p>
+
+      </div>
+
+    </div>
+
+    <div class="nested1" id="implementDomain"><a name="implementDomain"><!-- --></a>
+      <h2 class="topictitle2">Implementing a map domain</h2>
+
+      <div>
+        <div class="section">
+          <p>A map domain uses the same DTD design pattern as a topic domain. See <a href="http://www-106.ibm.com/developerworks/xml/library/x-dita5/index.html">specializing domains</a> for the details on the domain design pattern, which aren't repeated here. Instead, this article summarizes the application of the domain DTD design pattern to maps.</p>
+
+        </div>
+
+        <ol>
+          <li>
+            <span>Create a domain entities file to declare the elements extending the <samp class="codeph">topicref</samp> element.</span>
+          </li>
+
+          <li>
+            <span>Create a domain definition module to define the elements including their element entities, content and attribute definitions, and the architectural class attribute.</span>
+          </li>
+
+          <li>
+            <span>Create a shell DTD that assembles the base map module and the domain entities file and definition module.</span>
+          </li>
+
+          <li>
+            <span>Create map collections from the shell DTD. </span>
+          </li>
+
+        </ol>
+
+      </div>
+
+    </div>
+
+    <div class="nested1" id="declareEntities"><a name="declareEntities"><!-- --></a>
+      <h2 class="topictitle2">Declaring the map domain entities</h2>
+
+      <div>
+        <p>The entities file for the how-to domain defines the howto, conceptref, taskref, and exampleref extensions for the topicref element and defines the how-to domain declaration for the domain attributes entity:</p>
+
+        <pre>&lt;!ENTITY % howto-d-topicref "howto"&gt;
+&lt;!ENTITY howto-d-att "(map howto-d)"&gt;</pre>
+
+      </div>
+
+    </div>
+
+    <div class="nested1" id="domainModule"><a name="domainModule"><!-- --></a>
+      <h2 class="topictitle2">Defining the map domain module</h2>
+
+      <div>
+        <p>The definition module for the how-to domain starts with the element entities so the new elements could, in turn, be extended by subsequent specializations. Of these new elements, only <samp class="codeph">howto</samp> has been declared in the entities file because the other new elements should only appear in the child list of the <samp class="codeph">howto</samp> element. (In fact, reference typing elements such as <samp class="codeph">conceptref</samp> and <samp class="codeph">taskref</samp> might also be defined in the entities file for reuse in other specialized child lists.)</p>
+
+        <pre>&lt;!ENTITY % howto       "howto"&gt;
+&lt;!ENTITY % conceptref  "conceptref"&gt;
+&lt;!ENTITY % taskref     "taskref"&gt;
+&lt;!ENTITY % exampleref  "exampleref"&gt;
+&lt;!ENTITY % summaryref  "summaryref"&gt;</pre>
+
+        <p>The definition module goes on to define the elements. The definition for the <samp class="codeph">howto</samp> element restricts the content list for the collection to the metadata for the topic, references to any number of concept topics, references to task topics and optional example topics, and a topic acting in the role of a concluding summary. In addition, the <samp class="codeph">howto</samp> element refers to the topic that provides an overview of the contents.</p>
+
+        <pre>&lt;!ELEMENT howto ((%topicmeta;)?, (%conceptref;)*, ((%taskref;), (%exampleref;)?)+,
+      (%summaryref;))&gt;
+&lt;!ATTLIST howto
+  navtitle     CDATA     #IMPLIED
+  id           ID        #IMPLIED
+  href         CDATA     #IMPLIED
+  keyref       CDATA     #IMPLIED
+  query        CDATA     #IMPLIED
+  conref       CDATA     #IMPLIED
+  copy-to      CDATA     #IMPLIED
+  %topicref-atts;
+  %select-atts;&gt;</pre>
+
+        <p>The <samp class="codeph">conceptref</samp> and <samp class="codeph">taskref</samp> elements have a restricted type, meaning that validating processing is obligated to report an error if the referenced topic doesn't have the declared type (or a specialization from the declared type):</p>
+
+        <pre>&lt;!ELEMENT conceptref ((%topicmeta;)?, (%conceptref;)*)&gt;
+&lt;!ATTLIST conceptref
+  href         CDATA     #IMPLIED
+  type         CDATA     "concept"
+  ...&gt;
+&lt;!ELEMENT taskref    ((%topicmeta;)?, (%taskref;)*)&gt;
+&lt;!ATTLIST taskref
+  href         CDATA     #IMPLIED
+  type         CDATA     "task"
+  ...&gt;</pre>
+
+        <p>The <samp class="codeph">exampleref</samp> and <samp class="codeph">summaryref</samp> elements don't restrict the type but, instead, assign roles to the referenced topics. Because the content list of the <samp class="codeph">howto</samp> collection topic allows a topic to act as an example and requires a topic to act as a summary, the author is prompted to create topics in those roles, and the roles can be used in processing, for instance, to add a lead-in word to the emitted topic titles.</p>
+
+        <pre>&lt;!ELEMENT exampleref  ((%topicmeta;)?, (%exampleref;)*)&gt;
+&lt;!ATTLIST exampleref
+  ...&gt;
+&lt;!ELEMENT summaryref  ((%topicmeta;)?)&gt;
+&lt;!ATTLIST summaryref
+  ...&gt;</pre>
+
+        <p>On closer investigation, either or both of these particular roles may turn out to reflect a persistent topic structure or semantic, in which case it would be appropriate to define topic types and limit the corresponding <samp class="codeph">topicref</samp> specialization to topics of those types. The general technique, however, of assigning a role to a topic in the context of a collection remains valid.</p>
+
+        <p>Finally, the definition module sets the class attribute to declare that the new elements derive from <samp class="codeph">topicref</samp> and are provided by the howto package:</p>
+
+        <pre>&lt;!ATTLIST howto %global-atts;
+    class CDATA "- map/topicref howto/howto "&gt;
+&lt;!ATTLIST conceptref %global-atts;
+    class CDATA "- map/topicref howto/conceptref "&gt;
+...</pre>
+
+      </div>
+
+    </div>
+
+    <div class="nested1" id="assembleDTD"><a name="assembleDTD"><!-- --></a>
+      <h2 class="topictitle2">Assembling the shell DTD</h2>
+
+      <div>
+        <p>As with topic domains, a shell DTD assembles the base map module with the entities file and definition module for the how-to domain:</p>
+
+        <pre>&lt;!--vocabulary declarations--&gt;
+&lt;!ENTITY % howto-d-dec PUBLIC "-//IBM//ENTITIES DITA How To Map Domain//EN" "howto.ent"&gt;
+  %howto-d-dec;
+...
+
+&lt;!--vocabulary substitution (one for each extended base element,
+    with the names of the domains in which the extension was declared)--&gt;
+&lt;!ENTITY % topicref  "topicref | %mapgroup-d-topicref; | %howto-d-topicref;"&gt;
+
+&lt;!--vocabulary attributes (must be declared ahead of the default definition) --&gt;
+&lt;!ENTITY included-domains "&amp;mapgroup-d-att; &amp;howto-d-att;"&gt;
+
+&lt;!--Embed map to get generic elements --&gt;
+&lt;!ENTITY % map-type PUBLIC "-//IBM//Elements DITA Map//EN" "../../dtd/map.mod"&gt;
+  %map-type;
+
+&lt;!--vocabulary definitions--&gt;
+...
+
+&lt;!ENTITY % howto-d-def PUBLIC "-//IBM//ELEMENTS DITA How To Map Domain//EN" "howto.mod"&gt;
+  %howto-d-def;</pre>
+
+      </div>
+
+    </div>
+
+    <div class="nested1" id="domainInstance"><a name="domainInstance"><!-- --></a>
+      <h2 class="topictitle2">Creating a collection with the domain</h2>
+
+      <div>
+        <p>Using the shell DTD, a map could include one or more how-to collections, as in the following example: </p>
+
+        <pre>&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;!DOCTYPE map PUBLIC "-//IBM//DTD DITA How To Map//EN"
+  "howtomap.dtd"&gt;
+&lt;map&gt;
+  &lt;!-- how-to clusters can appear anywhere in a map hierarchy but always
+       follow a consistent information pattern within the how to --&gt;
+  &lt;howto href="dita-mapdomains.xml"&gt;
+    &lt;conceptref href="informationArchitecture.xml"/&gt;
+    &lt;conceptref href="mapBackground.xml"/&gt;
+    &lt;conceptref href="formalCollection.xml"/&gt;
+    &lt;conceptref href="mapSpecialization.xml"/&gt;
+    &lt;taskref href="implementDomain.xml"/&gt;
+    &lt;exampleref href="declareEntities.xml"/&gt;
+    &lt;exampleref href="domainModule.xml"/&gt;
+    &lt;exampleref href="assembleDTD.xml"/&gt;
+    &lt;exampleref href="domainInstance.xml"/&gt;
+    &lt;summaryref href="summary.xml"/&gt;
+  &lt;/howto&gt;
+&lt;/map&gt;</pre>
+
+        <p>In fact, this example is the map for the article that you're reading right now. That is, as you may well have noticed, this article conforms to the formal pattern for a how-to collection. Here's the list of topics in this how-to article but with the addition of the topic type or role and title:</p>
+
+        <ul>
+          <li>howto: How to define a formal information architecture with DITA map domains<ul>
+              <li>concept: Formal information architecture</li>
+
+              <li>concept: Specializing topics and maps</li>
+
+              <li>concept: The how-to collection</li>
+
+              <li>concept: Map specialization</li>
+
+              <li>task: Implementing a map domain</li>
+
+              <li>example: Declaring the map domain entities</li>
+
+              <li>example: Defining the map domain module</li>
+
+              <li>example: Assembling the shell DTD</li>
+
+              <li>example: Creating a collection with the domain (this topic)</li>
+
+              <li>summary: Summary</li>
+
+            </ul>
+</li>
+
+        </ul>
+
+        <p>While this article contains only a how-to collection, a how-to collection could be part of a larger deliverable. For instance, a help system could include multiple how-tos as part of a navigation hierarchy. Similarly, how-to collections could be used in books by creating a new shell DTD that combines the bookmap map type with the how-to map domain.</p>
+
+        <p>As you explore collection types, you'll find that, in addition to topics, a collection can aggregate smaller collections. For instance, you could create domains for a how-to collection, a case study collection, and a reference set collection. A product information collection could then require a product summary topic and at least one of each of these subordinate collections in that order.</p>
+
+        <p>You'll also find that, to represent a high-level relationship with a collection, you can create a relationship to the root topic for the collection branch. As the introduction and entry point for the collection, the root topic should provide the most statement of the content of the collection. That is, you can treat the set of topics as a collective content object, using the root topic to represent the collection as a whole for navigation and cross references. </p>
+
+      </div>
+
+    </div>
+
+    <div class="nested1" id="summary"><a name="summary"><!-- --></a>
+      <h2 class="topictitle2">Summary</h2>
+
+      <div>
+        <p>In this article, you've learned how to specialize the <samp class="codeph">topicref</samp> element to mandate a specific collection of topics. For complete, single-purpose collections such as functional specifications and quick reference guides, you might package these specialized <samp class="codeph">topicref</samp> elements with a new map type. For building-block collections (such as how-tos or case studies) that can appear within a large deliverable, especially when different designers might create different collection types, you might want to package the specialized <samp class="codeph">topicref</samp> elements as a map domain.</p>
+
+        <p>By specializing a DITA map in this way, you can implement a formal information architecture not just at the micro level within topics but at the macro level across topics. By defining such large-scale collective content objects, you can provide guidance to authors and declare semantics for processors with the end result that users have consistent and complete information deliverables. </p>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+</body>
+</html>

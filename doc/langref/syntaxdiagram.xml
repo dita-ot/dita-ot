@@ -1,0 +1,98 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
+<reference id="syntaxdiagram" xml:lang="en-us">
+   <title>
+      <keyword>syntaxdiagram</keyword>
+   </title>
+   <shortdesc>The syntax diagram (&lt;<keyword>syntaxdiagram</keyword>&gt;) element
+is the main container for all the syntax elements that make up a syntax definition.
+The syntax diagram represents the syntax of a statement from a computer language,
+or a command, function call or programming language statement. Traditionally,
+the syntax diagram is formatted with <q>railroad tracks</q> that
+connect the units of the syntax together, but this presentation may differ
+depending on the output media. The syntax diagram element is part of the DITA
+programming domain, a special set of DITA elements designed to document programming
+tasks, concepts and reference information.</shortdesc>
+   <prolog>
+      <metadata>
+         <keywords>
+            <indexterm>syntaxdiagram (syntax
+diagram)</indexterm>
+            <indexterm>Domain elements<indexterm>syntax diagram</indexterm>
+            </indexterm>
+            <indexterm>syntax diagram</indexterm>
+         </keywords>
+      </metadata>
+   </prolog>
+   <refbody>
+      <refsyn>
+         <title>Contained by</title>The same contexts as <xref href="fig.xml">fig</xref>
+      </refsyn>
+      <refsyn>
+         <title>Contains</title> ( <xref href="title.xml">title</xref> ) (optional)
+then ( <xref href="groupseq.xml">groupseq</xref> or <xref href="groupchoice.xml">groupchoice</xref> or <xref href="groupcomp.xml">groupcomp</xref> or <xref href="fragref.xml">fragref</xref> or <xref href="fragment.xml">fragment</xref> or <xref href="synblk.xml">synblk</xref> or <xref href="synnote.xml">synnote</xref> or <xref href="synnoteref.xml">synnoteref</xref> ) (0 or more) </refsyn>
+      <section>
+         <title>Attributes</title>
+         <simpletable relcolwidth="2* 3* 1* 1* 1*" id="syntaxdiagram_attr">
+            <sthead>
+               <stentry>Name</stentry>
+               <stentry>Description</stentry>
+               <stentry>Data Type</stentry>
+               <stentry>Default Value</stentry>
+               <stentry>Required?</stentry>
+            </sthead>
+            <strow conref="commonLRdefs.xml#commonLRdefs/display-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/univ-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/outputclass">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/global-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/class">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+         </simpletable>
+      </section>
+      <example>
+         <pre>&lt;syntaxdiagram&gt;
+ &lt;title&gt;CopyFile&lt;/title&gt;
+ &lt;groupseq&gt;&lt;kwd&gt;COPYF&lt;/kwd&gt;&lt;/groupseq&gt;
+ &lt;groupcomp&gt;&lt;var&gt;input-filename&lt;/var&gt;&lt;kwd&gt;*INFILE&lt;/kwd&gt;&lt;/groupcomp&gt;
+ &lt;groupseq&gt;&lt;var&gt;output-filename&lt;/var&gt;&lt;kwd&gt;*OUTFILE&lt;/kwd&gt;&lt;/groupseq&gt;
+ &lt;groupchoice&gt; &lt;var&gt;input-filename&lt;/var&gt; &lt;kwd&gt;*INFILE&lt;/kwd&gt;&lt;/groupchoice&gt;
+ &lt;groupchoice&gt; &lt;var&gt;output-filename&lt;/var&gt; &lt;kwd&gt;*OUTFILE&lt;/kwd&gt;&lt;/groupchoice&gt;
+&lt;/syntaxdiagram&gt;
+</pre>
+      </example>
+   </refbody>
+</reference>

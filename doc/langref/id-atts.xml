@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
+<reference id="id-atts" xml:lang="en-us">
+   <title>
+      <keyword>%id-atts;</keyword>
+   </title>
+   <shortdesc>ID attributes (%id-atts;) is a parameter entity declaration in the
+topic DTD that includes attributes that enable the naming and referencing
+of elements in a DITA topic: <i>
+         
+         
+         <keyword>id</keyword>
+      
+      
+      </i> and <i>
+         
+         
+         <keyword>conref</keyword>
+      
+      
+      </i>.</shortdesc>
+   <prolog>
+      <metadata>
+         <keywords>
+            <indexterm>%id-atts</indexterm>
+            <indexterm>Commonly
+Referenced Objects elements<indexterm>%id-atts</indexterm>
+            </indexterm>
+            <indexterm>%id-atts</indexterm>
+         </keywords>
+      </metadata>
+   </prolog>
+   <refbody>
+      <refsyn>
+         <title>Contained by</title>Used in the topic DTD.</refsyn>
+      <refsyn>
+         <title>Contains</title>Declarations for attributes.</refsyn>
+      <section>
+         <title>Attributes</title>
+         <simpletable relcolwidth="2* 3* 1* 1* 1*" id="id-atts_attr">
+            <sthead>
+               <stentry>Name</stentry>
+               <stentry>Description</stentry>
+               <stentry>Data Type</stentry>
+               <stentry>Default Value</stentry>
+               <stentry>Required?</stentry>
+            </sthead>
+            <strow conref="commonLRdefs.xml#commonLRdefs/id">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/conref">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+         </simpletable>
+      </section>
+      <example>
+         <p>The %id-atts; parameter entity is used within the DITA dtds as
+a common definition for attributes available to most elements that enable
+you to name or reference (link to or fetch) the content of particular elements.
+Not all of these capabilities have been provided yet for DITA topic processing.
+Some typical examples include:</p>
+         <codeblock>&lt;p id="mainpara"&gt;The war cry of Kudzu University, &lt;q id="warcry"&gt;To the victor 
+go the spoils!&lt;/q&gt;, is often heard on campus during freshman orientation.&lt;/p&gt;
+&lt;p id="dullpara"&gt;One often hears the cry, &lt;q conref="#topicid/warcry"/&gt;, when 
+students are competing in intramural sports.&lt;/p&gt;</codeblock>
+      </example>
+   </refbody>
+</reference>

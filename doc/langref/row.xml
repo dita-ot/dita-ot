@@ -1,0 +1,116 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
+<reference id="row" xml:lang="en-us">
+   <title>
+      <keyword>row</keyword>
+   </title>
+   <shortdesc>The &lt;<keyword>row</keyword>&gt; element contains a single row in a table &lt;<keyword>tgroup</keyword>&gt;.</shortdesc>
+   <prolog>
+      <metadata>
+         <keywords>
+            <indexterm>row</indexterm>
+            <indexterm>Table
+elements<indexterm>row</indexterm>
+            </indexterm>
+            <indexterm>row</indexterm>
+         </keywords>
+      </metadata>
+   </prolog>
+   <refbody>
+      <refsyn>
+         <title>Contained by</title>
+         <xref href="thead.xml">thead</xref> ,  <xref href="tfoot.xml">tfoot</xref> ,  <xref href="tbody.xml">tbody</xref>
+      </refsyn>
+      <refsyn>
+         <title>Contains</title>
+         <xref href="entry.xml">entry</xref>
+      </refsyn>
+      <section>
+         <title>Attributes</title>
+         <simpletable relcolwidth="2* 3* 1* 1* 1*" id="row_attr">
+            <sthead>
+               <stentry>Name</stentry>
+               <stentry>Description</stentry>
+               <stentry>Data Type</stentry>
+               <stentry>Default Value</stentry>
+               <stentry>Required?</stentry>
+            </sthead>
+            <strow conref="commonLRdefs.xml#commonLRdefs/rowsep">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/valign">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/outputclass">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/univ-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/global-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/class">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+         </simpletable>
+      </section>
+      <example>
+         <pre>&lt;table&gt;
+ &lt;tgroup cols="2"&gt;
+  &lt;colspec colnum="1" colname="col1" colwidth="100*"/&gt;
+  &lt;colspec colnum="2" colname="col2" colwidth="100*"/&gt;
+  &lt;thead&gt;
+   &lt;row&gt;
+    &lt;entry colname="col1"&gt;Type style&lt;/entry&gt;
+    &lt;entry colname="col2"&gt;Elements used&lt;/entry&gt;
+   &lt;/row&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+   &lt;row&gt;
+    &lt;entry colname="col1"&gt;Bold&lt;/entry&gt;
+    &lt;entry colname="col2"&gt;b&lt;/entry&gt;
+   &lt;/row&gt;
+   &lt;row&gt;
+    &lt;entry colname="col1"&gt;Italic&lt;/entry&gt;
+    &lt;entry colname="col2"&gt;i&lt;/entry&gt;
+   &lt;/row&gt;
+   &lt;row&gt;
+    &lt;entry colname="col1"&gt;Underlined&lt;/entry&gt;
+    &lt;entry colname="col2"&gt;u&lt;/entry&gt;
+   &lt;/row&gt;
+  &lt;/tbody&gt;
+ &lt;/tgroup&gt;
+&lt;/table</pre>
+      </example>
+   </refbody>
+</reference>

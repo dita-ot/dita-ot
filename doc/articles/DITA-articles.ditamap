@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- (C) Copyright IBM Corporation 2001, 2002, 2003. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers.
+ *-->
+<!DOCTYPE map PUBLIC "-//IBM//DTD DITA Map//EN" "../../dtd/map.dtd">
+<map title="Documentation including DITA papers">
+    <topicref href="DITA-rm.xml" collection-type="sequence" id="DITA-rm">
+      <topicref href="DITA-dsf.xml"/>
+      <topicref href="DITA-domains.xml"/>
+      <topicref href="DITA-mapdomains.xml"/>
+    </topicref>
+</map>

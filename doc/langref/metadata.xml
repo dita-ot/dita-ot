@@ -1,0 +1,73 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
+<reference id="metadata" xml:lang="en-us">
+   <title>
+      <keyword>metadata</keyword>
+   </title>
+   <shortdesc>The &lt;<keyword>metadata</keyword>&gt; section of the prolog contains
+information about a topic such as audience and product information. Metadata
+can be used by computational processes to select particular topics or to prepare
+search indexes or to customize navigation.</shortdesc>
+   <prolog>
+      <metadata>
+         <keywords>
+            <indexterm>metadata</indexterm>
+            <indexterm>Prolog
+elements<indexterm>metadata</indexterm>
+            </indexterm>
+            <indexterm>metadata</indexterm>
+         </keywords>
+      </metadata>
+   </prolog>
+   <refbody>
+      <refsyn>
+         <title>Contained by</title>
+         <xref href="prolog.xml">prolog</xref>
+      </refsyn>
+      <refsyn>
+         <title>Contains</title> ( <xref href="audience.xml">audience</xref> ) (0
+or more) then ( <xref href="category.xml">category</xref> )
+(0 or more) then ( <xref href="keywords.xml">keywords</xref> )
+(0 or more) then ( <xref href="prodinfo.xml">prodinfo</xref> )
+(0 or more) then ( <xref href="othermeta.xml">othermeta</xref> )
+(0 or more) </refsyn>
+      <section>
+         <title>Attributes</title>
+         <simpletable relcolwidth="2* 3* 1* 1* 1*" id="metadata_attr">
+            <sthead>
+               <stentry>Name</stentry>
+               <stentry>Description</stentry>
+               <stentry>Data Type</stentry>
+               <stentry>Default Value</stentry>
+               <stentry>Required?</stentry>
+            </sthead>
+            <strow conref="commonLRdefs.xml#commonLRdefs/global-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/class">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+         </simpletable>
+      </section>
+      <example>
+         <codeblock>&lt;prolog&gt;
+  &lt;metadata&gt;
+    &lt;audience type="user" job="using" experiencelevel="novice"/&gt;
+  &lt;/metadata&gt;
+&lt;/prolog&gt;</codeblock>
+      </example>
+   </refbody>
+</reference>

@@ -1,0 +1,92 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
+<reference id="resourceid" xml:lang="en-us">
+   <title>
+      <keyword>resourceid</keyword>
+   </title>
+   <shortdesc>The &lt;<keyword>resourceid</keyword>&gt; element provides an identifier for applications
+that require them in a particular format, when the normal id attribute of
+the topic can't be used. Each resourceid entry should be unique.
+It is one of the metadata elements that can be included within the prolog
+of a topic, along with document tracking and product information, etc. The
+element has no content, but takes an <i>
+         
+         
+         <keyword>id</keyword>
+      
+      
+      </i> attribute or an <i>
+         
+         
+         <keyword>appname</keyword>
+      
+      
+      </i> attribute.</shortdesc>
+   <prolog>
+      <metadata>
+         <keywords>
+            <indexterm>resourceid</indexterm>
+            <indexterm>Prolog
+elements<indexterm>resourceid</indexterm>
+            </indexterm>
+            <indexterm>resourceid</indexterm>
+         </keywords>
+      </metadata>
+   </prolog>
+   <refbody>
+      <refsyn>
+         <title>Contained by</title>
+         <xref href="prolog.xml">prolog</xref>
+      </refsyn>
+      <refsyn>
+         <title>Contains</title> no content</refsyn>
+      <section>
+         <title>Attributes</title>
+         <simpletable relcolwidth="2* 3* 1* 1* 1*" id="resourceid_attr">
+            <sthead>
+               <stentry>Name</stentry>
+               <stentry>Description</stentry>
+               <stentry>Data Type</stentry>
+               <stentry>Default Value</stentry>
+               <stentry>Required?</stentry>
+            </sthead>
+            <strow conref="commonLRdefs.xml#commonLRdefs/id">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/appname">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/global-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/class">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+         </simpletable>
+      </section>
+      <example>
+         <pre>&lt;resourceid id="fred" appname="sqlid00375"/&gt;</pre>
+      </example>
+   </refbody>
+</reference>

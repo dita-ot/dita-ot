@@ -1,0 +1,125 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
+<reference id="map" xml:lang="en-us">
+   <title>
+      <keyword>map</keyword>
+   </title>
+   <shortdesc>The &lt;<keyword>map</keyword>&gt; element is used to define a map which
+describes the relationships among a set of DITA topics. Maps consist of references
+to topics organized into hierarchies and tables. Maps provide a way to express
+these relationships in a single common format that can be used for different
+outputs. </shortdesc>
+   <prolog>
+      <metadata>
+         <keywords>
+            <indexterm>map</indexterm>
+            <indexterm>Map
+elements<indexterm>map</indexterm>
+            </indexterm>
+            <indexterm>map</indexterm>
+         </keywords>
+      </metadata>
+   </prolog>
+   <refbody>
+      <section>
+         <p>The containing element for a map is the &lt;<keyword>map</keyword>&gt;
+element, which can take title and id attributes. Within the map, use the &lt;<keyword>topicref</keyword>&gt;
+element to add and organize references to the topics. You can use the map
+element to set default attribute values for all topicrefs in the map.</p>
+         <p>While
+the Title attribute on a map is optional, the Title attribute is required
+by the Eclipse help system. The primary XML table of contents must have a
+title (label in Eclipse), in order for that help's table of contents to load.</p>
+      </section>
+      <refsyn>
+         <title>Contained by</title>[unknown for this context]</refsyn>
+      <refsyn>
+         <title>Contains</title> ( <xref href="topicmeta.xml">topicmeta</xref> ) (optional)
+then ( <xref href="navref.xml">navref</xref> or <xref href="anchor.xml">anchor</xref> or <xref href="topicref.xml">topicref</xref> or <xref href="reltable.xml">reltable</xref> ) (0 or more) </refsyn>
+      <section>
+         <title>Attributes</title>
+         <simpletable relcolwidth="2* 3* 1* 1* 1*" id="map_attr">
+            <sthead>
+               <stentry>Name</stentry>
+               <stentry>Description</stentry>
+               <stentry>Data Type</stentry>
+               <stentry>Default Value</stentry>
+               <stentry>Required?</stentry>
+            </sthead>
+            <strow conref="commonLRdefs.xml#commonLRdefs/title">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/id-map">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/anchorref">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/topicref-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/select-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/DTDVersion">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/global-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/class">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+         </simpletable>
+      </section>
+      <example>In this example, there are six topicrefs. They are nested and have
+a hierarchical relationship. Bats.xml is the parent topic and the other topics
+are its children.<codeblock>&lt;map title="Bats" id="mybats"&gt; Bats
+ &lt;topicref href="bats.xml" type="topic"
+  &lt;topicref href="batcaring.xml" type="task"&gt;&lt;/topicref&gt;
+  &lt;topicref href="batfeeding.xml" type="task"&gt;&lt;/topicref&gt;
+  &lt;topicref href="batsonar.xml" type="concept"&gt;&lt;/topicref&gt;
+  &lt;topicref href="batguano.xml" type="reference"&gt;&lt;/topicref&gt;
+  &lt;topicref href="bathistory.xml" type="reference"&gt;&lt;/topicref&gt;
+ &lt;/topicref&gt;
+&lt;/map&gt;</codeblock>
+      </example>
+   </refbody>
+</reference>

@@ -1,0 +1,119 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
+<reference id="draft-comment" xml:lang="en-us">
+   <title>
+      <keyword>draft-comment</keyword>
+   </title>
+   <shortdesc>The &lt;<keyword>draft-comment</keyword>&gt; element allows simple review and discussion
+of topic contents within the marked-up content. Use the &lt;draft-comment&gt;
+element to ask a question or make a comment that you would like others to
+review. To indicate the source of the draft comment or the status of the comment,
+use the author, time or disposition attributes.</shortdesc>
+   <prolog>
+      <metadata>
+         <keywords>
+            <indexterm>draft-comment</indexterm>
+            <indexterm>Miscellaneous
+elements<indexterm>draft-comment</indexterm>
+            </indexterm>
+            <indexterm>draft-comment</indexterm>
+         </keywords>
+      </metadata>
+   </prolog>
+   <refbody>
+      <section>
+         <note type="note">Your processing
+system will provide a run-time flag or parameter to cause the content of this
+element to be specially displayed for draft output only. By default, it is
+stripped out to prevent publishing internal comments by mistake!.</note>
+      </section>
+      <refsyn>
+         <title>Contained by</title>
+         <xref href="section.xml">section</xref> ,  <xref href="example.xml">example</xref> ,  <xref href="p.xml">p</xref> ,
+ <xref href="note.xml">note</xref> ,  <xref href="lq.xml">lq</xref> ,
+ <xref href="sli.xml">sli</xref> ,  <xref href="li.xml">li</xref> ,
+ <xref href="itemgroup.xml">itemgroup</xref> ,  <xref href="dd.xml">dd</xref> ,  <xref href="pre.xml">pre</xref> ,
+ <xref href="lines.xml">lines</xref> ,  <xref href="ph.xml">ph</xref> ,  <xref href="stentry.xml">stentry</xref> ,
+ <xref href="entry.xml">entry</xref> ,  <xref href="prereq.xml">prereq</xref> ,  <xref href="context.xml">context</xref> ,
+ <xref href="cmd.xml">cmd</xref> ,  <xref href="info.xml">info</xref> ,
+ <xref href="tutorialinfo.xml">tutorialinfo</xref> ,  <xref href="stepxmp.xml">stepxmp</xref> ,  <xref href="choptionhd.xml">choptionhd</xref> ,  <xref href="chdeschd.xml">chdeschd</xref> ,
+ <xref href="choption.xml">choption</xref> ,  <xref href="chdesc.xml">chdesc</xref> ,  <xref href="stepresult.xml">stepresult</xref> ,
+ <xref href="result.xml">result</xref> ,  <xref href="postreq.xml">postreq</xref> ,  <xref href="refsyn.xml">refsyn</xref> ,
+ <xref href="proptype.xml">proptype</xref> ,  <xref href="propvalue.xml">propvalue</xref> ,  <xref href="screen.xml">screen</xref> ,
+ <xref href="codeblock.xml">codeblock</xref> ,  <xref href="pd.xml">pd</xref>
+      </refsyn>
+      <refsyn>
+         <title>Contains</title> text data or <xref href="ph.xml">ph</xref> or <xref href="term.xml">term</xref> or <xref href="xref.xml">xref</xref> or <xref href="cite.xml">cite</xref> or <xref href="q.xml">q</xref> or <xref href="boolean.xml">boolean</xref> or <xref href="state.xml">state</xref> or <xref href="keyword.xml">keyword</xref> or <xref href="tm.xml">tm</xref> or <xref href="p.xml">p</xref> or <xref href="lq.xml">lq</xref> or <xref href="note.xml">note</xref> or <xref href="dl.xml">dl</xref> or <xref href="ul.xml">ul</xref> or <xref href="ol.xml">ol</xref> or <xref href="sl.xml">sl</xref> or <xref href="pre.xml">pre</xref> or <xref href="lines.xml">lines</xref> or <xref href="fig.xml">fig</xref> or <xref href="image.xml">image</xref> or <xref href="object.xml">object</xref> or <xref href="table.xml">table</xref> or <xref href="simpletable.xml">simpletable</xref>
+      </refsyn>
+      <section>
+         <title>Attributes</title>
+         <simpletable relcolwidth="2* 3* 1* 1* 1*" id="draft-comment_attr">
+            <sthead>
+               <stentry>Name</stentry>
+               <stentry>Description</stentry>
+               <stentry>Data Type</stentry>
+               <stentry>Default Value</stentry>
+               <stentry>Required?</stentry>
+            </sthead>
+            <strow conref="commonLRdefs.xml#commonLRdefs/author">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/time">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/disposition">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/univ-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/outputclass">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/global-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/class">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+         </simpletable>
+      </section>
+      <example>
+         <codeblock>&lt;draft-comment author="EBP"&gt;Where's the usage information for this 
+section?&lt;/draft-comment&gt;</codeblock>
+      </example>
+   </refbody>
+</reference>

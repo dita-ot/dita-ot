@@ -1,0 +1,111 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
+<reference id="parml" xml:lang="en-us">
+   <title>
+      <keyword>parml</keyword>
+   </title>
+   <shortdesc>The parameter list (&lt;<keyword>parml</keyword>&gt;) element contains a list of
+terms and definitions that describes the parameters in an application programming
+interface. This is a special kind of definition list that is
+designed for computer parameters. This element is part of the DITA programming
+domain, a special set of DITA elements designed to document programming tasks,
+concepts and reference information.</shortdesc>
+   <prolog>
+      <metadata>
+         <keywords>
+            <indexterm>parml (parameter list)</indexterm>
+            <indexterm>parameter
+list (parml)</indexterm>
+            <indexterm>Domain elements<indexterm>parml</indexterm>
+            </indexterm>
+            <indexterm>parml</indexterm>
+         </keywords>
+      </metadata>
+   </prolog>
+   <refbody>
+      <refsyn>
+         <title>Contained by</title>The same contexts as <xref href="dl.xml">dl</xref>
+      </refsyn>
+      <refsyn>
+         <title>Contains</title>
+         <xref href="plentry.xml">plentry</xref>
+      </refsyn>
+      <section>
+         <title>Attributes</title>
+         <simpletable relcolwidth="2* 3* 1* 1* 1*" id="parml_attr">
+            <sthead>
+               <stentry>Name</stentry>
+               <stentry>Description</stentry>
+               <stentry>Data Type</stentry>
+               <stentry>Default Value</stentry>
+               <stentry>Required?</stentry>
+            </sthead>
+            <strow conref="commonLRdefs.xml#commonLRdefs/compact">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/univ-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/spectitle">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/outputclass">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/global-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/class">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+         </simpletable>
+      </section>
+      <example>
+         <pre>
+            
+            
+            <b>&lt;parml&gt;</b>
+ &lt;plentry&gt;
+  &lt;pt&gt;&lt;synph&gt;&lt;kwd&gt;from&lt;/kwd&gt;&lt;delim&gt; &lt;/delim&gt;&lt;var&gt;this&lt;/var&gt;&lt;/synph&gt;&lt;/pt&gt;
+  &lt;pd&gt;copy from somewhere&lt;/pd&gt;
+ &lt;/plentry&gt;
+ &lt;plentry&gt;
+  &lt;pt&gt;&lt;synph&gt;&lt;kwd&gt;to&lt;/kwd&gt;&lt;delim&gt; &lt;/delim&gt;&lt;var&gt;that&lt;/var&gt;&lt;/synph&gt;&lt;/pt&gt;
+  &lt;pd&gt;to somewhere else&lt;/pd&gt;
+ &lt;/plentry&gt;
+<b>&lt;/parml&gt;</b>
+         
+         
+         </pre>
+      </example>
+   </refbody>
+</reference>

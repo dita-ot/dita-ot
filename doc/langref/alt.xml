@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
+<reference id="alt">
+  <title>alt</title>
+  <shortdesc>The alt element provides an element equivalent of the <apiname>alt</apiname> attribute on the image element. As an element, it provides direct text entry within an XML editor and is more easily accessed than an attribute for translation.</shortdesc>
+  <refbody>
+    <section>
+      <p>[say more about best practices when writing content for this element; relate it to creating accessible descriptions for the object element, and to accessibility in general.]</p>
+    </section>
+    <section class="- topic/section "><title>Contains</title>[to be revised]</section>
+    <section class="- topic/section "><title>Contained by</title>[image]</section>
+    <section class="- topic/section "><title>Attributes</title>[to be revised]</section>
+    <section class="- topic/section ">
+      <title>Examples</title>
+      <p>A simple imagemap looks like this (note that the rendering will depend on how this markup is supported for particular output formats):</p>
+      <image href="tip-ing.jpg" height="12" width="21"/>
+      <p class="- topic/p ">The markup for this example looks like this:</p>
+      <codeblock>&lt;image href=&quot;tip-ing.jpg&quot; height=&quot;12&quot; width=&quot;21&quot;/&gt;
+  &lt;alt&gt;Tip!&lt;/alt&gt;
+&lt;/image&gt; </codeblock>
+    </section>
+  </refbody>
+</reference>
+

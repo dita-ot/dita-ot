@@ -1,0 +1,127 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
+<reference id="topic" xml:lang="en-us">
+   <title>
+      <keyword>topic</keyword>
+   </title>
+   <shortdesc>The &lt;<keyword>topic</keyword>&gt; element is the top-level DITA element for
+a single-subject topic or article. Other top-level DITA elements that are
+more content-specific are &lt;<keyword>concept</keyword>&gt;, &lt;<keyword>task</keyword>&gt;, and &lt;<keyword>reference</keyword>&gt;.</shortdesc>
+   <prolog>
+      <metadata>
+         <keywords>
+            <indexterm>topic</indexterm>
+            <indexterm>Topic
+elements<indexterm>topic</indexterm>
+            </indexterm>
+            <indexterm>topic</indexterm>
+         </keywords>
+      </metadata>
+   </prolog>
+   <refbody>
+      <section/>
+      <refsyn>
+         <title>Contained by</title>
+         <xref href="dita.xml">dita</xref> ,  <xref href="topic.xml">topic</xref> ,  <xref href="concept.xml">concept</xref> ,
+ <xref href="task.xml">task</xref> ,  <xref href="reference.xml">reference</xref>
+      </refsyn>
+      <refsyn>
+         <title>Contains</title>
+         <xref href="title.xml">title</xref> then ( <xref href="titlealts.xml">titlealts</xref> ) (optional) then ( <xref href="shortdesc.xml">shortdesc</xref> ) (optional) then ( <xref href="prolog.xml">prolog</xref> ) (optional) then <xref href="body.xml">body</xref> then ( <xref href="related-links.xml">related-links</xref> )
+(optional) then ( <xref href="topic.xml">topic</xref> ) (0 or
+more) </refsyn>
+      <section>
+         <title>Attributes</title>
+         <simpletable relcolwidth="2* 3* 1* 1* 1*" id="topic_attr">
+            <sthead>
+               <stentry>Name</stentry>
+               <stentry>Description</stentry>
+               <stentry>Data Type</stentry>
+               <stentry>Default Value</stentry>
+               <stentry>Required?</stentry>
+            </sthead>
+            <strow conref="commonLRdefs.xml#commonLRdefs/id">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/conref-topic">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/select-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/outputclass">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/xmllang">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/DTDVersion">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/domains">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/global-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/class">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+         </simpletable>
+      </section>
+      <example>
+         <codeblock>&lt;topic id="topic"&gt;
+ &lt;title&gt;Some little topic&lt;/title&gt;
+ &lt;body&gt;
+  &lt;p&gt;Here's a &lt;b&gt;&lt;i&gt;cute&lt;/i&gt;&lt;/b&gt;,
+  &lt;b&gt;little&lt;/b&gt; topic.&lt;/p&gt;
+  &lt;ul&gt;
+   &lt;li&gt;Some item&lt;/li&gt;
+   &lt;li&gt;Another item&lt;/li&gt;
+  &lt;/ul&gt;
+ &lt;/body&gt;
+&lt;/topic&gt;</codeblock>
+      </example>
+   </refbody>
+</reference>

@@ -1,0 +1,189 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
+<reference id="xref" xml:lang="en-us">
+   <title>
+      <keyword>xref</keyword>
+   </title>
+   <shortdesc>Use the cross-reference (&lt;<keyword>xref</keyword>&gt;) element to
+link to a different location within the current topic, or a different topic
+within the same help system or DITA document. You can also point to external
+sources, such as Web pages, or to a location in another topic as well. The <i>
+         
+         
+         <keyword>href</keyword>
+      
+      
+      </i> attribute
+on the &lt;<keyword>xref</keyword>&gt; element is used to create the link pointer,
+or URL.</shortdesc>
+   <prolog>
+      <metadata>
+         <keywords>
+            <indexterm>xref (cross reference)</indexterm>
+            <indexterm>cross
+reference (xref)</indexterm>
+            <indexterm>Body elements<indexterm>xref (cross
+reference)</indexterm>
+            </indexterm>
+            <indexterm>xref (cross
+reference)</indexterm>
+         </keywords>
+      </metadata>
+   </prolog>
+   <refbody>
+      <section>
+         <p>Typically it is best to restrict yourself to linking to reference
+topics where the content of the target is clear from the &lt;<keyword>xref</keyword>&gt;'s
+text, for example API names and their descriptions. With other information
+types, it may be less clear to the user whether they should follow the link,
+and often they will, thereby missing important information in following paragraphs.
+Therefore it is a good idea to use <xref href="related-links.xml">related-links</xref> wherever
+possible.</p>
+      </section>
+      <refsyn>
+         <title>Contained by</title>
+         <xref href="section.xml">section</xref> ,  <xref href="example.xml">example</xref> ,  <xref href="desc.xml">desc</xref> ,  <xref href="p.xml">p</xref> ,  <xref href="note.xml">note</xref> ,  <xref href="lq.xml">lq</xref> ,
+ <xref href="q.xml">q</xref> ,  <xref href="sli.xml">sli</xref> ,
+ <xref href="li.xml">li</xref> ,  <xref href="itemgroup.xml">itemgroup</xref> ,  <xref href="dt.xml">dt</xref> ,
+ <xref href="dd.xml">dd</xref> ,  <xref href="figgroup.xml">figgroup</xref> ,  <xref href="pre.xml">pre</xref> ,
+ <xref href="lines.xml">lines</xref> ,  <xref href="ph.xml">ph</xref> ,  <xref href="stentry.xml">stentry</xref> ,
+ <xref href="draft-comment.xml">draft-comment</xref> ,  <xref href="fn.xml">fn</xref> ,  <xref href="linkinfo.xml">linkinfo</xref> ,
+ <xref href="entry.xml">entry</xref> ,  <xref href="prereq.xml">prereq</xref> ,  <xref href="context.xml">context</xref> ,
+ <xref href="cmd.xml">cmd</xref> ,  <xref href="info.xml">info</xref> ,
+ <xref href="tutorialinfo.xml">tutorialinfo</xref> ,  <xref href="stepxmp.xml">stepxmp</xref> ,  <xref href="choice.xml">choice</xref> ,  <xref href="choptionhd.xml">choptionhd</xref> ,
+ <xref href="chdeschd.xml">chdeschd</xref> ,  <xref href="choption.xml">choption</xref> ,  <xref href="chdesc.xml">chdesc</xref> ,
+ <xref href="stepresult.xml">stepresult</xref> ,  <xref href="result.xml">result</xref> ,  <xref href="postreq.xml">postreq</xref> ,
+ <xref href="refsyn.xml">refsyn</xref> ,  <xref href="proptype.xml">proptype</xref> ,  <xref href="propvalue.xml">propvalue</xref> ,
+ <xref href="propdesc.xml">propdesc</xref> ,  <xref href="screen.xml">screen</xref> ,  <xref href="b.xml">b</xref> ,
+ <xref href="u.xml">u</xref> ,  <xref href="i.xml">i</xref> ,
+ <xref href="tt.xml">tt</xref> ,  <xref href="sup.xml">sup</xref> ,
+ <xref href="sub.xml">sub</xref> ,  <xref href="codeph.xml">codeph</xref> ,  <xref href="codeblock.xml">codeblock</xref> ,
+ <xref href="pt.xml">pt</xref> ,  <xref href="pd.xml">pd</xref> ,
+ <xref href="synnote.xml">synnote</xref>
+      </refsyn>
+      <refsyn>
+         <title>Contains</title> text data or <xref href="ph.xml">ph</xref> or <xref href="term.xml">term</xref> or <xref href="q.xml">q</xref> or <xref href="boolean.xml">boolean</xref> or <xref href="state.xml">state</xref> or <xref href="keyword.xml">keyword</xref> or <xref href="tm.xml">tm</xref> or <xref href="image.xml">image</xref>
+      </refsyn>
+      <section>
+         <title>Attributes</title>
+         <simpletable relcolwidth="2* 3* 1* 1* 1*" id="xref_attr">
+            <sthead>
+               <stentry>Name</stentry>
+               <stentry>Description</stentry>
+               <stentry>Data Type</stentry>
+               <stentry>Default Value</stentry>
+               <stentry>Required?</stentry>
+            </sthead>
+            <strow conref="commonLRdefs.xml#commonLRdefs/href">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/keyref">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/type">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/univ-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/format">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/scope">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/outputclass">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/global-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/class">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+         </simpletable>
+      </section>
+      <example>
+         <p>Here's an example of a cross-reference to another topic; that
+topic's title will be used as the link text.</p>
+         <codeblock>&lt;p&gt;Background information about DITA is provided in the section titled
+&lt;xref href="whatsdita.xml#tmmdita"&gt;&lt;/xref&gt;.&lt;/p&gt;</codeblock>
+         <p>Here's
+an example of a cross-reference to another topic; the supplied text will be
+used as the link text</p>
+         <codeblock>&lt;p&gt;&lt;xref href="whatsdita.xml#tmmdita"&gt;Background information about DITA&lt;/xref&gt; is provided
+free of charge.&lt;/p&gt;</codeblock>
+         <p>If you are linking to anything within
+a topic, you should use the following format in the href attribute: <codeblock>filename.xml#topicid/elementid</codeblock>
+         
+         
+         </p>
+         <p>If
+you are linking within the same file, you can leave off the "filename.xml"
+part. So, for a section with the ID "mysection", you should use: <codeblock>#topicid/mysection  </codeblock>
+         
+         
+         </p>
+         <p>For
+a list item within that section, assuming the item has an ID of "mylist",
+use <codeblock>#topicid/mylist  </codeblock>
+         
+         
+         </p>
+         <p>Regardless of how deeply
+the target element is nested, the only important pieces are the ID of the
+containing topic, and the ID of the target element. IDs in DITA need not be
+unique within a file, but they must be unique within a topic, so you need
+to be sure that the topic ID is part of your reference.</p>
+         <p>If your URL
+has an ampersand in it; you need to code that using the symbol. For example;
+for this URL:<codeblock>http://www.ibm.com/docview.wss?rs=757&amp;context=SSVNX5
+</codeblock>You need to enter the &amp;amp; in the Href attribute as follows:<codeblock>&lt;xref href="http://www.ibm.com/docview.wss?rs=757<b>&amp;amp;</b>context=SSVNX5"&gt;
+Part number SSVNX5&lt;/xref&gt;</codeblock>
+         
+         
+         </p>
+      </example>
+   </refbody>
+</reference>

@@ -1,0 +1,103 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
+<reference id="groupchoice" xml:lang="en-us">
+   <title>
+      <keyword>groupchoice</keyword>
+   </title>
+   <shortdesc>The &lt;<keyword>groupchoice</keyword>&gt; element is part
+of the subset of elements that define syntax diagrams in DITA. A group is
+a logical set of pieces of syntax that go together. A group choice specifies
+that the user must make a choice about which part of the syntax to use. Groups
+are often nested. This element is part of the DITA programming domain, a special
+set of DITA elements designed to document programming tasks, concepts and
+reference information.</shortdesc>
+   <prolog>
+      <metadata>
+         <keywords>
+            <indexterm>groupchoice (group choice)</indexterm>
+            <indexterm>group
+choice (groupchoice)</indexterm>
+            <indexterm>Domain elements<indexterm>groupchoice</indexterm>
+            </indexterm>
+            <indexterm>groupchoice</indexterm>
+         </keywords>
+      </metadata>
+   </prolog>
+   <refbody>
+      <refsyn>
+         <title>Contained by</title>
+         <xref href="syntaxdiagram.xml">syntaxdiagram</xref> ,
+ <xref href="synblk.xml">synblk</xref> ,  <xref href="groupseq.xml">groupseq</xref> ,  <xref href="groupchoice.xml">groupchoice</xref> ,
+ <xref href="groupcomp.xml">groupcomp</xref> ,  <xref href="fragment.xml">fragment</xref>
+      </refsyn>
+      <refsyn>
+         <title>Contains</title> ( <xref href="title.xml">title</xref> ) (optional)
+then ( <xref href="repsep.xml">repsep</xref> ) (optional) then
+( <xref href="groupseq.xml">groupseq</xref> or <xref href="groupchoice.xml">groupchoice</xref> or <xref href="groupcomp.xml">groupcomp</xref> or <xref href="fragref.xml">fragref</xref> or <xref href="kwd.xml">kwd</xref> or <xref href="var.xml">var</xref> or <xref href="delim.xml">delim</xref> or <xref href="oper.xml">oper</xref> or <xref href="sep.xml">sep</xref> or <xref href="synnote.xml">synnote</xref> or <xref href="synnoteref.xml">synnoteref</xref> ) (0 or more) </refsyn>
+      <section>
+         <title>Attributes</title>
+         <simpletable relcolwidth="2* 3* 1* 1* 1*" id="groupchoice_attr">
+            <sthead>
+               <stentry>Name</stentry>
+               <stentry>Description</stentry>
+               <stentry>Data Type</stentry>
+               <stentry>Default Value</stentry>
+               <stentry>Required?</stentry>
+            </sthead>
+            <strow conref="commonLRdefs.xml#commonLRdefs/importance-var">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/univ-atts-no-importance">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/outputclass">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/global-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/class">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+         </simpletable>
+      </section>
+      <example>
+         <pre>&lt;syntaxdiagram frame="bottom"&gt;
+ &lt;title&gt;CopyFile&lt;/title&gt;
+ &lt;groupseq&gt;&lt;kwd&gt;COPYF&lt;/kwd&gt;&lt;/groupseq&gt;
+ &lt;groupcomp&gt;&lt;var&gt;input-filename&lt;/var&gt;&lt;kwd&gt;*INFILE&lt;/kwd&gt;&lt;/groupcomp&gt;
+ &lt;groupseq&gt;&lt;var&gt;output-filename&lt;/var&gt;&lt;kwd&gt;*OUTFILE&lt;/kwd&gt;&lt;/groupseq&gt;
+ <b>&lt;groupchoice&gt;</b>&lt;var&gt;input-filename&lt;/var&gt;&lt;kwd&gt;*INFILE&lt;/kwd&gt;<b>&lt;/groupchoice&gt;</b>
+ 
+            
+            
+            <b>&lt;groupchoice&gt;</b>&lt;var&gt;output-filename&lt;/var&gt;&lt;kwd&gt;*OUTFILE&lt;/kwd&gt;<b>&lt;/groupchoice&gt;</b>
+&lt;/syntaxdiagram&gt;</pre>
+      </example>
+   </refbody>
+</reference>

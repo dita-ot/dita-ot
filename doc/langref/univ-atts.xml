@@ -1,0 +1,217 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
+<reference id="univ-atts" xml:lang="en-us">
+   <title>
+      <keyword>%univ-atts;</keyword>
+   </title>
+   <shortdesc>Universal attributes is a parameter entity declaration in the topic
+DTD that includes:</shortdesc>
+   <prolog>
+      <metadata>
+         <keywords>
+            <indexterm>%univ-atts</indexterm>
+            <indexterm>Commonly Referenced Objects
+elements<indexterm>%univ-atts</indexterm>
+            </indexterm>
+            <indexterm>%univ-atts</indexterm>
+         </keywords>
+      </metadata>
+   </prolog>
+   <refbody>
+      <section>
+         <ul>
+
+            
+            
+            <li>the attributes in the <xref href="select-atts.xml">select-atts</xref> parameter
+entity (<i>
+                  
+                  
+                  <keyword>platform</keyword>
+               
+               
+               </i>, <i>
+                  
+                  
+                  <keyword>product</keyword>
+               
+               
+               </i>, <i>
+                  
+                  
+                  <keyword>audience</keyword>
+               
+               
+               </i>, <i>
+                  
+                  
+                  <keyword>otherprops</keyword>
+               
+               
+               </i>, <i>
+                  
+                  
+                  <keyword>importance</keyword>
+               
+               
+               </i>, <i>
+                  
+                  
+                  <keyword>rev</keyword>
+               
+               
+               </i>, <i>
+                  
+                  
+                  <keyword>status</keyword>
+               
+               
+               </i>)</li>
+
+            
+            
+            <li>the attributes in the <xref href="id-atts.xml">id-atts</xref> parameter
+entity (<i>
+                  
+                  
+                  <keyword>id</keyword>
+               
+               
+               </i>, <i>
+                  
+                  
+                  <keyword>conref</keyword>
+               
+               
+               </i>)</li>
+
+            
+            
+            <li>two additional attributes: <i>
+                  
+                  
+                  <keyword>translate</keyword>
+               
+               
+               </i> and <i>
+                  
+                  
+                  <keyword>xml:lang</keyword>
+               
+               
+               </i>.</li>
+
+         
+         
+         </ul>
+      </section>
+      <refsyn>
+         <title>Contained by</title>Used in the topic DTD.</refsyn>
+      <refsyn>
+         <title>Contains</title>Declarations for attributes. </refsyn>
+      <section id="univ-atts_attr">
+         <title>Attributes</title>
+         <simpletable relcolwidth="2* 3* 1* 1* 1*">
+            <sthead>
+               <stentry>Name</stentry>
+               <stentry>Description</stentry>
+               <stentry>Data Type</stentry>
+               <stentry>Default Value</stentry>
+               <stentry>Required?</stentry>
+            </sthead>
+            <strow>
+               <stentry>%select-atts;</stentry>
+               <stentry>A set of related attributes, described at <xref href="select-atts.xml">select-atts</xref>: <i>
+                     
+                     
+                     <keyword>platform</keyword>
+                  
+                  
+                  </i>, <i>
+                     
+                     
+                     <keyword>product</keyword>
+                  
+                  
+                  </i>, <i>
+                     
+                     
+                     <keyword>audience</keyword>
+                  
+                  
+                  </i>, <i>
+                     
+                     
+                     <keyword>otherprops</keyword>
+                  
+                  
+                  </i>, <i>
+                     
+                     
+                     <keyword>importance</keyword>
+                  
+                  
+                  </i>, <i>
+                     
+                     
+                     <keyword>rev</keyword>
+                  
+                  
+                  </i>, <i>
+                     
+                     
+                     <keyword>status</keyword>
+                  
+                  
+                  </i>.</stentry>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow>
+               <stentry>%id-atts;</stentry>
+               <stentry>A set of related attributes, described at <xref href="id-atts.xml">id-atts</xref>: <i>
+                     
+                     
+                     <keyword>id</keyword>
+                  
+                  
+                  </i>, <i>
+                     
+                     
+                     <keyword>conref</keyword>
+                  
+                  
+                  </i>.</stentry>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/translate">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/xmllang">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+         </simpletable>
+      </section>
+      <example>See examples for the <xref href="select-atts.xml">select-atts</xref> and <xref href="id-atts.xml">id-atts</xref> parameter entries. The translate
+and xml:lang attributes identify language-specific words or phrases for specific
+processing (or non-processing, in the case of translate="no").<codeblock>&lt;p&gt;The cordial response to the question is 
+&lt;q translate="no" xml:lang="de-de"&gt;nein.&lt;/q&gt;&lt;/p&gt;</codeblock>
+      </example>
+   </refbody>
+</reference>

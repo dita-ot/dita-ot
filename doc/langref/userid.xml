@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
+<reference id="userid" xml:lang="en-us">
+   <title>User interface elements</title>
+   <refbody>
+      <section>
+         <p>The user interface domain elements are used to describe the user interface
+of a software program.<indexterm>Domains elements<indexterm>user interface
+elements</indexterm>
+            </indexterm>
+            
+            <indexterm>user interface elements</indexterm>
+         
+         </p>
+      </section>
+   </refbody>
+</reference>

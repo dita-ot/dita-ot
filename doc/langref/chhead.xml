@@ -1,0 +1,99 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
+<reference id="chhead" xml:lang="en-us">
+   <title>
+      <keyword>chhead</keyword>
+   </title>
+   <shortdesc>The &lt;<keyword>chhead</keyword>&gt; element is a container inside the &lt;<keyword>choicetable</keyword>&gt; element
+that provides specific heading text to override the default <b>Options</b> and <b>Description</b> headings.
+The &lt;<keyword>chhead</keyword>&gt; element contains both a <ph>
+         <xref href="choptionhd.xml">choptionhd</xref>
+      </ph> and <ph>
+         <xref href="chdeschd.xml">chdeschd</xref>
+      </ph> element
+as a pair.</shortdesc>
+   <prolog>
+      <metadata>
+         <keywords>
+            <indexterm>chhead (choicetable heading)</indexterm>
+            <indexterm>Task
+elements<indexterm>chhead</indexterm>
+            </indexterm>
+            <indexterm>chhead</indexterm>
+         </keywords>
+      </metadata>
+   </prolog>
+   <refbody>
+      <refsyn>
+         <title>Contained by</title>
+         <xref href="choicetable.xml">choicetable</xref>
+      </refsyn>
+      <refsyn>
+         <title>Contains</title> ( <xref href="choptionhd.xml">choptionhd</xref> )
+then ( <xref href="chdeschd.xml">chdeschd</xref> ) </refsyn>
+      <section>
+         <title>Attributes</title>
+         <simpletable relcolwidth="2* 3* 1* 1* 1*" id="chhead_attr">
+            <sthead>
+               <stentry>Name</stentry>
+               <stentry>Description</stentry>
+               <stentry>Data Type</stentry>
+               <stentry>Default Value</stentry>
+               <stentry>Required?</stentry>
+            </sthead>
+            <strow conref="commonLRdefs.xml#commonLRdefs/univ-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/outputclass">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/global-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/class">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+         </simpletable>
+      </section>
+      <example>
+         <pre>&lt;step&gt;&lt;cmd&gt;Then this&lt;/cmd&gt;
+ &lt;substeps&gt;
+  &lt;substep importance="optional"&gt;&lt;cmd&gt;which is done by doing this&lt;/cmd&gt;&lt;/substep&gt;
+  &lt;substep importance="required"&gt;&lt;cmd&gt;and then this.&lt;/cmd&gt;&lt;/substep&gt;
+ &lt;/substeps&gt;
+ &lt;choicetable&gt;
+  <b>&lt;chhead&gt;</b>
+   &lt;choptionhd&gt;Do something&lt;/choptionhd&gt;
+   &lt;chdeschd&gt;Or Else this&lt;/chdeschd&gt;
+  <b>&lt;/chhead&gt;</b>
+  &lt;chrow&gt;&lt;choption&gt;Do this&lt;/choption&gt;
+     &lt;chdesc&gt;and this will happen&lt;/chdesc&gt;&lt;/chrow&gt;
+  &lt;chrow&gt;&lt;choption&gt;Do that&lt;/choption&gt;
+     &lt;chdesc&gt;and that will happen&lt;/chdesc&gt;&lt;/chrow&gt;
+ &lt;/choicetable&gt;
+&lt;/step&gt;
+</pre>
+      </example>
+   </refbody>
+</reference>

@@ -1,0 +1,167 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
+<reference id="image" xml:lang="en-us">
+   <title>
+      <keyword>image</keyword>
+   </title>
+   <shortdesc>Include artwork or images in a DITA topic by using the &lt;<keyword>image</keyword>&gt; element.
+The &lt;<keyword>image</keyword>&gt; element has optional attributes that indicate whether
+the placement of the included graphic or artwork should be inline (like a
+button or icon), or on a separate line for a larger image. An <i>
+         
+         
+         <keyword>href</keyword>
+      
+      
+      </i> attribute
+is required on the image element, as this attribute creates a pointer to the
+image, and allows the output formatting processor to bring the image into
+the text flow. To make the intent of the image more accessible for users using
+screen readers or text-only readers, always include a description of the image's
+content in the <i>
+         
+         
+         <keyword>alt </keyword>
+      
+      
+      </i>attribute.</shortdesc>
+   <prolog>
+      <metadata>
+         <keywords>
+            <indexterm>image</indexterm>
+            <indexterm>Body
+elements<indexterm>image</indexterm>
+            </indexterm>
+            <indexterm>image</indexterm>
+         </keywords>
+      </metadata>
+   </prolog>
+   <refbody>
+      <refsyn>
+         <title>Contained by</title>
+         <xref href="title.xml">title</xref> ,  <xref href="shortdesc.xml">shortdesc</xref> ,  <xref href="body.xml">body</xref> ,
+ <xref href="section.xml">section</xref> ,  <xref href="example.xml">example</xref> ,  <xref href="desc.xml">desc</xref> ,
+ <xref href="p.xml">p</xref> ,  <xref href="note.xml">note</xref> ,
+ <xref href="lq.xml">lq</xref> ,  <xref href="sli.xml">sli</xref> ,
+ <xref href="li.xml">li</xref> ,  <xref href="itemgroup.xml">itemgroup</xref> ,  <xref href="dthd.xml">dthd</xref> ,
+ <xref href="ddhd.xml">ddhd</xref> ,  <xref href="dt.xml">dt</xref> ,
+ <xref href="dd.xml">dd</xref> ,  <xref href="fig.xml">fig</xref> ,
+ <xref href="ph.xml">ph</xref> ,  <xref href="stentry.xml">stentry</xref> ,  <xref href="draft-comment.xml">draft-comment</xref> ,
+ <xref href="fn.xml">fn</xref> ,  <xref href="xref.xml">xref</xref> ,
+ <xref href="linkinfo.xml">linkinfo</xref> ,  <xref href="entry.xml">entry</xref> ,  <xref href="conbody.xml">conbody</xref> ,
+ <xref href="prereq.xml">prereq</xref> ,  <xref href="context.xml">context</xref> ,  <xref href="cmd.xml">cmd</xref> ,
+ <xref href="info.xml">info</xref> ,  <xref href="tutorialinfo.xml">tutorialinfo</xref> ,  <xref href="stepxmp.xml">stepxmp</xref> ,
+ <xref href="choptionhd.xml">choptionhd</xref> ,  <xref href="chdeschd.xml">chdeschd</xref> ,  <xref href="choption.xml">choption</xref> ,
+ <xref href="chdesc.xml">chdesc</xref> ,  <xref href="stepresult.xml">stepresult</xref> ,  <xref href="result.xml">result</xref> ,
+ <xref href="postreq.xml">postreq</xref> ,  <xref href="refsyn.xml">refsyn</xref> ,  <xref href="proptype.xml">proptype</xref> ,
+ <xref href="propvalue.xml">propvalue</xref> ,  <xref href="propdesc.xml">propdesc</xref> ,  <xref href="uicontrol.xml">uicontrol</xref> ,
+ <xref href="pt.xml">pt</xref> ,  <xref href="pd.xml">pd</xref>
+      </refsyn>
+      <refsyn>
+         <title>Contains</title> no content</refsyn>
+      <section>
+         <title>Attributes</title>
+         <simpletable relcolwidth="2* 3* 1* 1* 1*" id="image_attr">
+            <sthead>
+               <stentry>Name</stentry>
+               <stentry>Description</stentry>
+               <stentry>Data Type</stentry>
+               <stentry>Default Value</stentry>
+               <stentry>Required?</stentry>
+            </sthead>
+            <strow conref="commonLRdefs.xml#commonLRdefs/href-image">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/keyref-image">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/alt">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/longdescref">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/height">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/width">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/align-image">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/placement">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/univ-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/outputclass">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/global-atts">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+            <strow conref="commonLRdefs.xml#commonLRdefs/class">
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+               <stentry/>
+            </strow>
+         </simpletable>
+      </section>
+      <example>
+         <codeblock>&lt;image href="bike.gif" alt="Two-wheeled bicycle" placement="break"/&gt;</codeblock>
+      </example>
+   </refbody>
+</reference>

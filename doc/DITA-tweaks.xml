@@ -1,0 +1,205 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE topic PUBLIC "-//IBM//DTD DITA Topic//EN" "../dtd/topic.dtd">
+<topic id="tweaks">
+  <title>Controls, parameters, tweaks, and gizmos for dita2htmlImpl.xsl</title>
+  <shortdesc>No one transform is ever able to meet your requirements off the shelf. DITA transforms support a number of ways to customize or enhance the output without having to modify core transforms directly.</shortdesc>
+  <body>
+    <p>To change the way the main processor, <filepath>dita2htmlImpl.xsl</filepath>, produces XHTML output, you can work with the following variables and parameters.</p>
+    <p>If you need to make code changes to <filepath>dita2htmlImpl.xsl</filepath> to change a variable value, the preferred mechanism is to create an override transform and place your changed code there. Editing any of the DITA distribution files directly is not recommended in case of package updates that might wipe out your changes! The file <filepath>dita2xhtml.xsl</filepath> in the xsl directory is an example of an override transform: copy it to a new filename and add your XSLT changes within the copy. Making edit changes to XSLT transforms is outside the scope of this document; please refer to a good XSLT reference for guidance!</p>
+    <note type="note">You are responsible for any changes you make with DITA transforms! If you need help, the <xref href="news://news.software.ibm.com/ibm.software.developerworks.xml.xml" format="html">DITA forum on developerWorks</xref> may be a useful resource.</note>
+  </body>
+  <topic id="globalvars">
+    <title>Global variable declarations</title>
+    <body>
+      <p>To change the values of the following global variable declarations to meet your publication requirements, copy the appropriate XSL directive into an override stylesheet which imports <filepath>dita2htmlImpl.xsl</filepath> and make your editing changes there.</p>
+      <simpletable relcolwidth="20* 50* 30*" scale="80">
+        <sthead>
+          <stentry>Variable name</stentry>
+          <stentry>Explanation</stentry>
+          <stentry>Default Value</stentry>
+        </sthead>
+        <strow>
+          <stentry>afill</stentry>
+          <stentry>Filler for A-name anchors (link-to points that have no data content in and of themselves; some browsers fail to link if a named anchor has no text)</stentry>
+          <stentry>null string (could be a space character, &amp;nbsp;, &amp;#160;, etc.)</stentry>
+        </strow>
+      </simpletable>
+      <p>For example, copy the afiil variable declaration into your override stylesheet and change the content to represent the actual copyright owner of <i>your</i> content (this string will be copied into the result HTML document as a comment):</p>
+      <pre>&lt;xsl:variable name=&quot;afill&quot;&gt;&amp;nbsp;&lt;/xsl:variable&gt;
+</pre>
+    </body>
+  </topic>
+  <topic id="extparmdefs">
+    <title>Default values for externally modifiable parameters</title>
+    <body>
+      <p>These default values can be changed at run time by using the parameter-passing syntax of your XSLT processor (if it supports command-line parameters). If your processor does not support parameter-passing on the command line, copy the XSL directives you wish to change into an override XSLT stylesheet, change the values as needed, and import <filepath>dita2htmlImpl.xsl</filepath> at the top of this new stylesheet. <filepath>dita2xhtml.xsl</filepath> is an example of an override stylesheet that you can copy and modify as needed.</p>
+      <simpletable relcolwidth="20* 60* 20*" scale="80">
+        <sthead>
+          <stentry>Parameter name</stentry>
+          <stentry>Explanation</stentry>
+          <stentry>Default value</stentry>
+        </sthead>
+        <strow>
+          <stentry>dita-css</stentry>
+          <stentry>Default CSS filename parameter, usually the name of your site&apos;s overall stylesheet.</stentry>
+          <stentry>
+            <q>commonltr.css</q>
+          </stentry>
+        </strow>
+        <strow>
+          <stentry>bidi-dita-css</stentry>
+          <stentry>Default CSS filename parameter for bi-direction language, usually the name of your site&apos;s overall stylesheet.</stentry>
+          <stentry>
+            <q>commonrtl.css</q>
+          </stentry>
+        </strow>
+        <strow>
+          <stentry>CSS</stentry>
+          <stentry>User&apos;s CSS filename parameter. <p>This can be the name of a stylesheet used by one or more topics within an overall group. This stylesheet can use the CSS cascade effect to modify existing properties or it can override or define new properties.</p></stentry>
+          <stentry>(null)</stentry>
+        </strow>
+        <strow>
+          <stentry>CSSPATH</stentry>
+          <stentry>Default CSS path parameter.<p>This specifies a path for the cascading style sheet (CSS). This allows you to place the CSS in one place and have several different topics point to it. If no CSSPATH is specified, the CSS is assumed to be in the same directory as the XHTML.</p></stentry>
+          <stentry> (null) </stentry>
+        </strow>
+        <strow>
+          <stentry>HDF</stentry>
+          <stentry>The file name containing XHTML to be placed in the HEAD area</stentry>
+          <stentry> (null)</stentry>
+        </strow>
+        <strow>
+          <stentry>HDR</stentry>
+          <stentry>The file name containing XHTML to be placed in the BODY running-heading area</stentry>
+          <stentry> (null)</stentry>
+        </strow>
+        <strow>
+          <stentry>FTR</stentry>
+          <stentry>The file name containing XHTML to be placed in the BODY running-footing area</stentry>
+          <stentry> (null)</stentry>
+        </strow>
+        <strow>
+          <stentry>ARTLBL</stentry>
+          <stentry>Default &quot;output artwork filenames&quot; processing parameter; <q>no</q>and <q>yes</q>are valid values; non-<q>yes</q> is ignored.</stentry>
+          <stentry>
+            <q>no</q>
+          </stentry>
+        </strow>
+        <strow>
+          <stentry>DRAFT </stentry>
+          <stentry>Default &quot;hide draft &amp; cleanup content&quot; processing parameter (<q>no</q>= hide them); <q>no</q> and <q>yes</q> are valid values; non-<q>yes</q> is ignored.</stentry>
+          <stentry>
+            <q>no</q>
+          </stentry>
+        </strow>
+        <strow>
+          <stentry>INDEXSHOW</stentry>
+          <stentry>Default &quot;hide index entries&quot; processing parameter (<q>no</q> = hide them); <q>no</q> and <q>yes</q> are valid values; non-<q>yes</q> is ignored.</stentry>
+          <stentry>
+            <q>no</q>
+          </stentry>
+        </strow>
+        <strow>
+          <stentry>YEAR</stentry>
+          <stentry>The year for the copyright.</stentry>
+          <stentry>
+            <q>2005l</q>
+          </stentry>
+        </strow>
+        <strow>
+          <stentry>OUTEXT</stentry>
+          <stentry>Default &quot;output extension&quot; processing parameter; <q>htm</q> and <q>html</q> are valid values.</stentry>
+          <stentry>
+            <q>html</q>
+          </stentry>
+        </strow>
+        <strow>
+          <stentry>WORKDIR</stentry>
+          <stentry>The working directory, relative to the stylesheet, that contains the document being transformed. Needed as a directory prefix for the @conref and @href <q>document()</q> function calls.</stentry>
+          <stentry>
+            <q>./</q>
+          </stentry>
+        </strow>
+        <strow>
+          <stentry>PATH2PROJ</stentry>
+          <stentry>The path back to the project. Used for c.gif, delta.gif, css to allow user&apos;s to have these files in 1 location.</stentry>
+          <stentry> (null)</stentry>
+        </strow>
+        <strow>
+          <stentry>FILENAME</stentry>
+          <stentry>The file name (file name and extension only - no path) of the document being transformed. Needed to help form debugging messages.<note type="note">This value is not inherent to the XSLT processor; typically, your calling exec will pass the input filename to the processor&apos;s command line as a parameter. Any resulting debugging messages will echo the filename.</note></stentry>
+          <stentry> (null)</stentry>
+        </strow>
+        <strow>
+          <stentry>FILTERFILE</stentry>
+          <stentry>The file name containing filter/flagging/revision information.</stentry>
+          <stentry> (null)</stentry>
+        </strow>
+        <strow>
+          <stentry>DBG</stentry>
+          <stentry>Debug mode - enables XSL debugging xsl-messages. Needed to help form debugging messages. <q>no</q> and <q>yes</q> are valid values; non-<q>yes</q> is ignored.</stentry>
+          <stentry>
+            <q>no</q>
+          </stentry>
+        </strow>
+        <strow>
+          <stentry>DITAEXT</stentry>
+          <stentry>DITAEXT file extension name of dita topic file.</stentry>
+          <stentry> (null)</stentry>
+        </strow>
+      </simpletable>
+      <p>For example, the following sample invocation shows how to turn on draft mode using the Saxon XSLT processor:</p>
+      <pre>c:pkg\dita12\doc&gt;saxon -o abc.htm dita-tweaks.xml ..\xsl\dita2htmlImpl.xsl DRAFT=yes</pre>
+      <p>The effect of this parameter will be to show the content of all <codeph>&lt;draft-comment&gt;</codeph> and <codeph>&lt;required-cleanup&gt;</codeph> elements with highly visible styling for use by reviewers.</p>
+      <note type="note">To invoke a process using parameters, please check the documentation for your XSLT processor. Most current XSLT 1.0 processors support a non-standard command line interface for parameters. </note>
+      <note type="note">Parametric tweaks cannot be applied from internal stylesheet links (that is, the <codeph>&lt;?xml-stylesheet ...?&gt;</codeph> processing instruction) as such associations do not provide a way to pass parameters, even if a browser-specific renderer is capable of using such data. To cause a browser-based view to show something ordinarily affected by a command-line parameter, such as the DRAFT=&quot;yes&quot; effect, embed the alternative value directly in the override stylesheet that is named in the stylesheet processing instruction:<pre>&lt;xsl:param name=&quot;DRAFT&quot; select=&quot;&apos;yes&apos;&quot;/&gt;</pre></note>
+    </body>
+  </topic>
+  <topic id="mrstubbs">
+    <title>Stubs for user-provided override extensions</title>
+    <body>
+      <p>The <filepath>dita2htmlImpl.xsl</filepath> stylesheet provides code stubs that extend the appearance of your HTML result document. If you copy these stubs into your override stylesheet and provide your own code within them, the result content will be pasted into appropriate parts of the overall HTML page.</p>
+      <p>Regions that can be modified by these stubs include header, footer, topic-top blurbs (a common location for mini-contents boxes), self-contained scripts (such as JavaScript used commonly for DHTML support), self-contained styles, <ph>flagging based on property value matches, </ph>panel titles and prefixes for panel titles (to auto-generate explicit bookmarks for your users). See the section of <filepath>dita2htmlImpl.xsl</filepath> called <q>start of override stubs</q> for the examples of mostly-empty stubs that you can modify.</p>
+      <p>For example, copy the following template rule into an override file, such as a copy of <filepath>dita2xhtml.xsl</filepath>, to cause a &quot;mini-table of contents&quot; to be generated at the top of a topic that directly nests child topics:</p>
+      <pre scale="70">
+&lt;!-- override for main stub --&gt;
+&lt;xsl:template name=&quot;gen-user-sidetoc&quot;&gt;
+  &lt;!-- if there are nested topics... --&gt;
+  &lt;xsl:if test=&quot;descendant::*[contains(@class,&apos; topic/topic &apos;)]&quot;&gt;
+    &lt;p&gt;
+      &lt;table width=&quot;150&quot; align=&quot;right&quot; border=&quot;1&quot; frame=&quot;box&quot; rules=&quot;none&quot;&gt;
+        &lt;tr&gt;&lt;td height=&quot;5&quot; bgcolor=&quot;#0033CC&quot; align=&quot;center&quot;&gt;
+            &lt;b&gt;&lt;font color=&quot;#FFFFFF&quot;&gt;Contents:&lt;/font&gt;&lt;/b&gt;&lt;/td&gt;
+        &lt;/tr&gt;
+
+
+
+        &lt;xsl:for-each select=&quot;descendant::*[contains(@class,&apos; topic/topic &apos;)]&quot;&gt;
+          &lt;xsl:variable name=&quot;ttext&quot;&gt;&lt;xsl:value-of select=&quot;*[contains(@class,&apos; topic/title &apos;)]&quot;/&gt;&lt;/xsl:variable&gt;
+          &lt;tr&gt;&lt;td class=&quot;toc&quot;&gt;- &lt;a href=&quot;#{generate-id()}&quot;&gt;&lt;xsl:value-of select=&quot;$ttext&quot;/&gt;&lt;/a&gt;
+            &lt;!--recursive call for subtopics here&quot;/--&gt;
+          &lt;/td&gt;&lt;/tr&gt;
+        &lt;/xsl:for-each&gt;
+      &lt;/table&gt;
+    &lt;/p&gt;
+  &lt;/xsl:if&gt;
+&lt;/xsl:template&gt;
+</pre>
+      <note type="remember"> Do your modifications on copies of stylesheets so that you can fall back on the original!</note>
+      <section>
+        <title>Testing some tweaks</title>
+        <p>This section makes use of several tweak-controllable features. It contains a draft comment, a required cleanup container, a figure whose title can be shifted over or under the figure upon output, and a section title that can be augmented with a graphical <q>information navigation icon</q> or <i>ing</i> (see do-place-ing under <xref href="#behavior" type="topic" format="xml"/>).</p>
+        <note type="note">This document will appear differently depending on which stylesheet you use to view it. If you view or process it with a standard shell (dita2xhtml.xsl or dita2fo_shell.xsl), the special features will not be turned on. But if you process it into HTML (or view it directly in IE6) using the myoverrides.xsl demo stylesheet the special features WILL be enabled, and cause differences in the rendering of the output. </note>
+        <note type="tip">If you code your note type as &quot;tip&quot; and turn on the do-place-ing behavior, as with this note, the output should include a graphical icon alongside the text label.</note>
+        <draft-comment>The following footnote IS unrelated to the current discussion. However, we are exploring both draft-comment and required-cleanup markup here. Draft comments allow authors to share comments between levels of a draft. Required-cleanup sequesters potentially faulty content from output.</draft-comment>
+        <fn callout="^">This is a footnote with a special callout character.</fn>
+        <fig frame="all">
+          <title>This is a <i>wild</i> title</title>
+          <desc>A good <i>figure</i> doesn&apos;t need a thousand words unless it is a technical description, in which case you probably can&apos;t say enough.</desc>
+          <image href="../doc/articles/image/basediag.gif" height="74" width="300"/>
+        </fig>
+      </section>
+    </body>
+  </topic>
+</topic>
+
