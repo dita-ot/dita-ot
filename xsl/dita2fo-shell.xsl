@@ -31,7 +31,10 @@
   <!ENTITY headerstub    "(stub for header content)">
 
 ]>
-<xsl:stylesheet version="1.0" xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:stylesheet version="1.0"
+                xmlns:fo="http://www.w3.org/1999/XSL/Format"
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:fox="http://xml.apache.org/fop/extensions">
   <!-- stylesheet imports -->
   <xsl:import href="xslfo/topic2foImpl.xsl"/>
   <xsl:import href="xslfo/domains2fo.xsl"/>
@@ -67,6 +70,8 @@
   <!-- this template rule defines the overall output organization -->
   <xsl:template name="dita-setup">
     <fo:root xmlns:fo="http://www.w3.org/1999/XSL/Format">
+      <!-- create FOP outline elements for PDF bookmarks -->
+      <xsl:apply-templates mode="outline"/>
       <!-- get the overall master page defs here -->
       <xsl:call-template name="define-page-masters-dita"/>
       <!-- place generated content -->
@@ -79,6 +84,33 @@
       <!--xsl:call-template name="index-chapter"/-->
       <!--xsl:call-template name="back-covers"/-->
     </fo:root>
+  </xsl:template>
+  <!-- create FOP outline elements for PDF bookmarks -->
+  <xsl:template match="*" mode="outline">
+    <xsl:if test="contains(@class,' topic/topic ')">
+      <fox:outline>
+        <xsl:attribute name="internal-destination">
+          <!-- use id attribute of topic as anchor for PDF bookmark -->
+          <xsl:value-of select="@id"/>
+        </xsl:attribute>
+        <fox:label>
+          <!-- if topic contains navtitle, use that as label for PDF bookmark -->
+          <!-- otherwise, use title -->
+          <xsl:choose>
+            <xsl:when test="navtitle">
+              <xsl:apply-templates select="navtitle" mode="text-only"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:apply-templates select="title" mode="text-only"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </fox:label>
+        <xsl:apply-templates mode="outline" />
+      </fox:outline>
+    </xsl:if>
+  </xsl:template>
+  <xsl:template match="*" mode="text-only">
+    <xsl:apply-templates select="text()|*" mode="text-only"/>
   </xsl:template>
   <xsl:template name="define-page-masters-dita">
     <fo:layout-master-set>
@@ -117,6 +149,8 @@
           <!-- set the title -->
           <fo:block font-size="30pt" font-weight="bold" line-height="140%">
             <xsl:value-of select="//*[contains(@class,' bkinfo/bkinfo ')]/*[contains(@class,' topic/title ')]"/>
+            <!-- use the id attribute of the bkinfo element as an anchor for a PDF bookmark to the cover page -->
+            <xsl:apply-templates select="//*[contains(@class,' bkinfo/bkinfo ')]/@id"/>
           </fo:block>
           <!-- set the subtitle -->
           <fo:block font-size="24pt" font-weight="bold" line-height="140%" margin-bottom="1in">

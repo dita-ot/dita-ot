@@ -76,7 +76,8 @@
 <!-- /Lang = default language parameter  -->
 <xsl:param name="Lang" select="'en-us'"/>
 
-
+<!-- DITAEXT file extension name of dita topic file -->
+<xsl:param name="DITAEXT" select="'.xml'"/>
 
 <!-- CONTROL PARAMETERS -->
 <!-- offset -->

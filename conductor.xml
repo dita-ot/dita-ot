@@ -69,18 +69,40 @@
   <target name="check-arg">
     <fail message="please provide filename for dita input">
       <condition>
+        <and>
         <not>
           <isset property="args.input"/>
         </not>
+        <or>
+          <not>
+            <isset property="dita.input"/>
+          </not>
+          <not>
+            <isset property="dita.input.dirname"/>
+          </not>
+        </or>
+        </and>
       </condition>
     </fail>
         
-    <basename property="dita.input" file="${args.input}"/>
+    <basename property="dita.input.args" file="${args.input}"/>
+    <dirname property="dita.input.dirname.args" file="${args.input}"/>
+    <condition property="dita.input" value="${dita.input.args}">
+      <not>
+        <isset property="dita.input"/>
+      </not>
+    </condition>
+    <condition property="dita.input.dirname" value="${dita.input.dirname.args}">
+      <not>
+        <isset property="dita.input.dirname"/>
+      </not>
+    </condition>
+    
     <basename property="dita.input.filename" file="${dita.input}"/>
-    <dirname property="dita.input.dirname" file="${args.input}"/>
-    <basename property="dita.map.filename.root" file="${dita.input}" suffix=".ditamap"/>
-    <basename property="dita.topic.filename.root" file="${dita.input}" suffix="${dita.extname}"/>
-    <dirname property="dita.map.outputdir" file="${output.dir}${file.separator}${dita.input}"/>
+    
+    <basename property="dita.map.filename.root" file="${dita.input.filename}" suffix=".ditamap"/>
+    <basename property="dita.topic.filename.root" file="${dita.input.filename}" suffix="${dita.extname}"/>
+    <dirname property="dita.map.outputdir" file="${output.dir}${file.separator}${dita.input.filename}"/>
     <fail message="please provide extension filename for dita topic file">
       <condition>
         <not>

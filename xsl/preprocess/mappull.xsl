@@ -24,7 +24,7 @@
   <xsl:copy>
 
     <!--copy existing explicit attributes-->
-    <xsl:apply-templates select="@*[not(self::navtitle)]"/>
+    <xsl:apply-templates select="@*"/>
 
     <!--copy inheritable attributes that aren't already explicitly defined-->
     <!--@type|@importance|@linking|@toc|@print|@search|@format|@scope-->

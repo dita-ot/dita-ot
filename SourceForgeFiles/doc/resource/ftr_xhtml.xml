@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<project name="sample_xhtml" default="all" basedir="../../..">
+  
+<import file="${basedir}${file.separator}conductor.xml"/>
+
+<target name="all" depends="sample2xhtml">
+</target>
+	<!-- revise below here -->
+
+<property name="my.input.dir"
+	value="${basedir}${file.separator}SourceForgeFiles${file.separator}doc"/>
+
+<property name="my.resource.dir"
+	value="${my.input.dir}${file.separator}resource"/>
+
+<property name="my.output.dir"
+	value="${basedir}${file.separator}pmdocs${file.separator}doc${file.separator}xhtml"/>
+
+
+<target name="sample2xhtml"
+	description="build DITA Open Toolkit web docs"
+	depends="use-init">
+	<antcall target="dita2xhtml">
+
+    <param name="dita.input.dirname"
+      value="${basedir}"/>
+		<param name="dita.input"
+			value="SourceForgeFiles${file.separator}doc${file.separator}DITA-OTDocs.ditamap"/>
+
+		<param name="output.dir"
+			value="${my.output.dir}"/>
+
+       	        <param name="args.ftr"
+			value="${my.resource.dir}${file.separator}htmlfoot.html"/>
+
+		<param name="args.css"
+			value="dita-ot.css"/>
+
+       		<param name="args.xhtml.toc" value="toc"/>
+
+	</antcall>
+
+	<copy todir="${my.output.dir}">
+		<fileset dir="${my.resource.dir}" includes="index.html"/>
+	</copy>
+
+	<copy todir="${my.output.dir}${file.separator}SourceForgeFiles${file.separator}doc"
+		file="${my.resource.dir}${file.separator}dita-ot.css">
+	</copy>
+  <copy todir="${my.output.dir}${file.separator}doc"
+		file="${my.resource.dir}${file.separator}dita-ot.css">
+	</copy>
+  <copy todir="${my.output.dir}${file.separator}doc${file.separator}articles"
+		file="${my.resource.dir}${file.separator}dita-ot.css">
+	</copy>
+
+	<copy todir="${my.output.dir}${file.separator}SourceForgeFiles${file.separator}doc"
+		file="${dita.resource.dir}${file.separator}commonltr.css">
+	</copy>
+  <copy todir="${my.output.dir}${file.separator}doc"
+		file="${dita.resource.dir}${file.separator}commonltr.css">
+	</copy>
+  <copy todir="${my.output.dir}${file.separator}doc${file.separator}articles"
+		file="${dita.resource.dir}${file.separator}commonltr.css">
+	</copy>
+
+
+</target>
+
+
+</project>

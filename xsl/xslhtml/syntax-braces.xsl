@@ -63,7 +63,7 @@ and if so, produce an associative link. -->
 </xsl:template>
 
 <!-- Where is the template for var with a priority of 50? -->
-<xsl:template match="var" priority="51">
+<xsl:template match="*[contains(@class,' pr-d/var ')]" priority="51">
  <var>
   <xsl:if test="name(parent::*)='groupchoice'"> | </xsl:if>
   <xsl:if test="@importance='optional'"> [</xsl:if>

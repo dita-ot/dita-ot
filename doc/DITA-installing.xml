@@ -28,9 +28,7 @@
       <step>
         <cmd>Use an unzip tool to extract the package into a location of your choice. </cmd>
       </step>
-      <step>
-        <cmd>Set up your environment variable JAVA_HOME to your installation directory for JDK or JRE.</cmd>
-      </step>
+      <step><cmd>Set up your environment variable JAVA_HOME to your installation directory for JDK or JRE. If you&apos;re using Windows, you can use <q>set</q> command under command line to set up environment variable or directly add or modify the environment variable in System Property. If you&apos;re using bash shell under linux, you can use <q>export</q> command to set up environment variable.</cmd> <stepxmp>For example, we can set up JAVA_HOME like this in Windows command line.<pre>c:\pkg\DITA-OT1.0&gt;set JAVA_HOME=C:\ibm\Java142</pre>In linux bash shell, we can set up JAVA_HOME like this.<pre>[dita@localhost dita]$export JAVA_HOME=/usr/local/IBM/Java142</pre></stepxmp></step>
       <step>
         <cmd>Set up your XSLT processor and include the jar files needed into the CLASSPATH. For example, if you are using saxon, include saxon.jar into the CLASSPATH. If you are using xalan, include xalan.jar and xercesImpl.jar into the CLASSPATH.</cmd>
       </step>

@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!DOCTYPE topic PUBLIC "-//IBM//DTD DITA Topic//EN" "../../dtd/topic.dtd">
 <topic id="ditaotgoals">
-  <title>Goal and objectives of the DITA Open Toolkit</title>
+  <title>Goals and objectives of the DITA Open Toolkit</title>
   <shortdesc>The DITA Open Toolkit is an implementation of the OASIS DITA Technical Committee&apos;s specification for DITA DTDs and Schemas. The Toolkit transforms DITA content (maps and topics) into deliverable formats.</shortdesc>
   <body>
     <p>The long term goal of the DITA Open Toolkit is to provide a high quality implementation for production level output of DITA XML content, built in a professionally-managed project environment by vetted contributors, and tested thoroughly for each Release Candidate.</p>

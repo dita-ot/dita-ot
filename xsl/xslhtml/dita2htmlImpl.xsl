@@ -3407,11 +3407,11 @@
 <xsl:variable name="trace">no</xsl:variable> <!--set string to 'yes' to turn on trace -->
 
 <!-- set up keys based on xref's "type" attribute: %info-types;|hd|fig|table|li|fn -->
-<xsl:key name="topic" match="topic" use="@id"/> <!-- uses "title" -->
-<xsl:key name="fig"   match="fig"   use="@id"/> <!-- uses "title" -->
-<xsl:key name="table" match="table" use="@id"/> <!-- uses "title" -->
-<xsl:key name="li"    match="li"    use="@id"/> <!-- uses "?" -->
-<xsl:key name="fn"    match="fn"    use="@id"/> <!-- uses "callout?" -->
+<xsl:key name="topic" match="*[contains(@class,' topic/topic ')]" use="@id"/> <!-- uses "title" -->
+<xsl:key name="fig"   match="*[contains(@class,' topic/fig ')]"   use="@id"/> <!-- uses "title" -->
+<xsl:key name="table" match="*[contains(@class,' topic/table ')]" use="@id"/> <!-- uses "title" -->
+<xsl:key name="li"    match="*[contains(@class,' topic/li ')]"    use="@id"/> <!-- uses "?" -->
+<xsl:key name="fn"    match="*[contains(@class,' topic/fn ')]"    use="@id"/> <!-- uses "callout?" -->
 
 
 <!-- ========== FORMATTER DECLARATIONS AND GLOBALS ========== -->

@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!DOCTYPE map PUBLIC "-//IBM//DTD DITA Map//EN" "../dtd/map.dtd">
 <map title="DITA Readme map" id="mainDITAreadme">
-  <topicref href="DITA-readme.xml" collection-type="family" navtitle="DITA-OT introduction" locktitle="yes">
+  <topicref href="DITA-readme.xml" collection-type="family" navtitle="DITA-OT introduction" locktitle="yes" id="DITA-doc">
     <topicref href="DITA-changes.xml" navtitle="Release history"/>
     <topicref href="DITA-futures.xml" navtitle="Future"/>
     <topicref href="DITA-installing.xml" navtitle="Installation"/>

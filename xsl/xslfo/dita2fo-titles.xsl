@@ -181,7 +181,10 @@
 <!-- ======== NAMED TEMPLATES for labels and titles related to topic structures ======== -->
 
 <xsl:template name="get-title"><!-- get fully-processed title content by whatever mechanism -->
-  <xsl:choose>
+   <!-- insert anchor for PDF bookmark, using id attribute of topic element -->
+   <!-- inserting the anchor here ensures that it is on the same page as the topic title, not the page before -->
+   <xsl:apply-templates select="parent::*/@id"/>
+   <xsl:choose>
    <!-- add keycol here once implemented -->
    <xsl:when test="@spectitle">
      <xsl:value-of select="@spectitle"/>

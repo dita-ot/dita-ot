@@ -2,10 +2,24 @@
 <!DOCTYPE map PUBLIC "-//IBM//DTD DITA Map//EN"
  "../../dtd/map.dtd">
 <map>
-<topicref href="ContributionPolicy.xml" navtitle="Contribution Policy" locktitle="yes"></topicref>
-<topicref href="ContributionForm.xml" navtitle="Contribution Questionnaire" locktitle="yes"></topicref>
-<topicref href="DevelopmentProcess.xml" navtitle="Development Process" locktitle="yes"></topicref>
-<topicref href="BugFixGuidelines-NoCLA.xml" navtitle="Bug Fix Guidelines" locktitle="yes"></topicref>
-<topicref href="DITA-OTProjectGoals.xml"></topicref>
+<topicref href="DITA-OTProjectHome.xml" collection-type="family">
+  <topicref href="DITA-OTProjectGoals.xml" navtitle="Goals" locktitle="yes"/>
+  <topicref href="DevelopmentProcess.xml" navtitle="Development Process" locktitle="yes"/>
+  <topicref href="ContributionPolicy.xml" navtitle="Contribution Policy" locktitle="yes"/>
+</topicref>
+
+<topicref href="ContributionForm.xml" navtitle="Contribution Questionnaire" toc="no"/>
+<topicref href="BugFixGuidelines-NoCLA.xml" navtitle="Bug Fix Guidelines" toc="no"/>
+
+<topichead navtitle="Readme Documents">
+  <topicref conref="../../doc/DITA-readme.ditamap#DITA-doc"></topicref>
+</topichead>
+
+<topichead navtitle="Resources">
+  <topicref href=" http://sourceforge.net/projects/dita-ot/" format="html" navtitle="Download" scope="external"/>
+  <topicref href="http://groups.yahoo.com/group/dita-users/" format="html" navtitle="Yahoo! Group: dita-users" scope="external"/>
+  <topicref href="http://www.oasis-open.org/committees/dita/" format="html" navtitle="OASIS DITA Technical Committee " scope="external"/>
+  <topicref href="http://xml.coverpages.org/dita.html" format="html" navtitle="Cover page: DITA page" scope="external"/>
+</topichead>
 </map>
 

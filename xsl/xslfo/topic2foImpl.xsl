@@ -128,7 +128,6 @@
   <!-- this should be a lower-priority match for all non-toplevel topics in an aggregate -->
   <xsl:template match="*[contains(@class,' topic/topic ')]">
     <fo:block>
-      <xsl:apply-templates select="@id"/>
       <xsl:call-template name="gen-toc-id"/>
       <xsl:apply-templates/>
     </fo:block>

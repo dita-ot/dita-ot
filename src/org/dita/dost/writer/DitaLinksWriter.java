@@ -196,7 +196,9 @@ public class DitaLinksWriter extends AbstractWriter implements ContentHandler,Le
             }
 
         } catch (Exception e) {
-            e.printStackTrace(System.out);
+            if (atts.getValue("class") != null){
+                e.printStackTrace(System.out);
+            }//prevent printing stack trace when meeting <dita> which has no class attribute
         }
     }
 

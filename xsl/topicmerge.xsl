@@ -50,6 +50,11 @@
       <xsl:element name="{$targetName}">
         <xsl:apply-templates select="document(@href)/*/@*" mode="copy-element"/>
         <xsl:attribute name="refclass"><xsl:value-of select="$topicrefClass"/></xsl:attribute>
+        <!-- If the root element of the topic does not contain an id attribute, then generate one.
+             Later, we will use these id attributes as anchors for PDF bookmarks. -->
+        <xsl:if test="not(document(@href)/*/@id)">
+          <xsl:attribute name="id"><xsl:value-of select="generate-id()"/></xsl:attribute>
+        </xsl:if>
         <xsl:apply-templates select="document(@href)/*/*" mode="copy-element">
           <xsl:with-param name="src-file"><xsl:value-of select="@href"/></xsl:with-param>
         </xsl:apply-templates>

@@ -18,14 +18,14 @@
    </fo:block>
  </xsl:template> 
 
- <xsl:template match="title" mode="toc">
+ <xsl:template match="*[contains(@class, ' topic/title ')]" mode="toc">
     <fo:block start-indent="{count(ancestor-or-self::topic) * 10}pt">
         <xsl:number count="sect" format="1. " level="multiple"/>
         <xsl:apply-templates select="text()"/>
     </fo:block>
  </xsl:template>
 
- <xsl:template match="topic" mode="toc">
+ <xsl:template match="*[contains(@class, ' topic/topic ')]" mode="toc">
     <xsl:apply-templates mode="toc" select="*[self::sect or self::title]"/>
  </xsl:template>
 

@@ -1,0 +1,11 @@
+/*
+ | This CSS stylesheet provides additional behaviors for DITA Open Toolkit web page 
+ */
+
+.dita-ot-setup {
+ bgcolor="#e0e0e0"
+}
+
+HTML {font-size: 10pt; font-family: Arial, Helvetical, Helv, sans-serif}
+
+H1 {font-size: 14pt}

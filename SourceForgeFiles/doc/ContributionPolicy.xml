@@ -27,7 +27,7 @@
               </ol></li>
             <li>If it is determined by the Committer that the Content is not the original work of the Contributor, collect the contact information of the copyright holder of the original or underlying work. The copyright holder of the Content or the underlying work may then need to be contacted to collect additional information.</li>
           </ul></li>
-        <li> The Committer(s) shall document all information gathered pursuant to (1) above and fill in Contribution Questionnaire (to be provided by the Committer) and provide the completed Contribution Questionnaire to the Committer.</li>
+        <li>The <draft-comment>was &quot;Committer(s)&quot;</draft-comment>Contributor(s) shall document all information requested in (1) above and fill in Contribution Questionnaire (to be provided by the Committer) and provide the completed Contribution Questionnaire to the Committer.</li>
         <li>The Committer shall also be responsible for running a scan tool to help ensure that the Content does not include any code not identified by the contributor.</li>
         <li> Based on the information collected, the Committer shall use his/her reasonable judgment to determine if the Content can be contributed under terms and conditions that are consistent with the licensing requirements of this IP Policy. </li>
       </ol>
@@ -38,7 +38,7 @@
         <li>Articles and White Papers</li>
         <li>Information or minor Content modifications provided through bug reports, mailing lists and news groups </li>
       </ul>
-      <p>While the record keeping requirements do not apply to the items listed above, Committers, must conduct reasonable due diligence to satisfy themselves that proposed Contributions can be licensed under the terms of the CPL .</p>
+      <p>While the record keeping requirements do not apply to the items listed above, Committers must conduct reasonable due diligence to satisfy themselves that proposed Contributions can be licensed under the terms of the CPL .</p>
     </section>
   </body>
 </topic>

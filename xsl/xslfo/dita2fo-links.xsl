@@ -67,10 +67,53 @@
       <xsl:apply-templates/>
     </fo:inline>
   </xsl:template>
-  <!-- if there is an href, make it look like a link and remove prompt -->
+  <!-- if the xref element contains an href attribute, then create a hyperlink -->
   <xsl:template match="*[contains(@class,' topic/xref ')][not(@href = '')]">
-    <fo:inline color="blue" text-decoration="underline">
-      <xsl:apply-templates/> (<xsl:value-of select="@href"/>) </fo:inline>
+    <fo:inline color="blue">
+      <xsl:choose>
+        <!-- If the format attribute is dita, or is unspecified, then interpret the href as a topic -->
+        <!-- Create an internal hyperlink to the topic -->
+        <xsl:when test="@format=substring-after($DITAEXT,'.') or not(@format)">
+          <fo:basic-link>
+            <!-- Set the destination to the id attribute of the topic referred to by the href -->
+            <xsl:attribute name="internal-destination">
+              <xsl:choose>
+                <!-- If the href contains a # character, then the topic file name is the preceding substring -->
+                <!-- To do: intra-topic xrefs (these do not quote a file name prior to the #) -->
+                <xsl:when test="starts-with(@href,'#')">
+                  <xsl:value-of select="substring-before(substring-after(@href,'#'),'/')"/>
+                </xsl:when>
+                <xsl:when test="contains(@href,'#')">
+                  <xsl:value-of select="document(substring-before(@href,'#'),/)/*/@id"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:value-of select="document(@href,/)/*/@id"/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </xsl:attribute>
+            <xsl:apply-templates/>
+          </fo:basic-link>
+        </xsl:when>
+        <xsl:otherwise>
+          <!-- If the format attribute is html, then interpret the href as an external link -->
+          <!-- (for example, to a website) -->
+          <xsl:choose>
+            <xsl:when test="@format='html'">
+              <fo:basic-link>
+                <xsl:attribute name="external-destination">
+                  <xsl:value-of select="@href"/>
+                </xsl:attribute>
+                <xsl:apply-templates/>
+              </fo:basic-link>
+            </xsl:when>
+            <xsl:otherwise>
+              <!-- xref format not recognized: output xref contents without creating a hyperlink -->
+              <xsl:apply-templates/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:otherwise>
+      </xsl:choose>
+    </fo:inline>
   </xsl:template>
   <!-- =================== end of related links and xrefs ====================== -->
 </xsl:stylesheet>
