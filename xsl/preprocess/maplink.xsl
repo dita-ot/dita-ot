@@ -162,6 +162,7 @@
       </linkpool>
     </maplinks>
   </xsl:if>  
+  <xsl:apply-templates />
 </xsl:template>
 
 <!-- Reduce links of the form "plugin-one/../plugin-two/a.html" to "plugin-two/a.html"
