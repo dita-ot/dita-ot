@@ -72,11 +72,11 @@ public class StringUtils {
         }
 
         String postfix = relativePath;
-        if (relativePath.startsWith("..")) {
-            int sepPos = relativePath.indexOf(File.separatorChar);
+        while (postfix.startsWith("..")) {
+            int sepPos = postfix.indexOf(File.separatorChar);
             int lastPos = prefix.lastIndexOf(File.separatorChar);
-            postfix = relativePath.substring(sepPos == -1 ? 0 : sepPos
-                    + File.separator.length(), relativePath.length());
+            postfix = postfix.substring(sepPos == -1 ? 0 : sepPos
+                    + File.separator.length(), postfix.length());
             if(lastPos == -1){
                 return postfix;
             }
