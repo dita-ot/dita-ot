@@ -1,3 +1,30 @@
+DITA OT release 1.0.1
+Available since Apr. 04, 2005
+
+Release 1.0.1 is a maintenance release to fix defects and adds some minor enhancements in release 1.0. 
+
+[9 Bugs Fixed]
+1. committer: maplink.xsl doesn't generate related links for second level referred topic 
+2. SF Bug 1160964: Can't point above the directory which contains the map file  
+3. SF Bug 1163523: Broken XPath expression in mappull.xsl 
+4. SF Bug 1168974: useless DRAFT param in FO transformation  
+5. SF Bug 1173162: generate null internal link destination in fo transformation -
+6. SF Bug 1173164: Not correctly use document() in dita2fo-links.xsl -
+7. SF Bug 1173663: All base directories are DITA-OT 1.0
+8. SF Patch 1163561: XLST match patterns test for element names  
+9. SF Patch 1174012: Modification to sequence.ditamap
+
+[2 Enhancement  Added]
+1. committer: avoid infinite loop of conref 
+2. SF Patch 1165068: FO hyperlinks and FOP-generated PDF bookmarks  
+
+Note: SourceForge bugs, patches listed here can be found in SourceForge Bugs, Patches tracker.  
+Select query criteria 'Group' as 'v1.0.1' and then click 'Browse' button.
+Bugs tracker:  http://sourceforge.net/tracker/?group_id=132728&atid=725074
+Patches tracker: http://sourceforge.net/tracker/?group_id=132728&atid=725076
+
+====================================================================================
+
 DITA Open Toolkit 1.0 is a major upgrade from its predecessor, the developerWorks version known as "dita132." Because this is a new project with a new name. a new home, and largely new code, and because it is considered production-level code for XHTML output, the project numbering has been initiated at 1.0 for the first built release. The 1.0 version of code is still based on the dita132 DTDs and Schemas.
 
 Major improvements from dita132 include:
