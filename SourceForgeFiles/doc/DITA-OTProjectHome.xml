@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE topic PUBLIC "-//IBM//DTD DITA Topic//EN" "../../dtd/topic.dtd">
+<topic id="dita-otprojecthome">
+  <title>DITA Open Toolkit Project Home</title>
+  <shortdesc>This document describes the DITA Open Toolkit project--what the project is, and how to use the site.</shortdesc>
+  <body>
+    <p>Preliminary page, sourced as a DITA topic, transformed using DITA Open Toolkit into HTML.</p>
+    <section>
+      <title>Links</title>
+      <ul>
+        <li>
+          <xref href="dita-ot.sourceforge.net" format="html">This page</xref>
+        </li>
+        <li>
+          <xref href=" http://sourceforge.net/projects/dita-ot/" format="html">DITA Open Toolkit Project</xref>
+        </li>
+        <li>
+          <xref href="http://groups.yahoo.com/group/dita-users/" format="html">Yahoo User&apos;s Group</xref>
+        </li>
+        <li>
+          <xref href="http://www.oasis-open.org/committees/dita/" format="html">OASIS DITA TC </xref>
+        </li>
+        <li>
+          <xref href="http://xml.coverpages.org/dita.html" format="html">Cover page </xref>
+        </li>
+      </ul>
+    </section>
+    <section>
+      <title>Sourceforge.net</title>
+      <p>
+        <xref href="http://sourceforge.net" format="html">
+          <image href="http://sourceforge.net/sflogo.php?group_id=132728&amp;amp;type=5" alt="SourceForge.net Logo" height="62" width="210"/>
+        </xref>
+      </p>
+    </section>
+  </body>
+</topic>
+

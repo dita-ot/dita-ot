@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE map PUBLIC "-//IBM//DTD DITA Map//EN"
+ "../../dtd/map.dtd">
+<map>
+<topicref href="ContributionPolicy.xml" navtitle="Contribution Policy" locktitle="yes"></topicref>
+<topicref href="ContributionForm.xml" navtitle="Contribution Questionnaire" locktitle="yes"></topicref>
+<topicref href="DevelopmentProcess.xml" navtitle="Development Process" locktitle="yes"></topicref>
+<topicref href="BugFixGuidelines-NoCLA.xml" navtitle="Bug Fix Guidelines" locktitle="yes"></topicref>
+<topicref href="DITA-OTProjectGoals.xml"></topicref>
+</map>
+
