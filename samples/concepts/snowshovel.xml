@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/ditaview_shell.xsl" type="text/xsl"?>
+<!DOCTYPE concept PUBLIC "-//IBM//DTD DITA Concept//EN"
+ "../../dtd/concept.dtd">
+<concept id="snowshovelconcept" xml:lang="en-us">
+<title>Snow shovel</title>
+<conbody><p>Use the snow shovel to clear the drive way and side walk of snow in the 
+winter. A good snow shovel has a straight, wide scoop and a strong handle. To 
+help snow come off the scoop, spray the scoop with cooking spray.</p></conbody>
+<related-links>
+<link href="../tasks/shovellingsnow.xml" format="xml" type="task"><linktext>Shovelling snow</linktext></link>
+</related-links>
+</concept>

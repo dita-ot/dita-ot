@@ -1,0 +1,6 @@
+
+<!ENTITY % topic-type PUBLIC "-//IBM//ELEMENTS DITA Topic//EN" "../../dtd/topic.mod">
+  %topic-type;
+
+<!ENTITY % bkinfo-typemod PUBLIC "-//IBM//ELEMENTS DITA Book Information//EN" "bkinfo.mod">
+  %bkinfo-typemod;

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<project name="sample_xhtml" default="all" basedir="..">
+  
+  <import file="${basedir}${file.separator}conductor.xml"/>
+
+	<target name="all" depends="sample2xhtml">
+	</target>
+	<!-- revise below here -->
+
+	<target name="sample2xhtml" depends="use-init">
+      <antcall target="dita2xhtml">
+		<param name="args.input"
+            value="${basedir}${file.separator}samples${file.separator}hierarchy.ditamap"/>
+		<param name="output.dir"
+            value="${basedir}${file.separator}out${file.separator}samples${file.separator}xhtml"/>
+      </antcall>
+	</target>
+</project>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
+
+<strings xml:lang="sl-si">
+   <!-- Slovenian -->
+   <!-- various labels (not author controlled) -->
+   <str name="Figure">Slika</str>
+   <str name="Table">Tabela</str>
+   <str name="Next topic">Naslednja tema</str>
+   <str name="Previous topic">Prejšnja tema</str>
+   <str name="Parent topic">Nadrejena tema</str>
+   <str name="Required cleanup">Potrebno očiščenje</str>
+   <str name="Draft comment">Komentar osnutka</str>
+   <str name="Option">Možnost</str>
+   <str name="Description">Opis</str>
+   <str name="Optional">Izbirno</str>
+   <str name="Required">Zahtevano</str>
+   <str name="Skip visual syntax diagram">Preskoči vizualni skladenjski diagram</str>
+   <str name="Read syntax diagram">Preberi skladenjski diagram</str>
+   <str name="Start of change">Začetek spremembe</str>
+   <str name="End of change">Konec spremembe</str>
+   <str name="Index">Stvarno Kazalo</str>
+   <str name="Special characters">Posebni znaki</str>
+   <str name="Numerics">Številke</str>
+   <str name="End notes">Končne opombe</str>
+   <str name="Artwork">Sličice</str>
+   <str name="Syntax">Skladnja</str>
+   <str name="Type">Tip</str>
+   <str name="Value">Vrednost</str>
+   <!-- Text that goes before a link to a topic -->
+   <str name="intro-to-topic-link"></str>
+
+   <!-- peril notice labels -->
+   <str name="Note">Opomba</str>
+   <str name="Notes">Opombe</str>
+   <str name="Tip">Nasvet</str>
+   <str name="Fastpath">Bližnjica</str>
+   <str name="Important">Pomembno</str>
+   <str name="Attention">Opozorilo</str>
+   <str name="Caution">POZOR</str>
+   <str name="Danger">NEVARNOST</str>
+   <str name="Remember">Pomnite</str>
+   <str name="Restriction">Omejitev</str>
+
+   <!-- default title text for section level generated sections -->
+   <str name="Contents">Kazalo</str>
+   <str name="Related concepts">S tem povezani pojmi</str>
+   <str name="Related tasks">S tem povezana opravila</str>
+   <str name="Related reference">S tem povezane povezave</str>
+   <str name="Related information">S tem povezane informacije</str>
+
+   <str name="Prerequisite">Predpogoj</str>
+   <str name="Prerequisites">Predpogoji</str>
+   <str name="or">or</str>
+
+   <str name="Copyright">Copyright</str>
+
+   <!-- Symbols -->
+   <str name="OpenQuote">"</str>
+   <str name="CloseQuote">"</str>
+   <str name="ColonSymbol">:</str>
+
+</strings>

@@ -1,0 +1,186 @@
+<?xml version="1.0"?>
+
+<!-- build whole bin and source package for DITA-OT 1.0 -->
+<project name="build_DITA-OT_package" default="build-package-binary" basedir=".">
+  <description>
+    Build source and binary package for DITA-OT 1.0
+  </description>
+    
+  
+  
+  <property name="rootname" value="DITA-OT"/>
+  <property name="version" value="1.0"/>
+
+  <property name="src.dir" location="src/"/>
+  <property name="bin.dir" location="output2/"/>
+  <property name="lib.dir" location="lib/"/>
+  <property name="doc.dir" location="doc/"/>
+  <property name="dtd.dir" location="dtd/"/>
+  <property name="schema.dir" location="schema/"/>
+  <property name="xsl.dir" location="xsl/"/>
+  <property name="demo.dir" location="demo/"/>
+  <property name="sample.dir" location="samples/"/> 
+  <property name="css.dir" location="css/"/>
+  <property name="ant.dir" location="ant/"/>
+  <property name="resource.dir" location="resource/"/>
+  <property name="out.dir" location="out/"/>
+  
+    
+  <property name="classpath.dir" location="dev/lib"/>
+  <property name="package.output.dir" location="build/"/>
+  
+  <property name="dost.jar" location="${lib.dir}/dost1.0.jar" />
+  <property name="ant.jar" location="${classpath.dir}/ant162.jar" />    
+  
+  <property name="binary" value="DITA-OT1.0_bin" />    
+  <property name="source" value="DITA-OT1.0_src" />    
+
+  <property name="win32.zip.suffix" value=".zip" /> 
+  <property name="linux.zip.suffix" value=".tar.gz" />  
+
+  <target name="clean">
+    <delete file="${package.output.dir}/${binary}${win32.zip.suffix}"/>
+    <delete file="${package.output.dir}/${source}${win32.zip.suffix}"/>
+    <delete file="${package.output.dir}/${binary}${linux.zip.suffix}"/>
+    <delete file="${package.output.dir}/${source}${linux.zip.suffix}"/>  
+    <delete file="${dost.jar}"/>
+    <delete dir="${bin.dir}"/>      
+  </target>
+    
+  <target name="init"> 
+    <mkdir dir="${bin.dir}"/>
+  </target>
+    
+  <target name="build-java" depends="clean, init">
+    <javac  srcdir="${src.dir}"
+            destdir="${bin.dir}"
+            classpath="${ant.jar}"
+            debug="on"
+    />
+  </target>
+
+  <target name="package-java" depends="">
+    <jar destfile="${dost.jar}"
+         basedir="${bin.dir}"
+         includes="org/dita/dost/**">            
+    </jar>  
+  </target>
+  
+  <target name="package-source">
+    <delete>
+        <fileset dir="${doc.dir}" includes="*.html"/>
+        <fileset dir="${doc.dir}/articles/" includes="*.html"/>
+      </delete>
+      <copy todir="${doc.dir}">
+        <fileset dir="${out.dir}/doc" includes="*.html"/>
+      </copy>
+      <copy todir="${doc.dir}/articles/">
+        <fileset dir="${out.dir}/doc/articles/" includes="*.html"/>
+      </copy>
+    <zip destfile="${package.output.dir}/${param.out.file}${win32.zip.suffix}">
+                    
+          <zipfileset dir="./" includes="conductor.xml,build.xml,catalog-dita.xml,catalog-dita.txt,catalog-ant.xml,pretargets.xml,ditatargets.xml,CommonPublicLicense-v10.html" prefix="${rootname}${version}"/>
+          <zipfileset dir="./" includes="buildPackage.xml" prefix="${rootname}${version}"/>              
+          
+          <zipfileset dir="${src.dir}" includes="**" prefix="${rootname}${version}/src" />
+          <zipfileset dir="${xsl.dir}" includes="**" prefix="${rootname}${version}/xsl" />
+  
+          <zipfileset dir="${dtd.dir}" includes="**" prefix="${rootname}${version}/dtd" />
+          <zipfileset dir="${schema.dir}" includes="**" prefix="${rootname}${version}/schema" />    
+  
+          <zipfileset dir="${doc.dir}" includes="**" prefix="${rootname}${version}/doc" />      
+          <zipfileset dir="${demo.dir}" includes="**" prefix="${rootname}${version}/demo"/>
+          <zipfileset dir="${sample.dir}" includes="**" prefix="${rootname}${version}/samples"/>
+          <zipfileset dir="${css.dir}" includes="**" prefix="${rootname}${version}/css"/>   
+          <zipfileset dir="${ant.dir}" includes="**" prefix="${rootname}${version}/ant"/> 
+          <zipfileset dir="${resource.dir}" includes="**" prefix="${rootname}${version}/resource"/>
+    </zip>
+    <tar destfile="${package.output.dir}/${param.out.file}${linux.zip.suffix}" compression="gzip">
+          <tarfileset dir="./" includes="conductor.xml,build.xml,catalog-dita.xml,catalog-dita.txt,catalog-ant.xml,pretargets.xml,ditatargets.xml,CommonPublicLicense-v10.html" prefix="${rootname}${version}"/>
+          <tarfileset dir="./" includes="buildPackage.xml" prefix="${rootname}${version}"/>              
+          
+          <tarfileset dir="${src.dir}" includes="**" prefix="${rootname}${version}/src" />
+          <tarfileset dir="${xsl.dir}" includes="**" prefix="${rootname}${version}/xsl" />
+  
+          <tarfileset dir="${dtd.dir}" includes="**" prefix="${rootname}${version}/dtd" />
+          <tarfileset dir="${schema.dir}" includes="**" prefix="${rootname}${version}/schema" />    
+  
+          <tarfileset dir="${doc.dir}" includes="**" prefix="${rootname}${version}/doc" />      
+          <tarfileset dir="${demo.dir}" includes="**" prefix="${rootname}${version}/demo"/>
+          <tarfileset dir="${sample.dir}" includes="**" prefix="${rootname}${version}/samples"/>
+          <tarfileset dir="${css.dir}" includes="**" prefix="${rootname}${version}/css"/>   
+          <tarfileset dir="${ant.dir}" includes="**" prefix="${rootname}${version}/ant"/> 
+          <tarfileset dir="${resource.dir}" includes="**" prefix="${rootname}${version}/resource"/>
+    </tar>
+  </target>   
+  
+  <target name="package-binary">
+      <delete>
+        <fileset dir="${doc.dir}" includes="*.html"/>
+        <fileset dir="${doc.dir}/articles/" includes="*.html"/>
+      </delete>
+      <copy todir="${doc.dir}">
+        <fileset dir="${out.dir}/doc/" includes="*.html"/>
+      </copy>
+      <copy todir="${doc.dir}/articles/">
+        <fileset dir="${out.dir}/doc/articles/" includes="*.html"/>
+      </copy>
+      <zip destfile="${package.output.dir}/${param.out.file}${win32.zip.suffix}">
+          
+        
+          <zipfileset dir="./" includes="conductor.xml,build.xml,files.txt,catalog-dita.xml,catalog-dita.txt,catalog-ant.xml,pretargets.xml,ditatargets.xml,CommonPublicLicense-v10.html" prefix="${rootname}${version}"/>
+          <zipfileset dir="${xsl.dir}" includes="**" prefix="${rootname}${version}/xsl" />  
+          <zipfileset dir="${lib.dir}" includes="*.jar" prefix="${rootname}${version}/lib" />
+  
+          <zipfileset dir="${dtd.dir}" includes="**" prefix="${rootname}${version}/dtd" />
+          <zipfileset dir="${schema.dir}" includes="**" prefix="${rootname}${version}/schema" />    
+  
+          <zipfileset dir="${doc.dir}" includes="**" prefix="${rootname}${version}/doc" />      
+          <zipfileset dir="${demo.dir}" includes="**" prefix="${rootname}${version}/demo"/>
+          <zipfileset dir="${sample.dir}" includes="**" prefix="${rootname}${version}/samples"/>
+          <zipfileset dir="${css.dir}" includes="**" prefix="${rootname}${version}/css"/>
+          <zipfileset dir="${ant.dir}" includes="**" prefix="${rootname}${version}/ant"/>
+          <zipfileset dir="${resource.dir}" includes="**" prefix="${rootname}${version}/resource"/>
+      </zip>
+      <tar destfile="${package.output.dir}/${param.out.file}${linux.zip.suffix}" compression="gzip">
+          <tarfileset dir="./" includes="conductor.xml,build.xml,files.txt,catalog-dita.xml,catalog-dita.txt,catalog-ant.xml,pretargets.xml,ditatargets.xml,CommonPublicLicense-v10.html" prefix="${rootname}${version}"/>
+          <tarfileset dir="${xsl.dir}" includes="**" prefix="${rootname}${version}/xsl" />  
+          <tarfileset dir="${lib.dir}" includes="*.jar" prefix="${rootname}${version}/lib" />
+  
+          <tarfileset dir="${dtd.dir}" includes="**" prefix="${rootname}${version}/dtd" />
+          <tarfileset dir="${schema.dir}" includes="**" prefix="${rootname}${version}/schema" />    
+  
+          <tarfileset dir="${doc.dir}" includes="**" prefix="${rootname}${version}/doc" />      
+          <tarfileset dir="${demo.dir}" includes="**" prefix="${rootname}${version}/demo"/>
+          <tarfileset dir="${sample.dir}" includes="**" prefix="${rootname}${version}/samples"/>
+          <tarfileset dir="${css.dir}" includes="**" prefix="${rootname}${version}/css"/>
+          <tarfileset dir="${ant.dir}" includes="**" prefix="${rootname}${version}/ant"/>
+          <tarfileset dir="${resource.dir}" includes="**" prefix="${rootname}${version}/resource"/>
+      </tar>
+  </target>
+  
+  <target name="build-package-source" depends="package-java">
+      <antcall target="package-source">
+          <param name="param.out.file" value="${source}"/>
+      </antcall>
+  </target>
+      
+  <target name="build-package-binary" depends="build-java, package-java">
+      <antcall target="package-binary">
+          <param name="param.out.file" value="${binary}"/>
+      </antcall>
+  </target>
+  
+  <target name="build-package-binary-with-buildnum" depends="build-java, package-java">
+      <buildnumber/>
+  
+      <tstamp>
+        <format property="build.time" pattern="yyyyMMddhhmm"/>
+      </tstamp>
+  
+      <antcall target="package-binary">
+          <param name="param.out.file" value="${rootname}${version}b${build.number}-bin.${build.time}"/>
+      </antcall>
+      
+  </target>
+</project>

@@ -1,0 +1,50 @@
+
+<!--vocabulary declarations-->
+<!ENTITY % ui-d-dec PUBLIC "-//IBM//ENTITIES DITA User Interface Domain//EN" "../../dtd/ui-domain.ent">
+  %ui-d-dec;
+<!ENTITY % hi-d-dec PUBLIC "-//IBM//ENTITIES DITA Highlight Domain//EN" "../../dtd/highlight-domain.ent">
+  %hi-d-dec;
+<!ENTITY % pr-d-dec PUBLIC "-//IBM//ENTITIES DITA Programming Domain//EN" "../../dtd/programming-domain.ent">
+  %pr-d-dec;
+<!ENTITY % sw-d-dec PUBLIC "-//IBM//ENTITIES DITA Software Domain//EN" "../../dtd/software-domain.ent">
+  %sw-d-dec;
+<!ENTITY % ut-d-dec PUBLIC "-//IBM//ENTITIES DITA Utilities Domain//EN" "../../dtd/utilities-domain.ent">
+  %ut-d-dec;
+
+
+
+<!--vocabulary substitution (one for each extended base element,
+    with the name of the domain(s) in which the extension was declared)-->
+<!ENTITY % pre     "pre     | %pr-d-pre;     | %sw-d-pre;     | %ui-d-pre;">
+<!ENTITY % keyword "keyword | %pr-d-keyword; | %sw-d-keyword; | %ui-d-keyword;">
+<!ENTITY % ph      "ph      | %pr-d-ph;      | %sw-d-ph;      | %hi-d-ph; | %ui-d-ph;">
+<!ENTITY % fig     "fig     | %pr-d-fig;     | %ut-d-fig;">
+<!ENTITY % dl      "dl      | %pr-d-dl;">
+
+
+<!--Redefine the infotype entity to exclude other topic types and disallow nesting-->
+<!ENTITY % elementref-info-types "elementref">
+
+<!--vocabulary attributes (must be declared ahead of the dtds, which puts @domains first in order) -->
+<!ENTITY included-domains "&ui-d-att; &hi-d-att; &pr-d-att; &sw-d-att; &ut-d-att;">
+
+<!--Embed topic to get generic elements -->
+<!ENTITY % topic-type PUBLIC "-//IBM//ELEMENTS DITA Topic//EN" "../../dtd/topic.mod">
+  %topic-type;
+
+<!--Embed elementref to get specific elements -->
+<!ENTITY % elementref-typemod PUBLIC "-//IBM//ELEMENTS DITA Element Reference//EN" "elementref.mod">
+%elementref-typemod;
+
+
+<!--vocabulary definitions-->
+<!ENTITY % ui-d-def PUBLIC "-//IBM//ELEMENTS DITA User Interface Domain//EN" "../../dtd/ui-domain.mod">
+  %ui-d-def;
+<!ENTITY % hi-d-def PUBLIC "-//IBM//ELEMENTS DITA Highlight Domain//EN" "../../dtd/highlight-domain.mod">
+  %hi-d-def;
+<!ENTITY % pr-d-def PUBLIC "-//IBM//ELEMENTS DITA Programming Domain//EN" "../../dtd/programming-domain.mod">
+  %pr-d-def;
+<!ENTITY % sw-d-def PUBLIC "-//IBM//ELEMENTS DITA Software Domain//EN" "../../dtd/software-domain.mod">
+  %sw-d-def;
+<!ENTITY % ut-d-def PUBLIC "-//IBM//ELEMENTS DITA Utilities Domain//EN" "../../dtd/utilities-domain.mod">
+  %ut-d-def;

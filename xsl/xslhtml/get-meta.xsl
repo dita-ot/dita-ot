@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
+
+<xsl:stylesheet version="1.0"
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+
+<!-- Get each value in each <keywords>. Nested indexterms should have unique entries. Other
+     elements (based on keyword) cannot nest. -->
+<xsl:key name="meta-keywords" match="*[ancestor::*[contains(@class,' topic/keywords ')]]" use="text()"/>
+
+<xsl:template name="getMeta">
+
+<!-- Processing note:
+ getMeta is issued from the topic/topic context, therefore it is looking DOWN
+ for most data except for attributes on topic, which will be current context.
+-->
+
+  <!-- = = = = = = = = = = = CONTENT = = = = = = = = = = = -->
+
+  <!-- CONTENT: Type -->
+  <xsl:apply-templates select="." mode="gen-type-metadata"/>
+
+  <!-- CONTENT: Title - title -->
+  <xsl:apply-templates select="*[contains(@class,' topic/title ')] |
+                               self::dita/*[1]/*[contains(@class,' topic/title ')]" mode="gen-metadata"/>
+
+  <!-- CONTENT: Description - shortdesc -->
+  <xsl:apply-templates select="*[contains(@class,' topic/shortdesc ')] |
+                               self::dita/*[1]/*[contains(@class,' topic/shortdesc ')]" mode="gen-metadata"/>
+
+  <!-- CONTENT: Source - prolog/source/@href -->
+  <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/source ')]/@href |
+                               self::dita/*[1]/*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/source ')]/@href" mode="gen-metadata"/>
+
+  <!-- CONTENT: Coverage prolog/metadata/category -->
+  <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/metadata ')]/*[contains(@class,' topic/category ')] |
+                               self::dita/*[1]/*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/metadata ')]/*[contains(@class,' topic/category ')]" mode="gen-metadata"/>
+
+  <!-- CONTENT: Subject - prolog/metadata/keywords -->
+  <xsl:apply-templates select="." mode="gen-keywords-metadata"/>
+
+  <!-- CONTENT: Relation - related-links -->
+  <xsl:apply-templates select="*[contains(@class,' topic/related-links ')]/descendant::*/@href |
+                               self::dita/*/*[contains(@class,' topic/related-links ')]/descendant::*/@href" mode="gen-metadata"/>
+
+  <!-- = = = = = = = = = = = INTELLECTUAL PROPERTY = = = = = = = = = = = -->
+
+  <!-- INTELLECTUAL PROPERTY: Contributor - prolog/author -->
+  <!-- INTELLECTUAL PROPERTY: Creator -->
+  <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/author ')] |
+                               self::dita/*[1]/*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/author ')]" mode="gen-metadata"/>
+
+  <!-- INTELLECTUAL PROPERTY: Publisher - prolog/publisher -->
+  <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/publisher ')] |
+                               self::dita/*[1]/*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/publisher ')]" mode="gen-metadata"/>
+
+  <!-- INTELLECTUAL PROPERTY: Rights - prolog/copyright -->
+  <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/copyright ')] |
+                               self::dita/*[1]/*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/copyright ')]" mode="gen-metadata"/>
+
+  <!-- Usage Rights - prolog/permissions -->
+  <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/permissions ')] |
+                               self::dita/*[1]/*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/permissions ')]" mode="gen-metadata"/>
+
+  <!-- = = = = = = = = = = = INSTANTIATION = = = = = = = = = = = -->
+
+  <!-- INSTANTIATION: Date - prolog/critdates/created -->
+  <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/critdates ')]/*[contains(@class,' topic/created ')] |
+                               self::dita/*[1]/*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/critdates ')]/*[contains(@class,' topic/created ')]" mode="gen-metadata"/>
+
+  <!-- prolog/critdates/revised/@modified -->
+  <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/critdates ')]/*[contains(@class,' topic/revised ')]/@modified |
+                               self::dita/*[1]/*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/critdates ')]/*[contains(@class,' topic/revised ')]/@modified" mode="gen-metadata"/>
+
+  <!-- prolog/critdates/revised/@golive -->
+  <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/critdates ')]/*[contains(@class,' topic/revised ')]/@golive |
+                               self::dita/*[1]/*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/critdates ')]/*[contains(@class,' topic/revised ')]/@golive" mode="gen-metadata"/>
+
+  <!-- prolog/critdates/revised/@expiry -->
+  <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/critdates ')]/*[contains(@class,' topic/revised ')]/@expiry |
+                               self::dita/*[1]/*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/critdates ')]/*[contains(@class,' topic/revised ')]/@expiry" mode="gen-metadata"/>
+
+  <!-- prolog/metadata/othermeta -->
+  <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/metadata ')]/*[contains(@class,' topic/othermeta ')] |
+                               self::dita/*[1]/*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/metadata ')]/*[contains(@class,' topic/othermeta ')]" mode="gen-metadata"/>
+
+  <!-- INSTANTIATION: Format -->
+  <xsl:apply-templates select="." mode="gen-format-metadata"/>
+
+  <!-- INSTANTIATION: Identifier --> <!-- id is an attribute on Topic -->
+  <xsl:apply-templates select="@id | self::dita/*[1]/@id" mode="gen-metadata"/>
+
+  <!-- INSTANTIATION: Language -->
+  <xsl:apply-templates select="@xml:lang | self::dita/*[1]/@xml:lang" mode="gen-metadata"/>
+
+</xsl:template>
+
+
+<!-- CONTENT: Type -->
+<xsl:template match="dita" mode="gen-type-metadata">
+  <xsl:apply-templates select="*[1]" mode="gen-type-metadata"/>
+</xsl:template>
+<xsl:template match="*" mode="gen-type-metadata">
+  <meta name="DC.Type" content="{name(.)}"/>
+  <xsl:value-of select="$newline"/>
+</xsl:template>
+
+<!-- CONTENT: Title - title -->
+<xsl:template match="*[contains(@class,' topic/title ')]" mode="gen-metadata">
+  <xsl:variable name="titlemeta">
+    <xsl:apply-templates select="*|text()" mode="text-only"/>
+  </xsl:variable>
+  <meta name="DC.Title">
+    <xsl:attribute name="content"><xsl:value-of select="normalize-space($titlemeta)"/></xsl:attribute>
+  </meta>
+  <xsl:value-of select="$newline"/>
+</xsl:template>
+
+<!-- CONTENT: Description - shortdesc -->
+<xsl:template match="*[contains(@class,' topic/shortdesc ')]" mode="gen-metadata">
+  <xsl:variable name="shortmeta">
+    <xsl:apply-templates select="*|text()" mode="text-only"/>
+  </xsl:variable>
+  <meta name="abstract">
+    <xsl:attribute name="content"><xsl:value-of select="normalize-space($shortmeta)"/></xsl:attribute>
+  </meta>
+  <xsl:value-of select="$newline"/>
+  <meta name="description">
+    <xsl:attribute name="content"><xsl:value-of select="normalize-space($shortmeta)"/></xsl:attribute>
+  </meta>
+  <xsl:value-of select="$newline"/>
+</xsl:template>
+
+<!-- CONTENT: Source - prolog/source/@href -->
+<xsl:template match="*[contains(@class,' topic/source ')]/@href" mode="gen-metadata">
+  <meta name="DC.Source" content="{normalize-space(.)}"/>
+  <xsl:value-of select="$newline"/>
+</xsl:template>
+
+<!-- CONTENT: Coverage prolog/metadata/category -->
+<xsl:template match="*[contains(@class,' topic/metadata ')]/*[contains(@class,' topic/category ')]" mode="gen-metadata">
+  <meta name="DC.Coverage" content="{normalize-space(.)}"/>
+  <xsl:value-of select="$newline"/>
+</xsl:template>
+
+<!-- CONTENT: Subject - prolog/metadata/keywords -->
+<xsl:template match="*" mode="gen-keywords-metadata">
+  <xsl:variable name="keywords-content">
+    <!-- for each item inside keywords (including nested index terms) -->
+    <xsl:for-each select="descendant::*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/metadata ')]/*[contains(@class,' topic/keywords ')]/descendant-or-self::*">
+      <!-- If this is the first term or keyword with this value -->
+      <xsl:if test="generate-id(key('meta-keywords',text())[1])=generate-id(.)">
+        <xsl:if test="position()>2"><xsl:text>, </xsl:text></xsl:if>
+        <xsl:value-of select="normalize-space(text())"/>
+      </xsl:if>
+    </xsl:for-each>
+  </xsl:variable>
+
+  <xsl:if test="string-length($keywords-content)>0">
+    <meta name="DC.subject" content="{$keywords-content}"/>
+    <xsl:value-of select="$newline"/>
+    <meta name="keywords" content="{$keywords-content}"/>
+    <xsl:value-of select="$newline"/>
+  </xsl:if>
+</xsl:template>
+
+<!-- CONTENT: Relation - related-links -->
+<xsl:template match="*[contains(@class,' topic/link ')]/@href" mode="gen-metadata">
+ <xsl:variable name="linkmeta">
+  <xsl:value-of select="normalize-space(.)"/>
+ </xsl:variable>
+ <xsl:choose>
+  <xsl:when test="substring($linkmeta,1,1)='#'" />  <!-- ignore internal file links -->
+  <xsl:otherwise>
+    <xsl:variable name="linkmeta_ext">
+     <xsl:choose>
+      <xsl:when test="contains($linkmeta,$DITAEXT)">
+       <xsl:value-of select="substring-before($linkmeta,$DITAEXT)"/>.<xsl:value-of select="$OUTEXT"/><xsl:value-of select="substring-after($linkmeta,$DITAEXT)"/>
+      </xsl:when>
+      <xsl:otherwise>
+       <xsl:value-of select="$linkmeta"/>
+      </xsl:otherwise>
+     </xsl:choose>
+    </xsl:variable>
+    <meta name="DC.Relation" scheme="URI">
+      <xsl:attribute name="content"><xsl:value-of select="$linkmeta_ext"/></xsl:attribute>
+    </meta>
+    <xsl:value-of select="$newline"/>
+  </xsl:otherwise>
+ </xsl:choose>
+</xsl:template>
+
+<!-- Do not let any other @href's inside related-links generate metadata -->
+<xsl:template match="*/@href" mode="gen-metadata" priority="0"/>
+
+<!-- INTELLECTUAL PROPERTY: Contributor - prolog/author -->
+<!-- INTELLECTUAL PROPERTY: Creator -->
+<!-- Default is type='creator' -->
+<xsl:template match="*[contains(@class,' topic/author ')]" mode="gen-metadata">
+  <xsl:choose>
+    <xsl:when test="@type= 'contributor'">
+      <meta name="DC.Contributor" content="{normalize-space(.)}"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <meta name="DC.Creator" content="{normalize-space(.)}"/>
+    </xsl:otherwise>
+  </xsl:choose>
+  <xsl:value-of select="$newline"/>
+</xsl:template>
+
+<!-- INTELLECTUAL PROPERTY: Publisher - prolog/publisher -->
+<xsl:template match="*[contains(@class,' topic/publisher ')]" mode="gen-metadata">
+  <meta name="DC.Publisher" content="{normalize-space(.)}"/>
+  <xsl:value-of select="$newline"/>
+</xsl:template>
+
+<!-- INTELLECTUAL PROPERTY: Rights - prolog/copyright -->
+<xsl:template match="*[contains(@class,' topic/copyright ')]" mode="gen-metadata">
+  <meta name="copyright">
+    <xsl:attribute name="content">
+     <xsl:choose>
+       <!-- ./copyrholder/text() -->
+       <xsl:when test="*[contains(@class,' topic/copyrholder ')]/text()">
+         <xsl:value-of select="normalize-space(*[contains(@class,' topic/copyrholder ')])"/>
+       </xsl:when>
+       <xsl:otherwise>
+         <xsl:text>(C) </xsl:text>
+         <xsl:call-template name="getString">
+          <xsl:with-param name="stringName" select="'Copyright'"/>
+         </xsl:call-template>
+       </xsl:otherwise>
+     </xsl:choose>
+     <!-- copyryear -->
+     <xsl:for-each select="*[contains(@class,' topic/copyryear ')]">
+      <xsl:text> </xsl:text><xsl:value-of select="@year"/>
+     </xsl:for-each>
+    </xsl:attribute>
+    <xsl:choose>
+      <xsl:when test="@type = 'secondary'">
+        <xsl:attribute name="type">secondary</xsl:attribute>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:attribute name="type">primary</xsl:attribute>
+      </xsl:otherwise>
+    </xsl:choose>
+  </meta>
+  <xsl:value-of select="$newline"/>
+  <meta name="DC.Rights.Owner">
+    <xsl:attribute name="content">
+         <xsl:choose>
+       <xsl:when test="*[contains(@class,' topic/copyrholder ')]/text()">
+         <xsl:value-of select="normalize-space(*[contains(@class,' topic/copyrholder ')])"/>
+       </xsl:when>
+       <xsl:otherwise>
+         <xsl:text>(C) </xsl:text>
+         <xsl:call-template name="getString">
+          <xsl:with-param name="stringName" select="'Copyright'"/>
+         </xsl:call-template>
+       </xsl:otherwise>
+     </xsl:choose>
+     <xsl:for-each select="*[contains(@class,' topic/copyryear ')]">
+      <xsl:text> </xsl:text><xsl:value-of select="@year"/>
+     </xsl:for-each>
+    </xsl:attribute>
+    <xsl:choose>
+      <xsl:when test="@type = 'secondary'">
+        <xsl:attribute name="type">secondary</xsl:attribute>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:attribute name="type">primary</xsl:attribute>
+      </xsl:otherwise>
+    </xsl:choose>
+  </meta>
+  <xsl:value-of select="$newline"/>
+</xsl:template>
+
+<!-- Usage Rights - prolog/permissions -->
+<xsl:template match="*[contains(@class,' topic/permissions ')]" mode="gen-metadata">
+  <meta name="DC.Rights.Usage" content="{@view}"/>
+  <xsl:value-of select="$newline"/>
+</xsl:template>
+
+<!-- INSTANTIATION: Date - prolog/critdates/created -->
+<xsl:template match="*[contains(@class,' topic/critdates ')]/*[contains(@class,' topic/created ')]" mode="gen-metadata">
+  <meta name="DC.Date.Created" content="{@date}"/>
+  <xsl:value-of select="$newline"/>
+</xsl:template>
+
+<!-- prolog/critdates/revised/@modified -->
+<xsl:template match="*[contains(@class,' topic/critdates ')]/*[contains(@class,' topic/revised ')]/@modified" mode="gen-metadata">
+  <meta name="DC.Date.Modified" content="{.}"/>
+  <xsl:value-of select="$newline"/>
+</xsl:template>
+
+<!-- prolog/critdates/revised/@golive -->
+<xsl:template match="*[contains(@class,' topic/critdates ')]/*[contains(@class,' topic/revised ')]/@golive" mode="gen-metadata">
+  <meta name="DC.Date.Issued" content="{.}"/>
+  <xsl:value-of select="$newline"/>
+  <meta name="DC.Date.Available" content="{.}"/>
+  <xsl:value-of select="$newline"/>
+</xsl:template>
+
+<!-- prolog/critdates/revised/@expiry -->
+<xsl:template match="*[contains(@class,' topic/critdates ')]/*[contains(@class,' topic/revised ')]/@expiry" mode="gen-metadata">
+  <meta name="DC.Date.Expiry" content="{.}"/>
+  <xsl:value-of select="$newline"/>
+</xsl:template>
+
+<!-- prolog/metadata/othermeta -->
+<xsl:template match="*[contains(@class,' topic/othermeta ')]" mode="gen-metadata">
+  <meta name="{@name}" content="{@content}"/>
+  <xsl:value-of select="$newline"/>
+</xsl:template>
+
+<!-- INSTANTIATION: Format -->
+<!-- this value is based on output format used for DC indexing, not source.
+     Put in this odd template for easy overriding, if creating another output format. -->
+<xsl:template match="*" mode="gen-format-metadata">
+  <meta name="DC.Format" content="XHTML"/>
+  <xsl:value-of select="$newline"/>
+</xsl:template>
+
+<!-- INSTANTIATION: Identifier --> <!-- id is an attribute on Topic -->
+<xsl:template match="@id" mode="gen-metadata">
+  <meta name="DC.Identifier" content="{.}"/>
+  <xsl:value-of select="$newline"/>
+</xsl:template>
+
+<!-- INSTANTIATION: Language -->
+<!-- ideally, take the first token of the language attribute value -->
+<xsl:template match="@xml:lang" mode="gen-metadata">
+  <meta name="DC.Language" content="{.}"/>
+  <xsl:value-of select="$newline"/>
+</xsl:template>
+
+</xsl:stylesheet>

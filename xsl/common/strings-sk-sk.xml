@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
+
+<strings xml:lang="sk-sk">
+   <!-- Slovak -->
+   <!-- various labels (not author controlled) -->
+   <str name="Figure">Obrázok</str>
+   <str name="Table">Tabuľka</str>
+   <str name="Next topic">Nasledujúca téma</str>
+   <str name="Previous topic">Predchádzajúca téma</str>
+   <str name="Parent topic">Nadradená téma</str>
+   <str name="Required cleanup">Požadované čistenie</str>
+   <str name="Draft comment">Poznámka v koncepte</str>
+   <str name="Option">Voľba</str>
+   <str name="Description">Opis</str>
+   <str name="Optional">Voliteľný</str>
+   <str name="Required">Požadovaný</str>
+   <str name="Skip visual syntax diagram">Preskočiť vizuálny diagram syntaxe</str>
+   <str name="Read syntax diagram">Čítať diagram syntaxe</str>
+   <str name="Start of change">Začiatok zmeny</str>
+   <str name="End of change">Koniec zmeny</str>
+   <str name="Index">Index</str>
+   <str name="Special characters">Špeciálne znaky</str>
+   <str name="Numerics">Numerický</str>
+   <str name="End notes">Záverečné poznámky</str>
+   <str name="Artwork">Obrázok</str>
+   <str name="Syntax">Syntax</str>
+   <str name="Type">Typ</str>
+   <str name="Value">Hodnota</str>
+   <!-- Text that goes before a link to a topic -->
+   <str name="intro-to-topic-link"></str>
+
+   <!-- peril notice labels -->
+   <str name="Note">Poznámka</str>
+   <str name="Notes">Poznámky</str>
+   <str name="Tip">Tip</str>
+   <str name="Fastpath">Rýchla cesta</str>
+   <str name="Important">Dôležité</str>
+   <str name="Attention">Varovanie</str>
+   <str name="Caution">POZOR</str>
+   <str name="Danger">NEBEZPEČENSTVO</str>
+   <str name="Remember">Zapamätajte si</str>
+   <str name="Restriction">Obmedzenie</str>
+
+   <!-- default title text for section level generated sections -->
+   <str name="Contents">Obsah</str>
+   <str name="Related concepts">Súvisiace koncepty</str>
+   <str name="Related tasks">Súvisiace úlohy</str>
+   <str name="Related reference">Súvisiaci odkaz</str>
+   <str name="Related information">Súvisiace informácie</str>
+
+   <str name="Prerequisite">Požiadavka</str>
+   <str name="Prerequisites">Požiadavky</str>
+   <str name="or">or</str>
+
+   <str name="Copyright">Copyright</str>
+
+   <!-- Symbols -->
+   <str name="OpenQuote">"</str>
+   <str name="CloseQuote">"</str>
+   <str name="ColonSymbol">:</str>
+
+</strings>

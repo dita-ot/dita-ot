@@ -1,0 +1,328 @@
+<?xml version="1.0"?>
+<!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
+
+<!-- 
+     Conversion from DITA map or maplist to HTML Help contents file.
+     Input = one DITA map file, or a maplist pointing to multiple maps
+     Output = one HHC contents file for use with the HTML Help compiler.
+     
+     Options:
+        /OUTEXT  = XHTML output extension (default is 'html')
+        /WORKDIR = The working directory that contains the document being transformed.
+                   Needed as a directory prefix for the @href "document()" function calls. 
+                   Default is './'
+
+-->
+
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                version="1.0">
+
+<!-- Include error message template -->
+<xsl:include href="common/output-message.xsl"/>
+
+<!-- NOTE NOTE NOTE NOTE: This will produce the <?xml .... ?> processing instruction
+     at the top of the file. THIS MUST BE REMOVED for the compiler to work. However,
+     it is left in here to ensure that the output uses utf-8 codepoints instead of
+     the &#1234; style numbers you get with method="html".
+ -->
+<xsl:output method="xml"/>
+
+<!-- Set the prefix for error message numbers -->
+<xsl:variable name="msgprefix">IDXS</xsl:variable>
+
+<xsl:variable name="newline"><xsl:text>
+</xsl:text></xsl:variable>
+
+<!-- *************************** Command line parameters *********************** -->
+<xsl:param name="FILEREF" select="'file://'"/>
+<xsl:param name="OUTEXT" select="'html'"/><!-- "htm" and "html" are valid values -->
+<xsl:param name="WORKDIR" select="'./'"/>
+<xsl:param name="DITAEXT" select="'.xml'"/>
+
+<!-- *********************************************************************************
+     Setup the HTML wrapper for the table of contents
+     ********************************************************************************* -->
+<xsl:template match="/">
+  <xsl:value-of select="$newline"/>
+  <html>
+    <xsl:value-of select="$newline"/>
+    <head>
+      <xsl:value-of select="$newline"/>
+      <xsl:comment> Sitemap 1.0 </xsl:comment>
+      <xsl:value-of select="$newline"/>
+    </head>
+    <xsl:value-of select="$newline"/>
+    <body>
+      <xsl:apply-templates/>
+      <xsl:value-of select="$newline"/>
+    </body>
+    <xsl:value-of select="$newline"/>
+  </html>
+</xsl:template>
+
+<!-- *********************************************************************************
+     If processing only a single map, setup the HTML wrapper and output the contents.
+     Otherwise, just process the contents.
+     ********************************************************************************* -->
+<xsl:template match="/*[contains(@class, ' map/map ')]">
+  <xsl:param name="pathFromMaplist"/>
+  <xsl:if test="*[contains(@class, ' map/topicref ')][not(@toc='no')]">
+    <xsl:value-of select="$newline"/>
+    <UL>
+      <xsl:apply-templates select="*[contains(@class, ' map/topicref ')][not(@toc='no')]">
+        <xsl:with-param name="pathFromMaplist" select="$pathFromMaplist"/>
+      </xsl:apply-templates>
+    </UL>
+  </xsl:if>
+</xsl:template>
+
+<!-- *********************************************************************************
+     Output each topic as an <OBJECT> in an <LI>. Each object takes 2 parameters:
+     - A name must be given. If it is specified on <topicref>, use that, otherwise try
+       to open the file and retrieve the title. First look for a navigation title,
+       followed by the main topic title. Last, try to use <linktext> specified in the map.
+       Failing that, use *** and issue a message.
+     - An HREF is optional. If none is specified, this will generate a wrapper (which
+       shows up as a book instead of a page in the HTML Help viewer). The HREF is only
+       valid for inclusion in the HHC if it is not external, and if it points to a DITA
+       or HTML file.
+     
+     If this topicref has any child topicref's that will be part of the navigation,
+     output a <UL> around them and process the contents.
+     
+     Move the real work to the named template, to easily check @format for
+     files that cannot be included.
+     ********************************************************************************* -->
+<xsl:template match="*[contains(@class, ' map/topicref ')]">
+  <xsl:param name="pathFromMaplist"/>
+  <xsl:choose>
+    <xsl:when test="@toc='no'"/>
+    <!-- If this this a container (no href, no title), just process children -->
+    <xsl:when test="not(@href) and not(@navtitle) and 
+                    not(*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/linktext ')])">
+      <xsl:apply-templates select="*[contains(@class, ' map/topicref ')][not(contains(@toc,'no'))]">
+        <xsl:with-param name="pathFromMaplist" select="$pathFromMaplist"/>
+      </xsl:apply-templates>
+    </xsl:when>
+    <!-- If this this a container (no href, with title), output a TOC node with
+         the title, and process children -->
+    <xsl:when test="not(@href)">
+      <xsl:call-template name="output-toc-entry">
+        <xsl:with-param name="pathFromMaplist" select="$pathFromMaplist"/>
+      </xsl:call-template>
+    </xsl:when>
+    <xsl:when test="not(@format)">
+      <xsl:call-template name="output-toc-entry">
+        <xsl:with-param name="pathFromMaplist" select="$pathFromMaplist"/>
+      </xsl:call-template>
+    </xsl:when>
+    <xsl:when test="@format=substring-after($DITAEXT,'.')">
+      <xsl:call-template name="output-toc-entry">
+        <xsl:with-param name="pathFromMaplist" select="$pathFromMaplist"/>
+      </xsl:call-template>
+    </xsl:when>
+    <xsl:when test="(contains(@format,'htm') or contains(@format,'HTM')) and (@scope='external' or @scope='peer')">
+      <!-- The html file is not available, so of course it cannot be included -->
+      <xsl:call-template name="output-toc-entry">
+        <xsl:with-param name="pathFromMaplist" select="$pathFromMaplist"/>
+      </xsl:call-template>
+    </xsl:when>
+    <xsl:when test="contains(@format,'htm') or contains(@format,'HTM')">
+      <!-- Including a local HTML file: they must recompile to include it -->
+      <xsl:call-template name="output-message">
+        <xsl:with-param name="msg">In order to include <xsl:value-of select="@href"/> in your help file, you will need
+to recompile the CHM file locally. The automatically compiled CHM file will only
+contain formatted DITA files, not files that are already in HTML.</xsl:with-param>
+        <xsl:with-param name="msgnum">039</xsl:with-param>
+        <xsl:with-param name="msgsev">I</xsl:with-param>
+      </xsl:call-template>
+      <xsl:call-template name="output-toc-entry">
+        <xsl:with-param name="pathFromMaplist" select="$pathFromMaplist"/>
+      </xsl:call-template>
+    </xsl:when>
+    <xsl:otherwise>
+      <!-- @format is not DITA and not HTML, so the target will be ignored for HTML Help -->
+      <xsl:call-template name="output-message">
+        <xsl:with-param name="msg">Only DITA topics, HTML files, and images may be included in
+your compiled CHM file. The reference to "<xsl:value-of select="@href"/>" will be ignored.
+To remove this message, you can set the toc="no" attribute on your topicref.</xsl:with-param>
+        <xsl:with-param name="msgnum">040</xsl:with-param>
+        <xsl:with-param name="msgsev">I</xsl:with-param>
+      </xsl:call-template>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+    
+<xsl:template match="processing-instruction('workdir')" mode="get-work-dir">
+  <xsl:value-of select="."/><xsl:text>/</xsl:text>
+</xsl:template>    
+    
+<xsl:template name="output-toc-entry">
+  <xsl:param name="pathFromMaplist"/>
+  <xsl:variable name="WORKDIR">
+    <xsl:value-of select="$FILEREF"/>
+    <xsl:apply-templates select="/processing-instruction()" mode="get-work-dir"/>
+  </xsl:variable>
+  <xsl:value-of select="$newline"/>
+  <LI> <OBJECT type="text/sitemap">
+        <xsl:element name="param">
+          <xsl:attribute name="name">Name</xsl:attribute>
+          <xsl:attribute name="value">
+          <xsl:choose>
+           
+           <!-- If navtitle is specified, use it -->
+           <xsl:when test="@navtitle"><xsl:value-of select="@navtitle"/></xsl:when>
+
+           <!-- If this references a DITA file (has @href, not "local" or "external"),
+                try to open the file and get the title -->
+           <xsl:when test="@href and 
+                           not ((ancestor-or-self::*/@scope)[last()]='external') and
+                           not ((ancestor-or-self::*/@scope)[last()]='peer') and
+                           not ((ancestor-or-self::*/@type)[last()]='external') and
+                           not ((ancestor-or-self::*/@type)[last()]='local')">
+             <!-- Need to worry about targeting a nested topic? Not for now. -->
+             <!--<xsl:variable name="FileWithPath"><xsl:value-of select="$WORKDIR"/><xsl:choose>-->
+               <xsl:variable name="FileWithPath"><xsl:choose>
+               <xsl:when test="@copy-to"><xsl:value-of select="$WORKDIR"/><xsl:value-of select="@copy-to"/></xsl:when>
+               <xsl:when test="contains(@href,'#')"><xsl:value-of select="$WORKDIR"/><xsl:value-of select="substring-before(@href,'#')"/></xsl:when>
+               <xsl:otherwise><xsl:value-of select="$WORKDIR"/><xsl:value-of select="@href"/></xsl:otherwise></xsl:choose></xsl:variable>
+             <xsl:variable name="TargetFile" select="document($FileWithPath,/)"/>
+             
+             <xsl:choose>
+               <xsl:when test="not($TargetFile)">   <!-- DITA file does not exist -->
+                 <xsl:choose>
+                   <xsl:when test="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/linktext ')]">  <!-- attempt to recover by using linktext -->
+                     <xsl:value-of select="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/linktext ')]"/>
+                   </xsl:when>
+                   <xsl:otherwise>
+                     <xsl:call-template name="output-message">
+                       <xsl:with-param name="msg">File <xsl:value-of select="@href"/> does not exist.</xsl:with-param>
+                       <xsl:with-param name="msgnum">004</xsl:with-param>
+                       <xsl:with-param name="msgsev">W</xsl:with-param>
+                     </xsl:call-template>
+                   </xsl:otherwise>
+                 </xsl:choose>
+               </xsl:when>
+               <!-- First choice for navtitle: topic/titlealts/navtitle -->
+               <xsl:when test="$TargetFile/*[contains(@class,' topic/topic ')]/*[contains(@class,' topic/titlealts ')]/*[contains(@class,' topic/navtitle ')]">
+                 <xsl:value-of select="$TargetFile/*[contains(@class,' topic/topic ')]/*[contains(@class,' topic/titlealts ')]/*[contains(@class,' topic/navtitle ')]"/>
+               </xsl:when>
+               <!-- Second choice for navtitle: topic/title -->
+               <xsl:when test="$TargetFile/*[contains(@class,' topic/topic ')]/*[contains(@class,' topic/title ')]">
+                 <xsl:value-of select="$TargetFile/*[contains(@class,' topic/topic ')]/*[contains(@class,' topic/title ')]"/>
+               </xsl:when>
+               <!-- This might be a combo article; modify the same queries: dita/topic/titlealts/navtitle -->
+               <xsl:when test="$TargetFile/dita/*[contains(@class,' topic/topic ')]/*[contains(@class,' topic/titlealts ')]/*[contains(@class,' topic/navtitle ')]">
+                 <xsl:value-of select="$TargetFile/dita/*[contains(@class,' topic/topic ')]/*[contains(@class,' topic/titlealts ')]/*[contains(@class,' topic/navtitle ')]"/>
+               </xsl:when>
+               <!-- Second choice: dita/topic/title -->
+               <xsl:when test="$TargetFile/dita/*[contains(@class,' topic/topic ')]/*[contains(@class,' topic/title ')]">
+                 <xsl:value-of select="$TargetFile/dita/*[contains(@class,' topic/topic ')]/*[contains(@class,' topic/title ')]"/>
+               </xsl:when>
+               <!-- Last choice: use the linktext specified within the topicref -->
+               <xsl:when test="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/linktext ')]">
+                 <xsl:value-of select="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/linktext ')]"/>
+               </xsl:when>
+               <xsl:otherwise>
+                 <xsl:call-template name="output-message">
+                   <xsl:with-param name="msg">Could not retrieve a title from <xsl:value-of select="$TargetFile"/>. Using '***'.</xsl:with-param>
+                   <xsl:with-param name="msgnum">005</xsl:with-param>
+                   <xsl:with-param name="msgsev">W</xsl:with-param>
+                 </xsl:call-template>
+                 <xsl:text>***</xsl:text>
+               </xsl:otherwise>
+             </xsl:choose>
+           </xsl:when>
+
+           <!-- If there is no title and none can be retrieved, check for <linktext> -->
+           <xsl:when test="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/linktext ')]">
+             <xsl:value-of select="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/linktext ')]"/>
+           </xsl:when>
+
+           <!-- No local title, and not targeting a DITA file. Could be just a container setting
+                metadata, or a file reference with no title. Issue message for the second case. -->
+           <xsl:otherwise>
+             <xsl:if test="@href">
+                 <xsl:call-template name="output-message">
+                   <xsl:with-param name="msg">Could not retrieve a title from <xsl:value-of select="@href"/>. Using the HREF value.</xsl:with-param>
+                   <xsl:with-param name="msgnum">005</xsl:with-param>
+                   <xsl:with-param name="msgsev">W</xsl:with-param>
+                 </xsl:call-template>
+                 <xsl:value-of select="@href"/>
+             </xsl:if>
+           </xsl:otherwise>
+           </xsl:choose>
+          </xsl:attribute>       <!-- End of @value (the title) -->
+        </xsl:element>           <!-- End of <param> element -->
+
+        <!-- If there is a reference to a DITA or HTML file, and it is not external: -->
+        <!-- Update for 3.8: allow non-dita, external values in navigation. Removed the
+             following test, which came after @href:
+             and not (((ancestor-or-self::*/@scope)[last()]='external') or ((ancestor-or-self::*/@scope)[last()]='peer'))
+             and (contains(@href,'.dita') or contains(@href,'.htm')) -->
+        <xsl:if test="@href">
+          <!-- to use an extension other than '.dita' just uncomment the variable and replace
+               '.dita' below with $DITAEXT -->
+          <!-- <xsl:variable name="DITAEXT">.dita</xsl:variable> -->
+          <xsl:element name="param">
+            <xsl:attribute name="name">Local</xsl:attribute>
+            <xsl:choose>        <!-- What if targeting a nested topic? Need to keep the ID? -->
+              <xsl:when test="contains(@copy-to, $DITAEXT)">
+                <xsl:attribute name="value"><xsl:value-of select="$pathFromMaplist"/><xsl:value-of select="substring-before(@copy-to, $DITAEXT)"/>.<xsl:value-of select="$OUTEXT"/></xsl:attribute>
+              </xsl:when>
+              <xsl:when test="contains(@href, $DITAEXT)">
+                <xsl:attribute name="value"><xsl:value-of select="$pathFromMaplist"/><xsl:value-of select="substring-before(@href, $DITAEXT)"/>.<xsl:value-of select="$OUTEXT"/></xsl:attribute>
+              </xsl:when>
+              <xsl:when test="contains(@href,'.htm') and @scope!='external'">
+                <xsl:attribute name="value"><xsl:value-of select="$pathFromMaplist"/><xsl:value-of select="@href"/></xsl:attribute>
+              </xsl:when>
+              <xsl:otherwise>  <!-- If non-DITA, keep the href as-is -->
+                <xsl:attribute name="value"><xsl:value-of select="@href"/></xsl:attribute>
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:element>
+        </xsl:if>
+       </OBJECT>
+
+       <!-- If there are any children that should be in the TOC, process them -->
+       <xsl:if test="*[contains(@class, ' map/topicref ')][not(contains(@toc,'no'))]">
+         <UL>
+           <xsl:apply-templates select="*[contains(@class, ' map/topicref ')][not(contains(@toc,'no'))]">
+             <xsl:with-param name="pathFromMaplist" select="$pathFromMaplist"/>
+           </xsl:apply-templates>
+         </UL>
+       </xsl:if>
+  <xsl:value-of select="$newline"/>
+  </LI>
+</xsl:template>
+
+<!-- These are here just to prevent accidental fallthrough -->
+<xsl:template match="*[contains(@class, ' map/navref ')]"/>
+<xsl:template match="*[contains(@class, ' map/anchor ')]"/>
+<xsl:template match="*[contains(@class, ' map/reltable ')]"/>
+<xsl:template match="*[contains(@class, ' map/topicmeta ')]"/>
+
+<xsl:template match="*">
+  <xsl:apply-templates/>
+</xsl:template>
+
+<!-- Template to get the relative path to a map -->
+<xsl:template name="getRelativePath">
+  <xsl:param name="remainingPath" select="@file"/>
+  <xsl:choose>
+    <xsl:when test="contains($remainingPath,'/')">
+      <xsl:value-of select="substring-before($remainingPath,'/')"/><xsl:text>/</xsl:text>
+      <xsl:call-template name="getRelativePath">
+        <xsl:with-param name="remainingPath" select="substring-after($remainingPath,'/')"/>
+      </xsl:call-template>
+    </xsl:when>
+    <xsl:when test="contains($remainingPath,'\')">
+      <xsl:value-of select="substring-before($remainingPath,'\')"/><xsl:text>/</xsl:text>
+      <xsl:call-template name="getRelativePath">
+        <xsl:with-param name="remainingPath" select="substring-after($remainingPath,'\')"/>
+      </xsl:call-template>
+    </xsl:when>
+  </xsl:choose>
+</xsl:template>
+
+</xsl:stylesheet>

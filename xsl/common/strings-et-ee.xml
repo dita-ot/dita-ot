@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
+
+<strings xml:lang="et-ee">        <!-- Estonian -->
+
+<!-- various labels (not author controlled) -->
+<str name="Figure">Joonis</str>
+<str name="Table">Tabel</str>
+<str name="Next topic">Järgmine teema</str>
+<str name="Previous topic">Eelmine teema</str>
+<str name="Parent topic">Peateema</str>
+<str name="Required cleanup">Puhastus nõutav</str>
+<str name="Draft comment">Mustandi kommentaar</str>
+<str name="Option">Suvand</str>
+<str name="Description">Kirjeldus</str>
+<str name="Optional">Mittenõutav</str>
+<str name="Required">Nõutav</str>
+<str name="Skip visual syntax diagram">Jäta süntaksidiagramm vahele</str>
+<str name="Read syntax diagram">Loe süntaksidiagrammi</str>
+<str name="Start of change">Muudatuse algus</str>
+<str name="End of change">Muudatuse lõpp</str>
+<str name="Index">Register</str>
+<str name="Special characters">Erimärgid</str>
+<str name="Numerics">Numbrid</str>
+<str name="End notes">Lõpumärkused</str>
+<str name="Artwork">Pilt</str>
+<str name="Syntax">Süntaks</str>
+<str name="Type">Tüüp</str>
+<str name="Value">Väärtus</str>
+<!-- Text that goes before a link to a topic -->
+<str name="intro-to-topic-link"></str>
+
+<!-- peril notice labels -->
+<str name="Note">Märkus</str>
+<str name="Notes">Märkused</str>
+<str name="Tip">Soovitus</str>
+<str name="Fastpath">Kiirtee</str>
+<str name="Important">Tähtis</str>
+<str name="Attention">Tähelepanu</str>
+<str name="Caution">ETTEVAATUST</str>
+<str name="Danger">OHT</str>
+<str name="Remember">Pidage meeles</str>
+<str name="Restriction">Piirang</str>
+
+<!-- default title text for section level generated sections -->
+<str name="Contents">Sisukord</str>
+<str name="Related concepts">Seostuvad mõisted</str>
+<str name="Related tasks">Seostuvad tegevused</str>
+<str name="Related reference">Seostuv viide</str>
+<str name="Related information">Seostuv teave</str>
+
+<str name="Prerequisite">Eeltingimus</str>
+<str name="Prerequisites">Eeltingimused</str>
+<str name="or">või</str>
+
+<str name="Copyright">Autoriõigus</str>
+
+<!-- Symbols -->
+<str name="OpenQuote">"</str>
+<str name="CloseQuote">"</str>
+<str name="ColonSymbol">:</str>
+
+</strings>

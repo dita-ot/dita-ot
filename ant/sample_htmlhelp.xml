@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<project name="sample_htmlhelp" default="all" basedir="..">
+
+  <import file="${basedir}${file.separator}conductor.xml"/>
+
+	<target name="all" depends="sample2htmlhelp">
+	</target>
+	<!-- revise below here -->
+
+	<target name="sample2htmlhelp" depends="use-init">
+      <antcall target="dita2htmlhelp">
+		<param name="args.input"
+            value="${basedir}${file.separator}samples${file.separator}hierarchy.ditamap"/>
+		<param name="output.dir"
+            value="${basedir}${file.separator}out${file.separator}samples${file.separator}htmlhelp"/>
+      </antcall>
+	</target>
+</project>

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+
+   <xs:group name="bookmap">
+    <xs:choice>
+        <xs:element ref="bookmap" />
+    </xs:choice>
+  </xs:group>
+  
+  <xs:group name="bkbasicinfo">
+    <xs:choice>
+        <xs:element ref="bkbasicinfo" />
+    </xs:choice>
+  </xs:group>
+  
+  <xs:group name="bkinfo">
+    <xs:choice>
+        <xs:element ref="bkinfo" />
+    </xs:choice>
+  </xs:group>
+  
+  <xs:group name="booktitle">
+    <xs:choice>
+        <xs:element ref="booktitle" />
+    </xs:choice>
+  </xs:group>
+  
+  <xs:group name="booksubtitle">
+    <xs:choice>
+        <xs:element ref="booksubtitle" />
+    </xs:choice>
+  </xs:group>
+  
+  <xs:group name="bookabstract">
+    <xs:choice>
+        <xs:element ref="bookabstract" />
+    </xs:choice>
+  </xs:group>
+  
+  <xs:group name="draftintro">
+    <xs:choice>
+        <xs:element ref="draftintro" />
+    </xs:choice>
+  </xs:group>
+  
+  <xs:group name="abstract">
+    <xs:choice>
+        <xs:element ref="abstract" />
+    </xs:choice>
+  </xs:group>
+  
+  <xs:group name="dedication">
+    <xs:choice>
+        <xs:element ref="dedication" />
+    </xs:choice>
+  </xs:group>
+  
+  <xs:group name="preface">
+    <xs:choice>
+        <xs:element ref="preface" />
+    </xs:choice>
+  </xs:group>
+  
+  <xs:group name="chapter">
+    <xs:choice>
+        <xs:element ref="chapter" />
+    </xs:choice>
+  </xs:group>
+  
+  <xs:group name="part">
+    <xs:choice>
+        <xs:element ref="part" />
+    </xs:choice>
+  </xs:group>
+  
+  <xs:group name="appendix">
+    <xs:choice>
+        <xs:element ref="appendix" />
+    </xs:choice>
+  </xs:group>
+  
+  <xs:group name="notices">
+    <xs:choice>
+        <xs:element ref="notices" />
+    </xs:choice>
+  </xs:group>
+  
+  <xs:group name="amendments">
+    <xs:choice>
+        <xs:element ref="amendments" />
+    </xs:choice>
+  </xs:group>
+  
+  <xs:group name="colophon">
+    <xs:choice>
+        <xs:element ref="colophon" />
+    </xs:choice>
+  </xs:group>
+  
+ 
+  <xs:group name="divinfo">
+    <xs:choice>
+        <xs:element ref="divinfo" />
+    </xs:choice>
+  </xs:group>
+  
+  <xs:group name="divtitle">
+    <xs:choice>
+        <xs:element ref="divtitle" />
+    </xs:choice>
+  </xs:group>
+
+</xs:schema>

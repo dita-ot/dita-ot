@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE topic PUBLIC "-//IBM//DTD DITA Topic//EN"
+ "../../dtd/topic.dtd">
+<topic id="task_appendix" xml:lang="en-us">
+<title>Appendix</title>
+<shortdesc>This appendix describes things that you rarely need
+to know.</shortdesc>
+<body>
+<p>You can consult this section when you need detailed informatin
+about a specific component. </p>
+</body>
+</topic>

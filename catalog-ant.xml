@@ -1,0 +1,99 @@
+<project name="catalog"  basedir=".">
+<!-- =============== DTD catalog =============== -->
+<xmlcatalog id="dita.catalog">
+  <!-- Topics -->
+  <dtd publicId="-//IBM//DTD DITA Concept//EN"
+       location="${dita.dtd.dir}${file.separator}concept.dtd" />
+  <dtd publicId="-//IBM//ELEMENTS DITA Concept//EN"
+       location="${dita.dtd.dir}${file.separator}concept.mod" />
+
+  <dtd publicId="-//IBM//DTD DITA Composite//EN"
+       location="${dita.dtd.dir}${file.separator}ditabase.dtd" />
+
+  <dtd publicId="-//IBM//DTD DITA Reference//EN"
+       location="${dita.dtd.dir}${file.separator}reference.dtd" />
+  <dtd publicId="-//IBM//ELEMENTS DITA Reference//EN"
+       location="${dita.dtd.dir}${file.separator}reference.mod" />
+
+  <dtd publicId="-//IBM//DTD DITA Task//EN"
+       location="${dita.dtd.dir}${file.separator}task.dtd" />
+  <dtd publicId="-//IBM//ELEMENTS DITA Task//EN"
+       location="${dita.dtd.dir}${file.separator}task.mod" />
+
+  <dtd publicId="-//IBM//DTD DITA Topic//EN"
+       location="${dita.dtd.dir}${file.separator}topic.dtd" />
+  <dtd publicId="-//IBM//ELEMENTS DITA Topic//EN"
+       location="${dita.dtd.dir}${file.separator}topic.mod" />
+  <dtd publicId="-//IBM//ENTITIES DITA Topic Class//EN"
+       location="${dita.dtd.dir}${file.separator}topic_class.ent" />
+  <dtd publicId="-//IBM//ENTITIES DITA Topic Definitions//EN"
+       location="${dita.dtd.dir}${file.separator}topic_defn.ent" />
+
+  <!-- Maps -->
+  <dtd publicId="-//IBM//DTD DITA Map//EN"
+       location="${dita.dtd.dir}${file.separator}map.dtd" />
+  <dtd publicId="-//IBM//Elements DITA Map//EN"
+       location="${dita.dtd.dir}${file.separator}map.mod" />
+  <dtd publicId="-//IBM//ENTITIES DITA Map Group Domain//EN"
+       location="${dita.dtd.dir}${file.separator}mapgroup.ent" />
+  <dtd publicId="-//IBM//ELEMENTS DITA Map Group Domain//EN"
+       location="${dita.dtd.dir}${file.separator}mapgroup.mod" />
+
+  <!-- Domains -->
+  <dtd publicId="-//IBM//ELEMENTS DITA Highlight Domain//EN"
+       location="${dita.dtd.dir}${file.separator}highlight-domain.mod" />
+  <dtd publicId="-//IBM//ENTITIES DITA Highlight Domain//EN"
+       location="${dita.dtd.dir}${file.separator}highlight-domain.ent" />
+
+  <dtd publicId="-//IBM//ELEMENTS DITA Programming Domain//EN"
+       location="${dita.dtd.dir}${file.separator}programming-domain.mod" />
+  <dtd publicId="-//IBM//ENTITIES DITA Programming Domain//EN"
+       location="${dita.dtd.dir}${file.separator}programming-domain.ent" />
+
+  <dtd publicId="-//IBM//ELEMENTS DITA Software Domain//EN"
+       location="${dita.dtd.dir}${file.separator}software-domain.mod" />
+  <dtd publicId="-//IBM//ENTITIES DITA Software Domain//EN"
+       location="${dita.dtd.dir}${file.separator}software-domain.ent" />
+
+  <dtd publicId="-//IBM//ELEMENTS DITA User Interface Domain//EN"
+       location="${dita.dtd.dir}${file.separator}ui-domain.mod" />
+  <dtd publicId="-//IBM//ENTITIES DITA User Interface Domain//EN"
+       location="${dita.dtd.dir}${file.separator}ui-domain.ent" />
+
+  <dtd publicId="-//IBM//ELEMENTS DITA Utilities Domain//EN"
+       location="${dita.dtd.dir}${file.separator}utilities-domain.mod" />
+  <dtd publicId="-//IBM//ENTITIES DITA Utilities Domain//EN"
+       location="${dita.dtd.dir}${file.separator}utilities-domain.ent" />
+
+  <!-- Common -->
+  <dtd publicId="-//IBM//ELEMENTS DITA Metadata//EN"
+       location="${dita.dtd.dir}${file.separator}meta_xml.mod" />
+  <dtd publicId="-//IBM//ELEMENTS DITA CALS Tables//EN"
+       location="${dita.dtd.dir}${file.separator}tbl_xml.mod" />
+
+  <!-- Experimental -->
+  <dtd publicId="-//IBM//DTD DITA BookMap//EN"
+       location="${dita.demo.book.dir}${file.separator}bookmap.dtd" />
+  <dtd publicId="-//IBM//ELEMENTS DITA BookMap//EN"
+       location="${dita.demo.book.dir}${file.separator}bookmap.mod" />
+  <dtd publicId="-//IBM//DTD DITA Book Information//EN"
+       location="${dita.demo.book.dir}${file.separator}bkinfo.dtd" />
+  <dtd publicId="-//IBM//ELEMENTS DITA Book Information//EN"
+       location="${dita.demo.book.dir}${file.separator}bkinfo.mod" />
+
+  <dtd publicId="-//IBM//DTD DITA Element Reference//EN"
+       location="${dita.demo.elementref.dir}${file.separator}elementref_shell.dtd" />
+  <dtd publicId="-//IBM//ELEMENTS DITA Element Reference//EN"
+       location="${dita.demo.elementref.dir}${file.separator}elementref.mod" />
+
+  <dtd publicId="-//IBM//DTD DITA eNote//EN"
+       location="${dita.demo.enote.dir}${file.separator}enote_shell.dtd" />
+  <dtd publicId="-//IBM//ELEMENTS DITA eNote//EN"
+       location="${dita.demo.enote.dir}${file.separator}enote.mod" />
+
+  <dtd publicId="-//IBM//DTD DITA FAQ//EN"
+       location="${dita.demo.faq.dir}${file.separator}faq_shell.dtd" />
+  <dtd publicId="-//IBM//ELEMENTS DITA FAQ//EN"
+       location="${dita.demo.faq.dir}${file.separator}faq.mod" />
+</xmlcatalog>
+</project>

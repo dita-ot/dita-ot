@@ -1,0 +1,324 @@
+<project name="dita-targets"  basedir=".">
+
+<!-- parameters 
+  dita.input.dirname  required
+	dita.input          required
+	dita.temp.dir       required
+	dita.script.dir     required
+  dita.extname        required
+  output.dir          required
+-->
+  
+<target name="dita.init">
+  <!-- environment -->
+  
+</target>
+
+
+<!-- Begin Main Process -->
+
+<!-- build DocBook output for topic -->
+<target name="dita.map.docbook">
+  <mkdir dir="${outputDir}" />
+  <xslt processor="trax"
+        in="${inputDir}${file.separator}${inputMap}"
+        out="${outputDir}${file.separator}${mapRoot}.xml"
+        style="${dita.script.dir}${file.separator}map2docbook.xsl">
+    <param name="outputdir" expression="${outputDir}" />
+    <xmlcatalog refid="dita.catalog" />
+  </xslt>
+</target>
+
+<!-- build DocBook output for topic map -->
+<target name="dita.topic.docbook">
+  <xslt processor="trax"
+        in="${inputFile}"
+        out="${outputFile}"
+        style="${dita.script.dir}${file.separator}dita2docbook.xsl">
+    <xmlcatalog refid="dita.catalog" />
+  </xslt>
+</target>
+
+<target name="dita.merge.delete" unless="dita.debug">
+  <delete file="${inputDir}${file.separator}${outputFileRoot}_MERGED.xml" />
+</target>
+
+<!-- merge a map file -->
+<target name="dita.map.merge">
+  <xslt processor="trax"
+        in="${inputDir}${file.separator}${inputMap}"
+        out="${inputDir}${file.separator}${outputFileRoot}_MERGED.xml"
+        style="${dita.script.dir}${file.separator}topicmerge.xsl">
+    <param name="root-path" expression="${rootPath}${file.separator}" />
+    <xmlcatalog refid="dita.catalog" />
+  </xslt>
+</target>
+
+<!-- build XSL-FO output -->
+<target name="dita.map.fo">
+  <mkdir dir="${outputDir}" />
+  <antcall target="dita.map.merge" />
+  <xslt processor="trax"
+        in="${inputDir}${file.separator}${outputFileRoot}_MERGED.xml"
+        out="${outputDir}${file.separator}${outputFileRoot}.fo"
+        style="${dita.script.dir}${file.separator}dita2fo-shell.xsl">
+    <xmlcatalog refid="dita.catalog" />
+    <param name="output-related-links" expression="" />
+  </xslt>
+  <antcall target="dita.merge.delete" />
+</target>
+
+<!-- build XSL-FO output for a topic -->
+
+<target name="dita.topic.pdf">
+  <antcall target="dita.topic.fo" />
+  <antcall target="dita.topic.pdf.fop" />
+</target>
+
+<target name="dita.topic.fo">
+  <xslt processor="trax"
+        in="${inputDir}${file.separator}${inputFile}"
+        out="${outputDir}${file.separator}${outputFileRoot}.fo"
+        style="${dita.script.dir}${file.separator}dita2fo-shell.xsl">
+    <xmlcatalog refid="dita.catalog" />
+    <param name="output-related-links" expression=""/>
+  </xslt>
+</target>
+
+<target name="dita.topic.pdf.fop" if="hasFOP">
+  <taskdef name="fop" classname="org.apache.fop.tools.anttasks.Fop">
+    <!-- specify FOP, Avalon, and Batik jar files on CLASSPATH -->
+  </taskdef>
+  <fop format="application/pdf"
+       fofile="${outputDir}${file.separator}${outputFileRoot}.fo"
+       outfile="${outputDir}${file.separator}${outputFileRoot}.pdf"
+       messagelevel="info">
+  </fop>
+</target>
+
+<!-- build PDF output -->
+<target name="dita.map.pdf">
+  <echo message="${hasFOP}"/>
+  <antcall target="dita.map.fo" />
+  <antcall target="dita.map.pdf.fop" />
+</target>
+
+<!-- use FOP to build PDF output -->
+<target name="dita.map.pdf.fop" if="hasFOP">
+  <taskdef name="fop" classname="org.apache.fop.tools.anttasks.Fop">
+    <!-- specify FOP, Avalon, and Batik jar files on CLASSPATH -->
+  </taskdef>
+  <fop format="application/pdf"
+       fofile="${outputDir}${file.separator}${outputFileRoot}.fo"
+       outfile="${outputDir}${file.separator}${outputFileRoot}.pdf"
+       messagelevel="info">
+  </fop>
+</target>
+
+<!-- End Mail Process -->
+
+<!-- xhtml output -->
+<target name="dita.topics.xhtml">
+  <xslt processor="trax"
+		basedir="${dita.temp.dir}"
+		destdir="${output.dir}"
+		includes="${fullditatopc.list}"
+		extension=".html"
+		style="${dita.script.dir}${file.separator}dita2xhtml.xsl">
+        <param name="DITAEXT" expression="${dita.extname}" if="dita.extname"/>
+        <param name="FILTERFILE" expression="${dita.input.valfile}" if="dita.input.valfile"/>
+        <param name="CSS" expression="${args.css}" if="args.css"/>
+        <param name="CSSPATH" expression="${args.csspath}" if="args.csspath"/>
+        <param name="HDF" expression="${args.hdf}" if="args.hdf"/>
+        <param name="HDR" expression="${args.hdr}" if="args.hdr"/>
+        <param name="FTR" expression="${args.ftr}" if="args.ftr"/>
+        <param name="DRAFT" expression="${args.draft}" if="args.draft"/>
+        <param name="ARTLBL" expression="${args.artlbl}" if="args.artlbl"/>
+    </xslt>
+</target>
+
+<target name="dita.map.xhtml">
+  <condition property="args.xhtml.toc" value="index">
+    <not>
+      <isset property="args.xhtml.toc"/>
+    </not>
+  </condition>
+  <xslt processor="trax"
+		basedir="${dita.temp.dir}"
+		destdir="${output.dir}"
+		includes="${dita.input}"
+		style="${dita.script.dir}${file.separator}map2htmtoc.xsl">
+        <param name="DITAEXT" expression="${dita.extname}" if="dita.extname"/>
+        <mapper type="glob" from="*${dita.input.filename}" to="*${args.xhtml.toc}.html"/>
+    </xslt>
+</target>
+<!-- end xhtml process -->
+
+<!-- eclipse output -->
+<target name="dita.map.eclipse">
+  <condition property="args.eclipse.toc" value="toc">
+    <not>
+      <isset property="args.eclipse.toc"/>
+    </not>
+  </condition>
+  <xslt processor="trax"
+    basedir="${dita.temp.dir}"
+		destdir="${output.dir}"
+		includes="${dita.input}"
+		style="${dita.script.dir}${file.separator}map2eclipse.xsl">
+        <param name="DITAEXT" expression="${dita.extname}" if="dita.extname"/>
+        <mapper type="glob" from="*${dita.input.filename}" to="*${args.eclipse.toc}.xml"/>
+    </xslt>
+</target>
+
+<target name="dita.topics.eclipse">
+  <antcall target="dita.topics.xhtml"/>
+</target>
+<!-- end eclipse process -->
+
+<!-- java help output -->
+<target name="dita.map.javahelp">
+  <condition property="args.javahelp.toc" value="toc">
+    <not>
+      <isset property="args.javahelp.toc"/>
+    </not>
+  </condition>
+  <condition property="args.javahelp.map" value="map">
+    <not>
+      <isset property="args.javahelp.map"/>
+    </not>
+  </condition>
+  <xslt processor="trax"
+    basedir="${dita.temp.dir}"
+		destdir="${output.dir}"
+		includes="${dita.input}"
+		style="${dita.script.dir}${file.separator}map2JavaHelpTOC.xsl">
+        <param name="DITAEXT" expression="${dita.extname}" if="dita.extname"/>
+        <mapper type="glob" from="*${dita.input.filename}" to="*${args.javahelp.toc}.xml"/>
+    </xslt>
+  <xslt processor="trax"
+    basedir="${dita.temp.dir}"
+		destdir="${output.dir}"
+		includes="${dita.input}"
+		style="${dita.script.dir}${file.separator}map2JavaHelpMap.xsl">
+        <param name="DITAEXT" expression="${dita.extname}" if="dita.extname"/>
+        <mapper type="glob" from="*${dita.input.filename}" to="*${args.javahelp.map}.jhm"/>
+    </xslt>
+</target>
+
+<target name="dita.topics.javahelp">
+  <xslt processor="trax"
+		basedir="${dita.temp.dir}"
+		destdir="${output.dir}"
+		includes="${fullditatopc.list}"
+		extension=".html"
+		style="${dita.script.dir}${file.separator}dita2html.xsl">
+        <param name="DITAEXT" expression="${dita.extname}" if="dita.extname"/>
+        <param name="FILTERFILE" expression="${dita.input.valfile}" if="dita.input.valfile"/>
+        <param name="CSS" expression="${args.css}" if="args.css"/>
+        <param name="CSSPATH" expression="${args.csspath}" if="args.csspath"/>
+        <param name="HDF" expression="${args.hdf}" if="args.hdf"/>
+        <param name="HDR" expression="${args.hdr}" if="args.hdr"/>
+        <param name="FTR" expression="${args.ftr}" if="args.ftr"/>
+        <param name="DRAFT" expression="${args.draft}" if="args.draft"/>
+        <param name="ARTLBL" expression="${args.artlbl}" if="args.artlbl"/>
+    </xslt>
+</target>
+
+<target name="compile.Java.Help" if="env.JHHOME">
+		<java jar="${env.JHHOME}${file.separator}javahelp${file.separator}bin${file.separator}jhindexer.jar"
+				fork="true"
+				dir="${outputDir}">
+			<arg value="."/>
+		</java>
+</target>
+<!-- end java help process -->
+
+<!-- html help output -->
+<target name="dita.map.htmlhelp">
+  
+  <xslt processor="trax"
+		basedir="${dita.temp.dir}"
+		destdir="${output.dir}"
+		includes="${dita.input}"
+		extension=".hhc"
+		style="${dita.script.dir}${file.separator}map2hhc.xsl">
+        <param name="DITAEXT" expression="${dita.extname}" if="dita.extname"/>
+    </xslt>
+  <xslt processor="trax"
+		basedir="${dita.temp.dir}"
+		destdir="${output.dir}"
+		includes="${dita.input}"
+		extension=".hhp"
+		style="${dita.script.dir}${file.separator}map2hhp.xsl">
+        <param name="DITAEXT" expression="${dita.extname}" if="dita.extname"/>
+        <param name="HHCNAME" expression="${dita.map.filename.root}.hhc"/>
+    </xslt>
+  
+</target>
+
+<target name="compile.HTML.Help" if="HTMLHelpCompiler">
+		<exec executable="${HTMLHelpCompiler}"
+				failonerror="${failonerror}"
+				failifexecutionfails="${failonerror}">
+			<arg value="${projectFile}"/>
+		</exec>
+	</target>
+
+<target name="dita.topics.htmlhelp">
+  <antcall target="dita.topics.javahelp"/>
+</target>
+<!-- end html help process -->
+
+<!-- generalize a specialized topic to the base elements -->
+<target name="dita.topic.generalize">
+	<xslt processor="trax"
+			in="${inputFile}"
+			out="${outputFile}"
+			style="${dita.script.dir}${file.separator}generalize.xsl">
+		<xmlcatalog refid="dita.catalog"/>
+	</xslt>
+</target>
+  
+<!-- restore the specialized elements for a previously generalized topic -->
+	<target name="dita.topic.respecialize">
+		<xslt processor="trax"
+				in="${inputFile}"
+				out="${outputFile}"
+				style="${dita.script.dir}${file.separator}specialize.xsl">
+			<xmlcatalog refid="dita.catalog"/>
+		</xslt>
+	</target>
+
+	<!-- add the architectural attributes with default values from the document type to the document -->
+	<target name="dita.topic.normalize">
+		<xslt processor="trax"
+				in="${inputFile}"
+				out="${outputFile}"
+				style="${dita.script.dir}${file.separator}normalize.xsl">
+			<xmlcatalog refid="dita.catalog"/>
+		</xslt>
+	</target>
+
+	<target name="dita.dir.normalize">
+		<xslt processor="trax"
+				basedir="${inputDir}"
+				destdir="${outputDir}"
+				includes="*.xml"
+				extension=".xml"
+				style="${dita.script.dir}${file.separator}normalize.xsl">
+			<xmlcatalog refid="dita.catalog"/>
+		</xslt>
+	</target>
+
+	<!-- remove the architectural attributes with default values in the document type from the document -->
+	<target name="dita.topic.denormalize">
+		<xslt processor="trax"
+				in="${inputFile}"
+				out="${outputFile}"
+				style="${dita.script.dir}${file.separator}pretty.xsl">
+			<xmlcatalog refid="dita.catalog"/>
+		</xslt>
+	</target>
+
+</project>

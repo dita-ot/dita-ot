@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<project name="sample_docbook" default="all" basedir="..">
+	
+  <import file="${basedir}${file.separator}conductor.xml"/>
+
+	<target name="all" depends="sample2docbook">
+	</target>
+	<!-- revise below here -->
+
+	<target name="sample2docbook" depends="use-init">
+      <antcall target="dita2docbook">
+		<param name="args.input"
+            value="${basedir}${file.separator}samples${file.separator}hierarchy.ditamap"/>
+		<param name="output.dir"
+            value="${basedir}${file.separator}out${file.separator}samples${file.separator}docbook"/>
+      </antcall>
+	</target>
+</project>

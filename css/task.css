@@ -1,0 +1,9 @@
+/*
+ | (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+*/
+
+*[class~="task\/info"]:before {
+ content: "  ";
+}

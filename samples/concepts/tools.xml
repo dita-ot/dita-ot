@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/ditaview_shell.xsl" type="text/xsl"?>
+<!DOCTYPE concept PUBLIC "-//IBM//DTD DITA Concept//EN"
+ "../../dtd/concept.dtd">
+<concept id="toolsconcept" xml:lang="en-us">
+<title>Tools</title>
+<conbody><p>Invest in a good set of tools for doing all kinds of tasks around the house. 
+Useful tools include the following items:</p>
+<ul>
+  <li>Hammer</li>
+  <li>Screw driver set</li>
+  <li>Wrench set</li>
+  <li>Nails and screws</li>
+  <li>Level</li>
+  <li>Saws</li>
+  <li>Drill</li>
+  <li>Air pressure guage</li>
+  <li>Spade</li>
+  <li>Rake</li>
+</ul><p>Keep your tools organized in a tool box.</p></conbody>
+<related-links>
+<link href="toolbox.xml" format="xml" type="concept"><linktext>Tool box</linktext></link>
+<link href="../tasks/organizing.xml" format="xml" type="task"><linktext>Organizing the workbench and tools</linktext></link>
+</related-links>
+</concept>

@@ -1,0 +1,193 @@
+<?xml version="1.0"?>
+
+<project name="DOST" default="init" basedir=".">
+  <import file="catalog-ant.xml"/>
+  <import file="ditatargets.xml"/>
+  <import file="pretargets.xml"/>    
+  
+  <taskdef name="pipeline" classname="org.dita.dost.invoker.AntInvoker">
+    <classpath>
+	  <pathelement location="${basedir}${file.separator}lib${file.separator}dost1.0.jar"/>
+    </classpath>
+  </taskdef>
+  <!-- parameters from command line or external property file 
+		transtype          required
+		args.input         required
+		output.dir         required
+		dita.extname       required
+		dita.input.valfile optional
+	-->
+
+  <property name="dita.dir" value="${basedir}"/>
+  <property name="dita.temp.dir" value="${basedir}${file.separator}temp"/>
+  <property name="dita.script.dir" value="${dita.dir}${file.separator}xsl"/>
+  <property name="dita.resource.dir" value="${dita.dir}${file.separator}resource"/>
+  <property name="hhc.dir" value="C:\Program Files\HTML Help Workshop"/>
+  <property environment="env"/>
+  
+  <!-- property values end -->
+  <target name="use-init">
+    <available classname="com.icl.saxon.StyleSheet" property="hasSaxon"/>
+    <available classname="org.apache.fop.tools.anttasks.Fop" property="hasFOP"/>
+    <available file="${hhc.dir}\hhc.exe" property="HTMLHelpCompiler" value="${hhc.dir}\hhc.exe"/>
+    <condition property="dita.extname" value=".xml">
+      <not>
+        <isset property="dita.extname"/>
+      </not>
+    </condition>
+  </target>
+  
+  <target name="init" depends="use-init">
+    <fail message="Invalid transformation type! Valid types:  xhtml, eclipsehelp, javahelp, htmlhelp, pdf, docbook">
+      <condition>
+        <and>
+          <not>
+            <equals arg1="${transtype}" arg2="xhtml" casesensitive="false"/>
+          </not>
+          <not>
+            <equals arg1="${transtype}" arg2="eclipsehelp" casesensitive="false"/>
+          </not>
+          <not>
+            <equals arg1="${transtype}" arg2="javahelp" casesensitive="false"/>
+          </not>
+          <not>
+            <equals arg1="${transtype}" arg2="htmlhelp" casesensitive="false"/>
+          </not>
+          <not>
+            <equals arg1="${transtype}" arg2="pdf" casesensitive="false"/>
+          </not>
+          <not>
+            <equals arg1="${transtype}" arg2="docbook" casesensitive="false"/>
+          </not>
+        </and>
+      </condition>
+    </fail>
+    <antcall target="dita2${transtype}"/>
+  </target>
+  
+  <!-- property value validation begin -->
+  <target name="check-arg">
+    <fail message="please provide filename for dita input">
+      <condition>
+        <not>
+          <isset property="args.input"/>
+        </not>
+      </condition>
+    </fail>
+        
+    <basename property="dita.input" file="${args.input}"/>
+    <basename property="dita.input.filename" file="${dita.input}"/>
+    <dirname property="dita.input.dirname" file="${args.input}"/>
+    <basename property="dita.map.filename.root" file="${dita.input}" suffix=".ditamap"/>
+    <basename property="dita.topic.filename.root" file="${dita.input}" suffix="${dita.extname}"/>
+    <dirname property="dita.map.outputdir" file="${output.dir}${file.separator}${dita.input}"/>
+    <fail message="please provide extension filename for dita topic file">
+      <condition>
+        <not>
+          <isset property="dita.extname"/>
+        </not>
+      </condition>
+    </fail>
+    <fail message="please provide ouput directory">
+      <condition>
+        <not>
+          <isset property="output.dir"/>
+        </not>
+      </condition>
+    </fail>
+    <echo>*****************************************************************</echo>
+    <echo>* input = ${args.input}</echo>
+    <echo>* type = ${transtype}</echo>
+    <echo>* outputdir = ${output.dir}</echo>
+    <echo>* extname = ${dita.extname}</echo>
+    <echo>*****************************************************************</echo>
+    
+  </target>
+  
+  <!-- property value validation end -->
+  
+  <target name="dita-preprocess" depends="check-arg, preprocess"/>
+  
+  <!-- main transformation targets begin -->
+  
+  <target name="dita2pdf" depends="dita-preprocess, map2pdf, topic2pdf"/>  
+  
+  <target name="topic2pdf" if="noMap" depends="dita-preprocess">
+    <antcall target="dita.topic.pdf">
+      <param name="inputDir" value="${dita.temp.dir}"/>
+      <param name="inputFile" value="${dita.input}"/>
+      <param name="outputDir" value="${dita.map.outputdir}"/>
+      <param name="outputFileRoot" value="${dita.topic.filename.root}"/>
+    </antcall>
+  </target>
+  
+  <target name="map2pdf" unless="noMap" depends="dita-preprocess">
+    <antcall target="dita.map.pdf">
+      <param name="inputDir" value="${dita.temp.dir}"/>
+      <param name="inputMap" value="${dita.input}"/>
+      <param name="outputDir" value="${dita.map.outputdir}"/>
+      <param name="outputFileRoot" value="${dita.map.filename.root}"/>
+      <param name="rootPath" value="${dita.input.dirname}"/>
+    </antcall>
+  </target>
+  
+  <target name="dita2docbook" depends="dita-preprocess, topic2docbook, map2docbook"/>
+  
+  <target name="topic2docbook" if="noMap" depends="dita-preprocess">
+    <antcall target="dita.topic.docbook">
+      <param name="inputFile" value="${dita.temp.dir}${file.separator}${dita.input}"/>
+      <param name="outputFile" value="${dita.map.outputdir}${file.separator}${dita.topic.filename.root}.xml"/>
+    </antcall>
+  </target>
+  
+  <target name="map2docbook" unless="noMap" depends="dita-preprocess">
+    <antcall target="dita.map.docbook">
+      <param name="mapRoot" value="${dita.map.filename.root}"/>
+      <param name="inputMap" value="${dita.input}"/>
+      <param name="inputDir" value="${dita.temp.dir}"/>
+      <param name="outputDir" value="${dita.map.outputdir}"/>
+    </antcall>
+  </target>
+  
+  <target name="dita2xhtml" depends="dita-preprocess, map2xhtml">
+    <antcall target="dita.topics.xhtml"/>
+  </target>
+  
+  <target name="map2xhtml" unless="noMap">
+    <antcall target="dita.map.xhtml"/>
+  </target>
+  
+  <target name="dita2javahelp" unless="noMap" depends="dita-preprocess">
+    <condition property="args.javahelp.helpset" value="${dita.resource.dir}${file.separator}helpset.hs">
+      <not>
+        <isset property="args.javahelp.helpset"/>
+      </not>
+    </condition>
+    <antcall target="dita.topics.javahelp"/>
+    <antcall target="dita.map.javahelp"/>
+    <copy file="${args.javahelp.helpset}" todir="${dita.map.outputdir}"/>
+    <antcall target="compile.Java.Help">
+      <param name="outputDir" value="${dita.map.outputdir}"/>
+    </antcall>
+  </target>
+  
+  <target name="dita2eclipsehelp" unless="noMap" depends="dita-preprocess">
+    <condition property="args.eclipsehelp.plugin" value="${dita.resource.dir}${file.separator}plugin.xml">
+      <not>
+        <isset property="args.eclipsehelp.plugin"/>
+      </not>
+    </condition>
+    <antcall target="dita.topics.eclipse"/>
+    <antcall target="dita.map.eclipse"/>
+    <copy file="${args.eclipsehelp.plugin}" todir="${dita.map.outputdir}"/>
+  </target>
+  
+  <target name="dita2htmlhelp" unless="noMap" depends="dita-preprocess">
+    <antcall target="dita.map.htmlhelp"/>
+    <antcall target="dita.topics.htmlhelp"/>
+    <antcall target="compile.HTML.Help">
+      <param name="projectFile" value="${dita.map.outputdir}${file.separator}${dita.map.filename.root}.hhp"/>
+    </antcall>
+  </target>
+
+</project>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?><!--Common DITA topic to HTML application by IBM Corp., 2001, 2002, 2003-->
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-US"><head><meta http-equiv="generator" content="IBM Darwin Information Typing Architecture topic-to-html transform"/><meta name="copyright" content="(C) Copyright IBM Corp. 2001, 2002, 2003"/><meta name="security" content="public"/><link rel="stylesheet" type="text/css" href="common.css"/><title>About DITA</title></head><body class="base"><a name="ditafaq"/><h1 class="topictitle1">About DITA</h1>
+<div><!--topic body--><p>Questions in this FAQ list:</p><div><b>Designing Specializations</b><ol><li><a href="#d6e16">How do I create a specialization?</a></li><li><a href="#d6e33">Which element should be the basis for my specialized element?</a></li></ol></div><div><b>Processing Specializations</b><ol><li><a href="#d6e65">How do I format my specialization?</a></li><li><a href="#d6e74">What if  another DITA user needs to reuse my content but doesn't have my specialization?</a></li></ol></div><hr/>
+<div><a name="d6e10"/><p class="sectiontitle"><b>Designing Specializations</b></p>
+    <div>
+    <div><a name="d6e16"> </a><div style="display: block; margin-top: 1em; font-style: italic;"><span style="font-weight: bold;">Question:</span> How do I create a specialization?</div><div style="display: block; margin-top: 0.5em; margin-left: 1em;"><span style="font-style: italic; font-weight: bold;">Answer:</span> Create a DTD module in which the DTD elements derive from elements in an existing DTD module.</div></div>
+    <div><a name="d6e33"> </a><div style="display: block; margin-top: 1em; font-style: italic;"><span style="font-weight: bold;">Question:</span> Which element should be the basis for my specialized element?</div><div style="display: block; margin-top: 0.5em; margin-left: 1em;"><span style="font-style: italic; font-weight: bold;">Answer:</span> You should look for a base element that
+            <ol>
+            <li>Has a more general meaning that also applies to your content</li>
+            <li>Can accomodate the substructure   of your content.</li>
+            </ol>
+            <p>For example, this specialization is based on the <span style="font-style: italic;">simpletable</span> element, which models information with a repeating substructure.</p>
+        </div></div>
+    </div>
+<p align="left"><a href="#TOP">Return to Top</a></p></div>
+<div><a name="d6e59"/><p class="sectiontitle"><b>Processing Specializations</b></p>
+    <div>
+    <div><a name="d6e65"> </a><div style="display: block; margin-top: 1em; font-style: italic;"><span style="font-weight: bold;">Question:</span> How do I format my specialization?</div><div style="display: block; margin-top: 0.5em; margin-left: 1em;"><span style="font-style: italic; font-weight: bold;">Answer:</span> First, consider whether the default formatting for the base elements meets your requirements.  If not, create a new XSLT script that imports the base XSLT script and provides the special formatting for your specialized elements. </div></div>
+    <div><a name="d6e74"> </a><div style="display: block; margin-top: 1em; font-style: italic;"><span style="font-weight: bold;">Question:</span> What if  another DITA user needs to reuse my content but doesn't have my specialization?</div><div style="display: block; margin-top: 0.5em; margin-left: 1em;"><span style="font-style: italic; font-weight: bold;">Answer:</span> DITA provides a built-in generalization process that automatically promotes your specialized elements to the base elements that the other user already has.</div></div>
+    </div>
+<p align="left"><a href="#TOP">Return to Top</a></p></div>
+</div>
+</body></html>

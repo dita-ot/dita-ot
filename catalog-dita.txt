@@ -1,0 +1,65 @@
+-- Catalog for Dita --
+
+-- Dita DTDs --
+
+PUBLIC "-//IBM//DTD DITA Concept//EN" "concept.dtd"
+PUBLIC "-//IBM//ELEMENTS DITA Concept//EN" "concept.mod"
+
+PUBLIC "-//IBM//DTD DITA Composite//EN" "ditabase.dtd"
+
+PUBLIC "-//IBM//DTD DITA Reference//EN" "reference.dtd"
+PUBLIC "-//IBM//ELEMENTS DITA Reference//EN" "reference.mod"
+
+PUBLIC "-//IBM//DTD DITA Task//EN" "task.dtd"
+PUBLIC "-//IBM//ELEMENTS DITA Task//EN" "task.mod"
+
+PUBLIC "-//IBM//DTD DITA Topic//EN" "topic.dtd"
+PUBLIC "-//IBM//ELEMENTS DITA Topic//EN" "topic.mod"
+PUBLIC "-//IBM//ENTITIES DITA Topic Class//EN" "topic_class.ent"
+PUBLIC "-//IBM//ENTITIES DITA Topic Definitions//EN" "topic_defn.ent"
+
+-- Maps --
+
+PUBLIC "-//IBM//DTD DITA Map//EN" "map.dtd"
+PUBLIC "-//IBM//ELEMENTS DITA Map//EN" "map.mod"
+PUBLIC "-//IBM//ENTITIES DITA Map Group Domain//EN" "mapgroup.ent"
+PUBLIC "-//IBM//ELEMENTS DITA Map Group Domain//EN" "mapgroup.mod"
+
+-- Domains --
+
+PUBLIC "-//IBM//ELEMENTS DITA Highlight Domain//EN" "highlight-domain.mod"
+PUBLIC "-//IBM//ENTITIES DITA Highlight Domain//EN" "highlight-domain.ent"
+
+PUBLIC "-//IBM//ELEMENTS DITA Programming Domain//EN" "programming-domain.mod"
+PUBLIC "-//IBM//ENTITIES DITA Programming Domain//EN" "programming-domain.ent"
+
+PUBLIC "-//IBM//ELEMENTS DITA Software Domain//EN" "software-domain.mod"
+PUBLIC "-//IBM//ENTITIES DITA Software Domain//EN" "software-domain.ent"
+
+PUBLIC "-//IBM//ELEMENTS DITA User Interface Domain//EN" "ui-domain.mod"
+PUBLIC "-//IBM//ENTITIES DITA User Interface Domain//EN" "ui-domain.ent"
+
+PUBLIC "-//IBM//ELEMENTS DITA User Interface Domain//EN" "ui-domain.mod"
+PUBLIC "-//IBM//ENTITIES DITA User Interface Domain//EN" "ui-domain.ent"
+
+PUBLIC "-//IBM//ELEMENTS DITA Utilities Domain//EN" "utilities-domain.mod"
+PUBLIC "-//IBM//ENTITIES DITA Utilities Domain//EN" "utilities-domain.ent"
+
+-- Common --
+
+PUBLIC "-//IBM//ELEMENTS DITA Metadata//EN" "meta_xml.mod"
+PUBLIC "-//IBM//ELEMENTS DITA CALS Tables//EN" "tbl_xml.mod"
+
+-- Demo/Experimental --
+
+PUBLIC "-//IBM//DTD DITA Element Reference//EN" "demo/elementref/elementref_shell.dtd"
+PUBLIC "-//IBM//ELEMENTS DITA Element Reference//EN" "demo/elementref/elementref.mod"
+
+PUBLIC "-//IBM//DTD DITA FAQ//EN" "demo/faq/faq_shell.dtd"
+PUBLIC "-//IBM//ELEMENTS DITA FAQ//EN" "demo/faq/faq.mod"
+
+PUBLIC "-//IBM//DTD DITA BookMap//EN" "demo/book/bookmap.dtd"
+PUBLIC "-//IBM//ELEMENTS DITA BookMap//EN" "demo/book/bookmap.mod"
+
+PUBLIC "-//IBM//DTD DITA Book Information//EN" "demo/book/bkinfo.dtd"
+PUBLIC "-//IBM//ELEMENTS DITA Book Information//EN" "demo/book/bkinfo.mod"

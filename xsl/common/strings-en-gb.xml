@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
+
+<strings xml:lang="en-gb">        <!-- British English -->
+
+<!-- various labels (not author controlled) -->
+<str name="Figure">Figure</str>
+<str name="Table">Table</str>
+<str name="Next topic">Next topic</str>
+<str name="Previous topic">Previous topic</str>
+<str name="Parent topic">Parent topic</str>
+<str name="Required cleanup">Required cleanup</str>
+<str name="Draft comment">Draft comment</str>
+<str name="Option">Option</str>
+<str name="Description">Description</str>
+<str name="Optional">Optional</str>
+<str name="Required">Required</str>
+<str name="Skip visual syntax diagram">Skip visual syntax diagram</str>
+<str name="Read syntax diagram">Read syntax diagram</str>
+<str name="Start of change">Start of change</str>
+<str name="End of change">End of change</str>
+<str name="Index">Index</str>
+<str name="Special characters">Special characters</str>
+<str name="Numerics">Numerics</str>
+<str name="End notes">End notes</str>
+<str name="Artwork">Artwork</str>
+<str name="Syntax">Syntax</str>
+<str name="Type">Type</str>
+<str name="Value">Value</str>
+<!-- Text that goes before a link to a topic -->
+<str name="intro-to-topic-link"></str>
+
+<!-- peril notice labels -->
+<str name="Note">Note</str>
+<str name="Notes">Notes</str>
+<str name="Tip">Tip</str>
+<str name="Fastpath">Fastpath</str>
+<str name="Important">Important</str>
+<str name="Attention">Attention</str>
+<str name="Caution">CAUTION</str>
+<str name="Danger">DANGER</str>
+<str name="Remember">Remember</str>
+<str name="Restriction">Restriction</str>
+
+<!-- default title text for section level generated sections -->
+<str name="Contents">Contents</str>
+<str name="Related concepts">Related concepts</str>
+<str name="Related tasks">Related tasks</str>
+<str name="Related reference">Related reference</str>
+<str name="Related information">Related information</str>
+
+<str name="Prerequisite">Prerequisite</str>
+<str name="Prerequisites">Prerequisites</str>
+<str name="or">or</str>
+
+<str name="Copyright">Copyright</str>
+
+<!-- Symbols -->
+<str name="OpenQuote">"</str>
+<str name="CloseQuote">"</str>
+<str name="ColonSymbol">:</str>
+
+</strings>

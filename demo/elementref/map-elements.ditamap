@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE map PUBLIC "-//IBM//DTD DITA Map//EN" "../../dtd/map.dtd">
+<map title="Element reference for the map dtd">
+	<topicref href="map.xml"/>
+      <topicref href="topicref.xml"/>
+</map>

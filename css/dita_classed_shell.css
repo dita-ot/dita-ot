@@ -1,0 +1,31 @@
+/*
+ | (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+*/
+
+
+@import url(topic_classed.css);
+/*
+@import url(task.css);
+
+@import url(concept.css);
+
+@import url(reference.css);
+*/
+@import url(domains_classed.css);
+
+
+/* === support overrides and "delivery context" markup here === */
+
+/* revert the ph class */
+
+*[class~="topic\/xph"] {
+      color: black;
+}
+
+
+dita {
+  display: block;
+}
+

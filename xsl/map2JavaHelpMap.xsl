@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
+
+<xsl:stylesheet version="1.0" 
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+
+<!-- stylesheet imports -->
+<xsl:import href="xslhtml/map2TOC.xsl"/>
+
+<xsl:output
+    method="xml"
+    omit-xml-declaration="no"
+    encoding="ISO-8859-1"
+    doctype-public="-//Sun Microsystems Inc.//DTD JavaHelp Map Version 1.0//EN"
+    doctype-system="http://java.sun.com/products/javahelp/map_1_0.dtd"
+    indent="yes"
+/>
+
+<xsl:template match="*[contains(@class,' map/map ')]" mode="toctop">
+  <map version="1.0">
+    <xsl:apply-templates select="*[contains(@class,' map/topicref ')]"/>
+  </map>
+</xsl:template>
+
+<xsl:template match="*[contains(@class,' map/topicref ')]" mode="tocentry">
+  <xsl:param name="infile"/>
+  <xsl:param name="outroot"/>
+  <xsl:param name="outfile"/>
+  <xsl:param name="nodeID"/>
+  <xsl:param name="isFirst"/>
+  <xsl:param name="subtopicNodes"/>
+  <xsl:param name="title"/>
+  <xsl:if test="$isFirst">
+    <xsl:if test="$outfile and $outfile!=''">
+      <xsl:variable name="targetID" select="translate($outroot, '\/.', '___')"/>
+      <mapID target="{$targetID}" url="{$outfile}"/>
+    </xsl:if>
+    <xsl:apply-templates select="$subtopicNodes"/>
+  </xsl:if>
+</xsl:template>
+
+<!-- suppress default processing because title not used in JavaHelp map -->
+<xsl:template match="*[contains(@class,' map/topicref ')]" mode="title">
+  <xsl:param name="isFirst"/>
+  <xsl:param name="infile"/>
+  <xsl:param name="nodeID"/>
+  <xsl:param name="outfile"/>
+</xsl:template>
+
+</xsl:stylesheet>

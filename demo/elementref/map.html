@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?><!--Common DITA topic to HTML application by IBM Corp., 2001, 2002, 2003-->
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-US"><head><meta http-equiv="generator" content="IBM Darwin Information Typing Architecture topic-to-html transform"/><meta name="copyright" content="(C) Copyright IBM Corp. 2001, 2002, 2003"/><meta name="security" content="public"/><link rel="stylesheet" type="text/css" href="common.css"/><title>
+map
+</title></head><body class="base"><a name="map"/>
+<h1 class="topictitle1">
+<span>map</span>
+</h1>
+<div><!--topic body-->
+<div><a name="d2e14"/><p class="sectiontitle"><b>Purpose</b></p>The &lt;<span>map</span>&gt; element is used to define a map which
+describes the relationships among a set of DITA topics. Maps consist of references
+to topics organized into hierarchies. Maps provide a way to
+express these relationships in a single common format that can be used for
+different outputs, such as to aggregate related topics for a single print
+job.<p>The containing element for a map is the &lt;<span>map</span>&gt;
+element, which can take title and id attributes. Within the map, use the &lt;<span>topicref</span>&gt;
+element to add and organize references to the topics.</p></div>
+<div><a name="d2e34"/><p class="sectiontitle"><b>Contained by</b></p>This is the root element for mapping applications.</div>
+<div><a name="d2e37"/><p class="sectiontitle"><b>Contains</b></p><a href="topicref.html">topicref</a> (0 or more) </div>
+<div><a name="d2e42"/><p class="sectiontitle"><b>Attributes</b></p>
+<a name="map__map_attr"/><table border="1"><tr><th>Name</th><th>Description</th><th>Data Type</th><th>Default Value</th><th>Required?</th></tr>
+<tr>
+<td align="left" valign="top" headers="t1">title</td>
+<td align="left" valign="top" headers="t1">An identifying title for this element.</td>
+<td align="left" valign="top" headers="t1">CDATA</td>
+<td align="left" valign="top" headers="t1">#IMPLIED</td>
+<td align="left" valign="top" headers="t1"><span style="color:green">boolean: no</span>
+
+</td>
+</tr>
+<tr>
+<td align="left" valign="top" headers="t1">id</td>
+<td align="left" valign="top" headers="t1">This attribute is only used for debugging purposes to tell where
+generated links came from.</td>
+<td align="left" valign="top" headers="t1">ID</td>
+<td align="left" valign="top" headers="t1">#IMPLIED</td>
+<td align="left" valign="top" headers="t1"><span style="color:green">boolean: no</span>
+
+</td>
+</tr>
+<tr>
+<td align="left" valign="top" headers="t1">class</td>
+<td align="left" valign="top" headers="t1"><span><span>Not for use by authors. If an editor displays class attribute
+values, do not edit them.</span></span> The class attribute supports specialization.
+Its predefined values help the output transforms work correctly with ranges
+of related content.</td>
+<td align="left" valign="top" headers="t1">CDATA</td>
+<td align="left" valign="top" headers="t1">#IMPLIED</td>
+<td align="left" valign="top" headers="t1"><span style="color:green">boolean: no</span></td>
+</tr>
+</table>
+</div>
+<div><a name="d2e87"/><p class="sectiontitle"><b>Example</b></p>In this example, there are six topicrefs. They are nested and have
+a hierarchical relationship. Bats.xml is the parent topic and the other topics
+are its children.<pre>&lt;map title="Bats" id="mybats"&gt; Bats
+ &lt;topicref href="bats.xml" type="topic"
+  &lt;topicref href="batcaring.xml" type="task"&gt;&lt;/topicref&gt;
+  &lt;topicref href="batfeeding.xml" type="task"&gt;&lt;/topicref&gt;
+  &lt;topicref href="batsonar.xml" type="concept"&gt;&lt;/topicref&gt;
+  &lt;topicref href="batguano.xml" type="reference"&gt;&lt;/topicref&gt;
+  &lt;topicref href="bathistory.xml" type="reference"&gt;&lt;/topicref&gt;
+ &lt;/topicref&gt;
+&lt;/map&gt;</pre></div></div>
+</body></html>

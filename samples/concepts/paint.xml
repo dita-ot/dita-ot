@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/ditaview_shell.xsl" type="text/xsl"?>
+<!DOCTYPE concept PUBLIC "-//IBM//DTD DITA Concept//EN"
+ "../../dtd/concept.dtd">
+<concept id="paintconcept" xml:lang="en-us">
+<title>Paint</title>
+<prolog></prolog><conbody><p>Paint is useful for refreshing the look of rooms and furniture. Store unused 
+portions in the garage.</p></conbody>
+<related-links>
+<link href="../tasks/spraypainting.xml" format="xml" type="task"><linktext>Spray painting</linktext></link>
+</related-links></concept>

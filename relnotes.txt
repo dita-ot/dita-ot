@@ -1,0 +1,11 @@
+DITA Open Toolkit 1.0 is a major upgrade from its predecessor, the developerWorks version known as "dita132." Because this is a new project with a new name. a new home, and largely new code, and because it is considered production-level code for XHTML output, the project numbering has been initiated at 1.0 for the first built release. The 1.0 version of code is still based on the dita132 DTDs and Schemas.
+
+Major improvements from dita132 include:
+
+    * A new processing architecture that includes a new preprocessing stage
+    * Full conref resolution in the preprocessor
+    * Full conditional resolution (filtering and flagging) in the preprocessor
+    * Second pass transformation into final output formats
+    * Use of Ant and Java for the processing sequence and utility code
+    * A high-quality transform for XHTML output based on code that IBM has tested and used for the past 5 years
+    * Translated libraries for generated text in 47 languages (accessed by region and country code)

@@ -1,0 +1,136 @@
+<project name="pre-targets"  basedir=".">
+  <!-- preprocess target begin -->
+  <target name="preprocess" depends="gen-list,copy-image,debug-filter,move-index-entries,conref,mappull,maplink,move-links,topicpull">
+    
+  </target>
+  <!-- preprocess target end-->
+
+  <!-- parameters 
+	    dita.input.dirname      required
+	    dita.input              required
+      dita.input.valfile      optional
+      dita.temp.dir           required
+      dita.extname            required
+  -->
+  
+  <!-- preprocess modules begin -->
+  <target name="gen-list">
+    <pipeline message="Generate list."
+      module="GenMapAndTopicList"
+      basedir="${dita.input.dirname}"
+      inputmap="${dita.input}"/>
+	
+	<property file="${dita.temp.dir}${file.separator}dita.list"/>
+  
+	<condition property="noConref">
+		<equals arg1="${conref.list}" arg2=""/>
+	</condition>
+	<condition property="noMap">
+		<equals arg1="${fullditamap.list}" arg2=""/>
+	</condition>
+	<condition property="noTopicpull">
+		<equals arg1="${hrefditatopc.list}" arg2=""/>
+    </condition>
+	<condition property="noImagelist">
+		<equals arg1="${imagelist.list}" arg2=""/>
+	</condition>
+  </target>
+  
+  <target name="debug-filter" depends="gen-list,debug,debug-and-filter"/>
+  
+  <target name="debug" unless="dita.input.valfile">
+    <echo message="debug"/>
+    <pipeline message="Debug and filtering."
+		module="DebugAndFilter"
+    basedir="${dita.input.dirname}"/>
+  </target>
+  
+  <target name="debug-and-filter" if="dita.input.valfile">
+    <echo message="debug and filter"/>
+    <pipeline message="Debug and filtering."
+		module="DebugAndFilter"
+		ditaval="${dita.input.valfile}"
+    basedir="${dita.input.dirname}"/>
+  </target>
+  
+  <target name="move-index-entries" unless="noMap" depends="debug-filter">
+  	<pipeline message="Move index entries."
+		module="MoveIndex"
+		inputmap="${dita.input}"
+	/>
+  </target>
+  
+  <target name="conref" unless="noConref" depends="debug-filter">
+  	<echo message="in conref"/>
+  	<xslt processor="trax"
+		basedir="${dita.temp.dir}"
+		destdir="${dita.temp.dir}"
+		includes="${conref.list}"
+		style="xsl/preprocess/conref.xsl">
+	<mapper type="glob" from="*" to="*.cnrf"/>
+        <param name="DITAEXT" expression="${dita.extname}"/>
+    </xslt>
+	
+	<move todir="${dita.temp.dir}">
+		<fileset dir="${dita.temp.dir}" includes="**/*.cnrf"/>
+		<mapper type="glob" from="*.cnrf" to="*"/>
+	</move>
+  </target>
+    
+  <target name="mappull" unless="noMap" depends="move-index-entries">
+  	<dirname property="mappull.workdir" file="${dita.temp.dir}/${dita.input}"/>
+
+    <xslt processor="trax"
+      in="${dita.temp.dir}${file.separator}${dita.input}"
+      out="${mappull.workdir}${file.separator}${dita.map.filename.root}.ditamap.pull"
+      style="xsl/preprocess/mappull.xsl">
+        <param name="DITAEXT" expression="${dita.extname}" if="dita.extname"/>
+    </xslt>
+	  
+    <copy overwrite="true" todir="${dita.temp.dir}">
+      <fileset dir="${dita.temp.dir}" includes="**/*.ditamap.pull"/>
+      <mapper type="glob" from="*.ditamap.pull" to="*.ditamap"/>
+    </copy>
+  </target>
+  
+  <target name="maplink" unless="noMap" depends="mappull">
+  	<dirname property="maplink.workdir" file="${dita.temp.dir}/${dita.input}"/>
+  	<xslt processor="trax"
+		in="${dita.temp.dir}${file.separator}${dita.input}"
+		out="${maplink.workdir}${file.separator}maplinks.unordered"
+		style="xsl/preprocess/maplink.xsl">
+        <param name="DITAEXT" expression="${dita.extname}" if="dita.extname"/>
+    </xslt>
+	
+  </target>
+  
+  <target name="move-links" unless="noMap" depends="maplink">
+      <pipeline message="Move links."
+		module="MoveLinks"
+		maplinks="${maplink.workdir}${file.separator}maplinks.unordered"
+		inputmap="${dita.input}"/>
+  </target>
+  
+  <target name="topicpull" depends="debug-filter">
+    <xslt processor="trax"
+		basedir="${dita.temp.dir}"
+		destdir="${dita.temp.dir}"
+		includes="${fullditatopc.list}"
+		extension="${dita.extname}.pull"
+		style="xsl/preprocess/topicpull.xsl">
+        <param name="DITAEXT" expression="${dita.extname}" if="dita.extname"/>
+    </xslt>
+	<move todir="${dita.temp.dir}">
+		<fileset dir="${dita.temp.dir}" includes="**/*${dita.extname}.pull"/>
+		<mapper type="glob" from="*${dita.extname}.pull" to="*${dita.extname}"/>
+    </move>
+  </target>
+
+  
+  <target name="copy-image" unless="noImagelist">
+    <copy todir="${output.dir}">
+        <fileset dir="${dita.input.dirname}" includes="${imagelist.list}"></fileset>
+    </copy>
+  </target>
+  <!-- preprocess modules end -->
+</project>

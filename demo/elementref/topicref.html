@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?><!--Common DITA topic to HTML application by IBM Corp., 2001, 2002, 2003-->
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-US"><head><meta http-equiv="generator" content="IBM Darwin Information Typing Architecture topic-to-html transform"/><meta name="copyright" content="(C) Copyright IBM Corp. 2001, 2002, 2003"/><meta name="security" content="public"/><link rel="stylesheet" type="text/css" href="common.css"/><title>
+topicref
+</title></head><body class="base"><a name="topicref"/>
+<h1 class="topictitle1">
+<span>topicref</span>
+</h1>
+<div><!--topic body-->
+<div><a name="d2e14"/><p class="sectiontitle"><b>Purpose</b></p>The &lt;<span>topicref</span>&gt; element designates a topic (such
+as a concept, task, or reference) as a link in a DITA map. A &lt;<span>topicref</span>&gt;
+can contain other&lt;<span>topicref</span>&gt; elements, allowing you to
+express navigation or table-of-contents hierarchies.
+<p>
+</p></div>
+<div><a name="d2e34"/><p class="sectiontitle"><b>Contained by</b></p><a href="map.html">map</a>,  <a href="topicref.html">topicref</a></div>
+<div><a name="d2e41"/><p class="sectiontitle"><b>Contains</b></p><a href="topicref.html">topicref</a> (0 or more) </div>
+<div><a name="d2e46"/><p class="sectiontitle"><b>Attributes</b></p>
+<a name="topicref__topicref_attr"/><table border="1"><tr><th>Name</th><th>Description</th><th>Data Type</th><th>Default Value</th><th>Required?</th></tr>
+<tr>
+<td align="left" valign="top" headers="t1">navtitle</td>
+<td align="left" valign="top" headers="t1">Specifies the title of a container in a toc.</td>
+<td align="left" valign="top" headers="t1">CDATA</td>
+<td align="left" valign="top" headers="t1">#IMPLIED</td>
+<td align="left" valign="top" headers="t1"><span style="color:green">boolean: no</span>
+
+</td>
+</tr>
+<tr>
+<td align="left" valign="top" headers="t1">id</td>
+<td align="left" valign="top" headers="t1">An anchor point. This ID is the target for references by link, xref,
+and conref, and for external applications that refer to DITA content..</td>
+<td align="left" valign="top" headers="t1">ID</td>
+<td align="left" valign="top" headers="t1">#IMPLIED</td>
+<td align="left" valign="top" headers="t1"><span style="color:green">boolean: no</span>
+
+</td>
+</tr>
+<tr>
+<td align="left" valign="top" headers="t1">href</td>
+<td align="left" valign="top" headers="t1">A hyperlink to an external Web page (URL) or to another topic in
+the same file or in another file. The href attribute identifies the destination
+of the cross-reference link using conventional URL syntax:<pre>href="http://www.xxx.com" format="html"
+href="myfile.dita" type="concept"
+   (or task, reference, or topic)
+href="myfile.dita#topicid/figid" type="fig"
+   (or table, fn, or section)
+href="mything.pdf" format="pdf"</pre></td>
+<td align="left" valign="top" headers="t1">CDATA</td>
+<td align="left" valign="top" headers="t1">#IMPLIED</td>
+<td align="left" valign="top" headers="t1"><span style="color:green">boolean: no</span></td>
+</tr>
+<tr>
+<td align="left" valign="top" headers="t1">type</td>
+<td align="left" valign="top" headers="t1">Describes the target of a cross-reference and may generate cross-reference
+text based on that description. <p>Allowed values are: </p><dl>
+<dt><b>fig</b></dt>
+<dd>Indicates a link to a figure.</dd>
+
+<dt><b>table</b></dt>
+<dd>Indicates a link to a table.</dd>
+
+<dt><b>li</b></dt>
+<dd>Indicates a link to an ordered list item.</dd>
+
+<dt><b>fn</b></dt>
+<dd>Indicates a link to a footnote.</dd>
+
+<dt><b>section</b></dt>
+<dd>"section" indicates a link to a section.</dd>
+
+<dt><b>concept, task, reference, topic</b></dt>
+<dd>Cross-reference to a topic type.</dd>
+
+<dt><b>other</b></dt>
+<dd>Indicates a cross-reference to an alternate topic information type (currently
+unsupported).</dd>
+</dl>
+
+<p><b>Note: </b>Valid types for &lt;<span>link</span>&gt; include
+topic, concept, task, and reference. Valid types for &lt;<span>xref</span>&gt;
+also include fig, figgroup, table, li, fn, and section.</p>
+
+<p><b>Note: </b>The values <span>external</span> and <span>local</span> are
+deprecated for this attribute, and will be removed in later versions of the
+DTDs. Use the <span><span>scope</span></span> attribute instead to specify
+these linking semantics.</p></td>
+<td align="left" valign="top" headers="t1">CDATA</td>
+<td align="left" valign="top" headers="t1">#IMPLIED (Processed as if the target were of type "topic.")</td>
+<td align="left" valign="top" headers="t1"><span style="color:green">boolean: no</span></td>
+</tr>
+<tr>
+<td align="left" valign="top" headers="t1">class</td>
+<td align="left" valign="top" headers="t1"><span><span>Not for use by authors. If an editor displays class attribute
+values, do not edit them.</span></span> The class attribute supports specialization.
+Its predefined values help the output transforms work correctly with ranges
+of related content.</td>
+<td align="left" valign="top" headers="t1">CDATA</td>
+<td align="left" valign="top" headers="t1">#IMPLIED</td>
+<td align="left" valign="top" headers="t1"><span style="color:green">boolean: no</span></td>
+</tr>
+</table>
+</div>
+<div><a name="d2e117"/><p class="sectiontitle"><b>Example</b></p>In this example, there are six topicrefs. They are nested and have
+a hierarchical relationship. Bats.xml is the parent topic and the other topics
+are its children.<pre>&lt;map title="Bats" Bats
+ &lt;topicref href="bats.xml" type="topic"&gt;
+  &lt;topicref href="batcaring.xml" type="task"&gt;&lt;/topicref&gt;
+  &lt;topicref href="batfeeding.xml" type="task"&gt;&lt;/topicref&gt;
+  &lt;topicref href="batsonar.xml" type="concept"&gt;&lt;/topicref&gt;
+  &lt;topicref href="batguano.xml" type="reference"&gt;&lt;/topicref&gt;
+  &lt;topicref href="bathistory.xml" type="reference"&gt;&lt;/topicref&gt;
+ &lt;/topicref&gt;
+&lt;/map&gt;</pre></div></div>
+</body></html>

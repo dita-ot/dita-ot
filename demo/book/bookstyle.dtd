@@ -1,0 +1,57 @@
+<!ELEMENT bookstyle (basic, content-sequence, styled-target*)>
+
+<!ELEMENT basic (style-type, page, pagination, cover-layout, column-layout, generate-title, generate-prefix)>
+<!ELEMENT style-type (final | draft)>
+<!ELEMENT final EMPTY>
+<!ELEMENT draft EMPTY>
+<!ELEMENT page EMPTY>
+<!ATTLIST page format (8.5x11|8.5x11-2column|8x9|7x9|7x9-landscape|5.5x8.5|5.5x8.5-landscape|4.75x4.75|4.25x6.25) #REQUIRED>
+<!ELEMENT pagination (sequential | folio)>
+<!ELEMENT sequential EMPTY>
+<!ELEMENT folio EMPTY>
+<!ELEMENT column-layout (one | two | offset)>
+<!ELEMENT one EMPTY>
+<!ELEMENT two EMPTY>
+<!ELEMENT offset EMPTY>
+<!ELEMENT cover-layout (spine?)>
+<!ELEMENT spine EMPTY>
+
+<!ELEMENT generate-title (abbreviations?, abstract?, amendments?, bibliography?, glossary?, preface?)>
+<!ELEMENT generate-prefix ((numbered-label | numbered), appendix?, chapter?, part?)>
+<!ELEMENT numbered-label EMPTY>
+<!ELEMENT numbered EMPTY>
+
+<!ELEMENT content-sequence (titlepage | creditspage | toc | draftintro | abstract | dedication | preface | chapters | appendixes | notices | amendments | colophon | abbreviations | bibliography | glossary | index | reader-comment-form)*>
+<!ELEMENT titlepage EMPTY>
+<!ELEMENT creditspage EMPTY>
+<!ELEMENT toc EMPTY>
+<!ATTLIST toc depth CDATA #REQUIRED>
+<!ELEMENT index EMPTY>
+<!ELEMENT reader-comment-form EMPTY>
+
+<!ELEMENT styled-target (page-break?, subtoc?, column-layout?)>
+<!ATTLIST styled-target type CDATA #REQUIRED>
+<!ELEMENT page-break (any | even | odd)>
+<!ELEMENT any EMPTY>
+<!ELEMENT even EMPTY>
+<!ELEMENT odd EMPTY>
+<!ELEMENT subtoc (hide | show)>
+<!ELEMENT hide EMPTY>
+<!ELEMENT show EMPTY>
+
+<!ELEMENT abbreviations EMPTY>
+<!ELEMENT abstract EMPTY>
+<!ELEMENT amendments EMPTY>
+<!ELEMENT appendix EMPTY>
+<!ELEMENT appendixes EMPTY>
+<!ELEMENT bibliography EMPTY>
+<!ELEMENT colophon EMPTY>
+<!ELEMENT chapter EMPTY>
+<!ELEMENT chapters EMPTY>
+<!ELEMENT dedication EMPTY>
+<!ELEMENT draftintro EMPTY>
+<!ELEMENT glossary EMPTY>
+<!ELEMENT notices EMPTY>
+<!ELEMENT part EMPTY>
+<!ELEMENT preface EMPTY>
+

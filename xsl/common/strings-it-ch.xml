@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
+
+<strings xml:lang="it-ch">        <!-- Swiss Italian -->
+
+<!-- various labels (not author controlled) -->
+<str name="Figure">Figura</str>
+<str name="Table">Tabella</str>
+<str name="Next topic">Argomento successivo</str>
+<str name="Previous topic">Argomento precedente</str>
+<str name="Parent topic">Argomento principale</str>
+<str name="Required cleanup">Correzione necessaria</str>
+<str name="Draft comment">Commento per la versione bozza</str>
+<str name="Option">Opzione</str>
+<str name="Description">Descrizione</str>
+<str name="Optional">Opzionale</str>
+<str name="Required">Richiesto</str>
+<str name="Skip visual syntax diagram">Salta diagramma di sintassi</str>
+<str name="Read syntax diagram">Leggi diagramma di sintassi</str>
+<str name="Start of change">Inizio modifica</str>
+<str name="End of change">Fine modifica</str>
+<str name="Index">Indice analitico</str>
+<str name="Special characters">Caratteri speciali</str>
+<str name="Numerics">Numerico</str>
+<str name="End notes">Note a pié di pagina</str>
+<str name="Artwork">Figura</str>
+<str name="Syntax">Sintassi</str>
+<str name="Type">Tipo</str>
+<str name="Value">Valore</str>
+<!-- Text that goes before a link to a topic -->
+<str name="intro-to-topic-link"></str>
+
+<!-- peril notice labels -->
+<str name="Note">Nota</str>
+<str name="Notes">Note</str>
+<str name="Tip">Suggerimento</str>
+<str name="Fastpath">Percorso di accesso rapido</str>
+<str name="Important">Importante</str>
+<str name="Attention">Attenzione</str>
+<str name="Caution">Avvertenza</str>
+<str name="Danger">Pericolo</str>
+<str name="Remember">Attenzione</str>
+<str name="Restriction">Limitazione</str>
+
+<!-- default title text for section level generated sections -->
+<str name="Contents">Indice</str>
+<str name="Related concepts">Concetti correlati</str>
+<str name="Related tasks">Attività correlate</str>
+<str name="Related reference">Riferimenti correlati</str>
+<str name="Related information">Informazioni correlate</str>
+
+<str name="Prerequisite">Prerequisito</str>
+<str name="Prerequisites">Prerequisiti</str>
+<str name="or">oppure</str>
+
+<str name="Copyright">Copyright</str>
+
+<!-- Symbols -->
+<str name="OpenQuote">"</str>
+<str name="CloseQuote">"</str>
+<str name="ColonSymbol">:</str>
+
+</strings>

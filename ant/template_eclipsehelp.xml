@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!-- revise @PLACEHOLDER@ names and values-->
+<project name="@PROJECT.NAME@_eclipsehelp" default="all" basedir="..">
+    <import file="${basedir}${file.separator}conductor.xml"/>
+
+	<target name="all" depends="@DELIVERABLE.NAME@2eclipsehelp">
+	</target>
+
+	<target name="@DELIVERABLE.NAME@2eclipsehelp" depends="use-init">
+      <antcall target="dita2eclipsehelp">
+        <param name="transtype" value="dita2eclipsehelp"/>
+		<param name="args.input"
+            value="@DITA.INPUT@"/>
+		<param name="output.dir"
+            value="@OUTPUT.DIR@"/>
+      </antcall>
+	</target>
+</project>

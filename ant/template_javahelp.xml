@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!-- revise @PLACEHOLDER@ names and values-->
+<project name="@PROJECT.NAME@_javahelp" default="all" basedir="..">
+    <import file="${basedir}${file.separator}conductor.xml"/>
+
+	<target name="all" depends="@DELIVERABLE.NAME@2javahelp">
+	</target>
+
+	<target name="@DELIVERABLE.NAME@2javahelp" depends="use-init">
+      <antcall target="dita2javahelp">
+        <param name="transtype" value="dita2javahelp"/>
+		<param name="args.input"
+            value="@DITA.INPUT@"/>
+		<param name="output.dir"
+            value="@OUTPUT.DIR@"/>
+      </antcall>
+	</target>
+</project>

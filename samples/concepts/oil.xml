@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/ditaview_shell.xsl" type="text/xsl"?>
+<!DOCTYPE concept PUBLIC "-//IBM//DTD DITA Concept//EN"
+ "../../dtd/concept.dtd">
+<concept id="oilconcept" xml:lang="en-us">
+<title>Oil</title>
+<prolog>
+</prolog><conbody><p>Motor oil keeps your car's engine running smoothly. Oil should be changed 
+every 6000 kilometers.</p></conbody>
+<related-links>
+<link href="../tasks/changingtheoil.xml" format="xml" type="task"><linktext>Changing the oil</linktext></link>
+</related-links></concept>

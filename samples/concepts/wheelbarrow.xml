@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ *-->
+<?xml-stylesheet href="../../xsl/ditaview_shell.xsl" type="text/xsl"?>
+<!DOCTYPE concept PUBLIC "-//IBM//DTD DITA Concept//EN"
+ "../../dtd/concept.dtd">
+<concept id="wheelbarrow" xml:lang="en-us">
+<title>Wheel barrow</title>
+<conbody><p>A good wheel barrow will save your back from extensive trauma when you 
+garden.</p>
+</conbody>
+</concept>
