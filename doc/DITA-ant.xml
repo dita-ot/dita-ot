@@ -75,7 +75,7 @@ ant demo.faq</codeblock>
       <p>If you want to build your input to output in an default and easy way, you can try to invoke the prompt mode ant by executing</p>
       <codeblock>ant</codeblock>
       <p>Ant will prompt you for the input and output. You need to fill in the input file and output directory in correctly upper or lower case.</p>
-      <p>You can reuse the targets provided by the <codeph>conductor.xml</codeph> file in builds for your own DITA content. Just copy the <codeph>build.xml</codeph>, <codeph>conductor.xml</codeph>, <codeph>pretargets.xml,</codeph> <codeph>ditatargets.xml</codeph> and<codeph>catalog-ant.xml</codeph> file into a new directory and edit the <codeph>build.xml</codeph> to specify your DITA files.</p>
+      <p>You can reuse the targets provided by the <codeph>conductor.xml</codeph> file in builds for your own DITA content. Just copy the <codeph>build.xml</codeph>, <codeph>conductor.xml</codeph>, <codeph>pretargets.xml,</codeph><codeph>ditatargets.xml</codeph> and<codeph>catalog-ant.xml</codeph> file into a new directory and edit the <codeph>build.xml</codeph> to specify your DITA files.</p>
       <note type="note">To troubleshoot problems in setting up Java, Ant, Saxon, or FOP, you will get better information from the communities for those components than for the DITA community. Of course, if you find issues with the DITA XSLT scripts (or have ideas for improving them), you should engage the DITA community.</note>
       <section>
         <title>Ant tasks and scripts</title>
@@ -488,7 +488,7 @@ ant demo.faq</codeblock>
 &lt;project name=&quot;sample_xhtml&quot; default=&quot;all&quot; basedir=&quot;..&quot;&gt;
   
   &lt;import file=&quot;${basedir}${file.separator}conductor.xml&quot;/&gt;
-
+  &lt;property name=&quot;dita.extname&quot; value=&quot;.xml&quot;/&gt;
  &lt;target name=&quot;all&quot; depends=&quot;sample2xhtml&quot;&gt;
  &lt;/target&gt;
  &lt;!-- revise below here --&gt;
@@ -503,7 +503,7 @@ ant demo.faq</codeblock>
  &lt;/target&gt;
 &lt;/project&gt;
 </codeblock>
-        </p>After you write the input file and output directory to overwrite @DITA.INPUT@ and @OUTPUT.DIR@, the script can do the transformation from your input to xhtml for you by command<pre>c:\pkg\DITA-OT1.0&gt;ant -f ant/template_xhtml.xml</pre> All of targets we use here are defined in conductor.xml. Therefore, you need to import that file before calling the target.</section>
+        </p>After you write the input file and output directory to overwrite @DITA.INPUT@ and @OUTPUT.DIR@, the script can do the transformation from your input to xhtml for you by command. As to the property dita.extname, it&apos;s a global variable with which you can set the file extension name of the topic file. By default dita.extname is <q>.xml</q>. You can also set it to <q>.dita</q> according to OASIS DITA recommendation.<pre>c:\pkg\DITA-OT1.0&gt;ant -f ant/template_xhtml.xml</pre> All of targets we use here are defined in conductor.xml. Therefore, you need to import that file before calling the target.</section>
     </conbody>
   </concept>
 </concept>

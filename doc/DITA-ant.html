@@ -12,6 +12,14 @@
 <meta name="DC.Title" content="Building DITA output with Ant" />
 <meta name="abstract" content="You can use the Ant build tool to automate builds that use the DITA processes including output for the sample documents provided with DITA." />
 <meta name="description" content="You can use the Ant build tool to automate builds that use the DITA processes including output for the sample documents provided with DITA." />
+<meta scheme="URI" name="DC.Relation" content="DITA-readme.html" />
+<meta scheme="URI" name="DC.Relation" content="DITA-changes.html" />
+<meta scheme="URI" name="DC.Relation" content="DITA-futures.html" />
+<meta scheme="URI" name="DC.Relation" content="DITA-installing.html" />
+<meta scheme="URI" name="DC.Relation" content="DITA-usingtransforms.html" />
+<meta scheme="URI" name="DC.Relation" content="DITA-tested.html" />
+<meta scheme="URI" name="DC.Relation" content="DITA-tweaks.html" />
+<meta scheme="URI" name="DC.Relation" content="DITA-XS-readme.html" />
 <meta content="XHTML" name="DC.Format" />
 <meta content="DITA-ant" name="DC.Identifier" />
 <link href="commonltr.css" type="text/css" rel="stylesheet" />
@@ -36,7 +44,24 @@
 
   </div>
 
-  <div class="nested1" id="setup_ant"><a name="setup_ant"><!-- --></a>
+  <div>
+<div class="familylinks">
+<div class="parentlink"><strong>Parent topic:</strong> <a href="DITA-readme.html" title="The DITA Open Toolkit is a reference implementation of the OASIS DITA Technical Committee's specification for DITA DTDs and Schemas. The Toolkit transforms DITA content (maps and topics) into deliverable formats, including: XHTML, Eclipse Help, HTML Help, and JavaHelp.">The DITA Open Toolkit</a></div>
+</div>
+<div class="relconcepts"><strong>Related concepts</strong><br />
+<div><a href="DITA-futures.html" title="Activity on the DITA Open Toolkit project will revolve around maintenance (bug fixes), enhancements (new function based on prioritized requests), demos and experimentation (sandbox activity), and community support (forums, etc.).">DITA futures</a></div>
+</div>
+<div class="reltasks"><strong>Related tasks</strong><br />
+<div><a href="DITA-installing.html" title="This topic explains how to install the DITA Toolkit processing environment.">Installing the DITA Toolkit</a></div>
+</div>
+<div class="relinfo"><strong>Related information</strong><br />
+<div><a href="DITA-changes.html" title="This document lists major changes and new features by release. Latest release news is added at the top of this document.">DITA release history</a></div>
+<div><a href="DITA-usingtransforms.html" title="The core transforms of the DITA Toolkit represent the Reference Implementation for processing the standard DITA specification as maintained by OASIS Open.">Using DITA transforms</a></div>
+<div><a href="DITA-tested.html" title="See which tools and platforms have been used in testing the DITA processing system.">Tested platforms and tools</a></div>
+<div><a href="DITA-tweaks.html" title="No one transform is ever able to meet your requirements off the shelf. DITA transforms support a number of ways to customize or enhance the output without having to modify core transforms directly.">Controls, parameters, tweaks, and gizmos for dita2htmlImpl.xsl</a></div>
+<div><a href="DITA-XS-readme.html" title="This document describes the release notes and usage of the experimental DITA XML Schema on developerWorks.">DITA XML Schema Readme</a></div>
+</div>
+</div><div class="nested1" id="setup_ant"><a name="setup_ant"><!-- --></a>
     <h2 class="topictitle2">Setting Up Ant</h2>
 
     
@@ -133,7 +158,7 @@ ant demo.faq</pre>
 
       <p>Ant will prompt you for the input and output. You need to fill in the input file and output directory in correctly upper or lower case.</p>
 
-      <p>You can reuse the targets provided by the <samp class="codeph">conductor.xml</samp> file in builds for your own DITA content. Just copy the <samp class="codeph">build.xml</samp>, <samp class="codeph">conductor.xml</samp>, <samp class="codeph">pretargets.xml,</samp> <samp class="codeph">ditatargets.xml</samp> and<samp class="codeph">catalog-ant.xml</samp> file into a new directory and edit the <samp class="codeph">build.xml</samp> to specify your DITA files.</p>
+      <p>You can reuse the targets provided by the <samp class="codeph">conductor.xml</samp> file in builds for your own DITA content. Just copy the <samp class="codeph">build.xml</samp>, <samp class="codeph">conductor.xml</samp>, <samp class="codeph">pretargets.xml,</samp><samp class="codeph">ditatargets.xml</samp> and<samp class="codeph">catalog-ant.xml</samp> file into a new directory and edit the <samp class="codeph">build.xml</samp> to specify your DITA files.</p>
 
       <div class="note"><span class="notetitle">Note: </span>To troubleshoot problems in setting up Java, Ant, Saxon, or FOP, you will get better information from the communities for those components than for the DITA community. Of course, if you find issues with the DITA XSLT scripts (or have ideas for improving them), you should engage the DITA community.</div>
 
@@ -170,11 +195,11 @@ ant demo.faq</pre>
                           
                           <thead align="left">
                             <tr>
-                              <th valign="top" width="16.666666666666664%" id="N102D6">Parameter </th>
+                              <th valign="top" width="16.666666666666664%" id="N10344">Parameter </th>
 
-                              <th valign="top" width="66.66666666666666%" id="N102DC">Description</th>
+                              <th valign="top" width="66.66666666666666%" id="N1034A">Description</th>
 
-                              <th valign="top" width="16.666666666666664%" id="N102E2">Required</th>
+                              <th valign="top" width="16.666666666666664%" id="N10350">Required</th>
 
                             </tr>
 
@@ -182,20 +207,20 @@ ant demo.faq</pre>
 
                           <tbody>
                             <tr>
-                              <td valign="top" width="16.666666666666664%" headers="N102D6 ">args.input</td>
+                              <td valign="top" width="16.666666666666664%" headers="N10344 ">args.input</td>
 
-                              <td valign="top" width="66.66666666666666%" headers="N102DC ">The file path and file name of the input file. This argument should be in the same upper or lower case with the filename on file system.</td>
+                              <td valign="top" width="66.66666666666666%" headers="N1034A ">The file path and file name of the input file. This argument should be in the same upper or lower case with the filename on file system.</td>
 
-                              <td valign="top" width="16.666666666666664%" headers="N102E2 ">Yes</td>
+                              <td valign="top" width="16.666666666666664%" headers="N10350 ">Yes</td>
 
                             </tr>
 
                             <tr>
-                              <td valign="top" width="16.666666666666664%" headers="N102D6 ">output.dir</td>
+                              <td valign="top" width="16.666666666666664%" headers="N10344 ">output.dir</td>
 
-                              <td valign="top" width="66.66666666666666%" headers="N102DC ">The path of the output directory.</td>
+                              <td valign="top" width="66.66666666666666%" headers="N1034A ">The path of the output directory.</td>
 
-                              <td valign="top" width="16.666666666666664%" headers="N102E2 ">Yes</td>
+                              <td valign="top" width="16.666666666666664%" headers="N10350 ">Yes</td>
 
                             </tr>
 
@@ -216,11 +241,11 @@ ant demo.faq</pre>
                           
                           <thead align="left">
                             <tr>
-                              <th valign="top" width="16.666666666666664%" id="N10366">Parameter </th>
+                              <th valign="top" width="16.666666666666664%" id="N103D4">Parameter </th>
 
-                              <th valign="top" width="66.66666666666666%" id="N1036C">Description</th>
+                              <th valign="top" width="66.66666666666666%" id="N103DA">Description</th>
 
-                              <th valign="top" width="16.666666666666664%" id="N10372">Required</th>
+                              <th valign="top" width="16.666666666666664%" id="N103E0">Required</th>
 
                             </tr>
 
@@ -228,112 +253,112 @@ ant demo.faq</pre>
 
                           <tbody>
                             <tr>
-                              <td valign="top" width="16.666666666666664%" headers="N10366 ">args.input</td>
+                              <td valign="top" width="16.666666666666664%" headers="N103D4 ">args.input</td>
 
-                              <td valign="top" width="66.66666666666666%" headers="N1036C ">The file path and file name of the input file. This argument should be in the same upper or lower case with the filename on file system.</td>
+                              <td valign="top" width="66.66666666666666%" headers="N103DA ">The file path and file name of the input file. This argument should be in the same upper or lower case with the filename on file system.</td>
 
-                              <td valign="top" width="16.666666666666664%" headers="N10372 ">Yes</td>
-
-                            </tr>
-
-                            <tr>
-                              <td valign="top" width="16.666666666666664%" headers="N10366 ">output.dir</td>
-
-                              <td valign="top" width="66.66666666666666%" headers="N1036C ">The path of the output directory.</td>
-
-                              <td valign="top" width="16.666666666666664%" headers="N10372 ">Yes</td>
+                              <td valign="top" width="16.666666666666664%" headers="N103E0 ">Yes</td>
 
                             </tr>
 
                             <tr>
-                              <td valign="top" width="16.666666666666664%" headers="N10366 ">args.eclipse.toc</td>
+                              <td valign="top" width="16.666666666666664%" headers="N103D4 ">output.dir</td>
 
-                              <td valign="top" width="66.66666666666666%" headers="N1036C ">The root file name of the output toc file.(Default is 'toc')</td>
+                              <td valign="top" width="66.66666666666666%" headers="N103DA ">The path of the output directory.</td>
 
-                              <td valign="top" width="16.666666666666664%" headers="N10372 ">No</td>
-
-                            </tr>
-
-                            <tr>
-                              <td valign="top" width="16.666666666666664%" headers="N10366 ">args.eclipse.plugin</td>
-
-                              <td valign="top" width="66.66666666666666%" headers="N1036C ">The file path of the plugin.xml file for eclipse help (Default value is <span class="q">"resource/plugin.xml"</span>)</td>
-
-                              <td valign="top" width="16.666666666666664%" headers="N10372 ">No</td>
+                              <td valign="top" width="16.666666666666664%" headers="N103E0 ">Yes</td>
 
                             </tr>
 
                             <tr>
-                              <td valign="top" width="16.666666666666664%" headers="N10366 ">dita.input.valfile</td>
+                              <td valign="top" width="16.666666666666664%" headers="N103D4 ">args.eclipse.toc</td>
 
-                              <td valign="top" width="66.66666666666666%" headers="N1036C ">The file name containing filter/flagging/revision information.</td>
+                              <td valign="top" width="66.66666666666666%" headers="N103DA ">The root file name of the output toc file.(Default is 'toc')</td>
 
-                              <td valign="top" width="16.666666666666664%" headers="N10372 ">No</td>
+                              <td valign="top" width="16.666666666666664%" headers="N103E0 ">No</td>
 
                             </tr>
 
                             <tr>
-                              <td valign="top" width="16.666666666666664%" headers="N10366 ">args.css</td>
+                              <td valign="top" width="16.666666666666664%" headers="N103D4 ">args.eclipse.plugin</td>
 
-                              <td valign="top" width="66.66666666666666%" headers="N1036C ">User's CSS filename parameter. <p>This can be the name of a stylesheet used by one or more topics within an overall group. This stylesheet can use the CSS cascade effect to modify existing properties or it can override or define new properties.</p>
+                              <td valign="top" width="66.66666666666666%" headers="N103DA ">The file path of the plugin.xml file for eclipse help (Default value is <span class="q">"resource/plugin.xml"</span>)</td>
+
+                              <td valign="top" width="16.666666666666664%" headers="N103E0 ">No</td>
+
+                            </tr>
+
+                            <tr>
+                              <td valign="top" width="16.666666666666664%" headers="N103D4 ">dita.input.valfile</td>
+
+                              <td valign="top" width="66.66666666666666%" headers="N103DA ">The file name containing filter/flagging/revision information.</td>
+
+                              <td valign="top" width="16.666666666666664%" headers="N103E0 ">No</td>
+
+                            </tr>
+
+                            <tr>
+                              <td valign="top" width="16.666666666666664%" headers="N103D4 ">args.css</td>
+
+                              <td valign="top" width="66.66666666666666%" headers="N103DA ">User's CSS filename parameter. <p>This can be the name of a stylesheet used by one or more topics within an overall group. This stylesheet can use the CSS cascade effect to modify existing properties or it can override or define new properties.</p>
 </td>
 
-                              <td valign="top" width="16.666666666666664%" headers="N10372 ">No</td>
+                              <td valign="top" width="16.666666666666664%" headers="N103E0 ">No</td>
 
                             </tr>
 
                             <tr>
-                              <td valign="top" width="16.666666666666664%" headers="N10366 ">args.csspath</td>
+                              <td valign="top" width="16.666666666666664%" headers="N103D4 ">args.csspath</td>
 
-                              <td valign="top" width="66.66666666666666%" headers="N1036C ">Default CSS path parameter.<p>This specifies a path for the cascading style sheet (CSS). This allows you to place the CSS in one place and have several different topics point to it. If no CSSPATH is specified, the CSS is assumed to be in the same directory as the XHTML.</p>
+                              <td valign="top" width="66.66666666666666%" headers="N103DA ">Default CSS path parameter.<p>This specifies a path for the cascading style sheet (CSS). This allows you to place the CSS in one place and have several different topics point to it. If no CSSPATH is specified, the CSS is assumed to be in the same directory as the XHTML.</p>
 </td>
 
-                              <td valign="top" width="16.666666666666664%" headers="N10372 ">No</td>
+                              <td valign="top" width="16.666666666666664%" headers="N103E0 ">No</td>
 
                             </tr>
 
                             <tr>
-                              <td valign="top" width="16.666666666666664%" headers="N10366 ">args.hdf</td>
+                              <td valign="top" width="16.666666666666664%" headers="N103D4 ">args.hdf</td>
 
-                              <td valign="top" width="66.66666666666666%" headers="N1036C ">The file name containing XHTML to be placed in the HEAD area</td>
+                              <td valign="top" width="66.66666666666666%" headers="N103DA ">The file name containing XHTML to be placed in the HEAD area</td>
 
-                              <td valign="top" width="16.666666666666664%" headers="N10372 ">No</td>
-
-                            </tr>
-
-                            <tr>
-                              <td valign="top" width="16.666666666666664%" headers="N10366 ">args.hdr</td>
-
-                              <td valign="top" width="66.66666666666666%" headers="N1036C ">The file name containing XHTML to be placed in the BODY running-heading area</td>
-
-                              <td valign="top" width="16.666666666666664%" headers="N10372 ">No</td>
+                              <td valign="top" width="16.666666666666664%" headers="N103E0 ">No</td>
 
                             </tr>
 
                             <tr>
-                              <td valign="top" width="16.666666666666664%" headers="N10366 ">args.ftr</td>
+                              <td valign="top" width="16.666666666666664%" headers="N103D4 ">args.hdr</td>
 
-                              <td valign="top" width="66.66666666666666%" headers="N1036C ">The file name containing XHTML to be placed in the BODY running-footing area</td>
+                              <td valign="top" width="66.66666666666666%" headers="N103DA ">The file name containing XHTML to be placed in the BODY running-heading area</td>
 
-                              <td valign="top" width="16.666666666666664%" headers="N10372 ">No</td>
-
-                            </tr>
-
-                            <tr>
-                              <td valign="top" width="16.666666666666664%" headers="N10366 ">args.draft</td>
-
-                              <td valign="top" width="66.66666666666666%" headers="N1036C ">Default "hide draft &amp; cleanup content" processing parameter (<span class="q">"no"</span>= hide them); <span class="q">"no"</span> and <span class="q">"yes"</span> are valid values; non-<span class="q">"yes"</span> is ignored.</td>
-
-                              <td valign="top" width="16.666666666666664%" headers="N10372 ">No</td>
+                              <td valign="top" width="16.666666666666664%" headers="N103E0 ">No</td>
 
                             </tr>
 
                             <tr>
-                              <td valign="top" width="16.666666666666664%" headers="N10366 ">args.artlbl</td>
+                              <td valign="top" width="16.666666666666664%" headers="N103D4 ">args.ftr</td>
 
-                              <td valign="top" width="66.66666666666666%" headers="N1036C ">Default "output artwork filenames" processing parameter; <span class="q">"no"</span>and <span class="q">"yes"</span>are valid values; non-<span class="q">"yes"</span> is ignored.</td>
+                              <td valign="top" width="66.66666666666666%" headers="N103DA ">The file name containing XHTML to be placed in the BODY running-footing area</td>
 
-                              <td valign="top" width="16.666666666666664%" headers="N10372 ">No</td>
+                              <td valign="top" width="16.666666666666664%" headers="N103E0 ">No</td>
+
+                            </tr>
+
+                            <tr>
+                              <td valign="top" width="16.666666666666664%" headers="N103D4 ">args.draft</td>
+
+                              <td valign="top" width="66.66666666666666%" headers="N103DA ">Default "hide draft &amp; cleanup content" processing parameter (<span class="q">"no"</span>= hide them); <span class="q">"no"</span> and <span class="q">"yes"</span> are valid values; non-<span class="q">"yes"</span> is ignored.</td>
+
+                              <td valign="top" width="16.666666666666664%" headers="N103E0 ">No</td>
+
+                            </tr>
+
+                            <tr>
+                              <td valign="top" width="16.666666666666664%" headers="N103D4 ">args.artlbl</td>
+
+                              <td valign="top" width="66.66666666666666%" headers="N103DA ">Default "output artwork filenames" processing parameter; <span class="q">"no"</span>and <span class="q">"yes"</span>are valid values; non-<span class="q">"yes"</span> is ignored.</td>
+
+                              <td valign="top" width="16.666666666666664%" headers="N103E0 ">No</td>
 
                             </tr>
 
@@ -354,11 +379,11 @@ ant demo.faq</pre>
                           
                           <thead align="left">
                             <tr>
-                              <th valign="top" width="16.666666666666664%" id="N10520">Parameter </th>
+                              <th valign="top" width="16.666666666666664%" id="N1058E">Parameter </th>
 
-                              <th valign="top" width="66.66666666666666%" id="N10526">Description</th>
+                              <th valign="top" width="66.66666666666666%" id="N10594">Description</th>
 
-                              <th valign="top" width="16.666666666666664%" id="N1052C">Required</th>
+                              <th valign="top" width="16.666666666666664%" id="N1059A">Required</th>
 
                             </tr>
 
@@ -366,94 +391,94 @@ ant demo.faq</pre>
 
                           <tbody>
                             <tr>
-                              <td valign="top" width="16.666666666666664%" headers="N10520 ">args.input</td>
+                              <td valign="top" width="16.666666666666664%" headers="N1058E ">args.input</td>
 
-                              <td valign="top" width="66.66666666666666%" headers="N10526 ">The file path and file name of the input file. This argument should be in the same upper or lower case with the filename on file system.</td>
+                              <td valign="top" width="66.66666666666666%" headers="N10594 ">The file path and file name of the input file. This argument should be in the same upper or lower case with the filename on file system.</td>
 
-                              <td valign="top" width="16.666666666666664%" headers="N1052C ">Yes</td>
-
-                            </tr>
-
-                            <tr>
-                              <td valign="top" width="16.666666666666664%" headers="N10520 ">output.dir</td>
-
-                              <td valign="top" width="66.66666666666666%" headers="N10526 ">The path of the output directory.</td>
-
-                              <td valign="top" width="16.666666666666664%" headers="N1052C ">Yes</td>
+                              <td valign="top" width="16.666666666666664%" headers="N1059A ">Yes</td>
 
                             </tr>
 
                             <tr>
-                              <td valign="top" width="16.666666666666664%" headers="N10520 ">dita.input.valfile</td>
+                              <td valign="top" width="16.666666666666664%" headers="N1058E ">output.dir</td>
 
-                              <td valign="top" width="66.66666666666666%" headers="N10526 ">The file name containing filter/flagging/revision information.</td>
+                              <td valign="top" width="66.66666666666666%" headers="N10594 ">The path of the output directory.</td>
 
-                              <td valign="top" width="16.666666666666664%" headers="N1052C ">No</td>
+                              <td valign="top" width="16.666666666666664%" headers="N1059A ">Yes</td>
 
                             </tr>
 
                             <tr>
-                              <td valign="top" width="16.666666666666664%" headers="N10520 ">args.css</td>
+                              <td valign="top" width="16.666666666666664%" headers="N1058E ">dita.input.valfile</td>
 
-                              <td valign="top" width="66.66666666666666%" headers="N10526 ">User's CSS filename parameter. <p>This can be the name of a stylesheet used by one or more topics within an overall group. This stylesheet can use the CSS cascade effect to modify existing properties or it can override or define new properties.</p>
+                              <td valign="top" width="66.66666666666666%" headers="N10594 ">The file name containing filter/flagging/revision information.</td>
+
+                              <td valign="top" width="16.666666666666664%" headers="N1059A ">No</td>
+
+                            </tr>
+
+                            <tr>
+                              <td valign="top" width="16.666666666666664%" headers="N1058E ">args.css</td>
+
+                              <td valign="top" width="66.66666666666666%" headers="N10594 ">User's CSS filename parameter. <p>This can be the name of a stylesheet used by one or more topics within an overall group. This stylesheet can use the CSS cascade effect to modify existing properties or it can override or define new properties.</p>
 </td>
 
-                              <td valign="top" width="16.666666666666664%" headers="N1052C ">No</td>
+                              <td valign="top" width="16.666666666666664%" headers="N1059A ">No</td>
 
                             </tr>
 
                             <tr>
-                              <td valign="top" width="16.666666666666664%" headers="N10520 ">args.csspath</td>
+                              <td valign="top" width="16.666666666666664%" headers="N1058E ">args.csspath</td>
 
-                              <td valign="top" width="66.66666666666666%" headers="N10526 ">Default CSS path parameter.<p>This specifies a path for the cascading style sheet (CSS). This allows you to place the CSS in one place and have several different topics point to it. If no CSSPATH is specified, the CSS is assumed to be in the same directory as the XHTML.</p>
+                              <td valign="top" width="66.66666666666666%" headers="N10594 ">Default CSS path parameter.<p>This specifies a path for the cascading style sheet (CSS). This allows you to place the CSS in one place and have several different topics point to it. If no CSSPATH is specified, the CSS is assumed to be in the same directory as the XHTML.</p>
 </td>
 
-                              <td valign="top" width="16.666666666666664%" headers="N1052C ">No</td>
+                              <td valign="top" width="16.666666666666664%" headers="N1059A ">No</td>
 
                             </tr>
 
                             <tr>
-                              <td valign="top" width="16.666666666666664%" headers="N10520 ">args.hdf</td>
+                              <td valign="top" width="16.666666666666664%" headers="N1058E ">args.hdf</td>
 
-                              <td valign="top" width="66.66666666666666%" headers="N10526 ">The file name containing XHTML to be placed in the HEAD area</td>
+                              <td valign="top" width="66.66666666666666%" headers="N10594 ">The file name containing XHTML to be placed in the HEAD area</td>
 
-                              <td valign="top" width="16.666666666666664%" headers="N1052C ">No</td>
-
-                            </tr>
-
-                            <tr>
-                              <td valign="top" width="16.666666666666664%" headers="N10520 ">args.hdr</td>
-
-                              <td valign="top" width="66.66666666666666%" headers="N10526 ">The file name containing XHTML to be placed in the BODY running-heading area</td>
-
-                              <td valign="top" width="16.666666666666664%" headers="N1052C ">No</td>
+                              <td valign="top" width="16.666666666666664%" headers="N1059A ">No</td>
 
                             </tr>
 
                             <tr>
-                              <td valign="top" width="16.666666666666664%" headers="N10520 ">args.ftr</td>
+                              <td valign="top" width="16.666666666666664%" headers="N1058E ">args.hdr</td>
 
-                              <td valign="top" width="66.66666666666666%" headers="N10526 ">The file name containing XHTML to be placed in the BODY running-footing area</td>
+                              <td valign="top" width="66.66666666666666%" headers="N10594 ">The file name containing XHTML to be placed in the BODY running-heading area</td>
 
-                              <td valign="top" width="16.666666666666664%" headers="N1052C ">No</td>
-
-                            </tr>
-
-                            <tr>
-                              <td valign="top" width="16.666666666666664%" headers="N10520 ">args.draft</td>
-
-                              <td valign="top" width="66.66666666666666%" headers="N10526 ">Default "hide draft &amp; cleanup content" processing parameter (<span class="q">"no"</span>= hide them); <span class="q">"no"</span> and <span class="q">"yes"</span> are valid values; non-<span class="q">"yes"</span> is ignored.</td>
-
-                              <td valign="top" width="16.666666666666664%" headers="N1052C ">No</td>
+                              <td valign="top" width="16.666666666666664%" headers="N1059A ">No</td>
 
                             </tr>
 
                             <tr>
-                              <td valign="top" width="16.666666666666664%" headers="N10520 ">args.artlbl</td>
+                              <td valign="top" width="16.666666666666664%" headers="N1058E ">args.ftr</td>
 
-                              <td valign="top" width="66.66666666666666%" headers="N10526 ">Default "output artwork filenames" processing parameter; <span class="q">"no"</span>and <span class="q">"yes"</span>are valid values; non-<span class="q">"yes"</span> is ignored.</td>
+                              <td valign="top" width="66.66666666666666%" headers="N10594 ">The file name containing XHTML to be placed in the BODY running-footing area</td>
 
-                              <td valign="top" width="16.666666666666664%" headers="N1052C ">No</td>
+                              <td valign="top" width="16.666666666666664%" headers="N1059A ">No</td>
+
+                            </tr>
+
+                            <tr>
+                              <td valign="top" width="16.666666666666664%" headers="N1058E ">args.draft</td>
+
+                              <td valign="top" width="66.66666666666666%" headers="N10594 ">Default "hide draft &amp; cleanup content" processing parameter (<span class="q">"no"</span>= hide them); <span class="q">"no"</span> and <span class="q">"yes"</span> are valid values; non-<span class="q">"yes"</span> is ignored.</td>
+
+                              <td valign="top" width="16.666666666666664%" headers="N1059A ">No</td>
+
+                            </tr>
+
+                            <tr>
+                              <td valign="top" width="16.666666666666664%" headers="N1058E ">args.artlbl</td>
+
+                              <td valign="top" width="66.66666666666666%" headers="N10594 ">Default "output artwork filenames" processing parameter; <span class="q">"no"</span>and <span class="q">"yes"</span>are valid values; non-<span class="q">"yes"</span> is ignored.</td>
+
+                              <td valign="top" width="16.666666666666664%" headers="N1059A ">No</td>
 
                             </tr>
 
@@ -474,11 +499,11 @@ ant demo.faq</pre>
                           
                           <thead align="left">
                             <tr>
-                              <th valign="top" width="16.666666666666664%" id="N106A4">Parameter </th>
+                              <th valign="top" width="16.666666666666664%" id="N10712">Parameter </th>
 
-                              <th valign="top" width="66.66666666666666%" id="N106AA">Description</th>
+                              <th valign="top" width="66.66666666666666%" id="N10718">Description</th>
 
-                              <th valign="top" width="16.666666666666664%" id="N106B0">Required</th>
+                              <th valign="top" width="16.666666666666664%" id="N1071E">Required</th>
 
                             </tr>
 
@@ -486,121 +511,121 @@ ant demo.faq</pre>
 
                           <tbody>
                             <tr>
-                              <td valign="top" width="16.666666666666664%" headers="N106A4 ">args.input</td>
+                              <td valign="top" width="16.666666666666664%" headers="N10712 ">args.input</td>
 
-                              <td valign="top" width="66.66666666666666%" headers="N106AA ">The file path and file name of the input file. This argument should be in the same upper or lower case with the filename on file system.</td>
+                              <td valign="top" width="66.66666666666666%" headers="N10718 ">The file path and file name of the input file. This argument should be in the same upper or lower case with the filename on file system.</td>
 
-                              <td valign="top" width="16.666666666666664%" headers="N106B0 ">Yes</td>
-
-                            </tr>
-
-                            <tr>
-                              <td valign="top" width="16.666666666666664%" headers="N106A4 ">output.dir</td>
-
-                              <td valign="top" width="66.66666666666666%" headers="N106AA ">The path of the output directory.</td>
-
-                              <td valign="top" width="16.666666666666664%" headers="N106B0 ">Yes</td>
+                              <td valign="top" width="16.666666666666664%" headers="N1071E ">Yes</td>
 
                             </tr>
 
                             <tr>
-                              <td valign="top" width="16.666666666666664%" headers="N106A4 ">args.javahelp.toc</td>
+                              <td valign="top" width="16.666666666666664%" headers="N10712 ">output.dir</td>
 
-                              <td valign="top" width="66.66666666666666%" headers="N106AA ">The root file name of the output toc file.(Default is 'toc')</td>
+                              <td valign="top" width="66.66666666666666%" headers="N10718 ">The path of the output directory.</td>
 
-                              <td valign="top" width="16.666666666666664%" headers="N106B0 ">No</td>
-
-                            </tr>
-
-                            <tr>
-                              <td valign="top" width="16.666666666666664%" headers="N106A4 ">args.javahelp.map</td>
-
-                              <td valign="top" width="66.66666666666666%" headers="N106AA ">The root file name of the output javahelp map file.(Default is 'map')</td>
-
-                              <td valign="top" width="16.666666666666664%" headers="N106B0 ">No</td>
+                              <td valign="top" width="16.666666666666664%" headers="N1071E ">Yes</td>
 
                             </tr>
 
                             <tr>
-                              <td valign="top" width="16.666666666666664%" headers="N106A4 ">args.javahelp.helpset</td>
+                              <td valign="top" width="16.666666666666664%" headers="N10712 ">args.javahelp.toc</td>
 
-                              <td valign="top" width="66.66666666666666%" headers="N106AA ">The file path of the helpset file for java help. (Default value is <span class="q">"resource/helpset.hs"</span>)</td>
+                              <td valign="top" width="66.66666666666666%" headers="N10718 ">The root file name of the output toc file.(Default is 'toc')</td>
 
-                              <td valign="top" width="16.666666666666664%" headers="N106B0 ">No</td>
-
-                            </tr>
-
-                            <tr>
-                              <td valign="top" width="16.666666666666664%" headers="N106A4 ">dita.input.valfile</td>
-
-                              <td valign="top" width="66.66666666666666%" headers="N106AA ">The file name containing filter/flagging/revision information.</td>
-
-                              <td valign="top" width="16.666666666666664%" headers="N106B0 ">No</td>
+                              <td valign="top" width="16.666666666666664%" headers="N1071E ">No</td>
 
                             </tr>
 
                             <tr>
-                              <td valign="top" width="16.666666666666664%" headers="N106A4 ">args.css</td>
+                              <td valign="top" width="16.666666666666664%" headers="N10712 ">args.javahelp.map</td>
 
-                              <td valign="top" width="66.66666666666666%" headers="N106AA ">User's CSS filename parameter. <p>This can be the name of a stylesheet used by one or more topics within an overall group. This stylesheet can use the CSS cascade effect to modify existing properties or it can override or define new properties.</p>
+                              <td valign="top" width="66.66666666666666%" headers="N10718 ">The root file name of the output javahelp map file.(Default is 'map')</td>
+
+                              <td valign="top" width="16.666666666666664%" headers="N1071E ">No</td>
+
+                            </tr>
+
+                            <tr>
+                              <td valign="top" width="16.666666666666664%" headers="N10712 ">args.javahelp.helpset</td>
+
+                              <td valign="top" width="66.66666666666666%" headers="N10718 ">The file path of the helpset file for java help. (Default value is <span class="q">"resource/helpset.hs"</span>)</td>
+
+                              <td valign="top" width="16.666666666666664%" headers="N1071E ">No</td>
+
+                            </tr>
+
+                            <tr>
+                              <td valign="top" width="16.666666666666664%" headers="N10712 ">dita.input.valfile</td>
+
+                              <td valign="top" width="66.66666666666666%" headers="N10718 ">The file name containing filter/flagging/revision information.</td>
+
+                              <td valign="top" width="16.666666666666664%" headers="N1071E ">No</td>
+
+                            </tr>
+
+                            <tr>
+                              <td valign="top" width="16.666666666666664%" headers="N10712 ">args.css</td>
+
+                              <td valign="top" width="66.66666666666666%" headers="N10718 ">User's CSS filename parameter. <p>This can be the name of a stylesheet used by one or more topics within an overall group. This stylesheet can use the CSS cascade effect to modify existing properties or it can override or define new properties.</p>
 </td>
 
-                              <td valign="top" width="16.666666666666664%" headers="N106B0 ">No</td>
+                              <td valign="top" width="16.666666666666664%" headers="N1071E ">No</td>
 
                             </tr>
 
                             <tr>
-                              <td valign="top" width="16.666666666666664%" headers="N106A4 ">args.csspath</td>
+                              <td valign="top" width="16.666666666666664%" headers="N10712 ">args.csspath</td>
 
-                              <td valign="top" width="66.66666666666666%" headers="N106AA ">Default CSS path parameter.<p>This specifies a path for the cascading style sheet (CSS). This allows you to place the CSS in one place and have several different topics point to it. If no CSSPATH is specified, the CSS is assumed to be in the same directory as the XHTML.</p>
+                              <td valign="top" width="66.66666666666666%" headers="N10718 ">Default CSS path parameter.<p>This specifies a path for the cascading style sheet (CSS). This allows you to place the CSS in one place and have several different topics point to it. If no CSSPATH is specified, the CSS is assumed to be in the same directory as the XHTML.</p>
 </td>
 
-                              <td valign="top" width="16.666666666666664%" headers="N106B0 ">No</td>
+                              <td valign="top" width="16.666666666666664%" headers="N1071E ">No</td>
 
                             </tr>
 
                             <tr>
-                              <td valign="top" width="16.666666666666664%" headers="N106A4 ">args.hdf</td>
+                              <td valign="top" width="16.666666666666664%" headers="N10712 ">args.hdf</td>
 
-                              <td valign="top" width="66.66666666666666%" headers="N106AA ">The file name containing XHTML to be placed in the HEAD area</td>
+                              <td valign="top" width="66.66666666666666%" headers="N10718 ">The file name containing XHTML to be placed in the HEAD area</td>
 
-                              <td valign="top" width="16.666666666666664%" headers="N106B0 ">No</td>
-
-                            </tr>
-
-                            <tr>
-                              <td valign="top" width="16.666666666666664%" headers="N106A4 ">args.hdr</td>
-
-                              <td valign="top" width="66.66666666666666%" headers="N106AA ">The file name containing XHTML to be placed in the BODY running-heading area</td>
-
-                              <td valign="top" width="16.666666666666664%" headers="N106B0 ">No</td>
+                              <td valign="top" width="16.666666666666664%" headers="N1071E ">No</td>
 
                             </tr>
 
                             <tr>
-                              <td valign="top" width="16.666666666666664%" headers="N106A4 ">args.ftr</td>
+                              <td valign="top" width="16.666666666666664%" headers="N10712 ">args.hdr</td>
 
-                              <td valign="top" width="66.66666666666666%" headers="N106AA ">The file name containing XHTML to be placed in the BODY running-footing area</td>
+                              <td valign="top" width="66.66666666666666%" headers="N10718 ">The file name containing XHTML to be placed in the BODY running-heading area</td>
 
-                              <td valign="top" width="16.666666666666664%" headers="N106B0 ">No</td>
-
-                            </tr>
-
-                            <tr>
-                              <td valign="top" width="16.666666666666664%" headers="N106A4 ">args.draft</td>
-
-                              <td valign="top" width="66.66666666666666%" headers="N106AA ">Default "hide draft &amp; cleanup content" processing parameter (<span class="q">"no"</span>= hide them); <span class="q">"no"</span> and <span class="q">"yes"</span> are valid values; non-<span class="q">"yes"</span> is ignored.</td>
-
-                              <td valign="top" width="16.666666666666664%" headers="N106B0 ">No</td>
+                              <td valign="top" width="16.666666666666664%" headers="N1071E ">No</td>
 
                             </tr>
 
                             <tr>
-                              <td valign="top" width="16.666666666666664%" headers="N106A4 ">args.artlbl</td>
+                              <td valign="top" width="16.666666666666664%" headers="N10712 ">args.ftr</td>
 
-                              <td valign="top" width="66.66666666666666%" headers="N106AA ">Default "output artwork filenames" processing parameter; <span class="q">"no"</span>and <span class="q">"yes"</span>are valid values; non-<span class="q">"yes"</span> is ignored.</td>
+                              <td valign="top" width="66.66666666666666%" headers="N10718 ">The file name containing XHTML to be placed in the BODY running-footing area</td>
 
-                              <td valign="top" width="16.666666666666664%" headers="N106B0 ">No</td>
+                              <td valign="top" width="16.666666666666664%" headers="N1071E ">No</td>
+
+                            </tr>
+
+                            <tr>
+                              <td valign="top" width="16.666666666666664%" headers="N10712 ">args.draft</td>
+
+                              <td valign="top" width="66.66666666666666%" headers="N10718 ">Default "hide draft &amp; cleanup content" processing parameter (<span class="q">"no"</span>= hide them); <span class="q">"no"</span> and <span class="q">"yes"</span> are valid values; non-<span class="q">"yes"</span> is ignored.</td>
+
+                              <td valign="top" width="16.666666666666664%" headers="N1071E ">No</td>
+
+                            </tr>
+
+                            <tr>
+                              <td valign="top" width="16.666666666666664%" headers="N10712 ">args.artlbl</td>
+
+                              <td valign="top" width="66.66666666666666%" headers="N10718 ">Default "output artwork filenames" processing parameter; <span class="q">"no"</span>and <span class="q">"yes"</span>are valid values; non-<span class="q">"yes"</span> is ignored.</td>
+
+                              <td valign="top" width="16.666666666666664%" headers="N1071E ">No</td>
 
                             </tr>
 
@@ -621,11 +646,11 @@ ant demo.faq</pre>
                           
                           <thead align="left">
                             <tr>
-                              <th valign="top" width="16.666666666666664%" id="N10876">Parameter </th>
+                              <th valign="top" width="16.666666666666664%" id="N108E4">Parameter </th>
 
-                              <th valign="top" width="66.66666666666666%" id="N1087C">Description</th>
+                              <th valign="top" width="66.66666666666666%" id="N108EA">Description</th>
 
-                              <th valign="top" width="16.666666666666664%" id="N10882">Required</th>
+                              <th valign="top" width="16.666666666666664%" id="N108F0">Required</th>
 
                             </tr>
 
@@ -633,103 +658,103 @@ ant demo.faq</pre>
 
                           <tbody>
                             <tr>
-                              <td valign="top" width="16.666666666666664%" headers="N10876 ">args.input</td>
+                              <td valign="top" width="16.666666666666664%" headers="N108E4 ">args.input</td>
 
-                              <td valign="top" width="66.66666666666666%" headers="N1087C ">The file path and file name of the input file. This argument should be in the same upper or lower case with the filename on file system.</td>
+                              <td valign="top" width="66.66666666666666%" headers="N108EA ">The file path and file name of the input file. This argument should be in the same upper or lower case with the filename on file system.</td>
 
-                              <td valign="top" width="16.666666666666664%" headers="N10882 ">Yes</td>
-
-                            </tr>
-
-                            <tr>
-                              <td valign="top" width="16.666666666666664%" headers="N10876 ">output.dir</td>
-
-                              <td valign="top" width="66.66666666666666%" headers="N1087C ">The path of the output directory.</td>
-
-                              <td valign="top" width="16.666666666666664%" headers="N10882 ">Yes</td>
+                              <td valign="top" width="16.666666666666664%" headers="N108F0 ">Yes</td>
 
                             </tr>
 
                             <tr>
-                              <td valign="top" width="16.666666666666664%" headers="N10876 ">args.xhtml.toc</td>
+                              <td valign="top" width="16.666666666666664%" headers="N108E4 ">output.dir</td>
 
-                              <td valign="top" width="66.66666666666666%" headers="N1087C ">The root file name of the output toc file.(Default is 'index')</td>
+                              <td valign="top" width="66.66666666666666%" headers="N108EA ">The path of the output directory.</td>
 
-                              <td valign="top" width="16.666666666666664%" headers="N10882 ">No</td>
-
-                            </tr>
-
-                            <tr>
-                              <td valign="top" width="16.666666666666664%" headers="N10876 ">dita.input.valfile</td>
-
-                              <td valign="top" width="66.66666666666666%" headers="N1087C ">The file name containing filter/flagging/revision information.</td>
-
-                              <td valign="top" width="16.666666666666664%" headers="N10882 ">No</td>
+                              <td valign="top" width="16.666666666666664%" headers="N108F0 ">Yes</td>
 
                             </tr>
 
                             <tr>
-                              <td valign="top" width="16.666666666666664%" headers="N10876 ">args.css</td>
+                              <td valign="top" width="16.666666666666664%" headers="N108E4 ">args.xhtml.toc</td>
 
-                              <td valign="top" width="66.66666666666666%" headers="N1087C ">User's CSS filename parameter. <p>This can be the name of a stylesheet used by one or more topics within an overall group. This stylesheet can use the CSS cascade effect to modify existing properties or it can override or define new properties.</p>
+                              <td valign="top" width="66.66666666666666%" headers="N108EA ">The root file name of the output toc file.(Default is 'index')</td>
+
+                              <td valign="top" width="16.666666666666664%" headers="N108F0 ">No</td>
+
+                            </tr>
+
+                            <tr>
+                              <td valign="top" width="16.666666666666664%" headers="N108E4 ">dita.input.valfile</td>
+
+                              <td valign="top" width="66.66666666666666%" headers="N108EA ">The file name containing filter/flagging/revision information.</td>
+
+                              <td valign="top" width="16.666666666666664%" headers="N108F0 ">No</td>
+
+                            </tr>
+
+                            <tr>
+                              <td valign="top" width="16.666666666666664%" headers="N108E4 ">args.css</td>
+
+                              <td valign="top" width="66.66666666666666%" headers="N108EA ">User's CSS filename parameter. <p>This can be the name of a stylesheet used by one or more topics within an overall group. This stylesheet can use the CSS cascade effect to modify existing properties or it can override or define new properties.</p>
 </td>
 
-                              <td valign="top" width="16.666666666666664%" headers="N10882 ">No</td>
+                              <td valign="top" width="16.666666666666664%" headers="N108F0 ">No</td>
 
                             </tr>
 
                             <tr>
-                              <td valign="top" width="16.666666666666664%" headers="N10876 ">args.csspath</td>
+                              <td valign="top" width="16.666666666666664%" headers="N108E4 ">args.csspath</td>
 
-                              <td valign="top" width="66.66666666666666%" headers="N1087C ">Default CSS path parameter.<p>This specifies a path for the cascading style sheet (CSS). This allows you to place the CSS in one place and have several different topics point to it. If no CSSPATH is specified, the CSS is assumed to be in the same directory as the XHTML.</p>
+                              <td valign="top" width="66.66666666666666%" headers="N108EA ">Default CSS path parameter.<p>This specifies a path for the cascading style sheet (CSS). This allows you to place the CSS in one place and have several different topics point to it. If no CSSPATH is specified, the CSS is assumed to be in the same directory as the XHTML.</p>
 </td>
 
-                              <td valign="top" width="16.666666666666664%" headers="N10882 ">No</td>
+                              <td valign="top" width="16.666666666666664%" headers="N108F0 ">No</td>
 
                             </tr>
 
                             <tr>
-                              <td valign="top" width="16.666666666666664%" headers="N10876 ">args.hdf</td>
+                              <td valign="top" width="16.666666666666664%" headers="N108E4 ">args.hdf</td>
 
-                              <td valign="top" width="66.66666666666666%" headers="N1087C ">The file name containing XHTML to be placed in the HEAD area</td>
+                              <td valign="top" width="66.66666666666666%" headers="N108EA ">The file name containing XHTML to be placed in the HEAD area</td>
 
-                              <td valign="top" width="16.666666666666664%" headers="N10882 ">No</td>
-
-                            </tr>
-
-                            <tr>
-                              <td valign="top" width="16.666666666666664%" headers="N10876 ">args.hdr</td>
-
-                              <td valign="top" width="66.66666666666666%" headers="N1087C ">The file name containing XHTML to be placed in the BODY running-heading area</td>
-
-                              <td valign="top" width="16.666666666666664%" headers="N10882 ">No</td>
+                              <td valign="top" width="16.666666666666664%" headers="N108F0 ">No</td>
 
                             </tr>
 
                             <tr>
-                              <td valign="top" width="16.666666666666664%" headers="N10876 ">args.ftr</td>
+                              <td valign="top" width="16.666666666666664%" headers="N108E4 ">args.hdr</td>
 
-                              <td valign="top" width="66.66666666666666%" headers="N1087C ">The file name containing XHTML to be placed in the BODY running-footing area</td>
+                              <td valign="top" width="66.66666666666666%" headers="N108EA ">The file name containing XHTML to be placed in the BODY running-heading area</td>
 
-                              <td valign="top" width="16.666666666666664%" headers="N10882 ">No</td>
-
-                            </tr>
-
-                            <tr>
-                              <td valign="top" width="16.666666666666664%" headers="N10876 ">args.draft</td>
-
-                              <td valign="top" width="66.66666666666666%" headers="N1087C ">Default "hide draft &amp; cleanup content" processing parameter (<span class="q">"no"</span>= hide them); <span class="q">"no"</span> and <span class="q">"yes"</span> are valid values; non-<span class="q">"yes"</span> is ignored.</td>
-
-                              <td valign="top" width="16.666666666666664%" headers="N10882 ">No</td>
+                              <td valign="top" width="16.666666666666664%" headers="N108F0 ">No</td>
 
                             </tr>
 
                             <tr>
-                              <td valign="top" width="16.666666666666664%" headers="N10876 ">args.artlbl</td>
+                              <td valign="top" width="16.666666666666664%" headers="N108E4 ">args.ftr</td>
 
-                              <td valign="top" width="66.66666666666666%" headers="N1087C ">Default "output artwork filenames" processing parameter; <span class="q">"no"</span>and <span class="q">"yes"</span>are valid values; non-<span class="q">"yes"</span> is ignored.</td>
+                              <td valign="top" width="66.66666666666666%" headers="N108EA ">The file name containing XHTML to be placed in the BODY running-footing area</td>
 
-                              <td valign="top" width="16.666666666666664%" headers="N10882 ">No</td>
+                              <td valign="top" width="16.666666666666664%" headers="N108F0 ">No</td>
+
+                            </tr>
+
+                            <tr>
+                              <td valign="top" width="16.666666666666664%" headers="N108E4 ">args.draft</td>
+
+                              <td valign="top" width="66.66666666666666%" headers="N108EA ">Default "hide draft &amp; cleanup content" processing parameter (<span class="q">"no"</span>= hide them); <span class="q">"no"</span> and <span class="q">"yes"</span> are valid values; non-<span class="q">"yes"</span> is ignored.</td>
+
+                              <td valign="top" width="16.666666666666664%" headers="N108F0 ">No</td>
+
+                            </tr>
+
+                            <tr>
+                              <td valign="top" width="16.666666666666664%" headers="N108E4 ">args.artlbl</td>
+
+                              <td valign="top" width="66.66666666666666%" headers="N108EA ">Default "output artwork filenames" processing parameter; <span class="q">"no"</span>and <span class="q">"yes"</span>are valid values; non-<span class="q">"yes"</span> is ignored.</td>
+
+                              <td valign="top" width="16.666666666666664%" headers="N108F0 ">No</td>
 
                             </tr>
 
@@ -750,11 +775,11 @@ ant demo.faq</pre>
                           
                           <thead align="left">
                             <tr>
-                              <th valign="top" width="16.666666666666664%" id="N10A12">Parameter </th>
+                              <th valign="top" width="16.666666666666664%" id="N10A80">Parameter </th>
 
-                              <th valign="top" width="66.66666666666666%" id="N10A18">Description</th>
+                              <th valign="top" width="66.66666666666666%" id="N10A86">Description</th>
 
-                              <th valign="top" width="16.666666666666664%" id="N10A1E">Required</th>
+                              <th valign="top" width="16.666666666666664%" id="N10A8C">Required</th>
 
                             </tr>
 
@@ -762,20 +787,20 @@ ant demo.faq</pre>
 
                           <tbody>
                             <tr>
-                              <td valign="top" width="16.666666666666664%" headers="N10A12 ">args.input</td>
+                              <td valign="top" width="16.666666666666664%" headers="N10A80 ">args.input</td>
 
-                              <td valign="top" width="66.66666666666666%" headers="N10A18 ">The file path and file name of the input file. This argument should be in the same upper or lower case with the filename on file system.</td>
+                              <td valign="top" width="66.66666666666666%" headers="N10A86 ">The file path and file name of the input file. This argument should be in the same upper or lower case with the filename on file system.</td>
 
-                              <td valign="top" width="16.666666666666664%" headers="N10A1E ">Yes</td>
+                              <td valign="top" width="16.666666666666664%" headers="N10A8C ">Yes</td>
 
                             </tr>
 
                             <tr>
-                              <td valign="top" width="16.666666666666664%" headers="N10A12 ">output.dir</td>
+                              <td valign="top" width="16.666666666666664%" headers="N10A80 ">output.dir</td>
 
-                              <td valign="top" width="66.66666666666666%" headers="N10A18 ">The path of the output directory.</td>
+                              <td valign="top" width="66.66666666666666%" headers="N10A86 ">The path of the output directory.</td>
 
-                              <td valign="top" width="16.666666666666664%" headers="N10A1E ">Yes</td>
+                              <td valign="top" width="16.666666666666664%" headers="N10A8C ">Yes</td>
 
                             </tr>
 
@@ -823,7 +848,7 @@ ant demo.faq</pre>
 &lt;project name="sample_xhtml" default="all" basedir=".."&gt;
   
   &lt;import file="${basedir}${file.separator}conductor.xml"/&gt;
-
+  &lt;property name="dita.extname" value=".xml"/&gt;
  &lt;target name="all" depends="sample2xhtml"&gt;
  &lt;/target&gt;
  &lt;!-- revise below here --&gt;
@@ -840,7 +865,7 @@ ant demo.faq</pre>
 </pre>
 
         </div>
-After you write the input file and output directory to overwrite @DITA.INPUT@ and @OUTPUT.DIR@, the script can do the transformation from your input to xhtml for you by command<pre>c:\pkg\DITA-OT1.0&gt;ant -f ant/template_xhtml.xml</pre>
+After you write the input file and output directory to overwrite @DITA.INPUT@ and @OUTPUT.DIR@, the script can do the transformation from your input to xhtml for you by command. As to the property dita.extname, it's a global variable with which you can set the file extension name of the topic file. By default dita.extname is <span class="q">".xml"</span>. You can also set it to <span class="q">".dita"</span> according to OASIS DITA recommendation.<pre>c:\pkg\DITA-OT1.0&gt;ant -f ant/template_xhtml.xml</pre>
  All of targets we use here are defined in conductor.xml. Therefore, you need to import that file before calling the target.</div>
 
     </div>
