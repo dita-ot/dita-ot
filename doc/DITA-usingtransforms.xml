@@ -1,57 +1,59 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<!DOCTYPE topic PUBLIC "-//IBM//DTD DITA Topic//EN" "../dtd/topic.dtd">
-<topic id="ditausingxform">
-  <title>Using DITA transforms</title>
-  <shortdesc>The core transforms of the DITA Toolkit represent the <q>Reference Implementation</q> for processing the standard DITA specification as maintained by OASIS Open.</shortdesc>
-  <body>
-    <section>
-      <title>Pre-process</title>
-      <p>A pre-process is done before the main transformation. The input of Pre-process is dita files and the output of Pre-process is also dita files. But the output is in temp directory. Pre-process is the basic for the main transformation, it handles several different processing before the main transformation. Without pre-process, dita topics and map can still be transformed into different outputs, but the features in pre-process such as resolving conref attribute are not available.</p>
-    </section>
-    <section>
-      <title>Available core transforms</title>
-      <p>A core DITA transform is the basic set of templates that support all the elements of a topic. This set is the basis for fallthrough processing of any specialized element. Core transforms handle one topic instance, or nested set of topics, at a time. The DITA Toolkit provides these core transforms:<dl>
-          <dlentry>
-            <dt>dita2xhtml.xsl</dt>
-            <dd>DITA topic to HTML page transform.</dd>
-          </dlentry>
-        </dl><dl>
-          <dlentry>
-            <dt>dita2fo-shell.xsl</dt>
-            <dd>DITA topic to XSL Formatting Object page transform.</dd>
-          </dlentry>
-        </dl></p>
-    </section>
-    <section>
-      <title>Available special output formats</title>
-      <p>Additional map-driven tools support transforming sets of topics into special output formats, including:<dl>
-          <dlentry>
-            <dt>Web page (map2htmtoc.xsl)</dt>
-            <dd>This transform generates a set of web pages with an index page that is ready to place on a Web site.</dd>
-          </dlentry>
-          <dlentry>
-            <dt>map2htmlhelp (map2hhc.xsl map2hhp.xsl)</dt>
-            <dd>This transform generates hhc and hhp file for the compilation of Html Help.</dd>
-          </dlentry>
-          <dlentry>
-            <dt>map2javahelp (map2JavaHelpToc.xsl map2JavaHelpMap.xsl)</dt>
-            <dd>This transform generates table of content and jhm file for Java Help.</dd>
-          </dlentry>
-          <dlentry>
-            <dt>map2eclipsehelp (map2elipse.xsl)</dt>
-            <dd>This transform generates table of content for help contents in Eclipse.</dd>
-          </dlentry>
-          <dlentry>
-            <dt>map2printout</dt>
-            <dd>Calls topicmerge to consolidate a set of topics into a single entity that is transformed into Formatting Objects (FO), which can be compiled into PDF.</dd>
-          </dlentry>
-        </dl></p>
-    </section>
-    <section>
-      <title>Invoke the complete transformation</title>
-      <p>The complete transformation including pre-process can be excuted by the ant script. There are some examples of simple ant script in directory /ant. The ant target for the transformation which can be called is listed at <xref href="DITA-ant.xml#running_ant">Running Ant</xref></p>
-    </section>
-    <section/>
-  </body>
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2004, v.4002-->
+<!DOCTYPE topic PUBLIC "-//IBM//DTD DITA Topic//EN"
+ "../dtd/topic.dtd">
+<topic id="ditausingxform" xml:lang="en-us">
+<title>Using DITA transforms</title>
+<shortdesc>The core transforms of the DITA Toolkit represent the <q>Reference
+Implementation</q> for processing the standard DITA specification as maintained
+by OASIS Open.</shortdesc>
+<body>
+<section id="preprocess"><?Pub Caret?>       <title>Pre-process</title>  
+    <p>A pre-process is done before the main transformation. The input of
+Pre-process is dita files and the output of Pre-process is also dita files.
+But the output is in temp directory. Pre-process is the basic for the main
+transformation, it handles several different processing before the main transformation.
+Without pre-process, dita topics and map can still be transformed into different
+outputs, but the features in pre-process such as resolving conref attribute
+are not available.</p>     </section>
+<section>       <title>Available core transforms</title>       <p>A core DITA
+transform is the basic set of templates that support all the elements of a
+topic. This set is the basis for fallthrough processing of any specialized
+element. Core transforms handle one topic instance, or nested set of topics,
+at a time. The DITA Toolkit provides these core transforms:<dl><dlentry>
+<dt>dita2xhtml.xsl</dt>
+<dd>DITA topic to HTML page transform.</dd>
+</dlentry></dl><dl><dlentry>
+<dt>dita2fo-shell.xsl</dt>
+<dd>DITA topic to XSL Formatting Object page transform.</dd>
+</dlentry></dl></p>     </section>
+<section>       <title>Available special output formats</title>       <p>Additional
+map-driven tools support transforming sets of topics into special output formats,
+including:<dl><dlentry>
+<dt>Web page (map2htmtoc.xsl)</dt>
+<dd>This transform generates a set of web pages with an index page that is
+ready to place on a Web site.</dd>
+</dlentry><dlentry>
+<dt>map2htmlhelp (map2hhc.xsl map2hhp.xsl)</dt>
+<dd>This transform generates hhc and hhp file for the compilation of Html
+Help.</dd>
+</dlentry><dlentry>
+<dt>map2javahelp (map2JavaHelpToc.xsl map2JavaHelpMap.xsl)</dt>
+<dd>This transform generates table of content and jhm file for Java Help.</dd>
+</dlentry><dlentry>
+<dt>map2eclipsehelp (map2elipse.xsl)</dt>
+<dd>This transform generates table of content for help contents in Eclipse.</dd>
+</dlentry><dlentry>
+<dt>map2printout</dt>
+<dd>Calls topicmerge to consolidate a set of topics into a single entity that
+is transformed into Formatting Objects (FO), which can be compiled into PDF.</dd>
+</dlentry></dl></p>     </section>
+<section>       <title>Invoke the complete transformation</title>       <p>The
+complete transformation including pre-process can be excuted by the ant script.
+There are some examples of simple ant script in directory /ant. The ant target
+for the transformation which can be called is listed at <xref href="DITA-ant.xml#running_ant">Running
+Ant</xref></p>     </section>
+<section></section>
+</body>
 </topic>
-
+<?Pub *0000003066?>

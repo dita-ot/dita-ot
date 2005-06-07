@@ -1,25 +1,50 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2004, v.4002-->
 <!DOCTYPE map PUBLIC "-//IBM//DTD DITA Map//EN"
  "../../dtd/map.dtd">
 <map>
-<topicref href="DITA-OTProjectHome.xml" collection-type="family">
-  <topicref href="DITA-OTProjectGoals.xml" navtitle="Goals" locktitle="yes"/>
-  <topicref href="DevelopmentProcess.xml" navtitle="Development Process" locktitle="yes"/>
-  <topicref href="ContributionPolicy.xml" navtitle="Contribution Policy" locktitle="yes"/>
+<topicref collection-type="family" href="DITA-OTProjectHome.xml">
+<topicref href="DITA-OTProjectGoals.xml" locktitle="yes" navtitle="Goals">
+</topicref>
+<topicref format="html" href="http://cvs.sourceforge.net/viewcvs.py/*checkout*/dita-ot/DITA-OT/CommonPublicLicense-v10.html?content-type=text%2Fplain" navtitle="License"
+scope="external"></topicref>
+<topicref format="html" href="http://sourceforge.net/news/?group_id=132728" navtitle="News"
+scope="external"></topicref>
 </topicref>
 
-<topicref href="ContributionForm.xml" navtitle="Contribution Questionnaire" toc="no"/>
-<topicref href="BugFixGuidelines-NoCLA.xml" navtitle="Bug Fix Guidelines" toc="no"/>
 
-<topichead navtitle="Readme Documents">
-  <topicref conref="../../doc/DITA-readme.ditamap#DITA-doc"></topicref>
+<topicref format="html" href="http://sourceforge.net/project/showfiles.php?group_id=132728" navtitle="Download"
+scope="external"></topicref>
+
+<topicref conref="../../doc/DITA-readme.ditamap#DITA-doc"></topicref>
+
+<topichead navtitle="Development Documents">
+<topicref href="DITA-OTArchitecture.xml" locktitle="yes" navtitle="Complete Process Architecture">
+</topicref>
+<topicref href="DITA-preprocessarch.xml" locktitle="yes" navtitle="Preprocess Architecture">
+</topicref>
+<topicref href="DITA-OTGenListModule.xml" locktitle="yes" navtitle="Java Module Architecture">
+</topicref>
+</topichead>
+
+<topichead navtitle="Project Management">
+<topicref href="DevelopmentProcess.xml" locktitle="yes" navtitle="Development Process">
+</topicref>
+<topicref href="ContributionPolicy.xml" locktitle="yes" navtitle="Contribution Policy">
+</topicref>
+<topicref href="ContributionForm.xml" navtitle="Contribution Questionnaire"
+toc="no"></topicref>
+<topicref href="BugFixGuidelines-NoCLA.xml" navtitle="Bug Fix Guidelines"
+toc="no"></topicref>
 </topichead>
 
 <topichead navtitle="Resources">
-  <topicref href=" http://sourceforge.net/projects/dita-ot/" format="html" navtitle="Download" scope="external"/>
-  <topicref href="http://groups.yahoo.com/group/dita-users/" format="html" navtitle="Yahoo! Group: dita-users" scope="external"/>
-  <topicref href="http://www.oasis-open.org/committees/dita/" format="html" navtitle="OASIS DITA Technical Committee " scope="external"/>
-  <topicref href="http://xml.coverpages.org/dita.html" format="html" navtitle="Cover page: DITA page" scope="external"/>
+<topicref format="html" href="http://groups.yahoo.com/group/dita-users/" navtitle="Yahoo! Group: dita-users"
+scope="external"></topicref>
+<topicref format="html" href="http://www.oasis-open.org/committees/dita/"
+navtitle="OASIS DITA Technical Committee " scope="external"></topicref>
+<topicref format="html" href="http://xml.coverpages.org/dita.html" navtitle="Cover page: DITA page"
+scope="external"></topicref>
 </topichead>
 </map>
 

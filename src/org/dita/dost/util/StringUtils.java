@@ -87,6 +87,50 @@ public class StringUtils {
     }
 
     /**
+     * @param rootPath
+     * @param relativePath
+     * @return
+     */
+    public static String resolveTopic(String rootPath, String relativePath) {        
+        String begin = relativePath;
+        String end = "";
+        if (relativePath.indexOf("#") != -1) {
+            begin = relativePath.substring(0,relativePath.indexOf('#'));
+            end = relativePath.substring(relativePath.indexOf('#'));
+        }
+                
+        begin = begin.replace('\\', File.separatorChar);
+        begin = begin.replace('/', File.separatorChar);
+
+        relativePath = begin + end;
+        
+        if (rootPath == null) {
+            return relativePath;
+        }
+
+        String prefix = null;
+        if (rootPath.charAt(rootPath.length() - 1) == File.separatorChar) {
+            prefix = rootPath.substring(0, rootPath.length() - 1);
+        } else {
+            prefix = rootPath;
+        }
+
+        String postfix = relativePath;
+        while (postfix.startsWith("..")) {
+            int sepPos = postfix.indexOf(File.separatorChar);
+            int lastPos = prefix.lastIndexOf(File.separatorChar);
+            postfix = postfix.substring(sepPos == -1 ? 0 : sepPos
+                    + File.separator.length(), postfix.length());
+            if(lastPos == -1){
+                return postfix;
+            }
+            prefix = prefix.substring(0, lastPos);
+        }
+
+        return prefix + File.separatorChar + postfix;
+    }
+    
+    /**
      * @param name
      * @return
      */

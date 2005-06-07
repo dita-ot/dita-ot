@@ -116,7 +116,7 @@
         <xsl:with-param name="pathFromMaplist" select="$pathFromMaplist"/>
       </xsl:call-template>
     </xsl:when>
-    <xsl:when test="@format=substring-after($DITAEXT,'.')">
+    <xsl:when test="@format='dita' or @format='DITA'">
       <xsl:call-template name="output-toc-entry">
         <xsl:with-param name="pathFromMaplist" select="$pathFromMaplist"/>
       </xsl:call-template>

@@ -688,7 +688,7 @@ DATA-TYPE PHRASES: date time currency char num bin oct dec hex ???
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' topic/xref ') and
-      (not(@format) or @format='dita') and
+      (not(@format) or @format='dita' or @format='DITA') and
 	  (not(@scope)  or @scope='local') and
 	  @href and (
 	      substring(@href, string-length(@href) - 5) = '.dita' or

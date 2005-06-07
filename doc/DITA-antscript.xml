@@ -1,0 +1,464 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2004, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\dtd\reference.dtd">
+<?Pub Inc?>
+<reference id="antscript" xml:lang="en-us">
+<title>Ant tasks and script</title>
+<shortdesc>This topic lists detailed Ant tasks and script.</shortdesc>
+<refbody>
+<section>                 <p>The build process including pre-process can be
+called by using Ant script. There are four major Ant script files: </p><p><i>conductor.xml</i>, <i>pretargets.xml,</i> <i>ditatargets.xml</i> and <i
+>catalog-ant.xml</i>.<?Pub Caret?></p>         <dl><dlentry>
+<dt><i>conductor.xml</i></dt>
+<dd>The main Ant script file includes the other three ant scripts and provides
+main targets for every output style. </dd>
+</dlentry><dlentry>
+<dt>targets in <i>conductor.xml</i></dt>
+<dd>                 <p>The following targets in <i>conductor.xml</i> will
+call the complete processing of DITA files which can be loaded by users.</p> 
+               <dl><dlentry>
+<dt>dita2docbook</dt>
+<dd>Transform DITA topic or DITA map into docbook output. <table expanse="column"
+id="dita2docbook"><title>Parameter Table of dita2docbook</title>
+<tgroup cols="3"><colspec align="center" colname="col1" colwidth="1*"/><colspec
+align="center" colname="col2" colwidth="4*"/><colspec align="center" colname="col3"
+colwidth="1*"/>
+<thead>
+<row>
+<entry>Parameter </entry>
+<entry>Description</entry>
+<entry>Required</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry>args.input</entry>
+<entry>The file path and file name of the input file. This argument should
+be in the same upper or lower case with the filename on file system.</entry>
+<entry>Yes</entry>
+</row>
+<row>
+<entry>output.dir</entry>
+<entry>The path of the output directory.</entry>
+<entry>Yes</entry>
+</row>
+</tbody>
+</tgroup>
+</table></dd>
+</dlentry><dlentry>
+<dt>dita2eclipsehelp</dt>
+<dd>Transform DITA topic or DITA map into eclipse help plugin based on xhtml. <table
+expanse="column" id="dita2eclipsehelp"><title>Parameter Table of dita2eclipsehelp</title>
+<tgroup cols="3"><colspec align="center" colname="col1" colwidth="1*"/><colspec
+align="center" colname="col2" colwidth="4*"/><colspec align="center" colname="col3"
+colwidth="1*"/>
+<thead>
+<row>
+<entry>Parameter </entry>
+<entry>Description</entry>
+<entry>Required</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry>args.input</entry>
+<entry>The file path and file name of the input file. This argument should
+be in the same upper or lower case with the filename on file system.</entry>
+<entry>Yes</entry>
+</row>
+<row>
+<entry>output.dir</entry>
+<entry>The path of the output directory.</entry>
+<entry>Yes</entry>
+</row>
+<row>
+<entry>args.eclipse.toc</entry>
+<entry>The root file name of the output toc file.(Default is &apos;toc&apos;)</entry>
+<entry>No</entry>
+</row>
+<row>
+<entry>args.eclipse.plugin</entry>
+<entry>The file path of the plugin.xml file for eclipse help (Default value
+is <q>resource/plugin.xml</q>)</entry>
+<entry>No</entry>
+</row>
+<row>
+<entry>dita.input.valfile</entry>
+<entry>The file name containing filter/flagging/revision information.</entry>
+<entry>No</entry>
+</row>
+<row>
+<entry>args.css</entry>
+<entry>User&apos;s CSS filename parameter. <p>This can be the name of a stylesheet
+used by one or more topics within an overall group. This stylesheet can use
+the CSS cascade effect to modify existing properties or it can override or
+define new properties.</p></entry>
+<entry>No</entry>
+</row>
+<row>
+<entry>args.csspath</entry>
+<entry>Default CSS path parameter.<p>This specifies a path for the cascading
+style sheet (CSS). This allows you to place the CSS in one place and have
+several different topics point to it. If no CSSPATH is specified, the CSS
+is assumed to be in the same directory as the XHTML.</p></entry>
+<entry>No</entry>
+</row>
+<row>
+<entry>args.hdf</entry>
+<entry>Absolute path of the file containing XHTML to be placed in the HEAD area. </entry>
+<entry>No</entry>
+</row>
+<row>
+<entry>args.hdr</entry>
+<entry>Absolute path of the file containing XHTML to be placed in the BODY running-heading area.</entry>
+<entry>No</entry>
+</row>
+<row>
+<entry>args.ftr</entry>
+<entry>Absolute path of the file containing XHTML to be placed in the BODY running-footing area.</entry>
+<entry>No</entry>
+</row>
+<row>
+<entry>args.draft</entry>
+<entry>Default &quot;hide draft &amp; cleanup content&quot; processing parameter
+(<q>no</q>= hide them); <q>no</q> and <q>yes</q> are valid values; non-<q>yes</q> is
+ignored.</entry>
+<entry>No</entry>
+</row>
+<row>
+<entry>args.artlbl</entry>
+<entry>Default &quot;output artwork filenames&quot; processing parameter; <q>no</q>and <q>yes</q>are
+valid values; non-<q>yes</q> is ignored.</entry>
+<entry>No</entry>
+</row>
+</tbody>
+</tgroup>
+</table></dd>
+</dlentry><dlentry>
+<dt>dita2htmlhelp</dt>
+<dd>Transform DITA topic or DITA map into html help output based on html. <table
+expanse="column" id="dita2html"><title>Parameter Table of dita2htmlhelp</title>
+<tgroup cols="3"><colspec align="center" colname="col1" colwidth="1*"/><colspec
+align="center" colname="col2" colwidth="4*"/><colspec align="center" colname="col3"
+colwidth="1*"/>
+<thead>
+<row>
+<entry>Parameter </entry>
+<entry>Description</entry>
+<entry>Required</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry>args.input</entry>
+<entry>The file path and file name of the input file. This argument should
+be in the same upper or lower case with the filename on file system.</entry>
+<entry>Yes</entry>
+</row>
+<row>
+<entry>output.dir</entry>
+<entry>The path of the output directory.</entry>
+<entry>Yes</entry>
+</row>
+<row>
+<entry>dita.input.valfile</entry>
+<entry>The file name containing filter/flagging/revision information.</entry>
+<entry>No</entry>
+</row>
+<row>
+<entry>args.css</entry>
+<entry>User&apos;s CSS filename parameter. <p>This can be the name of a stylesheet
+used by one or more topics within an overall group. This stylesheet can use
+the CSS cascade effect to modify existing properties or it can override or
+define new properties.</p></entry>
+<entry>No</entry>
+</row>
+<row>
+<entry>args.csspath</entry>
+<entry>Default CSS path parameter.<p>This specifies a path for the cascading
+style sheet (CSS), which allows you to direct several different topics to
+one CSS file in a directory. If no CSSPATH is specified, the CSS is assumed
+to be in the same directory as the XHTML.</p></entry>
+<entry>No</entry>
+</row>
+<row>
+<entry>args.hdf</entry>
+<entry>Absolute path of the file containing XHTML to be placed in the HEAD area.</entry>
+<entry>No</entry>
+</row>
+<row>
+<entry>args.hdr</entry>
+<entry>Absolute path of the file containing XHTML to be placed in the BODY running-heading area.</entry>
+<entry>No</entry>
+</row>
+<row>
+<entry>args.ftr</entry>
+<entry>Absolute path of the file containing XHTML to be placed in the BODY running-footing area.</entry>
+<entry>No</entry>
+</row>
+<row>
+<entry>args.draft</entry>
+<entry>Default &quot;hide draft &amp; cleanup content&quot; processing parameter
+(<q>no</q>= hide them); <q>no</q> and <q>yes</q> are valid values; non-<q>yes</q> is
+ignored.</entry>
+<entry>No</entry>
+</row>
+<row>
+<entry>args.artlbl</entry>
+<entry>Default &quot;output artwork filenames&quot; processing parameter; <q>no</q>and <q>yes</q>are
+valid values; non-<q>yes</q> is ignored.</entry>
+<entry>No</entry>
+</row>
+</tbody>
+</tgroup>
+</table></dd>
+</dlentry><dlentry>
+<dt>dita2javahelp</dt>
+<dd>Transform DITA topic or DITA map into java help output based on html. <table
+expanse="column"><title>Parameter Table of dita2javahelp</title>
+<tgroup cols="3"><colspec align="center" colname="col1" colwidth="1*"/><colspec
+align="center" colname="col2" colwidth="4*"/><colspec align="center" colname="col3"
+colwidth="1*"/>
+<thead>
+<row>
+<entry>Parameter </entry>
+<entry>Description</entry>
+<entry>Required</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry>args.input</entry>
+<entry>The file path and file name of the input file. This argument should
+be in the same upper or lower case with the filename on file system.</entry>
+<entry>Yes</entry>
+</row>
+<row>
+<entry>output.dir</entry>
+<entry>The path of the output directory.</entry>
+<entry>Yes</entry>
+</row>
+<row>
+<entry>args.javahelp.toc</entry>
+<entry>The root file name of the output toc file.(Default is &apos;toc&apos;)</entry>
+<entry>No</entry>
+</row>
+<row>
+<entry>args.javahelp.map</entry>
+<entry>The root file name of the output javahelp map file.(Default is &apos;map&apos;)</entry>
+<entry>No</entry>
+</row>
+<row>
+<entry>args.javahelp.helpset</entry>
+<entry>The file path of the helpset file for java help. (Default value is <q>resource/helpset.hs</q>)</entry>
+<entry>No</entry>
+</row>
+<row>
+<entry>dita.input.valfile</entry>
+<entry>The file name containing filter/flagging/revision information.</entry>
+<entry>No</entry>
+</row>
+<row>
+<entry>args.css</entry>
+<entry>User&apos;s CSS filename parameter. <p>This can be the name of a stylesheet
+used by one or more topics within an overall group. This stylesheet can use
+the CSS cascade effect to modify existing properties or it can override or
+define new properties.</p></entry>
+<entry>No</entry>
+</row>
+<row>
+<entry>args.csspath</entry>
+<entry>Default CSS path parameter.<p>This specifies a path for the cascading
+style sheet (CSS), which allows you to direct several different topics to
+one CSS file in a directory. If no CSSPATH is specified, the CSS is assumed
+to be in the same directory as the XHTML.</p></entry>
+<entry>No</entry>
+</row>
+<row>
+<entry>args.hdf</entry>
+<entry>Absolute path of the file containing XHTML to be placed in the HEAD area.</entry>
+<entry>No</entry>
+</row>
+<row>
+<entry>args.hdr</entry>
+<entry>Absolute path of the file containing XHTML to be placed in the BODY running-heading area.</entry>
+<entry>No</entry>
+</row>
+<row>
+<entry>args.ftr</entry>
+<entry>Absolute path of the file containing XHTML to be placed in the BODY running-footing area.</entry>
+<entry>No</entry>
+</row>
+<row>
+<entry>args.draft</entry>
+<entry>Default &quot;hide draft &amp; cleanup content&quot; processing parameter
+(<q>no</q>= hide them); <q>no</q> and <q>yes</q> are valid values; non-<q>yes</q> is
+ignored.</entry>
+<entry>No</entry>
+</row>
+<row>
+<entry>args.artlbl</entry>
+<entry>Default &quot;output artwork filenames&quot; processing parameter; <q>no</q>and <q>yes</q>are
+valid values; non-<q>yes</q> is ignored.</entry>
+<entry>No</entry>
+</row>
+</tbody>
+</tgroup>
+</table></dd>
+</dlentry><dlentry>
+<dt>dita2xhtml</dt>
+<dd>Transform DITA topic or DITA map into xhtml web output.<table expanse="column">
+<title>Parameter Table of dita2xhtml</title>
+<tgroup cols="3"><colspec align="center" colname="col1" colwidth="1*"/><colspec
+align="center" colname="col2" colwidth="4*"/><colspec align="center" colname="col3"
+colwidth="1*"/>
+<thead>
+<row>
+<entry>Parameter </entry>
+<entry>Description</entry>
+<entry>Required</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry>args.input</entry>
+<entry>The file path and file name of the input file. This argument should
+be in the same upper or lower case with the filename on file system.</entry>
+<entry>Yes</entry>
+</row>
+<row>
+<entry>output.dir</entry>
+<entry>The path of the output directory.</entry>
+<entry>Yes</entry>
+</row>
+<row>
+<entry>args.xhtml.toc</entry>
+<entry>The root file name of the output toc file.(Default is &apos;index&apos;)</entry>
+<entry>No</entry>
+</row>
+<row>
+<entry>dita.input.valfile</entry>
+<entry>The file name containing filter/flagging/revision information.</entry>
+<entry>No</entry>
+</row>
+<row>
+<entry>args.css</entry>
+<entry>User&apos;s CSS filename parameter. <p>This can be the name of a stylesheet
+used by one or more topics within an overall group. This stylesheet can use
+the CSS cascade effect to modify existing properties or it can override or
+define new properties.</p></entry>
+<entry>No</entry>
+</row>
+<row>
+<entry>args.csspath</entry>
+<entry>Default CSS path parameter.<p>This specifies a path for the cascading
+style sheet (CSS), which allows you to direct several different topics to
+one CSS file in a directory. If no CSSPATH is specified, the CSS is assumed
+to be in the same directory as the XHTML.</p></entry>
+<entry>No</entry>
+</row>
+<row>
+<entry>args.hdf</entry>
+<entry>Absolute path of the file containing XHTML to be placed in the HEAD area.</entry>
+<entry>No</entry>
+</row>
+<row>
+<entry>args.hdr</entry>
+<entry>Absolute path of the file containing XHTML to be placed in the BODY running-heading area.</entry>
+<entry>No</entry>
+</row>
+<row>
+<entry>args.ftr</entry>
+<entry>Absolute path of the file containing XHTML to be placed in the BODY running-footing area.</entry>
+<entry>No</entry>
+</row>
+<row>
+<entry>args.draft</entry>
+<entry>Default &quot;hide draft &amp; cleanup content&quot; processing parameter
+(<q>no</q>= hide them); <q>no</q> and <q>yes</q> are valid values; non-<q>yes</q> is
+ignored.</entry>
+<entry>No</entry>
+</row>
+<row>
+<entry>args.artlbl</entry>
+<entry>Default &quot;output artwork filenames&quot; processing parameter; <q>no</q>and <q>yes</q>are
+valid values; non-<q>yes</q> is ignored.</entry>
+<entry>No</entry>
+</row>
+</tbody>
+</tgroup>
+</table></dd>
+</dlentry><dlentry>
+<dt>dita2pdf</dt>
+<dd>Transform DITA topic or DITA map into pdf. <table expanse="column"><title>Parameter
+Table of dita2pdf</title>
+<tgroup cols="3"><colspec align="center" colname="col1" colwidth="1*"/><colspec
+align="center" colname="col2" colwidth="4*"/><colspec align="center" colname="col3"
+colwidth="1*"/>
+<thead>
+<row>
+<entry>Parameter </entry>
+<entry>Description</entry>
+<entry>Required</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry>args.input</entry>
+<entry>The file path and file name of the input file. This argument should
+be in the same upper or lower case with the filename on file system.</entry>
+<entry>Yes</entry>
+</row>
+<row>
+<entry>output.dir</entry>
+<entry>The path of the output directory.</entry>
+<entry>Yes</entry>
+</row>
+</tbody>
+</tgroup>
+</table></dd>
+</dlentry></dl>               </dd>
+</dlentry><dlentry>
+<dt><i>pretargets.xml</i></dt>
+<dd>The Ant script file which contains all targets for pre-process.</dd>
+</dlentry><dlentry>
+<dt><i>ditatargets.xml</i></dt>
+<dd>The Ant script file which contains all targets for main transformation.</dd>
+</dlentry><dlentry>
+<dt><i>catalog-ant.xml</i></dt>
+<dd>The xml catalog information which is used by Ant.</dd>
+</dlentry></dl><p>                   </p>       </section>
+<section><title>Sample ant script</title><p>These ant scripts are in <codeph>/ant/</codeph> directory.
+They are simple and easy to learn. From these files, you can learn how to
+write your own Ant script to build your own process.</p><p>Here is a sample
+template for writing an Ant script that executes transformation to xhtml in <codeph>/ant/</codeph> directory<codeblock>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;
+
+&lt;project name=&quot;sample_xhtml&quot; default=&quot;all&quot; basedir=&quot;..&quot;&gt;
+  
+  &lt;import file=&quot;${basedir}${file.separator}conductor.xml&quot;/&gt;
+  &lt;property name=&quot;dita.extname&quot; value=&quot;.xml&quot;/&gt;
+ &lt;target name=&quot;all&quot; depends=&quot;sample2xhtml&quot;&gt;
+ &lt;/target&gt;
+ &lt;!-- revise below here --&gt;
+
+ &lt;target name=&quot;sample2xhtml&quot; depends=&quot;use-init&quot;&gt;
+   &lt;antcall target=&quot;dita2xhtml&quot;&gt;
+     &lt;param name=&quot;args.input&quot;
+            value=&quot;@DITA.INPUT@&quot;/&gt;
+     &lt;param name=&quot;output.dir&quot;
+            value=&quot;@OUTPUT.DIR@&quot;/&gt;
+   &lt;/antcall&gt;
+ &lt;/target&gt;
+&lt;/project&gt;
+</codeblock></p>After you write the input file and output directory to overwrite
+@DITA.INPUT@ and @OUTPUT.DIR@, the script can execute the transformation from
+your input to xhtml by this command. The property of dita.extname is a global
+variable with which you can set the file extension name of the topic file.
+The default dita.extname is <q><i>.xml</i></q>. You can also set it to <q><i>.dita</i></q> according
+to OASIS DITA recommendation. <pre>c:\pkg\DITA-OT1.0&gt;ant -f ant/template_xhtml.xml</pre> All
+of targets we use here are defined in <i>conductor.xml</i>. Therefore, you
+need to import that file before calling the target.</section>
+</refbody>
+</reference>
+<?Pub *0000016008?>

@@ -23,7 +23,7 @@ Useful tools include the following items:</p>
   <li>Rake</li>
 </ul><p>Keep your tools organized in a tool box.</p></conbody>
 <related-links>
-<link href="toolbox.xml" format="xml" type="concept"><linktext>Tool box</linktext></link>
-<link href="../tasks/organizing.xml" format="xml" type="task"><linktext>Organizing the workbench and tools</linktext></link>
+<link href="toolbox.xml" format="dita" type="concept"><linktext>Tool box</linktext></link>
+<link href="../tasks/organizing.xml" format="dita" type="task"><linktext>Organizing the workbench and tools</linktext></link>
 </related-links>
 </concept>

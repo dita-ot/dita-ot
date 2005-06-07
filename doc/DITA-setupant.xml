@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2004, v.4002-->
+<!DOCTYPE task PUBLIC "-//IBM//DTD DITA Task//EN"
+ "..\dtd\task.dtd">
+<?Pub Inc?>
+<task id="setupant" xml:lang="en-us">
+<title>Setting up Ant</title>
+<titlealts>
+<navtitle>Setting up Ant</navtitle>
+</titlealts>
+<shortdesc>This topic guides you how to set up Ant environment properly.</shortdesc>
+<taskbody>
+<prereq>Assume that you have already installed the <xref href="DITA-installation.xml#installation/jdk">Java
+Development Kit (JDK)</xref> and the <xref href="DITA-installation.xml#installation/xslt">XSLT
+processor </xref>before setting up the Ant. </prereq>
+<context><b>Set up the Ant </b></context>
+<steps>
+<step><cmd>Download and extract the Ant package file (available on <xref format="html"
+href="http://ant.apache.org/bindownload.cgi" scope="external"></xref>) into
+a directory of your choice.</cmd></step>
+<step><cmd>Set up environment variable. </cmd>
+<choicetable>
+<chrow><choption>If you use Windows,</choption><chdesc>follow these steps.<ul>
+<li>Set the JAVA_HOME. <codeph>set JAVA_HOME=&lt;jdk_dir></codeph></li>
+<li>Set the ANT_HOME. <codeph>set ANT_HOME=&lt;ant_dir></codeph></li>
+<li>Set the PATH. <codeph>set PATH=%PATH%;&lt;ant_dir>\bin</codeph></li>
+</ul></chdesc></chrow>
+<chrow><choption>If you use Linux,</choption><chdesc>follow these steps.<ul>
+<li>Set JAVA_HOME <codeph>export JAVA_HOME=&lt;jdk_dir></codeph></li>
+<li>Set the ANT_HOME <codeph>export ANT_HOME=&lt;ant_dir></codeph></li>
+<li>Set the PATH (<codeph>export PATH=$PATH:&lt;ant_dir>\bin</codeph></li>
+</ul></chdesc></chrow>
+</choicetable>
+</step>
+<step importance="optional"><cmd>If you have installed optional output FOP
+to generate PDF output, see <xref href="DITA-installation.xml"><?Pub Caret?>DITA
+installation</xref> for detail information of setting up. </cmd></step>
+</steps>
+</taskbody>
+</task>
+<?Pub *0000001894?>

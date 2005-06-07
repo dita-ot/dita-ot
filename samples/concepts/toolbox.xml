@@ -11,7 +11,7 @@
 <conbody><p>A tool box contains many compartments for organizing tools and hardware. Keep 
 the tool box handy for all sorts of jobs around the house.</p></conbody>
 <related-links>
-<link href="tools.xml" format="xml" type="concept"><linktext>Tools</linktext></link>
-<link href="../tasks/organizing.xml" format="xml" type="task"><linktext>Organizing the workbench and tools</linktext></link>
+<link href="tools.xml" format="dita" type="concept"><linktext>Tools</linktext></link>
+<link href="../tasks/organizing.xml" format="dita" type="task"><linktext>Organizing the workbench and tools</linktext></link>
 </related-links>
 </concept>

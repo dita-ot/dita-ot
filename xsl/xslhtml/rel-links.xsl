@@ -333,7 +333,7 @@ Children are displayed in a numbered list, with the target title as the cmd and 
 <xsl:template name="href">
   <xsl:choose>
     <!-- For non-DITA formats - use the href as is -->
-    <xsl:when test="(not(@format) and (@type='external' or @scope='external')) or (@format and not(@format=substring-after($DITAEXT,'.')))">
+    <xsl:when test="(not(@format) and (@type='external' or @scope='external')) or (@format and not(@format='dita' or @format='DITA'))">
         <xsl:value-of select="@href"/>
       </xsl:when>
       <!-- For DITA - process the internal href -->

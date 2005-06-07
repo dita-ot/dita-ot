@@ -10,6 +10,6 @@
 any snowfall.</p></context><steps><step><cmd>Get the shovel out of the garage</cmd></step><step><cmd>Shovel the driveway, starting at the garage door and working out to the 
   street.</cmd></step><step><cmd>Shovel the sidewalk in front of your house.</cmd></step><step><cmd>Shovel the walk to your front door.</cmd></step></steps></taskbody>
 <related-links>
-<link href="../concepts/snowshovel.xml" format="xml" type="concept"><linktext>Snow shovel</linktext></link>
+<link href="../concepts/snowshovel.xml" format="dita" type="concept"><linktext>Snow shovel</linktext></link>
 </related-links>
 </task>

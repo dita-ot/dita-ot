@@ -1,29 +1,37 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<!DOCTYPE topic PUBLIC "-//IBM//DTD DITA Topic//EN" "../dtd/topic.dtd">
-<topic id="testedplatformsandtools">
-  <title>Tested platforms and tools</title>
-  <shortdesc>See which tools and platforms have been used in testing the DITA processing system.</shortdesc>
-  <body>
-    <p>The DITA processing system has been tested against the following platforms and tools:</p>
-    <simpletable>
-      <strow>
-        <stentry>Tested OS:</stentry>
-        <stentry>Windows, RedHat Linux 9</stentry>
-      </strow>
-      <strow>
-        <stentry>Tested XSL processor:</stentry>
-        <stentry>Xalan-J (2.6), Saxon 6.5<note>This version of the XSLT transforms are written <i>only</i> to the XSLT 1.0 standard. Do not use XSLT 2.0 engines!</note></stentry>
-      </strow>
-      <strow>
-        <stentry>Tested JDK:</stentry>
-        <stentry>IBM 1.4.2, SUN 1.4.2</stentry>
-      </strow>
-      <strow>
-        <stentry>Tested Ant:</stentry>
-        <stentry>Ant 1.6.2</stentry>
-      </strow>
-    </simpletable>
-
-  </body>
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2004, v.4002-->
+<!DOCTYPE topic PUBLIC "-//IBM//DTD DITA Topic//EN"
+ "../dtd/topic.dtd">
+<topic id="testedplatformsandtools" xml:lang="en-us">
+<title>Tested platforms and tools</title>
+<titlealts>
+<navtitle>Tested Platforms and tools</navtitle>
+</titlealts>
+<shortdesc>See which tools and platforms have been used in testing the DITA
+processing system.</shortdesc>
+<body>
+<p>The DITA processing system has been tested against the following platforms
+and tools:</p>
+<simpletable>
+<strow>
+<stentry>Tested OS:</stentry>
+<stentry>Windows, RedHat Linux 9</stentry>
+</strow>
+<strow>
+<stentry>Tested XSLT processor:</stentry>
+<stentry>Xalan-J 2.6<?Pub Caret?>, Saxon 6.5<note>This version of the XSLT
+transforms are written <i>only</i> to the XSLT 1.0 standard. Do not use XSLT
+2.0 engines!</note></stentry>
+</strow>
+<strow>
+<stentry>Tested JDK:</stentry>
+<stentry>IBM 1.4.2, SUN 1.4.2</stentry>
+</strow>
+<strow>
+<stentry>Tested Ant:</stentry>
+<stentry>Ant 1.6.2</stentry>
+</strow>
+</simpletable>
+</body>
 </topic>
-
+<?Pub *0000001092?>

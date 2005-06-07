@@ -23,9 +23,9 @@ will help keep the engine in good condition. </p><p>To change the oil:</p></cont
 </steps>
 </taskbody>
 <related-links>
-<link href="../concepts/oil.xml" format="xml" type="concept"><linktext>Oil</linktext>
+<link href="../concepts/oil.xml" format="dita" type="concept"><linktext>Oil</linktext>
 </link>
-<link href="../concepts/wwfluid.xml" format="xml" type="concept"><linktext>Windshield
+<link href="../concepts/wwfluid.xml" format="dita" type="concept"><linktext>Windshield
 washer fluid</linktext></link>
 </related-links>
 </task>

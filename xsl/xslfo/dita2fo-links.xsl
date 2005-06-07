@@ -73,7 +73,7 @@
       <xsl:choose>
         <!-- If the format attribute is dita, or is unspecified, then interpret the href as a topic -->
         <!-- Create an internal hyperlink to the topic -->
-        <xsl:when test="@format=substring-after($DITAEXT,'.') or not(@format)">
+        <xsl:when test="@format='dita' or @format='DITA' or not(@format)">
           <fo:basic-link>
             <!-- Set the destination to the id attribute of the topic referred to by the href -->
             <xsl:attribute name="internal-destination">
@@ -98,7 +98,7 @@
           <!-- If the format attribute is html, then interpret the href as an external link -->
           <!-- (for example, to a website) -->
           <xsl:choose>
-            <xsl:when test="@format='html'">
+            <xsl:when test="@format='html' or @format='HTML'">
               <fo:basic-link>
                 <xsl:attribute name="external-destination">
                   <xsl:value-of select="@href"/>

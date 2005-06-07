@@ -37,7 +37,7 @@ public class MapIndexReader extends AbstractReader implements ContentHandler,Lex
     private int level;
     private boolean match;
     private boolean needResolveEntity;
-    private String topicFileName;
+    private String topicPath;
     private XMLReader reader;
     private String indexEntries;
     private HashMap map;
@@ -212,12 +212,12 @@ public class MapIndexReader extends AbstractReader implements ContentHandler,Lex
         }
 
         if (qName.equals(first)) {
-            if (check(indexEntries) && topicFileName != null) {
-                String origin = (String) map.get(topicFileName);
+            if (check(indexEntries) && topicPath != null) {
+                String origin = (String) map.get(topicPath);
                 if (origin != null) {
-                    map.put(topicFileName, origin + indexEntries);
+                    map.put(topicPath, origin + indexEntries);
                 } else {
-                    map.put(topicFileName, indexEntries);
+                    map.put(topicPath, indexEntries);
                 }
                 indexEntries = null;
             }
@@ -264,10 +264,10 @@ public class MapIndexReader extends AbstractReader implements ContentHandler,Lex
         if (qName.equals(first)) {
             String hrefValue = atts.getValue("href");
             if(hrefValue != null && hrefValue.indexOf("://") == -1){
-                topicFileName = StringUtils.resolveDirectory(filePath, atts
+                topicPath = StringUtils.resolveTopic(filePath, atts
                         .getValue("href"));
             }else{
-                topicFileName = null;
+                topicPath = null;
             }
         }
         if (!match) {

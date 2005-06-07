@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2004, v.4002-->
+<!DOCTYPE topic PUBLIC "-//IBM//DTD DITA Topic//EN"
+ "..\dtd\topic.dtd">
+<?Pub Inc?>
+<topic id="ditaot_genlistmodule" xml:lang="en-us">
+<title>DITA Open Toolkit GenList module</title>
+<shortdesc></shortdesc>
+<body>
+<p>Here is the class diagram of a sample Java module 'GenListModule' in the
+preprocessing stage</p>
+<p><?Pub Caret?><image href="javamodules.gif"></image> </p>
+<p>We use GenListModule which extends AbstractModule to control the whole
+program logic of this module. MapReader is used to parse the input xml file.
+It's also implements the org.xml.sax.ContentHandler and is used to handle
+different information in xml file, collect and write the information we need
+to class Content. ListWriter reads the information from class GenListModule
+and outputs those lists into intermediate files. </p>
+<p>Here is the sequence diagram of the example. </p>
+<p><image href="genlistmodule.gif"></image></p>
+<p>GenListModule first create MapReader and ListWriter. Then GenListModule
+call MapReader to read and parse the input file. In order to process the large
+input file, we choose SAX Parser as the parser and each time we only process
+one file and keep the list of files we will process later in the waiting list
+of GenListModule. After the parse process is over,GenListModule get the result
+content from MapReader. Then GenListModule process the content and set the
+content to ListWriter. Then it calls ListWriter to output the information
+to intermediate file.</p>
+<p></p>
+</body>
+</topic>
+<?Pub *0000001597?>

@@ -11,6 +11,6 @@
 <conbody><p>A water hose is useful for cleaning and gardening projects around the yard. 
 Keep the hose coiled on a large hook near a water spout.</p></conbody>
 <related-links>
-<link href="../tasks/washingthecar.xml" format="xml" type="task"><linktext>Washing the car</linktext></link>
+<link href="../tasks/washingthecar.xml" format="dita" type="task"><linktext>Washing the car</linktext></link>
 </related-links>
 </concept>

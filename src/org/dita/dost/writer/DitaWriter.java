@@ -5,6 +5,7 @@ package org.dita.dost.writer;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -12,9 +13,12 @@ import java.util.Map;
 import java.util.Set;
 
 import org.dita.dost.module.Content;
+import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.StringUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
+import org.xml.sax.EntityResolver;
+import org.xml.sax.InputSource;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
@@ -26,7 +30,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
 /**
  * @author Zhang, Yuan Peng
  */
-public class DitaWriter extends AbstractWriter implements ContentHandler,LexicalHandler{
+public class DitaWriter extends AbstractWriter implements ContentHandler,LexicalHandler,EntityResolver{
 
     private XMLReader reader;
     private OutputStreamWriter output;
@@ -41,6 +45,8 @@ public class DitaWriter extends AbstractWriter implements ContentHandler,Lexical
     private int level;// level is used to count the element level in the
     // filtering
     private int columnNumber; // columnNumber is used to adjust column name
+    
+    private HashMap catalogMap; //map that contains the information from XML Catalog
 
     /**
      * 
@@ -50,6 +56,7 @@ public class DitaWriter extends AbstractWriter implements ContentHandler,Lexical
         exclude = false;
         filterMap = new HashMap();
         columnNumber = 0;
+        catalogMap = CatalogUtils.getCatalog();
         try {
             //SAXParserFactory spFactory = SAXParserFactory.newInstance();
             //spFactory.setValidating(true);
@@ -63,6 +70,7 @@ public class DitaWriter extends AbstractWriter implements ContentHandler,Lexical
             reader = XMLReaderFactory.createXMLReader();
             reader.setContentHandler(this);
             reader.setProperty("http://xml.org/sax/properties/lexical-handler",this);
+            reader.setEntityResolver(this);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -449,4 +457,16 @@ public class DitaWriter extends AbstractWriter implements ContentHandler,Lexical
         }
 
 	}
+		
+    /* (non-Javadoc)
+     * @see org.xml.sax.EntityResolver#resolveEntity(java.lang.String, java.lang.String)
+     */
+    public InputSource resolveEntity(String publicId, String systemId)
+            throws SAXException, IOException {
+        if (catalogMap.get(publicId)!=null){
+            File dtdFile = new File((String)catalogMap.get(publicId));
+            return new InputSource(dtdFile.getAbsolutePath());
+       }
+        return null;
+    }
 }

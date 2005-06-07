@@ -6,13 +6,16 @@ package org.dita.dost.reader;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.StringUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
+import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
@@ -25,18 +28,20 @@ import org.xml.sax.helpers.XMLReaderFactory;
  * 
  * @author Wu, Zhi Qiang
  */
-public class PipelineReader implements ContentHandler {
+public class PipelineReader implements ContentHandler, EntityResolver {
     private List result = null;
     private boolean hasConRef = false;
     private boolean hasHref = false;
     private XMLReader reader = null;
     private String filePath = null;
+    private HashMap map = null;
 
     /**
      * Constructor
      */
     public PipelineReader() {
         result = new ArrayList();
+        map = CatalogUtils.getCatalog();
     }
 
     /**
@@ -52,6 +57,7 @@ public class PipelineReader implements ContentHandler {
         }
         reader = XMLReaderFactory.createXMLReader();
         reader.setContentHandler(this);
+        reader.setEntityResolver(this);
     }
 
     /**
@@ -227,5 +233,18 @@ public class PipelineReader implements ContentHandler {
      */
     public List getResult() {
         return result;
+    }
+    
+    
+    /* (non-Javadoc)
+     * @see org.xml.sax.EntityResolver#resolveEntity(java.lang.String, java.lang.String)
+     */
+    public InputSource resolveEntity(String publicId, String systemId)
+            throws SAXException, IOException {
+        if (map.get(publicId)!=null){
+             File dtdFile = new File((String)map.get(publicId));
+             return new InputSource(dtdFile.getAbsolutePath());
+        }
+        return null;
     }
 }

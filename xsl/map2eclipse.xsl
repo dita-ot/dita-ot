@@ -78,7 +78,7 @@ to an Eclipse XML file. The value <xsl:value-of select="@anchorref"/> does not p
 <!-- Format @href for the title attribute on the map element -->
 <xsl:template match="*" mode="format-href">
   <xsl:choose>
-    <xsl:when test="@type='external' or (@scope='external' and not(@format)) or not(not(@format) or @format=substring-after($DITAEXT,'.'))"><xsl:value-of select="@href"/></xsl:when> <!-- adding local -->
+    <xsl:when test="@type='external' or (@scope='external' and not(@format)) or not(not(@format) or @format='dita' or @format='DITA')"><xsl:value-of select="@href"/></xsl:when> <!-- adding local -->
     <xsl:when test="starts-with(@href,'#')"><xsl:value-of select="@href"/></xsl:when>
     <xsl:when test="contains(@copy-to, $DITAEXT)">
       <xsl:value-of select="substring-before(@copy-to,$DITAEXT)"/>.<xsl:value-of select="$OUTEXT"/>
@@ -156,7 +156,7 @@ to an Eclipse XML file. Found a navref that does not point to anything.</xsl:wit
 				<xsl:when test="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/linktext ')]"><xsl:value-of select="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/linktext ')]"/></xsl:when>
 				<xsl:otherwise>
                     			<xsl:choose>
-		                         <xsl:when test="@type='external' or not(not(@format) or @format=substring-after($DITAEXT,'.'))"><xsl:value-of select="@href"/></xsl:when> <!-- adding local -->
+		                         <xsl:when test="@type='external' or not(not(@format) or @format='dita' or @format='DITA')"><xsl:value-of select="@href"/></xsl:when> <!-- adding local -->
                 		         <xsl:when test="starts-with(@href,'#')"><xsl:value-of select="@href"/></xsl:when>
 		                         <xsl:when test="contains(@copy-to, $DITAEXT)">
                 		              <xsl:value-of select="substring-before(@copy-to, $DITAEXT)"/>.<xsl:value-of select="$OUTEXT"/>
@@ -178,7 +178,7 @@ If the topic is not accessible at build time, provide the navigation title in th
 		<xsl:if test="@href and @href!=''">
                   <xsl:attribute name="href">
                     <xsl:choose>
-                      <xsl:when test="@type='external' or (@scope='external' and not(@format)) or not(not(@format) or @format=substring-after($DITAEXT,'.'))"><xsl:value-of select="@href"/></xsl:when> <!-- adding local -->
+                      <xsl:when test="@type='external' or (@scope='external' and not(@format)) or not(not(@format) or @format='dita' or @format='DITA')"><xsl:value-of select="@href"/></xsl:when> <!-- adding local -->
                       <xsl:when test="starts-with(@href,'#')"><xsl:value-of select="@href"/></xsl:when>
                       <xsl:when test="contains(@copy-to, $DITAEXT)">
                         <xsl:value-of select="substring-before(@copy-to, $DITAEXT)"/>.<xsl:value-of select="$OUTEXT"/>

@@ -11,6 +11,6 @@
 <conbody><p>Wooden or metal shelving is useful for storing things in the garage. It keeps 
 things neat and organized.</p></conbody>
 <related-links>
-<link href="../tasks/organizing.xml" format="xml" type="task"><linktext>Organizing the workbench and tools</linktext></link>
+<link href="../tasks/organizing.xml" format="dita" type="task"><linktext>Organizing the workbench and tools</linktext></link>
 </related-links>
 </concept>

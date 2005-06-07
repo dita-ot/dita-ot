@@ -27,7 +27,7 @@ from the hose.</cmd></step>
 width="249"/></p></result>
 </taskbody>
 <related-links>
-<link href="../concepts/waterhose.xml" format="xml" type="concept"><linktext>Water hose</linktext>
+<link href="../concepts/waterhose.xml" format="dita" type="concept"><linktext>Water hose</linktext>
 </link>
 </related-links>
 </task>

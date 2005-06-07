@@ -1,3 +1,27 @@
+DITA OT release 1.0.2
+Available since Jun. 08, 2005
+Release 1.0.2 is a maintenance release to fix defects and adds some minor enhancements in release 1.0.1. 
+
+[7 Changes]
+1. Bug 1181950	format attribute should be set to 'dita' for dita topic
+2. Patch 1176909 Add template for getting image URI
+3. RFE 1183487	Document the usage of footer property
+4. RFE 1198847	command line interface support 
+5. RFE 1198850	architecture document update 
+6. RFE 1200410	need explanation for dita.list
+7. RFE 1201175	XML catalog support
+ 
+Note: SourceForge bugs, patches listed above can be found in SourceForge Bugs, Patches, RFE tracker.  
+Query criteria in different trackers for 1.0.2 changes
+* in Bugs tracker, 'Group' as 'v1.0.2'
+* in Patches tracker, 'Group' as 'fixed in 1.0.2'
+* in RFE tracker, 'Group' as 'v1.0.2'
+
+Bugs tracker:  http://sourceforge.net/tracker/?group_id=132728&atid=725074
+Patches tracker: http://sourceforge.net/tracker/?group_id=132728&atid=725076
+RFE tracker: http://sourceforge.net/tracker/?group_id=132728&atid=725077
+====================================================================================
+
 DITA OT release 1.0.1
 Available since Apr. 04, 2005
 
