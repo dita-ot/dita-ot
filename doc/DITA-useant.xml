@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--Arbortext, Inc., 1988-2004, v.4002-->
-<!DOCTYPE concept PUBLIC "-//IBM//DTD DITA Concept//EN"
- "..\dtd\concept.dtd">
-<?Pub Inc?>
+<!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
+<!DOCTYPE concept PUBLIC "-//IBM//DTD DITA Concept//EN" "concept.dtd">
 <concept id="useant" xml:lang="en-us">
-<title>Using the Ant</title>
-<titlealts>
-<navtitle>Using<?Pub Caret?> the Ant</navtitle>
-</titlealts>
-<shortdesc>Put your short description here; used for first paragraph and abstract.</shortdesc>
+  <title>Using the Ant</title>
+  <titlealts>
+    <navtitle>Using the Ant</navtitle>
+  </titlealts>
+  <shortdesc>Put your short description here; used for first paragraph and 
+    abstract.</shortdesc>
 </concept>
-<?Pub *0000000439?>

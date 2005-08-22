@@ -1,0 +1,139 @@
+<!-- ============================================================= -->
+<!--                    HEADER                                     -->
+<!-- ============================================================= -->
+<!--  MODULE:    DITA Topic Definitions                            -->
+<!--  VERSION:   1.O                                               -->
+<!--  DATE:      February 2005                                     -->
+<!--                                                               -->
+<!-- ============================================================= -->
+
+<!-- ============================================================= -->
+<!--                    PUBLIC DOCUMENT TYPE DEFINITION            -->
+<!--                    TYPICAL INVOCATION                         -->
+<!--                                                               -->
+<!--  Refer to this file by the following public identfier or an 
+PUBLIC"-//OASIS//ENTITIES DITA Topic Definitions//EN"
+      Delivered as file"topic_defn.ent"                           -->
+
+<!-- ============================================================= -->
+<!-- SYSTEM:     Darwin Information Typing Architecture (DITA)     -->
+<!--                                                               -->
+<!-- PURPOSE:    Declaring the topic definitions                   -->
+<!--                                                               -->
+<!-- ORIGINAL CREATION DATE:                                       -->
+<!--             March 2001                                        -->
+<!--                                                               -->
+<!--             (C) Copyright OASIS Open 2005.                    -->
+<!--             (C) Copyright IBM Corporation 2001, 2004.         -->
+<!--             All Rights Reserved.                              -->
+<!-- ============================================================= -->
+
+
+<!-- ============================================================= -->
+<!--                    ELEMENT NAME ENTITIES                      -->
+<!-- ============================================================= -->
+
+<!ENTITY % topic        "topic"                                      >
+
+<!ENTITY % body         "body"                                       >
+<!ENTITY % boolean      "boolean"                                    >
+<!ENTITY % cite         "cite"                                       >
+<!ENTITY % dd           "dd"                                         >
+<!ENTITY % ddhd         "ddhd"                                       >
+<!ENTITY % desc         "desc"                                       >
+<!ENTITY % dl           "dl"                                         >
+<!ENTITY % dlentry      "dlentry"                                    >
+<!ENTITY % dlhead       "dlhead"                                     >
+<!ENTITY % draft-comment 
+                        "draft-comment"                                  >
+<!ENTITY % dt           "dt"                                         >
+<!ENTITY % dthd         "dthd"                                       >
+<!ENTITY % example      "example"                                    >
+<!ENTITY % fig          "fig"                                        >
+<!ENTITY % figgroup     "figgroup"                                   >
+<!ENTITY % fn           "fn"                                         >
+<!ENTITY % image        "image"                                      >
+<!ENTITY % indextermref "indextermref"                               >
+<!ENTITY % itemgroup    "itemgroup"                                  >
+<!ENTITY % li           "li"                                         >
+<!ENTITY % lines        "lines"                                      >
+<!ENTITY % link         "link"                                       >
+<!ENTITY % linkinfo     "linkinfo"                                   >
+<!ENTITY % linklist     "linklist"                                   >
+<!ENTITY % linkpool     "linkpool"                                   >
+<!ENTITY % linktext     "linktext"                                   >
+<!ENTITY % lq           "lq"                                         >
+<!ENTITY % metadata     "metadata"                                   >
+<!ENTITY % navtitle     "navtitle"                                   >
+<!ENTITY % no-topic-nesting     
+                        "no-topic-nesting"                           >
+<!ENTITY % note         "note"                                       >
+<!ENTITY % object       "object"                                     >
+<!ENTITY % ol           "ol"                                         >
+<!ENTITY % p            "p"                                          > 
+<!ENTITY % param        "param"                                      >
+<!ENTITY % ph           "ph"                                         >
+<!ENTITY % pre          "pre"                                        >
+<!ENTITY % prolog       "prolog"                                     >
+<!ENTITY % q            "q"                                          >
+<!ENTITY % related-links     
+                        "related-links"                              >
+<!ENTITY % required-cleanup     
+                        "required-cleanup"                           >
+<!ENTITY % searchtitle  "searchtitle"                                >
+<!ENTITY % section      "section"                                    >
+<!ENTITY % shortdesc    "shortdesc"                                  >
+<!ENTITY % simpletable  "simpletable"                                >
+<!ENTITY % state        "state"                                      >
+<!ENTITY % stentry      "stentry"                                    >
+<!ENTITY % sthead       "sthead"                                     >
+<!ENTITY % strow        "strow"                                      >
+<!ENTITY % term         "term"                                       >
+<!ENTITY % title        "title"                                      >
+<!ENTITY % titlealts    "titlealts"                                  >
+<!ENTITY % tm           "tm"                                         >
+<!ENTITY % ul           "ul"                                         >
+<!ENTITY % xref         "xref"                                       >
+
+<!ENTITY % table        "table"                                      >
+<!ENTITY % colspec      "colspec"                                    >
+<!ENTITY % entry        "entry"                                      >
+<!ENTITY % row          "row"                                        >
+<!ENTITY % spanspec     "spanspec"                                   >
+<!ENTITY % tbody        "tbody"                                      >
+<!ENTITY % tfoot        "tfoot"                                      >
+<!ENTITY % tgroup       "tgroup"                                     >
+<!ENTITY % thead        "thead"                                      >
+
+<!ENTITY % alt          "alt"                                        >
+<!ENTITY % audience     "audience"                                   >
+<!ENTITY % author       "author"                                     >
+<!ENTITY % brand        "brand"                                      >
+<!ENTITY % category     "category"                                   >
+<!ENTITY % component    "component"                                  >
+<!ENTITY % copyrholder  "copyrholder"                                >
+<!ENTITY % copyright    "copyright"                                  >
+<!ENTITY % copyryear    "copyryear"                                  >
+<!ENTITY % created      "created"                                    >
+<!ENTITY % critdates    "critdates"                                  >
+<!ENTITY % featnum      "featnum"                                    >
+<!ENTITY % indexterm    "indexterm"                                  >
+<!ENTITY % keyword      "keyword"                                    >
+<!ENTITY % keywords     "keywords"                                   >
+<!ENTITY % othermeta    "othermeta"                                  >
+<!ENTITY % permissions  "permissions"                                >
+<!ENTITY % platform     "platform"                                   >
+<!ENTITY % prodinfo     "prodinfo"                                   >
+<!ENTITY % prodname     "prodname"                                   >
+<!ENTITY % prognum      "prognum"                                    >
+<!ENTITY % publisher    "publisher"                                  >
+<!ENTITY % resourceid   "resourceid"                                 >
+<!ENTITY % revised      "revised"                                    >
+<!ENTITY % series       "series"                                     >
+<!ENTITY % sl           "sl"                                         > 
+<!ENTITY % sli          "sli"                                        >
+<!ENTITY % source       "source"                                     >
+<!ENTITY % vrm          "vrm"                                        >
+<!ENTITY % vrmlist      "vrmlist"                                    >
+
+<!-- ================== End Topic Definitions Entities =========== -->

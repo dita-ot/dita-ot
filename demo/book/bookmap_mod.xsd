@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
 
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
 	<!-- ======= IMPORT - XML attributes and namespace ======= -->
     <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="../../schema/xml.xsd"/>
+    <xs:import namespace="http://dita.oasis-open.org/architecture/2005/" schemaLocation="../../schema/ditaarch.xsd"/>
   
    <xs:element name="bookmap" type="bookmap.class" />
    <xs:element name="bkbasicinfo" type="bkbasicinfo.class" />
@@ -49,7 +51,7 @@
 		    <xs:attribute name="title" type="xs:string" />
 		    <xs:attribute name="id" type="xs:ID" />
 		    <xs:attribute ref="xml:lang"/>
-		    <xs:attribute name="DTDVersion" type="xs:string" use="optional" default="V1.1.3"/>
+		     <xs:attribute ref="ditaarch:DITAArchVersion"/>
 		    <xs:attributeGroup ref="global-atts" />    
 		    <xs:attribute ref="class" default="- map/map bookmap/bookmap " />
    </xs:complexType>
@@ -114,7 +116,7 @@
 		      <xs:group ref="divinfo"  minOccurs="0" />
 	        <xs:group ref="topicref" maxOccurs="unbounded"/>
 		    </xs:sequence>
-		    <xs:attribute name="navtitle" type="xs:string" use="required"/>
+		    <xs:attribute name="navtitle" type="xs:string" />
 		    <xs:attribute name="id" type="xs:ID"/>
 		    <xs:attribute name="href" type="xs:string"/>
 		    <xs:attribute name="conref" type="xs:string"/>
@@ -153,7 +155,7 @@
    </xs:complexType>
    
    <xs:complexType name="abstract.class">
-		    <xs:attribute name="navtitle" type="xs:string" use="required"/>
+		    <xs:attribute name="navtitle" type="xs:string" />
 		    <xs:attribute name="id" type="xs:ID"/>
 		    <xs:attribute name="href" type="xs:string"/>
 		    <xs:attribute name="conref" type="xs:string"/>
@@ -164,7 +166,7 @@
    </xs:complexType>
    
    <xs:complexType name="dedication.class">
-		    <xs:attribute name="navtitle" type="xs:string" use="required"/>
+		    <xs:attribute name="navtitle" type="xs:string" />
 		    <xs:attribute name="id" type="xs:ID"/>
 		    <xs:attribute name="href" type="xs:string"/>
 		    <xs:attribute name="conref" type="xs:string"/>
@@ -177,9 +179,9 @@
    <xs:complexType name="preface.class">
      		<xs:sequence>
 		      <xs:group ref="divinfo" minOccurs="0" />
-	        <xs:group ref="topicref" maxOccurs="unbounded"/>
+     			<xs:group ref="topicref" minOccurs="0" maxOccurs="unbounded"/>
 		    </xs:sequence>
-		    <xs:attribute name="navtitle" type="xs:string" use="required"/>
+		    <xs:attribute name="navtitle" type="xs:string"/>
 		    <xs:attribute name="id" type="xs:ID"/>
 		    <xs:attribute name="href" type="xs:string"/>
 		    <xs:attribute name="conref" type="xs:string"/>
@@ -194,7 +196,7 @@
 		      <xs:group ref="divinfo" minOccurs="0" />
 	        <xs:group ref="topicref" maxOccurs="unbounded"/>
 		    </xs:sequence>
-		    <xs:attribute name="navtitle" type="xs:string" use="required"/>
+		    <xs:attribute name="navtitle" type="xs:string" />
 		    <xs:attribute name="id" type="xs:ID"/>
 		    <xs:attribute name="href" type="xs:string"/>
 		    <xs:attribute name="conref" type="xs:string"/>
@@ -209,7 +211,7 @@
 		      <xs:group ref="divinfo" minOccurs="0" />
 	        <xs:group ref="topicref" maxOccurs="unbounded"/>
 		    </xs:sequence>
-		    <xs:attribute name="navtitle" type="xs:string" use="required"/>
+		    <xs:attribute name="navtitle" type="xs:string" />
 		    <xs:attribute name="id" type="xs:ID"/>
 		    <xs:attribute name="href" type="xs:string"/>
 		    <xs:attribute name="conref" type="xs:string"/>
@@ -224,7 +226,7 @@
 		      <xs:group ref="divinfo" minOccurs="0" />
 	        <xs:group ref="topicref" maxOccurs="unbounded"/>
 		    </xs:sequence>
-		    <xs:attribute name="navtitle" type="xs:string" use="required"/>
+		    <xs:attribute name="navtitle" type="xs:string" />
 		    <xs:attribute name="id" type="xs:ID"/>
 		    <xs:attribute name="href" type="xs:string"/>
 		    <xs:attribute name="conref" type="xs:string"/>
@@ -235,7 +237,7 @@
    </xs:complexType>
    
    <xs:complexType name="amendments.class">
-		    <xs:attribute name="navtitle" type="xs:string" use="required"/>
+		    <xs:attribute name="navtitle" type="xs:string" />
 		    <xs:attribute name="id" type="xs:ID"/>
 		    <xs:attribute name="href" type="xs:string"/>
 		    <xs:attribute name="conref" type="xs:string"/>
@@ -257,7 +259,7 @@
 		      </xs:sequence>
 		    </xs:choice>
 		    </xs:sequence>
-		    <xs:attribute name="navtitle" type="xs:string" use="required"/>
+		    <xs:attribute name="navtitle" type="xs:string" />
 		    <xs:attribute name="id" type="xs:ID"/>
 		    <xs:attribute name="href" type="xs:string"/>
 		    <xs:attribute name="conref" type="xs:string"/>
@@ -268,7 +270,7 @@
    </xs:complexType>
    
    <xs:complexType name="colophon.class">
-		    <xs:attribute name="navtitle" type="xs:string" use="required"/>
+		    <xs:attribute name="navtitle" type="xs:string" />
 		    <xs:attribute name="id" type="xs:ID"/>
 		    <xs:attribute name="href" type="xs:string"/>
 		    <xs:attribute name="conref" type="xs:string"/>

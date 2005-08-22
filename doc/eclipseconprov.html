@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+<meta name="copyright" content="(C) Copyright 2005" />
+<meta name="DC.rights.owner" content="(C) Copyright 2005" />
+<meta content="public" name="security" />
+<meta content="index,follow" name="Robots" />
+<meta http-equiv="PICS-Label" content='(PICS-1.1 "http://www.icra.org/ratingsv02.html" l gen true r (cz 1 lz 1 nz 1 oz 1 vz 1) "http://www.rsac.org/ratingsv01.html" l gen true r (n 0 s 0 v 0 l 0) "http://www.classify.org/safesurf/" l gen true r (SS~~000 1))' />
+<meta content="concept" name="DC.Type" />
+<meta name="DC.Title" content="Eclipse Content Provider" />
+<meta content="XHTML" name="DC.Format" />
+<meta content="eclipseconprov" name="DC.Identifier" />
+<meta content="en-us" name="DC.Language" />
+<link href="commonltr.css" type="text/css" rel="stylesheet" />
+<title>Eclipse Content Provider</title>
+</head>
+<body id="eclipseconprov"><a name="eclipseconprov"><!-- --></a>
+
+
+  <h1 class="topictitle1">Eclipse Content Provider</h1>
+
+  <div>
+    <p>The Eclipse Content Provider is a new function in IBM DITA toolkit 
+      Release 1.1 tool. In former releases, you should transform DITA files to 
+      HTMLs before you build them into Eclipse help output. With the Eclipse 
+      Content Provider, you do not need to transform DITA files to HTMLs 
+      beforehand. This new function will preprocess DITA files and dynamically 
+      transform them into HTMLs at runtime.</p>
+
+    
+    <p>During the building process, the Eclipse Content Provider generate 
+      plugin.xml. The file plugin.xml provides the definition of one or more 
+      tables of contents and locate the contents to display.</p>
+
+    <div class="p">Here is an example of creating an output for the Eclipse Content 
+      Provider and view the output in specially designed Eclipse on Windows 
+      XP.<ol> <li>Create a directory <strong>c:\dita-ot</strong> as the output directory 
+      for DITA mapfiles.</li>
+ <li>Start the command line interface by choosing 
+      <span class="menucascade"><span class="uicontrol">Start</span> 
+       &gt; <span class="uicontrol">Run</span></span>.</li>
+ <li>Switch to the 
+      directory <strong>c:\dita-ot</strong>.</li>
+ <li>Enter the following command to 
+      build:<pre>java -jar lib\dost1.0.jar /i:samples/sequence.ditamap 
+      /outdir:out /transtype:eclipsecontent </pre>
+</li>
+ <li>Then view all 
+      the files under <strong>c:\dita-ot</strong> and copy these files to the 
+      corresponding directory under the plugin directory for Eclipse.</li>
+ 
+      <li>Call the specially designed Eclipse to view the output.</li>
+ </ol>
+</div>
+
+  </div>
+
+
+</body>
+</html>

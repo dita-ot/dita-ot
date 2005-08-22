@@ -1,3 +1,5 @@
+## <!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
+
 ELEMENTREF EXAMPLE
 
 This example gives a demonstration of topic specialization by

@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
+
 <!--  enote_shell2fo.xsl
  | DITA domains support for the demo set; extend as needed
  |

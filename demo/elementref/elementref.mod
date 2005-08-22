@@ -1,3 +1,4 @@
+<!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
 
 <!ENTITY DTDVersion 'V1.1.2' >
 

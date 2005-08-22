@@ -1,3 +1,5 @@
+<!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
+
 <!ENTITY % bkinfo          "bkinfo">
 <!ENTITY % bktitlealts     "bktitlealts">
 <!ENTITY % bksubtitle      "bksubtitle">

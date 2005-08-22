@@ -1,23 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--Arbortext, Inc., 1988-2004, v.4002-->
-<!DOCTYPE task PUBLIC "-//IBM//DTD DITA Task//EN"
- "..\dtd\task.dtd">
-<?Pub Inc?>
+<!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
+
+<!DOCTYPE task PUBLIC "-//IBM//DTD DITA Task//EN" "task.dtd">
 <task id="prereqtools" xml:lang="en-us">
-<title>Setting up prerequisite tools</title>
-<titlealts>
-<navtitle>Prerequisite Tools Setup</navtitle>
-<searchtitle>prerequisite tools</searchtitle>
-</titlealts>
-<shortdesc>This chapter explains how to set up prerequisite tools for installation
-of DITA Toolkit. </shortdesc>
-<taskbody></taskbody>
-<task id="systemporperty" xml:lang="en-us"><?Pub Caret1?>
-<title>Setting up environment variable in System Property</title>
-<titlealts>
-<navtitle>Set up environment variable in System Property</navtitle>
-</titlealts>
-<taskbody></taskbody>
+  <title>Setting up prerequisite tools</title>
+  <titlealts>
+    <navtitle>Prerequisite Tools Setup</navtitle>
+    <searchtitle>prerequisite tools</searchtitle>
+  </titlealts>
+  <shortdesc>This chapter explains how to set up prerequisite tools for 
+    installation of DITA Toolkit. </shortdesc>
+  <taskbody></taskbody>
+  <task id="systemporperty" xml:lang="en-us">
+    <title>Setting up environment variable in System Property</title>
+    <titlealts>
+      <navtitle>Set up environment variable in System Property</navtitle>
+    </titlealts>
+    <taskbody></taskbody>
+  </task>
 </task>
-</task>
-<?Pub *0000000776?>

@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
+<!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
+
 <!--  
  | Specific override stylesheet for faq (demo)
  | This demonstrates the XSLT override mechanism tied to a specialization.

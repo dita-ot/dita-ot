@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+<meta name="copyright" content="(C) Copyright 2005" />
+<meta name="DC.rights.owner" content="(C) Copyright 2005" />
+<meta content="public" name="security" />
+<meta content="index,follow" name="Robots" />
+<meta http-equiv="PICS-Label" content='(PICS-1.1 "http://www.icra.org/ratingsv02.html" l gen true r (cz 1 lz 1 nz 1 oz 1 vz 1) "http://www.rsac.org/ratingsv01.html" l gen true r (n 0 s 0 v 0 l 0) "http://www.classify.org/safesurf/" l gen true r (SS~~000 1))' />
+<meta content="concept" name="DC.Type" />
+<meta name="DC.Title" content="XML Catalog" />
+<meta name="abstract" content="This is an introduction of XML catalog." />
+<meta name="description" content="This is an introduction of XML catalog." />
+<meta content="XHTML" name="DC.Format" />
+<meta content="xmlcatalog" name="DC.Identifier" />
+<meta content="en-us" name="DC.Language" />
+<link href="commonltr.css" type="text/css" rel="stylesheet" />
+<title>XML Catalog</title>
+</head>
+<body id="xmlcatalog"><a name="xmlcatalog"><!-- --></a>
+
+
+<h1 class="topictitle1">XML Catalog</h1>
+
+
+<div><p>This is an introduction of XML catalog. </p>
+
+  <p><tt>An</tt> <em>XML catalog</em>, which can be physically composed of 
+    several <em>catalog entry files</em>, is a logical structure that describes 
+    mapping information. A <em>catalog entry file</em> is an xml file that 
+    includes a group of <em>catalog entries</em>. </p>
+
+  <p>A <em>catalog entry</em> can be used to locate a unified resource identifier 
+    (URI) reference for a certain resource such as a dtd file. An external 
+    entity's <em>public identifier</em> is used for mapping to the URI reference. 
+    </p>
+
+  <p>The URI of any system identifier can be ignored.</p>
+
+  <div class="section"><h4 class="sectiontitle">Why use XML Catalog</h4>
+    
+    <p>XML Catalogs are used to make the XML setup more flexible and portable. 
+      Using XML Catalogs, you can</p>
+
+    <div class="p">
+      <ul>
+        <li>Map from the logical names such as the public identifiers. The 
+          public identifier is safer and more stable to use to locate a 
+          specific file than the system identifier. Even if the physical 
+          location of the file changes, you only need to make revision 
+          accordingly on the public identifier within the catalog.</li>
+
+        <li>Establish a local cache mechanism to locate the files associated to 
+          public identifiers or remote resources. With this mechanism the delay 
+          that occurs when locating remote resources can be avoided. </li>
+
+      </ul>
+
+    </div>
+
+  </div>
+
+  <div class="section"><h4 class="sectiontitle">An XML Catalog Example</h4>
+    
+    <p>Here is an example of a XML Catalog file.</p>
+
+    <p><strong>Example 1. An XML Catalog File:</strong> <em>catalog-dita.xml</em>.</p>
+
+    <pre> &lt;?xml version="1.0" ?&gt; &lt;catalog 
+      xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" prefer="public"&gt; 
+      &lt;!-- Catalog for DITA --&gt; &lt;!-- DITA DTDs --&gt; &lt;group 
+      xml:base="dtd"&gt; &lt;public publicId="-//IBM//DTD DITA Concept//EN" 
+      uri="concept.dtd"/&gt; &lt;public publicId="-//IBM//ELEMENTS DITA 
+      Concept//EN" uri="concept.mod"/&gt; ... &lt;!-- Demo/Experimental --&gt; 
+      &lt;public publicId="-//IBM//DTD DITA Element Reference//EN" 
+      uri="demo/elementref/elementref_shell.dtd"/&gt; &lt;public 
+      publicId="-//IBM//ELEMENTS DITA Element Reference//EN" 
+      uri="demo/elementref/elementref.mod"/&gt; &lt;public 
+      publicId="-//IBM//DTD DITA FAQ//EN" uri="demo/faq/faq_shell.dtd"/&gt; 
+      &lt;public publicId="-//IBM//ELEMENTS DITA FAQ//EN" 
+      uri="demo/faq/faq.mod"/&gt; &lt;/catalog&gt;</pre>
+
+    <div class="note"><span class="notetitle">Note: </span>
+      <ol>
+        <li>The <tt>catalog</tt> element contains all other entries, and also 
+          includes a catalog namespace identifier. The attribute of 
+          <tt>prefer</tt> is set to <tt>public</tt>, which means that the 
+          public identifiers are tried to resolve the catalog before using the 
+          system identifiers.</li>
+
+        <li>The group element is simply a wrapper element where the attributes 
+          such as <tt>xml:base</tt> are set. These attributes apply to all 
+          entries that are within the group content. The <tt>xml:base</tt> 
+          attribute set the main pathname prefix that all URIs are located 
+          relative to.</li>
+
+      </ol>
+
+    </div>
+
+  </div>
+
+  <div class="section"><h4 class="sectiontitle">Demo/Experimental section</h4>
+    
+    <p>The <strong>Demo/Experimental</strong> section in the <em>catalog-dita.xml</em> file 
+      is the section to place demo or experimental dtd descriptions. New DITA 
+      specialization features can be added in these descriptions. For example, 
+      if you want to use the public identifier, <tt>-//IBM//DTD 
+      SAMPLE//EN</tt>, to refer to the file with the pathname 
+      <em>dtd/sample/mysample.dtd</em>, put the following catalog entry within 
+      the <strong>Demo/Experimental</strong> section.</p>
+
+    <div class="p">
+      <pre>&lt;public publicId="-//IBM//DTD SAMPLE//EN" 
+        uri="sample/mysample.dtd"/&gt;</pre>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+</body>
+</html>

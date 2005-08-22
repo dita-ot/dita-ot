@@ -12,8 +12,18 @@
 <meta name="DC.Title" content="Using DITA transforms" />
 <meta name="abstract" content="The core transforms of the DITA Toolkit represent the Reference Implementation for processing the standard DITA specification as maintained by OASIS Open." />
 <meta name="description" content="The core transforms of the DITA Toolkit represent the Reference Implementation for processing the standard DITA specification as maintained by OASIS Open." />
+<meta scheme="URI" name="DC.Relation" content="DITA-readme.html" />
+<meta scheme="URI" name="DC.Relation" content="DITA-relnotes.html" />
+<meta scheme="URI" name="DC.Relation" content="DITA-changes.html" />
+<meta scheme="URI" name="DC.Relation" content="DITA-futures.html" />
+<meta scheme="URI" name="DC.Relation" content="DITA-installation.html" />
+<meta scheme="URI" name="DC.Relation" content="DITA-tested.html" />
+<meta scheme="URI" name="DC.Relation" content="DITA-ant.html" />
+<meta scheme="URI" name="DC.Relation" content="DITA-javacmd.html" />
+<meta scheme="URI" name="DC.Relation" content="DITA-tweaks.html" />
 <meta content="XHTML" name="DC.Format" />
 <meta content="ditausingxform" name="DC.Identifier" />
+<meta content="en-us" name="DC.Language" />
 <link href="commonltr.css" type="text/css" rel="stylesheet" />
 <title>Using DITA transforms</title>
 </head>
@@ -23,69 +33,68 @@
   <h1 class="topictitle1">Using DITA transforms</h1>
 
   
-  <div><p>The core transforms of the DITA Toolkit represent the <span class="q">"Reference Implementation"</span> for processing the standard DITA specification as maintained by OASIS Open.</p>
+  <div><p>The core transforms of the DITA Toolkit represent the <span class="q">"Reference 
+    Implementation"</span> for processing the standard DITA specification as 
+    maintained by OASIS Open.</p>
 
-    <div class="section"><h4 class="sectiontitle">Pre-process</h4>
+    <div class="section" id="ditausingxform__preprocess"><a name="ditausingxform__preprocess"><!-- --></a><h4 class="sectiontitle">Pre-process</h4>
       
-      <p>A pre-process is done before the main transformation. The input of Pre-process is dita files and the output of Pre-process is also dita files. But the output is in temp directory. Pre-process is the basic for the main transformation, it handles several different processing before the main transformation. Without pre-process, dita topics and map can still be transformed into different outputs, but the features in pre-process such as resolving conref attribute are not available.</p>
+      
+      <p>A pre-process is done before the main transformation. The input of 
+        Pre-process is dita files and the output of Pre-process is also dita 
+        files. But the output is in temp directory. Pre-process is the basic 
+        for the main transformation, it handles several different processing 
+        before the main transformation. Without pre-process, dita topics and 
+        map can still be transformed into different outputs, but the features 
+        in pre-process such as resolving conref attribute are not available.</p>
 
     </div>
 
     <div class="section"><h4 class="sectiontitle">Available core transforms</h4>
       
-      <div class="p">A core DITA transform is the basic set of templates that support all the elements of a topic. This set is the basis for fallthrough processing of any specialized element. Core transforms handle one topic instance, or nested set of topics, at a time. The DITA Toolkit provides these core transforms:<dl>
-          
-            <dt class="dlterm">dita2xhtml.xsl</dt>
-
-            <dd>DITA topic to HTML page transform.</dd>
-
-          
-        </dl>
-<dl>
-          
-            <dt class="dlterm">dita2fo-shell.xsl</dt>
-
-            <dd>DITA topic to XSL Formatting Object page transform.</dd>
-
-          
-        </dl>
+      <div class="p">A core DITA transform is the basic set of templates that support all 
+        the elements of a topic. This set is the basis for the following 
+        processing of any specialized element. Core transforms handle one topic 
+        instance, or nested set of topics, at a time. The DITA Toolkit provides 
+        these core transforms:<dl> <dt class="dlterm">dita2xhtml.xsl</dt>
+ <dd>DITA 
+        topic to HTML page transform.</dd>
+ </dl>
+<dl> 
+        <dt class="dlterm">dita2fo-shell.xsl</dt>
+ <dd>DITA topic to XSL Formatting Object page 
+        transform.</dd>
+ </dl>
 </div>
 
     </div>
 
     <div class="section"><h4 class="sectiontitle">Available special output formats</h4>
       
-      <div class="p">Additional map-driven tools support transforming sets of topics into special output formats, including:<dl>
-          
-            <dt class="dlterm">Web page (map2htmtoc.xsl)</dt>
-
-            <dd>This transform generates a set of web pages with an index page that is ready to place on a Web site.</dd>
-
-          
-          
-            <dt class="dlterm">map2htmlhelp (map2hhc.xsl map2hhp.xsl)</dt>
-
-            <dd>This transform generates hhc and hhp file for the compilation of Html Help.</dd>
-
-          
-          
-            <dt class="dlterm">map2javahelp (map2JavaHelpToc.xsl map2JavaHelpMap.xsl)</dt>
-
-            <dd>This transform generates table of content and jhm file for Java Help.</dd>
-
-          
-          
-            <dt class="dlterm">map2eclipsehelp (map2elipse.xsl)</dt>
-
-            <dd>This transform generates table of content for help contents in Eclipse.</dd>
-
-          
-          
-            <dt class="dlterm">map2printout</dt>
-
-            <dd>Calls topicmerge to consolidate a set of topics into a single entity that is transformed into Formatting Objects (FO), which can be compiled into PDF.</dd>
-
-          
+      <div class="p">Additional map-driven tools support transforming sets of topics into 
+        special output formats, including:<dl> <dt class="dlterm">Web page 
+        (map2htmtoc.xsl)</dt>
+ <dd>This transform generates a set of web pages 
+        with an index page that is ready to place on a Web site.</dd>
+ 
+         <dt class="dlterm">map2htmlhelp (map2hhc.xsl map2hhp.xsl)</dt>
+ 
+        <dd>This transform generates hhc and hhp file for the compilation of 
+        Html Help.</dd>
+  <dt class="dlterm">map2javahelp 
+        (map2JavaHelpToc.xsl map2JavaHelpMap.xsl)</dt>
+ <dd>This transform 
+        generates table of content and jhm file for Java Help.</dd>
+ 
+         <dt class="dlterm">map2eclipsehelp (map2elipse.xsl)</dt>
+ <dd>This 
+        transform generates table of content for help contents in Eclipse.</dd>
+ 
+         <dt class="dlterm">map2printout</dt>
+ <dd>Calls topicmerge to 
+        consolidate a set of topics into a single entity that is transformed 
+        into Formatting Objects (FO), which can be compiled into PDF.</dd>
+ 
         </dl>
 </div>
 
@@ -93,7 +102,11 @@
 
     <div class="section"><h4 class="sectiontitle">Invoke the complete transformation</h4>
       
-      <p>The complete transformation including pre-process can be excuted by the ant script. There are some examples of simple ant script in directory /ant. The ant target for the transformation which can be called is listed at <a href="DITA-ant.html#running_ant">Running Ant</a></p>
+      <p>The complete transformation including pre-process can be excuted by 
+        the ant script. There are some examples of simple ant script in 
+        directory /ant. The ant target for the transformation which can be 
+        called is listed at <a href="DITA-ant.html#running_ant">Running 
+        Ant</a></p>
 
     </div>
 
@@ -101,6 +114,26 @@
 
   </div>
 
-
+<div>
+<div class="familylinks">
+<div class="parentlink"><strong>Parent topic:</strong> <a href="DITA-readme.html" title="The DITA Open Toolkit is a reference implementation of the OASIS DITA Technical Committee's specification for DITA DTDs and Schemas. The Toolkit transforms DITA content (maps and topics) into deliverable formats, including: XHTML, Eclipse Help, HTML Help, and JavaHelp.">DITA Open Toolkit</a></div>
+</div>
+<div class="relconcepts"><strong>Related concepts</strong><br />
+<div><a href="DITA-futures.html" title="Activity on the DITA Open Toolkit project will revolve around maintenance (bug fixes), enhancements (new function based on prioritized requests), demos and experimentation (sandbox activity), and community support (forums, etc.).">DITA futures</a></div>
+<div><a href="DITA-ant.html" title="Ant is an open tool that uses the DITA processes to make producing DITA output easier.">Building DITA output with Ant</a></div>
+<div><a href="DITA-javacmd.html" title="The DITA Open Toolkit release 1.0.2 or above provides a command line interface as an alternative for users with little knowledge of Ant to use the toolkit easily.">Building DITA output with Java command line</a></div>
+</div>
+<div class="reltasks"><strong>Related tasks</strong><br />
+<div><a href="DITA-installation.html" title="This topic explains how to install the DITA Toolkit processing environment.">Installing the DITA Toolkit</a></div>
+</div>
+<div class="relref"><strong>Related reference</strong><br />
+<div><a href="DITA-relnotes.html" title="">DITA release notes</a></div>
+<div><a href="DITA-tweaks.html" title="If the available methods can not fully match your own output requirements, DITA Toolkit supports other ways to customize or enhance the transforms without having to modify core transforms directly.">Controls, parameters, tweaks, and gizmos for dita2htmlImpl.xsl</a></div>
+</div>
+<div class="relinfo"><strong>Related information</strong><br />
+<div><a href="DITA-changes.html" title="This document lists major changes and new features by release.">DITA release history</a></div>
+<div><a href="DITA-tested.html" title="See which tools and platforms have been used in testing the DITA processing system.">Tested platforms and tools</a></div>
+</div>
+</div>
 </body>
 </html>

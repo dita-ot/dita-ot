@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+<meta name="copyright" content="(C) Copyright 2005" />
+<meta name="DC.rights.owner" content="(C) Copyright 2005" />
+<meta content="public" name="security" />
+<meta content="index,follow" name="Robots" />
+<meta http-equiv="PICS-Label" content='(PICS-1.1 "http://www.icra.org/ratingsv02.html" l gen true r (cz 1 lz 1 nz 1 oz 1 vz 1) "http://www.rsac.org/ratingsv01.html" l gen true r (n 0 s 0 v 0 l 0) "http://www.classify.org/safesurf/" l gen true r (SS~~000 1))' />
+<meta content="concept" name="DC.Type" />
+<meta name="DC.Title" content="Building DITA output with Java command line" />
+<meta name="abstract" content="The DITA Open Toolkit release 1.0.2 or above provides a command line interface as an alternative for users with little knowledge of Ant to use the toolkit easily." />
+<meta name="description" content="The DITA Open Toolkit release 1.0.2 or above provides a command line interface as an alternative for users with little knowledge of Ant to use the toolkit easily." />
+<meta scheme="URI" name="DC.Relation" content="DITA-readme.html" />
+<meta scheme="URI" name="DC.Relation" content="DITA-relnotes.html" />
+<meta scheme="URI" name="DC.Relation" content="DITA-changes.html" />
+<meta scheme="URI" name="DC.Relation" content="DITA-futures.html" />
+<meta scheme="URI" name="DC.Relation" content="DITA-installation.html" />
+<meta scheme="URI" name="DC.Relation" content="DITA-tested.html" />
+<meta scheme="URI" name="DC.Relation" content="DITA-usingtransforms.html" />
+<meta scheme="URI" name="DC.Relation" content="DITA-ant.html" />
+<meta scheme="URI" name="DC.Relation" content="DITA-tweaks.html" />
+<meta content="XHTML" name="DC.Format" />
+<meta content="usingparameterbuildingtool" name="DC.Identifier" />
+<meta content="en-us" name="DC.Language" />
+<link href="commonltr.css" type="text/css" rel="stylesheet" />
+<title>Building DITA output with Java command line</title>
+</head>
+<body id="usingparameterbuildingtool"><a name="usingparameterbuildingtool"><!-- --></a>
+
+
+  <h1 class="topictitle1">Building DITA output with Java command line</h1>
+
+  
+  <div><p>The DITA Open Toolkit release 1.0.2 or above provides a command 
+    line interface as an alternative for users with little knowledge of Ant to 
+    use the toolkit easily.</p>
+
+    <div class="section"><h4 class="sectiontitle">Running example</h4>
+      
+      <ol>
+        <li>Change into the DITA Open Toolkit installation directory.</li>
+
+        <li>On the command line, enter the following command: <p><tt>java -jar 
+          lib/dost.jar /i:samples/sequence.ditamap /outdir:out 
+          /transtype:xhtml</tt></p>
+</li>
+
+      </ol>
+
+      <p>This particular example creates a properties file, and then calls Ant 
+        using those properties to build the sample <em>sequence.ditamap</em> file 
+        and outputs the xhtml results to the out directory. You can add other 
+        parameters to the property file. See the following <em><a href="#usingparameterbuildingtool__javacmdinterface">Table of supported parameters</a></em> for 
+        details.</p>
+
+      <div class="p">Note:<ol> <li>In this example, the '<em>/</em>' symbol preceded by a 
+        space is the separator for each parameter.</li>
+ <li>Currently, the 
+        parameters <em>/filter</em>, <em>/ftr</em>, <em>/hdr</em>, and <em>/hdf</em> 
+        require an absolute path.</li>
+ <li>The properties file is saved in the 
+        ${dita.temp.dir} directory. This properties file can also be used in 
+        future transform. The following command provides an example:<p><tt>ant 
+        -f conductor.xml -propertyfile 
+        ${dita.temp.dir}/property.temp</tt></p>
+</li>
+ </ol>
+</div>
+
+    </div>
+
+    <div class="section"><h4 class="sectiontitle">Supported parameters</h4>
+      
+      <p><em><a href="#usingparameterbuildingtool__javacmdinterface">Table of supported parameters</a></em> lists 
+        the supported parameters (their Ant names are within the braces) that 
+        you can set with this tool.</p>
+
+      
+<div class="tablenoborder"><a name="usingparameterbuildingtool__javacmdinterface"><!-- --></a><table summary="" cellspacing="0" cellpadding="4" id="usingparameterbuildingtool__javacmdinterface" width="100%" frame="border" border="1" rules="all"><caption>Table 1. Table of supported parameters</caption>
+          
+          
+          <thead align="left">
+            <tr valign="bottom">
+              <th valign="bottom" id="N100E6">Parameter</th>
+
+              <th valign="bottom" id="N100EF">Description</th>
+
+            </tr>
+
+          </thead>
+
+          <tbody>
+            <tr>
+              <td valign="top" headers="N100E6 "> 
+                <em>/i</em>:{args.input}</td>
+
+              <td valign="top" headers="N100EF ">
+                <span>The path and name of the input file. 
+                        This argument should be in the same upper or lower case 
+                        with the filename on file system.</span>
+                <div class="note"><span class="notetitle">Note: </span>This parameter must be provided 
+                        if <tt>dita.input</tt> and <tt>dita.input.dirname</tt> 
+                        not be provided.</div>
+
+              </td>
+
+            </tr>
+
+            <tr>
+              <td valign="top" headers="N100E6 "><em>/if</em>:{dita.input}</td>
+
+              <td valign="top" headers="N100EF ">
+                <span>The name of the input file .</span>
+                <div class="note"><span class="notetitle">Note: </span>This parameter must be provided 
+                        if <tt>args.input</tt> not be provided. And this 
+                        parameter must be used together with the 
+                        <tt>dita.input.dirname</tt> parameter. The result of 
+                        this combination is equivalent to use only the 
+                        <tt>args.input</tt> parameter. It is an alternative way 
+                        to specify the path and name of the input file.</div>
+
+              </td>
+
+            </tr>
+
+            <tr>
+              <td valign="top" headers="N100E6 "><em>/id</em>:{dita.input.dirname}</td>
+
+              <td valign="top" headers="N100EF ">
+                <span>The input directory which 
+                        contains the input file.</span>
+                <div class="note"><span class="notetitle">Note: </span>This parameter must be 
+                        provided if <tt>args.input</tt> not be provided. And 
+                        this parameter must be used together with the 
+                        <tt>dita.input</tt> parameter. The result of this 
+                        combination is equivalent to use only the 
+                        <tt>args.input</tt> parameter. It is an alternative way 
+                        to specify the path and name of the input file.</div>
+
+              </td>
+
+            </tr>
+
+            <tr>
+              <td valign="top" headers="N100E6 "><em>/outdir</em>:{output.dir}</td>
+
+              <td valign="top" headers="N100EF ">
+                <span>The path of the output directory.</span>
+              </td>
+
+            </tr>
+
+            <tr>
+              <td valign="top" headers="N100E6 "><em>/tempdir</em>:{dita.temp.dir}</td>
+
+              <td valign="top" headers="N100EF ">
+                <span>The directory of the temporary files. 
+                        The default is 'temp'.</span>
+              </td>
+
+            </tr>
+
+            <tr>
+              <td valign="top" headers="N100E6 "><em>/ditaext</em>:{dita.extname}</td>
+
+              <td valign="top" headers="N100EF ">
+                <span>The file extension name of the input 
+                        topic files, for example, '.xml' or '.dita'. The 
+                        default is '.xml'.</span>
+              </td>
+
+            </tr>
+
+            <tr>
+              <td valign="top" headers="N100E6 "><em>/transtype</em>:{transtype}</td>
+
+              <td valign="top" headers="N100EF ">The transformation type. Currently, the 
+                supported values include xhtml, pdf, javahelp, eclipsehelp, 
+                htmlhelp, and docbook.</td>
+
+            </tr>
+
+            <tr>
+              <td valign="top" headers="N100E6 "><em>/filter</em>:{dita.input.valfile}</td>
+
+              <td valign="top" headers="N100EF ">
+                <span>The name of the file containing 
+                        <em>filter/flagging/revision </em>information.</span>
+              </td>
+
+            </tr>
+
+            <tr>
+              <td valign="top" headers="N100E6 "><em>/draft</em>:{args.draft}</td>
+
+              <td valign="top" headers="N100EF ">
+                <span>Default "hide draft &amp; cleanup 
+                        content" processing parameter (<span class="q">"no"</span>= hide 
+                        them); <span class="q">"no"</span> and <span class="q">"yes"</span> are valid values; 
+                        non-<span class="q">"yes"</span> is ignored.</span>
+              </td>
+
+            </tr>
+
+            <tr>
+              <td valign="top" headers="N100E6 "><em>/artlbl</em>:{args.artlbl}</td>
+
+              <td valign="top" headers="N100EF ">
+                <span>Default "output artwork 
+                        filenames" processing parameter; <span class="q">"no"</span>and 
+                        <span class="q">"yes"</span>are valid values; non-<span class="q">"yes"</span> is 
+                        ignored.</span>
+              </td>
+
+            </tr>
+
+            <tr>
+              <td valign="top" headers="N100E6 "><em>/ftr</em>:{args.ftr}</td>
+
+              <td valign="top" headers="N100EF ">
+                <span>The name of the file containing XHTML to 
+                        be placed in the BODY running-footing area.</span>
+              </td>
+
+            </tr>
+
+            <tr>
+              <td valign="top" headers="N100E6 "><em>/hdr</em>:{args.hdr}</td>
+
+              <td valign="top" headers="N100EF ">
+                <span>The name of the file containing XHTML to 
+                        be placed in the BODY running-heading area.</span>
+              </td>
+
+            </tr>
+
+            <tr>
+              <td valign="top" headers="N100E6 "><em>/hdf</em>:{args.hdf}</td>
+
+              <td valign="top" headers="N100EF ">
+                <span>The name of the file containing XHTML to 
+                        be placed in the HEAD area.</span>
+              </td>
+
+            </tr>
+
+            <tr>
+              <td valign="top" headers="N100E6 "><em>/csspath</em>:{args.csspath}</td>
+
+              <td valign="top" headers="N100EF ">
+                <span>The output path of css files.</span>
+              </td>
+
+            </tr>
+
+            <tr>
+              <td valign="top" headers="N100E6 "><em>/css</em>:{args.css}</td>
+
+              <td valign="top" headers="N100EF ">
+                <span>User specified css file. This stylesheet can use 
+                        the css cascade effect to modify existing properties or 
+                        it can override or define new properties.</span>
+              </td>
+
+            </tr>
+
+            <tr>
+              <td valign="top" headers="N100E6 "><em>/copycss</em>:{args.copycss}</td>
+
+              <td valign="top" headers="N100EF ">
+                <span>The parameter to specify whether all the 
+                        user-specified css files are to be copied to the 
+                        directory specified in the csspath option. Only "no" 
+                        and "yes" are valid values.</span>
+              </td>
+
+            </tr>
+
+            <tr>
+              <td valign="top" headers="N100E6 "><em>/indexshow</em>:{args.indexshow}</td>
+
+              <td valign="top" headers="N100EF ">
+                <span>The parameter to specify whether each 
+                        index entry should display within the body of the text 
+                        itself. Only "no" and "yes" are valid values.</span>
+              </td>
+
+            </tr>
+
+            <tr>
+              <td valign="top" headers="N100E6 "><em>/outext</em>:{args.outext}</td>
+
+              <td valign="top" headers="N100EF ">
+                <span>The output file extension name for 
+                        generated xhtml files. Typically, '.html' or '.htm' can 
+                        be used as the extension name for the generated xhtml 
+                        files. You can also specify other extension name. The 
+                        default is '.html'.</span>
+              </td>
+
+            </tr>
+
+            <tr>
+              <td valign="top" headers="N100E6 "><em>/xsl</em>:{args.xsl}</td>
+
+              <td valign="top" headers="N100EF ">
+                <span>The xsl file to replace the default xsl 
+                        file. It will replace dita2docbook.xsl in docbook 
+                        transformation, dita2fo-shell.xsl in pdf 
+                        transformation, dita2xhtml.xsl in xhtml/eclipsehelp 
+                        transformation, and dita2html.xsl in javahelp/htmlhelp 
+                        transformation.</span>
+              </td>
+
+            </tr>
+
+          </tbody>
+
+        </table>
+</div>
+
+    </div>
+
+  </div>
+
+<div>
+<div class="familylinks">
+<div class="parentlink"><strong>Parent topic:</strong> <a href="DITA-readme.html" title="The DITA Open Toolkit is a reference implementation of the OASIS DITA Technical Committee's specification for DITA DTDs and Schemas. The Toolkit transforms DITA content (maps and topics) into deliverable formats, including: XHTML, Eclipse Help, HTML Help, and JavaHelp.">DITA Open Toolkit</a></div>
+</div>
+<div class="relconcepts"><strong>Related concepts</strong><br />
+<div><a href="DITA-futures.html" title="Activity on the DITA Open Toolkit project will revolve around maintenance (bug fixes), enhancements (new function based on prioritized requests), demos and experimentation (sandbox activity), and community support (forums, etc.).">DITA futures</a></div>
+<div><a href="DITA-ant.html" title="Ant is an open tool that uses the DITA processes to make producing DITA output easier.">Building DITA output with Ant</a></div>
+</div>
+<div class="reltasks"><strong>Related tasks</strong><br />
+<div><a href="DITA-installation.html" title="This topic explains how to install the DITA Toolkit processing environment.">Installing the DITA Toolkit</a></div>
+</div>
+<div class="relref"><strong>Related reference</strong><br />
+<div><a href="DITA-relnotes.html" title="">DITA release notes</a></div>
+<div><a href="DITA-tweaks.html" title="If the available methods can not fully match your own output requirements, DITA Toolkit supports other ways to customize or enhance the transforms without having to modify core transforms directly.">Controls, parameters, tweaks, and gizmos for dita2htmlImpl.xsl</a></div>
+</div>
+<div class="relinfo"><strong>Related information</strong><br />
+<div><a href="DITA-changes.html" title="This document lists major changes and new features by release.">DITA release history</a></div>
+<div><a href="DITA-tested.html" title="See which tools and platforms have been used in testing the DITA processing system.">Tested platforms and tools</a></div>
+<div><a href="DITA-usingtransforms.html" title="The core transforms of the DITA Toolkit represent the Reference Implementation for processing the standard DITA specification as maintained by OASIS Open.">Using DITA transforms</a></div>
+</div>
+</div>
+</body>
+</html>

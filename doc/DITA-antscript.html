@@ -1,0 +1,553 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+<meta name="copyright" content="(C) Copyright 2005" />
+<meta name="DC.rights.owner" content="(C) Copyright 2005" />
+<meta content="public" name="security" />
+<meta content="index,follow" name="Robots" />
+<meta http-equiv="PICS-Label" content='(PICS-1.1 "http://www.icra.org/ratingsv02.html" l gen true r (cz 1 lz 1 nz 1 oz 1 vz 1) "http://www.rsac.org/ratingsv01.html" l gen true r (n 0 s 0 v 0 l 0) "http://www.classify.org/safesurf/" l gen true r (SS~~000 1))' />
+<meta content="reference" name="DC.Type" />
+<meta name="DC.Title" content="Ant tasks and script" />
+<meta name="abstract" content="This topic lists detailed Ant tasks and script." />
+<meta name="description" content="This topic lists detailed Ant tasks and script." />
+<meta scheme="URI" name="DC.Relation" content="DITA-ant.html" />
+<meta content="XHTML" name="DC.Format" />
+<meta content="antscript" name="DC.Identifier" />
+<meta content="en-us" name="DC.Language" />
+<link href="commonltr.css" type="text/css" rel="stylesheet" />
+<title>Ant tasks and script</title>
+</head>
+<body id="antscript"><a name="antscript"><!-- --></a>
+
+
+  <h1 class="topictitle1">Ant tasks and script</h1>
+
+  
+  <div><p>This topic lists detailed Ant tasks and script.</p>
+
+    <div class="section">
+      <p>The build process including pre-process can be called by using Ant 
+        script. There are four major Ant script files: </p>
+
+      <p><em>conductor.xml</em>, <em>pretargets.xml,</em> <em>ditatargets.xml</em> 
+        and <em>catalog-ant.xml</em>.</p>
+
+      <dl>
+        
+          <dt class="dlterm">
+            <em>conductor.xml</em>
+          </dt>
+
+          <dd>The main Ant script file includes the other three ant scripts and 
+            provides main targets for every output style. </dd>
+
+          <dd class="ddexpand">
+            
+<div class="tablenoborder"><a name="antscript__dita.param.general"><!-- --></a><table summary="" cellspacing="0" cellpadding="4" id="antscript__dita.param.general" width="90%" frame="border" border="1" rules="all"><caption>Table 1. General Parameter Table</caption>
+                
+                
+                
+                <thead align="left">
+                  <tr>
+                    <th valign="top" width="16.666666666666664%" id="N1009B">Parameter </th>
+
+                    <th valign="top" width="66.66666666666666%" id="N100A1">Description</th>
+
+                    <th valign="top" width="16.666666666666664%" id="N100A7">Required</th>
+
+                  </tr>
+
+                </thead>
+
+                <tbody>
+                  <tr>
+                    <td valign="top" width="16.666666666666664%" headers="N1009B ">args.input</td>
+
+                    <td valign="top" width="66.66666666666666%" headers="N100A1 ">
+                      <span id="antscript__argsinput"><a name="antscript__argsinput"><!-- --></a>The path and name of the input file. 
+                        This argument should be in the same upper or lower case 
+                        with the filename on file system.</span>
+                      <div class="note" id="antscript__argsinput-note"><a name="antscript__argsinput-note"><!-- --></a><span class="notetitle">Note: </span>This parameter must be provided 
+                        if <tt>dita.input</tt> and <tt>dita.input.dirname</tt> 
+                        not be provided.</div>
+
+                    </td>
+
+                    <td valign="top" width="16.666666666666664%" headers="N100A7 ">No</td>
+
+                  </tr>
+
+                  <tr>
+                    <td valign="top" width="16.666666666666664%" headers="N1009B ">dita.input</td>
+
+                    <td valign="top" width="66.66666666666666%" headers="N100A1 ">
+                      <span id="antscript__ditainput"><a name="antscript__ditainput"><!-- --></a>The name of the input file .</span>
+                      <div class="note" id="antscript__ditainput-note"><a name="antscript__ditainput-note"><!-- --></a><span class="notetitle">Note: </span>This parameter must be provided 
+                        if <tt>args.input</tt> not be provided. And this 
+                        parameter must be used together with the 
+                        <tt>dita.input.dirname</tt> parameter. The result of 
+                        this combination is equivalent to use only the 
+                        <tt>args.input</tt> parameter. It is an alternative way 
+                        to specify the path and name of the input file.</div>
+
+                    </td>
+
+                    <td valign="top" width="16.666666666666664%" headers="N100A7 ">No</td>
+
+                  </tr>
+
+                  <tr>
+                    <td valign="top" width="16.666666666666664%" headers="N1009B ">dita.input.dirname</td>
+
+                    <td valign="top" width="66.66666666666666%" headers="N100A1 ">
+                      <span id="antscript__ditainputdirname"><a name="antscript__ditainputdirname"><!-- --></a>The input directory which 
+                        contains the input file.</span>
+                      <div class="note" id="antscript__ditainputdirname-note"><a name="antscript__ditainputdirname-note"><!-- --></a><span class="notetitle">Note: </span>This parameter must be 
+                        provided if <tt>args.input</tt> not be provided. And 
+                        this parameter must be used together with the 
+                        <tt>dita.input</tt> parameter. The result of this 
+                        combination is equivalent to use only the 
+                        <tt>args.input</tt> parameter. It is an alternative way 
+                        to specify the path and name of the input file.</div>
+
+                    </td>
+
+                    <td valign="top" width="16.666666666666664%" headers="N100A7 ">No</td>
+
+                  </tr>
+
+                  <tr>
+                    <td valign="top" width="16.666666666666664%" headers="N1009B ">dita.temp.dir</td>
+
+                    <td valign="top" width="66.66666666666666%" headers="N100A1 ">
+                      <span id="antscript__tempdir"><a name="antscript__tempdir"><!-- --></a>The directory of the temporary files. 
+                        The default is 'temp'.</span>
+                    </td>
+
+                    <td valign="top" width="16.666666666666664%" headers="N100A7 ">No</td>
+
+                  </tr>
+
+                  <tr>
+                    <td valign="top" width="16.666666666666664%" headers="N1009B ">output.dir</td>
+
+                    <td valign="top" width="66.66666666666666%" headers="N100A1 ">
+                      <span id="antscript__outputdir"><a name="antscript__outputdir"><!-- --></a>The path of the output directory.</span>
+                    </td>
+
+                    <td valign="top" width="16.666666666666664%" headers="N100A7 ">Yes</td>
+
+                  </tr>
+
+                  <tr>
+                    <td valign="top" width="16.666666666666664%" headers="N1009B ">dita.extname</td>
+
+                    <td valign="top" width="66.66666666666666%" headers="N100A1 ">
+                      <span id="antscript__ditaextname"><a name="antscript__ditaextname"><!-- --></a>The file extension name of the input 
+                        topic files, for example, '.xml' or '.dita'. The 
+                        default is '.xml'.</span>
+                    </td>
+
+                    <td valign="top" width="16.666666666666664%" headers="N100A7 ">No</td>
+
+                  </tr>
+
+                  <tr>
+                    <td valign="top" width="16.666666666666664%" headers="N1009B ">args.xsl</td>
+
+                    <td valign="top" width="66.66666666666666%" headers="N100A1 ">
+                      <span id="antscript__argsxsl"><a name="antscript__argsxsl"><!-- --></a>The xsl file to replace the default xsl 
+                        file. It will replace dita2docbook.xsl in docbook 
+                        transformation, dita2fo-shell.xsl in pdf 
+                        transformation, dita2xhtml.xsl in xhtml/eclipsehelp 
+                        transformation, and dita2html.xsl in javahelp/htmlhelp 
+                        transformation.</span>
+                    </td>
+
+                    <td valign="top" width="16.666666666666664%" headers="N100A7 ">No</td>
+
+                  </tr>
+
+                  <tr>
+                    <td valign="top" width="16.666666666666664%" headers="N1009B ">dita.input.valfile</td>
+
+                    <td valign="top" width="66.66666666666666%" headers="N100A1 ">
+                      <span id="antscript__inputvalfile"><a name="antscript__inputvalfile"><!-- --></a>The name of the file containing 
+                        <em>filter/flagging/revision </em>information.</span>
+                    </td>
+
+                    <td valign="top" width="16.666666666666664%" headers="N100A7 ">No</td>
+
+                  </tr>
+
+                  <tr>
+                    <td valign="top" width="16.666666666666664%" headers="N1009B ">args.draft</td>
+
+                    <td valign="top" width="66.66666666666666%" headers="N100A1 ">
+                      <span id="antscript__argsdraft"><a name="antscript__argsdraft"><!-- --></a>Default "hide draft &amp; cleanup 
+                        content" processing parameter (<span class="q">"no"</span>= hide 
+                        them); <span class="q">"no"</span> and <span class="q">"yes"</span> are valid values; 
+                        non-<span class="q">"yes"</span> is ignored.</span>
+                    </td>
+
+                    <td valign="top" width="16.666666666666664%" headers="N100A7 ">No</td>
+
+                  </tr>
+
+                  <tr>
+                    <td valign="top" width="16.666666666666664%" headers="N1009B ">args.artlbl</td>
+
+                    <td valign="top" width="66.66666666666666%" headers="N100A1 ">
+                      <span id="antscript__argsartlbl"><a name="antscript__argsartlbl"><!-- --></a>Default "output artwork 
+                        filenames" processing parameter; <span class="q">"no"</span>and 
+                        <span class="q">"yes"</span>are valid values; non-<span class="q">"yes"</span> is 
+                        ignored.</span>
+                    </td>
+
+                    <td valign="top" width="16.666666666666664%" headers="N100A7 ">No</td>
+
+                  </tr>
+
+                </tbody>
+
+              </table>
+</div>
+
+          </dd>
+
+          <dd class="ddexpand">
+            
+<div class="tablenoborder"><a name="antscript__dita.param.htmlgeneral"><!-- --></a><table summary="" cellspacing="0" cellpadding="4" id="antscript__dita.param.htmlgeneral" width="90%" frame="border" border="1" rules="all"><caption>Table 2. General Parameter Table for 
+                Tasks(dita2xhtml,dita2htmlhelp,dita2javahelp,dita2eclipsehelp)</caption>
+                
+                
+                
+                <thead align="left">
+                  <tr>
+                    <th valign="top" width="16.666666666666664%" id="N1029D">Parameter </th>
+
+                    <th valign="top" width="66.66666666666666%" id="N102A3">Description</th>
+
+                    <th valign="top" width="16.666666666666664%" id="N102A9">Required</th>
+
+                  </tr>
+
+                </thead>
+
+                <tbody>
+                  <tr>
+                    <td valign="top" width="16.666666666666664%" headers="N1029D ">args.indexshow</td>
+
+                    <td valign="top" width="66.66666666666666%" headers="N102A3 ">
+                      <span id="antscript__indexshow"><a name="antscript__indexshow"><!-- --></a>The parameter to specify whether each 
+                        index entry should display within the body of the text 
+                        itself. Only "no" and "yes" are valid values.</span>
+                    </td>
+
+                    <td valign="top" width="16.666666666666664%" headers="N102A9 ">No</td>
+
+                  </tr>
+
+                  <tr>
+                    <td valign="top" width="16.666666666666664%" headers="N1029D ">args.copycss</td>
+
+                    <td valign="top" width="66.66666666666666%" headers="N102A3 ">
+                      <span id="antscript__copycss"><a name="antscript__copycss"><!-- --></a>The parameter to specify whether all the 
+                        user-specified css files are to be copied to the 
+                        directory specified in the csspath option. Only "no" 
+                        and "yes" are valid values.</span>
+                    </td>
+
+                    <td valign="top" width="16.666666666666664%" headers="N102A9 ">No</td>
+
+                  </tr>
+
+                  <tr>
+                    <td valign="top" width="16.666666666666664%" headers="N1029D ">args.outext</td>
+
+                    <td valign="top" width="66.66666666666666%" headers="N102A3 ">
+                      <span id="antscript__outext"><a name="antscript__outext"><!-- --></a>The output file extension name for 
+                        generated xhtml files. Typically, '.html' or '.htm' can 
+                        be used as the extension name for the generated xhtml 
+                        files. You can also specify other extension name. The 
+                        default is '.html'.</span>
+                    </td>
+
+                    <td valign="top" width="16.666666666666664%" headers="N102A9 ">No</td>
+
+                  </tr>
+
+                  <tr>
+                    <td valign="top" width="16.666666666666664%" headers="N1029D ">args.css</td>
+
+                    <td valign="top" width="66.66666666666666%" headers="N102A3 ">
+                      <span id="antscript__argscss"><a name="antscript__argscss"><!-- --></a>User specified css file. This stylesheet can use 
+                        the css cascade effect to modify existing properties or 
+                        it can override or define new properties.</span>
+                    </td>
+
+                    <td valign="top" width="16.666666666666664%" headers="N102A9 ">No</td>
+
+                  </tr>
+
+                  <tr>
+                    <td valign="top" width="16.666666666666664%" headers="N1029D ">args.csspath</td>
+
+                    <td valign="top" width="66.66666666666666%" headers="N102A3 ">
+                      <span id="antscript__csspath"><a name="antscript__csspath"><!-- --></a>The output path of css files.</span>
+                    </td>
+
+                    <td valign="top" width="16.666666666666664%" headers="N102A9 ">No</td>
+
+                  </tr>
+
+                  <tr>
+                    <td valign="top" width="16.666666666666664%" headers="N1029D ">args.hdf</td>
+
+                    <td valign="top" width="66.66666666666666%" headers="N102A3 ">
+                      <span id="antscript__argshdf"><a name="antscript__argshdf"><!-- --></a>The name of the file containing XHTML to 
+                        be placed in the HEAD area.</span>
+                    </td>
+
+                    <td valign="top" width="16.666666666666664%" headers="N102A9 ">No</td>
+
+                  </tr>
+
+                  <tr>
+                    <td valign="top" width="16.666666666666664%" headers="N1029D ">args.hdr</td>
+
+                    <td valign="top" width="66.66666666666666%" headers="N102A3 ">
+                      <span id="antscript__argshdr"><a name="antscript__argshdr"><!-- --></a>The name of the file containing XHTML to 
+                        be placed in the BODY running-heading area.</span>
+                    </td>
+
+                    <td valign="top" width="16.666666666666664%" headers="N102A9 ">No</td>
+
+                  </tr>
+
+                  <tr>
+                    <td valign="top" width="16.666666666666664%" headers="N1029D ">args.ftr</td>
+
+                    <td valign="top" width="66.66666666666666%" headers="N102A3 ">
+                      <span id="antscript__argsftr"><a name="antscript__argsftr"><!-- --></a>The name of the file containing XHTML to 
+                        be placed in the BODY running-footing area.</span>
+                    </td>
+
+                    <td valign="top" width="16.666666666666664%" headers="N102A9 ">No</td>
+
+                  </tr>
+
+                </tbody>
+
+              </table>
+</div>
+
+          </dd>
+
+        
+        
+          <dt class="dlterm">targets in <em>conductor.xml</em></dt>
+
+          <dd>
+            <p>The following targets in <em>conductor.xml</em> will call the 
+              complete processing of DITA files which can be loaded by 
+              users.</p>
+
+            <dl>
+              
+                <dt class="dlterm">dita2docbook</dt>
+
+                <dd>Transform DITA topic or DITA map into docbook output.</dd>
+
+              
+              
+                <dt class="dlterm">dita2eclipsehelp</dt>
+
+                <dd>Transform DITA topic or DITA map into eclipse help plugin 
+                  based on xhtml. 
+<div class="tablenoborder"><table summary="" cellspacing="0" cellpadding="4" width="90%" frame="border" border="1" rules="all"><caption>Table 3. Parameter 
+                  Table of dita2eclipsehelp</caption> <thead align="left"> <tr> 
+                  <th valign="top" width="16.666666666666664%" id="N1042B">Parameter </th>
+ <th valign="top" width="66.66666666666666%" id="N10431">Description</th>
+ 
+                  <th valign="top" width="16.666666666666664%" id="N10437">Required</th>
+ </tr>
+ </thead>
+ <tbody> <tr> 
+                  <td valign="top" width="16.666666666666664%" headers="N1042B ">args.eclipse.toc</td>
+ <td align="left" valign="top" width="66.66666666666666%" headers="N10431 ">The root 
+                  file name of the output toc file. The default is the name of 
+                  input ditamap file.</td>
+ <td valign="top" width="16.666666666666664%" headers="N10437 ">No</td>
+ </tr>
+</tbody>
+ 
+                  </table>
+</div>
+</dd>
+
+              
+              
+                <dt class="dlterm">dita2htmlhelp</dt>
+
+                <dd>Transform DITA topic or DITA map into html help output 
+                  based on html. </dd>
+
+              
+              
+                <dt class="dlterm">dita2javahelp</dt>
+
+                <dd>Transform DITA topic or DITA map into java help output 
+                  based on html. 
+<div class="tablenoborder"><table summary="" cellspacing="0" cellpadding="4" width="90%" frame="border" border="1" rules="all"><caption>Table 3. Parameter Table 
+                  of dita2javahelp</caption> <thead align="left"> <tr> 
+                  <th valign="top" width="16.666666666666664%" id="N104B2">Parameter </th>
+ <th valign="top" width="66.66666666666666%" id="N104B8">Description</th>
+ 
+                  <th valign="top" width="16.666666666666664%" id="N104BE">Required</th>
+ </tr>
+ </thead>
+ <tbody> <tr> 
+                  <td valign="top" width="16.666666666666664%" headers="N104B2 ">args.javahelp.toc</td>
+ <td align="left" valign="top" width="66.66666666666666%" headers="N104B8 ">The root 
+                  file name of the output toc file. The default is the root 
+                  file name of the input toc file.</td>
+ <td valign="top" width="16.666666666666664%" headers="N104BE ">No</td>
+ 
+                  </tr>
+ <tr> <td valign="top" width="16.666666666666664%" headers="N104B2 ">args.javahelp.map</td>
+ <td align="left" valign="top" width="66.66666666666666%" headers="N104B8 ">The root file name of the output javahelp map 
+                  file. The default is the root file name of the map 
+                  file.</td>
+ <td valign="top" width="16.666666666666664%" headers="N104BE ">No</td>
+ </tr>
+ </tbody>
+ </table>
+</div>
+</dd>
+
+              
+              
+                <dt class="dlterm">dita2xhtml</dt>
+
+                <dd>Transform DITA topic or DITA map into xhtml web 
+                  output.
+<div class="tablenoborder"><table summary="" cellspacing="0" cellpadding="4" width="90%" frame="border" border="1" rules="all"><caption>Table 3. Parameter Table of 
+                  dita2xhtml</caption> <thead align="left"> <tr> <th valign="top" width="16.666666666666664%" id="N10541">Parameter 
+                  </th>
+ <th valign="top" width="66.66666666666666%" id="N10547">Description</th>
+ <th valign="top" width="16.666666666666664%" id="N1054D">Required</th>
+ 
+                  </tr>
+ </thead>
+ <tbody> <tr> <td valign="top" width="16.666666666666664%" headers="N10541 ">args.xhtml.toc</td>
+ 
+                  <td align="left" valign="top" width="66.66666666666666%" headers="N10547 ">The root file name of the output toc 
+                  file. The default is 'index'.)</td>
+ <td valign="top" width="16.666666666666664%" headers="N1054D ">No</td>
+ 
+                  </tr>
+</tbody>
+ </table>
+</div>
+</dd>
+
+              
+              
+                <dt class="dlterm">dita2pdf</dt>
+
+                <dd>Transform DITA topic or DITA map into pdf. </dd>
+
+              
+              
+                <dt class="dlterm">dita2troff</dt>
+
+                <dd>Transform DITA map into troff, which is the system menu 
+                  style in UNIX system.</dd>
+
+              
+            </dl>
+
+          </dd>
+
+        
+        
+          <dt class="dlterm">
+            <em>pretargets.xml</em>
+          </dt>
+
+          <dd>The Ant script file which contains all targets for 
+            pre-process.</dd>
+
+        
+        
+          <dt class="dlterm">
+            <em>ditatargets.xml</em>
+          </dt>
+
+          <dd>The Ant script file which contains all targets for main 
+            transformation.</dd>
+
+        
+        
+          <dt class="dlterm">
+            <em>catalog-ant.xml</em>
+          </dt>
+
+          <dd>The xml catalog information which is used by Ant.</dd>
+
+        
+        
+          <dt class="dlterm">dita2troff</dt>
+
+          <dd>Transform DITA topic or DITA map into eclipse help plugin based 
+            on xhtml. </dd>
+
+        
+      </dl>
+
+    </div>
+
+    <div class="section"><h4 class="sectiontitle">Sample ant script</h4><p>These ant scripts are in 
+      <samp class="codeph">/ant/</samp> directory. They are simple and easy to learn. From 
+      these files, you can learn how to write your own Ant script to build your 
+      own process.</p>
+<div class="p">Here is a sample template for writing an Ant script 
+      that executes transformation to xhtml in <samp class="codeph">/ant/</samp> 
+      directory<pre>&lt;?xml version="1.0" 
+      encoding="UTF-8" ?&gt; &lt;project 
+      name="sample_xhtml" default="all" 
+      basedir=".."&gt; &lt;import 
+      file="${basedir}${file.separator}conductor.xml"/&gt; 
+      &lt;property name="dita.extname" value=".xml"/&gt; 
+      &lt;target name="all" depends="sample2xhtml"&gt; 
+      &lt;/target&gt; &lt;!-- revise below here --&gt; &lt;target 
+      name="sample2xhtml" depends="use-init"&gt; 
+      &lt;antcall target="dita2xhtml"&gt; &lt;param 
+      name="args.input" value="@DITA.INPUT@"/&gt; &lt;param 
+      name="output.dir" value="@OUTPUT.DIR@"/&gt; 
+      &lt;/antcall&gt; &lt;/target&gt; &lt;/project&gt; </pre>
+</div>
+After 
+      you write the input file and output directory to overwrite @DITA.INPUT@ 
+      and @OUTPUT.DIR@, the script can execute the transformation from your 
+      input to xhtml by this command. The property of dita.extname is a global 
+      variable with which you can set the file extension name of the topic 
+      file. The default dita.extname is <span class="q">"<em>.xml</em>"</span>. You can also set it 
+      to <span class="q">"<em>.dita</em>"</span> according to OASIS DITA recommendation. 
+      <pre>c:\pkg\DITA-OT1.0&gt;ant -f ant/template_xhtml.xml</pre>
+ All of 
+      targets we use here are defined in <em>conductor.xml</em>. Therefore, you 
+      need to import that file before calling the target.</div>
+
+  </div>
+
+<div>
+<div class="familylinks">
+<div class="parentlink"><strong>Parent topic:</strong> <a href="DITA-ant.html" title="Ant is an open tool that uses the DITA processes to make producing DITA output easier.">Building DITA output with Ant</a></div>
+</div>
+</div>
+</body>
+</html>

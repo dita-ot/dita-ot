@@ -1,3 +1,5 @@
+<!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
+
 <!ENTITY % bookmap         "bookmap">
 <!ENTITY % bkbasicinfo     "bkbasicinfo">
 <!ENTITY % bkinfo          "bkinfo">
@@ -32,7 +34,7 @@
 <!ATTLIST bookmap  title      CDATA   #IMPLIED
                    id         ID      #IMPLIED
                    xml:lang   NMTOKEN #IMPLIED
-                   DTDVersion CDATA   #FIXED "&DTDVersion;"
+                  %arch-atts;
                    domains    CDATA   "&included-domains;">
 
 <!ELEMENT bkbasicinfo ((%booktitle;)?, (%booksubtitle;)?, (%bookabstract;)?, (%author;)*, (%publisher;)?, (%copyright;)*, (%critdates;)?, (%permissions;)?, (%audience;)*, (%category;)*, (%keywords;)*, (%prodinfo;)*, (%othermeta;)*)>
@@ -74,7 +76,7 @@
                       conref   CDATA    #IMPLIED
                       toc      (yes|no) #IMPLIED
                       print    (yes|no) #IMPLIED >
-<!ELEMENT preface ((%divinfo;)?, (%topicref;)+)>
+<!ELEMENT preface ((%divinfo;)?, (%topicref;)*)>
 <!ATTLIST preface  id        ID       #IMPLIED
                    href      CDATA    #IMPLIED
                    navtitle  CDATA    #IMPLIED
@@ -96,7 +98,7 @@
                 conref    CDATA    #IMPLIED
                 toc       (yes|no) #IMPLIED
                 print     (yes|no) #IMPLIED >
-<!ELEMENT appendix ((%divinfo;)?, (%topicref;)+)>
+<!ELEMENT appendix ((%divinfo;)?, (%topicref;)*)>
 <!ATTLIST appendix  id        ID       #IMPLIED
                     href      CDATA    #IMPLIED
                     navtitle  CDATA    #IMPLIED

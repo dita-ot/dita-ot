@@ -1,75 +1,149 @@
-<!--
- | (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
- | This file is part of the DITA package on IBM's developerWorks site.
- | See license.txt for disclaimers and permissions.
- |
- | The Darwin Information Typing Architecture (DITA) was orginated by
- | IBM's XML Workgroup and ID Workbench tools team.
- |
- | Refer to this file by the following public identfier or an appropriate
- | system identifier:
- |
- |   PUBLIC "-//IBM//DTD DITA Task//EN"
- |
- | Release history (vrm):
- |   1.0.0 Initial release on developerWorks, March 2001 (dita00.zip)
- |   1.0.1 fix 1 on developerWorks, October 2001 (dita01.zip)
- |   1.0.2 consolidated redesign December 2001
- |   1.0.3 fix 1, dtd freeze for UCD-1 January 2002
- |   1.1.0 Release 1 March 2002 (dita10.zip)
- |   1.1.1 Release 1.1 December 2002
- |   1.1.2 Release 1.2 June 2003
- |   1.1.3 Release 1.3 March 2004: bug fixes and map updates
- *-->
+<!-- ============================================================= -->
+<!--                    HEADER                                     -->
+<!-- ============================================================= -->
+<!--  MODULE:    DITA Task DTD                                     -->
+<!--  VERSION:   1.O                                               -->
+<!--  DATE:      February 2005                                     -->
+<!--                                                               -->
+<!-- ============================================================= -->
+
+<!-- ============================================================= -->
+<!--                    PUBLIC DOCUMENT TYPE DEFINITION            -->
+<!--                    TYPICAL INVOCATION                         -->
+<!--                                                               -->
+<!--  Refer to this file by the following public identfier or an 
+PUBLIC "-//OASIS//DTD DITA Task//EN"
+      Delivered as file "task.dtd"                                 -->
+
+<!-- ============================================================= -->
+<!-- SYSTEM:     Darwin Information Typing Architecture (DITA)     -->
+<!--                                                               -->
+<!-- PURPOSE:    DTD to describe DITA Tasks                        -->
+<!--                                                               -->
+<!-- ORIGINAL CREATION DATE:                                       -->
+<!--             March 2001                                        -->
+<!--                                                               -->
+<!--             (C) Copyright OASIS Open 2005.                    -->
+<!--             (C) Copyright IBM Corporation 2001, 2004.         -->
+<!--             All Rights Reserved.                              -->
+<!-- ============================================================= -->
 
 
-
-<!--vocabulary declarations-->
-<!ENTITY % ui-d-dec PUBLIC "-//IBM//ENTITIES DITA User Interface Domain//EN" "ui-domain.ent">
-  %ui-d-dec;
-<!ENTITY % hi-d-dec PUBLIC "-//IBM//ENTITIES DITA Highlight Domain//EN" "highlight-domain.ent">
-  %hi-d-dec;
-<!ENTITY % pr-d-dec PUBLIC "-//IBM//ENTITIES DITA Programming Domain//EN" "programming-domain.ent">
-  %pr-d-dec;
-<!ENTITY % sw-d-dec PUBLIC "-//IBM//ENTITIES DITA Software Domain//EN" "software-domain.ent">
-  %sw-d-dec;
-<!ENTITY % ut-d-dec PUBLIC "-//IBM//ENTITIES DITA Utilities Domain//EN" "utilities-domain.ent">
-  %ut-d-dec;
+<!-- ============================================================= -->
+<!--                    DOMAIN ENTITY DECLARATIONS                 -->
+<!-- ============================================================= -->
 
 
+<!ENTITY % ui-d-dec     PUBLIC 
+"-//OASIS//ENTITIES DITA User Interface Domain//EN" 
+"uiDomain.ent"                                                      >
+%ui-d-dec;
 
-<!--vocabulary substitution (one for each extended base element,
-    with the name of the domain(s) in which the extension was declared)-->
-<!ENTITY % pre     "pre     | %pr-d-pre;     | %sw-d-pre;     | %ui-d-pre;">
-<!ENTITY % keyword "keyword | %pr-d-keyword; | %sw-d-keyword; | %ui-d-keyword;">
-<!ENTITY % ph      "ph      | %pr-d-ph;      | %sw-d-ph;      | %hi-d-ph; | %ui-d-ph;">
-<!ENTITY % fig     "fig     | %pr-d-fig;     | %ut-d-fig;">
-<!ENTITY % dl      "dl      | %pr-d-dl;">
+<!ENTITY % hi-d-dec     PUBLIC 
+"-//OASIS//ENTITIES DITA Highlight Domain//EN" 
+"highlightDomain.ent"                                               >
+%hi-d-dec;
+
+<!ENTITY % pr-d-dec     PUBLIC 
+"-//OASIS//ENTITIES DITA Programming Domain//EN" 
+"programmingDomain.ent"                                             >
+%pr-d-dec;
+
+<!ENTITY % sw-d-dec     PUBLIC 
+"-//OASIS//ENTITIES DITA Software Domain//EN" 
+"softwareDomain.ent"                                                >
+%sw-d-dec;
+
+<!ENTITY % ut-d-dec     PUBLIC 
+"-//OASIS//ENTITIES DITA Utilities Domain//EN" 
+"utilitiesDomain.ent"                                               >
+%ut-d-dec;
 
 
-<!--Redefine the infotype entity to exclude other topic types and disallow nesting-->
-<!--MAT - removed no-topic-nesting per MichaelP -->
-<!ENTITY % task-info-types "task">
+<!-- ============================================================= -->
+<!--                    DOMAIN EXTENSIONS                          -->
+<!-- ============================================================= -->
+<!--                    One for each extended base element, with
+                        the name of the domain(s) in which the
+                        extension was declared                     -->
 
-<!--vocabulary attributes (must be declared ahead of the dtds, which puts @domains first in order) -->
-<!ENTITY included-domains "&ui-d-att; &hi-d-att; &pr-d-att; &sw-d-att; &ut-d-att;">
+<!ENTITY % pre          "pre     | %pr-d-pre;     | %sw-d-pre;     | 
+                                   %ui-d-pre;"                       >
+<!ENTITY % keyword      "keyword | %pr-d-keyword; | %sw-d-keyword; |
+                                   %ui-d-keyword;"                   >
+<!ENTITY % ph           "ph      | %pr-d-ph;      | %sw-d-ph;      | 
+                                    %hi-d-ph;     | %ui-d-ph;"       >
+<!ENTITY % fig          "fig     | %pr-d-fig;     | %ut-d-fig;"      >
+<!ENTITY % dl           "dl      | %pr-d-dl;"                        >
 
-<!--Embed topic to get generic elements -->
-<!ENTITY % topic-type PUBLIC "-//IBM//ELEMENTS DITA Topic//EN" "topic.mod">
-  %topic-type;
 
-<!--Embed task to get specific elements -->
-<!ENTITY % task-typemod PUBLIC "-//IBM//ELEMENTS DITA Task//EN" "task.mod">
-  %task-typemod;
+<!-- ============================================================= -->
+<!--                    TOPIC NESTING OVERRIDE                     -->
+<!-- ============================================================= -->
 
-<!--vocabulary definitions-->
-<!ENTITY % ui-d-def PUBLIC "-//IBM//ELEMENTS DITA User Interface Domain//EN" "ui-domain.mod">
-  %ui-d-def;
-<!ENTITY % hi-d-def PUBLIC "-//IBM//ELEMENTS DITA Highlight Domain//EN" "highlight-domain.mod">
-  %hi-d-def;
-<!ENTITY % pr-d-def PUBLIC "-//IBM//ELEMENTS DITA Programming Domain//EN" "programming-domain.mod">
-  %pr-d-def;
-<!ENTITY % sw-d-def PUBLIC "-//IBM//ELEMENTS DITA Software Domain//EN" "software-domain.mod">
-  %sw-d-def;
-<!ENTITY % ut-d-def PUBLIC "-//IBM//ELEMENTS DITA Utilities Domain//EN" "utilities-domain.mod">
-  %ut-d-def;
+<!--                    Redefine the infotype entity to exclude 
+                        other topic types and disallow nesting     -->
+<!ENTITY % task-info-types 
+                        "task"                                       >
+
+
+<!-- ============================================================= -->
+<!--                    DOMAINS ATTRIBUTE OVERRIDE                 -->
+<!-- ============================================================= -->
+<!--                    Must be declared ahead of the DTDs, which
+                        puts @domains first in order               -->
+
+<!ENTITY included-domains 
+                        "&ui-d-att; &hi-d-att; &pr-d-att; &sw-d-att;
+                         &ut-d-att;"                                 >
+
+
+<!-- ============================================================= -->
+<!--                    TOPIC ELEMENT INTEGRATION                  -->
+<!-- ============================================================= -->
+
+<!--                    Embed topic to get generic elements        -->
+<!ENTITY % topic-type   PUBLIC 
+"-//OASIS//ELEMENTS DITA Topic//EN" 
+"topic.mod"                                                          >
+%topic-type;
+        
+<!--                    Embed task to get specific elements        -->
+<!ENTITY % task-typemod PUBLIC 
+"-//OASIS//ELEMENTS DITA Task//EN" 
+"task.mod"                                                           >
+%task-typemod;
+
+
+<!-- ============================================================= -->
+<!--                    DOMAIN ELEMENT INTEGRATION                 -->
+<!-- ============================================================= -->
+
+
+<!ENTITY % ui-d-def     PUBLIC 
+"-//OASIS//ELEMENTS DITA User Interface Domain//EN" 
+"uiDomain.mod"                                                      >
+%ui-d-def;
+
+<!ENTITY % hi-d-def     PUBLIC 
+"-//OASIS//ELEMENTS DITA Highlight Domain//EN" 
+"highlightDomain.mod"                                               >
+%hi-d-def;
+
+<!ENTITY % pr-d-def     PUBLIC 
+"-//OASIS//ELEMENTS DITA Programming Domain//EN" 
+"programmingDomain.mod"                                             >
+%pr-d-def;
+
+<!ENTITY % sw-d-def     PUBLIC 
+"-//OASIS//ELEMENTS DITA Software Domain//EN" 
+"softwareDomain.mod"                                                >
+%sw-d-def;
+
+<!ENTITY % ut-d-def     PUBLIC 
+"-//OASIS//ELEMENTS DITA Utilities Domain//EN" 
+"utilitiesDomain.mod"                                               >
+%ut-d-def;
+
+
+<!-- ================== End DITA Task DTD  ======================= -->

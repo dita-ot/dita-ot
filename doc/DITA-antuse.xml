@@ -1,43 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--Arbortext, Inc., 1988-2004, v.4002-->
-<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
- "..\dtd\reference.dtd">
-<?Pub Inc?>
+<!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
+
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "reference.dtd">
+
 <reference id="runant" xml:lang="en-us">
-<title>Running Ant</title>
-<titlealts>
-<navtitle>Running Ant</navtitle>
-</titlealts>
-<shortdesc>After setting up the Ant environment, you can build the DITA output
-by running <codeph>ant</codeph> command. </shortdesc>
-<refbody>
-<example>Here are some samples to explain how to use Ant to build sample output
-in the DITA directory. <note> To run the Ant demo properly, you should switch
-to the <b>DITA installation directory</b> under the command prompt. </note><ul>
-<li>You can build all demos in the DITA directory.<p>Input <codeph>ant all</codeph></p><p>The
-building process will create an <b>/out/</b> directory and puts the output
-files in subdirectories that parallel the source directory. </p></li>
-<li>You can also rebuild specific part of output of the DITA sample files.<p>You
-need to remove part of the output first by specifying a "<codeph>clean</codeph>"
-target, and then rebuild the output. For example: To rebuild FAQ demo, input</p><p><codeph>ant
-clean.demo.faq</codeph></p><p><codeph>ant demo.faq</codeph></p><note>To find
-out the complete list of targets you can clean and build, check the <i>name</i> attributes
-for the target elements within the <i>build.xml</i> file. Or, input <codeph>ant
--projecthelp</codeph> for information.</note> </li>
-<li>You can also build assigned input to output in a default and easy way. <p>Input <codeph>ant</codeph></p><p>Ant
-will prompt you for the input and output, and you need to input the directories
-of input files and output with correctly upper or lower case. </p></li>
-</ul><p>You can reuse the targets provided by the <i>conductor.xml</i> file
-in builds for your own DITA content by coping the<i> build.xml, conductor.xml,
-pretargets.xml, ditatargets.xml</i> and <i>catalog-ant.xml </i>files into
-a new directory and edit the <i>build.xml</i> to specify your DITA files.
-Refer to <xref href="DITA-antscript.xml#antscript"><?Pub Caret?>Ant tasks
-and tweaks</xref> for more information of those functions.</p><note>To troubleshoot
-problems in setting up Java, Ant, Saxon, or FOP, you will get better information
-from the communities for those components rather than the communities for
-the DITA. Of course, if you find issues relevant to the DITA XSLT scripts
-(or have ideas for improving them), you are encouraged to engage the DITA
-community.</note> </example>
-</refbody>
+  <title>Running Ant</title>
+  <titlealts>
+    <navtitle>Running Ant</navtitle>
+  </titlealts>
+  <shortdesc>After setting up the Ant environment, you can build the DITA 
+    output by running <codeph>ant</codeph> command. </shortdesc>
+  <refbody>
+    <example>Here are some samples to explain how to use Ant to build sample 
+      output in the DITA directory. <note> To run the Ant demo properly, you 
+      should switch to the <b>DITA installation directory</b> under the command 
+      prompt. </note><ul> <li>You can build all demos in the DITA 
+      directory.<p>Input <codeph>ant all</codeph></p><p>The building process 
+      will create an <b>/out/</b> directory and puts the output files in 
+      subdirectories that parallel the source directory. </p></li> <li>You can 
+      also rebuild specific part of output of the DITA sample files.<p>You need 
+      to remove part of the output first by specifying a 
+      "<codeph>clean</codeph>" target, and then rebuild the output. For 
+      example: To rebuild FAQ demo, input</p><p><codeph>ant 
+      clean.demo.faq</codeph></p><p><codeph>ant demo.faq</codeph></p><note>To 
+      find out the complete list of targets you can clean and build, check the 
+      <i>name</i> attributes for the target elements within the 
+      <i>build.xml</i> file. Or, input <codeph>ant -projecthelp</codeph> for 
+      information.</note> </li> <li>You can also build assigned input to output 
+      in a default and easy way. <p>Input <codeph>ant</codeph></p><p>Ant will 
+      prompt you for the input and output, and you need to input the 
+      directories of input files and output with correctly upper or lower case. 
+      </p></li> </ul><p>You can reuse the targets provided by the 
+      <i>conductor.xml</i> file in builds for your own DITA content by coping 
+      the<i> build.xml, conductor.xml, pretargets.xml, ditatargets.xml</i> and 
+      <i>catalog-ant.xml </i>files into a new directory and edit the 
+      <i>build.xml</i> to specify your DITA files. Refer to <xref 
+      href="DITA-antscript.xml#antscript"><?Pub Caret?>Ant tasks and 
+      tweaks</xref> for more information of those functions.</p><note>To 
+      troubleshoot problems in setting up Java, Ant, Saxon, or FOP, you will 
+      get better information from the communities for those components rather 
+      than the communities for the DITA. Of course, if you find issues relevant 
+      to the DITA XSLT scripts (or have ideas for improving them), you are 
+      encouraged to engage the DITA community.</note> </example>
+  </refbody>
 </reference>
-<?Pub *0000002585?>

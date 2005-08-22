@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
+
+<!DOCTYPE concept PUBLIC "-//IBM//DTD DITA Concept//EN" "concept.dtd">
+
+<concept id="xmlcatalog" xml:lang="en-us">
+<title>XML Catalog</title>
+<shortdesc>This is an introduction of XML catalog. </shortdesc>
+<conbody>
+  <p><tt>An</tt> <i>XML catalog</i>, which can be physically composed of 
+    several <i>catalog entry files</i>, is a logical structure that describes 
+    mapping information. A <i>catalog entry file</i> is an xml file that 
+    includes a group of <i>catalog entries</i>. </p>
+  <p>A <i>catalog entry</i> can be used to locate a unified resource identifier 
+    (URI) reference for a certain resource such as a dtd file. An external 
+    entity's <i>public identifier</i> is used for mapping to the URI reference. 
+    </p>
+  <p>The URI of any system identifier can be ignored.</p>
+  <section>
+    <title>Why use XML Catalog</title>
+    <p>XML Catalogs are used to make the XML setup more flexible and portable. 
+      Using XML Catalogs, you can</p>
+    <p>
+      <ul>
+        <li>Map from the logical names such as the public identifiers. The 
+          public identifier is safer and more stable to use to locate a 
+          specific file than the system identifier. Even if the physical 
+          location of the file changes, you only need to make revision 
+          accordingly on the public identifier within the catalog.</li>
+        <li>Establish a local cache mechanism to locate the files associated to 
+          public identifiers or remote resources. With this mechanism the delay 
+          that occurs when locating remote resources can be avoided. </li>
+      </ul>
+    </p>
+  </section>
+  <section>
+    <title>An XML Catalog Example</title>
+    <p>Here is an example of a XML Catalog file.</p>
+    <p><b>Example 1. An XML Catalog File:</b> <i>catalog-dita.xml</i>.</p>
+    <codeblock> &lt;?xml version="1.0" ?&gt; &lt;catalog 
+      xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" prefer="public"&gt; 
+      &lt;!-- Catalog for DITA --&gt; &lt;!-- DITA DTDs --&gt; &lt;group 
+      xml:base="dtd"&gt; &lt;public publicId="-//IBM//DTD DITA Concept//EN" 
+      uri="concept.dtd"/&gt; &lt;public publicId="-//IBM//ELEMENTS DITA 
+      Concept//EN" uri="concept.mod"/&gt; ... &lt;!-- Demo/Experimental --&gt; 
+      &lt;public publicId="-//IBM//DTD DITA Element Reference//EN" 
+      uri="demo/elementref/elementref_shell.dtd"/&gt; &lt;public 
+      publicId="-//IBM//ELEMENTS DITA Element Reference//EN" 
+      uri="demo/elementref/elementref.mod"/&gt; &lt;public 
+      publicId="-//IBM//DTD DITA FAQ//EN" uri="demo/faq/faq_shell.dtd"/&gt; 
+      &lt;public publicId="-//IBM//ELEMENTS DITA FAQ//EN" 
+      uri="demo/faq/faq.mod"/&gt; &lt;/catalog&gt;</codeblock>
+    <note>
+      <ol>
+        <li>The <tt>catalog</tt> element contains all other entries, and also 
+          includes a catalog namespace identifier. The attribute of 
+          <tt>prefer</tt> is set to <tt>public</tt>, which means that the 
+          public identifiers are tried to resolve the catalog before using the 
+          system identifiers.</li>
+        <li>The group element is simply a wrapper element where the attributes 
+          such as <tt>xml:base</tt> are set. These attributes apply to all 
+          entries that are within the group content. The <tt>xml:base</tt> 
+          attribute set the main pathname prefix that all URIs are located 
+          relative to.</li>
+      </ol>
+    </note>
+  </section>
+  <section>
+    <title>Demo/Experimental section</title>
+    <p>The <b>Demo/Experimental</b> section in the <i>catalog-dita.xml</i> file 
+      is the section to place demo or experimental dtd descriptions. New DITA 
+      specialization features can be added in these descriptions. For example, 
+      if you want to use the public identifier, <tt>-//IBM//DTD 
+      SAMPLE//EN</tt>, to refer to the file with the pathname 
+      <i>dtd/sample/mysample.dtd</i>, put the following catalog entry within 
+      the <b>Demo/Experimental</b> section.</p>
+    <p>
+      <codeblock>&lt;public publicId="-//IBM//DTD SAMPLE//EN" 
+        uri="sample/mysample.dtd"/&gt;</codeblock>
+    </p>
+  </section>
+</conbody>
+</concept>

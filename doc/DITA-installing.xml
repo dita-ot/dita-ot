@@ -1,5 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<!DOCTYPE task PUBLIC "-//IBM//DTD DITA Task//EN" "../dtd/task.dtd">
+<!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
+
+<!DOCTYPE task PUBLIC "-//IBM//DTD DITA Task//EN" "task.dtd">
 <task id="installing">
   <title>Installing the DITA Toolkit</title>
   <shortdesc>This topic explains how to install the DITA Toolkit processing environment.</shortdesc>

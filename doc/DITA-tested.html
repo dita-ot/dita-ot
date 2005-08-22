@@ -12,8 +12,18 @@
 <meta name="DC.Title" content="Tested platforms and tools" />
 <meta name="abstract" content="See which tools and platforms have been used in testing the DITA processing system." />
 <meta name="description" content="See which tools and platforms have been used in testing the DITA processing system." />
+<meta scheme="URI" name="DC.Relation" content="DITA-readme.html" />
+<meta scheme="URI" name="DC.Relation" content="DITA-relnotes.html" />
+<meta scheme="URI" name="DC.Relation" content="DITA-changes.html" />
+<meta scheme="URI" name="DC.Relation" content="DITA-futures.html" />
+<meta scheme="URI" name="DC.Relation" content="DITA-installation.html" />
+<meta scheme="URI" name="DC.Relation" content="DITA-usingtransforms.html" />
+<meta scheme="URI" name="DC.Relation" content="DITA-ant.html" />
+<meta scheme="URI" name="DC.Relation" content="DITA-javacmd.html" />
+<meta scheme="URI" name="DC.Relation" content="DITA-tweaks.html" />
 <meta content="XHTML" name="DC.Format" />
 <meta content="testedplatformsandtools" name="DC.Identifier" />
+<meta content="en-us" name="DC.Language" />
 <link href="commonltr.css" type="text/css" rel="stylesheet" />
 <title>Tested platforms and tools</title>
 </head>
@@ -23,9 +33,12 @@
   <h1 class="topictitle1">Tested platforms and tools</h1>
 
   
-  <div><p>See which tools and platforms have been used in testing the DITA processing system.</p>
+  
+  <div><p>See which tools and platforms have been used in testing the DITA 
+    processing system.</p>
 
-    <p>The DITA processing system has been tested against the following platforms and tools:</p>
+    <p>The DITA processing system has been tested against the following 
+      platforms and tools:</p>
 
     <table summary="" cellspacing="0" cellpadding="4" border="1" class="simpletableborder">
       <tr>
@@ -36,9 +49,10 @@
       </tr>
 
       <tr>
-        <td valign="top">Tested XSL processor:</td>
+        <td valign="top">Tested XSLT processor:</td>
 
-        <td valign="top">Xalan-J (2.6), Saxon 6.5<div class="note"><span class="notetitle">Note: </span>This version of the XSLT transforms are written <em>only</em> to the XSLT 1.0 standard. Do not use XSLT 2.0 engines!</div>
+        <td valign="top">Xalan-J 2.6, Saxon 6.5<div class="note"><span class="notetitle">Note: </span>XSLT 2.0 standard is not supported yet, 
+          don't use XSLT 2.0 engines. For example: Saxon 8.x.</div>
 </td>
 
       </tr>
@@ -59,9 +73,28 @@
 
     </table>
 
-
   </div>
 
-
+<div>
+<div class="familylinks">
+<div class="parentlink"><strong>Parent topic:</strong> <a href="DITA-readme.html" title="The DITA Open Toolkit is a reference implementation of the OASIS DITA Technical Committee's specification for DITA DTDs and Schemas. The Toolkit transforms DITA content (maps and topics) into deliverable formats, including: XHTML, Eclipse Help, HTML Help, and JavaHelp.">DITA Open Toolkit</a></div>
+</div>
+<div class="relconcepts"><strong>Related concepts</strong><br />
+<div><a href="DITA-futures.html" title="Activity on the DITA Open Toolkit project will revolve around maintenance (bug fixes), enhancements (new function based on prioritized requests), demos and experimentation (sandbox activity), and community support (forums, etc.).">DITA futures</a></div>
+<div><a href="DITA-ant.html" title="Ant is an open tool that uses the DITA processes to make producing DITA output easier.">Building DITA output with Ant</a></div>
+<div><a href="DITA-javacmd.html" title="The DITA Open Toolkit release 1.0.2 or above provides a command line interface as an alternative for users with little knowledge of Ant to use the toolkit easily.">Building DITA output with Java command line</a></div>
+</div>
+<div class="reltasks"><strong>Related tasks</strong><br />
+<div><a href="DITA-installation.html" title="This topic explains how to install the DITA Toolkit processing environment.">Installing the DITA Toolkit</a></div>
+</div>
+<div class="relref"><strong>Related reference</strong><br />
+<div><a href="DITA-relnotes.html" title="">DITA release notes</a></div>
+<div><a href="DITA-tweaks.html" title="If the available methods can not fully match your own output requirements, DITA Toolkit supports other ways to customize or enhance the transforms without having to modify core transforms directly.">Controls, parameters, tweaks, and gizmos for dita2htmlImpl.xsl</a></div>
+</div>
+<div class="relinfo"><strong>Related information</strong><br />
+<div><a href="DITA-changes.html" title="This document lists major changes and new features by release.">DITA release history</a></div>
+<div><a href="DITA-usingtransforms.html" title="The core transforms of the DITA Toolkit represent the Reference Implementation for processing the standard DITA specification as maintained by OASIS Open.">Using DITA transforms</a></div>
+</div>
+</div>
 </body>
 </html>

@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
+
+<!DOCTYPE concept PUBLIC "-//IBM//DTD DITA Concept//EN" "concept.dtd">
+
+<concept id="usingparameterbuildingtool" xml:lang="en-us">
+  <title>Building DITA output with Java command line</title>
+  <shortdesc>The DITA Open Toolkit release 1.0.2 or above provides a command 
+    line interface as an alternative for users with little knowledge of Ant to 
+    use the toolkit easily.</shortdesc>
+  <conbody>
+    <section>
+      <title>Running example</title>
+      <ol>
+        <li>Change into the DITA Open Toolkit installation directory.</li>
+        <li>On the command line, enter the following command: <p><tt>java -jar 
+          lib/dost1.1.0.jar /i:samples/sequence.ditamap /outdir:out 
+          /transtype:xhtml</tt></p></li>
+      </ol>
+      <p>This particular example creates a properties file, and then calls Ant 
+        using those properties to build the sample <i>sequence.ditamap</i> file 
+        and outputs the xhtml results to the out directory. You can add other 
+        parameters to the property file. See the following <i><xref 
+        href="#usingparameterbuildingtool/javacmdinterface"></xref></i> for 
+        details.</p>
+      <p>Note:<ol> <li>In this example, the '<i>/</i>' symbol preceded by a 
+        space is the separator for each parameter.</li> <li>Currently, the 
+        parameters <i>/filter</i>, <i>/ftr</i>, <i>/hdr</i>, and <i>/hdf</i> 
+        require an absolute path.</li> <li>The properties file is saved in the 
+        ${dita.temp.dir} directory. This properties file can also be used in 
+        future transform. The following command provides an example:<p><tt>ant 
+        -f conductor.xml -propertyfile 
+        ${dita.temp.dir}/property.temp</tt></p></li> </ol></p>
+    </section>
+    <section>
+      <title>Supported parameters</title>
+      <p><i><xref 
+        href="#usingparameterbuildingtool/javacmdinterface"></xref></i> lists 
+        the supported parameters (their Ant names are within the braces) that 
+        you can set with this tool.</p>
+      <table expanse="column" id="javacmdinterface">
+        <title>Table of supported parameters</title>
+        <tgroup cols="2">
+          <colspec colname="col1"/>
+          <colspec colname="col2"/>
+          <thead>
+            <row valign="bottom">
+              <entry colname="col1" colsep="1" rowsep="1">Parameter</entry>
+              <entry colname="col2">Description</entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry colname="col1" colsep="1" rowsep="1"> 
+                <i>/i</i>:{args.input}</entry>
+              <entry colname="col2">
+                <ph conref="DITA-antscript.xml#antscript/argsinput"></ph>
+                <note conref="DITA-antscript.xml#antscript/argsinput-note"/>
+              </entry>
+            </row>
+            <row>
+              <entry colname="col1"><i>/if</i>:{dita.input}</entry>
+              <entry colname="col2">
+                <ph conref="DITA-antscript.xml#antscript/ditainput"></ph>
+                <note conref="DITA-antscript.xml#antscript/ditainput-note"/>
+              </entry>
+            </row>
+            <row>
+              <entry colname="col1"><i>/id</i>:{dita.input.dirname}</entry>
+              <entry colname="col2">
+                <ph conref="DITA-antscript.xml#antscript/ditainputdirname"></ph>
+                <note 
+                  conref="DITA-antscript.xml#antscript/ditainputdirname-note"/>
+              </entry>
+            </row>
+            <row>
+              <entry colname="col1"><i>/outdir</i>:{output.dir}</entry>
+              <entry colname="col2">
+                <ph conref="DITA-antscript.xml#antscript/outputdir"></ph>
+              </entry>
+            </row>
+            <row>
+              <entry colname="col1"><i>/tempdir</i>:{dita.temp.dir}</entry>
+              <entry colname="col2">
+                <ph conref="DITA-antscript.xml#antscript/tempdir"></ph>
+              </entry>
+            </row>
+            <row>
+              <entry colname="col1"><i>/ditaext</i>:{dita.extname}</entry>
+              <entry colname="col2">
+                <ph conref="DITA-antscript.xml#antscript/ditaextname"></ph>
+              </entry>
+            </row>
+            <row>
+              <entry colname="col1"><i>/transtype</i>:{transtype}</entry>
+              <entry colname="col2">The transformation type. Currently, the 
+                supported values include xhtml, pdf, javahelp, eclipsehelp, 
+                htmlhelp, and docbook.</entry>
+            </row>
+            <row>
+              <entry colname="col1"><i>/filter</i>:{dita.input.valfile}</entry>
+              <entry colname="col2">
+                <ph conref="DITA-antscript.xml#antscript/inputvalfile"></ph>
+              </entry>
+            </row>
+            <row>
+              <entry colname="col1"><i>/draft</i>:{args.draft}</entry>
+              <entry colname="col2">
+                <ph conref="DITA-antscript.xml#antscript/argsdraft"></ph>
+              </entry>
+            </row>
+            <row>
+              <entry colname="col1"><i>/artlbl</i>:{args.artlbl}</entry>
+              <entry colname="col2">
+                <ph conref="DITA-antscript.xml#antscript/argsartlbl"></ph>
+              </entry>
+            </row>
+            <row>
+              <entry colname="col1"><i>/ftr</i>:{args.ftr}</entry>
+              <entry colname="col2">
+                <ph conref="DITA-antscript.xml#antscript/argsftr"></ph>
+              </entry>
+            </row>
+            <row>
+              <entry colname="col1"><i>/hdr</i>:{args.hdr}</entry>
+              <entry colname="col2">
+                <ph conref="DITA-antscript.xml#antscript/argshdr"></ph>
+              </entry>
+            </row>
+            <row>
+              <entry colname="col1"><i>/hdf</i>:{args.hdf}</entry>
+              <entry colname="col2">
+                <ph conref="DITA-antscript.xml#antscript/argshdf"></ph>
+              </entry>
+            </row>
+            <row>
+              <entry colname="col1"><i>/csspath</i>:{args.csspath}</entry>
+              <entry colname="col2">
+                <ph conref="DITA-antscript.xml#antscript/csspath"></ph>
+              </entry>
+            </row>
+            <row>
+              <entry colname="col1"><i>/css</i>:{args.css}</entry>
+              <entry colname="col2">
+                <ph conref="DITA-antscript.xml#antscript/argscss"></ph>
+              </entry>
+            </row>
+            <row>
+              <entry colname="col1"><i>/copycss</i>:{args.copycss}</entry>
+              <entry colname="col2">
+                <ph conref="DITA-antscript.xml#antscript/copycss"></ph>
+              </entry>
+            </row>
+            <row>
+              <entry colname="col1"><i>/indexshow</i>:{args.indexshow}</entry>
+              <entry colname="col2">
+                <ph conref="DITA-antscript.xml#antscript/indexshow"></ph>
+              </entry>
+            </row>
+            <row>
+              <entry colname="col1"><i>/outext</i>:{args.outext}</entry>
+              <entry colname="col2">
+                <ph conref="DITA-antscript.xml#antscript/outext"></ph>
+              </entry>
+            </row>
+            <row>
+              <entry colname="col1"><i>/xsl</i>:{args.xsl}</entry>
+              <entry colname="col2">
+                <ph conref="DITA-antscript.xml#antscript/argsxsl"></ph>
+              </entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+    </section>
+  </conbody>
+</concept>

@@ -1,4 +1,4 @@
-
+<!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
 
 <!-- ============ Hooks for domain extension ============ -->
 <!ENTITY % faqbody "faqbody">
@@ -21,7 +21,7 @@
                           conref CDATA #IMPLIED
                           outputclass CDATA #IMPLIED
                           xml:lang NMTOKEN #IMPLIED
-                          DTDVersion CDATA #FIXED "&DTDVersion;"
+                          %arch-atts;
                           domains CDATA "&included-domains;"
 >
 

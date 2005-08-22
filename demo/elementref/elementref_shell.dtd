@@ -1,14 +1,14 @@
-
+<!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
 <!--vocabulary declarations-->
-<!ENTITY % ui-d-dec PUBLIC "-//IBM//ENTITIES DITA User Interface Domain//EN" "../../dtd/ui-domain.ent">
+<!ENTITY % ui-d-dec PUBLIC "-//OASIS//ENTITIES DITA User Interface Domain//EN" "../../dtd/ui-domain.ent">
   %ui-d-dec;
-<!ENTITY % hi-d-dec PUBLIC "-//IBM//ENTITIES DITA Highlight Domain//EN" "../../dtd/highlight-domain.ent">
+<!ENTITY % hi-d-dec PUBLIC "-//OASIS//ENTITIES DITA Highlight Domain//EN" "../../dtd/highlight-domain.ent">
   %hi-d-dec;
-<!ENTITY % pr-d-dec PUBLIC "-//IBM//ENTITIES DITA Programming Domain//EN" "../../dtd/programming-domain.ent">
+<!ENTITY % pr-d-dec PUBLIC "-//OASIS//ENTITIES DITA Programming Domain//EN" "../../dtd/programming-domain.ent">
   %pr-d-dec;
-<!ENTITY % sw-d-dec PUBLIC "-//IBM//ENTITIES DITA Software Domain//EN" "../../dtd/software-domain.ent">
+<!ENTITY % sw-d-dec PUBLIC "-//OASIS//ENTITIES DITA Software Domain//EN" "../../dtd/software-domain.ent">
   %sw-d-dec;
-<!ENTITY % ut-d-dec PUBLIC "-//IBM//ENTITIES DITA Utilities Domain//EN" "../../dtd/utilities-domain.ent">
+<!ENTITY % ut-d-dec PUBLIC "-//OASIS//ENTITIES DITA Utilities Domain//EN" "../../dtd/utilities-domain.ent">
   %ut-d-dec;
 
 
@@ -38,13 +38,13 @@
 
 
 <!--vocabulary definitions-->
-<!ENTITY % ui-d-def PUBLIC "-//IBM//ELEMENTS DITA User Interface Domain//EN" "../../dtd/ui-domain.mod">
+<!ENTITY % ui-d-def PUBLIC "-//OASIS//ELEMENTS DITA User Interface Domain//EN" "../../dtd/ui-domain.mod">
   %ui-d-def;
-<!ENTITY % hi-d-def PUBLIC "-//IBM//ELEMENTS DITA Highlight Domain//EN" "../../dtd/highlight-domain.mod">
+<!ENTITY % hi-d-def PUBLIC "-//OASIS//ELEMENTS DITA Highlight Domain//EN" "../../dtd/highlight-domain.mod">
   %hi-d-def;
-<!ENTITY % pr-d-def PUBLIC "-//IBM//ELEMENTS DITA Programming Domain//EN" "../../dtd/programming-domain.mod">
+<!ENTITY % pr-d-def PUBLIC "-//OASIS//ELEMENTS DITA Programming Domain//EN" "../../dtd/programming-domain.mod">
   %pr-d-def;
-<!ENTITY % sw-d-def PUBLIC "-//IBM//ELEMENTS DITA Software Domain//EN" "../../dtd/software-domain.mod">
+<!ENTITY % sw-d-def PUBLIC "-//OASIS//ELEMENTS DITA Software Domain//EN" "../../dtd/software-domain.mod">
   %sw-d-def;
-<!ENTITY % ut-d-def PUBLIC "-//IBM//ELEMENTS DITA Utilities Domain//EN" "../../dtd/utilities-domain.mod">
+<!ENTITY % ut-d-def PUBLIC "-//OASIS//ELEMENTS DITA Utilities Domain//EN" "../../dtd/utilities-domain.mod">
   %ut-d-def;

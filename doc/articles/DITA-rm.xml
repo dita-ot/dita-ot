@@ -1,11 +1,9 @@
 <?xml version='1.0' encoding='utf-8'?>
+<!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
+
 <?xml-stylesheet href="../xsl/ditaview_shell.xsl" type="text/xsl"?>
 <?xml-stylesheet href="../css/dita_shell.css" type="text/css"?>
-<!DOCTYPE topic PUBLIC "-//IBM//DTD DITA Topic//EN" "../../dtd/topic.dtd" [
-<!-- (C) Copyright IBM Corporation 2001, 2002, 2003. All Rights Reserved.
- | This file is part of the DITA package on IBM's developerWorks site.
- | See license.txt for disclaimers.
- *-->]>
+<!DOCTYPE topic PUBLIC "-//IBM//DTD DITA Topic//EN" "../../dtd/topic.dtd">
 <topic id="ditarmpublic" xml:lang="en-us">
   <title> Introduction to the Darwin Information Typing Architecture</title>
   <titlealts>

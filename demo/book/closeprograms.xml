@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
 
-<!DOCTYPE task PUBLIC "-//IBM//DTD DITA Task//EN"
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN"
  "../../dtd/task.dtd">
 <task id="closeprograms" xml:lang="en-us">
 <title>Close all of your programs</title>

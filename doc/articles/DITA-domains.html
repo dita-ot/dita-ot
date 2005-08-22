@@ -12,6 +12,9 @@
 <meta name="DC.Title" content="Specializing domains in DITA" />
 <meta name="abstract" content="In current approaches, DTDs are static. As a result, DTD designers try to cover every contingency and, when this effort fails, users have to force their information to fit existing types. DITA changes this situation by giving information architects and developers the power to extend a base DTD to cover their domains." />
 <meta name="description" content="In current approaches, DTDs are static. As a result, DTD designers try to cover every contingency and, when this effort fails, users have to force their information to fit existing types. DITA changes this situation by giving information architects and developers the power to extend a base DTD to cover their domains." />
+<meta scheme="URI" name="DC.Relation" content="DITA-rm.html" />
+<meta scheme="URI" name="DC.Relation" content="DITA-dsf.html" />
+<meta scheme="URI" name="DC.Relation" content="DITA-mapdomains.html" />
 <meta content="Erik Hennum; IBM Corporation; ehennum@us.ibm.com. Erik Hennum works on the design and implementation of User Assistance for the IBM Storage Systems Group." name="DC.Creator" />
 <meta content="XHTML" name="DC.Format" />
 <meta content="domains" name="DC.Identifier" />
@@ -31,7 +34,13 @@
     <p>The Darwin Information Typing Architecture (DITA) is an XML architecture for extensible technical information. A domain extends DITA with a set of elements whose names and content models are unique to an organization or field of knowledge. Architects and authors can combine elements from any number of domains, leading to great flexibility and precision in capturing the semantics and structure of their information. In this overview, you learn how to define your own domains.</p>
 
   </div>
-  <div class="nested1" id="intro"><a name="intro"><!-- --></a>
+  <div>
+<div class="familylinks">
+<div class="parentlink"><strong>Parent topic:</strong> <a href="DITA-rm.html" title="This document is a roadmap for the Darwin Information Typing Architecture: what it is and how it applies to technical documentation. It is also a product of the architecture, having been written entirely in XML and produced using the principles described here...">Introduction to the Darwin Information Typing Architecture</a></div>
+<div class="previouslink"><strong>Previous topic:</strong> <a href="DITA-dsf.html" title="The Darwin Information Typing Architecture (DITA) provides a way for documentation authors and architects to create collections of typed topics that can be easily assembled into various delivery contexts. Topic specialization is the process by which authors and architects can define topic types, while maintaining compatibility with existing style sheets, transforms, and processes. The new topic types are defined as an extension, or delta, relative to an existing topic type, thereby reducing the work necessary to define and maintain the new type.">Specializing topic types in DITA</a></div>
+<div class="nextlink"><strong>Next topic:</strong> <a href="DITA-mapdomains.html" title="The benefits of formal information typing are well known for the content of topics, but collections of topics also benefit from formal organizing structure. Such formal structures guide authors while they assemble collections of topics and ensure consistent large-scale patterns of information for the user. Using DITA map domains, a designer can define a formal information architecture that can be reused in many deliverables.">How to define a formal information architecture with DITA map domains</a></div>
+</div>
+</div><div class="nested1" id="intro"><a name="intro"><!-- --></a>
     <h2 class="topictitle2">Introducing domain specialization</h2>
 
     <div>
@@ -65,9 +74,9 @@
 <div class="tablenoborder"><table summary="" cellspacing="0" cellpadding="4" frame="border" border="1" rules="all">
           <thead align="left">
             <tr>
-              <th valign="top" id="N100D8">Domain</th>
+              <th valign="top" id="N10103">Domain</th>
 
-              <th valign="top" id="N100DE">Purpose</th>
+              <th valign="top" id="N10109">Purpose</th>
 
             </tr>
 
@@ -75,30 +84,30 @@
 
           <tbody>
             <tr>
-              <td valign="top" headers="N100D8 ">highlight</td>
+              <td valign="top" headers="N10103 ">highlight</td>
 
-              <td valign="top" headers="N100DE ">To highlight text with styles such as bold, italic, and monospace</td>
-
-            </tr>
-
-            <tr>
-              <td valign="top" headers="N100D8 ">programming</td>
-
-              <td valign="top" headers="N100DE ">To define the syntax and give examples of programming languages</td>
+              <td valign="top" headers="N10109 ">To highlight text with styles such as bold, italic, and monospace</td>
 
             </tr>
 
             <tr>
-              <td valign="top" headers="N100D8 ">software</td>
+              <td valign="top" headers="N10103 ">programming</td>
 
-              <td valign="top" headers="N100DE ">To describe the operation of a software program</td>
+              <td valign="top" headers="N10109 ">To define the syntax and give examples of programming languages</td>
 
             </tr>
 
             <tr>
-              <td valign="top" headers="N100D8 ">UI</td>
+              <td valign="top" headers="N10103 ">software</td>
 
-              <td valign="top" headers="N100DE ">To describe the user interface of a software program</td>
+              <td valign="top" headers="N10109 ">To describe the operation of a software program</td>
+
+            </tr>
+
+            <tr>
+              <td valign="top" headers="N10103 ">UI</td>
+
+              <td valign="top" headers="N10109 ">To describe the user interface of a software program</td>
 
             </tr>
 

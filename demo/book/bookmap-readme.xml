@@ -1,10 +1,8 @@
 <?xml version='1.0' encoding='utf-8'?>
+<!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
+
 <?xml-stylesheet href="../../xsl/ditaview_shell.xsl" type="text/xsl"?>
-<!DOCTYPE concept PUBLIC "-//IBM//DTD DITA Concept//EN" "../../dtd/concept.dtd" [
-<!-- (C) Copyright IBM Corporation 2001, 2002, 2003, 2004. All Rights Reserved.
- | This file is part of the DITA package on IBM's developerWorks site.
- | See license.txt for disclaimers.
- *-->]>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "../../dtd/concept.dtd">
 <concept id="bookmap-readme" xml:lang="en-us">
   <title>Bookmap Readme</title>
   <prolog/>

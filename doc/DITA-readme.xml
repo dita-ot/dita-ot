@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--Arbortext, Inc., 1988-2004, v.4002-->
-<!DOCTYPE concept PUBLIC "-//IBM//DTD DITA Concept//EN"
- "..\dtd\concept.dtd">
-<?Pub Inc?>
+<!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
+
+<!DOCTYPE concept PUBLIC "-//IBM//DTD DITA Concept//EN" "concept.dtd">
 <concept id="DITA-readme" xml:lang="en-us">
 <title>DITA Open Toolkit </title>
 <titlealts>
@@ -12,6 +11,5 @@
 DITA Technical Committee&apos;s specification for DITA DTDs and Schemas. The
 Toolkit transforms DITA content (maps and topics) into deliverable formats,
 including: XHTML, Eclipse Help, HTML Help, and JavaHelp.</shortdesc>
-<conbody></conbody><?Pub Caret1?>
+<conbody></conbody>
 </concept>
-<?Pub *0000000685?>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<!DOCTYPE task PUBLIC "-//IBM//DTD DITA Task//EN"
+<!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN"
  "../../dtd/task.dtd">
 <task id="webtrouble" xml:lang="en-us">
 <title>Troublshooting Web Server problems</title>

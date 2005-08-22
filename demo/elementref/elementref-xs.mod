@@ -1,4 +1,4 @@
-
+<!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
   <!-- ==================== Import Section ======================= -->
   <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="../../../xml/schemas/ditaV1.3/xml.xsd"/>

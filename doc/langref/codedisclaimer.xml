@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- (C) Copyright IBM Corporation 2001, 2005. All Rights Reserved. -->
+
 <!DOCTYPE topic PUBLIC "-//IBM//DTD DITA Topic//EN"
  "../../dtd/topic.dtd">
-<!--ArborText, Inc., 1988-2001, v.4002-->
-<?Pub Inc?>
+
 <topic id="codedisclaimer">
 <title>Code disclaimer information</title>
 <body>
@@ -19,5 +20,4 @@ without any warranties of any kind. The implied warranties of non-infringement,
 merchantability and fitness for a particular purpose are expressly disclaimed.</p>
 </body>
 </topic>
-<?Pub *0000000989?>
 
