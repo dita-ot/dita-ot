@@ -67,25 +67,8 @@
   <xsl:param name="nodeID"/>
   <xsl:param name="outfile"/>
   <xsl:choose>
-  <xsl:when test="@navtitle">
-    <xsl:choose>
-    <xsl:when test="$isFirst and $infile and $infile!=''">
-      <xsl:apply-templates select="document($infile, /)" mode="topic">
-        <xsl:with-param name="outfile" select="$outfile"/>
-        <xsl:with-param name="isFirst" select="$isFirst"/>
-        <xsl:with-param name="title"   select="@navtitle"/>
-      </xsl:apply-templates>
-    </xsl:when>
-    <xsl:otherwise>
-      <xsl:value-of select="@navtitle"/>
-    </xsl:otherwise>
-    </xsl:choose>
-  </xsl:when>
-  <xsl:when test="$isFirst and $infile and $infile!=''">
-    <xsl:apply-templates select="document($infile, /)" mode="topic">
-      <xsl:with-param name="outfile" select="$outfile"/>
-      <xsl:with-param name="isFirst" select="$isFirst"/>
-    </xsl:apply-templates>
+  <xsl:when test="@navtitle">   
+    <xsl:value-of select="@navtitle"/>    
   </xsl:when>
   <xsl:otherwise>
     <xsl:message>
@@ -96,23 +79,5 @@
   </xsl:choose>
 </xsl:template>
 
-<!-- topic output -->
-<xsl:template match="/" mode="topic">
-  <xsl:param name="isFirst" select="false()"/>
-  <xsl:param name="outfile"/>
-  <xsl:param name="title">
-    <xsl:value-of select="*[contains(@class,' topic/topic ')][1]/
-        *[contains(@class,' topic/title ')]"/>
-  </xsl:param>
-  <!-- output only the first reference to a file -->
-  <xsl:if test="$isFirst">
-    <xsl:apply-templates select="." mode="write-topic">
-      <xsl:with-param name="outfile" select="$outfile"/>
-    </xsl:apply-templates>
-  </xsl:if>
-  <xsl:value-of select="$title"/>
-</xsl:template>
-
-<xsl:template match="/" mode="write-topic"/>
 
 </xsl:stylesheet>

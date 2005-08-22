@@ -32,25 +32,27 @@
   <xsl:param name="infile" select="@href"/>
   <xsl:param name="outroot">
     <xsl:choose>
-    <xsl:when test="not($infile) or $infile=''"/>
     <xsl:when test="contains($infile, '.xml')">
       <xsl:value-of select="substring-before($infile, '.xml')"/>
     </xsl:when>
     <xsl:when test="contains($infile, '.dita')">
       <xsl:value-of select="substring-before($infile, '.dita')"/>
     </xsl:when>
-<!--
     <xsl:otherwise>
       <xsl:value-of select="$infile"/>
     </xsl:otherwise>
--->
     </xsl:choose>
   </xsl:param>
   <xsl:param name="outfile">
-    <xsl:if test="$outroot and $outroot!=''">
-      <xsl:value-of select="concat($outroot, '.html')"/>
-    </xsl:if>
-  </xsl:param>
+    <xsl:choose>
+    <xsl:when test="contains($infile, '.xml') or contains($infile, '.dita')">
+      <xsl:value-of select="concat($outroot, $OUTEXT)"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:value-of select="$infile"/>
+    </xsl:otherwise>
+    </xsl:choose>
+  </xsl:param>  
   <xsl:param name="nodeID" select="generate-id(.)"/>
   <xsl:param name="isFirstFile">
     <xsl:choose>

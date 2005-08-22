@@ -10,9 +10,12 @@ import java.util.StringTokenizer;
 
 import org.dita.dost.module.Content;
 import org.dita.dost.module.ContentImpl;
-
+import org.dita.dost.util.Constants;
 
 /**
+ * ListReader reads "dita.list" file in temp directory.
+ * "dita.list" file contains information of the files that should be processed.
+ * 
  * @author Zhang, Yuan Peng
  */
 public class ListReader extends AbstractReader {
@@ -20,8 +23,9 @@ public class ListReader extends AbstractReader {
     private LinkedList refList;
     private ContentImpl content;
 
+
     /**
-     * 
+     * Default constructor of ListReader class.
      */
     public ListReader() {
         super();
@@ -30,30 +34,43 @@ public class ListReader extends AbstractReader {
         content.setCollection(refList);
     }
 
+
     /**
+     * @see org.dita.dost.reader.AbstractReader#read(java.lang.String)
      * 
      */
     public void read(String filename) {
         String liststr;
+        StringTokenizer tokenizer;
+        FileInputStream listInput = null;
         try {
-            FileInputStream listInput = new FileInputStream(filename);
+            listInput = new FileInputStream(filename);
             Properties property = new Properties();
             property.load(listInput);
-            liststr = property.getProperty("dita.list");
-            StringTokenizer list = new StringTokenizer(liststr,",");
+            liststr = property.getProperty(Constants.FULL_DITAMAP_TOPIC_LIST);
+            tokenizer = new StringTokenizer(liststr,Constants.COMMA);
                         
-            while (list.hasMoreTokens()) {
-                refList.addFirst(list.nextToken());
+            while (tokenizer.hasMoreTokens()) {
+                refList.addFirst(tokenizer.nextToken());
             }
             
 
         } catch (Exception e) {
             e.printStackTrace(System.out);
+        }finally{
+            try{
+                listInput.close();
+            }catch (Exception e) {
+                e.printStackTrace(System.out);                
+            }
+            
         }
 
     }
 
+
     /**
+     * @see org.dita.dost.reader.AbstractReader#getContent()
      * 
      */
     public Content getContent() {

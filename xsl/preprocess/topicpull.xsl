@@ -18,12 +18,12 @@
     <xsl:value-of select="."/>
     <xsl:text>/</xsl:text>
   </xsl:template>
-  <xsl:template match="*[contains(@class, ' topic/link ')]">
-    
+  
+  <xsl:template match="*[contains(@class, ' topic/link ')]">    
     <xsl:if test="@href=''">
       <xsl:call-template name="output-message">
-        <xsl:with-param name="msg">Found a link or cross reference with an empty
-          HREF attribute. The attribute should point to a file or other valid address.</xsl:with-param>
+        <xsl:with-param name="msg">Found a link with an empty HREF attribute.
+          The attribute should point to a file or other valid address.</xsl:with-param>
         <xsl:with-param name="msgnum">041</xsl:with-param>
         <xsl:with-param name="msgsev">E</xsl:with-param>
       </xsl:call-template>
@@ -170,8 +170,8 @@
   <xsl:template match="*[contains(@class, ' topic/xref ')]">
     <xsl:if test="@href=''">
       <xsl:call-template name="output-message">
-        <xsl:with-param name="msg">Found a link or cross reference with an empty
-          HREF attribute. The attribute should point to a file or other valid address.</xsl:with-param>
+        <xsl:with-param name="msg">Found a cross reference with an empty HREF attribute.
+          The attribute should point to a file or other valid address.</xsl:with-param>
         <xsl:with-param name="msgnum">041</xsl:with-param>
         <xsl:with-param name="msgsev">E</xsl:with-param>
       </xsl:call-template>
@@ -213,6 +213,7 @@
           </xsl:variable>
           <!--grab type, text and metadata, as long there's an href to grab from, otherwise error-->
           <xsl:choose>
+            <xsl:when test="@href=''"/>
             <xsl:when test="@href">
               <xsl:call-template name="get-stuff">
                 <xsl:with-param name="localtype">

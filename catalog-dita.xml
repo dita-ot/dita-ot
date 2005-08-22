@@ -1,4 +1,5 @@
 <?xml version="1.0" ?>
+<!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
 <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog"
          prefer="public">
 
@@ -9,76 +10,152 @@
 <group xml:base="dtd">
 
   <public publicId="-//IBM//DTD DITA Concept//EN"
-          uri="concept.dtd"/>
+          uri="dita132/concept.dtd"/>
   <public publicId="-//IBM//ELEMENTS DITA Concept//EN"
-          uri="concept.mod"/>
+          uri="dita132/concept.mod"/>
 
   <public publicId="-//IBM//DTD DITA Composite//EN"
-          uri="ditabase.dtd"/>
+          uri="dita132/ditabase.dtd"/>
 
   <public publicId="-//IBM//DTD DITA Reference//EN"
-          uri="reference.dtd"/>
+          uri="dita132/reference.dtd"/>
   <public publicId="-//IBM//ELEMENTS DITA Reference//EN"
-          uri="reference.mod"/>
+          uri="dita132/reference.mod"/>
 
   <public publicId="-//IBM//DTD DITA Task//EN"
-          uri="task.dtd"/>
+          uri="dita132/task.dtd"/>
   <public publicId="-//IBM//ELEMENTS DITA Task//EN"
-          uri="task.mod"/>
+          uri="dita132/task.mod"/>
 
   <public publicId="-//IBM//DTD DITA Topic//EN"
-          uri="topic.dtd"/>
+          uri="dita132/topic.dtd"/>
   <public publicId="-//IBM//ELEMENTS DITA Topic//EN"
-          uri="topic.mod"/>
+          uri="dita132/topic.mod"/>
   <public publicId="-//IBM//ENTITIES DITA Topic Class//EN"
-          uri="topic_class.ent"/>
+          uri="dita132/topic_class.ent"/>
   <public publicId="-//IBM//ENTITIES DITA Topic Definitions//EN"
-          uri="topic_defn.ent"/>
+          uri="dita132/topic_defn.ent"/>
 
 <!-- Maps -->
 
   <public publicId="-//IBM//DTD DITA Map//EN"
-          uri="map.dtd"/>
+          uri="dita132/map.dtd"/>
   <public publicId="-//IBM//ELEMENTS DITA Map//EN"
-          uri="map.mod"/>
+          uri="dita132/map.mod"/>
   <public publicId="-//IBM//ENTITIES DITA Map Group Domain//EN"
-          uri="mapgroup.ent"/>
+          uri="dita132/mapgroup.ent"/>
   <public publicId="-//IBM//ELEMENTS DITA Map Group Domain//EN"
-          uri="mapgroup.mod"/>
+          uri="dita132/mapgroup.mod"/>
 
 <!-- Domains -->
 
   <public publicId="-//IBM//ELEMENTS DITA Highlight Domain//EN"
-          uri="highlight-domain.mod"/>
+          uri="dita132/highlight-domain.mod"/>
   <public publicId="-//IBM//ENTITIES DITA Highlight Domain//EN"
-          uri="highlight-domain.ent"/>
+          uri="dita132/highlight-domain.ent"/>
 
   <public publicId="-//IBM//ELEMENTS DITA Programming Domain//EN"
-          uri="programming-domain.mod"/>
+          uri="dita132/programming-domain.mod"/>
   <public publicId="-//IBM//ENTITIES DITA Programming Domain//EN"
-          uri="programming-domain.ent"/>
+          uri="dita132/programming-domain.ent"/>
 
   <public publicId="-//IBM//ELEMENTS DITA Software Domain//EN"
-          uri="software-domain.mod"/>
+          uri="dita132/software-domain.mod"/>
   <public publicId="-//IBM//ENTITIES DITA Software Domain//EN"
-          uri="software-domain.ent"/>
+          uri="dita132/software-domain.ent"/>
 
   <public publicId="-//IBM//ELEMENTS DITA User Interface Domain//EN"
-          uri="ui-domain.mod"/>
+          uri="dita132/ui-domain.mod"/>
   <public publicId="-//IBM//ENTITIES DITA User Interface Domain//EN"
-          uri="ui-domain.ent"/>
+          uri="dita132/ui-domain.ent"/>
 
   <public publicId="-//IBM//ELEMENTS DITA Utilities Domain//EN"
-          uri="utilities-domain.mod"/>
+          uri="dita132/utilities-domain.mod"/>
   <public publicId="-//IBM//ENTITIES DITA Utilities Domain//EN"
-          uri="utilities-domain.ent"/>
+          uri="dita132/utilities-domain.ent"/>
 
 <!-- Common -->
 
   <public publicId="-//IBM//ELEMENTS DITA Metadata//EN"
-          uri="meta_xml.mod"/>
+          uri="dita132/meta_xml.mod"/>
   <public publicId="-//IBM//ELEMENTS DITA CALS Tables//EN"
-          uri="tbl_xml.mod"/>
+          uri="dita132/tbl_xml.mod"/>
+          
+          
+<!-- New OASIS DTD -->
+
+
+  <public publicId="-//OASIS//DTD DITA Concept//EN"
+          uri="concept.dtd"/>
+  <public publicId="-//OASIS//ELEMENTS DITA Concept//EN"
+          uri="concept.mod"/>
+
+  <public publicId="-//OASIS//DTD DITA Composite//EN"
+          uri="ditabase.dtd"/>
+
+  <public publicId="-//OASIS//DTD DITA Reference//EN"
+          uri="reference.dtd"/>
+  <public publicId="-//OASIS//ELEMENTS DITA Reference//EN"
+          uri="reference.mod"/>
+
+  <public publicId="-//OASIS//DTD DITA Task//EN"
+          uri="task.dtd"/>
+  <public publicId="-//OASIS//ELEMENTS DITA Task//EN"
+          uri="task.mod"/>
+
+  <public publicId="-//OASIS//DTD DITA Topic//EN"
+          uri="topic.dtd"/>
+  <public publicId="-//OASIS//ELEMENTS DITA Topic//EN"
+          uri="topic.mod"/>
+  <public publicId="-//OASIS//ENTITIES DITA Topic Class//EN"
+          uri="topicAttr.mod"/>
+  <public publicId="-//OASIS//ENTITIES DITA Topic Definitions//EN"
+          uri="topicDefn.ent"/>
+
+<!-- Maps -->
+
+  <public publicId="-//OASIS//DTD DITA Map//EN"
+          uri="map.dtd"/>
+  <public publicId="-//OASIS//ELEMENTS DITA Map//EN"
+          uri="map.mod"/>
+  <public publicId="-//OASIS//ENTITIES DITA Map Group Domain//EN"
+          uri="mapGroup.ent"/>
+  <public publicId="-//OASIS//ELEMENTS DITA Map Group Domain//EN"
+          uri="mapGroup.mod"/>
+
+<!-- Domains -->
+
+  <public publicId="-//OASIS//ELEMENTS DITA Highlight Domain//EN"
+          uri="highlightDomain.mod"/>
+  <public publicId="-//OASIS//ENTITIES DITA Highlight Domain//EN"
+          uri="highlightDomain.ent"/>
+
+  <public publicId="-//OASIS//ELEMENTS DITA Programming Domain//EN"
+          uri="programmingDomain.mod"/>
+  <public publicId="-//OASIS//ENTITIES DITA Programming Domain//EN"
+          uri="programmingDomain.ent"/>
+
+  <public publicId="-//OASIS//ELEMENTS DITA Software Domain//EN"
+          uri="softwareDomain.mod"/>
+  <public publicId="-//OASIS//ENTITIES DITA Software Domain//EN"
+          uri="softwareDomain.ent"/>
+
+  <public publicId="-//OASIS//ELEMENTS DITA User Interface Domain//EN"
+          uri="uiDomain.mod"/>
+  <public publicId="-//OASIS//ENTITIES DITA User Interface Domain//EN"
+          uri="uiDomain.ent"/>
+
+  <public publicId="-//OASIS//ELEMENTS DITA Utilities Domain//EN"
+          uri="utilitiesDomain.mod"/>
+  <public publicId="-//OASIS//ENTITIES DITA Utilities Domain//EN"
+          uri="utilitiesDomain.ent"/>
+
+<!-- Common -->
+
+  <public publicId="-//OASIS//ELEMENTS DITA Metadata//EN"
+          uri="metaDecl.mod"/>
+  <public publicId="-//OASIS//ELEMENTS DITA CALS Tables//EN"
+          uri="tblDecl.mod"/>
 </group>
 
 <!-- Demo/Experimental -->

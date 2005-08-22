@@ -7,7 +7,7 @@
      Output = one HHC contents file for use with the HTML Help compiler.
      
      Options:
-        /OUTEXT  = XHTML output extension (default is 'html')
+        /OUTEXT  = XHTML output extension (default is '.html')
         /WORKDIR = The working directory that contains the document being transformed.
                    Needed as a directory prefix for the @href "document()" function calls. 
                    Default is './'
@@ -20,12 +20,7 @@
 <!-- Include error message template -->
 <xsl:include href="common/output-message.xsl"/>
 
-<!-- NOTE NOTE NOTE NOTE: This will produce the <?xml .... ?> processing instruction
-     at the top of the file. THIS MUST BE REMOVED for the compiler to work. However,
-     it is left in here to ensure that the output uses utf-8 codepoints instead of
-     the &#1234; style numbers you get with method="html".
- -->
-<xsl:output method="xml"/>
+<xsl:output method="html" indent="no"/>
 
 <!-- Set the prefix for error message numbers -->
 <xsl:variable name="msgprefix">IDXS</xsl:variable>
@@ -35,7 +30,7 @@
 
 <!-- *************************** Command line parameters *********************** -->
 <xsl:param name="FILEREF" select="'file://'"/>
-<xsl:param name="OUTEXT" select="'html'"/><!-- "htm" and "html" are valid values -->
+<xsl:param name="OUTEXT" select="'.html'"/><!-- "htm" and "html" are valid values -->
 <xsl:param name="WORKDIR" select="'./'"/>
 <xsl:param name="DITAEXT" select="'.xml'"/>
 
@@ -127,15 +122,7 @@
         <xsl:with-param name="pathFromMaplist" select="$pathFromMaplist"/>
       </xsl:call-template>
     </xsl:when>
-    <xsl:when test="contains(@format,'htm') or contains(@format,'HTM')">
-      <!-- Including a local HTML file: they must recompile to include it -->
-      <xsl:call-template name="output-message">
-        <xsl:with-param name="msg">In order to include <xsl:value-of select="@href"/> in your help file, you will need
-to recompile the CHM file locally. The automatically compiled CHM file will only
-contain formatted DITA files, not files that are already in HTML.</xsl:with-param>
-        <xsl:with-param name="msgnum">039</xsl:with-param>
-        <xsl:with-param name="msgsev">I</xsl:with-param>
-      </xsl:call-template>
+    <xsl:when test="contains(@format,'htm') or contains(@format,'HTM')">      
       <xsl:call-template name="output-toc-entry">
         <xsl:with-param name="pathFromMaplist" select="$pathFromMaplist"/>
       </xsl:call-template>
@@ -268,10 +255,10 @@ To remove this message, you can set the toc="no" attribute on your topicref.</xs
             <xsl:attribute name="name">Local</xsl:attribute>
             <xsl:choose>        <!-- What if targeting a nested topic? Need to keep the ID? -->
               <xsl:when test="contains(@copy-to, $DITAEXT)">
-                <xsl:attribute name="value"><xsl:value-of select="$pathFromMaplist"/><xsl:value-of select="substring-before(@copy-to, $DITAEXT)"/>.<xsl:value-of select="$OUTEXT"/></xsl:attribute>
+                <xsl:attribute name="value"><xsl:value-of select="$pathFromMaplist"/><xsl:value-of select="substring-before(@copy-to, $DITAEXT)"/><xsl:value-of select="$OUTEXT"/></xsl:attribute>
               </xsl:when>
               <xsl:when test="contains(@href, $DITAEXT)">
-                <xsl:attribute name="value"><xsl:value-of select="$pathFromMaplist"/><xsl:value-of select="substring-before(@href, $DITAEXT)"/>.<xsl:value-of select="$OUTEXT"/></xsl:attribute>
+                <xsl:attribute name="value"><xsl:value-of select="$pathFromMaplist"/><xsl:value-of select="substring-before(@href, $DITAEXT)"/><xsl:value-of select="$OUTEXT"/></xsl:attribute>
               </xsl:when>
               <xsl:when test="contains(@href,'.htm') and @scope!='external'">
                 <xsl:attribute name="value"><xsl:value-of select="$pathFromMaplist"/><xsl:value-of select="@href"/></xsl:attribute>

@@ -6,15 +6,15 @@ package org.dita.dost.writer;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
+import java.util.ArrayList;
+import java.util.ListIterator;
 
 import org.dita.dost.module.Content;
+import org.dita.dost.util.Constants;
 import org.dita.dost.util.StringUtils;
 import org.xml.sax.Attributes;
-import org.xml.sax.ContentHandler;
-import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
-import org.xml.sax.ext.LexicalHandler;
 import org.xml.sax.helpers.XMLReaderFactory;
 
 
@@ -23,39 +23,58 @@ import org.xml.sax.helpers.XMLReaderFactory;
  */
 
 /**
+ * DitaIndexWriter reads dita topic file and insert the index information into it.
+ * 
  * @author Zhang, Yuan Peng
  */
-public class DitaIndexWriter extends AbstractWriter implements ContentHandler,LexicalHandler {
+public class DitaIndexWriter extends AbstractXMLWriter {
 
     private String indexEntries;
     private XMLReader reader;
     private OutputStreamWriter output;
-    private boolean hasProlog;// whether there is <prolog> in this file
-    private boolean hasMetadata;// whether there is <metadata> in this file
+    private boolean hasPrologTillNow;// whether we have met <prolog> in this topic we want
+    private boolean hasMetadataTillNow;// whether we have met <metadata> in <prolog> element
     private boolean needResolveEntity;
-
-    public void setContent(Content content) {
-        indexEntries = (String) content.getObject();
-    }
+    private ArrayList matchList; // topic path that topicIdList need to match
+    private ArrayList topicIdList; // array list that is used to keep the hierarchy of topic id
+    private String lastMatchTopic;
+    private String firstMatchTopic;
+    private boolean startTopic; //whether to insert links at this topic
 
     /**
+     * @see org.dita.dost.writer.AbstractWriter#setContent(org.dita.dost.module.Content)
      * 
+     */
+    public void setContent(Content content) {
+        indexEntries = (String) content.getValue();
+    }
+
+
+    /**
+     * Default constructor of DitaIndexWriter class.
      */
     public DitaIndexWriter() {
         super();
+        topicIdList = new ArrayList(Constants.INT_16);
+        firstMatchTopic = null;
+        hasMetadataTillNow = false;
+        hasPrologTillNow = false;
+        indexEntries = null;
+        lastMatchTopic = null;
+        matchList = null;
+        needResolveEntity = false;
+        output = null;
+        startTopic = false;
+        
         try {
-            //SAXParserFactory spFactory = SAXParserFactory.newInstance();
-            //spFactory.setFeature("http://xml.org/sax/features/validation", true);
-            //spFactory.setValidating(true);
-            //SAXParser parser = spFactory.newSAXParser();
-            //reader = parser.getXMLReader();
-            if (System.getProperty("org.xml.sax.driver") == null){
+            if (System.getProperty(Constants.SAX_DRIVER_PROPERTY) == null){
                 //The default sax driver is set to xerces's sax driver
-                System.setProperty("org.xml.sax.driver","org.apache.xerces.parsers.SAXParser");
+                System.setProperty(Constants.SAX_DRIVER_PROPERTY,Constants.SAX_DRIVER_DEFAULT_CLASS);
             }
             reader = XMLReaderFactory.createXMLReader();
             reader.setContentHandler(this);
-            reader.setProperty("http://xml.org/sax/properties/lexical-handler",this);
+            reader.setProperty(Constants.LEXICAL_HANDLER_PROPERTY,this);
+            reader.setFeature(Constants.FEATURE_NAMESPACE_PREFIX, true);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -63,20 +82,38 @@ public class DitaIndexWriter extends AbstractWriter implements ContentHandler,Le
     }
 
     /**
+     * @see org.dita.dost.writer.AbstractWriter#write(java.lang.String)
      * 
      */
     public void write(String filename) {
+		String file = null;
+		String topic = null;
+		File inputFile = null;
+		File outputFile = null;
+		FileOutputStream fileOutput = null;
 
         try {
+            
+            
+            if(filename.lastIndexOf(Constants.SHARP)!=-1){
+                file = filename.substring(0,filename.lastIndexOf(Constants.SHARP));
+                topic = filename.substring(filename.lastIndexOf(Constants.SHARP)+1);
+                setMatch(topic);
+                startTopic = false;
+            }else{
+                file = filename;
+                matchList = null;
+                startTopic = true;
+            }
         	needResolveEntity = true;
-            hasProlog = false;
-            hasMetadata = false;
-            File inputFile = new File(filename);
-            File outputFile = new File(filename + ".temp");
-            FileOutputStream fileOutput = new FileOutputStream(outputFile);
-            output = new OutputStreamWriter(fileOutput, "UTF-8");
+            hasPrologTillNow = false;
+            hasMetadataTillNow = false;
+            inputFile = new File(file);
+            outputFile = new File(file + Constants.FILE_EXTENSION_TEMP);
+            fileOutput = new FileOutputStream(outputFile);
+            output = new OutputStreamWriter(fileOutput, Constants.UTF8);
 
-            reader.parse(filename);
+            reader.parse(file);
 
             output.close();
             if(!inputFile.delete()){
@@ -87,10 +124,61 @@ public class DitaIndexWriter extends AbstractWriter implements ContentHandler,Le
             }
         } catch (Exception e) {
             e.printStackTrace(System.out);
+        }finally {
+            try{
+                fileOutput.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
+    private void setMatch(String match) {
+		int index = 0;
+        matchList = new ArrayList(Constants.INT_16);
+        
+        firstMatchTopic = (match.indexOf(Constants.SLASH) != -1) ? match.substring(0, match.indexOf('/')) : match;
+
+        while (index != -1) {
+            int end = match.indexOf(Constants.SLASH, index);
+            if (end == -1) {
+                matchList.add(match.substring(index));
+                lastMatchTopic = match.substring(index);
+                index = end;
+            } else {
+                matchList.add(match.substring(index, end));
+                index = end + 1;
+            }
+        }
+    }
+    
+//  check whether the hierarchy of current node match the matchList
+    private boolean checkMatch() {    	
+        
+        int matchSize = matchList.size();
+        int ancestorSize = topicIdList.size();
+        ListIterator matchIterator = matchList.listIterator();
+        ListIterator ancestorIterator = topicIdList.listIterator(ancestorSize
+                - matchSize);
+        String match;
+        String ancestor;
+        
+		if (matchList == null){
+			return true;
+		}
+        
+        while (matchIterator.hasNext()) {
+            match = (String) matchIterator.next();
+            ancestor = (String) ancestorIterator.next();
+            if (!match.equals(ancestor)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
 
     /**
+     * @see org.xml.sax.ContentHandler#characters(char[], int, int)
      * 
      */
     public void characters(char[] ch, int start, int length)
@@ -104,6 +192,10 @@ public class DitaIndexWriter extends AbstractWriter implements ContentHandler,Le
     	}
     }
 
+    /**
+     * @see org.xml.sax.ContentHandler#endDocument()
+     * 
+     */
     public void endDocument() throws SAXException {
 
         try {
@@ -113,25 +205,33 @@ public class DitaIndexWriter extends AbstractWriter implements ContentHandler,Le
         }
     }
 
+    /**
+     * @see org.xml.sax.ContentHandler#endElement(java.lang.String, java.lang.String, java.lang.String)
+     * 
+     */
     public void endElement(String uri, String localName, String qName)
             throws SAXException {
+        if (!startTopic){
+            topicIdList.remove(topicIdList.size() - 1);
+        }
         try {
-            if (!hasMetadata && qName.equals("prolog")) {
-                output.write("<metadata class=\"- topic/metadata \">");
+            if (!hasMetadataTillNow && Constants.ELEMENT_NAME_PROLOG.equals(qName) && startTopic) {
+                output.write(Constants.META_HEAD);
                 output.write(indexEntries);
-                output.write("</metadata>");
-                hasMetadata = true;
+                output.write(Constants.META_END);
+                hasMetadataTillNow = true;
             }
-            output.write("</" + qName + ">");
+            output.write(Constants.LESS_THAN + Constants.SLASH + qName
+                    + Constants.GREATER_THAN);
         } catch (Exception e) {
             e.printStackTrace(System.out);
         }
     }
 
-    public void endPrefixMapping(String prefix) throws SAXException {
-
-    }
-
+    /**
+     * @see org.xml.sax.ContentHandler#ignorableWhitespace(char[], int, int)
+     * 
+     */
     public void ignorableWhitespace(char[] ch, int start, int length)
             throws SAXException {
         try {
@@ -141,25 +241,26 @@ public class DitaIndexWriter extends AbstractWriter implements ContentHandler,Le
         }
     }
 
+    /**
+     * @see org.xml.sax.ContentHandler#processingInstruction(java.lang.String, java.lang.String)
+     * 
+     */
     public void processingInstruction(String target, String data)
             throws SAXException {
         String pi;
         try {
-            if (data != null) {
-                pi = target + " " + data;
-            } else {
-                pi = target;
-            }
-            output.write("<?" + pi + "?>");
+            pi = (data != null) ? target + Constants.STRING_BLANK + data : target;
+            output.write(Constants.LESS_THAN + Constants.QUESTION 
+                    + pi + Constants.QUESTION + Constants.GREATER_THAN);
         } catch (Exception e) {
             e.printStackTrace(System.out);
         }
     }
 
-    public void setDocumentLocator(Locator locator) {
-
-    }
-
+    /**
+     * @see org.xml.sax.ContentHandler#skippedEntity(java.lang.String)
+     * 
+     */
     public void skippedEntity(String name) throws SAXException {
         try {
             output.write(name);
@@ -168,107 +269,103 @@ public class DitaIndexWriter extends AbstractWriter implements ContentHandler,Le
         }
     }
 
-    public void startDocument() throws SAXException {
-
-    }
-    
     /**
+     * @see org.xml.sax.ContentHandler#startElement(java.lang.String, java.lang.String, java.lang.String, org.xml.sax.Attributes)
      * 
      */
     public void startElement(String uri, String localName, String qName,
             Attributes atts) throws SAXException {
+    	int attsLen = atts.getLength();
     	
         try {
-            if (!hasProlog
-                    && atts.getValue("class").indexOf("topic/body") != -1) {
+            if (!hasProlog(atts) && startTopic) {
                 // if <prolog> don't exist
                 output
-                        .write("<prolog class=\"- topic/prolog \"><metadata class=\"- topic/metadata \">");
+                        .write(Constants.PROLOG_HEAD + Constants.META_HEAD);
                 output.write(indexEntries);
-                output.write("</metadata></prolog>");
+                output.write(Constants.META_END + Constants.PROLOG_END);
+            }
+            if ( startTopic == false && Constants.ELEMENT_NAME_DITA.equalsIgnoreCase(qName) == false){
+                if (atts.getValue(Constants.ATTRIBUTE_NAME_ID) != null){
+                    topicIdList.add(atts.getValue(Constants.ATTRIBUTE_NAME_ID));
+                }else{
+                    topicIdList.add("null");
+                }
+                if (topicIdList.size() == matchList.size()){
+                    startTopic = checkMatch();
+                }
             }
 
-            if (hasProlog && !hasMetadata && qName.equals("resourceid")) {
-                output.write("<metadata class=\"- topic/metadata \">");
+            if (!hasMetadata(qName) && startTopic) {
+                output.write(Constants.META_HEAD);
                 output.write(indexEntries);
-                output.write("</metadata>");
-                hasMetadata = true;
+                output.write(Constants.META_END);
+                hasMetadataTillNow = true;
             }
 
-            output.write("<" + qName);
-            for (int i = 0; i < atts.getLength(); i++) {
+            output.write(Constants.LESS_THAN + qName);
+            for (int i = 0; i < attsLen; i++) {
                 String attQName = atts.getQName(i);
                 String attValue;
                 attValue = atts.getValue(i);
-                output.write(" " + attQName + "=\"" + attValue + "\"");
+                output.write(new StringBuffer().append(Constants.STRING_BLANK)
+                		.append(attQName).append(Constants.EQUAL).append(Constants.QUOTATION)
+                		.append(attValue).append(Constants.QUOTATION).toString());
             }
-            output.write(">");
-            if (atts.getValue("class").indexOf(" topic/metadata ") != -1) {
-                hasMetadata = true;
+            output.write(Constants.GREATER_THAN);
+            if (atts.getValue(Constants.ATTRIBUTE_NAME_CLASS)
+                    .indexOf(" topic/metadata ") != -1 && startTopic) {
+                hasMetadataTillNow = true;
                 output.write(indexEntries);
             }
-            if (atts.getValue("class").indexOf(" topic/prolog ") != -1) {
-                hasProlog = true;
+            if (atts.getValue(Constants.ATTRIBUTE_NAME_CLASS)
+                    .indexOf(" topic/prolog ") != -1) {
+                hasPrologTillNow = true;
             }
         } catch (Exception e) {
             e.printStackTrace(System.out);
         }
     }
 
-    public void startPrefixMapping(String prefix, String uri)
-            throws SAXException {
-
-    }
-    
-    
-	/* (non-Javadoc)
-	 * @see org.xml.sax.ext.LexicalHandler#comment(char[], int, int)
-	 */
-	public void comment(char[] ch, int start, int length) throws SAXException {
-	}
-	/* (non-Javadoc)
-	 * @see org.xml.sax.ext.LexicalHandler#endCDATA()
-	 */
-	public void endCDATA() throws SAXException {
+	/**
+     * @see org.xml.sax.ext.LexicalHandler#endCDATA()
+     * 
+     */
+    public void endCDATA() throws SAXException {
 	    try{
-	        output.write("]]>");
+	        output.write(Constants.CDATA_END);
 	    }catch(Exception e){
 	        e.printStackTrace(System.out);
 	    }
 	}
-	/* (non-Javadoc)
-	 * @see org.xml.sax.ext.LexicalHandler#endDTD()
-	 */
-	public void endDTD() throws SAXException {
-	}
-	/* (non-Javadoc)
-	 * @see org.xml.sax.ext.LexicalHandler#endEntity(java.lang.String)
-	 */
-	public void endEntity(String name) throws SAXException {
+
+	/**
+     * @see org.xml.sax.ext.LexicalHandler#endEntity(java.lang.String)
+     * 
+     */
+    public void endEntity(String name) throws SAXException {
 		if(!needResolveEntity){
 			needResolveEntity = true;
 		}
 	}
-	/* (non-Javadoc)
-	 * @see org.xml.sax.ext.LexicalHandler#startCDATA()
-	 */
-	public void startCDATA() throws SAXException {
+	
+	/**
+     * @see org.xml.sax.ext.LexicalHandler#startCDATA()
+     * 
+     */
+    public void startCDATA() throws SAXException {
 	    try{
-	        output.write("<![CDATA[");
+	        output.write(Constants.CDATA_HEAD);
 	    }catch(Exception e){
 	        e.printStackTrace(System.out);
 	    }
 	}
-	/* (non-Javadoc)
-	 * @see org.xml.sax.ext.LexicalHandler#startDTD(java.lang.String, java.lang.String, java.lang.String)
-	 */
-	public void startDTD(String name, String publicId, String systemId)
-			throws SAXException {
-	}
-	/* (non-Javadoc)
-	 * @see org.xml.sax.ext.LexicalHandler#startEntity(java.lang.String)
-	 */
-	public void startEntity(String name) throws SAXException {
+
+	/**
+     * @see org.xml.sax.ext.LexicalHandler#startEntity(java.lang.String)
+     * 
+     */
+    public void startEntity(String name) throws SAXException {
 		try {
            	needResolveEntity = StringUtils.checkEntity(name);
            	if(!needResolveEntity){
@@ -277,5 +374,28 @@ public class DitaIndexWriter extends AbstractWriter implements ContentHandler,Le
         } catch (Exception e) {
             e.printStackTrace(System.out);
         }
+	}
+	
+	private boolean hasProlog(Attributes atts){
+		//check whether there is <prolog> in the current topic
+		//if current element is <body> and there is no <prolog> before
+		//then this topic has no <prolog> and return false
+		
+		if (!hasPrologTillNow && atts.getValue(Constants.ATTRIBUTE_NAME_CLASS)
+		        .indexOf("topic/body") != -1){
+			return false;
+		}
+		return true;		
+	}
+	
+	private boolean hasMetadata(String qName){
+		//check whether there is <metadata> in <prolog> element
+		//if there is <prolog> element and there is no <metadata> element before
+		//and current element is <resourceid>, then there is no <metadata> in current
+		//<prolog> element. return false.
+		if(hasPrologTillNow && !hasMetadataTillNow && Constants.ELEMENT_NAME_RESOURCEID.equals(qName)){
+			return false;
+		}
+		return true;
 	}
 }

@@ -1,29 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--Arbortext, Inc., 1988-2004, v.4002-->
-<!DOCTYPE topic PUBLIC "-//IBM//DTD DITA Topic//EN"
- "../../dtd/topic.dtd">
-<topic id="dita-otprojecthome" xml:lang="en-us"><?Pub Caret1?>
-<title>DITA Open Toolkit Project Home</title>
-<shortdesc>This document describes the DITA Open Toolkit project--what the
-project is, and how to use the site.</shortdesc>
-<body>
-<p>DITA Open Toolkit 1.0 is a major upgrade from its predecessor, the developerWorks
-version known as &quot;dita132.&quot; </p>
-<p>Major improvements from dita132 include:</p>
-<ul>
-<li>A new processing architecture that includes a preprocessing stage</li>
-<li>Full conref resolution in the preprocessor</li>
-<li>Conditional resolution (filtering and flagging) in the preprocessor</li>
-<li>Second pass transformation into final output formats</li>
-<li>Use of Ant and Java for the processing sequence and utility code</li>
-<li>A high-quality transform for XHTML output based on code that IBM has tested
-and used for the past 5 years</li>
-<li>Translated libraries for generated text in 47 languages (accessed by region
-and country code) (globalization not fully tested yet)</li>
-</ul>
-<note othertype="Colophon" type="other">The content of this site was sourced
-as DITA topics, organized using a DITA map, and transformed using the DITA
-Open Toolkit into HTML.</note>
-</body>
+<!-- (C) Copyright IBM Corporation 2005. All Rights Reserved.
+ *-->
+<!DOCTYPE topic PUBLIC "-//IBM//DTD DITA Topic//EN" "topic.dtd">
+<topic id="dita-otprojecthome" xml:lang="en-us">
+  <?Pub Caret1?>
+  <title>DITA Open Toolkit Project Home</title>
+  <shortdesc>This document describes the DITA Open Toolkit project--what the 
+    project is, and how to use the site.</shortdesc>
+  <body>
+    <p>DITA Open Toolkit 1.0 is a major upgrade from its predecessor, the 
+      developerWorks version known as &quot;dita132.&quot; </p>
+    <p>Major improvements from dita132 include:</p>
+    <ul>
+      <li>A new processing architecture that includes a preprocessing stage</li>
+      <li>Full conref resolution in the preprocessor</li>
+      <li>Conditional resolution (filtering and flagging) in the 
+        preprocessor</li>
+      <li>Second pass transformation into final output formats</li>
+      <li>Use of Ant and Java for the processing sequence and utility code</li>
+      <li>A high-quality transform for XHTML output based on code that IBM has 
+        tested and used for the past 5 years</li>
+      <li>Translated libraries for generated text in 47 languages (accessed by 
+        region and country code) (globalization not fully tested yet)</li>
+    </ul>
+    <note othertype="Colophon" type="other">The content of this site was 
+      sourced as DITA topics, organized using a DITA map, and transformed using 
+      the DITA Open Toolkit into HTML.</note>
+  </body>
 </topic>
-<?Pub *0000001399?>

@@ -1,3 +1,49 @@
+(c) Copyright IBM Corp. 2004, 2005 All Rights Reserved.
+DITA OT release 1.1
+Available since Aug. 18, 2005
+
+DITA open toolkit Release 1.1 is a major release to add new functions, fulfill new requirements, make some function enhancements and fix bugs over release 1.0.2.
+
+Release 1.1 implements the new OASIS DITA 1.0 standard for DITA DTDs and Schemas. 
+
+Release 1.1 contains a new Eclipse transformation that produces as output a version of DITA MY that can be dynamically rendered in Eclipse Help System (Function enhancements 7. Eclipse Content Provider support).  However, this output cannot be used without an special made Eclipse content provider in the Eclipse Help System side.  This special Eclipse content provider to support DITA is planned to be contributed to Eclipse community by submitting a patch to Eclipse Bugzilla system at https://bugs.eclipse.org/bugs/ in the future.
+
+[13 Function Enhancements]
+1. Adaptation to the new OASIS DITA standard
+2. Transformation to troff
+3. XML catalog support
+4. Topicref referring to a nested topic
+5. Globalization support
+6. Accessibility support
+7. Eclipse Content Provider Support
+8. Index information in output
+9. Mapref function
+10. TOC generation for Eclipse Help transformation
+11. Helpset generation for Java Help transformation
+12. New parameters supported in Java commands
+13. New parameters supported in Ant scripts
+
+[6 SF Bugs Fixed]
+1. SF bug 1220569: Add XML Schema processing to DITA-OT
+2. SF bug 1220644: Prompted ant--image does not link for single topic to PDF
+3. SF bug 1229058: Add schema validation loading file for processing
+4. SF bug 1209385: Intermediate dita files drops namespace prefix declaration 
+5. SF bug 1204143: FileNotFoundException thrown from moving index 
+6. SF bug 1200393: generate different names for eclipse toc xml
+
+[4 SF RFEs Added]
+1. SF RFE 1176855: Ant must be run from toolkit directory
+2. SF RFE 1183482: Copy pre-existing html to output dir
+3. SF RFE 1183490: Provide argument to specify the location of temp dir
+4. SF RFE 1201242: override capability
+ 
+Note: SourceForge bugs, patches, and RFE listed above can be found in SourceForge Bugs, Patches, and RFE tracker.  
+
+Bugs tracker:  http://sourceforge.net/tracker/?group_id=132728&atid=725074
+Patches tracker: http://sourceforge.net/tracker/?group_id=132728&atid=725076
+RFE tracker: http://sourceforge.net/tracker/?group_id=132728&atid=725077
+====================================================================================
+
 DITA OT release 1.0.2
 Available since Jun. 08, 2005
 Release 1.0.2 is a maintenance release to fix defects and adds some minor enhancements in release 1.0.1. 

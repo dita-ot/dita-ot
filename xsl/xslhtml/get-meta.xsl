@@ -43,18 +43,16 @@
   <xsl:apply-templates select="*[contains(@class,' topic/related-links ')]/descendant::*/@href |
                                self::dita/*/*[contains(@class,' topic/related-links ')]/descendant::*/@href" mode="gen-metadata"/>
 
-  <!-- = = = = = = = = = = = INTELLECTUAL PROPERTY = = = = = = = = = = = -->
 
-  <!-- INTELLECTUAL PROPERTY: Contributor - prolog/author -->
-  <!-- INTELLECTUAL PROPERTY: Creator -->
+  <!-- Add prolog: Creator -->
   <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/author ')] |
                                self::dita/*[1]/*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/author ')]" mode="gen-metadata"/>
 
-  <!-- INTELLECTUAL PROPERTY: Publisher - prolog/publisher -->
+  <!-- Add prolog: Publisher - prolog/publisher -->
   <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/publisher ')] |
                                self::dita/*[1]/*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/publisher ')]" mode="gen-metadata"/>
 
-  <!-- INTELLECTUAL PROPERTY: Rights - prolog/copyright -->
+  <!-- Add prolog: Rights - prolog/copyright -->
   <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/copyright ')] |
                                self::dita/*[1]/*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/copyright ')]" mode="gen-metadata"/>
 
@@ -175,7 +173,7 @@
     <xsl:variable name="linkmeta_ext">
      <xsl:choose>
       <xsl:when test="contains($linkmeta,$DITAEXT)">
-       <xsl:value-of select="substring-before($linkmeta,$DITAEXT)"/>.<xsl:value-of select="$OUTEXT"/><xsl:value-of select="substring-after($linkmeta,$DITAEXT)"/>
+       <xsl:value-of select="substring-before($linkmeta,$DITAEXT)"/><xsl:value-of select="$OUTEXT"/><xsl:value-of select="substring-after($linkmeta,$DITAEXT)"/>
       </xsl:when>
       <xsl:otherwise>
        <xsl:value-of select="$linkmeta"/>
@@ -193,8 +191,8 @@
 <!-- Do not let any other @href's inside related-links generate metadata -->
 <xsl:template match="*/@href" mode="gen-metadata" priority="0"/>
 
-<!-- INTELLECTUAL PROPERTY: Contributor - prolog/author -->
-<!-- INTELLECTUAL PROPERTY: Creator -->
+<!--  Contributor - prolog/author -->
+<!--  Creator -->
 <!-- Default is type='creator' -->
 <xsl:template match="*[contains(@class,' topic/author ')]" mode="gen-metadata">
   <xsl:choose>
@@ -208,13 +206,13 @@
   <xsl:value-of select="$newline"/>
 </xsl:template>
 
-<!-- INTELLECTUAL PROPERTY: Publisher - prolog/publisher -->
+<!--  Publisher - prolog/publisher -->
 <xsl:template match="*[contains(@class,' topic/publisher ')]" mode="gen-metadata">
   <meta name="DC.Publisher" content="{normalize-space(.)}"/>
   <xsl:value-of select="$newline"/>
 </xsl:template>
 
-<!-- INTELLECTUAL PROPERTY: Rights - prolog/copyright -->
+<!--  Rights - prolog/copyright -->
 <xsl:template match="*[contains(@class,' topic/copyright ')]" mode="gen-metadata">
   <meta name="copyright">
     <xsl:attribute name="content">

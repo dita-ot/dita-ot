@@ -1,15 +1,15 @@
 <?xml version="1.0"?>
-
-<!-- build whole bin and source package for DITA-OT 1.0 -->
-<project name="build_DITA-OT_package" default="build-package-binary" basedir=".">
+<!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
+<!-- build whole bin and source package for DITA Open Toolkit -->
+<project name="build_DITA-OT_package" default="build-package-binary-with-doc" basedir=".">
   <description>
-    Build source and binary package for DITA-OT 1.0
+    Build source and binary package for DITA Open Toolkit
   </description>
     
   
   
   <property name="rootname" value="DITA-OT"/>
-  <property name="version" value="1.0.2"/>
+  <property name="version" value="1.1"/>
 
   <property name="src.dir" location="src/"/>
   <property name="bin.dir" location="output2/"/>
@@ -29,11 +29,11 @@
   <property name="classpath.dir" location="dev/lib"/>
   <property name="package.output.dir" location="build/"/>
   
-  <property name="dost.jar" location="${lib.dir}/dost1.0.jar" />
+  <property name="dost.jar" location="${lib.dir}/dost1.1.0.jar" />
   <property name="ant.jar" location="${classpath.dir}/ant162.jar" />    
   
-  <property name="binary" value="DITA-OT1.0_bin" />    
-  <property name="source" value="DITA-OT1.0_src" />    
+  <property name="binary" value="DITA-OT${version}_bin" />    
+  <property name="source" value="DITA-OT${version}_src" />    
 
   <property name="win32.zip.suffix" value=".zip" /> 
   <property name="linux.zip.suffix" value=".tar.gz" />  
@@ -67,7 +67,7 @@
     />
   </target>
 
-  <target name="package-java" depends="">
+  <target name="package-java" depends="build-java">
     <mkdir dir="${lib.dir}" />
     <jar destfile="${dost.jar}"
          basedir="${bin.dir}"
@@ -105,6 +105,7 @@
           <zipfileset dir="${css.dir}" includes="**" prefix="${rootname}${version}-src/css"/>   
           <zipfileset dir="${ant.dir}" includes="**" prefix="${rootname}${version}-src/ant"/> 
           <zipfileset dir="${resource.dir}" includes="**" prefix="${rootname}${version}-src/resource"/>
+          <zipfileset dir="./" includes="temp" prefix="${rootname}${version}-src"/>
     </zip>
     <tar destfile="${package.output.dir}/${param.out.file}${linux.zip.suffix}" compression="gzip">
           <tarfileset dir="./" includes="conductor.xml,build.xml,catalog-dita.xml,catalog-dita.txt,catalog-ant.xml,pretargets.xml,ditatargets.xml,CommonPublicLicense-v10.html,relnotes.txt,manifest.mf" prefix="${rootname}${version}-src"/>
@@ -122,6 +123,7 @@
           <tarfileset dir="${css.dir}" includes="**" prefix="${rootname}${version}-src/css"/>   
           <tarfileset dir="${ant.dir}" includes="**" prefix="${rootname}${version}-src/ant"/> 
           <tarfileset dir="${resource.dir}" includes="**" prefix="${rootname}${version}-src/resource"/>
+          <tarfileset dir="./" includes="temp" prefix="${rootname}${version}-src"/>
     </tar>
   </target>   
   
@@ -153,6 +155,7 @@
           <zipfileset dir="${css.dir}" includes="**" prefix="${rootname}${version}/css"/>
           <zipfileset dir="${ant.dir}" includes="**" prefix="${rootname}${version}/ant"/>
           <zipfileset dir="${resource.dir}" includes="**" prefix="${rootname}${version}/resource"/>
+          <zipfileset dir="./" includes="temp" prefix="${rootname}${version}"/>
       </zip>
       <tar destfile="${package.output.dir}/${param.out.file}${linux.zip.suffix}" compression="gzip">
           <tarfileset dir="./" includes="conductor.xml,build.xml,files.txt,catalog-dita.xml,catalog-dita.txt,catalog-ant.xml,pretargets.xml,ditatargets.xml,CommonPublicLicense-v10.html,relnotes.txt,manifest.mf" prefix="${rootname}${version}"/>
@@ -168,6 +171,7 @@
           <tarfileset dir="${css.dir}" includes="**" prefix="${rootname}${version}/css"/>
           <tarfileset dir="${ant.dir}" includes="**" prefix="${rootname}${version}/ant"/>
           <tarfileset dir="${resource.dir}" includes="**" prefix="${rootname}${version}/resource"/>
+          <tarfileset dir="./" includes="temp" prefix="${rootname}${version}"/>
       </tar>
   </target>
   
@@ -177,13 +181,19 @@
       </antcall>
   </target>
       
-  <target name="build-package-binary" depends="build-java, package-java, update-doc">
+  <target name="build-package-binary" depends="build-java, package-java">
+      <antcall target="package-binary">
+          <param name="param.out.file" value="${binary}"/>
+      </antcall>
+  </target>
+
+  <target name="build-package-binary-with-doc" depends="build-java, package-java, update-doc">
       <antcall target="package-binary">
           <param name="param.out.file" value="${binary}"/>
       </antcall>
   </target>
   
-  <target name="build-package-binary-with-buildnum" depends="build-java, package-java">
+  <target name="build-package-binary-with-buildnum" depends="build-java, package-java, update-doc">
       <buildnumber/>
   
       <tstamp>

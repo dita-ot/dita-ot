@@ -1,18 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
- | (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
- | This file is part of the DITA package on IBM's developerWorks site.
- | See license.txt for disclaimers and permissions.
- |
- | The Darwin Information Typing Architecture (DITA) was orginated by
- | IBM's XML Workgroup and ID Workbench tools team.
- |
- | File: xml.xsd
- |
- | Release history (vrm):
- |   1.0.0 Release 1.2 - Initial XML Schema release on IBM's developerWorks, June 2003
- |   1.1.3 Release 1.3 March 2004: bug fixes and map updates
- *-->
+<!--             (C) Copyright OASIS Open 2005.                    -->
+<!--             (C) Copyright IBM Corporation 2001, 2004.         -->
+<!--             All Rights Reserved.                              -->
 <xs:schema targetNamespace="http://www.w3.org/XML/1998/namespace" xmlns:xs="http://www.w3.org/2001/XMLSchema" xml:lang="en">
 
  <xs:annotation>
@@ -41,7 +30,7 @@
         &lt;type . . .>
          . . .
          &lt;attributeGroup ref="xml:specialAttrs"/>
- 
+
          will define a type which will schema-validate an instance
          element with any of those attributes</xs:documentation>
 

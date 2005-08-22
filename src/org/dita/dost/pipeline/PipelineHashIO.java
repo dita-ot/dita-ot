@@ -6,6 +6,9 @@ package org.dita.dost.pipeline;
 import java.util.HashMap;
 
 /**
+ * PipelineHashIO implements AbstractPipelineInput. It put all of the input information
+ * in a hash map.
+ * 
  * @author Lian, Li
  * 
  */
@@ -13,18 +16,31 @@ public class PipelineHashIO implements AbstractPipelineInput,
         AbstractPipelineOutput {
     private HashMap hash;
 
+
     /**
-     * 
+     * Default contructor of PipelineHashIO class.
      */
     public PipelineHashIO() {
         super();
         hash = new HashMap();
     }
 
+    /**
+     * Set the attribute vale with name into hash map.
+     * 
+     * @param name
+     * @param value
+     */
     public void setAttribute(String name, String value) {
         hash.put(name, value);
     }
 
+    /**
+     * Get the attribute value according to its name.
+     * 
+     * @param name
+     * @return String
+     */
     public String getAttribute(String name) {
         String value = null;
         value = (String) hash.get(name);

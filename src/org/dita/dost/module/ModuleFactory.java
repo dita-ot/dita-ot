@@ -4,17 +4,29 @@
 package org.dita.dost.module;
 
 /**
+ * The factory to create instance for each module class.
+ * 
  * @author Lian, Li
  * 
  */
 public class ModuleFactory {
     private static ModuleFactory moduleFactory = null;
-    private static String packagePrefix = "org.dita.dost.module.";
+    private final String packagePrefix = "org.dita.dost.module.";
 
+
+	/**
+	* Automatically generated constructor: ModuleFactory
+	*/
     public ModuleFactory() {
 
     }
 
+    /**
+     * Method to get the only instance of ModuleFactory. ModuleFactory is a singleton
+     * class.
+     * 
+     * @return ModuleFactory
+     */
     public static ModuleFactory instance() {
         if (moduleFactory == null) {
             moduleFactory = new ModuleFactory();
@@ -22,6 +34,12 @@ public class ModuleFactory {
         return moduleFactory;
     }
 
+    /**
+     * Create the Module class instance according to moduleName.
+     * 
+     * @param moduleName
+     * @return AbstractPipelineModule
+     */
     public AbstractPipelineModule createModule(String moduleName) {
         AbstractPipelineModule module = null;
 

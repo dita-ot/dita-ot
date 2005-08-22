@@ -16,26 +16,34 @@ import org.dita.dost.module.Content;
 import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.StringUtils;
 import org.xml.sax.Attributes;
-import org.xml.sax.ContentHandler;
-import org.xml.sax.EntityResolver;
+import org.dita.dost.util.Constants;
 import org.xml.sax.InputSource;
-import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
-import org.xml.sax.ext.LexicalHandler;
 import org.xml.sax.helpers.XMLReaderFactory;
 
 
 
 /**
+ * DitaWriter reads dita topic file and insert debug information and filter out the
+ * content that is not necessary in the output.
+ * 
  * @author Zhang, Yuan Peng
  */
-public class DitaWriter extends AbstractWriter implements ContentHandler,LexicalHandler,EntityResolver{
+public class DitaWriter extends AbstractXMLWriter {
 
+    private static final String ATTRIBUTE_END = "\"";
+    private static final String ATTRIBUTE_XTRC_START = " xtrc=\"";
+    private static final String ATTRIBUTE_XTRF_START = " xtrf=\"";
+    private static final String COLUMN_NAME_COL = "col";
+    private static final String PI_END = "?>";
+    private static final String PI_WORKDIR_HEAD = "<?workdir ";
+    private static final String OS_NAME_WINDOWS = "windows";
+    private static final String ACTION_EXCLUDE = "exclude";
     private XMLReader reader;
     private OutputStreamWriter output;
     private HashMap counterMap;
-    private String filename;
+    private String traceFilename;
     private String absolutePath;
     private String tempDir;
     private boolean exclude; // when exclude is true the tag will be excluded.
@@ -48,28 +56,38 @@ public class DitaWriter extends AbstractWriter implements ContentHandler,Lexical
     
     private HashMap catalogMap; //map that contains the information from XML Catalog
 
+
     /**
-     * 
+     * Default constructor of DitaWriter class.
      */
     public DitaWriter() {
         super();
         exclude = false;
         filterMap = new HashMap();
         columnNumber = 0;
-        catalogMap = CatalogUtils.getCatalog();
+        catalogMap = CatalogUtils.getCatalog(null);
+        absolutePath = null;
+        counterMap = null;
+        traceFilename = null;
+        filterSet = null;
+        level = 0;
+        needResolveEntity = false;
+        output = null;
+        tempDir = null;
+        
         try {
-            //SAXParserFactory spFactory = SAXParserFactory.newInstance();
-            //spFactory.setValidating(true);
-            //spFactory.setFeature("http://xml.org/sax/features/validation", true);
-            //SAXParser parser = spFactory.newSAXParser();
-            //reader = parser.getXMLReader();
-            if (System.getProperty("org.xml.sax.driver") == null){
+            if (System.getProperty(Constants.SAX_DRIVER_PROPERTY) == null){
                 //The default sax driver is set to xerces's sax driver
-                System.setProperty("org.xml.sax.driver","org.apache.xerces.parsers.SAXParser");
+                System.setProperty(Constants.SAX_DRIVER_PROPERTY, Constants.SAX_DRIVER_DEFAULT_CLASS);
             }
             reader = XMLReaderFactory.createXMLReader();
             reader.setContentHandler(this);
-            reader.setProperty("http://xml.org/sax/properties/lexical-handler",this);
+            reader.setProperty(Constants.LEXICAL_HANDLER_PROPERTY,this);
+            reader.setFeature(Constants.FEATURE_NAMESPACE_PREFIX, true);
+            reader.setFeature(Constants.FEATURE_VALIDATION, true); 
+            reader.setFeature(Constants.FEATURE_VALIDATION_SCHEMA, true);
+
+            
             reader.setEntityResolver(this);
         } catch (Exception e) {
             e.printStackTrace();
@@ -80,7 +98,7 @@ public class DitaWriter extends AbstractWriter implements ContentHandler,Lexical
      * check whether we will filter this tag return true means we will exclude
      * this tag return false means we will include this tag
      */
-    private boolean check(String attName, Attributes atts) {
+    private boolean checkExclude(String attName, Attributes atts) {
         
         String value = atts.getValue(attName);
         //String temp = value.trim();
@@ -92,19 +110,20 @@ public class DitaWriter extends AbstractWriter implements ContentHandler,Lexical
             return false;
         }
         
-        index = value.indexOf(' ');
+        index = value.indexOf(Constants.STRING_BLANK);
         while(index!=-1){
-            action = (String)filterMap.get(attName + "=" + value.substring(0,index));
-            if(action != null && action.equals("exclude")){
+        	action = (String)filterMap.get(new StringBuffer().append(attName)
+        			.append(Constants.EQUAL).append(value.substring(0,index)).toString());
+            if(action != null && ACTION_EXCLUDE.equals(action)){
                 ret=true;
             }else if(action != null){
                 return false;
             }
             value = value.substring(index+1);
-            index = value.indexOf(' ');
+            index = value.indexOf(Constants.STRING_BLANK);
         }
-        action = (String)filterMap.get(attName + "=" + value);
-        if(action != null && action.equals("exclude")){
+        action = (String)filterMap.get(attName + Constants.EQUAL + value);
+        if(action != null && ACTION_EXCLUDE.equals(action)){
             ret=true;
         }else if(action != null){
             return false;
@@ -112,10 +131,10 @@ public class DitaWriter extends AbstractWriter implements ContentHandler,Lexical
         return ret;
     }
 
-    /*
-     * (non-Javadoc)
+    
+    /**
+     * @see org.dita.dost.writer.AbstractWriter#setContent(org.dita.dost.module.Content)
      * 
-     * @see org.dita.dost.module.AbstractWriter#setContent(org.dita.dost.module.Content)
      */
     public void setContent(Content content) {
         filterSet = (Set) content.getCollection();
@@ -129,58 +148,62 @@ public class DitaWriter extends AbstractWriter implements ContentHandler,Lexical
                 filterMap.put(entry.getKey(), entry.getValue());
             }
         }
-        tempDir = (String) content.getObject();
+        tempDir = (String) content.getValue();
     }
 
-    /*
-     * (non-Javadoc)
+   
+    /**
+     * @see org.dita.dost.writer.AbstractWriter#write(java.lang.String)
      * 
-     * @see org.dita.dost.module.AbstractWriter#write(java.lang.String)
      */
     public void write(String filename) {
+		int index;
+		File outputFile;
+		File dirFile;
+		FileOutputStream fileOutput = null;
         exclude = false;
         needResolveEntity = true;
-        int index;
-        File outputFile;
-        System.out.println(filename);
-        index = filename.indexOf('|');
+        index = filename.indexOf(Constants.STICK);
         try {
             if(index!=-1){
-                this.filename = filename.replace('|',File.separatorChar)
+                traceFilename = filename.replace('|',File.separatorChar)
                 .replace('/',File.separatorChar).replace('\\',File.separatorChar);
                 outputFile = new File(tempDir 
                         + File.separatorChar + filename.substring(index+1));
             }else{
-                this.filename = filename;
+                traceFilename = filename;
                 outputFile = new File(tempDir + File.separatorChar + filename);
             }
             counterMap = new HashMap();
-            File dirFile = outputFile.getParentFile();
+            dirFile = outputFile.getParentFile();
             if (!dirFile.exists()) {
                 dirFile.mkdirs();
             }
             absolutePath = dirFile.getCanonicalPath();
-            FileOutputStream fileOutput = new FileOutputStream(outputFile);
-            output = new OutputStreamWriter(fileOutput, "UTF-8");
+            fileOutput = new FileOutputStream(outputFile);
+            output = new OutputStreamWriter(fileOutput, Constants.UTF8);
 
             
             // start to parse the file and direct to output in the temp
             // directory
-            if(index!=-1){
-                reader.parse(this.filename);
-            }else{
-                reader.parse(filename);
-            }
+            reader.parse(traceFilename);
+            
             output.close();
         } catch (Exception e) {
             e.printStackTrace(System.out);
+        }finally {
+            try {
+                fileOutput.close();
+            }catch (Exception e) {
+                e.printStackTrace(System.out);
+            }
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * 
+    
+    /**
      * @see org.xml.sax.ContentHandler#characters(char[], int, int)
+     * 
      */
     public void characters(char[] ch, int start, int length)
             throws SAXException {
@@ -195,10 +218,10 @@ public class DitaWriter extends AbstractWriter implements ContentHandler,Lexical
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * 
+    
+    /**
      * @see org.xml.sax.ContentHandler#endDocument()
+     * 
      */
     public void endDocument() throws SAXException {
         try {
@@ -208,21 +231,14 @@ public class DitaWriter extends AbstractWriter implements ContentHandler,Lexical
         }
     }
 
-    /*
-     * (non-Javadoc)
+    
+    /**
+     * @see org.xml.sax.ContentHandler#endElement(java.lang.String, java.lang.String, java.lang.String)
      * 
-     * @see org.xml.sax.ContentHandler#endElement(java.lang.String,
-     *      java.lang.String, java.lang.String)
      */
     public void endElement(String uri, String localName, String qName)
             throws SAXException {
-        if (!exclude) { // exclude shows whether it's excluded by filtering
-            try {
-                output.write("</" + qName + ">");
-            } catch (Exception e) {
-                e.printStackTrace(System.out);
-            }
-        } else {
+        if (exclude) {
             if (level > 0) {
                 // If it is the end of a child of an excluded tag, level
                 // decrease
@@ -230,22 +246,19 @@ public class DitaWriter extends AbstractWriter implements ContentHandler,Lexical
             } else {
                 exclude = false;
             }
+        } else { // exclude shows whether it's excluded by filtering
+            try {
+                output.write(Constants.LESS_THAN + Constants.SLASH 
+                        + qName + Constants.GREATER_THAN);
+            } catch (Exception e) {
+                e.printStackTrace(System.out);
+            }
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.xml.sax.ContentHandler#endPrefixMapping(java.lang.String)
-     */
-    public void endPrefixMapping(String prefix) throws SAXException {
-
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
+    /**
      * @see org.xml.sax.ContentHandler#ignorableWhitespace(char[], int, int)
+     * 
      */
     public void ignorableWhitespace(char[] ch, int start, int length)
             throws SAXException {
@@ -258,42 +271,9 @@ public class DitaWriter extends AbstractWriter implements ContentHandler,Lexical
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.xml.sax.ContentHandler#processingInstruction(java.lang.String,
-     *      java.lang.String)
-     */
-    public void processingInstruction(String target, String data)
-            throws SAXException {
-        String pi;
-        if (!exclude) { // exclude shows whether it's excluded by filtering
-            try {
-                if (data != null) {
-                    pi = target + " " + data;
-                } else {
-                    pi = target;
-                }
-                output.write("<?" + pi + "?>");
-            } catch (Exception e) {
-                e.printStackTrace(System.out);
-            }
-        }
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.xml.sax.ContentHandler#setDocumentLocator(org.xml.sax.Locator)
-     */
-    public void setDocumentLocator(Locator locator) {
-
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
+    /**
      * @see org.xml.sax.ContentHandler#skippedEntity(java.lang.String)
+     * 
      */
     public void skippedEntity(String name) throws SAXException {
         if (!exclude) { // exclude shows whether it's excluded by filtering
@@ -305,146 +285,137 @@ public class DitaWriter extends AbstractWriter implements ContentHandler,Lexical
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * 
+    
+    /**
      * @see org.xml.sax.ContentHandler#startDocument()
+     * 
      */
     public void startDocument() throws SAXException {
         try {
-            output.write("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
-            output.write(System.getProperty("line.separator"));
-            if(System.getProperty("os.name").toLowerCase().indexOf("windows")==-1)
+            output.write(Constants.XML_HEAD);
+            output.write(Constants.LINE_SEPARATOR);
+            if(Constants.OS_NAME.toLowerCase().indexOf(OS_NAME_WINDOWS)==-1)
             {
-                output.write("<?workdir " + absolutePath + "?>");
+                output.write(PI_WORKDIR_HEAD + absolutePath + PI_END);
             }else{
-                output.write("<?workdir " + '/' + absolutePath + "?>");
+                output.write(PI_WORKDIR_HEAD + Constants.SLASH + absolutePath + PI_END);
             }
-            output.write(System.getProperty("line.separator"));
+            output.write(Constants.LINE_SEPARATOR);
         } catch (Exception e) {
             e.printStackTrace(System.out);
         }
     }
 
-    /*
-     * (non-Javadoc)
+    
+    /**
+     * @see org.xml.sax.ContentHandler#startElement(java.lang.String, java.lang.String, java.lang.String, org.xml.sax.Attributes)
      * 
-     * @see org.xml.sax.ContentHandler#startElement(java.lang.String,
-     *      java.lang.String, java.lang.String, org.xml.sax.Attributes)
      */
     public void startElement(String uri, String localName, String qName,
             Attributes atts) throws SAXException {
-        String value;
-        String nextValue;
+        Integer value;
+        Integer nextValue;
+        int attsLen = atts.getLength();
         
         if (counterMap.containsKey(qName)) {
-            value = (String) counterMap.get(qName);
-            nextValue = Integer.toString(Integer.parseInt(value) + 1);
+            value = (Integer) counterMap.get(qName);
+            nextValue = new Integer(value.intValue()+1);
             counterMap.put(qName, nextValue);
         } else {
-            counterMap.put(qName, "1");
-            nextValue = "1";
+            nextValue = new Integer(Constants.INT_1);
+            counterMap.put(qName, nextValue);
         }
 
-        if (!exclude) { // exclude shows whether it's excluded by filtering
-            if (!check("audience", atts) && !check("platform", atts)
-                    && !check("product", atts) && !check("otherprops", atts)) {
+        if (exclude) {
+            // If it is the start of a child of an excluded tag, level increase
+            level++;
+        } else { // exclude shows whether it's excluded by filtering
+            if (needExclude(atts)){
+                exclude = true;
+                level = 0;
+            }else{
                 try {
-                    if (qName.equals("tgroup") || qName.equals("row")) {
+                    if (Constants.ELEMENT_NAME_TGROUP.equals(qName) 
+                            || Constants.ELEMENT_NAME_ROW.equals(qName)) {
                         columnNumber = 0; // initialize the column number
                     }
                     // copy the element name and all of its attribute
-                    output.write("<" + qName);
-                    for (int i = 0; i < atts.getLength(); i++) {
+                    output.write(Constants.LESS_THAN + qName);
+                    for (int i = 0; i < attsLen; i++) {
                         String attQName = atts.getQName(i);
                         String attValue;
-                        if (attQName.equals("colname")) {
+                        if (Constants.ATTRIBUTE_NAME_COLNAME.equals(attQName)) {
                             columnNumber++;
-                            attValue = "col" + Integer.toString(columnNumber);
-                        } else {
+                            attValue = new StringBuffer().append(COLUMN_NAME_COL)
+							.append( Integer.toString(columnNumber) ).toString();
+                        } else if(Constants.ATTRIBUTE_NAME_HREF.equals(attQName)
+                                || Constants.ATTRIBUTE_NAME_CONREF.equals(attQName)){
+                            /*
+                             * replace all the backslash with slash in 
+                             * all href and conref attribute
+                             */
+                            attValue = atts.getValue(i).replaceAll(
+                                    Constants.DOUBLE_BACK_SLASH, Constants.SLASH);
+                        }
+                        else {
                             attValue = atts.getValue(i);
                         }
-                        output.write(" " + attQName + "=\"" + attValue + "\"");
+                        output.write(new StringBuffer().append(Constants.STRING_BLANK)
+                        		.append(attQName).append(Constants.EQUAL).append(Constants.QUOTATION)
+                        		.append(attValue).append(Constants.QUOTATION).toString());
                     }
                     // write the xtrf and xtrc attributes which contain debug
                     // information
-                    output.write(" xtrf=\"" + filename + "\"");
-                    output.write(" xtrc=\"" + qName + ":" + nextValue + "\"");
-                    output.write(">");
+                    output.write(ATTRIBUTE_XTRF_START + traceFilename + ATTRIBUTE_END);
+                    output.write(ATTRIBUTE_XTRC_START + qName + Constants.COLON + nextValue.toString() + ATTRIBUTE_END);
+                    output.write(Constants.GREATER_THAN);
                     
                 } catch (Exception e) {
                     e.printStackTrace(System.out);
                 }// try
-            } else {
-                exclude = true;
-                level = 0;
-            }
-        } else {// if(!exclude)
-            // If it is the start of a child of an excluded tag, level increase
-            level++;
+            } 
         }
     }
 
-    /*
-     * (non-Javadoc)
+	/**
+     * @see org.xml.sax.ext.LexicalHandler#endCDATA()
      * 
-     * @see org.xml.sax.ContentHandler#startPrefixMapping(java.lang.String,
-     *      java.lang.String)
      */
-    public void startPrefixMapping(String prefix, String uri)
-            throws SAXException {
-
-    }
-
-	/* (non-Javadoc)
-	 * @see org.xml.sax.ext.LexicalHandler#comment(char[], int, int)
-	 */
-	public void comment(char[] ch, int start, int length) throws SAXException {
-
-	}
-	/* (non-Javadoc)
-	 * @see org.xml.sax.ext.LexicalHandler#endCDATA()
-	 */
-	public void endCDATA() throws SAXException {
+    public void endCDATA() throws SAXException {
 	    try{
-	        output.write("]]>");
+	        output.write(Constants.CDATA_END);
 	    }catch(Exception e){
 	        e.printStackTrace(System.out);
 	    }
 	}
-	/* (non-Javadoc)
-	 * @see org.xml.sax.ext.LexicalHandler#endDTD()
-	 */
-	public void endDTD() throws SAXException {
-	}
-	/* (non-Javadoc)
-	 * @see org.xml.sax.ext.LexicalHandler#endEntity(java.lang.String)
-	 */
-	public void endEntity(String name) throws SAXException {
+
+	/**
+     * @see org.xml.sax.ext.LexicalHandler#endEntity(java.lang.String)
+     * 
+     */
+    public void endEntity(String name) throws SAXException {
 		if(!needResolveEntity){
 			needResolveEntity = true;
 		}
 	}
-	/* (non-Javadoc)
-	 * @see org.xml.sax.ext.LexicalHandler#startCDATA()
-	 */
-	public void startCDATA() throws SAXException {
+	
+	/**
+     * @see org.xml.sax.ext.LexicalHandler#startCDATA()
+     * 
+     */
+    public void startCDATA() throws SAXException {
 	    try{
-	        output.write("<![CDATA[");
+	        output.write(Constants.CDATA_HEAD);
 	    }catch(Exception e){
 	        e.printStackTrace(System.out);
 	    }
 	}
-	/* (non-Javadoc)
-	 * @see org.xml.sax.ext.LexicalHandler#startDTD(java.lang.String, java.lang.String, java.lang.String)
-	 */
-	public void startDTD(String name, String publicId, String systemId)
-			throws SAXException {
-	}
-	/* (non-Javadoc)
-	 * @see org.xml.sax.ext.LexicalHandler#startEntity(java.lang.String)
-	 */
-	public void startEntity(String name) throws SAXException {
+
+	/**
+     * @see org.xml.sax.ext.LexicalHandler#startEntity(java.lang.String)
+     * 
+     */
+    public void startEntity(String name) throws SAXException {
 		if (!exclude) { // exclude shows whether it's excluded by filtering
             try {
             	needResolveEntity = StringUtils.checkEntity(name);
@@ -458,8 +429,10 @@ public class DitaWriter extends AbstractWriter implements ContentHandler,Lexical
 
 	}
 		
-    /* (non-Javadoc)
+    
+    /**
      * @see org.xml.sax.EntityResolver#resolveEntity(java.lang.String, java.lang.String)
+     * 
      */
     public InputSource resolveEntity(String publicId, String systemId)
             throws SAXException, IOException {
@@ -468,5 +441,12 @@ public class DitaWriter extends AbstractWriter implements ContentHandler,Lexical
             return new InputSource(dtdFile.getAbsolutePath());
        }
         return null;
+    }
+    
+    private boolean needExclude (Attributes atts){
+    	return checkExclude(Constants.ELEMENT_NAME_AUDIENCE, atts) 
+    			|| checkExclude(Constants.ELEMENT_NAME_PLATFORM, atts) 
+    			|| checkExclude(Constants.ELEMENT_NAME_PRODUCT, atts) 
+    			|| checkExclude(Constants.ELEMENT_NAME_OTHERPROPS, atts);
     }
 }

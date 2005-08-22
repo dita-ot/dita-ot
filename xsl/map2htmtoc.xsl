@@ -13,7 +13,7 @@
      Output = one HTML file for viewing/checking by the author.
 
      Options:
-        OUTEXT  = XHTML output extension (default is 'html')
+        OUTEXT  = XHTML output extension (default is '.html')
         WORKDIR = The working directory that contains the document being transformed.
                    Needed as a directory prefix for the @href "document()" function calls.
                    Default is './'
@@ -22,18 +22,13 @@
 <!-- Include error message template -->
 <xsl:include href="common/output-message.xsl"/>
 
-<!-- Output XHTML with XML syntax, use UFT-8 encoding="UTF-8", transitional XHTML.
-     Prevent indenting to conserve space on output. -->
-<!-- <xsl:output method="xml" -->
-<xsl:output method="html"
-           indent="no"
-/>
+<xsl:output method="html" indent="no"/>
 
 <!-- Set the prefix for error message numbers -->
 <xsl:variable name="msgprefix">IDXS</xsl:variable>
 
 <!-- *************************** Command line parameters *********************** -->
-<xsl:param name="OUTEXT" select="'html'"/><!-- "htm" and "html" are valid values -->
+<xsl:param name="OUTEXT" select="'.html'"/><!-- "htm" and "html" are valid values -->
 <xsl:param name="WORKDIR" select="'./'"/>
 <xsl:param name="DITAEXT" select="'.xml'"/>
 <xsl:param name="FILEREF" select="'file://'"/>
@@ -99,7 +94,7 @@
   <LI>
       <xsl:choose>
         <!-- If there is a reference to a DITA or HTML file, and it is not external: -->
-        <xsl:when test="@href">
+        <xsl:when test="@href and not(@href='')">
           <!-- to use an extension other than '.dita' just uncomment the variable and replace
                '.dita' below with $DITAEXT -->
           <!-- <xsl:variable name="DITAEXT">.dita</xsl:variable> -->
@@ -108,11 +103,11 @@
              <xsl:choose>        <!-- What if targeting a nested topic? Need to keep the ID? -->
               <xsl:when test="contains(@copy-to, $DITAEXT)">
                 <xsl:if test="not(@scope='external')"><xsl:value-of select="$pathFromMaplist"/></xsl:if>
-                <xsl:value-of select="substring-before(@copy-to,$DITAEXT)"/>.<xsl:value-of select="$OUTEXT"/>
+                <xsl:value-of select="substring-before(@copy-to,$DITAEXT)"/><xsl:value-of select="$OUTEXT"/>
               </xsl:when>
               <xsl:when test="contains(@href,$DITAEXT)">
                 <xsl:if test="not(@scope='external')"><xsl:value-of select="$pathFromMaplist"/></xsl:if>
-                <xsl:value-of select="substring-before(@href,$DITAEXT)"/>.<xsl:value-of select="$OUTEXT"/>
+                <xsl:value-of select="substring-before(@href,$DITAEXT)"/><xsl:value-of select="$OUTEXT"/>
               </xsl:when>
               <xsl:otherwise>  <!-- If non-DITA, keep the href as-is -->
                 <xsl:if test="not(@scope='external')"><xsl:value-of select="$pathFromMaplist"/></xsl:if>

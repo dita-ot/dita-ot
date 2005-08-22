@@ -1,3 +1,4 @@
+<!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
 -- Catalog for Dita --
 
 -- Dita DTDs --
@@ -49,6 +50,62 @@ PUBLIC "-//IBM//ENTITIES DITA Utilities Domain//EN" "utilities-domain.ent"
 
 PUBLIC "-//IBM//ELEMENTS DITA Metadata//EN" "meta_xml.mod"
 PUBLIC "-//IBM//ELEMENTS DITA CALS Tables//EN" "tbl_xml.mod"
+
+
+
+-- Catalog for Dita --
+--             (C) Copyright OASIS Open 2005.                    --
+--             (C) Copyright IBM Corporation 2001, 2004.         --
+--             All Rights Reserved.                              --
+
+-- Dita DTDs --
+
+PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd"
+PUBLIC "-//OASIS//ELEMENTS DITA Concept//EN" "concept.mod"
+
+PUBLIC "-//OASIS//DTD DITA Composite//EN" "ditabase.dtd"
+
+PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd"
+PUBLIC "-//OASIS//ELEMENTS DITA Reference//EN" "reference.mod"
+
+PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd"
+PUBLIC "-//OASIS//ELEMENTS DITA Task//EN" "task.mod"
+
+PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd"
+PUBLIC "-//OASIS//ELEMENTS DITA Topic//EN" "topic.mod"
+PUBLIC "-//OASIS//ENTITIES DITA Topic Class//EN" "topicAttr.ent"
+PUBLIC "-//OASIS//ENTITIES DITA Topic Definitions//EN" "topicAttr.ent"
+
+-- Maps --
+
+PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd"
+PUBLIC "-//OASIS//ELEMENTS DITA Map//EN" "map.mod"
+PUBLIC "-//OASIS//ENTITIES DITA Map Group Domain//EN" "mapGroup.ent"
+PUBLIC "-//OASIS//ELEMENTS DITA Map Group Domain//EN" "mapGroup.mod"
+
+-- Domains --
+
+PUBLIC "-//OASIS//ELEMENTS DITA Highlight Domain//EN" "highlightDomain.mod"
+PUBLIC "-//OASIS//ENTITIES DITA Highlight Domain//EN" "highlightDomain.ent"
+
+PUBLIC "-//OASIS//ELEMENTS DITA Programming Domain//EN" "programmingDomain.mod"
+PUBLIC "-//OASIS//ENTITIES DITA Programming Domain//EN" "programmingDomain.ent"
+
+PUBLIC "-//OASIS//ELEMENTS DITA Software Domain//EN" "softwareDomain.mod"
+PUBLIC "-//OASIS//ENTITIES DITA Software Domain//EN" "softwareDomain.ent"
+
+PUBLIC "-//OASIS//ELEMENTS DITA User Interface Domain//EN" "uiDomain.mod"
+PUBLIC "-//OASIS//ENTITIES DITA User Interface Domain//EN" "uiDomain.ent"
+
+PUBLIC "-//OASIS//ELEMENTS DITA Utilities Domain//EN" "utilitiesDomain.mod"
+PUBLIC "-//OASIS//ENTITIES DITA Utilities Domain//EN" "utilitiesDomain.ent"
+
+-- Common --
+
+PUBLIC "-//OASIS//ELEMENTS DITA Metadata//EN" "metaDecl.mod"
+PUBLIC "-//OASIS//ELEMENTS DITA CALS Tables//EN" "tblDecl.mod"
+
+
 
 -- Demo/Experimental --
 

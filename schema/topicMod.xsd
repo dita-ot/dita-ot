@@ -1,0 +1,2154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ============================================================= -->
+<!--                    HEADER                                     -->
+<!-- ============================================================= -->
+<!--  MODULE:    DITA Topic XSD Module                                   -->
+<!--  VERSION:   1.0                                               -->
+<!--  DATE:      February 2005                                     -->
+<!--                                                               -->
+<!-- ============================================================= -->
+
+<!-- ============================================================= -->
+<!-- SYSTEM:     Darwin Information Typing Architecture (DITA)     -->
+<!--                                                               -->
+<!-- PURPOSE:    Define elements and specialization atttributed    -->
+<!--             for Topics       -->
+<!--                                                               -->
+<!-- ORIGINAL CREATION DATE:                                       -->
+<!--             March 2001                                        -->
+<!--                                                               -->
+<!--             (C) Copyright OASIS-Open.org 2005.                -->
+<!--             (C) Copyright IBM Corporation 2001, 2004.         -->
+<!--             All Rights Reserved.                              -->
+<!-- ============================================================= -->
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="qualified" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
+  <!-- ==================== Import Section ======================= -->
+  <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="xml.xsd"/>
+  <xs:import namespace="http://dita.oasis-open.org/architecture/2005/" schemaLocation="ditaarch.xsd"/>
+
+  <!-- ==================== Include Section - Start ======================= -->
+  <!-- ======== Table elements ======== -->
+  <xs:include schemaLocation="tblDeclMod.xsd"/>
+  <xs:include schemaLocation="tblDeclGrp.xsd"/>
+
+  <!-- ======= MetaData elements, plus keyword and indexterm ======= -->
+  <xs:include schemaLocation="metaDeclMod.xsd"/>
+  <xs:include schemaLocation="metaDeclGrp.xsd"/>
+
+  <!-- ==================== Include Section - End ======================= -->
+
+
+  <xs:attributeGroup name="display-atts">
+    <xs:annotation>
+      <xs:documentation>Display attributes is a parameter entity declaration in the topic
+        DTD that includes attributes whose values may be used for affecting the display
+        of a topic or its selection by search tools.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:attribute name="scale" type="scale-atts.class"/>
+    <xs:attribute name="frame" type="frame-att.class"/>
+    <xs:attribute name="expanse" type="expanse-att.class"/>
+  </xs:attributeGroup>
+
+  <xs:simpleType name="frame-att.class">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="top"/>
+      <xs:enumeration value="bottom"/>
+      <xs:enumeration value="topbot"/>
+      <xs:enumeration value="all"/>
+      <xs:enumeration value="sides"/>
+      <xs:enumeration value="none"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="expanse-att.class">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="page"/>
+      <xs:enumeration value="column"/>
+      <xs:enumeration value="textline"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!-- these are common for some classes of resources and exhibits -->  
+  <xs:attributeGroup name="rel-atts">
+    <xs:annotation>
+      <xs:documentation>Relational attributes (&lt;<keyword>%rel-atts;</keyword>>) is a
+        parameter entity declaration in the topic DTD that includes attributes whose
+        values may be used for representing navigational relationships. These attributes
+        occur only on elements that represent relationships between topics.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:attribute name="type" type="xs:string"/>
+    <xs:attribute name="role" type="role-att.class"/>
+    <xs:attribute name="otherrole" type="xs:string"/>
+  </xs:attributeGroup>
+
+  
+  <xs:attributeGroup name="id-atts">
+    <xs:annotation>
+      <xs:documentation>ID attributes (%id-atts;) is a parameter entity declaration in the
+        topic DTD that includes attributes that enable the naming and referencing
+        of elements in a DITA topic: <i> <keyword>id</keyword> </i> and <i> <keyword>conref</keyword> </i>.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:attribute name="id" type="xs:NMTOKEN"/>
+    <xs:attribute name="conref" type="xs:string"/>
+  </xs:attributeGroup>
+
+  
+  <xs:attributeGroup name="select-atts">
+    <xs:annotation>
+      <xs:documentation>Attributes that support both filtering and flagging include <i><keyword>platform</keyword></i>, <i><keyword>product</keyword></i>, <i><keyword
+        >audience</keyword></i>, and <i><keyword>otherprops</keyword></i>. Attribute <i><keyword>rev</keyword></i> only
+        lets you flag information that matches a run-time parameter. Attribute <i><keyword>importance</keyword></i> currently
+        provides output effects only for steps (where only the values "optional" and
+        "required" are supported).
+      </xs:documentation>
+    </xs:annotation>
+    <xs:attribute name="platform" type="xs:string"/>
+    <xs:attribute name="product" type="xs:string"/>
+    <xs:attribute name="audience" type="xs:string"/>
+    <xs:attribute name="otherprops" type="xs:string"/>
+    <xs:attribute name="rev" type="xs:string"/>
+    <xs:attribute name="importance" type="importance-atts.class"/>
+    <xs:attribute name="status" type="status-atts.class"/>
+  </xs:attributeGroup>
+
+  <xs:simpleType name="importance-atts.class">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="obsolete"/>
+      <xs:enumeration value="deprecated"/>
+      <xs:enumeration value="optional"/>
+      <xs:enumeration value="default"/>
+      <xs:enumeration value="low"/>
+      <xs:enumeration value="normal"/>
+      <xs:enumeration value="high"/>
+      <xs:enumeration value="recommended"/>
+      <xs:enumeration value="required"/>
+      <xs:enumeration value="urgent"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="scale-atts.class">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="50"/>
+      <xs:enumeration value="60"/>
+      <xs:enumeration value="70"/>
+      <xs:enumeration value="80"/>
+      <xs:enumeration value="90"/>
+      <xs:enumeration value="100"/>
+      <xs:enumeration value="110"/>
+      <xs:enumeration value="120"/>
+      <xs:enumeration value="140"/>
+      <xs:enumeration value="160"/>
+      <xs:enumeration value="180"/>
+      <xs:enumeration value="200"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="status-atts.class">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="new"/>
+      <xs:enumeration value="changed"/>
+      <xs:enumeration value="deleted"/>
+      <xs:enumeration value="unchanged"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  
+  <xs:attributeGroup name="univ-atts">
+    <xs:annotation>
+      <xs:documentation>Universal attributes is a parameter entity declaration in the topic DTD that
+        includes all of the attributes in the select-atts and id-atts attribute groups. 
+      </xs:documentation>
+    </xs:annotation>
+    <xs:attributeGroup ref="id-atts"/>
+    <xs:attributeGroup ref="select-atts"/>
+    <xs:attribute name="translate" type="yesno-att.class"/>
+    <xs:attribute ref="xml:lang"/>
+  </xs:attributeGroup>
+
+  <xs:attributeGroup name="global-atts">
+    <xs:annotation>
+      <xs:documentation>Debugging attributes, normally hidden from authoring view.        
+      </xs:documentation>
+    </xs:annotation>
+    
+    <xs:attribute name="xtrc" type="xs:string"/>
+    <xs:attribute name="xtrf" type="xs:string"/>
+  </xs:attributeGroup>
+
+  <!-- =========================================================================== -->
+  <!-- COMMON GROUP DECLARATIONS - START ======================================= -->
+  <!-- =========================================================================== -->
+  <!-- Phrase or inline elements of various classes
+    <!ENTITY % basic.ph             "%ph;|%term;|%xref;|%cite;|%q;|%state;|%keyword;|%tm;"> -->
+  <xs:group name="basic.ph">
+    <xs:choice>
+      <xs:group ref="ph"/>
+      <xs:group ref="term"/>
+      <xs:group ref="xref"/>
+      <xs:group ref="cite"/>
+      <xs:group ref="q"/>
+      <xs:group ref="state"/>
+      <xs:group ref="boolean"/>
+      <xs:group ref="keyword"/>
+      <xs:group ref="tm"/>
+    </xs:choice>
+  </xs:group>
+
+  <!-- Elements common to most body-like contexts -->
+  <xs:group name="basic.block">
+    <xs:choice>
+      <xs:group ref="p"/>
+      <xs:group ref="lq"/>
+      <xs:group ref="note"/>
+      <xs:group ref="dl"/>
+      <xs:group ref="ul"/>
+      <xs:group ref="ol"/>
+      <xs:group ref="sl"/>
+      <xs:group ref="pre"/>
+      <xs:group ref="lines"/>
+      <xs:group ref="fig"/>
+      <xs:group ref="image"/>
+      <xs:group ref="object"/>
+      <xs:group ref="table"/>
+      <xs:group ref="simpletable"/>
+    </xs:choice>
+  </xs:group>
+
+  <!-- class groupings to preserve in a schema
+    <!ENTITY % basic.phandblock     "%basic.ph; | %basic.block;">
+    -->
+  <xs:group name="basic.phandblock">
+    <xs:choice>
+      <xs:group ref="basic.ph"/>
+      <xs:group ref="basic.block"/>
+    </xs:choice>
+  </xs:group>
+
+  <!-- Exclusions:.models.modified by removing excluded content -->
+  <!-- <!ENTITY % basic.ph.noxref      "%ph;|%term;|              %q;|%state;|%keyword;|%tm">  -->
+
+  <xs:group name="basic.ph.noxref">
+    <xs:choice>
+      <xs:group ref="ph"/>
+      <xs:group ref="term"/>
+      <xs:group ref="q"/>
+      <xs:group ref="state"/>
+      <xs:group ref="boolean"/>
+      <xs:group ref="keyword"/>
+      <xs:group ref="tm"/>
+    </xs:choice>
+  </xs:group>
+
+  <!-- <!ENTITY % basic.block.notbl    "%p;|%lq;|%note;|%dl;|%ul;|%ol;|%pre;|%lines;|%fig;|%image;|%object;">  -->
+  <xs:group name="basic.block.notbl">
+    <xs:choice>
+      <xs:group ref="p"/>
+      <xs:group ref="lq"/>
+      <xs:group ref="note"/>
+      <xs:group ref="dl"/>
+      <xs:group ref="ul"/>
+      <xs:group ref="ol"/>
+      <xs:group ref="sl"/>
+      <xs:group ref="pre"/>
+      <xs:group ref="lines"/>
+      <xs:group ref="fig"/>
+      <xs:group ref="image"/>
+      <xs:group ref="object"/>
+    </xs:choice>
+  </xs:group>
+
+  <!-- <!ENTITY % basic.block.nonote   "%p;|%lq;|       %dl;|%ul;|%ol;|%pre;|%lines;|%fig;|%image;|%object;|%table;|%simpletable;">  -->
+  <xs:group name="basic.block.nonote">
+    <xs:choice>
+      <xs:group ref="p"/>
+      <xs:group ref="lq"/>
+      <xs:group ref="dl"/>
+      <xs:group ref="ul"/>
+      <xs:group ref="ol"/>
+      <xs:group ref="sl"/>
+      <xs:group ref="pre"/>
+      <xs:group ref="lines"/>
+      <xs:group ref="fig"/>
+      <xs:group ref="image"/>
+      <xs:group ref="object"/>
+      <xs:group ref="table"/>
+      <xs:group ref="simpletable"/>
+    </xs:choice>
+  </xs:group>
+
+  <!-- <!ENTITY % basic.block.nopara   "    %lq;|%note;|%dl;|%ul;|%ol;|%pre;|%lines;|%fig;|%image;|%object;|%table;|%simpletable;">  -->
+  <xs:group name="basic.block.nopara">
+    <xs:choice>
+      <xs:group ref="lq"/>
+      <xs:group ref="note"/>
+      <xs:group ref="dl"/>
+      <xs:group ref="ul"/>
+      <xs:group ref="ol"/>
+      <xs:group ref="sl"/>
+      <xs:group ref="pre"/>
+      <xs:group ref="lines"/>
+      <xs:group ref="fig"/>
+      <xs:group ref="image"/>
+      <xs:group ref="object"/>
+      <xs:group ref="table"/>
+      <xs:group ref="simpletable"/>
+    </xs:choice>
+  </xs:group>
+
+  <!-- <!ENTITY % basic.block.nolq     "%p;|     %note;|%dl;|%ul;|%ol;|%pre;|%lines;|%fig;|%image;|%object;|%table;|%simpletable;">  -->
+  <xs:group name="basic.block.nolq">
+    <xs:choice>
+      <xs:group ref="p"/>
+      <xs:group ref="note"/>
+      <xs:group ref="dl"/>
+      <xs:group ref="ul"/>
+      <xs:group ref="ol"/>
+      <xs:group ref="sl"/>
+      <xs:group ref="pre"/>
+      <xs:group ref="lines"/>
+      <xs:group ref="fig"/>
+      <xs:group ref="image"/>
+      <xs:group ref="object"/>
+      <xs:group ref="table"/>
+      <xs:group ref="simpletable"/>
+    </xs:choice>
+  </xs:group>
+
+  <!-- <!ENTITY % basic.block.notbnofg  "%p;|%lq;|%note;|%dl;|%ul;|%ol;|%pre;|%lines;|      %image;|%object;">  -->
+  <xs:group name="basic.block.notbnofg">
+    <xs:choice>
+      <xs:group ref="p"/>
+      <xs:group ref="lq"/>
+      <xs:group ref="note"/>
+      <xs:group ref="dl"/>
+      <xs:group ref="ul"/>
+      <xs:group ref="ol"/>
+      <xs:group ref="sl"/>
+      <xs:group ref="pre"/>
+      <xs:group ref="lines"/>
+      <xs:group ref="image"/>
+      <xs:group ref="object"/>
+    </xs:choice>
+  </xs:group>
+
+  <!-- <!ENTITY % basic.block.notbfgobj "%p;|%lq;|%note;|%dl;|%ul;|%ol;|%pre;|%lines;|      %image;">  -->
+  <xs:group name="basic.block.notbfgobj">
+    <xs:choice>
+      <xs:group ref="p"/>
+      <xs:group ref="lq"/>
+      <xs:group ref="note"/>
+      <xs:group ref="dl"/>
+      <xs:group ref="ul"/>
+      <xs:group ref="ol"/>
+      <xs:group ref="sl"/>
+      <xs:group ref="pre"/>
+      <xs:group ref="lines"/>
+      <xs:group ref="image"/>
+    </xs:choice>
+  </xs:group>
+
+  <!-- Phrase or inline elements of various classes
+    <!ENTITY % basic.ph             "%ph;|%term;|%xref;|%cite;|%q;|%state;|%keyword;"> -->
+
+  <xs:group name="basic.ph.notm">
+    <xs:choice>
+      <xs:group ref="ph"/>
+      <xs:group ref="term"/>
+      <xs:group ref="xref"/>
+      <xs:group ref="cite"/>
+      <xs:group ref="q"/>
+      <xs:group ref="state"/>
+      <xs:group ref="boolean"/>
+      <xs:group ref="keyword"/>
+    </xs:choice>
+  </xs:group>
+
+  <!-- Inclusions: defined sets that can be added into appropriate.models -->
+  <xs:group name="txt.incl">
+    <xs:choice>
+      <xs:group ref="draft-comment"/>
+      <xs:group ref="required-cleanup"/>
+      <xs:group ref="fn"/>
+      <xs:group ref="indextermref"/>
+      <xs:group ref="indexterm"/>
+    </xs:choice>
+  </xs:group>
+
+  <!-- =========================================================================== -->
+  <!-- COMMON GROUP DECLARATIONS - END ======================================= -->
+  <!-- =========================================================================== -->
+  <!-- Predefined content.model groups, based on the previous, element-only categories: -->
+  <!-- txt.incl is appropriate for any mixed content definitions (those that have PCDATA) -->
+  <!-- the context for blocks is implicitly an InfoMaster "containing_division" -->
+  <!-- <!ENTITY % body.cnt             "%basic.block;|%required-cleanup;"> -->
+  <xs:group name="body.cnt">
+    <xs:choice>
+      <xs:group ref="basic.block"/>
+      <xs:group ref="required-cleanup"/>
+    </xs:choice>
+  </xs:group>
+
+  <!-- <!ENTITY % fig.cnt              "%basic.block.notbnofg; | %simpletable;"> -->
+  <xs:group name="fig.cnt">
+    <xs:choice>
+      <xs:group ref="basic.block.notbnofg"/>
+      <xs:group ref="simpletable"/>
+    </xs:choice>
+  </xs:group>
+
+  <!-- <!ENTITY % section.cnt          "#PCDATA | %basic.ph; | %basic.block; | %title; |  %txt.incl;"> -->
+  <xs:group name="section.cnt">
+    <xs:choice>
+      <xs:group ref="basic.ph"/>
+      <xs:group ref="basic.block"/>
+      <xs:group ref="title"/>
+      <xs:group ref="txt.incl"/>
+    </xs:choice>
+  </xs:group>
+
+  <!-- <!ENTITY % section.notitle.cnt  "#PCDATA | %basic.ph; | %basic.block; |             %txt.incl;"> -->
+  <xs:group name="section.notitle.cnt">
+    <xs:choice>
+      <xs:group ref="basic.ph"/>
+      <xs:group ref="basic.block"/>
+      <xs:group ref="txt.incl"/>
+    </xs:choice>
+  </xs:group>
+
+  <!-- <!ENTITY % desc.cnt             "#PCDATA | %basic.ph; | %basic.block.notbfgobj;">> -->
+  <xs:group name="desc.cnt">
+    <xs:choice>
+      <xs:group ref="basic.ph"/>
+      <xs:group ref="basic.block.notbfgobj"/>
+    </xs:choice>
+  </xs:group>
+
+  <!-- <!ENTITY % note.cnt             "#PCDATA | %basic.ph; | %basic.block.nonote; | %txt.incl;"> -->
+  <xs:group name="note.cnt">
+    <xs:choice>
+      <xs:group ref="basic.ph"/>
+      <xs:group ref="basic.block.nonote"/>
+      <xs:group ref="txt.incl"/>
+    </xs:choice>
+  </xs:group>
+
+  <!-- <!ENTITY % fn.cnt               "#PCDATA | %basic.ph; | %basic.block.notbl;"> -->
+  <xs:group name="fn.cnt">
+    <xs:choice>
+      <xs:group ref="basic.ph"/>
+      <xs:group ref="basic.block.notbl"/>
+    </xs:choice>
+  </xs:group>
+
+  <!-- <!ENTITY % ph.cnt               "#PCDATA | %basic.ph; | %image;              | %txt.incl;"> -->
+  <xs:group name="ph.cnt">
+    <xs:choice>
+      <xs:group ref="basic.ph"/>
+      <xs:group ref="image"/>
+      <xs:group ref="txt.incl"/>
+    </xs:choice>
+  </xs:group>
+
+  <!-- <!ENTITY % tblcell.cnt          "#PCDATA | %basic.ph; | %basic.block.notbl;  | %txt.incl;"> -->
+  <xs:group name="tblcell.cnt">
+    <xs:choice>
+      <xs:group ref="basic.ph"/>
+      <xs:group ref="basic.block.notbl"/>
+      <xs:group ref="txt.incl"/>
+    </xs:choice>
+  </xs:group>
+
+  <!-- <!ENTITY % itemgroup.cnt        "#PCDATA | %basic.ph; | %basic.block; |             %txt.incl;"> -->
+  <xs:group name="itemgroup.cnt">
+    <xs:choice>
+      <xs:group ref="basic.ph"/>
+      <xs:group ref="basic.block"/>
+      <xs:group ref="txt.incl"/>
+    </xs:choice>
+  </xs:group>
+
+  <!-- <!ENTITY % listitem.cnt         "#PCDATA | %basic.ph; | %basic.block; |%itemgroup;| %txt.incl;"> -->
+  <xs:group name="listitem.cnt">
+    <xs:choice>
+      <xs:group ref="basic.ph"/>
+      <xs:group ref="basic.block"/>
+      <xs:group ref="itemgroup"/>
+      <xs:group ref="txt.incl"/>
+    </xs:choice>
+  </xs:group>
+
+  <!-- <!ENTITY % para.cnt             "#PCDATA | %basic.ph; | %basic.block.nopara; | %txt.incl;"> -->
+  <xs:group name="para.cnt">
+    <xs:choice>
+      <xs:group ref="basic.ph"/>
+      <xs:group ref="basic.block.nopara"/>
+      <xs:group ref="txt.incl"/>
+    </xs:choice>
+  </xs:group>
+
+  <!-- <!ENTITY % longquote.cnt        "#PCDATA | %basic.ph; | %basic.block.nolq;   | %txt.incl;"> -->
+  <xs:group name="longquote.cnt">
+    <xs:choice>
+      <xs:group ref="basic.ph"/>
+      <xs:group ref="basic.block.nolq"/>
+      <xs:group ref="txt.incl"/>
+    </xs:choice>
+  </xs:group>
+
+  <!-- <!ENTITY % shortquote.cnt       "#PCDATA | %basic.ph;"> -->
+  <xs:group name="shortquote.cnt">
+    <xs:choice>
+      <xs:group ref="basic.ph"/>
+    </xs:choice>
+  </xs:group>
+
+  <!-- <!ENTITY % defn.cnt             "%listitem.cnt;"> -->
+  <xs:group name="defn.cnt">
+    <xs:choice>
+      <xs:group ref="listitem.cnt"/>
+    </xs:choice>
+  </xs:group>
+
+  <!-- <!ENTITY % pre.cnt              "#PCDATA | %basic.ph; | %txt.incl;"> -->
+  <xs:group name="pre.cnt">
+    <xs:choice>
+      <xs:group ref="basic.ph"/>
+      <xs:group ref="txt.incl"/>
+    </xs:choice>
+  </xs:group>
+
+  <!-- <!ENTITY % term.cnt             "#PCDATA | %basic.ph; | image"> -->
+  <xs:group name="term.cnt">
+    <xs:choice>
+      <xs:group ref="basic.ph"/>
+      <xs:group ref="image"/>
+    </xs:choice>
+  </xs:group>
+
+  <!-- <!ENTITY % xreftext.cnt         "#PCDATA | %basic.ph.noxref; | %image;"> -->
+  <xs:group name="xreftext.cnt">
+    <xs:choice>
+      <xs:group ref="basic.ph.noxref"/>
+      <xs:group ref="image"/>
+    </xs:choice>
+  </xs:group>
+
+  <!-- <!ENTITY % title.cnt            "#PCDATA | %basic.ph.noxref; | %image;"> -->
+  <xs:group name="title.cnt">
+    <xs:choice>
+      <xs:group ref="basic.ph.noxref"/>
+      <xs:group ref="image"/>
+    </xs:choice>
+  </xs:group>
+
+  <!-- <!ENTITY % xrefph.cnt           "#PCDATA | %basic.ph.noxref;"> -->
+  <xs:group name="xrefph.cnt">
+    <xs:choice>
+      <xs:group ref="basic.ph.noxref"/>
+    </xs:choice>
+  </xs:group>
+
+  <!-- new <!ENTITY % words.cnt               "#PCDATA | %keyword; | %term;"> -->
+  <xs:group name="words.cnt">
+    <xs:choice>
+      <xs:group ref="keyword"/>
+      <xs:group ref="term"/>
+    </xs:choice>
+  </xs:group>
+
+  <!-- STRUCTURAL MEMBERS ======================================================== -->
+  <!-- things that can be nested under topic after body - redefined when specializing -->
+  <xs:simpleType name="topicreftypes-att.class">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="topic"/>
+      <xs:enumeration value="concept"/>
+      <xs:enumeration value="task"/>
+      <xs:enumeration value="reference"/>
+      <xs:enumeration value="external"/>
+      <xs:enumeration value="local"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="role-att.class">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="parent"/>
+      <xs:enumeration value="child"/>
+      <xs:enumeration value="sibling"/>
+      <xs:enumeration value="friend"/>
+      <xs:enumeration value="next"/>
+      <xs:enumeration value="previous"/>
+      <xs:enumeration value="cousin"/>
+      <xs:enumeration value="ancestor"/>
+      <xs:enumeration value="descendant"/>
+      <xs:enumeration value="sample"/>
+      <xs:enumeration value="external"/>
+      <xs:enumeration value="other"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="xref-type-attlist.class">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="fig"/>
+      <xs:enumeration value="figgroup"/>
+      <xs:enumeration value="table"/>
+      <xs:enumeration value="li"/>
+      <xs:enumeration value="fn"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="view-att.class">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="internal"/>
+      <xs:enumeration value="classified"/>
+      <xs:enumeration value="all"/>
+      <xs:enumeration value="entitled"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="workflow-att.class">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="author"/>
+      <xs:enumeration value="editor"/>
+      <xs:enumeration value="reviewer"/>
+      <xs:enumeration value="publisher"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="job-att.class">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="installing"/>
+      <xs:enumeration value="customizing"/>
+      <xs:enumeration value="administratoring"/>
+      <xs:enumeration value="programming"/>
+      <xs:enumeration value="using"/>
+      <xs:enumeration value="maintaining"/>
+      <xs:enumeration value="troubleshooting"/>
+      <xs:enumeration value="evaluating"/>
+      <xs:enumeration value="planning"/>
+      <xs:enumeration value="migrating"/>
+      <xs:enumeration value="other"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="experiencelevel-att.class">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="novice"/>
+      <xs:enumeration value="general"/>
+      <xs:enumeration value="expert"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="disposition-att.class">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="issue"/>
+      <xs:enumeration value="open"/>
+      <xs:enumeration value="accepted"/>
+      <xs:enumeration value="rejected"/>
+      <xs:enumeration value="deferred"/>
+      <xs:enumeration value="duplicate"/>
+      <xs:enumeration value="reopened"/>
+      <xs:enumeration value="unassigned"/>
+      <xs:enumeration value="completed"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="yesno-att.class">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="yes"/>
+      <xs:enumeration value="no"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+   <xs:group name="topic-info-types">
+      <xs:choice>
+        <xs:group ref="topic"/>
+      </xs:choice>
+    </xs:group>
+
+  <!--  infotype 'topic'
+ | Topic is the archetype from which other typed topics may be derived.
+ | Its body has completely optional content, which allows topic to be used as a titled container
+ | role: migration target for XHTML, other hierarchically structured source
+ *-->
+  <xs:element name="topic" type="topic.class">
+    <xs:annotation>
+      <xs:documentation>The &lt;<keyword>topic</keyword>> element is the top-level DITA
+        element for a single-subject topic or article. Other top-level DITA elements
+        that are more content-specific are &lt;<keyword>concept</keyword>>, &lt;<keyword>task</keyword>>,
+        and &lt;<keyword>reference</keyword>>.
+</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="topic.class">
+    <xs:sequence>
+      <xs:group ref="title"/>
+      <xs:group ref="titlealts" minOccurs="0"/>
+      <xs:group ref="shortdesc" minOccurs="0"/>
+      <xs:group ref="prolog" minOccurs="0"/>
+      <xs:group ref="body" minOccurs="0"/>
+      <xs:group ref="related-links" minOccurs="0"/>
+      <xs:group ref="info-types" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+    <xs:attribute name="id" type="xs:ID" use="required"/>
+    <xs:attribute name="outputclass" type="xs:string"/>
+    <xs:attribute name="conref"/>
+    <xs:attribute ref="ditaarch:DITAArchVersion"/>
+    <xs:attributeGroup ref="select-atts"/>
+    <xs:attribute ref="xml:lang"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute ref="class" default="- topic/topic "/>
+  </xs:complexType>
+
+  <!-- Rename null to no-topic-nesting -->
+  <xs:element name="no-topic-nesting" type="no-topic-nesting.class">
+    <xs:annotation>
+      <xs:documentation>The &lt;<keyword>no-topic-nesting</keyword>> element is a placeholder
+        in the DITA architecture. It is not actually used by the DITA DTDs; it is
+        for use only when creating a customized DTD where the information designer
+        wants to eliminate the ability to nest topics. <b>Not for use by authors.</b>        
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="no-topic-nesting.class">
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute ref="class" default="- topic/no-topic-nesting "/>
+  </xs:complexType>
+
+  
+  <!-- This is referenced inside CALS tables -->
+  <xs:element name="title" type="title.class">
+    <xs:annotation>
+      <xs:documentation>The &lt;<keyword>title</keyword>> element contains a heading or
+        label for the main parts of a document such as &lt;topic>, &lt;section>, and
+        &lt;example> and for the display elements such as figure  (&lt;<keyword>fig</keyword>>)
+        and &lt;<keyword>table</keyword>>.
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="title.class" mixed="true">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="title.cnt"/>
+    </xs:choice>
+    <xs:attribute name="outputclass" type="xs:string"/>
+    <xs:attributeGroup ref="id-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute ref="class" default="- topic/title "/>
+  </xs:complexType>
+
+  
+  <xs:element name="titlealts" type="titlealts.class">
+    <xs:annotation>
+      <xs:documentation>The alternate title element (&lt;<keyword>titlealts</keyword>>)
+        is optional, but can occur after the topic title. Two elements can be inserted
+        as sub-elements of &lt;<keyword>titlealts</keyword>>: navigation title &lt;<keyword>navtitle</keyword>>
+        and search title &lt;<keyword>searchtitle</keyword>>. When your DITA topic
+        is transformed to XHTML, the &lt;<keyword>searchtitle</keyword>> element is
+        used to create a title element at the top of the resulting XHTML file. This
+        title may differ from the first level heading that shows in the main browser
+        window. In HTML output, the &lt;<keyword>navtitle</keyword>> may be used to
+        create navigation panels when your DITA topics are part of an HTML-based help
+        or information system. The design intent is to enable navigation for HTML
+        Help and Eclipse help systems.
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="titlealts.class">
+    <xs:sequence>
+      <xs:group ref="navtitle" minOccurs="0"/>
+      <xs:group ref="searchtitle" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="id-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute ref="class" default="- topic/titlealts "/>
+  </xs:complexType>
+
+  
+  <xs:element name="navtitle" type="navtitle.class">
+    <xs:annotation>
+      <xs:documentation>The navigation title (&lt;<keyword>navtitle</keyword>>) element
+        is one of a set of alternate titles that can be included inside the &lt;<keyword>titlealts</keyword>>
+        element. This navigation title may differ from the first level heading that
+        shows in the main browser window. Use &lt;<keyword>navtitle</keyword>> when
+        the actual title of the topic isn't appropriate for use in navigation panes
+        or online contents (for example, because the actual title is too long or needs
+        stated in terse, imperative voice in the navigation).
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="navtitle.class" mixed="true">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="words.cnt"/>
+    </xs:choice>
+    <xs:attributeGroup ref="id-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute ref="class" default="- topic/navtitle "/>
+  </xs:complexType>
+
+  
+  <xs:element name="searchtitle" type="searchtitle.class">
+    <xs:annotation>
+      <xs:documentation>When your DITA topic is transformed to XHTML, the &lt;<keyword>searchtitle</keyword>>
+        element is used to create a title element at the top of the resulting HTML
+        file. This title is normally used in search result summaries by some search
+        engines, such as that in Eclipse (<ph><xref format="html" href="http://eclipse.org"
+          scope="external">http://eclipse.org</xref></ph>); if not set, the XHTML's
+        title element defaults to the source topic's title content (which may not
+        be as well optimized for search summaries)
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="searchtitle.class" mixed="true">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="words.cnt"/>
+    </xs:choice>
+    <xs:attributeGroup ref="id-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute ref="class" default="- topic/searchtitle "/>
+  </xs:complexType>
+
+  
+  <xs:element name="shortdesc" type="shortdesc.class">
+    <xs:annotation>
+      <xs:documentation>The short description (&lt;<keyword>shortdesc</keyword>>) element
+        occurs between the topic title and the topic body, as the initial paragraph-like
+        content of a topic. The short description, which represents the purpose or
+        theme of the topic, is also intended to be used as a link preview and for
+        searching.
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="shortdesc.class" mixed="true">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="title.cnt"/>
+    </xs:choice>
+    <xs:attribute name="outputclass" type="xs:string"/>
+    <xs:attributeGroup ref="id-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute ref="class" default="- topic/shortdesc "/>
+  </xs:complexType>
+
+  
+  <xs:element name="body" type="body.class">
+    <xs:annotation>
+      <xs:documentation>The &lt;<keyword>body</keyword>> element is the container for the
+        main content of a &lt;<keyword>topic</keyword>>.
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="body.class">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="body.cnt"/>
+      <xs:group ref="section"/>
+      <xs:group ref="example"/>
+    </xs:choice>
+    <xs:attribute name="outputclass" type="xs:string"/>
+    <xs:attributeGroup ref="id-atts"/>
+    <xs:attribute name="translate" type="yesno-att.class"/>
+    <xs:attribute ref="xml:lang"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute ref="class" default="- topic/body "/>
+  </xs:complexType>
+
+  
+  <xs:element name="section" type="section.class">
+    <xs:annotation>
+      <xs:documentation> The &lt;<keyword>section</keyword>> element represents an organizational
+        division in a topic. Sections are used to organize subsets of information
+        that are directly related to the topic. For example, the titles <b>Reference
+          Syntax</b>, <b>Example</b> and <b>Properties</b> might represent section-level
+        discourse within a topic about a command-line process—the content in each
+        section relates uniquely to the subject of that topic. Multiple sections within
+        a single topic do not represent a hierarchy, but rather peer divisions of
+        that topic. Sections cannot be nested. A section may have an optional title.
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="section.class" mixed="true">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="section.cnt"/>
+    </xs:choice>
+    <xs:attribute name="spectitle" type="xs:string"/>
+    <xs:attribute name="outputclass" type="xs:string"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute ref="class" default="- topic/section "/>
+  </xs:complexType>
+
+  
+  <xs:element name="example" type="example.class">
+    <xs:annotation>
+      <xs:documentation>The &lt;<keyword>example</keyword>> element is a section with the
+        specific role of containing examples that illustrate or support the current
+        topic.  The &lt;<keyword>example</keyword>> element has the same content model
+        as &lt;<keyword>section</keyword>>.
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="example.class" mixed="true">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="section.cnt"/>
+    </xs:choice>
+    <xs:attribute name="spectitle" type="xs:string"/>
+    <xs:attribute name="outputclass" type="xs:string"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute ref="class" default="- topic/example "/>
+  </xs:complexType>
+
+  
+  <xs:element name="keyword" type="keyword.class">
+    <xs:annotation>
+      <xs:documentation>The &lt;<keyword>keyword</keyword>> element identifies a keyword
+        or token, such as a single value from an enumerated list, the name of a command
+        or parameter, or a lookup key for a message (contrast with <ph><xref href="term.xml">term</xref></ph>).
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="keyword.class" mixed="true">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="tm" />
+    </xs:choice>
+    <xs:attribute name="keyref" type="xs:NMTOKEN"/>
+    <xs:attribute name="outputclass" type="xs:string"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute ref="class" default="- topic/keyword "/>
+  </xs:complexType>
+
+
+
+  
+  <xs:element name="desc" type="desc.class">
+    <xs:annotation>
+      <xs:documentation>The &lt;<keyword>desc</keyword>> element contains the description
+        of the current element. A description should provide more information than
+        the title.
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="desc.class" mixed="true">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="desc.cnt"/>
+    </xs:choice>
+    <xs:attribute name="outputclass" type="xs:string"/>
+    <xs:attributeGroup ref="id-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute ref="class" default="- topic/desc "/>
+  </xs:complexType>
+
+  <!-- PROLOG (metadata for topics) =================================== -->
+  <!-- TYPED DATA ELEMENTS: ======================================================= -->
+  <!-- typed content definitions  -->
+  <!-- typed, localizable content -->
+  
+  <xs:element name="prolog" type="prolog.class">
+    <xs:annotation>
+      <xs:documentation>The &lt;<keyword>prolog</keyword>> element contains information
+        about the topic as an whole (for example, author information or subject category)
+        that is either entered by the author or machine-maintained. Much of the metadata
+        inside the &lt;<keyword>prolog</keyword>> will not be displayed with the topic
+        on output, but may be used by processes that generate search indexes or customize
+        navigation.
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="prolog.class">
+    <xs:sequence>
+      <xs:group ref="author" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:group ref="source" minOccurs="0"/>
+      <xs:group ref="publisher" minOccurs="0"/>
+      <xs:group ref="copyright" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:group ref="critdates" minOccurs="0"/>
+      <xs:group ref="permissions" minOccurs="0"/>
+      <xs:group ref="metadata" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:group ref="resourceid" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute ref="class" default="- topic/prolog "/>
+  </xs:complexType>
+
+ 
+  <xs:element name="metadata" type="metadata.class">
+    <xs:annotation>
+      <xs:documentation>The &lt;<keyword>metadata</keyword>> section of the prolog contains
+        information about a topic such as audience and product information. Metadata
+        can be used by computational processes to select particular topics or to prepare
+        search indexes or to customize navigation.
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="metadata.class">
+    <xs:sequence>
+      <xs:group ref="audience" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:group ref="category" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:group ref="keywords" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:group ref="prodinfo" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:group ref="othermeta" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+    <xs:attribute name="mapkeyref" type="xs:string"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute ref="class" default="- topic/metadata "/>
+  </xs:complexType>
+
+  <!-- ================ LINKS GROUPING - START ================ -->
+ 
+  <xs:element name="related-links" type="related-links.class">
+    <xs:annotation>
+      <xs:documentation>The related information links of a topic (&lt;<keyword>related-links</keyword>>
+        element) are stored in a special section following the body of the topic.
+        After a topic is processed into it final output form, the related links are
+        usually displayed at the end of the topic, although some Web-based help systems
+        might display them in a separate navigation frame.
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="related-links.class">
+    <xs:choice maxOccurs="unbounded">
+      <xs:group ref="link"/>
+      <xs:group ref="linklist"/>
+      <xs:group ref="linkpool"/>
+    </xs:choice>
+    <xs:attribute name="outputclass" type="xs:string"/>
+    <xs:attributeGroup ref="rel-atts"/>
+    <xs:attributeGroup ref="select-atts"/>
+    <xs:attribute name="format" type="xs:string"/>
+    <xs:attribute name="scope" type="scope-att.class"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute ref="class" default="- topic/related-links "/>
+  </xs:complexType>
+
+  
+  <xs:element name="linklist" type="linklist.class">
+    <xs:annotation>
+      <xs:documentation>The &lt;<keyword>linklist</keyword>> element defines an author-arranged
+        group of links. Within &lt;<keyword>linklist</keyword>>, the organization
+        of links on final output is in the same order as originally authored in the
+        DITA topic file.
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="linklist.class">
+    <xs:sequence>
+      <xs:group ref="title" minOccurs="0"/>
+      <xs:group ref="desc" minOccurs="0"/>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:group ref="linklist"/>
+        <xs:group ref="link"/>
+      </xs:choice>
+      <xs:group ref="linkinfo" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute name="collection-type" type="collection-type.class"/>
+    <xs:attribute name="duplicates" type="yesno-att.class"/>
+    <xs:attribute name="mapkeyref" type="xs:string"/>
+    <xs:attribute name="outputclass" type="xs:string"/>
+    <xs:attribute name="format" type="xs:string"/>
+    <xs:attribute name="spectitle" type="xs:string"/>
+    <xs:attribute name="scope" type="scope-att.class"/>
+    <xs:attributeGroup ref="rel-atts"/>
+    <xs:attributeGroup ref="select-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute ref="class" default="- topic/linklist "/>
+  </xs:complexType>
+
+  <xs:element name="linkinfo" type="linkinfo.class">
+    <xs:annotation>
+      <xs:documentation>
+        The &lt;<keyword>linkinfo</keyword>> element allows you to place
+        a descriptive paragraph following a list of links in a <ph><xref href="linklist.xml">linklist</xref></ph> element. 
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="linkinfo.class" mixed="true">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="desc.cnt"/>
+    </xs:choice>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute ref="class" default="- topic/linkinfo "/>
+  </xs:complexType>
+
+  
+  <xs:element name="linkpool" type="linkpool.class">
+    <xs:annotation>
+      <xs:documentation>The &lt;<keyword>linkpool</keyword>> element defines a group of
+        links that have common characteristics, such as type or audience or source.
+        Within &lt;<keyword>linkpool</keyword>>, the organization of links on final
+        output is determined by the output process, not by the order that the links
+        actually occur in the DITA topic file.
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="linkpool.class">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="linkpool"/>
+      <xs:group ref="link"/>
+    </xs:choice>
+    <xs:attribute name="collection-type" type="collection-type.class"/>
+    <xs:attribute name="duplicates" type="yesno-att.class"/>
+    <xs:attribute name="mapkeyref" type="xs:string"/>
+    <xs:attribute name="outputclass" type="xs:string"/>
+    <xs:attribute name="format" type="xs:string"/>
+    <xs:attribute name="scope" type="scope-att.class"/>
+    <xs:attributeGroup ref="rel-atts"/>
+    <xs:attributeGroup ref="select-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute ref="class" default="- topic/linkpool "/>
+  </xs:complexType>
+
+  
+  <xs:element name="linktext" type="linktext.class">
+    <xs:annotation>
+      <xs:documentation>The &lt;<keyword>linktext</keyword>> element provides the literal
+        label or line of text for a link. In most cases, the text of a link can be
+        resolved during processing by cross reference with the target resource. Use
+        the &lt;<keyword>linktext</keyword>> element only when the target cannot be
+        reached, such as when it is a peer or external link.
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="linktext.class" mixed="true">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="words.cnt"/>
+    </xs:choice>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute ref="class" default="- topic/linktext "/>
+  </xs:complexType>
+
+  
+  <xs:element name="link" type="link.class">
+    <xs:annotation>
+      <xs:documentation>The &lt;<keyword>link</keyword>> element defines a relationship
+        to another topic. Links represent the types and roles of topics in a web of
+        information, and therefore represent navigational links within that web. The
+        parent structures of link allow authors to define named groups and even sort
+        orders that can be applied to sets of links.  
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="link.class">
+    <xs:sequence>
+      <xs:group ref="linktext" minOccurs="0"/>
+      <xs:group ref="desc" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute name="href" type="xs:string"/>
+    <xs:attribute name="keyref" type="xs:NMTOKEN"/>
+    <xs:attribute name="outputclass" type="xs:string"/>
+    <xs:attribute name="format" type="xs:string"/>
+    <xs:attribute name="query" type="xs:string"/>
+    <xs:attribute name="scope" type="scope-att.class"/>
+    <xs:attributeGroup ref="rel-atts"/>
+    <xs:attributeGroup ref="select-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute ref="class" default="- topic/link "/>
+  </xs:complexType>
+
+  <xs:simpleType name="collection-type.class">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="choice"/>
+      <xs:enumeration value="unordered"/>
+      <xs:enumeration value="sequence"/>
+      <xs:enumeration value="family"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!-- ================ LINKS GROUPING - END ================ -->
+  
+  <xs:element name="ph" type="ph.class">
+    <xs:annotation>
+      <xs:documentation>The phrase (&lt;<keyword>ph</keyword>>) element is used to organize
+        content for reuse or conditional processing (for example, when part of a paragraph
+        applies to a particular audience). It can be used by future specializations
+        of DITA to apply specific processing or formatting to marked up phrases.</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="ph.class" mixed="true">
+    <xs:annotation>
+      <xs:documentation>var &amp; keyword defined by syntax diagram</xs:documentation>
+    </xs:annotation>
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="ph.cnt"/>
+    </xs:choice>
+    <xs:attribute name="keyref" type="xs:NMTOKEN"/>
+    <xs:attribute name="outputclass" type="xs:string"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute ref="class" default="- topic/ph "/>
+  </xs:complexType>
+
+  
+  <xs:element name="term" type="term.class">
+    <xs:annotation>
+      <xs:documentation>The &lt;<keyword>term</keyword>> element identifies words that
+        represent extended definitions or explanations. In future development of DITA,
+        for example, terms might provide associative linking to matching glossary
+        entries.
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="term.class" mixed="true">
+    <xs:annotation>
+      <xs:documentation>Inline content (prhases)</xs:documentation>
+    </xs:annotation>
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="tm"/>
+    </xs:choice>
+    <xs:attribute name="keyref" type="xs:NMTOKEN"/>
+    <xs:attribute name="outputclass" type="xs:string"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute ref="class" default="- topic/term "/>
+  </xs:complexType>
+
+  
+  <xs:element name="tm" type="tm.class">
+    <xs:annotation>
+      <xs:documentation>The trademark (&lt;<keyword>tm</keyword>>) element in DITA is used
+        to markup and identify a term or phrase that is trademarked. Trademarks include
+        registered trademarks, service marks, slogans and logos.
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="tm.class" mixed="true">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="tm"/>
+    </xs:choice>
+    <xs:attribute name="trademark" type="xs:string"/>
+    <xs:attribute name="tmowner" type="xs:string"/>
+    <xs:attribute name="tmtype" type="tmtype-type-att.class" use="required"/>
+    <xs:attribute name="tmclass" type="xs:string"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute ref="class" default="- topic/tm "/>
+  </xs:complexType>
+
+  <xs:simpleType name="tmtype-type-att.class">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="tm"/>
+      <xs:enumeration value="reg"/>
+      <xs:enumeration value="service"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+    
+  <xs:element name="boolean" type="boolean.class">
+    <xs:annotation>
+      <xs:documentation>( Deprecated ) - The &lt;<keyword>boolean</keyword>> element is used to express
+        one of two opposite values, such as yes or no, on or off, true or false, high
+        or low, and so forth. The element itself is empty; the value of the element
+        is stored in its <i>       <keyword>state</keyword>     </i> attribute, and
+        the semantic associated with the value is typically in a specialized name
+        derived from this element. If you need more than two values (for example,
+        "yes," "no" and "don&apos;t care") use the <ph>       <xref href="state.xml">&lt;<keyword>state</keyword>></xref> 
+        </ph> element instead. This element is primarily for specialization, where
+        it can be used to require a logical true or false designation in a particular
+        part of the document.
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="boolean.class">
+    <xs:attribute name="state" type="yesno-att.class" use="required"/>
+    <xs:attribute name="outputclass" type="xs:string"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute ref="class" default="- topic/boolean "/>
+  </xs:complexType>
+
+
+  
+  <xs:element name="state" type="state.class">
+    <xs:annotation>
+      <xs:documentation>The &lt;<keyword>state</keyword>> element specifies a name/value
+        pair whenever it is necessary to represent a named state that has a variable
+        value. The element is primarily intended for use in specializations to represent
+        specific states (like logic circuit states, chemical reaction states, airplane
+        instrumentation states, and so forth).
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="state.class">
+    <xs:attribute name="name" type="xs:string" use="required"/>
+    <xs:attribute name="value" type="xs:string" use="required"/>
+    <xs:attribute name="outputclass" type="xs:string"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute ref="class" default="- topic/state "/>
+  </xs:complexType>
+
+  <!---->
+  <!-- MIME type should follow the convention xxx/xxx -->
+  <!-- =========================================================================== -->
+  <!-- BASIC DOCUMENT ELEMENT DECLARATIONS (rich text) =========================== -->
+  <!-- =========================================================================== -->
+  <!-- Base form: Paragraph -->
+  
+  <xs:element name="p" type="p.class">
+    <xs:annotation>
+      <xs:documentation>A paragraph element (&lt;<keyword>p</keyword>>) is a block of
+        text containing a single main idea.
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="p.class" mixed="true">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="para.cnt"/>
+    </xs:choice>
+    <xs:attribute name="outputclass" type="xs:string"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute ref="class" default="- topic/p "/>
+  </xs:complexType>
+
+  <!-- Base form: Excerpt -->
+  
+  <xs:element name="lq" type="lq.class">
+    <xs:annotation>
+      <xs:documentation> TThe long quote (&lt;<keyword>lq</keyword>>) element indicates
+        content quoted from another source. Use the quote element &lt;<keyword>q</keyword>>for
+        short, inline quotations, and long quote &lt;<keyword>lq</keyword>> for quotations
+        that are too long for inline use, following normal guidelines for quoting
+        other sources. You can store a URL to the source of the quotation in the <i><keyword>href</keyword></i> attribute.
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="lq.class" mixed="true">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="longquote.cnt"/>
+    </xs:choice>
+    <xs:attribute name="href" type="xs:string" />
+    <xs:attribute name="keyref" type="xs:NMTOKEN"/>
+    <xs:attribute name="type" type="type-lq-atts.class"/>
+    <xs:attribute name="reftitle" type="xs:string"/>
+    <xs:attribute name="outputclass" type="xs:string"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute ref="class" default="- topic/lq "/>
+  </xs:complexType>
+
+  <xs:simpleType name="type-lq-atts.class">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="internal"/>
+      <xs:enumeration value="external"/>
+      <xs:enumeration value="bibliographic"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!-- Base form: Note -->
+  
+  <xs:element name="note" type="note.class">
+    <xs:annotation>
+      <xs:documentation>A &lt;<keyword>note</keyword>> element contains information, differentiated
+        from the main text, which expands on or calls attention to a particular point.
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="note.class" mixed="true">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="note.cnt"/>
+    </xs:choice>
+    <xs:attribute name="type" type="type-note-atts.class"/>
+    <xs:attribute name="spectitle" type="xs:string"/>
+    <xs:attribute name="othertype" type="xs:string"/>
+    <xs:attribute name="outputclass" type="xs:string"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute ref="class" default="- topic/note "/>
+  </xs:complexType>
+
+  <xs:simpleType name="type-note-atts.class">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="note"/>
+      <xs:enumeration value="tip"/>
+      <xs:enumeration value="fastpath"/>
+      <xs:enumeration value="restriction"/>
+      <xs:enumeration value="important"/>
+      <xs:enumeration value="remember"/>
+      <xs:enumeration value="attention"/>
+      <xs:enumeration value="caution"/>
+      <xs:enumeration value="danger"/>
+      <xs:enumeration value="other"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!-- Base form: Quoted text -->
+  
+  <xs:element name="q" type="q.class">
+    <xs:annotation>
+      <xs:documentation> A quotation element (&lt;q>) indicates content quoted from another
+        source. This element is used for short quotes which are displayed inline.
+        Use the long quote element (&lt;lq>) for quotations that should be set off
+        from the surrounding text.
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="q.class" mixed="true">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="shortquote.cnt"/>
+    </xs:choice>
+    <xs:attribute name="outputclass" type="xs:string"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute ref="class" default="- topic/q "/>
+  </xs:complexType>
+
+  <!-- Base form: Unordered list -->
+  
+  <xs:element name="ul" type="ul.class">
+    <xs:annotation>
+      <xs:documentation>In an unordered list (&lt;ul>), the order of the list items is
+        not significant. List items are typically styled on output with a "bullet"
+        character, depending on nesting level.
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="ul.class">
+    <xs:choice>
+      <xs:group ref="li" maxOccurs="unbounded"/>
+    </xs:choice>
+    <xs:attribute name="spectitle" type="xs:string"/>
+    <xs:attribute name="compact" type="yesno-att.class"/>
+    <xs:attribute name="outputclass" type="xs:string"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute ref="class" default="- topic/ul "/>
+  </xs:complexType>
+
+  <!-- Base form: Ordered list -->
+ 
+  <xs:element name="ol" type="ol.class">
+    <xs:annotation>
+      <xs:documentation>An ordered list (&lt;ol>) is a list of items sorted by sequence
+        or order of importance.
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="ol.class">
+    <xs:choice>
+      <xs:group ref="li" maxOccurs="unbounded"/>
+    </xs:choice>
+    <xs:attribute name="spectitle" type="xs:string"/>
+    <xs:attribute name="compact" type="yesno-att.class"/>
+    <xs:attribute name="outputclass" type="xs:string"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute ref="class" default="- topic/ol "/>
+  </xs:complexType>
+
+  <!-- Base form: Simple list -->
+  
+  <xs:element name="sl" type="sl.class">
+    <xs:annotation>
+      <xs:documentation>The &lt;<keyword>sl</keyword>> element contains a simple list of
+        items of short, phrase-like content, such as in documenting the materials
+        in a kit or package.
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="sl.class">
+    <xs:choice>
+      <xs:group ref="sli" maxOccurs="unbounded"/>
+    </xs:choice>
+    <xs:attribute name="spectitle" type="xs:string"/>
+    <xs:attribute name="compact" type="yesno-att.class"/>
+    <xs:attribute name="outputclass" type="xs:string"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute ref="class" default="- topic/sl "/>
+  </xs:complexType>
+
+  <!-- Base form: Simple List Item -->
+  <xs:element name="sli" type="sli.class">
+    <xs:annotation>
+      <xs:documentation>
+        A simple list item (&lt;sli>) is a single item in a simple list&lt;sl>.
+        Simple list items have phrase or text content, adequate for describing package
+        contents, for example. When a DITA topic is formatted for output, the items
+        of a simple list are placed each on its own line, with no other prefix such
+        as a number (as in an ordered list) or bullet (as in an unordered list)..
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="sli.class" mixed="true">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="ph.cnt"/>
+    </xs:choice>
+    <xs:attribute name="outputclass" type="xs:string"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute ref="class" default="- topic/sli "/>
+  </xs:complexType>
+
+  <!-- Base form: List Item -->
+  
+  <xs:element name="li" type="li.class">
+    <xs:annotation>
+      <xs:documentation>A list (&lt;li>) item is a single item in an ordered &lt;ol> or
+        unordered &lt;ul> list. When a DITA topic is formatted for output, numbers
+        and alpha characters are usually output with list items in ordered lists,
+        while bullets and dashes are usually output with list items in unordered lists.
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="li.class" mixed="true">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="listitem.cnt"/>
+    </xs:choice>
+    <xs:attribute name="outputclass" type="xs:string"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute ref="class" default="- topic/li "/>
+  </xs:complexType>
+
+  <!-- Base form: List Item Section-->
+  
+  <xs:element name="itemgroup" type="itemgroup.class">
+    <xs:annotation>
+      <xs:documentation>The &lt;<keyword>itemgroup</keyword>> element is reserved for specialization
+        of DITA. As a container element, it can be used to sub-divide or organize
+        elements that occur inside a list item, definition, or parameter definition.</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="itemgroup.class" mixed="true">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="itemgroup.cnt"/>
+    </xs:choice>
+    <xs:attribute name="outputclass" type="xs:string"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute ref="class" default="- topic/itemgroup "/>
+  </xs:complexType>
+
+  <!-- Base form: Definition List -->
+  
+  <xs:element name="dl" type="dl.class">
+    <xs:annotation>
+      <xs:documentation>A definition list (&lt;<keyword>dl</keyword>>) is a list of terms
+        and corresponding definitions.  The term (&lt;<keyword>dt</keyword>>) is usually
+        flush left.  The description or definition (&lt;<keyword>dt</keyword>>) is
+        usually either indented and on the next line, or on the same line to the right
+        of the term.
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="dl.class">
+    <xs:sequence>
+      <xs:group ref="dlhead" minOccurs="0"/>
+      <xs:group ref="dlentry" maxOccurs="unbounded"/>
+    </xs:sequence>
+    <xs:attribute name="compact" type="yesno-att.class"/>
+    <xs:attribute name="spectitle" type="xs:string"/>
+    <xs:attribute name="outputclass" type="xs:string"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute ref="class" default="- topic/dl "/>
+  </xs:complexType>
+
+  
+  <xs:element name="dlhead" type="dlhead.class">
+    <xs:annotation>
+      <xs:documentation>The &lt;<keyword>dlhead</keyword>> element contains optional headings
+        for the term and description columns in a definition list. The definition
+        list heading contains a heading &lt;<keyword>dthd</keyword>> for the column
+        of terms and an optional heading &lt;<keyword>ddhd</keyword>>for the column
+        of descriptions.
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="dlhead.class">
+    <xs:sequence>
+      <xs:group ref="dthd" minOccurs="0"/>
+      <xs:group ref="ddhd" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute name="outputclass" type="xs:string"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute ref="class" default="- topic/dlhead "/>
+  </xs:complexType>
+
+  
+  <xs:element name="ddhd" type="ddhd.class">
+    <xs:annotation>
+      <xs:documentation>The definition descriptions heading (&lt;ddhd>) element contains
+        an optional heading or title for a column of descriptions or definitions in
+        a definition list
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="ddhd.class" mixed="true">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="title.cnt"/>
+    </xs:choice>
+    <xs:attribute name="outputclass" type="xs:string"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute ref="class" default="- topic/ddhd "/>
+  </xs:complexType>
+
+  
+  <xs:element name="dthd" type="dthd.class">
+    <xs:annotation>
+      <xs:documentation>The definition term heading (&lt;dthd>) element is contained in
+        a definition list head (&lt;dlhead>) and provides an optional heading for
+        the column of terms in a description list.</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="dthd.class" mixed="true">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="title.cnt"/>
+    </xs:choice>
+    <xs:attribute name="outputclass" type="xs:string"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute ref="class" default="- topic/dthd "/>
+  </xs:complexType>
+
+  
+  <xs:element name="dlentry" type="dlentry.class">
+    <xs:annotation>
+      <xs:documentation>In a definition list, each list item is defined by the definition
+        list entry (&lt;dlentry>) element. The definition list entry element includes
+        a term &lt;dt> and one or more definitions or descriptions &lt;dd> of that
+        term.
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="dlentry.class">
+    <xs:sequence>
+      <xs:group ref="dt" maxOccurs="unbounded"/>
+      <xs:group ref="dd" maxOccurs="unbounded"/>
+    </xs:sequence>
+    <xs:attribute name="outputclass" type="xs:string"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute ref="class" default="- topic/dlentry "/>
+  </xs:complexType>
+
+ 
+  <xs:element name="dt" type="dt.class">
+    <xs:annotation>
+      <xs:documentation>The definition term &lt;<keyword>dt</keyword>> element contains
+        a term in a definition list entry.
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="dt.class" mixed="true">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="term.cnt"/>
+    </xs:choice>
+    <xs:attribute name="keyref" type="xs:NMTOKEN"/>
+    <xs:attribute name="outputclass" type="xs:string"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute ref="class" default="- topic/dt "/>
+  </xs:complexType>
+
+  
+  <xs:element name="dd" type="dd.class">
+    <xs:annotation>
+      <xs:documentation>The definition description (&lt;<keyword>dd</keyword>>) element
+        contains the description of a term in a definition list entry.
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="dd.class" mixed="true">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="defn.cnt"/>
+    </xs:choice>
+    <xs:attribute name="outputclass" type="xs:string"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute ref="class" default="- topic/dd "/>
+  </xs:complexType>
+
+  <!-- Base form: Figure -->
+  
+  <xs:element name="fig" type="fig.class">
+    <xs:annotation>
+      <xs:documentation>The figure (&lt;<keyword>fig</keyword>>) element is a display context
+        (sometimes called an <q>exhibit</q>) with an optional title for a wide variety
+        of content. Most commonly, the figure element contains an image element (a
+        graphic or artwork), but it can contain several kinds of text objects as well.
+        A title is placed inside the figure element to provide a caption to describe
+        the content.
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="fig.class">
+    <xs:sequence>
+      <xs:group ref="title" minOccurs="0"/>
+      <xs:group ref="desc" minOccurs="0"/>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:group ref="figgroup"/>
+        <xs:group ref="fig.cnt"/>
+      </xs:choice>
+    </xs:sequence>
+    <xs:attributeGroup ref="display-atts"/>
+    <xs:attribute name="outputclass" type="xs:string"/>
+    <xs:attribute name="spectitle" type="xs:string"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute ref="class" default="- topic/fig "/>
+  </xs:complexType>
+
+  
+  <xs:element name="figgroup" type="figgroup.class">
+    <xs:annotation>
+      <xs:documentation>The &lt;<keyword>figgroup</keyword>> element is used only for specialization
+        at this time. Figure groups can be used to contain multiple cross-references,
+        footnotes or keywords, but not multipart images. Multipart images in DITA
+        should be represented by a suitable media type displayed by the &lt;<keyword>object</keyword>>
+        element.
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="figgroup.class">
+    <xs:sequence>
+      <xs:group ref="title" minOccurs="0"/>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:group ref="figgroup"/>
+        <xs:group ref="xref"/>
+        <xs:group ref="fn"/>
+        <xs:group ref="ph"/>
+        <xs:group ref="keyword"/>
+      </xs:choice>
+    </xs:sequence>
+    <xs:attribute name="outputclass" type="xs:string"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute ref="class" default="- topic/figgroup "/>
+  </xs:complexType>
+
+  <!-- Base form: Preformatted Text -->
+  
+  <xs:element name="pre" type="pre.class">
+    <xs:annotation>
+      <xs:documentation>The preformatted element (&lt;<keyword>pre</keyword>>) preserves
+        line breaks and spaces entered manually by the author in the content of the
+        element, and also presents the content in a monospaced type font (depending
+        on your output formatting processor).
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="pre.class" mixed="true">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="pre.cnt"/>
+    </xs:choice>
+    <xs:attribute name="outputclass" type="xs:string"/>
+    <xs:attribute name="spectitle" type="xs:string"/>
+    <xs:attributeGroup ref="display-atts"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attribute ref="xml:space" fixed="preserve"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute ref="class" default="- topic/pre "/>
+  </xs:complexType>
+
+  <!-- Base form: Lines Respecting Text -->
+  
+  <xs:element name="lines" type="lines.class">
+    <xs:annotation>
+      <xs:documentation>The &lt;<keyword>lines</keyword>> element may be used to represent
+        dialogs, lists, text fragments, and so forth. The &lt;<keyword>lines</keyword>>
+        element is similar to &lt;<keyword>pre</keyword>> in that hard line breaks
+        are preserved, but the font style is not set to monospace, and extra spaces
+        inside the lines are not preserved. 
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="lines.class" mixed="true">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="pre.cnt"/>
+    </xs:choice>
+    <xs:attribute name="spectitle" type="xs:string"/>
+    <xs:attributeGroup ref="display-atts"/>
+    <xs:attribute name="outputclass" type="xs:string"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attribute ref="xml:space" fixed="preserve"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute ref="class" default="- topic/lines "/>
+  </xs:complexType>
+
+  
+  <xs:element name="image" type="image.class">
+    <xs:annotation>
+      <xs:documentation>Include artwork or images in a DITA topic by using the &lt;<keyword>image</keyword>>
+        element. The &lt;<keyword>image</keyword>> element has optional attributes
+        that indicate whether the placement of the included graphic or artwork should
+        be inline (like a button or icon), or on a separate line for a larger image.
+        An <i><keyword>href</keyword></i> attribute is required on the image element,
+        as this attribute creates a pointer to the image, and allows the output formatting
+        processor to bring the image into the text flow. To make the intent of the
+        image more accessible for users using screen readers or text-only readers,
+        always include a description of the image's content in the <i><keyword>alt </keyword></i>attribute.
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="image.class">
+    <xs:choice>
+      <xs:group ref="alt" minOccurs="0"/>
+    </xs:choice>
+    <xs:attribute name="href" type="xs:string" use="required"/>
+    <xs:attribute name="keyref" type="xs:NMTOKEN"/>
+    <xs:attribute name="alt" type="xs:string"/>
+    <xs:attribute name="longdescref" type="xs:string"/>
+    <xs:attribute name="height" type="xs:NMTOKEN"/>
+    <xs:attribute name="width" type="xs:NMTOKEN"/>
+    <xs:attribute name="align" type="image-align-att.class"/>
+    <xs:attribute name="placement" type="image-placement-att.class" default="inline"/>
+    <xs:attribute name="outputclass" type="xs:string"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute ref="class" default="- topic/image "/>
+  </xs:complexType>
+
+  <xs:simpleType name="image-placement-att.class">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="inline"/>
+      <xs:enumeration value="break"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="image-align-att.class">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="left"/>
+      <xs:enumeration value="center"/>
+      <xs:enumeration value="right"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+ 
+  <xs:element name="alt" type="alt.class">
+    <xs:annotation>
+      <xs:documentation>The alt element provides an element equivalent of the <apiname>alt</apiname> attribute
+        on the image element. As an element, it provides direct text entry within
+        an XML editor and is more easily accessed than an attribute for translation.
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="alt.class" mixed="true">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="words.cnt"/>
+    </xs:choice>
+    <xs:attribute name="outputclass" type="xs:string"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute ref="class" default="- topic/alt "/>
+  </xs:complexType>
+
+
+  <xs:element name="object" type="object.class">
+    <xs:annotation>
+      <xs:documentation>DITA's &lt;<keyword>object</keyword>> element corresponds to the
+        HTML &lt;<keyword>object</keyword>> element. The &lt;<keyword>object</keyword>>
+        element allows authors to include animated images, applets, plug-ins, ActiveX
+        controls, video clips, and other multimedia objects in a topic for rendering
+        after transformation to HTML.
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="object.class">
+    <xs:sequence>
+      <xs:group ref="desc" minOccurs="0"/>
+      <xs:group ref="param" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+    <xs:attribute name="declare" type="xs:string" fixed="declare"/>
+    <xs:attribute name="classid" type="xs:string"/>
+    <xs:attribute name="codebase" type="xs:string"/>
+    <xs:attribute name="data" type="xs:string"/>
+    <xs:attribute name="type" type="xs:string"/>
+    <xs:attribute name="codetype" type="xs:string"/>
+    <xs:attribute name="archive" type="xs:string"/>
+    <xs:attribute name="standby" type="xs:string"/>
+    <xs:attribute name="height" type="xs:NMTOKEN"/>
+    <xs:attribute name="width" type="xs:NMTOKEN"/>
+    <xs:attribute name="usemap" type="xs:string"/>
+    <xs:attribute name="name" type="xs:string"/>
+    <xs:attribute name="tabindex" type="xs:string"/>
+    <xs:attribute name="longdescref" type="xs:string"/>
+    <xs:attribute name="outputclass" type="xs:string"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute ref="class" default="- topic/object "/>
+  </xs:complexType>
+
+  
+  <xs:element name="param" type="param.class">
+    <xs:annotation>
+      <xs:documentation>The parameter (&lt;<keyword>param</keyword>>)element specifies
+        a set of values that may be required by an &lt;<keyword>object</keyword>>
+        at runtime. Any number of &lt;<keyword>param</keyword>> elements may appear
+        in the content of an object in any order, but must be placed at the start
+        of the content of the enclosing object. This element is comparable to the
+        XHMTL &lt;<keyword>param</keyword>> element.
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="param.class">
+    <xs:attribute name="id" type="xs:ID"/>
+    <xs:attribute name="name" type="xs:string" use="required"/>
+    <xs:attribute name="value" type="xs:string"/>
+    <xs:attribute name="valuetype" type="valuetype-att.class"/>
+    <xs:attribute name="type" type="xs:string"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute ref="class" default="- topic/param "/>
+  </xs:complexType>
+
+  <!-- Base form: Simple Table -->
+ 
+  <xs:element name="simpletable" type="simpletable.class">
+    <xs:annotation>
+      <xs:documentation>The &lt;<keyword>simpletable</keyword>> element is used for tables
+        that are regular in structure and do not need a caption. Choose the simple
+        table element when you want to show information in regular rows and columns.
+        For example, multi-column tabular data such as phone directory listings or
+        parts lists are good candidates for simpletable. Another good use of simpletable
+        is for information that seems to beg for a "three-part definition list"—just
+        use the keycol attribute to indicate which column represents the "key" or
+        term-like column of your structure. 
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="simpletable.class">
+    <xs:sequence>
+      <xs:group ref="sthead" minOccurs="0"/>
+      <xs:group ref="strow" maxOccurs="unbounded"/>
+    </xs:sequence>
+    <xs:attribute name="relcolwidth" type="xs:string"/>
+    <xs:attribute name="keycol" type="xs:NMTOKEN" />
+    <xs:attribute name="refcols" type="xs:NMTOKENS"/>
+    <xs:attributeGroup ref="display-atts"/>
+    <xs:attribute name="outputclass" type="xs:string"/>
+    <xs:attribute name="spectitle" type="xs:string"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute ref="class" default="- topic/simpletable "/>
+  </xs:complexType>
+
+ 
+  <xs:element name="sthead" type="sthead.class">
+    <xs:annotation>
+      <xs:documentation>The simpletable header (&lt;sthead>) element contains the table's
+        header row. The header row is optional in a simple table.
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="sthead.class">
+    <xs:choice>
+      <xs:group ref="stentry" maxOccurs="unbounded"/>
+    </xs:choice>
+    <xs:attribute name="outputclass" type="xs:string"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute ref="class" default="- topic/sthead "/>
+  </xs:complexType>
+
+ 
+  <xs:element name="strow" type="strow.class">
+    <xs:annotation>
+      <xs:documentation>The &lt;<keyword>simpletable</keyword>> row (&lt;<keyword>strow</keyword>>)
+        element specifies a row in a simple table, like row in a conventional <ph><xref
+          href="table.xml">table</xref></ph>.
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="strow.class">
+    <xs:choice>
+      <xs:group ref="stentry" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:choice>
+    <xs:attribute name="outputclass" type="xs:string"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute ref="class" default="- topic/strow "/>
+  </xs:complexType>
+
+  
+  <xs:element name="stentry" type="stentry.class">
+    <xs:annotation>
+      <xs:documentation>The simpletable entry (&lt;stentry>) element represents a single
+        table cell, like &lt;entry> in &lt;table>. You can place any number of stentry
+        cells in either an <ph><xref href="sthead.xml">sthead</xref></ph> element
+        (for headings) or <ph><xref href="strow.xml">strow</xref></ph> element (for
+        rows of data).
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="stentry.class" mixed="true">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="tblcell.cnt"/>
+    </xs:choice>
+    <xs:attribute name="outputclass" type="xs:string"/>
+    <xs:attribute name="specentry" type="xs:string"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute ref="class" default="- topic/stentry "/>
+  </xs:complexType>
+
+  <!-- Base form: Required Cleanup Block -->
+  <!-- ===============================
+        CLEAN UP "ANY" CONTENT MODEL
+    ================================ -->
+ 
+  <xs:element name="draft-comment" type="draft-comment.class">
+    <xs:annotation>
+      <xs:documentation>The &lt;<keyword>draft-comment</keyword>> element allows simple
+        review and discussion of topic contents within the marked-up content. Use
+        the &lt;draft-comment> element to ask a question or make a comment that you
+        would like others to review. To indicate the source of the draft comment or
+        the status of the comment, use the author, time or disposition attributes.
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="draft-comment.class" mixed="true">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="basic.phandblock"/>
+    </xs:choice>
+    <xs:attribute name="disposition" type="disposition-att.class"/>
+    <xs:attribute name="author" type="xs:string"/>
+    <xs:attribute name="time" type="xs:string"/>
+    <xs:attribute name="outputclass" type="xs:string"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute ref="class" default="- topic/draft-comment "/>
+  </xs:complexType>
+
+ 
+  <xs:element name="required-cleanup" type="required-cleanup.class">
+    <xs:annotation>
+      <xs:documentation>A &lt;<keyword>required-cleanup</keyword>> element is used as a
+        placeholder for migrated elements that cannot be appropriately tagged without
+        manual intervention. As the element name implies, the intent for authors is
+        to clean up the contained material and eventually get rid of the &lt;<keyword>required-cleanup</keyword>>
+        element. Authors should not insert this element into documents. 
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="required-cleanup.class" mixed="true">
+    <xs:choice>
+      <xs:any processContents="skip" maxOccurs="unbounded"/>
+    </xs:choice>
+    <xs:attribute name="remap" type="xs:string"/>
+    <xs:attribute name="outputclass" type="xs:string"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute ref="class" default="- topic/required-cleanup "/>
+  </xs:complexType>
+
+  <!-- Base form: Footnote -->
+  
+  <xs:element name="fn" type="fn.class">
+    <xs:annotation>
+      <xs:documentation>Use footnote (&lt;<keyword>fn</keyword>>) to annotate text with
+        notes that are not appropriate for inclusion in line or to indicate the source
+        for facts or other material used in the text.
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="fn.class" mixed="true">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="fn.cnt"/>
+    </xs:choice>
+    <xs:attribute name="callout" type="xs:string"/>
+    <xs:attribute name="outputclass" type="xs:string"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute ref="class" default="- topic/fn "/>
+  </xs:complexType>
+
+  
+  <xs:element name="indextermref" type="indextermref.class">
+    <xs:annotation>
+      <xs:documentation>An &lt;<keyword>indextermref</keyword>> is a reference to an index
+        entry in a lookup table used by the indexing process. If you want to create
+        index markers pointing to referenced items, but only want page numbers instead
+        of separate index entries to be generated, use the index term reference &lt;indextermref>
+        element. This adds the page number of the reference to the index without creating
+        a separate index entry. 
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="indextermref.class" >
+    <xs:attribute name="keyref" type="xs:NMTOKEN" use="required"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute ref="class" default="- topic/indextermref "/>
+  </xs:complexType>
+
+  <!-- Base form: Citation (from a bibliographic source) -->
+  
+  <xs:element name="cite" type="cite.class">
+    <xs:annotation>
+      <xs:documentation>The &lt;<keyword>cite</keyword>> element is used when you need
+        a bibliographic citation that refers to a book or article. It specifically
+        identifies the title of the resource. Its <i><keyword>keyref</keyword></i> attribute
+        allows the citation to be associated to other possible bibliographic processing
+        (not supported yet). 
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="cite.class" mixed="true">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="xrefph.cnt"/>
+    </xs:choice>
+    <xs:attribute name="keyref" type="xs:NMTOKEN"/>
+    <xs:attribute name="outputclass" type="xs:string"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute ref="class" default="- topic/cite "/>
+  </xs:complexType>
+
+ 
+  <xs:element name="xref" type="xref.class">
+    <xs:annotation>
+      <xs:documentation>Use the cross-reference (&lt;<keyword>xref</keyword>>) element
+        to link to a different location within the current topic, or a different topic
+        within the same help system or DITA document. You can also point to external
+        sources, such as Web pages, or to a location in another topic as well. The <i><keyword>href</keyword></i> attribute
+        on the &lt;<keyword>xref</keyword>> element is used to create the link pointer,
+        or URL.
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="xref.class" mixed="true">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="xreftext.cnt"/>
+      <xs:group ref="desc"/>
+    </xs:choice>
+    <xs:attribute name="href" type="xs:string"/>
+    <xs:attribute name="keyref" type="xs:NMTOKEN"/>
+    <xs:attribute name="type" type="xs:string"/>
+    <xs:attribute name="format" type="xs:string"/>
+    <xs:attribute name="scope" type="scope-att.class"/>
+    <xs:attribute name="outputclass" type="xs:string"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute ref="class" default="- topic/xref "/>
+  </xs:complexType>
+
+  <xs:simpleType name="xref-type-att.class">
+    <xs:union memberTypes="xref-type-attlist.class topicreftypes-att.class"/>
+  </xs:simpleType>
+  <xs:simpleType name="scope-att.class">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="local"/>
+      <xs:enumeration value="peer"/>
+      <xs:enumeration value="external"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="valuetype-att.class">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="data"/>
+      <xs:enumeration value="ref"/>
+      <xs:enumeration value="object"/>
+    </xs:restriction>
+  </xs:simpleType>
+  
+  <xs:attribute name="class" type="xs:string" >
+    <xs:annotation>
+      <xs:documentation>
+        The class attribute supports specialization. Its predefined values help 
+        the output transforms work correctly with ranges of related content. 
+      </xs:documentation>
+    </xs:annotation>
+  </xs:attribute>
+  
+</xs:schema>

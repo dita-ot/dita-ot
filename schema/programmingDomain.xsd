@@ -1,0 +1,711 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ============================================================= -->
+<!--                    HEADER                                     -->
+<!-- ============================================================= -->
+<!--  MODULE:    DITA Programming Domain                             -->
+<!--  VERSION:   1.0                                               -->
+<!--  DATE:      February 2005                                     -->
+<!--                                                               -->
+<!-- ============================================================= -->
+
+<!-- ============================================================= -->
+<!-- SYSTEM:     Darwin Information Typing Architecture (DITA)     -->
+<!--                                                               -->
+<!-- PURPOSE:    Define elements and specialization atttributed    -->
+<!--             for Programming Domain                              -->
+<!--                                                               -->
+<!-- ORIGINAL CREATION DATE:                                       -->
+<!--             March 2001                                        -->
+<!--                                                               -->
+<!--             (C) Copyright OASIS-Open.org 2005.                -->
+<!--             (C) Copyright IBM Corporation 2001, 2004.         -->
+<!--             All Rights Reserved.                              -->
+<!-- ============================================================= -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+  <!-- ==================== Import Section ======================= -->
+  <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="xml.xsd"/>
+
+  <xs:group name="pr-d-keyword">
+    <xs:choice>
+        <xs:element ref="option"/>
+        <xs:element ref="parmname"/>
+        <xs:element ref="apiname"/>
+    </xs:choice >
+  </xs:group >
+
+  <xs:group name="pr-d-ph">
+    <xs:choice>
+      <xs:element ref="codeph" />
+      <xs:element ref="synph" />
+     </xs:choice>
+  </xs:group>
+
+  <xs:group name="pr-d-pre">
+    <xs:choice>
+        <xs:element ref="codeblock"/>
+    </xs:choice >
+  </xs:group >
+
+   <xs:group name="pr-d-dl">
+    <xs:choice>
+        <xs:element ref="parml"/>
+    </xs:choice >
+  </xs:group >
+
+   <xs:group name="pr-d-fig">
+    <xs:choice>
+        <xs:element ref="syntaxdiagram"/>
+    </xs:choice >
+  </xs:group >
+
+  <xs:attributeGroup name="univ-atts-no-importance">
+    <xs:attributeGroup ref="id-atts"/>
+    <xs:attribute name="platform" type="xs:string"/>
+    <xs:attribute name="product" type="xs:string"/>
+    <xs:attribute name="audience" type="xs:string"/>
+    <xs:attribute name="otherprops" type="xs:string"/>
+    <xs:attribute name="rev" type="xs:string"/>
+    <xs:attribute name="status" type="status-atts.class"/>
+    <xs:attribute name="translate" type="yesno-att.class"/>
+    <xs:attribute ref="xml:lang"/>
+  </xs:attributeGroup>
+
+  <xs:attributeGroup name="univ-atts-importance-nodefault">
+    <xs:attributeGroup ref="id-atts"/>
+    <xs:attribute name="platform" type="xs:string"/>
+    <xs:attribute name="product" type="xs:string"/>
+    <xs:attribute name="audience" type="xs:string"/>
+    <xs:attribute name="otherprops" type="xs:string"/>
+    <xs:attribute name="rev" type="xs:string"/>
+    <xs:attribute name="importance" type="importance-att-nodefault.class"/>
+    <xs:attribute name="translate" type="yesno-att.class"/>
+    <xs:attribute ref="xml:lang"/>
+  </xs:attributeGroup>
+
+  <xs:simpleType name="importance-att-progdom.class">
+    <xs:restriction base="importance-atts.class">
+      <xs:enumeration value="optional"/>
+      <xs:enumeration value="required"/>
+      <xs:enumeration value="default"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="importance-att-nodefault.class">
+    <xs:restriction base="importance-atts.class">
+      <xs:enumeration value="optional"/>
+      <xs:enumeration value="required"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:element name="codeph" type="codeph.class">
+    <xs:annotation>
+      <xs:documentation>
+        The code phrase (&lt;<keyword>codeph</keyword>&gt;) element represents a snippet
+        of code within the main flow of text. The code phrase may be displayed in
+        a monospaced font for emphasis. This element is part of the DITA programming
+        domain, a special set of DITA elements designed to document programming tasks,
+        concepts and reference information.
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="codeph.class" mixed="true">
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:group ref="basic.ph.notm" />
+        </xs:choice>
+        <xs:attribute name="outputclass" type="xs:string"/>
+        <xs:attributeGroup ref="global-atts"/>
+        <xs:attributeGroup ref="univ-atts"/>
+        <xs:attribute ref="class" default="+ topic/ph pr-d/codeph "/>
+  </xs:complexType>
+
+  <xs:element name="codeblock" type="codeblock.class" >
+    <xs:annotation>
+      <xs:documentation>
+        The &lt;<keyword>codeblock</keyword>&gt; element represents lines of
+        program code. Like the <ph>
+          <xref href="xref.xml">&lt;<keyword>pre</keyword>&gt;</xref>
+        </ph> element,
+        content of this element has preserved line endings and is output in a monospaced
+        font. This element is part of the DITA programming domain, a special set of
+        DITA elements designed to document programming tasks, concepts and reference
+        information.
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="codeblock.class" mixed="true">
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:group ref="basic.ph.notm"/>
+          <xs:group ref="txt.incl"/>
+        </xs:choice>
+        <xs:attribute name="outputclass" type="xs:string"/>
+        <xs:attribute name="spectitle" type="xs:string"/>
+        <xs:attributeGroup ref="display-atts"/>
+        <xs:attributeGroup ref="univ-atts"/>
+        <xs:attribute ref="xml:space" fixed="preserve"/>
+        <xs:attributeGroup ref="global-atts"/>
+        <xs:attribute ref="class" default="+ topic/pre pr-d/codeblock "/>
+  </xs:complexType>
+
+  <xs:element name="option" type="option.class" >
+    <xs:annotation>
+      <xs:documentation>
+        The &lt;<keyword>option</keyword>&gt; element describes an option
+        that can be used to modify a command (or something else, like a configuration).
+        This element is part of the DITA programming domain, a special set of DITA
+        elements designed to document programming tasks, concepts and reference information.
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="option.class" mixed="true">
+        <xs:attribute name="keyref" type="xs:NMTOKEN"/>
+        <xs:attribute name="outputclass" type="xs:string"/>
+        <xs:attributeGroup ref="global-atts"/>
+        <xs:attributeGroup ref="univ-atts"/>
+        <xs:attribute ref="class" default="+ topic/keyword pr-d/option "/>
+  </xs:complexType>
+
+  <xs:element name="var" type="var.class">
+    <xs:annotation>
+      <xs:documentation>
+        Within a syntax definition, the &lt;<keyword>var</keyword>&gt; element
+        defines a variable for which the user must supply content, such as their user
+        name or password. It is represented in output in an italic font.
+        This element is part of the DITA programming domain, a special set of DITA
+        elements designed to document programming tasks, concepts and reference information.
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="var.class" mixed="true">
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:group ref="words.cnt"/>
+        </xs:choice>
+        <xs:attribute name="outputclass" type="xs:string"/>
+        <xs:attribute name="importance" type="importance-att-progdom.class"/>
+        <xs:attributeGroup ref="global-atts"/>
+        <xs:attributeGroup ref="univ-atts-no-importance"/>
+        <xs:attribute ref="class" default="+ topic/ph pr-d/var "/>
+  </xs:complexType>
+
+  <xs:element name="parmname" type="parmname.class" >
+    <xs:annotation>
+      <xs:documentation>
+        When referencing the name of an application programming interface
+        parameter within the text flow of your topic, use the parameter
+        name (&lt;<keyword>parmname</keyword>&gt;) element to markup the parameter. This element
+        is part of the DITA programming domain, a special set of DITA elements designed
+        to document programming tasks, concepts and reference information.
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="parmname.class" mixed="true">
+        <xs:attribute name="keyref" type="xs:NMTOKEN"/>
+        <xs:attribute name="outputclass" type="xs:string"/>
+        <xs:attributeGroup ref="global-atts"/>
+        <xs:attributeGroup ref="univ-atts"/>
+        <xs:attribute ref="class" default="+ topic/keyword  pr-d/parmname "/>
+  </xs:complexType>
+
+  <xs:element name="synph" type="synph.class">
+    <xs:annotation>
+      <xs:documentation>
+        The syntax phrase (&lt;synph&gt;) element is a container for syntax
+        definition elements. It is used when a complete syntax definition is not needed,
+        but some of the syntax elements, such as kwd, oper, delim, are used within
+        the text flow of the topic content. This element is part of the DITA programming
+        domain, a special set of DITA elements designed to document programming tasks,
+        concepts and reference information.
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="synph.class" mixed="true">
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <!-- ph -->
+          <xs:element ref="codeph"/>
+          <xs:element ref="var"/>
+          <xs:element ref="oper"/>
+          <xs:element ref="delim"/>
+          <xs:element ref="sep"/>
+          <xs:element ref="synph"/>
+          <!-- keyword -->
+          <xs:element ref="option"/>
+          <xs:element ref="parmname"/>
+          <xs:element ref="kwd"/>
+        </xs:choice>
+        <xs:attribute name="outputclass" type="xs:string"/>
+        <xs:attributeGroup ref="global-atts"/>
+        <xs:attributeGroup ref="univ-atts"/>
+        <xs:attribute ref="class" default="+ topic/ph pr-d/synph "/>
+  </xs:complexType>
+
+  <xs:element name="oper" type="oper.class" >
+    <xs:annotation>
+      <xs:documentation>
+        The operator (&lt;<keyword>oper</keyword>&gt;) element defines an operator
+        within a syntax definition. Typical operators are equals (=), plus (+) or
+        multiply (*). This element is part of the DITA programming domain, a special
+        set of DITA elements designed to document programming tasks, concepts and
+        reference information.
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="oper.class" mixed="true">
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:group ref="words.cnt"/>
+        </xs:choice>
+        <xs:attribute name="outputclass" type="xs:string"/>
+        <xs:attributeGroup ref="univ-atts-no-importance"/>
+        <xs:attribute name="importance" type="importance-att-progdom.class"/>
+        <xs:attributeGroup ref="global-atts"/>
+        <xs:attribute ref="class" default="+ topic/ph pr-d/oper "/>
+  </xs:complexType>
+
+  <xs:element name="delim" type="delim.class">
+    <xs:annotation>
+      <xs:documentation>
+        Within a syntax definition, the delimiter (&lt;delim&gt;) element defines
+        a character marking the beginning or end of a section or part of the complete
+        syntax. Typical delimiter characters are the parenthesis, comma, tab, vertical
+        bar or other special characters. This element is part of the DITA programming
+        domain, a special set of DITA elements designed to document programming tasks,
+        concepts and reference information.
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="delim.class" mixed="true">
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:group ref="words.cnt"/>
+        </xs:choice>
+        <xs:attribute name="outputclass" type="xs:string"/>
+        <xs:attributeGroup ref="global-atts"/>
+        <xs:attributeGroup ref="univ-atts-no-importance"/>
+        <xs:attribute name="importance" type="importance-att-nodefault.class"/>
+        <xs:attribute ref="class" default="+ topic/ph pr-d/delim "/>
+  </xs:complexType>
+
+  <xs:element name="sep" type="sep.class" >
+    <xs:annotation>
+      <xs:documentation>
+        The separator (&lt;sep&gt;) element defines a separator character that
+        is inline with the content of a syntax definition. The separator occurs between
+        keywords, operators or groups in a syntax definition. This element is part
+        of the DITA programming domain, a special set of DITA elements designed to
+        document programming tasks, concepts and reference information.
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="sep.class" mixed="true">
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:group ref="words.cnt"/>
+        </xs:choice>
+        <xs:attribute name="outputclass" type="xs:string"/>
+        <xs:attributeGroup ref="global-atts"/>
+        <xs:attributeGroup ref="univ-atts-no-importance"/>
+        <xs:attribute name="importance" type="importance-att-nodefault.class"/>
+        <xs:attribute ref="class" default="+ topic/ph pr-d/sep "/>
+  </xs:complexType>
+
+  <xs:element name="apiname" type="apiname.class" >
+    <xs:annotation>
+      <xs:documentation>
+        The &lt;<keyword>apiname</keyword>&gt; element provides the name of
+        an application programming interface (API) such as a Java class name or method
+        name. This element is part of the DITA programming domain, a special set of
+        DITA elements designed to document programming tasks, concepts and reference
+        information.
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="apiname.class" mixed="true">
+        <xs:attribute name="keyref" type="xs:NMTOKEN"/>
+        <xs:attribute name="outputclass" type="xs:string"/>
+        <xs:attributeGroup ref="global-atts"/>
+        <xs:attributeGroup ref="univ-atts"/>
+        <xs:attribute ref="class" default="+ topic/keyword pr-d/apiname "/>
+  </xs:complexType>
+
+  <xs:element name="parml" type="parml.class" >
+    <xs:annotation>
+        <xs:documentation>
+          The parameter list (&lt;<keyword>parml</keyword>&gt;) element contains a list of
+          terms and definitions that describes the parameters in an application programming
+          interface. This is a special kind of definition list that is
+          designed for computer parameters. This element is part of the DITA programming
+          domain, a special set of DITA elements designed to document programming tasks,
+          concepts and reference information.
+        </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="parml.class">
+     <xs:choice maxOccurs="unbounded">
+          <xs:element ref="plentry" />
+      </xs:choice>
+        <xs:attribute name="spectitle" type="xs:string"/>
+        <xs:attribute name="outputclass" type="xs:string"/>
+        <xs:attributeGroup ref="global-atts"/>
+        <xs:attributeGroup ref="univ-atts"/>
+        <xs:attribute name="compact" type="yesno-att.class"/>
+        <xs:attribute ref="class" default="+ topic/dl pr-d/parml "/>
+  </xs:complexType>
+
+  <xs:element name="plentry" type="plentry.class">
+    <xs:annotation>
+      <xs:documentation>
+        The parameter list entry element (&lt;plentry&gt;) contains one or more parameter terms and definitions (pd and pt).
+        This element is part of the DITA programming domain, a special set of DITA elements designed to document
+        programming tasks, concepts and reference information.
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="plentry.class">
+        <xs:sequence>
+          <xs:element ref="pt" maxOccurs="unbounded"/>
+          <xs:element ref="pd" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="outputclass" type="xs:string"/>
+        <xs:attributeGroup ref="global-atts"/>
+        <xs:attributeGroup ref="univ-atts"/>
+        <xs:attribute ref="class" default="+ topic/dlentry pr-d/plentry "/>
+  </xs:complexType>
+
+  <xs:element name="pt" type="pt.class">
+  <xs:annotation>
+    <xs:documentation>
+      A parameter term, within a parameter list entry, is enclosed by the &lt;<keyword>pt</keyword>&gt; element.
+      This element is part of the DITA programming domain, a special set of DITA elements designed to document
+      programming tasks, concepts and reference information.
+    </xs:documentation>
+  </xs:annotation>
+  </xs:element>
+  <xs:complexType name="pt.class" mixed="true">
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:group ref="term.cnt"/>
+        </xs:choice>
+        <xs:attribute name="keyref" type="xs:NMTOKEN"/>
+        <xs:attribute name="outputclass" type="xs:string"/>
+        <xs:attributeGroup ref="global-atts"/>
+        <xs:attributeGroup ref="univ-atts"/>
+        <xs:attribute ref="class" default="+ topic/dt pr-d/pt "/>
+  </xs:complexType>
+
+  <xs:element name="pd" type="pd.class">
+    <xs:annotation>
+      <xs:documentation>
+        A parameter definition, within a parameter list entry, is enclosed by the &lt;<keyword>pd</keyword>&gt; element.
+        This element is part of the DITA programming domain, a special set of DITA elements designed to document
+        programming tasks, concepts and reference information.
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="pd.class" mixed="true">
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:group ref="defn.cnt"/>
+        </xs:choice>
+        <xs:attribute name="outputclass" type="xs:string"/>
+        <xs:attributeGroup ref="global-atts"/>
+        <xs:attributeGroup ref="univ-atts"/>
+        <xs:attribute ref="class" default="+ topic/dd pr-d/pd "/>
+  </xs:complexType>
+
+  <!-- Base form: Syntax Diagram -->
+  <xs:element name="syntaxdiagram" type="syntaxdiagram.class">
+    <xs:annotation>
+      <xs:documentation>
+        The syntax diagram (&lt;<keyword>syntaxdiagram</keyword>&gt;) element
+        is the main container for all the syntax elements that make up a syntax definition.
+        The syntax diagram represents the syntax of a statement from a computer language,
+        or a command, function call or programming language statement. Traditionally,
+        the syntax diagram is formatted with <q>railroad tracks</q> that
+        connect the units of the syntax together, but this presentation may differ
+        depending on the output media. The syntax diagram element is part of the DITA
+        programming domain, a special set of DITA elements designed to document programming
+        tasks, concepts and reference information.
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="syntaxdiagram.class">
+        <xs:sequence>
+          <xs:element ref="title" minOccurs="0" maxOccurs="1"/>
+          <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:group ref="syntaxdiagram.grp"/>
+            <xs:element ref="fragment"/>
+            <xs:element ref="synblk"/>
+          </xs:choice>
+        </xs:sequence>
+        <xs:attribute name="outputclass" type="xs:string"/>
+        <xs:attributeGroup ref="global-atts"/>
+        <xs:attributeGroup ref="univ-atts"/>
+        <xs:attributeGroup ref="display-atts"/>
+        <xs:attribute ref="class" default="+ topic/fig pr-d/syntaxdiagram "/>
+  </xs:complexType>
+
+  <xs:group name="syntaxdiagram.grp">
+    <xs:choice>
+      <xs:element ref="groupseq"/>
+      <xs:element ref="groupchoice"/>
+      <xs:element ref="groupcomp"/>
+      <xs:element ref="fragref"/>
+      <xs:element ref="synnote"/>
+      <xs:element ref="synnoteref"/>
+    </xs:choice>
+  </xs:group>
+
+  <xs:group name="syntaxdiagramprog.grp">
+    <xs:choice>
+      <xs:element ref="kwd"/>
+      <xs:element ref="var"/>
+      <xs:element ref="delim"/>
+      <xs:element ref="oper"/>
+      <xs:element ref="sep"/>
+    </xs:choice>
+  </xs:group>
+
+  <xs:element name="synblk" type="synblk.class">
+    <xs:annotation>
+      <xs:documentation>
+        The syntax block (&lt;<keyword>synblk</keyword>&gt;) element
+        organizes small pieces of a syntax definition into a larger piece. The syntax
+        block element is part of the DITA programming domain, a special set of DITA
+        elements designed to document programming tasks, concepts and reference information.
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="synblk.class">
+        <xs:sequence>
+          <xs:element ref="title" minOccurs="0"/>
+          <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:group ref="syntaxdiagram.grp"/>
+            <xs:element ref="fragment"/>
+          </xs:choice>
+        </xs:sequence>
+        <xs:attribute name="outputclass" type="xs:string"/>
+        <xs:attributeGroup ref="global-atts"/>
+        <xs:attributeGroup ref="univ-atts"/>
+        <xs:attribute ref="class" default="+ topic/figgroup pr-d/synblk "/>
+  </xs:complexType>
+
+  <xs:element name="groupseq" type="groupseq.class">
+    <xs:annotation>
+      <xs:documentation>
+        The &lt;<keyword>groupseq</keyword>&gt; element is part of the subset
+        of elements that define syntax diagrams in DITA. A group is a logical set
+        of pieces of syntax that go together. Within the syntax definition, groups
+        of keywords, delimiters and other syntax units act as a combined unit, and
+        they occur in a specific sequence, as delimited by the &lt;<keyword>groupseq</keyword>&gt;
+        element. This element is part of the DITA programming domain, a special set
+        of DITA elements designed to document programming tasks, concepts and reference
+        information.
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="groupseq.class">
+        <xs:sequence>
+          <xs:element ref="title" minOccurs="0"/>
+          <xs:element ref="repsep" minOccurs="0"/>
+          <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:group ref="syntaxdiagram.grp"/>
+            <xs:group ref="syntaxdiagramprog.grp"/>
+          </xs:choice>
+        </xs:sequence>
+        <xs:attribute name="outputclass" type="xs:string"/>
+        <xs:attributeGroup ref="global-atts"/>
+        <xs:attributeGroup ref="univ-atts-no-importance"/>
+        <xs:attribute name="importance" type="importance-att-progdom.class"/>
+        <xs:attribute ref="class" default="+ topic/figgroup pr-d/groupseq "/>
+  </xs:complexType>
+
+  <xs:element name="groupchoice" type="groupchoice.class" >
+    <xs:annotation>
+      <xs:documentation>
+        The &lt;<keyword>groupchoice</keyword>&gt; element is part
+        of the subset of elements that define syntax diagrams in DITA. A group is
+        a logical set of pieces of syntax that go together. A group choice specifies
+        that the user must make a choice about which part of the syntax to use. Groups
+        are often nested. This element is part of the DITA programming domain, a special
+        set of DITA elements designed to document programming tasks, concepts and
+        reference information.
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="groupchoice.class">
+        <xs:sequence>
+          <xs:element ref="title" minOccurs="0"/>
+          <xs:element ref="repsep" minOccurs="0"/>
+          <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:group ref="syntaxdiagram.grp"/>
+            <xs:group ref="syntaxdiagramprog.grp"/>
+          </xs:choice>
+        </xs:sequence>
+        <xs:attribute name="outputclass" type="xs:string"/>
+        <xs:attributeGroup ref="global-atts"/>
+        <xs:attributeGroup ref="univ-atts-no-importance"/>
+        <xs:attribute name="importance" type="importance-att-progdom.class"/>
+        <xs:attribute ref="class" default="+ topic/figgroup pr-d/groupchoice "/>
+  </xs:complexType>
+
+  <xs:element name="groupcomp" type="groupcomp.class">
+    <xs:annotation>
+      <xs:documentation>
+        The &lt;<keyword>groupcomp</keyword>&gt; element is part
+        of the subset of elements that define syntax diagrams in DITA. A group is
+        a logical set of pieces of syntax that go together. The group composite means
+        that the items that make up the syntax diagram will be formatted close together
+        rather than being separated by a horizontal or vertical line, which is the
+        usual formatting method. This element is part of the DITA programming domain,
+        a special set of DITA elements designed to document programming tasks, concepts
+        and reference information.
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="groupcomp.class">
+        <xs:sequence>
+          <xs:element ref="title" minOccurs="0"/>
+          <xs:element ref="repsep" minOccurs="0"/>
+          <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:group ref="syntaxdiagram.grp"/>
+            <xs:group ref="syntaxdiagramprog.grp"/>
+          </xs:choice>
+        </xs:sequence>
+        <xs:attribute name="outputclass" type="xs:string"/>
+        <xs:attributeGroup ref="global-atts"/>
+        <xs:attributeGroup ref="univ-atts-no-importance"/>
+        <xs:attribute name="importance" type="importance-att-progdom.class"/>
+        <xs:attribute ref="class" default="+ topic/figgroup pr-d/groupcomp "/>
+  </xs:complexType>
+
+  <xs:element name="fragment" type="fragment.class">
+    <xs:annotation>
+      <xs:documentation>
+        Within a syntax definition, a &lt;<keyword>fragment</keyword>&gt; is
+        a labeled subpart of the syntax. The &lt;<keyword>fragment</keyword>&gt; element
+        allows breaking out logical chunks of a large syntax diagram
+        into named fragments. This element is part of the DITA programming domain,
+        a special set of DITA elements designed to document programming tasks, concepts
+        and reference information.
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="fragment.class">
+        <xs:sequence>
+          <xs:element ref="title" minOccurs="0"/>
+          <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:group ref="syntaxdiagram.grp"/>
+          </xs:choice>
+        </xs:sequence>
+        <xs:attribute name="outputclass" type="xs:string"/>
+        <xs:attributeGroup ref="global-atts"/>
+        <xs:attributeGroup ref="univ-atts"/>
+        <xs:attribute ref="class" default="+ topic/figgroup pr-d/fragment "/>
+  </xs:complexType>
+
+  <xs:element name="fragref" type="fragref.class" >
+    <xs:annotation>
+      <xs:documentation>
+        The fragment reference (&lt;<keyword>fragref</keyword>&gt;) element provides a
+        logical reference to a syntax definition fragment so that you can reference
+        a syntax fragment multiple times. This element is part of the DITA programming
+        domain, a special set of DITA elements designed to document programming tasks,
+        concepts and reference information.
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="fragref.class" mixed="true">
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:group ref="xrefph.cnt"/>
+        </xs:choice>
+        <xs:attribute name="href" type="xs:string"/>
+        <xs:attribute name="outputclass" type="xs:string"/>
+        <xs:attributeGroup ref="global-atts"/>
+        <xs:attributeGroup ref="univ-atts-no-importance"/>
+        <xs:attribute name="importance" type="importance-att-nodefault.class"/>
+        <xs:attribute ref="class" default="+ topic/xref pr-d/fragref "/>
+  </xs:complexType>
+
+  <xs:element name="synnote" type="synnote.class">
+    <xs:annotation>
+      <xs:documentation>
+        The syntax note (&lt;<keyword>synnote</keyword>&gt;) element
+        contains a note (similar to a footnote) within a syntax definition group or
+        fragment. The syntax note explains aspects of the syntax that cannot be expressed
+        in the markup itself. The note will appear at the bottom of the syntax diagram
+        instead of at the bottom of the page. The syntax block element is part of
+        the DITA programming domain, a special set of DITA elements designed to document
+        programming tasks, concepts and reference information.
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="synnote.class" mixed="true">
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:group ref="basic.ph"/>
+        </xs:choice>
+        <xs:attribute name="callout" type="xs:string"/>
+        <xs:attribute name="outputclass" type="xs:string"/>
+        <xs:attributeGroup ref="global-atts"/>
+        <xs:attributeGroup ref="univ-atts"/>
+        <xs:attribute ref="class" default="+ topic/fn pr-d/synnote "/>
+  </xs:complexType>
+
+  <xs:element name="synnoteref" type="synnoteref.class">
+    <xs:annotation>
+      <xs:documentation>
+        The syntax note (&lt;<keyword>synnoteref</keyword>&gt;) reference element references
+        a syntax note element (&lt;<keyword>synnote</keyword>&gt;) that has already been defined
+        elsewhere in the topic. The same notation can be used in more than one syntax
+        definition. The syntax note reference element is part of the DITA programming
+        domain, a special set of DITA elements designed to document programming tasks,
+        concepts and reference information.
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="synnoteref.class">
+        <xs:attribute name="href" type="xs:string" use="required"/>
+        <xs:attribute name="outputclass" type="xs:string"/>
+        <xs:attributeGroup ref="global-atts"/>
+        <xs:attributeGroup ref="univ-atts"/>
+        <xs:attribute ref="class" default="+ topic/xref pr-d/synnoteref "/>
+  </xs:complexType>
+
+  <xs:element name="repsep" type="repsep.class" >
+    <xs:annotation>
+      <xs:documentation>
+        The repeat separator (&lt;<keyword>repsep</keyword>&gt;) element defines
+        a group of syntax elements that can (or should) be repeated. If the &lt;<keyword>repsep</keyword>&gt;
+        element contains a separator character, such as a plus (+), this
+        indicates that the character must be used between repetitions of the syntax
+        elements. This element is part of the DITA programming domain, a special set
+        of DITA elements designed to document programming tasks, concepts and reference
+        information.
+       </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="repsep.class" mixed="true">
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:group ref="words.cnt"/>
+        </xs:choice>
+        <xs:attribute name="outputclass" type="xs:string"/>
+        <xs:attributeGroup ref="global-atts"/>
+        <xs:attributeGroup ref="univ-atts-no-importance"/>
+        <xs:attribute name="importance" type="importance-att-nodefault.class"/>
+        <xs:attribute ref="class" default="+ topic/ph pr-d/repsep "/>
+  </xs:complexType>
+
+  <xs:element name="kwd" type="kwd.class" >
+    <xs:annotation>
+      <xs:documentation>
+        The &lt;<keyword>kwd</keyword>&gt; element defines a keyword in a syntax
+        definition. A keyword must be typed or output, either by the user or application,
+        exactly as specified in the syntax definition. This element is
+        part of the DITA programming domain, a special set of DITA elements designed
+        to document programming tasks, concepts and reference information.
+      </xs:documentation>
+     </xs:annotation>
+  </xs:element>
+  <xs:complexType name="kwd.class" mixed="true">
+        <xs:attribute name="keyref" type="xs:NMTOKEN"/>
+        <xs:attribute name="outputclass" type="xs:string"/>
+        <xs:attributeGroup ref="global-atts"/>
+        <xs:attributeGroup ref="univ-atts-no-importance"/>
+        <xs:attribute name="importance" type="importance-att-progdom.class"/>
+        <xs:attribute ref="class" default="+ topic/keyword pr-d/kwd "/>
+  </xs:complexType>
+
+</xs:schema>

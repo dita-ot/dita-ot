@@ -73,7 +73,16 @@
   <!-- Path from the topic back to the map's directory (with map): for ref/abc.dita, will be "../" -->
   <xsl:variable name="pathBackToMapDirectory">
     <xsl:call-template name="pathBackToMapDirectory">
-      <xsl:with-param name="path"><xsl:value-of select="$hrefFromOriginalMap"/></xsl:with-param>
+      <xsl:with-param name="path">
+        <xsl:choose>
+          <xsl:when test="contains($hrefFromOriginalMap,'#')">
+            <xsl:value-of select="substring-before($hrefFromOriginalMap,'#')"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="$hrefFromOriginalMap"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:with-param>
     </xsl:call-template>
   </xsl:variable>
   
@@ -92,7 +101,7 @@
         </xsl:if>	
     
         <!--parent-->
-        <xsl:apply-templates mode="link" select="ancestor::*[contains(@class, ' map/topicref ')][@href][not(@linking='none')][not(@linking='sourceonly')][1]">
+        <xsl:apply-templates mode="link" select="ancestor::*[contains(@class, ' map/topicref ')][@href][not(@href='')][not(@linking='none')][not(@linking='sourceonly')][1]">
           <xsl:with-param name="role">parent</xsl:with-param>          
           <xsl:with-param name="pathBackToMapDirectory" select="$pathBackToMapDirectory"/>
         </xsl:apply-templates>    

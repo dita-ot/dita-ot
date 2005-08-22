@@ -6,6 +6,7 @@
 package org.dita.dost.util;
 
 
+import java.io.File;
 import java.util.HashMap;
 
 import org.xml.sax.XMLReader;
@@ -26,24 +27,35 @@ public class CatalogUtils {
     /**
      * 
      */
-    public CatalogUtils() {
+    private CatalogUtils() {
         super();
     }
 
-    public static HashMap getCatalog(){
+    /**
+     * Parse the catalog file.
+     * 
+     * @return
+     * 
+     */
+    public static HashMap getCatalog(String ditaDir){
+    	CatalogParser parser;
+		XMLReader reader;
+        String catalogFilePath;
+    	
         if (map!=null){
             return map;
         }else{
             map = new HashMap();
-            CatalogParser parser = new CatalogParser(map);
+            parser = new CatalogParser(map, ditaDir);
             try{
-                if (System.getProperty("org.xml.sax.driver") == null){
+                if (System.getProperty(Constants.SAX_DRIVER_PROPERTY) == null){
                     //The default sax driver is set to xerces's sax driver
-                    System.setProperty("org.xml.sax.driver","org.apache.xerces.parsers.SAXParser");
+                    System.setProperty(Constants.SAX_DRIVER_PROPERTY,Constants.SAX_DRIVER_DEFAULT_CLASS);
                 }
-                XMLReader reader = XMLReaderFactory.createXMLReader();
+                reader = XMLReaderFactory.createXMLReader();
                 reader.setContentHandler(parser);
-                reader.parse("catalog-dita.xml");
+                catalogFilePath = (ditaDir == null) ? Constants.FILE_NAME_CATALOG : ditaDir+File.separator+Constants.FILE_NAME_CATALOG;
+                reader.parse(catalogFilePath);
             }catch (Exception e){
                 e.printStackTrace(System.out);
             }

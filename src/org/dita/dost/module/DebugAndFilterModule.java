@@ -11,26 +11,42 @@ import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.pipeline.PipelineHashIO;
 import org.dita.dost.reader.DitaValReader;
 import org.dita.dost.reader.ListReader;
+import org.dita.dost.util.Constants;
 import org.dita.dost.writer.DitaWriter;
 
 
 /**
+ * DebugAndFilterModule implement the second step in preprocess. It will insert debug
+ * information into every dita files and filter out the information that is not 
+ * necessary.
+ * 
  * @author Zhang, Yuan Peng
  */
 public class DebugAndFilterModule extends AbstractPipelineModule {
 
     /**
+     * Automatically generated constructor: DebugAndFilterModule
+     */
+    public DebugAndFilterModule() {
+    }
+
+    
+    /**
+     * @see org.dita.dost.module.AbstractPipelineModule#execute(org.dita.dost.pipeline.AbstractPipelineInput)
      * 
      */
     public AbstractPipelineOutput execute(AbstractPipelineInput input) {
-        String baseDir = ((PipelineHashIO) input).getAttribute("basedir");
-        String ditavalFile = ((PipelineHashIO) input).getAttribute("ditaval");
-        String tempDir = ((PipelineHashIO) input).getAttribute("tempDir");
+        String baseDir = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_BASEDIR);
+        String ditavalFile = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_DITAVAL);
+        String tempDir = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_TEMPDIR);
+        String filePathPrefix = null;
         ListReader listReader = new ListReader();
-        listReader.read(tempDir + File.separator + "dita.list");
-        LinkedList parseList = (LinkedList) listReader.getContent()
-                .getCollection();
+        LinkedList parseList = null;
         Content content;
+        DitaWriter fileWriter;
+        listReader.read(tempDir + File.separator + Constants.FILE_NAME_DITA_LIST);
+        parseList = (LinkedList) listReader.getContent()
+                .getCollection();
         if (ditavalFile!=null){
             DitaValReader filterReader = new DitaValReader();
             filterReader.read(ditavalFile);
@@ -39,32 +55,29 @@ public class DebugAndFilterModule extends AbstractPipelineModule {
             content = new ContentImpl();
         }
 
-        DitaWriter fileWriter = new DitaWriter();
-        content.setObject(tempDir);
+        fileWriter = new DitaWriter();
+        content.setValue(tempDir);
         fileWriter.setContent(content);
         
         if(baseDir!=null){
-            while (!parseList.isEmpty()) {
-                /*
-                 * Usually the writer's argument for write() is used to pass in the
-                 * ouput file name. But in this case, the input file name is same as
-                 * output file name so we can use this argument to pass in the input
-                 * file name
-                 */
-                fileWriter.write(baseDir+'|'+
-                        (String) parseList.removeLast());
-            }
-        }else{
-            while (!parseList.isEmpty()) {
-                /*
-                 * Usually the writer's argument for write() is used to pass in the
-                 * ouput file name. But in this case, the input file name is same as
-                 * output file name so we can use this argument to pass in the input
-                 * file name
-                 */
-                fileWriter.write((String) parseList.removeLast());
-            }
+            filePathPrefix = baseDir + Constants.STICK;
         }
+        
+        while (!parseList.isEmpty()) {
+            /*
+             * Usually the writer's argument for write() is used to pass in the
+             * ouput file name. But in this case, the input file name is same as
+             * output file name so we can use this argument to pass in the input
+             * file name. "|" is used to separate the path information that is
+             * not necessary to be kept (baseDir) and the path information that
+             * need to be kept in the temp directory.
+             */
+        	fileWriter.write(
+        			new StringBuffer().append(filePathPrefix)
+        				.append((String) parseList.removeLast()).toString());
+            
+        }
+        
 
         return null;
     }

@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE task PUBLIC "-//IBM//DTD DITA Task//EN"
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN"
  "../../dtd/task.dtd">
-<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
- | This file is part of the DITA package on IBM's developerWorks site.
- | See license.txt for disclaimers and permissions.
+<!-- (C) Copyright IBM Corporation 2001, 2005. All Rights Reserved.
  *-->
 <?xml-stylesheet href="../../xsl/ditaview_shell.xsl" type="text/xsl"?>
 <task id="organize" xml:lang="en-us">

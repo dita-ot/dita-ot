@@ -6,14 +6,42 @@ package org.dita.dost.module;
 import java.util.Collection;
 
 /**
+ * Content is an interface which defines the method a content container should implement.
+ * Content container is used to exchange result data between module, reader and writer
+ * instance.
+ * 
  * @author Zhang, Yuan Peng
  */
 public interface Content {
-    public Collection getCollection();
+    /**
+     * Get the collection contained in the content container.
+     * 
+     * @return
+     * 
+     */
+    Collection getCollection();
 
-    public Object getObject();
+    /**
+     * Get the object contained in the content container.
+     * 
+     * @return
+     * 
+     */
+    Object getValue();
 
-    public void setCollection(Collection collection);
+    /**
+     * Set the collection to the content container.
+     * 
+     * @param collection
+     * 
+     */
+    void setCollection(Collection collection);
 
-    public void setObject(Object object);
+    /**
+     * Set the object to the content container.
+     * 
+     * @param object
+     * 
+     */
+    void setValue(Object object);
 }

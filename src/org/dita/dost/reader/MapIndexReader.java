@@ -5,26 +5,26 @@ package org.dita.dost.reader;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.ListIterator;
 
 import org.dita.dost.module.Content;
 import org.dita.dost.module.ContentImpl;
+import org.dita.dost.util.Constants;
 import org.dita.dost.util.StringUtils;
 import org.xml.sax.Attributes;
-import org.xml.sax.ContentHandler;
-import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
-import org.xml.sax.ext.LexicalHandler;
 import org.xml.sax.helpers.XMLReaderFactory;
 
 
 /**
+ * MapIndexReader reads and parse the index information. It is also used to parse
+ * map link information in "maplinks.unordered" file.
+ * 
  * @author Zhang, Yuan Peng
  */
-public class MapIndexReader extends AbstractReader implements ContentHandler,LexicalHandler {
+public class MapIndexReader extends AbstractXMLReader {
 
     /*
      * meta shows whether the event is in metadata when using sax to parse
@@ -32,45 +32,47 @@ public class MapIndexReader extends AbstractReader implements ContentHandler,Lex
      */
     private ArrayList matchList;
     private ArrayList ancestorList;
-    private String last;
-    private String first;
+    private String lastMatchElement;
+    private String firstMatchElement;
     private int level;
     private boolean match;
     private boolean needResolveEntity;
     private String topicPath;
     private XMLReader reader;
-    private String indexEntries;
+    private StringBuffer indexEntries;
     private HashMap map;
     private File inputFile;
     private String filePath = null;
     private String filePathName = null;
+    private static final String INTERNET_LINK_MARK = "://";
+    
 
     /**
-     * 
+     * Default constructor of MapIndexReader class.
      */
     public MapIndexReader() {
         super();
         map = new HashMap();
-        ancestorList = new ArrayList();
-        matchList = new ArrayList();
+        ancestorList = new ArrayList(Constants.INT_16);
+        matchList = new ArrayList(Constants.INT_16);
+        indexEntries = new StringBuffer(Constants.INT_1024);
+        firstMatchElement = null;
+        lastMatchElement = null;
+        level = 0;
+        match = false;
+        needResolveEntity = false;
+        topicPath = null;
+        inputFile = null; 
+        
         
         try {
-            //SAXParserFactory spFactory = SAXParserFactory.newInstance();
-            //spFactory.setFeature("http://xml.org/sax/features/validation", true);
-            //spFactory.setValidating(true);
-            //SAXParser parser = spFactory.newSAXParser();
-            //reader = parser.getXMLReader();
-            if (System.getProperty("org.xml.sax.driver") == null){
+            if (System.getProperty(Constants.SAX_DRIVER_PROPERTY) == null){
                 //The default sax driver is set to xerces's sax driver
-                System.setProperty("org.xml.sax.driver","org.apache.xerces.parsers.SAXParser");
+                System.setProperty(Constants.SAX_DRIVER_PROPERTY,Constants.SAX_DRIVER_DEFAULT_CLASS);
             }
             reader = XMLReaderFactory.createXMLReader();
             reader.setContentHandler(this);
-            //reader.setFeature("http://xml.org/sax/features/lexical-handler",true);
-            //reader.setFeature("http://xml.org/sax/features/external-general-entities",true);
-            //reader.setFeature("http://xml.org/sax/features/external-parameter-entities",true);
-            //reader.setFeature("http://xml.org/sax/features/lexical-handler/parameter-entities",true);
-            reader.setProperty("http://xml.org/sax/properties/lexical-handler",this);
+            reader.setProperty(Constants.LEXICAL_HANDLER_PROPERTY,this);
             
         } catch (Exception e) {
             e.printStackTrace(System.out);
@@ -78,22 +80,24 @@ public class MapIndexReader extends AbstractReader implements ContentHandler,Lex
 
     }
 
-    public void setMatch(String match) {
+    /**
+     * Set the match pattern in the reader. The match pattern is used to see whether
+     * current element can be include in the result of parsing.
+     * 
+     * @param matchPattern
+     */
+    public void setMatch(String matchPattern) {
         int index = 0;
-        if (match.indexOf('/') != -1) {
-            first = match.substring(0, match.indexOf('/'));
-        } else {
-            first = match;
-        }
+        firstMatchElement = (matchPattern.indexOf(Constants.SLASH) != -1) ? matchPattern.substring(0, matchPattern.indexOf(Constants.SLASH)) : matchPattern;
 
         while (index != -1) {
-            int end = match.indexOf('/', index);
+            int end = matchPattern.indexOf(Constants.SLASH, index);
             if (end == -1) {
-                matchList.add(match.substring(index));
-                last = match.substring(index);
+                matchList.add(matchPattern.substring(index));
+                lastMatchElement = matchPattern.substring(index);
                 index = end;
             } else {
-                matchList.add(match.substring(index, end));
+                matchList.add(matchPattern.substring(index, end));
                 index = end + 1;
             }
         }
@@ -107,12 +111,12 @@ public class MapIndexReader extends AbstractReader implements ContentHandler,Lex
         ListIterator matchIterator = matchList.listIterator();
         ListIterator ancestorIterator = ancestorList.listIterator(ancestorSize
                 - matchSize);
-        String match;
+        String currentMatchString;
         String ancestor;
         while (matchIterator.hasNext()) {
-            match = (String) matchIterator.next();
+            currentMatchString = (String) matchIterator.next();
             ancestor = (String) ancestorIterator.next();
-            if (!match.equals(ancestor)) {
+            if (!currentMatchString.equals(ancestor)) {
                 return false;
             }
         }
@@ -120,89 +124,99 @@ public class MapIndexReader extends AbstractReader implements ContentHandler,Lex
     }
 
     // check whether the index entries we got is meaningfull and valid
-    private boolean check(String str) {
-        if (str == null) {
+    private boolean verifyIndexEntries(StringBuffer str) {
+    	int start;
+    	int end;
+    	String temp;
+        if (str.length() == 0) {
             return false;
         }
-        int start = str.indexOf('>'); // start from first tag's end
-        int end = str.lastIndexOf('<'); // end at last tag's start
-
-        // original code check whether there is text between different tags
-        // modified code check whether there is any content between first and
-        // last tags
+        start = str.indexOf(Constants.GREATER_THAN); // start from first tag's end
+        end = str.lastIndexOf(Constants.LESS_THAN); // end at last tag's start
 
         /*
-         * if(start == -1){ return false; } int end = str.indexOf(' <',start);
-         * for(;start != -1 && end != -1;){ String temp = str.substring(start+1,
-         * end); if(temp.length()!=0 && temp.trim().length()!=0){ return true; }
-         * start = str.indexOf('>',end); end = str.indexOf(' <', start); }
-         * return false;
+         * original code check whether there is text between different tags
+         * modified code check whether there is any content between first and
+         * last tags
          */
-        String temp = str.substring(start + 1, end);
+                
+        temp = str.substring(start + 1, end);
         if (temp.trim().length() != 0) {
             return true;
-        } else {
-            return false;
         }
+        return false;
     }
 
+
     /**
+     * @see org.dita.dost.reader.AbstractReader#read(java.lang.String)
      * 
      */
     public void read(String filename) {
 
-        if (!matchList.isEmpty()) {
+        if (matchList.isEmpty()) {
+            System.out.println("Set the match list with match string first.");
+        } else {
             match = false;
             needResolveEntity = true;
             inputFile = new File(filename);
             filePath = inputFile.getParent();
             filePathName = inputFile.getPath();
-            indexEntries = null;
+            if(indexEntries.length() != 0){
+				//delete all the content in indexEntries
+				indexEntries = new StringBuffer(Constants.INT_1024);
+            }
+                         
             try {
                 reader.parse(filename);
             } catch (Exception e) {
                 e.printStackTrace(System.out);
             }
-        } else {
-            System.out.println("Set the match list with match string first.");
         }
     }
 
+    /**
+     * @see org.dita.dost.reader.AbstractReader#getContent()
+     * 
+     */
     public Content getContent() {
 
         ContentImpl result = new ContentImpl();
-        result.setCollection((Collection) map.entrySet());
+        result.setCollection( map.entrySet());
         return result;
     }
 
+    /**
+     * @see org.xml.sax.ContentHandler#characters(char[], int, int)
+     * 
+     */
     public void characters(char[] ch, int start, int length)
             throws SAXException {
 
         if (match && needResolveEntity) {
             String temp = new String(ch, start, length);
-            if (indexEntries != null) {
-                indexEntries += temp;
-            } else {
-                indexEntries = temp;
-            }
+            indexEntries.append(temp);
+            
         }
     }
 
-    public void endDocument() throws SAXException {
-
-    }
-
+    /**
+     * @see org.xml.sax.ContentHandler#endElement(java.lang.String, java.lang.String, java.lang.String)
+     * 
+     */
     public void endElement(String uri, String localName, String qName)
             throws SAXException {
 
         if (match) {
-            indexEntries += "</";
-            indexEntries += qName;
-            indexEntries += ">";
+            indexEntries.append(Constants.LESS_THAN);
+            indexEntries.append(Constants.SLASH);
+            indexEntries.append(qName);
+            indexEntries.append(Constants.GREATER_THAN);
+            
             level--;
         }
 
-        if (qName.equals(last) && level == 0) {
+        if (qName.equals(lastMatchElement) && level == 0) {
             if (match) {
                 match = false;
             }
@@ -211,157 +225,115 @@ public class MapIndexReader extends AbstractReader implements ContentHandler,Lex
             ancestorList.remove(ancestorList.size() - 1);
         }
 
-        if (qName.equals(first)) {
-            if (check(indexEntries) && topicPath != null) {
+        if (qName.equals(firstMatchElement) && verifyIndexEntries(indexEntries) && topicPath != null) {
                 String origin = (String) map.get(topicPath);
                 if (origin != null) {
-                    map.put(topicPath, origin + indexEntries);
+                    map.put(topicPath, origin + indexEntries.toString());
                 } else {
-                    map.put(topicPath, indexEntries);
+                    map.put(topicPath, indexEntries.toString());
                 }
-                indexEntries = null;
-            }
+                indexEntries = new StringBuffer(Constants.INT_1024);
+            
         }
     }
 
-    public void endPrefixMapping(String prefix) throws SAXException {
-
-    }
-
+    /**
+     * @see org.xml.sax.ContentHandler#ignorableWhitespace(char[], int, int)
+     * 
+     */
     public void ignorableWhitespace(char[] ch, int start, int length)
             throws SAXException {
 
         if (match) {
             String temp = new String(ch, start, length);
-            if (indexEntries != null) {
-                indexEntries += temp;
-            } else {
-                indexEntries = temp;
-            }
+            indexEntries.append(temp);
+           
         }
     }
 
-    public void processingInstruction(String target, String data)
-            throws SAXException {
-
-    }
-
-    public void setDocumentLocator(Locator locator) {
-
-    }
-
-    public void skippedEntity(String name) throws SAXException {
-
-    }
-
-    public void startDocument() throws SAXException {
-
-    }
-
+    /**
+     * @see org.xml.sax.ContentHandler#startElement(java.lang.String, java.lang.String, java.lang.String, org.xml.sax.Attributes)
+     * 
+     */
     public void startElement(String uri, String localName, String qName,
             Attributes atts) throws SAXException {
+    	int attsLen = atts.getLength();
     	
-        if (qName.equals(first)) {
-            String hrefValue = atts.getValue("href");
-            if(hrefValue != null && hrefValue.indexOf("://") == -1){
-                topicPath = StringUtils.resolveTopic(filePath, atts
-                        .getValue("href"));
-            }else{
-                topicPath = null;
-            }
+        if (qName.equals(firstMatchElement)) {
+            String hrefValue = atts.getValue(Constants.ATTRIBUTE_NAME_HREF);
+            topicPath = (hrefValue != null && hrefValue.indexOf(INTERNET_LINK_MARK) == -1) ? StringUtils.resolveTopic(filePath, hrefValue) : null;
         }
         if (!match) {
             ancestorList.add(qName);
-            if (qName.equals(last)) {
-                if (checkMatch()) {
+            if (qName.equals(lastMatchElement) && checkMatch()) {
+                
                     match = true;
                     level = 0;
-                }
             }
         }
 
         if (match) {
-            if (indexEntries != null) {
-                indexEntries += "<";
-            } else {
-                indexEntries = "<";
+        	indexEntries.append(Constants.LESS_THAN + qName + Constants.STRING_BLANK);
+            
+            for (int i = 0; i < attsLen; i++) {
+            	indexEntries.append(atts.getQName(i));
+            	indexEntries.append(Constants.EQUAL + Constants.QUOTATION);
+            	indexEntries.append(atts.getValue(i));
+            	indexEntries.append(Constants.QUOTATION + Constants.STRING_BLANK);
+            	
             }
-            indexEntries += qName;
-            indexEntries += " ";
-
-            for (int i = 0; i < atts.getLength(); i++) {
-                indexEntries += atts.getQName(i);
-                indexEntries += "=\"";
-                indexEntries += atts.getValue(i);
-                indexEntries += "\" ";
-            }
-            indexEntries += ">";
+            
+            indexEntries.append(Constants.GREATER_THAN);
             level++;
         }
     }
 
-    public void startPrefixMapping(String prefix, String uri)
-            throws SAXException {
+	/**
+     * @see org.xml.sax.ext.LexicalHandler#endCDATA()
+     * 
+     */
+    public void endCDATA() throws SAXException {
+	    indexEntries.append(Constants.CDATA_END);
+	    
+	}
 
-    }
-    
-	/* (non-Javadoc)
-	 * @see org.xml.sax.ext.LexicalHandler#comment(char[], int, int)
-	 */
-	public void comment(char[] ch, int start, int length) throws SAXException {
-	}
-	/* (non-Javadoc)
-	 * @see org.xml.sax.ext.LexicalHandler#endCDATA()
-	 */
-	public void endCDATA() throws SAXException {
-	    if (indexEntries != null) {
-            indexEntries += "]]>";
-        } else {
-            indexEntries = "]]>";
-        }
-	}
-	/* (non-Javadoc)
-	 * @see org.xml.sax.ext.LexicalHandler#endDTD()
-	 */
-	public void endDTD() throws SAXException {
-	}
-	/* (non-Javadoc)
-	 * @see org.xml.sax.ext.LexicalHandler#endEntity(java.lang.String)
-	 */
-	public void endEntity(String name) throws SAXException {
+	/**
+     * @see org.xml.sax.ext.LexicalHandler#endEntity(java.lang.String)
+     * 
+     */
+    public void endEntity(String name) throws SAXException {
 		if(!needResolveEntity){
 			needResolveEntity = true;
 		}
 	}
-	/* (non-Javadoc)
-	 * @see org.xml.sax.ext.LexicalHandler#startCDATA()
-	 */
-	public void startCDATA() throws SAXException {
-	    if (indexEntries != null) {
-            indexEntries += "<![CDATA[";
-        } else {
-            indexEntries = "<![CDATA[";
-        }
+
+	/**
+     * @see org.xml.sax.ext.LexicalHandler#startCDATA()
+     * 
+     */
+    public void startCDATA() throws SAXException {
+	    indexEntries.append(Constants.CDATA_HEAD);
+	    
 	}
-	/* (non-Javadoc)
-	 * @see org.xml.sax.ext.LexicalHandler#startDTD(java.lang.String, java.lang.String, java.lang.String)
-	 */
-	public void startDTD(String name, String publicId, String systemId)
+
+	/**
+     * @see org.xml.sax.ext.LexicalHandler#startDTD(java.lang.String, java.lang.String, java.lang.String)
+     * 
+     */
+    public void startDTD(String name, String publicId, String systemId)
 			throws SAXException {
 	}
-	/* (non-Javadoc)
-	 * @see org.xml.sax.ext.LexicalHandler#startEntity(java.lang.String)
-	 */
-	public void startEntity(String name) throws SAXException {
+
+	/**
+     * @see org.xml.sax.ext.LexicalHandler#startEntity(java.lang.String)
+     * 
+     */
+    public void startEntity(String name) throws SAXException {
 		needResolveEntity = StringUtils.checkEntity(name);
 		//System.out.println("meet entity:"+name);
 		if (match && !needResolveEntity) {
-            if (indexEntries != null) {
-                indexEntries += StringUtils.getEntity(name);
-                //System.out.println(StringUtils.getEntity(name));
-            } else {
-                indexEntries = StringUtils.getEntity(name);
-            }
+            indexEntries.append(StringUtils.getEntity(name));
+            
         }
 	}
 }

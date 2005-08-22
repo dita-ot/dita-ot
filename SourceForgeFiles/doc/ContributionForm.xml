@@ -1,18 +1,37 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<!DOCTYPE topic PUBLIC "-//IBM//DTD DITA Topic//EN" "../../dtd/topic.dtd">
+<!-- (C) Copyright IBM Corporation 2005. All Rights Reserved.
+ *-->
+<!DOCTYPE topic PUBLIC "-//IBM//DTD DITA Topic//EN" "topic.dtd">
 <topic id="contribution">
   <title>DITA-OT Contribution Questionnaire</title>
   <body>
-    <p>The Contribution Questionnaire is the first step in initiating the due diligence and approval process by the Project Manager (PM) for any significant contribution of content to be committed to the project. Prior to completing this Questionnaire, the Committer should have technical agreement from the PM that the new code is required. Once the PM has approved, the Committer, with the assistance of one or more of the contributors, may begin the due diligence and approval process by completing and submitting this questionnaire. </p>
+    <p>The Contribution Questionnaire is the first step in initiating the due 
+      diligence and approval process by the Project Manager (PM) for any 
+      significant contribution of content to be committed to the project. Prior 
+      to completing this Questionnaire, the Committer should have technical 
+      agreement from the PM that the new code is required. Once the PM has 
+      approved, the Committer, with the assistance of one or more of the 
+      contributors, may begin the due diligence and approval process by 
+      completing and submitting this questionnaire. </p>
     <p>
       <b>What is meant by a significant contribution?</b>
     </p>
-    <p>Any initial code contribution used to kick off a new project. By definition, this code has been written elsewhere and it needs to be reviewed. </p>
+    <p>Any initial code contribution used to kick off a new project. By 
+      definition, this code has been written elsewhere and it needs to be 
+      reviewed. </p>
     <p>or </p>
-    <p>Any contribution authored by someone other than a committer which is adding new functionality to the codebase. In most cases, bug fixes do not add new functionality athough it&apos;s not impossible. </p>
+    <p>Any contribution authored by someone other than a committer which is 
+      adding new functionality to the codebase. In most cases, bug fixes do not 
+      add new functionality athough it&apos;s not impossible. </p>
     <p>or </p>
-    <p>Any contribution containing third-party code maintained by another open source project, individual, group, or organization. In addition to reviewing the contribution, if the license is not the Common Public License (CPL), the PM will need to review and approve the third-party license for compatibility with the CPL. </p>
-    <p>NOTE: A questionnaire and approval is not required for bug fixes or minor enhancements. If you have any questions, please send an email to the PM. </p>
+    <p>Any contribution containing third-party code maintained by another open 
+      source project, individual, group, or organization. In addition to 
+      reviewing the contribution, if the license is not the Common Public 
+      License (CPL), the PM will need to review and approve the third-party 
+      license for compatibility with the CPL. </p>
+    <p>NOTE: A questionnaire and approval is not required for bug fixes or 
+      minor enhancements. If you have any questions, please send an email to 
+      the PM. </p>
     <p>
       <b>Your Info</b>
     </p>
@@ -42,7 +61,9 @@
     <p>
       <b>Committer</b>
     </p>
-    <p>Please provide contact details for the committer who will be incorporating this contribution into the code base. If this is the same as above, just put &quot;same&quot; in the Name field.</p>
+    <p>Please provide contact details for the committer who will be 
+      incorporating this contribution into the code base. If this is the same 
+      as above, just put &quot;same&quot; in the Name field.</p>
     <simpletable relcolwidth="1* 3*">
       <strow>
         <stentry>Name:</stentry>
@@ -68,7 +89,9 @@
     <p>
       <b>PM Approval </b>
     </p>
-    <p>PM Approval is required for all significant contributions. Please provide the contact info of the PM who has given approval for this contribution:</p>
+    <p>PM Approval is required for all significant contributions. Please 
+      provide the contact info of the PM who has given approval for this 
+      contribution:</p>
     <simpletable relcolwidth="1* 3*">
       <strow>
         <stentry>Name:</stentry>
@@ -109,11 +132,14 @@
         <stentry/>
       </strow>
       <strow>
-        <stentry>Does this contribution require any packages maintained by a 3rd party? </stentry>
+        <stentry>Does this contribution require any packages maintained by a 
+          3rd party? </stentry>
         <stentry/>
       </strow>
       <strow>
-        <stentry>Please list all pkgs required by the contribution which are maintained by a 3rd party:(Please list one package per line e.g 3rd party package name v1.0) </stentry>
+        <stentry>Please list all pkgs required by the contribution which are 
+          maintained by a 3rd party:(Please list one package per line e.g 3rd 
+          party package name v1.0) </stentry>
         <stentry/>
       </strow>
       <strow>
@@ -121,15 +147,23 @@
         <stentry/>
       </strow>
       <strow>
-        <stentry>Provide any additional information you may have regarding intellectual property rights (patents, trademarks, etc.) related to the Contribution. If there is more than one committer who worked on this contribution, please list their name and email addresses. </stentry>
+        <stentry>Provide any additional information you may have regarding 
+          intellectual property rights (patents, trademarks, etc.) related to 
+          the Contribution. If there is more than one committer who worked on 
+          this contribution, please list their name and email addresses. 
+          </stentry>
         <stentry/>
       </strow>
     </simpletable>
     <p>
       <b>Contributor</b>
     </p>
-    <p>Note: All of the contributors should ensure that they possess the necessary rights to make the contribution under the terms and conditions set out in the <xref href="ContributionPolicy.xml">Contribution Policy</xref>.</p>
-    <p>Please provide contact details for the contributor or the primary contributor if there is more than one:</p>
+    <p>Note: All of the contributors should ensure that they possess the 
+      necessary rights to make the contribution under the terms and conditions 
+      set out in the <xref href="ContributionPolicy.xml">Contribution 
+      Policy</xref>.</p>
+    <p>Please provide contact details for the contributor or the primary 
+      contributor if there is more than one:</p>
     <simpletable relcolwidth="1* 3*">
       <strow>
         <stentry>Name: </stentry>
@@ -152,16 +186,15 @@
         <stentry/>
       </strow>
     </simpletable>
-    <p>If there are other contributors, please provide names, organisations, e-mail, and percentage of content authored in the contribution:<simpletable relcolwidth="1* 3*">
-        <strow>
-          <stentry>Other Contributors:</stentry>
-          <stentry/>
-        </strow>
-      </simpletable></p>
+    <p>If there are other contributors, please provide names, organisations, 
+      e-mail, and percentage of content authored in the 
+      contribution:<simpletable relcolwidth="1* 3*"> <strow> <stentry>Other 
+      Contributors:</stentry> <stentry/> </strow> </simpletable></p>
     <p>
       <b>Cryptography </b>
     </p>
-    <p>If the contribution deals in any way with cryptography, please provide details:</p>
+    <p>If the contribution deals in any way with cryptography, please provide 
+      details:</p>
     <simpletable relcolwidth="1* 3*">
       <strow>
         <stentry>Details:</stentry>
@@ -178,4 +211,3 @@
     </p>
   </body>
 </topic>
-

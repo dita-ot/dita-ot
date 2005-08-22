@@ -11,11 +11,25 @@ import org.dita.dost.pipeline.PipelineHashIO;
 
 
 /**
+ * Invoke the process in Java and use java code to control building process.
+ * 
  * @author Lian, Li
  * 
  */
 public class JavaInvoker {
 
+    /**
+     * Automatically generated constructor for utility class
+     */
+    private JavaInvoker() {
+    }
+
+    /**
+     * The main flow of the process
+     * 
+     * @param args
+     * 
+     */
     public static void main(String[] args) {
         AbstractFacade facade = new PipelineFacade();
         PipelineHashIO pipelineInput = new PipelineHashIO();

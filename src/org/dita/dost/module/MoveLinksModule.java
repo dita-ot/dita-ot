@@ -12,16 +12,21 @@ import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.pipeline.PipelineHashIO;
 import org.dita.dost.reader.MapIndexReader;
 import org.dita.dost.writer.DitaLinksWriter;
-
+import org.dita.dost.util.Constants;
 
 /**
+ * MoveLinksModule implements move links step in preprocess. It reads the map links
+ * information from the temp file "maplinks.unordered" and move these information
+ * to different corresponding dita topic file.
+ * 
  * @author Zhang, Yuan Peng
  */
 public class MoveLinksModule extends AbstractPipelineModule {
     private ContentImpl content;
 
+
     /**
-     * 
+     * Default constructor of MoveLinksModule class.
      */
     public MoveLinksModule() {
         super();
@@ -29,23 +34,30 @@ public class MoveLinksModule extends AbstractPipelineModule {
 
     }
 
+
     /**
+     * 
      * 
      */
     public AbstractPipelineOutput execute(AbstractPipelineInput input) {
 
-        String maplinksFile = ((PipelineHashIO)input).getAttribute("maplinks");
+        String maplinksFile = ((PipelineHashIO)input).getAttribute(Constants.ANT_INVOKER_PARAM_MAPLINKS);
         MapIndexReader indexReader = new MapIndexReader();
-        indexReader.setMatch("maplinks/linkpool");
-        DitaLinksWriter indexInserter = new DitaLinksWriter();
-
+		DitaLinksWriter indexInserter = new DitaLinksWriter();
+		Set mapSet;
+		Iterator i;
+        
+        indexReader.setMatch(new StringBuffer(Constants.ELEMENT_NAME_MAPLINKS)
+                .append(Constants.SLASH).append(Constants.ELEMENT_NAME_LINKPOOL)
+                .toString());
+        
         indexReader.read(maplinksFile);
-        Set mapSet = (Set) indexReader.getContent().getCollection();
+        mapSet = (Set) indexReader.getContent().getCollection();
 
-        Iterator i = mapSet.iterator();
-        for (; i.hasNext();) {
+        i = mapSet.iterator();
+        while (i.hasNext()) {
             Map.Entry entry = (Map.Entry) i.next();
-            content.setObject(entry.getValue());
+            content.setValue(entry.getValue());
             indexInserter.setContent(content);
             indexInserter.write((String) entry.getKey());
         }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-
+<!-- (c) Copyright IBM Corp. 2001, 2005 All Rights Reserved. -->
 <project name="dita.build" default="prompt" basedir=".">
 	<!-- Set a property for each environment variable -->
 	<description>Build the DITA Demos and Samples</description>
@@ -95,6 +95,9 @@
 			value="${dita.output.samples.dir}${file.separator}htmlhelp"/>
 		<property name="dita.output.samples.pdf.dir"
 			value="${dita.output.samples.dir}${file.separator}pdf"/>
+  
+  		<property name="dita.output.samples.troff.dir"
+  	    	value="${dita.output.samples.dir}${file.separator}troff"/>
 
 		<property name="dita.output.docbook.dir"
 			value="${dita.output.dir}${file.separator}docbook"/>
@@ -111,7 +114,7 @@
 			depends="use.init">
 			<!-- Create the time stamp -->
 			<tstamp/>
-
+      <mkdir dir="${dita.temp.dir}"/>
 			<mkdir dir="${dita.output.dir}"/>
 		</target>
 
@@ -180,7 +183,7 @@
 					in="${inputFile}"
 					out="${outputFile}"
 					style="${dita.demo.elementref.dir}${file.separator}elementref2xhtml_shell.xsl">
-				<param name="OUTEXT" expression="html"/>
+				<param name="OUTEXT" expression=".html"/>
 				<xmlcatalog refid="dita.catalog"/>
 			</xslt>
 		</target>
@@ -210,7 +213,7 @@
 					in="${inputFile}"
 					out="${outputFile}"
 					style="${dita.demo.enote.dir}${file.separator}enote2xhtml_shell.xsl">
-				<param name="OUTEXT" expression="html"/>
+				<param name="OUTEXT" expression=".html"/>
 				<xmlcatalog refid="dita.catalog"/>
 			</xslt>
 		</target>
@@ -643,6 +646,7 @@
 				<param name="args.input"      value="${prompt.ditamap.filename}"/>
 				<param name="output.dir"     value="${prompt.output.directory}"/>
 				<param name="args.xhtml.toc" value="toc"/>
+				<param name="dita.temp.dir" value="temp"/>
 			</antcall>
 		</target>
 
@@ -652,6 +656,7 @@
 				<param name="args.input"      value="${prompt.ditamap.filename}"/>
 				<param name="output.dir"     value="${prompt.output.directory}"/>
 				<param name="args.eclipse.toc" value="toc"/>
+				<param name="dita.temp.dir" value="temp"/>
 			</antcall>
 		</target>
 
@@ -662,6 +667,7 @@
 				<param name="output.dir"     value="${prompt.output.directory}"/>
 				<param name="args.javahelp.toc" value="toc"/>
 				<param name="args.javahelp.map" value="map"/>
+				<param name="dita.temp.dir" value="temp"/>
 			</antcall>
 		</target>
 
@@ -672,6 +678,7 @@
 					value="${prompt.ditamap.filename}"/>
 				<param name="output.dir"
 					value="${prompt.output.directory}"/>
+				<param name="dita.temp.dir" value="temp"/>
 			</antcall>
 		</target>
 
@@ -681,6 +688,7 @@
 				<param name="args.input"      
 					value="${prompt.ditamap.filename}"/>
 				<param name="output.dir"      value="${prompt.output.directory}"/>
+				<param name="dita.temp.dir" value="temp"/>
 			</antcall>
 		</target>
 
@@ -689,7 +697,19 @@
 			<antcall target="dita2docbook">
 				<param name="args.input"       value="${prompt.ditamap.filename}"/>
 				<param name="output.dir"      value="${prompt.output.directory}"/>
+				<param name="dita.temp.dir" value="temp"/>
 			</antcall>
 		</target>
+  
+ 		<target name="samples.troff"
+  				description="test dita to troff"
+  				depends="samples.init">
+  			<antcall target="dita2troff">
+  				<param name="args.input"       
+  					value="${dita.samples.dir}${file.separator}concepts${file.separator}oil.xml"/>
+  				<param name="output.dir" value="${dita.output.samples.troff.dir}"/>
+  				<param name="dita.temp.dir" value="temp"/>
+  			</antcall>
+  		</target>
 	
 </project>

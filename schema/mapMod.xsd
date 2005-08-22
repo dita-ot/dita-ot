@@ -1,0 +1,587 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ============================================================= -->
+<!--                    HEADER                                     -->
+<!-- ============================================================= -->
+<!-- ============================================================= -->
+<!--  MODULE:    DITA MAP XSD Module                                      -->
+<!--  VERSION:   1.0                                               -->
+<!--  DATE:      February 2005                                     -->
+<!--                                                               -->
+<!-- ============================================================= -->
+
+<!-- ============================================================= -->
+<!-- SYSTEM:     Darwin Information Typing Architecture (DITA)     -->
+<!--                                                               -->
+<!-- PURPOSE:    W3C XML Schema to describe DITA maps                         -->
+<!--                                                               -->
+<!-- ORIGINAL CREATION DATE:                                       -->
+<!--             March 2001                                        -->
+<!--                                                               -->
+<!--             (C) Copyright OASIS-Open.org 2005.                -->
+<!--             (C) Copyright IBM Corporation 2001, 2004.         -->
+<!--             All Rights Reserved.                              -->
+<!--             See license.txt for disclaimers and permissions.  -->
+<!-- ============================================================= -->
+ <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
+
+  <!-- ======= MetaData elements, plus keyword and indexterm ======= -->
+  <xs:include schemaLocation="metaDeclMod.xsd"/>
+  <xs:include schemaLocation="metaDeclGrp.xsd"/>
+
+
+  <!-- ======= IMPORT - XML attributes and namespace ======= -->
+  <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="xml.xsd"/>
+  <xs:import namespace="http://dita.oasis-open.org/architecture/2005/" schemaLocation="ditaarch.xsd"/>
+
+  <!-- new <!ENTITY % words.cnt               "#PCDATA | %keyword; | %term;"> -->
+  <xs:group name="words.cnt">
+    <xs:choice>
+      <xs:group ref="keyword"/>
+    </xs:choice>
+  </xs:group>
+
+   <xs:element name="keyword" type="keyword.class">
+     <xs:annotation>
+       <xs:documentation>
+         The &lt;<keyword>keyword</keyword>> element identifies a keyword
+         or token, such as a single value from an enumerated list, the name of a command
+         or parameter, or a lookup key for a message (contrast with <ph><xref href="term.xml">term</xref></ph>).
+       </xs:documentation>
+     </xs:annotation>
+   </xs:element>
+   <xs:complexType name="keyword.class" mixed="true">
+         <xs:attribute name="keyref" type="xs:NMTOKEN"/>
+         <xs:attribute name="outputclass" type="xs:string"/>
+         <xs:attributeGroup ref="univ-atts"/>
+         <xs:attributeGroup ref="global-atts"/>
+         <xs:attribute ref="class" default="- topic/keyword "/>
+   </xs:complexType>
+
+
+  <xs:attributeGroup name="select-atts">
+    <xs:annotation>
+      <xs:documentation>Attributes that support both filtering and flagging include <i><keyword>platform</keyword></i>, <i><keyword>product</keyword></i>, <i><keyword
+        >audience</keyword></i>, and <i><keyword>otherprops</keyword></i>. Attribute <i><keyword>rev</keyword></i> only
+        lets you flag information that matches a run-time parameter. Attribute <i><keyword>importance</keyword></i> currently
+        provides output effects only for steps (where only the values "optional" and
+        "required" are supported).
+      </xs:documentation>
+    </xs:annotation>
+    <xs:attribute name="platform" type="xs:string"/>
+    <xs:attribute name="product" type="xs:string"/>
+    <xs:attribute name="audience" type="xs:string"/>
+    <xs:attribute name="otherprops" type="xs:string"/>
+    <xs:attribute name="rev" type="xs:string"/>
+    <xs:attribute name="importance" type="importance-atts.class"/>
+    <xs:attribute name="status" type="status-atts.class"/>
+  </xs:attributeGroup>
+
+  <xs:simpleType name="importance-atts.class">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="obsolete"/>
+      <xs:enumeration value="deprecated"/>
+      <xs:enumeration value="optional"/>
+      <xs:enumeration value="default"/>
+      <xs:enumeration value="low"/>
+      <xs:enumeration value="normal"/>
+      <xs:enumeration value="high"/>
+      <xs:enumeration value="recommended"/>
+      <xs:enumeration value="required"/>
+      <xs:enumeration value="urgent"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+
+  <xs:simpleType name="status-atts.class">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="new"/>
+      <xs:enumeration value="changed"/>
+      <xs:enumeration value="deleted"/>
+      <xs:enumeration value="unchanged"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  
+  <xs:attributeGroup name="id-atts">
+    <xs:annotation>
+      <xs:documentation>ID attributes (%id-atts;) is a parameter entity declaration in
+        the topic DTD that includes attributes that enable the naming and referencing
+        of elements in a DITA topic: <i><keyword>id</keyword></i> and <i><keyword>conref</keyword></i>.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:attribute name="id" type="xs:NMTOKEN"/>
+    <xs:attribute name="conref" type="xs:string"/>
+  </xs:attributeGroup>
+
+  
+  <xs:attributeGroup name="univ-atts">
+    <xs:annotation>
+      <xs:documentation>Universal attributes is a parameter entity declaration in the topic DTD that
+        includes all of the attributes in the select-atts and id-atts attribute groups. 
+      </xs:documentation>
+    </xs:annotation>
+    <xs:attributeGroup ref="id-atts"/>
+    <xs:attributeGroup ref="select-atts"/>
+    <xs:attribute name="translate" type="yesno-att.class"/>
+    <xs:attribute ref="xml:lang"/>
+  </xs:attributeGroup>
+
+  <xs:attributeGroup name="global-atts">
+    <xs:annotation>
+      <xs:documentation>Universal attributes is a parameter entity declaration in the topic DTD that
+        includes all of the attributes in the select-atts and id-atts attribute groups. 
+      </xs:documentation>
+    </xs:annotation>
+    <xs:attribute name="xtrc" type="xs:string"/>
+    <xs:attribute name="xtrf" type="xs:string"/>
+  </xs:attributeGroup>
+
+  <!-- STRUCTURAL MEMBERS ======================================================== -->
+  <!-- things that can be nested under topic after body - redefined when specializing -->
+  <xs:simpleType name="topicreftypes.class">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="topic"/>
+      <xs:enumeration value="concept"/>
+      <xs:enumeration value="task"/>
+      <xs:enumeration value="reference"/>
+      <xs:enumeration value="external"/>
+      <xs:enumeration value="local"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:attributeGroup name="topicref-atts">
+    <xs:annotation>
+      <xs:documentation>
+        The %topicref-atts; parameter entity represents a group of attributes
+        used in numerous map elements: map, topicref, relcolspec, relcell, topichead,
+        and topicgroup. The set is similar to those documented in <ph><xref href="topicref-atts-no-toc.xml">topicref-atts-no-toc</xref></ph> but
+        includes the <i><keyword>toc</keyword></i> attribute.
+      </xs:documentation>
+    </xs:annotation>
+     <xs:attribute name="collection-type" type="collection-type.class"/>
+     <xs:attribute name="type" type="xs:string"/>
+     <xs:attribute name="scope" type="scope-att.class"/>
+     <xs:attribute name="locktitle" type="yesno-att.class"/>
+     <xs:attribute name="format" type="xs:string"/>
+     <xs:attribute name="linking" type="linkingtypes.class"/>
+     <xs:attribute name="toc" type="yesno-att.class"/>
+     <xs:attribute name="print" type="yesno-att.class"/>
+     <xs:attribute name="search" type="yesno-att.class"/>
+     <xs:attribute name="chunk" type="xs:string"/>
+  </xs:attributeGroup>
+
+  <xs:simpleType name="collection-type.class">
+   <xs:restriction base="xs:string">
+     <xs:enumeration value="choice"/>
+     <xs:enumeration value="unordered"/>
+     <xs:enumeration value="sequence"/>
+     <xs:enumeration value="family"/>
+   </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="linkingtypes.class">
+   <xs:restriction base="xs:string">
+     <xs:enumeration value="targetonly"/>
+     <xs:enumeration value="sourceonly"/>
+     <xs:enumeration value="normal"/>
+     <xs:enumeration value="none"/>
+   </xs:restriction>
+  </xs:simpleType>
+
+
+  <xs:attributeGroup name="topicref-atts-no-toc">
+    <xs:annotation>
+      <xs:documentation>
+        The %topicref-atts-no-toc; parameter entity represents the set
+        of attributes used in the <ph><xref href="reltable.xml">reltable</xref></ph> map
+        element. The set is similar to those documented in <ph><xref href="topicref-atts.xml">topicref-atts</xref></ph> but
+        for &lt;<keyword>reltable</keyword>> the <i><keyword>toc</keyword></i> attribute
+        defaults to <q>no</q>. For the other elements that use the %topicref-atts;
+        group declaration, the <i><keyword>toc</keyword></i> attribute doesn't have
+        a default; they can inherit their <i><keyword>toc</keyword></i> value from
+        the nearest container, otherwise it functions upon output as if set to <q>yes</q>.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:attribute name="collection-type" type="collection-type.class"/>
+     <xs:attribute name="type" type="xs:string"/>
+     <xs:attribute name="scope" type="scope-att.class"/>
+     <xs:attribute name="locktitle" type="yesno-att.class"/>
+     <xs:attribute name="format" type="xs:string"/>
+     <xs:attribute name="linking" type="linkingtypes.class"/>
+     <xs:attribute name="toc" type="yesno-att.class" default="no"/>
+     <xs:attribute name="print" type="yesno-att.class"/>
+     <xs:attribute name="search" type="yesno-att.class"/>
+     <xs:attribute name="chunk" type="xs:string"/>
+  </xs:attributeGroup>
+
+  <xs:simpleType name="job-att.class">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="installing"/>
+      <xs:enumeration value="customizing"/>
+      <xs:enumeration value="administratoring"/>
+      <xs:enumeration value="programming"/>
+      <xs:enumeration value="using"/>
+      <xs:enumeration value="maintianing"/>
+      <xs:enumeration value="troubleshooting"/>
+      <xs:enumeration value="evaluating"/>
+      <xs:enumeration value="planning"/>
+      <xs:enumeration value="other"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="experiencelevel-att.class">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="novice"/>
+      <xs:enumeration value="general"/>
+      <xs:enumeration value="expert"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+   <xs:simpleType name="view-att.class">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="internal"/>
+      <xs:enumeration value="classified"/>
+      <xs:enumeration value="all"/>
+      <xs:enumeration value="entitled"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="scope-att.class">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="local" />
+      <xs:enumeration value="peer" />
+      <xs:enumeration value="external" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="yesno-att.class">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="yes"/>
+      <xs:enumeration value="no"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:element name="map" type="map.class">
+    <xs:annotation>
+      <xs:documentation>
+        The &lt;<keyword>map</keyword>> element is used to define a map
+        which describes the relationships among a set of DITA topics. Maps consist
+        of references to topics organized into hierarchies and tables. Maps provide
+        a way to express these relationships in a single common format that can be
+        used for different outputs. 
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="map.class" >
+    <xs:sequence>
+      <xs:group ref="topicmeta" minOccurs="0" />
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:group ref="navref" />
+        <xs:group ref="anchor" />
+        <xs:group ref="topicref" />
+        <xs:group ref="reltable" />
+      </xs:choice>
+    </xs:sequence>
+    <xs:attribute name="title" type="xs:string" />
+    <xs:attribute name="id" type="xs:ID" />
+    <xs:attribute name="anchorref" type="xs:string" />
+    <xs:attributeGroup ref="topicref-atts" />
+    <xs:attributeGroup ref="select-atts" />
+    <xs:attribute name="translate" type="yesno-att.class"/>
+    <xs:attribute ref="xml:lang"/>
+    <xs:attribute ref="ditaarch:DITAArchVersion"/>
+    <xs:attributeGroup ref="global-atts" />
+    <xs:attribute ref="class" default="- map/map " />
+    <xs:attribute name="domains" type="xs:string" default="(map mapgroup-d)"/>
+  </xs:complexType>
+
+  <xs:element name="navref" type="navref.class">
+    <xs:annotation>
+      <xs:documentation>
+        The &lt;<keyword>navref</keyword>> element references a map file
+        from within a map file.  The reference is resolved at runtime for Eclipse
+        navigation, typically to pull together the navigation for multiple components
+        into a product navigation. <ph conref="commonLRdefs.xml#commonLRdefs/only4eclipse"></ph>
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="navref.class">
+    <xs:attribute name="mapref" type="xs:string"/>
+    <xs:attributeGroup ref="global-atts" />
+    <xs:attribute ref="class" default="- map/navref " />
+  </xs:complexType>
+
+  <xs:element name="topicref" type="topicref.class">
+    <xs:annotation>
+      <xs:documentation>
+        The &lt;<keyword>topicref</keyword>> element designates a topic
+        (such as a concept, task, or reference) as a link in a DITA map. A &lt;<keyword>topicref</keyword>>
+        can contain other&lt;<keyword>topicref</keyword>> elements, allowing you to
+        express navigation or table-of-contents hierarchies, as well as implying relationships
+        between the containing &lt;<keyword>topicref</keyword>> and its children.
+        You can set the collection-type of a container &lt;<keyword>topicref</keyword>>
+        to determine how its children are related to each other. Relationships end
+        up expressed as links in the output (with each participant in a relationship
+        having links to the other participants). 
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="topicref.class">
+    <xs:sequence>
+      <xs:group ref="topicmeta" minOccurs="0"/>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:group ref="navref" />
+        <xs:group ref="anchor" />
+        <xs:group ref="topicref" />
+      </xs:choice>
+    </xs:sequence>
+    <xs:attribute name="navtitle" type="xs:string"/>
+    <xs:attribute name="href" type="xs:string"/>
+    <xs:attribute name="keyref" type="xs:string"/>
+    <xs:attribute name="query" type="xs:string"/>
+    <xs:attribute name="copy-to" type="xs:string"/>
+    <xs:attributeGroup ref="topicref-atts" />
+    <xs:attributeGroup ref="id-atts" />
+    <xs:attributeGroup ref="select-atts" />
+    <xs:attribute name="translate" type="yesno-att.class"/>
+    <xs:attribute ref="xml:lang"/>
+    <xs:attributeGroup ref="global-atts" />
+    <xs:attribute ref="class" default="- map/topicref " />
+  </xs:complexType>
+
+  <xs:element name="reltable" type="reltable.class" >
+    <xs:annotation>
+      <xs:documentation>
+        The relationship table (&lt;<keyword>reltable</keyword>>) defines
+        relationships between topics, based on the familiar table model of rows (&lt;<keyword>relrow</keyword>>),
+        columns (&lt;<keyword>relheader</keyword>>), and cells (&lt;<keyword>relcell</keyword>>).
+        The &lt;<keyword>relcell</keyword>> elements can contain &lt;<keyword>topicref</keyword>>
+        elements, which are then related to other &lt;<keyword>topicref</keyword>>
+        elements in the same row (although not necessarily in the same cell). By default,
+        the contents of a &lt;<keyword>reltable</keyword>> element are not output
+        for navigation or TOC purposes, and are used only to define relationships
+        that can be expressed as topic-to-topic links.
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="reltable.class">
+    <xs:sequence>
+      <xs:group ref="topicmeta" minOccurs="0" />
+      <xs:group ref="relheader" minOccurs="0" />
+      <xs:group ref="relrow" maxOccurs="unbounded" />
+    </xs:sequence>
+       <xs:attribute name="title" type="xs:string" />
+       <xs:attributeGroup ref="id-atts" />
+       <xs:attributeGroup ref="topicref-atts-no-toc" />
+       <xs:attributeGroup ref="select-atts" />
+       <xs:attribute name="translate" type="yesno-att.class"/>
+       <xs:attribute ref="xml:lang"/>
+       <xs:attributeGroup ref="global-atts" />
+    <xs:attribute ref="class" default="- map/reltable " />
+  </xs:complexType>
+
+  <xs:element name="relheader" type="relheader.class" >
+    <xs:annotation>
+      <xs:documentation>
+        The &lt;<keyword>relheader</keyword>> element is a row of column
+        definitions (&lt;<keyword>relcolspec</keyword>> elements) in a relationship
+        table. Each table can have only one set of column definitions.
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="relheader.class">
+    <xs:sequence maxOccurs="unbounded">
+        <xs:group ref="relcolspec"  />
+    </xs:sequence>
+    <xs:attributeGroup ref="global-atts" />
+    <xs:attribute ref="class" default="- map/relheader " />
+  </xs:complexType>
+
+  <xs:element name="relcolspec" type="relcolspec.class" >
+    <xs:annotation>
+      <xs:documentation>
+        A column definition in the relationship table. You can use &lt;<keyword>relcolspec</keyword>>
+        column definitions to set defaults for the attributes of &lt;<keyword>topicref</keyword>>
+        elements in the column. For example, you can set type="concept" to treat all
+        untyped &lt;<keyword>topicref</keyword>> elements in the column as concepts.
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="relcolspec.class">
+    <xs:sequence minOccurs="0">
+        <xs:group ref="topicmeta"  />
+    </xs:sequence>
+    <xs:attributeGroup ref="select-atts" />
+    <xs:attributeGroup ref="topicref-atts" />
+    <xs:attribute name="translate" type="yesno-att.class"/>
+    <xs:attribute ref="xml:lang"/>
+    <xs:attributeGroup ref="global-atts" />
+    <xs:attribute ref="class" default="- map/relcolspec " />
+  </xs:complexType>
+
+  <xs:element name="relrow" type="relrow.class" >
+    <xs:annotation>
+      <xs:documentation>
+        A &lt;<keyword>relrow</keyword>> is a row in the relationship table.
+        This creates a relationship between the cells in the row, which will end up
+        expressed as links among the &lt;<keyword>topicref</keyword>> elements in
+        the cells.
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="relrow.class">
+    <xs:sequence minOccurs="0" maxOccurs="unbounded">
+        <xs:group ref="relcell"  />
+    </xs:sequence>
+    <xs:attributeGroup ref="id-atts" />
+    <xs:attributeGroup ref="select-atts" />
+    <xs:attribute name="translate" type="yesno-att.class"/>
+    <xs:attribute ref="xml:lang"/>
+    <xs:attributeGroup ref="global-atts" />
+    <xs:attribute ref="class" default="- map/relrow " />
+  </xs:complexType>
+
+  <xs:element name="relcell" type="relcell.class" >
+    <xs:annotation>
+      <xs:documentation>
+        A &lt;<keyword>relcell</keyword>> element is a cell in the relationship
+        table. The &lt;<keyword>topicref</keyword>> elements it contains will be related
+        to topicrefs in other cells of the same row. By default, topicrefs in the
+        same cell are not related to each other, unless you change the relcell's collection-type
+        attribute to indicate that they are related.
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="relcell.class">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:group ref="topicref"  />
+    </xs:choice>
+    <xs:attributeGroup ref="id-atts" />
+    <xs:attributeGroup ref="topicref-atts" />
+    <xs:attribute name="translate" type="yesno-att.class"/>
+    <xs:attribute ref="xml:lang"/>
+    <xs:attributeGroup ref="global-atts" />
+    <xs:attribute ref="class" default="- map/relcell " />
+  </xs:complexType>
+
+
+  <xs:element name="anchor" type="anchor.class">
+    <xs:annotation>
+      <xs:documentation>
+        The &lt;<keyword>anchor</keyword>> element is used for runtime
+        integration of navigation. It provides an integration point that another map
+        can point to in order to insert its navigation into the current navigation
+        tree. It is currently supported by Eclipse output only.
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="anchor.class">
+    <xs:attribute name="id" type="xs:ID" use="required"/>
+    <xs:attributeGroup ref="global-atts" />
+    <xs:attribute ref="class" default="- map/anchor " />
+  </xs:complexType>
+
+  <xs:element name="topicmeta" type="topicmeta.class">
+    <xs:annotation>
+      <xs:documentation>
+        The &lt;<keyword>topicmeta</keyword>> element defines the metadata
+        that applies to a topic and the topic's children. When creating links, it
+        can also be used to override the title and short description of the topic.
+        In addition, it can insert index entries through the &lt;<keyword>keywords</keyword>>
+        element.
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="topicmeta.class" >
+    <xs:sequence>
+      <xs:group ref="linktext" minOccurs="0"/>
+      <xs:group ref="searchtitle" minOccurs="0"/>
+      <xs:group ref="shortdesc" minOccurs="0"/>
+      <xs:group ref="author" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:group ref="source" minOccurs="0"/>
+      <xs:group ref="publisher" minOccurs="0"/>
+      <xs:group ref="copyright" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:group ref="critdates" minOccurs="0"/>
+      <xs:group ref="permissions" minOccurs="0"/>
+      <xs:group ref="audience" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:group ref="category" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:group ref="keywords" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:group ref="prodinfo" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:group ref="othermeta" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:group ref="resourceid" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+    <xs:attribute name="lockmeta" type="yesno-att.class"/>
+    <xs:attributeGroup ref="global-atts" />
+    <xs:attribute ref="class" default="- map/topicmeta " />
+  </xs:complexType>
+
+  <xs:element name="linktext" type="linktext.class">
+    <xs:annotation>
+      <xs:documentation>
+        The &lt;<keyword>linktext</keyword>> element provides the literal
+        label or line of text for a link. In most cases, the text of a link can be
+        resolved during processing by cross reference with the target resource. Use
+        the &lt;<keyword>linktext</keyword>> element only when the target cannot be
+        reached, such as when it is a peer or external link.
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="linktext.class" mixed="true">
+    <xs:sequence minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="words.cnt"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="global-atts" />
+    <xs:attribute ref="class" default="- map/linktext " />
+  </xs:complexType>
+
+  <xs:element name="searchtitle" type="searchtitle.class">
+    <xs:annotation>
+      <xs:documentation>
+        When your DITA topic is transformed to XHTML, the &lt;<keyword>searchtitle</keyword>>
+        element is used to create a title element at the top of the resulting HTML
+        file. This title is normally used in search result summaries by some search
+        engines, such as that in Eclipse (<ph><xref format="html" href="http://eclipse.org"
+          scope="external">http://eclipse.org</xref></ph>); if not set, the XHTML's
+        title element defaults to the source topic's title content (which may not
+        be as well optimized for search summaries)
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="searchtitle.class" mixed="true">
+    <xs:sequence minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="words.cnt"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="global-atts" />
+    <xs:attribute ref="class" default="- map/searchtitle " />
+  </xs:complexType >
+
+  <xs:element name="shortdesc" type="shortdesc.class">
+    <xs:annotation>
+      <xs:documentation>
+        The short description (&lt;<keyword>shortdesc</keyword>>) element
+        occurs between the topic title and the topic body, as the initial paragraph-like
+        content of a topic. The short description, which represents the purpose or
+        theme of the topic, is also intended to be used as a link preview and for
+        searching.
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="shortdesc.class" mixed="true">
+    <xs:sequence minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="words.cnt"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="global-atts" />
+    <xs:attribute ref="class" default="- map/shortdesc " />
+  </xs:complexType >
+
+ <xs:attribute name="class" type="xs:string" >
+    <xs:annotation>
+      <xs:documentation>
+        The class attribute supports specialization. Its predefined values help 
+        the output transforms work correctly with ranges of related content. 
+      </xs:documentation>
+    </xs:annotation>
+  </xs:attribute>
+ 
+   
+</xs:schema>

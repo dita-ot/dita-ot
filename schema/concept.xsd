@@ -1,32 +1,91 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
- | (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
- | This file is part of the DITA package on IBM's developerWorks site.
- | See license.txt for disclaimers and permissions.
- |
- | The Darwin Information Typing Architecture (DITA) was orginated by
- | IBM's XML Workgroup and ID Workbench tools team.
- |
- | File: concept.xsd
- |
- | Release history (vrm):
- |   1.0.0 Release 1.2 - Initial XML Schema release on IBM's developerWorks, June 2003
- |   1.1.3 Release 1.3 March 2004: bug fixes and map updates
- *-->
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<!-- ============================================================= -->
+<!--                    HEADER                                     -->
+<!-- ============================================================= -->
+<!--  MODULE:    DITA Concept XSD                                 -->
+<!--  VERSION:   1.0                                               -->
+<!--  DATE:      February 2005                                     -->
+<!--                                                               -->
+<!-- ============================================================= -->
+
+
+<!-- ============================================================= -->
+<!-- SYSTEM:     Darwin Information Typing Architecture (DITA)     -->
+<!--                                                               -->
+<!-- PURPOSE:    W3C XML Schema to describe DITA concepts                     -->
+<!--                                                               -->
+<!-- ORIGINAL CREATION DATE:                                       -->
+<!--             March 2001                                        -->
+<!--                                                               -->
+<!--             (C) Copyright OASIS-Open.org 2005.                -->
+<!--             (C) Copyright IBM Corporation 2001, 2004.         -->
+<!--             All Rights Reserved.                              -->
+<!-- ============================================================= -->
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
   <!-- Add the domains to the base topic XML Schema -->
-  <!--  ================ TOPIC DOMAINS =====================  -->
-  <xs:include schemaLocation="programming-domain.mod"/>
-  <xs:include schemaLocation="software-domain.mod"/>
-  <xs:include schemaLocation="highlight-domain.mod"/>
-  <xs:include schemaLocation="ui-domain.mod"/>
-  <xs:include schemaLocation="utilities-domain.mod"/>
-  
-  <xs:include schemaLocation="topic_domains.mod"/>
-  
-  <!--  ================ INFO TYPES =====================  -->
-  <xs:include schemaLocation="concept.grp"/>
-  <xs:redefine schemaLocation="topic.mod" >
+  <!--  ================ TOPIC DOMAINS INLCUSION =====================  -->
+  <xs:include schemaLocation="programmingDomain.xsd"/>
+  <xs:include schemaLocation="softwareDomain.xsd"/>
+  <xs:include schemaLocation="highlightDomain.xsd"/>
+  <xs:include schemaLocation="uiDomain.xsd"/>
+  <xs:include schemaLocation="utilitiesDomain.xsd"/>
+
+  <!--  ================ CONCEPT GROUP DEFINITION=====================  -->
+  <xs:include schemaLocation="conceptGrp.xsd"/>
+
+  <!--  ================ DOMAIN ELEMENT REDEFINITION =====================  -->
+  <xs:redefine schemaLocation="topicGrp.xsd">
+    <xs:group name="keyword">
+      <xs:choice>
+        <xs:group ref="keyword"/>
+        <xs:group ref="pr-d-keyword" />
+        <xs:group ref="ui-d-keyword" />
+        <xs:group ref="sw-d-keyword" />
+      </xs:choice>
+    </xs:group>
+
+    <xs:group name="ph">
+      <xs:choice>
+        <xs:group ref="ph"/>
+        <xs:group ref="pr-d-ph" />
+        <xs:group ref="ui-d-ph" />
+        <xs:group ref="hi-d-ph" />
+        <xs:group ref="sw-d-ph" />
+      </xs:choice>
+    </xs:group>
+
+    <xs:group name="pre">
+      <xs:choice>
+        <xs:group ref="pre"/>
+        <xs:group ref="pr-d-pre" />
+        <xs:group ref="ui-d-pre" />
+        <xs:group ref="sw-d-pre" />
+      </xs:choice>
+    </xs:group>
+
+
+    <xs:group name="dl">
+      <xs:choice>
+        <xs:group ref="dl"/>
+        <xs:group ref="pr-d-dl"/>
+      </xs:choice >
+    </xs:group >
+
+
+    <xs:group name="fig">
+      <xs:choice>
+        <xs:group ref="fig"/>
+        <xs:group ref="pr-d-fig"/>
+        <xs:group ref="ut-d-fig" />
+      </xs:choice>
+    </xs:group >
+
+  </xs:redefine>
+
+
+  <!--  ================ DOMAINS ATTRIBUTE DEFINITION =====================  -->
+  <xs:redefine schemaLocation="topicMod.xsd" >
   	<xs:complexType name="topic.class">
   		<xs:complexContent>
   			<xs:extension base="topic.class">
@@ -34,8 +93,8 @@
   			</xs:extension>
   		</xs:complexContent>
   	</xs:complexType>
-  </xs:redefine> 
-  <xs:redefine schemaLocation="concept.mod" >
+  </xs:redefine>
+  <xs:redefine schemaLocation="conceptMod.xsd" >
   	<xs:complexType name="concept.class">
   		<xs:complexContent>
   			<xs:extension base="concept.class">
@@ -43,13 +102,14 @@
   			</xs:extension>
   		</xs:complexContent>
   	</xs:complexType>
-  </xs:redefine> 
-  
+  </xs:redefine>
+
+  <!--  ================ INFO-TYPES DEFINITION =====================  -->
   <xs:group name="info-types">
     <xs:choice>
       <xs:group ref="concept-info-types"/>
     </xs:choice>
   </xs:group>
 
-  
+
 </xs:schema>

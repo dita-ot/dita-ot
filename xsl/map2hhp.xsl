@@ -7,7 +7,7 @@
      Output = one HHP project file for use with the HTML Help compiler.
 
      Options:
-        /OUTEXT  = XHTML output extension (default is 'html')
+        /OUTEXT  = XHTML output extension (default is '.html')
         /WORKDIR = The working directory that contains the document being transformed.
                    Needed as a directory prefix for the @href "document()" function calls.
                    Default is './'
@@ -35,10 +35,10 @@
 <xsl:variable name="msgprefix">IDXS</xsl:variable>
 
 <!-- *************************** Command line parameters *********************** -->
-<xsl:param name="OUTEXT" select="'html'"/>
+<xsl:param name="OUTEXT" select="'.html'"/>
 <xsl:param name="WORKDIR" select="'./'"/>
 <xsl:param name="HHCNAME" select="'help'"/>
-<xsl:param name="USEINDEX" select="'no'"/>  <!-- to turn on, use 'yes' -->
+<xsl:param name="USEINDEX" select="'yes'"/>  <!-- to turn on, use 'yes' -->
 <xsl:param name="HELPALIAS" />
 <xsl:param name="HELPMAP" />
 <xsl:param name="DITAEXT" select="'.xml'"/>
@@ -168,8 +168,8 @@ Default topic=</xsl:text>
     <xsl:if test="@href and not ((ancestor-or-self::*/@type)[last()]='external') and not((ancestor-or-self::*/@scope)[last()]='external')">
       <xsl:choose>
         <!-- For dita files, change the extension; for HTML files, output the name as-is. Use the copy-to value first. -->
-        <xsl:when test="contains(@copy-to,$DITAEXT)"><xsl:value-of select="$pathFromMaplist"/><xsl:value-of select="substring-before(@copy-to,$DITAEXT)"/>.<xsl:value-of select="$OUTEXT"/></xsl:when>
-        <xsl:when test="contains(@href,$DITAEXT)"><xsl:value-of select="$pathFromMaplist"/><xsl:value-of select="substring-before(@href,$DITAEXT)"/>.<xsl:value-of select="$OUTEXT"/></xsl:when>
+        <xsl:when test="contains(@copy-to,$DITAEXT)"><xsl:value-of select="$pathFromMaplist"/><xsl:value-of select="substring-before(@copy-to,$DITAEXT)"/><xsl:value-of select="$OUTEXT"/></xsl:when>
+        <xsl:when test="contains(@href,$DITAEXT)"><xsl:value-of select="$pathFromMaplist"/><xsl:value-of select="substring-before(@href,$DITAEXT)"/><xsl:value-of select="$OUTEXT"/></xsl:when>
         <!-- For local HTML files, add any path from the maplist -->
         <xsl:when test="contains(@href,'.htm') and not(@scope='external')"><xsl:value-of select="$pathFromMaplist"/><xsl:value-of select="@href"/></xsl:when>
         <xsl:when test="contains(@href,'.htm')"><xsl:value-of select="$pathFromMaplist"/><xsl:value-of select="@href"/></xsl:when>
@@ -200,12 +200,12 @@ Default topic=</xsl:text>
     <!-- If copy-to is specified, that copy should be used in place of the original -->
     <xsl:when test="contains(@copy-to,$DITAEXT)">
       <xsl:if test="not(@scope='external')"><xsl:value-of select="$pathFromMaplist"/></xsl:if>
-      <xsl:value-of select="substring-before(@copy-to,$DITAEXT)"/>.<xsl:value-of select="$OUTEXT"/><xsl:text>
+      <xsl:value-of select="substring-before(@copy-to,$DITAEXT)"/><xsl:value-of select="$OUTEXT"/><xsl:text>
 </xsl:text></xsl:when>
     <!-- For dita files, change the extension to OUTEXT -->
     <xsl:when test="contains(@href,$DITAEXT)">
       <xsl:if test="not(@scope='external')"><xsl:value-of select="$pathFromMaplist"/></xsl:if>
-      <xsl:value-of select="substring-before(@href,$DITAEXT)"/>.<xsl:value-of select="$OUTEXT"/><xsl:text>
+      <xsl:value-of select="substring-before(@href,$DITAEXT)"/><xsl:value-of select="$OUTEXT"/><xsl:text>
 </xsl:text></xsl:when>
     <!-- For local HTML files, add any path from the maplist -->
     <xsl:when test="contains(@href,'.htm') and not(@scope='external')">

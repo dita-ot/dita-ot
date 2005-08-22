@@ -31,17 +31,9 @@
 
 <!-- Setup for translation/localization -->
 <xsl:variable name="StringFile" select="document('../common/strings.xml')"/>
-<xsl:variable name="PrimaryLang" select="substring-before($Lang,'-')"/>
 
 
 <!-- DEFAULT VALUES FOR EXTERNALLY MODIFIABLE PARAMETERS -->
-
-<!-- /CSS = user's CSS filename parameter ('')-->
-<xsl:param name="default-css" select="'common.css'"/>
-<xsl:param name="CSS" select="''"/>
-
-<!-- /CSSPATH = default CSS path parameter (null)-->
-<xsl:param name="CSSPATH" select="''"/>
 
 <!-- /IP = default image path parameter (null)-->
 <xsl:param name="IP" select="''"/>
@@ -52,29 +44,10 @@
 <!-- /DRAFT = default "hide draft & cleanup content" processing parameter ('no' = hide them)-->
 <xsl:param name="DRAFT" select="'no'"/><!-- "no" and "yes" are valid values; non-'yes' is ignored -->
 
-<!-- /INDEXSHOW = default "hide index entries" processing parameter ('no' = hide them)-->
-<xsl:param name="INDEXSHOW" select="'no'"/><!-- "no" and "yes" are valid values; non-'yes' is ignored -->
-
-<!-- /OUTEXT = default "output extension" processing parameter ('pdf')-->
-<xsl:param name="OUTEXT" select="'pdf'"/><!-- "pdf" and "ps" are valid values for FO -->
-
 <!-- /WORKDIR = the working directory that contains the document being transformed.
      Needed as a directory prefix for the @conref and @href "document()" function calls.
      default is './')-->
 <xsl:param name="WORKDIR" select="'./'"/>
-
-<!-- /FILENAME = the file name (file name and extension only - no path) of the document being transformed.
-     Needed to help with debugging.
-     default is 'myfile.xml')-->
-<xsl:param name="FILENAME" select="'myfile.xml'"/>
-
-<!-- /DBG = Debug mode - enables XSL debugging xsl-messages.
-     Needed to help with debugging.
-     default is 'no')-->
-<xsl:param name="DBG" select="'no'"/><!-- "no" and "yes" are valid values; non-'yes' is ignored -->
-
-<!-- /Lang = default language parameter  -->
-<xsl:param name="Lang" select="'en-us'"/>
 
 <!-- DITAEXT file extension name of dita topic file -->
 <xsl:param name="DITAEXT" select="'.xml'"/>
@@ -84,7 +57,6 @@
 <xsl:param name="basic-start-indent">72pt</xsl:param>
 <xsl:param name="basic-end-indent">24pt</xsl:param>
 <xsl:param name="basic-first-indent">84pt</xsl:param>
-
 
 
 <!-- ========== FORMATTER DECLARATIONS AND GLOBALS ========== -->

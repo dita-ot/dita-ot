@@ -345,7 +345,7 @@ Children are displayed in a numbered list, with the target title as the cmd and 
       <!-- It's to a DITA file - process the file name (adding the html extension)
       and process the rest of the href -->
       <xsl:when test="contains(@href,$DITAEXT)">
-        <xsl:value-of select="substring-before(@href,$DITAEXT)"/>.<xsl:value-of select="$OUTEXT"/><xsl:call-template name="parsehref"><xsl:with-param name="href" select="substring-after(@href,$DITAEXT)"/></xsl:call-template>
+        <xsl:value-of select="substring-before(@href,$DITAEXT)"/><xsl:value-of select="$OUTEXT"/><xsl:call-template name="parsehref"><xsl:with-param name="href" select="substring-after(@href,$DITAEXT)"/></xsl:call-template>
       </xsl:when>
       <xsl:when test="@href=''"/>
       <xsl:otherwise>
@@ -646,7 +646,7 @@ If it's a link to a DITA resource, the file extension must be .dita or .xml .</x
       <!-- If the link is exactly the same, do not output message.  The duplicate will automatically be removed. -->
       <xsl:if test="not(key('link', concat(ancestor::*[contains(@class, ' topic/related-links ')]/parent::*[contains(@class, ' topic/topic ')]/@id, ' ', @href,@type,@role,@platform,@audience,@importance,@outputclass,@keyref,@scope,@format,@otherrole,@product,@otherprops,@rev,@class,child::*))[2])">
         <xsl:call-template name="output-message">
-          <xsl:with-param name="msg">The link to <xsl:value-of select="@href"/> may appear more than once in <xsl:value-of select="concat(substring-before($FILENAME, $DITAEXT), '.', $OUTEXT)"/>.</xsl:with-param>
+          <xsl:with-param name="msg">The link to <xsl:value-of select="@href"/> may appear more than once in <xsl:value-of select="concat(substring-before($FILENAME, $DITAEXT), $OUTEXT)"/>.</xsl:with-param>
           <xsl:with-param name="msgnum">037</xsl:with-param>
           <xsl:with-param name="msgsev">I</xsl:with-param>
         </xsl:call-template>

@@ -6,72 +6,116 @@ package org.dita.dost.writer;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
+import java.util.ArrayList;
+import java.util.ListIterator;
 
 import org.dita.dost.module.Content;
+import org.dita.dost.util.Constants;
 import org.dita.dost.util.StringUtils;
 import org.xml.sax.Attributes;
-import org.xml.sax.ContentHandler;
-import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
-import org.xml.sax.ext.LexicalHandler;
 import org.xml.sax.helpers.XMLReaderFactory;
 
 
 /**
+ * DitaLinksWriter reads dita topic file and insert map links information into it.
+ * 
  * @author Zhang, Yuan Peng
  * 
  */
-public class DitaLinksWriter extends AbstractWriter implements ContentHandler,LexicalHandler {
+public class DitaLinksWriter extends AbstractXMLWriter {
 
     private String indexEntries;
     private XMLReader reader;
     private OutputStreamWriter output;
-    private boolean hasRelatedlinks;// whether there is <related-links> in thisfile
+    private boolean hasRelatedlinksTillNow;// whether there is <related-links> in thisfile
     private boolean needResolveEntity;
     private int level; // level of the element
+    private ArrayList matchList; // topic path that topicIdList need to match
+    private int matchLevel; // the level of the topic to insert into
+    private ArrayList topicIdList; // array list that is used to keep the hierarchy of topic id
+    private String lastMatchTopic;
+    private String firstMatchTopic;
+    private boolean startTopic; //whether to insert links at this topic
 
-
+    /**
+     * @see org.dita.dost.writer.AbstractWriter#setContent(org.dita.dost.module.Content)
+     * 
+     */
     public void setContent(Content content) {
-        indexEntries = (String) content.getObject();
+        indexEntries = (String) content.getValue();
         //System.out.println(indexEntries);
     }
 
+
     /**
-     * 
+     * Default constructor of DitaLinksWriter class.
      */
     public DitaLinksWriter() {
         super();
+        topicIdList = new ArrayList(Constants.INT_16);
+        firstMatchTopic = null;
+        hasRelatedlinksTillNow = false;
+        indexEntries = null;
+        lastMatchTopic = null;
+        level = 0;
+        matchLevel = 0;
+        matchList = null;
+        needResolveEntity = false;
+        output = null;
+        startTopic = false;
+        
         try {
-            //SAXParserFactory spFactory = SAXParserFactory.newInstance();
-            //spFactory.setValidating(true);
-            //spFactory.setFeature("http://xml.org/sax/features/validation", true);
-            //SAXParser parser = spFactory.newSAXParser();
-            //reader = parser.getXMLReader();
-            if (System.getProperty("org.xml.sax.driver") == null){
+            if (System.getProperty(Constants.SAX_DRIVER_PROPERTY) == null){
                 //The default sax driver is set to xerces's sax driver
-                System.setProperty("org.xml.sax.driver","org.apache.xerces.parsers.SAXParser");
+                System.setProperty(Constants.SAX_DRIVER_PROPERTY,
+                        Constants.SAX_DRIVER_DEFAULT_CLASS);
             }
             reader = XMLReaderFactory.createXMLReader();
             reader.setContentHandler(this);
-            reader.setProperty("http://xml.org/sax/properties/lexical-handler",this);
+            reader.setProperty(Constants.LEXICAL_HANDLER_PROPERTY,this);
+            reader.setFeature(Constants.FEATURE_NAMESPACE_PREFIX, true);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
     }
 
+    /**
+     * @see org.dita.dost.writer.AbstractWriter#write(java.lang.String)
+     * 
+     */
     public void write(String filename) {
+		String file = null;
+		String topic = null;
+		File inputFile = null;
+		File outputFile = null;
+		FileOutputStream fileOutput = null;
 
         try {
+            
+            if(filename.lastIndexOf(Constants.SHARP)!=-1){
+                file = filename.substring(0,filename.lastIndexOf(Constants.SHARP));
+                topic = filename.substring(filename.lastIndexOf(Constants.SHARP)+1);
+                setMatch(topic);
+                startTopic = false;
+                matchLevel = matchList.size();
+            }else{
+                file = filename;
+                matchList = null;
+                startTopic = true;
+                matchLevel = 1;
+            }
+            
         	needResolveEntity = true;
-            hasRelatedlinks = false;
-            File inputFile = new File(filename);
-            File outputFile = new File(filename + ".temp");
-            FileOutputStream fileOutput = new FileOutputStream(outputFile);
-            output = new OutputStreamWriter(fileOutput, "UTF-8");
+            hasRelatedlinksTillNow = false;
+            inputFile = new File(file);
+            outputFile = new File(file + Constants.FILE_EXTENSION_TEMP);
+            fileOutput = new FileOutputStream(outputFile);
+            output = new OutputStreamWriter(fileOutput, Constants.UTF8);
 
-            reader.parse(filename);
+            reader.parse(file);
             output.close();
             
             if(!inputFile.delete()){
@@ -82,9 +126,63 @@ public class DitaLinksWriter extends AbstractWriter implements ContentHandler,Le
             }
         } catch (Exception e) {
             e.printStackTrace(System.out);
+        }finally {
+            try {
+                fileOutput.close();
+            }catch (Exception e) {
+                e.printStackTrace(System.out);
+            }
         }
     }
+    
+    private void setMatch(String match) {
+		int index = 0;
+        matchList = new ArrayList(Constants.INT_16);
+        
+        firstMatchTopic = (match.indexOf(Constants.SLASH) != -1) ? match.substring(0, match.indexOf(Constants.SLASH)) : match;
 
+        while (index != -1) {
+            int end = match.indexOf(Constants.SLASH, index);
+            if (end == -1) {
+                matchList.add(match.substring(index));
+                lastMatchTopic = match.substring(index);
+                index = end;
+            } else {
+                matchList.add(match.substring(index, end));
+                index = end + 1;
+            }
+        }
+    }
+    
+//  check whether the hierarchy of current node match the matchList
+    private boolean checkMatch() {
+        
+        int matchSize = matchList.size();
+        int ancestorSize = topicIdList.size();
+        ListIterator matchIterator = matchList.listIterator();
+        ListIterator ancestorIterator = topicIdList.listIterator(ancestorSize
+                - matchSize);
+        String match;
+        String ancestor;
+        
+		if (matchList == null){
+			return true;
+		}
+        
+        while (matchIterator.hasNext()) {
+            match = (String) matchIterator.next();
+            ancestor = (String) ancestorIterator.next();
+            if (!match.equals(ancestor)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * @see org.xml.sax.ContentHandler#characters(char[], int, int)
+     * 
+     */
     public void characters(char[] ch, int start, int length)
             throws SAXException {
     	if(needResolveEntity){
@@ -96,6 +194,10 @@ public class DitaLinksWriter extends AbstractWriter implements ContentHandler,Le
     	}
     }
 
+    /**
+     * @see org.xml.sax.ContentHandler#endDocument()
+     * 
+     */
     public void endDocument() throws SAXException {
 
         try {
@@ -105,26 +207,35 @@ public class DitaLinksWriter extends AbstractWriter implements ContentHandler,Le
         }
     }
 
+    /**
+     * @see org.xml.sax.ContentHandler#endElement(java.lang.String, java.lang.String, java.lang.String)
+     * 
+     */
     public void endElement(String uri, String localName, String qName)
             throws SAXException {
         level--;
+        if (!startTopic){
+            topicIdList.remove(topicIdList.size() - 1);
+        }
         try {
-            if (!hasRelatedlinks && level == 0) {
-                output.write("<related-links class=\"- topic/related-links \">");
+            if (checkLinkAtEnd() && startTopic) {
+                output.write(Constants.RELATED_LINKS_HEAD);
                 output.write(indexEntries);
-                output.write("</related-links>");
-                hasRelatedlinks = true;
+                output.write(Constants.RELATED_LINKS_END);
+                hasRelatedlinksTillNow = true;
             }
-            output.write("</" + qName + ">");
+            output.write(Constants.LESS_THAN + Constants.SLASH + qName 
+                    + Constants.GREATER_THAN);
         } catch (Exception e) {
             e.printStackTrace(System.out);
         }
     }
 
-    public void endPrefixMapping(String prefix) throws SAXException {
 
-    }
-
+    /**
+     * @see org.xml.sax.ContentHandler#ignorableWhitespace(char[], int, int)
+     * 
+     */
     public void ignorableWhitespace(char[] ch, int start, int length)
             throws SAXException {
         try {
@@ -134,28 +245,27 @@ public class DitaLinksWriter extends AbstractWriter implements ContentHandler,Le
         }
     }
 
+
     /**
+     * @see org.xml.sax.ContentHandler#processingInstruction(java.lang.String, java.lang.String)
      * 
      */
     public void processingInstruction(String target, String data)
             throws SAXException {
         String pi;
         try {
-            if (data != null) {
-                pi = target + " " + data;
-            } else {
-                pi = target;
-            }
-            output.write("<?" + pi + "?>");
+            pi = (data != null) ? target + Constants.STRING_BLANK + data : target;
+            output.write(Constants.LESS_THAN + Constants.QUESTION 
+                    + pi + Constants.QUESTION + Constants.GREATER_THAN);
         } catch (Exception e) {
             e.printStackTrace(System.out);
         }
     }
 
-    public void setDocumentLocator(Locator locator) {
-
-    }
-
+    /**
+     * @see org.xml.sax.ContentHandler#skippedEntity(java.lang.String)
+     * 
+     */
     public void skippedEntity(String name) throws SAXException {
         try {
             output.write(name);
@@ -164,98 +274,104 @@ public class DitaLinksWriter extends AbstractWriter implements ContentHandler,Le
         }
     }
 
+    /**
+     * @see org.xml.sax.ContentHandler#startDocument()
+     * 
+     */
     public void startDocument() throws SAXException {
         level = 0;
     }
 
+    /**
+     * @see org.xml.sax.ContentHandler#startElement(java.lang.String, java.lang.String, java.lang.String, org.xml.sax.Attributes)
+     * 
+     */
     public void startElement(String uri, String localName, String qName,
             Attributes atts) throws SAXException {
-    	
+		int attsLen = atts.getLength();
         level++;
+        
+        
         try {
-            if (!hasRelatedlinks && level > 1
-                    && atts.getValue("class").indexOf(" topic/topic ") != -1) {
+            if (checkLinkAtStart(atts) && startTopic) {
                 // if <related-links> don't exist
-                output.write("<related-links class=\"- topic/related-links \">");
+                output.write(Constants.RELATED_LINKS_HEAD);
                 output.write(indexEntries);
-                output.write("</related-links>");
-                hasRelatedlinks = true;
+                output.write(Constants.RELATED_LINKS_END);
+                hasRelatedlinksTillNow = true;
             }
-
-            output.write("<" + qName);
-            for (int i = 0; i < atts.getLength(); i++) {
+            if ( startTopic == false && Constants.ELEMENT_NAME_DITA.equalsIgnoreCase(qName) == false ){
+                if (atts.getValue(Constants.ATTRIBUTE_NAME_ID) != null){
+                    topicIdList.add(atts.getValue(Constants.ATTRIBUTE_NAME_ID));
+                }else{
+                    topicIdList.add("null");
+                }
+                if (topicIdList.size() == matchList.size()){
+                    startTopic = checkMatch();
+                }
+            }
+             output.write(Constants.LESS_THAN + qName);
+            for (int i = 0; i < attsLen; i++) {
                 String attQName = atts.getQName(i);
                 String attValue;
                 attValue = atts.getValue(i);
-                output.write(" " + attQName + "=\"" + attValue + "\"");
+                output.write(new StringBuffer().append(Constants.STRING_BLANK)
+                        .append(attQName).append(Constants.EQUAL).append(Constants.QUOTATION)
+                		.append(attValue).append(Constants.QUOTATION).toString());
             }
-            output.write(">");
-            if (atts.getValue("class").indexOf(" topic/related-links ") != -1) {
-                hasRelatedlinks = true;
+            output.write(Constants.GREATER_THAN);
+            if (atts.getValue(Constants.ATTRIBUTE_NAME_CLASS)
+                    .indexOf(" topic/related-links ") != -1
+                    && startTopic) {
+                hasRelatedlinksTillNow = true;
                 output.write(indexEntries);
             }
-
-        } catch (Exception e) {
-            if (atts.getValue("class") != null){
+         } catch (Exception e) {
+            if (atts.getValue(Constants.ATTRIBUTE_NAME_CLASS) != null){
                 e.printStackTrace(System.out);
             }//prevent printing stack trace when meeting <dita> which has no class attribute
         }
     }
 
-    public void startPrefixMapping(String prefix, String uri)
-            throws SAXException {
-
-    }
-
-    
-    /* (non-Javadoc)
-	 * @see org.xml.sax.ext.LexicalHandler#comment(char[], int, int)
-	 */
-	public void comment(char[] ch, int start, int length) throws SAXException {
-	}
-	/* (non-Javadoc)
-	 * @see org.xml.sax.ext.LexicalHandler#endCDATA()
-	 */
-	public void endCDATA() throws SAXException {
+	/**
+     * @see org.xml.sax.ext.LexicalHandler#endCDATA()
+     * 
+     */
+    public void endCDATA() throws SAXException {
 	    try{
-	        output.write("]]>");
+	        output.write(Constants.CDATA_END);
 	    }catch(Exception e){
 	        e.printStackTrace(System.out);
 	    }
 	}
-	/* (non-Javadoc)
-	 * @see org.xml.sax.ext.LexicalHandler#endDTD()
-	 */
-	public void endDTD() throws SAXException {
-	}
-	/* (non-Javadoc)
-	 * @see org.xml.sax.ext.LexicalHandler#endEntity(java.lang.String)
-	 */
-	public void endEntity(String name) throws SAXException {
+
+	/**
+     * @see org.xml.sax.ext.LexicalHandler#endEntity(java.lang.String)
+     * 
+     */
+    public void endEntity(String name) throws SAXException {
 		if(!needResolveEntity){
 			needResolveEntity = true;
 		}
 	}
-	/* (non-Javadoc)
-	 * @see org.xml.sax.ext.LexicalHandler#startCDATA()
-	 */
-	public void startCDATA() throws SAXException {
+	
+	/**
+     * @see org.xml.sax.ext.LexicalHandler#startCDATA()
+     * 
+     */
+    public void startCDATA() throws SAXException {
 	    try{
-	        output.write("<![CDATA[");
+	        output.write(Constants.CDATA_HEAD);
 	    }catch(Exception e){
 	        e.printStackTrace(System.out);
 	    }
 	}
-	/* (non-Javadoc)
-	 * @see org.xml.sax.ext.LexicalHandler#startDTD(java.lang.String, java.lang.String, java.lang.String)
-	 */
-	public void startDTD(String name, String publicId, String systemId)
-			throws SAXException {
-	}
-	/* (non-Javadoc)
-	 * @see org.xml.sax.ext.LexicalHandler#startEntity(java.lang.String)
-	 */
-	public void startEntity(String name) throws SAXException {
+
+	/**
+     * @see org.xml.sax.ext.LexicalHandler#startEntity(java.lang.String)
+     * 
+     */
+    public void startEntity(String name) throws SAXException {
 		try {
            	needResolveEntity = StringUtils.checkEntity(name);
            	if(!needResolveEntity){
@@ -265,5 +381,21 @@ public class DitaLinksWriter extends AbstractWriter implements ContentHandler,Le
             e.printStackTrace(System.out);
         }
         
+	}
+	
+	private boolean checkLinkAtStart(Attributes atts){
+		if (!hasRelatedlinksTillNow && level > 1 
+				&& atts.getValue(Constants.ATTRIBUTE_NAME_CLASS)
+				.indexOf(" topic/topic ") != -1){
+			return true;
+		}
+		return false;
+	}
+	
+	private boolean checkLinkAtEnd(){
+		if(!hasRelatedlinksTillNow && level == matchLevel-1){
+			return true;
+		}
+		return false;
 	}
 }

@@ -5,9 +5,8 @@
 <!-- entities for use in the generated output (must produce correctly in FO) -->
   <!ENTITY bullet        "&#x2022;"><!--check these two for better assignments -->
 ]>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-  xmlns:fo="http://www.w3.org/1999/XSL/Format" version="1.0">  
-  
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
+  xmlns:fo="http://www.w3.org/1999/XSL/Format" version="1.0">
   <!--==== related-links content subset ====-->
   <xsl:template match="*[contains(@class,' topic/related-links ')]">
     <xsl:if test="$output-related-links">
@@ -24,7 +23,8 @@
       </fo:block>
     </xsl:if>
   </xsl:template>
-  <xsl:template match="*[contains(@class,' topic/linklist ')]/*[contains(@class,' topic/title ')]">
+  <xsl:template 
+    match="*[contains(@class,' topic/linklist ')]/*[contains(@class,' topic/title ')]">
     <fo:block font-weight="bold">
       <xsl:apply-templates/>
     </fo:block>
@@ -46,14 +46,16 @@
   </xsl:template>
   <!-- rule for when the link is still not pointing at anything -->
   <xsl:template match="*[contains(@class,' topic/link ')][@href = '']">
-    <fo:block color="red" start-indent="{$basic-start-indent} + {                    count(ancestor-or-self::*[contains(@class,' topic/linklist ')]) +                    count(ancestor-or-self::*[contains(@class,' topic/linkpool ')])}em">
+    <fo:block color="red" 
+      start-indent="{$basic-start-indent} + {                    count(ancestor-or-self::*[contains(@class,' topic/linklist ')]) +                    count(ancestor-or-self::*[contains(@class,' topic/linkpool ')])}em">
       <xsl:text>&bullet; </xsl:text>
       <xsl:apply-templates/>
     </fo:block>
   </xsl:template>
   <!-- if there is an href, make it look like a link and remove prompt -->
   <xsl:template match="*[contains(@class,' topic/link ')][not(@href = '')]">
-    <fo:block color="blue" text-decoration="underline" start-indent="{$basic-start-indent} + {                    count(ancestor-or-self::*[contains(@class,' topic/linklist ')]) +                    count(ancestor-or-self::*[contains(@class,' topic/linkpool ')])}em">
+    <fo:block color="blue" text-decoration="underline" 
+      start-indent="{$basic-start-indent} + {                    count(ancestor-or-self::*[contains(@class,' topic/linklist ')]) +                    count(ancestor-or-self::*[contains(@class,' topic/linkpool ')])}em">
       <xsl:text>&bullet; </xsl:text>
       <xsl:apply-templates/>
     </fo:block>
@@ -63,7 +65,8 @@
   <!-- rule for when the xref is still not pointing at anything -->
   <xsl:template match="*[contains(@class,' topic/xref ')][@href = '']">
     <fo:inline color="red">
-      <fo:inline font-weight="bold">[xref to: <xsl:value-of select="@href"/>]</fo:inline>
+      <fo:inline font-weight="bold">[xref to: <xsl:value-of 
+        select="@href"/>]</fo:inline>
       <xsl:apply-templates/>
     </fo:inline>
   </xsl:template>
@@ -77,21 +80,19 @@
           <fo:basic-link>
             <!-- Set the destination to the id attribute of the topic referred to by the href -->
             <xsl:attribute name="internal-destination">
-              <xsl:choose>
-                <!-- If the href contains a # character, then the topic file name is the preceding substring -->
-                <!-- To do: intra-topic xrefs (these do not quote a file name prior to the #) -->
-                <xsl:when test="starts-with(@href,'#')">
-                  <xsl:value-of select="substring-before(substring-after(@href,'#'),'/')"/>
-                </xsl:when>
-                <xsl:when test="contains(@href,'#')">
-                  <xsl:value-of select="document(substring-before(@href,'#'),/)/*/@id"/>
-                </xsl:when>
-                <xsl:otherwise>
-                  <xsl:value-of select="document(@href,/)/*/@id"/>
-                </xsl:otherwise>
-              </xsl:choose>
+              <xsl:call-template name="href"/>
             </xsl:attribute>
-            <xsl:apply-templates/>
+            <!--use content as linktext if it exists, otherwise use href as linktext-->
+            <xsl:choose>
+              <!--use xref content-->
+              <xsl:when test="*|text()">
+                <xsl:apply-templates select="*|text()"/>
+              </xsl:when>
+              <!--use href text-->
+              <xsl:otherwise>
+                <xsl:call-template name="href"/>
+              </xsl:otherwise>
+            </xsl:choose>
           </fo:basic-link>
         </xsl:when>
         <xsl:otherwise>
@@ -103,7 +104,17 @@
                 <xsl:attribute name="external-destination">
                   <xsl:value-of select="@href"/>
                 </xsl:attribute>
-                <xsl:apply-templates/>
+                <!--use content as linktext if it exists, otherwise use href as linktext-->
+                <xsl:choose>
+                  <!--use xref content-->
+                  <xsl:when test="*|text()">
+                    <xsl:apply-templates select="*|text()"/>
+                  </xsl:when>
+                  <!--use href text-->
+                  <xsl:otherwise>
+                    <xsl:call-template name="href"/>
+                  </xsl:otherwise>
+                </xsl:choose>
               </fo:basic-link>
             </xsl:when>
             <xsl:otherwise>
@@ -114,6 +125,30 @@
         </xsl:otherwise>
       </xsl:choose>
     </fo:inline>
+  </xsl:template>
+  
+  <xsl:template name="href">
+    <xsl:choose>
+      <!-- If the href contains a # character, then the topic file name is the preceding substring -->
+      <!-- To do: intra-topic xrefs (these do not quote a file name prior to the #) -->
+      <xsl:when test="starts-with(@href,'#')">
+        <xsl:choose>
+          <xsl:when test="contains(substring-after(@herf,'#'),'/')">
+            <xsl:value-of 
+              select="substring-before(substring-after(@href,'#'),'/')"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="substring-after(@href,'#')"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:when>
+      <xsl:when test="contains(@href,'#')">
+        <xsl:value-of select="document(substring-before(@href,'#'),/)/*/@id"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="document(@href,/)/*/@id"/>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
   <!-- =================== end of related links and xrefs ====================== -->
 </xsl:stylesheet>

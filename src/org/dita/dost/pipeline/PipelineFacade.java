@@ -7,12 +7,23 @@ import org.dita.dost.module.AbstractPipelineModule;
 import org.dita.dost.module.ModuleFactory;
 
 /**
+ * PipelineFacade implement AbstractFacade and control the constructing and excuting
+ * of a module.
+ * 
  * @author Lian, Li
  * 
  */
 public class PipelineFacade extends AbstractFacade {
 
     /**
+     * Automatically generated constructor: PipelineFacade
+     */
+    public PipelineFacade() {
+    }
+
+
+    /**
+     * @see org.dita.dost.pipeline.AbstractFacade#execute(java.lang.String, org.dita.dost.pipeline.AbstractPipelineInput)
      * 
      */
     public AbstractPipelineOutput execute(String pipelineModuleName,
@@ -22,11 +33,11 @@ public class PipelineFacade extends AbstractFacade {
         // modules
         AbstractPipelineModule module = null;
         AbstractPipelineOutput output = null;
-        ((PipelineHashIO)input).setAttribute("tempDir",new String("temp"));
+        //((PipelineHashIO)input).setAttribute("tempDir",new String("temp"));
 
         module = ModuleFactory.instance().createModule(pipelineModuleName);
 
-        if (null != module) {
+        if (module != null) {
             output = module.execute(input);
         }
 

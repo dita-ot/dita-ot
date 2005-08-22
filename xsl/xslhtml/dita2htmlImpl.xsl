@@ -72,8 +72,8 @@
 <!-- the year for the copyright -->
 <xsl:param name="YEAR" select="'2005'"/>
 
-<!-- default "output extension" processing parameter ('html')-->
-<xsl:param name="OUTEXT" select="'html'"/><!-- "htm" and "html" are valid values -->
+<!-- default "output extension" processing parameter ('.html')-->
+<xsl:param name="OUTEXT" select="'.html'"/><!-- "htm" and "html" are valid values -->
 
 <!-- the working directory that contains the document being transformed.
      Needed as a directory prefix for the @conref "document()" function calls.
@@ -529,7 +529,7 @@
      <xsl:attribute name="href">
       <xsl:choose>
        <xsl:when test="contains(@href,$DITAEXT)">
-        <xsl:value-of select="substring-before(@href,$DITAEXT)"/>.<xsl:value-of select="$OUTEXT"/><xsl:value-of select="substring-after(@href,$DITAEXT)"/>
+        <xsl:value-of select="substring-before(@href,$DITAEXT)"/><xsl:value-of select="$OUTEXT"/><xsl:value-of select="substring-after(@href,$DITAEXT)"/>
        </xsl:when>
        <xsl:otherwise>
         <xsl:value-of select="@href"/>
@@ -1259,7 +1259,7 @@
   <xsl:attribute name="longdesc">
     <xsl:choose>
       <xsl:when test="contains(.,$DITAEXT)">  <!-- switch extension from .dita -->
-        <xsl:value-of select="substring-before(.,$DITAEXT)"/>.<xsl:value-of select="$OUTEXT"/><xsl:value-of select="substring-after(.,$DITAEXT)"/>
+        <xsl:value-of select="substring-before(.,$DITAEXT)"/><xsl:value-of select="$OUTEXT"/><xsl:value-of select="substring-after(.,$DITAEXT)"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="."/>
@@ -1412,16 +1412,16 @@
   <!-- When a table's width is set to page or column, force it's width to 100%. If it's in a list, use 90%.
        Otherwise, the table flows to the content -->
   <xsl:choose>
-   <xsl:when test="@expanse='page' and (ancestor::*[contains(@class,' topic/li ')] or ancestor::*[contains(@class,' topic/dd ')] )">
+   <xsl:when test="(@expanse='page' or @pgwide='1')and (ancestor::*[contains(@class,' topic/li ')] or ancestor::*[contains(@class,' topic/dd ')] )">
     <xsl:attribute name="width">90%</xsl:attribute>
    </xsl:when>
-   <xsl:when test="@expanse='column' and (ancestor::*[contains(@class,' topic/li ')] or ancestor::*[contains(@class,' topic/dd ')] )">
+   <xsl:when test="(@expanse='column' or @pgwide='0') and (ancestor::*[contains(@class,' topic/li ')] or ancestor::*[contains(@class,' topic/dd ')] )">
     <xsl:attribute name="width">90%</xsl:attribute>
    </xsl:when>
-   <xsl:when test="@expanse='page'">
+   <xsl:when test="(@expanse='page' or @pgwide='1')">
     <xsl:attribute name="width">100%</xsl:attribute>
    </xsl:when>
-   <xsl:when test="@expanse='column'">
+   <xsl:when test="(@expanse='column' or @pgwide='0')">
     <xsl:attribute name="width">100%</xsl:attribute>
    </xsl:when>
   </xsl:choose>
@@ -3566,7 +3566,7 @@
 
 <xsl:template name="proc-ing">
   <xsl:if test="$do-place-ing = 'yes'"> <!-- set in a global variable, as with label placement, etc. -->
-    <img src="tip-ing.jpg"/> <!-- this should be an xsl:choose with the approved list and a selection method-->
+    <img src="tip-ing.jpg" alt="tip-ing.jpg"/> <!-- this should be an xsl:choose with the approved list and a selection method-->
     <!-- add any other required positioning controls, if needed, but must be valid in the location
          from which the call to this template was made -->
     <xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text>
