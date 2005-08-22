@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-
+<!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
 <!-- revise @PLACEHOLDER@ names and values-->
 <project name="@PROJECT.NAME@_docbook" default="all" basedir="..">
     <import file="${basedir}${file.separator}conductor.xml"/>

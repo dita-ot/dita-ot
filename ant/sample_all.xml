@@ -1,5 +1,5 @@
-﻿<?xml version="1.0" encoding="UTF-8" ?>
-
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
 <project name="sample_all" default="all" basedir="..">
 	<!-- Set a property for each environment variable -->
 	<property environment="env"/>
