@@ -8,6 +8,25 @@
   <shortdesc>This document describes the DITA Open Toolkit project--what the 
     project is, and how to use the site.</shortdesc>
   <body>
+    <p>
+      This document describes the DITA Open Toolkit project--what the project is, and how to use the site.
+    </p>
+    
+    <section>
+    <title>31 August, 2005</title>
+    <p>DITA Open toolkit begins to publish the source and binary code under Apache license 2.0 from release 1.1. We provide separate packages for downloading in SourceForege download area.</p>
+    </section>
+
+    <section>
+    <title>18 August, 2005</title>    
+    <p>DITA Open Toolkit 1.1 has been released. Release 1.1 is a major release to add new functions, fulfill new requirements, make some function enhancements and fix bugs over release 1.0.2.</p>
+    <p>Release 1.1 implements the new OASIS DITA 1.0 standard for DITA DTDs and Schemas.</p>
+    <p>Release 1.1 also contains a new Eclipse transformation that produces as output a version of DITA XML that can be dynamically rendered in Eclipse Help System. However, this output cannot be used without an special made Eclipse content provider in the Eclipse Help System side.</p>
+    <p>Please refer to <xref href="../../doc/DITA-relnotes.xml">DITA OT 1.1 release notes</xref> for detail release information. </p>
+    </section>
+    
+    <section>
+    <title>03 March, 2005</title>
     <p>DITA Open Toolkit 1.0 is a major upgrade from its predecessor, the 
       developerWorks version known as &quot;dita132.&quot; </p>
     <p>Major improvements from dita132 include:</p>
@@ -26,5 +45,6 @@
     <note othertype="Colophon" type="other">The content of this site was 
       sourced as DITA topics, organized using a DITA map, and transformed using 
       the DITA Open Toolkit into HTML.</note>
+      </section>
   </body>
 </topic>
