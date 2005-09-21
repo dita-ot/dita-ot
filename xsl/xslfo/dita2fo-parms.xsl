@@ -19,7 +19,7 @@
 <!-- "GLOBAL" DECLARATIONS -->
 
 <xsl:variable name="img-path"></xsl:variable> <!-- this will be specific to your delivery tree! -->
-<xsl:variable name="dflt-ext">.jpg</xsl:variable> <!-- this sets whatever your preferred extension is for your graphics -->
+<xsl:param name="dflt-ext">.jpg</xsl:param> <!-- this sets whatever your preferred extension is for your graphics -->
                                                   <!-- For Antenna House, override to ".jpg" -->
 
 

@@ -9,7 +9,7 @@
   
   
   <property name="rootname" value="DITA-OT"/>
-  <property name="version" value="1.1"/>
+  <property name="version" value="1.1.1"/>
 
   <property name="src.dir" location="src/"/>
   <property name="bin.dir" location="output2/"/>
@@ -29,7 +29,7 @@
   <property name="classpath.dir" location="dev/lib"/>
   <property name="package.output.dir" location="build/"/>
   
-  <property name="dost.jar" location="${lib.dir}/dost1.1.0.jar" />
+  <property name="dost.jar" location="${lib.dir}/dost.jar" />
   <property name="ant.jar" location="${classpath.dir}/ant162.jar" />    
   
   <property name="binary" value="DITA-OT${version}_bin" />    

@@ -3,7 +3,6 @@
  */
 package org.dita.dost.reader;
 
-import java.util.Iterator;
 import java.util.Locale;
 import java.util.Stack;
 
@@ -42,26 +41,26 @@ public class IndexTermReader extends AbstractXMLReader {
     public void characters(char[] ch, int start, int length)
             throws SAXException {
         if (!termStack.empty()) {
-            String temp = new String(ch, start, length);
-            Iterator iter = termStack.iterator();
-
-            while (iter.hasNext()) {
-                IndexTerm term = (IndexTerm) iter.next();
-                if (term.getTermName() == null) {
-                    term.setTermName(temp);
-                } else {
-                    term.setTermName(new StringBuffer(term.getTermName())
-                            .append(Constants.STRING_BLANK).append(temp)
-                            .toString());
-                }
-            }
+            String temp = new String(ch, start, length).trim();
+			IndexTerm indexTerm = (IndexTerm) termStack.peek();
+			
+			if (temp.length() == 0) {
+				return;
+			}
+			
+			if (indexTerm.getTermName() == null) {
+				indexTerm.setTermName(temp);
+			} else {
+				indexTerm.setTermName(new StringBuffer(indexTerm.getTermName()).append(
+						Constants.STRING_BLANK).append(temp).toString());
+			}
         }
     }
 
     /**
-     * @see org.xml.sax.helpers.DefaultHandler#endElement(java.lang.String,
-     *      java.lang.String, java.lang.String)
-     */
+	 * @see org.xml.sax.helpers.DefaultHandler#endElement(java.lang.String,
+	 *      java.lang.String, java.lang.String)
+	 */
     public void endElement(String uri, String localName, String qName)
             throws SAXException {
         if (Constants.ELEMENT_NAME_INDEXTERM.equals(localName)) {

@@ -130,10 +130,9 @@
   <xsl:template name="href">
     <xsl:choose>
       <!-- If the href contains a # character, then the topic file name is the preceding substring -->
-      <!-- To do: intra-topic xrefs (these do not quote a file name prior to the #) -->
       <xsl:when test="starts-with(@href,'#')">
         <xsl:choose>
-          <xsl:when test="contains(substring-after(@herf,'#'),'/')">
+          <xsl:when test="contains(substring-after(@href,'#'),'/')">
             <xsl:value-of 
               select="substring-before(substring-after(@href,'#'),'/')"/>
           </xsl:when>

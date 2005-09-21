@@ -50,6 +50,8 @@ public class CommandLineInvoker {
 		paramMap.put("/copycss", "args.copycss");
 		paramMap.put("/xsl", "args.xsl");
 		paramMap.put("/tempdir", "dita.temp.dir");
+		paramMap.put("/cleantemp", "clean.temp");
+		paramMap.put("/foimgext", "args.fo.img.ext");
 	}
 
 	/**

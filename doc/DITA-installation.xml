@@ -97,8 +97,7 @@
                 <li>Set up CLASSPATH to include the <i>saxon.jar</i> file. 
                   <p><codeph>set CLASSPATH=%CLASSPATH%; 
                   &lt;saxon_dir>\saxon.jar</codeph></p></li>
-                <li>Set up ANT_OPTS.<p><codeph>set ANT_OPTS=%ANT_OPTS% - 
-                  Djavax.xml.transform.TransformerFactory=com.icl.saxon.TransformerFactoryImpl</codeph></p><note 
+                <li>Set up ANT_OPTS.<p><codeph>set ANT_OPTS=%ANT_OPTS% -Djavax.xml.transform.TransformerFactory=com.icl.saxon.TransformerFactoryImpl</codeph></p><note 
                   type="attention">if you do not use Saxon, please remove the 
                   <i>saxon.jar</i> file and ANT_OPTS from the environment 
                   variable.</note></li>
@@ -111,8 +110,7 @@
             <chdesc>
               <ul>
                 <li>Set up CLASSPATH to include the <i>xalan.jar</i> file and 
-                  the <i> xercesImpl.jar</i> file. <codeblock>set 
-                  CLASSPATH=%CLASSPATH%;&lt;xalan_dir>\bin</codeblock><note 
+                  the <i> xercesImpl.jar</i> file. <codeblock>set CLASSPATH=%CLASSPATH%;&lt;xalan_dir&gt;\bin</codeblock><note 
                   type="attention">if you don't use the Xalan, please remove<i> 
                   jar</i> files related to the Xalan from the environment 
                   variable CLASSPATH.</note></li>

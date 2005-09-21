@@ -1,20 +1,24 @@
 <project name="pre-targets"  basedir=".">
   <!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
   <!-- preprocess target begin -->
-  <target name="preprocess" depends="gen-list,copy-image,copy-html,debug-filter,move-index-entries,conref,mappull,maplink,move-links,topicpull">
+  <target name="preprocess" depends="clean-temp, gen-list,copy-image,copy-html,copy-flag,debug-filter,move-index-entries,conref,mappull,maplink,move-links,topicpull">
     
   </target>
   <!-- preprocess target end-->
 
   <!-- parameters 
-	    dita.input.dirname      required
-	    dita.input              required
-      dita.input.valfile      optional
-      dita.temp.dir           required
-      dita.extname            required
+    dita.input.dirname      required
+    dita.input              required
+    dita.input.valfile      optional
+    dita.temp.dir           required
+    dita.extname            required
   -->
   
   <!-- preprocess modules begin -->
+  <target name="clean-temp" unless="clean_temp" description="delete temp directory">
+    <delete dir="${dita.temp.dir}"/>
+  </target>  
+  
   <target name="gen-list">
     <pipeline message="Generate list."
       module="GenMapAndTopicList"
@@ -76,7 +80,7 @@
 		basedir="${dita.temp.dir}"
 		destdir="${dita.temp.dir}"
 		includes="${conreflist}"
-		style="xsl/preprocess/conref.xsl">
+		style="${dita.script.dir}${file.separator}preprocess${file.separator}conref.xsl">
 	<mapper type="glob" from="*" to="*.cnrf"/>
         <param name="DITAEXT" expression="${dita.extname}"/>
     </xslt>
@@ -93,7 +97,7 @@
     <xslt processor="trax"
       in="${dita.temp.dir}${file.separator}${dita.input}"
       out="${mappull.workdir}${file.separator}${dita.map.filename.root}.ditamap.pull"
-      style="xsl/preprocess/mappull.xsl">
+      style="${dita.script.dir}${file.separator}preprocess${file.separator}mappull.xsl">
         <param name="DITAEXT" expression="${dita.extname}" if="dita.extname"/>
     </xslt>
 	  
@@ -108,8 +112,9 @@
   	<xslt processor="trax"
 		in="${dita.temp.dir}${file.separator}${dita.input}"
 		out="${maplink.workdir}${file.separator}maplinks.unordered"
-		style="xsl/preprocess/maplink.xsl">
+		style="${dita.script.dir}${file.separator}preprocess${file.separator}maplink.xsl">
         <param name="DITAEXT" expression="${dita.extname}" if="dita.extname"/>
+        <param name="INPUTMAP" expression="${dita.input}"/>
     </xslt>
 	
   </target>
@@ -128,7 +133,7 @@
 		destdir="${dita.temp.dir}"
 		includes="${fullditatopiclist}"
 		extension="${dita.extname}.pull"
-		style="xsl/preprocess/topicpull.xsl">
+		style="${dita.script.dir}${file.separator}preprocess${file.separator}topicpull.xsl">
         <param name="DITAEXT" expression="${dita.extname}" if="dita.extname"/>
     </xslt>
 	<move todir="${dita.temp.dir}">
@@ -141,6 +146,12 @@
   <target name="copy-image" unless="noImagelist">
     <copy todir="${output.dir}">
         <fileset dir="${dita.input.dirname}" includes="${imagelist}"/>
+    </copy>
+  </target>
+  
+  <target name="copy-flag" if="dita.input.valfile">
+    <copy todir="${dita.map.output.dir}">
+      <fileset dir="${dita.resource.dir}" includes="delta.gif,deltaend.gif"/>
     </copy>
   </target>
   

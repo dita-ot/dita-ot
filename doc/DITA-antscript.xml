@@ -139,6 +139,15 @@
                     </entry>
                     <entry>No</entry>
                   </row>
+                  <row>
+                    <entry>clean.temp</entry>
+                    <entry>
+                      <ph id="cleantemp">The parameter to specify whether to clean 
+                        the temp directory before each build. Only "no" and "yes" 
+                        are valid values. The default is yes.</ph>
+                    </entry>
+                    <entry>No</entry>
+                  </row>
                 </tbody>
               </tgroup>
             </table>
@@ -171,10 +180,16 @@
                   <row>
                     <entry>args.copycss</entry>
                     <entry>
-                      <ph id="copycss">The parameter to specify whether all the 
-                        user-specified css files are to be copied to the 
-                        directory specified in the csspath option. Only "no" 
-                        and "yes" are valid values.</ph>
+                      <ph id="copycss">The parameter to specify whether copy css files 
+                        to the directory specified by <tt>args.csspath</tt>. Only "no" and "yes" 
+                        are valid values.</ph>
+                      <note id="copycss-note">
+                        If <tt>args.copycss</tt> equals "yes", <tt>args.csspath</tt> must be an valid 
+                        local directory, URL are invalid. 
+                        If <tt>args.copycss</tt> equals "no", since no css files copied to 
+                        <tt>args.csspath</tt>, if <tt>args.csspath</tt> is a local path, the 
+                        css reference will be invalid.
+                      </note>
                     </entry>
                     <entry>No</entry>
                   </row>
@@ -192,16 +207,21 @@
                   <row>
                     <entry>args.css</entry>
                     <entry>
-                      <ph id="argscss">User specified css file. This stylesheet can use 
-                        the css cascade effect to modify existing properties or 
-                        it can override or define new properties.</ph>
+                      <ph id="argscss">User specified css file, it can be a local file or remote
+                        file in the web.</ph>
+                      <note id="argscss-note">It must be a filepath relative to URL or local root dir base on 
+                        the type of <tt>args.csspath</tt>.</note>
                     </entry>
                     <entry>No</entry>
                   </row>
                   <row>
                     <entry>args.csspath</entry>
                     <entry>
-                      <ph id="csspath">The output path of css files.</ph>
+                      <ph id="csspath">The path for css reference, it can be a URL start 
+                        with 'http:\\' or 'https:\\', it also can be a local absolute directory.
+                        Default will be output directory.</ph>
+                      <note id="csspath-note"><tt>args.csspath</tt> should end with '\' if it is a URL,
+                        or file separator for local path.</note>
                     </entry>
                     <entry>No</entry>
                   </row>
@@ -295,12 +315,26 @@
                   </entry> <entry>Description</entry> <entry>Required</entry> 
                   </row> </thead> <tbody> <row> <entry>args.xhtml.toc</entry> 
                   <entry align="left">The root file name of the output toc 
-                  file. The default is &apos;index&apos;.)</entry> <entry>No</entry> 
+                  file. The default is &apos;index&apos;.</entry> <entry>No</entry> 
                   </row></tbody> </tgroup> </table></dd>
               </dlentry>
               <dlentry>
                 <dt>dita2pdf</dt>
-                <dd>Transform DITA topic or DITA map into pdf. </dd>
+                <dd>Transform DITA topic or DITA map into pdf. 
+                  <table expanse="column"><title>Parameter Table of 
+                  dita2pdf</title> <tgroup cols="3"><colspec align="center" 
+                  colname="col1" colwidth="1*"/><colspec align="center" 
+                  colname="col2" colwidth="4*"/><colspec align="center" 
+                  colname="col3" colwidth="1*"/> <thead> <row> <entry>Parameter 
+                  </entry> <entry>Description</entry> <entry>Required</entry> 
+                  </row> </thead> <tbody> <row> <entry>args.fo.img.ext</entry> 
+                  <entry align="left"><ph id="foimgext">The extension name of image file in pdf transformation. 
+                    Only '.jpg', '.gif' are valid value. The default is '.jpg'.</ph>
+                    <note id="foimgextnote">Only one extension supported in the same 
+                      transformation, image files with other extensions will be renamed 
+                      to the specified extension.</note></entry> 
+                  <entry>No</entry> 
+                  </row></tbody> </tgroup> </table></dd>
               </dlentry>
               <dlentry>
                 <dt>dita2troff</dt>

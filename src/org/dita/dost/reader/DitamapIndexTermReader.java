@@ -42,37 +42,25 @@ public class DitamapIndexTermReader extends AbstractXMLReader {
 	 * @see org.xml.sax.helpers.DefaultHandler#characters(char[], int, int)
 	 */
 	public void characters(char[] ch, int start, int length)
-			throws SAXException {
-		Object topElement = null;
-		String temp = new String(ch, start, length);
-		Iterator iter = null;
-
-		if (elementStack.empty()) {
+			throws SAXException {		
+		String temp = new String(ch, start, length).trim();
+		IndexTerm indexTerm = null;
+		
+		if (temp.length() == 0) {
+			return;
+		}
+		
+		if (elementStack.empty() || !(elementStack.peek() instanceof IndexTerm)) {
 			return;
 		}
 
-		topElement = elementStack.peek();
+	    indexTerm = (IndexTerm) elementStack.peek();
 
-		if (!(topElement instanceof IndexTerm)) {
-			return;
-		}
-
-		iter = elementStack.iterator();
-
-		while (iter.hasNext()) {
-			Object obj = iter.next();
-			if (obj instanceof IndexTerm) {
-				IndexTerm term = (IndexTerm) obj;
-
-				if (term.getTermName() == null) {
-					term.setTermName(temp);
-				} else {
-					term.setTermName(new StringBuffer(term.getTermName())
-							.append(Constants.STRING_BLANK).append(temp)
-							.toString());
-				}
-			}
-
+		if (indexTerm.getTermName() == null) {
+			indexTerm.setTermName(temp);
+		} else {
+			indexTerm.setTermName(new StringBuffer(indexTerm.getTermName()).append(
+					Constants.STRING_BLANK).append(temp).toString());
 		}
 
 	}

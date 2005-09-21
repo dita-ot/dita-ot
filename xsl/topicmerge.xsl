@@ -111,7 +111,7 @@
   </xsl:copy>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/image ')]/@href" mode="copy-element" priority="1">
+<xsl:template match="@href" mode="copy-element" priority="1">
   <xsl:param name="src-file"></xsl:param>
 
   <xsl:variable name="file-path">  
@@ -132,7 +132,7 @@
   </xsl:variable>  
 
   <xsl:choose>
-    <xsl:when test="contains(.,'://')">
+    <xsl:when test="contains(.,'://') or starts-with(.,'#')">
       <xsl:copy/>
     </xsl:when>
     <xsl:otherwise>

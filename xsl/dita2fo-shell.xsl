@@ -46,7 +46,7 @@
   <xsl:param name="basic-end-indent">24pt</xsl:param>
   <xsl:param name="output-related-links"/>
   <!-- GLOBALS: -->
-  <xsl:variable name="dflt-ext">.jpg</xsl:variable>
+  <xsl:param name="dflt-ext">.jpg</xsl:param>
   <!-- For Antenna House, set to ".jpg" -->
   <!-- Set the prefix for error message numbers -->
   <xsl:variable name="msgprefix">IDXS</xsl:variable>

@@ -349,7 +349,7 @@ Children are displayed in a numbered list, with the target title as the cmd and 
       </xsl:when>
       <xsl:when test="@href=''"/>
       <xsl:otherwise>
-        <xsl:value-of select="@href"/><xsl:call-template name="output-message">
+        <xsl:call-template name="output-message">
           <xsl:with-param name="msg">Unknown file extension in href: <xsl:value-of select="@href"/>
 If this is a link to a non-DITA resource, set the format attribute to match the resource (for example, 'txt', 'pdf', or 'html').
 If it's a link to a DITA resource, the file extension must be .dita or .xml .</xsl:with-param>

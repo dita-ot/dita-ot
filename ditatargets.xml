@@ -63,6 +63,7 @@
     <param name="DITAEXT" expression="${dita.extname}" if="dita.extname"/>
     <param name="DRAFT" expression="${args.draft}" if="args.draft"/>
     <param name="ARTLBL" expression="${args.artlbl}" if="args.artlbl"/>
+    <param name="dflt-ext" expression="${args.fo.img.ext}" if="args.fo.img.ext"/>
   </xslt>
 </target>
 
@@ -94,6 +95,7 @@
     <param name="DITAEXT" expression="${dita.extname}" if="dita.extname"/>
     <param name="DRAFT" expression="${args.draft}" if="args.draft"/>
     <param name="ARTLBL" expression="${args.artlbl}" if="args.artlbl"/>	
+    <param name="dflt-ext" expression="${args.fo.img.ext}" if="args.fo.img.ext"/>
   </xslt>
 </target>
 
@@ -126,6 +128,7 @@
         <param name="ARTLBL" expression="${args.artlbl}" if="args.artlbl"/>
         <param name="INDEXSHOW" expression="${args.indexshow}" if="args.indexshow"/>
         <param name="OUTEXT" expression="${args.outext}" if="args.outext"/>
+        <param name="PATH2PROJ" expression="${dita.map.output.dir}${file.separator}" if="dita.input.valfile"/>
     </xslt>
   <antcall target="copy-css"/>
 </target>
@@ -176,12 +179,10 @@
         <mapper type="glob" from="*${dita.input.filename}" to="*${args.eclipse.toc}.xml"/>
     </xslt>
     <xslt processor="trax"
-      basedir="${dita.temp.dir}"
-      destdir="${output.dir}"
-      includes="${dita.input}"
+      in="${dita.temp.dir}${file.separator}${dita.input}"
+      out="${dita.map.output.dir}${file.separator}plugin.xml"
       style="${dita.script.dir}${file.separator}map2plugin.xsl">
         <param name="TOCROOT" expression="${args.eclipse.toc}"/>
-        <mapper type="glob" from="*${dita.input.filename}" to="plugin.xml"/>
     </xslt>
 </target>
 
@@ -208,12 +209,10 @@
         <mapper type="glob" from="*${dita.input.filename}" to="*${args.eclipse.toc}.xml"/>
     </xslt>
     <xslt processor="trax"
-      basedir="${dita.temp.dir}"
-      destdir="${output.dir}"
-      includes="${dita.input}"
+      in="${dita.temp.dir}${file.separator}${dita.input}"
+      out="${dita.map.output.dir}${file.separator}plugin.xml"
       style="${dita.script.dir}${file.separator}map2plugin.xsl">
         <param name="TOCROOT" expression="${args.eclipse.toc}"/>
-        <mapper type="glob" from="*${dita.input.filename}" to="plugin.xml"/>
     </xslt>
 </target>
 
@@ -309,7 +308,9 @@
         <param name="ARTLBL" expression="${args.artlbl}" if="args.artlbl"/>
         <param name="OUTEXT" expression="${args.outext}" if="args.outext"/>
         <param name="INDEXSHOW" expression="${args.indexshow}" if="args.indexshow"/>
+        <param name="PATH2PROJ" expression="${dita.map.output.dir}${file.separator}" if="dita.input.valfile"/>
     </xslt>
+    <antcall target="copy-css"/>
 </target>
 
 <target name="compile.Java.Help" if="env.JHHOME">
@@ -417,8 +418,24 @@
 		</xslt>
 	</target>
 
-  <target name="copy-css" if="args.copycss">
-    <copy file="${args.css}" tofile="${args.csspath}${file.separator}${args.css}"/>
+  <target name="copy-css" if="args.copycss.yes">
+    <antcall target="make-css-path"/>
+    <antcall target="copy-css-default"/>
+    <antcall target="copy-css-user"/>
+  </target>
+  
+  <target name="make-css-path" unless="args.csspath.present">
+    <mkdir dir="${args.csspath}"/>
+  </target>
+  
+  <target name="copy-css-default">
+    <copy todir="${args.csspath}">
+      <fileset dir="${dita.resource.dir}" includes="*.css"/>
+    </copy>    
+  </target>
+  
+  <target name="copy-css-user" if="args.css.present">
+    <copy file="${args.css}" tofile="${args.csspath}${args.css}"/>
   </target>
     
   <target name="dita.topic.troff">

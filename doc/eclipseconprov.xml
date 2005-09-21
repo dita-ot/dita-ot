@@ -22,7 +22,7 @@
       <menucascade><uicontrol>Start</uicontrol> 
       <uicontrol>Run</uicontrol></menucascade>.</li> <li>Switch to the 
       directory <b>c:\dita-ot</b>.</li> <li>Enter the following command to 
-      build:<codeblock>java -jar lib\dost1.0.jar /i:samples/sequence.ditamap 
+      build:<codeblock>java -jar lib\dost.jar /i:samples/sequence.ditamap 
       /outdir:out /transtype:eclipsecontent </codeblock></li> <li>Then view all 
       the files under <b>c:\dita-ot</b> and copy these files to the 
       corresponding directory under the plugin directory for Eclipse.</li> 

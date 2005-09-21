@@ -103,6 +103,9 @@
 
 <!-- =========== "GLOBAL" DECLARATIONS (see 35) =========== -->
 
+<!-- The document tree of filterfile returned by document($FILTERFILE,/)-->
+<xsl:variable name="FILTERDOC" select="document($FILTERFILE,/)"/>
+
 <!-- Define a newline character -->
 <xsl:variable name="newline"><xsl:text>
 </xsl:text></xsl:variable>
@@ -3038,15 +3041,15 @@
   </xsl:variable>
 
   <xsl:choose> <!-- Ensure there's an image to get, otherwise don't insert anything -->
-   <xsl:when test="document($FILTERFILE,/)/val/prop[@att=$flag-att][@val=$firstflag][@action='flag'][@img]">
+   <xsl:when test="$FILTERDOC/val/prop[@att=$flag-att][@val=$firstflag][@action='flag'][@img]">
     <!-- output the flag -->
     <img>
      <xsl:attribute name="src">
       <xsl:if test="string-length($PATH2PROJ) > 0"><xsl:value-of select="$PATH2PROJ"/></xsl:if>
-      <xsl:value-of select="document($FILTERFILE,/)/val/prop[@att=$flag-att][@val=$firstflag][@action='flag']/@img"/>
+      <xsl:value-of select="$FILTERDOC/val/prop[@att=$flag-att][@val=$firstflag][@action='flag']/@img"/>
      </xsl:attribute>
      <xsl:attribute name="alt"> <!-- always insert an ALT - if it's blank, assume the user didn't want to fill it. -->
-      <xsl:value-of select="document($FILTERFILE,/)/val/prop[@att=$flag-att][@val=$firstflag][@action='flag']/@alt"/>
+      <xsl:value-of select="$FILTERDOC/val/prop[@att=$flag-att][@val=$firstflag][@action='flag']/@alt"/>
      </xsl:attribute>
     </img>
    </xsl:when>
@@ -3327,7 +3330,7 @@
   </xsl:variable>
 
   <xsl:choose>
-   <xsl:when test="document($FILTERFILE,/)/val/revprop[@val=$firstrev][@action='flag']">
+   <xsl:when test="$FILTERDOC/val/revprop[@val=$firstrev][@action='flag']">
      <xsl:value-of select="1"/> <!-- rev active -->
    </xsl:when>
    <xsl:otherwise>              <!-- rev not active -->
@@ -3379,9 +3382,9 @@
   </xsl:variable>
 
   <xsl:choose>
-   <xsl:when test="document($FILTERFILE,/)/val/revprop[@val=$firstrev]/@style">
+   <xsl:when test="$FILTERDOC/val/revprop[@val=$firstrev]/@style">
      <!-- rev active -->
-     <xsl:value-of select="document($FILTERFILE,/)/val/revprop[@val=$firstrev]/@style"/>
+     <xsl:value-of select="$FILTERDOC/val/revprop[@val=$firstrev]/@style"/>
    </xsl:when>
    <xsl:otherwise>              <!-- rev not active -->
 
@@ -3683,31 +3686,19 @@
   </xsl:call-template>
  </xsl:variable>
 
- <xsl:choose>
-  <xsl:when test="($childlang='ar-eg' or $childlang='ar' or $childlang='he' or $childlang='he-il') and ($urltest='url')">
+  <xsl:choose>
+  <xsl:when test="($childlang='ar-eg' or $childlang='ar' or $childlang='he' or $childlang='he-il')">
    <link rel="stylesheet" type="text/css" href="{$CSSPATH}{$bidi-dita-css}" />
   </xsl:when>
-  <xsl:when test="($childlang='ar-eg' or $childlang='ar' or $childlang='he' or $childlang='he-il') and ($urltest='')">
-   <link rel="stylesheet" type="text/css" href="{$PATH2PROJ}{$CSSPATH}{$bidi-dita-css}" />
-  </xsl:when>
-  <xsl:when test="not($childlang='ar-eg' or $childlang='ar' or $childlang='he' or $childlang='he-il') and ($urltest='url')">
-   <link rel="stylesheet" type="text/css" href="{$CSSPATH}{$dita-css}" />
-  </xsl:when>
   <xsl:otherwise>
-   <link rel="stylesheet" type="text/css" href="{$PATH2PROJ}{$CSSPATH}{$dita-css}" />
+   <link rel="stylesheet" type="text/css" href="{$CSSPATH}{$dita-css}" />
   </xsl:otherwise>
- </xsl:choose>
+  </xsl:choose>
   <xsl:value-of select="$newline"/>
   <!-- Add user's style sheet if requested to -->
   <xsl:if test="string-length($CSS)>0">
-   <xsl:choose>
-    <xsl:when test="$urltest='url'">
-     <link rel="stylesheet" type="text/css" href="{$CSSPATH}{$CSS}" />
-    </xsl:when>
-    <xsl:otherwise>
-     <link rel="stylesheet" type="text/css" href="{$PATH2PROJ}{$CSSPATH}{$CSS}" />
-    </xsl:otherwise>
-   </xsl:choose><xsl:value-of select="$newline"/>
+    <link rel="stylesheet" type="text/css" href="{$CSSPATH}{$CSS}" />
+    <xsl:value-of select="$newline"/>
   </xsl:if>
 
   <!-- Title processing - special handling for short descriptions -->

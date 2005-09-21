@@ -74,9 +74,9 @@ public class IndexTermCollection {
 				return;
 			}
 
-			if (indexTerm.getSubTerms().equals(term.getSubTerms())
-					&& indexTerm.getTermName().equals(term.getTermName())) {
+			if (indexTerm.getTermName().equals(term.getTermName())) {
 				indexTerm.addTargets(term.getTargetList());
+				indexTerm.addSubTerms(term.getSubTerms());
 				break;
 			}
 		}

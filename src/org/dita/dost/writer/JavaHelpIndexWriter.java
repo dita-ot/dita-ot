@@ -87,42 +87,47 @@ public class JavaHelpIndexWriter extends AbstractWriter {
 	private void outputIndexTerm(IndexTerm term, PrintWriter printWriter) {
 		List targets = term.getTargetList();
 		List subTerms = term.getSubTerms();		
-		int targetNum = targets.size();
-		int subTermNum = subTerms.size();
+		int targetNum = (targets == null) ? 0: targets.size();
+		int subTermNum = (subTerms == null) ? 0 : subTerms.size();
 		
-		printWriter.print("<indexitem text=\"");		
-		printWriter.print(term.getTermName());
-		printWriter.print("\"");		
-		
-		for ( int i = 0; i<targetNum; i++) {
-			IndexTermTarget target = (IndexTermTarget) targets.get(i);			
-			String targetName = target.getTargetName();
+		/*
+		 * Don't set 'target' attribute for group purpose index item.
+		 */
+		if (subTermNum > 0) { 
+			printWriter.print("<indexitem text=\"");		
+			printWriter.print(term.getTermName());
+			printWriter.print("\">");	
 			
-			/*
-			 * Remove file extension from targetName, and replace all the 
-			 * file seperator with '_'.
-			 */
-			targetName = targetName.substring(0, targetName.lastIndexOf("."));
-			targetName = targetName.replace('\\', '_');
-			targetName = targetName.replace('/', '_');
-			targetName = targetName.replace('.', '_');
-			
-			printWriter.print(" target=\"");
-			printWriter.print(targetName);
-			printWriter.print("\"");
-		}
-		
-		printWriter.println(">");		
-		
-		if (subTerms != null && subTermNum > 0) {						
 			for (int i = 0; i < subTermNum; i++) {
 				IndexTerm subTerm = (IndexTerm) subTerms.get(i);
 				outputIndexTerm(subTerm, printWriter);
-			}			
+			}
 			
+			printWriter.println("</indexitem>");
+		} else {
+			for (int i = 0; i < targetNum; i++) {
+				IndexTermTarget target = (IndexTermTarget) targets.get(i);
+				String targetName = target.getTargetName();
+
+				/*
+				 * Remove file extension from targetName, and replace all the
+				 * file seperator with '_'.
+				 */
+				targetName = targetName.substring(0, targetName
+						.lastIndexOf("."));
+				targetName = targetName.replace('\\', '_');
+				targetName = targetName.replace('/', '_');
+				targetName = targetName.replace('.', '_');
+
+				printWriter.print("<indexitem text=\"");		
+				printWriter.print(term.getTermName());
+				printWriter.print("\"");
+				printWriter.print(" target=\"");
+				printWriter.print(targetName);
+				printWriter.print("\"/>");
+			}
 		}		
 		
-		printWriter.println("</indexitem>");
 	}
 
 }

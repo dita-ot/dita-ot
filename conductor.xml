@@ -7,9 +7,10 @@
   
   <taskdef name="pipeline" classname="org.dita.dost.invoker.AntInvoker">
     <classpath>
-	  <pathelement location="${basedir}${file.separator}lib${file.separator}dost1.1.0.jar"/>
+	  <pathelement location="${basedir}${file.separator}lib${file.separator}dost.jar"/>
     </classpath>
   </taskdef>
+  
   <!-- parameters from command line or external property file 
 		transtype          required
 		args.input         required
@@ -35,6 +36,12 @@
       <not>
         <isset property="dita.extname"/>
       </not>
+    </condition>
+    <condition property="clean_temp">     
+      <and>
+        <isset property="clean.temp"/>
+        <equals arg1="${clean.temp}" arg2="no" casesensitive="false"/> 
+      </and>
     </condition>
   </target>
   
@@ -73,7 +80,7 @@
   </target>
   
   <!-- property value validation begin -->
-  <target name="check-arg">
+  <target name="check-arg" depends="use-init">
     <fail message="please provide filename of dita map of dita topic using Ant parameter 'args.input' ">
       <condition>
         <and>
@@ -119,6 +126,28 @@
     <basename property="dita.map.filename.root" file="${dita.input.filename}" suffix=".ditamap"/>
     <basename property="dita.topic.filename.root" file="${dita.input.filename}" suffix="${dita.extname}"/>
     <dirname property="dita.map.output.dir" file="${output.dir}${file.separator}${dita.input}"/>
+    
+    <condition property="args.csspath" value="${dita.map.output.dir}${file.separator}">
+      <not>
+        <isset property="args.csspath"/>
+      </not>
+    </condition>
+    
+    <condition property="args.copycss.yes">
+      <and>
+        <equals arg1="${args.copycss}" arg2="yes"/>
+        <not>  
+          <or>
+            <contains string="${args.csspath}" substring="http:\\"/>
+            <contains string="${args.csspath}" substring="https:\\"/>
+          </or>
+        </not>
+      </and>
+    </condition>
+    
+    <available file="${args.csspath}" property="args.csspath.present"/>
+    <available file="${args.css}" property="args.css.present"/>    
+        
     <fail message="please provide extension filename for dita topic file using Ant parameter 'dita.extname' ">
       <condition>
         <not>
@@ -145,6 +174,7 @@
     <echo>* outputdir = ${output.dir}</echo>
     <echo>* extname = ${dita.extname}</echo>
     <echo>* tempdir = ${dita.temp.dir}</echo>
+    <echo>* clean.temp = ${clean.temp}</echo>
     <echo>*****************************************************************</echo>
     
   </target>

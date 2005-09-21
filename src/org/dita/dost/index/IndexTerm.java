@@ -101,9 +101,9 @@ public class IndexTerm implements Comparable {
             }
 
             // Add targets when same subTerms and same term name
-            if (subTerm.getSubTerms().equals(term.getSubTerms())
-                    && subTerm.getTermName().equals(term.getTermName())) {
+            if (subTerm.getTermName().equals(term.getTermName())) {
                 subTerm.addTargets(term.getTargetList());
+                subTerm.addSubTerms(term.getSubTerms());
                 return;
             }
         }
@@ -111,6 +111,23 @@ public class IndexTerm implements Comparable {
         if (i == subTermNum) {
             subTerms.add(term);
         }
+    }
+    
+    /**
+     * Add all the sub terms in the list.
+     *  
+     * @param terms
+     */
+    public void addSubTerms(List terms) {
+    	int subTermsNum = 0;
+    	if (terms == null) {
+    		return;
+    	}
+    	
+    	subTermsNum = terms.size();
+    	for (int i = 0; i < subTermsNum; i++) {
+    		addSubTerm((IndexTerm) terms.get(i));
+    	}
     }
 
     /**
@@ -130,8 +147,8 @@ public class IndexTerm implements Comparable {
         }
 
         return termName.equals(it.termName)
-                && targetList.equals(it.getTargetList())
-                && subTerms.equals(it.subTerms);
+				&& targetList.equals(it.getTargetList())
+				&& subTerms.equals(it.getSubTerms());
     }
 
     /**
@@ -198,7 +215,13 @@ public class IndexTerm implements Comparable {
      * @param targets
      */
     public void addTargets(List targets) {
-        int targetNum = targets.size();
+    	int targetNum = 0;
+    	
+    	if (targets == null) {
+    		return;
+    	}
+    	
+        targetNum = targets.size();
         for (int i = 0; i < targetNum; i++) {
             addTarget((IndexTermTarget) targets.get(i));
         }
