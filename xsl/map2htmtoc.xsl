@@ -66,16 +66,15 @@
      ********************************************************************************* -->
 <xsl:template match="/*[contains(@class, ' map/map ')]">
   <xsl:param name="pathFromMaplist"/>
-  <xsl:if test="*[contains(@class, ' map/topicref ')][not(@toc='no')]">
+  <xsl:if test=".//*[contains(@class, ' map/topicref ')][not(@toc='no')]">
     <UL><xsl:value-of select="$newline"/>
 
-      <xsl:apply-templates select="*[contains(@class, ' map/topicref ')][not(@toc='no')]">
+      <xsl:apply-templates select="*[contains(@class, ' map/topicref ')]">
         <xsl:with-param name="pathFromMaplist" select="$pathFromMaplist"/>
       </xsl:apply-templates>
     </UL><xsl:value-of select="$newline"/>
   </xsl:if>
 </xsl:template>
-
 <!-- *********************************************************************************
      Output each topic as an <LI> with an A-link. Each item takes 2 values:
      - A title. If a navtitle is specified on <topicref>, use that.
@@ -95,9 +94,6 @@
       <xsl:choose>
         <!-- If there is a reference to a DITA or HTML file, and it is not external: -->
         <xsl:when test="@href and not(@href='')">
-          <!-- to use an extension other than '.dita' just uncomment the variable and replace
-               '.dita' below with $DITAEXT -->
-          <!-- <xsl:variable name="DITAEXT">.dita</xsl:variable> -->
           <xsl:element name="a">
             <xsl:attribute name="href">
              <xsl:choose>        <!-- What if targeting a nested topic? Need to keep the ID? -->
@@ -125,14 +121,22 @@
       </xsl:choose>
 
        <!-- If there are any children that should be in the TOC, process them -->
-       <xsl:if test="*[contains(@class, ' map/topicref ')][not(contains(@toc,'no'))]">
+       <xsl:if test="descendant::*[contains(@class, ' map/topicref ')][not(contains(@toc,'no'))]">
          <xsl:value-of select="$newline"/><UL><xsl:value-of select="$newline"/>
-           <xsl:apply-templates select="*[contains(@class, ' map/topicref ')][not(contains(@toc,'no'))]">
+           <xsl:apply-templates select="*[contains(@class, ' map/topicref ')]">
              <xsl:with-param name="pathFromMaplist" select="$pathFromMaplist"/>
            </xsl:apply-templates>
          </UL><xsl:value-of select="$newline"/>
        </xsl:if>
   </LI><xsl:value-of select="$newline"/>
+</xsl:template>
+
+<!-- If toc=no, but a child has toc=yes, that child should bubble up to the top -->
+<xsl:template match="*[contains(@class, ' map/topicref ')][@toc='no']">
+  <xsl:param name="pathFromMaplist"/>
+  <xsl:apply-templates select="*[contains(@class, ' map/topicref ')]">
+    <xsl:with-param name="pathFromMaplist" select="$pathFromMaplist"/>
+  </xsl:apply-templates>
 </xsl:template>
 
 <xsl:template match="processing-instruction('workdir')" mode="get-work-dir">
@@ -151,7 +155,7 @@
 
     <!-- If this references a DITA file (has @href, not "local" or "external"),
          try to open the file and get the title -->
-    <xsl:when test="@href and
+    <xsl:when test="@href and not(@href='') and 
                     not ((ancestor-or-self::*/@scope)[last()]='external') and
                     not ((ancestor-or-self::*/@scope)[last()]='peer') and
                     not ((ancestor-or-self::*/@type)[last()]='external') and
@@ -218,7 +222,7 @@
     <!-- No local title, and not targeting a DITA file. Could be just a container setting
          metadata, or a file reference with no title. Issue message for the second case. -->
     <xsl:otherwise>
-      <xsl:if test="@href">
+      <xsl:if test="@href and not(@href='')">
           <xsl:call-template name="output-message">
             <xsl:with-param name="msg">Could not retrieve a title from <xsl:value-of select="@href"/>. Using the HREF value.</xsl:with-param>
             <xsl:with-param name="msgnum">005</xsl:with-param>
@@ -232,7 +236,6 @@
 
 <!-- These are here just to prevent accidental fallthrough -->
 <xsl:template match="*[contains(@class, ' map/navref ')]"/>
-<xsl:template match="*[contains(@class, ' map/topicref ')][@toc='no']"/>
 <xsl:template match="*[contains(@class, ' map/anchor ')]"/>
 <xsl:template match="*[contains(@class, ' map/reltable ')]"/>
 <xsl:template match="*[contains(@class, ' map/topicmeta ')]"/>

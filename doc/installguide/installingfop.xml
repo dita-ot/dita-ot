@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- (c) Copyright by Comtech Services, Inc. All rights reserved. -->
+<!DOCTYPE task PUBLIC "-//IBM//DTD DITA Task//EN" "../dtd/task.dtd">
+<task id="install_fop" xml:lang="en-us">
+  <title>Installing Apache FOP</title>
+  <titlealts>
+    <searchtitle>Installing Apache FOP (Windows)</searchtitle>
+  </titlealts>
+  <shortdesc>Formatting Objects Processor (FOP) is a print formatter. It uses 
+    XSL formatting objects (XSL-FO) to produce portable document format (PDF) 
+    or direct-printable files. You can use it to format and produce PDF output 
+    from XML.</shortdesc>
+  <taskbody>
+    <steps>
+      <step>
+        <cmd>Enter the URL: <xref format="html" 
+          href="http://apache.tradebit.com/pub/xml/fop/" 
+          scope="external">http://apache.tradebit.com/pub/xml/fop/</xref></cmd>
+      </step>
+      <step>
+        <cmd>From the FOP page, in the Name column, select <uicontrol><image 
+          href="pic/compressed.gif"></image>"fop-0.20.5-bin.zip" 
+          </uicontrol></cmd>
+      </step>
+      <step>
+        <cmd>Click <uicontrol>Save</uicontrol> to unzip the fop-0.20.5-bin.zip 
+          file and save it to the C:\ directory as 
+          <filepath>fop-0.20.5</filepath></cmd>
+      </step>
+      <step>
+        <cmd>Set the <varname>CLASSPATH </varname><xref 
+          href="settingenvironmentvariables.xml" scope="local">environment 
+          variable</xref> for the following jar files:</cmd>
+        <info>
+          <sl>
+            <sli>
+              <filepath>\build\fop.jar</filepath>
+            </sli>
+            <sli>
+              <filepath>\lib\batik.jar</filepath>
+            </sli>
+            <sli>
+              <filepath>\lib\avalon-framework-cvs-20020806.jar</filepath>
+            </sli>
+          </sl>
+        </info>
+        <?Pub Caret?>
+      </step>
+    </steps>
+  </taskbody>
+</task>

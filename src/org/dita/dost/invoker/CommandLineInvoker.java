@@ -52,6 +52,11 @@ public class CommandLineInvoker {
 		paramMap.put("/tempdir", "dita.temp.dir");
 		paramMap.put("/cleantemp", "clean.temp");
 		paramMap.put("/foimgext", "args.fo.img.ext");
+		paramMap.put("/javahelptoc", "args.javahelp.toc");
+		paramMap.put("/javahelpmap", "args.javahelp.map");
+		paramMap.put("/eclipsehelptoc", "args.eclipsehelp.toc");
+		paramMap.put("/eclipsecontenttoc", "args.eclipsecontent.toc");
+		paramMap.put("/xhtmltoc", "args.xhtml.toc");
 	}
 
 	/**

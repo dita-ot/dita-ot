@@ -6,6 +6,7 @@ package org.dita.dost.writer;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import org.dita.dost.index.IndexTerm;
@@ -43,16 +44,17 @@ public class JavaHelpIndexWriter extends AbstractWriter {
 	 * Output the java help index to the output stream.
      * 
 	 * @param outputStream
+	 * @throws UnsupportedEncodingException 
 	 */
-	public void write(OutputStream outputStream) {
+	public void write(OutputStream outputStream) throws UnsupportedEncodingException {
 		PrintWriter printWriter = null;
 		int termNum = termList.size();
 		
 		try {
 			printWriter = new PrintWriter(new OutputStreamWriter(
-					outputStream));
+					outputStream, "UTF-8"));
 			
-			printWriter.println("<?xml version='1.0' encoding='ISO-8859-1' ?>");
+			printWriter.println("<?xml version='1.0' encoding='UTF-8' ?>");
 			printWriter.println("<!DOCTYPE index PUBLIC ");
 			printWriter.println("\"-//Sun Microsystems Inc.//DTD JavaHelp Index Version 1.0//EN\" ");
 			printWriter.println("\"http://java.sun.com/products/javahelp/index_1_0.dtd\">");
@@ -107,23 +109,23 @@ public class JavaHelpIndexWriter extends AbstractWriter {
 		} else {
 			for (int i = 0; i < targetNum; i++) {
 				IndexTermTarget target = (IndexTermTarget) targets.get(i);
-				String targetName = target.getTargetName();
+				String targetURL = target.getTargetURI();
 
 				/*
 				 * Remove file extension from targetName, and replace all the
 				 * file seperator with '_'.
 				 */
-				targetName = targetName.substring(0, targetName
+				targetURL = targetURL.substring(0, targetURL
 						.lastIndexOf("."));
-				targetName = targetName.replace('\\', '_');
-				targetName = targetName.replace('/', '_');
-				targetName = targetName.replace('.', '_');
+				targetURL = targetURL.replace('\\', '_');
+				targetURL = targetURL.replace('/', '_');
+				targetURL = targetURL.replace('.', '_');
 
 				printWriter.print("<indexitem text=\"");		
 				printWriter.print(term.getTermName());
 				printWriter.print("\"");
 				printWriter.print(" target=\"");
-				printWriter.print(targetName);
+				printWriter.print(targetURL);
 				printWriter.print("\"/>");
 			}
 		}		

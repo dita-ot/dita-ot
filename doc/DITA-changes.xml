@@ -9,6 +9,36 @@
     release.</shortdesc>
   <body>
     <section>
+      <title>DITA OT release 1.1.2</title>
+      <p>Release 1.1.2 is a maintenance release to fix defects and make patches based on release 1.1.1. </p>
+      <p>But there are certain limitations and unfixed bugs in this release, such as,
+        <ul>
+          <li>Bug 1343963 Blank index.html generated for ditamap contains only reltabe</li>
+          <li>Bug 1344486 java.io.EOFException thrown out when reading ditaval file</li>
+        </ul>       
+        Please check the current 'open' bugs on the SourceForge bugs tracker.        
+      </p>
+      <p>
+        <b>Changes</b>
+        <ol>
+          <li>SF Bug   1297355: Multilevel HTML Help popup shows filenames</li>
+          <li>SF Bug   1297657: Update for Supported Parameters page</li>
+          <li>SF Bug   1304859: Toolkit disallows repetition of topic ID within map</li>
+          <li>SF Bug   1306361: Fatal error in published ditamap example</li>
+          <li>SF Bug   1306363: common.css not compiled with htmlhelp</li>
+          <li>SF Bug   1311788: DTD references not resolved</li>
+          <li>SF Bug   1314081: Fix catalog entries in catalag-ant.xml for OASIS DTDs</li>
+          <li>SF Bug   1323435: wrong system id for html output used in validation</li>
+          <li>SF Bug   1323486: HTML Help subterm indexes not sorted</li>
+          <li>SF Bug   1325290: JavaHelp output does not work for Russian</li>
+          <li>SF Bug   1325277: File missing from the map causes abend</li>
+          <li>SF Patch 1253783: dita2fo-links relative hrefs</li>
+          <li>SF Patch 1324387: In xslfo, groupchoice var prints extra | delimiter</li>
+          <li>SF RFE   1324990: Installation Guide</li>
+        </ol>
+      </p>
+    </section>
+    <section>
       <title>DITA OT release 1.1.1</title>
       <p>Release 1.1.1 is a maintenance release to fix defects and make patches based on release 1.1. </p>
       <p>For patch 1284023, we are changing the name of the jar lib file from dost1.0.jar back to dost.jar because we believe we need to keep the jar file name consistent through various releases.</p>

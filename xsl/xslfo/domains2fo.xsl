@@ -362,10 +362,14 @@
 
 <xsl:template match="*[contains(@class,' pr-d/kwd ')]">
 <fo:inline font-family="Courier">
-  <xsl:if test="parent::*[contains(@class,' pr-d/groupchoice ')]"><xsl:if test="count(preceding-sibling::*)!=0"> | </xsl:if></xsl:if>
+  <xsl:if test="parent::*[contains(@class,' pr-d/groupchoice ')]">
+    <xsl:if test="count(preceding-sibling::*)!=0"> | </xsl:if>
+  </xsl:if>
   <xsl:if test="@importance='optional'"> [</xsl:if>
   <xsl:choose>
-    <xsl:when test="@importance='default'"><fo:inline text-decoration="underline"><xsl:value-of select="."/></fo:inline></xsl:when>
+    <xsl:when test="@importance='default'">
+      <fo:inline text-decoration="underline"><xsl:value-of select="."/></fo:inline>
+    </xsl:when>
     <xsl:otherwise><xsl:value-of select="."/></xsl:otherwise>
   </xsl:choose>
   <xsl:if test="@importance='optional'">] </xsl:if>
@@ -384,10 +388,14 @@ and if so, produce an associative link. -->
 <!-- Where is the template for var with a priority of 50? -->
 <xsl:template match="*[contains(@class,' pr-d/var ')]" priority="51">
  <fo:inline font-style="italic">
-  <xsl:if test="parent::*[contains(@class,' pr-d/groupchoice ')]"> | </xsl:if>
+  <xsl:if test="parent::*[contains(@class,' pr-d/groupchoice ')]">
+    <xsl:if test="count(preceding-sibling::*)!=0"> | </xsl:if>
+  </xsl:if>
   <xsl:if test="@importance='optional'"> [</xsl:if>
   <xsl:choose>
-    <xsl:when test="@importance='default'"><fo:inline text-decoration="underline"><xsl:value-of select="."/></fo:inline></xsl:when>
+    <xsl:when test="@importance='default'">
+      <fo:inline text-decoration="underline"><xsl:value-of select="."/></fo:inline>
+    </xsl:when>
     <xsl:otherwise><xsl:value-of select="."/></xsl:otherwise>
   </xsl:choose>
   <xsl:if test="@importance='optional'">] </xsl:if>
@@ -447,14 +455,6 @@ and if so, produce an associative link. -->
 	<xsl:call-template name="dogroup"/>
 </xsl:template>
 
-<!--
-<xsl:template match="*[contains(@class,' topic/figgroup ')]/*[contains(@class,' topic/figgroup ')]">
-	<xsl:call-template name="dogroup"/>
-</xsl:template>
--->
-
-
-	<!--xsl:if test="../@choiceseq='choice'"> | </xsl:if-->
 <xsl:template name="dogroup">
 	<xsl:if test="parent::*[contains(@class,' pr-d/groupchoice ')]">
 		<xsl:if test="count(preceding-sibling::*)!=0"> | </xsl:if>
@@ -468,12 +468,6 @@ and if so, produce an associative link. -->
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' pr-d/groupcomp ')]/title|*[contains(@class,' pr-d/groupseq ')]/title|*[contains(@class,' pr-d/groupseq ')]/title"/>  <!-- Consume title -->
-
-
-
-
-
-
 
 
 <!-- start of software domain elements -->

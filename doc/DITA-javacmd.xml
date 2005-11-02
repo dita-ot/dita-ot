@@ -95,7 +95,7 @@
               <entry colname="col1"><i>/transtype</i>:{transtype}</entry>
               <entry colname="col2">The transformation type. Currently, the 
                 supported values include xhtml, pdf, javahelp, eclipsehelp, 
-                htmlhelp, and docbook.</entry>
+                htmlhelp, eclipsecontent, troff, and docbook.</entry>
             </row>
             <row>
               <entry colname="col1"><i>/filter</i>:{dita.input.valfile}</entry>
@@ -151,7 +151,6 @@
               <entry colname="col1"><i>/copycss</i>:{args.copycss}</entry>
               <entry colname="col2">
                 <ph conref="DITA-antscript.xml#antscript/copycss"></ph>
-                <note conref="DITA-antscript.xml#antscript/copycss-note"/>
               </entry>
             </row>
             <row>
@@ -183,6 +182,36 @@
               <entry colname="col2">
                 <ph conref="DITA-antscript.xml#antscript/foimgext"/>
                 <note conref="DITA-antscript.xml#antscript/foimgextnote"/>
+              </entry>
+            </row>
+            <row>
+              <entry colname="col1"><i>/javahelptoc</i>:{args.javahelp.toc}</entry>
+              <entry colname="col2">
+                <ph conref="DITA-antscript.xml#antscript/javahelptoc"/>
+              </entry>
+            </row>
+            <row>
+              <entry colname="col1"><i>/javahelpmap</i>:{args.javahelp.map}</entry>
+              <entry colname="col2">
+                <ph conref="DITA-antscript.xml#antscript/javahelpmap"/>
+              </entry>
+            </row>
+            <row>
+              <entry colname="col1"><i>/eclipsehelptoc</i>:{args.eclipsehelp.toc}</entry>
+              <entry colname="col2">
+                <ph conref="DITA-antscript.xml#antscript/eclipsehelptoc"/>
+              </entry>
+            </row>
+            <row>
+              <entry colname="col1"><i>/eclipsecontenttoc</i>:{args.eclipsecontent.toc}</entry>
+              <entry colname="col2">
+                <ph conref="DITA-antscript.xml#antscript/eclipsecontenttoc"/>
+              </entry>
+            </row>
+            <row>
+              <entry colname="col1"><i>/xhtmltoc</i>:{args.xhtml.toc}</entry>
+              <entry colname="col2">
+                <ph conref="DITA-antscript.xml#antscript/xhtmltoc"/>
               </entry>
             </row>
           </tbody>

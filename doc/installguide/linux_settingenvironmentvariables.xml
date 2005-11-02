@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
+<!DOCTYPE task PUBLIC "-//IBM//DTD DITA Task//EN" "../dtd/task.dtd">
+<task id="linux_set_env" xml:lang="en-us">
+  <title>Setting Environment Variables</title>
+  <titlealts>
+    <searchtitle>Setting Environment Variables (Linux)</searchtitle>
+  </titlealts>
+  <shortdesc>Use this information to find and set your environment variables. 
+    Set your system environment variables after all DITA Open Toolkit items are 
+    installed. The environment variables must be set for each item installed in 
+    this guide.</shortdesc>
+  <taskbody>
+    <steps>
+      <step>
+        <cmd>Type in the Linux Console.</cmd>
+      </step>
+      <step>
+        <cmd>Modify each <varname>environmental or system 
+          variable</varname>.</cmd>
+        <choicetable frame="none">
+          <chrow>
+            <choption>Set the <varname>PATH</varname> environment variable to 
+              include the directory where you installed the Ant bin 
+              directory.</choption>
+            <chdesc>
+              <ol>
+                <li>
+                  <codeph>export PATH=${PATH}:${ANT_HOME}/bin:${JAVA_HOME}/bin</codeph>
+                </li>
+              </ol>
+            </chdesc>
+          </chrow>
+          <chrow>
+            <choption>Set the <varname>ANT_HOME</varname> environment variable 
+              to the directory where you installed Ant.</choption>
+            <chdesc>
+              <ol>
+                <li>
+                  <codeph>export ANT_HOME=${ant_dir}</codeph>
+                </li>
+              </ol>
+            </chdesc>
+          </chrow>
+          <chrow>
+            <choption>Set the <varname>JAVA_HOME</varname> environment variable 
+              to the directory where you installed the J2SE SDK 
+              application.</choption>
+            <chdesc>
+              <ol>
+                <li>
+                  <codeph>export JAVA_HOME=${java_dir}</codeph>
+                </li>
+              </ol>
+            </chdesc>
+          </chrow>
+          <chrow>
+            <choption>Set the <varname>JHHOME</varname> environment variable to 
+              the directory where you installed the JavaHelp 
+              application.</choption>
+            <chdesc>
+              <ol>
+                <li>
+                  <codeph>export JHHOME=${javahelp_dir}</codeph>
+                </li>
+              </ol>
+            </chdesc>
+          </chrow>
+          <chrow>
+            <choption>Set the <varname>CLASSPATH </varname>environment variable 
+              to include the .jar files from the Apache FOP 
+              application.</choption>
+            <chdesc>
+              <ol>
+                <li>set up your environment variable CLASSPATH to include the 
+                  fop.jar, batik.jar and avalon.jar files in the FOP directory. 
+                  For example: <codeblock>export CLASSPATH=${CLASSPATH}:${fop_dir}/build:${fop_dir}/lib</codeblock></li>
+              </ol>
+            </chdesc>
+          </chrow>
+          <chrow>
+            <choption>Set the <varname>CLASSPATH</varname> environment variable 
+              to include the directory where you installed Saxon.</choption>
+			<chdesc>If you use the Saxon,
+				<ol> 
+				<li>Set up CLASSPATH to include the saxon.jar file. For example:
+					<codeblock expanse="page">export CLASSPATH=${CLASSPATH}:${saxon_dir}/saxon.jar </codeblock>
+				</li> 
+				<li>Set up ANT_OPTS. For example: <codeblock>export ANT_OPTS=${ANT_OPTS} -Djavax.xml.transform.TransformerFactory=com.icl.saxon.TransformerFactoryImpl</codeblock></li> 
+				</ol>
+			</chdesc>
+          </chrow>
+          <chrow>
+            <choption>Set the <varname>CLASSPATH</varname> environment variable 
+              to include the directory where you installed Xalan.</choption>
+            <chdesc>If you use the Xalan,<ol> <li>Set up CLASSPATH to include 
+              the <filepath>xalan.jar</filepath> file and the 
+              <filepath>xercesImpl.jar</filepath> file. For example:<codeblock 
+              expanse="page">export CLASSPATH=${CLASSPATH}:${xalan_dir}/bin </codeblock></li> </ol></chdesc>
+          </chrow>
+        </choicetable>
+      </step>
+    </steps>
+    <example></example>
+    <postreq></postreq>
+  </taskbody>
+</task>

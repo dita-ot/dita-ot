@@ -61,16 +61,15 @@
      ********************************************************************************* -->
 <xsl:template match="/*[contains(@class, ' map/map ')]">
   <xsl:param name="pathFromMaplist"/>
-  <xsl:if test="*[contains(@class, ' map/topicref ')][not(@toc='no')]">
+  <xsl:if test=".//*[contains(@class, ' map/topicref ')][not(@toc='no')]">
     <xsl:value-of select="$newline"/>
     <UL>
-      <xsl:apply-templates select="*[contains(@class, ' map/topicref ')][not(@toc='no')]">
+      <xsl:apply-templates select="*[contains(@class, ' map/topicref ')]">
         <xsl:with-param name="pathFromMaplist" select="$pathFromMaplist"/>
       </xsl:apply-templates>
     </UL>
   </xsl:if>
 </xsl:template>
-
 <!-- *********************************************************************************
      Output each topic as an <OBJECT> in an <LI>. Each object takes 2 parameters:
      - A name must be given. If it is specified on <topicref>, use that, otherwise try
@@ -91,9 +90,15 @@
 <xsl:template match="*[contains(@class, ' map/topicref ')]">
   <xsl:param name="pathFromMaplist"/>
   <xsl:choose>
-    <xsl:when test="@toc='no'"/>
-    <!-- If this this a container (no href, no title), just process children -->
-    <xsl:when test="not(@href) and not(@navtitle) and 
+    <!-- If TOC is no, go ahead and process children; if TOC is turned back on,
+         those topics will rise to this level -->
+    <xsl:when test="@toc='no'">
+      <xsl:apply-templates select="*[contains(@class, ' map/topicref ')]">
+        <xsl:with-param name="pathFromMaplist" select="$pathFromMaplist"/>
+      </xsl:apply-templates>
+    </xsl:when>
+    <!-- If this this a container (no href or href='', no title), just process children -->
+    <xsl:when test="(not(@href) or @href='') and not(@navtitle) and 
                     not(*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/linktext ')])">
       <xsl:apply-templates select="*[contains(@class, ' map/topicref ')][not(contains(@toc,'no'))]">
         <xsl:with-param name="pathFromMaplist" select="$pathFromMaplist"/>
@@ -121,8 +126,16 @@
       <xsl:call-template name="output-toc-entry">
         <xsl:with-param name="pathFromMaplist" select="$pathFromMaplist"/>
       </xsl:call-template>
-    </xsl:when>
-    <xsl:when test="contains(@format,'htm') or contains(@format,'HTM')">      
+    </xsl:when>    
+    <xsl:when test="contains(@format,'htm') or contains(@format,'HTM')">
+      <!-- Including a local HTML file: they must recompile to include it -->
+      <xsl:call-template name="output-message">
+        <xsl:with-param name="msg">In order to include <xsl:value-of select="@href"/> in your help file, you will need
+to recompile the CHM file locally. The automatically compiled CHM file will only
+contain formatted DITA files, not files that are already in HTML.</xsl:with-param>
+        <xsl:with-param name="msgnum">039</xsl:with-param>
+        <xsl:with-param name="msgsev">I</xsl:with-param>
+      </xsl:call-template>
       <xsl:call-template name="output-toc-entry">
         <xsl:with-param name="pathFromMaplist" select="$pathFromMaplist"/>
       </xsl:call-template>
@@ -162,7 +175,8 @@ To remove this message, you can set the toc="no" attribute on your topicref.</xs
 
            <!-- If this references a DITA file (has @href, not "local" or "external"),
                 try to open the file and get the title -->
-           <xsl:when test="@href and 
+           
+           <xsl:when test="@href and not(@href='') and 
                            not ((ancestor-or-self::*/@scope)[last()]='external') and
                            not ((ancestor-or-self::*/@scope)[last()]='peer') and
                            not ((ancestor-or-self::*/@type)[last()]='external') and
@@ -229,7 +243,7 @@ To remove this message, you can set the toc="no" attribute on your topicref.</xs
            <!-- No local title, and not targeting a DITA file. Could be just a container setting
                 metadata, or a file reference with no title. Issue message for the second case. -->
            <xsl:otherwise>
-             <xsl:if test="@href">
+             <xsl:if test="@href and not(@href='')">
                  <xsl:call-template name="output-message">
                    <xsl:with-param name="msg">Could not retrieve a title from <xsl:value-of select="@href"/>. Using the HREF value.</xsl:with-param>
                    <xsl:with-param name="msgnum">005</xsl:with-param>
@@ -242,18 +256,12 @@ To remove this message, you can set the toc="no" attribute on your topicref.</xs
           </xsl:attribute>       <!-- End of @value (the title) -->
         </xsl:element>           <!-- End of <param> element -->
 
-        <!-- If there is a reference to a DITA or HTML file, and it is not external: -->
-        <!-- Update for 3.8: allow non-dita, external values in navigation. Removed the
-             following test, which came after @href:
-             and not (((ancestor-or-self::*/@scope)[last()]='external') or ((ancestor-or-self::*/@scope)[last()]='peer'))
-             and (contains(@href,'.dita') or contains(@href,'.htm')) -->
+        <!-- If there is a reference to a DITA or HTML file, and it is not external: 
+             allow non-dita, external values in navigation.  -->
         <xsl:if test="@href">
-          <!-- to use an extension other than '.dita' just uncomment the variable and replace
-               '.dita' below with $DITAEXT -->
-          <!-- <xsl:variable name="DITAEXT">.dita</xsl:variable> -->
           <xsl:element name="param">
             <xsl:attribute name="name">Local</xsl:attribute>
-            <xsl:choose>        <!-- What if targeting a nested topic? Need to keep the ID? -->
+            <xsl:choose> <!-- What if targeting a nested topic? Need to keep the ID? -->
               <xsl:when test="contains(@copy-to, $DITAEXT)">
                 <xsl:attribute name="value"><xsl:value-of select="$pathFromMaplist"/><xsl:value-of select="substring-before(@copy-to, $DITAEXT)"/><xsl:value-of select="$OUTEXT"/></xsl:attribute>
               </xsl:when>
@@ -263,7 +271,7 @@ To remove this message, you can set the toc="no" attribute on your topicref.</xs
               <xsl:when test="contains(@href,'.htm') and @scope!='external'">
                 <xsl:attribute name="value"><xsl:value-of select="$pathFromMaplist"/><xsl:value-of select="@href"/></xsl:attribute>
               </xsl:when>
-              <xsl:otherwise>  <!-- If non-DITA, keep the href as-is -->
+              <xsl:otherwise> <!-- If non-DITA, keep the href as-is -->
                 <xsl:attribute name="value"><xsl:value-of select="@href"/></xsl:attribute>
               </xsl:otherwise>
             </xsl:choose>
@@ -272,9 +280,9 @@ To remove this message, you can set the toc="no" attribute on your topicref.</xs
        </OBJECT>
 
        <!-- If there are any children that should be in the TOC, process them -->
-       <xsl:if test="*[contains(@class, ' map/topicref ')][not(contains(@toc,'no'))]">
+       <xsl:if test="descendant::*[contains(@class, ' map/topicref ')][not(contains(@toc,'no'))]">
          <UL>
-           <xsl:apply-templates select="*[contains(@class, ' map/topicref ')][not(contains(@toc,'no'))]">
+           <xsl:apply-templates select="*[contains(@class, ' map/topicref ')]">
              <xsl:with-param name="pathFromMaplist" select="$pathFromMaplist"/>
            </xsl:apply-templates>
          </UL>

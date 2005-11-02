@@ -126,27 +126,29 @@
     <basename property="dita.map.filename.root" file="${dita.input.filename}" suffix=".ditamap"/>
     <basename property="dita.topic.filename.root" file="${dita.input.filename}" suffix="${dita.extname}"/>
     <dirname property="dita.map.output.dir" file="${output.dir}${file.separator}${dita.input}"/>
-    
+
     <condition property="args.csspath" value="${dita.map.output.dir}${file.separator}">
       <not>
         <isset property="args.csspath"/>
       </not>
     </condition>
-    
-    <condition property="args.copycss.yes">
-      <and>
-        <equals arg1="${args.copycss}" arg2="yes"/>
-        <not>  
-          <or>
-            <contains string="${args.csspath}" substring="http:\\"/>
-            <contains string="${args.csspath}" substring="https:\\"/>
-          </or>
-        </not>
-      </and>
+
+    <condition property="args.csspath.url">
+      <or>
+        <contains string="${args.csspath}" substring="http://"/>
+        <contains string="${args.csspath}" substring="https://"/>
+      </or>
     </condition>
     
     <available file="${args.csspath}" property="args.csspath.present"/>
     <available file="${args.css}" property="args.css.present"/>    
+           
+    <condition property="user.copycss.yes">
+      <and>
+        <equals arg1="${args.copycss}" arg2="yes"/>
+        <isset property="${args.css.present}"/>
+      </and>      
+    </condition>    
         
     <fail message="please provide extension filename for dita topic file using Ant parameter 'dita.extname' ">
       <condition>

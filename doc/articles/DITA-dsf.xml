@@ -463,7 +463,7 @@
         <li>A <filepath>body</filepath> element, to allow parameters as valid content (giving us <filepath>APIbody</filepath>)</li>
         <li>A <filepath>topic</filepath> element, to allow the specialized body (giving us <filepath>APIdesc</filepath>)</li>
       </ul>
-      <p>This domino effect can be avoided by using domain specialization. If you truly just want to add some new variant structures to an existing information type, use domain specialization instead of topic specialization (see <xref href="DITA-domains.html" type="external">Specializing domains in DITA</xref>).</p>
+      <p>This domino effect can be avoided by using domain specialization. If you truly just want to add some new variant structures to an existing information type, use domain specialization instead of topic specialization (see <xref href="DITA-domains.xml">Specializing domains in DITA</xref>).</p>
       <p>To ensure that the specialized elements are more constrained than their general equivalents (that is, that they allow a proper subset of the structures that the general equivalent allows), you need to look at the content model of the general element. You can safely change the content model of your specialized element as shown in Table A: </p>
       <table frame="all">
         <title>Summary of specialization rules </title>

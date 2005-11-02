@@ -144,16 +144,22 @@ public class GenMapAndTopicListModule extends AbstractPipelineModule {
     private void processWaitList() throws SAXException,
             ParserConfigurationException {
         GenListModuleReader reader = new GenListModuleReader();
+        File fileToParse = null;
 
         reader.initXMLReader(ditaDir);
 
         while (!waitList.isEmpty()) {
             String currentFile = (String) waitList.remove(0);
+            fileToParse = new File(baseDir, currentFile);
 
-            doneList.add(currentFile);
-            reader.setCurrentDir(new File(currentFile).getParent());
-            reader.parse(new File(baseDir, currentFile));
-            saveParseResult(reader, currentFile);
+            if (fileToParse.exists()){
+            	doneList.add(currentFile);
+            	reader.setCurrentDir(new File(currentFile).getParent());
+            	reader.parse(fileToParse);
+            	saveParseResult(reader, currentFile);
+            }else{
+            	// TO DO: report the File Not Found error in the log system
+            }
         }
     }
 

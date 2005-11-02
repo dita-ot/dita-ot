@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
+<!DOCTYPE task PUBLIC "-//IBM//DTD DITA Task//EN" "../dtd/task.dtd">
+<task id="linux_install_fop" xml:lang="en-us">
+  <title>Installing Apache FOP</title>
+  <titlealts>
+    <searchtitle>Installing Apache FOP (Linux)</searchtitle>
+  </titlealts>
+  <shortdesc>Formatting Objects Processor (FOP) is a print formatter. It uses 
+    XSL formatting objects (XSL-FO) to produce portable document format (PDF) 
+    or direct-printable files. You can use it to format and produce PDF output 
+    from XML.</shortdesc>
+  <taskbody>
+    <steps>
+      <step>
+        <cmd>Enter the URL: <xref format="html" 
+          href="http://apache.tradebit.com/pub/xml/fop/" 
+          scope="external">http://apache.tradebit.com/pub/xml/fop/</xref></cmd>
+      </step>
+      <step>
+        <cmd>From the FOP page, in the Name column, select <uicontrol><image 
+          href="pic/compressed.gif"></image>"fop-0.20.5-bin.tar.gz" 
+          </uicontrol></cmd>
+      </step>
+      <step>
+        <cmd>Save and extract the package file into a Linux home directory. 
+          </cmd>
+      </step>
+      <step>
+        <cmd>Set the <varname>CLASSPATH </varname><xref 
+          href="linux_settingenvironmentvariables.xml" 
+          scope="local">environment variable</xref> for the following jar 
+          files:</cmd>
+        <info>
+          <sl>
+            <sli>
+              <filepath>\build\fop.jar</filepath>
+            </sli>
+            <sli>
+              <filepath>\lib\batik.jar</filepath>
+            </sli>
+            <sli>
+              <filepath>\lib\avalon-framework-cvs-20020806.jar</filepath>
+            </sli>
+          </sl>
+        </info>
+      </step>
+    </steps>
+  </taskbody>
+</task>

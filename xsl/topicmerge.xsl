@@ -36,7 +36,7 @@
 <xsl:template match="*[contains(@class,' map/reltable ')]"/>
 <xsl:template match="*[contains(@class,' map/anchor ')]"/>
 
-<xsl:template match="*[contains(@class,' map/topicref ')][@href][not(@print='no')]">
+<xsl:template match="*[contains(@class,' map/topicref ')][@href][not(@href='')][not(@print='no')]">
   <xsl:variable name="topicrefClass"><xsl:value-of select="@class"/></xsl:variable>
   <xsl:comment>Start of imbed for <xsl:value-of select="@href"/></xsl:comment>
   <xsl:choose>

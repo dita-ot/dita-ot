@@ -4,7 +4,6 @@
 
 package org.dita.dost.reader;
 
-import java.util.Iterator;
 import java.util.Stack;
 
 import org.dita.dost.index.IndexTerm;
@@ -42,25 +41,25 @@ public class DitamapIndexTermReader extends AbstractXMLReader {
 	 * @see org.xml.sax.helpers.DefaultHandler#characters(char[], int, int)
 	 */
 	public void characters(char[] ch, int start, int length)
-			throws SAXException {		
+			throws SAXException {
 		String temp = new String(ch, start, length).trim();
 		IndexTerm indexTerm = null;
-		
+
 		if (temp.length() == 0) {
 			return;
 		}
-		
+
 		if (elementStack.empty() || !(elementStack.peek() instanceof IndexTerm)) {
 			return;
 		}
 
-	    indexTerm = (IndexTerm) elementStack.peek();
+		indexTerm = (IndexTerm) elementStack.peek();
 
 		if (indexTerm.getTermName() == null) {
 			indexTerm.setTermName(temp);
 		} else {
-			indexTerm.setTermName(new StringBuffer(indexTerm.getTermName()).append(
-					Constants.STRING_BLANK).append(temp).toString());
+			indexTerm.setTermName(new StringBuffer(indexTerm.getTermName())
+					.append(temp).toString());
 		}
 
 	}
@@ -80,6 +79,12 @@ public class DitamapIndexTermReader extends AbstractXMLReader {
 				&& needPushTerm()) {
 			IndexTerm indexTerm = (IndexTerm) elementStack.pop();
 
+			if (indexTerm.getTermName() == null) {
+				indexTerm.setTermName("***");
+				System.out
+						.println("The indexterm element does not have any content. Setting the term to ***.");
+			}
+			
 			Object obj = elementStack.peek();
 
 			if (obj instanceof TopicrefElement) {

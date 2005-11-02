@@ -1,5 +1,40 @@
 (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved.
 
+DITA OT release 1.1.2
+Available since Oct. 31, 2005
+Release 1.1.2 is a maintenance release to fix defects and make patches based on release 1.1.1. 
+But there are certain limitations and unfixed bugs in this release, such as,
+* Bug 1343963 Blank index.html generated for ditamap contains only reltabe
+* Bug 1344486 java.io.EOFException thrown out when reading ditaval file
+please check the current 'open' bugs on the SourceForge bugs tracker.
+
+[14 Changes]
+1.  SF Bug   1297355: Multilevel HTML Help popup shows filenames
+2.  SF Bug   1297657: Update for Supported Parameters page
+3.  SF Bug   1304859: Toolkit disallows repetition of topic ID within map 
+4.  SF Bug   1306361: Fatal error in published ditamap example 
+5.  SF Bug   1306363: common.css not compiled with htmlhelp
+6.  SF Bug   1311788: DTD references not resolved
+7.  SF Bug   1314081: Fix catalog entries in catalag-ant.xml for OASIS DTDs
+8.  SF Bug   1323435: wrong system id for html output used in validation  
+9.  SF Bug   1323486: HTML Help subterm indexes not sorted
+10. SF Bug   1325290: JavaHelp output does not work for Russian
+11. SF Bug   1325277: File missing from the map causes abend 
+12. SF Patch 1253783: dita2fo-links relative hrefs
+13. SF Patch 1324387: In xslfo, < groupchoice >< var > prints extra | delimiter
+14. SF RFE   1324990: Installation Guide
+
+Note: SourceForge bugs, patches, and RFE listed above can be found in SourceForge Bugs, Patches, and RFE tracker.  
+Query criteria in different trackers for 1.1.2 changes
+* in Bugs tracker, 'Group' as 'fixed in v1.1.2'
+* in Patches tracker, 'Group' as 'fixed in 1.1.2'
+* in RFE tracker, 'Group' as 'fixed in 1.1.2'
+
+Bugs tracker:  http://sourceforge.net/tracker/?group_id=132728&atid=725074
+Patches tracker: http://sourceforge.net/tracker/?group_id=132728&atid=725076
+RFE tracker: http://sourceforge.net/tracker/?group_id=132728&atid=725077
+====================================================================================
+
 DITA OT release 1.1.1
 Available since Sep. 21, 2005
 Release 1.1.1 is a maintenance release to fix defects and make patches based on release 1.1. 

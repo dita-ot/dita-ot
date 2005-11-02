@@ -10,7 +10,7 @@
   <xsl:output
     method="xml"
     omit-xml-declaration="no"
-    encoding="ISO-8859-1"
+    encoding="UTF-8"
     doctype-public="-//Sun Microsystems Inc.//DTD JavaHelp HelpSet Version 1.0//EN"
     doctype-system="http://java.sun.com/products/javahelp/helpset_1_0.dtd"
     indent="yes"/>

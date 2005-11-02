@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- (c) Copyright by Comtech Services, Inc. All rights reserved. -->
+<!DOCTYPE task PUBLIC "-//IBM//DTD DITA Task//EN" "../dtd/task.dtd">
+<task id="set_env" xml:lang="en-us">
+  <title>Setting Environment Variables</title>
+  <titlealts>
+    <searchtitle>Setting Environment Variables (Windows)</searchtitle>
+  </titlealts>
+  <shortdesc>Use this information to find and set your environment variables. 
+    Set your system environment variables after all DITA Open Toolkit items are 
+    installed. The environment variables must be set for each item installed in 
+    this guide.</shortdesc>
+  <taskbody>
+    <steps>
+      <step>
+        <cmd>From the Start Menu, select <uicontrol>Start > Settings > Control 
+          Panel.</uicontrol></cmd>
+      </step>
+      <step>
+        <cmd>Double-click <varname>System</varname> to open the System 
+          Properties window.</cmd>
+      </step>
+      <step>
+        <cmd>On the Advanced tab, select <varname>environmental 
+          variables</varname> .</cmd>
+      </step>
+      <step>
+        <cmd>Modify each <varname>environmental or system 
+          variable</varname>.</cmd>
+        <choicetable frame="none">
+          <chrow>
+            <choption>Set the <varname>PATH</varname> environment variable to 
+              include the directory where you installed the Ant bin 
+              directory.</choption>
+            <chdesc>
+              <ol>
+                <li>Find the <varname>PATH</varname> environment variable in 
+                  the list. If <varname>PATH</varname> is not listed, click on 
+                  <uicontrol>New</uicontrol> under the System variables 
+                  section.</li>
+                <li>Type <codeph>%ANT_HOME%\bin;%JAVA_HOME%\bin;</codeph><note 
+                  type="important">If there are other variables listed, create 
+                  a new variable separated by a semicolon. Ensure there are no 
+                  spaces before or after the semicolon.</note></li>
+              </ol>
+            </chdesc>
+          </chrow>
+          <chrow>
+            <choption>Set the <varname>ANT_HOME</varname> environment variable 
+              to the directory where you installed Ant.</choption>
+            <chdesc>
+              <ol>
+                <li>Click on <uicontrol>New</uicontrol> under the System 
+                  variables section.</li>
+                <li>Type <codeph>ANT_HOME</codeph> in the variable name 
+                  field.</li>
+                <li>Type <codeph>C:\ant</codeph> in the variable value 
+                  field.</li>
+              </ol>
+            </chdesc>
+          </chrow>
+          <chrow>
+            <choption>Set the <varname>JAVA_HOME</varname> environment variable 
+              to the directory where you installed the J2SE SDK 
+              application.</choption>
+            <chdesc>
+              <ol>
+                <li>Click on <uicontrol>New</uicontrol> under the System 
+                  variables section.</li>
+                <li>Type <codeph>JAVA_HOME</codeph> in the variable name 
+                  field.</li>
+                <li>Type <codeph>C:\j2sdk1.4.2_08</codeph> in the variable 
+                  value field.</li>
+              </ol>
+            </chdesc>
+          </chrow>
+          <chrow>
+            <choption>Set the <varname>JHHOME</varname> environment variable to 
+              the directory where you installed the JavaHelp 
+              application.</choption>
+            <chdesc>
+              <ol>
+                <li>Click on <uicontrol>New</uicontrol> under the System 
+                  variables section.</li>
+                <li>Type <codeph>JHHOME</codeph> in the variable name 
+                  field.</li>
+                <li>Type <codeph>C:\javahelp\jh2.0</codeph> in the 
+                  variable value field.</li>
+              </ol>
+            </chdesc>
+          </chrow>
+          <chrow>
+            <choption>Set the <varname>CLASSPATH </varname>environment variable 
+              to include the .jar files from the Apache FOP 
+              application.</choption>
+            <chdesc>
+              <ol>
+                <li>Find the <varname>CLASSPATH </varname> environment variable 
+                  in the list. If <varname>CLASSPATH </varname> is not listed, 
+                  click on <uicontrol>New</uicontrol> under the System 
+                  variables section.</li>
+                <li>Type 
+                  <codeph>C:\fop-0.20.5\build;C:\fop-0.20.5\lib</codeph><note 
+                  type="important">If there are other variables listed, create 
+                  new variable separated by a semicolon. Ensure there are no 
+                  spaces before or after the semicolon.</note></li>
+              </ol>
+            </chdesc>
+          </chrow>
+          <chrow>
+            <choption>Set the <varname>CLASSPATH</varname> environment variable 
+              to include the directory where you installed Saxon.</choption>
+            <chdesc>If you use the Saxon,<ol> <li>Find the 
+              <varname>CLASSPATH</varname> environment variable in the list. If 
+              <varname>CLASSPATH </varname> is not listed, click on 
+              <uicontrol>New</uicontrol> under the System variables 
+              section.</li> <li>Type <codeph>C:\saxon\saxon.jar</codeph><note 
+              type="important">If there are other variables listed, create a 
+              new variable separated by a semicolon. Ensure there are no spaces 
+              before or after the semicolon.</note></li> 
+              <li>Set up ANT_OPTS. For example: <codeblock>set ANT_OPTS=%ANT_OPTS% -Djavax.xml.transform.TransformerFactory=com.icl.saxon.TransformerFactoryImpl</codeblock></li> 
+              </ol></chdesc>
+          </chrow>
+          <chrow>
+            <choption>Set the <varname>CLASSPATH</varname> environment variable 
+              to include the directory where you installed Xalan<?Pub 
+              Caret?>.</choption>
+            <chdesc>If you use the Xalan,<ol> <li>Find the 
+              <varname>CLASSPATH</varname> environment variable in the list. If 
+              <varname>CLASSPATH </varname> is not listed, click on 
+              <uicontrol>New</uicontrol> under the System variables 
+              section.</li> <li>Type <codeph>C:\xalan\bin</codeph><note 
+              type="important">If there are other variables listed, create a 
+              new variable separated by a semicolon. Ensure there are no spaces 
+              before or after the semicolon.</note></li> </ol></chdesc>
+          </chrow>
+        </choicetable>
+      </step>
+    </steps>
+    <example></example>
+    <postreq></postreq>
+  </taskbody>
+</task>

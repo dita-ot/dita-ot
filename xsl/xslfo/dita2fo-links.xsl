@@ -71,7 +71,7 @@
     </fo:inline>
   </xsl:template>
   <!-- if the xref element contains an href attribute, then create a hyperlink -->
-  <xsl:template match="*[contains(@class,' topic/xref ')][not(@href = '')]">
+  <xsl:template match="*[contains(@class,' topic/xref ')][not(@href='')]">
     <fo:inline color="blue">
       <xsl:choose>
         <!-- If the format attribute is dita, or is unspecified, then interpret the href as a topic -->

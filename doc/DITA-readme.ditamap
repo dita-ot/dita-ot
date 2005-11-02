@@ -9,7 +9,6 @@
     <topicref href="DITA-relnotes.xml" navtitle="DITA release notes"/>
     <topicref href="DITA-changes.xml" navtitle="DITA release history"/>
     <topicref href="DITA-futures.xml" navtitle="DITA futures"/>
-    <topicref href="DITA-installation.xml" navtitle="Installation"/>
     <topicref href="DITA-tested.xml" navtitle="Tested platforms and tools" 
       toc="no"/>
     <topicref href="DITA-usingtransforms.xml" navtitle="Using DITA transforms"/>

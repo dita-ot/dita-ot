@@ -103,6 +103,14 @@ public class IndexTermCollection {
 			IndexTerm.setTermLocale(new Locale(Constants.LANGUAGE_EN,
 					Constants.COUNTRY_US));
 		}
+		
+		/*
+		 * Sort all the terms recursively
+		 */
+		for (int i = 0; i < termList.size(); i++) {
+			IndexTerm term = (IndexTerm) termList.get(i);
+			term.sortSubTerms();
+		}
 
 		Collections.sort(termList);
 	}

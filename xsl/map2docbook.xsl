@@ -39,7 +39,7 @@
 <xsl:template match="*[contains(@class,' map/topicref ')]" name="topicref">
   <xsl:param name="element" select="'section'"/>
   <xsl:choose>
-  <xsl:when test="@href">
+  <xsl:when test="@href and not(@href='')">
     <xsl:apply-templates select="document(@href, /)/*">
       <xsl:with-param name="element" select="$element"/>
       <xsl:with-param name="childrefs"

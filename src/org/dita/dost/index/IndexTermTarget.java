@@ -92,4 +92,12 @@ public class IndexTermTarget {
 
         return result;
     }
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	public String toString() {
+		return new StringBuffer("{Target name: ").append(targetName).append(
+				", Target URL: ").append(targetURI).append("}").toString();
+	}
 }

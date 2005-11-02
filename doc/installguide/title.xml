@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- (c) Copyright by Comtech Services, Inc. All rights reserved. -->
+<!DOCTYPE concept PUBLIC "-//IBM//DTD DITA Concept//EN" "..\dtd\concept.dtd">
+<concept id="titlepage" xml:lang="en-us">
+  <title>DITA Open Toolkit Installation Guide</title>
+  <conbody>
+    <p>Authored by Comtech Services, Inc.</p>
+  </conbody>
+</concept>

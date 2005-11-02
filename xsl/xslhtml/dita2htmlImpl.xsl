@@ -3629,79 +3629,122 @@
 
 <xsl:template name="chapter-setup">
 <html>
- <xsl:variable name="childlang">
-     <xsl:choose>
-         <xsl:when test="self::dita">
-             <xsl:for-each select="*[1]"><xsl:call-template name="getLowerCaseLang"/></xsl:for-each>
-         </xsl:when>
-         <xsl:otherwise><xsl:call-template name="getLowerCaseLang"/></xsl:otherwise>
-     </xsl:choose>
- </xsl:variable>
- <xsl:attribute name="lang"><xsl:value-of select="$childlang"/></xsl:attribute>
- <xsl:attribute name="xml:lang"><xsl:value-of select="$childlang"/></xsl:attribute>
- <xsl:if test="$childlang='ar-eg' or $childlang='ar' or $childlang='he' or $childlang='he-il'">
-  <xsl:attribute name="dir">rtl</xsl:attribute>
- </xsl:if>
-
-<xsl:value-of select="$newline"/>
-<head><xsl:value-of select="$newline"/>
-  <!-- initial meta information -->
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><xsl:value-of select="$newline"/>
-
-<!-- If there is no copyright in the document, make the standard one -->
-<xsl:if test="not(//*[contains(@class,' topic/copyright ')])">
-  <meta name="copyright">
-   <xsl:attribute name="content">
-   <xsl:text>(C) </xsl:text>
-   <xsl:call-template name="getString">
-    <xsl:with-param name="stringName" select="'Copyright'"/>
-   </xsl:call-template>
-   <xsl:text> </xsl:text><xsl:value-of select="$YEAR"/>
-   </xsl:attribute>
-  </meta>
+  <xsl:call-template name="setTopicLanguage"/>
   <xsl:value-of select="$newline"/>
-  <meta name="DC.rights.owner">
-   <xsl:attribute name="content">
-   <xsl:text>(C) </xsl:text>
-   <xsl:call-template name="getString">
-    <xsl:with-param name="stringName" select="'Copyright'"/>
-   </xsl:call-template>
-   <xsl:text> </xsl:text><xsl:value-of select="$YEAR"/>
-   </xsl:attribute>
-  </meta>
-  <xsl:value-of select="$newline"/>
-</xsl:if>
+  <xsl:call-template name="chapterHead"/>
+  <xsl:call-template name="chapterBody"/> 
+</html>
+</xsl:template>
 
-  <meta name="security" content="public" /><xsl:value-of select="$newline"/>
-  <meta name="Robots" content="index,follow" /><xsl:value-of select="$newline"/>
-  <xsl:text disable-output-escaping="yes">&lt;meta http-equiv="PICS-Label" content='(PICS-1.1 "http://www.icra.org/ratingsv02.html" l gen true r (cz 1 lz 1 nz 1 oz 1 vz 1) "http://www.rsac.org/ratingsv01.html" l gen true r (n 0 s 0 v 0 l 0) "http://www.classify.org/safesurf/" l gen true r (SS~~000 1))' /></xsl:text>
-  <xsl:value-of select="$newline"/>
-
-  <xsl:call-template name="getMeta"/>
-  <xsl:call-template name="copyright"/>
-
- <xsl:variable name="urltest"> <!-- test for URL -->
-  <xsl:call-template name="url-string">
-   <xsl:with-param name="urltext" select="$CSSPATH"/>
-  </xsl:call-template>
- </xsl:variable>
-
-  <xsl:choose>
-  <xsl:when test="($childlang='ar-eg' or $childlang='ar' or $childlang='he' or $childlang='he-il')">
-   <link rel="stylesheet" type="text/css" href="{$CSSPATH}{$bidi-dita-css}" />
-  </xsl:when>
-  <xsl:otherwise>
-   <link rel="stylesheet" type="text/css" href="{$CSSPATH}{$dita-css}" />
-  </xsl:otherwise>
-  </xsl:choose>
-  <xsl:value-of select="$newline"/>
-  <!-- Add user's style sheet if requested to -->
-  <xsl:if test="string-length($CSS)>0">
-    <link rel="stylesheet" type="text/css" href="{$CSSPATH}{$CSS}" />
+  <xsl:template name="setTopicLanguage">
+    <xsl:variable name="childlang">
+      <xsl:choose>
+        <xsl:when test="self::dita">
+          <xsl:for-each select="*[1]"><xsl:call-template name="getLowerCaseLang"/></xsl:for-each>
+        </xsl:when>
+        <xsl:otherwise><xsl:call-template name="getLowerCaseLang"/></xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:attribute name="lang"><xsl:value-of select="$childlang"/></xsl:attribute>
+    <xsl:attribute name="xml:lang"><xsl:value-of select="$childlang"/></xsl:attribute>
+    <xsl:if test="$childlang='ar-eg' or $childlang='ar' or $childlang='he' or $childlang='he-il'">
+      <xsl:attribute name="dir">rtl</xsl:attribute>
+    </xsl:if>
+  </xsl:template>
+  
+  <xsl:template name="chapterHead">
+    <head><xsl:value-of select="$newline"/>
+      <!-- initial meta information -->
+      <xsl:call-template name="generateCharset"/>   <!-- Set the character set to UTF-8 -->
+      <xsl:call-template name="generateDefaultCopyright"/> <!-- Generate a default copyright, if needed -->
+      <xsl:call-template name="generateDefaultMeta"/> <!-- Standard meta for security, robots, etc -->
+      <xsl:call-template name="getMeta"/>           <!-- Process metadata from topic prolog -->
+      <xsl:call-template name="copyright"/>         <!-- Generate copyright, if specified manually -->
+      <xsl:call-template name="generateCssLinks"/>  <!-- Generate links to CSS files -->
+      <xsl:call-template name="generateChapterTitle"/> <!-- Generate the <title> element -->
+      <xsl:call-template name="gen-user-head" />    <!-- include user's XSL HEAD processing here -->
+      <xsl:call-template name="gen-user-scripts" /> <!-- include user's XSL javascripts here -->
+      <xsl:call-template name="gen-user-styles" />  <!-- include user's XSL style element and content here -->
+      <xsl:call-template name="processHDF"/>        <!-- Add user HDF file, if specified -->
+    </head>
     <xsl:value-of select="$newline"/>
-  </xsl:if>
-
-  <!-- Title processing - special handling for short descriptions -->
+  </xsl:template>
+  
+  <xsl:template name="generateCharset">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><xsl:value-of select="$newline"/>
+  </xsl:template>
+  
+  <!-- If there is no copyright in the document, make the standard one -->
+  <xsl:template name="generateDefaultCopyright">
+    <xsl:if test="not(//*[contains(@class,' topic/copyright ')])">
+      <meta name="copyright">
+        <xsl:attribute name="content">
+          <xsl:text>(C) </xsl:text>
+          <xsl:call-template name="getString">
+            <xsl:with-param name="stringName" select="'Copyright'"/>
+          </xsl:call-template>
+          <xsl:text> </xsl:text><xsl:value-of select="$YEAR"/>
+        </xsl:attribute>
+      </meta>
+      <xsl:value-of select="$newline"/>
+      <meta name="DC.rights.owner">
+        <xsl:attribute name="content">
+          <xsl:text>(C) </xsl:text>
+          <xsl:call-template name="getString">
+            <xsl:with-param name="stringName" select="'Copyright'"/>
+          </xsl:call-template>
+          <xsl:text> </xsl:text><xsl:value-of select="$YEAR"/>
+        </xsl:attribute>
+      </meta>
+      <xsl:value-of select="$newline"/>
+    </xsl:if>
+  </xsl:template>
+  
+  <!-- Output metadata that should appear in every XHTML topic -->
+  <xsl:template name="generateDefaultMeta">
+    <meta name="security" content="public" /><xsl:value-of select="$newline"/>
+    <meta name="Robots" content="index,follow" /><xsl:value-of select="$newline"/>
+    <xsl:text disable-output-escaping="yes">&lt;meta http-equiv="PICS-Label" content='(PICS-1.1 "http://www.icra.org/ratingsv02.html" l gen true r (cz 1 lz 1 nz 1 oz 1 vz 1) "http://www.rsac.org/ratingsv01.html" l gen true r (n 0 s 0 v 0 l 0) "http://www.classify.org/safesurf/" l gen true r (SS~~000 1))' /></xsl:text>
+    <xsl:value-of select="$newline"/>
+  </xsl:template>
+  
+  <!-- Generate links to CSS files -->
+  <xsl:template name="generateCssLinks">
+    <xsl:variable name="childlang">
+      <xsl:choose>
+        <xsl:when test="self::dita">
+          <xsl:for-each select="*[1]"><xsl:call-template name="getLowerCaseLang"/></xsl:for-each>
+        </xsl:when>
+        <xsl:otherwise><xsl:call-template name="getLowerCaseLang"/></xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="urltest"> <!-- test for URL -->
+      <xsl:call-template name="url-string">
+        <xsl:with-param name="urltext" select="$CSSPATH"/>
+      </xsl:call-template>
+    </xsl:variable>
+    
+    <xsl:choose>
+      <xsl:when test="($childlang='ar-eg' or $childlang='ar' or $childlang='he' or $childlang='he-il')">
+        <link rel="stylesheet" type="text/css" href="{$CSSPATH}{$bidi-dita-css}" />
+        <!-- Code using path2proj deleted. We only use csspath now. -->
+      </xsl:when>
+      <xsl:otherwise>
+        <link rel="stylesheet" type="text/css" href="{$CSSPATH}{$dita-css}" />
+        <!-- Code using path2proj deleted. We only use csspath now. -->
+      </xsl:otherwise>
+    </xsl:choose>
+    <xsl:value-of select="$newline"/>
+    <!-- Add user's style sheet if requested to -->
+    <xsl:if test="string-length($CSS)>0">
+      <link rel="stylesheet" type="text/css" href="{$CSSPATH}{$CSS}" />
+      <!-- Code using path2proj deleted. We only use csspath now. -->
+      <xsl:value-of select="$newline"/>
+    </xsl:if>
+  </xsl:template>
+  
+  <xsl:template name="generateChapterTitle">
+    <!-- Title processing - special handling for short descriptions -->
     <title>
       <xsl:call-template name="gen-user-panel-title-pfx"/> <!-- hook for a user-XSL title prefix -->
       <!-- use the searchtitle unless there's no value - else use title -->
@@ -3710,75 +3753,74 @@
       <xsl:variable name="maintitle"><xsl:apply-templates select="/*[contains(@class,' topic/topic ')]/*[contains(@class,' topic/title ')]" mode="text-only"/></xsl:variable>
       <xsl:variable name="ditamaintitle"><xsl:apply-templates select="/dita/*[contains(@class,' topic/topic ')][1]/*[contains(@class,' topic/title ')]" mode="text-only"/></xsl:variable>
       <xsl:choose>
-       <xsl:when test="string-length($schtitle)>'0'"><xsl:value-of select="$schtitle"/></xsl:when>
-       <xsl:when test="string-length($ditaschtitle)>'0'"><xsl:value-of select="$ditaschtitle"/></xsl:when>
-       <xsl:when test="string-length($maintitle)>'0'"><xsl:value-of select="$maintitle"/></xsl:when>
-       <xsl:when test="string-length($ditamaintitle)>'0'"><xsl:value-of select="$ditamaintitle"/></xsl:when>
-       <xsl:otherwise><xsl:text>***</xsl:text>
-       <xsl:call-template name="output-message">
-         <xsl:with-param name="msg">Topic contains no title; using "***".</xsl:with-param>
-         <xsl:with-param name="msgnum">009</xsl:with-param>
-         <xsl:with-param name="msgsev">W</xsl:with-param>
-       </xsl:call-template>
-       </xsl:otherwise>
+        <xsl:when test="string-length($schtitle)>'0'"><xsl:value-of select="$schtitle"/></xsl:when>
+        <xsl:when test="string-length($ditaschtitle)>'0'"><xsl:value-of select="$ditaschtitle"/></xsl:when>
+        <xsl:when test="string-length($maintitle)>'0'"><xsl:value-of select="$maintitle"/></xsl:when>
+        <xsl:when test="string-length($ditamaintitle)>'0'"><xsl:value-of select="$ditamaintitle"/></xsl:when>
+        <xsl:otherwise><xsl:text>***</xsl:text>
+          <xsl:call-template name="output-message">
+            <xsl:with-param name="msg">Topic contains no title; using "***".</xsl:with-param>
+            <xsl:with-param name="msgnum">009</xsl:with-param>
+            <xsl:with-param name="msgsev">W</xsl:with-param>
+          </xsl:call-template>
+        </xsl:otherwise>
       </xsl:choose>
     </title><xsl:value-of select="$newline"/>
-
-    <!--do pull processing for resource ID via xsl:choose-->
-    <!-- include user's XSL HEAD processing here -->
-    <xsl:call-template name="gen-user-head" />
-    <!-- include user's XSL javascripts here -->
-    <xsl:call-template name="gen-user-scripts" />
-    <!-- include user's XSL style element and content here -->
-    <xsl:call-template name="gen-user-styles" />
-
-  <!-- Add user's head XHTML code snippet if requested to -->
-  <xsl:if test="string-length($HDF)>0">
-   <xsl:apply-templates select="document($HDF,/)" mode="add-HDF"/>
-  </xsl:if>
-  </head><xsl:value-of select="$newline"/>
-
-  <body>
-  <!-- Already put xml:lang on <html>; do not copy to body-->
-  <xsl:call-template name="setidaname"/>
-  <xsl:value-of select="$newline"/>
-  <xsl:call-template name="flagit"/>
-  <xsl:call-template name="start-revflag"/>
-
-<!-- Insert previous/next/ancestor breadcrumbs links at the top of the xhtml. -->
-  <xsl:apply-templates select="*[contains(@class,' topic/related-links ')]" mode="breadcrumb"/>
-
-  <!-- include user's XSL running header here -->
-  <xsl:call-template name="gen-user-header"/>
-  <!-- Add user's running heading XHTML code snippet if requested to -->
-  <xsl:if test="string-length($HDR)>0">
-   <xsl:copy-of select="document($HDR,/)"/>
-  </xsl:if>
-  <xsl:value-of select="$newline"/>
-  <!-- Include a user's XSL call here to generate a toc based on what's a child of topic -->
-  <xsl:call-template name="gen-user-sidetoc"/>
-
-    <xsl:apply-templates/> <!-- this will include all things within topic; therefore, -->
-    <!-- title content will appear here by fall-through -->
-    <!-- followed by prolog (but no fall-through is permitted for it) -->
-    <!-- followed by body content, again by fall-through in document order -->
-    <!-- followed by related links -->
-    <!-- followed by child topics by fall-through -->
-
-  <!-- include footnote-endnotes -->
-  <xsl:call-template name="gen-endnotes"/>
-
-  <!-- include user's XSL running footer here -->
-  <xsl:call-template name="gen-user-footer"/>
-  <!-- Add user's running footing XHTML code snippet if requested to -->
-  <xsl:if test="string-length($FTR)>0">
-   <xsl:copy-of select="document($FTR,/)"/>
-  </xsl:if>
-  <xsl:value-of select="$newline"/>
- <xsl:call-template name="end-revflag"/>
-
-  </body><xsl:value-of select="$newline"/>
-</html>
-</xsl:template>
+  </xsl:template>
+  
+  <!-- Add user's head XHTML code snippet, if specified -->
+  <xsl:template name="processHDF">
+    <xsl:if test="string-length($HDF)>0">
+      <xsl:apply-templates select="document($HDF,/)" mode="add-HDF"/>
+    </xsl:if>
+  </xsl:template>
+  
+  <xsl:template name="chapterBody">
+    <body>
+      <!-- Already put xml:lang on <html>; do not copy to body with commonattributes -->
+      <xsl:call-template name="setidaname"/>
+      <xsl:value-of select="$newline"/>
+      <xsl:call-template name="flagit"/>
+      <xsl:call-template name="start-revflag"/>
+      <xsl:call-template name="generateBreadcrumbs"/>
+      <xsl:call-template name="gen-user-header"/>  <!-- include user's XSL running header here -->
+      <xsl:call-template name="processHDR"/>
+      <!-- Include a user's XSL call here to generate a toc based on what's a child of topic -->
+      <xsl:call-template name="gen-user-sidetoc"/>
+      <xsl:apply-templates/> <!-- this will include all things within topic; therefore, -->
+      <!-- title content will appear here by fall-through -->
+      <!-- followed by prolog (but no fall-through is permitted for it) -->
+      <!-- followed by body content, again by fall-through in document order -->
+      <!-- followed by related links -->
+      <!-- followed by child topics by fall-through -->
+      
+      <xsl:call-template name="gen-endnotes"/>    <!-- include footnote-endnotes -->
+      <xsl:call-template name="gen-user-footer"/> <!-- include user's XSL running footer here -->
+      <xsl:call-template name="processFTR"/>      <!-- Include XHTML footer, if specified -->
+      <xsl:call-template name="end-revflag"/>
+    </body>
+    <xsl:value-of select="$newline"/>
+  </xsl:template>
+  
+  <xsl:template name="generateBreadcrumbs">
+    <!-- Insert previous/next/ancestor breadcrumbs links at the top of the xhtml. -->
+    <xsl:apply-templates select="*[contains(@class,' topic/related-links ')]" mode="breadcrumb"/>
+  </xsl:template>
+  
+  <xsl:template name="processHDR">
+    <!-- Add user's running heading XHTML code snippet if requested to -->
+    <xsl:if test="string-length($HDR)>0">
+      <xsl:copy-of select="document($HDR,/)"/>      
+    </xsl:if>
+    <xsl:value-of select="$newline"/>    
+  </xsl:template>
+  
+  <xsl:template name="processFTR">
+    <!-- Add user's running footing XHTML code snippet if requested to -->
+    <xsl:if test="string-length($FTR)>0">
+      <xsl:copy-of select="document($FTR,/)"/>
+    </xsl:if>
+    <xsl:value-of select="$newline"/>
+  </xsl:template>
 
 </xsl:stylesheet>

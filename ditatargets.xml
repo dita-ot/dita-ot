@@ -159,9 +159,9 @@
 <!-- eclipse output -->
 <target name="dita.map.eclipse">
   <basename property="dita.map.toc.root" file="${dita.input.filename}" suffix=".ditamap"/>
-  <condition property="args.eclipse.toc" value="${dita.map.toc.root}">
+  <condition property="args.eclipsehelp.toc" value="${dita.map.toc.root}">
     <not>
-      <isset property="args.eclipse.toc"/>
+      <isset property="args.eclipsehelp.toc"/>
     </not>
   </condition>
   <condition property="args.outext" value=".html">
@@ -176,13 +176,13 @@
 		style="${dita.script.dir}${file.separator}map2eclipse.xsl">
         <param name="DITAEXT" expression="${dita.extname}" if="dita.extname"/>
         <param name="OUTEXT" expression="${args.outext}" if="args.outext"/>
-        <mapper type="glob" from="*${dita.input.filename}" to="*${args.eclipse.toc}.xml"/>
+        <mapper type="glob" from="*${dita.input.filename}" to="*${args.eclipsehelp.toc}.xml"/>
     </xslt>
     <xslt processor="trax"
       in="${dita.temp.dir}${file.separator}${dita.input}"
       out="${dita.map.output.dir}${file.separator}plugin.xml"
       style="${dita.script.dir}${file.separator}map2plugin.xsl">
-        <param name="TOCROOT" expression="${args.eclipse.toc}"/>
+        <param name="TOCROOT" expression="${args.eclipsehelp.toc}"/>
     </xslt>
 </target>
 
@@ -194,10 +194,16 @@
 <!-- eclipse content provider -->
 <target name="dita.map.eclipse.content">
   <basename property="dita.map.toc.root" file="${dita.input.filename}" suffix=".ditamap"/>
-  <condition property="args.eclipse.toc" value="${dita.map.toc.root}">
+  <condition property="args.eclipsecontent.toc" value="${dita.map.toc.root}">
     <not>
-      <isset property="args.eclipse.toc"/>
+      <isset property="args.eclipsecontent.toc"/>
     </not>
+  </condition>
+  <condition property="content.link.ext" value=".html?srcext=dita">
+	<equals arg1="${dita.extname}" arg2=".dita"></equals>
+  </condition>
+  <condition property="content.link.ext" value=".html?srcext=xml">
+	<equals arg1="${dita.extname}" arg2=".xml"></equals>
   </condition>
   <xslt processor="trax"
     basedir="${dita.temp.dir}"
@@ -205,14 +211,14 @@
 		includes="${dita.input}"
 		style="${dita.script.dir}${file.separator}map2eclipse.xsl">
         <param name="DITAEXT" expression="${dita.extname}" if="dita.extname"/>
-        <param name="OUTEXT" expression="${dita.extname}" if="dita.extname"/>
-        <mapper type="glob" from="*${dita.input.filename}" to="*${args.eclipse.toc}.xml"/>
+        <param name="OUTEXT" expression="${content.link.ext}"/>
+        <mapper type="glob" from="*${dita.input.filename}" to="*${args.eclipsecontent.toc}.xml"/>
     </xslt>
     <xslt processor="trax"
       in="${dita.temp.dir}${file.separator}${dita.input}"
       out="${dita.map.output.dir}${file.separator}plugin.xml"
-      style="${dita.script.dir}${file.separator}map2plugin.xsl">
-        <param name="TOCROOT" expression="${args.eclipse.toc}"/>
+      style="${dita.script.dir}${file.separator}map2plugin-cp.xsl">
+        <param name="TOCROOT" expression="${args.eclipsecontent.toc}"/>
     </xslt>
 </target>
 
@@ -418,7 +424,7 @@
 		</xslt>
 	</target>
 
-  <target name="copy-css" if="args.copycss.yes">
+  <target name="copy-css" unless="args.csspath.url">
     <antcall target="make-css-path"/>
     <antcall target="copy-css-default"/>
     <antcall target="copy-css-user"/>
@@ -434,7 +440,7 @@
     </copy>    
   </target>
   
-  <target name="copy-css-user" if="args.css.present">
+  <target name="copy-css-user" if="user.copycss.yes">
     <copy file="${args.css}" tofile="${args.csspath}${args.css}"/>
   </target>
     

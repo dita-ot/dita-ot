@@ -18,6 +18,7 @@
 <property name="my.output.dir"
 	value="${basedir}${file.separator}pmdocs${file.separator}doc${file.separator}xhtml"/>
 
+<property name="args.csspath" value="http://dita-ot.sourceforge.net/SourceForgeFiles/doc/"/>
 
 <target name="sample2xhtml"
 	description="build DITA Open Toolkit web docs"

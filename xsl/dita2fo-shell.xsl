@@ -90,8 +90,8 @@
     <xsl:if test="contains(@class,' topic/topic ')">
       <fox:outline>
         <xsl:attribute name="internal-destination">
-          <!-- use id attribute of topic as anchor for PDF bookmark -->
-          <xsl:value-of select="@id"/>
+          <!-- use id attribute node to generate anchor for PDF bookmark fix bug#1304859 -->
+          <xsl:value-of select="generate-id(@id)"/>
         </xsl:attribute>
         <fox:label>
           <!-- if topic contains navtitle, use that as label for PDF bookmark -->

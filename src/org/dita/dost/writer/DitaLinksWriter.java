@@ -38,7 +38,7 @@ public class DitaLinksWriter extends AbstractXMLWriter {
     private String lastMatchTopic;
     private String firstMatchTopic;
     private boolean startTopic; //whether to insert links at this topic
-
+    
     /**
      * @see org.dita.dost.writer.AbstractWriter#setContent(org.dita.dost.module.Content)
      * 
@@ -222,6 +222,7 @@ public class DitaLinksWriter extends AbstractXMLWriter {
                 output.write(Constants.RELATED_LINKS_HEAD);
                 output.write(indexEntries);
                 output.write(Constants.RELATED_LINKS_END);
+                output.write("\n");
                 hasRelatedlinksTillNow = true;
             }
             output.write(Constants.LESS_THAN + Constants.SLASH + qName 
@@ -295,10 +296,16 @@ public class DitaLinksWriter extends AbstractXMLWriter {
         try {
             if (checkLinkAtStart(atts) && startTopic) {
                 // if <related-links> don't exist
-                output.write(Constants.RELATED_LINKS_HEAD);
-                output.write(indexEntries);
-                output.write(Constants.RELATED_LINKS_END);
-                hasRelatedlinksTillNow = true;
+            	//
+            	// Commented by Charlie at 10/21/2005 for the "related-links
+            	// position not correct" problem
+            	//
+                //output.write(Constants.RELATED_LINKS_HEAD);
+                //output.write(indexEntries);
+                //output.write(Constants.RELATED_LINKS_END);
+                //hasRelatedlinksTillNow = true;          
+            	
+            	matchLevel = level;
             }
             if ( startTopic == false && Constants.ELEMENT_NAME_DITA.equalsIgnoreCase(qName) == false ){
                 if (atts.getValue(Constants.ATTRIBUTE_NAME_ID) != null){
@@ -308,6 +315,11 @@ public class DitaLinksWriter extends AbstractXMLWriter {
                 }
                 if (topicIdList.size() == matchList.size()){
                     startTopic = checkMatch();
+                    
+                    // added by Charlie at 10/21/2005
+                    if (startTopic) {
+                    	matchLevel = level;
+                    }
                 }
             }
              output.write(Constants.LESS_THAN + qName);

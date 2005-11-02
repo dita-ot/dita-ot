@@ -167,10 +167,11 @@ public class IndexTermExtractModule extends AbstractPipelineModule {
 
 		xmlReader = XMLReaderFactory.createXMLReader();
 
-		try {
+		try {			
 			xmlReader.setContentHandler(handler);
 
 			for (int i = 0; i < hrefTargetNum; i++) {
+				handler.reset();
 				String target = (String) hrefTargetList.get(i);
 				String targetPathFromMap = StringUtils.getRelativePathFromMap(
 						inputMap, target);

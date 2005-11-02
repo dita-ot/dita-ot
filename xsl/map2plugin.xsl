@@ -3,9 +3,14 @@
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
   
+  <xsl:include href="common/output-message.xsl"/>
+  
   <xsl:param name="version">1.0</xsl:param>
   <xsl:param name="provider">DITA</xsl:param>
   <xsl:param name="TOCROOT">toc</xsl:param>
+  
+  <!-- Define the error message prefix identifier -->
+  <xsl:variable name="msgprefix">IDXS</xsl:variable>
   
   <xsl:template match="*[contains(@class, ' map/map ')]">
     <xsl:element name="plugin">
@@ -26,6 +31,11 @@
           </xsl:when>
           <xsl:otherwise>
             <xsl:text>org.sample.help.doc</xsl:text>
+            <xsl:call-template name="output-message">
+              <xsl:with-param name="msg">Cannot find id attribute in map element. Use default id "org.sample.help.doc" for plugin. If you want to use your own id, please specify it in id attribute of map.</xsl:with-param>
+              <xsl:with-param name="msgnum">100</xsl:with-param>
+              <xsl:with-param name="msgsev">W</xsl:with-param>
+             </xsl:call-template>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:attribute>

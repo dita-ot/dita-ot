@@ -18,7 +18,9 @@
 
 <xsl:output method="html"
             encoding="UTF-8"
-            doctype-public="-//IETF//DTD HTML 4.0//EN"
+            indent="no"
+            doctype-system="http://www.w3.org/TR/html4/loose.dtd"
+            doctype-public="-//W3C//DTD HTML 4.01 Transitional//EN"
 />
 
 </xsl:stylesheet>

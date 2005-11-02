@@ -171,7 +171,7 @@ public class IndexTerm implements Comparable {
         int subTermNum = subTerms.size();
 
         if (subTerms != null && subTermNum > 0) {
-            Collections.sort(subTerms, Collator.getInstance(termLocale));
+            Collections.sort(subTerms);
             for (int i = 0; i < subTermNum; i++) {
                 IndexTerm subTerm = (IndexTerm) subTerms.get(i);
                 subTerm.sortSubTerms();
@@ -235,4 +235,20 @@ public class IndexTerm implements Comparable {
     public boolean hasSubTerms() {
         return subTerms != null && subTerms.size() > 0;
     }
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	public String toString() {
+		StringBuffer buffer = new StringBuffer(Constants.INT_128);
+		
+		buffer.append("{Term name: ").append(termName);
+		buffer.append(", Target list: ");
+		buffer.append(targetList.toString());		
+		buffer.append(", Sub-terms: ");
+		buffer.append(subTerms.toString());
+		buffer.append("}");
+				
+		return buffer.toString();
+	}
 }

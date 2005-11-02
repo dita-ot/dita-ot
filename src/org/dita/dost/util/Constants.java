@@ -63,6 +63,7 @@ public abstract class Constants {
     public static final String ELEMENT_NAME_OTHERPROPS = "otherprops";
     public static final String ELEMENT_NAME_TGROUP = "tgroup";
     public static final String ELEMENT_NAME_ROW = "row";
+    public static final String ELEMENT_NAME_TITLE = "title";
     
     /**
      * Constants for attribute names in dita files.

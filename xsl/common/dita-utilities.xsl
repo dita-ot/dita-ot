@@ -111,10 +111,10 @@
             select="document($stringFileList)/*/lang[@xml:lang=$ancestorlang][1]/@filename"/>
         </xsl:variable>
         <!-- Get the translated string -->
-        <xsl:variable name="str" select="document($stringfile)/strings/str[@name=$stringName]"/>
+        <xsl:variable name="str" select="document($stringfile,document($stringFileList))/strings/str[@name=$stringName]"/>
         <xsl:choose>
           <!-- If the string was found, use it. Cannot test $str, because value could be empty. -->
-          <xsl:when test="document($stringfile)/strings/str[@name=$stringName]">
+          <xsl:when test="document($stringfile,document($stringFileList))/strings/str[@name=$stringName]">
             <xsl:value-of select="$str"/>
           </xsl:when>
           <!-- If the current language is not the default language, try the default -->
@@ -125,7 +125,7 @@
                 select="document($stringFileList)/*/lang[@xml:lang=$DEFAULTLANG]/@filename"/>
             </xsl:variable>
             <xsl:variable name="str-default"
-              select="document($backupstringfile)/strings/str[@name=$stringName]"/>
+              select="document($backupstringfile,document($stringFileList))/strings/str[@name=$stringName]"/>
             <xsl:choose>
               <!-- If a default was found, use it, but warn that fallback was needed.-->
               <xsl:when test="string-length($str-default)>0">

@@ -53,11 +53,14 @@
       <ol>
         <li>Contact the potential contributor of the Content through an 
           appropriate channel of communication and collect/confirm the 
-          following:<ul> <li>Contributor&apos;s name, current address, phone 
-          number and e-mail address;</li> <li>Name and contact information of 
+          following:
+          <ul> 
+            <li>Contributor&apos;s name, current address, phone 
+          number and e-mail address;</li> 
+            <li>Name and contact information of 
           the contributor&apos;s current employer, if any;</li> <li>If the 
           contributor is not self-employed, the Committer must request and 
-          receive a signed consent form (to be provided by the Committer) from 
+          receive a signed <xref href="ContributionForm.xml">consent form</xref> (to be provided by the Committer) from 
           the contributor&apos;s employer confirming that the employer does not 
           object to the employee contributing the Content. </li> <li>Determine 
           if the Content can be contributed under the terms of the CPL or the 
@@ -72,7 +75,9 @@
           Contributor, collect the contact information of the copyright holder 
           of the original or underlying work. The copyright holder of the 
           Content or the underlying work may then need to be contacted to 
-          collect additional information.</li> </ul></li>
+          collect additional information.</li> 
+          </ul>
+        </li>
         <li>The <draft-comment>was 
           &quot;Committer(s)&quot;</draft-comment>Contributor(s) shall document 
           all information requested in (1) above and fill in Contribution 

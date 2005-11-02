@@ -97,16 +97,18 @@
         <xsl:copy>
           <!--copy existing explicit attributes-->
           <xsl:apply-templates select="@*[not(local-name()='href')]"/>
-          <xsl:attribute name="href">
-            <xsl:choose>
-              <xsl:when test="not($relative-path='#none#' or $relative-path='')">
-                <xsl:value-of select="$relative-path"/><xsl:value-of select="@href"/>
-              </xsl:when>
-              <xsl:otherwise>
-                <xsl:value-of select="@href"/>
-              </xsl:otherwise>
-            </xsl:choose>            
-          </xsl:attribute>
+          <xsl:if test="@href and not(@href='')">
+            <xsl:attribute name="href">
+              <xsl:choose>
+                <xsl:when test="not($relative-path='#none#' or $relative-path='')">
+                  <xsl:value-of select="$relative-path"/><xsl:value-of select="@href"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:value-of select="@href"/>
+                </xsl:otherwise>
+              </xsl:choose>            
+            </xsl:attribute>
+          </xsl:if>
           <!--copy inheritable attributes that aren't already explicitly defined-->
           <!--@type|@importance|@linking|@toc|@print|@search|@format|@scope-->
           <!--need to create type variable regardless, for passing as a parameter to getstuff template-->

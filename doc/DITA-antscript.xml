@@ -180,16 +180,9 @@
                   <row>
                     <entry>args.copycss</entry>
                     <entry>
-                      <ph id="copycss">The parameter to specify whether copy css files 
+                      <ph id="copycss">The parameter to specify whether copy user specified css files 
                         to the directory specified by <tt>args.csspath</tt>. Only "no" and "yes" 
                         are valid values.</ph>
-                      <note id="copycss-note">
-                        If <tt>args.copycss</tt> equals "yes", <tt>args.csspath</tt> must be an valid 
-                        local directory, URL are invalid. 
-                        If <tt>args.copycss</tt> equals "no", since no css files copied to 
-                        <tt>args.csspath</tt>, if <tt>args.csspath</tt> is a local path, the 
-                        css reference will be invalid.
-                      </note>
                     </entry>
                     <entry>No</entry>
                   </row>
@@ -218,9 +211,9 @@
                     <entry>args.csspath</entry>
                     <entry>
                       <ph id="csspath">The path for css reference, it can be a URL start 
-                        with 'http:\\' or 'https:\\', it also can be a local absolute directory.
+                        with 'http://' or 'https://', it also can be a local absolute directory.
                         Default will be output directory.</ph>
-                      <note id="csspath-note"><tt>args.csspath</tt> should end with '\' if it is a URL,
+                      <note id="csspath-note"><tt>args.csspath</tt> should end with '/' if it is a URL,
                         or file separator for local path.</note>
                     </entry>
                     <entry>No</entry>
@@ -275,9 +268,32 @@
                   align="center" colname="col3" colwidth="1*"/> <thead> <row> 
                   <entry>Parameter </entry> <entry>Description</entry> 
                   <entry>Required</entry> </row> </thead> <tbody> <row> 
-                  <entry>args.eclipse.toc</entry> <entry align="left">The root 
-                  file name of the output toc file. The default is the name of 
-                  input ditamap file.</entry> <entry>No</entry> </row></tbody> 
+                  <entry>args.eclipsehelp.toc</entry> 
+                  <entry align="left">
+                    <ph id="eclipsehelptoc">The root file name of the output 
+                      eclipsehelp toc file in eclipsehelp transformation. 
+                      The default is the name of input ditamap file.</ph>
+                  </entry>
+                  <entry>No</entry> </row></tbody> 
+                  </tgroup> </table></dd>
+              </dlentry>
+              <dlentry>
+                <dt>dita2eclipsecontent</dt>
+                <dd>Transform DITA topic or DITA map into eclipse content provider 
+                  based on xhtml. <table expanse="column"><title>Parameter 
+                  Table of dita2eclipsecontent</title> <tgroup cols="3"><colspec 
+                  align="center" colname="col1" colwidth="1*"/><colspec 
+                  align="center" colname="col2" colwidth="4*"/><colspec 
+                  align="center" colname="col3" colwidth="1*"/> <thead> <row> 
+                  <entry>Parameter </entry> <entry>Description</entry> 
+                  <entry>Required</entry> </row> </thead> <tbody> <row> 
+                  <entry>args.eclipsecontent.toc</entry> 
+                  <entry align="left">
+                    <ph id="eclipsecontenttoc">The root file name of the output 
+                      eclipse content provider toc file in eclipsecontent transformation. 
+                      The default is the name of input ditamap file.</ph>
+                  </entry>
+                  <entry>No</entry> </row></tbody> 
                   </tgroup> </table></dd>
               </dlentry>
               <dlentry>
@@ -295,13 +311,19 @@
                   align="center" colname="col3" colwidth="1*"/> <thead> <row> 
                   <entry>Parameter </entry> <entry>Description</entry> 
                   <entry>Required</entry> </row> </thead> <tbody> <row> 
-                  <entry>args.javahelp.toc</entry> <entry align="left">The root 
-                  file name of the output toc file. The default is the root 
-                  file name of the input toc file.</entry> <entry>No</entry> 
-                  </row> <row> <entry>args.javahelp.map</entry> <entry 
-                  align="left">The root file name of the output javahelp map 
-                  file. The default is the root file name of the map 
-                  file.</entry> <entry>No</entry> </row> </tbody> </tgroup> 
+                  <entry>args.javahelp.toc</entry>
+                  <entry align="left">
+                    <ph id="javahelptoc">The root file name of the output 
+                      javahelp toc file in javahelp transformation. 
+                      The default is the name of input ditamap file.</ph>
+                  </entry> <entry>No</entry> 
+                  </row> <row> 
+                  <entry>args.javahelp.map</entry>
+                  <entry align="left">
+                    <ph id="javahelpmap">The root file name of the output 
+                      javahelp map file in javahelp transformation. 
+                      The default is the name of input ditamap file.</ph>
+                  </entry> <entry>No</entry> </row> </tbody> </tgroup> 
                   </table></dd>
               </dlentry>
               <dlentry>
@@ -313,9 +335,12 @@
                   colname="col2" colwidth="4*"/><colspec align="center" 
                   colname="col3" colwidth="1*"/> <thead> <row> <entry>Parameter 
                   </entry> <entry>Description</entry> <entry>Required</entry> 
-                  </row> </thead> <tbody> <row> <entry>args.xhtml.toc</entry> 
-                  <entry align="left">The root file name of the output toc 
-                  file. The default is &apos;index&apos;.</entry> <entry>No</entry> 
+                  </row> </thead> <tbody> <row> 
+                  <entry>args.xhtml.toc</entry> 
+                  <entry align="left">
+                    <ph id="xhtmltoc">The root file name of the output xhtml toc 
+                    file in xhtml transformation. The default is 'index'.</ph>
+                  </entry> <entry>No</entry> 
                   </row></tbody> </tgroup> </table></dd>
               </dlentry>
               <dlentry>
@@ -328,7 +353,8 @@
                   colname="col3" colwidth="1*"/> <thead> <row> <entry>Parameter 
                   </entry> <entry>Description</entry> <entry>Required</entry> 
                   </row> </thead> <tbody> <row> <entry>args.fo.img.ext</entry> 
-                  <entry align="left"><ph id="foimgext">The extension name of image file in pdf transformation. 
+                  <entry align="left">
+                    <ph id="foimgext">The extension name of image file in pdf transformation. 
                     Only '.jpg', '.gif' are valid value. The default is '.jpg'.</ph>
                     <note id="foimgextnote">Only one extension supported in the same 
                       transformation, image files with other extensions will be renamed 

@@ -3,7 +3,7 @@
  *-->
 <!DOCTYPE topic PUBLIC "-//IBM//DTD DITA Topic//EN" "topic.dtd">
 <topic id="contribution">
-  <title>DITA-OT Contribution Questionnaire</title>
+  <title>DITA-OT Contribution Questionnaire Form 1.1</title>
   <body>
     <p>The Contribution Questionnaire is the first step in initiating the due 
       diligence and approval process by the Project Manager (PM) for any 
@@ -22,13 +22,20 @@
     <p>or </p>
     <p>Any contribution authored by someone other than a committer which is 
       adding new functionality to the codebase. In most cases, bug fixes do not 
-      add new functionality athough it&apos;s not impossible. </p>
+      add new functionality although it&apos;s not impossible. </p>
     <p>or </p>
     <p>Any contribution containing third-party code maintained by another open 
       source project, individual, group, or organization. In addition to 
       reviewing the contribution, if the license is not the Common Public 
       License (CPL), the PM will need to review and approve the third-party 
       license for compatibility with the CPL. </p>
+    <p>
+      <b>How to send PM this form?</b>
+    </p>   
+    <p>Please fill in this form and sign your name and get your employer's authorized signature, such as your manager's.
+      then fax to DITA open toolkit Project Manager Lian, Li. The fax number is +8621-53060504. If you have problem
+      sending international fax, please send a scanned copy to leelix@users.sourceforge.net</p>
+      
     <p>NOTE: A questionnaire and approval is not required for bug fixes or 
       minor enhancements. If you have any questions, please send an email to 
       the PM. </p>
@@ -138,7 +145,7 @@
       </strow>
       <strow>
         <stentry>Please list all pkgs required by the contribution which are 
-          maintained by a 3rd party:(Please list one package per line e.g 3rd 
+          maintained by a 3rd party: (Please list one package per line e.g 3rd 
           party package name v1.0) </stentry>
         <stentry/>
       </strow>
@@ -170,7 +177,7 @@
         <stentry/>
       </strow>
       <strow>
-        <stentry>Organisation: </stentry>
+        <stentry>Organization: </stentry>
         <stentry/>
       </strow>
       <strow>
@@ -186,12 +193,12 @@
         <stentry/>
       </strow>
     </simpletable>
-    <p>If there are other contributors, please provide names, organisations, 
+    <p>If there are other contributors, please provide names, organizations, 
       e-mail, and percentage of content authored in the 
       contribution:<simpletable relcolwidth="1* 3*"> <strow> <stentry>Other 
       Contributors:</stentry> <stentry/> </strow> </simpletable></p>
     <p>
-      <b>Cryptography </b>
+      <b>Cryptography</b>
     </p>
     <p>If the contribution deals in any way with cryptography, please provide 
       details:</p>
@@ -200,14 +207,57 @@
         <stentry>Details:</stentry>
         <stentry/>
       </strow>
-    </simpletable>
-    <p>
-      <simpletable relcolwidth="1* 3*">
-        <strow>
+      <strow>
           <stentry>Identify the Cryptography algorithm used: </stentry>
           <stentry/>
         </strow>
-      </simpletable>
+    </simpletable>
+
+    <p>
+      <b>Contributor's signature</b>
     </p>
+    
+    <simpletable relcolwidth="1* 3*">
+      <strow>
+        <stentry>Name (Type or Print)</stentry>
+        <stentry/>
+      </strow>
+      <strow>
+          <stentry>Title</stentry>
+          <stentry/>
+      </strow>
+      <strow>
+          <stentry>Signature</stentry>
+          <stentry/>
+      </strow>
+      <strow>
+          <stentry>Date</stentry>
+          <stentry/>
+      </strow>
+    </simpletable>
+    
+    <p>
+      <b>Contributor employer's signature</b>
+    </p>    
+    
+    <simpletable relcolwidth="1* 3*">
+      <strow>
+        <stentry>Name (Type or Print)</stentry>
+        <stentry/>
+      </strow>
+      <strow>
+          <stentry>Title</stentry>
+          <stentry/>
+      </strow>
+      <strow>
+          <stentry>Signature</stentry>
+          <stentry/>
+      </strow>
+      <strow>
+          <stentry>Date</stentry>
+          <stentry/>
+      </strow>
+    </simpletable>
+    
   </body>
 </topic>

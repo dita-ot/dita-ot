@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- (c) Copyright by Comtech Services, Inc. All rights reserved. -->
+<!DOCTYPE task PUBLIC "-//IBM//DTD DITA Task//EN" "../dtd/task.dtd" [
+  <!-- Begin Document Specific Declarations -->
+  <!ENTITY ut-d-att "(topic ut-d)">
+  <!-- End Document Specific Declarations -->
+  ]>
+<task id = "install_ditaot" xml:lang = "en-us">
+  <title>Installing the DITA Open Toolkit</title>
+  <titlealts>
+    <searchtitle>Installing the DITA Open Toolkit (Windows)</searchtitle>
+  </titlealts>
+  <shortdesc>The DITA Open Toolkit is downloaded from the SourceForge web site. 
+    For this installation, you will access the web sites for each of the 
+    required installation items, including Ant, Java Development Toolkit, 
+    JavaHelp, Apache FOP, SAXON XSLT Processor, and Microsoft HTML Help. 
+    </shortdesc>
+  <taskbody>
+    <steps>
+      <step>
+        <cmd>Enter the URL: <xref href = 
+          "http://sourceforge.net/projects/dita-ot/" format = "html" scope = 
+          "external">http://sourceforge.net/projects/dita-ot</xref></cmd>
+      </step>
+      <step>
+        <cmd>On the SourceForge.net page, find <uicontrol>dita-ot 
+          1.1.2</uicontrol></cmd>
+      </step>
+      <step>
+        <cmd>Select <uicontrol>dita-ot 1.1.2</uicontrol>. </cmd>
+        <stepresult>The <systemoutput>Dita-ot</systemoutput> table 
+          displays.</stepresult>
+      </step>
+      <step>
+        <cmd>Select <uicontrol>DITA-OT1.1.2_bin.zip</uicontrol></cmd>
+        <stepresult>The SourceForge.net page opens with a list of 
+          <systemoutput>download options</systemoutput>.</stepresult>
+      </step>
+      <step>
+        <cmd>Select any of the <image href = "pic/compressed.gif"></image> 
+          images to start the download. </cmd>
+        <info>If the DITA Open Toolkit does not appear to be downloading, wait 
+          a few minutes before selecting another image. You may have to select 
+          more than one images until you find one that works.<note type = 
+          "note">If you are an Internet Explorer user and a yellow bar appears 
+          at the top of the screen with the message, "To help protect your 
+          security, Internet Explorer blocked this site from downloading files 
+          to your computer. Click here for options...,"click on the bar and 
+          select "Download File." </note></info>
+      </step>
+      <step>
+        <cmd>Click <uicontrol>Save</uicontrol> to unzip the DITA-OT1.1.2_bin.zip 
+          file and save it to your C:\ directory as 
+          <filepath>ditaot</filepath>.</cmd>
+      </step>
+    </steps>
+  </taskbody>
+</task>

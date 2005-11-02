@@ -26,9 +26,9 @@
   <dtd publicId="-//OASIS//ELEMENTS DITA Topic//EN"
        location="${dita.dtd.dir}${file.separator}topic.mod" />
   <dtd publicId="-//OASIS//ENTITIES DITA Topic Class//EN"
-       location="${dita.dtd.dir}${file.separator}topic_class.ent" />
+       location="${dita.dtd.dir}${file.separator}topicAttr.mod" />
   <dtd publicId="-//OASIS//ENTITIES DITA Topic Definitions//EN"
-       location="${dita.dtd.dir}${file.separator}topic_defn.ent" />
+       location="${dita.dtd.dir}${file.separator}topicDefn.ent" />
 
   <!-- OASIS Maps -->
   <dtd publicId="-//OASIS//DTD DITA Map//EN"
@@ -42,99 +42,104 @@
 
   <!-- OASIS Domains -->
   <dtd publicId="-//OASIS//ELEMENTS DITA Highlight Domain//EN"
-       location="${dita.dtd.dir}${file.separator}highlight-domain.mod" />
+       location="${dita.dtd.dir}${file.separator}highlightDdomain.mod" />
   <dtd publicId="-//OASIS//ENTITIES DITA Highlight Domain//EN"
-       location="${dita.dtd.dir}${file.separator}highlight-domain.ent" />
+       location="${dita.dtd.dir}${file.separator}highlightDomain.ent" />
 
   <dtd publicId="-//OASIS//ELEMENTS DITA Programming Domain//EN"
-       location="${dita.dtd.dir}${file.separator}programming-domain.mod" />
+       location="${dita.dtd.dir}${file.separator}programmingDomain.mod" />
   <dtd publicId="-//OASIS//ENTITIES DITA Programming Domain//EN"
-       location="${dita.dtd.dir}${file.separator}programming-domain.ent" />
+       location="${dita.dtd.dir}${file.separator}programmingDomain.ent" />
 
   <dtd publicId="-//OASIS//ELEMENTS DITA Software Domain//EN"
-       location="${dita.dtd.dir}${file.separator}software-domain.mod" />
+       location="${dita.dtd.dir}${file.separator}softwareDomain.mod" />
   <dtd publicId="-//OASIS//ENTITIES DITA Software Domain//EN"
-       location="${dita.dtd.dir}${file.separator}software-domain.ent" />
+       location="${dita.dtd.dir}${file.separator}softwareDomain.ent" />
 
   <dtd publicId="-//OASIS//ELEMENTS DITA User Interface Domain//EN"
-       location="${dita.dtd.dir}${file.separator}ui-domain.mod" />
+       location="${dita.dtd.dir}${file.separator}uiDomain.mod" />
   <dtd publicId="-//OASIS//ENTITIES DITA User Interface Domain//EN"
-       location="${dita.dtd.dir}${file.separator}ui-domain.ent" />
+       location="${dita.dtd.dir}${file.separator}uiDomain.ent" />
 
   <dtd publicId="-//OASIS//ELEMENTS DITA Utilities Domain//EN"
-       location="${dita.dtd.dir}${file.separator}utilities-domain.mod" />
+       location="${dita.dtd.dir}${file.separator}utilitiesDomain.mod" />
   <dtd publicId="-//OASIS//ENTITIES DITA Utilities Domain//EN"
-       location="${dita.dtd.dir}${file.separator}utilities-domain.ent" />
+       location="${dita.dtd.dir}${file.separator}utilitiesDomain.ent" />
+       
+  <dtd publicId="-//OASIS//ELEMENTS DITA Metadata//EN"
+       location="${dita.dtd.dir}${file.separator}metaDecl.mod"/>
+  <dtd publicId="-//OASIS//ELEMENTS DITA CALS Tables//EN"
+       location="${dita.dtd.dir}${file.separator}tblDecl.mod"/>
   
   <!-- Topics -->
   <dtd publicId="-//IBM//DTD DITA Concept//EN"
-       location="${dita.dtd.dir}${file.separator}dita132${file.separator}concept.dtd" />
+       location="${dita.dtd.dir}${file.separator}dita132/concept.dtd" />
   <dtd publicId="-//IBM//ELEMENTS DITA Concept//EN"
-       location="${dita.dtd.dir}${file.separator}dita132${file.separator}concept.mod" />
+       location="${dita.dtd.dir}${file.separator}dita132/concept.mod" />
 
   <dtd publicId="-//IBM//DTD DITA Composite//EN"
-       location="${dita.dtd.dir}${file.separator}dita132${file.separator}ditabase.dtd" />
+       location="${dita.dtd.dir}${file.separator}dita132/ditabase.dtd" />
 
   <dtd publicId="-//IBM//DTD DITA Reference//EN"
-       location="${dita.dtd.dir}${file.separator}dita132${file.separator}reference.dtd" />
+       location="${dita.dtd.dir}${file.separator}dita132/reference.dtd" />
   <dtd publicId="-//IBM//ELEMENTS DITA Reference//EN"
-       location="${dita.dtd.dir}${file.separator}dita132${file.separator}reference.mod" />
+       location="${dita.dtd.dir}${file.separator}dita132/reference.mod" />
 
   <dtd publicId="-//IBM//DTD DITA Task//EN"
-       location="${dita.dtd.dir}${file.separator}dita132${file.separator}task.dtd" />
+       location="${dita.dtd.dir}${file.separator}dita132/task.dtd" />
   <dtd publicId="-//IBM//ELEMENTS DITA Task//EN"
-       location="${dita.dtd.dir}${file.separator}dita132${file.separator}task.mod" />
+       location="${dita.dtd.dir}${file.separator}dita132/task.mod" />
 
   <dtd publicId="-//IBM//DTD DITA Topic//EN"
-       location="${dita.dtd.dir}${file.separator}dita132${file.separator}topic.dtd" />
+       location="${dita.dtd.dir}${file.separator}dita132/topic.dtd" />
   <dtd publicId="-//IBM//ELEMENTS DITA Topic//EN"
-       location="${dita.dtd.dir}${file.separator}dita132${file.separator}topic.mod" />
+       location="${dita.dtd.dir}${file.separator}dita132/topic.mod" />
   <dtd publicId="-//IBM//ENTITIES DITA Topic Class//EN"
-       location="${dita.dtd.dir}${file.separator}dita132${file.separator}topic_class.ent" />
+       location="${dita.dtd.dir}${file.separator}dita132/topic_class.ent" />
   <dtd publicId="-//IBM//ENTITIES DITA Topic Definitions//EN"
-       location="${dita.dtd.dir}${file.separator}dita132${file.separator}topic_defn.ent" />
+       location="${dita.dtd.dir}${file.separator}dita132/topic_defn.ent" />
 
   <!-- Maps -->
   <dtd publicId="-//IBM//DTD DITA Map//EN"
-       location="${dita.dtd.dir}${file.separator}dita132${file.separator}map.dtd" />
+       location="${dita.dtd.dir}${file.separator}dita132/map.dtd" />
   <dtd publicId="-//IBM//Elements DITA Map//EN"
-       location="${dita.dtd.dir}${file.separator}dita132${file.separator}map.mod" />
+       location="${dita.dtd.dir}${file.separator}dita132/map.mod" />
   <dtd publicId="-//IBM//ENTITIES DITA Map Group Domain//EN"
-       location="${dita.dtd.dir}${file.separator}dita132${file.separator}mapgroup.ent" />
+       location="${dita.dtd.dir}${file.separator}dita132/mapgroup.ent" />
   <dtd publicId="-//IBM//ELEMENTS DITA Map Group Domain//EN"
-       location="${dita.dtd.dir}${file.separator}dita132${file.separator}mapgroup.mod" />
+       location="${dita.dtd.dir}${file.separator}dita132/mapgroup.mod" />
 
   <!-- Domains -->
   <dtd publicId="-//IBM//ELEMENTS DITA Highlight Domain//EN"
-       location="${dita.dtd.dir}${file.separator}dita132${file.separator}highlight-domain.mod" />
+       location="${dita.dtd.dir}${file.separator}dita132/highlight-domain.mod" />
   <dtd publicId="-//IBM//ENTITIES DITA Highlight Domain//EN"
-       location="${dita.dtd.dir}${file.separator}dita132${file.separator}highlight-domain.ent" />
+       location="${dita.dtd.dir}${file.separator}dita132/highlight-domain.ent" />
 
   <dtd publicId="-//IBM//ELEMENTS DITA Programming Domain//EN"
-       location="${dita.dtd.dir}${file.separator}dita132${file.separator}programming-domain.mod" />
+       location="${dita.dtd.dir}${file.separator}dita132/programming-domain.mod" />
   <dtd publicId="-//IBM//ENTITIES DITA Programming Domain//EN"
-       location="${dita.dtd.dir}${file.separator}dita132${file.separator}programming-domain.ent" />
+       location="${dita.dtd.dir}${file.separator}dita132/programming-domain.ent" />
 
   <dtd publicId="-//IBM//ELEMENTS DITA Software Domain//EN"
-       location="${dita.dtd.dir}${file.separator}dita132${file.separator}software-domain.mod" />
+       location="${dita.dtd.dir}${file.separator}dita132/software-domain.mod" />
   <dtd publicId="-//IBM//ENTITIES DITA Software Domain//EN"
-       location="${dita.dtd.dir}${file.separator}dita132${file.separator}software-domain.ent" />
+       location="${dita.dtd.dir}${file.separator}dita132/software-domain.ent" />
 
   <dtd publicId="-//IBM//ELEMENTS DITA User Interface Domain//EN"
-       location="${dita.dtd.dir}${file.separator}dita132${file.separator}ui-domain.mod" />
+       location="${dita.dtd.dir}${file.separator}dita132/ui-domain.mod" />
   <dtd publicId="-//IBM//ENTITIES DITA User Interface Domain//EN"
-       location="${dita.dtd.dir}${file.separator}dita132${file.separator}ui-domain.ent" />
+       location="${dita.dtd.dir}${file.separator}dita132/ui-domain.ent" />
 
   <dtd publicId="-//IBM//ELEMENTS DITA Utilities Domain//EN"
-       location="${dita.dtd.dir}${file.separator}dita132${file.separator}utilities-domain.mod" />
+       location="${dita.dtd.dir}${file.separator}dita132/utilities-domain.mod" />
   <dtd publicId="-//IBM//ENTITIES DITA Utilities Domain//EN"
-       location="${dita.dtd.dir}${file.separator}dita132${file.separator}utilities-domain.ent" />
+       location="${dita.dtd.dir}${file.separator}dita132/utilities-domain.ent" />
 
   <!-- Common -->
   <dtd publicId="-//IBM//ELEMENTS DITA Metadata//EN"
-       location="${dita.dtd.dir}${file.separator}dita132${file.separator}meta_xml.mod" />
+       location="${dita.dtd.dir}${file.separator}dita132/meta_xml.mod" />
   <dtd publicId="-//IBM//ELEMENTS DITA CALS Tables//EN"
-       location="${dita.dtd.dir}${file.separator}dita132${file.separator}tbl_xml.mod" />
+       location="${dita.dtd.dir}${file.separator}dita132/tbl_xml.mod" />
 
   <!-- Experimental -->
   <dtd publicId="-//IBM//DTD DITA BookMap//EN"

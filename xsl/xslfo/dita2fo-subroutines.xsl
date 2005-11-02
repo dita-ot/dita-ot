@@ -40,10 +40,8 @@
 <xsl:variable name="afill"></xsl:variable>
   <fo:inline>
     <xsl:attribute name="id">
-      <xsl:if test="ancestor::*[contains(@class,' topic/body ')]">
-       <xsl:value-of select="ancestor::*[contains(@class,' topic/body ')]/parent::*/@id"/><xsl:text>__</xsl:text>
-      </xsl:if>
-      <xsl:value-of select="."/>
+      <!--We delete the line to get parent id here -->
+      <xsl:value-of select="generate-id()"/><!-- generate id according to current node -->
     </xsl:attribute>
   <xsl:value-of select="$afill"/></fo:inline>
 </xsl:template>
