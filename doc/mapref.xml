@@ -38,44 +38,48 @@
         navigation title, add the following codes into the 
         <i>readme.ditamap</i> file.</p>
       <p>
-        <codeblock>&lt;topicref format="ditamap" href="sample\mysample.ditamap" 
-          navtitle="sample ditamap"&gt; </codeblock>
+        <codeblock>&lt;topicref format="ditamap" href="sample\mysample.ditamap" navtitle="sample ditamap"&gt; </codeblock>
       </p>
       <p>Now the complete content of the <i>readme.ditamap</i> file is shown as 
-        follows.<codeblock>&lt;?xml version="1.0" encoding="utf-8"?&gt; 
-        &lt;!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" 
-        "../dtd/map.dtd"&gt; &lt;map id="mainDITAreadme" title="DITA Readme 
-        map"&gt; &lt;topicref collection-type="family" href="DITA-readme.xml" 
-        id="DITA-doc" locktitle="yes" navtitle="DITA-OT Introduction"&gt; 
-        &lt;topicref href="DITA-changes.xml" navtitle="DITA release 
-        history"&gt;&lt;/topicref&gt; &lt;topicref format="ditamap" 
-        href="sample\mysample.ditamap" navtitle="sample ditamap"&gt; 
-        &lt;/topicref&gt; &lt;/topicref&gt; &lt;/map&gt; </codeblock></p>
-      <p>If, for example, the content of the <i>mysample.ditamap<?Pub 
-        Caret?></i> is shown as follows,</p>
+        follows.
+        <codeblock>
+&lt;?xml version="1.0" encoding="utf-8"?&gt;           
+&lt;!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd"&gt;
+&lt;map id="mainDITAreadme" title="DITA Readme map"&gt;
+  &lt;topicref collection-type="family" href="DITA-readme.xml" id="DITA-doc" 
+           locktitle="yes" navtitle="DITA-OT Introduction"&gt; 
+    &lt;topicref href="DITA-changes.xml" navtitle="DITA release history"/&gt;
+    &lt;topicref format="ditamap" href="sample\mysample.ditamap" navtitle="sample ditamap"/&gt;
+  &lt;/topicref&gt;
+&lt;/map&gt; 
+        </codeblock>
+      </p>
+      <p>If, for example, the content of the <i>mysample.ditamap</i> is shown as follows,</p>
       <p>
-        <codeblock>&lt;?xml version="1.0" encoding="utf-8"?&gt; &lt;!DOCTYPE 
-          map PUBLIC "-//OASIS//DTD DITA Map//EN" "../dtd/map.dtd"&gt; &lt;map 
-          id="samplemap" title="Sample Ditamap"&gt; &lt;topicref 
-          href="..\DITA-futures.xml" navtitle="DITA 
-          futures"&gt;&lt;/topicref&gt; &lt;topicref 
-          href="..\DITA-installation.xml" 
-          navtitle="Installation"&gt;&lt;/topicref&gt; &lt;/map&gt; </codeblock>
+        <codeblock>
+&lt;?xml version="1.0" encoding="utf-8"?&gt; 
+&lt;!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd"&gt; 
+&lt;map id="samplemap" title="Sample Ditamap"&gt; 
+  &lt;topicref href="..\DITA-futures.xml" navtitle="DITA futures"/&gt;
+  &lt;topicref href="..\DITA-installation.xml" navtitle="Installation"/&gt;
+&lt;/map&gt; 
+        </codeblock>
       </p>
       <p>then the <i>readme.ditamap</i> file can be equivalently expressed by 
         the following codes:</p>
       <p>
-        <codeblock>&lt;?xml version="1.0" encoding="utf-8"?&gt; &lt;!DOCTYPE 
-          map PUBLIC "-//OASIS//DTD DITA Map//EN" "../dtd/map.dtd"&gt; &lt;map 
-          id="mainDITAreadme" title="DITA Readme map"&gt; &lt;topicref 
-          collection-type="family" href="DITA-readme.xml" id="DITA-doc" 
-          locktitle="yes" navtitle="DITA-OT Introduction"&gt; &lt;topicref 
-          href="DITA-changes.xml" navtitle="DITA release 
-          history"&gt;&lt;/topicref&gt; &lt;topicref href="DITA-futures.xml" 
-          navtitle="DITA futures"&gt;&lt;/topicref&gt; &lt;topicref 
-          href="DITA-installation.xml" 
-          navtitle="Installation"&gt;&lt;/topicref&gt; &lt;/topicref&gt; 
-          &lt;/map&gt; </codeblock>
+        <codeblock>
+&lt;?xml version="1.0" encoding="utf-8"?&gt; 
+&lt;!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd"&gt; 
+&lt;map id="mainDITAreadme" title="DITA Readme map"&gt; 
+  &lt;topicref collection-type="family" href="DITA-readme.xml" 
+           id="DITA-doc" locktitle="yes" navtitle="DITA-OT Introduction"&gt;
+    &lt;topicref href="DITA-changes.xml" navtitle="DITA release history"/&gt; 
+    &lt;topicref href="DITA-futures.xml" navtitle="DITA futures"/&gt; 
+    &lt;topicref href="DITA-installation.xml" navtitle="Installation"/&gt;
+  &lt;/topicref&gt; 
+&lt;/map&gt; 
+        </codeblock>
       </p>
     </example>
   </taskbody>

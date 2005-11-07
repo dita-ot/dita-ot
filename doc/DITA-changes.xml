@@ -37,6 +37,22 @@
           <li>SF RFE   1324990: Installation Guide</li>
         </ol>
       </p>
+      <b>Parameter Changes</b>
+      <p>        
+        <ol>
+          <li>The original parameter "args.eclipse.toc" in "Ant tasks and script" was separated to "args.eclipsehelp.toc" for dita2eclipsehelp transformation, and "args.eclipsecontent.toc" for dita2eclipsecontent transformation.</li>
+          <li>Several parameters were added to the java command line interface, including "/javahelptoc","/javahelpmap","/eclipsehelptoc","/eclipsecontenttoc","/xhtmltoc".</li>
+        </ol>
+      </p>
+      <b>Other Changes</b>
+      <p>        
+        Change to the "doc" directory, except "doc\langref" directory:
+        <ol>
+          <li>The source dita files and the generated HTML, CHM, and PDF files were separated into separate downloads.</li>
+          <li>The source package contains the source dita files.</li>
+          <li>The binary package contains the generated HTML, CHM, and PDF files.</li>
+        </ol>      
+      </p>
     </section>
     <section>
       <title>DITA OT release 1.1.1</title>

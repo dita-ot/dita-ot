@@ -21,7 +21,7 @@ element, which can take title and id attributes. Within the map, use the &lt;<ap
 element to add and organize references to the topics.</p><indexterm>map</indexterm><indexterm>Map
 elements<indexterm>map</indexterm></indexterm></purpose>
 <containedby>This is the root element for mapping applications.</containedby>
-<contains><xref href="topicref.xml" type="topic" format="xml">topicref</xref> (0 or more) </contains>
+<contains><xref href="topicref.xml" type="topic">topicref</xref> (0 or more) </contains>
 <attributes>
 <attlist id="map_attr">
 <attribute conref="commonLRdefs.xml#commonLRdefs/title">

@@ -17,9 +17,8 @@ express navigation or table-of-contents hierarchies.
 <p>
 <indexterm
 >topicref<indexterm>Map elements<indexterm>topicref</indexterm></indexterm></indexterm></p></purpose>
-<containedby><xref href="map.xml" type="topic" format="xml">map</xref>,  <xref href="topicref.xml" type="topic"
-format="xml">topicref</xref></containedby>
-<contains><xref href="topicref.xml" type="topic" format="xml">topicref</xref> (0 or more) </contains>
+<containedby><xref href="map.xml" type="topic">map</xref>,  <xref href="topicref.xml" type="topic">topicref</xref></containedby>
+<contains><xref href="topicref.xml" type="topic">topicref</xref> (0 or more) </contains>
 <attributes>
 <attlist id="topicref_attr">
 <attribute conref="commonLRdefs.xml#commonLRdefs/navtitle">

@@ -12,7 +12,7 @@
     <steps>
       <step>
         <cmd>In the command prompt under the DITA Open Toolkit directory 
-          (DITAOT) type <codeblock>set ANT_OPTS=%ANT_OPTS% -Xmx256M</codeblock></cmd>
+          (DITAOT) type <codeph>set ANT_OPTS=%ANT_OPTS% -Xmx256M</codeph></cmd>
       </step>
       <step>
         <cmd>Repeat step four of the testing DITA installation process again by 

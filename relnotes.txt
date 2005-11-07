@@ -8,7 +8,7 @@ But there are certain limitations and unfixed bugs in this release, such as,
 * Bug 1344486 java.io.EOFException thrown out when reading ditaval file
 please check the current 'open' bugs on the SourceForge bugs tracker.
 
-[14 Changes]
+[14 SF Changes]
 1.  SF Bug   1297355: Multilevel HTML Help popup shows filenames
 2.  SF Bug   1297657: Update for Supported Parameters page
 3.  SF Bug   1304859: Toolkit disallows repetition of topic ID within map 
@@ -23,6 +23,17 @@ please check the current 'open' bugs on the SourceForge bugs tracker.
 12. SF Patch 1253783: dita2fo-links relative hrefs
 13. SF Patch 1324387: In xslfo, < groupchoice >< var > prints extra | delimiter
 14. SF RFE   1324990: Installation Guide
+
+[Parameter Changes]
+1. The original parameter "args.eclipse.toc" in "Ant tasks and script" was separated to "args.eclipsehelp.toc" for dita2eclipsehelp transformation, and "args.eclipsecontent.toc" for dita2eclipsecontent transformation.
+2. Several parameters were added to the java command line interface, including "/javahelptoc","/javahelpmap","/eclipsehelptoc","/eclipsecontenttoc","/xhtmltoc".
+
+[Other Changes]
+Change to the "doc" directory, except "doc\langref" directory:
+1. The source dita files and the generated HTML, CHM, and PDF files were separated into separate downloads.
+2. The source package contains the source dita files.
+3. The binary package contains the generated HTML, CHM, and PDF files.
+
 
 Note: SourceForge bugs, patches, and RFE listed above can be found in SourceForge Bugs, Patches, and RFE tracker.  
 Query criteria in different trackers for 1.1.2 changes
