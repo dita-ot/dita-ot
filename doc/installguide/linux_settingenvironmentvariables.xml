@@ -74,7 +74,9 @@
               <ol>
                 <li>set up your environment variable CLASSPATH to include the 
                   fop.jar, batik.jar and avalon.jar files in the FOP directory. 
-                  For example: <codeblock>export CLASSPATH=${CLASSPATH}:${fop_dir}/build:${fop_dir}/lib</codeblock></li>
+                  For example: 
+                  <codeblock>export CLASSPATH=${fop_dir}/build/fop.jar:${fop_dir}/lib/batik.jar:${fop_dir}/lib/avalon-framework-cvs-20020806.jar:${CLASSPATH}</codeblock>
+                </li>
               </ol>
             </chdesc>
           </chrow>

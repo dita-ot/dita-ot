@@ -260,7 +260,7 @@
               </dlentry>
               <dlentry>
                 <dt>dita2eclipsehelp</dt>
-                <dd>Transform DITA topic or DITA map into eclipse help plugin 
+                <dd>Transform DITA topic or DITA map into Eclipse help plugin 
                   based on xhtml. <table expanse="column"><title>Parameter 
                   Table of dita2eclipsehelp</title> <tgroup cols="3"><colspec 
                   align="center" colname="col1" colwidth="1*"/><colspec 
@@ -279,8 +279,9 @@
               </dlentry>
               <dlentry>
                 <dt>dita2eclipsecontent</dt>
-                <dd>Transform DITA topic or DITA map into eclipse content provider 
-                  based on xhtml. <table expanse="column"><title>Parameter 
+                <dd>Transform DITA topic or DITA map into Eclipse help plugin for 
+                  Eclipse dynamic content provider based on xhtml.
+                  <table expanse="column"><title>Parameter 
                   Table of dita2eclipsecontent</title> <tgroup cols="3"><colspec 
                   align="center" colname="col1" colwidth="1*"/><colspec 
                   align="center" colname="col2" colwidth="4*"/><colspec 
@@ -290,7 +291,7 @@
                   <entry>args.eclipsecontent.toc</entry> 
                   <entry align="left">
                     <ph id="eclipsecontenttoc">The root file name of the output 
-                      eclipse content provider toc file in eclipsecontent transformation. 
+                      Eclipse content provider toc file in eclipsecontent transformation. 
                       The default is the name of input ditamap file.</ph>
                   </entry>
                   <entry>No</entry> </row></tbody> 
@@ -389,40 +390,40 @@
             <i>catalog-ant.xml</i>
           </dt>
           <dd>The xml catalog information which is used by Ant.</dd>
-        </dlentry>
-        <dlentry>
-          <dt>dita2troff</dt>
-          <dd>Transform DITA topic or DITA map into eclipse help plugin based 
-            on xhtml. </dd>
-        </dlentry>
+        </dlentry>        
       </dl>
     </section>
-    <section><title>Sample ant script</title><p>These ant scripts are in 
-      <codeph>/ant/</codeph> directory. They are simple and easy to learn. From 
-      these files, you can learn how to write your own Ant script to build your 
-      own process.</p><p>Here is a sample template for writing an Ant script 
-      that executes transformation to xhtml in <codeph>/ant/</codeph> 
-      directory<codeblock>&lt;?xml version=&quot;1.0&quot; 
-      encoding=&quot;UTF-8&quot; ?&gt; &lt;project 
-      name=&quot;sample_xhtml&quot; default=&quot;all&quot; 
-      basedir=&quot;..&quot;&gt; &lt;import 
-      file=&quot;${basedir}${file.separator}conductor.xml&quot;/&gt; 
-      &lt;property name=&quot;dita.extname&quot; value=&quot;.xml&quot;/&gt; 
-      &lt;target name=&quot;all&quot; depends=&quot;sample2xhtml&quot;&gt; 
-      &lt;/target&gt; &lt;!-- revise below here --&gt; &lt;target 
-      name=&quot;sample2xhtml&quot; depends=&quot;use-init&quot;&gt; 
-      &lt;antcall target=&quot;dita2xhtml&quot;&gt; &lt;param 
-      name=&quot;args.input&quot; value=&quot;@DITA.INPUT@&quot;/&gt; &lt;param 
-      name=&quot;output.dir&quot; value=&quot;@OUTPUT.DIR@&quot;/&gt; 
-      &lt;/antcall&gt; &lt;/target&gt; &lt;/project&gt; </codeblock></p>After 
-      you write the input file and output directory to overwrite @DITA.INPUT@ 
-      and @OUTPUT.DIR@, the script can execute the transformation from your 
-      input to xhtml by this command. The property of dita.extname is a global 
-      variable with which you can set the file extension name of the topic 
-      file. The default dita.extname is <q><i>.xml</i></q>. You can also set it 
-      to <q><i>.dita</i></q> according to OASIS DITA recommendation. 
-      <pre>c:\pkg\DITA-OT1.0&gt;ant -f ant/template_xhtml.xml</pre> All of 
-      targets we use here are defined in <i>conductor.xml</i>. Therefore, you 
-      need to import that file before calling the target.</section>
+    <section>
+      <title>Sample ant script</title>
+      <p>These ant scripts are in <codeph>ant</codeph> directory. 
+        They are simple and easy to learn. From these files, you can learn how 
+        to write your own Ant script to build your own process.</p>
+      <p>Here is a sample template for writing an Ant script that executes 
+        transformation to xhtml in <codeph>ant</codeph> directory
+        <codeblock>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;
+&lt;project name=&quot;sample_xhtml&quot; default=&quot;all&quot; basedir=&quot;..&quot;&gt; 
+  &lt;import file=&quot;${basedir}${file.separator}conductor.xml&quot;/&gt; 
+  &lt;property name=&quot;dita.extname&quot; value=&quot;.xml&quot;/&gt; 
+  &lt;target name=&quot;all&quot; depends=&quot;sample2xhtml&quot;&gt; &lt;/target&gt; 
+  &lt;!-- revise below here --&gt; 
+  &lt;target name=&quot;sample2xhtml&quot; depends=&quot;use-init&quot;&gt; 
+    &lt;antcall target=&quot;dita2xhtml&quot;&gt; 
+      &lt;param name=&quot;args.input&quot; value=&quot;@DITA.INPUT@&quot;/&gt; 
+      &lt;param name=&quot;output.dir&quot; value=&quot;@OUTPUT.DIR@&quot;/&gt; 
+    &lt;/antcall&gt; 
+  &lt;/target&gt; 
+&lt;/project&gt;</codeblock>
+      </p>
+      <p>After you write the input file and output directory to overwrite @DITA.INPUT@ 
+        and @OUTPUT.DIR@, the script can execute the transformation from your 
+        input to xhtml by this command. The property of dita.extname is a global 
+        variable with which you can set the file extension name of the topic 
+        file. The default dita.extname is <q><i>.xml</i></q>. You can also set it 
+        to <q><i>.dita</i></q> according to OASIS DITA recommendation. 
+        <codeblock>ant -f ant/template_xhtml.xml</codeblock> All of 
+        targets we use here are defined in <i>conductor.xml</i>. Therefore, you 
+        need to import that file before calling the target.
+      </p>
+    </section>
   </refbody>
 </reference>

@@ -9,7 +9,7 @@
   <property name="args.fo.img.ext" value=".gif"/>
   <property name="package.output.dir" location="build\"/>
   <property name="package.name.root" value="DITA-OT"/>
-  <property name="version" value="1.1.2"/>
+  <property name="version" value="1.1.2.1"/>
   
   <property name="src.dir" location="src/"/>
   <property name="bin.dir" location="output2/"/>
@@ -182,7 +182,7 @@
     </tar>
   </target>
   
-  <target name="package-binary">
+  <target name="package-binary">    
     <zip destfile="${package.output.dir}/${param.out.file}${win32.zip.suffix}">
       <zipfileset dir="./" 
         includes="conductor.xml,build.xml,files.txt,catalog-dita.xml,catalog-dita.txt,catalog-ant.xml,pretargets.xml,ditatargets.xml,CommonPublicLicense-v10.html,relnotes.txt,manifest.mf" 
@@ -194,16 +194,8 @@
       <zipfileset dir="${dtd.dir}" includes="**" 
         prefix="${package.name.root}${version}/dtd" />
       <zipfileset dir="${schema.dir}" includes="**" 
-        prefix="${package.name.root}${version}/schema" />
-      <zipfileset dir="${doc.out.dir}" prefix="${package.name.root}${version}/doc">        
-        <exclude name="**/*.hhp"/>
-        <exclude name="**/*.hhc"/>
-        <exclude name="**/*.hhk"/>
-        <exclude name="**/*.fo"/>
-      </zipfileset>
-      <zipfileset dir="${doc.dir}" prefix="${package.name.root}${version}/doc">
-        <include name="langref/**"/>
-      </zipfileset>
+        prefix="${package.name.root}${version}/schema" />      
+      <zipfileset dir="${doc.dir}" prefix="${package.name.root}${version}/doc"/>
       <zipfileset dir="${demo.dir}" includes="**" 
         prefix="${package.name.root}${version}/demo"/>
       <zipfileset dir="${sample.dir}" includes="**" 
@@ -229,16 +221,8 @@
       <tarfileset dir="${dtd.dir}" includes="**" 
         prefix="${package.name.root}${version}/dtd" />
       <tarfileset dir="${schema.dir}" includes="**" 
-        prefix="${package.name.root}${version}/schema" />
-      <tarfileset dir="${doc.out.dir}" prefix="${package.name.root}${version}/doc">
-        <exclude name="**/*.hhp"/>
-        <exclude name="**/*.hhc"/>
-        <exclude name="**/*.hhk"/>
-        <exclude name="**/*.fo"/>
-      </tarfileset>
-      <tarfileset dir="${doc.dir}" prefix="${package.name.root}${version}/doc">
-        <include name="langref/**"/>
-      </tarfileset>
+        prefix="${package.name.root}${version}/schema" />      
+      <tarfileset dir="${doc.dir}" prefix="${package.name.root}${version}/doc"/>
       <tarfileset dir="${demo.dir}" includes="**" 
         prefix="${package.name.root}${version}/demo"/>
       <tarfileset dir="${sample.dir}" includes="**" 
@@ -265,16 +249,8 @@
       <zipfileset dir="${dtd.dir}" includes="**" 
         prefix="${package.name.root}${version}/dtd" />
       <zipfileset dir="${schema.dir}" includes="**" 
-        prefix="${package.name.root}${version}/schema" />
-      <zipfileset dir="${doc.out.dir}" prefix="${package.name.root}${version}/doc">
-        <exclude name="**/*.hhp"/>
-        <exclude name="**/*.hhc"/>
-        <exclude name="**/*.hhk"/>
-        <exclude name="**/*.fo"/>
-      </zipfileset>
-      <zipfileset dir="${doc.dir}" prefix="${package.name.root}${version}/doc">
-        <include name="langref/**"/>
-      </zipfileset>
+        prefix="${package.name.root}${version}/schema" />     
+      <zipfileset dir="${doc.dir}" prefix="${package.name.root}${version}/doc"/>
       <zipfileset dir="${demo.dir}" includes="**" 
         prefix="${package.name.root}${version}/demo"/>
       <zipfileset dir="${sample.dir}" includes="**" 
@@ -300,15 +276,7 @@
         prefix="${package.name.root}${version}/dtd" />
       <tarfileset dir="${schema.dir}" includes="**" 
         prefix="${package.name.root}${version}/schema" />
-      <tarfileset dir="${doc.out.dir}" prefix="${package.name.root}${version}/doc">
-        <exclude name="**/*.hhp"/>
-        <exclude name="**/*.hhc"/>
-        <exclude name="**/*.hhk"/>
-        <exclude name="**/*.fo"/>
-      </tarfileset>
-      <tarfileset dir="${doc.dir}" prefix="${package.name.root}${version}/doc">
-        <include name="langref/**"/>
-      </tarfileset>
+      <tarfileset dir="${doc.dir}" prefix="${package.name.root}${version}/doc"/>
       <tarfileset dir="${demo.dir}" includes="**" 
         prefix="${package.name.root}${version}/demo"/>
       <tarfileset dir="${sample.dir}" includes="**" 
@@ -323,25 +291,25 @@
     </tar>
   </target>
   
-  <target name="build-package-source" depends="package-java">
+  <target name="build-package-source" depends="package-java, update-doc, copy-updated-doc">
     <antcall target="package-source">
       <param name="param.out.file" value="${source}"/>
     </antcall>
   </target>
   
-  <target name="build-package-source-ASL" depends="package-java">
+  <target name="build-package-source-ASL" depends="package-java, update-doc, copy-updated-doc">
     <antcall target="package-source-ASL">
       <param name="param.out.file" value="${source}-ASL"/>
     </antcall>
   </target>
   
-  <target name="build-package-binary" depends="package-java, update-doc">
+  <target name="build-package-binary" depends="package-java, update-doc, copy-updated-doc">
     <antcall target="package-binary">
       <param name="param.out.file" value="${binary}"/>
     </antcall>
   </target>
   
-  <target name="build-package-binary-ASL" depends="package-java, update-doc">
+  <target name="build-package-binary-ASL" depends="package-java, update-doc, copy-updated-doc">
     <antcall target="package-binary-ASL">
       <param name="param.out.file" value="${binary}-ASL"/>
     </antcall>
@@ -371,5 +339,16 @@
     <ant antfile="build.xml" target="doc.readme.web"/>
     <ant antfile="build.xml" target="doc.readme.chm"/>
     <ant antfile="build.xml" target="doc.readme.pdf"/> 
+  </target>
+  
+  <target name="copy-updated-doc">
+    <copy todir="${doc.dir}">
+      <fileset dir="${doc.out.dir}">        
+        <exclude name="**/*.hhp"/>
+        <exclude name="**/*.hhc"/>
+        <exclude name="**/*.hhk"/>
+        <exclude name="**/*.fo"/>
+      </fileset>
+    </copy>
   </target>
 </project>

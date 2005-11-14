@@ -20,7 +20,7 @@
 	</target>
 
 	<target name="all" description="build all output" 
-		depends="demo, samples">
+		depends="demo, doc, samples, docbook">
 		<echo>output in the ${dita.output.dir} directory</echo>
 	</target>
 	<!-- revise below here -->

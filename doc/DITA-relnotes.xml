@@ -7,66 +7,18 @@
   <refbody>
     <section>
       <title>Introduction</title>
-      <p>Release 1.1.2 is a maintenance release to fix defects and make patches based on release 1.1.1. </p>
-      <p>But there are certain limitations and unfixed bugs in this release, such as,
-        <ul>
-          <li>Bug 1343963 Blank index.html generated for ditamap contains only reltabe</li>
-          <li>Bug 1344486 java.io.EOFException thrown out when reading ditaval file</li>
-        </ul>       
-        Please check the current 'open' bugs on the SourceForge bugs tracker.        
-      </p>
-    </section>
-    <section>
-      <title>Changes</title>
+      <p>Release 1.1.2.1 is a full build to provide an urgent fix to fix the following critical problem which users found in release 1.1.2.</p>
       <p>
-        <ol>
-          <li>SF Bug   1297355: Multilevel HTML Help popup shows filenames</li>
-          <li>SF Bug   1297657: Update for Supported Parameters page</li>
-          <li>SF Bug   1304859: Toolkit disallows repetition of topic ID within map</li>
-          <li>SF Bug   1306361: Fatal error in published ditamap example</li>
-          <li>SF Bug   1306363: common.css not compiled with htmlhelp</li>
-          <li>SF Bug   1311788: DTD references not resolved</li>
-          <li>SF Bug   1314081: Fix catalog entries in catalag-ant.xml for OASIS DTDs</li>
-          <li>SF Bug   1323435: wrong system id for html output used in validation</li>
-          <li>SF Bug   1323486: HTML Help subterm indexes not sorted</li>
-          <li>SF Bug   1325290: JavaHelp output does not work for Russian</li>
-          <li>SF Bug   1325277: File missing from the map causes abend</li>
-          <li>SF Patch 1253783: dita2fo-links relative hrefs</li>
-          <li>SF Patch 1324387: In xslfo, groupchoice var prints extra | delimiter</li>
-          <li>SF RFE   1324990: Installation Guide</li>
-        </ol> 
+        <ul>
+          <li>SF Bug 1345600  The build process failed when run "Ant all" in release 1.1.2</li>
+        </ul>             
       </p>
+      <p>For this fix, we have restored all the source DITA files in 'doc' and directories in the binary packages.</p>
+      <p>Note that the original parameter "args.eclipse.toc" in "Ant tasks and script" was separated to "args.eclipsehelp.toc" for DITA-to-Eclipse help transformation, and "args.eclipsecontent.toc" for DITA-to-dynamic Eclipse content transformation.</p>
+      <p>Another issue is that we found there is a mismatch in the document and the toolkit behavior when you are trying to use the following command
+      <codeblock>ant -f conductor.xml -propertyfile ${dita.temp.dir}/property.temp.</codeblock>
+      Now we have updated the documentation. Please refer to the topic 'Building DITA output with Java command line' on our website for more details.</p>
+      <p>These updates do not affect standard operation of the toolkit. The main goal of this minor release to enable new users of the toolkit to run the installation verification tests without failure.</p>
     </section>    
-    <section>
-      <title>Parameter Changes</title>
-      <p>
-        <ol>
-          <li>The original parameter "args.eclipse.toc" in "Ant tasks and script" was separated to "args.eclipsehelp.toc" for dita2eclipsehelp transformation, and "args.eclipsecontent.toc" for dita2eclipsecontent transformation.</li>
-          <li>Several parameters were added to the java command line interface, including "/javahelptoc","/javahelpmap","/eclipsehelptoc","/eclipsecontenttoc","/xhtmltoc".</li>
-        </ol>
-      </p>
-    </section>
-    <section>
-      <title>Other Changes</title>
-      <p>
-        Change to the "doc" directory, except "doc\langref" directory:
-        <ol>
-          <li>The source dita files and the generated HTML, CHM, and PDF files were separated into separate downloads.</li>
-          <li>The source package contains the source dita files.</li>
-          <li>The binary package contains the generated HTML, CHM, and PDF files.</li>
-        </ol>
-      </p>
-    </section>
-    <section>
-      <b>Note</b>
-      <p>SourceForge bugs, patches, and RFEs can be found in SourceForge bugs, patches, and RFE tracker.</p>
-      <p>
-        <ul>
-          <li>Bugs tracker: http://sourceforge.net/tracker/?group_id=132728&amp;atid=725074</li>
-          <li>Patches tracker: http://sourceforge.net/tracker/?group_id=132728&amp;atid=725076</li>
-          <li>RFE tracker: http://sourceforge.net/tracker/?group_id=132728&amp;atid=725077</li>
-        </ul>
-      </p>
-    </section>
   </refbody>
 </reference>

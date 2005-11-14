@@ -16,20 +16,20 @@
       </step>
       <step>
         <cmd>On the SourceForge.net page, find <uicontrol>dita-ot 
-          1.1.2</uicontrol></cmd>
+          1.1.2.1</uicontrol></cmd>
       </step>
       <step>
-        <cmd>Select <uicontrol>dita-ot 1.1.2</uicontrol>. </cmd>
+        <cmd>Select <uicontrol>dita-ot 1.1.2.1</uicontrol>. </cmd>
         <stepresult>The <systemoutput>Dita-ot</systemoutput> table 
           displays.</stepresult>
       </step>
       <step>
-        <cmd>Select <uicontrol>DITA-OT1.1.2_bin.tar.gz</uicontrol></cmd>
+        <cmd>Select <uicontrol>DITA-OT1.1.2.1_bin.tar.gz</uicontrol></cmd>
         <stepresult>The SourceForge.net page opens with a list of 
           <systemoutput>download options</systemoutput>.</stepresult>
       </step>
       <step>
-        <cmd>Save and e<?Pub Caret?>xtract the package file into a Linux home 
+        <cmd>Save and extract the package file into a Linux home 
           directory. </cmd>
         <info>
           <note>You can extract all package files and toolkits either to your 

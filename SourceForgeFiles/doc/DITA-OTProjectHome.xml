@@ -8,10 +8,6 @@
   <shortdesc>This document describes the DITA Open Toolkit project--what the 
     project is, and how to use the site.</shortdesc>
   <body>
-    <p>
-      This document describes the DITA Open Toolkit project--what the project is, and how to use the site.
-    </p>
-    
     <section>
     <title>31 August, 2005</title>
     <p>DITA Open toolkit begins to publish the source and binary code under Apache license 2.0 from release 1.1. We provide separate packages for downloading in SourceForege download area.</p>

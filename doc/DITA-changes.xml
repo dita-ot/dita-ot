@@ -9,6 +9,21 @@
     release.</shortdesc>
   <body>
     <section>
+      <title>DITA OT release 1.1.2.1</title>
+      <p>Release 1.1.2.1 is a full build to provide an urgent fix to fix the following critical problem which users found in release 1.1.2.</p>
+      <p>
+        <ul>
+          <li>SF Bug 1345600  The build process failed when run "Ant all" in release 1.1.2</li>
+        </ul>             
+      </p>
+      <p>For this fix, we have restored all the source DITA files in 'doc' and directories in the binary packages.</p>
+      <p>Note that the original parameter "args.eclipse.toc" in "Ant tasks and script" was separated to "args.eclipsehelp.toc" for DITA-to-Eclipse help transformation, and "args.eclipsecontent.toc" for DITA-to-dynamic Eclipse content transformation.</p>
+      <p>Another issue is that we found there is a mismatch in the document and the toolkit behavior when you are trying to use the following command
+      <codeblock>ant -f conductor.xml -propertyfile ${dita.temp.dir}/property.temp.</codeblock>
+      Now we have updated the documentation. Please refer to the topic 'Building DITA output with Java command line' on our website for more details.</p>
+      <p>These updates do not affect standard operation of the toolkit. The main goal of this minor release to enable new users of the toolkit to run the installation verification tests without failure.</p>
+    </section> 
+    <section>
       <title>DITA OT release 1.1.2</title>
       <p>Release 1.1.2 is a maintenance release to fix defects and make patches based on release 1.1.1. </p>
       <p>But there are certain limitations and unfixed bugs in this release, such as,
