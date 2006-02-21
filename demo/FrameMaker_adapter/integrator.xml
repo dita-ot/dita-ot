@@ -1,0 +1,41 @@
+<project>
+
+  <target name="dita2fmxml" depends="dita-preprocess, map2fmxml, topic2fmxml"/>
+
+  <target name="topic2fmxml" if="noMap" depends="dita-preprocess">
+    <antcall target="dita.map.fm">
+      <!-- To do -->
+    </antcall>
+  </target>
+
+  <target name="map2fmxml" unless="noMap" depends="dita-preprocess">
+    <antcall target="dita.map.fm">
+      <param name="input" value="${dita.temp.dir}${file.separator}${user.input.file}"></param>
+      <param name="output" value="${dita.map.output.dir}${file.separator}${dita.map.filename.root}.xml"></param>
+    </antcall>
+  </target>
+
+  <target name="dita.map.fm" description="Build FrameMaker-friendly XML output from ditamap">
+    <condition property="args.xsl" value="${dita.dir}/demo/FrameMaker_adapter/xsl/fmxml_shell.xsl">
+      <not>
+        <isset property="args.xsl"/>
+      </not>
+    </condition>
+    <xslt processor="trax"
+          in="${input}"
+          out="${dita.temp.dir}${file.separator}${dita.map.filename.root}_MERGED.xml"
+          style="${dita.script.dir}${file.separator}topicmerge.xsl">
+      <xmlcatalog refid="dita.catalog" />
+    </xslt>
+    <xslt processor="trax"
+  	    in="${dita.temp.dir}${file.separator}${dita.map.filename.root}_MERGED.xml"
+  		out="${output}"
+          style="${args.xsl}">
+      <param name="config-table-title" expression="${fmxml.table.title.type}" if="fmxml.table.title.type" />
+      <param name="config-book" expression="${fmxml.make.book}" if="fmxml.make.book" />
+      <param name="config-chapter-grouping" expression="${fmxml.chapter.grouping}" if="fmxml.chapter.grouping" />
+      <xmlcatalog refid="dita.catalog" />
+    </xslt>
+  </target>
+
+</project>

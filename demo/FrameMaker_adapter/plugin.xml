@@ -1,0 +1,4 @@
+<plugin id="org.dita.dost.FrameMaker_adapter">
+  <feature extension="dita.conductor.transtype.check" value="fmxml" type="txt"/>
+  <feature extension="dita.conductor.target" value="integrator.xml" type="file"/>
+</plugin>
