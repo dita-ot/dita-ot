@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?><!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference
+  PUBLIC "-//IBM//DTD DITA Reference//EN" "..\dtd\reference.dtd">
+<reference id="apiDesc" outputclass="element" xml:lang="en-us">
+<title>apiDesc</title>
+<shortdesc>The &lt;apiDesc&gt; element describes the API item in detail, and
+expands on the short description about that API item.</shortdesc>
+<refbody>
+<section><title>Description</title><p>For example, in the Java API reference,
+the &lt;apiDesc&gt; element represents the class, interface, field, method, and
+parameter description. </p></section>
+<example> <title>Example</title><p>The following examples illustrate types
+of &lt;apiDesc&gt; elements for different API class items:</p><codeblock>&lt;javaFieldDetail&gt;
+      &lt;apiDesc&gt;This constant is returned if the connection is open.&lt;/apiDesc&gt;
+&lt;/javaFieldDetail&gt;</codeblock><codeblock>&lt;javaParamDetail&gt;
+     &lt;apiDesc&gt;Be sure to provide a test parameter that matches the defined properties.&lt;/apiDesc&gt;
+&lt;/javaParamDetail&gt;
+</codeblock><codeblock>&lt;javaMethodDetail&gt;
+      &lt;apiDesc&gt;Specifies the format and size of the serialized content.&lt;/apiDesc&gt;
+&lt;/javaMethodDetail&gt;
+</codeblock> </example>
+<section conref="../packagedef.dita#apiDesc-reference/apiDesc-containedBy-section"/><section conref="../packagedef.dita#apiDesc-reference/apiDesc-contains-section"/><section conref="../packagedef.dita#apiDesc-reference/apiDesc-contentModel-section"/><section conref="../packagedef.dita#apiDesc-reference/apiDesc-attList-section"/><section conref="../packagedef.dita#apiDesc-reference/apiDesc-classValue-section"/></refbody>
+</reference>

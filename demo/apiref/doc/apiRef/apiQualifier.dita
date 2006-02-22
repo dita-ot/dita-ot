@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\dtd\reference.dtd">
+<reference id="apiQualifier" outputclass="element" xml:lang="en-us">
+<title>apiQualifier</title>
+<shortdesc>The &lt;apiQualifier> element specifies a semantic flag that qualifies
+the interface.</shortdesc>
+<refbody>
+<section><title>Description</title><p>This element requires the name and value
+attributes. Use the name attribute for the name of the flag and the value
+attribute for the value of the flag. </p><p>For example, in the Java API specialization,
+the &lt;apiQualifier> element represents the access flag (javaClassAccess|
+javaInterfaceAccess| javaMethodAccess| <?Pub Caret?>javaFieldAccess) with
+a value enumeration of <i>public</i>, <i>protected</i>, or <i>private</i>.</p></section>
+<example> <title>Example</title><p>The following example shows a simple &lt;apiQualifier>
+element for a Visual Basic property. </p><codeblock>&lt;apiValue id="parameter">
+   &lt;apiName>theNameOPT&lt;/apiName>
+   &lt;apiValueDetail>
+      &lt;apiValueDef>
+         &lt;apiQualifier name="access" value="public"/>
+         &lt;apiValueClassifier href="string.html" type="html">String&lt;/apiValueClassifier>
+          &lt;apiDefNote>A string that provides the name to assign to the action. Providing a valid
+             value for this parameter is optional. If you do not want to provide a value,
+             use the empty string ("").&lt;/apiDefNote>
+      &lt;/apiValueDef>
+    &lt;/apiValueDetail>
+&lt;/apiValue></codeblock><codeblock></codeblock></example>
+<section conref="../packagedef.dita#apiQualifier-reference/apiQualifier-containedBy-section"></section>
+<section conref="../packagedef.dita#apiQualifier-reference/apiQualifier-contains-section"></section>
+<section conref="../packagedef.dita#apiQualifier-reference/apiQualifier-contentModel-section"></section>
+<section conref="../packagedef.dita#apiQualifier-reference/apiQualifier-attList-section"></section>
+<section conref="../packagedef.dita#apiQualifier-reference/apiQualifier-classValue-section"></section>
+</refbody>
+</reference>
+<?Pub *0000002181?>

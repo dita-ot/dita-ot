@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- (c) Copyright by Comtech Services, Inc. All rights reserved. -->
-<!DOCTYPE task PUBLIC "-//IBM//DTD DITA Task//EN" "../dtd/task.dtd">
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="install_jdk" xml:lang="en-us">
   <title>Installing JDK (Java Development Kit)</title>
   <titlealts>

@@ -4,13 +4,13 @@
 <xsl:stylesheet version="1.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
-  <xsl:include href="../common/output-message.xsl"/>
+  <xsl:import href="../common/output-message.xsl"/>
 
 
 <!-- Define the error message prefix identifier -->
-<xsl:variable name="msgprefix">IDXS</xsl:variable>
+<xsl:variable name="msgprefix">DOTX</xsl:variable>
 
-<xsl:param name="WORKDIR" select="'./'"/>
+<!--xsl:param name="WORKDIR" select="'./'"/-->
 <xsl:param name="PROJDIR" select="'.'"/>
 <xsl:param name="DBG" select="no"/>
 <xsl:param name="FILEREF">file://</xsl:param>
@@ -23,21 +23,19 @@
 
 <!-- If the target element does not exist, this template will be called to issue an error -->
 <xsl:template name="missing-target-error">
-  <xsl:call-template name="output-message">
-    <xsl:with-param name="msg">Unable to find target for conref="<xsl:value-of select="@conref"/>". Check to make
-sure that the target element is available, and that it is a <xsl:value-of select="name()"/> element.</xsl:with-param>
-    <xsl:with-param name="msgnum">030</xsl:with-param>
+  <xsl:call-template name="output-message">    
+    <xsl:with-param name="msgnum">010</xsl:with-param>
     <xsl:with-param name="msgsev">E</xsl:with-param>
+    <xsl:with-param name="msgparams">%1=<xsl:value-of select="@conref"/></xsl:with-param>
   </xsl:call-template>
 </xsl:template>
 
 <!-- If an ID is duplicated, and there are 2 possible targets, issue a warning -->
 <xsl:template name="duplicateConrefTarget">
-  <xsl:call-template name="output-message">
-    <xsl:with-param name="msg">There is more than one possible target for conref="<xsl:value-of select="@conref"/>".
-Only the first will be used. Remove the duplicate ID from one of the targets.</xsl:with-param>
-    <xsl:with-param name="msgnum">049</xsl:with-param>
+  <xsl:call-template name="output-message">    
+    <xsl:with-param name="msgnum">011</xsl:with-param>
     <xsl:with-param name="msgsev">W</xsl:with-param>
+    <xsl:with-param name="msgparams">%1=<xsl:value-of select="@conref"/></xsl:with-param>
   </xsl:call-template>
 </xsl:template>
 
@@ -98,10 +96,7 @@ Only the first will be used. Remove the duplicate ID from one of the targets.</x
         </xsl:when>
         <xsl:otherwise>
           <xsl:call-template name="output-message">
-            <xsl:with-param name="msg">When you conref another topic or an item in another topic, the
-domains attribute of the target topic must be equal to or a subset of the current topic's
-domains attribute. See the messages guide for more details.</xsl:with-param>
-            <xsl:with-param name="msgnum">057</xsl:with-param>
+            <xsl:with-param name="msgnum">012</xsl:with-param>
             <xsl:with-param name="msgsev">W</xsl:with-param>
           </xsl:call-template>
         </xsl:otherwise>
@@ -143,7 +138,7 @@ domains attribute. See the messages guide for more details.</xsl:with-param>
   </xsl:variable>
   
   <xsl:variable name="file-prefix">
-	<xsl:value-of select="FILEREF"/><xsl:value-of select="$WORKDIR"/><xsl:value-of select="$current-relative-path"/>
+	<xsl:value-of select="$FILEREF"/><xsl:value-of select="$WORKDIR"/><xsl:value-of select="$current-relative-path"/>
   </xsl:variable>
   
   <xsl:variable name="file">
@@ -197,11 +192,9 @@ domains attribute. See the messages guide for more details.</xsl:with-param>
     <!-- If this conref has already been followed, stop to prevent an infinite loop -->
     <xsl:when test="contains($conref-ids,concat(' ',generate-id(.),' '))">
       <xsl:call-template name="output-message">
-        <xsl:with-param name="msg">A element with a conref attribute indirectly includes itself, which is not possible.
-Please fix the target of the conref attribute. The conref attribute points to
-<xsl:value-of select="@conref"/></xsl:with-param>
-        <xsl:with-param name="msgnum">062</xsl:with-param>
+        <xsl:with-param name="msgnum">013</xsl:with-param>
         <xsl:with-param name="msgsev">E</xsl:with-param>
+        <xsl:with-param name="msgparams">%1=<xsl:value-of select="@conref"/></xsl:with-param>
       </xsl:call-template>
     </xsl:when>
     <!--targetting an element inside a topic-->
@@ -510,9 +503,7 @@ Please fix the target of the conref attribute. The conref attribute points to
         </xsl:when>        
         <xsl:otherwise>
           <xsl:call-template name="output-message">
-            <xsl:with-param name="msg">You must provide the id of the target topicref you want to reuse.
-              For example, mymap.ditamap#mytopicrefid.</xsl:with-param>
-            <xsl:with-param name="msgnum">012</xsl:with-param>
+            <xsl:with-param name="msgnum">014</xsl:with-param>
             <xsl:with-param name="msgsev">E</xsl:with-param>
           </xsl:call-template>
         </xsl:otherwise>
@@ -596,9 +587,7 @@ Please fix the target of the conref attribute. The conref attribute points to
         </xsl:when>
         <xsl:otherwise>
           <xsl:call-template name="output-message">
-            <xsl:with-param name="msg">You must provide the id of the target topicref you want to reuse.
-              For example, mymap.ditamap#mytopicrefid.</xsl:with-param>
-            <xsl:with-param name="msgnum">012</xsl:with-param>
+            <xsl:with-param name="msgnum">014</xsl:with-param>
             <xsl:with-param name="msgsev">E</xsl:with-param>
           </xsl:call-template>
         </xsl:otherwise>
@@ -607,10 +596,9 @@ Please fix the target of the conref attribute. The conref attribute points to
       
     <xsl:otherwise>
       <xsl:call-template name="output-message">
-        <xsl:with-param name="msg">Incorrectly formed conref attribute: <xsl:value-of select="@conref"/>
-Make sure the syntax is correct and try again. </xsl:with-param>
-    	<xsl:with-param name="msgnum">014</xsl:with-param>
+    	  <xsl:with-param name="msgnum">015</xsl:with-param>
         <xsl:with-param name="msgsev">E</xsl:with-param>
+        <xsl:with-param name="msgparams">%1=<xsl:value-of select="@conref"/></xsl:with-param>
       </xsl:call-template>
     </xsl:otherwise>
   </xsl:choose>
@@ -843,7 +831,9 @@ Make sure the syntax is correct and try again. </xsl:with-param>
     <xsl:param name="conref-filename"/>
     <xsl:param name="topicid"/>
     <xsl:param name="elemid"/>
-    <xsl:param name="WORKDIR"/>
+    <xsl:param name="WORKDIR">
+      <xsl:apply-templates select="/processing-instruction()" mode="get-work-dir"/>
+    </xsl:param>
 	<xsl:param name="conref-source-topicid"/>
   <xsl:param name="conref-ids"/>
   <xsl:copy>

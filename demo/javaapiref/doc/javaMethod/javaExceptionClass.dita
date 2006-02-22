@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\dtd\reference.dtd">
+<reference id="javaMethodClass" outputclass="element" xml:lang="en-us">
+<title>javaMethodClass</title>
+<shortdesc>The &lt;javaMethodClass> element is used to identify the exception
+thrown when a compile-time error occurs. </shortdesc>
+<refbody>
+<section><title>Description</title><p>Exceptions that are represented by the
+subclasses of class Error, for example OutOfMemoryError, are thrown due to
+a failure in or of the virtual machine. </p><simpletable>
+<strow>
+<stentry><lines><b>Throws:</b> 
+                throws ClassType, ClassTypeList</lines></stentry>
+</strow>
+</simpletable><p>T<?Pub Caret1?>he <i>keyref </i> attribute must provide a
+unique key such as a fully qualified class name for the named API item.</p></section>
+<example> <title>Example</title>Click on the following link to open the Java
+API topic type example in  <object classid="clsid:adb880a6-d8ff-11cf-9377-00aa003b7a11"
+codebase="hhctrl.ocx#Version=4,73,8412,0" codetype="VIEWASTEXT" height="100"
+id="hhctrl" type="application/x-oleobject" width="300">
+<param name="Command" value="ShortCut"/>
+<param name="Text" value="Text: DITA "/>
+<param name="Item1" value=",../samples/java/IImportEngineTask.dita,"/></object><codeblock>&lt;javaMethod id="com.ibm.xtools.ras.impord.engine.tasks.IImportEngineTask">
+   &lt;apiName>getManifest()&lt;/apiName>
+   &lt;shortDesc>Get the asset's manifest in the latest supported format.&lt;/shortDesc>
+   &lt;javaMethodDetail>
+      &lt;javaMethodDef>
+         &lt;javaFinalMethod/>
+         &lt;javaMethodAccess value="public"/>
+         &lt;javaRetur>
+              &lt;javaMethodClass href=”http://java.sun.com/j2se/org/w3c/dom/Document.html”
+                          format=”html” scope=”external”>
+              Document
+              &lt;/javaMethodClass>
+              &lt;apiDefNote>the manifest&lt;/apiDefNote>
+          &lt;/javaRetur>
+          &lt;javaException>
+              &lt;javaMethodClass href=”http://java.sun.com/j2se/io/IOException.html”
+                              format=”html” scope=”external”>
+              IOException
+              &lt;/javaMethodClass>
+              &lt;apiDefNote>if an error occured retrieving the manifest&lt;/apiDefNote>
+              &lt;javaMethodClass href=”http://java.sun.com/j2se/io/NullPointerException.html”
+                              format=”html” scope=”external”>
+              NullPointerException
+              &lt;/javaMethodClass>
+              &lt;apiDefNote>if an error occured retrieving the manifest because an argument was null
+              &lt;/apiDefNote>
+           &lt;/javaException>
+      &lt;/javaMethodDef>
+      &lt;apiDesc>This method will take care of updating the profile to the latest version supported.&lt;/apiDesc>
+   &lt;/javaMethodDetail>
+ &lt;/javaMethod></codeblock></example>
+<section><title>Processing Expectations</title><image href="images/javaExceptionClass.jpg"
+placement="inline"><alt></alt></image></section>
+<section conref="../packagedef.dita#javaMethodClass-reference/javaMethodClass-containedBy-section"></section>
+<section conref="../packagedef.dita#javaMethodClass-reference/javaMethodClass-contains-section"></section>
+<section conref="../packagedef.dita#javaMethodClass-reference/javaMethodClass-contentModel-section"></section>
+<section conref="../packagedef.dita#javaMethodClass-reference/javaMethodClass-attList-section"></section>
+<section conref="../packagedef.dita#javaMethodClass-reference/javaMethodClass-classValue-section"></section>
+</refbody>
+</reference>
+<?Pub *0000003675?>

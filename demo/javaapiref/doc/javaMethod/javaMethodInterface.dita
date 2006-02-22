@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?><!--Arbortext, Inc., 1988-2005, v.4002--><?Pub Inc?>
+<!DOCTYPE reference
+  PUBLIC "-//IBM//DTD DITA Reference//EN" "..\dtd\reference.dtd">
+<reference id="javaMethodInterface" outputclass="element" xml:lang="en-us">
+<title>javaMethodInterface</title>
+<shortdesc>The &lt;javaMethodInterface&gt; element identifies the name of the
+returned value of the method or constructor when the return value is an interface.</shortdesc>
+<refbody>
+<section><title>Description</title><p>A method declaration either specifies
+the type of value that the method returns or uses the keyword <i>void</i> to
+indicate that the method does not return a value. </p><p>This element has
+the following attributes: <i>href</i>, <i>keyref</i>, <i>type</i>, <i>format</i>, <i>scope(local
+| peer | external),</i> and <i>outputclass</i>. The <i>keyref</i> attribute
+must provide a unique key such as a fully qualified class name for the named
+API item.</p>Possible alternative definitions of the &lt;javaMethodInterface&gt;
+element are the <xref href="javaMethodClass.dita">javaMethodClass</xref>, <xref href="javaMethodPrimitive.dita">javaMethodPrimitive</xref>, <xref href="javaMethodArray.dita">javaMethodArray</xref>,
+and <xref href="javaVoid.dita">javaVoid</xref> elements. This element is the
+specialization of the <xref href="../../genericSpecialization/apiOperation/apiOperationClassifier.dita">apiOperationClassifier</xref> element
+from the generic topic type.</section>
+<example> <title>Example</title>Click on the following link to open the Java
+API topic type example in  <object classid="clsid:adb880a6-d8ff-11cf-9377-00aa003b7a11" codebase="hhctrl.ocx#Version=4,73,8412,0" codetype="VIEWASTEXT" height="100" id="hhctrl" type="application/x-oleobject" width="100">
+<param name="Command" value="ShortCut"/>
+<param name="Text" value="Text: DITA "/>
+<param name="Item1" value=",../samples/java/IImportEngineTask.dita,"/></object><codeblock><?Pub Caret?>&lt;javaMethod id="com.ibm.xtools.ras.impord.engine.tasks.IImportEngineTask"&gt;
+   &lt;apiName&gt;execute&lt;/apiName&gt;
+   &lt;shortdesc&gt;Execute the task.&lt;/shortdesc&gt;
+   &lt;javaMethodDetail&gt;
+     &lt;javaMethodDef&gt;
+         &lt;javaReturnInterface keyref=”IStatus”&gt;
+             IStatus
+         &lt;/javaReturnInterface&gt;
+         &lt;apiDefNote&gt;
+             &lt;p&gt;atus returns the status. The severity is
+             &lt;ul&gt;&lt;li&gt;IStatus.OK if the task executed without any problems
+                &lt;li&gt;IStatus.INFO if the task executed successfully, but there were
+                    messages to report to the end user
+                &lt;li&gt;IStatus.WARNING if the task executed successfully, however
+                    there are warnings reported or non-fatal errors. &lt;/li&gt;
+                &lt;li&gt;IStatus.ERROR if there are errors during the
+                    execution of the task that cause the import
+                    to be aborted&lt;/li&gt;
+             &lt;/ul&gt;&lt;/p&gt;
+          &lt;/apiDefNote&gt;
+         &lt;javaMethodAccess value=”public”/&gt;
+     &lt;/javaMethodDef&gt;
+&lt;/javaMethod&gt;</codeblock></example>
+<section><?Pub Dtl?><title>Processing Expectations</title><image href="images/javaReturnInterface.jpg" placement="inline">
+<alt/></image></section>
+<section conref="../packagedef.dita#javaMethodInterface-reference/javaMethodInterface-containedBy-section"/><section conref="../packagedef.dita#javaMethodInterface-reference/javaMethodInterface-contains-section"/><section conref="../packagedef.dita#javaMethodInterface-reference/javaMethodInterface-contentModel-section"/><section conref="../packagedef.dita#javaMethodInterface-reference/javaMethodInterface-attList-section"/><section conref="../packagedef.dita#javaMethodInterface-reference/javaMethodInterface-classValue-section"/></refbody>
+</reference><?Pub *0000003214?>

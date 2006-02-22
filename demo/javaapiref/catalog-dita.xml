@@ -1,0 +1,35 @@
+<?xml version="1.0" ?>
+<!--
+ | (C) Copyright IBM Corporation 2005 - 2006. All Rights Reserved.
+ *-->
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog"
+         prefer="public">
+
+  <public publicId="-//IBM//DTD DITA Java API Reference Map//EN"
+          uri="demo/javaapiref/dtd/javaAPIMap.dtd"/>
+  <public publicId="-//IBM//DTD DITA Java API Package Reference Type//EN"
+          uri="demo/javaapiref/dtd/javaPackage.dtd"/>
+  <public publicId="-//IBM//DTD DITA Java API Class Reference Type//EN"
+          uri="demo/javaapiref/dtd/javaClass.dtd"/>
+  <public publicId="-//IBM//DTD DITA Java API Interface Reference Type//EN"
+          uri="demo/javaapiref/dtd/javaInterface.dtd"/>
+
+  <public publicId="-//IBM//ELEMENTS DITA Java API Reference Map//EN"
+          uri="demo/javaapiref/dtd/javaAPIMap.mod"/>
+  <public publicId="-//IBM//ELEMENTS DITA Java API Package//EN"
+          uri="demo/javaapiref/dtd/javaPackage.mod"/>
+  <public publicId="-//IBM//ELEMENTS DITA Java API Class//EN"
+          uri="demo/javaapiref/dtd/javaClass.mod"/>
+  <public publicId="-//IBM//ELEMENTS DITA Java API Interface//EN"
+          uri="demo/javaapiref/dtd/javaInterface.mod"/>
+  <public publicId="-//IBM//ELEMENTS DITA Java API Field//EN"
+          uri="demo/javaapiref/dtd/javaField.mod"/>
+  <public publicId="-//IBM//ELEMENTS DITA Java API Method//EN"
+          uri="demo/javaapiref/dtd/javaMethod.mod"/>
+
+  <public publicId="-//IBM//ENTITIES DITA Java API Domain//EN"
+          uri="demo/javaapiref/dtd/javaAPIDomain.ent"/>
+  <public publicId="-//IBM//ELEMENTS DITA Java API Domain//EN"
+          uri="demo/javaapiref/dtd/javaAPIDomain.mod"/>
+
+</catalog>

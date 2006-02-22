@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\dtd\reference.dtd">
+<reference id="javaClass_module" outputclass="module" xml:lang="en-us">
+<title>javaClass module</title>
+<shortdesc>Defines a top-level container for all the elements that are necessary
+to describe an API class. </shortdesc>
+<refbody>
+<section><title>Description</title><p>The javaClass topic type contains the
+elements that are necessary to show the name of the class, the short description
+of the class, the class syntax, and the class use description.  This topic
+type module also contains all the elements necessary to describe the component
+fields and methods. The members of the class have the following categories:
+constants, fields, methods, events, and constructors.  To describe the component
+fields and methods insert the javaField and javaMethod<?Pub Caret?> elements
+into javaClass module. </p></section>
+<example> <title>Example</title><codeblock><![CDATA[<javaClass id="">
+   <apiName></apiName>
+   <shortdesc></shortdesc>
+   <javaClassDetail></javaClassDetail>
+</javaClass>
+]]></codeblock></example>
+<section><title>Processing Expectations</title><image href="images/javaClass.jpg">
+<alt>Processing Expectations</alt></image></section>
+</refbody>
+</reference>
+<?Pub *0000001361?>

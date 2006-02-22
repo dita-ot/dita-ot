@@ -5,7 +5,8 @@
                 xmlns:fo="http://www.w3.org/1999/XSL/Format"
                 version='1.0'>
 
-
+<!-- Define the error message prefix identifier -->
+<xsl:variable name="msgprefix">DOTX</xsl:variable>
 
 <!-- =================== start of override stubs ====================== -->
 
@@ -58,8 +59,7 @@
     <xsl:otherwise>
       <xsl:text>***</xsl:text>
       <xsl:call-template name="output-message">
-        <xsl:with-param name="msg">No title specified; using "***".</xsl:with-param>
-        <xsl:with-param name="msgnum">009</xsl:with-param>
+        <xsl:with-param name="msgnum">037</xsl:with-param>
         <xsl:with-param name="msgsev">W</xsl:with-param>
       </xsl:call-template>
     </xsl:otherwise>

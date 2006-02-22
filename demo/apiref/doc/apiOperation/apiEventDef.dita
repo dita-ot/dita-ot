@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?><!--Arbortext, Inc., 1988-2004, v.4002--><?Pub Inc?>
+<!DOCTYPE reference
+  PUBLIC "-//IBM//DTD DITA Reference//EN" "..\dtd\reference.dtd">
+<reference id="apiEventDef" outputclass="element" xml:lang="en-us">
+<title>apiEventDef</title>
+<shortdesc>The &lt;apiEventDef&gt; element represents the definition of the events
+that are created by the operation. Examples of such events include exceptions
+and errors.</shortdesc>
+<refbody>
+<section><title>Description</title>Within the &lt;apiEventDef&gt; element, the <b>state</b>, <b>keyword</b>,
+and <b>ph</b> attributes are provided to handle unexpected situations<?Pub Caret?>
+within the general representation and to provide a basis for specialization.<dl>
+<dlentry>
+<dt/>
+<dd><lines><b><u>state</u></b> 
+The state element specifies a name/value pair whenever it is necessary to represent a named state that has a variable value. The element is primarily intended for use in specializations to represent specific states (like logic circuit states, chemical reaction states, airplane instrumentation states, and so forth).</lines><lines><b><u>ph</u></b> 
+The phrase ph element is used to organize content for reuse or conditional processing (for example, when part of a paragraph applies to a particular audience). It can be used by future specializations of DITA to apply specific processing or formatting to marked up phrases.</lines><lines><b><u>keyword</u></b> 
+The keyword element identifies a keyword or token, such as a single value from an enumerated list, the name of a command or parameter, product name, or a lookup key for a message (contrast with term )</lines></dd>
+</dlentry></dl></section>
+<section conref="../packagedef.dita#apiEventDef-reference/apiEventDef-containedBy-section"/><section conref="../packagedef.dita#apiEventDef-reference/apiEventDef-contains-section"/><section conref="../packagedef.dita#apiEventDef-reference/apiEventDef-contentModel-section"/><section conref="../packagedef.dita#apiEventDef-reference/apiEventDef-attList-section"/><section conref="../packagedef.dita#apiEventDef-reference/apiEventDef-classValue-section"/></refbody>
+</reference><?Pub *0000001734?>

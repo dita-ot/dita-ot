@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ | (C) Copyright IBM Corporation 2005 - 2006. All Rights Reserved.
+ *-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
+  <xs:import namespace="http://dita.oasis-open.org/architecture/2005/" schemaLocation="../../../schema/ditaarch.xsd"/>
+  <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="../../../schema/xml.xsd"/>
+
+   <xs:group name="api-d-xref">
+     <xs:choice>
+       <xs:element ref="apipackage"/>
+       <xs:element ref="apiclassifier"/>
+       <xs:element ref="apioperation"/>
+       <xs:element ref="apivalue"/>
+     </xs:choice>
+   </xs:group>
+  
+  
+  <xs:element name="apipackage" >
+    <xs:complexType mixed="true">
+      <xs:attributeGroup ref="apipackage.attlist"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="apipackage.attlist">
+    <xs:attribute name="href"/>
+    <xs:attribute name="keyref"/>
+    <xs:attribute name="type"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attribute name="format"/>
+    <xs:attribute name="scope">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="local"/>
+          <xs:enumeration value="peer"/>
+          <xs:enumeration value="external"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="outputclass"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute name="class" default="+ topic/xref pr-d/xref api-d/apipackage "/>
+  </xs:attributeGroup>
+  <xs:element name="apiclassifier" >
+    <xs:complexType mixed="true">
+      <xs:attributeGroup ref="apiclassifier.attlist"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="apiclassifier.attlist">
+    <xs:attribute name="href"/>
+    <xs:attribute name="keyref"/>
+    <xs:attribute name="type"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attribute name="format"/>
+    <xs:attribute name="scope">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="local"/>
+          <xs:enumeration value="peer"/>
+          <xs:enumeration value="external"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="outputclass"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute name="class" default="+ topic/xref pr-d/xref api-d/apiclassifier "/>
+  </xs:attributeGroup>
+  <xs:element name="apioperation" >
+    <xs:complexType mixed="true">
+      <xs:attributeGroup ref="apioperation.attlist"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="apioperation.attlist">
+    <xs:attribute name="href"/>
+    <xs:attribute name="keyref"/>
+    <xs:attribute name="type"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attribute name="format"/>
+    <xs:attribute name="scope">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="local"/>
+          <xs:enumeration value="peer"/>
+          <xs:enumeration value="external"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="outputclass"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute name="class" default="+ topic/xref pr-d/xref api-d/apioperation "/>
+  </xs:attributeGroup>
+  <xs:element name="apivalue" >
+    <xs:complexType mixed="true">
+      <xs:attributeGroup ref="apivalue.attlist"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="apivalue.attlist">
+    <xs:attribute name="href"/>
+    <xs:attribute name="keyref"/>
+    <xs:attribute name="type"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attribute name="format"/>
+    <xs:attribute name="scope">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="local"/>
+          <xs:enumeration value="peer"/>
+          <xs:enumeration value="external"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="outputclass"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute name="class" default="+ topic/xref pr-d/xref api-d/apivalue "/>
+  </xs:attributeGroup>
+</xs:schema>

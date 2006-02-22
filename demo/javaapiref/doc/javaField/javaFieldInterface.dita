@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\dtd\reference.dtd">
+<reference id="javaFieldInterface" outputclass="element" xml:lang="en-us">
+<title>javaFieldInterface</title>
+<shortdesc>The &lt;javaFieldI<?Pub Caret?>nterface> element specifies within
+the <i>Data Type</i> declaration that the value of the field must be an object
+of a class that implements the interface.</shortdesc>
+<refbody>
+<section><title>Description</title><p> The <i>keyref</i> attribute must provide
+a unique key such as a fully qualified class name for the named API item. </p></section>
+<example> <title>Example</title>Click on the following link to open the Java
+API topic type example in  <object classid="clsid:adb880a6-d8ff-11cf-9377-00aa003b7a11"
+codebase="hhctrl.ocx#Version=4,73,8412,0" codetype="VIEWASTEXT" height="100"
+id="hhctrl" type="application/x-oleobject" width="100">
+<param name="Command" value="ShortCut"/>
+<param name="Text" value="Text: DITA "/>
+<param name="Item1" value=",../samples/java/IDefaultComponentExportDataModel.dita,"/>
+</object><codeblock>&lt;javaField id="com.ibm.xtools.ras.profile.defauld.component.defaultcomponentprofile">
+   &lt;apiName>eINSTANCE&lt;/apiName>
+   &lt;shortdesc>The singleton instance of the package.&lt;/shortdesc>
+   &lt;javaFieldDetail>
+     &lt;javaFieldDef>
+       &lt;javaFinalField/>
+       &lt;javaStaticField/>
+       &lt;javaFieldAccess value="public"/>
+       &lt;javaFieldInterface keyref="DefaultcomponentprofilePackage">
+          DefaultcomponentprofilePackage&lt;/javaFieldInterface>
+     &lt;/javaFieldDef>
+   &lt;/javaFieldDetail>
+&lt;/javaField></codeblock></example>
+<section><title>Processing Expectations</title><image href="images/javaFieldInterface.jpg"
+placement="inline"><alt></alt></image></section>
+<section conref="../packagedef.dita#javaFieldInterface-reference/javaFieldInterface-containedBy-section"></section>
+<section conref="../packagedef.dita#javaFieldInterface-reference/javaFieldInterface-contains-section"></section>
+<section conref="../packagedef.dita#javaFieldInterface-reference/javaFieldInterface-contentModel-section"></section>
+<section conref="../packagedef.dita#javaFieldInterface-reference/javaFieldInterface-attList-section"></section>
+<section conref="../packagedef.dita#javaFieldInterface-reference/javaFieldInterface-classValue-section"></section>
+</refbody>
+</reference>
+<?Pub *0000002476?>

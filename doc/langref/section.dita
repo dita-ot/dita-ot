@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2004, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "../../dtd/reference.dtd">
+<!--             (C) Copyright OASIS Open 2005.                    -->
+<!--             (C) Copyright IBM Corporation 2001, 2004.         -->
+<!--             All Rights Reserved.                              -->
+<reference id="section" xml:lang="en-us">
+<title><keyword>section</keyword></title>
+<shortdesc>The &lt;<keyword>section</keyword>> element represents an organizational
+division in a topic. Sections are used to organize subsets of information
+that are directly related to the topic. For example, the titles <b>Reference
+Syntax</b>, <b>Example</b> and <b>Properties</b> might represent section-level
+discourse within a topic about a command-line process—the content in each
+section relates uniquely to the subject of that topic. Multiple sections within
+a single topic do not represent a hierarchy, but rather peer divisions of
+that topic. Sections cannot be nested. A section may have an optional title.</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>section</indexterm><indexterm>Topic elements<indexterm>section</indexterm>  </indexterm>
+<indexterm>section</indexterm></keywords>
+</metadata></prolog>
+<refbody>
+<section conref="DitabaseNav.dita#commonCMdefs/section-contains"></section>
+<section conref="DitabaseNav.dita#commonCMdefs/section-containedby"></section>
+<section conref="DitabaseNav.dita#commonCMdefs/section-classvalue"></section>
+<section><title>Attributes</title><simpletable id="section_attr" relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="commonLRdefs.dita#commonLRdefs/spectitle">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/univ-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/classandout">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+</simpletable></section>
+<example>      <title>Example<?Pub Caret?></title>    <codeblock>&lt;reference id="reference">
+ &lt;title>Copy Command&lt;/title>
+ &lt; refbody>
+  &lt;section>
+   &lt;title>Purpose&lt;/title>
+   This little command copies
+   things.
+  &lt;/section>
+ &lt;/refbody>
+&lt;/reference></codeblock>       </example>
+</refbody>
+</reference>
+<?Pub *0000002842?>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\..\dtd\reference.dtd">
+<reference id="packageOverview" outputclass="package" xml:lang="en-us">
+<title>Taxonomy specialization</title>
+<shortdesc>The Taxonomy specialization supports semantic classification of
+content.</shortdesc>
+<refbody>
+<section><title>Description</title><?Pub Caret1?><p>You take the following
+approach:</p><ol>
+<li>Define the subject matter for your content by writing <xref href="subjectDomain/subject-d_module.xml"
+type="reference">subject topics</xref>. In effect, these topics define a single
+sense of a term from a glossary. </li>
+<li>Define relationships between these subjects with a <xref href="mapScheme/scheme_module.xml"
+type="reference">scheme map</xref>.</li>
+<li>Classify your content by specifying relationships between content topics
+and these subject topics in your <xref href="classifyDomain/classify-d_module.xml"
+type="reference">navigation map</xref>.</li>
+</ol><note>This specialization conforms closely to the SKOS standard, which
+(though largely stable) hasn't progressed to full approval yet. Because of
+that, it is possible that this specialization could change in the future if
+SKOS changes during approval. The RDF output generated from this specialization
+is more likely to change than the markup itself. For more information about
+SKOS, see <xref format="html" href="http://www.w3.org/2004/02/skos/core/">http://www.w3.org/2004/02/skos/core/</xref>.</note></section>
+</refbody>
+</reference>
+<?Pub *0000001612?>

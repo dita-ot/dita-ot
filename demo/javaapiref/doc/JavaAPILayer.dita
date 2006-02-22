@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\dtd\reference.dtd">
+<reference id="javaReferenceDoc" outputclass="moduleset" xml:lang="en-us">
+<title>Java topic types</title>
+<shortdesc>The Java API specialization provides a set of specific topic types
+that can describe a Java application programming interface (API) library.
+The Java language-specific API topic types are specialized from the generic
+API reference topic types. This specialization permits the sharing of the
+basic semantics and processing. </shortdesc>
+<refbody>
+<section><title>Description</title><p>The Java modules describe the Java topic
+types and their contained elements. For example, the javaPackage module describes
+all the elements necessary to describe a Java API package. The Java topic
+types provide language-specific topic types for documenting Java API references. </p><p>The
+Java topic types and the contained elements are described in the following
+modules:</p></section>
+</refbody>
+</reference>

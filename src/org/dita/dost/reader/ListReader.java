@@ -8,6 +8,7 @@ import java.util.LinkedList;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
+import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.module.Content;
 import org.dita.dost.module.ContentImpl;
 import org.dita.dost.util.Constants;
@@ -22,6 +23,7 @@ public class ListReader extends AbstractReader {
 
     private LinkedList refList;
     private ContentImpl content;
+    private DITAOTJavaLogger logger;
 
 
     /**
@@ -30,6 +32,7 @@ public class ListReader extends AbstractReader {
     public ListReader() {
         super();
         refList = new LinkedList();
+        logger = new DITAOTJavaLogger();
         content = new ContentImpl();
         content.setCollection(refList);
     }
@@ -56,12 +59,12 @@ public class ListReader extends AbstractReader {
             
 
         } catch (Exception e) {
-            e.printStackTrace(System.out);
+        	logger.logException(e);
         }finally{
             try{
                 listInput.close();
             }catch (Exception e) {
-                e.printStackTrace(System.out);                
+            	logger.logException(e);              
             }
             
         }

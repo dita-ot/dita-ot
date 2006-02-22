@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE javaInterface PUBLIC "-//IBM//DTD DITA Java API Interface Reference Type//EN"
+ "../dtd/javaInterface.dtd">
+<javaInterface id="javaInterface1">
+<apiName>NodeAvailability</apiName>
+<shortdesc>This interface represents the access to a node that may not be
+available.</shortdesc>
+<javaInterfaceDetail>
+<javaInterfaceDef>
+<javaInterfaceAccess/></javaInterfaceDef>
+<apiDesc>You use the methods of the NodeAvailability interface to check access
+to the node.</apiDesc>
+</javaInterfaceDetail>
+<javaField id="read">
+<apiName>READ_OPERATION</apiName>
+<shortdesc>This constant should be passed to determine if the node can be
+read.</shortdesc>
+<javaFieldDetail>
+<javaFieldDef>
+<javaFieldAccess value="public"/>
+<javaFieldPrimitive value="int"/>
+<apiData>1</apiData>
+</javaFieldDef>
+</javaFieldDetail>
+</javaField>
+<javaField id="write">
+<apiName>WRITE_OPERATION</apiName>
+<shortdesc>This constant should be passed to determine if the node can be
+updated.</shortdesc>
+<javaFieldDetail>
+<javaFieldDef>
+<javaFieldAccess value="public"/>
+<javaFieldPrimitive value="int"/>
+<apiData>-1</apiData>
+</javaFieldDef>
+</javaFieldDetail>
+</javaField>
+<javaMethod id="getNodeAvailability">
+<apiName>getNodeAvailability</apiName>
+<shortdesc>This method returns the availability of the node.</shortdesc>
+<javaMethodDetail>
+<javaMethodDef>
+<javaMethodAccess value="public"/>
+<javaReturn>
+<javaMethodPrimitive value="boolean"/>
+<apiDefNote>Whether the node is available for the specified operation.</apiDefNote>
+</javaReturn>
+<javaParam>
+<javaMethodPrimitive value="int"/>
+<apiItemName>operation</apiItemName>
+<apiDefNote>This parameter identifies whether to check availability for reading
+or writing the node. You should use the  <javafield href="#read">READ_OPERATION</javafield> or <javafield
+href="#write">WRITE_OPERATION</javafield> constants to specify the operation.</apiDefNote>
+</javaParam>
+</javaMethodDef>
+</javaMethodDetail>
+</javaMethod>
+</javaInterface>

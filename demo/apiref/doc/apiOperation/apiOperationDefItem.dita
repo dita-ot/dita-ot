@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\dtd\reference.dtd">
+<reference id="apiOperationDefItem" outputclass="element" xml:lang="en-us">
+<title>apiOperationDefItem</title>
+<shortdesc>The &lt;apiOperationDefItem&gt; element is the specialization of
+the
+&lt;apiDefItem&gt; element to support classifier references and to distinguish
+returns, parameters, and events.</shortdesc>
+<refbody>
+<section><title>Description</title><p>In the &lt;apiOperationDefItem&gt; element,
+the &lt;state&gt;, &lt;keyword&gt;, and &lt;ph&gt; elements are provided to
+support unexpected situations within the general representation and to provide
+a basis for specialization. The &lt;apiOperationDefItem&gt; element is for
+nested substructure within returns, parameters, and events.</p></section>
+<section conref="../packagedef.dita#apiOperationDefItem-reference/apiOperationDefItem-containedBy-section"></section>
+<section conref="../packagedef.dita#apiOperationDefItem-reference/apiOperationDefItem-contains-section"></section>
+<section conref="../packagedef.dita#apiOperationDefItem-reference/apiOperationDefItem-contentModel-section"></section>
+<section conref="../packagedef.dita#apiOperationDefItem-reference/apiOperationDefItem-attList-section"></section>
+<section conref="../packagedef.dita#apiOperationDefItem-reference/apiOperationDefItem-classValue-section"></section>
+</refbody>
+</reference>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\..\dtd\reference.dtd">
+<reference id="subjectRole" outputclass="element" xml:lang="en-us">
+<title>subjectRole</title>
+<shortdesc>Specifies a role for the contained subjects.</shortdesc><?Pub Caret1?>
+<refbody>
+<section><title>Description</title><p>Within the <xref href="subjectRelHeader.xml"
+type="reference"></xref> element, the <keyword>subjectRole</keyword> element
+defines the role by reference to a subject. </p><p>Within the <xref href="subjectRel.xml"
+type="reference"></xref> element, the <keyword>subjectRole</keyword> element
+identifies the role played by a subject within an associative relationship. </p></section>
+<section conref="../packagedef.xml#subjectRole-reference/subjectRole-containedBy-section"></section>
+<section conref="../packagedef.xml#subjectRole-reference/subjectRole-contains-section"></section>
+<section conref="../packagedef.xml#subjectRole-reference/subjectRole-contentModel-section"></section>
+<section conref="../packagedef.xml#subjectRole-reference/subjectRole-attList-section"></section>
+<section conref="../packagedef.xml#subjectRole-reference/subjectRole-classValue-section"></section>
+</refbody>
+</reference>
+<?Pub *0000001323?>

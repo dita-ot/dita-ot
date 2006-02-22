@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2004, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "../../dtd/reference.dtd">
+<!--             (C) Copyright OASIS Open 2005.                    -->
+<!--             (C) Copyright IBM Corporation 2001, 2004.         -->
+<!--             All Rights Reserved.                              -->
+<reference id="navref" xml:lang="en-us">
+<title><keyword>navref</keyword></title>
+<shortdesc>The &lt;<keyword>navref</keyword>> element references a map file
+from within a map file.  The reference is resolved at runtime for Eclipse
+navigation, typically to pull together the navigation for multiple components
+into a product navigation. <ph conref="commonLRdefs.dita#commonLRdefs/only4eclipse"></ph></shortdesc>
+<prolog><metadata>
+<keywords><indexterm>navref</indexterm><indexterm xml:lang="en-us">Map elements<indexterm>navref</indexterm>  </indexterm>
+<indexterm>navref</indexterm></keywords>
+</metadata></prolog>
+<refbody>
+<section>For build-time integration, you can use the conref attribute on an
+element inside the map (for example, a topicref) to pull in content from a
+matching element (for example, another topicref) in another map.</section>
+<section conref="MapNav.dita#commonCMdefs/navref-contains"></section>
+<section conref="MapNav.dita#commonCMdefs/navref-containedby"></section>
+<section conref="MapNav.dita#commonCMdefs/navref-classvalue"></section>
+<section><title>Attributes</title><simpletable id="navref_attr" relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="commonLRdefs.dita#commonLRdefs/mapref">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/classonly">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+</simpletable></section>
+<example><title>Example</title>In this example, the map titled "MyComponent
+tasks" references the maps "othermap2.ditamap" and "othermap3.ditamap".<codeblock>&lt;map title="MyComponent tasks">
+&lt;<?Pub Caret1?>navref mapref="../com.ibm.xml.doc/othermap1.ditamap"/>
+&lt;navref mapref="../com.ibm.xml.doc/othermap2.ditamap"/>
+&lt;/topicref>
+&lt;/map></codeblock>       </example>
+</refbody>
+</reference>
+<?Pub *0000002656?>

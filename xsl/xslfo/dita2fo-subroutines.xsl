@@ -41,7 +41,7 @@
   <fo:inline>
     <xsl:attribute name="id">
       <!--We delete the line to get parent id here -->
-      <xsl:value-of select="generate-id()"/><!-- generate id according to current node -->
+      <xsl:value-of select="."/><!-- generate id according to current node -->
     </xsl:attribute>
   <xsl:value-of select="$afill"/></fo:inline>
 </xsl:template>
@@ -51,7 +51,17 @@
 <xsl:template name="gen-toc-id">
 <!-- Filler for A-name anchors (empty links)-->
 <xsl:variable name="afill"></xsl:variable>
-  <fo:inline id="{generate-id()}"><xsl:value-of select="$afill"/></fo:inline>
+<xsl:variable name="id-value">
+    <xsl:choose>
+      <xsl:when test="@id">
+        <xsl:value-of select="@id"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="generate-id()"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <fo:inline id="{$id-value}"><xsl:value-of select="$afill"/></fo:inline>
 </xsl:template>
 
 

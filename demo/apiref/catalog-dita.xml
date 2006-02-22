@@ -1,0 +1,35 @@
+<?xml version="1.0" ?>
+<!--
+ | (C) Copyright IBM Corporation 2005 - 2006. All Rights Reserved.
+ *-->
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog"
+         prefer="public">
+
+  <public publicId="-//IBM//DTD DITA API Operation Reference Type//EN"
+          uri="demo/apiref/dtd/apiOperation.dtd"/>
+  <public publicId="-//IBM//DTD DITA API Package Type//EN"
+          uri="demo/apiref/dtd/apiPackage.dtd"/>
+  <public publicId="-//IBM//DTD DITA API Reference Type//EN"
+          uri="demo/apiref/dtd/apiRef.dtd"/>
+  <public publicId="-//IBM//DTD DITA API Classifier Reference Type//EN"
+          uri="demo/apiref/dtd/apiClassifier.dtd"/>
+  <public publicId="-//IBM//DTD DITA API Reference Map//EN"
+          uri="demo/apiref/dtd/apiMap.dtd"/>
+
+  <public publicId="-//IBM//ELEMENTS DITA API Reference//EN"
+          uri="demo/apiref/dtd/apiRef.mod"/>
+  <public publicId="-//IBM//ELEMENTS DITA API Package//EN"
+          uri="demo/apiref/dtd/apiPackage.mod"/>
+  <public publicId="-//IBM//ELEMENTS DITA API Classifier//EN"
+          uri="demo/apiref/dtd/apiClassifier.mod"/>
+  <public publicId="-//IBM//ELEMENTS DITA API Operation//EN"
+          uri="demo/apiref/dtd/apiOperation.mod"/>
+  <public publicId="-//IBM//ELEMENTS DITA API Value//EN"
+          uri="demo/apiref/dtd/apiValue.mod"/>
+
+  <public publicId="-//IBM//ENTITIES DITA API Domain//EN"
+          uri="demo/apiref/dtd/apiDomain.ent"/>
+  <public publicId="-//IBM//ELEMENTS DITA API Domain//EN"
+          uri="demo/apiref/dtd/apiDomain.mod"/>
+
+</catalog>

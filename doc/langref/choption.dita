@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2004, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "../../dtd/reference.dtd">
+<!--             (C) Copyright OASIS Open 2005.                    -->
+<!--             (C) Copyright IBM Corporation 2001, 2004.         -->
+<!--             All Rights Reserved.                              -->
+<reference id="choption" xml:lang="en-us">
+<title><keyword>choption</keyword></title>
+<shortdesc>The &lt;<keyword>choption</keyword>> element describes an option
+that a user could choose to accomplish a step of a task. In a user interface,
+for example, this might be the name of radio button.</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>choption (choice option)</indexterm><indexterm>Task elements<indexterm>choption</indexterm>  </indexterm>
+<indexterm>choption</indexterm></keywords>
+</metadata></prolog>
+<refbody>
+<section conref="DitabaseNav.dita#commonCMdefs/choption-contains"></section>
+<section conref="DitabaseNav.dita#commonCMdefs/choption-containedby"></section>
+<section conref="DitabaseNav.dita#commonCMdefs/choption-classvalue"></section>
+<section><title>Attributes</title> <simpletable id="choption_attr" relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="commonLRdefs.dita#commonLRdefs/univ-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/specentry">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/classandout">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+</simpletable></section>
+<example>          <title>Example</title><pre>&lt;step>&lt;cmd>Then this&lt;/cmd>
+ &lt;choicetable>
+  &lt;chhead>
+   &lt;choptionhd>Do something&lt;/choptionhd>
+   &lt;chdeschd>And this happens<?Pub Caret?>&lt;/chdeschd>
+  &lt;/chhead>
+  &lt;chrow><b>&lt;choption></b>Do this<b>&lt;/choption></b>
+     &lt;chdesc>and this will happen&lt;/chdesc>&lt;/chrow>
+  &lt;chrow><b>&lt;choption></b>Do that<b>&lt;/choption></b>
+     &lt;chdesc>and that will happen&lt;/chdesc>&lt;/chrow>
+ &lt;/choicetable>
+&lt;/step>
+</pre>       </example>
+</refbody>
+</reference>
+<?Pub *0000002678?>

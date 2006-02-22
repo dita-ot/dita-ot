@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2004, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "../../dtd/reference.dtd">
+<!--             (C) Copyright OASIS Open 2005.                    -->
+<!--             (C) Copyright IBM Corporation 2001, 2004.         -->
+<!--             All Rights Reserved.                              -->
+<reference id="sub" xml:lang="en-us">
+<title><keyword>sub</keyword></title>
+<shortdesc>A subscript (&lt;<keyword>sub</keyword>>) indicates that text should
+be subscripted, or placed lower in relationship to the surrounding text. 
+Subscripted text is often a smaller font than the surrounding text. Formatting
+may vary depending on your output process. This element is part of the DITA
+highlighting domain.</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>sub (subscript)</indexterm><indexterm>subscript (sub)</indexterm>
+<indexterm>Domain elements<indexterm>sub (subscript)</indexterm>         
+   </indexterm><indexterm>sub (subscript)</indexterm></keywords>
+</metadata></prolog>
+<refbody>
+<section conref="DitabaseNav.dita#commonCMdefs/sub-contains"></section>
+<section conref="DitabaseNav.dita#commonCMdefs/sub-containedby"></section>
+<section conref="DitabaseNav.dita#commonCMdefs/sub-classvalue"></section>
+<section><title>Attributes</title><simpletable id="sub_attr" relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="commonLRdefs.dita#commonLRdefs/univ-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/classonly">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+</simpletable></section>
+<example>&nbsp;<title>Example<?Pub Caret?></title><codeblock>The power produced by the electrohydraulic dam was 10&lt;sup>10&lt;/sup> more than 
+the older electric plant.  The difference was H<b>&lt;sub></b>2<b>&lt;/sub></b>O.</codeblock> 
+     </example>
+</refbody>
+</reference>
+<?Pub *0000002381?>

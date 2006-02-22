@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\dtd\reference.dtd">
+<reference id="apiBaseClassifier" outputclass="element" xml:lang="en-us">
+<title>apiBaseClassifier</title>
+<shortdesc>The &lt;apiBaseClassifier> element specifies a base classifier
+from which the classifier inherits part of its instance, structure, or behavior. </shortdesc>
+<refbody>
+<section><title>Description</title><p>Base classes are a useful way to group
+objects that share a common set of functionality. Base classes can provide
+a default set of functionality and allow customization though extension. </p><p>This
+element can provide an <i>href</i> attribute if the description of the API
+item is available. If the description is not available, the &lt;apiBaseClassifier>
+element can provide the name of the API item in its contents. <ul>
+<li>If you use an <i>href</i> attribute to a DITA API topic that describes
+the related API item, you do not need to provide any other information.</li>
+</ul><ul>
+<li>If you provide an <i>href </i> attribute to some other format (such as
+HTML), you need to provide the name of the related API item inside the &lt;apiBaseClassifier>
+element.</li>
+</ul><ul>
+<li>If you cannot provide an <i>href</i> attribute (for instance, if the description
+of the related API item might not be available), you must provide the name
+of the related API item inside the &lt;apiBaseClassifier> element and the
+fully qualified name of the element in the <i>keyref</i> attribute. The <i>keyref</i> attribute
+must provide a unique key such as a fully qualified classifier name for the
+named API item.</li>
+</ul></p><p>For example, in Java API specialization, the &lt;apiBaseClassifier>
+represents the &lt;javaBaseClass> for a superclass and the &lt;javaBaseInterface>
+for a super interface. </p></section>
+<example><title>Example</title>The following example shows a simple &lt;apiBaseClassifier>
+element for a Visual Basic API class:<?Pub Caret?><codeblock>&lt;apiClassifier id="com.ibm.xtools.xde" outputclass="class" platform="vb">
+    &lt;apiName>RXEAbstraction&lt;/apiName>
+    &lt;shortdesc>Specifies one or more interfaces or interface members that will be implemented
+        in the class or structure definition in which it appears.&lt;/shortdesc>
+    &lt;apiClassifierDetail>
+       &lt;apiClassifierDef>
+		&lt;!– SYNTAX
+          Public Class RXEAbstraction
+          Inherits IRXEClass 
+        –>
+          &lt;apiQualifier name="access" value="public"/>
+          &lt;apiBaseClassifier>
+            &lt;apiItemName href=”IRXEClass”>IRXEClass&lt;/apiItemName>
+            &lt;apiDefNote>Required. A class whose properties, methods, and events will be
+                implemented by corresponding members in a class or structure.&lt;/apiDefNote>
+          &lt;/apiBaseClassifier>
+          &lt;apiClassifierMember>&lt;apiItemName>RXEAbstraction&lt;/apiItemName>
+          &lt;/apiClassifierMember>
+       &lt;/apiClassifierDef>
+	&lt;/apiClassifierDetail>
+&lt;/apiClassifier></codeblock></example>
+<section conref="../packagedef.dita#apiBaseClassifier-reference/apiBaseClassifier-containedBy-section"></section>
+<section conref="../packagedef.dita#apiBaseClassifier-reference/apiBaseClassifier-contains-section"></section>
+<section conref="../packagedef.dita#apiBaseClassifier-reference/apiBaseClassifier-contentModel-section"></section>
+<section conref="../packagedef.dita#apiBaseClassifier-reference/apiBaseClassifier-attList-section"></section>
+<section conref="../packagedef.dita#apiBaseClassifier-reference/apiBaseClassifier-classValue-section"></section>
+</refbody>
+</reference>
+<?Pub *0000003705?>

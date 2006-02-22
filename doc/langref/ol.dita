@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2004, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "../../dtd/reference.dtd">
+<!--             (C) Copyright OASIS Open 2005.                    -->
+<!--             (C) Copyright IBM Corporation 2001, 2004.         -->
+<!--             All Rights Reserved.                              -->
+<reference id="ol" xml:lang="en-us">
+<title><keyword>ol</keyword></title>
+<shortdesc>An ordered list (&lt;ol>) is a list of items sorted by sequence
+or order of importance.</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>ol</indexterm><indexterm>Body elements<indexterm>ol</indexterm>  </indexterm>
+<indexterm>ol</indexterm></keywords>
+</metadata></prolog>
+<refbody>
+<section conref="DitabaseNav.dita#commonCMdefs/ol-contains"></section>
+<section conref="DitabaseNav.dita#commonCMdefs/ol-containedby"></section>
+<section conref="DitabaseNav.dita#commonCMdefs/ol-classvalue"></section>
+<section><title>Attributes</title><simpletable id="ol_attr" relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="commonLRdefs.dita#commonLRdefs/compact">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/spectitle">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/univ-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/classandout">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+</simpletable></section>
+<example>  <title>Example<?Pub Caret?></title>        <codeblock>Here are the colors of the rainbow in order of appearance from top to bottom:
+&lt;ol>
+&lt;li>Red&lt;/li>
+&lt;li>Orange&lt;/li>
+&lt;li>Yellow&lt;/li>
+&lt;li>Green&lt;/li>
+&lt;li>Blue&lt;/li>
+&lt;li>Indigo&lt;/li>
+&lt;li>Violet&lt;/li>
+&lt;/ol></codeblock>       </example>
+</refbody>
+</reference>
+<?Pub *0000002469?>

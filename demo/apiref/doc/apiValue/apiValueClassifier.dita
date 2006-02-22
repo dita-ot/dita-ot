@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\dtd\reference.dtd">
+<reference id="apiValueClassifier" outputclass="element" xml:lang="en-us">
+<title>apiValueClassifier</title>
+<shortdesc>The &lt;apiValueClassifier> element specifies that the value is
+an instance of a classifier.</shortdesc>
+<refbody>
+<section><title>Description</title><p>This element can provide an <i>href</i> if
+the description of the API item is available. If the description is not available,
+the &lt;apiValueClassifier> element can provide the name of the API item in
+its contents. </p><ul>
+<li>If you use an <i>href</i> attribute to a DITA API topic that describes
+the related API item, you do not need any other attributes.</li>
+</ul><ul>
+<li>If you provide an <i>href</i> attribute to some other format (such as
+HTML), you need to provide the name of the related API item inside the &lt;apiValueClassifier>
+element.</li>
+</ul><ul>
+<li> If you cannot provide an <i>href</i> attribute (for instance, if the
+description of the related API item might not be available), you must provide
+the name of the related API item inside the &lt;apiValueClassifier> element
+and the fully qualified name of the element in the <i>keyref</i> attribute.
+The <i>keyref</i> attribute should provide a unique key such as a fully qualified
+classifier name for the named API item.</li>
+</ul><p>For example, in Java DITA API specialization, the &lt;apiValueClassifier>
+element represents the javaMethodClass or javaMethodInterface for parameters,
+and javaFieldClass or javaFieldInterface for fields. </p></section>
+<example><title>Example</title><p>The following example shows an &lt;apiValueClassifier>
+element for a Visual Basic property:</p><?Pub Caret1?><codeblock></codeblock><codeblock>&lt;apiValue id="IRXEAbstarction.Model" outputclass="property">
+    &lt;apiName>Model&lt;/apiName>
+    &lt;shortDesc>Retrieves the IRXEModel object that the element belongs to.&lt;/shortDesc>
+      &lt;apiValueDetail>
+         &lt;apiValueDef>
+            &lt;apiQualifier name="access" value="Public"/>
+            &lt;apiType name="type" value="Readonly">
+            &lt;apiValueClassifier href="IRXEModel.dita">IRXEModel&lt;/apiValueClassifier>
+            &lt;apiRelation href=”../IRXEAbstarction_intf.dita”>IRXEAbstarction Interface&lt;/apiRelation>
+            &lt;apiDefNote>
+                Returns the &lt;keyword>IRXEModel&lt;/keyword> object that the element belongs to.
+            &lt;/apiDefNote>
+         &lt;/apiValueDef>
+      &lt;/apiValueDetail>
+      &lt;apiDesc>
+         &lt;note>You must have an open read action before calling this property.&lt;/note>
+     &lt;/apiDesc>
+&lt;/apiValue></codeblock><codeblock></codeblock></example>
+<section conref="../packagedef.dita#apiValueClassifier-reference/apiValueClassifier-containedBy-section"></section>
+<section conref="../packagedef.dita#apiValueClassifier-reference/apiValueClassifier-contains-section"></section>
+<section conref="../packagedef.dita#apiValueClassifier-reference/apiValueClassifier-contentModel-section"></section>
+<section conref="../packagedef.dita#apiValueClassifier-reference/apiValueClassifier-attList-section"></section>
+<section conref="../packagedef.dita#apiValueClassifier-reference/apiValueClassifier-classValue-section"></section>
+</refbody>
+</reference>
+<?Pub *0000003416?>

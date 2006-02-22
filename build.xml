@@ -138,12 +138,14 @@
 				value="${dita.demo.book.dir}${file.separator}bookmap-readme.xml"/>
 			<param name="output.dir"
 				value="${dita.output.demo.book.dir}"/>
+      <param name="transtype" value="xhtml"/>
 		</antcall>
 		<antcall target="dita2pdf">
 			<param name="args.input"
 				value="${dita.demo.book.dir}${file.separator}taskbook.ditamap"/>
 			<param name="output.dir"
 				value="${dita.output.demo.book.dir}"/>
+      <param name="transtype" value="pdf"/>
 		</antcall>
 	</target>
 
@@ -281,6 +283,9 @@
 			<param name="args.input"       
 				value="${dita.doc.langref.dir}${file.separator}ditaref-book.ditamap"/>
 			<param name="output.dir"      value="${dita.output.demo.langref.dir}"/>
+            <param name="transtype" value="pdf"/>
+            <param name="dita.extname" value="dita"/>
+            <param name="args.fo.img.ext" value=".gif"/>
 		</antcall>
 	</target>
 
@@ -292,6 +297,11 @@
 				value="${dita.doc.langref.dir}${file.separator}ditaref-book.ditamap"/>
 			<param name="output.dir"
 				value="${dita.output.demo.langrefhelp.dir}"/>
+            <param name="transtype" value="htmlhelp"/>
+            <param name="dita.extname" value="dita"/>
+            <param name="args.ftr" value="${dita.doc.langref.dir}${file.separator}langref-footer.html"/>
+            <param name="args.css" value="${dita.doc.langref.dir}${file.separator}resource${file.separator}dita-oasis.css"/>
+            <param name="args.copycss" value="yes"/>
 		</antcall>
 	</target>
 
@@ -345,10 +355,15 @@
 			<param name="args.input"
 				value="${dita.doc.langref.dir}${file.separator}ditaref-alpha.ditamap"/>
 			<param name="output.dir"     value="${dita.output.doc.langref.dir}"/>
-	        <param name="args.xhtml.toc" value="toc"/>
+            <param name="args.xhtml.toc" value="toc"/>
+            <param name="dita.extname" value="dita"/>
+            <param name="transtype" value="xhtml"/>
+            <param name="args.ftr" value="${dita.doc.langref.dir}${file.separator}langref-footer.html"/>
+            <param name="args.css" value="${dita.doc.langref.dir}${file.separator}resource${file.separator}dita-oasis.css"/>
+            <param name="args.copycss" value="yes"/>    
 		</antcall>
 		<copy todir="${dita.output.doc.langref.dir}"
-        file="${dita.doc.langref.dir}${file.separator}index.html"/>		    
+        file="${dita.doc.langref.dir}${file.separator}resource${file.separator}index.html"/>		    
 	</target>
     
     <target name="doc.langref.chm" depends="init.doc.langref"
@@ -357,6 +372,11 @@
 			<param name="args.input"
 				     value="${dita.doc.langref.dir}${file.separator}ditaref-alpha.ditamap"/>
 			<param name="output.dir" value="${dita.output.doc.langref.dir}"/>
+            <param name="transtype" value="htmlhelp"/>
+            <param name="dita.extname" value="dita"/>
+            <param name="args.ftr" value="${dita.doc.langref.dir}${file.separator}langref-footer.html"/>
+            <param name="args.css" value="${dita.doc.langref.dir}${file.separator}resource${file.separator}dita-oasis.css"/>
+            <param name="args.copycss" value="yes"/>
 		</antcall>    
 	</target>
     
@@ -365,7 +385,10 @@
 		<antcall target="dita2pdf">
 			<param name="args.input"
 				value="${dita.doc.langref.dir}${file.separator}ditaref-alpha.ditamap"/>
-			<param name="output.dir" value="${dita.output.doc.langref.dir}"/>		    
+			<param name="output.dir" value="${dita.output.doc.langref.dir}"/>
+            <param name="transtype" value="pdf"/>		   
+            <param name="dita.extname" value="dita"/>
+            <param name="args.fo.img.ext" value=".gif"/>
 		</antcall>
 	</target>
 	
@@ -384,6 +407,7 @@
 			<param name="args.input"
 				value="${dita.doc.articles.dir}${file.separator}DITA-articles.ditamap"/>
 			<param name="output.dir"     value="${dita.output.doc.articles.dir}"/>
+      <param name="transtype" value="xhtml"/>
 		</antcall>
 	</target>
     
@@ -393,6 +417,7 @@
 			<param name="args.input"
 				value="${dita.doc.articles.dir}${file.separator}DITA-articles.ditamap"/>
 			<param name="output.dir"     value="${dita.output.doc.articles.dir}"/>
+      <param name="transtype" value="htmlhelp"/>
 		</antcall>
 	</target>
     
@@ -402,6 +427,7 @@
 			<param name="args.input"
 				value="${dita.doc.articles.dir}${file.separator}DITA-articles.ditamap"/>
 			<param name="output.dir"     value="${dita.output.doc.articles.dir}"/>
+      <param name="transtype" value="pdf"/>
 		</antcall>
 	</target>
 	
@@ -415,6 +441,7 @@
 			<param name="args.input"
 				value="${dita.doc.dir}${file.separator}DITA-readme.ditamap"/>
 			<param name="output.dir"     value="${dita.output.doc.dir}"/>
+      <param name="transtype" value="xhtml"/>
 		</antcall>
 	</target>
     
@@ -423,6 +450,7 @@
 			<param name="args.input"
 				value="${dita.doc.dir}${file.separator}DITA-readme.ditamap"/>
 			<param name="output.dir"     value="${dita.output.doc.dir}"/>
+      <param name="transtype" value="htmlhelp"/>
 		</antcall>
 	</target>
     
@@ -431,6 +459,7 @@
 			<param name="args.input"
 				value="${dita.doc.dir}${file.separator}DITA-readme.ditamap"/>
 			<param name="output.dir"     value="${dita.output.doc.dir}"/>
+      <param name="transtype" value="pdf"/>
 		</antcall>
 	</target>
 	
@@ -439,6 +468,7 @@
 			<param name="args.input"
 				value="${dita.doc.dir}${file.separator}installguide${file.separator}installing-ditaot.ditamap"/>
 			<param name="output.dir" value="${dita.output.doc.dir}${file.separator}installguide"/>
+      <param name="transtype" value="xhtml"/>
 		</antcall>
 	</target>
     
@@ -447,6 +477,7 @@
 			<param name="args.input"
 				value="${dita.doc.dir}${file.separator}installguide${file.separator}installing-ditaot.ditamap"/>
 			<param name="output.dir" value="${dita.output.doc.dir}${file.separator}installguide"/>
+      <param name="transtype" value="htmlhelp"/>
 		</antcall>
 	</target>
   
@@ -455,6 +486,7 @@
 			<param name="args.input"
 				value="${dita.doc.dir}${file.separator}installguide${file.separator}installing-ditaot.ditamap"/>
 			<param name="output.dir" value="${dita.output.doc.dir}${file.separator}installguide"/>
+      <param name="transtype" value="pdf"/>
 		</antcall>
 	</target>
 
@@ -479,7 +511,8 @@
 			<param name="args.input"
 				value="${dita.samples.dir}${file.separator}hierarchy.ditamap"/>
 			<param name="output.dir" value="${dita.output.samples.web.dir}"/>
-    		<param name="args.xhtml.toc" value="toc"/>
+  		<param name="args.xhtml.toc" value="toc"/>
+      <param name="transtype" value="xhtml"/>
 		</antcall>
 		<copy todir="${dita.output.samples.web.dir}">
 			<fileset dir="${dita.resource.dir}"
@@ -494,7 +527,8 @@
 			<param name="args.input"
 				value="${dita.samples.dir}${file.separator}hierarchy.ditamap"/>
 			<param name="output.dir"     value="${dita.output.samples.eclipse.dir}"/>
-		</antcall>			
+      <param name="transtype" value="eclipsehelp"/>
+		</antcall>
 	</target>
 
 	<target name="samples.javahelp"
@@ -504,6 +538,7 @@
 			<param name="args.input"
 				value="${dita.samples.dir}${file.separator}hierarchy.ditamap"/>
 			<param name="output.dir"     value="${dita.output.samples.javahelp.dir}"/>
+      <param name="transtype" value="javahelp"/>
 		</antcall>
 	</target>
 
@@ -515,6 +550,7 @@
 				value="${dita.samples.dir}${file.separator}hierarchy.ditamap"/>
 			<param name="output.dir"
 				value="${dita.output.samples.htmlhelp.dir}"/>
+      <param name="transtype" value="htmlhelp"/>
 		</antcall>
 	</target>
 
@@ -525,6 +561,7 @@
 			<param name="args.input"       
 				value="${dita.samples.dir}${file.separator}sequence.ditamap"/>
 			<param name="output.dir" value="${dita.output.samples.pdf.dir}"/>
+      <param name="transtype" value="pdf"/>
 		</antcall>
 	</target>
 	
@@ -537,6 +574,7 @@
 			<param name="args.input"  
 				value="${dita.samples.dir}${file.separator}hierarchy.ditamap"/>
 			<param name="output.dir" value="${dita.output.docbook.dir}"/>
+      <param name="transtype" value="docbook"/>
 		</antcall>
 
 		<antcall target="dita2docbook">
@@ -544,6 +582,7 @@
 				value="${dita.doc.dir}${file.separator}DITA-readme.xml"/>
 			<param name="output.dir"
 				value="${dita.output.docbook.dir}"/>
+      <param name="transtype" value="docbook"/>
 		</antcall>
 	</target>
 	
@@ -693,6 +732,7 @@
 			<param name="output.dir"     value="${prompt.output.directory}"/>
 			<param name="args.xhtml.toc" value="toc"/>
 			<param name="dita.temp.dir" value="temp"/>
+      <param name="transtype" value="xhtml"/>
 		</antcall>
 	</target>
 
@@ -703,6 +743,7 @@
 			<param name="output.dir"     value="${prompt.output.directory}"/>
 			<param name="args.eclipse.toc" value="toc"/>
 			<param name="dita.temp.dir" value="temp"/>
+      <param name="transtype" value="eclipsehelp"/>
 		</antcall>
 	</target>
 
@@ -714,6 +755,7 @@
 			<param name="args.javahelp.toc" value="toc"/>
 			<param name="args.javahelp.map" value="map"/>
 			<param name="dita.temp.dir" value="temp"/>
+      <param name="transtype" value="javahelp"/>
 		</antcall>
 	</target>
 
@@ -725,6 +767,7 @@
 			<param name="output.dir"
 				value="${prompt.output.directory}"/>
 			<param name="dita.temp.dir" value="temp"/>
+      <param name="transtype" value="htmlhelp"/>
 		</antcall>
 	</target>
 
@@ -735,6 +778,7 @@
 				value="${prompt.ditamap.filename}"/>
 			<param name="output.dir"      value="${prompt.output.directory}"/>
 			<param name="dita.temp.dir" value="temp"/>
+      <param name="transtype" value="pdf"/>
 		</antcall>
 	</target>
 
@@ -744,6 +788,7 @@
 			<param name="args.input"       value="${prompt.ditamap.filename}"/>
 			<param name="output.dir"      value="${prompt.output.directory}"/>
 			<param name="dita.temp.dir" value="temp"/>
+      <param name="transtype" value="docbook"/>
 		</antcall>
 	</target>
   
@@ -755,6 +800,7 @@
   				value="${dita.samples.dir}${file.separator}concepts${file.separator}oil.xml"/>
   			<param name="output.dir" value="${dita.output.samples.troff.dir}"/>
   			<param name="dita.temp.dir" value="temp"/>
+        <param name="transtype" value="troff"/>
   		</antcall>
   	</target>
 	

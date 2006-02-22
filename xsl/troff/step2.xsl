@@ -67,7 +67,7 @@
 
 <xsl:param name="OUTFORMAT">troff</xsl:param>
 <xsl:param name="FILENAME"></xsl:param>
-<xsl:variable name="msgprefix">IDXS</xsl:variable>
+<xsl:variable name="msgprefix">DOTX</xsl:variable>
 <xsl:variable name="OUTEXT">txt</xsl:variable>
 
 <!-- Single newline character. This is used to search for newlines in pre-formatted text, and

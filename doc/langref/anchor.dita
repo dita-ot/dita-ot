@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2004, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "../../dtd/reference.dtd">
+<!--             (C) Copyright OASIS Open 2005.                    -->
+<!--             (C) Copyright IBM Corporation 2001, 2004.         -->
+<!--             All Rights Reserved.                              -->
+<reference id="anchor" xml:lang="en-us">
+<title><keyword>anchor</keyword></title>
+<shortdesc>The &lt;<keyword>anchor</keyword>> element is used for runtime
+integration of navigation. It provides an integration point that another map
+can point to in order to insert its navigation into the current navigation
+tree. It is currently supported by Eclipse output only.</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>anchor</indexterm><indexterm>map reference anchor point</indexterm>
+<indexterm>Map elements<indexterm>anchor</indexterm>  </indexterm><indexterm>anchor</indexterm>
+</keywords>
+</metadata></prolog>
+<refbody>
+<section>For build-time integration, you can use the conref attribute on an
+element inside the map (for example, a topicref) to pull in content from a
+matching element (for example, another topicref) in another map.</section>
+<section conref="MapNav.dita#commonCMdefs/anchor-contains"></section>
+<section conref="MapNav.dita#commonCMdefs/anchor-containedby"></section>
+<section conref="MapNav.dita#commonCMdefs/anchor-classvalue"></section>
+<section><title>Attributes</title><simpletable id="anchor_attr" relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow>
+<stentry>id</stentry>
+<stentry>The id of the anchor, to distinguish it from other anchor points
+in the same map.</stentry>
+<stentry>ID</stentry>
+<stentry>#IMPLIED</stentry>
+<stentry>No</stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/classonly">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+</simpletable></section>
+<example><title>Example<?Pub Caret?></title>In this example, an anchor is
+defined with an ID of "a1". This ID can be referenced by the anchorref attribute
+on another map's map element.<codeblock>&lt;map title="MyComponent tasks">
+&lt;topicref navtitle="Start here" href="" toc="yes"> Start here
+&lt;navref mapref="othermap2.ditamap"/>
+&lt;navref mapref="othermap3.ditamap"/>
+&lt;anchor id="a1"/>
+&lt;/topicref>
+&lt;/map></codeblock>       </example>
+</refbody>
+</reference>
+<?Pub *0000002772?>

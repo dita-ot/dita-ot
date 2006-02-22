@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE map PUBLIC "-//IBM//DTD DITA Map//EN"
+ "..\dtd\map.dtd">
+<map title="DITA Generic and Java API Specialization">
+<topicref href="../../apiref/doc/guidelineSpecialization/ditaapispecialization.dita"
+navtitle="DITA API specialization" toc="yes" type="concept">
+<topicref href="../../apiref/doc/guidelineSpecialization/intro_ditaapispecialization.dita"
+navtitle="Overview" type="concept">
+<topicref href="../../apiref/doc/guidelineSpecialization/language-specificapireference.dita"
+navtitle="Language-specific API reference" type="concept"></topicref>
+</topicref>
+<topicref conref="../../apiref/doc/apiRefDoc.ditamap#GenericAPILayer">
+</topicref>
+<topicref href="JavaAPILayer.dita" locktitle="yes" navtitle="Java  API topic types"
+print="yes" status="new" toc="yes" type="reference">
+<topicref href="javaPackage/javaPackage_module.dita" locktitle="yes" navtitle="javaPackage module"
+toc="yes" type="reference">
+<topicref href="javaPackage/javaPackage.dita" type="reference">
+<topicref href="../../apiref/doc/apiRef/apiName.dita" toc="no" type="reference">
+</topicref>
+<topicref href="javaPackage/javaPackageDetail.dita" type="reference">
+<topicref href="../../apiref/doc/apiRef/apiDesc.dita" toc="no" type="reference">
+</topicref>
+<topicref href="../../apiref/doc/apiRef/apiImpl.dita" toc="no" type="reference">
+</topicref>
+</topicref>
+<topicref href="../../apiref/doc/apiRef/apiSyntax.dita" toc="no" type="reference">
+</topicref>
+</topicref>
+</topicref>
+<topicref href="javaClass/javaClass_module.dita" type="reference">
+<topicref href="javaClass/javaClass.dita" type="reference">
+<topicref href="../../apiref/doc/apiRef/apiName.dita" toc="no" type="reference">
+</topicref>
+<topicref href="javaClass/javaClassDetail.dita" type="reference">
+<topicref href="javaClass/javaClassDef.dita" type="reference">
+<topicref href="javaClass/javaFinalClass.dita" type="reference"></topicref>
+<topicref href="javaClass/javaAbstractClass.dita" type="reference"></topicref>
+<topicref href="javaClass/javaStaticClass.dita" type="reference"></topicref>
+<topicref href="javaClass/javaClassAccess.dita" type="reference"></topicref>
+<topicref href="javaClass/javaBaseClass.dita" type="reference"></topicref>
+<topicref href="javaClass/javaImplementedInterface.dita" type="reference">
+</topicref>
+</topicref>
+<topicref href="../../apiref/doc/apiRef/apiDesc.dita" toc="no" type="reference">
+</topicref>
+<topicref href="../../apiref/doc/apiRef/apiImpl.dita" toc="no" type="reference">
+</topicref>
+</topicref>
+<topicref href="javaInterface/javaInterface_module.dita" linking="none" toc="no"
+type="reference"></topicref>
+<topicref href="javaField/javaField_module.dita" linking="none" toc="no" type="reference">
+</topicref>
+<topicref href="javaMethod/javaMethod_module.dita" linking="none" toc="no"
+type="reference"></topicref>
+</topicref>
+</topicref>
+<topicref href="javaInterface/javaInterface_module.dita" type="reference">
+<topicref href="javaInterface/javaInterface.dita" type="reference">
+<topicref href="../../apiref/doc/apiRef/apiName.dita" toc="no" type="reference">
+</topicref>
+<topicref href="javaInterface/javaInterfaceDetail.dita" type="reference">
+<topicref href="javaInterface/javaInterfaceDef.dita" type="reference">
+<topicref href="javaInterface/javaInterfaceAccess.dita" type="reference">
+</topicref>
+<topicref href="javaInterface/javaBaseInterface.dita" type="reference"></topicref>
+</topicref>
+<topicref href="../../apiref/doc/apiRef/apiDesc.dita" toc="no" type="reference">
+</topicref>
+<topicref href="../../apiref/doc/apiRef/apiImpl.dita" toc="no" type="reference">
+</topicref>
+</topicref>
+<topicref href="javaMethod/javaMethod_module.dita" toc="no" type="reference">
+</topicref>
+<topicref href="javaField/javaField_module.dita" toc="no" type="reference">
+</topicref>
+</topicref>
+</topicref>
+<topicref href="javaMethod/javaMethod_module.dita" type="reference">
+<topicref href="javaMethod/javaMethod.dita" type="reference">
+<topicref href="../../apiref/doc/apiRef/apiName.dita" toc="no" type="reference">
+</topicref>
+<topicref href="javaMethod/javaMethodDetail.dita" type="reference">
+<topicref href="javaMethod/javaMethodDef.dita" type="reference">
+<topicref href="javaMethod/javaStaticMethod.dita" type="reference"></topicref>
+<topicref href="javaMethod/javaFinalMethod.dita" type="reference"></topicref>
+<topicref href="javaMethod/javaNativeMethod.dita" type="reference"></topicref>
+<topicref href="javaMethod/javaAbstractMethod.dita" type="reference"></topicref>
+<topicref href="javaMethod/javaSynchronizedMethod.dita" type="reference">
+</topicref>
+<topicref href="javaMethod/javaMethodAccess.dita" type="reference"></topicref>
+<topicref href="javaMethod/javaReturn.dita" type="reference">
+<topicref href="javaMethod/javaMethodClass.dita" type="reference"></topicref>
+<topicref href="javaMethod/javaReturnInterface.dita" type="reference"></topicref>
+<topicref href="javaMethod/javaMethodPrimitive.dita" type="reference"></topicref>
+<topicref href="javaMethod/javaReturnArray.dita" locktitle="yes" navtitle="javaMethodArray"
+type="reference"></topicref>
+<topicref href="../../apiref/doc/apiRef/apiDefNote.dita" toc="no" type="reference">
+</topicref>
+</topicref>
+<topicref href="javaMethod/javaVoid.dita" type="reference"></topicref>
+<topicref href="javaMethod/javaParam.dita" type="reference">
+<topicref href="javaMethod/javaParamClass.dita" locktitle="yes" navtitle="javaMethodClass"
+type="reference"></topicref>
+<topicref href="javaMethod/javaParamInterface.dita" locktitle="yes" navtitle="javaMethodInterface"
+type="reference"></topicref>
+<topicref href="javaMethod/javaParamPrimitive.dita" locktitle="yes" navtitle="javaMethodPrimitive"
+type="reference"></topicref>
+<topicref href="javaMethod/javaParamArray.dita" locktitle="yes" navtitle="javaMethodArray"
+type="reference"></topicref>
+<topicref href="../../apiref/doc/apiRef/apiItemName.dita" toc="no" type="reference">
+</topicref>
+<topicref href="../../apiref/doc/apiRef/apiDefNote.dita" toc="no" type="reference">
+</topicref>
+</topicref>
+<topicref href="javaMethod/javaException.dita" type="reference">
+<topicref href="javaMethod/javaExceptionClass.dita" locktitle="yes" navtitle="javaMethodClass"
+type="reference"></topicref>
+<topicref href="../../apiref/doc/apiRef/apiDefNote.dita" toc="no" type="reference">
+</topicref>
+</topicref>
+</topicref>
+<topicref href="javaMethod/javaConstructorDef.dita" type="reference">
+<topicref href="javaMethod/javaConstructorAccess.dita" type="reference"></topicref>
+<topicref href="javaMethod/javaParam.dita" toc="no" type="reference"></topicref>
+<topicref href="javaMethod/javaException.dita" toc="no" type="reference">
+</topicref>
+</topicref>
+<topicref href="../../apiref/doc/apiRef/apiDesc.dita" toc="no" type="reference">
+</topicref>
+<topicref href="../../apiref/doc/apiRef/apiImpl.dita" toc="no" type="reference">
+</topicref>
+</topicref>
+</topicref>
+</topicref>
+<topicref href="javaField/javaField_module.dita" locktitle="yes" navtitle="javaField module"
+toc="yes" type="reference">
+<topicref href="javaField/javaField.dita" type="reference">
+<topicref href="../../apiref/doc/apiRef/apiName.dita" toc="no" type="reference">
+</topicref>
+<topicref href="javaField/javaFieldDetail.dita" type="reference">
+<topicref href="javaField/javaFieldDef.dita" type="reference">
+<topicref href="javaField/javaFinalField.dita" type="reference"></topicref>
+<topicref href="javaField/javaStaticField.dita" type="reference"></topicref>
+<topicref href="javaField/javaTransientField.dita" type="reference"></topicref>
+<topicref href="javaField/javaVolatileField.dita" type="reference"></topicref>
+<topicref href="javaField/javaFieldAccess.dita" type="reference"></topicref>
+<topicref href="javaField/javaFieldClass.dita" type="reference"></topicref>
+<topicref href="javaField/javaFieldInterface.dita" type="reference"></topicref>
+<topicref href="javaField/javaFieldPrimitive.dita" type="reference"></topicref>
+<topicref href="javaField/javaFieldArray.dita" type="reference"></topicref>
+<topicref href="../../apiref/doc/apiRef/apiData.dita" toc="no" type="reference">
+</topicref>
+</topicref>
+<topicref href="../../apiref/doc/apiRef/apiDesc.dita" toc="no" type="reference">
+</topicref>
+<topicref href="../../apiref/doc/apiRef/apiImpl.dita" toc="no" type="reference">
+</topicref>
+</topicref>
+</topicref>
+</topicref>
+<topicref href="javaAPIDomain/javaAPIDomain_module.dita" locktitle="yes" navtitle="javaAPIDomain module"
+type="reference">
+<topicref href="javaAPIDomain/javaclass.dita" type="reference"></topicref>
+<topicref href="javaAPIDomain/javafield.dita" type="reference"></topicref>
+<topicref href="javaAPIDomain/javainterface.dita" type="reference"></topicref>
+<topicref href="javaAPIDomain/javamethod.dita" type="reference"></topicref>
+</topicref>
+<topicref href="javaAPIMap/javaAPIMap_module.dita" locktitle="yes" navtitle="javaAPIMap module"
+type="reference">
+<topicref href="javaAPIMap/javaAPIMap.dita" type="reference">
+<topicref href="javaAPIMap/javaPackageRef.dita" locktitle="yes" navtitle="javaPackageRef"
+type="reference">
+<topicref href="javaAPIMap/javaClassRef.dita" locktitle="yes" navtitle="javaClassRef"
+type="reference"></topicref>
+<topicref href="javaAPIMap/javaExceptionClassRef.dita" locktitle="yes" navtitle="javaExceptionClassRef"
+type="reference"></topicref>
+<topicref href="javaAPIMap/javaInterfaceRef.dita" locktitle="yes" navtitle="javaInterfaceRef"
+type="reference"></topicref>
+<topicref href="javaAPIMap/javaErrorClassRef.dita" locktitle="yes" navtitle="javaErrorClassRef"
+type="reference"></topicref>
+<topicref href="javaAPIMap/javaPackageRef.dita" locktitle="yes" navtitle="javaPackageRef"
+toc="no" type="reference"></topicref>
+</topicref>
+</topicref>
+</topicref>
+</topicref>
+</topicref>
+</map>

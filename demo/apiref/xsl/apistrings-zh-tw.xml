@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<strings xml:lang="zh-tw">        <!-- Traditional Chinese -->
+
+  <str name="Example">範例</str>
+  <str name="Implementation">實作</str>
+  <str name="platform.c">C</str>
+  <str name="platform.cpp">C++</str>
+  <str name="platform.java">Java</str>
+  <str name="platform.javascript">JavaScript</str>
+  <str name="platform.perl">Perl</str>
+  <str name="platform.vb">VisualBasic</str>
+
+</strings>

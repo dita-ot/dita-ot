@@ -35,6 +35,8 @@
        location="${dita.dtd.dir}${file.separator}map.dtd" />
   <dtd publicId="-//OASIS//Elements DITA Map//EN"
        location="${dita.dtd.dir}${file.separator}map.mod" />
+  <dtd publicId="-//OASIS//ELEMENTS DITA Map//EN"
+       location="${dita.dtd.dir}${file.separator}map.mod" />
   <dtd publicId="-//OASIS//ENTITIES DITA Map Group Domain//EN"
        location="${dita.dtd.dir}${file.separator}mapgroup.ent" />
   <dtd publicId="-//OASIS//ELEMENTS DITA Map Group Domain//EN"
@@ -69,6 +71,8 @@
   <dtd publicId="-//OASIS//ELEMENTS DITA Metadata//EN"
        location="${dita.dtd.dir}${file.separator}metaDecl.mod"/>
   <dtd publicId="-//OASIS//ELEMENTS DITA CALS Tables//EN"
+       location="${dita.dtd.dir}${file.separator}tblDecl.mod"/>
+  <dtd publicId="-//OASIS//ELEMENTS DITA Exchange Table Model//EN"
        location="${dita.dtd.dir}${file.separator}tblDecl.mod"/>
   
   <!-- Topics -->

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\..\dtd\reference.dtd">
+<reference id="topicSubjectTable" outputclass="element" xml:lang="en-us">
+<title>topicSubjectTable</title>
+<shortdesc>Specifies a structured classification of content topics. </shortdesc><?Pub Caret1?>
+<refbody>
+<section><title>Description</title><p>The <keyword>topicSubjectTable</keyword> element
+provides a tabular structure for classifying content as an alternative to
+nesting the <xref href="topicsubject.xml" type="reference"></xref> element
+within a reference to the classified topic. Each row in the table identifies
+one or more topics and specifies the subjects that classify those topics.
+The columns of the table distinguish different kinds of subjects. In particular,
+the topic subject table can be useful for facet classification.</p></section>
+<section conref="../packagedef.xml#topicSubjectTable-reference/topicSubjectTable-containedBy-section"></section>
+<section conref="../packagedef.xml#topicSubjectTable-reference/topicSubjectTable-contains-section"></section>
+<section conref="../packagedef.xml#topicSubjectTable-reference/topicSubjectTable-contentModel-section"></section>
+<section conref="../packagedef.xml#topicSubjectTable-reference/topicSubjectTable-attList-section"></section>
+<section conref="../packagedef.xml#topicSubjectTable-reference/topicSubjectTable-classValue-section"></section>
+</refbody>
+</reference>
+<?Pub *0000001535?>

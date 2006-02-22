@@ -2,7 +2,7 @@
 <!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
 
 <?xml-stylesheet type="text/css" href="css/dita_shell.css"?>
-<!DOCTYPE topic PUBLIC "-//IBM//DTD DITA Topic//EN" "topic.dtd">
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
 <topic id="xsreadme" xml:lang="en">
   <title>DITA XML Schema Readme </title>
   <shortdesc>This document describes the release notes and usage of the 

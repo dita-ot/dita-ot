@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\dtd\reference.dtd">
+<reference id="javaStaticField" outputclass="element" xml:lang="en-us">
+<title>javaStaticField</title>
+<shortdesc>The &lt;javaStaticField> element declares within the <i>FieldModifiers<sup>opt</sup></i> that
+the fields introduced by the declaration are static fields.</shortdesc>
+<refbody>
+<section><title>Description</title><p>This element declares that a single
+field is associated with the class instead of a separate field for each object
+instantiated from the class. When no static modifier is present, the fields
+introduced by the declaration are instance fields. A field that is not declared <i>static</i> (sometimes
+called a non-static field) is called an instance variable. Possible alternative
+definitions of the <i>FieldModifier</i> declaration are the &lt;javaFinalField>,
+&lt;javaTransientField>, and &lt;javaVolatileField> elements. </p></section><?Pub Caret1?>
+<example> <title>Example</title>Click on the following link to open the Java
+API topic type example in  <object classid="clsid:adb880a6-d8ff-11cf-9377-00aa003b7a11"
+codebase="hhctrl.ocx#Version=4,73,8412,0" codetype="VIEWASTEXT" height="100"
+id="hhctrl" type="application/x-oleobject" width="100">
+<param name="Command" value="ShortCut"/>
+<param name="Text" value="Text: DITA "/>
+<param name="Item1" value=",../samples/java/IImportEngineTask.dita,"/></object><codeblock>&lt;javaField id="com.ibm.xtools.pluglets.engine.PlugletException">
+   &lt;apiName>CASE_INSENSITIVE_ORDER&lt;/apiName>
+   &lt;shortDesc>
+       A Comparator that orders String objects as by compareToIgnoreCase.
+       This comparator is serializable.
+   &lt;/shortDesc>
+   &lt;javaFieldDetail>
+      &lt;javaFieldDef>
+         &lt;javaFinalField/>
+         &lt;javaStaticField/>
+         &lt;javaFieldAccess value="public" />
+         &lt;javaFieldInterface
+              href=”http://java.sun.com/…/Comparator.html”
+              format=”html” scope=”external”>
+          Comparator
+          &lt;/javaFieldInterface>
+      &lt;/javaFieldDef>
+      &lt;apiDesc>Note that this Comparator does not take locale into account,
+             and will result in an unsatisfactory ordering for certain locales.
+             The java.text package provides Collators to allow locale-sensitive
+             ordering.
+       &lt;/apiDesc>
+   &lt;/javaFieldDetail>
+   &lt;related-links>
+      &lt;link href="http://java.sun.com/../
+              collator.html#compare(java.lang.String, java.lang.String)" format="html">
+           &lt;linktext>Collator.compare(String, String)&lt;linktext>
+       &lt;/link>
+    &lt;/related-links>
+&lt;/javaField></codeblock></example>
+<section><title>Processing Expectations</title><image href="images/javaStaticField.jpg"
+placement="inline"><alt></alt></image></section>
+<section conref="../packagedef.dita#javaStaticField-reference/javaStaticField-containedBy-section"></section>
+<section conref="../packagedef.dita#javaStaticField-reference/javaStaticField-contains-section"></section>
+<section conref="../packagedef.dita#javaStaticField-reference/javaStaticField-contentModel-section"></section>
+<section conref="../packagedef.dita#javaStaticField-reference/javaStaticField-attList-section"></section>
+<section conref="../packagedef.dita#javaStaticField-reference/javaStaticField-classValue-section"></section>
+</refbody>
+</reference>
+<?Pub *0000003493?>

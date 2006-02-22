@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2004, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "../../dtd/reference.dtd">
+<!--             (C) Copyright OASIS Open 2005.                    -->
+<!--             (C) Copyright IBM Corporation 2001, 2004.         -->
+<!--             All Rights Reserved.                              -->
+<reference id="keyword" xml:lang="en-us">
+<title><keyword>keyword</keyword></title>
+<shortdesc>&lt;<keyword>keyword</keyword>> represents a word or phrase with
+special significance in a particular domain. In the general case, &lt;<keyword>keyword</keyword>>
+elements typically do not have any special semantics and processing associated
+with them, but can still be useful for organizing content for reuse or special
+processing. &lt;<keyword>keyword</keyword>> specializations are more meaningful
+and are therefore preferable. &lt;<keyword>keyword</keyword>> in the &lt;<keyword>keywords</keyword><?Pub Caret?>>
+element distinguishes a word or phrase that describes the content of a topic
+(a topic description keyword). Topic description keywords are typically used
+for searching, retrieval and classification purposes.</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>keyword</indexterm><indexterm>Body elements<indexterm>keyword</indexterm>  </indexterm>
+<indexterm>keyword</indexterm></keywords>
+</metadata></prolog>
+<refbody>
+<section> <p>Specialized elements derived from &lt;<keyword>keyword</keyword>>
+may also have extended processing, such as different formatting or automatic
+indexing. If the keyref attribute is used, or some other method of key-based
+lookup based on the value of the element itself, then the keyword can be turned
+into a hyperlink on output (not currently supported).</p> <p>When DITA topics
+are output to XHTML, any &lt;<keyword>keyword</keyword>> elements in the &lt;<keyword>keywords</keyword>>
+element are placed in the Web page metadata.</p> </section>
+<section conref="DitabaseNav.dita#commonCMdefs/keyword-contains"></section>
+<section conref="DitabaseNav.dita#commonCMdefs/keyword-containedby"></section>
+<section conref="DitabaseNav.dita#commonCMdefs/keyword-classvalue"></section>
+<section><title>Attributes</title><simpletable id="keyword_attr" relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="commonLRdefs.dita#commonLRdefs/keyref-keyword">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/univ-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/classandout">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+</simpletable></section>
+<example>          <title>Example</title><codeblock>&lt;p>The &lt;keyword>assert&lt;/keyword> pragma statement allows messages to be passed
+to the emulator, pre-compiler, etc.. </codeblock>       </example>
+</refbody>
+</reference>
+<?Pub *0000003417?>

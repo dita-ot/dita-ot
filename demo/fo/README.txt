@@ -1,0 +1,152 @@
+Welcome to Idiom's FO output for the DITA Open Toolkit
+======================================================
+
+Idiom Technologies has donated its production quality PDF output for use with 
+the DITA Open Toolkit. This has been integrated into the Toolkit as a plugin. 
+Features of this code include:
+
+- Index (with extensions) and table of contents generation
+- Font mapping: characters can be remapped to different fonts. This is 
+  particularly useful for CJK font support, and is configured per-locale.
+- Extensive customization of publishing output by setting variables (67 of them)
+  and attribute-sets (391 of them).
+- A catalog-based customization framework where you can customize variables, 
+  attribute-sets and XSLs without modifying Open Toolkit code: your custom 
+  settings live in files in a separate customization hierarchy.
+- Bookmap/bookinfo support.
+
+This plugin has only been tested with Sun's JDK 1.4 and may not work
+with the IBM JDK due to a conflict with XEP's crimson.jar.
+
+Building and installing Idiom's FO output
+=========================================
+
+You will need the following software, which we cannot include with
+this plugin due to licensing and redistribution restrictions:
+
+- RenderX XEP: Idiom's FO output currently requires RenderX XEP to
+  convert FO to PDF. The personal edition of XEP can be obtained for
+  free from RenderX (http://www.renderx.com). XEP comes with Saxon
+  6.5, which this plugin also needs.
+
+- ICU4J: You can find this library by clicking on the "Download ICU" link
+  at http://icu.sourceforge.net. Look for the ICU4J downloads.
+
+ To install and use with the Open Toolkit's distribution,
+
+1. Install the DITA Open Toolkit.
+2. Unzip this plugin into an Open Toolkit installation's
+   demo directory.
+3. Install XEP personal edition and license into demo/fo/lib/xep.
+4. Install the ICU4j jar as demo/fo/lib/icu4j.jar
+5. From the Open Toolkit directory, run "ant -f integrator.xml"
+
+At this point, the FO output is fully integrated into the Open
+Toolkit's pipeline. The plugin infrastructure will detect the FO
+plugin in step 5 and provide a "pdf2" output: this will invoke this FO
+output instead of the previous FOP-based output. Invoke with a command
+line like:
+
+java -jar lib/dost.jar /i:doc/DITA-readme.ditamap /transtype:pdf2
+
+About the index extensions
+==========================
+
+The index generation feature adds extensions to DITA's indexterm that can be
+expressed as content of that element. These extensions are expressed in a 
+FrameMaker-like syntax in the element's textual content, and provide 
+functionality not yet available in the standard indexterm element. They also
+help migration from legacy FrameMaker content. For example, the following 
+generates a "see also" entry:
+
+	<indexterm>Carp:<$nopage>see also Goldfish</indexterm>
+	
+As:
+
+	Carp, 34
+	   see also Goldfish	
+	
+The extended syntax consists of:
+
+	: (colon)       Separates levels in an entry
+	; (semicolon)   Separates entries in a marker
+	[] (brackets)   Specifies a special sort order for the entry
+	<$startrange>   Indicates the beginning of a page range
+	<$endrange>     Indicates the end of a page range
+	<$nopage>       Suppresses the page number in the entry (for example, in
+	                a See entry)
+	<$singlepage>   In a marker that contains several entries, restores the 
+	                page number for an entry that follows a <$nopage>
+	                building block
+
+Work is underway to extend the indexterm element for DITA 1.1. While the markup
+will be different, it should be possible in DITA 1.1 to express comparable 
+semantics.
+
+About /Customization
+====================
+
+This directory is where the custom files live that make up customized
+versions of the FO publishing outputs.  Idiom's FO publishing output will 
+look for certain files here to override the standard ones. Things you can 
+currently override include:
+
+  - Custom XSL via fo/xsl/custom.xsl and fo/attrs/custom.xsl
+  - Layout overrides via fo/layout-masters.xml
+  - Font overrides via fo/font-mappings.xml
+  - Per-locale variable overrides via common/vars/[locale].xml
+  - I18N configuration via fo/i18n/[locale].xml
+  - Index configuration via fo/index/[locale].xml
+
+When customizing any of these areas, modify the relevant file(s) in
+/Customization.  Then, to enable the changes in the publishing process, 
+you find the corresponding entry for each file you modified in 
+/Customization/catalog.xml. It should look like this:
+
+    <!--uri name="cfg:fo/attrs/custom.xsl" uri="fo/attrs/custom.xsl"/-->
+
+Remove the comment markers "!--" and "--" to enable the change:
+
+    <uri name="cfg:fo/attrs/custom.xsl" uri="fo/attrs/custom.xsl"/>
+
+Your customization should now be enabled as part of the publishing process.
+
+Idiom has provided template files that you can start with throughout
+this directory structure.  These files end in the suffix ".orig" (for
+example, "catalog.xml.orig").  To enable these files, make a copy of
+them and remove the ".orig" suffix.  For example, copy
+"catalog.xml.orig" to "catalog.xml".  You can then make modifications
+to the copy.
+
+Idiom's FO output also provides a general configuration file called
+"build.properties" that allows you to control the publishing process.
+To modify these settings, copy "build.properties.orig" to
+"build.properties" and then modify the relevant options.
+
+============================================================================
+
+Copyright © 2005 by Idiom Technologies, Inc. All rights reserved. 
+IDIOM is a registered trademark of Idiom Technologies, Inc. and WORLDSERVER
+and WORLDSTART are trademarks of Idiom Technologies, Inc. All other 
+trademarks are the property of their respective owners. 
+
+IDIOM TECHNOLOGIES, INC. IS DELIVERING THE SOFTWARE "AS IS," WITH 
+ABSOLUTELY NO WARRANTIES WHATSOEVER, WHETHER EXPRESS OR IMPLIED,  AND IDIOM
+TECHNOLOGIES, INC. DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING
+BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
+PURPOSE AND WARRANTY OF NON-INFRINGEMENT. IDIOM TECHNOLOGIES, INC. SHALL NOT
+BE LIABLE FOR INDIRECT, INCIDENTAL, SPECIAL, COVER, PUNITIVE, EXEMPLARY,
+RELIANCE, OR CONSEQUENTIAL DAMAGES (INCLUDING BUT NOT LIMITED TO LOSS OF 
+ANTICIPATED PROFIT), ARISING FROM ANY CAUSE UNDER OR RELATED TO  OR ARISING 
+OUT OF THE USE OF OR INABILITY TO USE THE SOFTWARE, EVEN IF IDIOM
+TECHNOLOGIES, INC. HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES. 
+
+Idiom Technologies, Inc. and its licensors shall not be liable for any
+damages suffered by any person as a result of using and/or modifying the
+Software or its derivatives. In no event shall Idiom Technologies, Inc.'s
+liability for any damages hereunder exceed the amounts received by Idiom
+Technologies, Inc. as a result of this transaction.
+
+These terms and conditions supersede the terms and conditions in any
+licensing agreement to the extent that such terms and conditions conflict
+with those set forth herein.

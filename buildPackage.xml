@@ -1,15 +1,15 @@
 <?xml version="1.0"?>
-<!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
+<!-- (c) Copyright IBM Corp. 2004, 2006 All Rights Reserved. -->
 <!-- build whole bin and source package for DITA Open Toolkit -->
 <project name="build_DITA-OT_package" default="build-all-packages" 
             basedir=".">
   <description>Build source and binary packages for DITA Open Toolkit</description>
-  
+
   <property name="HTMLHelpCompiler" value="C:\Program Files\HTML Help Workshop\hhc.exe"/>  
   <property name="args.fo.img.ext" value=".gif"/>
   <property name="package.output.dir" location="build\"/>
   <property name="package.name.root" value="DITA-OT"/>
-  <property name="version" value="1.1.2.1"/>
+  <property name="version" value="1.2"/>
   
   <property name="src.dir" location="src/"/>
   <property name="bin.dir" location="output2/"/>
@@ -25,10 +25,9 @@
   <property name="resource.dir" location="resource/"/>
   <property name="out.dir" location="out/"/>
   <property name="doc.out.dir" location="out/doc"/>
-  <property name="classpath.dir" location="dev/lib"/>
   
   <property name="dost.jar" location="${lib.dir}/dost.jar" />
-  <property name="ant.jar" location="${classpath.dir}/ant162.jar" />
+
   <property name="binary" value="DITA-OT${version}_bin" />
   <property name="source" value="DITA-OT${version}_src" />
   <property name="win32.zip.suffix" value=".zip" />
@@ -53,19 +52,20 @@
   </target>
   
   <target name="build-java" depends="init-java">
-    <javac srcdir="${src.dir}" destdir="${bin.dir}" classpath="${ant.jar}" 
-      debug="on" />
+    <javac srcdir="${src.dir}" destdir="${bin.dir}" excludes="com/**"
+      debug="on" source="1.4" target="1.4">
+    </javac>
   </target>
   
   <target name="package-java" depends="build-java">    
     <jar destfile="${dost.jar}" basedir="${bin.dir}" manifest="manifest.mf"
-           includes="org/dita/dost/**" />
+           includes="**" />
   </target>
   
   <target name="package-source">    
     <zip destfile="${package.output.dir}/${param.out.file}${win32.zip.suffix}">
       <zipfileset dir="./" 
-        includes="conductor.xml,build.xml,catalog-dita.xml,catalog-dita.txt,catalog-ant.xml,pretargets.xml,ditatargets.xml,CommonPublicLicense-v10.html,relnotes.txt,manifest.mf" 
+        includes="conductor_template.xml,conductor.xml,catalog-dita.xml,build.xml,catalog-dita_template.xml,catalog-dita.txt,catalog-ant.xml,pretargets.xml,ditatargets.xml,CommonPublicLicense-v10.html,relnotes.txt,manifest.mf,integrator.xml" 
         prefix="${package.name.root}${version}-src"/>
       <zipfileset dir="./" includes="buildPackage.xml" 
         prefix="${package.name.root}${version}-src"/>
@@ -77,7 +77,7 @@
         prefix="${package.name.root}${version}-src/dtd" />
       <zipfileset dir="${schema.dir}" includes="**" 
         prefix="${package.name.root}${version}-src/schema" />
-      <zipfileset dir="${doc.dir}" includes="**" 
+      <zipfileset dir="${doc.dir}" excludes="userguide-orig/**" 
         prefix="${package.name.root}${version}-src/doc" />
       <zipfileset dir="${demo.dir}" includes="**" 
         prefix="${package.name.root}${version}-src/demo"/>
@@ -94,7 +94,7 @@
     <tar destfile="${package.output.dir}/${param.out.file}${linux.zip.suffix}" 
       compression="gzip">
       <tarfileset dir="./" 
-        includes="conductor.xml,build.xml,catalog-dita.xml,catalog-dita.txt,catalog-ant.xml,pretargets.xml,ditatargets.xml,CommonPublicLicense-v10.html,relnotes.txt,manifest.mf" 
+        includes="conductor_template.xml,conductor.xml,catalog-dita.xml,build.xml,catalog-dita_template.xml,catalog-dita.txt,catalog-ant.xml,pretargets.xml,ditatargets.xml,CommonPublicLicense-v10.html,relnotes.txt,manifest.mf,integrator.xml" 
         prefix="${package.name.root}${version}-src"/>
       <tarfileset dir="./" includes="buildPackage.xml" 
         prefix="${package.name.root}${version}-src"/>
@@ -106,7 +106,7 @@
         prefix="${package.name.root}${version}-src/dtd" />
       <tarfileset dir="${schema.dir}" includes="**" 
         prefix="${package.name.root}${version}-src/schema" />
-      <tarfileset dir="${doc.dir}" includes="**" 
+      <tarfileset dir="${doc.dir}" excludes="userguide-orig/**" 
         prefix="${package.name.root}${version}-src/doc" />
       <tarfileset dir="${demo.dir}" includes="**" 
         prefix="${package.name.root}${version}-src/demo"/>
@@ -125,7 +125,7 @@
   <target name="package-source-ASL">
     <zip destfile="${package.output.dir}/${param.out.file}${win32.zip.suffix}">
       <zipfileset dir="./" 
-        includes="conductor.xml,build.xml,catalog-dita.xml,catalog-dita.txt,catalog-ant.xml,pretargets.xml,ditatargets.xml,APACHE-LICENSE-2_0.html,relnotes.txt,manifest.mf" 
+        includes="conductor_template.xml,conductor.xml,catalog-dita.xml,build.xml,catalog-dita_template.xml,catalog-dita.txt,catalog-ant.xml,pretargets.xml,ditatargets.xml,APACHE-LICENSE-2_0.html,relnotes.txt,manifest.mf,integrator.xml" 
         prefix="${package.name.root}${version}-src"/>
       <zipfileset dir="./" includes="buildPackage.xml" 
         prefix="${package.name.root}${version}-src"/>
@@ -137,7 +137,7 @@
         prefix="${package.name.root}${version}-src/dtd" />
       <zipfileset dir="${schema.dir}" includes="**" 
         prefix="${package.name.root}${version}-src/schema" />
-      <zipfileset dir="${doc.dir}" includes="**" 
+      <zipfileset dir="${doc.dir}" excludes="userguide-orig/**" 
         prefix="${package.name.root}${version}-src/doc" />
       <zipfileset dir="${demo.dir}" includes="**" 
         prefix="${package.name.root}${version}-src/demo"/>
@@ -154,7 +154,7 @@
     <tar destfile="${package.output.dir}/${param.out.file}${linux.zip.suffix}" 
       compression="gzip">
       <tarfileset dir="./" 
-        includes="conductor.xml,build.xml,catalog-dita.xml,catalog-dita.txt,catalog-ant.xml,pretargets.xml,ditatargets.xml,APACHE-LICENSE-2_0.html,relnotes.txt,manifest.mf" 
+        includes="conductor_template.xml,conductor.xml,catalog-dita.xml,build.xml,catalog-dita_template.xml,catalog-dita.txt,catalog-ant.xml,pretargets.xml,ditatargets.xml,APACHE-LICENSE-2_0.html,relnotes.txt,manifest.mf,integrator.xml" 
         prefix="${package.name.root}${version}-src"/>
       <tarfileset dir="./" includes="buildPackage.xml" 
         prefix="${package.name.root}${version}-src"/>
@@ -166,7 +166,7 @@
         prefix="${package.name.root}${version}-src/dtd" />
       <tarfileset dir="${schema.dir}" includes="**" 
         prefix="${package.name.root}${version}-src/schema" />
-      <tarfileset dir="${doc.dir}" includes="**" 
+      <tarfileset dir="${doc.dir}" excludes="userguide-orig/**" 
         prefix="${package.name.root}${version}-src/doc" />
       <tarfileset dir="${demo.dir}" includes="**" 
         prefix="${package.name.root}${version}-src/demo"/>
@@ -185,7 +185,7 @@
   <target name="package-binary">    
     <zip destfile="${package.output.dir}/${param.out.file}${win32.zip.suffix}">
       <zipfileset dir="./" 
-        includes="conductor.xml,build.xml,files.txt,catalog-dita.xml,catalog-dita.txt,catalog-ant.xml,pretargets.xml,ditatargets.xml,CommonPublicLicense-v10.html,relnotes.txt,manifest.mf" 
+        includes="conductor_template.xml,conductor.xml,catalog-dita.xml,build.xml,files.txt,catalog-dita_template.xml,catalog-dita.txt,catalog-ant.xml,pretargets.xml,ditatargets.xml,CommonPublicLicense-v10.html,relnotes.txt,manifest.mf,integrator.xml" 
         prefix="${package.name.root}${version}"/>
       <zipfileset dir="${xsl.dir}" includes="**" 
         prefix="${package.name.root}${version}/xsl" />
@@ -195,7 +195,7 @@
         prefix="${package.name.root}${version}/dtd" />
       <zipfileset dir="${schema.dir}" includes="**" 
         prefix="${package.name.root}${version}/schema" />      
-      <zipfileset dir="${doc.dir}" prefix="${package.name.root}${version}/doc"/>
+      <zipfileset dir="${doc.dir}" excludes="userguide-orig/**"  prefix="${package.name.root}${version}/doc"/>
       <zipfileset dir="${demo.dir}" includes="**" 
         prefix="${package.name.root}${version}/demo"/>
       <zipfileset dir="${sample.dir}" includes="**" 
@@ -212,7 +212,7 @@
     <tar destfile="${package.output.dir}/${param.out.file}${linux.zip.suffix}" 
       compression="gzip">
       <tarfileset dir="./" 
-        includes="conductor.xml,build.xml,files.txt,catalog-dita.xml,catalog-dita.txt,catalog-ant.xml,pretargets.xml,ditatargets.xml,CommonPublicLicense-v10.html,relnotes.txt,manifest.mf" 
+        includes="conductor_template.xml,conductor.xml,catalog-dita.xml,build.xml,files.txt,catalog-dita_template.xml,catalog-dita.txt,catalog-ant.xml,pretargets.xml,ditatargets.xml,CommonPublicLicense-v10.html,relnotes.txt,manifest.mf,integrator.xml" 
         prefix="${package.name.root}${version}"/>
       <tarfileset dir="${xsl.dir}" includes="**" 
         prefix="${package.name.root}${version}/xsl" />
@@ -222,7 +222,7 @@
         prefix="${package.name.root}${version}/dtd" />
       <tarfileset dir="${schema.dir}" includes="**" 
         prefix="${package.name.root}${version}/schema" />      
-      <tarfileset dir="${doc.dir}" prefix="${package.name.root}${version}/doc"/>
+      <tarfileset dir="${doc.dir}" excludes="userguide-orig/**"  prefix="${package.name.root}${version}/doc"/>
       <tarfileset dir="${demo.dir}" includes="**" 
         prefix="${package.name.root}${version}/demo"/>
       <tarfileset dir="${sample.dir}" includes="**" 
@@ -240,7 +240,7 @@
   <target name="package-binary-ASL">    
     <zip destfile="${package.output.dir}/${param.out.file}${win32.zip.suffix}">
       <zipfileset dir="./" 
-        includes="conductor.xml,build.xml,files.txt,catalog-dita.xml,catalog-dita.txt,catalog-ant.xml,pretargets.xml,ditatargets.xml,APACHE-LICENSE-2_0.html,relnotes.txt,manifest.mf" 
+        includes="conductor_template.xml,conductor.xml,catalog-dita.xml,build.xml,files.txt,catalog-dita_template.xml,catalog-dita.txt,catalog-ant.xml,pretargets.xml,ditatargets.xml,APACHE-LICENSE-2_0.html,relnotes.txt,manifest.mf,integrator.xml" 
         prefix="${package.name.root}${version}"/>
       <zipfileset dir="${xsl.dir}" includes="**" 
         prefix="${package.name.root}${version}/xsl" />
@@ -250,7 +250,7 @@
         prefix="${package.name.root}${version}/dtd" />
       <zipfileset dir="${schema.dir}" includes="**" 
         prefix="${package.name.root}${version}/schema" />     
-      <zipfileset dir="${doc.dir}" prefix="${package.name.root}${version}/doc"/>
+      <zipfileset dir="${doc.dir}" excludes="userguide-orig/**"  prefix="${package.name.root}${version}/doc"/>
       <zipfileset dir="${demo.dir}" includes="**" 
         prefix="${package.name.root}${version}/demo"/>
       <zipfileset dir="${sample.dir}" includes="**" 
@@ -266,7 +266,7 @@
     <tar destfile="${package.output.dir}/${param.out.file}${linux.zip.suffix}" 
       compression="gzip">
       <tarfileset dir="./" 
-        includes="conductor.xml,build.xml,files.txt,catalog-dita.xml,catalog-dita.txt,catalog-ant.xml,pretargets.xml,ditatargets.xml,APACHE-LICENSE-2_0.html,relnotes.txt,manifest.mf" 
+        includes="conductor_template.xml,conductor.xml,catalog-dita.xml,build.xml,files.txt,catalog-dita_template.xml,catalog-dita.txt,catalog-ant.xml,pretargets.xml,ditatargets.xml,APACHE-LICENSE-2_0.html,relnotes.txt,manifest.mf,integrator.xml" 
         prefix="${package.name.root}${version}"/>
       <tarfileset dir="${xsl.dir}" includes="**" 
         prefix="${package.name.root}${version}/xsl" />
@@ -276,7 +276,7 @@
         prefix="${package.name.root}${version}/dtd" />
       <tarfileset dir="${schema.dir}" includes="**" 
         prefix="${package.name.root}${version}/schema" />
-      <tarfileset dir="${doc.dir}" prefix="${package.name.root}${version}/doc"/>
+      <tarfileset dir="${doc.dir}" excludes="userguide-orig/**"  prefix="${package.name.root}${version}/doc"/>
       <tarfileset dir="${demo.dir}" includes="**" 
         prefix="${package.name.root}${version}/demo"/>
       <tarfileset dir="${sample.dir}" includes="**" 
@@ -329,7 +329,8 @@
   
   <target name="build-all-packages" depends="init-package, build-package-binary, build-package-binary-ASL, build-package-source, build-package-source-ASL"/>
   
-  <target name="update-doc"> 
+  <target name="update-doc">
+    <ant antfile="integrator.xml" target="integrate"/> 
     <ant antfile="build.xml" target="doc.articles.web"/>
     <ant antfile="build.xml" target="doc.articles.chm"/>
     <ant antfile="build.xml" target="doc.articles.pdf"/>
@@ -348,6 +349,10 @@
         <exclude name="**/*.hhc"/>
         <exclude name="**/*.hhk"/>
         <exclude name="**/*.fo"/>
+        <exclude name="**/*.log"/>
+        <exclude name="**/*.list"/>
+        <exclude name="**/*.temp"/>
+        <exclude name="**/*.db"/>
       </fileset>
     </copy>
   </target>

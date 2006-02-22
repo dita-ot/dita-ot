@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\dtd\reference.dtd">
+<reference id="javaClassRef" outputclass="element" xml:lang="en-us">
+<title>javaClassRef</title>
+<shortdesc>This element provides a Java class topic type as a link in a DITA
+map. </shortdesc>
+<refbody>
+<section><title>Description</title><p>A &lt;javaClassRef > can contain &lt;topicref>
+and &lt;topicmeta> elements, allowing you to express navigation or table-of-contents
+hierarchies, as well as implying relationships between the containing topicref
+and its children. It can also be used to override the title and short description
+of the <?Pub Caret?>topic.</p></section>
+<example> <title>Example</title><codeblock>&lt;javaAPIMap title="RXE">
+  &lt;javaPackageRef href="com.ibm.xtools.patterns.framework.uml2">
+    &lt;javaClassRef href="UmlnotationPlugin.Implementation.dita">&lt;/javaClassRef>
+    &lt;javaClassRef href="UMLDiagramResourceUtil.dita">&lt;/javaClassRef>
+  &lt;/javaPackageRef>
+  &lt;javaPackageRef href="com.ibm.xtools.patterns.pluglet">
+    &lt;javaClassRef href="AbstractImportEngineTask.dita">&lt;/javaClassRef>
+    &lt;javaClassRef href="PlugletCompiler.dita">&lt;/javaClassRef>
+    &lt;javaClassRef href="PlugletException.dita">&lt;/javaClassRef>
+  &lt;/javaPackageRef>
+&lt;/javaAPIMap></codeblock> </example>
+<section conref="../packagedef.dita#javaClassRef-reference/javaClassRef-containedBy-section"></section>
+<section conref="../packagedef.dita#javaClassRef-reference/javaClassRef-contains-section"></section>
+<section conref="../packagedef.dita#javaClassRef-reference/javaClassRef-contentModel-section"></section>
+<section conref="../packagedef.dita#javaClassRef-reference/javaClassRef-attList-section"></section>
+<section conref="../packagedef.dita#javaClassRef-reference/javaClassRef-classValue-section"></section>
+</refbody>
+</reference>
+<?Pub *0000001957?>

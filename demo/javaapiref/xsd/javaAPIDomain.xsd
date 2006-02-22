@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ | (C) Copyright IBM Corporation 2005 - 2006. All Rights Reserved.
+ *-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
+  <xs:import namespace="http://dita.oasis-open.org/architecture/2005/" schemaLocation="../../../schema/ditaarch.xsd"/>
+  <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="../../../schema/xml.xsd"/>
+  
+  <xs:group name="javaapi-d-xref">
+    <xs:choice>
+      <xs:element ref="javapackage" />
+      <xs:element ref="javaclass" />
+      <xs:element ref="javainterface" />
+      <xs:element ref="javafield" />
+      <xs:element ref="javamethod" />
+    </xs:choice>
+  </xs:group>
+  
+  <xs:element name="javapackage">
+    <xs:complexType mixed="true">
+      <xs:attributeGroup ref="javapackage.attlist"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="javapackage.attlist">
+    <xs:attribute name="href"/>
+    <xs:attribute name="keyref"/>
+    <xs:attribute name="type"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attribute name="format"/>
+    <xs:attribute name="scope">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="local"/>
+          <xs:enumeration value="peer"/>
+          <xs:enumeration value="external"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="outputclass"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute name="class" default="+ topic/xref pr-d/xref api-d/apipackage javaapi-d/javapackage "/>
+  </xs:attributeGroup>
+  <xs:element name="javaclass" >
+    <xs:complexType mixed="true">
+      <xs:attributeGroup ref="javaclass.attlist"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="javaclass.attlist">
+    <xs:attribute name="href"/>
+    <xs:attribute name="keyref"/>
+    <xs:attribute name="type"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attribute name="format"/>
+    <xs:attribute name="scope">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="local"/>
+          <xs:enumeration value="peer"/>
+          <xs:enumeration value="external"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="outputclass"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute name="class" default="+ topic/xref pr-d/xref api-d/apiclassifier javaapi-d/javaclass "/>
+  </xs:attributeGroup>
+  <xs:element name="javainterface" >
+    <xs:complexType mixed="true">
+      <xs:attributeGroup ref="javainterface.attlist"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="javainterface.attlist">
+    <xs:attribute name="href"/>
+    <xs:attribute name="keyref"/>
+    <xs:attribute name="type"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attribute name="format"/>
+    <xs:attribute name="scope">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="local"/>
+          <xs:enumeration value="peer"/>
+          <xs:enumeration value="external"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="outputclass"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute name="class" default="+ topic/xref pr-d/xref api-d/apiclassifier javaapi-d/javainterface "/>
+  </xs:attributeGroup>
+  <xs:element name="javafield">
+    <xs:complexType mixed="true">
+      <xs:attributeGroup ref="javafield.attlist"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="javafield.attlist">
+    <xs:attribute name="href"/>
+    <xs:attribute name="keyref"/>
+    <xs:attribute name="type"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attribute name="format"/>
+    <xs:attribute name="scope">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="local"/>
+          <xs:enumeration value="peer"/>
+          <xs:enumeration value="external"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="outputclass"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute name="class" default="+ topic/xref pr-d/xref api-d/apivalue javaapi-d/javafield "/>
+  </xs:attributeGroup>
+  <xs:element name="javamethod" >
+    <xs:complexType mixed="true">
+      <xs:attributeGroup ref="javamethod.attlist"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="javamethod.attlist">
+    <xs:attribute name="href"/>
+    <xs:attribute name="keyref"/>
+    <xs:attribute name="type"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attribute name="format"/>
+    <xs:attribute name="scope">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="local"/>
+          <xs:enumeration value="peer"/>
+          <xs:enumeration value="external"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="outputclass"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute name="class" default="+ topic/xref pr-d/xref api-d/apioperation javaapi-d/javamethod "/>
+  </xs:attributeGroup>
+</xs:schema>

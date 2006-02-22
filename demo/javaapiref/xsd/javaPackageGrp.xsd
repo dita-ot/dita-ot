@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!--
+ | (C) Copyright IBM Corporation 2005 - 2006. All Rights Reserved.
+ *-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:group name="javaPackage">
+    <xs:sequence>
+      <xs:element ref="javaPackage"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="javaPackageDetail">
+    <xs:sequence>
+      <xs:element ref="javaPackageDetail"/>
+    </xs:sequence>
+  </xs:group>
+</xs:schema>

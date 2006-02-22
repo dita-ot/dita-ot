@@ -1,0 +1,181 @@
+/*
+ | (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved.
+ */
+
+
+/* class definitions */
+
+.unresolved	{ background-color: skyblue;
+		}
+
+.noTemplate	{ background-color: yellow;
+		}
+
+.sidebar     {background: silver
+             }
+
+.toc         {font-size: small;
+		}
+
+.base		{ background-color: #ffffff;
+		}
+
+.figborder   { border-style: double;
+               border-color: black;
+               border-width: 3;
+             }
+
+
+/* the nested mappings provide the opportunity to manipulate things at the topic level */
+/* no function here for now; nested topics don't indent incrementally */
+.nested1	{ 
+		}
+
+.nested2	{ 
+		}
+
+.nested3	{ 
+		}
+
+.nested4	{ 
+		}
+
+.nested5	{ 
+		}
+
+.nested6	{ 
+		}
+
+
+
+/* the topictitle mappings provide nesting-specific title control */
+/* equivalent to FO xsl attribute sets for nested titles */
+
+.topictitle1 { margin-top: 0pc;
+		  margin-bottom: 1.4pt;
+		  font-size: 16pt;
+		  }
+
+.topictitle2 { margin-top: 1pc;
+               margin-bottom: 5pt;
+               font-size: 14pt;
+               }
+
+.topictitle3 { margin-top: 1pc;
+               margin-bottom: 2pt;
+               font-size: 14t;
+               font-weight: bold;
+             }
+
+.topictitle4 { margin-top: 10pt;
+               font-size: 14pt;
+               font-weight: bold;
+             }
+
+
+.topictitle5 { font-size: 14pt;
+               font-weight: bold;
+             }
+
+.topictitle6 { font-size: 15pt;
+               font-style: italic;
+             }
+
+/* some class settings tied to generated divs */
+div.notetitle { margin-top: 1em; font-weight: bold }
+div.notebody { margin-left: 2em }
+
+div.attention { margin-top: 1em }
+span.attentiontitle { font-weight: bold }
+div.dangertitle { margin-top: 1em; font-weight: bold }
+div.danger { padding: 5px 5px 5px 5px; border: solid; border-width: thin; font-weight: bold; margin-top: 2px }
+div.cautiontitle { margin-top: 1em; font-weight: bold }
+div.caution { font-weight: bold }
+
+div.tiptitle { margin-top: 1em; font-weight: bold }
+div.tipbody { margin-left: 2em }
+div.fastpathtitle { margin-top: 1em; font-weight: bold }
+div.fastpathbody { margin-left: 2em }
+div.importanttitle { margin-top: 1em; font-weight: bold }
+div.importantbody { margin-left: 2em }
+div.remembertitle { margin-top: 1em; font-weight: bold }
+div.rememberbody { margin-left: 2em }
+div.restrictiontitle { margin-top: 1em; font-weight: bold }
+div.restrictionbody { margin-left: 2em }
+
+div.imageleft { text-align: left }
+div.imagecenter { text-align: center }
+div.imageright { text-align: right }
+div.imagejustify { text-align: justify }
+
+
+
+/* format-specific */
+
+.bold		{ font-weight: bold;
+		}
+
+.boldItalic	{ font-weight: bold;
+		  font-style: italic;
+		}
+
+.italic		{ font-style: italic;
+		}
+
+		
+.underlined  { text-decoration: underline;
+		}
+
+.ptocH1      {font-size: x-small;
+		}
+
+.ptocH2      {font-size: x-small;
+		}
+
+.smallCaps   { text-transform: uppercase; 
+		  font-size: smaller;
+		}
+
+.stitle      { font-style: italic;
+		  text-decoration: underline;
+             }
+
+.nte		{}
+
+.defListHead	{ font-weight: bold;
+		  text-decoration: underline;
+		}
+
+.parmListKwd	{ font-weight: bold;
+		}
+
+.parmListVar	{ font-style: italic;
+		}
+
+.xxlines		{
+	white-space: pre;
+	font-family : serif;
+	font-size : 100%;
+}
+
+.pk          { font-weight: bold;
+		  text-decoration: underline;
+		}
+
+.sectiontitle {margin-top: 1em;
+               margin-bottom: 0em;
+               color: black;
+               font-size: 11pt;
+               font-weight: bold;
+              }
+
+
+*[compact="yes"]>li {
+  margin-top: 0pt;
+}
+
+*[compact="no"]>li {
+  margin-top: 6pt;
+}
+
+

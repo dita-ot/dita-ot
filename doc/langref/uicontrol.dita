@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2004, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "../../dtd/reference.dtd">
+<!--             (C) Copyright OASIS Open 2005.                    -->
+<!--             (C) Copyright IBM Corporation 2001, 2004.         -->
+<!--             All Rights Reserved.                              -->
+<reference id="uicontrol" xml:lang="en-us">
+<title><keyword>uicontrol</keyword></title>
+<shortdesc>The user interface control (&lt;<keyword>uicontrol</keyword>>)
+element is used to mark up names of buttons, entry fields, menu items, or
+other objects that allow the user to control the interface. Use the &lt;<keyword>uicontrol</keyword>>
+element inside a &lt;<keyword>menucascade</keyword>> element to identify a
+sequence of menu choices in a nested menu, such as <menucascade><uicontrol>File</uicontrol>
+<uicontrol>New</uicontrol></menucascade>. This element is part of the DITA
+user interface domain, a special set of DITA elements designed to document
+user interface tasks, concepts and reference information.</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>uicontrol (user interface control)</indexterm><indexterm>user
+interface control (uicontrol)</indexterm><indexterm>Domain elements<indexterm>uicontrol</indexterm>  </indexterm>
+<indexterm>uicontrol</indexterm></keywords>
+</metadata></prolog>
+<refbody>
+<section conref="DitabaseNav.dita#commonCMdefs/uicontrol-contains"></section>
+<section conref="DitabaseNav.dita#commonCMdefs/uicontrol-containedby"></section>
+<section conref="DitabaseNav.dita#commonCMdefs/uicontrol-classvalue"></section>
+<section><title>Attributes</title><simpletable id="uicontrol_attr" relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="commonLRdefs.dita#commonLRdefs/keyref">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/univ-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/classandout">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+</simpletable></section>
+<example><title>Example<?Pub Caret?></title>Press the <b>&lt;uicontrol></b>OK<b>&lt;/uicontrol></b> button.</example>
+</refbody>
+</reference>
+<?Pub *0000002755?>

@@ -2,17 +2,20 @@
 <!--                    HEADER                                     -->
 <!-- ============================================================= -->
 <!--  MODULE:    XML EXCHANGE TABLE MODEL DECLARATION MODULE       -->
-<!--  VERSION:   1.O                                               -->
-<!--  DATE:      February 2005                                     -->
+<!--  VERSION:   1.0.1                                             -->
+<!--  DATE:      November 2005                                     -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
 <!--             (C) Copyright OASIS Open 2005.                    -->
 <!--             (C) Copyright IBM Corporation 2001, 2004.         -->
 <!--             All Rights Reserved.                              -->
+<!--                                                               -->
+<!--  UPDATES:                                                     -->
+<!--    2005.11.15 RDA: Corrected the "Delivered as" system ID     -->
 
 <!-- ============================================================= -->
-<!--  Delivered as file "tbl_xml.mod"                              -->
+<!--  Delivered as file "tblDecl.mod"                              -->
 <!-- ============================================================= -->
 
 

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\dtd\reference.dtd">
+<reference id="apiMap" outputclass="element" xml:lang="en-us">
+<title>apiMap module</title>
+<shortdesc>Provides the relationships among a set of application programming
+interface (API) topic types, and can be used to create a Table of Contents
+(TOC), aggregate Java API topics into a PDF document, or to create links between
+topics in output. </shortdesc>
+<refbody>
+<section><title>Description</title>Maps provide a way to express these relationships
+in a single common format for the Java API reference that can be used for
+different outputs. The apiMap module organizes your DITA files into a hierarchy.
+It can also create relationship links between your topics. You can use the &lt;apiMap>
+to organize your work, and to create and edit DITA API files.</section>
+<example><title>Example</title><p>The following example shows a simple &lt;apiMap>
+element for a VB.NET API:</p><codeblock><![CDATA[<apiMap title="RXE">
+     <apiPackageRef navtitle=Rational RXE">
+       <apiItemRef href="FileHandle.dita"></apiItemRef>
+       <apiItemRef href="MultiLanguage.dita"></apiItemRef>
+     </apiPackageRef>
+     <apiPackageRef navtitle=Index">
+       <apiItemRef href="RXEIndex.html"></apiItemRef>
+     </apiPackageRef>
+</apiMap>]]></codeblock></example>
+</refbody>
+</reference>

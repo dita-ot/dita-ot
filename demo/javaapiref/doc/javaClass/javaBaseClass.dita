@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\dtd\reference.dtd">
+<reference id="javaBaseClass" outputclass="element" xml:lang="en-us">
+<title>javaBaseClass</title>
+<shortdesc>The &lt;javaBaseClass> element within the <i>Super<sup>opt</sup> </i> declaration
+specifies the direct superclass of the current class.</shortdesc>
+<refbody>
+<section><title>Description</title> <p>The &lt;javaBaseClass> element is the
+root of the class hierarchy. Every class has the &lt;javaBaseClass> element
+as a superclass. All objects, including arrays, implement the methods of this
+class.   The <i>keyref</i> attribute must provide a unique key such as a fully
+qualified class name for the named API item. </p><?Pub Caret1?></section>
+<example> <title>Example</title>Click on the following link to open the Java
+API topic type example in  <object classid="clsid:adb880a6-d8ff-11cf-9377-00aa003b7a11"
+codebase="hhctrl.ocx#Version=4,73,8412,0" codetype="VIEWASTEXT" height="90"
+id="hhctrl" type="application/x-oleobject" width="100">
+<param name="Command" value="ShortCut"/>
+<param name="Text" value="Text: DITA "/>
+<param name="Item1" value=",../samples/java/UmlnotationPlugin.Implementation.dita,"/>
+</object><codeblock>&lt;javaClass id="com.ibm.xtools.umlnotation">
+    &lt;apiName>UmlnotationPlugin.Implementation&lt;/apiName>
+    &lt;shortdesc>The implementation of the Eclipse plugin.&lt;/shortdesc>
+    &lt;javaClassDetail>
+	     &lt;javaClassDef>
+           &lt;javaStaticClass/>
+	         &lt;javaClassAccess value="public"/>
+           &lt;javaBaseClass keyref=”org.eclipse.emf.common.EMFPlugin.EclipsePlugin”>
+             org.eclipse.emf.common.EMFPlugin.EclipsePlugin
+           &lt;/javaBaseClass>
+           &lt;javaImplementedInterface>org.osgi.framework.BundleActivator&lt;/javaImplementedInterface>
+           &lt;javaImplementedInterface keyref=”org.eclipse.core.runtime.Logger”>
+               Logger
+           &lt;/javaImplementedInterface>
+           &lt;javaImplementedInterface href=”../ResourceLocator.html" format=”html” scope="external">
+               ResourceLocator
+           &lt;/javaImplementedInterface>
+    &lt;/javaClassDef>
+    &lt;section>
+        &lt;title>Enclosing class:&lt;/title>
+        &lt;xref href="umlnotation/UmlnotationPlugin.html"
+            format="html" scope="local">
+        UmlnotationPlugin
+        &lt;/xref>
+    &lt;/section>
+  &lt;/javaClassDetail>
+&lt;/javaClass></codeblock></example>
+<section><title>Processing Expectations</title><image href="images/javaBasecClass.jpg"
+placement="inline"><alt></alt></image></section>
+<section conref="../packagedef.dita#javaBaseClass-reference/javaBaseClass-containedBy-section"></section>
+<section conref="../packagedef.dita#javaBaseClass-reference/javaBaseClass-contains-section"></section>
+<section conref="../packagedef.dita#javaBaseClass-reference/javaBaseClass-contentModel-section"></section>
+<section conref="../packagedef.dita#javaBaseClass-reference/javaBaseClass-attList-section"></section>
+<section conref="../packagedef.dita#javaBaseClass-reference/javaBaseClass-classValue-section"></section>
+</refbody>
+</reference>
+<?Pub *0000003234?>

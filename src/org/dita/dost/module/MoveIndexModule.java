@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.pipeline.PipelineHashIO;
@@ -41,7 +42,7 @@ public class MoveIndexModule extends AbstractPipelineModule {
      * 
      * 
      */
-    public AbstractPipelineOutput execute(AbstractPipelineInput input) {
+    public AbstractPipelineOutput execute(AbstractPipelineInput input) throws DITAOTException {
 
     	String tempDir = ((PipelineHashIO)input).getAttribute(Constants.ANT_INVOKER_PARAM_TEMPDIR);
         String mapFile = tempDir + File.separatorChar
@@ -52,6 +53,11 @@ public class MoveIndexModule extends AbstractPipelineModule {
 		Iterator i;
 		String targetFileName;
         
+		if (tempDir == null){
+        	throw new DITAOTException(
+				"Please specify the temp directory.");
+        }
+		
         indexReader.setMatch(new StringBuffer(Constants.ELEMENT_NAME_TOPICREF)
                 .append(Constants.SLASH).append(Constants.ELEMENT_NAME_TOPICMETA)
                 .append(Constants.SLASH).append(Constants.ELEMENT_NAME_KEYWORDS).toString());

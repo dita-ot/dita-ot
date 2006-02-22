@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE apiOperation PUBLIC "-//IBM//DTD DITA API Operation Reference Type//EN"
+ "../dtd/apiOperation.dtd">
+<apiOperation id="read">
+<apiName>read</apiName>
+<shortdesc>Read the specified quantity of data from a file into a variable. </shortdesc>
+<apiOperationDetail>
+<apiSyntax>
+<apiSyntaxText>read <apiItemName>FILEHANDLE</apiItemName>, <apiItemName>SCALAR</apiItemName>, <apiItemName>LENGTH</apiItemName>, <apiItemName>OFFSET</apiItemName
+>
+read <apiItemName>FILEHANDLE</apiItemName>, <apiItemName>SCALAR</apiItemName>, <apiItemName>LENGTH</apiItemName></apiSyntaxText>
+<apiSyntaxItem>
+<apiItemName>FILEHANDLE</apiItemName>
+<apiDefNote>The identifier for the file from which the data is read.</apiDefNote>
+</apiSyntaxItem>
+<apiSyntaxItem>
+<apiItemName>SCALAR</apiItemName>
+<apiDefNote>The name of the variable where the data is stored after reading.</apiDefNote>
+</apiSyntaxItem>
+<apiSyntaxItem>
+<apiItemName>LENGTH</apiItemName>
+<apiDefNote>The number of characters of data to read.</apiDefNote>
+</apiSyntaxItem>
+<apiSyntaxItem>
+<apiItemName>OFFSET</apiItemName>
+<apiDefNote>The number of characters from the start of the file prior to the
+data to be read.</apiDefNote>
+</apiSyntaxItem>
+</apiSyntax>
+<apiDesc>The <apioperation>read</apioperation> function returns the number
+of characters actually read, 0 at end of file, or undef if there was an error
+(in the latter case $! is also set). The <apivalue>SCALAR</apivalue> variable
+will be grown or shrunk so that the last character actually read is the last
+character of the scalar after the read.<p>An <apivalue>OFFSET</apivalue> may
+be specified to place the read data at some place in the string other than
+the beginning. A negative <apivalue>OFFSET</apivalue> specifies placement
+at that many characters counting backwards from the end of the string. A positive <apivalue>OFFSET</apivalue> greater
+than the length of <apivalue>SCALAR</apivalue> results in the string being
+padded to the required size with "\0" bytes before the result of the read
+is appended.</p></apiDesc>
+</apiOperationDetail>
+<apiValue id="rs">
+<apiName>INPUT_RECORD_SEPARATOR</apiName>
+<shortdesc>Defines what a line is.</shortdesc>
+<apiValueDetail>
+<apiSyntax>
+<apiSyntaxText>$INPUT_RECORD_SEPARATOR
+$RS
+$/</apiSyntaxText>
+</apiSyntax>
+<apiDesc>The input record separator defines what a <q>line</q> is (newline
+by default). The input record separator treats empty lines as a terminator
+if set to the null string. An empty line cannot contain any spaces or tabs.
+You may set it to a multi-character string to match a multi-character terminator,
+or to undef to read through the end of file. <p>Setting it to "\n\n" means
+something slightly different than setting to "", if the file contains consecutive
+empty lines. Setting to "" will treat two or more consecutive empty lines
+as a single empty line. Setting to "\n\n" will blindly assume that the next
+input character belongs to the next paragraph, even if it's a newline. (Mnemonic:
+/ delimits line boundaries when quoting poetry.)</p></apiDesc>
+</apiValueDetail>
+</apiValue>
+</apiOperation>

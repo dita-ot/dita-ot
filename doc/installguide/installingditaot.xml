@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- (c) Copyright by Comtech Services, Inc. All rights reserved. -->
-<!DOCTYPE task PUBLIC "-//IBM//DTD DITA Task//EN" "../dtd/task.dtd" [
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd" [
   <!-- Begin Document Specific Declarations -->
   <!ENTITY ut-d-att "(topic ut-d)">
   <!-- End Document Specific Declarations -->
@@ -24,15 +24,15 @@
       </step>
       <step>
         <cmd>On the SourceForge.net page, find <uicontrol>dita-ot 
-          1.1.2.1</uicontrol></cmd>
+          1.2</uicontrol></cmd>
       </step>
       <step>
-        <cmd>Select <uicontrol>dita-ot 1.1.2.1</uicontrol>. </cmd>
+        <cmd>Select <uicontrol>dita-ot 1.2</uicontrol>. </cmd>
         <stepresult>The <systemoutput>Dita-ot</systemoutput> table 
           displays.</stepresult>
       </step>
       <step>
-        <cmd>Select <uicontrol>DITA-OT1.1.2.1_bin.zip</uicontrol></cmd>
+        <cmd>Select <uicontrol>DITA-OT1.2_bin.zip</uicontrol></cmd>
         <stepresult>The SourceForge.net page opens with a list of 
           <systemoutput>download options</systemoutput>.</stepresult>
       </step>
@@ -49,9 +49,14 @@
           select "Download File." </note></info>
       </step>
       <step>
-        <cmd>Click <uicontrol>Save</uicontrol> to unzip the DITA-OT1.1.2.1_bin.zip 
+        <cmd>Click <uicontrol>Save</uicontrol> to unzip the DITA-OT1.2_bin.zip 
           file and save it to your C:\ directory as 
           <filepath>ditaot</filepath>.</cmd>
+      </step>
+      <step>
+        <cmd>Set the <varname>CLASSPATH </varname><xref 
+          href="settingenvironmentvariables.xml" scope="local">environment 
+          variable</xref> for <codeph>dost.jar</codeph></cmd>
       </step>
     </steps>
   </taskbody>

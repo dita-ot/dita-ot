@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\..\dtd\reference.dtd">
+<reference id="hasNarrower" outputclass="element" xml:lang="en-us">
+<title>hasNarrower</title>
+<shortdesc>Specifies that the contained hierarchy indicates a general-purpose,
+NARROWER-THAN relationship between subjects.</shortdesc>
+<refbody>
+<section><title>Description</title><p>Within the hierarchy, the child subject
+is nar<?Pub Caret?>rower than the parent subject, but the way in which it
+is narrower isn't specified. For example, planting roses is a narrower subject
+than horticulture. See also <xref format="html" href="http://www.w3.org/TR/swbp-skos-core-guide/#sechierarchy">http://www.w3.org/TR/swbp-skos-core-guide/#sechierarchy</xref
+>.</p></section>
+<section conref="../packagedef.xml#hasNarrower-reference/hasNarrower-containedBy-section"></section>
+<section conref="../packagedef.xml#hasNarrower-reference/hasNarrower-contains-section"></section>
+<section conref="../packagedef.xml#hasNarrower-reference/hasNarrower-contentModel-section"></section>
+<section conref="../packagedef.xml#hasNarrower-reference/hasNarrower-attList-section"></section>
+<section conref="../packagedef.xml#hasNarrower-reference/hasNarrower-classValue-section"></section>
+</refbody>
+</reference>
+<?Pub *0000001378?>

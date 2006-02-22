@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?><!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference
+  PUBLIC "-//IBM//DTD DITA Reference//EN" "..\dtd\reference.dtd">
+<reference id="apiData" outputclass="element" xml:lang="en-us">
+<title>apiData</title>
+<shortdesc>The &lt;apiData&gt; element specifies the actual value such as the
+initial value of variable, the default value of a parameter,
+or the value of a constant.</shortdesc>
+<refbody>
+<section><title>Description</title><p>This element provides a literal value
+such as "5 Maple Street" or "6" typically where a parameter or variable has
+a default or initial value. </p><p>
+  For example, if the description of the data type is not available, you must
+provide the name of the related API item inside the &lt;apiData&gt; element and
+the fully qualified name of the element in the keyref attribute. The keyref
+attribute should provide a unique key such as a fully qualified classifier
+name for the named API item.</p></section>
+<example> <title>Example</title><p>The following example shows a simple &lt;apiData&gt;
+element  for a Visual Basic property:</p><codeblock>&lt;apiValue&gt;
+       &lt;apiValueDetail&gt;
+           &lt;apiValueDef&gt;
+              &lt;apiType value="month"/&gt;
+              &lt;apiData&gt;25&lt;/apiData&gt;
+              &lt;apiDefNote&gt;
+                   Returns the day and month that the element belongs to.
+              &lt;/apiDefNote&gt;
+           &lt;/apiValueDef&gt;
+       &lt;/apiValueDetail&gt;
+   &lt;/apiValue&gt;
+</codeblock></example>
+<section conref="../packagedef.dita#apiData-reference/apiData-containedBy-section"/><section conref="../packagedef.dita#apiData-reference/apiData-contains-section"/><section conref="../packagedef.dita#apiData-reference/apiData-contentModel-section"/><section conref="../packagedef.dita#apiData-reference/apiData-attList-section"/><section conref="../packagedef.dita#apiData-reference/apiData-classValue-section"/></refbody>
+</reference>

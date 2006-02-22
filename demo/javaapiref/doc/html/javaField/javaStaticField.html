@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+<meta name="copyright" content="(C) Copyright 2005" />
+<meta name="DC.rights.owner" content="(C) Copyright 2005" />
+<meta content="public" name="security" />
+<meta content="index,follow" name="Robots" />
+<meta http-equiv="PICS-Label" content='(PICS-1.1 "http://www.icra.org/ratingsv02.html" l gen true r (cz 1 lz 1 nz 1 oz 1 vz 1) "http://www.rsac.org/ratingsv01.html" l gen true r (n 0 s 0 v 0 l 0) "http://www.classify.org/safesurf/" l gen true r (SS~~000 1))' />
+<meta content="reference" name="DC.Type" />
+<meta name="DC.Title" content="javaStaticField" />
+<meta name="abstract" content="The &lt;javaStaticField&gt; element declares within the FieldModifiersopt that the fields introduced by the declaration are static fields." />
+<meta name="description" content="The &lt;javaStaticField&gt; element declares within the FieldModifiersopt that the fields introduced by the declaration are static fields." />
+<meta scheme="URI" name="DC.Relation" content="../javaField/javaFieldDef.html" />
+<meta content="XHTML" name="DC.Format" />
+<meta content="javaStaticField" name="DC.Identifier" />
+<meta content="en-us" name="DC.Language" />
+<link href="C:\Work\dita\dost0.1\DITA-OT1.1.1\demo\javaapiref\out\doc\commonltr.css" type="text/css" rel="stylesheet" />
+<title>javaStaticField</title>
+</head>
+<body id="javaStaticField"><a name="javaStaticField"><!-- --></a>
+
+
+<h1 class="topictitle1">javaStaticField</h1>
+
+
+<div><p>The &lt;javaStaticField&gt; element declares within the <em>FieldModifiers<sup>opt</sup></em> that
+the fields introduced by the declaration are static fields.</p>
+
+<div class="section"><h4 class="sectiontitle">Description</h4><p>This element declares that a single
+field is associated with the class instead of a separate field for each object
+instantiated from the class. When no static modifier is present, the fields
+introduced by the declaration are instance fields. A field that is not declared <em>static</em> (sometimes
+called a non-static field) is called an instance variable. Possible alternative
+definitions of the <em>FieldModifier</em> declaration are the &lt;javaFinalField&gt;,
+&lt;javaTransientField&gt;, and &lt;javaVolatileField&gt; elements. </p>
+</div>
+
+<div class="example"><h4 class="sectiontitle">Example</h4> Click on the following link to open the Java
+API topic type example in  <object id="hhctrl" codebase="hhctrl.ocx#Version=4,73,8412,0" type="application/x-oleobject" height="100" classid="clsid:adb880a6-d8ff-11cf-9377-00aa003b7a11" codetype="VIEWASTEXT" width="100">
+<param name="Command" value="ShortCut" />
+<param name="Text" value="Text: DITA " />
+<param name="Item1" value=",../samples/java/IImportEngineTask.dita," /></object><pre>&lt;javaField id="com.ibm.xtools.pluglets.engine.PlugletException"&gt;
+   &lt;apiName&gt;CASE_INSENSITIVE_ORDER&lt;/apiName&gt;
+   &lt;shortDesc&gt;
+       A Comparator that orders String objects as by compareToIgnoreCase.
+       This comparator is serializable.
+   &lt;/shortDesc&gt;
+   &lt;javaFieldDetail&gt;
+      &lt;javaFieldDef&gt;
+         &lt;javaFinalField/&gt;
+         &lt;javaStaticField/&gt;
+         &lt;javaFieldAccess value="public" /&gt;
+         &lt;javaFieldInterface
+              href=”http://java.sun.com/…/Comparator.html”
+              format=”html” scope=”external”&gt;
+          Comparator
+          &lt;/javaFieldInterface&gt;
+      &lt;/javaFieldDef&gt;
+      &lt;apiDesc&gt;Note that this Comparator does not take locale into account,
+             and will result in an unsatisfactory ordering for certain locales.
+             The java.text package provides Collators to allow locale-sensitive
+             ordering.
+       &lt;/apiDesc&gt;
+   &lt;/javaFieldDetail&gt;
+   &lt;related-links&gt;
+      &lt;link href="http://java.sun.com/../
+              collator.html#compare(java.lang.String, java.lang.String)" format="html"&gt;
+           &lt;linktext&gt;Collator.compare(String, String)&lt;linktext&gt;
+       &lt;/link&gt;
+    &lt;/related-links&gt;
+&lt;/javaField&gt;</pre>
+</div>
+
+<div class="section"><h4 class="sectiontitle">Processing Expectations</h4><img src="images/javaStaticField.jpg" alt="" /></div>
+
+<div class="elementContainedBy"><h4 class="sectiontitle">Contained by</h4><p id="javaStaticField__N51AC3"><a name="javaStaticField__N51AC3"><!-- --></a><a href="../javaField/javaFieldDef.html">javaFieldDef</a></p>
+</div>
+
+<div class="hideSection" />
+
+<div class="elementContentModel"><h4 class="sectiontitle">Content model</h4><p id="javaStaticField__N51ADF"><a name="javaStaticField__N51ADF"><!-- --></a>no content</p>
+</div>
+
+<div class="elementAttList" />
+
+<div class="elementClassValue"><h4 class="sectiontitle">Inheritance</h4><p id="javaStaticField__N51AF6"><a name="javaStaticField__N51AF6"><!-- --></a>topic/<span class="keyword">state</span> reference/<span class="keyword">state</span> apiRef/<span class="keyword">apiQualifier</span> apiValue/<span class="keyword">apiQualifier</span></p>
+</div>
+
+</div>
+
+<div>
+<div class="familylinks">
+<div class="parentlink"><strong>Parent topic:</strong> <a href="../javaField/javaFieldDef.html" title="The &lt;javaFieldDef&gt; element represents the FieldDeclaration of a class declaration.">javaFieldDef</a></div>
+</div>
+</div>
+</body>
+</html>

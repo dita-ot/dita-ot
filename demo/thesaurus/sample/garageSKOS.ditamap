@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?><map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" title="Associating scheme and classification using a map" ditaarch:DITAArchVersion="1.0" domains="(map mapgroup-d)" class="- map/map ">
+  <subjectScheme xtrf="garageScheme.ditamap" id="garageSubjects" title="Subject scheme definition" ditaarch:DITAArchVersion="1.0" domains="(map mapgroup-d)" class="- map/map scheme/subjectScheme ">
+<subjectdef href="equipment.xml" class="- map/topicref scheme/subjectdef ">
+  <subjectdef href="lawnmower.xml" class="- map/topicref scheme/subjectdef "/>
+  <subjectdef href="snowshovel.xml" class="- map/topicref scheme/subjectdef "/>
+  <subjectdef href="tools.xml" class="- map/topicref scheme/subjectdef "/>
+  <subjectdef href="waterhose.xml" class="- map/topicref scheme/subjectdef "/>
+  <subjectdef href="wheelbarrow.xml" class="- map/topicref scheme/subjectdef "/>
+</subjectdef>
+<subjectdef href="material.xml" class="- map/topicref scheme/subjectdef ">
+  <subjectdef href="oil.xml" class="- map/topicref scheme/subjectdef "/>
+  <subjectdef href="paint.xml" class="- map/topicref scheme/subjectdef "/>
+  <subjectdef href="shelving.xml" class="- map/topicref scheme/subjectdef "/>
+  <subjectdef href="wwfluid.xml" class="- map/topicref scheme/subjectdef "/>
+</subjectdef>
+<subjectdef href="placecontain.xml" class="- map/topicref scheme/subjectdef ">
+  <subjectdef href="toolbox.xml" class="- map/topicref scheme/subjectdef "/>
+  <subjectdef href="workbench.xml" class="- map/topicref scheme/subjectdef "/>
+</subjectdef>
+
+<subjectRelTable title="Containment" locktitle="yes" toc="no" class="- map/reltable scheme/subjectRelTable ">
+  <subjectRelHeader class="- map/relrow scheme/subjectRelHeader ">
+    <subjectRole class="- map/relcell scheme/subjectRole ">
+      <subjectdef navtitle="Container" class="- map/topicref scheme/subjectdef "/>
+    </subjectRole>
+    <subjectRole class="- map/relcell scheme/subjectRole ">
+      <subjectdef navtitle="Contained" class="- map/topicref scheme/subjectdef "/>
+    </subjectRole>
+  </subjectRelHeader>
+  <subjectRel class="- map/relrow scheme/subjectRel ">
+    <subjectRole class="- map/relcell scheme/subjectRole ">
+      <subjectdef href="toolbox.xml" class="- map/topicref scheme/subjectdef "/>
+    </subjectRole>
+    <subjectRole class="- map/relcell scheme/subjectRole ">
+      <subjectdef href="tools.xml" class="- map/topicref scheme/subjectdef "/>
+      
+    </subjectRole>
+  </subjectRel>
+</subjectRelTable>
+</subjectScheme>
+  <map xtrf="garageClassify.ditamap" title="The classified garage" ditaarch:DITAArchVersion="1.0" domains="(map mapgroup-d) (map classify-d)" class="- map/map ">
+<topicref href="tasks/garagetaskoverview.xml" class="- map/topicref ">
+  <topicref href="tasks/changingtheoil.xml" class="- map/topicref ">
+    <topicsubject href="oil.xml" class="+ map/topicref classify-d/topicsubject ">
+      <subjectref href="toolbox.xml" class="+ map/topicref classify-d/subjectref "/>
+    </topicsubject>
+  </topicref>
+  <topicref href="tasks/organizing.xml" class="- map/topicref ">
+    <topicsubject class="+ map/topicref classify-d/topicsubject ">
+      <subjectref href="workbench.xml" class="+ map/topicref classify-d/subjectref "/>
+      <subjectref href="toolbox.xml" class="+ map/topicref classify-d/subjectref "/>
+    </topicsubject>
+  </topicref>
+  <topicref href="tasks/shovellingsnow.xml" class="- map/topicref ">
+    <topicsubject href="snowshovel.xml" class="+ map/topicref classify-d/topicsubject "/>
+  </topicref>
+  <topicref href="tasks/spraypainting.xml" class="- map/topicref ">
+    <topicsubject href="paint.xml" class="+ map/topicref classify-d/topicsubject "/>
+  </topicref>
+  <topicref href="tasks/takinggarbage.xml" class="- map/topicref "/>
+  <topicref href="tasks/washingthecar.xml" class="- map/topicref ">
+    <topicsubject href="waterhose.xml" class="+ map/topicref classify-d/topicsubject "/>
+  </topicref>
+</topicref>
+<topichead navtitle="Glossary" class="+ map/topicref mapgroup-d/topichead ">
+  <topicref href="equipment.xml" class="- map/topicref "/>
+  <topicref href="lawnmower.xml" class="- map/topicref "/>
+  <topicref href="material.xml" class="- map/topicref "/>
+  <topicref href="oil.xml" class="- map/topicref "/>
+  <topicref href="paint.xml" class="- map/topicref "/>
+  <topicref href="placecontain.xml" class="- map/topicref "/>
+  <topicref href="shelving.xml" class="- map/topicref "/>
+  <topicref href="snowshovel.xml" class="- map/topicref "/>
+  <topicref href="toolbox.xml" class="- map/topicref "/>
+  <topicref href="tools.xml" class="- map/topicref "/>
+  <topicref href="waterhose.xml" class="- map/topicref "/>
+  <topicref href="wheelbarrow.xml" class="- map/topicref "/>
+  <topicref href="workbench.xml" class="- map/topicref "/>
+  <topicref href="wwfluid.xml" class="- map/topicref "/>
+</topichead>
+</map>
+</map>

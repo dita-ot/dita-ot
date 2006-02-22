@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\dtd\reference.dtd">
+<reference id="javaVolatileField" outputclass="element" xml:lang="en-us">
+<title>javaVolatileField</title>
+<shortdesc>The &lt;javaVolatileField> element provides a flag within the <i>FieldModifiers<sup>opt</sup></i> that
+declares the fields that are introduced by the declaration can be declared
+volatile. </shortdesc>
+<refbody>
+<section><title>Description</title>The volatile fields are special fields
+that are used for communicating a state between threads. Possible alternative
+definitions of the <i>FieldModifier</i> declaration are the &lt;javaStaticField>,
+&lt;javaTransientField>, and &lt;javaFinalField> elements.  The &lt;javaSynchronizedMethod>
+element has the following predefined attributes: <i>name ="volatile</i>" and <i> value
+="volatile</i>".<?Pub Caret?>.</section>
+<example> <title>Example</title>Click on the following link to open the Java
+API topic type example in  <object classid="clsid:adb880a6-d8ff-11cf-9377-00aa003b7a11"
+codebase="hhctrl.ocx#Version=4,73,8412,0" codetype="VIEWASTEXT" height="100"
+id="hhctrl" type="application/x-oleobject" width="100">
+<param name="Command" value="ShortCut"/>
+<param name="Text" value="Text: DITA "/>
+<param name="Item1" value=",../samples/java/AbstractImportEngineTask.dita,"/>
+</object><codeblock>&lt;javaField id="java.lang.Float">
+   &lt;apiName>POSITIVE_INFINITY&lt;/apiName>
+   &lt;shortdesc> &lt;/shortdesc>
+   &lt;javaFieldDetail>
+      &lt;javaFieldDef>
+         &lt;javaFinalField/>
+         &lt;javaStaticField/>
+         &lt;javaVolatileField/>
+         &lt;javaFieldAccess value="protected"/>
+      &lt;/javaFieldDef>
+   &lt;/javaFieldDetail>
+   &lt;related-links>
+      &lt;link href="../constant-values.html#ATTRIBUTE_NODE" format="html" scope=”external”>
+           &lt;linktext>Constant Field Values&lt;/linktext> 
+      &lt;/link>
+    &lt;/related-links>
+&lt;/javaField></codeblock></example>
+<section><title>Processing Expectations</title><image href="images/javaVolatileField.jpg"
+placement="inline"><alt></alt></image></section>
+<section conref="../packagedef.dita#javaVolatileField-reference/javaVolatileField-containedBy-section"></section>
+<section conref="../packagedef.dita#javaVolatileField-reference/javaVolatileField-contains-section"></section>
+<section conref="../packagedef.dita#javaVolatileField-reference/javaVolatileField-contentModel-section"></section>
+<section conref="../packagedef.dita#javaVolatileField-reference/javaVolatileField-attList-section"></section>
+<section conref="../packagedef.dita#javaVolatileField-reference/javaVolatileField-classValue-section"></section>
+</refbody>
+</reference>
+<?Pub *0000002785?>

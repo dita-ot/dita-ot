@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?><!--Arbortext, Inc., 1988-2004, v.4002-->
+<!DOCTYPE reference
+  PUBLIC "-//IBM//DTD DITA Reference//EN" "..\dtd\reference.dtd">
+<reference id="javaparameter" outputclass="element" xml:lang="en-us">
+<title>javaparameter</title>
+<shortdesc>The javaparameter element is a reference to a Java parameter. </shortdesc>
+<refbody>
+<section><title>Description</title><p>This element can be used to reference
+a Java parameter from another topic type. </p><p>This element has the following
+attributes: <i>href</i>, <i>keyref</i>, <i>type</i>, <i>format</i>, s<i>cope(local
+| peer | external)</i>, and <i>outputclass</i>. The <i>keyref</i><?Pub Caret?> attribute
+must provide a unique key such as a fully qualified class name for the named
+API item.</p></section>
+<example><title>Example</title><codeblock>&lt;task id="httpxml"&gt;
+  &lt;title&gt;Getting an XML file through an HTTP connection&lt;/title&gt;
+  &lt;taskbody&gt;
+    &lt;steps&gt;
+    &lt;step&gt;&lt;cm&gt;Open the connection&lt;/cm&gt;
+      &lt;info&gt;Use this &lt;javaparameter keyref="com.ibm.xtools.ras.export.engine.findElementByName"&gt;"container" parameters&lt;/javaparameter&gt; 
+      for the root element where to perform the search.&lt;/info&gt;
+    &lt;/step&gt;
+    ...
+    &lt;/steps&gt;
+  &lt;/taskbody&gt;
+&lt;/task&gt;</codeblock></example>
+<section conref="../packagedef.dita#javaparameter-reference/javaparameter-containedBy-section"/><section conref="../packagedef.dita#javaparameter-reference/javaparameter-contains-section"/><section conref="../packagedef.dita#javaparameter-reference/javaparameter-contentModel-section"/><section conref="../packagedef.dita#javaparameter-reference/javaparameter-attList-section"/><section conref="../packagedef.dita#javaparameter-reference/javaparameter-classValue-section"/></refbody>
+</reference><?Pub *0000001312?>

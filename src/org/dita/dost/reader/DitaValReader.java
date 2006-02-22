@@ -3,12 +3,20 @@
  */
 package org.dita.dost.reader;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Properties;
 
+import org.dita.dost.log.DITAOTJavaLogger;
+import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.Content;
 import org.dita.dost.module.ContentImpl;
 import org.dita.dost.util.Constants;
 import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
@@ -24,8 +32,10 @@ public class DitaValReader extends AbstractXMLReader {
     private HashMap filterMap;
     private ContentImpl content;
     private XMLReader reader;
-
-
+    private DITAOTJavaLogger logger;
+    private List imageList = null;
+    private String ditaval = null;
+    
     /**
      * Default constructor of DitaValReader class.
      */
@@ -33,6 +43,8 @@ public class DitaValReader extends AbstractXMLReader {
         super();
         filterMap = new HashMap();
         content = null;
+        logger = new DITAOTJavaLogger();
+        imageList = new ArrayList();
         
         try {
             if (System.getProperty(Constants.SAX_DRIVER_PROPERTY) == null){
@@ -41,8 +53,8 @@ public class DitaValReader extends AbstractXMLReader {
             }
             reader = XMLReaderFactory.createXMLReader();
             reader.setContentHandler(this);
-        } catch (Exception e) {
-            e.printStackTrace(System.out);
+        } catch (Exception e) {        	
+        	logger.logException(e);
         }
 
     }
@@ -53,10 +65,12 @@ public class DitaValReader extends AbstractXMLReader {
      * 
      */
     public void read(String filename) {
+    	ditaval = filename;
+    	
         try {
-            reader.parse(filename);
-        } catch (Exception e) {
-            e.printStackTrace(System.out);
+            reader.parse(new InputSource(new FileInputStream(filename)));
+        } catch (Exception e) {        
+        	logger.logException(e);
         }
     }
 
@@ -69,13 +83,19 @@ public class DitaValReader extends AbstractXMLReader {
         return content;
     }
    
+    public List getImageList() {
+    	return imageList;
+    }
+    
     /**
      * @see org.xml.sax.ContentHandler#startElement(java.lang.String, java.lang.String, java.lang.String, org.xml.sax.Attributes)
      * 
      */
     public void startElement(String uri, String localName, String qName,
             Attributes atts) throws SAXException {
-        if (Constants.ELEMENT_NAME_PROP.equals(qName)) {
+    	String img = atts.getValue(Constants.ATTRIBUTE_NAME_IMG);
+    	
+    	if (Constants.ELEMENT_NAME_PROP.equals(qName)) {
             String action = atts.getValue(Constants.ELEMENT_NAME_ACTION);
             String key = atts.getValue(Constants.ATTRIBUTE_NAME_ATT) 
             + Constants.EQUAL + atts.getValue(Constants.ATTRIBUTE_NAME_VAL);
@@ -83,9 +103,25 @@ public class DitaValReader extends AbstractXMLReader {
                 if(filterMap.get(key) == null){
                     filterMap.put(key, action);
                 }else{
-                    System.out.println("duplicate condition in filter file");
+                	Properties prop = new Properties();
+                	prop.put("%1", key);
+                	logger.logError(MessageUtils.getMessage("DOTJ007E", prop).toString());
                 }
             }
+        }
+        
+        /*
+         * Parse image files for flagging
+         */        
+		if (img != null && !(img.trim().equals(""))) {
+        	if (new File(img).isAbsolute()) {
+        		imageList.add(img);
+        		return;
+        	}
+        	
+        	// img is a relative path to the .ditaval file
+        	String ditavalDir = new File(new File(ditaval).getAbsolutePath()).getParent();
+        	imageList.add(new File(ditavalDir, img).getAbsolutePath());
         }
     }
 }

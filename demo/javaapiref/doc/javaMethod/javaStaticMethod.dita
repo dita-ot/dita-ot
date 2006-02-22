@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\dtd\reference.dtd">
+<reference id="javaStaticMethod" outputclass="element" xml:lang="en-us">
+<title>javaStaticMethod</title>
+<shortdesc>The &lt;javaStaticMethod> element provides within the <i>MethodModifiers<sup>opt</sup></i> declaration
+that a method is declared <i>static</i>. </shortdesc>
+<refbody>
+<section><title>Description</title><p> The &lt;javaStaticMethod> element must
+not be  used in conjunction with the &lt;javaAbstractMethod> element. Possible
+alternative definitions of the method declaration are the javaFinalMethod, javaNativeMethod<?Pub Caret?>,
+and  javaSyncronizedMethod elements. The &lt;javaStaticClass> element has
+the following predefined attributes: <i>name ="static" </i>and  <i>value ="static"</i>.
+ </p></section>
+<example> <title>Example</title>Click on the following link to open the Java
+API topic type example in  <object classid="clsid:adb880a6-d8ff-11cf-9377-00aa003b7a11"
+codebase="hhctrl.ocx#Version=4,73,8412,0" codetype="VIEWASTEXT" height="100"
+id="hhctrl" type="application/x-oleobject" width="100">
+<param name="Command" value="ShortCut"/>
+<param name="Text" value="Text: DITA "/>
+<param name="Item1" value=",../samples/java/PlugletCompiler.dita,"/></object><codeblock>&lt;javaMethod id="com.ibm.pluglets.getInteger">
+   &lt;apiName>getInteger&lt;/apiName>
+   &lt;shortdesc>Determines the integer value of the system property
+              with the specified name.&lt;/shortdesc>
+   &lt;javaMethodDetail>
+      &lt;javaMethodDef>
+         &lt;javaStaticMethod/>
+         &lt;javaMethodAccess value="public"/>
+         &lt;javaReturn>
+            &lt;javaMethodClass href="http://java.sun.com/j2se/../lang/Integer.html"
+                 format="html" scope="external">Integer&lt;/javaMethodClass>
+            &lt;apiDefNote>The Integer value of the property.&lt;/apiDefNote>
+         &lt;/javaReturn>
+         &lt;javaParam>
+            &lt;javaMethodClass href="../lang/String.html"
+                   format="html" scope="external">String&lt;/javaMethodClass>
+            &lt;apiItemName>nm&lt;/apiItemName>
+            &lt;apiDefNote>property name&lt;/apiDefNote>
+         &lt;/javaParam>
+     &lt;/javaMethodDef>
+     &lt;apiDesc>Determines the integer value of the system property with the specified
+       name. The first argument is treated as the name of a system property.&lt;/apiDesc>
+   &lt;/javaMethodDetail>
+   &lt;related-links>
+      &lt;link href="../System.html#getProperty" format="html" scope="external">
+         &lt;linktext>getProperty(java.lang.String)&lt;/linktext>
+      &lt;/link>
+   &lt;/related-links>
+&lt;/javaMethod></codeblock></example>
+<section><title>Processing Expectations</title><image href="images/javaStaticMethod.jpg"
+placement="inline"><alt></alt></image></section>
+<section conref="../packagedef.dita#javaStaticMethod-reference/javaStaticMethod-containedBy-section"></section>
+<section conref="../packagedef.dita#javaStaticMethod-reference/javaStaticMethod-contains-section"></section>
+<section conref="../packagedef.dita#javaStaticMethod-reference/javaStaticMethod-contentModel-section"></section>
+<section conref="../packagedef.dita#javaStaticMethod-reference/javaStaticMethod-attList-section"></section>
+<section conref="../packagedef.dita#javaStaticMethod-reference/javaStaticMethod-classValue-section"></section>
+</refbody>
+</reference>
+<?Pub *0000003492?>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\..\dtd\reference.dtd">
+<reference id="altLabel" outputclass="element" xml:lang="en-us">
+<title>altLabel</title>
+<shortdesc>An optional synonym for naming this subject.</shortdesc>
+<refbody>
+<section><title>Description</title><p>You can supply <?Pub Caret?>many alternative
+labels.</p></section>
+<section conref="../packagedef.xml#altLabel-reference/altLabel-containedBy-section"></section>
+<section conref="../packagedef.xml#altLabel-reference/altLabel-contains-section"></section>
+<section conref="../packagedef.xml#altLabel-reference/altLabel-contentModel-section"></section>
+<section conref="../packagedef.xml#altLabel-reference/altLabel-attList-section"></section>
+<section conref="../packagedef.xml#altLabel-reference/altLabel-classValue-section"></section>
+</refbody>
+</reference>
+<?Pub *0000000958?>

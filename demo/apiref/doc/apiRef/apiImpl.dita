@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?><!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference
+  PUBLIC "-//IBM//DTD DITA Reference//EN" "..\dtd\reference.dtd">
+<reference id="apiImpl" outputclass="element" xml:lang="en-us">
+<title>apiImpl</title>
+<shortdesc>The &lt;apiImpl&gt; element describes the classifier implementation
+for specific forms, including class, data type, interface, component, and
+other API items.</shortdesc>
+<refbody>
+<section><title>Description</title><p>The &lt;apiImpl&gt; element can contain
+code fragments or other source code for generating the supporting code for
+the interface (especially for functions and methods). The processing expectation
+is that the &lt;apiImpl&gt; element is hidden from the audience the implementation
+should not be exposed to.</p></section>
+<example> <title>Example</title><p>The following example shows a simple &lt;apiImpl&gt;
+element  for a VisualBasic property:</p><codeblock>&lt;apiValue&gt;
+       &lt;apiValueDetail&gt;
+           &lt;apiValueDef&gt;
+              &lt;apiDefNote&gt;
+                   Returns the IRXEModel object to which the element belongs.
+              &lt;/apiDefNote&gt;
+           &lt;/apiValueDef&gt;
+       &lt;/apiValueDetail&gt;
+       &lt;apiImpl&gt;Statement&lt;/apiImpl&gt;
+   &lt;/apiValue&gt;
+</codeblock></example>
+<section conref="../packagedef.dita#apiImpl-reference/apiImpl-containedBy-section"/><section conref="../packagedef.dita#apiImpl-reference/apiImpl-contains-section"/><section conref="../packagedef.dita#apiImpl-reference/apiImpl-contentModel-section"/><section conref="../packagedef.dita#apiImpl-reference/apiImpl-attList-section"/><section conref="../packagedef.dita#apiImpl-reference/apiImpl-classValue-section"/></refbody>
+</reference>

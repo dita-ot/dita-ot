@@ -9,7 +9,7 @@
 
 <xsl:include href="output-message.xsl"/>           - Place with other included files
 
-<xsl:variable name="msgprefix">IDXS</xsl:variable> - Place with other variables
+<xsl:variable name="msgprefix">DOTX</xsl:variable> - Place with other variables
 
 
         The template takes in the following parameters:
@@ -26,6 +26,19 @@
   <xsl:param name="msg" select="***"/>
   <xsl:param name="msgnum" select="000"/>
   <xsl:param name="msgsev" select="I"/>
+  <xsl:param name="msgparams" select="''"/>
+  
+  <xsl:variable name="msgid">
+    <xsl:value-of select="$msgprefix"/>
+    <xsl:value-of select="$msgnum"/>
+    <xsl:value-of select="$msgsev"/>
+  </xsl:variable>
+  <xsl:variable name="msgdoc" select="document('../../resource/messages.xml')"/>
+  <xsl:variable name="msgcontent">
+    <xsl:apply-templates select="$msgdoc/messages/message[@id=$msgid]" mode="get-message-content">    
+      <xsl:with-param name="params" select="$msgparams"/>    
+    </xsl:apply-templates>
+  </xsl:variable>
   <xsl:variable name="localclass"><xsl:value-of select="@class"/></xsl:variable>
   <xsl:variable name="debugloc">
    <!-- Information on how to find the error; file name, followed by element counter: -->
@@ -40,23 +53,87 @@
      <xsl:text>)</xsl:text>
    </xsl:if>
   </xsl:variable>
-  <xsl:message><xsl:text>------------------------------------------------------------------
+  
+  <xsl:message><xsl:text>
 </xsl:text>
-    <xsl:value-of select="$msgprefix"/><xsl:value-of select="$msgnum"/>
-    <xsl:choose>
-      <xsl:when test="$msgsev='I'">I Information: </xsl:when>
-      <xsl:when test="$msgsev='W'">W Warning: </xsl:when>
-      <xsl:when test="$msgsev='E'">E Error: </xsl:when>
-      <xsl:when test="$msgsev='F'">F Fatal: </xsl:when>
-      <xsl:otherwise>I Information: </xsl:otherwise>
-    </xsl:choose>
     <xsl:value-of select="$debugloc"/>     <!-- Debug location, followed by a newline -->
     <xsl:text>
 </xsl:text>
-    <xsl:value-of select="$msg"/>          <!-- Error message, followed by a newline -->
+    <xsl:value-of select="$msgcontent"/>          <!-- Error message, followed by a newline -->
     <xsl:text>
 </xsl:text>
   </xsl:message>
 </xsl:template>
 
+<xsl:template match="message" mode="get-message-content">
+  <xsl:param name="params"/>
+  <xsl:variable name="reason" select="reason/text()"/>
+  <xsl:variable name="response" select="response/text()"/>    
+  
+  <xsl:text>[</xsl:text><xsl:value-of select="@id"/><xsl:text>]</xsl:text>
+  <xsl:text>[</xsl:text><xsl:value-of select="@type"/><xsl:text>]</xsl:text>
+  <xsl:text>: </xsl:text>
+  <xsl:call-template name="replaceParams">
+    <xsl:with-param name="string" select="$reason"/>
+    <xsl:with-param name="params" select="$params"/>    
+  </xsl:call-template>
+  <xsl:text> </xsl:text>
+  <xsl:call-template name="replaceParams">
+    <xsl:with-param name="string" select="$response"/>
+    <xsl:with-param name="params" select="$params"/>    
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template name="replaceParams">
+  <xsl:param name="string"/>
+  <xsl:param name="params"/>
+  <xsl:choose>
+    <xsl:when test="contains($params,';')">
+      <xsl:variable name="param" select="substring-before($params,';')"/>
+      <xsl:variable name="newString">
+        <xsl:call-template name="replaceString">
+          <xsl:with-param name="string" select="$string"/>
+          <xsl:with-param name="match" select="substring-before($param,'=')"/>
+          <xsl:with-param name="replacement" select="substring-after($param,'=')"/>            
+        </xsl:call-template>          
+      </xsl:variable>
+      <xsl:call-template name="replaceParams">
+        <xsl:with-param name="string" select="$newString"/>
+        <xsl:with-param name="params" select="substring-after($params,';')"/>
+      </xsl:call-template>
+    </xsl:when>
+    <xsl:when test="contains($params,'=')">
+      <xsl:call-template name="replaceString">
+        <xsl:with-param name="string" select="$string"/>
+        <xsl:with-param name="match" select="substring-before($params,'=')"/>
+        <xsl:with-param name="replacement" select="substring-after($params,'=')"/>            
+      </xsl:call-template>   
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:value-of select="$string"/>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+<xsl:template name="replaceString">
+  <xsl:param name="string"/>
+  <xsl:param name="match"/>
+  <xsl:param name="replacement"/>
+  <xsl:choose>
+    <xsl:when test="contains($string, $match)">
+      <xsl:variable name="newstring">
+        <xsl:value-of select="concat(substring-before($string, $match), concat($replacement, substring-after($string, $match)))"/>
+      </xsl:variable>
+      <xsl:call-template name="replaceString">
+        <xsl:with-param name="string" select="$newstring"/>
+        <xsl:with-param name="match" select="$match"/>
+        <xsl:with-param name="replacement" select="$replacement"/>                    
+      </xsl:call-template>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:value-of select="$string"/>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+  
 </xsl:stylesheet>

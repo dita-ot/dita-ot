@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
+<!-- revise @PLACEHOLDER@ names and values-->
+<project name="@PROJECT.NAME@_wordrtf" default="all" basedir="..">
+  <path id="dost.class.path">
+    <pathelement location="${basedir}${file.separator}lib${file.separator}dost.jar"/>
+  </path>
+  
+  <taskdef name="integrate" classname="org.dita.dost.platform.IntegratorTask">
+    <classpath refid="dost.class.path"/>
+  </taskdef>
+  <target name="all" depends="integrate, @DELIVERABLE.NAME@2wordrtf"></target>
+  <target name="integrate">
+    <integrate ditadir="${basedir}"/>
+  </target>
+  
+  <target name="@DELIVERABLE.NAME@2wordrtf">
+    <ant antfile="${basedir}${file.separator}conductor.xml" target="init">
+      <property name="args.input" value="@DITA.INPUT@"/>
+      <property name="output.dir" value="@OUTPUT.DIR@"/>
+      <property name="transtype" value="wordrtf"/>
+    </ant>
+  </target>
+</project>

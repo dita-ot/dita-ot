@@ -3,7 +3,7 @@
 
 <?xml-stylesheet href="../xsl/ditaview_shell.xsl" type="text/xsl"?>
 <?xml-stylesheet href="../css/dita_shell.css" type="text/css"?>
-<!DOCTYPE topic PUBLIC "-//IBM//DTD DITA Topic//EN" "../../dtd/topic.dtd">
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
 <topic id="domains" xml:lang="en-us">
   <title>Specializing domains in DITA</title>
   <shortdesc>In current approaches, DTDs are static. As a result, DTD designers try to cover every contingency and, when this effort fails, users have to force their information to fit existing types. DITA changes this situation by giving information architects and developers the power to extend a base DTD to cover their domains.</shortdesc>

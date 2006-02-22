@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2004, v.4002-->
+<!DOCTYPE concept PUBLIC "-//IBM//DTD DITA Concept//EN"
+ "..\dtd\concept.dtd">
+<?Pub Inc?>
+<concept id="intro_ditaapispecialization" xml:lang="en-us">
+<title>Overview</title>
+<shortdesc>You can use the DITA API specialization to author and generate
+API reference documentation for Java and other programming languages. </shortdesc>
+<conbody>
+<p>The DITA API specialization documentation describes the XML based DITA
+architecture through the document type definition (DTD) elements for generic
+(all programming languages) and Java programming language. The DITA API specialization
+includes topic types and elements for documenting generic and Java API refrences.
+Each language-specific DITA API specialization consists of modules. A module
+is topic type designed for a specific task such as describing an API package
+or class. Each module includes the appropriate XML elements to describe a
+specific part of the programming language.</p>
+<p>The topic type module describes the contained XML elements. A topic type
+module has a dependency on the topic type modules that, for its contained
+specialized elements, provide the base XML elements. <?Pub Caret?></p>
+</conbody>
+</concept>
+<?Pub *0000001281?>

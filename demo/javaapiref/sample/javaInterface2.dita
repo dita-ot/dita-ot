@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE javaInterface PUBLIC "-//IBM//DTD DITA Java API Interface Reference Type//EN"
+ "../dtd/javaInterface.dtd">
+<javaInterface id="javaInterface2">
+<apiName>NodeCompleteness</apiName>
+<shortdesc>This interface represents the completeness of a node that may not
+be complete.</shortdesc>
+<javaInterfaceDetail>
+<javaInterfaceDef>
+<javaInterfaceAccess/>
+<javaBaseInterface href="javaInterface1.dita"></javaBaseInterface>
+</javaInterfaceDef>
+<apiDesc>You use the methods of the NodeCompleteness interface to check whether
+the node is complete.</apiDesc>
+</javaInterfaceDetail>
+<javaMethod id="getNodeCompleteness">
+<apiName>getNodeCompleteness</apiName>
+<shortdesc>This method returns the completeness of the node.</shortdesc>
+<javaMethodDetail>
+<javaMethodDef>
+<javaMethodAccess value="public"/>
+<javaReturn>
+<javaMethodPrimitive value="boolean"/>
+<apiDefNote>Whether the node is ready to access.</apiDefNote>
+</javaReturn>
+</javaMethodDef>
+</javaMethodDetail>
+</javaMethod>
+</javaInterface>

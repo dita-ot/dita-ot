@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- (c) Copyright by Comtech Services, Inc. All rights reserved. -->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference id="troubleshooting" xml:lang="en-us">
+  <title>Troubleshooting</title>
+  <shortdesc>This section is used for identifying problems when installing 
+    and executing the DITA Open Toolkit.</shortdesc>
+  <refbody>
+    <section>
+      <title>1. Out of Memory Error</title>
+      <p>In some cases, you might receive a message stating the build has 
+        failed due to an "Out of Memory" error. Please follow the steps below 
+        to fix this problem:</p>
+      <ol>
+        <li><p>For Windows, type <codeph>set ANT_OPTS=%ANT_OPTS% -Xmx256M</codeph> 
+            in the command prompt, you can also choose to add a new opition 
+            <codeph>-Xmx256M</codeph> to the <codeph>ANT_OPTS</codeph> 
+            environment variable.</p>
+            <p>For Linux, type <codeph>export ANT_OPTS=${ANT_OPTS} -Xmx256M</codeph> 
+            in the command prompt.</p>
+        </li>
+        <li>Run the transformation again.</li>
+      </ol>
+    </section>
+    <section>
+        <title>2. java.io.IOException: Can't store Document</title>
+        <p>In some cases, when you run the JavaHelp transformation, you might 
+          receive the exception above. This problem is caused by some HTML 
+          files unrelated with the current JavaHelp transformation were found 
+          under the output directory. Please follow the steps below to fix 
+          this problem:</p>
+        <ol>
+          <li>Change into the output directory.</li>
+          <li>Clean the output directory.</li>
+          <li>Run the JavaHelp transformation again.</li>
+        </ol>
+    </section>
+  </refbody>
+</reference>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\..\dtd\reference.dtd">
+<reference id="subjHiddenLabel" outputclass="element" xml:lang="en-us">
+<title>subjHiddenLabel</title>
+<shortdesc>An name that can be applied to the subject within the scheme but
+shouldn't be presented to the user. </shortdesc><?Pub Caret1?>
+<refbody>
+<section><title>Description</title><p>If any hidden labels are specified within
+the scheme, they are used instead of the hidden labels specified with the <xref
+href="../subjectDomain/hiddenLabel.xml" type="reference"></xref> element
+in the subject topic. </p></section>
+<section conref="../packagedef.xml#subjHiddenLabel-reference/subjHiddenLabel-containedBy-section"></section>
+<section conref="../packagedef.xml#subjHiddenLabel-reference/subjHiddenLabel-contains-section"></section>
+<section conref="../packagedef.xml#subjHiddenLabel-reference/subjHiddenLabel-contentModel-section"></section>
+<section conref="../packagedef.xml#subjHiddenLabel-reference/subjHiddenLabel-attList-section"></section>
+<section conref="../packagedef.xml#subjHiddenLabel-reference/subjHiddenLabel-classValue-section"></section>
+</refbody>
+</reference>
+<?Pub *0000001279?>

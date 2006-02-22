@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "../../dtd/reference.dtd">
+<!--             (C) Copyright OASIS Open 2005.                    -->
+<!--             (C) Copyright IBM Corporation 2001, 2004.         -->
+<!--             All Rights Reserved.                              -->
+<reference id="univ-atts" xml:lang="en-us">
+<title><keyword>%univ-atts;</keyword></title>
+<shortdesc>Universal attributes is a parameter entity declaration in the topic
+DTD that includes:</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>%univ-atts</indexterm><indexterm>Commonly Referenced
+Objects elements<indexterm>%univ-atts</indexterm>  </indexterm>
+<indexterm>%univ-atts</indexterm></keywords>
+</metadata></prolog>
+<refbody>
+<section><ul>
+<li>the attributes in the <xref href="select-atts.dita">select-atts</xref> parameter
+entity (<i><keyword>platform</keyword></i>, <i><keyword>product</keyword></i>, <i><keyword>audience</keyword></i>,
+ <i><keyword>otherprops</keyword></i>, <i><keyword>importance</keyword></i>,
+ <i><keyword>rev</keyword></i>, <i><keyword>status</keyword></i>)</li>
+<li>the attributes in the <xref href="id-atts.dita">id-atts</xref> parameter
+entity (<i><keyword>id</keyword></i>, <i><keyword>conref</keyword></i>)</li>
+<li>two additional attributes: <i><keyword>translate</keyword></i> and <i><keyword>xml:lang</keyword></i>.</li>
+</ul></section>
+<!--xsection conref="DitabaseNav.dita#commonCMdefs/univ-atts-contains"/-->
+<!--xsection conref="DitabaseNav.dita#commonCMdefs/univ-atts-containedby"/-->
+<section><title>Attributes</title><simpletable
+relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow>
+<stentry>%select-atts;</stentry>
+<stentry>A set of related attributes, described at <xref href="select-atts.dita">select-atts</xref>:
+ <i><keyword>platform</keyword></i>, <i><keyword>product</keyword></i>,  <i><keyword>audience</keyword></i>, <i><keyword>otherprops</keyword></i>,
+ <i><keyword>importance</keyword></i>, <i><keyword>rev</keyword></i>,  <i><keyword>status</keyword></i>.</stentry>
+<stentry> </stentry>
+<stentry> </stentry>
+<stentry> </stentry>
+</strow>
+<strow>
+<stentry>%id-atts;</stentry>
+<stentry>A set of related attributes, described at <xref href="id-atts.dita">id-atts</xref>:
+ <i><keyword>id</keyword></i>, <i><keyword>conref</keyword></i>.</stentry>
+<stentry> </stentry>
+<stentry> </stentry>
+<stentry> </stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/translate">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/xmllang">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+</simpletable>       </section>
+<example>See examples for the <xref href="select-atts.dita">select-atts</xref> and <xref
+href="id-atts.dita">id-atts</xref> parameter entries. The translate and xml:lang
+attributes identify language-specific words or phrases for specific processing
+(or non-processing, in the case of translate="no").<codeblock>&lt;p>The cordial response to the question is 
+&lt;q translate="no" xml:lang="de-de">nein.&lt;/q>&lt;/p></codeblock>    
+  </example>
+</refbody>
+</reference>
+<?Pub *0000003179?>

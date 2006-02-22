@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\..\dtd\reference.dtd">
+<reference id="hasPart" outputclass="element" xml:lang="en-us">
+<title>hasPart</title>
+<shortdesc>Specifies that the contained hierarchy expresses PART-OF relationships
+between subjects.</shortdesc>
+<refbody>
+<section><title>Description</title><p>In a PART-OF hierarchy, the child subject
+contributes to the composition of the parent subject. For example, a tire
+is part of a car.</p></section>
+<section conref="../packagedef.xml#hasPart-reference/hasPart-containedBy-section"><?Pub Caret1?></section>
+<section conref="../packagedef.xml#hasPart-reference/hasPart-contains-section"></section>
+<section conref="../packagedef.xml#hasPart-reference/hasPart-contentModel-section"></section>
+<section conref="../packagedef.xml#hasPart-reference/hasPart-attList-section"></section>
+<section conref="../packagedef.xml#hasPart-reference/hasPart-classValue-section"></section>
+</refbody>
+</reference>
+<?Pub *0000001085?>

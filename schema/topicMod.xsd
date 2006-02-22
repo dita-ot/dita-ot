@@ -2,17 +2,17 @@
 <!-- ============================================================= -->
 <!--                    HEADER                                     -->
 <!-- ============================================================= -->
-<!--  MODULE:    DITA Topic XSD Module                                   -->
-<!--  VERSION:   1.0                                               -->
-<!--  DATE:      February 2005                                     -->
+<!--  MODULE:    DITA Topic XSD Module                             -->
+<!--  VERSION:   1.0.1                                             -->
+<!--  DATE:      November 2005                                     -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
 <!-- ============================================================= -->
 <!-- SYSTEM:     Darwin Information Typing Architecture (DITA)     -->
 <!--                                                               -->
-<!-- PURPOSE:    Define elements and specialization atttributed    -->
-<!--             for Topics       -->
+<!-- PURPOSE:    Define elements and specialization attributes     -->
+<!--             for Topics                                        -->
 <!--                                                               -->
 <!-- ORIGINAL CREATION DATE:                                       -->
 <!--             March 2001                                        -->

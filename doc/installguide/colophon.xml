@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- (c) Copyright by Comtech Services, Inc. All rights reserved. -->
-<!DOCTYPE concept PUBLIC "-//IBM//DTD DITA Concept//EN" "../dtd/concept.dtd" [
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd" [
   <!-- Begin Document Specific Declarations -->
   <!ENTITY ut-d-att "(topic ut-d)">
   <!-- End Document Specific Declarations -->
@@ -8,21 +8,18 @@
 <concept id = "colophon" xml:lang = "en-us">
   <title>About the installation guide</title>
   <conbody>
-    <p>This set of information was produced using DITA methodologies. The 
-      center point of the information within this guide was created using 
-      tasks. We have also included concept and reference topics to support 
-      these tasks. </p>
-    <p>If you are interested in using this information set but need to 
-      eliminate some of the tasks, such as HTML Help or Java Help installation, 
-      you can filter them out in the map using a .xmlval file or the print 
+    <p>This set of information is based on using DITA methodologies. The 
+      main point of the guide is created using tasks. The concepts and 
+      reference topics to support these tasks are also included. </p>
+    <p>If you are interested in this information, and you want to eliminate 
+      some tasks, such as HTML Help or Java Help installation, 
+      you can filter them out in the map using a .ditaval file or the print 
       attribute. </p>
-    <p>We slightly modified the HTML style sheet delivered with the DITA open 
-      toolkit by changing the spacing between steps and enhancing the output 
-      format of the tables. We made these changes to the stylesheet by adding 
-      CSS and basic html tags to the stylesheet that is delivered with the open 
-      toolkit. The DITA Toolkit was used to produce this information. In 
-      production, we used the HTML Help .chm build file to produce our 
-      output.</p>
+    <p>There are some updates in HTML style sheet delivered with DITA Open 
+      toolkit, such as the spacing between each step, and the format of the 
+      tables. These updates are made to the stylesheet by adding CSS and basic 
+      html tags to the stylesheet within the open toolkit. The HTML Help.chm 
+      build file helps in producing this information.</p>
     <section>
       <title><image href = "pic/copy.gif" placement = 
         "inline"></image>Copyright by Comtech Services, Inc. All rights 

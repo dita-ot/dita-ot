@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
 
-<!DOCTYPE concept PUBLIC "-//IBM//DTD DITA Concept//EN" "concept.dtd">
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "../dtd/concept.dtd">
 
 <concept id="antintroduction" xml:lang="en-us">
   <title>Ant Introduction</title>
@@ -24,7 +24,7 @@
       XSLT scripts. To execute the DITA scripts directly, see the <xref>DITA 
       Readme</xref> document.</p>
     <note>The following instructions and the associated <i>build.xml</i> and 
-      <i>ditatargets.xml</i> files are for the Java 1.4.2, Ant 1.6.2, FOP 
+      <i>ditatargets.xml</i> files are for the Java 1.4.2, Ant 1.6.5, FOP 
       0.20.5, and Saxon 6.5.3 releases. These instructions are likely to need 
       some adjustment for other versions of these components and for specific 
       environments.</note>

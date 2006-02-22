@@ -3,6 +3,7 @@
  */
 package org.dita.dost.pipeline;
 
+import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.module.AbstractPipelineModule;
 import org.dita.dost.module.ModuleFactory;
 
@@ -23,25 +24,27 @@ public class PipelineFacade extends AbstractFacade {
 
 
     /**
+     * @throws DITAOTException 
      * @see org.dita.dost.pipeline.AbstractFacade#execute(java.lang.String, org.dita.dost.pipeline.AbstractPipelineInput)
      * 
      */
     public AbstractPipelineOutput execute(String pipelineModuleName,
-            AbstractPipelineInput input) {
-        // PipelineFacade just call the relevant single module
-        // in the future can do more complex things here, like call several
-        // modules
-        AbstractPipelineModule module = null;
-        AbstractPipelineOutput output = null;
-        //((PipelineHashIO)input).setAttribute("tempDir",new String("temp"));
-
-        module = ModuleFactory.instance().createModule(pipelineModuleName);
-
+            AbstractPipelineInput input) throws DITAOTException {
+        /* 
+         * PipelineFacade just call the relevant single module now,
+         * in the future can do more complex things here, like call several
+         * modules. 
+         */
+        AbstractPipelineModule module = null;                
+        ModuleFactory factory = ModuleFactory.instance();
+        		
+		module = factory.createModule(pipelineModuleName);
+		
         if (module != null) {
-            output = module.execute(input);
+            return module.execute(input);
         }
 
-        return output;
+        return null;
     }
 
 }

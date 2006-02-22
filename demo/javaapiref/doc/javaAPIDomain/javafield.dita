@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\dtd\reference.dtd">
+<reference id="javafield" outputclass="element" xml:lang="en-us">
+<title>javafield</title>
+<shortdesc>The &lt;javafield> element is a reference to a Java field. </shortdesc>
+<refbody>
+<section><title>Description</title><p>The &lt;javafield> element can be used
+to reference a Java field from another topic type. </p></section>
+<example><title>Example</title><codeblock>&lt;task id="httpxml">
+  &lt;title>Getting an XML file through an HTTP connection&lt;/title>
+  &lt;taskbody>
+    &lt;steps>
+    &lt;step>&lt;cm>Open the connection&lt;/cm>
+      &lt;info>You can use &lt;javafield keyref="com.ibm.xtools.patterns.framework.uml2.AbstractImportEngineTask.IDD">IDD field (AbstractImportEngineTask)&lt;/javafield> 
+      in a Java application.&lt;/info>
+    &lt;/step>
+    ...
+    &lt;/steps>
+  &lt;/taskbody>
+&lt;/task></codeblock></example>
+<section conref="../packagedef.dita#javafield-reference/javafield-containedBy-section"></section>
+<section conref="../packagedef.dita#javafield-reference/javafield-contains-section"></section>
+<section conref="../packagedef.dita#javafield-reference/javafield-contentModel-section"></section>
+<section conref="../packagedef.dita#javafield-reference/javafield-attList-section"></section>
+<section conref="../packagedef.dita#javafield-reference/javafield-classValue-section"></section>
+</refbody>
+</reference>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\dtd\reference.dtd">
+<reference id="javaClass" outputclass="element" xml:lang="en-us">
+<title>javaClass</title>
+<shortdesc>The &lt;javaClass&gt; element provides the name of the Java API
+class, all the elements necessary to describe the members that are introduced
+by the class declaration, and the members inherited from the direct base class.</shortdesc>
+<refbody>
+<section><title>Description</title><p>The &lt; javaClass&gt; element requires
+an ID attribute as an anchor point and this ID must always be specified. This
+ID attribute is referenced by the <i>conref</i> attribute and internal applications
+that refer to the  &lt;javaClass&gt; element content. Use a unique key such
+as fully qualified package name (com.ibm.xtools.ras.engine.tasks) for the
+named API reference. The &lt;apiName&gt;, &lt;shortdesc&gt;, and &lt;javaClassDetail&gt;
+elements are the required elements for this top-level container. </p></section>
+<section conref="../packagedef.dita#javaClass-reference/javaClass-containedBy-section"></section>
+<section conref="../packagedef.dita#javaClass-reference/javaClass-contains-section"></section>
+<section conref="../packagedef.dita#javaClass-reference/javaClass-contentModel-section"></section>
+<section conref="../packagedef.dita#javaClass-reference/javaClass-attList-section"></section>
+<section conref="../packagedef.dita#javaClass-reference/javaClass-classValue-section"></section>
+</refbody>
+</reference>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\..\dtd\reference.dtd">
+<reference id="hasKind" outputclass="element" xml:lang="en-us">
+<title>hasKind</title>
+<shortdesc>Specifies that the contained hierarchy expresses KIND-OF relationships
+between subjects.</shortdesc>
+<refbody>
+<section><title>Description</title><p>In a KIND-OF hierarchy, the child subject
+is a particular variety <?Pub Caret?>of the parent subject. For example, a
+car is a kind of vehicle. A KIND-OF hierarchy is sometimes called an IS-A,
+generic, or subsumption hierarchy. </p></section>
+<section conref="../packagedef.xml#hasKind-reference/hasKind-containedBy-section"></section>
+<section conref="../packagedef.xml#hasKind-reference/hasKind-contains-section"></section>
+<section conref="../packagedef.xml#hasKind-reference/hasKind-contentModel-section"></section>
+<section conref="../packagedef.xml#hasKind-reference/hasKind-attList-section"></section>
+<section conref="../packagedef.xml#hasKind-reference/hasKind-classValue-section"></section>
+</refbody>
+</reference>
+<?Pub *0000001165?>

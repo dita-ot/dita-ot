@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\..\dtd\reference.dtd">
+<reference id="fullnoteref" outputclass="element" xml:lang="en-us">
+<title>fullnoteref</title>
+<shortdesc>A<?Pub Caret1?> cross reference to a topic with a more complete
+treatment than the subject note.</shortdesc>
+<refbody>
+<section><title>Description</title><p>See also <xref format="html" href="http://www.w3.org/TR/swbp-skos-core-guide/#secdocrefstyle">http://www.w3.org/TR/swbp-skos-core-guide/#secdocrefstyle</xref
+></p></section>
+<section conref="../packagedef.xml#fullnoteref-reference/fullnoteref-containedBy-section"></section>
+<section conref="../packagedef.xml#fullnoteref-reference/fullnoteref-contains-section"></section>
+<section conref="../packagedef.xml#fullnoteref-reference/fullnoteref-contentModel-section"></section>
+<section conref="../packagedef.xml#fullnoteref-reference/fullnoteref-attList-section"></section>
+<section conref="../packagedef.xml#fullnoteref-reference/fullnoteref-classValue-section"></section>
+</refbody>
+</reference>
+<?Pub *0000001153?>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
+<project name="sample_wordrtf" default="all" basedir="..">
+  <path id="dost.class.path">
+    <pathelement location="${basedir}${file.separator}lib${file.separator}dost.jar"/>
+  </path>
+  
+  <taskdef name="integrate" classname="org.dita.dost.platform.IntegratorTask">
+    <classpath refid="dost.class.path"/>
+  </taskdef>
+  <target name="all" depends="integrate, sample2wordrtf"></target>
+  <target name="integrate">
+    <integrate ditadir="${basedir}"/>
+  </target>
+  <!-- revise below here -->
+  <target name="sample2wordrtf">
+    <ant antfile="${basedir}${file.separator}conductor.xml" target="init">
+      <property name="args.input"
+        value="${basedir}${file.separator}samples${file.separator}hierarchy.ditamap"/>
+      <property name="output.dir"
+        value="${basedir}${file.separator}out${file.separator}samples${file.separator}wordrtf"/>
+      <property name="transtype" value="wordrtf"/>
+    </ant>
+  </target>
+</project>

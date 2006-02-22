@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?><!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference
+  PUBLIC "-//IBM//DTD DITA Reference//EN" "..\dtd\reference.dtd">
+<reference id="javaMethodDetail" outputclass="element" xml:lang="en-us">
+<title>javaMethodDetail</title>
+<shortdesc>The &lt;javaMethodDetai&gt; element can contain the Java method definition,
+the description, return values, the exception thrown, and other sections.</shortdesc>
+<refbody>
+<section><title>Description</title><p>In the &lt;javaMethodDetail&gt; element
+the &lt;example&gt; and &lt;section&gt; elements are provided to support the current
+specific API reference. </p></section>
+<section conref="../packagedef.dita#javaMethodDetail-reference/javaMethodDetail-containedBy-section"/><section conref="../packagedef.dita#javaMethodDetail-reference/javaMethodDetail-contains-section"/><section conref="../packagedef.dita#javaMethodDetail-reference/javaMethodDetail-contentModel-section"/><section conref="../packagedef.dita#javaMethodDetail-reference/javaMethodDetail-attList-section"/><section conref="../packagedef.dita#javaMethodDetail-reference/javaMethodDetail-classValue-section"/></refbody>
+</reference>

@@ -2,17 +2,17 @@
 <!-- ============================================================= -->
 <!--                    HEADER                                     -->
 <!-- ============================================================= -->
-<!--  MODULE:    DITA Software Domain                             -->
-<!--  VERSION:   1.0                                               -->
-<!--  DATE:      February 2005                                     -->
+<!--  MODULE:    DITA Software Domain                              -->
+<!--  VERSION:   1.0.1                                             -->
+<!--  DATE:      November 2005                                     -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
 <!-- ============================================================= -->
 <!-- SYSTEM:     Darwin Information Typing Architecture (DITA)     -->
 <!--                                                               -->
-<!-- PURPOSE:    Define elements and specialization atttributed    -->
-<!--             for Software Domain                              -->
+<!-- PURPOSE:    Define elements and specialization attributes     -->
+<!--             for Software Domain                               -->
 <!--                                                               -->
 <!-- ORIGINAL CREATION DATE:                                       -->
 <!--             March 2001                                        -->

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\dtd\reference.dtd">
+<reference id="javaMethod_module" outputclass="module" xml:lang="en-us">
+<title>javaMethod module</title>
+<shortdesc>Describes all the elements necessary for the basic structure of
+a Java API method. </shortdesc>
+<refbody>
+<section><title>Description</title><p> The javaMethod module describes the
+elements necessary to provide the name of the method and the short description
+of the method. <?Pub Caret?></p></section>
+<example> <title>Example</title><codeblock><![CDATA[<javaMethod id="com.ibm.xtools.ras.impord.engine.tasks.IImportEngineTask">
+    <apiName>getName</apiName>
+    <shortdesc></shortdesc>
+    <javaMethodDetail></javaMethodDetail>
+</javaMethod>]]></codeblock></example>
+<section><title>Processing Expectations</title><image href="images/javaMethod.jpg">
+<alt></alt></image></section>
+</refbody>
+</reference>
+<?Pub *0000001011?>

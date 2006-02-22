@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?><!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference
+  PUBLIC "-//IBM//DTD DITA Reference//EN" "..\dtd\reference.dtd">
+<reference id="apiOperation" outputclass="element" xml:lang="en-us">
+<title>apiOperation</title>
+<shortdesc>The &lt;apiOperation&gt; element specifies a collection of features,
+such as attributes, methods, values, and operations.</shortdesc>
+<refbody>
+<section><title>Description</title><p>This element requires an ID attribute
+as an anchor point. This ID is the target for references by &lt;link&gt; or &lt;xref&gt;
+elements (<i>conref</i> and <i>keyref </i> attributes), and for other internal
+specialization elements that refer to this &lt;apiRef&gt; content. Use a unique
+key such as fully qualified package name for the named API reference. </p></section>
+<section conref="../packagedef.dita#apiOperation-reference/apiOperation-containedBy-section"/><section conref="../packagedef.dita#apiOperation-reference/apiOperation-contains-section"/><section conref="../packagedef.dita#apiOperation-reference/apiOperation-contentModel-section"/><section conref="../packagedef.dita#apiOperation-reference/apiOperation-attList-section"/><section conref="../packagedef.dita#apiOperation-reference/apiOperation-classValue-section"/></refbody>
+</reference>

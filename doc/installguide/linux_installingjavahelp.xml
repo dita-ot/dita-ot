@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
-<!DOCTYPE task PUBLIC "-//IBM//DTD DITA Task//EN" "../dtd/task.dtd" [
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd" [
   <!-- Begin Document Specific Declarations -->
   <!ENTITY ut-d-att "(topic ut-d)">
   <!-- End Document Specific Declarations -->
@@ -38,12 +38,11 @@
       </step>
       <step>
         <cmd>Click <uicontrol>Save</uicontrol> to unzip the javahelp-2_0_02.zip 
-          file and save it to the C:\ directory as 
-          <filepath>javahelp</filepath>.</cmd>
+          file and save it to a Linux home directory.</cmd>
       </step>
       <step>
-        <cmd>Set the <varname>JHHOME </varname><xref href = 
-          "settingenvironmentvariables.xml" scope = "local">environment 
+        <cmd>Add the <varname>JHHOME </varname><xref href = 
+          "linux_settingenvironmentvariables.xml" scope = "local">environment 
           variable</xref>.</cmd>
       </step>
     </steps>

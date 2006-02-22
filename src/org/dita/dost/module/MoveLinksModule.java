@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.pipeline.PipelineHashIO;
@@ -39,7 +40,7 @@ public class MoveLinksModule extends AbstractPipelineModule {
      * 
      * 
      */
-    public AbstractPipelineOutput execute(AbstractPipelineInput input) {
+    public AbstractPipelineOutput execute(AbstractPipelineInput input) throws DITAOTException {
 
         String maplinksFile = ((PipelineHashIO)input).getAttribute(Constants.ANT_INVOKER_PARAM_MAPLINKS);
         MapIndexReader indexReader = new MapIndexReader();

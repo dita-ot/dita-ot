@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
-<!DOCTYPE task PUBLIC "-//IBM//DTD DITA Task//EN" "../dtd/task.dtd" [
+<!-- (c) Copyright IBM Corp. 2005, 2006 All Rights Reserved. -->
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd" [
   <!-- Begin Document Specific Declarations -->
   <!ENTITY ut-d-att "(topic ut-d)">
   <!-- End Document Specific Declarations -->
@@ -15,16 +15,16 @@
   <taskbody>
     <steps>
       <step>
-        <cmd>In the console, type <codeph>cd {DITAOT_dir}</codeph>. </cmd>
+        <cmd>In the console, type <codeph>cd {ditaot_dir}</codeph>.</cmd>
       </step>
       <step>
         <cmd>Type <codeph>ant all</codeph> and press Enter to begin testing. 
-          </cmd>
+        </cmd>
         <stepresult>The testing process completes in 3-10 minutes depending on 
           the speed of your machine. When testing completes, the confirmation 
           message "BUILD SUCCESSFUL" displays. <note type = "note">To read more 
           about the DITA Open Toolkit options and functions, see 
-          {DITAOT_dir}\doc\DITA-readme.html on your local hard 
+          {ditaot_dir}/doc/DITA-readme.html on your local hard 
           drive.</note></stepresult>
       </step>
     </steps>

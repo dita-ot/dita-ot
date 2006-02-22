@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\dtd\reference.dtd">
+<reference id="javaFinalField" outputclass="element" xml:lang="en-us">
+<title>javaFinalField</title>
+<shortdesc>The &lt;javaFinalField> element provides a flag within the <i>FieldModifiers<sup>opt</sup></i> that
+declares that the fields introduced by the declaration are final fields.</shortdesc>
+<refbody>
+<section><title>Description</title><p>Both class and instance variables (static
+and non-static fields) can be declared <i>final</i>. Every field declaration
+in the body of an interface is implicitly <i>public</i>, <i>static</i>, and <i>final</i>.
+Possible alternative definitions of the <i>FieldModifier </i> declaration
+are the &lt;javaStaticField>, &lt;javaTransientField>, and &lt;javaVolatileField>
+elements.   </p><?Pub Caret1?></section>
+<example> <title>Example</title>Click on the following link to open the Java
+API topic type example in  <object classid="clsid:adb880a6-d8ff-11cf-9377-00aa003b7a11"
+codebase="hhctrl.ocx#Version=4,73,8412,0" codetype="VIEWASTEXT" height="100"
+id="hhctrl" type="application/x-oleobject" width="100">
+<param name="Command" value="ShortCut"/>
+<param name="Text" value="Text: DITA "/>
+<param name="Item1" value=",../samples/java/IImportEngineTask.dita,"/></object><codeblock>&lt;javaField id="com.ibm.xtools.pluglets.engine.PlugletException">
+   &lt;apiName>CASE_INSENSITIVE_ORDER&lt;/apiName>
+   &lt;shortDesc>
+       A Comparator that orders String objects as by compareToIgnoreCase.
+       This comparator is serializable.
+   &lt;/shortDesc>
+   &lt;javaFieldDetail>
+      &lt;javaFieldDef>
+         &lt;javaFinalField/>
+         &lt;javaStaticField/>
+         &lt;javaFieldAccess value="public"/>
+         &lt;javaFieldInterface
+              href=”http://java.sun.com/…/Comparator.html”
+              format=”html” scope=”external”>
+          Comparator
+          &lt;/javaFieldInterface>
+      &lt;/javaFieldDef>
+      &lt;apiDesc>Note that this Comparator does not take locale into account,
+             and will result in an unsatisfactory ordering for certain locales.
+             The java.text package provides Collators to allow locale-sensitive
+             ordering.
+       &lt;/apiDesc>
+   &lt;/javaFieldDetail>
+   &lt;related-links>
+      &lt;link href="http://java.sun.com/../
+              collator.html#compare(java.lang.String, java.lang.String)" format="html">
+           &lt;linktext>Collator.compare(String, String)&lt;linktext>
+       &lt;/link>
+    &lt;/related-links>
+&lt;/javaField></codeblock></example>
+<section><title>Processing Expectations</title><image href="images/javaFinalField.jpg"
+placement="inline"><alt></alt></image></section>
+<section conref="../packagedef.dita#javaFinalField-reference/javaFinalField-containedBy-section"></section>
+<section conref="../packagedef.dita#javaFinalField-reference/javaFinalField-contains-section"></section>
+<section conref="../packagedef.dita#javaFinalField-reference/javaFinalField-contentModel-section"></section>
+<section conref="../packagedef.dita#javaFinalField-reference/javaFinalField-attList-section"></section>
+<section conref="../packagedef.dita#javaFinalField-reference/javaFinalField-classValue-section"></section>
+</refbody>
+</reference>
+<?Pub *0000003356?>

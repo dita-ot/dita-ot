@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2004, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "../../dtd/reference.dtd">
+<!--             (C) Copyright OASIS Open 2005.                    -->
+<!--             (C) Copyright IBM Corporation 2001, 2004.         -->
+<!--             All Rights Reserved.                              -->
+<reference id="context" xml:lang="en-us">
+<title><keyword>context</keyword></title>
+<shortdesc>The &lt;<keyword>context</keyword>> section of a task provides
+background information for the task. This information helps the user understand
+what the purpose of the task is and what they will gain by completing the
+task. This section should be brief and does not replace or recreate a concept
+topic on the same subject, although the context section may include some conceptual
+information.</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>context</indexterm><indexterm>Task elements<indexterm>context</indexterm>  </indexterm>
+<indexterm>context</indexterm></keywords>
+</metadata></prolog>
+<refbody>
+<section conref="DitabaseNav.dita#commonCMdefs/context-contains"></section>
+<section conref="DitabaseNav.dita#commonCMdefs/context-containedby"></section>
+<section conref="DitabaseNav.dita#commonCMdefs/context-classvalue"></section>
+<section><title>Attributes</title><simpletable id="context_attr" relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="commonLRdefs.dita#commonLRdefs/univ-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/classandout">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+</simpletable></section>
+<example>         <title>Example</title> <codeblock>&lt;task id="sqlj">
+&lt;title>Creating an SQLJ file&lt;/title>
+&lt;taskbody>
+<b>&lt;context></b>Once you have set up SQLJ, you need to create a new SQLJ file.
+<b>&lt;/context></b>
+<?Pub Caret?>&lt;/task></codeblock>       </example>
+</refbody>
+</reference>
+<?Pub *0000002434?>

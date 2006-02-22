@@ -72,21 +72,18 @@
               <xsl:when test="string-length($str-default)>0">
                 <xsl:value-of select="$str-default"/>
                 <xsl:call-template name="output-message">
-                  <xsl:with-param name="msg">No string named '<xsl:value-of select="$stringName"/>'
-                    was found for language <xsl:value-of select="$ancestorlang"/>. Using the default
-                    language (<xsl:value-of select="$DEFAULTLANG"/>).</xsl:with-param>
-                  <xsl:with-param name="msgnum">008</xsl:with-param>
+                  <xsl:with-param name="msgnum">001</xsl:with-param>
                   <xsl:with-param name="msgsev">W</xsl:with-param>
+                  <xsl:with-param name="msgparams">%1=<xsl:value-of select="$stringName"/>;%2=<xsl:value-of select="$ancestorlang"/>;%3=<xsl:value-of select="$DEFAULTLANG"/></xsl:with-param>
                 </xsl:call-template>
               </xsl:when>
               <!-- Translation was not even found in the default language. -->
               <xsl:otherwise>
                 <xsl:value-of select="$stringName"/>
                 <xsl:call-template name="output-message">
-                  <xsl:with-param name="msg">No string named '<xsl:value-of select="$stringName"/>'
-                    was found. Using original value.</xsl:with-param>
-                  <xsl:with-param name="msgnum">008</xsl:with-param>
+                  <xsl:with-param name="msgnum">052</xsl:with-param>
                   <xsl:with-param name="msgsev">W</xsl:with-param>
+                  <xsl:with-param name="msgparams">%1=<xsl:value-of select="$stringName"/></xsl:with-param>
                 </xsl:call-template>
               </xsl:otherwise>
             </xsl:choose>
@@ -95,10 +92,9 @@
           <xsl:otherwise>
             <xsl:value-of select="$stringName"/>
             <xsl:call-template name="output-message">
-              <xsl:with-param name="msg">No string named '<xsl:value-of select="$stringName"/>' was
-                found. Using original value.</xsl:with-param>
-              <xsl:with-param name="msgnum">008</xsl:with-param>
+              <xsl:with-param name="msgnum">052</xsl:with-param>
               <xsl:with-param name="msgsev">W</xsl:with-param>
+              <xsl:with-param name="msgparams">%1=<xsl:value-of select="$stringName"/></xsl:with-param>
             </xsl:call-template>
           </xsl:otherwise>
         </xsl:choose>
@@ -131,21 +127,18 @@
               <xsl:when test="string-length($str-default)>0">
                 <xsl:value-of select="$str-default"/>
                 <xsl:call-template name="output-message">
-                  <xsl:with-param name="msg">No string named '<xsl:value-of select="$stringName"/>'
-                    was found for language <xsl:value-of select="$ancestorlang"/>. Using the default
-                    language (<xsl:value-of select="$DEFAULTLANG"/>).</xsl:with-param>
-                  <xsl:with-param name="msgnum">008</xsl:with-param>
+                  <xsl:with-param name="msgnum">001</xsl:with-param>
                   <xsl:with-param name="msgsev">W</xsl:with-param>
+                  <xsl:with-param name="msgparams">%1=<xsl:value-of select="$stringName"/>;%2=<xsl:value-of select="$ancestorlang"/>;%3=<xsl:value-of select="$DEFAULTLANG"/></xsl:with-param>
                 </xsl:call-template>
               </xsl:when>
               <!-- Translation was not even found in the default language. -->
               <xsl:otherwise>
                 <xsl:value-of select="$stringName"/>
                 <xsl:call-template name="output-message">
-                  <xsl:with-param name="msg">No string named '<xsl:value-of select="$stringName"/>'
-                    was found. Using original value.</xsl:with-param>
-                  <xsl:with-param name="msgnum">008</xsl:with-param>
+                  <xsl:with-param name="msgnum">052</xsl:with-param>
                   <xsl:with-param name="msgsev">W</xsl:with-param>
+                  <xsl:with-param name="msgparams">%1=<xsl:value-of select="$stringName"/></xsl:with-param>
                 </xsl:call-template>
               </xsl:otherwise>
             </xsl:choose>
@@ -154,10 +147,9 @@
           <xsl:otherwise>
             <xsl:value-of select="$stringName"/>
             <xsl:call-template name="output-message">
-              <xsl:with-param name="msg">No string named '<xsl:value-of select="$stringName"/>' was
-                found. Using original value.</xsl:with-param>
-              <xsl:with-param name="msgnum">008</xsl:with-param>
+              <xsl:with-param name="msgnum">052</xsl:with-param>
               <xsl:with-param name="msgsev">W</xsl:with-param>
+              <xsl:with-param name="msgparams">%1=<xsl:value-of select="$stringName"/></xsl:with-param>
             </xsl:call-template>
           </xsl:otherwise>
         </xsl:choose>

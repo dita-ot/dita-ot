@@ -2,8 +2,8 @@
 <!--                    HEADER                                     -->
 <!-- ============================================================= -->
 <!--  MODULE:    DITA Highlight Domain                             -->
-<!--  VERSION:   1.O                                               -->
-<!--  DATE:      February 2005                                     -->
+<!--  VERSION:   1.0.1                                             -->
+<!--  DATE:      November 2005                                     -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -11,15 +11,15 @@
 <!--                    PUBLIC DOCUMENT TYPE DEFINITION            -->
 <!--                    TYPICAL INVOCATION                         -->
 <!--                                                               -->
-<!--  Refer to this file by the following public identfier or an 
+<!--  Refer to this file by the following public identifier or an 
       appropriate system identifier 
 PUBLIC "-//OASIS//ELEMENTS DITA Highlight Domain//EN"
-      Delivered as file "highlight-domain.nod"                     -->
+      Delivered as file "highlightDomain.mod"                      -->
 
 <!-- ============================================================= -->
 <!-- SYSTEM:     Darwin Information Typing Architecture (DITA)     -->
 <!--                                                               -->
-<!-- PURPOSE:    Define elements and specialization atttributed    -->
+<!-- PURPOSE:    Define elements and specialization attributes     -->
 <!--             for Highlight Domain                              -->
 <!--                                                               -->
 <!-- ORIGINAL CREATION DATE:                                       -->
@@ -28,6 +28,11 @@ PUBLIC "-//OASIS//ELEMENTS DITA Highlight Domain//EN"
 <!--             (C) Copyright OASIS Open 2005.                    -->
 <!--             (C) Copyright IBM Corporation 2001, 2004.         -->
 <!--             All Rights Reserved.                              -->
+<!--                                                               -->
+<!--  UPDATES:                                                     -->
+<!--    2005.11.15 RDA: Corrected descriptive names for all        -->
+<!--                    elements except bold                       -->
+<!--    2005.11.15 RDA: Corrected the "Delivered as" system ID     -->
 <!-- ============================================================= -->
 
 <!-- ============================================================= -->
@@ -55,7 +60,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Highlight Domain//EN"
                         CDATA                            #IMPLIED    >
 
 
-<!--                    LONG NAME: Bold                            -->
+<!--                    LONG NAME: Underlined                      -->
 <!ELEMENT u             (#PCDATA | %basic.ph;)*                      >
 <!ATTLIST u              
              %univ-atts;                                  
@@ -63,7 +68,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Highlight Domain//EN"
                         CDATA                            #IMPLIED    >
 
 
-<!--                    LONG NAME: Bold                            -->
+<!--                    LONG NAME: Italic                          -->
 <!ELEMENT i             (#PCDATA | %basic.ph;)*                      >
 <!ATTLIST i             
              %univ-atts;                                  
@@ -71,7 +76,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Highlight Domain//EN"
                         CDATA                            #IMPLIED    >
 
 
-<!--                    LONG NAME: Bold                            -->
+<!--                    LONG NAME: Teletype (monospaced)           -->
 <!ELEMENT tt            (#PCDATA | %basic.ph;)*                      >
 <!ATTLIST tt            
              %univ-atts;                                  
@@ -79,7 +84,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Highlight Domain//EN"
                         CDATA                            #IMPLIED    >
 
 
-<!--                    LONG NAME: Bold                            -->
+<!--                    LONG NAME: Superscript                     -->
 <!ELEMENT sup           (#PCDATA | %basic.ph;)*                      >
 <!ATTLIST sup          
              %univ-atts;                                  
@@ -87,7 +92,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Highlight Domain//EN"
                         CDATA                            #IMPLIED    >
 
 
-<!--                    LONG NAME: Bold                            -->
+<!--                    LONG NAME: Subscript                       -->
 <!ELEMENT sub           (#PCDATA | %basic.ph;)*                      >
 <!ATTLIST sub           
              %univ-atts;                                  

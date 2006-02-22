@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2004, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "../../dtd/reference.dtd">
+<!--             (C) Copyright OASIS Open 2005.                    -->
+<!--             (C) Copyright IBM Corporation 2001, 2004.         -->
+<!--             All Rights Reserved.                              -->
+<reference id="param" xml:lang="en-us">
+<title><keyword>param</keyword></title>
+<shortdesc>The parameter (&lt;<keyword>param</keyword>>)element specifies
+a set of values that may be required by an &lt;<keyword>object</keyword>>
+at runtime. Any number of &lt;<keyword>param</keyword>> elements may appear
+in the content of an object in any order, but must be placed at the start
+of the content of the enclosing object. This element is comparable to the
+XHMTL &lt;<keyword>param</keyword>> element. </shortdesc>
+<prolog><metadata>
+<keywords><indexterm>param</indexterm><indexterm>Body elements<indexterm>param</indexterm>  </indexterm>
+<indexterm>param</indexterm></keywords>
+</metadata></prolog>
+<refbody>
+<section conref="DitabaseNav.dita#commonCMdefs/param-contains"></section>
+<section conref="DitabaseNav.dita#commonCMdefs/param-containedby"></section>
+<section conref="DitabaseNav.dita#commonCMdefs/param-classvalue"></section>
+<section><title>Attributes</title><simpletable id="param_attr" relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="commonLRdefs.dita#commonLRdefs/name-param">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/id-param">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/value">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/valuetype">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/type-param">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/classonly">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+</simpletable></section>
+<example><title>Example</title> See <xref href="object.dita"></xref>.<?Pub Caret?>
+             </example>
+</refbody>
+</reference>
+<?Pub *0000002916?>

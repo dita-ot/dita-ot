@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?><!--Arbortext, Inc., 1988-2004, v.4002--><?Pub Inc?>
+<!DOCTYPE reference
+  PUBLIC "-//IBM//DTD DITA Reference//EN" "..\dtd\reference.dtd">
+<reference id="javaConstructor" outputclass="element" xml:lang="en-us">
+<title>javaConstructor</title>
+<shortdesc>The javaConstructor element identifies the method constructor declaration. </shortdesc>
+<refbody>
+<section><title>Description</title><p>Constructors are similar to methods,
+but cannot be invoked directly by a method call. They are used to initialize
+new class instances. Unlike methods, a constructor cannot be <i>abstract</i>, <i>static</i>, <i>final</i>, <i>native</i>,
+or <i>synchronized</i>. A constructor is not inherited, so there is no need
+to declare it final and an abstract constructor could never be implemented.
+A constructor is always invoked with respect to an object, so it makes no
+sense for a constructor to be static. There is no practical need for a constructor
+to be synchronized, because it would lock the object under construction, which
+is normally not made available to other threads until all constructors for
+the object have completed their work.<?Pub Caret?>This element is the specialization
+of the <xref href="../../genericSpecialization/apiRef/apiQualifier.dita">apiQualifier</xref> element
+from the Generic topic type.</p></section>
+<example> <title>Example</title>This sample can be found with the accompanying
+content in Samples Gallery (samples/java/PlugletException.dita)<codeblock>&lt;javaMethod id="com.ibm.xtool.plugin"&gt;
+   &lt;apiName&gt;ExportPlugin()&lt;/apiName&gt;
+   &lt;shortDesc&gt;The constructor.&lt;/shortDesc&gt;
+   &lt;javaMethodDetail&gt;
+        &lt;javaMethodDef&gt;
+           &lt;javaConstructor&gt;
+           &lt;javaMethodAccess value=”public”/&gt;
+        &lt;/javaMethodDef&gt;
+       &lt;apiDesc&gt;[Eclipse 3.0] Bundles have to have a default constructor.&lt;/apiDesc&gt;
+   &lt;/javaMethodDetail&gt;
+   &lt;related-links&gt;
+      &lt;link keyref=”PlugInPlugin”&gt;
+         &lt;linktext&gt;Plugin.Plugin()&lt;/linktext&gt;
+       &lt;link&gt;
+   &lt;/related-links&gt;
+&lt;/javaContructor&gt;</codeblock></example>
+<section><title>Processing Expectations</title><image href="images/javaConstructoLinksr.jpg" placement="inline">
+<alt/></image></section>
+<section conref="../packagedef.dita#javaConstructor-reference/javaConstructor-containedBy-section"/><section conref="../packagedef.dita#javaConstructor-reference/javaConstructor-contains-section"/><section conref="../packagedef.dita#javaConstructor-reference/javaConstructor-contentModel-section"/><section conref="../packagedef.dita#javaConstructor-reference/javaConstructor-attList-section"/><section conref="../packagedef.dita#javaConstructor-reference/javaConstructor-classValue-section"/></refbody>
+</reference><?Pub *0000002232?>

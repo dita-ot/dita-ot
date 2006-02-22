@@ -62,6 +62,9 @@
 <xsl:transform version="1.0" xmlns:fo="http://www.w3.org/1999/XSL/Format"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:saxon="http://icl.com/saxon" extension-element-prefixes="saxon">
+  
+  <xsl:import href="../common/output-message.xsl"/>
+    
   <!-- Page setup - used by simple-master-set -->
   <xsl:param name="paper.type" select="'A4'"/>
   <xsl:param name="page.orientation" select="'portrait'"/>
@@ -98,8 +101,11 @@
   <xsl:include href="dita2fo-calstable.xsl"/>
   <xsl:include href="dita2fo-subroutines.xsl"/>
   <!-- common routines -->
-  <xsl:include href="../common/output-message.xsl"/>
   <xsl:include href="../common/dita-utilities.xsl"/>
+  
+  <!-- Define the error message prefix identifier -->
+  <xsl:variable name="msgprefix">DOTX</xsl:variable>
+
   <!-- null some things that won't be used for now -->
   <!--xsl:template name="output-message"/-->
   <!--
@@ -291,9 +297,8 @@
       </xsl:when>
       <xsl:otherwise>
         <xsl:text>***</xsl:text>
-        <xsl:call-template name="output-message">
-          <xsl:with-param name="msg">No title specified; using "***".</xsl:with-param>
-          <xsl:with-param name="msgnum">009</xsl:with-param>
+        <xsl:call-template name="output-message">          
+          <xsl:with-param name="msgnum">037</xsl:with-param>
           <xsl:with-param name="msgsev">W</xsl:with-param>
         </xsl:call-template>
       </xsl:otherwise>

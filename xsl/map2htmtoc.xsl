@@ -20,12 +20,12 @@
 -->
 
 <!-- Include error message template -->
-<xsl:include href="common/output-message.xsl"/>
+<xsl:import href="common/output-message.xsl"/>
 
 <xsl:output method="html" indent="no"/>
 
 <!-- Set the prefix for error message numbers -->
-<xsl:variable name="msgprefix">IDXS</xsl:variable>
+<xsl:variable name="msgprefix">DOTX</xsl:variable>
 
 <!-- *************************** Command line parameters *********************** -->
 <xsl:param name="OUTEXT" select="'.html'"/><!-- "htm" and "html" are valid values -->
@@ -111,6 +111,9 @@
               </xsl:otherwise>
              </xsl:choose>
             </xsl:attribute>
+            <xsl:if test="@scope='external' or @type='external' or ((@format='PDF' or @format='pdf') and not(@scope='local'))">
+                <xsl:attribute name="target">_blank</xsl:attribute>
+            </xsl:if>
            <xsl:call-template name="navtitle"/>
           </xsl:element>
         </xsl:when>
@@ -176,10 +179,10 @@
             </xsl:when>
             <xsl:otherwise>
               <xsl:call-template name="output-message">
-                <xsl:with-param name="msg">File <xsl:value-of select="@href"/> does not exist.</xsl:with-param>
-                <xsl:with-param name="msgnum">004</xsl:with-param>
+                <xsl:with-param name="msgnum">008</xsl:with-param>
                 <xsl:with-param name="msgsev">W</xsl:with-param>
-              </xsl:call-template>
+                <xsl:with-param name="msgparams">%1=<xsl:value-of select="@href"/></xsl:with-param>
+               </xsl:call-template>
             </xsl:otherwise>
           </xsl:choose>
         </xsl:when>
@@ -205,9 +208,9 @@
         </xsl:when>
         <xsl:otherwise>
           <xsl:call-template name="output-message">
-            <xsl:with-param name="msg">Could not retrieve a title from <xsl:value-of select="$TargetFile"/>. Using '***'.</xsl:with-param>
-            <xsl:with-param name="msgnum">005</xsl:with-param>
+            <xsl:with-param name="msgnum">009</xsl:with-param>
             <xsl:with-param name="msgsev">W</xsl:with-param>
+            <xsl:with-param name="msgparams">%1=<xsl:value-of select="@TargetFile"/>;%2=***</xsl:with-param>
           </xsl:call-template>
           <xsl:text>***</xsl:text>
         </xsl:otherwise>
@@ -224,9 +227,9 @@
     <xsl:otherwise>
       <xsl:if test="@href and not(@href='')">
           <xsl:call-template name="output-message">
-            <xsl:with-param name="msg">Could not retrieve a title from <xsl:value-of select="@href"/>. Using the HREF value.</xsl:with-param>
-            <xsl:with-param name="msgnum">005</xsl:with-param>
+            <xsl:with-param name="msgnum">009</xsl:with-param>
             <xsl:with-param name="msgsev">W</xsl:with-param>
+            <xsl:with-param name="msgparams">%1=<xsl:value-of select="@href"/>;%2=<xsl:value-of select="@href"/></xsl:with-param>
           </xsl:call-template>
           <xsl:value-of select="@href"/>
       </xsl:if>

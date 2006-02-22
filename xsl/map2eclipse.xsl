@@ -4,12 +4,12 @@
 <xsl:stylesheet version="1.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
-<xsl:include href="common/output-message.xsl"/>
+<xsl:import href="common/output-message.xsl"/>
 
 <xsl:output indent="yes"/>
 
 <!-- Define the error message prefix identifier -->
-<xsl:variable name="msgprefix">IDXS</xsl:variable>
+<xsl:variable name="msgprefix">DOTX</xsl:variable>
 
 <xsl:param name="WORKDIR" select="'./'"/>
 <xsl:param name="OUTEXT" select="'.html'"/>
@@ -24,9 +24,7 @@
   <toc>
     <xsl:if test="not(@title)">
       <xsl:call-template name="output-message">
-        <xsl:with-param name="msg">The title attribute is required for Eclipse output. You need to add a title
-attribute to your map.</xsl:with-param>
-          <xsl:with-param name="msgnum">043</xsl:with-param>
+          <xsl:with-param name="msgnum">002</xsl:with-param>
           <xsl:with-param name="msgsev">W</xsl:with-param>
         </xsl:call-template>
     </xsl:if>
@@ -62,11 +60,10 @@ attribute to your map.</xsl:with-param>
       <xsl:otherwise> <!-- should be dita, but name does not include .ditamap -->
         <!-- use the for-each so that the message scope is the map element, not the attribute -->
         <xsl:for-each select="parent::*">
-          <xsl:call-template name="output-message">
-            <xsl:with-param name="msg">The anchorref attribute should either point to another dita map, or
-to an Eclipse XML file. The value <xsl:value-of select="@anchorref"/> does not point to either.</xsl:with-param>
-            <xsl:with-param name="msgnum">042</xsl:with-param>
+          <xsl:call-template name="output-message">             
+            <xsl:with-param name="msgnum">003</xsl:with-param>
             <xsl:with-param name="msgsev">I</xsl:with-param>
+            <xsl:with-param name="msgparams">%1=<xsl:value-of select="@anchorref"/></xsl:with-param>
           </xsl:call-template>
         </xsl:for-each>
         <xsl:value-of select="$fix-anchorref"/>
@@ -105,10 +102,9 @@ to an Eclipse XML file. The value <xsl:value-of select="@anchorref"/> does not p
       <xsl:otherwise>
         <xsl:for-each select="parent::*">
           <xsl:call-template name="output-message">
-            <xsl:with-param name="msg">The navref element should either point to another dita map, or
-to an Eclipse XML file. The value <xsl:value-of select="@mapref"/> does not point to either.</xsl:with-param>
-            <xsl:with-param name="msgnum">042</xsl:with-param>
+            <xsl:with-param name="msgnum">003</xsl:with-param>
             <xsl:with-param name="msgsev">I</xsl:with-param>
+            <xsl:with-param name="msgparams">%1=<xsl:value-of select="@mapref"/></xsl:with-param>
           </xsl:call-template>
         </xsl:for-each>
         <xsl:value-of select="$fix-mapref"/>
@@ -124,9 +120,7 @@ to an Eclipse XML file. The value <xsl:value-of select="@mapref"/> does not poin
     </xsl:when>
     <xsl:otherwise>
       <xsl:call-template name="output-message">
-        <xsl:with-param name="msg">The navref element should either point to another dita map, or
-to an Eclipse XML file. Found a navref that does not point to anything.</xsl:with-param>
-        <xsl:with-param name="msgnum">046</xsl:with-param>
+        <xsl:with-param name="msgnum">004</xsl:with-param>
         <xsl:with-param name="msgsev">I</xsl:with-param>
       </xsl:call-template>
     </xsl:otherwise>
@@ -166,10 +160,9 @@ to an Eclipse XML file. Found a navref that does not point to anything.</xsl:wit
 		                         </xsl:when>
                                          <xsl:when test="not(@href) or @href=''"/> <!-- P017000: error generated in prior step -->
                 		         <xsl:otherwise><xsl:value-of select="@href"/><xsl:call-template name="output-message">
-                       <xsl:with-param name="msg">Unable to find navigation title, using href instead: <xsl:value-of select="@href"/>.
-If the topic is not accessible at build time, provide the navigation title in the map, and set the format or scope attributes to indicate why it is not accessible.</xsl:with-param>
-                       <xsl:with-param name="msgnum">017</xsl:with-param>
+                       <xsl:with-param name="msgnum">005</xsl:with-param>
                        <xsl:with-param name="msgsev">E</xsl:with-param>
+                		   <xsl:with-param name="msgparams">%1=<xsl:value-of select="@href"/></xsl:with-param>
                      </xsl:call-template></xsl:otherwise>
 					</xsl:choose>
 				</xsl:otherwise>
@@ -189,11 +182,9 @@ If the topic is not accessible at build time, provide the navigation title in th
                       <xsl:otherwise>
                         <xsl:value-of select="@href"/>
                         <xsl:call-template name="output-message">
-                          <xsl:with-param name="msg">Unknown file extension in href: <xsl:value-of select="@href"/> 
-If this is a link to a non-DITA resource, set the format attribute to match the resource (for example, 'txt', 'pdf', or 'html'). 
-If it's a link to a DITA resource, the file extension must be $DITAEXT .</xsl:with-param>
-                          <xsl:with-param name="msgnum">015</xsl:with-param>
+                          <xsl:with-param name="msgnum">006</xsl:with-param>
                           <xsl:with-param name="msgsev">E</xsl:with-param>
+                          <xsl:with-param name="msgparams">%1=<xsl:value-of select="@href"/></xsl:with-param>
                         </xsl:call-template>
                        </xsl:otherwise>
                      </xsl:choose>

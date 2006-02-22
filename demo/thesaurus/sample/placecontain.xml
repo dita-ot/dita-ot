@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE concept PUBLIC "-//IBM//DTD DITA Concept Subject//EN"
+ "../dtd/conceptSubject.dtd">
+<concept id="placecontain" xml:lang="en-us">
+<title>Place or container</title>
+<conbody><p>A place or container is where you use or store tools.</p>
+<subjectDetail>
+<scopeNote>That can be found in a garage.</scopeNote>
+</subjectDetail>
+</conbody>
+</concept>

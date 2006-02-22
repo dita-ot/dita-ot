@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
 
-<!DOCTYPE concept PUBLIC "-//IBM//DTD DITA Concept//EN" "concept.dtd">
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "..\dtd\concept.dtd">
 
 <concept id="usingparameterbuildingtool" xml:lang="en-us">
   <title>Building DITA output with Java command line</title>
@@ -13,25 +13,25 @@
       <title>Running example</title>
       <ol>
         <li>Change into the DITA Open Toolkit installation directory.</li>
-        <li>On the command line, enter the following command: <p><tt>java -jar 
-          lib/dost.jar /i:samples/sequence.ditamap /outdir:out 
-          /transtype:xhtml</tt></p></li>
+        <li>On the command line, enter the following command: 
+          <codeblock>java -jar lib/dost.jar /i:samples/sequence.ditamap /outdir:out /transtype:xhtml</codeblock></li>
       </ol>
       <p>This particular example creates a properties file, and then calls Ant 
-        using this properties to build the sample <i>sequence.ditamap</i> file 
+        using this properties to build the sample <codeph>sequence.ditamap</codeph> file 
         and outputs the xhtml results to the out directory. You can add other 
         parameters to this properties file. See the following <i><xref 
         href="#usingparameterbuildingtool/javacmdinterface"></xref></i> for 
         details.</p>
-      <p>Note:<ol> <li>In this example, the '<i>/</i>' symbol preceded by a 
-        space is the separator for each parameter.</li> <li>Currently, the 
-        parameters <i>/filter</i>, <i>/ftr</i>, <i>/hdr</i>, and <i>/hdf</i> 
-        require an absolute path.</li> <li>The properties file is saved in the 
-        ${dita.temp.dir} directory, and this directory is cleaned before each 
-        transformation after release 1.1.1, if you want to use this properties 
-        file in future transform, you need to specify '/cleantemp:no' in the command. 
-        The following command provides an example using this properties file:
-        <p><tt>ant -f conductor.xml -propertyfile ${dita.temp.dir}/property.temp</tt></p></li> </ol></p>
+      <p>Note:
+        <ol>
+          <li>In this example, the character slash preceded by a 
+            space is the separator for each parameter.</li>
+          <li>Currently, the parameters <codeph>/filter</codeph>, <codeph>/ftr</codeph>, 
+            <codeph>/hdr</codeph>, and <codeph>/hdf</codeph> require an absolute path.</li> 
+          <li>The properties file is saved in the <codeph>${args.logdir}</codeph> directory. 
+            The following command provides an example using this properties file:
+            <codeblock>ant -f conductor.xml -propertyfile ${args.logdir}/property.temp</codeblock>
+          </li> </ol></p>
     </section>
     <section>
       <title>Supported parameters</title>
@@ -39,7 +39,7 @@
         href="#usingparameterbuildingtool/javacmdinterface"></xref></i> lists 
         the supported parameters (their Ant names are within the braces) that 
         you can set with this tool.</p>
-      <table expanse="column" id="javacmdinterface">
+      <table id="javacmdinterface">
         <title>Table of supported parameters</title>
         <tgroup cols="2">
           <colspec colname="col1"/>
@@ -96,7 +96,7 @@
               <entry colname="col1"><i>/transtype</i>:{transtype}</entry>
               <entry colname="col2">The transformation type. Currently, the 
                 supported values include xhtml, pdf, javahelp, eclipsehelp, 
-                htmlhelp, eclipsecontent, troff, and docbook.</entry>
+                htmlhelp, eclipsecontent, troff, wordrtf and docbook.</entry>
             </row>
             <row>
               <entry colname="col1"><i>/filter</i>:{dita.input.valfile}</entry>
@@ -213,6 +213,26 @@
               <entry colname="col1"><i>/xhtmltoc</i>:{args.xhtml.toc}</entry>
               <entry colname="col2">
                 <ph conref="DITA-antscript.xml#antscript/xhtmltoc"/>
+              </entry>
+            </row>
+            <row>
+              <entry colname="col1"><i>/logdir</i>:{args.logdir}</entry>
+              <entry colname="col2">
+                <ph conref="DITA-antscript.xml#antscript/argslogdir"/>
+                <note conref="DITA-antscript.xml#antscript/argslogdir-note"/>
+              </entry>
+            </row>
+            <row>
+              <entry colname="col1"><i>/ditalocale</i>:{args.dita.locale}</entry>
+              <entry colname="col2">
+                <ph conref="DITA-antscript.xml#antscript/ditalocale"/>
+              </entry>
+            </row>
+            <row>
+              <entry colname="col1"><i>/fooutputrellinks</i>:{args.fo.output.rel.links}</entry>
+              <entry colname="col2">
+                <ph conref="DITA-antscript.xml#antscript/fooutputrellinks"/>
+                <note conref="DITA-antscript.xml#antscript/fooutputrellinks-note"/>
               </entry>
             </row>
           </tbody>

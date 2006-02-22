@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2004, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "../../dtd/reference.dtd">
+<!--             (C) Copyright OASIS Open 2005.                    -->
+<!--             (C) Copyright IBM Corporation 2001, 2004.         -->
+<!--             All Rights Reserved.                              -->
+<reference id="draft-comment" xml:lang="en-us">
+<title><keyword>draft-comment</keyword></title>
+<shortdesc>The &lt;<keyword>draft-comment</keyword>> element allows simple
+review and discussion of topic contents within the marked-up content. Use
+the &lt;draft-comment> element to ask a question or make a comment that you
+would like others to review. To indicate the source of the draft comment or
+the status of the comment, use the author, time or disposition attributes.</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>draft-comment</indexterm><indexterm>Miscellaneous elements<indexterm>draft-comment</indexterm>  </indexterm>
+<indexterm>draft-comment</indexterm></keywords>
+</metadata></prolog>
+<refbody>
+<section>Processing systems should provide a run-time flag or parameter to
+cause the content of this element to be specially displayed for draft output
+only. By default, it is stripped out to prevent publishing internal comments
+by mistake.</section>
+<section conref="DitabaseNav.dita#commonCMdefs/draft-comment-contains"></section>
+<section conref="DitabaseNav.dita#commonCMdefs/draft-comment-containedby"></section>
+<section conref="DitabaseNav.dita#commonCMdefs/draft-comment-classvalue"></section>
+<section><title>Attributes</title><simpletable id="draft-comment_attr" relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="commonLRdefs.dita#commonLRdefs/author">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/time">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/disposition">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/univ-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/classandout">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+</simpletable></section>
+<example>      <title>Example</title>    <?Pub Caret?><codeblock>&lt;draft-comment author="EBP">Where's the usage information for this 
+section?&lt;/draft-comment></codeblock>       </example>
+</refbody>
+</reference>
+<?Pub *0000003124?>

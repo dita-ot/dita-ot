@@ -2,8 +2,8 @@
 <!--                    HEADER                                     -->
 <!-- ============================================================= -->
 <!--  MODULE:    DITA Map                                          -->
-<!--  VERSION:   1.O                                               -->
-<!--  DATE:      February 2005                                     -->
+<!--  VERSION:   1.0.1                                             -->
+<!--  DATE:      November 2005                                     -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -11,9 +11,9 @@
 <!--                    PUBLIC DOCUMENT TYPE DEFINITION            -->
 <!--                    TYPICAL INVOCATION                         -->
 <!--                                                               -->
-<!--  Refer to this file by the following public identfier or an 
+<!--  Refer to this file by the following public identifier or an 
       appropriate system identifier 
-PUBLIC "-//OASIS//Elements DITA Map//EN"
+PUBLIC "-//OASIS//ELEMENTS DITA Map//EN"
       Delivered as file "map.mod"                                  -->
 
 <!-- ============================================================= -->
@@ -28,6 +28,11 @@ PUBLIC "-//OASIS//Elements DITA Map//EN"
 <!--             (C) Copyright OASIS Open 2005.                    -->
 <!--             (C) Copyright IBM Corporation 2001, 2004.         -->
 <!--             All Rights Reserved.                              -->
+<!--                                                               -->
+<!--  UPDATES:                                                     -->
+<!--    2005.11.15 RDA: Corrected public ID in the comment above   -->
+<!--    2005.11.15 RDA: Removed old declaration for topicreftypes  -->
+<!--                    entity                                     -->
 <!-- ============================================================= -->
 
 
@@ -78,12 +83,6 @@ PUBLIC "-//OASIS//Elements DITA Map//EN"
 
 <!--                    DATE FORMAT                                -->
 <!ENTITY % date-format  'CDATA'                                      >
-
-
-<!--                    TOPIC REFERENCE TYPES                      -->
-<!ENTITY % topicreftypes 
-                        'topic | concept | task | 
-                         reference | external | local'               >
 
 
 <!-- ============================================================= -->

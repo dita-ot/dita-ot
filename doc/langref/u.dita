@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2004, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "../../dtd/reference.dtd">
+<!--             (C) Copyright OASIS Open 2005.                    -->
+<!--             (C) Copyright IBM Corporation 2001, 2004.         -->
+<!--             All Rights Reserved.                              -->
+<reference id="u" xml:lang="en-us">
+<title><keyword>u</keyword></title>
+<shortdesc>The underline (&lt;<keyword>u</keyword>>) element is used to apply
+underline highlighting to the content of the element.  Use this element only
+when there is not some other more proper tag. This element is part of the
+DITA highlighting domain.</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>u (underline)</indexterm><indexterm>underline (u)</indexterm>
+<indexterm>Domain elements<indexterm>u (underline)</indexterm>           
+ </indexterm><indexterm>u (underline)</indexterm></keywords>
+</metadata></prolog>
+<refbody>
+<section conref="DitabaseNav.dita#commonCMdefs/u-contains"></section>
+<section conref="DitabaseNav.dita#commonCMdefs/u-containedby"></section>
+<section conref="DitabaseNav.dita#commonCMdefs/u-classvalue"></section>
+<section><title>Attributes</title><simpletable id="u_attr" relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="commonLRdefs.dita#commonLRdefs/univ-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/classonly">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+</simpletable></section>
+<example>        <title>Example<?Pub Caret?></title>  <codeblock>Beware: &lt;u>overuse&lt;/u> &lt;i>of&lt;/i> &lt;b>highlighting&lt;/b> is 
+sometimes known as font-itis!
+</codeblock>       </example>
+</refbody>
+</reference>
+<?Pub *0000002230?>

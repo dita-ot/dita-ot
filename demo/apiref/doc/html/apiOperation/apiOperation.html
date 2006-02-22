@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+<meta name="copyright" content="(C) Copyright 2005" />
+<meta name="DC.rights.owner" content="(C) Copyright 2005" />
+<meta content="public" name="security" />
+<meta content="index,follow" name="Robots" />
+<meta http-equiv="PICS-Label" content='(PICS-1.1 "http://www.icra.org/ratingsv02.html" l gen true r (cz 1 lz 1 nz 1 oz 1 vz 1) "http://www.rsac.org/ratingsv01.html" l gen true r (n 0 s 0 v 0 l 0) "http://www.classify.org/safesurf/" l gen true r (SS~~000 1))' />
+<meta content="reference" name="DC.Type" />
+<meta name="DC.Title" content="apiOperation" />
+<meta name="abstract" content="The &lt;apiOperation&gt; element specifies a collection of features, such as attributes, methods, values, and operations." />
+<meta name="description" content="The &lt;apiOperation&gt; element specifies a collection of features, such as attributes, methods, values, and operations." />
+<meta scheme="URI" name="DC.Relation" content="../apiOperation/apiOperation_module.html" />
+<meta scheme="URI" name="DC.Relation" content="../apiRef/apiName.html" />
+<meta scheme="URI" name="DC.Relation" content="../apiOperation/apiOperationDetail.html" />
+<meta scheme="URI" name="DC.Relation" content="../apiClassifier/apiClassifier_module.html" />
+<meta scheme="URI" name="DC.Relation" content="../apiValue/apiValue_module.html" />
+<meta content="XHTML" name="DC.Format" />
+<meta content="apiOperation" name="DC.Identifier" />
+<meta content="en-us" name="DC.Language" />
+<link href="C:\Work\dita\dost0.1\DITA-OT1.1.1\demo\apiref\out\doc\commonltr.css" type="text/css" rel="stylesheet" />
+<title>apiOperation</title>
+</head>
+<body id="apiOperation"><a name="apiOperation"><!-- --></a>
+
+
+<h1 class="topictitle1">apiOperation</h1>
+
+
+<div><p>The &lt;apiOperation&gt; element specifies a collection of features,
+such as attributes, methods, values, and operations.</p>
+
+<div class="section"><h4 class="sectiontitle">Description</h4><p>This element requires an ID attribute
+as an anchor point. This ID is the target for references by &lt;link&gt; or &lt;xref&gt;
+elements (<em>conref</em> and <em>keyref </em> attributes), and for other internal
+specialization elements that refer to this &lt;apiRef&gt; content. Use a unique
+key such as fully qualified package name for the named API reference. </p>
+</div>
+
+<div class="elementContainedBy"><h4 class="sectiontitle">Contained by</h4><p id="apiOperation__N52DF0"><a name="apiOperation__N52DF0"><!-- --></a><a href="../apiClassifier/apiClassifier.html">apiClassifier</a>, <a href="../apiOperation/apiOperation.html">apiOperation</a>, <a href="../apiPackage/apiPackage.html">apiPackage</a>, <a href="../apiValue/apiValue.html">apiValue</a></p>
+</div>
+<div class="elementContains"><h4 class="sectiontitle">Contains</h4><p id="apiOperation__N52E1B"><a name="apiOperation__N52E1B"><!-- --></a><a href="../apiClassifier/apiClassifier.html">apiClassifier</a>, <a href="../apiRef/apiName.html">apiName</a>, <a href="../apiOperation/apiOperation.html">apiOperation</a>, <a href="../apiOperation/apiOperationDetail.html">apiOperationDetail</a>, <a href="../apiValue/apiValue.html">apiValue</a>, <span class="keyword">prolog</span>, <span class="keyword">related-links</span>, <span class="keyword">shortdesc</span></p>
+</div>
+<div class="elementContentModel"><h4 class="sectiontitle">Content model</h4><p id="apiOperation__N52E5F"><a name="apiOperation__N52E5F"><!-- --></a>
+  (
+  (<a href="../apiRef/apiName.html">apiName</a>)
+ then 
+  (<span class="keyword">shortdesc</span>)
+ then 
+  (<span class="keyword">prolog</span>)
+<em>(optional)</em> then 
+  (<a href="../apiOperation/apiOperationDetail.html">apiOperationDetail</a>)
+ then 
+  (<span class="keyword">related-links</span>)
+<em>(optional)</em> then 
+  (<a href="../apiClassifier/apiClassifier.html">apiClassifier</a> or <a href="../apiOperation/apiOperation.html">apiOperation</a> or <a href="../apiValue/apiValue.html">apiValue</a>)
+<em>(any number)</em>)
+</p>
+</div>
+<div class="elementAttList" />
+<div class="elementClassValue"><h4 class="sectiontitle">Inheritance</h4><p id="apiOperation__N52EBD"><a name="apiOperation__N52EBD"><!-- --></a>topic/<span class="keyword">topic</span> reference/<span class="keyword">reference</span> apiRef/<a href="../apiRef/apiRef.html">apiRef</a></p>
+</div>
+</div>
+
+<div>
+<ul class="ullinks">
+<li class="ulchildlink"><strong><a href="../apiRef/apiName.html">apiName</a></strong><br />
+The &lt;apiName&gt; element provides the name of an application programming interface (API).</li>
+<li class="ulchildlink"><strong><a href="../apiOperation/apiOperationDetail.html">apiOperationDetail</a></strong><br />
+The &lt;apiOperationDetail&gt; element provides the detailed information about the interface to the operation.</li>
+<li class="ulchildlink"><strong><a href="../apiClassifier/apiClassifier_module.html">apiClassifier module</a></strong><br />
+Defines a top-level container for the generic topic types such as class, interface, typedef, or other named construct for typing values.</li>
+<li class="ulchildlink"><strong><a href="../apiValue/apiValue_module.html">apiValue module</a></strong><br />
+Defines a subordinate container to the &lt;apiOperation&gt; element for generic topic types such as constants, variables, enumerations, structures, or other named values.</li>
+</ul>
+
+<div class="familylinks">
+<div class="parentlink"><strong>Parent topic:</strong> <a href="../apiOperation/apiOperation_module.html" title="Defines a top-level container for general-purpose topic types for a function, method, subroutine, procedure, event handler, or other named unit of executable code.">apiOperation module</a></div>
+</div>
+</div>
+</body>
+</html>

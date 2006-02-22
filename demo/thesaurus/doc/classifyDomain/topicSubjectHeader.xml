@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\..\dtd\reference.dtd">
+<reference id="topicSubjectHeader" outputclass="element" xml:lang="en-us">
+<title>topicSubjectHeader</title>
+<shortdesc>Specifies constraints on the subjects used in classifications.</shortdesc>
+<refbody>
+<section><title>Description</title><p>You use the <keyword>topicSubjectHeader</keyword> element
+to supply a header row for a topic classification table when you want to allow
+only specific kinds of subjects in each column. To specify a facet classification,
+each cell in the header row can identify a subject topic that must be the
+ancestor in some scheme for the subjects in the same column within the classification
+rows. For instance, if the cell within the header row specifies a User Action
+subject, the subjects in the column must be kinds of user actions. </p><?Pub Caret1?></section>
+<section conref="../packagedef.xml#topicSubjectHeader-reference/topicSubjectHeader-containedBy-section"></section>
+<section conref="../packagedef.xml#topicSubjectHeader-reference/topicSubjectHeader-contains-section"></section>
+<section conref="../packagedef.xml#topicSubjectHeader-reference/topicSubjectHeader-contentModel-section"></section>
+<section conref="../packagedef.xml#topicSubjectHeader-reference/topicSubjectHeader-attList-section"></section>
+<section conref="../packagedef.xml#topicSubjectHeader-reference/topicSubjectHeader-classValue-section"></section>
+</refbody>
+</reference>
+<?Pub *0000001583?>

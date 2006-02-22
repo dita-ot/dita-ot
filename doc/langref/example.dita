@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2004, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "../../dtd/reference.dtd">
+<!--             (C) Copyright OASIS Open 2005.                    -->
+<!--             (C) Copyright IBM Corporation 2001, 2004.         -->
+<!--             All Rights Reserved.                              -->
+<reference id="example" xml:lang="en-us">
+<title><keyword>example</keyword></title>
+<shortdesc>The &lt;<keyword>example</keyword>> element is a section with the
+specific role of containing examples that illustrate or support the current
+topic.  The &lt;<keyword>example</keyword>> element has the same content model
+as &lt;<keyword>section</keyword>>. </shortdesc>
+<prolog><metadata>
+<keywords><indexterm>example</indexterm><indexterm>Topic elements<indexterm>example</indexterm>  </indexterm>
+<indexterm>example</indexterm></keywords>
+</metadata></prolog>
+<refbody>
+<section><p>DITA uses &lt;<keyword>example</keyword>> to contain both discussion
+and sample code or outputs. Hence, in a DITA topic, to represent programming
+code and results within the discussion in an example, use the &lt;<keyword>codeblock</keyword>>
+and &lt;<keyword>systemoutput</keyword>> elements within the example element.
+For lines of text, use the &lt;<keyword>lines</keyword>> element. For pre-formatted
+text such as email headers, use the &lt;<keyword>pre</keyword>> element.</p></section>
+<section conref="DitabaseNav.dita#commonCMdefs/example-contains"></section>
+<section conref="DitabaseNav.dita#commonCMdefs/example-containedby"></section>
+<section conref="DitabaseNav.dita#commonCMdefs/example-classvalue"></section>
+<section><title>Attributes</title><simpletable id="example_attr" relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="commonLRdefs.dita#commonLRdefs/spectitle">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/univ-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/classandout">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+</simpletable></section>
+</refbody><?Pub Caret1?>
+</reference>
+<?Pub *0000002700?>

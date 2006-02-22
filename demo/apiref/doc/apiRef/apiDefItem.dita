@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\dtd\reference.dtd">
+<reference id="apiDefItem" outputclass="element" xml:lang="en-us">
+<title>apiDefItem</title>
+<shortdesc>The &lt;apiDefItem&gt; element provides the most general definition
+of an API item when an API interface has subordinate structure such as parameters
+of a method or subfields of a record value.</shortdesc>
+<refbody>
+<section><title>Description</title><p>In the &lt;apiDefItem&gt; element, the &lt;state&gt;, &lt;keyword&gt;,
+and &lt;ph&gt; elements can provide general representation and provide a basis
+for specialization.</p></section>
+<section conref="../packagedef.dita#apiDefItem-reference/apiDefItem-containedBy-section"></section>
+<section conref="../packagedef.dita#apiDefItem-reference/apiDefItem-contains-section"></section>
+<section conref="../packagedef.dita#apiDefItem-reference/apiDefItem-contentModel-section"></section>
+<section conref="../packagedef.dita#apiDefItem-reference/apiDefItem-attList-section"></section>
+<section conref="../packagedef.dita#apiDefItem-reference/apiDefItem-classValue-section"></section>
+</refbody>
+</reference>

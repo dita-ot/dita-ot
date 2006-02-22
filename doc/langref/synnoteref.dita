@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2004, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "../../dtd/reference.dtd">
+<!--             (C) Copyright OASIS Open 2005.                    -->
+<!--             (C) Copyright IBM Corporation 2001, 2004.         -->
+<!--             All Rights Reserved.                              -->
+<reference id="synnoteref" xml:lang="en-us">
+<title><keyword>synnoteref</keyword></title>
+<shortdesc>The syntax note (&lt;<keyword>synnoteref</keyword>>) reference
+element references a syntax note element (&lt;<keyword>synnote</keyword>>)
+that has already been defined elsewhere in the topic. The same notation can
+be used in more than one syntax definition. The syntax note reference element
+is part of the DITA programming domain, a special set of DITA elements designed
+to document programming tasks, concepts and reference information.</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>synnoteref</indexterm><indexterm>Domain elements<indexterm>synnoteref</indexterm>  </indexterm>
+<indexterm>synnoteref</indexterm></keywords>
+</metadata></prolog>
+<refbody>
+<section conref="DitabaseNav.dita#commonCMdefs/synnoteref-contains"></section>
+<section conref="DitabaseNav.dita#commonCMdefs/synnoteref-containedby"></section>
+<section conref="DitabaseNav.dita#commonCMdefs/synnoteref-classvalue"></section>
+<section><title>Attributes</title><simpletable id="synnoteref_attr" relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="commonLRdefs.dita#commonLRdefs/href-synnoteref">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/univ-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/classandout">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+</simpletable></section>
+<example>          <title>Example</title><pre>&lt;synnoteref href="#topicid<?Pub Caret?>/mysyn"/>
+</pre>&nbsp;</example>
+</refbody>
+</reference>
+<?Pub *0000002519?>

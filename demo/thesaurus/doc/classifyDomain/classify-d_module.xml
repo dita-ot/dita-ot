@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\..\dtd\reference.dtd">
+<reference id="classify-d_module" outputclass="module" xml:lang="en-us">
+<title>Classification map</title>
+<shortdesc>You classify your content by adding relationships between content
+topics and subject topics.</shortdesc>
+<refbody>
+<section><title>Description</title><p>You can add classifications to your
+existing navigation map by nesting references to subject topics inside the
+existing references to content topics. You use the <xref href="topicsubject.xml"
+type="reference"></xref> element to refer to subject topics. <?Pub Caret?>You
+can also classify sets of topics using a <xref href="topicSubjectTable.xml"
+type="reference"></xref> element.</p></section>
+<example><title>Example</title><p>The following example indicates that </p><ul>
+<li>The websecure.dita topic is about the Web Server and Security subjects. </li>
+<li>The loginsetup.dita topic is about the Configuring, Web Server, and Security
+subjects. </li>
+</ul><codeblock>&lt;topicref href="websecure.xml"&gt;
+    &lt;topicsubject&gt;
+        &lt;subjectref href="webserver.xml"/&gt;
+        &lt;subjectref href="security.xml"/&gt;
+    &lt;/topicsubject&gt;
+    &lt;topicref href="https_protocol.xml"/&gt;
+    ... <i>other subordinate content topics</i> ...
+&lt;/topicref&gt;
+&lt;topicref href="loginsetup.xml" collection-type="sequence"&gt;
+    &lt;topicsubject&gt;
+        &lt;subjectref href="configuring.xml"/&gt;
+        &lt;subjectref href="webserver.xml"/&gt;
+        &lt;subjectref href="security.xml"/&gt;
+    &lt;/topicsubject&gt;
+    &lt;topicref href="editinguserdef.xml"/&gt;
+    ... <i>other subordinate content topics</i> ...
+&lt;/topicref&gt;</codeblock></example>
+</refbody>
+</reference>
+<?Pub *0000001873?>

@@ -5,6 +5,7 @@ package org.dita.dost.reader;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,7 +15,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.Constants;
-import org.dita.dost.util.StringUtils;
+import org.dita.dost.util.FileUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -30,213 +31,215 @@ import org.xml.sax.helpers.XMLReaderFactory;
  * @author Wu, Zhi Qiang
  */
 public class GenListModuleReader extends AbstractXMLReader {
-    /** List of the parsing result */
-    private List result = null;
+	/** XMLReader instance for parsing dita file */
+	private static XMLReader reader = null;
 
-    /** Flag for conref in parsing file */
-    private boolean hasConRef = false;
+	/** Map of XML catalog info */
+	private static HashMap catalogMap = null;
 
-    /** Flag for href in parsing file */
-    private boolean hasHref = false;
+	/** Basedir of the current parsing file */
+	private String currentDir = null;
 
-    /** XMLReader instance for parsing dita file */
-    private XMLReader reader = null;
+	/** Flag for conref in parsing file */
+	private boolean hasConRef = false;
 
-    /** Basedir of the current parsing file */
-    private String currentDir = null;
+	/** Flag for href in parsing file */
+	private boolean hasHref = false;
 
-    /** Map of XML catalog info */
-    private HashMap catalogMap = null;
+	/** List of the parsing result */
+	private List result = null;
 
-    /** List of href targets refered in current parsing file */
-    private List hrefTargets = null;
+	/** List of href targets refered in current parsing file */
+	private List hrefTargets = null;
 
-    /**
-     * Constructor
-     */
-    public GenListModuleReader() {
-        result = new ArrayList(Constants.INT_64);
-        hrefTargets = new ArrayList(Constants.INT_32);
-    }
+	/**
+	 * Constructor
+	 */
+	public GenListModuleReader() {
+		result = new ArrayList(Constants.INT_64);
+		hrefTargets = new ArrayList(Constants.INT_32);
+		reader.setContentHandler(this);
+		reader.setEntityResolver(this);
+	}
 
-    /**
-     * To see if the parsed file has conref inside.
-     * 
-     * @return
-     */
-    public boolean hasConRef() {
-        return hasConRef;
-    }
+	/**
+	 * Init xml reader used for pipeline parsing.
+	 * 
+	 * @throws SAXException
+	 * @throws ParserConfigurationException
+	 */
+	public static void initXMLReader(String ditaDir) throws SAXException {
+		if (System.getProperty(Constants.SAX_DRIVER_PROPERTY) == null) {
+			// The default sax driver is set to xerces's sax driver
+			System.setProperty(Constants.SAX_DRIVER_PROPERTY,
+					Constants.SAX_DRIVER_DEFAULT_CLASS);
+		}
 
-    /**
-     * To see if the parsed file has href inside.
-     * 
-     * @return
-     */
-    public boolean hasHref() {
-        return hasHref;
-    }
+		reader = XMLReaderFactory.createXMLReader();
+		reader.setFeature(Constants.FEATURE_NAMESPACE_PREFIX, true);
+		reader.setFeature(Constants.FEATURE_VALIDATION, true);
+		reader.setFeature(Constants.FEATURE_VALIDATION_SCHEMA, true);
+		catalogMap = CatalogUtils.getCatalog(ditaDir);
+	}
 
-    /**
-     * Get the parsing result.
-     * 
-     * @return Returns the result.
-     */
-    public List getResult() {
-        return result;
-    }
+	public void reset() {
+		hasConRef = false;
+		hasHref = false;
+		currentDir = null;
 
-    /**
-     * Get the href target.
-     * 
-     * @return Returns the hrefTargets.
-     */
-    public List getHrefTargets() {
-        return hrefTargets;
-    }
+		result.clear();
+		hrefTargets.clear();
+	}
 
-    /**
-     * Set the relative directory of current file.
-     * 
-     * @param dir
-     */
-    public void setCurrentDir(String dir) {
-        this.currentDir = dir;
-    }
+	/**
+	 * To see if the parsed file has conref inside.
+	 * 
+	 * @return
+	 */
+	public boolean hasConRef() {
+		return hasConRef;
+	}
 
-    /**
-     * Init xml reader used for pipeline parsing.
-     * 
-     * @throws SAXException
-     * @throws ParserConfigurationException
-     */
-    public void initXMLReader(String ditaDir) throws SAXException,
-            ParserConfigurationException {
-        if (System.getProperty(Constants.SAX_DRIVER_PROPERTY) == null) {
-            // The default sax driver is set to xerces's sax driver
-            System.setProperty(Constants.SAX_DRIVER_PROPERTY,
-                    Constants.SAX_DRIVER_DEFAULT_CLASS);
-        }
+	/**
+	 * To see if the parsed file has href inside.
+	 * 
+	 * @return
+	 */
+	public boolean hasHref() {
+		return hasHref;
+	}
 
-        reader = XMLReaderFactory.createXMLReader();
-        reader.setContentHandler(this);
-        reader.setEntityResolver(this);
-        reader.setFeature(Constants.FEATURE_NAMESPACE_PREFIX, true);
-        reader.setFeature(Constants.FEATURE_VALIDATION, true); 
-        reader.setFeature(Constants.FEATURE_VALIDATION_SCHEMA, true);
-        catalogMap = CatalogUtils.getCatalog(ditaDir);
-    }
+	/**
+	 * Get the parsing result.
+	 * 
+	 * @return Returns the result.
+	 */
+	public List getResult() {
+		return result;
+	}
 
-    /**
-     * Parse input xml file.
-     * 
-     * @param file
-     */
-    public void parse(File file) {
-        hasConRef = false;
-        hasHref = false;
+	/**
+	 * Get the href target.
+	 * 
+	 * @return Returns the hrefTargets.
+	 */
+	public List getHrefTargets() {
+		return hrefTargets;
+	}
 
-        try {
-            reader.parse(new InputSource(new FileInputStream(file)));
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-        } catch (SAXException saxe) {
-            saxe.printStackTrace();
-        }
-    }
+	/**
+	 * Set the relative directory of current file.
+	 * 
+	 * @param dir
+	 */
+	public void setCurrentDir(String dir) {
+		this.currentDir = dir;
+	}
 
-    /**
-     * Parse specific attributes for info used in later process.
-     * 
-     * @param uri
-     * @param localName
-     * @param qName
-     * @param atts
-     * 
-     * @exception org.xml.sax.SAXException
-     */
-    public void startElement(String uri, String localName, String qName,
-            Attributes atts) throws SAXException {
-        parseAttribute(atts, Constants.ATTRIBUTE_NAME_CONREF);
-        parseAttribute(atts, Constants.ATTRIBUTE_NAME_HREF);
-        parseAttribute(atts, Constants.ATTRIBUTE_NAME_COPY_TO);
-        parseAttribute(atts, Constants.ATTRIBUTE_NAME_IMG);
-    }
+	/**
+	 * Parse input xml file.
+	 * 
+	 * @param file
+	 * @throws SAXException 
+	 * @throws IOException 
+	 * @throws FileNotFoundException
+	 */
+	public void parse(File file) throws FileNotFoundException, IOException, SAXException {
+		reader.parse(new InputSource(new FileInputStream(file)));
+	}
 
-    /**
-     * Resolve the publicId used in XMLCatalog.
-     * 
-     * @param publicId
-     * @param systemId
-     * @throws java.io.IOException
-     * @exception org.xml.sax.SAXException
-     */
-    public InputSource resolveEntity(String publicId, String systemId)
-            throws SAXException, IOException {
-        if (catalogMap.get(publicId) != null) {
-            File dtdFile = new File((String) catalogMap.get(publicId));
-            return new InputSource(dtdFile.getAbsolutePath());
-        }
+	/**
+	 * Parse specific attributes for info used in later process.
+	 * 
+	 * @param uri
+	 * @param localName
+	 * @param qName
+	 * @param atts
+	 * 
+	 * @exception org.xml.sax.SAXException
+	 */
+	public void startElement(String uri, String localName, String qName,
+			Attributes atts) throws SAXException {
+		parseAttribute(atts, Constants.ATTRIBUTE_NAME_CONREF);
+		parseAttribute(atts, Constants.ATTRIBUTE_NAME_HREF);
+		parseAttribute(atts, Constants.ATTRIBUTE_NAME_COPY_TO);
+		parseAttribute(atts, Constants.ATTRIBUTE_NAME_IMG);
+	}
 
-        return null;
-    }
+	/**
+	 * Resolve the publicId used in XMLCatalog.
+	 * 
+	 * @param publicId
+	 * @param systemId
+	 * @throws java.io.IOException
+	 * @exception org.xml.sax.SAXException
+	 */
+	public InputSource resolveEntity(String publicId, String systemId)
+			throws SAXException, IOException {
+		if (catalogMap.get(publicId) != null) {
+			File dtdFile = new File((String) catalogMap.get(publicId));
+			return new InputSource(dtdFile.getAbsolutePath());
+		}
 
-    /*
-     * Parse the input attributes for needed information.
-     */
-    private void parseAttribute(Attributes atts, String attrName) {
-        String attrValue = atts.getValue(attrName);
-        String filename = null;
+		return null;
+	}
 
-        if (attrValue == null) {
-            return;
-        }
+	/*
+	 * Parse the input attributes for needed information.
+	 */
+	private void parseAttribute(Attributes atts, String attrName) {
+		String attrValue = atts.getValue(attrName);
+		String filename = null;
 
-        if (Constants.ATTRIBUTE_NAME_CONREF.equals(attrName)) {
-            hasConRef = true;
-        } else if (Constants.ATTRIBUTE_NAME_HREF.equals(attrName)) {
-            hasHref = true;
-        }
+		if (attrValue == null) {
+			return;
+		}
 
-        if (attrValue.startsWith(Constants.SHARP)
-                || attrValue.indexOf(Constants.COLON_DOUBLE_SLASH) != -1) {
-            return;
-        }
+		if (Constants.ATTRIBUTE_NAME_CONREF.equals(attrName)) {
+			hasConRef = true;
+		} else if (Constants.ATTRIBUTE_NAME_HREF.equals(attrName)) {
+			hasHref = true;
+		}
 
-        filename = normalizeDirectory(attrValue);
+		if (attrValue.startsWith(Constants.SHARP)
+				|| attrValue.indexOf(Constants.COLON_DOUBLE_SLASH) != -1) {
+			return;
+		}
 
-        if (StringUtils.isValidTarget(filename)) {
-            result.add(filename);
-        }
+		filename = normalizeDirectory(attrValue);
 
-        /*
-         * Collect only href target topic files for index extracting.
-         */
-        if (Constants.ATTRIBUTE_NAME_HREF.equals(attrName)
-                && StringUtils.isTopicFile(filename)) {
-            hrefTargets.add(new File(filename).getPath());
-        }
+		if (FileUtils.isValidTarget(filename)) {
+			result.add(filename);
+		}
 
-    }
+		/*
+		 * Collect only href target topic files for index extracting.
+		 */
+		if (Constants.ATTRIBUTE_NAME_HREF.equals(attrName)
+				&& FileUtils.isTopicFile(filename)) {
+			hrefTargets.add(new File(filename).getPath());
+		}
 
-    /*
-     * Normalize the file directory, replace all the '\\', '/' with
-     * File.seperator, and remove '..' from the directory.
-     */
-    private String normalizeDirectory(String dir) {
-        String normilizedPath = null;
-        int index = dir.indexOf(Constants.SHARP);
-        String pathname = (index == -1) ? dir : dir.substring(0, index);
+	}
 
-        /*
-         * Normilize file path using java.io.File
-         */
-        normilizedPath = new File(currentDir, pathname).getPath();
+	/*
+	 * Normalize the file directory, replace all the '\\', '/' with
+	 * File.seperator, and remove '..' from the directory.
+	 */
+	private String normalizeDirectory(String dir) {
+		String normilizedPath = null;
+		int index = dir.indexOf(Constants.SHARP);
+		String pathname = (index == -1) ? dir : dir.substring(0, index);
 
-        if (currentDir == null || currentDir.length() == 0) {
-            return normilizedPath;
-        }
+		/*
+		 * Normilize file path using java.io.File
+		 */
+		normilizedPath = new File(currentDir, pathname).getPath();
 
-        return StringUtils.removeRedundantNames(normilizedPath);
-    }
+		if (currentDir == null || currentDir.length() == 0) {
+			return normilizedPath;
+		}
+
+		return FileUtils.removeRedundantNames(normilizedPath);
+	}
 }

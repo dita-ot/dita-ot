@@ -42,7 +42,7 @@
 
 <xsl:param name="FILENAME"></xsl:param> <!-- Needed by rel-links -->
 <xsl:param name="DRAFT">no</xsl:param>  <!-- Include draft information? 'no' or 'yes' -->
-<xsl:variable name="msgprefix">IDXS</xsl:variable> <!-- Prefix for messages -->
+<xsl:variable name="msgprefix">DOTX</xsl:variable> <!-- Prefix for messages -->
 <xsl:variable name="OUTEXT">cli</xsl:variable>  <!-- extension will go at the end of links -->
 <xsl:variable name="newline"><xsl:text>
 </xsl:text></xsl:variable>

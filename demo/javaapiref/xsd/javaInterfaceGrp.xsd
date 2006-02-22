@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!--
+ | (C) Copyright IBM Corporation 2005 - 2006. All Rights Reserved.
+ *-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:group name="javaInterface">
+    <xs:sequence>
+      <xs:element ref="javaInterface"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="javaInterfaceDetail">
+    <xs:sequence>
+      <xs:element ref="javaInterfaceDetail"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="javaInterfaceDef">
+    <xs:sequence>
+      <xs:element ref="javaInterfaceDef"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="javaInterfaceAccess">
+    <xs:sequence>
+      <xs:element ref="javaInterfaceAccess"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="javaBaseInterface">
+    <xs:sequence>
+      <xs:element ref="javaBaseInterface"/>
+    </xs:sequence>
+  </xs:group>
+</xs:schema>

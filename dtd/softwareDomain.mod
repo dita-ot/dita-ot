@@ -2,8 +2,8 @@
 <!--                    HEADER                                     -->
 <!-- ============================================================= -->
 <!--  MODULE:    DITA Software Domain                              -->
-<!--  VERSION:   1.O                                               -->
-<!--  DATE:      February 2005                                     -->
+<!--  VERSION:   1.0.1                                             -->
+<!--  DATE:      November 2005                                     -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -11,16 +11,16 @@
 <!--                    PUBLIC DOCUMENT TYPE DEFINITION            -->
 <!--                    TYPICAL INVOCATION                         -->
 <!--                                                               -->
-<!--  Refer to this file by the following public identfier or an 
+<!--  Refer to this file by the following public identifier or an 
       appropriate system identifier 
 PUBLIC "-//OASIS//ELEMENTS DITA Software Domain//EN"
-      Delivered as file "software-domain.dtd"                      -->
+      Delivered as file "softwareDomain.mod"                       -->
 
 <!-- ============================================================= -->
 <!-- SYSTEM:     Darwin Information Typing Architecture (DITA)     -->
 <!--                                                               -->
 <!-- PURPOSE:    Declaring the elements and specialization         -->
-<!--             attributes for the DITA XML Metadata              -->
+<!--             attributes for the Software Domain                -->
 <!--                                                               -->
 <!-- ORIGINAL CREATION DATE:                                       -->
 <!--             March 2001                                        -->
@@ -28,6 +28,10 @@ PUBLIC "-//OASIS//ELEMENTS DITA Software Domain//EN"
 <!--             (C) Copyright OASIS Open 2005.                    -->
 <!--             (C) Copyright IBM Corporation 2001, 2004.         -->
 <!--             All Rights Reserved.                              -->
+<!--                                                               -->
+<!--  UPDATES:                                                     -->
+<!--    2005.11.15 RDA: Corrected the PURPOSE in this comment      -->
+<!--    2005.11.15 RDA: Corrected the "Delivered as" system ID     -->
 <!-- ============================================================= -->
 
 

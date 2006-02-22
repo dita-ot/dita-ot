@@ -2,8 +2,8 @@
 <!--                    HEADER                                     -->
 <!-- ============================================================= -->
 <!--  MODULE:    DITA Topic Class Entities                         -->
-<!--  VERSION:   1.O                                               -->
-<!--  DATE:      February 2005                                     -->
+<!--  VERSION:   1.0.1                                             -->
+<!--  DATE:      November 2005                                     -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -11,10 +11,10 @@
 <!--                    PUBLIC DOCUMENT TYPE DEFINITION            -->
 <!--                    TYPICAL INVOCATION                         -->
 <!--                                                               -->
-<!--  Refer to this file by the following public identfier or an 
+<!--  Refer to this file by the following public identifier or an 
       appropriate system identifier 
 PUBLIC "-//OASIS//ENTITIES DITA Topic Class//EN"
-      Delivered as file "topic_class.ent"                          -->
+      Delivered as file "topicAttr.mod"                            -->
 
 <!-- ============================================================= -->
 <!-- SYSTEM:     Darwin Information Typing Architecture (DITA)     -->
@@ -27,6 +27,11 @@ PUBLIC "-//OASIS//ENTITIES DITA Topic Class//EN"
 <!--             (C) Copyright OASIS Open 2005.                    -->
 <!--             (C) Copyright IBM Corporation 2001, 2004.         -->
 <!--             All Rights Reserved.                              -->
+<!--                                                               -->
+<!--  UPDATES:                                                     -->
+<!--    2005.11.15 RDA: Removed extra declaration for <title>      -->
+<!--                    attributes                                 -->
+<!--    2005.11.15 RDA: Corrected the "Delivered as" system ID     -->
 <!-- ============================================================= -->
 
 
@@ -34,7 +39,6 @@ PUBLIC "-//OASIS//ENTITIES DITA Topic Class//EN"
 <!--                    SPECIALIZATION ATTRIBUTE DECLARATIONS      -->
 <!-- ============================================================= -->
 
-<!ATTLIST title     %global-atts;  class CDATA "- topic/title "      >
 <!ATTLIST alt       %global-atts;  class CDATA "- topic/alt "        >
 <!ATTLIST body      %global-atts;  class CDATA "- topic/body "       >
 <!ATTLIST boolean   %global-atts;  class CDATA "- topic/boolean "    >

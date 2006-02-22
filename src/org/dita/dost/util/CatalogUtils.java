@@ -1,7 +1,5 @@
 /*
- * @(#)CatalogUtils.java        1.0 2005-4-11
- *
- * 
+ * (c) Copyright IBM Corp. 2005, 2006 All Rights Reserved.
  */
 package org.dita.dost.util;
 

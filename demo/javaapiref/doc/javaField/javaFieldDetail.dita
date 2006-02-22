@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?><!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference
+  PUBLIC "-//IBM//DTD DITA Reference//EN" "..\dtd\reference.dtd">
+<reference id="javaFieldDetail" outputclass="element" xml:lang="en-us">
+<title>javaFieldDetail</title>
+<shortdesc>The &lt;javaFieldDetail&gt; element provides details about a field
+that belongs to a class or interface. </shortdesc>
+<refbody>
+<section><title>Description</title><p>The name of a field must differ from
+the name of all other members that are declared in the same class. In the &lt;javaFieldDetail&gt;
+element, the &lt;example&gt; and &lt;section&gt; elements are provided to support
+the current specific API reference. </p></section>
+<section conref="../packagedef.dita#javaFieldDetail-reference/javaFieldDetail-containedBy-section"/><section conref="../packagedef.dita#javaFieldDetail-reference/javaFieldDetail-contains-section"/><section conref="../packagedef.dita#javaFieldDetail-reference/javaFieldDetail-contentModel-section"/><section conref="../packagedef.dita#javaFieldDetail-reference/javaFieldDetail-attList-section"/><section conref="../packagedef.dita#javaFieldDetail-reference/javaFieldDetail-classValue-section"/></refbody>
+</reference>

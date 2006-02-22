@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ | (C) Copyright IBM Corporation 2005 - 2006. All Rights Reserved.
+ *-->
+<xs:schema
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    elementFormDefault="qualified"
+    attributeFormDefault="unqualified">
+
+  <xs:group name="classify-d-topicref">
+    <xs:choice>
+      <xs:element ref="topicsubject"/>
+    </xs:choice>
+  </xs:group>
+
+  <xs:group name="classify-d-reltable">
+    <xs:choice>
+      <xs:element ref="topicSubjectTable"/>
+    </xs:choice>
+  </xs:group>
+
+  <!-- SKOS equivalent:  primary if href or keyref are specified -->
+  <xs:element name="topicsubject" type="topicsubject.class"/>
+  <xs:complexType name="topicsubject.class">
+    <xs:sequence>
+      <xs:group minOccurs="0" ref="topicmeta"/>
+      <xs:element minOccurs="0" maxOccurs="unbounded" ref="subjectref"/>
+    </xs:sequence>
+    <xs:attribute name="navtitle"/>
+    <xs:attribute name="id" type="xs:ID"/>
+    <xs:attribute name="href"/>
+    <xs:attribute name="keyref"/>
+    <xs:attribute name="query"/>
+    <xs:attribute name="conref"/>
+    <xs:attribute name="type"/>
+    <xs:attribute name="scope">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="local"/>
+          <xs:enumeration value="external"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="format"/>
+    <xs:attributeGroup ref="select-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute name="class" default="+ map/topicref classify-d/topicsubject "/>
+  </xs:complexType>
+
+  <xs:element name="subjectref" type="subjectref.class"/>
+  <xs:complexType name="subjectref.class">
+    <xs:group minOccurs="0" ref="topicmeta"/>
+    <xs:attribute name="navtitle"/>
+    <xs:attribute name="id" type="xs:ID"/>
+    <xs:attribute name="href"/>
+    <xs:attribute name="keyref"/>
+    <xs:attribute name="query"/>
+    <xs:attribute name="conref"/>
+    <xs:attribute name="collection-type">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="choice"/>
+          <xs:enumeration value="unordered"/>
+          <xs:enumeration value="sequence"/>
+          <xs:enumeration value="family"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="type"/>
+    <xs:attribute name="scope">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="local"/>
+          <xs:enumeration value="external"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="format"/>
+    <xs:attribute name="linking">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="targetonly"/>
+          <xs:enumeration value="sourceonly"/>
+          <xs:enumeration value="normal"/>
+          <xs:enumeration value="none"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attributeGroup ref="select-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute name="class" default="+ map/topicref classify-d/subjectref "/>
+  </xs:complexType>
+
+  <xs:element name="topicSubjectTable" type="topicSubjectTable.class"/>
+  <xs:complexType name="topicSubjectTable.class">
+    <xs:sequence>
+      <xs:group minOccurs="0" ref="topicmeta"/>
+      <xs:element minOccurs="0" ref="topicSubjectHeader"/>
+      <xs:element maxOccurs="unbounded" ref="topicSubjectRow"/>
+    </xs:sequence>
+    <xs:attribute name="title"/>
+    <xs:attributeGroup ref="id-atts"/>
+    <xs:attributeGroup ref="topicref-atts-no-toc"/>
+    <xs:attributeGroup ref="select-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute name="class" default="+ map/reltable classify-d/topicSubjectTable "/>
+  </xs:complexType>
+
+  <!--
+    The header defines the set of subjects for each column.
+    By default, the subject in the header cell must be a broader ancestor
+        within a scheme available during processing for the subjects
+        in the same column of other rows
+    In the header, the topicCell serves primarily as a placeholder
+        for the topic column but could also provide some constraints
+        or metadata for the topics
+  -->
+  <xs:element name="topicSubjectHeader" type="topicSubjectHeader.class"/>
+  <xs:complexType name="topicSubjectHeader.class">
+    <xs:sequence>
+      <xs:element ref="topicCell"/>
+      <xs:element maxOccurs="unbounded" ref="subjectCell"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="id-atts"/>
+    <xs:attributeGroup ref="select-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute name="class" default="+ map/relrow classify-d/topicSubjectHeader "/>
+  </xs:complexType>
+
+  <xs:element name="topicSubjectRow" type="topicSubjectRow.class"/>
+  <xs:complexType name="topicSubjectRow.class">
+    <xs:sequence>
+      <xs:element ref="topicCell"/>
+      <xs:element maxOccurs="unbounded" ref="subjectCell"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="id-atts"/>
+    <xs:attributeGroup ref="select-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute name="class" default="+ map/relrow classify-d/topicSubjectRow "/>
+  </xs:complexType>
+
+  <xs:element name="topicCell" type="topicCell.class"/>
+  <xs:complexType name="topicCell.class">
+    <xs:group maxOccurs="unbounded" ref="topicref"/>
+    <xs:attributeGroup ref="id-atts"/>
+    <xs:attributeGroup ref="topicref-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute name="class" default="+ map/relcell classify-d/topicCell "/>
+  </xs:complexType>
+
+  <xs:element name="subjectCell" type="subjectCell.class"/>
+  <xs:complexType name="subjectCell.class">
+    <xs:sequence>
+      <xs:element minOccurs="0" ref="topicsubject"/>
+      <xs:element minOccurs="0" maxOccurs="unbounded" ref="subjectref"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="id-atts"/>
+    <xs:attributeGroup ref="topicref-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute name="class" default="+ map/relcell classify-d/subjectCell "/>
+  </xs:complexType>
+
+</xs:schema>

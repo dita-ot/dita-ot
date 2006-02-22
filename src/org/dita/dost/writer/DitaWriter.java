@@ -7,13 +7,17 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.module.Content;
 import org.dita.dost.util.CatalogUtils;
+import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.StringUtils;
 import org.xml.sax.Attributes;
 import org.dita.dost.util.Constants;
@@ -38,6 +42,7 @@ public class DitaWriter extends AbstractXMLWriter {
     private static final String COLUMN_NAME_COL = "col";
     private static final String PI_END = "?>";
     private static final String PI_WORKDIR_HEAD = "<?workdir ";
+    private static final String PI_PATH2PROJ_HEAD = "<?path2project ";
     private static final String OS_NAME_WINDOWS = "windows";
     private static final String ACTION_EXCLUDE = "exclude";
     private XMLReader reader;
@@ -45,6 +50,7 @@ public class DitaWriter extends AbstractXMLWriter {
     private HashMap counterMap;
     private String traceFilename;
     private String absolutePath;
+    private String path2Project;
     private String tempDir;
     private boolean exclude; // when exclude is true the tag will be excluded.
     private boolean needResolveEntity; //check whether the entity need resolve.
@@ -53,9 +59,13 @@ public class DitaWriter extends AbstractXMLWriter {
     private int level;// level is used to count the element level in the
     // filtering
     private int columnNumber; // columnNumber is used to adjust column name
+    private int columnNumberEnd; //columnNumberEnd is the end value for current entry
     
     private HashMap catalogMap; //map that contains the information from XML Catalog
 
+    private DITAOTJavaLogger logger;
+    
+    private ArrayList colSpec;
 
     /**
      * Default constructor of DitaWriter class.
@@ -64,9 +74,11 @@ public class DitaWriter extends AbstractXMLWriter {
         super();
         exclude = false;
         filterMap = new HashMap();
-        columnNumber = 0;
+        columnNumber = 1;
+        columnNumberEnd = 0;
         catalogMap = CatalogUtils.getCatalog(null);
         absolutePath = null;
+        path2Project = null;
         counterMap = null;
         traceFilename = null;
         filterSet = null;
@@ -74,6 +86,7 @@ public class DitaWriter extends AbstractXMLWriter {
         needResolveEntity = false;
         output = null;
         tempDir = null;
+        logger = new DITAOTJavaLogger();
         
         try {
             if (System.getProperty(Constants.SAX_DRIVER_PROPERTY) == null){
@@ -90,7 +103,7 @@ public class DitaWriter extends AbstractXMLWriter {
             
             reader.setEntityResolver(this);
         } catch (Exception e) {
-            e.printStackTrace();
+        	logger.logException(e);
         }
     }
 
@@ -116,7 +129,7 @@ public class DitaWriter extends AbstractXMLWriter {
         			.append(Constants.EQUAL).append(value.substring(0,index)).toString());
             if(action != null && ACTION_EXCLUDE.equals(action)){
                 ret=true;
-            }else if(action != null){
+            }else{
                 return false;
             }
             value = value.substring(index+1);
@@ -125,7 +138,7 @@ public class DitaWriter extends AbstractXMLWriter {
         action = (String)filterMap.get(attName + Constants.EQUAL + value);
         if(action != null && ACTION_EXCLUDE.equals(action)){
             ret=true;
-        }else if(action != null){
+        }else{
             return false;
         }
         return ret;
@@ -170,9 +183,11 @@ public class DitaWriter extends AbstractXMLWriter {
                 .replace('/',File.separatorChar).replace('\\',File.separatorChar);
                 outputFile = new File(tempDir 
                         + File.separatorChar + filename.substring(index+1));
+                path2Project = FileUtils.getPathtoProject(filename.substring(index+1));
             }else{
                 traceFilename = filename;
                 outputFile = new File(tempDir + File.separatorChar + filename);
+                path2Project = FileUtils.getPathtoProject(filename);
             }
             counterMap = new HashMap();
             dirFile = outputFile.getParentFile();
@@ -190,12 +205,12 @@ public class DitaWriter extends AbstractXMLWriter {
             
             output.close();
         } catch (Exception e) {
-            e.printStackTrace(System.out);
+        	logger.logException(e);
         }finally {
             try {
                 fileOutput.close();
             }catch (Exception e) {
-                e.printStackTrace(System.out);
+            	logger.logException(e);
             }
         }
     }
@@ -213,7 +228,7 @@ public class DitaWriter extends AbstractXMLWriter {
             try {
                 output.write(ch, start, length);
             } catch (Exception e) {
-                e.printStackTrace(System.out);
+            	logger.logException(e);
             }
         }
     }
@@ -227,7 +242,7 @@ public class DitaWriter extends AbstractXMLWriter {
         try {
             output.flush();
         } catch (Exception e) {
-            e.printStackTrace(System.out);
+        	logger.logException(e);
         }
     }
 
@@ -251,7 +266,7 @@ public class DitaWriter extends AbstractXMLWriter {
                 output.write(Constants.LESS_THAN + Constants.SLASH 
                         + qName + Constants.GREATER_THAN);
             } catch (Exception e) {
-                e.printStackTrace(System.out);
+            	logger.logException(e);
             }
         }
     }
@@ -266,7 +281,7 @@ public class DitaWriter extends AbstractXMLWriter {
             try {
                 output.write(ch, start, length);
             } catch (Exception e) {
-                e.printStackTrace(System.out);
+            	logger.logException(e);
             }
         }
     }
@@ -280,7 +295,7 @@ public class DitaWriter extends AbstractXMLWriter {
             try {
                 output.write(name);
             } catch (Exception e) {
-                e.printStackTrace(System.out);
+            	logger.logException(e);
             }
         }
     }
@@ -301,8 +316,14 @@ public class DitaWriter extends AbstractXMLWriter {
                 output.write(PI_WORKDIR_HEAD + Constants.SLASH + absolutePath + PI_END);
             }
             output.write(Constants.LINE_SEPARATOR);
+            if(path2Project != null){
+            	output.write(PI_PATH2PROJ_HEAD + path2Project + PI_END);
+            }else{
+            	output.write(PI_PATH2PROJ_HEAD + PI_END);
+            }
+            output.write(Constants.LINE_SEPARATOR);
         } catch (Exception e) {
-            e.printStackTrace(System.out);
+        	logger.logException(e);
         }
     }
 
@@ -335,20 +356,44 @@ public class DitaWriter extends AbstractXMLWriter {
                 level = 0;
             }else{
                 try {
-                    if (Constants.ELEMENT_NAME_TGROUP.equals(qName) 
-                            || Constants.ELEMENT_NAME_ROW.equals(qName)) {
-                        columnNumber = 0; // initialize the column number
+                	//copy the element name
+                	output.write(Constants.LESS_THAN + qName);
+                    if (Constants.ELEMENT_NAME_TGROUP.equals(qName)){
+                    	columnNumber = 1; // initialize the column number
+                        columnNumberEnd = 0;
+                        colSpec = new ArrayList(16);
+                    }else if(Constants.ELEMENT_NAME_ROW.equals(qName)) {
+                        columnNumber = 1; // initialize the column number
+                        columnNumberEnd = 0;
+                    }else if(Constants.ELEMENT_NAME_COLSPEC.equals(qName)){
+                    	columnNumber = columnNumberEnd +1;
+                    	if(atts.getValue(Constants.ATTRIBUTE_NAME_COLNAME) != null){
+                    		colSpec.add(atts.getValue(Constants.ATTRIBUTE_NAME_COLNAME));
+                    	}else{
+                    		colSpec.add(COLUMN_NAME_COL+columnNumber);
+                    	}
+                    	columnNumberEnd = columnNumber;
+                    	output.write(new StringBuffer().append(Constants.STRING_BLANK)
+                        		.append(Constants.ATTRIBUTE_NAME_COLNAME).append(Constants.EQUAL).append(Constants.QUOTATION)
+                        		.append(COLUMN_NAME_COL+columnNumber).append(Constants.QUOTATION).toString());
+                    }else if(Constants.ELEMENT_NAME_ENTRY.equals(qName)){
+                    	//TO DO
+                    	columnNumber = getStartNumber(atts, columnNumberEnd);
+                    	if(columnNumber > columnNumberEnd){
+                    		output.write(new StringBuffer().append(Constants.STRING_BLANK)
+                            		.append(Constants.ATTRIBUTE_NAME_COLNAME).append(Constants.EQUAL).append(Constants.QUOTATION)
+                            		.append(COLUMN_NAME_COL+columnNumber).append(Constants.QUOTATION).toString());
+                    	}else{
+                    		//throw error;
+                    	}
+                    	columnNumberEnd = getEndNumber(atts, columnNumber);
                     }
-                    // copy the element name and all of its attribute
-                    output.write(Constants.LESS_THAN + qName);
+                    
+                    // copy the element's attributes                    
                     for (int i = 0; i < attsLen; i++) {
                         String attQName = atts.getQName(i);
                         String attValue;
-                        if (Constants.ATTRIBUTE_NAME_COLNAME.equals(attQName)) {
-                            columnNumber++;
-                            attValue = new StringBuffer().append(COLUMN_NAME_COL)
-							.append( Integer.toString(columnNumber) ).toString();
-                        } else if(Constants.ATTRIBUTE_NAME_HREF.equals(attQName)
+                        if(Constants.ATTRIBUTE_NAME_HREF.equals(attQName)
                                 || Constants.ATTRIBUTE_NAME_CONREF.equals(attQName)){
                             /*
                              * replace all the backslash with slash in 
@@ -360,9 +405,12 @@ public class DitaWriter extends AbstractXMLWriter {
                         else {
                             attValue = atts.getValue(i);
                         }
-                        output.write(new StringBuffer().append(Constants.STRING_BLANK)
-                        		.append(attQName).append(Constants.EQUAL).append(Constants.QUOTATION)
-                        		.append(attValue).append(Constants.QUOTATION).toString());
+                        //output all attributes except colname
+                        if (!Constants.ATTRIBUTE_NAME_COLNAME.equals(attQName)){
+                        	output.write(new StringBuffer().append(Constants.STRING_BLANK)
+                        			.append(attQName).append(Constants.EQUAL).append(Constants.QUOTATION)
+                        			.append(attValue).append(Constants.QUOTATION).toString());
+                        }
                     }
                     // write the xtrf and xtrc attributes which contain debug
                     // information
@@ -371,11 +419,46 @@ public class DitaWriter extends AbstractXMLWriter {
                     output.write(Constants.GREATER_THAN);
                     
                 } catch (Exception e) {
-                    e.printStackTrace(System.out);
+                	logger.logException(e);
                 }// try
             } 
         }
     }
+
+	private int getEndNumber(Attributes atts, int columnStart) {
+		int ret;
+		if (atts.getValue("nameend") == null){
+			return columnStart;
+		}else{
+			ret = colSpec.indexOf(atts.getValue("nameend")) + 1;
+			if(ret == 0){
+				return columnStart;
+			}
+			return ret;
+		}
+	}
+
+	private int getStartNumber(Attributes atts, int previousEnd) {
+		// TODO Auto-generated method stub
+		int ret;
+		if (atts.getValue("colnum") != null){
+			return new Integer(atts.getValue("colnum")).intValue();
+		}else if(atts.getValue("namest") != null){
+			ret = colSpec.indexOf(atts.getValue("namest")) + 1;
+			if(ret == 0){
+				return previousEnd + 1;
+			}
+			return ret;
+		}else if(atts.getValue("colname") != null){
+			ret = colSpec.indexOf(atts.getValue("colname")) + 1;
+			if(ret == 0){
+				return previousEnd + 1;
+			}
+			return ret;
+		}else{
+			return previousEnd + 1;
+		}
+	}
 
 	/**
      * @see org.xml.sax.ext.LexicalHandler#endCDATA()
@@ -385,7 +468,7 @@ public class DitaWriter extends AbstractXMLWriter {
 	    try{
 	        output.write(Constants.CDATA_END);
 	    }catch(Exception e){
-	        e.printStackTrace(System.out);
+	    	logger.logException(e);
 	    }
 	}
 
@@ -407,7 +490,7 @@ public class DitaWriter extends AbstractXMLWriter {
 	    try{
 	        output.write(Constants.CDATA_HEAD);
 	    }catch(Exception e){
-	        e.printStackTrace(System.out);
+	    	logger.logException(e);
 	    }
 	}
 
@@ -423,7 +506,7 @@ public class DitaWriter extends AbstractXMLWriter {
             		output.write(StringUtils.getEntity(name));
             	}
             } catch (Exception e) {
-                e.printStackTrace(System.out);
+            	logger.logException(e);
             }
         }
 

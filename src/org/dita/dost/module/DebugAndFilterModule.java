@@ -6,6 +6,7 @@ package org.dita.dost.module;
 import java.io.File;
 import java.util.LinkedList;
 
+import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.pipeline.PipelineHashIO;
@@ -35,7 +36,7 @@ public class DebugAndFilterModule extends AbstractPipelineModule {
      * @see org.dita.dost.module.AbstractPipelineModule#execute(org.dita.dost.pipeline.AbstractPipelineInput)
      * 
      */
-    public AbstractPipelineOutput execute(AbstractPipelineInput input) {
+    public AbstractPipelineOutput execute(AbstractPipelineInput input) throws DITAOTException {
         String baseDir = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_BASEDIR);
         String ditavalFile = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_DITAVAL);
         String tempDir = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_TEMPDIR);
@@ -44,6 +45,16 @@ public class DebugAndFilterModule extends AbstractPipelineModule {
         LinkedList parseList = null;
         Content content;
         DitaWriter fileWriter;
+        
+        if (baseDir == null){
+        	throw new DITAOTException(
+				"Please specify the base directory.");
+        }
+        if (tempDir == null){
+        	throw new DITAOTException(
+				"Please specify the temp directory.");
+        }
+        
         listReader.read(tempDir + File.separator + Constants.FILE_NAME_DITA_LIST);
         parseList = (LinkedList) listReader.getContent()
                 .getCollection();

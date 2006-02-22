@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2004, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "../../dtd/reference.dtd">
+<!--             (C) Copyright OASIS Open 2005.                    -->
+<!--             (C) Copyright IBM Corporation 2001, 2004.         -->
+<!--             All Rights Reserved.                              -->
+<reference id="concept2" xml:lang="en-us">
+<title>Concept elements</title>
+<refbody>
+<section>          <p>Use the concept topic to introduce the background or
+overview information for tasks or reference topics. The concept topic has
+the restriction that following a section or example, only other sections or
+examples are permitted as content. <?Pub Caret?><indexterm>Concept elements</indexterm> 
+        </p>       </section>
+</refbody>
+</reference>
+<?Pub *0000000855?>

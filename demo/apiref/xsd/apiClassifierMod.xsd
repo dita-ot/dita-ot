@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ | (C) Copyright IBM Corporation 2005 - 2006. All Rights Reserved.
+ *-->
+<!-- ============ Hooks for domain extension ============ -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
+  <xs:import namespace="http://dita.oasis-open.org/architecture/2005/" schemaLocation="../../../schema/ditaarch.xsd"/>
+  <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="../../../schema/xml.xsd"/>
+   
+  <!-- ============ Hooks for shell DTD ============ -->
+  <xs:group name="apiClassifier-types-default">
+    <xs:choice>
+      <xs:element ref="apiClassifier"/>
+      <xs:element ref="apiOperation"/>
+      <xs:element ref="apiValue"/>
+    </xs:choice>
+  </xs:group>
+  <xs:group name="apiClassifier-info-types">
+    <xs:sequence>
+      <xs:group ref="apiClassifier-types-default"/>
+    </xs:sequence>
+  </xs:group>
+  <!-- ============ Element definitions ============ -->
+  <xs:element name="apiClassifier" type="apiClassifier.class" />
+  <xs:complexType name="apiClassifier.class">
+    <xs:sequence>
+      <xs:group ref="apiName"/>
+      <xs:group ref="shortdesc"/>
+      <xs:group minOccurs="0" ref="prolog"/>
+      <xs:group ref="apiClassifierDetail"/>
+      <xs:group minOccurs="0" ref="related-links"/>
+      <xs:group minOccurs="0" maxOccurs="unbounded" ref="apiClassifier-info-types"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="apiClassifier.attlist"/>
+  </xs:complexType>
+  
+  <xs:attributeGroup name="apiClassifier.attlist">
+    <xs:attribute name="id" use="required" type="xs:ID"/>
+    <xs:attribute name="conref"/>
+    <xs:attribute name="outputclass"/>
+    <xs:attribute ref="xml:lang"/>
+    <xs:attribute ref="ditaarch:DITAArchVersion"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute name="class" default="- topic/topic reference/reference apiRef/apiRef apiClassifier/apiClassifier "/>
+  </xs:attributeGroup>
+  <xs:element name="apiClassifierDetail">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:choice>
+          <xs:group minOccurs="0" maxOccurs="unbounded" ref="apiSyntax"/>
+          <xs:group minOccurs="0" maxOccurs="unbounded" ref="apiClassifierDef"/>
+        </xs:choice>
+        <xs:group minOccurs="0" maxOccurs="unbounded" ref="apiDesc"/>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:group ref="example"/>
+          <xs:group ref="section"/>
+          <xs:group ref="apiImpl"/>
+        </xs:choice>
+      </xs:sequence>
+      <xs:attributeGroup ref="apiClassifierDetail.attlist"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="apiClassifierDetail.attlist">
+    <xs:attributeGroup ref="id-atts"/>
+    <xs:attribute name="translate">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="yes"/>
+          <xs:enumeration value="no"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute ref="xml:lang"/>
+    <xs:attribute name="outputclass"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute name="class" default="- topic/body reference/refbody apiRef/apiDetail apiClassifier/apiClassifierDetail "/>
+  </xs:attributeGroup>
+  <xs:element name="apiClassifierDef">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:group ref="apiBaseClassifier"/>
+        <xs:group ref="apiDefinition.cnt"/>
+        <xs:group ref="apiClassifierMember"/>
+        <xs:group ref="apiItemName"/>
+      </xs:choice>
+      <xs:attributeGroup ref="apiClassifierDef.attlist"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="apiClassifierDef.attlist">
+    <xs:attribute name="spectitle"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attribute name="outputclass"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute name="class" default="- topic/section reference/section apiRef/apiDef apiClassifier/apiClassifierDef "/>
+  </xs:attributeGroup>
+  <xs:element name="apiBaseClassifier">
+    <xs:complexType mixed="true">
+      <xs:attributeGroup ref="apiBaseClassifier.attlist"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="apiBaseClassifier.attlist">
+    <xs:attribute name="href"/>
+    <xs:attribute name="keyref"/>
+    <xs:attribute name="type"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attribute name="format"/>
+    <xs:attribute name="scope">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="local"/>
+          <xs:enumeration value="peer"/>
+          <xs:enumeration value="external"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="outputclass"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute name="class" default="- topic/xref reference/xref apiRef/apiRelation apiClassifier/apiBaseClassifier "/>
+  </xs:attributeGroup>
+  <xs:element name="apiClassifierMember">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:group ref="apiItemName"/>
+        <xs:group ref="apiOtherClassifier"/>
+        <xs:group ref="apiDefinition.cnt"/>
+        <xs:group ref="apiClassifierMember"/>
+      </xs:choice>
+      <xs:attributeGroup ref="apiClassifierMember.attlist"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="apiClassifierMember.attlist">
+    <xs:attribute name="keyref"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attribute name="outputclass"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute name="class" default="- topic/ph reference/ph apiRef/apiDefItem apiClassifier/apiClassifierMember "/>
+  </xs:attributeGroup>
+  <xs:element name="apiOtherClassifier">
+    <xs:complexType mixed="true">
+      <xs:attributeGroup ref="apiOtherClassifier.attlist"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="apiOtherClassifier.attlist">
+    <xs:attribute name="href"/>
+    <xs:attribute name="keyref"/>
+    <xs:attribute name="type"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attribute name="format"/>
+    <xs:attribute name="scope">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="local"/>
+          <xs:enumeration value="peer"/>
+          <xs:enumeration value="external"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="outputclass"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute name="class" default="- topic/xref reference/xref apiRef/apiRelation apiClassifier/apiOtherClassifier "/>
+  </xs:attributeGroup>
+  <!-- ============ Class ancestry ============ -->
+</xs:schema>

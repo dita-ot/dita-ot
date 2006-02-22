@@ -1,34 +1,30 @@
 <project name="pre-targets"  basedir=".">
   <!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
   <!-- preprocess target begin -->
-  <target name="preprocess" depends="clean-temp, gen-list,copy-image,copy-html,copy-flag,debug-filter,move-index-entries,conref,mappull,maplink,move-links,topicpull">
-    
-  </target>
+  <target name="preprocess" 
+          depends="start-preprocess,clean-temp,gen-list,copy-files,debug-filter,move-index-entries,conref,mappull,maplink,move-links,topicpull" 
+          description="Preprocessing ended"/>
   <!-- preprocess target end-->
 
   <!-- parameters 
-    dita.input.dirname      required
-    dita.input              required
+    args.input              required
     dita.input.valfile      optional
     dita.temp.dir           required
-    dita.extname            required
+    dita.ext            required
   -->
   
   <!-- preprocess modules begin -->
-  <target name="clean-temp" unless="clean_temp" description="delete temp directory">
-    <delete dir="${dita.temp.dir}"/>
+  <target name="start-preprocess" description="Preprocessing started"/>
+  
+  <target name="clean-temp" unless="clean_temp" description="Clean temp directory">
+    <delete includeemptydirs="true">
+      <fileset dir="${dita.temp.dir}" includes="**/*" excludes="property.temp"/>
+    </delete>
   </target>  
   
-  <target name="gen-list">
-    <pipeline message="Generate list."
-      module="GenMapAndTopicList"
-      basedir="${dita.input.dirname}"
-      inputmap="${dita.input}"
-      tempdir="${dita.temp.dir}"
-      extparam="ditadir=${basedir}"/>
-	
+  <target name="gen-list" depends="gen-list-without-flagging, gen-list-with-flagging" description="Generate file list">	
 	<property file="${dita.temp.dir}${file.separator}dita.list"/>
-  
+    <dirname property="dita.map.output.dir" file="${output.dir}${file.separator}${user.input.file}"/>
 	<condition property="noConref">
 		<equals arg1="${conreflist}" arg2=""/>
 	</condition>
@@ -41,48 +37,60 @@
 	<condition property="noImagelist">
 		<equals arg1="${imagelist}" arg2=""/>
 	</condition>
-  <condition property="noHtmllist">
+    <condition property="noHtmllist">
 		<equals arg1="${htmllist}" arg2=""/>
 	</condition>
-  
   </target>
   
-  <target name="debug-filter" depends="gen-list,debug,debug-and-filter"/>
+  <target name="gen-list-without-flagging" unless="dita.input.valfile">
+    <pipeline message="Generate list."
+      module="GenMapAndTopicList"
+      inputmap="${args.input}"
+      tempdir="${dita.temp.dir}"
+      extparam="ditadir=${basedir}"/>
+  </target>
   
-  <target name="debug" unless="dita.input.valfile">
-    <echo message="debug"/>
+  <target name="gen-list-with-flagging" if="dita.input.valfile">
+    <pipeline message="Generate list."
+      module="GenMapAndTopicList"
+      inputmap="${args.input}"
+      tempdir="${dita.temp.dir}"
+      extparam="ditadir=${basedir};ditaval=${dita.input.valfile}"/>
+  </target>
+  
+  <target name="debug-filter" depends="gen-list,debug,debug-and-filter" description="Debug and filter input files"/>
+  
+  <target name="debug" unless="dita.input.valfile" description="Debug input files">
     <pipeline message="Debug and filtering."
 		module="DebugAndFilter"
-    basedir="${dita.input.dirname}"
+    basedir="${user.input.dir}"
     tempdir="${dita.temp.dir}"/>
   </target>
   
-  <target name="debug-and-filter" if="dita.input.valfile">
-    <echo message="debug and filter"/>
+  <target name="debug-and-filter" if="dita.input.valfile" description="Debug and filter input files">
     <pipeline message="Debug and filtering."
 		module="DebugAndFilter"
 		extparam="ditaval=${dita.input.valfile}"
-    basedir="${dita.input.dirname}"
+    basedir="${user.input.dir}"
     tempdir="${dita.temp.dir}"/>
   </target>
   
-  <target name="move-index-entries" unless="noMap" depends="debug-filter">
+  <target name="move-index-entries" unless="noMap" depends="debug-filter" description="Move index entries">
   	<pipeline message="Move index entries."
 		module="MoveIndex"
-		inputmap="${dita.input}"
+		inputmap="${user.input.file}"
     tempdir="${dita.temp.dir}"
 	/>
   </target>
   
-  <target name="conref" unless="noConref" depends="debug-filter">
-  	<echo message="in conref"/>
+  <target name="conref" unless="noConref" depends="debug-filter" description="Resolve conref in input files">
   	<xslt processor="trax"
 		basedir="${dita.temp.dir}"
 		destdir="${dita.temp.dir}"
 		includes="${conreflist}"
 		style="${dita.script.dir}${file.separator}preprocess${file.separator}conref.xsl">
 	<mapper type="glob" from="*" to="*.cnrf"/>
-        <param name="DITAEXT" expression="${dita.extname}"/>
+        <param name="DITAEXT" expression="${dita.ext}"/>
     </xslt>
 	
 	<move todir="${dita.temp.dir}">
@@ -91,14 +99,14 @@
 	</move>
   </target>
     
-  <target name="mappull" unless="noMap" depends="move-index-entries">
-  	<dirname property="mappull.workdir" file="${dita.temp.dir}/${dita.input}"/>
+  <target name="mappull" unless="noMap" depends="move-index-entries" description="Pull the navtitle and topicmeta from topics to ditamap">
+  	<dirname property="mappull.workdir" file="${dita.temp.dir}${file.separator}${user.input.file}"/>
 
     <xslt processor="trax"
-      in="${dita.temp.dir}${file.separator}${dita.input}"
+      in="${dita.temp.dir}${file.separator}${user.input.file}"
       out="${mappull.workdir}${file.separator}${dita.map.filename.root}.ditamap.pull"
       style="${dita.script.dir}${file.separator}preprocess${file.separator}mappull.xsl">
-        <param name="DITAEXT" expression="${dita.extname}" if="dita.extname"/>
+        <param name="DITAEXT" expression="${dita.ext}" if="dita.ext"/>
     </xslt>
 	  
     <copy overwrite="true" todir="${dita.temp.dir}">
@@ -107,57 +115,65 @@
     </copy>
   </target>
   
-  <target name="maplink" unless="noMap" depends="mappull">
-  	<dirname property="maplink.workdir" file="${dita.temp.dir}/${dita.input}"/>
+  <target name="maplink" unless="noMap" depends="mappull" description="Find and generate related link information">
+  	<dirname property="maplink.workdir" file="${dita.temp.dir}/${user.input.file}"/>
   	<xslt processor="trax"
-		in="${dita.temp.dir}${file.separator}${dita.input}"
+		in="${dita.temp.dir}${file.separator}${user.input.file}"
 		out="${maplink.workdir}${file.separator}maplinks.unordered"
 		style="${dita.script.dir}${file.separator}preprocess${file.separator}maplink.xsl">
-        <param name="DITAEXT" expression="${dita.extname}" if="dita.extname"/>
-        <param name="INPUTMAP" expression="${dita.input}"/>
+        <param name="DITAEXT" expression="${dita.ext}" if="dita.ext"/>
+        <param name="INPUTMAP" expression="${user.input.file}"/>
     </xslt>
 	
   </target>
   
-  <target name="move-links" unless="noMap" depends="maplink">
+  <target name="move-links" unless="noMap" depends="maplink" description="Move the related link information to topics">
       <pipeline message="Move links."
 		module="MoveLinks"
 		extparam="maplinks=${maplink.workdir}${file.separator}maplinks.unordered"
-		inputmap="${dita.input}"
+		inputmap="${user.input.file}"
     tempdir="${dita.temp.dir}"/>
   </target>
   
-  <target name="topicpull" depends="debug-filter">
+  <target name="topicpull" depends="debug-filter" description="Pull metadata for link and xref element">
     <xslt processor="trax"
 		basedir="${dita.temp.dir}"
 		destdir="${dita.temp.dir}"
 		includes="${fullditatopiclist}"
-		extension="${dita.extname}.pull"
 		style="${dita.script.dir}${file.separator}preprocess${file.separator}topicpull.xsl">
-        <param name="DITAEXT" expression="${dita.extname}" if="dita.extname"/>
+        <param name="DITAEXT" expression="${dita.ext}" if="dita.ext"/>
+        <mapper type="glob" from="*" to="*.pull"/>
     </xslt>
 	<move todir="${dita.temp.dir}">
-		<fileset dir="${dita.temp.dir}" includes="**/*${dita.extname}.pull"/>
-		<mapper type="glob" from="*${dita.extname}.pull" to="*${dita.extname}"/>
+		<fileset dir="${dita.temp.dir}" includes="**/*.pull"/>
+		<mapper type="glob" from="*.pull" to="*"/>
     </move>
   </target>
 
+  <target name="copy-files" depends="copy-image, copy-html, copy-flag, copy-generated-files"/>
   
-  <target name="copy-image" unless="noImagelist">
+  <target name="copy-image" unless="noImagelist" description="Copy image files">
     <copy todir="${output.dir}">
-        <fileset dir="${dita.input.dirname}" includes="${imagelist}"/>
+        <fileset dir="${user.input.dir}" includes="${imagelist}"/>
     </copy>
   </target>
   
-  <target name="copy-flag" if="dita.input.valfile">
+  <target name="copy-flag" if="dita.input.valfile" description="Copy flag files">
     <copy todir="${dita.map.output.dir}">
       <fileset dir="${dita.resource.dir}" includes="delta.gif,deltaend.gif"/>
     </copy>
+    <dita-ot-copy todir="${output.dir}" includes="${flagimagelist}"/>
   </target>
   
-  <target name="copy-html" unless="noHtmllist">
+  <target name="copy-html" unless="noHtmllist" description="Copy html files">
     <copy todir="${output.dir}">
-        <fileset dir="${dita.input.dirname}" includes="${htmllist}"></fileset>
+        <fileset dir="${user.input.dir}" includes="${htmllist}"></fileset>
+    </copy>
+  </target>
+  
+  <target name="copy-generated-files" description="Copy generated files">
+    <copy todir="${args.logdir}">
+        <fileset dir="${dita.temp.dir}" includes="dita.list,property.temp"/>
     </copy>
   </target>
   

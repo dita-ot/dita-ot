@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ | (C) Copyright IBM Corporation 2005 - 2006. All Rights Reserved.
+ *-->
+<!-- ============ Hooks for domain extension ============ -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
+  <xs:import namespace="http://dita.oasis-open.org/architecture/2005/" schemaLocation="../../../schema/ditaarch.xsd"/>
+  <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="../../../schema/xml.xsd"/>
+  
+  <!-- ============ Hooks for shell DTD ============ -->
+  <xs:group name="javaField-types-default">
+    <xs:sequence>
+      <xs:element ref="no-topic-nesting"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="javaField-info-types">
+    <xs:sequence>
+      <xs:group ref="javaField-types-default"/>
+    </xs:sequence>
+  </xs:group>
+  <!-- ============ Topic specializations ============ -->
+  <xs:element name="javaField" type="javaField.class"/>
+  <xs:complexType name="javaField.class">
+    <xs:sequence>
+      <xs:group ref="apiName"/>
+      <xs:group ref="shortdesc"/>
+      <xs:group minOccurs="0" ref="prolog"/>
+      <xs:group ref="javaFieldDetail"/>
+      <xs:group minOccurs="0" ref="related-links"/>
+      <xs:group minOccurs="0" maxOccurs="unbounded" ref="javaField-info-types"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="javaField.attlist"/>
+  </xs:complexType>
+  
+  <xs:attributeGroup name="javaField.attlist">
+    <xs:attribute name="id" use="required" type="xs:ID"/>
+    <xs:attribute name="conref"/>
+    <xs:attribute name="outputclass"/>
+    <xs:attribute ref="xml:lang"/>
+    <xs:attribute ref="ditaarch:DITAArchVersion"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute name="class" default="- topic/topic reference/reference apiRef/apiRef apiValue/apiValue javaField/javaField "/>
+  </xs:attributeGroup>
+  <xs:element name="javaFieldDetail">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:group ref="javaFieldDef"/>
+        <xs:group minOccurs="0" ref="apiDesc"/>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:group ref="example"/>
+          <xs:group ref="section"/>
+          <xs:group ref="apiImpl"/>
+        </xs:choice>
+      </xs:sequence>
+      <xs:attributeGroup ref="javaFieldDetail.attlist"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="javaFieldDetail.attlist">
+    <xs:attributeGroup ref="id-atts"/>
+    <xs:attribute name="translate">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="yes"/>
+          <xs:enumeration value="no"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute ref="xml:lang"/>
+    <xs:attribute name="outputclass"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute name="class" default="- topic/body reference/refbody apiRef/apiDetail apiValue/apiValueDetail javaField/javaFieldDetail "/>
+  </xs:attributeGroup>
+  <xs:element name="javaFieldDef">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:group minOccurs="0" ref="javaFinalField"/>
+        <xs:group minOccurs="0" ref="javaStaticField"/>
+        <xs:group minOccurs="0" ref="javaTransientField"/>
+        <xs:group minOccurs="0" ref="javaVolatileField"/>
+        <xs:group minOccurs="0" ref="javaFieldAccess"/>
+        <xs:choice>
+          <xs:group ref="javaFieldClass"/>
+          <xs:group ref="javaFieldInterface"/>
+          <xs:group ref="javaFieldPrimitive"/>
+        </xs:choice>
+        <xs:group minOccurs="0" maxOccurs="unbounded" ref="javaFieldArray"/>
+        <xs:group minOccurs="0" ref="apiData"/>
+      </xs:sequence>
+      <xs:attributeGroup ref="javaFieldDef.attlist"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="javaFieldDef.attlist">
+    <xs:attribute name="spectitle"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attribute name="outputclass"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute name="class" default="- topic/section reference/section apiRef/apiDef apiValue/apiValueDef javaField/javaFieldDef "/>
+  </xs:attributeGroup>
+  <xs:element name="javaFinalField">
+    <xs:complexType>
+      <xs:attributeGroup ref="javaFinalField.attlist"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="javaFinalField.attlist">
+    <xs:attribute name="name" default="final">
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="final"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="value" default="final">
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="final"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attribute name="outputclass"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute name="class" default="- topic/state reference/state apiRef/apiQualifier apiValue/apiQualifier javaField/javaFinalField "/>
+  </xs:attributeGroup>
+  <xs:element name="javaStaticField">
+    <xs:complexType>
+      <xs:attributeGroup ref="javaStaticField.attlist"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="javaStaticField.attlist">
+    <xs:attribute name="name" default="static">
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="static"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="value" default="static">
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="static"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attribute name="outputclass"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute name="class" default="- topic/state reference/state apiRef/apiQualifier apiValue/apiQualifier javaField/javaStaticField "/>
+  </xs:attributeGroup>
+  <xs:element name="javaTransientField">
+    <xs:complexType>
+      <xs:attributeGroup ref="javaTransientField.attlist"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="javaTransientField.attlist">
+    <xs:attribute name="name" default="transient">
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="transient"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="value" default="transient">
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="transient"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attribute name="outputclass"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute name="class" default="- topic/state reference/state apiRef/apiQualifier apiValue/apiQualifier javaField/javaTransientField "/>
+  </xs:attributeGroup>
+  <xs:element name="javaVolatileField">
+    <xs:complexType>
+      <xs:attributeGroup ref="javaVolatileField.attlist"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="javaVolatileField.attlist">
+    <xs:attribute name="name" default="volatile">
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="volatile"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="value" default="volatile">
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="volatile"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attribute name="outputclass"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute name="class" default="- topic/state reference/state apiRef/apiQualifier apiValue/apiQualifier javaField/javaVolatileField "/>
+  </xs:attributeGroup>
+  <xs:element name="javaFieldAccess">
+    <xs:complexType>
+      <xs:attributeGroup ref="javaFieldAccess.attlist"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="javaFieldAccess.attlist">
+    <xs:attribute name="name" default="access">
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="access"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="value" use="required">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="public"/>
+          <xs:enumeration value="protected"/>
+          <xs:enumeration value="private"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attribute name="outputclass"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute name="class" default="- topic/state reference/state apiRef/apiQualifier apiValue/apiQualifier javaField/javaFieldAccess "/>
+  </xs:attributeGroup>
+  <xs:element name="javaFieldClass">
+    <xs:complexType mixed="true">
+      <xs:attributeGroup ref="javaFieldClass.attlist"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="javaFieldClass.attlist">
+    <xs:attribute name="href"/>
+    <xs:attribute name="keyref"/>
+    <xs:attribute name="type"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attribute name="format"/>
+    <xs:attribute name="scope">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="local"/>
+          <xs:enumeration value="peer"/>
+          <xs:enumeration value="external"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="outputclass"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute name="class" default="- topic/xref reference/xref apiRef/apiRelation apiValue/apiValueClassifier javaField/javaFieldClass "/>
+  </xs:attributeGroup>
+  <xs:element name="javaFieldInterface">
+    <xs:complexType mixed="true">
+      <xs:attributeGroup ref="javaFieldInterface.attlist"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="javaFieldInterface.attlist">
+    <xs:attribute name="href"/>
+    <xs:attribute name="keyref"/>
+    <xs:attribute name="type"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attribute name="format"/>
+    <xs:attribute name="scope">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="local"/>
+          <xs:enumeration value="peer"/>
+          <xs:enumeration value="external"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="outputclass"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute name="class" default="- topic/xref reference/xref apiRef/apiRelation apiValue/apiValueClassifier javaField/javaFieldInterface "/>
+  </xs:attributeGroup>
+  <xs:element name="javaFieldPrimitive">
+    <xs:complexType>
+      <xs:attributeGroup ref="javaFieldPrimitive.attlist"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="javaFieldPrimitive.attlist">
+    <xs:attribute name="name" default="type">
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="type"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="value" use="required">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="boolean"/>
+          <xs:enumeration value="byte"/>
+          <xs:enumeration value="char"/>
+          <xs:enumeration value="double"/>
+          <xs:enumeration value="float"/>
+          <xs:enumeration value="int"/>
+          <xs:enumeration value="long"/>
+          <xs:enumeration value="short"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attribute name="outputclass"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute name="class" default="- topic/state reference/state apiRef/apiType apiValue/apiType javaField/javaFieldPrimitive "/>
+  </xs:attributeGroup>
+  <xs:element name="javaFieldArray">
+    <xs:complexType>
+      <xs:attributeGroup ref="javaFieldArray.attlist"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="javaFieldArray.attlist">
+    <xs:attribute name="name" default="arraysize"/>
+    <xs:attribute name="value" default=""/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attribute name="outputclass"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute name="class" default="- topic/state reference/state apiRef/apiArray apiValue/apiArray javaField/javaFieldArray "/>
+  </xs:attributeGroup>
+  <!-- ============ Class attributes for type ancestry ============ -->
+</xs:schema>

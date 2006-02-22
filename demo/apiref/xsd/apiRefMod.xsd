@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ | (C) Copyright IBM Corporation 2005 - 2006. All Rights Reserved.
+ *-->
+<!-- ============ Hooks for domain extension ============ -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
+  <xs:import namespace="http://dita.oasis-open.org/architecture/2005/" schemaLocation="../../../schema/ditaarch.xsd"/>
+  <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="../../../schema/xml.xsd"/>
+  
+  <!-- ============ Hooks for shell DTD ============ -->
+  <xs:group name="apiRef-info-types">
+    <xs:sequence>
+      <xs:group ref="apiRef"/>
+    </xs:sequence>
+  </xs:group>
+  <!-- ============ Content Models ============ -->
+  <xs:group name="apiDefinition.cnt">
+    <xs:choice>
+      <xs:group ref="apiQualifier"/>
+      <xs:group ref="apiRelation"/>
+      <xs:group ref="apiType"/>
+      <xs:group ref="apiArray"/>
+      <xs:group ref="apiData"/>
+      <xs:group ref="apiDefNote"/>
+      <xs:group ref="state"/>
+      <xs:group ref="keyword"/>
+      <xs:group ref="ph"/>
+    </xs:choice>
+  </xs:group>
+  <!-- ============ Element definitions ============ -->
+  <xs:element name="apiRef" type="apiRef.class"/>
+  <xs:complexType name="apiRef.class">
+    <xs:sequence>
+      <xs:group ref="apiName"/>
+      <xs:group ref="shortdesc"/>
+      <xs:group minOccurs="0" ref="prolog"/>
+      <xs:group ref="apiDetail"/>
+      <xs:group minOccurs="0" ref="related-links"/>
+      <xs:group minOccurs="0" maxOccurs="unbounded" ref="apiRef-info-types"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="apiRef.attlist"/>
+  </xs:complexType>
+  <xs:attributeGroup name="apiRef.attlist">
+    <xs:attribute name="id" use="required" type="xs:ID"/>
+    <xs:attribute name="conref"/>
+    <xs:attribute name="outputclass"/>
+    <xs:attribute ref="xml:lang"/>
+    <xs:attribute ref="ditaarch:DITAArchVersion"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute name="class" default="- topic/topic reference/reference apiRef/apiRef "/>
+  </xs:attributeGroup>
+  <xs:element name="apiName">
+    <xs:complexType mixed="true">
+      <xs:group minOccurs="0" maxOccurs="unbounded" ref="title.cnt"/>
+      <xs:attributeGroup ref="apiName.attlist"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="apiName.attlist">
+    <xs:attributeGroup ref="id-atts"/>
+    <xs:attribute name="outputclass"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute name="class" default="- topic/title reference/title apiRef/apiName "/>
+  </xs:attributeGroup>
+  <xs:element name="apiDetail">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:group minOccurs="0" maxOccurs="unbounded" ref="apiSyntax"/>
+        <xs:group minOccurs="0" maxOccurs="unbounded" ref="apiDef"/>
+        <xs:group minOccurs="0" maxOccurs="unbounded" ref="apiDesc"/>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:group ref="example"/>
+          <xs:group ref="section"/>
+          <xs:group ref="apiImpl"/>
+        </xs:choice>
+      </xs:sequence>
+      <xs:attributeGroup ref="apiDetail.attlist"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="apiDetail.attlist">
+    <xs:attributeGroup ref="id-atts"/>
+    <xs:attribute name="translate">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="yes"/>
+          <xs:enumeration value="no"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute ref="xml:lang"/>
+    <xs:attribute name="outputclass"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute name="class" default="- topic/body reference/refbody apiRef/apiDetail "/>
+  </xs:attributeGroup>
+  <xs:element name="apiSyntax">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:group maxOccurs="unbounded" ref="apiSyntaxText"/>
+        <xs:group minOccurs="0" maxOccurs="unbounded" ref="apiSyntaxItem"/>
+      </xs:sequence>
+      <xs:attributeGroup ref="apiSyntax.attlist"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="apiSyntax.attlist">
+    <xs:attribute name="spectitle"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attribute name="outputclass"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute name="class" default="- topic/section reference/refsyn apiRef/apiSyntax "/>
+  </xs:attributeGroup>
+  <xs:element name="apiSyntaxText">
+    <xs:complexType mixed="true">
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:group ref="apiRelation"/>
+        <xs:group ref="apiType"/>
+        <xs:group ref="apiItemName"/>
+        <xs:group ref="apiData"/>
+        <xs:group ref="keyword"/>
+        <xs:group ref="txt.incl"/>
+      </xs:choice>
+      <xs:attributeGroup ref="apiSyntaxText.attlist"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="apiSyntaxText.attlist">
+    <xs:attributeGroup ref="display-atts"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attribute name="spectitle"/>
+    <xs:attribute name="outputclass"/>
+    <xs:attribute ref="xml:space" default="preserve"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute name="class" default="- topic/pre reference/pre apiRef/apiSyntaxText "/>
+  </xs:attributeGroup>
+  <xs:element name="apiSyntaxItem">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:group minOccurs="0" maxOccurs="unbounded" ref="apiItemName"/>
+        <xs:group minOccurs="0" ref="apiDefNote"/>
+      </xs:sequence>
+      <xs:attributeGroup ref="apiSyntaxItem.attlist"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="apiSyntaxItem.attlist">
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attribute name="outputclass"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute name="class" default="- topic/p reference/p apiRef/apiSyntaxItem "/>
+  </xs:attributeGroup>
+  <xs:element name="apiItemName">
+    <xs:complexType mixed="true">
+      <xs:attributeGroup ref="apiItemName.attlist"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="apiItemName.attlist">
+    <xs:attribute name="keyref"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attribute name="outputclass"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute name="class" default="- topic/keyword reference/keyword apiRef/apiItemName "/>
+  </xs:attributeGroup>
+  <xs:element name="apiDefNote">
+    <xs:complexType mixed="true">
+      <xs:group minOccurs="0" maxOccurs="unbounded" ref="ph.cnt"/>
+      <xs:attributeGroup ref="apiDefNote.attlist"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="apiDefNote.attlist">
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attribute name="outputclass"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute name="class" default="- topic/ph reference/ph apiRef/apiDefNote "/>
+  </xs:attributeGroup>
+  <xs:element name="apiDef">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:group ref="apiDefinition.cnt"/>
+        <xs:group ref="apiDefItem"/>
+        <xs:group ref="apiItemName"/>
+      </xs:choice>
+      <xs:attributeGroup ref="apiDef.attlist"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="apiDef.attlist">
+    <xs:attribute name="spectitle"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attribute name="outputclass"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute name="class" default="- topic/section reference/section apiRef/apiDef "/>
+  </xs:attributeGroup>
+  <xs:element name="apiDefItem">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:group ref="apiItemName"/>
+        <xs:group ref="apiDefinition.cnt"/>
+        <xs:group ref="apiDefItem"/>
+      </xs:choice>
+      <xs:attributeGroup ref="apiDefItem.attlist"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="apiDefItem.attlist">
+    <xs:attribute name="keyref"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attribute name="outputclass"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute name="class" default="- topic/ph reference/ph apiRef/apiDefItem "/>
+  </xs:attributeGroup>
+  <xs:element name="apiQualifier">
+    <xs:complexType>
+      <xs:attributeGroup ref="apiQualifier.attlist"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="apiQualifier.attlist">
+    <xs:attribute name="name" use="required"/>
+    <xs:attribute name="value" use="required"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attribute name="outputclass"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute name="class" default="- topic/state reference/state apiRef/apiQualifier "/>
+  </xs:attributeGroup>
+  <xs:element name="apiRelation">
+    <xs:complexType mixed="true">
+      <xs:attributeGroup ref="apiRelation.attlist"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="apiRelation.attlist">
+    <xs:attribute name="href"/>
+    <xs:attribute name="keyref"/>
+    <xs:attribute name="type"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attribute name="format"/>
+    <xs:attribute name="scope">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="local"/>
+          <xs:enumeration value="peer"/>
+          <xs:enumeration value="external"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="outputclass"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute name="class" default="- topic/xref reference/xref apiRef/apiRelation "/>
+  </xs:attributeGroup>
+  <xs:element name="apiType">
+    <xs:complexType>
+      <xs:attributeGroup ref="apiType.attlist"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="apiType.attlist">
+    <xs:attribute name="name" default="type"/>
+    <xs:attribute name="value" use="required"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attribute name="outputclass"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute name="class" default="- topic/state reference/state apiRef/apiType "/>
+  </xs:attributeGroup>
+  <xs:element name="apiArray">
+    <xs:complexType>
+      <xs:attributeGroup ref="apiArray.attlist"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="apiArray.attlist">
+    <xs:attribute name="name" default="arraysize"/>
+    <xs:attribute name="value" default=""/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attribute name="outputclass"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute name="class" default="- topic/state reference/state apiRef/apiArray "/>
+  </xs:attributeGroup>
+  <xs:element name="apiData">
+    <xs:complexType mixed="true">
+      <xs:group minOccurs="0" maxOccurs="unbounded" ref="ph.cnt"/>
+      <xs:attributeGroup ref="apiData.attlist"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="apiData.attlist">
+    <xs:attribute name="keyref"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attribute name="outputclass"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute name="class" default="- topic/ph reference/ph apiRef/apiData "/>
+  </xs:attributeGroup>
+  <xs:element name="apiDesc">
+    <xs:complexType mixed="true">
+      <xs:group minOccurs="0" maxOccurs="unbounded" ref="section.notitle.cnt"/>
+      <xs:attributeGroup ref="apiDesc.attlist"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="apiDesc.attlist">
+    <xs:attribute name="spectitle"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attribute name="outputclass"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute name="class" default="- topic/section reference/section apiRef/apiDesc "/>
+  </xs:attributeGroup>
+  <xs:element name="apiImpl">
+    <xs:complexType mixed="true">
+      <xs:group minOccurs="0" maxOccurs="unbounded" ref="section.notitle.cnt"/>
+      <xs:attributeGroup ref="apiImpl.attlist"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="apiImpl.attlist">
+    <xs:attribute name="spectitle"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attribute name="outputclass"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute name="class" default="- topic/section reference/section apiRef/apiImpl "/>
+  </xs:attributeGroup>
+  <!-- ============ Class ancestry ============ -->
+</xs:schema>

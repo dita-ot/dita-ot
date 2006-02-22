@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\..\dtd\reference.dtd">
+<reference id="schemeref" outputclass="element" xml:lang="en-us">
+<title>schemeref</title>
+<shortdesc>Refers to a related scheme.</shortdesc>
+<refbody>
+<section><title>Description</title><p>The related scheme might be a base scheme
+or might complement this scheme in some way. </p></section>
+<section conref="../packagedef.xml#schemeref-reference/schemeref-containedBy-section"><?Pub Caret1?></section>
+<section conref="../packagedef.xml#schemeref-reference/schemeref-contains-section"></section>
+<section conref="../packagedef.xml#schemeref-reference/schemeref-contentModel-section"></section>
+<section conref="../packagedef.xml#schemeref-reference/schemeref-attList-section"></section>
+<section conref="../packagedef.xml#schemeref-reference/schemeref-classValue-section"></section>
+</refbody>
+</reference>
+<?Pub *0000001002?>

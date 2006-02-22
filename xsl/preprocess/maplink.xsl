@@ -2,7 +2,7 @@
 <!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-  <xsl:include href="../common/output-message.xsl"/>
+  <xsl:import href="../common/output-message.xsl"/>
   <xsl:output method="xml" encoding="utf-8" indent="no" />
   <!-- =========== DEFAULT VALUES FOR EXTERNALLY MODIFIABLE PARAMETERS =========== -->
   <!-- output type -->
@@ -22,7 +22,7 @@
 
   
   <!-- Define the error message prefix identifier -->
-  <xsl:variable name="msgprefix">IDXS</xsl:variable>
+  <xsl:variable name="msgprefix">DOTX</xsl:variable>
   <!-- Start by creating the collection element for the map being processed. -->
   <xsl:template match="/*[contains(@class, ' map/map ')]">    
     <mapcollection>
@@ -188,8 +188,11 @@
     <xsl:if 
       test="not(($FINALOUTPUTTYPE='PDF' or $FINALOUTPUTTYPE='IDD') and @print='no')">
       <link class="- topic/link ">
+        <xsl:if test="@class">
+          <xsl:attribute name="mapclass"><xsl:value-of select="@class"/></xsl:attribute>
+        </xsl:if>
         <xsl:copy-of 
-          select="@type|@scope|@importance|@format|@platform|@product|@audience|@otherprops|@rev|@xtrf|@xtrc"/>
+          select="@type|@scope|@importance|@format|@platform|@product|@audience|@otherprops|@rev|@xtrf|@xtrc"/>        
         <xsl:attribute name="href">
           <xsl:choose>
             <xsl:when 

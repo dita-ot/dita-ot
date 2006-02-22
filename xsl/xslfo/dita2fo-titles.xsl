@@ -13,7 +13,17 @@
 
 <!-- h1 -->
 <xsl:template match="*[contains(@class,' topic/topic ')]/*[contains(@class,' topic/title ')]" priority="2">
-  <fo:block xsl:use-attribute-sets="topictitle1" id="{generate-id()}" padding-top="1.4pc">
+  <xsl:variable name="id-value">
+    <xsl:choose>
+      <xsl:when test="@id">
+        <xsl:value-of select="@id"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="generate-id()"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <fo:block xsl:use-attribute-sets="topictitle1" id="{$id-value}" padding-top="1.4pc">
     <fo:block border-top-color="black" border-top-width="3pt" line-height="100%"
               border-left-width="0pt" border-right-width="0pt">
       <xsl:call-template name="get-title"/>
@@ -24,7 +34,17 @@
 
 <!-- h2 -->
 <xsl:template match="*[contains(@class,' topic/topic ')]/*[contains(@class,' topic/topic ')]/*[contains(@class,' topic/title ')]" priority="3">
-  <fo:block xsl:use-attribute-sets="topictitle2" id="{generate-id()}" padding-top="1pc">
+  <xsl:variable name="id-value">
+    <xsl:choose>
+      <xsl:when test="@id">
+        <xsl:value-of select="@id"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="generate-id()"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <fo:block xsl:use-attribute-sets="topictitle2" id="{$id-value}" padding-top="1pc">
     <fo:block border-top-color="black" border-top-width="1pt"
               border-left-width="0pt" border-right-width="0pt">
       <xsl:call-template name="get-title"/>
@@ -34,14 +54,34 @@
 
 <!-- h3 -->
 <xsl:template match="*[contains(@class,' topic/topic ')]/*[contains(@class,' topic/topic ')]/*[contains(@class,' topic/topic ')]/*[contains(@class,' topic/title ')]" priority="4">
-  <fo:block xsl:use-attribute-sets="topictitle3" id="{generate-id()}">
+  <xsl:variable name="id-value">
+    <xsl:choose>
+      <xsl:when test="@id">
+        <xsl:value-of select="@id"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="generate-id()"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <fo:block xsl:use-attribute-sets="topictitle3" id="{$id-value}">
     <xsl:call-template name="get-title"/>
   </fo:block>
 </xsl:template>
 
 <!-- h4 -->
 <xsl:template match="*[contains(@class,' topic/topic ')]/*[contains(@class,' topic/topic ')]/*[contains(@class,' topic/topic ')]/*[contains(@class,' topic/topic ')]/*[contains(@class,' topic/title ')]" priority="5">
-  <fo:block xsl:use-attribute-sets="topictitle4" id="{generate-id()}">
+  <xsl:variable name="id-value">
+    <xsl:choose>
+      <xsl:when test="@id">
+        <xsl:value-of select="@id"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="generate-id()"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <fo:block xsl:use-attribute-sets="topictitle4" id="{$id-value}">
     <xsl:if test="$trace='yes'"><fo:inline color="purple"></fo:inline></xsl:if>
     <xsl:call-template name="get-title"/>
   </fo:block>
@@ -49,14 +89,34 @@
 
 <!-- h5 -->
 <xsl:template match="*[contains(@class,' topic/topic ')]/*[contains(@class,' topic/topic ')]/*[contains(@class,' topic/topic ')]/*[contains(@class,' topic/topic ')]/*[contains(@class,' topic/topic ')]/*[contains(@class,' topic/title ')]" priority="6">
-  <fo:block xsl:use-attribute-sets="topictitle5" id="{generate-id()}">
+  <xsl:variable name="id-value">
+    <xsl:choose>
+      <xsl:when test="@id">
+        <xsl:value-of select="@id"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="generate-id()"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <fo:block xsl:use-attribute-sets="topictitle5" id="{$id-value}">
     <xsl:call-template name="get-title"/><xsl:text>: </xsl:text>
   </fo:block>
 </xsl:template>
 
 <!-- h6 -->
 <xsl:template match="*[contains(@class,' topic/topic ')]/*[contains(@class,' topic/topic ')]/*[contains(@class,' topic/topic ')]/*[contains(@class,' topic/topic ')]/*[contains(@class,' topic/topic ')]/*[contains(@class,' topic/topic ')]/*[contains(@class,' topic/title ')]" priority="7">
-  <fo:block xsl:use-attribute-sets="topictitle6" id="{generate-id()}">
+  <xsl:variable name="id-value">
+    <xsl:choose>
+      <xsl:when test="@id">
+        <xsl:value-of select="@id"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="generate-id()"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <fo:block xsl:use-attribute-sets="topictitle6" id="{$id-value}">
     <xsl:call-template name="get-title"/><xsl:text>: </xsl:text>
   </fo:block>
 </xsl:template>
@@ -86,11 +146,14 @@
 <!-- table/title handling -->
 
 <xsl:template match="*[contains(@class,' topic/table ')]/*[contains(@class,' topic/title ')]">
+  <xsl:variable name="tbl-count">                  <!-- Number of table/title's before this one -->
+    <xsl:number count="*/*[contains(@class,' topic/table ')]/*[contains(@class,' topic/title ')]" level="any"/>
+  </xsl:variable>
   <xsl:variable name="tbl-pfx-txt">
     <xsl:call-template name="getString">
       <xsl:with-param name="stringName" select="'Table'"/>
     </xsl:call-template>
-    <xsl:number level="single" count="title" from="/" />
+    <xsl:value-of select="$tbl-count"/>
   </xsl:variable>
   <fo:block font-weight="bold">
     <fo:inline color="red"><xsl:value-of select="$tbl-pfx-txt"/>. </fo:inline>

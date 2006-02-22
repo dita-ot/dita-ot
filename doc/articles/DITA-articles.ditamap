@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
 
-<!DOCTYPE map PUBLIC "-//IBM//DTD DITA Map//EN" "../../dtd/map.dtd">
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
 <map title="Documentation including DITA papers">
     <topicref href="DITA-rm.xml" collection-type="sequence" id="DITA-rm">
       <topicref href="DITA-dsf.xml"/>

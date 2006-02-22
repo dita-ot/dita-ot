@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?><!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference
+  PUBLIC "-//IBM//DTD DITA Reference//EN" "..\dtd\reference.dtd">
+<reference id="apiDefNote" outputclass="element" xml:lang="en-us">
+<title>apiDefNote</title>
+<shortdesc>The &lt;apiDefNote&gt; element provides an optional note element to
+expand the information about a part of the declared interface for the API
+item within the &lt;apiDef&gt; element.</shortdesc>
+<refbody>
+<section><title>Description</title><p>The &lt;apiDefNote&gt; element supports
+any phrase content other than &lt;keyword&gt;, &lt;ph&gt;, and &lt;state&gt; elements.</p><p>For
+example, in the Java API reference, you can provide an &lt;apiDefNote&gt; element
+about an exception thrown by a method.</p></section>
+<example> <title>Example</title><p>The following example shows a simple &lt;apiDefNote&gt;
+element  for a Visual Basic property: </p><codeblock>&lt;apiOperation&gt;
+       &lt;apiOperationDetail&gt;
+           &lt;apiSyntax&gt;
+              Public ReadOnly Property Model As IRXEModel
+           &lt;/apiSyntax&gt;
+           &lt;apiReturnDef&gt;
+              &lt;apiReturnClassifier&gt;IRXEModel&lt;/apiReturnClassifier&gt;
+              &lt;apiDefNote&gt;
+                   Returns the IRXEModel object to which the element belongs.
+              &lt;/apiDefNote&gt;
+           &lt;/apiReturnDef&gt;
+       &lt;/apiOperationDetail&gt;
+   &lt;/apiOperation&gt;
+</codeblock><ul>
+<li>The following example shows a simple &lt;apiDefNote&gt; item for a VisualBasic
+method  details. </li>
+</ul><codeblock>&lt;apiReturnDef&gt;
+          &lt;apiType name="type" value="function" /&gt;
+          &lt;apiQualifier name="access" value="public" /&gt;
+          &lt;apiReturnClassifier keyref=”String” /&gt;
+          &lt;apiDefNote&gt;
+              Returns a string that specifies the stereotypes that can be associated
+              with the extensible element.
+           &lt;/apiDefNote&gt;
+       &lt;/apiReturnDef&gt;
+</codeblock><ul>
+<li>The following example shows a simple &lt;apiDefNote&gt; item for a Java method
+ details. </li>
+</ul> <codeblock>&lt;javaExceptionDef&gt;
+     &lt;javaExceptionClass  href=”///io/NullPointerException.html” format=”html” scope=”external”&gt;
+         NullPointerException&lt;/javaExceptionClass&gt;
+      &lt;apiDefNote&gt;Thrown if an error occured retrieving the manifest.&lt;/apiDefNote&gt;
+      &lt;/javaExceptionDef&gt;
+</codeblock></example>
+<section/>
+<section conref="../packagedef.dita#apiDefNote-reference/apiDefNote-containedBy-section"/><section conref="../packagedef.dita#apiDefNote-reference/apiDefNote-contains-section"/><section conref="../packagedef.dita#apiDefNote-reference/apiDefNote-contentModel-section"/><section conref="../packagedef.dita#apiDefNote-reference/apiDefNote-attList-section"/><section conref="../packagedef.dita#apiDefNote-reference/apiDefNote-classValue-section"/></refbody>
+</reference>

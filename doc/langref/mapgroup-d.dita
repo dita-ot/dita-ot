@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE reference  PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "../../dtd/reference.dtd">
+<!--             (C) Copyright OASIS Open 2005.                    -->
+<!--             (C) Copyright IBM Corporation 2001, 2004.         -->
+<!--             All Rights Reserved.                              -->
+<reference id="uitlities" xml:lang="en-us">
+  <title>Map group elements</title>
+  <refbody>
+    <section>
+<p>The mapgroup domain elements represent particular containment strategies within a set of topicrefs in a map.
+<indexterm>Domains elements<indexterm>mapgroup elements</indexterm></indexterm><indexterm>mapgroup elements</indexterm></p>
+</section>
+  </refbody>
+</reference>

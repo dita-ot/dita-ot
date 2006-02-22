@@ -1,0 +1,46 @@
+/***
+ * (C) Copyright IBM Corporation 2005 - 2006. All Rights Reserved.
+ ***/
+H4.sectiontitle {
+  font-size: smaller;
+}
+SPAN.platformSyntax {
+  color:           black;
+}
+PRE.apiSyntaxText {
+  padding-right:    1.2em;
+}
+SPAN.itemname {
+  font-style: italic;
+}
+TABLE.itemdefs {
+  border-collapse:  collapse;
+  padding:  .1em;
+  border:   0;
+}
+TR.itemdefs {
+}
+TD.itemdefname {
+  padding-right:   1.2em;
+  padding-left:  .33em;
+  font-style:     italic;
+}
+TD.itemdefnote {
+}
+TR.platformItem TD {
+  color: black;
+}
+SPAN.platformItem {
+  color: black;
+}
+P.platformExample {
+  padding-right:    1.2em;
+  padding-bottom:  0em;
+  margin-bottom:   0em;
+  font-weight:     bold;
+  font-size:       smaller;
+  color:           black;
+}
+DIV.example PRE {
+  padding-left:    1.2em;
+}

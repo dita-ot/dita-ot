@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2004, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "../../dtd/reference.dtd">
+<!--             (C) Copyright OASIS Open 2005.                    -->
+<!--             (C) Copyright IBM Corporation 2001, 2004.         -->
+<!--             All Rights Reserved.                              -->
+<reference id="author" xml:lang="en-us">
+<title><keyword>author</keyword></title>
+<shortdesc>The &lt;<keyword>author</keyword>> metadata element contains the
+name of the topic's author. </shortdesc>
+<prolog><metadata>
+<keywords><indexterm>author</indexterm><indexterm>topic author</indexterm>
+<indexterm>Prolog elements<indexterm>author</indexterm>  </indexterm><indexterm>author</indexterm>
+</keywords>
+</metadata></prolog>
+<refbody>
+<section conref="DitabaseNav.dita#commonCMdefs/author-contains"></section>
+<section conref="DitabaseNav.dita#commonCMdefs/author-containedby"></section>
+<section conref="DitabaseNav.dita#commonCMdefs/author-classvalue"></section>
+<section><title>Attributes</title><simpletable id="author_attr" relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="commonLRdefs.dita#commonLRdefs/href-defining">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/keyref">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/type-author">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/classonly">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow><?Pub Caret?>
+</simpletable></section>
+<example>   <title>Example</title>       <codeblock>&lt;prolog>
+&lt;author type="creator">Jane Roe&lt;/author>
+&lt;author type="contributor">John Doe&lt;/author>
+&lt;/prolog></codeblock>       </example>
+</refbody>
+</reference>
+<?Pub *0000002432?>

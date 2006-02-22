@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- 
+Copyright © 2004-2005 by Idiom Technologies, Inc. All rights reserved. 
+IDIOM is a registered trademark of Idiom Technologies, Inc. and WORLDSERVER
+and WORLDSTART are trademarks of Idiom Technologies, Inc. All other 
+trademarks are the property of their respective owners. 
+
+IDIOM TECHNOLOGIES, INC. IS DELIVERING THE SOFTWARE "AS IS," WITH 
+ABSOLUTELY NO WARRANTIES WHATSOEVER, WHETHER EXPRESS OR IMPLIED,  AND IDIOM
+TECHNOLOGIES, INC. DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING
+BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
+PURPOSE AND WARRANTY OF NON-INFRINGEMENT. IDIOM TECHNOLOGIES, INC. SHALL NOT
+BE LIABLE FOR INDIRECT, INCIDENTAL, SPECIAL, COVER, PUNITIVE, EXEMPLARY,
+RELIANCE, OR CONSEQUENTIAL DAMAGES (INCLUDING BUT NOT LIMITED TO LOSS OF 
+ANTICIPATED PROFIT), ARISING FROM ANY CAUSE UNDER OR RELATED TO  OR ARISING 
+OUT OF THE USE OF OR INABILITY TO USE THE SOFTWARE, EVEN IF IDIOM
+TECHNOLOGIES, INC. HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES. 
+
+Idiom Technologies, Inc. and its licensors shall not be liable for any
+damages suffered by any person as a result of using and/or modifying the
+Software or its derivatives. In no event shall Idiom Technologies, Inc.'s
+liability for any damages hereunder exceed the amounts received by Idiom
+Technologies, Inc. as a result of this transaction.
+
+These terms and conditions supersede the terms and conditions in any
+licensing agreement to the extent that such terms and conditions conflict
+with those set forth herein.
+-->
+
+<configuration>
+
+    <!--<alphabet char-set="Latin">
+        <character-set>
+            <character-range>
+                <start include="yes">&#x20;</start>
+                <end include="yes">&#x7F;</end>
+            </character-range>
+        </character-set>
+    </alphabet>-->
+
+    <!-- TODO Not sure. Correct range -->
+    <alphabet char-set="Japanese">
+        <character-set>
+            <character-range>
+                <start include="yes">&#x3000;</start>
+                <end include="yes">&#x30FF;</end>
+            </character-range>
+            <character-range>
+                <start include="yes">&#x3100;</start>
+                <end include="yes">&#x34FF;</end>
+            </character-range>
+            <character-range>
+                <start include="yes">&#x4E00;</start>
+                <end include="yes">&#x9FFF;</end>
+            </character-range>
+			<character>&#xFF62;</character>
+			<character>&#xFF63;</character>
+        </character-set>
+    </alphabet>
+
+    <alphabet char-set="SymbolsSuperscript">
+        <character-set>
+            <!-- Copyright -->
+            <character>&#169;</character>
+            <!-- Registered Trademark -->
+            <character>&#174;</character>
+            <!-- Trademark -->
+            <character>&#8482;</character>
+        </character-set>
+    </alphabet>
+    
+    <alphabet char-set="Symbols">
+        <character-set>
+            
+            <!-- I don't like this value, let's arrive at an official char -->
+            <character>&#x27A4;</character>
+
+        </character-set>
+    </alphabet>
+</configuration>

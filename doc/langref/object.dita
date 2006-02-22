@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2004, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "../../dtd/reference.dtd">
+<!--             (C) Copyright OASIS Open 2005.                    -->
+<!--             (C) Copyright IBM Corporation 2001, 2004.         -->
+<!--             All Rights Reserved.                              -->
+<reference id="object" xml:lang="en-us">
+<title><keyword>object</keyword></title>
+<shortdesc>DITA's &lt;<keyword>object</keyword>> element corresponds to the
+HTML &lt;<keyword>object</keyword>> element. The &lt;<keyword>object</keyword>>
+element allows authors to include animated images, applets, plug-ins, ActiveX
+controls, video clips, and other multimedia objects in a topic for rendering
+after transformation to HTML.</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>object</indexterm><indexterm>Body elements<indexterm>object</indexterm>  </indexterm>
+<indexterm>object</indexterm></keywords>
+</metadata></prolog>
+<refbody>
+<section conref="DitabaseNav.dita#commonCMdefs/object-contains"></section>
+<section conref="DitabaseNav.dita#commonCMdefs/object-containedby"></section>
+<section conref="DitabaseNav.dita#commonCMdefs/object-classvalue"></section>
+<section><title>Attributes</title><simpletable id="object_attr" relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="commonLRdefs.dita#commonLRdefs/declare">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/classid">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/codebase">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/data">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/type-object">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/codetype">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/archive">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/standby">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/height">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/width">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/usemap">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/name">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/tabindex">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/longdescref">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/univ-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/classandout">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+</simpletable></section>
+<example><title>Example<?Pub Caret?></title>Output processors may need to
+modify data to enable compatible function across various browsers, so these
+examples are only representative:<pre>&lt;p>Cutting the keys from the system unit:&lt;/p>
+&lt;object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"
+ codebase="http://download.macromedia.com/pub/shockwave/cabs/
+flash/swflash.cab#version=6,0,0,0"
+ data="cutkey370.swf"
+ type="application/x-shockwave-flash"
+ height="280"
+ width="370"
+ id="cutkey370">
+ &lt;desc>A description of the task&lt;/desc>
+ &lt;param name="movie" value="cutkey370.swf"/>
+ &lt;param name="quality" value="high"/>
+ &lt;param name="bgcolor" value="#FFFFFF"/>
+&lt;/object>
+</pre>          <pre>&lt;p>What's EIM?&lt;/p>
+&lt;object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"
+ codebase="http://download.macromedia.com/pub/shockwave/cabs/
+flash/swflash.cab#version=6,0,0,0"
+ data="eim.swf"
+ height="400"
+ width="500"
+ id="eim">
+ &lt;desc>Some great, glorious info&lt;/desc>
+ &lt;param name="movie" value="eim.swf"/>
+ &lt;param name="quality" value="high"/>
+ &lt;param name="bgcolor" value="#FFFFFF"/>
+ &lt;param name="pluginspace"
+ value="http://www.macromedia.com/go/getflashplayer"/>
+&lt;/object></pre>       </example>
+</refbody>
+</reference>
+<?Pub *0000005641?>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
-<!DOCTYPE concept PUBLIC "-//IBM//DTD DITA Concept//EN" "../dtd/concept.dtd" [
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd" [
   <!-- Begin Document Specific Declarations -->
   <!ENTITY ut-d-att "(topic ut-d)">
   <!-- End Document Specific Declarations -->
@@ -10,12 +10,12 @@
   <titlealts>
     <searchtitle>DITA Open Toolkit Installation (Linux)</searchtitle>
   </titlealts>
-  <shortdesc>This guide provides you with the steps to successfully install the 
-    DITA Open Toolkit provided on the SourceForge web site. </shortdesc>
+  <shortdesc>This section contains the instructions for installing DITA Open 
+    Toolkit from the SourceForge Web site for Linux.</shortdesc>
   <conbody>
-    <p>Included with this guide is background and reference information about 
-      the DITA Open Toolkit installation process. You can install the items in 
-      any order. If you already have some of the items (Ant, SAXON, etc.) 
+    <p>The background and reference information about the DITA Open Toolkit 
+      installation process is included in this guide. You can install the items 
+      in any order. If you already have some of the items (Ant, SAXON, etc.) 
       installed on your computer, skip to another section and proceed until all 
       required items are installed.</p>
     <p>The guide does not include instructions for using the Toolkit.</p>

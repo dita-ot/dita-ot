@@ -1,0 +1,43 @@
+<!--Arbortext, Inc., 1988-2004, v.4002-->
+<!DOCTYPE IBMIDDOC PUBLIC "+//ISBN 0-933186::IBM//DTD IBMIDDoc//EN" [
+<!ENTITY ditaref SYSTEM "ditaref-type.ditamap" NDATA ditamap>
+<!ENTITY front SYSTEM "oasis.jpg" NDATA graphics>
+<!ENTITY arrow "&mdash;&rahead;">
+<!ENTITY ibmboil PUBLIC "+//ISBN 0-933186::IBM//ENTITIES IBM Boilerplate//EN" "ibmboil.ide">
+<!ENTITY doc "IBMIDDoc">
+<!ENTITY ed "Adept">
+]>
+<?Pub UDT _bookmark _target>
+<?Pub Inc>
+<ibmiddoc company="none" copyr="oasis ibm" layout="onecol">
+<prolog><ibmbibentry><doctitle><titleblk>
+<title>OASIS Darwin Information Typing Architecture (DITA) Language Specification v1.0
+</title>
+<subtitle>OASIS Standard 09 May 2005</subtitle>
+</titleblk></doctitle>
+<coverdef cover="cover">
+<frontcover>
+<mmobj><objref obj="front"><textalt>OASIS</textalt></mmobj>
+</frontcover>
+</coverdef>
+</ibmbibentry>
+<copyrdefs>
+<copyr id="oasis">&copyr; OASIS Open 2005. All rights reserved.</copyr>
+</copyrdefs><?Pub Caret1>
+</prolog>
+<frontm>
+<notices></notices>
+<ednotices><title>First Edition (May 2005)</title>
+<p>This edition applies to version 1.0 of the Darwin Information Typing Architecture
+(DITA) and to all subsequent releases and modifications until otherwise indicated
+in new editions.</p>
+</ednotices>
+<toc>
+<gendtitle></toc>
+</frontm>
+<body>
+<!--This pulls in the whole map, as headings and subheadings.-->
+<xmlobj obj="ditaref"></body>
+<backm></backm>
+</ibmiddoc>
+<?Pub *0000001432>

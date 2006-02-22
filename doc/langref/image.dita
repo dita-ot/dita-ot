@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2004, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "../../dtd/reference.dtd">
+<!--             (C) Copyright OASIS Open 2005.                    -->
+<!--             (C) Copyright IBM Corporation 2001, 2004.         -->
+<!--             All Rights Reserved.                              -->
+<reference id="image" xml:lang="en-us">
+<title><keyword>image</keyword></title>
+<shortdesc>Include artwork or images in a DITA topic by using the &lt;<keyword>image</keyword>>
+element. The &lt;<keyword>image</keyword>> element has optional attributes
+that indicate whether the placement of the included graphic or artwork should
+be inline (like a button or icon), or on a separate line for a larger image.
+An <keyword>href</keyword> attribute is required on the image element, as
+this attribute creates a pointer to the image, and allows the output formatting
+processor to bring the image into the text flow. To make the intent of the
+image more accessible for users using screen readers or text-only readers,
+always include a description of the image's content in the <keyword>alt </keyword> element.</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>image</indexterm><indexterm>Body elements<indexterm>image</indexterm>  </indexterm>
+<indexterm>image</indexterm></keywords>
+</metadata></prolog>
+<refbody>
+<section conref="DitabaseNav.dita#commonCMdefs/image-contains"></section>
+<section conref="DitabaseNav.dita#commonCMdefs/image-containedby"></section>
+<section conref="DitabaseNav.dita#commonCMdefs/image-classvalue"></section>
+<section><title>Attributes</title><simpletable id="image_attr" relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="commonLRdefs.dita#commonLRdefs/href-image">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/keyref-image">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/alt">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/longdescref">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/height">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/width">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/align-image">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/placement">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/univ-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/classandout">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+</simpletable></section>
+<example>      <title>Example</title>    <codeblock>&lt;image href="bike.gif" " placement="break">&lt;alt>Two-wheeled bicycle&lt;/alt>&lt;/image><?Pub Caret?></codeblock
+>       </example>
+</refbody>
+</reference>
+<?Pub *0000003970?>

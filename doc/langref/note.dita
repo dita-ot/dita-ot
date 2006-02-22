@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2004, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "../../dtd/reference.dtd">
+<!--             (C) Copyright OASIS Open 2005.                    -->
+<!--             (C) Copyright IBM Corporation 2001, 2004.         -->
+<!--             All Rights Reserved.                              -->
+<reference id="note" xml:lang="en-us">
+<title><keyword>note</keyword></title>
+<shortdesc>A &lt;<keyword>note</keyword>> element contains information, differentiated
+from the main text, which expands on or calls attention to a particular point.
+    </shortdesc>
+<prolog><metadata>
+<keywords><indexterm>note</indexterm><indexterm>Body elements<indexterm>note</indexterm>  </indexterm>
+<indexterm>note</indexterm></keywords>
+</metadata></prolog>
+<refbody>
+<section><note type="tip">Variant types of note (tip, caution, danger, restriction,
+etc.) can be indicated through values selected on the type attribute. This
+note is typed as a <q>tip.</q></note></section>
+<section conref="DitabaseNav.dita#commonCMdefs/note-contains"></section>
+<section conref="DitabaseNav.dita#commonCMdefs/note-containedby"></section>
+<section conref="DitabaseNav.dita#commonCMdefs/note-classvalue"></section>
+<section><title>Attributes</title><simpletable id="note_attr" relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="commonLRdefs.dita#commonLRdefs/type-note">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/spectitle">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/othertype-note">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/univ-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/classandout">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+</simpletable></section>
+<example><title>Example<?Pub Caret?></title>This example:<codeblock>&lt;note type="tip">Thinking of a seashore, green meadow, or cool
+mountain overlook can help you to relax and be more
+patient.&lt;/note></codeblock>produces this result:<note type="tip">Thinking
+of a seashore, green meadow, or cool mountain overlook can help you to relax
+and be more patient.</note>       </example>
+</refbody>
+</reference>
+<?Pub *0000002988?>

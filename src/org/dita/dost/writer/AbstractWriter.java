@@ -3,6 +3,7 @@
  */
 package org.dita.dost.writer;
 
+import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.module.Content;
 
 /**
@@ -27,6 +28,6 @@ public abstract class AbstractWriter {
      * @param filename
      * 
      */
-    public abstract void write(String filename);
+    public abstract void write(String filename) throws DITAOTException;
 
 }

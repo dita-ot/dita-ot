@@ -3,6 +3,11 @@
  */
 package org.dita.dost.module;
 
+import java.util.Properties;
+
+import org.dita.dost.exception.DITAOTException;
+import org.dita.dost.log.MessageUtils;
+
 /**
  * The factory to create instance for each module class.
  * 
@@ -10,59 +15,54 @@ package org.dita.dost.module;
  * 
  */
 public class ModuleFactory {
-    private static ModuleFactory moduleFactory = null;
-    private final String packagePrefix = "org.dita.dost.module.";
+	private static ModuleFactory moduleFactory = null;
 
+	private final String packagePrefix = "org.dita.dost.module.";
 
 	/**
-	* Automatically generated constructor: ModuleFactory
-	*/
-    public ModuleFactory() {
+	 * Automatically generated constructor: ModuleFactory
+	 */
+	public ModuleFactory() {
 
-    }
+	}
 
-    /**
-     * Method to get the only instance of ModuleFactory. ModuleFactory is a singleton
-     * class.
-     * 
-     * @return ModuleFactory
-     */
-    public static ModuleFactory instance() {
-        if (moduleFactory == null) {
-            moduleFactory = new ModuleFactory();
-        }
-        return moduleFactory;
-    }
+	/**
+	 * Method to get the only instance of ModuleFactory. ModuleFactory is a
+	 * singleton class.
+	 * 
+	 * @return ModuleFactory
+	 */
+	public static ModuleFactory instance() {
+		if (moduleFactory == null) {
+			moduleFactory = new ModuleFactory();
+		}
+		return moduleFactory;
+	}
 
-    /**
-     * Create the Module class instance according to moduleName.
-     * 
-     * @param moduleName
-     * @return AbstractPipelineModule
-     */
-    public AbstractPipelineModule createModule(String moduleName) {
-        AbstractPipelineModule module = null;
+	/**
+	 * Create the Module class instance according to moduleName.
+	 * 
+	 * @param moduleName
+	 * @return AbstractPipelineModule
+	 * @throws ClassNotFoundException
+	 * @throws IllegalAccessException
+	 * @throws InstantiationException
+	 */
+	public AbstractPipelineModule createModule(String moduleName)
+			throws DITAOTException {
+		String module = packagePrefix + moduleName + "Module";
+		
+		try {
+			return (AbstractPipelineModule) Class.forName(
+					module).newInstance();
+		} catch (Exception e) {
+			String msg = null;
+			Properties params = new Properties();
 
-        String moduleClassName = moduleName + "Module";
+			params.put("%1", module);
+			msg = MessageUtils.getMessage("DOTJ005F", params).toString();
 
-        try {
-            module = (AbstractPipelineModule) Class.forName(
-                    packagePrefix + moduleClassName).newInstance();
-
-        } catch (ClassNotFoundException e) {
-            System.err.println("PCM not found");
-            e.printStackTrace();
-            module = null;
-        } catch (InstantiationException e) {
-            System.err.println("InstantiationException");
-            e.printStackTrace();
-            module = null;
-        } catch (IllegalAccessException e) {
-            System.err.println("IllegalAccessException");
-            e.printStackTrace();
-            module = null;
-        }
-
-        return module;
-    }
+			throw new DITAOTException(msg, e);
+		}
+	}
 }

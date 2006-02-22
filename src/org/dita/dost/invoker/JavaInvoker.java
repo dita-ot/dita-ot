@@ -5,6 +5,7 @@ package org.dita.dost.invoker;
 
 import java.io.File;
 
+import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.pipeline.AbstractFacade;
 import org.dita.dost.pipeline.PipelineFacade;
 import org.dita.dost.pipeline.PipelineHashIO;
@@ -40,14 +41,19 @@ public class JavaInvoker {
         pipelineInput.setAttribute("inputmap","test.ditamap");
         pipelineInput.setAttribute("basedir", "e:\\eclipse\\workspace\\DITA-OT1.1\\test");
 
-        facade.execute("GenMapAndTopicList", pipelineInput);
-        //pipelineInput.setAttribute("ditaval", "testcase" + File.separator
-        //        + "DOST\\new.ditaval");
-        pipelineInput.setAttribute("ditalist", "temp" + File.separator
-                + "dita.list");
-        pipelineInput.setAttribute("maplinks", "temp\\maplinks.unordered");
-        facade.execute("DebugAndFilter", pipelineInput);
-        facade.execute("MoveIndex", pipelineInput);
-        facade.execute("MoveLinks", pipelineInput);
+        try {
+			facade.execute("GenMapAndTopicList", pipelineInput);
+			//pipelineInput.setAttribute("ditaval", "testcase" + File.separator
+			//        + "DOST\\new.ditaval");
+			pipelineInput.setAttribute("ditalist", "temp" + File.separator
+			        + "dita.list");
+			pipelineInput.setAttribute("maplinks", "temp\\maplinks.unordered");
+			facade.execute("DebugAndFilter", pipelineInput);
+			facade.execute("MoveIndex", pipelineInput);
+			facade.execute("MoveLinks", pipelineInput);
+		} catch (DITAOTException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
 }

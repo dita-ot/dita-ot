@@ -38,6 +38,7 @@ public abstract class Constants {
     public static final String FILE_EXTENSION_DITA = ".dita";
     public static final String FILE_EXTENSION_XML = ".xml";
     public static final String FILE_EXTENSION_HTML = ".html";
+    public static final String FILE_EXTENSION_HTM = ".htm";
     public static final String FILE_EXTENSION_JPG = ".jpg";
     public static final String FILE_EXTENSION_EPS = ".eps";
     public static final String FILE_EXTENSION_DITAMAP = ".ditamap";
@@ -64,6 +65,8 @@ public abstract class Constants {
     public static final String ELEMENT_NAME_TGROUP = "tgroup";
     public static final String ELEMENT_NAME_ROW = "row";
     public static final String ELEMENT_NAME_TITLE = "title";
+    public static final String ELEMENT_NAME_ENTRY = "entry";
+    public static final String ELEMENT_NAME_COLSPEC = "colspec";
     
     /**
      * Constants for attribute names in dita files.
@@ -101,6 +104,7 @@ public abstract class Constants {
     public static final String HREF_TARGET_LIST = "hreftargetslist";
     public static final String HTML_LIST = "htmllist";
     public static final String IMAGE_LIST = "imagelist";
+    public static final String FLAG_IMAGE_LIST = "flagimagelist";
     public static final String CONREF_LIST = "conreflist";
     public static final String HREF_DITA_TOPIC_LIST = "hrefditatopiclist";
     public static final String FULL_DITA_TOPIC_LIST = "fullditatopiclist";

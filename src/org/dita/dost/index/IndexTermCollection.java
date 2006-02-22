@@ -3,17 +3,16 @@
  */
 package org.dita.dost.index;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
+import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.module.Content;
 import org.dita.dost.module.ContentImpl;
 import org.dita.dost.util.Constants;
+import org.dita.dost.writer.AbstractWriter;
 import org.dita.dost.writer.CHMIndexWriter;
 import org.dita.dost.writer.JavaHelpIndexWriter;
 
@@ -103,7 +102,7 @@ public class IndexTermCollection {
 			IndexTerm.setTermLocale(new Locale(Constants.LANGUAGE_EN,
 					Constants.COUNTRY_US));
 		}
-		
+
 		/*
 		 * Sort all the terms recursively
 		 */
@@ -118,45 +117,24 @@ public class IndexTermCollection {
 	/**
 	 * Output index terms into index file.
 	 * 
-	 * @throws IOException
-	 * @throws IOException
+	 * @throws DITAOTException
 	 */
-	public static void outputTerms() throws IOException {
-		OutputStream outputStream = null;
-
-		try {
-
-			if (Constants.INDEX_TYPE_HTMLHELP.equalsIgnoreCase(indexType)) {
-				CHMIndexWriter indexWriter = new CHMIndexWriter();
-				Content content = new ContentImpl();
-				outputStream = new FileOutputStream(new StringBuffer(
-						IndexTermCollection.outputFileRoot).append(".hhk")
-						.toString());
-
-				content.setCollection(IndexTermCollection.getTermList());
-				indexWriter.setContent(content);
-				indexWriter.write(outputStream);
-			} else if (Constants.INDEX_TYPE_JAVAHELP
-					.equalsIgnoreCase(indexType)) {
-				JavaHelpIndexWriter indexWriter = new JavaHelpIndexWriter();
-				Content content = new ContentImpl();
-				outputStream = new FileOutputStream(new StringBuffer(
-						IndexTermCollection.outputFileRoot)
-						.append("_index.xml").toString());
-
-				content.setCollection(IndexTermCollection.getTermList());
-				indexWriter.setContent(content);
-				indexWriter.write(outputStream);
-			}
-
-			System.out.println(new StringBuffer().append(
-					IndexTermCollection.getTermList().size()).append(
-					" index terms were extracted.").toString());
-		} finally {
-			if (outputStream != null) {
-				outputStream.close();
-			}
+	public static void outputTerms() throws DITAOTException {
+		StringBuffer buff = new StringBuffer(IndexTermCollection.outputFileRoot);
+		AbstractWriter indexWriter = null;
+		Content content = new ContentImpl();
+		
+		if (Constants.INDEX_TYPE_HTMLHELP.equalsIgnoreCase(indexType)) {
+			indexWriter = new CHMIndexWriter();			
+			buff.append(".hhk");
+		} else if (Constants.INDEX_TYPE_JAVAHELP.equalsIgnoreCase(indexType)) {
+			indexWriter = new JavaHelpIndexWriter();			
+			buff.append("_index.xml");			
 		}
+		
+		content.setCollection(IndexTermCollection.getTermList());
+		indexWriter.setContent(content);
+		indexWriter.write(buff.toString());
 	}
 
 	/**

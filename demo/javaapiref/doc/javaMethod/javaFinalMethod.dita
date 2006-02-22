@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\dtd\reference.dtd">
+<reference id="javaFinalMethod" outputclass="element" xml:lang="en-us">
+<title>javaFinalMethod</title>
+<shortdesc>The &lt;javaFinalMethod> element within the <i>MethodModifiers<sup>opt</sup></i> declaration
+indicates that the method cannot be overridden.</shortdesc>
+<refbody>
+<section><title>Description</title><p>Possible alternative definitions of
+the method declaration are the javaFinalMethod, javaNativeMethod, and  javaSyncronizedMethod
+elements. The &lt;javaFinalMethod> element must not be used with the &lt;javaAbstractMethod>
+element.   </p><?Pub Caret1?></section>
+<example> <title>Example</title>Click on the following link to open the Java
+API topic type example in  <object classid="clsid:adb880a6-d8ff-11cf-9377-00aa003b7a11"
+codebase="hhctrl.ocx#Version=4,73,8412,0" codetype="VIEWASTEXT" height="100"
+id="hhctrl" type="application/x-oleobject" width="100">
+<param name="Command" value="ShortCut"/>
+<param name="Text" value="Text: DITA "/>
+<param name="Item1" value=",../samples/java/AbstractImportEngineTask.dita,"/>
+</object><codeblock>&lt;javaMethod id="com.ibm.xtools.ras.impord.engine.tasks.AbstractImportEngineTask.notify">
+   &lt;apiName>notify&lt;/apiName>
+   &lt;shortDesc> Wakes up a single thread that is waiting on this object's monitor.&lt;/shortDesc>
+   &lt;javaMethodDetail>
+      &lt;javaMethodDef>
+         &lt;javaFinalMethod/>
+         &lt;javaMethodAccess value="public"/>
+         &lt;javaVoid/>
+      &lt;/javaMethodDef>
+      &lt;apiDesc>Wakes up a single thread that is waiting on this object's monitor.
+          If any threads are waiting on this object, one of them is chosen to be awakened.
+          The choice is arbitrary and occurs at the discretion of the implementation.
+          A thread waits on an object's monitor by calling one of the wait methods.
+      &lt;/apiDesc>
+   &lt;/javaFieldDetail>
+   &lt;related-links>
+       &lt;link href="http://java.sun.com/../Object.html#notifyAll()" format="html">
+          &lt;linktext>notifyAll()&lt;/linktext>
+       &lt;/link>
+       &lt;link href="http://java.sun.com/../Object.html#wait()" format="html">
+          &lt;linktext>wait()&lt;/linktext>
+       &lt;/link>
+   &lt;/related-links>
+&lt;/javaMethod></codeblock></example>
+<section><title>Processing Expectations</title><image href="images/javaFinalMethod.jpg"
+placement="inline"><alt></alt></image></section>
+<section conref="../packagedef.dita#javaFinalMethod-reference/javaFinalMethod-containedBy-section"></section>
+<section conref="../packagedef.dita#javaFinalMethod-reference/javaFinalMethod-contains-section"></section>
+<section conref="../packagedef.dita#javaFinalMethod-reference/javaFinalMethod-contentModel-section"></section>
+<section conref="../packagedef.dita#javaFinalMethod-reference/javaFinalMethod-attList-section"></section>
+<section conref="../packagedef.dita#javaFinalMethod-reference/javaFinalMethod-classValue-section"></section>
+</refbody>
+</reference>
+<?Pub *0000003119?>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE concept PUBLIC "-//IBM//DTD DITA Concept Subject//EN"
+ "../dtd/conceptSubject.dtd">
+<concept id="workbenchconcept" xml:lang="en-us">
+<title>Workbench</title>
+<conbody><p>Use the workbench for storing tools and hardware, and for doing small 
+projects.</p>
+<subjectDetail>
+<scopeNote>That can be found in a garage.</scopeNote>
+</subjectDetail>
+</conbody>
+</concept>

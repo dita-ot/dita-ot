@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2004, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "../../dtd/reference.dtd">
+<!--             (C) Copyright OASIS Open 2005.                    -->
+<!--             (C) Copyright IBM Corporation 2001, 2004.         -->
+<!--             All Rights Reserved.                              -->
+<reference id="taskbody" xml:lang="en-us">
+<title><keyword>taskbody</keyword></title>
+<shortdesc>The &lt;<keyword>taskbody</keyword>> element is the main body-level
+element inside a task topic. A task body has a very specific structure, with
+the following elements in this order: &lt;<keyword>prereq</keyword>>, &lt;<keyword>context</keyword>>, &lt;<keyword>steps</keyword>>, &lt;<keyword
+>result</keyword>, &lt;<keyword>example</keyword>> and &lt;<keyword>postreq</keyword>>.
+Each of the body sections are optional.</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>taskbody</indexterm><indexterm>Task elements<indexterm>taskbody</indexterm>  </indexterm>
+<indexterm>taskbody</indexterm></keywords>
+</metadata></prolog>
+<refbody>
+<section conref="DitabaseNav.dita#commonCMdefs/taskbody-contains"></section>
+<section conref="DitabaseNav.dita#commonCMdefs/taskbody-containedby"></section>
+<section conref="DitabaseNav.dita#commonCMdefs/taskbody-classvalue"></section>
+<section><title>Attributes</title><simpletable id="taskbody_attr" relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="commonLRdefs.dita#commonLRdefs/univ-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/classandout">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+</simpletable></section>
+<example>         <title>Example</title>See <xref href="task.dita"></xref>.<?Pub Caret?>
+     </example>
+</refbody>
+</reference>
+<?Pub *0000002291?>

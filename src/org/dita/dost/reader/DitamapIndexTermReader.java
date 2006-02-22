@@ -10,8 +10,9 @@ import org.dita.dost.index.IndexTerm;
 import org.dita.dost.index.IndexTermCollection;
 import org.dita.dost.index.IndexTermTarget;
 import org.dita.dost.index.TopicrefElement;
+import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.util.Constants;
-import org.dita.dost.util.StringUtils;
+import org.dita.dost.util.FileUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
@@ -28,6 +29,8 @@ public class DitamapIndexTermReader extends AbstractXMLReader {
 	private Stack elementStack = null;
 
 	private String mapPath = null;
+
+	private DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
 
 	/**
 	 * Create a new instance of sax handler for ditamap.
@@ -81,10 +84,10 @@ public class DitamapIndexTermReader extends AbstractXMLReader {
 
 			if (indexTerm.getTermName() == null) {
 				indexTerm.setTermName("***");
-				System.out
-						.println("The indexterm element does not have any content. Setting the term to ***.");
+				javaLogger
+						.logWarn("The indexterm element does not have any content. Setting the term to ***.");
 			}
-			
+
 			Object obj = elementStack.peek();
 
 			if (obj instanceof TopicrefElement) {
@@ -133,7 +136,7 @@ public class DitamapIndexTermReader extends AbstractXMLReader {
 					buffer.append(Constants.SLASH);
 				}
 				buffer.append(href);
-				String targetURI = StringUtils.removeRedundantNames(buffer
+				String targetURI = FileUtils.removeRedundantNames(buffer
 						.toString());
 
 				if (targetName.lastIndexOf(Constants.SLASH) != -1) {

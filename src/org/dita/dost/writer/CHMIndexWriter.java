@@ -3,12 +3,14 @@
  */
 package org.dita.dost.writer;
 
+import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 
+import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.index.IndexTerm;
 import org.dita.dost.index.IndexTermTarget;
 import org.dita.dost.module.Content;
@@ -44,7 +46,7 @@ public class CHMIndexWriter extends AbstractWriter {
      * @param outputStream
      * @throws UnsupportedEncodingException
      */
-    public void write(OutputStream outputStream) throws UnsupportedEncodingException {
+    public void write(OutputStream outputStream) {
         PrintWriter printWriter = null;
         int termNum = termList.size();
 
@@ -76,13 +78,19 @@ public class CHMIndexWriter extends AbstractWriter {
         }
     }
     
-    /** (non-Javadoc)
-     * @see org.dita.dost.writer.AbstractWriter#write(java.lang.String)
-     */
-    public void write(String filename) {
-    }
 
-    /**
+    /** (non-Javadoc)
+	 * @see org.dita.dost.writer.AbstractWriter#write(java.lang.String)
+	 */
+	public void write(String filename) throws DITAOTException {		
+		try {
+			write(new FileOutputStream(filename));
+		} catch (Exception e) {
+			throw new DITAOTException(e);
+		}
+	}
+
+	/**
      * Output the given indexterm into the PrintWriter.  
      * 
      * @param term

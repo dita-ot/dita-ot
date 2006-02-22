@@ -1,19 +1,23 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
-<project name="sample_xhtml" default="all" basedir="..">
+<project name="@PROJECT.NAME@_xhtml" default="all" basedir="..">
+  <path id="dost.class.path">
+    <pathelement location="${basedir}${file.separator}lib${file.separator}dost.jar"/>
+  </path>
   
-  <import file="${basedir}${file.separator}conductor.xml"/>
-
-	<target name="all" depends="sample2xhtml">
-	</target>
-	<!-- revise below here -->
-
-	<target name="sample2xhtml" depends="use-init">
-      <antcall target="dita2xhtml">
-		<param name="args.input"
-            value="@DITA.INPUT@"/>
-		<param name="output.dir"
-            value="@OUTPUT.DIR@"/>
-      </antcall>
-	</target>
+  <taskdef name="integrate" classname="org.dita.dost.platform.IntegratorTask">
+    <classpath refid="dost.class.path"/>
+  </taskdef>
+  <target name="all" depends="integrate, @DELIVERABLE.NAME@2xhtml"></target>
+  <target name="integrate">
+    <integrate ditadir="${basedir}"/>
+  </target>
+  
+  <target name="@DELIVERABLE.NAME@2xhtml">
+    <ant antfile="${basedir}${file.separator}conductor.xml" target="init">
+      <property name="args.input" value="@DITA.INPUT@"/>
+      <property name="output.dir" value="@OUTPUT.DIR@"/>
+      <property name="transtype" value="xhtml"/>
+    </ant>
+  </target>
 </project>

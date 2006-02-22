@@ -3,12 +3,10 @@
  */
 package org.dita.dost.writer;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.Properties;
 
+import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.module.Content;
 
 /**
@@ -37,22 +35,18 @@ public class PropertiesWriter extends AbstractWriter {
 		prop = (Properties) content.getValue();
 	}
 
-	/**
-	 * (non-Javadoc)
-	 * 
+	/** (non-Javadoc)
 	 * @see org.dita.dost.writer.AbstractWriter#write(java.lang.String)
 	 */
-	public void write(String filename) {
+	public void write(String filename) throws DITAOTException {
 		FileOutputStream fileOutputStream = null;
 
 		try {
 			fileOutputStream = new FileOutputStream(filename);
 			prop.store(fileOutputStream, null);
 			fileOutputStream.flush();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch (Exception e) {
+			throw new DITAOTException(e);
 		} finally {
 			if (fileOutputStream != null) {
 				try {
@@ -62,15 +56,4 @@ public class PropertiesWriter extends AbstractWriter {
 			}
 		}
 	}
-
-	public void writeToFile(File file) {
-		try {
-			prop.store(new FileOutputStream(file), null);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
 }

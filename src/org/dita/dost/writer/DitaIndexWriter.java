@@ -8,10 +8,13 @@ import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.ListIterator;
+import java.util.Properties;
 
 import org.dita.dost.module.Content;
 import org.dita.dost.util.Constants;
 import org.dita.dost.util.StringUtils;
+import org.dita.dost.log.DITAOTJavaLogger;
+import org.dita.dost.log.MessageUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
@@ -40,6 +43,7 @@ public class DitaIndexWriter extends AbstractXMLWriter {
     private String lastMatchTopic;
     private String firstMatchTopic;
     private boolean startTopic; //whether to insert links at this topic
+    private DITAOTJavaLogger logger;
 
     /**
      * @see org.dita.dost.writer.AbstractWriter#setContent(org.dita.dost.module.Content)
@@ -65,6 +69,7 @@ public class DitaIndexWriter extends AbstractXMLWriter {
         needResolveEntity = false;
         output = null;
         startTopic = false;
+        logger = new DITAOTJavaLogger();
         
         try {
             if (System.getProperty(Constants.SAX_DRIVER_PROPERTY) == null){
@@ -76,7 +81,7 @@ public class DitaIndexWriter extends AbstractXMLWriter {
             reader.setProperty(Constants.LEXICAL_HANDLER_PROPERTY,this);
             reader.setFeature(Constants.FEATURE_NAMESPACE_PREFIX, true);
         } catch (Exception e) {
-            e.printStackTrace();
+        	logger.logException(e);
         }
 
     }
@@ -117,18 +122,24 @@ public class DitaIndexWriter extends AbstractXMLWriter {
 
             output.close();
             if(!inputFile.delete()){
-            	System.out.println("File not deleted. " + inputFile.getPath());
+            	Properties prop = new Properties();
+            	prop.put("%1", inputFile.getPath());
+            	prop.put("%2", outputFile.getPath());
+            	logger.logError(MessageUtils.getMessage("DOTJ009E", prop).toString());
             }
             if(!outputFile.renameTo(inputFile)){
-            	System.out.println("File not renamed. " + outputFile.getPath());
+            	Properties prop = new Properties();
+            	prop.put("%1", inputFile.getPath());
+            	prop.put("%2", outputFile.getPath());
+            	logger.logError(MessageUtils.getMessage("DOTJ009E", prop).toString());
             }
         } catch (Exception e) {
-            e.printStackTrace(System.out);
+        	logger.logException(e);
         }finally {
             try{
                 fileOutput.close();
             } catch (Exception e) {
-                e.printStackTrace();
+            	logger.logException(e);
             }
         }
     }
@@ -187,7 +198,7 @@ public class DitaIndexWriter extends AbstractXMLWriter {
     		try {
             	output.write(ch, start, length);
         	} catch (Exception e) {
-        		e.printStackTrace(System.out);
+        		logger.logException(e);
         	}
     	}
     }
@@ -201,7 +212,7 @@ public class DitaIndexWriter extends AbstractXMLWriter {
         try {
             output.flush();
         } catch (Exception e) {
-            e.printStackTrace(System.out);
+        	logger.logException(e);
         }
     }
 
@@ -224,7 +235,7 @@ public class DitaIndexWriter extends AbstractXMLWriter {
             output.write(Constants.LESS_THAN + Constants.SLASH + qName
                     + Constants.GREATER_THAN);
         } catch (Exception e) {
-            e.printStackTrace(System.out);
+        	logger.logException(e);
         }
     }
 
@@ -237,7 +248,7 @@ public class DitaIndexWriter extends AbstractXMLWriter {
         try {
             output.write(ch, start, length);
         } catch (Exception e) {
-            e.printStackTrace(System.out);
+        	logger.logException(e);
         }
     }
 
@@ -253,7 +264,7 @@ public class DitaIndexWriter extends AbstractXMLWriter {
             output.write(Constants.LESS_THAN + Constants.QUESTION 
                     + pi + Constants.QUESTION + Constants.GREATER_THAN);
         } catch (Exception e) {
-            e.printStackTrace(System.out);
+        	logger.logException(e);
         }
     }
 
@@ -265,7 +276,7 @@ public class DitaIndexWriter extends AbstractXMLWriter {
         try {
             output.write(name);
         } catch (Exception e) {
-            e.printStackTrace(System.out);
+        	logger.logException(e);
         }
     }
 
@@ -323,7 +334,7 @@ public class DitaIndexWriter extends AbstractXMLWriter {
                 hasPrologTillNow = true;
             }
         } catch (Exception e) {
-            e.printStackTrace(System.out);
+        	logger.logException(e);
         }
     }
 
@@ -335,7 +346,7 @@ public class DitaIndexWriter extends AbstractXMLWriter {
 	    try{
 	        output.write(Constants.CDATA_END);
 	    }catch(Exception e){
-	        e.printStackTrace(System.out);
+	    	logger.logException(e);
 	    }
 	}
 
@@ -357,7 +368,7 @@ public class DitaIndexWriter extends AbstractXMLWriter {
 	    try{
 	        output.write(Constants.CDATA_HEAD);
 	    }catch(Exception e){
-	        e.printStackTrace(System.out);
+	    	logger.logException(e);
 	    }
 	}
 
@@ -372,7 +383,7 @@ public class DitaIndexWriter extends AbstractXMLWriter {
            		output.write(StringUtils.getEntity(name));
            	}
         } catch (Exception e) {
-            e.printStackTrace(System.out);
+        	logger.logException(e);
         }
 	}
 	

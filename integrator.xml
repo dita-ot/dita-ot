@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- (c) Copyright IBM Corp. 2006 All Rights Reserved. -->
+<project name="dita.integrator" default="integrate" basedir=".">
+  <path id="dost.class.path">
+    <pathelement location="${basedir}${file.separator}lib${file.separator}dost.jar"/>
+  </path>
+  
+  <taskdef name="integrate" classname="org.dita.dost.platform.IntegratorTask">
+    <classpath refid="dost.class.path"/>
+  </taskdef>
+  
+  <target name="integrate">
+    <integrate ditadir="${basedir}"/>
+  </target>
+</project>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\dtd\reference.dtd">
+<reference id="javaFieldClass" outputclass="element" xml:lang="en-us">
+<title>javaFieldClass</title>
+<shortdesc>The &lt;javaFieldClass> element specifies within the <i>Data Type</i> declaration
+that the final value of the field must be an object of a class. </shortdesc>
+<refbody>
+<section><title>Description</title><p>All variables in the Java language must
+have a data type. The Java language has two two major categories of data types: <i>primitive</i> and <i>reference</i>.
+If a final variable holds a reference to a class, then the state of the object
+can be changed by operations on the object, but the variable will always refer
+to the same object. </p><p> The <i>keyref</i> attribute must provide a unique
+key such as a fully qualified class name for the named API item. </p></section><?Pub Caret1?>
+<example> <title>Example</title>Click on the following link to open the Java
+API topic type example in  <object classid="clsid:adb880a6-d8ff-11cf-9377-00aa003b7a11"
+codebase="hhctrl.ocx#Version=4,73,8412,0" codetype="VIEWASTEXT" height="100"
+id="hhctrl" type="application/x-oleobject" width="100">
+<param name="Command" value="ShortCut"/>
+<param name="Text" value="Text: DITA "/>
+<param name="Item1" value=",../samples/java/UMLDiagramResourceUtil.dita,"/>
+</object><codeblock>&lt;javaField id="com.ibm.xtools.ras.impord.engine.tasks.UMLDiagramResourceUtil.TYPE_EXTRACT">
+   &lt;apiName>TYPE_EXTRACT&lt;/apiName>
+   &lt;shortdesc>RAS import task type "Extract".&lt;/shortdesc>
+   &lt;javaFieldDetail>
+      &lt;javaFieldDef>
+        &lt;javaStaticField/>
+        &lt;javaFieldAccess value="public"/>
+        &lt;javaFieldClass href="http:">String&lt;/javaFieldClass>
+      &lt;/javaFieldDef>
+   &lt;/javaFieldDetail>
+   &lt;related-links>
+     &lt;link href="http://java.sun.com/../constant-values.html#ATTRIBUTE_NODE" 
+        format="html" scope="external">
+        &lt;linktext>Constant Field Values&lt;/linktext>
+     &lt;/link>
+   &lt;/related-links>
+&lt;/javaField></codeblock></example>
+<section><title>Processing Expectations</title><image href="images/javaFieldClass.jpg"
+placement="inline"><alt></alt></image></section>
+<section conref="../packagedef.dita#javaFieldClass-reference/javaFieldClass-containedBy-section"></section>
+<section conref="../packagedef.dita#javaFieldClass-reference/javaFieldClass-contains-section"></section>
+<section conref="../packagedef.dita#javaFieldClass-reference/javaFieldClass-contentModel-section"></section>
+<section conref="../packagedef.dita#javaFieldClass-reference/javaFieldClass-attList-section"></section>
+<section conref="../packagedef.dita#javaFieldClass-reference/javaFieldClass-classValue-section"></section>
+</refbody>
+</reference>
+<?Pub *0000002880?>

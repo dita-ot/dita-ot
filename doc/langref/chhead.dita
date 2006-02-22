@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2004, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "../../dtd/reference.dtd">
+<!--             (C) Copyright OASIS Open 2005.                    -->
+<!--             (C) Copyright IBM Corporation 2001, 2004.         -->
+<!--             All Rights Reserved.                              -->
+<reference id="chhead" xml:lang="en-us">
+<title><keyword>chhead</keyword></title>
+<shortdesc>The &lt;<keyword>chhead</keyword>> element is a container inside
+the &lt;<keyword>choicetable</keyword>> element that provides specific heading
+text to override the default <b>Options</b> and <b>Description</b> headings.
+The &lt;<keyword>chhead</keyword>> element contains both a <ph><xref href="choptionhd.dita">choptionhd</xref></ph> and <ph><xref
+href="chdeschd.dita">chdeschd</xref></ph> element as a pair.</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>chhead (choicetable heading)</indexterm><indexterm>Task
+elements<indexterm>chhead</indexterm>  </indexterm><indexterm>chhead</indexterm>
+</keywords>
+</metadata></prolog>
+<refbody>
+<section conref="DitabaseNav.dita#commonCMdefs/chhead-contains"></section>
+<section conref="DitabaseNav.dita#commonCMdefs/chhead-containedby"></section>
+<section conref="DitabaseNav.dita#commonCMdefs/chhead-classvalue"></section>
+<section><title>Attributes</title><simpletable id="chhead_attr" relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="commonLRdefs.dita#commonLRdefs/univ-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/classandout">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow><?Pub Caret?>
+</simpletable></section>
+<example>          <title>Example</title><pre>&lt;step>&lt;cmd>Then this&lt;/cmd>
+ &lt;substeps>
+  &lt;substep importance="optional">&lt;cmd>which is done by doing this&lt;/cmd>&lt;/substep>
+  &lt;substep importance="required">&lt;cmd>and then this.&lt;/cmd>&lt;/substep>
+ &lt;/substeps>
+ &lt;choicetable>
+  <b>&lt;chhead></b>
+   &lt;choptionhd>Do something&lt;/choptionhd>
+   &lt;chdeschd>Or Else this&lt;/chdeschd>
+  <b>&lt;/chhead></b>
+  &lt;chrow>&lt;choption>Do this&lt;/choption>
+     &lt;chdesc>and this will happen&lt;/chdesc>&lt;/chrow>
+  &lt;chrow>&lt;choption>Do that&lt;/choption>
+     &lt;chdesc>and that will happen&lt;/chdesc>&lt;/chrow>
+ &lt;/choicetable>
+&lt;/step>
+</pre>       </example>
+</refbody>
+</reference>
+<?Pub *0000002901?>

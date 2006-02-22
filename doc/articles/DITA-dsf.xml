@@ -3,7 +3,7 @@
 
 <?xml-stylesheet href="../xsl/ditaview_shell.xsl" type="text/xsl"?>
 <?xml-stylesheet href="../css/dita_shell.css" type="text/css"?>
-<!DOCTYPE topic PUBLIC "-//IBM//DTD DITA Topic//EN" "../../dtd/topic.dtd">
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
 
 <topic id="specarch" xml:lang="en-us">
   <title>Specializing topic types in DITA</title>

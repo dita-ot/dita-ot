@@ -32,7 +32,7 @@
 <xsl:output method="text"/>
 
 <!-- Set the prefix for error message numbers -->
-<xsl:variable name="msgprefix">IDXS</xsl:variable>
+<xsl:variable name="msgprefix">DOTX</xsl:variable>
 
 <!-- *************************** Command line parameters *********************** -->
 <xsl:param name="OUTEXT" select="'.html'"/>

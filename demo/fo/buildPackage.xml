@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<project name="build_FO_plugin" default="package-plugin" basedir=".">
+  <description>Build jar for FO output</description>
+
+  <property name="src.dir" location="src/"/>
+  <property name="lib.dir" location="lib/"/>
+  <property name="bin.dir" location="bin/"/>
+  <property name="package.output.dir" location="../../build"/>
+  <property name="package.file" value="fo.zip"/>
+  
+  <property name="classpath.dir" location="../../dev/lib"/>
+  <property name="fo.lib.dir" location="demo/fo/lib"/>	
+  
+  <property name="fo.jar" location="${lib.dir}/fo.jar" />
+  <property name="ant.jar" location="${classpath.dir}/ant162.jar" />
+  <property name="resolver.jar" location="${lib.dir}/resolver.jar" />
+  <property name="icu4j.jar" location="${lib.dir}/icu4j.jar" />
+  <property name="xep.jar" location="${lib.dir}/xep/lib/xep.jar" />
+
+  <path id="build.class.path">
+    <pathelement location="${ant.jar}" />
+    <pathelement location="${resolver.jar}" />
+    <pathelement location="${icu4j.jar}" />
+    <pathelement location="${xep.jar}" />
+  </path>
+
+  <target name="clean-java">
+    <delete dir="${bin.dir}"/>
+    <delete file="${fo.jar}"/>
+  </target>
+	
+  <target name="init-java" depends="clean-java">
+    <mkdir dir="${bin.dir}"/>
+  </target>
+	
+  <target name="build-java" depends="init-java">
+    <javac srcdir="${src.dir}" destdir="${bin.dir}" classpath="${ant.jar}"
+      debug="on">
+      <classpath refid="build.class.path"/>
+    </javac>
+  </target>
+  
+  <target name="package-java" depends="build-java">    
+    <jar destfile="${fo.jar}" basedir="${bin.dir}" includes="**" />
+  </target>
+
+  <target name="init-package" depends="clean-package">
+    <mkdir dir="${package.output.dir}"/>    
+  </target>
+
+  <target name="clean-package">
+    <delete file="${package.output.dir}/${package.file}"/>
+  </target>
+ 
+  <target name="package-plugin" depends="package-java,init-package">
+    <zip destfile="${package.output.dir}/${package.file}">
+      <zipfileset dir="." includes="*.xml" prefix="fo"/>
+      <zipfileset file="README.txt" prefix="fo"/>
+      <zipfileset dir="cfg" excludes="**/CVS" prefix="fo/cfg"/>
+      <zipfileset dir="lib" excludes="**/CVS xep/** icu4j.jar" prefix="fo/lib"/>
+      <zipfileset dir="xsl" excludes="**/CVS" prefix="fo/xsl"/>
+      <zipfileset dir="Customization" excludes="**/CVS" prefix="fo/Customization"/>
+      <zipfileset dir="src" prefix="fo"/>
+    </zip>
+  </target>
+</project>

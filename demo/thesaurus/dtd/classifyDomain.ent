@@ -1,0 +1,6 @@
+<!--
+ | (C) Copyright IBM Corporation 2005 - 2006. All Rights Reserved.
+ *-->
+<!ENTITY % classify-d-topicref "topicsubject">
+<!ENTITY % classify-d-reltable "topicSubjectTable">
+<!ENTITY classify-d-att "(map classify-d)">

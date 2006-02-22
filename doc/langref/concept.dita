@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2004, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "../../dtd/reference.dtd">
+<!--             (C) Copyright OASIS Open 2005.                    -->
+<!--             (C) Copyright IBM Corporation 2001, 2004.         -->
+<!--             All Rights Reserved.                              -->
+<reference id="concept" xml:lang="en-us">
+<title><keyword>concept</keyword></title>
+<shortdesc>The &lt;<keyword>concept</keyword>> element is the top-level element
+for a topic that answers the question <q>what is?</q> Concepts provide background
+information that users must know before they can successfully work with a
+product or interface. Often, a concept is an extended definition of a major
+abstraction such as a process or function. It might also have an example or
+a graphic, but generally the structure of a concept is fairly simple.</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>concept</indexterm><indexterm>Concept elements<indexterm>concept</indexterm>  </indexterm>
+<indexterm>concept</indexterm></keywords>
+</metadata></prolog>
+<refbody>
+<section conref="DitabaseNav.dita#commonCMdefs/concept-contains"></section>
+<section conref="DitabaseNav.dita#commonCMdefs/concept-containedby"></section>
+<section conref="DitabaseNav.dita#commonCMdefs/concept-classvalue"></section>
+<section><title>Attributes</title><simpletable id="concept_attr" relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="commonLRdefs.dita#commonLRdefs/id">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/conref-topic">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/select-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/xmllang">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/DITAArchVersion">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/domains">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/classandout">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+</simpletable></section>
+<example>      <title>Example</title>    <pre>&lt;concept id="concept">
+ &lt;title>Introduction to Bird Calling&lt;/title>
+ &lt;shortdesc>If you wish to attract more birds to your Acme Bird Feeder,
+learn the art of bird calling. Bird calling is an efficient way
+to alert more birds to the presence of your bird feeder.&lt;/shortdesc>
+ &lt;conbody>
+   &lt;p>Bird calling requires learning:&lt;/p>
+   &lt;ul>
+    &lt;li>Popular and classical bird songs&lt;/li>
+    &lt;li>How to whistle like a bird&lt;/li>
+   &lt;/ul>
+<?Pub Caret?> &lt;/conbody>
+&lt;/concept></pre>       </example>
+</refbody>
+</reference>
+<?Pub *0000003624?>

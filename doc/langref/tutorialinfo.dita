@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2004, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "../../dtd/reference.dtd">
+<!--             (C) Copyright OASIS Open 2005.                    -->
+<!--             (C) Copyright IBM Corporation 2001, 2004.         -->
+<!--             All Rights Reserved.                              -->
+<reference id="tutorialinfo" xml:lang="en-us">
+<title><keyword>tutorialinfo</keyword></title>
+<shortdesc>The tutorial info (&lt;<keyword>tutorialinfo</keyword>>) element
+contains information that is included in a step when a task is part of a tutorial.
+The &lt;<keyword>tutorialinfo</keyword>> element allows you to turn a task
+into a learning exercise by including explanatory content about methods for
+completing the current step. The information should be excluded when a task
+is processed on its own.</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>tutorialinfo</indexterm><indexterm>Task elements<indexterm>tutorialinfo</indexterm>  </indexterm>
+<indexterm>tutorialinfo</indexterm></keywords>
+</metadata></prolog>
+<refbody>
+<section conref="DitabaseNav.dita#commonCMdefs/tutorialinfo-contains"></section>
+<section conref="DitabaseNav.dita#commonCMdefs/tutorialinfo-containedby"></section>
+<section conref="DitabaseNav.dita#commonCMdefs/tutorialinfo-classvalue"></section>
+<section><title>Attributes</title><simpletable id="tutorialinfo_attr" relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="commonLRdefs.dita#commonLRdefs/univ-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/classandout">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+</simpletable></section>
+<example>          <title>Example<?Pub Caret?></title><codeblock>&lt;steps>
+ &lt;step>
+  &lt;cmd>Do this&lt;/cmd>
+  &lt;tutorialinfo>In your editor, open the first element and click on 
+  the dialog.&lt;/tutorialinfo>
+ &lt;/step>
+ &lt;step>
+  &lt;cmd>Do that&lt;/cmd>
+  &lt;tutorialinfo>Move the framulator into the foobar box.&lt;/tutorialinfo>
+ &lt;/step>
+&lt;/steps></codeblock>&nbsp;</example>
+</refbody>
+</reference>
+<?Pub *0000002600?>

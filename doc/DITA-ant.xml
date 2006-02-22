@@ -2,7 +2,7 @@
 <!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
 
 <?xml-stylesheet href="../xsl/ditaview_shell.xsl" type="text/xsl"?>
-<!DOCTYPE concept PUBLIC "-//IBM//DTD DITA Composite//EN" "ditabase.dtd">
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Composite//EN" "../dtd/ditabase.dtd">
  
 <concept id="DITA-ant" xml:lang="en-us">
   <title>Building DITA output with Ant</title>
@@ -23,10 +23,10 @@
       development builds as well as document builds. </p>
     <p>It is unnecessary for Ant to set up a build environment to run the DITA 
       XSLT scripts. To run the DITA scripts directly, see the <xref 
-      href="DITA-readme.xml#DITA-readme">DITA Readme</xref> 
+      href="DITA-readme.xml">DITA Readme</xref> 
       document.</p>
     <note>The following instructions and the associated <i>build.xml</i> and 
-      <i>ditatargets.xml </i> files are for the Java 1.4.2, Ant 1.6.2, FOP 
+      <i>ditatargets.xml </i> files are for the Java 1.4.2, Ant 1.6.5, FOP 
       0.20.5, and Saxon 6.5.3 releases. These instructions are likely to need 
       some adjustment for other versions of these components and for specific 
       environments.</note>

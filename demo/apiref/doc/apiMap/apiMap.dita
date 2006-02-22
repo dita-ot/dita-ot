@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\dtd\reference.dtd">
+<reference id="apiMap" outputclass="element" xml:lang="en-us">
+<title>apiMap</title>
+<shortdesc>The &lt;apiMap> element provides the name of the application programming
+interface (API) reference and all the elements necessary to describe the package,
+or set of packages, and its components. </shortdesc>
+<refbody>
+<section><title>Description</title><p>The containing element for a map is
+the &lt;apiMap> element that can contain the title and id attributes. In the
+&lt;apiMap> element, use the &lt;apiPackageRef>, &lt;topicmeta> and &lt;reltable>
+sub <?Pub Caret?>elements to add and organize references to the topics.</p> </section>
+<section conref="../packagedef.dita#apiMap-reference/apiMap-containedBy-section"></section>
+<section conref="../packagedef.dita#apiMap-reference/apiMap-contains-section"></section>
+<section conref="../packagedef.dita#apiMap-reference/apiMap-contentModel-section"></section>
+<section conref="../packagedef.dita#apiMap-reference/apiMap-attList-section"></section>
+<section conref="../packagedef.dita#apiMap-reference/apiMap-classValue-section"></section>
+</refbody>
+</reference>
+<?Pub *0000001297?>

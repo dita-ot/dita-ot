@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2004, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "../../dtd/reference.dtd">
+<!--             (C) Copyright OASIS Open 2005.                    -->
+<!--             (C) Copyright IBM Corporation 2001, 2004.         -->
+<!--             All Rights Reserved.                              -->
+<reference id="synblk" xml:lang="en-us">
+<title><keyword>synblk</keyword></title>
+<shortdesc>The syntax block (&lt;<keyword>synblk</keyword>>) element organizes
+small pieces of a syntax definition into a larger piece. The syntax block
+element is part of the DITA programming domain, a special set of DITA elements
+designed to document programming tasks, concepts and reference information.</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>synblk</indexterm><indexterm>Domain elements<indexterm>synblk</indexterm>  </indexterm>
+<indexterm>synblk</indexterm></keywords>
+</metadata></prolog>
+<refbody>
+<section conref="DitabaseNav.dita#commonCMdefs/synblk-contains"></section>
+<section conref="DitabaseNav.dita#commonCMdefs/synblk-containedby"></section>
+<section conref="DitabaseNav.dita#commonCMdefs/synblk-classvalue"></section>
+<section><title>Attributes</title><simpletable id="synblk_attr" relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="commonLRdefs.dita#commonLRdefs/univ-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/classandout">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+</simpletable></section>
+<example>    <title>Example</title>      <pre><b>&lt;synblk></b>
+&lt;groupseq>&lt;kwd>this&lt;/kwd>&lt;sep>-&lt;/sep>&lt;kwd>is&lt;/kwd>&lt;sep>-&lt;/sep>&lt;kwd>a&lt;/kwd>
+&lt;sep>-&lt;/sep>&lt;var>test&lt;/var>&lt;/groupseq>
+<b>&lt;/synblk></b> <?Pub Caret1?>       </pre>       </example>
+</refbody>
+</reference>
+<?Pub *0000002339?>

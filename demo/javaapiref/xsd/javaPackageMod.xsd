@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ | (C) Copyright IBM Corporation 2005 - 2006. All Rights Reserved.
+ *-->
+<!-- ============ Hooks for domain extension ============ -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
+  <xs:import namespace="http://dita.oasis-open.org/architecture/2005/" schemaLocation="../../../schema/ditaarch.xsd"/>
+  <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="../../../schema/xml.xsd"/>
+  
+  <!-- ============ Hooks for shell DTD ============ -->
+  <xs:group name="javaPackage-types-default">
+    <xs:sequence>
+      <xs:element ref="no-topic-nesting"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="javaPackage-info-types">
+    <xs:sequence>
+      <xs:group ref="javaPackage-types-default"/>
+    </xs:sequence>
+  </xs:group>
+  <!-- ============ Topic specializations ============ -->
+  <xs:element name="javaPackage" type="javaPackage.class"/>
+  <xs:complexType name="javaPackage.class">
+    <xs:sequence>
+      <xs:group minOccurs="0" ref="apiSyntax"/>
+      <xs:group ref="apiName"/>
+      <xs:group ref="shortdesc"/>
+      <xs:group minOccurs="0" ref="prolog"/>
+      <xs:group ref="javaPackageDetail"/>
+      <xs:group minOccurs="0" ref="related-links"/>
+      <xs:group minOccurs="0" maxOccurs="unbounded" ref="javaPackage-info-types"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="javaPackage.attlist"/>
+  </xs:complexType>
+ 
+  <xs:attributeGroup name="javaPackage.attlist">
+    <xs:attribute name="id" use="required" type="xs:ID"/>
+    <xs:attribute name="conref"/>
+    <xs:attribute name="outputclass"/>
+    <xs:attribute ref="xml:lang"/>
+    <xs:attribute ref="ditaarch:DITAArchVersion"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute name="class" default="- topic/topic reference/reference apiRef/apiRef apiPackage/apiPackage javaPackage/javaPackage "/>
+  </xs:attributeGroup>
+  <xs:element name="javaPackageDetail">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:group minOccurs="0" ref="apiDesc"/>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:group ref="example"/>
+          <xs:group ref="section"/>
+          <xs:group ref="apiImpl"/>
+        </xs:choice>
+      </xs:sequence>
+      <xs:attributeGroup ref="javaPackageDetail.attlist"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="javaPackageDetail.attlist">
+    <xs:attributeGroup ref="id-atts"/>
+    <xs:attribute name="translate">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="yes"/>
+          <xs:enumeration value="no"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute ref="xml:lang"/>
+    <xs:attribute name="outputclass"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute name="class" default="- topic/body reference/refbody apiRef/apiDetail apiPackage/apiDetail javaPackage/javaPackageDetail "/>
+  </xs:attributeGroup>
+  <!-- ============ Class attributes for type ancestry ============ -->
+</xs:schema>

@@ -13,11 +13,16 @@ import java.util.Set;
 
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.dita.dost.exception.DITAOTException;
+import org.dita.dost.log.DITAOTJavaLogger;
+import org.dita.dost.log.MessageUtils;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.pipeline.PipelineHashIO;
+import org.dita.dost.reader.DitaValReader;
 import org.dita.dost.reader.GenListModuleReader;
 import org.dita.dost.util.Constants;
+import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.StringUtils;
 import org.dita.dost.writer.PropertiesWriter;
 import org.xml.sax.SAXException;
@@ -31,255 +36,331 @@ import org.xml.sax.SAXException;
  * @author Wu, Zhi Qiang
  */
 public class GenMapAndTopicListModule extends AbstractPipelineModule {
-    /** Set of all dita files */
-    private Set ditaSet = null;
+	/** Set of all dita files */
+	private Set ditaSet = null;
 
-    /** Set of all topic files */
-    private Set fullTopicSet = null;
+	/** Set of all topic files */
+	private Set fullTopicSet = null;
 
-    /** Set of all map files */
-    private Set fullMapSet = null;
+	/** Set of all map files */
+	private Set fullMapSet = null;
 
-    /** Set of topic files containing href */
-    private Set hrefTopicSet = null;
+	/** Set of topic files containing href */
+	private Set hrefTopicSet = null;
 
-    /** Set of map files containing href */
-    private Set hrefMapSet = null;
+	/** Set of map files containing href */
+	private Set hrefMapSet = null;
 
-    /** Set of dita files containing conref */
-    private Set conrefSet = null;
+	/** Set of dita files containing conref */
+	private Set conrefSet = null;
 
-    /** Set of all images */
-    private Set imageSet = null;
+	/** Set of all images */
+	private Set imageSet = null;
+	
+	/** Set of all images used for flagging */
+	private Set flagImageSet = null;
 
-    /** Set of all html files */
-    private Set htmlSet = null;
+	/** Set of all html files */
+	private Set htmlSet = null;
 
-    /** Set of all the href targets */
-    private Set hrefTargetSet = null;
+	/** Set of all the href targets */
+	private Set hrefTargetSet = null;
 
-    /** List of files waiting for parsing */
-    private List waitList = null;
+	/** List of files waiting for parsing */
+	private List waitList = null;
 
-    /** List of parsed files */
-    private List doneList = null;
-    
-    /** Basedir for processing */
-    private String baseDir = null;
-    
-    /** Tempdir for processing */
-    private String tempDir = null;
-    
-    /** ditadir for processing */
-    private String ditaDir = null;
+	/** List of parsed files */
+	private List doneList = null;
 
-    /**
-     * Create a new instance and do the initialization.
-     * 
-     * @throws ParserConfigurationException
-     * @throws SAXException
-     */
-    public GenMapAndTopicListModule() throws SAXException,
-            ParserConfigurationException {
-        ditaSet = new HashSet();
-        fullTopicSet = new HashSet();
-        fullMapSet = new HashSet();
-        hrefTopicSet = new HashSet();
-        hrefMapSet = new HashSet();
-        conrefSet = new HashSet();
-        imageSet = new HashSet();
-        htmlSet = new HashSet();
-        hrefTargetSet = new HashSet();
-        waitList = new LinkedList();
-        doneList = new LinkedList();
-    }
+	/** Basedir for processing */
+	private String baseDir = null;
 
-    /**
-     * Execute the module.
-     * 
-     * @param input
-     * @return
-     */
-    public AbstractPipelineOutput execute(AbstractPipelineInput input) {
-        try {
-            String inputFile = ((PipelineHashIO) input)
-                    .getAttribute(Constants.ANT_INVOKER_PARAM_INPUTMAP);
-            baseDir = ((PipelineHashIO) input)
-                    .getAttribute(Constants.ANT_INVOKER_PARAM_BASEDIR);
-            tempDir = ((PipelineHashIO) input)
-                    .getAttribute(Constants.ANT_INVOKER_PARAM_TEMPDIR);
-            ditaDir = ((PipelineHashIO) input)
-                    .getAttribute(Constants.ANT_INVOKER_EXT_PARAM_DITADIR);
+	/** Tempdir for processing */
+	private String tempDir = null;
 
-            // Initiate the waitingList
-            addToWaitList(inputFile);
+	/** ditadir for processing */
+	private String ditaDir = null;
 
-            // Add the input file into href targets
-            if (inputFile.toLowerCase().endsWith(Constants.FILE_EXTENSION_DITA)
-                    || inputFile.toLowerCase().endsWith(
-                            Constants.FILE_EXTENSION_XML)) {
-                hrefTargetSet.add(new File(inputFile).getPath());
-            }
+	private String inputFile = null;
+	
+	private String ditavalFile = null;
 
-            // Parse all the file in the waitingList
-            processWaitList();
+	private int uplevels = 0;
 
-            outputResult();
-        } catch (SAXException e) {
-            e.printStackTrace();
-        } catch (ParserConfigurationException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+	private String prefix = "";
 
-        return null;
-    }
+	private DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
 
-    /**
-     * @param baseDir
-     * @throws ParserConfigurationException
-     * @throws SAXException
-     */
-    private void processWaitList() throws SAXException,
-            ParserConfigurationException {
-        GenListModuleReader reader = new GenListModuleReader();
-        File fileToParse = null;
+	GenListModuleReader reader = null;
 
-        reader.initXMLReader(ditaDir);
+	/**
+	 * Create a new instance and do the initialization.
+	 * 
+	 * @throws ParserConfigurationException
+	 * @throws SAXException
+	 */
+	public GenMapAndTopicListModule() throws SAXException,
+			ParserConfigurationException {
+		ditaSet = new HashSet();
+		fullTopicSet = new HashSet();
+		fullMapSet = new HashSet();
+		hrefTopicSet = new HashSet();
+		hrefMapSet = new HashSet();
+		conrefSet = new HashSet();
+		imageSet = new HashSet();
+		flagImageSet = new HashSet();
+		htmlSet = new HashSet();
+		hrefTargetSet = new HashSet();
+		waitList = new LinkedList();
+		doneList = new LinkedList();
+	}
 
-        while (!waitList.isEmpty()) {
-            String currentFile = (String) waitList.remove(0);
-            fileToParse = new File(baseDir, currentFile);
+	/**
+	 * Execute the module.
+	 * 
+	 * @param input
+	 * @return
+	 * @throws DITAOTException
+	 */
+	public AbstractPipelineOutput execute(AbstractPipelineInput input)
+			throws DITAOTException {
+		File inFile = null;
+		
+		try {
+			PipelineHashIO hashIO = (PipelineHashIO) input;
+			String ditaInput = hashIO
+					.getAttribute(Constants.ANT_INVOKER_PARAM_INPUTMAP);
+			tempDir = hashIO.getAttribute(Constants.ANT_INVOKER_PARAM_TEMPDIR);
+			ditaDir = hashIO
+					.getAttribute(Constants.ANT_INVOKER_EXT_PARAM_DITADIR);
+			ditavalFile = hashIO.getAttribute(Constants.ANT_INVOKER_PARAM_DITAVAL);
+			inFile = new File(ditaInput);
+			baseDir = new File(inFile.getAbsolutePath()).getParent();
+			inputFile = inFile.getName();
 
-            if (fileToParse.exists()){
-            	doneList.add(currentFile);
-            	reader.setCurrentDir(new File(currentFile).getParent());
-            	reader.parse(fileToParse);
-            	saveParseResult(reader, currentFile);
-            }else{
-            	// TO DO: report the File Not Found error in the log system
-            }
-        }
-    }
+			GenListModuleReader.initXMLReader(ditaDir);
 
-    /**
-     * @param currentFile
-     */
-    private void saveParseResult(GenListModuleReader reader, String currentFile) {
-        String lcasecf = currentFile.toLowerCase();
-        Iterator iter = reader.getResult().iterator();
+			addInputToHrefTargets();
+			addToWaitList(inputFile);
+			processWaitList();
+			updateBaseDirectory();
+			parseFlaggingImages();
+			outputResult();
+		} catch (SAXException e) {
+			throw new DITAOTException(e.getMessage(), e);
+		}
 
-        while (iter.hasNext()) {
-            String item = (String) iter.next();
-            String lcaseItem = item.toLowerCase();
+		return null;
+	}
 
-            addToWaitList(item);
+	/*
+	 * Add the input file into href targets for index generation.
+	 */
+	private void addInputToHrefTargets() {
+		if (FileUtils.isDITATopicFile(inputFile.toLowerCase())) {
+			hrefTargetSet.add(new File(inputFile).getPath());
+		}
+	}
 
-            if (lcaseItem.endsWith(Constants.FILE_EXTENSION_JPG)
-                    || lcaseItem.endsWith(Constants.FILE_EXTENSION_GIF)
-                    || lcaseItem.endsWith(Constants.FILE_EXTENSION_EPS)) {
-                imageSet.add(item);
-            }
+	/**
+	 * @param baseDir
+	 * @throws DITAOTException
+	 * @throws ParserConfigurationException
+	 * @throws SAXException
+	 */
+	private void processWaitList() throws DITAOTException {
+		reader = new GenListModuleReader();
 
-            if (lcaseItem.endsWith(Constants.FILE_EXTENSION_HTML)) {
-                htmlSet.add(item);
-            }
-        }
+		while (!waitList.isEmpty()) {
+			processFile((String) waitList.remove(0));
+		}
+	}
 
-        ditaSet.add(currentFile);
-        hrefTargetSet.addAll(reader.getHrefTargets());
+	private void processFile(String currentFile) throws DITAOTException {
+		File fileToParse = new File(baseDir, currentFile);
 
-        if (reader.hasConRef()) {
-            conrefSet.add(currentFile);
-        }
+		try {
+			reader.setCurrentDir(new File(currentFile).getParent());
+			reader.parse(fileToParse);
+			processParseResult(currentFile);
+			categorizeCurrentFile(currentFile);
+		} catch (Exception e) {
+			Properties params = new Properties();
+			params.put("%1", currentFile);
+			String msg = null;
 
-        if (lcasecf.endsWith(Constants.FILE_EXTENSION_DITA)
-                || lcasecf.endsWith(Constants.FILE_EXTENSION_XML)) {
-            fullTopicSet.add(currentFile);
-            if (reader.hasHref()) {
-                hrefTopicSet.add(currentFile);
-            }
-        }
+			if (currentFile.equals(inputFile)) {
+				// stop the build if exception thrown when parsing input file.
+				msg = MessageUtils.getMessage("DOTJ012F", params).toString();
+				msg = new StringBuffer(msg).append(Constants.LINE_SEPARATOR)
+						.append(e.toString()).toString();				
+				throw new DITAOTException(msg, e);
+			}
 
-        if (lcasecf.endsWith(Constants.FILE_EXTENSION_DITAMAP)) {
-            fullMapSet.add(currentFile);
-            if (reader.hasHref()) {
-                hrefMapSet.add(currentFile);
-            }
-        }
-    }
+			msg = MessageUtils.getMessage("DOTJ013E", params).toString();
+			javaLogger.logError(msg);
+			javaLogger.logException(e);
+		}
 
-    /**
-     * Add the given file into the wait list, if it is a dita file and has not
-     * been parsed.
-     * 
-     * @param fileName
-     */
-    private void addToWaitList(String fileName) {
-    	String normalizedFileName = new File(fileName).getPath();
-        String lcasefn = normalizedFileName.toLowerCase();
-        boolean isDitaFile = lcasefn.endsWith(Constants.FILE_EXTENSION_DITA)
-                || lcasefn.endsWith(Constants.FILE_EXTENSION_XML)
-                || lcasefn.endsWith(Constants.FILE_EXTENSION_DITAMAP);
+		doneList.add(currentFile);
+		reader.reset();
+	}
 
-        if (!isDitaFile) {
-            return;
-        }
-        
-        if (doneList.contains(normalizedFileName) || waitList.contains(normalizedFileName)) {
-            return;
-        }
-                
-        waitList.add(normalizedFileName);
-    }
+	/**
+	 * @param currentFile
+	 */
+	private void processParseResult(String currentFile) {
+		Iterator iter = reader.getResult().iterator();
 
-    /**
-     * @param tempDir
-     */
-    private void outputResult() {
-        Properties prop = new Properties();
-        PropertiesWriter writer = new PropertiesWriter();
-        Content content = new ContentImpl();
-        File dir = new File(tempDir);
+		while (iter.hasNext()) {
+			String file = (String) iter.next();
+			categorizeResultFile(file);
+			updateUplevels(file);
+		}
+	}
 
-        if (!dir.exists()) {
-            dir.mkdirs();
-        }
+	private void categorizeCurrentFile(String currentFile) {
+		String lcasefn = currentFile.toLowerCase();
+		
+		ditaSet.add(currentFile);
+		hrefTargetSet.addAll(reader.getHrefTargets());
 
-        /*
-         * In ant, all the file separator should be slash, so we need to replace
-         * all the back slash with slash.
-         */
-        prop.put(Constants.FULL_DITAMAP_TOPIC_LIST, StringUtils.assembleString(ditaSet,
-                Constants.COMMA).replaceAll(Constants.DOUBLE_BACK_SLASH,
-                Constants.SLASH));
-        prop.put(Constants.FULL_DITA_TOPIC_LIST, StringUtils.assembleString(
-                fullTopicSet, Constants.COMMA).replaceAll(
-                Constants.DOUBLE_BACK_SLASH, Constants.SLASH));
-        prop.put(Constants.FULL_DITAMAP_LIST, StringUtils.assembleString(
-                fullMapSet, Constants.COMMA).replaceAll(
-                Constants.DOUBLE_BACK_SLASH, Constants.SLASH));
-        prop.put(Constants.HREF_DITA_TOPIC_LIST, StringUtils.assembleString(
-                hrefTopicSet, Constants.COMMA).replaceAll(
-                Constants.DOUBLE_BACK_SLASH, Constants.SLASH));
-        prop.put(Constants.CONREF_LIST, StringUtils.assembleString(conrefSet,
-                Constants.COMMA).replaceAll(Constants.DOUBLE_BACK_SLASH,
-                Constants.SLASH));
-        prop.put(Constants.IMAGE_LIST, StringUtils.assembleString(imageSet,
-                Constants.COMMA).replaceAll(Constants.DOUBLE_BACK_SLASH,
-                Constants.SLASH));
-        prop.put(Constants.HTML_LIST, StringUtils.assembleString(htmlSet,
-                Constants.COMMA).replaceAll(Constants.DOUBLE_BACK_SLASH,
-                Constants.SLASH));
-        prop.put(Constants.HREF_TARGET_LIST, StringUtils.assembleString(
-                hrefTargetSet, Constants.COMMA).replaceAll(
-                Constants.DOUBLE_BACK_SLASH, Constants.SLASH));
+		if (reader.hasConRef()) {
+			conrefSet.add(currentFile);
+		}
+		
+		if (FileUtils.isDITATopicFile(lcasefn)) {
+			fullTopicSet.add(currentFile);
+			if (reader.hasHref()) {
+				hrefTopicSet.add(currentFile);
+			}
+		}
 
-        content.setValue(prop);
-        writer.setContent(content);
-        writer.write(new StringBuffer(tempDir).append(Constants.FILE_SEPARATOR)
-                .append(Constants.FILE_NAME_DITA_LIST).toString());
-    }
+		if (FileUtils.isDITAMapFile(lcasefn)) {
+			fullMapSet.add(currentFile);
+			if (reader.hasHref()) {
+				hrefMapSet.add(currentFile);
+			}
+		}
+	}
+
+	private void categorizeResultFile(String file) {		
+		String lcasefn = file.toLowerCase();
+		if (FileUtils.isDITAFile(lcasefn)) {
+			addToWaitList(file);
+		}
+
+		if (FileUtils.isSupportedImageFile(lcasefn)) {
+			imageSet.add(file);
+		}
+
+		if (FileUtils.isHTMLFile(lcasefn)) {
+			htmlSet.add(file);
+		}
+	}
+
+	/*
+	 * Update uplevels if needed.
+	 * 
+	 * @param file
+	 */
+	private void updateUplevels(String file) {
+		// for uplevels (../../)
+		int lastIndex = file.lastIndexOf("..");
+		if (lastIndex != -1) {
+			int newUplevels = lastIndex / 3 + 1;
+			uplevels = newUplevels > uplevels ? newUplevels : uplevels;
+		}
+	}
+
+	/**
+	 * Add the given file the wait list if it has not been parsed.
+	 * 
+	 * @param file
+	 */
+	private void addToWaitList(String file) {
+		if (doneList.contains(file) || waitList.contains(file)) {
+			return;
+		}
+
+		waitList.add(file);
+	}
+
+	private void updateBaseDirectory() {
+		baseDir = new File(baseDir).getAbsolutePath();
+
+		for (int i = uplevels; i > 0; i--) {
+			File file = new File(baseDir);
+			baseDir = file.getParent();
+			prefix = file.getName() + File.separator + prefix;
+		}
+	}
+
+	private void parseFlaggingImages() {
+		if (ditavalFile != null) {
+			DitaValReader ditavalReader = new DitaValReader();
+			ditavalReader.read(ditavalFile);
+			flagImageSet.addAll(ditavalReader.getImageList());
+		}
+	}
+	
+	private void outputResult() throws DITAOTException {
+		Properties prop = new Properties();
+		PropertiesWriter writer = new PropertiesWriter();
+		Content content = new ContentImpl();
+		File outputFile = new File(tempDir, Constants.FILE_NAME_DITA_LIST);
+		File dir = new File(tempDir);
+
+		if (!dir.exists()) {
+			dir.mkdirs();
+		}
+
+		prop.put("user.input.dir", baseDir);
+		prop.put("user.input.file", prefix + inputFile);
+
+		addSetToProperties(prop, Constants.FULL_DITAMAP_TOPIC_LIST, ditaSet);
+		addSetToProperties(prop, Constants.FULL_DITA_TOPIC_LIST, fullTopicSet);
+		addSetToProperties(prop, Constants.FULL_DITAMAP_LIST, fullMapSet);
+		addSetToProperties(prop, Constants.HREF_DITA_TOPIC_LIST, hrefTopicSet);
+		addSetToProperties(prop, Constants.CONREF_LIST, conrefSet);
+		addSetToProperties(prop, Constants.IMAGE_LIST, imageSet);
+		addSetToProperties(prop, Constants.FLAG_IMAGE_LIST, flagImageSet);
+		addSetToProperties(prop, Constants.HTML_LIST, htmlSet);
+		addSetToProperties(prop, Constants.HREF_TARGET_LIST, hrefTargetSet);
+
+		content.setValue(prop);
+		writer.setContent(content);
+		writer.write(outputFile.getAbsolutePath());
+	}
+
+	private void addSetToProperties(Properties prop, String key, Set set) {
+		String value = null;
+		Set newSet = new HashSet();
+		Iterator iter = set.iterator();
+
+		while (iter.hasNext()) {
+			String file = (String) iter.next();			
+			if (new File(file).isAbsolute()) {
+				// no need to append relative path before absolute paths
+				newSet.add(FileUtils.removeRedundantNames(file));
+			} else {
+				/*
+				 * In ant, all the file separator should be slash, so we need to replace
+				 * all the back slash with slash.
+				 */
+				newSet.add(FileUtils.removeRedundantNames(prefix + file)
+						.replaceAll(Constants.DOUBLE_BACK_SLASH,
+								Constants.SLASH));
+			}
+		}
+
+		value = StringUtils.assembleString(newSet, Constants.COMMA);
+
+		prop.put(key, value);
+
+		// clear set
+		set.clear();
+		newSet.clear();
+	}
 
 }

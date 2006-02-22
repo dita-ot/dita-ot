@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\dtd\reference.dtd">
+<reference id="apiPackage" outputclass="element" xml:lang="en-us">
+<title>apipackage</title>
+<shortdesc>The &lt;apipackage> element is a reference to a package.</shortdesc>
+<refbody>
+<section><title>Description</title><p>This element can be used to reference
+a package from another DITA topic type.</p></section><?Pub Caret1?>
+<example><title>Example</title><codeblock>&lt;task id="httpxml">
+  &lt;title>Getting an XML file through an HTTP connection&lt;/title>
+  &lt;taskbody>
+    &lt;steps>
+    &lt;step>&lt;cm>Open the connection.&lt;/cm>
+      &lt;info>You use &lt;apipackage keyref="com.ibm.xtools.patterns.framework.uml2">com.ibm.xtools.patterns.framework.uml2&lt;/apipackage> 
+      in a Java application.&lt;/info>
+    &lt;/step>
+    ...
+    &lt;/steps>
+  &lt;/taskbody>
+&lt;/task></codeblock></example>
+<section conref="../packagedef.dita#apipackage-reference/apipackage-containedBy-section"></section>
+<section conref="../packagedef.dita#apipackage-reference/apipackage-contains-section"></section>
+<section conref="../packagedef.dita#apipackage-reference/apipackage-contentModel-section"></section>
+<section conref="../packagedef.dita#apipackage-reference/apipackage-attList-section"></section>
+<section conref="../packagedef.dita#apipackage-reference/apipackage-classValue-section"></section>
+</refbody>
+</reference>
+<?Pub *0000001515?>

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- (c) Copyright IBM Corp. 2005, 2006 All Rights Reserved. -->
+
+<project name="html2dita" basedir="." default="html2dita">
+
+    <property name="args.input" value="." />
+    <property name="args.include.subdirs" value="no" />
+    <property name="args.output" value="." />
+    <property name="args.dita.ext" value=".dita" />
+    <property name="args.xsl" value="h2d.xsl" />
+
+    <!-- - - - - - - - - - - - - - - - - - 
+          private target: init                      
+         - - - - - - - - - - - - - - - - - -->
+    <target name="init"
+            depends="checkinputs"
+            description="-->Init properties base on input parameters">
+        <available file="${args.input}" type="file" property="isInputFile" />
+        <available file="${args.input}" type="dir" property="isInputDir" />
+        <mkdir dir="${args.output}" />
+        <condition property="includes.pattern" value="**/*.html,**/*.htm">
+            <equals arg1="${args.include.subdirs}"
+                    arg2="yes"
+                    casesensitive="false" />
+        </condition>
+        <condition property="includes.pattern" value="*.html,*.htm">
+            <not>
+                <isset property="includes.pattern" />
+            </not>
+        </condition>
+    </target>
+
+
+    <!-- - - - - - - - - - - - - - - - - - 
+          private target: checkinputs                      
+         - - - - - - - - - - - - - - - - - -->
+    <target name="checkinputs" description="-->Check input parameters">
+        <fail message="Input parameter 'args.input=${args.input}' does not exist.">
+            <condition>
+                <not>
+                    <available file="${args.input}" />
+                </not>
+            </condition>
+        </fail>
+        <fail message="Input parameter 'args.xsl=${args.xsl}' does not exist">
+            <condition>
+                <not>
+                    <available file="${args.xsl}" />
+                </not>
+            </condition>
+        </fail>
+    </target>
+
+
+    <!-- ================================= 
+          public target: html2dita              
+         ================================= -->
+    <target name="html2dita"
+            depends="html2dita-single, html2dita-batch"
+            description="-->Migrate one or more HTML files to DITA files">
+    </target>
+
+
+    <!-- - - - - - - - - - - - - - - - - - 
+          private target: html2dita-batch              
+         - - - - - - - - - - - - - - - - - -->
+    <target name="html2dita-batch"
+            depends="init"
+            if="isInputDir"
+            description="-->Migrate HTML files to DITA files in batches">
+
+        <xslt processor="trax"
+              basedir="${args.input}"
+              destdir="${args.output}"
+              includes="${includes.pattern}"
+              extension="${args.dita.ext}"
+              style="${args.xsl}"
+              force="true">
+            <param name="infotype"
+                   expression="${args.infotype}"
+                   if="args.infotype" />
+            <param name="dita-extension"
+                   expression="${args.dita.ext}"
+                   if="args.dita.ext" />
+            <param name="default-lang"
+                   expression="${args.lang}"
+                   if="args.lang" />
+        </xslt>
+    </target>
+
+
+    <!-- - - - - - - - - - - - - - - - - - 
+          private target: html2dita-batch              
+         - - - - - - - - - - - - - - - - - -->
+    <target name="html2dita-single"
+            depends="init"
+            if="isInputFile"
+            description="-->Migrate single HTML file to DITA file">
+        <basename file="${args.input}" property="filename" />
+        <dirname file="${args.input}" property="args.input.dir"/>
+        <xslt processor="trax"
+              basedir="${args.input.dir}"
+              includes="${filename}"
+              destdir="${args.output}"
+              extension="${args.dita.ext}"
+              style="${args.xsl}"
+              force="true">
+            <param name="infotype"
+                   expression="${args.infotype}"
+                   if="args.infotype" />
+            <param name="dita-extension"
+                   expression="${args.dita.ext}"
+                   if="args.dita.ext" />
+            <param name="default-lang"
+                   expression="${args.lang}"
+                   if="args.lang" />
+            <param name="FILENAME" expression="${filename}" if="filename" />
+        </xslt>
+    </target>
+
+
+</project>

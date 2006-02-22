@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2004, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "../../dtd/reference.dtd">
+<!--             (C) Copyright OASIS Open 2005.                    -->
+<!--             (C) Copyright IBM Corporation 2001, 2004.         -->
+<!--             All Rights Reserved.                              -->
+<reference id="shortcut" xml:lang="en-us">
+<title><keyword>shortcut</keyword></title>
+<shortdesc>The &lt;<keyword>shortcut</keyword>> element identifies a keyboard
+shortcut for a menu or window action. This element is part of the DITA user
+interface domain, a special set of DITA elements designed to document user
+interface tasks, concepts and reference information.</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>shortcut</indexterm><indexterm>Domain elements<indexterm>shortcut</indexterm>  </indexterm>
+<indexterm>shortcut</indexterm></keywords>
+</metadata></prolog>
+<refbody>
+<section conref="DitabaseNav.dita#commonCMdefs/shortcut-contains"></section>
+<section conref="DitabaseNav.dita#commonCMdefs/shortcut-containedby"></section>
+<section conref="DitabaseNav.dita#commonCMdefs/shortcut-classvalue"></section>
+<section><title>Attributes</title><simpletable id="shortcut_attr" relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="commonLRdefs.dita#commonLRdefs/keyref">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/univ-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/classandout">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+</simpletable></section>
+<example><title>Example<?Pub Caret?></title>This example:<pre>&lt;menucascade>
+ &lt;uicontrol>Start&lt;/uicontrol>
+ &lt;uicontrol><b>&lt;shortcut></b>P<b>&lt;/shortcut></b>rograms&lt;/uicontrol>
+&lt;/menucascade></pre>produces the following reusult: <menucascade><uicontrol>Start</uicontrol>
+<uicontrol>                                                <shortcut>P</shortcut>rograms</uicontrol>
+</menucascade>       </example>
+</refbody>
+</reference>
+<?Pub *0000002628?>

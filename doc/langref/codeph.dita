@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2004, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "../../dtd/reference.dtd">
+<!--             (C) Copyright OASIS Open 2005.                    -->
+<!--             (C) Copyright IBM Corporation 2001, 2004.         -->
+<!--             All Rights Reserved.                              -->
+<reference id="codeph" xml:lang="en-us">
+<title><keyword>codeph</keyword></title>
+<shortdesc>The code phrase (&lt;<keyword>codeph</keyword>>) element represents
+a snippet of code within the main flow of text. The code phrase is displayed
+in a monospaced font for emphasis. This element is part of the DITA programming
+domain, a special set of DITA elements designed to document programming tasks,
+concepts and reference information.</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>codeph (code phrase)</indexterm><indexterm>code phrase
+(codeph)</indexterm><indexterm>Domain elements<indexterm>codeph (code phrase)</indexterm>  </indexterm>
+<indexterm>codeph (code phrase)</indexterm></keywords>
+</metadata></prolog>
+<refbody>
+<section conref="DitabaseNav.dita#commonCMdefs/codeph-contains"></section>
+<section conref="DitabaseNav.dita#commonCMdefs/codeph-containedby"></section>
+<section conref="DitabaseNav.dita#commonCMdefs/codeph-classvalue"></section>
+<section><title>Attributes</title><simpletable id="codeph_attr" relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="commonLRdefs.dita#commonLRdefs/univ-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/classandout">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+</simpletable></section>
+<example>          <title>Example</title><?Pub Caret?><codeblock>&lt;p>The second line of the sample program code, &lt;codeph>Do forever&lt;/codeph>, 
+represents the start of a loop construct.&lt;/p></codeblock>       </example>
+</refbody>
+</reference>
+<?Pub *0000002404?>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\dtd\reference.dtd">
+<reference id="javaReturnClass" outputclass="element" xml:lang="en-us">
+<title>javaMethodClass</title>
+<shortdesc>The &lt;javaMethodClass> element within the <i>ResultType</i> declaration
+identifies the name of the returned class when a method, constructor, or exception
+returns a class.</shortdesc>
+<refbody>
+<section><title>Description</title><p>A method declaration either specifies
+the type of value that the method returns or uses the keyword <i>void</i> to
+indicate that the method does not return a value. The <i>keyref</i> attribute
+must provide a unique key such as a fully qualified class name for the named
+API item.</p></section><?Pub Caret1?>
+<example> <title>Example</title>Click on the following link to open the Java
+API topic type example in  <object classid="clsid:adb880a6-d8ff-11cf-9377-00aa003b7a11"
+codebase="hhctrl.ocx#Version=4,73,8412,0" codetype="VIEWASTEXT" height="100"
+id="hhctrl" name="Sample" type="application/x-oleobject" width="100">
+<param name="Command" value="ShortCut"/>
+<param name="Text" value="Text: DITA "/>
+<param name="Item1" value=",../samples/java/IDefaultComponentExportDataModel.dita,"/>
+</object><codeblock>&lt;javaMethod id="com.ibm.xtools.ras.impord.engine.task.IImportEngineTask.getName">&lt;?Pub Dtl?>
+   &lt;apiName>getName&lt;/apiName>
+   &lt;shortdesc>Retrieve the name of the task.&lt;/shortdesc>
+   &lt;javaMethodDetail>
+     &lt;javaMethodDef>
+     &lt;javaMethodAccess value="public"/>
+     &lt;javaReturn>
+       &lt;javaMethodClass href="http://java.sun.com/String.html" format="html" scope="external">
+         String&lt;/javaMethodClass>
+       &lt;apiDefNote>name of the task.&lt;/apiDefNote>
+     &lt;/javaReturn>
+   &lt;/javaMethodDef>
+   &lt;apiDesc>This corresponds to the name  attribute defined in the importEngineTask
+         extension point.&lt;/apiDesc>
+  &lt;/javaMethodDetail>
+&lt;/javaMethod></codeblock></example>
+<section><title>Processing Expectations</title><image href="images/javaReturnClass.jpg"
+placement="inline"><alt></alt></image></section>
+<section conref="../packagedef.dita#javaMethodClass-reference/javaMethodClass-containedBy-section"></section>
+<section conref="../packagedef.dita#javaMethodClass-reference/javaMethodClass-contains-section"></section>
+<section conref="../packagedef.dita#javaMethodClass-reference/javaMethodClass-contentModel-section"></section>
+<section conref="../packagedef.dita#javaMethodClass-reference/javaMethodClass-attList-section"></section>
+<section conref="../packagedef.dita#javaMethodClass-reference/javaMethodClass-classValue-section"></section>
+</refbody>
+</reference>
+<?Pub *0000002783?>

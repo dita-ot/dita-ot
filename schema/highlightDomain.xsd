@@ -3,15 +3,15 @@
 <!--                    HEADER                                     -->
 <!-- ============================================================= -->
 <!--  MODULE:    DITA Highlight Domain                             -->
-<!--  VERSION:   1.0                                               -->
-<!--  DATE:      February 2005                                     -->
+<!--  VERSION:   1.0.1                                             -->
+<!--  DATE:      November 2005                                     -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
 <!-- ============================================================= -->
 <!-- SYSTEM:     Darwin Information Typing Architecture (DITA)     -->
 <!--                                                               -->
-<!-- PURPOSE:    Define elements and specialization atttributed    -->
+<!-- PURPOSE:    Define elements and specialization attributes     -->
 <!--             for Highlight Domain                              -->
 <!--                                                               -->
 <!-- ORIGINAL CREATION DATE:                                       -->

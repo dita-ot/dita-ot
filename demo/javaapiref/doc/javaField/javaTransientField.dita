@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\dtd\reference.dtd">
+<reference id="javaTransientField" outputclass="element" xml:lang="en-us">
+<title>javaTransientField</title>
+<shortdesc>The &lt;javaTransientField> element declares within the <i>FieldModifiers<sup>opt</sup></i> that
+the fields introduced by the declaration are marked transient fields. </shortdesc>
+<refbody>
+<section><title>Description</title>This element specifies that the value of
+the field  should not be serialized. The variables can be marked transient
+to indicate that they are not part of the persistent state of an object. Possible
+alternative definitions of the <i>FieldModifier</i> declaration are the &lt;javaStaticField>,
+&lt;javaFinalField>, and &lt;javaVolatileField> elements.  The &lt;javaSynchronizedMethod>
+element has the following predefined attributes:<i>name ="transient</i>" and
+ <i>value ="transient</i>". </section><?Pub Caret1?>
+<example> <title>Example</title>Click on the following link to open the Java
+API topic type example in  <object classid="clsid:adb880a6-d8ff-11cf-9377-00aa003b7a11"
+codebase="hhctrl.ocx#Version=4,73,8412,0" codetype="VIEWASTEXT" height="100"
+id="hhctrl" type="application/x-oleobject" width="100">
+<param name="Command" value="ShortCut"/>
+<param name="Text" value="Text: DITA "/>
+<param name="Item1" value=",../samples/java/IImportEngineTask.dita,"/></object><codeblock>&lt;javaField id="javax.swing.plaf.TabbedPaneUI">
+   &lt;apiName>calcRect&lt;/apiName>
+   &lt;shortDesc>
+      A rectangle used for general layout calculations in order to
+      avoid constructing many new rectangles automatically.
+   &lt;/shortDesc>
+   &lt;javaFieldDetail>
+      &lt;javaFieldDef>
+         &lt;javaTransientField/>
+         &lt;javaFieldAccess value="protected"/>
+         &lt;javaFieldClass href=”http://java.sun.com/…/awt/Rectangle.html”
+              format=”html” scope=”external”>Rectangle&lt;/javaFieldClass>
+      &lt;/javaFieldDef>
+    &lt;/javaFieldDetail>
+&lt;/javaField></codeblock></example>
+<section><title>Processing Expectations</title><image href="images/javaTransientField.jpg"
+placement="inline"><alt></alt></image></section>
+<section conref="../packagedef.dita#javaTransientField-reference/javaTransientField-containedBy-section"></section>
+<section conref="../packagedef.dita#javaTransientField-reference/javaTransientField-contains-section"></section>
+<section conref="../packagedef.dita#javaTransientField-reference/javaTransientField-contentModel-section"></section>
+<section conref="../packagedef.dita#javaTransientField-reference/javaTransientField-attList-section"></section>
+<section conref="../packagedef.dita#javaTransientField-reference/javaTransientField-classValue-section"></section>
+</refbody>
+</reference>
+<?Pub *0000002873?>

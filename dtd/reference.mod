@@ -2,8 +2,8 @@
 <!--                    HEADER                                     -->
 <!-- ============================================================= -->
 <!--  MODULE:    DITA Reference                                    -->
-<!--  VERSION:   1.O                                               -->
-<!--  DATE:      February 2005                                     -->
+<!--  VERSION:   1.0.1                                             -->
+<!--  DATE:      November 2005                                     -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -11,7 +11,7 @@
 <!--                    PUBLIC DOCUMENT TYPE DEFINITION            -->
 <!--                    TYPICAL INVOCATION                         -->
 <!--                                                               -->
-<!--  Refer to this file by the following public identfier or an 
+<!--  Refer to this file by the following public identifier or an 
       appropriate system identifier 
 PUBLIC "-//OASIS//ELEMENTS DITA Reference//EN"
       Delivered as file "reference.mod"                            -->
@@ -28,6 +28,11 @@ PUBLIC "-//OASIS//ELEMENTS DITA Reference//EN"
 <!--             (C) Copyright OASIS Open 2005.                    -->
 <!--             (C) Copyright IBM Corporation 2001, 2004.         -->
 <!--             All Rights Reserved.                              -->
+<!--                                                               -->
+<!--  UPDATES:                                                     -->
+<!--    2005.11.15 RDA: Removed old declaration for                -->
+<!--                    referenceClasses entity                    -->
+<!--    2005.11.15 RDA: Corrected LONG NAME for propdeschd         -->
 <!-- ============================================================= -->
 
 
@@ -53,9 +58,6 @@ PUBLIC "-//OASIS//ELEMENTS DITA Reference//EN"
 <!-- ============================================================= -->
 <!--                   SPECIALIZATION OF DECLARED ELEMENTS         -->
 <!-- ============================================================= -->
-
-
-<!ENTITY % referenceClasses SYSTEM "reference_class.ent"             >
 
 
 <!ENTITY % reference-info-types 
@@ -120,7 +122,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Reference//EN"
                         CDATA                            #IMPLIED    >
 
 
-<!--                    LONG NAME: Refernce Syntax                 -->
+<!--                    LONG NAME: Reference Syntax                -->
 <!ELEMENT refsyn        (%section.cnt;)*                             >  
 <!ATTLIST refsyn          
              spectitle  CDATA                            #IMPLIED
@@ -169,7 +171,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Reference//EN"
                         CDATA                            #IMPLIED    >
 
 
-<!--                    LONG NAME: Property Schedule               -->
+<!--                    LONG NAME: Property Description Head       -->
 <!ELEMENT propdeschd    (%tblcell.cnt;)*                             >
 <!ATTLIST propdeschd    
              specentry  CDATA                            #IMPLIED

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
-<!DOCTYPE task PUBLIC "-//IBM//DTD DITA Task//EN" "../dtd/task.dtd">
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="linux_install_fop" xml:lang="en-us">
   <title>Installing Apache FOP</title>
   <titlealts>
@@ -34,13 +34,13 @@
         <info>
           <sl>
             <sli>
-              <filepath>\build\fop.jar</filepath>
+              <filepath>build/fop.jar</filepath>
             </sli>
             <sli>
-              <filepath>\lib\batik.jar</filepath>
+              <filepath>lib/batik.jar</filepath>
             </sli>
             <sli>
-              <filepath>\lib\avalon-framework-cvs-20020806.jar</filepath>
+              <filepath>lib/avalon-framework-cvs-20020806.jar</filepath>
             </sli>
           </sl>
         </info>

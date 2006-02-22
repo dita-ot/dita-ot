@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2004, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "../../dtd/reference.dtd">
+<!--             (C) Copyright OASIS Open 2005.                    -->
+<!--             (C) Copyright IBM Corporation 2001, 2004.         -->
+<!--             All Rights Reserved.                              -->
+<reference id="topicgroup" xml:lang="en-us">
+<title><keyword>topicgroup</keyword></title>
+<shortdesc>The &lt;<keyword>topicgroup</keyword>> element is for creating
+groups of &lt;<keyword>topicref</keyword>> elements without affecting the
+hierarchy, as opposed to nested &lt;<keyword>topicref</keyword>> elements
+within a &lt;<keyword>topicref</keyword>>, which does imply a structural hierarchy.
+It is typically used outside a hierarchy to identify groups for linking without
+affecting the resulting toc/navigation output.</shortdesc>
+<refbody>
+<section conref="MapNav.dita#commonCMdefs/topicgroup-contains"></section>
+<section conref="MapNav.dita#commonCMdefs/topicgroup-containedby"></section>
+<section conref="MapNav.dita#commonCMdefs/topicgroup-classvalue"></section>
+<section><title>Attributes</title><simpletable id="topicgroup_attr" relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="commonLRdefs.dita#commonLRdefs/id-topicref">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/conref-topicref">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/topicref-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/select-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/classonly">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+</simpletable></section>
+<example>          <title>Example</title><p>The following &lt;topicgroup>
+adds a set of related links among the members of the family it defines using
+collection-type="family", but does not affect generated navigation files or
+<?Pub Caret?>tables of contents since the group is set to toc="no"<codeblock>&lt;map title="DITA Reference">
+ &lt;topicref href="anchor.dita" type="topic">&lt;/topicref>
+ &lt;topicref href="apiname.dita" type="topic">&lt;/topicref>
+ &lt;topicref href="audience.dita" type="topic">&lt;/topicref>
+ &lt;topicref href="author.dita" type="topic">&lt;/topicref>
+ <b>&lt;topicgroup  collection-type="family" toc="no"></b>
+  &lt;topicref href="global-atts.dita" type="topic">&lt;/topicref>
+  &lt;topicref href="select-atts.dita" type="topic">&lt;/topicref>
+  &lt;topicref href="univ-atts.dita" type="topic">&lt;/topicref>
+  &lt;topicref href="topicref-atts.dita" type="topic">&lt;/topicref>
+ <b>&lt;/topicgroup></b>
+&lt;/map></codeblock></p>        </example>
+</refbody>
+</reference>
+<?Pub *0000003483?>

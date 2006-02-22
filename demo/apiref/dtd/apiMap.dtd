@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+<!DOCTYPE apiMap PUBLIC "-//IBM//DTD DITA API Reference Map//EN" "dtd/apiMap.dtd"   >
+-->
+<!--
+ | (C) Copyright IBM Corporation 2005 - 2006. All Rights Reserved.
+ *-->
+<!--vocabulary declarations-->
+<!ENTITY % mapgroup-d-dec PUBLIC "-//OASIS//ENTITIES DITA Map Group Domain//EN" 
+  "../../../dtd/mapgroup.ent">
+  %mapgroup-d-dec;
+
+<!--vocabulary substitution (one for each extended base element,
+    with the name of the domain(s) in which the extension was declared)-->
+<!ENTITY % topicref     "topicref | (%mapgroup-d-topicref;)"         >
+
+<!--vocabulary attributes (must be declared ahead of the dtds, which puts @domains first in order) -->
+<!ENTITY included-domains "&mapgroup-d-att;"                         >
+
+<!--Embed map to get generic elements -->
+<!ENTITY % map-type PUBLIC "-//OASIS//Elements DITA Map//EN" "../../../dtd/map.mod">
+  %map-type;
+
+<!ENTITY % apimap-type PUBLIC "-//IBM//ELEMENTS DITA API Reference Map//EN" "apiMap.mod">
+  %apimap-type;
+
+
+<!--vocabulary definitions-->
+<!ENTITY % mapgroup-d-def PUBLIC "-//OASIS//ELEMENTS DITA Map Group Domain//EN" 
+  "../../../dtd/mapgroup.mod">
+  %mapgroup-d-def;
+

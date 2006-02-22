@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2004, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "../../dtd/reference.dtd">
+<!--             (C) Copyright OASIS Open 2005.                    -->
+<!--             (C) Copyright IBM Corporation 2001, 2004.         -->
+<!--             All Rights Reserved.                              -->
+<reference id="critdates" xml:lang="en-us">
+<title><keyword>critdates</keyword></title>
+<shortdesc>The &lt;<keyword>critdates</keyword>> element contains the critical
+dates in a document life cycle, such as the creation date and multiple revision
+dates.</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>critdates (critical dates)</indexterm><indexterm>critical
+dates (critdates)</indexterm><indexterm>Prolog elements<indexterm>critdates</indexterm>  </indexterm>
+<indexterm>critdates</indexterm></keywords>
+</metadata></prolog>
+<refbody>
+<section conref="DitabaseNav.dita#commonCMdefs/critdates-contains"></section>
+<section conref="DitabaseNav.dita#commonCMdefs/critdates-containedby"></section>
+<section conref="DitabaseNav.dita#commonCMdefs/critdates-classvalue"></section>
+<section><title>Attributes</title><simpletable id="critdates_attr" relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/classonly">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+</simpletable></section>
+<example>    <title>Example</title><?Pub Caret?>      <codeblock>&lt;prolog>
+ &lt;critdates>
+  &lt;created date="2001-06-12">&lt;/created>
+  &lt;revised golive="2001-08-20">&lt;/revised>
+ &lt;/critdates>
+&lt;/prolog></codeblock>       </example>
+</refbody>
+</reference>
+<?Pub *0000002075?>

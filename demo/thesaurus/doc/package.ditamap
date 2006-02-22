@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE map PUBLIC "-//IBM//DTD DITA Map//EN"
+ "..\..\dtd\map.dtd">
+<map>
+<topicref href="packageOverview.xml"></topicref>
+<topicref href="subjectDomain/subject-d_module.xml" type="reference">
+<topicref href="subjectDomain/altLabel.xml" type="reference"></topicref>
+<topicref href="subjectDomain/altSymbol.xml" type="reference"></topicref>
+<topicref href="subjectDomain/changeNote.xml" type="reference"></topicref>
+<topicref href="subjectDomain/editorialNote.xml" type="reference"></topicref>
+<topicref href="subjectDomain/fullnoteref.xml" type="reference"></topicref>
+<topicref href="subjectDomain/hiddenLabel.xml" type="reference"></topicref>
+<topicref href="subjectDomain/historyNote.xml" type="reference"></topicref>
+<topicref href="subjectDomain/prefLabel.xml" type="reference"></topicref>
+<topicref href="subjectDomain/prefSymbol.xml" type="reference"></topicref>
+<topicref href="subjectDomain/scopeNote.xml" type="reference"></topicref>
+<topicref href="subjectDomain/subjectDefinition.xml" type="reference"></topicref>
+<topicref href="subjectDomain/subjectDetail.xml" type="reference"></topicref>
+<topicref href="subjectDomain/subjectLabels.xml" type="reference"></topicref>
+<topicref href="subjectDomain/subjectNote.xml" type="reference"></topicref>
+</topicref>
+<topicref href="mapScheme/scheme_module.xml" type="reference">
+<topicref href="mapScheme/hasInstance.xml" type="reference"></topicref>
+<topicref href="mapScheme/hasKind.xml" type="reference"></topicref>
+<topicref href="mapScheme/hasNarrower.xml" type="reference"></topicref>
+<topicref href="mapScheme/hasPart.xml" type="reference"></topicref>
+<topicref href="mapScheme/relatedSubjects.xml" type="reference"></topicref>
+<topicref href="mapScheme/schemeref.xml" type="reference"></topicref>
+<topicref href="mapScheme/subjAltLabel.xml" type="reference"></topicref>
+<topicref href="mapScheme/subjAltSymbol.xml" type="reference"></topicref>
+<topicref href="mapScheme/subjectdef.xml" type="reference"></topicref>
+<topicref href="mapScheme/subjectHead.xml" type="reference"></topicref>
+<topicref href="mapScheme/subjectmeta.xml" type="reference"></topicref>
+<topicref href="mapScheme/subjectRel.xml" type="reference"></topicref>
+<topicref href="mapScheme/subjectRelHeader.xml" type="reference"></topicref>
+<topicref href="mapScheme/subjectRelTable.xml" type="reference"></topicref>
+<topicref href="mapScheme/subjectRole.xml" type="reference"></topicref>
+<topicref href="mapScheme/subjectScheme.xml" type="reference"></topicref>
+<topicref href="mapScheme/subjHiddenLabel.xml" type="reference"></topicref>
+<topicref href="mapScheme/subjPrefLabel.xml" type="reference"></topicref>
+<topicref href="mapScheme/subjPrefSymbol.xml" type="reference"></topicref>
+</topicref>
+<topicref href="classifyDomain/classify-d_module.xml" type="reference">
+<topicref href="classifyDomain/subjectCell.xml" type="reference"></topicref>
+<topicref href="classifyDomain/subjectref.xml" type="reference"></topicref>
+<topicref href="classifyDomain/topicCell.xml" type="reference"><?Pub Caret?>
+</topicref>
+<topicref href="classifyDomain/topicsubject.xml" type="reference"></topicref>
+<topicref href="classifyDomain/topicSubjectHeader.xml" type="reference">
+</topicref>
+<topicref href="classifyDomain/topicSubjectRow.xml" type="reference"></topicref>
+<topicref href="classifyDomain/topicSubjectTable.xml" type="reference"></topicref>
+</topicref>
+</map>
+<?Pub *0000003535?>

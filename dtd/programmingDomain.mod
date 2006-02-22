@@ -2,8 +2,8 @@
 <!--                    HEADER                                     -->
 <!-- ============================================================= -->
 <!--  MODULE:    DITA DITA Programming Domain                      -->
-<!--  VERSION:   1.O                                               -->
-<!--  DATE:      February 2005                                     -->
+<!--  VERSION:   1.0.1                                             -->
+<!--  DATE:      November 2005                                     -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -11,15 +11,15 @@
 <!--                    PUBLIC DOCUMENT TYPE DEFINITION            -->
 <!--                    TYPICAL INVOCATION                         -->
 <!--                                                               -->
-<!--  Refer to this file by the following public identfier or an 
+<!--  Refer to this file by the following public identifier or an 
       appropriate system identifier 
 PUBLIC "-//OASIS//ELEMENTS DITA Programming Domain//EN"
-      Delivered as file "programming-domain.mod"                   -->
+      Delivered as file "programmingDomain.mod"                    -->
 
 <!-- ============================================================= -->
 <!-- SYSTEM:     Darwin Information Typing Architecture (DITA)     -->
 <!--                                                               -->
-<!-- PURPOSE:    Declaring the elements and sepcialization         -->
+<!-- PURPOSE:    Declaring the elements and specialization         -->
 <!--             attributes for the Programming Domain             -->
 <!--                                                               -->
 <!-- ORIGINAL CREATION DATE:                                       -->
@@ -27,6 +27,13 @@ PUBLIC "-//OASIS//ELEMENTS DITA Programming Domain//EN"
 <!--                                                               -->
 <!--             (C) Copyright OASIS Open 2005.                    -->
 <!--             (C) Copyright IBM Corporation 2001, 2004.         -->
+<!--             All Rights Reserved.                              -->
+<!--                                                               -->
+<!--  UPDATES:                                                     -->
+<!--    2005.11.15 RDA: Updated these comments to match template   -->
+<!--    2005.11.15 RDA: Corrected Long Names for syntax groups,    -->
+<!--                    codeph, and kwd                            -->
+<!--    2005.11.15 RDA: Corrected the "Delivered as" system ID     -->
 <!-- ============================================================= -->
 
 
@@ -89,7 +96,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Programming Domain//EN"
              xml:lang   NMTOKEN                          #IMPLIED'   > 
 
 
-<!--                    LONG NAME: Code Emphasis                   -->
+<!--                    LONG NAME: Code Phrase                     -->
 <!ELEMENT codeph        (#PCDATA | %basic.ph.notm;)*                 >
 <!ATTLIST codeph      
              %univ-atts;                                  
@@ -237,7 +244,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Programming Domain//EN"
                         CDATA                            #IMPLIED    >
 
 
-<!--                    LONG NAME: Group Sequence                  -->
+<!--                    LONG NAME: Sequence Group                  -->
 <!ELEMENT groupseq      ((%title;)?, (%repsep;)?,
                          (%groupseq; | %groupchoice; | %groupcomp; |
                           %fragref; | %kwd; | %var; | %delim; | 
@@ -251,7 +258,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Programming Domain//EN"
                         CDATA                            #IMPLIED    >
 
 
-<!--                    LONG NAME: Group Choice                    -->
+<!--                    LONG NAME: Choice Group                    -->
 <!ELEMENT groupchoice   ((%title;)?, (%repsep;)?,
                          (%groupseq; | %groupchoice; | %groupcomp; |
                           %fragref;| %kwd; | %var; | %delim; |
@@ -265,7 +272,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Programming Domain//EN"
                         CDATA                            #IMPLIED    >
 
 
-<!--                    LONG NAME: Group Comparison                -->
+<!--                    LONG NAME: Composite group                 -->
 <!ELEMENT groupcomp     ((%title;)?, (%repsep;)?,
                          (%groupseq; | %groupchoice; | %groupcomp; |
                           %fragref; | %kwd; | %var; | %delim; |
@@ -327,7 +334,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Programming Domain//EN"
                         CDATA                            #IMPLIED    >
 
 
-<!--                    LONG NAME: Keyword                         -->
+<!--                    LONG NAME: Syntax Keyword                  -->
 <!ELEMENT kwd           (#PCDATA)                                    >
 <!ATTLIST kwd             
              keyref     CDATA                            #IMPLIED

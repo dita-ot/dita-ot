@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
 <project name="sample_all" default="all" basedir="..">
-	<!-- Set a property for each environment variable -->
-	<property environment="env"/>
-	<property name="dita.extname" value=".xml"/>
-
-    <import file="${basedir}${file.separator}ant${file.separator}sample_xhtml.xml"/>
-    <import file="${basedir}${file.separator}ant${file.separator}sample_eclipsehelp.xml"/>
-    <import file="${basedir}${file.separator}ant${file.separator}sample_javahelp.xml"/>
-    <import file="${basedir}${file.separator}ant${file.separator}sample_htmlhelp.xml"/>
-    <import file="${basedir}${file.separator}ant${file.separator}sample_pdf.xml"/>
-    <import file="${basedir}${file.separator}ant${file.separator}sample_docbook.xml"/>
-
-	<!-- exercise all of the sample targets -->
-	<target name="all" depends="sample2xhtml, sample2eclipsehelp,
-        sample2javahelp, sample2htmlhelp, sample2pdf, sample2docbook">
-	</target>
+  <!-- Set a property for each environment variable -->
+  <property environment="env"/>
+  <property name="args.logdir" value="${basedir}${file.separator}log"></property>
+  <property name="dita.extname" value=".xml"/>
+  <import file="${basedir}${file.separator}ant${file.separator}sample_xhtml.xml"/>
+  <import file="${basedir}${file.separator}ant${file.separator}sample_eclipsehelp.xml"/>
+  <import file="${basedir}${file.separator}ant${file.separator}sample_javahelp.xml"/>
+  <import file="${basedir}${file.separator}ant${file.separator}sample_htmlhelp.xml"/>
+  <import file="${basedir}${file.separator}ant${file.separator}sample_pdf.xml"/>
+  <import file="${basedir}${file.separator}ant${file.separator}sample_docbook.xml"/>
+  <!-- exercise all of the sample targets -->
+  <target name="all"
+    depends="sample2xhtml, sample2eclipsehelp, sample2javahelp, sample2htmlhelp, sample2pdf, sample2docbook"
+  > </target>
 </project>

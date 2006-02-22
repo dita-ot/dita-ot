@@ -2,8 +2,8 @@
 <!--                    HEADER                                     -->
 <!-- ============================================================= -->
 <!--  MODULE:    DITA Map Group Domain                             -->
-<!--  VERSION:   1.O                                               -->
-<!--  DATE:      February 2005                                     -->
+<!--  VERSION:   1.0.1                                             -->
+<!--  DATE:      November 2005                                     -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -11,15 +11,15 @@
 <!--                    PUBLIC DOCUMENT TYPE DEFINITION            -->
 <!--                    TYPICAL INVOCATION                         -->
 <!--                                                               -->
-<!--  Refer to this file by the following public identfier or an 
+<!--  Refer to this file by the following public identifier or an 
       appropriate system identifier 
 PUBLIC "-//OASIS//ELEMENTS DITA Map Group Domain//EN"
-      Delivered as file "mapgroup.mod"                             -->
+      Delivered as file "mapGroup.mod"                             -->
 
 <!-- ============================================================= -->
 <!-- SYSTEM:     Darwin Information Typing Architecture (DITA)     -->
 <!--                                                               -->
-<!-- PURPOSE:    Define elements and specialization atttributed    -->
+<!-- PURPOSE:    Define elements and specialization attributes     -->
 <!--             for Map Group Domain                              -->
 <!--                                                               -->
 <!-- ORIGINAL CREATION DATE:                                       -->
@@ -28,6 +28,9 @@ PUBLIC "-//OASIS//ELEMENTS DITA Map Group Domain//EN"
 <!--             (C) Copyright OASIS Open 2005.                    -->
 <!--             (C) Copyright IBM Corporation 2001, 2004.         -->
 <!--             All Rights Reserved.                              -->
+<!--                                                               -->
+<!--  UPDATES:                                                     -->
+<!--    2005.11.15 RDA: Corrected the "Delivered as" system ID     -->
 <!-- ============================================================= -->
 
 

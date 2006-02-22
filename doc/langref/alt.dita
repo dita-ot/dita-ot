@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2004, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "../../dtd/reference.dtd">
+<!--             (C) Copyright OASIS Open 2005.                    -->
+<!--             (C) Copyright IBM Corporation 2001, 2004.         -->
+<!--             All Rights Reserved.                              -->
+<reference id="alt" xml:lang="en-us">
+<title>alt</title>
+<shortdesc>The alt element provides an element equivalent of the <apiname>alt</apiname> attribute
+on the image element. As an element, it provides direct text entry within
+an XML editor and is more easily accessed than an attribute for translation.</shortdesc>
+<refbody>
+<section> <p> The use of the alt attribute is deprecated but still supported.
+The alt element is the preferred way of indicating alternative text for an
+image.</p> </section>
+<section conref="DitabaseNav.dita#commonCMdefs/alt-contains"></section>
+<section conref="DitabaseNav.dita#commonCMdefs/alt-containedby"></section>
+<section conref="DitabaseNav.dita#commonCMdefs/alt-classvalue"></section>
+<section><title>Attributes</title><simpletable id="apiname_attr" relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="commonLRdefs.dita#commonLRdefs/univ-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/classandout">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+</simpletable></section>
+<section><title>Example<?Pub Caret?></title> <p>The markup for alt text within
+an image looks like this:</p> <codeblock>&lt;image href="tip-ing.jpg"/>
+  &lt;alt>Here's a Tip!&lt;/alt>
+&lt;/image> </codeblock></section>
+</refbody>
+</reference>
+<?Pub *0000002159?>

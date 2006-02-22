@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?><!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference
+  PUBLIC "-//IBM//DTD DITA Reference//EN" "..\dtd\reference.dtd">
+<reference id="javaFieldDef" outputclass="element" xml:lang="en-us">
+<title>javaFieldDef</title>
+<shortdesc>The &lt;javaFieldDef&gt; element represents the <i>FieldDeclaration</i> of
+a class declaration.</shortdesc>
+<refbody>
+<section><title>Description</title><p>The variables of a class type are introduced
+by the field declarations: <simpletable>
+<strow>
+<stentry><lines><b>FieldDeclaration:</b>
+      <i>FieldModifiers<sup>opt</sup></i>   Data Type    VariableDeclarators  </lines></stentry>
+</strow>
+</simpletable></p><p>A
+field definition can include a set of attributes, a new modifier, a valid
+combination of the four access modifiers, and a static modifier. Also, a field
+declaration can include a read-only modifier or a volatile modifier, but not
+both. The <i>public</i>, <i>protected</i>, and <i>private</i> access modifiers
+are introduced by the &lt;javaFieldAccess&gt; element. The <i>FieldModifiers</i> and <i>Data
+Type</i> apply to all the decorators in the declaration.</p></section>
+<section conref="../packagedef.dita#javaFieldDef-reference/javaFieldDef-containedBy-section"/><section conref="../packagedef.dita#javaFieldDef-reference/javaFieldDef-contains-section"/><section conref="../packagedef.dita#javaFieldDef-reference/javaFieldDef-contentModel-section"/><section conref="../packagedef.dita#javaFieldDef-reference/javaFieldDef-attList-section"/><section conref="../packagedef.dita#javaFieldDef-reference/javaFieldDef-classValue-section"/></refbody>
+</reference>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\dtd\reference.dtd">
+<reference id="apiConstructorDef" outputclass="element" xml:lang="en-us">
+<title>apiConstructorDef</title>
+<shortdesc>The &lt;javaConstructorDef&gt; element provides the constructor
+declaration. </shortdesc>
+<refbody>
+<section><title>Description</title><p>The &lt;apiConstructorDef &gt; element
+is an exclusive alternative to &lt;apiOperationDef&gt; element.</p></section>
+<section conref="../packagedef.dita#apiConstructorDef-reference/apiConstructorDef-containedBy-section"></section>
+<section conref="../packagedef.dita#apiConstructorDef-reference/apiConstructorDef-contains-section"></section>
+<section conref="../packagedef.dita#apiConstructorDef-reference/apiConstructorDef-contentModel-section"></section>
+<section conref="../packagedef.dita#apiConstructorDef-reference/apiConstructorDef-attList-section"></section>
+<section conref="../packagedef.dita#apiConstructorDef-reference/apiConstructorDef-classValue-section"></section>
+</refbody>
+</reference>

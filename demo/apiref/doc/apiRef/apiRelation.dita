@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?><!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference
+  PUBLIC "-//IBM//DTD DITA Reference//EN" "..\dtd\reference.dtd">
+<reference id="apiRelation" outputclass="element" xml:lang="en-us">
+<title>apiRelation</title>
+<shortdesc>The &lt;apiRelation&gt; element specifies a related API item that
+is part of the declared interface to this API item.</shortdesc>
+<refbody>
+<section><title>Description</title><p>This element can provide an href attribute
+if the description of the API item is available. If the description is not
+available, the &lt;apiRelation&gt; element provides the name of the API item
+in its contents.</p><p><ul>
+<li>If you use an href attribute in a DITA API topic that describes the related
+API item, you do not need any other attributes. </li>
+</ul><ul>
+<li>If you provide an href attribute to some other format (such as HTML),
+you must provide the name of the related API item inside the &lt;apiRelation&gt;
+element.</li>
+</ul><ul>
+<li>If you cannot provide an href attribute (for instance, if the description
+of the related API item is not available), you must provide the name of the
+related API item inside the &lt;apiRelation&gt; element and the fully qualified
+name of the element in the keyref attribute. The keyref attribute should provide
+a unique key such as a fully qualified classifier name for the named API item.</li>
+</ul></p></section>
+<example><title>Example</title><p>The following example shows a simple &lt;apiRelation&gt;
+element:</p><codeblock>&lt;apiRef id="IRXEAfterCloseFile"&gt;
+   &lt;apiName&gt;getApplicableStereotypesAsString&lt;/apiName&gt;
+   &lt;shortdesc&gt;The test function&lt;/shortdesc&gt;
+   &lt;apiDetail&gt;
+      &lt;apiDef&gt;
+         &lt;apiRelation href="pluglet/IRXEAfterCloseFile.dita"/&gt;
+      &lt;/apiDef&gt;
+   &lt;/apiDetail&gt;
+&lt;/apiRef&gt;</codeblock></example>
+<section conref="../packagedef.dita#apiRelation-reference/apiRelation-containedBy-section"/><section conref="../packagedef.dita#apiRelation-reference/apiRelation-contains-section"/><section conref="../packagedef.dita#apiRelation-reference/apiRelation-contentModel-section"/><section conref="../packagedef.dita#apiRelation-reference/apiRelation-attList-section"/><section conref="../packagedef.dita#apiRelation-reference/apiRelation-classValue-section"/></refbody>
+</reference>

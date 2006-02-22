@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2004, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "../../dtd/reference.dtd">
+<!--             (C) Copyright OASIS Open 2005.                    -->
+<!--             (C) Copyright IBM Corporation 2001, 2004.         -->
+<!--             All Rights Reserved.                              -->
+<reference id="required-cleanup" xml:lang="en-us">
+<title><keyword>required-cleanup</keyword></title>
+<shortdesc>A &lt;<keyword>required-cleanup</keyword>> element is used as a
+placeholder for migrated elements that cannot be appropriately tagged without
+manual intervention. As the element name implies, the intent for authors is
+to clean up the contained material and eventually get rid of the &lt;<keyword>required-cleanup</keyword>>
+element. Authors should not insert this element into documents. </shortdesc>
+<prolog><metadata>
+<keywords><indexterm>required-cleanup</indexterm><indexterm>Specialization
+elements<indexterm>required-cleanup</indexterm>  </indexterm><indexterm>required-cleanup</indexterm>
+</keywords>
+</metadata></prolog>
+<refbody>
+<section><note>Because the content of &lt;<keyword>required-cleanup</keyword>>
+is not considered to be verified data, <b>DITA processors are required to
+strip this element from output by default.</b> A runtime flag <i><keyword>may</keyword></i> be
+provided to allow a draft view of migrated content in context.</note></section>
+<section conref="DitabaseNav.dita#commonCMdefs/required-cleanup-contains"></section>
+<section conref="DitabaseNav.dita#commonCMdefs/required-cleanup-containedby"></section>
+<section conref="DitabaseNav.dita#commonCMdefs/required-cleanup-classvalue"></section>
+<section><title>Attributes</title><simpletable id="required-cleanup_attr"
+relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="commonLRdefs.dita#commonLRdefs/remap">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/univ-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/classandout">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+</simpletable></section>
+<example>          <title>Example<?Pub Caret?></title><p>Presuming an original
+HTML document had contained some content within a &lt;<keyword>center</keyword>>
+tag (for which there is no clear migrational equivalent in DITA), the following
+might be the result that is valid within an XML editor, but which requires
+an author to decide how to better tag or revise this original content:</p> 
+         <codeblock>&lt;section>
+  &lt;title>Some section title&lt;/title>
+  &lt;required-cleanup remap="center">Some original content migrated
+  from a &amp;lt;center> tag.&lt;/required-cleanup>
+&lt;/section>
+</codeblock>       </example>
+</refbody>
+</reference>
+<?Pub *0000003359?>

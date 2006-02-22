@@ -2,16 +2,16 @@
 <!-- ============================================================= -->
 <!--                    HEADER                                     -->
 <!-- ============================================================= -->
-<!--  MODULE:    DITA Task XSD Group Definition                                     -->
-<!--  VERSION:   1.0                                               -->
-<!--  DATE:      February 2005                                     -->
+<!--  MODULE:    DITA Task XSD Group Definition                    -->
+<!--  VERSION:   1.0.1                                             -->
+<!--  DATE:      November 2005                                     -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
 <!-- ============================================================= -->
 <!-- SYSTEM:     Darwin Information Typing Architecture (DITA)     -->
 <!--                                                               -->
-<!-- PURPOSE:    W3C XML Schema to describe DITA Tasks                        -->
+<!-- PURPOSE:    W3C XML Schema to describe DITA Tasks             -->
 <!--                                                               -->
 <!-- ORIGINAL CREATION DATE:                                       -->
 <!--             March 2001                                        -->
@@ -19,6 +19,10 @@
 <!--             (C) Copyright OASIS-Open.org 2005.                -->
 <!--             (C) Copyright IBM Corporation 2001, 2004.         -->
 <!--             All Rights Reserved.                              -->
+<!--                                                               -->
+<!--  UPDATES:                                                     -->
+<!--    2005.11.15 EAS: Corrected definitions for choption,        -->
+<!--                    chdesc, choptionhd, and chdeschd           -->
 <!-- ============================================================= -->
 <xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema'>
   <xs:group name="task">
@@ -149,25 +153,25 @@
 
   <xs:group name="choption">
   	<xs:sequence>
-  	  <xs:element ref="task" />
+  	  <xs:element ref="choption" />
   	</xs:sequence>
   </xs:group>
 
   <xs:group name="chdesc">
   	<xs:sequence>
-  	  <xs:element ref="task" />
+  	  <xs:element ref="chdesc" />
   	</xs:sequence>
   </xs:group>
 
   <xs:group name="choptionhd">
   	<xs:sequence>
-  	  <xs:element ref="task" />
+  	  <xs:element ref="choptionhd" />
   	</xs:sequence>
   </xs:group>
 
   <xs:group name="chdeschd">
   	<xs:sequence>
-  	  <xs:element ref="task" />
+  	  <xs:element ref="chdeschd" />
   	</xs:sequence>
   </xs:group>
 

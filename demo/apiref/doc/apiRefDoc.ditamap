@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE map PUBLIC "-//IBM//DTD DITA Map//EN"
+ "..\dtd\map.dtd">
+<map title="DITA API Specialization">
+<topicref href="guidelineSpecialization/ditaapispecialization.dita" navtitle="DITA API specialization"
+toc="yes" type="concept">
+<topicref href="guidelineSpecialization/intro_ditaapispecialization.dita"
+navtitle="Overview" type="concept">
+<topicref href="guidelineSpecialization/language-specificapireference.dita"
+navtitle="Language-specific API reference" type="concept"></topicref>
+</topicref>
+<topicref href="GenericAPILayer.dita" id="GenericAPILayer" locktitle="yes"
+navtitle="Generic API topic types" print="yes" status="new" toc="yes" type="reference">
+<topicref href="apiRef/apiRef_module.dita" locktitle="yes" navtitle="apiRef module"
+toc="yes" type="reference">
+<topicref href="apiRef/apiRef.dita" type="reference">
+<topicref href="apiRef/apiName.dita" type="reference"></topicref>
+<topicref href="apiRef/apiDetail.dita" type="reference">
+<topicref href="apiRef/apiSyntax.dita" type="reference">
+<topicref href="apiRef/apiSyntaxText.dita" type="reference">
+<topicref href="apiRef/apiRelation.dita" toc="no" type="reference"></topicref>
+<topicref href="apiRef/apiType.dita" toc="no" type="reference"></topicref>
+<topicref href="apiRef/apiItemName.dita" toc="no" type="reference"></topicref>
+<topicref href="apiRef/apiData.dita" toc="no" type="reference"></topicref>
+</topicref>
+<topicref href="apiRef/apiSyntaxItem.dita" type="reference">
+<topicref href="apiRef/apiItemName.dita" toc="no" type="reference"></topicref>
+<topicref href="apiRef/apiDefNote.dita" toc="no" type="reference"></topicref>
+</topicref>
+</topicref>
+<topicref href="apiRef/apiDef.dita" type="reference">
+<topicref href="apiRef/apiQualifier.dita" type="reference"></topicref>
+<topicref href="apiRef/apiRelation.dita" type="reference"></topicref>
+<topicref href="apiRef/apiType.dita" type="reference"></topicref>
+<topicref href="apiRef/apiArray.dita" type="reference"></topicref>
+<topicref href="apiRef/apiData.dita" type="reference"></topicref>
+<topicref href="apiRef/apiDefNote.dita" type="reference"></topicref>
+<topicref href="apiRef/apiDefItem.dita" type="reference">
+<topicref href="apiRef/apiDef.dita" toc="no" type="reference"></topicref>
+</topicref>
+<topicref href="apiRef/apiItemName.dita" type="reference"></topicref>
+</topicref>
+<topicref href="apiRef/apiDesc.dita" type="reference"></topicref>
+<topicref href="apiRef/apiImpl.dita" type="reference"></topicref>
+</topicref>
+</topicref>
+</topicref>
+<topicref href="apiPackage/apiPackage_module.dita" locktitle="yes" navtitle="apiPackage module"
+toc="yes" type="reference">
+<topicref href="apiPackage/apiPackage.dita" type="reference">
+<topicref format="dita" href="apiRef/apiName.dita" toc="no" type="reference">
+</topicref>
+<topicref href="apiRef/apiDetail.dita" toc="no" type="reference"></topicref>
+<topicref href="apiClassifier/apiClassifier_module.dita" toc="no" type="reference">
+</topicref>
+<topicref href="apiOperation/apiOperation_module.dita" toc="no" type="reference">
+</topicref>
+<topicref href="apiValue/apiValue_module.dita" toc="no" type="reference">
+</topicref>
+</topicref>
+</topicref>
+<topicref href="apiClassifier/apiClassifier_module.dita" locktitle="yes" navtitle="apiClassifier module"
+toc="yes" type="reference">
+<topicref href="apiClassifier/apiClassifier.dita" type="reference">
+<topicref format="dita" href="apiRef/apiName.dita" toc="no" type="reference">
+</topicref>
+<topicref href="apiClassifier/apiClassifierDetail.dita" type="reference">
+<topicref href="apiClassifier/apiClassifierDef.dita" type="reference">
+<topicref href="apiClassifier/apiClassifierMember.dita" type="reference">
+<topicref href="apiRef/apiItemName.dita" toc="no" type="reference"></topicref>
+<topicref href="apiClassifier/apiOtherClassifier.dita" type="reference"></topicref>
+<topicref href="apiRef/apiQualifier.dita" toc="no" type="reference"></topicref>
+<topicref href="apiRef/apiRelation.dita" toc="no" type="reference"></topicref>
+<topicref href="apiRef/apiType.dita" toc="no" type="reference"></topicref>
+<topicref href="apiRef/apiArray.dita" toc="no" type="reference"></topicref>
+<topicref href="apiRef/apiData.dita" toc="no" type="reference"></topicref>
+<topicref href="apiRef/apiDefNote.dita" toc="no" type="reference"></topicref>
+</topicref>
+<topicref href="apiClassifier/apiBaseClassifier.dita" type="reference"></topicref>
+<topicref href="apiRef/apiQualifier.dita" toc="no" type="reference"></topicref>
+<topicref href="apiRef/apiRelation.dita" toc="no" type="reference"></topicref>
+<topicref href="apiRef/apiType.dita" toc="no" type="reference"></topicref>
+<topicref href="apiRef/apiArray.dita" toc="no" type="reference"></topicref>
+<topicref href="apiRef/apiData.dita" toc="no" type="reference"></topicref>
+<topicref href="apiRef/apiDefNote.dita" toc="no" type="reference"></topicref>
+<topicref href="apiRef/apiItemName.dita" toc="no" type="reference"></topicref>
+</topicref>
+<topicref href="apiClassifier/apiClassSyntax.dita" type="reference">
+<topicref href="apiClassifier/apiClassSyntaxText.dita" type="reference"></topicref>
+<topicref href="apiClassifier/apiClassSyntaxItem.dita" type="reference"></topicref>
+</topicref>
+<topicref format="dita" href="apiRef/apiDesc.dita" toc="no" type="reference">
+</topicref>
+<topicref format="dita" href="apiRef/apiImpl.dita" toc="no" type="reference">
+</topicref>
+</topicref>
+<topicref href="apiOperation/apiOperation_module.dita" toc="no" type="reference">
+</topicref>
+<topicref href="apiValue/apiValue_module.dita" toc="no" type="reference">
+</topicref>
+</topicref>
+</topicref>
+<topicref href="apiOperation/apiOperation_module.dita" locktitle="yes" navtitle="apiOperation module"
+toc="yes" type="reference">
+<topicref href="apiOperation/apiOperation.dita" type="reference">
+<topicref format="dita" href="apiRef/apiName.dita" toc="no" type="reference">
+</topicref>
+<topicref href="apiOperation/apiOperationDetail.dita" type="reference">
+<topicref href="apiRef/apiSyntax.dita" toc="no" type="reference"></topicref>
+<topicref href="apiOperation/apiOperationDef.dita" type="reference">
+<topicref href="apiOperation/apiReturn.dita" type="reference">
+<topicref href="apiRef/apiItemName.dita" toc="no" type="reference"></topicref>
+<topicref href="apiOperation/apiOperationClassifier.dita" toc="no" type="reference">
+</topicref>
+<topicref href="apiRef/apiQualifier.dita" toc="no" type="reference"></topicref>
+<topicref href="apiRef/apiRelation.dita" toc="no" type="reference"></topicref>
+<topicref href="apiRef/apiType.dita" toc="no" type="reference"></topicref>
+<topicref href="apiRef/apiArray.dita" toc="no" type="reference"></topicref>
+<topicref href="apiRef/apiData.dita" toc="no" type="reference"></topicref>
+<topicref href="apiRef/apiDefNote.dita" toc="no" type="reference"></topicref>
+<topicref href="apiOperation/apiOperationDefItem.dita" toc="no" type="reference">
+</topicref>
+</topicref>
+<topicref href="apiOperation/apiParam.dita" type="reference">
+<topicref href="apiRef/apiItemName.dita" toc="no" type="reference"></topicref>
+<topicref href="apiOperation/apiOperationClassifier.dita" toc="no" type="reference">
+</topicref>
+<topicref href="apiRef/apiQualifier.dita" toc="no" type="reference"></topicref>
+<topicref href="apiRef/apiRelation.dita" toc="no" type="reference"></topicref>
+<topicref href="apiRef/apiType.dita" toc="no" type="reference"></topicref>
+<topicref href="apiRef/apiArray.dita" toc="no" type="reference"></topicref>
+<topicref href="apiRef/apiData.dita" toc="no" type="reference"></topicref>
+<topicref href="apiRef/apiDefNote.dita" toc="no" type="reference"></topicref>
+<topicref href="apiOperation/apiOperationDefItem.dita" toc="no" type="reference">
+</topicref>
+</topicref>
+<topicref href="apiOperation/apiEvent.dita" type="reference">
+<topicref href="apiRef/apiItemName.dita" toc="no" type="reference"></topicref>
+<topicref href="apiOperation/apiOperationClassifier.dita" toc="no" type="reference">
+</topicref>
+<topicref href="apiRef/apiQualifier.dita" toc="no" type="reference"></topicref>
+<topicref href="apiRef/apiRelation.dita" toc="no" type="reference"></topicref>
+<topicref href="apiRef/apiType.dita" toc="no" type="reference"></topicref>
+<topicref href="apiRef/apiArray.dita" toc="no" type="reference"></topicref>
+<topicref href="apiRef/apiData.dita" toc="no" type="reference"></topicref>
+<topicref href="apiRef/apiDefNote.dita" toc="no" type="reference"></topicref>
+<topicref href="apiOperation/apiOperationDefItem.dita" toc="no" type="reference">
+</topicref>
+</topicref>
+<topicref href="apiOperation/apiOperationDefItem.dita" type="reference">
+<topicref href="apiRef/apiItemName.dita" toc="no" type="reference"></topicref>
+<topicref href="apiOperation/apiOperationClassifier.dita" toc="no" type="reference">
+</topicref>
+<topicref href="apiRef/apiQualifier.dita" toc="no" type="reference"></topicref>
+<topicref href="apiRef/apiRelation.dita" toc="no" type="reference"></topicref>
+<topicref href="apiRef/apiType.dita" toc="no" type="reference"></topicref>
+<topicref href="apiRef/apiArray.dita" toc="no" type="reference"></topicref>
+<topicref href="apiRef/apiData.dita" toc="no" type="reference"></topicref>
+<topicref href="apiRef/apiDefNote.dita" toc="no" type="reference"></topicref>
+<topicref href="apiRef/apiDefItem.dita" toc="no" type="reference"></topicref>
+<topicref href="apiOperation/apiOperationDefItem.dita" toc="no" type="reference">
+</topicref>
+</topicref>
+<topicref href="apiOperation/apiOperationClassifier.dita" type="reference">
+</topicref>
+<topicref href="apiRef/apiQualifier.dita" toc="no" type="reference"></topicref>
+<topicref href="apiRef/apiRelation.dita" toc="no" type="reference"></topicref>
+<topicref href="apiRef/apiType.dita" toc="no" type="reference"></topicref>
+<topicref href="apiRef/apiArray.dita" toc="no" type="reference"></topicref>
+<topicref href="apiRef/apiData.dita" toc="no" type="reference"></topicref>
+<topicref href="apiRef/apiDefNote.dita" toc="no" type="reference"></topicref>
+<topicref href="apiRef/apiItemName.dita" toc="no" type="reference"></topicref>
+</topicref>
+<topicref href="apiOperation/apiConstructorDef.dita" type="reference">
+<topicref href="apiOperation/apiParam.dita" type="reference">
+<topicref href="apiRef/apiItemName.dita" toc="no" type="reference"></topicref>
+<topicref href="apiOperation/apiOperationClassifier.dita" toc="no" type="reference">
+</topicref>
+<topicref href="apiRef/apiDef.dita" toc="no" type="reference"></topicref>
+<topicref href="apiOperation/apiOperationDefItem.dita" toc="no" type="reference">
+</topicref>
+</topicref>
+<topicref href="apiOperation/apiEvent.dita" type="reference">
+<topicref href="apiRef/apiItemName.dita" toc="no" type="reference"></topicref>
+<topicref href="apiOperation/apiOperationClassifier.dita" toc="no" type="reference">
+</topicref>
+<topicref href="apiRef/apiDef.dita" toc="no" type="reference"></topicref>
+<topicref href="apiOperation/apiOperationDefItem.dita" toc="no" type="reference">
+</topicref>
+</topicref>
+<topicref href="apiOperation/apiOperationDefItem.dita" type="reference">
+<topicref href="apiRef/apiItemName.dita" toc="no" type="reference"></topicref>
+<topicref href="apiOperation/apiOperationClassifier.dita" toc="no" type="reference">
+</topicref>
+<topicref href="apiRef/apiDef.dita" toc="no" type="reference"></topicref>
+<topicref href="apiOperation/apiOperationDefItem.dita" toc="no" type="reference">
+</topicref>
+</topicref>
+<topicref href="apiOperation/apiConstructorClassifier.dita" type="reference">
+</topicref>
+<topicref href="apiRef/apiQualifier.dita" toc="no" type="reference"></topicref>
+<topicref href="apiRef/apiRelation.dita" toc="no" type="reference"></topicref>
+<topicref href="apiRef/apiType.dita" toc="no" type="reference"></topicref>
+<topicref href="apiRef/apiArray.dita" toc="no" type="reference"></topicref>
+<topicref href="apiRef/apiData.dita" toc="no" type="reference"></topicref>
+<topicref href="apiRef/apiDefNote.dita" toc="no" type="reference"></topicref>
+</topicref>
+<topicref href="apiOperation/apiOperationSyntax.dita" type="reference">
+<topicref href="apiOperation/apiOperationSyntaxText.dita" type="reference">
+</topicref>
+<topicref href="apiOperation/apiOperationSyntaxItem.dita" type="reference">
+</topicref>
+</topicref>
+<topicref href="apiRef/apiDesc.dita" toc="no" type="reference"></topicref>
+<topicref href="apiRef/apiImpl.dita" toc="no" type="reference"></topicref>
+</topicref>
+<topicref href="apiClassifier/apiClassifier_module.dita" toc="no" type="reference">
+</topicref>
+<topicref href="apiValue/apiValue_module.dita" toc="no" type="reference">
+</topicref>
+</topicref>
+</topicref>
+<topicref href="apiValue/apiValue_module.dita" locktitle="yes" navtitle="apiValue module"
+toc="yes" type="reference">
+<topicref href="apiValue/apiValue.dita" type="reference">
+<topicref format="dita" href="apiRef/apiName.dita" toc="no" type="reference">
+</topicref>
+<topicref href="apiValue/apiValueDetail.dita" type="reference">
+<topicref href="apiRef/apiSyntax.dita" toc="no" type="reference"></topicref>
+<topicref href="apiValue/apiValueDef.dita" type="reference">
+<topicref href="apiValue/apiValueMember.dita" type="reference">
+<topicref href="apiRef/apiQualifier.dita" toc="no" type="reference"></topicref>
+<topicref href="apiRef/apiRelation.dita" toc="no" type="reference"></topicref>
+<topicref href="apiRef/apiType.dita" toc="no" type="reference"></topicref>
+<topicref href="apiRef/apiArray.dita" toc="no" type="reference"></topicref>
+<topicref href="apiRef/apiData.dita" toc="no" type="reference"></topicref>
+<topicref href="apiRef/apiDefNote.dita" toc="no" type="reference"></topicref>
+<topicref href="apiRef/apiItemName.dita" toc="no" type="reference"></topicref>
+<topicref href="apiValue/apiValueClassifier.dita" toc="no" type="reference">
+</topicref>
+<topicref href="apiRef/apiDef.dita" toc="no" type="reference"></topicref>
+</topicref>
+<topicref href="apiValue/apiValueClassifier.dita" type="reference"></topicref>
+<topicref href="apiRef/apiDef.dita" toc="no" type="reference"></topicref>
+</topicref>
+<topicref href="apiValue/apiValueSyntax.dita" type="reference">
+<topicref href="apiValue/apiValueSyntaxText.dita" type="reference"></topicref>
+<topicref href="apiValue/apiValueSyntaxItem.dita" type="reference"></topicref>
+</topicref>
+<topicref href="apiRef/apiDesc.dita" toc="no" type="reference"></topicref>
+<topicref href="apiRef/apiImpl.dita" toc="no" type="reference"></topicref>
+</topicref>
+<topicref href="apiOperation/apiOperation_module.dita" toc="no" type="reference">
+</topicref>
+<topicref href="apiValue/apiValue_module.dita" toc="no" type="reference">
+</topicref>
+</topicref>
+</topicref>
+<topicref href="apiDomain/apiDomain_module.dita" locktitle="yes" navtitle="apiDomain module"
+toc="yes" type="reference">
+<topicref href="apiDomain/apiclassifier.dita" type="reference"></topicref>
+<topicref href="apiDomain/apioperation.dita" type="reference"></topicref>
+<topicref href="apiDomain/apipackage.dita" type="reference"></topicref>
+<topicref href="apiDomain/apivalue.dita" type="reference"></topicref>
+</topicref>
+<topicref href="apiMap/apiMap_module.dita" locktitle="yes" navtitle="apiMap module"
+type="reference">
+<topicref href="apiMap/apiMap.dita" type="reference">
+<topicref href="apiMap/apiItemRef.dita" locktitle="yes" navtitle="apiItemRef"
+type="reference"></topicref>
+</topicref>
+</topicref>
+</topicref>
+</topicref>
+</map>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\dtd\reference.dtd">
+<reference id="javaInterfaceDef" outputclass="element" xml:lang="en-us">
+<title>javaInterfaceDef</title>
+<shortdesc>The &lt;javaInterfaceDef> element provides the interface modifier
+elements for the interface declaration.</shortdesc>
+<refbody>
+<section><title>Description</title><p>An interface declaration specifies a
+new named reference type as in the following Java syntax:<simpletable>
+<strow>
+<stentry><lines><b>InterfaceDeclaration:</b>
+      <i>InterfaceModifiers<sup>opt</sup></i>   interface Identifier   <i>ExtendsInterfaces<sup>opt</sup></i>    InterfaceBody </lines></stentry>
+</strow>
+</simpletable>The<i> protected</i> and <i>private</i> access modifiers pertain
+only to the member interfaces within the enclosed class declaration. The  <i>static</i> access
+modifier pertains only to the member interfaces. The identifier in an interface
+declaration specifies the name of the interface. A compile error occurs if
+an interface has the same simple name as any of its enclosing classes or interfaces. </p> <?Pub Caret1?></section>
+<section conref="../packagedef.dita#javaInterfaceDef-reference/javaInterfaceDef-containedBy-section"></section>
+<section conref="../packagedef.dita#javaInterfaceDef-reference/javaInterfaceDef-contains-section"></section>
+<section conref="../packagedef.dita#javaInterfaceDef-reference/javaInterfaceDef-contentModel-section"></section>
+<section conref="../packagedef.dita#javaInterfaceDef-reference/javaInterfaceDef-attList-section"></section>
+<section conref="../packagedef.dita#javaInterfaceDef-reference/javaInterfaceDef-classValue-section"></section>
+</refbody>
+</reference>
+<?Pub *0000001805?>

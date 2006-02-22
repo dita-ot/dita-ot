@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\dtd\reference.dtd">
+<reference id="apiOperation_module" outputclass="module" xml:lang="en-us">
+<title>apiOperation module</title>
+<shortdesc>Defines a top-level container for general-purpose topic types for
+a function, method, subroutine, procedure, event handler, or other named unit
+of executable code.</shortdesc>
+<refbody>
+<section><title>Description</title><p>In an apiOperation topic type you can
+create a <b>New Document Type</b> by clicking <menucascade><uicontrol>File</uicontrol>
+<uicontrol>New</uicontrol></menucascade> from the Epic Editor Menu. An &lt;apiOperation>
+element is a single callable behavior. Examples include Java methods, Perl
+subroutines, C functions, and so on.</p></section>
+<example><title>Example</title><p>The following example shows an &lt;apiOperation>
+element used for a Visual Basic method:</p><codeblock><![CDATA[<apiOperation id="RXEApplication" outputclass="Method">
+   <apiName>startWriteAction</apiName>
+   <shortdesc>Opens a write action.</shortdesc>
+   <apiOperationDetail>
+      <apiOperationDef>
+        <apiSyntax>
+         <apiSyntaxText>Public Sub startWriteAction( <┘
+                       theNameOPT As String <┘
+               ) <┘
+          </apiSyntaxText>
+        <apiSyntax>
+      </apiOperationDef>
+      <apiDesc>All model element manipulations must be performed.</apiDesc>
+      <section>
+         <note>You must have an open write action before calling this method. 
+             For more information, see <xref href=""> Understanding Actions</xref>.
+         </note>
+       </section>
+       <example>An example of the method.</example>
+     </apiOperationDetail>
+</apiOperation>]]></codeblock></example>
+</refbody>
+</reference>

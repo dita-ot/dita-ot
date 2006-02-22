@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE javaClass PUBLIC "-//IBM//DTD DITA Java API Class Reference Type//EN"
+ "../dtd/javaClass.dtd">
+<javaClass id="javaException1">
+<apiName>CollectionTraversalException</apiName>
+<shortdesc>This class identifies an exception during a traverse operation
+on a collection.</shortdesc>
+<javaClassDetail>
+<javaClassDef>
+<javaBaseClass keyref="java.lang.Exception">Exception</javaBaseClass>
+</javaClassDef>
+<apiDesc>The CollectionTraversalException exception occurs when an operation
+on a node within a collection isn't able to access another node
+within the same collection.</apiDesc>
+</javaClassDetail>
+</javaClass>

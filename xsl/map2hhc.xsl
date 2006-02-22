@@ -18,12 +18,12 @@
                 version="1.0">
 
 <!-- Include error message template -->
-<xsl:include href="common/output-message.xsl"/>
+<xsl:import href="common/output-message.xsl"/>
 
 <xsl:output method="html" indent="no"/>
 
 <!-- Set the prefix for error message numbers -->
-<xsl:variable name="msgprefix">IDXS</xsl:variable>
+<xsl:variable name="msgprefix">DOTX</xsl:variable>
 
 <xsl:variable name="newline"><xsl:text>
 </xsl:text></xsl:variable>
@@ -130,11 +130,9 @@
     <xsl:when test="contains(@format,'htm') or contains(@format,'HTM')">
       <!-- Including a local HTML file: they must recompile to include it -->
       <xsl:call-template name="output-message">
-        <xsl:with-param name="msg">In order to include <xsl:value-of select="@href"/> in your help file, you will need
-to recompile the CHM file locally. The automatically compiled CHM file will only
-contain formatted DITA files, not files that are already in HTML.</xsl:with-param>
-        <xsl:with-param name="msgnum">039</xsl:with-param>
+        <xsl:with-param name="msgnum">048</xsl:with-param>
         <xsl:with-param name="msgsev">I</xsl:with-param>
+        <xsl:with-param name="msgparams">%1=<xsl:value-of select="@href"/></xsl:with-param>
       </xsl:call-template>
       <xsl:call-template name="output-toc-entry">
         <xsl:with-param name="pathFromMaplist" select="$pathFromMaplist"/>
@@ -143,11 +141,9 @@ contain formatted DITA files, not files that are already in HTML.</xsl:with-para
     <xsl:otherwise>
       <!-- @format is not DITA and not HTML, so the target will be ignored for HTML Help -->
       <xsl:call-template name="output-message">
-        <xsl:with-param name="msg">Only DITA topics, HTML files, and images may be included in
-your compiled CHM file. The reference to "<xsl:value-of select="@href"/>" will be ignored.
-To remove this message, you can set the toc="no" attribute on your topicref.</xsl:with-param>
-        <xsl:with-param name="msgnum">040</xsl:with-param>
+        <xsl:with-param name="msgnum">007</xsl:with-param>
         <xsl:with-param name="msgsev">I</xsl:with-param>
+        <xsl:with-param name="msgparams">%1=<xsl:value-of select="@href"/></xsl:with-param>
       </xsl:call-template>
     </xsl:otherwise>
   </xsl:choose>
@@ -197,9 +193,9 @@ To remove this message, you can set the toc="no" attribute on your topicref.</xs
                    </xsl:when>
                    <xsl:otherwise>
                      <xsl:call-template name="output-message">
-                       <xsl:with-param name="msg">File <xsl:value-of select="@href"/> does not exist.</xsl:with-param>
-                       <xsl:with-param name="msgnum">004</xsl:with-param>
+                       <xsl:with-param name="msgnum">008</xsl:with-param>
                        <xsl:with-param name="msgsev">W</xsl:with-param>
+                       <xsl:with-param name="msgparams">%1=<xsl:value-of select="@href"/></xsl:with-param>
                      </xsl:call-template>
                    </xsl:otherwise>
                  </xsl:choose>
@@ -226,9 +222,9 @@ To remove this message, you can set the toc="no" attribute on your topicref.</xs
                </xsl:when>
                <xsl:otherwise>
                  <xsl:call-template name="output-message">
-                   <xsl:with-param name="msg">Could not retrieve a title from <xsl:value-of select="$TargetFile"/>. Using '***'.</xsl:with-param>
-                   <xsl:with-param name="msgnum">005</xsl:with-param>
+                   <xsl:with-param name="msgnum">009</xsl:with-param>
                    <xsl:with-param name="msgsev">W</xsl:with-param>
+                   <xsl:with-param name="msgparams">%1=<xsl:value-of select="@TargetFile"/>;%2=***</xsl:with-param>
                  </xsl:call-template>
                  <xsl:text>***</xsl:text>
                </xsl:otherwise>
@@ -245,9 +241,9 @@ To remove this message, you can set the toc="no" attribute on your topicref.</xs
            <xsl:otherwise>
              <xsl:if test="@href and not(@href='')">
                  <xsl:call-template name="output-message">
-                   <xsl:with-param name="msg">Could not retrieve a title from <xsl:value-of select="@href"/>. Using the HREF value.</xsl:with-param>
-                   <xsl:with-param name="msgnum">005</xsl:with-param>
+                   <xsl:with-param name="msgnum">009</xsl:with-param>
                    <xsl:with-param name="msgsev">W</xsl:with-param>
+                   <xsl:with-param name="msgparams">%1=<xsl:value-of select="@href"/>;%2=<xsl:value-of select="@href"/></xsl:with-param>
                  </xsl:call-template>
                  <xsl:value-of select="@href"/>
              </xsl:if>

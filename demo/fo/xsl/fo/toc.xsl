@@ -1,0 +1,200 @@
+<?xml version='1.0'?>
+
+<!-- 
+Copyright © 2004-2005 by Idiom Technologies, Inc. All rights reserved. 
+IDIOM is a registered trademark of Idiom Technologies, Inc. and WORLDSERVER
+and WORLDSTART are trademarks of Idiom Technologies, Inc. All other 
+trademarks are the property of their respective owners. 
+
+IDIOM TECHNOLOGIES, INC. IS DELIVERING THE SOFTWARE "AS IS," WITH 
+ABSOLUTELY NO WARRANTIES WHATSOEVER, WHETHER EXPRESS OR IMPLIED,  AND IDIOM
+TECHNOLOGIES, INC. DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING
+BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
+PURPOSE AND WARRANTY OF NON-INFRINGEMENT. IDIOM TECHNOLOGIES, INC. SHALL NOT
+BE LIABLE FOR INDIRECT, INCIDENTAL, SPECIAL, COVER, PUNITIVE, EXEMPLARY,
+RELIANCE, OR CONSEQUENTIAL DAMAGES (INCLUDING BUT NOT LIMITED TO LOSS OF 
+ANTICIPATED PROFIT), ARISING FROM ANY CAUSE UNDER OR RELATED TO  OR ARISING 
+OUT OF THE USE OF OR INABILITY TO USE THE SOFTWARE, EVEN IF IDIOM
+TECHNOLOGIES, INC. HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES. 
+
+Idiom Technologies, Inc. and its licensors shall not be liable for any
+damages suffered by any person as a result of using and/or modifying the
+Software or its derivatives. In no event shall Idiom Technologies, Inc.'s
+liability for any damages hereunder exceed the amounts received by Idiom
+Technologies, Inc. as a result of this transaction.
+
+These terms and conditions supersede the terms and conditions in any
+licensing agreement to the extent that such terms and conditions conflict
+with those set forth herein.
+-->
+
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+    xmlns:fo="http://www.w3.org/1999/XSL/Format"
+    xmlns:exsl="http://exslt.org/common"
+    xmlns:opentopic="http://www.idiominc.com/opentopic"
+    extension-element-prefixes="exsl"
+    exclude-result-prefixes="opentopic"
+    version='1.1'>
+
+    <xsl:include href="../../cfg/fo/attrs/toc-attr.xsl"/>
+
+    <xsl:variable name="map" select="//opentopic:map"/>
+
+    <xsl:template name="createTocHeader">
+        <fo:block xsl:use-attribute-sets="__toc__header">
+            <xsl:attribute name="id">ID_TOC_00-0F-EA-40-0D-4D</xsl:attribute>
+            <xsl:call-template name="insertVariable">
+                <xsl:with-param name="theVariableID" select="'Table of Contents'"/>
+            </xsl:call-template>
+        </fo:block>
+    </xsl:template>
+
+    <xsl:template name="createToc">
+
+        <xsl:variable name="toc">
+            <xsl:apply-templates select="/" mode="toc"/>
+        </xsl:variable>
+
+        <xsl:if test="count(exsl:node-set($toc)/*) > 0">
+            <fo:page-sequence master-reference="toc-sequence" xsl:use-attribute-sets="__force__page__count">
+
+                <xsl:call-template name="insertTocStaticContents"/>
+
+                <fo:flow flow-name="xsl-region-body">
+                    <xsl:call-template name="createTocHeader"/>
+                    <fo:block>
+                        <xsl:copy-of select="exsl:node-set($toc)"/>
+                    </fo:block>
+                </fo:flow>
+
+            </fo:page-sequence>
+        </xsl:if>
+    </xsl:template>
+
+    <xsl:template match="/" mode="toc">
+        <xsl:apply-templates mode="toc">
+            <xsl:with-param name="include" select="'true'"/>
+        </xsl:apply-templates>
+    </xsl:template>
+
+    <xsl:template match="*[contains(@class, ' topic/topic ') and not(contains(@class, ' bkinfo/bkinfo '))]" mode="toc">
+        <xsl:param name="include"/>
+        <xsl:variable name="topicTitle">
+            <xsl:for-each select="child::*[contains(@class,' topic/title ')]">
+                <xsl:call-template name="getTitle"/>
+            </xsl:for-each>
+        </xsl:variable>
+        <xsl:variable name="id" select="@id"/>
+        <xsl:variable name="gid" select="generate-id()"/>
+        <xsl:variable name="topicNumber" select="count(exsl:node-set($topicNumbers)/topic[@id = $id][following-sibling::topic[@guid = $gid]]) + 1"/>
+        <xsl:variable name="mapTopic">
+            <xsl:copy-of select="$map//*[@id = $id]"/>
+        </xsl:variable>
+        <xsl:variable name="topicType">
+            <xsl:choose>
+                <xsl:when test="$mapTopic/*[position() = $topicNumber][contains(@class, ' bookmap/chapter ')]">
+                    <xsl:text>topicChapter</xsl:text>
+                </xsl:when>
+                <xsl:when test="$mapTopic/*[position() = $topicNumber][contains(@class, ' bookmap/appendix ')]">
+                    <xsl:text>topicAppendix</xsl:text>
+                </xsl:when>
+                <xsl:when test="$mapTopic/*[position() = $topicNumber][contains(@class, ' bookmap/part ')]">
+                    <xsl:text>topicPart</xsl:text>
+                </xsl:when>
+                <xsl:when test="$mapTopic/*[position() = $topicNumber][contains(@class, ' bookmap/preface ')]">
+                    <xsl:text>topicPreface</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>topicSimple</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+
+        <xsl:variable name="parentTopicHead">
+            <xsl:copy-of select="$map//*[@id = $id]/parent::*[contains(@class, ' mapgroup/topichead ')]"/>
+        </xsl:variable>
+
+<!--        <xsl:if test="(($mapTopic/*[position() = $topicNumber][@toc = 'yes' or not(@toc)]) or (not($mapTopic/*) and $include = 'true')) and not($parentTopicHead/*[position() = $topicNumber]/@toc = 'no')">-->
+        <xsl:if test="($mapTopic/*[position() = $topicNumber][@toc = 'yes' or not(@toc)]) or (not($mapTopic/*) and $include = 'true')">
+            <fo:basic-link internal-destination="{concat('_OPENTOPIC_TOC_PROCESSING_', generate-id())}" xsl:use-attribute-sets="__toc__link">
+                <fo:block xsl:use-attribute-sets="__toc__indent">
+                    <fo:block xsl:use-attribute-sets="__toc__content">
+                        <xsl:choose>
+                            <xsl:when test="$topicType = 'topicChapter'">
+                                <xsl:variable name="topicChapters">
+                                    <xsl:copy-of select="$map//*[contains(@class, ' bookmap/chapter ')]"/>
+                                </xsl:variable>
+                                <xsl:variable name="chapterNumber">
+                                    <xsl:number format="1" value="count($topicChapters/*[@id = $id]/preceding-sibling::*) + 1"/>
+                                </xsl:variable>
+                                <xsl:call-template name="insertVariable">
+                                    <xsl:with-param name="theVariableID" select="'Table of Contents Chapter'"/>
+                                    <xsl:with-param name="theParameters">
+                                        <number>
+                                            <xsl:value-of select="$chapterNumber"/>
+                                        </number>
+                                    </xsl:with-param>
+                                </xsl:call-template>
+                            </xsl:when>
+                            <xsl:when test="$topicType = 'topicAppendix'">
+                                <xsl:variable name="topicAppendixes">
+                                    <xsl:copy-of select="$map//*[contains(@class, ' bookmap/appendix ')]"/>
+                                </xsl:variable>
+                                <xsl:variable name="appendixNumber">
+                                    <xsl:number format="A" value="count($topicAppendixes/*[@id = $id]/preceding-sibling::*) + 1"/>
+                                </xsl:variable>
+                                <xsl:call-template name="insertVariable">
+                                    <xsl:with-param name="theVariableID" select="'Table of Contents Appendix'"/>
+                                    <xsl:with-param name="theParameters">
+                                        <number>
+                                            <xsl:value-of select="$appendixNumber"/>
+                                        </number>
+                                    </xsl:with-param>
+                                </xsl:call-template>
+                            </xsl:when>
+                            <xsl:when test="$topicType = 'topicPart'">
+                                <xsl:variable name="topicParts">
+                                    <xsl:copy-of select="$map//*[contains(@class, ' bookmap/part ')]"/>
+                                </xsl:variable>
+                                <xsl:variable name="partNumber">
+                                    <xsl:number format="I" value="count($topicParts/*[@id = $id]/preceding-sibling::*) + 1"/>
+                                </xsl:variable>
+                                <xsl:call-template name="insertVariable">
+                                    <xsl:with-param name="theVariableID" select="'Table of Contents Part'"/>
+                                    <xsl:with-param name="theParameters">
+                                        <number>
+                                            <xsl:value-of select="$partNumber"/>
+                                        </number>
+                                    </xsl:with-param>
+                                </xsl:call-template>
+                            </xsl:when>
+                            <xsl:when test="$topicType = 'topicPreface'">
+<!--
+                                <xsl:call-template name="insertVariable">
+                                    <xsl:with-param name="theVariableID" select="'Table of Contents Preface'"/>
+                                </xsl:call-template>
+-->
+                            </xsl:when>
+                        </xsl:choose>
+                        <fo:inline xsl:use-attribute-sets="__toc__title">
+                            <xsl:value-of select="$topicTitle"/>
+                        </fo:inline>
+                        <fo:leader xsl:use-attribute-sets="__toc__leader"/>
+                        <fo:page-number-citation ref-id="{concat('_OPENTOPIC_TOC_PROCESSING_', generate-id())}"/>
+                    </fo:block>
+                </fo:block>
+            </fo:basic-link>
+            <xsl:apply-templates mode="toc">
+                <xsl:with-param name="include" select="'true'"/>
+            </xsl:apply-templates>
+        </xsl:if>
+    </xsl:template>
+
+    <xsl:template match="node()" mode="toc">
+        <xsl:param name="include"/>
+        <xsl:apply-templates mode="toc">
+            <xsl:with-param name="include" select="$include"/>
+        </xsl:apply-templates>
+    </xsl:template>
+
+</xsl:stylesheet>

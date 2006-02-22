@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?><!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference
+  PUBLIC "-//IBM//DTD DITA Reference//EN" "..\dtd\reference.dtd">
+<reference id="apiClassifier" outputclass="element" xml:lang="en-us">
+<title>apiClassifier </title>
+<shortdesc>The &lt;apiClassifier&gt; element specifies a classifier and comes
+in several specific forms, including class, data type, interface, component,
+and other API references.</shortdesc>
+<refbody>
+<section><title>Description</title><p>The &lt;apiClassifier&gt; element requires
+an ID attribute as an anchor point. This ID is the target for references by &lt;link&gt;
+or &lt;xref&gt; elements (<i>conref</i> and <i>keyref</i> attributes), and for
+other internal specialization elements that refer to this &lt;apiClassifier&gt;
+content. Use a unique key such as fully qualified package name for the named
+API reference.  </p></section>
+<section conref="../packagedef.dita#apiClassifier-reference/apiClassifier-containedBy-section"/><section conref="../packagedef.dita#apiClassifier-reference/apiClassifier-contains-section"/><section conref="../packagedef.dita#apiClassifier-reference/apiClassifier-contentModel-section"/><section conref="../packagedef.dita#apiClassifier-reference/apiClassifier-attList-section"/><section conref="../packagedef.dita#apiClassifier-reference/apiClassifier-classValue-section"/></refbody>
+</reference>

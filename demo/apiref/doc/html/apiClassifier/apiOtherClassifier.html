@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+<meta name="copyright" content="(C) Copyright 2005" />
+<meta name="DC.rights.owner" content="(C) Copyright 2005" />
+<meta content="public" name="security" />
+<meta content="index,follow" name="Robots" />
+<meta http-equiv="PICS-Label" content='(PICS-1.1 "http://www.icra.org/ratingsv02.html" l gen true r (cz 1 lz 1 nz 1 oz 1 vz 1) "http://www.rsac.org/ratingsv01.html" l gen true r (n 0 s 0 v 0 l 0) "http://www.classify.org/safesurf/" l gen true r (SS~~000 1))' />
+<meta content="reference" name="DC.Type" />
+<meta name="DC.Title" content="apiOtherClassifier" />
+<meta name="abstract" content="The &lt;apiOtherClassifier&gt; element provides the type for a member classifier." />
+<meta name="description" content="The &lt;apiOtherClassifier&gt; element provides the type for a member classifier." />
+<meta scheme="URI" name="DC.Relation" content="../apiClassifier/apiClassifierMember.html" />
+<meta content="XHTML" name="DC.Format" />
+<meta content="apiOtherClassifier" name="DC.Identifier" />
+<meta content="en-us" name="DC.Language" />
+<link href="C:\Work\dita\dost0.1\DITA-OT1.1.1\demo\apiref\out\doc\commonltr.css" type="text/css" rel="stylesheet" />
+<title>apiOtherClassifier</title>
+</head>
+<body id="apiOtherClassifier"><a name="apiOtherClassifier"><!-- --></a>
+
+
+<h1 class="topictitle1">apiOtherClassifier</h1>
+
+
+<div><p>The &lt;apiOtherClassifier&gt; element provides the type for a member
+classifier.</p>
+
+<div class="section"><h4 class="sectiontitle">Description</h4><p />
+<div class="p">The &lt;apiOtherClassifier&gt; element
+can provide an <em>href</em> attribute if the description of the API item is
+available. If the description is not available, the &lt;apiOtherClassifier&gt;
+element can provide the name of the API item in its contents. <ul>
+<li>If you use an <em>href</em> attribute to a DITA API topic that describes
+the related API item, you do not need any other attributes.</li>
+
+</ul>
+<ul>
+<li>If you provide an <em>href</em> attribute to some other format (such as
+HTML), you need to supply the name of the related API item inside the &lt;apiOtherClassifier&gt;
+element.</li>
+
+</ul>
+<ul>
+<li>If you cannot provide an <em>href</em> (for instance, if the description
+of the related API item might not be available), you must provide the name
+of the related API item inside the &lt;apiOtherClassifier&gt; element and the
+fully qualified name of the element in the <em>keyref</em> attribute. The <em>keyref </em>attribute
+must provide a unique key such as a fully qualified classifier name for the
+named API item.</li>
+
+</ul>
+</div>
+</div>
+
+<div class="example"><h4 class="sectiontitle">Example</h4> The following example shows a simple &lt;apiOtherClassifier&gt;
+element for a VB.NET API class:<pre>&lt;apiClassifier id="rational.xde" outputclass="class" platform="vb"&gt;
+    &lt;apiName&gt;RXEAbstractClass&lt;/apiName&gt;
+    &lt;shortdesc&gt;Specifies one or more interfaces or interface members that will be implemented
+        in the class or structure definition in which it appears.&lt;/shortdesc&gt;
+    &lt;apiClassifierDetail&gt;
+       &lt;apiClassifierDef&gt;
+			&lt;!–
+          Public MustInherit Class RXEAbstractClass
+       –&gt;
+          &lt;apiQualifier name="access" value="public"/&gt;
+          &lt;apiBaseClassifier&gt;
+            &lt;apiItemName href=”IRXEClass”&gt;IRXEClass&lt;/apiItemName&gt;
+            &lt;apiDefNote&gt;Required. A class whose properties, methods, and events will be
+                implemented by corresponding members in a class or structure.&lt;/apiDefNote&gt;
+          &lt;/apiBaseClassifier&gt;
+          &lt;apiOtherClassifier&gt;
+            &lt;apiItemName href=”RXEAbstractClass”&gt;RXEAbstractClass&lt;/apiItemName&gt;
+            &lt;apiDefNote&gt;Required. A class whose properties, methods, and events will be
+                implemented by corresponding members in a class or structure.&lt;/apiDefNote&gt;
+          &lt;/apiOtherClassifier&gt;
+          &lt;apiClassifierMember&gt;&lt;apiItemName&gt;RXEAbstraction&lt;/apiItemName&gt;
+          &lt;/apiClassifierMember&gt;
+       &lt;/apiClassifierDef&gt;
+	&lt;/apiClassifierDetail&gt;
+&lt;/apiClassifier&gt;</pre>
+</div>
+
+<div class="elementContainedBy"><h4 class="sectiontitle">Contained by</h4><p id="apiOtherClassifier__N52184"><a name="apiOtherClassifier__N52184"><!-- --></a><a href="../apiClassifier/apiClassifierMember.html">apiClassifierMember</a></p>
+</div>
+
+<div class="hideSection" />
+
+<div class="elementContentModel"><h4 class="sectiontitle">Content model</h4><p id="apiOtherClassifier__N521A0"><a name="apiOtherClassifier__N521A0"><!-- --></a>
+  (text data)
+<em>(any number)</em></p>
+</div>
+
+<div class="elementAttList" />
+
+<div class="elementClassValue"><h4 class="sectiontitle">Inheritance</h4><p id="apiOtherClassifier__N521BC"><a name="apiOtherClassifier__N521BC"><!-- --></a>topic/<span class="keyword">xref</span> reference/<span class="keyword">xref</span> apiRef/<a href="../apiRef/apiRelation.html">apiRelation</a></p>
+</div>
+
+</div>
+
+<div>
+<div class="familylinks">
+<div class="parentlink"><strong>Parent topic:</strong> <a href="../apiClassifier/apiClassifierMember.html" title="The &lt;apiClassifierMember&gt; element specifies that the classifier member is a substructure field of the classifier.">apiClassifierMember</a></div>
+</div>
+</div>
+</body>
+</html>

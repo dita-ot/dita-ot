@@ -2,8 +2,8 @@
 <!--                    HEADER                                     -->
 <!-- ============================================================= -->
 <!--  MODULE:    DITA DITA Topic                                   -->
-<!--  VERSION:   1.O                                               -->
-<!--  DATE:      February 2005                                     -->
+<!--  VERSION:   1.0.1                                             -->
+<!--  DATE:      November 2005                                     -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -11,7 +11,7 @@
 <!--                    PUBLIC DOCUMENT TYPE DEFINITION            -->
 <!--                    TYPICAL INVOCATION                         -->
 <!--                                                               -->
-<!--  Refer to this file by the following public identfier or an 
+<!--  Refer to this file by the following public identifier or an 
       appropriate system identifier 
 PUBLIC "-//OASIS//ELEMENTS DITA Topic//EN"
       Delivered as file "topic.mod"                                -->
@@ -19,8 +19,8 @@ PUBLIC "-//OASIS//ELEMENTS DITA Topic//EN"
 <!-- ============================================================= -->
 <!-- SYSTEM:     Darwin Information Typing Architecture (DITA)     -->
 <!--                                                               -->
-<!-- PURPOSE:    Declaring the elements and sepcialization         -->
-<!--             attributes for the Programming Domain             -->
+<!-- PURPOSE:    Declaring the elements and specialization         -->
+<!--             attributes for the base Topic type                -->
 <!--                                                               -->
 <!-- ORIGINAL CREATION DATE:                                       -->
 <!--             March 2001                                        -->
@@ -28,6 +28,13 @@ PUBLIC "-//OASIS//ELEMENTS DITA Topic//EN"
 <!--             (C) Copyright OASIS Open 2005.                    -->
 <!--             (C) Copyright IBM Corporation 2001, 2004.         -->
 <!--             All Rights Reserved.                              -->
+<!--                                                               -->
+<!--  UPDATES:                                                     -->
+<!--    2005.11.15 RDA: Corrected the public ID for tblDecl.mod    -->
+<!--    2005.11.15 RDA: Removed old declaration for topicreftypes  -->
+<!--                    entity                                     -->
+<!--    2005.11.15 RDA: Corrected the PURPOSE in this comment      -->
+<!--    2005.11.15 RDA: Corrected Long Names for alt, indextermref -->
 <!-- ============================================================= -->
 
 
@@ -158,8 +165,6 @@ PUBLIC "-//OASIS//ELEMENTS DITA Topic//EN"
 <!--                    STRUCTURAL MEMBERS                         -->
 <!-- ============================================================= -->
 
-<!ENTITY % topicreftypes 'topic | concept | task | reference | 
-                          external | local'                          >
 
 <!ENTITY % info-types    'topic'                                     > 
 
@@ -631,7 +636,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Topic//EN"
                         CDATA                            #IMPLIED    >
 
 
-<!--                    LONG NAME: Required Cleanup Block          -->
+<!--                    LONG NAME: Alternate text                  -->
 <!ELEMENT alt            (%words.cnt;)*>
 <!ATTLIST alt             %univ-atts;
                           outputclass CDATA #IMPLIED
@@ -708,7 +713,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Topic//EN"
              outputclass 
                         CDATA                            #IMPLIED    >
 
-<!--                    LONG NAME: Review Comments Bloc            -->
+<!--                    LONG NAME: Review Comments Block           -->
 <!ELEMENT draft-comment (#PCDATA | %basic.phandblock;)*              >
 <!ATTLIST draft-comment   
              author     CDATA                            #IMPLIED
@@ -741,8 +746,8 @@ PUBLIC "-//OASIS//ELEMENTS DITA Topic//EN"
                         CDATA                            #IMPLIED    >
 
 
-<!--                    LONG NAME: Link                            -->
-<!ELEMENT indextermref   EMPTY>               <!-- Index term reference -->
+<!--                    LONG NAME: Index term reference            -->
+<!ELEMENT indextermref   EMPTY>
 <!ATTLIST indextermref    keyref CDATA #REQUIRED
                           %univ-atts;
 >
@@ -848,8 +853,10 @@ PUBLIC "-//OASIS//ELEMENTS DITA Topic//EN"
 
 
 <!--                      Table Elements                           -->
+<!--    2005.11.15 RDA: Corrected the public ID for tblDecl.mod,   -->
+<!--  from the old value "-//OASIS//ELEMENTS DITA CALS Tables//EN" -->
 <!ENTITY % tableXML       PUBLIC  
-"-//OASIS//ELEMENTS DITA CALS Tables//EN" 
+"-//OASIS//ELEMENTS DITA Exchange Table Model//EN" 
 "tblDecl.mod"                                                        >
 %tableXML;
 

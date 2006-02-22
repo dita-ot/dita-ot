@@ -12,6 +12,8 @@ import org.dita.dost.module.Content;
 import org.dita.dost.module.ContentImpl;
 import org.dita.dost.util.Constants;
 import org.dita.dost.util.StringUtils;
+import org.dita.dost.log.DITAOTJavaLogger;
+import org.dita.dost.log.MessageUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
@@ -45,6 +47,7 @@ public class MapIndexReader extends AbstractXMLReader {
     private String filePath = null;
     private String filePathName = null;
     private static final String INTERNET_LINK_MARK = "://";
+    private DITAOTJavaLogger logger;
     
 
     /**
@@ -63,6 +66,7 @@ public class MapIndexReader extends AbstractXMLReader {
         needResolveEntity = false;
         topicPath = null;
         inputFile = null; 
+        logger = new DITAOTJavaLogger();
         
         
         try {
@@ -75,7 +79,7 @@ public class MapIndexReader extends AbstractXMLReader {
             reader.setProperty(Constants.LEXICAL_HANDLER_PROPERTY,this);
             
         } catch (Exception e) {
-            e.printStackTrace(System.out);
+        	logger.logException(e);
         }
 
     }
@@ -155,7 +159,7 @@ public class MapIndexReader extends AbstractXMLReader {
     public void read(String filename) {
 
         if (matchList.isEmpty()) {
-            System.out.println("Set the match list with match string first.");
+        	logger.logError(MessageUtils.getMessage("DOTJ008E").toString());
         } else {
             match = false;
             needResolveEntity = true;
@@ -170,7 +174,7 @@ public class MapIndexReader extends AbstractXMLReader {
             try {
                 reader.parse(filename);
             } catch (Exception e) {
-                e.printStackTrace(System.out);
+            	logger.logException(e);
             }
         }
     }
@@ -330,7 +334,6 @@ public class MapIndexReader extends AbstractXMLReader {
      */
     public void startEntity(String name) throws SAXException {
 		needResolveEntity = StringUtils.checkEntity(name);
-		//System.out.println("meet entity:"+name);
 		if (match && !needResolveEntity) {
             indexEntries.append(StringUtils.getEntity(name));
             

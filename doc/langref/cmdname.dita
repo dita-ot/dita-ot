@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2004, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "../../dtd/reference.dtd">
+<!--             (C) Copyright OASIS Open 2005.                    -->
+<!--             (C) Copyright IBM Corporation 2001, 2004.         -->
+<!--             All Rights Reserved.                              -->
+<reference id="cmdname" xml:lang="en-us">
+<title><keyword>cmdname</keyword></title>
+<shortdesc>The command name (&lt;cmdname>) element specifies the name of a
+command when it is part of a software discussion.  This element is part of
+the DITA software domain, a special set of DITA elements designed to document
+software tasks, concepts and reference information.</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>cmdname (command name)</indexterm><indexterm>command
+name (cmdname)</indexterm><indexterm>Domain elements<indexterm>cmdname</indexterm>  </indexterm>
+<indexterm>cmdname</indexterm></keywords>
+</metadata></prolog>
+<refbody>
+<section conref="DitabaseNav.dita#commonCMdefs/cmdname-contains"></section>
+<section conref="DitabaseNav.dita#commonCMdefs/cmdname-containedby"></section>
+<section conref="DitabaseNav.dita#commonCMdefs/cmdname-classvalue"></section>
+<section><title>Attributes</title><simpletable id="cmdname_attr" relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="commonLRdefs.dita#commonLRdefs/keyref-cmdname">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/univ-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/classandout"><?Pub Caret?>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+</simpletable></section>
+<example></example>
+</refbody>
+</reference>
+<?Pub *0000002293?>

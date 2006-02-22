@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+  <target name="dita2pdf2" depends="dita-preprocess, map2pdf2, topic2pdf2"/> 
+  
+  <target name="topic2pdf2" if="noMap" depends="dita-preprocess">
+	<ant dir="${basedir}/demo/fo" target="preview.topic.pdf" />
+  </target>
+			
+  <target name="map2pdf2" unless="noMap" depends="dita-preprocess">
+    <xslt processor="trax"
+		in="${dita.temp.dir}${file.separator}${user.input.file}"
+		out="${dita.temp.dir}${file.separator}${dita.map.filename.root}_MERGED.xml"
+		style="${dita.script.dir}${file.separator}topicmerge.xsl">
+	  <param name="root-path" expression="${user.input.dir}${file.separator}" />
+	  <xmlcatalog refid="dita.catalog" />
+	</xslt>
+	<ant dir="${basedir}/demo/fo" target="publish.map.pdf" />
+  </target>
+</project>

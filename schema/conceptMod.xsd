@@ -2,9 +2,9 @@
 <!-- ============================================================= -->
 <!--                    HEADER                                     -->
 <!-- ============================================================= -->
-<!--  MODULE:    DITA Concept XSD Module                                  -->
-<!--  VERSION:   1.0                                               -->
-<!--  DATE:      February 2005                                     -->
+<!--  MODULE:    DITA Concept XSD Module                           -->
+<!--  VERSION:   1.0.1                                             -->
+<!--  DATE:      November 2005                                     -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -12,7 +12,7 @@
 <!-- ============================================================= -->
 <!-- SYSTEM:     Darwin Information Typing Architecture (DITA)     -->
 <!--                                                               -->
-<!-- PURPOSE:    W3C XML Schema to describe DITA concepts                     -->
+<!-- PURPOSE:    W3C XML Schema to describe DITA concepts          -->
 <!--                                                               -->
 <!-- ORIGINAL CREATION DATE:                                       -->
 <!--             March 2001                                        -->

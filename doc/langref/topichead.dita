@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2004, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "../../dtd/reference.dtd">
+<!--             (C) Copyright OASIS Open 2005.                    -->
+<!--             (C) Copyright IBM Corporation 2001, 2004.         -->
+<!--             All Rights Reserved.                              -->
+<reference id="topichead" xml:lang="en-us">
+<title><keyword>topichead</keyword></title>
+<shortdesc>The &lt;<keyword>topichead</keyword>> element provides a title-only
+entry in a navigation map, as an alternative to the fully-linked title provided
+by the &lt;<keyword>topicref</keyword>> element.</shortdesc>
+<refbody>
+<section conref="MapNav.dita#commonCMdefs/topichead-contains"></section>
+<section conref="MapNav.dita#commonCMdefs/topichead-containedby"></section>
+<section conref="MapNav.dita#commonCMdefs/topichead-classvalue"></section>
+<section><title>Attributes</title><simpletable id="topichead_attr" relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="commonLRdefs.dita#commonLRdefs/navtitle">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/id-topicref">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/conref-topicref">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/topicref-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/select-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/classonly">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+</simpletable></section>
+<example>         <title>Example<?Pub Caret?></title> <p>The following markup,
+for HTML Help output, will produce a book icon that expands into a nested
+set when toggled.<codeblock>&lt;map title="DITA Reference">
+ &lt;topicref href="anchor.dita" type="topic">&lt;/topicref>
+ &lt;topicref href="apiname.dita" type="topic">&lt;/topicref>
+ &lt;topicref href="audience.dita" type="topic">&lt;/topicref>
+ &lt;topicref href="author.dita" type="topic">&lt;/topicref>
+ <b>&lt;topichead navtitle="Parameter Entity elements"></b>
+  &lt;topicref href="global-atts.dita" type="topic">&lt;/topicref>
+  &lt;topicref href="select-atts.dita" type="topic">&lt;/topicref>
+  &lt;topicref href="univ-atts.dita" type="topic">&lt;/topicref>
+  &lt;topicref href="topicref-atts.dita" type="topic">&lt;/topicref>
+ <b>&lt;/topichead></b>
+&lt;/map></codeblock></p>        </example>
+</refbody>
+</reference>
+<?Pub *0000003295?>

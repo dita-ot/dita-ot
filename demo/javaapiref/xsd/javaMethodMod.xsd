@@ -1,0 +1,449 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ | (C) Copyright IBM Corporation 2005 - 2006. All Rights Reserved.
+ *-->
+<!-- ============ Hooks for domain extension ============ -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
+  <xs:import namespace="http://dita.oasis-open.org/architecture/2005/" schemaLocation="../../../schema/ditaarch.xsd"/>
+  <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="../../../schema/xml.xsd"/>
+  
+  <!-- ============ Hooks for shell DTD ============ -->
+  <xs:group name="javaMethod-types-default">
+    <xs:sequence>
+      <xs:element ref="no-topic-nesting"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="javaMethod-info-types">
+    <xs:sequence>
+      <xs:group ref="javaMethod-types-default"/>
+    </xs:sequence>
+  </xs:group>
+  <!-- ============ Topic specializations ============ -->
+  <xs:element name="javaMethod" type="javaMethod.class"/>
+  <xs:complexType name="javaMethod.class">
+    <xs:sequence>
+      <xs:group ref="apiName"/>
+      <xs:group ref="shortdesc"/>
+      <xs:group minOccurs="0" ref="prolog"/>
+      <xs:group ref="javaMethodDetail"/>
+      <xs:group minOccurs="0" ref="related-links"/>
+      <xs:group minOccurs="0" maxOccurs="unbounded" ref="javaMethod-info-types"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="javaMethod.attlist"/>
+  </xs:complexType>
+
+  <xs:attributeGroup name="javaMethod.attlist">
+    <xs:attribute name="id" use="required" type="xs:ID"/>
+    <xs:attribute name="conref"/>
+    <xs:attribute name="outputclass"/>
+    <xs:attribute ref="xml:lang"/>
+    <xs:attribute ref="ditaarch:DITAArchVersion"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute name="class" default="- topic/topic reference/reference apiRef/apiRef apiOperation/apiOperation javaMethod/javaMethod "/>
+  </xs:attributeGroup>
+  <xs:element name="javaMethodDetail">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:choice>
+          <xs:group ref="javaMethodDef"/>
+          <xs:group ref="javaConstructorDef"/>
+        </xs:choice>
+        <xs:group minOccurs="0" ref="apiDesc"/>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:group ref="example"/>
+          <xs:group ref="section"/>
+          <xs:group ref="apiImpl"/>
+        </xs:choice>
+      </xs:sequence>
+      <xs:attributeGroup ref="javaMethodDetail.attlist"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="javaMethodDetail.attlist">
+    <xs:attributeGroup ref="id-atts"/>
+    <xs:attribute name="translate">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="yes"/>
+          <xs:enumeration value="no"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute ref="xml:lang"/>
+    <xs:attribute name="outputclass"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute name="class" default="- topic/body reference/refbody apiRef/apiDetail apiOperation/apiOperationDetail javaMethod/javaMethodDetail "/>
+  </xs:attributeGroup>
+  <xs:element name="javaMethodDef">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:group minOccurs="0" ref="javaFinalMethod"/>
+        <xs:group minOccurs="0" ref="javaAbstractMethod"/>
+        <xs:group minOccurs="0" ref="javaStaticMethod"/>
+        <xs:group minOccurs="0" ref="javaNativeMethod"/>
+        <xs:group minOccurs="0" ref="javaSynchronizedMethod"/>
+        <xs:group minOccurs="0" ref="javaMethodAccess"/>
+        <xs:choice>
+          <xs:group ref="javaReturn"/>
+          <xs:group ref="javaVoid"/>
+        </xs:choice>
+        <xs:group minOccurs="0" maxOccurs="unbounded" ref="javaParam"/>
+        <xs:group minOccurs="0" maxOccurs="unbounded" ref="javaException"/>
+      </xs:sequence>
+      <xs:attributeGroup ref="javaMethodDef.attlist"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="javaMethodDef.attlist">
+    <xs:attribute name="spectitle"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attribute name="outputclass"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute name="class" default="- topic/section reference/section apiRef/apiDef apiOperation/apiOperationDef javaMethod/javaMethodDef "/>
+  </xs:attributeGroup>
+  <xs:element name="javaConstructorDef">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:group minOccurs="0" ref="javaMethodAccess"/>
+        <xs:group minOccurs="0" maxOccurs="unbounded" ref="javaParam"/>
+        <xs:group minOccurs="0" maxOccurs="unbounded" ref="javaException"/>
+      </xs:sequence>
+      <xs:attributeGroup ref="javaConstructorDef.attlist"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="javaConstructorDef.attlist">
+    <xs:attribute name="spectitle"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attribute name="outputclass"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute name="class" default="- topic/section reference/section apiRef/apiDef apiOperation/apiConstructorDef javaMethod/javaConstructorDef "/>
+  </xs:attributeGroup>
+  <xs:element name="javaReturn">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:choice>
+          <xs:group ref="javaMethodClass"/>
+          <xs:group ref="javaMethodInterface"/>
+          <xs:group ref="javaMethodPrimitive"/>
+        </xs:choice>
+        <xs:group minOccurs="0" maxOccurs="unbounded" ref="javaMethodArray"/>
+        <xs:group minOccurs="0" ref="apiDefNote"/>
+      </xs:sequence>
+      <xs:attributeGroup ref="javaReturn.attlist"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="javaReturn.attlist">
+    <xs:attribute name="keyref"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attribute name="outputclass"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute name="class" default="- topic/ph reference/ph apiRef/apiDefItem apiOperation/apiReturn javaMethod/javaReturn "/>
+  </xs:attributeGroup>
+  <xs:element name="javaParam">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:choice>
+          <xs:group ref="javaMethodClass"/>
+          <xs:group ref="javaMethodInterface"/>
+          <xs:group ref="javaMethodPrimitive"/>
+        </xs:choice>
+        <xs:group minOccurs="0" maxOccurs="unbounded" ref="javaMethodArray"/>
+        <xs:group ref="apiItemName"/>
+        <xs:group minOccurs="0" ref="apiDefNote"/>
+      </xs:sequence>
+      <xs:attributeGroup ref="javaParam.attlist"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="javaParam.attlist">
+    <xs:attribute name="keyref"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attribute name="outputclass"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute name="class" default="- topic/ph reference/ph apiRef/apiDefItem apiOperation/apiParam javaMethod/javaParam "/>
+  </xs:attributeGroup>
+  <xs:element name="javaException">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:group ref="javaMethodClass"/>
+        <xs:group minOccurs="0" ref="apiDefNote"/>
+      </xs:sequence>
+      <xs:attributeGroup ref="javaException.attlist"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="javaException.attlist">
+    <xs:attribute name="keyref"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attribute name="outputclass"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute name="class" default="- topic/ph reference/ph apiRef/apiDefItem apiOperation/apiEvent javaMethod/javaException "/>
+  </xs:attributeGroup>
+  <xs:element name="javaFinalMethod">
+    <xs:complexType>
+      <xs:attributeGroup ref="javaFinalMethod.attlist"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="javaFinalMethod.attlist">
+    <xs:attribute name="name" default="final">
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="final"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="value" default="final">
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="final"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attribute name="outputclass"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute name="class" default="- topic/state reference/state apiRef/apiQualifier apiOperation/apiQualifier javaMethod/javaFinalMethod "/>
+  </xs:attributeGroup>
+  <xs:element name="javaAbstractMethod">
+    <xs:complexType>
+      <xs:attributeGroup ref="javaAbstractMethod.attlist"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="javaAbstractMethod.attlist">
+    <xs:attribute name="name" default="abstract">
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="abstract"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="value" default="abstract">
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="abstract"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attribute name="outputclass"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute name="class" default="- topic/state reference/state apiRef/apiQualifier apiOperation/apiQualifier javaMethod/javaAbstractMethod "/>
+  </xs:attributeGroup>
+  <xs:element name="javaStaticMethod">
+    <xs:complexType>
+      <xs:attributeGroup ref="javaStaticMethod.attlist"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="javaStaticMethod.attlist">
+    <xs:attribute name="name" default="static">
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="static"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="value" default="static">
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="static"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attribute name="outputclass"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute name="class" default="- topic/state reference/state apiRef/apiQualifier apiOperation/apiQualifier javaMethod/javaStaticMethod "/>
+  </xs:attributeGroup>
+  <xs:element name="javaNativeMethod">
+    <xs:complexType>
+      <xs:attributeGroup ref="javaNativeMethod.attlist"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="javaNativeMethod.attlist">
+    <xs:attribute name="name" default="native">
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="native"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="value" default="native">
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="native"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attribute name="outputclass"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute name="class" default="- topic/state reference/state apiRef/apiQualifier apiOperation/apiQualifier javaMethod/javaNativeMethod "/>
+  </xs:attributeGroup>
+  <xs:element name="javaSynchronizedMethod">
+    <xs:complexType>
+      <xs:attributeGroup ref="javaSynchronizedMethod.attlist"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="javaSynchronizedMethod.attlist">
+    <xs:attribute name="name" default="synchronized">
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="synchronized"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="value" default="synchronized">
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="synchronized"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attribute name="outputclass"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute name="class" default="- topic/state reference/state apiRef/apiQualifier apiOperation/apiQualifier javaMethod/javaSynchronizedMethod "/>
+  </xs:attributeGroup>
+  <xs:element name="javaMethodAccess">
+    <xs:complexType>
+      <xs:attributeGroup ref="javaMethodAccess.attlist"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="javaMethodAccess.attlist">
+    <xs:attribute name="name" default="access">
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="access"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="value" use="required">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="public"/>
+          <xs:enumeration value="protected"/>
+          <xs:enumeration value="private"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attribute name="outputclass"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute name="class" default="- topic/state reference/state apiRef/apiQualifier apiOperation/apiQualifier javaMethod/javaMethodAccess "/>
+  </xs:attributeGroup>
+  <xs:element name="javaMethodClass">
+    <xs:complexType mixed="true">
+      <xs:attributeGroup ref="javaMethodClass.attlist"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="javaMethodClass.attlist">
+    <xs:attribute name="href"/>
+    <xs:attribute name="keyref"/>
+    <xs:attribute name="type"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attribute name="format"/>
+    <xs:attribute name="scope">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="local"/>
+          <xs:enumeration value="peer"/>
+          <xs:enumeration value="external"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="outputclass"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute name="class" default="- topic/xref reference/xref apiRef/apiRelation apiOperation/apiOperationClassifier javaMethod/javaMethodClass "/>
+  </xs:attributeGroup>
+  <xs:element name="javaMethodInterface">
+    <xs:complexType mixed="true">
+      <xs:attributeGroup ref="javaMethodInterface.attlist"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="javaMethodInterface.attlist">
+    <xs:attribute name="href"/>
+    <xs:attribute name="keyref"/>
+    <xs:attribute name="type"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attribute name="format"/>
+    <xs:attribute name="scope">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="local"/>
+          <xs:enumeration value="peer"/>
+          <xs:enumeration value="external"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="outputclass"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute name="class" default="- topic/xref reference/xref apiRef/apiRelation apiOperation/apiOperationClassifier javaMethod/javaMethodInterface "/>
+  </xs:attributeGroup>
+  <xs:element name="javaMethodPrimitive">
+    <xs:complexType>
+      <xs:attributeGroup ref="javaMethodPrimitive.attlist"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="javaMethodPrimitive.attlist">
+    <xs:attribute name="name" default="type">
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="type"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="value" use="required">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="boolean"/>
+          <xs:enumeration value="byte"/>
+          <xs:enumeration value="char"/>
+          <xs:enumeration value="double"/>
+          <xs:enumeration value="float"/>
+          <xs:enumeration value="int"/>
+          <xs:enumeration value="long"/>
+          <xs:enumeration value="short"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attribute name="outputclass"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute name="class" default="- topic/state reference/state apiRef/apiType apiOperation/apiType javaMethod/javaMethodPrimitive "/>
+  </xs:attributeGroup>
+  <xs:element name="javaMethodArray">
+    <xs:complexType>
+      <xs:attributeGroup ref="javaMethodArray.attlist"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="javaMethodArray.attlist">
+    <xs:attribute name="name" default="arraysize"/>
+    <xs:attribute name="value" default=""/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attribute name="outputclass"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute name="class" default="- topic/state reference/state apiRef/apiArray apiOperation/apiArray javaMethod/javaMethodArray "/>
+  </xs:attributeGroup>
+  <xs:element name="javaVoid">
+    <xs:complexType>
+      <xs:attributeGroup ref="javaVoid.attlist"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="javaVoid.attlist">
+    <xs:attribute name="name" default="void">
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="void"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="value" default="void">
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="void"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attribute name="outputclass"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute name="class" default="- topic/state reference/state apiRef/apiQualifier apiOperation/apiQualifier javaMethod/javaVoid "/>
+  </xs:attributeGroup>
+  <!-- ============ Class attributes for type ancestry ============ -->
+</xs:schema>

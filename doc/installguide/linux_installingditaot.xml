@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
-<!DOCTYPE task PUBLIC "-//IBM//DTD DITA Task//EN" "../dtd/task.dtd">
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="linux_install_ditaot" xml:lang="en-us">
   <title>Installing the DITA Open Toolkit</title>
   <shortdesc>The DITA Open Toolkit is downloaded from the SourceForge web site. 
@@ -16,15 +16,15 @@
       </step>
       <step>
         <cmd>On the SourceForge.net page, find <uicontrol>dita-ot 
-          1.1.2.1</uicontrol></cmd>
+          1.2</uicontrol></cmd>
       </step>
       <step>
-        <cmd>Select <uicontrol>dita-ot 1.1.2.1</uicontrol>. </cmd>
+        <cmd>Select <uicontrol>dita-ot 1.2</uicontrol>. </cmd>
         <stepresult>The <systemoutput>Dita-ot</systemoutput> table 
           displays.</stepresult>
       </step>
       <step>
-        <cmd>Select <uicontrol>DITA-OT1.1.2.1_bin.tar.gz</uicontrol></cmd>
+        <cmd>Select <uicontrol>DITA-OT1.2_bin.tar.gz</uicontrol></cmd>
         <stepresult>The SourceForge.net page opens with a list of 
           <systemoutput>download options</systemoutput>.</stepresult>
       </step>
@@ -36,6 +36,11 @@
             private home directory for exclusive usage or to /usr/local/share/ 
             directory for sharing. </note>
         </info>
+      </step>
+      <step>
+        <cmd>Set the <varname>CLASSPATH </varname><xref 
+          href="linux_settingenvironmentvariables.xml" scope="local">environment 
+          variable</xref> for <codeph>dost.jar</codeph></cmd>
       </step>
     </steps>
   </taskbody>

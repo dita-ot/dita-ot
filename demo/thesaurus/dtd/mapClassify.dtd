@@ -1,0 +1,27 @@
+<!--
+ | (C) Copyright IBM Corporation 2005 - 2006. All Rights Reserved.
+ *-->
+
+<!--vocabulary declarations-->
+<!ENTITY % classify-d-dec PUBLIC "-//IBM//ENTITIES DITA Map Subject Classification Domain//EN" "classifyDomain.ent">
+  %classify-d-dec;
+<!ENTITY % mapgroup-d-dec PUBLIC "-//OASIS//ENTITIES DITA Map Group Domain//EN"  "../../../dtd/mapGroup.ent">
+  %mapgroup-d-dec;
+
+<!--vocabulary substitution (one for each extended base element,
+    with the name of the domain(s) in which the extension was declared)-->
+<!ENTITY % topicref  "topicref | (%mapgroup-d-topicref;) | (%classify-d-topicref;)">
+<!ENTITY % reltable  "reltable | (%classify-d-reltable;)">
+
+<!--vocabulary attributes (must be declared ahead of the dtds, which puts @domains first in order) -->
+<!ENTITY included-domains "&mapgroup-d-att; &classify-d-att;">
+
+<!--Embed map to get generic elements -->
+<!ENTITY % map-type PUBLIC "-//OASIS//ELEMENTS DITA Map//EN" "../../../dtd/map.mod">
+  %map-type;
+
+<!--vocabulary definitions-->
+<!ENTITY % mapgroup-d-def PUBLIC "-//OASIS//ELEMENTS DITA Map Group Domain//EN" "../../../dtd/mapGroup.mod">
+  %mapgroup-d-def;
+<!ENTITY % classify-d-def PUBLIC "-//IBM//ELEMENTS DITA Map Subject Classification Domain//EN" "classifyDomain.mod">
+  %classify-d-def;

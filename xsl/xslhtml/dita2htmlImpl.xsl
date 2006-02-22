@@ -17,12 +17,10 @@
 
 
 <!-- =========== OTHER STYLESHEET INCLUDES/IMPORTS =========== -->
-
+<xsl:import href="../common/output-message.xsl"/>
 <xsl:import href="../common/dita-utilities.xsl"/>
 <xsl:include href="get-meta.xsl"/>
 <xsl:include href="rel-links.xsl"/>
-<xsl:include href="../common/output-message.xsl"/>
-
 
 <!-- =========== OUTPUT METHOD =========== -->
 
@@ -82,7 +80,9 @@
 
 <!-- the path back to the project. Used for c.gif, delta.gif, css to allow user's to have
      these files in 1 location. -->
-<xsl:param name="PATH2PROJ"/>
+<xsl:param name="PATH2PROJ">
+    <xsl:apply-templates select="/processing-instruction('path2project')" mode="get-path2project"/>
+</xsl:param>
 
 <!-- the file name (file name and extension only - no path) of the document being transformed.
      Needed to help with debugging.
@@ -104,14 +104,33 @@
 <!-- =========== "GLOBAL" DECLARATIONS (see 35) =========== -->
 
 <!-- The document tree of filterfile returned by document($FILTERFILE,/)-->
-<xsl:variable name="FILTERDOC" select="document($FILTERFILE,/)"/>
+  <xsl:variable name="FILTERFILEURL">
+    <xsl:choose>
+      <xsl:when test="not($FILTERFILE)"/> <!-- If no filterfile leave empty -->
+      <xsl:when test="starts-with($FILTERFILE,'file:')">
+        <xsl:value-of select="$FILTERFILE"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:choose>
+          <xsl:when test="starts-with($FILTERFILE,'/')">
+            <xsl:text>file://</xsl:text><xsl:value-of select="$FILTERFILE"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:text>file:/</xsl:text><xsl:value-of select="$FILTERFILE"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  
+<xsl:variable name="FILTERDOC" select="document($FILTERFILEURL,/)"/>
 
 <!-- Define a newline character -->
 <xsl:variable name="newline"><xsl:text>
 </xsl:text></xsl:variable>
 
 <!-- Define the error message prefix identifier -->
-<xsl:variable name="msgprefix">IDXS</xsl:variable>
+<xsl:variable name="msgprefix">DOTX</xsl:variable>
 
 <!-- Filler for A-name anchors  - was &nbsp;-->
 <xsl:variable name="afill"></xsl:variable>
@@ -1291,9 +1310,9 @@
   <xsl:if test="@name"><xsl:attribute name="name"><xsl:value-of select="@name"/></xsl:attribute></xsl:if>
   <xsl:if test="@longdescref">
    <xsl:call-template name="output-message">
-    <xsl:with-param name="msg">The LONGDESCREF attribute on tag "<xsl:value-of select="name(.)"/>" will be ignored. Accessibility needs to be handled another way.</xsl:with-param>
-    <xsl:with-param name="msgnum">010</xsl:with-param>
+    <xsl:with-param name="msgnum">038</xsl:with-param>
     <xsl:with-param name="msgsev">I</xsl:with-param>
+    <xsl:with-param name="msgparams">%1=<xsl:value-of select="name(.)"/></xsl:with-param>
    </xsl:call-template>
   </xsl:if>
   <xsl:apply-templates/>
@@ -2428,8 +2447,7 @@
 <xsl:template match="*[contains(@class,' topic/required-cleanup ')]" name="topic.required-cleanup">
  <xsl:if test="$DRAFT='yes'">
   <xsl:call-template name="output-message">
-   <xsl:with-param name="msg">Required cleanup area found.</xsl:with-param>
-   <xsl:with-param name="msgnum">001</xsl:with-param>
+   <xsl:with-param name="msgnum">039</xsl:with-param>
    <xsl:with-param name="msgsev">W</xsl:with-param>
   </xsl:call-template>
   <div style="background-color: #FFFF99; color:#CC3333; border: 1pt black solid;">
@@ -2452,8 +2470,7 @@
 <xsl:template match="*[contains(@class,' topic/draft-comment ')]" name="topic.draft-comment">
  <xsl:if test="$DRAFT='yes'">
   <xsl:call-template name="output-message">
-   <xsl:with-param name="msg">Draft comment area found.</xsl:with-param>
-   <xsl:with-param name="msgnum">048</xsl:with-param>
+   <xsl:with-param name="msgnum">040</xsl:with-param>
    <xsl:with-param name="msgsev">I</xsl:with-param>
   </xsl:call-template>
   <div style="background-color: #99FF99; border: 1pt black solid;">
@@ -2773,8 +2790,7 @@
         <xsl:apply-templates select="*[contains(@class,' topic/title ')][1]" mode="text-only"/>
         <xsl:if test="*[contains(@class,' topic/title ')][2]">
          <xsl:call-template name="output-message">
-           <xsl:with-param name="msg">More than one title element in a <xsl:value-of select="name()"/>. Using the first one for the <xsl:value-of select="name()"/>'s title.</xsl:with-param>
-           <xsl:with-param name="msgnum">007</xsl:with-param>
+           <xsl:with-param name="msgnum">041</xsl:with-param>
            <xsl:with-param name="msgsev">W</xsl:with-param>
          </xsl:call-template>
       </xsl:if>
@@ -2954,30 +2970,30 @@
  <xsl:if test="$DBG='yes' and not($FILTERFILE='')">
   <xsl:if test="@audience">
    <xsl:call-template name="output-message">
-    <xsl:with-param name="msg">Flagging attribute found on audience attribute. Inline phrases cannot be flagged.</xsl:with-param>
-    <xsl:with-param name="msgnum">058</xsl:with-param>
+    <xsl:with-param name="msgnum">042</xsl:with-param>
     <xsl:with-param name="msgsev">I</xsl:with-param>
+    <xsl:with-param name="msgparams">%1=audience</xsl:with-param>
    </xsl:call-template>
   </xsl:if>
   <xsl:if test="@platform">
    <xsl:call-template name="output-message">
-    <xsl:with-param name="msg">Flagging attribute found on platform attribute. Inline phrases cannot be flagged.</xsl:with-param>
-    <xsl:with-param name="msgnum">058</xsl:with-param>
+    <xsl:with-param name="msgnum">042</xsl:with-param>
     <xsl:with-param name="msgsev">I</xsl:with-param>
+    <xsl:with-param name="msgparams">%1=platform</xsl:with-param>
    </xsl:call-template>
   </xsl:if>
   <xsl:if test="@product">
    <xsl:call-template name="output-message">
-    <xsl:with-param name="msg">Flagging attribute found on product attribute. Inline phrases cannot be flagged.</xsl:with-param>
-    <xsl:with-param name="msgnum">058</xsl:with-param>
+    <xsl:with-param name="msgnum">042</xsl:with-param>
     <xsl:with-param name="msgsev">I</xsl:with-param>
+    <xsl:with-param name="msgparams">%1=product</xsl:with-param>
    </xsl:call-template>
   </xsl:if>
   <xsl:if test="@otherprops">
    <xsl:call-template name="output-message">
-    <xsl:with-param name="msg">Flagging attribute found on otherprops attribute. Inline phrases cannot be flagged.</xsl:with-param>
-    <xsl:with-param name="msgnum">058</xsl:with-param>
+    <xsl:with-param name="msgnum">042</xsl:with-param>
     <xsl:with-param name="msgsev">I</xsl:with-param>
+    <xsl:with-param name="msgparams">%1=otherprops</xsl:with-param>
    </xsl:call-template>
   </xsl:if>
  </xsl:if>
@@ -3039,14 +3055,18 @@
     <xsl:otherwise/> <!-- no space, one value -->
    </xsl:choose>
   </xsl:variable>
-
+  
   <xsl:choose> <!-- Ensure there's an image to get, otherwise don't insert anything -->
    <xsl:when test="$FILTERDOC/val/prop[@att=$flag-att][@val=$firstflag][@action='flag'][@img]">
     <!-- output the flag -->
+    <xsl:variable name="imgsrc" select="$FILTERDOC/val/prop[@att=$flag-att][@val=$firstflag][@action='flag']/@img"/>
+    
     <img>
      <xsl:attribute name="src">
       <xsl:if test="string-length($PATH2PROJ) > 0"><xsl:value-of select="$PATH2PROJ"/></xsl:if>
-      <xsl:value-of select="$FILTERDOC/val/prop[@att=$flag-att][@val=$firstflag][@action='flag']/@img"/>
+      <xsl:call-template name="get-file-name">
+        <xsl:with-param name="file-path" select="$imgsrc"/>
+      </xsl:call-template>
      </xsl:attribute>
      <xsl:attribute name="alt"> <!-- always insert an ALT - if it's blank, assume the user didn't want to fill it. -->
       <xsl:value-of select="$FILTERDOC/val/prop[@att=$flag-att][@val=$firstflag][@action='flag']/@alt"/>
@@ -3725,22 +3745,32 @@
     </xsl:variable>
     
     <xsl:choose>
-      <xsl:when test="($childlang='ar-eg' or $childlang='ar' or $childlang='he' or $childlang='he-il')">
+      <xsl:when test="($childlang='ar-eg' or $childlang='ar' or $childlang='he' or $childlang='he-il') and ($urltest='url')">
         <link rel="stylesheet" type="text/css" href="{$CSSPATH}{$bidi-dita-css}" />
-        <!-- Code using path2proj deleted. We only use csspath now. -->
+      </xsl:when>
+      <xsl:when test="($childlang='ar-eg' or $childlang='ar' or $childlang='he' or $childlang='he-il') and ($urltest='')">
+        <link rel="stylesheet" type="text/css" href="{$PATH2PROJ}{$CSSPATH}{$bidi-dita-css}" />
+      </xsl:when>
+      <xsl:when test="not($childlang='ar-eg' or $childlang='ar' or $childlang='he' or $childlang='he-il') and ($urltest='url')">
+        <link rel="stylesheet" type="text/css" href="{$CSSPATH}{$dita-css}" />
       </xsl:when>
       <xsl:otherwise>
-        <link rel="stylesheet" type="text/css" href="{$CSSPATH}{$dita-css}" />
-        <!-- Code using path2proj deleted. We only use csspath now. -->
+        <link rel="stylesheet" type="text/css" href="{$PATH2PROJ}{$CSSPATH}{$dita-css}" />
       </xsl:otherwise>
     </xsl:choose>
     <xsl:value-of select="$newline"/>
     <!-- Add user's style sheet if requested to -->
     <xsl:if test="string-length($CSS)>0">
-      <link rel="stylesheet" type="text/css" href="{$CSSPATH}{$CSS}" />
-      <!-- Code using path2proj deleted. We only use csspath now. -->
-      <xsl:value-of select="$newline"/>
+      <xsl:choose>
+        <xsl:when test="$urltest='url'">
+          <link rel="stylesheet" type="text/css" href="{$CSSPATH}{$CSS}" />
+        </xsl:when>
+        <xsl:otherwise>
+          <link rel="stylesheet" type="text/css" href="{$PATH2PROJ}{$CSSPATH}{$CSS}" />
+        </xsl:otherwise>
+      </xsl:choose><xsl:value-of select="$newline"/>
     </xsl:if>
+    
   </xsl:template>
   
   <xsl:template name="generateChapterTitle">
@@ -3759,8 +3789,7 @@
         <xsl:when test="string-length($ditamaintitle)>'0'"><xsl:value-of select="$ditamaintitle"/></xsl:when>
         <xsl:otherwise><xsl:text>***</xsl:text>
           <xsl:call-template name="output-message">
-            <xsl:with-param name="msg">Topic contains no title; using "***".</xsl:with-param>
-            <xsl:with-param name="msgnum">009</xsl:with-param>
+            <xsl:with-param name="msgnum">037</xsl:with-param>
             <xsl:with-param name="msgsev">W</xsl:with-param>
           </xsl:call-template>
         </xsl:otherwise>
@@ -3821,6 +3850,29 @@
       <xsl:copy-of select="document($FTR,/)"/>
     </xsl:if>
     <xsl:value-of select="$newline"/>
+  </xsl:template>
+
+  <xsl:template match="processing-instruction('path2project')" mode="get-path2project">
+    <xsl:value-of select="."/>
+  </xsl:template>
+
+  <xsl:template name="get-file-name">
+    <xsl:param name="file-path"/>
+    <xsl:choose>
+    <xsl:when test="contains($file-path, '\')">
+        <xsl:call-template name="get-file-name">
+            <xsl:with-param name="file-path" select="substring-after($file-path, '\')"/>
+        </xsl:call-template>
+    </xsl:when>
+    <xsl:when test="contains($file-path, '/')">
+        <xsl:call-template name="get-file-name">
+            <xsl:with-param name="file-path" select="substring-after($file-path, '/')"/>
+        </xsl:call-template>
+    </xsl:when>
+    <xsl:otherwise>
+        <xsl:value-of select="$file-path"/>
+    </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
 </xsl:stylesheet>

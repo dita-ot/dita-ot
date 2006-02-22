@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\..\dtd\reference.dtd">
+<reference id="subjectRelHeader" outputclass="element" xml:lang="en-us">
+<title>subjectRelHeader</title>
+<shortdesc>Specifies the roles played by subjects in associations.<?Pub Caret?> </shortdesc>
+<refbody>
+<section><title>Description</title><p>You use the <keyword>subjectRelHeader</keyword> element
+to supply a header row for a subject relationship table when you want to identify
+the roles played by the subjects in each column. Each cell in the header row
+identifies a subject topic that defines a role. When specializing the <xref
+href="subjectRelTable.xml"></xref> element, you can accomplish the same purpose
+by specializing the cells within the rows to enforce the roles. </p></section>
+<section conref="../packagedef.xml#subjectRelHeader-reference/subjectRelHeader-containedBy-section"></section>
+<section conref="../packagedef.xml#subjectRelHeader-reference/subjectRelHeader-contains-section"></section>
+<section conref="../packagedef.xml#subjectRelHeader-reference/subjectRelHeader-contentModel-section"></section>
+<section conref="../packagedef.xml#subjectRelHeader-reference/subjectRelHeader-attList-section"></section>
+<section conref="../packagedef.xml#subjectRelHeader-reference/subjectRelHeader-classValue-section"></section>
+</refbody>
+</reference>
+<?Pub *0000001463?>

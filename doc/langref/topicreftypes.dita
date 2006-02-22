@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE reference  PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "../../dtd/reference.dtd">
+<!--             (C) Copyright OASIS Open 2005.                    -->
+<!--             (C) Copyright IBM Corporation 2001, 2004.         -->
+<!--             All Rights Reserved.                              -->
+<reference id="topicreftypes" xml:lang="en-us">
+   <title>
+      <keyword>%topicreftypes;</keyword>
+   </title>
+   <refbody>
+      <refsyn>
+         <title>Contained by</title>Used in the topic DTD.</refsyn>
+      <refsyn>
+         <title>Contains</title>Declarations for attributes. <xref href="topic.dita">topic</xref> or <xref href="concept.dita">concept</xref> or <xref href="task.dita">task</xref> or <xref href="reference.dita">reference</xref> or <xref href="external.dita">external</xref> or <xref href="local.dita">local</xref>
+      </refsyn>
+<!--xsection conref="DitabaseNav.dita#commonCMdefs/topicreftypes-contains"/-->
+<!--xsection conref="DitabaseNav.dita#commonCMdefs/topicreftypes-containedby"/-->
+      <section><title>Attributes</title>
+         <state name="IsAttlist" value="NA"/>
+      </section>
+      <example><!-- optional content --></example>
+   </refbody>
+</reference>

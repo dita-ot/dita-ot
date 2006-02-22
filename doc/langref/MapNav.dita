@@ -1,0 +1,425 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2004, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\..\dtd\reference.dtd">
+<!--             (C) Copyright OASIS Open 2005.                    -->
+<!--             (C) Copyright IBM Corporation 2001, 2004.         -->
+<!--             All Rights Reserved.                              -->
+<reference id="commonCMdefs" xml:lang="en-us"><?Pub Caret1?>
+<title>Common Content Model Definitions</title>
+<refbody>
+<!--ELEMENT: author-->
+<section id="author-contains">          <title>Contains</title>          <p> 
+( text data  or <xref href="keyword.dita">keyword</xref>) <i> (any number) </i> 
+        </p>       </section>
+<section id="author-containedby">          <title>Contained by</title>   
+      <xref href="topicmeta.dita"></xref>       </section>
+<section id="author-classvalue">          <title>Inheritance</title>     
+    <xref href="topic.dita">topic</xref>/<xref href="author.dita">author</xref> 
+     </section>
+<!--ELEMENT: source-->
+<section id="source-contains">          <title>Contains</title>          <p> 
+( text data  or <xref href="keyword.dita">keyword</xref>) <i> (any number) </i> 
+        </p>       </section>
+<section id="source-containedby">          <title>Contained by</title>   
+      <xref href="topicmeta.dita"></xref>       </section>
+<section id="source-classvalue">          <title>Inheritance</title>     
+    <xref href="topic.dita">topic</xref>/<xref href="source.dita">source</xref> 
+     </section>
+<!--ELEMENT: publisher-->
+<section id="publisher-contains">          <title>Contains</title>       
+  <p>  ( text data  or <xref href="keyword.dita">keyword</xref>) <i> (any
+number) </i>          </p>       </section>
+<section id="publisher-containedby">          <title>Contained by</title> 
+        <xref href="topicmeta.dita"></xref>       </section>
+<section id="publisher-classvalue">          <title>Inheritance</title>  
+       <xref href="topic.dita">topic</xref>/<xref href="publisher.dita">publisher</xref> 
+     </section>
+<!--ELEMENT: copyright-->
+<section id="copyright-contains">          <title>Contains</title>       
+  <p>  (  (<xref href="copyryear.dita">copyryear</xref>) <i> (one or more) </i> then <xref
+href="copyrholder.dita">copyrholder</xref>) </p>       </section>
+<section id="copyright-containedby">          <title>Contained by</title> 
+        <xref href="topicmeta.dita"></xref>       </section>
+<section id="copyright-classvalue">          <title>Inheritance</title>  
+       <xref href="topic.dita">topic</xref>/<xref href="copyright.dita">copyright</xref> 
+     </section>
+<!--ELEMENT: copyryear-->
+<section id="copyryear-contains">          <title>Contains</title>       
+  <p> no content </p>       </section>
+<section id="copyryear-containedby">          <title>Contained by</title> 
+        <xref href="copyright.dita"></xref>       </section>
+<section id="copyryear-classvalue">          <title>Inheritance</title>  
+       <xref href="topic.dita">topic</xref>/<xref href="copyryear.dita">copyryear</xref> 
+     </section>
+<!--ELEMENT: copyrholder-->
+<section id="copyrholder-contains">          <title>Contains</title>     
+    <p>  ( text data  or <xref href="keyword.dita">keyword</xref>) <i> (any
+number) </i>          </p>       </section>
+<section id="copyrholder-containedby">          <title>Contained by</title> 
+        <xref href="copyright.dita"></xref>       </section>
+<section id="copyrholder-classvalue">          <title>Inheritance</title> 
+        <xref href="topic.dita">topic</xref>/<xref href="copyrholder.dita">copyrholder</xref> 
+     </section>
+<!--ELEMENT: critdates-->
+<section id="critdates-contains">          <title>Contains</title>       
+  <p>  (<xref href="created.dita">created</xref> then   (<xref href="revised.dita">revised</xref>) <i> (any
+number) </i>) </p>       </section>
+<section id="critdates-containedby">          <title>Contained by</title> 
+        <xref href="topicmeta.dita"></xref>       </section>
+<section id="critdates-classvalue">          <title>Inheritance</title>  
+       <xref href="topic.dita">topic</xref>/<xref href="critdates.dita">critdates</xref> 
+     </section>
+<!--ELEMENT: created-->
+<section id="created-contains">          <title>Contains</title>          <p> no
+content </p>       </section>
+<section id="created-containedby">          <title>Contained by</title>  
+       <xref href="critdates.dita"></xref>       </section>
+<section id="created-classvalue">          <title>Inheritance</title>    
+     <xref href="topic.dita">topic</xref>/<xref href="created.dita">created</xref> 
+     </section>
+<!--ELEMENT: revised-->
+<section id="revised-contains">          <title>Contains</title>          <p> no
+content </p>       </section>
+<section id="revised-containedby">          <title>Contained by</title>  
+       <xref href="critdates.dita"></xref>       </section>
+<section id="revised-classvalue">          <title>Inheritance</title>    
+     <xref href="topic.dita">topic</xref>/<xref href="revised.dita">revised</xref> 
+     </section>
+<!--ELEMENT: permissions-->
+<section id="permissions-contains">          <title>Contains</title>     
+    <p> no content </p>       </section>
+<section id="permissions-containedby">          <title>Contained by</title> 
+        <xref href="topicmeta.dita"></xref>       </section>
+<section id="permissions-classvalue">          <title>Inheritance</title> 
+        <xref href="topic.dita">topic</xref>/<xref href="permissions.dita">permissions</xref> 
+     </section>
+<!--ELEMENT: category-->
+<section id="category-contains">          <title>Contains</title>        
+ <p>  ( text data  or <xref href="keyword.dita">keyword</xref>) <i> (any number) </i> 
+        </p>       </section>
+<section id="category-containedby">          <title>Contained by</title> 
+        <xref href="topicmeta.dita"></xref>       </section>
+<section id="category-classvalue">          <title>Inheritance</title>   
+      <xref href="topic.dita">topic</xref>/<xref href="category.dita">category</xref> 
+     </section>
+<!--ELEMENT: audience-->
+<section id="audience-contains">          <title>Contains</title>        
+ <p> no content </p>       </section>
+<section id="audience-containedby">          <title>Contained by</title> 
+        <xref href="topicmeta.dita"></xref>       </section>
+<section id="audience-classvalue">          <title>Inheritance</title>   
+      <xref href="topic.dita">topic</xref>/<xref href="audience.dita">audience</xref> 
+     </section>
+<!--ELEMENT: keywords-->
+<section id="keywords-contains">          <title>Contains</title>        
+ <p>  (<xref href="indexterm.dita">indexterm</xref> or <xref href="keyword.dita">keyword</xref>) <i> (any
+number) </i>          </p>       </section>
+<section id="keywords-containedby">          <title>Contained by</title> 
+        <xref href="topicmeta.dita"></xref>       </section>
+<section id="keywords-classvalue">          <title>Inheritance</title>   
+      <xref href="topic.dita">topic</xref>/<xref href="keywords.dita">keywords</xref> 
+     </section>
+<!--ELEMENT: prodinfo-->
+<section id="prodinfo-contains">          <title>Contains</title>        
+ <p>  (  (<xref href="prodname.dita">prodname</xref>)  then   (<xref href="vrmlist.dita">vrmlist</xref>)
+ then   (<xref href="brand.dita">brand</xref> or <xref href="series.dita">series</xref> or <xref
+href="platform.dita">platform</xref> or <xref href="prognum.dita">prognum</xref> or <xref
+href="featnum.dita">featnum</xref> or <xref href="component.dita">component</xref>) <i> (any
+number) </i>) </p>       </section>
+<section id="prodinfo-containedby">          <title>Contained by</title> 
+        <xref href="topicmeta.dita"></xref>       </section>
+<section id="prodinfo-classvalue">          <title>Inheritance</title>   
+      <xref href="topic.dita">topic</xref>/<xref href="prodinfo.dita">prodinfo</xref> 
+     </section>
+<!--ELEMENT: prodname-->
+<section id="prodname-contains">          <title>Contains</title>        
+ <p>  ( text data  or <xref href="keyword.dita">keyword</xref>) <i> (any number) </i> 
+        </p>       </section>
+<section id="prodname-containedby">          <title>Contained by</title> 
+        <xref href="prodinfo.dita"></xref>       </section>
+<section id="prodname-classvalue">          <title>Inheritance</title>   
+      <xref href="topic.dita">topic</xref>/<xref href="prodname.dita">prodname</xref> 
+     </section>
+<!--ELEMENT: vrmlist-->
+<section id="vrmlist-contains">          <title>Contains</title>          <p> 
+(<xref href="vrm.dita">vrm</xref>) <i> (one or more) </i>          </p>  
+    </section>
+<section id="vrmlist-containedby">          <title>Contained by</title>  
+       <xref href="prodinfo.dita"></xref>       </section>
+<section id="vrmlist-classvalue">          <title>Inheritance</title>    
+     <xref href="topic.dita">topic</xref>/<xref href="vrmlist.dita">vrmlist</xref> 
+     </section>
+<!--ELEMENT: vrm-->
+<section id="vrm-contains">          <title>Contains</title>          <p> no
+content </p>       </section>
+<section id="vrm-containedby">          <title>Contained by</title>      
+   <xref href="vrmlist.dita"></xref>       </section>
+<section id="vrm-classvalue">          <title>Inheritance</title>        
+ <xref href="topic.dita">topic</xref>/<xref href="vrm.dita">vrm</xref>   
+   </section>
+<!--ELEMENT: brand-->
+<section id="brand-contains">          <title>Contains</title>          <p> 
+( text data  or <xref href="keyword.dita">keyword</xref>) <i> (any number) </i> 
+        </p>       </section>
+<section id="brand-containedby">          <title>Contained by</title>    
+     <xref href="prodinfo.dita"></xref>       </section>
+<section id="brand-classvalue">          <title>Inheritance</title>      
+   <xref href="topic.dita">topic</xref>/<xref href="brand.dita">brand</xref> 
+     </section>
+<!--ELEMENT: series-->
+<section id="series-contains">          <title>Contains</title>          <p> 
+( text data  or <xref href="keyword.dita">keyword</xref>) <i> (any number) </i> 
+        </p>       </section>
+<section id="series-containedby">          <title>Contained by</title>   
+      <xref href="prodinfo.dita"></xref>       </section>
+<section id="series-classvalue">          <title>Inheritance</title>     
+    <xref href="topic.dita">topic</xref>/<xref href="series.dita">series</xref> 
+     </section>
+<!--ELEMENT: platform-->
+<section id="platform-contains">          <title>Contains</title>        
+ <p>  ( text data  or <xref href="keyword.dita">keyword</xref>) <i> (any number) </i> 
+        </p>       </section>
+<section id="platform-containedby">          <title>Contained by</title> 
+        <xref href="prodinfo.dita"></xref>       </section>
+<section id="platform-classvalue">          <title>Inheritance</title>   
+      <xref href="topic.dita">topic</xref>/<xref href="platform.dita">platform</xref> 
+     </section>
+<!--ELEMENT: prognum-->
+<section id="prognum-contains">          <title>Contains</title>          <p> 
+( text data  or <xref href="keyword.dita">keyword</xref>) <i> (any number) </i> 
+        </p>       </section>
+<section id="prognum-containedby">          <title>Contained by</title>  
+       <xref href="prodinfo.dita"></xref>       </section>
+<section id="prognum-classvalue">          <title>Inheritance</title>    
+     <xref href="topic.dita">topic</xref>/<xref href="prognum.dita">prognum</xref> 
+     </section>
+<!--ELEMENT: featnum-->
+<section id="featnum-contains">          <title>Contains</title>          <p> 
+( text data  or <xref href="keyword.dita">keyword</xref>) <i> (any number) </i> 
+        </p>       </section>
+<section id="featnum-containedby">          <title>Contained by</title>  
+       <xref href="prodinfo.dita"></xref>       </section>
+<section id="featnum-classvalue">          <title>Inheritance</title>    
+     <xref href="topic.dita">topic</xref>/<xref href="featnum.dita">featnum</xref> 
+     </section>
+<!--ELEMENT: component-->
+<section id="component-contains">          <title>Contains</title>       
+  <p>  ( text data  or <xref href="keyword.dita">keyword</xref>) <i> (any
+number) </i>          </p>       </section>
+<section id="component-containedby">          <title>Contained by</title> 
+        <xref href="prodinfo.dita"></xref>       </section>
+<section id="component-classvalue">          <title>Inheritance</title>  
+       <xref href="topic.dita">topic</xref>/<xref href="component.dita">component</xref> 
+     </section>
+<!--ELEMENT: othermeta-->
+<section id="othermeta-contains">          <title>Contains</title>       
+  <p> no content </p>       </section>
+<section id="othermeta-containedby">          <title>Contained by</title> 
+        <xref href="topicmeta.dita"></xref>       </section>
+<section id="othermeta-classvalue">          <title>Inheritance</title>  
+       <xref href="topic.dita">topic</xref>/<xref href="othermeta.dita">othermeta</xref> 
+     </section>
+<!--ELEMENT: resourceid-->
+<section id="resourceid-contains">          <title>Contains</title>      
+   <p> no content </p>       </section>
+<section id="resourceid-containedby">          <title>Contained by</title> 
+        <xref href="topicmeta.dita"></xref>       </section>
+<section id="resourceid-classvalue">          <title>Inheritance</title> 
+        <xref href="topic.dita">topic</xref>/<xref href="resourceid.dita">resourceid</xref> 
+     </section>
+<!--ELEMENT: indexterm-->
+<section id="indexterm-contains">          <title>Contains</title>       
+  <p>  ( text data  or <xref href="keyword.dita">keyword</xref> or <xref href="indexterm.dita">indexterm</xref>) <i> (any
+number) </i>          </p>       </section>
+<section id="indexterm-containedby">          <title>Contained by</title> 
+        <xref href="keywords.dita"></xref>, <xref href="indexterm.dita"></xref> 
+     </section>
+<section id="indexterm-classvalue">          <title>Inheritance</title>  
+       <xref href="topic.dita">topic</xref>/<xref href="indexterm.dita">indexterm</xref> 
+     </section>
+<!--ELEMENT: keyword-->
+<section id="keyword-contains">          <title>Contains</title>          <p> 
+( text data ) </p>       </section>
+<section id="keyword-containedby">          <title>Contained by</title>  
+       <xref href="author.dita"></xref>, <xref href="source.dita"></xref>, <xref
+href="publisher.dita"></xref>, <xref href="copyrholder.dita"></xref>, <xref
+href="category.dita"></xref>, <xref href="keywords.dita"></xref>, <xref href="prodname.dita"></xref>, <xref
+href="brand.dita"></xref>, <xref href="series.dita"></xref>, <xref href="platform.dita"></xref>, <xref
+href="prognum.dita"></xref>, <xref href="featnum.dita"></xref>, <xref href="component.dita"></xref>, <xref
+href="indexterm.dita"></xref>, <xref href="linktext.dita"></xref>, <xref href="searchtitle.dita"></xref>, <xref
+href="shortdesc.dita"></xref>       </section>
+<section id="keyword-classvalue">          <title>Inheritance</title>    
+     <xref href="topic.dita">topic</xref>/<xref href="keyword.dita">keyword</xref> 
+     </section>
+<!--ELEMENT: map-->
+<section id="map-contains">          <title>Contains</title>          <p> 
+(  (<xref href="topicmeta.dita">topicmeta</xref>) <i> (optional) </i> then
+  (<xref href="navref.dita">navref</xref> or <xref href="anchor.dita">anchor</xref> or <xref
+href="topicref.dita">topicref</xref> or   (<xref href="topichead.dita">topichead</xref> or <xref
+href="topicgroup.dita">topicgroup</xref>)  or <xref href="reltable.dita">reltable</xref>) <i> (any
+number) </i>) </p>       </section>
+<section id="map-containedby">          <title>Contained by</title>       </section>
+<section id="map-classvalue">          <title>Inheritance</title>        
+ <xref href="map.dita">map</xref>/<xref href="map.dita">map</xref>       </section>
+<!--ELEMENT: navref-->
+<section id="navref-contains">          <title>Contains</title>          <p> no
+content </p>       </section>
+<section id="navref-containedby">          <title>Contained by</title>   
+      <xref href="map.dita"></xref>, <xref href="topicref.dita"></xref>, <xref
+href="topichead.dita"></xref>, <xref href="topicgroup.dita"></xref>       </section>
+<section id="navref-classvalue">          <title>Inheritance</title>     
+    <xref href="map.dita">map</xref>/<xref href="navref.dita">navref</xref> 
+     </section>
+<!--ELEMENT: topicref-->
+<section id="topicref-contains">          <title>Contains</title>        
+ <p>  (  (<xref href="topicmeta.dita">topicmeta</xref>) <i> (optional) </i> then
+  (<xref href="topicref.dita">topicref</xref> or   (<xref href="topichead.dita">topichead</xref> or <xref
+href="topicgroup.dita">topicgroup</xref>)  or <xref href="navref.dita">navref</xref> or <xref
+href="anchor.dita">anchor</xref>) <i> (any number) </i>) </p>       </section>
+<section id="topicref-containedby">          <title>Contained by</title> 
+        <xref href="map.dita"></xref>, <xref href="topicref.dita"></xref>, <xref
+href="relcell.dita"></xref>, <xref href="topichead.dita"></xref>, <xref href="topicgroup.dita"></xref> 
+     </section>
+<section id="topicref-classvalue">          <title>Inheritance</title>   
+      <xref href="map.dita">map</xref>/<xref href="topicref.dita">topicref</xref> 
+     </section>
+<!--ELEMENT: anchor-->
+<section id="anchor-contains">          <title>Contains</title>          <p> no
+content </p>       </section>
+<section id="anchor-containedby">          <title>Contained by</title>   
+      <xref href="map.dita"></xref>, <xref href="topicref.dita"></xref>, <xref
+href="topichead.dita"></xref>, <xref href="topicgroup.dita"></xref>       </section>
+<section id="anchor-classvalue">          <title>Inheritance</title>     
+    <xref href="map.dita">map</xref>/<xref href="anchor.dita">anchor</xref> 
+     </section>
+<!--ELEMENT: reltable-->
+<section id="reltable-contains">          <title>Contains</title>        
+ <p>  (  (<xref href="topicmeta.dita">topicmeta</xref>) <i> (optional) </i> then
+  (<xref href="relheader.dita">relheader</xref>) <i> (optional) </i> then
+  (<xref href="relrow.dita">relrow</xref>) <i> (one or more) </i>) </p>  
+    </section>
+<section id="reltable-containedby">          <title>Contained by</title> 
+        <xref href="map.dita"></xref>       </section>
+<section id="reltable-classvalue">          <title>Inheritance</title>   
+      <xref href="map.dita">map</xref>/<xref href="reltable.dita">reltable</xref> 
+     </section>
+<!--ELEMENT: relheader-->
+<section id="relheader-contains">          <title>Contains</title>       
+  <p>  (<xref href="relcolspec.dita">relcolspec</xref>) <i> (one or more) </i> 
+        </p>       </section>
+<section id="relheader-containedby">          <title>Contained by</title> 
+        <xref href="reltable.dita"></xref>       </section>
+<section id="relheader-classvalue">          <title>Inheritance</title>  
+       <xref href="map.dita">map</xref>/<xref href="relheader.dita">relheader</xref> 
+     </section>
+<!--ELEMENT: relcolspec-->
+<section id="relcolspec-contains">          <title>Contains</title>      
+   <p>  (<xref href="topicmeta.dita">topicmeta</xref>) <i> (optional) </i> 
+        </p>       </section>
+<section id="relcolspec-containedby">          <title>Contained by</title> 
+        <xref href="relheader.dita"></xref>       </section>
+<section id="relcolspec-classvalue">          <title>Inheritance</title> 
+        <xref href="map.dita">map</xref>/<xref href="relcolspec.dita">relcolspec</xref> 
+     </section>
+<!--ELEMENT: relrow-->
+<section id="relrow-contains">          <title>Contains</title>          <p> 
+(<xref href="relcell.dita">relcell</xref>) <i> (any number) </i>          </p> 
+     </section>
+<section id="relrow-containedby">          <title>Contained by</title>   
+      <xref href="reltable.dita"></xref>       </section>
+<section id="relrow-classvalue">          <title>Inheritance</title>     
+    <xref href="map.dita">map</xref>/<xref href="relrow.dita">relrow</xref> 
+     </section>
+<!--ELEMENT: relcell-->
+<section id="relcell-contains">          <title>Contains</title>          <p> 
+(  (<xref href="topicref.dita">topicref</xref> or   (<xref href="topichead.dita">topichead</xref> or <xref
+href="topicgroup.dita">topicgroup</xref>) ) <i> (any number) </i>) </p>  
+    </section>
+<section id="relcell-containedby">          <title>Contained by</title>  
+       <xref href="relrow.dita"></xref>       </section>
+<section id="relcell-classvalue">          <title>Inheritance</title>    
+     <xref href="map.dita">map</xref>/<xref href="relcell.dita">relcell</xref> 
+     </section>
+<!--ELEMENT: topicmeta-->
+<section id="topicmeta-contains">          <title>Contains</title>       
+  <p>  (  (<xref href="linktext.dita">linktext</xref>) <i> (optional) </i> then
+  (<xref href="searchtitle.dita">searchtitle</xref>) <i> (optional) </i> then
+  (<xref href="shortdesc.dita">shortdesc</xref>) <i> (optional) </i> then
+  (<xref href="author.dita">author</xref>) <i> (any number) </i> then   (<xref
+href="source.dita">source</xref>) <i> (optional) </i> then   (<xref href="publisher.dita">publisher</xref>) <i> (optional) </i> then
+  (<xref href="copyright.dita">copyright</xref>) <i> (any number) </i> then
+  (<xref href="critdates.dita">critdates</xref>) <i> (optional) </i> then
+  (<xref href="permissions.dita">permissions</xref>) <i> (optional) </i> then
+  (<xref href="audience.dita">audience</xref>) <i> (any number) </i> then
+  (<xref href="category.dita">category</xref>) <i> (any number) </i> then
+  (<xref href="keywords.dita">keywords</xref>) <i> (any number) </i> then
+  (<xref href="prodinfo.dita">prodinfo</xref>) <i> (any number) </i> then
+  (<xref href="othermeta.dita">othermeta</xref>) <i> (any number) </i> then
+  (<xref href="resourceid.dita">resourceid</xref>) <i> (any number) </i>) </p> 
+     </section>
+<section id="topicmeta-containedby">          <title>Contained by</title> 
+        <xref href="map.dita"></xref>, <xref href="topicref.dita"></xref>, <xref
+href="reltable.dita"></xref>, <xref href="relcolspec.dita"></xref>, <xref
+href="topichead.dita"></xref>, <xref href="topicgroup.dita"></xref>       </section>
+<section id="topicmeta-classvalue">          <title>Inheritance</title>  
+       <xref href="map.dita">map</xref>/<xref href="topicmeta.dita">topicmeta</xref> 
+     </section>
+<!--ELEMENT: linktext-->
+<section id="linktext-contains">          <title>Contains</title>        
+ <p>  ( text data  or <xref href="keyword.dita">keyword</xref>) <i> (any number) </i> 
+        </p>       </section>
+<section id="linktext-containedby">          <title>Contained by</title> 
+        <xref href="topicmeta.dita"></xref>       </section>
+<section id="linktext-classvalue">          <title>Inheritance</title>   
+      <xref href="map.dita">map</xref>/<xref href="linktext.dita">linktext</xref> 
+     </section>
+<!--ELEMENT: searchtitle-->
+<section id="searchtitle-contains">          <title>Contains</title>     
+    <p>  ( text data  or <xref href="keyword.dita">keyword</xref>) <i> (any
+number) </i>          </p>       </section>
+<section id="searchtitle-containedby">          <title>Contained by</title> 
+        <xref href="topicmeta.dita"></xref>       </section>
+<section id="searchtitle-classvalue">          <title>Inheritance</title> 
+        <xref href="map.dita">map</xref>/<xref href="searchtitle.dita">searchtitle</xref> 
+     </section>
+<!--ELEMENT: shortdesc-->
+<section id="shortdesc-contains">          <title>Contains</title>       
+  <p>  ( text data  or <xref href="keyword.dita">keyword</xref>) <i> (any
+number) </i>          </p>       </section>
+<section id="shortdesc-containedby">          <title>Contained by</title> 
+        <xref href="topicmeta.dita"></xref>       </section>
+<section id="shortdesc-classvalue">          <title>Inheritance</title>  
+       <xref href="map.dita">map</xref>/<xref href="shortdesc.dita">shortdesc</xref> 
+     </section>
+<!--ELEMENT: topichead-->
+<section id="topichead-contains">          <title>Contains</title>       
+  <p>  (  (<xref href="topicmeta.dita">topicmeta</xref>) <i> (optional) </i> then
+  (<xref href="topicref.dita">topicref</xref> or   (<xref href="topichead.dita">topichead</xref> or <xref
+href="topicgroup.dita">topicgroup</xref>)  or <xref href="navref.dita">navref</xref> or <xref
+href="anchor.dita">anchor</xref>) <i> (any number) </i>) </p>       </section>
+<section id="topichead-containedby">          <title>Contained by</title> 
+        <xref href="map.dita"></xref>, <xref href="topicref.dita"></xref>, <xref
+href="relcell.dita"></xref>, <xref href="topichead.dita"></xref>, <xref href="topicgroup.dita"></xref> 
+     </section>
+<section id="topichead-classvalue">          <title>Inheritance</title>  
+       <xref href="map.dita">map</xref>/<xref href="topicref.dita">topicref</xref>,
+       <xref href="mapgroup-d.dita">mapgroup-d</xref>/<xref href="topichead.dita">topichead</xref> 
+     </section>
+<!--ELEMENT: topicgroup-->
+<section id="topicgroup-contains">          <title>Contains</title>      
+   <p>  (  (<xref href="topicmeta.dita">topicmeta</xref>) <i> (optional) </i> then
+  (<xref href="topicref.dita">topicref</xref> or   (<xref href="topichead.dita">topichead</xref> or <xref
+href="topicgroup.dita">topicgroup</xref>)  or <xref href="navref.dita">navref</xref> or <xref
+href="anchor.dita">anchor</xref>) <i> (any number) </i>) </p>       </section>
+<section id="topicgroup-containedby">          <title>Contained by</title> 
+        <xref href="map.dita"></xref>, <xref href="topicref.dita"></xref>, <xref
+href="relcell.dita"></xref>, <xref href="topichead.dita"></xref>, <xref href="topicgroup.dita"></xref> 
+     </section>
+<section id="topicgroup-classvalue">          <title>Inheritance</title> 
+        <xref href="map.dita">map</xref>/<xref href="topicref.dita">topicref</xref>,
+       <xref href="mapgroup-d.dita">mapgroup-d</xref>/<xref href="topicgroup.dita">topicgroup</xref> 
+     </section>
+</refbody>
+</reference>
+<?Pub *0000025740?>

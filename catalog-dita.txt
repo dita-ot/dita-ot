@@ -57,6 +57,10 @@ PUBLIC "-//IBM//ELEMENTS DITA CALS Tables//EN" "tbl_xml.mod"
 --             (C) Copyright OASIS Open 2005.                    --
 --             (C) Copyright IBM Corporation 2001, 2004.         --
 --             All Rights Reserved.                              --
+-- UPDATES:                                                      --
+--     2005.11.15 RDA: Corrected system ID for topicAttr.mod,    --
+--                     topicDefn.ent                             -- 
+--     2005.11.15 RDA: Corrected public ID for tblDecl.mod       --
 
 -- Dita DTDs --
 
@@ -73,8 +77,8 @@ PUBLIC "-//OASIS//ELEMENTS DITA Task//EN" "task.mod"
 
 PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd"
 PUBLIC "-//OASIS//ELEMENTS DITA Topic//EN" "topic.mod"
-PUBLIC "-//OASIS//ENTITIES DITA Topic Class//EN" "topicAttr.ent"
-PUBLIC "-//OASIS//ENTITIES DITA Topic Definitions//EN" "topicAttr.ent"
+PUBLIC "-//OASIS//ENTITIES DITA Topic Class//EN" "topicAttr.mod"
+PUBLIC "-//OASIS//ENTITIES DITA Topic Definitions//EN" "topicDefn.ent"
 
 -- Maps --
 
@@ -103,7 +107,7 @@ PUBLIC "-//OASIS//ENTITIES DITA Utilities Domain//EN" "utilitiesDomain.ent"
 -- Common --
 
 PUBLIC "-//OASIS//ELEMENTS DITA Metadata//EN" "metaDecl.mod"
-PUBLIC "-//OASIS//ELEMENTS DITA CALS Tables//EN" "tblDecl.mod"
+PUBLIC "-//OASIS//ELEMENTS DITA Exchange Table Model//EN" "tblDecl.mod"
 
 
 

@@ -1,10 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- (C) Copyright IBM Corporation 2001, 2005. All Rights Reserved.
-
-
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
  *-->
 <!DOCTYPE bookmap PUBLIC "-//IBM//DTD DITA BookMap//EN"
-  "../../demo/book/bookmap.dtd">
+  "../book/bookmap.dtd">
 <bookmap id="ditaref-book">
 
 <!-- inline representation of simple book information
@@ -17,263 +17,263 @@
   -->
 
 <!-- external representation of book information -->
-  <bkinfo href="ditaref-bkinfo.xml"/>
+  <bkinfo href="ditaref-bkinfo.dita"/>
 
-  <preface href="overview.xml"/>
+  <preface href="overview.dita"/>
 
-  <chapter href="topic2.xml">
-    <topicref href="dita.xml"/>
-    <topicref href="topic.xml"/>
-    <topicref href="title.xml"/>
-    <topicref href="titlealts.xml"/>
-    <topicref href="navtitle.xml"/>
-    <topicref href="searchtitle.xml"/>
-    <topicref href="shortdesc.xml"/>
-    <topicref href="body.xml"/>
-    <topicref href="section.xml"/>
-    <topicref href="example.xml"/>
-    <topicref href="related-links.xml"/>
+  <chapter href="topic2.dita">
+    <topicref href="dita.dita"/>
+    <topicref href="topic.dita"/>
+    <topicref href="title.dita"/>
+    <topicref href="titlealts.dita"/>
+    <topicref href="navtitle.dita"/>
+    <topicref href="searchtitle.dita"/>
+    <topicref href="shortdesc.dita"/>
+    <topicref href="body.dita"/>
+    <topicref href="section.dita"/>
+    <topicref href="example.dita"/>
+    <topicref href="related-links.dita"/>
   </chapter>
 
-  <chapter href="concept2.xml">
-    <topicref href="concept.xml"/>
-    <topicref href="conbody.xml"/>
+  <chapter href="concept2.dita">
+    <topicref href="concept.dita"/>
+    <topicref href="conbody.dita"/>
   </chapter>
 
-  <chapter href="reference2.xml">
-    <topicref href="reference.xml"/>
-    <topicref href="refbody.xml"/>
-    <topicref href="refsyn.xml"/>
-    <topicref href="properties.xml"/>
-    <topicref href="property.xml"/>
-    <topicref href="proptype.xml"/>
-    <topicref href="propdesc.xml"/>
-    <topicref href="propvalue.xml"/>
-    <topicref href="prophead.xml"></topicref>
+  <chapter href="reference2.dita">
+    <topicref href="reference.dita"/>
+    <topicref href="refbody.dita"/>
+    <topicref href="refsyn.dita"/>
+    <topicref href="properties.dita"/>
+    <topicref href="property.dita"/>
+    <topicref href="proptype.dita"/>
+    <topicref href="propdesc.dita"/>
+    <topicref href="propvalue.dita"/>
+    <topicref href="prophead.dita"></topicref>
   </chapter>
 
-  <chapter href="task2.xml">
-    <topicref href="task.xml"/>
-    <topicref href="taskbody.xml"/>
-    <topicref href="postreq.xml"/>
-    <topicref href="prereq.xml"/>
-    <topicref href="result.xml"/>
-    <topicref href="context.xml"/>
-    <topicref href="steps.xml"/>
-    <topicref href="steps-unordered.xml"/>
-    <topicref href="step.xml"/>
-    <topicref href="choices.xml"/>
-    <topicref href="choice.xml"/>
-    <topicref href="stepxmp.xml"/>
-    <topicref href="substeps.xml"/>
-    <topicref href="substep.xml"/>
-    <topicref href="cmd.xml"/>
-    <topicref href="info.xml"/>
-    <topicref href="stepresult.xml"/>
-    <topicref href="tutorialinfo.xml"/>
-    <topicref href="choicetable.xml"/>
-    <topicref href="chrow.xml"/>
-    <topicref href="chhead.xml"/>
-    <topicref href="chdesc.xml"/>
-    <topicref href="chdeschd.xml"/>
-    <topicref href="choption.xml"/>
-    <topicref href="choptionhd.xml"/>
+  <chapter href="task2.dita">
+    <topicref href="task.dita"/>
+    <topicref href="taskbody.dita"/>
+    <topicref href="postreq.dita"/>
+    <topicref href="prereq.dita"/>
+    <topicref href="result.dita"/>
+    <topicref href="context.dita"/>
+    <topicref href="steps.dita"/>
+    <topicref href="steps-unordered.dita"/>
+    <topicref href="step.dita"/>
+    <topicref href="choices.dita"/>
+    <topicref href="choice.dita"/>
+    <topicref href="stepxmp.dita"/>
+    <topicref href="substeps.dita"/>
+    <topicref href="substep.dita"/>
+    <topicref href="cmd.dita"/>
+    <topicref href="info.dita"/>
+    <topicref href="stepresult.dita"/>
+    <topicref href="tutorialinfo.dita"/>
+    <topicref href="choicetable.dita"/>
+    <topicref href="chrow.dita"/>
+    <topicref href="chhead.dita"/>
+    <topicref href="chdesc.dita"/>
+    <topicref href="chdeschd.dita"/>
+    <topicref href="choption.dita"/>
+    <topicref href="choptionhd.dita"/>
   </chapter> 
 
-  <chapter href="body2.xml">
-    <topicref href="alt.xml"></topicref>
-    <topicref href="cite.xml"/>
-    <topicref href="desc.xml"/>
-    <topicref href="dd.xml"/>
-    <topicref href="ddhd.xml"/>
-    <topicref href="dl.xml"/>
-    <topicref href="dlentry.xml"/>
-    <topicref href="dlhead.xml"/>
-    <topicref href="dt.xml"/>
-    <topicref href="dthd.xml"/>
-    <topicref href="fig.xml"/>
-    <topicref href="figgroup.xml"/>
-    <topicref href="image.xml"/>
-    <topicref href="keyword.xml"/>
-    <topicref href="li.xml"/>
-    <topicref href="lines.xml"/>
-    <topicref href="lq.xml"/>
-    <topicref href="note.xml"/>
-    <topicref href="object.xml"/>
-    <topicref href="ol.xml"/>
-    <topicref href="p.xml"/>
-    <topicref href="param.xml"/>
-    <topicref href="ph.xml"/>
-    <topicref href="pre.xml"/>
-    <topicref href="q.xml"/>
-    <topicref href="sl.xml"/>
-    <topicref href="sli.xml"/>
-    <topicref href="ul.xml"/>
-    <topicref href="xref.xml"/>
+  <chapter href="body2.dita">
+    <topicref href="alt.dita"></topicref>
+    <topicref href="cite.dita"/>
+    <topicref href="desc.dita"/>
+    <topicref href="dd.dita"/>
+    <topicref href="ddhd.dita"/>
+    <topicref href="dl.dita"/>
+    <topicref href="dlentry.dita"/>
+    <topicref href="dlhead.dita"/>
+    <topicref href="dt.dita"/>
+    <topicref href="dthd.dita"/>
+    <topicref href="fig.dita"/>
+    <topicref href="figgroup.dita"/>
+    <topicref href="image.dita"/>
+    <topicref href="keyword.dita"/>
+    <topicref href="li.dita"/>
+    <topicref href="lines.dita"/>
+    <topicref href="lq.dita"/>
+    <topicref href="note.dita"/>
+    <topicref href="object.dita"/>
+    <topicref href="ol.dita"/>
+    <topicref href="p.dita"/>
+    <topicref href="param.dita"/>
+    <topicref href="ph.dita"/>
+    <topicref href="pre.dita"/>
+    <topicref href="q.dita"/>
+    <topicref href="sl.dita"/>
+    <topicref href="sli.dita"/>
+    <topicref href="ul.dita"/>
+    <topicref href="xref.dita"/>
   </chapter>
 
-  <chapter href="table2.xml">
-    <topicref href="table.xml"/>
-    <topicref href="tgroup.xml"/>
-    <topicref href="thead.xml"/>
-    <topicref href="tfoot.xml"/>
-    <topicref href="spanspec.xml"/>
-    <topicref href="stentry.xml"/>
-    <topicref href="colspec.xml"/>
-    <topicref href="tbody.xml"/>
-    <topicref href="row.xml"/>
-    <topicref href="entry.xml"/>
-    <topicref href="simpletable.xml"/>
-    <topicref href="sthead.xml"/>
-    <topicref href="strow.xml"/>
+  <chapter href="table2.dita">
+    <topicref href="table.dita"/>
+    <topicref href="tgroup.dita"/>
+    <topicref href="thead.dita"/>
+    <topicref href="stentry.dita"/>
+    <topicref href="colspec.dita"/>
+    <topicref href="tbody.dita"/>
+    <topicref href="row.dita"/>
+    <topicref href="entry.dita"/>
+    <topicref href="simpletable.dita"/>
+    <topicref href="sthead.dita"/>
+    <topicref href="strow.dita"/>
   </chapter>
 
-  <chapter href="domain.xml">
-    <topicref href="highld.xml">
-      <topicref href="b.xml"/>
-      <topicref href="i.xml"/>
-      <topicref href="u.xml"/>
-      <topicref href="tt.xml"/>
-      <topicref href="sup.xml"/>
-      <topicref href="sub.xml"/>
+  <chapter href="domain.dita">
+    <topicref href="hi-d.dita">
+      <topicref href="b.dita"/>
+      <topicref href="i.dita"/>
+      <topicref href="u.dita"/>
+      <topicref href="tt.dita"/>
+      <topicref href="sup.dita"/>
+      <topicref href="sub.dita"/>
     </topicref>
-    <topicref href="progd.xml">
-      <topicref href="codeph.xml"/>
-      <topicref href="codeblock.xml"/>
-      <topicref href="option.xml"/>
-      <topicref href="kwd.xml"/>
-      <topicref href="var.xml"/>
-      <topicref href="parmname.xml"/>
-      <topicref href="synph.xml"/>
-      <topicref href="oper.xml"/>
-      <topicref href="delim.xml"/>
-      <topicref href="sep.xml"/>
-      <topicref href="apiname.xml"/>
-      <topicref href="parml.xml"/>
-      <topicref href="plentry.xml"/>
-      <topicref href="pt.xml"/>
-      <topicref href="pd.xml"/>
-      <topicref href="syntaxdiagram.xml"/>
-      <topicref href="synblk.xml"/>
-      <topicref href="groupseq.xml"/>
-      <topicref href="groupchoice.xml"/>
-      <topicref href="groupcomp.xml"/>
-      <topicref href="fragment.xml"/>
-      <topicref href="fragref.xml"/>
-      <topicref href="synnote.xml"/>
-      <topicref href="synnoteref.xml"/>
-      <topicref href="repsep.xml"/>
+    <topicref href="pr-d.dita">
+      <topicref href="codeph.dita"/>
+      <topicref href="codeblock.dita"/>
+      <topicref href="option.dita"/>
+      <topicref href="kwd.dita"/>
+      <topicref href="var.dita"/>
+      <topicref href="parmname.dita"/>
+      <topicref href="synph.dita"/>
+      <topicref href="oper.dita"/>
+      <topicref href="delim.dita"/>
+      <topicref href="sep.dita"/>
+      <topicref href="apiname.dita"/>
+      <topicref href="parml.dita"/>
+      <topicref href="plentry.dita"/>
+      <topicref href="pt.dita"/>
+      <topicref href="pd.dita"/>
+      <topicref href="syntaxdiagram.dita"/>
+      <topicref href="synblk.dita"/>
+      <topicref href="groupseq.dita"/>
+      <topicref href="groupchoice.dita"/>
+      <topicref href="groupcomp.dita"/>
+      <topicref href="fragment.dita"/>
+      <topicref href="fragref.dita"/>
+      <topicref href="synnote.dita"/>
+      <topicref href="synnoteref.dita"/>
+      <topicref href="repsep.dita"/>
     </topicref>
-    <topicref href="softwd.xml">
-      <topicref href="msgph.xml"/>
-      <topicref href="msgblock.xml"/>
-      <topicref href="msgnum.xml"/>
-      <topicref href="cmdname.xml"/>
-      <topicref href="varname.xml"/>
-      <topicref href="filepath.xml"/>
-      <topicref href="userinput.xml"/>
-      <topicref href="systemoutput.xml"/>
+    <topicref href="sw-d.dita">
+      <topicref href="msgph.dita"/>
+      <topicref href="msgblock.dita"/>
+      <topicref href="msgnum.dita"/>
+      <topicref href="cmdname.dita"/>
+      <topicref href="varname.dita"/>
+      <topicref href="filepath.dita"/>
+      <topicref href="userinput.dita"/>
+      <topicref href="systemoutput.dita"/>
     </topicref>
-    <topicref href="userid.xml">
-      <topicref href="uicontrol.xml"/>
-      <topicref href="wintitle.xml"/>
-      <topicref href="menucascade.xml"/>
-      <topicref href="shortcut.xml"/>
-      <topicref href="screen.xml"/>
+    <topicref href="ui-d.dita">
+      <topicref href="uicontrol.dita"/>
+      <topicref href="wintitle.dita"/>
+      <topicref href="menucascade.dita"/>
+      <topicref href="shortcut.dita"/>
+      <topicref href="screen.dita"/>
     </topicref>
-    <topicref href="utilitiesd.xml">
-      <topicref href="imagemap.xml"></topicref>
-      <topicref href="area.xml"></topicref>
-      <topicref href="coords.xml"></topicref>
-      <topicref href="shape.xml"></topicref>
+    <topicref href="ut-d.dita">
+      <topicref href="imagemap.dita"></topicref>
+      <topicref href="area.dita"></topicref>
+      <topicref href="coords.dita"></topicref>
+      <topicref href="shape.dita"></topicref>
     </topicref>
   </chapter> 
 
-  <chapter href="valid.xml">
-    <topicref href="draft-comment.xml"/>
-    <topicref href="fn.xml"/>
-    <topicref href="indexterm.xml"/>
-    <topicref href="indextermref.xml"/>
-    <topicref href="tm.xml"/>
+  <chapter href="valid.dita">
+    <topicref href="draft-comment.dita"/>
+    <topicref href="fn.dita"/>
+    <topicref href="indexterm.dita"/>
+    <topicref href="indextermref.dita"/>
+    <topicref href="tm.dita"/>
   </chapter> 
 
-  <chapter href="prolog2.xml">
-    <topicref href="audience.xml"/>
-    <topicref href="author.xml"/>
-    <topicref href="brand.xml"/>
-    <topicref href="category.xml"/>
-    <topicref href="component.xml"/>
-    <topicref href="copyrholder.xml"/>
-    <topicref href="copyright.xml"/>
-    <topicref href="copyryear.xml"/>
-    <topicref href="created.xml"/>
-    <topicref href="critdates.xml"/>
-    <topicref href="featnum.xml"/>
-    <topicref href="keywords.xml"/>
-    <topicref href="metadata.xml"/>
-    <topicref href="othermeta.xml"/>
-    <topicref href="permissions.xml"/>
-    <topicref href="platform.xml"/>
-    <topicref href="prodinfo.xml"/>
-    <topicref href="prodname.xml"/>
-    <topicref href="prognum.xml"/>
-    <topicref href="prolog.xml"/>
-    <topicref href="publisher.xml"/>
-    <topicref href="resourceid.xml"/>
-    <topicref href="revised.xml"/>
-    <topicref href="series.xml"/>
-    <topicref href="source.xml"/>
-    <topicref href="vrm.xml"/>
-    <topicref href="vrmlist.xml"/>
+  <chapter href="prolog2.dita">
+    <topicref href="audience.dita"/>
+    <topicref href="author.dita"/>
+    <topicref href="brand.dita"/>
+    <topicref href="category.dita"/>
+    <topicref href="component.dita"/>
+    <topicref href="copyrholder.dita"/>
+    <topicref href="copyright.dita"/>
+    <topicref href="copyryear.dita"/>
+    <topicref href="created.dita"/>
+    <topicref href="critdates.dita"/>
+    <topicref href="featnum.dita"/>
+    <topicref href="keywords.dita"/>
+    <topicref href="metadata.dita"/>
+    <topicref href="othermeta.dita"/>
+    <topicref href="permissions.dita"/>
+    <topicref href="platform.dita"/>
+    <topicref href="prodinfo.dita"/>
+    <topicref href="prodname.dita"/>
+    <topicref href="prognum.dita"/>
+    <topicref href="prolog.dita"/>
+    <topicref href="publisher.dita"/>
+    <topicref href="resourceid.dita"/>
+    <topicref href="revised.dita"/>
+    <topicref href="series.dita"/>
+    <topicref href="source.dita"/>
+    <topicref href="vrm.dita"/>
+    <topicref href="vrmlist.dita"/>
   </chapter>
 
-  <chapter href="relatedl.xml">
-    <topicref href="link.xml"/>
-    <topicref href="linkinfo.xml"/>
-    <topicref href="linklist.xml"/>
-    <topicref href="linkpool.xml"/>
-    <topicref href="linktext.xml"/>
+  <chapter href="relatedl.dita">
+    <topicref href="link.dita"/>
+    <topicref href="linkinfo.dita"/>
+    <topicref href="linklist.dita"/>
+    <topicref href="linkpool.dita"/>
+    <topicref href="linktext.dita"/>
   </chapter>
 
-  <chapter href="special.xml">
-    <topicref href="boolean.xml"/>
-    <topicref href="itemgroup.xml"/>
-    <topicref href="no-topic-nesting.xml"/>
-    <topicref href="required-cleanup.xml"/>
-    <topicref href="state.xml"/>
-    <topicref href="term.xml"/>
+  <chapter href="special.dita">
+    <topicref href="boolean.dita"/>
+    <topicref href="itemgroup.dita"/>
+    <topicref href="no-topic-nesting.dita"/>
+    <topicref href="required-cleanup.dita"/>
+    <topicref href="state.dita"/>
+    <topicref href="term.dita"/>
   </chapter>
 
-  <chapter href="comrfet.xml">
-    <topicref href="display-atts.xml"/>
-    <topicref href="global-atts.xml"/>
-    <topicref href="id-atts.xml"/>
-    <topicref href="rel-atts.xml"/>
-    <topicref href="select-atts.xml"/>
-    <topicref href="univ-atts.xml"/>
+  <chapter href="comrfet.dita">
+    <topicref href="display-atts.dita"/>
+    <topicref href="global-atts.dita"/>
+    <topicref href="id-atts.dita"/>
+    <topicref href="rel-atts.dita"/>
+    <topicref href="select-atts.dita"/>
+    <topicref href="univ-atts.dita"/>
   </chapter>
 
-  <chapter id="mapelems" href="map2.xml">
-    <topicref href="map.xml"/>
-    <topicref href="anchor.xml"/>
-    <topicref href="navref.xml"/>
-    <topicref href="reltable.xml"/>
-    <topicref href="relrow.xml"/>
-    <topicref href="relcell.xml"/>
-    <topicref href="relheader.xml"/>
-    <topicref href="relcolspec.xml"/>
-    <topicref href="topicmeta.xml"/>
-    <topicref href="topicref.xml"/>
-    <topicref href="topicgroup.xml"/>
-    <topicref href="topichead.xml"/>
-    <topicref href="topicref-atts.xml"/>
-    <topicref href="topicref-atts-no-toc.xml"/>
+  <chapter id="mapelems" href="map2.dita">
+    <topicref href="map.dita"/>
+    <topicref href="anchor.dita"/>
+    <topicref href="navref.dita"/>
+    <topicref href="reltable.dita"/>
+    <topicref href="relrow.dita"/>
+    <topicref href="relcell.dita"/>
+    <topicref href="relheader.dita"/>
+    <topicref href="relcolspec.dita"/>
+    <topicref href="topicmeta.dita"/>
+    <topicref href="topicref.dita"/>
+    <topicref href="mapgroup-d.dita">
+      <topicref href="topicgroup.dita"/>
+      <topicref href="topichead.dita"/>
+    </topicref>
+    <topicref href="topicref-atts.dita"/>
+    <topicref href="topicref-atts-no-toc.dita"/>
   </chapter>
 
   <appendix navtitle="Appendix">
-    <topicref navtitle="xml;lang values" href="xmllangvalues.xml"/>
-    <topicref navtitle="outputclass processing" href="outputclassprocessing.xml"/>
-    <topicref navtitle="keyref processing" href="keyrefprocessing.xml"/>
+    <topicref href="xmllangvalues.dita" navtitle="xml:lang values"></topicref>
+    <topicref href="outputclassprocessing.dita" navtitle="outputclass processing"></topicref>
+    <topicref href="keyrefprocessing.dita" navtitle="keyref processing"></topicref>
   </appendix>
 
 </bookmap>

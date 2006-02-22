@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
 
-<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "reference.dtd">
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
 <reference id="stubs" xml:lang="en-us">
   <title>Stubs for user-provided override extensions</title>
   <shortdesc>The <i>dita2htmlImpl.xsl</i> stylesheet provides code stubs that 

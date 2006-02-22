@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2004, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "../../dtd/reference.dtd">
+<!--             (C) Copyright OASIS Open 2005.                    -->
+<!--             (C) Copyright IBM Corporation 2001, 2004.         -->
+<!--             All Rights Reserved.                              -->
+<reference id="fig" xml:lang="en-us">
+<title><keyword>fig</keyword></title>
+<shortdesc>The figure (&lt;<keyword>fig</keyword>>) element is a display context
+(sometimes called an <q>exhibit</q>) with an optional title for a wide variety
+of content. Most commonly, the figure element contains an image element (a
+graphic or artwork), but it can contain several kinds of text objects as well.
+A title is placed inside the figure element to provide a caption to describe
+the content.</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>fig (figure)</indexterm><indexterm>figure (fig)</indexterm>
+<indexterm>Body elements<indexterm>fig</indexterm>  </indexterm><indexterm>fig</indexterm>
+</keywords>
+</metadata></prolog>
+<refbody>
+<section conref="DitabaseNav.dita#commonCMdefs/fig-contains"></section>
+<section conref="DitabaseNav.dita#commonCMdefs/fig-containedby"></section>
+<section conref="DitabaseNav.dita#commonCMdefs/fig-classvalue"></section>
+<section><title>Attributes</title><simpletable id="fig_attr" relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="commonLRdefs.dita#commonLRdefs/display-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/univ-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/spectitle">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/classandout">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+</simpletable></section>
+<example>      <title>Example<?Pub Caret?></title>    <codeblock>&lt;fig expanse="column">&lt;title>The Handshake&lt;/title>
+&lt;image href="handshake.jpg" alt="The Handshake"/>
+&lt;/fig></codeblock>       </example>
+</refbody>
+</reference>
+<?Pub *0000002713?>

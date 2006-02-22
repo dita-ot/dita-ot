@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2004, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "../../dtd/reference.dtd">
+<!--             (C) Copyright OASIS Open 2005.                    -->
+<!--             (C) Copyright IBM Corporation 2001, 2004.         -->
+<!--             All Rights Reserved.                              -->
+<reference id="filepath" xml:lang="en-us">
+<title><keyword>filepath</keyword></title>
+<shortdesc>The &lt;<keyword>filepath</keyword>> element indicates the name
+and optionally the location of a referenced file by specifying the directory
+containing the file, and other directories that may precede it in the system
+hierarchy. This element is part of the DITA software domain, a special set
+of DITA elements designed to document software tasks, concepts and reference
+information.</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>filepath</indexterm><indexterm>Domain elements<indexterm>filepath</indexterm>  </indexterm>
+<indexterm>filepath</indexterm></keywords>
+</metadata></prolog>
+<refbody>
+<section conref="DitabaseNav.dita#commonCMdefs/filepath-contains"></section>
+<section conref="DitabaseNav.dita#commonCMdefs/filepath-containedby"></section>
+<section conref="DitabaseNav.dita#commonCMdefs/filepath-classvalue"></section>
+<section><title>Attributes</title><simpletable id="filepath_attr" relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="commonLRdefs.dita#commonLRdefs/univ-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/classandout">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+</simpletable></section>
+<example>   <title>Example<?Pub Caret?></title>       <pre>&lt;p>Uncompress the &lt;filepath>gbbrsh.gz&lt;/filepath> file to the 
+&lt;filepath>/usr&lt;/filepath> directory. Ensure that the
+&lt;filepath>/usr/tools/data.cfg&lt;/filepath> path is listed in
+the execution path system variable.&lt;/p></pre>       </example>
+</refbody>
+</reference>
+<?Pub *0000002471?>

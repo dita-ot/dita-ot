@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
+<!-- 
+Copyright © 2004-2005 by Idiom Technologies, Inc. All rights reserved. 
+IDIOM is a registered trademark of Idiom Technologies, Inc. and WORLDSERVER
+and WORLDSTART are trademarks of Idiom Technologies, Inc. All other 
+trademarks are the property of their respective owners. 
+
+IDIOM TECHNOLOGIES, INC. IS DELIVERING THE SOFTWARE "AS IS," WITH 
+ABSOLUTELY NO WARRANTIES WHATSOEVER, WHETHER EXPRESS OR IMPLIED,  AND IDIOM
+TECHNOLOGIES, INC. DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING
+BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
+PURPOSE AND WARRANTY OF NON-INFRINGEMENT. IDIOM TECHNOLOGIES, INC. SHALL NOT
+BE LIABLE FOR INDIRECT, INCIDENTAL, SPECIAL, COVER, PUNITIVE, EXEMPLARY,
+RELIANCE, OR CONSEQUENTIAL DAMAGES (INCLUDING BUT NOT LIMITED TO LOSS OF 
+ANTICIPATED PROFIT), ARISING FROM ANY CAUSE UNDER OR RELATED TO  OR ARISING 
+OUT OF THE USE OF OR INABILITY TO USE THE SOFTWARE, EVEN IF IDIOM
+TECHNOLOGIES, INC. HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES. 
+
+Idiom Technologies, Inc. and its licensors shall not be liable for any
+damages suffered by any person as a result of using and/or modifying the
+Software or its derivatives. In no event shall Idiom Technologies, Inc.'s
+liability for any damages hereunder exceed the amounts received by Idiom
+Technologies, Inc. as a result of this transaction.
+
+These terms and conditions supersede the terms and conditions in any
+licensing agreement to the extent that such terms and conditions conflict
+with those set forth herein.
+-->
+
+<index.configuration.set>
+	<metadata>
+		<revision.history>
+			<revision>
+				<date>26 Mar 2004 4:08PM</date>
+				<author>Ivan Luzyanin</author>
+				<description>
+					Created
+				</description>
+			</revision>
+		</revision.history>
+	</metadata>
+	<index.configuration>
+		<language>zh-CN</language>
+		<description></description>
+		<collation.sequence></collation.sequence>
+		<index.groups>
+			<index.group>
+				<group.key>\</group.key>
+				<group.label>符號</group.label>
+				<group.members>
+					<char.set>`</char.set>
+					<char.set>~</char.set>
+					<char.set>!</char.set>
+					<char.set>@</char.set>
+					<char.set>#</char.set>
+					<char.set>$</char.set>
+					<char.set>%</char.set>
+					<char.set>^</char.set>
+					<char.set>&amp;</char.set>
+					<char.set>*</char.set>
+					<char.set>(</char.set>
+					<char.set>)</char.set>
+					<char.set>_</char.set>
+					<char.set>-</char.set>
+					<char.set>=</char.set>
+					<char.set>+</char.set>
+					<char.set>'</char.set>
+					<char.set>&#x201c;</char.set>  <!--TODO ARGH-->
+					<char.set>&quot;</char.set>
+					<char.set>;</char.set>
+					<char.set>:</char.set>
+					<char.set>&lt;</char.set>
+					<char.set>&gt;</char.set>
+					<char.set>.</char.set>
+					<char.set>/</char.set>
+					<char.set>?</char.set>
+					<char.set>[</char.set>
+					<char.set>]</char.set>
+					<char.set>{</char.set>
+					<char.set>}</char.set>
+					<char.set>|</char.set>
+				</group.members>
+			</index.group>
+			<index.group>
+				<group.key>0</group.key>
+				<group.label>數字</group.label>
+				<group.members>
+					<char.set>0</char.set>
+					<char.set>０</char.set>
+					<char.set>1</char.set>
+					<char.set>１</char.set>
+					<char.set>2</char.set>
+					<char.set>２</char.set>
+					<char.set>3</char.set>
+					<char.set>３</char.set>
+					<char.set>4</char.set>
+					<char.set>４</char.set>
+					<char.set>5</char.set>
+					<char.set>５</char.set>
+					<char.set>6</char.set>
+					<char.set>６</char.set>
+					<char.set>7</char.set>
+					<char.set>７</char.set>
+					<char.set>8</char.set>
+					<char.set>８</char.set>
+					<char.set>9</char.set>
+					<char.set>９</char.set>
+				</group.members>
+			</index.group>
+			<index.group>
+				<group.key>A</group.key>
+				<group.label>字母</group.label>
+			</index.group>
+			<index.group>
+				<group.key>阿</group.key>
+				<group.label>A</group.label>
+				<group.members/>
+			</index.group>
+			<index.group>
+				<group.key>八</group.key>
+				<group.label>B</group.label>
+				<group.members/>
+			</index.group>
+			<index.group>
+				<group.key>擦</group.key>
+				<group.label>C</group.label>
+				<group.members/>
+			</index.group>
+			<index.group>
+				<group.key>打</group.key>
+				<group.label>D</group.label>
+				<group.members/>
+			</index.group>
+			<index.group>
+				<group.key>俄</group.key>
+				<group.label>E</group.label>
+				<group.members/>
+			</index.group>
+			<index.group>
+				<group.key>发</group.key>
+				<group.label>F</group.label>
+				<group.members/>
+			</index.group>
+			<index.group>
+				<group.key>嘎</group.key>
+				<group.label>G</group.label>
+				<group.members/>
+			</index.group>
+			<index.group>
+				<group.key>哈</group.key>
+				<group.label>H</group.label>
+				<group.members/>
+			</index.group>
+			<index.group>
+				<group.key>机</group.key>
+				<group.label>J</group.label>
+				<group.members/>
+			</index.group>
+			<index.group>
+				<group.key>喀</group.key>
+				<group.label>K</group.label>
+				<group.members/>
+			</index.group>
+			<index.group>
+				<group.key>拉</group.key>
+				<group.label>L</group.label>
+				<group.members/>
+			</index.group>
+			<index.group>
+				<group.key>麻</group.key>
+				<group.label>M</group.label>
+				<group.members/>
+			</index.group>
+			<index.group>
+				<group.key>那</group.key>
+				<group.label>N</group.label>
+				<group.members/>
+			</index.group>
+			<index.group>
+				<group.key>欧</group.key>
+				<group.label>O</group.label>
+				<group.members/>
+			</index.group>
+			<index.group>
+				<group.key>帕</group.key>
+				<group.label>P</group.label>
+				<group.members/>
+			</index.group>
+			<index.group>
+				<group.key>七</group.key>
+				<group.label>Q</group.label>
+				<group.members/>
+			</index.group>
+			<index.group>
+				<group.key>热</group.key>
+				<group.label>R</group.label>
+				<group.members/>
+			</index.group>
+			<index.group>
+				<group.key>撒</group.key>
+				<group.label>S</group.label>
+				<group.members/>
+			</index.group>
+			<index.group>
+				<group.key>他</group.key>
+				<group.label>T</group.label>
+				<group.members/>
+			</index.group>
+			<index.group>
+				<group.key>瓦</group.key>
+				<group.label>W</group.label>
+				<group.members/>
+			</index.group>
+			<index.group>
+				<group.key>西</group.key>
+				<group.label>X</group.label>
+				<group.members/>
+			</index.group>
+			<index.group>
+				<group.key>押</group.key>
+				<group.label>Y</group.label>
+				<group.members/>
+			</index.group>
+			<index.group>
+				<group.key>在</group.key>
+				<group.label>Z</group.label>
+				<group.members/>
+			</index.group>
+		</index.groups>
+	</index.configuration>
+</index.configuration.set>

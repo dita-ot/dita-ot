@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
 
-<!DOCTYPE topic PUBLIC "-//IBM//DTD DITA Topic//EN" "topic.dtd">
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
 <topic id="ditausingxform" xml:lang="en-us">
   <title>Using DITA transforms</title>
   <shortdesc>The core transforms of the DITA Toolkit represent the <q>Reference 
@@ -53,7 +53,7 @@
       <p>The complete transformation including pre-process can be excuted by 
         the ant script. There are some examples of simple ant script in 
         directory /ant. The ant target for the transformation which can be 
-        called is listed at <xref href="DITA-ant.xml#running_ant">Running 
+        called is listed at <xref href="DITA-antuse.xml">Running 
         Ant</xref></p>
     </section>
     <section></section>

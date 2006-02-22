@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?><!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference
+  PUBLIC "-//IBM//DTD DITA Reference//EN" "..\dtd\reference.dtd">
+<reference id="apiSyntaxItem" outputclass="element" xml:lang="en-us">
+<title>apiSyntaxItem</title>
+<shortdesc>The &lt;apiSyntaxItem&gt; element provides the programming language
+representation of the declared interface for the API item.</shortdesc>
+<refbody>
+<section><title>Description</title>In the &lt;apiDef&gt; element, the &lt;apiSyntaxItem&gt;
+element can supplement or replace the semantic declaration of the same interface.
+When a specialization provides a complete representation of the interface
+within a specialized &lt;apiDef&gt; element, the &lt;apiSyntaxItem&gt; element is
+omitted. The Java DITA API reference takes this approach. </section>
+<example><title>Example</title>The following example shows an &lt;apiSyntaxItem&gt;
+element for a Visual Basic function:<codeblock>&lt;apiClassifier id="com.ibm.xtools.rational.xde"&gt;
+    &lt;apiName&gt;IRXEAbstraction&lt;/apiName&gt;
+    &lt;shortdesc&gt;Represents a semantic mapping between elements that characterize the
+            same concept.&lt;/shortdesc&gt;
+    &lt;apiClassifierDetail &gt; 
+      &lt;apiSyntax&gt;
+         &lt;apiSyntaxText&gt;IRXEAbstraction&lt;/apiSyntaxText&gt;
+      &lt;/apiSyntax&gt; 
+&lt;/apiClassifier&gt;
+</codeblock><codeblock>&lt;apiClassifier id="rational.xde" outputclass="statement" platform="vb"&gt;
+    &lt;apiName&gt;TestImplements&lt;/apiName&gt;
+    &lt;shortdesc&gt;Specifies one or more interfaces or interface members.&lt;/shortdesc&gt;
+    &lt;apiClassifierDetail&gt;
+      &lt;apiSyntax platform="vb"&gt;
+        &lt;apiSyntaxText&gt;Implements &lt;apiItemName&gt;IRXEAbstraction&lt;/apiItemName&gt; 
+                      &lt;apiItemName&gt;TestImplements&lt;/apiItemName&gt;[name, …]&lt;apiRelation
+        &lt;/apiSyntaxText&gt;
+        &lt;apiSyntaxItem&gt;
+          &lt;apiItemName&gt;IRXEAbstraction&lt;/apiItemName&gt;
+          &lt;apiDefNote&gt;Required. An interface whose properties, methods, and events will be 
+             implemented by corresponding members in the class or structure.&lt;/apiDefNote&gt;
+        &lt;/apiSyntaxItem&gt;
+        &lt;apiSyntaxItem&gt;
+         &lt;apiItemName&gt;TestImplements&lt;/apiItemName&gt;
+           &lt;apiDefNote&gt;Required. The member of an interface that is being implemented.&lt;/apiDefNote&gt;
+        &lt;/apiSyntaxItem&gt;
+        &lt;apiSyntaxItem id="nameParam"&gt;
+           &lt;apiItemName&gt;name&lt;/apiItemName&gt;
+              &lt;apiDefNote&gt;The name for the created interface member.&lt;/apiDefNote&gt;
+        &lt;/apiSyntaxItem&gt;
+     &lt;/apiSyntax&gt;
+     &lt;apiDesc&gt;An interface is a collection of prototypes representing the members 
+         (properties, methods and events) the interface encapsulates.&lt;/apiDesc&gt;
+&lt;/apiClassifier&gt;
+</codeblock></example>
+
+<section conref="../packagedef.dita#apiSyntaxItem-reference/apiSyntaxItem-containedBy-section"/><section conref="../packagedef.dita#apiSyntaxItem-reference/apiSyntaxItem-contains-section"/><section conref="../packagedef.dita#apiSyntaxItem-reference/apiSyntaxItem-contentModel-section"/><section conref="../packagedef.dita#apiSyntaxItem-reference/apiSyntaxItem-attList-section"/><section conref="../packagedef.dita#apiSyntaxItem-reference/apiSyntaxItem-classValue-section"/></refbody>
+</reference>

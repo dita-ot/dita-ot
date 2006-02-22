@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- (c) Copyright IBM Corp. 2005 All Rights Reserved. -->
+<!ELEMENT messages (message)+ >
+<!ELEMENT message (reason, response) >
+<!ATTLIST message id ID #REQUIRED >
+<!ATTLIST message type (FATAL|ERROR|WARN|INFO|DEBUG) #REQUIRED >
+<!ELEMENT reason (#PCDATA) >
+<!ELEMENT response (#PCDATA) >

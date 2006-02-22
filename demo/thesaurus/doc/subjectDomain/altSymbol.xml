@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\..\dtd\reference.dtd">
+<reference id="altSymbol" outputclass="element" xml:lang="en-us">
+<title>altSymbol</title>
+<shortdesc>An alternative symbol used to identify the subject.</shortdesc><?Pub Caret1?>
+<refbody>
+<section conref="../packagedef.xml#altSymbol-reference/altSymbol-containedBy-section"></section>
+<section conref="../packagedef.xml#altSymbol-reference/altSymbol-contains-section"></section>
+<section conref="../packagedef.xml#altSymbol-reference/altSymbol-contentModel-section"></section>
+<section conref="../packagedef.xml#altSymbol-reference/altSymbol-attList-section"></section>
+<section conref="../packagedef.xml#altSymbol-reference/altSymbol-classValue-section"></section>
+</refbody>
+</reference>
+<?Pub *0000000886?>

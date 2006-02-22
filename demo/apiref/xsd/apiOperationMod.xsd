@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ | (C) Copyright IBM Corporation 2005 - 2006. All Rights Reserved.
+ *-->
+<!-- ============ Hooks for domain extension ============ -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
+  <xs:import namespace="http://dita.oasis-open.org/architecture/2005/" schemaLocation="../../../schema/ditaarch.xsd"/>
+  <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="../../../schema/xml.xsd"/>
+  
+  <!-- ============ Hooks for shell DTD ============ -->
+  <xs:group name="apiOperation-types-default">
+    <xs:choice>
+      <xs:element ref="apiClassifier"/>
+      <xs:element ref="apiOperation"/>
+      <xs:element ref="apiValue"/>
+    </xs:choice>
+  </xs:group>
+  <xs:group name="apiOperation-info-types">
+    <xs:sequence>
+      <xs:group ref="apiOperation-types-default"/>
+    </xs:sequence>
+  </xs:group>
+  <!-- ============ Element definitions ============ -->
+  <xs:element name="apiOperation" type="apiOperation.class" />
+  <xs:complexType name="apiOperation.class">
+    <xs:sequence>
+      <xs:group ref="apiName"/>
+      <xs:group ref="shortdesc"/>
+      <xs:group minOccurs="0" ref="prolog"/>
+      <xs:group ref="apiOperationDetail"/>
+      <xs:group minOccurs="0" ref="related-links"/>
+      <xs:group minOccurs="0" maxOccurs="unbounded" ref="apiOperation-info-types"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="apiOperation.attlist"/>
+  </xs:complexType>
+  
+  <xs:attributeGroup name="apiOperation.attlist">
+    <xs:attribute name="id" use="required" type="xs:ID"/>
+    <xs:attribute name="conref"/>
+    <xs:attribute name="outputclass"/>
+    <xs:attribute ref="xml:lang"/>
+    <xs:attribute ref="ditaarch:DITAArchVersion"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute name="class" default="- topic/topic reference/reference apiRef/apiRef apiOperation/apiOperation "/>
+  </xs:attributeGroup>
+  <xs:element name="apiOperationDetail">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:choice>
+          <xs:group minOccurs="0" maxOccurs="unbounded" ref="apiSyntax"/>
+          <xs:group minOccurs="0" maxOccurs="unbounded" ref="apiConstructorDef"/>
+          <xs:group minOccurs="0" maxOccurs="unbounded" ref="apiOperationDef"/>
+        </xs:choice>
+        <xs:group minOccurs="0" maxOccurs="unbounded" ref="apiDesc"/>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:group ref="example"/>
+          <xs:group ref="section"/>
+          <xs:group ref="apiImpl"/>
+        </xs:choice>
+      </xs:sequence>
+      <xs:attributeGroup ref="apiOperationDetail.attlist"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="apiOperationDetail.attlist">
+    <xs:attributeGroup ref="id-atts"/>
+    <xs:attribute name="translate">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="yes"/>
+          <xs:enumeration value="no"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute ref="xml:lang"/>
+    <xs:attribute name="outputclass"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute name="class" default="- topic/body reference/refbody apiRef/apiDetail apiOperation/apiOperationDetail "/>
+  </xs:attributeGroup>
+  <xs:element name="apiOperationDef">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:group ref="apiReturn"/>
+        <xs:group ref="apiParam"/>
+        <xs:group ref="apiEvent"/>
+        <xs:group ref="apiOperationClassifier"/>
+        <xs:group ref="apiDefinition.cnt"/>
+        <xs:group ref="apiOperationDefItem"/>
+        <xs:group ref="apiItemName"/>
+      </xs:choice>
+      <xs:attributeGroup ref="apiOperationDef.attlist"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="apiOperationDef.attlist">
+    <xs:attribute name="spectitle"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attribute name="outputclass"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute name="class" default="- topic/section reference/section apiRef/apiDef apiOperation/apiOperationDef "/>
+  </xs:attributeGroup>
+  <xs:element name="apiConstructorDef">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:group ref="apiParam"/>
+        <xs:group ref="apiEvent"/>
+        <xs:group ref="apiOperationClassifier"/>
+        <xs:group ref="apiDefinition.cnt"/>
+        <xs:group ref="apiOperationDefItem"/>
+        <xs:group ref="apiItemName"/>
+      </xs:choice>
+      <xs:attributeGroup ref="apiConstructorDef.attlist"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="apiConstructorDef.attlist">
+    <xs:attribute name="spectitle"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attribute name="outputclass"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute name="class" default="- topic/section reference/section apiRef/apiDef apiOperation/apiConstructorDef "/>
+  </xs:attributeGroup>
+  <xs:element name="apiReturn">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:group ref="apiItemName"/>
+        <xs:group ref="apiOperationClassifier"/>
+        <xs:group ref="apiDefinition.cnt"/>
+        <xs:group ref="apiOperationDefItem"/>
+      </xs:choice>
+      <xs:attributeGroup ref="apiReturn.attlist"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="apiReturn.attlist">
+    <xs:attribute name="keyref"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attribute name="outputclass"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute name="class" default="- topic/ph reference/ph apiRef/apiDefItem apiOperation/apiReturn "/>
+  </xs:attributeGroup>
+  <xs:element name="apiParam">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:group ref="apiItemName"/>
+        <xs:group ref="apiOperationClassifier"/>
+        <xs:group ref="apiDefinition.cnt"/>
+        <xs:group ref="apiOperationDefItem"/>
+      </xs:choice>
+      <xs:attributeGroup ref="apiParam.attlist"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="apiParam.attlist">
+    <xs:attribute name="keyref"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attribute name="outputclass"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute name="class" default="- topic/ph reference/ph apiRef/apiDefItem apiOperation/apiParam "/>
+  </xs:attributeGroup>
+  <xs:element name="apiEvent">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:group ref="apiItemName"/>
+        <xs:group ref="apiOperationClassifier"/>
+        <xs:group ref="apiDefinition.cnt"/>
+        <xs:group ref="apiOperationDefItem"/>
+      </xs:choice>
+      <xs:attributeGroup ref="apiEvent.attlist"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="apiEvent.attlist">
+    <xs:attribute name="keyref"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attribute name="outputclass"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute name="class" default="- topic/ph reference/ph apiRef/apiDefItem apiOperation/apiEvent "/>
+  </xs:attributeGroup>
+  <xs:element name="apiOperationDefItem">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:group ref="apiItemName"/>
+        <xs:group ref="apiOperationClassifier"/>
+        <xs:group ref="apiDefinition.cnt"/>
+        <xs:group ref="apiOperationDefItem"/>
+      </xs:choice>
+      <xs:attributeGroup ref="apiOperationDefItem.attlist"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="apiOperationDefItem.attlist">
+    <xs:attribute name="keyref"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attribute name="outputclass"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute name="class" default="- topic/ph reference/ph apiRef/apiDefItem apiOperation/apiOperationDefItem "/>
+  </xs:attributeGroup>
+  <xs:element name="apiOperationClassifier">
+    <xs:complexType mixed="true">
+      <xs:attributeGroup ref="apiOperationClassifier.attlist"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="apiOperationClassifier.attlist">
+    <xs:attribute name="href"/>
+    <xs:attribute name="keyref"/>
+    <xs:attribute name="type"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attribute name="format"/>
+    <xs:attribute name="scope">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="local"/>
+          <xs:enumeration value="peer"/>
+          <xs:enumeration value="external"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="outputclass"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute name="class" default="- topic/xref reference/xref apiRef/apiRelation apiOperation/apiOperationClassifier "/>
+  </xs:attributeGroup>
+  <!-- ============ Class ancestry ============ -->
+</xs:schema>

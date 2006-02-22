@@ -1,19 +1,25 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
 <project name="sample_htmlhelp" default="all" basedir="..">
-
-  <import file="${basedir}${file.separator}conductor.xml"/>
-
-	<target name="all" depends="sample2htmlhelp">
-	</target>
-	<!-- revise below here -->
-
-	<target name="sample2htmlhelp" depends="use-init">
-      <antcall target="dita2htmlhelp">
-		<param name="args.input"
-            value="${basedir}${file.separator}samples${file.separator}hierarchy.ditamap"/>
-		<param name="output.dir"
-            value="${basedir}${file.separator}out${file.separator}samples${file.separator}htmlhelp"/>
-      </antcall>
-	</target>
+  <path id="dost.class.path">
+    <pathelement location="${basedir}${file.separator}lib${file.separator}dost.jar"/>
+  </path>
+  
+  <taskdef name="integrate" classname="org.dita.dost.platform.IntegratorTask">
+    <classpath refid="dost.class.path"/>
+  </taskdef>
+  <target name="all" depends="integrate, sample2htmlhelp"></target>
+  <target name="integrate">
+    <integrate ditadir="${basedir}"/>
+  </target>
+  <!-- revise below here -->
+  <target name="sample2htmlhelp">
+    <ant antfile="${basedir}${file.separator}conductor.xml" target="init">
+      <property name="args.input"
+        value="${basedir}${file.separator}samples${file.separator}hierarchy.ditamap"/>
+      <property name="output.dir"
+        value="${basedir}${file.separator}out${file.separator}samples${file.separator}htmlhelp"/>
+      <property name="transtype" value="htmlhelp"/>
+    </ant>
+  </target>
 </project>

@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2004, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "../../dtd/reference.dtd">
+<!--             (C) Copyright OASIS Open 2005.                    -->
+<!--             (C) Copyright IBM Corporation 2001, 2004.         -->
+<!--             All Rights Reserved.                              -->
+<reference id="topicref" xml:lang="en-us">
+<title><keyword>topicref</keyword></title>
+<shortdesc>The &lt;<keyword>topicref</keyword>> element identifies a topic
+(such as a concept, task, or reference) or other resource. A &lt;<keyword>topicref</keyword>>
+can contain other&lt;<keyword>topicref</keyword>> elements, allowing you to
+express navigation or table-of-contents hierarchies, as well as implying relationships
+between the containing &lt;<keyword>topicref</keyword>> and its children.
+You can set the collection-type of a container &lt;<keyword>topicref</keyword>>
+to determine how its children are related to each other. You can also express
+relationships among &lt;<keyword>topicref</keyword>>s using group and table
+structures (using &lt;<keyword>topicgroup</keyword>> and &lt;<keyword>reltable</keyword>>).
+Relationships end up expressed as links in the output (with each participant
+in a relationship having links to the other participants by default). </shortdesc>
+<prolog><metadata>
+<keywords><indexterm>topicref<indexterm>Map elements<indexterm>topicref</indexterm> 
+   </indexterm>  </indexterm><indexterm>Map elements<indexterm>topicref</indexterm>  </indexterm>
+<indexterm>topicref</indexterm></keywords>
+</metadata></prolog>
+<refbody>
+<section> <p>You can fine tune the output from your map by setting different
+attributes on topicrefs: for example, the <i><keyword>linking</keyword></i> attribute
+controls how its relationships to other topicrefs are expressed as links,
+and the <i><keyword>toc</keyword></i> attribute controls whether the topicref
+shows up in TOC or navigation output.</p> </section>
+<section conref="MapNav.dita#commonCMdefs/topicref-contains"></section>
+<section conref="MapNav.dita#commonCMdefs/topicref-containedby"></section>
+<section conref="MapNav.dita#commonCMdefs/topicref-classvalue"></section>
+<section><title>Attributes</title><simpletable id="topicref_attr" relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="commonLRdefs.dita#commonLRdefs/navtitle">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/id-topicref">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/href-topicref">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/keyref">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/query">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/conref-topicref">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/copy-to">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/topicref-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/select-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/translate">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/xmllang">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/classonly"><?Pub Caret?>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+</simpletable></section>
+<example><title>Example</title>In this example, there are six topicrefs. They
+are nested and have a hierarchical relationship. Bats.xml is the parent topic
+and the other topics are its children.<codeblock>&lt;map title="Bats" Bats
+ &lt;topicref href="bats.dita" type="topic">
+  &lt;topicref href="batcaring.dita" type="task">&lt;/topicref>
+  &lt;topicref href="batfeeding.dita" type="task">&lt;/topicref>
+  &lt;topicref href="batsonar.dita" type="concept">&lt;/topicref>
+  &lt;topicref href="batguano.dita" type="reference">&lt;/topicref>
+  &lt;topicref href="bathistory.dita" type="reference">&lt;/topicref>
+ &lt;/topicref>
+&lt;/map></codeblock>       </example>
+</refbody>
+</reference>
+<?Pub *0000005411?>

@@ -1,0 +1,14 @@
+PUBLIC "-//IBM//DTD DITA API Operation Reference Type//EN" "demo/apiref/dtd/apiOperation.dtd"
+PUBLIC "-//IBM//DTD DITA API Package Type//EN" "demo/apiref/dtd/apiPackage.dtd"
+PUBLIC "-//IBM//DTD DITA API Reference Type//EN" "demo/apiref/dtd/apiRef.dtd"
+PUBLIC "-//IBM//DTD DITA API Classifier Reference Type//EN" "demo/apiref/dtd/apiClassifier.dtd"
+PUBLIC "-//IBM//DTD DITA API Reference Map//EN" "demo/apiref/dtd/apiMap.dtd"
+
+PUBLIC "-//IBM//ELEMENTS DITA API Reference//EN" "demo/apiref/dtd/apiRef.mod"
+PUBLIC "-//IBM//ELEMENTS DITA API Package//EN" "demo/apiref/dtd/apiPackage.mod"
+PUBLIC "-//IBM//ELEMENTS DITA API Classifier//EN" "demo/apiref/dtd/apiClassifier.mod"
+PUBLIC "-//IBM//ELEMENTS DITA API Operation//EN" "demo/apiref/dtd/apiOperation.mod"
+PUBLIC "-//IBM//ELEMENTS DITA API Value//EN" "demo/apiref/dtd/apiValue.mod"
+
+PUBLIC "-//IBM//ENTITIES DITA API Domain//EN" "demo/apiref/dtd/apiDomain.ent"
+PUBLIC "-//IBM//ELEMENTS DITA API Domain//EN" "demo/apiref/dtd/apiDomain.mod"

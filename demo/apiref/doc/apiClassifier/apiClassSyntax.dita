@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?><!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference
+  PUBLIC "-//IBM//DTD DITA Reference//EN" "..\dtd\reference.dtd">
+<reference id="apiSyntax" outputclass="element" xml:lang="en-us">
+<title>apiSyntax</title>
+<shortdesc>The &lt;apiSyntax&gt; element provides the representation in the programming
+language for the declared interface for the API item.</shortdesc>
+<refbody>
+<section><title>Description</title><p>In the &lt;apiDef&gt; element, the &lt;apiSyntax&gt;
+element can supplement or replace the semantic declaration of the same interface.
+When a specialization provides a complete representation of the interface
+within a specialized &lt;apiDef&gt; element, it can omit the &lt;apiSyntax&gt; element.
+The Java API reference takes this approach. </p></section>
+<example><title>Example</title><p>The following example shows an &lt;apiSyntax&gt;
+element for a Visual Basic property:</p><codeblock>&lt;apiClassifier id="IRXEAbstarction.Model"&gt;
+    &lt;apiClassifierDetail&gt;
+        &lt;apiSyntax&gt;
+          &lt;┘ 
+        &lt;/apiSyntax&gt;
+    &lt;/apiClassifierDetail&gt;
+&lt;/apiClassifier&gt;</codeblock></example>
+
+<section conref="../packagedef.dita#apiSyntax-reference/apiSyntax-containedBy-section"/><section conref="../packagedef.dita#apiSyntax-reference/apiSyntax-contains-section"/><section conref="../packagedef.dita#apiSyntax-reference/apiSyntax-contentModel-section"/><section conref="../packagedef.dita#apiSyntax-reference/apiSyntax-attList-section"/><section conref="../packagedef.dita#apiSyntax-reference/apiSyntax-classValue-section"/></refbody>
+</reference>

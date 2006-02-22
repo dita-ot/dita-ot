@@ -41,9 +41,7 @@
    </xsl:when>
    <xsl:otherwise>
     <xsl:call-template name="output-message">
-     <xsl:with-param name="msg">Area element has no cross-reference HREF attribute.
-The area requires a cross-reference with an HREF attribute.</xsl:with-param>
-     <xsl:with-param name="msgnum">051</xsl:with-param>
+     <xsl:with-param name="msgnum">044</xsl:with-param>
      <xsl:with-param name="msgsev">E</xsl:with-param>
     </xsl:call-template>
    </xsl:otherwise>
@@ -58,12 +56,8 @@ The area requires a cross-reference with an HREF attribute.</xsl:with-param>
      <xsl:attribute name="title"><xsl:value-of select="normalize-space($alttext)"/></xsl:attribute>
     </xsl:when>
    <xsl:otherwise>
-    <xsl:call-template name="output-message">
-     <xsl:with-param name="msg">Area element contains a cross-reference that is missing link text.
-The area recommends a cross-reference that contains link text; either from the referenced topic's title,
-or from the content of the cross-reference.
-Because there was no cross-reference content; the HREF attribute value is being used.</xsl:with-param>
-     <xsl:with-param name="msgnum">052</xsl:with-param>
+    <xsl:call-template name="output-message">     
+     <xsl:with-param name="msgnum">045</xsl:with-param>
      <xsl:with-param name="msgsev">W</xsl:with-param>
     </xsl:call-template>
    </xsl:otherwise>
@@ -79,11 +73,9 @@ Because there was no cross-reference content; the HREF attribute value is being 
     <xsl:when test="contains('--rect-circle-poly-default-',$shapetest)"/>
    <xsl:otherwise>
     <xsl:call-template name="output-message">
-     <xsl:with-param name="msg">Area shape should be: default, blank (no value), rect, circle, or poly.
-This value is not recognized: "<xsl:value-of select="$shapeval"/>".
-It was passed as-is through to the area element in the XHTML.</xsl:with-param>
-     <xsl:with-param name="msgnum">053</xsl:with-param>
+     <xsl:with-param name="msgnum">046</xsl:with-param>
      <xsl:with-param name="msgsev">W</xsl:with-param>
+     <xsl:with-param name="msgparams">%1=<xsl:value-of select="$shapeval"/></xsl:with-param>
     </xsl:call-template>
    </xsl:otherwise>
   </xsl:choose>
@@ -98,9 +90,7 @@ It was passed as-is through to the area element in the XHTML.</xsl:with-param>
    </xsl:when>
    <xsl:otherwise>
     <xsl:call-template name="output-message">
-     <xsl:with-param name="msg">Area coordinates are blank.
-Coordinate points for the shape need to be specified.</xsl:with-param>
-     <xsl:with-param name="msgnum">054</xsl:with-param>
+     <xsl:with-param name="msgnum">047</xsl:with-param>
      <xsl:with-param name="msgsev">W</xsl:with-param>
     </xsl:call-template>
    </xsl:otherwise>

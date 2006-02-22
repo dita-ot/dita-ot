@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2004, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "../../dtd/reference.dtd">
+<!--             (C) Copyright OASIS Open 2005.                    -->
+<!--             (C) Copyright IBM Corporation 2001, 2004.         -->
+<!--             All Rights Reserved.                              -->
+<reference id="indexterm" xml:lang="en-us">
+<title><keyword>indexterm</keyword></title>
+<shortdesc>An &lt;<keyword>indexterm</keyword>> is an index entry. You can
+nest entries to create multi-level indexes. The content is not output as part
+of topic content, only as part of the index.</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>indexterm</indexterm><indexterm>Miscellaneous elements<indexterm>indexterm</indexterm>  </indexterm>
+<indexterm>indexterm</indexterm></keywords>
+</metadata></prolog>
+<refbody>
+<section> <p>When DITA topics are output to XHTML, any indexterm elements
+in the &lt;<keyword>keywords</keyword>> element are placed in the Web page
+metadata, in addition to becoming part of the generated index.</p> </section>
+<section conref="DitabaseNav.dita#commonCMdefs/indexterm-contains"></section>
+<section conref="DitabaseNav.dita#commonCMdefs/indexterm-containedby"></section>
+<section conref="DitabaseNav.dita#commonCMdefs/indexterm-classvalue"></section>
+<section><title>Attributes</title><simpletable id="indexterm_attr" relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="commonLRdefs.dita#commonLRdefs/keyref-indexterm"><?Pub Caret?>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/univ-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/classonly">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+</simpletable></section>
+<example>          <title>Example</title><codeblock>&lt;purpose>An indexterm is an index entry. You can nest entries to 
+create multi-level indexes.&lt;indexterm>indexterm&lt;/indexterm>
+&lt;indexterm>Valid in Many Places elements&lt;indexterm>indexterm&lt;/indexterm>
+&lt;/indexterm>&lt;/purpose></codeblock>       </example>
+</refbody>
+</reference>
+<?Pub *0000002710?>

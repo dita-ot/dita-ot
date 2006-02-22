@@ -1,12 +1,11 @@
 /*
- * @(#)AbstractXMLWriter.java        1.0 2005-6-28
- *
- * 
+ * (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved.
  */
 package org.dita.dost.writer;
 
 import java.io.IOException;
 
+import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.module.Content;
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
@@ -135,9 +134,10 @@ ContentHandler, LexicalHandler, EntityResolver {
      */
     public void setContent(Content content) {
     }
-    /** (non-Javadoc)
-     * @see org.dita.dost.writer.AbstractWriter#write(java.lang.String)
-     */
-    public void write(String filename) {
-    }
+	/** (non-Javadoc)
+	 * @see org.dita.dost.writer.AbstractWriter#write(java.lang.String)
+	 */
+	public void write(String filename) throws DITAOTException {
+	}
+    
 }

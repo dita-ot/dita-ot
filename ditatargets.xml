@@ -1,11 +1,10 @@
 <project name="dita-targets"  basedir=".">
 <!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
-<!-- parameters 
-  dita.input.dirname  required
-	dita.input          required
+<!-- parameters   
+	args.input          required
 	dita.temp.dir       required
 	dita.script.dir     required
-  dita.extname        required
+  dita.ext            required
   output.dir          required
 -->
   
@@ -14,7 +13,7 @@
 </target>
 
 <!-- Build DocBook output from ditamap -->
-<target name="dita.map.docbook">  
+<target name="dita.map.docbook" description="Build DocBook output from ditamap">  
   <mkdir dir="${outputDir}" />
   <xslt processor="trax"
         in="${inputDir}${file.separator}${inputMap}"
@@ -26,7 +25,7 @@
 </target>
 
 <!-- Build DocBook output from dita topic -->
-<target name="dita.topic.docbook">
+<target name="dita.topic.docbook" description="Build DocBook output from dita topic">
   <condition property="args.xsl" value="${dita.script.dir}${file.separator}dita2docbook.xsl">
     <not>
       <isset property="args.xsl"/>
@@ -40,9 +39,24 @@
   </xslt>
 </target>
 
-<!-- Build XSL-FO output from ditamap -->
-<target name="dita.map.fo">
-  <condition property="args.xsl" value="${dita.script.dir}${file.separator}dita2fo-shell.xsl">
+<!-- Build RTF from DITA -->
+<target name="dita.topic.rtf">
+  <condition property="args.xsl" value="${dita.script.dir}${file.separator}dita2rtf.xsl">
+    <not>
+      <isset property="args.xsl"/>
+    </not>
+  </condition>
+  <xslt processor="trax"
+        in="${input}"
+        out="${output}"
+        style="${args.xsl}">    
+    <param name="DRAFT" expression="${args.draft}" if="args.draft"/>
+    <xmlcatalog refid="dita.catalog" />
+  </xslt>
+</target>
+
+<target name="dita.map.rtf">
+  <condition property="args.xsl" value="${dita.script.dir}${file.separator}dita2rtf.xsl">
     <not>
       <isset property="args.xsl"/>
     </not>
@@ -51,25 +65,47 @@
 	    in="${input}"
 	    out="${dita.temp.dir}${file.separator}${dita.map.filename.root}_MERGED.xml"
         style="${dita.script.dir}${file.separator}topicmerge.xsl">
-    <param name="root-path" expression="${rootPath}${file.separator}" />
     <xmlcatalog refid="dita.catalog" />
   </xslt>
   <xslt processor="trax"
 	    in="${dita.temp.dir}${file.separator}${dita.map.filename.root}_MERGED.xml"
 		out="${output}"
         style="${args.xsl}">
+    <param name="DRAFT" expression="${args.draft}" if="args.draft"/>
     <xmlcatalog refid="dita.catalog" />
-    <param name="output-related-links" expression="" />
-    <param name="DITAEXT" expression="${dita.extname}" if="dita.extname"/>
+  </xslt>
+</target>
+
+<!-- Build XSL-FO output from ditamap -->
+<target name="dita.map.fo" description="Build XSL-FO output from ditamap">
+  <condition property="args.xsl" value="${dita.script.dir}${file.separator}dita2fo-shell.xsl">
+    <not>
+      <isset property="args.xsl"/>
+    </not>
+  </condition>
+  <dirname file="${dita.temp.dir}${file.separator}${user.input.file}" property="dita.merged.dir"/>
+  <xslt processor="trax"
+	    in="${input}"
+	    out="${dita.merged.dir}${file.separator}${dita.map.filename.root}_MERGED.xml"
+        style="${dita.script.dir}${file.separator}topicmerge.xsl">
+    <xmlcatalog refid="dita.catalog" />
+  </xslt>
+  <xslt processor="trax"
+	    in="${dita.merged.dir}${file.separator}${dita.map.filename.root}_MERGED.xml"
+      out="${output}"
+      style="${args.xsl}">
+    <xmlcatalog refid="dita.catalog" />
+    <param name="output-related-links" expression="${args.fo.output.rel.links}" if="args.fo.output.rel.links"/>
+    <param name="DITAEXT" expression="${dita.ext}" if="dita.ext"/>
     <param name="DRAFT" expression="${args.draft}" if="args.draft"/>
     <param name="ARTLBL" expression="${args.artlbl}" if="args.artlbl"/>
-    <param name="dflt-ext" expression="${args.fo.img.ext}" if="args.fo.img.ext"/>
+    <param name="dflt-ext" expression="${fo.img.ext}" if="fo.img.ext"/>
   </xslt>
 </target>
 
 <!-- Build PDF from FO using FOP, need to include FOP, Avalon, 
 	 and Batik relevant jar files in CLASSPATH -->
-<target name="dita.fo2pdf" if="hasFOP">
+<target name="dita.fo2pdf" if="hasFOP" description="Build PDF from FO using FOP">
   <taskdef name="fop" classname="org.apache.fop.tools.anttasks.Fop"/>
   <fop format="application/pdf"
 	   basedir="${input}"
@@ -80,7 +116,7 @@
 </target>
 
 <!-- Build XSL-FO output from dita topic -->
-<target name="dita.topic.fo">
+<target name="dita.topic.fo" description="Build XSL-FO output from dita topic">
   <condition property="args.xsl" value="${dita.script.dir}${file.separator}dita2fo-shell.xsl">
     <not>
       <isset property="args.xsl"/>
@@ -91,19 +127,19 @@
         out="${output}"
         style="${args.xsl}">
     <xmlcatalog refid="dita.catalog" />
-    <param name="output-related-links" expression=""/>
-    <param name="DITAEXT" expression="${dita.extname}" if="dita.extname"/>
+    <param name="output-related-links" expression="${args.fo.output.rel.links}" if="args.fo.output.rel.links"/>
+    <param name="DITAEXT" expression="${dita.ext}" if="dita.ext"/>
     <param name="DRAFT" expression="${args.draft}" if="args.draft"/>
     <param name="ARTLBL" expression="${args.artlbl}" if="args.artlbl"/>	
-    <param name="dflt-ext" expression="${args.fo.img.ext}" if="args.fo.img.ext"/>
+    <param name="dflt-ext" expression="${fo.img.ext}" if="fo.img.ext"/>
   </xslt>
 </target>
 
 <!-- xhtml output -->
-<target name="dita.topics.xhtml">
-  <condition property="args.outext" value=".html">
+<target name="dita.topics.xhtml" description="Build XHTML output from dita topics" depends="copy-revflag">
+  <condition property="out.ext" value=".html">
     <not>
-      <isset property="args.outext"/>
+      <isset property="out.ext"/>
     </not>
   </condition>
   <condition property="args.xsl" value="${dita.script.dir}${file.separator}dita2xhtml.xsl">
@@ -115,28 +151,33 @@
 		basedir="${dita.temp.dir}"
 		destdir="${output.dir}"
 		includes="${fullditatopiclist}"
-		extension="${args.outext}"
+		extension="${out.ext}"
 		style="${args.xsl}">
-        <param name="DITAEXT" expression="${dita.extname}" if="dita.extname"/>
+        <param name="DITAEXT" expression="${dita.ext}" if="dita.ext"/>
         <param name="FILTERFILE" expression="${dita.input.valfile}" if="dita.input.valfile"/>
-        <param name="CSS" expression="${args.css}" if="args.css"/>
-        <param name="CSSPATH" expression="${args.csspath}" if="args.csspath"/>
+        <param name="CSS" expression="${args.css.file}" if="args.css.file"/>
+        <param name="CSSPATH" expression="${user.csspath}" if="user.csspath"/>
         <param name="HDF" expression="${args.hdf}" if="args.hdf"/>
         <param name="HDR" expression="${args.hdr}" if="args.hdr"/>
         <param name="FTR" expression="${args.ftr}" if="args.ftr"/>
         <param name="DRAFT" expression="${args.draft}" if="args.draft"/>
         <param name="ARTLBL" expression="${args.artlbl}" if="args.artlbl"/>
         <param name="INDEXSHOW" expression="${args.indexshow}" if="args.indexshow"/>
-        <param name="OUTEXT" expression="${args.outext}" if="args.outext"/>
-        <param name="PATH2PROJ" expression="${dita.map.output.dir}${file.separator}" if="dita.input.valfile"/>
+        <param name="OUTEXT" expression="${out.ext}" if="out.ext"/>
     </xslt>
   <antcall target="copy-css"/>
 </target>
 
-<target name="dita.map.xhtml">
-  <condition property="args.outext" value=".html">
+  <target name="copy-revflag" if="dita.input.valfile">
+    <copy todir="${output.dir}">
+      <fileset dir="${dita.resource.dir}" includes="*.gif"/>
+    </copy>
+  </target>
+
+<target name="dita.map.xhtml" description="Build HTML TOC file from ditamap">
+  <condition property="out.ext" value=".html">
     <not>
-      <isset property="args.outext"/>
+      <isset property="out.ext"/>
     </not>
   </condition>
   <condition property="args.xhtml.toc" value="index">
@@ -147,39 +188,39 @@
   <xslt processor="trax"
 		basedir="${dita.temp.dir}"
 		destdir="${output.dir}"
-		includes="${dita.input}"
+		includes="${user.input.file}"
 		style="${dita.script.dir}${file.separator}map2htmtoc.xsl">
-        <param name="DITAEXT" expression="${dita.extname}" if="dita.extname"/>
-        <param name="OUTEXT" expression="${args.outext}" if="args.outext"/>
-        <mapper type="glob" from="*${dita.input.filename}" to="*${args.xhtml.toc}${args.outext}"/>
+        <param name="DITAEXT" expression="${dita.ext}" if="dita.ext"/>
+        <param name="OUTEXT" expression="${out.ext}" if="out.ext"/>
+        <mapper type="glob" from="*${dita.input.filename}" to="*${args.xhtml.toc}${out.ext}"/>
     </xslt>
 </target>
 <!-- end xhtml process -->
 
 <!-- eclipse output -->
-<target name="dita.map.eclipse">
+<target name="dita.map.eclipse" description="Build EclipseHelp TOC and plugin.xml from ditamap">
   <basename property="dita.map.toc.root" file="${dita.input.filename}" suffix=".ditamap"/>
   <condition property="args.eclipsehelp.toc" value="${dita.map.toc.root}">
     <not>
       <isset property="args.eclipsehelp.toc"/>
     </not>
   </condition>
-  <condition property="args.outext" value=".html">
+  <condition property="out.ext" value=".html">
     <not>
-      <isset property="args.outext"/>
+      <isset property="out.ext"/>
     </not>
   </condition>
   <xslt processor="trax"
     basedir="${dita.temp.dir}"
 		destdir="${output.dir}"
-		includes="${dita.input}"
+		includes="${user.input.file}"
 		style="${dita.script.dir}${file.separator}map2eclipse.xsl">
-        <param name="DITAEXT" expression="${dita.extname}" if="dita.extname"/>
-        <param name="OUTEXT" expression="${args.outext}" if="args.outext"/>
+        <param name="DITAEXT" expression="${dita.ext}" if="dita.ext"/>
+        <param name="OUTEXT" expression="${out.ext}" if="out.ext"/>
         <mapper type="glob" from="*${dita.input.filename}" to="*${args.eclipsehelp.toc}.xml"/>
     </xslt>
     <xslt processor="trax"
-      in="${dita.temp.dir}${file.separator}${dita.input}"
+      in="${dita.temp.dir}${file.separator}${user.input.file}"
       out="${dita.map.output.dir}${file.separator}plugin.xml"
       style="${dita.script.dir}${file.separator}map2plugin.xsl">
         <param name="TOCROOT" expression="${args.eclipsehelp.toc}"/>
@@ -192,7 +233,7 @@
 <!-- end eclipse process -->
 
 <!-- eclipse content provider -->
-<target name="dita.map.eclipse.content">
+<target name="dita.map.eclipse.content" description="Build EclipseContent TOC and plugin.xml from ditamap">
   <basename property="dita.map.toc.root" file="${dita.input.filename}" suffix=".ditamap"/>
   <condition property="args.eclipsecontent.toc" value="${dita.map.toc.root}">
     <not>
@@ -200,22 +241,22 @@
     </not>
   </condition>
   <condition property="content.link.ext" value=".html?srcext=dita">
-	<equals arg1="${dita.extname}" arg2=".dita"></equals>
+	<equals arg1="${dita.ext}" arg2=".dita"></equals>
   </condition>
   <condition property="content.link.ext" value=".html?srcext=xml">
-	<equals arg1="${dita.extname}" arg2=".xml"></equals>
+	<equals arg1="${dita.ext}" arg2=".xml"></equals>
   </condition>
   <xslt processor="trax"
     basedir="${dita.temp.dir}"
 		destdir="${output.dir}"
-		includes="${dita.input}"
+		includes="${user.input.file}"
 		style="${dita.script.dir}${file.separator}map2eclipse.xsl">
-        <param name="DITAEXT" expression="${dita.extname}" if="dita.extname"/>
+        <param name="DITAEXT" expression="${dita.ext}" if="dita.ext"/>
         <param name="OUTEXT" expression="${content.link.ext}"/>
         <mapper type="glob" from="*${dita.input.filename}" to="*${args.eclipsecontent.toc}.xml"/>
     </xslt>
     <xslt processor="trax"
-      in="${dita.temp.dir}${file.separator}${dita.input}"
+      in="${dita.temp.dir}${file.separator}${user.input.file}"
       out="${dita.map.output.dir}${file.separator}plugin.xml"
       style="${dita.script.dir}${file.separator}map2plugin-cp.xsl">
         <param name="TOCROOT" expression="${args.eclipsecontent.toc}"/>
@@ -231,7 +272,7 @@
 <!-- end eclipse content provider process -->
 
 <!-- java help output -->
-<target name="dita.map.javahelp">
+<target name="dita.map.javahelp" description="Build JavaHelp TOC, Map, Helpset, Index files">
   <basename property="dita.map.toc.root" file="${dita.input.filename}" suffix=".ditamap"/>
   <condition property="args.javahelp.toc" value="${dita.map.toc.root}">
     <not>
@@ -243,27 +284,27 @@
       <isset property="args.javahelp.map"/>
     </not>
   </condition>
-  <condition property="args.outext" value=".html">
+  <condition property="out.ext" value=".html">
     <not>
-      <isset property="args.outext"/>
+      <isset property="out.ext"/>
     </not>
   </condition>
   <xslt processor="trax"
     basedir="${dita.temp.dir}"
 		destdir="${output.dir}"
-		includes="${dita.input}"
+		includes="${user.input.file}"
 		style="${dita.script.dir}${file.separator}map2javahelptoc.xsl">
-        <param name="DITAEXT" expression="${dita.extname}" if="dita.extname"/>
-        <param name="OUTEXT" expression="${args.outext}" if="args.outext"/>
+        <param name="DITAEXT" expression="${dita.ext}" if="dita.ext"/>
+        <param name="OUTEXT" expression="${out.ext}" if="out.ext"/>
         <mapper type="glob" from="*${dita.input.filename}" to="*${args.javahelp.toc}.xml"/>
     </xslt>
   <xslt processor="trax"
     basedir="${dita.temp.dir}"
 		destdir="${output.dir}"
-		includes="${dita.input}"
+		includes="${user.input.file}"
 		style="${dita.script.dir}${file.separator}map2javahelpmap.xsl">
-        <param name="DITAEXT" expression="${dita.extname}" if="dita.extname"/>
-        <param name="OUTEXT" expression="${args.outext}" if="args.outext"/>      
+        <param name="DITAEXT" expression="${dita.ext}" if="dita.ext"/>
+        <param name="OUTEXT" expression="${out.ext}" if="out.ext"/>      
         <mapper type="glob" from="*${dita.input.filename}" to="*${args.javahelp.map}.jhm"/>
     </xslt>
 	
@@ -271,7 +312,7 @@
 	<xslt processor="trax"
 	      basedir="${dita.temp.dir}"
 	      destdir="${output.dir}"
-	      includes="${dita.input}"
+	      includes="${user.input.file}"
 	      style="${dita.script.dir}${file.separator}map2javahelpset.xsl">
 	        <param name="javahelpmap" expression="${args.javahelp.map}"/>
             <param name="javahelptoc" expression="${args.javahelp.toc}"/>
@@ -281,15 +322,15 @@
 	<!-- Generate Java Help Index File -->
     <pipeline message="Extract index term."
                 module="IndexTermExtract"    
-				inputmap="${dita.input}"        
-                extparam="input=${dita.temp.dir}${file.separator}dita.list;output=${output.dir}${file.separator}${dita.input};targetext=.html;indextype=javahelp"
+				inputmap="${user.input.file}"        
+                extparam="input=${dita.temp.dir}${file.separator}dita.list;output=${output.dir}${file.separator}${user.input.file};targetext=.html;indextype=javahelp;${index.ext.param.encoding}"
     />
 </target>
 
-<target name="dita.topics.javahelp">
-  <condition property="args.outext" value=".html">
+<target name="dita.topics.javahelp" description="Build HTML files from dita topics">
+  <condition property="out.ext" value=".html">
     <not>
-      <isset property="args.outext"/>
+      <isset property="out.ext"/>
     </not>
   </condition>
   <condition property="args.xsl" value="${dita.script.dir}${file.separator}dita2html.xsl">
@@ -301,25 +342,26 @@
 		basedir="${dita.temp.dir}"
 		destdir="${output.dir}"
 		includes="${fullditatopiclist}"
-		extension="${args.outext}"
+		extension="${out.ext}"
 		style="${args.xsl}">
-        <param name="DITAEXT" expression="${dita.extname}" if="dita.extname"/>
+        <param name="DITAEXT" expression="${dita.ext}" if="dita.ext"/>
         <param name="FILTERFILE" expression="${dita.input.valfile}" if="dita.input.valfile"/>
-        <param name="CSS" expression="${args.css}" if="args.css"/>
-        <param name="CSSPATH" expression="${args.csspath}" if="args.csspath"/>
+        <param name="CSS" expression="${args.css.file}" if="args.css.file"/>
+        <param name="CSSPATH" expression="${user.csspath}" if="user.csspath"/>
         <param name="HDF" expression="${args.hdf}" if="args.hdf"/>
         <param name="HDR" expression="${args.hdr}" if="args.hdr"/>
         <param name="FTR" expression="${args.ftr}" if="args.ftr"/>
         <param name="DRAFT" expression="${args.draft}" if="args.draft"/>
         <param name="ARTLBL" expression="${args.artlbl}" if="args.artlbl"/>
-        <param name="OUTEXT" expression="${args.outext}" if="args.outext"/>
+        <param name="OUTEXT" expression="${out.ext}" if="out.ext"/>
         <param name="INDEXSHOW" expression="${args.indexshow}" if="args.indexshow"/>
-        <param name="PATH2PROJ" expression="${dita.map.output.dir}${file.separator}" if="dita.input.valfile"/>
     </xslt>
     <antcall target="copy-css"/>
 </target>
 
-<target name="compile.Java.Help" if="env.JHHOME">
+<target name="compile.Java.Help" if="env.JHHOME" description="Compile Java Help output">
+  <!-- delete 'JavaHelpSearch' directory before compiling. -->
+  <delete dir="${outputDir}${file.separator}JavaHelpSearch"/>
   <java jar="${env.JHHOME}${file.separator}javahelp${file.separator}bin${file.separator}jhindexer.jar"
         fork="true"
         dir="${outputDir}">
@@ -329,38 +371,38 @@
 <!-- end java help process -->
 
 <!-- html help output -->
-<target name="dita.map.htmlhelp">
-  <condition property="args.outext" value=".html">
+<target name="dita.map.htmlhelp" description="Build HTMLHelp HHP, HHC, HHK files">
+  <condition property="out.ext" value=".html">
     <not>
-      <isset property="args.outext"/>
+      <isset property="out.ext"/>
     </not>
   </condition>
   <xslt processor="trax"
 		basedir="${dita.temp.dir}"
 		destdir="${output.dir}"
-		includes="${dita.input}"
+		includes="${user.input.file}"
 		extension=".hhc"
 		style="${dita.script.dir}${file.separator}map2hhc.xsl">
-        <param name="DITAEXT" expression="${dita.extname}" if="dita.extname"/>
-        <param name="OUTEXT" expression="${args.outext}" if="args.outext"/>
+        <param name="DITAEXT" expression="${dita.ext}" if="dita.ext"/>
+        <param name="OUTEXT" expression="${out.ext}" if="out.ext"/>
   </xslt>  
   <pipeline message="Extract index term."
             module="IndexTermExtract"   
-			inputmap="${dita.input}"         
-            extparam="input=${dita.temp.dir}${file.separator}dita.list;output=${output.dir}${file.separator}${dita.input};targetext=${args.outext};indextype=htmlhelp"/>
+			inputmap="${user.input.file}"         
+            extparam="input=${dita.temp.dir}${file.separator}dita.list;output=${output.dir}${file.separator}${user.input.file};targetext=${out.ext};indextype=htmlhelp;${index.ext.param.encoding}"/>
   <xslt processor="trax"
 		basedir="${dita.temp.dir}"
 		destdir="${output.dir}"
-		includes="${dita.input}"
+		includes="${user.input.file}"
 		extension=".hhp"
 		style="${dita.script.dir}${file.separator}map2hhp.xsl">
-        <param name="DITAEXT" expression="${dita.extname}" if="dita.extname"/>
-        <param name="OUTEXT" expression="${args.outext}" if="args.outext"/>
+        <param name="DITAEXT" expression="${dita.ext}" if="dita.ext"/>
+        <param name="OUTEXT" expression="${out.ext}" if="out.ext"/>
         <param name="HHCNAME" expression="${dita.map.filename.root}.hhc"/>
     </xslt>  
 </target>
 
-<target name="compile.HTML.Help" if="HTMLHelpCompiler">
+<target name="compile.HTML.Help" if="HTMLHelpCompiler" description="Compile HTMLHelp output">
 		<exec executable="${HTMLHelpCompiler}"
 				failonerror="${failonerror}"
 				failifexecutionfails="${failonerror}">
@@ -424,35 +466,36 @@
 		</xslt>
 	</target>
 
-  <target name="copy-css" unless="args.csspath.url">
-    <antcall target="make-css-path"/>
-    <antcall target="copy-css-default"/>
-    <antcall target="copy-css-user"/>
-  </target>
-  
-  <target name="make-css-path" unless="args.csspath.present">
-    <mkdir dir="${args.csspath}"/>
-  </target>
-  
-  <target name="copy-css-default">
-    <copy todir="${args.csspath}">
+  <target name="copy-css" unless="user.csspath.url" description="Copy CSS files">    
+    <condition property="user.copycss.yes">
+      <and>
+        <equals arg1="${args.copycss}" arg2="yes"/>
+        <isset property="args.css.present"/>
+      </and>
+    </condition>
+    <property name="user.csspath.real" value="${output.dir}${file.separator}${user.csspath}"/>
+    <mkdir dir="${user.csspath.real}"/>    
+    <!-- Always copy system default css files -->
+    <copy todir="${user.csspath.real}">
       <fileset dir="${dita.resource.dir}" includes="*.css"/>
     </copy>    
+    <!-- Copy user specify css file when required -->
+    <antcall target="copy-css-user"/>
   </target>
-  
+
   <target name="copy-css-user" if="user.copycss.yes">
-    <copy file="${args.css}" tofile="${args.csspath}${args.css}"/>
+    <copy file="${args.css}" todir="${user.csspath.real}"/>
   </target>
     
-  <target name="dita.topic.troff">
+  <target name="dita.topic.troff" description="Build troff output from dita topics">
       <!-- step 1 -->
       <xslt processor="trax"
   		basedir="${dita.temp.dir}"
   		destdir="${output.dir}"
   		includes="${fullditatopiclist}"
-  		extension="${dita.extname}"
+  		extension="${dita.ext}"
   		style="${dita.script.dir}${file.separator}dita2troff-step1-shell.xsl">
-          <param name="DITAEXT" expression="${dita.extname}" if="dita.extname"/>
+          <param name="DITAEXT" expression="${dita.ext}" if="dita.ext"/>
       </xslt>
       
   		<!-- step 2 -->
@@ -462,7 +505,7 @@
           includes="${fullditatopiclist}"
           extension=".cli"
           style="${dita.script.dir}${file.separator}dita2troff-step2-shell.xsl">
-  			<param name="DITAEXT" expression="${dita.extname}" if="dita.extname"/>
+  			<param name="DITAEXT" expression="${dita.ext}" if="dita.ext"/>
   		</xslt>
   	</target>
 </project>

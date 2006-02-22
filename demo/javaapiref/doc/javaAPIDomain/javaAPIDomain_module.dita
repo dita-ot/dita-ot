@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2004, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\dtd\reference.dtd">
+<reference id="javaapi-domain_module" outputclass="module" xml:lang="en-us">
+<title>javaapi-domain module</title>
+<shortdesc>Provides the description of the elements that refer to the API
+items within Java API topics or other DITA topic types, such as concept or
+task. </shortdesc>
+<refbody>
+<section><title>Description</title>The javaapi-domain is a module that packages
+several elements, such as &lt;javaoperation> or &lt;javapackage> elements.
+These elements allow the writer a consistent way to provide references to
+other topic types operations or packages. <p>The javaapi-domain
+topic contains the following elements:</p></section>
+</refbody>
+</reference>

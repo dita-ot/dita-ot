@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2004, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "../../dtd/reference.dtd">
+<!--             (C) Copyright OASIS Open 2005.                    -->
+<!--             (C) Copyright IBM Corporation 2001, 2004.         -->
+<!--             All Rights Reserved.                              -->
+<reference id="topicmeta" xml:lang="en-us">
+<title><keyword>topicmeta</keyword></title>
+<shortdesc>The &lt;<keyword>topicmeta</keyword>> element defines the metadata
+that applies to a topic when it appears in a map, and to the other topics
+in the map that are contained by the same element that contains the &lt;topicmeta>
+element. When creating links, it can also be used to override the title and
+short description of the topic. In addition, it can be used to add index entries
+to referenced content using the &lt;<keyword>keywords</keyword>> element.</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>topicmeta</indexterm><indexterm>Map elements<indexterm>topicmeta</indexterm>  </indexterm>
+<indexterm>topicmeta</indexterm></keywords>
+</metadata></prolog>
+<refbody>
+<section conref="MapNav.dita#commonCMdefs/topicmeta-contains"></section>
+<section conref="MapNav.dita#commonCMdefs/topicmeta-containedby"></section>
+<section conref="MapNav.dita#commonCMdefs/topicmeta-classvalue"></section>
+<section><title>Attributes</title><simpletable id="topicmeta_attr" relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="commonLRdefs.dita#commonLRdefs/lockmeta">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/classonly">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+</simpletable></section>
+<example><title>Example<?Pub Caret?></title>In this example, the metadata
+defined by the metadata element applies to the associated &lt;<keyword>topicref</keyword>>
+(<filepath>bats.xml</filepath>) and all of its children. The &lt;<keyword>topicmeta</keyword>>
+element contains an audience definition which indicates that <filepath>bats.xml</filepath> and
+its children are of interest to experienced programmers who are troubleshooting. <codeblock>&lt;map>
+ &lt;topicref href="bats.dita">
+  &lt;topicmeta>
+   &lt;audience type="programmer" job="troubleshooting" experiencelevel="expert"/>
+  &lt;/topicmeta>
+  &lt;topicref href="batcaring.dita">&lt;/topicref>
+  &lt;topicref href="batfeeding.dita">&lt;/topciref>
+ &lt;/topicref>
+&lt;/map></codeblock>       </example>
+</refbody>
+</reference>
+<?Pub *0000002977?>

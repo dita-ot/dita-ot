@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ | (C) Copyright IBM Corporation 2005 - 2006. All Rights Reserved.
+ *-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
+  
+  <xs:import namespace="http://dita.oasis-open.org/architecture/2005/" schemaLocation="../../../schema/ditaarch.xsd"/>
+  <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="../../../schema/xml.xsd"/>
+  
+  <xs:element name="apiMap" type="apiMap.class" />
+    
+  <xs:complexType name="apiMap.class">
+    <xs:sequence>
+      <xs:group minOccurs="0" ref="topicmeta"/>
+      <xs:group minOccurs="0" maxOccurs="unbounded" ref="apiItemRef"/>
+      <xs:group minOccurs="0" maxOccurs="unbounded" ref="reltable"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="apiMap-attlist"/>
+  </xs:complexType>
+
+  <xs:attributeGroup name="apiMap-attlist">
+    <xs:attribute name="title"/>
+    <xs:attribute name="id" type="xs:ID"/>
+    <xs:attribute name="anchorref"/>
+    <xs:attributeGroup ref="topicref-atts"/>
+    <xs:attributeGroup ref="select-atts"/>
+    <xs:attribute name="translate">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="yes"/>
+          <xs:enumeration value="no"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute ref="xml:lang"/>
+    <xs:attribute ref="ditaarch:DITAArchVersion"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute name="class" default="- map/map apiMap/apiMap "/>
+  </xs:attributeGroup>
+  <xs:element name="apiItemRef">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:group minOccurs="0" ref="topicmeta"/>
+        <xs:group minOccurs="0" maxOccurs="unbounded" ref="topicref"/>
+        <xs:group minOccurs="0" maxOccurs="unbounded" ref="apiItemRef"/>
+      </xs:sequence>
+      <xs:attributeGroup ref="apiItemRef-attlist"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="apiItemRef-attlist">
+    <xs:attribute name="navtitle"/>
+    <xs:attribute name="id" type="xs:ID"/>
+    <xs:attribute name="href"/>
+    <xs:attribute name="keyref"/>
+    <xs:attribute name="query"/>
+    <xs:attribute name="conref"/>
+    <xs:attribute name="copy-to"/>
+    <xs:attribute name="collection-type">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="choice"/>
+          <xs:enumeration value="unordered"/>
+          <xs:enumeration value="sequence"/>
+          <xs:enumeration value="family"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="type" default="apiRef"/>
+    <xs:attribute name="scope">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="local"/>
+          <xs:enumeration value="peer"/>
+          <xs:enumeration value="external"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="locktitle">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="yes"/>
+          <xs:enumeration value="no"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="format"/>
+    <xs:attribute name="linking">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="targetonly"/>
+          <xs:enumeration value="sourceonly"/>
+          <xs:enumeration value="normal"/>
+          <xs:enumeration value="none"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="toc">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="yes"/>
+          <xs:enumeration value="no"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="print">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="yes"/>
+          <xs:enumeration value="no"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="search">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="yes"/>
+          <xs:enumeration value="no"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="chunk"/>
+    <xs:attributeGroup ref="select-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute name="class" default="- map/topicref apiMap/apiItemRef "/>
+  </xs:attributeGroup>
+</xs:schema>

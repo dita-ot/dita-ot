@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\dtd\reference.dtd">
+<reference id="javaMethodPrimitive" outputclass="element" xml:lang="en-us">
+<title>javaMethodPrimitive</title>
+<shortdesc>The &lt;javaMethodPrimitive> element specifies the return value
+of the method or constructor as a primitive type, such as int.</shortdesc>
+<refbody>
+<section><title>Description</title><p>The return <i>Type</i> variables in
+the Java language can have a primitive or reference data type. Possible alternative
+definitions of the &lt;javaMethodPrimitive> element are the javaMethodClass, javaMethodInterface,
+javaMethodArray and javaVoid elements. </p><p>This element has the following
+predefined attributes: <i>name ="type"</i> and <i>value ="boolean | byte |
+char | double | float | int | long | short"</i> .</p></section><?Pub Caret1?>
+<example> <title>Example</title>Click on the following link to open the Java
+API topic type example in  <object classid="clsid:adb880a6-d8ff-11cf-9377-00aa003b7a11"
+codebase="hhctrl.ocx#Version=4,73,8412,0" codetype="VIEWASTEXT" height="100"
+id="hhctrl" name="Sample" type="application/x-oleobject" width="100">
+<param name="Command" value="ShortCut"/>
+<param name="Text" value="Text: DITA "/>
+<param name="Item1" value=",../samples/java/IDefaultComponentExportDataModel.dita,"/>
+</object><codeblock>&lt;javaMethod id="com.ibm.xtools.ras.impord.engine.tasks.IImportEngineTask">
+   &lt;apiName>getPriority&lt;/apiName>
+   &lt;shortdesc>Retrieve the priority of the task.&lt;/shortdesc>
+   &lt;javaMethodDetail>
+      &lt;javaMethodDef>
+        &lt;javaMethodAccess value="public"/>
+        &lt;javaReturn>
+          &lt;javaMethodPrimitive value="int"/>
+          &lt;apiDefNote>priority of the task in the range 0..100..&lt;/apiDefNote>
+        &lt;/javaReturn>
+     &lt;/javaMethodDef>
+     &lt;apiDesc>This corresponds to the priority attribute defined in the importEngineTask
+         extension point&lt;/apiDesc>
+   &lt;/javaMethodDetail>
+&lt;/javaMethod></codeblock></example>
+<section><title>Processing Expectations</title><image href="images/javaReturnPrimitive.jpg"
+placement="inline"><alt></alt></image></section>
+<section conref="../packagedef.dita#javaMethodPrimitive-reference/javaMethodPrimitive-containedBy-section"></section>
+<section conref="../packagedef.dita#javaMethodPrimitive-reference/javaMethodPrimitive-contains-section"></section>
+<section conref="../packagedef.dita#javaMethodPrimitive-reference/javaMethodPrimitive-contentModel-section"></section>
+<section conref="../packagedef.dita#javaMethodPrimitive-reference/javaMethodPrimitive-attList-section"></section>
+<section conref="../packagedef.dita#javaMethodPrimitive-reference/javaMethodPrimitive-classValue-section"></section>
+</refbody>
+</reference>
+<?Pub *0000002873?>

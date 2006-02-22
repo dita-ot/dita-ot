@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ | (C) Copyright IBM Corporation 2005 - 2006. All Rights Reserved.
+ *-->
+<plugin id="org.dita.specialization.apiref">
+  <feature extension="dita.specialization.catalog"
+      value="catalog-dita.xml" type="file"/>
+  <feature extension="dita.xsl.xhtml"
+      value="xsl/apiref2xhtml.xsl" type="file"/>
+  <feature extension="dita.conductor.target"
+      value="conductor.xml" type="file"/>
+</plugin>

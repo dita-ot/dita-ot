@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2004, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "../../dtd/reference.dtd">
+<!--             (C) Copyright OASIS Open 2005.                    -->
+<!--             (C) Copyright IBM Corporation 2001, 2004.         -->
+<!--             All Rights Reserved.                              -->
+<reference id="xref" xml:lang="en-us">
+<title><keyword>xref</keyword></title>
+<shortdesc>Use the cross-reference (&lt;<keyword>xref</keyword>>) element
+to link to a different location within the current topic, or a different topic
+within the same help system, or to external sources, such as Web pages, or
+to a location in another topic. The <i><keyword>href</keyword></i> attribute
+on the &lt;<keyword>xref</keyword>> element provides the location of the target.</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>xref (cross reference)</indexterm><indexterm>cross reference
+(xref)</indexterm><indexterm>Body elements<indexterm>xref (cross reference)</indexterm>  </indexterm>
+<indexterm>xref (cross reference)</indexterm></keywords>
+</metadata></prolog>
+<refbody>
+<section> <p>Typically it is best to restrict yourself to linking to reference
+topics where the content of the target is clear from the &lt;<keyword>xref</keyword>>'s
+text, for example API names and their descriptions. With other information
+types, it may be less clear to the user whether they should follow the link,
+and often they will, thereby missing important information in following paragraphs.
+Therefore it is a good idea to use links at the end of the topic, in the &lt;<xref
+href="related-links.dita">related-links</xref>> element, wherever possible,
+rather than linking from within body content using &lt;<keyword>xref</keyword>>.
+Links at the end of a topic can also be managed from outside the topic, using
+DITA maps: this allows topics to be quickly integrated into new contexts without
+breaking links.</p> </section>
+<section conref="DitabaseNav.dita#commonCMdefs/xref-contains"></section>
+<section conref="DitabaseNav.dita#commonCMdefs/xref-containedby"></section>
+<section conref="DitabaseNav.dita#commonCMdefs/xref-classvalue"></section>
+<section><title>Attributes</title><simpletable id="xref_attr" relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="commonLRdefs.dita#commonLRdefs/href-xref">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/keyref">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/type">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/univ-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/format">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/scope">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/classandout">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+</simpletable></section>
+<example>          <title>Examples</title><p>Here's an example of a cross-reference
+to another topic; that topic's title will be used as the link text.</p>  
+        <codeblock>&lt;p>Background information about DITA is provided in the section titled
+&lt;xref href="whatsdita.dita#tmmdita">&lt;/xref>.&lt;/p></codeblock>    
+     <p>Here's an example of a cross-reference to another topic; the supplied
+text will be used as the link text</p>           <codeblock>&lt;p>&lt;xref href="whatsdita.dita#tmmdita">Background information about DITA&lt;/xref> is provided
+free of charge.&lt;/p></codeblock>          <p>If you are linking to anything
+within a topic, you should use the following format in the href attribute: <codeblock>filename.xml#topicid/elementid</codeblock></p> 
+        <p>If you are linking within the same file, you can leave off the
+"filename.xml" part. So, for a section with the ID "mysection", you should
+use: <codeblock>#topicid/mysection  </codeblock></p>          <p>For a list
+item within that section, assuming the item has an ID of "mylist", use <codeblock>#topicid/mylist  </codeblock></p> 
+        <p>Regardless of how deeply the target element is nested, the only
+important pieces are the ID of the containing topic, and the ID of the target
+element. IDs of topics in DITA must be unique within a file, but IDs of other
+elements only need to be unique within the topic. You need to be sure that
+the topic ID is part of your reference.</p>          <p>If your URL has an
+ampersand in it, you need to code that using a symbol. For example; for this
+URL:<codeblock>http://www.ibm.com/docview.wss?rs=757&amp;context=SSVNX5
+</codeblock>You need to enter the &amp;amp; in the Href attribute as follows:<codeblock>&lt;xref href="http://www.ibm.com/docview.wss?rs=757<b>&amp;amp;</b
+>context=SSVNX5">
+Part number SSVNX5&lt;/xref></codeblock></p>        </example>
+</refbody>
+</reference><?Pub Caret?>
+<?Pub *0000005755?>

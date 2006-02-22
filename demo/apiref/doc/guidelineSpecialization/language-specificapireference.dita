@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE concept PUBLIC "-//IBM//DTD DITA Concept//EN"
+ "..\dtd\concept.dtd">
+<?Pub Inc?>
+<concept id="language-specificapireference" xml:lang="en-us">
+<title>Language-specific API reference</title>
+<shortdesc>The language-specific topic types are specialized from the generic
+topic types and share the semantics and processing.</shortdesc>
+<conbody>
+<p>The following table describes the language-specific topic types for Java
+and their source in the generic topic types: </p>
+<p><table>
+<tgroup cols="2"><colspec colname="col1"/><colspec colname="col2"/>
+<thead>
+<row valign="bottom">
+<entry colname="col1">Generic</entry>
+<entry colname="col2">Java</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry colname="col1">apiPackage</entry>
+<entry colname="col2">javaPackage</entry>
+</row>
+<row>
+<entry colname="col1">apiClassifier</entry>
+<entry colname="col2">javaClass, javaInterface</entry>
+</row>
+<row>
+<entry colname="col1">apiOperation</entry>
+<entry colname="col2">javaMethod</entry>
+</row>
+<row>
+<entry colname="col1">apiValue </entry>
+<entry colname="col2"> javaField</entry>
+</row>
+</tbody>
+</tgroup>
+</table></p>
+<p>Each supported programming language has a specialization that models the
+structure and semantics of its libraries. A generic API Reference specialization
+provides a basis for sharing processing and semantics across these language-specific
+specializations. The support for programming languages other than Java are
+futures. In addition, the generic API reference specialization can be used
+to describe the libraries of programming languages that do not yet have a
+language-specific specialization or to describe a library that is implemented
+in multiple languages.</p>
+<image href="languagespec.jpg"><?Pub Caret?><alt></alt></image></conbody>
+</concept>
+<?Pub *0000001872?>

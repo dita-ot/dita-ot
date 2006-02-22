@@ -19,14 +19,16 @@
     <xsl:call-template name="flagit"/>
     <xsl:call-template name="start-revflag"/>
     <a>
-        <xsl:call-template name="commonattributes"/>
         <xsl:attribute name="href"><xsl:call-template name="href"/></xsl:attribute>
+        <xsl:call-template name="commonattributes"/>        
         <xsl:if test="@scope='external' or @type='external' or ((@format='PDF' or @format='pdf') and not(@scope='local'))">
             <xsl:attribute name="target">_blank</xsl:attribute>
         </xsl:if>
         <!--use content as linktext if it exists, otherwise use href as linktext-->
         <xsl:choose>
-            <xsl:when test="*|text()"><xsl:apply-templates select="*|text()"/></xsl:when><!--use xref content-->
+            <!-- replace "*|text()" with "normalize-space()" to handle xref without 
+                 valid link content, in this situation, use href as linktext. -->
+            <xsl:when test="normalize-space()"><xsl:apply-templates select="*|text()"/></xsl:when><!--use xref content-->
             <xsl:otherwise><xsl:call-template name="href"/></xsl:otherwise><!--use href text-->
         </xsl:choose>
     </a>
@@ -350,11 +352,9 @@ Children are displayed in a numbered list, with the target title as the cmd and 
       <xsl:when test="@href=''"/>
       <xsl:otherwise>
         <xsl:call-template name="output-message">
-          <xsl:with-param name="msg">Unknown file extension in href: <xsl:value-of select="@href"/>
-If this is a link to a non-DITA resource, set the format attribute to match the resource (for example, 'txt', 'pdf', or 'html').
-If it's a link to a DITA resource, the file extension must be .dita or .xml .</xsl:with-param>
-            <xsl:with-param name="msgnum">015</xsl:with-param>
+          <xsl:with-param name="msgnum">006</xsl:with-param>
           <xsl:with-param name="msgsev">E</xsl:with-param>
+          <xsl:with-param name="msgparams">%1=<xsl:value-of select="@href"/></xsl:with-param>
         </xsl:call-template>
         <xsl:value-of select="@href"/>
     </xsl:otherwise>
@@ -379,7 +379,6 @@ If it's a link to a DITA resource, the file extension must be .dita or .xml .</x
           <xsl:call-template name="flagit"/>
           <xsl:call-template name="start-revflag"/>
           <a>
-             <xsl:call-template name="commonattributes"/>
              <xsl:attribute name="href"><xsl:call-template name="href"/></xsl:attribute>
              <xsl:if test="@scope='external' or @type='external' or ((@format='PDF' or @format='pdf') and not(@scope='local'))">
                 <xsl:attribute name="target">_blank</xsl:attribute>
@@ -391,6 +390,7 @@ If it's a link to a DITA resource, the file extension must be .dita or .xml .</x
             <xsl:otherwise><xsl:call-template name="href"/></xsl:otherwise>
           </xsl:choose>
           </xsl:attribute>
+          <xsl:call-template name="commonattributes"/>             
           <!--use string as output link text for now, use image eventually-->
           <xsl:choose>
           <xsl:when test="@role='next'">
@@ -558,12 +558,12 @@ If it's a link to a DITA resource, the file extension must be .dita or .xml .</x
           <xsl:call-template name="linkdupinfo"/>
           <xsl:call-template name="flagit"/>
           <xsl:call-template name="start-revflag"/>
-          <a>
-             <xsl:call-template name="commonattributes"/>
+          <a>             
              <xsl:attribute name="href"><xsl:call-template name="href"/></xsl:attribute>
              <xsl:if test="@scope='external' or @type='external' or ((@format='PDF' or @format='pdf') and not(@scope='local'))">
                 <xsl:attribute name="target">_blank</xsl:attribute>
              </xsl:if>
+             <xsl:call-template name="commonattributes"/>
           <!--create hover help if desc exists-->
           <xsl:if test="*[contains(@class, ' topic/desc ')]">
             <xsl:variable name="hoverhelp"><xsl:apply-templates select="*[contains(@class, ' topic/desc ')]" mode="text-only"/></xsl:variable>
@@ -646,9 +646,9 @@ If it's a link to a DITA resource, the file extension must be .dita or .xml .</x
       <!-- If the link is exactly the same, do not output message.  The duplicate will automatically be removed. -->
       <xsl:if test="not(key('link', concat(ancestor::*[contains(@class, ' topic/related-links ')]/parent::*[contains(@class, ' topic/topic ')]/@id, ' ', @href,@type,@role,@platform,@audience,@importance,@outputclass,@keyref,@scope,@format,@otherrole,@product,@otherprops,@rev,@class,child::*))[2])">
         <xsl:call-template name="output-message">
-          <xsl:with-param name="msg">The link to <xsl:value-of select="@href"/> may appear more than once in <xsl:value-of select="concat(substring-before($FILENAME, $DITAEXT), $OUTEXT)"/>.</xsl:with-param>
-          <xsl:with-param name="msgnum">037</xsl:with-param>
+          <xsl:with-param name="msgnum">043</xsl:with-param>
           <xsl:with-param name="msgsev">I</xsl:with-param>
+          <xsl:with-param name="msgparams">%1=<xsl:value-of select="@href"/>;%2=<xsl:value-of select="concat(substring-before($FILENAME, $DITAEXT), $OUTEXT)"/></xsl:with-param>
         </xsl:call-template>
       </xsl:if>
     </xsl:if>

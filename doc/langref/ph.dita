@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2004, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "../../dtd/reference.dtd">
+<!--             (C) Copyright OASIS Open 2005.                    -->
+<!--             (C) Copyright IBM Corporation 2001, 2004.         -->
+<!--             All Rights Reserved.                              -->
+<reference id="ph" xml:lang="en-us">
+<title><keyword>ph</keyword></title>
+<shortdesc>The phrase (&lt;<keyword>ph</keyword>>) element is used to organize
+content for reuse or conditional processing (for example, when part of a paragraph
+applies to a particular audience). It can be used by specializations of DITA
+to create semantic markup for content at the phrase level, which then allows
+(but does not require) specific processing or formatting.</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>ph (phrase)</indexterm><indexterm>phrase (ph)</indexterm>
+<indexterm>Body elements<indexterm>ph</indexterm>  </indexterm><indexterm>ph</indexterm>
+</keywords>
+</metadata></prolog>
+<refbody>
+<section conref="DitabaseNav.dita#commonCMdefs/ph-contains"></section>
+<section conref="DitabaseNav.dita#commonCMdefs/ph-containedby"></section>
+<section conref="DitabaseNav.dita#commonCMdefs/ph-classvalue"></section>
+<section><title>Attributes</title><simpletable id="ph_attr" relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="commonLRdefs.dita#commonLRdefs/keyref">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/univ-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/classandout">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+</simpletable></section>
+<example>     <title>Example<?Pub Caret?></title>     <pre>This was not changed. &lt;ph rev="v5r2">This was updated.&lt;/ph> This was not.</pre> 
+     </example>
+</refbody>
+</reference>
+<?Pub *0000002445?>

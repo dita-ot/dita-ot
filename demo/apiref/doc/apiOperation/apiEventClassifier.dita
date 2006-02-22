@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?><!--Arbortext, Inc., 1988-2004, v.4002--><?Pub Inc?>
+<!DOCTYPE reference
+  PUBLIC "-//IBM//DTD DITA Reference//EN" "..\dtd\reference.dtd">
+<reference id="apiEventClassifier" outputclass="element" xml:lang="en-us">
+<title>apiEventClassifier</title>
+<shortdesc>The &lt;apiEventClassifier&gt; element identifies an event value that
+is an instance of a classifier.</shortdesc>
+<refbody>
+<section><title>Description</title>This element can provide an <b>href</b> attribute
+if the description of the API item is available. If the description is not
+available, the &lt;apiEventClassifier&gt; element can provide the name of the
+API item in its contents. This element has the following added attributes: <b>href</b> <b>keyref</b>, <b>type</b>, <b>format</b>, <b>scope</b> (local
+| peer | external), <b> outputclass</b>. <ul>
+<li>If you use an <b>href</b> attribute to a DITA API topic that describe
+the related API item, you do not need any other attrubutes.</li>
+</ul><ul>
+<li>If you supply an <b>href</b> to some other format (such as HTML), you
+need to supply the name of the related API item inside the &lt;apiEventClassifier&gt;
+element.</li>
+</ul><ul>
+<li>If you cannot provide an <b>href</b> (for instance, if the description
+of the related API item might not be available), you must provide the name
+of the related API item inside the &lt;apiEventClassifier&gt; element and the
+fully qualified name of the element in the <b>keyref </b> attribute. The <b>keyref </b> attribute
+should provide a unique key such as a fully qualified classifier name for
+the named API item.</li>
+</ul><p>For instance, in the Java API Specialization, the &lt;apiEventClassifier&gt;
+element <?Pub Caret?>represents the javaExceptionClass or javaConstructorClass
+for a class. </p></section>
+<example> <title>Example</title><p>The following example shows a <keyword>&lt;apiEventClassifier&gt;&lt;/apiEventClassifier&gt;</keyword> element
+for a Visual Basic 6.0 event:</p><codeblock>&lt;apiOperationDef&gt;
+       &lt;ph&gt;The enumerated values for FileType are:&lt;/ph&gt;
+       &lt;apiEventClassifier &gt;vbext_ft_Form&lt;/apiEventClassifier&gt;
+       &lt;apiType name="vbext_ft_Form" value="0"&gt;
+       &lt;apiDefNote&gt;File type is a form.&lt;apiDefNote&gt;
+       &lt;apiEventClassifier&gt;vbext_ft_Module&lt;/apiEventClassifier&gt;
+       &lt;apiType name="vbext_ft_Form" value="1"&gt;
+       &lt;apiDefNote&gt;File type is a basic module.&lt;apiDefNote&gt;
+       &lt;apiEventClassifier&gt;vbext_ft_Class&lt;/apiEventClassifier&gt;
+       &lt;apiType name="vbext_ft_Form" value="2"&gt;
+       &lt;apiDefNote&gt;File type is a class module.&lt;apiDefNote&gt;
+       &lt;apiEventClassifier&gt;vbext_ft_Exe&lt;/apiEventClassifier&gt;
+       &lt;apiType name="vbext_ft_Form" value="3"&gt;
+       &lt;apiDefNote&gt;File type is an executable file.&lt;apiDefNote&gt;
+			&lt;apiReturnClassifier&gt;None.&lt;/apiReturnClassifier&gt;
+&lt;/apiOperationDef&gt;&gt;</codeblock></example>
+<section conref="../packagedef.dita#apiEventClassifier-reference/apiEventClassifier-containedBy-section"/><section conref="../packagedef.dita#apiEventClassifier-reference/apiEventClassifier-contains-section"/><section conref="../packagedef.dita#apiEventClassifier-reference/apiEventClassifier-contentModel-section"/><section conref="../packagedef.dita#apiEventClassifier-reference/apiEventClassifier-attList-section"/><section conref="../packagedef.dita#apiEventClassifier-reference/apiEventClassifier-classValue-section"/></refbody>
+</reference><?Pub *0000002878?>

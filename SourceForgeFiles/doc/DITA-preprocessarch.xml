@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- (C) Copyright IBM Corporation 2005. All Rights Reserved.
  *-->
-<!DOCTYPE concept PUBLIC "-//IBM//DTD DITA Concept//EN" "concept.dtd">
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="preprocessarch" xml:lang="en-us">
   <title>DITA pre-processing architecture</title>
   <shortdesc>This document describes the different steps in preprocessing for 

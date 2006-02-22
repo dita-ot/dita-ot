@@ -1,0 +1,468 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ | (C) Copyright IBM Corporation 2005 - 2006. All Rights Reserved.
+ *-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
+  <xs:import namespace="http://dita.oasis-open.org/architecture/2005/" schemaLocation="../../../schema/ditaarch.xsd"/>
+  <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="../../../schema/xml.xsd"/>
+  
+  <xs:element name="javaAPIMap" type="javaAPIMap.class"/>
+  <xs:complexType name="javaAPIMap.class">
+    <xs:sequence>
+      <xs:group minOccurs="0" ref="topicmeta"/>
+      <xs:group minOccurs="0" maxOccurs="unbounded" ref="javaPackageRef"/>
+      <xs:group minOccurs="0" maxOccurs="unbounded" ref="reltable"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="javaAPIMap-attlist"/>
+  </xs:complexType>
+
+  <xs:attributeGroup name="javaAPIMap-attlist">
+    <xs:attribute name="title"/>
+    <xs:attribute name="id" type="xs:ID"/>
+    <xs:attribute name="anchorref"/>
+    <xs:attributeGroup ref="topicref-atts"/>
+    <xs:attributeGroup ref="select-atts"/>
+    <xs:attribute name="translate">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="yes"/>
+          <xs:enumeration value="no"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute ref="xml:lang"/>
+    <xs:attribute ref="ditaarch:DITAArchVersion"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute name="class" default="- map/map apiMap/apiMap javaAPIMap/javaAPIMap "/>
+  </xs:attributeGroup>
+  <xs:element name="javaPackageRef">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:group minOccurs="0" ref="topicmeta"/>
+        <xs:group minOccurs="0" maxOccurs="unbounded" ref="topicref"/>
+        <xs:group minOccurs="0" maxOccurs="unbounded" ref="javaPackageRef"/>
+        <xs:group minOccurs="0" maxOccurs="unbounded" ref="javaInterfaceRef"/>
+        <xs:group minOccurs="0" maxOccurs="unbounded" ref="javaClassRef"/>
+        <xs:group minOccurs="0" maxOccurs="unbounded" ref="javaExceptionClassRef"/>
+        <xs:group minOccurs="0" maxOccurs="unbounded" ref="javaErrorClassRef"/>
+      </xs:sequence>
+      <xs:attributeGroup ref="javaPackageRef-attlist"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="javaPackageRef-attlist">
+    <xs:attribute name="navtitle"/>
+    <xs:attribute name="id" type="xs:ID"/>
+    <xs:attribute name="href"/>
+    <xs:attribute name="keyref"/>
+    <xs:attribute name="query"/>
+    <xs:attribute name="conref"/>
+    <xs:attribute name="copy-to"/>
+    <xs:attribute name="collection-type">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="choice"/>
+          <xs:enumeration value="unordered"/>
+          <xs:enumeration value="sequence"/>
+          <xs:enumeration value="family"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="type" default="javaPackage"/>
+    <xs:attribute name="scope">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="local"/>
+          <xs:enumeration value="peer"/>
+          <xs:enumeration value="external"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="locktitle">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="yes"/>
+          <xs:enumeration value="no"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="format"/>
+    <xs:attribute name="linking">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="targetonly"/>
+          <xs:enumeration value="sourceonly"/>
+          <xs:enumeration value="normal"/>
+          <xs:enumeration value="none"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="toc">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="yes"/>
+          <xs:enumeration value="no"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="print">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="yes"/>
+          <xs:enumeration value="no"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="search">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="yes"/>
+          <xs:enumeration value="no"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="chunk"/>
+    <xs:attributeGroup ref="select-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute name="class" default="- map/topicref apiMap/apiItemRef javaAPIMap/javaPackageRef "/>
+  </xs:attributeGroup>
+  <xs:element name="javaInterfaceRef">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:group minOccurs="0" ref="topicmeta"/>
+        <xs:group minOccurs="0" maxOccurs="unbounded" ref="topicref"/>
+      </xs:sequence>
+      <xs:attributeGroup ref="javaInterfaceRef-attlist"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="javaInterfaceRef-attlist">
+    <xs:attribute name="navtitle"/>
+    <xs:attribute name="id" type="xs:ID"/>
+    <xs:attribute name="href"/>
+    <xs:attribute name="keyref"/>
+    <xs:attribute name="query"/>
+    <xs:attribute name="conref"/>
+    <xs:attribute name="copy-to"/>
+    <xs:attribute name="collection-type">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="choice"/>
+          <xs:enumeration value="unordered"/>
+          <xs:enumeration value="sequence"/>
+          <xs:enumeration value="family"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="type" default="javaInterface"/>
+    <xs:attribute name="scope">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="local"/>
+          <xs:enumeration value="peer"/>
+          <xs:enumeration value="external"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="locktitle">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="yes"/>
+          <xs:enumeration value="no"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="format"/>
+    <xs:attribute name="linking">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="targetonly"/>
+          <xs:enumeration value="sourceonly"/>
+          <xs:enumeration value="normal"/>
+          <xs:enumeration value="none"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="toc">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="yes"/>
+          <xs:enumeration value="no"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="print">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="yes"/>
+          <xs:enumeration value="no"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="search">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="yes"/>
+          <xs:enumeration value="no"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="chunk"/>
+    <xs:attributeGroup ref="select-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute name="class" default="- map/topicref apiMap/apiItemRef javaAPIMap/javaInterfaceRef "/>
+  </xs:attributeGroup>
+  <xs:element name="javaClassRef">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:group minOccurs="0" ref="topicmeta"/>
+        <xs:group minOccurs="0" maxOccurs="unbounded" ref="topicref"/>
+      </xs:sequence>
+      <xs:attributeGroup ref="javaClassRef-attlist"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="javaClassRef-attlist">
+    <xs:attribute name="navtitle"/>
+    <xs:attribute name="id" type="xs:ID"/>
+    <xs:attribute name="href"/>
+    <xs:attribute name="keyref"/>
+    <xs:attribute name="query"/>
+    <xs:attribute name="conref"/>
+    <xs:attribute name="copy-to"/>
+    <xs:attribute name="collection-type">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="choice"/>
+          <xs:enumeration value="unordered"/>
+          <xs:enumeration value="sequence"/>
+          <xs:enumeration value="family"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="type" default="javaClass"/>
+    <xs:attribute name="scope">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="local"/>
+          <xs:enumeration value="peer"/>
+          <xs:enumeration value="external"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="locktitle">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="yes"/>
+          <xs:enumeration value="no"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="format"/>
+    <xs:attribute name="linking">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="targetonly"/>
+          <xs:enumeration value="sourceonly"/>
+          <xs:enumeration value="normal"/>
+          <xs:enumeration value="none"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="toc">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="yes"/>
+          <xs:enumeration value="no"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="print">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="yes"/>
+          <xs:enumeration value="no"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="search">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="yes"/>
+          <xs:enumeration value="no"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="chunk"/>
+    <xs:attributeGroup ref="select-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute name="class" default="- map/topicref apiMap/apiItemRef javaAPIMap/javaClassRef "/>
+  </xs:attributeGroup>
+  <xs:element name="javaExceptionClassRef">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:group minOccurs="0" ref="topicmeta"/>
+        <xs:group minOccurs="0" maxOccurs="unbounded" ref="topicref"/>
+      </xs:sequence>
+      <xs:attributeGroup ref="javaExceptionClassRef-attlist"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="javaExceptionClassRef-attlist">
+    <xs:attribute name="navtitle"/>
+    <xs:attribute name="id" type="xs:ID"/>
+    <xs:attribute name="href"/>
+    <xs:attribute name="keyref"/>
+    <xs:attribute name="query"/>
+    <xs:attribute name="conref"/>
+    <xs:attribute name="copy-to"/>
+    <xs:attribute name="collection-type">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="choice"/>
+          <xs:enumeration value="unordered"/>
+          <xs:enumeration value="sequence"/>
+          <xs:enumeration value="family"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="type" default="javaClass"/>
+    <xs:attribute name="scope">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="local"/>
+          <xs:enumeration value="peer"/>
+          <xs:enumeration value="external"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="locktitle">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="yes"/>
+          <xs:enumeration value="no"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="format"/>
+    <xs:attribute name="linking">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="targetonly"/>
+          <xs:enumeration value="sourceonly"/>
+          <xs:enumeration value="normal"/>
+          <xs:enumeration value="none"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="toc">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="yes"/>
+          <xs:enumeration value="no"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="print">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="yes"/>
+          <xs:enumeration value="no"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="search">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="yes"/>
+          <xs:enumeration value="no"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="chunk"/>
+    <xs:attributeGroup ref="select-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute name="class" default="- map/topicref apiMap/apiItemRef javaAPIMap/javaExceptionClassRef "/>
+  </xs:attributeGroup>
+  <xs:element name="javaErrorClassRef">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:group minOccurs="0" ref="topicmeta"/>
+        <xs:group minOccurs="0" maxOccurs="unbounded" ref="topicref"/>
+      </xs:sequence>
+      <xs:attributeGroup ref="javaErrorClassRef-attlist"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="javaErrorClassRef-attlist">
+    <xs:attribute name="navtitle"/>
+    <xs:attribute name="id" type="xs:ID"/>
+    <xs:attribute name="href"/>
+    <xs:attribute name="keyref"/>
+    <xs:attribute name="query"/>
+    <xs:attribute name="conref"/>
+    <xs:attribute name="copy-to"/>
+    <xs:attribute name="collection-type">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="choice"/>
+          <xs:enumeration value="unordered"/>
+          <xs:enumeration value="sequence"/>
+          <xs:enumeration value="family"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="type" default="javaClass"/>
+    <xs:attribute name="scope">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="local"/>
+          <xs:enumeration value="peer"/>
+          <xs:enumeration value="external"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="locktitle">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="yes"/>
+          <xs:enumeration value="no"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="format"/>
+    <xs:attribute name="linking">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="targetonly"/>
+          <xs:enumeration value="sourceonly"/>
+          <xs:enumeration value="normal"/>
+          <xs:enumeration value="none"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="toc">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="yes"/>
+          <xs:enumeration value="no"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="print">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="yes"/>
+          <xs:enumeration value="no"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="search">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="yes"/>
+          <xs:enumeration value="no"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="chunk"/>
+    <xs:attributeGroup ref="select-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
+    <xs:attribute name="class" default="- map/topicref apiMap/apiItemRef javaAPIMap/javaErrorClassRef "/>
+  </xs:attributeGroup>
+</xs:schema>

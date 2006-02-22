@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
 
-<!DOCTYPE task PUBLIC "-//IBM//DTD DITA Task//EN" "task.dtd">
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "../dtd/task.dtd">
 <task id="installation" xml:lang="en-us">
   <title>Installing the DITA Toolkit</title>
   <titlealts>
@@ -43,7 +43,7 @@
             choice.</p></dd>
         </dlentry>
         <dlentry id="antbuild">
-          <dt>Ant 1.6.2 build tool</dt>
+          <dt>Ant 1.6.5 build tool</dt>
           <dd>Provides the standard setup and sequencing of processing 
             steps.</dd>
           <dd>See <xref href="DITA-setupant.xml#setupant"></xref> for more 

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?><!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference
+  PUBLIC "-//IBM//DTD DITA Reference//EN" "..\dtd\reference.dtd">
+<reference id="apiDetail" outputclass="element" xml:lang="en-us">
+<title>apiDetail</title>
+<shortdesc>The &lt;apiDetail&gt; element provides the most general representation
+for reference documentation detail about an API item. This element is the
+main container for the detailed content.</shortdesc>
+<refbody>
+<section><title>Description</title><p>In the &lt;apiDetail&gt; element, the &lt;example&gt;
+and &lt;section&gt; elements are provided to handle support for the current specific
+API reference. </p></section>
+<section conref="../packagedef.dita#apiDetail-reference/apiDetail-containedBy-section"/><section conref="../packagedef.dita#apiDetail-reference/apiDetail-contains-section"/><section conref="../packagedef.dita#apiDetail-reference/apiDetail-contentModel-section"/><section conref="../packagedef.dita#apiDetail-reference/apiDetail-attList-section"/><section conref="../packagedef.dita#apiDetail-reference/apiDetail-classValue-section"/></refbody>
+</reference>

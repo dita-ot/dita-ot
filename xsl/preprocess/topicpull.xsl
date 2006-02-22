@@ -4,9 +4,9 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:xalan="http://xml.apache.org/xalan" xmlns:exsl="http://exslt.org/common">
   <xsl:import href="../common/dita-utilities.xsl"/>
-  <xsl:include href="../common/output-message.xsl"/>
+  <xsl:import href="../common/output-message.xsl"/>
   <!-- Define the error message prefix identifier -->
-  <xsl:variable name="msgprefix">IDXS</xsl:variable>
+  <xsl:variable name="msgprefix">DOTX</xsl:variable>
 
   <xsl:param name="FILEREF">file://</xsl:param>
   <!-- The directory where the topic resides, starting with root -->
@@ -22,9 +22,7 @@
   <xsl:template match="*[contains(@class, ' topic/link ')]">    
     <xsl:if test="@href=''">
       <xsl:call-template name="output-message">
-        <xsl:with-param name="msg">Found a link with an empty HREF attribute.
-          The attribute should point to a file or other valid address.</xsl:with-param>
-        <xsl:with-param name="msgnum">041</xsl:with-param>
+        <xsl:with-param name="msgnum">017</xsl:with-param>
         <xsl:with-param name="msgsev">E</xsl:with-param>
       </xsl:call-template>
     </xsl:if>
@@ -147,11 +145,9 @@
             </xsl:when>
             <xsl:otherwise>
               <xsl:call-template name="output-message">
-                <xsl:with-param name="msg">Link or Xref must contain an href attribute.</xsl:with-param>
-                <xsl:with-param name="msgnum">016</xsl:with-param>
+                <xsl:with-param name="msgnum">028</xsl:with-param>
                 <xsl:with-param name="msgsev">E</xsl:with-param>
               </xsl:call-template>
-              <xsl:apply-templates/>
             </xsl:otherwise>
           </xsl:choose>
         </xsl:otherwise>
@@ -170,20 +166,20 @@
   <xsl:template match="*[contains(@class, ' topic/xref ')]">
     <xsl:if test="@href=''">
       <xsl:call-template name="output-message">
-        <xsl:with-param name="msg">Found a cross reference with an empty HREF attribute.
-          The attribute should point to a file or other valid address.</xsl:with-param>
-        <xsl:with-param name="msgnum">041</xsl:with-param>
+        <xsl:with-param name="msgnum">017</xsl:with-param>
         <xsl:with-param name="msgsev">E</xsl:with-param>
       </xsl:call-template>
     </xsl:if>
     <xsl:choose>
-      
-      <xsl:when test="text()|*">
+      <!-- replace "*|text()" with "normalize-space()" to handle xref without 
+        valid link content, in this situation, the xref linktext should be 
+        grabbed from href target. -->
+      <xsl:when test="normalize-space()">
         <xsl:copy>
           <xsl:apply-templates select="*|@*|comment()|processing-instruction()|text()"/>
         </xsl:copy>
       </xsl:when>
-      <xsl:otherwise>
+      <xsl:when test="@href and not(@href='')">
         <xsl:copy>
           <xsl:apply-templates select="@*"/>
           <!--create variables for attributes that will be passed by parameter to the getstuff template (which is shared with link, which needs the attributes in variables to save doing inheritance checks for each one)-->
@@ -212,31 +208,19 @@
             </xsl:choose>
           </xsl:variable>
           <!--grab type, text and metadata, as long there's an href to grab from, otherwise error-->
-          <xsl:choose>
-            <xsl:when test="@href=''"/>
-            <xsl:when test="@href">
-              <xsl:call-template name="get-stuff">
-                <xsl:with-param name="localtype">
-                  <xsl:value-of select="$type"/>
-                </xsl:with-param>
-                <xsl:with-param name="scope">
-                  <xsl:value-of select="$scope"/>
-                </xsl:with-param>
-                <xsl:with-param name="format">
-                  <xsl:value-of select="$format"/>
-                </xsl:with-param>
-              </xsl:call-template>
-            </xsl:when>
-            <xsl:otherwise>
-              <xsl:call-template name="output-message">
-                <xsl:with-param name="msg">Link or Xref must contain an href attribute.</xsl:with-param>
-                <xsl:with-param name="msgnum">016</xsl:with-param>
-                <xsl:with-param name="msgsev">E</xsl:with-param>
-              </xsl:call-template>
-              <xsl:apply-templates/>
-            </xsl:otherwise>
-          </xsl:choose>
+          <xsl:call-template name="get-stuff">
+            <xsl:with-param name="localtype"><xsl:value-of select="$type"/></xsl:with-param>
+            <xsl:with-param name="scope"><xsl:value-of select="$scope"/></xsl:with-param>
+            <xsl:with-param name="format"><xsl:value-of select="$format"/></xsl:with-param>
+          </xsl:call-template>
         </xsl:copy>
+      </xsl:when>
+      <!-- Ignore <xref></xref>, <xref href=""></xref> -->
+      <xsl:otherwise>
+        <xsl:call-template name="output-message">
+          <xsl:with-param name="msgnum">028</xsl:with-param>
+          <xsl:with-param name="msgsev">E</xsl:with-param>
+        </xsl:call-template>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
@@ -256,32 +240,17 @@
          specializedReference can be called reference -->
       <xsl:when test="($targetting='topic' and contains($actual-class,concat(' ',$type,'/',$type,' '))) or                     ($targetting='element' and contains($actual-class,concat('/',$type,' ')))">
         <xsl:call-template name="output-message">
-          <xsl:with-param name="msg">The type attribute on a <xsl:value-of
-            select="name()"/> element does not match the target <xsl:value-of
-            select="$targetting"/>. The type attribute was set to <xsl:value-of
-            select="$type"/>, but the <xsl:value-of select="name()"/> points to
-            a more specific <xsl:value-of select="$actual-name"/> element. This
-            may cause your links to sort incorrectly in the output, and link
-            text may not be properly retrieved. Note that the type attribute is
-            inherited in maps, so the value '<xsl:value-of select="$type"/>' may
-            come from an ancestor topicref.</xsl:with-param>
-          <xsl:with-param name="msgnum">044</xsl:with-param>
+          <xsl:with-param name="msgnum">029</xsl:with-param>
           <xsl:with-param name="msgsev">I</xsl:with-param>
+          <xsl:with-param name="msgparams">%1=<xsl:value-of select="name()"/>;%2=<xsl:value-of select="$targetting"/>;%3=<xsl:value-of select="$type"/>;%4=<xsl:value-of select="$actual-name"/></xsl:with-param>
         </xsl:call-template>
       </xsl:when>
       <!-- Otherwise: incorrect type is specified -->
       <xsl:otherwise>
         <xsl:call-template name="output-message">
-          <xsl:with-param name="msg">The type attribute on a <xsl:value-of
-            select="name()"/> element does not match the target <xsl:value-of
-            select="$targetting"/>. The type attribute was set to <xsl:value-of
-            select="$type"/>, but the <xsl:value-of select="name()"/> points to
-            a <xsl:value-of select="$actual-name"/> element. This may cause your
-            links to sort incorrectly in the output. Note that the type
-            attribute is inherited in maps, so the value '<xsl:value-of
-            select="$type"/>' may come from an ancestor topicref.</xsl:with-param>
-          <xsl:with-param name="msgnum">045</xsl:with-param>
+          <xsl:with-param name="msgnum">030</xsl:with-param>
           <xsl:with-param name="msgsev">W</xsl:with-param>
+          <xsl:with-param name="msgparams">%1=<xsl:value-of select="name()"/>;%2=<xsl:value-of select="$targetting"/>;%3=<xsl:value-of select="$type"/>;%4=<xsl:value-of select="$actual-name"/></xsl:with-param>
         </xsl:call-template>
       </xsl:otherwise>
     </xsl:choose>
@@ -326,13 +295,9 @@
     <xsl:if test="$topicpos!='samefile' and                 ($scope!='external' and $scope!='peer') and                 ($format='dita' or $format='DITA' or $format='#none#')">
       <xsl:if test="not(document($file,/)) or not(document($file,/)/*/*)">
         <xsl:call-template name="output-message">
-          <xsl:with-param name="msg">The file <xsl:value-of select="$file"/> is
-            not available to resolve link information. Either the file could not
-            be found, or a DITAVAL file was used to remove the file's contents.
-            Be aware that the path information above may not match the link in
-            your topic.</xsl:with-param>
-          <xsl:with-param name="msgnum">059</xsl:with-param>
+          <xsl:with-param name="msgnum">031</xsl:with-param>
           <xsl:with-param name="msgsev">E</xsl:with-param>
+          <xsl:with-param name="msgparams">%1=<xsl:value-of select="$file"/></xsl:with-param>
         </xsl:call-template>
       </xsl:if>
     </xsl:if>
@@ -374,12 +339,7 @@
         <!--check whether file extension is correct, for targets in other files-->
         <xsl:when
             test="not($topicpos='samefile') and not(contains($file,$DITAEXT))">#none#<xsl:call-template name="output-message">
-            <xsl:with-param name="msg">Unknown file extension in href:
-                <xsl:value-of select="@href"/> If this is a link to a non-DITA
-              resource, set the format attribute to match the resource (for
-              example, 'txt', 'pdf', or 'html'). If it's a link to a DITA
-              resource, the file extension must be .dita .</xsl:with-param>
-            <xsl:with-param name="msgnum">015</xsl:with-param>
+            <xsl:with-param name="msgnum">006</xsl:with-param>
             <xsl:with-param name="msgsev">E</xsl:with-param>
           </xsl:call-template>
         </xsl:when>
@@ -615,63 +575,71 @@
       </xsl:call-template>
     </xsl:variable>
     <!--linktext-->
+    <xsl:variable name="linktext">
+      <xsl:choose>
+        <!--when type is external, or format is defaulted to not-DITA 
+            (because scope is external), or format is explicitly something 
+            non-DITA, use the href value with no error message-->
+        <xsl:when test="$type='external' or ($scope='external' and $format='#none#') or not($format='#none#' or $format='dita' or $format='DITA')">
+          <xsl:value-of select="@href"/>
+        </xsl:when>
+        <!--when scope is external or peer and format is DITA, don't use
+          the href - defer to the final output process - and leave it 
+          to the final output process to emit an error msg-->
+        <xsl:when test="$scope='peer' or $scope='external'">#none#</xsl:when>
+        <xsl:when test="@href=''">#none#</xsl:when>
+
+        <!--when format is DITA, it's a different file, and file extension 
+          is wrong, use the href and generate an error -->
+        <xsl:when test="not($topicpos='samefile') and not(contains($file,$DITAEXT))">
+          <xsl:value-of select="@href"/>
+          <xsl:call-template name="output-message">
+            <xsl:with-param name="msgnum">006</xsl:with-param>
+            <xsl:with-param name="msgsev">E</xsl:with-param>
+          </xsl:call-template>
+        </xsl:when>
+        <!-- otherwise pull text from the target -->
+        <xsl:otherwise>
+          <xsl:apply-templates select="." mode="getlinktext">
+            <xsl:with-param name="file">
+              <xsl:value-of select="$file"/>
+            </xsl:with-param>
+            <xsl:with-param name="topicpos">
+              <xsl:value-of select="$topicpos"/>
+            </xsl:with-param>
+            <xsl:with-param name="classval">
+              <xsl:value-of select="$classval"/>
+            </xsl:with-param>
+            <xsl:with-param name="topicid">
+              <xsl:value-of select="$topicid"/>
+            </xsl:with-param>
+            <xsl:with-param name="elemid">
+              <xsl:value-of select="$elemid"/>
+            </xsl:with-param>
+          </xsl:apply-templates>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
     <xsl:choose>
+      <!-- first check if the link content is valid, if it is invalid, need to 
+           pull text from the target. -->
+      <xsl:when test="normalize-space()=''">
+        <xsl:if test="not($linktext='#none#') and contains(@class, ' topic/xref ')">
+          <!-- need to avoid flattening complex markup here-->
+          <xsl:value-of select="$linktext"/>
+        </xsl:if>
+        <xsl:if test="not($linktext='#none#') and contains(@class, ' topic/link ')">
+          <linktext class=" topic/linktext ">
+            <xsl:value-of select="$linktext"/>
+          </linktext>
+        </xsl:if>
+      </xsl:when>
       <!--if there's link content other than a shortdesc, no need to pull linktext from target-->
       <xsl:when test="text()|*[not(contains(@class, ' topic/desc '))]">
         <xsl:apply-templates select="text()|*[not(contains(@class, ' topic/desc '))]"/>
       </xsl:when>
       <!--pull text from the target-->
-      <xsl:otherwise>
-        <xsl:variable name="linktext">
-          <xsl:choose>
-            <!--when type is external, or format is defaulted to not-DITA 
-                (because scope is external), or format is explicitly something 
-                non-DITA, use the href value with no error message-->
-            <xsl:when test="$type='external' or ($scope='external' and $format='#none#') or not($format='#none#' or $format='dita' or $format='DITA')">
-              <xsl:value-of select="@href"/>
-            </xsl:when>
-            <!--when scope is external or peer and format is DITA, don't use
-              the href - defer to the final output process - and leave it 
-              to the final output process to emit an error msg-->
-            <xsl:when test="$scope='peer' or $scope='external'">#none#</xsl:when>
-            <xsl:when test="@href=''">#none#</xsl:when>
-
-            <!--when format is DITA, it's a different file, and file extension 
-              is wrong, use the href and generate an error -->
-            <xsl:when test="not($topicpos='samefile') and not(contains($file,$DITAEXT))">
-              <xsl:value-of select="@href"/>
-              <xsl:call-template name="output-message">
-                <xsl:with-param name="msg">Unknown file extension in href:
-                    <xsl:value-of select="@href"/> If this is a link to a
-                  non-DITA resource, set the format attribute to match the
-                  resource (for example, 'txt', 'pdf', or 'html'). If it's a
-                  link to a DITA resource, the file extension must be .dita .</xsl:with-param>
-                <xsl:with-param name="msgnum">015</xsl:with-param>
-                <xsl:with-param name="msgsev">E</xsl:with-param>
-              </xsl:call-template>
-            </xsl:when>
-            <!-- otherwise pull text from the target -->
-            <xsl:otherwise>
-              <xsl:apply-templates select="." mode="getlinktext">
-                <xsl:with-param name="file">
-                  <xsl:value-of select="$file"/>
-                </xsl:with-param>
-                <xsl:with-param name="topicpos">
-                  <xsl:value-of select="$topicpos"/>
-                </xsl:with-param>
-                <xsl:with-param name="classval">
-                  <xsl:value-of select="$classval"/>
-                </xsl:with-param>
-                <xsl:with-param name="topicid">
-                  <xsl:value-of select="$topicid"/>
-                </xsl:with-param>
-                <xsl:with-param name="elemid">
-                  <xsl:value-of select="$elemid"/>
-                </xsl:with-param>
-              </xsl:apply-templates>
-            </xsl:otherwise>
-          </xsl:choose>
-        </xsl:variable>
+      <xsl:otherwise>        
         <xsl:if test="not($linktext='#none#') and contains(@class, ' topic/xref ')">
           <!-- need to avoid flattening complex markup here-->
           <xsl:value-of select="$linktext"/>
@@ -773,15 +741,9 @@
           <xsl:otherwise>
             <xsl:value-of select="@href"/>
             <xsl:call-template name="output-message">
-              
-              <xsl:with-param name="msg">Unable to retrieve link text from
-                target: <xsl:value-of select="@href"/>. Make sure the link type
-                matches the target, the ids for topic and element are correct,
-                and that the target has a title. If the target is not accessible
-                at build time, or does not have a title, give the link text as
-                content of the xref element.</xsl:with-param>
-              <xsl:with-param name="msgnum">018</xsl:with-param>
+              <xsl:with-param name="msgnum">032</xsl:with-param>
               <xsl:with-param name="msgsev">E</xsl:with-param>
+              <xsl:with-param name="msgparams">%1=<xsl:value-of select="@href"/></xsl:with-param>
             </xsl:call-template>
           </xsl:otherwise>
         </xsl:choose>
@@ -1055,13 +1017,9 @@
           </xsl:otherwise>
         </xsl:choose>
         <xsl:call-template name="output-message">
-          <xsl:with-param name="msg">Unable to retrieve link text from target:
-              <xsl:value-of select="@href"/>. Make sure the link type matches
-            the target, the ids for topic and element are correct, and that the
-            target has a title. If the target is not accessible at build time,
-            or does not have a title, give the link text as content of the xref element.</xsl:with-param>
-          <xsl:with-param name="msgnum">018</xsl:with-param>
+          <xsl:with-param name="msgnum">032</xsl:with-param>
           <xsl:with-param name="msgsev">E</xsl:with-param>
+          <xsl:with-param name="msgparams">%1=<xsl:value-of select="@href"/></xsl:with-param>
         </xsl:call-template>
       </xsl:otherwise>
     </xsl:choose>
@@ -1130,13 +1088,9 @@
           </xsl:otherwise>
         </xsl:choose>
         <xsl:call-template name="output-message">
-          <xsl:with-param name="msg">Unable to retrieve link text from target:
-              <xsl:value-of select="@href"/>. Make sure the link type matches
-            the target, the ids for topic and element are correct, and that the
-            target has a title. If the target is not accessible at build time,
-            or does not have a title, give the link text as content of the xref element.</xsl:with-param>
-          <xsl:with-param name="msgnum">018</xsl:with-param>
+          <xsl:with-param name="msgnum">032</xsl:with-param>
           <xsl:with-param name="msgsev">E</xsl:with-param>
+          <xsl:with-param name="msgparams">%1=<xsl:value-of select="@href"/></xsl:with-param>
         </xsl:call-template>
       </xsl:otherwise>
     </xsl:choose>
@@ -1216,13 +1170,9 @@
           </xsl:otherwise>
         </xsl:choose>
         <xsl:call-template name="output-message">
-          <xsl:with-param name="msg">Unable to retrieve link text from target:
-              <xsl:value-of select="@href"/>. Make sure the link type matches
-            the target, the ids for topic and element are correct, and that the
-            target has a title. If the target is not accessible at build time,
-            or does not have a title, give the link text as content of the xref element.</xsl:with-param>
-          <xsl:with-param name="msgnum">018</xsl:with-param>
+          <xsl:with-param name="msgnum">032</xsl:with-param>
           <xsl:with-param name="msgsev">E</xsl:with-param>
+          <xsl:with-param name="msgparams">%1=<xsl:value-of select="@href"/></xsl:with-param>
         </xsl:call-template>
       </xsl:otherwise>
     </xsl:choose>
@@ -1265,10 +1215,7 @@
           </xsl:otherwise>
         </xsl:choose>
         <xsl:call-template name="output-message">
-          <xsl:with-param name="msg">Unable to find the target to determine the
-            list item number. Make sure the link type matches the target, and
-            that the ids for topic and element are correct.</xsl:with-param>
-          <xsl:with-param name="msgnum">019</xsl:with-param>
+          <xsl:with-param name="msgnum">033</xsl:with-param>
           <xsl:with-param name="msgsev">E</xsl:with-param>
         </xsl:call-template>
       </xsl:otherwise>
@@ -1284,13 +1231,7 @@
      the error points to the XREF, not to the list item. -->
   <xsl:template name="invalid-list-item">
     <xsl:call-template name="output-message">
-      <xsl:with-param name="msg">You are cross-referencing a list item in an
-        unordered list. The process could not automatically generate
-        cross-reference text, since the list item is not numbered. You need to
-        provide cross-reference text within the xref element, or you need to
-        change the target to something the process can support. Using the id of
-        the target as cross-reference text for now.</xsl:with-param>
-      <xsl:with-param name="msgnum">020</xsl:with-param>
+      <xsl:with-param name="msgnum">034</xsl:with-param>
       <xsl:with-param name="msgsev">E</xsl:with-param>
     </xsl:call-template>
   </xsl:template>
@@ -1318,10 +1259,7 @@
           </xsl:otherwise>
         </xsl:choose>
         <xsl:call-template name="output-message">
-          <xsl:with-param name="msg">Unable to find the target to determine the
-            footnote number. Make sure the link type matches the target, and
-            that the ids for topic and element are correct.</xsl:with-param>
-          <xsl:with-param name="msgnum">021</xsl:with-param>
+          <xsl:with-param name="msgnum">035</xsl:with-param>
           <xsl:with-param name="msgsev">E</xsl:with-param>
         </xsl:call-template>
       </xsl:otherwise>
@@ -1383,10 +1321,7 @@
           </xsl:otherwise>
         </xsl:choose>
         <xsl:call-template name="output-message">
-          <xsl:with-param name="msg">Unable to find the dlentry target to
-            determine the dlterm text. Make sure the link type matches the
-            target, and that the ids for topic and element are correct.</xsl:with-param>
-          <xsl:with-param name="msgnum">022</xsl:with-param>
+          <xsl:with-param name="msgnum">036</xsl:with-param>
           <xsl:with-param name="msgsev">E</xsl:with-param>
         </xsl:call-template>
       </xsl:otherwise>

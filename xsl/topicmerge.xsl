@@ -7,12 +7,10 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   
 <!-- Include error message template -->
-<xsl:include href="common/output-message.xsl"/>
-
-<xsl:param name="root-path"></xsl:param>
+<xsl:import href="common/output-message.xsl"/>
 
 <!-- Set the prefix for error message numbers -->
-<xsl:variable name="msgprefix">IDXS</xsl:variable>
+<xsl:variable name="msgprefix">DOTX</xsl:variable>
 
 <xsl:variable name="xml-path"></xsl:variable>
 
@@ -43,8 +41,7 @@
     <xsl:when test="@format and not(@format='dita')">
        <!-- Topicref to non-dita files will be ingored in PDF transformation -->
       <xsl:call-template name="output-message">
-        <xsl:with-param name="msg">Topicref to non-dita files will be ignored in PDF transformation</xsl:with-param>
-        <xsl:with-param name="msgnum">039</xsl:with-param>
+        <xsl:with-param name="msgnum">049</xsl:with-param>
         <xsl:with-param name="msgsev">I</xsl:with-param>
       </xsl:call-template>
     </xsl:when>
@@ -111,6 +108,10 @@
   </xsl:copy>
 </xsl:template>
 
+  <xsl:template match="@id" mode="copy-element">
+    <xsl:attribute name="id"><xsl:value-of select="generate-id(.)"/></xsl:attribute>
+  </xsl:template>
+
 <xsl:template match="@href" mode="copy-element" priority="1">
   <xsl:param name="src-file"></xsl:param>
 
@@ -132,8 +133,67 @@
   </xsl:variable>  
 
   <xsl:choose>
-    <xsl:when test="contains(.,'://') or starts-with(.,'#')">
+    <xsl:when test="contains(.,'://') or ../@scope='external' or ../@scope='peer'">
       <xsl:copy/>
+    </xsl:when>
+    <xsl:when test="(parent::*[contains(@class,' topic/xref ')] or parent::*[contains(@class,' topic/link ')]) and (not(../@format) or ../@format='dita' or ../@format='DITA')">
+      <xsl:choose>
+        <xsl:when test="starts-with(.,'#')">
+          <xsl:variable name="refer-path" select="substring-after(.,'#')"/>
+          <xsl:choose>
+            <xsl:when test="contains($refer-path,'/')">
+              <xsl:variable name="topic-id" select="substring-before($refer-path,'/')"/>
+              <xsl:variable name="target-id" select="substring-after($refer-path,'/')"/>
+              <xsl:variable name="href-value">
+                <xsl:value-of select="generate-id(//*[contains(@class,' topic/topic ')][@id=$topic-id]//*[@id=$target-id]/@id)"/>
+              </xsl:variable>
+              <xsl:if test="not($href-value='')">
+                <xsl:attribute name="href"><xsl:text>#</xsl:text><xsl:value-of select="$href-value"/></xsl:attribute>
+              </xsl:if>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:variable name="href-value">
+                <xsl:value-of select="generate-id(//*[contains(@class,' topic/topic ')][@id=$refer-path]/@id)"/>
+              </xsl:variable>
+              <xsl:if test="not($href-value='')">
+                <xsl:attribute name="href"><xsl:text>#</xsl:text><xsl:value-of select="$href-value"/></xsl:attribute>
+              </xsl:if>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:when>
+        <xsl:when test="contains(.,'#')">
+          <xsl:variable name="file-name" select="substring-before(.,'#')"/>
+          <xsl:variable name="refer-path" select="substring-after(.,'#')"/>
+          <xsl:choose>
+            <xsl:when test="contains($refer-path,'/')">
+              <xsl:variable name="topic-id" select="substring-before($refer-path,'/')"/>
+              <xsl:variable name="target-id" select="substring-after($refer-path,'/')"/>
+              <xsl:variable name="href-value">
+                <xsl:value-of select="generate-id(document($file-name,/)//*[contains(@class,' topic/topic ')][@id=$topic-id]//*[@id=$target-id]/@id)"/>
+              </xsl:variable>
+              <xsl:if test="not($href-value='')">
+                <xsl:attribute name="href"><xsl:text>#</xsl:text><xsl:value-of select="$href-value"/></xsl:attribute>
+              </xsl:if>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:variable name="href-value">
+                <xsl:value-of select="generate-id(document($file-name,/)//*[contains(@class,' topic/topic ')][@id=$refer-path]/@id)"/>
+              </xsl:variable>
+              <xsl:if test="not($href-value='')">
+                <xsl:attribute name="href"><xsl:text>#</xsl:text><xsl:value-of select="$href-value"/></xsl:attribute>
+              </xsl:if>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:choose>
+            <xsl:when test="document(.,/)//*[contains(@class,' topic/topic ')]/@id">
+              <xsl:attribute name="href"><xsl:text>#</xsl:text><xsl:value-of select="generate-id(document(.,/)//*[contains(@class,' topic/topic ')][1]/@id)"/></xsl:attribute>
+            </xsl:when>
+            <xsl:otherwise><xsl:text>#</xsl:text><xsl:value-of select="generate-id(document(.,/)//*[contains(@class,' topic/topic ')][1])"/></xsl:otherwise>
+          </xsl:choose>
+        </xsl:otherwise>
+      </xsl:choose>
     </xsl:when>
     <xsl:otherwise>
       <xsl:attribute name="href">

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE javaClass PUBLIC "-//IBM//DTD DITA Java API Class Reference Type//EN"
+ "../dtd/javaClass.dtd">
+<javaClass id="javaTreeNode">
+<apiName>TreeNode</apiName>
+<shortdesc>This class represents the position of a topic within a tree.</shortdesc>
+<javaClassDetail>
+<javaClassDef>
+<javaClassAccess value="public"/>
+<javaBaseClass href="javaClass1.dita"></javaBaseClass>
+<javaImplementedInterface keyref="org.w3c.dom.Node">Node</javaImplementedInterface>
+</javaClassDef>
+<apiDesc>The TreeNode class provides methods for traversing a tree collection
+that contains a topic.</apiDesc>
+</javaClassDetail>
+<javaMethod id="TreeNodeConstructor">
+<apiName>TreeNode</apiName>
+<shortdesc>This constructor creates a topic node within a tree collection.</shortdesc>
+<javaMethodDetail>
+<javaConstructorDef>
+<javaMethodAccess value="public"/>
+<javaParam>
+<javaMethodClass keyref="java.util.TreeMap">Tree</javaMethodClass>
+<apiItemName>tree</apiItemName>
+<apiDefNote>The tree that should contain the constructed node.</apiDefNote>
+</javaParam>
+<javaParam>
+<javaMethodClass keyref="com.ibm.Topic">Topic</javaMethodClass>
+<apiItemName>topic</apiItemName>
+<apiDefNote>The topic for the constructed node.</apiDefNote>
+</javaParam>
+</javaConstructorDef>
+</javaMethodDetail>
+</javaMethod>
+<javaMethod id="getParentNode">
+<apiName>getParentNode</apiName>
+<shortdesc>This method gets climbs the tree.</shortdesc>
+<javaMethodDetail>
+<javaMethodDef>
+<javaMethodAccess value="public"/>
+<javaReturn>
+<javaMethodClass keyref="com.ibm.Topic">Topic</javaMethodClass>
+<apiDefNote>The topic node or null if there is no node.</apiDefNote>
+</javaReturn>
+<javaException>
+<javaMethodClass href="javaException1.dita"></javaMethodClass>
+<apiDefNote>The topic node exists but couldn't be accessed.</apiDefNote>
+</javaException>
+</javaMethodDef>
+<apiDesc>You can use the <javamethod href="javaClass1.dita#getNodeAvailability"></javamethod> method
+to confirm that the node is available before traversal.</apiDesc>
+</javaMethodDetail>
+</javaMethod>
+<javaMethod id="getFirstChildNode">
+<apiName>getFirstChildNode</apiName>
+<shortdesc>This method descends the tree.</shortdesc>
+<javaMethodDetail>
+<javaMethodDef>
+<javaMethodAccess value="public"/>
+<javaReturn>
+<javaMethodClass keyref="com.ibm.Topic">Topic</javaMethodClass>
+<apiDefNote>The parent topic node or null if there is no node.</apiDefNote>
+</javaReturn>
+<javaException>
+<javaMethodClass href="javaException1.dita"></javaMethodClass>
+<apiDefNote>The topic node exists but couldn't be accessed.</apiDefNote>
+</javaException>
+</javaMethodDef>
+</javaMethodDetail>
+</javaMethod>
+<javaMethod id="getChildren">
+<apiName>getChildren</apiName>
+<shortdesc>This method gets the child list.</shortdesc>
+<javaMethodDetail>
+<javaMethodDef>
+<javaMethodAccess value="public"/>
+<javaReturn>
+<javaMethodClass keyref="com.ibm.Topic">Topic</javaMethodClass>
+<javaMethodArray/>
+<apiDefNote>The child topic nodes or null if there are no child nodes.</apiDefNote>
+</javaReturn>
+<javaException>
+<javaMethodClass keyref="java.lang.ArrayBoundsException">ArrayBoundsException</javaMethodClass>
+<apiDefNote>The child nodes exist but couldn't be put into an array.</apiDefNote>
+</javaException>
+</javaMethodDef>
+</javaMethodDetail>
+</javaMethod>
+<javaMethod id="appendChild">
+<apiName>appendChild</apiName>
+<shortdesc>This method appends a node to the child list, removing the node
+from its current position if any.</shortdesc>
+<javaMethodDetail>
+<javaMethodDef>
+<javaMethodAccess value="public"/>
+<javaVoid/>
+<javaParam>
+<javaMethodClass keyref="com.ibm.Topic">Topic</javaMethodClass>
+<apiItemName>node</apiItemName>
+<apiDefNote>The node to add as a child.</apiDefNote>
+</javaParam>
+<javaException>
+<javaMethodClass href="javaException1.dita"></javaMethodClass>
+<apiDefNote>The topic node couldn't be appended to the parent node's child
+list.</apiDefNote>
+</javaException>
+</javaMethodDef>
+</javaMethodDetail>
+</javaMethod>
+<javaMethod id="release">
+<apiName>release</apiName>
+<shortdesc>This method releases resources associated with the nodes.</shortdesc>
+<javaMethodDetail>
+<javaMethodDef>
+<javaMethodAccess value="public"/>
+<javaVoid/></javaMethodDef>
+<apiDesc>The class retains nodes until you release them or the garbage collector
+releases the memory for the class.</apiDesc>
+</javaMethodDetail>
+</javaMethod>
+<!--And the other DOM node methods...-->
+</javaClass>

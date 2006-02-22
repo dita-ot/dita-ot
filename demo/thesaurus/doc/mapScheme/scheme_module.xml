@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\..\dtd\reference.dtd">
+<reference id="scheme_module" outputclass="module" xml:lang="en-us">
+<title>Scheme map</title>
+<shortdesc>You define the relationships between subjects including both hierarchies
+and associations in the scheme map.</shortdesc>
+<refbody>
+<section><title>Description</title><p>You define a taxonomy by organizing
+the subjects in a hierarchy, referring to subject topics with the <xref href="subjectdef.xml"
+type="reference"></xref> element. <?Pub Caret?></p><p>The scheme map also
+expresses associations between subjects such as use of one subject by another
+subject. To express associations, you use the <xref href="relatedSubjects.xml"></xref> or <xref
+href="subjectRelTable.xml"></xref> table.</p></section>
+<example><title>Example</title><p>The following example shows a scheme that
+identifies the Installing and Configuring subjects as special kinds of user
+action subjects. The example also identifies Security and Utilization as special
+kinds of user concerns. </p><codeblock>&lt;subjectScheme title="Sample taxonomy" id="taxonomyScheme"&gt;
+    &lt;subjectdef href="action.xml" navtitle="Action"&gt;
+        &lt;subjectdef href="installing.xml" navtitle="Installing"/&gt;
+        &lt;subjectdef href="configuring.xml" navtitle="Configuring"/&gt;
+        ...
+    &lt;subjectdef href="concern.xml" navtitle="Concern"&gt;
+        &lt;subjectdef href="security.xml" navtitle="Security"/&gt;
+        &lt;subjectdef href="utilization.xml" navtitle="Resource utilization"/&gt;
+        ...</codeblock></example>
+</refbody>
+</reference>
+<?Pub *0000001732?>

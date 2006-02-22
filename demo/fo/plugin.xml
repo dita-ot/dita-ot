@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin id="org.dita.pdf2">
+  <feature extension="dita.conductor.lib.import" value="fo.jar" type="file"/>
+  <feature extension="dita.conductor.transtype.check" value="pdf2" type="pdf"/>
+  <feature extension="dita.conductor.target" value="integrator.xml" type="file"/>
+</plugin>

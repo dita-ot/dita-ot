@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+﻿<?xml version="1.0" encoding="UTF-8" ?>
 <!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
 
 <xsl:stylesheet version="1.0"
@@ -28,9 +28,9 @@
          </xsl:apply-templates>
        </xsl:when>
        <xsl:when test="following-sibling::*/*[contains(@class,' reference/proptype ')]">
-         <th valign="bottom">
-           <xsl:call-template name="th-align"/>
+         <th valign="bottom">           
            <xsl:attribute name="id"><xsl:value-of select="generate-id(parent::*)"/>-type</xsl:attribute>
+           <xsl:call-template name="th-align"/>
            <xsl:call-template name="getString">
              <xsl:with-param name="stringName" select="'Type'"/>
            </xsl:call-template>
@@ -44,9 +44,9 @@
          </xsl:apply-templates>
        </xsl:when>
        <xsl:when test="following-sibling::*/*[contains(@class,' reference/propvalue ')]">
-         <th valign="bottom">
-           <xsl:call-template name="th-align"/>
+         <th valign="bottom">           
            <xsl:attribute name="id"><xsl:value-of select="generate-id(parent::*)"/>-value</xsl:attribute>
+           <xsl:call-template name="th-align"/>
            <xsl:call-template name="getString">
              <xsl:with-param name="stringName" select="'Value'"/>
            </xsl:call-template>
@@ -60,9 +60,9 @@
          </xsl:apply-templates>
        </xsl:when>
        <xsl:when test="following-sibling::*/*[contains(@class,' reference/propdesc ')]">
-         <th valign="bottom">
-           <xsl:call-template name="th-align"/>
+         <th valign="bottom">           
            <xsl:attribute name="id"><xsl:value-of select="generate-id(parent::*)"/>-desc</xsl:attribute>
+           <xsl:call-template name="th-align"/>
            <xsl:call-template name="getString">
              <xsl:with-param name="stringName" select="'Description'"/>
            </xsl:call-template>

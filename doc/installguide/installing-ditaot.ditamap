@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- (c) Copyright by Comtech Services, Inc. All rights reserved. -->
-<!DOCTYPE map PUBLIC "-//IBM//DTD DITA Map//EN"
- "..\dtd\map.dtd">
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
 <map id="ditaot" title="DITA Open Toolkit Installation Guide" toc="yes">
 <topicref id="DITAOT-installguide" href="title.xml" linking="none" 
   navtitle="DITA Open Toolkit Installation Guide" type="concept">
@@ -29,7 +28,6 @@
       </topicref>
       <topicref href="installingXALAN.xml" navtitle="Installing Xalan" 
         type="task">
-        <?Pub Caret1?>
       </topicref>
       <topicref href="installinghtmlhelp.xml" navtitle="Installing HTML Help" 
         type="task">
@@ -39,8 +37,6 @@
       navtitle="Setting Environement Variables" type="task"></topicref>
     <topicref href="usingditaot.xml" linking="normal" 
       navtitle="Executing the DITA OT" type="task"></topicref>
-    <topicref href="errors.xml" linking="normal" navtitle="Processing Errors" 
-      type="task"></topicref>
   </topicref>
   <topicref href="linux_ditaot.xml" linking="normal" 
     navtitle="DITA Open Toolkit for Linux" type="topic">
@@ -53,6 +49,8 @@
       </topicref>
       <topicref href="linux_installingjdk.xml" 
         navtitle="Installing Java Development Kit" type="task"></topicref>
+      <topicref href="linux_installingjavahelp.xml" 
+        navtitle="Installing Java Help" type="task" toc="no"/>
       <topicref href="linux_installingfop.xml" navtitle="Installing FOP" 
         type="task">
       </topicref>
@@ -67,8 +65,6 @@
       navtitle="Setting Environement Variables" type="task"></topicref>
     <topicref href="linux_usingditaot.xml" linking="normal" 
       navtitle="Executing the DITA OT" type="task"></topicref>
-    <topicref href="linux_errors.xml" linking="normal" 
-      navtitle="Processing Errors" type="task"></topicref>
   </topicref>
 </topicref>
 </map>

@@ -11,8 +11,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
+import org.dita.dost.exception.DITAOTException;
+import org.dita.dost.log.DITAOTJavaLogger;
+import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.Content;
 import org.dita.dost.module.ContentImpl;
+import org.dita.dost.platform.Integrator;
 import org.dita.dost.util.Constants;
 import org.dita.dost.writer.PropertiesWriter;
 
@@ -25,9 +29,10 @@ import org.dita.dost.writer.PropertiesWriter;
 
 public class CommandLineInvoker {
 	private static Map paramMap = null;
-
 	private String propertyFile = null;
-
+	private boolean debugMode = false;
+	DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
+	
 	static {
 		paramMap = new HashMap();
 
@@ -57,6 +62,9 @@ public class CommandLineInvoker {
 		paramMap.put("/eclipsehelptoc", "args.eclipsehelp.toc");
 		paramMap.put("/eclipsecontenttoc", "args.eclipsecontent.toc");
 		paramMap.put("/xhtmltoc", "args.xhtml.toc");
+		paramMap.put("/logdir", "args.logdir");
+		paramMap.put("/ditalocale", "args.dita.locale");
+		paramMap.put("/fooutputrellinks", "args.fo.output.rel.links");
 	}
 
 	/**
@@ -71,7 +79,7 @@ public class CommandLineInvoker {
 	 * @param args
 	 * @throws Exception
 	 */
-	public void processArguments(String[] args) throws Exception {
+	public void processArguments(String[] args) throws DITAOTException {
 		Properties prop = new Properties();
 		PropertiesWriter propWriter = null;
 		Content content = null;
@@ -86,29 +94,44 @@ public class CommandLineInvoker {
 			String antArg = null;
 			int colonPos = arg.indexOf(Constants.COLON);
 
+			if (arg.equals("/debug") || arg.equals("/d")) {
+				debugMode = true;
+				continue;
+			}
+			
 			if (colonPos == -1) {
-				String errorMsg = new StringBuffer(
-						"Input arguments error: no ':' in the param[").append(
-						arg).append("]").toString();
-				throw new Exception(errorMsg);
+				String msg = null;
+				Properties params = new Properties();
+
+				params.put("%1", arg);
+				msg = MessageUtils.getMessage("DOTJ001F", params).toString();
+
+				throw new DITAOTException(msg);
 			}
 
 			javaArg = arg.substring(0, colonPos);
 			antArg = (String) paramMap.get(javaArg.toLowerCase());
 
 			if (antArg == null) {
-				String errorMsg = new StringBuffer("Unsupported param: [")
-						.append(javaArg).append("]").toString();
-				throw new Exception(errorMsg);
+				String msg = null;
+				Properties params = new Properties();
+
+				params.put("%1", javaArg);
+				msg = MessageUtils.getMessage("DOTJ002F", params).toString();
+
+				throw new DITAOTException(msg);
 			}
 
 			String antArgValue = arg.substring(colonPos + 1);
 
 			if (antArgValue.trim().equals(Constants.STRING_EMPTY)) {
-				String errorMsg = new StringBuffer(
-						"Param value can't be null for [").append(javaArg)
-						.append("]").toString();
-				throw new Exception(errorMsg);
+				String msg = null;
+				Properties params = new Properties();
+
+				params.put("%1", javaArg);
+				msg = MessageUtils.getMessage("DOTJ003F", params).toString();
+
+				throw new DITAOTException(msg);
 			}
 
 			prop.put(antArg, antArgValue);
@@ -120,12 +143,17 @@ public class CommandLineInvoker {
 		tempDir = prop.getProperty("dita.temp.dir", Constants.TEMP_DIR_DEFAULT);
 		File tempPath = new File(tempDir);
 		if (!tempPath.exists() && tempPath.mkdirs() == false) {
-			String errorMsg = new StringBuffer("Cant't create temp path[")
-					.append(tempDir).append("]").toString();
-			throw new Exception(errorMsg);
-		}		
+			String msg = null;
+			Properties params = new Properties();
 
-		propertyFile = new StringBuffer(tempDir).append("/property.temp").toString();
+			params.put("%1", tempDir);
+			msg = MessageUtils.getMessage("DOTJ004F", params).toString();
+
+			throw new DITAOTException(msg);
+		}
+
+		propertyFile = new StringBuffer(tempDir).append("/property.temp")
+				.toString();
 
 		/*
 		 * Output input params into temp property file
@@ -143,10 +171,10 @@ public class CommandLineInvoker {
 	 * @throws IOException
 	 */
 	public void startAnt() throws IOException {
-		String antScript = "ant.bat"; // default windows
+		String antScript = "ant.bat"; // default for windows
 		StringBuffer cmdBuffer = new StringBuffer(Constants.INT_64);
 		BufferedReader reader = null;
-		Process antProcess = null;
+		Process antProcess = null;		
 
 		if (Constants.OS_NAME.toLowerCase().indexOf(Constants.OS_NAME_WINDOWS) == -1) {
 			antScript = "ant";
@@ -154,25 +182,31 @@ public class CommandLineInvoker {
 
 		cmdBuffer.append(antScript);
 		cmdBuffer.append(" -f conductor.xml");
-		cmdBuffer.append(" -propertyfile ").append(propertyFile);		
-		
+		cmdBuffer.append(" -logger org.dita.dost.log.DITAOTBuildLogger");
+		cmdBuffer.append(" -propertyfile ").append(propertyFile);
+		if (debugMode) {
+			cmdBuffer.append(" -d");
+		}
+
 		antProcess = Runtime.getRuntime().exec(cmdBuffer.toString());
 
 		/*
-		 * Get output message and print to System.out
+		 * Get output message and print to console. 
+		 * Note: Since these messages have been logged to the log file, 
+		 * there is no need to output them to log file.
 		 */
-		try {
-			reader = new BufferedReader(new InputStreamReader(antProcess
-					.getInputStream()));
-
-			for (String line = reader.readLine(); line != null; line = reader
-					.readLine()) {
-				System.out.println(line);
-			}
-		} finally {
-			if (reader != null) {
-				reader.close();
-			}
+		reader = new BufferedReader(new InputStreamReader(antProcess
+				.getInputStream()));
+		for (String line = reader.readLine(); line != null; line = reader
+				.readLine()) {
+			System.out.println(line);
+		}
+		reader.close();
+		reader = new BufferedReader(new InputStreamReader(antProcess
+				.getErrorStream()));
+		for (String line = reader.readLine(); line != null; line = reader
+				.readLine()) {
+			System.err.println(line);
 		}
 	}
 
@@ -185,14 +219,17 @@ public class CommandLineInvoker {
 	 */
 	public static void main(String[] args) {
 		CommandLineInvoker invoker = new CommandLineInvoker();
-		
+
 		try {
+			File currentDir = new File(".");
+			String ditaDir = currentDir.getAbsolutePath();
+			Integrator integrator = new Integrator();
+			integrator.setDitaDir(ditaDir.substring(0,ditaDir.lastIndexOf(Constants.FILE_SEPARATOR)));
+			integrator.execute();
 			invoker.processArguments(args);
 			invoker.startAnt();
-		} catch (IOException e) {
-			e.printStackTrace();
 		} catch (Exception e) {
-			e.printStackTrace();
+			System.err.println(e.getMessage());
 		}
 	}
 

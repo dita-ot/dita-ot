@@ -9,6 +9,8 @@ import java.util.Stack;
 import org.dita.dost.index.IndexTerm;
 import org.dita.dost.index.IndexTermCollection;
 import org.dita.dost.index.IndexTermTarget;
+import org.dita.dost.log.DITAOTJavaLogger;
+import org.dita.dost.log.MessageUtils;
 import org.dita.dost.util.Constants;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -36,6 +38,8 @@ public class IndexTermReader extends AbstractXMLReader {
 
 	/** Stack used to store index term */
 	private Stack termStack = null;
+
+	private DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
 
 	/**
 	 * Constructor
@@ -97,8 +101,7 @@ public class IndexTermReader extends AbstractXMLReader {
 
 			if (term.getTermName() == null) {
 				term.setTermName("***");
-				System.out
-						.println("The indexterm element does not have any content. Setting the term to ***.");
+				javaLogger.logWarn(MessageUtils.getMessage("DOTJ014W").toString());				
 			}
 
 			if (termStack.empty()) {

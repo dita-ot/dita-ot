@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
 
-<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "reference.dtd">
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
 
 <reference id="runant" xml:lang="en-us">
   <title>Running Ant</title>
@@ -35,7 +35,7 @@
       the<i> build.xml, conductor.xml, pretargets.xml, ditatargets.xml</i> and 
       <i>catalog-ant.xml </i>files into a new directory and edit the 
       <i>build.xml</i> to specify your DITA files. Refer to <xref 
-      href="DITA-antscript.xml#antscript"><?Pub Caret?>Ant tasks and 
+      href="DITA-antscript.xml">Ant tasks and 
       tweaks</xref> for more information of those functions.</p><note>To 
       troubleshoot problems in setting up Java, Ant, Saxon, or FOP, you will 
       get better information from the communities for those components rather 

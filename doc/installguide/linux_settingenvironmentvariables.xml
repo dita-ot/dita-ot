@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
-<!DOCTYPE task PUBLIC "-//IBM//DTD DITA Task//EN" "../dtd/task.dtd">
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="linux_set_env" xml:lang="en-us">
   <title>Setting Environment Variables</title>
   <titlealts>
     <searchtitle>Setting Environment Variables (Linux)</searchtitle>
   </titlealts>
-  <shortdesc>Use this information to find and set your environment variables. 
+  <shortdesc>This section helps you find and set the environment variables. 
     Set your system environment variables after all DITA Open Toolkit items are 
     installed. The environment variables must be set for each item installed in 
     this guide.</shortdesc>
@@ -26,7 +26,7 @@
             <chdesc>
               <ol>
                 <li>
-                  <codeph>export PATH=${PATH}:${ANT_HOME}/bin:${JAVA_HOME}/bin</codeph>
+                  <codeph>export PATH=${ANT_HOME}/bin:${JAVA_HOME}/bin:${PATH}</codeph>
                 </li>
               </ol>
             </chdesc>
@@ -68,8 +68,19 @@
           </chrow>
           <chrow>
             <choption>Set the <varname>CLASSPATH </varname>environment variable 
-              to include the .jar files from the Apache FOP 
-              application.</choption>
+              for DITA-OT.</choption>
+            <chdesc>
+              <ol>
+                <li>set up your environment variable CLASSPATH to include the 
+                  dost.jar. For example: 
+                  <codeblock>export CLASSPATH=${ditaot_dir}/lib/dost.jar</codeblock>
+                </li>
+              </ol>
+            </chdesc>
+          </chrow>
+          <chrow>
+            <choption>Set the <varname>CLASSPATH </varname>environment variable 
+              for the Apache FOP application.</choption>
             <chdesc>
               <ol>
                 <li>set up your environment variable CLASSPATH to include the 
@@ -81,8 +92,7 @@
             </chdesc>
           </chrow>
           <chrow>
-            <choption>Set the <varname>CLASSPATH</varname> environment variable 
-              to include the directory where you installed Saxon.</choption>
+            <choption>Set environment variables for Saxon.</choption>
 			<chdesc>If you use the Saxon,
 				<ol> 
 				<li>Set up CLASSPATH to include the saxon.jar file. For example:
@@ -94,7 +104,7 @@
           </chrow>
           <chrow>
             <choption>Set the <varname>CLASSPATH</varname> environment variable 
-              to include the directory where you installed Xalan.</choption>
+              for Xalan.</choption>
             <chdesc>If you use the Xalan,<ol> <li>Set up CLASSPATH to include 
               the <filepath>xalan.jar</filepath> file and the 
               <filepath>xercesImpl.jar</filepath> file. For example:<codeblock 

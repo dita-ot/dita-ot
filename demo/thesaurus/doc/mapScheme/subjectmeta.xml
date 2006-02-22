@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\..\dtd\reference.dtd">
+<reference id="subjectmeta" outputclass="element" xml:lang="en-us">
+<title>subjectmeta</title>
+<shortdesc>Overrides or extends the standard labels or symbols for a subject.</shortdesc><?Pub Caret1?>
+<refbody>
+<section><title>Description</title><p>The subject metadata can assign new
+labels or symbols to a subject within the scheme.  A property within the scheme
+overrides any equivalent property in the definition of the subject.</p></section>
+<section conref="../packagedef.xml#subjectmeta-reference/subjectmeta-containedBy-section"></section>
+<section conref="../packagedef.xml#subjectmeta-reference/subjectmeta-contains-section"></section>
+<section conref="../packagedef.xml#subjectmeta-reference/subjectmeta-contentModel-section"></section>
+<section conref="../packagedef.xml#subjectmeta-reference/subjectmeta-attList-section"></section>
+<section conref="../packagedef.xml#subjectmeta-reference/subjectmeta-classValue-section"></section>
+</refbody>
+</reference>
+<?Pub *0000001161?>

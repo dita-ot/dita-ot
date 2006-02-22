@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<strings xml:lang="en-us">
+
+<!-- Java API Reference -->
+<str name="javaBaseClass">extends</str>
+<str name="javaImplementedInterface">implements</str>
+
+<str name="javaPackage">Package</str>
+<str name="javaClass">Class</str>
+<str name="javaInterface">Interface</str>
+<str name="javaConstructor">Constructor</str>
+<str name="javaField">Field</str>
+<str name="javaMethod">Method</str>
+<str name="javaParameter">Parameter</str>
+
+<str name="javaPackageHead">Package summary</str>
+<str name="javaClassHead">Class summary</str>
+<str name="javaInterfaceHead">Interface summary</str>
+<str name="javaExceptionHead">Exception summary</str>
+<str name="javaErrorHead">Error summary</str>
+<str name="javaConstructorHead">Constructor summary</str>
+<str name="javaFieldHead">Fields</str>
+<str name="javaMethodHead">Method summary</str>
+<str name="javaParameterHead">Parameters</str>
+<str name="javaReturnHead">Returns</str>
+<str name="javaThrowHead">Throws</str>
+
+<str name="javaConstructorDetail">Constructor detail</str>
+<str name="javaMethodDetail">Method detail</str>
+
+<str name="javaBaseFieldHead">Fields inherited from</str>
+<str name="javaBaseMethodHead">Methods inherited from</str>
+
+</strings>

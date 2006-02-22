@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\dtd\reference.dtd">
+<reference id="apiPackage_module" outputclass="module" xml:lang="en-us">
+<title>apiPackage module</title>
+<shortdesc>Defines a top-level container for the general-purpose topic types
+for a library, package, header, module, namespace, class members, or other
+named grouping for the entities provided by the API. </shortdesc>
+<refbody>
+<section><title>Description</title><p>Within an apiPackage topic type, you
+can create a <b>New Document Type</b> by clicking <menucascade><uicontrol>File</uicontrol>
+<uicontrol>New</uicontrol></menucascade> from the Epic Editor Menu for creating
+and publishing API package documentation.</p><p>To represent multiple values
+for the &lt;apiPackage> element , create additional &lt;apiPackage> elements
+for each successive value. Use &lt;apiPackage> element in conjunction with
+apiMap module to displays the short descriptions for all component classes/interfaces,
+methods/properties, namespace, etc. </p></section>
+<example><title>Example</title><p>The following example shows a simple &lt;apiPackage>
+element for a VB<?Pub Caret?>.NET package: </p><codeblock><![CDATA[<apiPackage id="rational.xde">
+   <apiName>RXE.NET API Reference</apiName>
+   <shortdesc>Rational XDE includes Rational XDE Extensibility (RXE), an application programming interface
+      (API) and related examples and tools that allow users to customize and extend XDE.</shortdesc>
+</apiPackage>]]></codeblock><p>The following example shows a simple &lt;apiPackage>
+element for a VB public class: </p><codeblock><![CDATA[<apiPackage id="IRXEAssociationPM">
+   <apiName>IRXEAssociation Properties and Methods</apiName>
+   <shortdesc>The following objects are available to RXE .NET users for use within their scripts.</shortdesc>
+   <apiDetail>
+       <apiDesc>The Public Members are grouped by category and then listed alphabetically.</apiDesc>
+   <apiDetail>
+   <related-links>
+       <link keyref=”IRXEAssociation.dita”>
+           <linktext>IRXEAssociation Interface</linktext>
+       </link>
+   </related-links>
+</apiPackage>]]></codeblock></example>
+</refbody>
+</reference>
+<?Pub *0000002266?>

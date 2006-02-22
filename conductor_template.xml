@@ -1,0 +1,414 @@
+<?xml version="1.0"?>
+<!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
+<project name="DOST" default="init" basedir=".">
+  <import file="catalog-ant.xml"/>
+  <import file="ditatargets.xml"/>
+  <import file="pretargets.xml"/>    
+  
+  <path id="dost.class.path">
+    <dita:extension id="dita.conductor.lib.import" behavior="org.dita.dost.platform.ImportAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
+    <pathelement location="${basedir}${file.separator}lib${file.separator}dost.jar"/>
+  </path>
+  
+  <taskdef name="pipeline" classname="org.dita.dost.invoker.AntInvoker">
+    <classpath refid="dost.class.path"/>
+  </taskdef>
+  <taskdef name="config-logger" classname="org.dita.dost.log.LogConfigTask">
+    <classpath refid="dost.class.path"/>
+  </taskdef>
+  
+  <taskdef name="dita-ot-echo" classname="org.dita.dost.log.DITAOTEchoTask">
+    <classpath refid="dost.class.path"/>
+  </taskdef>
+  
+  <taskdef name="dita-ot-fail" classname="org.dita.dost.log.DITAOTFailTask">
+    <classpath refid="dost.class.path"/>
+  </taskdef>  
+  
+  <taskdef name="dita-ot-copy" classname="org.dita.dost.util.DITAOTCopy">
+    <classpath refid="dost.class.path"/>
+  </taskdef>
+  
+  <typedef name="isabsolute" classname="org.dita.dost.util.IsAbsolute">
+    <classpath refid="dost.class.path"/>
+  </typedef>
+  
+  <!-- parameters from command line or external property file 
+		transtype          required
+		args.input         required
+		output.dir         required
+		dita.extname       required
+		dita.input.valfile optional
+	-->
+
+  <property name="dita.dir" value="${basedir}"/>
+  <property name="dita.temp.dir" value="${basedir}${file.separator}temp"/>
+  <property name="output.dir" value="${basedir}${file.separator}out"/>
+  <property name="dita.extname" value="xml"/>
+  <property name="dita.script.dir" value="${dita.dir}${file.separator}xsl"/>
+  <property name="dita.resource.dir" value="${dita.dir}${file.separator}resource"/>
+  <property name="hhc.dir" value="C:\Program Files\HTML Help Workshop"/>
+  <property environment="env"/>
+  <property name="dita.empty" value=""/>
+  <!-- property values end -->
+  
+  <target name="init">
+    <dita-ot-fail id="DOTA001F">
+      <condition>
+        <and>
+          <not>
+            <equals arg1="${transtype}" arg2="xhtml" casesensitive="false"/>
+          </not>
+          <not>
+            <equals arg1="${transtype}" arg2="eclipsehelp" casesensitive="false"/>
+          </not>
+          <not>
+            <equals arg1="${transtype}" arg2="javahelp" casesensitive="false"/>
+          </not>
+          <not>
+            <equals arg1="${transtype}" arg2="htmlhelp" casesensitive="false"/>
+          </not>
+          <not>
+            <equals arg1="${transtype}" arg2="pdf" casesensitive="false"/>
+          </not>
+          <not>
+            <equals arg1="${transtype}" arg2="docbook" casesensitive="false"/>
+          </not>
+          <not>
+            <equals arg1="${transtype}" arg2="eclipsecontent" casesensitive="false"/>
+          </not>
+          <not>
+            <equals arg1="${transtype}" arg2="troff" casesensitive="false"/>
+          </not>
+          <not>
+            <equals arg1="${transtype}" arg2="wordrtf" casesensitive="false"/>
+          </not>
+          <dita:extension id="dita.conductor.transtype.check" behavior="org.dita.dost.platform.ImportAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
+        </and>
+      </condition>
+    </dita-ot-fail>
+    <antcall target="dita2${transtype}"/>
+  </target>
+
+  <target name="use-init">
+    <available classname="com.icl.saxon.StyleSheet" property="hasSaxon"/>
+    <available classname="org.apache.fop.tools.anttasks.Fop" property="hasFOP"/>
+    <available file="${hhc.dir}\hhc.exe" property="HTMLHelpCompiler" value="${hhc.dir}\hhc.exe"/>
+  </target>
+
+  <!-- property value validation begin -->
+  <target name="check-arg" depends="use-init" description="Validate and init input arguments">
+    <!-- begin to check input parameters -->
+    <dita-ot-fail id="DOTA002F">
+      <condition>
+        <and>
+        <or>
+          <not>
+            <isset property="args.input"/>
+          </not>
+          <and>
+            <isset property="args.input"/>
+            <not><available file="${args.input}" type="file"/></not>
+          </and>
+        </or>
+        <or>
+          <not>
+            <isset property="dita.input"/>
+          </not>
+          <not>
+            <isset property="dita.input.dirname"/>
+          </not>
+          <and>
+            <isset property="dita.input"/>
+            <isset property="dita.input.dirname"/>
+            <not><available file="${dita.input}" filepath="${dita.input.dirname}" type="file"/></not>
+          </and>
+        </or>
+        </and>
+      </condition>
+    </dita-ot-fail>
+    
+    <dita-ot-fail id="DOTA003F" params="%1=${args.xsl}">
+      <condition>
+        <and>
+          <isset property="args.xsl"/>
+          <not><available file="${args.xsl}" type="file"/></not>
+        </and>
+      </condition>
+    </dita-ot-fail>
+    
+    <dita-ot-fail id="DOTA004F" params="%1=${dita.extname}">
+      <condition>
+        <not>
+        <or>
+          <contains string="${dita.extname}" substring="dita"/>
+          <contains string="${dita.extname}" substring="xml"/>
+        </or>
+        </not>
+      </condition>
+    </dita-ot-fail>
+    <!-- end to check input parameters -->
+    
+    <!-- begin to init required parameters -->
+    
+    <condition property="msg.deprecate">
+      <and>
+        <not><isset property="args.input"/></not>
+        <isset property="dita.input"/>
+        <isset property="dita.input.dirname"/>
+      </and>
+    </condition>
+    
+    <condition property="args.input" value="${dita.input.dirname}${file.separator}${dita.input}">
+      <not><isset property="args.input"/></not>
+    </condition>
+    
+    <condition property="dita.ext" value=".xml">
+      <and>
+        <isset property="dita.extname"/>
+        <contains string="${dita.extname}" substring="xml"/>
+      </and>
+    </condition>    
+    <condition property="dita.ext" value=".dita">
+      <and>
+        <isset property="dita.extname"/>
+        <contains string="${dita.extname}" substring="dita"/>
+      </and>
+    </condition>
+    
+    <!-- append a '.' to out.ext if args.outext not contains '.' -->
+    <condition property="out.ext" value=".${args.outext}">
+      <and>
+        <isset property="args.outext"/>
+        <not>
+          <contains string="${args.outext}" substring="."/>
+        </not>
+      </and>
+    </condition>    
+    <condition property="out.ext" value="${args.outext}">
+      <and>
+        <isset property="args.outext"/>        
+        <contains string="${args.outext}" substring="."/>
+      </and>
+    </condition>
+    
+    <!-- append a '.' to ${fo.img.ext} if ${args.fo.img.ext} not contains '.' -->
+    <condition property="fo.img.ext" value=".${args.fo.img.ext}">
+      <and>
+        <isset property="args.fo.img.ext"/>
+        <not>
+          <contains string="${args.fo.img.ext}" substring="."/>
+        </not>
+      </and>
+    </condition>
+    <condition property="fo.img.ext" value="${args.fo.img.ext}">
+      <and>
+        <isset property="args.fo.img.ext"/>        
+        <contains string="${args.fo.img.ext}" substring="."/>
+      </and>
+    </condition>
+    
+    <condition property="clean_temp">
+      <and>
+        <isset property="clean.temp"/>
+        <equals arg1="${clean.temp}" arg2="no" casesensitive="false"/> 
+      </and>
+    </condition>
+    
+    <basename property="dita.input.filename" file="${args.input}"/>    
+    <basename property="dita.map.filename.root" file="${dita.input.filename}" suffix=".ditamap"/>
+    <basename property="dita.topic.filename.root" file="${dita.input.filename}" suffix="${dita.ext}"/>
+    <!-- end to init required parameters -->
+
+    <!-- create required directories -->
+    <mkdir dir="${output.dir}"/>
+    <mkdir dir="${dita.temp.dir}"/>
+
+    <!-- begin to check and init css relevant properties -->
+    <condition property="user.csspath.url">
+      <or>
+        <contains string="${args.csspath}" substring="http://"/>
+        <contains string="${args.csspath}" substring="https://"/>
+      </or>
+    </condition>    
+    <condition property="args.csspath.absolute">
+      <isabsolute path="${args.csspath}"/>
+    </condition>    
+    <!-- Set the csspath as default empty directory when there is no user
+         input csspath or user input csspath is a local absolute path. -->
+    <condition property="user.csspath" value="">
+      <or>
+        <not><isset property="args.csspath"/></not>
+        <isset property="args.csspath.absolute"/>
+      </or>
+    </condition>
+    <condition property="user.csspath" value="${args.csspath}/">
+        <not><isset property="user.csspath"/></not>
+    </condition>
+    <available file="${args.css}" property="args.css.present" type="file"/>
+    <basename property="args.css.file.temp" file="${args.css}"/>
+    <condition property="args.css.file" value="${args.css.file.temp}">
+        <isset property="args.css.present"/>
+    </condition>
+    <!-- end to check and init css relevant parameters -->
+    
+    <condition property="args.logdir" value="${output.dir}">
+        <not><isset property="args.logdir"/></not>
+    </condition>
+    
+    <condition property="index.ext.param.encoding" value="">
+        <not><isset property="args.dita.locale"/></not>
+    </condition>
+    
+    <condition property="index.ext.param.encoding" value="encoding=${args.dita.locale}">
+        <not><isset property="index.ext.param.encoding"/></not>
+    </condition>    
+    
+    <condition property="xslt.parser" value="SAXON">
+        <isset property="hasSaxon"/>
+    </condition>
+    <condition property="xslt.parser" value="XALAN">
+        <not><isset property="xslt.parser"/></not>
+    </condition>    
+    <!-- output parameters info -->
+    <echo>*****************************************************************</echo>
+    <echo>* input = ${args.input}</echo>
+    <echo>* transtype = ${transtype}</echo>
+    <echo>* tempdir = ${dita.temp.dir}</echo>
+    <echo>* outputdir = ${output.dir}</echo>    
+    <echo>* extname = ${dita.ext}</echo>
+    <echo>* clean.temp = ${clean.temp}</echo>
+    <echo>* xslt.parser = ${xslt.parser}</echo>
+    <echo>*****************************************************************</echo>
+  </target>
+  
+  <target name="start-process" description="Processing started"/>
+  
+  <target name="output-deprecated-msg" if="msg.deprecate">        
+    <dita-ot-echo id="DOTA005W"/>
+  </target>
+  
+  <target name="output-css-warn-message" if="args.csspath.absolute">
+    <dita-ot-echo id="DOTA006W"/>
+  </target>
+  
+  <target name="init-logger" description="Init log directory and file name">
+    <config-logger/>
+  </target>
+  <!-- property value validation end -->
+  
+  <target name="dita-preprocess" depends="start-process, init-logger, check-arg, output-deprecated-msg, output-css-warn-message, preprocess"/>
+  
+  <!-- main transformation targets begin -->
+  
+  <target name="dita2wordrtf" depends="dita-preprocess, map2wordrtf, topic2wordrtf"/>
+  <target name="topic2wordrtf" if="noMap" depends="dita-preprocess">
+    <antcall target="dita.topic.rtf">
+      <param name="input" value="${dita.temp.dir}${file.separator}${user.input.file}"/>
+      <param name="output" value="${dita.map.output.dir}${file.separator}${dita.topic.filename.root}.rtf"/>
+    </antcall>
+  </target>
+  <target name="map2wordrtf" unless="noMap" depends="dita-preprocess">
+    <antcall target="dita.map.rtf">
+      <param name="input" value="${dita.temp.dir}${file.separator}${user.input.file}"/>
+      <param name="output" value="${dita.map.output.dir}${file.separator}${dita.map.filename.root}.rtf"/>
+    </antcall>
+  </target>
+  
+  <target name="dita2pdf" depends="dita-preprocess, map2pdf, topic2pdf"/>   
+  
+  <target name="topic2pdf" if="noMap" depends="dita-preprocess">
+    <antcall target="dita.topic.fo">
+      <param name="input" value="${dita.temp.dir}${file.separator}${user.input.file}"/>
+      <param name="output" value="${dita.map.output.dir}${file.separator}${dita.topic.filename.root}.fo"/>
+    </antcall>
+	<antcall target="dita.fo2pdf">
+      <param name="input" value="${dita.map.output.dir}${file.separator}${dita.topic.filename.root}.fo"/>
+      <param name="output" value="${dita.map.output.dir}${file.separator}${dita.topic.filename.root}.pdf"/>
+    </antcall>
+  </target>
+  
+  <target name="map2pdf" unless="noMap" depends="dita-preprocess">
+    <antcall target="dita.map.fo">
+      <param name="input" value="${dita.temp.dir}${file.separator}${user.input.file}"/>
+      <param name="output" value="${dita.map.output.dir}${file.separator}${dita.map.filename.root}.fo"/>
+    </antcall>
+    <antcall target="dita.fo2pdf">
+      <param name="input" value="${dita.map.output.dir}${file.separator}${dita.map.filename.root}.fo"/>
+      <param name="output" value="${dita.map.output.dir}${file.separator}${dita.map.filename.root}.pdf"/>
+    </antcall>
+  </target>
+  			
+  <target name="dita2docbook" depends="dita-preprocess, topic2docbook, map2docbook"/>
+  
+  <target name="topic2docbook" if="noMap" depends="dita-preprocess">
+    <antcall target="dita.topic.docbook">
+      <param name="inputFile" value="${dita.temp.dir}${file.separator}${user.input.file}"/>
+      <param name="outputFile" value="${dita.map.output.dir}${file.separator}${dita.topic.filename.root}.xml"/>
+    </antcall>
+  </target>
+  
+  <target name="map2docbook" unless="noMap" depends="dita-preprocess">
+    <antcall target="dita.map.docbook">
+      <param name="mapRoot" value="${dita.map.filename.root}"/>
+      <param name="inputMap" value="${user.input.file}"/>
+      <param name="inputDir" value="${dita.temp.dir}"/>
+      <param name="outputDir" value="${dita.map.output.dir}"/>
+    </antcall>
+  </target>
+  
+  <target name="dita2xhtml" depends="dita-preprocess, map2xhtml">
+    <antcall target="dita.topics.xhtml"/>
+  </target>
+  
+  <target name="map2xhtml" unless="noMap">
+    <antcall target="dita.map.xhtml"/>
+  </target>
+  
+  <target name="dita2javahelp" unless="noMap" depends="dita-preprocess">
+    <condition property="args.javahelp.helpset" value="${dita.resource.dir}${file.separator}helpset.hs">
+      <not>
+        <isset property="args.javahelp.helpset"/>
+      </not>
+    </condition>
+    <antcall target="dita.topics.javahelp"/>
+    <antcall target="dita.map.javahelp"/>
+
+    <antcall target="compile.Java.Help">
+      <param name="outputDir" value="${dita.map.output.dir}"/>
+    </antcall>
+  </target>
+  
+  <target name="dita2eclipsehelp" unless="noMap" depends="dita-preprocess">
+
+    <antcall target="dita.topics.eclipse"/>
+    <antcall target="dita.map.eclipse"/>
+
+  </target>
+  
+  <target name="dita2eclipsecontent" unless="noMap" depends="dita-preprocess">
+
+    <antcall target="dita.topics.eclipse.content"/>
+    <antcall target="dita.map.eclipse.content"/>
+
+  </target>
+  
+  <target name="dita2htmlhelp" unless="noMap" depends="dita-preprocess">
+    <antcall target="dita.map.htmlhelp"/>
+    <antcall target="dita.topics.htmlhelp"/>
+    <antcall target="compile.HTML.Help">
+      <param name="projectFile" value="${dita.map.output.dir}${file.separator}${dita.map.filename.root}.hhp"/>
+    </antcall>
+  </target>
+
+  <target name="dita2troff" depends="dita-preprocess">
+    <antcall target="dita.topic.troff">
+      <param name="inputDir" value="${dita.temp.dir}"/>
+      <param name="inputFile" value="${user.input.file}"/>
+      <param name="outputDir" value="${dita.map.output.dir}"/>
+      <param name="outputFileRoot" value="${dita.topic.filename.root}"/>
+    </antcall>
+  </target>
+  
+  <dita:extension id="dita.conductor.target" behavior="org.dita.dost.platform.InsertAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
+</project>

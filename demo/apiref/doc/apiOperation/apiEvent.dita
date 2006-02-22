@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\dtd\reference.dtd">
+<reference id="apiEvent" outputclass="element" xml:lang="en-us">
+<title>apiEvent</title>
+<shortdesc>The &lt;apiEvent&gt; element identifies an event action that is
+an instance of a classifier.</shortdesc>
+<refbody>
+<section><title>Description</title><p>An &lt;apiEvent&gt; can also raise a
+typed value such as a signal or a classifier such as an exception. In the &lt;apiEventDef&gt;
+element, the &lt;state&gt;, &lt;keyword&gt;, and &lt;ph&gt; elements are provided
+to support unexpected contingencies within the value to return. </p></section>
+<section conref="../packagedef.dita#apiEvent-reference/apiEvent-containedBy-section"></section>
+<section conref="../packagedef.dita#apiEvent-reference/apiEvent-contains-section"></section>
+<section conref="../packagedef.dita#apiEvent-reference/apiEvent-contentModel-section"></section>
+<section conref="../packagedef.dita#apiEvent-reference/apiEvent-attList-section"></section>
+<section conref="../packagedef.dita#apiEvent-reference/apiEvent-classValue-section"></section>
+</refbody>
+</reference>

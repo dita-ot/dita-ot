@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2004, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "../../dtd/reference.dtd">
+<!--             (C) Copyright OASIS Open 2005.                    -->
+<!--             (C) Copyright IBM Corporation 2001, 2004.         -->
+<!--             All Rights Reserved.                              -->
+<reference id="wintitle" xml:lang="en-us">
+<title><keyword>wintitle</keyword></title>
+<shortdesc>The window title &lt;<keyword>wintitle</keyword>> element can be
+used to mark up names of windows or dialogs, or other user interface elements
+at the same level of grouping, including wizard titles, wizard page titles,
+and window pane titles. This element is part of the DITA user interface domain,
+a special set of DITA elements designed to document user interface tasks,
+concepts and reference information.</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>wintitle (window title)</indexterm><indexterm>Domain
+elements<indexterm>wintitle</indexterm>  </indexterm><indexterm>wintitle</indexterm>
+</keywords>
+</metadata></prolog>
+<refbody>
+<section conref="DitabaseNav.dita#commonCMdefs/wintitle-contains"></section>
+<section conref="DitabaseNav.dita#commonCMdefs/wintitle-containedby"></section>
+<section conref="DitabaseNav.dita#commonCMdefs/wintitle-classvalue"></section>
+<section><title>Attributes</title><simpletable id="wintitle_attr" relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="commonLRdefs.dita#commonLRdefs/keyref">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/univ-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/classandout">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+</simpletable></section>
+<example>  <title>Example<?Pub Caret?></title>        <pre>&lt;step>
+  &lt;cmd>Click &lt;uicontrol>Configure&lt;/uicontrol>.&lt;/cmd>
+  &lt;stepresult>The &lt;wintitle>Configuration Options&lt;/wintitle> window
+  opens with your last set of selections highlighted.&lt;/stepresult>
+&lt;/step></pre>       </example>
+</refbody>
+</reference>
+<?Pub *0000002671?>

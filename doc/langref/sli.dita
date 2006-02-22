@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2004, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "../../dtd/reference.dtd">
+<!--             (C) Copyright OASIS Open 2005.                    -->
+<!--             (C) Copyright IBM Corporation 2001, 2004.         -->
+<!--             All Rights Reserved.                              -->
+<reference id="sli" xml:lang="en-us">
+<title><keyword>sli</keyword></title>
+<shortdesc>A simple list item (&lt;sli>) is a single item in a simple list&lt;sl>.
+Simple list items have phrase or text content, adequate for describing package
+contents, for example. When a DITA topic is formatted for output, the items
+of a simple list are placed each on its own line, with no other prefix such
+as a number (as in an ordered list) or bullet (as in an unordered list).</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>sli (simple list item)</indexterm><indexterm>simple list
+item (sli)</indexterm><indexterm>Body elements<indexterm>sli (simple list
+item)</indexterm>  </indexterm><indexterm>sli (simple list item)</indexterm>
+</keywords>
+</metadata></prolog>
+<refbody>
+<section conref="DitabaseNav.dita#commonCMdefs/sli-contains"></section>
+<section conref="DitabaseNav.dita#commonCMdefs/sli-containedby"></section>
+<section conref="DitabaseNav.dita#commonCMdefs/sli-classvalue"></section>
+<section><title>Attributes</title><simpletable id="sli_attr" relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="commonLRdefs.dita#commonLRdefs/univ-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/classandout">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+</simpletable></section>
+<example>         <title>Example</title>See <xref href="sl.dita"></xref>.<?Pub Caret?>
+     </example>
+</refbody>
+</reference>
+<?Pub *0000002302?>

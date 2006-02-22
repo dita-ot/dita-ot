@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+﻿<?xml version="1.0" encoding="UTF-8" ?>
 <!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
 
 <xsl:stylesheet version="1.0"
@@ -507,9 +507,9 @@
     </th></tr></thead><xsl:value-of select="$newline"/>
   </xsl:when>
   <xsl:otherwise>
-   <thead><tr><th valign="bottom">
-     <xsl:call-template name="th-align"/>
+   <thead><tr><th valign="bottom">     
      <xsl:attribute name="id">
+     <xsl:call-template name="th-align"/>
      <xsl:choose>
       <!-- if the option header has an ID, use that -->
       <xsl:when test="*[contains(@class,' task/chhead ')]/*[contains(@class,' task/choptionhd ')]/@id">
@@ -522,9 +522,9 @@
      </xsl:attribute>
      <xsl:apply-templates select="*[contains(@class,' task/chhead ')]/*[contains(@class,' task/choptionhd ')]" mode="chtabhdr"/>
     </th><xsl:value-of select="$newline"/>
-    <th valign="bottom">
-     <xsl:call-template name="th-align"/>
+    <th valign="bottom">     
      <xsl:attribute name="id">
+     <xsl:call-template name="th-align"/>
      <xsl:choose>
       <!-- if the description header has an ID, use that -->
       <xsl:when test="*[contains(@class,' task/chhead ')]/*[contains(@class,' task/chdeschd ')]/@id">

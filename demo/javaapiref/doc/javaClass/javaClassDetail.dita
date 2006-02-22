@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\dtd\reference.dtd">
+<reference id="javaClassDetail" outputclass="element" xml:lang="en-us">
+<title>javaClassDetail</title>
+<shortdesc>The  &lt;javaClassDetail> element provides detailed information
+about the structure and behaviors of the Java class. </shortdesc>
+<refbody>
+<section><title>Description</title><p>In the &lt;javaClassDetail> element,
+the &lt;example> and &lt;section> elements are provided to support the current
+specific Java API reference. A class body can contain declarations of the
+members of the class, such as fields, classes, interfaces, and methods. A
+class body can also contain instance initializers, static initializers, and
+declarations of the constructors for the class. </p></section>
+<section conref="../packagedef.dita#javaClassDetail-reference/javaClassDetail-containedBy-section"></section>
+<section conref="../packagedef.dita#javaClassDetail-reference/javaClassDetail-contains-section"></section>
+<section conref="../packagedef.dita#javaClassDetail-reference/javaClassDetail-contentModel-section"></section>
+<section conref="../packagedef.dita#javaClassDetail-reference/javaClassDetail-attList-section"></section>
+<section conref="../packagedef.dita#javaClassDetail-reference/javaClassDetail-classValue-section"></section>
+</refbody>
+</reference>

@@ -3,6 +3,8 @@
  */
 package org.dita.dost.pipeline;
 
+import org.dita.dost.exception.DITAOTException;
+
 /**
  * AbstractFacade defines the method of executing each module.
  * 
@@ -17,7 +19,8 @@ public abstract class AbstractFacade {
      * @param pipelineModule
      * @param input
      * @return AbstractPipelineOutput
+     * @throws DITAOTException 
      */
     public abstract AbstractPipelineOutput execute(String pipelineModule,
-            AbstractPipelineInput input);
+            AbstractPipelineInput input) throws DITAOTException;
 }

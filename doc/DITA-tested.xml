@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
 
-<!DOCTYPE topic PUBLIC "-//IBM//DTD DITA Topic//EN" "topic.dtd">
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "../dtd/topic.dtd">
 <topic id="testedplatformsandtools" xml:lang="en-us">
   <title>Tested platforms and tools</title>
   <titlealts>
@@ -28,7 +28,7 @@
       </strow>
       <strow>
         <stentry>Tested Ant:</stentry>
-        <stentry>Ant 1.6.2</stentry>
+        <stentry>Ant 1.6.5</stentry>
       </strow>
     </simpletable>
   </body>

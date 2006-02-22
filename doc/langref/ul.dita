@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2004, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "../../dtd/reference.dtd">
+<!--             (C) Copyright OASIS Open 2005.                    -->
+<!--             (C) Copyright IBM Corporation 2001, 2004.         -->
+<!--             All Rights Reserved.                              -->
+<reference id="ul" xml:lang="en-us">
+<title><keyword>ul</keyword></title>
+<shortdesc>In an unordered list (&lt;ul>), the order of the list items is
+not significant. List items are typically styled on output with a "bullet"
+character, depending on nesting level.</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>ul (unordered list)</indexterm><indexterm>unordered list
+(ol)</indexterm><indexterm>Body elements<indexterm>ul (unordered list)</indexterm>  </indexterm>
+<indexterm>ul (unordered list)</indexterm></keywords>
+</metadata></prolog>
+<refbody>
+<section conref="DitabaseNav.dita#commonCMdefs/ul-contains"></section>
+<section conref="DitabaseNav.dita#commonCMdefs/ul-containedby"></section>
+<section><title>Attributes</title><simpletable id="ul_attr" relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="commonLRdefs.dita#commonLRdefs/compact">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/spectitle">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/univ-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/classandout">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+</simpletable></section>
+<example>      <title>Example<?Pub Caret?></title>    <codeblock>&lt;ul>
+ &lt;li>This is an item in an unordered list.&lt;/li>
+ &lt;li>To separate it from other items in the list, the
+ formatter puts a bullet beside it.&lt;/li>
+ &lt;li>The following paragraph, contained in the list item
+ element, is part of the list item which contains it.
+ &lt;p>This is the contained paragraph.&lt;/p>&lt;/li>
+ &lt;li>This is the last list item in our unordered list.&lt;/li>
+&lt;/ul></codeblock>       </example>
+</refbody>
+</reference>
+<?Pub *0000002742?>

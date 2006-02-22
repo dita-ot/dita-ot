@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
+ "..\dtd\reference.dtd">
+<reference id="apiClassifierDetail" outputclass="element" xml:lang="en-us">
+<title>apiClassifierDetail</title>
+<shortdesc>The &lt;apiClassifierDetail> element provides detailed information
+about the structure and behavior of the classifier.</shortdesc>
+<refbody>
+<section><title>Description</title><p>In general, for expressing the detailed
+classifier in the HTML format, there are two exclusive alternatives, &lt;apiSyntax>
+which supplies the syntax <?Pub Caret?>and &lt;apiClassifierDef> to write
+custom processing for formatting. The &lt;example> and &lt;section> elements
+are provided within the &lt;apiClassifierDetail> element to support the current
+API reference. </p></section>
+<section conref="../packagedef.dita#apiClassifierDetail-reference/apiClassifierDetail-containedBy-section"></section>
+<section conref="../packagedef.dita#apiClassifierDetail-reference/apiClassifierDetail-contains-section"></section>
+<section conref="../packagedef.dita#apiClassifierDetail-reference/apiClassifierDetail-contentModel-section"></section>
+<section conref="../packagedef.dita#apiClassifierDetail-reference/apiClassifierDetail-attList-section"></section>
+<section conref="../packagedef.dita#apiClassifierDetail-reference/apiClassifierDetail-classValue-section"></section>
+</refbody>
+</reference>
+<?Pub *0000001479?>

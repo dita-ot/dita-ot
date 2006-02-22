@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+<meta name="copyright" content="(C) Copyright 2005" />
+<meta name="DC.rights.owner" content="(C) Copyright 2005" />
+<meta content="public" name="security" />
+<meta content="index,follow" name="Robots" />
+<meta http-equiv="PICS-Label" content='(PICS-1.1 "http://www.icra.org/ratingsv02.html" l gen true r (cz 1 lz 1 nz 1 oz 1 vz 1) "http://www.rsac.org/ratingsv01.html" l gen true r (n 0 s 0 v 0 l 0) "http://www.classify.org/safesurf/" l gen true r (SS~~000 1))' />
+<meta content="reference" name="DC.Type" />
+<meta name="DC.Title" content="apiClassifier module" />
+<meta name="abstract" content="Defines a top-level container for the generic topic types such as class, interface, typedef, or other named construct for typing values." />
+<meta name="description" content="Defines a top-level container for the generic topic types such as class, interface, typedef, or other named construct for typing values." />
+<meta scheme="URI" name="DC.Relation" content="../apiPackage/apiPackage.html" />
+<meta scheme="URI" name="DC.Relation" content="../GenericAPILayer.html" />
+<meta scheme="URI" name="DC.Relation" content="../apiClassifier/apiClassifier.html" />
+<meta scheme="URI" name="DC.Relation" content="../apiOperation/apiOperation.html" />
+<meta content="XHTML" name="DC.Format" />
+<meta content="apiClassifier_module" name="DC.Identifier" />
+<meta content="en-us" name="DC.Language" />
+<link href="C:\Work\dita\dost0.1\DITA-OT1.1.1\demo\apiref\out\doc\commonltr.css" type="text/css" rel="stylesheet" />
+<title>apiClassifier module</title>
+</head>
+<body id="apiClassifier_module"><a name="apiClassifier_module"><!-- --></a>
+
+
+<h1 class="topictitle1">apiClassifier module</h1>
+
+
+<div><p>Defines a top-level container for the generic topic types such
+as class, interface, typedef, or other named construct for typing values.</p>
+
+<div class="section"><h4 class="sectiontitle">Description</h4>This element specifies a collection of
+features, such as attributes, methods, values, and operations. <p>In the apiClassifier
+topic type, you can create a <strong>New Document Type</strong> by clicking <span class="menucascade">
+<span class="uicontrol">File</span> &gt; <span class="uicontrol">New</span></span> from the
+Epic Editor menu for creating and publishing API classifier documentation.</p>
+</div>
+
+<div class="example"><h4 class="sectiontitle">Example</h4><p>The following example shows an &lt;apiClassifier&gt;
+element used for an Visual Basic interface:</p>
+<pre>&lt;apiClassifier id="rational.xde" outputclass="statement" platform="vb"&gt;
+    &lt;apiName&gt;TestImplements&lt;/apiName&gt;
+    &lt;shortdesc&gt;Specifies one or more interfaces or interface members.&lt;/shortdesc&gt;
+    &lt;apiClassifierDetail&gt;
+      &lt;apiSyntax platform="vb"&gt;
+        &lt;apiSyntaxText&gt;Implements &lt;apiItemName&gt;IRXEAbstraction&lt;/apiItemName&gt; 
+                          &lt;apiItemName&gt;TestImplements&lt;/apiItemName&gt;[name, …]&lt;apiRelation
+        &lt;/apiSyntaxText&gt;
+        &lt;apiSyntaxItem&gt;
+          &lt;apiItemName&gt;IRXEAbstraction&lt;/apiItemName&gt;
+          &lt;apiDefNote&gt;Required. An interface whose properties, methods, and events will be 
+             implemented by corresponding members in the class or structure.&lt;/apiDefNote&gt;
+        &lt;/apiSyntaxItem&gt;
+        &lt;apiSyntaxItem&gt;
+         &lt;apiItemName&gt;TestImplements&lt;/apiItemName&gt;
+           &lt;apiDefNote&gt;Required. The member of an interface that is being implemented.&lt;/apiDefNote&gt;
+        &lt;/apiSyntaxItem&gt;
+        &lt;apiSyntaxItem id="nameParam"&gt;
+           &lt;apiItemName&gt;name&lt;/apiItemName&gt;
+              &lt;apiDefNote&gt;The name for the created interface member.&lt;/apiDefNote&gt;
+        &lt;/apiSyntaxItem&gt;
+     &lt;/apiSyntax&gt;
+     &lt;apiDesc&gt;An interface is a collection of prototypes representing the members 
+         (properties, methods and events) the interface encapsulates.&lt;/apiDesc&gt;
+&lt;/apiClassifier&gt;</pre>
+</div>
+
+</div>
+
+<div>
+<ul class="ullinks">
+<li class="ulchildlink"><strong><a href="../apiClassifier/apiClassifier.html">apiClassifier</a></strong><br />
+The &lt;apiClassifier&gt; element specifies a classifier and comes in several specific forms, including class, data type, interface, component, and other API references.</li>
+</ul>
+
+<div class="familylinks">
+<div class="parentlink"><strong>Parent topic:</strong> <a href="../apiPackage/apiPackage.html" title="The &lt;apiPackage&gt; element provides the name of the API package, module, public class members, namespace and all the elements that are necessary to describe its components.">apiPackage</a></div>
+</div>
+
+<div class="familylinks">
+<div class="parentlink"><strong>Parent topic:</strong> <a href="../GenericAPILayer.html" title="The generic API topic types describe any application programming interface (API) library and can serve as a basis for deriving more specialized topic types for specific languages or other library environments.">Generic API topic types</a></div>
+</div>
+
+<div class="familylinks">
+<div class="parentlink"><strong>Parent topic:</strong> <a href="../apiOperation/apiOperation.html" title="The &lt;apiOperation&gt; element specifies a collection of features, such as attributes, methods, values, and operations.">apiOperation</a></div>
+</div>
+</div>
+</body>
+</html>
