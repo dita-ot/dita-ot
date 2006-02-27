@@ -1,3 +1,18 @@
+<!-- 
+
+integrator.xml is the primary entry point to the FrameMaker Adapter.
+
+$Author: prescod $
+$Date: 2006/02/27 11:10:20 $
+$Revision: 1.2 $
+$Log: integrator.xml,v $
+Revision 1.2  2006/02/27 11:10:20  prescod
+Fix line endings, add explanatory comments and add RCS keywords.
+
+$Header: /cvsroot/dita-ot/DITA-OT/demo/FrameMaker_adapter/integrator.xml,v 1.2 2006/02/27 11:10:20 prescod Exp $
+
+-->
+
 <project>
 
   <target name="dita2fmxml" depends="dita-preprocess, map2fmxml, topic2fmxml"/>
