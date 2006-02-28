@@ -31,7 +31,7 @@
       <note>The plug-in is integrated to toolkit every time when a build is invoked. You only need to unzip the package to the specific directory. </note>
       <p> If the implemented plug-in depends on another plug-in, which is not installed in your local workstation, the installed plug-in cannot work. Thus a dependency track checks whether the installed plug-in is about to be loaded or not when the transformation pipeline is invoked.</p>
       <p>There is no function provided by plug-ins in default build.xml file. You need to customize build.xml file if you want to use plug-in&apos;s function in it. Before running customized build.xml file with plug-in&apos;s function, you need to execute an installer program to update and integrate the installed plug-ins. Otherwise, the plug-ins you want to use might not be loaded. </p>
-      <p>Here is how to execute the installer program under the DITA OT root directory. Type <userinput>java -cp lib\dost.jar org.dita.dost.platform.Integrator</userinput> on the command line. The installer program will be invoked to integrate the plug-ins with DITA OT.</p>
+      <p>Here is how to execute the installer program under the DITA OT root directory. Type <userinput>java -cp lib\dost.jar org.dita.dost.platform.Integrator</userinput> on the command line or use <userinput>ant -f integrator.xml</userinput> to execute the ANT script. The installer program will be invoked to integrate the plug-ins with DITA OT.</p>
     </postreq>
   </taskbody>
 </task>
