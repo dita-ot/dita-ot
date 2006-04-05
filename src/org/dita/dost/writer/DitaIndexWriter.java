@@ -319,6 +319,12 @@ public class DitaIndexWriter extends AbstractXMLWriter {
                 String attQName = atts.getQName(i);
                 String attValue;
                 attValue = atts.getValue(i);
+                
+                // replace '&' with '&amp;'
+				if (attValue.indexOf('&') > 0) {
+					attValue = StringUtils.replaceAll(attValue, "&", "&amp;");
+				}
+                
                 output.write(new StringBuffer().append(Constants.STRING_BLANK)
                 		.append(attQName).append(Constants.EQUAL).append(Constants.QUOTATION)
                 		.append(attValue).append(Constants.QUOTATION).toString());

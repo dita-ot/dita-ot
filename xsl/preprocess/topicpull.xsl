@@ -652,8 +652,6 @@
       </xsl:otherwise>
     </xsl:choose>
     <xsl:choose>
-      <!--if it's an xref, shortdesc not allowed-->
-      <xsl:when test="contains(@class, ' topic/xref ')"/>
       <!--if there's already a desc, copy it-->
       <xsl:when test="*[contains(@class, ' topic/desc ')]">
         <xsl:apply-templates select="*[contains(@class, ' topic/desc ')]"/>
@@ -675,6 +673,9 @@
             </xsl:with-param>
             <xsl:with-param name="topicid">
               <xsl:value-of select="$topicid"/>
+            </xsl:with-param>
+            <xsl:with-param name="elemid">
+              <xsl:value-of select="$elemid"/>
             </xsl:with-param>
           </xsl:apply-templates>
         </xsl:variable>
@@ -1330,14 +1331,19 @@
   <!--getting the shortdesc for a link; called from main mode template for link/xref, 
     only after conditions such as scope and format have been tested and a text pull
     has been determined to be appropriate-->
-  <xsl:template mode="getshortdesc" match="*[contains(@class,' topic/link ')]">
+  <xsl:template mode="getshortdesc" match="*[contains(@class,' topic/link ') or contains(@class,' topic/xref ')]">
     <xsl:param name="file">#none#</xsl:param>
     <xsl:param name="topicpos">#none#</xsl:param>
     <xsl:param name="classval">#none#</xsl:param>
     <xsl:param name="topicid">#none#</xsl:param>
+    <xsl:param name="elemid">#none#</xsl:param>
     <xsl:choose>
       <xsl:when test="$topicpos='samefile'">
         <xsl:choose>
+          <!--First try to copy the contents of the target's desc element-->
+          <xsl:when test="//*[contains(@class, $classval)][@id=$elemid]/*[contains(@class, ' topic/desc ')]">
+            <xsl:copy-of select="//*[contains(@class, $classval)][@id=$elemid]/*[contains(@class, ' topic/desc ')]/* | //*[contains(@class, $classval)][@id=$elemid]/*[contains(@class, ' topic/desc ')]/text()"/>
+          </xsl:when>
           <xsl:when test="//*[contains(@class, $classval)][@id=$topicid]/*[contains(@class, ' topic/shortdesc ')]">
             <xsl:copy-of select="//*[contains(@class, $classval)][@id=$topicid]/*[contains(@class, ' topic/shortdesc ')]/* | //*[contains(@class, $classval)][@id=$topicid]/*[contains(@class, ' topic/shortdesc ')]/text()"/>
           </xsl:when>
@@ -1350,8 +1356,7 @@
           <xsl:when test="//*[contains(@class, ' topic/topic ')][1]/*[contains(@class, ' topic/shortdesc ')]">
             <xsl:copy-of select="//*[contains(@class, ' topic/topic ')][1]/*[contains(@class, ' topic/shortdesc ')]/* | //*[contains(@class, ' topic/topic ')][1]/*[contains(@class, ' topic/shortdesc ')]/text()"/>
           </xsl:when>
-          <xsl:otherwise>
-          </xsl:otherwise>
+          <xsl:otherwise/>
         </xsl:choose>
       </xsl:when>
       <xsl:when test="$topicpos='firstinfile'">
@@ -1362,20 +1367,22 @@
           <xsl:when test="document($file,/)//*[contains(@class, ' topic/topic ')][1]/*[contains(@class, ' topic/shortdesc ')]">
             <xsl:copy-of select="(document($file,/)//*[contains(@class, ' topic/topic ')])[1]/*[contains(@class, ' topic/shortdesc ')]/* | (document($file,/)//*[contains(@class, ' topic/topic ')])[1]/*[contains(@class, ' topic/shortdesc ')]/text()"/>
           </xsl:when>
-          <xsl:otherwise>
-          </xsl:otherwise>
+          <xsl:otherwise/>
         </xsl:choose>
       </xsl:when>
       <xsl:when test="$topicpos='otherfile'">
         <xsl:choose>
+          <!--First try to copy the contents of the target's desc element-->
+          <xsl:when test="document($file,/)//*[contains(@class, $classval)][@id=$elemid]/*[contains(@class, ' topic/desc ')]">
+            <xsl:copy-of select="document($file,/)//*[contains(@class, $classval)][@id=$elemid]/*[contains(@class, ' topic/desc ')]/* | document($file,/)//*[contains(@class, $classval)][@id=$elemid]/*[contains(@class, ' topic/desc ')]/text()"/>
+          </xsl:when>
           <xsl:when test="document($file,/)//*[contains(@class, $classval)][@id=$topicid]/*[contains(@class, ' topic/shortdesc ')]">
             <xsl:copy-of select="(document($file,/)//*[contains(@class, $classval)][@id=$topicid])[1]/*[contains(@class, ' topic/shortdesc ')]/* | (document($file,/)//*[contains(@class, $classval)][@id=$topicid])[1]/*[contains(@class, ' topic/shortdesc ')]/text()"/>
           </xsl:when>
           <xsl:when test="document($file,/)//*[contains(@class, ' topic/topic ')][@id=$topicid]/*[contains(@class, ' topic/shortdesc ')]">
             <xsl:copy-of select="(document($file,/)//*[contains(@class, ' topic/topic ')][@id=$topicid])[1]/*[contains(@class, ' topic/shortdesc ')]/* | (document($file,/)//*[contains(@class, ' topic/topic ')][@id=$topicid])[1]/*[contains(@class, ' topic/shortdesc ')]/text()"/>
           </xsl:when>
-          <xsl:otherwise>
-          </xsl:otherwise>
+          <xsl:otherwise/>
         </xsl:choose>
       </xsl:when>
       <xsl:otherwise>

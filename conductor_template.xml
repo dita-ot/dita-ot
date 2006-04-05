@@ -50,6 +50,8 @@
   <property name="hhc.dir" value="C:\Program Files\HTML Help Workshop"/>
   <property environment="env"/>
   <property name="dita.empty" value=""/>
+  <property name="args.message.file" 
+    value="${dita.dir}${file.separator}resource${file.separator}messages.xml"/>
   <!-- property values end -->
   
   <target name="init">

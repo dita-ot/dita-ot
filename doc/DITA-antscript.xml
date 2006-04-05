@@ -315,7 +315,21 @@
                       eclipsehelp toc file in eclipsehelp transformation. 
                       The default is the name of input ditamap file.</ph>
                   </entry>
-                  <entry>No</entry> </row></tbody> 
+                  <entry>No</entry> </row>
+                  <row id="argsprovider">
+                    <entry>args.eclipse.provider</entry>
+                    <entry align="left">
+                      <ph id="eclipseprovider">The provider name of the eclipse help output. The default value is DITA.</ph>
+                    </entry>
+                    <entry>No</entry>
+                  </row>
+                  <row id="argsversion">
+                    <entry>args.eclipse.version</entry>
+                    <entry align="left">
+                      <ph id="eclipseversion">The version number of the eclipse help output. The default value is 1.0</ph>
+                    </entry>
+                    <entry>No</entry>
+                  </row></tbody> 
                   </tgroup> </table></dd>
               </dlentry>
               <dlentry>
@@ -335,7 +349,13 @@
                       Eclipse content provider toc file in eclipsecontent transformation. 
                       The default is the name of input ditamap file.</ph>
                   </entry>
-                  <entry>No</entry> </row></tbody> 
+                  <entry>No</entry> </row>
+                  <row conref="#antscript/argsprovider">
+                    <entry></entry>
+                  </row>
+                  <row conref="#antscript/argsversion">
+                    <entry></entry>
+                  </row></tbody> 
                   </tgroup> </table></dd>
               </dlentry>
               <dlentry>

@@ -146,14 +146,11 @@
 <!-- table/title handling -->
 
 <xsl:template match="*[contains(@class,' topic/table ')]/*[contains(@class,' topic/title ')]">
-  <xsl:variable name="tbl-count">                  <!-- Number of table/title's before this one -->
-    <xsl:number count="*/*[contains(@class,' topic/table ')]/*[contains(@class,' topic/title ')]" level="any"/>
-  </xsl:variable>
   <xsl:variable name="tbl-pfx-txt">
     <xsl:call-template name="getString">
       <xsl:with-param name="stringName" select="'Table'"/>
     </xsl:call-template>
-    <xsl:value-of select="$tbl-count"/>
+    <xsl:value-of select="count(preceding::*[contains(@class,' topic/table ')]/*[contains(@class,' topic/title ')])+1"/>
   </xsl:variable>
   <fo:block font-weight="bold">
     <fo:inline color="red"><xsl:value-of select="$tbl-pfx-txt"/>. </fo:inline>
@@ -169,7 +166,7 @@
     <xsl:call-template name="getString">
       <xsl:with-param name="stringName" select="'Figure'"/>
     </xsl:call-template>
-    <xsl:number level="single" count="title" from="/" />
+    <xsl:value-of select="count(preceding::*[contains(@class,' topic/fig ')]/*[contains(@class,' topic/title ')])+1"/>
   </xsl:variable>
   <fo:block font-weight="bold">
     <fo:inline color="red"><xsl:value-of select="$fig-pfx-txt"/>. </fo:inline>

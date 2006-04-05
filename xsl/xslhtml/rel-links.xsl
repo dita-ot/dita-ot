@@ -24,12 +24,22 @@
         <xsl:if test="@scope='external' or @type='external' or ((@format='PDF' or @format='pdf') and not(@scope='local'))">
             <xsl:attribute name="target">_blank</xsl:attribute>
         </xsl:if>
+        <xsl:if test="*[contains(@class,' topic/desc ')]">
+            <xsl:attribute name="title">
+                <xsl:apply-templates select="*[contains(@class,' topic/desc ')][1]" mode="text-only"/>
+            </xsl:attribute>
+        </xsl:if>
         <!--use content as linktext if it exists, otherwise use href as linktext-->
+        <xsl:variable name="linktext">
+            <xsl:apply-templates select="*[not(contains(@class,' topic/desc '))]|text()"/>
+        </xsl:variable>
         <xsl:choose>
-            <!-- replace "*|text()" with "normalize-space()" to handle xref without 
-                 valid link content, in this situation, use href as linktext. -->
-            <xsl:when test="normalize-space()"><xsl:apply-templates select="*|text()"/></xsl:when><!--use xref content-->
-            <xsl:otherwise><xsl:call-template name="href"/></xsl:otherwise><!--use href text-->
+            <xsl:when test="normalize-space($linktext)">
+                <xsl:value-of select="normalize-space($linktext)"/> <!--use xref content-->
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:call-template name="href"/> <!--use href text-->
+            </xsl:otherwise>
         </xsl:choose>
     </a>
     <xsl:call-template name="end-revflag"/>

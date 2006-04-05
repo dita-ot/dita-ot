@@ -39,6 +39,18 @@ public class MessageBean {
 	}
 
 	/**
+	 * Copy constructor.
+	 * 
+	 * @param message
+	 */
+	public MessageBean(MessageBean message) {
+		this.id = message.getId();
+		this.type = message.getType();
+		this.reason = message.getReason();
+		this.response = message.getResponse();
+	}
+	
+	/**
 	 * @return Returns the id.
 	 */
 	public String getId() {

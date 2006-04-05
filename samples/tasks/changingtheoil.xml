@@ -3,7 +3,6 @@
  "../../dtd/task.dtd">
 <!-- (C) Copyright IBM Corporation 2001, 2005. All Rights Reserved.
  *-->
-<?xml-stylesheet href="../../xsl/ditaview_shell.xsl" type="text/xsl"?>
 <task id="changeoil" xml:lang="en-us">
 <title>Changing the oil in your car</title>
 <prolog></prolog>

@@ -8,19 +8,16 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
 
 import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.module.Content;
 import org.dita.dost.util.CatalogUtils;
+import org.dita.dost.util.Constants;
 import org.dita.dost.util.FileUtils;
+import org.dita.dost.util.FilterUtils;
 import org.dita.dost.util.StringUtils;
 import org.xml.sax.Attributes;
-import org.dita.dost.util.Constants;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
@@ -44,7 +41,7 @@ public class DitaWriter extends AbstractXMLWriter {
     private static final String PI_WORKDIR_HEAD = "<?workdir ";
     private static final String PI_PATH2PROJ_HEAD = "<?path2project ";
     private static final String OS_NAME_WINDOWS = "windows";
-    private static final String ACTION_EXCLUDE = "exclude";
+    
     private XMLReader reader;
     private OutputStreamWriter output;
     private HashMap counterMap;
@@ -54,17 +51,11 @@ public class DitaWriter extends AbstractXMLWriter {
     private String tempDir;
     private boolean exclude; // when exclude is true the tag will be excluded.
     private boolean needResolveEntity; //check whether the entity need resolve.
-    private Set filterSet;
-    private HashMap filterMap;
-    private int level;// level is used to count the element level in the
-    // filtering
+    private int level;// level is used to count the element level in the filtering
     private int columnNumber; // columnNumber is used to adjust column name
     private int columnNumberEnd; //columnNumberEnd is the end value for current entry
-    
     private HashMap catalogMap; //map that contains the information from XML Catalog
-
     private DITAOTJavaLogger logger;
-    
     private ArrayList colSpec;
 
     /**
@@ -73,7 +64,6 @@ public class DitaWriter extends AbstractXMLWriter {
     public DitaWriter() {
         super();
         exclude = false;
-        filterMap = new HashMap();
         columnNumber = 1;
         columnNumberEnd = 0;
         catalogMap = CatalogUtils.getCatalog(null);
@@ -81,7 +71,6 @@ public class DitaWriter extends AbstractXMLWriter {
         path2Project = null;
         counterMap = null;
         traceFilename = null;
-        filterSet = null;
         level = 0;
         needResolveEntity = false;
         output = null;
@@ -106,61 +95,12 @@ public class DitaWriter extends AbstractXMLWriter {
         	logger.logException(e);
         }
     }
-
-    /*
-     * check whether we will filter this tag return true means we will exclude
-     * this tag return false means we will include this tag
-     */
-    private boolean checkExclude(String attName, Attributes atts) {
-        
-        String value = atts.getValue(attName);
-        //String temp = value.trim();
-        int index;
-        boolean ret=false;
-        String action;
-        
-        if (value == null) {
-            return false;
-        }
-        
-        index = value.indexOf(Constants.STRING_BLANK);
-        while(index!=-1){
-        	action = (String)filterMap.get(new StringBuffer().append(attName)
-        			.append(Constants.EQUAL).append(value.substring(0,index)).toString());
-            if(action != null && ACTION_EXCLUDE.equals(action)){
-                ret=true;
-            }else{
-                return false;
-            }
-            value = value.substring(index+1);
-            index = value.indexOf(Constants.STRING_BLANK);
-        }
-        action = (String)filterMap.get(attName + Constants.EQUAL + value);
-        if(action != null && ACTION_EXCLUDE.equals(action)){
-            ret=true;
-        }else{
-            return false;
-        }
-        return ret;
-    }
-
     
     /**
      * @see org.dita.dost.writer.AbstractWriter#setContent(org.dita.dost.module.Content)
      * 
      */
-    public void setContent(Content content) {
-        filterSet = (Set) content.getCollection();
-        if(filterSet != null){
-            Iterator i = filterSet.iterator();
-            Map.Entry entry;
-            
-            while (i.hasNext())
-            {
-                entry = (Map.Entry)i.next();
-                filterMap.put(entry.getKey(), entry.getValue());
-            }
-        }
+    public void setContent(Content content) {        
         tempDir = (String) content.getValue();
     }
 
@@ -351,7 +291,7 @@ public class DitaWriter extends AbstractXMLWriter {
             // If it is the start of a child of an excluded tag, level increase
             level++;
         } else { // exclude shows whether it's excluded by filtering
-            if (needExclude(atts)){
+            if (FilterUtils.needExclude(atts)){
                 exclude = true;
                 level = 0;
             }else{
@@ -405,6 +345,12 @@ public class DitaWriter extends AbstractXMLWriter {
                         else {
                             attValue = atts.getValue(i);
                         }
+
+                        // replace '&' with '&amp;'
+        				if (attValue.indexOf('&') > 0) {
+        					attValue = StringUtils.replaceAll(attValue, "&", "&amp;");
+        				}
+        				
                         //output all attributes except colname
                         if (!Constants.ATTRIBUTE_NAME_COLNAME.equals(attQName)){
                         	output.write(new StringBuffer().append(Constants.STRING_BLANK)
@@ -438,8 +384,7 @@ public class DitaWriter extends AbstractXMLWriter {
 		}
 	}
 
-	private int getStartNumber(Attributes atts, int previousEnd) {
-		// TODO Auto-generated method stub
+	private int getStartNumber(Attributes atts, int previousEnd) {		
 		int ret;
 		if (atts.getValue("colnum") != null){
 			return new Integer(atts.getValue("colnum")).intValue();
@@ -524,12 +469,5 @@ public class DitaWriter extends AbstractXMLWriter {
             return new InputSource(dtdFile.getAbsolutePath());
        }
         return null;
-    }
-    
-    private boolean needExclude (Attributes atts){
-    	return checkExclude(Constants.ELEMENT_NAME_AUDIENCE, atts) 
-    			|| checkExclude(Constants.ELEMENT_NAME_PLATFORM, atts) 
-    			|| checkExclude(Constants.ELEMENT_NAME_PRODUCT, atts) 
-    			|| checkExclude(Constants.ELEMENT_NAME_OTHERPROPS, atts);
     }
 }

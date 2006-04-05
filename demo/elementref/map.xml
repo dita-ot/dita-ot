@@ -4,8 +4,6 @@
 <!DOCTYPE elementref PUBLIC "-//IBM//DTD DITA Element Reference//EN"
  "elementref_shell.dtd">
 
-<?xml-stylesheet href="elementref2html_shell.xsl" type="text/xsl"?>
-<?xml-stylesheet href="elementref_shell.css" type="text/css"?>
 <elementref id="map" xml:lang="en-us">
 <elementname>
 <element>map</element>

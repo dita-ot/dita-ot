@@ -135,6 +135,26 @@
     <response>Check and see whether all of the plugins required are installed in toolkit.</response>
   </message>
   
+  <message id="DOTJ021W" type="WARN">
+    <reason>File '%1' was excluded from the 'dita.list' file since it is invalid and all its content has been filtered out by the ditaval file.</reason>
+    <response>Please check the file '%1' and the ditaval file to see if this is the intended result.</response>
+  </message>
+  
+  <message id="DOTJ022F" type="FATAL">
+    <reason>Failed to parse the input file '%1' due to all of its content has been filtered out.</reason>
+    <response>Please check the input file '%1' and the ditaval file, and ensure that the input is valid.</response>
+  </message>
+
+  <message id="DOTJ023E" type="ERROR">
+    <reason>Failed to get the image file specified '%1' in RTF generation</reason>
+    <response>Check whether the image exists and copied to output directory before the final step of RTF generation.</response>
+  </message>
+  
+  <message id="DOTJ024W" type="WARN">
+    <reason>Extension name of picture file '%1' not supported.</reason>
+    <response>Please convert your picture to JPEG or GIF style.</response>
+  </message>
+  
   <!-- End of Java Messages -->
     
   <!-- Begin of XSL Messages -->  

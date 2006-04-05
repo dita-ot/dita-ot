@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- (C) Copyright IBM Corporation 2001, 2005. All Rights Reserved.=
  *-->
-<?xml-stylesheet href="../../xsl/ditaview_shell.xsl" type="text/xsl"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN"
  "../../dtd/concept.dtd">
 <concept id="shelvingconcept" xml:lang="en-us">

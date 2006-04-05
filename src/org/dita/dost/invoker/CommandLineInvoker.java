@@ -65,6 +65,8 @@ public class CommandLineInvoker {
 		paramMap.put("/logdir", "args.logdir");
 		paramMap.put("/ditalocale", "args.dita.locale");
 		paramMap.put("/fooutputrellinks", "args.fo.output.rel.links");
+		paramMap.put("/version", "args.eclipse.version");
+		paramMap.put("/provider", "args.eclipse.provider");
 	}
 
 	/**

@@ -3,8 +3,6 @@
 
 <!DOCTYPE faq PUBLIC "-//IBM//DTD DITA FAQ//EN" "faq_shell.dtd">
 
-<?xml-stylesheet href="faq2html_shell.xsl" type="text/xsl"?>
-<?xml-stylesheet href="faq_shell.css" type="text/css"?>
 <faq id="ditafaq" xml:lang="en-us"><title>About DITA</title>
 <faqbody>
 <faqgroup><title>Designing Specializations</title>

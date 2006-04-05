@@ -23,10 +23,23 @@ import org.w3c.dom.NodeList;
  * @author Wu, Zhi Qiang
  */
 public class MessageUtils {
+	private static boolean usingDefaultMessage = true;
 	private static Hashtable hashTable = null;
-	private static final String MESSAGE_FILE = "resource/messages.xml";
-
+	private static String MESSAGE_FILE = "resource/messages.xml";
+	private static DITAOTFileLogger fileLogger = DITAOTFileLogger.getInstance();
+	
 	private static void loadMessages() {
+		// always assign a new instance to hashTable to avoid 
+		// to reload this method again and again when messages 
+		// loading failed.
+		hashTable = new Hashtable();
+		
+		if (usingDefaultMessage) {
+			fileLogger.logInfo("Loading default message file...");
+		} else {
+			fileLogger.logInfo("Reloading message file...");
+		}
+		
 		try {
 			DocumentBuilderFactory factory = DocumentBuilderFactory
 					.newInstance();
@@ -35,8 +48,6 @@ public class MessageUtils {
 
 			Element messages = doc.getDocumentElement();
 			NodeList messageList = messages.getElementsByTagName("message");
-
-			hashTable = new Hashtable();
 
 			for (int i = 0; i < messageList.getLength(); i++) {
 				Element message = (Element) messageList.item(i);
@@ -56,27 +67,64 @@ public class MessageUtils {
 
 				hashTable.put(id, messageBean);
 			}
+			
+			fileLogger.logInfo("  Messages loaded from '" + MESSAGE_FILE + "' successfully.");
+			
 		} catch (Exception e) {
-			throw new RuntimeException(e);
+			StringBuffer buff = new StringBuffer(128);
+			
+			buff.append("  Failed to load messages from '");
+			buff.append(MESSAGE_FILE);
+			buff.append("' due to exception: ");
+			buff.append(e.getMessage());
+			buff.append(". Please check if there are files 'resource/messages.xml'");
+			buff.append(" and 'resource/messages.dtd' in the directory");
+			buff.append(" that you run the toolkit. If not, please copy them");
+			buff.append(" from the toolkit's root directory.");
+			
+			fileLogger.logError(buff.toString());
 		}
 	}
 
+	/**
+	 * Get the message respond to the given id, if no message found, 
+	 * an empty message with this id will be returned. 
+	 * 
+	 * @param id
+	 * @return
+	 */
 	public static MessageBean getMessage(String id) {
 		MessageBean message = null;
+		MessageBean hashMessage = null;
 		
 		if (hashTable == null) {
 			loadMessages();
 		}
 
-		message = (MessageBean) hashTable.get(id);
+		hashMessage = (MessageBean) hashTable.get(id);
+		if (hashMessage != null) {
+			message = new MessageBean(hashMessage);
+		}
 		
 		if (message == null) {
-			throw new RuntimeException("Can't find message for id: " + id);
+			// return a empty message when no message found, 
+			// and notify the user with a warning message.
+			message = new MessageBean(id, "", "", "");
+			fileLogger.logWarn("  Can't find message for id: " + id);			
 		}
 		
 		return message;
 	}
 
+	/**
+	 * Get the message respond to the given id with all of the parameters
+	 * are replaced by those in the given 'prop', if no message found, 
+	 * an empty message with this id will be returned. 
+	 * 
+	 * @param id
+	 * @param prop
+	 * @return
+	 */
 	public static MessageBean getMessage(String id, Properties prop) {		
 		String reason = null;
 		String response = null;
@@ -102,5 +150,13 @@ public class MessageUtils {
 		messageBean.setResponse(response);
 
 		return messageBean;
+	}
+	
+	public static void reloadMessages(String messageFile) {
+		MessageUtils.MESSAGE_FILE = messageFile; // reset the message file
+	    hashTable = null; // empty the messages, it will force 
+	                      // the loadMessage() reload the
+	                      // messages from the new message file.
+	    usingDefaultMessage = false;
 	}
 }

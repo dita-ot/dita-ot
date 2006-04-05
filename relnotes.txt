@@ -1,4 +1,38 @@
 (c) Copyright IBM Corp. 2004, 2006 All Rights Reserved.
+DITA OT release 1.2.1
+Available since Apr. 5, 2006
+
+Release 1.2.1 is a maintenance release to fix defects and make patches based on release 1.2.
+
+[5 Improvements]
+1.  Corrupt table generated in WORD RTF is fixed
+2.  Pictures  are merged into the WORD RTF instead of creating links to them
+3.  lq element  is supported in WORD RTF
+4.  Generated text  can be translated to different  languages in WORD RTF
+5.  In WORD RTF, if no <choptionhd> given, head will be generated in table
+
+[11 SF Bugs Fixed]
+1.  SF Bug 1460451 Spaces preserving methods are different among tags.
+2.  SF Bug 1460449 Nested list can not be well supported.
+3.  SF Bug 1460445 h2d stylesheet cannot handle HTML files within namespace.
+4.  SF Bug 1431229 hardcoded path in MessageUtils.java
+5.  SF Bug 1408477 <desc> element is not handled inside xref for XHTML 
+6.  SF Bug 1398867 ampersands in hrefs (on xref and link) cause build to fail 
+7.  SF Bug 1326439 filtered-out indexterms leak into index through dita.list 
+8.  SF Bug 1408487 Short description is not retrieved for <xref> element 
+9.  SF Bug 1407454 XHTML processing for <alt> is incomplete 
+10. SF Bug 1405221 Some table frames ignored in dita->xhtml 
+11. SF Bug 1414398 Cannot set provider for Eclipse help transformation 
+
+[1 SF RFEs Added]
+1.  SF RFE 1448712 add support for /plugins directory in plug-in architecture
+
+Note: SourceForge bugs, patches, and RFE listed above can be found in SourceForge Bugs, Patches, and RFE tracker.  
+
+Bugs tracker:  http://sourceforge.net/tracker/?group_id=132728&atid=725074
+Patches tracker: http://sourceforge.net/tracker/?group_id=132728&atid=725076
+RFE tracker: http://sourceforge.net/tracker/?group_id=132728&atid=725077
+====================================================================================
 
 DITA OT release 1.2
 Available since Feb. 23, 2006

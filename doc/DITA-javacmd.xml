@@ -210,6 +210,18 @@
               </entry>
             </row>
             <row>
+              <entry colname="col1"><i>/provider</i>:{args.eclipse.provider}</entry>
+              <entry colname="col2">
+                <ph conref="DITA-antscript.xml#antscript/eclipseprovider"></ph>
+              </entry>
+            </row>
+            <row>
+              <entry colname="col1"><i>/version</i>:{args.eclipse.version}</entry>
+              <entry colname="col2">
+                <ph conref="DITA-antscript.xml#antscript/eclipseversion"></ph>
+              </entry>
+            </row>
+            <row>
               <entry colname="col1"><i>/xhtmltoc</i>:{args.xhtml.toc}</entry>
               <entry colname="col2">
                 <ph conref="DITA-antscript.xml#antscript/xhtmltoc"/>

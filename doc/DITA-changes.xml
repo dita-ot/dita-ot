@@ -1,49 +1,68 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
-
-<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "../dtd/topic.dtd">
-
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- (c) Copyright IBM Corp. 2004, 2006 All Rights Reserved. -->
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "../dtd/topic.dtd" []>
 <topic id="ditareleasehistory" xml:lang="en-us">
   <title>DITA release history</title>
-  <shortdesc>This document lists major changes and new features by 
-    release.</shortdesc>
+  <shortdesc>This document lists major changes and new features by release.</shortdesc>
   <body>
+    <section>
+      <title>DITA OT release 1.2.1</title>
+      <p>Release 1.2.1 is a maintenance release to fix defects and make patches based on release 1.2.</p>
+      <p>
+        <b>[5 Improvements]</b>
+        <ol>
+          <li>Corrupt table generated in WORD RTF is fixed</li>
+          <li>Pictures are merged into the WORD RTF instead of creating links to them</li>
+          <li>lq element is supported in WORD RTF</li>
+          <li>Generated text can be translated to different languages in WORD RTF</li>
+          <li>In WORD RTF, if no &lt;choptionhd&gt; given, head will be generated in table</li>
+        </ol>
+      </p>
+      <p>
+        <b>[11 SF Bugs Fixed]</b>
+        <ol>
+          <li>SF Bug 1460451 Spaces preserving methods are different among tags.</li>
+          <li>SF Bug 1460449 Nested list can not be well supported.</li>
+          <li>SF Bug 1460445 h2d stylesheet cannot handle HTML files within namespace.</li>
+          <li>SF Bug 1431229 hardcoded path in MessageUtils.java</li>
+          <li>SF Bug 1408477 &lt;desc&gt; element is not handled inside xref for XHTML</li>
+          <li>SF Bug 1398867 ampersands in hrefs (on xref and link) cause build to fail</li>
+          <li>SF Bug 1326439 filtered-out indexterms leak into index through dita.list </li>
+          <li>SF Bug 1408487 Short description is not retrieved for &lt;xref&gt; element</li>
+          <li>SF Bug 1407454 XHTML processing for &lt;alt&gt; is incomplete </li>
+          <li>SF Bug 1405221 Some table frames ignored in dita-&gt;xhtml </li>
+          <li>SF Bug 1414398 Cannot set provider for Eclipse help transformation </li>
+        </ol>
+      </p>
+      <p>
+        <b>[1 SF RFEs Added]</b>
+        <ol>
+          <li>SF RFE 1448712 add support for /plugins directory in plug-in architecture</li>
+        </ol>
+      </p>
+    </section>
     <section>
       <title>DITA OT release 1.2</title>
       <p>DITA open toolkit Release 1.2 is a major release to add new functions, fulfill new requirements, make some function enhancements and fix bugs over release 1.1.2.1.</p>
-      <p>
-        <b>Important Change</b> DITA-OT 1.2 offers new error handling and logging system. If you invoke your transformation by using java command line where new error handling and logging system is mandatory, you need to set the <varname>CLASSPATH</varname> <xref href="installguide/settingenvironmentvariables.xml">Environment Variable</xref> for <codeph>dost.jar</codeph>. If you invoke your transformation by using an ant script, you need to do one more step after the setting above. That is adding a parameter in your command to invoke an ant script. For example, use <userinput>ant -f ant\sample_xhtml.xml -logger org.dita.dost.log.DITAOTBuildLogger</userinput> instead of <userinput>ant -f ant\sample_xhtml.xml</userinput> to start a transformation defined in ant script file ant\sample_xhtml.xml.
-      </p>
+      <p><b>Important Change</b> DITA-OT 1.2 offers new error handling and logging system. If you invoke your transformation by using java command line where new error handling and logging system is mandatory, you need to set the <varname>CLASSPATH</varname><xref href="installguide/settingenvironmentvariables.xml">Environment Variable</xref> for <codeph>dost.jar</codeph>. If you invoke your transformation by using an ant script, you need to do one more step after the setting above. That is adding a parameter in your command to invoke an ant script. For example, use <userinput>ant -f ant\sample_xhtml.xml -logger org.dita.dost.log.DITAOTBuildLogger</userinput> instead of <userinput>ant -f ant\sample_xhtml.xml</userinput> to start a transformation defined in ant script file ant\sample_xhtml.xml. </p>
       <p>
         <b>New Functions</b>
         <ol>
           <li>
             <b>New plugin archiecture</b>
-            <p>DITA Open Toolkit 1.2 provides a new function to help users to download, install and use plug-ins and help developers
-create new plug-ins for DITA Open Toolkit.</p>
+            <p>DITA Open Toolkit 1.2 provides a new function to help users to download, install and use plug-ins and help developers create new plug-ins for DITA Open Toolkit.</p>
           </li>
           <li>
             <b>Transformation to wordrtf</b>
-            <p>DITA Open Toolkit 1.2 provides DITA to Word transforming
-function to transform DITA source files to output in <tm tmclass="special"
-tmowner="Microsoft Corporation" tmtype="reg" trademark="Microsoft">Microsoft</tm> Word
-RTF file.</p>
+            <p>DITA Open Toolkit 1.2 provides DITA to Word transforming function to transform DITA source files to output in <tm trademark="Microsoft" tmowner="Microsoft Corporation" tmtype="reg" tmclass="special">Microsoft</tm> Word RTF file.</p>
           </li>
           <li>
             <b>HTML to DITA migration tool</b>
-            <p>DITA Open Toolkit 1.2 provides a HTML to DITA 
-            migration tool, which migrates HTML files to DITA files. This 
-            migration tool originally comes from the developerWorks publication 
-            of Robert D. Anderson's how-to articles with the original h2d code.</p>
+            <p>DITA Open Toolkit 1.2 provides a HTML to DITA migration tool, which migrates HTML files to DITA files. This migration tool originally comes from the developerWorks publication of Robert D. Anderson&apos;s how-to articles with the original h2d code.</p>
           </li>
           <li>
             <b>Problem determination and log analysis</b>
-            <p>In DITA Open Toolkit 1.2, a new logging method is supported 
-    to log messages both on the screen and into the log file. The messages on 
-    the screen present user with the status information, warning, error, and 
-    fatal error messages. The messages in the log file present user with more 
-    detailed information about the transformation process. By analyzing these 
-    messages, user can know what cause the problem and how to solve it.</p>
+            <p>In DITA Open Toolkit 1.2, a new logging method is supported to log messages both on the screen and into the log file. The messages on the screen present user with the status information, warning, error, and fatal error messages. The messages in the log file present user with more detailed information about the transformation process. By analyzing these messages, user can know what cause the problem and how to solve it.</p>
           </li>
           <li>
             <b>Open DITA User Guide for conditional processing</b>
@@ -62,13 +81,13 @@ RTF file.</p>
       <p>
         <b>Other Changes</b>
         <ol>
-          <li>SF Bug 1304545 Some folders were copied to DITA-OT's root directory</li>
+          <li>SF Bug 1304545 Some folders were copied to DITA-OT&apos;s root directory</li>
           <li>SF Bug 1328689 Stylesheet links in HTML emitted with local filesystem paths</li>
           <li>SF Bug 1333481 Mapref function does not work for maps in another directory</li>
           <li>SF Bug 1343963 Blank index.html generated for ditamap contains only reltabe</li>
           <li>SF Bug 1344486 java.io.EOFException thrown out when reading ditaval file</li>
           <li>SF Bug 1347669 Path Spec. in nested DITA maps</li>
-          <li>SF Bug 1357139 filtering behavior doesn't conform to spec</li>
+          <li>SF Bug 1357139 filtering behavior doesn&apos;t conform to spec</li>
           <li>SF Bug 1358619 The property.temp file gets cleaned out by default</li>
           <li>SF Bug 1366843 XRefs do not generate proper links in FO/PDF</li>
           <li>SF Bug 1367636 dita2fo-elems.xsl has strange line breaks</li>
@@ -89,61 +108,53 @@ RTF file.</p>
       <p>Release 1.1.2.1 is a full build to provide an urgent fix to fix the following critical problem which users found in release 1.1.2.</p>
       <p>
         <ul>
-          <li>SF Bug 1345600  The build process failed when run "Ant all" in release 1.1.2</li>
-        </ul>             
+          <li>SF Bug 1345600 The build process failed when run &quot;Ant all&quot; in release 1.1.2</li>
+        </ul>
       </p>
-      <p>For this fix, we have restored all the source DITA files in 'doc' and directories in the binary packages.</p>
-      <p>Note that the original parameter "args.eclipse.toc" in "Ant tasks and script" was separated to "args.eclipsehelp.toc" for DITA-to-Eclipse help transformation, and "args.eclipsecontent.toc" for DITA-to-dynamic Eclipse content transformation.</p>
-      <p>Another issue is that we found there is a mismatch in the document and the toolkit behavior when you are trying to use the following command
-      <codeblock>ant -f conductor.xml -propertyfile ${dita.temp.dir}/property.temp.</codeblock>
-      Now we have updated the documentation. Please refer to the topic 'Building DITA output with Java command line' on our website for more details.</p>
+      <p>For this fix, we have restored all the source DITA files in &apos;doc&apos; and directories in the binary packages.</p>
+      <p>Note that the original parameter &quot;args.eclipse.toc&quot; in &quot;Ant tasks and script&quot; was separated to &quot;args.eclipsehelp.toc&quot; for DITA-to-Eclipse help transformation, and &quot;args.eclipsecontent.toc&quot; for DITA-to-dynamic Eclipse content transformation.</p>
+      <p>Another issue is that we found there is a mismatch in the document and the toolkit behavior when you are trying to use the following command <codeblock>ant -f conductor.xml -propertyfile ${dita.temp.dir}/property.temp.</codeblock> Now we have updated the documentation. Please refer to the topic &apos;Building DITA output with Java command line&apos; on our website for more details.</p>
       <p>These updates do not affect standard operation of the toolkit. The main goal of this minor release to enable new users of the toolkit to run the installation verification tests without failure.</p>
-    </section> 
+    </section>
     <section>
       <title>DITA OT release 1.1.2</title>
       <p>Release 1.1.2 is a maintenance release to fix defects and make patches based on release 1.1.1. </p>
-      <p>But there are certain limitations and unfixed bugs in this release, such as,
-        <ul>
+      <p>But there are certain limitations and unfixed bugs in this release, such as, <ul>
           <li>Bug 1343963 Blank index.html generated for ditamap contains only reltabe</li>
           <li>Bug 1344486 java.io.EOFException thrown out when reading ditaval file</li>
-        </ul>       
-        Please check the current 'open' bugs on the SourceForge bugs tracker.        
-      </p>
+        </ul> Please check the current &apos;open&apos; bugs on the SourceForge bugs tracker. </p>
       <p>
         <b>Changes</b>
         <ol>
-          <li>SF Bug   1297355: Multilevel HTML Help popup shows filenames</li>
-          <li>SF Bug   1297657: Update for Supported Parameters page</li>
-          <li>SF Bug   1304859: Toolkit disallows repetition of topic ID within map</li>
-          <li>SF Bug   1306361: Fatal error in published ditamap example</li>
-          <li>SF Bug   1306363: common.css not compiled with htmlhelp</li>
-          <li>SF Bug   1311788: DTD references not resolved</li>
-          <li>SF Bug   1314081: Fix catalog entries in catalag-ant.xml for OASIS DTDs</li>
-          <li>SF Bug   1323435: wrong system id for html output used in validation</li>
-          <li>SF Bug   1323486: HTML Help subterm indexes not sorted</li>
-          <li>SF Bug   1325290: JavaHelp output does not work for Russian</li>
-          <li>SF Bug   1325277: File missing from the map causes abend</li>
+          <li>SF Bug 1297355: Multilevel HTML Help popup shows filenames</li>
+          <li>SF Bug 1297657: Update for Supported Parameters page</li>
+          <li>SF Bug 1304859: Toolkit disallows repetition of topic ID within map</li>
+          <li>SF Bug 1306361: Fatal error in published ditamap example</li>
+          <li>SF Bug 1306363: common.css not compiled with htmlhelp</li>
+          <li>SF Bug 1311788: DTD references not resolved</li>
+          <li>SF Bug 1314081: Fix catalog entries in catalag-ant.xml for OASIS DTDs</li>
+          <li>SF Bug 1323435: wrong system id for html output used in validation</li>
+          <li>SF Bug 1323486: HTML Help subterm indexes not sorted</li>
+          <li>SF Bug 1325290: JavaHelp output does not work for Russian</li>
+          <li>SF Bug 1325277: File missing from the map causes abend</li>
           <li>SF Patch 1253783: dita2fo-links relative hrefs</li>
           <li>SF Patch 1324387: In xslfo, groupchoice var prints extra | delimiter</li>
-          <li>SF RFE   1324990: Installation Guide</li>
+          <li>SF RFE 1324990: Installation Guide</li>
         </ol>
       </p>
       <b>Parameter Changes</b>
-      <p>        
+      <p>
         <ol>
-          <li>The original parameter "args.eclipse.toc" in "Ant tasks and script" was separated to "args.eclipsehelp.toc" for dita2eclipsehelp transformation, and "args.eclipsecontent.toc" for dita2eclipsecontent transformation.</li>
-          <li>Several parameters were added to the java command line interface, including "/javahelptoc","/javahelpmap","/eclipsehelptoc","/eclipsecontenttoc","/xhtmltoc".</li>
+          <li>The original parameter &quot;args.eclipse.toc&quot; in &quot;Ant tasks and script&quot; was separated to &quot;args.eclipsehelp.toc&quot; for dita2eclipsehelp transformation, and &quot;args.eclipsecontent.toc&quot; for dita2eclipsecontent transformation.</li>
+          <li>Several parameters were added to the java command line interface, including &quot;/javahelptoc&quot;,&quot;/javahelpmap&quot;,&quot;/eclipsehelptoc&quot;,&quot;/eclipsecontenttoc&quot;,&quot;/xhtmltoc&quot;.</li>
         </ol>
       </p>
       <b>Other Changes</b>
-      <p>        
-        Change to the "doc" directory, except "doc\langref" directory:
-        <ol>
+      <p> Change to the &quot;doc&quot; directory, except &quot;doc\langref&quot; directory: <ol>
           <li>The source dita files and the generated HTML, CHM, and PDF files were separated into separate downloads.</li>
           <li>The source package contains the source dita files.</li>
           <li>The binary package contains the generated HTML, CHM, and PDF files.</li>
-        </ol>      
-      </p>
+        </ol></p>
     </section>
     <section>
       <title>DITA OT release 1.1.1</title>
@@ -152,19 +163,19 @@ RTF file.</p>
       <p>
         <b>Changes</b>
         <ol>
-          <li>SF Bug   1196409: HTMLHelp output does not reference CSS</li>
-          <li>SF Bug   1272687: extra "../" link generated by topicgroup</li>
-          <li>SF Bug   1273751: revision flag using unavailable pictures  </li>   
-          <li>SF Bug   1273816: Index generation doesn't cope with multilevel well </li>
-          <li>SF Bug   1281900: Unnecessary comment and href typo</li>
-          <li>SF Bug   1283600: unecessary space in document cause invalid parameter of Ant </li>
-          <li>SF Bug   1283644: multipul document($FILTERFILE,/) doesn't work (XALAN) </li>
+          <li>SF Bug 1196409: HTMLHelp output does not reference CSS</li>
+          <li>SF Bug 1272687: extra &quot;../&quot; link generated by topicgroup</li>
+          <li>SF Bug 1273751: revision flag using unavailable pictures </li>
+          <li>SF Bug 1273816: Index generation doesn&apos;t cope with multilevel well </li>
+          <li>SF Bug 1281900: Unnecessary comment and href typo</li>
+          <li>SF Bug 1283600: unecessary space in document cause invalid parameter of Ant </li>
+          <li>SF Bug 1283644: multipul document($FILTERFILE,/) doesn&apos;t work (XALAN) </li>
           <li>SF Patch 1251609: pretargets xsl directory needs to use ${dita.script.dir} </li>
           <li>SF Patch 1252441: Files in temp directory not deleted before build</li>
           <li>SF Patch 1253785: Inline images in dita2fo-elems</li>
           <li>SF Patch 1284023: change the name of jar file and remove the version name </li>
-        </ol> 
-      </p>      
+        </ol>
+      </p>
     </section>
     <section>
       <title>DITA OT release 1.1</title>
@@ -239,7 +250,7 @@ RTF file.</p>
           <li>SF RFE 1183490: Provide argument to specify the location of temp dir</li>
           <li>SF RFE 1201242: override capability</li>
         </ol>
-      </p>     
+      </p>
     </section>
     <section>
       <title>DITA OT release 1.0.2</title>
@@ -247,7 +258,7 @@ RTF file.</p>
       <p>
         <b>Changes</b>
         <ol>
-          <li>SF Bug 1181950:	format attribute should be set to 'dita' for dita topic</li>
+          <li>SF Bug 1181950: format attribute should be set to &apos;dita&apos; for dita topic</li>
           <li>SF RFE 1183487: Document the usage of footer property</li>
           <li>SF RFE 1198847: command line interface support</li>
           <li>SF RFE 1198850: architecture document update</li>
@@ -255,71 +266,47 @@ RTF file.</p>
           <li>SF RFE 1201175: XML catalog support</li>
           <li>SF Patch 1176909: Add template for getting image URI</li>
         </ol>
-      </p>     
+      </p>
     </section>
     <section>
       <title>DITA OT release 1.0.1</title>
-      <p>Release 1.0.1 is a maintenance release to fix defects and adds some 
-        minor enhancements in release 1.0.</p>
+      <p>Release 1.0.1 is a maintenance release to fix defects and adds some minor enhancements in release 1.0.</p>
       <p>
         <b>Changes</b>
         <ol>
-          <li>Committer: maplink.xsl doesn't generate related links for second 
-            level referred topic </li>
+          <li>Committer: maplink.xsl doesn&apos;t generate related links for second level referred topic </li>
           <li>Committer: avoid infinite loop of conref</li>
-          <li>SF Bug 1160964: Can't point above the directory which contains 
-            the map file</li>
+          <li>SF Bug 1160964: Can&apos;t point above the directory which contains the map file</li>
           <li>SF Bug 1163523: Broken XPath expression in mappull.xsl</li>
           <li>SF Bug 1168974: useless DRAFT param in FO transformation</li>
-          <li>SF Bug 1173162: generate null internal link destination in fo 
-            transformation</li>
-          <li>SF Bug 1173164: Not correctly use document() in 
-            dita2fo-links.xsl</li>
+          <li>SF Bug 1173162: generate null internal link destination in fo transformation</li>
+          <li>SF Bug 1173164: Not correctly use document() in dita2fo-links.xsl</li>
           <li>SF Bug 1173663: All base directories are DITA-OT 1.0</li>
           <li>SF Patch 1163561: XLST match patterns test for element names</li>
-          <li>SF Patch 1165068: FO hyperlinks and FOP-generated PDF 
-            bookmarks</li>
+          <li>SF Patch 1165068: FO hyperlinks and FOP-generated PDF bookmarks</li>
           <li>SF Patch 1174012: Modification to sequence.ditamap</li>
         </ol>
-      </p>      
+      </p>
     </section>
     <section>
       <title>DITA OT release 1.0</title>
-      <p>The initial release of the Open Sourced DITA Toolkit introduces major 
-        architectural changes from the previous, developerWorks version of the 
-        Toolkit. </p>
+      <p>The initial release of the Open Sourced DITA Toolkit introduces major architectural changes from the previous, developerWorks version of the Toolkit. </p>
       <p>
         <b>New features</b>
         <ol>
-          <li>A new, Java-based processing architecture that supports 
-            single-threaded execution throughout.</li>
-          <li>Ant-based orchestration of the processing environment, from 
-            preprocessing to transformation to any required 
-            post-processing.</li>
-          <li>A pre-processor core that supports conditional processing and 
-            conref resolution.</li>
-          <li>Map-driven processing that generates links for transformed 
-            topics.</li>
-          <li>A new DITA to HTML transform that replaces the previous 
-            topic2html_Impl.xsl core transform. This new core is based on 
-            requirements for high-volume usage within IBM for the past several 
-            years.</li>
+          <li>A new, Java-based processing architecture that supports single-threaded execution throughout.</li>
+          <li>Ant-based orchestration of the processing environment, from preprocessing to transformation to any required post-processing.</li>
+          <li>A pre-processor core that supports conditional processing and conref resolution.</li>
+          <li>Map-driven processing that generates links for transformed topics.</li>
+          <li>A new DITA to HTML transform that replaces the previous topic2html_Impl.xsl core transform. This new core is based on requirements for high-volume usage within IBM for the past several years.</li>
         </ol>
       </p>
-      <p>Ant-driven processing means that you can integrate the DITA processing 
-        tools into a seamless pipeline within supportive environments such as 
-        Eclipse.</p>
-      <p>The DTDs and Schemas in this version are based on those in the 
-        previous dita132 package with bug fixes. The DITA OS Toolkit will later 
-        support the OASIS 1.0 specification in its public review form.</p>
+      <p>Ant-driven processing means that you can integrate the DITA processing tools into a seamless pipeline within supportive environments such as Eclipse.</p>
+      <p>The DTDs and Schemas in this version are based on those in the previous dita132 package with bug fixes. The DITA OS Toolkit will later support the OASIS 1.0 specification in its public review form.</p>
     </section>
     <section>
       <title>DITA history on developerWorks (pre-Open Source)</title>
-      <p>Versions of the toolkit prior to Open Source are in the developerWorks 
-        XML Zone at this address: <xref format="html" 
-        href="http://www-106.ibm.com/developerworks/xml/library/x-dita6/x-dita_downloads.html">DITA 
-        Downloads</xref> Change logs for those versions are within the Readme 
-        files in each distribution.</p>
+      <p>Versions of the toolkit prior to Open Source are in the developerWorks XML Zone at this address: <xref href="http://www-106.ibm.com/developerworks/xml/library/x-dita6/x-dita_downloads.html" format="html">DITA Downloads</xref> Change logs for those versions are within the Readme files in each distribution.</p>
     </section>
   </body>
 </topic>

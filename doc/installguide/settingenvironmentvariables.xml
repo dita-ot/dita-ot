@@ -116,7 +116,7 @@
                   click on <uicontrol>New</uicontrol> under the System 
                   variables section.</li>
                 <li>Type 
-                  <codeph>C:\fop-0.20.5\build;C:\fop-0.20.5\lib</codeph><note 
+                  <codeph>C:\fop-0.20.5\build\fop.jar;C:\fop-0.20.5\lib\batik.jar;C:\fop-0.20.5\lib \avalon-framework-cvs-20020806.jar</codeph><note 
                   type="important">If there are other variables listed, create 
                   new variable separated by a semicolon. Ensure there are no 
                   spaces before or after the semicolon.</note></li>

@@ -1259,7 +1259,7 @@
     <xsl:apply-templates select="@href|@height|@width|@longdescref"/>
     <xsl:choose>
       <xsl:when test="*[contains(@class,' topic/alt')]">
-        <xsl:attribute name="alt"><xsl:value-of select="*[contains(@class,' topic/alt ')]"/></xsl:attribute>
+        <xsl:attribute name="alt"><xsl:apply-templates select="*[contains(@class,' topic/alt ')]" mode="text-only"/></xsl:attribute>
       </xsl:when>
       <xsl:when test="@alt">
         <xsl:attribute name="alt"><xsl:value-of select="@alt"/></xsl:attribute>
@@ -1267,6 +1267,11 @@
     </xsl:choose>
   </xsl:element>
 </xsl:template>
+
+<xsl:template match="*[contains(@class,' topic/alt ')]">
+  <xsl:apply-templates select="." mode="text-only"/>
+</xsl:template>
+
 <!-- Process image attributes. Using priority, in case default @href is added at some point. -->
 <xsl:template match="*[contains(@class,' topic/image ')]/@href" priority="1">
   <xsl:attribute name="src"><xsl:value-of select="."/></xsl:attribute>
@@ -1378,37 +1383,73 @@
  </xsl:choose>
 </xsl:template>
 <xsl:template match="*[contains(@class,' topic/table ')]" mode="table-fmt">
- <xsl:value-of select="$newline"/>
- <!-- special case for IE & NS for frame & no rules - needs to be a double table -->
- <xsl:variable name="colsep">
-   <xsl:choose>
-     <xsl:when test="*[contains(@class,' topic/tgroup ')]/@colsep"><xsl:value-of select="*[contains(@class,' topic/tgroup ')]/@colsep"/></xsl:when>
-     <xsl:when test="@colsep"><xsl:value-of select="@colsep"/></xsl:when>
-   </xsl:choose>
- </xsl:variable>
- <xsl:variable name="rowsep">
-   <xsl:choose>
-     <xsl:when test="*[contains(@class,' topic/tgroup ')]/@rowsep"><xsl:value-of select="*[contains(@class,' topic/tgroup ')]/@rowsep"/></xsl:when>
-     <xsl:when test="@rowsep"><xsl:value-of select="@rowsep"/></xsl:when>
-   </xsl:choose>
- </xsl:variable>
- <xsl:choose>
-  <xsl:when test="@frame='all' and $colsep='0' and $rowsep='0'">
-    <table cellpadding="4" cellspacing="0" border="1" class="tableborder"><tr><td><xsl:value-of select="$newline"/>
-     <xsl:call-template name="dotable"/>
-    </td></tr></table>
-  </xsl:when>
-  <xsl:when test="not(@frame) and $colsep='0' and $rowsep='0'">
-    <table cellpadding="4" cellspacing="0" border="1" class="tableborder"><tr><td><xsl:value-of select="$newline"/>
-     <xsl:call-template name="dotable"/>
-    </td></tr></table>
-  </xsl:when>
-  <xsl:otherwise>
-   <div class="tablenoborder">
-   <xsl:call-template name="dotable"/>
-   </div>
-  </xsl:otherwise>
- </xsl:choose><xsl:value-of select="$newline"/>
+  <xsl:value-of select="$newline"/>
+  <!-- special case for IE & NS for frame & no rules - needs to be a double table -->
+  <xsl:variable name="colsep">
+    <xsl:choose>
+      <xsl:when test="*[contains(@class,' topic/tgroup ')]/@colsep">
+        <xsl:value-of select="*[contains(@class,' topic/tgroup ')]/@colsep"/>
+      </xsl:when>
+      <xsl:when test="@colsep">
+        <xsl:value-of select="@colsep"/>
+      </xsl:when>
+    </xsl:choose>
+  </xsl:variable>
+  <xsl:variable name="rowsep">
+    <xsl:choose>
+      <xsl:when test="*[contains(@class,' topic/tgroup ')]/@rowsep">
+        <xsl:value-of select="*[contains(@class,' topic/tgroup ')]/@rowsep"/>
+      </xsl:when>
+      <xsl:when test="@rowsep">
+        <xsl:value-of select="@rowsep"/>
+      </xsl:when>
+    </xsl:choose>
+  </xsl:variable>
+  <xsl:choose>
+    <xsl:when test="@frame='all' and $colsep='0' and $rowsep='0'">
+      <table cellpadding="4" cellspacing="0" border="1" class="tableborder">
+        <tr>
+          <td>
+            <xsl:value-of select="$newline"/>
+            <xsl:call-template name="dotable"/>
+          </td>
+        </tr>
+      </table>
+    </xsl:when>
+    <xsl:when test="@frame='top' and $colsep='0' and $rowsep='0'">
+      <hr />
+      <xsl:value-of select="$newline"/>
+      <xsl:call-template name="dotable"/>
+    </xsl:when>
+    <xsl:when test="@frame='bot' and $colsep='0' and $rowsep='0'">
+      <xsl:call-template name="dotable"/>
+      <hr />
+      <xsl:value-of select="$newline"/>
+    </xsl:when>
+    <xsl:when test="@frame='topbot' and $colsep='0' and $rowsep='0'">
+      <hr />
+      <xsl:value-of select="$newline"/>
+      <xsl:call-template name="dotable"/>
+      <hr />
+      <xsl:value-of select="$newline"/>
+    </xsl:when>
+    <xsl:when test="not(@frame) and $colsep='0' and $rowsep='0'">
+      <table cellpadding="4" cellspacing="0" border="1" class="tableborder">
+        <tr>
+          <td>
+            <xsl:value-of select="$newline"/>
+            <xsl:call-template name="dotable"/>
+          </td>
+        </tr>
+      </table>
+    </xsl:when>
+    <xsl:otherwise>
+      <div class="tablenoborder">
+        <xsl:call-template name="dotable"/>
+      </div>
+    </xsl:otherwise>
+  </xsl:choose>
+  <xsl:value-of select="$newline"/>
 </xsl:template>
 
 <xsl:template name="dotable">
@@ -3462,18 +3503,14 @@
 <!-- table caption -->
 <xsl:template name="place-tbl-lbl">
 <xsl:param name="stringName"/>
-<xsl:variable name="tbl-count">                  <!-- Number of table/title's before this one -->
- <xsl:number count="*/*[contains(@class,' topic/table ')]/*[contains(@class,' topic/title ')]" level="any"/>
-</xsl:variable>
-<xsl:variable name="tbl-count-actual">           <!-- Number of table/title's including this one -->
- <xsl:choose>   <!-- init table counter to 1 - if not set -->
-   <xsl:when test="not($tbl-count&gt;0) and not($tbl-count=0) and not($tbl-count&lt;0)">1</xsl:when>
-   <xsl:otherwise><xsl:value-of select="$tbl-count+1"/></xsl:otherwise>
- </xsl:choose>
-</xsl:variable>          <!-- normally: "Table 1. " -->
+  <!-- Number of table/title's before this one -->
+  <xsl:variable name="tbl-count-actual" select="count(preceding::*[contains(@class,' topic/table ')]/*[contains(@class,' topic/title ')])+1"/>
+
+  <!-- normally: "Table 1. " -->
   <xsl:variable name="ancestorlang">
    <xsl:call-template name="getLowerCaseLang"/>
   </xsl:variable>
+  
   <xsl:choose>
     <!-- title -or- title & desc -->
     <xsl:when test="*[contains(@class,' topic/title ')]">
@@ -3524,15 +3561,8 @@
 <!-- Figure caption -->
 <xsl:template name="place-fig-lbl">
 <xsl:param name="stringName"/>
-<xsl:variable name="fig-count">                 <!-- Number of fig/title's before this one -->
- <xsl:number count="*/*[contains(@class,' topic/fig ')]/*[contains(@class,' topic/title ')]" level="any"/>
-</xsl:variable>
-<xsl:variable name="fig-count-actual">          <!-- Number of fig/title's including this one -->
- <xsl:choose>
-   <xsl:when test="not($fig-count&gt;0) and not($fig-count=0) and not($fig-count&lt;0)">1</xsl:when>
-   <xsl:otherwise><xsl:value-of select="$fig-count+1"/></xsl:otherwise>
- </xsl:choose>
-</xsl:variable>
+  <!-- Number of fig/title's including this one -->
+  <xsl:variable name="fig-count-actual" select="count(preceding::*[contains(@class,' topic/fig ')]/*[contains(@class,' topic/title ')])+1"/>
   <xsl:variable name="ancestorlang">
     <xsl:call-template name="getLowerCaseLang"/>
   </xsl:variable>

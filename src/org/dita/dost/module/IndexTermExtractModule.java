@@ -47,8 +47,8 @@ public class IndexTermExtractModule extends AbstractPipelineModule {
 	/** The basedir of the input file for parsing */
 	private String inputDir = null;
 
-	/** The list of href targets */
-	private List hrefTargetList = null;
+	/** The list of topics */
+	private List topicList = null;
 
 	/** The list of ditamap files */
 	private List ditamapList = null;
@@ -140,13 +140,13 @@ public class IndexTermExtractModule extends AbstractPipelineModule {
 		}
 
 		/*
-		 * Parse href targets and ditamap list from the input dita.list file
+		 * Parse topic list and ditamap list from the input dita.list file
 		 */
 		tokenizer = new StringTokenizer(prop
-				.getProperty(Constants.HREF_TARGET_LIST), Constants.COMMA);
-		hrefTargetList = new ArrayList(tokenizer.countTokens());
+				.getProperty(Constants.FULL_DITA_TOPIC_LIST), Constants.COMMA);
+		topicList = new ArrayList(tokenizer.countTokens());
 		while (tokenizer.hasMoreTokens()) {
-			hrefTargetList.add(tokenizer.nextToken());
+			topicList.add(tokenizer.nextToken());
 		}
 
 		tokenizer = new StringTokenizer(prop
@@ -170,7 +170,7 @@ public class IndexTermExtractModule extends AbstractPipelineModule {
 	}
 
 	private void extractIndexTerm() throws SAXException {
-		int hrefTargetNum = hrefTargetList.size();
+		int topicNum = topicList.size();
 		int ditamapNum = ditamapList.size();
 		FileInputStream inputStream = null;
 		XMLReader xmlReader = null;
@@ -187,9 +187,9 @@ public class IndexTermExtractModule extends AbstractPipelineModule {
 		try {
 			xmlReader.setContentHandler(handler);
 
-			for (int i = 0; i < hrefTargetNum; i++) {
+			for (int i = 0; i < topicNum; i++) {
 				handler.reset();
-				String target = (String) hrefTargetList.get(i);
+				String target = (String) topicList.get(i);
 				String targetPathFromMap = FileUtils.getRelativePathFromMap(
 						inputMap, target);
 				String targetPathFromMapWithoutExt = targetPathFromMap

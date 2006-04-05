@@ -55,7 +55,7 @@
   <!-- if there is an href, make it look like a link and remove prompt -->
   <xsl:template match="*[contains(@class,' topic/link ')][not(@href = '')]">
     <xsl:choose>
-      <xsl:when test="@format='dita' or @format='DITA' or not(@format)">
+      <xsl:when test="not(@scope='external') and (@format='dita' or @format='DITA' or not(@format))">
         <fo:block color="blue" text-decoration="underline" 
                   start-indent="{$basic-start-indent}">
           <xsl:text>&bullet; </xsl:text>
@@ -63,11 +63,18 @@
             <xsl:attribute name="internal-destination">
               <xsl:call-template name="href"/>
             </xsl:attribute>
-            <xsl:apply-templates/>
+            <xsl:apply-templates select="*[contains(@class,' topic/linktext ')]|text()"/>
+            <!--use linktext as linktext if it exists, otherwise use href as linktext-->
+            <xsl:choose>
+              <xsl:when test="*[contains(@class, ' topic/linktext ')]">
+                <xsl:apply-templates select="*[contains(@class, ' topic/linktext ')]"/>
+              </xsl:when>
+              <xsl:otherwise><!--use href--><xsl:call-template name="href"/></xsl:otherwise>
+            </xsl:choose>
           </fo:basic-link>
         </fo:block>
       </xsl:when>
-      <xsl:when test="@format='html' or @format='HTML'">
+      <xsl:when test="@format='html' or @format='HTML' or @scope='external'">
         <fo:block color="blue" text-decoration="underline" 
                   start-indent="{$basic-start-indent}">
           <xsl:text>&bullet; </xsl:text>
@@ -75,7 +82,13 @@
             <xsl:attribute name="external-destination">
               <xsl:value-of select="@href"/>
             </xsl:attribute>
-            <xsl:apply-templates/>
+            <!--use linktext as linktext if it exists, otherwise use href as linktext-->
+            <xsl:choose>
+              <xsl:when test="*[contains(@class, ' topic/linktext ')]">
+                <xsl:apply-templates select="*[contains(@class, ' topic/linktext ')]"/>
+              </xsl:when>
+              <xsl:otherwise><!--use href--><xsl:call-template name="href"/></xsl:otherwise>
+            </xsl:choose>
           </fo:basic-link>
         </fo:block>
       </xsl:when>
@@ -107,7 +120,7 @@
       <xsl:choose>
         <!-- If the format attribute is dita, or is unspecified, then interpret the href as a topic -->
         <!-- Create an internal hyperlink to the topic -->
-        <xsl:when test="@format='dita' or @format='DITA' or not(@format)">
+        <xsl:when test="not(@scope='external') and (@format='dita' or @format='DITA' or not(@format))">
           <fo:inline color="blue">
           <fo:basic-link>
             <!-- Set the destination to the id attribute of the topic referred to by the href -->
@@ -117,8 +130,8 @@
             <!--use content as linktext if it exists, otherwise use href as linktext-->
             <xsl:choose>
               <!--use xref content-->
-              <xsl:when test="*|text()">
-                <xsl:apply-templates select="*|text()"/>
+              <xsl:when test="text()">
+                <xsl:apply-templates select="text()"/>
               </xsl:when>
               <!--use href text-->
               <xsl:otherwise>
@@ -132,7 +145,7 @@
           <!-- If the format attribute is html, then interpret the href as an external link -->
           <!-- (for example, to a website) -->
           <xsl:choose>
-            <xsl:when test="@format='html' or @format='HTML'">
+            <xsl:when test="@scope='external' or @format='html' or @format='HTML'">
               <fo:inline color="blue">                
               <fo:basic-link>
                 <xsl:attribute name="external-destination">
@@ -141,8 +154,8 @@
                 <!--use content as linktext if it exists, otherwise use href as linktext-->
                 <xsl:choose>
                   <!--use xref content-->
-                  <xsl:when test="*|text()">
-                    <xsl:apply-templates select="*|text()"/>
+                  <xsl:when test="text()">
+                    <xsl:apply-templates select="text()"/>
                   </xsl:when>
                   <!--use href text-->
                   <xsl:otherwise>
@@ -185,10 +198,10 @@
         </xsl:choose>
       </xsl:when>
       <xsl:when test="contains(@href,'#')">
-        <xsl:value-of select="document(substring-before(@href,'#'),/)/*/@id"/>
+        <xsl:value-of select="document(substring-before(@href,'#'),/)//descendant::*[contains(@class,' topic/topic ')][1]/@id"/>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:value-of select="document(@href,/)/*/@id"/>
+        <xsl:value-of select="document(@href,/)/descendant::*[contains(@class,' topic/topic ')][1]/@id"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>

@@ -7,7 +7,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Properties;
 
 /**
  * Class description goes here.
@@ -64,10 +63,12 @@ public class DITAOTFileLogger {
 			}
 			
 			if (tmpLogFile.renameTo(log)) {
-				Properties params = new Properties();
-				params.put("%1", logFile);
-				params.put("%2", logDir);
-				javaLogger.logInfo(MessageUtils.getMessage("DOTJ018I", params).toString());
+				StringBuffer buff = new StringBuffer(256);
+				buff.append("Log file '").append(logFile);
+				buff.append("' was generated successfully in directory '");
+				buff.append(logDir).append("'.");				
+				
+				javaLogger.logInfo(buff.toString());
 				return;
 			}
 		}
@@ -77,7 +78,7 @@ public class DITAOTFileLogger {
 			tmpLogFile.delete();
 		}
 		
-		javaLogger.logError(MessageUtils.getMessage("DOTJ019E").toString());
+		javaLogger.logError("Failed to generate log file.");
 	}
 
 	/**

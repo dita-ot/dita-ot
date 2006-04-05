@@ -14,6 +14,9 @@
                 <codeblock>ant -Dargs.input={file|direcotry} -Dargs.output={direcotry} -Dargs.infotype={topic|concept|task|reference}</codeblock>
             </li>
         </ol>
+        <note>The namespace problem listed in <xref href="DITA-limitations.xml"/> 
+          has been fixed by adding a new preprocess step in the script in 
+          release 1.2.1.</note>
         <p>You can also add other parameters to the command. See the following table for details.</p>
         </section>
         <section>

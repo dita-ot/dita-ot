@@ -1,8 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
 
-<?xml-stylesheet href="faq2html_shell.xsl" type="text/xsl"?>
-<?xml-stylesheet href="faq_shell.css" type="text/css"?>
 <!DOCTYPE faq PUBLIC "-//IBM//DTD DITA FAQ//EN" "faq_shell.dtd" [
 ]>
 <faq id="ditafaq">

@@ -1,8 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
 
-<?xml-stylesheet href="../xsl/ditaview_shell.xsl" type="text/xsl"?>
-<?xml-stylesheet href="../css/dita_shell.css" type="text/css"?>
 <!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
 <topic id="ditarmpublic" xml:lang="en-us">
   <title> Introduction to the Darwin Information Typing Architecture</title>
@@ -152,14 +150,13 @@ Austin TX 78758</address>
         <title>Layers in the Darwin Information Typing Architecture</title>
       </fig>
       <table>
-        <tgroup cols="4">
+        <tgroup cols="3">
           <colspec colnum="1" colname="col1" colwidth="*"/>
           <colspec colnum="2" colname="col2" colwidth="*"/>
           <colspec colnum="3" colname="col3" colwidth="*"/>
           <thead>
             <row>
               <entry namest="col1" nameend="col3" align="center">Delivery contexts</entry>
-              <entry/>
             </row>
           </thead>
           <tbody>
@@ -167,7 +164,6 @@ Austin TX 78758</address>
               <entry colname="col1" align="center">helpset</entry>
               <entry colname="col2" align="center">aggregate printing</entry>
               <entry colname="col3" align="center">Web site; information portal</entry>
-              <entry/>
             </row>
           </tbody>
         </tgroup>

@@ -29,6 +29,7 @@ public class LogConfigTask extends Task {
 		DITAOTFileLogger logger = DITAOTFileLogger.getInstance();
 		String oldLogDir = logger.getLogDir();
 		
+		initMessageFile();
 		initLogDirectory();		
 		initLogFile();
 		
@@ -58,6 +59,11 @@ public class LogConfigTask extends Task {
 		logger.setLogFile(logFile);
 	}
 
+	private void initMessageFile() {
+		MessageUtils.reloadMessages(getProject().getProperty(
+				"args.message.file"));
+	}
+	
 	private void initLogDirectory() throws BuildException {
 		Project project = getProject();
 		

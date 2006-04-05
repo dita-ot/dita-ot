@@ -1,8 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
 
-<?xml-stylesheet href="../xsl/ditaview_shell.xsl" type="text/xsl"?>
-<?xml-stylesheet href="../css/dita_shell.css" type="text/css"?>
 <!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
 
 <topic id="specarch" xml:lang="en-us">
@@ -17,7 +15,6 @@
       <audience type="user" job="other" experiencelevel="general"/>
       <category>General</category>
       <keywords>
-        <keyword>Darwin Information Typing Architecture</keyword>
         <keyword>DITA</keyword>
         <keyword>XML</keyword>
         <keyword>topic</keyword>

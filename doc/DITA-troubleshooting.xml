@@ -35,5 +35,14 @@
           <li>Run the JavaHelp transformation again.</li>
         </ol>
     </section>
+    <section>
+        <title>3. Failed to load message file</title>
+        <p>In some situations, the toolkit may fails to load the message file 
+          due to some exceptions thrown.</p>
+        <p>To fix this problem, you need to check if there are files 
+          'resource/messages.xml' and 'resource/messages.dtd' in the directory 
+          that you run the toolkit. If not, please copy them from the toolkit's 
+          root directory.</p>
+    </section>
   </refbody>
 </reference>

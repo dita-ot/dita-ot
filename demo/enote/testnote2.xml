@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
 
-<?xml-stylesheet href="enote2html_shell.xsl" type="text/xsl"?>
 
 <!DOCTYPE enote PUBLIC "-//IBM//DTD DITA eNote//EN" "enote_shell.dtd">
 <enote id="asdf">

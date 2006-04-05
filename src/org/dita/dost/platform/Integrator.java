@@ -41,15 +41,24 @@ public class Integrator {
 
 	public void execute() {
 		// TODO Auto-generated method stub
-		File demoDir = new File(ditaDir+"/demo");
-		File[] files = demoDir.listFiles();
+		File demoDir = new File(ditaDir + "/demo");
+		File pluginDir = new File(ditaDir + "/plugins");
+		File[] demoFiles = demoDir.listFiles();
+		File[] pluginFiles = pluginDir.listFiles();
 		
-		for (int i=0; i < files.length; i++){
-			File descFile = new File(files[i],"plugin.xml");
-			if (files[i].isDirectory() && descFile.exists()){
+		for (int i=0; i < demoFiles.length; i++){
+			File descFile = new File(demoFiles[i],"plugin.xml");
+			if (demoFiles[i].isDirectory() && descFile.exists()){
 				descSet.add(descFile);
 			}
-		}		
+		}
+		for (int i=0; i < pluginFiles.length; i++){
+			File descFile = new File(pluginFiles[i],"plugin.xml");
+			if (pluginFiles[i].isDirectory() && descFile.exists()){
+				descSet.add(descFile);
+			}
+		}
+		
 		parsePlugin();
 		integrate();
 	}

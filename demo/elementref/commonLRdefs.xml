@@ -2,8 +2,6 @@
 <!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
 <!DOCTYPE elementref PUBLIC "-//IBM//DTD DITA Element Reference//EN" "elementref_shell.dtd">
 
-<?xml-stylesheet href="elementref2html_shell.xsl" type="text/xsl"?>
-<?xml-stylesheet href="../demo_shell.css" type="text/css"?>
 <elementref id="commonLRdefs" xml:lang="en-us">
 <elementname>
 <element>Common content for Language Reference</element>

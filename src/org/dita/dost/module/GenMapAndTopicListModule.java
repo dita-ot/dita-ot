@@ -23,6 +23,7 @@ import org.dita.dost.reader.DitaValReader;
 import org.dita.dost.reader.GenListModuleReader;
 import org.dita.dost.util.Constants;
 import org.dita.dost.util.FileUtils;
+import org.dita.dost.util.FilterUtils;
 import org.dita.dost.util.StringUtils;
 import org.dita.dost.writer.PropertiesWriter;
 import org.xml.sax.SAXException;
@@ -139,12 +140,14 @@ public class GenMapAndTopicListModule extends AbstractPipelineModule {
 			inputFile = inFile.getName();
 
 			GenListModuleReader.initXMLReader(ditaDir);
-
-			addInputToHrefTargets();
+			
+			// first parse filter file for later use
+			parseFilterFile();
+			
 			addToWaitList(inputFile);
 			processWaitList();
 			updateBaseDirectory();
-			parseFlaggingImages();
+			
 			outputResult();
 		} catch (SAXException e) {
 			throw new DITAOTException(e.getMessage(), e);
@@ -152,16 +155,7 @@ public class GenMapAndTopicListModule extends AbstractPipelineModule {
 
 		return null;
 	}
-
-	/*
-	 * Add the input file into href targets for index generation.
-	 */
-	private void addInputToHrefTargets() {
-		if (FileUtils.isDITATopicFile(inputFile.toLowerCase())) {
-			hrefTargetSet.add(new File(inputFile).getPath());
-		}
-	}
-
+	
 	/**
 	 * @param baseDir
 	 * @throws DITAOTException
@@ -178,17 +172,22 @@ public class GenMapAndTopicListModule extends AbstractPipelineModule {
 
 	private void processFile(String currentFile) throws DITAOTException {
 		File fileToParse = new File(baseDir, currentFile);
-
+		String msg = null;
+		Properties params = new Properties();
+		params.put("%1", currentFile);		
+		
 		try {
 			reader.setCurrentDir(new File(currentFile).getParent());
 			reader.parse(fileToParse);
-			processParseResult(currentFile);
-			categorizeCurrentFile(currentFile);
-		} catch (Exception e) {
-			Properties params = new Properties();
-			params.put("%1", currentFile);
-			String msg = null;
 
+			// don't put it into dita.list if it is invalid
+			if (reader.isValidInput()) {
+				processParseResult(currentFile);
+				categorizeCurrentFile(currentFile);
+			} else if (!currentFile.equals(inputFile)) {
+				javaLogger.logWarn(MessageUtils.getMessage("DOTJ021W", params).toString());
+			}	
+		} catch (Exception e) {
 			if (currentFile.equals(inputFile)) {
 				// stop the build if exception thrown when parsing input file.
 				msg = MessageUtils.getMessage("DOTJ012F", params).toString();
@@ -201,7 +200,13 @@ public class GenMapAndTopicListModule extends AbstractPipelineModule {
 			javaLogger.logError(msg);
 			javaLogger.logException(e);
 		}
-
+		
+		if (!reader.isValidInput() && currentFile.equals(inputFile)) {
+			// stop the build if all content in the input file was filtered out.
+			msg = MessageUtils.getMessage("DOTJ022F", params).toString();							
+			throw new DITAOTException(msg);
+		}
+		
 		doneList.add(currentFile);
 		reader.reset();
 	}
@@ -223,6 +228,11 @@ public class GenMapAndTopicListModule extends AbstractPipelineModule {
 		String lcasefn = currentFile.toLowerCase();
 		
 		ditaSet.add(currentFile);
+		
+		if (FileUtils.isTopicFile(currentFile)) {
+			hrefTargetSet.add(currentFile);
+		}
+		
 		hrefTargetSet.addAll(reader.getHrefTargets());
 
 		if (reader.hasConRef()) {
@@ -296,11 +306,15 @@ public class GenMapAndTopicListModule extends AbstractPipelineModule {
 		}
 	}
 
-	private void parseFlaggingImages() {
+	private void parseFilterFile() {
 		if (ditavalFile != null) {
-			DitaValReader ditavalReader = new DitaValReader();
-			ditavalReader.read(ditavalFile);
-			flagImageSet.addAll(ditavalReader.getImageList());
+			DitaValReader ditaValReader = new DitaValReader();
+			
+			ditaValReader.read(ditavalFile);			
+			// Store filter map for later use
+			FilterUtils.setFilterMap(ditaValReader.getFilterMap());			
+			// Store flagging image used for image copying
+			flagImageSet.addAll(ditaValReader.getImageList());
 		}
 	}
 	

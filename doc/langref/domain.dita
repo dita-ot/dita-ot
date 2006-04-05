@@ -3,7 +3,6 @@
 
 
  *-->
-<?xml-stylesheet href="../../xsl/dita2html_shell.xsl" type="text/xsl"?>
 <!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN" "../../dtd/reference.dtd" []>
 <reference id="domain" xml:lang="en-us">
    <title>Domain elements</title>

@@ -8,6 +8,7 @@
     <property name="args.output" value="." />
     <property name="args.dita.ext" value=".dita" />
     <property name="args.xsl" value="h2d.xsl" />
+    <property name="temp.dir" value="temp"/>
 
     <!-- - - - - - - - - - - - - - - - - - 
           private target: init                      
@@ -51,26 +52,48 @@
         </fail>
     </target>
 
-
+    <!-- - - - - - - - - - - - - - - - - - 
+          private target: clean-temp                      
+         - - - - - - - - - - - - - - - - - -->
+    <target name="clean-temp" description="-->Clean temp directory">
+      <delete dir="${temp.dir}"/>
+    </target>
+      
     <!-- ================================= 
           public target: html2dita              
          ================================= -->
     <target name="html2dita"
-            depends="html2dita-single, html2dita-batch"
+            depends="html2dita-single, html2dita-batch, clean-temp"
             description="-->Migrate one or more HTML files to DITA files">
     </target>
 
 
     <!-- - - - - - - - - - - - - - - - - - 
+          private target: preprocess-batch              
+         - - - - - - - - - - - - - - - - - -->
+    <target name="preprocess-batch" 
+            if="isInputDir" 
+            description="-->Remove xmlns from HTML files">
+      <xslt processor="trax"
+            basedir="${args.input}"
+            destdir="${temp.dir}"
+            includes="${includes.pattern}"
+            style="preprocess.xsl"
+            force="true">
+        <mapper type="identity"/>
+      </xslt>
+    </target>
+      
+    <!-- - - - - - - - - - - - - - - - - - 
           private target: html2dita-batch              
          - - - - - - - - - - - - - - - - - -->
     <target name="html2dita-batch"
-            depends="init"
+            depends="init, preprocess-batch"
             if="isInputDir"
             description="-->Migrate HTML files to DITA files in batches">
 
         <xslt processor="trax"
-              basedir="${args.input}"
+              basedir="${temp.dir}"
               destdir="${args.output}"
               includes="${includes.pattern}"
               extension="${args.dita.ext}"
@@ -88,18 +111,33 @@
         </xslt>
     </target>
 
-
+    <!-- - - - - - - - - - - - - - - - - - 
+          private target: preprocess-single              
+         - - - - - - - - - - - - - - - - - -->
+    <target name="preprocess-single" 
+            if="isInputFile"
+            description="-->Remove xmlns from HTML file">
+      <basename file="${args.input}" property="filename" />
+      <dirname file="${args.input}" property="args.input.dir"/>
+      <xslt processor="trax"
+            basedir="${args.input.dir}"
+            destdir="${temp.dir}"
+            includes="${filename}"            
+            style="preprocess.xsl"
+            force="true">
+        <mapper type="identity"/>
+      </xslt>
+    </target>
+    
     <!-- - - - - - - - - - - - - - - - - - 
           private target: html2dita-batch              
          - - - - - - - - - - - - - - - - - -->
     <target name="html2dita-single"
-            depends="init"
+            depends="init, preprocess-single"
             if="isInputFile"
             description="-->Migrate single HTML file to DITA file">
-        <basename file="${args.input}" property="filename" />
-        <dirname file="${args.input}" property="args.input.dir"/>
         <xslt processor="trax"
-              basedir="${args.input.dir}"
+              basedir="${temp.dir}"
               includes="${filename}"
               destdir="${args.output}"
               extension="${args.dita.ext}"
