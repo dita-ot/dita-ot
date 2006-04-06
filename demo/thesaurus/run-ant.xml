@@ -21,6 +21,7 @@
 		<param name="associateMap" value="garageAssociate.ditamap"/>
 		<param name="output.dir"
             value="${basedir}${file.separator}demo${file.separator}thesaurus${file.separator}out${file.separator}sample"/>
+		<param name="dita.ext" value=".xml"/>
       </antcall>
 	</target>
 
@@ -43,6 +44,7 @@
 		<param name="thesaurus.temp.dir" value="${dita.temp.dir}${file.separator}thesaurus"/>
 		<param name="output.dir"
             value="${basedir}${file.separator}demo${file.separator}thesaurus${file.separator}out${file.separator}sample"/>
+		<param name="dita.ext" value=".xml"/>
       </antcall>
 
       <copy file="${basedir}${file.separator}demo${file.separator}thesaurus${file.separator}sample${file.separator}content_frameset.html"
