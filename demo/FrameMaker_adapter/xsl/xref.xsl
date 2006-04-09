@@ -22,14 +22,15 @@
 		<xsl:when test="string-length(normalize-space(.))">
 			<fm_internal_link_with_anchor_text><xsl:copy-of select="@*"/>
 			<fm_internal_linktext><xsl:copy-of select="@*"/><xsl:call-template name="fm_goto_marker"/><xsl:apply-templates select="." mode="process-children"/></fm_internal_linktext>
-			<fm_internal_xref_after_content idref="{substring-after(@xlink:href, '#')}"><xsl:copy-of select="@*"/></fm_internal_xref_after_content>
+			<fm_internal_xref_after_content><xsl:attribute name="idref"><xsl:value-of select="substring-after(@href,'#')"/></xsl:attribute><xsl:copy-of select="@*"/></fm_internal_xref_after_content>
 			</fm_internal_link_with_anchor_text>
 		</xsl:when>
 
 		<!-- internal cross reference without link anchor text -->
 		<xsl:otherwise>
 			<fm_internal_link_no_anchor_text><xsl:copy-of select="@*"/>
-			<fm_internal_xref idref="{substring-after(@xlink:href, '#')}"><xsl:copy-of select="@*"/></fm_internal_xref>
+<!--			<fm_internal_xref idref="{substring-after(@href,'#')}"><xsl:copy-of select="@*"/></fm_internal_xref> -->
+			<fm_internal_xref><xsl:attribute name="idref"><xsl:value-of select="substring-after(@href,'#')"/></xsl:attribute><xsl:copy-of select="@*"/></fm_internal_xref>
 			</fm_internal_link_no_anchor_text>
 		</xsl:otherwise>
           </xsl:choose>
@@ -45,8 +46,13 @@
     <xsl:template name="fm_goto_marker">
 			<xsl:processing-instruction name="Fm"> 
 				<xsl:text>MARKER [Hypertext] gotolink </xsl:text>
-				<xsl:value-of select="substring-after(@xlink:href,'#')"/>
+				<xsl:value-of select="substring-after(@href,'#')"/>
 			</xsl:processing-instruction>
     </xsl:template>
 
 </xsl:stylesheet>
+<!-- Stylus Studio meta-information - (c) 2004-2005. Progress Software Corporation. All rights reserved.
+<metaInformation>
+<scenarios/><MapperMetaTag><MapperInfo srcSchemaPathIsRelative="yes" srcSchemaInterpretAsXML="no" destSchemaPath="" destSchemaRoot="" destSchemaPathIsRelative="yes" destSchemaInterpretAsXML="no"/><MapperBlockPosition></MapperBlockPosition><TemplateContext></TemplateContext><MapperFilter side="source"></MapperFilter></MapperMetaTag>
+</metaInformation>
+-->

@@ -13,7 +13,8 @@
   <xsl:if test="$config-book = 'yes' and $config-chapter-grouping = 'each'">
     <xsl:processing-instruction name="Fm">
       <xsl:choose>
-        <!-- If outputclass defined on topic then use this as filename for FrameMaker file in book -->
+        <!-- If outputclass defined on topic then use this as filename for FrameMaker file in book.
+		     Used to allow identification of TOC/IX/LOT/LOF -->
         <xsl:when test="@outputclass">
           <xsl:text>document "</xsl:text>
           <xsl:value-of select="@outputclass"/>
@@ -61,3 +62,8 @@
 </xsl:template>
 
 </xsl:stylesheet>
+<!-- Stylus Studio meta-information - (c) 2004-2005. Progress Software Corporation. All rights reserved.
+<metaInformation>
+<scenarios/><MapperMetaTag><MapperInfo srcSchemaPathIsRelative="yes" srcSchemaInterpretAsXML="no" destSchemaPath="" destSchemaRoot="" destSchemaPathIsRelative="yes" destSchemaInterpretAsXML="no"/><MapperBlockPosition></MapperBlockPosition><TemplateContext></TemplateContext><MapperFilter side="source"></MapperFilter></MapperMetaTag>
+</metaInformation>
+-->

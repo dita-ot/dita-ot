@@ -36,9 +36,11 @@
   <topic>
     <xsl:apply-templates select="@*[name() != 'id']"/>
     <xsl:apply-templates select="@id"/>
-    <!-- *** Moldflow-specific *** -->
+
     <!-- Insert element to count chapter numbers. -->
-    <moldflow_chapterhead/>
+	<xsl:if test="$config-chapter-head = 'yes'">
+    	<chapter-head/>
+	</xsl:if>
     <!-- Use Header/Footer $1 marker for chapter title. -->
     <xsl:processing-instruction name="Fm" >
       <xsl:text>MARKER [Header/Footer $1] </xsl:text>
@@ -56,7 +58,6 @@
         </xsl:otherwise>
       </xsl:choose>
     </xsl:processing-instruction>
-    <!-- *** End Moldflow-specific code *** -->
     <xsl:if test="self::node()[contains(@class, ' mapgroup-d/topichead ')]">
       <title>
         <xsl:apply-templates select="@navtitle" mode="topichead-title"/>
@@ -69,3 +70,8 @@
 
 </xsl:stylesheet>
 
+<!-- Stylus Studio meta-information - (c) 2004-2005. Progress Software Corporation. All rights reserved.
+<metaInformation>
+<scenarios ><scenario default="yes" name="Scenario1" userelativepaths="yes" externalpreview="no" url="..\..\..\temp\installing&#x2D;ditaot.ditamap" htmlbaseurl="" outputurl="" processortype="internal" useresolver="yes" profilemode="0" profiledepth="" profilelength="" urlprofilexml="" commandline="" additionalpath="" additionalclasspath="" postprocessortype="none" postprocesscommandline="" postprocessadditionalpath="" postprocessgeneratedext="" validateoutput="no" validator="internal" customvalidator=""/></scenarios><MapperMetaTag><MapperInfo srcSchemaPathIsRelative="yes" srcSchemaInterpretAsXML="no" destSchemaPath="" destSchemaRoot="" destSchemaPathIsRelative="yes" destSchemaInterpretAsXML="no"/><MapperBlockPosition></MapperBlockPosition><TemplateContext></TemplateContext><MapperFilter side="source"></MapperFilter></MapperMetaTag>
+</metaInformation>
+-->

@@ -98,7 +98,7 @@
         <xsl:apply-templates select="." mode="is-block"/>
       </xsl:variable>
       <xsl:choose>
-        <xsl:when test="string-length($is-block) &gt; 0">
+        <xsl:when test="$is-block">
           <xsl:value-of select="$is-block"/>
         </xsl:when>
         <xsl:when test="count(preceding-sibling::node()) = 0">
@@ -130,7 +130,7 @@
         <xsl:apply-templates select="." mode="is-block"/>
       </xsl:variable>
       <xsl:choose>
-        <xsl:when test="string-length($is-block) &gt; 0">
+        <xsl:when test="$is-block">
           <xsl:value-of select="$is-block"/>
         </xsl:when>
         <xsl:when test="count(following-sibling::node()) = 0">

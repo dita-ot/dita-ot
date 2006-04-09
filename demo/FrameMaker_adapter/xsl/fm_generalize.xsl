@@ -29,7 +29,37 @@
                       type (group bookmap types (preface, chapter, appendix) into one book each)
                       each (every top-level topic is its own chapter)
      -->
-<xsl:param name="config-chapter-grouping">one</xsl:param>
+<xsl:param name="config-chapter-grouping">each</xsl:param>
+
+<!-- Configuration: Add chapter-head element to topics
+     Possible values: yes (add chapter-head element)
+	                  no (don't add chapter-head)
+	 -->
+<xsl:param name="config-chapter-head">no</xsl:param>
+
+<!-- Configuration: Treat all dl's as tables
+     Possible values: yes (treat all dl's as tables)
+	                  no (don't treat as table)
+	 -->
+<xsl:param name="config-dl-as-table">yes</xsl:param>
+
+<!-- Configuration: treat codeblock as single cell table
+     Possible values: yes
+	                  no
+	 -->
+<xsl:param name="config-codeblock-as-table">no</xsl:param>
+
+<!-- Configuration: put title after image
+     Possible values: yes
+	                  no
+	 -->
+<xsl:param name="config-title-after-image">yes</xsl:param>
+
+<!-- Configuration: FM text frame width
+     Possible values: units e.g. 4.75in
+	 -->
+<xsl:param name="config-text-frame-width">4.75in</xsl:param>
+
 
 <xsl:variable name="apos">'</xsl:variable>
 
@@ -75,10 +105,17 @@
 
  
     <!-- Ignore these elements (more prolog elements TODO) -->
+	<!--
     <xsl:template match="*[contains(@class, ' map/topicref ') and not(contains(@class, ' mapgroup-d/topichead '))] |
                          *[contains(@class, ' topic/prolog ')] |
+                         *[contains(@class, ' topic/author ')] |
+                         *[contains(@class, ' topic/copyright ')] |
                          *[contains(@class, ' topic/keywords ')] |
                          *[contains(@class, ' topic/metadata ')] " priority="5">
+	<xsl:apply-templates/>
+    </xsl:template>
+	-->
+	<xsl:template match="*[contains(@class, ' map/topicref ') and not(contains(@class, ' mapgroup-d/topichead '))]" priority="5">
 	<xsl:apply-templates/>
     </xsl:template>
 
@@ -111,14 +148,17 @@
         <xsl:apply-templates select="." mode="simplify-class"/>
       </xsl:attribute>
     </xsl:template>
-
-    <xsl:template match="@refclass">
+                          
+<!-- Removed by Paul Prescod -->
+<!--
+   <xsl:template match="@refclass">
       <xsl:attribute name="refclass">
         <xsl:apply-templates select="." mode="simplify-class"/>
       </xsl:attribute>
     </xsl:template>
-
+-->
     <xsl:template match="@id">
+	<xsl:copy-of select="."/>
 	<xsl:processing-instruction name="Fm">MARKER [Hypertext] newlink <xsl:value-of select="."/></xsl:processing-instruction>
     </xsl:template>
 
@@ -144,11 +184,11 @@
         </xsl:if>
     </xsl:template>
 
-    <xsl:template match="*[@class]">
+    <xsl:template match="*[@class]" priority="0">
           <xsl:apply-templates select="." mode="replace-tag"/>
     </xsl:template>
 
-  <xsl:template match="*[@class]" mode="replace-tag">
+  <xsl:template match="*[@class]" mode="replace-tag" priority="0">
           <xsl:call-template name="wrap-fm-pi-begin"/>
               <xsl:variable name="generalize" select="substring-before(substring-after(@class,'/'),' ')"/>
               <xsl:element name="{$generalize}">
@@ -179,7 +219,7 @@
           <xsl:choose>
             <xsl:when test="contains($child-block, 'y') and contains($child-block, 'n')">
               <xsl:for-each select="child::node()">
-                <xsl:variable name="is-block">
+                <xsl:variable name="is-block-child">
                   <xsl:apply-templates select="." mode="is-block"/>
                 </xsl:variable>
                 <xsl:variable name="preceding-block">
@@ -187,15 +227,15 @@
                 </xsl:variable>
                 <xsl:choose>
                   <!-- Block elements need no attention. -->
-                  <xsl:when test="$is-block = 'y'">
+                  <xsl:when test="$is-block-child = 'y'">
                     <xsl:apply-templates select="."/>
                   </xsl:when>
                   <xsl:when test="$preceding-block = 'n'"/> <!-- Skip -->
                   <!-- Start of inline sequence, needs wrapper. -->
-                  <xsl:when test="$is-block = 'n'">
-                    <fm_div>
+                  <xsl:when test="$is-block-child = 'n'">
+                    <!--<fm_div>-->
                       <xsl:apply-templates select="." mode="walk-inline-wrap"/>
-                    </fm_div>
+                    <!--</fm_div>-->
                   </xsl:when>
                   <!-- Otherwise is vanished node outside block. -->
                   <xsl:otherwise>
@@ -238,7 +278,7 @@
         <xsl:param name="s"/>
         <xsl:variable name="t" select="translate($s, '\[]:;&lt;&gt;', ':::::')"/>
         <xsl:choose>
-          <xsl:when test="not(contains($t, ':'))">
+          <xsl:when test="not(contains($t, '\:'))">
             <xsl:value-of select="$s"/>
           </xsl:when>
           <xsl:otherwise>
@@ -283,5 +323,11 @@
 <xsl:include href="tm.xsl"/>
 <xsl:include href="xref.xsl"/>
 <xsl:include href="topic.xsl"/>
+<xsl:include href="customized.xsl"/>
 
 </xsl:stylesheet>
+<!-- Stylus Studio meta-information - (c) 2004-2005. Progress Software Corporation. All rights reserved.
+<metaInformation>
+<scenarios/><MapperMetaTag><MapperInfo srcSchemaPathIsRelative="yes" srcSchemaInterpretAsXML="no" destSchemaPath="" destSchemaRoot="" destSchemaPathIsRelative="yes" destSchemaInterpretAsXML="no"/><MapperBlockPosition></MapperBlockPosition><TemplateContext></TemplateContext><MapperFilter side="source"></MapperFilter></MapperMetaTag>
+</metaInformation>
+-->
