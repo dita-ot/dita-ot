@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
+<!-- (c) Copyright IBM Corp. 2004, 2006 All Rights Reserved. -->
 
 <!-- Second step in the DITA to text transform. This takes an intermediate
      format, and converts it to text output. The text style is determined by
@@ -48,7 +48,7 @@
                    extra indenting specified by @indent.
                    
    Attributes on text:
-      @style="bold|italics|underline|tt|sup|sub"
+      @style="bold|italics|underlined|tt|sup|sub"
       @href="" [target, if this is a link]
       @format="" copy through @format for a link
       @scope="" copy through @scope for a link
@@ -63,7 +63,7 @@
 />
 
 
-<xsl:param name="LINELENGTH">50</xsl:param>
+<xsl:param name="LINELENGTH">65</xsl:param>
 
 <xsl:param name="OUTFORMAT">troff</xsl:param>
 <xsl:param name="FILENAME"></xsl:param>
@@ -79,7 +79,7 @@
   <xsl:choose>
     <xsl:when test="$OUTFORMAT='plaintext'"><xsl:value-of select="$newline"/></xsl:when>
     <xsl:when test="$OUTFORMAT='troff' or $OUTFORMAT='nroff'">
-      <xsl:value-of select="$newline"/>.sp<xsl:value-of select="$newline"/>
+      <xsl:value-of select="$newline"/>.br<xsl:value-of select="$newline"/>
     </xsl:when>
   </xsl:choose>
 </xsl:template>
@@ -92,8 +92,56 @@
   </xsl:choose>
 </xsl:template>
 
+<!-- Set the default justification -->
+<xsl:template name="set-default-justification">
+  <xsl:choose>
+    <xsl:when test="$OUTFORMAT='plaintext'"><xsl:value-of select="$newline"/></xsl:when>
+    <xsl:when test="$OUTFORMAT='troff' or $OUTFORMAT='nroff'">
+      <xsl:choose>
+        <xsl:when test="/dita/@dir='rtl'">
+          <xsl:value-of select="$newline"/>.ad r<xsl:value-of select="$newline"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="$newline"/>.ad l<xsl:value-of select="$newline"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:when>
+  </xsl:choose>
+</xsl:template>
+<!-- Set the default line length. Tables are 72, so set it to 72. -->
+<xsl:template name="set-default-linelength">
+  <xsl:choose>
+    <xsl:when test="$OUTFORMAT='plaintext'"><xsl:value-of select="$newline"/></xsl:when>
+    <xsl:when test="$OUTFORMAT='troff' or $OUTFORMAT='nroff'">
+      <xsl:value-of select="$newline"/>.ll 72<xsl:value-of select="$newline"/>
+    </xsl:when>
+  </xsl:choose>
+</xsl:template>
+
+<!-- Turn on centering -->
+<xsl:template name="start-centering">
+  <xsl:choose>
+    <xsl:when test="$OUTFORMAT='plaintext'"><xsl:value-of select="$newline"/></xsl:when>
+    <xsl:when test="$OUTFORMAT='troff' or $OUTFORMAT='nroff'">
+      <!-- Centers the next 1000 lines, or until centering is turned off -->
+      <xsl:value-of select="$newline"/>.ce 1000<xsl:value-of select="$newline"/>
+    </xsl:when>
+  </xsl:choose>
+</xsl:template>
+<!-- Turn on centering -->
+<xsl:template name="stop-centering">
+  <xsl:choose>
+    <xsl:when test="$OUTFORMAT='plaintext'"><xsl:value-of select="$newline"/></xsl:when>
+    <xsl:when test="$OUTFORMAT='troff' or $OUTFORMAT='nroff'">
+      <xsl:value-of select="$newline"/>.ce 0<xsl:value-of select="$newline"/>
+    </xsl:when>
+  </xsl:choose>
+</xsl:template>
+
 <!-- root rule -->
 <xsl:template match="/">
+  <xsl:call-template name="set-default-justification"/>
+  <xsl:call-template name="set-default-linelength"/>
   <xsl:apply-templates select="*[1]"/>
 </xsl:template>
 
@@ -105,7 +153,7 @@
      their own, they can always return '' from this function. -->
 <xsl:template match="*" mode="find-indent">
   <xsl:choose>
-    <xsl:when test="not(@indent)"/>
+    <xsl:when test="not(@indent) or @expanse='page'"/>
     <xsl:when test="@indent='1'"><xsl:text> </xsl:text></xsl:when>
     <xsl:when test="@indent='2'"><xsl:text>  </xsl:text></xsl:when>
     <xsl:when test="@indent='3'"><xsl:text>   </xsl:text></xsl:when>
@@ -147,6 +195,7 @@
   <xsl:param name="leadin"/>   <!-- Text to use once, before indent -->
   <xsl:param name="addIndent">
     <xsl:choose>
+      <xsl:when test="@expanse='page'"/>  <!-- Ignore any active indent -->
       <!-- If there is lead-in text that does not indent, only get the indent from ancestor blocks -->
       <xsl:when test="string-length(normalize-space($leadin))>0">
         <xsl:apply-templates select="ancestor-or-self::block/ancestor::*[@indent]" mode="find-indent"/>
@@ -214,10 +263,25 @@
 <!-- Process pre-formatted text. Newlines should be preserved, none should be added. -->
 <xsl:template name="preserve-space">
     <xsl:param name="string" select="."/>
+    <xsl:param name="leadin"/>   <!-- Text to use once, before indent -->
+    <xsl:param name="addIndent">
+      <xsl:choose>
+        <xsl:when test="@expanse='page'"/>  <!-- Ignore any active indent -->
+        <!-- If there is lead-in text that does not indent, only get the indent from ancestor blocks -->
+        <xsl:when test="string-length(normalize-space($leadin))>0">
+          <xsl:apply-templates select="ancestor-or-self::block/ancestor::*[@indent]" mode="find-indent"/>
+        </xsl:when>
+        <!-- Otherwise, start with the indent on the current element -->
+        <xsl:otherwise>
+          <xsl:apply-templates select="ancestor-or-self::*[@indent]" mode="find-indent"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:param>
     <xsl:choose>
         <xsl:when test="string-length($string)=0"/>
         <xsl:when test="contains($string,$newline)">
             <!-- Warn if the line exceeds the limit? -->
+            <xsl:value-of select="$addIndent"/>
             <xsl:value-of select="substring-before($string,$newline)"/>
             <xsl:call-template name="force-newline"/>
             <xsl:call-template name="preserve-space">
@@ -225,21 +289,58 @@
             </xsl:call-template>
         </xsl:when>
         <xsl:otherwise>
+            <xsl:value-of select="$addIndent"/>
             <xsl:value-of select="$string"/>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
 
+<xsl:template name="center-this-block">
+  <xsl:if test="@position='center' and not(ancestor::*[@position='center'])">
+    <xsl:call-template name="start-centering"/>
+  </xsl:if>
+</xsl:template>
+<xsl:template name="UN-center-this-block">
+  <xsl:if test="@position='center' and not(ancestor::*[@position='center'])">
+    <xsl:call-template name="stop-centering"/>
+  </xsl:if>
+</xsl:template>
+
 <!-- Process a block. If there was a block or text immediately before, we need to jump down
      a new line. -->
+<!-- If a block is in <text> it probably means this was a breaking image in a phrase.
+     Otherwise, blocks should not be able to appear in text. In that case, treat it as inline. -->
 <xsl:template match="block">
-  <xsl:if test="preceding-sibling::*">
-    <xsl:choose>
-      <xsl:when test="@compact='yes'"><xsl:call-template name="force-newline"/></xsl:when>
-      <xsl:otherwise><xsl:call-template name="force-two-newlines"/></xsl:otherwise>
-    </xsl:choose>
-  </xsl:if>
-  <xsl:apply-templates select="*[1]"/>
+  <xsl:variable name="thisLeadin">
+    <!-- If there is no text inside here, and it should have lead-in (such as a list
+         number), ensure the lead-in still shows up. -->
+    <xsl:if test="@leadin and (not(*) or *[1][self::block|section])"><xsl:value-of select="@leadin"/></xsl:if>
+  </xsl:variable>
+  <xsl:variable name="leadinWithIndent">
+    <xsl:if test="normalize-space($thisLeadin)">
+      <xsl:apply-templates select="ancestor::*[@indent]" mode="find-indent"/>
+      <xsl:value-of select="$thisLeadin"/>
+      <xsl:value-of select="$newline"/>
+    </xsl:if>
+  </xsl:variable>
+  <xsl:choose>
+    <xsl:when test="ancestor::text">
+      <xsl:value-of select="$thisLeadin"/> <!-- If doing it inline, do not use indent -->
+      <xsl:apply-templates select="*[1]"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:if test="preceding-sibling::*">
+        <xsl:choose>
+          <xsl:when test="@compact='yes'"><xsl:call-template name="force-newline"/></xsl:when>
+          <xsl:otherwise><xsl:call-template name="force-two-newlines"/></xsl:otherwise>
+        </xsl:choose>
+      </xsl:if>
+      <xsl:call-template name="center-this-block"/>
+      <xsl:value-of select="$leadinWithIndent"/>
+      <xsl:apply-templates select="*[1]"/>
+      <xsl:call-template name="UN-center-this-block"/>
+    </xsl:otherwise>
+  </xsl:choose>
   <xsl:apply-templates select="following-sibling::*[1]"/>
 </xsl:template>
 
@@ -263,16 +364,23 @@
 <!-- Based on step1, section titles should come first in the section. If this is
      a *ROFF format, use the .SH macro to get roff's section-like formatting. -->
 <xsl:template match="sectiontitle">
+  <xsl:if test="preceding-sibling::*">
+    <xsl:call-template name="force-two-newlines"/>
+  </xsl:if>
   <xsl:choose>
     <xsl:when test="$OUTFORMAT='plaintext'">
       <xsl:call-template name="force-two-newlines"/>
-      <xsl:apply-templates select="*[1]"/>
+      <xsl:apply-templates/>
     </xsl:when>
     <xsl:when test="$OUTFORMAT='troff' or $OUTFORMAT='nroff'">
-      <xsl:text>
-.SH "</xsl:text><xsl:apply-templates select="*[1]"/><xsl:text>"</xsl:text>
+      <xsl:value-of select="$newline"/>.SH "<xsl:apply-templates/>"<xsl:value-of select="$newline"/>
+      <xsl:call-template name="start-bold"/>
+      <xsl:apply-templates>
+        <xsl:with-param name="current-style" select="'bold'"/>
+      </xsl:apply-templates>
+      <xsl:call-template name="start-normal"/>
     </xsl:when>
-    <xsl:otherwise><xsl:apply-templates select="*[1]"/></xsl:otherwise>
+    <xsl:otherwise><xsl:apply-templates/></xsl:otherwise>
   </xsl:choose>
   <!-- Do not process following siblings: those come through from section -->
 </xsl:template>
@@ -284,10 +392,33 @@
      preformatted section; would need to make sure that nested elements do
      not cause problems with that. -->
 <xsl:template match="block[@xml:space='preserve']">
-  <xsl:if test="preceding-sibling::*">
-    <xsl:call-template name="force-two-newlines"/>
-  </xsl:if>
-  <xsl:call-template name="preserve-space"/>
+  <xsl:variable name="thisLeadin">
+    <!-- If there is no text inside here, and it should have lead-in (such as a list
+         number), ensure the lead-in still shows up. -->
+    <xsl:if test="@leadin and (not(*) or *[1][self::block|section])"><xsl:value-of select="@leadin"/></xsl:if>
+  </xsl:variable>
+  <xsl:variable name="leadinWithIndent">
+    <xsl:if test="normalize-space($thisLeadin)">
+      <xsl:apply-templates select="ancestor::*[@indent]" mode="find-indent"/>
+      <xsl:value-of select="$thisLeadin"/>
+      <xsl:value-of select="$newline"/>
+    </xsl:if>
+  </xsl:variable>
+  <xsl:choose>
+    <xsl:when test="ancestor::text">      <!-- Should not ever be active, but just in case -->
+      <xsl:value-of select="$thisLeadin"/>
+      <xsl:call-template name="preserve-space"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:if test="preceding-sibling::*">
+        <xsl:call-template name="force-two-newlines"/>
+      </xsl:if>
+      <xsl:call-template name="center-this-block"/>
+      <xsl:value-of select="$leadinWithIndent"/>
+      <xsl:call-template name="preserve-space"/>
+      <xsl:call-template name="UN-center-this-block"/>
+    </xsl:otherwise>
+  </xsl:choose>
   <xsl:apply-templates select="(following-sibling::*)[1]"/>
 </xsl:template>
 
@@ -303,6 +434,20 @@
   <xsl:choose>
     <xsl:when test="$OUTFORMAT='plaintext'"/>
     <xsl:when test="$OUTFORMAT='troff' or $OUTFORMAT='nroff'">\fI</xsl:when>
+  </xsl:choose>
+</xsl:template>
+<xsl:template name="start-underlined">
+  <xsl:choose>
+    <!-- No underlined in basic troff, use italic -->
+    <xsl:when test="$OUTFORMAT='plaintext'"/>
+    <xsl:when test="$OUTFORMAT='troff' or $OUTFORMAT='nroff'">\fI</xsl:when>
+  </xsl:choose>
+</xsl:template>
+<!-- Default is already tt for these formats, so use normal font -->
+<xsl:template name="start-tt">
+  <xsl:choose>
+    <xsl:when test="$OUTFORMAT='plaintext'"/>
+    <xsl:when test="$OUTFORMAT='troff' or $OUTFORMAT='nroff'">\fR</xsl:when>
   </xsl:choose>
 </xsl:template>
 <xsl:template name="start-normal">
@@ -331,13 +476,27 @@
         <xsl:with-param name="current-style" select="'italics'"/>
       </xsl:apply-templates>
     </xsl:when>
+    <xsl:when test="@style='underlined'">
+      <xsl:call-template name="start-underlined"/>
+      <xsl:apply-templates>
+        <xsl:with-param name="current-style" select="'underlined'"/>
+      </xsl:apply-templates>
+    </xsl:when>
+    <xsl:when test="@style='tt'">
+      <xsl:call-template name="start-tt"/>
+      <xsl:apply-templates>
+        <xsl:with-param name="current-style" select="'tt'"/>
+      </xsl:apply-templates>
+    </xsl:when>
     <xsl:otherwise><xsl:apply-templates/></xsl:otherwise>
   </xsl:choose>
   <!-- If there was a style, return to original style -->
-  <xsl:if test="@style='bold' or @style='italics'">
+  <xsl:if test="@style='bold' or @style='italics' or @style='underlined' or @style='tt'">
     <xsl:choose>
       <xsl:when test="$current-style='bold'"><xsl:call-template name="start-bold"/></xsl:when>
       <xsl:when test="$current-style='italics'"><xsl:call-template name="start-italics"/></xsl:when>
+      <xsl:when test="$current-style='underlined'"><xsl:call-template name="start-underlined"/></xsl:when>
+      <xsl:when test="$current-style='tt'"><xsl:call-template name="start-tt"/></xsl:when>
       <xsl:otherwise><xsl:call-template name="start-normal"/></xsl:otherwise>
     </xsl:choose>
   </xsl:if>
@@ -386,7 +545,7 @@
       </xsl:if>
     </xsl:with-param>
   </xsl:call-template>
-  <xsl:apply-templates select="following-sibling::*[self::block][1]"/>
+  <xsl:apply-templates select="(following-sibling::block|following-sibling::section)[1]"/>
 </xsl:template>
 
 <!-- This matches text when sequentially moving through text blocks. Process

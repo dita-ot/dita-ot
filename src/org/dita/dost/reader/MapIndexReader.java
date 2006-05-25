@@ -11,6 +11,7 @@ import java.util.ListIterator;
 import org.dita.dost.module.Content;
 import org.dita.dost.module.ContentImpl;
 import org.dita.dost.util.Constants;
+import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.StringUtils;
 import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.log.MessageUtils;
@@ -265,7 +266,10 @@ public class MapIndexReader extends AbstractXMLReader {
     	
         if (qName.equals(firstMatchElement)) {
             String hrefValue = atts.getValue(Constants.ATTRIBUTE_NAME_HREF);
-            topicPath = (hrefValue != null && hrefValue.indexOf(INTERNET_LINK_MARK) == -1) ? StringUtils.resolveTopic(filePath, hrefValue) : null;
+            topicPath = null;
+            if (hrefValue != null && hrefValue.indexOf(INTERNET_LINK_MARK) == -1) {
+            	topicPath = FileUtils.resolveTopic(filePath, hrefValue);
+            }
         }
         if (!match) {
             ancestorList.add(qName);

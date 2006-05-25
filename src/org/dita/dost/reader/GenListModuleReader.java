@@ -252,6 +252,7 @@ public class GenListModuleReader extends AbstractXMLReader {
 	private void parseAttribute(Attributes atts, String attrName) {
 		String attrValue = atts.getValue(attrName);
 		String filename = null;
+		String attrScope = atts.getValue("scope");
 
 		if (attrValue == null) {
 			return;
@@ -264,11 +265,13 @@ public class GenListModuleReader extends AbstractXMLReader {
 		}
 
 		if (attrValue.startsWith(Constants.SHARP)
-				|| attrValue.indexOf(Constants.COLON_DOUBLE_SLASH) != -1) {
+				|| attrValue.indexOf(Constants.COLON_DOUBLE_SLASH) != -1
+				|| "external".equalsIgnoreCase(attrScope)
+				|| "peer".equalsIgnoreCase(attrScope)) {
 			return;
 		}
 
-		filename = normalizeDirectory(attrValue);
+		filename = FileUtils.normalizeDirectory(currentDir, attrValue);
 
 		if (FileUtils.isValidTarget(filename)) {
 			result.add(filename);
@@ -284,24 +287,4 @@ public class GenListModuleReader extends AbstractXMLReader {
 
 	}
 
-	/*
-	 * Normalize the file directory, replace all the '\\', '/' with
-	 * File.seperator, and remove '..' from the directory.
-	 */
-	private String normalizeDirectory(String dir) {
-		String normilizedPath = null;
-		int index = dir.indexOf(Constants.SHARP);
-		String pathname = (index == -1) ? dir : dir.substring(0, index);
-
-		/*
-		 * Normilize file path using java.io.File
-		 */
-		normilizedPath = new File(currentDir, pathname).getPath();
-
-		if (currentDir == null || currentDir.length() == 0) {
-			return normilizedPath;
-		}
-
-		return FileUtils.removeRedundantNames(normilizedPath);
-	}
 }

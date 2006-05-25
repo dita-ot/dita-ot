@@ -5,9 +5,29 @@
   <import file="ditatargets.xml"/>
   <import file="pretargets.xml"/>    
   
+  <dirname property="ant.file.DOST.dir" file="${ant.file.DOST}"/>
+  
+  <!-- First try to initialize ${dita.dir} using the special 
+       property passed by Ant's import task. -->
+  <condition property="dita.dir" value="${ant.file.DOST.dir}">
+    <and>
+      <isset property="ant.file.DOST"/>
+      <not>
+        <isset property="dita.dir"/>
+      </not>
+    </and>
+  </condition>
+  
+  <!-- Try to initialize ${dita.dir} again if it was not set. -->
+  <condition property="dita.dir" value="${basedir}">
+    <not>
+      <isset property="dita.dir"/>
+    </not>
+  </condition>
+  
   <path id="dost.class.path">
     <dita:extension id="dita.conductor.lib.import" behavior="org.dita.dost.platform.ImportAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
-    <pathelement location="${basedir}${file.separator}lib${file.separator}dost.jar"/>
+    <pathelement location="${dita.dir}${file.separator}lib${file.separator}dost.jar"/>
   </path>
   
   <taskdef name="pipeline" classname="org.dita.dost.invoker.AntInvoker">
@@ -40,10 +60,9 @@
 		dita.extname       required
 		dita.input.valfile optional
 	-->
-
-  <property name="dita.dir" value="${basedir}"/>
-  <property name="dita.temp.dir" value="${basedir}${file.separator}temp"/>
-  <property name="output.dir" value="${basedir}${file.separator}out"/>
+  
+  <property name="dita.temp.dir" value="temp"/>
+  <property name="output.dir" value="out"/>
   <property name="dita.extname" value="xml"/>
   <property name="dita.script.dir" value="${dita.dir}${file.separator}xsl"/>
   <property name="dita.resource.dir" value="${dita.dir}${file.separator}resource"/>
@@ -247,7 +266,13 @@
     <condition property="user.csspath" value="${args.csspath}/">
         <not><isset property="user.csspath"/></not>
     </condition>
-    <available file="${args.css}" property="args.css.present" type="file"/>
+    <condition property="args.css.real" value="${args.cssroot}${file.separator}${args.css}">
+        <isset property="args.cssroot"/>
+    </condition>
+    <condition property="args.css.real" value="${args.css}">
+        <not><isset property="args.cssroot"/></not>
+    </condition>
+    <available file="${args.css.real}" property="args.css.present" type="file"/>
     <basename property="args.css.file.temp" file="${args.css}"/>
     <condition property="args.css.file" value="${args.css.file.temp}">
         <isset property="args.css.present"/>
@@ -274,6 +299,8 @@
     </condition>    
     <!-- output parameters info -->
     <echo>*****************************************************************</echo>
+    <echo>* basedir = ${basedir} </echo>
+    <echo>* dita.dir = ${dita.dir} </echo>
     <echo>* input = ${args.input}</echo>
     <echo>* transtype = ${transtype}</echo>
     <echo>* tempdir = ${dita.temp.dir}</echo>

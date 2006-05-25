@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN"
+ "map.dtd">
+<?Pub Inc?>
+<map title="Plugin reltable">
+<reltable>
+<relrow>
+<relcell>
+<topicref href="compA/installA.dita"></topicref>
+<topicref href="compA/useA.dita"></topicref>
+</relcell>
+<relcell>
+<topicref href="compA/aboutA.dita" navtitle="All about A"></topicref>
+</relcell>
+</relrow>
+<relrow>
+<relcell>
+<topicref href="compB/installB.dita"></topicref>
+<topicref href="compB/useB.dita"></topicref>
+</relcell>
+<relcell>
+<topicref href="compB/aboutB.dita"></topicref>
+</relcell>
+</relrow>
+<relrow>
+<relcell>
+<topicref href="compA/aboutA.dita" navtitle="All about A"></topicref>
+</relcell>
+<relcell>
+<topicref href="compB/aboutB.dita"></topicref>
+</relcell>
+</relrow>
+</reltable>
+</map><?Pub Caret?>
+<?Pub *0000000859?>

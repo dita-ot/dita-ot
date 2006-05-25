@@ -46,6 +46,9 @@
     match="*[contains(@class,' topic/table ')]/*[contains(@class,' topic/xtitle ')]" priority="2"/>
   <xsl:template match="*[contains(@class,' topic/table ')]">
     <fo:block>
+      <xsl:if test="@id">
+        <xsl:apply-templates select="@id"/>
+      </xsl:if>
       <xsl:apply-templates/>
     </fo:block>
   </xsl:template>

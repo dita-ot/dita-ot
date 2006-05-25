@@ -74,7 +74,7 @@ public class GenMapAndTopicListModule extends AbstractPipelineModule {
 	private List doneList = null;
 
 	/** Basedir for processing */
-	private String baseDir = null;
+	private String baseInputDir = null;
 
 	/** Tempdir for processing */
 	private String tempDir = null;
@@ -125,20 +125,9 @@ public class GenMapAndTopicListModule extends AbstractPipelineModule {
 	 */
 	public AbstractPipelineOutput execute(AbstractPipelineInput input)
 			throws DITAOTException {
-		File inFile = null;
-		
 		try {
-			PipelineHashIO hashIO = (PipelineHashIO) input;
-			String ditaInput = hashIO
-					.getAttribute(Constants.ANT_INVOKER_PARAM_INPUTMAP);
-			tempDir = hashIO.getAttribute(Constants.ANT_INVOKER_PARAM_TEMPDIR);
-			ditaDir = hashIO
-					.getAttribute(Constants.ANT_INVOKER_EXT_PARAM_DITADIR);
-			ditavalFile = hashIO.getAttribute(Constants.ANT_INVOKER_PARAM_DITAVAL);
-			inFile = new File(ditaInput);
-			baseDir = new File(inFile.getAbsolutePath()).getParent();
-			inputFile = inFile.getName();
-
+			parseInputParameters(input);
+			
 			GenListModuleReader.initXMLReader(ditaDir);
 			
 			// first parse filter file for later use
@@ -155,9 +144,42 @@ public class GenMapAndTopicListModule extends AbstractPipelineModule {
 
 		return null;
 	}
+
+	private void parseInputParameters(AbstractPipelineInput input) {
+		File inFile = null;
+		PipelineHashIO hashIO = (PipelineHashIO) input;
+		String basedir = hashIO
+				.getAttribute(Constants.ANT_INVOKER_PARAM_BASEDIR);
+		String ditaInput = hashIO
+				.getAttribute(Constants.ANT_INVOKER_PARAM_INPUTMAP);
+
+		tempDir = hashIO.getAttribute(Constants.ANT_INVOKER_PARAM_TEMPDIR);
+		ditaDir = hashIO.getAttribute(Constants.ANT_INVOKER_EXT_PARAM_DITADIR);
+		ditavalFile = hashIO.getAttribute(Constants.ANT_INVOKER_PARAM_DITAVAL);
+
+		/*
+		 * Resolve relative paths base on the basedir.
+		 */
+		inFile = new File(ditaInput);
+		if (!inFile.isAbsolute()) {
+			inFile = new File(basedir, ditaInput);
+		}
+		if (!new File(tempDir).isAbsolute()) {
+			tempDir = new File(basedir, tempDir).getAbsolutePath();
+		}
+		if (!new File(ditaDir).isAbsolute()) {
+			ditaDir = new File(basedir, ditaDir).getAbsolutePath();
+		}
+		if (ditavalFile != null && !new File(ditavalFile).isAbsolute()) {
+			ditavalFile = new File(basedir, ditavalFile).getAbsolutePath();
+		}
+
+		baseInputDir = new File(inFile.getAbsolutePath()).getParent();
+		inputFile = inFile.getName();
+	}
 	
 	/**
-	 * @param baseDir
+	 * @param baseInputDir
 	 * @throws DITAOTException
 	 * @throws ParserConfigurationException
 	 * @throws SAXException
@@ -171,7 +193,7 @@ public class GenMapAndTopicListModule extends AbstractPipelineModule {
 	}
 
 	private void processFile(String currentFile) throws DITAOTException {
-		File fileToParse = new File(baseDir, currentFile);
+		File fileToParse = new File(baseInputDir, currentFile);
 		String msg = null;
 		Properties params = new Properties();
 		params.put("%1", currentFile);		
@@ -297,11 +319,11 @@ public class GenMapAndTopicListModule extends AbstractPipelineModule {
 	}
 
 	private void updateBaseDirectory() {
-		baseDir = new File(baseDir).getAbsolutePath();
+		baseInputDir = new File(baseInputDir).getAbsolutePath();
 
 		for (int i = uplevels; i > 0; i--) {
-			File file = new File(baseDir);
-			baseDir = file.getParent();
+			File file = new File(baseInputDir);
+			baseInputDir = file.getParent();
 			prefix = file.getName() + File.separator + prefix;
 		}
 	}
@@ -329,7 +351,7 @@ public class GenMapAndTopicListModule extends AbstractPipelineModule {
 			dir.mkdirs();
 		}
 
-		prop.put("user.input.dir", baseDir);
+		prop.put("user.input.dir", baseInputDir);
 		prop.put("user.input.file", prefix + inputFile);
 
 		addSetToProperties(prop, Constants.FULL_DITAMAP_TOPIC_LIST, ditaSet);

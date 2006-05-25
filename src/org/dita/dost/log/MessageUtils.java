@@ -3,6 +3,7 @@
  */
 package org.dita.dost.log;
 
+import java.io.File;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Properties;
@@ -23,28 +24,30 @@ import org.w3c.dom.NodeList;
  * @author Wu, Zhi Qiang
  */
 public class MessageUtils {
-	private static boolean usingDefaultMessage = true;
 	private static Hashtable hashTable = null;
-	private static String MESSAGE_FILE = "resource/messages.xml";
-	private static DITAOTFileLogger fileLogger = DITAOTFileLogger.getInstance();
+	private static String messageFile = null;
+	private static DITAOTJavaLogger fileLogger = new DITAOTJavaLogger();
 	
-	private static void loadMessages() {
+	private static void loadDefaultMessages() {
+		loadMessages("resource/messages.xml");
+	}
+	
+	public static void loadMessages(String newMessageFile) {
+		if (!updateMessageFile(newMessageFile)) {
+			// this message file has been loaded
+			return;
+		}
+		
 		// always assign a new instance to hashTable to avoid 
 		// to reload this method again and again when messages 
 		// loading failed.
 		hashTable = new Hashtable();
 		
-		if (usingDefaultMessage) {
-			fileLogger.logInfo("Loading default message file...");
-		} else {
-			fileLogger.logInfo("Reloading message file...");
-		}
-		
 		try {
 			DocumentBuilderFactory factory = DocumentBuilderFactory
 					.newInstance();
 			DocumentBuilder builder = factory.newDocumentBuilder();
-			Document doc = builder.parse(MESSAGE_FILE);
+			Document doc = builder.parse(messageFile);
 
 			Element messages = doc.getDocumentElement();
 			NodeList messageList = messages.getElementsByTagName("message");
@@ -67,14 +70,11 @@ public class MessageUtils {
 
 				hashTable.put(id, messageBean);
 			}
-			
-			fileLogger.logInfo("  Messages loaded from '" + MESSAGE_FILE + "' successfully.");
-			
 		} catch (Exception e) {
 			StringBuffer buff = new StringBuffer(128);
 			
 			buff.append("  Failed to load messages from '");
-			buff.append(MESSAGE_FILE);
+			buff.append(messageFile);
 			buff.append("' due to exception: ");
 			buff.append(e.getMessage());
 			buff.append(". Please check if there are files 'resource/messages.xml'");
@@ -86,6 +86,27 @@ public class MessageUtils {
 		}
 	}
 
+	private static boolean updateMessageFile(String newMessageFile) {
+		String oldMessagePath = null;
+		String newMessagePath = null;
+
+		if (messageFile == null) {
+			messageFile = newMessageFile;
+			return true;
+		}
+		
+		oldMessagePath = new File(MessageUtils.messageFile).getAbsolutePath();
+		newMessagePath = new File(newMessageFile).getAbsolutePath();
+		
+		if (oldMessagePath.equalsIgnoreCase(newMessagePath)) {
+			return false;
+		}
+		
+		messageFile = newMessageFile;
+		
+		return true;
+	}
+	
 	/**
 	 * Get the message respond to the given id, if no message found, 
 	 * an empty message with this id will be returned. 
@@ -98,7 +119,7 @@ public class MessageUtils {
 		MessageBean hashMessage = null;
 		
 		if (hashTable == null) {
-			loadMessages();
+			loadDefaultMessages();
 		}
 
 		hashMessage = (MessageBean) hashTable.get(id);
@@ -152,11 +173,4 @@ public class MessageUtils {
 		return messageBean;
 	}
 	
-	public static void reloadMessages(String messageFile) {
-		MessageUtils.MESSAGE_FILE = messageFile; // reset the message file
-	    hashTable = null; // empty the messages, it will force 
-	                      // the loadMessage() reload the
-	                      // messages from the new message file.
-	    usingDefaultMessage = false;
-	}
 }

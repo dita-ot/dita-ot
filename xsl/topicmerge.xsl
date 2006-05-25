@@ -14,10 +14,7 @@
 
 <xsl:variable name="xml-path"></xsl:variable>
 
-<xsl:output method="xml"
-            encoding="utf-8"
-            indent="yes"
-/>
+<xsl:output method="xml" encoding="utf-8" />
 
 <xsl:template match="/*">
    <xsl:element name="{name()}">

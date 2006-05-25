@@ -12,6 +12,7 @@
                    Needed as a directory prefix for the @href "document()" function calls.
                    Default is './'
         /HHCNAME = The name of the contents file associated with this help project
+        /INCLUDEFILE = adds a #include for extra files in FILES section.
         /HELPALIAS = adds the ALIAS header & the #include
         /HELPMAP = adds the MAP header & the #include
 
@@ -39,6 +40,7 @@
 <xsl:param name="WORKDIR" select="'./'"/>
 <xsl:param name="HHCNAME" select="'help'"/>
 <xsl:param name="USEINDEX" select="'yes'"/>  <!-- to turn on, use 'yes' -->
+<xsl:param name="INCLUDEFILE" />
 <xsl:param name="HELPALIAS" />
 <xsl:param name="HELPMAP" />
 <xsl:param name="DITAEXT" select="'.xml'"/>
@@ -109,6 +111,11 @@ Default topic=</xsl:text>
   <xsl:apply-templates select="exsl:node-set($temp)/filelist/*" mode="tempfile">
     <xsl:sort select="@href"/>
   </xsl:apply-templates>
+  <xsl:if test="string-length($INCLUDEFILE)>0">
+<xsl:text>
+#include </xsl:text><xsl:value-of select="$INCLUDEFILE"/><xsl:text>
+</xsl:text>
+  </xsl:if>
 </xsl:template>
 
 <!-- *********************************************************************************
@@ -179,7 +186,7 @@ Default topic=</xsl:text>
   <xsl:if test="string-length($thisFilename)>0">
     <file>
       <xsl:attribute name="href">
-        <xsl:call-template name="removeExtraRelpath">
+        <xsl:call-template name="removeAllExtraRelpath">
           <xsl:with-param name="remainingPath" select="$thisFilename"/>
         </xsl:call-template>
       </xsl:attribute>
@@ -262,10 +269,49 @@ Default topic=</xsl:text>
   </xsl:choose>
 </xsl:template>
 
+<!-- Remove all extra relpaths (as in './multiple/directories/../../other/') -->
+<xsl:template name="removeAllExtraRelpath">
+  <xsl:param name="remainingPath"><xsl:value-of select="@href"/></xsl:param>
+  <xsl:variable name="firstRoundRemainingPath">
+    <xsl:call-template name="removeExtraRelpath">
+      <xsl:with-param name="remainingPath">
+        <xsl:value-of select="$remainingPath"/>
+      </xsl:with-param>
+    </xsl:call-template>
+  </xsl:variable>
+  <xsl:variable name="secondRoundRemainingPath">
+    <xsl:call-template name="removeExtraRelpath">
+      <xsl:with-param name="remainingPath">
+        <xsl:value-of select="$firstRoundRemainingPath"/>
+      </xsl:with-param>
+    </xsl:call-template>
+  </xsl:variable>
+  <xsl:choose>
+    <xsl:when test="contains($secondRoundRemainingPath, '../') and not($firstRoundRemainingPath=$secondRoundRemainingPath)">
+      <xsl:call-template name="removeAllExtraRelpath">
+        <xsl:with-param name="remainingPath" select="$secondRoundRemainingPath"/>
+      </xsl:call-template>
+    </xsl:when>
+    <xsl:otherwise><xsl:value-of select="$secondRoundRemainingPath"/></xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
 <!-- Remove extra relpaths (as in abc/../def) -->
 <xsl:template name="removeExtraRelpath">
   <xsl:param name="remainingPath"><xsl:value-of select="@href"/></xsl:param>
   <xsl:choose>
+    <xsl:when test="contains($remainingPath,'\')">
+      <xsl:call-template name="removeExtraRelpath">
+        <xsl:with-param name="remainingPath"><xsl:value-of 
+          select="substring-before($remainingPath,'\')"/>/<xsl:value-of 
+          select="substring-after($remainingPath,'\')"/></xsl:with-param>
+      </xsl:call-template>
+    </xsl:when>
+    <xsl:when test="starts-with($remainingPath,'./')">
+      <xsl:call-template name="removeExtraRelpath">
+        <xsl:with-param name="remainingPath" select="substring-after($remainingPath,'./')"/>
+      </xsl:call-template>
+    </xsl:when>
     <xsl:when test="not(contains($remainingPath,'../'))"><xsl:value-of select="$remainingPath"/></xsl:when>
     <xsl:when test="not(starts-with($remainingPath,'../')) and
                     starts-with(substring-after($remainingPath,'/'),'../')">

@@ -1,8 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- (c) Copyright IBM Corp. 2006 All Rights Reserved. -->
 <project name="dita.integrator" default="integrate" basedir=".">
+  
+  <dirname property="ant.file.dita.integrator.dir" file="${ant.file.dita.integrator}"/>
+  
+  <!-- First try to initialize ${dita.dir} using the special 
+       property passed by Ant's import task. -->
+  <condition property="dita.dir" value="${ant.file.dita.integrator.dir}">
+    <and>
+      <isset property="ant.file.dita.integrator"/>
+      <not>
+        <isset property="dita.dir"/>
+      </not>
+    </and>
+  </condition>
+  
+  <!-- Try to initialize ${dita.dir} again if it was not set. -->
+  <condition property="dita.dir" value="${basedir}">
+    <not>
+      <isset property="dita.dir"/>
+    </not>
+  </condition>
+  
   <path id="dost.class.path">
-    <pathelement location="${basedir}${file.separator}lib${file.separator}dost.jar"/>
+    <pathelement location="${dita.dir}${file.separator}lib${file.separator}dost.jar"/>
   </path>
   
   <taskdef name="integrate" classname="org.dita.dost.platform.IntegratorTask">
@@ -10,6 +31,6 @@
   </taskdef>
   
   <target name="integrate">
-    <integrate ditadir="${basedir}"/>
+    <integrate basedir="${basedir}" ditadir="${dita.dir}"/>
   </target>
 </project>

@@ -1,4 +1,50 @@
 (c) Copyright IBM Corp. 2004, 2006 All Rights Reserved.
+DITA OT release 1.2.2
+Available since May 22, 2006
+
+Release 1.2.2 is a maintenance release to fix defects and make patches based on release 1.2.1.
+
+[2 Improvements]
+1.  Chinese support in WORD RTF
+2.  Improve plug-in architecture in plug-in dependency handling
+
+[16 SF Bugs Fixed]
+1.  SF Bug 1461642  Relative paths in toolkit.
+2.  SF Bug 1463756  TROFF output is not usable
+3.  SF Bug 1459527  Properties elements should generate default headings 
+4.  SF Bug 1457552  FO gen-toc does not work right for ditamaps and bookmaps
+5.  SF Bug 1430983  Specialized indexterm does not generate entries in index
+6.  SF Bug 1363055  Shortdesc disappears when optional body is removed 
+7.  SF Bug 1368403  The dita2docbook transformation lacks support for args.xsl  
+8.  SF Bug 1405184  Note template for XHTML should be easier to override 
+9.  SF Bug 1407646  Map titles are not used in print outputs 
+10. SF Bug 1409960  No page numbers in PDF toc 
+11. SF Bug 1459790  Related Links omitted when map references file#topicid 
+12. SF Bug 1428015  Topicmerge.xsl should leave indentation alone
+13. SF Bug 1429400  FO output should allow more external links
+14. SF Bug 1405169  Space inside XHTML note title affects CSS presentation
+15. SF Bug 1402377  Updated translations for Icelandic
+16. SF Bug 1366845  XRefs do not generate page numbers
+
+[7 SF Patches Added]
+1.  SF Patch 1326450 Make ${basedir} mine 
+2.  SF Patch 1328264 FOP task userconfig file
+3.  SF Patch 1385636 Tweaks to docbook/topic2db.xsl
+4.  SF Patch 1435584 Recognize more image extensions
+5.  SF Patch 1444900 Add template for getting input file URI
+6.  SF Patch 1460419 Add a new parameter /cssroot:{args.cssroot}
+7.  SF Patch 1460441 map2hhp [FILES] include
+
+[1 SF RFE Added]
+1.  SF RFE 1400140 Add a new parameter /cssroot:{args.cssroot}
+
+Note: SourceForge bugs, patches, and RFE listed above can be found in SourceForge Bugs, Patches, and RFE tracker.  
+
+Bugs tracker:  http://sourceforge.net/tracker/?group_id=132728&atid=725074
+Patches tracker: http://sourceforge.net/tracker/?group_id=132728&atid=725076
+RFE tracker: http://sourceforge.net/tracker/?group_id=132728&atid=725077
+====================================================================================
+
 DITA OT release 1.2.1
 Available since Apr. 5, 2006
 

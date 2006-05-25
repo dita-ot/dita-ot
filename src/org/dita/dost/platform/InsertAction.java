@@ -3,9 +3,9 @@
  */
 package org.dita.dost.platform;
 
-import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.StringTokenizer;
 
 import org.dita.dost.log.DITAOTJavaLogger;
@@ -24,13 +24,13 @@ public class InsertAction extends DefaultHandler implements IAction {
 
 	private XMLReader reader;
 	private DITAOTJavaLogger logger;
-	private HashSet fileNameSet = null;
+	private LinkedHashSet fileNameSet = null;
 	private StringBuffer retBuf;
 	private Hashtable paramTable = null;
 	private int elemLevel = 0;
 	
 	public InsertAction() {
-		fileNameSet = new HashSet(16);
+		fileNameSet = new LinkedHashSet(16);
 		logger = new DITAOTJavaLogger();
 		retBuf = new StringBuffer(4096);
 		paramTable = new Hashtable();

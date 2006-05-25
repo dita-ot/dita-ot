@@ -43,6 +43,9 @@ public abstract class Constants {
     public static final String FILE_EXTENSION_EPS = ".eps";
     public static final String FILE_EXTENSION_DITAMAP = ".ditamap";
     public static final String FILE_EXTENSION_TEMP = ".temp";    
+    public static final String FILE_EXTENSION_JPEG = ".jpeg";
+    public static final String FILE_EXTENSION_PNG = ".png";
+    public static final String FILE_EXTENSION_SVG = ".svg";
     
     /**
      * Constants for element names in dita files.
@@ -130,6 +133,7 @@ public abstract class Constants {
     public static final String ANT_INVOKER_EXT_PARAM_OUTPUT = "output";
     public static final String ANT_INVOKER_EXT_PARAM_INPUT = "input";
     public static final String ANT_INVOKER_EXT_PARAM_DITADIR = "ditadir";
+    public static final String ANT_INVOKER_EXT_PARAM_INPUTDIR = "inputdir";
     
     /**
      * Constants for file and line separator.

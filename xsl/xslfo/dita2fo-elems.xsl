@@ -54,7 +54,12 @@
   </fo:block>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/shortdesc ')]"/>
+<!-- Added for SF 1363055: Shortdesc disappears when optional body is removed -->
+<xsl:template match="*[contains(@class,' topic/shortdesc ')]">
+  <xsl:if test="not(following-sibling::*[contains(@class,' topic/body ')])">
+    <xsl:apply-templates select="." mode="outofline"/>
+  </xsl:if>
+</xsl:template>
 
 <xsl:template match="*[contains(@class,' topic/xshortdesc ')]">
   <fo:block start-indent="{$basic-start-indent}" background-color="#F0C0F0">
@@ -273,10 +278,13 @@
   <fo:block xsl:use-attribute-sets="fig">
     <!-- setclass -->
     <!-- set id -->
+    <xsl:if test="@id">
+      <xsl:apply-templates select="@id"/>
+    </xsl:if>    
     <xsl:call-template name="setframe"/>
- <xsl:if test="@expanse = 'page'">
-  <xsl:attribute name="start-indent">-<xsl:value-of select="$basic-start-indent"/></xsl:attribute>
- </xsl:if>
+    <xsl:if test="@expanse = 'page'">
+      <xsl:attribute name="start-indent">-<xsl:value-of select="$basic-start-indent"/></xsl:attribute>
+    </xsl:if>
     <!-- this is where the main fig rendering happens -->
     <xsl:apply-templates/>
   </fo:block>

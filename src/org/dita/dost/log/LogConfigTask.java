@@ -50,7 +50,7 @@ public class LogConfigTask extends Task {
 			 * the basedir will be used as default log directory.
 			 **/			 
 			if (!oldLogDir.equals(logDir)) {
-				logDir = getProject().getBaseDir().getPath();
+				logDir = getProject().getBaseDir().getAbsolutePath();
 			}
 			logFile = "ditaot_batch.log";
 		}
@@ -60,8 +60,15 @@ public class LogConfigTask extends Task {
 	}
 
 	private void initMessageFile() {
-		MessageUtils.reloadMessages(getProject().getProperty(
-				"args.message.file"));
+		String messageFile = getProject().getProperty(
+				"args.message.file");
+		
+		if (!new File(messageFile).isAbsolute()) {
+			messageFile = new File(getProject().getBaseDir(), messageFile)
+					.getAbsolutePath();
+		}
+		
+		MessageUtils.loadMessages(messageFile);
 	}
 	
 	private void initLogDirectory() throws BuildException {
@@ -76,6 +83,10 @@ public class LogConfigTask extends Task {
 		if (logDir == null || "".equals(logDir)) {
 			String msg = MessageUtils.getMessage("DOTJ015F").toString();
 			throw new BuildException(msg);
+		}
+		
+		if (!new File(logDir).isAbsolute()) {
+			logDir = new File(project.getBaseDir(), logDir).getAbsolutePath();
 		}
 		
 		// create log directory

@@ -26,13 +26,6 @@ import org.dita.dost.writer.DitaWriter;
 public class DebugAndFilterModule extends AbstractPipelineModule {
 
     /**
-     * Automatically generated constructor: DebugAndFilterModule
-     */
-    public DebugAndFilterModule() {
-    }
-
-    
-    /**
      * @see org.dita.dost.module.AbstractPipelineModule#execute(org.dita.dost.pipeline.AbstractPipelineInput)
      * 
      */
@@ -40,22 +33,24 @@ public class DebugAndFilterModule extends AbstractPipelineModule {
         String baseDir = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_BASEDIR);
         String ditavalFile = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_DITAVAL);
         String tempDir = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_TEMPDIR);
+        String inputDir = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_EXT_PARAM_INPUTDIR);
         String filePathPrefix = null;
         ListReader listReader = new ListReader();
         LinkedList parseList = null;
         Content content;
         DitaWriter fileWriter;
         
-        if (baseDir == null){
-        	throw new DITAOTException(
-				"Please specify the base directory.");
+        if (!new File(inputDir).isAbsolute()) {
+        	inputDir = new File(baseDir, inputDir).getAbsolutePath();
         }
-        if (tempDir == null){
-        	throw new DITAOTException(
-				"Please specify the temp directory.");
+        if (!new File(tempDir).isAbsolute()) {
+        	tempDir = new File(baseDir, tempDir).getAbsolutePath();
         }
+        if (ditavalFile != null && !new File(ditavalFile).isAbsolute()) {
+			ditavalFile = new File(baseDir, ditavalFile).getAbsolutePath();
+		}
         
-        listReader.read(tempDir + File.separator + Constants.FILE_NAME_DITA_LIST);
+        listReader.read(new File(tempDir, Constants.FILE_NAME_DITA_LIST).getAbsolutePath());
         parseList = (LinkedList) listReader.getContent()
                 .getCollection();
         if (ditavalFile!=null){
@@ -70,8 +65,8 @@ public class DebugAndFilterModule extends AbstractPipelineModule {
         content.setValue(tempDir);
         fileWriter.setContent(content);
         
-        if(baseDir!=null){
-            filePathPrefix = baseDir + Constants.STICK;
+        if(inputDir != null){
+            filePathPrefix = inputDir + Constants.STICK;
         }
         
         while (!parseList.isEmpty()) {

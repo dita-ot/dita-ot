@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN"
+ "task.dtd">
+<?Pub Inc?>
+<task id="usea" xml:lang="en-us">
+<title>Using A</title>
+<shortdesc>This tells you how to use A</shortdesc>
+<taskbody>
+<steps>
+<step><cmd>Open</cmd></step>
+<step><cmd>Run<?Pub Caret?></cmd></step>
+</steps>
+</taskbody>
+</task>
+<?Pub *0000000410?>

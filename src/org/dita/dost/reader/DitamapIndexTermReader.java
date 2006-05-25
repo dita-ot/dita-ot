@@ -4,6 +4,7 @@
 
 package org.dita.dost.reader;
 
+import java.util.ArrayList;
 import java.util.Stack;
 
 import org.dita.dost.index.IndexTerm;
@@ -27,7 +28,10 @@ import org.xml.sax.SAXException;
 public class DitamapIndexTermReader extends AbstractXMLReader {
 	/** The stack used to store elements */
 	private Stack elementStack = null;
-
+	
+	/** List used to store all the specilized index terms */
+	private ArrayList indexTermSpecList = null;
+	
 	private String mapPath = null;
 
 	private DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
@@ -38,6 +42,7 @@ public class DitamapIndexTermReader extends AbstractXMLReader {
 	public DitamapIndexTermReader() {
 		super();
 		elementStack = new Stack();
+		indexTermSpecList = new ArrayList();
 	}
 
 	/**
@@ -77,9 +82,10 @@ public class DitamapIndexTermReader extends AbstractXMLReader {
 			elementStack.pop();
 			return;
 		}
-
-		if (Constants.ELEMENT_NAME_INDEXTERM.equals(localName)
-				&& needPushTerm()) {
+		
+		// check to see it the indexterm element or a specialized version is 
+		// in the list.
+		if (indexTermSpecList.contains(localName) && needPushTerm()) {
 			IndexTerm indexTerm = (IndexTerm) elementStack.pop();
 
 			if (indexTerm.getTermName() == null) {
@@ -105,6 +111,17 @@ public class DitamapIndexTermReader extends AbstractXMLReader {
 	 */
 	public void startElement(String uri, String localName, String qName,
 			Attributes attributes) throws SAXException {
+		String classAttr = attributes.getValue(Constants.ATTRIBUTE_NAME_CLASS);
+		
+		if (classAttr != null
+				&& classAttr.indexOf(Constants.ELEMENT_NAME_INDEXTERM) != -1) {
+			// add the element name to the indexterm specialization element 
+			// list if it does not already exist in that list.  
+			if (!indexTermSpecList.contains(localName)){
+				indexTermSpecList.add(localName);
+			}
+		}
+		
 		if (Constants.ELEMENT_NAME_TOPICREF.equals(localName)) {
 			String href = attributes.getValue(Constants.ATTRIBUTE_NAME_HREF);
 			String format = attributes
@@ -117,9 +134,10 @@ public class DitamapIndexTermReader extends AbstractXMLReader {
 
 			return;
 		}
-
-		if (Constants.ELEMENT_NAME_INDEXTERM.equals(localName)
-				&& needPushTerm()) {
+		
+		// check to see it the indexterm element or a specialized version is 
+		// in the list.
+		if (indexTermSpecList.contains(localName) && needPushTerm()) {
 			IndexTerm indexTerm = new IndexTerm();
 			Object obj = elementStack.peek();
 

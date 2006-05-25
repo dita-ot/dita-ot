@@ -9,7 +9,7 @@
   <property name="args.fo.img.ext" value=".gif"/>
   <property name="package.output.dir" location="build\"/>
   <property name="package.name.root" value="DITA-OT"/>
-  <property name="version" value="1.2.1"/>
+  <property name="version" value="1.2.2"/>
   
   <property name="src.dir" location="src/"/>
   <property name="bin.dir" location="output2/"/>

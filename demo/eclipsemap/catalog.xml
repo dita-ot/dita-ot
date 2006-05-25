@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog"
+  prefer="public">
+  
+  <public publicId="-//IBM//DTD DITA Eclipse Map Collection//EN"
+    uri="demo/eclipsemap/dtd/eclipsemap.dtd"/>
+  
+</catalog>

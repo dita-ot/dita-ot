@@ -35,6 +35,26 @@
                 </thead>
                 <tbody>
                   <row>
+                    <entry>basedir</entry>
+                    <entry>
+                      <ph id="basedir">The path of the working directory for transformations, 
+                        it will be the base of relative paths specified by other parameters.</ph> 
+                      <note id="basedir-note"><ul>
+                        <li>If input is relative, it will be set relative to the current directory.</li>
+                        <li>In Ant scripts, the default is that specified in the Ant buildfile.</li>
+                        <li>In Java command line, the default is current directory.</li></ul>
+                      </note>
+                    </entry>
+                    <entry>No</entry>
+                  </row>
+                  <row>
+                    <entry>dita.dir</entry>
+                    <entry>
+                      <ph id="ditadir">The absolute path of the toolkit's home directory.</ph> 
+                    </entry>
+                    <entry>No</entry>
+                  </row>
+                  <row>
                     <entry>args.input</entry>
                     <entry>
                       <ph id="argsinput">The path and name of the input file. 
@@ -240,6 +260,16 @@
                     <entry>No</entry>
                   </row>
                   <row>
+                    <entry>args.cssroot</entry>
+                    <entry>
+                      <ph id="argscssroot">The root directory of user specified css file.</ph>
+                      <note id="argscssroot-note">If this parameter is set, 
+                        the <codeph>${args.css}</codeph> should be a 
+                        filepath relative to <codeph>args.cssroot</codeph>.</note>
+                    </entry>
+                    <entry>No</entry>
+                  </row>
+                  <row>
                     <entry>args.csspath</entry>
                     <entry>
                       <ph id="csspath">The path for css reference. Default is no path.</ph>
@@ -379,6 +409,13 @@
                         be used by default.</ph></entry>                    
                     <entry>No</entry>
                   </row>
+                  <row>
+                    <entry>args.htmlhelp.includefile</entry>
+                    <entry align="left"><ph id="htmlhelpincludefile">
+                      The parameter to specify the file that need to be included
+                      by the HTMLHelp output.</ph></entry>                    
+                    <entry>No</entry>
+                  </row>
                   </tbody></tgroup> 
                   </table></dd>
               </dlentry>
@@ -461,6 +498,13 @@
                       "yes" and "no" are valid values. Default is "no".</ph>
                       <note id="fooutputrellinks-note">Any value that is not 
                         "yes" is regarded as "no".</note>
+                    </entry>
+                    <entry>No</entry>
+                  </row>
+                  <row>
+                    <entry>args.fo.userconfig</entry>
+                    <entry align="left"><ph id="fouserconfig">The parameter to specify 
+                      the user configuration file for FOP.</ph>
                     </entry>
                     <entry>No</entry>
                   </row>

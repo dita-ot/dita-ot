@@ -87,8 +87,7 @@
     </fo:root>
   </xsl:template>
   <!-- create FOP outline elements for PDF bookmarks -->
-  <xsl:template match="*" mode="outline">
-    <xsl:if test="contains(@class,' topic/topic ')">
+  <xsl:template match="*[contains(@class,' topic/topic ')]" mode="outline">
       <xsl:variable name="id-value">
         <xsl:choose>
           <xsl:when test="@id">
@@ -99,17 +98,18 @@
           </xsl:otherwise>
         </xsl:choose>
       </xsl:variable>
+      
       <fox:outline>
         <xsl:attribute name="internal-destination">
           <!-- use id attribute node to generate anchor for PDF bookmark fix bug#1304859 -->
           <xsl:value-of select="$id-value"/>
         </xsl:attribute>
         <fox:label>
-          <!-- if topic contains navtitle, use that as label for PDF bookmark -->
-          <!-- otherwise, use title -->
+          <!-- if topic contains navtitle, use that as label for PDF bookmark
+               otherwise, use title -->
           <xsl:choose>
-            <xsl:when test="navtitle">
-              <xsl:apply-templates select="navtitle" mode="text-only"/>
+            <xsl:when test="*[contains(@class,' topic/titlealts ')]/*[contains(@class, ' topic/navtitle ')]">
+              <xsl:apply-templates select="*[contains(@class,' topic/titlealts ')]/*[contains(@class, ' topic/navtitle ')]" mode="text-only"/>
             </xsl:when>
             <xsl:otherwise>
               <xsl:apply-templates select="title" mode="text-only"/>
@@ -118,8 +118,8 @@
         </fox:label>
         <xsl:apply-templates mode="outline" />
       </fox:outline>
-    </xsl:if>
   </xsl:template>
+  
   <xsl:template match="*" mode="text-only">
     <xsl:apply-templates select="text()|*" mode="text-only"/>
   </xsl:template>
@@ -159,9 +159,15 @@
         <fo:block text-align="right" font-family="Helvetica">
           <!-- set the title -->
           <fo:block font-size="30pt" font-weight="bold" line-height="140%">
-            <xsl:value-of select="//*[contains(@class,' bkinfo/bkinfo ')]/*[contains(@class,' topic/title ')]"/>
-            <!-- use the id attribute of the bkinfo element as an anchor for a PDF bookmark to the cover page -->
-            <xsl:apply-templates select="//*[contains(@class,' bkinfo/bkinfo ')]/@id"/>
+            <xsl:choose>
+              <xsl:when test="//*[contains(@class,' bkinfo/bkinfo ')]">
+                <xsl:value-of select="//*[contains(@class,' bkinfo/bkinfo ')]/*[contains(@class,' topic/title ')]"/>
+                <!-- use the id attribute of the bkinfo element as an anchor for a PDF bookmark to the cover page -->
+                <xsl:apply-templates select="//*[contains(@class,' bkinfo/bkinfo ')]/@id"/>
+              </xsl:when>
+              <xsl:when test="@title"><xsl:value-of select="@title"/></xsl:when>
+              <xsl:otherwise><xsl:value-of select="//*/title"/></xsl:otherwise>
+            </xsl:choose>
           </fo:block>
           <!-- set the subtitle -->
           <fo:block font-size="24pt" font-weight="bold" line-height="140%" margin-bottom="1in">
@@ -220,8 +226,21 @@
       <!-- Static setup for the generated pages -->
       <!-- header -->
       <fo:static-content flow-name="xsl-region-before">
+        <!-- SF Bug 1407646: uses the map title when it is specified. 
+             If the map title is not specified, we fall back to the 
+             title of the first topic. -->
         <xsl:variable name="booktitle">
-          <xsl:value-of select="//*/title"/>
+          <xsl:choose>
+            <xsl:when test="//*[contains(@class,' bkinfo/bkinfo ')]">
+              <xsl:value-of select="//*[contains(@class,' bkinfo/bkinfo ')]/*[contains(@class,' topic/title ')]"/>
+              <!-- use the id attribute of the bkinfo element as an anchor for a PDF bookmark to the cover page -->
+              <xsl:apply-templates select="//*[contains(@class,' bkinfo/bkinfo ')]/@id"/>
+            </xsl:when>
+            <xsl:when test="@title">
+              <xsl:value-of select="@title"/>
+            </xsl:when>
+            <xsl:otherwise><xsl:value-of select="//*/title"/></xsl:otherwise>
+          </xsl:choose>
         </xsl:variable>
         <fo:block font-size="8pt" line-height="8pt">
           <xsl:value-of select="$booktitle"/>
@@ -278,9 +297,22 @@
     <fo:page-sequence master-reference="chapter-master">
       <!-- header: single page -->
       <fo:static-content flow-name="xsl-region-before">
+        <!-- SF Bug 1407646: uses the map title when it is specified. 
+             If the map title is not specified, we fall back to the 
+             title of the first topic. -->
         <!-- book title here -->
         <xsl:variable name="booktitle">
-          <xsl:value-of select="//*/title"/>
+          <xsl:choose>
+            <xsl:when test="//*[contains(@class,' bkinfo/bkinfo ')]">
+              <xsl:value-of select="//*[contains(@class,' bkinfo/bkinfo ')]/*[contains(@class,' topic/title ')]"/>
+              <!-- use the id attribute of the bkinfo element as an anchor for a PDF bookmark to the cover page -->
+              <xsl:apply-templates select="//*[contains(@class,' bkinfo/bkinfo ')]/@id"/>
+            </xsl:when>
+            <xsl:when test="@title">
+              <xsl:value-of select="@title"/>
+            </xsl:when>
+            <xsl:otherwise><xsl:value-of select="//*/title"/></xsl:otherwise>
+          </xsl:choose>
         </xsl:variable>
         <fo:block font-size="8pt" line-height="8pt">
           <xsl:value-of select="$booktitle"/>
@@ -328,14 +360,24 @@
   <!-- main toc generator -->
   <xsl:template name="gen-toc">
     <!-- get by main part: body -->
-    <xsl:for-each select="//bookmap/*[contains(@class,' topic/topic ')]">
+    <xsl:for-each select="//bookmap/*[contains(@class,' topic/topic ')]|//map/*[contains(@class,' topic/topic ')]">
       <fo:block text-align-last="justify" margin-top="6pt" margin-left="4.9pc">
         <fo:inline font-weight="bold">
           <!--Chapter <xsl:number level="any" from="bookmap"/>. -->
           <xsl:value-of select="*[contains(@class,' topic/title ')]"/>
         </fo:inline>
         <fo:leader leader-pattern="dots"/>
-        <fo:page-number-citation ref-id="{generate-id()}"/>
+        <xsl:variable name="id-value">
+          <xsl:choose>
+            <xsl:when test="@id">
+              <xsl:value-of select="@id"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="generate-id()"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:variable>
+        <fo:page-number-citation ref-id="{$id-value}"/>
       </fo:block>
       <xsl:call-template name="get-tce2-section"/>
     </xsl:for-each>
@@ -348,7 +390,17 @@
           <xsl:value-of select="*[contains(@class,' topic/title ')]"/>
         </fo:inline>
         <fo:leader leader-pattern="dots"/>
-        <fo:page-number-citation ref-id="{generate-id()}"/>
+        <xsl:variable name="id-value">
+          <xsl:choose>
+            <xsl:when test="@id">
+              <xsl:value-of select="@id"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="generate-id()"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:variable>
+        <fo:page-number-citation ref-id="{$id-value}"/>
       </fo:block>
       <xsl:call-template name="get-tce3-section"/>
     </xsl:for-each>
@@ -359,7 +411,17 @@
       <fo:block text-align-last="justify" margin-left="9pc">
         <xsl:value-of select="*[contains(@class,' topic/title ')]"/>
         <fo:leader leader-pattern="dots"/>
-        <fo:page-number-citation ref-id="{generate-id()}"/>
+        <xsl:variable name="id-value">
+          <xsl:choose>
+            <xsl:when test="@id">
+              <xsl:value-of select="@id"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="generate-id()"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:variable>
+        <fo:page-number-citation ref-id="{$id-value}"/>
       </fo:block>
       <xsl:call-template name="get-tce4-section"/>
     </xsl:for-each>
@@ -370,7 +432,17 @@
       <fo:block text-align-last="justify" margin-left="+5.9pc">
         <xsl:value-of select="*/title"/>
         <fo:leader leader-pattern="dots"/>
-        <fo:page-number-citation ref-id="{generate-id()}"/>
+        <xsl:variable name="id-value">
+          <xsl:choose>
+            <xsl:when test="@id">
+              <xsl:value-of select="@id"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="generate-id()"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:variable>
+        <fo:page-number-citation ref-id="{$id-value}"/>
       </fo:block>
       <xsl:call-template name="get-tce5-section"/>
     </xsl:for-each>
@@ -381,7 +453,17 @@
       <fo:block text-align-last="justify" margin-left="+5.9pc">
         <xsl:value-of select="*/title"/>
         <fo:leader leader-pattern="dots"/>
-        <fo:page-number-citation ref-id="{generate-id()}"/>
+        <xsl:variable name="id-value">
+          <xsl:choose>
+            <xsl:when test="@id">
+              <xsl:value-of select="@id"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="generate-id()"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:variable>
+        <fo:page-number-citation ref-id="{$id-value}"/>
       </fo:block>
       <!--xsl:call-template name="get-tce6-section"/-->
     </xsl:for-each>

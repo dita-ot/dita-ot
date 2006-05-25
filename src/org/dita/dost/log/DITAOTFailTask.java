@@ -3,6 +3,7 @@
  */
 package org.dita.dost.log;
 
+import java.io.File;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
@@ -45,9 +46,21 @@ public class DITAOTFailTask extends Exit {
 	 * @see org.apache.tools.ant.taskdefs.Exit#execute()
 	 */
 	public void execute() throws BuildException {
+		initMessageFile();
 		setMessage(MessageUtils.getMessage(id, prop).toString());
 		super.execute();
 	}
 	
+	private void initMessageFile() {
+		String messageFile = getProject().getProperty(
+				"args.message.file");
+		
+		if (!new File(messageFile).isAbsolute()) {
+			messageFile = new File(getProject().getBaseDir(), messageFile)
+					.getAbsolutePath();
+		}
+		
+		MessageUtils.loadMessages(messageFile);
+	}
 	
 }

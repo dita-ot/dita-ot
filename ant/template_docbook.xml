@@ -1,21 +1,27 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
 <!-- revise @PLACEHOLDER@ names and values-->
-<project name="@PROJECT.NAME@_docbook" default="all" basedir="..">
-  <path id="dost.class.path">
-    <pathelement location="${basedir}${file.separator}lib${file.separator}dost.jar"/>
-  </path>
+
+<!-- 
+  | basedir can be specified to other places base on your need.
+  |
+  | Note: input, output, and temp directories will base on the basedir if 
+  | they are relative paths.
+  * -->
+
+<project name="@PROJECT.NAME@_docbook" default="@DELIVERABLE.NAME@2docbook" basedir=".">
+    
+  <!-- dita.dir should point to the toolkit's root directory -->
+  <property name="dita.dir" value="${basedir}${file.separator}.."/>
   
-  <taskdef name="integrate" classname="org.dita.dost.platform.IntegratorTask">
-    <classpath refid="dost.class.path"/>
-  </taskdef>
-  <target name="all" depends="integrate, @DELIVERABLE.NAME@2docbook"></target>
-  <target name="integrate">
-    <integrate ditadir="${basedir}"/>
-  </target>
+  <!-- if file is a relative file name, the file name will be resolved 
+       relative to the importing file -->
+  <import file="${dita.dir}${file.separator}integrator.xml"/>
   
-  <target name="@DELIVERABLE.NAME@2docbook">
-    <ant antfile="${basedir}${file.separator}conductor.xml" target="init">
+  <target name="@DELIVERABLE.NAME@2docbook" depends="integrate">
+    <ant antfile="${dita.dir}${file.separator}conductor.xml" target="init">
+      <!-- please refer to the toolkit's document for supported parameters, and 
+           specify them base on your needs -->
       <property name="args.input" value="@DITA.INPUT@"/>
       <property name="output.dir" value="@OUTPUT.DIR@"/>
       <property name="transtype" value="docbook"/>

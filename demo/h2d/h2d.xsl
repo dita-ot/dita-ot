@@ -1194,7 +1194,7 @@ Move any content that belongs with that heading into the section.</xsl:with-para
 <xsl:variable name="width">
     <xsl:if test="@width"><xsl:value-of select="substring-before(@width,'%')"/></xsl:if>
 </xsl:variable>
-<xsl:if test="@summary">
+<xsl:if test="@summary and not(@summary='')">
     <xsl:comment><xsl:value-of select="@summary"/></xsl:comment>
     <xsl:call-template name="output-message">
         <xsl:with-param name="msg">The summary attribute on tables cannot be converted to DITA.

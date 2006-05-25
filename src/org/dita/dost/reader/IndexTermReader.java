@@ -3,6 +3,7 @@
  */
 package org.dita.dost.reader;
 
+import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Stack;
 
@@ -39,6 +40,9 @@ public class IndexTermReader extends AbstractXMLReader {
 	/** Stack used to store index term */
 	private Stack termStack = null;
 
+	/** List used to store all the specilized index terms */
+	private ArrayList indexTermSpecList = null;
+	
 	private DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
 
 	/**
@@ -46,6 +50,7 @@ public class IndexTermReader extends AbstractXMLReader {
 	 */
 	public IndexTermReader() {
 		termStack = new Stack();
+		indexTermSpecList = new ArrayList();
 	}
 
 	/**
@@ -57,6 +62,7 @@ public class IndexTermReader extends AbstractXMLReader {
 		inTitleElement = false;
 		isTitleFound = false;
 		termStack.clear();
+		indexTermSpecList.clear();
 	}
 
 	/**
@@ -96,7 +102,9 @@ public class IndexTermReader extends AbstractXMLReader {
 	 */
 	public void endElement(String uri, String localName, String qName)
 			throws SAXException {
-		if (Constants.ELEMENT_NAME_INDEXTERM.equals(localName)) {
+		// Check to see it the indexterm element or a specialized version is 
+		// in the list.
+		if (indexTermSpecList.contains(localName)) {
 			IndexTerm term = (IndexTerm) termStack.pop();
 
 			if (term.getTermName() == null) {
@@ -128,7 +136,20 @@ public class IndexTermReader extends AbstractXMLReader {
 	 */
 	public void startElement(String uri, String localName, String qName,
 			Attributes attributes) throws SAXException {
-		if (Constants.ELEMENT_NAME_INDEXTERM.equals(localName)) {
+		String classAttr = attributes.getValue(Constants.ATTRIBUTE_NAME_CLASS);
+		
+		if (classAttr != null
+				&& classAttr.indexOf(Constants.ELEMENT_NAME_INDEXTERM) != -1) {
+			// add the element name to the indexterm specialization element 
+			// list if it does not already exist in that list.  
+			if (!indexTermSpecList.contains(localName)){
+				indexTermSpecList.add(localName);
+			}
+		}
+		
+		// check to see it the indexterm element or a specialized version is 
+		// in the list.
+		if (indexTermSpecList.contains(localName)) {
 			IndexTerm indexTerm = new IndexTerm();
 			IndexTermTarget target = new IndexTermTarget();
 

@@ -53,6 +53,21 @@
           <tbody>
             <row>
               <entry colname="col1" colsep="1" rowsep="1"> 
+                <i>/basedir</i>:{basedir}</entry>
+              <entry colname="col2">
+                <ph conref="DITA-antscript.xml#antscript/basedir"></ph>
+                <note conref="DITA-antscript.xml#antscript/basedir-note"/>
+              </entry>
+            </row>
+            <row>
+              <entry colname="col1" colsep="1" rowsep="1"> 
+                <i>/ditadir</i>:{dita.dir}</entry>
+              <entry colname="col2">
+                <ph conref="DITA-antscript.xml#antscript/ditadir"></ph>
+              </entry>
+            </row>
+            <row>
+              <entry colname="col1" colsep="1" rowsep="1"> 
                 <i>/i</i>:{args.input}</entry>
               <entry colname="col2">
                 <ph conref="DITA-antscript.xml#antscript/argsinput"></ph>
@@ -146,6 +161,13 @@
               <entry colname="col2">
                 <ph conref="DITA-antscript.xml#antscript/argscss"/>
                 <note conref="DITA-antscript.xml#antscript/argscss-note"/>
+              </entry>
+            </row>
+            <row>
+              <entry colname="col1"><i>/cssroot</i>:{args.cssroot}</entry>
+              <entry colname="col2">
+                <ph conref="DITA-antscript.xml#antscript/argscssroot"/>
+                <note conref="DITA-antscript.xml#antscript/argscssroot-note"/>
               </entry>
             </row>
             <row>
@@ -245,6 +267,18 @@
               <entry colname="col2">
                 <ph conref="DITA-antscript.xml#antscript/fooutputrellinks"/>
                 <note conref="DITA-antscript.xml#antscript/fooutputrellinks-note"/>
+              </entry>
+            </row>
+            <row>
+              <entry colname="col1"><i>/fouserconfig</i>:{args.fo.userconfig}</entry>
+              <entry colname="col2">
+                <ph conref="DITA-antscript.xml#antscript/fouserconfig"/>
+              </entry>
+            </row>
+            <row>
+              <entry colname="col1"><i>/htmlhelpincludefile</i>:{args.htmlhelp.includefile}</entry>
+              <entry colname="col2">
+                <ph conref="DITA-antscript.xml#antscript/htmlhelpincludefile"/>
               </entry>
             </row>
           </tbody>

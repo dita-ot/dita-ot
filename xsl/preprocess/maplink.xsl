@@ -312,6 +312,7 @@
     <xsl:param name="buildLink"/>
     <!-- Link being evaluated -->
     <xsl:param name="originalLink"/>
+    
     <xsl:choose>
       <xsl:when test="contains($originalLink,'\')">
         <xsl:call-template name="simplifyLink">
@@ -320,6 +321,12 @@
             select="substring-after($originalLink,'\')"/> </xsl:with-param>
         </xsl:call-template>
       </xsl:when>
+      <xsl:when test="starts-with($originalLink,'./')">
+        <xsl:call-template name="simplifyLink">
+          <xsl:with-param name="buildLink" select="$buildLink"/>
+          <xsl:with-param name="originalLink" select="substring-after($originalLink,'./')"/>
+        </xsl:call-template>
+      </xsl:when>      
       <xsl:when test="not(contains($originalLink,'../'))">
         <xsl:value-of select="$buildLink"/>
         <xsl:value-of select="$originalLink"/>

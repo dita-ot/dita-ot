@@ -10,11 +10,11 @@ import java.util.ArrayList;
 import java.util.ListIterator;
 import java.util.Properties;
 
+import org.dita.dost.log.DITAOTJavaLogger;
+import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.Content;
 import org.dita.dost.util.Constants;
 import org.dita.dost.util.StringUtils;
-import org.dita.dost.log.DITAOTJavaLogger;
-import org.dita.dost.log.MessageUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
@@ -57,7 +57,7 @@ public class DitaLinksWriter extends AbstractXMLWriter {
      */
     public DitaLinksWriter() {
         super();
-        topicIdList = new ArrayList(Constants.INT_16);
+        topicIdList = null;
         firstMatchTopic = null;
         hasRelatedlinksTillNow = false;
         indexEntries = null;
@@ -119,6 +119,7 @@ public class DitaLinksWriter extends AbstractXMLWriter {
             
         	needResolveEntity = true;
             hasRelatedlinksTillNow = false;
+            topicIdList = new ArrayList(Constants.INT_16);
             inputFile = new File(file);
             outputFile = new File(file + Constants.FILE_EXTENSION_TEMP);
             fileOutput = new FileOutputStream(outputFile);

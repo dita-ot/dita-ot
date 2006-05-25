@@ -329,6 +329,7 @@
 <xsl:template match="*[contains(@class,' topic/related-links ') or
       contains(@class,' topic/linkpool ')]">
   <itemizedlist>
+    <title>Related links</title>
     <xsl:apply-templates/>
   </itemizedlist>
 </xsl:template>
@@ -421,9 +422,18 @@
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' topic/itemgroup ')]">
-  <xsl:apply-templates select="." mode="deflate">
-    <xsl:with-param name="descendentsOkay" select="true()"/>
-  </xsl:apply-templates>
+  <xsl:variable name="element" select="local-name(.)" />
+  <xsl:variable name="id" select="concat('elem', generate-id())" />
+  <xsl:call-template name="deflateElementStart">
+    <xsl:with-param name="id" select="$id" />
+    <xsl:with-param name="element" select="$element" />
+    <xsl:with-param name="parentID" select="''" />
+  </xsl:call-template>
+  <xsl:call-template name="makeBlock" />
+  <xsl:call-template name="deflateElementEnd">
+    <xsl:with-param name="id" select="$id" />
+    <xsl:with-param name="element" select="$element" />
+  </xsl:call-template>
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' topic/dl ')]">

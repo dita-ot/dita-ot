@@ -45,17 +45,19 @@
   <target name="gen-list-without-flagging" unless="dita.input.valfile">
     <pipeline message="Generate list."
       module="GenMapAndTopicList"
+      basedir="${basedir}"
       inputmap="${args.input}"
       tempdir="${dita.temp.dir}"
-      extparam="ditadir=${basedir}"/>
+      extparam="ditadir=${dita.dir}"/>
   </target>
   
   <target name="gen-list-with-flagging" if="dita.input.valfile">
     <pipeline message="Generate list."
       module="GenMapAndTopicList"
+      basedir="${basedir}"
       inputmap="${args.input}"
       tempdir="${dita.temp.dir}"
-      extparam="ditadir=${basedir};ditaval=${dita.input.valfile}"/>
+      extparam="ditadir=${dita.dir};ditaval=${dita.input.valfile}"/>
   </target>
   
   <target name="debug-filter" depends="gen-list,debug,debug-and-filter" description="Debug and filter input files"/>
@@ -63,21 +65,23 @@
   <target name="debug" unless="dita.input.valfile" description="Debug input files">
     <pipeline message="Debug and filtering."
 		module="DebugAndFilter"
-    basedir="${user.input.dir}"
-    tempdir="${dita.temp.dir}"/>
+    basedir="${basedir}"
+    tempdir="${dita.temp.dir}"
+    extparam="inputdir=${user.input.dir}"/>
   </target>
   
   <target name="debug-and-filter" if="dita.input.valfile" description="Debug and filter input files">
     <pipeline message="Debug and filtering."
 		module="DebugAndFilter"
-		extparam="ditaval=${dita.input.valfile}"
-    basedir="${user.input.dir}"
-    tempdir="${dita.temp.dir}"/>
+    basedir="${basedir}"
+    tempdir="${dita.temp.dir}"
+    extparam="inputdir=${user.input.dir};ditaval=${dita.input.valfile}"/>
   </target>
   
   <target name="move-index-entries" unless="noMap" depends="debug-filter" description="Move index entries">
   	<pipeline message="Move index entries."
 		module="MoveIndex"
+    basedir="${basedir}"
 		inputmap="${user.input.file}"
     tempdir="${dita.temp.dir}"
 	/>
@@ -107,6 +111,7 @@
       out="${mappull.workdir}${file.separator}${dita.map.filename.root}.ditamap.pull"
       style="${dita.script.dir}${file.separator}preprocess${file.separator}mappull.xsl">
         <param name="DITAEXT" expression="${dita.ext}" if="dita.ext"/>
+        <param name="TRANSTYPE" expression="${transtype}"/>
     </xslt>
 	  
     <copy overwrite="true" todir="${dita.temp.dir}">

@@ -3,9 +3,9 @@
  */
 package org.dita.dost.platform;
 
-import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.StringTokenizer;
 
 import org.dita.dost.util.Constants;
@@ -16,13 +16,12 @@ import org.dita.dost.util.FileUtils;
  * @author Zhang, Yuan Peng
  */
 public class ImportAction implements IAction {
-
-	private HashSet valueSet = null;
+	private LinkedHashSet valueSet = null;
 	private Hashtable paramTable = null;
 	private StringBuffer retBuf = null;
 	
 	public ImportAction() {
-		valueSet = new HashSet(16);
+		valueSet = new LinkedHashSet(16);
 		paramTable = new Hashtable();
 		retBuf = new StringBuffer(1024);
 	}

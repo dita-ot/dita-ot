@@ -100,7 +100,7 @@
 <xsl:template match="*[contains(@class,' reference/property ')]" name="topic.reference.property">
   <xsl:param name="width-multiplier"/>
   <!-- If there was no header, then this is the first child of properties; create default headers -->
-  <xsl:if test="position()=1">
+  <xsl:if test=".=../*[1]">
     <tr><xsl:value-of select="$newline"/>
       <xsl:if test="../*/*[contains(@class,' reference/proptype ')]">
         <th id="{generate-id(parent::*)}-type" valign="bottom">

@@ -17,9 +17,9 @@
     <xsl:text>\cellx </xsl:text>
 <xsl:text>\plain \s7\f4\fs24\b \qc</xsl:text>
 \li0\fi0\ri0\nowidctlpar\intbl\aspalpha\aspnum\faauto\adjustright\rin0\lin0
-<xsl:text>{</xsl:text><xsl:call-template name="getString">
+<xsl:text>{</xsl:text><xsl:call-template name="getStringRTF">
       <xsl:with-param name="stringName" select="'Option'"/>
-    </xsl:call-template><xsl:text>\cell </xsl:text><xsl:call-template name="getString">
+    </xsl:call-template><xsl:text>\cell </xsl:text><xsl:call-template name="getStringRTF">
       <xsl:with-param name="stringName" select="'Description'"/>
     </xsl:call-template><xsl:text>\cell}\row</xsl:text>
     </xsl:when>

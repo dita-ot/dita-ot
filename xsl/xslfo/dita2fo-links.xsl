@@ -69,12 +69,15 @@
               <xsl:when test="*[contains(@class, ' topic/linktext ')]">
                 <xsl:apply-templates select="*[contains(@class, ' topic/linktext ')]"/>
               </xsl:when>
-              <xsl:otherwise><!--use href--><xsl:call-template name="href"/></xsl:otherwise>
+              <xsl:otherwise>
+                <!--use href text-->
+                <xsl:value-of select="@href"/>
+              </xsl:otherwise>
             </xsl:choose>
           </fo:basic-link>
         </fo:block>
       </xsl:when>
-      <xsl:when test="@format='html' or @format='HTML' or @scope='external'">
+      <xsl:otherwise>
         <fo:block color="blue" text-decoration="underline" 
                   start-indent="{$basic-start-indent}">
           <xsl:text>&bullet; </xsl:text>
@@ -87,20 +90,12 @@
               <xsl:when test="*[contains(@class, ' topic/linktext ')]">
                 <xsl:apply-templates select="*[contains(@class, ' topic/linktext ')]"/>
               </xsl:when>
-              <xsl:otherwise><!--use href--><xsl:call-template name="href"/></xsl:otherwise>
+              <xsl:otherwise>
+                <!-- use href text -->
+                <xsl:value-of select="@href"/>
+              </xsl:otherwise>
             </xsl:choose>
           </fo:basic-link>
-        </fo:block>
-      </xsl:when>
-      <xsl:otherwise>
-        <fo:block color="red" start-indent="{$basic-start-indent}">
-          <xsl:text>&bullet; </xsl:text>
-          <xsl:call-template name="output-message">
-            <xsl:with-param name="msgnum">051</xsl:with-param>
-            <xsl:with-param name="msgsev">W</xsl:with-param>
-            <xsl:with-param name="msgparams">%1=link;%2=<xsl:value-of select="@href"/>;%3=<xsl:value-of select="@format"/></xsl:with-param>
-          </xsl:call-template>
-          <xsl:apply-templates/>
         </fo:block>
       </xsl:otherwise>
     </xsl:choose>
@@ -135,49 +130,37 @@
               </xsl:when>
               <!--use href text-->
               <xsl:otherwise>
-                <xsl:call-template name="href"/>
+                <xsl:value-of select="@href"/>
               </xsl:otherwise>
             </xsl:choose>
           </fo:basic-link>
           </fo:inline>
+          <fo:inline>
+            <xsl:variable name="href-id">
+              <xsl:call-template name="href"/>
+            </xsl:variable>
+            <xsl:text> on page </xsl:text><fo:page-number-citation ref-id="{$href-id}"/>
+          </fo:inline>          
         </xsl:when>
         <xsl:otherwise>
-          <!-- If the format attribute is html, then interpret the href as an external link -->
-          <!-- (for example, to a website) -->
-          <xsl:choose>
-            <xsl:when test="@scope='external' or @format='html' or @format='HTML'">
-              <fo:inline color="blue">                
-              <fo:basic-link>
-                <xsl:attribute name="external-destination">
+          <fo:inline color="blue">
+            <fo:basic-link>
+              <xsl:attribute name="external-destination">
+                <xsl:value-of select="@href"/>
+              </xsl:attribute>
+              <!--use content as linktext if it exists, otherwise use href as linktext-->
+              <xsl:choose>
+                <!--use xref content-->
+                <xsl:when test="text()">
+                  <xsl:apply-templates select="text()"/>
+                </xsl:when>
+                <!--use href text-->
+                <xsl:otherwise>
                   <xsl:value-of select="@href"/>
-                </xsl:attribute>
-                <!--use content as linktext if it exists, otherwise use href as linktext-->
-                <xsl:choose>
-                  <!--use xref content-->
-                  <xsl:when test="text()">
-                    <xsl:apply-templates select="text()"/>
-                  </xsl:when>
-                  <!--use href text-->
-                  <xsl:otherwise>
-                    <xsl:call-template name="href"/>
-                  </xsl:otherwise>
-                </xsl:choose>
-              </fo:basic-link>
-              </fo:inline>
-            </xsl:when>
-            <xsl:otherwise>
-              <!-- xref format not recognized: output xref contents without creating a hyperlink -->
-              <xsl:call-template name="output-message">
-                <xsl:with-param name="msgnum">051</xsl:with-param>
-                <xsl:with-param name="msgsev">W</xsl:with-param>
-                <xsl:with-param name="msgparams">%1=xref;%2=<xsl:value-of select="@href"/>;%3=<xsl:value-of select="@format"/></xsl:with-param>
-              </xsl:call-template>
-              <fo:inline color="red">
-                <fo:inline font-weight="bold">[xref to: <xsl:value-of select="@href"/>]</fo:inline>
-                <xsl:apply-templates/>
-              </fo:inline>
-            </xsl:otherwise>
-          </xsl:choose>
+                </xsl:otherwise>
+              </xsl:choose>
+            </fo:basic-link>
+          </fo:inline>
         </xsl:otherwise>
       </xsl:choose>
 

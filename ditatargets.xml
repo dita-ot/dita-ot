@@ -14,11 +14,16 @@
 
 <!-- Build DocBook output from ditamap -->
 <target name="dita.map.docbook" description="Build DocBook output from ditamap">  
+  <condition property="args.xsl" value="${dita.script.dir}${file.separator}map2docbook.xsl">
+    <not>
+      <isset property="args.xsl"/>
+    </not>
+  </condition>
   <mkdir dir="${outputDir}" />
   <xslt processor="trax"
         in="${inputDir}${file.separator}${inputMap}"
         out="${outputDir}${file.separator}${mapRoot}.xml"
-        style="${dita.script.dir}${file.separator}map2docbook.xsl">
+        style="${args.xsl}">
     <param name="outputdir" expression="${outputDir}" />
     <xmlcatalog refid="dita.catalog" />
   </xslt>
@@ -111,6 +116,21 @@
 	 and Batik relevant jar files in CLASSPATH -->
 <target name="dita.fo2pdf" if="hasFOP" description="Build PDF from FO using FOP">
   <taskdef name="fop" classname="org.apache.fop.tools.anttasks.Fop"/>
+  <antcall target="dita.fo2pdf.userconfig"/>
+  <antcall target="dita.fo2pdf.nouserconfig"/>    
+</target>
+    
+<target name="dita.fo2pdf.userconfig" if="args.fo.userconfig">
+  <fop format="application/pdf"
+       basedir="${input}"
+       fofile="${input}"
+       outfile="${output}"
+       messagelevel="info"
+       userconfig="${args.fo.userconfig}">
+  </fop>
+</target>
+    
+<target name="dita.fo2pdf.nouserconfig" unless="args.fo.userconfig">
   <fop format="application/pdf"
 	   basedir="${input}"
        fofile="${input}"
@@ -214,24 +234,31 @@
       <isset property="out.ext"/>
     </not>
   </condition>
+  <condition property="noPlugin">
+    <equals arg1="${dita.eclipse.plugin}" arg2="no"/>
+  </condition>
   <xslt processor="trax"
     basedir="${dita.temp.dir}"
 		destdir="${output.dir}"
-		includes="${user.input.file}"
+    includes="${fullditamaplist}"
+    extension=".xml"
 		style="${dita.script.dir}${file.separator}map2eclipse.xsl">
         <param name="DITAEXT" expression="${dita.ext}" if="dita.ext"/>
         <param name="OUTEXT" expression="${out.ext}" if="out.ext"/>
-        <mapper type="glob" from="*${dita.input.filename}" to="*${args.eclipsehelp.toc}.xml"/>
-    </xslt>
+    </xslt>    
+  <antcall target="dita.map.plugin"/>
+</target>
+
+  <target name="dita.map.plugin" unless="noPlugin">
     <xslt processor="trax"
       in="${dita.temp.dir}${file.separator}${user.input.file}"
       out="${dita.map.output.dir}${file.separator}plugin.xml"
       style="${dita.script.dir}${file.separator}map2plugin.xsl">
-        <param name="TOCROOT" expression="${args.eclipsehelp.toc}"/>
-        <param name="version" expression="${args.eclipse.version}" if="args.eclipse.version"/>
-        <param name="provider" expression="${args.eclipse.provider}" if="args.eclipse.provider"/>
+      <param name="TOCROOT" expression="${args.eclipsehelp.toc}"/>
+      <param name="version" expression="${args.eclipse.version}" if="args.eclipse.version"/>
+      <param name="provider" expression="${args.eclipse.provider}" if="args.eclipse.provider"/>
     </xslt>
-</target>
+  </target>
 
 <target name="dita.topics.eclipse">
   <antcall target="dita.topics.xhtml"/>
@@ -329,9 +356,11 @@
     
 	<!-- Generate Java Help Index File -->
     <pipeline message="Extract index term."
-                module="IndexTermExtract"    
-				inputmap="${user.input.file}"        
-                extparam="input=${dita.temp.dir}${file.separator}dita.list;output=${output.dir}${file.separator}${user.input.file};targetext=.html;indextype=javahelp;${index.ext.param.encoding}"
+              module="IndexTermExtract"    
+              basedir="${basedir}"
+              tempdir="${dita.temp.dir}"
+              inputmap="${user.input.file}"        
+              extparam="output=${output.dir}${file.separator}${user.input.file};targetext=.html;indextype=javahelp;${index.ext.param.encoding}"
     />
 </target>
 
@@ -396,8 +425,10 @@
   </xslt>  
   <pipeline message="Extract index term."
             module="IndexTermExtract"   
-			inputmap="${user.input.file}"         
-            extparam="input=${dita.temp.dir}${file.separator}dita.list;output=${output.dir}${file.separator}${user.input.file};targetext=${out.ext};indextype=htmlhelp;${index.ext.param.encoding}"/>
+            basedir="${basedir}"
+            tempdir="${dita.temp.dir}"
+            inputmap="${user.input.file}"         
+            extparam="output=${output.dir}${file.separator}${user.input.file};targetext=${out.ext};indextype=htmlhelp;${index.ext.param.encoding}"/>
   <xslt processor="trax"
 		basedir="${dita.temp.dir}"
 		destdir="${output.dir}"
@@ -407,6 +438,7 @@
         <param name="DITAEXT" expression="${dita.ext}" if="dita.ext"/>
         <param name="OUTEXT" expression="${out.ext}" if="out.ext"/>
         <param name="HHCNAME" expression="${dita.map.filename.root}.hhc"/>
+        <param name="INCLUDEFILE" expression="${args.htmlhelp.includefile}" if="args.htmlhelp.includefile"/>
     </xslt>  
 </target>
 
@@ -492,7 +524,7 @@
   </target>
 
   <target name="copy-css-user" if="user.copycss.yes">
-    <copy file="${args.css}" todir="${user.csspath.real}"/>
+    <copy file="${args.css.real}" todir="${user.csspath.real}"/>
   </target>
     
   <target name="dita.topic.troff" description="Build troff output from dita topics">

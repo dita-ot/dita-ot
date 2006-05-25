@@ -27,6 +27,14 @@ public class IntegratorTask extends Task {
 		adaptee.execute();
 	}
 
+	public String getBasedir() {
+		return adaptee.getBasedir();
+	}
+	
+	public void setBasedir(String basedir) {
+		adaptee.setBasedir(basedir);
+	}
+	
 	public String getDitadir() {
 		return adaptee.getDitaDir();
 	}

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2005, v.4002-->
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN"
+ "task.dtd">
+<?Pub Inc?>
+<task id="installb" xml:lang="en-us">
+<title>Installing BBBB</title>
+<shortdesc>This tells how to install B</shortdesc>
+<taskbody>
+<steps>
+<step><cmd>setup.exe<?Pub Caret?></cmd></step>
+</steps>
+</taskbody>
+</task>
+<?Pub *0000000399?>
