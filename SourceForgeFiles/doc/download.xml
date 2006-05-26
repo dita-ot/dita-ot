@@ -6,6 +6,21 @@
   <body>
     <note importance="recommended">Before you click the download link, please read <cite>Important Changes for DITA-OT 1.2</cite> at below to get the information about the installation and usage changes for DITA-OT.</note>
     <p><xref href="http://sourceforge.net/project/showfiles.php?group_id=132728" scope="external" format="html">Download DITA-OT</xref></p>      
+    <section>
+      <title>Important Changes for DITA-OT 1.2.2</title>
+      <p>There are some changes to the behavior of paths in release 1.3 base
+        on the SourceForge Patch #1326450 "Make ${basedir} mine".</p>
+      <p>Now, basedir can be specified to other places base on needs, 
+        and input, output, and temp paths are based on the basedir if 
+        they are relative.</p>
+      <p>In the sample ant scripts provided in the toolkit's 'ant' directory,
+        the default value of 'basedir' was changed to the current directory, 
+        which used to point to the toolkit's root direcoty. Base on the design,
+        'temp', 'out' directories are now generated into the current directory 
+        by default.</p>
+      <p>For detail information on this design change, please refer to 
+        <xref href="http://dita.xml.org/node/1281" scope="external" format="html"/>.</p>
+    </section>
     <section importance="high">
       <title>Important Changes for DITA-OT 1.2</title>
       <p>DITA-OT 1.2 provides two significant new features: an error handling and logging system and a plug-in capability for new transforms and specializations.</p>
