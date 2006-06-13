@@ -5,6 +5,8 @@
     "D:\Mekon\DITA\DITA-OT\demo\FrameMaker_adapter\fm_app\fm_print.dtd">
 -->
 
+<!-- 13Jun2006 added fm_div to ph element -->
+
 
 <!--D:\Mekon\DITA\DITA-OT\demo\FrameMaker_adapter\fm_app\template.fm-->
 
@@ -1053,7 +1055,7 @@
 
 <!ELEMENT ph         (#PCDATA | ph | term | xref | cite | q | boolean |
                               state | keyword | tm | image | draft-comment |
-                              fn | indextermref)* >
+                              fn | fm_div | indextermref)* >
 <!ATTLIST ph         keyref    CDATA     #IMPLIED
                      id ID     #IMPLIED
                      platform  CDATA     #IMPLIED
