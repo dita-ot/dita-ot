@@ -2,6 +2,7 @@
 <!-- (c) Copyright IBM Corp. 2004, 2006 All Rights Reserved. -->
 <!-- Deprecated: left for backward compatibility, and it will be removed in a 
      later release -->
-<project name="pre-targets">
-  <import file="build_preprocess.xml" />
+
+<project name="conductor" default="init" basedir=".">
+  <import file="build.xml"/>
 </project>
