@@ -3,13 +3,13 @@
  */
 package org.dita.dost.index;
 
-import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
 import org.dita.dost.util.Constants;
+import org.dita.dost.util.DITAOTCollator;
 
 /**
  * This class represent indexterm.
@@ -185,7 +185,7 @@ public class IndexTerm implements Comparable {
      * @param obj
      */
     public int compareTo(Object obj) {
-        return Collator.getInstance(termLocale).compare(termName,
+        return DITAOTCollator.getInstance(termLocale).compare(termName,
                 ((IndexTerm) obj).getTermName());
     }
 
