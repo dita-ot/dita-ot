@@ -1,5 +1,5 @@
 /*
- * (c) Copyright IBM Corp. 2005 All Rights Reserved.
+ * (c) Copyright IBM Corp. 2005, 2006 All Rights Reserved.
  */
 package org.dita.dost.module;
 
@@ -45,10 +45,10 @@ public class IndexTermExtractModule extends AbstractPipelineModule {
 	private String targetExt = null;
 
 	/** The basedir of the input file for parsing */
-	private String inputDir = null;
+	private String baseInputDir = null;
 
-	/** The list of href targets */
-	private List hrefTargetList = null;
+	/** The list of topics */
+	private List topicList = null;
 
 	/** The list of ditamap files */
 	private List ditamapList = null;
@@ -85,49 +85,36 @@ public class IndexTermExtractModule extends AbstractPipelineModule {
 		StringTokenizer tokenizer = null;
 		Properties prop = new Properties();
 		String outputRoot = null;
+		int lastIndexOfDot;
+		String ditalist;
+		Properties params = new Properties();
 		PipelineHashIO hashIO = (PipelineHashIO) input;
-		String ditalist = hashIO
-				.getAttribute(Constants.ANT_INVOKER_EXT_PARAM_INPUT);
+		
+		String baseDir = hashIO
+				.getAttribute(Constants.ANT_INVOKER_PARAM_BASEDIR);
+		String tempDir = ((PipelineHashIO)input).getAttribute(Constants.ANT_INVOKER_PARAM_TEMPDIR);
 		String output = hashIO
 				.getAttribute(Constants.ANT_INVOKER_EXT_PARAM_OUTPUT);
 		String encoding = hashIO
 				.getAttribute(Constants.ANT_INVOKER_EXT_PARAM_ENCODING);
 		String indextype = hashIO
 				.getAttribute(Constants.ANT_INVOKER_EXT_PARAM_INDEXTYPE);
-		Properties params = new Properties();
-
+		
 		inputMap = hashIO.getAttribute(Constants.ANT_INVOKER_PARAM_INPUTMAP);
 		targetExt = hashIO
 				.getAttribute(Constants.ANT_INVOKER_EXT_PARAM_TARGETEXT);
+		
 
-		if (ditalist == null) {
-			params.put("%1", "the input dita.list file");
-			throw new DITAOTException(MessageUtils.getMessage("DOTJ010E",
-					params).toString());
+		if (!new File(tempDir).isAbsolute()) {
+        	tempDir = new File(baseDir, tempDir).getAbsolutePath();
+        }
+		
+		if (!new File(output).isAbsolute()) {
+			output = new File(baseDir, output).getAbsolutePath();
 		}
-
-		if (output == null) {
-			params.put("%1", "the output file");
-			throw new DITAOTException(MessageUtils.getMessage("DOTJ010E",
-					params).toString());
-		}
-
-		if (targetExt == null) {
-			params.put("%1", "the target extension");
-			throw new DITAOTException(MessageUtils.getMessage("DOTJ010E",
-					params).toString());
-		}
-
-		if (indextype == null) {
-			params.put("%1", "the index type");
-			throw new DITAOTException(MessageUtils.getMessage("DOTJ010E",
-					params).toString());
-		}
-
-		if (ditalist.indexOf(File.separator) != -1) {
-			inputDir = ditalist.substring(0, ditalist
-					.lastIndexOf(File.separator) + 1);
-		}
+		
+		baseInputDir = tempDir;		
+		ditalist = new File(tempDir, "dita.list").getAbsolutePath();
 
 		try {
 			prop.load(new FileInputStream(ditalist));
@@ -140,13 +127,13 @@ public class IndexTermExtractModule extends AbstractPipelineModule {
 		}
 
 		/*
-		 * Parse href targets and ditamap list from the input dita.list file
+		 * Parse topic list and ditamap list from the input dita.list file
 		 */
 		tokenizer = new StringTokenizer(prop
-				.getProperty(Constants.HREF_TARGET_LIST), Constants.COMMA);
-		hrefTargetList = new ArrayList(tokenizer.countTokens());
+				.getProperty(Constants.FULL_DITA_TOPIC_LIST), Constants.COMMA);
+		topicList = new ArrayList(tokenizer.countTokens());
 		while (tokenizer.hasMoreTokens()) {
-			hrefTargetList.add(tokenizer.nextToken());
+			topicList.add(tokenizer.nextToken());
 		}
 
 		tokenizer = new StringTokenizer(prop
@@ -155,11 +142,11 @@ public class IndexTermExtractModule extends AbstractPipelineModule {
 		while (tokenizer.hasMoreTokens()) {
 			ditamapList.add(tokenizer.nextToken());
 		}
-
-		outputRoot = output.lastIndexOf(".") == -1 ? output : output.substring(
-				0, output.lastIndexOf("."));
+		
+		lastIndexOfDot = output.lastIndexOf(".");
+		outputRoot = (lastIndexOfDot == -1) ? output : output.substring(0,
+				lastIndexOfDot);
 		IndexTermCollection.setOutputFileRoot(outputRoot);
-
 		IndexTermCollection.setIndexType(indextype);
 
 		if (encoding != null && encoding.trim().length() > 0) {
@@ -170,7 +157,7 @@ public class IndexTermExtractModule extends AbstractPipelineModule {
 	}
 
 	private void extractIndexTerm() throws SAXException {
-		int hrefTargetNum = hrefTargetList.size();
+		int topicNum = topicList.size();
 		int ditamapNum = ditamapList.size();
 		FileInputStream inputStream = null;
 		XMLReader xmlReader = null;
@@ -187,9 +174,9 @@ public class IndexTermExtractModule extends AbstractPipelineModule {
 		try {
 			xmlReader.setContentHandler(handler);
 
-			for (int i = 0; i < hrefTargetNum; i++) {
+			for (int i = 0; i < topicNum; i++) {
 				handler.reset();
-				String target = (String) hrefTargetList.get(i);
+				String target = (String) topicList.get(i);
 				String targetPathFromMap = FileUtils.getRelativePathFromMap(
 						inputMap, target);
 				String targetPathFromMapWithoutExt = targetPathFromMap
@@ -199,7 +186,7 @@ public class IndexTermExtractModule extends AbstractPipelineModule {
 						.toString());
 				try {
 					inputStream = new FileInputStream(
-							new File(inputDir, target));
+							new File(baseInputDir, target));
 					xmlReader.parse(new InputSource(inputStream));
 					inputStream.close();
 				} catch (Exception e) {					
@@ -227,7 +214,7 @@ public class IndexTermExtractModule extends AbstractPipelineModule {
 
 				ditamapIndexTermReader.setMapPath(mapPathFromInputMap);
 				try {
-					inputStream = new FileInputStream(new File(inputDir,
+					inputStream = new FileInputStream(new File(baseInputDir,
 							ditamap));
 					xmlReader.parse(new InputSource(inputStream));
 					inputStream.close();

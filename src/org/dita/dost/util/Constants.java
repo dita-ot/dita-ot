@@ -1,5 +1,5 @@
 /*
- * (c) Copyright IBM Corp. 2005 All Rights Reserved.
+ * (c) Copyright IBM Corp. 2005, 2006 All Rights Reserved.
  */
 package org.dita.dost.util;
 
@@ -43,11 +43,18 @@ public abstract class Constants {
     public static final String FILE_EXTENSION_EPS = ".eps";
     public static final String FILE_EXTENSION_DITAMAP = ".ditamap";
     public static final String FILE_EXTENSION_TEMP = ".temp";    
+    public static final String FILE_EXTENSION_JPEG = ".jpeg";
+    public static final String FILE_EXTENSION_PNG = ".png";
+    public static final String FILE_EXTENSION_SVG = ".svg";
     
     /**
      * Constants for element names in dita files.
      */
+    public static final String ELEMENT_NAME_MAP = "map";
     public static final String ELEMENT_NAME_INDEXTERM = "indexterm";
+    public static final String ELEMENT_NAME_INDEXSEE = "index-see";
+    public static final String ELEMENT_NAME_INDEXSEEALSO = "index-see-also";
+    public static final String ELEMENT_NAME_INDEXSORTAS = "index-sort-as";
     public static final String ELEMENT_NAME_TOPICREF = "topicref";
     public static final String ELEMENT_NAME_TOPICMETA = "topicmeta";
     public static final String ELEMENT_NAME_KEYWORDS = "keywords";
@@ -129,6 +136,7 @@ public abstract class Constants {
     public static final String ANT_INVOKER_EXT_PARAM_OUTPUT = "output";
     public static final String ANT_INVOKER_EXT_PARAM_INPUT = "input";
     public static final String ANT_INVOKER_EXT_PARAM_DITADIR = "ditadir";
+    public static final String ANT_INVOKER_EXT_PARAM_INPUTDIR = "inputdir";
     
     /**
      * Constants for file and line separator.
@@ -181,6 +189,10 @@ public abstract class Constants {
     public static final String FEATURE_VALIDATION = "http://xml.org/sax/features/validation";
     public static final String FEATURE_VALIDATION_SCHEMA = "http://apache.org/xml/features/validation/schema";    
     public static final String TEMP_DIR_DEFAULT = "temp";
+	public static final String FILTER_ACTION_EXCLUDE = "exclude";
+	public static final String ATTR_CLASS_VALUE_TITLE = "topic/title";
+	public static final String ATTR_CLASS_VALUE_MAP = "map/map";
+	public static final String ATTR_CLASS_VALUE_INDEXTERM = "topic/indexterm";
     
     /**
      * Private constructor used to forbid instantiation.

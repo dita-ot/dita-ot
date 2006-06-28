@@ -1,5 +1,5 @@
 /*
- * (c) Copyright IBM Corp. 2005 All Rights Reserved.
+ * (c) Copyright IBM Corp. 2005, 2006 All Rights Reserved.
  */
 package org.dita.dost.index;
 
@@ -28,6 +28,9 @@ public class IndexTerm implements Comparable {
     /** The target list of the indexterm */
     private List targetList = null;
 
+    /** The sorting termKey of the indexterm, default will be the term name */
+    private String termKey = null;
+    
     /** The sub indexterms contained by this indexterm */
     private List subTerms = null;
 
@@ -76,6 +79,20 @@ public class IndexTerm implements Comparable {
     }
 
     /**
+	 * @return Returns the termKey.
+	 */
+	public String getTermKey() {
+		return termKey;
+	}
+
+	/**
+	 * @param termKey The termKey to set.
+	 */
+	public void setTermKey(String key) {
+		this.termKey = key;
+	}
+
+	/**
      * Get the sub term list.
      * 
      * @return
@@ -185,8 +202,8 @@ public class IndexTerm implements Comparable {
      * @param obj
      */
     public int compareTo(Object obj) {
-        return DITAOTCollator.getInstance(termLocale).compare(termName,
-                ((IndexTerm) obj).getTermName());
+        return DITAOTCollator.getInstance(termLocale).compare(termKey,
+                ((IndexTerm) obj).getTermKey());
     }
 
     /**
@@ -243,6 +260,7 @@ public class IndexTerm implements Comparable {
 		StringBuffer buffer = new StringBuffer(Constants.INT_128);
 		
 		buffer.append("{Term name: ").append(termName);
+		buffer.append(", Term key: ").append(termKey);
 		buffer.append(", Target list: ");
 		buffer.append(targetList.toString());		
 		buffer.append(", Sub-terms: ");

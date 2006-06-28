@@ -1,8 +1,9 @@
 /*
- * (c) Copyright IBM Corp. 2005 All Rights Reserved.
+ * (c) Copyright IBM Corp. 2005, 2006 All Rights Reserved.
  */
 package org.dita.dost.reader;
 
+import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Stack;
 
@@ -30,15 +31,30 @@ public class IndexTermReader extends AbstractXMLReader {
 	/** The title of the dita file under parsing */
 	private String title = null;
 
-	/** If current element under parsing is a title element */
+	/** Whether or not current element under parsing is a title element */
 	private boolean inTitleElement = false;
 
 	/** title element found? */
 	private boolean isTitleFound = false;
 
+	/** Whether or not current element under parsing is <index-sort-as> */
+	private boolean insideSortingAs = false;
+	
 	/** Stack used to store index term */
 	private Stack termStack = null;
 
+	/** List used to store all the specilized index terms */
+	private ArrayList indexTermSpecList = null;
+	
+	/** List used to store all the specilized index-see */
+	private ArrayList indexSeeSpecList = null;
+	
+	/** List used to store all the specilized index-see-also */
+	private ArrayList indexSeeAlsoSpecList = null;
+	
+	/** List used to store all the specilized index-sort-as */
+	private ArrayList indexSortAsSpecList = null;
+	
 	private DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
 
 	/**
@@ -46,6 +62,10 @@ public class IndexTermReader extends AbstractXMLReader {
 	 */
 	public IndexTermReader() {
 		termStack = new Stack();
+		indexTermSpecList = new ArrayList();
+		indexSeeSpecList = new ArrayList();
+		indexSeeAlsoSpecList = new ArrayList();
+		indexSortAsSpecList = new ArrayList();
 	}
 
 	/**
@@ -57,6 +77,10 @@ public class IndexTermReader extends AbstractXMLReader {
 		inTitleElement = false;
 		isTitleFound = false;
 		termStack.clear();
+		indexTermSpecList.clear();
+		indexSeeSpecList.clear();
+		indexSeeAlsoSpecList.clear();
+		indexSortAsSpecList.clear();
 	}
 
 	/**
@@ -66,20 +90,21 @@ public class IndexTermReader extends AbstractXMLReader {
 			throws SAXException {
 		String temp = new String(ch, start, length).trim();
 
+		if (temp.length() == 0) {
+			return;
+		}
+		
 		/*
 		 * For title info
 		 */
-		if (inTitleElement && temp.length() > 0) {
+		if (inTitleElement) {
 			title = (title == null) ? temp : new StringBuffer(title).append(
 					temp).toString();
-		}
-
-		if (!termStack.empty()) {
+		} else if (insideSortingAs && temp.length() > 0) {
 			IndexTerm indexTerm = (IndexTerm) termStack.peek();
-
-			if (temp.length() == 0) {
-				return;
-			}
+			indexTerm.setTermKey(temp);
+		} else if (!termStack.empty()) {
+			IndexTerm indexTerm = (IndexTerm) termStack.peek();
 
 			if (indexTerm.getTermName() == null) {
 				indexTerm.setTermName(temp);
@@ -96,14 +121,20 @@ public class IndexTermReader extends AbstractXMLReader {
 	 */
 	public void endElement(String uri, String localName, String qName)
 			throws SAXException {
-		if (Constants.ELEMENT_NAME_INDEXTERM.equals(localName)) {
+		// Check to see it the indexterm element or a specialized version is 
+		// in the list.
+		if (indexTermSpecList.contains(localName)) {
 			IndexTerm term = (IndexTerm) termStack.pop();
 
 			if (term.getTermName() == null) {
 				term.setTermName("***");
 				javaLogger.logWarn(MessageUtils.getMessage("DOTJ014W").toString());				
 			}
-
+			
+			if (term.getTermKey() == null) {
+				term.setTermKey(term.getTermName());
+			}
+			
 			if (termStack.empty()) {
 				IndexTermCollection.addTerm(term);
 			} else {
@@ -112,6 +143,19 @@ public class IndexTermReader extends AbstractXMLReader {
 			}
 		}
 
+		// Check to see if the index-see or index-see-also or a specialized 
+		// version is in the list.
+		if (indexSeeSpecList.contains(localName)
+				|| indexSeeAlsoSpecList.contains(localName)) {
+			IndexTerm term = (IndexTerm) termStack.pop();
+			IndexTerm parentTerm = (IndexTerm) termStack.peek();
+			if (term.getTermKey() == null) {
+				term.setTermKey(term.getTermName());
+			}
+			term.addTargets(parentTerm.getTargetList());
+			parentTerm.addSubTerm(term);
+		}
+		
 		/*
 		 * For title info
 		 */
@@ -119,6 +163,11 @@ public class IndexTermReader extends AbstractXMLReader {
 				&& isTitleFound == false) {
 			isTitleFound = true;
 			inTitleElement = false;
+		}
+		
+		// For <index-sort-as>
+		if (indexSortAsSpecList.contains(localName)) {
+			insideSortingAs = false;
 		}
 	}
 
@@ -128,21 +177,13 @@ public class IndexTermReader extends AbstractXMLReader {
 	 */
 	public void startElement(String uri, String localName, String qName,
 			Attributes attributes) throws SAXException {
-		if (Constants.ELEMENT_NAME_INDEXTERM.equals(localName)) {
-			IndexTerm indexTerm = new IndexTerm();
-			IndexTermTarget target = new IndexTermTarget();
-
-			if (title != null) {
-				target.setTargetName(title);
-			} else {
-				target.setTargetName(targetFile);
-			}
-
-			target.setTargetURI(targetFile);
-			indexTerm.addTarget(target);
-			termStack.push(indexTerm);
-		}
-
+		String classAttr = attributes.getValue(Constants.ATTRIBUTE_NAME_CLASS);
+		
+		handleSpecialization(localName, classAttr);
+		parseIndexTerm(localName);
+		parseIndexSee(localName);
+		parseIndexSeeAlso(localName);
+		
 		if (IndexTerm.getTermLocale() == null) {
 			String xmlLang = attributes
 					.getValue(Constants.ATTRIBUTE_NAME_XML_LANG);
@@ -160,6 +201,86 @@ public class IndexTermReader extends AbstractXMLReader {
 		if (Constants.ELEMENT_NAME_TITLE.equals(localName)
 				&& isTitleFound == false) {
 			inTitleElement = true;
+		}
+		
+		// For <index-sort-as>
+		if (indexSortAsSpecList.contains(localName)) {
+			insideSortingAs = true;
+		}
+	}
+
+	private void parseIndexSeeAlso(String localName) {
+		// check to see it the index-see-also element or a specialized version
+		// is in the list.
+		if (indexSeeAlsoSpecList.contains(localName)) {
+			IndexTerm indexTerm = new IndexTerm();
+			indexTerm.setTermName("See also ");
+			termStack.push(indexTerm);
+		}
+	}
+
+	private void parseIndexSee(String localName) {
+		// check to see it the index-see element or a specialized version is
+		// in the list.
+		if (indexSeeSpecList.contains(localName)) {
+			IndexTerm indexTerm = new IndexTerm();
+			indexTerm.setTermName("See ");
+			termStack.push(indexTerm);
+		}
+	}
+
+	private void parseIndexTerm(String localName) {
+		// check to see it the indexterm element or a specialized version is 
+		// in the list.
+		if (indexTermSpecList.contains(localName)) {
+			IndexTerm indexTerm = new IndexTerm();
+			IndexTermTarget target = new IndexTermTarget();
+
+			if (title != null) {
+				target.setTargetName(title);
+			} else {
+				target.setTargetName(targetFile);
+			}
+
+			target.setTargetURI(targetFile);
+			indexTerm.addTarget(target);
+			termStack.push(indexTerm);
+		}
+	}
+
+	/**
+	 * Note: <index-see-also> should be handled before <index-see>.
+	 * 
+	 * @param localName
+	 * @param classAttr
+	 */
+	private void handleSpecialization(String localName, String classAttr) {
+		if (classAttr == null) {
+			return;
+		} else if (classAttr.indexOf(Constants.ELEMENT_NAME_INDEXTERM) != -1) {
+			// add the element name to the indexterm specialization element
+			// list if it does not already exist in that list.
+			if (!indexTermSpecList.contains(localName)) {
+				indexTermSpecList.add(localName);
+			}
+		} else if (classAttr.indexOf(Constants.ELEMENT_NAME_INDEXSEEALSO) != -1) {
+			// add the element name to the index-see-also specialization element
+			// list if it does not already exist in that list.
+			if (!indexSeeAlsoSpecList.contains(localName)) {
+				indexSeeAlsoSpecList.add(localName);
+			}
+		} else if (classAttr.indexOf(Constants.ELEMENT_NAME_INDEXSEE) != -1) {
+			// add the element name to the index-see specialization element
+			// list if it does not already exist in that list.
+			if (!indexSeeSpecList.contains(localName)) {
+				indexSeeSpecList.add(localName);
+			}
+		} else if (classAttr.indexOf(Constants.ELEMENT_NAME_INDEXSORTAS) != -1) {
+			// add the element name to the index-sort-as specialization element
+			// list if it does not already exist in that list.
+			if (!indexSortAsSpecList.contains(localName)) {
+				indexSortAsSpecList.add(localName);
+			}
 		}
 	}
 
