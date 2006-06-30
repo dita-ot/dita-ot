@@ -238,8 +238,14 @@
 </div><xsl:value-of select="$newline"/>
 </xsl:template>
 
-<!-- no fallthru for shortdesc - needs to be pulled for 1st para and for abstract metadata -->
-<xsl:template match="*[contains(@class,' topic/shortdesc ')]"/>
+<!-- Added for SF 1363055: Shortdesc disappears when optional body is removed -->
+<xsl:template match="*[contains(@class,' topic/shortdesc ')]">
+  <xsl:if test="not(following-sibling::*[contains(@class,' topic/body ')])">
+    <xsl:apply-templates select="." mode="outofline"/>
+    <xsl:apply-templates select="following-sibling::*[contains(@class,' topic/related-links ')]" mode="prereqs"/>
+  </xsl:if>
+</xsl:template>
+
 <!-- called shortdesc processing - para at start of topic -->
 <xsl:template match="*[contains(@class,' topic/shortdesc ')]" mode="outofline">
 <p>
@@ -340,181 +346,223 @@
  </xsl:choose><xsl:value-of select="$newline"/>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/note ')]" name="topic.note">
- <xsl:call-template name="spec-title"/>
-  <xsl:choose>
-    <xsl:when test="@type='note'">
-     <xsl:call-template name="note"/>
-    </xsl:when>
-    <xsl:when test="@type='tip'">
-     <div class="tip">
-      <xsl:call-template name="commonattributes"/>
-      <xsl:call-template name="setidaname"/>
-      <span class="tiptitle">
-       <xsl:call-template name="getString">
-        <xsl:with-param name="stringName" select="'Tip'"/>
-       </xsl:call-template>
-       <xsl:call-template name="getString">
-        <xsl:with-param name="stringName" select="'ColonSymbol'"/>
-       </xsl:call-template><xsl:text> </xsl:text>
-      </span>
-      <xsl:call-template name="flagit"/>
-      <xsl:call-template name="revblock"/>
-     </div>
-    </xsl:when>
-    <xsl:when test="@type='fastpath'">
-     <div class="fastpath">
-      <xsl:call-template name="commonattributes"/>
-      <xsl:call-template name="setidaname"/>
-      <span class="fastpathtitle">
-       <xsl:call-template name="getString">
-        <xsl:with-param name="stringName" select="'Fastpath'"/>
-       </xsl:call-template>
-       <xsl:call-template name="getString">
-        <xsl:with-param name="stringName" select="'ColonSymbol'"/>
-       </xsl:call-template><xsl:text> </xsl:text>
-      </span>
-      <xsl:call-template name="flagit"/>
-      <xsl:call-template name="revblock"/>
-     </div>
-    </xsl:when>
-    <xsl:when test="@type='important'">
-     <div class="important">
-      <xsl:call-template name="commonattributes"/>
-      <xsl:call-template name="setidaname"/>
-      <span class="importanttitle">
-       <xsl:call-template name="getString">
-        <xsl:with-param name="stringName" select="'Important'"/>
-       </xsl:call-template>
-       <xsl:call-template name="getString">
-        <xsl:with-param name="stringName" select="'ColonSymbol'"/>
-       </xsl:call-template><xsl:text> </xsl:text>
-      </span>
-      <xsl:call-template name="flagit"/>
-      <xsl:call-template name="revblock"/>
-     </div>
-    </xsl:when>
-    <xsl:when test="@type='remember'">
-     <div class="remember">
-      <xsl:call-template name="commonattributes"/>
-      <xsl:call-template name="setidaname"/>
-      <span class="remembertitle">
-       <xsl:call-template name="getString">
-        <xsl:with-param name="stringName" select="'Remember'"/>
-       </xsl:call-template>
-       <xsl:call-template name="getString">
-        <xsl:with-param name="stringName" select="'ColonSymbol'"/>
-       </xsl:call-template><xsl:text> </xsl:text>
-      </span>
-      <xsl:call-template name="flagit"/>
-      <xsl:call-template name="revblock"/>
-     </div>
-    </xsl:when>
-    <xsl:when test="@type='restriction'">
-     <div class="restriction">
-      <xsl:call-template name="commonattributes"/>
-      <xsl:call-template name="setidaname"/>
-      <span class="restrictiontitle">
-       <xsl:call-template name="getString">
-        <xsl:with-param name="stringName" select="'Restriction'"/>
-       </xsl:call-template>
-       <xsl:call-template name="getString">
-        <xsl:with-param name="stringName" select="'ColonSymbol'"/>
-       </xsl:call-template><xsl:text> </xsl:text>
-      </span>
-      <xsl:call-template name="flagit"/>
-      <xsl:call-template name="revblock"/>
-     </div>
-    </xsl:when>
-    <xsl:when test="@type='attention'">
-     <div class="attention">
-      <xsl:call-template name="commonattributes"/>
-      <xsl:call-template name="setidaname"/>
-      <span class="attentiontitle">
-       <xsl:call-template name="flagit"/>
-       <xsl:call-template name="getString">
-        <xsl:with-param name="stringName" select="'Attention'"/>
-       </xsl:call-template>
-       <xsl:call-template name="getString">
-        <xsl:with-param name="stringName" select="'ColonSymbol'"/>
-       </xsl:call-template><xsl:text> </xsl:text>
-      </span>
-      <xsl:call-template name="revblock"/>
-     </div>
-    </xsl:when>
-    <xsl:when test="@type='caution'">
-     <div class="cautiontitle">
-      <xsl:call-template name="commonattributes"/>
-      <xsl:call-template name="setidaname"/>
-      <xsl:call-template name="flagit"/>
-      <xsl:call-template name="getString">
-       <xsl:with-param name="stringName" select="'Caution'"/>
-      </xsl:call-template>
-       <xsl:call-template name="getString">
-        <xsl:with-param name="stringName" select="'ColonSymbol'"/>
-       </xsl:call-template><xsl:text> </xsl:text>
-     </div>
-     <div class="caution">
-      <xsl:call-template name="revblock"/>
-     </div>
-    </xsl:when>
-    <xsl:when test="@type='danger'">
-     <div class="dangertitle">
-      <xsl:call-template name="commonattributes"/>
-      <xsl:call-template name="setidaname"/>
-      <xsl:call-template name="flagit"/>
-      <xsl:call-template name="getString">
-       <xsl:with-param name="stringName" select="'Danger'"/>
-      </xsl:call-template>
-     </div>
-     <div class="danger">
-      <xsl:call-template name="commonattributes"/>
-      <xsl:call-template name="revblock"/>
-     </div>
-    </xsl:when>
-    <xsl:when test="@type='other'">
-     <xsl:choose>
-      <xsl:when test="@othertype"> 
-       <div class="note">
-       <xsl:call-template name="commonattributes"/>
-       <xsl:call-template name="setidaname"/>
-        <span class="notetitle">
-         <xsl:value-of select="@othertype"/>
-         <xsl:call-template name="getString">
-          <xsl:with-param name="stringName" select="'ColonSymbol'"/>
-         </xsl:call-template><xsl:text> </xsl:text>
-        </span>
-        <xsl:call-template name="flagit"/>
-        <xsl:call-template name="revblock"/>
-       </div>
-      </xsl:when>
-      <xsl:otherwise>
-       <xsl:call-template name="note"/> <!-- otherwise, give them the standard note -->
-      </xsl:otherwise>
-     </xsl:choose>
-    </xsl:when>
-    <xsl:otherwise>
-     <xsl:call-template name="note"/>
-    </xsl:otherwise>
-  </xsl:choose>
- <xsl:value-of select="$newline"/>
+<!-- Left for users who call this template in an override -->
+<xsl:template name="note">
+  <xsl:apply-templates select="." mode="process.note"/>
 </xsl:template>
 
-<xsl:template name="note">
- <div class="note">
-  <xsl:call-template name="commonattributes"/>
-  <xsl:call-template name="setidaname"/>
-  <span class="notetitle">
-   <xsl:call-template name="getString">
-    <xsl:with-param name="stringName" select="'Note'"/>
-   </xsl:call-template>
-   <xsl:call-template name="getString">
-    <xsl:with-param name="stringName" select="'ColonSymbol'"/>
-   </xsl:call-template><xsl:text> </xsl:text>
-  </span>
-  <xsl:call-template name="flagit"/>
-  <xsl:call-template name="revblock"/>
- </div>
+<!-- Fixed SF Bug 1405184 "Note template for XHTML should be easier to override" -->
+<xsl:template match="*[contains(@class,' topic/note ')]" name="topic.note">
+  <xsl:call-template name="spec-title"/>
+  <xsl:choose>
+    <xsl:when test="@type='note'">
+      <xsl:apply-templates select="." mode="process.note"/>
+    </xsl:when>
+    <xsl:when test="@type='tip'">
+      <xsl:apply-templates select="." mode="process.note.tip"/>
+    </xsl:when>
+    <xsl:when test="@type='fastpath'">
+      <xsl:apply-templates select="." mode="process.note.fastpath"/>
+    </xsl:when>
+    <xsl:when test="@type='important'">
+      <xsl:apply-templates select="." mode="process.note.important"/>
+    </xsl:when>
+    <xsl:when test="@type='remember'">
+      <xsl:apply-templates select="." mode="process.note.remember"/>
+    </xsl:when>
+    <xsl:when test="@type='restriction'">
+      <xsl:apply-templates select="." mode="process.note.restriction"/>
+    </xsl:when>
+    <xsl:when test="@type='attention'">
+      <xsl:apply-templates select="." mode="process.note.attention"/>
+    </xsl:when>
+    <xsl:when test="@type='caution'">
+      <xsl:apply-templates select="." mode="process.note.caution"/>
+    </xsl:when>
+    <xsl:when test="@type='danger'">
+      <xsl:apply-templates select="." mode="process.note.danger"/>
+    </xsl:when>
+    <xsl:when test="@type='other'">
+      <xsl:apply-templates select="." mode="process.note.other"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:apply-templates select="." mode="process.note"/>
+    </xsl:otherwise>
+  </xsl:choose>
+  <xsl:value-of select="$newline"/>
+</xsl:template>
+
+<xsl:template match="*" mode="process.note">
+  <div class="note">
+    <xsl:call-template name="commonattributes"/>
+    <xsl:call-template name="setidaname"/>
+    <span class="notetitle">
+      <xsl:call-template name="getString">
+        <xsl:with-param name="stringName" select="'Note'"/>
+      </xsl:call-template>
+      <xsl:call-template name="getString">
+        <xsl:with-param name="stringName" select="'ColonSymbol'"/>
+      </xsl:call-template>
+    </span><xsl:text> </xsl:text>
+    <xsl:call-template name="flagit"/>
+    <xsl:call-template name="revblock"/>
+  </div>
+</xsl:template>
+
+<xsl:template match="*" mode="process.note.tip">
+  <div class="tip">
+    <xsl:call-template name="commonattributes"/>
+    <xsl:call-template name="setidaname"/>
+    <span class="tiptitle">
+      <xsl:call-template name="getString">
+        <xsl:with-param name="stringName" select="'Tip'"/>
+      </xsl:call-template>
+      <xsl:call-template name="getString">
+        <xsl:with-param name="stringName" select="'ColonSymbol'"/>
+      </xsl:call-template>
+    </span><xsl:text> </xsl:text>
+    <xsl:call-template name="flagit"/>
+    <xsl:call-template name="revblock"/>
+  </div>
+</xsl:template>
+
+<xsl:template match="*" mode="process.note.fastpath">
+  <div class="fastpath">
+    <xsl:call-template name="commonattributes"/>
+    <xsl:call-template name="setidaname"/>
+    <span class="fastpathtitle">
+      <xsl:call-template name="getString">
+        <xsl:with-param name="stringName" select="'Fastpath'"/>
+      </xsl:call-template>
+      <xsl:call-template name="getString">
+        <xsl:with-param name="stringName" select="'ColonSymbol'"/>
+      </xsl:call-template>
+    </span><xsl:text> </xsl:text>
+    <xsl:call-template name="flagit"/>
+    <xsl:call-template name="revblock"/>
+  </div>
+</xsl:template>
+
+<xsl:template match="*" mode="process.note.important">
+  <div class="important">
+    <xsl:call-template name="commonattributes"/>
+    <xsl:call-template name="setidaname"/>
+    <span class="importanttitle">
+      <xsl:call-template name="getString">
+        <xsl:with-param name="stringName" select="'Important'"/>
+      </xsl:call-template>
+      <xsl:call-template name="getString">
+        <xsl:with-param name="stringName" select="'ColonSymbol'"/>
+      </xsl:call-template>
+    </span><xsl:text> </xsl:text>
+    <xsl:call-template name="flagit"/>
+    <xsl:call-template name="revblock"/>
+  </div>
+</xsl:template>
+
+<xsl:template match="*" mode="process.note.remember">
+  <div class="remember">
+    <xsl:call-template name="commonattributes"/>
+    <xsl:call-template name="setidaname"/>
+    <span class="remembertitle">
+      <xsl:call-template name="getString">
+        <xsl:with-param name="stringName" select="'Remember'"/>
+      </xsl:call-template>
+      <xsl:call-template name="getString">
+        <xsl:with-param name="stringName" select="'ColonSymbol'"/>
+      </xsl:call-template>
+    </span><xsl:text> </xsl:text>
+    <xsl:call-template name="flagit"/>
+    <xsl:call-template name="revblock"/>
+  </div>
+</xsl:template>
+
+<xsl:template match="*" mode="process.note.restriction">
+  <div class="restriction">
+    <xsl:call-template name="commonattributes"/>
+    <xsl:call-template name="setidaname"/>
+    <span class="restrictiontitle">
+      <xsl:call-template name="getString">
+        <xsl:with-param name="stringName" select="'Restriction'"/>
+      </xsl:call-template>
+      <xsl:call-template name="getString">
+        <xsl:with-param name="stringName" select="'ColonSymbol'"/>
+      </xsl:call-template>
+    </span><xsl:text> </xsl:text>
+    <xsl:call-template name="flagit"/>
+    <xsl:call-template name="revblock"/>
+  </div>
+</xsl:template>
+
+<xsl:template match="*" mode="process.note.attention">
+  <div class="attention">
+    <xsl:call-template name="commonattributes"/>
+    <xsl:call-template name="setidaname"/>
+    <span class="attentiontitle">
+      <xsl:call-template name="flagit"/>
+      <xsl:call-template name="getString">
+        <xsl:with-param name="stringName" select="'Attention'"/>
+      </xsl:call-template>
+      <xsl:call-template name="getString">
+        <xsl:with-param name="stringName" select="'ColonSymbol'"/>
+      </xsl:call-template>
+    </span><xsl:text> </xsl:text>
+    <xsl:call-template name="revblock"/>
+  </div>
+</xsl:template>
+
+<xsl:template match="*" mode="process.note.caution">
+  <div class="cautiontitle">
+    <xsl:call-template name="commonattributes"/>
+    <xsl:call-template name="setidaname"/>
+    <xsl:call-template name="flagit"/>
+    <xsl:call-template name="getString">
+      <xsl:with-param name="stringName" select="'Caution'"/>
+    </xsl:call-template>
+    <xsl:call-template name="getString">
+      <xsl:with-param name="stringName" select="'ColonSymbol'"/>
+    </xsl:call-template>
+  </div>
+  <div class="caution">
+    <xsl:call-template name="revblock"/>
+  </div>
+</xsl:template>
+
+<xsl:template match="*" mode="process.note.danger">
+  <div class="dangertitle">
+    <xsl:call-template name="commonattributes"/>
+    <xsl:call-template name="setidaname"/>
+    <xsl:call-template name="flagit"/>
+    <xsl:call-template name="getString">
+      <xsl:with-param name="stringName" select="'Danger'"/>
+    </xsl:call-template>
+  </div>
+  <div class="danger">
+    <xsl:call-template name="commonattributes"/>
+    <xsl:call-template name="revblock"/>
+  </div>
+</xsl:template>
+
+<xsl:template match="*" mode="process.note.other">
+  <xsl:choose>
+    <xsl:when test="@othertype">
+      <div class="note">
+        <xsl:call-template name="commonattributes"/>
+        <xsl:call-template name="setidaname"/>
+        <span class="notetitle">
+          <xsl:value-of select="@othertype"/>
+          <xsl:call-template name="getString">
+            <xsl:with-param name="stringName" select="'ColonSymbol'"/>
+          </xsl:call-template>
+        </span><xsl:text> </xsl:text>
+        <xsl:call-template name="flagit"/>
+        <xsl:call-template name="revblock"/>
+      </div>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:apply-templates select="." mode="process.note"/> <!-- otherwise, give them the standard note -->
+    </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 <!-- long quote (bibliographic association).
@@ -1259,7 +1307,7 @@
     <xsl:apply-templates select="@href|@height|@width|@longdescref"/>
     <xsl:choose>
       <xsl:when test="*[contains(@class,' topic/alt')]">
-        <xsl:attribute name="alt"><xsl:value-of select="*[contains(@class,' topic/alt ')]"/></xsl:attribute>
+        <xsl:attribute name="alt"><xsl:apply-templates select="*[contains(@class,' topic/alt ')]" mode="text-only"/></xsl:attribute>
       </xsl:when>
       <xsl:when test="@alt">
         <xsl:attribute name="alt"><xsl:value-of select="@alt"/></xsl:attribute>
@@ -1267,6 +1315,11 @@
     </xsl:choose>
   </xsl:element>
 </xsl:template>
+
+<xsl:template match="*[contains(@class,' topic/alt ')]">
+  <xsl:apply-templates select="." mode="text-only"/>
+</xsl:template>
+
 <!-- Process image attributes. Using priority, in case default @href is added at some point. -->
 <xsl:template match="*[contains(@class,' topic/image ')]/@href" priority="1">
   <xsl:attribute name="src"><xsl:value-of select="."/></xsl:attribute>
@@ -1378,37 +1431,73 @@
  </xsl:choose>
 </xsl:template>
 <xsl:template match="*[contains(@class,' topic/table ')]" mode="table-fmt">
- <xsl:value-of select="$newline"/>
- <!-- special case for IE & NS for frame & no rules - needs to be a double table -->
- <xsl:variable name="colsep">
-   <xsl:choose>
-     <xsl:when test="*[contains(@class,' topic/tgroup ')]/@colsep"><xsl:value-of select="*[contains(@class,' topic/tgroup ')]/@colsep"/></xsl:when>
-     <xsl:when test="@colsep"><xsl:value-of select="@colsep"/></xsl:when>
-   </xsl:choose>
- </xsl:variable>
- <xsl:variable name="rowsep">
-   <xsl:choose>
-     <xsl:when test="*[contains(@class,' topic/tgroup ')]/@rowsep"><xsl:value-of select="*[contains(@class,' topic/tgroup ')]/@rowsep"/></xsl:when>
-     <xsl:when test="@rowsep"><xsl:value-of select="@rowsep"/></xsl:when>
-   </xsl:choose>
- </xsl:variable>
- <xsl:choose>
-  <xsl:when test="@frame='all' and $colsep='0' and $rowsep='0'">
-    <table cellpadding="4" cellspacing="0" border="1" class="tableborder"><tr><td><xsl:value-of select="$newline"/>
-     <xsl:call-template name="dotable"/>
-    </td></tr></table>
-  </xsl:when>
-  <xsl:when test="not(@frame) and $colsep='0' and $rowsep='0'">
-    <table cellpadding="4" cellspacing="0" border="1" class="tableborder"><tr><td><xsl:value-of select="$newline"/>
-     <xsl:call-template name="dotable"/>
-    </td></tr></table>
-  </xsl:when>
-  <xsl:otherwise>
-   <div class="tablenoborder">
-   <xsl:call-template name="dotable"/>
-   </div>
-  </xsl:otherwise>
- </xsl:choose><xsl:value-of select="$newline"/>
+  <xsl:value-of select="$newline"/>
+  <!-- special case for IE & NS for frame & no rules - needs to be a double table -->
+  <xsl:variable name="colsep">
+    <xsl:choose>
+      <xsl:when test="*[contains(@class,' topic/tgroup ')]/@colsep">
+        <xsl:value-of select="*[contains(@class,' topic/tgroup ')]/@colsep"/>
+      </xsl:when>
+      <xsl:when test="@colsep">
+        <xsl:value-of select="@colsep"/>
+      </xsl:when>
+    </xsl:choose>
+  </xsl:variable>
+  <xsl:variable name="rowsep">
+    <xsl:choose>
+      <xsl:when test="*[contains(@class,' topic/tgroup ')]/@rowsep">
+        <xsl:value-of select="*[contains(@class,' topic/tgroup ')]/@rowsep"/>
+      </xsl:when>
+      <xsl:when test="@rowsep">
+        <xsl:value-of select="@rowsep"/>
+      </xsl:when>
+    </xsl:choose>
+  </xsl:variable>
+  <xsl:choose>
+    <xsl:when test="@frame='all' and $colsep='0' and $rowsep='0'">
+      <table cellpadding="4" cellspacing="0" border="1" class="tableborder">
+        <tr>
+          <td>
+            <xsl:value-of select="$newline"/>
+            <xsl:call-template name="dotable"/>
+          </td>
+        </tr>
+      </table>
+    </xsl:when>
+    <xsl:when test="@frame='top' and $colsep='0' and $rowsep='0'">
+      <hr />
+      <xsl:value-of select="$newline"/>
+      <xsl:call-template name="dotable"/>
+    </xsl:when>
+    <xsl:when test="@frame='bot' and $colsep='0' and $rowsep='0'">
+      <xsl:call-template name="dotable"/>
+      <hr />
+      <xsl:value-of select="$newline"/>
+    </xsl:when>
+    <xsl:when test="@frame='topbot' and $colsep='0' and $rowsep='0'">
+      <hr />
+      <xsl:value-of select="$newline"/>
+      <xsl:call-template name="dotable"/>
+      <hr />
+      <xsl:value-of select="$newline"/>
+    </xsl:when>
+    <xsl:when test="not(@frame) and $colsep='0' and $rowsep='0'">
+      <table cellpadding="4" cellspacing="0" border="1" class="tableborder">
+        <tr>
+          <td>
+            <xsl:value-of select="$newline"/>
+            <xsl:call-template name="dotable"/>
+          </td>
+        </tr>
+      </table>
+    </xsl:when>
+    <xsl:otherwise>
+      <div class="tablenoborder">
+        <xsl:call-template name="dotable"/>
+      </div>
+    </xsl:otherwise>
+  </xsl:choose>
+  <xsl:value-of select="$newline"/>
 </xsl:template>
 
 <xsl:template name="dotable">
@@ -2938,6 +3027,16 @@
              For multiple attr values, output each flag in turn.
      -->
 <xsl:template name="flagit">
+  <xsl:variable name="domains">
+    <xsl:value-of select="normalize-space(ancesters-or-self::*[contains(@class,' topic/topic
+    ')][1]/@domains)"/>
+  </xsl:variable>
+  <xsl:variable name="props">
+    <xsl:if test="contains($domains, '(props')">
+      <xsl:value-of select="normalize-space(substring-before(substring-after($domains,'(props'), ')'
+      ))"/>
+    </xsl:if>
+  </xsl:variable>
  <!-- Test for the flagging attributes. If found, call 'mark-prop' with the values to use. Otherwise return -->
  <xsl:if test="@audience and not($FILTERFILE='')">
   <xsl:call-template name="mark-prop">
@@ -2963,10 +3062,71 @@
    <xsl:with-param name="flag-att-val" select="@otherprops"/>
   </xsl:call-template>
  </xsl:if>
+ 
+  <xsl:if test="not($props='' and not($FILTERFILE=''))">
+    <xsl:call-template name="ext-flagit">
+      <xsl:with-param name="props" select="$props"/>
+    </xsl:call-template>
+  </xsl:if>
 </xsl:template>
+
+  <xsl:template name="ext-flagit">
+    <xsl:param name="props"/>
+    <xsl:choose>
+      <xsl:when test="contains($props,' ')">
+        <xsl:choose>
+          <xsl:when test="@*[name() = substring-before($props,' ')]">
+            <xsl:call-template name="mark-prop">
+              <xsl:with-param name="flag-att" select="substring-before($props,' ')"/>
+              <xsl:with-param name="flag-att-val" select="@*[name() = substring-before($props,' ')]"/>
+            </xsl:call-template>
+          </xsl:when>
+          <xsl:when test="@props and contains(@props,concat(substring-before($props,' '),'('))">
+            <xsl:call-template name="mark-prop">
+              <xsl:with-param name="flag-att" select="substring-before($props,' ')"/>
+              <xsl:with-param name="flag-att-val" 
+              select="substring-before(substring-after(@props,concat(substring-before($props,'
+              '),'(')),')')"/>
+            </xsl:call-template>
+          </xsl:when>
+          <xsl:otherwise/>
+        </xsl:choose>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:choose>
+          <xsl:when test="@*[name() = $props]">
+            <xsl:call-template name="mark-prop">
+              <xsl:with-param name="flag-att" select="$props"/>
+              <xsl:with-param name="flag-att-val" select="@*[name() = $props]"/>
+            </xsl:call-template>
+          </xsl:when>
+          <xsl:when test="@props and contains(@props,concat($props,'('))">
+            <xsl:call-template name="mark-prop">
+              <xsl:with-param name="flag-att" select="$props"/>
+              <xsl:with-param name="flag-att-val" 
+                select="substring-before(substring-after(@props,concat($props ,'(')),')')"/>
+            </xsl:call-template>
+          </xsl:when>
+          <xsl:otherwise/>
+        </xsl:choose>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
 
 <!-- No flagging attrs allowed to process in phrases - output a message when in debug mode. -->
 <xsl:template name="flagcheck">
+  
+  <xsl:variable name="domains">
+    <xsl:value-of select="normalize-space(ancesters-or-self::*[contains(@class,' topic/topic
+      ')][1]/@domains)"/>
+  </xsl:variable>
+  <xsl:variable name="props">
+    <xsl:if test="contains($domains, '(props')">
+      <xsl:value-of select="normalize-space(substring-before(substring-after($domains,'(props'), ')'
+        ))"/>
+    </xsl:if>
+  </xsl:variable>
+  
  <xsl:if test="$DBG='yes' and not($FILTERFILE='')">
   <xsl:if test="@audience">
    <xsl:call-template name="output-message">
@@ -2996,10 +3156,70 @@
     <xsl:with-param name="msgparams">%1=otherprops</xsl:with-param>
    </xsl:call-template>
   </xsl:if>
+   <xsl:if test="not($props='')">
+     <xsl:call-template name="ext-flagcheck">
+       <xsl:with-param name="props" select="$props"/>
+     </xsl:call-template>
+   </xsl:if>
  </xsl:if>
 </xsl:template>
 
+  <xsl:template name="ext-flagcheck">
+    <xsl:param name="props"/>
+    <xsl:choose>
+      <xsl:when test="contains($props,' ')">
+        <xsl:choose>
+          <xsl:when test="@*[name() = substring-before($props,' ')]">
+            <xsl:call-template name="output-message">
+              <xsl:with-param name="msgnum">042</xsl:with-param>
+              <xsl:with-param name="msgsev">I</xsl:with-param>
+              <xsl:with-param name="msgparams">%1=<xsl:value-of select="substring-before($props,' ')"/></xsl:with-param>
+            </xsl:call-template>
+          </xsl:when>
+          <xsl:when test="@props and contains(@props,concat(substring-before($props,' '),'('))">
+            <xsl:call-template name="output-message">
+              <xsl:with-param name="msgnum">042</xsl:with-param>
+              <xsl:with-param name="msgsev">I</xsl:with-param>
+              <xsl:with-param name="msgparams">%1=<xsl:value-of select="substring-before($props,' ')"/></xsl:with-param>
+            </xsl:call-template>
+          </xsl:when>
+          <xsl:otherwise/>
+        </xsl:choose>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:choose>
+          <xsl:when test="@*[name() = $props]">
+            <xsl:call-template name="output-message">
+              <xsl:with-param name="msgnum">042</xsl:with-param>
+              <xsl:with-param name="msgsev">I</xsl:with-param>
+              <xsl:with-param name="msgparams">%1=<xsl:value-of select="$props"/></xsl:with-param>
+            </xsl:call-template>
+          </xsl:when>
+          <xsl:when test="@props and contains(@props,concat($props,'('))">
+            <xsl:call-template name="output-message">
+              <xsl:with-param name="msgnum">042</xsl:with-param>
+              <xsl:with-param name="msgsev">I</xsl:with-param>
+              <xsl:with-param name="msgparams">%1=<xsl:value-of select="$props"/></xsl:with-param>
+            </xsl:call-template>
+          </xsl:when>
+          <xsl:otherwise/>
+        </xsl:choose>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
 <xsl:template name="flagit-parent">
+  <xsl:variable name="domains">
+    <xsl:value-of select="normalize-space(ancesters::*[contains(@class,' topic/topic
+      ')][1]/@domains)"/>
+  </xsl:variable>
+  <xsl:variable name="props">
+    <xsl:if test="contains($domains, '(props')">
+      <xsl:value-of select="normalize-space(substring-before(substring-after($domains,'(props'), ')'
+        ))"/>
+    </xsl:if>
+  </xsl:variable>
+  
  <!-- Test for the flagging attributes on the parent.
    If found and if the filterfile name was passed in,
       call 'mark-prop' with the values to use. Otherwise return -->
@@ -3027,7 +3247,57 @@
    <xsl:with-param name="flag-att-val" select="../@otherprops"/>
   </xsl:call-template>
  </xsl:if>
+ 
+  <xsl:if test="not($props='') and not($FILTERFILE='')">
+    <xsl:call-template name="ext-flagit-parent">
+      <xsl:with-param name="props" select="$props"/>
+    </xsl:call-template>
+  </xsl:if>
+ 
 </xsl:template>
+
+  <xsl:template name="ext-flagit-parent">
+    <xsl:param name="props"/>
+    <xsl:choose>
+      <xsl:when test="contains($props,' ')">
+        <xsl:choose>
+          <xsl:when test="../@*[name() = substring-before($props,' ')]">
+            <xsl:call-template name="mark-prop">
+              <xsl:with-param name="flag-att" select="substring-before($props,' ')"/>
+              <xsl:with-param name="flag-att-val" select="../@*[name() = substring-before($props,' ')]"/>
+            </xsl:call-template>
+          </xsl:when>
+          <xsl:when test="../@props and contains(../@props,concat(substring-before($props,' '),'('))">
+            <xsl:call-template name="mark-prop">
+              <xsl:with-param name="flag-att" select="substring-before($props,' ')"/>
+              <xsl:with-param name="flag-att-val" 
+                select="substring-before(substring-after(../@props,concat(substring-before($props,'
+                '),'(')),')')"/>
+            </xsl:call-template>
+          </xsl:when>
+          <xsl:otherwise/>
+        </xsl:choose>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:choose>
+          <xsl:when test="../@*[name() = $props]">
+            <xsl:call-template name="mark-prop">
+              <xsl:with-param name="flag-att" select="$props"/>
+              <xsl:with-param name="flag-att-val" select="../@*[name() = $props]"/>
+            </xsl:call-template>
+          </xsl:when>
+          <xsl:when test="../@props and contains(../@props,concat($props,'('))">
+            <xsl:call-template name="mark-prop">
+              <xsl:with-param name="flag-att" select="$props"/>
+              <xsl:with-param name="flag-att-val" 
+                select="substring-before(substring-after(../@props,concat($props ,'(')),')')"/>
+            </xsl:call-template>
+          </xsl:when>
+          <xsl:otherwise/>
+        </xsl:choose>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
 
 <!-- Use passed attr value to mark each active flag. -->
 <xsl:template name="mark-prop">
@@ -3462,18 +3732,14 @@
 <!-- table caption -->
 <xsl:template name="place-tbl-lbl">
 <xsl:param name="stringName"/>
-<xsl:variable name="tbl-count">                  <!-- Number of table/title's before this one -->
- <xsl:number count="*/*[contains(@class,' topic/table ')]/*[contains(@class,' topic/title ')]" level="any"/>
-</xsl:variable>
-<xsl:variable name="tbl-count-actual">           <!-- Number of table/title's including this one -->
- <xsl:choose>   <!-- init table counter to 1 - if not set -->
-   <xsl:when test="not($tbl-count&gt;0) and not($tbl-count=0) and not($tbl-count&lt;0)">1</xsl:when>
-   <xsl:otherwise><xsl:value-of select="$tbl-count+1"/></xsl:otherwise>
- </xsl:choose>
-</xsl:variable>          <!-- normally: "Table 1. " -->
+  <!-- Number of table/title's before this one -->
+  <xsl:variable name="tbl-count-actual" select="count(preceding::*[contains(@class,' topic/table ')]/*[contains(@class,' topic/title ')])+1"/>
+
+  <!-- normally: "Table 1. " -->
   <xsl:variable name="ancestorlang">
    <xsl:call-template name="getLowerCaseLang"/>
   </xsl:variable>
+  
   <xsl:choose>
     <!-- title -or- title & desc -->
     <xsl:when test="*[contains(@class,' topic/title ')]">
@@ -3524,15 +3790,8 @@
 <!-- Figure caption -->
 <xsl:template name="place-fig-lbl">
 <xsl:param name="stringName"/>
-<xsl:variable name="fig-count">                 <!-- Number of fig/title's before this one -->
- <xsl:number count="*/*[contains(@class,' topic/fig ')]/*[contains(@class,' topic/title ')]" level="any"/>
-</xsl:variable>
-<xsl:variable name="fig-count-actual">          <!-- Number of fig/title's including this one -->
- <xsl:choose>
-   <xsl:when test="not($fig-count&gt;0) and not($fig-count=0) and not($fig-count&lt;0)">1</xsl:when>
-   <xsl:otherwise><xsl:value-of select="$fig-count+1"/></xsl:otherwise>
- </xsl:choose>
-</xsl:variable>
+  <!-- Number of fig/title's including this one -->
+  <xsl:variable name="fig-count-actual" select="count(preceding::*[contains(@class,' topic/fig ')]/*[contains(@class,' topic/title ')])+1"/>
   <xsl:variable name="ancestorlang">
     <xsl:call-template name="getLowerCaseLang"/>
   </xsl:variable>
