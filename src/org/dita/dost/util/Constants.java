@@ -87,6 +87,8 @@ public abstract class Constants {
     public static final String ATTRIBUTE_NAME_CLASS = "class";
     public static final String ATTRIBUTE_NAME_COLNAME = "colname";
     public static final String ATTRIBUTE_NAME_XML_LANG = "xml:lang";    
+    public static final String ATTRIBUTE_NAME_DOMAINS = "domains";
+    public static final String ATTRIBUTE_NAME_PROPS = "props";
     
     /**
      * Constant for value of attribute format in dita files.
@@ -193,6 +195,7 @@ public abstract class Constants {
 	public static final String ATTR_CLASS_VALUE_TITLE = "topic/title";
 	public static final String ATTR_CLASS_VALUE_MAP = "map/map";
 	public static final String ATTR_CLASS_VALUE_INDEXTERM = "topic/indexterm";
+	public static final String ATTR_CLASS_VALUE_TOPIC = "topic/topic";
     
     /**
      * Private constructor used to forbid instantiation.
