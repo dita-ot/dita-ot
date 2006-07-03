@@ -3028,7 +3028,7 @@
      -->
 <xsl:template name="flagit">
   <xsl:variable name="domains">
-    <xsl:value-of select="normalize-space(ancesters-or-self::*[contains(@class,' topic/topic
+    <xsl:value-of select="normalize-space(ancestor-or-self::*[contains(@class,' topic/topic
     ')][1]/@domains)"/>
   </xsl:variable>
   <xsl:variable name="props">
@@ -3117,7 +3117,7 @@
 <xsl:template name="flagcheck">
   
   <xsl:variable name="domains">
-    <xsl:value-of select="normalize-space(ancesters-or-self::*[contains(@class,' topic/topic
+    <xsl:value-of select="normalize-space(ancestor-or-self::*[contains(@class,' topic/topic
       ')][1]/@domains)"/>
   </xsl:variable>
   <xsl:variable name="props">
@@ -3210,7 +3210,7 @@
 
 <xsl:template name="flagit-parent">
   <xsl:variable name="domains">
-    <xsl:value-of select="normalize-space(ancesters::*[contains(@class,' topic/topic
+    <xsl:value-of select="normalize-space(ancestor::*[contains(@class,' topic/topic
       ')][1]/@domains)"/>
   </xsl:variable>
   <xsl:variable name="props">
