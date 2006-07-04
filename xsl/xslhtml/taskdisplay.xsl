@@ -21,10 +21,14 @@
   <!-- here, you can generate a toc based on what's a child of body -->
   <!--xsl:call-template name="gen-sect-ptoc"/--><!-- Works; not always wanted, though; could add a param to enable it.-->
 
+  <!-- Added for DITA 1.1 "Shortdesc proposal" -->
+  <!-- get the abstract para -->
+  <xsl:apply-templates select="preceding-sibling::*[contains(@class,' topic/abstract ')]" mode="outofline"/>
+
   <!-- get the short descr para -->
   <xsl:apply-templates select="preceding-sibling::*[contains(@class,' topic/shortdesc ')]" mode="outofline"/>
 
-<!-- Insert pre-req links here, after shortdesc - unless there is a prereq section about -->
+  <!-- Insert pre-req links here, after shortdesc - unless there is a prereq section about -->
   <xsl:if test="not(*[contains(@class,' task/prereq ')])">
    <xsl:apply-templates select="following-sibling::*[contains(@class,' topic/related-links ')]" mode="prereqs"/>
   </xsl:if>

@@ -64,6 +64,22 @@
   </xsl:element>
 </xsl:template>
 
+<!-- Added for DITA 1.1 "Shortdesc proposal" -->
+<xsl:template match="*[contains(@class,' topic/abstract ')]" mode="abstract">
+  <abstract>
+    <xsl:call-template name="makePara">
+      <xsl:with-param name="IDPrefix" select="'shrtdsc'"/>
+    </xsl:call-template>
+  </abstract>
+</xsl:template>
+
+<!-- Added for DITA 1.1 "Shortdesc proposal" -->
+<xsl:template match="*[contains(@class,' topic/abstract ')]">
+  <xsl:call-template name="makePara">
+    <xsl:with-param name="IDPrefix" select="'para'"/>
+  </xsl:call-template>
+</xsl:template>
+
 <xsl:template match="*[contains(@class,' topic/shortdesc ')]" mode="abstract">
   <abstract>
     <xsl:call-template name="makePara">
@@ -91,7 +107,7 @@
 <xsl:template match="*[contains(@class,' topic/prolog ')]">
   <xsl:param name="contextType" select="'section'"/>
   <xsl:variable name="shortDescNode"
-      select="../*[contains(@class,' topic/shortdesc ')]"/>
+      select="../*[contains(@class,' topic/shortdesc ') or contains(@class, ' topic/abstract ')]"/>
   <xsl:variable name="prologNodes" select="*"/>
   <xsl:if test="$shortDescNode or $prologNodes">
     <xsl:variable name="elementName">
@@ -329,6 +345,7 @@
 <xsl:template match="*[contains(@class,' topic/related-links ') or
       contains(@class,' topic/linkpool ')]">
   <itemizedlist>
+    <title>Related links</title>
     <xsl:apply-templates/>
   </itemizedlist>
 </xsl:template>
@@ -421,9 +438,18 @@
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' topic/itemgroup ')]">
-  <xsl:apply-templates select="." mode="deflate">
-    <xsl:with-param name="descendentsOkay" select="true()"/>
-  </xsl:apply-templates>
+  <xsl:variable name="element" select="local-name(.)" />
+  <xsl:variable name="id" select="concat('elem', generate-id())" />
+  <xsl:call-template name="deflateElementStart">
+    <xsl:with-param name="id" select="$id" />
+    <xsl:with-param name="element" select="$element" />
+    <xsl:with-param name="parentID" select="''" />
+  </xsl:call-template>
+  <xsl:call-template name="makeBlock" />
+  <xsl:call-template name="deflateElementEnd">
+    <xsl:with-param name="id" select="$id" />
+    <xsl:with-param name="element" select="$element" />
+  </xsl:call-template>
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' topic/dl ')]">

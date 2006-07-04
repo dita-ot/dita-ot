@@ -227,10 +227,14 @@
        - importance=required AND no role, or role=sibling or role=friend or role=previous or role=cousin (to generate prerequisite links)
        - we can't just assume that links with importance=required are prerequisites, since a topic with eg role='next' might be required, while at the same time by definition not a prerequisite -->
 
-  <!-- get the short descr para -->
+  <!-- Added for DITA 1.1 "Shortdesc proposal" -->
+  <!-- get the abstract para -->
+  <xsl:apply-templates select="preceding-sibling::*[contains(@class,' topic/abstract ')]" mode="outofline"/>
+  
+  <!-- get the shortdesc para -->
   <xsl:apply-templates select="preceding-sibling::*[contains(@class,' topic/shortdesc ')]" mode="outofline"/>
-
-<!-- Insert pre-req links - after shortdesc - unless there is a prereq section about -->
+  
+  <!-- Insert pre-req links - after shortdesc - unless there is a prereq section about -->
   <xsl:apply-templates select="following-sibling::*[contains(@class,' topic/related-links ')]" mode="prereqs"/>
 
   <xsl:apply-templates/>
@@ -238,12 +242,36 @@
 </div><xsl:value-of select="$newline"/>
 </xsl:template>
 
-<!-- Added for SF 1363055: Shortdesc disappears when optional body is removed -->
-<xsl:template match="*[contains(@class,' topic/shortdesc ')]">
+<!-- Added for DITA 1.1 "Shortdesc proposal" -->
+<xsl:template match="*[contains(@class,' topic/abstract ')]">
   <xsl:if test="not(following-sibling::*[contains(@class,' topic/body ')])">
     <xsl:apply-templates select="." mode="outofline"/>
     <xsl:apply-templates select="following-sibling::*[contains(@class,' topic/related-links ')]" mode="prereqs"/>
   </xsl:if>
+</xsl:template>
+
+<!-- Added for DITA 1.1 "Shortdesc proposal" -->
+<!-- called abstract processing - para at start of topic -->
+<xsl:template match="*[contains(@class,' topic/abstract ')]" mode="outofline">
+<p>
+  <xsl:call-template name="commonattributes"/>
+  <xsl:apply-templates/>
+</p><xsl:value-of select="$newline"/>
+</xsl:template>
+
+<!-- Updated for DITA 1.1 "Shortdesc proposal" -->
+<!-- Added for SF 1363055: Shortdesc disappears when optional body is removed -->
+<xsl:template match="*[contains(@class,' topic/shortdesc ')]">
+  <xsl:choose>
+    <xsl:when test="parent::*[contains(@class, ' topic/abstract ')]">
+      <xsl:apply-templates select="." mode="outofline"/>
+    </xsl:when>
+    <xsl:when test="not(following-sibling::*[contains(@class,' topic/body ')])">    
+      <xsl:apply-templates select="." mode="outofline"/>
+      <xsl:apply-templates select="following-sibling::*[contains(@class,' topic/related-links ')]" mode="prereqs"/>
+    </xsl:when>
+    <xsl:otherwise></xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 <!-- called shortdesc processing - para at start of topic -->

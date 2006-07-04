@@ -47,6 +47,20 @@
   </fo:block>
 </xsl:template>
 
+<!-- Added for DITA 1.1 "Shortdesc proposal" -->
+<xsl:template match="*[contains(@class,' topic/abstract ')]" mode="outofline">
+  <fo:block xsl:use-attribute-sets="p" start-indent="{$basic-start-indent}">
+    <xsl:apply-templates/>
+  </fo:block>
+</xsl:template>
+
+<!-- Added for DITA 1.1 "Shortdesc proposal" -->
+<xsl:template match="*[contains(@class,' topic/abstract ')]">
+  <xsl:if test="not(following-sibling::*[contains(@class,' topic/body ')])">
+    <xsl:apply-templates select="." mode="outofline"/>
+  </xsl:if>
+</xsl:template>
+
 <!-- shortdesc is called outside of body thus needs to set up its own indent. also relatedlinks -->
 <xsl:template match="*[contains(@class,' topic/shortdesc ')]" mode="outofline">
   <fo:block xsl:use-attribute-sets="p" start-indent="{$basic-start-indent}">
@@ -54,7 +68,19 @@
   </fo:block>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/shortdesc ')]"/>
+<!-- Updated for DITA 1.1 "Shortdesc proposal" -->
+<!-- Added for SF 1363055: Shortdesc disappears when optional body is removed -->
+<xsl:template match="*[contains(@class,' topic/shortdesc ')]">
+  <xsl:choose>
+    <xsl:when test="parent::*[contains(@class, ' topic/abstract ')]">
+      <xsl:apply-templates select="." mode="outofline"/>
+    </xsl:when>
+    <xsl:when test="not(following-sibling::*[contains(@class,' topic/body ')])">    
+      <xsl:apply-templates select="." mode="outofline"/>
+    </xsl:when>
+    <xsl:otherwise></xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
 
 <xsl:template match="*[contains(@class,' topic/xshortdesc ')]">
   <fo:block start-indent="{$basic-start-indent}" background-color="#F0C0F0">
@@ -72,6 +98,10 @@
   <xsl:attribute name="font-size">10pt</xsl:attribute>
     <!-- here, you can generate a toc based on what's a child of body -->
     <!--xsl:call-template  name="gen-sect-ptoc"/-->
+    
+    <!-- Added for DITA 1.1 "Shortdesc proposal" -->
+    <xsl:apply-templates select="preceding-sibling::*[contains(@class,' topic/abstract ')]" mode="outofline"/>
+   
     <xsl:apply-templates select="preceding-sibling::*[contains(@class,' topic/shortdesc ')]" mode="outofline"/>
     <xsl:apply-templates/>
   </fo:block>
@@ -81,8 +111,12 @@
 <xsl:template match="*[contains(@class,' topic/body ')]">
   <fo:block start-indent="{$basic-start-indent}">
    <xsl:attribute name="font-size">10pt</xsl:attribute>
+   
+   <!-- Added for DITA 1.1 "Shortdesc proposal" -->
+   <xsl:apply-templates select="preceding-sibling::*[contains(@class,' topic/abstract ')]" mode="outofline"/>
+   
    <xsl:apply-templates select="preceding-sibling::*[contains(@class,' topic/shortdesc ')]" mode="outofline"/>
-    <xsl:apply-templates/>
+   <xsl:apply-templates/>
   </fo:block>
 </xsl:template>
 
@@ -273,10 +307,13 @@
   <fo:block xsl:use-attribute-sets="fig">
     <!-- setclass -->
     <!-- set id -->
+    <xsl:if test="@id">
+      <xsl:apply-templates select="@id"/>
+    </xsl:if>    
     <xsl:call-template name="setframe"/>
- <xsl:if test="@expanse = 'page'">
-  <xsl:attribute name="start-indent">-<xsl:value-of select="$basic-start-indent"/></xsl:attribute>
- </xsl:if>
+    <xsl:if test="@expanse = 'page'">
+      <xsl:attribute name="start-indent">-<xsl:value-of select="$basic-start-indent"/></xsl:attribute>
+    </xsl:if>
     <!-- this is where the main fig rendering happens -->
     <xsl:apply-templates/>
   </fo:block>
