@@ -573,12 +573,32 @@ name="gen-linktxt"/>\s8 \f2\fs24\ul\cf1}}}\s8
     <xsl:text>}</xsl:text>
   </xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/required-cleanup ')]">
-<xsl:if test="$DRAFT='yes'">
-<xsl:text>\par \plain\s0\f4\fs24\cb3\b </xsl:text><xsl:call-template name="getStringRTF"><xsl:with-param name="stringName" select="'Required cleanup'"/></xsl:call-template><xsl:call-template name="getStringRTF"><xsl:with-param name="stringName" select="'ColonSymbol'"/></xsl:call-template><xsl:text> </xsl:text><xsl:text>\pard \plain\s0\f4\fs24\cb3</xsl:text><xsl:if test="ancestor::*[contains(@class,' topic/table ') or contains(@class,' topic/simpletable ')]">\intbl </xsl:if><xsl:apply-templates/><xsl:text>\par \plain\s0\f2\fs24</xsl:text>
-</xsl:if>
-</xsl:template>
+  <xsl:template
+    match="*[contains(@class,' topic/required-cleanup ')]">
+    <xsl:if test="$DRAFT='yes'">
+      <xsl:text>\par \plain\s0\f4\fs24\cb3\b</xsl:text>
+      <xsl:call-template name="getStringRTF">
+        <xsl:with-param name="stringName" select="'Required cleanup'" />
+      </xsl:call-template>
+      <xsl:call-template name="getStringRTF">
+        <xsl:with-param name="stringName" select="'ColonSymbol'" />
+      </xsl:call-template>
+      <xsl:text></xsl:text>
+      <xsl:text>\pard \plain\s0\f4\fs24\cb3</xsl:text>
+      <xsl:if
+        test="ancestor::*[contains(@class,' topic/table ') or contains(@class,' topic/simpletable ')]">
+        \intbl
+      </xsl:if>
+      <xsl:apply-templates />
+      <xsl:text>\par \plain\s0\f2\fs24</xsl:text>
+    </xsl:if>
+  </xsl:template>
 
+  <!-- Add for "New <data> element (#9)" in DITA 1.1 -->
+  <xsl:template match="*[contains(@class,' topic/data ')]" />
 
+  <!-- Add for "Support foreign content vocabularies such as 
+    MathML and SVG with <unknown> (#35) " in DITA 1.1 -->
+  <xsl:template match="*[contains(@class,' topic/foreign ')]" />
 
 </xsl:stylesheet>

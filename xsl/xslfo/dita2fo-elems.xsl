@@ -666,6 +666,12 @@ Status: <xsl:value-of select="@status"/>
   </fo:inline>
 </xsl:template>
 
+<!-- Add for "New <data> element (#9)" in DITA 1.1 -->
+<xsl:template match="*[contains(@class,' topic/data ')]"/>
+
+<!-- Add for "Support foreign content vocabularies such as 
+     MathML and SVG with <unknown> (#35) " in DITA 1.1 -->
+<xsl:template match="*[contains(@class,' topic/foreign ')]"/>
 
 <!-- =================== end of element rules ====================== -->
 
