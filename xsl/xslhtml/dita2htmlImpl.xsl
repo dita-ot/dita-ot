@@ -3056,13 +3056,11 @@
      -->
 <xsl:template name="flagit">
   <xsl:variable name="domains">
-    <xsl:value-of select="normalize-space(ancestor-or-self::*[contains(@class,' topic/topic
-    ')][1]/@domains)"/>
+    <xsl:value-of select="normalize-space(ancestor-or-self::*[contains(@class,' topic/topic ')][1]/@domains)"/>
   </xsl:variable>
   <xsl:variable name="props">
     <xsl:if test="contains($domains, '(props')">
-      <xsl:value-of select="normalize-space(substring-before(substring-after($domains,'(props'), ')'
-      ))"/>
+      <xsl:value-of select="normalize-space(substring-before(substring-after($domains,'(props'), ')'))"/>
     </xsl:if>
   </xsl:variable>
  <!-- Test for the flagging attributes. If found, call 'mark-prop' with the values to use. Otherwise return -->
@@ -3091,7 +3089,7 @@
   </xsl:call-template>
  </xsl:if>
  
-  <xsl:if test="not($props='' and not($FILTERFILE=''))">
+  <xsl:if test="not($props='') and not($FILTERFILE='')">
     <xsl:call-template name="ext-flagit">
       <xsl:with-param name="props" select="$props"/>
     </xsl:call-template>
@@ -3113,11 +3111,14 @@
             <xsl:call-template name="mark-prop">
               <xsl:with-param name="flag-att" select="substring-before($props,' ')"/>
               <xsl:with-param name="flag-att-val" 
-              select="substring-before(substring-after(@props,concat(substring-before($props,'
-              '),'(')),')')"/>
+              select="substring-before(substring-after(@props,concat(substring-before($props,' '),'(')),')')"/>
             </xsl:call-template>
           </xsl:when>
-          <xsl:otherwise/>
+          <xsl:otherwise>
+            <xsl:call-template name="ext-flagit">
+              <xsl:with-param name="props" select="substring-after($props,' ')"/>
+            </xsl:call-template>
+          </xsl:otherwise>
         </xsl:choose>
       </xsl:when>
       <xsl:otherwise>
@@ -3145,13 +3146,11 @@
 <xsl:template name="flagcheck">
   
   <xsl:variable name="domains">
-    <xsl:value-of select="normalize-space(ancestor-or-self::*[contains(@class,' topic/topic
-      ')][1]/@domains)"/>
+    <xsl:value-of select="normalize-space(ancestor-or-self::*[contains(@class,' topic/topic ')][1]/@domains)"/>
   </xsl:variable>
   <xsl:variable name="props">
     <xsl:if test="contains($domains, '(props')">
-      <xsl:value-of select="normalize-space(substring-before(substring-after($domains,'(props'), ')'
-        ))"/>
+      <xsl:value-of select="normalize-space(substring-before(substring-after($domains,'(props'), ')'))"/>
     </xsl:if>
   </xsl:variable>
   
@@ -3211,7 +3210,11 @@
               <xsl:with-param name="msgparams">%1=<xsl:value-of select="substring-before($props,' ')"/></xsl:with-param>
             </xsl:call-template>
           </xsl:when>
-          <xsl:otherwise/>
+          <xsl:otherwise>
+            <xsl:call-template name="ext-flagcheck">
+              <xsl:with-param name="props" select="substring-after($props,' ')"/>
+            </xsl:call-template>
+          </xsl:otherwise>
         </xsl:choose>
       </xsl:when>
       <xsl:otherwise>
@@ -3238,13 +3241,11 @@
 
 <xsl:template name="flagit-parent">
   <xsl:variable name="domains">
-    <xsl:value-of select="normalize-space(ancestor::*[contains(@class,' topic/topic
-      ')][1]/@domains)"/>
+    <xsl:value-of select="normalize-space(ancestor::*[contains(@class,' topic/topic ')][1]/@domains)"/>
   </xsl:variable>
   <xsl:variable name="props">
     <xsl:if test="contains($domains, '(props')">
-      <xsl:value-of select="normalize-space(substring-before(substring-after($domains,'(props'), ')'
-        ))"/>
+      <xsl:value-of select="normalize-space(substring-before(substring-after($domains,'(props'), ')'))"/>
     </xsl:if>
   </xsl:variable>
   
@@ -3299,11 +3300,14 @@
             <xsl:call-template name="mark-prop">
               <xsl:with-param name="flag-att" select="substring-before($props,' ')"/>
               <xsl:with-param name="flag-att-val" 
-                select="substring-before(substring-after(../@props,concat(substring-before($props,'
-                '),'(')),')')"/>
+                select="substring-before(substring-after(../@props,concat(substring-before($props,' '),'(')),')')"/>
             </xsl:call-template>
           </xsl:when>
-          <xsl:otherwise/>
+          <xsl:otherwise>
+            <xsl:call-template name="ext-flagit-parent">
+              <xsl:with-param name="props" select="substring-after($props,' ')"/>
+            </xsl:call-template>
+          </xsl:otherwise>
         </xsl:choose>
       </xsl:when>
       <xsl:otherwise>
