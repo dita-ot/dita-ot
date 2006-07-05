@@ -186,8 +186,9 @@ public class GenListModuleReader extends AbstractXMLReader {
 		String domains = null;
         int propsStart;
         int propsEnd;
+        String attrValue = atts.getValue(Constants.ATTRIBUTE_NAME_CLASS);
 		
-		if (atts.getValue(Constants.ATTRIBUTE_NAME_CLASS).indexOf(Constants.ATTR_CLASS_VALUE_TOPIC) != -1){
+		if (attrValue != null && attrValue.indexOf(Constants.ATTR_CLASS_VALUE_TOPIC) != -1){
         	domains = atts.getValue(Constants.ATTRIBUTE_NAME_DOMAINS);
         	propsStart = domains.indexOf("(props");
         	propsEnd = domains.indexOf(")",propsStart);
@@ -218,7 +219,7 @@ public class GenListModuleReader extends AbstractXMLReader {
 		 * from <title> was found, this kind of element's class attribute 
 		 * must contains 'topic/title'.
 		 */
-		String attrValue = atts.getValue(Constants.ATTRIBUTE_NAME_CLASS);
+		
 		if (attrValue != null) {
 			if ((attrValue.indexOf(Constants.ATTR_CLASS_VALUE_MAP) != -1)
 					|| (attrValue.indexOf(Constants.ATTR_CLASS_VALUE_TITLE) != -1)) {
