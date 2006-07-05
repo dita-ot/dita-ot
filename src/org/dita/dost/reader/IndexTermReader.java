@@ -13,6 +13,7 @@ import org.dita.dost.index.IndexTermTarget;
 import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.util.Constants;
+import org.dita.dost.util.StringUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
@@ -98,14 +99,16 @@ public class IndexTermReader extends AbstractXMLReader {
 		 * For title info
 		 */
 		if (inTitleElement) {
+			temp = StringUtils.restoreEntity(temp);
 			title = (title == null) ? temp : new StringBuffer(title).append(
 					temp).toString();
 		} else if (insideSortingAs && temp.length() > 0) {
+			temp = StringUtils.restoreEntity(temp);
 			IndexTerm indexTerm = (IndexTerm) termStack.peek();
 			indexTerm.setTermKey(temp);
 		} else if (!termStack.empty()) {
 			IndexTerm indexTerm = (IndexTerm) termStack.peek();
-
+			temp = StringUtils.restoreEntity(temp);
 			if (indexTerm.getTermName() == null) {
 				indexTerm.setTermName(temp);
 			} else {

@@ -3,7 +3,6 @@
  */
 package org.dita.dost.util;
 
-import java.io.File;
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -46,52 +45,6 @@ public class StringUtils {
 		}
 
 		return buff.toString();
-	}
-
-	/**
-	 * Resolve topic.
-	 * 
-	 * @param rootPath
-	 * @param relativePath
-	 * @return
-	 */
-	public static String resolveTopic(String rootPath, String relativePath) {
-		String begin = relativePath;
-		String end = "";
-		String prefix = null;
-		String postfix = null;
-
-		if (relativePath.indexOf("#") != -1) {
-			begin = relativePath.substring(0, relativePath.indexOf('#'));
-			end = relativePath.substring(relativePath.indexOf('#'));
-		}
-
-		begin = begin.replace('\\', File.separatorChar);
-		begin = begin.replace('/', File.separatorChar);
-
-		relativePath = begin + end;
-
-		if (rootPath == null) {
-			return relativePath;
-		}
-
-		prefix = (rootPath.charAt(rootPath.length() - 1) == File.separatorChar) ? rootPath
-				.substring(0, rootPath.length() - 1)
-				: rootPath;
-
-		postfix = relativePath;
-		while (postfix.startsWith("..")) {
-			int sepPos = postfix.indexOf(File.separatorChar);
-			int lastPos = prefix.lastIndexOf(File.separatorChar);
-			postfix = postfix.substring(sepPos == -1 ? 0 : sepPos
-					+ File.separator.length(), postfix.length());
-			if (lastPos == -1) {
-				return postfix;
-			}
-			prefix = prefix.substring(0, lastPos);
-		}
-
-		return prefix + File.separatorChar + postfix;
 	}
 
 	/**
@@ -141,5 +94,48 @@ public class StringUtils {
 		result.append(input.substring(startIndex));
 		
 		return result.toString();
+	}
+	
+	public static String getAscii(String inStr){
+		try{
+		byte [] input = inStr.getBytes();
+		/*byte [] output;
+		ByteArrayInputStream byteIS = new ByteArrayInputStream(input);
+		InputStreamReader reader = new InputStreamReader(byteIS,"UTF-8");
+		char [] cbuf = new char[Constants.INT_128];
+		int count = reader.read(cbuf);*/
+		StringBuffer ret = new StringBuffer(Constants.INT_1024);
+		String strByte = null;
+		for(int i = 0; i < input.length; i++){
+			ret.append("\\\'");
+			strByte = Integer.toHexString(input[i]);
+			ret.append(strByte.substring(strByte.length()-2));
+			//System.out.println(Integer.toHexString(input[i]));
+			//System.out.println(strByte);
+		}
+		/*while(count > 0){
+			output = (new String(cbuf, 0, count)).getBytes();
+			for(int j = 0; j < output.length; j++){
+				ret.append("\\\'");
+				strByte = Integer.toHexString(output[j]);
+				ret.append(strByte.substring(strByte.length()-2));
+			}
+			count = reader.read(cbuf);
+		}*/
+		
+		return ret.toString();
+		}catch (Exception e){
+			return null;
+		}
+	}
+	
+	public static String restoreEntity(String s) {
+		s = StringUtils.replaceAll(s, "&", "&amp;");
+		s = StringUtils.replaceAll(s, "<", "&lt;");
+		s = StringUtils.replaceAll(s, ">", "&gt;");		
+		s = StringUtils.replaceAll(s, "'", "&apos;");
+		s = StringUtils.replaceAll(s, "\"", "&quot;");
+		
+		return s;
 	}
 }

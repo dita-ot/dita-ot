@@ -128,12 +128,12 @@ public class JavaHelpIndexWriter extends AbstractWriter {
 				targetURL = targetURL.replace('/', '_');
 				targetURL = targetURL.replace('.', '_');
 
-				printWriter.print("<indexitem text=\"");		
+				printWriter.print("<indexitem text=\"");
 				printWriter.print(term.getTermName());
 				printWriter.print("\"");
 				printWriter.print(" target=\"");
 				printWriter.print(targetURL);
-				printWriter.print("\"/>");
+				printWriter.println("\"/>");
 			}
 		}		
 		
