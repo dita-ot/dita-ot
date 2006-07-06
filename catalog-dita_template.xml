@@ -169,6 +169,15 @@
           uri="xnalDomain.mod"/>
   <public publicId="-//OASIS//ENTITIES DITA XNAL Domain//EN"
           uri="xnalDomain.ent"/>
+  
+  <public publicId="-//OASIS//ENTITIES DITA Audience Attribute Domain//EN"
+          uri="audienceAttDomain.mod"/>
+  <public publicId="-//OASIS//ENTITIES DITA Platform Attribute Domain//EN"
+          uri="platformAttDomain.mod"/>
+  <public publicId="-//OASIS//ENTITIES DITA Product Attribute Domain//EN"
+          uri="productAttDomain.mod"/>
+  <public publicId="-//OASIS//ENTITIES DITA Otherprops Attribute Domain//EN"
+          uri="otherpropsAttDomain.mod"/>
 
 <!-- Common -->
   <public publicId="-//OASIS//ELEMENTS DITA Common Elements//EN"
