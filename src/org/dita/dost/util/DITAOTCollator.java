@@ -5,6 +5,7 @@ package org.dita.dost.util;
 
 import java.lang.reflect.Method;
 import java.text.Collator;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Locale;
 
@@ -13,7 +14,7 @@ import java.util.Locale;
  *
  * @author Wu, Zhi Qiang
  */
-public class DITAOTCollator {
+public class DITAOTCollator implements Comparator {
 	static HashMap cache = new HashMap();
 	
 	private Object collatorInstance;
@@ -28,10 +29,10 @@ public class DITAOTCollator {
 		
 		try {
 			c = Class.forName("com.ibm.icu.text.Collator");
-			System.out.println("Using ICU collator");
+			System.out.println("Using ICU collator for " + locale.toString());
 		} catch (Exception e) {
 			c = Collator.class;
-			System.out.println("Using JDK collator");
+			System.out.println("Using JDK collator for " + locale.toString());
 		}
 		
 		try {
@@ -39,7 +40,7 @@ public class DITAOTCollator {
 					new Class[] { Locale.class });
 			collatorInstance = m.invoke(null, new Object[] { locale });
 			compareMethod = c.getDeclaredMethod("compare", new Class[] {
-					String.class, String.class });
+					Object.class, Object.class });
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -60,7 +61,7 @@ public class DITAOTCollator {
 		return instance;
 	}
 	
-	public int compare(String source, String target) {
+	public int compare(Object source, Object target) {
 		try {
 			return ((Integer) compareMethod.invoke(collatorInstance, new Object[] {
 					source, target})).intValue();
@@ -68,4 +69,5 @@ public class DITAOTCollator {
 			throw new RuntimeException(e.getMessage(), e);
 		}
 	}
+
 }
