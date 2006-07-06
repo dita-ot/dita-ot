@@ -38,16 +38,19 @@ public class JavaInvoker {
         //pipelineInput.setAttribute("inputmap", "testcase" + File.separator
         //        + "dwDT\\langref\\ditaref-book.ditamap");
         
-        pipelineInput.setAttribute("inputmap","test.ditamap");
-        pipelineInput.setAttribute("basedir", "e:\\eclipse\\workspace\\DITA-OT1.1\\test");
+        pipelineInput.setAttribute("inputmap","TC1.xml");
+        pipelineInput.setAttribute("basedir", "d:\\temp\\DITA-OT\\test");
+        pipelineInput.setAttribute("inputdir", "d:\\temp\\DITA-OT\\test");
+        pipelineInput.setAttribute("tempDir", "d:\\temp\\DITA-OT\\temp");
+        pipelineInput.setAttribute("ditadir", "e:\\eclipse\\workspace\\DITA-OT13");
 
         try {
-			facade.execute("GenMapAndTopicList", pipelineInput);
-			//pipelineInput.setAttribute("ditaval", "testcase" + File.separator
-			//        + "DOST\\new.ditaval");
+			
+			pipelineInput.setAttribute("ditaval", "d:\\temp\\DITA-OT\\test\\02.ditaval");
 			pipelineInput.setAttribute("ditalist", "temp" + File.separator
 			        + "dita.list");
 			pipelineInput.setAttribute("maplinks", "temp\\maplinks.unordered");
+			facade.execute("GenMapAndTopicList", pipelineInput);
 			facade.execute("DebugAndFilter", pipelineInput);
 			facade.execute("MoveIndex", pipelineInput);
 			facade.execute("MoveLinks", pipelineInput);
