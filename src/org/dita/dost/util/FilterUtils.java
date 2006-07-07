@@ -131,7 +131,7 @@ public class FilterUtils {
 				if (filterAction == null) {
 					hasNullAction = true;
 				}else if (!(Constants.FILTER_ACTION_EXCLUDE.equalsIgnoreCase(filterAction))) {
-					return true;
+					return false;
 				}else{
 					hasExcludeAction = true;
 				}
