@@ -3,6 +3,7 @@
  */
 package org.dita.dost.util;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.StringTokenizer;
 
@@ -35,8 +36,12 @@ public class FilterUtils {
 		boolean ret = false;
 		boolean extRet = false;
 		StringTokenizer prop = null;
+		StringTokenizer propPathTokenizer = null;
 		String propName = null;
 		String propValue = null;
+		String propPath = null;
+		ArrayList propList = null;
+		int propListIndex = 0;
 		String attrPropsValue = null;
 		int propStart;
 		int propEnd;
@@ -57,14 +62,22 @@ public class FilterUtils {
 			return ret;
 		}
 		
-		prop = new StringTokenizer(extProps, Constants.STRING_BLANK);
+		prop = new StringTokenizer(extProps, Constants.COMMA);
 		
 		while(prop.hasMoreElements()){
-			propName = (String)prop.nextElement();
+			propPath = (String)prop.nextElement();
+			propPathTokenizer = new StringTokenizer(propPath, Constants.STRING_BLANK);
+			propList = new ArrayList();
+			while(propPathTokenizer.hasMoreElements()){
+				propList.add(propPathTokenizer.nextElement());
+			}
+			propListIndex = propList.size()-1;
+			propName = (String)propList.get(propListIndex);
 			propValue = atts.getValue(propName);
 			
-			if(propValue == null){
-				attrPropsValue = atts.getValue(Constants.ATTRIBUTE_NAME_PROPS);
+			while (propValue == null && propListIndex > 0){
+				propListIndex--;
+				attrPropsValue = atts.getValue((String)propList.get(propListIndex));
 				if (attrPropsValue != null){
 					propStart = attrPropsValue.indexOf(propName+"(") + propName.length() + 1;
 					propEnd = attrPropsValue.indexOf(")", propStart);
@@ -74,18 +87,80 @@ public class FilterUtils {
 				}
 			}
 			
-			extRet = extRet || checkExclude(propName, propValue);
+			extRet = extRet || extCheckExclude(propList, propValue);
 		}
 		return ret || extRet;
 	}
 
+	
+	/**
+	 * Check the given extended attribute in propList to see if it was excluded.
+	 * 
+	 * 
+	 * @param propList
+	 * @param attValue
+	 * @return
+	 */
+	private static boolean extCheckExclude(ArrayList propList, String attValue){
+		int propListIndex = 0;
+		boolean hasNullAction = false;
+		boolean hasExcludeAction = false;
+		StringTokenizer tokenizer = null;
+		String attName = null;
+		
+		if (attValue == null || propList.size() == 0) {
+			return false;
+		}
+		
+		propListIndex = propList.size() - 1;
+		
+		while (propListIndex >= 0){			
+			
+			hasNullAction = false;
+			hasExcludeAction = false;			
+			tokenizer = new StringTokenizer(attValue,
+					Constants.STRING_BLANK);
+			attName = (String)propList.get(propListIndex);
+			while (tokenizer.hasMoreTokens()) {
+				String attSubValue = tokenizer.nextToken();
+				String filterKey = new StringBuffer().append(attName).append(
+						Constants.EQUAL).append(attSubValue).toString();
+				String filterAction = (String) filterMap.get(filterKey);
+
+				// no action will be considered as 'not exclude'
+				if (filterAction == null) {
+					hasNullAction = true;
+				}else if (!(Constants.FILTER_ACTION_EXCLUDE.equalsIgnoreCase(filterAction))) {
+					return true;
+				}else{
+					hasExcludeAction = true;
+				}
+			}
+			
+			if(hasNullAction && hasExcludeAction){
+				//if there is exclude action but not all value should be excluded
+				return false;
+			}else if(hasExcludeAction){
+				//if all of the value should be excluded
+				return true;
+			}
+			//If no action for this extended prop has been found, we need to check the 
+			//parent prop action
+				
+			propListIndex --;			
+		}
+		
+		return false;
+	}
+	
+	
 	/**
 	 * Check the given attName to see if it was excluded.
 	 * 
 	 * Note: attName is case sensitive, action is case insensitive
 	 * 
 	 * @param attName
-	 * @param atts
+	 * @param attValue
 	 * @return
 	 */
 	private static boolean checkExclude(String attName, String attValue) {
