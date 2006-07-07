@@ -17,6 +17,7 @@ import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.Constants;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.FilterUtils;
+import org.dita.dost.util.StringUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -184,19 +185,11 @@ public class GenListModuleReader extends AbstractXMLReader {
 	public void startElement(String uri, String localName, String qName,
 			Attributes atts) throws SAXException {
 		String domains = null;
-        int propsStart;
-        int propsEnd;
         String attrValue = atts.getValue(Constants.ATTRIBUTE_NAME_CLASS);
 		
-		if (attrValue != null && attrValue.indexOf(Constants.ATTR_CLASS_VALUE_TOPIC) != -1){
+        if (attrValue != null && attrValue.indexOf(Constants.ATTR_CLASS_VALUE_TOPIC) != -1){
         	domains = atts.getValue(Constants.ATTRIBUTE_NAME_DOMAINS);
-        	propsStart = domains.indexOf("(props");
-        	propsEnd = domains.indexOf(")",propsStart);
-        	if(propsStart != -1 && propsEnd != -1){
-        		props = domains.substring(propsStart+6,propsEnd).trim();
-        	}else{
-        		props = null;
-        	}
+        	props = StringUtils.getExtProps(domains);
         }
 		
 		if (insideExcludedElement) {

@@ -279,19 +279,11 @@ public class DitaWriter extends AbstractXMLWriter {
         Integer nextValue;
         int attsLen = atts.getLength();
         String domains = null;
-        int propsStart;
-        int propsEnd;
         String attrValue = atts.getValue(Constants.ATTRIBUTE_NAME_CLASS);
         
         if (attrValue != null && attrValue.indexOf(Constants.ATTR_CLASS_VALUE_TOPIC) != -1){
         	domains = atts.getValue(Constants.ATTRIBUTE_NAME_DOMAINS);
-        	propsStart = domains.indexOf("(props");
-        	propsEnd = domains.indexOf(")",propsStart);
-        	if(propsStart != -1 && propsEnd != -1){
-        		props = domains.substring(propsStart+6,propsEnd).trim();
-        	}else{
-        		props = null;
-        	};
+        	props = StringUtils.getExtProps(domains);
         }
         
         if (counterMap.containsKey(qName)) {

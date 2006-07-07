@@ -129,6 +129,23 @@ public class StringUtils {
 		}
 	}
 	
+	public static String getExtProps (String domains){
+		StringBuffer propsBuffer = new StringBuffer();
+    	int propsStart = domains.indexOf("a(props");
+    	int propsEnd = domains.indexOf(")",propsStart);
+    	while (propsStart != -1 && propsEnd != -1){
+    		propsBuffer.append(Constants.COMMA);
+    		propsBuffer.append(domains.substring(propsStart+2,propsEnd).trim());
+    		propsStart = domains.indexOf("a(props", propsEnd);
+    		propsEnd = domains.indexOf(")",propsStart);
+    	}
+    	if(propsBuffer.length() > 0){
+    		return propsBuffer.substring(Constants.INT_1);        	
+    	}else{
+    		return null;
+    	}
+	}
+	
 	public static String restoreEntity(String s) {
 		s = StringUtils.replaceAll(s, "&", "&amp;");
 		s = StringUtils.replaceAll(s, "<", "&lt;");
