@@ -3067,25 +3067,25 @@
     <xsl:value-of select="substring-after($tmp_props, ',')"/>
   </xsl:variable>
  <!-- Test for the flagging attributes. If found, call 'mark-prop' with the values to use. Otherwise return -->
- <xsl:if test="@audience and not($FILTERFILE='')">
+  <xsl:if test="@audience and not($FILTERFILE='') and not($props)">
   <xsl:call-template name="mark-prop">
    <xsl:with-param name="flag-att" select="'audience'"/>
    <xsl:with-param name="flag-att-val" select="@audience"/>
   </xsl:call-template>
  </xsl:if>
- <xsl:if test="@platform and not($FILTERFILE='')">
+  <xsl:if test="@platform and not($FILTERFILE='') and not($props)">
   <xsl:call-template name="mark-prop">
    <xsl:with-param name="flag-att" select="'platform'"/>
    <xsl:with-param name="flag-att-val" select="@platform"/>
   </xsl:call-template>
  </xsl:if>
- <xsl:if test="@product and not($FILTERFILE='')">
+  <xsl:if test="@product and not($FILTERFILE='') and not($props)">
   <xsl:call-template name="mark-prop">
    <xsl:with-param name="flag-att" select="'product'"/>
    <xsl:with-param name="flag-att-val" select="@product"/>
   </xsl:call-template>
  </xsl:if>
- <xsl:if test="@otherprops and not($FILTERFILE='')">
+  <xsl:if test="@otherprops and not($FILTERFILE='') and not($props)">
   <xsl:call-template name="mark-prop">
    <xsl:with-param name="flag-att" select="'otherprops'"/>
    <xsl:with-param name="flag-att-val" select="@otherprops"/>
@@ -3126,27 +3126,15 @@
             <xsl:with-param name="propsPath" select="substring-before($props,',')"/>
           </xsl:call-template>
         </xsl:variable>
-        <xsl:variable name="markupResult">
-          <xsl:choose>
-            <xsl:when test="not($propsValue='')">
-              <xsl:call-template name="ext-mark-prop">
-                <xsl:with-param name="flag-att-path" select="substring-before($props,',')"/>
-                <xsl:with-param name="flag-att-val" select="$propsValue"/>
-              </xsl:call-template>
-            </xsl:when>
-          </xsl:choose>
-        </xsl:variable>
-        <xsl:choose>
-          <xsl:when test="$markupResult">
-            <xsl:copy-of select="$markupResult"/>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:call-template name="ext-flagit">
-              <xsl:with-param name="props" select="substring-after($props,',')"/>
-            </xsl:call-template>
-          </xsl:otherwise>
-        </xsl:choose>
-        
+        <xsl:if test="not($propsValue='')">
+          <xsl:call-template name="ext-mark-prop">
+            <xsl:with-param name="flag-att-path" select="substring-before($props,',')"/>
+            <xsl:with-param name="flag-att-val" select="$propsValue"/>
+          </xsl:call-template>
+        </xsl:if>
+        <xsl:call-template name="ext-flagit">
+          <xsl:with-param name="props" select="substring-after($props,',')"/>
+        </xsl:call-template>
       </xsl:when>
       <xsl:otherwise>
         <xsl:variable name="propsValue">
@@ -3341,25 +3329,25 @@
  <!-- Test for the flagging attributes on the parent.
    If found and if the filterfile name was passed in,
       call 'mark-prop' with the values to use. Otherwise return -->
- <xsl:if test="../@audience and not($FILTERFILE='')">
+  <xsl:if test="../@audience and not($FILTERFILE='') and not($props)">
   <xsl:call-template name="mark-prop">
    <xsl:with-param name="flag-att" select="'audience'"/>
    <xsl:with-param name="flag-att-val" select="../@audience"/>
   </xsl:call-template>
  </xsl:if>
- <xsl:if test="../@platform and not($FILTERFILE='')">
+  <xsl:if test="../@platform and not($FILTERFILE='') and not($props)">
   <xsl:call-template name="mark-prop">
    <xsl:with-param name="flag-att" select="'platform'"/>
    <xsl:with-param name="flag-att-val" select="../@platform"/>
   </xsl:call-template>
  </xsl:if>
- <xsl:if test="../@product and not($FILTERFILE='')">
+  <xsl:if test="../@product and not($FILTERFILE='') and not($props)">
   <xsl:call-template name="mark-prop">
    <xsl:with-param name="flag-att" select="'product'"/>
    <xsl:with-param name="flag-att-val" select="../@product"/>
   </xsl:call-template>
  </xsl:if>
- <xsl:if test="../@otherprops and not($FILTERFILE='')">
+  <xsl:if test="../@otherprops and not($FILTERFILE='') and not($props)">
   <xsl:call-template name="mark-prop">
    <xsl:with-param name="flag-att" select="'otherprops'"/>
    <xsl:with-param name="flag-att-val" select="../@otherprops"/>
@@ -3388,26 +3376,15 @@
             <xsl:with-param name="propsPath" select="substring-before($props,',')"/>
           </xsl:call-template>
         </xsl:variable>
-        <xsl:variable name="markupResult">
-          <xsl:choose>
-            <xsl:when test="not($propsValue='')">
-              <xsl:call-template name="ext-mark-prop">
-                <xsl:with-param name="flag-att-path" select="substring-before($props,',')"/>
-                <xsl:with-param name="flag-att-val" select="$propsValue"/>
-              </xsl:call-template>
-            </xsl:when>
-          </xsl:choose>
-        </xsl:variable>
-        <xsl:choose>
-          <xsl:when test="$markupResult">
-            <xsl:copy-of select="$markupResult"/>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:call-template name="ext-flagit-parent">
-              <xsl:with-param name="props" select="substring-after($props,',')"/>
-            </xsl:call-template>
-          </xsl:otherwise>
-        </xsl:choose>
+        <xsl:if test="not($propsValue='')">
+          <xsl:call-template name="ext-mark-prop">
+            <xsl:with-param name="flag-att-path" select="substring-before($props,',')"/>
+            <xsl:with-param name="flag-att-val" select="$propsValue"/>
+          </xsl:call-template>
+        </xsl:if>        
+        <xsl:call-template name="ext-flagit-parent">
+          <xsl:with-param name="props" select="substring-after($props,',')"/>
+        </xsl:call-template>
       </xsl:when>
       
       <xsl:otherwise>
@@ -3497,7 +3474,7 @@
       </xsl:call-template>
     </xsl:variable>
     <xsl:choose>
-      <xsl:when test="$flag-result">
+      <xsl:when test="exsl:node-set($flag-result)/img" xmlns:exsl="http://exslt.org/common">
         <xsl:copy-of select="$flag-result"/>
       </xsl:when>
       <xsl:otherwise>
