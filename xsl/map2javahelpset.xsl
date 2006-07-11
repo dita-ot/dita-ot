@@ -44,7 +44,7 @@
           <xsl:value-of select="$javahelptoc"/><xsl:text>.xml</xsl:text>
         </data>
       </view>
-      <view mergetype="javax.help.SortMerge">
+      <view mergetype="javax.help.AppendMerge">
         <name>index</name>
         <label>Index</label>
         <type>javax.help.IndexView</type>
