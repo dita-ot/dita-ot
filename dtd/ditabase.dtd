@@ -30,6 +30,8 @@ PUBLIC "-//OASIS//DTD DITA Composite//EN"
 <!--                                                               -->
 <!--  UPDATES:                                                     -->
 <!--    2005.11.15 RDA: Updated these comments to match template   -->
+<!--    2006.06.07 RDA: Added indexing domain                      -->
+<!--    2006.06.21 RDA: Added props attribute extensions           -->
 <!-- ============================================================= -->
 
 
@@ -63,6 +65,35 @@ PUBLIC "-//OASIS//DTD DITA Composite//EN"
 "utilitiesDomain.ent"                                               >
 %ut-d-dec;
 
+<!ENTITY % indexing-d-dec     PUBLIC 
+"-//OASIS//ENTITIES DITA Indexing Domain//EN" 
+"indexingDomain.ent"                                                >
+%indexing-d-dec;
+
+<!-- ============================================================= -->
+<!--                    DOMAIN ATTRIBUTE DECLARATIONS              -->
+<!-- ============================================================= -->
+
+<!ENTITY % audienceAtt-d-dec     PUBLIC 
+"-//OASIS//ENTITIES DITA Audience Attribute Domain//EN" 
+"audienceAttDomain.mod"                                               >
+%audienceAtt-d-dec;
+
+<!ENTITY % platformAtt-d-dec     PUBLIC 
+"-//OASIS//ENTITIES DITA Platform Attribute Domain//EN" 
+"platformAttDomain.mod"                                               >
+%platformAtt-d-dec;
+
+<!ENTITY % productAtt-d-dec     PUBLIC 
+"-//OASIS//ENTITIES DITA Product Attribute Domain//EN" 
+"productAttDomain.mod"                                               >
+%productAtt-d-dec;
+
+<!ENTITY % otherpropsAtt-d-dec     PUBLIC 
+"-//OASIS//ENTITIES DITA Otherprops Attribute Domain//EN" 
+"otherpropsAttDomain.mod"                                               >
+%otherpropsAtt-d-dec;
+
 
 <!-- ============================================================= -->
 <!--                    DOMAIN EXTENSIONS                          -->
@@ -79,6 +110,13 @@ PUBLIC "-//OASIS//DTD DITA Composite//EN"
                                     %hi-d-ph;     | %ui-d-ph;"       >
 <!ENTITY % fig          "fig     | %pr-d-fig;     | %ut-d-fig;"      >
 <!ENTITY % dl           "dl      | %pr-d-dl;"                        >
+<!ENTITY % index-base   "index-base | %indexing-d-index-base;"       >
+
+<!ENTITY % props-attribute-extensions 
+                        "%audienceAtt-d-attribute;
+                         %platformAtt-d-attribute;
+                         %productAtt-d-attribute;
+                         %otherpropsAtt-d-attribute;"                >
 
 
 <!-- ============================================================= -->
@@ -107,7 +145,9 @@ PUBLIC "-//OASIS//DTD DITA Composite//EN"
 
 <!ENTITY included-domains 
                         "&ui-d-att; &hi-d-att; &pr-d-att; &sw-d-att;
-                         &ut-d-att;"                                 >
+                         &ut-d-att; &indexing-d-att;
+                         &audienceAtt-d-att; &platformAtt-d-att;
+                         &productAtt-d-att; &otherpropsAtt-d-att;"   >
 
 
 <!-- ============================================================= -->
@@ -170,6 +210,11 @@ PUBLIC "-//OASIS//DTD DITA Composite//EN"
 "-//OASIS//ELEMENTS DITA Utilities Domain//EN" 
 "utilitiesDomain.mod"                                               >
 %ut-d-def;
+
+<!ENTITY % indexing-d-def     PUBLIC 
+"-//OASIS//ELEMENTS DITA Indexing Domain//EN" 
+"indexingDomain.mod">
+%indexing-d-def;
 
 
 <!-- ============================================================= -->

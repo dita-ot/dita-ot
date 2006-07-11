@@ -31,6 +31,9 @@ PUBLIC "-//OASIS//ELEMENTS DITA Concept//EN"
 <!--  UPDATES:                                                     -->
 <!--    2005.11.15 RDA: Removed old declaration for                -->
 <!--                    conceptClasses entity                      -->
+<!--    2006.06.07 RDA: Added <abstract> element                   -->
+<!--    2006.06.07 RDA: Make universal attributes universal        -->
+<!--                      (DITA 1.1 proposal #12)                  -->
 <!-- ============================================================= -->
 
 
@@ -84,14 +87,15 @@ PUBLIC "-//OASIS//ELEMENTS DITA Concept//EN"
 
 
 <!--                    LONG NAME: Concept                         -->
-<!ELEMENT concept       (%title;, (%titlealts;)?, (%shortdesc;)?, 
+<!ELEMENT concept       ((%title;), (%titlealts;)?,
+                         (%shortdesc; | %abstract;)?, 
                          (%prolog;)?, (%conbody;)?, (%related-links;)?,
                          (%concept-info-types;)* )                   >
 <!ATTLIST concept        
              id         ID                               #REQUIRED
              conref     CDATA                            #IMPLIED
              %select-atts;
-             xml:lang   NMTOKEN                          #IMPLIED
+             %localization-atts;
              %arch-atts;
              outputclass 
                         CDATA                            #IMPLIED
@@ -102,8 +106,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Concept//EN"
 <!ELEMENT conbody       ((%body.cnt;)*, (%section;|%example;)* )     >
 <!ATTLIST conbody         
              %id-atts;
-             translate  (yes | no)                       #IMPLIED
-             xml:lang   NMTOKEN                          #IMPLIED
+             %localization-atts;
              outputclass 
                         CDATA                            #IMPLIED    >
              

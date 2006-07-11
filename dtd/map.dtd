@@ -32,11 +32,13 @@ PUBLIC "-//OASIS//DTD DITA Map//EN"
 <!--  UPDATES:                                                     -->
 <!--    2005.11.15 RDA: Corrected public ID for map.mod            -->
 <!--    2005.11.15 RDA: Updated these comments to match template   -->
+<!--    2006.06.07 RDA: Added indexing domain                      -->
+<!--    2006.06.21 RDA: Added props attribute extensions           -->
 <!-- ============================================================= -->
 
 
 <!-- ============================================================= -->
-<!--                    ENTITY DECLARATIONS                        -->
+<!--                    DOMAIN ENTITY DECLARATIONS                 -->
 <!-- ============================================================= -->
 
 
@@ -46,11 +48,49 @@ PUBLIC "-//OASIS//DTD DITA Map//EN"
 "mapGroup.ent"                                                       >
 %mapgroup-d-dec;
 
+<!ENTITY % indexing-d-dec     PUBLIC 
+"-//OASIS//ENTITIES DITA Indexing Domain//EN" 
+"indexingDomain.ent"                                                 >
+%indexing-d-dec;
+
+<!-- ============================================================= -->
+<!--                    DOMAIN ATTRIBUTE DECLARATIONS              -->
+<!-- ============================================================= -->
+
+<!ENTITY % audienceAtt-d-dec     PUBLIC 
+"-//OASIS//ENTITIES DITA Audience Attribute Domain//EN" 
+"audienceAttDomain.mod"                                               >
+%audienceAtt-d-dec;
+
+<!ENTITY % platformAtt-d-dec     PUBLIC 
+"-//OASIS//ENTITIES DITA Platform Attribute Domain//EN" 
+"platformAttDomain.mod"                                               >
+%platformAtt-d-dec;
+
+<!ENTITY % productAtt-d-dec     PUBLIC 
+"-//OASIS//ENTITIES DITA Product Attribute Domain//EN" 
+"productAttDomain.mod"                                               >
+%productAtt-d-dec;
+
+<!ENTITY % otherpropsAtt-d-dec     PUBLIC 
+"-//OASIS//ENTITIES DITA Otherprops Attribute Domain//EN" 
+"otherpropsAttDomain.mod"                                               >
+%otherpropsAtt-d-dec;
+
+<!-- ============================================================= -->
+<!--                    DOMAIN EXTENSIONS                          -->
+<!-- ============================================================= -->
 <!--                    One for each extended base element, with
                         the name of the domain(s) in which the
                         extension was declared                     -->
 <!ENTITY % topicref     "topicref | (%mapgroup-d-topicref;)"         >
+<!ENTITY % index-base   "index-base | %indexing-d-index-base;"       >
 
+<!ENTITY % props-attribute-extensions 
+                        "%audienceAtt-d-attribute;
+                         %platformAtt-d-attribute;
+                         %productAtt-d-attribute;
+                         %otherpropsAtt-d-attribute;"                >
 
 <!-- ============================================================= -->
 <!--                    DOMAINS ATTRIBUTE OVERRIDE                 -->
@@ -59,8 +99,9 @@ PUBLIC "-//OASIS//DTD DITA Map//EN"
                         puts @domains first in order               -->
 
 <!ENTITY included-domains 
-                        "&mapgroup-d-att;"                           >
-
+                        "&mapgroup-d-att; &indexing-d-att;
+                         &audienceAtt-d-att; &platformAtt-d-att;
+                         &productAtt-d-att; &otherpropsAtt-d-att;"   >
 
 <!-- ============================================================= -->
 <!--                    TOPIC ELEMENT INTEGRATION                  -->
@@ -86,6 +127,11 @@ PUBLIC "-//OASIS//DTD DITA Map//EN"
 "-//OASIS//ELEMENTS DITA Map Group Domain//EN" 
 "mapGroup.mod"                                                       >
 %mapgroup-d-def;
+
+<!ENTITY % indexing-d-def     PUBLIC 
+"-//OASIS//ELEMENTS DITA Indexing Domain//EN" 
+"indexingDomain.mod">
+%indexing-d-def;
 
 
 <!-- ================== End DITA Map DTD  ======================== -->

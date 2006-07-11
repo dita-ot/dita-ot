@@ -32,6 +32,9 @@ PUBLIC "-//OASIS//ELEMENTS DITA Utilities Domain//EN"
 <!--  UPDATES:                                                     -->
 <!--    2005.11.15 RDA: Updated these comments to match template   -->
 <!--    2005.11.15 RDA: Corrected the "Delivered as" system ID     -->
+<!--    2006.06.07 RDA: Make universal attributes universal        -->
+<!--                      (DITA 1.1 proposal #12)                  -->
+<!--    2006.06.14 RDA: Move univ-atts-translate-no into topic.mod -->
 <!-- ============================================================= -->
 
 
@@ -52,22 +55,13 @@ PUBLIC "-//OASIS//ELEMENTS DITA Utilities Domain//EN"
 
 <!--                    Provide an alternative univ-atts that sets 
                         translate to default 'no'                  -->
-<!ENTITY % univ-atts-translate-no
+<!-- Now uses the definition from topic.mod                        -->
+<!--<!ENTITY % univ-atts-translate-no
             '%id-atts;
-             platform CDATA #IMPLIED
-             product CDATA #IMPLIED
-             audience CDATA #IMPLIED
-             otherprops CDATA #IMPLIED
-             importance (obsolete | deprecated | 
-                         optional | default | low | 
-                         normal | high | 
-                         recommended | required | 
-                         urgent)                         #IMPLIED
-             rev        CDATA                            #IMPLIED
-             status     (new | changed | deleted |  
-                         unchanged)                      #IMPLIED
+             %select-atts;
              translate  (yes | no)                       "no"
-             xml:lang   NMTOKEN                          #IMPLIED'   >
+             xml:lang   NMTOKEN                          #IMPLIED
+             dir       (ltr | rtl | lro | rlo)           #IMPLIED'   >-->
 
 
 <!-- ============================================================= -->

@@ -31,6 +31,8 @@ PUBLIC "-//OASIS//ELEMENTS DITA Map Group Domain//EN"
 <!--                                                               -->
 <!--  UPDATES:                                                     -->
 <!--    2005.11.15 RDA: Corrected the "Delivered as" system ID     -->
+<!--    2006.06.07 RDA: Make universal attributes universal        -->
+<!--                      (DITA 1.1 proposal #12)                  -->
 <!-- ============================================================= -->
 
 
@@ -47,25 +49,27 @@ PUBLIC "-//OASIS//ELEMENTS DITA Map Group Domain//EN"
 <!-- ============================================================= -->
 
 
-<!--                    LONG NAME: Topic Head                     -->
+<!--                    LONG NAME: Topic Head                      -->
 <!ELEMENT topichead     ((%topicmeta;)?, 
-                          (%topicref; | %navref; | %anchor;)* )      >
+                          (%topicref; | %navref; | %anchor; | 
+                           %data.elements.incl; | %unknown;)* )      >
 <!ATTLIST topichead
-             navtitle   CDATA                             #REQUIRED
-             id         ID                                #IMPLIED
-             conref     CDATA                             #IMPLIED
+             navtitle   CDATA                            #REQUIRED
+             outputclass 
+                        CDATA                            #IMPLIED
              %topicref-atts;
-             %select-atts;                                           >
+             %univ-atts;                                             >
 
 
 <!--                    LONG NAME: Topic Group                     -->
 <!ELEMENT topicgroup    ((%topicmeta;)?, 
-                         (%topicref; | %navref; | %anchor;)* )       >
+                         (%topicref; | %navref; | %anchor; | 
+                          %data.elements.incl; | %unknown;)* )       >
 <!ATTLIST topicgroup
-             id         ID                                #IMPLIED
-             conref     CDATA                             #IMPLIED
+             outputclass 
+                        CDATA                            #IMPLIED
              %topicref-atts;
-             %select-atts;                                           >
+             %univ-atts;                                             >
 
 
 <!-- ============================================================= -->

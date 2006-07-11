@@ -90,7 +90,8 @@ PUBLIC "-//OASIS//ELEMENTS DITA User Interface Domain//EN"
 
 
 <!--                    LONG NAME: Text Screen Capture             -->
-<!ELEMENT screen        (#PCDATA | %basic.ph.notm; | %txt.incl;)*    >
+<!ELEMENT screen        (#PCDATA | %basic.ph.notm; | %txt.incl; |
+                         %data.elements.incl; | %unknown;)*          >
 <!ATTLIST screen          
              %display-atts;
              spectitle  CDATA                            #IMPLIED

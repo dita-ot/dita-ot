@@ -53,7 +53,8 @@ PUBLIC "-//OASIS//ELEMENTS DITA Highlight Domain//EN"
 
 
 <!--                    LONG NAME: Bold                            -->
-<!ELEMENT b             (#PCDATA | %basic.ph;)*                      >
+<!ELEMENT b             (#PCDATA | %basic.ph; | %data.elements.incl; |
+                         %unknown;)*                                 >
 <!ATTLIST b              
              %univ-atts;                                  
              outputclass 
@@ -61,7 +62,8 @@ PUBLIC "-//OASIS//ELEMENTS DITA Highlight Domain//EN"
 
 
 <!--                    LONG NAME: Underlined                      -->
-<!ELEMENT u             (#PCDATA | %basic.ph;)*                      >
+<!ELEMENT u             (#PCDATA | %basic.ph; | %data.elements.incl; |
+                         %unknown;)*                                 >
 <!ATTLIST u              
              %univ-atts;                                  
              outputclass 
@@ -69,7 +71,8 @@ PUBLIC "-//OASIS//ELEMENTS DITA Highlight Domain//EN"
 
 
 <!--                    LONG NAME: Italic                          -->
-<!ELEMENT i             (#PCDATA | %basic.ph;)*                      >
+<!ELEMENT i             (#PCDATA | %basic.ph; | %data.elements.incl; |
+                         %unknown;)*                                 >
 <!ATTLIST i             
              %univ-atts;                                  
              outputclass 
@@ -77,7 +80,8 @@ PUBLIC "-//OASIS//ELEMENTS DITA Highlight Domain//EN"
 
 
 <!--                    LONG NAME: Teletype (monospaced)           -->
-<!ELEMENT tt            (#PCDATA | %basic.ph;)*                      >
+<!ELEMENT tt            (#PCDATA | %basic.ph; | %data.elements.incl; |
+                         %unknown;)*                                 >
 <!ATTLIST tt            
              %univ-atts;                                  
              outputclass 
@@ -85,7 +89,8 @@ PUBLIC "-//OASIS//ELEMENTS DITA Highlight Domain//EN"
 
 
 <!--                    LONG NAME: Superscript                     -->
-<!ELEMENT sup           (#PCDATA | %basic.ph;)*                      >
+<!ELEMENT sup           (#PCDATA | %basic.ph; | %data.elements.incl; |
+                         %unknown;)*                                 >
 <!ATTLIST sup          
              %univ-atts;                                  
              outputclass 
@@ -93,7 +98,8 @@ PUBLIC "-//OASIS//ELEMENTS DITA Highlight Domain//EN"
 
 
 <!--                    LONG NAME: Subscript                       -->
-<!ELEMENT sub           (#PCDATA | %basic.ph;)*                      >
+<!ELEMENT sub           (#PCDATA | %basic.ph; | %data.elements.incl; |
+                         %unknown;)*                                 >
 <!ATTLIST sub           
              %univ-atts;                                  
              outputclass 

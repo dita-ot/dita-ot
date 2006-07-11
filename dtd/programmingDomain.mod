@@ -34,6 +34,8 @@ PUBLIC "-//OASIS//ELEMENTS DITA Programming Domain//EN"
 <!--    2005.11.15 RDA: Corrected Long Names for syntax groups,    -->
 <!--                    codeph, and kwd                            -->
 <!--    2005.11.15 RDA: Corrected the "Delivered as" system ID     -->
+<!--    2006.06.07 RDA: Make universal attributes universal        -->
+<!--                      (DITA 1.1 proposal #12)                  -->
 <!-- ============================================================= -->
 
 
@@ -43,7 +45,6 @@ PUBLIC "-//OASIS//ELEMENTS DITA Programming Domain//EN"
 
 
 <!ENTITY % apiname      "apiname"                                    >
-<!ENTITY % audience     "audience"                                   >
 <!ENTITY % codeblock    "codeblock"                                  >
 <!ENTITY % codeph       "codeph"                                     >
 <!ENTITY % delim        "delim"                                      >
@@ -84,20 +85,17 @@ PUBLIC "-//OASIS//ELEMENTS DITA Programming Domain//EN"
                         allows importance to be redefined locally  -->
 <!ENTITY % univ-atts-no-importance
             '%id-atts;
-             platform   CDATA                            #IMPLIED
-             product    CDATA                            #IMPLIED
-             audience   CDATA                            #IMPLIED
-             otherprops 
-                        CDATA                            #IMPLIED
+             props      CDATA                            #IMPLIED
+             %props-attribute-extensions;
              rev        CDATA                            #IMPLIED
              status     (new | changed | deleted |
                          unchanged)                      #IMPLIED
-             translate  (yes|no)                         #IMPLIED
-             xml:lang   NMTOKEN                          #IMPLIED'   > 
+             %localization-atts;                                 '   > 
 
 
 <!--                    LONG NAME: Code Phrase                     -->
-<!ELEMENT codeph        (#PCDATA | %basic.ph.notm;)*                 >
+<!ELEMENT codeph        (#PCDATA | %basic.ph.notm; | 
+                         %data.elements.incl; | %unknown;)*          >
 <!ATTLIST codeph      
              %univ-atts;                                  
              outputclass 
@@ -105,7 +103,8 @@ PUBLIC "-//OASIS//ELEMENTS DITA Programming Domain//EN"
 
 
 <!--                    LONG NAME: Code Block                      -->
-<!ELEMENT codeblock     (#PCDATA | %basic.ph.notm; | %txt.incl;)*    >
+<!ELEMENT codeblock     (#PCDATA | %basic.ph.notm; | %txt.incl; |
+                         %data.elements.incl; | %unknown;)*          >
 <!ATTLIST codeblock       
              %display-atts;
              spectitle  CDATA                            #IMPLIED
