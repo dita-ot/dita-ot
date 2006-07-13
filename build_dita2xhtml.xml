@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- (c) Copyright IBM Corp. 2006 All Rights Reserved. -->
 <project name="dita2xhtml" default="dita2xhtml">
-
+    <property name="transtype" value="xhtml"/>
+    
     <import file="build_init.xml" />
     <import file="build_preprocess.xml" />
     <import file="build_general.xml" />

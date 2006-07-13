@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- (c) Copyright IBM Corp. 2006 All Rights Reserved. -->
 <project name="dita2htmlhelp" default="dita2htmlhelp">
-
+    <property name="transtype" value="htmlhelp"/>
+    
     <import file="build_init.xml" />
     <import file="build_preprocess.xml" />
     <import file="build_general.xml" />
