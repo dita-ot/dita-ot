@@ -72,8 +72,10 @@ public class IndexTermCollection {
 			if (indexTerm.equals(term)) {
 				return;
 			}
-
-			if (indexTerm.getTermName().equals(term.getTermName())) {
+			
+			// Add targets when same term name and same term key
+			if (indexTerm.getTermName().equals(term.getTermName())
+					&& indexTerm.getTermKey().equals(term.getTermKey())) {
 				indexTerm.addTargets(term.getTargetList());
 				indexTerm.addSubTerms(term.getSubTerms());
 				break;

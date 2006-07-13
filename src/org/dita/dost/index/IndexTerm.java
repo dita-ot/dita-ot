@@ -117,8 +117,9 @@ public class IndexTerm implements Comparable {
                 return;
             }
 
-            // Add targets when same subTerms and same term name
-            if (subTerm.getTermName().equals(term.getTermName())) {
+            // Add targets when same term name and same term key
+            if (subTerm.getTermName().equals(term.getTermName())
+					&& subTerm.getTermKey().equals(term.getTermKey())) {
                 subTerm.addTargets(term.getTargetList());
                 subTerm.addSubTerms(term.getSubTerms());
                 return;
@@ -163,7 +164,8 @@ public class IndexTerm implements Comparable {
             return false;
         }
 
-        return termName.equals(it.termName)
+        return termName.equals(it.getTermName())
+				&& termKey.equals(it.getTermKey())
 				&& targetList.equals(it.getTargetList())
 				&& subTerms.equals(it.getSubTerms());
     }
@@ -175,6 +177,7 @@ public class IndexTerm implements Comparable {
         int result = Constants.INT_17;
 
         result = Constants.INT_37 * result + termName.hashCode();
+        result = Constants.INT_37 * result + termKey.hashCode();
         result = Constants.INT_37 * result + targetList.hashCode();
         result = Constants.INT_37 * result + subTerms.hashCode();
 
