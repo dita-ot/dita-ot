@@ -2,8 +2,8 @@
 <!--                    HEADER                                     -->
 <!-- ============================================================= -->
 <!--  MODULE:    DITA Task                                         -->
-<!--  VERSION:   1.0.1                                             -->
-<!--  DATE:      November 2005                                     -->
+<!--  VERSION:   1.1                                               -->
+<!--  DATE:      June 2006                                         -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -25,7 +25,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Task//EN"
 <!-- ORIGINAL CREATION DATE:                                       -->
 <!--             March 2001                                        -->
 <!--                                                               -->
-<!--             (C) Copyright OASIS Open 2005.                    -->
+<!--             (C) Copyright OASIS Open 2005, 2006.              -->
 <!--             (C) Copyright IBM Corporation 2001, 2004.         -->
 <!--             All Rights Reserved.                              -->
 <!--                                                               -->
@@ -108,8 +108,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Task//EN"
                         locally                                    -->
 <!ENTITY % univ-atts-no-importance-task
             '%id-atts;
-             props      CDATA                            #IMPLIED
-             %props-attribute-extensions;
+             %filter-atts;
              rev        CDATA                            #IMPLIED
              status     (new | changed | deleted |   
                          unchanged)                      #IMPLIED
@@ -149,7 +148,8 @@ PUBLIC "-//OASIS//ELEMENTS DITA Task//EN"
 
 
 <!--                    LONG NAME: Task Body                       -->
-<!ELEMENT taskbody      ((%data.elements.incl; | %unknown;)*,
+<!ELEMENT taskbody      ((%data.elements.incl; | 
+                          %foreign.unknown.incl;)*,
                          (%prereq;)?, (%context;)?, 
                          (%steps; | %steps-unordered;)?, 
                          (%result;)?, (%example;)?, (%postreq;)?)    >

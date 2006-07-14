@@ -2,8 +2,8 @@
 <!--                    HEADER                                     -->
 <!-- ============================================================= -->
 <!--  MODULE:    DITA Map                                          -->
-<!--  VERSION:   1.0.1                                             -->
-<!--  DATE:      November 2005                                     -->
+<!--  VERSION:   1.1                                               -->
+<!--  DATE:      June 2006                                         -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -25,7 +25,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Map//EN"
 <!-- ORIGINAL CREATION DATE:                                       -->
 <!--             March 2001                                        -->
 <!--                                                               -->
-<!--             (C) Copyright OASIS Open 2005.                    -->
+<!--             (C) Copyright OASIS Open 2005, 2006.              -->
 <!--             (C) Copyright IBM Corporation 2001, 2004.         -->
 <!--             All Rights Reserved.                              -->
 <!--                                                               -->
@@ -93,7 +93,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Map//EN"
 
 <!--                    DATE FORMAT                                -->
 <!-- Copied into metaDecl.mod -->
-<!--<!ENTITY % date-format  'CDATA'                                      >-->
+<!--<!ENTITY % date-format  'CDATA'                               >-->
 
 
 <!-- ============================================================= -->
@@ -127,7 +127,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Map//EN"
              format     CDATA                             #IMPLIED
              linking    (targetonly | sourceonly | 
                          normal | none)                   #IMPLIED
-             toc        (yes | no)                            "no"
+             toc        (yes | no)                        "no"
              print      (yes | no)                        #IMPLIED
              search     (yes | no)                        #IMPLIED
              chunk      CDATA                             #IMPLIED'  >
@@ -144,10 +144,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Map//EN"
 "-//OASIS//ELEMENTS DITA Common Elements//EN" "commonElements.mod"   >
 %commonElements;
 
-<!--<!ENTITY % words.cnt            "#PCDATA | %keyword; | %term; | %data.elements.incl; | %unknown;">-->
-
-
-<!--                      MetaData Elements, plus indexterm        -->
+<!--                      MetaData Elements                        -->
 <!ENTITY % metaXML      PUBLIC 
 "-//OASIS//ELEMENTS DITA Metadata//EN" "metaDecl.mod"                >
 %metaXML;
@@ -169,7 +166,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Map//EN"
 <!--                    LONG NAME: Map                             -->
 <!ELEMENT  map          ((%title;)?, (%topicmeta;)?, 
                          (%navref;|%anchor;|%topicref;|%reltable;|
-                          %data.elements.incl;)* )          >
+                          %data.elements.incl;)* )                   >
 <!ATTLIST  map 
              title      CDATA                             #IMPLIED
              id         ID                                #IMPLIED
@@ -195,7 +192,8 @@ PUBLIC "-//OASIS//ELEMENTS DITA Map//EN"
 
 <!--                    LONG NAME: Topic Reference                 -->
 <!ELEMENT  topicref     ((%topicmeta;)?, 
-                         (%topicref; | %navref; | %anchor; | %data.elements.incl;)* )       >
+                         (%topicref; | %navref; | %anchor; |
+                          %data.elements.incl;)* )                   >
 <!ATTLIST  topicref
              navtitle   CDATA                             #IMPLIED
              href       CDATA                             #IMPLIED
@@ -271,7 +269,8 @@ PUBLIC "-//OASIS//ELEMENTS DITA Map//EN"
                          (%audience;)*, (%category;)*, 
                          (%keywords;)*, (%prodinfo;)*, (%othermeta;)*, 
                          (%resourceid;)*, 
-                         (%data.elements.incl; | %unknown;)*)        >
+                         (%data.elements.incl; | 
+                          %foreign.unknown.incl;)*)                  >
 <!ATTLIST  topicmeta
              lockmeta   (yes | no)                        #IMPLIED
              %univ-atts;                                             >
@@ -314,6 +313,9 @@ PUBLIC "-//OASIS//ELEMENTS DITA Map//EN"
 <!ATTLIST topicmeta   %global-atts;  class CDATA "- map/topicmeta "  >
 <!ATTLIST linktext    %global-atts;  class CDATA "- map/linktext "   >
 <!ATTLIST searchtitle %global-atts;  class CDATA "- map/searchtitle ">
+
+<!-- Shortdesc in topic uses topic/shortdesc so this one must be 
+     included, even though the element is common. -->
 <!ATTLIST shortdesc   %global-atts;  class CDATA "- map/shortdesc "  >
 
 

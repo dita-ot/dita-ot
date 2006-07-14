@@ -2,8 +2,8 @@
 <!--                    HEADER                                     -->
 <!-- ============================================================= -->
 <!--  MODULE:    DITA DITA Topic                                   -->
-<!--  VERSION:   1.0.1                                             -->
-<!--  DATE:      November 2005                                     -->
+<!--  VERSION:   1.1                                               -->
+<!--  DATE:      June 2006                                         -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -25,7 +25,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Topic//EN"
 <!-- ORIGINAL CREATION DATE:                                       -->
 <!--             March 2001                                        -->
 <!--                                                               -->
-<!--             (C) Copyright OASIS Open 2005.                    -->
+<!--             (C) Copyright OASIS Open 2005, 2006.              -->
 <!--             (C) Copyright IBM Corporation 2001, 2004.         -->
 <!--             All Rights Reserved.                              -->
 <!--                                                               -->
@@ -44,6 +44,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Topic//EN"
 <!--                      (DITA 1.1 proposal #12)                  -->
 <!--    2006.06.14 RDA: Add dir attribute to localization-atts     -->
 <!--    2006.06.20 RDA: defn.cnt now explicitly sets its content   -->
+<!--    2006.07.06 RDA: Moved class attributes in from topicAttr   -->
 <!-- ============================================================= -->
 
 
@@ -70,6 +71,11 @@ PUBLIC "-//OASIS//ELEMENTS DITA Topic//EN"
 <!--                   ELEMENT NAME ENTITIES                       -->
 <!-- ============================================================= -->
 
+<!--                    Definitions of declared elements           -->
+<!ENTITY % topicDefns   PUBLIC 
+                       "-//OASIS//ENTITIES DITA Topic Definitions//EN" 
+                       "topicDefn.ent"                              >
+%topicDefns;
 
 <!--                      Content elements common to map and topic -->
 <!ENTITY % commonElements      PUBLIC 
@@ -81,26 +87,6 @@ PUBLIC "-//OASIS//ELEMENTS DITA Topic//EN"
 "-//OASIS//ELEMENTS DITA Metadata//EN" 
 "metaDecl.mod"                                                       >
 %metaXML;
-<!ENTITY % topic        "topic"                                      >
-<!ENTITY % abstract     "abstract"                                   >
-<!ENTITY % body         "body"                                       >
-<!ENTITY % example      "example"                                    >
-<!ENTITY % link         "link"                                       >
-<!ENTITY % linkinfo     "linkinfo"                                   >
-<!ENTITY % linklist     "linklist"                                   >
-<!ENTITY % linkpool     "linkpool"                                   >
-<!ENTITY % linktext     "linktext"                                   >
-<!ENTITY % metadata     "metadata"                                   >
-<!ENTITY % navtitle     "navtitle"                                   >
-<!ENTITY % no-topic-nesting     
-                        "no-topic-nesting"                           >
-<!ENTITY % prolog       "prolog"                                     >
-<!ENTITY % related-links     
-                        "related-links"                              >
-<!ENTITY % searchtitle  "searchtitle"                                >
-<!ENTITY % section      "section"                                    >
-<!ENTITY % shortdesc    "shortdesc"                                  >
-<!ENTITY % titlealts    "titlealts"                                  >
 
 
 <!-- ============================================================= -->
@@ -113,9 +99,9 @@ PUBLIC "-//OASIS//ELEMENTS DITA Topic//EN"
 <!-- ============================================================= -->
 
 
-<!ENTITY % body.cnt             "%basic.block; | %required-cleanup; | %data.elements.incl; | %unknown;">
-<!ENTITY % section.cnt          "#PCDATA | %basic.ph; | %basic.block; | %title; |  %txt.incl; | %data.elements.incl; | %unknown;">
-<!ENTITY % section.notitle.cnt  "#PCDATA | %basic.ph; | %basic.block; |             %txt.incl; | %data.elements.incl; | %unknown;">
+<!ENTITY % body.cnt             "%basic.block; | %required-cleanup; | %data.elements.incl; | %foreign.unknown.incl;">
+<!ENTITY % section.cnt          "#PCDATA | %basic.ph; | %basic.block; | %title; |  %txt.incl; | %data.elements.incl; | %foreign.unknown.incl;">
+<!ENTITY % section.notitle.cnt  "#PCDATA | %basic.ph; | %basic.block; |             %txt.incl; | %data.elements.incl; | %foreign.unknown.incl;">
 
 
 <!-- ============================================================= -->
@@ -147,7 +133,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Topic//EN"
 <!-- ============================================================= -->
 
 <!-- Copied into metaDecl.mod -->
-<!--<!ENTITY % date-format 'CDATA'                                       >-->
+<!--<!ENTITY % date-format 'CDATA'                                >-->
 
 <!ENTITY % rel-atts      
             'type       CDATA                              #IMPLIED
@@ -278,7 +264,8 @@ PUBLIC "-//OASIS//ELEMENTS DITA Topic//EN"
                          (%copyright;)*, (%critdates;)?,
                          (%permissions;)?, (%metadata;)*, 
                          (%resourceid;)*,
-                         (%data.elements.incl; | %unknown;)*)        >
+                         (%data.elements.incl; | 
+                          %foreign.unknown.incl;)*)                  >
 <!ATTLIST prolog        
              %univ-atts;                                             >
 
@@ -286,7 +273,8 @@ PUBLIC "-//OASIS//ELEMENTS DITA Topic//EN"
 <!--                    LONG NAME: Metadata                        -->
 <!ELEMENT metadata       ((%audience;)*, (%category;)*, (%keywords;)*,
                           (%prodinfo;)*, (%othermeta;)*, 
-                          (%data.elements.incl; | %unknown;)*)       >
+                          (%data.elements.incl; |
+                           %foreign.unknown.incl;)*)                 >
 <!ATTLIST metadata
               %univ-atts;        
               mapkeyref CDATA                             #IMPLIED   >
@@ -396,11 +384,33 @@ PUBLIC "-//OASIS//ELEMENTS DITA Topic//EN"
 %tableXML;-->
 
 
-<!--                       Specialization of Declared Elements     -->
-<!ENTITY % topicClasses    PUBLIC 
-"-//OASIS//ENTITIES DITA Topic Class//EN" 
-"topicAttr.mod"                                                    >
-  %topicClasses;
+<!-- ============================================================= -->
+<!--                    SPECIALIZATION ATTRIBUTE DECLARATIONS      -->
+<!-- ============================================================= -->
+            
+<!ATTLIST abstract  %global-atts;  class CDATA "- topic/abstract "   >
+<!ATTLIST body      %global-atts;  class CDATA "- topic/body "       >
+<!ATTLIST example   %global-atts;  class CDATA "- topic/example "    >
+<!ATTLIST link      %global-atts;  class CDATA "- topic/link "       >
+<!ATTLIST linkinfo  %global-atts;  class CDATA "- topic/linkinfo "   >
+<!ATTLIST linklist  %global-atts;  class CDATA "- topic/linklist "   >
+<!ATTLIST linkpool  %global-atts;  class CDATA "- topic/linkpool "   >
+<!ATTLIST linktext  %global-atts;  class CDATA "- topic/linktext "   >
+<!ATTLIST metadata  %global-atts;  class CDATA "- topic/metadata "   >
+<!ATTLIST navtitle  %global-atts;  class CDATA "- topic/navtitle "   >
+<!ATTLIST no-topic-nesting 
+                    %global-atts;  class CDATA "- topic/no-topic-nesting ">
+<!ATTLIST prolog    %global-atts;  class CDATA "- topic/prolog "     >
+<!ATTLIST related-links 
+                    %global-atts;  class CDATA "- topic/related-links ">
+<!ATTLIST searchtitle 
+                    %global-atts;  class CDATA "- topic/searchtitle ">
+<!ATTLIST section   %global-atts;  class CDATA "- topic/section "    >
+<!ATTLIST titlealts %global-atts;  class CDATA "- topic/titlealts "  >
+<!ATTLIST topic     %global-atts;  class CDATA "- topic/topic "      >
 
+<!-- Shortdesc in map uses map/shortdesc so this one must be 
+     included, even though the element is common. -->
+<!ATTLIST shortdesc   %global-atts;  class CDATA "- topic/shortdesc ">
 
 <!-- ================== End DITA Topic  ========================== -->

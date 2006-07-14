@@ -1,9 +1,9 @@
 <!-- ============================================================= -->
 <!--                    HEADER                                     -->
 <!-- ============================================================= -->
-<!--  MODULE:    DITA XNAL Domain Entities                    -->
-<!--  VERSION:   1.O                                               -->
-<!--  DATE:      February 2005                                     -->
+<!--  MODULE:    DITA XNAL Domain Entities                         -->
+<!--  VERSION:   1.1                                               -->
+<!--  DATE:      June 2006                                         -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -13,20 +13,19 @@
 <!--                                                               -->
 <!--  Refer to this file by the following public identfier or an 
       appropriate system identifier 
-PUBLIC "-//IBM//ENTITIES DITA XNAL Domain//EN"
+PUBLIC "-//OASIS//ENTITIES DITA XNAL Domain//EN"
       Delivered as file "xnalDomain.ent"                           -->
 
 <!-- ============================================================= -->
 <!-- SYSTEM:     Darwin Information Typing Architecture (DITA)     -->
 <!--                                                               -->
 <!-- PURPOSE:    Declaring the substitution context and domain     -->
-<!--             entity declarations                               -->
+<!--             entity declarations for the XNAL domain           -->
 <!--                                                               -->
 <!-- ORIGINAL CREATION DATE:                                       -->
-<!--             March 2001                                        -->
+<!--             June 2006                                         -->
 <!--                                                               -->
-<!--             (C) Copyright OASIS Open 2005.                    -->
-<!--             (C) Copyright IBM Corporation 2001, 2004.         -->
+<!--             (C) Copyright OASIS Open 2006.                    -->
 <!--             All Rights Reserved.                              -->
 <!-- ============================================================= -->
 
@@ -34,15 +33,14 @@ PUBLIC "-//IBM//ENTITIES DITA XNAL Domain//EN"
 <!--                    ELEMENT EXTENSION ENTITY DECLARATIONS      -->
 <!-- ============================================================= -->
 
-<!ENTITY % xnal-d-author
-                        "authorinformation"                     >
+<!ENTITY % xnal-d-author "authorinformation"                         >
 
 
 <!-- ============================================================= -->
 <!--                    DOMAIN ENTITY DECLARATION                  -->
 <!-- ============================================================= -->
 
-<!ENTITY xnal-d-att "(topic xnal-d)"                           >
+<!ENTITY xnal-d-att "(topic xnal-d)"                                 >
 
 
-<!-- ================== End Map Group Domain Entities ============ -->
+<!-- ================== End XNAL Domain Entities ================= -->

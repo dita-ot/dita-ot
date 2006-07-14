@@ -2,8 +2,8 @@
 <!--                    HEADER                                     -->
 <!-- ============================================================= -->
 <!--  MODULE:    XNAL Domain                                       -->
-<!--  VERSION:   1.O                                               -->
-<!--  DATE:      May 2006                                          -->
+<!--  VERSION:   1.1                                               -->
+<!--  DATE:      June 2006                                         -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -20,13 +20,12 @@ PUBLIC "-//OASIS//ELEMENTS DITA XNAL Domain//EN"
 <!-- SYSTEM:     Darwin Information Typing Architecture (DITA)     -->
 <!--                                                               -->
 <!-- PURPOSE:    Define elements and specialization atttributed    -->
-<!--             for Map Group Domain                              -->
+<!--             for the XNAL Domain                               -->
 <!--                                                               -->
 <!-- ORIGINAL CREATION DATE:                                       -->
-<!--             March 2001                                        -->
+<!--             June 2006                                         -->
 <!--                                                               -->
-<!--             (C) Copyright OASIS Open 2005.                    -->
-<!--             (C) Copyright IBM Corporation 2001, 2004.         -->
+<!--             (C) Copyright OASIS Open 2006.                    -->
 <!--             All Rights Reserved.                              -->
 <!-- ============================================================= -->
 
@@ -36,289 +35,258 @@ PUBLIC "-//OASIS//ELEMENTS DITA XNAL Domain//EN"
 <!-- ============================================================= -->
 
 
-<!ENTITY % authorinformation "authorinformation">
-<!ENTITY % namedetails       "namedetails">
-<!-- Is this one really needed as a container for organizationname? -->
-<!ENTITY % organizationnamedetails    "organizationnamedetails">
-<!ENTITY % resource        "resource">
-<!ENTITY % organizationname         "organizationname">
-<!ENTITY % personname          "personname">
-<!--<!ENTITY % preceedingtitle       "preceedingtitle">-->
-<!ENTITY % honorific       "honorific">
-<!ENTITY % firstname       "firstname">
-<!ENTITY % middlename      "middlename">
-<!ENTITY % lastname      "lastname">
-<!ENTITY % generationidentifier         "generationidentifier">
-<!ENTITY % otherinfo       "otherinfo">
-
-<!ENTITY % addressdetails         "addressdetails">
-<!--<!ENTITY % address         "address">-->
-<!ENTITY % locality            "locality">
-<!ENTITY % localityname            "localityname">
-<!ENTITY % administrativearea       "administrativearea">
-<!ENTITY % thoroughfare      "thoroughfare">
-<!ENTITY % postalcode      "postalcode">
-<!ENTITY % country         "country">
-
-<!ENTITY % personinfo      "personinfo">
-<!ENTITY % organizationinfo      "organizationinfo">
-<!ENTITY % contactnumbers  "contactnumbers">
-<!ENTITY % contactnumber   "contactnumber">
-<!--<!ENTITY % officephone     "officephone">
-<!ENTITY % fax             "fax">
-<!ENTITY % cellular        "cellular">
-<!ENTITY % urlphone        "urlphone">-->
-<!ENTITY % emailaddresses  "emailaddresses">
-<!ENTITY % emailaddress  "emailaddress">
-<!ENTITY % urls  "urls">
-<!ENTITY % url  "url">
+<!ENTITY % authorinformation "authorinformation"                     >
+<!ENTITY % addressdetails  "addressdetails"                          >
+<!ENTITY % administrativearea "administrativearea"                   >
+<!ENTITY % contactnumber   "contactnumber"                           >
+<!ENTITY % contactnumbers  "contactnumbers"                          >
+<!ENTITY % country         "country"                                 >
+<!ENTITY % emailaddress    "emailaddress"                            >
+<!ENTITY % emailaddresses  "emailaddresses"                          >
+<!ENTITY % firstname       "firstname"                               >
+<!ENTITY % generationidentifier "generationidentifier"               >
+<!ENTITY % honorific       "honorific"                               >
+<!ENTITY % lastname        "lastname"                                >
+<!ENTITY % locality        "locality"                                >
+<!ENTITY % localityname    "localityname"                            >
+<!ENTITY % middlename      "middlename"                              >
+<!ENTITY % namedetails     "namedetails"                             >
+<!ENTITY % organizationinfo "organizationinfo"                       >
+<!ENTITY % organizationname "organizationname"                       >
+<!ENTITY % organizationnamedetails "organizationnamedetails"         >
+<!ENTITY % otherinfo       "otherinfo"                               >
+<!ENTITY % personinfo      "personinfo"                              >
+<!ENTITY % personname      "personname"                              >
+<!ENTITY % postalcode      "postalcode"                              >
+<!ENTITY % resource        "resource"                                >
+<!ENTITY % thoroughfare    "thoroughfare"                            >
+<!ENTITY % url             "url"                                     >
+<!ENTITY % urls            "urls"                                    >
 
 <!-- ============================================================= -->
 <!--                    ELEMENT DECLARATIONS                       -->
 <!-- ============================================================= -->
                       
-<!-- many items based on data element: copied here for reference -->
-<!-- <!ELEMENT data      (#PCDATA|%keyword;|%term;|%image;|%object;|%ph;|%data;)*> -->
-
-<!-- Based on Chris's xCIL/xNAL V3 spreadsheet: authorinformation will contain
-     only personinfo and organizationinfo. The names and addresses will be grouped
-     within those containers, to keep an a name/address with the person or organization. -->
-<!ELEMENT authorinformation      ((%personinfo; | %organizationinfo;)*)>
+<!--                    LONG NAME: Author Information              -->
+<!ELEMENT authorinformation
+                        ((%personinfo; | %organizationinfo;)*)       >
 <!ATTLIST authorinformation     
              %univ-atts;
-             href       CDATA                             #IMPLIED
-             keyref     CDATA                             #IMPLIED
-             type       (creator | contributor)           #IMPLIED   >
+             href       CDATA                            #IMPLIED
+             keyref     CDATA                            #IMPLIED
+             type       (creator | contributor)          #IMPLIED    >
 
-<!ELEMENT namedetails      ((%personname; | %organizationnamedetails;)*)>
-<!ATTLIST namedetails    %data-element-atts;>
+<!--                    LONG NAME: Name Details                    -->
+<!ELEMENT namedetails   ((%personname; | %organizationnamedetails;)*)>
+<!ATTLIST namedetails
+             %data-element-atts;                                     >
 
+<!--                    LONG NAME: Organization Details            -->
 <!ELEMENT organizationnamedetails      
-                 ((%organizationname;)?,
-                             (%resource;)*,
-                             (%otherinfo;)*)      >  
+                        ((%organizationname;)?, (%resource;)*,
+                         (%otherinfo;)*)                             >
 <!ATTLIST organizationnamedetails              
-             keyref     CDATA                           #IMPLIED
+             keyref     CDATA                            #IMPLIED
              %univ-atts;
              outputclass 
                         CDATA                            #IMPLIED    >
 
-<!-- BKINFO USED xreftext.cnt -->
-<!-- Not needed if organizationnamedetails is removed; not sure if it is needed there -->
-<!ELEMENT resource        (%words.cnt;)*>
-<!ATTLIST resource        href          CDATA   #IMPLIED
-                          keyref        CDATA #IMPLIED
-                          type          CDATA   #IMPLIED
-                          %univ-atts;
-                          format        CDATA   #IMPLIED
-                          scope         (local|peer|external)   "external"
-                          outputclass   CDATA   #IMPLIED
->
+<!--                    LONG NAME: Resource                        -->
+<!ELEMENT resource      (%words.cnt;)*                               >
+<!ATTLIST resource
+             href       CDATA                            #IMPLIED
+             keyref     CDATA                            #IMPLIED
+             type       CDATA                            #IMPLIED
+             %univ-atts;
+             format     CDATA                            #IMPLIED
+             scope      (local|peer|external)            "external"
+             outputclass
+                        CDATA                            #IMPLIED    >
 
-<!ELEMENT organizationname         (%ph.cnt;)*>
-<!ATTLIST organizationname         keyref CDATA #IMPLIED
-                          %univ-atts;
-                          outputclass CDATA #IMPLIED
->
+<!--                    LONG NAME: Organization Name               -->
+<!ELEMENT organizationname
+                        (%ph.cnt;)*                                  >
+<!ATTLIST organizationname
+             keyref     CDATA                            #IMPLIED
+             %univ-atts;
+             outputclass
+                        CDATA                            #IMPLIED    >
 
-<!ELEMENT personname            ((%honorific;)?, (%firstname;)*, (%middlename;)*,
-                             (%lastname;)*, (%generationidentifier;)?, (%resource;)?, 
-                             (%otherinfo;)*)      >  
-<!ATTLIST personname %data-element-atts;>
+<!--                    LONG NAME: Person Name                     -->
+<!ELEMENT personname    ((%honorific;)?, 
+                         (%firstname;)*,(%middlename;)*,(%lastname;)*,
+                         (%generationidentifier;)?,
+                         (%resource;)?, (%otherinfo;)*)              >
+<!ATTLIST personname
+             %data-element-atts;                                     >
 
-<!--<!ELEMENT preceedingtitle       (#PCDATA)*>
-<!ATTLIST preceedingtitle %data-element-atts;>-->
+<!--                    LONG NAME: Honorific                       -->
+<!ELEMENT honorific     (#PCDATA)*                                   >
+<!ATTLIST honorific
+             %data-element-atts;                                     >
 
-<!ELEMENT honorific       (#PCDATA)*>
-<!ATTLIST honorific %data-element-atts;>
+<!--                    LONG NAME: First Name                      -->
+<!ELEMENT firstname     (#PCDATA)*                                   >
+<!ATTLIST firstname
+             %data-element-atts;                                     >
 
-<!ELEMENT firstname       (#PCDATA)*>
-<!ATTLIST firstname %data-element-atts;>
+<!--                    LONG NAME: Middle Name                     -->
+<!ELEMENT middlename    (#PCDATA)*                                   >
+<!ATTLIST middlename
+             %data-element-atts;                                     >
 
-<!ELEMENT middlename      (#PCDATA)*>
-<!ATTLIST middlename %data-element-atts;>
+<!--                    LONG NAME: Last Name                       -->
+<!ELEMENT lastname      (#PCDATA)*                                   >
+<!ATTLIST lastname
+             %data-element-atts;                                     >
 
-<!ELEMENT lastname        (#PCDATA)*>
-<!ATTLIST lastname %data-element-atts;>
+<!--                    LONG NAME: Generation Identifier           -->
+<!ELEMENT generationidentifier
+                        (#PCDATA)*                                   >
+<!ATTLIST generationidentifier
+             %data-element-atts;                                     >
 
-<!ELEMENT generationidentifier     (#PCDATA)*>
-<!ATTLIST generationidentifier %data-element-atts;>
+<!--                    LONG NAME: Other Information               -->
+<!ELEMENT otherinfo     (%words.cnt;)*>
+<!ATTLIST otherinfo
+             %data-element-atts;                                     >
 
-<!ELEMENT otherinfo       (%words.cnt;)*>
-<!ATTLIST otherinfo %data-element-atts;>
-
-<!ELEMENT addressdetails         (%words.cnt;|%locality;|%administrativearea;|%thoroughfare;|%country;)*>
+<!--                    LONG NAME: Address Details                 -->
+<!ELEMENT addressdetails
+                        (%words.cnt;|%locality;|%administrativearea;|
+                         %thoroughfare;|%country;)*                  >
 <!ATTLIST addressdetails              
-             keyref     CDATA                           #IMPLIED
+             keyref     CDATA                            #IMPLIED
              %univ-atts;
              outputclass 
                         CDATA                            #IMPLIED    >
 
-<!--<!ELEMENT address         (%words.cnt;)*>
-<!ATTLIST address              
-             keyref     CDATA                           #IMPLIED
+<!--                    LONG NAME: Locality                        -->
+<!ELEMENT locality      (%words.cnt;|%localityname;|%postalcode;)*   >
+<!ATTLIST locality
+             keyref     CDATA                            #IMPLIED
+             %univ-atts;
+             outputclass
+                        CDATA                            #IMPLIED    >
+
+<!--                    LONG NAME: Locality Name                   -->
+<!ELEMENT localityname  (%words.cnt;)*                               >
+<!ATTLIST localityname
+             keyref     CDATA                            #IMPLIED
+             %univ-atts;
+             outputclass
+                        CDATA                            #IMPLIED    >
+
+<!--                    LONG NAME: Administrative Area             -->
+<!ELEMENT administrativearea
+                        (%words.cnt;)*                               >
+<!ATTLIST administrativearea
+             keyref     CDATA                            #IMPLIED
              %univ-atts;
              outputclass 
-                        CDATA                            #IMPLIED    >-->
+                        CDATA                            #IMPLIED    >
 
-<!ELEMENT locality            (%words.cnt;|%localityname;|%postalcode;)*>
-<!ATTLIST locality            keyref CDATA #IMPLIED
-                          %univ-atts;
-                          outputclass CDATA #IMPLIED
->
-<!ELEMENT localityname    (%words.cnt;)*>
-<!ATTLIST localityname    keyref CDATA #IMPLIED
-                          %univ-atts;
-                          outputclass CDATA #IMPLIED
->
-<!ELEMENT administrativearea       (%words.cnt;)*>
-<!ATTLIST administrativearea       keyref CDATA #IMPLIED
-                          %univ-atts;
-                          outputclass CDATA #IMPLIED
->
-<!ELEMENT thoroughfare       (%words.cnt;)*>
-<!ATTLIST thoroughfare       keyref CDATA #IMPLIED
-                          %univ-atts;
-                          outputclass CDATA #IMPLIED
->
-<!ELEMENT postalcode      (#PCDATA)*>
-<!ATTLIST postalcode      keyref CDATA #IMPLIED
-                          %univ-atts;
-                          outputclass CDATA #IMPLIED
->
-<!ELEMENT country         (#PCDATA)*>
-<!ATTLIST country         keyref CDATA #IMPLIED
-                          %univ-atts;
-                          outputclass CDATA #IMPLIED
->
+<!--                    LONG NAME: Thoroughfare                    -->
+<!ELEMENT thoroughfare  (%words.cnt;)*                               >
+<!ATTLIST thoroughfare
+             keyref     CDATA                            #IMPLIED
+             %univ-atts;
+             outputclass
+                        CDATA                            #IMPLIED    >
 
-<!ELEMENT personinfo      ((%namedetails;)?, (%addressdetails;)?, (%contactnumbers;)?, (%emailaddresses;)?)      >  
-<!ATTLIST personinfo              %data-element-atts;    >
+<!--                    LONG NAME: Postal Code                     -->
+<!ELEMENT postalcode    (#PCDATA)*                                   >
+<!ATTLIST postalcode
+             keyref     CDATA                            #IMPLIED
+             %univ-atts;
+             outputclass
+                        CDATA                            #IMPLIED    >
 
-<!ELEMENT organizationinfo  ((%namedetails;)?, (%addressdetails;)?, (%contactnumbers;)?, (%emailaddresses;)?, (%urls;)?)      >  
-<!ATTLIST organizationinfo              %data-element-atts;    >
+<!--                    LONG NAME: Country                         -->
+<!ELEMENT country       (#PCDATA)*                                   >
+<!ATTLIST country
+             keyref     CDATA                            #IMPLIED
+             %univ-atts;
+             outputclass
+                        CDATA                            #IMPLIED    >
 
-<!-- on advice from Chris Kravogel - remove specific phone types, and have users set
-     the value using @type on contactnumber -->
-<!--<!ELEMENT contactnumbers      ((%officephone;)*, (%fax;)*, (%cellular;)*, (%urlphone;)*, (%contactnumber;)*)      >  -->
-<!ELEMENT contactnumbers      ((%contactnumber;)*)>
-<!ATTLIST contactnumbers  %data-element-atts;    >
+<!--                    LONG NAME: Person Information              -->
+<!ELEMENT personinfo    ((%namedetails;)?, (%addressdetails;)?,
+                         (%contactnumbers;)?, (%emailaddresses;)?)   >
+<!ATTLIST personinfo
+             %data-element-atts;                                     >
+
+<!--                    LONG NAME: Organization Information        -->
+<!ELEMENT organizationinfo
+                        ((%namedetails;)?, (%addressdetails;)?, 
+                         (%contactnumbers;)?, (%emailaddresses;)?,
+                         (%urls;)?)                                  >  
+<!ATTLIST organizationinfo 
+             %data-element-atts;                                     >
+
+<!--                    LONG NAME: Contact Numbers                 -->
+<!ELEMENT contactnumbers
+                        (%contactnumber;)*                           >
+<!ATTLIST contactnumbers
+             %data-element-atts;                                     >
                         
-<!--<!ELEMENT officephone      (#PCDATA)  >  
-<!ATTLIST officephone              
-             keyref     CDATA                           #IMPLIED
-             %univ-atts;
-             outputclass 
-                        CDATA                            #IMPLIED    >
-<!ELEMENT fax      (#PCDATA)  >  
-<!ATTLIST fax              
-             keyref     CDATA                           #IMPLIED
-             %univ-atts;
-             outputclass 
-                        CDATA                            #IMPLIED    >
-<!ELEMENT cellular      (#PCDATA)  >  
-<!ATTLIST cellular              
-             keyref     CDATA                           #IMPLIED
-             %univ-atts;
-             outputclass 
-                        CDATA                            #IMPLIED    >
-<!ELEMENT urlphone      (#PCDATA)  >  
-<!ATTLIST urlphone              
-             keyref     CDATA                           #IMPLIED
-             %univ-atts;
-             outputclass 
-                        CDATA                            #IMPLIED    >-->
-
-<!ELEMENT contactnumber      (#PCDATA)      >  
-<!ATTLIST contactnumber              
-             keyref     CDATA                           #IMPLIED
-             %univ-atts;
-             outputclass 
-                        CDATA                            #IMPLIED    >
+<!--                    LONG NAME: Contact Number                  -->
+<!--                    Note: set the type of number using @type   -->
+<!ELEMENT contactnumber (#PCDATA)*                                   >  
+<!ATTLIST contactnumber
+             %data-element-atts;                                     >            
                         
-<!ELEMENT emailaddresses      (%emailaddress;)*      >  
-<!ATTLIST emailaddresses  %data-element-atts;    >
+<!--                    LONG NAME: Email Addresses                 -->
+<!ELEMENT emailaddresses
+                        (%emailaddress;)*                            >
+<!ATTLIST emailaddresses
+             %data-element-atts;                                     >
 
-<!ELEMENT emailaddress      (%words.cnt;)*      >  
-<!ATTLIST emailaddress    %data-element-atts;    >
+<!--                    LONG NAME: Email Address                   -->
+<!ELEMENT emailaddress  (%words.cnt;)*                               >
+<!ATTLIST emailaddress
+             %data-element-atts;                                     >
 
-<!ELEMENT urls      (%url;)*      >  
-<!ATTLIST urls  %data-element-atts;    >
+<!--                    LONG NAME: URLs                            -->
+<!ELEMENT urls          (%url;)*                                     >  
+<!ATTLIST urls
+             %data-element-atts;                                     >
 
-<!ELEMENT url      (%words.cnt;)*      >  
-<!ATTLIST url    %data-element-atts;    >
+<!--                    LONG NAME: URL                             -->
+<!ELEMENT url           (%words.cnt;)*                               >  
+<!ATTLIST url
+             %data-element-atts;                                     >
 
 <!-- ============================================================= -->
 <!--                    SPECIALIZATION ATTRIBUTE DECLARATIONS      -->
 <!-- ============================================================= -->
 
-<!ATTLIST authorinformation %global-atts;
-        class CDATA "- topic/author xnal-d/authorinformation ">
-<!ATTLIST namedetails %global-atts;
-        class CDATA "- topic/data xnal-d/namedetails ">
-<!ATTLIST organizationnamedetails %global-atts;
-        class CDATA "- topic/ph xnal-d/organizationnamedetails ">
-<!ATTLIST resource %global-atts;
-        class CDATA "- topic/xref xnal-d/resource ">
-<!ATTLIST organizationname %global-atts;
-        class CDATA "- topic/ph xnal-d/organizationname ">
-<!ATTLIST otherinfo %global-atts;
-        class CDATA "- topic/data xnal-d/otherinfo ">
-<!ATTLIST personname %global-atts;
-        class CDATA "- topic/data xnal-d/personname ">
-<!--<!ATTLIST preceedingtitle %global-atts;
-        class CDATA "- topic/ph xnal-d/preceedingtitle ">-->
-<!ATTLIST honorific %global-atts;
-        class CDATA "- topic/data xnal-d/honorific ">
-<!ATTLIST firstname %global-atts;
-        class CDATA "- topic/data xnal-d/firstname ">
-<!ATTLIST middlename %global-atts;
-        class CDATA "- topic/data xnal-d/middlename ">
-<!ATTLIST lastname %global-atts;
-        class CDATA "- topic/data xnal-d/lastname ">
-<!ATTLIST generationidentifier %global-atts;
-        class CDATA "- topic/data xnal-d/generationidentifier ">
+<!ATTLIST addressdetails %global-atts; class CDATA "- topic/ph xnal-d/addressdetails ">
+<!ATTLIST administrativearea %global-atts; class CDATA "- topic/ph xnal-d/administrativearea ">
+<!ATTLIST authorinformation %global-atts; class CDATA "- topic/author xnal-d/authorinformation ">
+<!ATTLIST contactnumber %global-atts; class CDATA "- topic/data xnal-d/contactnumber ">
+<!ATTLIST contactnumbers %global-atts; class CDATA "- topic/data xnal-d/contactnumbers ">
+<!ATTLIST country     %global-atts; class CDATA "- topic/ph xnal-d/country ">
+<!ATTLIST emailaddress %global-atts; class CDATA "- topic/data xnal-d/emailaddress ">
+<!ATTLIST emailaddresses %global-atts; class CDATA "- topic/data xnal-d/emailaddresses ">
+<!ATTLIST firstname   %global-atts; class CDATA "- topic/data xnal-d/firstname ">
+<!ATTLIST generationidentifier %global-atts; class CDATA "- topic/data xnal-d/generationidentifier ">
+<!ATTLIST honorific   %global-atts; class CDATA "- topic/data xnal-d/honorific ">
+<!ATTLIST lastname    %global-atts; class CDATA "- topic/data xnal-d/lastname ">
+<!ATTLIST locality    %global-atts; class CDATA "- topic/ph xnal-d/locality ">
+<!ATTLIST localityname %global-atts; class CDATA "- topic/ph xnal-d/localityname ">
+<!ATTLIST middlename  %global-atts; class CDATA "- topic/data xnal-d/middlename ">
+<!ATTLIST namedetails %global-atts; class CDATA "- topic/data xnal-d/namedetails ">
+<!ATTLIST organizationinfo %global-atts; class CDATA "- topic/data xnal-d/organizationinfo ">
+<!ATTLIST organizationname %global-atts;  class CDATA "- topic/ph xnal-d/organizationname ">
+<!ATTLIST organizationnamedetails %global-atts; class CDATA "- topic/ph xnal-d/organizationnamedetails ">
+<!ATTLIST otherinfo   %global-atts; class CDATA "- topic/data xnal-d/otherinfo ">
+<!ATTLIST personinfo  %global-atts; class CDATA "- topic/data xnal-d/personinfo ">
+<!ATTLIST personname  %global-atts; class CDATA "- topic/data xnal-d/personname ">
+<!ATTLIST postalcode  %global-atts; class CDATA "- topic/ph xnal-d/postalcode ">
+<!ATTLIST resource    %global-atts; class CDATA "- topic/xref xnal-d/resource ">
+<!ATTLIST thoroughfare %global-atts; class CDATA "- topic/ph xnal-d/thoroughfare ">
+<!ATTLIST url         %global-atts; class CDATA "- topic/data xnal-d/url ">
+<!ATTLIST urls        %global-atts; class CDATA "- topic/data xnal-d/urls ">
 
-<!ATTLIST addressdetails %global-atts;
-        class CDATA "- topic/ph xnal-d/addressdetails ">
-<!--<!ATTLIST address %global-atts;
-        class CDATA "- topic/ph xnal-d/address ">-->
-<!ATTLIST locality %global-atts;
-        class CDATA "- topic/ph xnal-d/locality ">
-<!ATTLIST localityname %global-atts;
-        class CDATA "- topic/ph xnal-d/localityname ">
-<!ATTLIST administrativearea %global-atts;
-        class CDATA "- topic/ph xnal-d/administrativearea ">
-<!ATTLIST thoroughfare %global-atts;
-        class CDATA "- topic/ph xnal-d/thoroughfare ">
-<!ATTLIST postalcode %global-atts;
-        class CDATA "- topic/ph xnal-d/postalcode ">
-<!ATTLIST country %global-atts;
-        class CDATA "- topic/ph xnal-d/country ">
-
-<!ATTLIST personinfo %global-atts;
-        class CDATA "- topic/data xnal-d/personinfo ">
-<!ATTLIST organizationinfo %global-atts;
-        class CDATA "- topic/data xnal-d/organizationinfo ">
-<!ATTLIST contactnumbers %global-atts;
-        class CDATA "- topic/data xnal-d/contactnumbers ">
-<!ATTLIST contactnumber %global-atts;
-        class CDATA "- topic/ph xnal-d/contactnumber ">
-<!--<!ATTLIST officephone %global-atts;
-        class CDATA "- topic/ph xnal-d/officephone ">
-<!ATTLIST fax %global-atts;
-        class CDATA "- topic/ph xnal-d/fax ">
-<!ATTLIST cellular %global-atts;
-        class CDATA "- topic/ph xnal-d/cellular ">
-<!ATTLIST urlphone %global-atts;
-        class CDATA "- topic/ph xnal-d/urlphone ">-->
-<!ATTLIST emailaddresses %global-atts;
-        class CDATA "- topic/data xnal-d/emailaddresses ">
-<!ATTLIST emailaddress %global-atts;
-        class CDATA "- topic/data xnal-d/emailaddress ">
-<!ATTLIST urls %global-atts;
-        class CDATA "- topic/data xnal-d/urls ">
-<!ATTLIST url %global-atts;
-        class CDATA "- topic/data xnal-d/url ">
-
-<!-- ================== DITA Map Group Domain  =================== -->
+<!-- ================== End DITA XNAL Domain  =================== -->

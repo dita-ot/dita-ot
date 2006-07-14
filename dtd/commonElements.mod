@@ -2,8 +2,8 @@
 <!--                    HEADER                                     -->
 <!-- ============================================================= -->
 <!--  MODULE:    DITA Common Elements                              -->
-<!--  VERSION:   1.0.1                                             -->
-<!--  DATE:      April 2006                                        -->
+<!--  VERSION:   1.1                                               -->
+<!--  DATE:      June 2006                                         -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -13,7 +13,7 @@
 <!--                                                               -->
 <!--  Refer to this file by the following public identifier or an 
       appropriate system identifier 
-PUBLIC "-//OASIS//ENTITIES DITA Common Elements//EN"
+PUBLIC "-//OASIS//ELEMENTS DITA Common Elements//EN"
       Delivered as file "commonElements.mod"                       -->
 
 <!-- ============================================================= -->
@@ -45,66 +45,10 @@ PUBLIC "-//OASIS//ENTITIES DITA Common Elements//EN"
 <!--                    ELEMENT NAME ENTITIES                      -->
 <!-- ============================================================= -->
 
-
-<!ENTITY % alt          "alt"                                        >
-<!ENTITY % boolean      "boolean"                                    >
-<!ENTITY % cite         "cite"                                       >
-<!ENTITY % data         "data"                                       >
-<!ENTITY % data-about   "data-about"                                 >
-<!ENTITY % dd           "dd"                                         >
-<!ENTITY % ddhd         "ddhd"                                       >
-<!ENTITY % desc         "desc"                                       >
-<!ENTITY % dl           "dl"                                         >
-<!ENTITY % dlentry      "dlentry"                                    >
-<!ENTITY % dlhead       "dlhead"                                     >
-<!ENTITY % draft-comment 
-                        "draft-comment"                              >
-<!ENTITY % dt           "dt"                                         >
-<!ENTITY % dthd         "dthd"                                       >
-<!ENTITY % fig          "fig"                                        >
-<!ENTITY % figgroup     "figgroup"                                   >
-<!ENTITY % fn           "fn"                                         >
-<!ENTITY % image        "image"                                      >
-<!ENTITY % indexterm    "indexterm"                                  >
-<!ENTITY % index-base   "index-base"                                 >
-<!ENTITY % indextermref "indextermref"                               >
-<!ENTITY % itemgroup    "itemgroup"                                  >
-<!ENTITY % keyword      "keyword"                                    >
-<!ENTITY % li           "li"                                         >
-<!ENTITY % lines        "lines"                                      >
-<!ENTITY % lq           "lq"                                         >
-<!ENTITY % note         "note"                                       >
-<!ENTITY % object       "object"                                     >
-<!ENTITY % ol           "ol"                                         >
-<!ENTITY % p            "p"                                          > 
-<!ENTITY % param        "param"                                      >
-<!ENTITY % ph           "ph"                                         >
-<!ENTITY % pre          "pre"                                        >
-<!ENTITY % q            "q"                                          >
-<!ENTITY % required-cleanup     
-                        "required-cleanup"                           >
-<!ENTITY % sl           "sl"                                         > 
-<!ENTITY % sli          "sli"                                        >
-<!ENTITY % simpletable  "simpletable"                                >
-<!ENTITY % state        "state"                                      >
-<!ENTITY % stentry      "stentry"                                    >
-<!ENTITY % sthead       "sthead"                                     >
-<!ENTITY % strow        "strow"                                      >
-<!ENTITY % term         "term"                                       >
-<!ENTITY % title        "title"                                      >
-<!ENTITY % tm           "tm"                                         >
-<!ENTITY % ul           "ul"                                         >
-<!ENTITY % unknown      "unknown"                                    >
-<!ENTITY % xref         "xref"                                       >
-
-<!-- Elements in tblDecl.mod                                       -->
-<!ENTITY % table        "table"                                      >
-<!ENTITY % colspec      "colspec"                                    >
-<!ENTITY % entry        "entry"                                      >
-<!ENTITY % row          "row"                                        >
-<!ENTITY % tbody        "tbody"                                      >
-<!ENTITY % tgroup       "tgroup"                                     >
-<!ENTITY % thead        "thead"                                      >
+<!ENTITY % commonDefns   PUBLIC 
+                       "-//OASIS//ENTITIES DITA Common Elements//EN" 
+                       "commonElements.ent"                          >
+%commonDefns;
 
 <!-- ============================================================= -->
 <!--                    COMMON ATTLIST SETS                        -->
@@ -113,7 +57,7 @@ PUBLIC "-//OASIS//ENTITIES DITA Common Elements//EN"
 
 <!--                   Phrase/inline elements of various classes   -->
 <!ENTITY % basic.ph    "%ph; | %term; | %xref; | %cite; | %q; |
-                        %boolean; | %state; | %keyword; | %tm;"                                      >
+                        %boolean; | %state; | %keyword; | %tm;"      >
 
 <!--                   Elements common to most body-like contexts  -->
 <!ENTITY % basic.block "%p; | %lq; | %note; | %dl; | %ul; | %ol;|  
@@ -150,31 +94,31 @@ PUBLIC "-//OASIS//ENTITIES DITA Common Elements//EN"
 <!ENTITY % txt.incl             '%draft-comment;|%required-cleanup;|%fn;|%indextermref;|%indexterm;'>
 
 <!-- Metadata elements intended for specialization -->
-<!ENTITY % data.elements.incl   '%data;|%data-about;'>
+<!ENTITY % data.elements.incl   "%data;|%data-about;"                >
+<!ENTITY % foreign.unknown.incl "%foreign;|%unknown;"                >
 
 <!-- Predefined content model groups, based on the previous, element-only categories: -->
 <!-- txt.incl is appropriate for any mixed content definitions (those that have PCDATA) -->
 <!-- the context for blocks is implicitly an InfoMaster "containing_division" -->
-<!ENTITY % listitem.cnt         "#PCDATA | %basic.ph; | %basic.block; |%itemgroup;| %txt.incl; | %data.elements.incl; | %unknown;">
-<!ENTITY % itemgroup.cnt        "#PCDATA | %basic.ph; | %basic.block; |             %txt.incl; | %data.elements.incl; | %unknown;">
-<!ENTITY % title.cnt            "#PCDATA | %basic.ph.noxref; | %image; | %data.elements.incl; | %unknown;">
-<!ENTITY % xreftext.cnt         "#PCDATA | %basic.ph.noxref; | %image; | %data.elements.incl; | %unknown;">
-<!ENTITY % xrefph.cnt           "#PCDATA | %basic.ph.noxref; | %data.elements.incl; | %unknown;">
-<!ENTITY % shortquote.cnt       "#PCDATA | %basic.ph; | %data.elements.incl; | %unknown;">
-<!ENTITY % para.cnt             "#PCDATA | %basic.ph; | %basic.block.nopara; | %txt.incl; | %data.elements.incl; | %unknown;">
-<!ENTITY % note.cnt             "#PCDATA | %basic.ph; | %basic.block.nonote; | %txt.incl; | %data.elements.incl; | %unknown;">
-<!ENTITY % longquote.cnt        "#PCDATA | %basic.ph; | %basic.block.nolq;   | %txt.incl; | %data.elements.incl; | %unknown;">
-<!ENTITY % tblcell.cnt          "#PCDATA | %basic.ph; | %basic.block.notbl;  | %txt.incl; | %data.elements.incl; | %unknown;">
-<!ENTITY % desc.cnt             "#PCDATA | %basic.ph; | %basic.block.notbfgobj; | %data.elements.incl; | %unknown;">
-<!ENTITY % ph.cnt               "#PCDATA | %basic.ph; | %image;              | %txt.incl; | %data.elements.incl; | %unknown;">
-<!ENTITY % fn.cnt               "#PCDATA | %basic.ph; | %basic.block.notbl; | %data.elements.incl; | %unknown;">
-<!ENTITY % term.cnt             "#PCDATA | %basic.ph; | %image; | %data.elements.incl; | %unknown;">
-<!ENTITY % defn.cnt             "#PCDATA | %basic.ph; | %basic.block; |%itemgroup;| %txt.incl; | %data.elements.incl; | %unknown;">
-<!ENTITY % pre.cnt              "#PCDATA | %basic.ph; | %txt.incl; | %data.elements.incl; | %unknown;">
-<!ENTITY % fig.cnt              "%basic.block.notbnofg; | %simpletable; | %xref; | %fn;| %data.elements.incl; | %unknown;">
-<!ENTITY % data.cnt             "#PCDATA|%keyword;|%term;|%image;|%object;|%ph;|%data.elements.incl;|%unknown;">
-<!-- <!ENTITY % words.cnt            "#PCDATA | %keyword; | %term;"> -->
-<!ENTITY % words.cnt            "#PCDATA | %keyword; | %term; | %data.elements.incl; | %unknown;">
+<!ENTITY % listitem.cnt         "#PCDATA | %basic.ph; | %basic.block; |%itemgroup;| %txt.incl; | %data.elements.incl; | %foreign.unknown.incl;">
+<!ENTITY % itemgroup.cnt        "#PCDATA | %basic.ph; | %basic.block; |             %txt.incl; | %data.elements.incl; | %foreign.unknown.incl;">
+<!ENTITY % title.cnt            "#PCDATA | %basic.ph.noxref; | %image; | %data.elements.incl; | %foreign.unknown.incl;">
+<!ENTITY % xreftext.cnt         "#PCDATA | %basic.ph.noxref; | %image; | %data.elements.incl; | %foreign.unknown.incl;">
+<!ENTITY % xrefph.cnt           "#PCDATA | %basic.ph.noxref; | %data.elements.incl; | %foreign.unknown.incl;">
+<!ENTITY % shortquote.cnt       "#PCDATA | %basic.ph; | %data.elements.incl; | %foreign.unknown.incl;">
+<!ENTITY % para.cnt             "#PCDATA | %basic.ph; | %basic.block.nopara; | %txt.incl; | %data.elements.incl; | %foreign.unknown.incl;">
+<!ENTITY % note.cnt             "#PCDATA | %basic.ph; | %basic.block.nonote; | %txt.incl; | %data.elements.incl; | %foreign.unknown.incl;">
+<!ENTITY % longquote.cnt        "#PCDATA | %basic.ph; | %basic.block.nolq;   | %txt.incl; | %data.elements.incl; | %foreign.unknown.incl;">
+<!ENTITY % tblcell.cnt          "#PCDATA | %basic.ph; | %basic.block.notbl;  | %txt.incl; | %data.elements.incl; | %foreign.unknown.incl;">
+<!ENTITY % desc.cnt             "#PCDATA | %basic.ph; | %basic.block.notbfgobj; | %data.elements.incl; | %foreign.unknown.incl;">
+<!ENTITY % ph.cnt               "#PCDATA | %basic.ph; | %image;              | %txt.incl; | %data.elements.incl; | %foreign.unknown.incl;">
+<!ENTITY % fn.cnt               "#PCDATA | %basic.ph; | %basic.block.notbl; | %data.elements.incl; | %foreign.unknown.incl;">
+<!ENTITY % term.cnt             "#PCDATA | %basic.ph; | %image; | %data.elements.incl; | %foreign.unknown.incl;">
+<!ENTITY % defn.cnt             "#PCDATA | %basic.ph; | %basic.block; |%itemgroup;| %txt.incl; | %data.elements.incl; | %foreign.unknown.incl;">
+<!ENTITY % pre.cnt              "#PCDATA | %basic.ph; | %txt.incl; | %data.elements.incl; | %foreign.unknown.incl;">
+<!ENTITY % fig.cnt              "%basic.block.notbnofg; | %simpletable; | %xref; | %fn;| %data.elements.incl; | %foreign.unknown.incl;">
+<!ENTITY % words.cnt            "#PCDATA | %keyword; | %term; | %data.elements.incl; | %foreign.unknown.incl;">
+<!ENTITY % data.cnt             "%words.cnt;|%image;|%object;|%ph;|%title;">
 
 <!-- ============================================================= -->
 <!--                    COMMON ATTLIST SETS                        -->
@@ -188,14 +132,24 @@ PUBLIC "-//OASIS//ENTITIES DITA Common Elements//EN"
                         180|200)                           #IMPLIED
              frame     (top | bottom |topbot | all | 
                         sides | none)                      #IMPLIED
-             expanse   (page | column | textline)           #IMPLIED' >
+             expanse   (page | column | textline)          #IMPLIED' >
 
-<!-- Provide a default of no props extensions -->
-<!ENTITY % props-attribute-extensions "">
+<!-- Provide a default of no attribute extensions -->
+<!ENTITY % props-attribute-extensions " ">
+<!ENTITY % base-attribute-extensions  " ">
+
+<!ENTITY % filter-atts
+            'props      CDATA                              #IMPLIED
+             base       CDATA                              #IMPLIED
+             platform   CDATA                              #IMPLIED
+             product    CDATA                              #IMPLIED
+             audience   CDATA                              #IMPLIED
+             otherprops CDATA                              #IMPLIED
+             %props-attribute-extensions;
+             %base-attribute-extensions;                           ' >
 
 <!ENTITY % select-atts   
-            'props      CDATA                              #IMPLIED
-             %props-attribute-extensions;
+            '%filter-atts;
              importance 
                        (obsolete | deprecated | optional | 
                         default | low | normal | high | 
@@ -238,35 +192,45 @@ PUBLIC "-//OASIS//ENTITIES DITA Common Elements//EN"
 <!--                    ELEMENT DECLARATIONS                       -->
 <!-- ============================================================= -->
 
+<!--                    LONG NAME: Data About                      -->
 <!ELEMENT data-about  ((%data;), (%data;|%data-about;)*)>
 <!ATTLIST data-about  %univ-atts;
-                  href        CDATA #IMPLIED
-                  format      CDATA #IMPLIED
-                  type        CDATA #IMPLIED
-                  scope      (local | peer | external)        #IMPLIED
-                  outputclass CDATA #IMPLIED
->
+             href       CDATA                            #IMPLIED
+             format     CDATA                            #IMPLIED
+             type       CDATA                            #IMPLIED
+             scope      (local | peer | external)        #IMPLIED
+             outputclass
+                        CDATA                            #IMPLIED    >
 
 <!ENTITY % data-element-atts
             '%univ-atts;
-             name        CDATA #IMPLIED
-             label       CDATA #IMPLIED
-             datatype    CDATA #IMPLIED
-             value       CDATA #IMPLIED
-             href        CDATA #IMPLIED
-             format      CDATA #IMPLIED
-             type        CDATA #IMPLIED
+             name       CDATA                            #IMPLIED
+             datatype   CDATA                            #IMPLIED
+             value      CDATA                            #IMPLIED
+             href       CDATA                            #IMPLIED
+             format     CDATA                            #IMPLIED
+             type       CDATA                            #IMPLIED
              scope      (local | peer | external)        #IMPLIED
-             outputclass CDATA #IMPLIED'  >
+             outputclass
+                        CDATA                            #IMPLIED'   >
              
+<!--                    LONG NAME: Data element                    -->
 <!ELEMENT data    (%data.cnt;)*>
 <!ATTLIST data    %data-element-atts;                                >
 
+<!--                    LONG NAME: Unknown element                 -->
 <!ELEMENT unknown ANY>
 <!ATTLIST unknown
              %univ-atts;
-             outputclass  CDATA  #IMPLIED                            >
-
+             outputclass
+                        CDATA                            #IMPLIED    >
+                        
+<!--                    LONG NAME: Foreign content element         -->
+<!ELEMENT foreign ANY>
+<!ATTLIST foreign
+             %univ-atts;
+             outputclass
+                        CDATA                            #IMPLIED    >
 
 <!--                    LONG NAME: Title                           -->
 <!--                    This is referenced inside CALS table       -->
@@ -278,22 +242,12 @@ PUBLIC "-//OASIS//ENTITIES DITA Common Elements//EN"
                         CDATA                            #IMPLIED    >
 
 
-<!--                    LONG NAME: Title Alternatives              -->
-<!--                    LONG NAME: Navigation Title                -->
-<!--                    LONG NAME: Search Title                    -->
-
 <!--                    LONG NAME: Short Description               -->
 <!ELEMENT shortdesc     (%title.cnt;)*                               >
 <!ATTLIST shortdesc    
              %univ-atts;
              outputclass 
                         CDATA                            #IMPLIED    >
-
-
-<!--                    LONG NAME: Body                            -->
-<!--                    LONG NAME: No Topic nesting                -->
-<!--                    LONG NAME: Section                         -->
-<!--                    LONG NAME: Example                         -->
 
 
 <!--                    LONG NAME: Description                     -->
@@ -307,16 +261,6 @@ PUBLIC "-//OASIS//ENTITIES DITA Common Elements//EN"
              outputclass 
                         CDATA                            #IMPLIED    >
 
-
-<!-- ============================================================= -->
-<!--                    PROLOG (METADATA FOR TOPICS)               -->
-<!--                    TYPED DATA ELEMENTS                        -->
-<!-- ============================================================= -->
-<!--                    typed content definitions                  -->
-<!--                    typed, localizable content                 -->
-
-<!--                    LONG NAME: Prolog                          -->
-<!--                    LONG NAME: Metadata                        -->
 
 <!-- ============================================================= -->
 <!--                    BASIC DOCUMENT ELEMENT DECLARATIONS        -->
@@ -403,8 +347,8 @@ PUBLIC "-//OASIS//ENTITIES DITA Common Elements//EN"
                         CDATA                            #IMPLIED    >
 
 
-<!--                    LONG NAME: List Item                      -->
-<!ELEMENT li            (%listitem.cnt;)*                           >
+<!--                    LONG NAME: List Item                       -->
+<!ELEMENT li            (%listitem.cnt;)*                            >
 <!ATTLIST li             
              %univ-atts;
              outputclass 
@@ -607,7 +551,8 @@ PUBLIC "-//OASIS//ENTITIES DITA Common Elements//EN"
 
 <!--                    LONG NAME: Object (Streaming/Executable 
                                    Data)                           -->
-<!ELEMENT object        ((%desc;)?, (%param;)*, (%unknown;)*)        >
+<!ELEMENT object        ((%desc;)?, (%param;)*, 
+                         (%foreign.unknown.incl;)*)                  >
 <!ATTLIST object
              declare    (declare)                        #IMPLIED
              classid    CDATA                            #IMPLIED
@@ -678,7 +623,8 @@ PUBLIC "-//OASIS//ENTITIES DITA Common Elements//EN"
 
 <!--                    LONG NAME: Review Comments Block           -->
 <!ELEMENT draft-comment (#PCDATA | %basic.phandblock; | 
-                         %data.elements.incl; | %unknown;)*          >
+                         %data.elements.incl; | 
+                         %foreign.unknown.incl;)*                    >
 <!ATTLIST draft-comment   
              author     CDATA                            #IMPLIED
              time       CDATA                            #IMPLIED
@@ -686,7 +632,7 @@ PUBLIC "-//OASIS//ENTITIES DITA Common Elements//EN"
                         (issue | open | accepted | rejected |
                          deferred| duplicate | reopened|
                          unassigned | completed)         #IMPLIED
-             %univ-atts;
+             %univ-atts-translate-no;
              outputclass 
                         CDATA                            #IMPLIED    >
 
@@ -695,7 +641,7 @@ PUBLIC "-//OASIS//ENTITIES DITA Common Elements//EN"
                         ANY                                          >
 <!ATTLIST required-cleanup 
              remap      CDATA                            #IMPLIED
-             %univ-atts;
+             %univ-atts-translate-no;
              outputclass 
                         CDATA                            #IMPLIED    >
 
@@ -776,6 +722,7 @@ PUBLIC "-//OASIS//ENTITIES DITA Common Elements//EN"
 <!ATTLIST fig       %global-atts;  class CDATA "- topic/fig "        >
 <!ATTLIST figgroup  %global-atts;  class CDATA "- topic/figgroup "   >
 <!ATTLIST fn        %global-atts;  class CDATA "- topic/fn "         >
+<!ATTLIST foreign   %global-atts;  class CDATA "- topic/foreign "    >
 <!ATTLIST image     %global-atts;  class CDATA "- topic/image "      >
 <!ATTLIST indexterm %global-atts;  class CDATA "- topic/indexterm "  >
 <!ATTLIST index-base %global-atts;  class CDATA "- topic/index-base ">
@@ -812,4 +759,4 @@ PUBLIC "-//OASIS//ENTITIES DITA Common Elements//EN"
 <!ATTLIST xref      %global-atts;  class CDATA "- topic/xref "       >
 
 
-<!-- ================== End Metadata  ================================ -->
+<!-- ================== End Common Elements Module  ============== -->

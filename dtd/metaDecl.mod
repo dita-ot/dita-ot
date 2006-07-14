@@ -2,8 +2,8 @@
 <!--                    HEADER                                     -->
 <!-- ============================================================= -->
 <!--  MODULE:    DITA Metadata                                     -->
-<!--  VERSION:   1.0.1                                             -->
-<!--  DATE:      November 2005                                     -->
+<!--  VERSION:   1.1                                               -->
+<!--  DATE:      June 2006                                         -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -25,7 +25,7 @@ PUBLIC "-//OASIS//ENTITIES DITA Metadata//EN"
 <!-- ORIGINAL CREATION DATE:                                       -->
 <!--             March 2001                                        -->
 <!--                                                               -->
-<!--             (C) Copyright OASIS Open 2005.                    -->
+<!--             (C) Copyright OASIS Open 2005, 2006.              -->
 <!--             (C) Copyright IBM Corporation 2001, 2004.         -->
 <!--             All Rights Reserved.                              -->
 <!--                                                               -->
@@ -42,32 +42,6 @@ PUBLIC "-//OASIS//ENTITIES DITA Metadata//EN"
 <!-- ============================================================= -->
 
 
-<!ENTITY % audience     "audience"                                   >
-<!ENTITY % author       "author"                                     >
-<!ENTITY % brand        "brand"                                      >
-<!ENTITY % category     "category"                                   >
-<!ENTITY % component    "component"                                  >
-<!ENTITY % copyrholder  "copyrholder"                                >
-<!ENTITY % copyright    "copyright"                                  >
-<!ENTITY % copyryear    "copyryear"                                  >
-<!ENTITY % created      "created"                                    >
-<!ENTITY % critdates    "critdates"                                  >
-<!ENTITY % featnum      "featnum"                                    >
-<!ENTITY % keywords     "keywords"                                   >
-<!ENTITY % othermeta    "othermeta"                                  >
-<!ENTITY % permissions  "permissions"                                >
-<!ENTITY % platform     "platform"                                   >
-<!ENTITY % prodinfo     "prodinfo"                                   >
-<!ENTITY % prodname     "prodname"                                   >
-<!ENTITY % prognum      "prognum"                                    >
-<!ENTITY % publisher    "publisher"                                  >
-<!ENTITY % resourceid   "resourceid"                                 >
-<!ENTITY % revised      "revised"                                    >
-<!ENTITY % series       "series"                                     >
-<!ENTITY % source       "source"                                     >
-<!ENTITY % vrm          "vrm"                                        >
-<!ENTITY % vrmlist      "vrmlist"                                    >
-
 <!ENTITY % date-format 'CDATA'                                       >
 
 <!-- ============================================================= -->
@@ -78,24 +52,24 @@ PUBLIC "-//OASIS//ENTITIES DITA Metadata//EN"
 <!ELEMENT author        (%words.cnt;)*                               >
 <!ATTLIST author 
              %univ-atts;
-             href       CDATA                             #IMPLIED
-             keyref     CDATA                             #IMPLIED
-             type       (creator | contributor)           #IMPLIED   >
+             href       CDATA                            #IMPLIED
+             keyref     CDATA                            #IMPLIED
+             type       (creator | contributor)          #IMPLIED    >
 
 
 <!--                     LONG NAME: Source                         -->
 <!ELEMENT source       (%words.cnt;)*                                >
 <!ATTLIST source 
              %univ-atts;
-             href       CDATA                             #IMPLIED
-             keyref     CDATA                             #IMPLIED   >
+             href       CDATA                            #IMPLIED
+             keyref     CDATA                            #IMPLIED    >
 
 
 <!--                    LONG NAME: Publisher                       -->
 <!ELEMENT publisher     (%words.cnt;)*                               >
 <!ATTLIST publisher
-             href       CDATA                             #IMPLIED
-             keyref     CDATA                             #IMPLIED
+             href       CDATA                            #IMPLIED
+             keyref     CDATA                            #IMPLIED
              %univ-atts;                                             >
 
 
@@ -103,7 +77,7 @@ PUBLIC "-//OASIS//ENTITIES DITA Metadata//EN"
 <!ELEMENT copyright     ((%copyryear;)+, %copyrholder;)              >
 <!ATTLIST copyright 
              %univ-atts;
-             type      (primary | secondary)              #IMPLIED   >
+             type      (primary | secondary)             #IMPLIED    >
 
 
 <!--                    LONG NAME: Copyright Year                  -->
@@ -130,16 +104,16 @@ PUBLIC "-//OASIS//ENTITIES DITA Metadata//EN"
 <!ATTLIST created 
              %univ-atts;
              date       %date-format;                    #REQUIRED
-             golive     %date-format;                     #IMPLIED
-             expiry     %date-format;                     #IMPLIED   >
+             golive     %date-format;                    #IMPLIED
+             expiry     %date-format;                    #IMPLIED    >
 
 
 <!--                    LONG NAME: Revised Date                    -->
 <!ELEMENT revised       EMPTY                                        >
 <!ATTLIST revised  
              modified   %date-format;                    #REQUIRED
-             golive     %date-format;                     #IMPLIED
-             expiry     %date-format;                     #IMPLIED
+             golive     %date-format;                    #IMPLIED
+             expiry     %date-format;                    #IMPLIED
              %univ-atts;                                             >
 
 
@@ -162,17 +136,17 @@ PUBLIC "-//OASIS//ENTITIES DITA Metadata//EN"
 <!ATTLIST audience
              type       (user | purchaser | administrator |
                         programmer | executive | services |
-                        other)                            #IMPLIED
-             othertype  CDATA                             #IMPLIED
+                        other)                           #IMPLIED
+             othertype  CDATA                            #IMPLIED
              job        (installing | customizing | 
                          administering | programming |
                          using| maintaining | troubleshooting |
                          evaluating | planning | migrating |
-                         other)                           #IMPLIED
-             otherjob    CDATA                            #IMPLIED
+                         other)                          #IMPLIED
+             otherjob    CDATA                           #IMPLIED
              experiencelevel
-                         (novice | general | expert)      #IMPLIED
-             name        NMTOKEN                          #IMPLIED
+                         (novice | general | expert)     #IMPLIED
+             name        NMTOKEN                         #IMPLIED
              %univ-atts;                                             >
 
 
@@ -207,10 +181,10 @@ PUBLIC "-//OASIS//ENTITIES DITA Metadata//EN"
 <!ELEMENT vrm           EMPTY                                        >
 <!ATTLIST vrm
              %univ-atts;               
-             version    CDATA                              #REQUIRED
-             release    CDATA                              #IMPLIED
+             version    CDATA                            #REQUIRED
+             release    CDATA                            #IMPLIED
              modification 
-                        CDATA                              #IMPLIED  >
+                        CDATA                            #IMPLIED    >
              
 <!--                    LONG NAME: Brand                           -->
 <!ELEMENT brand         (%words.cnt;)*                               >
@@ -255,7 +229,7 @@ PUBLIC "-//OASIS//ENTITIES DITA Metadata//EN"
              name       CDATA                            #REQUIRED
              content    CDATA                            #REQUIRED
              translate-content
-                        (yes | no)                        #IMPLIED
+                        (yes | no)                       #IMPLIED
              %univ-atts;                                             >
 
 
@@ -266,7 +240,7 @@ PUBLIC "-//OASIS//ENTITIES DITA Metadata//EN"
              %localization-atts;
              id         CDATA                            #REQUIRED
              conref     CDATA                            #IMPLIED
-             appname    CDATA                            #IMPLIED   >             
+             appname    CDATA                            #IMPLIED    >
 
 
 <!-- ============================================================= -->

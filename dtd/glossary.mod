@@ -1,7 +1,7 @@
 <!-- ============================================================= -->
 <!--                    HEADER                                     -->
 <!-- ============================================================= -->
-<!--  MODULE:    DITA Concept                                      -->
+<!--  MODULE:    DITA Glossary                                     -->
 <!--  VERSION:   1.1                                               -->
 <!--  DATE:      June 2006                                         -->
 <!--                                                               -->
@@ -13,27 +13,21 @@
 <!--                                                               -->
 <!--  Refer to this file by the following public identifier or an 
       appropriate system identifier 
-PUBLIC "-//OASIS//ELEMENTS DITA Concept//EN"
-      Delivered as file "concept.mod"                              -->
+PUBLIC "-//OASIS//ELEMENTS DITA Glossary//EN"
+      Delivered as file "glossary.mod"                             -->
 
 <!-- ============================================================= -->
 <!-- SYSTEM:     Darwin Information Typing Architecture (DITA)     -->
 <!--                                                               -->
 <!-- PURPOSE:    Define elements and specialization atttributes    -->
-<!--             for Concepts                                      -->
+<!--             for Glossary topics                               -->
 <!--                                                               -->
 <!-- ORIGINAL CREATION DATE:                                       -->
-<!--             March 2001                                        -->
+<!--             June 2006                                         -->
 <!--                                                               -->
-<!--             (C) Copyright OASIS Open 2005, 2006.              -->
-<!--             (C) Copyright IBM Corporation 2001, 2004.         -->
+<!--             (C) Copyright OASIS Open 2006.                    -->
 <!--             All Rights Reserved.                              -->
 <!--  UPDATES:                                                     -->
-<!--    2005.11.15 RDA: Removed old declaration for                -->
-<!--                    conceptClasses entity                      -->
-<!--    2006.06.07 RDA: Added <abstract> element                   -->
-<!--    2006.06.07 RDA: Make universal attributes universal        -->
-<!--                      (DITA 1.1 proposal #12)                  -->
 <!-- ============================================================= -->
 
 
@@ -61,7 +55,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Concept//EN"
 <!-- ============================================================= -->
 
 
-<!ENTITY % concept-info-types "%info-types;">
+<!ENTITY % glossentry-info-types "no-topic-nesting">
 
 
 <!-- ============================================================= -->
@@ -69,8 +63,9 @@ PUBLIC "-//OASIS//ELEMENTS DITA Concept//EN"
 <!-- ============================================================= -->
  
 
-<!ENTITY % concept     "concept"                                     >
-<!ENTITY % conbody     "conbody"                                     >
+<!ENTITY % glossentry  "glossentry"                                  >
+<!ENTITY % glossterm   "glossterm"                                   >
+<!ENTITY % glossdef    "glossdef"                                    >
 
 
 <!-- ============================================================= -->
@@ -86,12 +81,11 @@ PUBLIC "-//OASIS//ELEMENTS DITA Concept//EN"
 <!-- ============================================================= -->
 
 
-<!--                    LONG NAME: Concept                         -->
-<!ELEMENT concept       ((%title;), (%titlealts;)?,
-                         (%shortdesc; | %abstract;)?, 
-                         (%prolog;)?, (%conbody;)?, (%related-links;)?,
-                         (%concept-info-types;)* )                   >
-<!ATTLIST concept        
+<!--                    LONG NAME: Glossary Entry                  -->
+<!ELEMENT glossentry     ((%glossterm;), (%glossdef;), 
+                          (%related-links;)?,
+                          (%glossentry-info-types;)* )               >
+<!ATTLIST glossentry        
              id         ID                               #REQUIRED
              conref     CDATA                            #IMPLIED
              %select-atts;
@@ -102,11 +96,18 @@ PUBLIC "-//OASIS//ELEMENTS DITA Concept//EN"
              domains    CDATA                "&included-domains;"    >
 
 
-<!--                    LONG NAME: Concept Body                    -->
-<!ELEMENT conbody       ((%body.cnt;)*, (%section;|%example;)* )     >
-<!ATTLIST conbody         
+<!--                    LONG NAME: Glossary Term                   -->
+<!ELEMENT glossterm     (%title.cnt;)*                               >
+<!ATTLIST glossterm         
              %id-atts;
              %localization-atts;
+             outputclass 
+                        CDATA                            #IMPLIED    >
+                        
+<!--                    LONG NAME: Glossary Definition             -->
+<!ELEMENT glossdef      (%section.notitle.cnt; | %shortdesc;)*       >
+<!ATTLIST glossdef         
+             %univ-atts;
              outputclass 
                         CDATA                            #IMPLIED    >
              
@@ -116,11 +117,12 @@ PUBLIC "-//OASIS//ELEMENTS DITA Concept//EN"
 <!-- ============================================================= -->
 
 
-<!ATTLIST concept     %global-atts;  class CDATA "- topic/topic concept/concept ">
-<!ATTLIST conbody     %global-atts;  class CDATA "- topic/body  concept/conbody ">
+<!ATTLIST glossentry  %global-atts;  class CDATA "- topic/topic concept/concept glossentry/glossentry ">
+<!ATTLIST glossterm   %global-atts;  class CDATA "- topic/title concept/title glossentry/glossterm ">
+<!ATTLIST glossdef    %global-atts;  class CDATA "- topic/abstract concept/abstract glossentry/glossdef ">
 
  
-<!-- ================== End DITA Concept  ======================== -->
+<!-- ================== End DITA Glossary ======================== -->
 
 
 

@@ -14,7 +14,7 @@
 <!--  Refer to this file by the following public identifier or an 
       appropriate system identifier 
 PUBLIC "-//OASIS//ENTITIES DITA Indexing Domain//EN"
-      Delivered as file "indexingDomain.ent"                      -->
+      Delivered as file "indexingDomain.ent"                       -->
 
 <!-- ============================================================= -->
 <!-- SYSTEM:     Darwin Information Typing Architecture (DITA)     -->
@@ -43,6 +43,6 @@ PUBLIC "-//OASIS//ENTITIES DITA Indexing Domain//EN"
 <!--                    DOMAIN ENTITY DECLARATION                  -->
 <!-- ============================================================= -->
 
-<!ENTITY indexing-d-att "(topic indexing-d)">
+<!ENTITY indexing-d-att "(topic indexing-d)"                         >
 
 <!-- ================== End Indexing Domain Entities ============= -->

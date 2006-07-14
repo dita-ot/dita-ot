@@ -1,7 +1,7 @@
 <!-- ============================================================= -->
 <!--                    HEADER                                     -->
 <!-- ============================================================= -->
-<!--  MODULE:    DITA Concept DTD                                  -->
+<!--  MODULE:    DITA Glossary DTD                                 -->
 <!--  VERSION:   1.1                                               -->
 <!--  DATE:      June 2006                                         -->
 <!--                                                               -->
@@ -13,24 +13,21 @@
 <!--                                                               -->
 <!--  Refer to this file by the following public identifier or an 
       appropriate system identifier 
-PUBLIC "-//OASIS//DTD DITA Concept//EN"
-      Delivered as file "concept.dtd"                              -->
+PUBLIC "-//OASIS//DTD DITA Glossary//EN"
+      Delivered as file "glossary.dtd"                             -->
 
 <!-- ============================================================= -->
 <!-- SYSTEM:     Darwin Information Typing Architecture (DITA)     -->
 <!--                                                               -->
-<!-- PURPOSE:    DTD to describe DITA Concepts                     -->
+<!-- PURPOSE:    DTD to describe DITA Glossary topics              -->
 <!--                                                               -->
 <!-- ORIGINAL CREATION DATE:                                       -->
-<!--             March 2001                                        -->
+<!--             June 2006                                         -->
 <!--                                                               -->
-<!--             (C) Copyright OASIS Open 2005, 2006.              -->
-<!--             (C) Copyright IBM Corporation 2001, 2004.         -->
+<!--             (C) Copyright OASIS Open 2006.                    -->
 <!--             All Rights Reserved.                              -->
 <!--                                                               -->
 <!--  UPDATES:                                                     -->
-<!--    2006.06.07 RDA: Added indexing domain                      -->
-<!--    2006.06.21 RDA: Added props attribute extensions           -->
 <!-- ============================================================= -->
 
 
@@ -104,8 +101,8 @@ PUBLIC "-//OASIS//DTD DITA Concept//EN"
 
 <!--                    Redefine the infotype entity to exclude 
                         other topic types and disallow nesting     -->
-<!ENTITY % concept-info-types 
-                        "concept"                                    >
+<!ENTITY % glossentry-info-types 
+                        "no-topic-nesting"                           >
 
 
 <!-- ============================================================= -->
@@ -129,13 +126,18 @@ PUBLIC "-//OASIS//DTD DITA Concept//EN"
 "topic.mod"                                                          >
 %topic-type;
 
-
-<!--                    Embed concept to get specific elements     -->
 <!ENTITY % concept-typemod 
                         PUBLIC 
 "-//OASIS//ELEMENTS DITA Concept//EN" 
 "concept.mod"                                                        >                                                     
 %concept-typemod;
+
+<!--                    Embed glossary to get specific elements    -->
+<!ENTITY % glossary-typemod 
+                        PUBLIC 
+"-//OASIS//ELEMENTS DITA Glossary//EN" 
+"glossary.mod"                                                       >                                                     
+%glossary-typemod;
 
 
 <!-- ============================================================= -->
@@ -169,8 +171,8 @@ PUBLIC "-//OASIS//DTD DITA Concept//EN"
 %ut-d-def;
 
 <!ENTITY % indexing-d-def     PUBLIC 
-"-//OASIS//ELEMENTS DITA Indexing Domain//EN"
+"-//OASIS//ELEMENTS DITA Indexing Domain//EN" 
 "indexingDomain.mod"                                                 >
 %indexing-d-def;
 
-<!-- ================== End DITA Concept DTD  ==================== -->
+<!-- ================== End DITA Glossary DTD  =================== -->
