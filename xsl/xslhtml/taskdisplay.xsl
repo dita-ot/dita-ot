@@ -218,10 +218,10 @@
 <xsl:template match="*[contains(@class,' task/step ')]" mode="onestep-fmt">
 <xsl:param name="step_expand"/>
 <div class="p">
-  <xsl:call-template name="flagit"/>
-  <xsl:call-template name="start-revflag"/>
   <xsl:call-template name="commonattributes"/>
   <xsl:call-template name="setidaname"/>
+  <xsl:call-template name="flagit"/>
+  <xsl:call-template name="start-revflag"/>  
   <xsl:if test="@importance='optional'">
     <strong>
     <xsl:call-template name="getString">
