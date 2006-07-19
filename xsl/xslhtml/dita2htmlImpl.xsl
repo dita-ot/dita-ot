@@ -1353,10 +1353,42 @@
   <xsl:attribute name="src"><xsl:value-of select="."/></xsl:attribute>
 </xsl:template>
 <xsl:template match="*[contains(@class,' topic/image ')]/@height">
-  <xsl:attribute name="height"><xsl:value-of select="."/></xsl:attribute>
+  <xsl:attribute name="height">
+    <xsl:choose>
+      <xsl:when test="../@scale and string(number(../@scale))!='NaN'">
+        <xsl:variable name="height-in-pixel">
+          <xsl:call-template name="length-to-pixels">
+            <xsl:with-param name="dimen" select="."/>
+          </xsl:call-template>
+        </xsl:variable>
+        <xsl:value-of select="number($height-in-pixel) * number(../@scale)"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:call-template name="length-to-pixels">
+          <xsl:with-param name="dimen" select="."/>
+        </xsl:call-template>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:attribute>
 </xsl:template>
 <xsl:template match="*[contains(@class,' topic/image ')]/@width">
-  <xsl:attribute name="width"><xsl:value-of select="."/></xsl:attribute>
+  <xsl:attribute name="width">
+    <xsl:choose>
+      <xsl:when test="../@scale and string(number(../@scale))!='NaN'">
+        <xsl:variable name="width-in-pixel">
+          <xsl:call-template name="length-to-pixels">
+            <xsl:with-param name="dimen" select="."/>
+          </xsl:call-template>
+        </xsl:variable>
+        <xsl:value-of select="number($width-in-pixel) * number(../@scale)"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:call-template name="length-to-pixels">
+          <xsl:with-param name="dimen" select="."/>
+        </xsl:call-template>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:attribute>
 </xsl:template>
 <xsl:template match="*[contains(@class,' topic/image ')]/@longdescref">
   <xsl:attribute name="longdesc">
