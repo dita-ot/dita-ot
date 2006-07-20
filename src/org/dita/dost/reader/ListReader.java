@@ -50,7 +50,9 @@ public class ListReader extends AbstractReader {
             listInput = new FileInputStream(filename);
             Properties property = new Properties();
             property.load(listInput);
-            liststr = property.getProperty(Constants.FULL_DITAMAP_TOPIC_LIST);
+            liststr = property.getProperty(Constants.FULL_DITAMAP_TOPIC_LIST)
+					+ Constants.COMMA
+					+ property.getProperty(Constants.CONREF_TARGET_LIST);
             tokenizer = new StringTokenizer(liststr,Constants.COMMA);
                         
             while (tokenizer.hasMoreTokens()) {

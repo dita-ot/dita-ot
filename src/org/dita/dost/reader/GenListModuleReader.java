@@ -9,7 +9,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -48,11 +50,14 @@ public class GenListModuleReader extends AbstractXMLReader {
 	/** Flag for href in parsing file */
 	private boolean hasHref = false;
 
-	/** List of the parsing result */
-	private List result = null;
-
-	/** List of href targets refered in current parsing file */
-	private List hrefTargets = null;
+	/** Set of all the nonConrefTargets refered in current parsing file */
+	private Set nonConrefTargets = null;
+	
+	/** Set of conref nonConrefTargets refered in current parsing file */
+	private Set conrefTargets = null;
+	
+	/** Set of href nonConrefTargets refered in current parsing file */
+	private Set hrefTargets = null;
 
 	/** Flag used to mark if parsing entered into excluded element */
 	private boolean insideExcludedElement = false;
@@ -69,8 +74,9 @@ public class GenListModuleReader extends AbstractXMLReader {
 	 * Constructor
 	 */
 	public GenListModuleReader() {
-		result = new ArrayList(Constants.INT_64);
-		hrefTargets = new ArrayList(Constants.INT_32);
+		nonConrefTargets = new HashSet(Constants.INT_64);
+		hrefTargets = new HashSet(Constants.INT_32);
+		conrefTargets = new HashSet(Constants.INT_32);
 		reader.setContentHandler(this);
 		reader.setEntityResolver(this);
 	}
@@ -102,8 +108,9 @@ public class GenListModuleReader extends AbstractXMLReader {
 		insideExcludedElement = false;
 		excludedLevel = 0;
 		isValidInput = false;
-		result.clear();
+		nonConrefTargets.clear();
 		hrefTargets.clear();
+		conrefTargets.clear();
 	}
 
 	/**
@@ -125,12 +132,16 @@ public class GenListModuleReader extends AbstractXMLReader {
 	}
 
 	/**
-	 * Get the parsing result.
+	 * Get all targets.
 	 * 
-	 * @return Returns the result.
+	 * @return Returns allTargets.
 	 */
-	public List getResult() {
-		return result;
+	public Set getResult() {
+		Set allTargets = new HashSet();
+		allTargets.addAll(nonConrefTargets);
+		allTargets.addAll(conrefTargets);
+		
+		return allTargets;
 	}
 
 	/**
@@ -138,10 +149,29 @@ public class GenListModuleReader extends AbstractXMLReader {
 	 * 
 	 * @return Returns the hrefTargets.
 	 */
-	public List getHrefTargets() {
+	public Set getHrefTargets() {
 		return hrefTargets;
 	}
-
+	
+	/**
+	 * Get conref targets.
+	 * 
+	 * @return Returns the conrefTargets.
+	 */
+	public Set getConrefTargets() {
+		return conrefTargets;
+	}
+	
+	/**
+	 * Get non-conref targets.
+	 * 
+	 * @return Returns the nonConrefTargets.
+	 */
+	public Set getNonConrefTargets() {
+		return nonConrefTargets;
+	}
+	
+	
 	/**
 	 * Set the relative directory of current file.
 	 * 
@@ -284,8 +314,12 @@ public class GenListModuleReader extends AbstractXMLReader {
 
 		filename = FileUtils.normalizeDirectory(currentDir, attrValue);
 
-		if (FileUtils.isValidTarget(filename)) {
-			result.add(filename);
+		/*
+		 * Collect non-conref nonConrefTargets
+		 */
+		if (FileUtils.isValidTarget(filename)
+				&& !Constants.ATTRIBUTE_NAME_CONREF.equals(attrName)) {
+			nonConrefTargets.add(filename);
 		}
 
 		/*
@@ -295,7 +329,14 @@ public class GenListModuleReader extends AbstractXMLReader {
 				&& FileUtils.isTopicFile(filename)) {
 			hrefTargets.add(new File(filename).getPath());
 		}
-
+		
+		/*
+		 * Collect only conref target topic files.
+		 */
+		if (Constants.ATTRIBUTE_NAME_CONREF.equals(attrName)
+				&& FileUtils.isTopicFile(filename)) {
+			conrefTargets.add(filename);
+		}
 	}
 
 }

@@ -23,6 +23,7 @@ import org.dita.dost.reader.DitaValReader;
 import org.dita.dost.reader.GenListModuleReader;
 import org.dita.dost.util.Constants;
 import org.dita.dost.util.FileUtils;
+import org.dita.dost.util.FilterUtils;
 import org.dita.dost.util.StringUtils;
 import org.dita.dost.writer.PropertiesWriter;
 import org.xml.sax.SAXException;
@@ -66,6 +67,12 @@ public class GenMapAndTopicListModule extends AbstractPipelineModule {
 	/** Set of all the href targets */
 	private Set hrefTargetSet = null;
 
+	/** Set of all the conref targets */
+	private Set conrefTargetSet = null;
+	
+	/** Set of all the non-conref targets */
+	private Set nonConrefTargetSet = null;
+	
 	/** List of files waiting for parsing */
 	private List waitList = null;
 
@@ -73,7 +80,7 @@ public class GenMapAndTopicListModule extends AbstractPipelineModule {
 	private List doneList = null;
 
 	/** Basedir for processing */
-	private String baseDir = null;
+	private String baseInputDir = null;
 
 	/** Tempdir for processing */
 	private String tempDir = null;
@@ -113,6 +120,8 @@ public class GenMapAndTopicListModule extends AbstractPipelineModule {
 		hrefTargetSet = new HashSet();
 		waitList = new LinkedList();
 		doneList = new LinkedList();
+		conrefTargetSet = new HashSet();
+		nonConrefTargetSet = new HashSet();
 	}
 
 	/**
@@ -124,27 +133,18 @@ public class GenMapAndTopicListModule extends AbstractPipelineModule {
 	 */
 	public AbstractPipelineOutput execute(AbstractPipelineInput input)
 			throws DITAOTException {
-		File inFile = null;
-		
 		try {
-			PipelineHashIO hashIO = (PipelineHashIO) input;
-			String ditaInput = hashIO
-					.getAttribute(Constants.ANT_INVOKER_PARAM_INPUTMAP);
-			tempDir = hashIO.getAttribute(Constants.ANT_INVOKER_PARAM_TEMPDIR);
-			ditaDir = hashIO
-					.getAttribute(Constants.ANT_INVOKER_EXT_PARAM_DITADIR);
-			ditavalFile = hashIO.getAttribute(Constants.ANT_INVOKER_PARAM_DITAVAL);
-			inFile = new File(ditaInput);
-			baseDir = new File(inFile.getAbsolutePath()).getParent();
-			inputFile = inFile.getName();
-
+			parseInputParameters(input);
+			
 			GenListModuleReader.initXMLReader(ditaDir);
-
-			addInputToHrefTargets();
+			
+			// first parse filter file for later use
+			parseFilterFile();
+			
 			addToWaitList(inputFile);
 			processWaitList();
 			updateBaseDirectory();
-			parseFlaggingImages();
+			refactoringResult();
 			outputResult();
 		} catch (SAXException e) {
 			throw new DITAOTException(e.getMessage(), e);
@@ -153,17 +153,41 @@ public class GenMapAndTopicListModule extends AbstractPipelineModule {
 		return null;
 	}
 
-	/*
-	 * Add the input file into href targets for index generation.
-	 */
-	private void addInputToHrefTargets() {
-		if (FileUtils.isDITATopicFile(inputFile.toLowerCase())) {
-			hrefTargetSet.add(new File(inputFile).getPath());
-		}
-	}
+	private void parseInputParameters(AbstractPipelineInput input) {
+		File inFile = null;
+		PipelineHashIO hashIO = (PipelineHashIO) input;
+		String basedir = hashIO
+				.getAttribute(Constants.ANT_INVOKER_PARAM_BASEDIR);
+		String ditaInput = hashIO
+				.getAttribute(Constants.ANT_INVOKER_PARAM_INPUTMAP);
 
+		tempDir = hashIO.getAttribute(Constants.ANT_INVOKER_PARAM_TEMPDIR);
+		ditaDir = hashIO.getAttribute(Constants.ANT_INVOKER_EXT_PARAM_DITADIR);
+		ditavalFile = hashIO.getAttribute(Constants.ANT_INVOKER_PARAM_DITAVAL);
+
+		/*
+		 * Resolve relative paths base on the basedir.
+		 */
+		inFile = new File(ditaInput);
+		if (!inFile.isAbsolute()) {
+			inFile = new File(basedir, ditaInput);
+		}
+		if (!new File(tempDir).isAbsolute()) {
+			tempDir = new File(basedir, tempDir).getAbsolutePath();
+		}
+		if (!new File(ditaDir).isAbsolute()) {
+			ditaDir = new File(basedir, ditaDir).getAbsolutePath();
+		}
+		if (ditavalFile != null && !new File(ditavalFile).isAbsolute()) {
+			ditavalFile = new File(basedir, ditavalFile).getAbsolutePath();
+		}
+
+		baseInputDir = new File(inFile.getAbsolutePath()).getParent();
+		inputFile = inFile.getName();
+	}
+	
 	/**
-	 * @param baseDir
+	 * @param baseInputDir
 	 * @throws DITAOTException
 	 * @throws ParserConfigurationException
 	 * @throws SAXException
@@ -177,18 +201,23 @@ public class GenMapAndTopicListModule extends AbstractPipelineModule {
 	}
 
 	private void processFile(String currentFile) throws DITAOTException {
-		File fileToParse = new File(baseDir, currentFile);
-
+		File fileToParse = new File(baseInputDir, currentFile);
+		String msg = null;
+		Properties params = new Properties();
+		params.put("%1", currentFile);		
+		
 		try {
 			reader.setCurrentDir(new File(currentFile).getParent());
 			reader.parse(fileToParse);
-			processParseResult(currentFile);
-			categorizeCurrentFile(currentFile);
-		} catch (Exception e) {
-			Properties params = new Properties();
-			params.put("%1", currentFile);
-			String msg = null;
 
+			// don't put it into dita.list if it is invalid
+			if (reader.isValidInput()) {
+				processParseResult(currentFile);
+				categorizeCurrentFile(currentFile);
+			} else if (!currentFile.equals(inputFile)) {
+				javaLogger.logWarn(MessageUtils.getMessage("DOTJ021W", params).toString());
+			}	
+		} catch (Exception e) {
 			if (currentFile.equals(inputFile)) {
 				// stop the build if exception thrown when parsing input file.
 				msg = MessageUtils.getMessage("DOTJ012F", params).toString();
@@ -201,7 +230,13 @@ public class GenMapAndTopicListModule extends AbstractPipelineModule {
 			javaLogger.logError(msg);
 			javaLogger.logException(e);
 		}
-
+		
+		if (!reader.isValidInput() && currentFile.equals(inputFile)) {
+			// stop the build if all content in the input file was filtered out.
+			msg = MessageUtils.getMessage("DOTJ022F", params).toString();							
+			throw new DITAOTException(msg);
+		}
+		
 		doneList.add(currentFile);
 		reader.reset();
 	}
@@ -217,13 +252,20 @@ public class GenMapAndTopicListModule extends AbstractPipelineModule {
 			categorizeResultFile(file);
 			updateUplevels(file);
 		}
+		
+		hrefTargetSet.addAll(reader.getHrefTargets());
+		conrefTargetSet.addAll(reader.getConrefTargets());
+		nonConrefTargetSet.addAll(reader.getNonConrefTargets());
 	}
 
 	private void categorizeCurrentFile(String currentFile) {
 		String lcasefn = currentFile.toLowerCase();
 		
 		ditaSet.add(currentFile);
-		hrefTargetSet.addAll(reader.getHrefTargets());
+		
+		if (FileUtils.isTopicFile(currentFile)) {
+			hrefTargetSet.add(currentFile);
+		}
 
 		if (reader.hasConRef()) {
 			conrefSet.add(currentFile);
@@ -287,21 +329,46 @@ public class GenMapAndTopicListModule extends AbstractPipelineModule {
 	}
 
 	private void updateBaseDirectory() {
-		baseDir = new File(baseDir).getAbsolutePath();
+		baseInputDir = new File(baseInputDir).getAbsolutePath();
 
 		for (int i = uplevels; i > 0; i--) {
-			File file = new File(baseDir);
-			baseDir = file.getParent();
+			File file = new File(baseInputDir);
+			baseInputDir = file.getParent();
 			prefix = file.getName() + File.separator + prefix;
 		}
 	}
 
-	private void parseFlaggingImages() {
+	private void parseFilterFile() {
 		if (ditavalFile != null) {
-			DitaValReader ditavalReader = new DitaValReader();
-			ditavalReader.read(ditavalFile);
-			flagImageSet.addAll(ditavalReader.getImageList());
+			DitaValReader ditaValReader = new DitaValReader();
+			
+			ditaValReader.read(ditavalFile);			
+			// Store filter map for later use
+			FilterUtils.setFilterMap(ditaValReader.getFilterMap());			
+			// Store flagging image used for image copying
+			flagImageSet.addAll(ditaValReader.getImageList());
 		}
+	}
+	
+	private void refactoringResult() {
+		/*
+		 * Get pure conref targets
+		 */
+		Set pureConrefTargets = new HashSet();
+		Iterator iter = conrefTargetSet.iterator();
+		while (iter.hasNext()) {
+			String target = (String) iter.next();
+			if (!nonConrefTargetSet.contains(target)) {
+				pureConrefTargets.add(target);
+			}
+		}
+		conrefTargetSet = pureConrefTargets;
+		
+		/*
+		 * Remove pure conref targets from ditaSet, fullTopicSet
+		 */
+		ditaSet.removeAll(pureConrefTargets);
+		fullTopicSet.removeAll(pureConrefTargets);
 	}
 	
 	private void outputResult() throws DITAOTException {
@@ -315,7 +382,7 @@ public class GenMapAndTopicListModule extends AbstractPipelineModule {
 			dir.mkdirs();
 		}
 
-		prop.put("user.input.dir", baseDir);
+		prop.put("user.input.dir", baseInputDir);
 		prop.put("user.input.file", prefix + inputFile);
 
 		addSetToProperties(prop, Constants.FULL_DITAMAP_TOPIC_LIST, ditaSet);
@@ -327,6 +394,7 @@ public class GenMapAndTopicListModule extends AbstractPipelineModule {
 		addSetToProperties(prop, Constants.FLAG_IMAGE_LIST, flagImageSet);
 		addSetToProperties(prop, Constants.HTML_LIST, htmlSet);
 		addSetToProperties(prop, Constants.HREF_TARGET_LIST, hrefTargetSet);
+		addSetToProperties(prop, Constants.CONREF_TARGET_LIST, conrefTargetSet);
 
 		content.setValue(prop);
 		writer.setContent(content);
