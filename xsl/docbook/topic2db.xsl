@@ -1671,6 +1671,6 @@ DATA-TYPE PHRASES: date time currency char num bin oct dec hex ???
 
 <!-- Add for "Support foreign content vocabularies such as 
      MathML and SVG with <unknown> (#35) " in DITA 1.1 -->
-<xsl:template match="*[contains(@class,' topic/foreign ')]"/>
+<xsl:template match="*[contains(@class,' topic/foreign ') or contains(@class,' topic/unknown ')]"/>
 
 </xsl:stylesheet>
