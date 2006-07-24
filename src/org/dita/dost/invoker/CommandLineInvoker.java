@@ -237,28 +237,49 @@ public class CommandLineInvoker {
 	 * @throws IOException
 	 */
 	public void startAnt() throws IOException {
-		String antScript = "ant.bat"; // default for windows
 		StringBuffer cmdBuffer = new StringBuffer(Constants.INT_64);
-		BufferedReader reader = null;
-		Process antProcess = null;		
-
-		if (Constants.OS_NAME.toLowerCase().indexOf(Constants.OS_NAME_WINDOWS) == -1) {
-			antScript = "ant";
-		}
-
-		cmdBuffer.append(antScript);
+		
+		cmdBuffer.append(getCommandRunner());
 		cmdBuffer.append(" -f ");
 		cmdBuffer.append(antBuildFile);
 		cmdBuffer.append(" -logger org.dita.dost.log.DITAOTBuildLogger");
 		cmdBuffer.append(" -propertyfile ").append(propertyFile);
+		
 		if (debugMode) {
-			cmdBuffer.append(" -d");
+			cmdBuffer.append(" -d ");
 		}
 
-		antProcess = Runtime.getRuntime().exec(cmdBuffer.toString());
+		startTransformation(cmdBuffer.toString());
+	}
+	
+	private String getCommandRunner() {
+		File scriptRunner = null;
+		
+		if (Constants.OS_NAME.toLowerCase().indexOf(Constants.OS_NAME_WINDOWS) != -1) {
+			// Windows
+			scriptRunner = new File(ditaDir, "start.bat");
+			if (scriptRunner.exists()) {
+				return scriptRunner.getAbsolutePath().toString();
+			} else {
+				return "ant.bat";
+			}
+		} else {
+			// Linux
+			scriptRunner = new File(ditaDir, "start.sh");
+			if (scriptRunner.exists()) {
+				return scriptRunner.getAbsolutePath().toString();
+			} else {
+				return "ant";
+			}
+		}
+	}
+
+	private void startTransformation(String cmd) throws IOException {
+		BufferedReader reader;
+		Process antProcess = Runtime.getRuntime().exec(cmd);
 
 		/*
-		 * Get output message and print to console. 
+		 * Get output messages and print to console. 
 		 * Note: Since these messages have been logged to the log file, 
 		 * there is no need to output them to log file.
 		 */
@@ -269,6 +290,7 @@ public class CommandLineInvoker {
 			System.out.println(line);
 		}
 		reader.close();
+		
 		reader = new BufferedReader(new InputStreamReader(antProcess
 				.getErrorStream()));
 		for (String line = reader.readLine(); line != null; line = reader
