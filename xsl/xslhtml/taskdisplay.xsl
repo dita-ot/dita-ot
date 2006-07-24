@@ -512,8 +512,8 @@
   </xsl:when>
   <xsl:otherwise>
    <thead><tr><th valign="bottom">     
-     <xsl:attribute name="id">
      <xsl:call-template name="th-align"/>
+     <xsl:attribute name="id">     
      <xsl:choose>
       <!-- if the option header has an ID, use that -->
       <xsl:when test="*[contains(@class,' task/chhead ')]/*[contains(@class,' task/choptionhd ')]/@id">
@@ -527,8 +527,8 @@
      <xsl:apply-templates select="*[contains(@class,' task/chhead ')]/*[contains(@class,' task/choptionhd ')]" mode="chtabhdr"/>
     </th><xsl:value-of select="$newline"/>
     <th valign="bottom">     
-     <xsl:attribute name="id">
      <xsl:call-template name="th-align"/>
+     <xsl:attribute name="id">
      <xsl:choose>
       <!-- if the description header has an ID, use that -->
       <xsl:when test="*[contains(@class,' task/chhead ')]/*[contains(@class,' task/chdeschd ')]/@id">
@@ -566,7 +566,7 @@
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' task/chrow ')]" name="topic.task.chrow">
- <tr><xsl:call-template name="commonattributes"/><xsl:apply-templates/></tr>
+ <tr><xsl:call-template name="setid"/><xsl:call-template name="commonattributes"/><xsl:apply-templates/></tr>
  <xsl:value-of select="$newline"/>
 </xsl:template>
 
