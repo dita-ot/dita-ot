@@ -4,10 +4,15 @@
 package org.dita.dost.util;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.StringTokenizer;
+
+import org.dita.dost.log.DITAOTJavaLogger;
 
 /**
  * Class description goes here.
@@ -57,7 +62,10 @@ public class FileUtils {
 	public static boolean isSupportedImageFile(String lcasefn) {
 		return lcasefn.endsWith(Constants.FILE_EXTENSION_JPG)
 				|| lcasefn.endsWith(Constants.FILE_EXTENSION_GIF)
-				|| lcasefn.endsWith(Constants.FILE_EXTENSION_EPS);
+				|| lcasefn.endsWith(Constants.FILE_EXTENSION_EPS)
+				|| lcasefn.endsWith(Constants.FILE_EXTENSION_JPEG)
+				|| lcasefn.endsWith(Constants.FILE_EXTENSION_PNG)
+				|| lcasefn.endsWith(Constants.FILE_EXTENSION_SVG);
 	}
 
 	/**
@@ -80,7 +88,10 @@ public class FileUtils {
 				|| lcasefn.endsWith(Constants.FILE_EXTENSION_JPG)
 				|| lcasefn.endsWith(Constants.FILE_EXTENSION_GIF)
 				|| lcasefn.endsWith(Constants.FILE_EXTENSION_EPS)
-				|| lcasefn.endsWith(Constants.FILE_EXTENSION_HTML);
+				|| lcasefn.endsWith(Constants.FILE_EXTENSION_HTML)
+				|| lcasefn.endsWith(Constants.FILE_EXTENSION_JPEG)
+				|| lcasefn.endsWith(Constants.FILE_EXTENSION_PNG)
+				|| lcasefn.endsWith(Constants.FILE_EXTENSION_SVG);
 	}
 
 	/**
@@ -150,33 +161,86 @@ public class FileUtils {
 	}
 
 	/**
-	 * Removing redundant names ".." from the given path.
+	 * Normalize topic path base on current directory and href value, by 
+	 * replacing "\\" and "\" with File.separator, and removing ".", ".."
+	 * from the file path, with no change to substring behind "#".  
+	 * 
+	 * @param rootPath
+	 * @param relativePath
+	 * @return
+	 */
+	public static String resolveTopic(String rootPath, String relativePath) {
+		String begin = relativePath;
+		String end = "";
+	
+		if (relativePath.indexOf("#") != -1) {
+			begin = relativePath.substring(0, relativePath.indexOf('#'));
+			end = relativePath.substring(relativePath.indexOf('#'));
+		}
+		
+		return normalizeDirectory(rootPath, begin) + end;
+	}
+	
+	/**
+	 * Normalize the input file path, by replacing all the '\\', '/' with
+	 * File.seperator, and removing '..' from the directory.
+	 * 
+	 * Note: the substring behind "#" will be removed. 
+	 */
+	public static String normalizeDirectory(String basedir, String filepath) {
+		String normilizedPath = null;
+		int index = filepath.indexOf(Constants.SHARP);
+		String pathname = (index == -1) ? filepath : filepath.substring(0, index);
+
+		/*
+		 * normilize file path using java.io.File
+		 */
+		normilizedPath = new File(basedir, pathname).getPath();
+		
+		if (basedir == null || basedir.length() == 0) {
+			return normilizedPath;
+		}
+
+		return FileUtils.removeRedundantNames(normilizedPath);
+	}
+	
+	/**
+	 * Removing redundant names ".." and "." from the given path.
 	 * 
 	 * @param path
 	 * @return
 	 */
 	public static String removeRedundantNames(String path) {
-        StringTokenizer tokenizer = new StringTokenizer(path, File.separator);
+        StringTokenizer tokenizer = null;
         StringBuffer buff = new StringBuffer(path.length());
-        List dirNameList = new LinkedList();
+        List dirs = new LinkedList();
         Iterator iter = null;
-        int dirNameNum = 0;
+        int dirNum = 0;
         int i = 0;
     
+        /*
+         * remove "." from the directory.
+         */
+        tokenizer = new StringTokenizer(path, File.separator);
         while (tokenizer.hasMoreTokens()) {
-            dirNameList.add(tokenizer.nextToken());
+            String token = tokenizer.nextToken();
+            if (!(".".equals(token))) {
+			    dirs.add(token);
+            }
         }
     
-        dirNameNum = dirNameList.size();
-        while (i < dirNameNum) {
+        /*
+         * remove ".." and the dir name before it.
+         */
+        dirNum = dirs.size();
+        while (i < dirNum) {
         	if (i > 0) {
-        	  String lastDirName = (String) dirNameList.get(i-1);
-        	  String dirName = (String) dirNameList.get(i);
-        	  if ("..".equals(dirName) && !("..".equals(lastDirName))) {
-        		  // remove ".." and the dir name before
-                  dirNameList.remove(i);
-                  dirNameList.remove(i - 1);
-                  dirNameNum = dirNameList.size();
+        	  String lastDir = (String) dirs.get(i - 1);
+        	  String dir = (String) dirs.get(i);
+        	  if ("..".equals(dir) && !("..".equals(lastDir))) {
+                  dirs.remove(i);
+                  dirs.remove(i - 1);
+                  dirNum = dirs.size();
                   i = i - 1;
                   continue;
         	  }
@@ -185,7 +249,13 @@ public class FileUtils {
         	i++;
         }
     
-        iter = dirNameList.iterator();
+        /*
+         * restore the directory.
+         */
+        if (path.startsWith(File.separator)) {
+        	buff.append(File.separator);
+        }
+        iter = dirs.iterator();
         while (iter.hasNext()) {
             buff.append(iter.next());
             if (iter.hasNext()) {
@@ -216,4 +286,36 @@ public class FileUtils {
         return false;
     }
 
+    /**
+     * Copy file from src to target, overwrite if needed
+     * @param src
+     * @param target
+     */
+    public static void copyFile(File src, File target) {
+		FileInputStream fis = null;
+		FileOutputStream fos = null;
+		byte[] buffer = new byte[Constants.INT_1024 * Constants.INT_4];
+		int len;
+		
+		try {
+			fis = new FileInputStream(src);
+			fos = new FileOutputStream(target);
+			while ((len = fis.read(buffer)) != -1) {
+				fos.write(buffer, 0, len);
+			}
+			fos.flush();
+		} catch (IOException ex) {
+			DITAOTJavaLogger logger = new DITAOTJavaLogger();
+			logger.logWarn("Failed to copy file from '" + src + "' to '"
+					+ target + "'");
+		} finally {
+			try {
+				if (fis != null)
+					fis.close();
+				if (fos != null)
+					fos.close();
+			} catch (Exception e) {
+			}
+		}
+	}
 }

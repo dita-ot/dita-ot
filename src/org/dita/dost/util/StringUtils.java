@@ -4,7 +4,10 @@
 package org.dita.dost.util;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.StringTokenizer;
 
 /**
  * String relevant utilities.
@@ -154,5 +157,18 @@ public class StringUtils {
 		s = StringUtils.replaceAll(s, "\"", "&quot;");
 		
 		return s;
+	}
+	
+	public static Map restoreMap(String s) {
+		Map copytoMap = new HashMap();
+		StringTokenizer st = new StringTokenizer(s, Constants.COMMA);
+		
+        while (st.hasMoreTokens()) {
+        	String entry = st.nextToken();
+        	int index = entry.indexOf('=');
+        	copytoMap.put(entry.substring(0, index), entry.substring(index+1));
+        }
+        
+        return copytoMap;
 	}
 }

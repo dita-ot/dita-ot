@@ -4,10 +4,12 @@
 package org.dita.dost.module;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
@@ -70,8 +72,14 @@ public class GenMapAndTopicListModule extends AbstractPipelineModule {
 	/** Set of all the conref targets */
 	private Set conrefTargetSet = null;
 	
+	/** Set of all the copy-to sources */
+	private Set copytoSourceSet = null;
+	
 	/** Set of all the non-conref targets */
-	private Set nonConrefTargetSet = null;
+	private Set nonConrefCopytoTargetSet = null;
+	
+	/** Map of all copy-to (target,source) */
+	private Map copytoMap = null;
 	
 	/** List of files waiting for parsing */
 	private List waitList = null;
@@ -121,7 +129,9 @@ public class GenMapAndTopicListModule extends AbstractPipelineModule {
 		waitList = new LinkedList();
 		doneList = new LinkedList();
 		conrefTargetSet = new HashSet();
-		nonConrefTargetSet = new HashSet();
+		nonConrefCopytoTargetSet = new HashSet();
+		copytoMap = new HashMap();
+		copytoSourceSet = new HashSet();
 	}
 
 	/**
@@ -245,17 +255,32 @@ public class GenMapAndTopicListModule extends AbstractPipelineModule {
 	 * @param currentFile
 	 */
 	private void processParseResult(String currentFile) {
-		Iterator iter = reader.getResult().iterator();
-
+		Iterator iter = reader.getNonCopytoResult().iterator();
+		Map map = reader.getCopytoMap();
+		
+		/*
+		 * Category non-copyto result and update uplevels accordingly
+		 */
 		while (iter.hasNext()) {
 			String file = (String) iter.next();
 			categorizeResultFile(file);
 			updateUplevels(file);
 		}
+
+		/*
+		 * Update uplevels for copy-to targets accordingly
+		 */
+		iter = map.keySet().iterator();
+		while (iter.hasNext()) {
+			updateUplevels((String) iter.next());
+		}
 		
 		hrefTargetSet.addAll(reader.getHrefTargets());
 		conrefTargetSet.addAll(reader.getConrefTargets());
-		nonConrefTargetSet.addAll(reader.getNonConrefTargets());
+		nonConrefCopytoTargetSet.addAll(reader.getNonConrefCopytoTargets());
+		
+		// Note: same key(target) copy-to will be overwrited 
+		copytoMap.putAll(map); 
 	}
 
 	private void categorizeCurrentFile(String currentFile) {
@@ -351,6 +376,55 @@ public class GenMapAndTopicListModule extends AbstractPipelineModule {
 	}
 	
 	private void refactoringResult() {
+		handleConref();		
+		handleCopyto();		
+	}
+
+	private void handleCopyto() {
+		Map tempMap = new HashMap();
+		
+		/*
+		 * Validate copy-to map, remove those without valid sources
+		 */		
+		Iterator iter = copytoMap.keySet().iterator();
+		while (iter.hasNext()) {
+			String key = (String) iter.next();
+			String value = (String) copytoMap.get(key);
+			if (new File(baseInputDir, value).exists()) {
+				tempMap.put(key, value);
+			}
+		}
+		
+		copytoMap = tempMap;
+		
+		/*
+		 * Add copy-to targets into ditaSet, fullTopicSet
+		 */
+		ditaSet.addAll(copytoMap.keySet());
+		fullTopicSet.addAll(copytoMap.keySet());
+		
+		/*
+		 * Get pure copy-to sources
+		 */
+		Set pureCopytoSources = new HashSet();
+		iter = copytoMap.values().iterator();
+		while (iter.hasNext()) {
+			String src = (String) iter.next();
+			if (!nonConrefCopytoTargetSet.contains(src)) {
+				pureCopytoSources.add(src);
+			}
+		}
+		
+		copytoSourceSet = pureCopytoSources;
+		
+		/*
+		 * Remove pure copy-to sources from ditaSet, fullTopicSet
+		 */
+		ditaSet.removeAll(pureCopytoSources);
+		fullTopicSet.removeAll(pureCopytoSources);
+	}
+
+	private void handleConref() {
 		/*
 		 * Get pure conref targets
 		 */
@@ -358,7 +432,7 @@ public class GenMapAndTopicListModule extends AbstractPipelineModule {
 		Iterator iter = conrefTargetSet.iterator();
 		while (iter.hasNext()) {
 			String target = (String) iter.next();
-			if (!nonConrefTargetSet.contains(target)) {
+			if (!nonConrefCopytoTargetSet.contains(target)) {
 				pureConrefTargets.add(target);
 			}
 		}
@@ -377,7 +451,9 @@ public class GenMapAndTopicListModule extends AbstractPipelineModule {
 		Content content = new ContentImpl();
 		File outputFile = new File(tempDir, Constants.FILE_NAME_DITA_LIST);
 		File dir = new File(tempDir);
-
+		Set copytoSet = new HashSet();
+		Iterator iter = null;
+		
 		if (!dir.exists()) {
 			dir.mkdirs();
 		}
@@ -395,7 +471,18 @@ public class GenMapAndTopicListModule extends AbstractPipelineModule {
 		addSetToProperties(prop, Constants.HTML_LIST, htmlSet);
 		addSetToProperties(prop, Constants.HREF_TARGET_LIST, hrefTargetSet);
 		addSetToProperties(prop, Constants.CONREF_TARGET_LIST, conrefTargetSet);
-
+		addSetToProperties(prop, Constants.COPYTO_SOURCE_LIST, copytoSourceSet);
+		
+		/*
+		 * Convert copyto map into set and output
+		 */
+		iter = copytoMap.entrySet().iterator();
+		while (iter.hasNext()) {
+			Map.Entry entry = (Map.Entry) iter.next();
+			copytoSet.add(entry.toString());
+		}
+		addSetToProperties(prop, Constants.COPYTO_TARGET_TO_SOURCE_MAP_LIST, copytoSet);
+		
 		content.setValue(prop);
 		writer.setContent(content);
 		writer.write(outputFile.getAbsolutePath());

@@ -7,10 +7,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -50,15 +49,18 @@ public class GenListModuleReader extends AbstractXMLReader {
 	/** Flag for href in parsing file */
 	private boolean hasHref = false;
 
-	/** Set of all the nonConrefTargets refered in current parsing file */
-	private Set nonConrefTargets = null;
+	/** Set of all the non-conref and non-copyto targets refered in current parsing file */
+	private Set nonConrefCopytoTargets = null;
 	
-	/** Set of conref nonConrefTargets refered in current parsing file */
+	/** Set of conref targets refered in current parsing file */
 	private Set conrefTargets = null;
 	
-	/** Set of href nonConrefTargets refered in current parsing file */
+	/** Set of href nonConrefCopytoTargets refered in current parsing file */
 	private Set hrefTargets = null;
 
+	/** Map of copy-to target to souce	*/
+	private Map copytoMap = null;
+	
 	/** Flag used to mark if parsing entered into excluded element */
 	private boolean insideExcludedElement = false;
 	
@@ -74,9 +76,10 @@ public class GenListModuleReader extends AbstractXMLReader {
 	 * Constructor
 	 */
 	public GenListModuleReader() {
-		nonConrefTargets = new HashSet(Constants.INT_64);
+		nonConrefCopytoTargets = new HashSet(Constants.INT_64);
 		hrefTargets = new HashSet(Constants.INT_32);
 		conrefTargets = new HashSet(Constants.INT_32);
+		copytoMap = new HashMap(Constants.INT_16);
 		reader.setContentHandler(this);
 		reader.setEntityResolver(this);
 	}
@@ -108,9 +111,10 @@ public class GenListModuleReader extends AbstractXMLReader {
 		insideExcludedElement = false;
 		excludedLevel = 0;
 		isValidInput = false;
-		nonConrefTargets.clear();
+		nonConrefCopytoTargets.clear();
 		hrefTargets.clear();
 		conrefTargets.clear();
+		copytoMap.clear();
 	}
 
 	/**
@@ -132,16 +136,18 @@ public class GenListModuleReader extends AbstractXMLReader {
 	}
 
 	/**
-	 * Get all targets.
+	 * Get all targets except copy-to.
 	 * 
 	 * @return Returns allTargets.
 	 */
-	public Set getResult() {
-		Set allTargets = new HashSet();
-		allTargets.addAll(nonConrefTargets);
-		allTargets.addAll(conrefTargets);
+	public Set getNonCopytoResult() {
+		Set nonCopytoSet = new HashSet();
 		
-		return allTargets;
+		nonCopytoSet.addAll(nonConrefCopytoTargets);
+		nonCopytoSet.addAll(conrefTargets);
+		nonCopytoSet.addAll(copytoMap.values());
+		
+		return nonCopytoSet;
 	}
 
 	/**
@@ -163,14 +169,22 @@ public class GenListModuleReader extends AbstractXMLReader {
 	}
 	
 	/**
-	 * Get non-conref targets.
+	 * Get non-conref and non-copyto targets.
 	 * 
-	 * @return Returns the nonConrefTargets.
+	 * @return Returns the nonConrefCopytoTargets.
 	 */
-	public Set getNonConrefTargets() {
-		return nonConrefTargets;
+	public Set getNonConrefCopytoTargets() {
+		return nonConrefCopytoTargets;
 	}
 	
+	/**
+	 * Get the copy-to map.
+	 * 
+	 * @return
+	 */
+	public Map getCopytoMap() {
+		return copytoMap;
+	}
 	
 	/**
 	 * Set the relative directory of current file.
@@ -315,11 +329,13 @@ public class GenListModuleReader extends AbstractXMLReader {
 		filename = FileUtils.normalizeDirectory(currentDir, attrValue);
 
 		/*
-		 * Collect non-conref nonConrefTargets
+		 * Collect non-conref and non-copyto targets
 		 */
-		if (FileUtils.isValidTarget(filename)
-				&& !Constants.ATTRIBUTE_NAME_CONREF.equals(attrName)) {
-			nonConrefTargets.add(filename);
+		if (FileUtils.isValidTarget(filename) && 
+				atts.getValue(Constants.ATTRIBUTE_NAME_COPY_TO) == null
+				&& !Constants.ATTRIBUTE_NAME_CONREF.equals(attrName)
+				&& !Constants.ATTRIBUTE_NAME_COPY_TO.equals(attrName)) {
+			nonConrefCopytoTargets.add(filename);
 		}
 
 		/*
@@ -336,6 +352,16 @@ public class GenListModuleReader extends AbstractXMLReader {
 		if (Constants.ATTRIBUTE_NAME_CONREF.equals(attrName)
 				&& FileUtils.isTopicFile(filename)) {
 			conrefTargets.add(filename);
+		}
+		
+		// Collect copy-to (target,source) into hash map
+		if (Constants.ATTRIBUTE_NAME_COPY_TO.equals(attrName)
+				&& FileUtils.isTopicFile(filename)) {
+			String href = atts.getValue(Constants.ATTRIBUTE_NAME_HREF);
+			
+			if (href != null) {
+				copytoMap.put(filename, FileUtils.normalizeDirectory(currentDir, href));
+			}
 		}
 	}
 

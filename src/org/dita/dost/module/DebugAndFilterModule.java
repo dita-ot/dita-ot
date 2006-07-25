@@ -4,7 +4,9 @@
 package org.dita.dost.module;
 
 import java.io.File;
+import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Map;
 
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.pipeline.AbstractPipelineInput;
@@ -13,6 +15,7 @@ import org.dita.dost.pipeline.PipelineHashIO;
 import org.dita.dost.reader.DitaValReader;
 import org.dita.dost.reader.ListReader;
 import org.dita.dost.util.Constants;
+import org.dita.dost.util.FileUtils;
 import org.dita.dost.writer.DitaWriter;
 
 
@@ -26,13 +29,6 @@ import org.dita.dost.writer.DitaWriter;
 public class DebugAndFilterModule extends AbstractPipelineModule {
 
     /**
-     * Automatically generated constructor: DebugAndFilterModule
-     */
-    public DebugAndFilterModule() {
-    }
-
-    
-    /**
      * @see org.dita.dost.module.AbstractPipelineModule#execute(org.dita.dost.pipeline.AbstractPipelineInput)
      * 
      */
@@ -40,22 +36,24 @@ public class DebugAndFilterModule extends AbstractPipelineModule {
         String baseDir = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_BASEDIR);
         String ditavalFile = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_DITAVAL);
         String tempDir = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_TEMPDIR);
+        String inputDir = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_EXT_PARAM_INPUTDIR);
         String filePathPrefix = null;
         ListReader listReader = new ListReader();
         LinkedList parseList = null;
         Content content;
         DitaWriter fileWriter;
         
-        if (baseDir == null){
-        	throw new DITAOTException(
-				"Please specify the base directory.");
+        if (!new File(inputDir).isAbsolute()) {
+        	inputDir = new File(baseDir, inputDir).getAbsolutePath();
         }
-        if (tempDir == null){
-        	throw new DITAOTException(
-				"Please specify the temp directory.");
+        if (!new File(tempDir).isAbsolute()) {
+        	tempDir = new File(baseDir, tempDir).getAbsolutePath();
         }
+        if (ditavalFile != null && !new File(ditavalFile).isAbsolute()) {
+			ditavalFile = new File(baseDir, ditavalFile).getAbsolutePath();
+		}
         
-        listReader.read(tempDir + File.separator + Constants.FILE_NAME_DITA_LIST);
+        listReader.read(new File(tempDir, Constants.FILE_NAME_DITA_LIST).getAbsolutePath());
         parseList = (LinkedList) listReader.getContent()
                 .getCollection();
         if (ditavalFile!=null){
@@ -70,8 +68,8 @@ public class DebugAndFilterModule extends AbstractPipelineModule {
         content.setValue(tempDir);
         fileWriter.setContent(content);
         
-        if(baseDir!=null){
-            filePathPrefix = baseDir + Constants.STICK;
+        if(inputDir != null){
+            filePathPrefix = inputDir + Constants.STICK;
         }
         
         while (!parseList.isEmpty()) {
@@ -89,8 +87,25 @@ public class DebugAndFilterModule extends AbstractPipelineModule {
             
         }
         
+        performCopytoTask(tempDir, listReader.getCopytoMap());
 
         return null;
     }
+
+    /*
+     * Execute copy-to task, generate copy-to targets base on sources
+     */
+	private void performCopytoTask(String tempDir, Map copytoMap) {
+        Iterator iter = copytoMap.entrySet().iterator();
+        while (iter.hasNext()) {
+        	Map.Entry entry = (Map.Entry) iter.next();
+        	String copytoTarget = (String) entry.getKey();
+        	String copytoSource = (String) entry.getValue();        	
+        	File srcFile = new File(tempDir, copytoSource);
+        	File targetFile = new File(tempDir, copytoTarget);
+        	
+        	FileUtils.copyFile(srcFile, targetFile);
+        }
+	}
 
 }
