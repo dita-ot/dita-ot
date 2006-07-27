@@ -268,7 +268,9 @@
               </xsl:when>
               <xsl:when test="not(@href) or @href=''">
                 <xsl:variable name="parentHREF" select="parent::*[contains(@class, ' map/topicref ')]/@href"/>
-                <xsl:attribute name="value"><xsl:value-of select="$pathFromMaplist"/><xsl:value-of select="substring-before($parentHREF, $DITAEXT)"/><xsl:value-of select="$OUTEXT"/></xsl:attribute>
+                <xsl:if test="$parentHREF!=''">
+                  <xsl:attribute name="value"><xsl:value-of select="$pathFromMaplist"/><xsl:value-of select="substring-before($parentHREF, $DITAEXT)"/><xsl:value-of select="$OUTEXT"/></xsl:attribute>
+                </xsl:if>
               </xsl:when>
               <xsl:otherwise> <!-- If non-DITA, keep the href as-is -->
                 <xsl:attribute name="value"><xsl:value-of select="@href"/></xsl:attribute>
