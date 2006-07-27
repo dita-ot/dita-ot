@@ -253,25 +253,8 @@ public class CommandLineInvoker {
 	}
 	
 	private String getCommandRunner() {
-		File scriptRunner = null;
-		
-		if (Constants.OS_NAME.toLowerCase().indexOf(Constants.OS_NAME_WINDOWS) != -1) {
-			// Windows
-			scriptRunner = new File(ditaDir, "start.bat");
-			if (scriptRunner.exists()) {
-				return scriptRunner.getAbsolutePath().toString();
-			} else {
-				return "ant.bat";
-			}
-		} else {
-			// Linux
-			scriptRunner = new File(ditaDir, "start.sh");
-			if (scriptRunner.exists()) {
-				return scriptRunner.getAbsolutePath().toString();
-			} else {
-				return "ant";
-			}
-		}
+		return (Constants.OS_NAME.toLowerCase().indexOf(
+				Constants.OS_NAME_WINDOWS) != -1) ? "ant.bat" : "ant";
 	}
 
 	private void startTransformation(String cmd) throws IOException {
