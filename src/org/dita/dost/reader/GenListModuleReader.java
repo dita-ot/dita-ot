@@ -14,6 +14,7 @@ import java.util.Set;
 
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.Constants;
 import org.dita.dost.util.FileUtils;
@@ -58,6 +59,9 @@ public class GenListModuleReader extends AbstractXMLReader {
 	/** Set of href nonConrefCopytoTargets refered in current parsing file */
 	private Set hrefTargets = null;
 
+	/** Set of sources of those copy-to that were ignored */
+	private Set ignoredCopytoSourceSet = null;
+	
 	/** Map of copy-to target to souce	*/
 	private Map copytoMap = null;
 	
@@ -72,6 +76,8 @@ public class GenListModuleReader extends AbstractXMLReader {
 	
 	private String props; // contains the attribution specialization from props
 	
+	private DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
+	
 	/**
 	 * Constructor
 	 */
@@ -80,6 +86,7 @@ public class GenListModuleReader extends AbstractXMLReader {
 		hrefTargets = new HashSet(Constants.INT_32);
 		conrefTargets = new HashSet(Constants.INT_32);
 		copytoMap = new HashMap(Constants.INT_16);
+		ignoredCopytoSourceSet = new HashSet(Constants.INT_16);
 		reader.setContentHandler(this);
 		reader.setEntityResolver(this);
 	}
@@ -115,6 +122,7 @@ public class GenListModuleReader extends AbstractXMLReader {
 		hrefTargets.clear();
 		conrefTargets.clear();
 		copytoMap.clear();
+		ignoredCopytoSourceSet.clear();
 	}
 
 	/**
@@ -146,6 +154,7 @@ public class GenListModuleReader extends AbstractXMLReader {
 		nonCopytoSet.addAll(nonConrefCopytoTargets);
 		nonCopytoSet.addAll(conrefTargets);
 		nonCopytoSet.addAll(copytoMap.values());
+		nonCopytoSet.addAll(ignoredCopytoSourceSet);
 		
 		return nonCopytoSet;
 	}
@@ -177,6 +186,13 @@ public class GenListModuleReader extends AbstractXMLReader {
 		return nonConrefCopytoTargets;
 	}
 	
+	/**
+	 * @return Returns the ignoredCopytoSourceSet.
+	 */
+	public Set getIgnoredCopytoSourceSet() {
+		return ignoredCopytoSourceSet;
+	}
+
 	/**
 	 * Get the copy-to map.
 	 * 
@@ -359,10 +375,27 @@ public class GenListModuleReader extends AbstractXMLReader {
 				&& FileUtils.isTopicFile(filename)) {
 			String href = atts.getValue(Constants.ATTRIBUTE_NAME_HREF);
 			
-			if (href != null) {
-				copytoMap.put(filename, FileUtils.normalizeDirectory(currentDir, href));
+			if (href != null && !Constants.STRING_EMPTY.equals(href.trim())) {
+				if (copytoMap.get(filename) != null) {
+					StringBuffer buff = new StringBuffer();
+					buff.append("Copy-to task [href=\"");
+					buff.append(href);
+					buff.append("\" copy-to=\"");
+					buff.append(filename);
+					buff.append("\"] which points to another copy-to target");
+					buff.append(" was ignored.");
+					javaLogger.logWarn(buff.toString());
+					ignoredCopytoSourceSet.add(href);
+				} else {
+					copytoMap.put(filename, FileUtils.normalizeDirectory(currentDir, href));
+				}
+			} else {
+				StringBuffer buff = new StringBuffer();
+				buff.append("Copy-to task [href=\"\" copy-to=\"");
+				buff.append(filename);
+				buff.append("\"] was ignored.");
+				javaLogger.logWarn(buff.toString());
 			}
 		}
 	}
-
 }

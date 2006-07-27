@@ -78,6 +78,9 @@ public class GenMapAndTopicListModule extends AbstractPipelineModule {
 	/** Set of all the non-conref targets */
 	private Set nonConrefCopytoTargetSet = null;
 	
+	/** Set of sources of those copy-to that were ignored */
+	private Set ignoredCopytoSourceSet = null;
+	
 	/** Map of all copy-to (target,source) */
 	private Map copytoMap = null;
 	
@@ -132,6 +135,7 @@ public class GenMapAndTopicListModule extends AbstractPipelineModule {
 		nonConrefCopytoTargetSet = new HashSet();
 		copytoMap = new HashMap();
 		copytoSourceSet = new HashSet();
+		ignoredCopytoSourceSet = new HashSet();
 	}
 
 	/**
@@ -256,7 +260,7 @@ public class GenMapAndTopicListModule extends AbstractPipelineModule {
 	 */
 	private void processParseResult(String currentFile) {
 		Iterator iter = reader.getNonCopytoResult().iterator();
-		Map map = reader.getCopytoMap();
+		Map cpMap = reader.getCopytoMap();
 		
 		/*
 		 * Category non-copyto result and update uplevels accordingly
@@ -268,19 +272,36 @@ public class GenMapAndTopicListModule extends AbstractPipelineModule {
 		}
 
 		/*
-		 * Update uplevels for copy-to targets accordingly
+		 * Update uplevels for copy-to targets, and store
+		 * copy-to map.
+		 * 
+		 * Note: same key(target) copy-to will be ignored.
 		 */
-		iter = map.keySet().iterator();
+		iter = cpMap.keySet().iterator();
 		while (iter.hasNext()) {
-			updateUplevels((String) iter.next());
+			String key = (String) iter.next();
+			String value = (String) cpMap.get(key);
+			
+			if (!copytoMap.containsKey(key)) {
+				updateUplevels(key);
+				copytoMap.put(key, value);
+			} else {
+				StringBuffer buff = new StringBuffer();
+				buff.append("Copy-to task [href=\"");
+				buff.append(value);
+				buff.append("\" copy-to=\"");
+				buff.append(key);
+				buff.append("\"] which points to another copy-to target");
+				buff.append(" was ignored.");
+				javaLogger.logWarn(buff.toString());
+				ignoredCopytoSourceSet.add(value);
+			}
 		}
 		
 		hrefTargetSet.addAll(reader.getHrefTargets());
 		conrefTargetSet.addAll(reader.getConrefTargets());
 		nonConrefCopytoTargetSet.addAll(reader.getNonConrefCopytoTargets());
-		
-		// Note: same key(target) copy-to will be overwrited 
-		copytoMap.putAll(map); 
+		ignoredCopytoSourceSet.addAll(reader.getIgnoredCopytoSourceSet());
 	}
 
 	private void categorizeCurrentFile(String currentFile) {
@@ -382,6 +403,8 @@ public class GenMapAndTopicListModule extends AbstractPipelineModule {
 
 	private void handleCopyto() {
 		Map tempMap = new HashMap();
+		Set pureCopytoSources = new HashSet();
+		Set totalCopytoSources = new HashSet();
 		
 		/*
 		 * Validate copy-to map, remove those without valid sources
@@ -406,8 +429,9 @@ public class GenMapAndTopicListModule extends AbstractPipelineModule {
 		/*
 		 * Get pure copy-to sources
 		 */
-		Set pureCopytoSources = new HashSet();
-		iter = copytoMap.values().iterator();
+		totalCopytoSources.addAll(copytoMap.values());
+		totalCopytoSources.addAll(ignoredCopytoSourceSet);
+		iter = totalCopytoSources.iterator();
 		while (iter.hasNext()) {
 			String src = (String) iter.next();
 			if (!nonConrefCopytoTargetSet.contains(src)) {

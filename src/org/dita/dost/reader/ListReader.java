@@ -73,11 +73,7 @@ public class ListReader extends AbstractReader {
             tokenizer = new StringTokenizer(liststr,Constants.COMMA);
                         
             while (tokenizer.hasMoreTokens()) {
-            	String file = tokenizer.nextToken();
-            	// ignore copy-to targets
-            	if (!copytoMap.containsKey(file)) {
-            		refList.addFirst(file);
-            	}
+            	refList.addFirst(tokenizer.nextToken());
             }            
 
         } catch (Exception e) {

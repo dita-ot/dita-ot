@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import java.util.Map;
 
 import org.dita.dost.exception.DITAOTException;
+import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.pipeline.PipelineHashIO;
@@ -27,7 +28,8 @@ import org.dita.dost.writer.DitaWriter;
  * @author Zhang, Yuan Peng
  */
 public class DebugAndFilterModule extends AbstractPipelineModule {
-
+	private DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
+	
     /**
      * @see org.dita.dost.module.AbstractPipelineModule#execute(org.dita.dost.pipeline.AbstractPipelineInput)
      * 
@@ -73,6 +75,13 @@ public class DebugAndFilterModule extends AbstractPipelineModule {
         }
         
         while (!parseList.isEmpty()) {
+        	String filename = (String) parseList.removeLast();
+        	
+        	if (!new File(inputDir, filename).exists()) {
+        		// This is an copy-to target file, ignore it
+        		continue;
+        	}
+        	
             /*
              * Usually the writer's argument for write() is used to pass in the
              * ouput file name. But in this case, the input file name is same as
@@ -80,10 +89,10 @@ public class DebugAndFilterModule extends AbstractPipelineModule {
              * file name. "|" is used to separate the path information that is
              * not necessary to be kept (baseDir) and the path information that
              * need to be kept in the temp directory.
-             */
-        	fileWriter.write(
+             */        	
+			fileWriter.write(
         			new StringBuffer().append(filePathPrefix)
-        				.append((String) parseList.removeLast()).toString());
+        				.append(filename).toString());
             
         }
         
@@ -103,6 +112,14 @@ public class DebugAndFilterModule extends AbstractPipelineModule {
         	String copytoSource = (String) entry.getValue();        	
         	File srcFile = new File(tempDir, copytoSource);
         	File targetFile = new File(tempDir, copytoTarget);
+        	
+        	if (targetFile.exists()) {
+        		javaLogger
+						.logWarn("Copy-to task [copy-to=\""
+								+ copytoTarget
+								+ "\"] which points to an existed file was ignored.");
+        		continue;
+        	}
         	
         	FileUtils.copyFile(srcFile, targetFile);
         }
