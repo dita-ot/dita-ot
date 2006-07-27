@@ -12,7 +12,7 @@
                      maplink, move-links, topicpull, dita.topic.troff">
   </target>
 
-  <target name="dita.topic.troff"
+  <target name="dita.topic.troff" unless="noTopic"
     description="Build troff output from dita topics">
     <!-- step 1 -->
     <xslt processor="trax" basedir="${dita.temp.dir}"

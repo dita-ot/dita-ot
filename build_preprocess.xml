@@ -29,8 +29,8 @@
     <condition property="noMap">
       <equals arg1="${fullditamaplist}" arg2="" />
     </condition>
-    <condition property="noTopicpull">
-      <equals arg1="${hrefditatopiclist}" arg2="" />
+    <condition property="noTopic">
+      <equals arg1="${fullditatopiclist}" arg2="" />
     </condition>
     <condition property="noImagelist">
       <equals arg1="${imagelist}" arg2="" />
@@ -129,7 +129,7 @@
       inputmap="${user.input.file}" tempdir="${dita.temp.dir}" />
   </target>
 
-  <target name="topicpull" depends="debug-filter"
+  <target name="topicpull" unless="noTopic" depends="debug-filter"
     description="Pull metadata for link and xref element">
     <xslt processor="trax" basedir="${dita.temp.dir}"
       destdir="${dita.temp.dir}" includes="${fullditatopiclist}"

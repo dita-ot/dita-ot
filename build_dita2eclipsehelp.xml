@@ -39,7 +39,7 @@
         </condition>
     </target>
 
-    <target name="dita.map.eclipse.toc"
+    <target name="dita.map.eclipse.toc" unless="noMap"
             depends="dita.map.eclipse.init"
             description="Build EclipseHelp TOC file">
         <xslt processor="trax"

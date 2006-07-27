@@ -2,7 +2,7 @@
 <!-- (c) Copyright IBM Corp. 2006 All Rights Reserved. -->
 <project name="build_generaltargets">
 
-  <target name="dita.topics.xhtml"
+  <target name="dita.topics.xhtml" unless="noTopic"
     description="Build XHTML output from dita topics">
     <condition property="out.ext" value=".html">
       <not>
@@ -36,7 +36,7 @@
     </xslt>
   </target>
 
-  <target name="dita.topics.html"
+  <target name="dita.topics.html" unless="noTopic"
     description="Build HTML files from dita topics">
     <condition property="out.ext" value=".html">
       <not>

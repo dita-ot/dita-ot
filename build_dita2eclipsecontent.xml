@@ -64,7 +64,7 @@
     </xslt>
   </target>
 
-  <target name="dita.topics.eclipse.content">
+  <target name="dita.topics.eclipse.content" unless="noTopic">
     <copy todir="${output.dir}">
       <fileset dir="${dita.temp.dir}" includes="${fullditatopiclist}">
       </fileset>
