@@ -27,7 +27,7 @@
   <property name="doc.out.dir" location="out/doc"/>
   
   <property name="dost.jar" location="${lib.dir}/dost.jar" />
-
+  <property name="binary-big" value="DITA-OT${version}_fullpackage_bin" />
   <property name="binary" value="DITA-OT${version}_bin" />
   <property name="source" value="DITA-OT${version}_src" />
   <property name="win32.zip.suffix" value=".zip" />
@@ -47,7 +47,7 @@
   </target>
   
   <target name="clean-java">
-    <delete dir="${lib.dir}"/>
+    <delete dir="${lib.dir}/dost.jar"/>
     <delete dir="${bin.dir}"/>
   </target>
   
@@ -76,6 +76,7 @@
     <include name="xsl/**"/>
     <exclude name="doc/userguide-orig/**"/>
     <exclude name="build.number"/>
+    <exclude name=".*"/>
   </patternset>
     
   <target name="package-source">    
@@ -85,15 +86,19 @@
         <include name="src/**"/>
         <exclude name="APACHE-LICENSE-2_0.html"/>
         <exclude name="files.txt"/>
+        <exclude name="startcmd.*"/>
+        <exclude name="setupenv.*"/>
       </zipfileset>
     </zip>
     <tar destfile="${package.output.dir}/${param.out.file}${linux.zip.suffix}" 
-      compression="gzip">
+      compression="gzip" longfile="gnu">
       <tarfileset dir="./" prefix="${package.name.root}${version}-src">
         <patternset refid="pattern.package.general"/>
         <include name="src/**"/>
         <exclude name="APACHE-LICENSE-2_0.html"/>
         <exclude name="files.txt"/>
+        <exclude name="startcmd.*"/>
+        <exclude name="setupenv.*"/>
       </tarfileset>
     </tar>
   </target>
@@ -105,51 +110,104 @@
         <include name="src/**"/>
         <exclude name="CommonPublicLicense-v10.html"/>
         <exclude name="files.txt"/>
+        <exclude name="startcmd.*"/>
+        <exclude name="setupenv.*"/>
       </zipfileset>
     </zip>
     <tar destfile="${package.output.dir}/${param.out.file}${linux.zip.suffix}" 
-      compression="gzip">
+      compression="gzip" longfile="gnu">
       <tarfileset dir="./" prefix="${package.name.root}${version}-src">
         <patternset refid="pattern.package.general"/>
         <include name="src/**"/>
         <exclude name="CommonPublicLicense-v10.html"/>
         <exclude name="files.txt"/>
+        <exclude name="startcmd.*"/>
+        <exclude name="setupenv.*"/>
       </tarfileset>
     </tar>
   </target>
   
-  <target name="package-binary">    
+  <target name="package-binary-small">    
+    <zip destfile="${package.output.dir}/${param.out.file}${win32.zip.suffix}">
+      <zipfileset dir="./" prefix="${package.name.root}${version}">
+        <patternset refid="pattern.package.general"/>
+        <include name="lib/dost.jar"/>
+        <exclude name="APACHE-LICENSE-2_0.html"/>
+        <exclude name="startcmd.*"/>
+        <exclude name="setupenv.*"/>
+      </zipfileset>
+    </zip>
+    
+    <tar destfile="${package.output.dir}/${param.out.file}${linux.zip.suffix}" 
+      compression="gzip" longfile="gnu">
+      <tarfileset dir="./" prefix="${package.name.root}${version}">
+        <patternset refid="pattern.package.general"/>
+        <include name="lib/dost.jar"/>
+        <exclude name="APACHE-LICENSE-2_0.html"/>
+        <exclude name="startcmd.*"/>
+        <exclude name="setupenv.*"/>
+      </tarfileset>
+    </tar>
+  </target>
+  
+  <target name="package-binary-big">    
     <zip destfile="${package.output.dir}/${param.out.file}${win32.zip.suffix}">
       <zipfileset dir="./" prefix="${package.name.root}${version}">
         <patternset refid="pattern.package.general"/>
         <include name="lib/*.jar"/>
+        <include name="tools/**"/>
         <exclude name="APACHE-LICENSE-2_0.html"/>
       </zipfileset>
     </zip>
     
     <tar destfile="${package.output.dir}/${param.out.file}${linux.zip.suffix}" 
-      compression="gzip">
+      compression="gzip" longfile="gnu">
       <tarfileset dir="./" prefix="${package.name.root}${version}">
         <patternset refid="pattern.package.general"/>
         <include name="lib/*.jar"/>
+        <include name="tools/**"/>
         <exclude name="APACHE-LICENSE-2_0.html"/>
       </tarfileset>
     </tar>
   </target>
   
-  <target name="package-binary-ASL">    
+  <target name="package-binary-small-ASL">    
+    <zip destfile="${package.output.dir}/${param.out.file}${win32.zip.suffix}">
+      <zipfileset dir="./" prefix="${package.name.root}${version}">
+        <patternset refid="pattern.package.general"/>
+        <include name="lib/dost.jar"/>
+        <exclude name="CommonPublicLicense-v10.html"/>
+        <exclude name="startcmd.*"/>
+        <exclude name="setupenv.*"/>
+      </zipfileset>
+    </zip>
+    <tar destfile="${package.output.dir}/${param.out.file}${linux.zip.suffix}" 
+      compression="gzip" longfile="gnu">
+      <tarfileset dir="./" prefix="${package.name.root}${version}">
+        <patternset refid="pattern.package.general"/>
+        <include name="lib/dost.jar"/>
+        <exclude name="CommonPublicLicense-v10.html"/>
+        <exclude name="startcmd.*"/>
+        <exclude name="setupenv.*"/>
+      </tarfileset>
+    </tar>
+  </target>
+  
+  <target name="package-binary-big-ASL">    
     <zip destfile="${package.output.dir}/${param.out.file}${win32.zip.suffix}">
       <zipfileset dir="./" prefix="${package.name.root}${version}">
         <patternset refid="pattern.package.general"/>
         <include name="lib/*.jar"/>
+        <include name="tools/**"/>
         <exclude name="CommonPublicLicense-v10.html"/>
       </zipfileset>
     </zip>
     <tar destfile="${package.output.dir}/${param.out.file}${linux.zip.suffix}" 
-      compression="gzip">
+      compression="gzip" longfile="gnu">
       <tarfileset dir="./" prefix="${package.name.root}${version}">
         <patternset refid="pattern.package.general"/>
         <include name="lib/*.jar"/>
+        <include name="tools/**"/>
         <exclude name="CommonPublicLicense-v10.html"/>
       </tarfileset>
     </tar>
@@ -168,14 +226,20 @@
   </target>
   
   <target name="build-package-binary" depends="package-java, update-doc, copy-updated-doc">
-    <antcall target="package-binary">
+    <antcall target="package-binary-small">
       <param name="param.out.file" value="${binary}"/>
+    </antcall>
+    <antcall target="package-binary-big">
+      <param name="param.out.file" value="${binary-big}"/>
     </antcall>
   </target>
   
   <target name="build-package-binary-ASL" depends="package-java, update-doc, copy-updated-doc">
-    <antcall target="package-binary-ASL">
+    <antcall target="package-binary-small-ASL">
       <param name="param.out.file" value="${binary}-ASL"/>
+    </antcall>
+    <antcall target="package-binary-big-ASL">
+      <param name="param.out.file" value="${binary-big}-ASL"/>
     </antcall>
   </target>
     
@@ -185,9 +249,13 @@
     <tstamp>
       <format property="build.time" pattern="yyyyMMddhhmm"/>
     </tstamp>
-    <antcall target="package-binary">
+    <antcall target="package-binary-small">
       <param name="param.out.file" 
         value="${package.name.root}${version}b${build.number}-bin.${build.time}"/>
+    </antcall>
+    <antcall target="package-binary-big">
+      <param name="param.out.file" 
+        value="${package.name.root}${version}b${build.number}-fullpackage-bin.${build.time}"/>
     </antcall>
   </target>
   
