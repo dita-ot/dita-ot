@@ -27,7 +27,6 @@ public class MoveIndexModule extends AbstractPipelineModule {
 
     private ContentImpl content;
 
-
     /**
      * Default constructor of MoveIndexModule class.
      */
@@ -37,26 +36,25 @@ public class MoveIndexModule extends AbstractPipelineModule {
 
     }
 
-
-    /**
-     * 
-     * 
+    /** (non-Javadoc)
+     * @see org.dita.dost.module.AbstractPipelineModule#execute(org.dita.dost.pipeline.AbstractPipelineInput)
      */
     public AbstractPipelineOutput execute(AbstractPipelineInput input) throws DITAOTException {
-
-    	String tempDir = ((PipelineHashIO)input).getAttribute(Constants.ANT_INVOKER_PARAM_TEMPDIR);
-        String mapFile = tempDir + File.separatorChar
-                + ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_INPUTMAP);
-        MapIndexReader indexReader = new MapIndexReader();
-		DitaIndexWriter indexInserter = new DitaIndexWriter();
-		Set mapSet;
+    	String mapFile;
+    	Set mapSet;
 		Iterator i;
 		String targetFileName;
-        
-		if (tempDir == null){
-        	throw new DITAOTException(
-				"Please specify the temp directory.");
+		MapIndexReader indexReader = new MapIndexReader();
+		DitaIndexWriter indexInserter = new DitaIndexWriter();
+		String baseDir = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_BASEDIR);
+    	String tempDir = ((PipelineHashIO)input).getAttribute(Constants.ANT_INVOKER_PARAM_TEMPDIR);
+    	String inputMap = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_INPUTMAP);
+		
+		if (!new File(tempDir).isAbsolute()) {
+        	tempDir = new File(baseDir, tempDir).getAbsolutePath();
         }
+		
+		mapFile = new File(tempDir, inputMap).getAbsolutePath();
 		
         indexReader.setMatch(new StringBuffer(Constants.ELEMENT_NAME_TOPICREF)
                 .append(Constants.SLASH).append(Constants.ELEMENT_NAME_TOPICMETA)
@@ -69,6 +67,8 @@ public class MoveIndexModule extends AbstractPipelineModule {
         while (i.hasNext()) {
             Map.Entry entry = (Map.Entry) i.next();
             targetFileName = (String) entry.getKey();
+            targetFileName = targetFileName.indexOf(Constants.SHARP) != -1 ? 
+            		targetFileName.substring(0, targetFileName.indexOf(Constants.SHARP)): targetFileName;
             if (targetFileName.endsWith(Constants.FILE_EXTENSION_DITA) ||
                     targetFileName.endsWith(Constants.FILE_EXTENSION_XML)){
                 content.setValue(entry.getValue());
