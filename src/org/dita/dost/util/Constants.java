@@ -89,6 +89,7 @@ public abstract class Constants {
     public static final String ATTRIBUTE_NAME_XML_LANG = "xml:lang";    
     public static final String ATTRIBUTE_NAME_DOMAINS = "domains";
     public static final String ATTRIBUTE_NAME_PROPS = "props";
+    public static final String ATTRIBUTE_NAME_SCOPE = "scope";
     
     /**
      * Constant for value of attribute format in dita files.
@@ -142,6 +143,7 @@ public abstract class Constants {
     public static final String ANT_INVOKER_EXT_PARAM_INPUT = "input";
     public static final String ANT_INVOKER_EXT_PARAM_DITADIR = "ditadir";
     public static final String ANT_INVOKER_EXT_PARAM_INPUTDIR = "inputdir";
+    public static final String ANT_INVOKER_EXT_PARAM_STYLE = "style";
     
     /**
      * Constants for file and line separator.
@@ -170,6 +172,7 @@ public abstract class Constants {
     public static final String QUESTION = "?";    
     public static final String QUOTATION = "\"";    
     public static final String COLON = ":";
+    public static final String DOT= ".";
     public static final String DOUBLE_BACK_SLASH = "\\\\";    
     public static final String COLON_DOUBLE_SLASH = "://";    
     public static final String CDATA_HEAD = "<![CDATA[";    
@@ -199,6 +202,11 @@ public abstract class Constants {
 	public static final String ATTR_CLASS_VALUE_MAP = "map/map";
 	public static final String ATTR_CLASS_VALUE_INDEXTERM = "topic/indexterm";
 	public static final String ATTR_CLASS_VALUE_TOPIC = "topic/topic";
+	public static final String ATTR_CLASS_VALUE_XREF = "topic/xref";
+	public static final String ATTR_CLASS_VALUE_LINK = "topic/link";
+	public static final String ATTR_SCOPE_VALUE_LOCAL = "local";
+	public static final String ATTR_FORMAT_VALUE_DITA = "dita";
+	
     
     /**
      * Private constructor used to forbid instantiation.
