@@ -12,6 +12,7 @@ import java.util.HashMap;
 
 import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.module.Content;
+import org.dita.dost.module.DebugAndFilterModule;
 import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.Constants;
 import org.dita.dost.util.FileUtils;
@@ -135,7 +136,7 @@ public class DitaWriter extends AbstractXMLWriter {
                 } else {
                 	outputFile = new File(tempDir 
                             + File.separatorChar + filename.substring(index+1, fileExtIndex)
-                            + Constants.FILE_EXTENSION_DITA);
+                            + DebugAndFilterModule.extName);
                 }
                 
                 path2Project = FileUtils.getPathtoProject(filename.substring(index+1));
@@ -146,7 +147,7 @@ public class DitaWriter extends AbstractXMLWriter {
                 } else {
                 	outputFile = new File(tempDir + File.separatorChar 
                 			+ filename.substring(0, fileExtIndex)
-                			+ Constants.FILE_EXTENSION_DITA);
+                			+ DebugAndFilterModule.extName);
                 }
                 
                 path2Project = FileUtils.getPathtoProject(filename);

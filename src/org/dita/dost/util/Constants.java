@@ -128,6 +128,7 @@ public abstract class Constants {
      * Constants for common params used in ant invoker.
      */
     public static final String ANT_INVOKER_PARAM_TEMPDIR = "tempDir";
+    public static final String ANT_INVOKER_PARAM_DITAEXT = "ditaext";
     public static final String ANT_INVOKER_PARAM_BASEDIR = "basedir";
     public static final String ANT_INVOKER_PARAM_INPUTMAP = "inputmap";    
     public static final String ANT_INVOKER_PARAM_DITAVAL = "ditaval";    

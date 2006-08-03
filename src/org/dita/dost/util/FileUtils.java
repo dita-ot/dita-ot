@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 import org.dita.dost.log.DITAOTJavaLogger;
+import org.dita.dost.module.DebugAndFilterModule;
 
 /**
  * Class description goes here.
@@ -334,7 +335,7 @@ public class FileUtils {
     		fileExtIndex = fileName.lastIndexOf(Constants.DOT);
     		if (fileExtIndex != -1){        			
     			return fileName.substring(0,fileExtIndex) 
-    				+ Constants.FILE_EXTENSION_DITA 
+    				+ DebugAndFilterModule.extName 
     				+ attValue.substring(index);
     		} else {
     			return attValue;
@@ -342,7 +343,7 @@ public class FileUtils {
     	} else {
     		fileExtIndex = attValue.lastIndexOf(Constants.DOT);
     		if (fileExtIndex != -1){
-    			return attValue.substring(0, fileExtIndex) + Constants.FILE_EXTENSION_DITA;
+    			return attValue.substring(0, fileExtIndex) + DebugAndFilterModule.extName;
     		}else {
     			return attValue;
     		}
