@@ -318,4 +318,34 @@ public class FileUtils {
 			}
 		}
 	}
+    
+    
+    public static String replaceExtName(String attValue){
+    	String fileName;
+        int fileExtIndex;
+        int index;
+    	
+    	index = attValue.indexOf(Constants.SHARP);
+		
+    	if (attValue.startsWith(Constants.SHARP)){
+    		return attValue;
+    	} else if (index != -1){
+    		fileName = attValue.substring(0,index); 
+    		fileExtIndex = fileName.lastIndexOf(Constants.DOT);
+    		if (fileExtIndex != -1){        			
+    			return fileName.substring(0,fileExtIndex) 
+    				+ Constants.FILE_EXTENSION_DITA 
+    				+ attValue.substring(index);
+    		} else {
+    			return attValue;
+    		}
+    	} else {
+    		fileExtIndex = attValue.lastIndexOf(Constants.DOT);
+    		if (fileExtIndex != -1){
+    			return attValue.substring(0, fileExtIndex) + Constants.FILE_EXTENSION_DITA;
+    		}else {
+    			return attValue;
+    		}
+    	}
+    }
 }

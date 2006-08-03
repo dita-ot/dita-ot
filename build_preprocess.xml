@@ -3,7 +3,7 @@
 <project name="ditaot-preprocess" basedir=".">
 
   <target name="preprocess"
-    depends="start-preprocess,clean-temp,gen-list,copy-files,debug-filter,move-index-entries,conref,mappull,maplink,move-links,topicpull"
+    depends="start-preprocess,clean-temp,gen-list,debug-filter,copy-files,move-index-entries,conref,mappull,maplink,move-links,topicpull"
     description="Preprocessing ended" />
 
   <!-- preprocess modules begin -->
@@ -20,6 +20,24 @@
   <target name="gen-list"
     depends="gen-list-without-flagging, gen-list-with-flagging"
     description="Generate file list">
+  </target>
+
+  <target name="gen-list-without-flagging"
+    unless="dita.input.valfile">
+    <pipeline message="Generate list." module="GenMapAndTopicList"
+      basedir="${basedir}" inputmap="${args.input}"
+      tempdir="${dita.temp.dir}" extparam="ditadir=${dita.dir}" />
+  </target>
+
+  <target name="gen-list-with-flagging" if="dita.input.valfile">
+    <pipeline message="Generate list." module="GenMapAndTopicList"
+      basedir="${basedir}" inputmap="${args.input}"
+      tempdir="${dita.temp.dir}"
+      extparam="ditadir=${dita.dir};ditaval=${dita.input.valfile}" />
+  </target>
+
+  <target name="debug-filter" depends="gen-list, debug, debug-and-filter"
+    description="Debug and filter input files" >
     <property file="${dita.temp.dir}${file.separator}dita.list" />
     <dirname property="dita.map.output.dir"
       file="${output.dir}${file.separator}${user.input.file}" />
@@ -40,35 +58,17 @@
     </condition>
   </target>
 
-  <target name="gen-list-without-flagging"
-    unless="dita.input.valfile">
-    <pipeline message="Generate list." module="GenMapAndTopicList"
-      basedir="${basedir}" inputmap="${args.input}"
-      tempdir="${dita.temp.dir}" extparam="ditadir=${dita.dir}" />
-  </target>
-
-  <target name="gen-list-with-flagging" if="dita.input.valfile">
-    <pipeline message="Generate list." module="GenMapAndTopicList"
-      basedir="${basedir}" inputmap="${args.input}"
-      tempdir="${dita.temp.dir}"
-      extparam="ditadir=${dita.dir};ditaval=${dita.input.valfile}" />
-  </target>
-
-  <target name="debug-filter" depends="gen-list, debug, debug-and-filter"
-    description="Debug and filter input files" />
-
   <target name="debug" unless="dita.input.valfile"
     description="Debug input files">
     <pipeline message="Debug and filtering." module="DebugAndFilter"
-      basedir="${basedir}" tempdir="${dita.temp.dir}"
-      extparam="inputdir=${user.input.dir}" />
+      basedir="${basedir}" tempdir="${dita.temp.dir}"/>
   </target>
 
   <target name="debug-and-filter" if="dita.input.valfile"
     description="Debug and filter input files">
     <pipeline message="Debug and filtering." module="DebugAndFilter"
       basedir="${basedir}" tempdir="${dita.temp.dir}"
-      extparam="inputdir=${user.input.dir};ditaval=${dita.input.valfile}" />
+      extparam="ditaval=${dita.input.valfile}" />
   </target>
 
   <target name="move-index-entries" unless="noMap"
@@ -144,7 +144,7 @@
   </target>
 
   <target name="copy-files"
-    depends="copy-image, copy-html, copy-flag, copy-generated-files" />
+    depends="debug-filter,copy-image, copy-html, copy-flag, copy-generated-files" />
 
   <target name="copy-image" unless="noImagelist"
     description="Copy image files">

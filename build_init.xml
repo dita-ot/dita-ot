@@ -59,7 +59,7 @@
 
   <property name="dita.temp.dir" value="temp" />
   <property name="output.dir" value="out" />
-  <property name="dita.extname" value="xml" />
+  <property name="dita.extname" value="dita" />
   <property name="dita.script.dir"
     value="${dita.dir}${file.separator}xsl" />
   <property name="dita.resource.dir"

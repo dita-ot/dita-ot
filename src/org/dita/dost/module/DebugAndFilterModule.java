@@ -4,9 +4,13 @@
 package org.dita.dost.module;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Properties;
+import java.util.StringTokenizer;
 
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTJavaLogger;
@@ -29,6 +33,10 @@ import org.dita.dost.writer.DitaWriter;
  */
 public class DebugAndFilterModule extends AbstractPipelineModule {
 	private DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
+	private static final String [] propertyUpdateList = {"user.input.file",Constants.HREF_TARGET_LIST,
+		Constants.CONREF_LIST,Constants.HREF_DITA_TOPIC_LIST,Constants.FULL_DITA_TOPIC_LIST,
+		Constants.FULL_DITAMAP_TOPIC_LIST,Constants.CONREF_TARGET_LIST,Constants.COPYTO_SOURCE_LIST,
+		Constants.COPYTO_TARGET_TO_SOURCE_MAP_LIST};
 	
     /**
      * @see org.dita.dost.module.AbstractPipelineModule#execute(org.dita.dost.pipeline.AbstractPipelineInput)
@@ -38,16 +46,14 @@ public class DebugAndFilterModule extends AbstractPipelineModule {
         String baseDir = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_BASEDIR);
         String ditavalFile = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_DITAVAL);
         String tempDir = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_TEMPDIR);
-        String inputDir = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_EXT_PARAM_INPUTDIR);
+        String inputDir = null;
         String filePathPrefix = null;
         ListReader listReader = new ListReader();
         LinkedList parseList = null;
         Content content;
         DitaWriter fileWriter;
         
-        if (!new File(inputDir).isAbsolute()) {
-        	inputDir = new File(baseDir, inputDir).getAbsolutePath();
-        }
+        
         if (!new File(tempDir).isAbsolute()) {
         	tempDir = new File(baseDir, tempDir).getAbsolutePath();
         }
@@ -58,6 +64,12 @@ public class DebugAndFilterModule extends AbstractPipelineModule {
         listReader.read(new File(tempDir, Constants.FILE_NAME_DITA_LIST).getAbsolutePath());
         parseList = (LinkedList) listReader.getContent()
                 .getCollection();
+        inputDir = (String) listReader.getContent().getValue();
+        
+        if (!new File(inputDir).isAbsolute()) {
+        	inputDir = new File(baseDir, inputDir).getAbsolutePath();
+        }
+        
         if (ditavalFile!=null){
             DitaValReader filterReader = new DitaValReader();
             filterReader.read(ditavalFile);
@@ -96,11 +108,69 @@ public class DebugAndFilterModule extends AbstractPipelineModule {
             
         }
         
+        updateList(tempDir);
+        // reload the property for processing of copy-to
+        listReader.read(new File(tempDir, Constants.FILE_NAME_DITA_LIST).getAbsolutePath());
         performCopytoTask(tempDir, listReader.getCopytoMap());
 
         return null;
     }
 
+    private void updateList(String tempDir){
+    	Properties property = new Properties();
+    	FileOutputStream output;
+    	try{
+    		property.load(new FileInputStream( new File(tempDir, Constants.FILE_NAME_DITA_LIST)));
+    		
+    		for (int i = 0; i < propertyUpdateList.length; i ++){
+    			updateProperty(propertyUpdateList[i], property);
+    		}
+    		
+    		output = new FileOutputStream(new File(tempDir, Constants.FILE_NAME_DITA_LIST));
+    		property.store(output, null);
+    		output.flush();
+    		output.close();
+    		
+    	} catch (Exception e){
+    		javaLogger.logException(e);
+    	}
+    	
+    }
+    
+    private void updateProperty (String listName, Properties property){
+    	StringBuffer result = new StringBuffer(Constants.INT_1024);
+    	String propValue = property.getProperty(listName);
+    	if (propValue == null || Constants.STRING_EMPTY.equals(propValue.trim())){
+    		//if the propValue is null or empty
+    		return;
+    	}
+    	
+    	StringTokenizer tokenizer = new StringTokenizer(propValue,Constants.COMMA);
+    	String file;
+    	int equalIndex;
+    	
+    	while (tokenizer.hasMoreElements()){
+    		file = (String)tokenizer.nextElement();
+    		equalIndex = file.indexOf(Constants.EQUAL);
+    		if(file.indexOf(Constants.FILE_EXTENSION_DITAMAP) != -1){
+    			result.append(Constants.COMMA).append(file);
+    		} else if (equalIndex == -1 ){
+    			//append one more comma at the beginning of property value
+    			result.append(Constants.COMMA).append(FileUtils.replaceExtName(file));
+    		} else {
+    			//append one more comma at the beginning of property value
+    			result.append(Constants.COMMA);
+    			result.append(FileUtils.replaceExtName(file.substring(0,equalIndex)));
+    			result.append(Constants.EQUAL);
+    			result.append(FileUtils.replaceExtName(file.substring(equalIndex+1)));
+    		}
+    	}
+    	
+    	property.setProperty(listName, result.substring(Constants.INT_1));
+    	
+    }
+    
+    
     /*
      * Execute copy-to task, generate copy-to targets base on sources
      */

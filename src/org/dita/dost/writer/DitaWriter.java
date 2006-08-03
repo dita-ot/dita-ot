@@ -112,22 +112,43 @@ public class DitaWriter extends AbstractXMLWriter {
      */
     public void write(String filename) {
 		int index;
+		int fileExtIndex;
 		File outputFile;
 		File dirFile;
 		FileOutputStream fileOutput = null;
         exclude = false;
         needResolveEntity = true;
         index = filename.indexOf(Constants.STICK);
+        if (filename.endsWith(Constants.FILE_EXTENSION_DITAMAP)){
+        	fileExtIndex = -1;
+        } else {
+        	fileExtIndex = filename.lastIndexOf(Constants.DOT);
+        }
+        
         try {
             if(index!=-1){
                 traceFilename = filename.replace('|',File.separatorChar)
                 .replace('/',File.separatorChar).replace('\\',File.separatorChar);
-                outputFile = new File(tempDir 
-                        + File.separatorChar + filename.substring(index+1));
+                if(fileExtIndex == -1 || fileExtIndex <= index){
+                	outputFile = new File(tempDir 
+                            + File.separatorChar + filename.substring(index+1));
+                } else {
+                	outputFile = new File(tempDir 
+                            + File.separatorChar + filename.substring(index+1, fileExtIndex)
+                            + Constants.FILE_EXTENSION_DITA);
+                }
+                
                 path2Project = FileUtils.getPathtoProject(filename.substring(index+1));
             }else{
                 traceFilename = filename;
-                outputFile = new File(tempDir + File.separatorChar + filename);
+                if(fileExtIndex == -1){
+                	outputFile = new File(tempDir + File.separatorChar + filename);
+                } else {
+                	outputFile = new File(tempDir + File.separatorChar 
+                			+ filename.substring(0, fileExtIndex)
+                			+ Constants.FILE_EXTENSION_DITA);
+                }
+                
                 path2Project = FileUtils.getPathtoProject(filename);
             }
             counterMap = new HashMap();
@@ -341,16 +362,15 @@ public class DitaWriter extends AbstractXMLWriter {
                     for (int i = 0; i < attsLen; i++) {
                         String attQName = atts.getQName(i);
                         String attValue;
-                        if(Constants.ATTRIBUTE_NAME_HREF.equals(attQName)
-                                || Constants.ATTRIBUTE_NAME_CONREF.equals(attQName)){
-                            /*
-                             * replace all the backslash with slash in 
-                             * all href and conref attribute
-                             */
-                            attValue = atts.getValue(i).replaceAll(
-                                    Constants.DOUBLE_BACK_SLASH, Constants.SLASH);
-                        }
-                        else {
+                        
+                        if(Constants.ATTRIBUTE_NAME_HREF.equals(attQName)){
+                            
+                            attValue = replaceHREF(atts);
+                            
+                        } else if (Constants.ATTRIBUTE_NAME_CONREF.equals(attQName)){
+                                                        
+                            attValue = replaceCONREF(atts);
+                        } else {
                             attValue = atts.getValue(i);
                         }
 
@@ -377,6 +397,79 @@ public class DitaWriter extends AbstractXMLWriter {
                 }// try
             } 
         }
+    }
+    
+    private String replaceHREF (Attributes atts){
+    	
+    	String attValue = atts.getValue(Constants.ATTRIBUTE_NAME_HREF);
+        
+    	
+    	if (attValue != null){
+    		/*
+             * replace all the backslash with slash in 
+             * all href and conref attribute
+             */     
+    		attValue = attValue.replaceAll(Constants.DOUBLE_BACK_SLASH, Constants.SLASH);
+    	} else {
+    		return null;
+    	}
+    	
+    	if(checkDITAHREF(atts)){
+    		return FileUtils.replaceExtName(attValue);
+        }
+    	
+    	return attValue;
+    }
+    
+    private String replaceCONREF (Attributes atts){
+    	
+    	/*
+         * replace all the backslash with slash in 
+         * all href and conref attribute
+         */
+        String attValue = atts.getValue(Constants.ATTRIBUTE_NAME_CONREF);
+        if (attValue != null){
+        	attValue = attValue.replaceAll(Constants.DOUBLE_BACK_SLASH, Constants.SLASH);
+        }
+        
+        if(attValue.indexOf(Constants.FILE_EXTENSION_DITAMAP) == -1){
+        	return FileUtils.replaceExtName(attValue);
+        }
+
+    	return attValue;
+    }
+    
+    
+    
+    private boolean checkDITAHREF(Attributes atts){
+    	// TO DO add implementation
+    	String classValue = atts.getValue(Constants.ATTRIBUTE_NAME_CLASS);
+    	String scopeValue = atts.getValue(Constants.ATTRIBUTE_NAME_SCOPE);
+    	String formatValue = atts.getValue(Constants.ATTRIBUTE_NAME_FORMAT);
+    	
+    	
+    	
+    	if (classValue == null
+    			|| (classValue.indexOf(Constants.ATTR_CLASS_VALUE_XREF) == -1
+    			&& classValue.indexOf(Constants.ATTR_CLASS_VALUE_LINK) == -1
+    			&& classValue.indexOf(Constants.ATTR_CLASS_VALUE_TOPICREF) == -1))
+    	{
+    		return false;
+    	} 
+    	
+    	if (scopeValue == null){
+    		scopeValue = Constants.ATTR_SCOPE_VALUE_LOCAL;
+    	}
+    	if (formatValue == null){
+    		formatValue = Constants.ATTR_FORMAT_VALUE_DITA;
+    	}
+    	
+    	if (scopeValue.equalsIgnoreCase(Constants.ATTR_SCOPE_VALUE_LOCAL)
+    			&& formatValue.equalsIgnoreCase(Constants.ATTR_FORMAT_VALUE_DITA)){
+    		return true;
+    	}
+    	
+    	return false;
     }
 
 	private int getEndNumber(Attributes atts, int columnStart) {

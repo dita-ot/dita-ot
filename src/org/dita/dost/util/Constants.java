@@ -204,6 +204,7 @@ public abstract class Constants {
 	public static final String ATTR_CLASS_VALUE_TOPIC = "topic/topic";
 	public static final String ATTR_CLASS_VALUE_XREF = "topic/xref";
 	public static final String ATTR_CLASS_VALUE_LINK = "topic/link";
+	public static final String ATTR_CLASS_VALUE_TOPICREF = "map/topicref";
 	public static final String ATTR_SCOPE_VALUE_LOCAL = "local";
 	public static final String ATTR_FORMAT_VALUE_DITA = "dita";
 	

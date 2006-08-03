@@ -55,6 +55,7 @@ public class ListReader extends AbstractReader {
             listInput = new FileInputStream(filename);
             Properties property = new Properties();
             property.load(listInput);
+            content.setValue(property.getProperty("user.input.dir"));
             
             /*
              * Parse copy-to target to source map list, 
