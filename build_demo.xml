@@ -15,7 +15,7 @@
 		<available file="C:\Program Files\HTML Help Workshop\hhc.exe"
 			property="HTMLHelpCompiler"
 			value="C:\Program Files\HTML Help Workshop\hhc.exe"/>
-		<property name="dita.extname" value=".xml"/>
+		<!--property name="dita.extname" value=".xml"/-->
 		<property name="clean.temp" value="true"/>
 	</target>
 
@@ -284,7 +284,7 @@
 				value="${dita.doc.langref.dir}${file.separator}ditaref-book.ditamap"/>
 			<param name="output.dir"      value="${dita.output.demo.langref.dir}"/>
             <param name="transtype" value="pdf"/>
-            <param name="dita.extname" value="dita"/>
+            <!--param name="dita.extname" value="dita"/-->
             <param name="args.fo.img.ext" value=".gif"/>
 		</antcall>
 	</target>
@@ -298,7 +298,7 @@
 			<param name="output.dir"
 				value="${dita.output.demo.langrefhelp.dir}"/>
             <param name="transtype" value="htmlhelp"/>
-            <param name="dita.extname" value="dita"/>
+            <!--param name="dita.extname" value="dita"/-->
             <param name="args.ftr" value="${dita.doc.langref.dir}${file.separator}langref-footer.html"/>
             <param name="args.css" value="${dita.doc.langref.dir}${file.separator}resource${file.separator}dita-oasis.css"/>
             <param name="args.copycss" value="yes"/>
@@ -356,7 +356,7 @@
 				value="${dita.doc.langref.dir}${file.separator}ditaref-alpha.ditamap"/>
 			<param name="output.dir"     value="${dita.output.doc.langref.dir}"/>
             <param name="args.xhtml.toc" value="toc"/>
-            <param name="dita.extname" value="dita"/>
+            <!--param name="dita.extname" value="dita"/-->
             <param name="transtype" value="xhtml"/>
             <param name="args.ftr" value="${dita.doc.langref.dir}${file.separator}langref-footer.html"/>
             <param name="args.css" value="${dita.doc.langref.dir}${file.separator}resource${file.separator}dita-oasis.css"/>
@@ -373,7 +373,7 @@
 				     value="${dita.doc.langref.dir}${file.separator}ditaref-alpha.ditamap"/>
 			<param name="output.dir" value="${dita.output.doc.langref.dir}"/>
             <param name="transtype" value="htmlhelp"/>
-            <param name="dita.extname" value="dita"/>
+            <!--param name="dita.extname" value="dita"/-->
             <param name="args.ftr" value="${dita.doc.langref.dir}${file.separator}langref-footer.html"/>
             <param name="args.css" value="${dita.doc.langref.dir}${file.separator}resource${file.separator}dita-oasis.css"/>
             <param name="args.copycss" value="yes"/>
@@ -387,7 +387,7 @@
 				value="${dita.doc.langref.dir}${file.separator}ditaref-alpha.ditamap"/>
 			<param name="output.dir" value="${dita.output.doc.langref.dir}"/>
             <param name="transtype" value="pdf"/>		   
-            <param name="dita.extname" value="dita"/>
+            <!--param name="dita.extname" value="dita"/-->
             <param name="args.fo.img.ext" value=".gif"/>
 		</antcall>
 	</target>
