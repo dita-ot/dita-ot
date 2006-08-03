@@ -143,7 +143,9 @@
     <xsl:call-template name="setStandardAttr">
       <xsl:with-param name="IDPrefix" select="'athr'"/>
     </xsl:call-template>
-    <xsl:apply-templates/>
+	<othername>
+	    <xsl:apply-templates/>
+	</othername>
   </author>
 </xsl:template>
 
