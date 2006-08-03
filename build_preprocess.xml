@@ -61,14 +61,15 @@
   <target name="debug" unless="dita.input.valfile"
     description="Debug input files">
     <pipeline message="Debug and filtering." module="DebugAndFilter"
-      basedir="${basedir}" tempdir="${dita.temp.dir}"/>
+      basedir="${basedir}" tempdir="${dita.temp.dir}"
+      extparam="ditaext=${dita.extname}"/>
   </target>
 
   <target name="debug-and-filter" if="dita.input.valfile"
     description="Debug and filter input files">
     <pipeline message="Debug and filtering." module="DebugAndFilter"
       basedir="${basedir}" tempdir="${dita.temp.dir}"
-      extparam="ditaval=${dita.input.valfile}" />
+      extparam="ditaval=${dita.input.valfile};ditaext=${dita.extname}" />
   </target>
 
   <target name="move-index-entries" unless="noMap"
