@@ -1,5 +1,6 @@
 package org.dita.dost.module;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.io.StringReader;
@@ -11,6 +12,7 @@ import javax.xml.transform.stream.StreamSource;
 
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTJavaLogger;
+import org.dita.dost.log.MessageUtils;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.pipeline.PipelineHashIO;
@@ -35,6 +37,16 @@ public class TopicMergeModule extends AbstractPipelineModule {
 		.getAttribute(Constants.ANT_INVOKER_EXT_PARAM_OUTPUT);
 		OutputStreamWriter output = null;
 		DITAOTJavaLogger logger = new DITAOTJavaLogger();
+		
+		if (ditaInput == null || !new File(ditaInput).exists()){
+			logger.logError(MessageUtils.getMessage("DOTJ025E").toString());
+			return null;
+		}
+		
+		if ( out == null ){
+			logger.logError(MessageUtils.getMessage("DOTJ026E").toString());
+			return null;
+		}
 
 		MergeMapParser mapParser = new MergeMapParser();
 		mapParser.read(ditaInput);
