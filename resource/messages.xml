@@ -165,6 +165,11 @@
     <response>Please check whether you have set output for topic merge correctly.</response>
   </message>
   
+  <message id="DOTJ027W" type="WARN">
+    <reason>Parameter "/ditaext:" in Java command line is deprecated. We support both xml and dita as the file extension name for DITA topic.</reason>
+    <response>Remove "/ditaext:......" in your command.</response>
+  </message>
+  
   <!-- End of Java Messages -->
     
   <!-- Begin of XSL Messages -->  
