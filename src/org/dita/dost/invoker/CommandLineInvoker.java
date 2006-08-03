@@ -59,7 +59,7 @@ public class CommandLineInvoker {
 		paramMap.put("/cssroot", "args.cssroot");
 		paramMap.put("/css", "args.css");
 		paramMap.put("/filter", "dita.input.valfile");
-		paramMap.put("/ditaext", "dita.extname.deprecate");
+		paramMap.put("/ditaext", "dita.extname");
 		paramMap.put("/outdir", "output.dir");
 		paramMap.put("/transtype", "transtype");
 		paramMap.put("/indexshow", "args.indexshow");
@@ -121,9 +121,7 @@ public class CommandLineInvoker {
 			String arg = args[i];
 			if (arg.startsWith("/ditadir:")) {
 				inputDitaDir = arg.substring(arg.indexOf(":") + 1);
-			} else if (arg.startsWith("/ditaext:")){
-				javaLogger.logWarn(MessageUtils.getMessage("DOTJ027W").toString());
-			}
+			} 
 		}
 		ditaDir = new File(inputDitaDir, "").getAbsolutePath();
 		antBuildFile = new File(ditaDir, "build.xml").getAbsolutePath();
