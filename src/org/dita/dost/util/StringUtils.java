@@ -171,4 +171,8 @@ public class StringUtils {
         
         return copytoMap;
 	}
+	
+	public static boolean isEmptyString(String s){
+		return (s == null || Constants.STRING_EMPTY.equals(s.trim()));
+	}
 }

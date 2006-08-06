@@ -348,7 +348,8 @@ public class GenListModuleReader extends AbstractXMLReader {
 		 * Collect non-conref and non-copyto targets
 		 */
 		if (FileUtils.isValidTarget(filename) && 
-				atts.getValue(Constants.ATTRIBUTE_NAME_COPY_TO) == null
+				(StringUtils.isEmptyString(atts.getValue(Constants.ATTRIBUTE_NAME_COPY_TO)) ||
+						!FileUtils.isTopicFile(atts.getValue(Constants.ATTRIBUTE_NAME_COPY_TO).toLowerCase()))
 				&& !Constants.ATTRIBUTE_NAME_CONREF.equals(attrName)
 				&& !Constants.ATTRIBUTE_NAME_COPY_TO.equals(attrName)) {
 			nonConrefCopytoTargets.add(filename);
@@ -375,7 +376,7 @@ public class GenListModuleReader extends AbstractXMLReader {
 				&& FileUtils.isTopicFile(filename)) {
 			String href = atts.getValue(Constants.ATTRIBUTE_NAME_HREF);
 			
-			if (href != null && !Constants.STRING_EMPTY.equals(href.trim())) {
+			if (!StringUtils.isEmptyString(href)) {
 				if (copytoMap.get(filename) != null) {
 					StringBuffer buff = new StringBuffer();
 					buff.append("Copy-to task [href=\"");
