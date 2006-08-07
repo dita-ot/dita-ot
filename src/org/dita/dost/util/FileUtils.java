@@ -74,6 +74,8 @@ public class FileUtils {
 	 * @return
 	 */
 	public static boolean isTopicFile(String lcasefn) {
+		if(StringUtils.isEmptyString(lcasefn))
+			return false;
 		return lcasefn.endsWith(Constants.FILE_EXTENSION_DITA)
 				|| lcasefn.endsWith(Constants.FILE_EXTENSION_XML);
 	}
@@ -335,13 +337,8 @@ public class FileUtils {
     	} else if (index != -1){
     		fileName = attValue.substring(0,index); 
     		fileExtIndex = fileName.lastIndexOf(Constants.DOT);
-    		if (fileExtIndex != -1){        			
-    			return fileName.substring(0,fileExtIndex) 
-    				+ DebugAndFilterModule.extName 
-    				+ attValue.substring(index);
-    		} else {
-    			return attValue;
-    		}
+    		return (fileExtIndex != -1)? fileName.substring(0, fileExtIndex) + DebugAndFilterModule.extName + 
+					attValue.substring(index): attValue;
     	} else {
     		fileExtIndex = attValue.lastIndexOf(Constants.DOT);
     		return (fileExtIndex != -1)? 
