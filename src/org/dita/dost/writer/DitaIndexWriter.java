@@ -98,8 +98,9 @@ public class DitaIndexWriter extends AbstractXMLWriter {
 		FileOutputStream fileOutput = null;
 
         try {
-            if(filename.endsWith(Constants.SHARP))
+            if(filename.endsWith(Constants.SHARP)){
             	filename = filename.substring(0, filename.length()-1);
+            }
             
             if(filename.lastIndexOf(Constants.SHARP)!=-1){
                 file = filename.substring(0,filename.lastIndexOf(Constants.SHARP));
@@ -300,7 +301,7 @@ public class DitaIndexWriter extends AbstractXMLWriter {
                 output.write(Constants.META_END + Constants.PROLOG_END);
                 hasPrologTillNow = true;
             }
-            if ( startTopic == false && Constants.ELEMENT_NAME_DITA.equalsIgnoreCase(qName) == false){
+            if ( !startTopic && !Constants.ELEMENT_NAME_DITA.equalsIgnoreCase(qName)){
                 if (atts.getValue(Constants.ATTRIBUTE_NAME_ID) != null){
                     topicIdList.add(atts.getValue(Constants.ATTRIBUTE_NAME_ID));
                 }else{
