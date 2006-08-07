@@ -311,10 +311,12 @@ public class FileUtils {
 					+ target + "'");
 		} finally {
 			try {
-				if (fis != null)
+				if (fis != null){
 					fis.close();
-				if (fos != null)
+				}
+				if (fos != null){
 					fos.close();
+				}
 			} catch (Exception e) {
 			}
 		}
@@ -342,11 +344,8 @@ public class FileUtils {
     		}
     	} else {
     		fileExtIndex = attValue.lastIndexOf(Constants.DOT);
-    		if (fileExtIndex != -1){
-    			return attValue.substring(0, fileExtIndex) + DebugAndFilterModule.extName;
-    		}else {
-    			return attValue;
-    		}
+    		return (fileExtIndex != -1)? 
+    				(attValue.substring(0, fileExtIndex) + DebugAndFilterModule.extName) : attValue;
     	}
     }
 }
