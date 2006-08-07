@@ -364,9 +364,10 @@ public class DitaWriter extends AbstractXMLWriter {
                         String attQName = atts.getQName(i);
                         String attValue;
                         
-                        if(Constants.ATTRIBUTE_NAME_HREF.equals(attQName)){
+                        if(Constants.ATTRIBUTE_NAME_HREF.equals(attQName)
+                        		|| Constants.ATTRIBUTE_NAME_COPY_TO.equals(attQName)){
                             
-                            attValue = replaceHREF(atts);
+                            attValue = replaceHREF(attQName, atts);
                             
                         } else if (Constants.ATTRIBUTE_NAME_CONREF.equals(attQName)){
                                                         
@@ -400,9 +401,15 @@ public class DitaWriter extends AbstractXMLWriter {
         }
     }
     
-    private String replaceHREF (Attributes atts){
+    private String replaceHREF (String attName, Attributes atts){
     	
-    	String attValue = atts.getValue(Constants.ATTRIBUTE_NAME_HREF);
+    	String attValue = null;
+    	
+    	if (attName == null){
+    		return null;
+    	}
+    	
+    	attValue = atts.getValue(Constants.ATTRIBUTE_NAME_HREF);
         
     	
     	if (attValue != null){
