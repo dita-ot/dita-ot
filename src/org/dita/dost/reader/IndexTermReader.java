@@ -63,10 +63,10 @@ public class IndexTermReader extends AbstractXMLReader {
 	 */
 	public IndexTermReader() {
 		termStack = new Stack();
-		indexTermSpecList = new ArrayList();
-		indexSeeSpecList = new ArrayList();
-		indexSeeAlsoSpecList = new ArrayList();
-		indexSortAsSpecList = new ArrayList();
+		indexTermSpecList = new ArrayList(Constants.INT_256);
+		indexSeeSpecList = new ArrayList(Constants.INT_256);
+		indexSeeAlsoSpecList = new ArrayList(Constants.INT_256);
+		indexSortAsSpecList = new ArrayList(Constants.INT_256);
 	}
 
 	/**
@@ -163,7 +163,7 @@ public class IndexTermReader extends AbstractXMLReader {
 		 * For title info
 		 */
 		if (Constants.ELEMENT_NAME_TITLE.equals(localName)
-				&& isTitleFound == false) {
+				&& !isTitleFound) {
 			isTitleFound = true;
 			inTitleElement = false;
 		}
@@ -202,7 +202,7 @@ public class IndexTermReader extends AbstractXMLReader {
 		 * For title info
 		 */
 		if (Constants.ELEMENT_NAME_TITLE.equals(localName)
-				&& isTitleFound == false) {
+				&& !isTitleFound) {
 			inTitleElement = true;
 		}
 		
