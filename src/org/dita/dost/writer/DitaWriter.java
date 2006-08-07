@@ -409,7 +409,7 @@ public class DitaWriter extends AbstractXMLWriter {
     		return null;
     	}
     	
-    	attValue = atts.getValue(Constants.ATTRIBUTE_NAME_HREF);
+    	attValue = atts.getValue(attName);
         
     	
     	if (attValue != null){
