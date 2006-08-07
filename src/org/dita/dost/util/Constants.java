@@ -90,6 +90,8 @@ public abstract class Constants {
     public static final String ATTRIBUTE_NAME_DOMAINS = "domains";
     public static final String ATTRIBUTE_NAME_PROPS = "props";
     public static final String ATTRIBUTE_NAME_SCOPE = "scope";
+    public static final String ATTRIBUTE_NAME_IMG = "img";
+    public static final String ATTRIBUTE_NAME_COPY_TO = "copy-to";
     
     /**
      * Constant for value of attribute format in dita files.
@@ -185,8 +187,6 @@ public abstract class Constants {
     public static final String RELATED_LINKS_HEAD = "<related-links class=\"- topic/related-links \">";    
     public static final String RELATED_LINKS_END = "</related-links>";    
     public static final String XML_HEAD = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
-    public static final String ATTRIBUTE_NAME_IMG = "img";
-    public static final String ATTRIBUTE_NAME_COPY_TO = "copy-to";
     public static final String STRING_BLANK = " ";
     public static final String COUNTRY_US = "us";
     public static final String LANGUAGE_EN = "en";    
