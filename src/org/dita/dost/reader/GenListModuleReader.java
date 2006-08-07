@@ -92,11 +92,12 @@ public class GenListModuleReader extends AbstractXMLReader {
 	}
 
 	/**
-	 * Init xml reader used for pipeline parsing.
-	 * 
-	 * @throws SAXException
+     * Init xml reader used for pipeline parsing.
+	 *
+     * @throws SAXException
 	 * @throws ParserConfigurationException
-	 */
+     * @param ditaDir 
+     */
 	public static void initXMLReader(String ditaDir) throws SAXException {
 		if (System.getProperty(Constants.SAX_DRIVER_PROPERTY) == null) {
 			// The default sax driver is set to xerces's sax driver
@@ -111,7 +112,11 @@ public class GenListModuleReader extends AbstractXMLReader {
 		catalogMap = CatalogUtils.getCatalog(ditaDir);
 	}
 
-	public void reset() {
+	/**
+	 * 
+	 * Reset the internal variables
+	 */
+    public void reset() {
 		hasConRef = false;
 		hasHref = false;
 		currentDir = null;
@@ -149,7 +154,7 @@ public class GenListModuleReader extends AbstractXMLReader {
 	 * @return Returns allTargets.
 	 */
 	public Set getNonCopytoResult() {
-		Set nonCopytoSet = new HashSet();
+		Set nonCopytoSet = new HashSet(Constants.INT_128);
 		
 		nonCopytoSet.addAll(nonConrefCopytoTargets);
 		nonCopytoSet.addAll(conrefTargets);
@@ -187,8 +192,10 @@ public class GenListModuleReader extends AbstractXMLReader {
 	}
 	
 	/**
-	 * @return Returns the ignoredCopytoSourceSet.
-	 */
+     * Returns the ignoredCopytoSourceSet
+     *
+     * @return Returns the ignoredCopytoSourceSet.
+     */
 	public Set getIgnoredCopytoSourceSet() {
 		return ignoredCopytoSourceSet;
 	}
