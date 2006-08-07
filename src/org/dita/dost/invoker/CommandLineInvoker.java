@@ -141,15 +141,15 @@ public class CommandLineInvoker {
 			String antArg = null;
 			int colonPos = arg.indexOf(Constants.COLON);
 
-			if (arg.equals("-help") || arg.equals("-h")) {
+			if ("help".equals(arg) || "-h".equals(arg)) {
                 printUsage();
                 return;
-            } else if (arg.equals("-version")) {
+            } else if ("-version".equals(arg)) {
                 printVersion();
                 return;
             }
 			
-			if (arg.equals("/debug") || arg.equals("/d")) {
+			if ("/debug".equals(arg) || "/d".equals(arg)) {
 				debugMode = true;
 				continue;
 			}
@@ -179,7 +179,7 @@ public class CommandLineInvoker {
 
 			String antArgValue = arg.substring(colonPos + 1);
 
-			if (antArgValue.trim().equals(Constants.STRING_EMPTY)) {
+			if (Constants.STRING_EMPTY.equals(antArgValue.trim())) {
 				String msg = null;
 				Properties params = new Properties();
 
@@ -207,7 +207,7 @@ public class CommandLineInvoker {
 		if (!tempPath.isAbsolute()) {
 			tempPath = new File(baseDir, tempDir);
 		}
-		if (!tempPath.exists() && tempPath.mkdirs() == false) {
+		if (!tempPath.exists() && !tempPath.mkdirs()) {
 			String msg = null;
 			Properties params = new Properties();
 

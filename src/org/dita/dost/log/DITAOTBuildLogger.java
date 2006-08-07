@@ -129,7 +129,7 @@ public class DITAOTBuildLogger implements BuildLogger {
 
 	public void targetStarted(BuildEvent event) {
 		if (Project.MSG_INFO <= msgOutputLevel
-				&& !event.getTarget().getName().equals("")) {
+				&& !"".equals(event.getTarget().getName())) {
 			String desc = event.getTarget().getDescription();
 			if (desc == null || Constants.STRING_EMPTY.equals(desc.trim())) {
 				return;
@@ -192,13 +192,13 @@ public class DITAOTBuildLogger implements BuildLogger {
 			boolean flag = false;
 			// filter out message came from XSLT in console,
 			// except those contains [DOTXxxx]
-			if (eventTask != null && eventTask.getTaskName().equals("xslt")
+			if (eventTask != null && "xslt".equals(eventTask.getTaskName())
 					&& msg.indexOf("DOTX") == -1) {
 				flag = true;
 			}
 			
 			// filter out fop messages in console
-			if (eventTask != null && eventTask.getTaskName().equals("fop")) {
+			if (eventTask != null && "fop".equals(eventTask.getTaskName())) {
 				flag = true;
 			}
 
