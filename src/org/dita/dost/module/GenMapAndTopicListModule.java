@@ -415,6 +415,9 @@ public class GenMapAndTopicListModule extends AbstractPipelineModule {
 			String value = (String) copytoMap.get(key);
 			if (new File(baseInputDir, value).exists()) {
 				tempMap.put(key, value);
+				//Add the copy-to target to conreflist when its source has conref
+				if(conrefSet.contains(value))
+					conrefSet.add(key);
 			}
 		}
 		
@@ -434,7 +437,7 @@ public class GenMapAndTopicListModule extends AbstractPipelineModule {
 		iter = totalCopytoSources.iterator();
 		while (iter.hasNext()) {
 			String src = (String) iter.next();
-			if (!nonConrefCopytoTargetSet.contains(src)) {
+			if (!nonConrefCopytoTargetSet.contains(src) && !copytoMap.keySet().contains(src)) {
 				pureCopytoSources.add(src);
 			}
 		}
