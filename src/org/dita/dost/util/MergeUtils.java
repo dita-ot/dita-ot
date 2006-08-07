@@ -20,7 +20,7 @@ public class MergeUtils {
 		super();
 		// TODO Auto-generated constructor stub
 		idMap = new Hashtable();
-		visitSet = new HashSet();
+		visitSet = new HashSet(Constants.INT_256);
 		logger = new DITAOTJavaLogger();
 		index = 0;
 	}
@@ -33,22 +33,18 @@ public class MergeUtils {
 	}
 	
 	public boolean findId(String Id){
-		if (Id != null && idMap.containsKey(Id.trim().replaceAll(Constants.DOUBLE_BACK_SLASH,
-				Constants.SLASH))){
-			return true;
-		}else {
-			return false;
-		}
+		return (Id != null && idMap.containsKey(Id.trim().replaceAll(Constants.DOUBLE_BACK_SLASH,
+				Constants.SLASH)))?true:false;
 	}
 	
 	public String addId (String Id){
 		if(Id == null){
 			return null;
 		}
-		Id=Id.trim().replaceAll(Constants.DOUBLE_BACK_SLASH,
+		String localId=Id.trim().replaceAll(Constants.DOUBLE_BACK_SLASH,
 				Constants.SLASH);
 		index ++;
-		idMap.put(Id,"unique_"+Integer.toString(index));
+		idMap.put(localId,"unique_"+Integer.toString(index));
 		return "unique_"+Integer.toString(index);
 	}
 	
@@ -56,42 +52,46 @@ public class MergeUtils {
 		if (Id==null){
 			return null;
 		}
-		Id = Id.trim().replaceAll(Constants.DOUBLE_BACK_SLASH,
+		String localId = Id.trim().replaceAll(Constants.DOUBLE_BACK_SLASH,
 				Constants.SLASH);
-		return (String) idMap.get(Id);
+		return (String) idMap.get(localId);
 	}
 	
 	public void addId (String Id, String Value){
 		if(Id != null && Value != null){
-			Id=Id.trim().replaceAll(Constants.DOUBLE_BACK_SLASH,
+			String localId=Id.trim().replaceAll(Constants.DOUBLE_BACK_SLASH,
 					Constants.SLASH);
-			Value = Value.trim();
-			idMap.put(Id, Value);
+			String localValue = Value.trim();
+			idMap.put(localId, localValue);
 		}		
 	}
 	
 	public boolean isVisited(String path){
+		String localPath = path;
 		int index = path.indexOf(Constants.SHARP);
 		if(index != -1){
-			path=path.substring(0,index);
+			localPath=localPath.substring(0,index);
 		}
-		return visitSet.contains(path.trim().replaceAll(Constants.DOUBLE_BACK_SLASH,
+		return visitSet.contains(localPath.trim().replaceAll(Constants.DOUBLE_BACK_SLASH,
 				Constants.SLASH));
 	}
 	
 	public void visit(String path){
+		String localPath = path;
 		int index = path.indexOf(Constants.SHARP);
 		if(index != -1){
-			path=path.substring(0,index);
+			localPath=localPath.substring(0,index);
 		}
-		visitSet.add(path.trim().replaceAll(Constants.DOUBLE_BACK_SLASH,
+		visitSet.add(localPath.trim().replaceAll(Constants.DOUBLE_BACK_SLASH,
 				Constants.SLASH));
 	}
 	
 	public String getFirstTopicId(String path, String dir){
+		String localPath = path;
+		String localDir = dir;
 		if(path != null && dir != null){
-			path = path.trim();
-			dir = dir.trim();
+			localPath = localPath.trim();
+			localDir = localDir.trim();
 		}else{
 			return null;
 		}
@@ -106,7 +106,7 @@ public class MergeUtils {
             }
             reader = XMLReaderFactory.createXMLReader();
             reader.setContentHandler(parser);            
-            reader.parse(dir+File.separator+path);
+            reader.parse(localDir+File.separator+localPath);
         }catch (Exception e){
             logger.logException(e);
         }
