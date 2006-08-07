@@ -114,7 +114,8 @@ public class FileGenerator extends DefaultHandler {
 				int attLen = attributes.getLength();
 				for(int i = 0; i < attLen; i++){
 					output.write(" ");
-					output.write(attributes.getQName(i)+"=\""+attributes.getValue(i)+"\"");
+					output.write(new StringBuffer(attributes.getQName(i)).append("=\"").
+							append(attributes.getValue(i)+"\"").toString());
 				}
 				output.write(">");
 			}

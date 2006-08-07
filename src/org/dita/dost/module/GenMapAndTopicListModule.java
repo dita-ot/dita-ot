@@ -380,7 +380,7 @@ public class GenMapAndTopicListModule extends AbstractPipelineModule {
 		for (int i = uplevels; i > 0; i--) {
 			File file = new File(baseInputDir);
 			baseInputDir = file.getParent();
-			prefix = file.getName() + File.separator + prefix;
+			prefix = new StringBuffer(file.getName()).append(File.separator).append(prefix).toString();
 		}
 	}
 
@@ -530,7 +530,7 @@ public class GenMapAndTopicListModule extends AbstractPipelineModule {
 				 * In ant, all the file separator should be slash, so we need to replace
 				 * all the back slash with slash.
 				 */
-				newSet.add(FileUtils.removeRedundantNames(prefix + file)
+				newSet.add(FileUtils.removeRedundantNames(new StringBuffer(prefix).append(file).toString())
 						.replaceAll(Constants.DOUBLE_BACK_SLASH,
 								Constants.SLASH));
 			}

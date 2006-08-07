@@ -189,9 +189,9 @@ public class DebugAndFilterModule extends AbstractPipelineModule {
         	
         	if (targetFile.exists()) {
         		javaLogger
-						.logWarn("Copy-to task [copy-to=\""
-								+ copytoTarget
-								+ "\"] which points to an existed file was ignored.");
+						.logWarn(new StringBuffer("Copy-to task [copy-to=\"")
+								.append(copytoTarget)
+								.append("\"] which points to an existed file was ignored.").toString());
         	}else{
         		FileUtils.copyFile(srcFile, targetFile);
         	}

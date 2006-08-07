@@ -3,9 +3,9 @@
  */
 package org.dita.dost.platform;
 
-import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.StringTokenizer;
 
 import org.dita.dost.util.Constants;
@@ -16,13 +16,12 @@ import org.dita.dost.util.FileUtils;
  * @author Zhang, Yuan Peng
  */
 public class ImportAction implements IAction {
-
-	private HashSet valueSet = null;
+	private LinkedHashSet valueSet = null;
 	private Hashtable paramTable = null;
 	private StringBuffer retBuf = null;
 	
 	public ImportAction() {
-		valueSet = new HashSet(16);
+		valueSet = new LinkedHashSet(16);
 		paramTable = new Hashtable();
 		retBuf = new StringBuffer(1024);
 	}
@@ -52,7 +51,8 @@ public class ImportAction implements IAction {
 								value.replaceAll("\\\\","/")));
 				retBuf.append("\"/>");
 			}else if("dita.conductor.transtype.check".equals(extensionId)){
-				retBuf.append("<not><equals arg1=\"${transtype}\" arg2=\""+ value +"\" casesensitive=\"false\"/></not>");
+				retBuf.append("<not><equals arg1=\"${transtype}\" arg2=\"")
+					.append(value).append("\" casesensitive=\"false\"/></not>");
 			}
 		}
 		return retBuf.toString();
