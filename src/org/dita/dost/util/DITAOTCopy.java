@@ -46,16 +46,15 @@ public class DITAOTCopy extends Task {
 		}
 		
 		StringTokenizer tokenizer = new StringTokenizer(includes, Constants.COMMA);
-		while (tokenizer.hasMoreTokens()) {
-			File srcFile = new File(tokenizer.nextToken());
-			if (srcFile.exists()) {
-				File destFile = new File(destDir, srcFile.getName());
-				
-				try {
+		try {
+			while (tokenizer.hasMoreTokens()) {
+				File srcFile = new File(tokenizer.nextToken());
+				if (srcFile.exists()) {
+					File destFile = new File(destDir, srcFile.getName());								
 					fileUitls.copyFile(srcFile, destFile);
-				} catch (IOException e) {
 				}
 			}
+		}catch(IOException e){			
 		}
 	}
 
