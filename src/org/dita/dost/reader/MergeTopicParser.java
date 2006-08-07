@@ -99,16 +99,16 @@ public class MergeTopicParser extends AbstractXMLReader {
             	if(classValue != null 
             			&& classValue.indexOf(Constants.ATTR_CLASS_VALUE_TOPIC)!=-1){
             		// Process the topic element id
-            		if(!util.findId(filePath+Constants.SHARP+attValue)){
-            			topicInfo.append(Constants.STRING_BLANK)
-            			.append("oid").append(Constants.EQUAL).append(Constants.QUOTATION)
-            			.append(attValue).append(Constants.QUOTATION);
-            			attValue = util.addId(filePath+Constants.SHARP+attValue);
-            		}else{
+            		if(util.findId(filePath+Constants.SHARP+attValue)){
             			topicInfo.append(Constants.STRING_BLANK)
             			.append("oid").append(Constants.EQUAL).append(Constants.QUOTATION)
             			.append(attValue).append(Constants.QUOTATION);
             			attValue = util.getIdValue(filePath+Constants.SHARP+attValue);
+            		}else{
+            			topicInfo.append(Constants.STRING_BLANK)
+            			.append("oid").append(Constants.EQUAL).append(Constants.QUOTATION)
+            			.append(attValue).append(Constants.QUOTATION);
+            			attValue = util.addId(filePath+Constants.SHARP+attValue);           			
             		}
             		if(isFirstTopicId){
             			isFirstTopicId = false;
@@ -146,26 +146,16 @@ public class MergeTopicParser extends AbstractXMLReader {
     					topicId = attValue.substring(index);
     					slashIndex = topicId.indexOf(Constants.SLASH);
     					index = attValue.indexOf(Constants.SLASH, index);
-    					if (slashIndex != -1){
-    						topicId = pathFromMap + topicId.substring(0,slashIndex);
-    					}else {
-    						topicId = pathFromMap + topicId;
-    					}
+    					topicId = (slashIndex != -1) ? 
+    							pathFromMap + topicId.substring(0, slashIndex): pathFromMap + topicId;
+
     					
     					if(util.findId(topicId)){// topicId found 
-    						if(index!=-1){
-    							attValue = Constants.SHARP + util.getIdValue(topicId)
-    							+ attValue.substring(index);
-    						} else{
-    							attValue = Constants.SHARP + util.getIdValue(topicId);
-    						}
+    						String prefix = Constants.SHARP + util.getIdValue(topicId);
+    						attValue = (index!=-1)? prefix + attValue.substring(index) : prefix;
     					}else{//topicId not found
-    						if(index!=-1){
-    							attValue = Constants.SHARP + util.addId(topicId)
-    							+ attValue.substring(index);
-    						} else{
-    							attValue = Constants.SHARP + util.addId(topicId);
-    						}
+    						String prefix = Constants.SHARP + util.addId(topicId);
+    						attValue = (index!=-1)? prefix + attValue.substring(index) : prefix;
     					}
 
     				}else{ // href value refer to a topic
@@ -214,11 +204,7 @@ public class MergeTopicParser extends AbstractXMLReader {
 		int index = filename.indexOf(Constants.SHARP);
 		dirPath = dir;
 		try{
-			if (index != -1){
-				filePath = filename.substring(0,index);
-			}else{
-				filePath = filename;
-			}
+			filePath = (index != -1) ? filename.substring(0,index):filename;
 			reader.parse(dir + File.separator + filePath);
 			return retId;
 		}catch (Exception e){
