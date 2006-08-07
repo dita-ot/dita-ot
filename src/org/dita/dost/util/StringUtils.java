@@ -142,21 +142,18 @@ public class StringUtils {
     		propsStart = domains.indexOf("a(props", propsEnd);
     		propsEnd = domains.indexOf(")",propsStart);
     	}
-    	if(propsBuffer.length() > 0){
-    		return propsBuffer.substring(Constants.INT_1);        	
-    	}else{
-    		return null;
-    	}
+    	return (propsBuffer.length() > 0) ? propsBuffer.substring(Constants.INT_1) : null;
 	}
 	
 	public static String restoreEntity(String s) {
-		s = StringUtils.replaceAll(s, "&", "&amp;");
-		s = StringUtils.replaceAll(s, "<", "&lt;");
-		s = StringUtils.replaceAll(s, ">", "&gt;");		
-		s = StringUtils.replaceAll(s, "'", "&apos;");
-		s = StringUtils.replaceAll(s, "\"", "&quot;");
+		String localEntiry;
+		localEntiry = StringUtils.replaceAll(s, "&", "&amp;");
+		localEntiry = StringUtils.replaceAll(s, "<", "&lt;");
+		localEntiry = StringUtils.replaceAll(s, ">", "&gt;");		
+		localEntiry = StringUtils.replaceAll(s, "'", "&apos;");
+		localEntiry = StringUtils.replaceAll(s, "\"", "&quot;");
 		
-		return s;
+		return localEntiry;
 	}
 	
 	public static Map restoreMap(String s) {
