@@ -52,12 +52,10 @@ public class DITAOTCollator implements Comparator {
 	
 	public static DITAOTCollator getInstance(Locale locale) {
 		DITAOTCollator instance = null;
-		synchronized(cache){
-			instance = (DITAOTCollator) cache.get(locale);		
-			if (instance == null) {
-				instance = new DITAOTCollator(locale);
-				cache.put(locale, instance);
-			}
+		instance = (DITAOTCollator) cache.get(locale);		
+		if (instance == null) {
+			instance = new DITAOTCollator(locale);
+			cache.put(locale, instance);
 		}
 		return instance;
 	}
