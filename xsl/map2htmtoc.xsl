@@ -242,7 +242,7 @@
 <xsl:template match="*[contains(@class, ' map/anchor ')]"/>
 <xsl:template match="*[contains(@class, ' map/reltable ')]"/>
 <xsl:template match="*[contains(@class, ' map/topicmeta ')]"/>
-<xsl:template match="*[contains(@class, ' map/topicgroup ')]"/>
+<xsl:template match="*[contains(@class, ' mapgroup/topicgroup ')]" priority="10"/>
 
 <xsl:template match="*">
   <xsl:apply-templates/>
