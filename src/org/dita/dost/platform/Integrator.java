@@ -109,7 +109,8 @@ public class Integrator {
 				currentFeature = (Map.Entry)setIter.next();
 				if(featureTable.containsKey(currentFeature.getKey())){
 					String value = (String)featureTable.remove(currentFeature.getKey());
-					featureTable.put(currentFeature.getKey(), value+"," + currentFeature.getValue());
+					featureTable.put(currentFeature.getKey(), 
+							new StringBuffer(value).append(",").append(currentFeature.getValue()).toString());
 				}else{
 					featureTable.put(currentFeature.getKey(),currentFeature.getValue());
 				}
@@ -130,15 +131,17 @@ public class Integrator {
 		//check whether dependcy is satisfied
 		while (iter.hasNext()){
 			requiredPlugin = (String)iter.next();
-			if(!(pluginTable.containsKey(requiredPlugin))){
+			if(pluginTable.containsKey(requiredPlugin)){
+				if (!loadedPlugin.contains(requiredPlugin)){
+					//required plug-in is not loaded
+					loadPlugin(requiredPlugin);
+				}
+			}else {				
 				//not contain the plugin required by current plugin
 				prop.put("%1",requiredPlugin);
 				prop.put("%2",currentPlugin);
 				logger.logWarn(MessageUtils.getMessage("DOTJ020W",prop).toString());
 				return false;
-			}else if (!(loadedPlugin.contains(requiredPlugin))){
-				//required plug-in is not loaded
-				loadPlugin(requiredPlugin);
 			}
 		}		
 		return true;
@@ -172,21 +175,25 @@ public class Integrator {
 		logger = new DITAOTJavaLogger();
 		try {
             if (System.getProperty(Constants.SAX_DRIVER_PROPERTY) == null){
-                //The default sax driver is set to xerces's sax driver
-            	if(System.getProperty("java.vendor").toLowerCase().indexOf("sun")==-1){
-                System.setProperty(Constants.SAX_DRIVER_PROPERTY,Constants.SAX_DRIVER_DEFAULT_CLASS);
-            	}else{
-            		if(System.getProperty("java.version").startsWith("1.5")){
-            			System.setProperty(Constants.SAX_DRIVER_PROPERTY,"com.sun.org.apache.xerces.internal.parsers.SAXParser");
-            		}else{
-            			System.setProperty(Constants.SAX_DRIVER_PROPERTY,"org.apache.crimson.parser.XMLReaderImpl");
-            		}
-            	}
+                initSaxDriver();
             }
             reader = XMLReaderFactory.createXMLReader();            
         } catch (Exception e) {
         	logger.logException(e);
         }
+	}
+	
+	private void initSaxDriver(){
+		//The default sax driver is set to xerces's sax driver
+    	if(System.getProperty("java.vendor").toLowerCase().indexOf("sun")==-1){
+        System.setProperty(Constants.SAX_DRIVER_PROPERTY,Constants.SAX_DRIVER_DEFAULT_CLASS);
+    	}else{
+    		if(System.getProperty("java.version").startsWith("1.5")){
+    			System.setProperty(Constants.SAX_DRIVER_PROPERTY,"com.sun.org.apache.xerces.internal.parsers.SAXParser");
+    		}else{
+    			System.setProperty(Constants.SAX_DRIVER_PROPERTY,"org.apache.crimson.parser.XMLReaderImpl");
+    		}
+    	}
 	}
 
 	public String getBasedir() {
