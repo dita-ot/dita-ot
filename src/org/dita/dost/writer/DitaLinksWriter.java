@@ -10,11 +10,11 @@ import java.util.ArrayList;
 import java.util.ListIterator;
 import java.util.Properties;
 
+import org.dita.dost.log.DITAOTJavaLogger;
+import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.Content;
 import org.dita.dost.util.Constants;
 import org.dita.dost.util.StringUtils;
-import org.dita.dost.log.DITAOTJavaLogger;
-import org.dita.dost.log.MessageUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
@@ -57,7 +57,7 @@ public class DitaLinksWriter extends AbstractXMLWriter {
      */
     public DitaLinksWriter() {
         super();
-        topicIdList = new ArrayList(Constants.INT_16);
+        topicIdList = null;
         firstMatchTopic = null;
         hasRelatedlinksTillNow = false;
         indexEntries = null;
@@ -112,8 +112,14 @@ public class DitaLinksWriter extends AbstractXMLWriter {
                 matchLevel = 1;
             }
             
+            // ignore in-exists file
+            if (file == null || !new File(file).exists()) {
+            	return;
+            }
+            
         	needResolveEntity = true;
             hasRelatedlinksTillNow = false;
+            topicIdList = new ArrayList(Constants.INT_16);
             inputFile = new File(file);
             outputFile = new File(file + Constants.FILE_EXTENSION_TEMP);
             fileOutput = new FileOutputStream(outputFile);
@@ -139,9 +145,10 @@ public class DitaLinksWriter extends AbstractXMLWriter {
         	logger.logException(e);
         }finally {
             try {
-                fileOutput.close();
+            	if (fileOutput != null) {
+            		fileOutput.close();
+            	}
             }catch (Exception e) {
-            	logger.logException(e);
             }
         }
     }
@@ -233,7 +240,7 @@ public class DitaLinksWriter extends AbstractXMLWriter {
                 output.write(Constants.RELATED_LINKS_HEAD);
                 output.write(indexEntries);
                 output.write(Constants.RELATED_LINKS_END);
-                output.write("\n");
+                output.write(System.getProperty("line.separator"));
                 hasRelatedlinksTillNow = true;
             }
             output.write(Constants.LESS_THAN + Constants.SLASH + qName 
@@ -318,7 +325,7 @@ public class DitaLinksWriter extends AbstractXMLWriter {
             	
             	matchLevel = level;
             }
-            if ( startTopic == false && Constants.ELEMENT_NAME_DITA.equalsIgnoreCase(qName) == false ){
+            if ( !startTopic && !Constants.ELEMENT_NAME_DITA.equalsIgnoreCase(qName) ){
                 if (atts.getValue(Constants.ATTRIBUTE_NAME_ID) != null){
                     topicIdList.add(atts.getValue(Constants.ATTRIBUTE_NAME_ID));
                 }else{
@@ -338,6 +345,12 @@ public class DitaLinksWriter extends AbstractXMLWriter {
                 String attQName = atts.getQName(i);
                 String attValue;
                 attValue = atts.getValue(i);
+
+                // replace '&' with '&amp;'
+				if (attValue.indexOf('&') > 0) {
+					attValue = StringUtils.replaceAll(attValue, "&", "&amp;");
+				}
+				
                 output.write(new StringBuffer().append(Constants.STRING_BLANK)
                         .append(attQName).append(Constants.EQUAL).append(Constants.QUOTATION)
                 		.append(attValue).append(Constants.QUOTATION).toString());
