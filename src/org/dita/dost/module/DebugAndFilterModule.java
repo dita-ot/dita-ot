@@ -37,7 +37,7 @@ public class DebugAndFilterModule extends AbstractPipelineModule {
 		Constants.CONREF_LIST,Constants.HREF_DITA_TOPIC_LIST,Constants.FULL_DITA_TOPIC_LIST,
 		Constants.FULL_DITAMAP_TOPIC_LIST,Constants.CONREF_TARGET_LIST,Constants.COPYTO_SOURCE_LIST,
 		Constants.COPYTO_TARGET_TO_SOURCE_MAP_LIST};
-	public static String extName;
+	public static String extName = null;
 	
     /**
      * @see org.dita.dost.module.AbstractPipelineModule#execute(org.dita.dost.pipeline.AbstractPipelineInput)
@@ -48,11 +48,8 @@ public class DebugAndFilterModule extends AbstractPipelineModule {
         String ditavalFile = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_DITAVAL);
         String tempDir = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_TEMPDIR);
         String ext = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_DITAEXT);
-        if (ext.startsWith(Constants.DOT)){
-        	extName = ext;
-        }else {
-        	extName = Constants.DOT + ext;
-        }
+       	extName = ext.startsWith(Constants.DOT) ? ext : (Constants.DOT + ext);
+
         String inputDir = null;
         String filePathPrefix = null;
         ListReader listReader = new ListReader();
@@ -195,10 +192,9 @@ public class DebugAndFilterModule extends AbstractPipelineModule {
 						.logWarn("Copy-to task [copy-to=\""
 								+ copytoTarget
 								+ "\"] which points to an existed file was ignored.");
-        		continue;
+        	}else{
+        		FileUtils.copyFile(srcFile, targetFile);
         	}
-        	
-        	FileUtils.copyFile(srcFile, targetFile);
         }
 	}
 
