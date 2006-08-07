@@ -109,7 +109,7 @@ public class GenMapAndTopicListModule extends AbstractPipelineModule {
 
 	private DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
 
-	GenListModuleReader reader = null;
+	private GenListModuleReader reader = null;
 
 	/**
 	 * Create a new instance and do the initialization.
@@ -119,23 +119,23 @@ public class GenMapAndTopicListModule extends AbstractPipelineModule {
 	 */
 	public GenMapAndTopicListModule() throws SAXException,
 			ParserConfigurationException {
-		ditaSet = new HashSet();
-		fullTopicSet = new HashSet();
-		fullMapSet = new HashSet();
-		hrefTopicSet = new HashSet();
-		hrefMapSet = new HashSet();
-		conrefSet = new HashSet();
-		imageSet = new HashSet();
-		flagImageSet = new HashSet();
-		htmlSet = new HashSet();
-		hrefTargetSet = new HashSet();
+		ditaSet = new HashSet(Constants.INT_128);
+		fullTopicSet = new HashSet(Constants.INT_128);
+		fullMapSet = new HashSet(Constants.INT_128);
+		hrefTopicSet = new HashSet(Constants.INT_128);
+		hrefMapSet = new HashSet(Constants.INT_128);
+		conrefSet = new HashSet(Constants.INT_128);
+		imageSet = new HashSet(Constants.INT_128);
+		flagImageSet = new HashSet(Constants.INT_128);
+		htmlSet = new HashSet(Constants.INT_128);
+		hrefTargetSet = new HashSet(Constants.INT_128);
 		waitList = new LinkedList();
 		doneList = new LinkedList();
-		conrefTargetSet = new HashSet();
-		nonConrefCopytoTargetSet = new HashSet();
+		conrefTargetSet = new HashSet(Constants.INT_128);
+		nonConrefCopytoTargetSet = new HashSet(Constants.INT_128);
 		copytoMap = new HashMap();
-		copytoSourceSet = new HashSet();
-		ignoredCopytoSourceSet = new HashSet();
+		copytoSourceSet = new HashSet(Constants.INT_128);
+		ignoredCopytoSourceSet = new HashSet(Constants.INT_128);
 	}
 
 	/**
@@ -282,10 +282,7 @@ public class GenMapAndTopicListModule extends AbstractPipelineModule {
 			String key = (String) iter.next();
 			String value = (String) cpMap.get(key);
 			
-			if (!copytoMap.containsKey(key)) {
-				updateUplevels(key);
-				copytoMap.put(key, value);
-			} else {
+			if (copytoMap.containsKey(key)) {
 				StringBuffer buff = new StringBuffer();
 				buff.append("Copy-to task [href=\"");
 				buff.append(value);
@@ -295,6 +292,9 @@ public class GenMapAndTopicListModule extends AbstractPipelineModule {
 				buff.append(" was ignored.");
 				javaLogger.logWarn(buff.toString());
 				ignoredCopytoSourceSet.add(value);
+			} else {
+				updateUplevels(key);
+				copytoMap.put(key, value);				
 			}
 		}
 		
@@ -403,8 +403,8 @@ public class GenMapAndTopicListModule extends AbstractPipelineModule {
 
 	private void handleCopyto() {
 		Map tempMap = new HashMap();
-		Set pureCopytoSources = new HashSet();
-		Set totalCopytoSources = new HashSet();
+		Set pureCopytoSources = new HashSet(Constants.INT_128);
+		Set totalCopytoSources = new HashSet(Constants.INT_128);
 		
 		/*
 		 * Validate copy-to map, remove those without valid sources
@@ -455,7 +455,7 @@ public class GenMapAndTopicListModule extends AbstractPipelineModule {
 		/*
 		 * Get pure conref targets
 		 */
-		Set pureConrefTargets = new HashSet();
+		Set pureConrefTargets = new HashSet(Constants.INT_128);
 		Iterator iter = conrefTargetSet.iterator();
 		while (iter.hasNext()) {
 			String target = (String) iter.next();
@@ -478,7 +478,7 @@ public class GenMapAndTopicListModule extends AbstractPipelineModule {
 		Content content = new ContentImpl();
 		File outputFile = new File(tempDir, Constants.FILE_NAME_DITA_LIST);
 		File dir = new File(tempDir);
-		Set copytoSet = new HashSet();
+		Set copytoSet = new HashSet(Constants.INT_128);
 		Iterator iter = null;
 		
 		if (!dir.exists()) {
@@ -517,7 +517,7 @@ public class GenMapAndTopicListModule extends AbstractPipelineModule {
 
 	private void addSetToProperties(Properties prop, String key, Set set) {
 		String value = null;
-		Set newSet = new HashSet();
+		Set newSet = new HashSet(Constants.INT_128);
 		Iterator iter = set.iterator();
 
 		while (iter.hasNext()) {
