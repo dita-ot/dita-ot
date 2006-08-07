@@ -81,9 +81,7 @@ public class FileGenerator extends DefaultHandler {
 
 	public void endElement(String uri, String localName, String qName) throws SAXException {
 		try{
-			if("dita:extension".equals(qName)){
-				//output nothing
-			}else{
+			if(!"dita:extension".equals(qName)){
 				output.write("</"+qName+">");
 			}
 		}catch (Exception e) {
@@ -113,7 +111,8 @@ public class FileGenerator extends DefaultHandler {
 				}
 			}else{
 				output.write("<"+qName);
-				for(int i = 0; i < attributes.getLength(); i++){
+				int attLen = attributes.getLength();
+				for(int i = 0; i < attLen; i++){
 					output.write(" ");
 					output.write(attributes.getQName(i)+"=\""+attributes.getValue(i)+"\"");
 				}
