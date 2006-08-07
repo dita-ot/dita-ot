@@ -46,18 +46,19 @@ public class DITAOTCollator implements Comparator {
 		}
 	}
 	
-	public static synchronized DITAOTCollator getInstance() {
-		return getInstance(Locale.US);
+	public static DITAOTCollator getInstance() {
+			return getInstance(Locale.US);
 	}
 	
-	public static synchronized DITAOTCollator getInstance(Locale locale) {
-		DITAOTCollator instance = null;		
-		instance = (DITAOTCollator) cache.get(locale);		
-		if (instance == null) {
-			instance = new DITAOTCollator(locale);
-			cache.put(locale, instance);
+	public static DITAOTCollator getInstance(Locale locale) {
+		DITAOTCollator instance = null;
+		synchronized(cache){
+			instance = (DITAOTCollator) cache.get(locale);		
+			if (instance == null) {
+				instance = new DITAOTCollator(locale);
+				cache.put(locale, instance);
+			}
 		}
-		
 		return instance;
 	}
 	
