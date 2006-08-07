@@ -38,10 +38,10 @@ public class MergeMapParser extends AbstractXMLReader {
 			if(reader == null){
 				reader = XMLReaderFactory.createXMLReader();
 				reader.setContentHandler(this);
-				reader.setProperty(Constants.LEXICAL_HANDLER_PROPERTY,this);
+//				reader.setProperty(Constants.LEXICAL_HANDLER_PROPERTY,this);
 				reader.setFeature(Constants.FEATURE_NAMESPACE_PREFIX, true);
-				reader.setFeature(Constants.FEATURE_VALIDATION, true); 
-				reader.setFeature(Constants.FEATURE_VALIDATION_SCHEMA, true);
+//				reader.setFeature(Constants.FEATURE_VALIDATION, true); 
+//				reader.setFeature(Constants.FEATURE_VALIDATION_SCHEMA, true);
 			}
 			if(mapInfo == null){
 				mapInfo = new StringBuffer(Constants.INT_1024);

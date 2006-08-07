@@ -40,10 +40,10 @@ public class MergeTopicParser extends AbstractXMLReader {
 			if(reader == null){
 				reader = XMLReaderFactory.createXMLReader();
 				reader.setContentHandler(this);
-				reader.setProperty(Constants.LEXICAL_HANDLER_PROPERTY,this);
+//				reader.setProperty(Constants.LEXICAL_HANDLER_PROPERTY,this);
 				reader.setFeature(Constants.FEATURE_NAMESPACE_PREFIX, true);
-				reader.setFeature(Constants.FEATURE_VALIDATION, true); 
-				reader.setFeature(Constants.FEATURE_VALIDATION_SCHEMA, true);
+//				reader.setFeature(Constants.FEATURE_VALIDATION, true); 
+//				reader.setFeature(Constants.FEATURE_VALIDATION_SCHEMA, true);
 			}
 			if(topicInfo == null){
 				topicInfo = new StringBuffer(Constants.INT_1024);
