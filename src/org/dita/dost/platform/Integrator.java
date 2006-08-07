@@ -52,8 +52,8 @@ public class Integrator {
 			ditaDir = new File(basedir, ditaDir).getAbsolutePath();
 		}
 		
-		File demoDir = new File(ditaDir + "/demo");
-		File pluginDir = new File(ditaDir + "/plugins");
+		File demoDir = new File(ditaDir + File.separatorChar + "demo");
+		File pluginDir = new File(ditaDir + File.separatorChar + "plugin");
 		File[] demoFiles = demoDir.listFiles();
 		File[] pluginFiles = pluginDir.listFiles();
 		
