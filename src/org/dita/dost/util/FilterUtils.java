@@ -67,7 +67,7 @@ public class FilterUtils {
 		while(prop.hasMoreElements()){
 			propPath = (String)prop.nextElement();
 			propPathTokenizer = new StringTokenizer(propPath, Constants.STRING_BLANK);
-			propList = new ArrayList();
+			propList = new ArrayList(Constants.INT_128);
 			while(propPathTokenizer.hasMoreElements()){
 				propList.add(propPathTokenizer.nextElement());
 			}
@@ -130,10 +130,10 @@ public class FilterUtils {
 				// no action will be considered as 'not exclude'
 				if (filterAction == null) {
 					hasNullAction = true;
-				}else if (!(Constants.FILTER_ACTION_EXCLUDE.equalsIgnoreCase(filterAction))) {
-					return false;
-				}else{
+				}else if (Constants.FILTER_ACTION_EXCLUDE.equalsIgnoreCase(filterAction)) {
 					hasExcludeAction = true;
+				}else{
+					return false;
 				}
 			}
 			
