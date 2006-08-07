@@ -3,9 +3,9 @@
  */
 package org.dita.dost.platform;
 
-import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.StringTokenizer;
 
 import org.dita.dost.log.DITAOTJavaLogger;
@@ -24,13 +24,13 @@ public class InsertAction extends DefaultHandler implements IAction {
 
 	private XMLReader reader;
 	private DITAOTJavaLogger logger;
-	private HashSet fileNameSet = null;
+	private LinkedHashSet fileNameSet = null;
 	private StringBuffer retBuf;
 	private Hashtable paramTable = null;
 	private int elemLevel = 0;
 	
 	public InsertAction() {
-		fileNameSet = new HashSet(16);
+		fileNameSet = new LinkedHashSet(16);
 		logger = new DITAOTJavaLogger();
 		retBuf = new StringBuffer(4096);
 		paramTable = new Hashtable();
@@ -72,12 +72,12 @@ public class InsertAction extends DefaultHandler implements IAction {
 	public String getResult() {
 		Iterator iter;
 		iter = fileNameSet.iterator();
-		while(iter.hasNext()){
-			try{
+		try{
+			while(iter.hasNext()){
 				reader.parse((String)iter.next());
-			} catch (Exception e) {
-	        	logger.logException(e);
-	        }
+			}
+		} catch (Exception e) {
+	       	logger.logException(e);
 		}
 		return retBuf.toString();
 	}
@@ -86,7 +86,8 @@ public class InsertAction extends DefaultHandler implements IAction {
 		if(elemLevel != 0){
 			retBuf.append(Constants.LINE_SEPARATOR);
 			retBuf.append("<"+qName);
-			for (int i = 0; i < attributes.getLength(); i++){
+			int attLen = attributes.getLength();
+			for (int i = 0; i < attLen; i++){
 				retBuf.append(" ").append(attributes.getQName(i)).append("=\"");
 				retBuf.append(attributes.getValue(i)).append("\"");
 			}
