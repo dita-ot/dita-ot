@@ -3,6 +3,7 @@
  */
 package org.dita.dost.log;
 
+import java.io.File;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Properties;
@@ -24,21 +25,35 @@ import org.w3c.dom.NodeList;
  */
 public class MessageUtils {
 	private static Hashtable hashTable = null;
-	private static final String MESSAGE_FILE = "resource/messages.xml";
-
-	private static void loadMessages() {
+	private static String messageFile = null;
+	private static DITAOTJavaLogger fileLogger = new DITAOTJavaLogger();
+	
+	private static void loadDefaultMessages() {
+		loadMessages("resource/messages.xml");
+	}
+	
+	public static void loadMessages(String newMessageFile) {
+		if (!updateMessageFile(newMessageFile)) {
+			// this message file has been loaded
+			return;
+		}
+		
+		// always assign a new instance to hashTable to avoid 
+		// to reload this method again and again when messages 
+		// loading failed.
+		hashTable = new Hashtable();
+		
 		try {
 			DocumentBuilderFactory factory = DocumentBuilderFactory
 					.newInstance();
 			DocumentBuilder builder = factory.newDocumentBuilder();
-			Document doc = builder.parse(MESSAGE_FILE);
+			Document doc = builder.parse(messageFile);
 
 			Element messages = doc.getDocumentElement();
 			NodeList messageList = messages.getElementsByTagName("message");
 
-			hashTable = new Hashtable();
-
-			for (int i = 0; i < messageList.getLength(); i++) {
+			int messageListLength = messageList.getLength();
+			for (int i = 0; i < messageListLength; i++) {
 				Element message = (Element) messageList.item(i);
 				Node reason = message.getElementsByTagName("reason").item(0);
 				Node response = message.getElementsByTagName("response")
@@ -57,26 +72,81 @@ public class MessageUtils {
 				hashTable.put(id, messageBean);
 			}
 		} catch (Exception e) {
-			throw new RuntimeException(e);
+			StringBuffer buff = new StringBuffer(128);
+			
+			buff.append("  Failed to load messages from '");
+			buff.append(messageFile);
+			buff.append("' due to exception: ");
+			buff.append(e.getMessage());
+			buff.append(". Please check if there are files 'resource/messages.xml'");
+			buff.append(" and 'resource/messages.dtd' in the directory");
+			buff.append(" that you run the toolkit. If not, please copy them");
+			buff.append(" from the toolkit's root directory.");
+			
+			fileLogger.logError(buff.toString());
 		}
 	}
 
+	private static boolean updateMessageFile(String newMessageFile) {
+		String oldMessagePath = null;
+		String newMessagePath = null;
+
+		if (messageFile == null) {
+			messageFile = newMessageFile;
+			return true;
+		}
+		
+		oldMessagePath = new File(MessageUtils.messageFile).getAbsolutePath();
+		newMessagePath = new File(newMessageFile).getAbsolutePath();
+		
+		if (oldMessagePath.equalsIgnoreCase(newMessagePath)) {
+			return false;
+		}
+		
+		messageFile = newMessageFile;
+		
+		return true;
+	}
+	
+	/**
+	 * Get the message respond to the given id, if no message found, 
+	 * an empty message with this id will be returned. 
+	 * 
+	 * @param id
+	 * @return
+	 */
 	public static MessageBean getMessage(String id) {
 		MessageBean message = null;
+		MessageBean hashMessage = null;
 		
 		if (hashTable == null) {
-			loadMessages();
+			loadDefaultMessages();
 		}
 
-		message = (MessageBean) hashTable.get(id);
+		hashMessage = (MessageBean) hashTable.get(id);
+		if (hashMessage != null) {
+			message = new MessageBean(hashMessage);
+		}
 		
 		if (message == null) {
-			throw new RuntimeException("Can't find message for id: " + id);
+			// return a empty message when no message found, 
+			// and notify the user with a warning message.
+			message = new MessageBean(id, "", "", "");
+			fileLogger.logWarn("  Can't find message for id: " + id);			
 		}
 		
 		return message;
 	}
 
+	/**
+	 * Get the message respond to the given id with all of the parameters
+	 * are replaced by those in the given 'prop', if no message found, 
+	 * an empty message with this id will be returned. 
+	 * 
+	 * @param id
+	 * @param prop
+	 * @return
+	 */
 	public static MessageBean getMessage(String id, Properties prop) {		
 		String reason = null;
 		String response = null;
@@ -103,4 +173,5 @@ public class MessageUtils {
 
 		return messageBean;
 	}
+	
 }

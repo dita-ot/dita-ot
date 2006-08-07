@@ -108,7 +108,8 @@ public class IndexTermCollection {
 		/*
 		 * Sort all the terms recursively
 		 */
-		for (int i = 0; i < termList.size(); i++) {
+		int termListSize = termList.size();
+		for (int i = 0; i < termListSize; i++) {
 			IndexTerm term = (IndexTerm) termList.get(i);
 			term.sortSubTerms();
 		}
