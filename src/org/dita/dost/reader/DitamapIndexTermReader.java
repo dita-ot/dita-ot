@@ -97,7 +97,7 @@ public class DitamapIndexTermReader extends AbstractXMLReader {
 			Object obj = elementStack.peek();
 
 			if (obj instanceof TopicrefElement) {
-				IndexTermCollection.addTerm(indexTerm);
+				IndexTermCollection.getInstantce().addTerm(indexTerm);
 			} else {
 				IndexTerm parentTerm = (IndexTerm) obj;
 				parentTerm.addSubTerm(indexTerm);

@@ -25,18 +25,24 @@ import org.dita.dost.writer.JavaHelpIndexWriter;
  */
 public class IndexTermCollection {
 	/** The list of all index term */
-	private static List termList = new ArrayList(Constants.INT_16);
+	private List termList = new ArrayList(Constants.INT_16);
 
 	/** The type of index term */
-	private static String indexType = null;
+	private String indexType = null;
 
 	/** The output file name of index term without extension */
-	private static String outputFileRoot = null;
+	private String outputFileRoot = null;
+	
+	private static IndexTermCollection collection = null;
 
 	/**
 	 * Private constructor used to forbid instance.
 	 */
 	private IndexTermCollection() {
+	}
+	
+	public static IndexTermCollection getInstantce(){
+		return (collection == null)? new IndexTermCollection(): collection;
 	}
 
 	/**
@@ -44,8 +50,8 @@ public class IndexTermCollection {
 	 * 
 	 * @return
 	 */
-	public static String getIndexType() {
-		return IndexTermCollection.indexType;
+	public String getIndexType() {
+		return this.indexType;
 	}
 
 	/**
@@ -54,8 +60,8 @@ public class IndexTermCollection {
 	 * @param type
 	 *            The indexType to set.
 	 */
-	public static void setIndexType(String type) {
-		IndexTermCollection.indexType = type;
+	public void setIndexType(String type) {
+		this.indexType = type;
 	}
 
 	/**
@@ -63,7 +69,7 @@ public class IndexTermCollection {
 	 * 
 	 * @param term
 	 */
-	public static void addTerm(IndexTerm term) {
+	public void addTerm(IndexTerm term) {
 		int i = 0;
 		int termNum = termList.size();
 
@@ -92,14 +98,14 @@ public class IndexTermCollection {
 	 * 
 	 * @return
 	 */
-	public static List getTermList() {
+	public List getTermList() {
 		return termList;
 	}
 
 	/**
 	 * Sort term list extracted from dita files base on Locale.
 	 */
-	public static void sort() {
+	public void sort() {
 		if (IndexTerm.getTermLocale() == null) {
 			IndexTerm.setTermLocale(new Locale(Constants.LANGUAGE_EN,
 					Constants.COUNTRY_US));
@@ -122,8 +128,8 @@ public class IndexTermCollection {
 	 * 
 	 * @throws DITAOTException
 	 */
-	public static void outputTerms() throws DITAOTException {
-		StringBuffer buff = new StringBuffer(IndexTermCollection.outputFileRoot);
+	public void outputTerms() throws DITAOTException {
+		StringBuffer buff = new StringBuffer(this.outputFileRoot);
 		AbstractWriter indexWriter = null;
 		Content content = new ContentImpl();
 		
@@ -135,7 +141,7 @@ public class IndexTermCollection {
 			buff.append("_index.xml");			
 		}
 		
-		content.setCollection(IndexTermCollection.getTermList());
+		content.setCollection(this.getTermList());
 		indexWriter.setContent(content);
 		indexWriter.write(buff.toString());
 	}
@@ -146,8 +152,8 @@ public class IndexTermCollection {
 	 * @param fileRoot
 	 *            The outputFile to set.
 	 */
-	public static void setOutputFileRoot(String fileRoot) {
-		IndexTermCollection.outputFileRoot = fileRoot;
+	public void setOutputFileRoot(String fileRoot) {
+		this.outputFileRoot = fileRoot;
 	}
 
 }

@@ -139,7 +139,7 @@ public class IndexTermReader extends AbstractXMLReader {
 			}
 			
 			if (termStack.empty()) {
-				IndexTermCollection.addTerm(term);
+				IndexTermCollection.getInstantce().addTerm(term);
 			} else {
 				IndexTerm parentTerm = (IndexTerm) termStack.peek();
 				parentTerm.addSubTerm(term);
