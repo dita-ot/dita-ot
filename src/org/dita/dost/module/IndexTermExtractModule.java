@@ -71,8 +71,8 @@ public class IndexTermExtractModule extends AbstractPipelineModule {
 		try {
 			parseAndValidateInput(input);
 			extractIndexTerm();
-			IndexTermCollection.sort();
-			IndexTermCollection.outputTerms();
+			IndexTermCollection.getInstantce().sort();
+			IndexTermCollection.getInstantce().outputTerms();
 		} catch (Exception e) {
 			javaLogger.logException(e);
 		}
@@ -146,8 +146,8 @@ public class IndexTermExtractModule extends AbstractPipelineModule {
 		lastIndexOfDot = output.lastIndexOf(".");
 		outputRoot = (lastIndexOfDot == -1) ? output : output.substring(0,
 				lastIndexOfDot);
-		IndexTermCollection.setOutputFileRoot(outputRoot);
-		IndexTermCollection.setIndexType(indextype);
+		IndexTermCollection.getInstantce().setOutputFileRoot(outputRoot);
+		IndexTermCollection.getInstantce().setIndexType(indextype);
 
 		if (encoding != null && encoding.trim().length() > 0) {
 			Locale locale = new Locale(encoding.substring(0, 1), encoding
