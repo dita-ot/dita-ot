@@ -79,7 +79,8 @@ public class FilterUtils {
 				propListIndex--;
 				attrPropsValue = atts.getValue((String)propList.get(propListIndex));
 				if (attrPropsValue != null){
-					propStart = attrPropsValue.indexOf(propName+"(") + propName.length() + 1;
+					propStart = attrPropsValue.indexOf(new StringBuffer(propName).append("(").toString()) 
+						+ propName.length() + 1;
 					propEnd = attrPropsValue.indexOf(")", propStart);
 					if (propStart != -1 && propEnd != -1){
 						propValue = attrPropsValue.substring(propStart, propEnd).trim();
