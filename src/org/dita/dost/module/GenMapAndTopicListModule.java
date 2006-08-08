@@ -416,8 +416,9 @@ public class GenMapAndTopicListModule extends AbstractPipelineModule {
 			if (new File(baseInputDir, value).exists()) {
 				tempMap.put(key, value);
 				//Add the copy-to target to conreflist when its source has conref
-				if(conrefSet.contains(value))
+				if(conrefSet.contains(value)){
 					conrefSet.add(key);
+				}
 			}
 		}
 		
