@@ -116,7 +116,7 @@ public class MergeMapParser extends AbstractXMLReader {
     					
 //    					random = RandomUtils.getRandomNum();
 //    					filename = attValue + "(" + Long.toString(random) + ")";
-    					attValue = Constants.SHARP + util.getIdValue(attValue);
+    					attValue = new StringBuffer(Constants.SHARP).append(util.getIdValue(attValue)).toString();
     					//parse the file but give it another file name
 //    					topicParser.read(filename);
     				}else{
@@ -127,7 +127,7 @@ public class MergeMapParser extends AbstractXMLReader {
     					//parse the topic
     					fileId = topicParser.parse(attValue,dirPath);
     					util.visit(attValue);
-    					attValue = Constants.SHARP + fileId;
+    					attValue = new StringBuffer(Constants.SHARP).append(fileId).toString();
     				}
     			}
         		

@@ -94,28 +94,8 @@ public class MergeTopicParser extends AbstractXMLReader {
             String attQName = atts.getQName(i);
             String attValue = atts.getValue(i);
             
-            if(Constants.ATTRIBUTE_NAME_ID.equals(attQName)){
-            	
-            	if(classValue != null 
-            			&& classValue.indexOf(Constants.ATTR_CLASS_VALUE_TOPIC)!=-1){
-            		// Process the topic element id
-            		if(util.findId(filePath+Constants.SHARP+attValue)){
-            			topicInfo.append(Constants.STRING_BLANK)
-            			.append("oid").append(Constants.EQUAL).append(Constants.QUOTATION)
-            			.append(attValue).append(Constants.QUOTATION);
-            			attValue = util.getIdValue(filePath+Constants.SHARP+attValue);
-            		}else{
-            			topicInfo.append(Constants.STRING_BLANK)
-            			.append("oid").append(Constants.EQUAL).append(Constants.QUOTATION)
-            			.append(attValue).append(Constants.QUOTATION);
-            			attValue = util.addId(filePath+Constants.SHARP+attValue);           			
-            		}
-            		if(isFirstTopicId){
-            			isFirstTopicId = false;
-            			retId = attValue;
-            			util.addId(filePath,attValue);
-            		}
-            	}
+            if(Constants.ATTRIBUTE_NAME_ID.equals(attQName)){           	
+            	attValue = handleID(classValue, attValue);
             }
             
             if((classValue.indexOf(Constants.ATTR_CLASS_VALUE_XREF) != -1
@@ -135,51 +115,7 @@ public class MergeTopicParser extends AbstractXMLReader {
     					|| Constants.ATTR_SCOPE_VALUE_LOCAL.equalsIgnoreCase(scopeValue))
     					&& (formatValue == null 
     							|| Constants.ATTR_FORMAT_VALUE_DITA.equalsIgnoreCase(formatValue))){
-        			if (index != -1){ // href value refer to an id in a topic
-        				pathFromMap = FileUtils.resolveTopic(new File(filePath).getParent(),attValue.substring(0,index));
-    					topicInfo.append(Constants.STRING_BLANK)
-            			.append("ohref").append(Constants.EQUAL).append(Constants.QUOTATION)
-            			.append(pathFromMap)
-            			.append(attValue.substring(index))
-            			.append(Constants.QUOTATION);
-    					
-    					topicId = attValue.substring(index);
-    					slashIndex = topicId.indexOf(Constants.SLASH);
-    					index = attValue.indexOf(Constants.SLASH, index);
-    					topicId = (slashIndex != -1) ? 
-    							pathFromMap + topicId.substring(0, slashIndex): pathFromMap + topicId;
-
-    					
-    					if(util.findId(topicId)){// topicId found 
-    						String prefix = Constants.SHARP + util.getIdValue(topicId);
-    						attValue = (index!=-1)? prefix + attValue.substring(index) : prefix;
-    					}else{//topicId not found
-    						String prefix = Constants.SHARP + util.addId(topicId);
-    						attValue = (index!=-1)? prefix + attValue.substring(index) : prefix;
-    					}
-
-    				}else{ // href value refer to a topic
-    					pathFromMap = FileUtils.resolveTopic(new File(filePath).getParent(),attValue);
-    					    					
-    					topicInfo.append(Constants.STRING_BLANK)
-            			.append("ohref").append(Constants.EQUAL).append(Constants.QUOTATION)
-            			.append(pathFromMap)
-            			.append(Constants.QUOTATION);
-    					
-    					if(util.findId(pathFromMap)){
-    						attValue = Constants.SHARP + util.getIdValue(pathFromMap);
-    					}else{
-    						fileId = util.getFirstTopicId(pathFromMap, dirPath);
-    						if (util.findId(pathFromMap + Constants.SHARP + fileId)){
-    							util.addId(pathFromMap,util.getIdValue(pathFromMap + Constants.SHARP + fileId));
-    							attValue = Constants.SHARP + util.getIdValue(pathFromMap + Constants.SHARP + fileId);
-    						}else{
-    							attValue = Constants.SHARP + util.addId(pathFromMap);
-    							util.addId(pathFromMap + Constants.SHARP + fileId, util.getIdValue(pathFromMap));
-    						}
-    						
-    					}
-    				}
+        			attValue = handleLocalDita(index, attValue);
     			}
         		
             }
@@ -191,6 +127,96 @@ public class MergeTopicParser extends AbstractXMLReader {
         }
 		topicInfo.append(Constants.GREATER_THAN);
 	}
+
+	/**
+	 * @param index
+	 * @param attValue
+	 * @return
+	 */
+	private String handleLocalDita(int index, String attValue) {
+		String fileId;
+		String topicId;
+		String pathFromMap;
+		int slashIndex;
+		if (index != -1){ // href value refer to an id in a topic
+			pathFromMap = FileUtils.resolveTopic(new File(filePath).getParent(),attValue.substring(0,index));
+			topicInfo.append(Constants.STRING_BLANK)
+			.append("ohref").append(Constants.EQUAL).append(Constants.QUOTATION)
+			.append(pathFromMap)
+			.append(attValue.substring(index))
+			.append(Constants.QUOTATION);
+			
+			topicId = attValue.substring(index);
+			slashIndex = topicId.indexOf(Constants.SLASH);
+			index = attValue.indexOf(Constants.SLASH, index);
+			topicId = (slashIndex != -1) ? 
+					pathFromMap + topicId.substring(0, slashIndex): pathFromMap + topicId;
+
+			
+			if(util.findId(topicId)){// topicId found 
+				String prefix = Constants.SHARP + util.getIdValue(topicId);
+				attValue = (index!=-1)? prefix + attValue.substring(index) : prefix;
+			}else{//topicId not found
+				String prefix = Constants.SHARP + util.addId(topicId);
+				attValue = (index!=-1)? prefix + attValue.substring(index) : prefix;
+			}
+
+		}else{ // href value refer to a topic
+			pathFromMap = FileUtils.resolveTopic(new File(filePath).getParent(),attValue);
+			    					
+			topicInfo.append(Constants.STRING_BLANK)
+			.append("ohref").append(Constants.EQUAL).append(Constants.QUOTATION)
+			.append(pathFromMap)
+			.append(Constants.QUOTATION);
+			
+			if(util.findId(pathFromMap)){
+				attValue = Constants.SHARP + util.getIdValue(pathFromMap);
+			}else{
+				fileId = util.getFirstTopicId(pathFromMap, dirPath);
+				if (util.findId(pathFromMap + Constants.SHARP + fileId)){
+					util.addId(pathFromMap,util.getIdValue(pathFromMap + Constants.SHARP + fileId));
+					attValue = Constants.SHARP + util.getIdValue(pathFromMap + Constants.SHARP + fileId);
+				}else{
+					attValue = Constants.SHARP + util.addId(pathFromMap);
+					util.addId(pathFromMap + Constants.SHARP + fileId, util.getIdValue(pathFromMap));
+				}
+				
+			}
+		}
+		return attValue;
+	}
+
+
+	/**
+	 * @param classValue
+	 * @param attValue
+	 * @return
+	 */
+	private String handleID(String classValue, String attValue) {
+		if(classValue != null 
+				&& classValue.indexOf(Constants.ATTR_CLASS_VALUE_TOPIC)!=-1){
+			// Process the topic element id
+			String value = filePath+Constants.SHARP+attValue;
+			if(util.findId(value)){
+				topicInfo.append(Constants.STRING_BLANK)
+				.append("oid").append(Constants.EQUAL).append(Constants.QUOTATION)
+				.append(attValue).append(Constants.QUOTATION);
+				attValue = util.getIdValue(value);
+			}else{
+				topicInfo.append(Constants.STRING_BLANK)
+				.append("oid").append(Constants.EQUAL).append(Constants.QUOTATION)
+				.append(attValue).append(Constants.QUOTATION);
+				attValue = util.addId(value);           			
+			}
+			if(isFirstTopicId){
+				isFirstTopicId = false;
+				retId = attValue;
+				util.addId(filePath,attValue);
+			}
+		}
+		return attValue;
+	}
+
 
 	public void endDocument() throws SAXException {
 		
