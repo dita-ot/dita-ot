@@ -120,38 +120,27 @@ public class DitaWriter extends AbstractXMLWriter {
         exclude = false;
         needResolveEntity = true;
         index = filename.indexOf(Constants.STICK);
-        if (filename.endsWith(Constants.FILE_EXTENSION_DITAMAP)){
-        	fileExtIndex = -1;
-        } else {
-        	fileExtIndex = filename.lastIndexOf(Constants.DOT);
-        }
+        fileExtIndex = filename.endsWith(Constants.FILE_EXTENSION_DITAMAP)? -1:
+        	filename.lastIndexOf(Constants.DOT);
         
         try {
+        	String outputFilename = tempDir + File.separator;
             if(index!=-1){
                 traceFilename = filename.replace('|',File.separatorChar)
                 .replace('/',File.separatorChar).replace('\\',File.separatorChar);
-                if(fileExtIndex == -1 || fileExtIndex <= index){
-                	outputFile = new File(tempDir 
-                            + File.separatorChar + filename.substring(index+1));
-                } else {
-                	outputFile = new File(tempDir 
-                            + File.separatorChar + filename.substring(index+1, fileExtIndex)
-                            + DebugAndFilterModule.extName);
-                }
+                outputFilename += (fileExtIndex == -1 || fileExtIndex <= index)?
+                		filename.substring(index+1): 
+                		filename.substring(index+1, fileExtIndex)+DebugAndFilterModule.extName;
                 
                 path2Project = FileUtils.getPathtoProject(filename.substring(index+1));
             }else{
                 traceFilename = filename;
-                if(fileExtIndex == -1){
-                	outputFile = new File(tempDir + File.separatorChar + filename);
-                } else {
-                	outputFile = new File(tempDir + File.separatorChar 
-                			+ filename.substring(0, fileExtIndex)
-                			+ DebugAndFilterModule.extName);
-                }
+                outputFilename += (fileExtIndex == -1)? filename:
+                	filename.substring(0, fileExtIndex)+DebugAndFilterModule.extName;
                 
                 path2Project = FileUtils.getPathtoProject(filename);
             }
+            outputFile = new File(outputFilename);
             counterMap = new HashMap();
             dirFile = outputFile.getParentFile();
             if (!dirFile.exists()) {
@@ -299,7 +288,6 @@ public class DitaWriter extends AbstractXMLWriter {
             Attributes atts) throws SAXException {
         Integer value;
         Integer nextValue;
-        int attsLen = atts.getLength();
         String domains = null;
         String attrValue = atts.getValue(Constants.ATTRIBUTE_NAME_CLASS);
         
@@ -326,68 +314,9 @@ public class DitaWriter extends AbstractXMLWriter {
                 level = 0;
             }else{
                 try {
-                	//copy the element name
-                	output.write(Constants.LESS_THAN + qName);
-                    if (Constants.ELEMENT_NAME_TGROUP.equals(qName)){
-                    	columnNumber = 1; // initialize the column number
-                        columnNumberEnd = 0;
-                        colSpec = new ArrayList(16);
-                    }else if(Constants.ELEMENT_NAME_ROW.equals(qName)) {
-                        columnNumber = 1; // initialize the column number
-                        columnNumberEnd = 0;
-                    }else if(Constants.ELEMENT_NAME_COLSPEC.equals(qName)){
-                    	columnNumber = columnNumberEnd +1;
-                    	if(atts.getValue(Constants.ATTRIBUTE_NAME_COLNAME) != null){
-                    		colSpec.add(atts.getValue(Constants.ATTRIBUTE_NAME_COLNAME));
-                    	}else{
-                    		colSpec.add(COLUMN_NAME_COL+columnNumber);
-                    	}
-                    	columnNumberEnd = columnNumber;
-                    	output.write(new StringBuffer().append(Constants.STRING_BLANK)
-                        		.append(Constants.ATTRIBUTE_NAME_COLNAME).append(Constants.EQUAL).append(Constants.QUOTATION)
-                        		.append(COLUMN_NAME_COL+columnNumber).append(Constants.QUOTATION).toString());
-                    }else if(Constants.ELEMENT_NAME_ENTRY.equals(qName)){
-                    	//TO DO
-                    	columnNumber = getStartNumber(atts, columnNumberEnd);
-                    	if(columnNumber > columnNumberEnd){
-                    		output.write(new StringBuffer().append(Constants.STRING_BLANK)
-                            		.append(Constants.ATTRIBUTE_NAME_COLNAME).append(Constants.EQUAL).append(Constants.QUOTATION)
-                            		.append(COLUMN_NAME_COL+columnNumber).append(Constants.QUOTATION).toString());
-                    	}else{
-                    		//throw error;
-                    	}
-                    	columnNumberEnd = getEndNumber(atts, columnNumber);
-                    }
+                	copyElementName(qName, atts);
                     
-                    // copy the element's attributes                    
-                    for (int i = 0; i < attsLen; i++) {
-                        String attQName = atts.getQName(i);
-                        String attValue;
-                        
-                        if(Constants.ATTRIBUTE_NAME_HREF.equals(attQName)
-                        		|| Constants.ATTRIBUTE_NAME_COPY_TO.equals(attQName)){
-                            
-                            attValue = replaceHREF(attQName, atts);
-                            
-                        } else if (Constants.ATTRIBUTE_NAME_CONREF.equals(attQName)){
-                                                        
-                            attValue = replaceCONREF(atts);
-                        } else {
-                            attValue = atts.getValue(i);
-                        }
-
-                        // replace '&' with '&amp;'
-        				if (attValue.indexOf('&') > 0) {
-        					attValue = StringUtils.replaceAll(attValue, "&", "&amp;");
-        				}
-        				
-                        //output all attributes except colname
-                        if (!Constants.ATTRIBUTE_NAME_COLNAME.equals(attQName)){
-                        	output.write(new StringBuffer().append(Constants.STRING_BLANK)
-                        			.append(attQName).append(Constants.EQUAL).append(Constants.QUOTATION)
-                        			.append(attValue).append(Constants.QUOTATION).toString());
-                        }
-                    }
+                    copyElementAttribute(atts);
                     // write the xtrf and xtrc attributes which contain debug
                     // information
                     output.write(ATTRIBUTE_XTRF_START + traceFilename + ATTRIBUTE_END);
@@ -401,7 +330,82 @@ public class DitaWriter extends AbstractXMLWriter {
         }
     }
     
-    private String replaceHREF (String attName, Attributes atts){
+    /**
+	 * @param atts
+	 * @throws IOException
+	 */
+	private void copyElementAttribute(Attributes atts) throws IOException {
+		// copy the element's attributes    
+		int attsLen = atts.getLength();
+		for (int i = 0; i < attsLen; i++) {
+		    String attQName = atts.getQName(i);
+		    String attValue;
+		    
+		    if(Constants.ATTRIBUTE_NAME_HREF.equals(attQName)
+		    		|| Constants.ATTRIBUTE_NAME_COPY_TO.equals(attQName)){
+		        
+		        attValue = replaceHREF(attQName, atts);
+		        
+		    } else if (Constants.ATTRIBUTE_NAME_CONREF.equals(attQName)){
+		                                    
+		        attValue = replaceCONREF(atts);
+		    } else {
+		        attValue = atts.getValue(i);
+		    }
+
+		    // replace '&' with '&amp;'
+			if (attValue.indexOf('&') > 0) {
+				attValue = StringUtils.replaceAll(attValue, "&", "&amp;");
+			}
+			
+		    //output all attributes except colname
+		    if (!Constants.ATTRIBUTE_NAME_COLNAME.equals(attQName)){
+		    	output.write(new StringBuffer().append(Constants.STRING_BLANK)
+		    			.append(attQName).append(Constants.EQUAL).append(Constants.QUOTATION)
+		    			.append(attValue).append(Constants.QUOTATION).toString());
+		    }
+		}
+	}
+
+	/**
+	 * @param qName
+	 * @param atts
+	 * @throws IOException
+	 */
+	private void copyElementName(String qName, Attributes atts) throws IOException {
+		//copy the element name
+		output.write(Constants.LESS_THAN + qName);
+		if (Constants.ELEMENT_NAME_TGROUP.equals(qName)){
+			columnNumber = 1; // initialize the column number
+		    columnNumberEnd = 0;
+		    colSpec = new ArrayList(16);
+		}else if(Constants.ELEMENT_NAME_ROW.equals(qName)) {
+		    columnNumber = 1; // initialize the column number
+		    columnNumberEnd = 0;
+		}else if(Constants.ELEMENT_NAME_COLSPEC.equals(qName)){
+			columnNumber = columnNumberEnd +1;
+			if(atts.getValue(Constants.ATTRIBUTE_NAME_COLNAME) != null){
+				colSpec.add(atts.getValue(Constants.ATTRIBUTE_NAME_COLNAME));
+			}else{
+				colSpec.add(COLUMN_NAME_COL+columnNumber);
+			}
+			columnNumberEnd = columnNumber;
+			output.write(new StringBuffer().append(Constants.STRING_BLANK)
+		    		.append(Constants.ATTRIBUTE_NAME_COLNAME).append(Constants.EQUAL).append(Constants.QUOTATION)
+		    		.append(COLUMN_NAME_COL+columnNumber).append(Constants.QUOTATION).toString());
+		}else if(Constants.ELEMENT_NAME_ENTRY.equals(qName)){
+			//TO DO
+			columnNumber = getStartNumber(atts, columnNumberEnd);
+			if(columnNumber > columnNumberEnd){
+				output.write(new StringBuffer().append(Constants.STRING_BLANK)
+		        		.append(Constants.ATTRIBUTE_NAME_COLNAME).append(Constants.EQUAL).append(Constants.QUOTATION)
+		        		.append(COLUMN_NAME_COL+columnNumber).append(Constants.QUOTATION).toString());
+			}
+			columnNumberEnd = getEndNumber(atts, columnNumber);
+		}
+	}
+
+	private String replaceHREF (String attName, Attributes atts){
     	
     	String attValue = null;
     	
