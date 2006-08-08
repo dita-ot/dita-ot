@@ -40,7 +40,7 @@ public class CommandLineInvoker {
      */
     private boolean readyToRun = false;
     
-	DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
+	private static DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
 	
 	static {
 		paramMap = new HashMap();
@@ -353,7 +353,7 @@ public class CommandLineInvoker {
 				invoker.startAnt();
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			javaLogger.logException(e);
 		}
 	}
 

@@ -7,6 +7,7 @@ package org.dita.dost.util;
 import java.io.File;
 import java.util.HashMap;
 
+import org.dita.dost.log.DITAOTJavaLogger;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
@@ -22,6 +23,8 @@ import org.xml.sax.helpers.XMLReaderFactory;
 public class CatalogUtils {
 
     private static HashMap map=null;
+    
+    private static DITAOTJavaLogger logger = new DITAOTJavaLogger();
     /**
      * 
      */
@@ -55,7 +58,7 @@ public class CatalogUtils {
                 catalogFilePath = (ditaDir == null) ? Constants.FILE_NAME_CATALOG : ditaDir+File.separator+Constants.FILE_NAME_CATALOG;
                 reader.parse(catalogFilePath);
             }catch (Exception e){
-                e.printStackTrace(System.out);
+                logger.logException(e);
             }
             
             return map;
