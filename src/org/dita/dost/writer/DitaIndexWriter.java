@@ -90,7 +90,8 @@ public class DitaIndexWriter extends AbstractXMLWriter {
      * @see org.dita.dost.writer.AbstractWriter#write(java.lang.String)
      * 
      */
-    public void write(String filename) {
+    public void write(String outputFilename) {
+    	String filename = outputFilename;
 		String file = null;
 		String topic = null;
 		File inputFile = null;
