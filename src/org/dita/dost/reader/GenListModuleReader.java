@@ -343,8 +343,10 @@ public class GenListModuleReader extends AbstractXMLReader {
 		}
 
 		if (attrValue.startsWith(Constants.SHARP)
-				|| attrValue.indexOf(Constants.COLON_DOUBLE_SLASH) != -1
-				|| "external".equalsIgnoreCase(attrScope)
+				|| attrValue.indexOf(Constants.COLON_DOUBLE_SLASH) != -1){
+			return;
+		}
+		if ("external".equalsIgnoreCase(attrScope)
 				|| "peer".equalsIgnoreCase(attrScope)) {
 			return;
 		}
@@ -383,27 +385,26 @@ public class GenListModuleReader extends AbstractXMLReader {
 				&& FileUtils.isTopicFile(filename)) {
 			String href = atts.getValue(Constants.ATTRIBUTE_NAME_HREF);
 			
-			if (!StringUtils.isEmptyString(href)) {
-				if (copytoMap.get(filename) != null) {
-					StringBuffer buff = new StringBuffer();
-					buff.append("Copy-to task [href=\"");
-					buff.append(href);
-					buff.append("\" copy-to=\"");
-					buff.append(filename);
-					buff.append("\"] which points to another copy-to target");
-					buff.append(" was ignored.");
-					javaLogger.logWarn(buff.toString());
-					ignoredCopytoSourceSet.add(href);
-				} else {
-					copytoMap.put(filename, FileUtils.normalizeDirectory(currentDir, href));
-				}
-			} else {
+			if (StringUtils.isEmptyString(href)) {
 				StringBuffer buff = new StringBuffer();
 				buff.append("Copy-to task [href=\"\" copy-to=\"");
 				buff.append(filename);
 				buff.append("\"] was ignored.");
 				javaLogger.logWarn(buff.toString());
+			} else if (copytoMap.get(filename) != null){
+				StringBuffer buff = new StringBuffer();
+				buff.append("Copy-to task [href=\"");
+				buff.append(href);
+				buff.append("\" copy-to=\"");
+				buff.append(filename);
+				buff.append("\"] which points to another copy-to target");
+				buff.append(" was ignored.");
+				javaLogger.logWarn(buff.toString());
+				ignoredCopytoSourceSet.add(href);
+			} else {
+				copytoMap.put(filename, FileUtils.normalizeDirectory(currentDir, href));
 			}
+				
 		}
 	}
 }
