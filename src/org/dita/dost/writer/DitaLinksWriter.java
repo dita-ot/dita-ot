@@ -420,17 +420,19 @@ public class DitaLinksWriter extends AbstractXMLWriter {
 	}
 	
 	private boolean checkLinkAtStart(Attributes atts){
-		if (!hasRelatedlinksTillNow && level > 1 
-				&& atts.getValue(Constants.ATTRIBUTE_NAME_CLASS)
-				.indexOf(" topic/topic ") != -1){
-			return true;
+		if (!hasRelatedlinksTillNow && level > 1){
+				if (atts.getValue(Constants.ATTRIBUTE_NAME_CLASS).indexOf(" topic/topic ") != -1){
+					return true;
+				}
 		}
 		return false;
 	}
 	
 	private boolean checkLinkAtEnd(){
-		if(!hasRelatedlinksTillNow && level == matchLevel-1){
-			return true;
+		if(!hasRelatedlinksTillNow){
+			if( level == matchLevel-1){
+				return true;
+			}
 		}
 		return false;
 	}
