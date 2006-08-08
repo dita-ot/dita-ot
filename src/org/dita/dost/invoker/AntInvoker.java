@@ -14,10 +14,10 @@ import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.pipeline.PipelineFacade;
 import org.dita.dost.pipeline.PipelineHashIO;
-import org.dita.dost.util.Constants;
 import org.dita.dost.util.StringUtils;
 
 /**
+ * The class that ant scripts invokes by the <pipeline> tag.
  * @author Lian, Li
  * 
  */
@@ -30,57 +30,60 @@ public class AntInvoker extends Task {
 
 	private final static String KEY_VALUE_EQUAL_SIGN = "=";
 
-	DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
+	private DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
 
 	/**
-	 * @param module -
-	 *            The module to set.
+	 * Set the "module" attribute for input
+	 * @param module - The module to set.
 	 */
 	public void setModule(String module) {
 		pipelineInput.setAttribute("module", module);
 	}
 
 	/**
-	 * @param inputdita -
-	 *            The inputdita to set.
+	 * Set the "inputdata" attribute for input
+	 * @param inputdita - The inputdita to set.        
 	 */
 	public void setInputdita(String inputdita) {
 		pipelineInput.setAttribute("inputdita", inputdita);
 	}
 
 	/**
-	 * @param inputmap -
-	 *            The inputmap to set.
+	 * Set the "inputmap" attribute for input
+	 * @param inputmap - The inputmap to set.           
 	 */
 	public void setInputmap(String inputmap) {
 		pipelineInput.setAttribute("inputmap", inputmap);
 	}
 
 	/**
-	 * @param msg -
-	 *            The msg to set.
+	 * Set the "message" attribute for input
+	 * @param msg -  The msg to set.        
 	 */
 	public void setMessage(String msg) {
 		pipelineInput.setAttribute("message", msg);
 	}
 
 	/**
-	 * @param baseDir -
-	 *            base dir to set.
+	 * Set the "basedir" attribute for input
+	 * @param baseDir - base dir to set.
 	 */
 	public void setBasedir(String baseDir) {
 		pipelineInput.setAttribute("basedir", baseDir);
 	}
 
+	/**
+	 * Set the 'tempDir' attribute for input
+	 * @param tempdir
+	 */
 	public void setTempdir(String tempdir) {
 		pipelineInput.setAttribute("tempDir", tempdir);
 	}
 
 	/**
-	 * 
-	 * @param extParam
-	 *            extended parameters string, key value pair string separated by
-	 *            ";" eg. extparam="maplinks=XXXX;other=YYYY"
+	 * Set extra parameter values for input
+	 * @param extParam extended parameters string, key value pair string separated by
+	 *            ";" eg. extparam="maplinks=XXXX;other=YYYY"          
 	 */
 	public void setExtparam(String extParam) {
 		String keyValueStr = null;
@@ -90,8 +93,9 @@ public class AntInvoker extends Task {
 				KEY_VALUE_PAIR_SEPARATOR);
 
 		while (extParamStrTokenizer.hasMoreTokens()) {
+			int p;
 			keyValueStr = extParamStrTokenizer.nextToken();
-			int p = keyValueStr.indexOf(KEY_VALUE_EQUAL_SIGN);
+			p = keyValueStr.indexOf(KEY_VALUE_EQUAL_SIGN);
 
 			if (p <= 0) {
 				String msg = null;
@@ -121,7 +125,7 @@ public class AntInvoker extends Task {
 	}
 
 	/**
-	 * 
+	 * Defalut Constructor. Construct pipeline & input instance.
 	 */
 	public AntInvoker() {
 		super();
@@ -130,7 +134,8 @@ public class AntInvoker extends Task {
 	}
 
 	/**
-	 * 
+	 * execution point of this invoker
+	 * @throws BuildException
 	 */
 	public void execute() throws BuildException {
 		try {

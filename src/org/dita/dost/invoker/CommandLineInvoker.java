@@ -90,12 +90,16 @@ public class CommandLineInvoker {
 	}
 
 	/**
+	 * Getter function of ditaDir.
 	 * @return Returns the ditaDir.
 	 */
 	public String getDitaDir() {
 		return ditaDir;
 	}
-	
+	/**
+	 * Getter function for readytorun
+	 * @return if ready to run
+	 */
 	public boolean getReadyToRun() {
 		return readyToRun;
 	}
@@ -104,7 +108,7 @@ public class CommandLineInvoker {
 	 * Process input arguments.
 	 * 
 	 * @param args
-	 * @throws Exception
+	 * @throws DITAOTException
 	 */
 	public void processArguments(String[] args) throws DITAOTException {
 		Properties prop = new Properties();
@@ -113,6 +117,7 @@ public class CommandLineInvoker {
 		String baseDir = null;
 		String tempDir = null;
 		String inputDitaDir = null;
+		File tempPath = null;
 		
 		/*
 		 * validate dita.dir and init log message file
@@ -139,6 +144,7 @@ public class CommandLineInvoker {
 			String arg = args[i];
 			String javaArg = null;
 			String antArg = null;
+			String antArgValue = null;
 			int colonPos = arg.indexOf(Constants.COLON);
 
 			if ("help".equals(arg) || "-h".equals(arg)) {
@@ -177,7 +183,7 @@ public class CommandLineInvoker {
 				throw new DITAOTException(msg);
 			}
 
-			String antArgValue = arg.substring(colonPos + 1);
+			antArgValue = arg.substring(colonPos + 1);
 
 			if (Constants.STRING_EMPTY.equals(antArgValue.trim())) {
 				String msg = null;
@@ -203,7 +209,7 @@ public class CommandLineInvoker {
 		 * Init temp directory
 		 */
 		tempDir = prop.getProperty("dita.temp.dir", Constants.TEMP_DIR_DEFAULT);
-		File tempPath = new File(tempDir);
+		tempPath = new File(tempDir);
 		if (!tempPath.isAbsolute()) {
 			tempPath = new File(baseDir, tempDir);
 		}
@@ -252,12 +258,13 @@ public class CommandLineInvoker {
 		startTransformation(cmdBuffer.toString());
 	}
 	
-	private String getCommandRunner() {
-		return (Constants.OS_NAME.toLowerCase().indexOf(
-				Constants.OS_NAME_WINDOWS) != -1) ? "ant.bat" : "ant";
+	private static String getCommandRunner() {
+		return (Constants.OS_NAME.toLowerCase().indexOf(Constants.OS_NAME_WINDOWS) != -1)
+			?"ant.bat" 
+			: "ant";
 	}
 
-	private void startTransformation(String cmd) throws IOException {
+	private static void startTransformation(String cmd) throws IOException {
 		BufferedReader reader;
 		Process antProcess = Runtime.getRuntime().exec(cmd);
 
