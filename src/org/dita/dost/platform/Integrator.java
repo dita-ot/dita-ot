@@ -23,7 +23,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
  */
 public class Integrator {
 	public static Hashtable pluginTable = null;
-	private static HashSet templateSet = null;
+	private HashSet templateSet = null;
 	private String ditaDir;
 	private String basedir;
 	private HashSet descSet;
@@ -32,7 +32,7 @@ public class Integrator {
 	private HashSet loadedPlugin = null;
 	private Hashtable featureTable = null;
 	
-	static{
+	private void initTemplateSet(){
 		templateSet = new HashSet(16);
 		templateSet.add("catalog-dita_template.xml");
 		templateSet.add("build_template.xml");
@@ -168,6 +168,7 @@ public class Integrator {
 	}
 
 	public Integrator() {
+		initTemplateSet();
 		pluginTable = new Hashtable(16);
 		descSet = new HashSet(16);
 		loadedPlugin = new HashSet(16);
