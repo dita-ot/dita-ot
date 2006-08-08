@@ -9,6 +9,8 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Locale;
 
+import org.dita.dost.log.DITAOTJavaLogger;
+
 /**
  * Class description goes here. 
  *
@@ -19,6 +21,7 @@ public class DITAOTCollator implements Comparator {
 	
 	private Object collatorInstance;
 	private Method compareMethod;
+	private DITAOTJavaLogger logger = new DITAOTJavaLogger();
 	
 	DITAOTCollator(Locale locale) {
 		init(locale);
@@ -29,10 +32,10 @@ public class DITAOTCollator implements Comparator {
 		
 		try {
 			c = Class.forName("com.ibm.icu.text.Collator");
-			System.out.println("Using ICU collator for " + locale.toString());
+			logger.logInfo("Using ICU collator for " + locale.toString());
 		} catch (Exception e) {
 			c = Collator.class;
-			System.out.println("Using JDK collator for " + locale.toString());
+			logger.logInfo("Using JDK collator for " + locale.toString());
 		}
 		
 		try {
@@ -42,7 +45,7 @@ public class DITAOTCollator implements Comparator {
 			compareMethod = c.getDeclaredMethod("compare", new Class[] {
 					Object.class, Object.class });
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.logException(e);
 		}
 	}
 	
