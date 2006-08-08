@@ -41,6 +41,11 @@ public class IndexTermCollection {
 	private IndexTermCollection() {
 	}
 	
+	/**
+	 * The only interface to access IndexTermCollection instance
+	 * @return Singleton IndexTermCollection instance
+	 * @author Marshall
+	 */
 	public static IndexTermCollection getInstantce(){
 		return (collection == null)? new IndexTermCollection(): collection;
 	}
@@ -106,6 +111,7 @@ public class IndexTermCollection {
 	 * Sort term list extracted from dita files base on Locale.
 	 */
 	public void sort() {
+		int termListSize = termList.size();
 		if (IndexTerm.getTermLocale() == null) {
 			IndexTerm.setTermLocale(new Locale(Constants.LANGUAGE_EN,
 					Constants.COUNTRY_US));
@@ -114,7 +120,6 @@ public class IndexTermCollection {
 		/*
 		 * Sort all the terms recursively
 		 */
-		int termListSize = termList.size();
 		for (int i = 0; i < termListSize; i++) {
 			IndexTerm term = (IndexTerm) termList.get(i);
 			term.sortSubTerms();

@@ -79,6 +79,7 @@ public class IndexTerm implements Comparable {
     }
 
     /**
+     * Getter of termkey
 	 * @return Returns the termKey.
 	 */
 	public String getTermKey() {
@@ -86,7 +87,8 @@ public class IndexTerm implements Comparable {
 	}
 
 	/**
-	 * @param termKey The termKey to set.
+	 * Setter of termKey
+	 * @param key The termKey to set.
 	 */
 	public void setTermKey(String key) {
 		this.termKey = key;
@@ -256,7 +258,7 @@ public class IndexTerm implements Comparable {
         return subTerms != null && subTerms.size() > 0;
     }
 
-	/* (non-Javadoc)
+	/**
 	 * @see java.lang.Object#toString()
 	 */
 	public String toString() {

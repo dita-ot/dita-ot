@@ -93,7 +93,8 @@ public class IndexTermTarget {
         return result;
     }
 
-	/* (non-Javadoc)
+	/** 
+	 * Generate String for IndexTerm
 	 * @see java.lang.Object#toString()
 	 */
 	public String toString() {
