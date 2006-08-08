@@ -6,6 +6,7 @@ package org.dita.dost.invoker;
 import java.io.File;
 
 import org.dita.dost.exception.DITAOTException;
+import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.pipeline.AbstractFacade;
 import org.dita.dost.pipeline.PipelineFacade;
 import org.dita.dost.pipeline.PipelineHashIO;
@@ -24,6 +25,8 @@ public class JavaInvoker {
      */
     private JavaInvoker() {
     }
+    
+    private static DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
 
     /**
      * The main flow of the process
@@ -38,25 +41,38 @@ public class JavaInvoker {
         //pipelineInput.setAttribute("inputmap", "testcase" + File.separator
         //        + "dwDT\\langref\\ditaref-book.ditamap");
         
-        pipelineInput.setAttribute("inputmap","TC1.xml");
-        pipelineInput.setAttribute("basedir", "d:\\temp\\DITA-OT\\test");
-        pipelineInput.setAttribute("inputdir", "d:\\temp\\DITA-OT\\test");
-        pipelineInput.setAttribute("tempDir", "d:\\temp\\DITA-OT\\temp");
-        pipelineInput.setAttribute("ditadir", "e:\\eclipse\\workspace\\DITA-OT13");
+        pipelineInput.setAttribute("inputmap","TC5.ditamap");
+        pipelineInput.setAttribute("basedir", "C:/testcase/tc5");
+        pipelineInput.setAttribute("inputdir", "C:/testcase/tc5");
+        pipelineInput.setAttribute("tempDir", "C:/testcase/tc5/temp");
+        pipelineInput.setAttribute("ditadir", "c:/eclipse/workspace/DITA_OT");
 
         try {
 			
-			pipelineInput.setAttribute("ditaval", "d:\\temp\\DITA-OT\\test\\02.ditaval");
+			//pipelineInput.setAttribute("ditaval", "d:\\temp\\DITA-OT\\test\\02.ditaval");
+        	removeFiles("C:/testcase/tc5/temp");
 			pipelineInput.setAttribute("ditalist", "temp" + File.separator
 			        + "dita.list");
 			pipelineInput.setAttribute("maplinks", "temp\\maplinks.unordered");
 			facade.execute("GenMapAndTopicList", pipelineInput);
 			facade.execute("DebugAndFilter", pipelineInput);
 			facade.execute("MoveIndex", pipelineInput);
-			facade.execute("MoveLinks", pipelineInput);
+			//facade.execute("MoveLinks", pipelineInput);
 		} catch (DITAOTException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			javaLogger.logException(e);
 		}
+    }
+    
+    public static void removeFiles(String dir){
+    	File file = new File(dir);
+    	if(!(file.exists() && file.isDirectory())){
+    		return;
+    	}
+    	int size = file.listFiles().length;
+    	for(int i=0; i< size; i++){
+    		File f = file.listFiles()[i];
+    		f.deleteOnExit();
+    	}
     }
 }
