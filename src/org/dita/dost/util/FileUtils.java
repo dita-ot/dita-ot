@@ -74,8 +74,9 @@ public class FileUtils {
 	 * @return
 	 */
 	public static boolean isTopicFile(String lcasefn) {
-		if(StringUtils.isEmptyString(lcasefn))
+		if(StringUtils.isEmptyString(lcasefn)){
 			return false;
+		}
 		return lcasefn.endsWith(Constants.FILE_EXTENSION_DITA)
 				|| lcasefn.endsWith(Constants.FILE_EXTENSION_XML);
 	}
