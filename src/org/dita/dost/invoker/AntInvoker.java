@@ -15,6 +15,7 @@ import org.dita.dost.log.MessageUtils;
 import org.dita.dost.pipeline.PipelineFacade;
 import org.dita.dost.pipeline.PipelineHashIO;
 import org.dita.dost.util.Constants;
+import org.dita.dost.util.StringUtils;
 
 /**
  * @author Lian, Li
@@ -104,9 +105,8 @@ public class AntInvoker extends Task {
 			attrName = keyValueStr.substring(0, p).trim();
 			attrValue = keyValueStr.substring(p + 1).trim();
 
-			if (null == attrName || null == attrValue
-					|| Constants.STRING_EMPTY.equals(attrName)
-					|| Constants.STRING_EMPTY.equals(attrValue)) {
+			if (StringUtils.isEmptyString(attrName) ||
+					StringUtils.isEmptyString(attrValue)) {
 				String msg = null;
 				Properties params = new Properties();
 

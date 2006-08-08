@@ -7,6 +7,7 @@ import org.dita.dost.module.Content;
 import org.dita.dost.module.ContentImpl;
 import org.dita.dost.util.Constants;
 import org.dita.dost.util.MergeUtils;
+import org.dita.dost.util.StringUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
@@ -96,8 +97,7 @@ public class MergeMapParser extends AbstractXMLReader {
             String attQName = atts.getQName(i);
             String attValue = atts.getValue(i);
             if(Constants.ATTRIBUTE_NAME_HREF.equals(attQName) 
-            		&& attValue != null
-            		&& !Constants.STRING_EMPTY.equalsIgnoreCase(attValue)){
+            		&& !StringUtils.isEmptyString(attValue)){
             	scopeValue = atts.getValue(Constants.ATTRIBUTE_NAME_SCOPE);
         		formatValue = atts.getValue(Constants.ATTRIBUTE_NAME_FORMAT);
         		
