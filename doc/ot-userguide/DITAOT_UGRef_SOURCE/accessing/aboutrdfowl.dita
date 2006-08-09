@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "../dtd/concept.dtd">
+<concept id="rdf_owl">
+	<title>About RDF and the DITA Open Toolkit</title>
+	<shortdesc>Overview information about RDF and the DITA Open Toolkit.</shortdesc>
+	<prolog>
+		<author type="creator">Anna van Raaphorst</author>
+		<author type="contributor">Richard Johnson</author>
+		<publisher>OASIS (Organization for the Advancement of Structured Information Standards)</publisher>
+		<copyright>
+			<copyryear year="2006"/>
+			<copyrholder>VR Communications, Inc.</copyrholder>
+		</copyright>
+		<critdates>
+			<created date="2006-May-01"/>
+			<revised modified="2006-August-08"/>
+		</critdates>
+		<metadata>
+			<keywords>
+				<keyword>accessing information</keyword>
+				<keyword>RDF</keyword>
+				<keyword>OWL</keyword>
+				<keyword>Dublin Core metatag</keyword>
+				<keyword>SKOS</keyword>
+				<indexterm>RDF/OWL<indexterm>about</indexterm>
+				</indexterm>
+				<indexterm>OWL/RDF<indexterm>about</indexterm>
+				</indexterm>
+				<indexterm>Dublin Core metatags</indexterm>
+				<indexterm>SKOS</indexterm>
+			</keywords>
+			<prodinfo>
+				<prodname>DITA Open Toolkit</prodname>
+				<vrmlist>
+					<vrm version="1.2.2"/>
+				</vrmlist>
+			</prodinfo>
+		</metadata>
+	</prolog>
+	<conbody>
+		<section conref="../core_vocabulary/rdfowl.dita#rdfowl/rdfowl_term"/>
+	</conbody>
+</concept>

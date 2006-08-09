@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- (c) Copyright 2006 by VR Communications, Inc. All rights reserved. -->
+<!DOCTYPE bkinfo PUBLIC "-//IBM//DTD DITA Book Information//EN" "../dtd/bkinfo.dtd">
+<bkinfo id="DITAOT_UGRef_bkinfo">
+	<title>DITA Open Toolkit User Guide</title>
+	<bktitlealts>
+		<bksubtitle>First Edition, August 10, 2006 (DITA Open Toolkit release 1.2.2)</bksubtitle>
+	</bktitlealts>
+	<bkabstract>
+	</bkabstract>
+	<prolog>
+		<metadata>
+			<keywords>
+				<keyword>Darwin Information Typing Architecture</keyword>
+				<keyword>DITA</keyword>
+				<keyword>DITA Open Toolkit</keyword>
+				<keyword>DITA Open Toolkit User Guide and Reference</keyword>
+			</keywords>
+			<prodinfo>
+				<prodname>DITA Open Toolkit</prodname>
+				<vrmlist>
+					<vrm version="1.2.2"/>
+				</vrmlist>
+			</prodinfo>
+		</metadata>
+	</prolog>
+	<bkinfobody>
+		<bkrights>
+			<bkcopyrfirst>
+				<year>Published August 2006 by OASIS</year>
+			</bkcopyrfirst>
+			<bkowner>
+				<organization>
+					<orgname>OASIS (Organization for the Advancement of Structured Information Standards)</orgname>
+					<resource href="http://www.oasis-open.org" format="html"/>
+				</organization>
+			</bkowner>
+		</bkrights>
+	</bkinfobody>
+</bkinfo>

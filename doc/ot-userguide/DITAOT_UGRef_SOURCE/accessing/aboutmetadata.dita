@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "../dtd/concept.dtd">
+<concept id="aboutmetadata">
+	<title>About metadata</title>
+	<shortdesc>Overview information about creating and using metadata.</shortdesc>
+	<prolog>
+		<author type="creator">Anna van Raaphorst</author>
+		<author type="contributor">Richard Johnson</author>
+		<publisher>OASIS (Organization for the Advancement of Structured Information Standards)</publisher>
+		<copyright>
+			<copyryear year="2006"/>
+			<copyrholder>VR Communications, Inc.</copyrholder>
+		</copyright>
+		<critdates>
+			<created date="2006-June-10"/>
+			<revised modified="2006-August-08"/>
+		</critdates>
+		<metadata>
+			<keywords>
+				<keyword>accessing information</keyword>
+				<keyword>metadata</keyword>
+				<indexterm>metadata<indexterm>about</indexterm>
+				</indexterm>
+			</keywords>
+			<prodinfo>
+				<prodname>DITA Open Toolkit</prodname>
+				<vrmlist>
+					<vrm version="1.2.2"/>
+				</vrmlist>
+			</prodinfo>
+		</metadata>
+	</prolog>
+	<conbody>
+		<section conref="../core_vocabulary/metadata.dita#metadata/metadata_term"/>
+		<section>
+			<title>Providing metadata in DITA source files</title>
+			<p>The &lt;prolog&gt; section of a DITA source file can contain metadata about the source file. including the author(s), date created, and keywords describing what the file is about. For instance, the source for this DITA topic contains the following metadata:</p>
+			<codeblock>
+&lt;prolog&gt;
+&lt;author type="creator"&gt;Anna van Raaphorst&lt;/author&gt;
+&lt;author type="contributor"&gt;Richard Johnson&lt;/author&gt;
+&lt;publisher&gt;OASIS (Organization for the Advancement of Structured Information Standards)&lt;/publisher&gt;
+&lt;copyright&gt;
+&lt;copyryear year="2006"&gt;&lt;/copyryear&gt;
+&lt;copyrholder&gt;VR Communications, Inc.&lt;/copyrholder&gt;
+&lt;/copyright&gt;
+&lt;critdates&gt;
+&lt;created date="2006-June-10"/&gt;
+&lt;revised modified="2006-July-23"/&gt;
+&lt;/critdates&gt;
+&lt;metadata&gt;
+&lt;keywords&gt;
+&lt;keyword&gt;Darwin Information Typing Architecture&lt;/keyword&gt;
+&lt;keyword&gt;DITA&lt;/keyword&gt;
+&lt;keyword&gt;DITA Open Toolkit&lt;/keyword&gt;
+&lt;keyword&gt;managing content&lt;/keyword&gt;
+&lt;keyword&gt;metadata&lt;/keyword&gt;
+&lt;/keywords&gt;
+&lt;prodinfo&gt;
+&lt;prodname&gt;DITA Open Toolkit&lt;/prodname&gt;
+&lt;vrmlist&gt;
+&lt;vrm version="1.2.2"&gt;&lt;/vrm&gt;
+&lt;/vrmlist&gt;
+&lt;/prodinfo&gt;
+&lt;/metadata&gt;
+&lt;/prolog&gt;
+		</codeblock>
+		</section>
+		<section>
+			<title>How the Toolkit processes metadata</title>
+			<p>In some cases, the output produced by a Toolkit build will contain content based on the metadata that was in the source file. For instance, when this source file is processed to XHTML, the output files will contain metadata in the Dublin Core format. Here is the metadata in the XHTML source for the source file above:</p>
+			<codeblock>
+&lt;meta http-equiv="Content-Type" content="text/html; charset=utf-8"/&gt;
+&lt;meta name="security" content="public"/&gt;
+&lt;meta name="Robots" content="index,follow"/&gt;
+&lt;meta http-equiv="PICS-Label" content='(PICS-1.1 "http://www.icra.org/ratingsv02.html" l gen true r (cz 1 lz 1 nz 1 oz 1 vz 1) "http://www.rsac.org/ratingsv01.html" l gen true r (n 0 s 0 v 0 l 0) "http://www.classify.org/safesurf/" l gen true r (SS~~000 1))' /&gt;
+&lt;meta name="DC.Type" content="concept"/&gt;
+&lt;meta name="DC.Title" content="About metadata"/&gt;
+&lt;meta name="abstract" content="Overview information about creating and using metadata."/&gt;
+&lt;meta name="description" content="Overview information about creating and using metadata."/&gt;
+&lt;meta name="DC.subject" content="Darwin Information Typing Architecture, DITA, DITA Open Toolkit, managing content, metadata"/&gt;
+&lt;meta name="keywords" content="Darwin Information Typing Architecture, DITA, DITA Open Toolkit, managing content, metadata"/&gt;
+&lt;meta name="DC.Relation" scheme="URI" content="../managing/managing.html"/&gt;
+&lt;meta name="DC.Creator" content="Anna van Raaphorst"/&gt;
+&lt;meta name="DC.Contributor" content="Richard Johnson"/&gt;
+&lt;meta name="DC.Publisher" content="OASIS (Organization for the Advancement of Structured Information Standards)"/&gt;
+&lt;meta name="copyright" content="VR Communications, Inc. 2006" type="primary"/&gt;
+&lt;meta name="DC.Rights.Owner" content="VR Communications, Inc. 2006" type="primary"/&gt;
+&lt;meta name="DC.Date.Created" content="2006-June-10"/&gt;
+&lt;meta name="DC.Date.Modified" content="2006-June-10"/&gt;
+&lt;meta name="DC.Format" content="XHTML"/&gt;
+&lt;meta name="DC.Identifier" content="aboutmetadata"/&gt;
+		</codeblock>
+		</section>
+	</conbody>
+</concept>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- (c) Copyright 2006 by VR Communications, Inc. All rights reserved. -->
+<!DOCTYPE bookmap PUBLIC "-//IBM//DTD DITA BookMap//EN" "dtd/bookmap.dtd">
+<bookmap>
+	<!-- Legal, production, and publishing information -->
+	<bkinfo href="DITAOT_UGRef_bkinfo.dita"/>
+	<preface href="DITAOT_UGRef_preface.dita"/>
+	<!-- Current release -->
+	<chapter href="release_current/relcurrent_map.ditamap" format="ditamap">
+	</chapter>
+	<!-- Release history -->
+	<chapter href="release_history/relhistory_map.ditamap" format="ditamap">
+	</chapter>
+	<!-- Introduction -->
+	<chapter href="introduction/introduction_map.ditamap" format="ditamap">
+	</chapter>
+	<!-- Getting started -->
+	<chapter href="gettingstarted/gettingstarted_map.ditamap" format="ditamap">
+	</chapter>
+	<!-- Getting information -->
+	<chapter href="gettinginformation/gettinginformation_map.ditamap" format="ditamap">
+	</chapter>
+	<!-- Evaluating -->
+	<chapter href="evaluating/evaluating_map.ditamap" format="ditamap">
+	</chapter>
+	<!-- Installing and upgrading DITA Open Toolkit -->
+	<chapter href="installing/installing_map.ditamap" format="ditamap">
+	</chapter>
+	<!-- Setting up your processing environment -->
+	<chapter href="settingup/settingup_map.ditamap" format="ditamap">
+	</chapter>
+	<!-- Processing (building) and publishing DITA documents -->
+	<chapter href="processing/processing_map.ditamap" format="ditamap">
+	</chapter>
+	<!-- Troubleshooting the build process -->
+	<chapter href="troubleshooting/troubleshooting_map.ditamap" format="ditamap">
+	</chapter>
+	<!-- Creating DITA topics -->
+	<chapter href="topics/topics_map.ditamap" format="ditamap">
+	</chapter>
+	<!-- Creating DITA maps -->
+	<chapter href="maps/maps_map.ditamap" format="ditamap">
+	</chapter>
+	<!-- Linking DITA topics -->
+	<chapter href="linking/linking_map.ditamap" format="ditamap">
+	</chapter>
+	<!-- DITA Open Toolkit plug-ins -->
+	<chapter href="plugins/plugins_map.ditamap" format="ditamap">
+	</chapter>
+	<!-- Managing your content -->
+	<chapter href="managing/managing_map.ditamap" format="ditamap">
+	</chapter>
+	<!-- Reusing content, information design, and processing mechanisms -->
+	<chapter href="reusing/reusing_map.ditamap" format="ditamap">
+	</chapter>
+	<!-- Expanding access to your information -->
+	<chapter href="accessing/accessing_map.ditamap" format="ditamap">
+	</chapter>
+	<!-- Customizing your published output -->
+	<chapter href="customizing/customizing_map.ditamap" format="ditamap">
+	</chapter>
+	<!-- Localizing your DITA content -->
+	<chapter href="localizing/localizing_map.ditamap" format="ditamap">
+	</chapter>
+	<!-- Distributing your published content -->
+	<chapter href="distributing/distributing_map.ditamap" format="ditamap">
+	</chapter>
+	<!--Migrating legacy content to DITA -->
+	<chapter href="migratingcontent/migratingcontent_map.ditamap" format="ditamap">
+	</chapter>
+	<!--Sample files -->
+	<chapter href="samples/samples_map.ditamap" format="ditamap">
+	</chapter>
+	<!-- Frequently asked questions (FAQs) -->
+	<chapter href="faqs/faqs_map.ditamap" format="ditamap">
+	</chapter>
+	<!-- DITA core vocabulary -->
+	<chapter href="core_vocabulary/corevocabulary_map.ditamap" format="ditamap">
+	</chapter>
+	<!-- Relationship tables for the entire book -->
+	<chapter href="relationship_tables/reltables_map.ditamap" format="ditamap">
+	</chapter>
+</bookmap>
