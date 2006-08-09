@@ -242,7 +242,8 @@ public class MergeTopicParser extends AbstractXMLReader {
             	attValue = handleID(classValue, attValue);
             }
             
-            if((classValue.indexOf(Constants.ATTR_CLASS_VALUE_XREF) != -1
+            if(classValue != null
+            		&&(classValue.indexOf(Constants.ATTR_CLASS_VALUE_XREF) != -1
             		|| classValue.indexOf(Constants.ATTR_CLASS_VALUE_LINK) != -1)
             		&& Constants.ATTRIBUTE_NAME_HREF.equals(attQName) 
             		&& attValue != null
