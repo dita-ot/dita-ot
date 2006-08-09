@@ -47,7 +47,10 @@ public class IndexTermCollection {
 	 * @author Marshall
 	 */
 	public static IndexTermCollection getInstantce(){
-		return (collection == null)? new IndexTermCollection(): collection;
+		if(collection == null){
+			collection = new IndexTermCollection();
+		}
+		return collection;
 	}
 
 	/**
