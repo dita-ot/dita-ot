@@ -1,21 +1,32 @@
+/*
+ * (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved.
+ */
 package org.dita.dost.util;
 
 import java.io.File;
 import java.util.HashSet;
 import java.util.Hashtable;
+import java.util.Set;
 
 import org.dita.dost.log.DITAOTJavaLogger;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
+/**
+ * Utility that topic merge utilize 
+ * 
+ */
 public class MergeUtils {
 
 	private static MergeUtils instance = null;
 	private Hashtable idMap;
 	private int index;
-	private HashSet visitSet;
+	private Set visitSet;
 	private DITAOTJavaLogger logger = null;
 	
+	/**
+	 * Default Constructor
+	 */
 	private MergeUtils() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -25,6 +36,10 @@ public class MergeUtils {
 		index = 0;
 	}
 
+	/**
+	 * Return the MergeUtils instance. Singleton.
+	 * @return
+	 */
 	public static MergeUtils getInstance(){
 		if(instance == null){
 			instance = new MergeUtils();
@@ -32,31 +47,40 @@ public class MergeUtils {
 		return instance;
 	}
 	
+	/**
+	 * Find the topic id from idMap
+	 * @param Id
+	 * @return
+	 */
 	public boolean findId(String Id){
 		return (Id != null && idMap.containsKey(Id.trim().replaceAll(Constants.DOUBLE_BACK_SLASH,
-				Constants.SLASH)))?true:false;
+			Constants.SLASH)))
+			? true
+			: false;
 	}
 	
+	/**
+	 * Add topic id to the idMap
+	 * @param Id
+	 * @return
+	 */
 	public String addId (String Id){
+		String localId = Id;
 		if(Id == null){
 			return null;
 		}
-		String localId=Id.trim().replaceAll(Constants.DOUBLE_BACK_SLASH,
+		localId=Id.trim().replaceAll(Constants.DOUBLE_BACK_SLASH,
 				Constants.SLASH);
 		index ++;
 		idMap.put(localId,"unique_"+Integer.toString(index));
 		return "unique_"+Integer.toString(index);
 	}
-	
-	public String getIdValue (String Id){
-		if (Id==null){
-			return null;
-		}
-		String localId = Id.trim().replaceAll(Constants.DOUBLE_BACK_SLASH,
-				Constants.SLASH);
-		return (String) idMap.get(localId);
-	}
-	
+
+	/**
+	 * Add topic id-value pairs to idMap
+	 * @param Id
+	 * @param Value
+	 */
 	public void addId (String Id, String Value){
 		if(Id != null && Value != null){
 			String localId=Id.trim().replaceAll(Constants.DOUBLE_BACK_SLASH,
@@ -66,38 +90,71 @@ public class MergeUtils {
 		}		
 	}
 	
+	/**
+	 * Return the value corresponding to the id
+	 * @param Id
+	 * @return
+	 */
+	public String getIdValue (String Id){
+		String localId = Id;
+		if (Id==null){
+			return null;
+		}
+		localId = Id.trim().replaceAll(Constants.DOUBLE_BACK_SLASH,
+				Constants.SLASH);
+		return (String) idMap.get(localId);
+	}
+	
+	/**
+	 * Return if this path has been visited before
+	 * @param path
+	 * @return
+	 */
 	public boolean isVisited(String path){
+		int idx;
 		String localPath = path;
-		int index = path.indexOf(Constants.SHARP);
-		if(index != -1){
-			localPath=localPath.substring(0,index);
+		idx = path.indexOf(Constants.SHARP);
+		if(idx != -1){
+			localPath=localPath.substring(0,idx);
 		}
 		return visitSet.contains(localPath.trim().replaceAll(Constants.DOUBLE_BACK_SLASH,
 				Constants.SLASH));
 	}
 	
+	/**
+	 * Visit the path
+	 * @param path
+	 */
 	public void visit(String path){
 		String localPath = path;
-		int index = path.indexOf(Constants.SHARP);
-		if(index != -1){
-			localPath=localPath.substring(0,index);
+		int idx = path.indexOf(Constants.SHARP);
+		if(idx != -1){
+			localPath=localPath.substring(0,idx);
 		}
 		visitSet.add(localPath.trim().replaceAll(Constants.DOUBLE_BACK_SLASH,
 				Constants.SLASH));
 	}
 	
+	/**
+	 * 
+	 * Get the first topic id
+	 * @param path
+	 * @param dir
+	 * @return
+	 */
 	public String getFirstTopicId(String path, String dir){
 		String localPath = path;
 		String localDir = dir;
+		TopicIdParser parser;
+		XMLReader reader;
+		StringBuffer firstTopicId = new StringBuffer();
+		
 		if(path != null && dir != null){
 			localPath = localPath.trim();
 			localDir = localDir.trim();
 		}else{
 			return null;
 		}
-		TopicIdParser parser;
-		XMLReader reader;
-		StringBuffer firstTopicId = new StringBuffer();
 		parser = new TopicIdParser(firstTopicId);
 		try{
             if (System.getProperty(Constants.SAX_DRIVER_PROPERTY) == null){

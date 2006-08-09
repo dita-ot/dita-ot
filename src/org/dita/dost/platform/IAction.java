@@ -4,11 +4,23 @@
 package org.dita.dost.platform;
 
 /**
- *
+ * Interface 
  * @author Zhang, Yuan Peng
  */
 public interface IAction {
-	public void setInput(String input);
-	public void setParam(String param);
-	public String getResult();
+	/**
+	 * Set the input string
+	 * @param input
+	 */
+	void setInput(String input);
+	/**
+	 * Set the input parameters
+	 * @param param
+	 */
+	void setParam(String param);
+	/**
+	 * Return the result
+	 * @return
+	 */
+	String getResult();
 }

@@ -29,16 +29,6 @@ import org.dita.dost.writer.PropertiesWriter;
 
 public class CommandLineInvoker {
 	private static Map paramMap = null;
-	private String propertyFile = null;
-	private String antBuildFile = null;
-	private String ditaDir = null;
-	private boolean debugMode = false;
-
-    /**
-     * Whether or not this instance has successfully been
-     * constructed and is ready to run.
-     */
-    private boolean readyToRun = false;
     
 	private static DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
 	
@@ -82,6 +72,17 @@ public class CommandLineInvoker {
 		paramMap.put("/fouserconfig", "args.fo.userconfig");
 		paramMap.put("/htmlhelpincludefile", "args.htmlhelp.includefile");
 	}
+	
+	private String propertyFile = null;
+	private String antBuildFile = null;
+	private String ditaDir = null;
+	private boolean debugMode = false;
+
+	/**
+	 * Whether or not this instance has successfully been
+	 * constructed and is ready to run.
+	 */
+	private boolean readyToRun = false;
 
 	/**
 	 * Constructor: CommandLineInvoker
@@ -213,7 +214,7 @@ public class CommandLineInvoker {
 		if (!tempPath.isAbsolute()) {
 			tempPath = new File(baseDir, tempDir);
 		}
-		if (!tempPath.exists() && !tempPath.mkdirs()) {
+		if (!(tempPath.exists() || tempPath.mkdirs())) {
 			String msg = null;
 			Properties params = new Properties();
 
@@ -260,26 +261,28 @@ public class CommandLineInvoker {
 	
 	private static String getCommandRunner() {
 		return (Constants.OS_NAME.toLowerCase().indexOf(Constants.OS_NAME_WINDOWS) != -1)
-			?"ant.bat" 
-			: "ant";
+				? "ant.bat" 
+				: "ant";
 	}
 
 	private static void startTransformation(String cmd) throws IOException {
-		BufferedReader reader;
+		BufferedReader reader = null;
 		Process antProcess = Runtime.getRuntime().exec(cmd);
-
-		/*
-		 * Get output messages and print to console. 
-		 * Note: Since these messages have been logged to the log file, 
-		 * there is no need to output them to log file.
-		 */
-		reader = new BufferedReader(new InputStreamReader(antProcess
-				.getInputStream()));
-		for (String line = reader.readLine(); line != null; line = reader
-				.readLine()) {
-			System.out.println(line);
+		try{
+			/*
+			 * Get output messages and print to console. 
+			 * Note: Since these messages have been logged to the log file, 
+			 * there is no need to output them to log file.
+			 */
+			reader = new BufferedReader(new InputStreamReader(antProcess
+					.getInputStream()));
+			for (String line = reader.readLine(); line != null; line = reader
+					.readLine()) {
+				System.out.println(line);
+			}
+		}finally{
+			reader.close();
 		}
-		reader.close();
 		
 		reader = new BufferedReader(new InputStreamReader(antProcess
 				.getErrorStream()));

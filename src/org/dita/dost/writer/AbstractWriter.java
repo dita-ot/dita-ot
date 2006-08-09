@@ -12,7 +12,7 @@ import org.dita.dost.module.Content;
  * @author Lian, Li
  * 
  */
-public abstract class AbstractWriter {
+public interface AbstractWriter {
 
     /**
      * Set the result from reader to writer
@@ -20,14 +20,14 @@ public abstract class AbstractWriter {
      * @param content
      * 
      */
-    public abstract void setContent(Content content);
+    void setContent(Content content);
 
     /**
      * Call the writer to write or rewrite the file.
      * 
      * @param filename
-     * 
+     * @throws DITAOTException
      */
-    public abstract void write(String filename) throws DITAOTException;
+    void write(String filename) throws DITAOTException;
 
 }

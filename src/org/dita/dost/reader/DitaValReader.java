@@ -117,22 +117,31 @@ public class DitaValReader extends AbstractXMLReader {
 		 * Parse image files for flagging
 		 */
 		if (flagImage != null && !"".equals(flagImage.trim())) {
+			String filterDir;
 			if (new File(flagImage).isAbsolute()) {
 				imageList.add(flagImage);
 				return;
 			}
 
 			// img is a relative path to the .ditaval file
-			String filterDir = new File(new File(ditaVal).getAbsolutePath())
+			filterDir = new File(new File(ditaVal).getAbsolutePath())
 					.getParent();
 			imageList.add(new File(filterDir, flagImage).getAbsolutePath());
 		}
 	}
 
+	/**
+	 * Return the image list
+	 * @return
+	 */
 	public List getImageList() {
 		return imageList;
 	}
 	
+	/**
+	 * Return the filter map
+	 * @return
+	 */
 	public HashMap getFilterMap() {
 		return filterMap;
 	}

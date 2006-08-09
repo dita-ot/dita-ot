@@ -16,7 +16,7 @@ import org.dita.dost.module.Content;
  * 
  * @author Wu, Zhi Qiang
  */
-public class PropertiesWriter extends AbstractWriter {
+public class PropertiesWriter implements AbstractWriter {
 	/** Properties used to output */
 	private Properties prop = null;
 
@@ -52,6 +52,7 @@ public class PropertiesWriter extends AbstractWriter {
 				try {
 					fileOutputStream.close();
 				} catch (Exception e) {
+					throw new DITAOTException(e);
 				}
 			}
 		}

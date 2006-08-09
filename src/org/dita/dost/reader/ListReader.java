@@ -22,12 +22,12 @@ import org.dita.dost.util.StringUtils;
  * 
  * @author Zhang, Yuan Peng
  */
-public class ListReader extends AbstractReader {
+public class ListReader implements AbstractReader {
 
     private LinkedList refList;
     private ContentImpl content;
     private DITAOTJavaLogger logger;
-    Map copytoMap = new HashMap();
+    private Map copytoMap = new HashMap();
 
     /**
      * Default constructor of ListReader class.
@@ -52,8 +52,8 @@ public class ListReader extends AbstractReader {
         String copytoMapEntries;
         
         try {
+			Properties property = new Properties();
             listInput = new FileInputStream(filename);
-            Properties property = new Properties();
             property.load(listInput);
             content.setValue(property.getProperty("user.input.dir"));
             
@@ -99,7 +99,11 @@ public class ListReader extends AbstractReader {
         return content;
     }
 
-    public Map getCopytoMap() {
+    /**
+     * Return the copy-to map
+	 * @return
+	 */
+	public Map getCopytoMap() {
     	return copytoMap;
     }
 }

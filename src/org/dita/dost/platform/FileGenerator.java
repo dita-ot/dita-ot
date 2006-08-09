@@ -17,19 +17,32 @@ import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.XMLReaderFactory;
 
 /**
- *
+ * Generate outputfile with templates
  * @author Zhang, Yuan Peng
  */
 public class FileGenerator extends DefaultHandler {
 	
-	private XMLReader reader;
-	private DITAOTJavaLogger logger;
-	private OutputStreamWriter output;
-	private Hashtable featureTable;
-	private String templateFileName;
+	private XMLReader reader = null;
+	private DITAOTJavaLogger logger = null;
+	private OutputStreamWriter output = null;
+	private Hashtable featureTable = null;
+	private String templateFileName = null;
 
-	public FileGenerator(Hashtable featureTable) {
-		this.featureTable = featureTable;		
+	/**
+	 * Defautl Constructor
+	 */
+	public FileGenerator() {
+		this(null);
+	}
+
+	/**
+	 * Constructor init featureTable
+	 * @param featureTbl
+	 */
+	public FileGenerator(Hashtable featureTbl) {
+		this.featureTable = featureTbl;
+		output = null;
+		templateFileName = null;	
 		logger = new DITAOTJavaLogger();
 		
 		try {
@@ -49,6 +62,10 @@ public class FileGenerator extends DefaultHandler {
         }
 	}
 	
+	/**
+	 * Generator the output file
+	 * @param fileName
+	 */
 	public void generate(String fileName){
 		FileOutputStream fileOutput = null;
 		File outputFile = new File(fileName.substring(0,
@@ -71,6 +88,9 @@ public class FileGenerator extends DefaultHandler {
         }
 	}
 
+	/**
+	 * @see org.xml.sax.ContentHandler#characters(char[], int, int)
+	 */
 	public void characters(char[] ch, int start, int length) throws SAXException {
 		try{
 			output.write(ch,start,length);
@@ -79,6 +99,9 @@ public class FileGenerator extends DefaultHandler {
         }
 	}
 
+	/**
+	 * @see org.xml.sax.ContentHandler#endElement(java.lang.String, java.lang.String, java.lang.String)
+	 */
 	public void endElement(String uri, String localName, String qName) throws SAXException {
 		try{
 			if(!"dita:extension".equals(qName)){
@@ -89,6 +112,9 @@ public class FileGenerator extends DefaultHandler {
         }
 	}
 
+	/**
+	 * @see org.xml.sax.ContentHandler#ignorableWhitespace(char[], int, int)
+	 */
 	public void ignorableWhitespace(char[] ch, int start, int length) throws SAXException {
 		try{
 			output.write(ch,start,length);
@@ -97,6 +123,9 @@ public class FileGenerator extends DefaultHandler {
         }
 	}
 
+	/**
+	 * @see org.xml.sax.ContentHandler#startElement(java.lang.String, java.lang.String, java.lang.String, org.xml.sax.Attributes)
+	 */
 	public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
 		IAction action = null;
 		String input = null;
@@ -110,8 +139,8 @@ public class FileGenerator extends DefaultHandler {
 					output.write(action.getResult());
 				}
 			}else{
-				output.write("<"+qName);
 				int attLen = attributes.getLength();
+				output.write("<"+qName);
 				for(int i = 0; i < attLen; i++){
 					output.write(" ");
 					output.write(new StringBuffer(attributes.getQName(i)).append("=\"").
@@ -124,6 +153,9 @@ public class FileGenerator extends DefaultHandler {
 		}
 	}
 
+	/**
+	 * @see org.xml.sax.ContentHandler#endDocument()
+	 */
 	public void endDocument() throws SAXException {
 		try{
 			output.flush();

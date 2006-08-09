@@ -4,6 +4,7 @@
 package org.dita.dost.reader;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.Stack;
 
@@ -45,16 +46,16 @@ public class IndexTermReader extends AbstractXMLReader {
 	private Stack termStack = null;
 
 	/** List used to store all the specilized index terms */
-	private ArrayList indexTermSpecList = null;
+	private List indexTermSpecList = null;
 	
 	/** List used to store all the specilized index-see */
-	private ArrayList indexSeeSpecList = null;
+	private List indexSeeSpecList = null;
 	
 	/** List used to store all the specilized index-see-also */
-	private ArrayList indexSeeAlsoSpecList = null;
+	private List indexSeeAlsoSpecList = null;
 	
 	/** List used to store all the specilized index-sort-as */
-	private ArrayList indexSortAsSpecList = null;
+	private List indexSortAsSpecList = null;
 	
 	private DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
 
@@ -103,8 +104,8 @@ public class IndexTermReader extends AbstractXMLReader {
 			title = (title == null) ? temp : new StringBuffer(title).append(
 					temp).toString();
 		} else if (insideSortingAs && temp.length() > 0) {
-			temp = StringUtils.restoreEntity(temp);
 			IndexTerm indexTerm = (IndexTerm) termStack.peek();
+			temp = StringUtils.restoreEntity(temp);
 			indexTerm.setTermKey(temp);
 		} else if (!termStack.empty()) {
 			IndexTerm indexTerm = (IndexTerm) termStack.peek();

@@ -44,9 +44,7 @@ public class ModuleFactory {
 	 * 
 	 * @param moduleName
 	 * @return AbstractPipelineModule
-	 * @throws ClassNotFoundException
-	 * @throws IllegalAccessException
-	 * @throws InstantiationException
+	 * @throws DITAOTException
 	 */
 	public AbstractPipelineModule createModule(String moduleName)
 			throws DITAOTException {

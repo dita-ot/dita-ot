@@ -21,8 +21,15 @@ import org.dita.dost.module.DebugAndFilterModule;
  * @author Wu, Zhi Qiang
  */
 public class FileUtils {
+	/**
+	 * Default Constructor
+	 *
+	 */
+	private FileUtils(){
+	}
 
 	/**
+	 * Return if the file is a html file by extension
 	 * @param lcasefn
 	 * @return
 	 */
@@ -32,6 +39,7 @@ public class FileUtils {
 	}
 
 	/**
+	 * Return if the file is a dita file by extension
 	 * @param lcasefn
 	 * @return
 	 */
@@ -40,6 +48,7 @@ public class FileUtils {
 	}
 
 	/**
+	 * Return if the file is a dita topic file by extension
 	 * @param lcasefn
 	 * @return
 	 */
@@ -49,6 +58,7 @@ public class FileUtils {
 	}
 
 	/**
+	 * Return if the file is a dita map file by extension
 	 * @param lcasefn
 	 * @return
 	 */
@@ -57,6 +67,7 @@ public class FileUtils {
 	}
 
 	/**
+	 * Return if the file is a supported image file by extension
 	 * @param lcasefn
 	 * @return
 	 */
@@ -70,7 +81,8 @@ public class FileUtils {
 	}
 
 	/**
-	 * @param fileName
+	 * Return if the file is a topic file by extension
+	 * @param lcasefn
 	 * @return
 	 */
 	public static boolean isTopicFile(String lcasefn) {
@@ -82,7 +94,8 @@ public class FileUtils {
 	}
 
 	/**
-	 * @param fileName
+	 * Return if the file is a valid target file by extension
+	 * @param lcasefn
 	 * @return
 	 */
 	public static boolean isValidTarget(String lcasefn) {		
@@ -148,6 +161,7 @@ public class FileUtils {
 	
 	/**
 	 * Get path2Project from the relative path of a file
+	 * @param relativePath
 	 */
 	public static String getPathtoProject (String relativePath){
 		StringTokenizer tokenizer = new StringTokenizer(relativePath, Constants.SLASH);
@@ -190,6 +204,8 @@ public class FileUtils {
 	 * File.seperator, and removing '..' from the directory.
 	 * 
 	 * Note: the substring behind "#" will be removed. 
+	 * @param basedir
+	 * @param filepath
 	 */
 	public static String normalizeDirectory(String basedir, String filepath) {
 		String normilizedPath = null;
@@ -271,6 +287,7 @@ public class FileUtils {
     }
 
     /** 
+     * Return if the path is absolute
      * @param path
      * @return
      */
@@ -312,6 +329,8 @@ public class FileUtils {
 			DITAOTJavaLogger logger = new DITAOTJavaLogger();
 			logger.logWarn("Failed to copy file from '" + src + "' to '"
 					+ target + "'");
+			logger.logException(ex);
+			
 		} finally {
 			try {
 				if (fis != null){
@@ -321,11 +340,17 @@ public class FileUtils {
 					fos.close();
 				}
 			} catch (Exception e) {
+				DITAOTJavaLogger logger = new DITAOTJavaLogger();
+				logger.logException(e);
 			}
 		}
 	}
     
-    
+    /**
+     * Replace the file extension
+     * @param attValue
+     * @return
+     */
     public static String replaceExtName(String attValue){
     	String fileName;
         int fileExtIndex;
@@ -338,12 +363,14 @@ public class FileUtils {
     	} else if (index != -1){
     		fileName = attValue.substring(0,index); 
     		fileExtIndex = fileName.lastIndexOf(Constants.DOT);
-    		return (fileExtIndex != -1)? fileName.substring(0, fileExtIndex) + DebugAndFilterModule.extName + 
-					attValue.substring(index): attValue;
+    		return (fileExtIndex != -1)
+    			? fileName.substring(0, fileExtIndex) + DebugAndFilterModule.extName + attValue.substring(index)
+    			: attValue;
     	} else {
     		fileExtIndex = attValue.lastIndexOf(Constants.DOT);
-    		return (fileExtIndex != -1)? 
-    				(attValue.substring(0, fileExtIndex) + DebugAndFilterModule.extName) : attValue;
+    		return (fileExtIndex != -1)
+    			? (attValue.substring(0, fileExtIndex) + DebugAndFilterModule.extName) 
+    			: attValue;
     	}
     }
 }

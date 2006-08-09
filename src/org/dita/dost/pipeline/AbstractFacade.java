@@ -11,7 +11,7 @@ import org.dita.dost.exception.DITAOTException;
  * @author Lian, Li
  * 
  */
-public abstract class AbstractFacade {
+public interface AbstractFacade {
 
     /**
      * Excute the specified Java Module.
@@ -21,6 +21,6 @@ public abstract class AbstractFacade {
      * @return AbstractPipelineOutput
      * @throws DITAOTException 
      */
-    public abstract AbstractPipelineOutput execute(String pipelineModule,
+    AbstractPipelineOutput execute(String pipelineModule,
             AbstractPipelineInput input) throws DITAOTException;
 }

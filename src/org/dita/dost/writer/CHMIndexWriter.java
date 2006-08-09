@@ -7,7 +7,6 @@ import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import org.dita.dost.exception.DITAOTException;
@@ -23,7 +22,7 @@ import org.dita.dost.module.Content;
  * 
  * @author Wu, Zhi Qiang
  */
-public class CHMIndexWriter extends AbstractWriter {
+public class CHMIndexWriter implements AbstractWriter {
     /** List of indexterms */
     private List termList = null;
 
@@ -44,7 +43,6 @@ public class CHMIndexWriter extends AbstractWriter {
      * Write the index term into given OutputStream.
      * 
      * @param outputStream
-     * @throws UnsupportedEncodingException
      */
     public void write(OutputStream outputStream) {
         PrintWriter printWriter = null;

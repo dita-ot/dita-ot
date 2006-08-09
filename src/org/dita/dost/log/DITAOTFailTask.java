@@ -3,6 +3,7 @@
  */
 package org.dita.dost.log;
 
+import java.io.File;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
@@ -20,20 +21,27 @@ public class DITAOTFailTask extends Exit {
 	private Properties prop = null;
 
 	/**
-	 * @param id
-	 *            The id to set.
+	 * Default Construtor
+	 *
 	 */
-	public void setId(String id) {
-		this.id = id;
+	public DITAOTFailTask(){
+	}
+	/**
+	 * Set the id
+	 * @param identifier The id to set.
+	 * 
+	 */
+	public void setId(String identifier) {
+		this.id = identifier;
 	}
 
 	/**
-	 * @param params
-	 *            The prop to set.
+	 * Set the parameters.
+	 * @param params The prop to set.          
 	 */
 	public void setParams(String params) {
-		prop = new Properties();
 		StringTokenizer tokenizer = new StringTokenizer(params, ";");
+		prop = new Properties();
 		while (tokenizer.hasMoreTokens()) {
 			String token = tokenizer.nextToken();
 			int pos = token.indexOf("=");
@@ -41,13 +49,26 @@ public class DITAOTFailTask extends Exit {
 		}
 	}
 
-	/* (non-Javadoc)
+	/**
+	 * Task execute point
 	 * @see org.apache.tools.ant.taskdefs.Exit#execute()
 	 */
 	public void execute() throws BuildException {
+		initMessageFile();
 		setMessage(MessageUtils.getMessage(id, prop).toString());
 		super.execute();
 	}
 	
+	private void initMessageFile() {
+		String messageFile = getProject().getProperty(
+				"args.message.file");
+		
+		if (!new File(messageFile).isAbsolute()) {
+			messageFile = new File(getProject().getBaseDir(), messageFile)
+					.getAbsolutePath();
+		}
+		
+		MessageUtils.loadMessages(messageFile);
+	}
 	
 }

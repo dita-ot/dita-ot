@@ -16,14 +16,26 @@ import org.apache.tools.ant.taskdefs.condition.Condition;
  */
 public class IsAbsolute implements Condition {
 	private String path = null;
-
+	
 	/**
-	 * @param path The path to set.
+	 * Default Constructor
+	 *
 	 */
-	public void setPath(String path) {
-		this.path = path;
+	public IsAbsolute(){
 	}
 
+	/**
+	 * Set the path
+	 * @param pth The path to set.
+	 */
+	public void setPath(String pth) {
+		this.path = pth;
+	}
+	
+	/**
+	 * 
+	 * @see org.apache.tools.ant.taskdefs.condition.Condition#eval()
+	 */
 	public boolean eval() throws BuildException {
 		return new File(path).isAbsolute();
 	}

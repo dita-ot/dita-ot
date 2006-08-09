@@ -37,7 +37,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
  * 
  * @author Wu, Zhi Qiang
  */
-public class IndexTermExtractModule extends AbstractPipelineModule {
+public class IndexTermExtractModule implements AbstractPipelineModule {
 	/** The input map */
 	private String inputMap = null;
 
@@ -119,8 +119,9 @@ public class IndexTermExtractModule extends AbstractPipelineModule {
 		try {
 			prop.load(new FileInputStream(ditalist));
 		} catch (Exception e) {
+			String msg = null;
 			params.put("%1", ditalist);
-			String msg = MessageUtils.getMessage("DOTJ011E", params).toString();
+			msg = MessageUtils.getMessage("DOTJ011E", params).toString();
 			msg = new StringBuffer(msg).append(Constants.LINE_SEPARATOR)
 					.append(e.toString()).toString();
 			throw new DITAOTException(msg, e);
@@ -162,6 +163,7 @@ public class IndexTermExtractModule extends AbstractPipelineModule {
 		FileInputStream inputStream = null;
 		XMLReader xmlReader = null;
 		IndexTermReader handler = new IndexTermReader();
+		DitamapIndexTermReader ditamapIndexTermReader = new DitamapIndexTermReader();
 
 		if (System.getProperty(Constants.SAX_DRIVER_PROPERTY) == null) {
 			// The default sax driver is set to xerces's sax driver
@@ -175,7 +177,6 @@ public class IndexTermExtractModule extends AbstractPipelineModule {
 			xmlReader.setContentHandler(handler);
 
 			for (int i = 0; i < topicNum; i++) {
-				handler.reset();
 				String target = (String) topicList.get(i);
 				String targetPathFromMap = FileUtils.getRelativePathFromMap(
 						inputMap, target);
@@ -184,6 +185,7 @@ public class IndexTermExtractModule extends AbstractPipelineModule {
 				handler.setTargetFile(new StringBuffer(
 						targetPathFromMapWithoutExt).append(targetExt)
 						.toString());
+				handler.reset();
 				try {
 					inputStream = new FileInputStream(
 							new File(baseInputDir, target));
@@ -191,14 +193,14 @@ public class IndexTermExtractModule extends AbstractPipelineModule {
 					inputStream.close();
 				} catch (Exception e) {					
 					Properties params = new Properties();
+					String msg = null;
 					params.put("%1", target);
-					String msg = MessageUtils.getMessage("DOTJ013E", params).toString();
+					msg = MessageUtils.getMessage("DOTJ013E", params).toString();
 					javaLogger.logError(msg);
 					javaLogger.logException(e);
 				}
 			}
 
-			DitamapIndexTermReader ditamapIndexTermReader = new DitamapIndexTermReader();
 			xmlReader.setContentHandler(ditamapIndexTermReader);
 
 			for (int j = 0; j < ditamapNum; j++) {
@@ -220,8 +222,9 @@ public class IndexTermExtractModule extends AbstractPipelineModule {
 					inputStream.close();
 				} catch (Exception e) {
 					Properties params = new Properties();
+					String msg = null;
 					params.put("%1", ditamap);
-					String msg = MessageUtils.getMessage("DOTJ013E", params).toString();
+					msg = MessageUtils.getMessage("DOTJ013E", params).toString();
 					javaLogger.logError(msg);
 					javaLogger.logException(e);
 				}
@@ -231,6 +234,7 @@ public class IndexTermExtractModule extends AbstractPipelineModule {
 				try {
 					inputStream.close();
 				} catch (IOException e) {
+					javaLogger.logException(e);
 				}
 
 			}

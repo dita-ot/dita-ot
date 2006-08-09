@@ -10,6 +10,7 @@ import java.util.StringTokenizer;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 import org.apache.tools.ant.util.FileUtils;
+import org.dita.dost.log.DITAOTJavaLogger;
 
 /**
  * Class description goes here. 
@@ -18,34 +19,44 @@ import org.apache.tools.ant.util.FileUtils;
  */
 public class DITAOTCopy extends Task {
 	private String includes = null;
-	private String destDir = null;  // the destination directory	
+	private String destDir = null;  // the destination directory
+	private DITAOTJavaLogger logger = new DITAOTJavaLogger();
 	
 	/**
-	 * @param includes The includes to set.
+	 * Default Constructor
+	 * 
 	 */
-	public void setIncludes(String includes) {
-		this.includes = includes;
+	public DITAOTCopy(){
+	}
+	
+	/**
+	 * Set the copy files
+	 * @param incld The includes to set.
+	 */
+	public void setIncludes(String incld) {
+		this.includes = incld;
 	}
 	
     /**
      * Set the destination directory.
-     * @param destDir the destination directory.
+     * @param destdir the destination directory.
      */
-    public void setTodir(String destDir) {
-        this.destDir = destDir;
+    public void setTodir(String destdir) {
+        this.destDir = destdir;
     }
 
-	/* (non-Javadoc)
+	/** (non-Javadoc)
 	 * @see org.apache.tools.ant.Task#execute()
 	 */
 	public void execute() throws BuildException {
 		FileUtils fileUitls = FileUtils.newFileUtils();
+		StringTokenizer tokenizer;
 		
 		if (includes == null) {
 			return;
 		}
 		
-		StringTokenizer tokenizer = new StringTokenizer(includes, Constants.COMMA);
+		tokenizer = new StringTokenizer(includes, Constants.COMMA);
 		try {
 			while (tokenizer.hasMoreTokens()) {
 				File srcFile = new File(tokenizer.nextToken());
@@ -54,7 +65,8 @@ public class DITAOTCopy extends Task {
 					fileUitls.copyFile(srcFile, destFile);
 				}
 			}
-		}catch(IOException e){			
+		}catch(IOException e){
+			logger.logException(e);		
 		}
 	}
 

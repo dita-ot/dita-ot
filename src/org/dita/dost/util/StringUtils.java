@@ -77,6 +77,7 @@ public class StringUtils {
 	}
 
 	/**
+	 * Replace all the pattern with replacement
 	 * @param input
 	 * @param pattern
 	 * @param replacement
@@ -99,8 +100,12 @@ public class StringUtils {
 		return result.toString();
 	}
 	
+	/**
+	 * Get ASCII code of a string
+	 * @param inStr
+	 * @return
+	 */
 	public static String getAscii(String inStr){
-		try{
 		byte [] input = inStr.getBytes();
 		/*byte [] output;
 		ByteArrayInputStream byteIS = new ByteArrayInputStream(input);
@@ -127,11 +132,14 @@ public class StringUtils {
 		}*/
 		
 		return ret.toString();
-		}catch (Exception e){
-			return null;
-		}
+		
 	}
 	
+	/**
+	 * Get the props
+	 * @param domains
+	 * @return
+	 */
 	public static String getExtProps (String domains){
 		StringBuffer propsBuffer = new StringBuffer();
     	int propsStart = domains.indexOf("a(props");
@@ -145,6 +153,11 @@ public class StringUtils {
     	return (propsBuffer.length() > 0) ? propsBuffer.substring(Constants.INT_1) : null;
 	}
 	
+	/**
+	 * Restore entity
+	 * @param s
+	 * @return
+	 */
 	public static String restoreEntity(String s) {
 		String localEntiry;
 		localEntiry = StringUtils.replaceAll(s, "&", "&amp;");
@@ -156,6 +169,11 @@ public class StringUtils {
 		return localEntiry;
 	}
 	
+	/**
+	 * Restore map
+	 * @param s
+	 * @return
+	 */
 	public static Map restoreMap(String s) {
 		Map copytoMap = new HashMap();
 		StringTokenizer st = new StringTokenizer(s, Constants.COMMA);
@@ -169,6 +187,11 @@ public class StringUtils {
         return copytoMap;
 	}
 	
+	/**
+	 * Return is the string is null or ""
+	 * @param s
+	 * @return
+	 */
 	public static boolean isEmptyString(String s){
 		return (s == null || Constants.STRING_EMPTY.equals(s.trim()));
 	}

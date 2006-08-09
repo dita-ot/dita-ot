@@ -38,7 +38,7 @@ import org.xml.sax.SAXException;
  * 
  * @author Wu, Zhi Qiang
  */
-public class GenMapAndTopicListModule extends AbstractPipelineModule {
+public class GenMapAndTopicListModule implements AbstractPipelineModule {
 	/** Set of all dita files */
 	private Set ditaSet = null;
 
@@ -201,10 +201,9 @@ public class GenMapAndTopicListModule extends AbstractPipelineModule {
 	}
 	
 	/**
-	 * @param baseInputDir
+	 * 
 	 * @throws DITAOTException
-	 * @throws ParserConfigurationException
-	 * @throws SAXException
+	 * 
 	 */
 	private void processWaitList() throws DITAOTException {
 		reader = new GenListModuleReader();

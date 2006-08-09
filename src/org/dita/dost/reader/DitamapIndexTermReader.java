@@ -5,6 +5,7 @@
 package org.dita.dost.reader;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
 
 import org.dita.dost.index.IndexTerm;
@@ -30,7 +31,7 @@ public class DitamapIndexTermReader extends AbstractXMLReader {
 	private Stack elementStack = null;
 	
 	/** List used to store all the specilized index terms */
-	private ArrayList indexTermSpecList = null;
+	private List indexTermSpecList = null;
 	
 	private String mapPath = null;
 
@@ -87,6 +88,7 @@ public class DitamapIndexTermReader extends AbstractXMLReader {
 		// in the list.
 		if (indexTermSpecList.contains(localName) && needPushTerm()) {
 			IndexTerm indexTerm = (IndexTerm) elementStack.pop();
+			Object obj = null;
 
 			if (indexTerm.getTermName() == null) {
 				indexTerm.setTermName("***");
@@ -94,7 +96,7 @@ public class DitamapIndexTermReader extends AbstractXMLReader {
 						.logWarn("The indexterm element does not have any content. Setting the term to ***.");
 			}
 
-			Object obj = elementStack.peek();
+			obj = elementStack.peek();
 
 			if (obj instanceof TopicrefElement) {
 				IndexTermCollection.getInstantce().addTerm(indexTerm);
@@ -144,6 +146,7 @@ public class DitamapIndexTermReader extends AbstractXMLReader {
 			if (obj instanceof TopicrefElement) {
 				TopicrefElement topicref = (TopicrefElement) obj;
 				IndexTermTarget target = new IndexTermTarget();
+				String targetURI = null;
 
 				String href = topicref.getHref();
 				String targetName = href;
@@ -154,7 +157,7 @@ public class DitamapIndexTermReader extends AbstractXMLReader {
 					buffer.append(Constants.SLASH);
 				}
 				buffer.append(href);
-				String targetURI = FileUtils.removeRedundantNames(buffer
+				targetURI = FileUtils.removeRedundantNames(buffer
 						.toString());
 
 				if (targetName.lastIndexOf(Constants.SLASH) != -1) {
@@ -199,10 +202,10 @@ public class DitamapIndexTermReader extends AbstractXMLReader {
 	/**
 	 * Set map path.
 	 * 
-	 * @param mapPath
+	 * @param mappath
 	 */
-	public void setMapPath(String mapPath) {
-		this.mapPath = mapPath;
+	public void setMapPath(String mappath) {
+		this.mapPath = mappath;
 	}
 
 }

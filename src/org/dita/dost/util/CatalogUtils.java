@@ -34,7 +34,7 @@ public class CatalogUtils {
 
     /**
      * Parse the catalog file.
-     * 
+     * @param ditaDir
      * @return
      * 
      */

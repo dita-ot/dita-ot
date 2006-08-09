@@ -15,7 +15,7 @@ public class DITAOTException extends Exception {
 	 * Constructs a new DITAOTException with <code>null</code> as its detail message.
 	 */
 	public DITAOTException() {
-		super();
+		this(null, null);
 	}
 
 	/**
@@ -24,7 +24,7 @@ public class DITAOTException extends Exception {
 	 * @param message the detail message.
 	 */
 	public DITAOTException(String message) {
-		super(message);
+		this(message, null);
 	}
 
 	/**
@@ -33,7 +33,7 @@ public class DITAOTException extends Exception {
 	 * @param cause the cause 
 	 */
 	public DITAOTException(Throwable cause) {
-		super(cause);
+		this(null, cause);
 	}
 
 	/**

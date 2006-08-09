@@ -13,8 +13,8 @@ import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.pipeline.PipelineHashIO;
 import org.dita.dost.reader.MapIndexReader;
-import org.dita.dost.writer.DitaIndexWriter;
 import org.dita.dost.util.Constants;
+import org.dita.dost.writer.DitaIndexWriter;
 
 /**
  * MoveIndexModule implement the move index step in preprocess. It reads the index
@@ -23,7 +23,7 @@ import org.dita.dost.util.Constants;
  * 
  * @author Zhang, Yuan Peng
  */
-public class MoveIndexModule extends AbstractPipelineModule {
+public class MoveIndexModule implements AbstractPipelineModule {
 
     private ContentImpl content;
 
@@ -67,8 +67,9 @@ public class MoveIndexModule extends AbstractPipelineModule {
         while (i.hasNext()) {
             Map.Entry entry = (Map.Entry) i.next();
             targetFileName = (String) entry.getKey();
-            targetFileName = targetFileName.indexOf(Constants.SHARP) != -1 ? 
-            		targetFileName.substring(0, targetFileName.indexOf(Constants.SHARP)): targetFileName;
+            targetFileName = targetFileName.indexOf(Constants.SHARP) != -1 
+            				? targetFileName.substring(0, targetFileName.indexOf(Constants.SHARP))
+            				: targetFileName;
             if (targetFileName.endsWith(Constants.FILE_EXTENSION_DITA) ||
                     targetFileName.endsWith(Constants.FILE_EXTENSION_XML)){
                 content.setValue(entry.getValue());

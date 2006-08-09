@@ -12,7 +12,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import javax.xml.parsers.ParserConfigurationException;
 
 import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.util.CatalogUtils;
@@ -87,6 +86,7 @@ public class GenListModuleReader extends AbstractXMLReader {
 		conrefTargets = new HashSet(Constants.INT_32);
 		copytoMap = new HashMap(Constants.INT_16);
 		ignoredCopytoSourceSet = new HashSet(Constants.INT_16);
+		props = null;
 		reader.setContentHandler(this);
 		reader.setEntityResolver(this);
 	}
@@ -95,7 +95,6 @@ public class GenListModuleReader extends AbstractXMLReader {
      * Init xml reader used for pipeline parsing.
 	 *
      * @throws SAXException
-	 * @throws ParserConfigurationException
      * @param ditaDir 
      */
 	public static void initXMLReader(String ditaDir) throws SAXException {

@@ -1,3 +1,6 @@
+/*
+ * (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved.
+ */
 package org.dita.dost.reader;
 
 import java.io.File;
@@ -29,8 +32,11 @@ public class MergeMapParser extends AbstractXMLReader {
 	private ContentImpl content;
 	private String dirPath = null;
 
+	/**
+	 * Default Constructor
+	 */
 	public MergeMapParser() {
-		
+		logger = new DITAOTJavaLogger();
 		try{
 			if (System.getProperty(Constants.SAX_DRIVER_PROPERTY) == null){
 				//The default sax driver is set to xerces's sax driver
@@ -56,11 +62,17 @@ public class MergeMapParser extends AbstractXMLReader {
 		}
 	}
 
+	/**
+	 * @see org.dita.dost.reader.AbstractReader#getContent()
+	 */
 	public Content getContent() {
 		content.setValue(mapInfo.append((StringBuffer)topicParser.getContent().getValue()));
 		return content;
 	}
 
+	/**
+	 * @see org.dita.dost.reader.AbstractReader#read(java.lang.String)
+	 */
 	public void read(String filename) {
 		try{
 			File input = new File(filename);
@@ -72,6 +84,9 @@ public class MergeMapParser extends AbstractXMLReader {
 	}
 
 	
+	/**
+	 * @see org.xml.sax.ContentHandler#endElement(java.lang.String, java.lang.String, java.lang.String)
+	 */
 	public void endElement(String uri, String localName, String qName) throws SAXException {
 		mapInfo.append(Constants.LESS_THAN)
 		.append(Constants.SLASH)
@@ -80,10 +95,16 @@ public class MergeMapParser extends AbstractXMLReader {
 	}
 
 	
+	/**
+	 * @see org.xml.sax.ContentHandler#characters(char[], int, int)
+	 */
 	public void characters(char[] ch, int start, int length) throws SAXException {
 		mapInfo.append(ch, start, length);
 	}
 
+	/**
+	 * @see org.xml.sax.ContentHandler#startElement(java.lang.String, java.lang.String, java.lang.String, org.xml.sax.Attributes)
+	 */
 	public void startElement(String uri, String localName, String qName, Attributes atts) throws SAXException {
 		
 		String scopeValue = null;

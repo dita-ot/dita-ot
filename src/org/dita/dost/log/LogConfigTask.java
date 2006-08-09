@@ -20,8 +20,14 @@ public class LogConfigTask extends Task {
 	private String logDir = null;
 	private String logFile = null;
 	
-	/*
-	 * (non-Javadoc)
+	/**
+	 * Default Construtor
+	 *
+	 */
+	public LogConfigTask(){		
+	}
+	/**
+	 * Task execution point
 	 * 
 	 * @see org.apache.tools.ant.Task#execute()
 	 */
@@ -29,6 +35,7 @@ public class LogConfigTask extends Task {
 		DITAOTFileLogger logger = DITAOTFileLogger.getInstance();
 		String oldLogDir = logger.getLogDir();
 		
+		initMessageFile();
 		initLogDirectory();		
 		initLogFile();
 		
@@ -49,7 +56,7 @@ public class LogConfigTask extends Task {
 			 * the basedir will be used as default log directory.
 			 **/			 
 			if (!oldLogDir.equals(logDir)) {
-				logDir = getProject().getBaseDir().getPath();
+				logDir = getProject().getBaseDir().getAbsolutePath();
 			}
 			logFile = "ditaot_batch.log";
 		}
@@ -58,8 +65,21 @@ public class LogConfigTask extends Task {
 		logger.setLogFile(logFile);
 	}
 
+	private void initMessageFile() {
+		String messageFile = getProject().getProperty(
+				"args.message.file");
+		
+		if (!new File(messageFile).isAbsolute()) {
+			messageFile = new File(getProject().getBaseDir(), messageFile)
+					.getAbsolutePath();
+		}
+		
+		MessageUtils.loadMessages(messageFile);
+	}
+	
 	private void initLogDirectory() throws BuildException {
 		Project project = getProject();
+		File dir = null;
 		
 		logDir = project.getProperty("args.logdir");
 		
@@ -72,13 +92,18 @@ public class LogConfigTask extends Task {
 			throw new BuildException(msg);
 		}
 		
+		if (!new File(logDir).isAbsolute()) {
+			logDir = new File(project.getBaseDir(), logDir).getAbsolutePath();
+		}
+		
 		// create log directory
-		File dir = new File(logDir);
+		dir = new File(logDir);
 		if (!dir.exists()) {
 			if (!dir.mkdirs()) {
 				Properties params = new Properties();
+				String msg = null;
 				params.put("%1", logDir);
-				String msg = MessageUtils.getMessage("DOTJ016F", params).toString();
+				msg = MessageUtils.getMessage("DOTJ016F", params).toString();
 				throw new BuildException(msg);
 			}
 		}

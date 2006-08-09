@@ -22,7 +22,7 @@ import org.xml.sax.ext.LexicalHandler;
  * 
  * @author Wu, Zhi Qiang
  */
-public abstract class AbstractXMLReader extends AbstractReader implements
+public abstract class AbstractXMLReader implements AbstractReader,
         ContentHandler, LexicalHandler, EntityResolver {
 
     /**

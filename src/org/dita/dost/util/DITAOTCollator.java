@@ -19,14 +19,65 @@ import org.dita.dost.log.DITAOTJavaLogger;
 public class DITAOTCollator implements Comparator {
 	static HashMap cache = new HashMap();
 	
-	private Object collatorInstance;
-	private Method compareMethod;
+	/**
+	 * Return the DITAOTCollator instance, Locale.US is default
+	 * @return
+	 */
+	public static DITAOTCollator getInstance() {
+			return getInstance(Locale.US);
+	}
+	
+	/**
+	 * Return the DITAOTCollator instance specifying Locale
+	 * @param locale
+	 * @return
+	 */
+	public static DITAOTCollator getInstance(Locale locale) {
+		DITAOTCollator instance = null;
+		instance = (DITAOTCollator) cache.get(locale);		
+		if (instance == null) {
+			instance = new DITAOTCollator(locale);
+			cache.put(locale, instance);
+		}
+		return instance;
+	}
+	
+	private Object collatorInstance = null;
+	private Method compareMethod = null;
 	private DITAOTJavaLogger logger = new DITAOTJavaLogger();
 	
-	DITAOTCollator(Locale locale) {
+	/**
+	 * Default Constructor
+	 */
+	private DITAOTCollator(){
+		this(Locale.US);
+	}
+	
+	/**
+	 * Constructor specifying Locale
+	 * @param locale
+	 */
+	private DITAOTCollator(Locale locale) {
 		init(locale);
 	}
 	
+	/**
+	 * Comparing method required to compare
+	 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
+	 */
+	public int compare(Object source, Object target) {
+		try {
+			return ((Integer) compareMethod.invoke(collatorInstance, new Object[] {
+					source, target})).intValue();
+		} catch (Exception e) {
+			throw new RuntimeException(e.getMessage(), e);
+		}
+	}
+	
+	/**
+	 * Initialization
+	 * @param locale
+	 */
 	private void init(Locale locale) {
 		Class c = null;
 		
@@ -46,29 +97,6 @@ public class DITAOTCollator implements Comparator {
 					Object.class, Object.class });
 		} catch (Exception e) {
 			logger.logException(e);
-		}
-	}
-	
-	public static DITAOTCollator getInstance() {
-			return getInstance(Locale.US);
-	}
-	
-	public static DITAOTCollator getInstance(Locale locale) {
-		DITAOTCollator instance = null;
-		instance = (DITAOTCollator) cache.get(locale);		
-		if (instance == null) {
-			instance = new DITAOTCollator(locale);
-			cache.put(locale, instance);
-		}
-		return instance;
-	}
-	
-	public int compare(Object source, Object target) {
-		try {
-			return ((Integer) compareMethod.invoke(collatorInstance, new Object[] {
-					source, target})).intValue();
-		} catch (Exception e) {
-			throw new RuntimeException(e.getMessage(), e);
 		}
 	}
 

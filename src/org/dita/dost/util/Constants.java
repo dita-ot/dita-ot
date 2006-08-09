@@ -28,6 +28,8 @@ public abstract class Constants {
     public static final int INT_256 = 256;
     public static final int INT_512 = 512;
     public static final int INT_1024 = 1024;
+	public static final int INT_2048 = 2048;
+	public static final int INT_4096 = 4096;
     public static final int INT_17 = 17;
     public static final int INT_37 = 37;    
     

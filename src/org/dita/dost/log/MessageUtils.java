@@ -11,6 +11,7 @@ import java.util.Properties;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.dita.dost.util.Constants;
 import org.dita.dost.util.StringUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -28,10 +29,21 @@ public class MessageUtils {
 	private static String messageFile = null;
 	private static DITAOTJavaLogger fileLogger = new DITAOTJavaLogger();
 	
+	/**
+	 * Default Construtor
+	 *
+	 */
+	private MessageUtils(){
+	}
+
 	private static void loadDefaultMessages() {
 		loadMessages("resource/messages.xml");
 	}
 	
+	/**
+	 * Load message from message file.
+	 * @param newMessageFile
+	 */
 	public static void loadMessages(String newMessageFile) {
 		if (!updateMessageFile(newMessageFile)) {
 			// this message file has been loaded
@@ -72,7 +84,7 @@ public class MessageUtils {
 				hashTable.put(id, messageBean);
 			}
 		} catch (Exception e) {
-			StringBuffer buff = new StringBuffer(128);
+			StringBuffer buff = new StringBuffer(Constants.INT_128);
 			
 			buff.append("  Failed to load messages from '");
 			buff.append(messageFile);

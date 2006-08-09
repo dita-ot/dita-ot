@@ -7,7 +7,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Properties;
+
+import org.dita.dost.util.Constants;
 
 /**
  * Class description goes here.
@@ -15,6 +16,8 @@ import java.util.Properties;
  * @author Wu, Zhi Qiang
  */
 public class DITAOTFileLogger {
+	private static DITAOTFileLogger logger = null;
+	
 	private File tmpLogFile = null;
 
 	private String logFile = null;
@@ -22,8 +25,6 @@ public class DITAOTFileLogger {
 	private String logDir = null;
 
 	private PrintWriter printWriter = null;
-
-	private static DITAOTFileLogger logger = null;
 
 	private DITAOTFileLogger() {
 		try {
@@ -35,8 +36,8 @@ public class DITAOTFileLogger {
 	}
 
 	/**
+	 * Get the DITAOTFileLogger instance. Singleton.
 	 * @return
-	 * @throws IOException
 	 */
 	public static DITAOTFileLogger getInstance() {
 		if (logger == null) {
@@ -45,7 +46,11 @@ public class DITAOTFileLogger {
 
 		return logger;
 	}
-
+	
+	/**
+	 * Close the logger. Move log file to logDir.
+	 * 
+	 */
 	public void closeLogger() {
 		DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
 		
@@ -64,10 +69,12 @@ public class DITAOTFileLogger {
 			}
 			
 			if (tmpLogFile.renameTo(log)) {
-				Properties params = new Properties();
-				params.put("%1", logFile);
-				params.put("%2", logDir);
-				javaLogger.logInfo(MessageUtils.getMessage("DOTJ018I", params).toString());
+				StringBuffer buff = new StringBuffer(Constants.INT_256);
+				buff.append("Log file '").append(logFile);
+				buff.append("' was generated successfully in directory '");
+				buff.append(logDir).append("'.");				
+				
+				javaLogger.logInfo(buff.toString());
 				return;
 			}
 		}
@@ -77,10 +84,11 @@ public class DITAOTFileLogger {
 			tmpLogFile.delete();
 		}
 		
-		javaLogger.logError(MessageUtils.getMessage("DOTJ019E").toString());
+		javaLogger.logError("Failed to generate log file.");
 	}
 
 	/**
+	 * Getter function of logDir.
 	 * @return Returns the logDir.
 	 */
 	public String getLogDir() {
@@ -97,34 +105,58 @@ public class DITAOTFileLogger {
 	}
 
 	/**
-	 * @param logDir
-	 *            The logDir to set.
+	 * The logDir to set.
+	 * @param logdir           
 	 */
-	public void setLogDir(String logDir) {
-		this.logDir = logDir;
+	public void setLogDir(String logdir) {
+		this.logDir = logdir;
 	}
 
+	/**
+	 * Log the message at info level
+	 * @param msg
+	 */
 	public void logInfo(String msg) {
 		logMessage(msg);
 	}
-
+	
+	/**
+	 * Log the message at warning level
+	 * @param msg
+	 */
 	public void logWarn(String msg) {
 		logMessage(msg);
 	}
 
+	/**
+	 * Log the message at error level
+	 * @param msg
+	 */
 	public void logError(String msg) {
 		logMessage(msg);
 	}
 
+	/**
+	 * Log the message at debug level
+	 * @param msg
+	 */
 	public void logDebug(String msg) {
 		logMessage(msg);
 	}
 
+	/**
+	 * Log the exception
+	 * @param t
+	 */
 	public void logException(Throwable t) {
 		logError(t.getMessage());
 		t.printStackTrace(printWriter);
 	}
 
+	/**
+	 * Log ordinary message
+	 * @param msg
+	 */
 	private void logMessage(String msg) {
 		printWriter.println(msg);
 	}

@@ -7,38 +7,75 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 import java.util.StringTokenizer;
 
+import org.dita.dost.util.Constants;
+
 /**
- *
+ * Collection of features
  * @author Zhang, Yuan Peng
  */
 public class Features {
-	private String location;
+	private String location = null;
 	private Hashtable featureTable;
-	private ArrayList requireList;
+	private List requireList;
 	private Hashtable metaTable;
 
+	/**
+	 * Default constructor
+	 */
+	public Features() {
+		super();
+		featureTable = new Hashtable(Constants.INT_16);
+		requireList = new ArrayList(Constants.INT_8);
+		metaTable = new Hashtable(Constants.INT_16);
+		// TODO Auto-generated constructor stub
+	}
+
+	/**
+	 * Constructor init location 
+	 * @param location
+	 */
 	public Features(String location) {
 		this.location = location;
-		featureTable = new Hashtable(16);
-		requireList = new ArrayList(8);
-		metaTable = new Hashtable(16);
+		featureTable = new Hashtable(Constants.INT_16);
+		requireList = new ArrayList(Constants.INT_8);
+		metaTable = new Hashtable(Constants.INT_16);
 	}
 	
+	/**
+	 * Return the feature location
+	 * @return
+	 */
 	public String getLocation(){
 		return location;
 	}
 	
+	/**
+	 * Return the feature name by id.
+	 * @param id
+	 * @return
+	 */
 	public String getFeature(String id){
 		return (String) featureTable.get(id);
 	}
 	
+	/**
+	 * Return the set of all features.
+	 * @return
+	 */
 	public Set getAllFeatures(){
 		return featureTable.entrySet();
 	}
 	
+	/**
+	 * Add feature to the feature table.
+	 * @param id
+	 * @param value
+	 * @param type
+	 */
 	public void addFeature(String id, String value, String type){
 		StringTokenizer valueTokenizer = new StringTokenizer(value,",");
 		StringBuffer valueBuffer = new StringBuffer();
@@ -57,18 +94,36 @@ public class Features {
 		featureTable.put(id, valueBuffer.toString());
 	}
 	
+	/**
+	 * Add the required feature id.
+	 * @param id
+	 */
 	public void addRequire(String id){
 		requireList.add(id);
 	}
 	
+	/**
+	 * Get the iterator of required list.
+	 * @return
+	 */
 	public Iterator getRequireListIter(){
 		return requireList.iterator();
 	}
 	
+	/**
+	 * Add meta info to meta table
+	 * @param type
+	 * @param value
+	 */
 	public void addMeta(String type, String value){
 		metaTable.put(type, value);
 	}
 	
+	/**
+	 * Return meat info specifying type
+	 * @param type
+	 * @return
+	 */
 	public String getMeta(String type){
 		return (String) metaTable.get(type);
 	}

@@ -22,15 +22,26 @@ import org.dita.dost.util.StringUtils;
  * 
  */
 public class AntInvoker extends Task {
-	private PipelineFacade pipeline;
-
-	private PipelineHashIO pipelineInput;
 
 	private final static String KEY_VALUE_PAIR_SEPARATOR = ";";
 
 	private final static String KEY_VALUE_EQUAL_SIGN = "=";
 
-	private DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
+	private DITAOTJavaLogger javaLogger = null;
+	
+	private PipelineFacade pipeline;
+
+	private PipelineHashIO pipelineInput;
+	
+	/**
+	 * Defalut Constructor. Construct pipeline & input instance.
+	 */
+	public AntInvoker() {
+		super();
+		pipeline = new PipelineFacade();
+		pipelineInput = new PipelineHashIO();
+		javaLogger = new DITAOTJavaLogger();
+	}
 
 	/**
 	 * Set the "module" attribute for input
@@ -122,15 +133,6 @@ public class AntInvoker extends Task {
 			pipelineInput.setAttribute(attrName, attrValue);
 		}
 
-	}
-
-	/**
-	 * Defalut Constructor. Construct pipeline & input instance.
-	 */
-	public AntInvoker() {
-		super();
-		pipeline = new PipelineFacade();
-		pipelineInput = new PipelineHashIO();
 	}
 
 	/**

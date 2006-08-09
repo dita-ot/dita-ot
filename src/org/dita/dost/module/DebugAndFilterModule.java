@@ -6,6 +6,7 @@ package org.dita.dost.module;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
@@ -31,13 +32,57 @@ import org.dita.dost.writer.DitaWriter;
  * 
  * @author Zhang, Yuan Peng
  */
-public class DebugAndFilterModule extends AbstractPipelineModule {
-	private DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
-	private static final String [] propertyUpdateList = {"user.input.file",Constants.HREF_TARGET_LIST,
-		Constants.CONREF_LIST,Constants.HREF_DITA_TOPIC_LIST,Constants.FULL_DITA_TOPIC_LIST,
-		Constants.FULL_DITAMAP_TOPIC_LIST,Constants.CONREF_TARGET_LIST,Constants.COPYTO_SOURCE_LIST,
-		Constants.COPYTO_TARGET_TO_SOURCE_MAP_LIST};
+public class DebugAndFilterModule implements AbstractPipelineModule {
+	private static final String [] PROPERTY_UPDATE_LIST = {"user.input.file",Constants.HREF_TARGET_LIST,
+			Constants.CONREF_LIST,Constants.HREF_DITA_TOPIC_LIST,Constants.FULL_DITA_TOPIC_LIST,
+			Constants.FULL_DITAMAP_TOPIC_LIST,Constants.CONREF_TARGET_LIST,Constants.COPYTO_SOURCE_LIST,
+			Constants.COPYTO_TARGET_TO_SOURCE_MAP_LIST};
+	/**
+	 * File extension of source file
+	 */
 	public static String extName = null;
+    
+    private static void updateProperty (String listName, Properties property){
+    	StringBuffer result = new StringBuffer(Constants.INT_1024);
+    	String propValue = property.getProperty(listName);
+		String file;
+		int equalIndex;
+		StringTokenizer tokenizer = null;
+    	if (propValue == null || Constants.STRING_EMPTY.equals(propValue.trim())){
+    		//if the propValue is null or empty
+    		return;
+    	}
+    	
+    	tokenizer = new StringTokenizer(propValue,Constants.COMMA);
+    	
+    	while (tokenizer.hasMoreElements()){
+    		file = (String)tokenizer.nextElement();
+    		equalIndex = file.indexOf(Constants.EQUAL);
+    		if(file.indexOf(Constants.FILE_EXTENSION_DITAMAP) != -1){
+    			result.append(Constants.COMMA).append(file);
+    		} else if (equalIndex == -1 ){
+    			//append one more comma at the beginning of property value
+    			result.append(Constants.COMMA).append(FileUtils.replaceExtName(file));
+    		} else {
+    			//append one more comma at the beginning of property value
+    			result.append(Constants.COMMA);
+    			result.append(FileUtils.replaceExtName(file.substring(0,equalIndex)));
+    			result.append(Constants.EQUAL);
+    			result.append(FileUtils.replaceExtName(file.substring(equalIndex+1)));
+    		}
+    	}
+    	
+    	property.setProperty(listName, result.substring(Constants.INT_1));
+    	
+    }
+	private DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
+	
+	/**
+	 * Default Construtor
+	 *
+	 */
+	public DebugAndFilterModule(){
+	}
 	
     /**
      * @see org.dita.dost.module.AbstractPipelineModule#execute(org.dita.dost.pipeline.AbstractPipelineInput)
@@ -48,7 +93,6 @@ public class DebugAndFilterModule extends AbstractPipelineModule {
         String ditavalFile = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_DITAVAL);
         String tempDir = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_TEMPDIR);
         String ext = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_DITAEXT);
-       	extName = ext.startsWith(Constants.DOT) ? ext : (Constants.DOT + ext);
 
         String inputDir = null;
         String filePathPrefix = null;
@@ -57,7 +101,7 @@ public class DebugAndFilterModule extends AbstractPipelineModule {
         Content content;
         DitaWriter fileWriter;
         
-        
+		extName = ext.startsWith(Constants.DOT) ? ext : (Constants.DOT + ext);
         if (!new File(tempDir).isAbsolute()) {
         	tempDir = new File(baseDir, tempDir).getAbsolutePath();
         }
@@ -119,60 +163,6 @@ public class DebugAndFilterModule extends AbstractPipelineModule {
 
         return null;
     }
-
-    private void updateList(String tempDir){
-    	Properties property = new Properties();
-    	FileOutputStream output;
-    	try{
-    		property.load(new FileInputStream( new File(tempDir, Constants.FILE_NAME_DITA_LIST)));
-    		
-    		for (int i = 0; i < propertyUpdateList.length; i ++){
-    			updateProperty(propertyUpdateList[i], property);
-    		}
-    		
-    		output = new FileOutputStream(new File(tempDir, Constants.FILE_NAME_DITA_LIST));
-    		property.store(output, null);
-    		output.flush();
-    		output.close();
-    		
-    	} catch (Exception e){
-    		javaLogger.logException(e);
-    	}
-    	
-    }
-    
-    private void updateProperty (String listName, Properties property){
-    	StringBuffer result = new StringBuffer(Constants.INT_1024);
-    	String propValue = property.getProperty(listName);
-    	if (propValue == null || Constants.STRING_EMPTY.equals(propValue.trim())){
-    		//if the propValue is null or empty
-    		return;
-    	}
-    	
-    	StringTokenizer tokenizer = new StringTokenizer(propValue,Constants.COMMA);
-    	String file;
-    	int equalIndex;
-    	
-    	while (tokenizer.hasMoreElements()){
-    		file = (String)tokenizer.nextElement();
-    		equalIndex = file.indexOf(Constants.EQUAL);
-    		if(file.indexOf(Constants.FILE_EXTENSION_DITAMAP) != -1){
-    			result.append(Constants.COMMA).append(file);
-    		} else if (equalIndex == -1 ){
-    			//append one more comma at the beginning of property value
-    			result.append(Constants.COMMA).append(FileUtils.replaceExtName(file));
-    		} else {
-    			//append one more comma at the beginning of property value
-    			result.append(Constants.COMMA);
-    			result.append(FileUtils.replaceExtName(file.substring(0,equalIndex)));
-    			result.append(Constants.EQUAL);
-    			result.append(FileUtils.replaceExtName(file.substring(equalIndex+1)));
-    		}
-    	}
-    	
-    	property.setProperty(listName, result.substring(Constants.INT_1));
-    	
-    }
     
     
     /*
@@ -197,5 +187,31 @@ public class DebugAndFilterModule extends AbstractPipelineModule {
         	}
         }
 	}
+
+    private void updateList(String tempDir){
+    	Properties property = new Properties();
+    	FileOutputStream output = null;
+    	try{
+    		property.load(new FileInputStream( new File(tempDir, Constants.FILE_NAME_DITA_LIST)));
+    		
+    		for (int i = 0; i < PROPERTY_UPDATE_LIST.length; i ++){
+    			updateProperty(PROPERTY_UPDATE_LIST[i], property);
+    		}
+    		
+    		output = new FileOutputStream(new File(tempDir, Constants.FILE_NAME_DITA_LIST));
+    		property.store(output, null);
+    		output.flush();
+    		
+    	} catch (Exception e){
+    		javaLogger.logException(e);
+    	} finally{
+    		try{
+    			output.close();
+    		}catch(IOException e){
+				javaLogger.logException(e);
+    		}
+    	}
+    	
+    }
 
 }

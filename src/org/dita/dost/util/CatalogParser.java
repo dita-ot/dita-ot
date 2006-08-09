@@ -18,43 +18,44 @@ import org.xml.sax.SAXException;
  * @author Zhang, Yuan Peng
  */
 public class CatalogParser implements ContentHandler{
+    private String catalogDir;
+
+    private String dtdBase; 
+    private HashMap map;
     
     /**
      * Automatically generated constructor: CatalogParser
      */
     public CatalogParser() {
-    	dtdBase = null;
-    	map = null;
+    	this(null, null);
     }
-
-    private String dtdBase; 
-    private HashMap map;
-    private String catalogDir;
            
 
     /**
      * Default constructor of CatalogParser class.
      * 
      * @param catalogMap
-     * 
+     * @param ditaDir
      */
     public CatalogParser(HashMap catalogMap, String ditaDir) {
-        super();
         map = catalogMap;
         catalogDir = ditaDir;
         dtdBase = null;
     }
+    
     /** (non-Javadoc)
      * @see org.xml.sax.ContentHandler#characters(char[], int, int)
      */
     public void characters(char[] ch, int start, int length)
             throws SAXException {
     }
+    
     /** (non-Javadoc)
      * @see org.xml.sax.ContentHandler#endDocument()
      */
     public void endDocument() throws SAXException {
     }
+    
     /** (non-Javadoc)
      * @see org.xml.sax.ContentHandler#endElement(java.lang.String, java.lang.String, java.lang.String)
      */
@@ -64,23 +65,27 @@ public class CatalogParser implements ContentHandler{
             dtdBase = null;
         }
     }
+    
     /** (non-Javadoc)
      * @see org.xml.sax.ContentHandler#endPrefixMapping(java.lang.String)
      */
     public void endPrefixMapping(String prefix) throws SAXException {
     }
+    
     /** (non-Javadoc)
      * @see org.xml.sax.ContentHandler#ignorableWhitespace(char[], int, int)
      */
     public void ignorableWhitespace(char[] ch, int start, int length)
             throws SAXException {
     }
+    
     /** (non-Javadoc)
      * @see org.xml.sax.ContentHandler#processingInstruction(java.lang.String, java.lang.String)
      */
     public void processingInstruction(String target, String data)
             throws SAXException {
     }
+    
     /** (non-Javadoc)
      * @see org.xml.sax.ContentHandler#setDocumentLocator(org.xml.sax.Locator)
      */

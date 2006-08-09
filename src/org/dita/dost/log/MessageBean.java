@@ -23,22 +23,34 @@ public class MessageBean {
 	 * Default constructor.
 	 */
 	public MessageBean() {
+		this(null, null, null, null);
 	}
 
 	/**
-	 * @param id
-	 * @param type
-	 * @param reason
-	 * @param response
+	 * Constructor with params to init
+	 * @param mbId
+	 * @param mbType
+	 * @param mbReason
+	 * @param mbResponse
 	 */
-	public MessageBean(String id, String type, String reason, String response) {
-		this.id = id;
-		this.type = type;
-		this.reason = reason;
-		this.response = response;
+	public MessageBean(String mbId, String mbType, String mbReason, String mbResponse) {
+		this.id = mbId;
+		this.type = mbType;
+		this.reason = mbReason;
+		this.response = mbResponse;
 	}
 
 	/**
+	 * Copy constructor.
+	 * 
+	 * @param message
+	 */
+	public MessageBean(MessageBean message) {
+		this(message.getId(), message.getType(), message.getReason(), message.getResponse());
+	}
+	
+	/**
+	 * Getter function of id.
 	 * @return Returns the id.
 	 */
 	public String getId() {
@@ -46,14 +58,15 @@ public class MessageBean {
 	}
 
 	/**
-	 * @param id
-	 *            The id to set.
+	 * Setter funciton of id.
+	 * @param mbId The id to set.          
 	 */
-	public void setId(String id) {
-		this.id = id;
+	public void setId(String mbId) {
+		this.id = mbId;
 	}
 
 	/**
+	 * Getter function of reason.
 	 * @return Returns the reason.
 	 */
 	public String getReason() {
@@ -61,14 +74,15 @@ public class MessageBean {
 	}
 
 	/**
-	 * @param reason
-	 *            The reason to set.
+	 * Setter function of reason.
+	 * @param mbReason The reason to set.           
 	 */
-	public void setReason(String reason) {
-		this.reason = reason;
+	public void setReason(String mbReason) {
+		this.reason = mbReason;
 	}
 
 	/**
+	 * Getter function of response
 	 * @return Returns the response.
 	 */
 	public String getResponse() {
@@ -76,14 +90,16 @@ public class MessageBean {
 	}
 
 	/**
-	 * @param response
+	 * Setter function of response
+	 * @param mbResponse
 	 *            The response to set.
 	 */
-	public void setResponse(String response) {
-		this.response = response;
+	public void setResponse(String mbResponse) {
+		this.response = mbResponse;
 	}
 
 	/**
+	 * Getter function of type
 	 * @return Returns the type.
 	 */
 	public String getType() {
@@ -91,15 +107,16 @@ public class MessageBean {
 	}
 
 	/**
-	 * @param type
+	 * Setter function of type
+	 * @param mbType
 	 *            The type to set.
 	 */
-	public void setType(String type) {
-		this.type = type;
+	public void setType(String mbType) {
+		this.type = mbType;
 	}
 
-	/*
-	 * (non-Javadoc)
+	/**
+	 * Generate string for MessageBean
 	 * 
 	 * @see java.lang.Object#toString()
 	 */

@@ -23,7 +23,7 @@ import org.dita.dost.module.Content;
  * 
  * @author Wu, Zhi Qiang
  */
-public class JavaHelpIndexWriter extends AbstractWriter {
+public class JavaHelpIndexWriter implements AbstractWriter {
 	/** List of indexterms */
 	private List termList = null;
 	

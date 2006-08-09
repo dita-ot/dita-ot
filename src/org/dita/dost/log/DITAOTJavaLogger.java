@@ -10,6 +10,13 @@ package org.dita.dost.log;
  */
 public class DITAOTJavaLogger {
 	private static boolean debugMode = false;
+	
+	/**
+	 * Default Constructor
+	 *
+	 */
+	public DITAOTJavaLogger(){
+	}
 
 	/**
 	 * Enable DEBUG mode.

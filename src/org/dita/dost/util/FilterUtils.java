@@ -5,6 +5,7 @@ package org.dita.dost.util;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.StringTokenizer;
 
 import org.xml.sax.Attributes;
@@ -18,11 +19,18 @@ public class FilterUtils {
 	private static HashMap filterMap = null;
 
 	/**
-	 * @param filterMap
+	 * Default Constructor
+	 *
+	 */
+	private FilterUtils(){
+	}
+	/**
+	 * Set the filter map
+	 * @param filtermap
 	 *            The filterMap to set.
 	 */
-	public static void setFilterMap(HashMap filterMap) {
-		FilterUtils.filterMap = filterMap;
+	public static void setFilterMap(HashMap filtermap) {
+		FilterUtils.filterMap = filtermap;
 	}
 
 	/**
@@ -31,6 +39,9 @@ public class FilterUtils {
 	 * @param atts
 	 * @return true if any one of attributes 'audience', 'platform', 
 	 * 'product', 'otherprops' was excluded, 
+	 * 
+	 * @param atts
+	 * @param extProps
 	 */
 	public static boolean needExclude(Attributes atts, String extProps) {
 		boolean ret = false;
@@ -40,7 +51,7 @@ public class FilterUtils {
 		String propName = null;
 		String propValue = null;
 		String propPath = null;
-		ArrayList propList = null;
+		List propList = null;
 		int propListIndex = 0;
 		String attrPropsValue = null;
 		int propStart;
@@ -102,7 +113,7 @@ public class FilterUtils {
 	 * @param attValue
 	 * @return
 	 */
-	private static boolean extCheckExclude(ArrayList propList, String attValue){
+	private static boolean extCheckExclude(List propList, String attValue){
 		int propListIndex = 0;
 		boolean hasNullAction = false;
 		boolean hasExcludeAction = false;
@@ -165,7 +176,7 @@ public class FilterUtils {
 	 * @return
 	 */
 	private static boolean checkExclude(String attName, String attValue) {
-		
+		StringTokenizer tokenizer;
 		if (attValue == null) {
 			return false;
 		}
@@ -176,7 +187,7 @@ public class FilterUtils {
 		 * exclude; 2. only if all of those values were set to 'exluce', it can
 		 * be exclude.
 		 */
-		StringTokenizer tokenizer = new StringTokenizer(attValue,
+		tokenizer = new StringTokenizer(attValue,
 				Constants.STRING_BLANK);
 		while (tokenizer.hasMoreTokens()) {
 			String attSubValue = tokenizer.nextToken();

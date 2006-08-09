@@ -14,7 +14,7 @@ import org.dita.dost.pipeline.AbstractPipelineOutput;
  * @author Lian, Li
  * 
  */
-public abstract class AbstractPipelineModule {
+public interface AbstractPipelineModule {
 
 	/**
 	 * Start the process of this module with the input.
@@ -24,7 +24,7 @@ public abstract class AbstractPipelineModule {
 	 * @author Lian, Li
 	 * @throws DITAOTException
 	 */
-	public abstract AbstractPipelineOutput execute(AbstractPipelineInput input)
+	AbstractPipelineOutput execute(AbstractPipelineInput input)
 			throws DITAOTException;
 
 }

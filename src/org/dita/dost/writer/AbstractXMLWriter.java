@@ -22,7 +22,7 @@ import org.xml.sax.ext.LexicalHandler;
  * @author Zhang, Yuan Peng
  */
 
-public abstract class AbstractXMLWriter extends AbstractWriter implements
+public abstract class AbstractXMLWriter implements AbstractWriter,
 ContentHandler, LexicalHandler, EntityResolver {
 
     /** (non-Javadoc)

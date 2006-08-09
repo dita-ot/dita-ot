@@ -1,3 +1,6 @@
+/*
+ * (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved.
+ */
 package org.dita.dost.module;
 
 import java.io.File;
@@ -19,13 +22,26 @@ import org.dita.dost.pipeline.PipelineHashIO;
 import org.dita.dost.reader.MergeMapParser;
 import org.dita.dost.util.Constants;
 
-public class TopicMergeModule extends AbstractPipelineModule {
-
+/**
+ * 
+ * The module handles topic merge in issues as PDF
+ */
+public class TopicMergeModule implements AbstractPipelineModule {
+	
+	/**
+	 * Default Constructor
+	 *
+	 */
 	public TopicMergeModule() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-
+	
+	/**
+	 * Module execution point
+	 * @see org.dita.dost.module.AbstractPipelineModule#execute(org.dita.dost.pipeline.AbstractPipelineInput)
+	 * @author Stephen
+	 */
 	public AbstractPipelineOutput execute(AbstractPipelineInput input)
 			throws DITAOTException {
 		// TODO Auto-generated method stub
@@ -37,6 +53,9 @@ public class TopicMergeModule extends AbstractPipelineModule {
 		.getAttribute(Constants.ANT_INVOKER_EXT_PARAM_OUTPUT);
 		OutputStreamWriter output = null;
 		DITAOTJavaLogger logger = new DITAOTJavaLogger();
+		MergeMapParser mapParser = new MergeMapParser();
+		String midResult = null;
+		StringReader midStream = null;
 		
 		if (ditaInput == null || !new File(ditaInput).exists()){
 			logger.logError(MessageUtils.getMessage("DOTJ025E").toString());
@@ -48,11 +67,10 @@ public class TopicMergeModule extends AbstractPipelineModule {
 			return null;
 		}
 
-		MergeMapParser mapParser = new MergeMapParser();
 		mapParser.read(ditaInput);
-		String midResult = new StringBuffer(Constants.XML_HEAD).append("<dita-merge>")
+		midResult = new StringBuffer(Constants.XML_HEAD).append("<dita-merge>")
 			.append(((StringBuffer)mapParser.getContent().getValue())).append("</dita-merge>").toString();
-		StringReader midStream = new StringReader(midResult);
+		midStream = new StringReader(midResult);
 		
 		try{
 			if (style != null){
@@ -63,11 +81,18 @@ public class TopicMergeModule extends AbstractPipelineModule {
 				output = new OutputStreamWriter(new FileOutputStream(out),Constants.UTF8);
 				output.write(midResult);
 				output.flush();
-				output.close();
 			}
 		}catch (Exception e){
 			//use java logger to log the exception
 			logger.logException(e);
+		}finally{
+			try{
+				output.close();
+				midStream.close();
+			}catch (Exception e){
+				//use java logger to log the exception
+				logger.logException(e);
+			}
 		}
 		
 		return null;

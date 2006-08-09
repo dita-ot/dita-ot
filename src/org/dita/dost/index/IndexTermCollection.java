@@ -24,6 +24,8 @@ import org.dita.dost.writer.JavaHelpIndexWriter;
  * @author Wu, Zhi Qiang
  */
 public class IndexTermCollection {
+	
+	private static IndexTermCollection collection = null;
 	/** The list of all index term */
 	private List termList = new ArrayList(Constants.INT_16);
 
@@ -32,8 +34,6 @@ public class IndexTermCollection {
 
 	/** The output file name of index term without extension */
 	private String outputFileRoot = null;
-	
-	private static IndexTermCollection collection = null;
 
 	/**
 	 * Private constructor used to forbid instance.
