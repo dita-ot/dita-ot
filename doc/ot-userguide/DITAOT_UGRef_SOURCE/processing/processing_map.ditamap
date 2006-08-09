@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- (c) Copyright 2006 by VR Communications, Inc. All rights reserved. -->
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN"  "../dtd/map.dtd">
+<map id="processing_map" title="Processing (building) and publishing DITA documents">
+	<topicref href="processing.dita">
+		<topicref href="processing_overview.dita"/>
+		<topicref href="aboutant.dita"/>
+		<topicref href="aboutantscripts.dita"/>
+		<topicref href="antparms.dita"/>
+		<topicref href="aboutgarage_sample.dita"/>
+		<topicref href="processing_xhtml.dita"/>
+		<topicref href="processing_htmlhelp.dita"/>
+		<topicref href="processing_pdf2.dita"/>
+		<topicref href="processing_docbook.dita"/>
+		<topicref href="processing_eclipsecontent.dita"/>
+		<topicref href="processing_eclipsehelp.dita"/>
+		<topicref href="processing_PDEeclipsehelp.dita"/>
+		<topicref href="processing_javahelp.dita"/>
+		<topicref href="processing_troff.dita"/>
+		<topicref href="processing_wordrtf.dita"/>
+		<topicref href="processing_javacmd.dita"/>
+		<topicref href="processing_production_notes.dita"/>
+		<topicref href="processing_formoreinfo.dita"/>
+	</topicref>
+</map>

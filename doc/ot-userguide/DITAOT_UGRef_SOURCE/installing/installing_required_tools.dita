@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "../dtd/concept.dtd">
+<concept id="installing_required_tools">
+	<title>Installing the required tools</title>
+	<shortdesc>Information about installing the required tools.</shortdesc>
+	<prolog>
+		<author type="creator">Anna van Raaphorst</author>
+		<author type="contributor">Richard Johnson</author>
+		<publisher>OASIS (Organization for the Advancement of Structured Information Standards)</publisher>
+		<copyright>
+			<copyryear year="2006"/>
+			<copyrholder>VR Communications, Inc.</copyrholder>
+		</copyright>
+		<critdates>
+			<created date="2006-July-01"/>
+			<revised modified="2006-August-09"/>
+		</critdates>
+		<metadata>
+			<keywords>
+				<keyword>installing DITA Open Toolkit</keyword>
+				<keyword>DITA Open Toolkit</keyword>
+				<keyword>Adobe FrameMaker</keyword>
+				<keyword>FrameMaker editor</keyword>
+				<keyword>Altova XMLSpy</keyword>
+				<keyword>XMLSpy editor</keyword>
+				<keyword>Arbortext Editor</keyword>
+				<keyword>justSystems XMetaL</keyword>
+				<keyword>XMetaL editor</keyword>
+				<keyword>Pixware XMLmind</keyword>
+				<keyword>XMLmind editor</keyword>
+				<keyword>Syntext Serna</keyword>
+				<keyword>Serna editor</keyword>
+				<keyword>Microsoft Notepad</keyword>
+				<keyword>Notepad editor</keyword>
+				<keyword>Java Development Kit</keyword>
+				<keyword>JDK</keyword>
+				<keyword>Ant</keyword>
+				<keyword>XSLT processor</keyword>
+				<keyword>SAXON XSLT processor</keyword>
+				<keyword>Xalan XSLT processor</keyword>
+				<indexterm>installing<indexterm>about</indexterm>
+				</indexterm>
+				<indexterm>installing<indexterm>on Windows</indexterm>
+				</indexterm>
+				<indexterm>installing<indexterm>on Linux</indexterm>
+				</indexterm>
+				<indexterm>installing<indexterm>on Mac OS</indexterm>
+				</indexterm>
+				<indexterm>Windows<indexterm>installing on</indexterm>
+				</indexterm>
+				<indexterm>Linux<indexterm>installing on</indexterm>
+				</indexterm>
+				<indexterm>Mac OS<indexterm>installing on</indexterm>
+				</indexterm>
+				<indexterm>installing<indexterm>required tools</indexterm>
+				</indexterm>
+				<indexterm>authoring tool</indexterm>
+				<indexterm>Adobe FrameMaker</indexterm>
+				<indexterm>FrameMaker editor</indexterm>
+				<indexterm>Altova XMLSpy</indexterm>
+				<indexterm>XMLSpy editor</indexterm>
+				<indexterm>Arbortext Editor</indexterm>
+				<indexterm>justSystems XMetaL</indexterm>
+				<indexterm>XMetaL editor</indexterm>
+				<indexterm>Pixware XMLmind</indexterm>
+				<indexterm>XMLmind editor</indexterm>
+				<indexterm>Syntext Serna</indexterm>
+				<indexterm>Serna editor</indexterm>
+				<indexterm>Microsoft Notepad</indexterm>
+				<indexterm>Notepad editor</indexterm>
+				<indexterm>DITA Open Toolkit<indexterm>downloading</indexterm>
+				</indexterm>
+				<indexterm>Java Development Kit (JDK)<indexterm>downloading</indexterm>
+				</indexterm>
+				<indexterm>Ant<indexterm>downloading</indexterm>
+				</indexterm>
+				<indexterm>XSLT processors<indexterm>downloading</indexterm>
+				</indexterm>
+				<indexterm>SAXON XSLT processor<indexterm>downloading</indexterm>
+				</indexterm>
+				<indexterm>Xalan XSLT processor<indexterm>downloading</indexterm>
+				</indexterm>
+			</keywords>
+			<prodinfo>
+				<prodname>DITA Open Toolkit</prodname>
+				<vrmlist>
+					<vrm version="1.2.2"/>
+				</vrmlist>
+			</prodinfo>
+		</metadata>
+	</prolog>
+	<conbody>
+		<p>The following tools and kinds of tools are required for you create and process (build) DITA documents. Each tool must be at a certain version level to allow it to work with the other tools in the set. For information about the required levels, see <xref href="../release_current/sysreqs.dita">System requirements and supported applications</xref>.</p>
+		<p>
+			<b>An authoring tool of your choice</b>
+		</p>
+		<p>You can create DITA source files with a plain text editor, for example Microsoft Notepad for Windows. Editors at varying levels of "DITA-awareness" are also available, both free and for purchase. These editors help you create DITA documents that are well-formed and valid. Some well-known DITA-aware editors are Adobe FrameMaker, Altova XMLSpy, Arbortext Editor, justsystems XMetaL (DITA edition), Pixware XMLmind, Stylus Studio, SyncRO Soft &lt;Oxygen/&gt;, and Syntext Serna.</p>
+		<p>Authoring tools are not part of DITA Open Toolkit or any of the prerequisite tools for the Toolkit.</p>
+		<p>
+			<b>DITA Open Toolkit (OT)</b>
+		</p>
+		<p>DITA Open Toolkit is an implementation of the OASIS DITA Technical Committee's specification for DITA DTDs and schemas. The Toolkit transforms DITA content (maps and topics) into deliverable formats, and to do that, depends on the following tools, which must also be installed in your DITA processing (build) environment.</p>
+		<p>You can download DITA Open Toolkit from <xref href="http://sourceforge.net/projects/dita-ot" format="html" scope="external"/>.</p>
+		<p>
+			<b>Java Development Kit (JDK)</b>
+		</p>
+		<p>DITA Open Toolkit is a Java-based set of tools, and as such it requires the JDK to operate.</p>
+		<p>You can download the JDK from <xref href="http://java.sun.com/j2se/1.4.2/download.html" format="html" scope="external"/>.</p>
+		<p>
+			<b>Ant</b>
+		</p>
+		<p>Ant is an Apache, Java-based processing (build) tool.</p>
+		<p>You can download Ant from <xref href="http://ant.apache.org/bindownload.cgi" format="html" scope="external"/>.</p>
+		<p>
+			<b>An XSLT processor</b>
+		</p>
+		<p>You can install either SAXON or Xalan (or both) to process XSLT stylesheets (a set of which are part of the Toolkit).</p>
+		<p>You can download SAXON from <xref href="http://saxon.sourceforge.net/" format="html" scope="external"/>.</p>
+		<p>You can download Xalan from <xref href="http://archive.apache.org/dist/xml/xalan-j/" format="html" scope="external"/>.</p>
+	</conbody>
+</concept>

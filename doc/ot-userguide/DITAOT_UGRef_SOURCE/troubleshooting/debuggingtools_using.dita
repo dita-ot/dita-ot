@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "../dtd/concept.dtd">
+<concept id="debuggingtools_using">
+	<title>Using the debugging and reporting tools</title>
+	<shortdesc>How to use the debugging and reporting tools.</shortdesc>
+	<prolog>
+		<author type="creator">Richard Johnson</author>
+		<author type="contributor">Anna van Raaphorst</author>
+		<publisher>OASIS (Organization for the Advancement of Structured Information Standards)</publisher>
+		<copyright>
+			<copyryear year="2006"/>
+			<copyrholder>VR Communications, Inc.</copyrholder>
+		</copyright>
+		<critdates>
+			<created date="2006-May-01"/>
+			<revised modified="2006-August-09"/>
+		</critdates>
+		<metadata>
+			<keywords>
+				<keyword>troubleshooting the build process</keyword>
+				<keyword>debugging tool</keyword>
+				<keyword>reporting tool</keyword>
+				<keyword>message topic generation tool</keyword>
+				<keyword>ditamsg_generator.xsl message topic generator</keyword>
+				<keyword>ditadebug.php cross-reference debugging tool</keyword>
+				<keyword>ditaauthors.php author and copyright reporting tool</keyword>
+				<keyword>ditaids.php ID checking reporting tool</keyword>
+				<keyword>ditalinks.php URL checking debug tool</keyword>
+				<keyword>ditakeys.php keyword checking reporting tool</keyword>
+				<indexterm>troubleshooting the build process<indexterm>tools and techniques for</indexterm>
+				</indexterm>
+				<indexterm>tools and techniques for troubleshooting the build process</indexterm>
+				<indexterm>debugging tools</indexterm>
+				<indexterm>reporting tools</indexterm>
+				<indexterm>file generation tool</indexterm>
+				<indexterm>automatic file generation tool</indexterm>
+				<indexterm>message topic generator (ditamsg_generator.xsl)</indexterm>
+				<indexterm>ditamsg_generator.xsl message topic generator</indexterm>
+				<indexterm>cross-reference debugging tool (ditadebug.php)</indexterm>
+				<indexterm>ditadebug.php cross-reference debugging tool</indexterm>
+				<indexterm>URL checking debug tool (ditalinks.php)</indexterm>
+				<indexterm>ditalinks.php URL checking debug tool</indexterm>
+				<indexterm>author and copyright reporting tool (ditaauthors.php)</indexterm>
+				<indexterm>ditaauthors.php author and copyright reporting tool</indexterm>
+				<indexterm>ID checking reporting tool (ditaids.php)</indexterm>
+				<indexterm>ditaids.php ID checking reporting tool</indexterm>
+				<indexterm>keyword checking reporting tool (ditakeys.php)</indexterm>
+				<indexterm>ditakeys.php keyword checking reporting tool</indexterm>
+				<indexterm>PHP programs for debugging and reporting</indexterm>
+				<indexterm>XSL stylesheet for automatic message topic generation</indexterm>
+			</keywords>
+			<prodinfo>
+				<prodname>DITA Open Toolkit</prodname>
+				<vrmlist>
+					<vrm version="1.2.2"/>
+				</vrmlist>
+			</prodinfo>
+		</metadata>
+	</prolog>
+	<conbody>
+		<section>
+			<title>List and descriptions of the debugging and reporting tools</title>
+			<p>These tools (introduced in <xref href="../troubleshooting/debuggingtools_overview.dita" scope="local">About the debugging, reporting, and file generation tools</xref>) are written in the PHP programming language and are meant to be invoked either from a command line prompt or from an Ant build script. The tools all take a single argument, which is the name of a DITA map file. The tools process all files in the hierarchy below the level of the invoked DITA map.</p>
+			<simpletable>
+				<sthead>
+					<stentry>Tool</stentry>
+					<stentry>Description</stentry>
+				</sthead>
+				<strow>
+					<stentry>ditaauthors.php</stentry>
+					<stentry>Returns a set of unique author and copyright strings, with counts for each.</stentry>
+				</strow>
+				<strow>
+					<stentry>ditadebug.php</stentry>
+					<stentry>Produces several debugging and informational reports, most of them in a format that can be imported into a spreadsheet or a database. The reports include:
+			<ul>
+							<li>A list of any incorrect references found in the source files</li>
+							<li>A list of directories containing files used by the map</li>
+							<li>For each file in the map, its name, type, author, size, date last modified, and title</li>
+							<li>The total number of files by type</li>
+							<li>A list of all references found</li>
+						</ul>
+					</stentry>
+				</strow>
+				<strow>
+					<stentry>ditaids.php</stentry>
+					<stentry>Produces an alphabetical list of IDs for all files in the map, with duplicates marked with an asterisk.</stentry>
+				</strow>
+				<strow>
+					<stentry>ditakeys.php</stentry>
+					<stentry>Produces a list of all metadata keywords defined.</stentry>
+				</strow>
+				<strow>
+					<stentry>ditalinks.php</stentry>
+					<stentry>Tests all URLs referenced by files in the map for validity.</stentry>
+				</strow>
+			</simpletable>
+		</section>
+		<section>
+			<title>Software prequisites required</title>
+			<p>To run these tools you must have the PHP interpreter installed on your build machine. PHP is a free tool that can be downloaded from <xref href="http://www.php.net" format="html" scope="external"/>.</p>
+		</section>
+		<section>
+			<title>Example of how to invoke the tools</title>
+			<p>You can include any of these tools as part of an Ant build script. The following example shows how to run the debugging tool and write the output to a file.</p>
+			<codeblock>
+&lt;!-- create the ditamap debug cross-reference --&gt;
+&lt;target name="debug"&gt;
+&lt;echo&gt;Building debugging file ditadebug.txt&lt;/echo&gt;
+&lt;mkdir dir="${outdir}/debug_files"/&gt;
+&lt;exec executable="${PHPdir}/php.exe" dir = "${projdir}" 
+output="${outdir}/debug_files/ditadebug.txt"&gt;
+&lt;arg value="${projdir}/project/tools/ditadebug.php"/&gt;
+&lt;arg value="${MAP_file}"/&gt;
+&lt;/exec&gt;
+&lt;/target&gt;
+		</codeblock>
+		</section>
+	</conbody>
+</concept>

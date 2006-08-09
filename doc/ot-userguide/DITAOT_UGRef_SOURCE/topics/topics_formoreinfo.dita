@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "../dtd/concept.dtd">
+<concept id="topics_formoreinfo">
+	<title>For more information (topics)</title>
+	<shortdesc>Additional sources of information for the topics section of this document.</shortdesc>
+	<prolog>
+		<author type="creator">Anna van Raaphorst</author>
+		<author type="contributor">Richard Johnson</author>
+		<publisher>OASIS (Organization for the Advancement of Structured Information Standards)</publisher>
+		<copyright>
+			<copyryear year="2006"/>
+			<copyrholder>VR Communications, Inc.</copyrholder>
+		</copyright>
+		<critdates>
+			<created date="2006-May-01"/>
+			<revised modified="2006-August-08"/>
+		</critdates>
+		<metadata>
+			<keywords>
+				<keyword>topic</keyword>
+				<indexterm>topics<indexterm>more information about</indexterm>
+				</indexterm>
+				<indexterm>for more information<indexterm>topics</indexterm>
+				</indexterm>
+			</keywords>
+			<prodinfo>
+				<prodname>DITA Open Toolkit</prodname>
+				<vrmlist>
+					<vrm version="1.2.2"/>
+				</vrmlist>
+			</prodinfo>
+		</metadata>
+	</prolog>
+	<conbody>
+		<p>For a complete set of reference topics for DITA language elements, see the language reference document in the <filepath>ditaot/demo</filepath> directory.</p>
+	</conbody>
+</concept>

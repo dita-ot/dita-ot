@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "../dtd/concept.dtd">
+<concept id="rss_overview">
+	<title>Distributing information about published DITA content as RSS</title>
+	<shortdesc>Overview information about distributing published DITA content as RSS.</shortdesc>
+	<prolog>
+		<author type="creator">Anna van Raaphorst</author>
+		<author type="contributor">Richard Johnson</author>
+		<publisher>OASIS (Organization for the Advancement of Structured Information Standards)</publisher>
+		<copyright>
+			<copyryear year="2006"/>
+			<copyrholder>VR Communications, Inc.</copyrholder>
+		</copyright>
+		<critdates>
+			<created date="2006-May-01"/>
+			<revised modified="2006-August-09"/>
+		</critdates>
+		<metadata>
+			<keywords>
+				<keyword>distributing content</keyword>
+				<keyword>RSS</keyword>
+				<indexterm>RSS<indexterm>about</indexterm>
+				</indexterm>
+			</keywords>
+			<prodinfo>
+				<prodname>DITA Open Toolkit</prodname>
+				<vrmlist>
+					<vrm version="1.2.2"/>
+				</vrmlist>
+			</prodinfo>
+		</metadata>
+	</prolog>
+	<conbody>
+		<section conref="../core_vocabulary/rss.dita#rss/rss_term"/>
+		<section>
+			<p>For example, the build could create a file like this to announce the availability of a new version of the output:
+		<codeblock>
+&lt;?xml version='1.0'?&gt;
+&lt;rss version='2.0'&gt;
+&lt;channel&gt;
+
+&lt;title&gt;DITA OT User Guide&lt;/title&gt; 
+&lt;copyright&gt;Copyright (c) 2006 Anna van Raaphorst. All rights reserved.&lt;/copyright&gt;
+&lt;link&gt;http://www.mysite.com/ditaug.html&lt;/link&gt;
+&lt;description&gt;DITA Open Toolkit User Guide 1.3&lt;/description&gt; 
+&lt;language&gt;en-us&lt;/language&gt; 
+&lt;lastBuildDate&gt; Wed, 15 Aug 2006 15:14:30 PST&lt;/lastBuildDate&gt;
+&lt;item&gt;
+&lt;title&gt;DITA OT User Guide 1.3&lt;/title&gt;
+&lt;link&gt;http://www.mysite.com/ditaug.pdf&lt;/link&gt;
+&lt;pubDate&gt;Wed, 15 Aug 2006 15:14:30 PST&lt;/pubDate&gt;
+&lt;description&gt;
+Get the latest version of DITA OT User Guide.
+&lt;/description&gt;
+&lt;/item&gt;
+  
+&lt;/channel&gt;
+&lt;/rss&gt;
+		</codeblock>
+			</p>
+		</section>
+	</conbody>
+	<related-links>
+		<link href="http://www.xml.com/pub/a/2002/12/18/dive-into-xml.html" format="html" scope="external"/>
+	</related-links>
+</concept>

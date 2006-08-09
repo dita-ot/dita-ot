@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "../dtd/concept.dtd">
+<concept id="processing_production_notes">
+	<title>Production notes (processing)</title>
+	<shortdesc>Production notes for the processing (building) section of this document.</shortdesc>
+	<prolog>
+		<author type="creator">Richard Johnson</author>
+		<author type="contributor">Anna van Raaphorst</author>
+		<publisher>OASIS (Organization for the Advancement of Structured Information Standards)</publisher>
+		<copyright>
+			<copyryear year="2006"/>
+			<copyrholder>VR Communications, Inc.</copyrholder>
+		</copyright>
+		<critdates>
+			<created date="2006-May-01"/>
+			<revised modified="2006-August-08"/>
+		</critdates>
+		<metadata>
+			<keywords>
+				<keyword>processing DITA file</keyword>
+				<keyword>building DITA file</keyword>
+				<keyword>Ant script</keyword>
+				<indexterm>Ant scripts<indexterm>production notes for</indexterm>
+				</indexterm>
+				<indexterm>production notes
+				<indexterm>Ant scripts</indexterm>
+					<indexterm>processing (building)</indexterm>
+				</indexterm>
+			</keywords>
+			<prodinfo>
+				<prodname>DITA Open Toolkit</prodname>
+				<vrmlist>
+					<vrm version="1.2.2"/>
+				</vrmlist>
+			</prodinfo>
+		</metadata>
+	</prolog>
+	<conbody>
+		<section>
+			<title>Ant script used to build this document</title>
+			<p>To produce this document we used an Ant build script containing targets for building all  transformation types (often called "transtypes" or "targets") supported by DITA Open Toolkit. The location of the Toolkit, the location of the source files, and the location of the output files are variables that can be changed. These lines at the beginning of the script show how this is done:</p>
+			<codeblock>
+&lt;?xml version="1.0" encoding="UTF-8" ?&gt;
+&lt;!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. --&gt;
+&lt;project name="toolkitug" default="all" <b>basedir="c:/ditaot"&gt;</b>
+
+ &lt;!-- Location of project working files --&gt;
+ <b>&lt;property name="projdir" value="c:/DITAOT_UGRef_SOURCE"/&gt;
+ &lt;property name="outdir" value="c:/DITAOT_UGRef_OUTPUT"/&gt;
+ &lt;property name="args.logdir" value="${outdir}"/&gt;</b>
+			</codeblock>
+			<p>In the Windows operating environment we built to all transtypes to make sure they would build cleanly. On Linux, we tested XHTML output only.</p>
+			<p>We use a Windows batch file (<filepath>runbuild.bat</filepath>) to initiate the build. The batch file calls the DITA Ant logger that types a summary of build progress on the console (rather than a more verbose set of messages) and uses a log file to capture the details. Here is our batch file:</p>
+			<codeblock>
+ant -f ant_scripts\DITAOT_UGRef_all.xml -logger org.dita.dost.log.DITAOTBuildLogger %1
+            </codeblock>
+			<p>This method gives us enough information on the console screen to tell whether or not the build was successful and whether any errors occurred that need immediate attention. </p>
+		</section>
+	</conbody>
+</concept>

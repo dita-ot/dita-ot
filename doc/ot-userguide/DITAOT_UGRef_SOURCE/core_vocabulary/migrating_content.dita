@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "../dtd/concept.dtd">
+<concept id="migrating_content">
+	<title>Migrating legacy content to DITA</title>
+	<shortdesc/>
+	<prolog>
+		<author type="creator">Anna van Raaphorst</author>
+		<author type="contributor">Richard Johnson</author>
+		<publisher>OASIS (Organization for the Advancement of Structured Information Standards)</publisher>
+		<copyright>
+			<copyryear year="2006"/>
+			<copyrholder>VR Communications, Inc.</copyrholder>
+		</copyright>
+		<critdates>
+			<created date="2006-May-01"/>
+			<revised modified="2006-August-08"/>
+		</critdates>
+		<metadata>
+			<keywords>
+				<keyword>DITA core vocabulary</keyword>
+				<keyword>DITA controlled vocabulary</keyword>
+				<keyword>migrating legacy content to DITA</keyword>
+				<keyword>FrameMaker DITA Application Pack</keyword>
+				<keyword>Adobe FrameMaker DITA Application Pack</keyword>
+				<indexterm>migrating legacy content to DITA</indexterm>
+				<indexterm>FrameMaker DITA Application Pack</indexterm>
+				<indexterm>Adobe FrameMaker DITA Application Pack</indexterm>
+			</keywords>
+			<prodinfo>
+				<prodname>DITA Open Toolkit</prodname>
+				<vrmlist>
+					<vrm version="1.2.2"/>
+				</vrmlist>
+			</prodinfo>
+		</metadata>
+	</prolog>
+	<conbody>
+		<section id="migrating_content_term">
+			<p>Adobe has announced FrameMaker DITA Application Pack, a free plug-in for FrameMaker 7.2. The Application Pack is targeted to be released August 2006. 
+</p>
+			<p>
+				<note>This is a plug-in for FrameMaker, not DITA Open Toolkit.</note>
+			</p>
+		</section>
+	</conbody>
+	<related-links>
+		<link href="../migratingcontent/migratingcontent.dita" scope="local"/>
+	</related-links>
+</concept>

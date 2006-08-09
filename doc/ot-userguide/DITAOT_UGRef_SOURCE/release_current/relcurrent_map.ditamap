@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- (c) Copyright 2006 by VR Communications, Inc. All rights reserved. -->
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN"  "../dtd/map.dtd">
+<map id="relcurrent_map" title="Release information">
+	<topicref href="release_current.dita">
+		<topicref href="sysreqs.dita"/>
+		<topicref href="knownproblems.dita"/>
+	</topicref>
+</map>

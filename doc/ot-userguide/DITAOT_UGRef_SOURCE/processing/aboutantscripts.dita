@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "../dtd/concept.dtd">
+<concept id="aboutantscripts">
+	<title>About Ant scripts</title>
+	<shortdesc>Information about Ant scripts.</shortdesc>
+	<prolog>
+		<author type="creator">Richard Johnson</author>
+		<author type="contributor">Anna van Raaphorst</author>
+		<publisher>OASIS (Organization for the Advancement of Structured Information Standards)</publisher>
+		<copyright>
+			<copyryear year="2006"/>
+			<copyrholder>VR Communications, Inc.</copyrholder>
+		</copyright>
+		<critdates>
+			<created date="2006-June-06"/>
+			<revised modified="2006-August-08"/>
+		</critdates>
+		<metadata>
+			<keywords>
+				<keyword>processing DITA file</keyword>
+				<keyword>building DITA file</keyword>
+				<keyword>garage sample</keyword>
+				<keyword>Ant script</keyword>
+				<indexterm>Ant scripts
+				    <indexterm>about</indexterm>
+					<indexterm>system-level</indexterm>
+					<indexterm>user-level</indexterm>
+				</indexterm>
+				<indexterm>system-level Ant scripts
+				<indexterm>conductor.xml</indexterm>
+					<indexterm>build.xml</indexterm>
+					<indexterm>catalog-dita_template.xml</indexterm>
+					<indexterm>catalog-dita.xml</indexterm>
+					<indexterm>ditatargets.xml</indexterm>
+					<indexterm>integrator.xml</indexterm>
+					<indexterm>pretargets.xml</indexterm>
+				</indexterm>
+				<indexterm>user-level Ant scripts</indexterm>
+				<indexterm>conductor.xml</indexterm>
+				<indexterm>build.xml</indexterm>
+				<indexterm>catalog-dita_template.xml</indexterm>
+				<indexterm>catalog-dita.xml</indexterm>
+				<indexterm>ditatargets.xml</indexterm>
+				<indexterm>integrator.xml</indexterm>
+				<indexterm>pretargets.xml</indexterm>
+			</keywords>
+			<prodinfo>
+				<prodname>DITA Open Toolkit</prodname>
+				<vrmlist>
+					<vrm version="1.2.2"/>
+				</vrmlist>
+			</prodinfo>
+		</metadata>
+	</prolog>
+	<conbody>
+		<section conref="../core_vocabulary/antscripts.dita#antscripts/antscripts_term"/>
+		<section>
+			<title>System scripts in DITA Open Toolkit</title>
+			<p>
+				<simpletable>
+					<sthead>
+						<stentry>Script</stentry>
+						<stentry>Description</stentry>
+					</sthead>
+					<strow>
+						<stentry>conductor.xml</stentry>
+						<stentry>Controls the other files in the set.
+					</stentry>
+					</strow>
+					<strow>
+						<stentry>build.xml</stentry>
+						<stentry>Builds demos and samples.</stentry>
+					</strow>
+					<strow>
+						<stentry>catalog-dita_template.xml and catalog-dita.xml</stentry>
+						<stentry>Contains information that directs the Toolkit to the names and locations of the DTD files. The template file creates the non-template file dynamically during every build.</stentry>
+					</strow>
+					<strow>
+						<stentry>ditatargets.xml</stentry>
+						<stentry>Runs XSLT transforms to create output.</stentry>
+					</strow>
+					<strow>
+						<stentry>integrator.xml</stentry>
+						<stentry>Adds plug-ins to the build.</stentry>
+					</strow>
+					<strow>
+						<stentry>pretargets.xml</stentry>
+						<stentry>During the first stage of processing, builds the temporary files used to create the output.</stentry>
+					</strow>
+				</simpletable>
+			</p>
+		</section>
+		<section>
+			<title>Creating user scripts in DITA Open Toolkit</title>
+			<p>Sample Ant scripts for all target publishing environment supported by DITA Open Toolkit are located in <filepath>ditaot/samples/garage/ant_scripts</filepath>. Most of these scripts process the garage sample source files with the topics displayed in a hierarchy. One processes the garage sample to XHTML with the topics displayed as a sequence. One filters out some of the topics using a ditaval file before publishing as XHTML in a hierarchical format.</p>
+			<p>The following section contains one of these sample scripts for XHTML targets. You would run this build script in Windows by opening  the Command Prompt, navigating to the <filepath>ant_scripts directory</filepath>, and entering the command:
+     <codeblock>ant -f garage_hierarchy_xhtml.xml</codeblock>
+			</p>
+			<p>For more information about processing (building) to XHTML targets, see <xref href="../processing/processing_xhtml.dita" scope="local">Processing to XHTML targets.</xref>
+			</p>
+		</section>
+		<section id="sample_script">
+			<title>Sample user script</title>
+			<p>Here is an annotated script for publishing the garage sample to XHTML in a hierarchical format. The lines in bold are the actual script statements; the other lines are annotations.</p>
+			<codeblock>
+			&nbsp;
+<b>&lt;?xml version="1.0" encoding="UTF-8"?&gt;</b>
+&lt;!-- Copyright 2006 VR Communications, Inc. --&gt; 
+&lt;!-- All rights reserved. --&gt;
+&lt;!-- SAMPLE: GARAGE --&gt;
+&lt;!-- DITAMAP: HIERARCHY --&gt;
+&lt;!-- TARGET: XHTML --&gt;
+
+&lt;!-- SAMPLE ANT BUILD SCRIPT TO CREATE XHTML OUTPUT --&gt;   
+&lt;!-- from the provided sample ("garage"). --&gt;
+
+&lt;!-- This is a "user script," meant to be --&gt;
+&lt;!-- modified; however, be cautious in modifying the --&gt;
+&lt;!-- environment initialization section. --&gt;
+ 
+&lt;!-- --&gt;
+&lt;!-- ENVIRONMENT INITIALIZATION SECTION --&gt;
+&lt;!-- --&gt;
+
+&lt;!-- Modify with caution. --&gt;
+&lt;!-- garage_xhtml is an arbitrary name alluding to the --&gt; 
+&lt;!-- source and target trees. --&gt;
+
+&lt;!-- default="all" means "build all the targets in the --&gt;	 
+&lt;!-- 'depends' target list" (below) --&gt;
+&lt;!-- (NOT all targets supported by DITA Open Toolkit) --&gt;
+&lt;!-- basedir is the base directory for the Toolkit --&gt; 
+&lt;!-- executables (NOT the DITA source directory, --&gt; 
+&lt;!-- which is defined with projdir, below). --&gt;
+&lt;!-- OK to modify. --&gt;
+<b>&lt;project name="garage_xhtml" default="all" basedir="c:/ditaot"&gt;</b>
+
+
+&lt;!-- Location of DITA source files (projdir) and target --&gt; 
+&lt;!-- output files (outdir). --&gt;
+&lt;!-- OK to modify. --&gt;
+<b>&lt;property name="projdir" value="c:/MY_DITA_SOURCE/samples/garage"/&gt;</b>
+				<b>&lt;property name="outdir" value="c:/MY_DITA_OUTPUT/samples/garage"/&gt;</b>
+
+&lt;!-- Location of DITA Java classes. --&gt;
+&lt;!-- DO NOT modify! --&gt;
+<b>&lt;path id="dost.class.path"&gt;</b>
+				<b>&lt;pathelement location="${basedir}/lib/dost.jar"/&gt;</b>
+				<b>&lt;/path&gt;</b>
+  
+&lt;!-- Ant task to initialize the processing environment. --&gt;
+&lt;!-- Defines a new Ant task called "integrate" that --&gt;
+&lt;!-- executes the code defined in "classname". --&gt;
+&lt;!-- DO NOT modify! --&gt;
+<b>&lt;taskdef name="integrate" classname="org.dita.dost.platform.IntegratorTask"&gt;</b>
+				<b>&lt;classpath refid="dost.class.path"/&gt;</b>
+				<b>&lt;/taskdef&gt;</b>
+
+&lt;!-- dita2xhtml is a somewhat arbitrary name that --&gt;
+&lt;!-- alludes to the source and target. --&gt;
+&lt;!-- It must match the target name in the instance --&gt; 
+&lt;!-- processing section below. --&gt;
+&lt;!-- ${basedir} is the "basedir" defined above. --&gt;
+&lt;!-- OK to modify. --&gt;
+<b>&lt;target name="all" depends="integrate, dita2xhtml"&gt;&lt;/target&gt;</b>
+				<b>&lt;target name="integrate"&gt;</b>
+				<b>&lt;integrate ditadir="${basedir}"/&gt;</b>
+				<b>&lt;/target&gt;</b>
+
+&lt;!-- --&gt;
+&lt;!-- INSTANCE PROCESSING SECTION --&gt;
+&lt;!-- --&gt;
+
+&lt;!-- Modify to process a particular source instance. --&gt;
+&lt;!-- This sample builds only one target. --&gt; 
+&lt;!-- You could add other target sections --&gt;
+&lt;!-- to build to other targets --&gt; 
+&lt;!-- (for example, PDF or HTML Help). --&gt; 
+&lt;!-- If you do that, you must also add appropriate names --&gt; 
+&lt;!-- (for example, dita2pdf or dita2htmlhelp) --&gt;
+&lt;!-- to the "depends" list in the environment --&gt; 
+&lt;!-- initialization section above. --&gt;
+
+&lt;!-- This section builds to a single target (xhtml). --&gt;
+&lt;!-- Target name must match the target name in the --&gt; 
+&lt;!-- "depends" list in the environment initialization --&gt; 
+&lt;!-- section. --&gt; 
+<b>&lt;target name="dita2xhtml"&gt;</b>
+
+&lt;!-- The properties included below are input parameters. --&gt; 
+&lt;!-- They are listed and defined in the DITA OT User Guide --&gt; 
+&lt;!-- and Reference. --&gt;
+<b>&lt;ant antfile="${basedir}/conductor.xml" target="init"&gt;</b>
+
+&lt;!-- projdir is defined in the environment initialization --&gt; 
+&lt;!-- section above. --&gt;
+<b>&lt;property name="args.input" value="${projdir}/hierarchy.ditamap"/&gt;</b>
+
+&lt;!-- outdir is defined in the environment initialization --&gt; 
+&lt;!-- section above. --&gt;
+<b>&lt;property name="output.dir" value="${outdir}/xhtml/hierarchy/unfiltered"/&gt;</b>
+
+&lt;!-- Name of the DITA temporary directory where files --&gt; 
+&lt;!-- are stored during processing. --&gt;
+<b>&lt;property name="dita.temp.dir" value="${outdir}/temp"/&gt;</b>
+
+&lt;!-- transformation type (target output type). --&gt;
+<b>&lt;property name="transtype" value="xhtml"/&gt;</b>
+
+&lt;!-- The system default extname is .xml. --&gt; 			
+&lt;!-- The following statement changes --&gt;
+&lt;!-- the default to .dita. --&gt; 
+&lt;!-- If you use other extensions --&gt; 
+&lt;!-- (including .ditamap and .xml, --&gt;
+&lt;!-- but also extensions like .jpg and .gif), --&gt; 
+&lt;!-- you must specify the format attribute in --&gt; 
+&lt;!-- your source files (for example, format="xml"). --&gt;
+<b>&lt;property name="dita.extname" value=".dita"/&gt;</b>
+				<b>&lt;/ant&gt;</b>
+				<b>&lt;/target&gt;</b>
+				<b>&lt;/project&gt;</b>
+			</codeblock>
+		</section>
+	</conbody>
+</concept>

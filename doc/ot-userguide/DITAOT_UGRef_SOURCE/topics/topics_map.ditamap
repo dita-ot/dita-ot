@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- (c) Copyright 2006 by VR Communications, Inc. All rights reserved. -->
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN"  "../dtd/map.dtd">
+<map id="topics_map" title="Creating DITA topics">
+	<topicref href="topics.dita" collection-type="sequence">
+		<topicref href="aboutgroceryshopping_sample.dita"/>
+		<topicref href="abouttopics.dita"/>
+		<topicref href="creatingtopics.dita"/>
+		<topicref href="aboutconcepts.dita"/>
+		<topicref href="creatingconcepts.dita"/>
+		<topicref href="abouttasks.dita"/>
+		<topicref href="creatingtasks.dita"/>
+		<topicref href="aboutreference.dita"/>
+		<topicref href="creatingreference.dita"/>
+		<topicref href="processing_singletopic.dita"/>
+		<topicref href="topics_production_notes.dita"/>
+		<topicref href="topics_formoreinfo.dita"/>
+	</topicref>
+</map>

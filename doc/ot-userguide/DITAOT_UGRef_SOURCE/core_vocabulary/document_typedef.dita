@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "../dtd/concept.dtd">
+<concept id="document_typedef">
+	<title>Document type definition (DTD)</title>
+	<shortdesc/>
+	<prolog>
+		<author type="creator">Anna van Raaphorst</author>
+		<author type="contributor">Richard Johnson</author>
+		<publisher>OASIS (Organization for the Advancement of Structured Information Standards)</publisher>
+		<copyright>
+			<copyryear year="2006"/>
+			<copyrholder>VR Communications, Inc.</copyrholder>
+		</copyright>
+		<critdates>
+			<created date="2006-May-01"/>
+			<revised modified="2006-August-08"/>
+		</critdates>
+		<metadata>
+			<keywords>
+				<keyword>DITA core vocabulary</keyword>
+				<keyword>DITA controlled vocabulary</keyword>
+				<keyword>document type definition</keyword>
+				<keyword>DTD</keyword>
+				<indexterm>document type definition (DTD)</indexterm>
+				<indexterm>DTD (document type definition)</indexterm>
+			</keywords>
+			<prodinfo>
+				<prodname>DITA Open Toolkit</prodname>
+				<vrmlist>
+					<vrm version="1.2.2"/>
+				</vrmlist>
+			</prodinfo>
+		</metadata>
+	</prolog>
+	<conbody>
+		<section id="document_typedef_term">
+			<p>
+				<b>Definition</b>
+			</p>
+			<p>
+				<b>Usage</b>
+			</p>
+			<p>The DITA DTDs are (base) topic, concept, task, reference, map, and bookmap.</p>
+			<p>
+				<b>Example (concept DTD)</b>
+			</p>
+			<p>
+				<codeblock>
+&lt;!-- ============================================================= --&gt;
+&lt;!--                    HEADER                                     --&gt;
+&lt;!-- ============================================================= --&gt;
+&lt;!--  MODULE:    DITA Concept DTD                                  --&gt;
+&lt;!--  VERSION:   1.0.1                                             --&gt;
+&lt;!--  DATE:      November 2005                                     --&gt;
+&lt;!--                                                               --&gt;
+&lt;!-- ============================================================= --&gt;
+
+&lt;!-- ============================================================= --&gt;
+&lt;!--                    PUBLIC DOCUMENT TYPE DEFINITION            --&gt;
+&lt;!--                    TYPICAL INVOCATION                         --&gt;
+&lt;!--                                                               --&gt;
+&lt;!--  Refer to this file by the following public identifier or an 
+      appropriate system identifier 
+PUBLIC "-//OASIS//DTD DITA Concept//EN"
+      Delivered as file "concept.dtd"                              --&gt;
+
+&lt;!-- ============================================================= --&gt;
+&lt;!-- SYSTEM:     Darwin Information Typing Architecture (DITA)     --&gt;
+&lt;!--                                                               --&gt;
+&lt;!-- PURPOSE:    DTD to describe DITA concepts                     --&gt;
+&lt;!--                                                               --&gt;
+&lt;!-- ORIGINAL CREATION DATE:                                       --&gt;
+&lt;!--             March 2001                                        --&gt;
+&lt;!--                                                               --&gt;
+&lt;!--             (C) Copyright OASIS Open 2005.                    --&gt;
+&lt;!--             (C) Copyright IBM Corporation 2001, 2004.         --&gt;
+&lt;!--             All Rights Reserved.                              --&gt;
+&lt;!-- ============================================================= --&gt;
+
+
+&lt;!-- ============================================================= --&gt;
+&lt;!--                    DOMAIN ENTITY DECLARATIONS                 --&gt;
+&lt;!-- ============================================================= --&gt;
+
+
+&lt;!ENTITY % ui-d-dec     PUBLIC 
+"-//OASIS//ENTITIES DITA User Interface Domain//EN" 
+"uiDomain.ent"                                                       &gt;
+%ui-d-dec;
+</codeblock>
+			</p>
+		</section>
+	</conbody>
+</concept>

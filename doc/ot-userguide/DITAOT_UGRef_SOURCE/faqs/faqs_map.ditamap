@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- (c) Copyright 2006 by VR Communications, Inc. All rights reserved. -->
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN"  "../dtd/map.dtd">
+<map id="faqs_map" title="Frequently asked questions (FAQs)">
+	<topicref href="faqs.dita">
+		<topicref href="darwin_name.dita"/>
+		<topicref href="topic_length.dita"/>
+		<topicref href="xml.dita"/>
+		<topicref href="dita_docbook.dita"/>
+	</topicref>
+</map>

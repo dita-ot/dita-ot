@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "../dtd/concept.dtd">
+<concept id="production_notes">
+	<title>Production notes (linking)</title>
+	<shortdesc>Production notes for the linking section of this document.</shortdesc>
+	<prolog>
+		<author type="creator">Anna van Raaphorst</author>
+		<author type="contributor">Richard Johnson</author>
+		<publisher>OASIS (Organization for the Advancement of Structured Information Standards)</publisher>
+		<copyright>
+			<copyryear year="2006"/>
+			<copyrholder>VR Communications, Inc.</copyrholder>
+		</copyright>
+		<critdates>
+			<created date="2006-May-01"/>
+			<revised modified="2006-August-08"/>
+		</critdates>
+		<metadata>
+			<keywords>
+				<keyword>linking content</keyword>
+				<indexterm>linking<indexterm>production notes</indexterm>
+				</indexterm>
+				<indexterm>production notes<indexterm>linking</indexterm>
+				</indexterm>
+			</keywords>
+			<prodinfo>
+				<prodname>DITA Open Toolkit</prodname>
+				<vrmlist>
+					<vrm version="1.2.2"/>
+				</vrmlist>
+			</prodinfo>
+		</metadata>
+	</prolog>
+	<conbody>
+		<section>
+			<title>How we decided what kind of linking to use</title>
+			<p>Some experienced DITA users employ only relationship tables (located in the master map or in a separate map file). The advantage of this approach is mostly for the producing organization: the links, which are recorded in only one place, can easily be searched and changed if updates to the project require a new linking paradigm. The disadvantage is mostly to the content users, who are given no information about why or under what circumstances they might want to consult the information in the related links.</p>
+			<p>We have chosen an approach that uses both cross-references (xrefs) and relationship tables: where contextual information would seem to be helpful to the user ("I'll tell you <i>why</i> might might you want to click this link") we have used xrefs embedded in the content, and where the linked information is more along the lines of "I'll give you a few related topics you might want to consult if the titles sound interesting to you" we have used a single relationship table pointed to from the master map.</p>
+			<p>To help ensure that our links continue to be accurate throughout the document production process, we run a a set of debugging and link-checking tools we produced ourselves approximately once a day. The tools check both internal and external (URL) links.</p>
+		</section>
+	</conbody>
+</concept>

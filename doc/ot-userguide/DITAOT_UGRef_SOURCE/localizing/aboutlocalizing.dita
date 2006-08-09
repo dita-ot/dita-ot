@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "../dtd/concept.dtd">
+<concept id="aboutlocalizing">
+	<title>About localizing (translating)</title>
+	<shortdesc>Overview information about localizing (translating) DITA content.</shortdesc>
+	<prolog>
+		<author type="creator">Anna van Raaphorst</author>
+		<author type="contributor">Richard Johnson</author>
+		<publisher>OASIS (Organization for the Advancement of Structured Information Standards)</publisher>
+		<copyright>
+			<copyryear year="2006"/>
+			<copyrholder>VR Communications, Inc.</copyrholder>
+		</copyright>
+		<critdates>
+			<created date="2006-May-01"/>
+			<revised modified="2006-August-05"/>
+		</critdates>
+		<metadata>
+			<keywords>
+				<indexterm>localizing (translating)<indexterm>about</indexterm></indexterm>
+				<indexterm>translating (localizing)<indexterm>about</indexterm></indexterm>
+			</keywords>
+			<prodinfo>
+				<prodname>DITA Open Toolkit</prodname>
+				<vrmlist>
+					<vrm version="1.2.2"/>
+				</vrmlist>
+			</prodinfo>
+		</metadata>
+	</prolog>
+	<conbody>
+	<section>
+	<p>Two of the key reasons organizations cite for using DITA are:</p>
+	<ul>
+		<li>To contain localization (translation) costs</li>
+		<li>To respond quickly to customers who need product documentation translated into the primary language spoken in their country or region</li>
+	</ul>
+	</section>
+		<section conref="../release_current/sysreqs.dita#sysreqs/languages">
+	</section>
+	</conbody>
+</concept>

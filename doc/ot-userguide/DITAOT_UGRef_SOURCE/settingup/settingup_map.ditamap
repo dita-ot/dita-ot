@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- (c) Copyright 2006 by VR Communications, Inc. All rights reserved. -->
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN"  "../dtd/map.dtd">
+<map id="settingup_map" title="Setting up your processing (build) environment">
+	<topicref href="settingup.dita">
+		<topicref href="configuring_authoringtool.dita"/>
+		<topicref href="source_files.dita"/>
+		<topicref href="settingup_production_notes.dita"/>
+		<topicref href="settingup_formoreinfo.dita"/>
+	</topicref>
+</map>

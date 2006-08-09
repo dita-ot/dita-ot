@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "../dtd/task.dtd">
+<task id="windows_settingenvvariables" xml:lang="en-us">
+	<title>Setting environment variables on Windows</title>
+	<shortdesc>How to set environment variables in the Windows operating environment.</shortdesc>
+	<prolog>
+		<author type="creator">Jen Linton</author>
+		<author type="creator">JoAnn Hackos</author>
+		<author type="creator">Kylene Bruski</author>
+		<author type="contributor">Anna van Raaphorst</author>
+		<author type="contributor">Richard Johnson</author>
+		<publisher>OASIS (Organization for the Advancement of Structured Information Standards)</publisher>
+		<copyright>
+			<copyryear year="2005"/>
+			<copyrholder>Comtech Services, Inc.</copyrholder>
+		</copyright>
+		<critdates>
+			<created date="2005-November-01"/>
+			<revised modified="2006-August-08"/>
+		</critdates>
+		<metadata>
+			<keywords>
+				<keyword>installing DITA Open Toolkit</keyword>
+				<keyword>environment variable</keyword>
+				<indexterm>setting environment variable<indexterm>on Windows</indexterm>
+				</indexterm>
+				<indexterm>environment variables
+					<indexterm>setting on Windows</indexterm>
+					<indexterm>PATH</indexterm>
+					<indexterm>ANT_HOME</indexterm>
+					<indexterm>ANT_OPTS</indexterm>
+					<indexterm>JAVA_HOME</indexterm>
+					<indexterm>JHHOME</indexterm>
+					<indexterm>CLASSPATH</indexterm>
+				</indexterm>
+				<indexterm>PATH environment variable</indexterm>
+				<indexterm>ANT_HOME environment variable</indexterm>
+				<indexterm>ANT_OPTS environment variable</indexterm>
+				<indexterm>JAVA_HOME environment variable</indexterm>
+				<indexterm>JHHOME environment variable</indexterm>
+				<indexterm>CLASSPATH environment variable</indexterm>
+			</keywords>
+			<prodinfo>
+				<prodname>DITA Open Toolkit</prodname>
+				<vrmlist>
+					<vrm version="1.2.2"/>
+				</vrmlist>
+			</prodinfo>
+		</metadata>
+	</prolog>
+	<taskbody>
+		<steps>
+			<step>
+				<cmd>From the Start Menu, select <uicontrol>Start > Settings > Control 
+          Panel.</uicontrol>
+				</cmd>
+			</step>
+			<step>
+				<cmd>Double-click <varname>System</varname> to open the System 
+          Properties window.</cmd>
+			</step>
+			<step>
+				<cmd>On the Advanced tab, select <varname>environmental 
+          variables</varname> .</cmd>
+			</step>
+			<step>
+				<cmd>Modify each <varname>environmental or system 
+          variable</varname>.
+          </cmd>
+				<info>
+					<p>Set the <varname>PATH</varname> environment variable to 
+              include the directory where you installed the Ant bin 
+              directory:
+             <ol>
+							<li>Find the <varname>PATH</varname> environment variable in 
+                  the list. If <varname>PATH</varname> is not listed, click on 
+                  <uicontrol>New</uicontrol> under the System variables 
+                  section.</li>
+							<li>Type <codeph>%ANT_HOME%\bin;%JAVA_HOME%\bin;</codeph>
+								<note type="important">If there are other variables listed, create 
+                  a new variable separated by a semicolon. Ensure there are no 
+                  spaces before or after the semicolon.</note>
+							</li>
+						</ol>
+					</p>
+				</info>
+				<info>
+					<p>Set the <varname>ANT_HOME</varname> environment variable 
+              to the directory where you installed Ant:
+            <ol>
+							<li>Click on <uicontrol>New</uicontrol> under the System 
+                  variables section.</li>
+							<li>Type <codeph>ANT_HOME</codeph> in the variable name 
+                  field.</li>
+							<li>Type <codeph>C:\ant</codeph> in the variable value 
+                  field.</li>
+						</ol>
+					</p>
+				</info>
+				<info>
+					<p>Set the <varname>ANT_OPTS</varname> environment variable 
+              to the directory where you installed Ant:
+            <ol>
+							<li>Click <uicontrol>New</uicontrol> under the System 
+                  variables section.</li>
+							<li>Type <codeph>ANT_OPTS</codeph> in the variable name 
+                  field.</li>
+							<li>Type <codeph>-Xmx256M</codeph> in the variable value 
+                  field.</li>
+						</ol>
+					</p>
+				</info>
+				<info>
+					<p>Set the <varname>JAVA_HOME</varname> environment variable 
+              to the directory where you installed the J2SE SDK 
+              application:
+            <ol>
+							<li>Click on <uicontrol>New</uicontrol> under the System 
+                  variables section.</li>
+							<li>Type <codeph>JAVA_HOME</codeph> in the variable name 
+                  field.</li>
+							<li>Type <codeph>C:\j2sdk1.4.2_12</codeph> in the variable 
+                  value field.</li>
+						</ol>
+					</p>
+				</info>
+				<info>
+					<p>Set the <varname>JHHOME</varname> environment variable to 
+              the directory where you installed the JavaHelp 
+              application:
+           <ol>
+							<li>Click on <uicontrol>New</uicontrol> under the System 
+                  variables section.</li>
+							<li>Type <codeph>JHHOME</codeph> in the variable name 
+                  field.</li>
+							<li>Type <codeph>C:\javahelp\jh2.0</codeph> in the 
+                  variable value field.</li>
+						</ol>
+					</p>
+				</info>
+				<info>
+					<p>Create or append to the <varname>CLASSPATH</varname> environment variable 
+                for DITA-OT:
+           <ol>
+							<li>Find the <varname>CLASSPATH </varname> environment variable 
+                  in the list. If <varname>CLASSPATH </varname> is not listed, 
+                  click <uicontrol>New</uicontrol> under the System 
+                  variables section.</li>
+							<li>Type 
+                  <codeph>C:\ditaot\lib\dost.jar</codeph>
+								<note type="important">If there are other variables listed, create a
+                  new variable separated from the others by a semicolon. Ensure there are no 
+                  spaces before or after the semicolon.</note>
+							</li>
+						</ol>
+					</p>
+				</info>
+				<info>
+					<p>Create or append to the <varname>CLASSPATH </varname> environment variable 
+              for the Apache FOP application:
+          <ol>
+							<li>Find the <varname>CLASSPATH </varname> environment variable 
+                  in the list. If <varname>CLASSPATH </varname> is not listed, 
+                  click <uicontrol>New</uicontrol> under the System 
+                  variables section.</li>
+							<li>Type 
+                  <codeph>C:\fop-0.20.5\build\fop.jar;C:\fop-0.20.5\lib\batik.jar;C:\fop-0.20.5\lib \avalon-framework-cvs-20020806.jar</codeph>
+								<note type="important">If there are other variables listed, create a 
+                  new variable separated from the others by a semicolon. Ensure there are no 
+                  spaces before or after the semicolon.</note>
+							</li>
+						</ol>
+					</p>
+				</info>
+				<info>
+					<p>(If you use SAXON) Create or append to environment variables for SAXON:
+         <ol>
+							<li>Find the 
+              <varname>CLASSPATH</varname> environment variable in the list. If 
+              <varname>CLASSPATH </varname> is not listed, click on 
+              <uicontrol>New</uicontrol> under the System variables 
+              section.</li>
+							<li>Type <codeph>C:\saxon\saxon.jar</codeph>
+								<note type="important">If there are other variables listed, create a 
+              new variable separated by a semicolon. Ensure there are no spaces 
+              before or after the semicolon.</note>
+							</li>
+							<li>Set up ANT_OPTS. For example: <codeblock>set ANT_OPTS=%ANT_OPTS% -Djavax.xml.transform.TransformerFactory=com.icl.saxon.TransformerFactoryImpl</codeblock>
+							</li>
+						</ol>
+					</p>
+				</info>
+				<info>
+					<p>(If you use Xalan) Set the <varname>CLASSPATH</varname> environment variable 
+              for Xalan:
+        <ol>
+							<li>Find the 
+              <varname>CLASSPATH</varname> environment variable in the list. If 
+              <varname>CLASSPATH </varname> is not listed, click on 
+              <uicontrol>New</uicontrol> under the System variables 
+              section.</li>
+							<li>Type <codeph>C:\xalan\bin</codeph>
+								<note type="important">If there are other variables listed, create a 
+              new variable separated by a semicolon. Ensure there are no spaces 
+              before or after the semicolon.</note>
+							</li>
+						</ol>
+					</p>
+				</info>
+			</step>
+		</steps>
+	</taskbody>
+</task>

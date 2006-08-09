@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- (c) Copyright 2006 by VR Communications, Inc. All rights reserved. -->
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN"  "../dtd/map.dtd">
+<map id="migratinglegacy_map" title="Migrating legacy content to DITA">
+	<topicref href="migratingcontent.dita">
+	    <topicref href="migratingcontent_overview.dita"/>
+		<topicref href="migratingcontent_production_notes.dita"/>
+		<topicref href="migratingcontent_formoreinfo.dita"/>
+	</topicref>
+</map>

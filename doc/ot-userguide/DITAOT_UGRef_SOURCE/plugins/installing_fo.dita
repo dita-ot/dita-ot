@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "../dtd/task.dtd">
+<task id="installing_fo">
+	<title>Installing the Idiom FO plug-in</title>
+	<shortdesc>How to install the Idiom FO plug-in.</shortdesc>
+	<prolog>
+		<author type="creator">Richard Johnson</author>
+		<author type="contributor">Anna van Raaphorst</author>
+		<author type="contributor">Andy Hall</author>
+		<publisher>OASIS (Organization for the Advancement of Structured Information Standards)</publisher>
+		<copyright>
+			<copyryear year="2006"/>
+			<copyrholder>VR Communications, Inc.</copyrholder>
+		</copyright>
+		<critdates>
+			<created date="2006-June-21"/>
+			<revised modified="2006-August-09"/>
+		</critdates>
+		<metadata>
+			<keywords>
+				<keyword>plug-in</keyword>
+				<keyword>FO plug-in</keyword>
+				<keyword>Idiom FO plug-in</keyword>
+				<indexterm>installing<indexterm>Idiom FO plug-in</indexterm>
+				</indexterm>
+				<indexterm>plug-ins<indexterm>Idiom FO</indexterm>
+				</indexterm>
+				<indexterm>RenderX XEP processor<indexterm>using with the Idiom plug-in</indexterm>
+				</indexterm>
+				<indexterm>Idiom FO plug-in</indexterm>
+				<indexterm>FO plug-in</indexterm>
+				<indexterm>XSLT processors<indexterm>SAXON</indexterm>
+				</indexterm>
+				<indexterm>RenderX XEP processor</indexterm>
+				<indexterm>XEP processor</indexterm>
+				<indexterm>IBM ICU4J 3.4.4 package</indexterm>
+				<indexterm>ICU4J 3.4.4 package</indexterm>
+			</keywords>
+			<prodinfo>
+				<prodname>DITA Open Toolkit</prodname>
+				<vrmlist>
+					<vrm version="1.2.2"/>
+				</vrmlist>
+			</prodinfo>
+		</metadata>
+	</prolog>
+	<taskbody>
+		<prereq>Before installing the Idiom FO plug-in, you need to acquire and install several other software packages it depends on.
+		<dl>
+				<dlentry>
+					<dt>SAXON XSLT parser</dt>
+					<dd>See <xref href="../installing/windows_installingsaxon.dita" scope="local">Installing SAXON on Windows</xref> or <xref href="../installing/linux_installingsaxon.dita" scope="local">Installing SAXON on Linux</xref> for installation instructions.</dd>
+				</dlentry>
+				<dlentry>
+					<dt>
+						<filepath>IBM icu4j.jar</filepath> package</dt>
+					<dd>This package includes various forms of globalization support. You can download the ICU4J 3.4.4 package at <xref href="http://www-306.ibm.com/software/globalization/icu/downloads.jsp" format="html" scope="external"/>.</dd>
+				</dlentry>
+				<dlentry>
+					<dt>RenderX XEP Engine</dt>
+					<dd>You can use either the free XEP 4 Personal Edition or the XEP Engine product.
+				For information on XEP, see <xref href="http://www.renderx.com" format="html" scope="external"/>.</dd>
+				</dlentry>
+			</dl>
+		</prereq>
+		<context>Follow these steps to install the Idiom FO plug-in.</context>
+		<steps>
+			<step>
+				<cmd>Download the plug-in from the web.</cmd>
+			</step>
+			<step>
+				<cmd>Unzip the plug-in files to the Toolkit <filepath>demo/fo</filepath> directory. Your directory structure should then look like this:</cmd>
+				<stepxmp>
+					<p>
+						<image href="../images/plugins_folderidiomfo.jpg"/>
+					</p>
+				</stepxmp>
+			</step>
+			<step>
+				<cmd>Copy icu4j_3_3_4.jar to the demo/fo/lib directory and then rename icu4j_3_3_4.jar to icu4j.jar.</cmd>
+			</step>
+			<step>
+				<cmd>Edit the file <filepath>demo/fo/build.xml</filepath> and set the path information for <filepath>saxon.jar</filepath> and XEP.</cmd>
+				<stepxmp>
+					<p>That section of the file will look similar to the following:</p>
+					<codeblock>				
+&lt;path id="project.class.path"&gt;
+<b>&lt;pathelement location="c:/saxon6_5_3/saxon.jar"/&gt;</b>
+&lt;pathelement location="${fo.lib.dir}/xml-apis.jar"/&gt;
+&lt;pathelement location="${fo.lib.dir}/xercesImpl.jar"/&gt;
+&lt;pathelement location="${fo.lib.dir}/resolver.jar"/&gt;
+&lt;pathelement location="${fo.lib.dir}/icu4j.jar"/&gt;        
+&lt;pathelement location="${fo.lib.dir}/fo.jar"/&gt;
+&lt;/path&gt;
+
+&lt;path id="xep.class.path"&gt;
+<b>&lt;fileset dir="c:/xep/lib" includes="**/*.jar"/&gt;</b>
+&lt;pathelement location="${fo.lib.dir}/fo.jar"/&gt;
+&lt;/path&gt;
+				</codeblock>
+				</stepxmp>
+			</step>
+			<step>
+				<cmd>Move to the root directory of the DITA Open Toolkit and issue the following command to install the plug-in:</cmd>
+				<stepxmp>
+					<userinput>ant -f integrator.xml</userinput>
+				</stepxmp>
+			</step>
+		</steps>
+		<result>At this point, the plug-in is integrated into the Toolkit processing pipeline and can be used by specifying the pdf2 transtype. For information about transtypes in Ant scripts, see <xref href="../processing/aboutantscripts.dita" scope="local">About Ant scripts</xref>. For processing instructions for the pdf2 transtype, see <xref href="../processing/processing_pdf2.dita" scope="local">Processing to PDF2 targets</xref>.</result>
+	</taskbody>
+</task>

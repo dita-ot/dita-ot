@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "../dtd/concept.dtd">
+<concept id="installing_overview">
+	<title>Installation overview</title>
+	<shortdesc>Overview of the installation processes for Windows, Linux, and Mac OS. Key sections: required tools, optional tools, and things to consider before installing.</shortdesc>
+	<prolog>
+		<author type="creator">Jen Linton</author>
+		<author type="creator">JoAnn Hackos</author>
+		<author type="creator">Kylene Bruski</author>
+		<author type="contributor">Anna van Raaphorst</author>
+		<author type="contributor">Richard Johnson</author>
+		<publisher>OASIS (Organization for the Advancement of Structured Information Standards)</publisher>
+		<copyright>
+			<copyryear year="2005"/>
+			<copyrholder>Comtech Services, Inc.</copyrholder>
+		</copyright>
+		<critdates>
+			<created date="2005-November-01"/>
+			<revised modified="2006-August-08"/>
+		</critdates>
+		<metadata>
+			<keywords>
+				<keyword>installing DITA Open Toolkit</keyword>
+				<indexterm>installing<indexterm>overview</indexterm>
+				</indexterm>
+			</keywords>
+			<prodinfo>
+				<prodname>DITA Open Toolkit</prodname>
+				<vrmlist>
+					<vrm version="1.2.2"/>
+				</vrmlist>
+			</prodinfo>
+		</metadata>
+	</prolog>
+	<conbody>
+		<p/>
+	</conbody>
+</concept>

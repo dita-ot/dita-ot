@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "../dtd/concept.dtd">
+<concept id="processing_building">
+	<title>Processing (building)</title>
+	<shortdesc/>
+	<prolog>
+		<author type="creator">Anna van Raaphorst</author>
+		<author type="contributor">Richard Johnson</author>
+		<publisher>OASIS (Organization for the Advancement of Structured Information Standards)</publisher>
+		<copyright>
+			<copyryear year="2006"/>
+			<copyrholder>VR Communications, Inc.</copyrholder>
+		</copyright>
+		<critdates>
+			<created date="2006-May-01"/>
+			<revised modified="2006-August-08"/>
+		</critdates>
+		<metadata>
+			<keywords>
+				<keyword>DITA core vocabulary</keyword>
+				<keyword>DITA controlled vocabulary</keyword>
+				<keyword>processing DITA file</keyword>
+				<keyword>building DITA file</keyword>
+				<indexterm>processing (building) DITA files</indexterm>
+				<indexterm>building (processing) DITA files</indexterm>
+			</keywords>
+			<prodinfo>
+				<prodname>DITA Open Toolkit</prodname>
+				<vrmlist>
+					<vrm version="1.2.2"/>
+				</vrmlist>
+			</prodinfo>
+		</metadata>
+	</prolog>
+	<conbody>
+		<section id="processing_building_term">
+			<p>
+				<b>Definition</b>
+			</p>
+			<p>Producing output files from a set of DITA source files.</p>
+			<p>
+				<b>Usage</b>
+			</p>
+			<p>DITA Open Toolkit, working with other tools like the Java Development Kit (JDK) and Ant, provides a method to process DITA documents. </p>
+		</section>
+	</conbody>
+	<related-links>
+		<link href="../processing/processing.dita" scope="local"/>
+	</related-links>
+</concept>

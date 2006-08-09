@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- (c) Copyright 2006 by VR Communications, Inc. All rights reserved. -->
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN"  "../dtd/map.dtd">
+<map id="reusing_map" title="Reuse concepts and techniques">
+	<topicref href="reusing.dita">
+		<topicref href="aboutreuse.dita"/>
+		<topicref href="specialization_overview.dita"/>
+		<topicref href="implementingprocessing_reuse.dita"/>
+		<topicref href="reusing_production_notes.dita"/>
+		<topicref href="reusing_formoreinfo.dita"/>
+	</topicref>
+</map>

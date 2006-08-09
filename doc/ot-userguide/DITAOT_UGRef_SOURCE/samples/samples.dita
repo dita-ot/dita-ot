@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "../dtd/concept.dtd">
+<concept id="samples">
+	<title>Sample files</title>
+	<shortdesc>Information about the DITA sample source files that come with DITA Open Toolkit.</shortdesc>
+	<prolog>
+		<author type="creator">Anna van Raaphorst</author>
+		<author type="contributor">Richard Johnson</author>
+		<copyright>
+			<copyryear year="2001, 2005"/>
+			<copyrholder>IBM Corporation</copyrholder>
+		</copyright>
+		<critdates>
+			<created date="2006-May-01"/>
+			<revised modified="2006-August-08"/>
+		</critdates>
+		<metadata>
+			<keywords>
+				<keyword>garage sample</keyword>
+				<keyword>grocery shopping sample</keyword>
+				<indexterm>samples<indexterm>garage</indexterm>
+				</indexterm>
+				<indexterm>samples<indexterm>grocery shopping</indexterm>
+				</indexterm>
+				<indexterm>garage sample<indexterm>DITA source files</indexterm>
+				</indexterm>
+				<indexterm>grocery shopping sample<indexterm>DITA source files</indexterm>
+				</indexterm>
+			</keywords>
+			<prodinfo>
+				<prodname>DITA Open Toolkit</prodname>
+				<vrmlist>
+					<vrm version="1.2.2"/>
+				</vrmlist>
+			</prodinfo>
+		</metadata>
+	</prolog>
+	<conbody>
+		<p>The following sample files (garage and grocery shopping) are included in their DITA source form for your reference. Ant scripts are also included. Both samples are in the <filepath>samples</filepath> directory.</p>
+		<section>
+			<title>Garage sample</title>
+		</section>
+		<section conref="../core_vocabulary/garage_sample.dita#garage_sample/garage_sample_term"/>
+		<section>
+			<title>Grocery shopping sample</title>
+		</section>
+		<section conref="../core_vocabulary/groceryshopping_sample.dita#groceryshopping_sample/groceryshopping_sample_term"/>
+	</conbody>
+</concept>

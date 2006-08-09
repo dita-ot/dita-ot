@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "../dtd/concept.dtd">
+<concept id="specialization">
+	<title>Specialization (information design reuse)</title>
+	<shortdesc/>
+	<prolog>
+		<author type="creator">Anna van Raaphorst</author>
+		<author type="contributor">Richard Johnson</author>
+		<publisher>OASIS (Organization for the Advancement of Structured Information Standards)</publisher>
+		<copyright>
+			<copyryear year="2006"/>
+			<copyrholder>VR Communications, Inc.</copyrholder>
+		</copyright>
+		<critdates>
+			<created date="2006-May-01"/>
+			<revised modified="2006-August-08"/>
+		</critdates>
+		<metadata>
+			<keywords>
+				<keyword>DITA core vocabulary</keyword>
+				<keyword>DITA controlled vocabulary</keyword>
+				<keyword>specialization</keyword>
+				<indexterm>specialization (information design reuse)</indexterm>
+			</keywords>
+			<prodinfo>
+				<prodname>DITA Open Toolkit</prodname>
+				<vrmlist>
+					<vrm version="1.2.2"/>
+				</vrmlist>
+			</prodinfo>
+		</metadata>
+	</prolog>
+	<conbody>
+		<section id="specialization_term">
+			<p>
+				<b>Definition</b>
+			</p>
+			<p>An extension of a base DITA information type into one required for special purposes.</p>
+			<p>
+				<b>Usage</b>
+			</p>
+			<p>One of the key characteristics of DITA specialization is inheritance, which allows you to create new information types from existing ones. With inheritance you can use a class attribute to map an existing parent element to the specialized element you want to create.</p>
+			<p>
+				<b>Example</b>
+			</p>
+			<p>For example, you could specialize the base set of definition list tags (&lt;dl&gt;, &lt;dlentry&gt;, &lt;dt&gt;, and &lt;dd&gt;) into a set of glossary tags (&lt;glosslist&gt;, &lt;glossentry&gt;, and so forth) by defining only those characteristics specific to the glossary tags; they would inherit all other characteristics from the base definition list.</p>
+		</section>
+	</conbody>
+</concept>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "../dtd/concept.dtd">
+<concept id="darwininfo_typingarch">
+	<title>Darwin Information Typing Architecture (DITA)</title>
+	<shortdesc/>
+	<prolog>
+		<author type="creator">Anna van Raaphorst</author>
+		<author type="contributor">Richard Johnson</author>
+		<publisher>OASIS (Organization for the Advancement of Structured Information Standards)</publisher>
+		<copyright>
+			<copyryear year="2006"/>
+			<copyrholder>VR Communications, Inc.</copyrholder>
+		</copyright>
+		<critdates>
+			<created date="2006-May-01"/>
+			<revised modified="2006-August-08"/>
+		</critdates>
+		<metadata>
+			<keywords>
+				<keyword>DITA core vocabulary</keyword>
+				<keyword>DITA controlled vocabulary</keyword>
+				<keyword>DITA</keyword>
+				<keyword>Darwin Information Typing Architecture</keyword>
+				<indexterm>DITA (Darwin Information Typing Architecture)
+				<indexterm>definition</indexterm>
+					<indexterm>usage</indexterm>
+				</indexterm>
+				<indexterm>Darwin Information Typing Architecture (DITA)
+				<indexterm>definition</indexterm>
+					<indexterm>usage</indexterm>
+				</indexterm>
+			</keywords>
+			<prodinfo>
+				<prodname>DITA Open Toolkit</prodname>
+				<vrmlist>
+					<vrm version="1.2.2"/>
+				</vrmlist>
+			</prodinfo>
+		</metadata>
+	</prolog>
+	<conbody>
+		<section id="darwininfo_typingarch_term">
+			<p>
+				<b>Definition</b>
+			</p>
+			<p>An XML-based, end-to-end architecture for authoring, producing, and delivering information (often called <term>content</term>) as discrete, typed topics.
+		Typical information delivered using the DITA architecture is technical or scientific in nature and published as online help,  through product support portals, or as print-ready PDF files.
+		</p>
+			<p>The unofficial logo for DITA is the Woodpecker Finch of the Galapagos Islands, which is an example of a specialization that is also tool-using.</p>
+			<p>
+				<image href="../images/dita_finch_logo.jpg"/>
+			</p>
+			<p>
+				<b>Usage</b>
+			</p>
+			<p>The DITA architecture, along with appropriate tools, is used to:</p>
+			<ul>
+				<li>Create, manage, and publish XML-based, structured information in a wide variety of environments and platforms</li>
+				<li>Facilitate information sharing and reuse, and collaborative writing projects</li>
+				<li>Reduce writing, publishing, and translation costs</li>
+			</ul>
+			<p>DITA originated and is extensively used in the IBM Corporation; in 2005 it was adopted as an Organization for the Advancement of Structured Information Standards (OASIS) standard. DITA is currently used in many organizations world-wide, and is supported by an ever-growing list of commercial and open-source tools. DITA is actively being extended and enhanced under the direction of the OASIS DITA Technical Committee (TC).</p>
+		</section>
+	</conbody>
+</concept>

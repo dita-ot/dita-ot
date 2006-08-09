@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "../dtd/concept.dtd">
+<concept id="information_element">
+	<title>Information element (&lt;info&gt;)</title>
+	<shortdesc/>
+	<prolog>
+		<author type="creator">Anna van Raaphorst</author>
+		<author type="contributor">Richard Johnson</author>
+		<publisher>OASIS (Organization for the Advancement of Structured Information Standards)</publisher>
+		<copyright>
+			<copyryear year="2006"/>
+			<copyrholder>VR Communications, Inc.</copyrholder>
+		</copyright>
+		<critdates>
+			<created date="2006-May-01"/>
+			<revised modified="2006-August-08"/>
+		</critdates>
+		<metadata>
+			<keywords>
+				<keyword>DITA core vocabulary</keyword>
+				<keyword>DITA controlled vocabulary</keyword>
+				<keyword>information element</keyword>
+				<indexterm>information element</indexterm>
+			</keywords>
+			<prodinfo>
+				<prodname>DITA Open Toolkit</prodname>
+				<vrmlist>
+					<vrm version="1.2.2"/>
+				</vrmlist>
+			</prodinfo>
+		</metadata>
+	</prolog>
+	<conbody>
+		<section id="information_element_term">
+			<p>
+				<b>Definition</b>
+			</p>
+			<p>In a task step, describes additional information required to complete the step beyond the instruction in the command element.</p>
+			<p>
+				<b>Example</b>
+			</p>
+			<p>
+				<codeblock>
+&lt;step&gt;
+&lt;cmd&gt;Save and extract the package file 
+into a Linux home directory. &lt;/cmd&gt;
+&lt;info&gt;
+&lt;note&gt;You can extract all package files 
+and toolkits either to your private home directory 
+for exclusive usage or to the 
+&lt;filepath&gt;/usr/local/share/&lt;/filepath&gt;
+directory for sharing. &lt;/note&gt;
+&lt;/info&gt;
+			</codeblock>
+			</p>
+		</section>
+	</conbody>
+</concept>

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "../dtd/concept.dtd">
+<concept id="prolog_element">
+	<title>Prolog element (&lt;prolog&gt;)</title>
+	<shortdesc/>
+	<prolog>
+		<author type="creator">Anna van Raaphorst</author>
+		<author type="contributor">Richard Johnson</author>
+		<publisher>OASIS (Organization for the Advancement of Structured Information Standards)</publisher>
+		<copyright>
+			<copyryear year="2006"/>
+			<copyrholder>VR Communications, Inc.</copyrholder>
+		</copyright>
+		<critdates>
+			<created date="2006-May-01"/>
+			<revised modified="2006-August-08"/>
+		</critdates>
+		<metadata>
+			<keywords>
+				<keyword>DITA core vocabulary</keyword>
+				<keyword>DITA controlled vocabulary</keyword>
+				<keyword>prolog element</keyword>
+				<indexterm>prolog element</indexterm>
+			</keywords>
+			<prodinfo>
+				<prodname>DITA Open Toolkit</prodname>
+				<vrmlist>
+					<vrm version="1.2.2"/>
+				</vrmlist>
+			</prodinfo>
+		</metadata>
+	</prolog>
+	<conbody>
+		<section id="prolog_element_term">
+			<p>
+				<b>Definition</b>
+			</p>
+			<p>Element containing metadata for a topic.</p>
+			<p>
+				<b>Usage</b>
+			</p>
+			<p>For example, author, creation date, and modification date.</p>
+			<p>
+				<b>Example</b>
+			</p>
+			<p>
+				<codeblock>			
+&lt;prolog&gt;
+&lt;author type="creator"&gt;Anna van Raaphorst&lt;/author&gt;
+&lt;copyright&gt;
+&lt;copyryear year="2006"/&gt;
+&lt;copyrholder&gt;VR Communications, Inc.&lt;/copyrholder&gt;
+&lt;/copyright&gt;
+&lt;critdates&gt;
+&lt;created date="2006-August-07"/&gt;
+&lt;revised modified="2006-August-07"/&gt;
+&lt;/critdates&gt;
+&lt;metadata&gt;
+&lt;keywords&gt;
+&lt;keyword&gt;grocery shopping&lt;/keyword&gt;
+&lt;keyword&gt;canned goods&lt;/keyword&gt;
+&lt;/keywords&gt;
+&lt;/metadata&gt;
+&lt;/prolog&gt;			
+		</codeblock>
+			</p>
+		</section>
+	</conbody>
+</concept>

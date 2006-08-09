@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "../dtd/concept.dtd">
+<concept id="localizing_production_notes">
+	<title>Production notes (localizing)</title>
+	<shortdesc>Production notes for the localizing (translating) section of this document.</shortdesc>
+	<prolog>
+		<author type="creator">Anna van Raaphorst</author>
+		<author type="contributor">Richard Johnson</author>
+		<publisher>OASIS (Organization for the Advancement of Structured Information Standards)</publisher>
+		<copyright>
+			<copyryear year="2006"/>
+			<copyrholder>VR Communications, Inc.</copyrholder>
+		</copyright>
+		<critdates>
+			<created date="2006-May-01"/>
+			<revised modified="2006-August-08"/>
+		</critdates>
+		<metadata>
+			<keywords>
+				<keyword>localizing content</keyword>
+				<keyword>globalizing content</keyword>
+				<keyword>internationalizing content</keyword>
+				<keyword>translating content</keyword>
+				<indexterm>localizing (translating)<indexterm>production notes for</indexterm>
+				</indexterm>
+				<indexterm>production notes<indexterm>localizing (translating)</indexterm>
+				</indexterm>
+			</keywords>
+			<prodinfo>
+				<prodname>DITA Open Toolkit</prodname>
+				<vrmlist>
+					<vrm version="1.2.2"/>
+				</vrmlist>
+			</prodinfo>
+		</metadata>
+	</prolog>
+	<conbody>
+		<section>
+			<title>Using DITA to become "localization-ready"</title>
+			<p>Currently there are no plans to translate this document into languages other than US English. However, it would be well positioned to do so for the following key reasons:</p>
+			<ul>
+				<li>The document was written using DITA, an XML vocabulary that supports 9 output formats and over 40 languages</li>
+				<li>The core vocabulary set could provide a translation center with basic information about the Toolkit and related products.</li>
+				<li>Most of the "about" topics have been "conref'ed" from the core vocabulary, to that content needs to be translated only once.</li>
+			</ul>
+		</section>
+	</conbody>
+</concept>

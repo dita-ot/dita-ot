@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "../dtd/concept.dtd">
+<concept id="relationship_tables">
+	<title>Linking using relationship tables</title>
+	<shortdesc>How to link DITA topics using relationship tables.</shortdesc>
+	<prolog>
+		<author type="creator">Anna van Raaphorst</author>
+		<author type="contributor">Richard Johnson</author>
+		<publisher>OASIS (Organization for the Advancement of Structured Information Standards)</publisher>
+		<copyright>
+			<copyryear year="2006"/>
+			<copyrholder>VR Communications, Inc.</copyrholder>
+		</copyright>
+		<critdates>
+			<created date="2006-May-01"/>
+			<revised modified="2006-August-08"/>
+		</critdates>
+		<metadata>
+			<keywords>
+				<keyword>linking content</keyword>
+				<keyword>relationship table</keyword>
+				<indexterm>linking<indexterm>using relationship tables</indexterm>
+				</indexterm>
+				<indexterm>relationship tables</indexterm>
+			</keywords>
+			<prodinfo>
+				<prodname>DITA Open Toolkit</prodname>
+				<vrmlist>
+					<vrm version="1.2.2"/>
+				</vrmlist>
+			</prodinfo>
+		</metadata>
+	</prolog>
+	<conbody>
+		<p>The following example shows a section of the two-column relationship table for this document.
+		<codeblock>
+&lt;map id="reltables_map" title="Relationship tables"&gt;
+&lt;!-- Relationship table --&gt;
+&lt;reltable&gt;
+&lt;relrow&gt;
+&lt;relcell&gt;
+&lt;topicgroup collection-type="family"&gt;
+&lt;topicref href="../release_current/sysreqs.dita"/&gt;
+&lt;topicref href="../installing/aboutinstalling.dita"/&gt;
+&lt;/topicgroup&gt;
+&lt;/relcell&gt;
+&lt;relcell/&gt;
+&lt;/relrow&gt;
+&lt;relrow&gt;
+&lt;relcell&gt;
+&lt;topicref href="../introduction/aboutditaot.dita"/&gt;
+&lt;/relcell&gt;
+&lt;relcell&gt;
+&lt;topicref href="../core_vocabulary/docbook.dita" linking="targetonly"/&gt;
+&lt;/relcell&gt;
+&lt;/relrow&gt;
+&lt;relrow&gt;
+&lt;relcell&gt;
+&lt;topicref href="../introduction/aboutditaot.dita"/&gt;
+&lt;/relcell&gt;
+&lt;relcell&gt;
+&lt;topicref href="../core_vocabulary/eclipse_content.dita" linking="targetonly"/&gt;
+&lt;/relcell&gt;
+&lt;/relrow&gt;
+		</codeblock>
+		</p>
+		<p>The following example shows the three-column relationship table for the grocery shopping sample.
+		<codeblock>
+&lt;!-- Relationship table --&gt;
+&lt;!-- The related concept, task, and reference files point to each other --&gt;
+&lt;reltable&gt;
+&lt;relheader&gt;
+&lt;relcolspec type="concept"/&gt;
+&lt;relcolspec type="task"/&gt;
+&lt;relcolspec type="reference"/&gt;
+&lt;/relheader&gt;
+&lt;relrow&gt;
+&lt;relcell&gt;
+&lt;topicref href="concepts/about_produce.dita"/&gt;
+&lt;/relcell&gt;
+&lt;relcell&gt;
+&lt;topicref href="tasks/choosing_produce.dita"/&gt;
+&lt;/relcell&gt;
+&lt;relcell&gt;
+&lt;topicref href="reference/produce.dita"/&gt;
+&lt;/relcell&gt;
+&lt;/relrow&gt;
+&lt;relrow&gt;
+&lt;relcell&gt;
+&lt;topicref href="concepts/about_cannedgoods.dita"/&gt;
+&lt;/relcell&gt;
+&lt;relcell&gt;
+&lt;topicref href="tasks/buying_cannedgoods.dita"/&gt;
+&lt;/relcell&gt;
+&lt;relcell&gt;
+&lt;topicref href="reference/cannedgoods.dita"/&gt;
+&lt;/relcell&gt;
+&lt;/relrow&gt;
+&lt;/reltable&gt;
+		</codeblock>
+		</p>
+	</conbody>
+</concept>

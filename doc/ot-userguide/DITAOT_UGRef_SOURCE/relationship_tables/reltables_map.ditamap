@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- (c) Copyright 2006 by VR Communications, Inc. All rights reserved. -->
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN"  "../dtd/map.dtd">
+<map id="reltables_map" title="Relationship tables">
+	<!-- Relationship table -->
+	<reltable>
+		<relrow>
+			<relcell>
+				<topicgroup collection-type="family">
+					<topicref href="../release_current/sysreqs.dita"/>
+					<topicref href="../installing/installing_overview.dita"/>
+				</topicgroup>
+			</relcell>
+			<relcell/>
+		</relrow>
+		<relrow>
+			<relcell>
+				<topicref href="../introduction/aboutditaot.dita"/>
+			</relcell>
+			<relcell>
+				<topicref href="../core_vocabulary/docbook.dita" linking="targetonly"/>
+			</relcell>
+		</relrow>
+		<relrow>
+			<relcell>
+				<topicref href="../introduction/aboutditaot.dita"/>
+			</relcell>
+			<relcell>
+				<topicref href="../core_vocabulary/eclipse_content.dita" linking="targetonly"/>
+			</relcell>
+		</relrow>
+		<relrow>
+			<relcell>
+				<topicref href="../introduction/aboutditaot.dita"/>
+			</relcell>
+			<relcell>
+				<topicref href="../core_vocabulary/eclipse_help.dita" linking="targetonly"/>
+			</relcell>
+		</relrow>
+			<relrow>
+			<relcell>
+				<topicref href="../introduction/aboutditaot.dita"/>
+			</relcell>
+			<relcell>
+				<topicref href="../core_vocabulary/htmlhelp.dita" linking="targetonly"/>
+			</relcell>
+		</relrow>
+		<relrow>
+			<relcell>
+				<topicref href="../introduction/aboutditaot.dita"/>
+			</relcell>
+			<relcell>
+				<topicref href="../core_vocabulary/javahelp.dita" linking="targetonly"/>
+			</relcell>
+		</relrow>
+			<relrow>
+			<relcell>
+				<topicref href="../introduction/aboutditaot.dita"/>
+			</relcell>
+			<relcell>
+				<topicref href="../core_vocabulary/pdf.dita" linking="targetonly"/>
+			</relcell>
+		</relrow>
+		<relrow>
+			<relcell>
+				<topicref href="../introduction/aboutditaot.dita"/>
+			</relcell>
+			<relcell>
+				<topicref href="../core_vocabulary/troff.dita" linking="targetonly"/>
+			</relcell>
+		</relrow>
+			<relrow>
+			<relcell>
+				<topicref href="../introduction/aboutditaot.dita"/>
+			</relcell>
+			<relcell>
+				<topicref href="../core_vocabulary/wordrtf.dita" linking="targetonly"/>
+			</relcell>
+		</relrow>
+			<relrow>
+			<relcell>
+				<topicref href="../introduction/aboutditaot.dita"/>
+			</relcell>
+			<relcell>
+				<topicref href="../core_vocabulary/xhtml.dita" linking="targetonly"/>
+			</relcell>
+		</relrow>
+	</reltable>
+</map>

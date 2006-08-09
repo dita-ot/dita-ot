@@ -1,0 +1,525 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "../dtd/concept.dtd">
+<concept id="gettinginformation">
+	<title>Getting information (general)</title>
+	<shortdesc>Sources of information about DITA and DITA Open Toolkit.</shortdesc>
+	<prolog>
+		<author type="creator">Anna van Raaphorst</author>
+		<author type="contributor">Richard Johnson</author>
+		<publisher>OASIS (Organization for the Advancement of Structured Information Standards)</publisher>
+		<copyright>
+			<copyryear year="2006"/>
+			<copyrholder>VR Communications, Inc.</copyrholder>
+		</copyright>
+		<critdates>
+			<created date="2006-May-01"/>
+			<revised modified="2006-August-09"/>
+		</critdates>
+		<metadata>
+			<keywords>
+				<keyword>DITA information source</keyword>
+				<keyword>DITA Open Toolkit information source</keyword>
+				<keyword>information source</keyword>
+				<indexterm>DITA Open Toolkit<indexterm>getting information about</indexterm>
+				</indexterm>
+				<indexterm>getting information about DITA Open Toolkit</indexterm>
+			</keywords>
+			<prodinfo>
+				<prodname>DITA Open Toolkit</prodname>
+				<vrmlist>
+					<vrm version="1.2.2"/>
+				</vrmlist>
+			</prodinfo>
+		</metadata>
+	</prolog>
+	<conbody>
+		<p>Sections in this topic:
+		<sl>
+				<sli>
+					<xref href="#gettinginformation/generalfaqs">General information and FAQs</xref>
+				</sli>
+				<sli>
+					<xref href="#gettinginformation/toolsdownloads">Tools, downloads</xref>
+				</sli>
+				<sli>
+					<xref href="#gettinginformation/trainingeducation">Training, education</xref>
+				</sli>
+				<sli>
+					<xref href="#gettinginformation/consulting">Consulting</xref>
+				</sli>
+				<sli>
+					<xref href="#gettinginformation/standardsreleases">Standards and product releases</xref>
+				</sli>
+				<sli>
+					<xref href="#gettinginformation/usage">Usage information</xref>
+				</sli>
+				<sli>
+					<xref href="#gettinginformation/usergroups">User groups, forums</xref>
+				</sli>
+				<sli>
+					<xref href="#gettinginformation/conferences">Conferences</xref>
+				</sli>
+			</sl>
+		</p>
+		<!-- General information and FAQs -->
+		<section id="generalfaqs">
+			<title>General Information and Frequently Asked Questions (FAQs) about DITA and DITA Open Toolkit</title>
+			<p/>
+			<simpletable>
+				<sthead>
+					<stentry>Description</stentry>
+					<stentry>Information source</stentry>
+				</sthead>
+				<strow>
+					<stentry>
+						<p>
+							<b>dita.xml.org:</b> Official DITA community gathering place and information resource for the DITA OASIS Standard</p>
+						<p>Includes a knowledge base, a wiki, news items about DITA, events, products and services, case studies, user groups, forums, blogs, and a resource directory. Hosted by OASIS.</p>
+					</stentry>
+					<stentry>
+						<xref href="http://dita.xml.org" format="html" scope="external"/>
+					</stentry>
+				</strow>
+				<strow>
+					<stentry>
+						<p>
+							<b>Cover Pages:</b> Articles, presentations, and facts about DITA</p>
+						<p>Hosted by OASIS.</p>
+					</stentry>
+					<stentry>
+						<xref href="http://xml.coverpages.org/dita.html" format="html" scope="external"/>
+					</stentry>
+				</strow>
+				<strow>
+					<stentry>
+						<p>
+							<b>IBM site</b> containing a collection of information about DITA</p>
+					</stentry>
+					<stentry>
+						<p>
+							<xref href="http://www-128.ibm.com/developer-works/xml/library/x-dita1/" format="html" scope="external"/>
+						</p>
+					</stentry>
+				</strow>
+			</simpletable>
+		</section>
+		<!-- Tools and downloads -->
+		<section id="toolsdownloads">
+			<title>Tools, downloads</title>
+			<p/>
+			<simpletable>
+				<sthead>
+					<stentry>Description</stentry>
+					<stentry>Information source</stentry>
+				</sthead>
+				<strow>
+					<stentry>
+						<p>
+							<b>Download site</b> for the Toolkit and related/prerequisite software</p>
+					</stentry>
+					<stentry>
+						<xref href="https://sourceforge.net/projects/dita-ot" format="html" scope="external"/>
+					</stentry>
+				</strow>
+				<strow>
+					<stentry>
+						<p>
+							<b>alphaWorks IBM TaskModeler:</b> An Eclipse-based tool for rapidly creating and analyzing models of human activity for DITA and user experience design
+						</p>
+					</stentry>
+					<stentry>
+						<xref href="http://www.alphaworks.ibm.com/tech/taskmodeler" format="html" scope="external"/>
+					</stentry>
+				</strow>
+				<strow>
+					<stentry>
+						<p>
+							<b>IBM download site:</b> Collection of DITA downloads</p>
+					</stentry>
+					<stentry>
+						<xref href="http://www-128.ibm.com/developerworks/xml/library/x-dita6/x-dita_downloads.html" format="html" scope="external"/>
+					</stentry>
+				</strow>
+			</simpletable>
+		</section>
+		<!-- Training, education -->
+		<section id="trainingeducation">
+			<title>Training, education</title>
+			<p/>
+			<simpletable>
+				<sthead>
+					<stentry>Description</stentry>
+					<stentry>Information source</stentry>
+				</sthead>
+				<strow>
+					<stentry>
+						<p>
+							<cite>
+								<b>Introduction to DITA: </b>A User Guide to the Darwin Information Typing Architecture</cite>
+						</p>
+						<p>Book (level: beginner). Authors: Jennifer Linton and Kylene Bruski. Publisher: Comtech Services, Colorado, 2006. Task-oriented approach to learning DITA. Authored using DITA markup and methodology in a variety of XML editors. Published using the Blast Radius and Mekon FrameMaker plugin in the DITA 1.2 Open Toolkit.</p>
+					</stentry>
+					<stentry>
+						<xref href="http://www.comtech-serv.com" format="html" scope="external"/>
+					</stentry>
+				</strow>
+				<strow>
+					<stentry>
+						<p>
+							<cite>
+								<b>Introduction to the Darwin Information Typing Architecture</b>
+							</cite>
+						</p>
+						<p>Article (level: beginner). Authors: Eric Hennum, Don Day, John Hunt, and Dave Schell. Publisher: IBM, updated September 2005. Roadmap for the Darwin Information Typing Architecture: what it is and how it applies to technical documentation. Also a product of the architecture, having been written entirely in XML and produced using the principles described.</p>
+					</stentry>
+					<stentry>
+						<xref href="http://www-128.ibm.com/developerworks/xml/library/x-dita1/" format="html" scope="external"/>
+					</stentry>
+				</strow>
+				<strow>
+					<stentry>
+						<p>
+							<cite>
+								<b>Design patterns for information architecture with DITA map domains</b>
+							</cite>
+						</p>
+						<p>Article (level: intermediate). Authors: Eric Hennum, Don Day, John Hunt, and Dave Schell. Publisher: IBM, updated September 2005. Explains the design technique for creating a DITA map domain.</p>
+					</stentry>
+					<stentry>
+						<xref href="http://www-128.ibm.com/developerworks/xml/library/x-dita7/" format="html" scope="external"/>
+					</stentry>
+				</strow>
+				<strow>
+					<stentry>
+						<p>
+							<cite>
+								<b>An XML-based information architecture for learning content</b>
+							</cite>
+						</p>
+						<p>Part 1: A DITA specialization design. Article (level: intermediate). Authors: Robert Bernard and John P. Hunt. Publisher: IBM, August 2005. How topic-based DITA XML can provide the basis for developing an information architecture for single-sourced XML learning content.</p>
+					</stentry>
+					<stentry>
+						<xref href="http://www-128.ibm.com/developerworks/xml/library/x-dita9b/" format="html" scope="external"/>
+					</stentry>
+				</strow>
+				<strow>
+					<stentry>
+						<p>
+							<cite>
+								<b>An XML-based information architecture for learning content</b>
+							</cite>
+						</p>
+						<p>Part 2: A DITA content pilot. Article (level: intermediate). Authors: John P. Hunt and Robert Bernard. Publisher: IBM, August 2005. How topic-based DITA XML can provide the basis for developing an information architecture for single-sourced XML learning content.</p>
+					</stentry>
+					<stentry>
+						<xref href="http://www-128.ibm.com/developerworks/xml/library/x-dita9a/" format="html" scope="external"/>
+					</stentry>
+				</strow>
+			</simpletable>
+		</section>
+		<!-- Consulting -->
+		<section id="consulting">
+			<title>Consulting</title>
+			<p/>
+			<simpletable>
+				<sthead>
+					<stentry>Description</stentry>
+					<stentry>Information source</stentry>
+				</sthead>
+				<strow>
+					<stentry>
+						<p>
+							<b>List of DITA consultants</b>
+						</p>
+					</stentry>
+					<stentry>
+						<xref href="http://dita.xml.org/taxonomy/term/48" format="html" scope="external"/>
+					</stentry>
+				</strow>
+			</simpletable>
+		</section>
+		<!-- Standards, Releases -->
+		<section id="standardsreleases">
+			<title>DITA and DITA Open Toolkit standards and product releases</title>
+			<p/>
+			<simpletable>
+				<sthead>
+					<stentry>Description</stentry>
+					<stentry>Information source</stentry>
+				</sthead>
+				<strow>
+					<stentry>
+						<p>
+							<b>Roadmap for DITA development</b>
+						</p>
+						<p>Lists of proposed and committed features for future releases.</p>
+					</stentry>
+					<stentry>
+						<xref href="http://wiki.oasis-open.org/dita/Roadmap_for_DITA_development" format="html" scope="external"/>
+					</stentry>
+				</strow>
+				<strow>
+					<stentry>
+						<p>
+							<b>Current DITA Open Toolkit release</b>
+						</p>
+						<p>Bugs, support requests, patches, feature requests.</p>
+					</stentry>
+					<stentry>
+						<xref href="http://dita-ot.sourceforge.net/" format="html" scope="external"/>
+					</stentry>
+				</strow>
+				<strow>
+					<stentry>
+						<p>
+							<b>OASIS DITA Open Toolkit project home</b>
+						</p>
+					</stentry>
+					<stentry>
+						<xref href="http://dita-ot.sourceforge.net/" format="html" scope="external"/>
+					</stentry>
+				</strow>
+				<strow>
+					<stentry>
+						<p>
+							<b>OASIS DITA Open Toolkit 1.3 features and issues tracking</b>
+						</p>
+					</stentry>
+					<stentry>
+						<xref href="http://dita.xml.org/node/1282" format="html" scope="external"/>
+					</stentry>
+				</strow>
+				<strow>
+					<stentry>
+						<p>
+							<b>DITA Open Toolkit developers mailing list</b>
+						</p>
+					</stentry>
+					<stentry>
+						<xref href="https://lists.sourceforge.net/lists/listinfo/dita-ot-developer" format="html" scope="external"/>
+					</stentry>
+				</strow>
+				<strow>
+					<stentry>
+						<p>
+							<b>DITA 1.1 proposed features</b>
+						</p>
+					</stentry>
+					<stentry>
+						<xref href="http://wiki.oasis-open.org/dita/DITA_1.1_Features" format="html" scope="external"/>
+					</stentry>
+				</strow>
+				<strow>
+					<stentry>
+						<p>
+							<b>DITA 1.1 work items</b>
+						</p>
+					</stentry>
+					<stentry>
+						<xref href="http://wiki.oasis-open.org/dita/List_of_DITA_1.1_Work_Items" format="html" scope="external"/>
+					</stentry>
+				</strow>
+				<strow>
+					<stentry>
+						<p>
+							<b>OASIS DITA standards committee website</b>
+						</p>
+					</stentry>
+					<stentry>
+						<xref href="http://www.oasis-open.org/committees/tc_home.php?wg_abbrev=dita" format="html" scope="external"/>
+					</stentry>
+				</strow>
+				<strow>
+					<stentry>
+						<p>
+							<cite>
+								<b>OASIS DITA Language Specification version 1.0</b>
+							</cite>
+						</p>
+						<p>OASIS Standard, 09 May 2005.</p>
+					</stentry>
+					<stentry>
+						<xref href="http://docs.oasis-open.org/dita/v1.0/dita-v1.0-spec-os-LanguageSpecification.pdf" format="html" scope="external"/>
+					</stentry>
+				</strow>
+				<strow>
+					<stentry>
+						<p>
+							<cite>
+								<b>OASIS DITA Archetectural Specification version 1.0</b>
+							</cite>
+						</p>
+						<p>OASIS Standard, 09 May 2005.</p>
+					</stentry>
+					<stentry>
+						<xref href="http://docs.oasis-open.org/dita/v1.0/dita-v1.0-spec-os-ArchitecturalSpecification.pdf" format="pdf" scope="external"/>
+					</stentry>
+				</strow>
+			</simpletable>
+		</section>
+		<!-- Usage -->
+		<section id="usage">
+			<title>Usage Information</title>
+			<p/>
+			<simpletable>
+				<sthead>
+					<stentry>Description</stentry>
+					<stentry>Information source</stentry>
+				</sthead>
+				<strow>
+					<stentry>
+						<p>
+							<b>Apache Derby documentation:</b>
+						</p>
+						<p>Apache Derby, an Apache database subproject, is a relational database implemented entirely in Java, and available under the Apache license, version 2.0. The Derby documentation manuals are sourced in DITA.</p>
+					</stentry>
+					<stentry>
+						<p>For an overview of the documentation, see <xref href="http://db.apache.org/derby/manuals/index.html" format="html" scope="external"/>.</p>
+						<p>For the DITA source files, see <xref href="http://db.apache.org/derby/manuals/dita.html" format="html" scope="external"/>.</p>
+					</stentry>
+				</strow>
+			</simpletable>
+		</section>
+		<!-- User groups, forums -->
+		<section id="usergroups">
+			<title>User groups, forums</title>
+			<p/>
+			<simpletable>
+				<sthead>
+					<stentry>Description</stentry>
+					<stentry>Information source</stentry>
+				</sthead>
+				<strow>
+					<stentry>
+						<p>
+							<b>Forum for DITA questions and discussion</b>
+						</p>
+					</stentry>
+					<stentry>
+						<xref href="http://groups.yahoo.com/group/dita-users" format="html" scope="external"/>
+					</stentry>
+				</strow>
+				<strow>
+					<stentry>
+						<p>
+							<b>Forum for Adobe FrameMaker/DITA questions</b>
+						</p>
+					</stentry>
+					<stentry>
+						<xref href="http://groups.yahoo.com/group/framemaker-dita" format="html" scope="external"/>
+					</stentry>
+				</strow>
+				<strow>
+					<stentry>
+						<p>
+							<b>List of DITA user and interest groups</b> (by location)
+						</p>
+					</stentry>
+					<stentry>
+						<xref href="http://dita.xml.org/user-groups" format="html" scope="external"/>
+					</stentry>
+				</strow>
+				<strow>
+					<stentry>
+						<p>
+							<b>DITA forums on sourceforge.net </b> (there are three forums: developers, help, and open discussion)
+						</p>
+					</stentry>
+					<stentry>
+						<xref href="https://sourceforge.net/forum/?group_id=132728" format="html" scope="external"/>
+					</stentry>
+				</strow>
+			</simpletable>
+		</section>
+		<!-- Conferences -->
+		<section id="conferences">
+			<title>Conferences</title>
+			<p>
+				<note>The following DITA-related conferences were or will be held in 2006. Some tentative dates are also given for 2007. For the latest information about these conferences, see the referenced websites.</note>
+			</p>
+			<simpletable>
+				<sthead>
+					<stentry>Description</stentry>
+					<stentry>Information source</stentry>
+				</sthead>
+				<strow>
+					<stentry>
+						<p>
+							<b>XML 2006</b>
+						</p>
+						<p>Date: December 5-7. Location: Boston. Audience: Those who want to use XML and related technologies.</p>
+					</stentry>
+					<stentry>
+						<xref href="http://2005.xmlconference.org/" format="html" scope="external"/>
+					</stentry>
+				</strow>
+				<strow>
+					<stentry>
+						<p>
+							<b>DITA Europe 2006</b>
+						</p>
+						<p>Date: November 2-3. Location: Frankfurt. Audience: Those who are interested in implementing XML DITA or learning more about this new standard for topic-based authoring. Conference organizer: Center for Information Development Management.</p>
+					</stentry>
+					<stentry>
+						<xref href="http://www.infomanagementcenter.com/DITAeurope/" format="html" scope="external"/>
+					</stentry>
+				</strow>
+				<strow>
+					<stentry>
+						<p>
+							<b>Tri-XML 2006</b>
+						</p>
+						<p>Date: July 27-29. Location: Raleigh, NC. Focus: Presentations on real-world use of XML. Conference organizer: Tri-XML, an interest group for the Research Triangle area, NC USA that focuses on educating members in XML-related technologies and potential uses.</p>
+					</stentry>
+					<stentry>
+						<xref href="http://www.trixml.org//confindex.shtml" format="html" scope="external"/>
+					</stentry>
+				</strow>
+				<strow>
+					<stentry>
+						<p>
+							<b>X-Pubs 2006</b>
+						</p>
+						<p>Date: June 20-21. Location:London. Focus: Seeks to critique the established business justification for the adoption of both XML and DITA in organizational publishing.</p>
+					</stentry>
+					<stentry>
+						<xref href="http://www.x-pubs.com/index.php" format="html" scope="external"/>
+					</stentry>
+				</strow>
+				<strow>
+					<stentry>
+						<p>
+							<b>XTech 2006</b>
+						</p>
+						<p>Date: May 16-19. Location: Amsterdam. XTech 2007: Paris. Audience: Developers, information designers and managers working with web and standards-based technologies.</p>
+					</stentry>
+					<stentry>
+						<xref href="http://xtech06.usefulinc.com/content/about" format="html" scope="external"/>
+					</stentry>
+				</strow>
+				<strow>
+					<stentry>
+						<p>
+							<b>Content Management Strategies 2006</b>
+						</p>
+						<p>Date: April 3-5. Location: San Francisco, CA. CMS 07: March 26-28, Boston, MA. Conference organizer: Center for Information Development Management (CIDM).</p>
+					</stentry>
+					<stentry>
+						<xref href="http://www.infomanagementcenter.com/index.htm" format="html" scope="external"/>
+					</stentry>
+				</strow>
+				<strow>
+					<stentry>
+						<p>
+							<b>DITA 2006</b>
+						</p>
+						<p>Date: March 23-25. Location: Raleigh, NC. DITA 2007 (West Coast), February, California. DITA 2007 (East Coast), fall, Florida (tentative). Conference organizer: Bright Path Solutions.</p>
+					</stentry>
+					<stentry>
+						<xref href="http://www.travelthepath.com/dita2006.html" format="html" scope="external"/>
+					</stentry>
+				</strow>
+			</simpletable>
+		</section>
+	</conbody>
+</concept>

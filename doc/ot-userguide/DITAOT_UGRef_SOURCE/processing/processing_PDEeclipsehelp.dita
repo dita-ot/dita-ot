@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "../dtd/task.dtd">
+<task id="processing_PDEeclipsehelp">
+	<title>Processing to Eclipse help targets using Eclipse</title>
+	<shortdesc>How to process (build) to Eclipse help targets using Eclipse.</shortdesc>
+	<prolog>
+		<author type="creator">Richard Johnson</author>
+		<author type="contributor">Anna van Raaphorst</author>
+		<publisher>OASIS (Organization for the Advancement of Structured Information Standards)</publisher>
+		<copyright>
+			<copyryear year="2006"/>
+			<copyrholder>VR Communications, Inc.</copyrholder>
+		</copyright>
+		<critdates>
+			<created date="2006-June-14"/>
+			<revised modified="2006-August-08"/>
+		</critdates>
+		<metadata>
+			<keywords>
+				<keyword>processing DITA file</keyword>
+				<keyword>building DITA file</keyword>
+				<keyword>PDEclipse help</keyword>
+				<indexterm>processing (building)<indexterm>to Eclipse targets using Eclipse</indexterm>
+				</indexterm>
+				<indexterm>building (processing)<indexterm>to Eclipse targets using Eclipse</indexterm>
+				</indexterm>
+				<indexterm>PDEclipse help</indexterm>
+			</keywords>
+			<prodinfo>
+				<prodname>DITA Open Toolkit</prodname>
+				<vrmlist>
+					<vrm version="1.2.2"/>
+				</vrmlist>
+			</prodinfo>
+		</metadata>
+	</prolog>
+	<taskbody>
+		<prereq>This topic assumes you are already familiar with the Eclipse environment and know how to develop Eclipse plug-ins.</prereq>
+		<context>This topic assumes you want to author DITA topics making up an Eclipse help plug-in using Eclipse to both edit and build the content.</context>
+		<steps>
+			<step>
+				<cmd>Start Eclipse and create a new Eclipse plug-in development project.</cmd>
+			</step>
+			<step>
+				<cmd>Apply the DITA template to the new project. This causes the template wizard to start.</cmd>
+			</step>
+			<step>
+				<cmd>In the wizard, set:</cmd>
+				<info>
+					<ul>
+						<li>the source directory</li>
+						<li>the DITA map file</li>
+						<li>the output directory</li>
+						<li>the CSS directory</li>
+						<li>the name of any customized CSS file</li>
+						<li>the name of any ditaval file</li>
+					</ul>
+				</info>
+				<stepresult>The main DITA map will be created in the source directory and <filepath>build.xml</filepath> will be created in the root directory.</stepresult>
+			</step>
+			<step>
+				<cmd>Edit one or more DITA topic files in the source directory.</cmd>
+			</step>
+			<step>
+				<cmd>Update the DITA map file to include the topics created.</cmd>
+			</step>
+			<step>
+				<cmd>Select <filepath>build.xml</filepath> and run it with Ant.</cmd>
+				<stepresult>The DITA output should now be in the output directory.</stepresult>
+			</step>
+			<step>
+				<cmd>Edit the plug-in description in the plug-in editor, referring to the TOC files generated in the output directory.</cmd>
+			</step>
+			<step>
+				<cmd>Update the build property file to include all the output files.</cmd>
+			</step>
+			<step>
+				<cmd>Export the output files to a document plug-in.</cmd>
+			</step>
+		</steps>
+	</taskbody>
+</task>

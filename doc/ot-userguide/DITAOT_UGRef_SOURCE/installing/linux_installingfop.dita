@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "../dtd/task.dtd">
+<task id="linux_installingfop" xml:lang="en-us">
+	<title>(Optional) Installing FOP on Linux</title>
+	<shortdesc>(If you plan to publish PDFs) How to install FOP in the Linux operating environment.</shortdesc>
+	<prolog>
+		<author type="creator">Jen Linton</author>
+		<author type="creator">JoAnn Hackos</author>
+		<author type="creator">Kylene Bruski</author>
+		<author type="contributor">Anna van Raaphorst</author>
+		<author type="contributor">Richard Johnson</author>
+		<publisher>OASIS (Organization for the Advancement of Structured Information Standards)</publisher>
+		<copyright>
+			<copyryear year="2005"/>
+			<copyrholder>Comtech Services, Inc.</copyrholder>
+		</copyright>
+		<critdates>
+			<created date="2005-November-01"/>
+			<revised modified="2006-August-08"/>
+		</critdates>
+		<metadata>
+			<keywords>
+				<keyword>installing DITA Open Toolkit</keyword>
+				<keyword>FOP processor</keyword>
+				<indexterm>installing on Linux<indexterm>FOP</indexterm>
+				</indexterm>
+				<indexterm>FOP processor<indexterm>installing on Linux</indexterm>
+				</indexterm>
+				<indexterm>environment variables
+				<indexterm>CLASSPATH</indexterm>
+				</indexterm>
+				<indexterm>CLASSPATH environment variable</indexterm>
+				<indexterm>jar files
+				<indexterm>fop.jar</indexterm>
+					<indexterm>batik.jar</indexterm>
+				</indexterm>
+				<indexterm>fop.jar</indexterm>
+				<indexterm>batik.jar</indexterm>
+			</keywords>
+			<prodinfo>
+				<prodname>DITA Open Toolkit</prodname>
+				<vrmlist>
+					<vrm version="1.2.2"/>
+				</vrmlist>
+			</prodinfo>
+		</metadata>
+	</prolog>
+	<taskbody>
+		<steps>
+			<step>
+				<cmd>Enter the URL: <xref format="html" href="http://apache.tradebit.com/pub/xml/fop/" scope="external">http://apache.tradebit.com/pub/xml/fop/</xref>
+				</cmd>
+			</step>
+			<step>
+				<cmd>From the FOP page, in the Name column, select <uicontrol>
+						<image href="../images/compressed.gif"/>"fop-0.20.5-bin.tar.gz" 
+          </uicontrol>
+				</cmd>
+			</step>
+			<step>
+				<cmd>Save and extract the package file into a Linux home directory. 
+          </cmd>
+			</step>
+			<step>
+				<cmd>Set the <varname>CLASSPATH </varname>
+					<xref href="linux_settingenvvariables.dita" scope="local">environment variable</xref> for the following jar 
+          files:</cmd>
+				<info>
+					<sl>
+						<sli>
+							<filepath>build/fop.jar</filepath>
+						</sli>
+						<sli>
+							<filepath>lib/batik.jar</filepath>
+						</sli>
+						<sli>
+							<filepath>lib/avalon-framework-cvs-20020806.jar</filepath>
+						</sli>
+					</sl>
+				</info>
+			</step>
+		</steps>
+	</taskbody>
+</task>

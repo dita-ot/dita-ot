@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- (c) Copyright 2006 by VR Communications, Inc. All rights reserved. -->
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN"  "../dtd/map.dtd">
+<map id="localizing_map" title="Localizing">
+	<topicref href="localizing.dita">
+		<topicref href="aboutlocalizing.dita"/>
+		<topicref href="localizing_production_notes.dita"/>
+		<topicref href="localizing_formoreinfo.dita"/>
+	</topicref>
+</map>

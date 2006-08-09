@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- (c) Copyright 2006 by VR Communications, Inc. All rights reserved. -->
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN"  "../dtd/map.dtd">
+<map id="managing_map" title="Managing your content">
+	<topicref href="managing.dita">
+		<topicref href="backingup.dita"/>
+		<topicref href="library_system.dita"/>
+		<topicref href="cms.dita"/>
+		<topicref href="managing_production_notes.dita"/>
+		<topicref href="managing_formoreinfo.dita"/>
+	</topicref>
+</map>

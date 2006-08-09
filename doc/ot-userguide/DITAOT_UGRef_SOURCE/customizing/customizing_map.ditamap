@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- (c) Copyright 2006 by VR Communications, Inc. All rights reserved. -->
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN"  "../dtd/map.dtd">
+<map id="customizing_map" title="Customizing your published output">
+	<topicref href="customizing.dita">
+		<topicref href="css.dita"/>
+		<topicref href="tailoring_xhtml.dita"/>
+		<topicref href="customizing_production_notes.dita"/>
+		<topicref href="customizing_formoreinfo.dita"/>
+	</topicref>
+</map>

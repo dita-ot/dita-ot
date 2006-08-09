@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- (c) Copyright 2006 by VR Communications, Inc. All rights reserved. -->
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN"  "../dtd/map.dtd">
+<map id="plugins_map" title="DITA Open Toolkit plug-ins">
+	<topicref href="plugins.dita">
+		<topicref href="plugins_overview.dita"/>
+		<topicref href="installing_plugins.dita">
+			<topicref href="installing_generic.dita"/>
+			<topicref href="installing_fo.dita"/>
+			<topicref href="plugins_production_notes.dita"/>
+			<topicref href="plugins_formoreinfo.dita"/>
+		</topicref>
+	</topicref>
+</map>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "../dtd/task.dtd">
+<task id="linux_installingditaot" xml:lang="en-us">
+	<title>Installing DITA Open Toolkit on Linux</title>
+	<shortdesc>How to install DITA Open Toolkit in the Linux operating environment.</shortdesc>
+	<prolog>
+		<author type="creator">Jen Linton</author>
+		<author type="creator">JoAnn Hackos</author>
+		<author type="creator">Kylene Bruski</author>
+		<author type="contributor">Anna van Raaphorst</author>
+		<author type="contributor">Richard Johnson</author>
+		<publisher>OASIS (Organization for the Advancement of Structured Information Standards)</publisher>
+		<copyright>
+			<copyryear year="2005"/>
+			<copyrholder>Comtech Services, Inc.</copyrholder>
+		</copyright>
+		<critdates>
+			<created date="2005-November-01"/>
+			<revised modified="2006-August-08"/>
+		</critdates>
+		<metadata>
+			<keywords>
+				<keyword>installing DITA Open Toolkit</keyword>
+				<keyword>DITA Open Toolkit</keyword>
+				<indexterm>installing on Linux<indexterm>DITA Open Toolkit</indexterm>
+				</indexterm>
+				<indexterm>DITA Open Toolkit<indexterm>installing on Linux</indexterm>
+				</indexterm>
+				<indexterm>environment variables
+				<indexterm>CLASSPATH</indexterm>
+				</indexterm>
+				<indexterm>CLASSPATH environment variable</indexterm>
+			</keywords>
+			<prodinfo>
+				<prodname>DITA Open Toolkit</prodname>
+				<vrmlist>
+					<vrm version="1.2.2"/>
+				</vrmlist>
+			</prodinfo>
+		</metadata>
+	</prolog>
+	<taskbody>
+		<steps>
+			<step>
+				<cmd>Enter the URL: <xref format="html" href="http://sourceforge.net/projects/dita-ot/" scope="external">http://sourceforge.net/projects/dita-ot</xref>
+				</cmd>
+			</step>
+			<step>
+				<cmd>On the SourceForge.net page, find <uicontrol>Download DITA Open Toolkit</uicontrol>.
+				</cmd>
+			</step>
+			<step>
+				<cmd>Select <uicontrol>dita-ot 1.2.2</uicontrol>. </cmd>
+				<stepresult>The <systemoutput>Dita-ot</systemoutput> table 
+          displays.</stepresult>
+			</step>
+			<step>
+				<cmd>Select <uicontrol>DITA-OT1.2.2_bin.tar.gz</uicontrol>
+				</cmd>
+				<stepresult>The SourceForge.net page opens with a list of 
+          <systemoutput>download options</systemoutput>.</stepresult>
+			</step>
+			<step>
+				<cmd>Save and extract the package file into a Linux home 
+          directory. </cmd>
+				<info>
+					<note>You can extract all package files and toolkits either to your 
+            private home directory for exclusive usage or to the <filepath>/usr/local/share/</filepath>
+            directory for sharing. </note>
+				</info>
+			</step>
+			<step>
+				<cmd>Set the <varname>CLASSPATH </varname>
+					<xref href="linux_settingenvvariables.dita" scope="local">environment 
+          variable</xref> for <codeph>dost.jar</codeph>
+				</cmd>
+			</step>
+		</steps>
+	</taskbody>
+</task>

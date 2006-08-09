@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "../dtd/concept.dtd">
+<concept id="format_attribute">
+	<title>Format attribute</title>
+	<shortdesc/>
+	<prolog>
+		<author type="creator">Anna van Raaphorst</author>
+		<author type="contributor">Richard Johnson</author>
+		<publisher>OASIS (Organization for the Advancement of Structured Information Standards)</publisher>
+		<copyright>
+			<copyryear year="2006"/>
+			<copyrholder>VR Communications, Inc.</copyrholder>
+		</copyright>
+		<critdates>
+			<created date="2006-May-01"/>
+			<revised modified="2006-August-08"/>
+		</critdates>
+		<metadata>
+			<keywords>
+				<keyword>DITA core vocabulary</keyword>
+				<keyword>DITA controlled vocabulary</keyword>
+				<keyword>format attribute</keyword>
+				<indexterm>format attribute</indexterm>
+			</keywords>
+			<prodinfo>
+				<prodname>DITA Open Toolkit</prodname>
+				<vrmlist>
+					<vrm version="1.2.2"/>
+				</vrmlist>
+			</prodinfo>
+		</metadata>
+	</prolog>
+	<conbody>
+		<section id="format_attribute_term">
+			<p>
+				<b>Definition</b>
+			</p>
+			<p>File type of a referenced file or other information source.</p>
+			<p>
+				<b>Usage</b>
+			</p>
+			<p>The default value for the format attribute is "dita." Other common formats for DITA files are "xml" and "ditamap." You can also reference other formats like "pdf" or "html."</p>
+			<p>
+				<codeblock>	
+&lt;conbody&gt;
+&lt;p&gt;Motor oil keeps your car's engine smoothly. 
+Oil should be changed every 6000 kilometers.
+&lt;/p&gt;
+&lt;/conbody&gt;
+&lt;related-links&gt;
+&lt;link href="../tasks/changingtheoil.dita" format="dita" type="task"&gt;
+&lt;linktext&gt;Changing the oil&lt;/linktext&gt;
+&lt;/link&gt;
+&lt;/related-links&gt;			
+			</codeblock>
+			</p>
+		</section>
+	</conbody>
+</concept>

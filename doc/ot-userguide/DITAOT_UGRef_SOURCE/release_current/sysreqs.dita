@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "../dtd/concept.dtd">
+<concept id="sysreqs">
+	<title>System requirements and supported applications</title>
+	<shortdesc>System requirements, supported applications, and supported languages for release 1.2.2 of DITA Open Toolkit.</shortdesc>
+	<prolog>
+		<author type="creator">Anna van Raaphorst</author>
+		<author type="contributor">Richard Johnson</author>
+		<publisher>OASIS (Organization for the Advancement of Structured Information Standards)</publisher>
+		<copyright>
+			<copyryear year="2006"/>
+			<copyrholder>VR Communications, Inc.</copyrholder>
+		</copyright>
+		<critdates>
+			<created date="2006-May-01"/>
+			<revised modified="2006-August-09"/>
+		</critdates>
+		<metadata>
+			<keywords>
+				<keyword>release</keyword>
+				<keyword>current release</keyword>
+				<keyword>system requirement</keyword>
+				<keyword>applications supported</keyword>
+				<keyword>languages supported</keyword>
+				<indexterm>system requirements</indexterm>
+				<indexterm>requirements for installing and using DITA Open Toolkit</indexterm>
+				<indexterm>supported applications</indexterm>
+				<indexterm>applications supported by DITA Open Toolkit</indexterm>
+				<indexterm>supported languages</indexterm>
+				<indexterm>languages supported by DITA Open Toolkit</indexterm>
+			</keywords>
+			<prodinfo>
+				<prodname>DITA Open Toolkit</prodname>
+				<vrmlist>
+					<vrm version="1.2.2"/>
+				</vrmlist>
+			</prodinfo>
+		</metadata>
+	</prolog>
+	<conbody>
+		<section>
+			<title>System requirements</title>
+			<p>
+				DITA Open Toolkit is written in Java and requires at least a minimal set of Java applications be installed. 
+				Java SDK 1.4.2 is required to execute the applications and the Toolkit Java code.
+				</p>
+			<p>It is highly likely that any operating system environment where the supported Java SDK can be installed will support basic Toolkit functionality. The Toolkit has been successfully installed and used on Windows XP, Mac OS X, various UNIX and Linux distributions including FreeBSD, Ubuntu Linux, Nexenta GNU/OpenSolaris, Solaris, and other operating environments.
+				</p>
+			<p>Some optional applications can be installed and run only on Windows, for example the HTML Help compiler.
+			</p>
+		</section>
+		<section id="required_tools">
+			<title>Required tools</title>
+			<p>The following tools are required to use DITA Open Toolkit.
+			</p>
+			<dl>
+				<dlentry>
+					<dt>Java Development Kits (SDKs)</dt>
+					<dd>Sun 1.4.2. You can download the Sun JDK from <xref href="http://java.sun.com/j2se/1.4.2/download.html" scope="external"/>.</dd>
+					<dd>IBM 1.4.2.  You can download the IBM JDK from <xref href="http://www.ibm.com/developerworks/java/jdk" scope="external"/>.</dd>
+				</dlentry>
+				<dlentry>
+					<dt>Ant</dt>
+					<dd>Ant 1.6.5. You can download Ant from <xref href="http://ant.apache.org/bindownload.cgi" scope="external"/>.</dd>
+				</dlentry>
+				<dlentry>
+					<dt>Either the SAXON or Xalan XSLT processor</dt>
+					<dd>SAXON 6.5. You can download SAXON from <xref href="http://saxon.sourceforge.net/" scope="external"/>.</dd>
+					<dd>Xalan-J 2.6. You can download Xalan from <xref href="http://archive.apache.org/dist/xml/xalan-j/" scope="external"/>.</dd>
+				</dlentry>
+			</dl>
+			<note>The XSLT 2.0 standard is not yet supported by the Toolkit.
+			</note>
+			<p>For information about installing the required tools, see <xref href="../installing/installing_required_tools.dita">Installing the required tools</xref>.</p>
+		</section>
+		<section id="optional_tools">
+			<title>Optional tools</title>
+			<p>You may also want to install one or more optional tools, depending on your needs and your operating environment. For example, if you are planning to publish JavaHelp files you will probably want to install the Sun JavaHelp processor.</p>
+			<p>For information about the optional tools and how to install them, see <xref href="../installing/installing_optional_tools.dita">Installing the optional tools</xref>.</p>
+		</section>
+		<section id="languages">
+			<title>Supported languages</title>
+			<p>DITA and DITA Open Toolkit support the languages listed in the following table.</p>
+			<simpletable>
+				<sthead>
+					<stentry>Language</stentry>
+					<stentry>xml:lang value</stentry>
+				</sthead>
+				<strow>
+					<stentry>Arabic</stentry>
+					<stentry>ar-eg</stentry>
+				</strow>
+				<strow>
+					<stentry>Bulgarian</stentry>
+					<stentry>bg-bg</stentry>
+				</strow>
+				<strow>
+					<stentry>Catalan</stentry>
+					<stentry>ca-es</stentry>
+				</strow>
+				<strow>
+					<stentry>Chinese (Simplified)</stentry>
+					<stentry>zh-cn</stentry>
+				</strow>
+				<strow>
+					<stentry>Chinese (Traditional)</stentry>
+					<stentry>zh-tw</stentry>
+				</strow>
+				<strow>
+					<stentry>Croatian</stentry>
+					<stentry>hr-hr</stentry>
+				</strow>
+				<strow>
+					<stentry>Czech</stentry>
+					<stentry>cs-cz</stentry>
+				</strow>
+				<strow>
+					<stentry>Danish</stentry>
+					<stentry>da-dk</stentry>
+				</strow>
+				<strow>
+					<stentry>Dutch</stentry>
+					<stentry>nl-nl</stentry>
+				</strow>
+				<strow>
+					<stentry>Dutch (Belgian)</stentry>
+					<stentry>nl-be</stentry>
+				</strow>
+				<strow>
+					<stentry>English (Canadian)</stentry>
+					<stentry>en-ca</stentry>
+				</strow>
+				<strow>
+					<stentry>English (UK)</stentry>
+					<stentry>en-gb</stentry>
+				</strow>
+				<strow>
+					<stentry>English (US)</stentry>
+					<stentry>en-us</stentry>
+				</strow>
+				<strow>
+					<stentry>Estonian</stentry>
+					<stentry>et-ee</stentry>
+				</strow>
+				<strow>
+					<stentry>Finnish</stentry>
+					<stentry>fi-fi</stentry>
+				</strow>
+				<strow>
+					<stentry>French</stentry>
+					<stentry>fr-fr</stentry>
+				</strow>
+				<strow>
+					<stentry>French (Belgian)</stentry>
+					<stentry>fr-be</stentry>
+				</strow>
+				<strow>
+					<stentry>French (Canadian)</stentry>
+					<stentry>fr-ca</stentry>
+				</strow>
+				<strow>
+					<stentry>French (Swiss)</stentry>
+					<stentry>fr-ch</stentry>
+				</strow>
+				<strow>
+					<stentry>German</stentry>
+					<stentry>de-de</stentry>
+				</strow>
+				<strow>
+					<stentry>German (Swiss)</stentry>
+					<stentry>de-ch</stentry>
+				</strow>
+				<strow>
+					<stentry>Greek</stentry>
+					<stentry>el-gr</stentry>
+				</strow>
+				<strow>
+					<stentry>Hebrew</stentry>
+					<stentry>he-il</stentry>
+				</strow>
+				<strow>
+					<stentry>Hungarian</stentry>
+					<stentry>hu-hu</stentry>
+				</strow>
+				<strow>
+					<stentry>Icelandic</stentry>
+					<stentry>is-is</stentry>
+				</strow>
+				<strow>
+					<stentry>Italian</stentry>
+					<stentry>it-it</stentry>
+				</strow>
+				<strow>
+					<stentry>Italian (Swiss)</stentry>
+					<stentry>it-ch</stentry>
+				</strow>
+				<strow>
+					<stentry>Japanese</stentry>
+					<stentry>ja-jp</stentry>
+				</strow>
+				<strow>
+					<stentry>Korean</stentry>
+					<stentry>ko-lr</stentry>
+				</strow>
+				<strow>
+					<stentry>Latvian</stentry>
+					<stentry>lv-lv</stentry>
+				</strow>
+				<strow>
+					<stentry>Lithuanian</stentry>
+					<stentry>lt-lt</stentry>
+				</strow>
+				<strow>
+					<stentry>Macedonian</stentry>
+					<stentry>mk-mk</stentry>
+				</strow>
+				<strow>
+					<stentry>Norwegian</stentry>
+					<stentry>no-no</stentry>
+				</strow>
+				<strow>
+					<stentry>Polish</stentry>
+					<stentry>pl-pl</stentry>
+				</strow>
+				<strow>
+					<stentry>Portuguese</stentry>
+					<stentry>pt-pt</stentry>
+				</strow>
+				<strow>
+					<stentry>Portuguese (Brazilian)</stentry>
+					<stentry>pt-br</stentry>
+				</strow>
+				<strow>
+					<stentry>Romanian</stentry>
+					<stentry>ro-ro</stentry>
+				</strow>
+				<strow>
+					<stentry>Russian</stentry>
+					<stentry>ru-ru</stentry>
+				</strow>
+				<strow>
+					<stentry>Serbian</stentry>
+					<stentry>sr-sp</stentry>
+				</strow>
+				<strow>
+					<stentry>Slovak</stentry>
+					<stentry>sk-sk</stentry>
+				</strow>
+				<strow>
+					<stentry>Slovenian</stentry>
+					<stentry>sl-si</stentry>
+				</strow>
+				<strow>
+					<stentry>Spanish</stentry>
+					<stentry>es-es</stentry>
+				</strow>
+				<strow>
+					<stentry>Swedish</stentry>
+					<stentry>sv-se</stentry>
+				</strow>
+				<strow>
+					<stentry>Thai</stentry>
+					<stentry>th-th</stentry>
+				</strow>
+				<strow>
+					<stentry>Turkish</stentry>
+					<stentry>tr-tr</stentry>
+				</strow>
+			</simpletable>
+		</section>
+	</conbody>
+</concept>

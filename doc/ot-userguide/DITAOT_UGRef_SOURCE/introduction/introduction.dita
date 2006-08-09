@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "../dtd/concept.dtd">
+<concept id="introduction">
+	<title>Introduction</title>
+	<shortdesc>Introductory information about DITA, DITA Open Tooklit (OT), and this document. 
+	Where to get more information about DITA and the Toolkit.</shortdesc>
+	<prolog>
+		<author type="creator">Anna van Raaphorst</author>
+		<author type="contributor">Richard Johnson</author>
+		<publisher>OASIS (Organization for the Advancement of Structured Information Standards)</publisher>
+		<copyright>
+			<copyryear year="2006"/>
+			<copyrholder>VR Communications, Inc.</copyrholder>
+		</copyright>
+		<critdates>
+			<created date="2006-May-01"/>
+			<revised modified="2006-June-09"/>
+		</critdates>
+		<metadata>
+			<keywords>
+				<keyword>Darwin Information Typing Architecture</keyword>
+				<keyword>DITA</keyword>
+				<keyword>DITA Open Toolkit</keyword>
+			</keywords>
+			<prodinfo>
+				<prodname>DITA Open Toolkit</prodname>
+				<vrmlist>
+					<vrm version="1.2.2"/>
+				</vrmlist>
+			</prodinfo>
+		</metadata>
+	</prolog>
+	<conbody>
+		<p/>
+	</conbody>
+</concept>

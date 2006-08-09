@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "../dtd/reference.dtd">
+<reference id="ditaot_directory" xml:lang="en-us">
+	<title>Directories and files in the ditaot directory</title>
+	<shortdesc>Reference information about the directories and files in the <filepath>ditaot</filepath> directory.</shortdesc>
+	<prolog>
+		<author type="creator">Anna van Raaphorst</author>
+		<author type="contributor">Richard Johnson</author>
+		<publisher>OASIS (Organization for the Advancement of Structured Information Standards)</publisher>
+		<copyright>
+			<copyryear year="2006"/>
+			<copyrholder>VR Communications, Inc.</copyrholder>
+		</copyright>
+		<critdates>
+			<created date="2006-June-29"/>
+			<revised modified="2006-August-08"/>
+		</critdates>
+		<metadata>
+			<keywords>
+				<keyword>installing DITA Open Toolkit</keyword>
+				<keyword>ditaot directory</keyword>
+				<indexterm>directories
+				<indexterm>ditaot</indexterm>
+					<indexterm>book</indexterm>
+					<indexterm>elementref</indexterm>
+					<indexterm>enote</indexterm>
+					<indexterm>faq</indexterm>
+					<indexterm>fo</indexterm>
+					<indexterm>FrameMaker_adapter</indexterm>
+					<indexterm>h2d</indexterm>
+					<indexterm>java</indexterm>
+					<indexterm>doc</indexterm>
+					<indexterm>dtd</indexterm>
+					<indexterm>lib</indexterm>
+					<indexterm>plugins</indexterm>
+					<indexterm>resource</indexterm>
+					<indexterm>samples</indexterm>
+					<indexterm>schema</indexterm>
+					<indexterm>xsl</indexterm>
+					<indexterm>common</indexterm>
+					<indexterm>docbook</indexterm>
+					<indexterm>preprocess</indexterm>
+					<indexterm>troff</indexterm>
+					<indexterm>xslhtml</indexterm>
+					<indexterm>xslfo</indexterm>
+					<indexterm>xslrtf</indexterm>
+				</indexterm>
+				<indexterm>specializations
+				<indexterm>elementref</indexterm>
+					<indexterm>enote</indexterm>
+					<indexterm>faq</indexterm>
+				</indexterm>
+				<indexterm>plug-ins
+				<indexterm>bookmap</indexterm>
+					<indexterm>fo</indexterm>
+					<indexterm>FrameMaker adapter</indexterm>
+					<indexterm>h2d</indexterm>
+				</indexterm>
+				<indexterm>validators
+				<indexterm>java</indexterm>
+				</indexterm>
+				<indexterm>ditaot directory</indexterm>
+				<indexterm>root (ditaot) directory</indexterm>
+				<indexterm>book directory</indexterm>
+				<indexterm>elementref directory</indexterm>
+				<indexterm>enote directory</indexterm>
+				<indexterm>faq directory</indexterm>
+				<indexterm>fo directory</indexterm>
+				<indexterm>FrameMaker_adapter directory</indexterm>
+				<indexterm>h2d directory</indexterm>
+				<indexterm>java directory</indexterm>
+				<indexterm>doc directory</indexterm>
+				<indexterm>dtd directory</indexterm>
+				<indexterm>lib directory</indexterm>
+				<indexterm>plugins directory</indexterm>
+				<indexterm>resource directory</indexterm>
+				<indexterm>samples directory</indexterm>
+				<indexterm>schema directory</indexterm>
+				<indexterm>xsl directory</indexterm>
+				<indexterm>common directory</indexterm>
+				<indexterm>docbook directory</indexterm>
+				<indexterm>preprocess directory</indexterm>
+				<indexterm>troff directory</indexterm>
+				<indexterm>xslhtml directory</indexterm>
+				<indexterm>xslfo directory</indexterm>
+				<indexterm>xslrtf directory</indexterm>
+			</keywords>
+			<prodinfo>
+				<prodname>DITA Open Toolkit</prodname>
+				<vrmlist>
+					<vrm version="1.2.2"/>
+				</vrmlist>
+			</prodinfo>
+		</metadata>
+	</prolog>
+	<refbody>
+		<section>
+			<p>When you have installed DITA Open Toolkit, the following directories and subdirectories should be in your root <filepath>ditaot</filepath> directory.</p>
+			<simpletable>
+				<sthead>
+					<stentry>Directory</stentry>
+					<stentry>Description</stentry>
+				</sthead>
+				<strow>
+					<stentry>root (ditaot)</stentry>
+					<stentry>System-level Ant scripts and other system files (for example, <filepath>conductor.xml</filepath>, <filepath>build.xml</filepath>,
+				and <filepath>integrator.xml</filepath>). 
+				System-level scripts handle DITA source file processing and transformation into published output. They are an integral part of DITA Open Toolkit and should never be modified by users. For more information, see
+				<xref href="../processing/aboutantscripts.dita">About Ant scripts</xref>.
+				</stentry>
+				</strow>
+				<strow>
+					<stentry>ant</stentry>
+					<stentry>Ant scripts that can be used as-is to process sample files or modified for your use.</stentry>
+				</strow>
+				<strow>
+					<stentry>css</stentry>
+					<stentry>Sample CSS (cascading style sheet) files.</stentry>
+				</strow>
+				<strow>
+					<stentry>demo</stentry>
+					<stentry>Specializations, plug-ins, and validators that demonstrate extensions to the base DITA language.
+				Includes:
+				<ul>
+							<li>book: bookmap specialization</li>
+							<li>elementref: simple element reference description markup</li>
+							<li>enote: data object specialization</li>
+							<li>faq: faq (frequently asked questions) specialization</li>
+							<li>fo: plug-in files to produce PDF output</li>
+							<li>FrameMaker_adapter: plug-in to produce a structured FrameMaker (7.0+) input file </li>
+							<li>h2d: plug-in to convert XHTML to DITA topics</li>
+							<li>java: validators for DITA schemas</li>
+						</ul>
+					Many of these directories have README files that provide information about how to use the specializations.
+				</stentry>
+				</strow>
+				<strow>
+					<stentry>doc</stentry>
+					<stentry>DITA documentation: language reference and application notes.</stentry>
+				</strow>
+				<strow>
+					<stentry>dtd</stentry>
+					<stentry>Core DITA definitions in XML DTD format.</stentry>
+				</strow>
+				<strow>
+					<stentry>lib</stentry>
+					<stentry>Contains <filepath>dost.jar</filepath>, the executable jar file.</stentry>
+				</strow>
+				<strow>
+					<stentry>plugins</stentry>
+					<stentry>DITA Open Toolkit plug-ins.</stentry>
+				</strow>
+				<strow>
+					<stentry>resource</stentry>
+					<stentry>Miscellaneous resource files, including the default (common) CSS files and error messages.</stentry>
+				</strow>
+				<strow>
+					<stentry>samples</stentry>
+					<stentry>Sample DITA source files and Ant scripts.</stentry>
+				</strow>
+				<strow>
+					<stentry>schema</stentry>
+					<stentry>Core DITA definitions in XML Schema format.</stentry>
+				</strow>
+				<strow>
+					<stentry>xsl</stentry>
+					<stentry>Core and process-specific stylesheets.
+				Includes:
+				<ul>
+							<li>common: stylesheets that can be used by any process (for example, internationalization)</li>
+							<li>docbook: stylesheets used in converting DITA source content into DocBook source</li>
+							<li>preprocess: code for conditional, conref, and link resolution</li>
+							<li>troff: stylesheets used in converting DITA source content into troff source</li>
+							<li>xslfo: code to support the processing of Formatting Objects (FO) output</li>
+							<li>xslhtml: code to support XHTML processing</li>
+							<li>xslrtf: code to support RTF processing</li>
+						</ul>
+					</stentry>
+				</strow>
+			</simpletable>
+		</section>
+	</refbody>
+</reference>

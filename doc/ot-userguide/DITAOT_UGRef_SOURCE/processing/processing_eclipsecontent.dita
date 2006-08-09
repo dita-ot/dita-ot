@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "../dtd/task.dtd">
+<task id="processing_eclipsecontent">
+	<title>Processing to Eclipse content targets</title>
+	<shortdesc>How to process (build) to Eclipse content output targets using the garage sample.</shortdesc>
+	<prolog>
+		<author type="creator">Richard Johnson</author>
+		<author type="contributor">Anna van Raaphorst</author>
+		<publisher>OASIS (Organization for the Advancement of Structured Information Standards)</publisher>
+		<copyright>
+			<copyryear year="2006"/>
+			<copyrholder>VR Communications, Inc.</copyrholder>
+		</copyright>
+		<critdates>
+			<created date="2006-June-14"/>
+			<revised modified="2006-August-08"/>
+		</critdates>
+		<metadata>
+			<keywords>
+				<keyword>processing DITA file</keyword>
+				<keyword>building DITA file</keyword>
+				<keyword>garage sample</keyword>
+				<keyword>Eclipse content</keyword>
+				<indexterm>processing (building)<indexterm>to Eclipse content targets</indexterm>
+				</indexterm>
+				<indexterm>building (processing)<indexterm>to Eclipse content targets</indexterm>
+				</indexterm>
+				<indexterm>Eclipse content targets<indexterm>processing (building) to</indexterm>
+				</indexterm>
+			</keywords>
+			<prodinfo>
+				<prodname>DITA Open Toolkit</prodname>
+				<vrmlist>
+					<vrm version="1.2.2"/>
+				</vrmlist>
+			</prodinfo>
+		</metadata>
+	</prolog>
+	<taskbody>
+		<prereq>This topic assumes you have already installed DITA Open Toolkit and its prerequisite products, and have verified your installation, as described in the installation chapter of this document.</prereq>
+		<context>In general, the instructions in this topic assume the Windows environment; the procedure is very similar in other operating system environments.</context>
+		<steps>
+			<step>
+				<cmd>If you have not already done so, create <filepath>MY_DITA_OUTPUT</filepath> and <filepath>MY_DITA_SOURCE</filepath> directories in the root directory of your <filepath>C:</filepath> drive (or your <filepath>/home</filepath> directory in Linux).</cmd>
+			</step>
+			<step>
+				<cmd>If you have not already done so, copy the garage sample files into the <filepath>MY_DITA_SOURCE</filepath> directory.</cmd>
+				<info>
+					<p>You should have a directory structure that looks like this:</p>
+					<p>
+						<image href="../images/processing_directory.jpg"/>
+					</p>
+				</info>
+			</step>
+			<step>
+				<cmd>View and edit, if necessary for your specific working environment, 
+				<filepath>MY_DITA_SOURCE/ant_scripts/garage_hierarchy_eclipsecontent.xml</filepath>.</cmd>
+				<info>
+					<p>These are the significant Ant parameters and how they are set:
+				<ul>
+							<li>
+								<b>args.outdir</b> is set to send the output to <filepath>MY_DITA_OUTPUT</filepath>.</li>
+							<li>
+								<b>args.input</b> is set to use the hierarchy ditamap.</li>
+							<li>
+								<b>transtype</b> is set to eclipsecontent.</li>
+						</ul>
+					</p>
+				</info>
+			</step>
+			<step>
+				<cmd>In the Command Prompt, move to <filepath>MY_DITA_SOURCE/samples/garage/ant_scripts</filepath> and invoke the above Ant script.</cmd>
+				<stepxmp>For example: <userinput>ant -f garage_hierarchy_eclipsecontent.xml</userinput>
+				</stepxmp>
+			</step>
+			<step>
+				<cmd>After the Eclipse content file has processed successfully, go to the <filepath>MY_DITA_OUTPUT</filepath> directory.</cmd>
+				<info>Your directory structure should look like this:
+				<p>
+						<image href="../images/processing_eclipsecontent1.jpg"/>
+					</p>
+					<p>The <filepath>eclipsecontent</filepath> subdirectory should contain these directories and files:</p>
+					<p>
+						<image href="../images/processing_eclipsecontent2.jpg"/>
+					</p>
+				</info>
+			</step>
+			<step>
+				<cmd>Open the file <filepath>hierarchy.xml</filepath> in Eclipse to view the Eclipse content output.</cmd>
+			</step>
+		</steps>
+	</taskbody>
+</task>

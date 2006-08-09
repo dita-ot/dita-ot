@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "../dtd/concept.dtd">
+<concept id="customizing_production_notes">
+	<title>Production notes</title>
+	<shortdesc>Production notes for the customizing section of this document.</shortdesc>
+	<prolog>
+		<author type="creator">Anna van Raaphorst</author>
+		<author type="contributor">Richard Johnson</author>
+		<publisher>OASIS (Organization for the Advancement of Structured Information Standards)</publisher>
+		<copyright>
+			<copyryear year="2006"/>
+			<copyrholder>VR Communications, Inc.</copyrholder>
+		</copyright>
+		<critdates>
+			<created date="2006-May-01"/>
+			<revised modified="2006-August-08"/>
+		</critdates>
+		<metadata>
+			<keywords>
+				<keyword>customizing published output</keyword>
+				<indexterm>customizing your published output<indexterm>production notes</indexterm>
+				</indexterm>
+				<indexterm>production notes<indexterm>customizing your published output</indexterm>
+				</indexterm>
+			</keywords>
+			<prodinfo>
+				<prodname>DITA Open Toolkit</prodname>
+				<vrmlist>
+					<vrm version="1.2.2"/>
+				</vrmlist>
+			</prodinfo>
+		</metadata>
+	</prolog>
+	<conbody>
+		<section>
+			<title>Our experience with default CSS behavior</title>
+			<p>In the Ant scripts used to build the <cite>DITA Open Toolkit User Guide and Reference</cite>, we used only the default CSS stylesheet so that you can see what output that produces. However, using the default does not always produce the best results. For example, one problem we would like to address is that the default CSS for XHTML does not have any &lt;filepath&gt; class defined, so all &lt;filepath&gt; elements are unstyled.</p>
+		</section>
+	</conbody>
+</concept>

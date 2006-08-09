@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- (c) Copyright 2006 by VR Communications, Inc. All rights reserved. -->
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN"  "../dtd/map.dtd">
+<map id="distributing_map" title="Distributing your published content">
+	<topicref href="distributing.dita">
+		<topicref href="aboutdistributing.dita"/>
+		<topicref href="rss_overview.dita"/>
+		<topicref href="server.dita"/>
+		<topicref href="distributing_production_notes.dita"/>
+		<topicref href="distributing_formoreinfo.dita"/>
+	</topicref>
+</map>

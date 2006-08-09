@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "../dtd/concept.dtd">
+<concept id="aboutgroceryshopping_sample">
+	<title>About the grocery shopping sample</title>
+	<shortdesc>Overview information about the grocery shopping sample.</shortdesc>
+	<prolog>
+		<author type="creator">Anna van Raaphorst</author>
+		<author type="contributor">Richard Johnson</author>
+		<publisher>OASIS (Organization for the Advancement of Structured Information Standards)</publisher>
+		<copyright>
+			<copyryear year="2006"/>
+			<copyrholder>VR Communications, Inc.</copyrholder>
+		</copyright>
+		<critdates>
+			<created date="2006-June-13"/>
+			<revised modified="2006-August-08"/>
+		</critdates>
+		<metadata>
+			<keywords>
+				<keyword>grocery shopping sample</keyword>
+				<indexterm>samples<indexterm>grocery shopping</indexterm>
+				</indexterm>
+				<indexterm>grocery shopping sample
+				<indexterm>about</indexterm>
+				</indexterm>
+			</keywords>
+			<prodinfo>
+				<prodname>DITA Open Toolkit</prodname>
+				<vrmlist>
+					<vrm version="1.2.2"/>
+				</vrmlist>
+			</prodinfo>
+		</metadata>
+	</prolog>
+	<conbody>
+		<section conref="../core_vocabulary/groceryshopping_sample.dita#groceryshopping_sample/groceryshopping_sample_term"/>
+		<section>
+			<p>
+				<b>Creating and processing the grocery shopping sample</b>
+			</p>
+			<p>You will be working in the MY_DITA_SOURCE/samples/groceryshopping directory, which contains a number of subdirectories.</p>
+			<p>Your directory structure should look like this:</p>
+			<p>
+				<image href="../images/topics_groceryshopping_directories.jpg"/>
+			</p>
+			<p>Files in the <filepath>template</filepath> directory provide you with a starting point for each file in your grocery shopping project. The first step in each task in this chapter is to copy a file from the <filepath>template</filepath> directory to the <filepath>working</filepath> directory. Then edit the "working" version of the file, as instructed. If you need help along the way, you can use the files in the <filepath>completed</filepath> directory for reference.</p>
+			<p>The Ant scripts (in the <filepath>ant_scripts</filepath> directory) assume you will process (build) the "working" version of the files. If you want to build the "completed" file set, you will need to make appropriate modifications to the Ant scripts to point to the correct map.</p>
+			<p>If you follow the instructions in this chapter and the next ("Creating Maps") you will have your own working version of the sample, which you could modify to try and test other DITA features.</p>
+			<p>Files in the <filepath>template</filepath> directory provide you with a starting point for each file in your grocery shopping project. The first step in each task in this chapter is to copy a file from the <filepath>template</filepath> directory to the <filepath>working</filepath> directory. Then edit the "working" version of the file, as instructed. If you need help along the way, you can use the files in the <filepath>completed</filepath> directory for reference.</p>
+			<p>The Ant scripts (in the <filepath>ant_scripts</filepath> directory) assume you will process (build) the "working" version of the files. Ant scripts that build the "completed" files are also provided.</p>
+		</section>
+	</conbody>
+</concept>

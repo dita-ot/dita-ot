@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "../dtd/task.dtd">
+<task id="windows_installingsaxon" xml:lang="en-us">
+	<title>Installing SAXON on Windows</title>
+	<shortdesc>How to install SAXON in the Windows operating environment. Install either SAXON or Xalan: you do not need both.</shortdesc>
+	<prolog>
+		<author type="creator">Jen Linton</author>
+		<author type="creator">JoAnn Hackos</author>
+		<author type="creator">Kylene Bruski</author>
+		<author type="contributor">Anna van Raaphorst</author>
+		<author type="contributor">Richard Johnson</author>
+		<publisher>OASIS (Organization for the Advancement of Structured Information Standards)</publisher>
+		<copyright>
+			<copyryear year="2005"/>
+			<copyrholder>Comtech Services, Inc.</copyrholder>
+		</copyright>
+		<critdates>
+			<created date="2005-November-01"/>
+			<revised modified="2006-August-08"/>
+		</critdates>
+		<metadata>
+			<keywords>
+				<keyword>installing DITA Open Toolkit</keyword>
+				<keyword>SAXON XSLT processor</keyword>
+				<indexterm>installing on Windows<indexterm>SAXON XSLT processor</indexterm>
+				</indexterm>
+				<indexterm>SAXON XSLT processor<indexterm>installing on Windows</indexterm>
+				</indexterm>
+				<indexterm>environment variables<indexterm>CLASSPATH</indexterm>
+				</indexterm>
+				<indexterm>CLASSPATH environment variable</indexterm>
+			</keywords>
+			<prodinfo>
+				<prodname>DITA Open Toolkit</prodname>
+				<vrmlist>
+					<vrm version="1.2.2"/>
+				</vrmlist>
+			</prodinfo>
+		</metadata>
+	</prolog>
+	<taskbody>
+		<steps>
+			<step>
+				<cmd>Enter the URL: <xref href="http://saxon.sourceforge.net/" format="html" scope="external">http://saxon.sourceforge.net/</xref>
+				</cmd>
+			</step>
+			<step>
+				<cmd>From SAXON: The XSLT and XQuery Processor page, scroll to find the 
+          heading <uicontrol>Saxon 6.5.5</uicontrol>
+				</cmd>
+			</step>
+			<step>
+				<cmd>Select <uicontrol>Download (3265 Kbytes)</uicontrol>. </cmd>
+				<stepresult>The SourceForge.net page opens with a list of download 
+          options.</stepresult>
+			</step>
+			<step>
+				<cmd>Select any of the <image href="../images/compressed.gif"/> 
+          images to start the download.</cmd>
+				<info> If SAXON does not appear to be downloading, wait a few minutes 
+          before selecting another <image href="../images/compressed.gif"/> 
+          image. You may have to select more than one <image href="../images/compressed.gif"/> image until you find one that works. 
+          <note type="note">If you are an Internet Explorer user and a yellow 
+          bar appears at the top of the screen with the message, "To help 
+          protect your security, Internet Explorer blocked this site from 
+          downloading files to your computer. Click here for options..," click 
+          on the bar and select "Download File." </note>
+				</info>
+			</step>
+			<step>
+				<cmd>Click <uicontrol>Save</uicontrol> to unzip the Saxon 6.5.5.zip 
+          file and save it to the C:\ directory as 
+          <filepath>saxon</filepath>.</cmd>
+			</step>
+			<step>
+				<cmd>Set the <varname>CLASSPATH</varname>
+					<xref href="windows_settingenvvariables.dita" scope="local">environment 
+          variable</xref> for the saxon.jar files.</cmd>
+			</step>
+		</steps>
+	</taskbody>
+</task>

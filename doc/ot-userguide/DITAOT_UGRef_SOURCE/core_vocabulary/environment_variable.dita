@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "../dtd/concept.dtd">
+<concept id="environment_variable">
+	<title>Environment variable</title>
+	<shortdesc/>
+	<prolog>
+		<author type="creator">Anna van Raaphorst</author>
+		<author type="contributor">Richard Johnson</author>
+		<publisher>OASIS (Organization for the Advancement of Structured Information Standards)</publisher>
+		<copyright>
+			<copyryear year="2006"/>
+			<copyrholder>VR Communications, Inc.</copyrholder>
+		</copyright>
+		<critdates>
+			<created date="2006-May-01"/>
+			<revised modified="2006-August-08"/>
+		</critdates>
+		<metadata>
+			<keywords>
+				<keyword>DITA core vocabulary</keyword>
+				<keyword>DITA controlled vocabulary</keyword>
+				<keyword>environment variable</keyword>
+				<indexterm>environment variable</indexterm>
+			</keywords>
+			<prodinfo>
+				<prodname>DITA Open Toolkit</prodname>
+				<vrmlist>
+					<vrm version="1.2.2"/>
+				</vrmlist>
+			</prodinfo>
+		</metadata>
+	</prolog>
+	<conbody>
+		<section id="environment_variable_term">
+			<p>
+				<b>Definition</b>
+			</p>
+			<p>Variable you must set for DITA Open Toolkit to function. In Windows you set the variables in the Control Panel. In Linux you set the variables in the shell profile. </p>
+			<p>
+				<b>Usage</b>
+			</p>
+			<p>In Windows you set the variables in the Control Panel. In Linux you set the variables in the shell profile. Variables you need to set are PATH, CLASSPATH, ANT_HOME, ANT_OPTS, JAVA_HOME, and JHHOME.</p>
+		</section>
+	</conbody>
+	<related-links>
+		<link href="../installing/windows_settingenvvariables.dita" scope="local"/>
+		<link href="../installing/linux_settingenvvariables.dita" scope="local"/>
+	</related-links>
+</concept>

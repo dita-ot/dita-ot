@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- (c) Copyright 2006 by VR Communications, Inc. All rights reserved. -->
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN"  "../dtd/map.dtd">
+<map id="troubleshooting_map" title="Troubleshooting the build process">
+	<topicref href="troubleshooting.dita">
+		<topicref href="log.dita"/>
+		<topicref href="messages_overview.dita"/>
+		<topicref href="messages_toolkit.dita"/>
+		<topicref href="messages_other.dita"/>
+		<topicref href="classpath_environment.dita"/>
+		<topicref href="debuggingtools_overview.dita"/>
+		<topicref href="debuggingtools_using.dita"/>
+		<topicref href="troubleshooting_production_notes.dita"/>
+		<topicref href="troubleshooting_formoreinfo.dita"/>
+	</topicref>
+</map>
