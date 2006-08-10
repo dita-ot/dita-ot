@@ -15,6 +15,25 @@
 <xsl:param name="OUTEXT" select="'.html'"/>
 <xsl:param name="DBG" select="no"/>
 <xsl:param name="DITAEXT" select="'.xml'"/>
+<xsl:variable name="work.dir">
+  <xsl:choose>
+    <xsl:when test="$WORKDIR and not($WORKDIR='')">
+      <xsl:choose>
+        <xsl:when test="not(substring($WORKDIR,string-length($WORKDIR))='/')and not(substring($WORKDIR,string-length($WORKDIR))='\')">
+          <xsl:value-of select="translate($WORKDIR,
+            '\/=+|?[]{}()!#$%^&amp;*__~`;:.,-abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ',
+            '//=+|?[]{}()!#$%^&amp;*__~`;:.,-abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ')"/><xsl:text>/</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="translate($WORKDIR,
+            '\/=+|?[]{}()!#$%^&amp;*__~`;:.,-abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ',
+            '//=+|?[]{}()!#$%^&amp;*__~`;:.,-abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ')"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:when>
+    <xsl:otherwise/>
+  </xsl:choose>  
+</xsl:variable>
 
 <xsl:template match="*[contains(@class, ' map/map ')]">
   <!-- add NLS processing instruction -->
@@ -54,9 +73,9 @@
   <xsl:attribute name="link_to">
     <xsl:choose>
       <xsl:when test="contains($fix-anchorref,'.ditamap')">
-	      <xsl:value-of select="$WORKDIR"/><xsl:value-of select="substring-before($fix-anchorref,'.ditamap')"/>.xml<xsl:value-of select="substring-after($fix-anchorref,'.ditamap')"/>
+	      <xsl:value-of select="$work.dir"/><xsl:text>/</xsl:text><xsl:value-of select="substring-before($fix-anchorref,'.ditamap')"/>.xml<xsl:value-of select="substring-after($fix-anchorref,'.ditamap')"/>
       </xsl:when>
-      <xsl:when test="contains($fix-anchorref,'.xml')"><xsl:value-of select="$WORKDIR"/><xsl:value-of select="$fix-anchorref"/></xsl:when>
+      <xsl:when test="contains($fix-anchorref,'.xml')"><xsl:value-of select="$work.dir"/><xsl:value-of select="$fix-anchorref"/></xsl:when>
       <xsl:otherwise> <!-- should be dita, but name does not include .ditamap -->
         <!-- use the for-each so that the message scope is the map element, not the attribute -->
         <xsl:for-each select="parent::*">
@@ -66,7 +85,7 @@
             <xsl:with-param name="msgparams">%1=<xsl:value-of select="@anchorref"/></xsl:with-param>
           </xsl:call-template>
         </xsl:for-each>
-        <xsl:value-of select="$WORKDIR"/><xsl:value-of select="$fix-anchorref"/>
+        <xsl:value-of select="$work.dir"/><xsl:value-of select="$fix-anchorref"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:attribute>
@@ -78,13 +97,13 @@
     <xsl:when test="@type='external' or (@scope='external' and not(@format)) or not(not(@format) or @format='dita' or @format='DITA')"><xsl:value-of select="@href"/></xsl:when> <!-- adding local -->
     <xsl:when test="starts-with(@href,'#')"><xsl:value-of select="@href"/></xsl:when>
     <xsl:when test="contains(@copy-to, $DITAEXT)">
-      <xsl:value-of select="$WORKDIR"/><xsl:value-of select="substring-before(@copy-to,$DITAEXT)"/><xsl:value-of select="$OUTEXT"/>
+      <xsl:value-of select="$work.dir"/><xsl:value-of select="substring-before(@copy-to,$DITAEXT)"/><xsl:value-of select="$OUTEXT"/>
     </xsl:when>
     <xsl:when test="contains(@href, $DITAEXT)">
-      <xsl:value-of select="$WORKDIR"/><xsl:value-of select="substring-before(@href, $DITAEXT)"/><xsl:value-of select="$OUTEXT"/><!--xsl:value-of select="substring-after(@href, $DITAEXT)"/-->
+      <xsl:value-of select="$work.dir"/><xsl:value-of select="substring-before(@href, $DITAEXT)"/><xsl:value-of select="$OUTEXT"/><!--xsl:value-of select="substring-after(@href, $DITAEXT)"/-->
     </xsl:when>
     <!-- If it is a bad value, there will be a message when doing the real topic link -->
-    <xsl:otherwise><xsl:value-of select="$WORKDIR"/><xsl:value-of select="@href"/></xsl:otherwise>
+    <xsl:otherwise><xsl:value-of select="$work.dir"/><xsl:value-of select="@href"/></xsl:otherwise>
   </xsl:choose>
 </xsl:template>
 
@@ -97,8 +116,8 @@
   </xsl:variable>
   <xsl:attribute name="toc">
     <xsl:choose>
-      <xsl:when test="contains($fix-mapref,'.ditamap')"><xsl:value-of select="$WORKDIR"/><xsl:value-of select="substring-before($fix-mapref,'.ditamap')"/>.xml</xsl:when>
-      <xsl:when test="contains($fix-mapref,'.xml')"><xsl:value-of select="$WORKDIR"/><xsl:value-of select="$fix-mapref"/></xsl:when>
+      <xsl:when test="contains($fix-mapref,'.ditamap')"><xsl:value-of select="$work.dir"/><xsl:value-of select="substring-before($fix-mapref,'.ditamap')"/>.xml</xsl:when>
+      <xsl:when test="contains($fix-mapref,'.xml')"><xsl:value-of select="$work.dir"/><xsl:value-of select="$fix-mapref"/></xsl:when>
       <xsl:otherwise>
         <xsl:for-each select="parent::*">
           <xsl:call-template name="output-message">
@@ -107,7 +126,7 @@
             <xsl:with-param name="msgparams">%1=<xsl:value-of select="@mapref"/></xsl:with-param>
           </xsl:call-template>
         </xsl:for-each>
-        <xsl:value-of select="$WORKDIR"/><xsl:value-of select="$fix-mapref"/>
+        <xsl:value-of select="$work.dir"/><xsl:value-of select="$fix-mapref"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:attribute>
@@ -174,13 +193,13 @@
                       <xsl:when test="@type='external' or (@scope='external' and not(@format)) or not(not(@format) or @format='dita' or @format='DITA')"><xsl:value-of select="@href"/></xsl:when> <!-- adding local -->
                       <xsl:when test="starts-with(@href,'#')"><xsl:value-of select="@href"/></xsl:when>
                       <xsl:when test="contains(@copy-to, $DITAEXT)">
-                        <xsl:value-of select="$WORKDIR"/><xsl:value-of select="substring-before(@copy-to, $DITAEXT)"/><xsl:value-of select="$OUTEXT"/>
+                        <xsl:value-of select="$work.dir"/><xsl:value-of select="substring-before(@copy-to, $DITAEXT)"/><xsl:value-of select="$OUTEXT"/>
                       </xsl:when>
                       <xsl:when test="contains(@href, $DITAEXT)">
-                        <xsl:value-of select="$WORKDIR"/><xsl:value-of select="substring-before(@href, $DITAEXT)"/><xsl:value-of select="$OUTEXT"/><xsl:value-of select="substring-after(@href, $DITAEXT)"/>
+                        <xsl:value-of select="$work.dir"/><xsl:value-of select="substring-before(@href, $DITAEXT)"/><xsl:value-of select="$OUTEXT"/><xsl:value-of select="substring-after(@href, $DITAEXT)"/>
                       </xsl:when>
                       <xsl:otherwise>
-                        <xsl:value-of select="$WORKDIR"/><xsl:value-of select="@href"/>
+                        <xsl:value-of select="$work.dir"/><xsl:value-of select="@href"/>
                         <xsl:call-template name="output-message">
                           <xsl:with-param name="msgnum">006</xsl:with-param>
                           <xsl:with-param name="msgsev">E</xsl:with-param>

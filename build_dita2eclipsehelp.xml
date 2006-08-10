@@ -50,6 +50,7 @@
               style="${dita.script.dir}${file.separator}map2eclipse.xsl">
             <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
             <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
+            <param name="WORKDIR" expression="${workdir}" if="workdir"/>
         </xslt>
     </target>
 
