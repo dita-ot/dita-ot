@@ -49,7 +49,7 @@ if( $dbg_flag )
 */
 
 $rc = get_map_lists($dbg_flag, $ref_flag, $ditamap, $fsep,
-                    &$fused, &$notfound, &$lf, &$rf, &$tp, &$rcon);
+                    $fused, $notfound, $lf, $rf, $tp, $rcon);
 
 /* maybe input was not a map, nothing found */
 if( count($notfound)>0 )
@@ -76,7 +76,7 @@ if( $rc )
   /* find unused files in each directory used */
   foreach($dirlist as $d)
   {
-    myscandir ($dbg_flag, $fsep, $d, &$fused, &$unused);
+    myscandir ($dbg_flag, $fsep, $d, $fused, $unused);
   }
 
   if( count($unused)>0 )

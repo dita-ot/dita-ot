@@ -44,7 +44,7 @@ $dir = dirname($ditamap) . $fsep;
 */
 
 $rc = get_map_lists($dbg_flag, $ref_flag, $ditamap, $fsep,
-                    &$fused, &$notfound, &$lf, &$rf, &$tp, &$rcon);
+                    $fused, $notfound, $lf, $rf, $tp, $rcon);
 
 if( $rc )
 {

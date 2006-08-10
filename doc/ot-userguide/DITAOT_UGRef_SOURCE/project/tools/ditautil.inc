@@ -38,7 +38,7 @@ function myscandir ($dbg_flag, $fsep, $dir, &$fused, &$unused)
         {
           if ($file != "." && $file != "..") 
           { 
-            if( $fused[$sdir] != $sdir )
+            if( !isset($fused[$sdir]) )
             {
               if( $dbg_flag )
                 print("Unused file: " . $sdir . " != " . $fused[$sdir] . "\n");
@@ -203,7 +203,7 @@ function myscanfile ($dbg_flag,$ref_flag, $fin,$ids,&$ref,&$reftype,&$refcon,&$f
       if( $xml != FALSE ) /* could we parse it? */
       {
         /* search for matching ids */
-        parse_ids($dbg_flag, $ids,&$idt,&$ide); /* parse id string */
+        parse_ids($dbg_flag, $ids,$idt,$ide); /* parse id string */
         $rcid = check_ids($dbg_flag, $xml, $idt, $ide); /* check the reference */
         if( !$rcid )
         {
@@ -235,7 +235,7 @@ function myscanfile ($dbg_flag,$ref_flag, $fin,$ids,&$ref,&$reftype,&$refcon,&$f
     if( $ref_flag && strlen($ids)>0 )
     {
       /* search for matching ids */
-      parse_ids($dbg_flag, $ids,&$idt,&$ide); /* parse id string */
+      parse_ids($dbg_flag, $ids,$idt,$ide); /* parse id string */
       $rcid = check_ids($dbg_flag, $xml, $idt, $ide); /* check the reference */
       if( !$rcid )
       {
@@ -301,7 +301,7 @@ function myscanfile ($dbg_flag,$ref_flag, $fin,$ids,&$ref,&$reftype,&$refcon,&$f
 
             if( $ref_flag && strlen($xrf)>0 )
             {
-              parse_ids($dbg_flag, $xrf,&$idt,&$ide); /* parse id string */
+              parse_ids($dbg_flag, $xrf,$idt,$ide); /* parse id string */
               $rcid = check_ids($dbg_flag, $xml, $idt, $ide); /* check the reference */
               if( !$rcid )
               {
@@ -475,7 +475,7 @@ function get_map_lists($dbg_flag, $ref_flag, $ditamap, $fsep,
   /*
      Begin by finding what is referenced in the input ditamap.
   */
-  $rc   = myscanfile($dbg_flag,$ref_flag, $ditamap,"",&$ref,&$reftype,&$refcon,&$fused,&$notfound);
+  $rc   = myscanfile($dbg_flag,$ref_flag, $ditamap,"",$ref,$reftype,$refcon,$fused,$notfound);
   if(   $rc == 0 )
   {
     print("No references found in " . $ditamap . "\n");
@@ -524,7 +524,7 @@ function get_map_lists($dbg_flag, $ref_flag, $ditamap, $fsep,
           $dname="";
         $ffull = $dname . $sf;
          /* look for more references in this file */
-         $rc = myscanfile($dbg_flag,$ref_flag, $dname . $sf,$rcon[$k],&$ref,&$reftype,&$refcon,&$fused,&$notfound);
+         $rc = myscanfile($dbg_flag,$ref_flag, $dname . $sf,$rcon[$k],$ref,$reftype,$refcon,$fused,$notfound);
         if( $rc > 0 )
         {
           /* the file contained some more references */
@@ -644,7 +644,7 @@ function isIMAGE($f)
 function isDITA($f)
 {
   $parts = pathinfo($f);
-  $ext = $parts['extension'];
+  $ext = @$parts['extension'];
 
   $rc = false;
 

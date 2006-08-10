@@ -45,7 +45,7 @@ $dir = dirname($ditamap) . $fsep;
 */
 
 $rc = get_map_lists($dbg_flag, $ref_flag, $ditamap, $fsep,
-                    &$fused, &$notfound, &$lf, &$rf, &$tp, &$rcon);
+                    $fused, $notfound, $lf, $rf, $tp, $rcon);
 
 if( count($notfound)>0 )
 {
@@ -65,13 +65,13 @@ if( $rc )
   {
     if( !isURL($f) && !isIMAGE($f) )
     {
-      $irc = get_ids($dbg_flag, $f, &$idfile, &$idid);
+      $irc = get_ids($dbg_flag, $f, $idfile, $idid);
     }
   }
 
   print("There are " . count($idfile) . " IDs defined.\n\n");
   array_multisort($idid, SORT_ASC, $idfile, SORT_ASC);
-  $idl = max_str_len($idid, &$padding);
+  $idl = max_str_len($idid, $padding);
   $lastid="";
   for($i=0; $i<count($idfile); $i++)
   {
