@@ -56,6 +56,7 @@ public class TopicMergeModule implements AbstractPipelineModule {
 		MergeMapParser mapParser = new MergeMapParser();
 		String midResult = null;
 		StringReader midStream = null;
+		File outputDir = null;
 		
 		if (ditaInput == null || !new File(ditaInput).exists()){
 			logger.logError(MessageUtils.getMessage("DOTJ025E").toString());
@@ -66,6 +67,8 @@ public class TopicMergeModule implements AbstractPipelineModule {
 			logger.logError(MessageUtils.getMessage("DOTJ026E").toString());
 			return null;
 		}
+		
+		
 
 		mapParser.read(ditaInput);
 		midResult = new StringBuffer(Constants.XML_HEAD).append("<dita-merge>")
@@ -73,6 +76,10 @@ public class TopicMergeModule implements AbstractPipelineModule {
 		midStream = new StringReader(midResult);
 		
 		try{
+			outputDir = new File(out).getParentFile();
+			if (!outputDir.exists()){
+				outputDir.mkdirs();
+			}
 			if (style != null){
 				TransformerFactory factory = TransformerFactory.newInstance();
 				Transformer transformer = factory.newTransformer(new StreamSource(style));
@@ -87,7 +94,9 @@ public class TopicMergeModule implements AbstractPipelineModule {
 			logger.logException(e);
 		}finally{
 			try{
-				output.close();
+				if (output !=null){
+					output.close();
+				}
 				midStream.close();
 			}catch (Exception e){
 				//use java logger to log the exception
