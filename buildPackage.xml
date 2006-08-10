@@ -66,7 +66,12 @@
     <include name="*.*"/>
     <include name="ant/**"/>
     <include name="css/**"/>    
-    <include name="demo/**"/>
+    <include name="demo/book/**"/>
+  	<include name="demo/elmentref/**"/>
+   	<include name="demo/enote/**"/>
+  	<include name="demo/faq/**"/>
+  	<include name="demo/h2d/**"/>
+  	<include name="demo/java/**"/>
     <include name="doc/**"/>
     <include name="dtd/**"/>
     <include name="plugins/**"/>
@@ -78,16 +83,21 @@
     <exclude name="build.number"/>
     <exclude name=".*"/>
   </patternset>
+	
+  <patternset id="pattern.package.ant">
+  	<include name="tools/ant/*.*" />
+  	<include name="tools/ant/bin/**" />
+  	<include name="tools/ant/lib/**" />
+  </patternset>
     
-  <target name="package-source">    
+  <target name="package-source">
     <zip destfile="${package.output.dir}/${param.out.file}${win32.zip.suffix}">
       <zipfileset dir="./" prefix="${package.name.root}${version}-src">
         <patternset refid="pattern.package.general"/>
         <include name="src/**"/>
-        <exclude name="APACHE-LICENSE-2_0.html"/>
+      	<include name="lib/APACHE-LICENSE-2_0.html"/>
         <exclude name="files.txt"/>
         <exclude name="startcmd.*"/>
-        <exclude name="setupenv.*"/>
       </zipfileset>
     </zip>
     <tar destfile="${package.output.dir}/${param.out.file}${linux.zip.suffix}" 
@@ -95,34 +105,9 @@
       <tarfileset dir="./" prefix="${package.name.root}${version}-src">
         <patternset refid="pattern.package.general"/>
         <include name="src/**"/>
-        <exclude name="APACHE-LICENSE-2_0.html"/>
+      	<include name="lib/APACHE-LICENSE-2_0.html"/>
         <exclude name="files.txt"/>
         <exclude name="startcmd.*"/>
-        <exclude name="setupenv.*"/>
-      </tarfileset>
-    </tar>
-  </target>
-  
-  <target name="package-source-ASL">
-    <zip destfile="${package.output.dir}/${param.out.file}${win32.zip.suffix}">
-      <zipfileset dir="./" prefix="${package.name.root}${version}-src">
-        <patternset refid="pattern.package.general"/>
-        <include name="src/**"/>
-        <exclude name="CommonPublicLicense-v10.html"/>
-        <exclude name="files.txt"/>
-        <exclude name="startcmd.*"/>
-        <exclude name="setupenv.*"/>
-      </zipfileset>
-    </zip>
-    <tar destfile="${package.output.dir}/${param.out.file}${linux.zip.suffix}" 
-      compression="gzip" longfile="gnu">
-      <tarfileset dir="./" prefix="${package.name.root}${version}-src">
-        <patternset refid="pattern.package.general"/>
-        <include name="src/**"/>
-        <exclude name="CommonPublicLicense-v10.html"/>
-        <exclude name="files.txt"/>
-        <exclude name="startcmd.*"/>
-        <exclude name="setupenv.*"/>
       </tarfileset>
     </tar>
   </target>
@@ -132,9 +117,8 @@
       <zipfileset dir="./" prefix="${package.name.root}${version}">
         <patternset refid="pattern.package.general"/>
         <include name="lib/dost.jar"/>
-        <exclude name="APACHE-LICENSE-2_0.html"/>
+      	<include name="lib/APACHE-LICENSE-2_0.html"/>
         <exclude name="startcmd.*"/>
-        <exclude name="setupenv.*"/>
       </zipfileset>
     </zip>
     
@@ -143,9 +127,8 @@
       <tarfileset dir="./" prefix="${package.name.root}${version}">
         <patternset refid="pattern.package.general"/>
         <include name="lib/dost.jar"/>
-        <exclude name="APACHE-LICENSE-2_0.html"/>
+      	<include name="lib/APACHE-LICENSE-2_0.html"/>
         <exclude name="startcmd.*"/>
-        <exclude name="setupenv.*"/>
       </tarfileset>
     </tar>
   </target>
@@ -155,8 +138,8 @@
       <zipfileset dir="./" prefix="${package.name.root}${version}">
         <patternset refid="pattern.package.general"/>
         <include name="lib/*.jar"/>
-        <include name="tools/**"/>
-        <exclude name="APACHE-LICENSE-2_0.html"/>
+      	<patternset refid="pattern.package.ant"/>
+      	<include name="lib/APACHE-LICENSE-2_0.html"/>
       </zipfileset>
     </zip>
     
@@ -165,50 +148,8 @@
       <tarfileset dir="./" prefix="${package.name.root}${version}">
         <patternset refid="pattern.package.general"/>
         <include name="lib/*.jar"/>
-        <include name="tools/**"/>
-        <exclude name="APACHE-LICENSE-2_0.html"/>
-      </tarfileset>
-    </tar>
-  </target>
-  
-  <target name="package-binary-small-ASL">    
-    <zip destfile="${package.output.dir}/${param.out.file}${win32.zip.suffix}">
-      <zipfileset dir="./" prefix="${package.name.root}${version}">
-        <patternset refid="pattern.package.general"/>
-        <include name="lib/dost.jar"/>
-        <exclude name="CommonPublicLicense-v10.html"/>
-        <exclude name="startcmd.*"/>
-        <exclude name="setupenv.*"/>
-      </zipfileset>
-    </zip>
-    <tar destfile="${package.output.dir}/${param.out.file}${linux.zip.suffix}" 
-      compression="gzip" longfile="gnu">
-      <tarfileset dir="./" prefix="${package.name.root}${version}">
-        <patternset refid="pattern.package.general"/>
-        <include name="lib/dost.jar"/>
-        <exclude name="CommonPublicLicense-v10.html"/>
-        <exclude name="startcmd.*"/>
-        <exclude name="setupenv.*"/>
-      </tarfileset>
-    </tar>
-  </target>
-  
-  <target name="package-binary-big-ASL">    
-    <zip destfile="${package.output.dir}/${param.out.file}${win32.zip.suffix}">
-      <zipfileset dir="./" prefix="${package.name.root}${version}">
-        <patternset refid="pattern.package.general"/>
-        <include name="lib/*.jar"/>
-        <include name="tools/**"/>
-        <exclude name="CommonPublicLicense-v10.html"/>
-      </zipfileset>
-    </zip>
-    <tar destfile="${package.output.dir}/${param.out.file}${linux.zip.suffix}" 
-      compression="gzip" longfile="gnu">
-      <tarfileset dir="./" prefix="${package.name.root}${version}">
-        <patternset refid="pattern.package.general"/>
-        <include name="lib/*.jar"/>
-        <include name="tools/**"/>
-        <exclude name="CommonPublicLicense-v10.html"/>
+        <patternset refid="pattern.package.ant"/>
+      	<include name="lib/APACHE-LICENSE-2_0.html"/>
       </tarfileset>
     </tar>
   </target>
@@ -219,27 +160,12 @@
     </antcall>
   </target>
   
-  <target name="build-package-source-ASL" depends="package-java, update-doc, copy-updated-doc">
-    <antcall target="package-source-ASL">
-      <param name="param.out.file" value="${source}-ASL"/>
-    </antcall>
-  </target>
-  
   <target name="build-package-binary" depends="package-java, update-doc, copy-updated-doc">
     <antcall target="package-binary-small">
       <param name="param.out.file" value="${binary}"/>
     </antcall>
     <antcall target="package-binary-big">
       <param name="param.out.file" value="${binary-big}"/>
-    </antcall>
-  </target>
-  
-  <target name="build-package-binary-ASL" depends="package-java, update-doc, copy-updated-doc">
-    <antcall target="package-binary-small-ASL">
-      <param name="param.out.file" value="${binary}-ASL"/>
-    </antcall>
-    <antcall target="package-binary-big-ASL">
-      <param name="param.out.file" value="${binary-big}-ASL"/>
     </antcall>
   </target>
     
@@ -259,7 +185,7 @@
     </antcall>
   </target>
   
-  <target name="build-all-packages" depends="init-package, build-package-binary, build-package-binary-ASL, build-package-source, build-package-source-ASL"/>
+  <target name="build-all-packages" depends="init-package, build-package-binary, build-package-source"/>
   
   <target name="update-doc">
     <ant antfile="integrator.xml" target="integrate"/> 
