@@ -159,14 +159,14 @@ public class StringUtils {
 	 * @return
 	 */
 	public static String restoreEntity(String s) {
-		String localEntiry;
-		localEntiry = StringUtils.replaceAll(s, "&", "&amp;");
-		localEntiry = StringUtils.replaceAll(s, "<", "&lt;");
-		localEntiry = StringUtils.replaceAll(s, ">", "&gt;");		
-		localEntiry = StringUtils.replaceAll(s, "'", "&apos;");
-		localEntiry = StringUtils.replaceAll(s, "\"", "&quot;");
+		String localEntity = s;
+		localEntity = StringUtils.replaceAll(localEntity, "&", "&amp;");
+		localEntity = StringUtils.replaceAll(localEntity, "<", "&lt;");
+		localEntity = StringUtils.replaceAll(localEntity, ">", "&gt;");		
+		localEntity = StringUtils.replaceAll(localEntity, "'", "&apos;");
+		localEntity = StringUtils.replaceAll(localEntity, "\"", "&quot;");
 		
-		return localEntiry;
+		return localEntity;
 	}
 	
 	/**
