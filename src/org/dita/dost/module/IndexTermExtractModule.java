@@ -177,15 +177,19 @@ public class IndexTermExtractModule implements AbstractPipelineModule {
 			xmlReader.setContentHandler(handler);
 
 			for (int i = 0; i < topicNum; i++) {
-				String target = (String) topicList.get(i);
-				String targetPathFromMap = FileUtils.getRelativePathFromMap(
+				String target;
+				String targetPathFromMap;
+				String targetPathFromMapWithoutExt;
+				handler.reset();
+				target = (String) topicList.get(i);
+				targetPathFromMap = FileUtils.getRelativePathFromMap(
 						inputMap, target);
-				String targetPathFromMapWithoutExt = targetPathFromMap
+				targetPathFromMapWithoutExt = targetPathFromMap
 						.substring(0, targetPathFromMap.lastIndexOf("."));
 				handler.setTargetFile(new StringBuffer(
 						targetPathFromMapWithoutExt).append(targetExt)
 						.toString());
-				handler.reset();
+				
 				try {
 					inputStream = new FileInputStream(
 							new File(baseInputDir, target));
