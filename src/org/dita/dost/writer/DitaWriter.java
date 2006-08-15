@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.apache.xml.resolver.tools.CatalogResolver;
 import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.module.Content;
 import org.dita.dost.module.DebugAndFilterModule;
@@ -43,8 +44,7 @@ public class DitaWriter extends AbstractXMLWriter {
     private static final String PI_END = "?>";
     private static final String PI_PATH2PROJ_HEAD = "<?path2project ";
     private static final String PI_WORKDIR_HEAD = "<?workdir ";
-    
-    
+
     
     private static boolean checkDITAHREF(Attributes atts){
     	// TO DO add implementation
@@ -160,6 +160,10 @@ public class DitaWriter extends AbstractXMLWriter {
         colSpec = null;
         props = null;
         logger = new DITAOTJavaLogger();
+        File temp = new File("CatalogManager.properties");
+        if (!temp.exists()){
+        	System.out.println("cm file doesn't exist");
+        }
         
         try {
             if (System.getProperty(Constants.SAX_DRIVER_PROPERTY) == null){
@@ -174,7 +178,7 @@ public class DitaWriter extends AbstractXMLWriter {
             reader.setFeature(Constants.FEATURE_VALIDATION_SCHEMA, true);
 
             
-            reader.setEntityResolver(this);
+            reader.setEntityResolver(new CatalogResolver());
         } catch (Exception e) {
         	logger.logException(e);
         }
