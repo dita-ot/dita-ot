@@ -7,7 +7,7 @@
 
 <!-- DITA DTDs -->
 
-<group xml:base="dtd">
+<group xml:base="dtd/">
 
   <public publicId="-//IBM//DTD DITA Concept//EN"
           uri="dita132/concept.dtd"/>
