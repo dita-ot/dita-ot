@@ -71,9 +71,9 @@
               for DITA-OT.</choption>
             <chdesc>
               <ol>
-                <li>set up your environment variable CLASSPATH to include the 
+                <li>set up your environment variable CLASSPATH to include the library file like
                   dost.jar. For example: 
-                  <codeblock>export CLASSPATH=${ditaot_dir}/lib/dost.jar</codeblock>
+                  <codeblock>export CLASSPATH=${ditaot_dir}/lib:${ditaot_dir}/lib/dost.jar:${ditaot_dir}/lib/resolver.jar</codeblock>
                 </li>
               </ol>
             </chdesc>
