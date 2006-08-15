@@ -54,10 +54,12 @@
   <target name="build-java" depends="init-java">
     <javac srcdir="${src.dir}" destdir="${bin.dir}" excludes="com/**"
       debug="on" source="1.4" target="1.4">
+      <classpath location="lib/resolver.jar"></classpath>
     </javac>
   </target>
   
-  <target name="package-java" depends="build-java">    
+  <target name="package-java" depends="build-java"> 
+    <copy file="${src.dir}${file.separator}CatalogManager.properties" todir="${bin.dir}"/>   
     <jar destfile="${dost.jar}" basedir="${bin.dir}" manifest="manifest.mf"
            includes="**" />
   </target>
