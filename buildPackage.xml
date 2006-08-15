@@ -58,8 +58,7 @@
     </javac>
   </target>
   
-  <target name="package-java" depends="build-java"> 
-    <copy file="${src.dir}${file.separator}CatalogManager.properties" todir="${bin.dir}"/>   
+  <target name="package-java" depends="build-java">  
     <jar destfile="${dost.jar}" basedir="${bin.dir}" manifest="manifest.mf"
            includes="**" />
   </target>
