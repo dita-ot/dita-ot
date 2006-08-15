@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Set;
 
 
+import org.apache.xml.resolver.tools.CatalogResolver;
 import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.Constants;
@@ -88,7 +89,7 @@ public class GenListModuleReader extends AbstractXMLReader {
 		ignoredCopytoSourceSet = new HashSet(Constants.INT_16);
 		props = null;
 		reader.setContentHandler(this);
-		reader.setEntityResolver(this);
+		reader.setEntityResolver(new CatalogResolver());
 	}
 
 	/**
