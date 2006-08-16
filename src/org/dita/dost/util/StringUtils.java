@@ -49,6 +49,56 @@ public class StringUtils {
 
 		return buff.toString();
 	}
+	
+	/**
+	 * Escape XML characters
+	 * Suggested by hussein_shafie
+	 * @param s
+	 * @return
+	 */
+	public static String escapeXML(String s){
+		char[] chars = s.toCharArray();
+        return escapeXML(chars, 0, chars.length);
+	}
+	
+	/**
+	 * Escape XML characters
+	 * Suggested by hussein_shafie
+	 * @param chars
+	 * @param offset
+	 * @param length
+	 * @return
+	 */
+	public static String escapeXML(char[] chars, int offset, int length){
+		StringBuffer escaped = new StringBuffer();
+
+        int end = offset + length;
+        for (int i = offset; i < end; ++i) {
+            char c = chars[i];
+
+            switch (c) {
+            case '\'':
+                escaped.append("&apos;");
+                break;
+            case '\"':
+                escaped.append("&quot;");
+                break;
+            case '<':
+                escaped.append("&lt;");
+                break;
+            case '>':
+                escaped.append("&gt;");
+                break;
+            case '&':
+                escaped.append("&amp;");
+                break;
+            default:
+                escaped.append(c);
+            }
+        }
+
+        return escaped.toString();
+	}
 
 	/**
 	 * Get entity.
