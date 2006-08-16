@@ -80,6 +80,9 @@
     <include name="samples/**"/>
     <include name="schema/**"/>      
     <include name="xsl/**"/>
+    <include name="lib/APACHE-LICENSE-2_0.html"/>
+    <include name="lib/resolver.jar"/>
+    <include name="lib/CatalogManager.properties"/>
     <exclude name="doc/userguide-orig/**"/>
     <exclude name="build.number"/>
     <exclude name=".*"/>
