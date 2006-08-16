@@ -160,11 +160,7 @@ public class DitaWriter extends AbstractXMLWriter {
         colSpec = null;
         props = null;
         logger = new DITAOTJavaLogger();
-        File temp = new File("CatalogManager.properties");
-        if (!temp.exists()){
-        	System.out.println("cm file doesn't exist");
-        }
-        
+                
         try {
             if (System.getProperty(Constants.SAX_DRIVER_PROPERTY) == null){
                 //The default sax driver is set to xerces's sax driver
