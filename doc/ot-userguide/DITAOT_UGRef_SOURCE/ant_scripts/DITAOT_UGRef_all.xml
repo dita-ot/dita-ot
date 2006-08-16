@@ -6,7 +6,7 @@
   <!-- project global properties -->
   <property name="projdir" value="c:/DITAOT_UGRef_SOURCE"/>
   <property name="outdir" value="c:/DITAOT_UGRef_OUTPUT"/>
-  <property name="PHPdir" value="c:/wamp/php"/>
+  <property name="PHPexe" value="c:/wamp/php/php.exe"/>
   <property name="args.logdir" value="${outdir}"/>
   <property name="MAP_file" value="DITAOT_UGRef.ditamap"/>
 
@@ -28,7 +28,7 @@
   </target>
   
   <!-- create all output types -->
-  <target name="alltargets" depends="integrate, dita2xhtml, dita2toc, dita2htmlhelp, 
+  <target name="alltargets" depends="integrate, dita2xhtml, dita2htmlhelp, 
      dita2pdf2, dita2troff, dita2docbook, dita2javahelp, dita2wordrtf, dita2eclipsecontent,
      dita2eclipsehelp, dita2fmxml, dita2pdf">
   </target>
@@ -42,7 +42,7 @@
   <target name="ditadebug">
     <echo>Building debugging cross-reference file ditadebug.txt</echo>
     <mkdir dir="${outdir}/debug_files"/>
-    <exec executable="${PHPdir}/php.exe" dir = "${projdir}" output="${outdir}/debug_files/ditadebug.txt">
+    <exec executable="${PHPexe}" dir = "${projdir}" output="${outdir}/debug_files/ditadebug.txt">
       <arg value="${projdir}/project/tools/ditadebug.php"/>
       <arg value="${MAP_file}"/>
     </exec>
@@ -52,7 +52,7 @@
   <target name="ditalinks">
     <echo>Building URL check file ditalinks.txt</echo>
     <mkdir dir="${outdir}/debug_files"/>
-    <exec executable="${PHPdir}/php.exe" dir = "${projdir}" output="${outdir}/debug_files/ditalinks.txt">
+    <exec executable="${PHPexe}" dir = "${projdir}" output="${outdir}/debug_files/ditalinks.txt">
       <arg value="${projdir}/project/tools/ditalinks.php"/>
       <arg value="${MAP_file}"/>
     </exec>
@@ -62,7 +62,7 @@
   <target name="ditaauthors">
     <echo>Building author/copyright file ditaauth.txt</echo>
     <mkdir dir="${outdir}/debug_files"/>
-    <exec executable="${PHPdir}/php.exe" dir = "${projdir}" output="${outdir}/debug_files/ditaauthors.txt">
+    <exec executable="${PHPexe}" dir = "${projdir}" output="${outdir}/debug_files/ditaauthors.txt">
       <arg value="${projdir}/project/tools/ditaauthors.php"/>
       <arg value="${MAP_file}"/>
     </exec>
@@ -72,7 +72,7 @@
   <target name="ditaids">
     <echo>Building ID list file ditaids.txt</echo>
     <mkdir dir="${outdir}/debug_files"/>
-    <exec executable="${PHPdir}/php.exe" dir = "${projdir}" output="${outdir}/debug_files/ditaids.txt">
+    <exec executable="${PHPexe}" dir = "${projdir}" output="${outdir}/debug_files/ditaids.txt">
       <arg value="${projdir}/project/tools/ditaids.php"/>
       <arg value="${MAP_file}"/>
     </exec>
@@ -82,7 +82,7 @@
   <target name="ditakeys">
     <echo>Building keyword metadata file ditakeys.txt</echo>
     <mkdir dir="${outdir}/debug_files"/>
-    <exec executable="${PHPdir}/php.exe" dir = "${projdir}" output="${outdir}/debug_files/ditakeys.txt">
+    <exec executable="${PHPexe}" dir = "${projdir}" output="${outdir}/debug_files/ditakeys.txt">
       <arg value="${projdir}/project/tools/ditakeys.php"/>
       <arg value="${MAP_file}"/>
     </exec>
@@ -107,29 +107,6 @@
       <fileset dir="${projdir}/samples/samplefiles/garage"/>
     </copy> -->
   </target>
-
-  <!-- create html Javascript TOC output -->
-  <target name="dita2toc" description="Generate tocjs javascript file">
-
-    <ant antfile="${basedir}${file.separator}conductor.xml" target="dita2tocjs">
-      <property name="transtype" value="tocjs"/>
-      <property name="args.input" value="${projdir}/${MAP_file}"/>
-      <property name="output.file" value="${outdir}/xhtml/toctree.js"/>
-      <property name="output.dir" value="${outdir}/xhtml"/>
-      <property name="clean.temp" value="no"/>
-      <property name="dita.temp.dir" value="${outdir}/temp"/>
-      <property name="ditadir" value="${basedir}"/>
-      <property name="dita.extname" value=".dita"/>
-    </ant>
-
-     <copy todir="${outdir}/xhtml">
-        <fileset
-           dir="${basedir}${file.separator}demo${file.separator}tocjs${file.separator}basefiles">
-           <include name="**/*"/>
-        </fileset>
-     </copy>
-
-   </target>
 
   <!-- create htmlhelp output -->
   <target name="dita2htmlhelp">
