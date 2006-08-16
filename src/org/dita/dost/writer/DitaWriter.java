@@ -139,6 +139,7 @@ public class DitaWriter extends AbstractXMLWriter {
     private XMLReader reader;
     private String tempDir;
     private String traceFilename;
+    private boolean insideCDATA;
 
     /**
      * Default constructor of DitaWriter class.
@@ -155,6 +156,7 @@ public class DitaWriter extends AbstractXMLWriter {
         traceFilename = null;
         level = 0;
         needResolveEntity = false;
+        insideCDATA = false;
         output = null;
         tempDir = null;
         colSpec = null;
@@ -191,7 +193,10 @@ public class DitaWriter extends AbstractXMLWriter {
         	// exclude shows whether it's excluded by filtering
         	// isEntity shows whether it's an entity.
             try {
-                output.write(ch, start, length);
+            	if(insideCDATA)
+            		output.write(ch, start, length);
+            	else
+            		output.write(StringUtils.escapeXML(ch,start, length));
             } catch (Exception e) {
             	logger.logException(e);
             }
@@ -279,6 +284,7 @@ public class DitaWriter extends AbstractXMLWriter {
      * 
      */
     public void endCDATA() throws SAXException {
+    	insideCDATA = false;
 	    try{
 	        output.write(Constants.CDATA_END);
 	    }catch(Exception e){
@@ -412,7 +418,7 @@ public class DitaWriter extends AbstractXMLWriter {
     public void skippedEntity(String name) throws SAXException {
         if (!exclude) { // exclude shows whether it's excluded by filtering
             try {
-                output.write(name);
+                output.write(StringUtils.getEntity(name));
             } catch (Exception e) {
             	logger.logException(e);
             }
@@ -425,6 +431,7 @@ public class DitaWriter extends AbstractXMLWriter {
      */
     public void startCDATA() throws SAXException {
 	    try{
+	    	insideCDATA = true;
 	        output.write(Constants.CDATA_HEAD);
 	    }catch(Exception e){
 	    	logger.logException(e);

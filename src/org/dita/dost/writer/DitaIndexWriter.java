@@ -45,6 +45,7 @@ public class DitaIndexWriter extends AbstractXMLWriter {
     private XMLReader reader;
     private boolean startTopic; //whether to insert links at this topic
     private List topicIdList; // array list that is used to keep the hierarchy of topic id
+    private boolean insideCDATA;
 
 
     /**
@@ -62,6 +63,7 @@ public class DitaIndexWriter extends AbstractXMLWriter {
         needResolveEntity = false;
         output = null;
         startTopic = false;
+        insideCDATA = false;
         logger = new DITAOTJavaLogger();
         
         try {
@@ -88,7 +90,10 @@ public class DitaIndexWriter extends AbstractXMLWriter {
             throws SAXException {
     	if(needResolveEntity){
     		try {
-            	output.write(ch, start, length);
+    			if(insideCDATA)
+    				output.write(ch, start, length);
+    			else
+    				output.write(StringUtils.escapeXML(ch, start, length));
         	} catch (Exception e) {
         		logger.logException(e);
         	}
@@ -125,6 +130,7 @@ public class DitaIndexWriter extends AbstractXMLWriter {
      * 
      */
     public void endCDATA() throws SAXException {
+    	insideCDATA = false;
 	    try{
 	        output.write(Constants.CDATA_END);
 	    }catch(Exception e){
@@ -263,7 +269,7 @@ public class DitaIndexWriter extends AbstractXMLWriter {
      */
     public void skippedEntity(String name) throws SAXException {
         try {
-            output.write(name);
+            output.write(StringUtils.getEntity(name));
         } catch (Exception e) {
         	logger.logException(e);
         }
@@ -274,6 +280,7 @@ public class DitaIndexWriter extends AbstractXMLWriter {
      * 
      */
     public void startCDATA() throws SAXException {
+    	insideCDATA = true;
 	    try{
 	        output.write(Constants.CDATA_HEAD);
 	    }catch(Exception e){
