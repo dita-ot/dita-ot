@@ -222,9 +222,10 @@ public class DitaWriter extends AbstractXMLWriter {
 		    }
 
 		    // replace '&' with '&amp;'
-			if (attValue.indexOf('&') > 0) {
-				attValue = StringUtils.replaceAll(attValue, "&", "&amp;");
-			}
+			//if (attValue.indexOf('&') > 0) {
+				//attValue = StringUtils.replaceAll(attValue, "&", "&amp;");
+			//}
+		    attValue = StringUtils.escapeXML(attValue);
 			
 		    //output all attributes except colname
 		    if (!Constants.ATTRIBUTE_NAME_COLNAME.equals(attQName)){

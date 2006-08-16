@@ -333,9 +333,10 @@ public class DitaLinksWriter extends AbstractXMLWriter {
                 attValue = atts.getValue(i);
 
                 // replace '&' with '&amp;'
-				if (attValue.indexOf('&') > 0) {
-					attValue = StringUtils.replaceAll(attValue, "&", "&amp;");
-				}
+				//if (attValue.indexOf('&') > 0) {
+					//attValue = StringUtils.replaceAll(attValue, "&", "&amp;");
+				//}
+                attValue = StringUtils.escapeXML(attValue);
 				
                 output.write(new StringBuffer().append(Constants.STRING_BLANK)
                         .append(attQName).append(Constants.EQUAL).append(Constants.QUOTATION)
