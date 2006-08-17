@@ -13,7 +13,7 @@
 		</copyright>
 		<critdates>
 			<created date="2006-May-01"/>
-			<revised modified="2006-August-08"/>
+			<revised modified="2006-August-16"/>
 		</critdates>
 		<metadata>
 			<keywords>
@@ -46,10 +46,6 @@
 			<p>An XML-based, end-to-end architecture for authoring, producing, and delivering information (often called <term>content</term>) as discrete, typed topics.
 		Typical information delivered using the DITA architecture is technical or scientific in nature and published as online help,  through product support portals, or as print-ready PDF files.
 		</p>
-			<p>The unofficial logo for DITA is the Woodpecker Finch of the Galapagos Islands, which is an example of a specialization that is also tool-using.</p>
-			<p>
-				<image href="../images/dita_finch_logo.jpg"/>
-			</p>
 			<p>
 				<b>Usage</b>
 			</p>

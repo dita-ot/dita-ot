@@ -27,12 +27,11 @@
 	<bkinfobody>
 		<bkrights>
 			<bkcopyrfirst>
-				<year>Published August 2006 by OASIS</year>
+				<year>2006</year>
 			</bkcopyrfirst>
 			<bkowner>
 				<organization>
-					<orgname>OASIS (Organization for the Advancement of Structured Information Standards)</orgname>
-					<resource href="http://www.oasis-open.org" format="html"/>
+					<orgname>DITA Open Toolkit is an open source, reference implementation of the OASIS DITA standard (currently DITA 1.0)</orgname>
 				</organization>
 			</bkowner>
 		</bkrights>
