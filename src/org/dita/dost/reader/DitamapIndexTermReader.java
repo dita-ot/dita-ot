@@ -95,6 +95,10 @@ public class DitamapIndexTermReader extends AbstractXMLReader {
 				javaLogger
 						.logWarn("The indexterm element does not have any content. Setting the term to ***.");
 			}
+			
+			if(indexTerm.getTermKey() == null){
+				indexTerm.setTermKey(indexTerm.getTermName());
+			}
 
 			obj = elementStack.peek();
 

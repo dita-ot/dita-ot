@@ -157,6 +157,10 @@ public class IndexTerm implements Comparable {
      */
     public boolean equals(Object o) {
         IndexTerm it = (IndexTerm) o;
+        boolean eqTermName;
+        boolean eqTermKey;
+        boolean eqTargetList;
+        boolean eqSubTerms;
 
         if (o == this) {
             return true;
@@ -165,11 +169,14 @@ public class IndexTerm implements Comparable {
         if (!(o instanceof IndexTerm)) {
             return false;
         }
+        
 
-        return termName.equals(it.getTermName())
-				&& termKey.equals(it.getTermKey())
-				&& targetList.equals(it.getTargetList())
-				&& subTerms.equals(it.getSubTerms());
+        eqTermName =  termName == it.getTermName() || termName != null && termName.equals(it.getTermName());
+		eqTermKey =  termKey == it.getTermKey() || termKey != null && termKey.equals(it.getTermKey());
+		eqTargetList = targetList == it.getTargetList() || targetList != null && targetList.equals(it.getTargetList());
+		eqSubTerms =  subTerms == it.getSubTerms() || subTerms != null && subTerms.equals(it.getSubTerms());
+		
+		return eqTermName && eqTermKey && eqTargetList && eqSubTerms;
     }
 
     /**
