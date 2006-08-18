@@ -1334,7 +1334,7 @@
     <xsl:call-template name="setid"/>
     <xsl:apply-templates select="@href|@height|@width|@longdescref"/>
     <xsl:choose>
-      <xsl:when test="*[contains(@class,' topic/alt')]">
+      <xsl:when test="*[contains(@class,' topic/alt ')]">
         <xsl:attribute name="alt"><xsl:apply-templates select="*[contains(@class,' topic/alt ')]" mode="text-only"/></xsl:attribute>
       </xsl:when>
       <xsl:when test="@alt">
