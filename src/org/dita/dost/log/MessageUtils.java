@@ -28,6 +28,7 @@ public class MessageUtils {
 	private static Hashtable hashTable = null;
 	private static String messageFile = null;
 	private static DITAOTJavaLogger fileLogger = new DITAOTJavaLogger();
+	private static String defaultResource = "resource/messages.xml";
 	
 	/**
 	 * Default Construtor
@@ -37,7 +38,11 @@ public class MessageUtils {
 	}
 
 	private static void loadDefaultMessages() {
-		loadMessages("resource/messages.xml");
+		if(!new File(defaultResource).exists()){
+			loadMessages(ClassLoader.getSystemResource(defaultResource).toString());
+		}else{
+			loadMessages(defaultResource);
+		}
 	}
 	
 	/**

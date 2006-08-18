@@ -58,7 +58,10 @@
     </javac>
   </target>
   
-  <target name="package-java" depends="build-java">  
+  <target name="package-java" depends="build-java">
+	<copy todir="${bin.dir}/resource/">
+		<fileset dir="resource" includes="messages.*"/>
+	</copy>
     <jar destfile="${dost.jar}" basedir="${bin.dir}" manifest="manifest.mf"
            includes="**" />
   </target>
