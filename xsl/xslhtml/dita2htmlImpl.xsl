@@ -253,10 +253,10 @@
 <!-- Added for DITA 1.1 "Shortdesc proposal" -->
 <!-- called abstract processing - para at start of topic -->
 <xsl:template match="*[contains(@class,' topic/abstract ')]" mode="outofline">
-<p>
+<div>
   <xsl:call-template name="commonattributes"/>
   <xsl:apply-templates/>
-</p><xsl:value-of select="$newline"/>
+</div><xsl:value-of select="$newline"/>
 </xsl:template>
 
 <!-- Updated for DITA 1.1 "Shortdesc proposal" -->
