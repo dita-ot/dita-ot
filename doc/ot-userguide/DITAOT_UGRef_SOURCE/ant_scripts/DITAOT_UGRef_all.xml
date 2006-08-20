@@ -4,7 +4,7 @@
 <project name="toolkitug" default="xhtml" basedir="c:/ditaot">
 
   <!-- project global properties -->
-  <property name="projdir" value="c:/DITAOT_UGRef_SOURCE"/>
+  <property name="projdir" value="${user.dir}"/>
   <property name="outdir" value="c:/DITAOT_UGRef_OUTPUT"/>
   <property name="PHPexe" value="c:/wamp/php/php.exe"/>
   <property name="args.logdir" value="${outdir}"/>
