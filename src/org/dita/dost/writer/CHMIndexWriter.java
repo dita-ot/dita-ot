@@ -7,12 +7,14 @@ import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.index.IndexTerm;
 import org.dita.dost.index.IndexTermTarget;
 import org.dita.dost.module.Content;
+import org.dita.dost.util.Constants;
 
 /**
  * This class extends AbstractWriter, used to output IndexTerm list to CHM index
@@ -44,12 +46,12 @@ public class CHMIndexWriter implements AbstractWriter {
      * 
      * @param outputStream
      */
-    public void write(OutputStream outputStream) {
+    public void write(OutputStream outputStream) throws UnsupportedEncodingException{
         PrintWriter printWriter = null;
         int termNum = termList.size();
 
         try {
-            printWriter = new PrintWriter(new OutputStreamWriter(outputStream));
+            printWriter = new PrintWriter(new OutputStreamWriter(outputStream, Constants.UTF8));
 
             printWriter.println("<!DOCTYPE HTML PUBLIC \"-//IETF//DTD HTML//EN\">");
             printWriter.println("<html>");
