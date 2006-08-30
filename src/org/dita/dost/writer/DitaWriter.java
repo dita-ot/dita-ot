@@ -204,6 +204,17 @@ public class DitaWriter extends AbstractXMLWriter {
     }
     
     /**
+	 * @param attQName
+	 * @param attValue
+	 * @throws IOException
+	 */
+    private void copyAttribute(String attQName, String attValue) throws IOException{
+    	output.write(new StringBuffer().append(Constants.STRING_BLANK)
+    			.append(attQName).append(Constants.EQUAL).append(Constants.QUOTATION)
+    			.append(attValue).append(Constants.QUOTATION).toString());
+    }
+    
+    /**
 	 * @param atts
 	 * @throws IOException
 	 */
@@ -233,10 +244,10 @@ public class DitaWriter extends AbstractXMLWriter {
 		    attValue = StringUtils.escapeXML(attValue);
 			
 		    //output all attributes except colname
-		    if (!Constants.ATTRIBUTE_NAME_COLNAME.equals(attQName)){
-		    	output.write(new StringBuffer().append(Constants.STRING_BLANK)
-		    			.append(attQName).append(Constants.EQUAL).append(Constants.QUOTATION)
-		    			.append(attValue).append(Constants.QUOTATION).toString());
+		    if (!Constants.ATTRIBUTE_NAME_COLNAME.equals(attQName)
+		    		&& !Constants.ATTRIBUTE_NAME_NAMEST.equals(attQName)
+		    		&& !Constants.ATTRIBUTE_NAME_NAMEEND.equals(attQName)){
+		    	copyAttribute(attQName, attValue);
 		    }
 		}
 	}
@@ -264,16 +275,18 @@ public class DitaWriter extends AbstractXMLWriter {
 				colSpec.add(COLUMN_NAME_COL+columnNumber);
 			}
 			columnNumberEnd = columnNumber;
-			output.write(new StringBuffer().append(Constants.STRING_BLANK)
-		    		.append(Constants.ATTRIBUTE_NAME_COLNAME).append(Constants.EQUAL).append(Constants.QUOTATION)
-		    		.append(COLUMN_NAME_COL+columnNumber).append(Constants.QUOTATION).toString());
+			copyAttribute(Constants.ATTRIBUTE_NAME_COLNAME, COLUMN_NAME_COL+columnNumber);
 		}else if(Constants.ELEMENT_NAME_ENTRY.equals(qName)){
 			//TO DO
 			columnNumber = getStartNumber(atts, columnNumberEnd);
 			if(columnNumber > columnNumberEnd){
-				output.write(new StringBuffer().append(Constants.STRING_BLANK)
-		        		.append(Constants.ATTRIBUTE_NAME_COLNAME).append(Constants.EQUAL).append(Constants.QUOTATION)
-		        		.append(COLUMN_NAME_COL+columnNumber).append(Constants.QUOTATION).toString());
+				copyAttribute(Constants.ATTRIBUTE_NAME_COLNAME, COLUMN_NAME_COL+columnNumber);
+				if (atts.getValue(Constants.ATTRIBUTE_NAME_NAMEST) != null){
+					copyAttribute(Constants.ATTRIBUTE_NAME_NAMEST, COLUMN_NAME_COL+columnNumber);
+				}
+				if (atts.getValue(Constants.ATTRIBUTE_NAME_NAMEEND) != null){
+					copyAttribute(Constants.ATTRIBUTE_NAME_NAMEEND, COLUMN_NAME_COL+getEndNumber(atts, columnNumber));
+				}
 			}
 			columnNumberEnd = getEndNumber(atts, columnNumber);
 		}

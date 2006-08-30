@@ -88,6 +88,8 @@ public abstract class Constants {
     public static final String ATTRIBUTE_NAME_ID = "id";
     public static final String ATTRIBUTE_NAME_CLASS = "class";
     public static final String ATTRIBUTE_NAME_COLNAME = "colname";
+    public static final String ATTRIBUTE_NAME_NAMEST = "namest";
+    public static final String ATTRIBUTE_NAME_NAMEEND = "nameend";
     public static final String ATTRIBUTE_NAME_XML_LANG = "xml:lang";    
     public static final String ATTRIBUTE_NAME_DOMAINS = "domains";
     public static final String ATTRIBUTE_NAME_PROPS = "props";
