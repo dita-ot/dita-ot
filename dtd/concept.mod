@@ -53,7 +53,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Concept//EN"
                        'http://dita.oasis-open.org/architecture/2005/'
              %DITAArchNSPrefix;:DITAArchVersion
                         CDATA                              #FIXED
-                       '1.0'"                                        >
+                       '1.1'"                                        >
 
 
 <!-- ============================================================= -->

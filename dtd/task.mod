@@ -57,7 +57,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Task//EN"
                        'http://dita.oasis-open.org/architecture/2005/'
              %DITAArchNSPrefix;:DITAArchVersion
                         CDATA                              #FIXED
-                       '1.0'"                                        >
+                       '1.1'"                                        >
 
 
 <!-- ============================================================= -->
@@ -148,9 +148,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Task//EN"
 
 
 <!--                    LONG NAME: Task Body                       -->
-<!ELEMENT taskbody      ((%data.elements.incl; | 
-                          %foreign.unknown.incl;)*,
-                         (%prereq;)?, (%context;)?, 
+<!ELEMENT taskbody      ((%prereq;)?, (%context;)?, 
                          (%steps; | %steps-unordered;)?, 
                          (%result;)?, (%example;)?, (%postreq;)?)    >
 <!ATTLIST taskbody        

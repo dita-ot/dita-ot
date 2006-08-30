@@ -36,7 +36,7 @@ PUBLIC "-//OASIS//ENTITIES DITA Indexing Domain//EN"
 <!-- ============================================================= -->
 
 <!ENTITY % indexing-d-index-base 
-     "index-see | index-see-also | index-sort-as | index-range-start | index-range-end">
+     "index-see | index-see-also | index-sort-as">
 
 
 <!-- ============================================================= -->

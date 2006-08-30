@@ -63,7 +63,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Map//EN"
                        'http://dita.oasis-open.org/architecture/2005/'
              %DITAArchNSPrefix;:DITAArchVersion
                         CDATA                              #FIXED
-                       '1.0'"                                        >
+                       '1.1'"                                        >
 
 
 <!-- ============================================================= -->
@@ -112,7 +112,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Map//EN"
              linking    (none | normal | sourceonly | targetonly)
                                                           #IMPLIED
              toc        (yes | no)                        #IMPLIED
-             print      (yes | no)                        #IMPLIED
+             print      (yes | no | printonly)            #IMPLIED
              search     (yes | no)                        #IMPLIED
              chunk      CDATA                             #IMPLIED'  >
 
@@ -128,7 +128,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Map//EN"
              linking    (targetonly | sourceonly | 
                          normal | none)                   #IMPLIED
              toc        (yes | no)                        "no"
-             print      (yes | no)                        #IMPLIED
+             print      (yes | no | printonly)            #IMPLIED
              search     (yes | no)                        #IMPLIED
              chunk      CDATA                             #IMPLIED'  >
 

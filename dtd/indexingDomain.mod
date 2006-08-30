@@ -36,9 +36,6 @@ PUBLIC "-//OASIS//ELEMENTS DITA Indexing Domain//EN"
 <!--                   ELEMENT NAME ENTITIES                       -->
 <!-- ============================================================= -->
 
-<!ENTITY % index-range-end "index-range-end"                         >
-<!ENTITY % index-range-start
-                           "index-range-start"                       >
 <!ENTITY % index-see       "index-see"                               >
 <!ENTITY % index-see-also  "index-see-also"                          >
 <!ENTITY % index-sort-as   "index-sort-as"                           >
@@ -69,22 +66,8 @@ PUBLIC "-//OASIS//ELEMENTS DITA Indexing Domain//EN"
              %univ-atts;                                             >
 
 <!--                    LONG NAME: Index Sort As                   -->
-<!ELEMENT index-sort-as (%words.cnt;|%indexterm;)*                   >
+<!ELEMENT index-sort-as (%words.cnt;)*                               >
 <!ATTLIST index-sort-as
-             keyref     CDATA                            #IMPLIED
-             %univ-atts;                                             >
-
-<!--                    LONG NAME: Index Page Range Start          -->
-<!ELEMENT index-range-start
-                        EMPTY                                        >
-<!ATTLIST index-range-start
-             keyref     CDATA                            #IMPLIED
-             %univ-atts;                                             >
-
-<!--                    LONG NAME: Index Page Range End            -->
-<!ELEMENT index-range-end
-                        EMPTY                                        >
-<!ATTLIST index-range-end
              keyref     CDATA                            #IMPLIED
              %univ-atts;                                             >
 
@@ -93,8 +76,6 @@ PUBLIC "-//OASIS//ELEMENTS DITA Indexing Domain//EN"
 <!-- ============================================================= -->
 
 
-<!ATTLIST index-range-end %global-atts; class CDATA "+ topic/index-base indexing-d/index-range-end ">
-<!ATTLIST index-range-start %global-atts; class CDATA "+ topic/index-base indexing-d/index-range-start ">
 <!ATTLIST index-see       %global-atts; class CDATA "+ topic/index-base indexing-d/index-see ">
 <!ATTLIST index-see-also  %global-atts; class CDATA "+ topic/index-base indexing-d/index-see-also ">
 <!ATTLIST index-sort-as   %global-atts; class CDATA "+ topic/index-base indexing-d/index-sort-as ">

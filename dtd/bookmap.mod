@@ -560,7 +560,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA BookMap//EN"
              %chapter-atts;                                          >
 
 <!--                    LONG NAME: Glossary List                   -->
-<!ELEMENT glossarylist  ((%topicmeta;), (%topicref;)*)               >
+<!ELEMENT glossarylist  ((%topicmeta;)?, (%topicref;)*)              >
 <!ATTLIST glossarylist
              %chapter-atts;                                          >
 

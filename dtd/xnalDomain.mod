@@ -58,7 +58,6 @@ PUBLIC "-//OASIS//ELEMENTS DITA XNAL Domain//EN"
 <!ENTITY % personinfo      "personinfo"                              >
 <!ENTITY % personname      "personname"                              >
 <!ENTITY % postalcode      "postalcode"                              >
-<!ENTITY % resource        "resource"                                >
 <!ENTITY % thoroughfare    "thoroughfare"                            >
 <!ENTITY % url             "url"                                     >
 <!ENTITY % urls            "urls"                                    >
@@ -83,24 +82,11 @@ PUBLIC "-//OASIS//ELEMENTS DITA XNAL Domain//EN"
 
 <!--                    LONG NAME: Organization Details            -->
 <!ELEMENT organizationnamedetails      
-                        ((%organizationname;)?, (%resource;)*,
-                         (%otherinfo;)*)                             >
+                        ((%organizationname;)?, (%otherinfo;)*)      >
 <!ATTLIST organizationnamedetails              
              keyref     CDATA                            #IMPLIED
              %univ-atts;
              outputclass 
-                        CDATA                            #IMPLIED    >
-
-<!--                    LONG NAME: Resource                        -->
-<!ELEMENT resource      (%words.cnt;)*                               >
-<!ATTLIST resource
-             href       CDATA                            #IMPLIED
-             keyref     CDATA                            #IMPLIED
-             type       CDATA                            #IMPLIED
-             %univ-atts;
-             format     CDATA                            #IMPLIED
-             scope      (local|peer|external)            "external"
-             outputclass
                         CDATA                            #IMPLIED    >
 
 <!--                    LONG NAME: Organization Name               -->
@@ -115,8 +101,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA XNAL Domain//EN"
 <!--                    LONG NAME: Person Name                     -->
 <!ELEMENT personname    ((%honorific;)?, 
                          (%firstname;)*,(%middlename;)*,(%lastname;)*,
-                         (%generationidentifier;)?,
-                         (%resource;)?, (%otherinfo;)*)              >
+                         (%generationidentifier;)?, (%otherinfo;)*)  >
 <!ATTLIST personname
              %data-element-atts;                                     >
 
@@ -261,32 +246,31 @@ PUBLIC "-//OASIS//ELEMENTS DITA XNAL Domain//EN"
 <!--                    SPECIALIZATION ATTRIBUTE DECLARATIONS      -->
 <!-- ============================================================= -->
 
-<!ATTLIST addressdetails %global-atts; class CDATA "- topic/ph xnal-d/addressdetails ">
-<!ATTLIST administrativearea %global-atts; class CDATA "- topic/ph xnal-d/administrativearea ">
-<!ATTLIST authorinformation %global-atts; class CDATA "- topic/author xnal-d/authorinformation ">
-<!ATTLIST contactnumber %global-atts; class CDATA "- topic/data xnal-d/contactnumber ">
-<!ATTLIST contactnumbers %global-atts; class CDATA "- topic/data xnal-d/contactnumbers ">
-<!ATTLIST country     %global-atts; class CDATA "- topic/ph xnal-d/country ">
-<!ATTLIST emailaddress %global-atts; class CDATA "- topic/data xnal-d/emailaddress ">
-<!ATTLIST emailaddresses %global-atts; class CDATA "- topic/data xnal-d/emailaddresses ">
-<!ATTLIST firstname   %global-atts; class CDATA "- topic/data xnal-d/firstname ">
-<!ATTLIST generationidentifier %global-atts; class CDATA "- topic/data xnal-d/generationidentifier ">
-<!ATTLIST honorific   %global-atts; class CDATA "- topic/data xnal-d/honorific ">
-<!ATTLIST lastname    %global-atts; class CDATA "- topic/data xnal-d/lastname ">
-<!ATTLIST locality    %global-atts; class CDATA "- topic/ph xnal-d/locality ">
-<!ATTLIST localityname %global-atts; class CDATA "- topic/ph xnal-d/localityname ">
-<!ATTLIST middlename  %global-atts; class CDATA "- topic/data xnal-d/middlename ">
-<!ATTLIST namedetails %global-atts; class CDATA "- topic/data xnal-d/namedetails ">
-<!ATTLIST organizationinfo %global-atts; class CDATA "- topic/data xnal-d/organizationinfo ">
-<!ATTLIST organizationname %global-atts;  class CDATA "- topic/ph xnal-d/organizationname ">
-<!ATTLIST organizationnamedetails %global-atts; class CDATA "- topic/ph xnal-d/organizationnamedetails ">
-<!ATTLIST otherinfo   %global-atts; class CDATA "- topic/data xnal-d/otherinfo ">
-<!ATTLIST personinfo  %global-atts; class CDATA "- topic/data xnal-d/personinfo ">
-<!ATTLIST personname  %global-atts; class CDATA "- topic/data xnal-d/personname ">
-<!ATTLIST postalcode  %global-atts; class CDATA "- topic/ph xnal-d/postalcode ">
-<!ATTLIST resource    %global-atts; class CDATA "- topic/xref xnal-d/resource ">
-<!ATTLIST thoroughfare %global-atts; class CDATA "- topic/ph xnal-d/thoroughfare ">
-<!ATTLIST url         %global-atts; class CDATA "- topic/data xnal-d/url ">
-<!ATTLIST urls        %global-atts; class CDATA "- topic/data xnal-d/urls ">
+<!ATTLIST addressdetails %global-atts; class CDATA "+ topic/ph xnal-d/addressdetails ">
+<!ATTLIST administrativearea %global-atts; class CDATA "+ topic/ph xnal-d/administrativearea ">
+<!ATTLIST authorinformation %global-atts; class CDATA "+ topic/author xnal-d/authorinformation ">
+<!ATTLIST contactnumber %global-atts; class CDATA "+ topic/data xnal-d/contactnumber ">
+<!ATTLIST contactnumbers %global-atts; class CDATA "+ topic/data xnal-d/contactnumbers ">
+<!ATTLIST country     %global-atts; class CDATA "+ topic/ph xnal-d/country ">
+<!ATTLIST emailaddress %global-atts; class CDATA "+ topic/data xnal-d/emailaddress ">
+<!ATTLIST emailaddresses %global-atts; class CDATA "+ topic/data xnal-d/emailaddresses ">
+<!ATTLIST firstname   %global-atts; class CDATA "+ topic/data xnal-d/firstname ">
+<!ATTLIST generationidentifier %global-atts; class CDATA "+ topic/data xnal-d/generationidentifier ">
+<!ATTLIST honorific   %global-atts; class CDATA "+ topic/data xnal-d/honorific ">
+<!ATTLIST lastname    %global-atts; class CDATA "+ topic/data xnal-d/lastname ">
+<!ATTLIST locality    %global-atts; class CDATA "+ topic/ph xnal-d/locality ">
+<!ATTLIST localityname %global-atts; class CDATA "+ topic/ph xnal-d/localityname ">
+<!ATTLIST middlename  %global-atts; class CDATA "+ topic/data xnal-d/middlename ">
+<!ATTLIST namedetails %global-atts; class CDATA "+ topic/data xnal-d/namedetails ">
+<!ATTLIST organizationinfo %global-atts; class CDATA "+ topic/data xnal-d/organizationinfo ">
+<!ATTLIST organizationname %global-atts;  class CDATA "+ topic/ph xnal-d/organizationname ">
+<!ATTLIST organizationnamedetails %global-atts; class CDATA "+ topic/ph xnal-d/organizationnamedetails ">
+<!ATTLIST otherinfo   %global-atts; class CDATA "+ topic/data xnal-d/otherinfo ">
+<!ATTLIST personinfo  %global-atts; class CDATA "+ topic/data xnal-d/personinfo ">
+<!ATTLIST personname  %global-atts; class CDATA "+ topic/data xnal-d/personname ">
+<!ATTLIST postalcode  %global-atts; class CDATA "+ topic/ph xnal-d/postalcode ">
+<!ATTLIST thoroughfare %global-atts; class CDATA "+ topic/ph xnal-d/thoroughfare ">
+<!ATTLIST url         %global-atts; class CDATA "+ topic/data xnal-d/url ">
+<!ATTLIST urls        %global-atts; class CDATA "+ topic/data xnal-d/urls ">
 
 <!-- ================== End DITA XNAL Domain  =================== -->

@@ -658,6 +658,8 @@ PUBLIC "-//OASIS//ELEMENTS DITA Common Elements//EN"
 <!ELEMENT indexterm     (%words.cnt;|%indexterm;|%index-base;)*      >
 <!ATTLIST indexterm
              keyref     CDATA                             #IMPLIED
+             start      CDATA                             #IMPLIED
+             end        CDATA                             #IMPLIED
              %univ-atts;                                             >
 
 <!--                    LONG NAME: Index Base                      -->

@@ -105,7 +105,10 @@ PUBLIC "-//OASIS//DTD DITA Composite//EN"
 
 <!--                    Redefine the infotype entity to exclude 
                         other topic types and disallow nesting     -->
-<!ENTITY % info-types   "topic | concept | task | reference"         >
+<!ENTITY % glossentry-info-types 
+                        "no-topic-nesting"                           >
+<!ENTITY % info-types   "topic | concept | task | reference |
+                         glossentry"                                 >
 
 
 <!-- ============================================================= -->
@@ -158,6 +161,12 @@ PUBLIC "-//OASIS//DTD DITA Composite//EN"
 "reference.mod"                                                      >
 %reference-typemod;
 
+<!--                    Embed glossary to get specific elements    -->
+<!ENTITY % glossary-typemod 
+                        PUBLIC 
+"-//OASIS//ELEMENTS DITA Glossary//EN" 
+"glossary.mod"                                                       >                                                     
+%glossary-typemod;
 
 <!-- ============================================================= -->
 <!--                    DOMAIN ELEMENT INTEGRATION                 -->
