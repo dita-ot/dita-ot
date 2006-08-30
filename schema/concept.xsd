@@ -30,6 +30,7 @@
   <xs:include schemaLocation="highlightDomain.xsd"/>
   <xs:include schemaLocation="uiDomain.xsd"/>
   <xs:include schemaLocation="utilitiesDomain.xsd"/>
+  <xs:include schemaLocation="indexingDomain.xsd"/>
 
   <!--  ================ CONCEPT GROUP DEFINITION=====================  -->
   <xs:include schemaLocation="conceptGrp.xsd"/>
@@ -80,6 +81,13 @@
         <xs:group ref="ut-d-fig" />
       </xs:choice>
     </xs:group >
+    
+    <xs:group name="index-base">
+      <xs:choice>
+        <xs:group ref="index-base"/>
+        <xs:group ref="indexing-d-index-base"/>
+      </xs:choice>
+    </xs:group >
 
   </xs:redefine>
 
@@ -89,16 +97,17 @@
   	<xs:complexType name="topic.class">
   		<xs:complexContent>
   			<xs:extension base="topic.class">
-  				<xs:attribute name="domains" type="xs:string" default="(topic ui-d) (topic hi-d) (topic sw-d) (topic pr-d) (topic ut-d)"/>
+  			  <xs:attribute name="domains" type="xs:string" default="(topic ui-d) (topic hi-d) (topic sw-d) (topic pr-d) (topic ut-d) (topic indexing-d)"/>
   			</xs:extension>
   		</xs:complexContent>
   	</xs:complexType>
   </xs:redefine>
+  
   <xs:redefine schemaLocation="conceptMod.xsd" >
   	<xs:complexType name="concept.class">
   		<xs:complexContent>
   			<xs:extension base="concept.class">
-  				<xs:attribute name="domains" type="xs:string" default="(topic ui-d) (topic hi-d) (topic sw-d) (topic pr-d) (topic ut-d)"/>
+  			  <xs:attribute name="domains" type="xs:string" default="(topic ui-d) (topic hi-d) (topic sw-d) (topic pr-d) (topic ut-d) (topic indexing-d)"/>
   			</xs:extension>
   		</xs:complexContent>
   	</xs:complexType>
@@ -106,9 +115,7 @@
 
   <!--  ================ INFO-TYPES DEFINITION =====================  -->
   <xs:group name="info-types">
-    <xs:choice>
-      <xs:group ref="concept-info-types"/>
-    </xs:choice>
+    <xs:sequence/>
   </xs:group>
 
 

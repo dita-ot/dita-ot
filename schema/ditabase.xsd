@@ -3,7 +3,7 @@
 <!--                    HEADER                                     -->
 <!-- ============================================================= -->
 <!--  MODULE:    DITA BASE XSD                                     -->
-<!--  VERSION:   1.0.1                                             -->
+<!--  VERSION:   1.1                                             -->
 <!--  DATE:      November 2005                                     -->
 <!--                                                               -->
 <!-- ============================================================= -->
@@ -30,11 +30,13 @@
   <xs:include schemaLocation="highlightDomain.xsd"/>
   <xs:include schemaLocation="programmingDomain.xsd"/>
   <xs:include schemaLocation="utilitiesDomain.xsd"/>
+  <xs:include schemaLocation="indexingDomain.xsd"/>
 
   <!--  ================ INFO TYPES =====================  -->
   <xs:include schemaLocation="referenceGrp.xsd" />
   <xs:include schemaLocation="taskGrp.xsd" />
   <xs:include schemaLocation="conceptGrp.xsd" />
+  <xs:include schemaLocation="glossaryGrp.xsd" />
 
   <xs:redefine schemaLocation="topicGrp.xsd">
     <xs:group name="keyword">
@@ -81,52 +83,101 @@
         <xs:group ref="ut-d-fig" />
       </xs:choice>
     </xs:group >
+    
+    <xs:group name="index-base">
+      <xs:choice>
+        <xs:group ref="index-base"/>
+        <xs:group ref="indexing-d-index-base"/>
+      </xs:choice>
+    </xs:group >
+    
   </xs:redefine>
 
   <xs:redefine schemaLocation="topicMod.xsd" >
     <xs:complexType name="topic.class">
       <xs:complexContent>
         <xs:extension base="topic.class">
-          <xs:attribute name="domains" type="xs:string" default="(topic ui-d) (topic hi-d) (topic sw-d) (topic pr-d) (topic ut-d)"/>
+          <xs:attribute name="domains" type="xs:string" default="(topic ui-d) (topic hi-d) (topic sw-d) (topic pr-d) (topic ut-d) (topic indexing-d)"/>
         </xs:extension>
       </xs:complexContent>
     </xs:complexType>
+    
+    <xs:group name="topic-info-types">
+      <xs:choice>
+        <xs:group ref="info-types"/>
+      </xs:choice>
+    </xs:group>
   </xs:redefine>
 
   <xs:redefine schemaLocation="conceptMod.xsd" >
     <xs:complexType name="concept.class">
       <xs:complexContent>
         <xs:extension base="concept.class">
-          <xs:attribute name="domains" type="xs:string" default="(topic ui-d) (topic hi-d) (topic sw-d) (topic pr-d) (topic ut-d)"/>
+          <xs:attribute name="domains" type="xs:string" default="(topic ui-d) (topic hi-d) (topic sw-d) (topic pr-d) (topic ut-d) (topic indexing-d)"/>
         </xs:extension>
       </xs:complexContent>
     </xs:complexType>
+    
+    <xs:group name="concept-info-types">
+      <xs:choice>
+        <xs:group ref="info-types"/>
+      </xs:choice>
+    </xs:group>
   </xs:redefine>
 
   <xs:redefine schemaLocation="taskMod.xsd" >
     <xs:complexType name="task.class">
       <xs:complexContent>
         <xs:extension base="task.class">
-          <xs:attribute name="domains" type="xs:string" default="(topic ui-d) (topic hi-d) (topic sw-d) (topic pr-d) (topic ut-d)"/>
+          <xs:attribute name="domains" type="xs:string" default="(topic ui-d) (topic hi-d) (topic sw-d) (topic pr-d) (topic ut-d) (topic indexing-d)"/>
         </xs:extension>
       </xs:complexContent>
     </xs:complexType>
+    
+    <xs:group name="task-info-types">
+      <xs:choice>
+        <xs:group ref="info-types"/>
+      </xs:choice>
+    </xs:group>
   </xs:redefine>
 
   <xs:redefine schemaLocation="referenceMod.xsd" >
     <xs:complexType name="reference.class">
       <xs:complexContent>
         <xs:extension base="reference.class">
-          <xs:attribute name="domains" type="xs:string" default="(topic ui-d) (topic hi-d) (topic sw-d) (topic pr-d) (topic ut-d)"/>
+          <xs:attribute name="domains" type="xs:string" default="(topic ui-d) (topic hi-d) (topic sw-d) (topic pr-d) (topic ut-d) (topic indexing-d)"/>
         </xs:extension>
       </xs:complexContent>
     </xs:complexType>
+    
+    <xs:group name="reference-info-types">
+      <xs:choice>
+        <xs:group ref="info-types"/>
+      </xs:choice>
+    </xs:group>
+  </xs:redefine>
+  
+  <xs:redefine schemaLocation="glossaryMod.xsd" >
+    <xs:complexType name="glossentry.class">
+      <xs:complexContent>
+        <xs:extension base="glossentry.class">
+          <xs:attribute name="domains" type="xs:string" default="(topic ui-d) (topic hi-d) (topic sw-d) (topic pr-d) (topic ut-d) (topic indexing-d)"/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+    
+    <xs:group name="glossentry-info-types">
+      <xs:choice>
+        <xs:group ref="no-topic-nesting"/>
+      </xs:choice>
+    </xs:group>
+    
   </xs:redefine>
 
   <xs:group name="ditabase-info-types">
     <xs:choice>
       <xs:group ref="info-types"/>
-    </xs:choice>
+      </xs:choice>
   </xs:group>
 
   <xs:group name="info-types">
@@ -135,6 +186,7 @@
       <xs:element ref="task"/>
       <xs:element ref="concept"/>
       <xs:element ref="reference"/>
+      <xs:element ref="glossentry"/>
     </xs:choice>
   </xs:group>
 

@@ -67,7 +67,7 @@
       <xs:element ref="shortcut"/>
       <xs:group ref="words.cnt"/>
     </xs:choice>
-    <xs:attribute name="keyref" type="xs:NMTOKEN"/>
+    <xs:attribute name="keyref" type="xs:string"/>
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="global-atts"/>
     <xs:attributeGroup ref="univ-atts"/>
@@ -85,7 +85,7 @@
     </xs:annotation>
   </xs:element>
   <xs:complexType name="shortcut.class"  mixed="true">
-        <xs:attribute name="keyref" type="xs:NMTOKEN"/>
+        <xs:attribute name="keyref" type="xs:string"/>
         <xs:attribute name="outputclass" type="xs:string"/>
         <xs:attributeGroup ref="global-atts"/>
         <xs:attributeGroup ref="univ-atts"/>
@@ -104,7 +104,7 @@
       </xs:annotation>
   </xs:element>
   <xs:complexType name="wintitle.class"  mixed="true">
-    <xs:attribute name="keyref" type="xs:NMTOKEN"/>
+    <xs:attribute name="keyref" type="xs:string"/>
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="global-atts"/>
     <xs:attributeGroup ref="univ-atts"/>
@@ -131,7 +131,7 @@
      <xs:choice maxOccurs="unbounded">
           <xs:element ref="uicontrol" />
         </xs:choice>
-        <xs:attribute name="keyref" type="xs:NMTOKEN"/>
+        <xs:attribute name="keyref" type="xs:string"/>
         <xs:attribute name="outputclass" type="xs:string"/>
         <xs:attributeGroup ref="global-atts"/>
   <xs:attributeGroup ref="univ-atts"/>
@@ -151,6 +151,10 @@
         <xs:choice minOccurs="0" maxOccurs="unbounded">
           <xs:group ref="basic.ph.notm"/>
           <xs:group ref="txt.incl"/>
+          <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:group ref="data.element.incl"/>
+            <xs:group ref="foreign.unknown.incl"/>
+          </xs:choice>
         </xs:choice>
         <xs:attribute name="spectitle" type="xs:string"/>
         <xs:attribute name="outputclass" type="xs:string"/>

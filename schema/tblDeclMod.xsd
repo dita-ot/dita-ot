@@ -93,20 +93,23 @@
       <xs:group ref="tgroup" maxOccurs="unbounded"/>
     </xs:sequence>
     <xs:attributeGroup ref="colrowsep-atts"/>
-    <xs:attribute name="pgwide" type="xs:NMTOKEN"/>
+    <xs:attribute name="pgwide" type="xs:string"/>
+    <xs:attribute name="scale" type="scale-atts.class"/>
+    <xs:attribute name="frame" type="frame-att.class"/>
     <xs:attribute name="rowheader" type="rowheader-att.class"/>
     <xs:attribute name="outputclass" type="xs:string"/>
-    <xs:attributeGroup ref="display-atts"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
     <xs:attribute ref="class" default="- topic/table "/>
   </xs:complexType>
+  
   <xs:simpleType name="rowheader-att.class">
     <xs:restriction base="xs:string">
       <xs:enumeration value="firstcol"/>
       <xs:enumeration value="norowheader"/>
     </xs:restriction>
   </xs:simpleType>
+  
   <xs:element name="tgroup" type="tgroup.class">
     <xs:annotation>
       <xs:documentation>
@@ -130,10 +133,12 @@
     <xs:attributeGroup ref="global-atts"/>
     <xs:attribute ref="class" default="- topic/tgroup "/>
   </xs:complexType>
+  
   <xs:attributeGroup name="colrowsep-atts">
-    <xs:attribute name="colsep" type="xs:NMTOKEN"/>
-    <xs:attribute name="rowsep" type="xs:NMTOKEN"/>
+    <xs:attribute name="colsep" type="xs:string"/>
+    <xs:attribute name="rowsep" type="xs:string"/>
   </xs:attributeGroup>
+  
   <xs:element name="colspec" type="colspec.class">
     <xs:annotation>
       <xs:documentation>
@@ -151,9 +156,12 @@
     <xs:attributeGroup ref="colrowsep-atts"/>
     <xs:attribute name="char" type="xs:string"/>
     <xs:attribute name="charoff" type="xs:NMTOKEN"/>
+    <xs:attributeGroup ref="id-atts"/>
+    <xs:attributeGroup ref="localization-atts"/>
     <xs:attributeGroup ref="global-atts"/>
     <xs:attribute ref="class" default="- topic/colspec "/>
   </xs:complexType>
+  
   <xs:element name="thead" type="thead.class">
     <xs:annotation>
       <xs:documentation>
@@ -164,7 +172,7 @@
   </xs:element>
   <xs:complexType name="thead.class">
     <xs:sequence>
-      <xs:group ref="row" minOccurs="0"/>
+      <xs:group ref="row" maxOccurs="unbounded"/>
     </xs:sequence>
     <xs:attribute name="valign" type="valign-att.class"/>
     <xs:attribute name="outputclass" type="xs:string"/>
@@ -172,6 +180,8 @@
     <xs:attributeGroup ref="global-atts"/>
     <xs:attribute ref="class" default="- topic/thead "/>
   </xs:complexType>
+  
+  
   <xs:element name="tbody" type="tbody.class">
     <xs:annotation>
       <xs:documentation>
@@ -190,6 +200,8 @@
     <xs:attributeGroup ref="global-atts"/>
     <xs:attribute ref="class" default="- topic/tbody "/>
   </xs:complexType>
+  
+  
   <xs:element name="row" type="row.class">
     <xs:annotation>
       <xs:documentation>The &lt;<keyword>row</keyword>> element contains a single row in
@@ -201,13 +213,15 @@
     <xs:choice>
       <xs:group ref="entry" maxOccurs="unbounded"/>
     </xs:choice>
-    <xs:attribute name="rowsep" type="xs:NMTOKEN"/>
+    <xs:attribute name="rowsep" type="xs:string"/>
     <xs:attribute name="valign" type="valign-att.class"/>
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
     <xs:attribute ref="class" default="- topic/row "/>
   </xs:complexType>
+  
+  
   <xs:element name="entry" type="entry.class">
     <xs:annotation>
       <xs:documentation>The &lt;<keyword>entry</keyword>> element defines a single cell
@@ -219,16 +233,20 @@
     <xs:choice minOccurs="0" maxOccurs="unbounded">
       <xs:group ref="tblcell.cnt"/>
     </xs:choice>
-    <xs:attribute name="namest" type="xs:string"/>
-    <xs:attribute name="nameend" type="xs:string"/>
+    <xs:attribute name="namest" type="xs:NMTOKEN"/>
+    <xs:attribute name="nameend" type="xs:NMTOKEN"/>
     <xs:attribute name="spanname" type="xs:string"/>
-    <xs:attribute name="colname" type="xs:string"/>
-    <xs:attribute name="morerows" type="xs:string"/>
+    <xs:attribute name="colname" type="xs:NMTOKEN"/>
+    <xs:attribute name="morerows" type="xs:NMTOKEN"/>
+    <xs:attribute name="char" type="xs:string"/>
+    <xs:attribute name="charoff" type="xs:NMTOKEN"/>
     <xs:attributeGroup ref="colrowsep-atts"/>
     <xs:attribute name="align" type="align-att.class"/>
     <xs:attribute name="valign" type="valign-att.class"/>
     <xs:attribute name="rev" type="xs:string"/>
     <xs:attribute name="outputclass" type="xs:string"/>
+    <xs:attributeGroup ref="id-atts"/>
+    <xs:attributeGroup ref="localization-atts"/>
     <xs:attributeGroup ref="global-atts"/>
     <xs:attribute ref="class" default="- topic/entry "/>
     <!-- added DITA attributes -->

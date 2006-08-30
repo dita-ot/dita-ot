@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ============================================================= -->
+<!--                    HEADER                                     -->
+<!-- ============================================================= -->
+<!--  MODULE:    DITA Concept XSD                                  -->
+<!--  VERSION:   1.0.1                                             -->
+<!--  DATE:      November 2005                                     -->
+<!--                                                               -->
+<!-- ============================================================= -->
+
+
+<!-- ============================================================= -->
+<!-- SYSTEM:     Darwin Information Typing Architecture (DITA)     -->
+<!--                                                               -->
+<!-- PURPOSE:    W3C XML Schema to describe DITA concepts          -->
+<!--                                                               -->
+<!-- ORIGINAL CREATION DATE:                                       -->
+<!--             March 2001                                        -->
+<!--                                                               -->
+<!--             (C) Copyright OASIS-Open.org 2005.                -->
+<!--             (C) Copyright IBM Corporation 2001, 2004.         -->
+<!--             All Rights Reserved.                              -->
+<!-- ============================================================= -->
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
+    <!-- Add the domains to the base topic XML Schema -->
+    <!--  ================ TOPIC DOMAINS INLCUSION =====================  -->
+    <xs:include schemaLocation="programmingDomain.xsd"/>
+    <xs:include schemaLocation="softwareDomain.xsd"/>
+    <xs:include schemaLocation="highlightDomain.xsd"/>
+    <xs:include schemaLocation="uiDomain.xsd"/>
+    <xs:include schemaLocation="utilitiesDomain.xsd"/>
+    <xs:include schemaLocation="indexingDomain.xsd"/>
+    
+    <!--  ================ CONCEPT GROUP DEFINITION=====================  -->
+    <xs:include schemaLocation="conceptGrp.xsd"/>
+    <xs:include schemaLocation="topicGrp.xsd"/>
+    <xs:include schemaLocation="glossaryGrp.xsd"/>
+    
+     
+    
+    <!--  ================ DOMAINS ATTRIBUTE DEFINITION =====================  -->
+    <xs:redefine schemaLocation="topicMod.xsd" >
+        <xs:complexType name="topic.class">
+            <xs:complexContent>
+                <xs:extension base="topic.class">
+                    <xs:attribute name="domains" type="xs:string" default="(topic ui-d) (topic hi-d) (topic sw-d) (topic pr-d) (topic ut-d) (topic indexing-d)"/>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:redefine>
+    <xs:redefine schemaLocation="conceptMod.xsd" >
+        <xs:complexType name="concept.class">
+            <xs:complexContent>
+                <xs:extension base="concept.class">
+                    <xs:attribute name="domains" type="xs:string" default="(topic ui-d) (topic hi-d) (topic sw-d) (topic pr-d) (topic ut-d) (topic indexing-d)"/>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:redefine>
+    
+    <xs:redefine schemaLocation="glossaryMod.xsd" >
+        <xs:complexType name="glossentry.class">
+            <xs:complexContent>
+                <xs:extension base="glossentry.class">
+                    <xs:attribute name="domains" type="xs:string" default="(topic ui-d) (topic hi-d) (topic sw-d) (topic pr-d) (topic ut-d) (topic indexing-d)"/>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:redefine>
+    
+    <!--  ================ INFO-TYPES DEFINITION =====================  -->
+    <xs:group name="info-types">
+        <xs:choice/>    
+    </xs:group>
+    
+</xs:schema>

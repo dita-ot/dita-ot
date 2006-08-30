@@ -30,6 +30,7 @@
   <xs:include schemaLocation="highlightDomain.xsd"/>
   <xs:include schemaLocation="uiDomain.xsd"/>
   <xs:include schemaLocation="utilitiesDomain.xsd"/>
+  <xs:include schemaLocation="indexingDomain.xsd"/>
 
   <!-- <xs:include schemaLocation="topicDomainsMod.xsd"/> -->
   <xs:redefine schemaLocation="topicGrp.xsd">
@@ -77,6 +78,13 @@
         <xs:group ref="ut-d-fig" />
       </xs:choice>
     </xs:group >
+    
+    <xs:group name="index-base">
+      <xs:choice>
+        <xs:group ref="index-base"/>
+        <xs:group ref="indexing-d-index-base"/>
+      </xs:choice>
+    </xs:group>
 
   </xs:redefine>
 
@@ -86,7 +94,7 @@
   	<xs:complexType name="topic.class">
   		<xs:complexContent>
   			<xs:extension base="topic.class">
-  				<xs:attribute name="domains" type="xs:string" default="(topic ui-d) (topic hi-d) (topic sw-d) (topic pr-d) (topic ut-d)"/>
+  			  <xs:attribute name="domains" type="xs:string" default="(topic ui-d) (topic hi-d) (topic sw-d) (topic pr-d) (topic ut-d) (topic indexing-d)"/>
   			</xs:extension>
   		</xs:complexContent>
   	</xs:complexType>
@@ -95,7 +103,7 @@
   	<xs:complexType name="reference.class">
   		<xs:complexContent>
   			<xs:extension base="reference.class">
-  				<xs:attribute name="domains" type="xs:string" default="(topic ui-d) (topic hi-d) (topic sw-d) (topic pr-d) (topic ut-d)"/>
+  			  <xs:attribute name="domains" type="xs:string" default="(topic ui-d) (topic hi-d) (topic sw-d) (topic pr-d) (topic ut-d) (topic indexing-d)"/>
   			</xs:extension>
   		</xs:complexContent>
   	</xs:complexType>
@@ -103,9 +111,7 @@
 
 
   <xs:group name="info-types">
-    <xs:choice>
-      <xs:group ref="reference-info-types"/>
-    </xs:choice>
+    <xs:sequence/>    
   </xs:group>
 
 </xs:schema>

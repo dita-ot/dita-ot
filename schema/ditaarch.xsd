@@ -24,6 +24,6 @@
 <!-- ============================================================= -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"  targetNamespace="http://dita.oasis-open.org/architecture/2005/" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
 
-  <xs:attribute name="DITAArchVersion" type="xs:string" fixed="1.0"/>
+  <xs:attribute name="DITAArchVersion" type="xs:string" fixed="1.1"/>
 
 </xs:schema>

@@ -52,6 +52,8 @@
   <xs:complexType name="sup.class" mixed="true">
         <xs:choice minOccurs="0" maxOccurs="unbounded">
           <xs:group ref="basic.ph"/>
+          <xs:group ref="data.element.incl"/>
+          <xs:group ref="foreign.unknown.incl"/>
         </xs:choice>
         <xs:attributeGroup ref="global-atts"/>
         <xs:attributeGroup ref="univ-atts"/>
@@ -72,6 +74,8 @@
   <xs:complexType name="sub.class" mixed="true">
         <xs:choice minOccurs="0" maxOccurs="unbounded">
           <xs:group ref="basic.ph"/>
+          <xs:group ref="data.element.incl"/>
+          <xs:group ref="foreign.unknown.incl"/>
         </xs:choice>
         <xs:attributeGroup ref="global-atts"/>
         <xs:attributeGroup ref="univ-atts"/>
@@ -95,6 +99,8 @@
   <xs:complexType name="tt.class" mixed="true">
         <xs:choice minOccurs="0" maxOccurs="unbounded">
           <xs:group ref="basic.ph"/>
+          <xs:group ref="data.element.incl"/>
+          <xs:group ref="foreign.unknown.incl"/>
         </xs:choice>
         <xs:attributeGroup ref="global-atts"/>
         <xs:attributeGroup ref="univ-atts"/>
@@ -118,6 +124,8 @@
   <xs:complexType name="b.class" mixed="true">
         <xs:choice minOccurs="0" maxOccurs="unbounded">
           <xs:group ref="basic.ph"/>
+          <xs:group ref="data.element.incl"/>
+          <xs:group ref="foreign.unknown.incl"/>
         </xs:choice>
         <xs:attributeGroup ref="global-atts"/>
         <xs:attributeGroup ref="univ-atts"/>
@@ -141,6 +149,8 @@
   <xs:complexType name="u.class" mixed="true">
         <xs:choice minOccurs="0" maxOccurs="unbounded">
           <xs:group ref="basic.ph"/>
+          <xs:group ref="data.element.incl"/>
+          <xs:group ref="foreign.unknown.incl"/>
         </xs:choice>
         <xs:attributeGroup ref="global-atts"/>
         <xs:attributeGroup ref="univ-atts"/>
@@ -166,6 +176,8 @@
   <xs:complexType name="i.class" mixed="true">
         <xs:choice minOccurs="0" maxOccurs="unbounded">
           <xs:group ref="basic.ph"/>
+          <xs:group ref="data.element.incl"/>
+          <xs:group ref="foreign.unknown.incl"/>
         </xs:choice>
         <xs:attributeGroup ref="global-atts"/>
         <xs:attributeGroup ref="univ-atts"/>

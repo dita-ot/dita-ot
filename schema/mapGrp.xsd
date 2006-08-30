@@ -23,12 +23,12 @@
 <!-- ============================================================= -->
 <xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema'>
 
-   <xs:group name="keyword">
+  <xs:group name="map">
     <xs:sequence>
-      <xs:element ref="keyword"/>
+      <xs:element ref="map"/>
     </xs:sequence>
-   </xs:group>
-
+  </xs:group>
+  
    <xs:group name="topicmeta">
     <xs:sequence>
       <xs:element ref="topicmeta"/>
@@ -101,9 +101,4 @@
     </xs:sequence>
   </xs:group>
 
-  <xs:group name="indexterm">
-    <xs:sequence>
-      <xs:element ref="indexterm"/>
-    </xs:sequence>
-  </xs:group>
 </xs:schema>

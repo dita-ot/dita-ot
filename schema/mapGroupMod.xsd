@@ -23,6 +23,8 @@
 <!-- ============================================================= -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
 
+  <!--<!ENTITY mapgroup-d-att "(map mapgroup-d)"                           >-->
+  
   <xs:group name="mapgroup-d-topicref">
       <xs:choice>
         <xs:element ref="topichead"/>
@@ -45,13 +47,13 @@
             <xs:group ref="navref" />
             <xs:group ref="anchor" />
             <xs:group ref="topicref" />
+            <xs:group ref="data.element.incl"/>
           </xs:choice>
         </xs:sequence>
         <xs:attribute name="navtitle" type="xs:string" use="required"/>
-        <xs:attribute name="id" type="xs:ID"/>
-        <xs:attribute name="conref" type="xs:string"/>
+        <xs:attribute name="outputclass" type="xs:string"/>
         <xs:attributeGroup ref="topicref-atts" />
-        <xs:attributeGroup ref="select-atts" />
+        <xs:attributeGroup ref="univ-atts"/>
         <xs:attributeGroup ref="global-atts" />
         <xs:attribute ref="class" default="+ map/topicref mapgroup/topichead " />
     </xs:complexType>
@@ -75,12 +77,12 @@
             <xs:group ref="navref" />
             <xs:group ref="anchor" />
             <xs:group ref="topicref" />
+            <xs:group ref="data.element.incl"/>
           </xs:choice>
         </xs:sequence>
-        <xs:attribute name="id" type="xs:ID"/>
-        <xs:attribute name="conref" type="xs:string"/>
-        <xs:attributeGroup ref="topicref-atts" />
-        <xs:attributeGroup ref="select-atts" />
+    <xs:attribute name="outputclass" type="xs:string"/>
+    <xs:attributeGroup ref="topicref-atts" />
+    <xs:attributeGroup ref="univ-atts"/>
         <xs:attributeGroup ref="global-atts" />
         <xs:attribute ref="class" default="+ map/topicref mapgroup/topicgroup " />
   </xs:complexType>

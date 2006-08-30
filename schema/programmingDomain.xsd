@@ -60,14 +60,10 @@
 
   <xs:attributeGroup name="univ-atts-no-importance">
     <xs:attributeGroup ref="id-atts"/>
-    <xs:attribute name="platform" type="xs:string"/>
-    <xs:attribute name="product" type="xs:string"/>
-    <xs:attribute name="audience" type="xs:string"/>
-    <xs:attribute name="otherprops" type="xs:string"/>
     <xs:attribute name="rev" type="xs:string"/>
     <xs:attribute name="status" type="status-atts.class"/>
-    <xs:attribute name="translate" type="yesno-att.class"/>
-    <xs:attribute ref="xml:lang"/>
+    <xs:attributeGroup ref="localization-atts"/>
+    <xs:attributeGroup ref="filter-atts"/>
   </xs:attributeGroup>
 
   <xs:attributeGroup name="univ-atts-importance-nodefault">
@@ -111,6 +107,8 @@
   <xs:complexType name="codeph.class" mixed="true">
         <xs:choice minOccurs="0" maxOccurs="unbounded">
             <xs:group ref="basic.ph.notm" />
+            <xs:group ref="data.element.incl"/>
+            <xs:group ref="foreign.unknown.incl"/>
         </xs:choice>
         <xs:attribute name="outputclass" type="xs:string"/>
         <xs:attributeGroup ref="global-atts"/>
@@ -136,6 +134,8 @@
         <xs:choice minOccurs="0" maxOccurs="unbounded">
           <xs:group ref="basic.ph.notm"/>
           <xs:group ref="txt.incl"/>
+          <xs:group ref="data.element.incl"/>
+          <xs:group ref="foreign.unknown.incl"/>
         </xs:choice>
         <xs:attribute name="outputclass" type="xs:string"/>
         <xs:attribute name="spectitle" type="xs:string"/>
@@ -157,7 +157,7 @@
     </xs:annotation>
   </xs:element>
   <xs:complexType name="option.class" mixed="true">
-        <xs:attribute name="keyref" type="xs:NMTOKEN"/>
+        <xs:attribute name="keyref" type="xs:string"/>
         <xs:attribute name="outputclass" type="xs:string"/>
         <xs:attributeGroup ref="global-atts"/>
         <xs:attributeGroup ref="univ-atts"/>
@@ -198,7 +198,7 @@
     </xs:annotation>
   </xs:element>
   <xs:complexType name="parmname.class" mixed="true">
-        <xs:attribute name="keyref" type="xs:NMTOKEN"/>
+        <xs:attribute name="keyref" type="xs:string"/>
         <xs:attribute name="outputclass" type="xs:string"/>
         <xs:attributeGroup ref="global-atts"/>
         <xs:attributeGroup ref="univ-atts"/>
@@ -316,7 +316,7 @@
     </xs:annotation>
   </xs:element>
   <xs:complexType name="apiname.class" mixed="true">
-        <xs:attribute name="keyref" type="xs:NMTOKEN"/>
+        <xs:attribute name="keyref" type="xs:string"/>
         <xs:attribute name="outputclass" type="xs:string"/>
         <xs:attributeGroup ref="global-atts"/>
         <xs:attributeGroup ref="univ-atts"/>
@@ -380,7 +380,7 @@
         <xs:choice minOccurs="0" maxOccurs="unbounded">
           <xs:group ref="term.cnt"/>
         </xs:choice>
-        <xs:attribute name="keyref" type="xs:NMTOKEN"/>
+        <xs:attribute name="keyref" type="xs:string"/>
         <xs:attribute name="outputclass" type="xs:string"/>
         <xs:attributeGroup ref="global-atts"/>
         <xs:attributeGroup ref="univ-atts"/>
@@ -700,7 +700,7 @@
      </xs:annotation>
   </xs:element>
   <xs:complexType name="kwd.class" mixed="true">
-        <xs:attribute name="keyref" type="xs:NMTOKEN"/>
+        <xs:attribute name="keyref" type="xs:string"/>
         <xs:attribute name="outputclass" type="xs:string"/>
         <xs:attributeGroup ref="global-atts"/>
         <xs:attributeGroup ref="univ-atts-no-importance"/>
