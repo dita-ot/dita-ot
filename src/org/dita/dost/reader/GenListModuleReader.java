@@ -7,11 +7,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-
 
 import org.apache.xml.resolver.tools.CatalogResolver;
 import org.dita.dost.log.DITAOTJavaLogger;
@@ -352,6 +353,11 @@ public class GenListModuleReader extends AbstractXMLReader {
 		}
 
 		filename = FileUtils.normalizeDirectory(currentDir, attrValue);
+		try{
+			filename = URLDecoder.decode(filename, Constants.UTF8);
+		}catch(UnsupportedEncodingException e){
+			
+		}
 
 		/*
 		 * Collect non-conref and non-copyto targets
