@@ -2953,6 +2953,16 @@
      </xsl:choose>
   </xsl:variable>
 
+  <xsl:variable name="headCount">
+    <xsl:value-of select="count(ancestor::*[contains(@class,' topic/topic ')])+1"/>
+  </xsl:variable>
+  <xsl:variable name="headLevel">
+    <xsl:choose>
+      <xsl:when test="$headCount > 6">h6</xsl:when>
+      <xsl:otherwise>h<xsl:value-of select="$headCount"/></xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
   <!-- based on graceful defaults, build an appropriate section-level heading -->
   <xsl:choose>
     <xsl:when test="not($heading='')">
@@ -2960,26 +2970,41 @@
         <!-- hack: a title with whitespace ALWAYS overrides as null -->
         <xsl:comment>no heading</xsl:comment>
       </xsl:if>
-      <xsl:apply-templates select="*[contains(@class,' topic/title ')][1]"/>
+      <xsl:apply-templates select="*[contains(@class,' topic/title ')][1]">
+        <xsl:with-param name="headLevel" select="$headLevel"/>
+      </xsl:apply-templates>
       <xsl:if test="@spectitle and not(*[contains(@class,' topic/title ')])">
-        <h4 class="sectiontitle"><xsl:value-of select="@spectitle"/></h4>
+        <xsl:element name="{$headLevel}">
+          <xsl:attribute name="class">sectiontitle</xsl:attribute>
+          <xsl:value-of select="@spectitle"/>
+        </xsl:element>
       </xsl:if>
     </xsl:when>
     <xsl:when test="$defaulttitle">
-      <h4 class="sectiontitle"><xsl:value-of select="$defaulttitle"/></h4>
+      <xsl:element name="{$headLevel}">
+        <xsl:attribute name="class">sectiontitle</xsl:attribute>
+        <xsl:value-of select="$defaulttitle"/>
+      </xsl:element>
     </xsl:when>
     <xsl:otherwise></xsl:otherwise>
   </xsl:choose>
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' topic/section ')]/*[contains(@class,' topic/title ')]" name="topic.section_title">
-    <h4 class="sectiontitle">
-        <xsl:call-template name="commonattributes"/>
-        <xsl:apply-templates/>
-    </h4>
-</xsl:template>
-<xsl:template match="*[contains(@class,' topic/example ')]/*[contains(@class,' topic/title ')]" name="topic.example_title">
-    <xsl:call-template name="topic.section_title"/>
+  <xsl:param name="headLevel">
+    <xsl:variable name="headCount">
+      <xsl:value-of select="count(ancestor::*[contains(@class,' topic/topic ')])+1"/>
+    </xsl:variable>
+    <xsl:choose>
+      <xsl:when test="$headCount > 6">h6</xsl:when>
+      <xsl:otherwise>h<xsl:value-of select="$headCount"/></xsl:otherwise>
+    </xsl:choose>
+  </xsl:param>
+  <xsl:element name="{$headLevel}">
+    <xsl:attribute name="class">sectiontitle</xsl:attribute>
+    <xsl:call-template name="commonattributes"/>
+    <xsl:apply-templates/>
+  </xsl:element>
 </xsl:template>
 
 <!-- Test for in BIDI area: returns "bidi" when parent's @xml:lang is a bidi language;
