@@ -257,8 +257,10 @@ public class StringUtils {
 	public static String setOrAppend(String target, String value, boolean withSpace){
 		if(target == null){
 			return value;
+		}if(value == null){
+			return target;
 		}else{
-			if(withSpace){
+			if(withSpace && target.endsWith(Constants.STRING_BLANK)){
 				return target + Constants.STRING_BLANK + value;
 			}else{
 				return target + value;
