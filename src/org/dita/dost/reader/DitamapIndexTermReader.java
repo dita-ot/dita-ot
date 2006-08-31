@@ -15,6 +15,7 @@ import org.dita.dost.index.TopicrefElement;
 import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.util.Constants;
 import org.dita.dost.util.FileUtils;
+import org.dita.dost.util.StringUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
@@ -53,6 +54,7 @@ public class DitamapIndexTermReader extends AbstractXMLReader {
 			throws SAXException {
 		String temp = new String(ch, start, length).trim();
 		IndexTerm indexTerm = null;
+		boolean withSpace = (ch[start] == '\n');
 
 		if (temp.length() == 0) {
 			return;
@@ -63,13 +65,8 @@ public class DitamapIndexTermReader extends AbstractXMLReader {
 		}
 
 		indexTerm = (IndexTerm) elementStack.peek();
-
-		if (indexTerm.getTermName() == null) {
-			indexTerm.setTermName(temp);
-		} else {
-			indexTerm.setTermName(new StringBuffer(indexTerm.getTermName())
-					.append(temp).toString());
-		}
+		
+		indexTerm.setTermName(StringUtils.setOrAppend(indexTerm.getTermName(), temp, withSpace));
 
 	}
 

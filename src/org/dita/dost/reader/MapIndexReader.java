@@ -303,6 +303,11 @@ public class MapIndexReader extends AbstractXMLReader {
     	
         if (qName.equals(firstMatchElement)) {
             String hrefValue = atts.getValue(Constants.ATTRIBUTE_NAME_HREF);
+            if (verifyIndexEntries(indexEntries) && topicPath != null) {
+                String origin = (String) map.get(topicPath);
+                map.put(topicPath, StringUtils.setOrAppend(origin, indexEntries.toString(), false));
+                indexEntries = new StringBuffer(Constants.INT_1024);
+            }
             topicPath = null;
             if (hrefValue != null && hrefValue.indexOf(INTERNET_LINK_MARK) == -1) {
             	topicPath = FileUtils.resolveTopic(filePath, hrefValue);

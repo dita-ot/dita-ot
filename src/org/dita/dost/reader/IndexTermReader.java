@@ -44,6 +44,9 @@ public class IndexTermReader extends AbstractXMLReader {
 	
 	/** Stack used to store index term */
 	private Stack termStack = null;
+	
+	/** Stack used to store topic id */
+	private Stack topicIdStack = null;
 
 	/** List used to store all the specilized index terms */
 	private List indexTermSpecList = null;
@@ -57,6 +60,9 @@ public class IndexTermReader extends AbstractXMLReader {
 	/** List used to store all the specilized index-sort-as */
 	private List indexSortAsSpecList = null;
 	
+	/** List used to store all the specilized topics */
+	private List topicSpecList;
+	
 	private DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
 
 	/**
@@ -64,10 +70,12 @@ public class IndexTermReader extends AbstractXMLReader {
 	 */
 	public IndexTermReader() {
 		termStack = new Stack();
+		topicIdStack = new Stack();
 		indexTermSpecList = new ArrayList(Constants.INT_256);
 		indexSeeSpecList = new ArrayList(Constants.INT_256);
 		indexSeeAlsoSpecList = new ArrayList(Constants.INT_256);
 		indexSortAsSpecList = new ArrayList(Constants.INT_256);
+		topicSpecList = new ArrayList(Constants.INT_256);
 	}
 
 	/**
@@ -79,10 +87,12 @@ public class IndexTermReader extends AbstractXMLReader {
 		inTitleElement = false;
 		isTitleFound = false;
 		termStack.clear();
+		topicIdStack.clear();
 		indexTermSpecList.clear();
 		indexSeeSpecList.clear();
 		indexSeeAlsoSpecList.clear();
 		indexSortAsSpecList.clear();
+		topicSpecList.clear();
 	}
 
 	/**
@@ -91,6 +101,7 @@ public class IndexTermReader extends AbstractXMLReader {
 	public void characters(char[] ch, int start, int length)
 			throws SAXException {
 		String temp = new String(ch, start, length).trim();
+		boolean withSpace = ch[start] == '\n';
 
 		if (temp.length() == 0) {
 			return;
@@ -101,21 +112,15 @@ public class IndexTermReader extends AbstractXMLReader {
 		 */
 		if (inTitleElement) {
 			temp = StringUtils.restoreEntity(temp);
-			title = (title == null) ? temp : new StringBuffer(title).append(
-					temp).toString();
+			title = StringUtils.setOrAppend(title, temp, withSpace);
 		} else if (insideSortingAs && temp.length() > 0) {
 			IndexTerm indexTerm = (IndexTerm) termStack.peek();
 			temp = StringUtils.restoreEntity(temp);
-			indexTerm.setTermKey(temp);
+			indexTerm.setTermKey(StringUtils.setOrAppend(indexTerm.getTermKey(), temp, withSpace));
 		} else if (!termStack.empty()) {
 			IndexTerm indexTerm = (IndexTerm) termStack.peek();
 			temp = StringUtils.restoreEntity(temp);
-			if (indexTerm.getTermName() == null) {
-				indexTerm.setTermName(temp);
-			} else {
-				indexTerm.setTermName(new StringBuffer(indexTerm.getTermName())
-						.append(temp).toString());
-			}
+			indexTerm.setTermName(StringUtils.setOrAppend(indexTerm.getTermName(), temp, withSpace));
 		}
 	}
 
@@ -173,6 +178,11 @@ public class IndexTermReader extends AbstractXMLReader {
 		if (indexSortAsSpecList.contains(localName)) {
 			insideSortingAs = false;
 		}
+		
+		// For <topic>
+		if (topicSpecList.contains(localName)){
+			topicIdStack.pop();
+		}
 	}
 
 	/**
@@ -184,6 +194,7 @@ public class IndexTermReader extends AbstractXMLReader {
 		String classAttr = attributes.getValue(Constants.ATTRIBUTE_NAME_CLASS);
 		
 		handleSpecialization(localName, classAttr);
+		parseTopic(localName, attributes.getValue(Constants.ATTRIBUTE_NAME_ID));
 		parseIndexTerm(localName);
 		parseIndexSee(localName);
 		parseIndexSeeAlso(localName);
@@ -210,6 +221,12 @@ public class IndexTermReader extends AbstractXMLReader {
 		// For <index-sort-as>
 		if (indexSortAsSpecList.contains(localName)) {
 			insideSortingAs = true;
+		}
+	}
+	
+	private void parseTopic(String localName, String id){
+		if (topicSpecList.contains(localName)){
+			topicIdStack.push(id);
 		}
 	}
 
@@ -239,14 +256,15 @@ public class IndexTermReader extends AbstractXMLReader {
 		if (indexTermSpecList.contains(localName)) {
 			IndexTerm indexTerm = new IndexTerm();
 			IndexTermTarget target = new IndexTermTarget();
+			String fragment = topicIdStack.peek().toString();
 
 			if (title != null) {
 				target.setTargetName(title);
 			} else {
 				target.setTargetName(targetFile);
 			}
-
-			target.setTargetURI(targetFile);
+			if(target != null)
+				target.setTargetURI(targetFile + "#" + fragment);
 			indexTerm.addTarget(target);
 			termStack.push(indexTerm);
 		}
@@ -284,6 +302,12 @@ public class IndexTermReader extends AbstractXMLReader {
 			// list if it does not already exist in that list.
 			if (!indexSortAsSpecList.contains(localName)) {
 				indexSortAsSpecList.add(localName);
+			}
+		} else if (classAttr.indexOf(Constants.ATTR_CLASS_VALUE_TOPIC) != -1) {
+			//add the element name to the topic specialization element
+			// list if it does not already exist in that list.
+			if (!topicSpecList.contains(localName)) {
+				topicSpecList.add(localName);
 			}
 		}
 	}

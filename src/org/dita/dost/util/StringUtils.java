@@ -245,4 +245,24 @@ public class StringUtils {
 	public static boolean isEmptyString(String s){
 		return (s == null || Constants.STRING_EMPTY.equals(s.trim()));
 	}
+	
+	/**
+	 * If target is null, return the value; else append value to target. 
+	 * If withSpace is true, insert a blank between them.
+	 * @param target
+	 * @param value
+	 * @param withSpace
+	 * @return
+	 */
+	public static String setOrAppend(String target, String value, boolean withSpace){
+		if(target == null){
+			return value;
+		}else{
+			if(withSpace){
+				return target + Constants.STRING_BLANK + value;
+			}else{
+				return target + value;
+			}
+		}
+	}
 }
