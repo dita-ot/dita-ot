@@ -49,7 +49,7 @@ with those set forth herein.
         </xsl:attribute-->
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="__toc__content">
+    <xsl:attribute-set name="__toc__topic__content">
         <xsl:attribute name="last-line-end-indent">-22pt</xsl:attribute>
         <xsl:attribute name="end-indent">22pt</xsl:attribute>
         <xsl:attribute name="text-indent">-.2in</xsl:attribute>
@@ -69,6 +69,34 @@ with those set forth herein.
                 <xsl:otherwise>normal</xsl:otherwise>
             </xsl:choose>
         </xsl:attribute>
+    </xsl:attribute-set>
+
+    <xsl:attribute-set name="__toc__chapter__content" use-attribute-sets="__toc__topic__content">
+        <xsl:attribute name="font-size">14pt</xsl:attribute>
+        <xsl:attribute name="font-weight">bold</xsl:attribute>
+        <xsl:attribute name="padding-top">20pt</xsl:attribute>
+    </xsl:attribute-set>
+
+    <xsl:attribute-set name="__toc__appendix__content" use-attribute-sets="__toc__topic__content">
+        <xsl:attribute name="font-size">14pt</xsl:attribute>
+        <xsl:attribute name="font-weight">bold</xsl:attribute>
+        <xsl:attribute name="padding-top">20pt</xsl:attribute>
+    </xsl:attribute-set>
+
+    <xsl:attribute-set name="__toc__part__content" use-attribute-sets="__toc__topic__content">
+        <xsl:attribute name="font-size">14pt</xsl:attribute>
+        <xsl:attribute name="font-weight">bold</xsl:attribute>
+        <xsl:attribute name="padding-top">20pt</xsl:attribute>
+    </xsl:attribute-set>
+
+    <xsl:attribute-set name="__toc__preface__content" use-attribute-sets="__toc__topic__content">
+        <xsl:attribute name="font-size">14pt</xsl:attribute>
+        <xsl:attribute name="font-weight">bold</xsl:attribute>
+        <xsl:attribute name="padding-top">20pt</xsl:attribute>
+    </xsl:attribute-set>
+
+    <!-- Added for back compatibility since __toc__content was renamed into __toc__topic__content-->
+    <xsl:attribute-set name="__toc__content" use-attribute-sets="__toc__topic__content">
     </xsl:attribute-set>
 
     <xsl:attribute-set name="__toc__title">
@@ -116,9 +144,14 @@ with those set forth herein.
         <xsl:attribute name="page-break-after">always</xsl:attribute>
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="__toc__mini__table__column">
+    <xsl:attribute-set name="__toc__mini__table__column_1">
         <xsl:attribute name="column-number">1</xsl:attribute>
         <xsl:attribute name="column-width">35%</xsl:attribute>
+    </xsl:attribute-set>
+
+    <xsl:attribute-set name="__toc__mini__table__column_2">
+        <xsl:attribute name="column-number">2</xsl:attribute>
+        <xsl:attribute name="column-width">65%</xsl:attribute>
     </xsl:attribute-set>
 
      <xsl:attribute-set name="__toc__mini__summary">

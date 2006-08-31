@@ -129,6 +129,12 @@ with those set forth herein.
 
     <variable id="Index Continued String">continued</variable>
 
+    <!--string before see element-->
+    <variable id="Index See String">, See </variable>
+
+    <!--string before see also element-->
+    <variable id="Index See Also String">See also </variable>
+
     <!-- The string used to label a chapter within the table of contents. -->
     <variable id="Table of Contents Chapter">Chapter&#xA0;<param ref-name="number"/>:&#xA0;</variable>
 
@@ -278,6 +284,34 @@ with those set forth herein.
     <variable id="other Note Image Path">Configuration/OpenTopic/cfg/common/artwork/hand.gif</variable>
 
     <!--
+        String used for links in end of document in XHTML
+    -->
+
+    <!-- The title of the links to parent -->
+    <variable id="Parent topic">Parent Topic</variable>
+
+    <!-- The title of the links to next topics -->
+    <variable id="Next topic">Next Topic</variable>
+
+    <!-- The title of the links to previous topics -->
+    <variable id="Previous topic">Previous Topic</variable>
+
+    <!-- The title of the links to child topics -->
+    <variable id="Child topics">Child Topics</variable>
+
+    <!-- The title of the links to Related concepts -->
+    <variable id="Related concepts">Related Concepts</variable>
+
+    <!-- The title of the links to Related tasks -->
+    <variable id="Related tasks">Related Tasks</variable>
+
+    <!-- The title of the links to Related references -->
+    <variable id="Related references">Related References</variable>
+
+    <!-- The title of the links to Related information -->
+    <variable id="Related information">Related Information</variable>
+
+    <!--
        Strings used in the online-help publishing.
     -->
 
@@ -297,13 +331,13 @@ with those set forth herein.
     <variable id="Forward button title">Forward</variable>
 
     <!-- The title of the "main page" button in online-help output -->
-    <variable id="Main page button title">Main Page</variable>
+    <variable id="Main page button title">Home</variable>
 
     <!-- The title of the "previous page" button in online-help output -->
-    <variable id="Previous page button title">Previous Page</variable>
+    <variable id="Previous page button title">Previous Topic</variable>
 
     <!-- The title of the "next page" button in online-help output -->
-    <variable id="Next page button title">Next Page</variable>
+    <variable id="Next page button title">Next Topic</variable>
 
     <!-- The "online help" document title prefix in online-help output -->
     <variable id="Online help prefix">Online Help</variable>

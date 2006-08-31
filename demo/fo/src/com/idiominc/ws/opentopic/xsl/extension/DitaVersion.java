@@ -55,10 +55,12 @@ public class DitaVersion extends Task {
             saxParser.parse(file, new DefaultHandlerImpl());
 
         } catch (Exception e) {
-            if (e.getMessage().equals("Search finished"))
+            if (e.getMessage() != null &&
+                e.getMessage().equals("Search finished")) {
                 System.out.println("Search finished");
-            else
+            } else {
                 e.printStackTrace();
+            }
         }
 
     }
@@ -67,13 +69,20 @@ public class DitaVersion extends Task {
             extends DefaultHandler {
 
         public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
-            if (attributes.getValue("class").indexOf(" map/map ") > -1) {
-                if (attributes.getIndex("ditaarch:DITAArchVersion") > -1)
-                    setActiveProjectProrerty("ws.runtime.publishing.map.dita.version",attributes.getValue("ditaarch:DITAArchVersion"));
-                else
-                    setActiveProjectProrerty("ws.runtime.publishing.map.dita.version","132");
-                throw new SAXException("Search finished");
+            String classAttr = attributes.getValue("class");
+
+            if(classAttr != null) {
+                if ((classAttr.indexOf(" map/map ") > -1) ||
+                    (classAttr.indexOf(" topic/topic ") > -1)) {
+                    if (attributes.getIndex("ditaarch:DITAArchVersion") > -1)
+                        setActiveProjectProrerty("ws.runtime.publishing.map.dita.version",attributes.getValue("ditaarch:DITAArchVersion"));
+                    else
+                        setActiveProjectProrerty("ws.runtime.publishing.map.dita.version","132");
+                    throw new SAXException("Search finished");
+                }
+
             }
+
         }
 
     }

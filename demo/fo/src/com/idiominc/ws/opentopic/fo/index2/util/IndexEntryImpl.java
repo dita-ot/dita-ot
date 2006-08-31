@@ -19,6 +19,8 @@ class IndexEntryImpl
 	private String sortString;
 
 	private HashMap childs = new HashMap();
+	private HashMap seeChilds = new HashMap();
+	private HashMap seeAlsoChilds = new HashMap();
 
 	private boolean startRange = false;
 	private boolean endsRange = false;
@@ -94,7 +96,73 @@ class IndexEntryImpl
 	}
 
 
-	public void addChild(IndexEntry theEntry) {
+    public void addSeeChild(IndexEntry theEntry) {
+		final String entryValue = theEntry.getValue();
+		if (!this.seeChilds.containsKey(entryValue)) {
+			this.seeChilds.put(entryValue, theEntry);
+			return;
+		}
+		//The index with same value already exists
+		//Add seeChilds of given entry to existing entry
+		final IndexEntry existingEntry = (IndexEntry) this.seeChilds.get(entryValue);
+
+		final IndexEntry[] childIndexEntries = theEntry.getChildIndexEntries();
+		for (int i = 0; i < childIndexEntries.length; i++) {
+			IndexEntry childIndexEntry = childIndexEntries[i];
+			existingEntry.addChild(childIndexEntry);
+		}
+		//supress some attributes of given entry to the existing one
+		if (theEntry.isRestoresPageNumber()) {
+			existingEntry.setRestoresPageNumber(true);
+		}
+		if (!theEntry.isSuppressesThePageNumber()) {
+			existingEntry.setSuppressesThePageNumber(false);
+		}
+		if (theEntry.isStartingRange()) {
+			existingEntry.setStartRange(true);
+		}
+		if (theEntry.getSortString() != null) {
+			existingEntry.setSortString(theEntry.getSortString());
+		}
+		if (theEntry.getSoValue() != null) {
+			existingEntry.setSoValue(theEntry.getSoValue());
+		}
+	}
+
+    public void addSeeAlsoChild(IndexEntry theEntry) {
+		final String entryValue = theEntry.getValue();
+		if (!this.seeAlsoChilds.containsKey(entryValue)) {
+			this.seeAlsoChilds.put(entryValue, theEntry);
+			return;
+		}
+		//The index with same value already exists
+		//Add seeAlsoChilds of given entry to existing entry
+		final IndexEntry existingEntry = (IndexEntry) this.seeAlsoChilds.get(entryValue);
+
+		final IndexEntry[] childIndexEntries = theEntry.getChildIndexEntries();
+		for (int i = 0; i < childIndexEntries.length; i++) {
+			IndexEntry childIndexEntry = childIndexEntries[i];
+			existingEntry.addChild(childIndexEntry);
+		}
+		//supress some attributes of given entry to the existing one
+		if (theEntry.isRestoresPageNumber()) {
+			existingEntry.setRestoresPageNumber(true);
+		}
+		if (!theEntry.isSuppressesThePageNumber()) {
+			existingEntry.setSuppressesThePageNumber(false);
+		}
+		if (theEntry.isStartingRange()) {
+			existingEntry.setStartRange(true);
+		}
+		if (theEntry.getSortString() != null) {
+			existingEntry.setSortString(theEntry.getSortString());
+		}
+		if (theEntry.getSoValue() != null) {
+			existingEntry.setSoValue(theEntry.getSoValue());
+		}
+	}
+
+    public void addChild(IndexEntry theEntry) {
 		final String entryValue = theEntry.getValue();
 		if (!this.childs.containsKey(entryValue)) {
 			this.childs.put(entryValue, theEntry);
@@ -166,4 +234,19 @@ class IndexEntryImpl
 		}
 		this.restoresPageNumber = theRestoresPageNumber;
 	}
+
+    public IndexEntry[] getSeeChildIndexEntries() {
+        if (!seeChilds.isEmpty()) {
+            Collection collection = seeChilds.values();
+	    	return (IndexEntry[]) collection.toArray(new IndexEntry[collection.size()]);
+        } else return null;
+    }
+
+    public IndexEntry[] getSeeAlsoChildIndexEntries() {
+        if (!seeAlsoChilds.isEmpty()) {
+            Collection collection = seeAlsoChilds.values();
+            return (IndexEntry[]) collection.toArray(new IndexEntry[collection.size()]);
+        } else return null;
+    }
+
 }

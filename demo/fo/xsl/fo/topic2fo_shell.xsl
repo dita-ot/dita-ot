@@ -61,7 +61,7 @@ with those set forth herein.
     <xsl:import href="cfg:fo/attrs/custom.xsl"/>
     <xsl:import href="cfg:fo/xsl/custom.xsl"/>
 
-    <xsl:strip-space elements="*"/>
+    <xsl:strip-space elements="menucascade uicontrol"/>
 
     <xsl:param name="locale"/>
 
@@ -75,6 +75,10 @@ with those set forth herein.
 
     <xsl:param name="disableRelatedLinks" select="'yes'"/>
 
+    <xsl:param name="tocMaximumLevel" select="'4'"/>
+
+    <xsl:param name="ditaVersion" select="'132'"/>
+    
     <xsl:output method="xml" encoding="utf-8" indent="no"/>
 
     <xsl:template match="/">

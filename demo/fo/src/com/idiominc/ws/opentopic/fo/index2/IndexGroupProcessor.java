@@ -10,9 +10,9 @@ import java.util.Locale;
 import java.util.Set;
 
 /**
- * User: Ivan Luzyanin
- * Date: 21.06.2005
- * Time: 9:54:59
+ * User: Volodymyr.Mykhailyk
+ * Date: 31/7/2006
+ * Time: 13:03:18
  */
 public class IndexGroupProcessor {
 	/**
@@ -25,7 +25,7 @@ public class IndexGroupProcessor {
 	 */
 	public static IndexGroup[] process(IndexEntry[] theIndexEntries, IndexConfiguration theIndexConfiguration,
 									   Locale theLocale) {
-		final Collator collator = Collator.getInstance(theLocale);
+		final IndexCollator collator = new IndexCollator(theLocale);
 
 		ArrayList result = new ArrayList();
 
@@ -88,7 +88,7 @@ public class IndexGroupProcessor {
 	}
 
 
-	private static String[] getIndexKeysOfIndexesInRange(String theKey1, String theKey2, Collator theCollator, HashMap theIndexEntryMap) {
+	private static String[] getIndexKeysOfIndexesInRange(String theKey1, String theKey2, IndexCollator theCollator, HashMap theIndexEntryMap) {
 		final Set set = theIndexEntryMap.keySet();
 		final String[] allKeys = (String[]) set.toArray(new String[0]);
 
@@ -139,6 +139,16 @@ public class IndexGroupProcessor {
 				for (int j = 0; j < childIndexEntries.length; j++) {
 					IndexEntry childIndexEntry = childIndexEntries[j];
 					existingEntry.addChild(childIndexEntry);
+				}
+				final IndexEntry[] seeChildIndexEntries = indexEntry.getSeeChildIndexEntries();
+				for (int j = 0;seeChildIndexEntries != null && j < seeChildIndexEntries.length; j++) {
+					IndexEntry seeChildIndexEntry = seeChildIndexEntries[j];
+					existingEntry.addSeeChild(seeChildIndexEntry);
+				}
+				final IndexEntry[] seeAlsoChildIndexEntries = indexEntry.getSeeAlsoChildIndexEntries();
+				for (int j = 0;seeAlsoChildIndexEntries != null && j < seeAlsoChildIndexEntries.length; j++) {
+					IndexEntry seeAlsoChildIndexEntry = seeAlsoChildIndexEntries[j];
+					existingEntry.addSeeAlsoChild(seeAlsoChildIndexEntry);
 				}
 				//supress some attributes of given entry to the existing one
 				if (indexEntry.isRestoresPageNumber()) {

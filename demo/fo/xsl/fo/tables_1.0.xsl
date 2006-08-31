@@ -58,7 +58,7 @@ with those set forth herein.
                 <xsl:with-param name="theVariableID" select="'Table'"/>
                 <xsl:with-param name="theParameters">
                     <number>
-                        <xsl:number level="any" count="*[contains(@class, ' topic/table ')]" from="/"/>
+                        <xsl:number level="any" count="*[contains(@class, ' topic/table ')]/*[contains(@class, ' topic/title ')]" from="/"/>
                     </number>
                     <title>
                         <xsl:apply-templates/>
@@ -401,16 +401,77 @@ with those set forth herein.
         </xsl:choose>
     </xsl:template>
 
+    <xsl:template name="getEntryNumber">
+        <xsl:param name="colname"/>
+        <xsl:param name="optionalName" select="''"/>
+
+        <xsl:choose>
+            <xsl:when test="not(string(number($colname))='NaN')">
+                <xsl:value-of select="$colname"/>
+            </xsl:when>
+
+            <xsl:when test="ancestor::*[contains(@class,' topic/tgroup ')][1]/*[contains(@class,' topic/colspec ')][@colname = $colname]">
+                <xsl:for-each select="ancestor::*[contains(@class,' topic/tgroup ')][1]/*[contains(@class,' topic/colspec ')][@colname = $colname]">
+                    <xsl:choose>
+                        <xsl:when test="@colnum">
+                            <xsl:value-of select="@colnum"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:value-of select="count(preceding-sibling::*[contains(@class,' topic/colspec ')])+1"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:for-each>
+            </xsl:when>
+
+            <xsl:when test="not($optionalName = '') and ancestor::*[contains(@class,' topic/tgroup ')][1]/*[contains(@class,' topic/colspec ')][@colname = $optionalName]">
+                <xsl:for-each select="ancestor::*[contains(@class,' topic/tgroup ')][1]/*[contains(@class,' topic/colspec ')][@colname = $optionalName]">
+                    <xsl:choose>
+                        <xsl:when test="@colnum">
+                            <xsl:value-of select="@colnum"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:value-of select="count(preceding-sibling::*[contains(@class,' topic/colspec ')])+1"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:for-each>
+            </xsl:when>
+
+            <xsl:when test="not(string(number(translate($colname,'+-0123456789.abcdefghijklmnopqrstuvwxyz','0123456789')))='NaN')">
+                <xsl:value-of select="number(translate($colname,'0123456789.abcdefghijklmnopqrstuvwxyz','0123456789'))"/>
+            </xsl:when>
+
+            <xsl:otherwise>
+                <xsl:value-of select="'-1'"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+
     <xsl:template name="applySpansAttrs">
         <xsl:if test="(@morerows) and (number(@morerows) &gt; 0)">
             <xsl:attribute name="number-rows-spanned">
                 <xsl:value-of select="number(@morerows)+1"/>
             </xsl:attribute>
         </xsl:if>
-        <xsl:if test="(@nameend) and (@namest) and ((number(@nameend) - number(@namest)) &gt; 0)">
-            <xsl:attribute name="number-columns-spanned">
-                <xsl:value-of select="(number(@nameend) - number(@namest))+1"/>
-            </xsl:attribute>
+
+        <xsl:if test="(@nameend) and (@namest)">
+            <xsl:variable name="startNum">
+                <xsl:call-template name="getEntryNumber">
+                    <xsl:with-param name="colname" select="@namest"/>
+                    <xsl:with-param name="optionalName" select="@colname"/>
+                </xsl:call-template>
+            </xsl:variable>
+
+            <xsl:variable name="endNum">
+                <xsl:call-template name="getEntryNumber">
+                    <xsl:with-param name="colname" select="@nameend"/>
+                </xsl:call-template>
+            </xsl:variable>
+
+            <xsl:if test="($startNum &gt; '-1') and ($endNum &gt; '-1') and ((number($endNum) - number($startNum)) &gt; 0)">
+                <xsl:attribute name="number-columns-spanned">
+                    <xsl:value-of select="(number($endNum) - number($startNum))+1"/>
+                </xsl:attribute>
+            </xsl:if>
         </xsl:if>
     </xsl:template>
 

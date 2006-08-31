@@ -32,8 +32,9 @@ with those set forth herein.
     xmlns:fo="http://www.w3.org/1999/XSL/Format"
     xmlns:opentopic="http://www.idiominc.com/opentopic"
     xmlns:exsl="http://exslt.org/common"
+    xmlns:opentopic-index="http://www.idiominc.com/opentopic/index"
     extension-element-prefixes="exsl"
-    exclude-result-prefixes="opentopic exsl"
+    exclude-result-prefixes="opentopic exsl opentopic-index"
     version="1.1">
 
 
@@ -86,17 +87,71 @@ with those set forth herein.
         </xsl:choose>
     </xsl:template>
 
+    <xsl:template name="getTopicrefShortdesc">
+        <xsl:variable name="id" select="ancestor-or-self::*[contains(@class, ' topic/topic ')][1]/@id"/>
+        <xsl:variable name="gid" select="generate-id(ancestor-or-self::*[contains(@class, ' topic/topic ')][1])"/>
+        <xsl:variable name="topicNumber" select="count(exsl:node-set($topicNumbers)/topic[@id = $id][following-sibling::topic[@guid = $gid]]) + 1"/>
+        <xsl:variable name="mapTopic">
+            <xsl:copy-of select="$map//*[@id = $id]"/>
+        </xsl:variable>
+
+        <xsl:if test="$mapTopic/*[position() = $topicNumber]//*[contains(@class, ' map/shortdesc ')]">
+            <xsl:copy-of select="$mapTopic/*[position() = $topicNumber]/*[contains(@class, ' map/shortdesc ')]"/>
+        </xsl:if>
+    </xsl:template>
+
     <xsl:template name="processTopic">
+        <xsl:variable name="topicrefShortdesc">
+            <xsl:call-template name="getTopicrefShortdesc"/>
+        </xsl:variable>
         <fo:block xsl:use-attribute-sets="topic">
             <xsl:if test="not(ancestor::*[contains(@class, ' topic/topic ')])">
                 <fo:marker marker-class-name="current-topic-number">
                     <xsl:number format="1"/>
                 </fo:marker>
             </xsl:if>
-            <xsl:apply-templates>
-                <xsl:with-param name="include" select="'true'"/>
-            </xsl:apply-templates>
+            <xsl:choose>
+                <xsl:when test="$topicrefShortdesc/*">
+                    <xsl:apply-templates select="*[contains(@class, ' topic/title ')]"/>
+                    <xsl:apply-templates select="$topicrefShortdesc/*"/>
+                    <xsl:apply-templates select="*[not(contains(@class, ' topic/title ')) and not(contains(@class, ' topic/shortdesc '))]">
+                        <xsl:with-param name="include" select="'true'"/>
+                    </xsl:apply-templates>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:apply-templates>
+                        <xsl:with-param name="include" select="'true'"/>
+                    </xsl:apply-templates>
+                </xsl:otherwise>
+            </xsl:choose>
         </fo:block>
+    </xsl:template>
+
+    <xsl:template name="processUnknowTopic">
+        <xsl:param name="topicType"/>
+        <xsl:choose>
+            <xsl:when test="not(ancestor::*[contains(@class,' topic/topic ')])">
+                <xsl:variable name="page-sequence-reference">
+                    <xsl:choose>
+                        <xsl:when test="$mapType = 'bookmap'">
+                            <xsl:value-of select="'body-sequence'"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:value-of select="'ditamap-body-sequence'"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:variable>
+                <fo:page-sequence master-reference="{$page-sequence-reference}" xsl:use-attribute-sets="__force__page__count">
+                    <xsl:call-template name="insertBodyStaticContents"/>
+                    <fo:flow flow-name="xsl-region-body">
+                        <xsl:call-template name="processTopic"/>
+                    </fo:flow>
+                </fo:page-sequence>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:call-template name="processTopic"/>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' topic/topic ')]">
@@ -143,6 +198,11 @@ with those set forth herein.
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:when>
+            <xsl:otherwise>
+                <xsl:call-template name="processUnknowTopic">
+                    <xsl:with-param name="topicType" select="$topicType"/>
+                </xsl:call-template>
+            </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
 
@@ -358,7 +418,8 @@ with those set forth herein.
 
     <xsl:template name="createMiniToc">
         <fo:table >
-            <fo:table-column xsl:use-attribute-sets="__toc__mini__table__column"/>
+            <fo:table-column xsl:use-attribute-sets="__toc__mini__table__column_1"/>
+            <fo:table-column xsl:use-attribute-sets="__toc__mini__table__column_2"/>
             <fo:table-body xsl:use-attribute-sets="__toc__mini__table">
                 <fo:table-row>
                     <fo:table-cell>
@@ -492,7 +553,7 @@ with those set forth herein.
                 <xsl:with-param name="theVariableID" select="'Figure'"/>
                 <xsl:with-param name="theParameters">
                     <number>
-                        <xsl:number level="any" count="*[contains(@class, ' topic/fig ')]" from="/"/>
+                        <xsl:number level="any" count="*[contains(@class, ' topic/fig ')][child::*[contains(@class, ' topic/title ')]]" from="/"/>
                     </number>
                     <title>
                         <xsl:apply-templates/>
@@ -754,11 +815,25 @@ with those set forth herein.
     </xsl:template>
 
     <xsl:template name="processConcept">
+        <xsl:variable name="topicrefShortdesc">
+            <xsl:call-template name="getTopicrefShortdesc"/>
+        </xsl:variable>
         <fo:block xsl:use-attribute-sets="concept">
             <xsl:comment> concept/concept </xsl:comment>
-            <xsl:apply-templates>
-                <xsl:with-param name="include" select="'true'"/>
-            </xsl:apply-templates>
+            <xsl:choose>
+                <xsl:when test="$topicrefShortdesc/*">
+                    <xsl:apply-templates select="*[contains(@class, ' topic/title ')]"/>
+                    <xsl:apply-templates select="$topicrefShortdesc/*"/>
+                    <xsl:apply-templates select="*[not(contains(@class, ' topic/title ')) and not(contains(@class, ' topic/shortdesc '))]">
+                        <xsl:with-param name="include" select="'true'"/>
+                    </xsl:apply-templates>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:apply-templates>
+                        <xsl:with-param name="include" select="'true'"/>
+                    </xsl:apply-templates>
+                </xsl:otherwise>
+            </xsl:choose>
         </fo:block>
     </xsl:template>
 
@@ -806,6 +881,11 @@ with those set forth herein.
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:when>
+            <xsl:otherwise>
+                <xsl:call-template name="processUnknowTopic">
+                    <xsl:with-param name="topicType" select="$topicType"/>
+                </xsl:call-template>
+            </xsl:otherwise>
         </xsl:choose>
 
     </xsl:template>
@@ -817,10 +897,24 @@ with those set forth herein.
     </xsl:template>
 
     <xsl:template name="processReference">
+        <xsl:variable name="topicrefShortdesc">
+            <xsl:call-template name="getTopicrefShortdesc"/>
+        </xsl:variable>
         <fo:block xsl:use-attribute-sets="reference">
-            <xsl:apply-templates>
-                <xsl:with-param name="include" select="'true'"/>
-            </xsl:apply-templates>
+            <xsl:choose>
+                <xsl:when test="$topicrefShortdesc/*">
+                    <xsl:apply-templates select="*[contains(@class, ' topic/title ')]"/>
+                    <xsl:apply-templates select="$topicrefShortdesc/*"/>
+                    <xsl:apply-templates select="*[not(contains(@class, ' topic/title ')) and not(contains(@class, ' topic/shortdesc '))]">
+                        <xsl:with-param name="include" select="'true'"/>
+                    </xsl:apply-templates>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:apply-templates>
+                        <xsl:with-param name="include" select="'true'"/>
+                    </xsl:apply-templates>
+                </xsl:otherwise>
+            </xsl:choose>
         </fo:block>
     </xsl:template>
 
@@ -868,6 +962,11 @@ with those set forth herein.
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:when>
+            <xsl:otherwise>
+                <xsl:call-template name="processUnknowTopic">
+                    <xsl:with-param name="topicType" select="$topicType"/>
+                </xsl:call-template>
+            </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
 
@@ -884,10 +983,24 @@ with those set forth herein.
     </xsl:template>
 
     <xsl:template name="processTask">
+        <xsl:variable name="topicrefShortdesc">
+            <xsl:call-template name="getTopicrefShortdesc"/>
+        </xsl:variable>
         <fo:block xsl:use-attribute-sets="task">
-            <xsl:apply-templates>
-                <xsl:with-param name="include" select="'true'"/>
-            </xsl:apply-templates>
+            <xsl:choose>
+                <xsl:when test="$topicrefShortdesc/*">
+                    <xsl:apply-templates select="*[contains(@class, ' topic/title ')]"/>
+                    <xsl:apply-templates select="$topicrefShortdesc/*"/>
+                    <xsl:apply-templates select="*[not(contains(@class, ' topic/title ')) and not(contains(@class, ' topic/shortdesc '))]">
+                        <xsl:with-param name="include" select="'true'"/>
+                    </xsl:apply-templates>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:apply-templates>
+                        <xsl:with-param name="include" select="'true'"/>
+                    </xsl:apply-templates>
+                </xsl:otherwise>
+            </xsl:choose>
         </fo:block>
     </xsl:template>
 
@@ -935,8 +1048,12 @@ with those set forth herein.
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:when>
+            <xsl:otherwise>
+                <xsl:call-template name="processUnknowTopic">
+                    <xsl:with-param name="topicType" select="$topicType"/>
+                </xsl:call-template>
+            </xsl:otherwise>
         </xsl:choose>
-
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' task/taskbody ')]">
@@ -1042,8 +1159,16 @@ with those set forth herein.
         </fo:block>
     </xsl:template>
 
+    <xsl:template match="*[contains(@class,' map/searchtitle ')]"/>
+
     <xsl:template match="*[contains(@class,' topic/shortdesc ')]">
         <fo:block xsl:use-attribute-sets="shortdesc" id="{@id}">
+            <xsl:apply-templates/>
+        </fo:block>
+    </xsl:template>
+
+    <xsl:template match="*[contains(@class,' map/shortdesc ')]">
+        <fo:block xsl:use-attribute-sets="topic__shortdesc">
             <xsl:apply-templates/>
         </fo:block>
     </xsl:template>
@@ -1111,6 +1236,7 @@ with those set forth herein.
             <xsl:apply-templates/>
         </fo:block>
 -->
+        <xsl:apply-templates select="descendant::opentopic-index:index.entry[not(parent::opentopic-index:index.entry)]"/>
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' topic/metadata ')]">
@@ -1119,6 +1245,7 @@ with those set forth herein.
             <xsl:apply-templates/>
         </fo:block>
 -->
+        <xsl:apply-templates select="descendant::opentopic-index:index.entry[not(parent::opentopic-index:index.entry)]"/>
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' topic/p ')]">
@@ -1457,9 +1584,8 @@ with those set forth herein.
 
     <xsl:template match="*[contains(@class,' topic/image ')]">
         <!-- build any pre break indicated by style -->
-
         <xsl:choose>
-            <xsl:when test="parent::fig[contains(@frame,'top')]">
+            <xsl:when test="parent::fig">
                 <!-- NOP if there is already a break implied by a parent property -->
             </xsl:when>
             <xsl:otherwise>
@@ -1497,7 +1623,7 @@ with those set forth herein.
 
         <!-- build any post break indicated by style -->
         <xsl:choose>
-            <xsl:when test="parent::fig[contains(@frame,'bot')]">
+            <xsl:when test="parent::fig">
                 <!-- NOP if there is already a break implied by a parent property -->
             </xsl:when>
             <xsl:otherwise>

@@ -134,6 +134,10 @@ with those set forth herein.
             <equals arg1="${ws.runtime.publishing.map.dita.version}" arg2="1.0"/>
         </condition>
 
+    	<condition property="temp.transformation.file" value="${xsl.fo.dir}/topic2fo_shell_1.0.xsl">
+            <equals arg1="${ws.runtime.publishing.map.dita.version}" arg2="1.1"/>
+        </condition>
+
         <condition property="temp.transformation.file" value="${xsl.fo.dir}/topic2fo_shell.xsl">
             <not>
                 <isset property="temp.transformation.file"/>

@@ -44,7 +44,7 @@ public abstract class IndexStringProcessor {
 				int sortStartIdx = entry.indexOf(SORT_START_BRAKET);
 				if (sortStartIdx > 0) {
 					//there is a sort string
-					int sortEndIdx = entry.indexOf(SORT_END_BRAKET);
+                    int sortEndIdx = entry.indexOf(SORT_END_BRAKET);
 					if (sortEndIdx > 0 && sortEndIdx > sortStartIdx) {
 						sortString = entry.substring(sortStartIdx + SORT_START_BRAKET.length(), sortEndIdx);
 						entry = entry.substring(0, sortStartIdx);
@@ -155,7 +155,7 @@ public abstract class IndexStringProcessor {
 			soString = null;
 		}
 
-		boolean suppressesThePageNumber = theIsParentNoPage;
+        boolean suppressesThePageNumber = theIsParentNoPage;
 		int nopageIdx = theValue.indexOf(NOPAGE);
 		if (nopageIdx == 0) {
 			suppressesThePageNumber = true;
@@ -184,7 +184,9 @@ public abstract class IndexStringProcessor {
 			theValue = theValue.substring(ENDRANGE.length());
 		}
 
-		String strippedFormatting = stripFormatting(theValue);
+
+
+        String strippedFormatting = stripFormatting(theValue);
 
 		IndexEntryImpl indexEntry = new IndexEntryImpl(strippedFormatting, soString, theSortString, theValue);
 		indexEntry.setSuppressesThePageNumber(suppressesThePageNumber);

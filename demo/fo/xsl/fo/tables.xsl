@@ -736,7 +736,7 @@ with those set forth herein.
                 <xsl:with-param name="theVariableID" select="'Table'"/>
                 <xsl:with-param name="theParameters">
                     <number>
-                        <xsl:number level="any" count="*[contains(@class, ' topic/table ')]" from="/"/>
+                        <xsl:number level="any" count="*[contains(@class, ' topic/table ')]/*[contains(@class, ' topic/title ')]" from="/"/>
                     </number>
                     <title>
                         <xsl:apply-templates/>

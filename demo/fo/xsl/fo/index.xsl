@@ -192,7 +192,7 @@ with those set forth herein.
                 </xsl:when>
             </xsl:choose>
 			<!--Insert simple index entry marker-->
-            <xsl:for-each select="descendant::opentopic-index:refID[last()]">
+            <xsl:for-each select="child::opentopic-index:refID[last()]">
 				<fo:inline rx:key="{@value}"/>
 			</xsl:for-each>
 
@@ -247,6 +247,70 @@ with those set forth herein.
 				<xsl:with-param name="inner-text" select="opentopic-index:formatted-value"/>
 				<xsl:with-param name="no-page" select="$isNoPage"/>
 			</xsl:call-template>
+    </xsl:template>
+
+    <xsl:template match="opentopic-index:see-childs" mode="index-postprocess">
+        <xsl:choose>
+            <xsl:when test="parent::*[@no-page = 'true']">
+                <fo:inline>
+                    <xsl:call-template name="insertVariable">
+                        <xsl:with-param name="theVariableID" select="'Index See String'"/>
+                    </xsl:call-template>
+                    <fo:basic-link>
+                        <xsl:attribute name="internal-destination">
+                            <xsl:apply-templates select="opentopic-index:index.entry[1]" mode="get-see-destination"/>
+                        </xsl:attribute>
+                        <xsl:apply-templates select="opentopic-index:index.entry[1]" mode="get-see-value"/>
+                    </fo:basic-link>
+                </fo:inline>
+            </xsl:when>
+            <xsl:otherwise>
+                <fo:block xsl:use-attribute-sets="index.entry__content">
+                    <fo:inline >
+                        <xsl:call-template name="insertVariable">
+                            <xsl:with-param name="theVariableID" select="'Index See Also String'"/>
+                        </xsl:call-template>
+                        <fo:basic-link>
+                            <xsl:attribute name="internal-destination">
+                                <xsl:apply-templates select="opentopic-index:index.entry[1]" mode="get-see-destination"/>
+                            </xsl:attribute>
+                            <xsl:apply-templates select="opentopic-index:index.entry[1]" mode="get-see-value"/>
+                        </fo:basic-link>
+                    </fo:inline>
+                </fo:block>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+
+    <xsl:template match="opentopic-index:index.entry" mode="get-see-destination">
+        <xsl:value-of select="concat(@value,':')"/>
+        <xsl:apply-templates select="opentopic-index:index.entry[1]" mode="get-see-destination"/>
+    </xsl:template>
+
+    <xsl:template match="opentopic-index:index.entry" mode="get-see-value">
+        <fo:inline>
+            <xsl:call-template name="__formatText">
+                <xsl:with-param name="text" select="opentopic-index:formatted-value"/>
+            </xsl:call-template>
+            <xsl:text> </xsl:text>
+            <xsl:apply-templates select="opentopic-index:index.entry[1]" mode="get-see-value"/>
+        </fo:inline>
+    </xsl:template>
+
+    <xsl:template match="opentopic-index:see-also-childs" mode="index-postprocess">
+        <fo:block xsl:use-attribute-sets="index.entry__content">
+            <fo:inline>
+                <xsl:call-template name="insertVariable">
+                    <xsl:with-param name="theVariableID" select="'Index See Also String'"/>
+                </xsl:call-template>
+                <fo:basic-link>
+                    <xsl:attribute name="internal-destination">
+                        <xsl:apply-templates select="opentopic-index:index.entry[1]" mode="get-see-destination"/>
+                    </xsl:attribute>
+                    <xsl:apply-templates select="opentopic-index:index.entry[1]" mode="get-see-value"/>
+                </fo:basic-link>
+            </fo:inline>
+        </fo:block>
     </xsl:template>
 
     <xsl:template match="opentopic-index:index.entry" mode="index-postprocess">
@@ -309,6 +373,7 @@ with those set forth herein.
                                                 </xsl:call-template>
                                             </xsl:otherwise>
                                         </xsl:choose>
+                                        <!--<xsl:apply-templates select="" mode="index-postprocess"/>-->
                                     </xsl:if>
 
                                 </fo:block>
@@ -406,6 +471,11 @@ with those set forth herein.
                     <xsl:with-param name="text" select="$inner-text"/>
                 </xsl:call-template>
             </fo:inline>
+            <xsl:if test="$idxs">
+                <xsl:for-each select="$idxs">
+                    <fo:inline id="{@value}"/>
+                </xsl:for-each>
+            </xsl:if>
             <xsl:if test="not($no-page)">
                 <xsl:if test="$idxs and count($idxs) &gt; 0">
                     <xsl:text> </xsl:text>
@@ -417,7 +487,10 @@ with those set forth herein.
                     </rx:page-index>
                 </xsl:if>
             </xsl:if>
-		</fo:block>
+            <xsl:for-each select="opentopic-index:see-childs | opentopic-index:see-also-childs">
+                <xsl:apply-templates select="." mode="index-postprocess"/>
+            </xsl:for-each>
+        </fo:block>
 	</xsl:template>
 
 
