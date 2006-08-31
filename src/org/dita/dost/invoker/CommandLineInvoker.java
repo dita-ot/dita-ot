@@ -122,6 +122,12 @@ public class CommandLineInvoker {
 		String inputDitaDir = null;
 		File tempPath = null;
 		
+		if(args.length == 0){
+			printUsage();
+			readyToRun = false;
+			return;
+		}
+		
 		/*
 		 * validate dita.dir and init log message file
 		 */
@@ -166,6 +172,8 @@ public class CommandLineInvoker {
 			if (colonPos == -1) {
 				String msg = null;
 				Properties params = new Properties();
+				
+				printUsage();
 
 				params.put("%1", arg);
 				msg = MessageUtils.getMessage("DOTJ001F", params).toString();
@@ -182,6 +190,8 @@ public class CommandLineInvoker {
 
 				params.put("%1", javaArg);
 				msg = MessageUtils.getMessage("DOTJ002F", params).toString();
+				
+				printUsage();
 
 				throw new DITAOTException(msg);
 			}
@@ -194,6 +204,8 @@ public class CommandLineInvoker {
 
 				params.put("%1", javaArg);
 				msg = MessageUtils.getMessage("DOTJ003F", params).toString();
+				
+				printUsage();
 
 				throw new DITAOTException(msg);
 			}
@@ -312,43 +324,37 @@ public class CommandLineInvoker {
         StringBuffer msg = new StringBuffer();
         msg.append("java -jar lib/dost.jar [mandatory parameters] [options]" + lSep);
         msg.append("Mandatory parameters:" + lSep);
-        msg.append("  /i:{args.input}        specify the input file" + lSep);
-        msg.append("  /transtype:{transtype} specify the transformation type" + lSep);
+        msg.append("  /i:                    specify path and name of the input file" + lSep);
+        msg.append("  /transtype:            specify the transformation type" + lSep);
         msg.append("Options: " + lSep);
         msg.append("  -help, -h              print this message" + lSep);
         msg.append("  -version               print the version information and exit" + lSep);
-        msg.append("  /basedir:{basedir}     specify the working directory" + lSep);
-        msg.append("  /ditadir:{dita.dir}    specify the toolkit's home directory" + lSep);
-        msg.append("  /outdir:{output.dir}   specify the output directory" + lSep);
-        msg.append("  /tempdir:{dita.temp.dir} specify the temporary directory" + lSep);
-        msg.append("  /logdir:{args.logdir}  specify the log directory" + lSep);
-        msg.append("  /ditaext:{dita.extname} specify the dita file extension" + lSep);
-        msg.append("  /filter:{dita.input.valfile} specify the filter file" + lSep);
-        msg.append("  /draft:{args.draft}    specify whether to output draft info" + lSep);
-        msg.append("  /artlbl:{args.artlbl}  specify whether to output artwork filenames" + lSep);
-        msg.append("  /ftr:{args.ftr}        specify the file to be placed in the BODY running-footing area" + lSep);
-        msg.append("  /hdr:{args.hdr}        specify the file to be placed in the BODY running-heading area" + lSep);
-        msg.append("  /hdf:{args.hdf}        specify the file to be placed in the HEAD area" + lSep);
-        msg.append("  /csspath:{args.csspath} specify the path for css reference" + lSep);
-        msg.append("  /css:{args.css}        specify user css file" + lSep);
-        msg.append("  /cssroot:{args.cssroot} specify the root directory for user specified css file" + lSep);
-        msg.append("  /copycss:{args.copycss} specify whether to copy user specified css files" + lSep);
-        msg.append("  /indexshow:{args.indexshow} specify whether each index entry should display within the body of the text itself" + lSep);
-        msg.append("  /outext:{args.outext}  specify the output file extension for generated xhtml files" + lSep);
-        msg.append("  /xsl:{args.xsl}  	     specify the xsl file used to replace the default xsl file" + lSep);
-        msg.append("  /cleantemp:{clean.temp} specify whether to clean the temp directory before each build" + lSep);
-        msg.append("  /foimgext:{args.fo.img.ext} specify the extension of image file in pdf transformation" + lSep);
-        msg.append("  /javahelptoc:{args.javahelp.toc} specify the root file name of the output javahelp toc file in javahelp transformation" + lSep);
-        msg.append("  /javahelpmap:{args.javahelp.map} specify the root file name of the output javahelp map file in javahelp transformation" + lSep);
-        msg.append("  /eclipsehelptoc:{args.eclipsehelp.toc} specify the root file name of the output eclipsehelp toc file in eclipsehelp transformation" + lSep);
-        msg.append("  /eclipsecontenttoc:{args.eclipsecontent.toc} specify the root file name of the output Eclipse content provider toc file in eclipsecontent transformation" + lSep);
-        msg.append("  /provider:{args.eclipse.provider} specify the provider name of the eclipse help output" + lSep);
-        msg.append("  /version:{args.eclipse.version} specify the version number of the eclipse help output" + lSep);
-        msg.append("  /xhtmltoc:{args.xhtml.toc} specify the root file name of the output xhtml toc file in xhtml transformation" + lSep);
-        msg.append("  /ditalocale:{args.dita.locale} specify the locale used for sorting indexterms." + lSep);
-        msg.append("  /fooutputrellinks:{args.fo.output.rel.links} specify whether to output related links in pdf transformation" + lSep);
-        msg.append("  /fouserconfig:{args.fo.userconfig} specify the user configuration file for FOP" + lSep);
-        msg.append("  /htmlhelpincludefile:{args.htmlhelp.includefile} specify the file that need to be included by the HTMLHelp output" + lSep);
+        msg.append("  /basedir:              specify the working directory" + lSep);
+        msg.append("  /ditadir:              specify the toolkit's home directory. Default is \"temp\"" + lSep);
+        msg.append("  /outdir:               specify the output directory" + lSep);
+        msg.append("  /tempdir:              specify the temporary directory" + lSep);
+        msg.append("  /logdir:               specify the log directory" + lSep);
+        msg.append("  /ditaext:              specify the file extension name to be used in the temp directory. Default is \".xml\"" + lSep);
+        msg.append("  /filter:               specify the name of the file that contains the filter/flaggin/revision information" + lSep);
+        msg.append("  /draft:                specify whether to output draft info. Valid values are \"no\" and \"yes\". Default is \"no\" (hide them)." + lSep);
+        msg.append("  /artlbl:               specify whether to output artwork filenames. Valid values are \"no\" and \"yes\"" + lSep);
+        msg.append("  /ftr:                  specify the file to be placed in the BODY running-footing area" + lSep);
+        msg.append("  /hdr:                  specify the file to be placed in the BODY running-heading area" + lSep);
+        msg.append("  /hdf:                  specify the file to be placed in the HEAD area" + lSep);
+        msg.append("  /csspath:              specify the path for css reference" + lSep);
+        msg.append("  /css:                  specify user css file" + lSep);
+        msg.append("  /cssroot:              specify the root directory for user specified css file" + lSep);
+        msg.append("  /copycss:              specify whether to copy user specified css files. Valid values are \"no\" and \"yes\"" + lSep);
+        msg.append("  /indexshow:            specify whether each index entry should display within the body of the text itself. Valid values are \"no\" and \"yes\"" + lSep);
+        msg.append("  /outext:               specify the output file extension for generated xhtml files. Default is \".html\"" + lSep);
+        msg.append("  /xsl:            	     specify the xsl file used to replace the default xsl file" + lSep);
+        msg.append("  /cleantemp:            specify whether to clean the temp directory before each build. Valid values are \"no\" and \"yes\". Default is \"yes\"" + lSep);
+        msg.append("  /foimgext:             specify the extension of image file in pdf transformation. Default is \".jpg\"" + lSep);
+        msg.append("  /javahelptoc:          specify the root file name of the output javahelp toc file in javahelp transformation. Default is the name of the input ditamap file" + lSep);
+        msg.append("  /javahelpmap:          specify the root file name of the output javahelp map file in javahelp transformation. Default is the name of the input ditamap file" + lSep);
+        msg.append("  /eclipsehelptoc:       specify the root file name of the output eclipsehelp toc file in eclipsehelp transformation. Default is the name of the input ditamap file" + lSep);
+        msg.append("  /eclipsecontenttoc:    specify the root file name of the output Eclipse content provider toc file in eclipsecontent transformation. Default is the name of the input ditamap file" + lSep);
+        msg.append("  /xhtmltoc:             specify the root file name of the output xhtml toc file in xhtml transformation" + lSep);
         System.out.println(msg.toString());
     }
     
