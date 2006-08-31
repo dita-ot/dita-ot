@@ -46,6 +46,9 @@
     match="*[contains(@class,' topic/table ')]/*[contains(@class,' topic/xtitle ')]" priority="2"/>
   <xsl:template match="*[contains(@class,' topic/table ')]">
     <fo:block>
+      <xsl:if test="@id">
+        <xsl:apply-templates select="@id"/>
+      </xsl:if>
       <xsl:apply-templates/>
     </fo:block>
   </xsl:template>
@@ -260,6 +263,11 @@
       </xsl:attribute>
     </xsl:if>
     <!-- IPL end -->
+	<xsl:if test="@morerows">
+	  <xsl:attribute name="number-rows-spanned">
+		<xsl:value-of select="@morerows+1"/>
+	  </xsl:attribute>
+	</xsl:if>
   </xsl:template>
   <xsl:template name="att-valign">
     <xsl:if test="string(@valign)">
