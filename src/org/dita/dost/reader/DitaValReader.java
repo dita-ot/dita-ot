@@ -102,14 +102,7 @@ public class DitaValReader extends AbstractXMLReader {
 			String key = attName + Constants.EQUAL + attValue;
 
 			if (action != null) {
-				if (filterMap.get(key) == null) {
-					filterMap.put(key, action);
-				} else {
-					Properties prop = new Properties();
-					prop.put("%1", key);
-					logger.logError(MessageUtils.getMessage("DOTJ007E", prop)
-							.toString());
-				}
+				insertAction(action, key);
 			}
 		}
 
@@ -127,6 +120,22 @@ public class DitaValReader extends AbstractXMLReader {
 			filterDir = new File(new File(ditaVal).getAbsolutePath())
 					.getParent();
 			imageList.add(new File(filterDir, flagImage).getAbsolutePath());
+		}
+	}
+
+	/**
+	 * Insert action into filetermap if key not present in the map
+	 * @param action
+	 * @param key
+	 */
+	private void insertAction(String action, String key) {
+		if (filterMap.get(key) == null) {
+			filterMap.put(key, action);
+		} else {
+			Properties prop = new Properties();
+			prop.put("%1", key);
+			logger.logError(MessageUtils.getMessage("DOTJ007E", prop)
+					.toString());
 		}
 	}
 
