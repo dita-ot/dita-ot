@@ -7,7 +7,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
@@ -244,19 +246,25 @@ public class CommandLineInvoker {
 	 * @throws IOException
 	 */
 	public void startAnt() throws IOException {
-		StringBuffer cmdBuffer = new StringBuffer(Constants.INT_64);
+		List cmd = new ArrayList(Constants.INT_8);
+		String[] cmds = null;
 		
-		cmdBuffer.append(getCommandRunner());
-		cmdBuffer.append(" -f ");
-		cmdBuffer.append(antBuildFile);
-		cmdBuffer.append(" -logger org.dita.dost.log.DITAOTBuildLogger");
-		cmdBuffer.append(" -propertyfile ").append(propertyFile);
+		cmd.add(getCommandRunner());
+		cmd.add("-f");
+		cmd.add(antBuildFile);
+		cmd.add("-logger");
+		cmd.add("org.dita.dost.log.DITAOTBuildLogger");
+		cmd.add("-propertyfile");
+		cmd.add(propertyFile);
 		
-		if (debugMode) {
-			cmdBuffer.append(" -d ");
+		if (debugMode){
+			cmd.add("-d");
 		}
-
-		startTransformation(cmdBuffer.toString());
+		
+		cmds = new String[cmd.size()];
+		cmd.toArray(cmds);
+		
+		startTransformation(cmds);
 	}
 	
 	private static String getCommandRunner() {
@@ -265,7 +273,7 @@ public class CommandLineInvoker {
 				: "ant";
 	}
 
-	private static void startTransformation(String cmd) throws IOException {
+	private static void startTransformation(String[] cmd) throws IOException {
 		BufferedReader reader = null;
 		Process antProcess = Runtime.getRuntime().exec(cmd);
 		try{
