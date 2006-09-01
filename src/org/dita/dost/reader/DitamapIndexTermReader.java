@@ -54,7 +54,7 @@ public class DitamapIndexTermReader extends AbstractXMLReader {
 			throws SAXException {
 		String temp = new String(ch, start, length).trim();
 		IndexTerm indexTerm = null;
-		boolean withSpace = (ch[start] == '\n');
+		boolean withSpace = (ch[start] == '\n' || temp.startsWith(Constants.LINE_SEPARATOR));
 
 		if (temp.length() == 0) {
 			return;

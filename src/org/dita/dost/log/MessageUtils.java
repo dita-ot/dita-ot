@@ -37,7 +37,7 @@ public class MessageUtils {
 	private MessageUtils(){
 	}
 
-	private static void loadDefaultMessages() {
+	public static void loadDefaultMessages() {
 		if(!new File(defaultResource).exists()){
 			loadMessages(ClassLoader.getSystemResource(defaultResource).toString());
 		}else{

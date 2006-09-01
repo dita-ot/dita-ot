@@ -260,7 +260,7 @@ public class StringUtils {
 		}if(value == null){
 			return target;
 		}else{
-			if(withSpace && target.endsWith(Constants.STRING_BLANK)){
+			if(withSpace && !target.endsWith(Constants.STRING_BLANK)){
 				return target + Constants.STRING_BLANK + value;
 			}else{
 				return target + value;

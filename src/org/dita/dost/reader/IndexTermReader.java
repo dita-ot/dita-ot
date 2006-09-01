@@ -101,7 +101,7 @@ public class IndexTermReader extends AbstractXMLReader {
 	public void characters(char[] ch, int start, int length)
 			throws SAXException {
 		String temp = new String(ch, start, length).trim();
-		boolean withSpace = ch[start] == '\n';
+		boolean withSpace = (ch[start] == '\n' || temp.startsWith(Constants.LINE_SEPARATOR));
 
 		if (temp.length() == 0) {
 			return;
@@ -204,8 +204,8 @@ public class IndexTermReader extends AbstractXMLReader {
 					.getValue(Constants.ATTRIBUTE_NAME_XML_LANG);
 
 			if (xmlLang != null) {
-				Locale locale = new Locale(xmlLang.substring(0, 1), xmlLang
-						.substring(3, 4));
+				Locale locale = new Locale(xmlLang.substring(0, 2), xmlLang
+						.substring(3, 5));
 				IndexTerm.setTermLocale(locale);
 			}
 		}

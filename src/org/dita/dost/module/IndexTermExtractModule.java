@@ -151,8 +151,8 @@ public class IndexTermExtractModule implements AbstractPipelineModule {
 		IndexTermCollection.getInstantce().setIndexType(indextype);
 
 		if (encoding != null && encoding.trim().length() > 0) {
-			Locale locale = new Locale(encoding.substring(0, 1), encoding
-					.substring(3, 4));
+			Locale locale = new Locale(encoding.substring(0, 2), encoding
+					.substring(3, 5));
 			IndexTerm.setTermLocale(locale);
 		}
 	}
@@ -191,6 +191,10 @@ public class IndexTermExtractModule implements AbstractPipelineModule {
 						.toString());
 				
 				try {
+					if(!new File(baseInputDir, target).exists()){
+						javaLogger.logWarn("Cannot find file "+ target);
+						continue;
+					}
 					inputStream = new FileInputStream(
 							new File(baseInputDir, target));
 					xmlReader.parse(new InputSource(inputStream));
@@ -220,11 +224,15 @@ public class IndexTermExtractModule implements AbstractPipelineModule {
 
 				ditamapIndexTermReader.setMapPath(mapPathFromInputMap);
 				try {
+					if(!new File(baseInputDir, ditamap).exists()){
+						javaLogger.logWarn("Cannot find file "+ ditamap);
+						continue;
+					}
 					inputStream = new FileInputStream(new File(baseInputDir,
 							ditamap));
 					xmlReader.parse(new InputSource(inputStream));
 					inputStream.close();
-				} catch (Exception e) {
+				} 	catch (Exception e) {
 					Properties params = new Properties();
 					String msg = null;
 					params.put("%1", ditamap);

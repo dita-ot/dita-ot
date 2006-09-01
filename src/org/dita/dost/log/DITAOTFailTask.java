@@ -63,6 +63,11 @@ public class DITAOTFailTask extends Exit {
 		String messageFile = getProject().getProperty(
 				"args.message.file");
 		
+		if(!new File(messageFile).exists()){
+			MessageUtils.loadDefaultMessages();
+			return;
+		}
+		
 		if (!new File(messageFile).isAbsolute()) {
 			messageFile = new File(getProject().getBaseDir(), messageFile)
 					.getAbsolutePath();
