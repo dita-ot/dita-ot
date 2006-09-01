@@ -29,6 +29,7 @@ public class MessageUtils {
 	private static String messageFile = null;
 	private static DITAOTJavaLogger fileLogger = new DITAOTJavaLogger();
 	private static String defaultResource = "resource/messages.xml";
+	private static MessageUtils utils = null;
 	
 	/**
 	 * Default Construtor
@@ -36,10 +37,33 @@ public class MessageUtils {
 	 */
 	private MessageUtils(){
 	}
+	
+	/**
+	 * Internal Singleton getInstance() method, for Classloader to locate the CLASSPATH
+	 * @return
+	 */
+	private static MessageUtils getInstance(){
+		if(utils == null){
+			utils = new MessageUtils();
+		}
+		return utils;
+	}
 
+	/**
+	 * Just bypass to invoke member function loadDefMsg();
+	 *
+	 */
 	public static void loadDefaultMessages() {
+		getInstance().loadDefMsg();
+	}
+	
+	/**
+	 * Load Default Messages.
+	 * If not exist in the relative path, search the CLASSPATH
+	 */
+	private void loadDefMsg(){
 		if(!new File(defaultResource).exists()){
-			loadMessages(ClassLoader.getSystemResource(defaultResource).toString());
+			loadMessages(getClass().getClassLoader().getResource(defaultResource).toString());
 		}else{
 			loadMessages(defaultResource);
 		}
