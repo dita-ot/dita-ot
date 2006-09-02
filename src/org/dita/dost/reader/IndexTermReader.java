@@ -4,8 +4,10 @@
 package org.dita.dost.reader;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Stack;
 
 import org.dita.dost.index.IndexTerm;
@@ -30,14 +32,14 @@ public class IndexTermReader extends AbstractXMLReader {
 	/** The target file under parsing */
 	private String targetFile = null;
 
-	/** The title of the dita file under parsing */
+	/** The title of the topic under parsing */
 	private String title = null;
+	
+	/** The title of the main topic */
+	private String defaultTitle = null;
 
 	/** Whether or not current element under parsing is a title element */
 	private boolean inTitleElement = false;
-
-	/** title element found? */
-	private boolean isTitleFound = false;
 
 	/** Whether or not current element under parsing is <index-sort-as> */
 	private boolean insideSortingAs = false;
@@ -66,6 +68,9 @@ public class IndexTermReader extends AbstractXMLReader {
 	/** List used to store all the indexterm found in this topic file */
 	private List indexTermList;
 	
+	/** Map used to store the title info accessed by its topic id*/
+	private Map titleMap;
+	
 	private DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
 
 	/**
@@ -80,6 +85,7 @@ public class IndexTermReader extends AbstractXMLReader {
 		indexSortAsSpecList = new ArrayList(Constants.INT_256);
 		topicSpecList = new ArrayList(Constants.INT_256);
 		indexTermList = new ArrayList(Constants.INT_256);
+		titleMap = new HashMap(Constants.INT_256);
 	}
 
 	/**
@@ -88,8 +94,8 @@ public class IndexTermReader extends AbstractXMLReader {
 	public void reset() {
 		targetFile = null;
 		title = null;
+		defaultTitle = null;
 		inTitleElement = false;
-		isTitleFound = false;
 		termStack.clear();
 		topicIdStack.clear();
 		indexTermSpecList.clear();
@@ -98,6 +104,7 @@ public class IndexTermReader extends AbstractXMLReader {
 		indexSortAsSpecList.clear();
 		topicSpecList.clear();
 		indexTermList.clear();
+		titleMap.clear();
 	}
 
 	/**
@@ -135,6 +142,7 @@ public class IndexTermReader extends AbstractXMLReader {
 	 */
 	public void endDocument() throws SAXException {
 		int size = indexTermList.size();
+		updateIndexTermTargetName();
 		for(int i=0; i<size; i++){
 			IndexTerm indexterm = (IndexTerm)indexTermList.get(i);
 			IndexTermCollection.getInstantce().addTerm(indexterm);
@@ -185,15 +193,14 @@ public class IndexTermReader extends AbstractXMLReader {
 		/*
 		 * For title info
 		 */
-		if (Constants.ELEMENT_NAME_TITLE.equals(localName)
-				&& !isTitleFound) {
-			isTitleFound = true;
+		if (Constants.ELEMENT_NAME_TITLE.equals(localName)) {
 			inTitleElement = false;
-			/* 
-			 * Since there won't be any change of title, invoke here for performance issue.
-			   Or if we invoke in endDocument(), it will be more clear.
-			 */
-			updateIndexTermTargetName();
+			if(!titleMap.containsKey(topicIdStack.peek())){
+				//If this is the first topic title
+				if(titleMap.size() == 0)
+					defaultTitle = title;
+				titleMap.put(topicIdStack.peek(), title);
+			}
 		}
 		
 		// For <index-sort-as>
@@ -236,8 +243,9 @@ public class IndexTermReader extends AbstractXMLReader {
 		 * For title info
 		 */
 		if (Constants.ELEMENT_NAME_TITLE.equals(localName)
-				&& !isTitleFound) {
+				&& !titleMap.containsKey(topicIdStack.peek())) {
 			inTitleElement = true;
+			title = null;
 		}
 		
 		// For <index-sort-as>
@@ -278,15 +286,22 @@ public class IndexTermReader extends AbstractXMLReader {
 		if (indexTermSpecList.contains(localName)) {
 			IndexTerm indexTerm = new IndexTerm();
 			IndexTermTarget target = new IndexTermTarget();
-			String fragment = topicIdStack.peek().toString();
+			String fragment = null;
+			if(topicIdStack.peek() == null){
+				fragment = null;
+			}else{
+				fragment = topicIdStack.peek().toString();
+			}
 
 			if (title != null) {
 				target.setTargetName(title);
 			} else {
 				target.setTargetName(targetFile);
 			}
-			if(target != null)
-				target.setTargetURI(targetFile + "#" + fragment);
+			if(fragment != null)
+				target.setTargetURI(targetFile + Constants.SHARP + fragment);
+			else
+				target.setTargetURI(targetFile);
 			indexTerm.addTarget(target);
 			termStack.push(indexTerm);
 		}
@@ -350,6 +365,9 @@ public class IndexTermReader extends AbstractXMLReader {
 	 */
 	private void updateIndexTermTargetName(){
 		int size = indexTermList.size();
+		if(defaultTitle == null){
+			defaultTitle = targetFile;
+		}
 		for(int i=0; i<size; i++){
 			IndexTerm indexterm = (IndexTerm)indexTermList.get(i);
 			updateIndexTermTargetName(indexterm);
@@ -366,8 +384,15 @@ public class IndexTermReader extends AbstractXMLReader {
 		
 		for(int i=0; i<targetSize; i++){
 			IndexTermTarget target = (IndexTermTarget)indexterm.getTargetList().get(i);
-			if(title != null){
-				target.setTargetName(title);
+			String uri = target.getTargetURI();
+			int indexOfSharp = uri.lastIndexOf(Constants.SHARP);
+			String fragment = (indexOfSharp == -1 || uri.endsWith(Constants.SHARP))?
+								null:
+								uri.substring(indexOfSharp+1);
+			if(fragment != null && titleMap.containsKey(fragment)){
+				target.setTargetName(titleMap.get(fragment).toString());
+			}else{
+				target.setTargetName(defaultTitle);
 			}
 		}
 		
