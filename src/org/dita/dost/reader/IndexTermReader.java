@@ -63,6 +63,9 @@ public class IndexTermReader extends AbstractXMLReader {
 	/** List used to store all the specilized topics */
 	private List topicSpecList;
 	
+	/** List used to store all the indexterm found in this topic file */
+	private List indexTermList;
+	
 	private DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
 
 	/**
@@ -76,6 +79,7 @@ public class IndexTermReader extends AbstractXMLReader {
 		indexSeeAlsoSpecList = new ArrayList(Constants.INT_256);
 		indexSortAsSpecList = new ArrayList(Constants.INT_256);
 		topicSpecList = new ArrayList(Constants.INT_256);
+		indexTermList = new ArrayList(Constants.INT_256);
 	}
 
 	/**
@@ -93,6 +97,7 @@ public class IndexTermReader extends AbstractXMLReader {
 		indexSeeAlsoSpecList.clear();
 		indexSortAsSpecList.clear();
 		topicSpecList.clear();
+		indexTermList.clear();
 	}
 
 	/**
@@ -110,17 +115,29 @@ public class IndexTermReader extends AbstractXMLReader {
 		/*
 		 * For title info
 		 */
-		if (inTitleElement) {
+		if (!termStack.empty()) {
+			IndexTerm indexTerm = (IndexTerm) termStack.peek();
 			temp = StringUtils.restoreEntity(temp);
-			title = StringUtils.setOrAppend(title, temp, withSpace);
+			indexTerm.setTermName(StringUtils.setOrAppend(indexTerm.getTermName(), temp, withSpace));
 		} else if (insideSortingAs && temp.length() > 0) {
 			IndexTerm indexTerm = (IndexTerm) termStack.peek();
 			temp = StringUtils.restoreEntity(temp);
 			indexTerm.setTermKey(StringUtils.setOrAppend(indexTerm.getTermKey(), temp, withSpace));
-		} else if (!termStack.empty()) {
-			IndexTerm indexTerm = (IndexTerm) termStack.peek();
+		} else if (inTitleElement) {
 			temp = StringUtils.restoreEntity(temp);
-			indexTerm.setTermName(StringUtils.setOrAppend(indexTerm.getTermName(), temp, withSpace));
+			//Always append space if: <title>abc<ph/>df</title>
+			title = StringUtils.setOrAppend(title, temp, true);
+		}
+	}
+	
+	/**
+	 * @see org.dita.dost.reader.AbstractXMLReader#endDocument()
+	 */
+	public void endDocument() throws SAXException {
+		int size = indexTermList.size();
+		for(int i=0; i<size; i++){
+			IndexTerm indexterm = (IndexTerm)indexTermList.get(i);
+			IndexTermCollection.getInstantce().addTerm(indexterm);
 		}
 	}
 
@@ -145,7 +162,7 @@ public class IndexTermReader extends AbstractXMLReader {
 			}
 			
 			if (termStack.empty()) {
-				IndexTermCollection.getInstantce().addTerm(term);
+				indexTermList.add(term);
 			} else {
 				IndexTerm parentTerm = (IndexTerm) termStack.peek();
 				parentTerm.addSubTerm(term);
@@ -172,6 +189,11 @@ public class IndexTermReader extends AbstractXMLReader {
 				&& !isTitleFound) {
 			isTitleFound = true;
 			inTitleElement = false;
+			/* 
+			 * Since there won't be any change of title, invoke here for performance issue.
+			   Or if we invoke in endDocument(), it will be more clear.
+			 */
+			updateIndexTermTargetName();
 		}
 		
 		// For <index-sort-as>
@@ -321,5 +343,38 @@ public class IndexTermReader extends AbstractXMLReader {
 	public void setTargetFile(String target) {
 		this.targetFile = target;
 	}
-
+	
+	/**
+	 * Update the target name of constructed IndexTerm recursively
+	 *
+	 */
+	private void updateIndexTermTargetName(){
+		int size = indexTermList.size();
+		for(int i=0; i<size; i++){
+			IndexTerm indexterm = (IndexTerm)indexTermList.get(i);
+			updateIndexTermTargetName(indexterm);
+		}
+	}
+	
+	/**
+	 * Update the target name of each IndexTerm, recursively
+	 * @param indexterm
+	 */
+	private void updateIndexTermTargetName(IndexTerm indexterm){
+		int targetSize = indexterm.getTargetList().size();
+		int subtermSize = indexterm.getSubTerms().size();
+		
+		for(int i=0; i<targetSize; i++){
+			IndexTermTarget target = (IndexTermTarget)indexterm.getTargetList().get(i);
+			if(title != null){
+				target.setTargetName(title);
+			}
+		}
+		
+		for(int i=0; i<subtermSize; i++){
+			IndexTerm subterm = (IndexTerm)indexterm.getSubTerms().get(i);
+			updateIndexTermTargetName(subterm);
+		}
+	}
+	
 }

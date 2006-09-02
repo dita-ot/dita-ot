@@ -382,7 +382,7 @@ public class GenListModuleReader extends AbstractXMLReader {
 		 * Collect only conref target topic files.
 		 */
 		if (Constants.ATTRIBUTE_NAME_CONREF.equals(attrName)
-				&& FileUtils.isTopicFile(filename)) {
+				&& FileUtils.isDITAFile(filename)) {
 			conrefTargets.add(filename);
 		}
 		
