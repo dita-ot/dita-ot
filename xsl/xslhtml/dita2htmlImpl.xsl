@@ -339,11 +339,12 @@
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' topic/example ')]" mode="example-fmt">
+	
   <xsl:call-template name="start-revflag"/>
   <xsl:call-template name="flagit"/>
   <xsl:call-template name="sect-heading"/>
-  <xsl:apply-templates select="*[not(contains(@class,' topic/title '))] | text() | comment() | processing-instruction()"/>
-  <xsl:call-template name="end-revflag"/>
+  <xsl:apply-templates select="*[not(contains(@class,' topic/title '))] | text() | comment() | processing-instruction()"/>	
+  <xsl:call-template name="end-revflag"/>		
 </xsl:template>
 
 
@@ -2990,7 +2991,8 @@
   </xsl:choose>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/section ')]/*[contains(@class,' topic/title ')]" name="topic.section_title">
+<xsl:template match="*[contains(@class,' topic/section ')]/*[contains(@class,' topic/title ')] | 
+	*[contains(@class,' topic/example ')]/*[contains(@class,' topic/title ')]" name="topic.section_title">
   <xsl:param name="headLevel">
     <xsl:variable name="headCount">
       <xsl:value-of select="count(ancestor::*[contains(@class,' topic/topic ')])+1"/>
