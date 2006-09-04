@@ -241,7 +241,11 @@
                     </xsl:when>
                     <xsl:otherwise>
                         <xsl:variable name="beforedotdot" select="substring-before($file-path,'/..')"></xsl:variable>
-                        <xsl:variable name="beforedotdotparent" select="substring-before($beforedotdot,'/')"></xsl:variable>
+                        <xsl:variable name="beforedotdotparent" >
+                            <xsl:call-template name="parent-path">
+                                <xsl:with-param name="pathname" select="$beforedotdot" />
+                            </xsl:call-template>
+                        </xsl:variable>
                         <xsl:variable name="afterdotdot" select="substring-after($file-path,'../')"></xsl:variable>
                         <xsl:call-template name="normalize-path">
                             <xsl:with-param name="file-path">
@@ -256,5 +260,18 @@
             </xsl:otherwise>    
         </xsl:choose>
  </xsl:template>
+	
+	<xsl:template name="parent-path">
+        <xsl:param name="pathname" />
+        <xsl:choose>
+            <xsl:when test="contains($pathname, '/')">
+                <xsl:value-of select="substring-before($pathname, '/')"/>
+                <xsl:text>/</xsl:text>
+                <xsl:call-template name="parent-path">
+                    <xsl:with-param name="pathname" select="substring-after($pathname,'/')"/>
+                </xsl:call-template>
+            </xsl:when>
+        </xsl:choose>
+    </xsl:template>
 
 </xsl:stylesheet>
