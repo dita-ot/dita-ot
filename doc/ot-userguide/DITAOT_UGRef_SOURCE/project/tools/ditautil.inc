@@ -208,6 +208,7 @@ function myscanfile ($dbg_flag,$ref_flag, $fin,$ids,&$ref,&$reftype,&$refcon,&$f
         if( !$rcid )
         {
           print("Error: bad id reference " . $f . $ids . "\n");
+          $rc = -1;
         }
       }
       else
