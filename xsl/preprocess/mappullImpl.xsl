@@ -499,7 +499,6 @@
         </xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
-    <xsl:variable name="filecontent" select="document($file, /)" />
     <xsl:variable name="topicpos">
       <xsl:choose>
         <xsl:when test="contains(@href,'#')">otherfile</xsl:when>
@@ -548,10 +547,10 @@
           <!--finding type based on name of the target element in a particular topic in another file-->
           <xsl:when test="$topicpos='otherfile'">
             <xsl:choose>
-              <xsl:when test="$filecontent//*[contains(@class, $classval)][@id=$topicid]">
+              <xsl:when test="document($file,/)//*[contains(@class, $classval)][@id=$topicid]">
                 <xsl:attribute name="type">
                   <xsl:value-of
-                    select="local-name($filecontent//*[contains(@class, $classval)][@id=$topicid])"
+                    select="local-name(document($file,/)//*[contains(@class, $classval)][@id=$topicid])"
                   />
                 </xsl:attribute>
               </xsl:when>
@@ -563,10 +562,10 @@
           <!--finding type based on name of the target element in the first topic in another file-->
           <xsl:when test="$topicpos='firstinfile'">
             <xsl:choose>
-              <xsl:when test="$filecontent//*[contains(@class, ' topic/topic ')][1]">
+              <xsl:when test="document($file,/)//*[contains(@class, ' topic/topic ')][1]">
                 <xsl:attribute name="type">
                   <xsl:value-of
-                    select="local-name($filecontent//*[contains(@class, $classval)][1])"/>
+                    select="local-name(document($file,/)//*[contains(@class, $classval)][1])"/>
                 </xsl:attribute>
               </xsl:when>
               <xsl:otherwise>
@@ -585,37 +584,37 @@
         <xsl:choose>
           <!--finding type based on name of the target element in a particular topic in another file-->
           <xsl:when
-            test="$topicpos='otherfile' and $filecontent//*[contains(@class, ' topic/topic ')][@id=$topicid]">
+            test="$topicpos='otherfile' and document($file,/)//*[contains(@class, ' topic/topic ')][@id=$topicid]">
             <xsl:call-template name="verify-type-value">
               <xsl:with-param name="type">
                 <xsl:value-of select="$type"/>
               </xsl:with-param>
               <xsl:with-param name="actual-class">
                 <xsl:value-of
-                  select="$filecontent//*[contains(@class, ' topic/topic ')][@id=$topicid][1]/@class"
+                  select="document($file,/)//*[contains(@class, ' topic/topic ')][@id=$topicid][1]/@class"
                 />
               </xsl:with-param>
               <xsl:with-param name="actual-name">
                 <xsl:value-of
-                  select="local-name($filecontent//*[contains(@class, ' topic/topic ')][@id=$topicid][1])"
+                  select="local-name(document($file,/)//*[contains(@class, ' topic/topic ')][@id=$topicid][1])"
                 />
               </xsl:with-param>
             </xsl:call-template>
           </xsl:when>
           <!--finding type based on name of the target element in the first topic in another file-->
           <xsl:when
-            test="$topicpos='firstinfile' and $filecontent//*[contains(@class, ' topic/topic ')]">
+            test="$topicpos='firstinfile' and document($file,/)//*[contains(@class, ' topic/topic ')]">
             <xsl:call-template name="verify-type-value">
               <xsl:with-param name="type">
                 <xsl:value-of select="$type"/>
               </xsl:with-param>
               <xsl:with-param name="actual-class">
                 <xsl:value-of
-                  select="$filecontent//*[contains(@class, ' topic/topic ')][1]/@class"/>
+                  select="document($file,/)//*[contains(@class, ' topic/topic ')][1]/@class"/>
               </xsl:with-param>
               <xsl:with-param name="actual-name">
                 <xsl:value-of
-                  select="local-name($filecontent//*[contains(@class, ' topic/topic ')][1])"/>
+                  select="local-name(document($file,/)//*[contains(@class, ' topic/topic ')][1])"/>
               </xsl:with-param>
             </xsl:call-template>
           </xsl:when>
@@ -696,21 +695,21 @@
           <xsl:when test="$topicpos='otherfile'">
             <xsl:choose>
               <xsl:when
-                test="$filecontent//*[contains(@class, $classval)][@id=$topicid]/*[contains(@class, ' topic/titlealts ')]/*[contains(@class, ' topic/navtitle ')]">
+                test="document($file,/)//*[contains(@class, $classval)][@id=$topicid]/*[contains(@class, ' topic/titlealts ')]/*[contains(@class, ' topic/navtitle ')]">
                 <xsl:apply-templates
-                  select="($filecontent//*[contains(@class, $classval)][@id=$topicid])[1]/*[contains(@class, ' topic/titlealts ')]/*[contains(@class, ' topic/navtitle ')]"
+                  select="(document($file,/)//*[contains(@class, $classval)][@id=$topicid])[1]/*[contains(@class, ' topic/titlealts ')]/*[contains(@class, ' topic/navtitle ')]"
                   mode="text-only"/>
               </xsl:when>
               <xsl:when
-                test="$filecontent//*[contains(@class, $classval)][@id=$topicid]/*[contains(@class, ' topic/title ')]">
+                test="document($file,/)//*[contains(@class, $classval)][@id=$topicid]/*[contains(@class, ' topic/title ')]">
                 <xsl:apply-templates
-                  select="($filecontent//*[contains(@class, $classval)][@id=$topicid])[1]/*[contains(@class, ' topic/title ')]"
+                  select="(document($file,/)//*[contains(@class, $classval)][@id=$topicid])[1]/*[contains(@class, ' topic/title ')]"
                   mode="text-only"/>
               </xsl:when>
               <xsl:when
-                test="$filecontent//*[contains(@class, ' topic/topic ')][@id=$topicid]/*[contains(@class, ' topic/title ')]">
+                test="document($file,/)//*[contains(@class, ' topic/topic ')][@id=$topicid]/*[contains(@class, ' topic/title ')]">
                 <xsl:apply-templates
-                  select="($filecontent//*[contains(@class, ' topic/topic ')][@id=$topicid])[1]/*[contains(@class, ' topic/title ')]"
+                  select="(document($file,/)//*[contains(@class, ' topic/topic ')][@id=$topicid])[1]/*[contains(@class, ' topic/title ')]"
                   mode="text-only"/>
               </xsl:when>
               <xsl:otherwise>
@@ -722,15 +721,15 @@
           <xsl:when test="$topicpos='firstinfile'">
             <xsl:choose>
               <xsl:when
-                test="$filecontent//*[contains(@class, ' topic/topic ')][1]/*[contains(@class, ' topic/titlealts ')]/*[contains(@class, ' topic/navtitle ')]">
+                test="document($file,/)//*[contains(@class, ' topic/topic ')][1]/*[contains(@class, ' topic/titlealts ')]/*[contains(@class, ' topic/navtitle ')]">
                 <xsl:apply-templates
-                  select="($filecontent//*[contains(@class, ' topic/topic ')])[1]/*[contains(@class, ' topic/titlealts ')]/*[contains(@class, ' topic/navtitle ')]"
+                  select="(document($file,/)//*[contains(@class, ' topic/topic ')])[1]/*[contains(@class, ' topic/titlealts ')]/*[contains(@class, ' topic/navtitle ')]"
                   mode="text-only"/>
               </xsl:when>
               <xsl:when
-                test="$filecontent//*[contains(@class, ' topic/topic ')][1]/*[contains(@class, ' topic/title ')]">
+                test="document($file,/)//*[contains(@class, ' topic/topic ')][1]/*[contains(@class, ' topic/title ')]">
                 <xsl:apply-templates
-                  select="($filecontent//*[contains(@class, ' topic/topic ')])[1]/*[contains(@class, ' topic/title ')]"
+                  select="(document($file,/)//*[contains(@class, ' topic/topic ')])[1]/*[contains(@class, ' topic/title ')]"
                   mode="text-only"/>
               </xsl:when>
               <xsl:otherwise>
@@ -783,7 +782,6 @@
                 <xsl:with-param name="format">
                   <xsl:value-of select="$format"/>
                 </xsl:with-param>
-                <xsl:with-param name="filecontent" select="$filecontent" />
               </xsl:call-template>
             </xsl:for-each>
           </xsl:copy>
@@ -813,7 +811,6 @@
             <xsl:with-param name="format">
               <xsl:value-of select="$format"/>
             </xsl:with-param>
-            <xsl:with-param name="filecontent" select="$filecontent" />
           </xsl:call-template>
         </topicmeta>
       </xsl:otherwise>
@@ -848,7 +845,6 @@
     <xsl:param name="topicpos"/>
     <xsl:param name="topicid"/>
     <xsl:param name="classval"/>
-    <xsl:param name="filecontent"/>
     <!--linktext-->
     <xsl:choose>
       <xsl:when test="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/linktext ')]">
@@ -918,19 +914,19 @@
             <xsl:when test="$topicpos='otherfile'">
               <xsl:choose>
                 <xsl:when
-                  test="$filecontent//*[contains(@class, $classval)][@id=$topicid]/*[contains(@class, ' topic/title ')]">
+                  test="document($file,/)//*[contains(@class, $classval)][@id=$topicid]/*[contains(@class, ' topic/title ')]">
                   <xsl:variable name="grabbed-value">
                     <xsl:apply-templates
-                      select="($filecontent//*[contains(@class, $classval)][@id=$topicid])[1]/*[contains(@class, ' topic/title ')]"
+                      select="(document($file,/)//*[contains(@class, $classval)][@id=$topicid])[1]/*[contains(@class, ' topic/title ')]"
                       mode="text-only"/>
                   </xsl:variable>
                   <xsl:value-of select="normalize-space($grabbed-value)"/>
                 </xsl:when>
                 <xsl:when
-                  test="$filecontent//*[contains(@class, ' topic/topic ')][@id=$topicid]/*[contains(@class, ' topic/title ')]">
+                  test="document($file,/)//*[contains(@class, ' topic/topic ')][@id=$topicid]/*[contains(@class, ' topic/title ')]">
                   <xsl:variable name="grabbed-value">
                     <xsl:apply-templates
-                      select="($filecontent//*[contains(@class, ' topic/topic ')][@id=$topicid])[1]/*[contains(@class, ' topic/title ')]"
+                      select="(document($file,/)//*[contains(@class, ' topic/topic ')][@id=$topicid])[1]/*[contains(@class, ' topic/title ')]"
                       mode="text-only"/>
                   </xsl:variable>
                   <xsl:value-of select="normalize-space($grabbed-value)"/>
@@ -944,10 +940,10 @@
             <xsl:when test="$topicpos='firstinfile'">
               <xsl:choose>
                 <xsl:when
-                  test="$filecontent//*[contains(@class, ' topic/topic ')][1]/*[contains(@class, ' topic/title ')]">
+                  test="document($file,/)//*[contains(@class, ' topic/topic ')][1]/*[contains(@class, ' topic/title ')]">
                   <xsl:variable name="grabbed-value">
                     <xsl:apply-templates
-                      select="($filecontent//*[contains(@class, ' topic/topic ')])[1]/*[contains(@class, ' topic/title ')]"
+                      select="(document($file,/)//*[contains(@class, ' topic/topic ')])[1]/*[contains(@class, ' topic/title ')]"
                       mode="text-only"/>
                   </xsl:variable>
                   <xsl:value-of select="normalize-space($grabbed-value)"/>
@@ -983,10 +979,10 @@
       <xsl:when test="$topicpos='otherfile'">
         <xsl:choose>
           <xsl:when
-            test="$filecontent//*[contains(@class, $classval)][@id=$topicid]//*[contains(@class, ' topic/shortdesc ')]">
+            test="document($file,/)//*[contains(@class, $classval)][@id=$topicid]//*[contains(@class, ' topic/shortdesc ')]">
             <shortdesc class="- map/shortdesc ">
               <xsl:apply-templates
-                select="($filecontent//*[contains(@class, $classval)][@id=$topicid])[1]//*[contains(@class, ' topic/shortdesc ')]" 
+                select="(document($file,/)//*[contains(@class, $classval)][@id=$topicid])[1]//*[contains(@class, ' topic/shortdesc ')]" 
                 mode="copy-shortdesc"/>
             </shortdesc>
           </xsl:when>
@@ -999,10 +995,10 @@
       <xsl:when test="$topicpos='firstinfile'">
         <xsl:choose>
           <xsl:when
-            test="$filecontent//*[contains(@class, ' topic/topic ')][1]//*[contains(@class, ' topic/shortdesc ')]">
+            test="document($file,/)//*[contains(@class, ' topic/topic ')][1]//*[contains(@class, ' topic/shortdesc ')]">
             <shortdesc class="- map/shortdesc ">
               <xsl:apply-templates
-                select="($filecontent//*[contains(@class, ' topic/topic ')])[1]//*[contains(@class, ' topic/shortdesc ')]"
+                select="(document($file,/)//*[contains(@class, ' topic/topic ')])[1]//*[contains(@class, ' topic/shortdesc ')]"
                 mode="copy-shortdesc"/>
             </shortdesc>
           </xsl:when>
