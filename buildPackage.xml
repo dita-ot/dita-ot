@@ -88,7 +88,6 @@
     <include name="lib/CatalogManager.properties"/>
     <exclude name="doc/userguide-orig/**"/>
     <exclude name="build.number"/>
-	<exclude name="buildPackage.xml" />
     <exclude name=".*"/>
   </patternset>
 	
@@ -103,7 +102,6 @@
       <zipfileset dir="./" prefix="${package.name.root}${version}-src">
         <patternset refid="pattern.package.general"/>
         <include name="src/**"/>
-		<include name="buildPackage.xml"/>
       	<include name="lib/APACHE-LICENSE-2_0.html"/>
         <exclude name="files.txt"/>
         <exclude name="startcmd.*"/>
@@ -128,6 +126,7 @@
         <include name="lib/dost.jar"/>
       	<include name="lib/APACHE-LICENSE-2_0.html"/>
         <exclude name="startcmd.*"/>
+		<exclude name="buildPackage.xml" />
       </zipfileset>
     </zip>
     
@@ -138,6 +137,7 @@
         <include name="lib/dost.jar"/>
       	<include name="lib/APACHE-LICENSE-2_0.html"/>
         <exclude name="startcmd.*"/>
+		<exclude name="buildPackage.xml" />
       </tarfileset>
     </tar>
   </target>
@@ -149,6 +149,7 @@
         <include name="lib/*.jar"/>
       	<patternset refid="pattern.package.ant"/>
       	<include name="lib/APACHE-LICENSE-2_0.html"/>
+		<exclude name="buildPackage.xml" />
       </zipfileset>
     </zip>
     
@@ -159,6 +160,7 @@
         <include name="lib/*.jar"/>
         <patternset refid="pattern.package.ant"/>
       	<include name="lib/APACHE-LICENSE-2_0.html"/>
+		<exclude name="buildPackage.xml" />
       </tarfileset>
     </tar>
   </target>
