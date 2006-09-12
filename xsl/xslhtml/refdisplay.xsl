@@ -1,4 +1,7 @@
-﻿<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+     Sourceforge.net. See the accompanying license.txt file for 
+     applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
 
 <xsl:stylesheet version="1.0"
@@ -100,7 +103,7 @@
 <xsl:template match="*[contains(@class,' reference/property ')]" name="topic.reference.property">
   <xsl:param name="width-multiplier"/>
   <!-- If there was no header, then this is the first child of properties; create default headers -->
-  <xsl:if test="position()=1">
+  <xsl:if test=".=../*[1]">
     <tr><xsl:value-of select="$newline"/>
       <xsl:if test="../*/*[contains(@class,' reference/proptype ')]">
         <th id="{generate-id(parent::*)}-type" valign="bottom">
