@@ -1,85 +1,51 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
-
-<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+     Sourceforge.net. See the accompanying license.txt file for 
+     applicable licenses.-->
+<!-- (c) Copyright IBM Corp. 2004, 2006 All Rights Reserved. -->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd" []>
 <reference id="relnote" xml:lang="en-us">
   <title>DITA release notes</title>
   <refbody>
     <section>
-      <title>Introduction</title>
-      <p>DITA open toolkit Release 1.2 is a major release to add new functions, fulfill new requirements, make some function enhancements and fix bugs over release 1.1.2.1.</p>
+      <title>DITA OT release 1.2.2</title>
+      <p>Release 1.2.2 is a maintenance release to fix defects and make patches based on release 1.2.1.</p>
       <p>
-        <b>Important Change</b> DITA-OT 1.2 offers new error handling and logging system. If you invoke your transformation by using java command line where new error handling and logging system is mandatory, you need to set the <varname>CLASSPATH</varname> <xref href="installguide/settingenvironmentvariables.xml">Environment Variable</xref> for <codeph>dost.jar</codeph>. If you invoke your transformation by using an ant script, you need to do one more step after the setting above. That is adding a parameter in your command to invoke an ant script. For example, use <userinput>ant -f ant\sample_xhtml.xml -logger org.dita.dost.log.DITAOTBuildLogger</userinput> instead of <userinput>ant -f ant\sample_xhtml.xml</userinput> to start a transformation defined in ant script file ant\sample_xhtml.xml.
+        <b>Improvements</b>
+        <ol>
+          <li>Chinese support in WORD RTF</li>
+          <li>Improve plug-in architecture in plug-in dependency handling</li>
+        </ol>
       </p>
-    </section>
-    <section>
-      <title>New Functions</title>
-      <ol>
-        <li>
-          <b>New plugin archiecture</b>
-          <p>DITA Open Toolkit 1.2 provides a new function to help users to download, install and use plug-ins and help developers
-create new plug-ins for DITA Open Toolkit.</p>
-        </li>
-        <li>
-          <b>Transformation to wordrtf</b>
-          <p>DITA Open Toolkit 1.2 provides DITA to Word transforming
-function to transform DITA source files to output in <tm tmclass="special"
-tmowner="Microsoft Corporation" tmtype="reg" trademark="Microsoft">Microsoft</tm> Word
-RTF file.</p>
-        </li>
-        <li>
-          <b>HTML to DITA migration tool</b>
-          <p>DITA Open Toolkit 1.2 provides a HTML to DITA 
-          migration tool, which migrates HTML files to DITA files. This 
-          migration tool originally comes from the developerWorks publication 
-          of Robert D. Anderson's how-to articles with the original h2d code.</p>
-        </li>
-        <li>
-          <b>Problem determination and log analysis</b>
-          <p>In DITA Open Toolkit 1.2, a new logging method is supported 
-  to log messages both on the screen and into the log file. The messages on 
-  the screen present user with the status information, warning, error, and 
-  fatal error messages. The messages in the log file present user with more 
-  detailed information about the transformation process. By analyzing these 
-  messages, user can know what cause the problem and how to solve it.</p>
-        </li>
-        <li>
-          <b>Open DITA User Guide for conditional processing</b>
-          <p>In DITA Open Toolkit 1.2, a new user guide which can help users to use conditional processing is added to toolkit document.</p>
-        </li>
-        <li>
-          <b>Include the OASIS version langref</b>
-          <p>In DITA Open Toolkit 1.2, a new OASIS version of language reference for DITA standard is added to toolkit document.</p>
-        </li>
-        <li>
-          <b>Document adapt to OASIS DITA 1.0.1 DTDs</b>
-          <p>DITA DTD files are updated to 1.0.1 version in DITA Open Toolkit 1.2.</p>
-        </li>
-      </ol>
-    </section>
-    <section>
-      <title>Other Changes</title>
-      <ol>
-        <li>SF Bug 1304545 Some folders were copied to DITA-OT's root directory</li>
-        <li>SF Bug 1328689 Stylesheet links in HTML emitted with local filesystem paths</li>
-        <li>SF Bug 1333481 Mapref function does not work for maps in another directory</li>
-        <li>SF Bug 1343963 Blank index.html generated for ditamap contains only reltabe</li>
-        <li>SF Bug 1344486 java.io.EOFException thrown out when reading ditaval file</li>
-        <li>SF Bug 1347669 Path Spec. in nested DITA maps</li>
-        <li>SF Bug 1357139 filtering behavior doesn't conform to spec</li>
-        <li>SF Bug 1358619 The property.temp file gets cleaned out by default</li>
-        <li>SF Bug 1366843 XRefs do not generate proper links in FO/PDF</li>
-        <li>SF Bug 1367636 dita2fo-elems.xsl has strange line breaks</li>
-        <li>SF RFE 1296133 Enable related-links in PDF output</li>
-        <li>SF RFE 1326377 Add a /dbg or /debug flag for diagnostic info</li>
-        <li>SF RFE 1331727 Toolkit need to run on JDK 1.5.x(only support to run under Sun JDK 1.5 with saxon in normal case)</li>
-        <li>SF RFE 1357054 Be more friendly towards relative directories</li>
-        <li>SF RFE 1357906 Provide a default output directory</li>
-        <li>SF RFE 1368073 Enable plugins for DITA open toolkit</li>
-        <li>SF RFE 1379518 Clearer error messages and improved exception handling</li>
-        <li>SF RFE 1379523 DITA to Rich Text Format (.rtf) file</li>
-        <li>SF RFE 1382482 plugin architecture of DITA-OT</li>
-      </ol>
+      <p>
+        <b>SF Changes</b>
+        <ol>
+          <li>SF Bug 1461642  Relative paths in toolkit.</li>
+          <li>SF Bug 1463756  TROFF output is not usable</li>
+          <li>SF Bug 1459527  Properties elements should generate default headings</li>
+          <li>SF Bug 1457552  FO gen-toc does not work right for ditamaps and bookmaps</li>
+          <li>SF Bug 1430983  Specialized indexterm does not generate entries in index</li>
+          <li>SF Bug 1363055  Shortdesc disappears when optional body is removed</li>
+          <li>SF Bug 1368403  The dita2docbook transformation lacks support for args.xsl</li>
+          <li>SF Bug 1405184  Note template for XHTML should be easier to override</li>
+          <li>SF Bug 1407646  Map titles are not used in print outputs</li>
+          <li>SF Bug 1409960  No page numbers in PDF toc</li>
+          <li>SF Bug 1459790  Related Links omitted when map references file#topicid</li>
+          <li>SF Bug 1428015  Topicmerge.xsl should leave indentation alone</li>
+          <li>SF Bug 1429400  FO output should allow more external links</li>
+          <li>SF Bug 1405169  Space inside XHTML note title affects CSS presentation</li>
+          <li>SF Bug 1402377  Updated translations for Icelandic</li>
+          <li>SF Bug 1366845  XRefs do not generate page numbers</li>
+          <li>SF Patch 1326450 Make ${basedir} mine</li>
+          <li>SF Patch 1328264 FOP task userconfig file</li>
+          <li>SF Patch 1385636 Tweaks to docbook/topic2db.xsl</li>
+          <li>SF Patch 1435584 Recognize more image extensions</li>
+          <li>SF Patch 1444900 Add template for getting input file URI</li>
+          <li>SF Patch 1460419 Add a new parameter /cssroot:{args.cssroot}</li>
+          <li>SF Patch 1460441 map2hhp [FILES] include</li>
+          <li>SF RFE 1400140 Add a new parameter /cssroot:{args.cssroot}</li>
+        </ol>
+      </p>
     </section>
     <section>
       <title>Note</title>

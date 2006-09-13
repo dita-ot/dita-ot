@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+     Sourceforge.net. See the accompanying license.txt file for 
+     applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
 
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "..\dtd\concept.dtd">
@@ -51,6 +54,21 @@
             </row>
           </thead>
           <tbody>
+            <row>
+              <entry colname="col1" colsep="1" rowsep="1"> 
+                <i>/basedir</i>:{basedir}</entry>
+              <entry colname="col2">
+                <ph conref="DITA-antscript.xml#antscript/basedir"></ph>
+                <note conref="DITA-antscript.xml#antscript/basedir-note"/>
+              </entry>
+            </row>
+            <row>
+              <entry colname="col1" colsep="1" rowsep="1"> 
+                <i>/ditadir</i>:{dita.dir}</entry>
+              <entry colname="col2">
+                <ph conref="DITA-antscript.xml#antscript/ditadir"></ph>
+              </entry>
+            </row>
             <row>
               <entry colname="col1" colsep="1" rowsep="1"> 
                 <i>/i</i>:{args.input}</entry>
@@ -149,6 +167,13 @@
               </entry>
             </row>
             <row>
+              <entry colname="col1"><i>/cssroot</i>:{args.cssroot}</entry>
+              <entry colname="col2">
+                <ph conref="DITA-antscript.xml#antscript/argscssroot"/>
+                <note conref="DITA-antscript.xml#antscript/argscssroot-note"/>
+              </entry>
+            </row>
+            <row>
               <entry colname="col1"><i>/copycss</i>:{args.copycss}</entry>
               <entry colname="col2">
                 <ph conref="DITA-antscript.xml#antscript/copycss"></ph>
@@ -210,6 +235,18 @@
               </entry>
             </row>
             <row>
+              <entry colname="col1"><i>/provider</i>:{args.eclipse.provider}</entry>
+              <entry colname="col2">
+                <ph conref="DITA-antscript.xml#antscript/eclipseprovider"></ph>
+              </entry>
+            </row>
+            <row>
+              <entry colname="col1"><i>/version</i>:{args.eclipse.version}</entry>
+              <entry colname="col2">
+                <ph conref="DITA-antscript.xml#antscript/eclipseversion"></ph>
+              </entry>
+            </row>
+            <row>
               <entry colname="col1"><i>/xhtmltoc</i>:{args.xhtml.toc}</entry>
               <entry colname="col2">
                 <ph conref="DITA-antscript.xml#antscript/xhtmltoc"/>
@@ -233,6 +270,18 @@
               <entry colname="col2">
                 <ph conref="DITA-antscript.xml#antscript/fooutputrellinks"/>
                 <note conref="DITA-antscript.xml#antscript/fooutputrellinks-note"/>
+              </entry>
+            </row>
+            <row>
+              <entry colname="col1"><i>/fouserconfig</i>:{args.fo.userconfig}</entry>
+              <entry colname="col2">
+                <ph conref="DITA-antscript.xml#antscript/fouserconfig"/>
+              </entry>
+            </row>
+            <row>
+              <entry colname="col1"><i>/htmlhelpincludefile</i>:{args.htmlhelp.includefile}</entry>
+              <entry colname="col2">
+                <ph conref="DITA-antscript.xml#antscript/htmlhelpincludefile"/>
               </entry>
             </row>
           </tbody>

@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+     Sourceforge.net. See the accompanying license.txt file for 
+     applicable licenses.-->
 <!-- (c) Copyright by Comtech Services, Inc. All rights reserved. -->
 <!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
 <reference id="troubleshooting" xml:lang="en-us">
@@ -34,6 +37,15 @@
           <li>Clean the output directory.</li>
           <li>Run the JavaHelp transformation again.</li>
         </ol>
+    </section>
+    <section>
+        <title>3. Failed to load message file</title>
+        <p>In some situations, the toolkit may fails to load the message file 
+          due to some exceptions thrown.</p>
+        <p>To fix this problem, you need to check if there are files 
+          'resource/messages.xml' and 'resource/messages.dtd' in the directory 
+          that you run the toolkit. If not, please copy them from the toolkit's 
+          root directory.</p>
     </section>
   </refbody>
 </reference>
