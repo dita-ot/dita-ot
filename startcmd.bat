@@ -1,3 +1,8 @@
+REM  This file is part of the DITA Open Toolkit project hosted on 
+REM  Sourceforge.net. See the accompanying license.txt file for 
+REM  applicable licenses.
+REM  (c) Copyright IBM Corp. 2006 All Rights Reserved.
+
 REM Get the absolute path of DITAOT's home directory
 set DITA_DIR=%~dp0
 
