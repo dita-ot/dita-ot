@@ -24,7 +24,7 @@
           processing support.
           Important: Because this support is based on a yet-to-be-approved 
           version of the proposed OASIS DITA 1.1 specification, if you choose 
-          to investigate any1.1-based function, be aware that the 1.1 
+          to investigate any 1.1-based function, be aware that the 1.1 
           implementation in this version of the Toolkit is preliminary and very
           much forward-looking. Upon final approval of the DITA 1.1 standard, 
           Toolkit developers will, of course, review our implementation to make
@@ -32,19 +32,12 @@
           implementation.
        2.Related to the DITA 1.1 preliminary implementation, the 
           much-discussed bookmap updates for DITA 1.1 will be provided as 
-          override capabilities for the FO plugin. The original, demo-quality 
-          FO transforms are still in the toolkit's demo directory, but that 
-          code base is not strategic and is at very low priority for any 
-          further maintenance or new OASIS functionality. Instead, the more 
-          strategic FO plugin code will be updated for OASIS 1.1 Bookmap. At 
-          the same time, overrides will be provided to support FOP-compatible 
-          processing over the default XEP-based processing. Since plugin 
-          development is managed separately from the core Toolkit, those 
-          updates will be provided shortly after the 1.3 core code itself is 
-          released, not coincident with it. For the short interim, your FO 
-          processing is still at the same level of functionality as for Toolkit
-          version 1.2.2 (evidenced by the demo PDF transforms such as 
-          demo.faq.pdf).
+          override capabilities for the FO plugin (Idiom's donation). Note that:
+            The FO demo transform code at the 1.2.2 level is still included in 
+              the DITA 1.3 package, but is now deprecated.
+            To get the FO updates for 1.3, grab the FO plug-in at its next update, 
+              which should be shortly after the 1.3 core Toolkit code is released.
+            The updated FO plug-in will be usable with FOP as well as with XEP. 
 
      Changes
      
