@@ -2,7 +2,9 @@
 <!-- This file is part of the DITA Open Toolkit project hosted on 
  Sourceforge.net. See the accompanying license.txt file for 
  applicable licenses.-->
-<!--Arbortext, Inc., 1988-2005, v.4002-->
+ <!--
+  | (C) Copyright IBM Corporation 2005 - 2006. All Rights Reserved.
+  *-->   
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN"
  "concept.dtd">
 <concept id="standardxmlcatalogresolver" xml:lang="en-us">

@@ -2,6 +2,9 @@
 <!-- This file is part of the DITA Open Toolkit project hosted on 
  Sourceforge.net. See the accompanying license.txt file for 
  applicable licenses.-->
+ <!--
+  | (C) Copyright IBM Corporation 2005 - 2006. All Rights Reserved.
+  *-->   
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN"
  "concept.dtd">
 <concept id="graphicscalingimprovement" xml:lang="en-us">
