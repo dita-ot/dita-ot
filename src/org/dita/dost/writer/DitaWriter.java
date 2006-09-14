@@ -181,8 +181,12 @@ public class DitaWriter extends AbstractXMLWriter {
             reader.setFeature(Constants.FEATURE_VALIDATION, true); 
             reader.setFeature(Constants.FEATURE_VALIDATION_SCHEMA, true);
 
-            
-            reader.setEntityResolver(new CatalogResolver());
+            try {
+    			Class c = Class.forName(Constants.RESOLVER_CLASS);
+    			reader.setEntityResolver(new CatalogResolver());
+    		}catch (ClassNotFoundException e){
+    			reader.setEntityResolver(this);
+    		}
         } catch (Exception e) {
         	logger.logException(e);
         }

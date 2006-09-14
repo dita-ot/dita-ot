@@ -203,6 +203,7 @@ public abstract class Constants {
     public static final String UTF8 = "UTF-8";
     public static final String SAX_DRIVER_PROPERTY = "org.xml.sax.driver";    
     public static final String SAX_DRIVER_DEFAULT_CLASS = "org.apache.xerces.parsers.SAXParser";    
+    public static final String RESOLVER_CLASS = "org.apache.xml.resolver.tools.CatalogResolver";
     public static final String LEXICAL_HANDLER_PROPERTY = "http://xml.org/sax/properties/lexical-handler";    
     public static final String FEATURE_NAMESPACE_PREFIX = "http://xml.org/sax/features/namespace-prefixes";
     public static final String FEATURE_VALIDATION = "http://xml.org/sax/features/validation";

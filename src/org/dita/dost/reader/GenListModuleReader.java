@@ -89,6 +89,7 @@ public class GenListModuleReader extends AbstractXMLReader {
 	 * Constructor
 	 */
 	public GenListModuleReader() {
+		Class c = null;
 		nonConrefCopytoTargets = new HashSet(Constants.INT_64);
 		hrefTargets = new HashSet(Constants.INT_32);
 		conrefTargets = new HashSet(Constants.INT_32);
@@ -96,7 +97,12 @@ public class GenListModuleReader extends AbstractXMLReader {
 		ignoredCopytoSourceSet = new HashSet(Constants.INT_16);
 		props = null;
 		reader.setContentHandler(this);
-		reader.setEntityResolver(new CatalogResolver());
+		try {
+			c = Class.forName(Constants.RESOLVER_CLASS);
+			reader.setEntityResolver(new CatalogResolver());
+		}catch (ClassNotFoundException e){
+			reader.setEntityResolver(this);
+		}
 	}
 
 	/**
