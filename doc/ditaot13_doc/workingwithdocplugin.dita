@@ -78,7 +78,7 @@ added prgeclipse.help.toc, and select New, and then toc.</cmd><info><fig>
 <image href="toc.jpg" placement="break"><alt>Edit Extensions</alt></image>
 </fig></info></substep>
 <substep><cmd>Edit the Build Configuration to include the out directory or
-the directory you specified in <xref href="#integratingwithwtp/step2"></xref>.</cmd>
+the directory you specified in <xref href="#integratingwithwtp/step2">Step 2</xref>.</cmd>
 <info><fig>
 <image href="buildout.JPG" placement="break"><alt>Edit Build Configuration</alt>
 </image>
