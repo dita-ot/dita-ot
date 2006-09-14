@@ -6,7 +6,7 @@
   | (C) Copyright IBM Corporation 2005 - 2006. All Rights Reserved.
   *-->   
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN"
- "task.dtd">
+ "..\..\dtd\task.dtd">
 <task id="integratingwithwtp" xml:lang="en-us">
 <title>Working with documentation plug-in</title>
 <taskbody>
@@ -57,10 +57,13 @@ directory. The DITA files are then imported to your DITA project.</cmd></substep
 </substeps>
 </step>
 <step><cmd>Right click build.xml, select Run As, and then ANT Build.</cmd>
+ <info><note importance="high">If you're using SUN JDK, please download and use the latest Xalan. 
+The Xalan shipped with SUN JDK has some issue that will cause the build failure. You can use the latest 
+Xalan by selecting <uicontrol>ANT Build ...</uicontrol> and include the all of Xalan's jar files in Classpath.</note></info>
 <info>After the transformation, the output is in the output directory set
 in build.xml. Refresh the project after the build is successful.<fig>
 <image href="runasant.jpg" placement="break"><alt>Run as ANT build</alt></image>
-</fig></info></step>
+</fig><fig><image href="classpath.jpg" placement="break"><alt>Set the Classpath</alt></image></fig></info></step>
 <step><cmd>Edit the plug-in description of the property file MANITEST.MF in
 the plug-in editor after you run the ANT build successfully. </cmd>
 <substeps>
