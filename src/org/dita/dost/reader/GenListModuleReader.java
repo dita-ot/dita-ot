@@ -374,7 +374,7 @@ public class GenListModuleReader extends AbstractXMLReader {
 		/*
 		 * Collect non-conref and non-copyto targets
 		 */
-		if (FileUtils.isValidTarget(filename) && 
+		if (FileUtils.isValidTarget(filename.toLowerCase()) && 
 				(StringUtils.isEmptyString(atts.getValue(Constants.ATTRIBUTE_NAME_COPY_TO)) ||
 						!FileUtils.isTopicFile(atts.getValue(Constants.ATTRIBUTE_NAME_COPY_TO).toLowerCase()))
 				&& !Constants.ATTRIBUTE_NAME_CONREF.equals(attrName)
