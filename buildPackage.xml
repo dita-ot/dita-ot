@@ -90,6 +90,7 @@
     <include name="lib/resolver.jar"/>
     <include name="lib/CatalogManager.properties"/>
     <exclude name="doc/userguide-orig/**"/>
+	<exclude name="doc/ot-userguide/**"/>
     <exclude name="build.number"/>
     <exclude name=".*"/>
   </patternset>
