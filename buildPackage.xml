@@ -153,6 +153,7 @@
         <include name="lib/*.jar"/>
       	<patternset refid="pattern.package.ant"/>
       	<include name="lib/APACHE-LICENSE-2_0.html"/>
+		<include name="lib/ICU_License.html"/>
 		<exclude name="buildPackage.xml" />
       </zipfileset>
     </zip>
@@ -164,6 +165,7 @@
         <include name="lib/*.jar"/>
         <patternset refid="pattern.package.ant"/>
       	<include name="lib/APACHE-LICENSE-2_0.html"/>
+		<include name="lib/ICU_License.html"/>
 		<exclude name="buildPackage.xml" />
       </tarfileset>
     </tar>
