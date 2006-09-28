@@ -2,7 +2,7 @@
      DITA OT release 1.3
      Release 1.3 is a major release to add new functions, fulfill new 
      requirements, make some function enhancements and fix bugs over release 
-     1.2.2. Available since September 8, 2006
+     1.2.2. Available since September 28, 2006
 
      OASIS DITA 1.1 support
      
