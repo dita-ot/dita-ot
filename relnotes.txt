@@ -1,12 +1,14 @@
 (c) Copyright IBM Corp. 2004, 2006 All Rights Reserved.
      DITA OT release 1.3
+
      Release 1.3 is a major release to add new functions, fulfill new 
      requirements, make some function enhancements and fix bugs over release 
      1.2.2. Available since September 28, 2006
 
      OASIS DITA 1.1 support
-     
+
      Things to know about OASIS DITA 1.1 support in this release:
+
        1.DITA-OT 1.3 provides preliminary processing support for the upcoming 
           OASIS DITA 1.1 specification (see 
           http://wiki.oasis-open.org/dita/Roadmap_for_DITA_development). 
@@ -24,7 +26,7 @@
           processing support.
           Important: Because this support is based on a yet-to-be-approved 
           version of the proposed OASIS DITA 1.1 specification, if you choose 
-          to investigate any 1.1-based function, be aware that the 1.1 
+          to investigate any1.1-based function, be aware that the 1.1 
           implementation in this version of the Toolkit is preliminary and very
           much forward-looking. Upon final approval of the DITA 1.1 standard, 
           Toolkit developers will, of course, review our implementation to make
@@ -32,19 +34,23 @@
           implementation.
        2.Related to the DITA 1.1 preliminary implementation, the 
           much-discussed bookmap updates for DITA 1.1 will be provided as 
-          override capabilities for the FO plugin (Idiom's donation). Note that:
-            The FO demo transform code at the 1.2.2 level is still included in 
-              the DITA 1.3 package, but is now deprecated.
-            To get the FO updates for 1.3, grab the FO plug-in at its next update, 
-              which should be shortly after the 1.3 core Toolkit code is released.
-            The updated FO plug-in will be usable with FOP as well as with XEP. 
+          override capabilities for the FO plugin (Idiom's donation). Note 
+          that:
+              The FO demo transform code at the 1.2.2 level is still included 
+              in the DITA 1.3 package, but is now deprecated.
+              To get the FO updates for 1.3, grab the FO plug-in at its next 
+              update, which should be shortly after the 1.3 core Toolkit code 
+              is released. 
+              The updated FO plug-in will be usable with FOP as well as with 
+              XEP. 
 
      Changes
-     
+
      The DITA Open Toolkit team understands the need for stability in 
      essential APIs in the Toolit. This verson of the toolkit provides some 
      strategic updates that correct some long-overdue faults in the original 
      implementation. Necessarily, there are some changes to note: 
+
        1.Change to build.xml: To make the DITA processing environment more 
           like other Ant-driven build environments, the original build.xml has 
           been renamed as build_demo.xml. The current build.xml in this release
@@ -76,12 +82,17 @@
           version of the Toolkit, you need to include lib and 
           lib\resource\resolver.jar into your classpath. For example if your 
           CLASSPATH is like: 
+
           c:\dita-ot\lib\dost.jar
+
           you need to change it to: 
+
           c:\dita-ot\lib;c:\dita-ot\lib\dost.jar;c:\dita-ot\lib\resolver.jar
+
           At any time, the full version can be used like a normal installation 
           as long as you update the system variables either in the evironment 
           settings or in a batch file that sets up the shell environment. 
+
        5.License bundling: To reduce the duplication of builds on Sourceforge 
           in which the only difference was the license provided in each, both 
           the Apache and CPL licenses are included in root directory of the 
@@ -103,6 +114,7 @@
           (http://dita.xml.org/node/1282).
 
      [7 Improvements]
+
        1.Preliminary support for OASIS DITA 1.1 
        2.Support ICU in index sorting 
        3.Integrate with Eclipse 
@@ -112,6 +124,7 @@
        7.Full package distribution (was GUI/usability)
 
      [21 SF Bugs Fixed]
+
        1.SF Bug 1582506 Docbook cannot handle <author> 
        2.SF Bug 1548189 Sections should not jump to <h4> for Accessibility 
           reasons 
@@ -139,20 +152,29 @@
       21.SF Bug 1368997 PDF Vertical list of author redundancy 
 
      [1 SF Patch Added]
+
        1.SF Patch 1503296 Refactor of HTMLHelp inifiles creation
 
      [1 SF RFE Added]
+
        1.SF RFE 1160960 Enh: Toolkit should work with both both *.dita and 
           *.xml
 
      Note: SourceForge bugs, patches, and RFEs listed above can be found in 
      SourceForge Bugs, Patches, and RFE tracker pages: 
+
           Bugs tracker: 
+
           http://sourceforge.net/tracker/?group_id=132728&atid=725074
+
           Patches tracker: 
+
           http://sourceforge.net/tracker/?group_id=132728&atid=725076
+
           RFE tracker: 
+
           http://sourceforge.net/tracker/?group_id=132728&atid=725077
+
 ====================================================================================
 
 DITA OT release 1.2.2
