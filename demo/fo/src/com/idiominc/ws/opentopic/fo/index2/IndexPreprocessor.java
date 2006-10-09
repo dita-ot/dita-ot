@@ -2,6 +2,7 @@ package com.idiominc.ws.opentopic.fo.index2;
 
 import com.idiominc.ws.opentopic.fo.index2.configuration.IndexConfiguration;
 import com.idiominc.ws.opentopic.fo.index2.util.IndexStringProcessor;
+import com.idiominc.ws.opentopic.fo.index2.util.IndexDitaProcessor;
 import org.w3c.dom.*;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -19,6 +20,11 @@ public class IndexPreprocessor {
 	private final String prefix;
 	private final String namespace_url;
 	private String elIndexName = "indexterm";
+	private String elIndexSortName = "index-sort-as";
+	private String elIndexSeeName = "index-see";
+	private String elIndexSeeAlsoName = "index-see-also";
+    private String elIndexRangeStartName = "index-range-start";
+	private String elIndexRangeEndName = "index-range-end";
 
 
 	public IndexPreprocessor(String prefix, String theNamespace_url) {
@@ -144,20 +150,31 @@ public class IndexPreprocessor {
 		NodeList childNodes = theNode.getParentNode().getChildNodes();
 		for (int i = 0; i < childNodes.getLength(); i++) {
 			final Node child = childNodes.item(i);
-			if (elIndexName.equals(child.getNodeName())) {
+            final String nodeName = child.getNodeName();
+            if (checkElementName(nodeName)) {
 				ditastyle = true;
 				break;
 			}
 		}
 
 		String[] indexStrings;
-		if ((ditastyle)) {
-			indexStrings = createIndexStringFromDitastyleIndex(theNode.getParentNode());
-		} else {
+        ArrayList res = new ArrayList();
+        if ((ditastyle)) {
+            IndexEntry[] indexEntries = IndexDitaProcessor.processIndexDitaNode(theNode.getParentNode(),"");
+
+            for (int i = 0; i < indexEntries.length; i++) {
+			    theIndexEntryFoundListener.foundEntry(indexEntries[i]);
+		    }
+
+            final Node[] nodes = transformToNodes(indexEntries, theTargetDocument, null);
+            for (int j = 0; j < nodes.length; j++) {
+                Node node = nodes[j];
+                res.add(node);
+            }
+
+        } else {
 			indexStrings = new String[]{theNode.getNodeValue()};
-		}
-		ArrayList res = new ArrayList();
-		for (int i = 0; i < indexStrings.length; i++) {
+            for (int i = 0; i < indexStrings.length; i++) {
 			String indexString = indexStrings[i];
 			final Node[] nodes = processIndexString(indexString, theTargetDocument, theIndexEntryFoundListener);
 			for (int j = 0; j < nodes.length; j++) {
@@ -165,42 +182,17 @@ public class IndexPreprocessor {
 				res.add(node);
 			}
 		}
+        }
+
 		return (Node[]) res.toArray(new Node[res.size()]);
 	}
 
+    private boolean checkElementName(String nodeName) {
+        return elIndexName.equals(nodeName) || elIndexSortName.equals(nodeName)
+                || elIndexSeeName.equals(nodeName) || elIndexSeeAlsoName.equals(nodeName)
+                || elIndexRangeStartName.equals(nodeName) || elIndexRangeEndName.equals(nodeName);
 
-	private String[] createIndexStringFromDitastyleIndex(Node theNode) {
-		//Go through the childs and append text nodes to the index string
-		//Index elements on the same level will create separate index strings
-		ArrayList resultList = new ArrayList();
-		if (elIndexName.equals(theNode.getNodeName())) //Is index element?
-		{
-			StringBuffer resIndexString = new StringBuffer();
-			boolean skipCurrentLevel = false;
-			final NodeList childNodes = theNode.getChildNodes();
-			for (int i = 0; i < childNodes.getLength(); i++) { //Go through child nodes to find text nodes
-				final Node child = childNodes.item(i);
-				if (child.getNodeType() == Node.TEXT_NODE) {
-					final String val = child.getNodeValue();
-					if (null != val) {
-						resIndexString.append(val); //append to result index string
-					}
-				} else if (elIndexName.equals(child.getNodeName())) {
-					skipCurrentLevel = true;		//skip adding current level index string because it has continuation on the descendant level
-					String[] indexValues = createIndexStringFromDitastyleIndex(child); //call recursevelly but for the found child
-					for (int j = 0; j < indexValues.length; j++) {
-						String indexValue = indexValues[j];
-						resultList.add(resIndexString.toString() + ':' + indexValue); //append to result list prefixed by current level
-					}
-				}
-			}
-			if (!skipCurrentLevel) {
-				//No descendant index elements were found so add this level as final
-				resultList.add(resIndexString.toString());
-			}
-		}
-		return (String[]) resultList.toArray(new String[resultList.size()]); //return result
-	}
+    }
 
 
 	/**
@@ -212,9 +204,10 @@ public class IndexPreprocessor {
 	 * @return the array of nodes after processing index string
 	 */
 	private Node[] processIndexString(String theIndexString, Document theTargetDocument, IndexEntryFoundListener theIndexEntryFoundListener) {
-		IndexEntry[] indexEntries = IndexStringProcessor.processIndexString(theIndexString);
+        IndexEntry[] indexEntries = IndexStringProcessor.processIndexString(theIndexString);
 
-		for (int i = 0; i < indexEntries.length; i++) {
+
+        for (int i = 0; i < indexEntries.length; i++) {
 			theIndexEntryFoundListener.foundEntry(indexEntries[i]);
 		}
 
@@ -290,7 +283,31 @@ public class IndexPreprocessor {
 				indexEntryNode.appendChild(node);
 			}
 
-			result.add(indexEntryNode);
+            IndexEntry[] seeChildIndexEntries = indexEntry.getSeeChildIndexEntries();
+            if (seeChildIndexEntries != null) {
+                Element seeElement = createElement(theTargetDocument, "see-childs");
+                Node[] seeNodes = transformToNodes(seeChildIndexEntries, theTargetDocument, theIndexEntryComparator);
+                for (int j = 0; j < seeNodes.length; j++) {
+				    Node node = seeNodes[j];
+				    seeElement.appendChild(node);
+			    }
+
+                indexEntryNode.appendChild(seeElement);
+            }
+
+            IndexEntry[] seeAlsoChildIndexEntries = indexEntry.getSeeAlsoChildIndexEntries();
+            if (seeAlsoChildIndexEntries != null) {
+                Element seeAlsoElement = createElement(theTargetDocument, "see-also-childs");
+                Node[] seeAlsoNodes = transformToNodes(seeAlsoChildIndexEntries, theTargetDocument, theIndexEntryComparator);
+                for (int j = 0; j < seeAlsoNodes.length; j++) {
+				    Node node = seeAlsoNodes[j];
+				    seeAlsoElement.appendChild(node);
+			    }
+
+                indexEntryNode.appendChild(seeAlsoElement);
+            }
+
+            result.add(indexEntryNode);
 		}
 		return (Node[]) result.toArray(new Node[result.size()]);
 	}

@@ -2,8 +2,8 @@
 <!--                    HEADER                                     -->
 <!-- ============================================================= -->
 <!--  MODULE:    DITA Task                                         -->
-<!--  VERSION:   1.0.1                                             -->
-<!--  DATE:      November 2005                                     -->
+<!--  VERSION:   1.1                                               -->
+<!--  DATE:      June 2006                                         -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -25,7 +25,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Task//EN"
 <!-- ORIGINAL CREATION DATE:                                       -->
 <!--             March 2001                                        -->
 <!--                                                               -->
-<!--             (C) Copyright OASIS Open 2005.                    -->
+<!--             (C) Copyright OASIS Open 2005, 2006.              -->
 <!--             (C) Copyright IBM Corporation 2001, 2004.         -->
 <!--             All Rights Reserved.                              -->
 <!--                                                               -->
@@ -33,6 +33,11 @@ PUBLIC "-//OASIS//ELEMENTS DITA Task//EN"
 <!--    2005.11.15 RDA: Removed old declaration for                -->
 <!--                    taskClasses entity                         -->
 <!--    2005.11.15 RDA: Corrected LONG NAME for chdeschd           -->
+<!--    2006.06.06 RDA: Changed model of choice to listitem.cnt    -->
+<!--                    for completeness                           -->
+<!--    2006.06.07 RDA: Added <abstract> element                   -->
+<!--    2006.06.07 RDA: Make universal attributes universal        -->
+<!--                      (DITA 1.1 proposal #12)                  -->
 <!-- ============================================================= -->
 
 
@@ -52,7 +57,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Task//EN"
                        'http://dita.oasis-open.org/architecture/2005/'
              %DITAArchNSPrefix;:DITAArchVersion
                         CDATA                              #FIXED
-                       '1.0'"                                        >
+                       '1.1'"                                        >
 
 
 <!-- ============================================================= -->
@@ -103,15 +108,11 @@ PUBLIC "-//OASIS//ELEMENTS DITA Task//EN"
                         locally                                    -->
 <!ENTITY % univ-atts-no-importance-task
             '%id-atts;
-             platform   CDATA                            #IMPLIED
-             product    CDATA                            #IMPLIED
-             audience   CDATA                            #IMPLIED
-             otherprops CDATA                            #IMPLIED
+             %filter-atts;
              rev        CDATA                            #IMPLIED
              status     (new | changed | deleted |   
                          unchanged)                      #IMPLIED
-             translate  (yes | no)                       #IMPLIED
-             xml:lang   NMTOKEN                          #IMPLIED'                              >
+             %localization-atts;                                 '   >
 
 <!ENTITY % task-info-types 
                         "%info-types;"                               >
@@ -131,14 +132,15 @@ PUBLIC "-//OASIS//ELEMENTS DITA Task//EN"
 
 
 <!--                    LONG NAME: Task                            -->
-<!ELEMENT task          (%title;, (%titlealts;)?, (%shortdesc;)?, 
+<!ELEMENT task          ((%title;), (%titlealts;)?,
+                         (%shortdesc; | %abstract;)?, 
                          (%prolog;)?, (%taskbody;)?, 
                          (%related-links;)?, (%task-info-types;)* )  >
 <!ATTLIST task            
              id         ID                               #REQUIRED
              conref     CDATA                            #IMPLIED
              %select-atts;
-             xml:lang   NMTOKEN                          #IMPLIED
+             %localization-atts;
              %arch-atts;
              outputclass 
                         CDATA                            #IMPLIED
@@ -151,8 +153,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Task//EN"
                          (%result;)?, (%example;)?, (%postreq;)?)    >
 <!ATTLIST taskbody        
              %id-atts;
-             translate  (yes|no)                         #IMPLIED
-             xml:lang   NMTOKEN                          #IMPLIED
+             %localization-atts;
              outputclass 
                         CDATA                            #IMPLIED    >
 
@@ -272,8 +273,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Task//EN"
 
 
 <!--                    LONG NAME: Choice                          -->
-<!ELEMENT choice        (#PCDATA | %basic.ph; | %basic.block; |
-                         %itemgroup; | %txt.incl;)*                  >
+<!ELEMENT choice        (%listitem.cnt;)*                            >
 <!ATTLIST choice          
              %univ-atts;                                  
              outputclass 
@@ -297,7 +297,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Task//EN"
 <!--                    LONG NAME: Choice Head                     -->
 <!ELEMENT chhead        ((%choptionhd;), (%chdeschd;) )              >
 <!ATTLIST chhead         
-             %univ-atts-no-importance-task;                                  
+             %univ-atts;                                  
              outputclass 
                         CDATA                            #IMPLIED    >
 

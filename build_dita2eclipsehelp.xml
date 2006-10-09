@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+     Sourceforge.net. See the accompanying license.txt file for 
+     applicable licenses.-->
+<!-- (c) Copyright IBM Corp. 2006 All Rights Reserved. -->
+<project name="dita2eclipsehelp" default="dita2eclipsehelp">
+    <property name="transtype" value="eclipsehelp"/>
+    
+    <import file="build_init.xml" />
+    <import file="build_preprocess.xml" />
+    <import file="build_general.xml" />
+
+    <target name="dita2eclipsehelp"
+            unless="noMap"
+            depends="build-init, start-preprocess, clean-temp, gen-list, 
+                     copy-files, debug-filter, move-index-entries, conref, mappull, 
+                     maplink, move-links, topicpull, dita.map.eclipse, copy-css, 
+                     dita.topics.xhtml">
+    </target>
+
+    <target name="dita.map.eclipse"
+            depends="dita.map.eclipse.init, dita.map.eclipse.toc, dita.map.eclipse.plugin" />
+
+
+    <target name="dita.map.eclipse.init"
+            description="Init properties for EclipseHelp">
+        <basename property="dita.map.toc.root"
+                  file="${dita.input.filename}"
+                  suffix=".ditamap" />
+        <condition property="args.eclipsehelp.toc" value="${dita.map.toc.root}">
+            <not>
+                <isset property="args.eclipsehelp.toc" />
+            </not>
+        </condition>
+        <condition property="out.ext" value=".html">
+            <not>
+                <isset property="out.ext" />
+            </not>
+        </condition>
+        <condition property="noPlugin">
+            <equals arg1="${dita.eclipse.plugin}" arg2="no" />
+        </condition>
+    </target>
+
+    <target name="dita.map.eclipse.toc" unless="noMap"
+            depends="dita.map.eclipse.init"
+            description="Build EclipseHelp TOC file">
+        <xslt processor="trax"
+              basedir="${dita.temp.dir}"
+              destdir="${output.dir}"
+              includes="${fullditamaplist}"
+              extension=".xml"
+              style="${dita.script.dir}${file.separator}map2eclipse.xsl">
+            <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
+            <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
+            <param name="WORKDIR" expression="${workdir}" if="workdir"/>
+        </xslt>
+    </target>
+
+    <target name="dita.map.eclipse.plugin"
+            unless="noPlugin"
+            depends="dita.map.eclipse.init"
+            description="Build Eclipsehelp plugin file">
+        <xslt processor="trax"
+              in="${dita.temp.dir}${file.separator}${user.input.file}"
+              out="${dita.map.output.dir}${file.separator}plugin.xml"
+              style="${dita.script.dir}${file.separator}map2plugin.xsl">
+            <param name="TOCROOT" expression="${args.eclipsehelp.toc}" />
+            <param name="version"
+                   expression="${args.eclipse.version}"
+                   if="args.eclipse.version" />
+            <param name="provider"
+                   expression="${args.eclipse.provider}"
+                   if="args.eclipse.provider" />
+        </xslt>
+    </target>
+
+    <!-- depecrated: keep for back-compatibility, will be remvoed in a later release -->
+    <target name="dita.topics.eclipse" depends="dita.topics.xhtml" />
+
+</project>

@@ -1,4 +1,10 @@
 /*
+ * This file is part of the DITA Open Toolkit project hosted on
+ * Sourceforge.net. See the accompanying license.txt file for 
+ * applicable licenses.
+ */
+
+/*
  * (c) Copyright IBM Corp. 2005, 2006 All Rights Reserved.
  */
 package org.dita.dost.platform;
@@ -18,25 +24,29 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
 /**
- *
+ * Integrator is the main class to control and excute the 
+ * integration of the toolkit and different plug-ins.
  * @author Zhang, Yuan Peng
  */
 public class Integrator {
+	/**
+	 * Plugin table which contains detected plugins
+	 */
 	public static Hashtable pluginTable = null;
-	private static HashSet templateSet = null;
+	private Set templateSet = null;
 	private String ditaDir;
 	private String basedir;
-	private HashSet descSet;
+	private Set descSet;
 	private XMLReader reader;
 	private DITAOTJavaLogger logger;
-	private HashSet loadedPlugin = null;
+	private Set loadedPlugin = null;
 	private Hashtable featureTable = null;
 	
-	static{
-		templateSet = new HashSet(16);
+	private void initTemplateSet(){
+		templateSet = new HashSet(Constants.INT_16);
 		templateSet.add("catalog-dita_template.xml");
+		templateSet.add("build_template.xml");
 		templateSet.add("xsl/dita2xhtml_template.xsl");
-		templateSet.add("conductor_template.xml");
 		templateSet.add("xsl/dita2rtf_template.xsl");
 		templateSet.add("xsl/dita2fo-shell_template.xsl");
 		templateSet.add("xsl/dita2docbook_template.xsl");
@@ -47,15 +57,22 @@ public class Integrator {
 		templateSet.add("xsl/preprocess/topicpull_template.xsl");
 	}
 
+	/**
+	 * execute point of Integrator
+	 */
 	public void execute() {
+		File demoDir = null;
+		File pluginDir = null;
+		File[] demoFiles = null;
+		File[] pluginFiles = null;
 		if (!new File(ditaDir).isAbsolute()) {
 			ditaDir = new File(basedir, ditaDir).getAbsolutePath();
 		}
 		
-		File demoDir = new File(ditaDir + "/demo");
-		File pluginDir = new File(ditaDir + "/plugins");
-		File[] demoFiles = demoDir.listFiles();
-		File[] pluginFiles = pluginDir.listFiles();
+		demoDir = new File(ditaDir + File.separatorChar + "demo");
+		pluginDir = new File(ditaDir + File.separatorChar + "plugin");
+		demoFiles = demoDir.listFiles();
+		pluginFiles = pluginDir.listFiles();
 		
 		for (int i=0; (demoFiles != null) && (i < demoFiles.length); i++){
 			File descFile = new File(demoFiles[i],"plugin.xml");
@@ -109,7 +126,8 @@ public class Integrator {
 				currentFeature = (Map.Entry)setIter.next();
 				if(featureTable.containsKey(currentFeature.getKey())){
 					String value = (String)featureTable.remove(currentFeature.getKey());
-					featureTable.put(currentFeature.getKey(), value+"," + currentFeature.getValue());
+					featureTable.put(currentFeature.getKey(), 
+							new StringBuffer(value).append(",").append(currentFeature.getValue()).toString());
 				}else{
 					featureTable.put(currentFeature.getKey(),currentFeature.getValue());
 				}
@@ -130,15 +148,17 @@ public class Integrator {
 		//check whether dependcy is satisfied
 		while (iter.hasNext()){
 			requiredPlugin = (String)iter.next();
-			if(!(pluginTable.containsKey(requiredPlugin))){
+			if(pluginTable.containsKey(requiredPlugin)){
+				if (!loadedPlugin.contains(requiredPlugin)){
+					//required plug-in is not loaded
+					loadPlugin(requiredPlugin);
+				}
+			}else {				
 				//not contain the plugin required by current plugin
 				prop.put("%1",requiredPlugin);
 				prop.put("%2",currentPlugin);
 				logger.logWarn(MessageUtils.getMessage("DOTJ020W",prop).toString());
 				return false;
-			}else if (!(loadedPlugin.contains(requiredPlugin))){
-				//required plug-in is not loaded
-				loadPlugin(requiredPlugin);
 			}
 		}		
 		return true;
@@ -164,47 +184,80 @@ public class Integrator {
 		}		
 	}
 
+	/**
+	 * Default Constructor
+	 */
 	public Integrator() {
-		pluginTable = new Hashtable(16);
-		descSet = new HashSet(16);
-		loadedPlugin = new HashSet(16);
-		featureTable = new Hashtable(16);
+		initTemplateSet();
+		pluginTable = new Hashtable(Constants.INT_16);
+		descSet = new HashSet(Constants.INT_16);
+		loadedPlugin = new HashSet(Constants.INT_16);
+		featureTable = new Hashtable(Constants.INT_16);
 		logger = new DITAOTJavaLogger();
+		basedir = null;
+		ditaDir = null;
 		try {
             if (System.getProperty(Constants.SAX_DRIVER_PROPERTY) == null){
-                //The default sax driver is set to xerces's sax driver
-            	if(System.getProperty("java.vendor").toLowerCase().indexOf("sun")==-1){
-                System.setProperty(Constants.SAX_DRIVER_PROPERTY,Constants.SAX_DRIVER_DEFAULT_CLASS);
-            	}else{
-            		if(System.getProperty("java.version").startsWith("1.5")){
-            			System.setProperty(Constants.SAX_DRIVER_PROPERTY,"com.sun.org.apache.xerces.internal.parsers.SAXParser");
-            		}else{
-            			System.setProperty(Constants.SAX_DRIVER_PROPERTY,"org.apache.crimson.parser.XMLReaderImpl");
-            		}
-            	}
+                initSaxDriver();
             }
             reader = XMLReaderFactory.createXMLReader();            
         } catch (Exception e) {
         	logger.logException(e);
         }
 	}
+	
+	/**
+	 * Init sax driver info
+	 */
+	private static void initSaxDriver(){
+		//The default sax driver is set to xerces's sax driver
+    	if(System.getProperty("java.vendor").toLowerCase().indexOf("sun")==-1){
+        System.setProperty(Constants.SAX_DRIVER_PROPERTY,Constants.SAX_DRIVER_DEFAULT_CLASS);
+    	}else{
+    		if(System.getProperty("java.version").startsWith("1.5")){
+    			System.setProperty(Constants.SAX_DRIVER_PROPERTY,"com.sun.org.apache.xerces.internal.parsers.SAXParser");
+    		}else{
+    			System.setProperty(Constants.SAX_DRIVER_PROPERTY,"org.apache.crimson.parser.XMLReaderImpl");
+    		}
+    	}
+	}
 
+	/**
+	 * Return the basedir
+	 * @return
+	 */
 	public String getBasedir() {
 		return basedir;
 	}
 
-	public void setBasedir(String basedir) {
-		this.basedir = basedir;
+	/**
+	 * Set the basedir
+	 * @param baseDir
+	 */
+	public void setBasedir(String baseDir) {
+		this.basedir = baseDir;
 	}
 	
+	/**
+	 * Return the ditaDir
+	 * @return
+	 */
 	public String getDitaDir() {
 		return ditaDir;
 	}
 
-	public void setDitaDir(String ditaDir) {
-		this.ditaDir = ditaDir;
+	/**
+	 * Set the ditaDir
+	 * @param ditadir
+	 */
+	public void setDitaDir(String ditadir) {
+		this.ditaDir = ditadir;
 	}
 	
+	/**
+	 * Test function
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		Integrator abc = new Integrator();
 		File currentDir = new File(".");

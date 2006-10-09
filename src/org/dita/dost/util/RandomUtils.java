@@ -1,4 +1,10 @@
 /*
+ * This file is part of the DITA Open Toolkit project hosted on
+ * Sourceforge.net. See the accompanying license.txt file for 
+ * applicable licenses.
+ */
+
+/*
  * (c) Copyright IBM Corp. 2006 All Rights Reserved.
  */
 package org.dita.dost.util;
@@ -13,8 +19,15 @@ import java.util.Random;
  *
  */
 public class RandomUtils {
+	/**
+	 * Default Constructor
+	 *
+	 */
+	private RandomUtils(){
+	}
 
 	/**
+	 * Return a random long number.
 	 * @return long -
 	 * 				Long random integer generated.
 	 */

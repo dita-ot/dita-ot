@@ -1,4 +1,10 @@
 /*
+ * This file is part of the DITA Open Toolkit project hosted on
+ * Sourceforge.net. See the accompanying license.txt file for 
+ * applicable licenses.
+ */
+
+/*
  * (c) Copyright IBM Corp. 2005 All Rights Reserved.
  */
 package org.dita.dost.log;
@@ -10,6 +16,13 @@ package org.dita.dost.log;
  */
 public class DITAOTJavaLogger {
 	private static boolean debugMode = false;
+	
+	/**
+	 * Default Constructor
+	 *
+	 */
+	public DITAOTJavaLogger(){
+	}
 
 	/**
 	 * Enable DEBUG mode.

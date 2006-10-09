@@ -1,4 +1,10 @@
 /*
+ * This file is part of the DITA Open Toolkit project hosted on
+ * Sourceforge.net. See the accompanying license.txt file for 
+ * applicable licenses.
+ */
+
+/*
  * (c) Copyright IBM Corp. 2005 All Rights Reserved.
  */
 package org.dita.dost.writer;
@@ -16,7 +22,7 @@ import org.dita.dost.module.Content;
  * 
  * @author Wu, Zhi Qiang
  */
-public class PropertiesWriter extends AbstractWriter {
+public class PropertiesWriter implements AbstractWriter {
 	/** Properties used to output */
 	private Properties prop = null;
 
@@ -52,6 +58,7 @@ public class PropertiesWriter extends AbstractWriter {
 				try {
 					fileOutputStream.close();
 				} catch (Exception e) {
+					throw new DITAOTException(e);
 				}
 			}
 		}

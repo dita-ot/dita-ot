@@ -29,6 +29,8 @@
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
   <!-- ======= INCLUDE ======= -->
   <xs:include schemaLocation="mapGroupMod.xsd" />
+  <xs:include schemaLocation="indexingDomain.xsd" />
+ 
 
  <xs:redefine schemaLocation="mapGrp.xsd">
   <xs:group name="topicref">
@@ -38,12 +40,21 @@
    </xs:choice>
   </xs:group>
  </xs:redefine>
+ 
+ <xs:redefine schemaLocation="commonElementGrp.xsd">
+  <xs:group name="index-base">
+   <xs:choice>
+    <xs:group ref="index-base"/>
+    <xs:group ref="indexing-d-index-base"/>
+   </xs:choice>
+  </xs:group>
+ </xs:redefine>
 
  <xs:redefine schemaLocation="mapMod.xsd" >
   	<xs:complexType name="map.class">
   		<xs:complexContent>
   			<xs:extension base="map.class">
-  				<xs:attribute name="domains" type="xs:string" default="(map mapgroup-d)"/>
+  			 <xs:attribute name="domains" type="xs:string" default="(map mapgroup-d) (topic indexing-d)"/>
   			</xs:extension>
   		</xs:complexContent>
   	</xs:complexType>

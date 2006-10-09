@@ -2,8 +2,8 @@
 <!--                    HEADER                                     -->
 <!-- ============================================================= -->
 <!--  MODULE:    DITA Utilities Domain                             -->
-<!--  VERSION:   1.0.1                                             -->
-<!--  DATE:      November 2005                                     -->
+<!--  VERSION:   1.1                                               -->
+<!--  DATE:      June 2006                                         -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -25,13 +25,16 @@ PUBLIC "-//OASIS//ELEMENTS DITA Utilities Domain//EN"
 <!-- ORIGINAL CREATION DATE:                                       -->
 <!--             March 2001                                        -->
 <!--                                                               -->
-<!--             (C) Copyright OASIS Open 2005.                    -->
+<!--             (C) Copyright OASIS Open 2005, 2006.              -->
 <!--             (C) Copyright IBM Corporation 2001, 2004.         -->
 <!--             All Rights Reserved.                              -->
 <!--                                                               -->
 <!--  UPDATES:                                                     -->
 <!--    2005.11.15 RDA: Updated these comments to match template   -->
 <!--    2005.11.15 RDA: Corrected the "Delivered as" system ID     -->
+<!--    2006.06.07 RDA: Make universal attributes universal        -->
+<!--                      (DITA 1.1 proposal #12)                  -->
+<!--    2006.06.14 RDA: Move univ-atts-translate-no into topic.mod -->
 <!-- ============================================================= -->
 
 
@@ -52,22 +55,13 @@ PUBLIC "-//OASIS//ELEMENTS DITA Utilities Domain//EN"
 
 <!--                    Provide an alternative univ-atts that sets 
                         translate to default 'no'                  -->
-<!ENTITY % univ-atts-translate-no
+<!-- Now uses the definition from topic.mod                        -->
+<!--<!ENTITY % univ-atts-translate-no
             '%id-atts;
-             platform CDATA #IMPLIED
-             product CDATA #IMPLIED
-             audience CDATA #IMPLIED
-             otherprops CDATA #IMPLIED
-             importance (obsolete | deprecated | 
-                         optional | default | low | 
-                         normal | high | 
-                         recommended | required | 
-                         urgent)                         #IMPLIED
-             rev        CDATA                            #IMPLIED
-             status     (new | changed | deleted |  
-                         unchanged)                      #IMPLIED
+             %select-atts;
              translate  (yes | no)                       "no"
-             xml:lang   NMTOKEN                          #IMPLIED'   >
+             xml:lang   NMTOKEN                          #IMPLIED
+             dir       (ltr | rtl | lro | rlo)           #IMPLIED'   >-->
 
 
 <!-- ============================================================= -->

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    
+    <!--<!ENTITY indexing-d-att "(topic indexing-d)"                         >-->
+    
+    <xs:group name="indexing-d-index-base">
+        <xs:choice>
+            <xs:element ref="index-see"/>
+            <xs:element ref="index-see-also"/>
+            <xs:element ref="index-sort-as"/>
+        </xs:choice>
+    </xs:group>
+     
+    <xs:group name="index-see">
+        <xs:sequence>
+            <xs:element ref="index-see"/>
+        </xs:sequence>
+    </xs:group>
+
+    <xs:group name="index-see-also">
+        <xs:sequence>
+            <xs:element ref="index-see-also"/>
+        </xs:sequence>
+    </xs:group>
+    
+    <xs:group name="index-sort-as">
+        <xs:sequence>
+            <xs:element ref="index-sort-as"/>
+        </xs:sequence>
+    </xs:group>
+    
+ 
+    <xs:element name="index-see" type="index-see" />
+    <xs:complexType name="index-see" mixed="true">
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:group ref="words.cnt"/>
+            <xs:group ref="indexterm"/>
+        </xs:choice>
+        <xs:attribute name="keyref" type="xs:string"/>
+        <xs:attributeGroup ref="univ-atts" />
+        <xs:attributeGroup ref="global-atts" />
+        <xs:attribute ref="class" default="+ topic/index-base indexing-d/index-see "/>
+    </xs:complexType>
+    
+    <xs:element name="index-see-also" type="index-see-also" />
+    <xs:complexType name="index-see-also" mixed="true">
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:group ref="words.cnt"/>
+            <xs:group ref="indexterm"/>
+        </xs:choice>
+        <xs:attribute name="keyref" type="xs:string"/>
+        <xs:attributeGroup ref="univ-atts" />
+        <xs:attributeGroup ref="global-atts" />
+        <xs:attribute ref="class" default="+ topic/index-base indexing-d/index-see-also "/>
+    </xs:complexType>
+    
+    <xs:element name="index-sort-as" type="index-sort-as" />
+    <xs:complexType name="index-sort-as"  mixed="true">
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:group ref="words.cnt"/>
+            <xs:group ref="indexterm"/>
+        </xs:choice>
+        <xs:attribute name="keyref" type="xs:string"/>
+        <xs:attributeGroup ref="univ-atts" />
+        <xs:attributeGroup ref="global-atts" />
+        <xs:attribute ref="class" default="+ topic/index-base indexing-d/index-sort-as "/>
+    </xs:complexType>
+    
+</xs:schema>

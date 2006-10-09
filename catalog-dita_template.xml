@@ -1,4 +1,7 @@
 <?xml version="1.0" ?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+     Sourceforge.net. See the accompanying license.txt file for 
+     applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
 <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog"          
          prefer="public">
@@ -7,7 +10,7 @@
 
 <!-- DITA DTDs -->
 
-<group xml:base="dtd">
+<group xml:base="dtd/">
 
   <public publicId="-//IBM//DTD DITA Concept//EN"
           uri="dita132/concept.dtd"/>
@@ -93,6 +96,11 @@
   <public publicId="-//OASIS//DTD DITA Composite//EN"
           uri="ditabase.dtd"/>
 
+  <public publicId="-//OASIS//DTD DITA Glossary//EN"
+          uri="glossary.dtd"/>
+  <public publicId="-//OASIS//ELEMENTS DITA Glossary//EN"
+          uri="glossary.mod"/>
+
   <public publicId="-//OASIS//DTD DITA Reference//EN"
           uri="reference.dtd"/>
   <public publicId="-//OASIS//ELEMENTS DITA Reference//EN"
@@ -122,6 +130,11 @@
           uri="mapGroup.ent"/>
   <public publicId="-//OASIS//ELEMENTS DITA Map Group Domain//EN"
           uri="mapGroup.mod"/>
+          
+  <public publicId="-//OASIS//DTD DITA BookMap//EN"
+          uri="bookmap.dtd"/>
+  <public publicId="-//OASIS//ELEMENTS DITA BookMap//EN"
+          uri="bookmap.mod"/>
 
 <!-- Domains -->
 
@@ -129,6 +142,11 @@
           uri="highlightDomain.mod"/>
   <public publicId="-//OASIS//ENTITIES DITA Highlight Domain//EN"
           uri="highlightDomain.ent"/>
+          
+  <public publicId="-//OASIS//ELEMENTS DITA Indexing Domain//EN"
+          uri="indexingDomain.mod"/>
+  <public publicId="-//OASIS//ENTITIES DITA Indexing Domain//EN"
+          uri="indexingDomain.ent"/>
 
   <public publicId="-//OASIS//ELEMENTS DITA Programming Domain//EN"
           uri="programmingDomain.mod"/>
@@ -149,9 +167,17 @@
           uri="utilitiesDomain.mod"/>
   <public publicId="-//OASIS//ENTITIES DITA Utilities Domain//EN"
           uri="utilitiesDomain.ent"/>
-
+          
+  <public publicId="-//OASIS//ELEMENTS DITA XNAL Domain//EN"
+          uri="xnalDomain.mod"/>
+  <public publicId="-//OASIS//ENTITIES DITA XNAL Domain//EN"
+          uri="xnalDomain.ent"/>
+  
 <!-- Common -->
-
+  <public publicId="-//OASIS//ELEMENTS DITA Common Elements//EN"
+          uri="commonElements.mod"/>
+  <public publicId="-//OASIS//ENTITIES DITA Common Elements//EN"
+          uri="commonElements.ent"/>
   <public publicId="-//OASIS//ELEMENTS DITA Metadata//EN"
           uri="metaDecl.mod"/>
   <public publicId="-//OASIS//ELEMENTS DITA CALS Tables//EN"

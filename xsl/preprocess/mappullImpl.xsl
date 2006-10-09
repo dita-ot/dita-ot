@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+  Sourceforge.net. See the accompanying license.txt file for 
+  applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2004, 2006 All Rights Reserved. -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   <xsl:import href="../common/output-message.xsl"/>
@@ -979,16 +982,11 @@
       <xsl:when test="$topicpos='otherfile'">
         <xsl:choose>
           <xsl:when
-            test="document($file,/)//*[contains(@class, $classval)][@id=$topicid]/*[contains(@class, ' topic/shortdesc ')]/*"/>
-          <xsl:when
-            test="document($file,/)//*[contains(@class, $classval)][@id=$topicid]/*[contains(@class, ' topic/shortdesc ')]">
-            <xsl:variable name="shortdesc-value">
-              <xsl:apply-templates
-                select="(document($file,/)//*[contains(@class, $classval)][@id=$topicid])[1]/*[contains(@class, ' topic/shortdesc ')]"
-                mode="text-only"/>
-            </xsl:variable>
+            test="document($file,/)//*[contains(@class, $classval)][@id=$topicid]//*[contains(@class, ' topic/shortdesc ')]">
             <shortdesc class="- map/shortdesc ">
-              <xsl:value-of select="$shortdesc-value"/>
+              <xsl:apply-templates
+                select="(document($file,/)//*[contains(@class, $classval)][@id=$topicid])[1]//*[contains(@class, ' topic/shortdesc ')]" 
+                mode="copy-shortdesc"/>
             </shortdesc>
           </xsl:when>
           <xsl:otherwise>
@@ -1000,14 +998,11 @@
       <xsl:when test="$topicpos='firstinfile'">
         <xsl:choose>
           <xsl:when
-            test="document($file,/)//*[contains(@class, ' topic/topic ')][1]/*[contains(@class, ' topic/shortdesc ')]">
-            <xsl:variable name="shortdesc-value">
-              <xsl:apply-templates
-                select="(document($file,/)//*[contains(@class, ' topic/topic ')])[1]/*[contains(@class, ' topic/shortdesc ')]"
-                mode="text-only"/>
-            </xsl:variable>
+            test="document($file,/)//*[contains(@class, ' topic/topic ')][1]//*[contains(@class, ' topic/shortdesc ')]">
             <shortdesc class="- map/shortdesc ">
-              <xsl:value-of select="$shortdesc-value"/>
+              <xsl:apply-templates
+                select="(document($file,/)//*[contains(@class, ' topic/topic ')])[1]//*[contains(@class, ' topic/shortdesc ')]"
+                mode="copy-shortdesc"/>
             </shortdesc>
           </xsl:when>
           <xsl:otherwise>
@@ -1194,4 +1189,59 @@
       
     </xsl:attribute>
   </xsl:template>
+
+  <xsl:template match="*[contains(@class,' topic/xref ')]"
+    mode="copy-shortdesc">
+    <xsl:choose>
+      <xsl:when
+        test="not(@href) or @scope='peer' or @scope='external'">
+        <xsl:copy>
+          <xsl:apply-templates select="@*|text()|*"
+            mode="copy-shortdesc" />
+        </xsl:copy>
+      </xsl:when>
+      <xsl:when
+        test="@format and not(@format='dita' or @format='DITA')">
+        <xsl:copy>
+          <xsl:apply-templates select="@*|text()|*"
+            mode="copy-shortdesc" />
+        </xsl:copy>
+      </xsl:when>
+      <xsl:when test="not(contains(@href,'/'))"><!-- May be DITA, but in the same directory -->
+        <xsl:copy>
+          <xsl:apply-templates select="@*|text()|*"
+            mode="copy-shortdesc" />
+        </xsl:copy>
+      </xsl:when>
+      <xsl:when test="text()|*[not(contains(@class,' topic/desc '))]">
+        <xsl:apply-templates
+          select="*[not(contains(@class,' topic/desc '))]|text()|comment()|processing-instruction()"
+          mode="copy-shortdesc" />
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:text>***</xsl:text><!-- go get the target text -->
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+  
+  <xsl:template match="text()" mode="copy-shortdesc">
+    <xsl:value-of select="translate(.,'&#xA;',' ')" />
+  </xsl:template>
+  
+  <xsl:template match="*[contains(@class,' topic/shortdesc ')]"
+    mode="copy-shortdesc">
+    <xsl:apply-templates select="*|text()" mode="copy-shortdesc" />
+  </xsl:template>
+  
+  <xsl:template match="@id" mode="copy-shortdesc" />
+  
+  <xsl:template match="*[contains(@class,' topic/indexterm ')]"
+    mode="copy-shortdesc" />
+  
+  <xsl:template match="*|@*" mode="copy-shortdesc">
+    <xsl:copy>
+      <xsl:apply-templates select="@*|text()|*" mode="copy-shortdesc" />
+    </xsl:copy>
+  </xsl:template>
+
 </xsl:stylesheet>

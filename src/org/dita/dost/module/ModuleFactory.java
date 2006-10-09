@@ -1,4 +1,10 @@
 /*
+ * This file is part of the DITA Open Toolkit project hosted on
+ * Sourceforge.net. See the accompanying license.txt file for 
+ * applicable licenses.
+ */
+
+/*
  * (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved.
  */
 package org.dita.dost.module;
@@ -44,9 +50,7 @@ public class ModuleFactory {
 	 * 
 	 * @param moduleName
 	 * @return AbstractPipelineModule
-	 * @throws ClassNotFoundException
-	 * @throws IllegalAccessException
-	 * @throws InstantiationException
+	 * @throws DITAOTException
 	 */
 	public AbstractPipelineModule createModule(String moduleName)
 			throws DITAOTException {

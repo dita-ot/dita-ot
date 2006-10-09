@@ -1,4 +1,7 @@
 <?xml version='1.0'?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+     Sourceforge.net. See the accompanying license.txt file for 
+     applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
 
 <!DOCTYPE xsl:transform [
@@ -47,6 +50,20 @@
   </fo:block>
 </xsl:template>
 
+<!-- Added for DITA 1.1 "Shortdesc proposal" -->
+<xsl:template match="*[contains(@class,' topic/abstract ')]" mode="outofline">
+  <fo:block xsl:use-attribute-sets="p" start-indent="{$basic-start-indent}">
+    <xsl:apply-templates/>
+  </fo:block>
+</xsl:template>
+
+<!-- Added for DITA 1.1 "Shortdesc proposal" -->
+<xsl:template match="*[contains(@class,' topic/abstract ')]">
+  <xsl:if test="not(following-sibling::*[contains(@class,' topic/body ')])">
+    <xsl:apply-templates select="." mode="outofline"/>
+  </xsl:if>
+</xsl:template>
+
 <!-- shortdesc is called outside of body thus needs to set up its own indent. also relatedlinks -->
 <xsl:template match="*[contains(@class,' topic/shortdesc ')]" mode="outofline">
   <fo:block xsl:use-attribute-sets="p" start-indent="{$basic-start-indent}">
@@ -54,11 +71,18 @@
   </fo:block>
 </xsl:template>
 
+<!-- Updated for DITA 1.1 "Shortdesc proposal" -->
 <!-- Added for SF 1363055: Shortdesc disappears when optional body is removed -->
 <xsl:template match="*[contains(@class,' topic/shortdesc ')]">
-  <xsl:if test="not(following-sibling::*[contains(@class,' topic/body ')])">
-    <xsl:apply-templates select="." mode="outofline"/>
-  </xsl:if>
+  <xsl:choose>
+    <xsl:when test="parent::*[contains(@class, ' topic/abstract ')]">
+      <xsl:apply-templates select="." mode="outofline"/>
+    </xsl:when>
+    <xsl:when test="not(following-sibling::*[contains(@class,' topic/body ')])">    
+      <xsl:apply-templates select="." mode="outofline"/>
+    </xsl:when>
+    <xsl:otherwise></xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' topic/xshortdesc ')]">
@@ -77,6 +101,10 @@
   <xsl:attribute name="font-size">10pt</xsl:attribute>
     <!-- here, you can generate a toc based on what's a child of body -->
     <!--xsl:call-template  name="gen-sect-ptoc"/-->
+    
+    <!-- Added for DITA 1.1 "Shortdesc proposal" -->
+    <xsl:apply-templates select="preceding-sibling::*[contains(@class,' topic/abstract ')]" mode="outofline"/>
+   
     <xsl:apply-templates select="preceding-sibling::*[contains(@class,' topic/shortdesc ')]" mode="outofline"/>
     <xsl:apply-templates/>
   </fo:block>
@@ -86,8 +114,12 @@
 <xsl:template match="*[contains(@class,' topic/body ')]">
   <fo:block start-indent="{$basic-start-indent}">
    <xsl:attribute name="font-size">10pt</xsl:attribute>
+   
+   <!-- Added for DITA 1.1 "Shortdesc proposal" -->
+   <xsl:apply-templates select="preceding-sibling::*[contains(@class,' topic/abstract ')]" mode="outofline"/>
+   
    <xsl:apply-templates select="preceding-sibling::*[contains(@class,' topic/shortdesc ')]" mode="outofline"/>
-    <xsl:apply-templates/>
+   <xsl:apply-templates/>
   </fo:block>
 </xsl:template>
 
@@ -637,6 +669,12 @@ Status: <xsl:value-of select="@status"/>
   </fo:inline>
 </xsl:template>
 
+<!-- Add for "New <data> element (#9)" in DITA 1.1 -->
+<xsl:template match="*[contains(@class,' topic/data ')]"/>
+
+<!-- Add for "Support foreign content vocabularies such as 
+     MathML and SVG with <unknown> (#35) " in DITA 1.1 -->
+<xsl:template match="*[contains(@class,' topic/foreign ') or contains(@class,' topic/unknown ')]"/>
 
 <!-- =================== end of element rules ====================== -->
 

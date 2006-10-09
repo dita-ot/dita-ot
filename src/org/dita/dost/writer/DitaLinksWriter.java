@@ -1,4 +1,10 @@
 /*
+ * This file is part of the DITA Open Toolkit project hosted on
+ * Sourceforge.net. See the accompanying license.txt file for 
+ * applicable licenses.
+ */
+
+/*
  * (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved.
  */
 package org.dita.dost.writer;
@@ -7,6 +13,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.ListIterator;
 import java.util.Properties;
 
@@ -28,28 +35,21 @@ import org.xml.sax.helpers.XMLReaderFactory;
  * 
  */
 public class DitaLinksWriter extends AbstractXMLWriter {
+    private String firstMatchTopic;
+    private boolean hasRelatedlinksTillNow;// whether there is <related-links> in thisfile
 
     private String indexEntries;
-    private XMLReader reader;
-    private OutputStreamWriter output;
-    private boolean hasRelatedlinksTillNow;// whether there is <related-links> in thisfile
-    private boolean needResolveEntity;
-    private int level; // level of the element
-    private ArrayList matchList; // topic path that topicIdList need to match
-    private int matchLevel; // the level of the topic to insert into
-    private ArrayList topicIdList; // array list that is used to keep the hierarchy of topic id
     private String lastMatchTopic;
-    private String firstMatchTopic;
-    private boolean startTopic; //whether to insert links at this topic
+    private int level; // level of the element
     private DITAOTJavaLogger logger;
-    
-    /**
-     * @see org.dita.dost.writer.AbstractWriter#setContent(org.dita.dost.module.Content)
-     * 
-     */
-    public void setContent(Content content) {
-        indexEntries = (String) content.getValue();
-    }
+    private int matchLevel; // the level of the topic to insert into
+    private List matchList; // topic path that topicIdList need to match
+    private boolean needResolveEntity;
+    private OutputStreamWriter output;
+    private XMLReader reader;
+    private boolean startTopic; //whether to insert links at this topic
+    private List topicIdList; // array list that is used to keep the hierarchy of topic id
+    private boolean insideCDATA;
 
 
     /**
@@ -68,6 +68,7 @@ public class DitaLinksWriter extends AbstractXMLWriter {
         needResolveEntity = false;
         output = null;
         startTopic = false;
+        insideCDATA = false;
         logger = new DITAOTJavaLogger();
         
         try {
@@ -85,6 +86,304 @@ public class DitaLinksWriter extends AbstractXMLWriter {
         }
 
     }
+
+    /**
+     * @see org.xml.sax.ContentHandler#characters(char[], int, int)
+     * 
+     */
+    public void characters(char[] ch, int start, int length)
+            throws SAXException {
+    	if(needResolveEntity){
+    		try {
+    			if(insideCDATA)
+    				output.write(ch, start, length);
+    			else
+    				output.write(StringUtils.escapeXML(ch, start, length));
+    		} catch (Exception e) {
+    			logger.logException(e);
+    		}
+    	}
+    }
+	
+	private boolean checkLinkAtEnd(){
+		if(!hasRelatedlinksTillNow){
+			if( level == matchLevel-1){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	private boolean checkLinkAtStart(Attributes atts){
+		if (!hasRelatedlinksTillNow && level > 1){
+				if (atts.getValue(Constants.ATTRIBUTE_NAME_CLASS).indexOf(" topic/topic ") != -1){
+					return true;
+				}
+		}
+		return false;
+	}
+    
+//  check whether the hierarchy of current node match the matchList
+    private boolean checkMatch() {
+        
+        int matchSize = matchList.size();
+        int ancestorSize = topicIdList.size();
+        ListIterator matchIterator = matchList.listIterator();
+        ListIterator ancestorIterator = topicIdList.listIterator(ancestorSize
+                - matchSize);
+        String match;
+        String ancestor;
+        
+		if (matchList == null){
+			return true;
+		}
+        
+        while (matchIterator.hasNext()) {
+            match = (String) matchIterator.next();
+            ancestor = (String) ancestorIterator.next();
+            if (!match.equals(ancestor)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+	/**
+     * @see org.xml.sax.ext.LexicalHandler#endCDATA()
+     * 
+     */
+    public void endCDATA() throws SAXException {
+    	insideCDATA = false;
+	    try{
+	        output.write(Constants.CDATA_END);
+	    }catch(Exception e){
+	    	logger.logException(e);
+	    }
+	}
+
+    /**
+     * @see org.xml.sax.ContentHandler#endDocument()
+     * 
+     */
+    public void endDocument() throws SAXException {
+
+        try {
+            output.flush();
+        } catch (Exception e) {
+        	logger.logException(e);
+        }
+    }
+
+    /**
+     * @see org.xml.sax.ContentHandler#endElement(java.lang.String, java.lang.String, java.lang.String)
+     * 
+     */
+    public void endElement(String uri, String localName, String qName)
+            throws SAXException {
+        level--;
+        if (!startTopic){
+            topicIdList.remove(topicIdList.size() - 1);
+        }
+        try {
+            if (checkLinkAtEnd() && startTopic) {
+                output.write(Constants.RELATED_LINKS_HEAD);
+                output.write(indexEntries);
+                output.write(Constants.RELATED_LINKS_END);
+                output.write(System.getProperty("line.separator"));
+                hasRelatedlinksTillNow = true;
+            }
+            output.write(Constants.LESS_THAN + Constants.SLASH + qName 
+                    + Constants.GREATER_THAN);
+        } catch (Exception e) {
+        	logger.logException(e);
+        }
+    }
+
+	/**
+     * @see org.xml.sax.ext.LexicalHandler#endEntity(java.lang.String)
+     * 
+     */
+    public void endEntity(String name) throws SAXException {
+		if(!needResolveEntity){
+			needResolveEntity = true;
+		}
+	}
+
+
+    /**
+     * @see org.xml.sax.ContentHandler#ignorableWhitespace(char[], int, int)
+     * 
+     */
+    public void ignorableWhitespace(char[] ch, int start, int length)
+            throws SAXException {
+        try {
+            output.write(ch, start, length);
+        } catch (Exception e) {
+        	logger.logException(e);
+        }
+    }
+
+
+    /**
+     * @see org.xml.sax.ContentHandler#processingInstruction(java.lang.String, java.lang.String)
+     * 
+     */
+    public void processingInstruction(String target, String data)
+            throws SAXException {
+        String pi;
+        try {
+            pi = (data != null) ? target + Constants.STRING_BLANK + data : target;
+            output.write(Constants.LESS_THAN + Constants.QUESTION 
+                    + pi + Constants.QUESTION + Constants.GREATER_THAN);
+        } catch (Exception e) {
+        	logger.logException(e);
+        }
+    }
+    
+    /**
+     * @see org.dita.dost.writer.AbstractWriter#setContent(org.dita.dost.module.Content)
+     * 
+     */
+    public void setContent(Content content) {
+        indexEntries = (String) content.getValue();
+    }
+    
+    private void setMatch(String match) {
+		int index = 0;
+        matchList = new ArrayList(Constants.INT_16);
+        
+        firstMatchTopic = (match.indexOf(Constants.SLASH) != -1) ? match.substring(0, match.indexOf(Constants.SLASH)) : match;
+
+        while (index != -1) {
+            int end = match.indexOf(Constants.SLASH, index);
+            if (end == -1) {
+                matchList.add(match.substring(index));
+                lastMatchTopic = match.substring(index);
+                index = end;
+            } else {
+                matchList.add(match.substring(index, end));
+                index = end + 1;
+            }
+        }
+    }
+
+    /**
+     * @see org.xml.sax.ContentHandler#skippedEntity(java.lang.String)
+     * 
+     */
+    public void skippedEntity(String name) throws SAXException {
+        try {
+            output.write(StringUtils.getEntity(name));
+        } catch (Exception e) {
+        	logger.logException(e);
+        }
+    }
+	
+	/**
+     * @see org.xml.sax.ext.LexicalHandler#startCDATA()
+     * 
+     */
+    public void startCDATA() throws SAXException {
+    	insideCDATA = true;
+	    try{
+	        output.write(Constants.CDATA_HEAD);
+	    }catch(Exception e){
+	    	logger.logException(e);
+	    }
+	}
+
+    /**
+     * @see org.xml.sax.ContentHandler#startDocument()
+     * 
+     */
+    public void startDocument() throws SAXException {
+        level = 0;
+    }
+
+    /**
+     * @see org.xml.sax.ContentHandler#startElement(java.lang.String, java.lang.String, java.lang.String, org.xml.sax.Attributes)
+     * 
+     */
+    public void startElement(String uri, String localName, String qName,
+            Attributes atts) throws SAXException {
+		int attsLen = atts.getLength();
+        level++;
+        
+        
+        try {
+            if (checkLinkAtStart(atts) && startTopic) {
+                // if <related-links> don't exist
+            	//
+            	// Commented by Charlie at 10/21/2005 for the "related-links
+            	// position not correct" problem
+            	//
+                //output.write(Constants.RELATED_LINKS_HEAD);
+                //output.write(indexEntries);
+                //output.write(Constants.RELATED_LINKS_END);
+                //hasRelatedlinksTillNow = true;          
+            	
+            	matchLevel = level;
+            }
+            if ( !startTopic && !Constants.ELEMENT_NAME_DITA.equalsIgnoreCase(qName) ){
+                if (atts.getValue(Constants.ATTRIBUTE_NAME_ID) != null){
+                    topicIdList.add(atts.getValue(Constants.ATTRIBUTE_NAME_ID));
+                }else{
+                    topicIdList.add("null");
+                }
+                if (topicIdList.size() == matchList.size()){
+                    startTopic = checkMatch();
+                    
+                    // added by Charlie at 10/21/2005
+                    if (startTopic) {
+                    	matchLevel = level;
+                    }
+                }
+            }
+             output.write(Constants.LESS_THAN + qName);
+            for (int i = 0; i < attsLen; i++) {
+                String attQName = atts.getQName(i);
+                String attValue;
+                attValue = atts.getValue(i);
+
+                // replace '&' with '&amp;'
+				//if (attValue.indexOf('&') > 0) {
+					//attValue = StringUtils.replaceAll(attValue, "&", "&amp;");
+				//}
+                attValue = StringUtils.escapeXML(attValue);
+				
+                output.write(new StringBuffer().append(Constants.STRING_BLANK)
+                        .append(attQName).append(Constants.EQUAL).append(Constants.QUOTATION)
+                		.append(attValue).append(Constants.QUOTATION).toString());
+            }
+            output.write(Constants.GREATER_THAN);
+            if (atts.getValue(Constants.ATTRIBUTE_NAME_CLASS)
+                    .indexOf(" topic/related-links ") != -1
+                    && startTopic) {
+                hasRelatedlinksTillNow = true;
+                output.write(indexEntries);
+            }
+         } catch (Exception e) {
+            if (atts.getValue(Constants.ATTRIBUTE_NAME_CLASS) != null){
+            	logger.logException(e);
+            }//prevent printing stack trace when meeting <dita> which has no class attribute
+        }
+    }
+
+	/**
+     * @see org.xml.sax.ext.LexicalHandler#startEntity(java.lang.String)
+     * 
+     */
+    public void startEntity(String name) throws SAXException {
+		try {
+           	needResolveEntity = StringUtils.checkEntity(name);
+           	if(!needResolveEntity){
+           		output.write(StringUtils.getEntity(name));
+           	}
+        } catch (Exception e) {
+        	logger.logException(e);
+        }
+        
+	}
 
     /**
      * @see org.dita.dost.writer.AbstractWriter#write(java.lang.String)
@@ -149,289 +448,8 @@ public class DitaLinksWriter extends AbstractXMLWriter {
             		fileOutput.close();
             	}
             }catch (Exception e) {
+				logger.logException(e);
             }
         }
     }
-    
-    private void setMatch(String match) {
-		int index = 0;
-        matchList = new ArrayList(Constants.INT_16);
-        
-        firstMatchTopic = (match.indexOf(Constants.SLASH) != -1) ? match.substring(0, match.indexOf(Constants.SLASH)) : match;
-
-        while (index != -1) {
-            int end = match.indexOf(Constants.SLASH, index);
-            if (end == -1) {
-                matchList.add(match.substring(index));
-                lastMatchTopic = match.substring(index);
-                index = end;
-            } else {
-                matchList.add(match.substring(index, end));
-                index = end + 1;
-            }
-        }
-    }
-    
-//  check whether the hierarchy of current node match the matchList
-    private boolean checkMatch() {
-        
-        int matchSize = matchList.size();
-        int ancestorSize = topicIdList.size();
-        ListIterator matchIterator = matchList.listIterator();
-        ListIterator ancestorIterator = topicIdList.listIterator(ancestorSize
-                - matchSize);
-        String match;
-        String ancestor;
-        
-		if (matchList == null){
-			return true;
-		}
-        
-        while (matchIterator.hasNext()) {
-            match = (String) matchIterator.next();
-            ancestor = (String) ancestorIterator.next();
-            if (!match.equals(ancestor)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    /**
-     * @see org.xml.sax.ContentHandler#characters(char[], int, int)
-     * 
-     */
-    public void characters(char[] ch, int start, int length)
-            throws SAXException {
-    	if(needResolveEntity){
-    		try {
-    			output.write(ch, start, length);
-    		} catch (Exception e) {
-    			logger.logException(e);
-    		}
-    	}
-    }
-
-    /**
-     * @see org.xml.sax.ContentHandler#endDocument()
-     * 
-     */
-    public void endDocument() throws SAXException {
-
-        try {
-            output.flush();
-        } catch (Exception e) {
-        	logger.logException(e);
-        }
-    }
-
-    /**
-     * @see org.xml.sax.ContentHandler#endElement(java.lang.String, java.lang.String, java.lang.String)
-     * 
-     */
-    public void endElement(String uri, String localName, String qName)
-            throws SAXException {
-        level--;
-        if (!startTopic){
-            topicIdList.remove(topicIdList.size() - 1);
-        }
-        try {
-            if (checkLinkAtEnd() && startTopic) {
-                output.write(Constants.RELATED_LINKS_HEAD);
-                output.write(indexEntries);
-                output.write(Constants.RELATED_LINKS_END);
-                output.write("\n");
-                hasRelatedlinksTillNow = true;
-            }
-            output.write(Constants.LESS_THAN + Constants.SLASH + qName 
-                    + Constants.GREATER_THAN);
-        } catch (Exception e) {
-        	logger.logException(e);
-        }
-    }
-
-
-    /**
-     * @see org.xml.sax.ContentHandler#ignorableWhitespace(char[], int, int)
-     * 
-     */
-    public void ignorableWhitespace(char[] ch, int start, int length)
-            throws SAXException {
-        try {
-            output.write(ch, start, length);
-        } catch (Exception e) {
-        	logger.logException(e);
-        }
-    }
-
-
-    /**
-     * @see org.xml.sax.ContentHandler#processingInstruction(java.lang.String, java.lang.String)
-     * 
-     */
-    public void processingInstruction(String target, String data)
-            throws SAXException {
-        String pi;
-        try {
-            pi = (data != null) ? target + Constants.STRING_BLANK + data : target;
-            output.write(Constants.LESS_THAN + Constants.QUESTION 
-                    + pi + Constants.QUESTION + Constants.GREATER_THAN);
-        } catch (Exception e) {
-        	logger.logException(e);
-        }
-    }
-
-    /**
-     * @see org.xml.sax.ContentHandler#skippedEntity(java.lang.String)
-     * 
-     */
-    public void skippedEntity(String name) throws SAXException {
-        try {
-            output.write(name);
-        } catch (Exception e) {
-        	logger.logException(e);
-        }
-    }
-
-    /**
-     * @see org.xml.sax.ContentHandler#startDocument()
-     * 
-     */
-    public void startDocument() throws SAXException {
-        level = 0;
-    }
-
-    /**
-     * @see org.xml.sax.ContentHandler#startElement(java.lang.String, java.lang.String, java.lang.String, org.xml.sax.Attributes)
-     * 
-     */
-    public void startElement(String uri, String localName, String qName,
-            Attributes atts) throws SAXException {
-		int attsLen = atts.getLength();
-        level++;
-        
-        
-        try {
-            if (checkLinkAtStart(atts) && startTopic) {
-                // if <related-links> don't exist
-            	//
-            	// Commented by Charlie at 10/21/2005 for the "related-links
-            	// position not correct" problem
-            	//
-                //output.write(Constants.RELATED_LINKS_HEAD);
-                //output.write(indexEntries);
-                //output.write(Constants.RELATED_LINKS_END);
-                //hasRelatedlinksTillNow = true;          
-            	
-            	matchLevel = level;
-            }
-            if ( startTopic == false && Constants.ELEMENT_NAME_DITA.equalsIgnoreCase(qName) == false ){
-                if (atts.getValue(Constants.ATTRIBUTE_NAME_ID) != null){
-                    topicIdList.add(atts.getValue(Constants.ATTRIBUTE_NAME_ID));
-                }else{
-                    topicIdList.add("null");
-                }
-                if (topicIdList.size() == matchList.size()){
-                    startTopic = checkMatch();
-                    
-                    // added by Charlie at 10/21/2005
-                    if (startTopic) {
-                    	matchLevel = level;
-                    }
-                }
-            }
-             output.write(Constants.LESS_THAN + qName);
-            for (int i = 0; i < attsLen; i++) {
-                String attQName = atts.getQName(i);
-                String attValue;
-                attValue = atts.getValue(i);
-
-                // replace '&' with '&amp;'
-				if (attValue.indexOf('&') > 0) {
-					attValue = StringUtils.replaceAll(attValue, "&", "&amp;");
-				}
-				
-                output.write(new StringBuffer().append(Constants.STRING_BLANK)
-                        .append(attQName).append(Constants.EQUAL).append(Constants.QUOTATION)
-                		.append(attValue).append(Constants.QUOTATION).toString());
-            }
-            output.write(Constants.GREATER_THAN);
-            if (atts.getValue(Constants.ATTRIBUTE_NAME_CLASS)
-                    .indexOf(" topic/related-links ") != -1
-                    && startTopic) {
-                hasRelatedlinksTillNow = true;
-                output.write(indexEntries);
-            }
-         } catch (Exception e) {
-            if (atts.getValue(Constants.ATTRIBUTE_NAME_CLASS) != null){
-            	logger.logException(e);
-            }//prevent printing stack trace when meeting <dita> which has no class attribute
-        }
-    }
-
-	/**
-     * @see org.xml.sax.ext.LexicalHandler#endCDATA()
-     * 
-     */
-    public void endCDATA() throws SAXException {
-	    try{
-	        output.write(Constants.CDATA_END);
-	    }catch(Exception e){
-	    	logger.logException(e);
-	    }
-	}
-
-	/**
-     * @see org.xml.sax.ext.LexicalHandler#endEntity(java.lang.String)
-     * 
-     */
-    public void endEntity(String name) throws SAXException {
-		if(!needResolveEntity){
-			needResolveEntity = true;
-		}
-	}
-	
-	/**
-     * @see org.xml.sax.ext.LexicalHandler#startCDATA()
-     * 
-     */
-    public void startCDATA() throws SAXException {
-	    try{
-	        output.write(Constants.CDATA_HEAD);
-	    }catch(Exception e){
-	    	logger.logException(e);
-	    }
-	}
-
-	/**
-     * @see org.xml.sax.ext.LexicalHandler#startEntity(java.lang.String)
-     * 
-     */
-    public void startEntity(String name) throws SAXException {
-		try {
-           	needResolveEntity = StringUtils.checkEntity(name);
-           	if(!needResolveEntity){
-           		output.write(StringUtils.getEntity(name));
-           	}
-        } catch (Exception e) {
-        	logger.logException(e);
-        }
-        
-	}
-	
-	private boolean checkLinkAtStart(Attributes atts){
-		if (!hasRelatedlinksTillNow && level > 1 
-				&& atts.getValue(Constants.ATTRIBUTE_NAME_CLASS)
-				.indexOf(" topic/topic ") != -1){
-			return true;
-		}
-		return false;
-	}
-	
-	private boolean checkLinkAtEnd(){
-		if(!hasRelatedlinksTillNow && level == matchLevel-1){
-			return true;
-		}
-		return false;
-	}
 }

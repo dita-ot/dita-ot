@@ -1,4 +1,10 @@
 /*
+ * This file is part of the DITA Open Toolkit project hosted on
+ * Sourceforge.net. See the accompanying license.txt file for 
+ * applicable licenses.
+ */
+
+/*
  * (c) Copyright IBM Corp. 2005 All Rights Reserved.
  */
 package org.dita.dost.log;
@@ -8,12 +14,16 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import org.dita.dost.util.Constants;
+
 /**
  * Class description goes here.
  * 
  * @author Wu, Zhi Qiang
  */
 public class DITAOTFileLogger {
+	private static DITAOTFileLogger logger = null;
+	
 	private File tmpLogFile = null;
 
 	private String logFile = null;
@@ -21,8 +31,6 @@ public class DITAOTFileLogger {
 	private String logDir = null;
 
 	private PrintWriter printWriter = null;
-
-	private static DITAOTFileLogger logger = null;
 
 	private DITAOTFileLogger() {
 		try {
@@ -34,8 +42,8 @@ public class DITAOTFileLogger {
 	}
 
 	/**
+	 * Get the DITAOTFileLogger instance. Singleton.
 	 * @return
-	 * @throws IOException
 	 */
 	public static DITAOTFileLogger getInstance() {
 		if (logger == null) {
@@ -44,7 +52,11 @@ public class DITAOTFileLogger {
 
 		return logger;
 	}
-
+	
+	/**
+	 * Close the logger. Move log file to logDir.
+	 * 
+	 */
 	public void closeLogger() {
 		DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
 		
@@ -63,7 +75,7 @@ public class DITAOTFileLogger {
 			}
 			
 			if (tmpLogFile.renameTo(log)) {
-				StringBuffer buff = new StringBuffer(256);
+				StringBuffer buff = new StringBuffer(Constants.INT_256);
 				buff.append("Log file '").append(logFile);
 				buff.append("' was generated successfully in directory '");
 				buff.append(logDir).append("'.");				
@@ -82,6 +94,7 @@ public class DITAOTFileLogger {
 	}
 
 	/**
+	 * Getter function of logDir.
 	 * @return Returns the logDir.
 	 */
 	public String getLogDir() {
@@ -98,34 +111,58 @@ public class DITAOTFileLogger {
 	}
 
 	/**
-	 * @param logDir
-	 *            The logDir to set.
+	 * The logDir to set.
+	 * @param logdir           
 	 */
-	public void setLogDir(String logDir) {
-		this.logDir = logDir;
+	public void setLogDir(String logdir) {
+		this.logDir = logdir;
 	}
 
+	/**
+	 * Log the message at info level
+	 * @param msg
+	 */
 	public void logInfo(String msg) {
 		logMessage(msg);
 	}
-
+	
+	/**
+	 * Log the message at warning level
+	 * @param msg
+	 */
 	public void logWarn(String msg) {
 		logMessage(msg);
 	}
 
+	/**
+	 * Log the message at error level
+	 * @param msg
+	 */
 	public void logError(String msg) {
 		logMessage(msg);
 	}
 
+	/**
+	 * Log the message at debug level
+	 * @param msg
+	 */
 	public void logDebug(String msg) {
 		logMessage(msg);
 	}
 
+	/**
+	 * Log the exception
+	 * @param t
+	 */
 	public void logException(Throwable t) {
 		logError(t.getMessage());
 		t.printStackTrace(printWriter);
 	}
 
+	/**
+	 * Log ordinary message
+	 * @param msg
+	 */
 	private void logMessage(String msg) {
 		printWriter.println(msg);
 	}

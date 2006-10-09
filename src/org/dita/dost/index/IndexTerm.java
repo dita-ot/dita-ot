@@ -1,15 +1,21 @@
 /*
- * (c) Copyright IBM Corp. 2005 All Rights Reserved.
+ * This file is part of the DITA Open Toolkit project hosted on
+ * Sourceforge.net. See the accompanying license.txt file for 
+ * applicable licenses.
+ */
+
+/*
+ * (c) Copyright IBM Corp. 2005, 2006 All Rights Reserved.
  */
 package org.dita.dost.index;
 
-import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
 import org.dita.dost.util.Constants;
+import org.dita.dost.util.DITAOTCollator;
 
 /**
  * This class represent indexterm.
@@ -28,6 +34,9 @@ public class IndexTerm implements Comparable {
     /** The target list of the indexterm */
     private List targetList = null;
 
+    /** The sorting termKey of the indexterm, default will be the term name */
+    private String termKey = null;
+    
     /** The sub indexterms contained by this indexterm */
     private List subTerms = null;
 
@@ -76,6 +85,22 @@ public class IndexTerm implements Comparable {
     }
 
     /**
+     * Getter of termkey
+	 * @return Returns the termKey.
+	 */
+	public String getTermKey() {
+		return termKey;
+	}
+
+	/**
+	 * Setter of termKey
+	 * @param key The termKey to set.
+	 */
+	public void setTermKey(String key) {
+		this.termKey = key;
+	}
+
+	/**
      * Get the sub term list.
      * 
      * @return
@@ -100,8 +125,9 @@ public class IndexTerm implements Comparable {
                 return;
             }
 
-            // Add targets when same subTerms and same term name
-            if (subTerm.getTermName().equals(term.getTermName())) {
+            // Add targets when same term name and same term key
+            if (subTerm.getTermName().equals(term.getTermName())
+					&& subTerm.getTermKey().equals(term.getTermKey())) {
                 subTerm.addTargets(term.getTargetList());
                 subTerm.addSubTerms(term.getSubTerms());
                 return;
@@ -137,6 +163,10 @@ public class IndexTerm implements Comparable {
      */
     public boolean equals(Object o) {
         IndexTerm it = (IndexTerm) o;
+        boolean eqTermName;
+        boolean eqTermKey;
+        boolean eqTargetList;
+        boolean eqSubTerms;
 
         if (o == this) {
             return true;
@@ -145,10 +175,14 @@ public class IndexTerm implements Comparable {
         if (!(o instanceof IndexTerm)) {
             return false;
         }
+        
 
-        return termName.equals(it.termName)
-				&& targetList.equals(it.getTargetList())
-				&& subTerms.equals(it.getSubTerms());
+        eqTermName =  termName == it.getTermName() || termName != null && termName.equals(it.getTermName());
+		eqTermKey =  termKey == it.getTermKey() || termKey != null && termKey.equals(it.getTermKey());
+		eqTargetList = targetList == it.getTargetList() || targetList != null && targetList.equals(it.getTargetList());
+		eqSubTerms =  subTerms == it.getSubTerms() || subTerms != null && subTerms.equals(it.getSubTerms());
+		
+		return eqTermName && eqTermKey && eqTargetList && eqSubTerms;
     }
 
     /**
@@ -158,6 +192,7 @@ public class IndexTerm implements Comparable {
         int result = Constants.INT_17;
 
         result = Constants.INT_37 * result + termName.hashCode();
+        result = Constants.INT_37 * result + termKey.hashCode();
         result = Constants.INT_37 * result + targetList.hashCode();
         result = Constants.INT_37 * result + subTerms.hashCode();
 
@@ -185,8 +220,8 @@ public class IndexTerm implements Comparable {
      * @param obj
      */
     public int compareTo(Object obj) {
-        return Collator.getInstance(termLocale).compare(termName,
-                ((IndexTerm) obj).getTermName());
+        return DITAOTCollator.getInstance(termLocale).compare(termKey,
+                ((IndexTerm) obj).getTermKey());
     }
 
     /**
@@ -236,13 +271,14 @@ public class IndexTerm implements Comparable {
         return subTerms != null && subTerms.size() > 0;
     }
 
-	/* (non-Javadoc)
+	/**
 	 * @see java.lang.Object#toString()
 	 */
 	public String toString() {
 		StringBuffer buffer = new StringBuffer(Constants.INT_128);
 		
 		buffer.append("{Term name: ").append(termName);
+		buffer.append(", Term key: ").append(termKey);
 		buffer.append(", Target list: ");
 		buffer.append(targetList.toString());		
 		buffer.append(", Sub-terms: ");

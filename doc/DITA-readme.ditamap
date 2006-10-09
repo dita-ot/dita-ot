@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+     Sourceforge.net. See the accompanying license.txt file for 
+     applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
 
 <!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
  
 <map id="mainDITAreadme" title="DITA Readme map">
+  <topicref format="ditamap" href="ditaot13_doc/DITAOT13.ditamap"
+    navtitle="Changes in DITAOT1.3"/>
   <topicref collection-type="family" href="DITA-readme.xml" id="DITA-doc" 
     locktitle="yes" navtitle="DITA-OT Introduction">
     <topicref href="DITA-relnotes.xml" navtitle="DITA release notes"/>

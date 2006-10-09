@@ -1,4 +1,10 @@
 /*
+ * This file is part of the DITA Open Toolkit project hosted on
+ * Sourceforge.net. See the accompanying license.txt file for 
+ * applicable licenses.
+ */
+
+/*
  * (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved.
  */
 package org.dita.dost.invoker;
@@ -6,6 +12,7 @@ package org.dita.dost.invoker;
 import java.io.File;
 
 import org.dita.dost.exception.DITAOTException;
+import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.pipeline.AbstractFacade;
 import org.dita.dost.pipeline.PipelineFacade;
 import org.dita.dost.pipeline.PipelineHashIO;
@@ -18,42 +25,63 @@ import org.dita.dost.pipeline.PipelineHashIO;
  * 
  */
 public class JavaInvoker {
+	private static DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
+	
+	/**
+	 * Remove all files in certain directory
+	 * @param dir
+	 * @author Marshall
+	 */
+	public static void removeFiles(String dir){
+		File file = new File(dir);
+		int size = file.listFiles().length;
+		if(!(file.exists() && file.isDirectory())){
+			return;
+		}
+		for(int i=0; i< size; i++){
+			File f = file.listFiles()[i];
+			f.deleteOnExit();
+		}
+	}
 
     /**
      * Automatically generated constructor for utility class
      */
     private JavaInvoker() {
     }
-
-    /**
-     * The main flow of the process
-     * 
-     * @param args
-     * 
-     */
-    public static void main(String[] args) {
-        AbstractFacade facade = new PipelineFacade();
-        PipelineHashIO pipelineInput = new PipelineHashIO();
-
-        //pipelineInput.setAttribute("inputmap", "testcase" + File.separator
-        //        + "dwDT\\langref\\ditaref-book.ditamap");
+    
+    
+	/**
+	 * The main flow of the process
+	 * 
+	 * @param args
+	 * 
+	 */
+	public static void main(String[] args) {
+		AbstractFacade facade = new PipelineFacade();
+		PipelineHashIO pipelineInput = new PipelineHashIO();
+		//pipelineInput.setAttribute("inputmap", "testcase" + File.separator
+		//        + "dwDT\\langref\\ditaref-book.ditamap");
         
-        pipelineInput.setAttribute("inputmap","test.ditamap");
-        pipelineInput.setAttribute("basedir", "e:\\eclipse\\workspace\\DITA-OT1.1\\test");
-
-        try {
-			facade.execute("GenMapAndTopicList", pipelineInput);
-			//pipelineInput.setAttribute("ditaval", "testcase" + File.separator
-			//        + "DOST\\new.ditaval");
+		pipelineInput.setAttribute("inputmap","TC5.ditamap");
+		pipelineInput.setAttribute("basedir", "C:/testcase/tc5");
+		pipelineInput.setAttribute("inputdir", "C:/testcase/tc5");
+		pipelineInput.setAttribute("tempDir", "C:/testcase/tc5/temp");
+		pipelineInput.setAttribute("ditadir", "c:/eclipse/workspace/DITA_OT");
+		try {
+		
+			//pipelineInput.setAttribute("ditaval", "d:\\temp\\DITA-OT\\test\\02.ditaval");
+			removeFiles("C:/testcase/tc5/temp");
 			pipelineInput.setAttribute("ditalist", "temp" + File.separator
-			        + "dita.list");
+					+ "dita.list");
 			pipelineInput.setAttribute("maplinks", "temp\\maplinks.unordered");
+			facade.execute("GenMapAndTopicList", pipelineInput);
 			facade.execute("DebugAndFilter", pipelineInput);
 			facade.execute("MoveIndex", pipelineInput);
-			facade.execute("MoveLinks", pipelineInput);
+			//facade.execute("MoveLinks", pipelineInput);
 		} catch (DITAOTException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			javaLogger.logException(e);
 		}
-    }
+	}
 }

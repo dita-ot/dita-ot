@@ -194,7 +194,6 @@ with those set forth herein.
     <xsl:attribute-set name="body__secondLevel">
         <xsl:attribute name="margin-left">25pt</xsl:attribute>
         <xsl:attribute name="font-size">10pt</xsl:attribute>
-
     </xsl:attribute-set>
 
     <xsl:attribute-set name="body">
@@ -235,7 +234,7 @@ with those set forth herein.
     </xsl:attribute-set>
 
     <xsl:attribute-set name="p">
-        <xsl:attribute name="font-size">10pt</xsl:attribute>
+<!--        <xsl:attribute name="font-size">10pt</xsl:attribute>-->
         <xsl:attribute name="text-indent">0em</xsl:attribute>
         <xsl:attribute name="space-before">0.6em</xsl:attribute>
         <xsl:attribute name="space-after">0.6em</xsl:attribute>

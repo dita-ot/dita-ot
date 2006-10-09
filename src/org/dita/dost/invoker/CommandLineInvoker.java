@@ -1,4 +1,10 @@
 /*
+ * This file is part of the DITA Open Toolkit project hosted on
+ * Sourceforge.net. See the accompanying license.txt file for 
+ * applicable licenses.
+ */
+
+/*
  * (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved.
  */
 package org.dita.dost.invoker;
@@ -7,7 +13,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
@@ -29,11 +37,8 @@ import org.dita.dost.writer.PropertiesWriter;
 
 public class CommandLineInvoker {
 	private static Map paramMap = null;
-	private String propertyFile = null;
-	private String antBuildFile = null;
-	private String ditaDir = null;
-	private boolean debugMode = false;
-	DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
+    
+	private static DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
 	
 	static {
 		paramMap = new HashMap();
@@ -75,6 +80,17 @@ public class CommandLineInvoker {
 		paramMap.put("/fouserconfig", "args.fo.userconfig");
 		paramMap.put("/htmlhelpincludefile", "args.htmlhelp.includefile");
 	}
+	
+	private String propertyFile = null;
+	private String antBuildFile = null;
+	private String ditaDir = null;
+	private boolean debugMode = false;
+
+	/**
+	 * Whether or not this instance has successfully been
+	 * constructed and is ready to run.
+	 */
+	private boolean readyToRun = false;
 
 	/**
 	 * Constructor: CommandLineInvoker
@@ -83,17 +99,25 @@ public class CommandLineInvoker {
 	}
 
 	/**
+	 * Getter function of ditaDir.
 	 * @return Returns the ditaDir.
 	 */
 	public String getDitaDir() {
 		return ditaDir;
+	}
+	/**
+	 * Getter function for readytorun
+	 * @return if ready to run
+	 */
+	public boolean getReadyToRun() {
+		return readyToRun;
 	}
 	
 	/**
 	 * Process input arguments.
 	 * 
 	 * @param args
-	 * @throws Exception
+	 * @throws DITAOTException
 	 */
 	public void processArguments(String[] args) throws DITAOTException {
 		Properties prop = new Properties();
@@ -102,6 +126,13 @@ public class CommandLineInvoker {
 		String baseDir = null;
 		String tempDir = null;
 		String inputDitaDir = null;
+		File tempPath = null;
+		
+		if(args.length == 0){
+			printUsage();
+			readyToRun = false;
+			return;
+		}
 		
 		/*
 		 * validate dita.dir and init log message file
@@ -110,11 +141,11 @@ public class CommandLineInvoker {
 			String arg = args[i];
 			if (arg.startsWith("/ditadir:")) {
 				inputDitaDir = arg.substring(arg.indexOf(":") + 1);
-			}
+			} 
 		}
 		ditaDir = new File(inputDitaDir, "").getAbsolutePath();
-		antBuildFile = new File(ditaDir, "conductor.xml").getAbsolutePath();
-		if (!new File(ditaDir, "conductor_template.xml").exists()) {
+		antBuildFile = new File(ditaDir, "build.xml").getAbsolutePath();
+		if (!new File(ditaDir, "build_template.xml").exists()) {
 			throw new DITAOTException("Invalid dita-ot home directory '" + ditaDir
 					+ "', please specify the correct dita-ot home directory using '/ditadir'.");
 		}
@@ -128,9 +159,18 @@ public class CommandLineInvoker {
 			String arg = args[i];
 			String javaArg = null;
 			String antArg = null;
+			String antArgValue = null;
 			int colonPos = arg.indexOf(Constants.COLON);
 
-			if (arg.equals("/debug") || arg.equals("/d")) {
+			if ("help".equals(arg) || "-h".equals(arg)) {
+                printUsage();
+                return;
+            } else if ("-version".equals(arg)) {
+                printVersion();
+                return;
+            }
+			
+			if ("/debug".equals(arg) || "/d".equals(arg)) {
 				debugMode = true;
 				continue;
 			}
@@ -138,6 +178,8 @@ public class CommandLineInvoker {
 			if (colonPos == -1) {
 				String msg = null;
 				Properties params = new Properties();
+				
+				printUsage();
 
 				params.put("%1", arg);
 				msg = MessageUtils.getMessage("DOTJ001F", params).toString();
@@ -154,18 +196,22 @@ public class CommandLineInvoker {
 
 				params.put("%1", javaArg);
 				msg = MessageUtils.getMessage("DOTJ002F", params).toString();
+				
+				printUsage();
 
 				throw new DITAOTException(msg);
 			}
 
-			String antArgValue = arg.substring(colonPos + 1);
+			antArgValue = arg.substring(colonPos + 1);
 
-			if (antArgValue.trim().equals(Constants.STRING_EMPTY)) {
+			if (Constants.STRING_EMPTY.equals(antArgValue.trim())) {
 				String msg = null;
 				Properties params = new Properties();
 
 				params.put("%1", javaArg);
 				msg = MessageUtils.getMessage("DOTJ003F", params).toString();
+				
+				printUsage();
 
 				throw new DITAOTException(msg);
 			}
@@ -184,11 +230,11 @@ public class CommandLineInvoker {
 		 * Init temp directory
 		 */
 		tempDir = prop.getProperty("dita.temp.dir", Constants.TEMP_DIR_DEFAULT);
-		File tempPath = new File(tempDir);
+		tempPath = new File(tempDir);
 		if (!tempPath.isAbsolute()) {
 			tempPath = new File(baseDir, tempDir);
 		}
-		if (!tempPath.exists() && tempPath.mkdirs() == false) {
+		if (!(tempPath.exists() || tempPath.mkdirs())) {
 			String msg = null;
 			Properties params = new Properties();
 
@@ -208,6 +254,8 @@ public class CommandLineInvoker {
 		content.setValue(prop);
 		propWriter.setContent(content);
 		propWriter.write(propertyFile);
+		
+		readyToRun = true;
 	}
 
 	/**
@@ -216,38 +264,52 @@ public class CommandLineInvoker {
 	 * @throws IOException
 	 */
 	public void startAnt() throws IOException {
-		String antScript = "ant.bat"; // default for windows
-		StringBuffer cmdBuffer = new StringBuffer(Constants.INT_64);
+		List cmd = new ArrayList(Constants.INT_8);
+		String[] cmds = null;
+		
+		cmd.add(getCommandRunner());
+		cmd.add("-f");
+		cmd.add(antBuildFile);
+		cmd.add("-logger");
+		cmd.add("org.dita.dost.log.DITAOTBuildLogger");
+		cmd.add("-propertyfile");
+		cmd.add(propertyFile);
+		
+		if (debugMode){
+			cmd.add("-d");
+		}
+		
+		cmds = new String[cmd.size()];
+		cmd.toArray(cmds);
+		
+		startTransformation(cmds);
+	}
+	
+	private static String getCommandRunner() {
+		return (Constants.OS_NAME.toLowerCase().indexOf(Constants.OS_NAME_WINDOWS) != -1)
+				? "ant.bat" 
+				: "ant";
+	}
+
+	private static void startTransformation(String[] cmd) throws IOException {
 		BufferedReader reader = null;
-		Process antProcess = null;		
-
-		if (Constants.OS_NAME.toLowerCase().indexOf(Constants.OS_NAME_WINDOWS) == -1) {
-			antScript = "ant";
+		Process antProcess = Runtime.getRuntime().exec(cmd);
+		try{
+			/*
+			 * Get output messages and print to console. 
+			 * Note: Since these messages have been logged to the log file, 
+			 * there is no need to output them to log file.
+			 */
+			reader = new BufferedReader(new InputStreamReader(antProcess
+					.getInputStream()));
+			for (String line = reader.readLine(); line != null; line = reader
+					.readLine()) {
+				System.out.println(line);
+			}
+		}finally{
+			reader.close();
 		}
-
-		cmdBuffer.append(antScript);
-		cmdBuffer.append(" -f ");
-		cmdBuffer.append(antBuildFile);
-		cmdBuffer.append(" -logger org.dita.dost.log.DITAOTBuildLogger");
-		cmdBuffer.append(" -propertyfile ").append(propertyFile);
-		if (debugMode) {
-			cmdBuffer.append(" -d");
-		}
-
-		antProcess = Runtime.getRuntime().exec(cmdBuffer.toString());
-
-		/*
-		 * Get output message and print to console. 
-		 * Note: Since these messages have been logged to the log file, 
-		 * there is no need to output them to log file.
-		 */
-		reader = new BufferedReader(new InputStreamReader(antProcess
-				.getInputStream()));
-		for (String line = reader.readLine(); line != null; line = reader
-				.readLine()) {
-			System.out.println(line);
-		}
-		reader.close();
+		
 		reader = new BufferedReader(new InputStreamReader(antProcess
 				.getErrorStream()));
 		for (String line = reader.readLine(); line != null; line = reader
@@ -255,7 +317,53 @@ public class CommandLineInvoker {
 			System.err.println(line);
 		}
 	}
-
+	
+	private static void printVersion() {
+		System.out.println("DITA Open Toolkit 1.3");
+	}
+	
+	/**
+     * Prints the usage information for this class to <code>System.out</code>.
+     */
+    private static void printUsage() {
+    	String lSep = System.getProperty("line.separator");
+        StringBuffer msg = new StringBuffer();
+        msg.append("java -jar lib/dost.jar [mandatory parameters] [options]" + lSep);
+        msg.append("Mandatory parameters:" + lSep);
+        msg.append("  /i:                    specify path and name of the input file" + lSep);
+        msg.append("  /transtype:            specify the transformation type" + lSep);
+        msg.append("Options: " + lSep);
+        msg.append("  -help, -h              print this message" + lSep);
+        msg.append("  -version               print the version information and exit" + lSep);
+        msg.append("  /basedir:              specify the working directory" + lSep);
+        msg.append("  /ditadir:              specify the toolkit's home directory. Default is \"temp\"" + lSep);
+        msg.append("  /outdir:               specify the output directory" + lSep);
+        msg.append("  /tempdir:              specify the temporary directory" + lSep);
+        msg.append("  /logdir:               specify the log directory" + lSep);
+        msg.append("  /ditaext:              specify the file extension name to be used in the temp directory. Default is \".xml\"" + lSep);
+        msg.append("  /filter:               specify the name of the file that contains the filter/flaggin/revision information" + lSep);
+        msg.append("  /draft:                specify whether to output draft info. Valid values are \"no\" and \"yes\". Default is \"no\" (hide them)." + lSep);
+        msg.append("  /artlbl:               specify whether to output artwork filenames. Valid values are \"no\" and \"yes\"" + lSep);
+        msg.append("  /ftr:                  specify the file to be placed in the BODY running-footing area" + lSep);
+        msg.append("  /hdr:                  specify the file to be placed in the BODY running-heading area" + lSep);
+        msg.append("  /hdf:                  specify the file to be placed in the HEAD area" + lSep);
+        msg.append("  /csspath:              specify the path for css reference" + lSep);
+        msg.append("  /css:                  specify user css file" + lSep);
+        msg.append("  /cssroot:              specify the root directory for user specified css file" + lSep);
+        msg.append("  /copycss:              specify whether to copy user specified css files. Valid values are \"no\" and \"yes\"" + lSep);
+        msg.append("  /indexshow:            specify whether each index entry should display within the body of the text itself. Valid values are \"no\" and \"yes\"" + lSep);
+        msg.append("  /outext:               specify the output file extension for generated xhtml files. Default is \".html\"" + lSep);
+        msg.append("  /xsl:            	     specify the xsl file used to replace the default xsl file" + lSep);
+        msg.append("  /cleantemp:            specify whether to clean the temp directory before each build. Valid values are \"no\" and \"yes\". Default is \"yes\"" + lSep);
+        msg.append("  /foimgext:             specify the extension of image file in pdf transformation. Default is \".jpg\"" + lSep);
+        msg.append("  /javahelptoc:          specify the root file name of the output javahelp toc file in javahelp transformation. Default is the name of the input ditamap file" + lSep);
+        msg.append("  /javahelpmap:          specify the root file name of the output javahelp map file in javahelp transformation. Default is the name of the input ditamap file" + lSep);
+        msg.append("  /eclipsehelptoc:       specify the root file name of the output eclipsehelp toc file in eclipsehelp transformation. Default is the name of the input ditamap file" + lSep);
+        msg.append("  /eclipsecontenttoc:    specify the root file name of the output Eclipse content provider toc file in eclipsecontent transformation. Default is the name of the input ditamap file" + lSep);
+        msg.append("  /xhtmltoc:             specify the root file name of the output xhtml toc file in xhtml transformation" + lSep);
+        System.out.println(msg.toString());
+    }
+    
 	/**
 	 * Get the input parameter and map them into parameters which can be
 	 * accepted by Ant build task. Then start the building process
@@ -269,11 +377,13 @@ public class CommandLineInvoker {
 		
 		try {
 			invoker.processArguments(args);
-			integrator.setDitaDir(invoker.getDitaDir());
-			integrator.execute();
-			invoker.startAnt();
+			if (invoker.getReadyToRun()) {
+				integrator.setDitaDir(invoker.getDitaDir());
+				integrator.execute();
+				invoker.startAnt();
+			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			javaLogger.logException(e);
 		}
 	}
 

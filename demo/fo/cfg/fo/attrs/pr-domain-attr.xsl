@@ -53,12 +53,12 @@ with those set forth herein.
 
     <xsl:attribute-set name="codeblock__top">
         <xsl:attribute name="leader-pattern">rule</xsl:attribute>
-        <xsl:attribute name="leader-length">5.65in</xsl:attribute>
+        <xsl:attribute name="leader-length">100%</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="codeblock__bottom">
         <xsl:attribute name="leader-pattern">rule</xsl:attribute>
-        <xsl:attribute name="leader-length">5.65in</xsl:attribute>
+        <xsl:attribute name="leader-length">100%</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="option">

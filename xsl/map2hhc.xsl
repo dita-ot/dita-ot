@@ -1,4 +1,7 @@
 <?xml version="1.0"?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+     Sourceforge.net. See the accompanying license.txt file for 
+     applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
 
 <!-- 
@@ -254,7 +257,6 @@
 
         <!-- If there is a reference to a DITA or HTML file, and it is not external: 
              allow non-dita, external values in navigation.  -->
-        <xsl:if test="@href">
           <xsl:element name="param">
             <xsl:attribute name="name">Local</xsl:attribute>
             <xsl:choose> <!-- What if targeting a nested topic? Need to keep the ID? -->
@@ -267,12 +269,17 @@
               <xsl:when test="contains(@href,'.htm') and @scope!='external'">
                 <xsl:attribute name="value"><xsl:value-of select="$pathFromMaplist"/><xsl:value-of select="@href"/></xsl:attribute>
               </xsl:when>
+              <xsl:when test="not(@href) or @href=''">
+                <xsl:variable name="parentHREF" select="parent::*[contains(@class, ' map/topicref ')]/@href"/>
+                <xsl:if test="$parentHREF!=''">
+                  <xsl:attribute name="value"><xsl:value-of select="$pathFromMaplist"/><xsl:value-of select="substring-before($parentHREF, $DITAEXT)"/><xsl:value-of select="$OUTEXT"/></xsl:attribute>
+                </xsl:if>
+              </xsl:when>
               <xsl:otherwise> <!-- If non-DITA, keep the href as-is -->
                 <xsl:attribute name="value"><xsl:value-of select="@href"/></xsl:attribute>
               </xsl:otherwise>
             </xsl:choose>
           </xsl:element>
-        </xsl:if>
        </OBJECT>
 
        <!-- If there are any children that should be in the TOC, process them -->

@@ -1,4 +1,10 @@
 /*
+ * This file is part of the DITA Open Toolkit project hosted on
+ * Sourceforge.net. See the accompanying license.txt file for 
+ * applicable licenses.
+ */
+
+/*
  * (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved.
  */
 package org.dita.dost.pipeline;
@@ -14,7 +20,7 @@ import org.dita.dost.module.ModuleFactory;
  * @author Lian, Li
  * 
  */
-public class PipelineFacade extends AbstractFacade {
+public class PipelineFacade implements AbstractFacade {
 
     /**
      * Automatically generated constructor: PipelineFacade

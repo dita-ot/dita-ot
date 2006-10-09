@@ -34,6 +34,7 @@ with those set forth herein.
     xmlns:opentopic-index="http://www.idiominc.com/opentopic/index"
     xmlns:opentopic="http://www.idiominc.com/opentopic"
     xmlns:opentopic-func="http://www.idiominc.com/opentopic/exsl/function"
+    xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/"
     exclude-result-prefixes="opentopic-index opentopic opentopic-i18n opentopic-func"
     version="1.1">
 
@@ -46,10 +47,15 @@ with those set forth herein.
     <xsl:import href="tables_1.0.xsl"/>
     <xsl:import href="root-processing.xsl"/>
     <xsl:import href="commons.xsl"/>
+    <xsl:import href="commons_1.0.xsl"/>
     <xsl:import href="toc.xsl"/>
+    <xsl:import href="toc_1.0.xsl"/>
     <xsl:import href="bookmarks.xsl"/>
+    <xsl:import href="bookmarks_1.0.xsl"/>
     <xsl:import href="index.xsl"/>
+    <xsl:import href="index_1.0.xsl"/>
     <xsl:import href="front-matter.xsl"/>
+    <xsl:import href="front-matter_1.0.xsl"/>
     <xsl:import href="preface.xsl"/>
 
     <xsl:import href="sw-domain.xsl"/>
@@ -62,7 +68,7 @@ with those set forth herein.
     <xsl:import href="cfg:fo/attrs/custom.xsl"/>
     <xsl:import href="cfg:fo/xsl/custom.xsl"/>
 
-    <xsl:strip-space elements="*"/>
+<!--    <xsl:strip-space elements="*"/>-->
 
     <xsl:param name="locale"/>
 
@@ -75,6 +81,10 @@ with those set forth herein.
     <xsl:param name="publishRequiredCleanup"/>
 
     <xsl:param name="disableRelatedLinks" select="'yes'"/>
+
+    <xsl:param name="tocMaximumLevel" select="'4'"/>
+
+    <xsl:param name="ditaVersion" select="/*[contains(@class,' map/map ')]/@ditaarch:DITAArchVersion"/>
 
     <xsl:output method="xml" encoding="utf-8" indent="no"/>
 

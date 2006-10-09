@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+ Sourceforge.net. See the accompanying license.txt file for 
+ applicable licenses.-->
+ <!--
+  | (C) Copyright IBM Corporation 2005 - 2006. All Rights Reserved.
+  *-->   
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN"
+ "..\..\dtd\task.dtd">
+<task id="integratingwithwtp" xml:lang="en-us">
+<title>Working with documentation plug-in</title>
+<taskbody>
+<context>You can use a template to develop documentation plug-in with DITA
+in Eclipse PDE and use DITA OT 1.3 to build and pack the final plug-in. When
+you want to develop a documentation plug-in with DITA in Eclipse, you cannot
+use the previous releases of DITA OT in Eclipse to transform DITA to HTML.
+Though previous releases of DITA OT support the feature to transform DITA
+files to Eclipse documentation plug-in, they are not integrated with Eclipse.
+With DITA OT 1.3 integrated with WPT, you can develop document plug-ins with
+DITA in Eclipse PDE and build and pack the final plug-in by taking the following
+steps.</context>
+<steps>
+<step><cmd rev="r4">Create a new PDE project in Eclipse, and apply the DITA
+template to the project by following the wizard.</cmd><info><image href="createlpluginproject.jpg"
+placement="break"><alt>Start Eclipse and create a new plug-in project</alt>
+</image></info></step>
+<step id="step2"><cmd rev="r3">Set the source directory, the main ditamap
+file, the output directory (default value is root directory of project), css
+storage directory (used to contain common.css, commonltr.css, and commonrtl.css),
+user customized .css file name, and conditional processing ditaval file in
+the wizard. <uicontrol>Use root as output directory</uicontrol> is selected
+as the default.</cmd><info>You can also clear <uicontrol>Use root as output
+directory</uicontrol> and specify another output directory. <fig>
+<image href="specifyoutputdir.JPG" placement="break"><alt>Set directories</alt>
+</image>
+</fig><fig>
+<image href="newdirectory.JPG" placement="break"><alt>Specify another directory</alt>
+</image>
+</fig></info></step>
+<step><cmd>Create DITA files in the source directory and a ditamap to include
+the topic files that you created.</cmd></step>
+<step importance="optional"><cmd>Import the DITA files into the <filepath>src</filepath> directory
+of the DITA plug-in project you just created.</cmd>
+<substeps>
+<substep><cmd>Right-click a directory that you want to put the imported files
+and select Import, and then File system. </cmd><info><fig>
+<image href="filesys.jpg" placement="break"><alt>Select an import file source</alt>
+</image>
+</fig></info></substep>
+<substep><cmd>Select the directory under which you put the DITA files.</cmd>
+<info><fig>
+<image href="setdirectory.jpg" placement="break"><alt>Select a directory</alt>
+</image>
+</fig></info></substep>
+<substep><cmd>Click Finish after you selected the DITA files under the specified
+directory. The DITA files are then imported to your DITA project.</cmd></substep>
+</substeps>
+</step>
+<step><cmd>Right click build.xml, select Run As, and then ANT Build.</cmd>
+ <info><note importance="high">If you're using SUN JDK, please download and use the latest Xalan. 
+The Xalan shipped with SUN JDK has some issue that will cause the build failure. You can use the latest 
+Xalan by selecting <uicontrol>ANT Build ...</uicontrol> and include the all of Xalan's jar files in Classpath.</note></info>
+<info>After the transformation, the output is in the output directory set
+in build.xml. Refresh the project after the build is successful.<fig>
+<image href="runasant.jpg" placement="break"><alt>Run as ANT build</alt></image>
+</fig><fig><image href="classpath.jpg" placement="break"><alt>Set the Classpath</alt></image></fig></info></step>
+<step><cmd>Edit the plug-in description of the property file MANITEST.MF in
+the plug-in editor after you run the ANT build successfully. </cmd>
+<substeps>
+<substep><cmd>Click MANITEST.MF to go to the Overview page.</cmd><info><fig>
+<image href="overview.jpg" placement="break"><alt>Overview</alt></image>
+</fig></info></substep>
+<substep><cmd>Edit Dependencies to include org.eclipse.help.</cmd><info><fig>
+<image href="org.jpg" placement="break"><alt>Edit Dependencies</alt></image>
+</fig></info></substep>
+<substep><cmd>Edit Extensions to add org.eclipse.help.toc; right click the
+added prgeclipse.help.toc, and select New, and then toc.</cmd><info><fig>
+<image href="toc.jpg" placement="break"><alt>Edit Extensions</alt></image>
+</fig></info></substep>
+<substep><cmd>Edit the Build Configuration to include the out directory or
+the directory you specified in <xref href="#integratingwithwtp/step2">Step 2</xref>.</cmd>
+<info><fig>
+<image href="buildout.JPG" placement="break"><alt>Edit Build Configuration</alt>
+</image>
+</fig></info></substep>
+<substep rev="r3"><cmd>Save the changes you made to the property file MANITEST.MF.</cmd>
+</substep>
+</substeps>
+</step>
+<step><cmd>Export the output to a documentation plug-in. </cmd><info><note>build.xml
+can be customized to meet the requirement of headless build.</note></info>
+<substeps>
+<substep><cmd>Select <menucascade><uicontrol>File</uicontrol><uicontrol rev="r3">Export</uicontrol>
+</menucascade>; select Deployable plug-ins and fragments and click <uicontrol>Next</uicontrol>.</cmd>
+<info><fig>
+<image href="export.jpg" placement="break"><alt>Export a plug-in</alt></image>
+</fig></info></substep>
+<substep><cmd>Select the plug-in you want to export and specify a directory
+under which you want to put the plug-in package.</cmd><info><image href="selectplugin.jpg"
+placement="break"><alt>Select a plug-in and specify the export destination</alt>
+</image></info></substep>
+<substep><cmd>Click <uicontrol>Finish</uicontrol> to export the plug-in package.</cmd>
+</substep>
+</substeps>
+</step>
+</steps>
+</taskbody>
+</task>

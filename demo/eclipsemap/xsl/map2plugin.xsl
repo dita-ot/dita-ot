@@ -1,5 +1,10 @@
 <?xml version="1.0"?>
-
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+  Sourceforge.net. See the accompanying license.txt file for 
+  applicable licenses.-->
+  <!--
+    | (C) Copyright IBM Corporation 2006. All Rights Reserved.
+    *-->
 <!-- Need to ensure this comes out with the name "plugin.xml" rather than the default.
      So: use saxon to force the plugin name. -->
 

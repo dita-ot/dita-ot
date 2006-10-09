@@ -2,8 +2,8 @@
 <!--                    HEADER                                     -->
 <!-- ============================================================= -->
 <!--  MODULE:    DITA Concept                                      -->
-<!--  VERSION:   1.0.1                                             -->
-<!--  DATE:      November 2005                                     -->
+<!--  VERSION:   1.1                                               -->
+<!--  DATE:      June 2006                                         -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -19,18 +19,21 @@ PUBLIC "-//OASIS//ELEMENTS DITA Concept//EN"
 <!-- ============================================================= -->
 <!-- SYSTEM:     Darwin Information Typing Architecture (DITA)     -->
 <!--                                                               -->
-<!-- PURPOSE:    Define elements and specialization atttributed    -->
+<!-- PURPOSE:    Define elements and specialization atttributes    -->
 <!--             for Concepts                                      -->
 <!--                                                               -->
 <!-- ORIGINAL CREATION DATE:                                       -->
 <!--             March 2001                                        -->
 <!--                                                               -->
-<!--             (C) Copyright OASIS Open 2005.                    -->
+<!--             (C) Copyright OASIS Open 2005, 2006.              -->
 <!--             (C) Copyright IBM Corporation 2001, 2004.         -->
 <!--             All Rights Reserved.                              -->
 <!--  UPDATES:                                                     -->
 <!--    2005.11.15 RDA: Removed old declaration for                -->
 <!--                    conceptClasses entity                      -->
+<!--    2006.06.07 RDA: Added <abstract> element                   -->
+<!--    2006.06.07 RDA: Make universal attributes universal        -->
+<!--                      (DITA 1.1 proposal #12)                  -->
 <!-- ============================================================= -->
 
 
@@ -50,7 +53,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Concept//EN"
                        'http://dita.oasis-open.org/architecture/2005/'
              %DITAArchNSPrefix;:DITAArchVersion
                         CDATA                              #FIXED
-                       '1.0'"                                        >
+                       '1.1'"                                        >
 
 
 <!-- ============================================================= -->
@@ -84,14 +87,15 @@ PUBLIC "-//OASIS//ELEMENTS DITA Concept//EN"
 
 
 <!--                    LONG NAME: Concept                         -->
-<!ELEMENT concept       (%title;, (%titlealts;)?, (%shortdesc;)?, 
+<!ELEMENT concept       ((%title;), (%titlealts;)?,
+                         (%shortdesc; | %abstract;)?, 
                          (%prolog;)?, (%conbody;)?, (%related-links;)?,
                          (%concept-info-types;)* )                   >
 <!ATTLIST concept        
              id         ID                               #REQUIRED
              conref     CDATA                            #IMPLIED
              %select-atts;
-             xml:lang   NMTOKEN                          #IMPLIED
+             %localization-atts;
              %arch-atts;
              outputclass 
                         CDATA                            #IMPLIED
@@ -102,8 +106,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Concept//EN"
 <!ELEMENT conbody       ((%body.cnt;)*, (%section;|%example;)* )     >
 <!ATTLIST conbody         
              %id-atts;
-             translate  (yes | no)                       #IMPLIED
-             xml:lang   NMTOKEN                          #IMPLIED
+             %localization-atts;
              outputclass 
                         CDATA                            #IMPLIED    >
              

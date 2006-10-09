@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+     Sourceforge.net. See the accompanying license.txt file for 
+     applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -19,11 +22,7 @@
     <xsl:call-template name="flagit"/>
     <xsl:call-template name="start-revflag"/>
     <a>
-        <xsl:attribute name="href"><xsl:call-template name="href"/></xsl:attribute>
-        <xsl:call-template name="commonattributes"/>        
-        <xsl:if test="@scope='external' or @type='external' or ((@format='PDF' or @format='pdf') and not(@scope='local'))">
-            <xsl:attribute name="target">_blank</xsl:attribute>
-        </xsl:if>
+        <xsl:call-template name="add-linking-attributes"/>
         <xsl:if test="*[contains(@class,' topic/desc ')]">
             <xsl:attribute name="title">
                 <xsl:apply-templates select="*[contains(@class,' topic/desc ')][1]" mode="text-only"/>
@@ -389,18 +388,14 @@ Children are displayed in a numbered list, with the target title as the cmd and 
           <xsl:call-template name="flagit"/>
           <xsl:call-template name="start-revflag"/>
           <a>
-             <xsl:attribute name="href"><xsl:call-template name="href"/></xsl:attribute>
-             <xsl:if test="@scope='external' or @type='external' or ((@format='PDF' or @format='pdf') and not(@scope='local'))">
-                <xsl:attribute name="target">_blank</xsl:attribute>
-             </xsl:if>
-          <!--use link element's linktext as hoverhelp-->
-          <xsl:attribute name="title">
+             <xsl:call-template name="add-linking-attributes"/>
+             <!--use link element's linktext as hoverhelp-->
+             <xsl:attribute name="title">
                <xsl:choose>
-            <xsl:when test="*[contains(@class, ' topic/linktext ')]"><xsl:value-of select="normalize-space(*[contains(@class, ' topic/linktext ')])"/></xsl:when>
-            <xsl:otherwise><xsl:call-template name="href"/></xsl:otherwise>
-          </xsl:choose>
-          </xsl:attribute>
-          <xsl:call-template name="commonattributes"/>             
+                 <xsl:when test="*[contains(@class, ' topic/linktext ')]"><xsl:value-of select="normalize-space(*[contains(@class, ' topic/linktext ')])"/></xsl:when>
+                 <xsl:otherwise><xsl:call-template name="href"/></xsl:otherwise>
+               </xsl:choose>
+             </xsl:attribute>
           <!--use string as output link text for now, use image eventually-->
           <xsl:choose>
           <xsl:when test="@role='next'">
@@ -483,10 +478,7 @@ Children are displayed in a numbered list, with the target title as the cmd and 
      <xsl:call-template name="start-revflag"/>
      <strong>
      <a>
-          <xsl:attribute name="href"><xsl:call-template name="href"/></xsl:attribute>
-               <xsl:if test="@scope='external' or @type='external' or ((@format='PDF' or @format='pdf') and not(@scope='local'))">
-                <xsl:attribute name="target">_blank</xsl:attribute>
-               </xsl:if>
+          <xsl:call-template name="add-linking-attributes"/>
 
           <!--use linktext as linktext if it exists, otherwise use href as linktext-->
           <xsl:choose>
@@ -517,10 +509,7 @@ Children are displayed in a numbered list, with the target title as the cmd and 
      <xsl:call-template name="flagit"/>
      <xsl:call-template name="start-revflag"/>
      <a>
-          <xsl:attribute name="href"><xsl:call-template name="href"/></xsl:attribute>
-               <xsl:if test="@scope='external' or @type='external' or ((@format='PDF' or @format='pdf') and not(@scope='local'))">
-                <xsl:attribute name="target">_blank</xsl:attribute>
-               </xsl:if>
+          <xsl:call-template name="add-linking-attributes"/>
 
           <!--use linktext as linktext if it exists, otherwise use href as linktext-->
           <xsl:choose>
@@ -569,11 +558,7 @@ Children are displayed in a numbered list, with the target title as the cmd and 
           <xsl:call-template name="flagit"/>
           <xsl:call-template name="start-revflag"/>
           <a>             
-             <xsl:attribute name="href"><xsl:call-template name="href"/></xsl:attribute>
-             <xsl:if test="@scope='external' or @type='external' or ((@format='PDF' or @format='pdf') and not(@scope='local'))">
-                <xsl:attribute name="target">_blank</xsl:attribute>
-             </xsl:if>
-             <xsl:call-template name="commonattributes"/>
+             <xsl:call-template name="add-linking-attributes"/>
           <!--create hover help if desc exists-->
           <xsl:if test="*[contains(@class, ' topic/desc ')]">
             <xsl:variable name="hoverhelp"><xsl:apply-templates select="*[contains(@class, ' topic/desc ')]" mode="text-only"/></xsl:variable>
@@ -663,6 +648,25 @@ Children are displayed in a numbered list, with the target title as the cmd and 
       </xsl:if>
     </xsl:if>
   </xsl:if>
+</xsl:template>
+
+<xsl:template name="add-linking-attributes">
+  <xsl:attribute name="href">
+    <xsl:call-template name="href" />
+  </xsl:attribute>
+  <xsl:call-template name="commonattributes" />
+  <xsl:call-template name="add-link-target-attribute" />
+  <xsl:call-template name="add-user-link-attributes" />
+</xsl:template>
+
+<xsl:template name="add-link-target-attribute">
+  <xsl:if test="@scope='external' or @type='external' or ((@format='PDF' or @format='pdf') and not(@scope='local'))">
+    <xsl:attribute name="target">_blank</xsl:attribute>
+  </xsl:if>
+</xsl:template>
+
+<xsl:template name="add-user-link-attributes">
+  <!-- stub for user values -->
 </xsl:template>
 
 </xsl:stylesheet>

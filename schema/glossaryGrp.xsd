@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    
+    <xs:group name="glossentry">
+        <xs:sequence>
+            <xs:element ref="glossentry"/>
+        </xs:sequence>
+    </xs:group>
+    
+    <xs:group name="glossterm">
+        <xs:sequence>
+            <xs:element ref="glossterm"/>
+        </xs:sequence>
+    </xs:group>
+    
+    <xs:group name="glossdef">
+        <xs:sequence>
+            <xs:element ref="glossdef"/>
+        </xs:sequence>
+    </xs:group>
+
+</xs:schema>

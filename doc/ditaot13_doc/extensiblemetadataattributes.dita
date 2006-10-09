@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+ Sourceforge.net. See the accompanying license.txt file for 
+ applicable licenses.-->
+ <!--
+  | (C) Copyright IBM Corporation 2005 - 2006. All Rights Reserved.
+  *-->   
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN"
+ "concept.dtd">
+<concept id="extensiblemetadataattributes" xml:lang="en-us">
+<title>Extensible metadata attributes</title>
+<conbody>
+<p> OASIS DITA 1.1 provides the DITA architects with an enhanced feature,
+extensible metadata attributes. If the architects want to achieve multiple
+purposes in one attribute, especially in a selective attribute, they can use
+the extensible metadata attributes.</p>
+<note rev="r5"><ul>
+<li>Because OASIS DITA 1.1 is not yet an approved standard as
+of the release of DITA OT 1.3, the functionality described here should be
+considered a <i>preview</i> capability. </li>
+<li>The specification and the defined functions that need to be supported
+can change by the time OASIS formally approves DITA 1.1.</li>
+</ul></note>
+<example><title>Example</title><p>The following example illustrates how people
+of different roles use the extensible metadata attributes in DITA 1.1.</p><ul>
+<li>As a DITA architect of a team, you can perform the following actions:<p><ol>
+<li>Define new attributes that the team needs, for example, "proglanguage". </li>
+<li>Express each new attribute as a separate domain package, for example,
+proglanguage.mod, with the new attribute specialized from the "props" attribute.</li>
+<li>Integrate the domain packages into the authoring DTDs or schemas:  <ol>
+<li> Redefine the "props" attribute entity to include the "proglanguage" attribute.
+Similarly, you can redefine element entities to integrate new domain elements.</li>
+<li rev="r4">Add the new attribute domain to the list of domains in the domains
+attribute, preceded by an "a", for example, <codeph>domains="a(props proglanguage)"</codeph>.</li>
+</ol></li>
+</ol></p></li>
+<li>As an author, you can perform the following actions: <ol>
+<li>Add values to the new attributes of an element.</li>
+<li>Define values in the DITA filter file.</li>
+<li>Transform the DITA source files to remove or flag the content based on
+the new attributes, for example, flagging all <codeph>proglanguage="Java"</codeph></li>
+</ol><p>After you perform these actions, another user can reuse the content. </p><p>A
+specialization-unaware trademarking tool requires generalization of the contributed
+content. If the user runs all the content through the tool, the content is
+processed and filtered against the new attributes after the generalization.
+The new attributes are now collapsed into the "props" attribute.  <ol>
+<li>The generalization turned <codeph>proglanguage="Java"</codeph> into <codeph>props="proglanguage(Java)"</codeph>.</li>
+<li>The conditional processing transform recognizes the new form as equivalent
+to the old, and the instruction "<codeph>flag all proglanguage=java</codeph>"
+operates on either <codeph>props="proglanguage(Java)"</codeph> or <codeph>proglanguage="Java"</codeph>.</li>
+</ol></p></li>
+</ul></example>
+</conbody>
+</concept>

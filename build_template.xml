@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+     Sourceforge.net. See the accompanying license.txt file for 
+     applicable licenses.-->
+<!-- (c) Copyright IBM Corp. 2006 All Rights Reserved. -->
+<project name="DOST" default="init" basedir=".">
+  <import file="build_init.xml"/>  
+  <import file="build_preprocess.xml"/>
+  <import file="build_general.xml"/>    
+  <import file="build_dita2xhtml.xml"/>
+  <import file="build_dita2htmlhelp.xml"/>
+  <import file="build_dita2javahelp.xml"/>
+  <import file="build_dita2eclipsehelp.xml"/>
+  <import file="build_dita2eclipsecontent.xml"/>
+  <import file="build_dita2pdf.xml"/>
+  <import file="build_dita2wordrtf.xml"/>
+  <import file="build_dita2docbook.xml"/>
+  <import file="build_dita2troff.xml"/>
+        
+  <path id="dost.class.path">
+    <dita:extension id="dita.conductor.lib.import" behavior="org.dita.dost.platform.ImportAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
+    <pathelement location="${dita.dir}${file.separator}lib${file.separator}dost.jar"/>
+  </path>
+  
+  <target name="init">
+    <dita-ot-fail id="DOTA001F">
+      <condition>
+        <and>
+          <not>
+            <equals arg1="${transtype}" arg2="xhtml" casesensitive="false"/>
+          </not>
+          <not>
+            <equals arg1="${transtype}" arg2="eclipsehelp" casesensitive="false"/>
+          </not>
+          <not>
+            <equals arg1="${transtype}" arg2="javahelp" casesensitive="false"/>
+          </not>
+          <not>
+            <equals arg1="${transtype}" arg2="htmlhelp" casesensitive="false"/>
+          </not>
+          <not>
+            <equals arg1="${transtype}" arg2="pdf" casesensitive="false"/>
+          </not>
+          <not>
+            <equals arg1="${transtype}" arg2="docbook" casesensitive="false"/>
+          </not>
+          <not>
+            <equals arg1="${transtype}" arg2="eclipsecontent" casesensitive="false"/>
+          </not>
+          <not>
+            <equals arg1="${transtype}" arg2="troff" casesensitive="false"/>
+          </not>
+          <not>
+            <equals arg1="${transtype}" arg2="wordrtf" casesensitive="false"/>
+          </not>
+          <dita:extension id="dita.conductor.transtype.check" behavior="org.dita.dost.platform.ImportAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
+        </and>
+      </condition>
+    </dita-ot-fail>
+    <antcall target="dita2${transtype}"/>
+  </target>
+  
+  <target name="dita-preprocess" depends="start-process, init-logger, check-arg, output-deprecated-msg, output-css-warn-message, preprocess"/>
+  
+  <dita:extension id="dita.conductor.target" behavior="org.dita.dost.platform.InsertAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
+</project>

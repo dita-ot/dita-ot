@@ -2,17 +2,19 @@
 <!--                    HEADER                                     -->
 <!-- ============================================================= -->
 <!--  MODULE:    XML EXCHANGE TABLE MODEL DECLARATION MODULE       -->
-<!--  VERSION:   1.0.1                                             -->
-<!--  DATE:      November 2005                                     -->
+<!--  VERSION:   1.1                                               -->
+<!--  DATE:      June 2006                                         -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
-<!--             (C) Copyright OASIS Open 2005.                    -->
+<!--             (C) Copyright OASIS Open 2005, 2006.              -->
 <!--             (C) Copyright IBM Corporation 2001, 2004.         -->
 <!--             All Rights Reserved.                              -->
 <!--                                                               -->
 <!--  UPDATES:                                                     -->
 <!--    2005.11.15 RDA: Corrected the "Delivered as" system ID     -->
+<!--    2006.06.07 RDA: Make universal attributes universal        -->
+<!--                      (DITA 1.1 proposal #12)                  -->
 
 <!-- ============================================================= -->
 <!--  Delivered as file "tblDecl.mod"                              -->
@@ -44,7 +46,7 @@ For the <table> element, add:
   %univ-atts; which consists of:
     %select-atts; [for selection, conditional processing]
     %id-atts; [for conref and linking]
-    @translate + @xml:lang) [for NLS processing support]
+    %localization-atts (@translate + @xml:lang) [for NLS processing support]
     %global-atts; (@xtrf + @xtrc) [for tracing and messaging support in processors]
     @class [for specialization support]
   @outputclass [for role designation (ie, styles, future migrations)]
@@ -355,8 +357,12 @@ in useability, presentation, and possible structure information degradation.
         outputclass CDATA #IMPLIED>
 <!ATTLIST entry
         %id-atts;
+        %localization-atts;
         rev CDATA #IMPLIED
         outputclass CDATA #IMPLIED>
+<!ATTLIST colspec
+        %id-atts;
+        %localization-atts;>
 
 <!-- ============================================================= -->
 <!--                    DITA SPECIALIZATION ATTRIBUTE DECLARATIONS -->

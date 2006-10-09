@@ -1,3 +1,9 @@
+/*
+ * This file is part of the DITA Open Toolkit project hosted on
+ * Sourceforge.net. See the accompanying license.txt file for 
+ * applicable licenses.
+ */
+
 /**
  * (c) Copyright IBM Corp. 2006 All Rights Reserved.
  */
@@ -6,6 +12,7 @@ package org.dita.dost.util;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.Properties;
 
 import javax.imageio.ImageIO;
@@ -22,6 +29,13 @@ import org.dita.dost.log.MessageUtils;
  */
 public class ImgUtils {
 	/**
+	 * Default Constructor
+	 *
+	 */
+	private ImgUtils(){
+	}
+	/**
+	 * Get the image width
 	 * @param dirName -
 	 * 				The directory name that will be added to the path 
 	 * 				of the image file.
@@ -40,11 +54,13 @@ public class ImgUtils {
 			Properties prop = new Properties();
         	prop.put("%1", dirName+File.separatorChar+fileName);
 			logger.logError(MessageUtils.getMessage("DOTJ021E", prop).toString());
+			logger.logException(e);
 			return -1;
 		}
 	}
 	
 	/**
+	 * Get the image height
 	 * @param dirName -
 	 * 				The directory name that will be added to the path 
 	 * 				of the image file.
@@ -63,11 +79,13 @@ public class ImgUtils {
 			Properties prop = new Properties();
         	prop.put("%1", dirName+File.separatorChar+fileName);
 			logger.logError(MessageUtils.getMessage("DOTJ023E", prop).toString());
+			logger.logException(e);
 			return -1;
 		}
 	}
 	
 	/**
+	 * Get the image binary data, with hexical output
 	 * @param dirName -
 	 * 				The directory name that will be added to the path 
 	 * 				of the image file.
@@ -76,19 +94,16 @@ public class ImgUtils {
 	 * @return java.lang.String -
 	 * 				The Hexical binary of image data converted to String.
 	 */
-	/**
-	 * @param dirName
-	 * @param fileName
-	 * @return
-	 */
 	public static String getBinData (String dirName, String fileName){
 		DITAOTJavaLogger logger = new DITAOTJavaLogger();
 		File imgInput = new File(dirName+File.separatorChar+fileName);
+		FileInputStream binInput = null;
+		int bin;
 		try{
-			FileInputStream binInput = new FileInputStream(imgInput);
-			StringBuffer ret = new StringBuffer(Constants.INT_16*Constants.INT_1024);
-			int bin = binInput.read();
 			String binStr = null;
+			StringBuffer ret = new StringBuffer(Constants.INT_16*Constants.INT_1024);
+			binInput = new FileInputStream(imgInput);
+			bin = binInput.read();
 			while (bin != -1){
 				binStr = Integer.toHexString(bin);
 				if(binStr.length() < 2){
@@ -100,11 +115,19 @@ public class ImgUtils {
 			return ret.toString();
 		}catch (Exception e){
 			logger.logError(MessageUtils.getMessage("DOTJ023E").toString());
+			logger.logException(e);
 			return null;
+		}finally{
+			try{
+				binInput.close();
+			}catch(IOException ioe){
+				logger.logException(ioe);
+			}
 		}
 	}
 	
 	/**
+	 * Get the type of image file by extension
 	 * @param fileName -
 	 * 				The file name of the image file.
 	 * @return int -
@@ -113,12 +136,12 @@ public class ImgUtils {
 	public static String getType (String fileName){
 		String name = fileName.toLowerCase();
 		DITAOTJavaLogger logger = new DITAOTJavaLogger();
+		Properties prop = new Properties();
 		if (name.endsWith(".jpg")||name.endsWith(".jpeg")){
 			return "jpegblip";
 		}else if (name.endsWith(".gif")||name.endsWith(".png")){
 			return "pngblip";
 		}
-		Properties prop = new Properties();
     	prop.put("%1", fileName);
 		logger.logError(MessageUtils.getMessage("DOTJ024W", prop).toString());
 		return "other";

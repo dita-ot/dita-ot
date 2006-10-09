@@ -1,4 +1,10 @@
 /*
+ * This file is part of the DITA Open Toolkit project hosted on
+ * Sourceforge.net. See the accompanying license.txt file for 
+ * applicable licenses.
+ */
+
+/*
  * (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved.
  */
 package org.dita.dost.reader;
@@ -11,20 +17,20 @@ import org.dita.dost.module.Content;
  * @author Lian, Li
  * 
  */
-public abstract class AbstractReader {
+public interface AbstractReader {
 
     /**
      * Use reader to parse a document.
      * 
      * @param filename
      */
-    public abstract void read(String filename);
+    void read(String filename);
 
     /**
      * Get the result from reader after parsing.
      * 
      * @return Content
      */
-    public abstract Content getContent();
+    Content getContent();
 
 }

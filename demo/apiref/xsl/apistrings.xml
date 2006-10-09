@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    | (C) Copyright IBM Corporation 2005 - 2006. All Rights Reserved.
+    *-->
 <langlist name="apiref">
     <lang xml:lang="ar"    filename="apistrings-ar-eg.xml"/>
     <lang xml:lang="ar-eg" filename="apistrings-ar-eg.xml"/>

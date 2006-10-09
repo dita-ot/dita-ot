@@ -38,8 +38,9 @@
       <xs:group ref="words.cnt"/>
     </xs:choice>
     <xs:attribute name="href" type="xs:string"/>
-    <xs:attribute name="keyref" type="xs:NMTOKEN"/>
+    <xs:attribute name="keyref" type="xs:string"/>
     <xs:attribute name="type" type="author-type-atts.class"/>
+    <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
     <xs:attribute ref="class" default="- topic/author "/>
   </xs:complexType>
@@ -56,7 +57,7 @@
     <xs:annotation>
       <xs:documentation>The &lt;<keyword>source</keyword>> element contains a reference
         to a resource from which the present topic is derived, either completely or
-        in part. The element can contain a description of the resource; the <i><keyword>href</keyword></i> reference
+        in part. The element can contain a description of the resource; the <keyword>href</keyword> reference
         can be a string or a URL that points to it.
       </xs:documentation>
     </xs:annotation>
@@ -65,8 +66,9 @@
     <xs:choice minOccurs="0" maxOccurs="unbounded">
       <xs:group ref="words.cnt"/>
     </xs:choice>
-    <xs:attribute name="href" type="xs:string" use="required"/>
-    <xs:attribute name="keyref" type="xs:NMTOKEN"/>
+    <xs:attribute name="href" type="xs:string" />
+    <xs:attribute name="keyref" type="xs:string"/>
+    <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
     <xs:attribute ref="class" default="- topic/source "/>
   </xs:complexType>
@@ -84,9 +86,9 @@
     <xs:choice minOccurs="0" maxOccurs="unbounded">
       <xs:group ref="words.cnt"/>
     </xs:choice>
-    <xs:attribute name="href" type="xs:string" use="required"/>
-    <xs:attribute name="keyref" type="xs:NMTOKEN"/>
-    <xs:attributeGroup ref="select-atts"/>
+    <xs:attribute name="href" type="xs:string" />
+    <xs:attribute name="keyref" type="xs:string"/>
+    <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
     <xs:attribute ref="class" default="- topic/publisher "/>
   </xs:complexType>
@@ -106,6 +108,7 @@
       <xs:group ref="copyrholder"/>
     </xs:sequence>
     <xs:attribute name="type" type="copyright-type-att.class"/>
+    <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
     <xs:attribute ref="class" default="- topic/copyright "/>
   </xs:complexType>
@@ -121,13 +124,13 @@
   <xs:element name="copyryear" type="copyryear.class">
     <xs:annotation>
       <xs:documentation>The &lt;<keyword>copyryear</keyword>> element contains the copyright
-        year as specified by the <i><keyword>year</keyword></i> attribute.   
+        year as specified by the <keyword>year</keyword> attribute.   
       </xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:complexType name="copyryear.class">
     <xs:attribute name="year" type="xs:gYear" use="required"/>
-    <xs:attributeGroup ref="select-atts"/>
+    <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
     <xs:attribute ref="class" default="- topic/copyyear "/>
   </xs:complexType>
@@ -145,6 +148,7 @@
     <xs:choice minOccurs="0" maxOccurs="unbounded">
       <xs:group ref="words.cnt"/>
     </xs:choice>
+    <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
     <xs:attribute ref="class" default="- topic/copyholder "/>
   </xs:complexType>
@@ -163,6 +167,7 @@
       <xs:group ref="created"/>
       <xs:group ref="revised" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
+    <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
     <xs:attribute ref="class" default="- topic/critdates "/>
   </xs:complexType>
@@ -181,7 +186,7 @@
     <xs:attribute name="modified" type="xs:string" use="required"/>
     <xs:attribute name="golive" type="xs:string"/>
     <xs:attribute name="expiry" type="xs:string"/>
-    <xs:attributeGroup ref="select-atts"/>
+    <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
     <xs:attribute ref="class" default="- topic/revised "/>
   </xs:complexType>
@@ -190,7 +195,7 @@
   <xs:element name="created" type="created.class">
     <xs:annotation>
       <xs:documentation>The &lt;<keyword>created</keyword>> element specifies the document
-        creation date using the <i><keyword>date</keyword></i> attribute.
+        creation date using the <keyword>date</keyword> attribute.
       </xs:documentation>
     </xs:annotation>
   </xs:element>
@@ -198,6 +203,7 @@
     <xs:attribute name="date" type="xs:string" use="required"/>
     <xs:attribute name="golive" type="xs:string"/>
     <xs:attribute name="expiry" type="xs:string"/>
+    <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
     <xs:attribute ref="class" default="- topic/created "/>
   </xs:complexType>
@@ -210,14 +216,17 @@
         id attribute of the topic can't be used. Each resourceid entry should be unique.
         It is one of the metadata elements that can be included within the prolog
         of a topic, along with document tracking and product information, etc. The
-        element has no content, but takes an <i><keyword>id</keyword></i> attribute
-        or an <i><keyword>appname</keyword></i> attribute.
+        element has no content, but takes an <keyword>id</keyword> attribute
+        or an <keyword>appname</keyword> attribute.
       </xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:complexType name="resourceid.class">
     <xs:attribute name="id" type="xs:string" use="required"/>
     <xs:attribute name="appname" type="xs:string"/>
+    <xs:attribute name="conref" type="xs:string"/>
+    <xs:attributeGroup ref="select-atts"/>
+    <xs:attributeGroup ref="localization-atts"/>
     <xs:attributeGroup ref="global-atts"/>
     <xs:attribute ref="class" default="- topic/resourceid "/>
   </xs:complexType>
@@ -225,12 +234,12 @@
   
   <xs:element name="audience" type="audience.class">
     <xs:annotation>
-      <xs:documentation>The &lt;<keyword>audience</keyword>> metadata element indicates,
+      <xs:documentation>The &lt;<keyword>audience</keyword>&gt; metadata element indicates,
         through the value of its type attribute, the intended audience for a topic.
         Since a topic can have multiple audiences, you can include multiple audience
         elements. For each audience you specify, you can identify the high-level task
-        (<i><keyword>job</keyword></i>) they are trying to accomplish and the level
-        of experience (<i><keyword>experiencelevel</keyword></i>) expected.
+        (<keyword>job</keyword>) they are trying to accomplish and the level
+        of experience (<keyword>experiencelevel</keyword>) expected.
       </xs:documentation>
     </xs:annotation>
   </xs:element>
@@ -241,7 +250,7 @@
     <xs:attribute name="otherjob" type="xs:string"/>
     <xs:attribute name="experiencelevel" type="experiencelevel-att.class"/>
     <xs:attribute name="name" type="xs:NMTOKEN"/>
-    <xs:attributeGroup ref="select-atts"/>
+    <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
     <xs:attribute ref="class" default="- topic/audience "/>
   </xs:complexType>
@@ -260,30 +269,11 @@
     <xs:choice minOccurs="0" maxOccurs="unbounded">
       <xs:group ref="words.cnt"/>
     </xs:choice>
-    <xs:attributeGroup ref="select-atts"/>
+    <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
     <xs:attribute ref="class" default="- topic/category "/>
   </xs:complexType>
 
-  <!-- Base form: Index entry  -->
-  <xs:element name="indexterm" type="indexterm.class">
-    <xs:annotation>
-      <xs:documentation>An &lt;<keyword>indexterm</keyword>> is an index entry. You can
-        nest entries to create multi-level indexes. The content is not output as part
-        of topic content, only as part of the index.
-      </xs:documentation>
-    </xs:annotation>
-  </xs:element>
-  <xs:complexType name="indexterm.class" mixed="true">
-    <xs:choice minOccurs="0" maxOccurs="unbounded">
-      <xs:group ref="words.cnt"/>
-      <xs:group ref="indexterm"/>
-    </xs:choice>
-    <xs:attribute name="keyref" type="xs:NMTOKEN"/>
-    <xs:attributeGroup ref="univ-atts"/>
-    <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute ref="class" default="- topic/indexterm "/>
-  </xs:complexType>
 
 
   <xs:element name="keywords" type="keywords.class">
@@ -300,8 +290,7 @@
       <xs:group ref="indexterm"/>
       <xs:group ref="keyword"/>
     </xs:choice>
-    <xs:attributeGroup ref="id-atts"/>
-    <xs:attributeGroup ref="select-atts"/>
+    <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
     <xs:attribute ref="class" default="- topic/keywords "/>
   </xs:complexType>
@@ -320,10 +309,10 @@
     </xs:annotation>
   </xs:element>
   <xs:complexType name="othermeta.class">
-    <xs:attribute name="name" type="xs:string"/>
-    <xs:attribute name="content" type="xs:string"/>
+    <xs:attribute name="name" type="xs:string" use="required"/>
+    <xs:attribute name="content" type="xs:string" use="required"/>
     <xs:attribute name="translate-content" type="yesno-att.class"/>
-    <xs:attributeGroup ref="select-atts"/>
+    <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
     <xs:attribute ref="class" default="- topic/othermeta "/>
   </xs:complexType>
@@ -341,6 +330,7 @@
   <xs:complexType name="permissions.class">
     <xs:attribute name="view" type="view-att.class" use="required"/>
     <xs:attributeGroup ref="global-atts"/>
+    <xs:attributeGroup ref="univ-atts"/>
     <xs:attribute ref="class" default="- topic/permissions "/>
   </xs:complexType>
 
@@ -361,7 +351,7 @@
         <xs:group ref="prodinfo.cnt"/>
       </xs:choice>
     </xs:sequence>
-    <xs:attributeGroup ref="select-atts"/>
+    <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
     <xs:attribute ref="class" default="- topic/prodinfo "/>
   </xs:complexType>
@@ -378,6 +368,7 @@
     <xs:choice minOccurs="0" maxOccurs="unbounded">
       <xs:group ref="words.cnt"/>
     </xs:choice>
+    <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
     <xs:attribute ref="class" default="- topic/brand "/>
   </xs:complexType>
@@ -394,6 +385,7 @@
     <xs:choice minOccurs="0" maxOccurs="unbounded">
       <xs:group ref="words.cnt"/>
     </xs:choice>
+    <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
     <xs:attribute ref="class" default="- topic/series "/>
   </xs:complexType>
@@ -411,6 +403,7 @@
     <xs:choice minOccurs="0" maxOccurs="unbounded">
       <xs:group ref="words.cnt"/>
     </xs:choice>
+    <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
     <xs:attribute ref="class" default="- topic/platform "/>
   </xs:complexType>
@@ -429,6 +422,7 @@
     <xs:choice minOccurs="0" maxOccurs="unbounded">
       <xs:group ref="words.cnt"/>
     </xs:choice>
+    <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
     <xs:attribute ref="class" default="- topic/prognum "/>
   </xs:complexType>
@@ -445,6 +439,7 @@
     <xs:choice minOccurs="0" maxOccurs="unbounded">
       <xs:group ref="words.cnt"/>
     </xs:choice>
+    <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
     <xs:attribute ref="class" default="- topic/featnum "/>
   </xs:complexType>
@@ -468,6 +463,7 @@
     <xs:choice minOccurs="0" maxOccurs="unbounded">
       <xs:group ref="words.cnt"/>
     </xs:choice>
+    <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
     <xs:attribute ref="class" default="- topic/component "/>
   </xs:complexType>
@@ -484,6 +480,7 @@
     <xs:choice minOccurs="0" maxOccurs="unbounded">
       <xs:group ref="words.cnt"/>
     </xs:choice>
+    <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
     <xs:attribute ref="class" default="- topic/prodname "/>
   </xs:complexType>
@@ -512,6 +509,7 @@
     <xs:choice maxOccurs="unbounded">
       <xs:group ref="vrm" />
     </xs:choice>
+    <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
     <xs:attribute ref="class" default="- topic/vrmlist "/>
   </xs:complexType>
@@ -525,9 +523,10 @@
     </xs:annotation>
   </xs:element>
   <xs:complexType name="vrm.class">
-    <xs:attribute name="version" type="xs:string"/>
+    <xs:attribute name="version" type="xs:string" use="required"/>
     <xs:attribute name="release" type="xs:string"/>
     <xs:attribute name="modification" type="xs:string"/>
+    <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
     <xs:attribute ref="class" default="- topic/vrm "/>
   </xs:complexType>

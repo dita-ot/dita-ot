@@ -1,4 +1,7 @@
 <?xml version='1.0'?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+     Sourceforge.net. See the accompanying license.txt file for 
+     applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
 
 <!DOCTYPE xsl:transform [
@@ -263,6 +266,11 @@
       </xsl:attribute>
     </xsl:if>
     <!-- IPL end -->
+	<xsl:if test="@morerows">
+	  <xsl:attribute name="number-rows-spanned">
+		<xsl:value-of select="@morerows+1"/>
+	  </xsl:attribute>
+	</xsl:if>
   </xsl:template>
   <xsl:template name="att-valign">
     <xsl:if test="string(@valign)">

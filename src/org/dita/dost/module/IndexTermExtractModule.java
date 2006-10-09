@@ -1,5 +1,11 @@
 /*
- * (c) Copyright IBM Corp. 2005 All Rights Reserved.
+ * This file is part of the DITA Open Toolkit project hosted on
+ * Sourceforge.net. See the accompanying license.txt file for 
+ * applicable licenses.
+ */
+
+/*
+ * (c) Copyright IBM Corp. 2005, 2006 All Rights Reserved.
  */
 package org.dita.dost.module;
 
@@ -37,7 +43,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
  * 
  * @author Wu, Zhi Qiang
  */
-public class IndexTermExtractModule extends AbstractPipelineModule {
+public class IndexTermExtractModule implements AbstractPipelineModule {
 	/** The input map */
 	private String inputMap = null;
 
@@ -71,8 +77,8 @@ public class IndexTermExtractModule extends AbstractPipelineModule {
 		try {
 			parseAndValidateInput(input);
 			extractIndexTerm();
-			IndexTermCollection.sort();
-			IndexTermCollection.outputTerms();
+			IndexTermCollection.getInstantce().sort();
+			IndexTermCollection.getInstantce().outputTerms();
 		} catch (Exception e) {
 			javaLogger.logException(e);
 		}
@@ -119,8 +125,9 @@ public class IndexTermExtractModule extends AbstractPipelineModule {
 		try {
 			prop.load(new FileInputStream(ditalist));
 		} catch (Exception e) {
+			String msg = null;
 			params.put("%1", ditalist);
-			String msg = MessageUtils.getMessage("DOTJ011E", params).toString();
+			msg = MessageUtils.getMessage("DOTJ011E", params).toString();
 			msg = new StringBuffer(msg).append(Constants.LINE_SEPARATOR)
 					.append(e.toString()).toString();
 			throw new DITAOTException(msg, e);
@@ -146,12 +153,12 @@ public class IndexTermExtractModule extends AbstractPipelineModule {
 		lastIndexOfDot = output.lastIndexOf(".");
 		outputRoot = (lastIndexOfDot == -1) ? output : output.substring(0,
 				lastIndexOfDot);
-		IndexTermCollection.setOutputFileRoot(outputRoot);
-		IndexTermCollection.setIndexType(indextype);
+		IndexTermCollection.getInstantce().setOutputFileRoot(outputRoot);
+		IndexTermCollection.getInstantce().setIndexType(indextype);
 
 		if (encoding != null && encoding.trim().length() > 0) {
-			Locale locale = new Locale(encoding.substring(0, 1), encoding
-					.substring(3, 4));
+			Locale locale = new Locale(encoding.substring(0, 2), encoding
+					.substring(3, 5));
 			IndexTerm.setTermLocale(locale);
 		}
 	}
@@ -162,6 +169,7 @@ public class IndexTermExtractModule extends AbstractPipelineModule {
 		FileInputStream inputStream = null;
 		XMLReader xmlReader = null;
 		IndexTermReader handler = new IndexTermReader();
+		DitamapIndexTermReader ditamapIndexTermReader = new DitamapIndexTermReader();
 
 		if (System.getProperty(Constants.SAX_DRIVER_PROPERTY) == null) {
 			// The default sax driver is set to xerces's sax driver
@@ -175,30 +183,38 @@ public class IndexTermExtractModule extends AbstractPipelineModule {
 			xmlReader.setContentHandler(handler);
 
 			for (int i = 0; i < topicNum; i++) {
+				String target;
+				String targetPathFromMap;
+				String targetPathFromMapWithoutExt;
 				handler.reset();
-				String target = (String) topicList.get(i);
-				String targetPathFromMap = FileUtils.getRelativePathFromMap(
+				target = (String) topicList.get(i);
+				targetPathFromMap = FileUtils.getRelativePathFromMap(
 						inputMap, target);
-				String targetPathFromMapWithoutExt = targetPathFromMap
+				targetPathFromMapWithoutExt = targetPathFromMap
 						.substring(0, targetPathFromMap.lastIndexOf("."));
 				handler.setTargetFile(new StringBuffer(
 						targetPathFromMapWithoutExt).append(targetExt)
 						.toString());
+				
 				try {
+					if(!new File(baseInputDir, target).exists()){
+						javaLogger.logWarn("Cannot find file "+ target);
+						continue;
+					}
 					inputStream = new FileInputStream(
 							new File(baseInputDir, target));
 					xmlReader.parse(new InputSource(inputStream));
 					inputStream.close();
 				} catch (Exception e) {					
 					Properties params = new Properties();
+					String msg = null;
 					params.put("%1", target);
-					String msg = MessageUtils.getMessage("DOTJ013E", params).toString();
+					msg = MessageUtils.getMessage("DOTJ013E", params).toString();
 					javaLogger.logError(msg);
 					javaLogger.logException(e);
 				}
 			}
 
-			DitamapIndexTermReader ditamapIndexTermReader = new DitamapIndexTermReader();
 			xmlReader.setContentHandler(ditamapIndexTermReader);
 
 			for (int j = 0; j < ditamapNum; j++) {
@@ -214,14 +230,19 @@ public class IndexTermExtractModule extends AbstractPipelineModule {
 
 				ditamapIndexTermReader.setMapPath(mapPathFromInputMap);
 				try {
+					if(!new File(baseInputDir, ditamap).exists()){
+						javaLogger.logWarn("Cannot find file "+ ditamap);
+						continue;
+					}
 					inputStream = new FileInputStream(new File(baseInputDir,
 							ditamap));
 					xmlReader.parse(new InputSource(inputStream));
 					inputStream.close();
-				} catch (Exception e) {
+				} 	catch (Exception e) {
 					Properties params = new Properties();
+					String msg = null;
 					params.put("%1", ditamap);
-					String msg = MessageUtils.getMessage("DOTJ013E", params).toString();
+					msg = MessageUtils.getMessage("DOTJ013E", params).toString();
 					javaLogger.logError(msg);
 					javaLogger.logException(e);
 				}
@@ -231,6 +252,7 @@ public class IndexTermExtractModule extends AbstractPipelineModule {
 				try {
 					inputStream.close();
 				} catch (IOException e) {
+					javaLogger.logException(e);
 				}
 
 			}

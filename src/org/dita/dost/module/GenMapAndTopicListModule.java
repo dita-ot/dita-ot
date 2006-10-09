@@ -1,13 +1,21 @@
 /*
+ * This file is part of the DITA Open Toolkit project hosted on
+ * Sourceforge.net. See the accompanying license.txt file for 
+ * applicable licenses.
+ */
+
+/*
  * (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved.
  */
 package org.dita.dost.module;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
@@ -36,7 +44,7 @@ import org.xml.sax.SAXException;
  * 
  * @author Wu, Zhi Qiang
  */
-public class GenMapAndTopicListModule extends AbstractPipelineModule {
+public class GenMapAndTopicListModule implements AbstractPipelineModule {
 	/** Set of all dita files */
 	private Set ditaSet = null;
 
@@ -67,6 +75,21 @@ public class GenMapAndTopicListModule extends AbstractPipelineModule {
 	/** Set of all the href targets */
 	private Set hrefTargetSet = null;
 
+	/** Set of all the conref targets */
+	private Set conrefTargetSet = null;
+	
+	/** Set of all the copy-to sources */
+	private Set copytoSourceSet = null;
+	
+	/** Set of all the non-conref targets */
+	private Set nonConrefCopytoTargetSet = null;
+	
+	/** Set of sources of those copy-to that were ignored */
+	private Set ignoredCopytoSourceSet = null;
+	
+	/** Map of all copy-to (target,source) */
+	private Map copytoMap = null;
+	
 	/** List of files waiting for parsing */
 	private List waitList = null;
 
@@ -92,7 +115,7 @@ public class GenMapAndTopicListModule extends AbstractPipelineModule {
 
 	private DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
 
-	GenListModuleReader reader = null;
+	private GenListModuleReader reader = null;
 
 	/**
 	 * Create a new instance and do the initialization.
@@ -102,18 +125,23 @@ public class GenMapAndTopicListModule extends AbstractPipelineModule {
 	 */
 	public GenMapAndTopicListModule() throws SAXException,
 			ParserConfigurationException {
-		ditaSet = new HashSet();
-		fullTopicSet = new HashSet();
-		fullMapSet = new HashSet();
-		hrefTopicSet = new HashSet();
-		hrefMapSet = new HashSet();
-		conrefSet = new HashSet();
-		imageSet = new HashSet();
-		flagImageSet = new HashSet();
-		htmlSet = new HashSet();
-		hrefTargetSet = new HashSet();
+		ditaSet = new HashSet(Constants.INT_128);
+		fullTopicSet = new HashSet(Constants.INT_128);
+		fullMapSet = new HashSet(Constants.INT_128);
+		hrefTopicSet = new HashSet(Constants.INT_128);
+		hrefMapSet = new HashSet(Constants.INT_128);
+		conrefSet = new HashSet(Constants.INT_128);
+		imageSet = new HashSet(Constants.INT_128);
+		flagImageSet = new HashSet(Constants.INT_128);
+		htmlSet = new HashSet(Constants.INT_128);
+		hrefTargetSet = new HashSet(Constants.INT_128);
 		waitList = new LinkedList();
 		doneList = new LinkedList();
+		conrefTargetSet = new HashSet(Constants.INT_128);
+		nonConrefCopytoTargetSet = new HashSet(Constants.INT_128);
+		copytoMap = new HashMap();
+		copytoSourceSet = new HashSet(Constants.INT_128);
+		ignoredCopytoSourceSet = new HashSet(Constants.INT_128);
 	}
 
 	/**
@@ -136,7 +164,7 @@ public class GenMapAndTopicListModule extends AbstractPipelineModule {
 			addToWaitList(inputFile);
 			processWaitList();
 			updateBaseDirectory();
-			
+			refactoringResult();
 			outputResult();
 		} catch (SAXException e) {
 			throw new DITAOTException(e.getMessage(), e);
@@ -179,10 +207,9 @@ public class GenMapAndTopicListModule extends AbstractPipelineModule {
 	}
 	
 	/**
-	 * @param baseInputDir
+	 * 
 	 * @throws DITAOTException
-	 * @throws ParserConfigurationException
-	 * @throws SAXException
+	 * 
 	 */
 	private void processWaitList() throws DITAOTException {
 		reader = new GenListModuleReader();
@@ -237,13 +264,49 @@ public class GenMapAndTopicListModule extends AbstractPipelineModule {
 	 * @param currentFile
 	 */
 	private void processParseResult(String currentFile) {
-		Iterator iter = reader.getResult().iterator();
-
+		Iterator iter = reader.getNonCopytoResult().iterator();
+		Map cpMap = reader.getCopytoMap();
+		
+		/*
+		 * Category non-copyto result and update uplevels accordingly
+		 */
 		while (iter.hasNext()) {
 			String file = (String) iter.next();
 			categorizeResultFile(file);
 			updateUplevels(file);
 		}
+
+		/*
+		 * Update uplevels for copy-to targets, and store
+		 * copy-to map.
+		 * 
+		 * Note: same key(target) copy-to will be ignored.
+		 */
+		iter = cpMap.keySet().iterator();
+		while (iter.hasNext()) {
+			String key = (String) iter.next();
+			String value = (String) cpMap.get(key);
+			
+			if (copytoMap.containsKey(key)) {
+				StringBuffer buff = new StringBuffer();
+				buff.append("Copy-to task [href=\"");
+				buff.append(value);
+				buff.append("\" copy-to=\"");
+				buff.append(key);
+				buff.append("\"] which points to another copy-to target");
+				buff.append(" was ignored.");
+				javaLogger.logWarn(buff.toString());
+				ignoredCopytoSourceSet.add(value);
+			} else {
+				updateUplevels(key);
+				copytoMap.put(key, value);				
+			}
+		}
+		
+		hrefTargetSet.addAll(reader.getHrefTargets());
+		conrefTargetSet.addAll(reader.getConrefTargets());
+		nonConrefCopytoTargetSet.addAll(reader.getNonConrefCopytoTargets());
+		ignoredCopytoSourceSet.addAll(reader.getIgnoredCopytoSourceSet());
 	}
 
 	private void categorizeCurrentFile(String currentFile) {
@@ -254,8 +317,6 @@ public class GenMapAndTopicListModule extends AbstractPipelineModule {
 		if (FileUtils.isTopicFile(currentFile)) {
 			hrefTargetSet.add(currentFile);
 		}
-		
-		hrefTargetSet.addAll(reader.getHrefTargets());
 
 		if (reader.hasConRef()) {
 			conrefSet.add(currentFile);
@@ -324,7 +385,7 @@ public class GenMapAndTopicListModule extends AbstractPipelineModule {
 		for (int i = uplevels; i > 0; i--) {
 			File file = new File(baseInputDir);
 			baseInputDir = file.getParent();
-			prefix = file.getName() + File.separator + prefix;
+			prefix = new StringBuffer(file.getName()).append(File.separator).append(prefix).toString();
 		}
 	}
 
@@ -340,13 +401,92 @@ public class GenMapAndTopicListModule extends AbstractPipelineModule {
 		}
 	}
 	
+	private void refactoringResult() {
+		handleConref();		
+		handleCopyto();		
+	}
+
+	private void handleCopyto() {
+		Map tempMap = new HashMap();
+		Set pureCopytoSources = new HashSet(Constants.INT_128);
+		Set totalCopytoSources = new HashSet(Constants.INT_128);
+		
+		/*
+		 * Validate copy-to map, remove those without valid sources
+		 */		
+		Iterator iter = copytoMap.keySet().iterator();
+		while (iter.hasNext()) {
+			String key = (String) iter.next();
+			String value = (String) copytoMap.get(key);
+			if (new File(baseInputDir, value).exists()) {
+				tempMap.put(key, value);
+				//Add the copy-to target to conreflist when its source has conref
+				if(conrefSet.contains(value)){
+					conrefSet.add(key);
+				}
+			}
+		}
+		
+		copytoMap = tempMap;
+		
+		/*
+		 * Add copy-to targets into ditaSet, fullTopicSet
+		 */
+		ditaSet.addAll(copytoMap.keySet());
+		fullTopicSet.addAll(copytoMap.keySet());
+		
+		/*
+		 * Get pure copy-to sources
+		 */
+		totalCopytoSources.addAll(copytoMap.values());
+		totalCopytoSources.addAll(ignoredCopytoSourceSet);
+		iter = totalCopytoSources.iterator();
+		while (iter.hasNext()) {
+			String src = (String) iter.next();
+			if (!nonConrefCopytoTargetSet.contains(src) && !copytoMap.keySet().contains(src)) {
+				pureCopytoSources.add(src);
+			}
+		}
+		
+		copytoSourceSet = pureCopytoSources;
+		
+		/*
+		 * Remove pure copy-to sources from ditaSet, fullTopicSet
+		 */
+		ditaSet.removeAll(pureCopytoSources);
+		fullTopicSet.removeAll(pureCopytoSources);
+	}
+
+	private void handleConref() {
+		/*
+		 * Get pure conref targets
+		 */
+		Set pureConrefTargets = new HashSet(Constants.INT_128);
+		Iterator iter = conrefTargetSet.iterator();
+		while (iter.hasNext()) {
+			String target = (String) iter.next();
+			if (!nonConrefCopytoTargetSet.contains(target)) {
+				pureConrefTargets.add(target);
+			}
+		}
+		conrefTargetSet = pureConrefTargets;
+		
+		/*
+		 * Remove pure conref targets from ditaSet, fullTopicSet
+		 */
+		ditaSet.removeAll(pureConrefTargets);
+		fullTopicSet.removeAll(pureConrefTargets);
+	}
+	
 	private void outputResult() throws DITAOTException {
 		Properties prop = new Properties();
 		PropertiesWriter writer = new PropertiesWriter();
 		Content content = new ContentImpl();
 		File outputFile = new File(tempDir, Constants.FILE_NAME_DITA_LIST);
 		File dir = new File(tempDir);
-
+		Set copytoSet = new HashSet(Constants.INT_128);
+		Iterator iter = null;
+		
 		if (!dir.exists()) {
 			dir.mkdirs();
 		}
@@ -363,7 +503,19 @@ public class GenMapAndTopicListModule extends AbstractPipelineModule {
 		addSetToProperties(prop, Constants.FLAG_IMAGE_LIST, flagImageSet);
 		addSetToProperties(prop, Constants.HTML_LIST, htmlSet);
 		addSetToProperties(prop, Constants.HREF_TARGET_LIST, hrefTargetSet);
-
+		addSetToProperties(prop, Constants.CONREF_TARGET_LIST, conrefTargetSet);
+		addSetToProperties(prop, Constants.COPYTO_SOURCE_LIST, copytoSourceSet);
+		
+		/*
+		 * Convert copyto map into set and output
+		 */
+		iter = copytoMap.entrySet().iterator();
+		while (iter.hasNext()) {
+			Map.Entry entry = (Map.Entry) iter.next();
+			copytoSet.add(entry.toString());
+		}
+		addSetToProperties(prop, Constants.COPYTO_TARGET_TO_SOURCE_MAP_LIST, copytoSet);
+		
 		content.setValue(prop);
 		writer.setContent(content);
 		writer.write(outputFile.getAbsolutePath());
@@ -371,7 +523,7 @@ public class GenMapAndTopicListModule extends AbstractPipelineModule {
 
 	private void addSetToProperties(Properties prop, String key, Set set) {
 		String value = null;
-		Set newSet = new HashSet();
+		Set newSet = new HashSet(Constants.INT_128);
 		Iterator iter = set.iterator();
 
 		while (iter.hasNext()) {
@@ -384,7 +536,7 @@ public class GenMapAndTopicListModule extends AbstractPipelineModule {
 				 * In ant, all the file separator should be slash, so we need to replace
 				 * all the back slash with slash.
 				 */
-				newSet.add(FileUtils.removeRedundantNames(prefix + file)
+				newSet.add(FileUtils.removeRedundantNames(new StringBuffer(prefix).append(file).toString())
 						.replaceAll(Constants.DOUBLE_BACK_SLASH,
 								Constants.SLASH));
 			}

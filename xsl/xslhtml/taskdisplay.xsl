@@ -1,4 +1,7 @@
-﻿<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+     Sourceforge.net. See the accompanying license.txt file for 
+     applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
 
 <xsl:stylesheet version="1.0"
@@ -21,10 +24,14 @@
   <!-- here, you can generate a toc based on what's a child of body -->
   <!--xsl:call-template name="gen-sect-ptoc"/--><!-- Works; not always wanted, though; could add a param to enable it.-->
 
+  <!-- Added for DITA 1.1 "Shortdesc proposal" -->
+  <!-- get the abstract para -->
+  <xsl:apply-templates select="preceding-sibling::*[contains(@class,' topic/abstract ')]" mode="outofline"/>
+
   <!-- get the short descr para -->
   <xsl:apply-templates select="preceding-sibling::*[contains(@class,' topic/shortdesc ')]" mode="outofline"/>
 
-<!-- Insert pre-req links here, after shortdesc - unless there is a prereq section about -->
+  <!-- Insert pre-req links here, after shortdesc - unless there is a prereq section about -->
   <xsl:if test="not(*[contains(@class,' task/prereq ')])">
    <xsl:apply-templates select="following-sibling::*[contains(@class,' topic/related-links ')]" mode="prereqs"/>
   </xsl:if>
@@ -214,10 +221,10 @@
 <xsl:template match="*[contains(@class,' task/step ')]" mode="onestep-fmt">
 <xsl:param name="step_expand"/>
 <div class="p">
-  <xsl:call-template name="flagit"/>
-  <xsl:call-template name="start-revflag"/>
   <xsl:call-template name="commonattributes"/>
   <xsl:call-template name="setidaname"/>
+  <xsl:call-template name="flagit"/>
+  <xsl:call-template name="start-revflag"/>  
   <xsl:if test="@importance='optional'">
     <strong>
     <xsl:call-template name="getString">
@@ -508,8 +515,8 @@
   </xsl:when>
   <xsl:otherwise>
    <thead><tr><th valign="bottom">     
-     <xsl:attribute name="id">
      <xsl:call-template name="th-align"/>
+     <xsl:attribute name="id">     
      <xsl:choose>
       <!-- if the option header has an ID, use that -->
       <xsl:when test="*[contains(@class,' task/chhead ')]/*[contains(@class,' task/choptionhd ')]/@id">
@@ -523,8 +530,8 @@
      <xsl:apply-templates select="*[contains(@class,' task/chhead ')]/*[contains(@class,' task/choptionhd ')]" mode="chtabhdr"/>
     </th><xsl:value-of select="$newline"/>
     <th valign="bottom">     
-     <xsl:attribute name="id">
      <xsl:call-template name="th-align"/>
+     <xsl:attribute name="id">
      <xsl:choose>
       <!-- if the description header has an ID, use that -->
       <xsl:when test="*[contains(@class,' task/chhead ')]/*[contains(@class,' task/chdeschd ')]/@id">
@@ -562,7 +569,7 @@
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' task/chrow ')]" name="topic.task.chrow">
- <tr><xsl:call-template name="commonattributes"/><xsl:apply-templates/></tr>
+ <tr><xsl:call-template name="setid"/><xsl:call-template name="commonattributes"/><xsl:apply-templates/></tr>
  <xsl:value-of select="$newline"/>
 </xsl:template>
 

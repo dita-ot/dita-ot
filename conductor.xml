@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+     Sourceforge.net. See the accompanying license.txt file for 
+     applicable licenses.-->
+<!-- (c) Copyright IBM Corp. 2004, 2006 All Rights Reserved. -->
+<!-- Deprecated: left for backward compatibility, and it will be removed in a 
+     later release -->
+
+<project name="conductor" default="init" basedir=".">
+  <import file="build.xml"/>
+</project>

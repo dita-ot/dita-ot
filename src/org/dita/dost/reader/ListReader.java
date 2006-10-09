@@ -1,10 +1,18 @@
 /*
+ * This file is part of the DITA Open Toolkit project hosted on
+ * Sourceforge.net. See the accompanying license.txt file for 
+ * applicable licenses.
+ */
+
+/*
  * (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved.
  */
 package org.dita.dost.reader;
 
 import java.io.FileInputStream;
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
@@ -12,6 +20,7 @@ import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.module.Content;
 import org.dita.dost.module.ContentImpl;
 import org.dita.dost.util.Constants;
+import org.dita.dost.util.StringUtils;
 
 /**
  * ListReader reads "dita.list" file in temp directory.
@@ -19,12 +28,12 @@ import org.dita.dost.util.Constants;
  * 
  * @author Zhang, Yuan Peng
  */
-public class ListReader extends AbstractReader {
+public class ListReader implements AbstractReader {
 
     private LinkedList refList;
     private ContentImpl content;
     private DITAOTJavaLogger logger;
-
+    private Map copytoMap = new HashMap();
 
     /**
      * Default constructor of ListReader class.
@@ -46,17 +55,33 @@ public class ListReader extends AbstractReader {
         String liststr;
         StringTokenizer tokenizer;
         FileInputStream listInput = null;
+        String copytoMapEntries;
+        
         try {
+			Properties property = new Properties();
             listInput = new FileInputStream(filename);
-            Properties property = new Properties();
             property.load(listInput);
-            liststr = property.getProperty(Constants.FULL_DITAMAP_TOPIC_LIST);
+            content.setValue(property.getProperty("user.input.dir"));
+            
+            /*
+             * Parse copy-to target to source map list, 
+             * and restore the copy-to map
+             */
+            copytoMapEntries = property
+					.getProperty(Constants.COPYTO_TARGET_TO_SOURCE_MAP_LIST);
+            copytoMap = StringUtils.restoreMap(copytoMapEntries);
+            
+            liststr = property.getProperty(Constants.FULL_DITAMAP_TOPIC_LIST)
+					+ Constants.COMMA
+					+ property.getProperty(Constants.CONREF_TARGET_LIST) 
+					+ Constants.COMMA
+					+ property.getProperty(Constants.COPYTO_SOURCE_LIST);
+					
             tokenizer = new StringTokenizer(liststr,Constants.COMMA);
                         
             while (tokenizer.hasMoreTokens()) {
-                refList.addFirst(tokenizer.nextToken());
-            }
-            
+            	refList.addFirst(tokenizer.nextToken());
+            }            
 
         } catch (Exception e) {
         	logger.logException(e);
@@ -80,4 +105,11 @@ public class ListReader extends AbstractReader {
         return content;
     }
 
+    /**
+     * Return the copy-to map
+	 * @return
+	 */
+	public Map getCopytoMap() {
+    	return copytoMap;
+    }
 }

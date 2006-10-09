@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+     Sourceforge.net. See the accompanying license.txt file for 
+     applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2005, 2006 All Rights Reserved. -->
 <!DOCTYPE messages SYSTEM "messages.dtd">
 <messages>
@@ -155,6 +158,16 @@
     <response>Please convert your picture to JPEG or GIF style.</response>
   </message>
   
+  <message id="DOTJ025E" type="ERROR">
+    <reason>The input of topic merge cannot be found.</reason>
+    <response>Please check whether the input message for topic merge is absolute path.</response>
+  </message>
+  
+  <message id="DOTJ026E" type="ERROR">
+    <reason>The output of topic merge is null.</reason>
+    <response>Please check whether you have set output for topic merge correctly.</response>
+  </message>
+  
   <!-- End of Java Messages -->
     
   <!-- Begin of XSL Messages -->  
@@ -179,7 +192,7 @@
   </message>
   
   <message id="DOTX005E" type="ERROR">
-    <reason>Unable to find navigation title, using href instead: '%1'. If the topic is not accessible at build time, provide the navigation title in the map, and set the format or scope attributes to indicate why it is not accessible.</reason>
+    <reason>Unable to find navigation title, using href instead: '%1'. If the topic is not accessible at build time, provide the navigation title in the map, and set the format or scope attributes to indicate why it is not accessible. Note:'%1' might be changed to use default dita topic file extension name '.dita' or '.xml'.</reason>
     <response>Provide the navigation title in the map or topic files.</response>
   </message>
   
@@ -195,7 +208,7 @@
   
   <message id="DOTX008W" type="WARN">
     <reason>File '%1' does not exist.</reason>
-    <response>Append the file '%1' into the source or change the href link to existing file.</response>
+    <response>Append the file '%1' into the source or change the href link to existing file. Note:'%1' might be changed to use standard dita topic file extension name '.dita' or '.xml'.</response>
   </message>
   
   <message id="DOTX009W" type="WARN">
@@ -204,12 +217,12 @@
   </message>
   
   <message id="DOTX010E" type="ERROR">
-    <reason>Unable to find target for conref="%1". Check to make sure that the target element is available, and that it is a 'xxxx' element.</reason>
+    <reason>Unable to find target for conref="%1". Check to make sure that the target element is available, and that it is a 'xxxx' element. Note:'%1' might be changed to use default dita topic file extension name '.dita' or '.xml'.</reason>
     <response>Check to make sure the target of conref is correct.</response>
   </message>
   
   <message id="DOTX011W" type="WARN">
-    <reason>There is more than one possible target for conref="%1". Only the first will be used. Remove the duplicate ID from one of the targets.</reason>
+    <reason>There is more than one possible target for conref="%1". Only the first will be used. Remove the duplicate ID from one of the targets. Note:'%1' might be changed to use default dita topic file extension name '.dita' or '.xml'.</reason>
     <response>Remove the duplicated id in the conref target file.</response>
   </message>
   
@@ -219,7 +232,7 @@
   </message>
   
   <message id="DOTX013E" type="ERROR">
-    <reason>A element with a conref attribute indirectly includes itself, which is not possible. Please fix the target of the conref attribute. The conref attribute points to '%1'</reason>
+    <reason>A element with a conref attribute indirectly includes itself, which is not possible. Please fix the target of the conref attribute. The conref attribute points to '%1'. Note:'%1' might be changed to use default dita topic file extension name '.dita' or '.xml'.</reason>
     <response>Resolve the circle conref.</response>
   </message>
   
@@ -229,12 +242,12 @@
   </message>
   
   <message id="DOTX015E" type="ERROR">
-    <reason>Incorrectly formed conref attribute: '%1', Make sure the syntax is correct and try again.</reason>
+    <reason>Incorrectly formed conref attribute: '%1', Make sure the syntax is correct and try again. Note:'%1' might be changed to use default dita topic file extension name '.dita' or '.xml'.</reason>
     <response>Change the conref attribute to conform the correct syntax.</response>
   </message>
   
   <message id="DOTX016W" type="WARN">
-    <reason>An href value appears to point to a DITA file, but the format attribute is inherited a value of "%1". If the target '%2'is a DITA file, set the format attribute to "dita". If it does not point to a DITA file, set the format attribute locally.</reason>
+    <reason>An href value appears to point to a DITA file, but the format attribute is inherited a value of "%1". If the target '%2'is a DITA file, set the format attribute to "dita". If it does not point to a DITA file, set the format attribute locally. Note:'%2' might be changed to use standard dita topic file extension name '.dita' or '.xml'.</reason>
     <response>Directly set the format attribute to correct value instead of inheriting from ancestor.</response>
   </message>
   
@@ -370,7 +383,7 @@
   
   <message id="DOTX043I" type="INFO">
     <reason>The link to '%1' may appear more than once in '%2'.</reason>
-    <response>If you do not want to occurrences of a link to the same href, remove one of the links or define the same attributes on both link elements.  Note that links generated from a &lt;reltable> in a DITA Map will have the  role attribute set to friend.</response>
+    <response>If you do not want to occurrences of a link to the same href, remove one of the links or define the same attributes on both link elements.  Note that links generated from a &lt;reltable&gt; in a DITA Map will have the  role attribute set to friend.</response>
   </message>
   
   <message id="DOTX044E" type="ERROR">

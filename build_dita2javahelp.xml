@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+     Sourceforge.net. See the accompanying license.txt file for 
+     applicable licenses.-->
+<!-- (c) Copyright IBM Corp. 2006 All Rights Reserved. -->
+<project name="dita2javahelp" default="dita2javahelp">
+    <property name="transtype" value="javahelp"/>
+    
+    <import file="build_init.xml" />
+    <import file="build_preprocess.xml" />
+    <import file="build_general.xml" />
+
+    <target name="dita2javahelp"
+            unless="noMap"
+            depends="build-init, start-preprocess, clean-temp, gen-list, 
+                     copy-files, debug-filter, move-index-entries, conref, mappull, 
+                     maplink, move-links, topicpull, dita.map.javahelp, copy-css, 
+                     dita.topics.html, compile.Java.Help">
+    </target>
+
+    <target name="dita.map.javahelp"
+            depends="dita.map.javahelp.init, dita.map.javahelp.toc, 
+        						 dita.map.javahelp.map, dita.map.javahelp.set, dita.map.javahelp.index">
+    </target>
+
+    <target name="dita.map.javahelp.init"
+            description="Init properties for JavaHelp">
+        <basename property="dita.map.toc.root"
+                  file="${dita.input.filename}"
+                  suffix=".ditamap" />
+        <condition property="args.javahelp.toc" value="${dita.map.toc.root}">
+            <not>
+                <isset property="args.javahelp.toc" />
+            </not>
+        </condition>
+        <condition property="out.ext" value=".html">
+            <not>
+                <isset property="out.ext" />
+            </not>
+        </condition>
+        <condition property="args.javahelp.map" value="${dita.map.toc.root}">
+            <not>
+                <isset property="args.javahelp.map" />
+            </not>
+        </condition>
+        <condition property="args.javahelp.helpset"
+                   value="${dita.resource.dir}${file.separator}helpset.hs">
+            <not>
+                <isset property="args.javahelp.helpset" />
+            </not>
+        </condition>
+    </target>
+
+    <target name="dita.map.javahelp.toc"
+            depends="dita.map.javahelp.init"
+            description="Build JavaHelp TOC file">
+        <xslt processor="trax"
+              basedir="${dita.temp.dir}"
+              destdir="${output.dir}"
+              includes="${user.input.file}"
+              style="${dita.script.dir}${file.separator}map2javahelptoc.xsl">
+            <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
+            <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
+            <mapper type="glob"
+                    from="*${dita.input.filename}"
+                    to="*${args.javahelp.toc}.xml" />
+        </xslt>
+    </target>
+
+    <target name="dita.map.javahelp.map"
+            depends="dita.map.javahelp.init"
+            description="Build JavaHelp Map file">
+        <xslt processor="trax"
+              basedir="${dita.temp.dir}"
+              destdir="${output.dir}"
+              includes="${user.input.file}"
+              style="${dita.script.dir}${file.separator}map2javahelpmap.xsl">
+            <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
+            <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
+            <mapper type="glob"
+                    from="*${dita.input.filename}"
+                    to="*${args.javahelp.map}.jhm" />
+        </xslt>
+    </target>
+
+    <target name="dita.map.javahelp.set"
+            depends="dita.map.javahelp.init"
+            description="Build JavaHelp Set file">
+        <xslt processor="trax"
+              basedir="${dita.temp.dir}"
+              destdir="${output.dir}"
+              includes="${user.input.file}"
+              style="${dita.script.dir}${file.separator}map2javahelpset.xsl">
+            <param name="javahelpmap" expression="${args.javahelp.map}" />
+            <param name="javahelptoc" expression="${args.javahelp.toc}" />
+            <mapper type="glob"
+                    from="*${dita.input.filename}"
+                    to="*${dita.map.toc.root}_helpset.hs" />
+        </xslt>
+    </target>
+
+    <target name="dita.map.javahelp.index"
+            description="Build JavaHelp Index file">
+        <pipeline message="Extract index term."
+                  module="IndexTermExtract"
+                  basedir="${basedir}"
+                  tempdir="${dita.temp.dir}"
+                  inputmap="${user.input.file}"
+                  extparam="output=${output.dir}${file.separator}${user.input.file};targetext=.html;indextype=javahelp;${index.ext.param.encoding}" />
+    </target>
+
+    <target name="compile.Java.Help"
+            if="env.JHHOME"
+            description="Compile Java Help output">
+        <!-- delete 'JavaHelpSearch' directory before compiling. -->
+        <delete dir="${dita.map.output.dir}${file.separator}JavaHelpSearch" />
+        <java jar="${env.JHHOME}${file.separator}javahelp${file.separator}bin${file.separator}jhindexer.jar"
+              fork="true"
+              dir="${dita.map.output.dir}">
+            <arg value="." />
+        </java>
+    </target>
+
+    <!-- depecrated: keep for back-compatibility, will be remvoed in a later release -->
+    <target name="dita.topics.javahelp" depends="dita.topics.html" />
+
+</project>

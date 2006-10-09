@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+ Sourceforge.net. See the accompanying license.txt file for 
+ applicable licenses.-->
+ <!--
+  | (C) Copyright IBM Corporation 2005 - 2006. All Rights Reserved.
+  *-->   
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN"
+ "task.dtd">
+<task id="installingditaot1.3" xml:lang="en-us">
+<title>Installing DITA OT 1.3</title>
+<shortdesc>The software that the previous releases of DITA OT depend on are
+redistributed. The installation package of DITA OT 1.3 includes the software,
+so the configuration process is streamlined.</shortdesc>
+<taskbody>
+<prereq>Before installing DITA Open Toolkit 1.3, you need to complete the
+following steps:<ul>
+<li>Download and configure JDK properly.</li>
+<li>(Optional) Download and configure HTMLHelp Compiler properly for HTMLHelp
+transformation. </li>
+<li>(Optional) Download and configure JavaHelp Compiler properly for JavaHelp
+transformation.</li>
+</ul></prereq>
+<context>Then, you need to complete the following steps:</context>
+<steps>
+<step><cmd>Download the full DITA OT 1.3 package. </cmd></step>
+<step><cmd>Run the batch file "<codeph>startcmd.bat</codeph>" for Windows
+or "<codeph>startcmd.sh</codeph>" for Linux to set up the necessary environment
+variables.</cmd></step>
+<step><cmd rev="r3">Run the transformation in the command-line window by using
+Java command line or ANT as you did in the previous releases of DITA OT.</cmd>
+</step>
+</steps>
+<postreq rev="r3">You can still use the small package to install DITA OT 1.3:<ul>
+<li>Download the small package.</li>
+<li rev="r4">Configure the system environment as you did in previous releases
+of DITA OT, but add two more paths %DITA_HOME%\lib;%DITA_HOME%\lib\resolver.jar;
+to the CLASSPATH parameter.</li>
+<li> Run the package by using Java command line or Ant. </li>
+</ul></postreq>
+</taskbody>
+</task>

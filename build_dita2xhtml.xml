@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+     Sourceforge.net. See the accompanying license.txt file for 
+     applicable licenses.-->
+<!-- (c) Copyright IBM Corp. 2006 All Rights Reserved. -->
+<project name="dita2xhtml" default="dita2xhtml">
+    <property name="transtype" value="xhtml"/>
+    
+    <import file="build_init.xml" />
+    <import file="build_preprocess.xml" />
+    <import file="build_general.xml" />
+
+    <target name="dita2xhtml"
+            depends="build-init, start-preprocess, clean-temp, gen-list, 
+                     copy-files, debug-filter, move-index-entries, conref, mappull, 
+                     maplink, move-links, topicpull, dita.map.xhtml, copy-revflag, 
+                     copy-css, dita.topics.xhtml">
+    </target>
+
+    <target name="dita.map.xhtml"
+            depends="dita.map.xhtml.init, dita.map.xhtml.toc" />
+
+    <target name="dita.map.xhtml.init" description="">
+        <condition property="out.ext" value=".html">
+            <not>
+                <isset property="out.ext" />
+            </not>
+        </condition>
+        <condition property="args.xhtml.toc" value="index">
+            <not>
+                <isset property="args.xhtml.toc" />
+            </not>
+        </condition>
+    </target>
+
+    <target name="dita.map.xhtml.toc"
+            unless="noMap"
+            description="Build HTML TOC file">
+        <xslt processor="trax"
+              basedir="${dita.temp.dir}"
+              destdir="${output.dir}"
+              includes="${user.input.file}"
+              style="${dita.script.dir}${file.separator}map2htmtoc.xsl">
+            <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
+            <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
+            <mapper type="glob"
+                    from="*${dita.input.filename}"
+                    to="*${args.xhtml.toc}${out.ext}" />
+        </xslt>
+    </target>
+</project>

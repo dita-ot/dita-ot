@@ -146,4 +146,13 @@ public interface IndexEntry {
 	 * @param theSortString
 	 */
 	void setSortString(String theSortString);
+
+
+    void addSeeChild(IndexEntry theEntry);
+
+    void addSeeAlsoChild(IndexEntry theEntry);
+
+    public IndexEntry[] getSeeChildIndexEntries();
+
+    public IndexEntry[] getSeeAlsoChildIndexEntries();
 }

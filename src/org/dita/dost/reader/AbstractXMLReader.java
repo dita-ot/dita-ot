@@ -1,4 +1,10 @@
 /*
+ * This file is part of the DITA Open Toolkit project hosted on
+ * Sourceforge.net. See the accompanying license.txt file for 
+ * applicable licenses.
+ */
+
+/*
  * (c) Copyright IBM Corp. 2005 All Rights Reserved.
  */
 package org.dita.dost.reader;
@@ -22,7 +28,7 @@ import org.xml.sax.ext.LexicalHandler;
  * 
  * @author Wu, Zhi Qiang
  */
-public abstract class AbstractXMLReader extends AbstractReader implements
+public abstract class AbstractXMLReader implements AbstractReader,
         ContentHandler, LexicalHandler, EntityResolver {
 
     /**

@@ -22,10 +22,7 @@
 <!--             All Rights Reserved.                              -->
 <!-- ============================================================= -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
-  <!--  Import the XML Schema that contains the defiinitions for xml:lang and xml:space attributes -->
-  <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="xml.xsd"/>
-
-
+  
   <!-- Add the domains to the base topic XML Schema -->
   <!--  ================ TOPIC DOMAINS =====================  -->
   <xs:include schemaLocation="uiDomain.xsd"/>
@@ -33,6 +30,7 @@
   <xs:include schemaLocation="highlightDomain.xsd"/>
   <xs:include schemaLocation="programmingDomain.xsd"/>
   <xs:include schemaLocation="utilitiesDomain.xsd"/>
+  <xs:include schemaLocation="indexingDomain.xsd"/>
 
   <!-- <xs:include schemaLocation="topicDomainsMod.xsd"/> -->
   <xs:redefine schemaLocation="topicGrp.xsd">
@@ -80,6 +78,14 @@
         <xs:group ref="ut-d-fig" />
       </xs:choice>
     </xs:group >
+  
+    <xs:group name="index-base">
+      <xs:choice>
+        <xs:group ref="index-base"/>
+        <xs:group ref="indexing-d-index-base"/>
+      </xs:choice>
+    </xs:group >
+  
   </xs:redefine>
 
 
@@ -87,16 +93,14 @@
     <xs:complexType name="topic.class">
       <xs:complexContent>
         <xs:extension base="topic.class">
-          <xs:attribute name="domains" type="xs:string" default="(topic ui-d) (topic hi-d) (topic sw-d) (topic pr-d) (topic ut-d)"/>
+          <xs:attribute name="domains" type="xs:string" default="(topic ui-d) (topic hi-d) (topic sw-d) (topic pr-d) (topic ut-d) (topic indexing-d)"/>
         </xs:extension>
       </xs:complexContent>
     </xs:complexType>
   </xs:redefine>
 
   <xs:group name="info-types">
-    <xs:choice>
-      <xs:group ref="topic-info-types"/>
-    </xs:choice>
+    <xs:sequence/>    
   </xs:group>
 
 </xs:schema>

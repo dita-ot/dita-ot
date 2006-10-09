@@ -1,4 +1,10 @@
 /*
+ * This file is part of the DITA Open Toolkit project hosted on
+ * Sourceforge.net. See the accompanying license.txt file for 
+ * applicable licenses.
+ */
+
+/*
  * (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved.
  */
 package org.dita.dost.module;
@@ -12,8 +18,8 @@ import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.pipeline.PipelineHashIO;
 import org.dita.dost.reader.MapIndexReader;
-import org.dita.dost.writer.DitaLinksWriter;
 import org.dita.dost.util.Constants;
+import org.dita.dost.writer.DitaLinksWriter;
 
 /**
  * MoveLinksModule implements move links step in preprocess. It reads the map links
@@ -22,7 +28,7 @@ import org.dita.dost.util.Constants;
  * 
  * @author Zhang, Yuan Peng
  */
-public class MoveLinksModule extends AbstractPipelineModule {
+public class MoveLinksModule implements AbstractPipelineModule {
     private ContentImpl content;
 
 
@@ -37,8 +43,9 @@ public class MoveLinksModule extends AbstractPipelineModule {
 
 
     /**
-     * 
-     * 
+     * execution point of MoveLinksModule
+     * @param input
+     * @throws DITAOTException
      */
     public AbstractPipelineOutput execute(AbstractPipelineInput input) throws DITAOTException {
 

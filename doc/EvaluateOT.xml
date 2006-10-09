@@ -1,0 +1,71 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+  Sourceforge.net. See the accompanying license.txt file for 
+  applicable licenses.-->
+  <!-- (c) Copyright IBM Corp. 2006 All Rights Reserved. -->
+
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd" []>
+<concept id="concept-1">
+  <title>Evaluating the DITA Open Toolkit (fullpackage version)</title>
+  <shortdesc>The most common scenario for first users of the DITA Open Toolkit is to evaluate how it functions. Previous versions of the Toolkit required a number of preliminary installation steps for components necessary both to run the base function and to show off additional output capabilities. With DITA-OT 1.3, two versions of the Toolkit are now available: the standard package (updates core function only), and now a &quot;full package&quot; that basically installs all the related files to enable quick and easy evaluation of the Toolkit. This topic deals with installing and using the full package for the first time.</shortdesc>
+  <conbody>
+    <p>Unzip or extract the &quot;fullpackage&quot; zip file to a convenient directory, such as your c: drive&apos;s root directory. The package will install a directory called dita-ot1.3 that contains not only the usual Toolkit materials but also all the run-time components needed to run the Toolkit in a basic evaluation mode.</p>
+    <p>Browse over to this new directory and double-click on the &quot;startcmd.bat&quot; file in that directory. A new &quot;command shell&quot; window will open up, with the environment variables already set to enable the Toolkit to run within that shell.</p>
+    <p>At the command prompt (usually c:\dita-ot1.3 for this version), type &quot;ant samples.web -f build_demo.xml&quot;. After a series of processing messages, there should be a new \out directory in the dita-ot1.3 directory that contains a folder with the resulting HTML output in it. Congratulations on creating your first example of DITA output!</p>
+    <p>Now try the full set of transforms from a single command: &quot;ant all -f build_demo.xml&quot;. This command will process every DITA example in the Toolkit into each of the supported output types for the Toolkit. After a much longer flurry of messages stops, the \out directory should have a number of folders in it, each with several forms of deliverable produced by the Toolkit demos. If you happen to have the Microsoft HTMLHelp Workshop or the JavaHelp toolset installed for othe work you have done with User Assistance, you might even get ready-to use chm and javahelp output files. By comparing the outputs with the various source materials in the distribution, you can get an idea about how the processing works. That explanation is best found in the DITA Open Toolkit User Guide and at the DITA Focus Area at http://dita.xml.org .</p>
+  </conbody>
+  <concept id="includedtasks">
+    <title>Demo targets</title>
+    <shortdesc>Here are the individual demo targets that you can try while evaluating the DITA Open Toolkit. Note that most are subcomponents of larger operations--you can use any of these individually.</shortdesc>
+    <conbody>
+      <pre>
+ all                             Build all output
+ clean                           Delete all output
+   clean.demo                      Remove the demo output
+     clean.demo.book                 Remove the book demo output
+     clean.demo.elementref           Remove the Element Reference demo output
+     clean.demo.enote                Remove the eNote demo output
+     clean.demo.faq                  Remove the FAQ demo output
+     clean.demo.langref              Remove the Language Reference demo output
+     clean.demo.langref.compilehelp  Remove the Language Reference as HTML Help output
+   clean.doc                       Remove the documentation output
+     clean.doc.articles              Delete the articles directory in doc.
+     clean.doc.langref               Delete the langref directory in doc.
+   clean.docbook                   Remove the docbook output
+   clean.samples                   Remove the sample output
+     clean.samples.eclipse           Remove the sample Eclipse output
+     clean.samples.htmlhelp          Remove the sample HTMLHelp output
+     clean.samples.javahelp          Remove the sample JavaHelp output
+     clean.samples.pdf               Remove the sample PDF output
+     clean.samples.web               Remove the sample web output
+ demo                            Build the demos
+   demo.book                       Build the book demo
+   demo.elementref                 Build the element reference demo
+   demo.enote                      Build the eNote demo
+   demo.faq                        Build the FAQ demo
+   demo.langref                    Build the Language Reference book as a demo
+   demo.langref.compilehelp        Build the Language Reference as HTML Help (if the workshop is installed)
+ doc                             Build the documentation
+   doc.articles.chm                Build the articles of dita as document.
+   doc.articles.pdf                Build the articles of dita as document.
+   doc.articles.web                Build the articles of dita as document.
+   doc.langref.chm                 Build the langref document.
+   doc.langref.pdf                 Build the langref document.
+   doc.langref.web                 Build the langref document.
+ docbook                         Transform the samples to DocBook
+ prompt                          Prompt to build anything
+ samples                         Build the sample output
+   samples.eclipse                 Build the samples for Eclipse
+   samples.htmlhelp                Build the samples for HTMLHelp
+   samples.javahelp                Build the samples for JavaHelp
+   samples.pdf                     Build the samples as PDF
+   samples.troff                   Build the samples as troff
+   samples.web                     Build the samples for the web</pre>
+      <p>If you do not specify a target for build_demo.xml, the default target is prompt. </p>
+      <p>You can also try your hand at modifying some of the sample scripts in the ant directory. These represent the kind of driver files that you would create for your own projects. You can easily adapt these to process your own test DITA files, for example. Call the other ant samples after this example: </p>
+      <pre>c:\dita-ot1.3&gt;ant -f ant/sample_xhtml.xml</pre>
+      <p>(This is basically the same as running ant samples.web -f build_demo.xml, but intended for you to modify.) </p>
+      <p>You will find the output for this exercise in the ant directory itself. You can add parameters to the sample_xhtml.xml file to change where your outputs end up, and also to modify the build process in other ways. See the documentation for Ant parameters to learn more about processing options. </p>
+    </conbody>
+  </concept>
+</concept>

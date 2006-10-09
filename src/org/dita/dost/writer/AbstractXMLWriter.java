@@ -1,4 +1,10 @@
 /*
+ * This file is part of the DITA Open Toolkit project hosted on
+ * Sourceforge.net. See the accompanying license.txt file for 
+ * applicable licenses.
+ */
+
+/*
  * (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved.
  */
 package org.dita.dost.writer;
@@ -22,7 +28,7 @@ import org.xml.sax.ext.LexicalHandler;
  * @author Zhang, Yuan Peng
  */
 
-public abstract class AbstractXMLWriter extends AbstractWriter implements
+public abstract class AbstractXMLWriter implements AbstractWriter,
 ContentHandler, LexicalHandler, EntityResolver {
 
     /** (non-Javadoc)

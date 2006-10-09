@@ -1,4 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+  | (C) Copyright IBM Corporation 2005 - 2006. All Rights Reserved.
+  *-->
 <strings xml:lang="no-no">        <!-- Norwegian -->
 
   <str name="Example">Eksempel</str>

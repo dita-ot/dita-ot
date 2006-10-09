@@ -1,4 +1,10 @@
 /*
+ * This file is part of the DITA Open Toolkit project hosted on
+ * Sourceforge.net. See the accompanying license.txt file for 
+ * applicable licenses.
+ */
+
+/*
  * (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved.
  */
 package org.dita.dost.writer;
@@ -12,7 +18,7 @@ import org.dita.dost.module.Content;
  * @author Lian, Li
  * 
  */
-public abstract class AbstractWriter {
+public interface AbstractWriter {
 
     /**
      * Set the result from reader to writer
@@ -20,14 +26,14 @@ public abstract class AbstractWriter {
      * @param content
      * 
      */
-    public abstract void setContent(Content content);
+    void setContent(Content content);
 
     /**
      * Call the writer to write or rewrite the file.
      * 
      * @param filename
-     * 
+     * @throws DITAOTException
      */
-    public abstract void write(String filename) throws DITAOTException;
+    void write(String filename) throws DITAOTException;
 
 }

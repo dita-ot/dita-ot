@@ -1,5 +1,11 @@
 /*
- * (c) Copyright IBM Corp. 2005 All Rights Reserved.
+ * This file is part of the DITA Open Toolkit project hosted on
+ * Sourceforge.net. See the accompanying license.txt file for 
+ * applicable licenses.
+ */
+
+/*
+ * (c) Copyright IBM Corp. 2005, 2006 All Rights Reserved.
  */
 package org.dita.dost.util;
 
@@ -28,6 +34,8 @@ public abstract class Constants {
     public static final int INT_256 = 256;
     public static final int INT_512 = 512;
     public static final int INT_1024 = 1024;
+	public static final int INT_2048 = 2048;
+	public static final int INT_4096 = 4096;
     public static final int INT_17 = 17;
     public static final int INT_37 = 37;    
     
@@ -52,6 +60,9 @@ public abstract class Constants {
      */
     public static final String ELEMENT_NAME_MAP = "map";
     public static final String ELEMENT_NAME_INDEXTERM = "indexterm";
+    public static final String ELEMENT_NAME_INDEXSEE = "index-see";
+    public static final String ELEMENT_NAME_INDEXSEEALSO = "index-see-also";
+    public static final String ELEMENT_NAME_INDEXSORTAS = "index-sort-as";
     public static final String ELEMENT_NAME_TOPICREF = "topicref";
     public static final String ELEMENT_NAME_TOPICMETA = "topicmeta";
     public static final String ELEMENT_NAME_KEYWORDS = "keywords";
@@ -83,7 +94,14 @@ public abstract class Constants {
     public static final String ATTRIBUTE_NAME_ID = "id";
     public static final String ATTRIBUTE_NAME_CLASS = "class";
     public static final String ATTRIBUTE_NAME_COLNAME = "colname";
+    public static final String ATTRIBUTE_NAME_NAMEST = "namest";
+    public static final String ATTRIBUTE_NAME_NAMEEND = "nameend";
     public static final String ATTRIBUTE_NAME_XML_LANG = "xml:lang";    
+    public static final String ATTRIBUTE_NAME_DOMAINS = "domains";
+    public static final String ATTRIBUTE_NAME_PROPS = "props";
+    public static final String ATTRIBUTE_NAME_SCOPE = "scope";
+    public static final String ATTRIBUTE_NAME_IMG = "img";
+    public static final String ATTRIBUTE_NAME_COPY_TO = "copy-to";
     
     /**
      * Constant for value of attribute format in dita files.
@@ -114,11 +132,15 @@ public abstract class Constants {
     public static final String FULL_DITA_TOPIC_LIST = "fullditatopiclist";
     public static final String FULL_DITAMAP_LIST = "fullditamaplist";    
     public static final String FULL_DITAMAP_TOPIC_LIST = "fullditamapandtopiclist";
+    public static final String CONREF_TARGET_LIST = "conreftargetslist";
+    public static final String COPYTO_SOURCE_LIST = "copytosourcelist";
+    public static final String COPYTO_TARGET_TO_SOURCE_MAP_LIST = "copytotarget2sourcemaplist";
 
     /**
      * Constants for common params used in ant invoker.
      */
     public static final String ANT_INVOKER_PARAM_TEMPDIR = "tempDir";
+    public static final String ANT_INVOKER_PARAM_DITAEXT = "ditaext";
     public static final String ANT_INVOKER_PARAM_BASEDIR = "basedir";
     public static final String ANT_INVOKER_PARAM_INPUTMAP = "inputmap";    
     public static final String ANT_INVOKER_PARAM_DITAVAL = "ditaval";    
@@ -134,6 +156,7 @@ public abstract class Constants {
     public static final String ANT_INVOKER_EXT_PARAM_INPUT = "input";
     public static final String ANT_INVOKER_EXT_PARAM_DITADIR = "ditadir";
     public static final String ANT_INVOKER_EXT_PARAM_INPUTDIR = "inputdir";
+    public static final String ANT_INVOKER_EXT_PARAM_STYLE = "style";
     
     /**
      * Constants for file and line separator.
@@ -162,6 +185,7 @@ public abstract class Constants {
     public static final String QUESTION = "?";    
     public static final String QUOTATION = "\"";    
     public static final String COLON = ":";
+    public static final String DOT= ".";
     public static final String DOUBLE_BACK_SLASH = "\\\\";    
     public static final String COLON_DOUBLE_SLASH = "://";    
     public static final String CDATA_HEAD = "<![CDATA[";    
@@ -173,14 +197,13 @@ public abstract class Constants {
     public static final String RELATED_LINKS_HEAD = "<related-links class=\"- topic/related-links \">";    
     public static final String RELATED_LINKS_END = "</related-links>";    
     public static final String XML_HEAD = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
-    public static final String ATTRIBUTE_NAME_IMG = "img";
-    public static final String ATTRIBUTE_NAME_COPY_TO = "copy-to";
     public static final String STRING_BLANK = " ";
     public static final String COUNTRY_US = "us";
     public static final String LANGUAGE_EN = "en";    
     public static final String UTF8 = "UTF-8";
     public static final String SAX_DRIVER_PROPERTY = "org.xml.sax.driver";    
     public static final String SAX_DRIVER_DEFAULT_CLASS = "org.apache.xerces.parsers.SAXParser";    
+    public static final String RESOLVER_CLASS = "org.apache.xml.resolver.tools.CatalogResolver";
     public static final String LEXICAL_HANDLER_PROPERTY = "http://xml.org/sax/properties/lexical-handler";    
     public static final String FEATURE_NAMESPACE_PREFIX = "http://xml.org/sax/features/namespace-prefixes";
     public static final String FEATURE_VALIDATION = "http://xml.org/sax/features/validation";
@@ -190,6 +213,13 @@ public abstract class Constants {
 	public static final String ATTR_CLASS_VALUE_TITLE = "topic/title";
 	public static final String ATTR_CLASS_VALUE_MAP = "map/map";
 	public static final String ATTR_CLASS_VALUE_INDEXTERM = "topic/indexterm";
+	public static final String ATTR_CLASS_VALUE_TOPIC = "topic/topic";
+	public static final String ATTR_CLASS_VALUE_XREF = "topic/xref";
+	public static final String ATTR_CLASS_VALUE_LINK = "topic/link";
+	public static final String ATTR_CLASS_VALUE_TOPICREF = "map/topicref";
+	public static final String ATTR_SCOPE_VALUE_LOCAL = "local";
+	public static final String ATTR_FORMAT_VALUE_DITA = "dita";
+	
     
     /**
      * Private constructor used to forbid instantiation.

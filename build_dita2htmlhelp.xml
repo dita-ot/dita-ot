@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+     Sourceforge.net. See the accompanying license.txt file for 
+     applicable licenses.-->
+<!-- (c) Copyright IBM Corp. 2006 All Rights Reserved. -->
+<project name="dita2htmlhelp" default="dita2htmlhelp">
+    <property name="transtype" value="htmlhelp"/>
+    
+    <import file="build_init.xml" />
+    <import file="build_preprocess.xml" />
+    <import file="build_general.xml" />
+
+    <target name="dita2htmlhelp"
+            unless="noMap"
+            depends="build-init, start-preprocess, clean-temp, gen-list, 
+                     copy-files, debug-filter, move-index-entries, conref, mappull, 
+                     maplink, move-links, topicpull, dita.map.htmlhelp, copy-css, 
+                     dita.topics.html, compile.HTML.Help">
+    </target>
+
+    <target name="dita.map.htmlhelp"
+            depends="dita.map.htmlhelp.init, dita.map.htmlhelp.hhp, dita.map.htmlhelp.hhc, dita.map.htmlhelp.hhk">
+    </target>
+
+    <target name="dita.map.htmlhelp.init"
+            description="Init properties for HTMLHelp">
+        <condition property="out.ext" value=".html">
+            <not>
+                <isset property="out.ext" />
+            </not>
+        </condition>
+    </target>
+
+    <target name="dita.map.htmlhelp.hhp"
+            depends="dita.map.htmlhelp.init"
+            description="Build HTMLHelp HHP file">
+        <xslt processor="trax"
+              basedir="${dita.temp.dir}"
+              destdir="${output.dir}"
+              includes="${user.input.file}"
+              extension=".hhp"
+              style="${dita.script.dir}${file.separator}map2hhp.xsl">
+            <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
+            <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
+            <param name="HHCNAME" expression="${dita.map.filename.root}.hhc" />
+            <param name="INCLUDEFILE"
+                   expression="${args.htmlhelp.includefile}"
+                   if="args.htmlhelp.includefile" />
+        </xslt>
+    </target>
+
+    <target name="dita.map.htmlhelp.hhc"
+            depends="dita.map.htmlhelp.init"
+            description="Build HTMLHelp HHC file">
+        <xslt processor="trax"
+              basedir="${dita.temp.dir}"
+              destdir="${output.dir}"
+              includes="${user.input.file}"
+              extension=".hhc"
+              style="${dita.script.dir}${file.separator}map2hhc.xsl">
+            <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
+            <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
+        </xslt>
+    </target>
+
+    <target name="dita.map.htmlhelp.hhk"
+            depends="dita.map.htmlhelp.init"
+            description="Build HTMLHelp HHK file">
+        <pipeline message="Extract index term."
+                  module="IndexTermExtract"
+                  basedir="${basedir}"
+                  tempdir="${dita.temp.dir}"
+                  inputmap="${user.input.file}"
+                  extparam="output=${output.dir}${file.separator}${user.input.file};targetext=${out.ext};indextype=htmlhelp;${index.ext.param.encoding}" />
+    </target>
+
+    <target name="compile.HTML.Help"
+            if="HTMLHelpCompiler"
+            description="Compile HTMLHelp output">
+        <exec executable="${HTMLHelpCompiler}"
+              failonerror="${failonerror}"
+              failifexecutionfails="${failonerror}">
+            <arg value="${dita.map.output.dir}${file.separator}${dita.map.filename.root}.hhp" />
+        </exec>
+    </target>
+
+    <!-- depecrated: keep for back-compatibility, will be remvoed in a later release -->
+    <target name="dita.topics.htmlhelp" depends="dita.topics.html" />
+
+</project>

@@ -1,20 +1,30 @@
 /*
+ * This file is part of the DITA Open Toolkit project hosted on
+ * Sourceforge.net. See the accompanying license.txt file for 
+ * applicable licenses.
+ */
+
+/*
  * (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved.
  */
 package org.dita.dost.module;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
+import java.util.StringTokenizer;
 
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.pipeline.PipelineHashIO;
 import org.dita.dost.reader.MapIndexReader;
-import org.dita.dost.writer.DitaIndexWriter;
 import org.dita.dost.util.Constants;
+import org.dita.dost.writer.DitaIndexWriter;
 
 /**
  * MoveIndexModule implement the move index step in preprocess. It reads the index
@@ -23,7 +33,7 @@ import org.dita.dost.util.Constants;
  * 
  * @author Zhang, Yuan Peng
  */
-public class MoveIndexModule extends AbstractPipelineModule {
+public class MoveIndexModule implements AbstractPipelineModule {
 
     private ContentImpl content;
 
@@ -49,24 +59,40 @@ public class MoveIndexModule extends AbstractPipelineModule {
 		String baseDir = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_BASEDIR);
     	String tempDir = ((PipelineHashIO)input).getAttribute(Constants.ANT_INVOKER_PARAM_TEMPDIR);
     	String inputMap = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_INPUTMAP);
-		
+		File ditalist = null;
+		Properties prop = new Properties();
+		StringTokenizer st = null;
+    	
 		if (!new File(tempDir).isAbsolute()) {
         	tempDir = new File(baseDir, tempDir).getAbsolutePath();
         }
 		
-		mapFile = new File(tempDir, inputMap).getAbsolutePath();
+		indexReader.setMatch(new StringBuffer(Constants.ELEMENT_NAME_TOPICREF)
+        .append(Constants.SLASH).append(Constants.ELEMENT_NAME_TOPICMETA)
+        .append(Constants.SLASH).append(Constants.ELEMENT_NAME_KEYWORDS).toString());
 		
-        indexReader.setMatch(new StringBuffer(Constants.ELEMENT_NAME_TOPICREF)
-                .append(Constants.SLASH).append(Constants.ELEMENT_NAME_TOPICMETA)
-                .append(Constants.SLASH).append(Constants.ELEMENT_NAME_KEYWORDS).toString());
-        
-        indexReader.read(mapFile);
+		ditalist = new File(tempDir, Constants.FILE_NAME_DITA_LIST);
+		try{
+			prop.load(new FileInputStream(ditalist));
+		}catch(IOException ioe){
+			throw new DITAOTException(ioe);
+		}
+		
+		st = new StringTokenizer(prop.getProperty(Constants.FULL_DITAMAP_LIST), Constants.COMMA);
+		while(st.hasMoreTokens()){
+			mapFile = new File(tempDir, st.nextToken()).getAbsolutePath();        	        
+	        indexReader.read(mapFile);
+		}		
+		
         mapSet = (Set) indexReader.getContent().getCollection();
 
         i = mapSet.iterator();
         while (i.hasNext()) {
             Map.Entry entry = (Map.Entry) i.next();
             targetFileName = (String) entry.getKey();
+            targetFileName = targetFileName.indexOf(Constants.SHARP) != -1 
+            				? targetFileName.substring(0, targetFileName.indexOf(Constants.SHARP))
+            				: targetFileName;
             if (targetFileName.endsWith(Constants.FILE_EXTENSION_DITA) ||
                     targetFileName.endsWith(Constants.FILE_EXTENSION_XML)){
                 content.setValue(entry.getValue());

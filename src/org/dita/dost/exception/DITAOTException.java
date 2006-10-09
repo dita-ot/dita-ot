@@ -1,4 +1,10 @@
 /*
+ * This file is part of the DITA Open Toolkit project hosted on
+ * Sourceforge.net. See the accompanying license.txt file for 
+ * applicable licenses.
+ */
+
+/*
  * (c) Copyright IBM Corp. 2005 All Rights Reserved.
  */
 package org.dita.dost.exception;
@@ -15,7 +21,7 @@ public class DITAOTException extends Exception {
 	 * Constructs a new DITAOTException with <code>null</code> as its detail message.
 	 */
 	public DITAOTException() {
-		super();
+		this(null, null);
 	}
 
 	/**
@@ -24,7 +30,7 @@ public class DITAOTException extends Exception {
 	 * @param message the detail message.
 	 */
 	public DITAOTException(String message) {
-		super(message);
+		this(message, null);
 	}
 
 	/**
@@ -33,7 +39,7 @@ public class DITAOTException extends Exception {
 	 * @param cause the cause 
 	 */
 	public DITAOTException(Throwable cause) {
-		super(cause);
+		this(null, cause);
 	}
 
 	/**

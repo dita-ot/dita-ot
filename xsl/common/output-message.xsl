@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+     Sourceforge.net. See the accompanying license.txt file for 
+     applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
 
 <!--
@@ -23,9 +26,9 @@
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
 <xsl:template name="output-message">
-  <xsl:param name="msg" select="***"/>
-  <xsl:param name="msgnum" select="000"/>
-  <xsl:param name="msgsev" select="I"/>
+  <xsl:param name="msg" select="'***'"/>
+  <xsl:param name="msgnum" select="'000'"/>
+  <xsl:param name="msgsev" select="'I'"/>
   <xsl:param name="msgparams" select="''"/>
   
   <xsl:variable name="msgid">
@@ -35,9 +38,16 @@
   </xsl:variable>
   <xsl:variable name="msgdoc" select="document('../../resource/messages.xml')"/>
   <xsl:variable name="msgcontent">
-    <xsl:apply-templates select="$msgdoc/messages/message[@id=$msgid]" mode="get-message-content">    
-      <xsl:with-param name="params" select="$msgparams"/>    
-    </xsl:apply-templates>
+    <xsl:choose>
+      <xsl:when test="$msg!='***'">
+        <xsl:value-of select="$msg"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:apply-templates select="$msgdoc/messages/message[@id=$msgid]" mode="get-message-content">    
+          <xsl:with-param name="params" select="$msgparams"/>    
+        </xsl:apply-templates>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:variable>
   <xsl:variable name="localclass"><xsl:value-of select="@class"/></xsl:variable>
   <xsl:variable name="debugloc">

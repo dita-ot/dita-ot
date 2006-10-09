@@ -2,8 +2,8 @@
 <!--                    HEADER                                     -->
 <!-- ============================================================= -->
 <!--  MODULE:    DITA Reference                                    -->
-<!--  VERSION:   1.0.1                                             -->
-<!--  DATE:      November 2005                                     -->
+<!--  VERSION:   1.1                                               -->
+<!--  DATE:      June 2006                                         -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -25,7 +25,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Reference//EN"
 <!-- ORIGINAL CREATION DATE:                                       -->
 <!--             March 2001                                        -->
 <!--                                                               -->
-<!--             (C) Copyright OASIS Open 2005.                    -->
+<!--             (C) Copyright OASIS Open 2005, 2006.              -->
 <!--             (C) Copyright IBM Corporation 2001, 2004.         -->
 <!--             All Rights Reserved.                              -->
 <!--                                                               -->
@@ -33,6 +33,9 @@ PUBLIC "-//OASIS//ELEMENTS DITA Reference//EN"
 <!--    2005.11.15 RDA: Removed old declaration for                -->
 <!--                    referenceClasses entity                    -->
 <!--    2005.11.15 RDA: Corrected LONG NAME for propdeschd         -->
+<!--    2006.06.07 RDA: Added <abstract> element                   -->
+<!--    2006.06.07 RDA: Make universal attributes universal        -->
+<!--                      (DITA 1.1 proposal #12)                  -->
 <!-- ============================================================= -->
 
 
@@ -52,7 +55,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Reference//EN"
                        'http://dita.oasis-open.org/architecture/2005/'
              %DITAArchNSPrefix;:DITAArchVersion
                         CDATA                              #FIXED
-                       '1.0'"                                        >
+                       '1.1'"                                        >
 
 
 <!-- ============================================================= -->
@@ -97,14 +100,15 @@ PUBLIC "-//OASIS//ELEMENTS DITA Reference//EN"
 
 
 <!--                    LONG NAME: Reference                       -->
-<!ELEMENT reference     (%title;, (%titlealts;)?, (%shortdesc;)?, 
+<!ELEMENT reference     ((%title;), (%titlealts;)?,
+                         (%shortdesc; | %abstract;)?, 
                          (%prolog;)?, (%refbody;)?, (%related-links;)?, 
                          (%reference-info-types;)* )                 >
 <!ATTLIST reference
              id         ID                               #REQUIRED
              conref     CDATA                            #IMPLIED
              %select-atts;
-             xml:lang   NMTOKEN                          #IMPLIED
+             %localization-atts;
              %arch-atts;
              domains    CDATA                  "&included-domains;"
              outputclass 
@@ -113,11 +117,12 @@ PUBLIC "-//OASIS//ELEMENTS DITA Reference//EN"
 
 <!--                    LONG NAME: Reference Body                  -->
 <!ELEMENT refbody       ((%section; | %refsyn; | %example; | %table; | 
-                          %simpletable; |  %properties;)* )          >
+                          %simpletable; |  %properties; | 
+                          %data.elements.incl; | 
+                          %foreign.unknown.incl;)* )                 >
 <!ATTLIST refbody         
              %id-atts;
-             translate  (yes | no)                       #IMPLIED
-             xml:lang   NMTOKEN                          #IMPLIED
+             %localization-atts;
              outputclass 
                         CDATA                            #IMPLIED    >
 

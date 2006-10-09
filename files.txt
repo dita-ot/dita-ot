@@ -1,5 +1,8 @@
-(c) Copyright IBM Corp. 2004, 2005 All Rights Reserved.
-PACKAGE DESCRIPTION FOR "DITA-OT1.1" 
+This file is part of the DITA Open Toolkit project hosted on 
+Sourceforge.net. See the accompanying license.txt file for 
+applicable licenses.
+(c) Copyright IBM Corp. 2004, 2006 All Rights Reserved.
+PACKAGE DESCRIPTION FOR "DITA-OT1.3" 
 
 This document describes the organization and contents of the current DITA distribution.  These notes represent the specific organization of the directories in the current package.
 

@@ -55,7 +55,8 @@
 
   <xs:group name="concept-info-types">
     <xs:choice>
-      <xs:group ref="concept"/>
+      <xs:group ref="concept" minOccurs="0"/>
+      <xs:group ref="info-types" minOccurs="0"/>
     </xs:choice>
   </xs:group>
 
@@ -64,20 +65,23 @@
         <xs:sequence>
           <xs:group ref="title"/>
           <xs:group ref="titlealts" minOccurs="0"/>
-          <xs:group ref="shortdesc" minOccurs="0"/>
+          <xs:choice minOccurs="0">
+            <xs:group ref="shortdesc" />
+            <xs:group ref="abstract" />
+          </xs:choice>
           <xs:group ref="prolog" minOccurs="0"/>
           <xs:group ref="conbody" minOccurs="0"/>
           <xs:group ref="related-links" minOccurs="0"/>
-          <xs:group ref="info-types" minOccurs="0" maxOccurs="unbounded"/>
+          <xs:group ref="concept-info-types" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
          <xs:attribute name="id" type="xs:ID" use="required"/>
         <xs:attribute name="conref" type="xs:string"/>
         <xs:attributeGroup ref="select-atts"/>
         <xs:attribute ref="ditaarch:DITAArchVersion" />
         <xs:attribute name="outputclass" type="xs:string"/>
-        <xs:attribute ref="xml:lang"/>
+        <xs:attributeGroup ref="localization-atts"/>
         <xs:attributeGroup ref="global-atts"/>
-        <xs:attribute ref="class" default="- topic/topic concept/concept"/>
+        <xs:attribute ref="class" default="- topic/topic concept/concept "/>
   </xs:complexType>
 
   <!-- Base type: body.class -->
@@ -91,9 +95,8 @@
         </xs:sequence>
         <xs:attribute name="outputclass" type="xs:string"/>
         <xs:attributeGroup ref="id-atts"/>
-        <xs:attribute name="translate" type="yesno-att.class"/>
-        <xs:attribute ref="xml:lang"/>
+    <xs:attributeGroup ref="localization-atts"/>
         <xs:attributeGroup ref="global-atts"/>
-        <xs:attribute ref="class" default="- topic/body concept/conbody"/>
+        <xs:attribute ref="class" default="- topic/body concept/conbody "/>
   </xs:complexType>
 </xs:schema>

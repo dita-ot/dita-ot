@@ -1,4 +1,10 @@
 /*
+ * This file is part of the DITA Open Toolkit project hosted on
+ * Sourceforge.net. See the accompanying license.txt file for 
+ * applicable licenses.
+ */
+
+/*
  * (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved.
  */
 package org.dita.dost.reader;
@@ -6,15 +12,16 @@ package org.dita.dost.reader;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.ListIterator;
 
+import org.dita.dost.log.DITAOTJavaLogger;
+import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.Content;
 import org.dita.dost.module.ContentImpl;
 import org.dita.dost.util.Constants;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.StringUtils;
-import org.dita.dost.log.DITAOTJavaLogger;
-import org.dita.dost.log.MessageUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
@@ -28,27 +35,51 @@ import org.xml.sax.helpers.XMLReaderFactory;
  * @author Zhang, Yuan Peng
  */
 public class MapIndexReader extends AbstractXMLReader {
+    private static final String INTERNET_LINK_MARK = "://";
+
+    // check whether the index entries we got is meaningfull and valid
+    private static boolean verifyIndexEntries(StringBuffer str) {
+    	int start;
+    	int end;
+    	String temp;
+        if (str.length() == 0) {
+            return false;
+        }
+        start = str.indexOf(Constants.GREATER_THAN); // start from first tag's end
+        end = str.lastIndexOf(Constants.LESS_THAN); // end at last tag's start
+
+        /*
+         * original code check whether there is text between different tags
+         * modified code check whether there is any content between first and
+         * last tags
+         */
+                
+        temp = str.substring(start + 1, end);
+        if (temp.trim().length() != 0) {
+            return true;
+        }
+        return false;
+    }
+    private List ancestorList;
+    private String filePath = null;
+    private String filePathName = null;
+    private String firstMatchElement;
+    private StringBuffer indexEntries;
+    private File inputFile;
+    private String lastMatchElement;
+    private int level;
+    private DITAOTJavaLogger logger;
+    private HashMap map;
+    private boolean match;
 
     /*
      * meta shows whether the event is in metadata when using sax to parse
      * ditmap file.
      */
-    private ArrayList matchList;
-    private ArrayList ancestorList;
-    private String lastMatchElement;
-    private String firstMatchElement;
-    private int level;
-    private boolean match;
+    private List matchList;
     private boolean needResolveEntity;
-    private String topicPath;
     private XMLReader reader;
-    private StringBuffer indexEntries;
-    private HashMap map;
-    private File inputFile;
-    private String filePath = null;
-    private String filePathName = null;
-    private static final String INTERNET_LINK_MARK = "://";
-    private DITAOTJavaLogger logger;
+    private String topicPath;
     
 
     /**
@@ -86,27 +117,17 @@ public class MapIndexReader extends AbstractXMLReader {
     }
 
     /**
-     * Set the match pattern in the reader. The match pattern is used to see whether
-     * current element can be include in the result of parsing.
+     * @see org.xml.sax.ContentHandler#characters(char[], int, int)
      * 
-     * @param matchPattern
      */
-    public void setMatch(String matchPattern) {
-        int index = 0;
-        firstMatchElement = (matchPattern.indexOf(Constants.SLASH) != -1) ? matchPattern.substring(0, matchPattern.indexOf(Constants.SLASH)) : matchPattern;
+    public void characters(char[] ch, int start, int length)
+            throws SAXException {
 
-        while (index != -1) {
-            int end = matchPattern.indexOf(Constants.SLASH, index);
-            if (end == -1) {
-                matchList.add(matchPattern.substring(index));
-                lastMatchElement = matchPattern.substring(index);
-                index = end;
-            } else {
-                matchList.add(matchPattern.substring(index, end));
-                index = end + 1;
-            }
+        if (match && needResolveEntity) {
+            String temp = new String(ch, start, length);
+            indexEntries.append(temp);
+            
         }
-
     }
 
     // check whether the hierarchy of current node match the matchList
@@ -128,82 +149,14 @@ public class MapIndexReader extends AbstractXMLReader {
         return true;
     }
 
-    // check whether the index entries we got is meaningfull and valid
-    private boolean verifyIndexEntries(StringBuffer str) {
-    	int start;
-    	int end;
-    	String temp;
-        if (str.length() == 0) {
-            return false;
-        }
-        start = str.indexOf(Constants.GREATER_THAN); // start from first tag's end
-        end = str.lastIndexOf(Constants.LESS_THAN); // end at last tag's start
-
-        /*
-         * original code check whether there is text between different tags
-         * modified code check whether there is any content between first and
-         * last tags
-         */
-                
-        temp = str.substring(start + 1, end);
-        if (temp.trim().length() != 0) {
-            return true;
-        }
-        return false;
-    }
-
-
-    /**
-     * @see org.dita.dost.reader.AbstractReader#read(java.lang.String)
+	/**
+     * @see org.xml.sax.ext.LexicalHandler#endCDATA()
      * 
      */
-    public void read(String filename) {
-
-        if (matchList.isEmpty()) {
-        	logger.logError(MessageUtils.getMessage("DOTJ008E").toString());
-        } else {
-            match = false;
-            needResolveEntity = true;
-            inputFile = new File(filename);
-            filePath = inputFile.getParent();
-            filePathName = inputFile.getPath();
-            if(indexEntries.length() != 0){
-				//delete all the content in indexEntries
-				indexEntries = new StringBuffer(Constants.INT_1024);
-            }
-                         
-            try {
-                reader.parse(filename);
-            } catch (Exception e) {
-            	logger.logException(e);
-            }
-        }
-    }
-
-    /**
-     * @see org.dita.dost.reader.AbstractReader#getContent()
-     * 
-     */
-    public Content getContent() {
-
-        ContentImpl result = new ContentImpl();
-        result.setCollection( map.entrySet());
-        return result;
-    }
-
-    /**
-     * @see org.xml.sax.ContentHandler#characters(char[], int, int)
-     * 
-     */
-    public void characters(char[] ch, int start, int length)
-            throws SAXException {
-
-        if (match && needResolveEntity) {
-            String temp = new String(ch, start, length);
-            indexEntries.append(temp);
-            
-        }
-    }
+    public void endCDATA() throws SAXException {
+	    indexEntries.append(Constants.CDATA_END);
+	    
+	}
 
     /**
      * @see org.xml.sax.ContentHandler#endElement(java.lang.String, java.lang.String, java.lang.String)
@@ -242,6 +195,27 @@ public class MapIndexReader extends AbstractXMLReader {
         }
     }
 
+	/**
+     * @see org.xml.sax.ext.LexicalHandler#endEntity(java.lang.String)
+     * 
+     */
+    public void endEntity(String name) throws SAXException {
+		if(!needResolveEntity){
+			needResolveEntity = true;
+		}
+	}
+
+    /**
+     * @see org.dita.dost.reader.AbstractReader#getContent()
+     * 
+     */
+    public Content getContent() {
+
+        ContentImpl result = new ContentImpl();
+        result.setCollection( map.entrySet());
+        return result;
+    }
+
     /**
      * @see org.xml.sax.ContentHandler#ignorableWhitespace(char[], int, int)
      * 
@@ -256,6 +230,75 @@ public class MapIndexReader extends AbstractXMLReader {
         }
     }
 
+
+    /**
+     * @see org.dita.dost.reader.AbstractReader#read(java.lang.String)
+     * 
+     */
+    public void read(String filename) {
+
+        if (matchList.isEmpty()) {
+        	logger.logError(MessageUtils.getMessage("DOTJ008E").toString());
+        } else {
+            match = false;
+            needResolveEntity = true;
+            inputFile = new File(filename);
+            filePath = inputFile.getParent();
+            filePathName = inputFile.getPath();
+            if(indexEntries.length() != 0){
+				//delete all the content in indexEntries
+				indexEntries = new StringBuffer(Constants.INT_1024);
+            }
+                         
+            try {
+                reader.parse(filename);
+            } catch (Exception e) {
+            	logger.logException(e);
+            }
+        }
+    }
+
+    /**
+     * Set the match pattern in the reader. The match pattern is used to see whether
+     * current element can be include in the result of parsing.
+     * 
+     * @param matchPattern
+     */
+    public void setMatch(String matchPattern) {
+        int index = 0;
+        firstMatchElement = (matchPattern.indexOf(Constants.SLASH) != -1) ? matchPattern.substring(0, matchPattern.indexOf(Constants.SLASH)) : matchPattern;
+
+        while (index != -1) {
+            int end = matchPattern.indexOf(Constants.SLASH, index);
+            if (end == -1) {
+                matchList.add(matchPattern.substring(index));
+                lastMatchElement = matchPattern.substring(index);
+                index = end;
+            } else {
+                matchList.add(matchPattern.substring(index, end));
+                index = end + 1;
+            }
+        }
+
+    }
+
+	/**
+     * @see org.xml.sax.ext.LexicalHandler#startCDATA()
+     * 
+     */
+    public void startCDATA() throws SAXException {
+	    indexEntries.append(Constants.CDATA_HEAD);
+	    
+	}
+
+	/**
+     * @see org.xml.sax.ext.LexicalHandler#startDTD(java.lang.String, java.lang.String, java.lang.String)
+     * 
+     */
+    public void startDTD(String name, String publicId, String systemId)
+			throws SAXException {
+	}
+
     /**
      * @see org.xml.sax.ContentHandler#startElement(java.lang.String, java.lang.String, java.lang.String, org.xml.sax.Attributes)
      * 
@@ -266,6 +309,11 @@ public class MapIndexReader extends AbstractXMLReader {
     	
         if (qName.equals(firstMatchElement)) {
             String hrefValue = atts.getValue(Constants.ATTRIBUTE_NAME_HREF);
+            if (verifyIndexEntries(indexEntries) && topicPath != null) {
+                String origin = (String) map.get(topicPath);
+                map.put(topicPath, StringUtils.setOrAppend(origin, indexEntries.toString(), false));
+                indexEntries = new StringBuffer(Constants.INT_1024);
+            }
             topicPath = null;
             if (hrefValue != null && hrefValue.indexOf(INTERNET_LINK_MARK) == -1) {
             	topicPath = FileUtils.resolveTopic(filePath, hrefValue);
@@ -285,9 +333,11 @@ public class MapIndexReader extends AbstractXMLReader {
             
             for (int i = 0; i < attsLen; i++) {
             	indexEntries.append(atts.getQName(i));
-            	indexEntries.append(Constants.EQUAL + Constants.QUOTATION);
+            	indexEntries.append(Constants.EQUAL);
+				indexEntries.append(Constants.QUOTATION);
             	indexEntries.append(atts.getValue(i));
-            	indexEntries.append(Constants.QUOTATION + Constants.STRING_BLANK);
+            	indexEntries.append(Constants.QUOTATION);
+            	indexEntries.append(Constants.STRING_BLANK);
             	
             }
             
@@ -295,42 +345,6 @@ public class MapIndexReader extends AbstractXMLReader {
             level++;
         }
     }
-
-	/**
-     * @see org.xml.sax.ext.LexicalHandler#endCDATA()
-     * 
-     */
-    public void endCDATA() throws SAXException {
-	    indexEntries.append(Constants.CDATA_END);
-	    
-	}
-
-	/**
-     * @see org.xml.sax.ext.LexicalHandler#endEntity(java.lang.String)
-     * 
-     */
-    public void endEntity(String name) throws SAXException {
-		if(!needResolveEntity){
-			needResolveEntity = true;
-		}
-	}
-
-	/**
-     * @see org.xml.sax.ext.LexicalHandler#startCDATA()
-     * 
-     */
-    public void startCDATA() throws SAXException {
-	    indexEntries.append(Constants.CDATA_HEAD);
-	    
-	}
-
-	/**
-     * @see org.xml.sax.ext.LexicalHandler#startDTD(java.lang.String, java.lang.String, java.lang.String)
-     * 
-     */
-    public void startDTD(String name, String publicId, String systemId)
-			throws SAXException {
-	}
 
 	/**
      * @see org.xml.sax.ext.LexicalHandler#startEntity(java.lang.String)

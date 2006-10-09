@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+  Sourceforge.net. See the accompanying license.txt file for 
+  applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
 
 <xsl:stylesheet version="1.0" 
@@ -64,6 +67,22 @@
   </xsl:element>
 </xsl:template>
 
+<!-- Added for DITA 1.1 "Shortdesc proposal" -->
+<xsl:template match="*[contains(@class,' topic/abstract ')]" mode="abstract">
+  <abstract>
+    <xsl:call-template name="makePara">
+      <xsl:with-param name="IDPrefix" select="'shrtdsc'"/>
+    </xsl:call-template>
+  </abstract>
+</xsl:template>
+
+<!-- Added for DITA 1.1 "Shortdesc proposal" -->
+<xsl:template match="*[contains(@class,' topic/abstract ')]">
+  <xsl:call-template name="makePara">
+    <xsl:with-param name="IDPrefix" select="'para'"/>
+  </xsl:call-template>
+</xsl:template>
+
 <xsl:template match="*[contains(@class,' topic/shortdesc ')]" mode="abstract">
   <abstract>
     <xsl:call-template name="makePara">
@@ -91,7 +110,7 @@
 <xsl:template match="*[contains(@class,' topic/prolog ')]">
   <xsl:param name="contextType" select="'section'"/>
   <xsl:variable name="shortDescNode"
-      select="../*[contains(@class,' topic/shortdesc ')]"/>
+      select="../*[contains(@class,' topic/shortdesc ') or contains(@class, ' topic/abstract ')]"/>
   <xsl:variable name="prologNodes" select="*"/>
   <xsl:if test="$shortDescNode or $prologNodes">
     <xsl:variable name="elementName">
@@ -127,7 +146,9 @@
     <xsl:call-template name="setStandardAttr">
       <xsl:with-param name="IDPrefix" select="'athr'"/>
     </xsl:call-template>
-    <xsl:apply-templates/>
+	<othername>
+	    <xsl:apply-templates/>
+	</othername>
   </author>
 </xsl:template>
 
@@ -1649,5 +1670,12 @@ DATA-TYPE PHRASES: date time currency char num bin oct dec hex ???
   </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
+
+<!-- Add for "New <data> element (#9)" in DITA 1.1 -->
+<xsl:template match="*[contains(@class,' topic/data ')]"/>
+
+<!-- Add for "Support foreign content vocabularies such as 
+     MathML and SVG with <unknown> (#35) " in DITA 1.1 -->
+<xsl:template match="*[contains(@class,' topic/foreign ') or contains(@class,' topic/unknown ')]"/>
 
 </xsl:stylesheet>

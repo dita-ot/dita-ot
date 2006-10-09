@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+     Sourceforge.net. See the accompanying license.txt file for 
+     applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2005, 2006 All Rights Reserved. -->
 <xsl:stylesheet
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -369,6 +372,11 @@ name="gen-linktxt"/>\s8 \f2\fs24\ul\cf1}}}\s8
 <xsl:template match="*[contains(@class,' topic/prolog ')]"/>
 <xsl:template match="*[contains(@class,' topic/titlealts ')]"/>
 
+<!-- Added for DITA 1.1 "Shortdesc proposal" -->
+<xsl:template match="*[contains(@class,' topic/abstract ')]">
+<xsl:apply-templates/>\par
+</xsl:template>
+
 <xsl:template match="*[contains(@class,' topic/shortdesc ')]">
 <xsl:apply-templates/>\par
 </xsl:template>
@@ -568,12 +576,32 @@ name="gen-linktxt"/>\s8 \f2\fs24\ul\cf1}}}\s8
     <xsl:text>}</xsl:text>
   </xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/required-cleanup ')]">
-<xsl:if test="$DRAFT='yes'">
-<xsl:text>\par \plain\s0\f4\fs24\cb3\b </xsl:text><xsl:call-template name="getStringRTF"><xsl:with-param name="stringName" select="'Required cleanup'"/></xsl:call-template><xsl:call-template name="getStringRTF"><xsl:with-param name="stringName" select="'ColonSymbol'"/></xsl:call-template><xsl:text> </xsl:text><xsl:text>\pard \plain\s0\f4\fs24\cb3</xsl:text><xsl:if test="ancestor::*[contains(@class,' topic/table ') or contains(@class,' topic/simpletable ')]">\intbl </xsl:if><xsl:apply-templates/><xsl:text>\par \plain\s0\f2\fs24</xsl:text>
-</xsl:if>
-</xsl:template>
+  <xsl:template
+    match="*[contains(@class,' topic/required-cleanup ')]">
+    <xsl:if test="$DRAFT='yes'">
+      <xsl:text>\par \plain\s0\f4\fs24\cb3\b</xsl:text>
+      <xsl:call-template name="getStringRTF">
+        <xsl:with-param name="stringName" select="'Required cleanup'" />
+      </xsl:call-template>
+      <xsl:call-template name="getStringRTF">
+        <xsl:with-param name="stringName" select="'ColonSymbol'" />
+      </xsl:call-template>
+      <xsl:text></xsl:text>
+      <xsl:text>\pard \plain\s0\f4\fs24\cb3</xsl:text>
+      <xsl:if
+        test="ancestor::*[contains(@class,' topic/table ') or contains(@class,' topic/simpletable ')]">
+        \intbl
+      </xsl:if>
+      <xsl:apply-templates />
+      <xsl:text>\par \plain\s0\f2\fs24</xsl:text>
+    </xsl:if>
+  </xsl:template>
 
+  <!-- Add for "New <data> element (#9)" in DITA 1.1 -->
+  <xsl:template match="*[contains(@class,' topic/data ')]" />
 
+  <!-- Add for "Support foreign content vocabularies such as 
+    MathML and SVG with <unknown> (#35) " in DITA 1.1 -->
+  <xsl:template match="*[contains(@class,' topic/foreign ') or contains(@class,' topic/unknown ')]" />
 
 </xsl:stylesheet>

@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!-- (c) Copyright IBM Corp. 2001, 2005 All Rights Reserved. -->
-<project name="dita.build" default="prompt" basedir=".">
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+     Sourceforge.net. See the accompanying license.txt file for 
+     applicable licenses.-->
+<!-- (c) Copyright IBM Corp. 2001, 2006 All Rights Reserved. -->
+<project name="dita.build.demo" default="prompt" basedir=".">
 	<!-- Set a property for each environment variable -->
 	<description>Build the DITA Demos and Samples</description>
 	<property environment="env"/>
 
-    <import file="${basedir}${file.separator}conductor.xml"/>
+  <import file="${basedir}${file.separator}build.xml"/>
 
 	<target name="use.init">
         <available classname="com.icl.saxon.StyleSheet"
@@ -20,7 +23,7 @@
 	</target>
 
 	<target name="all" description="build all output" 
-		depends="demo, doc, samples, docbook">
+		depends="demo, samples">
 		<echo>output in the ${dita.output.dir} directory</echo>
 	</target>
 	<!-- revise below here -->
@@ -121,7 +124,7 @@
 
 	<target name="demo"
 		description="build the demos"
-		depends="demo.book, demo.elementref, demo.enote, demo.faq, demo.langref">
+		depends="demo.book, demo.elementref, demo.enote, demo.faq">
 	</target>
 
 	<target name="init.demo"
@@ -172,7 +175,7 @@
 		</antcall>
 	</target>
 				
-	<target name="dita.elementref.toc" depends="dita-preprocess, map2xhtml">
+	<target name="dita.elementref.toc" depends="dita-preprocess, dita.map.xhtml">
 	</target>
 
 	<target name="dita.elementref.html">
@@ -708,8 +711,7 @@
 			Before rebuilding, please delete the output or the directory.</echo>
 	</target>
 
-	<target name="prompt.init"
-		depends="dita.init">
+	<target name="prompt.init">
 		<!-- Create the time stamp -->
 		<tstamp/>
 	</target>

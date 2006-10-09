@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+     Sourceforge.net. See the accompanying license.txt file for 
+     applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
 
 <!DOCTYPE xsl:stylesheet [
@@ -227,10 +230,14 @@
        - importance=required AND no role, or role=sibling or role=friend or role=previous or role=cousin (to generate prerequisite links)
        - we can't just assume that links with importance=required are prerequisites, since a topic with eg role='next' might be required, while at the same time by definition not a prerequisite -->
 
-  <!-- get the short descr para -->
+  <!-- Added for DITA 1.1 "Shortdesc proposal" -->
+  <!-- get the abstract para -->
+  <xsl:apply-templates select="preceding-sibling::*[contains(@class,' topic/abstract ')]" mode="outofline"/>
+  
+  <!-- get the shortdesc para -->
   <xsl:apply-templates select="preceding-sibling::*[contains(@class,' topic/shortdesc ')]" mode="outofline"/>
-
-<!-- Insert pre-req links - after shortdesc - unless there is a prereq section about -->
+  
+  <!-- Insert pre-req links - after shortdesc - unless there is a prereq section about -->
   <xsl:apply-templates select="following-sibling::*[contains(@class,' topic/related-links ')]" mode="prereqs"/>
 
   <xsl:apply-templates/>
@@ -238,12 +245,36 @@
 </div><xsl:value-of select="$newline"/>
 </xsl:template>
 
-<!-- Added for SF 1363055: Shortdesc disappears when optional body is removed -->
-<xsl:template match="*[contains(@class,' topic/shortdesc ')]">
+<!-- Added for DITA 1.1 "Shortdesc proposal" -->
+<xsl:template match="*[contains(@class,' topic/abstract ')]">
   <xsl:if test="not(following-sibling::*[contains(@class,' topic/body ')])">
     <xsl:apply-templates select="." mode="outofline"/>
     <xsl:apply-templates select="following-sibling::*[contains(@class,' topic/related-links ')]" mode="prereqs"/>
   </xsl:if>
+</xsl:template>
+
+<!-- Added for DITA 1.1 "Shortdesc proposal" -->
+<!-- called abstract processing - para at start of topic -->
+<xsl:template match="*[contains(@class,' topic/abstract ')]" mode="outofline">
+<div>
+  <xsl:call-template name="commonattributes"/>
+  <xsl:apply-templates/>
+</div><xsl:value-of select="$newline"/>
+</xsl:template>
+
+<!-- Updated for DITA 1.1 "Shortdesc proposal" -->
+<!-- Added for SF 1363055: Shortdesc disappears when optional body is removed -->
+<xsl:template match="*[contains(@class,' topic/shortdesc ')]">
+  <xsl:choose>
+    <xsl:when test="parent::*[contains(@class, ' topic/abstract ')]">
+      <xsl:apply-templates select="." mode="outofline"/>
+    </xsl:when>
+    <xsl:when test="not(following-sibling::*[contains(@class,' topic/body ')])">    
+      <xsl:apply-templates select="." mode="outofline"/>
+      <xsl:apply-templates select="following-sibling::*[contains(@class,' topic/related-links ')]" mode="prereqs"/>
+    </xsl:when>
+    <xsl:otherwise></xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 <!-- called shortdesc processing - para at start of topic -->
@@ -311,11 +342,12 @@
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' topic/example ')]" mode="example-fmt">
+	
   <xsl:call-template name="start-revflag"/>
   <xsl:call-template name="flagit"/>
   <xsl:call-template name="sect-heading"/>
-  <xsl:apply-templates select="*[not(contains(@class,' topic/title '))] | text() | comment() | processing-instruction()"/>
-  <xsl:call-template name="end-revflag"/>
+  <xsl:apply-templates select="*[not(contains(@class,' topic/title '))] | text() | comment() | processing-instruction()"/>	
+  <xsl:call-template name="end-revflag"/>		
 </xsl:template>
 
 
@@ -1306,7 +1338,7 @@
     <xsl:call-template name="setid"/>
     <xsl:apply-templates select="@href|@height|@width|@longdescref"/>
     <xsl:choose>
-      <xsl:when test="*[contains(@class,' topic/alt')]">
+      <xsl:when test="*[contains(@class,' topic/alt ')]">
         <xsl:attribute name="alt"><xsl:apply-templates select="*[contains(@class,' topic/alt ')]" mode="text-only"/></xsl:attribute>
       </xsl:when>
       <xsl:when test="@alt">
@@ -1325,11 +1357,45 @@
   <xsl:attribute name="src"><xsl:value-of select="."/></xsl:attribute>
 </xsl:template>
 <xsl:template match="*[contains(@class,' topic/image ')]/@height">
-  <xsl:attribute name="height"><xsl:value-of select="."/></xsl:attribute>
+  <xsl:variable name="height-in-pixel">
+    <xsl:call-template name="length-to-pixels">
+      <xsl:with-param name="dimen" select="."/>
+    </xsl:call-template>
+  </xsl:variable>
+  <xsl:if test="not($height-in-pixel='100%')">
+    <xsl:attribute name="height">
+      <xsl:choose>
+        <xsl:when test="../@scale and string(number(../@scale))!='NaN'">          
+          <xsl:value-of select="number($height-in-pixel) * number(../@scale)"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="number($height-in-pixel)"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:attribute>
+  </xsl:if>  
 </xsl:template>
+
 <xsl:template match="*[contains(@class,' topic/image ')]/@width">
-  <xsl:attribute name="width"><xsl:value-of select="."/></xsl:attribute>
+  <xsl:variable name="width-in-pixel">
+    <xsl:call-template name="length-to-pixels">
+      <xsl:with-param name="dimen" select="."/>
+    </xsl:call-template>
+  </xsl:variable>
+  <xsl:if test="not($width-in-pixel = '100%')">
+    <xsl:attribute name="width">
+      <xsl:choose>
+        <xsl:when test="../@scale and string(number(../@scale))!='NaN'">          
+          <xsl:value-of select="number($width-in-pixel) * number(../@scale)"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="number($width-in-pixel)"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:attribute>
+  </xsl:if>  
 </xsl:template>
+
 <xsl:template match="*[contains(@class,' topic/image ')]/@longdescref">
   <xsl:attribute name="longdesc">
     <xsl:choose>
@@ -2891,6 +2957,16 @@
      </xsl:choose>
   </xsl:variable>
 
+  <xsl:variable name="headCount">
+    <xsl:value-of select="count(ancestor::*[contains(@class,' topic/topic ')])+1"/>
+  </xsl:variable>
+  <xsl:variable name="headLevel">
+    <xsl:choose>
+      <xsl:when test="$headCount > 6">h6</xsl:when>
+      <xsl:otherwise>h<xsl:value-of select="$headCount"/></xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
   <!-- based on graceful defaults, build an appropriate section-level heading -->
   <xsl:choose>
     <xsl:when test="not($heading='')">
@@ -2898,26 +2974,42 @@
         <!-- hack: a title with whitespace ALWAYS overrides as null -->
         <xsl:comment>no heading</xsl:comment>
       </xsl:if>
-      <xsl:apply-templates select="*[contains(@class,' topic/title ')][1]"/>
+      <xsl:apply-templates select="*[contains(@class,' topic/title ')][1]">
+        <xsl:with-param name="headLevel" select="$headLevel"/>
+      </xsl:apply-templates>
       <xsl:if test="@spectitle and not(*[contains(@class,' topic/title ')])">
-        <h4 class="sectiontitle"><xsl:value-of select="@spectitle"/></h4>
+        <xsl:element name="{$headLevel}">
+          <xsl:attribute name="class">sectiontitle</xsl:attribute>
+          <xsl:value-of select="@spectitle"/>
+        </xsl:element>
       </xsl:if>
     </xsl:when>
     <xsl:when test="$defaulttitle">
-      <h4 class="sectiontitle"><xsl:value-of select="$defaulttitle"/></h4>
+      <xsl:element name="{$headLevel}">
+        <xsl:attribute name="class">sectiontitle</xsl:attribute>
+        <xsl:value-of select="$defaulttitle"/>
+      </xsl:element>
     </xsl:when>
     <xsl:otherwise></xsl:otherwise>
   </xsl:choose>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/section ')]/*[contains(@class,' topic/title ')]" name="topic.section_title">
-    <h4 class="sectiontitle">
-        <xsl:call-template name="commonattributes"/>
-        <xsl:apply-templates/>
-    </h4>
-</xsl:template>
-<xsl:template match="*[contains(@class,' topic/example ')]/*[contains(@class,' topic/title ')]" name="topic.example_title">
-    <xsl:call-template name="topic.section_title"/>
+<xsl:template match="*[contains(@class,' topic/section ')]/*[contains(@class,' topic/title ')] | 
+	*[contains(@class,' topic/example ')]/*[contains(@class,' topic/title ')]" name="topic.section_title">
+  <xsl:param name="headLevel">
+    <xsl:variable name="headCount">
+      <xsl:value-of select="count(ancestor::*[contains(@class,' topic/topic ')])+1"/>
+    </xsl:variable>
+    <xsl:choose>
+      <xsl:when test="$headCount > 6">h6</xsl:when>
+      <xsl:otherwise>h<xsl:value-of select="$headCount"/></xsl:otherwise>
+    </xsl:choose>
+  </xsl:param>
+  <xsl:element name="{$headLevel}">
+    <xsl:attribute name="class">sectiontitle</xsl:attribute>
+    <xsl:call-template name="commonattributes"/>
+    <xsl:apply-templates/>
+  </xsl:element>
 </xsl:template>
 
 <!-- Test for in BIDI area: returns "bidi" when parent's @xml:lang is a bidi language;
@@ -3027,35 +3119,182 @@
              For multiple attr values, output each flag in turn.
      -->
 <xsl:template name="flagit">
+  <xsl:variable name="domains">
+    <xsl:value-of select="normalize-space(ancestor-or-self::*[contains(@class,' topic/topic ')][1]/@domains)"/>
+  </xsl:variable>
+  <xsl:variable name="tmp_props">
+    <xsl:call-template name="getExtProps">
+      <xsl:with-param name="domains" select="$domains"/>
+    </xsl:call-template>
+  </xsl:variable>
+  <xsl:variable name="props">
+    <xsl:value-of select="substring-after($tmp_props, ',')"/>
+  </xsl:variable>
  <!-- Test for the flagging attributes. If found, call 'mark-prop' with the values to use. Otherwise return -->
- <xsl:if test="@audience and not($FILTERFILE='')">
+  <xsl:if test="@audience and not($FILTERFILE='')">
   <xsl:call-template name="mark-prop">
    <xsl:with-param name="flag-att" select="'audience'"/>
    <xsl:with-param name="flag-att-val" select="@audience"/>
   </xsl:call-template>
  </xsl:if>
- <xsl:if test="@platform and not($FILTERFILE='')">
+  <xsl:if test="@platform and not($FILTERFILE='')">
   <xsl:call-template name="mark-prop">
    <xsl:with-param name="flag-att" select="'platform'"/>
    <xsl:with-param name="flag-att-val" select="@platform"/>
   </xsl:call-template>
  </xsl:if>
- <xsl:if test="@product and not($FILTERFILE='')">
+  <xsl:if test="@product and not($FILTERFILE='')">
   <xsl:call-template name="mark-prop">
    <xsl:with-param name="flag-att" select="'product'"/>
    <xsl:with-param name="flag-att-val" select="@product"/>
   </xsl:call-template>
  </xsl:if>
- <xsl:if test="@otherprops and not($FILTERFILE='')">
+  <xsl:if test="@otherprops and not($FILTERFILE='')">
   <xsl:call-template name="mark-prop">
    <xsl:with-param name="flag-att" select="'otherprops'"/>
    <xsl:with-param name="flag-att-val" select="@otherprops"/>
   </xsl:call-template>
  </xsl:if>
+ 
+  <xsl:if test="not($props='') and not($FILTERFILE='')">
+    <xsl:call-template name="ext-flagit">
+      <xsl:with-param name="props" select="$props"/>
+    </xsl:call-template>
+  </xsl:if>
 </xsl:template>
+
+  <xsl:template name="getExtProps">
+    <xsl:param name="domains"/>
+    <xsl:choose>
+      <xsl:when test="contains($domains, 'a(props')">
+        <xsl:text>,</xsl:text><xsl:value-of select="normalize-space(concat('props',substring-before(substring-after($domains,'a(props'), ')')))"/>
+        <xsl:call-template name="getExtProps">
+          <xsl:with-param name="domains" select="substring-after(substring-after($domains,'a(props'), ')')"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise/>
+    </xsl:choose>
+  </xsl:template>
+
+  <xsl:template name="ext-flagit">
+    <xsl:param name="props"/>
+    <xsl:choose>
+      <xsl:when test="contains($props,',')">
+        <xsl:variable name="propsValue">
+          <xsl:call-template name="getPropsValue">
+            <xsl:with-param name="propsPath" select="substring-before($props,',')"/>
+          </xsl:call-template>
+        </xsl:variable>
+        <xsl:variable name="propName">
+          <xsl:call-template name="getLastPropName">
+            <xsl:with-param name="propsPath" select="substring-before($props,',')"/>
+          </xsl:call-template>
+        </xsl:variable>
+        <xsl:if test="not($propsValue='')">
+          <xsl:call-template name="ext-mark-prop">
+            <xsl:with-param name="flag-att-path" select="substring-before($props,',')"/>
+            <xsl:with-param name="flag-att-val" select="$propsValue"/>
+          </xsl:call-template>
+        </xsl:if>
+        <xsl:call-template name="ext-flagit">
+          <xsl:with-param name="props" select="substring-after($props,',')"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:variable name="propsValue">
+          <xsl:call-template name="getPropsValue">
+            <xsl:with-param name="propsPath" select="$props"/>
+          </xsl:call-template>
+        </xsl:variable>
+        <xsl:variable name="propName">
+          <xsl:call-template name="getLastPropName">
+            <xsl:with-param name="propsPath" select="$props"/>
+          </xsl:call-template>
+        </xsl:variable>
+        <xsl:if test="not($propsValue='')">
+          <xsl:call-template name="ext-mark-prop">
+            <xsl:with-param name="flag-att-path" select="$props"/>
+            <xsl:with-param name="flag-att-val" select="$propsValue"/>
+          </xsl:call-template>
+        </xsl:if>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+  
+  <xsl:template name="getPropsValue">
+    <xsl:param name="propsPath"/>
+    <xsl:variable name="propName">
+      <xsl:call-template name="getLastPropName">
+        <xsl:with-param name="propsPath" select="$propsPath"/>
+      </xsl:call-template>
+    </xsl:variable>
+    <xsl:choose>
+      <xsl:when test="@*[name()=$propName]">
+        <xsl:value-of select="@*[name()=$propName]"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:call-template name="getGeneralValue">
+          <xsl:with-param name="propName" select="$propName"/>
+          <xsl:with-param name="propsPath" select="normalize-space(substring-before($propsPath, $propName))"/>
+        </xsl:call-template>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+  
+  <xsl:template name="getGeneralValue">
+    <xsl:param name="propsPath"/>
+    <xsl:param name="propName"/>
+    <xsl:variable name="propParentName">
+      <xsl:call-template name="getLastPropName">
+        <xsl:with-param name="propsPath" select="$propsPath"/>
+      </xsl:call-template>
+    </xsl:variable>
+    
+    <xsl:choose>
+      <xsl:when test="contains(@*[name()=$propParentName],concat($propName,'('))">
+        <xsl:value-of select="substring-before(substring-after(@*[name()=$propParentName],concat($propName,'(')),')')"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:choose>
+          <xsl:when test="contains($propsPath,' ')">
+            <xsl:call-template name="getGeneralValue">
+              <xsl:with-param name="propName" select="$propName"/>
+              <xsl:with-param name="propsPath" select="normalize-space(substring-before($propsPath, $propParentName))"/>
+            </xsl:call-template>
+          </xsl:when>
+          <xsl:otherwise/>
+        </xsl:choose>
+      </xsl:otherwise>
+    </xsl:choose>
+    
+  </xsl:template>
+  
+  <xsl:template name="getLastPropName">
+    <xsl:param name="propsPath"/>
+    <xsl:choose>
+      <xsl:when test="contains($propsPath,' ')">
+        <xsl:call-template name="getLastPropName">
+          <xsl:with-param name="propsPath" select="substring-after($propsPath,' ')"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$propsPath"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
 
 <!-- No flagging attrs allowed to process in phrases - output a message when in debug mode. -->
 <xsl:template name="flagcheck">
+  
+  <xsl:variable name="domains">
+    <xsl:value-of select="normalize-space(ancestor-or-self::*[contains(@class,' topic/topic ')][1]/@domains)"/>
+  </xsl:variable>
+  <xsl:variable name="props">
+    <xsl:if test="contains($domains, 'a(props')">
+      <xsl:value-of select="normalize-space(substring-before(substring-after($domains,'a(props'), ')'))"/>
+    </xsl:if>
+  </xsl:variable>
+  
  <xsl:if test="$DBG='yes' and not($FILTERFILE='')">
   <xsl:if test="@audience">
    <xsl:call-template name="output-message">
@@ -3085,40 +3324,234 @@
     <xsl:with-param name="msgparams">%1=otherprops</xsl:with-param>
    </xsl:call-template>
   </xsl:if>
+   <xsl:if test="not($props='')">
+     <xsl:call-template name="ext-flagcheck">
+       <xsl:with-param name="props" select="$props"/>
+     </xsl:call-template>
+   </xsl:if>
  </xsl:if>
 </xsl:template>
 
+  <xsl:template name="ext-flagcheck">
+    <xsl:param name="props"/>
+    <xsl:choose>
+      <xsl:when test="contains($props,',')">
+        <xsl:variable name="propsValue">
+          <xsl:call-template name="getPropsValue">
+            <xsl:with-param name="propsPath" select="substring-before($props,',')"/>
+          </xsl:call-template>
+        </xsl:variable>
+        <xsl:variable name="propName">
+          <xsl:call-template name="getLastPropName">
+            <xsl:with-param name="propsPath" select="substring-before($props,',')"/>
+          </xsl:call-template>
+        </xsl:variable>
+        <xsl:if test="not($propsValue='')">
+          <xsl:call-template name="output-message">
+            <xsl:with-param name="msgnum">042</xsl:with-param>
+            <xsl:with-param name="msgsev">I</xsl:with-param>
+            <xsl:with-param name="msgparams">%1=<xsl:value-of select="$propName"/></xsl:with-param>
+          </xsl:call-template>
+        </xsl:if>
+        
+        <xsl:call-template name="ext-flagcheck">
+          <xsl:with-param name="props" select="substring-after($props,',')"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:variable name="propsValue">
+          <xsl:call-template name="getPropsValue">
+            <xsl:with-param name="propsPath" select="$props"/>
+          </xsl:call-template>
+        </xsl:variable>
+        <xsl:variable name="propName">
+          <xsl:call-template name="getLastPropName">
+            <xsl:with-param name="propsPath" select="$props"/>
+          </xsl:call-template>
+        </xsl:variable>
+        <xsl:if test="not($propsValue='')">
+          <xsl:call-template name="output-message">
+            <xsl:with-param name="msgnum">042</xsl:with-param>
+            <xsl:with-param name="msgsev">I</xsl:with-param>
+            <xsl:with-param name="msgparams">%1=<xsl:value-of select="$propName"/></xsl:with-param>
+          </xsl:call-template>
+        </xsl:if>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
 <xsl:template name="flagit-parent">
+  <xsl:variable name="domains">
+    <xsl:value-of select="normalize-space(ancestor::*[contains(@class,' topic/topic ')][1]/@domains)"/>
+  </xsl:variable>
+  <xsl:variable name="props">
+    <xsl:if test="contains($domains, 'a(props')">
+      <xsl:value-of select="normalize-space(substring-before(substring-after($domains,'a(props'), ')'))"/>
+    </xsl:if>
+  </xsl:variable>
+  
  <!-- Test for the flagging attributes on the parent.
    If found and if the filterfile name was passed in,
       call 'mark-prop' with the values to use. Otherwise return -->
- <xsl:if test="../@audience and not($FILTERFILE='')">
+  <xsl:if test="../@audience and not($FILTERFILE='')">
   <xsl:call-template name="mark-prop">
    <xsl:with-param name="flag-att" select="'audience'"/>
    <xsl:with-param name="flag-att-val" select="../@audience"/>
   </xsl:call-template>
  </xsl:if>
- <xsl:if test="../@platform and not($FILTERFILE='')">
+  <xsl:if test="../@platform and not($FILTERFILE='')">
   <xsl:call-template name="mark-prop">
    <xsl:with-param name="flag-att" select="'platform'"/>
    <xsl:with-param name="flag-att-val" select="../@platform"/>
   </xsl:call-template>
  </xsl:if>
- <xsl:if test="../@product and not($FILTERFILE='')">
+  <xsl:if test="../@product and not($FILTERFILE='')">
   <xsl:call-template name="mark-prop">
    <xsl:with-param name="flag-att" select="'product'"/>
    <xsl:with-param name="flag-att-val" select="../@product"/>
   </xsl:call-template>
  </xsl:if>
- <xsl:if test="../@otherprops and not($FILTERFILE='')">
+  <xsl:if test="../@otherprops and not($FILTERFILE='')">
   <xsl:call-template name="mark-prop">
    <xsl:with-param name="flag-att" select="'otherprops'"/>
    <xsl:with-param name="flag-att-val" select="../@otherprops"/>
   </xsl:call-template>
  </xsl:if>
+ 
+  <xsl:if test="not($props='') and not($FILTERFILE='')">
+    <xsl:call-template name="ext-flagit-parent">
+      <xsl:with-param name="props" select="$props"/>
+    </xsl:call-template>
+  </xsl:if>
+ 
 </xsl:template>
 
+  <xsl:template name="ext-flagit-parent">
+    <xsl:param name="props"/>
+    <xsl:choose>
+      <xsl:when test="contains($props,',')">
+        <xsl:variable name="propsValue">
+          <xsl:call-template name="getPropsValue-parent">
+            <xsl:with-param name="propsPath" select="substring-before($props,',')"/>
+          </xsl:call-template>
+        </xsl:variable>
+        <xsl:variable name="propName">
+          <xsl:call-template name="getLastPropName">
+            <xsl:with-param name="propsPath" select="substring-before($props,',')"/>
+          </xsl:call-template>
+        </xsl:variable>
+        <xsl:if test="not($propsValue='')">
+          <xsl:call-template name="ext-mark-prop">
+            <xsl:with-param name="flag-att-path" select="substring-before($props,',')"/>
+            <xsl:with-param name="flag-att-val" select="$propsValue"/>
+          </xsl:call-template>
+        </xsl:if>        
+        <xsl:call-template name="ext-flagit-parent">
+          <xsl:with-param name="props" select="substring-after($props,',')"/>
+        </xsl:call-template>
+      </xsl:when>
+      
+      <xsl:otherwise>
+        <xsl:variable name="propsValue">
+          <xsl:call-template name="getPropsValue-parent">
+            <xsl:with-param name="propsPath" select="$props"/>
+          </xsl:call-template>
+        </xsl:variable>
+        <xsl:variable name="propName">
+          <xsl:call-template name="getLastPropName">
+            <xsl:with-param name="propsPath" select="$props"/>
+          </xsl:call-template>
+        </xsl:variable>
+        <xsl:if test="not($propsValue='')">
+          <xsl:call-template name="ext-mark-prop">
+            <xsl:with-param name="flag-att-path" select="$props"/>
+            <xsl:with-param name="flag-att-val" select="$propsValue"/>
+          </xsl:call-template>
+        </xsl:if>
+      </xsl:otherwise>
+    </xsl:choose>
+    
+  </xsl:template>
+  
+  <xsl:template name="getPropsValue-parent">
+    <xsl:param name="propsPath"/>
+    <xsl:variable name="propName">
+      <xsl:call-template name="getLastPropName">
+        <xsl:with-param name="propsPath" select="$propsPath"/>
+      </xsl:call-template>
+    </xsl:variable>
+    <xsl:choose>
+      <xsl:when test="../@*[name()=$propName]">
+        <xsl:value-of select="../@*[name()=$propName]"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:call-template name="getGeneralValue-parent">
+          <xsl:with-param name="propName" select="$propName"/>
+          <xsl:with-param name="propsPath" select="normalize-space(substring-before($propsPath, $propName))"/>
+        </xsl:call-template>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+  
+  <xsl:template name="getGeneralValue-parent">
+    <xsl:param name="propsPath"/>
+    <xsl:param name="propName"/>
+    <xsl:variable name="propParentName">
+      <xsl:call-template name="getLastPropName">
+        <xsl:with-param name="propsPath" select="$propsPath"/>
+      </xsl:call-template>
+    </xsl:variable>
+    
+    <xsl:choose>
+      <xsl:when test="contains(../@*[name()=$propParentName],concat($propName,'('))">
+        <xsl:value-of select="substring-before(substring-after(../@*[name()=$propParentName],concat($propName,'(')),')')"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:choose>
+          <xsl:when test="contains($propsPath,' ')">
+            <xsl:call-template name="getGeneralValue-parent">
+              <xsl:with-param name="propName" select="$propName"/>
+              <xsl:with-param name="propsPath" select="normalize-space(substring-before($propsPath, $propParentName))"/>
+            </xsl:call-template>
+          </xsl:when>
+          <xsl:otherwise/>
+        </xsl:choose>
+      </xsl:otherwise>
+    </xsl:choose>
+    
+  </xsl:template>
+  
+
 <!-- Use passed attr value to mark each active flag. -->
+  <xsl:template name="ext-mark-prop">
+    <xsl:param name="flag-att-path"/>
+    <xsl:param name="flag-att-val"/>
+    <xsl:variable name="propName">
+      <xsl:call-template name="getLastPropName">
+        <xsl:with-param name="propsPath" select="$flag-att-path"/>
+      </xsl:call-template>
+    </xsl:variable>
+    <xsl:variable name="flag-result">
+      <xsl:call-template name="mark-prop">
+        <xsl:with-param name="flag-att" select="$propName"/>
+        <xsl:with-param name="flag-att-val" select="$flag-att-val"/>
+      </xsl:call-template>
+    </xsl:variable>
+    <xsl:choose>
+      <xsl:when test="exsl:node-set($flag-result)/img" xmlns:exsl="http://exslt.org/common">
+        <xsl:copy-of select="$flag-result"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:if test="contains($flag-att-path,' ')">
+          <xsl:call-template name="ext-mark-prop">
+            <xsl:with-param name="flag-att-path" select="normalize-space(substring-before($flag-att-path, $propName))"/>
+            <xsl:with-param name="flag-att-val" select="$flag-att-val"/>
+          </xsl:call-template>
+        </xsl:if>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
 <xsl:template name="mark-prop">
  <xsl:param name="flag-att"/>     <!-- attribute name -->
  <xsl:param name="flag-att-val"/> <!-- content of attribute -->
@@ -3952,5 +4385,12 @@
     </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
+
+  <!-- Add for "New <data> element (#9)" in DITA 1.1 -->
+  <xsl:template match="*[contains(@class,' topic/data ')]" />
+
+  <!-- Add for "Support foreign content vocabularies such as 
+    MathML and SVG with <unknown> (#35) " in DITA 1.1 -->
+  <xsl:template match="*[contains(@class,' topic/foreign ') or contains(@class,' topic/unknown ')]" />
 
 </xsl:stylesheet>

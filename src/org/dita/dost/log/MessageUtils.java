@@ -1,4 +1,10 @@
 /*
+ * This file is part of the DITA Open Toolkit project hosted on
+ * Sourceforge.net. See the accompanying license.txt file for 
+ * applicable licenses.
+ */
+
+/*
  * (c) Copyright IBM Corp. 2005 All Rights Reserved.
  */
 package org.dita.dost.log;
@@ -11,6 +17,7 @@ import java.util.Properties;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.dita.dost.util.Constants;
 import org.dita.dost.util.StringUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -27,11 +34,51 @@ public class MessageUtils {
 	private static Hashtable hashTable = null;
 	private static String messageFile = null;
 	private static DITAOTJavaLogger fileLogger = new DITAOTJavaLogger();
+	private static String defaultResource = "resource/messages.xml";
+	private static MessageUtils utils = null;
 	
-	private static void loadDefaultMessages() {
-		loadMessages("resource/messages.xml");
+	/**
+	 * Default Construtor
+	 *
+	 */
+	private MessageUtils(){
 	}
 	
+	/**
+	 * Internal Singleton getInstance() method, for Classloader to locate the CLASSPATH
+	 * @return
+	 */
+	private static MessageUtils getInstance(){
+		if(utils == null){
+			utils = new MessageUtils();
+		}
+		return utils;
+	}
+
+	/**
+	 * Just bypass to invoke member function loadDefMsg();
+	 *
+	 */
+	public static void loadDefaultMessages() {
+		getInstance().loadDefMsg();
+	}
+	
+	/**
+	 * Load Default Messages.
+	 * If not exist in the relative path, search the CLASSPATH
+	 */
+	private void loadDefMsg(){
+		if(!new File(defaultResource).exists()){
+			loadMessages(getClass().getClassLoader().getResource(defaultResource).toString());
+		}else{
+			loadMessages(defaultResource);
+		}
+	}
+	
+	/**
+	 * Load message from message file.
+	 * @param newMessageFile
+	 */
 	public static void loadMessages(String newMessageFile) {
 		if (!updateMessageFile(newMessageFile)) {
 			// this message file has been loaded
@@ -52,7 +99,8 @@ public class MessageUtils {
 			Element messages = doc.getDocumentElement();
 			NodeList messageList = messages.getElementsByTagName("message");
 
-			for (int i = 0; i < messageList.getLength(); i++) {
+			int messageListLength = messageList.getLength();
+			for (int i = 0; i < messageListLength; i++) {
 				Element message = (Element) messageList.item(i);
 				Node reason = message.getElementsByTagName("reason").item(0);
 				Node response = message.getElementsByTagName("response")
@@ -71,7 +119,7 @@ public class MessageUtils {
 				hashTable.put(id, messageBean);
 			}
 		} catch (Exception e) {
-			StringBuffer buff = new StringBuffer(128);
+			StringBuffer buff = new StringBuffer(Constants.INT_128);
 			
 			buff.append("  Failed to load messages from '");
 			buff.append(messageFile);

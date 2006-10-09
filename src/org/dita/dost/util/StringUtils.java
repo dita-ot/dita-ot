@@ -1,10 +1,19 @@
 /*
+ * This file is part of the DITA Open Toolkit project hosted on
+ * Sourceforge.net. See the accompanying license.txt file for 
+ * applicable licenses.
+ */
+
+/*
  * (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved.
  */
 package org.dita.dost.util;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.StringTokenizer;
 
 /**
  * String relevant utilities.
@@ -46,6 +55,56 @@ public class StringUtils {
 
 		return buff.toString();
 	}
+	
+	/**
+	 * Escape XML characters
+	 * Suggested by hussein_shafie
+	 * @param s
+	 * @return
+	 */
+	public static String escapeXML(String s){
+		char[] chars = s.toCharArray();
+        return escapeXML(chars, 0, chars.length);
+	}
+	
+	/**
+	 * Escape XML characters
+	 * Suggested by hussein_shafie
+	 * @param chars
+	 * @param offset
+	 * @param length
+	 * @return
+	 */
+	public static String escapeXML(char[] chars, int offset, int length){
+		StringBuffer escaped = new StringBuffer();
+
+        int end = offset + length;
+        for (int i = offset; i < end; ++i) {
+            char c = chars[i];
+
+            switch (c) {
+            case '\'':
+                escaped.append("&apos;");
+                break;
+            case '\"':
+                escaped.append("&quot;");
+                break;
+            case '<':
+                escaped.append("&lt;");
+                break;
+            case '>':
+                escaped.append("&gt;");
+                break;
+            case '&':
+                escaped.append("&amp;");
+                break;
+            default:
+                escaped.append(c);
+            }
+        }
+
+        return escaped.toString();
+	}
 
 	/**
 	 * Get entity.
@@ -74,6 +133,7 @@ public class StringUtils {
 	}
 
 	/**
+	 * Replace all the pattern with replacement
 	 * @param input
 	 * @param pattern
 	 * @param replacement
@@ -96,8 +156,12 @@ public class StringUtils {
 		return result.toString();
 	}
 	
+	/**
+	 * Get ASCII code of a string
+	 * @param inStr
+	 * @return
+	 */
 	public static String getAscii(String inStr){
-		try{
 		byte [] input = inStr.getBytes();
 		/*byte [] output;
 		ByteArrayInputStream byteIS = new ByteArrayInputStream(input);
@@ -124,8 +188,89 @@ public class StringUtils {
 		}*/
 		
 		return ret.toString();
-		}catch (Exception e){
-			return null;
+		
+	}
+	
+	/**
+	 * Get the props
+	 * @param domains
+	 * @return
+	 */
+	public static String getExtProps (String domains){
+		StringBuffer propsBuffer = new StringBuffer();
+    	int propsStart = domains.indexOf("a(props");
+    	int propsEnd = domains.indexOf(")",propsStart);
+    	while (propsStart != -1 && propsEnd != -1){
+    		propsBuffer.append(Constants.COMMA);
+    		propsBuffer.append(domains.substring(propsStart+2,propsEnd).trim());
+    		propsStart = domains.indexOf("a(props", propsEnd);
+    		propsEnd = domains.indexOf(")",propsStart);
+    	}
+    	return (propsBuffer.length() > 0) ? propsBuffer.substring(Constants.INT_1) : null;
+	}
+	
+	/**
+	 * Restore entity
+	 * @param s
+	 * @return
+	 */
+	public static String restoreEntity(String s) {
+		String localEntity = s;
+		localEntity = StringUtils.replaceAll(localEntity, "&", "&amp;");
+		localEntity = StringUtils.replaceAll(localEntity, "<", "&lt;");
+		localEntity = StringUtils.replaceAll(localEntity, ">", "&gt;");		
+		localEntity = StringUtils.replaceAll(localEntity, "'", "&apos;");
+		localEntity = StringUtils.replaceAll(localEntity, "\"", "&quot;");
+		
+		return localEntity;
+	}
+	
+	/**
+	 * Restore map
+	 * @param s
+	 * @return
+	 */
+	public static Map restoreMap(String s) {
+		Map copytoMap = new HashMap();
+		StringTokenizer st = new StringTokenizer(s, Constants.COMMA);
+		
+        while (st.hasMoreTokens()) {
+        	String entry = st.nextToken();
+        	int index = entry.indexOf('=');
+        	copytoMap.put(entry.substring(0, index), entry.substring(index+1));
+        }
+        
+        return copytoMap;
+	}
+	
+	/**
+	 * Return is the string is null or ""
+	 * @param s
+	 * @return
+	 */
+	public static boolean isEmptyString(String s){
+		return (s == null || Constants.STRING_EMPTY.equals(s.trim()));
+	}
+	
+	/**
+	 * If target is null, return the value; else append value to target. 
+	 * If withSpace is true, insert a blank between them.
+	 * @param target
+	 * @param value
+	 * @param withSpace
+	 * @return
+	 */
+	public static String setOrAppend(String target, String value, boolean withSpace){
+		if(target == null){
+			return value;
+		}if(value == null){
+			return target;
+		}else{
+			if(withSpace && !target.endsWith(Constants.STRING_BLANK)){
+				return target + Constants.STRING_BLANK + value;
+			}else{
+				return target + value;
+			}
 		}
 	}
 }

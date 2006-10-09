@@ -1,4 +1,10 @@
 /*
+ * This file is part of the DITA Open Toolkit project hosted on
+ * Sourceforge.net. See the accompanying license.txt file for 
+ * applicable licenses.
+ */
+
+/*
  * (c) Copyright IBM Corp. 2005 All Rights Reserved.
  */
 package org.dita.dost.writer;
@@ -14,6 +20,7 @@ import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.index.IndexTerm;
 import org.dita.dost.index.IndexTermTarget;
 import org.dita.dost.module.Content;
+import org.dita.dost.util.Constants;
 
 /**
  * This class extends AbstractWriter, used to output IndexTerm list to CHM index
@@ -23,7 +30,7 @@ import org.dita.dost.module.Content;
  * 
  * @author Wu, Zhi Qiang
  */
-public class CHMIndexWriter extends AbstractWriter {
+public class CHMIndexWriter implements AbstractWriter {
     /** List of indexterms */
     private List termList = null;
 
@@ -44,14 +51,13 @@ public class CHMIndexWriter extends AbstractWriter {
      * Write the index term into given OutputStream.
      * 
      * @param outputStream
-     * @throws UnsupportedEncodingException
      */
-    public void write(OutputStream outputStream) {
+    public void write(OutputStream outputStream) throws UnsupportedEncodingException{
         PrintWriter printWriter = null;
         int termNum = termList.size();
 
         try {
-            printWriter = new PrintWriter(new OutputStreamWriter(outputStream));
+            printWriter = new PrintWriter(new OutputStreamWriter(outputStream, Constants.UTF8));
 
             printWriter.println("<!DOCTYPE HTML PUBLIC \"-//IETF//DTD HTML//EN\">");
             printWriter.println("<html>");

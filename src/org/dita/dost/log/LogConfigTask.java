@@ -1,4 +1,10 @@
 /*
+ * This file is part of the DITA Open Toolkit project hosted on
+ * Sourceforge.net. See the accompanying license.txt file for 
+ * applicable licenses.
+ */
+
+/*
  * (c) Copyright IBM Corp. 2005 All Rights Reserved.
  */
 package org.dita.dost.log;
@@ -20,8 +26,14 @@ public class LogConfigTask extends Task {
 	private String logDir = null;
 	private String logFile = null;
 	
-	/*
-	 * (non-Javadoc)
+	/**
+	 * Default Construtor
+	 *
+	 */
+	public LogConfigTask(){		
+	}
+	/**
+	 * Task execution point
 	 * 
 	 * @see org.apache.tools.ant.Task#execute()
 	 */
@@ -63,6 +75,11 @@ public class LogConfigTask extends Task {
 		String messageFile = getProject().getProperty(
 				"args.message.file");
 		
+		if(! new File(messageFile).exists()){
+			MessageUtils.loadDefaultMessages();
+			return;
+		}
+		
 		if (!new File(messageFile).isAbsolute()) {
 			messageFile = new File(getProject().getBaseDir(), messageFile)
 					.getAbsolutePath();
@@ -73,6 +90,7 @@ public class LogConfigTask extends Task {
 	
 	private void initLogDirectory() throws BuildException {
 		Project project = getProject();
+		File dir = null;
 		
 		logDir = project.getProperty("args.logdir");
 		
@@ -90,12 +108,13 @@ public class LogConfigTask extends Task {
 		}
 		
 		// create log directory
-		File dir = new File(logDir);
+		dir = new File(logDir);
 		if (!dir.exists()) {
 			if (!dir.mkdirs()) {
 				Properties params = new Properties();
+				String msg = null;
 				params.put("%1", logDir);
-				String msg = MessageUtils.getMessage("DOTJ016F", params).toString();
+				msg = MessageUtils.getMessage("DOTJ016F", params).toString();
 				throw new BuildException(msg);
 			}
 		}

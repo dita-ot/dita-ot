@@ -3,7 +3,7 @@
 <!--                    HEADER                                     -->
 <!-- ============================================================= -->
 <!--  MODULE:    DITA Task XSD Module                              -->
-<!--  VERSION:   1.0.1                                             -->
+<!--  VERSION:   1.1                                             -->
 <!--  DATE:      November 2005                                     -->
 <!--                                                               -->
 <!-- ============================================================= -->
@@ -26,17 +26,12 @@
   <xs:import namespace="http://dita.oasis-open.org/architecture/2005/" schemaLocation="ditaarch.xsd"/>
 
   <!-- Base type: univ-atts -->
-  <xs:attributeGroup name="univ-atts-importance-task">
+  <xs:attributeGroup name="univ-atts-no-importance-task">
     <xs:attributeGroup ref="id-atts"/>
-    <xs:attribute name="platform" type="xs:string"/>
-    <xs:attribute name="product" type="xs:string"/>
-    <xs:attribute name="audience" type="xs:string"/>
-    <xs:attribute name="otherprops" type="xs:string"/>
+    <xs:attributeGroup ref="filter-atts"/>
     <xs:attribute name="rev" type="xs:string"/>
     <xs:attribute name="status" type="status-atts.class"/>
-    <xs:attribute name="importance" type="importance-att-nodefault-task.class"/>
-    <xs:attribute name="translate" type="yesno-att.class"/>
-    <xs:attribute ref="xml:lang"/>
+    <xs:attributeGroup ref="localization-atts" />
   </xs:attributeGroup>
    
   <!-- Base type: importance-atts.class -->
@@ -336,6 +331,7 @@
   <xs:group name="task-info-types">
     <xs:choice>
       <xs:group ref="task"/>
+      <xs:group ref="info-types"/>
     </xs:choice>
   </xs:group>
 
@@ -344,18 +340,21 @@
     <xs:sequence>
       <xs:group ref="title"/>
       <xs:group ref="titlealts" minOccurs="0"/>
-      <xs:group ref="shortdesc" minOccurs="0"/>
+      <xs:choice minOccurs="0">
+        <xs:group ref="shortdesc" minOccurs="0"/>
+        <xs:group ref="abstract" minOccurs="0"/>
+      </xs:choice>
       <xs:group ref="prolog" minOccurs="0"/>
       <xs:group ref="taskbody" minOccurs="0"/>
       <xs:group ref="related-links" minOccurs="0"/>
-      <xs:group ref="info-types" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:group ref="task-info-types" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
     <xs:attribute name="id" type="xs:ID" use="required"/>
     <xs:attribute name="conref" type="xs:string"/>
     <xs:attributeGroup ref="select-atts"/>
     <xs:attribute ref="ditaarch:DITAArchVersion"/>
     <xs:attribute name="outputclass" type="xs:string"/>
-    <xs:attribute ref="xml:lang"/>
+    <xs:attributeGroup ref="localization-atts"/>
     <xs:attributeGroup ref="global-atts"/>
     <xs:attribute ref="class" default="- topic/topic task/task "/>
   </xs:complexType>
@@ -372,11 +371,14 @@
       <xs:group ref="result" minOccurs="0"/>
       <xs:group ref="example" minOccurs="0"/>
       <xs:group ref="postreq" minOccurs="0"/>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:group ref="data.element.incl"/>
+        <xs:group ref="foreign.unknown.incl"/>
+      </xs:choice>
     </xs:sequence>
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="id-atts"/>
-    <xs:attribute name="translate" type="yesno-att.class"/>
-    <xs:attribute ref="xml:lang"/>
+    <xs:attributeGroup ref="localization-atts" />
     <xs:attributeGroup ref="global-atts"/>
     <xs:attribute ref="class" default="- topic/body  task/taskbody "/>
   </xs:complexType>
@@ -440,7 +442,7 @@
       <xs:group ref="stepresult" minOccurs="0"/>
     </xs:sequence>
     <xs:attribute name="outputclass" type="xs:string"/>
-    <xs:attributeGroup ref="univ-atts-importance-task"/>
+    <xs:attributeGroup ref="univ-atts-no-importance-task"/>
     <xs:attributeGroup ref="global-atts"/>
     <xs:attribute ref="class" default="- topic/li     task/step "/>
   </xs:complexType>
@@ -491,7 +493,7 @@
       <xs:group ref="stepresult"  minOccurs="0"/>
     </xs:sequence>
     <xs:attribute name="outputclass" type="xs:string"/>
-    <xs:attributeGroup ref="univ-atts-importance-task"/>
+    <xs:attributeGroup ref="univ-atts-no-importance-task"/>
     <xs:attributeGroup ref="global-atts"/>
     <xs:attribute ref="class" default="- topic/li     task/substep "/>
   </xs:complexType>
@@ -531,10 +533,7 @@
 
   <xs:complexType name="choice.class" mixed="true">
     <xs:choice minOccurs="0" maxOccurs="unbounded">
-      <xs:group ref="basic.ph"/>
-      <xs:group ref="basic.block"/>
-      <xs:group ref="itemgroup"/>
-      <xs:group ref="txt.incl"/>
+      <xs:group ref="listitem.cnt"/>
     </xs:choice>
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>

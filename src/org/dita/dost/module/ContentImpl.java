@@ -1,4 +1,10 @@
 /*
+ * This file is part of the DITA Open Toolkit project hosted on
+ * Sourceforge.net. See the accompanying license.txt file for 
+ * applicable licenses.
+ */
+
+/*
  * (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved.
  */
 package org.dita.dost.module;
@@ -14,6 +20,9 @@ import java.util.Collection;
  */
 public class ContentImpl implements Content {
 
+    private Collection collection;
+    private Object object;
+
     /**
      * Automatically generated constructor: ContentImpl
      */
@@ -21,9 +30,6 @@ public class ContentImpl implements Content {
     	collection = null;
     	object = null;
     }
-
-    private Collection collection;
-    private Object object;
 
 
     /**
@@ -45,19 +51,19 @@ public class ContentImpl implements Content {
 
 
     /**
-     * 
-     * 
+     * Set the collection-like content
+     * @param col
      */
-    public void setCollection(Collection collection) {
-        this.collection = collection;
+    public void setCollection(Collection col) {
+        this.collection = col;
     }
 
 
     /**
-     * 
-     * 
+     * Set the object-like content
+     * @param obj
      */
-    public void setValue(Object object) {
-        this.object = object;
+    public void setValue(Object obj) {
+        this.object = obj;
     }
 }

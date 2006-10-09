@@ -49,13 +49,6 @@
   </xs:group>
 
 
-<xs:attributeGroup name="univ-atts-translate-no">
-	<xs:attributeGroup ref="id-atts"/>
-	<xs:attributeGroup ref="select-atts"/>
-	<xs:attribute name="translate" type="yesno-att.class" default="no"/>
-	<xs:attribute ref="xml:lang"/>
-</xs:attributeGroup>
-
   <!-- Base form: Imagemap ((%image;), (%area;)+) -->
 
   <xs:element name="imagemap" type="imagemap.class" >
@@ -105,7 +98,7 @@
     </xs:annotation>
   </xs:element>
   <xs:complexType name="shape.class" mixed="true">
-        <xs:attribute name="keyref" type="xs:NMTOKEN"/>
+        <xs:attribute name="keyref" type="xs:string"/>
         <xs:attributeGroup ref="univ-atts-translate-no"/>
         <xs:attribute name="outputclass" type="xs:string"/>
         <xs:attributeGroup ref="global-atts"/>
@@ -123,7 +116,7 @@
         <xs:choice minOccurs="0" maxOccurs="unbounded">
           <xs:group ref="words.cnt"/>
         </xs:choice>
-        <xs:attribute name="keyref" type="xs:NMTOKEN"/>
+        <xs:attribute name="keyref" type="xs:string"/>
         <xs:attributeGroup ref="univ-atts-translate-no"/>
         <xs:attribute name="outputclass" type="xs:string"/>
         <xs:attributeGroup ref="global-atts"/>

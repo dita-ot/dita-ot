@@ -1,4 +1,10 @@
 /*
+ * This file is part of the DITA Open Toolkit project hosted on
+ * Sourceforge.net. See the accompanying license.txt file for 
+ * applicable licenses.
+ */
+
+/*
  * (c) Copyright IBM Corp. 2005 All Rights Reserved.
  */
 package org.dita.dost.log;
@@ -21,20 +27,27 @@ public class DITAOTFailTask extends Exit {
 	private Properties prop = null;
 
 	/**
-	 * @param id
-	 *            The id to set.
+	 * Default Construtor
+	 *
 	 */
-	public void setId(String id) {
-		this.id = id;
+	public DITAOTFailTask(){
+	}
+	/**
+	 * Set the id
+	 * @param identifier The id to set.
+	 * 
+	 */
+	public void setId(String identifier) {
+		this.id = identifier;
 	}
 
 	/**
-	 * @param params
-	 *            The prop to set.
+	 * Set the parameters.
+	 * @param params The prop to set.          
 	 */
 	public void setParams(String params) {
-		prop = new Properties();
 		StringTokenizer tokenizer = new StringTokenizer(params, ";");
+		prop = new Properties();
 		while (tokenizer.hasMoreTokens()) {
 			String token = tokenizer.nextToken();
 			int pos = token.indexOf("=");
@@ -42,7 +55,8 @@ public class DITAOTFailTask extends Exit {
 		}
 	}
 
-	/* (non-Javadoc)
+	/**
+	 * Task execute point
 	 * @see org.apache.tools.ant.taskdefs.Exit#execute()
 	 */
 	public void execute() throws BuildException {
@@ -54,6 +68,11 @@ public class DITAOTFailTask extends Exit {
 	private void initMessageFile() {
 		String messageFile = getProject().getProperty(
 				"args.message.file");
+		
+		if(!new File(messageFile).exists()){
+			MessageUtils.loadDefaultMessages();
+			return;
+		}
 		
 		if (!new File(messageFile).isAbsolute()) {
 			messageFile = new File(getProject().getBaseDir(), messageFile)

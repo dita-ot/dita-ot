@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+     Sourceforge.net. See the accompanying license.txt file for 
+     applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
 
 <!-- Common utilities that can be used by DITA transforms -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   <xsl:param name="DEFAULTLANG">en-us</xsl:param>
   <!-- Function to convert a string to lower case -->
+  
+  <xsl:variable name="pixels-per-inch" select="number(96)"/>
+  
   <xsl:template name="convert-to-lower">
     <xsl:param name="inputval"/>
     <xsl:value-of
@@ -156,4 +162,55 @@
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
+    
+  <xsl:template name="length-to-pixels">
+    <xsl:param name="dimen"/>
+    <!-- We handle units of cm, mm, in, pt, pc, px.  We also accept em,
+      but just treat 1em=1pc.  An omitted unit is taken as px. -->
+    
+    <xsl:variable name="dimenx" select="concat('00',$dimen)"/>
+    <xsl:variable name="units" select="substring($dimenx,string-length($dimenx)-1)"/>
+    <xsl:variable name="numeric-value" select="number(substring($dimenx,1,string-length($dimenx)-2))"/>
+    <xsl:choose>
+      <xsl:when test="string(number($units))!='NaN' and string(number($numeric-value))!='NaN'">
+        <!-- Since $units is a number, the input was unitless, so we default
+          the unit to pixels and just return the input value -->
+        <xsl:value-of select="number(round(concat($numeric-value,$units)))"/>
+      </xsl:when>
+      <xsl:when test="string(number($numeric-value))='NaN'">
+        <!-- If the input isn't valid, just return 100% -->
+        <xsl:value-of select="'100%'"/>
+      </xsl:when>
+      <xsl:when test="$units='cm'">
+        <xsl:value-of select="number(round($numeric-value * $pixels-per-inch div 2.54))"/>
+      </xsl:when>
+      <xsl:when test="$units='mm'">
+        <xsl:value-of select="number(round($numeric-value * $pixels-per-inch div 25.4))"/>
+      </xsl:when>
+      <xsl:when test="$units='in'">
+        <xsl:value-of select="number(round($numeric-value * $pixels-per-inch))"/>
+      </xsl:when>
+      <xsl:when test="$units='pt'">
+        <xsl:value-of select="number(round($numeric-value * $pixels-per-inch div 72))"/>
+      </xsl:when>
+      <xsl:when test="$units='pc'">
+        <xsl:value-of select="number(round($numeric-value * $pixels-per-inch div 6))"/>
+      </xsl:when>
+      <xsl:when test="$units='px'">
+        <xsl:value-of select="number(round($numeric-value))"/>
+      </xsl:when>
+      <xsl:when test="$units='em'">
+        <xsl:value-of select="number(round($numeric-value * $pixels-per-inch div 6))"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <!-- If the input isn't valid, just return 100% -->
+        <xsl:value-of select="'100%'"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+  
+  
+  
+  
+  
 </xsl:stylesheet>

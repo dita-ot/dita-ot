@@ -1,4 +1,7 @@
 <project name="catalog"  basedir=".">
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+     Sourceforge.net. See the accompanying license.txt file for 
+     applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
 <!-- =============== DTD catalog =============== -->
 <xmlcatalog id="dita.catalog">
@@ -35,12 +38,14 @@
        location="${dita.dtd.dir}${file.separator}map.dtd" />
   <dtd publicId="-//OASIS//Elements DITA Map//EN"
        location="${dita.dtd.dir}${file.separator}map.mod" />
-  <dtd publicId="-//OASIS//ELEMENTS DITA Map//EN"
-       location="${dita.dtd.dir}${file.separator}map.mod" />
   <dtd publicId="-//OASIS//ENTITIES DITA Map Group Domain//EN"
        location="${dita.dtd.dir}${file.separator}mapgroup.ent" />
   <dtd publicId="-//OASIS//ELEMENTS DITA Map Group Domain//EN"
        location="${dita.dtd.dir}${file.separator}mapgroup.mod" />
+  <dtd publicid="-//OASIS//DTD DITA BookMap//EN"
+       location="${dita.dtd.dir}${file.separator}bookmap.dtd"/>
+  <dtd publicid="-//OASIS//ELEMENTS DITA BookMap//EN"
+       location="${dita.dtd.dir}${file.separator}bookmap.mod"/>
 
   <!-- OASIS Domains -->
   <dtd publicId="-//OASIS//ELEMENTS DITA Highlight Domain//EN"
@@ -68,6 +73,15 @@
   <dtd publicId="-//OASIS//ENTITIES DITA Utilities Domain//EN"
        location="${dita.dtd.dir}${file.separator}utilitiesDomain.ent" />
        
+  <dtd publicId="-//OASIS//ELEMENTS DITA XNAL Domain//EN"
+       location="${dita.dtd.dir}${file.separator}xnalDomain.mod"/>
+  <dtd publicId="-//OASIS//ENTITIES DITA XNAL Domain//EN"
+       location="${dita.dtd.dir}${file.separator}xnalDomain.ent"/>
+       
+  <dtd publicId="-//OASIS//ELEMENTS DITA Common Elements//EN"
+       location="${dita.dtd.dir}${file.separator}commonElements.mod"/>
+  <dtd publicId="-//OASIS//ENTITIES DITA Common Elements//EN"
+       location="${dita.dtd.dir}${file.separator}commonElements.ent"/>
   <dtd publicId="-//OASIS//ELEMENTS DITA Metadata//EN"
        location="${dita.dtd.dir}${file.separator}metaDecl.mod"/>
   <dtd publicId="-//OASIS//ELEMENTS DITA CALS Tables//EN"

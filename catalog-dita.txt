@@ -1,55 +1,55 @@
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+     Sourceforge.net. See the accompanying license.txt file for 
+     applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
 -- Catalog for Dita --
 
 -- Dita DTDs --
 
-PUBLIC "-//IBM//DTD DITA Concept//EN" "concept.dtd"
-PUBLIC "-//IBM//ELEMENTS DITA Concept//EN" "concept.mod"
+PUBLIC "-//IBM//DTD DITA Concept//EN" "dita132/concept.dtd"
+PUBLIC "-//IBM//ELEMENTS DITA Concept//EN" "dita132/concept.mod"
 
-PUBLIC "-//IBM//DTD DITA Composite//EN" "ditabase.dtd"
+PUBLIC "-//IBM//DTD DITA Composite//EN" "dita132/ditabase.dtd"
 
-PUBLIC "-//IBM//DTD DITA Reference//EN" "reference.dtd"
-PUBLIC "-//IBM//ELEMENTS DITA Reference//EN" "reference.mod"
+PUBLIC "-//IBM//DTD DITA Reference//EN" "dita132/reference.dtd"
+PUBLIC "-//IBM//ELEMENTS DITA Reference//EN" "dita132/reference.mod"
 
-PUBLIC "-//IBM//DTD DITA Task//EN" "task.dtd"
-PUBLIC "-//IBM//ELEMENTS DITA Task//EN" "task.mod"
+PUBLIC "-//IBM//DTD DITA Task//EN" "dita132/task.dtd"
+PUBLIC "-//IBM//ELEMENTS DITA Task//EN" "dita132/task.mod"
 
-PUBLIC "-//IBM//DTD DITA Topic//EN" "topic.dtd"
-PUBLIC "-//IBM//ELEMENTS DITA Topic//EN" "topic.mod"
-PUBLIC "-//IBM//ENTITIES DITA Topic Class//EN" "topic_class.ent"
-PUBLIC "-//IBM//ENTITIES DITA Topic Definitions//EN" "topic_defn.ent"
+PUBLIC "-//IBM//DTD DITA Topic//EN" "dita132/topic.dtd"
+PUBLIC "-//IBM//ELEMENTS DITA Topic//EN" "dita132/topic.mod"
+PUBLIC "-//IBM//ENTITIES DITA Topic Class//EN" "dita132/topic_class.ent"
+PUBLIC "-//IBM//ENTITIES DITA Topic Definitions//EN" "dita132/topic_defn.ent"
 
 -- Maps --
 
-PUBLIC "-//IBM//DTD DITA Map//EN" "map.dtd"
-PUBLIC "-//IBM//ELEMENTS DITA Map//EN" "map.mod"
-PUBLIC "-//IBM//ENTITIES DITA Map Group Domain//EN" "mapgroup.ent"
-PUBLIC "-//IBM//ELEMENTS DITA Map Group Domain//EN" "mapgroup.mod"
+PUBLIC "-//IBM//DTD DITA Map//EN" "dita132/map.dtd"
+PUBLIC "-//IBM//ELEMENTS DITA Map//EN" "dita132/map.mod"
+PUBLIC "-//IBM//ENTITIES DITA Map Group Domain//EN" "dita132/mapgroup.ent"
+PUBLIC "-//IBM//ELEMENTS DITA Map Group Domain//EN" "dita132/mapgroup.mod"
 
 -- Domains --
 
-PUBLIC "-//IBM//ELEMENTS DITA Highlight Domain//EN" "highlight-domain.mod"
-PUBLIC "-//IBM//ENTITIES DITA Highlight Domain//EN" "highlight-domain.ent"
+PUBLIC "-//IBM//ELEMENTS DITA Highlight Domain//EN" "dita132/highlight-domain.mod"
+PUBLIC "-//IBM//ENTITIES DITA Highlight Domain//EN" "dita132/highlight-domain.ent"
 
-PUBLIC "-//IBM//ELEMENTS DITA Programming Domain//EN" "programming-domain.mod"
-PUBLIC "-//IBM//ENTITIES DITA Programming Domain//EN" "programming-domain.ent"
+PUBLIC "-//IBM//ELEMENTS DITA Programming Domain//EN" "dita132/programming-domain.mod"
+PUBLIC "-//IBM//ENTITIES DITA Programming Domain//EN" "dita132/programming-domain.ent"
 
-PUBLIC "-//IBM//ELEMENTS DITA Software Domain//EN" "software-domain.mod"
-PUBLIC "-//IBM//ENTITIES DITA Software Domain//EN" "software-domain.ent"
+PUBLIC "-//IBM//ELEMENTS DITA Software Domain//EN" "dita132/software-domain.mod"
+PUBLIC "-//IBM//ENTITIES DITA Software Domain//EN" "dita132/software-domain.ent"
 
-PUBLIC "-//IBM//ELEMENTS DITA User Interface Domain//EN" "ui-domain.mod"
-PUBLIC "-//IBM//ENTITIES DITA User Interface Domain//EN" "ui-domain.ent"
+PUBLIC "-//IBM//ELEMENTS DITA User Interface Domain//EN" "dita132/ui-domain.mod"
+PUBLIC "-//IBM//ENTITIES DITA User Interface Domain//EN" "dita132/ui-domain.ent"
 
-PUBLIC "-//IBM//ELEMENTS DITA User Interface Domain//EN" "ui-domain.mod"
-PUBLIC "-//IBM//ENTITIES DITA User Interface Domain//EN" "ui-domain.ent"
-
-PUBLIC "-//IBM//ELEMENTS DITA Utilities Domain//EN" "utilities-domain.mod"
-PUBLIC "-//IBM//ENTITIES DITA Utilities Domain//EN" "utilities-domain.ent"
+PUBLIC "-//IBM//ELEMENTS DITA Utilities Domain//EN" "dita132/utilities-domain.mod"
+PUBLIC "-//IBM//ENTITIES DITA Utilities Domain//EN" "dita132/utilities-domain.ent"
 
 -- Common --
 
-PUBLIC "-//IBM//ELEMENTS DITA Metadata//EN" "meta_xml.mod"
-PUBLIC "-//IBM//ELEMENTS DITA CALS Tables//EN" "tbl_xml.mod"
+PUBLIC "-//IBM//ELEMENTS DITA Metadata//EN" "dita132/meta_xml.mod"
+PUBLIC "-//IBM//ELEMENTS DITA CALS Tables//EN" "dita132/tbl_xml.mod"
 
 
 
@@ -69,6 +69,9 @@ PUBLIC "-//OASIS//ELEMENTS DITA Concept//EN" "concept.mod"
 
 PUBLIC "-//OASIS//DTD DITA Composite//EN" "ditabase.dtd"
 
+PUBLIC "-//OASIS//DTD DITA Glossary//EN" "glossary.dtd"
+PUBLIC "-//OASIS//ELEMENTS DITA Glossary//EN" "glossary.mod"
+
 PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd"
 PUBLIC "-//OASIS//ELEMENTS DITA Reference//EN" "reference.mod"
 
@@ -86,11 +89,16 @@ PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd"
 PUBLIC "-//OASIS//ELEMENTS DITA Map//EN" "map.mod"
 PUBLIC "-//OASIS//ENTITIES DITA Map Group Domain//EN" "mapGroup.ent"
 PUBLIC "-//OASIS//ELEMENTS DITA Map Group Domain//EN" "mapGroup.mod"
+PUBLIC "-//OASIS//DTD DITA BookMap//EN" "bookmap.dtd"
+PUBLIC "-//OASIS//ELEMENTS DITA BookMap//EN" "bookmap.mod"
 
 -- Domains --
 
 PUBLIC "-//OASIS//ELEMENTS DITA Highlight Domain//EN" "highlightDomain.mod"
 PUBLIC "-//OASIS//ENTITIES DITA Highlight Domain//EN" "highlightDomain.ent"
+
+PUBLIC "-//OASIS//ELEMENTS DITA Indexing Domain//EN" "indexingDomain.mod"
+PUBLIC "-//OASIS//ENTITIES DITA Indexing Domain//EN" "indexingDomain.ent"
 
 PUBLIC "-//OASIS//ELEMENTS DITA Programming Domain//EN" "programmingDomain.mod"
 PUBLIC "-//OASIS//ENTITIES DITA Programming Domain//EN" "programmingDomain.ent"
@@ -104,9 +112,14 @@ PUBLIC "-//OASIS//ENTITIES DITA User Interface Domain//EN" "uiDomain.ent"
 PUBLIC "-//OASIS//ELEMENTS DITA Utilities Domain//EN" "utilitiesDomain.mod"
 PUBLIC "-//OASIS//ENTITIES DITA Utilities Domain//EN" "utilitiesDomain.ent"
 
+PUBLIC "-//OASIS//ELEMENTS DITA XNAL Domain//EN" "xnalDomain.mod"
+PUBLIC "-//OASIS//ENTITIES DITA XNAL Domain//EN" "xnalDomain.ent"
 -- Common --
 
+PUBLIC "-//OASIS//ELEMENTS DITA Common Elements//EN" "commonElements.mod"
+PUBLIC" -//OASIS//ENTITIES DITA Common Elements//EN" "commonElements.ent"
 PUBLIC "-//OASIS//ELEMENTS DITA Metadata//EN" "metaDecl.mod"
+PUBLIC "-//OASIS//ELEMENTS DITA CALS Tables//EN" "tblDecl.mod"
 PUBLIC "-//OASIS//ELEMENTS DITA Exchange Table Model//EN" "tblDecl.mod"
 
 
@@ -118,6 +131,9 @@ PUBLIC "-//IBM//ELEMENTS DITA Element Reference//EN" "demo/elementref/elementref
 
 PUBLIC "-//IBM//DTD DITA FAQ//EN" "demo/faq/faq_shell.dtd"
 PUBLIC "-//IBM//ELEMENTS DITA FAQ//EN" "demo/faq/faq.mod"
+
+PUBLIC "-//IBM//DTD DITA eNote//EN" "demo/enote/enote_shell.dtd"
+PUBLIC "-//IBM//ELEMENTS DITA eNote//EN" "demo/enote/enote.mod"
 
 PUBLIC "-//IBM//DTD DITA BookMap//EN" "demo/book/bookmap.dtd"
 PUBLIC "-//IBM//ELEMENTS DITA BookMap//EN" "demo/book/bookmap.mod"

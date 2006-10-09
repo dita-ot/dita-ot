@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+     Sourceforge.net. See the accompanying license.txt file for 
+     applicable licenses.-->
+<!-- (c) Copyright IBM Corp. 2006 All Rights Reserved. -->
+<project name="dita2troff" default="dita2troff">
+  <property name="transtype" value="troff"/>
+    
+  <import file="build_init.xml" />
+  <import file="build_preprocess.xml" />
+
+  <target name="dita2troff"
+    depends="build-init, start-preprocess, clean-temp, gen-list, 
+                     copy-files, debug-filter, move-index-entries, conref, mappull, 
+                     maplink, move-links, topicpull, dita.topic.troff">
+  </target>
+
+  <target name="dita.topic.troff" unless="noTopic"
+    description="Build troff output from dita topics">
+    <!-- step 1 -->
+    <xslt processor="trax" basedir="${dita.temp.dir}"
+      destdir="${output.dir}" includes="${fullditatopiclist}"
+      extension="${dita.ext}"
+      style="${dita.script.dir}${file.separator}dita2troff-step1-shell.xsl">
+      <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
+    </xslt>
+
+    <!-- step 2 -->
+    <xslt processor="trax" basedir="${dita.map.output.dir}" destdir="${dita.map.output.dir}"
+      includes="${fullditatopiclist}" extension=".cli"
+      style="${dita.script.dir}${file.separator}dita2troff-step2-shell.xsl">
+      <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
+    </xslt>
+  </target>
+</project>

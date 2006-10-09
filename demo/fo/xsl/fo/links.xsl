@@ -39,9 +39,11 @@ with those set forth herein.
 
     <xsl:include href="../../cfg/fo/attrs/links-attr.xsl"/>
 
+    <xsl:key name="key_anchor" match="*[@id][not(contains(@class,' map/topicref '))]" use="@id"/>
+<!--[not(contains(@class,' map/topicref '))]-->
     <xsl:template name="insertLinkShortDesc">
         <xsl:variable name="destination" select="opentopic-func:getDestinationId(@href)"/>
-        <xsl:variable name="element" select="ancestor::*[last()]//*[@id = $destination]"/>
+        <xsl:variable name="element" select="key('key_anchor',$destination)[1]"/>
         <xsl:if test="$element/*[contains(@class, ' topic/shortdesc ')]">
             <fo:block xsl:use-attribute-sets="link__shortdesc">
                 <xsl:apply-templates select="$element/*[contains(@class, ' topic/shortdesc ')]"/>
@@ -81,7 +83,7 @@ with those set forth herein.
             </xsl:call-template>
         </xsl:if>
 
-        <xsl:variable name="element" select="ancestor::*[last()]//*[@id = $destination]"/>
+        <xsl:variable name="element" select="key('key_anchor',$destination)[1]"/>
 
         <xsl:choose>
             <xsl:when test="not($element) or ($destination = '')">
@@ -95,12 +97,14 @@ with those set forth herein.
                 </xsl:choose>
             </xsl:when>
 
-            <xsl:when test="$element[contains(@class, ' topic/fig ')]">
+            <xsl:when test="$element[contains(@class, ' topic/fig ')]/*[contains(@class, ' topic/title ')]">
                 <xsl:call-template name="insertVariable">
                     <xsl:with-param name="theVariableID" select="'Figure'"/>
                     <xsl:with-param name="theParameters">
                         <number>
-                            <xsl:value-of select="count(preceding::*[contains(@class, ' topic/fig ')]) + 1"/>
+                            <xsl:for-each select="$element">
+                                <xsl:value-of select="count(preceding::*[contains(@class, ' topic/fig ')]) + 1"/>
+                            </xsl:for-each>
                         </number>
                         <title>
                             <xsl:apply-templates select="$element/*[contains(@class, ' topic/title ')]" mode="process-title"/>
@@ -126,12 +130,14 @@ with those set forth herein.
                 </xsl:call-template>
             </xsl:when>
 
-            <xsl:when test="$element[contains(@class, ' topic/table ')]">
+            <xsl:when test="$element[contains(@class, ' topic/table ')]/*[contains(@class, ' topic/title ')]">
                 <xsl:call-template name="insertVariable">
                     <xsl:with-param name="theVariableID" select="'Table'"/>
                     <xsl:with-param name="theParameters">
                         <number>
-                            <xsl:value-of select="count(preceding::*[contains(@class, ' topic/table ')]) + 1"/>
+                            <xsl:for-each select="$element">
+                                <xsl:value-of select="count(preceding::*[contains(@class, ' topic/table ')]) + 1"/>
+                            </xsl:for-each>
                         </number>
                         <title>
                             <xsl:apply-templates select="$element/*[contains(@class, ' topic/title ')]" mode="process-title"/>

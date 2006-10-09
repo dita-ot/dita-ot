@@ -1,18 +1,33 @@
 /*
+ * This file is part of the DITA Open Toolkit project hosted on
+ * Sourceforge.net. See the accompanying license.txt file for 
+ * applicable licenses.
+ */
+
+/*
  * (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved.
  */
 package org.dita.dost.module;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Map;
+import java.util.Properties;
+import java.util.StringTokenizer;
 
 import org.dita.dost.exception.DITAOTException;
+import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.pipeline.PipelineHashIO;
 import org.dita.dost.reader.DitaValReader;
 import org.dita.dost.reader.ListReader;
 import org.dita.dost.util.Constants;
+import org.dita.dost.util.FileUtils;
 import org.dita.dost.writer.DitaWriter;
 
 
@@ -23,8 +38,58 @@ import org.dita.dost.writer.DitaWriter;
  * 
  * @author Zhang, Yuan Peng
  */
-public class DebugAndFilterModule extends AbstractPipelineModule {
-
+public class DebugAndFilterModule implements AbstractPipelineModule {
+	private static final String [] PROPERTY_UPDATE_LIST = {"user.input.file",Constants.HREF_TARGET_LIST,
+			Constants.CONREF_LIST,Constants.HREF_DITA_TOPIC_LIST,Constants.FULL_DITA_TOPIC_LIST,
+			Constants.FULL_DITAMAP_TOPIC_LIST,Constants.CONREF_TARGET_LIST,Constants.COPYTO_SOURCE_LIST,
+			Constants.COPYTO_TARGET_TO_SOURCE_MAP_LIST};
+	/**
+	 * File extension of source file
+	 */
+	public static String extName = null;
+    
+    private static void updateProperty (String listName, Properties property){
+    	StringBuffer result = new StringBuffer(Constants.INT_1024);
+    	String propValue = property.getProperty(listName);
+		String file;
+		int equalIndex;
+		StringTokenizer tokenizer = null;
+    	if (propValue == null || Constants.STRING_EMPTY.equals(propValue.trim())){
+    		//if the propValue is null or empty
+    		return;
+    	}
+    	
+    	tokenizer = new StringTokenizer(propValue,Constants.COMMA);
+    	
+    	while (tokenizer.hasMoreElements()){
+    		file = (String)tokenizer.nextElement();
+    		equalIndex = file.indexOf(Constants.EQUAL);
+    		if(file.indexOf(Constants.FILE_EXTENSION_DITAMAP) != -1){
+    			result.append(Constants.COMMA).append(file);
+    		} else if (equalIndex == -1 ){
+    			//append one more comma at the beginning of property value
+    			result.append(Constants.COMMA).append(FileUtils.replaceExtName(file));
+    		} else {
+    			//append one more comma at the beginning of property value
+    			result.append(Constants.COMMA);
+    			result.append(FileUtils.replaceExtName(file.substring(0,equalIndex)));
+    			result.append(Constants.EQUAL);
+    			result.append(FileUtils.replaceExtName(file.substring(equalIndex+1)));
+    		}
+    	}
+    	
+    	property.setProperty(listName, result.substring(Constants.INT_1));
+    	
+    }
+	private DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
+	
+	/**
+	 * Default Construtor
+	 *
+	 */
+	public DebugAndFilterModule(){
+	}
+	
     /**
      * @see org.dita.dost.module.AbstractPipelineModule#execute(org.dita.dost.pipeline.AbstractPipelineInput)
      * 
@@ -33,16 +98,16 @@ public class DebugAndFilterModule extends AbstractPipelineModule {
         String baseDir = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_BASEDIR);
         String ditavalFile = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_DITAVAL);
         String tempDir = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_TEMPDIR);
-        String inputDir = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_EXT_PARAM_INPUTDIR);
+        String ext = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_DITAEXT);
+
+        String inputDir = null;
         String filePathPrefix = null;
         ListReader listReader = new ListReader();
         LinkedList parseList = null;
         Content content;
         DitaWriter fileWriter;
         
-        if (!new File(inputDir).isAbsolute()) {
-        	inputDir = new File(baseDir, inputDir).getAbsolutePath();
-        }
+		extName = ext.startsWith(Constants.DOT) ? ext : (Constants.DOT + ext);
         if (!new File(tempDir).isAbsolute()) {
         	tempDir = new File(baseDir, tempDir).getAbsolutePath();
         }
@@ -53,6 +118,12 @@ public class DebugAndFilterModule extends AbstractPipelineModule {
         listReader.read(new File(tempDir, Constants.FILE_NAME_DITA_LIST).getAbsolutePath());
         parseList = (LinkedList) listReader.getContent()
                 .getCollection();
+        inputDir = (String) listReader.getContent().getValue();
+        
+        if (!new File(inputDir).isAbsolute()) {
+        	inputDir = new File(baseDir, inputDir).getAbsolutePath();
+        }
+        
         if (ditavalFile!=null){
             DitaValReader filterReader = new DitaValReader();
             filterReader.read(ditavalFile);
@@ -70,6 +141,13 @@ public class DebugAndFilterModule extends AbstractPipelineModule {
         }
         
         while (!parseList.isEmpty()) {
+        	String filename = (String) parseList.removeLast();
+        	
+        	if (!new File(inputDir, filename).exists()) {
+        		// This is an copy-to target file, ignore it
+        		continue;
+        	}
+        	
             /*
              * Usually the writer's argument for write() is used to pass in the
              * ouput file name. But in this case, the input file name is same as
@@ -77,15 +155,69 @@ public class DebugAndFilterModule extends AbstractPipelineModule {
              * file name. "|" is used to separate the path information that is
              * not necessary to be kept (baseDir) and the path information that
              * need to be kept in the temp directory.
-             */
-        	fileWriter.write(
+             */        	
+			fileWriter.write(
         			new StringBuffer().append(filePathPrefix)
-        				.append((String) parseList.removeLast()).toString());
+        				.append(filename).toString());
             
         }
         
+        updateList(tempDir);
+        // reload the property for processing of copy-to
+        listReader.read(new File(tempDir, Constants.FILE_NAME_DITA_LIST).getAbsolutePath());
+        performCopytoTask(tempDir, listReader.getCopytoMap());
 
         return null;
+    }
+    
+    
+    /*
+     * Execute copy-to task, generate copy-to targets base on sources
+     */
+	private void performCopytoTask(String tempDir, Map copytoMap) {
+        Iterator iter = copytoMap.entrySet().iterator();
+        while (iter.hasNext()) {
+        	Map.Entry entry = (Map.Entry) iter.next();
+        	String copytoTarget = (String) entry.getKey();
+        	String copytoSource = (String) entry.getValue();        	
+        	File srcFile = new File(tempDir, copytoSource);
+        	File targetFile = new File(tempDir, copytoTarget);
+        	
+        	if (targetFile.exists()) {
+        		javaLogger
+						.logWarn(new StringBuffer("Copy-to task [copy-to=\"")
+								.append(copytoTarget)
+								.append("\"] which points to an existed file was ignored.").toString());
+        	}else{
+        		FileUtils.copyFile(srcFile, targetFile);
+        	}
+        }
+	}
+
+    private void updateList(String tempDir){
+    	Properties property = new Properties();
+    	FileOutputStream output = null;
+    	try{
+    		property.load(new FileInputStream( new File(tempDir, Constants.FILE_NAME_DITA_LIST)));
+    		
+    		for (int i = 0; i < PROPERTY_UPDATE_LIST.length; i ++){
+    			updateProperty(PROPERTY_UPDATE_LIST[i], property);
+    		}
+    		
+    		output = new FileOutputStream(new File(tempDir, Constants.FILE_NAME_DITA_LIST));
+    		property.store(output, null);
+    		output.flush();
+    		
+    	} catch (Exception e){
+    		javaLogger.logException(e);
+    	} finally{
+    		try{
+    			output.close();
+    		}catch(IOException e){
+				javaLogger.logException(e);
+    		}
+    	}
+    	
     }
 
 }

@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+     Sourceforge.net. See the accompanying license.txt file for 
+     applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
 <!-- revise @PLACEHOLDER@ names and values-->
 
@@ -19,7 +22,7 @@
   <import file="${dita.dir}${file.separator}integrator.xml"/>
   
   <target name="@DELIVERABLE.NAME@2eclipsehelp" depends="integrate">
-    <ant antfile="${dita.dir}${file.separator}conductor.xml" target="init">
+    <ant antfile="${dita.dir}${file.separator}build.xml" target="init">
       <!-- please refer to the toolkit's document for supported parameters, and 
            specify them base on your needs -->
       <property name="args.input" value="@DITA.INPUT@"/>

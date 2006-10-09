@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+  Sourceforge.net. See the accompanying license.txt file for 
+  applicable licenses.-->
 <!-- (c) Copyright by Comtech Services, Inc. All rights reserved. -->
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="set_env" xml:lang="en-us">
@@ -99,7 +102,7 @@
                   click on <uicontrol>New</uicontrol> under the System 
                   variables section.</li>
                 <li>Type 
-                  <codeph>C:\ditaot\lib\dost.jar</codeph><note 
+                  <codeph>C:\ditaot\lib;C:\ditaot\lib\dost.jar;C:\ditaot\lib\resolver.jar</codeph><note 
                   type="important">If there are other variables listed, create 
                   new variable separated by a semicolon. Ensure there are no 
                   spaces before or after the semicolon.</note></li>

@@ -1,4 +1,10 @@
 /*
+ * This file is part of the DITA Open Toolkit project hosted on
+ * Sourceforge.net. See the accompanying license.txt file for 
+ * applicable licenses.
+ */
+
+/*
  * (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved.
  */
 package org.dita.dost.reader;
@@ -7,16 +13,20 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.HashMap;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
-import javax.xml.parsers.ParserConfigurationException;
-
+import org.apache.xml.resolver.tools.CatalogResolver;
+import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.Constants;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.FilterUtils;
+import org.dita.dost.util.StringUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -47,12 +57,21 @@ public class GenListModuleReader extends AbstractXMLReader {
 	/** Flag for href in parsing file */
 	private boolean hasHref = false;
 
-	/** List of the parsing result */
-	private List result = null;
+	/** Set of all the non-conref and non-copyto targets refered in current parsing file */
+	private Set nonConrefCopytoTargets = null;
+	
+	/** Set of conref targets refered in current parsing file */
+	private Set conrefTargets = null;
+	
+	/** Set of href nonConrefCopytoTargets refered in current parsing file */
+	private Set hrefTargets = null;
 
-	/** List of href targets refered in current parsing file */
-	private List hrefTargets = null;
-
+	/** Set of sources of those copy-to that were ignored */
+	private Set ignoredCopytoSourceSet = null;
+	
+	/** Map of copy-to target to souce	*/
+	private Map copytoMap = null;
+	
 	/** Flag used to mark if parsing entered into excluded element */
 	private boolean insideExcludedElement = false;
 	
@@ -62,22 +81,36 @@ public class GenListModuleReader extends AbstractXMLReader {
 	/** Flag used to mark if current file is still valid after filtering */
 	private boolean isValidInput = false;
 	
+	private String props; // contains the attribution specialization from props
+	
+	private DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
+	
 	/**
 	 * Constructor
 	 */
 	public GenListModuleReader() {
-		result = new ArrayList(Constants.INT_64);
-		hrefTargets = new ArrayList(Constants.INT_32);
+		Class c = null;
+		nonConrefCopytoTargets = new HashSet(Constants.INT_64);
+		hrefTargets = new HashSet(Constants.INT_32);
+		conrefTargets = new HashSet(Constants.INT_32);
+		copytoMap = new HashMap(Constants.INT_16);
+		ignoredCopytoSourceSet = new HashSet(Constants.INT_16);
+		props = null;
 		reader.setContentHandler(this);
-		reader.setEntityResolver(this);
+		try {
+			c = Class.forName(Constants.RESOLVER_CLASS);
+			reader.setEntityResolver(new CatalogResolver());
+		}catch (ClassNotFoundException e){
+			reader.setEntityResolver(this);
+		}
 	}
 
 	/**
-	 * Init xml reader used for pipeline parsing.
-	 * 
-	 * @throws SAXException
-	 * @throws ParserConfigurationException
-	 */
+     * Init xml reader used for pipeline parsing.
+	 *
+     * @throws SAXException
+     * @param ditaDir 
+     */
 	public static void initXMLReader(String ditaDir) throws SAXException {
 		if (System.getProperty(Constants.SAX_DRIVER_PROPERTY) == null) {
 			// The default sax driver is set to xerces's sax driver
@@ -92,15 +125,22 @@ public class GenListModuleReader extends AbstractXMLReader {
 		catalogMap = CatalogUtils.getCatalog(ditaDir);
 	}
 
-	public void reset() {
+	/**
+	 * 
+	 * Reset the internal variables
+	 */
+    public void reset() {
 		hasConRef = false;
 		hasHref = false;
 		currentDir = null;
 		insideExcludedElement = false;
 		excludedLevel = 0;
 		isValidInput = false;
-		result.clear();
+		nonConrefCopytoTargets.clear();
 		hrefTargets.clear();
+		conrefTargets.clear();
+		copytoMap.clear();
+		ignoredCopytoSourceSet.clear();
 	}
 
 	/**
@@ -122,12 +162,19 @@ public class GenListModuleReader extends AbstractXMLReader {
 	}
 
 	/**
-	 * Get the parsing result.
+	 * Get all targets except copy-to.
 	 * 
-	 * @return Returns the result.
+	 * @return Returns allTargets.
 	 */
-	public List getResult() {
-		return result;
+	public Set getNonCopytoResult() {
+		Set nonCopytoSet = new HashSet(Constants.INT_128);
+		
+		nonCopytoSet.addAll(nonConrefCopytoTargets);
+		nonCopytoSet.addAll(conrefTargets);
+		nonCopytoSet.addAll(copytoMap.values());
+		nonCopytoSet.addAll(ignoredCopytoSourceSet);
+		
+		return nonCopytoSet;
 	}
 
 	/**
@@ -135,10 +182,46 @@ public class GenListModuleReader extends AbstractXMLReader {
 	 * 
 	 * @return Returns the hrefTargets.
 	 */
-	public List getHrefTargets() {
+	public Set getHrefTargets() {
 		return hrefTargets;
 	}
+	
+	/**
+	 * Get conref targets.
+	 * 
+	 * @return Returns the conrefTargets.
+	 */
+	public Set getConrefTargets() {
+		return conrefTargets;
+	}
+	
+	/**
+	 * Get non-conref and non-copyto targets.
+	 * 
+	 * @return Returns the nonConrefCopytoTargets.
+	 */
+	public Set getNonConrefCopytoTargets() {
+		return nonConrefCopytoTargets;
+	}
+	
+	/**
+     * Returns the ignoredCopytoSourceSet
+     *
+     * @return Returns the ignoredCopytoSourceSet.
+     */
+	public Set getIgnoredCopytoSourceSet() {
+		return ignoredCopytoSourceSet;
+	}
 
+	/**
+	 * Get the copy-to map.
+	 * 
+	 * @return
+	 */
+	public Map getCopytoMap() {
+		return copytoMap;
+	}
+	
 	/**
 	 * Set the relative directory of current file.
 	 * 
@@ -181,13 +264,21 @@ public class GenListModuleReader extends AbstractXMLReader {
 	 */
 	public void startElement(String uri, String localName, String qName,
 			Attributes atts) throws SAXException {
+		String domains = null;
+        String attrValue = atts.getValue(Constants.ATTRIBUTE_NAME_CLASS);
+		
+        if (attrValue != null && attrValue.indexOf(Constants.ATTR_CLASS_VALUE_TOPIC) != -1){
+        	domains = atts.getValue(Constants.ATTRIBUTE_NAME_DOMAINS);
+        	props = StringUtils.getExtProps(domains);
+        }
+		
 		if (insideExcludedElement) {
 			++excludedLevel;
 			return;
 		}
 		
 		// Ignore element that has been filtered out.
-		if (FilterUtils.needExclude(atts)) {
+		if (FilterUtils.needExclude(atts, props)) {
 			insideExcludedElement = true;
 			++excludedLevel;
 			return;
@@ -201,7 +292,7 @@ public class GenListModuleReader extends AbstractXMLReader {
 		 * from <title> was found, this kind of element's class attribute 
 		 * must contains 'topic/title'.
 		 */
-		String attrValue = atts.getValue(Constants.ATTRIBUTE_NAME_CLASS);
+		
 		if (attrValue != null) {
 			if ((attrValue.indexOf(Constants.ATTR_CLASS_VALUE_MAP) != -1)
 					|| (attrValue.indexOf(Constants.ATTR_CLASS_VALUE_TITLE) != -1)) {
@@ -265,16 +356,30 @@ public class GenListModuleReader extends AbstractXMLReader {
 		}
 
 		if (attrValue.startsWith(Constants.SHARP)
-				|| attrValue.indexOf(Constants.COLON_DOUBLE_SLASH) != -1
-				|| "external".equalsIgnoreCase(attrScope)
+				|| attrValue.indexOf(Constants.COLON_DOUBLE_SLASH) != -1){
+			return;
+		}
+		if ("external".equalsIgnoreCase(attrScope)
 				|| "peer".equalsIgnoreCase(attrScope)) {
 			return;
 		}
 
 		filename = FileUtils.normalizeDirectory(currentDir, attrValue);
+		try{
+			filename = URLDecoder.decode(filename, Constants.UTF8);
+		}catch(UnsupportedEncodingException e){
+			
+		}
 
-		if (FileUtils.isValidTarget(filename)) {
-			result.add(filename);
+		/*
+		 * Collect non-conref and non-copyto targets
+		 */
+		if (FileUtils.isValidTarget(filename.toLowerCase()) && 
+				(StringUtils.isEmptyString(atts.getValue(Constants.ATTRIBUTE_NAME_COPY_TO)) ||
+						!FileUtils.isTopicFile(atts.getValue(Constants.ATTRIBUTE_NAME_COPY_TO).toLowerCase()))
+				&& !Constants.ATTRIBUTE_NAME_CONREF.equals(attrName)
+				&& !Constants.ATTRIBUTE_NAME_COPY_TO.equals(attrName)) {
+			nonConrefCopytoTargets.add(filename);
 		}
 
 		/*
@@ -284,7 +389,40 @@ public class GenListModuleReader extends AbstractXMLReader {
 				&& FileUtils.isTopicFile(filename)) {
 			hrefTargets.add(new File(filename).getPath());
 		}
-
+		
+		/*
+		 * Collect only conref target topic files.
+		 */
+		if (Constants.ATTRIBUTE_NAME_CONREF.equals(attrName)
+				&& FileUtils.isDITAFile(filename)) {
+			conrefTargets.add(filename);
+		}
+		
+		// Collect copy-to (target,source) into hash map
+		if (Constants.ATTRIBUTE_NAME_COPY_TO.equals(attrName)
+				&& FileUtils.isTopicFile(filename)) {
+			String href = atts.getValue(Constants.ATTRIBUTE_NAME_HREF);
+			
+			if (StringUtils.isEmptyString(href)) {
+				StringBuffer buff = new StringBuffer();
+				buff.append("Copy-to task [href=\"\" copy-to=\"");
+				buff.append(filename);
+				buff.append("\"] was ignored.");
+				javaLogger.logWarn(buff.toString());
+			} else if (copytoMap.get(filename) != null){
+				StringBuffer buff = new StringBuffer();
+				buff.append("Copy-to task [href=\"");
+				buff.append(href);
+				buff.append("\" copy-to=\"");
+				buff.append(filename);
+				buff.append("\"] which points to another copy-to target");
+				buff.append(" was ignored.");
+				javaLogger.logWarn(buff.toString());
+				ignoredCopytoSourceSet.add(href);
+			} else {
+				copytoMap.put(filename, FileUtils.normalizeDirectory(currentDir, href));
+			}
+				
+		}
 	}
-
 }

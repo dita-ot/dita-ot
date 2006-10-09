@@ -1,10 +1,17 @@
 /*
+ * This file is part of the DITA Open Toolkit project hosted on
+ * Sourceforge.net. See the accompanying license.txt file for 
+ * applicable licenses.
+ */
+
+/*
  * (c) Copyright IBM Corp. 2005 All Rights Reserved.
  */
 
 package org.dita.dost.reader;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
 
 import org.dita.dost.index.IndexTerm;
@@ -14,6 +21,7 @@ import org.dita.dost.index.TopicrefElement;
 import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.util.Constants;
 import org.dita.dost.util.FileUtils;
+import org.dita.dost.util.StringUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
@@ -30,7 +38,7 @@ public class DitamapIndexTermReader extends AbstractXMLReader {
 	private Stack elementStack = null;
 	
 	/** List used to store all the specilized index terms */
-	private ArrayList indexTermSpecList = null;
+	private List indexTermSpecList = null;
 	
 	private String mapPath = null;
 
@@ -42,7 +50,7 @@ public class DitamapIndexTermReader extends AbstractXMLReader {
 	public DitamapIndexTermReader() {
 		super();
 		elementStack = new Stack();
-		indexTermSpecList = new ArrayList();
+		indexTermSpecList = new ArrayList(Constants.INT_256);
 	}
 
 	/**
@@ -52,6 +60,7 @@ public class DitamapIndexTermReader extends AbstractXMLReader {
 			throws SAXException {
 		String temp = new String(ch, start, length).trim();
 		IndexTerm indexTerm = null;
+		boolean withSpace = (ch[start] == '\n' || temp.startsWith(Constants.LINE_SEPARATOR));
 
 		if (temp.length() == 0) {
 			return;
@@ -62,13 +71,8 @@ public class DitamapIndexTermReader extends AbstractXMLReader {
 		}
 
 		indexTerm = (IndexTerm) elementStack.peek();
-
-		if (indexTerm.getTermName() == null) {
-			indexTerm.setTermName(temp);
-		} else {
-			indexTerm.setTermName(new StringBuffer(indexTerm.getTermName())
-					.append(temp).toString());
-		}
+		
+		indexTerm.setTermName(StringUtils.setOrAppend(indexTerm.getTermName(), temp, withSpace));
 
 	}
 
@@ -87,17 +91,22 @@ public class DitamapIndexTermReader extends AbstractXMLReader {
 		// in the list.
 		if (indexTermSpecList.contains(localName) && needPushTerm()) {
 			IndexTerm indexTerm = (IndexTerm) elementStack.pop();
+			Object obj = null;
 
 			if (indexTerm.getTermName() == null) {
 				indexTerm.setTermName("***");
 				javaLogger
 						.logWarn("The indexterm element does not have any content. Setting the term to ***.");
 			}
+			
+			if(indexTerm.getTermKey() == null){
+				indexTerm.setTermKey(indexTerm.getTermName());
+			}
 
-			Object obj = elementStack.peek();
+			obj = elementStack.peek();
 
 			if (obj instanceof TopicrefElement) {
-				IndexTermCollection.addTerm(indexTerm);
+				IndexTermCollection.getInstantce().addTerm(indexTerm);
 			} else {
 				IndexTerm parentTerm = (IndexTerm) obj;
 				parentTerm.addSubTerm(indexTerm);
@@ -144,17 +153,18 @@ public class DitamapIndexTermReader extends AbstractXMLReader {
 			if (obj instanceof TopicrefElement) {
 				TopicrefElement topicref = (TopicrefElement) obj;
 				IndexTermTarget target = new IndexTermTarget();
+				String targetURI = null;
 
 				String href = topicref.getHref();
 				String targetName = href;
 
 				StringBuffer buffer = new StringBuffer();
-				if (mapPath != null && !mapPath.equals(Constants.STRING_EMPTY)) {
+				if (mapPath != null && !Constants.STRING_EMPTY.equals(mapPath)) {
 					buffer.append(mapPath);
 					buffer.append(Constants.SLASH);
 				}
 				buffer.append(href);
-				String targetURI = FileUtils.removeRedundantNames(buffer
+				targetURI = FileUtils.removeRedundantNames(buffer
 						.toString());
 
 				if (targetName.lastIndexOf(Constants.SLASH) != -1) {
@@ -199,10 +209,10 @@ public class DitamapIndexTermReader extends AbstractXMLReader {
 	/**
 	 * Set map path.
 	 * 
-	 * @param mapPath
+	 * @param mappath
 	 */
-	public void setMapPath(String mapPath) {
-		this.mapPath = mapPath;
+	public void setMapPath(String mappath) {
+		this.mapPath = mappath;
 	}
 
 }

@@ -1,5 +1,11 @@
 <project name="dita-targets"  basedir=".">
-<!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+     Sourceforge.net. See the accompanying license.txt file for 
+     applicable licenses.-->
+<!-- (c) Copyright IBM Corp. 2004, 2006 All Rights Reserved. -->
+<!-- Deprecated: left for backward compatibility, and it will be removed in a 
+     later release -->
+    
 <!-- parameters   
 	args.input          required
 	dita.temp.dir       required

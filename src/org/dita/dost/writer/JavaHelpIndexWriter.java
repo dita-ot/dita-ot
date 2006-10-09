@@ -1,4 +1,10 @@
 /*
+ * This file is part of the DITA Open Toolkit project hosted on
+ * Sourceforge.net. See the accompanying license.txt file for 
+ * applicable licenses.
+ */
+
+/*
  * (c) Copyright IBM Corp. 2005 All Rights Reserved.
  */
 package org.dita.dost.writer;
@@ -23,7 +29,7 @@ import org.dita.dost.module.Content;
  * 
  * @author Wu, Zhi Qiang
  */
-public class JavaHelpIndexWriter extends AbstractWriter {
+public class JavaHelpIndexWriter implements AbstractWriter {
 	/** List of indexterms */
 	private List termList = null;
 	
@@ -128,12 +134,12 @@ public class JavaHelpIndexWriter extends AbstractWriter {
 				targetURL = targetURL.replace('/', '_');
 				targetURL = targetURL.replace('.', '_');
 
-				printWriter.print("<indexitem text=\"");		
+				printWriter.print("<indexitem text=\"");
 				printWriter.print(term.getTermName());
 				printWriter.print("\"");
 				printWriter.print(" target=\"");
 				printWriter.print(targetURL);
-				printWriter.print("\"/>");
+				printWriter.println("\"/>");
 			}
 		}		
 		
