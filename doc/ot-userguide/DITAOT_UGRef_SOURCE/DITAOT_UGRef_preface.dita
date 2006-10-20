@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
 <!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "../dtd/topic.dtd">
+<!-- 
+This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
+See the accompanying license.txt file for applicable licenses.
+-->
 <topic id="ditaug_preface" xml:lang="en-us">
 	<title>Colophon</title>
-	<shortdesc>Authoring and publishing information for this document.
-</shortdesc>
+	<shortdesc>Authoring and publishing information for this document.</shortdesc>
 	<prolog>
 	<author type="creator">Anna van Raaphorst</author>
 		<author type="contributor">Richard Johnson</author>
@@ -15,7 +18,7 @@
 		</copyright>
 		<critdates>
 			<created date="2006-May-01"/>
-			<revised modified="2006-August-09"/>
+			<revised modified="2006-October-12"/>
 		</critdates>
 		<metadata>
 			<keywords>
@@ -58,7 +61,7 @@
 			<prodinfo>
 				<prodname>DITA Open Toolkit</prodname>
 				<vrmlist>
-					<vrm version="1.2.2"/>
+					<vrm version="1.3"/>
 				</vrmlist>
 			</prodinfo>
 		</metadata>
@@ -67,15 +70,15 @@
 		<dl>
 			<dlentry>
 				<dt>Title</dt>
-				<dd><cite>DITA Open Toolkit User Guide and Reference</cite>.</dd>
+				<dd><cite>DITA Open Toolkit User Guide and Reference</cite></dd>
 				</dlentry>
 				<dlentry>
 				<dt>Edition, release</dt>
-				<dd>First edition, August 10, 2006. Based on release 1.2.2 of DITA Open Toolkit.</dd>
+				<dd>Second edition, October 17, 2006. Based on release 1.3 of DITA Open Toolkit.</dd>
 				</dlentry>
 				<dlentry>
 				<dt>Publishing information</dt>
-				<dd>DITA Open Toolkit is an open source, reference implementation of the OASIS DITA standard (currently DITA 1.0)</dd>
+				<dd>DITA Open Toolkit is an open-source, reference implementation of the OASIS DITA standard (currently DITA 1.1)</dd>
 				</dlentry>
 				<dlentry>
 				<dt>Authors</dt>
@@ -84,11 +87,11 @@
 				<dlentry>
 				<dt>Description</dt>
 				<dd>This document is the definitive source of information about DITA Open Toolkit (OT).
-				It is also a product of the architecture and the recommended best practices, having been written entirely in DITA XML and produced using the principles and procedures described in the document. With a few minor exceptions (in anticipation of some major enhancements in release 1.3, we made use of the existing bookmap and PDF2 functionality), <cite>DITA Open Toolkit User Guide and Reference</cite> is "vanilla DITA." By processing this document to a given target environment you can see output with no specializations or other special configurations applied. In general, we have found the vanilla outputs adequate for our needs, if not always glamorous or exciting.</dd>
+				It is also a product of the architecture and the recommended best practices, having been written entirely in DITA XML and produced using the principles and procedures described in the document. In general, the <cite>DITA Open Toolkit User Guide and Reference</cite> is "vanilla DITA," using the bookmap DTD. By processing this document to a given target environment you can see output with few specializations or other special configurations applied. For the most part, we have found the default outputs adequate for our needs.</dd>
 				</dlentry>
 				<dlentry>
 				<dt>Acknowledgements</dt>
-				<dd>The authors would like to thank those members of the DITA community who have authored or contributed to one or more topics in this document: Kylene Bruski, Don Day, Anne Gentle, JoAnn Hackos, Jennifer Linton, Deborah Pickett, and various anonymous IBM writers. We are also grateful to others in the community who have offered valuable encouragement, feedback, suggestions, and sources of information: Robert Anderson, Bernard Aschwanden, Ricardo Mattiazzi Baumgartner, Bob Doyle, Andy Hall, Erik Hennum, Carolyn Henry, Ellen Livengood, Shawn McKenzie, Scott Prentice, Paul Prescod, Michael Priestley, Todd Rose, Kate Wilhelm, Stacey Winn, Chris Wong, Bonnie Yelverton, and Stephen Zhang.</dd>
+				<dd>The authors would like to thank those members of the DITA community who have authored or contributed to one or more topics in this document: Kylene Bruski, Don Day, Anne Gentle, JoAnn Hackos, Jennifer Linton, Deborah Pickett, Michael Priestley, Stephen Zhang, and various anonymous IBM writers. We are also grateful to others in the community who have offered valuable encouragement, feedback, suggestions, and sources of information: Robert Anderson, Bernard Aschwanden, Ricardo Mattiazzi Baumgartner, Bob Doyle, Andy Hall, Erik Hennum, Carolyn Henry, Ellen Livengood, Shawn McKenzie, Scott Prentice, Paul Prescod, Todd Rose, Kate Wilhelm, Stacey Winn, Chris Wong, and Bonnie Yelverton.</dd>
 				</dlentry>
 				<dlentry>
 				<dt>Invitation to contribute to future editions</dt>

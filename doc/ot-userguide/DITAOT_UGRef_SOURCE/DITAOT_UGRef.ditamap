@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- (c) Copyright 2006 by VR Communications, Inc. All rights reserved. -->
 <!DOCTYPE bookmap PUBLIC "-//IBM//DTD DITA BookMap//EN" "dtd/bookmap.dtd">
-<bookmap>
+<!-- 
+This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
+See the accompanying license.txt file for applicable licenses.
+-->
+<bookmap title="DITA Open Toolkit User Guide" id="ditaug_top">
 	<!-- Legal, production, and publishing information -->
 	<bkinfo href="DITAOT_UGRef_bkinfo.dita"/>
 	<preface href="DITAOT_UGRef_preface.dita"/>
