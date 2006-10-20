@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "../dtd/concept.dtd">
+<!-- 
+This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
+See the accompanying license.txt file for applicable licenses.
+-->
 <concept id="collectiontype_attribute">
 	<title>Collection-type attribute</title>
-	<shortdesc/>
 	<prolog>
 		<author type="creator">Anna van Raaphorst</author>
 		<author type="contributor">Richard Johnson</author>
@@ -13,7 +16,7 @@
 		</copyright>
 		<critdates>
 			<created date="2006-May-01"/>
-			<revised modified="2006-August-08"/>
+			<revised modified="2006-October-11"/>
 		</critdates>
 		<metadata>
 			<keywords>
@@ -25,21 +28,15 @@
 			<prodinfo>
 				<prodname>DITA Open Toolkit</prodname>
 				<vrmlist>
-					<vrm version="1.2.2"/>
+					<vrm version="1.3"/>
 				</vrmlist>
 			</prodinfo>
 		</metadata>
 	</prolog>
 	<conbody>
 		<section id="collectiontype_attribute_term">
-			<p>
-				<b>Definition</b>
-			</p>
-			<p>One of a group of attributes used to create relationships among "sibling" topics that share a common parent.</p>
-			<p>
-				<b>Usage</b>
-			</p>
-			<p>To specify a collection-type attribute for a group of topics that do not have a common parent (for example, topics listed in the same cell of a <term>relationship table</term>, use the topic group container element.</p>
+			<p>A collection type is one of a group of attributes used to create relationships among "sibling" topics that share a common parent.</p>
+			<p>To specify a collection-type attribute for a group of topics that do not have a common parent (for example, topics listed in the same cell of a relationship table, use the topic group container element.</p>
 			<p>
 				<b>Example</b>
 			</p>

@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "../dtd/concept.dtd">
+<!-- 
+This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
+See the accompanying license.txt file for applicable licenses.
+-->
 <concept id="rss_overview">
 	<title>Distributing information about published DITA content as RSS</title>
-	<shortdesc>Overview information about distributing published DITA content as RSS.</shortdesc>
 	<prolog>
 		<author type="creator">Anna van Raaphorst</author>
 		<author type="contributor">Richard Johnson</author>
@@ -13,19 +16,18 @@
 		</copyright>
 		<critdates>
 			<created date="2006-May-01"/>
-			<revised modified="2006-August-09"/>
+			<revised modified="2006-October-11"/>
 		</critdates>
 		<metadata>
 			<keywords>
 				<keyword>distributing content</keyword>
 				<keyword>RSS</keyword>
-				<indexterm>RSS<indexterm>about</indexterm>
-				</indexterm>
+				<indexterm>RSS</indexterm>
 			</keywords>
 			<prodinfo>
 				<prodname>DITA Open Toolkit</prodname>
 				<vrmlist>
-					<vrm version="1.2.2"/>
+					<vrm version="1.3"/>
 				</vrmlist>
 			</prodinfo>
 		</metadata>
@@ -33,7 +35,7 @@
 	<conbody>
 		<section conref="../core_vocabulary/rss.dita#rss/rss_term"/>
 		<section>
-			<p>For example, the build could create a file like this to announce the availability of a new version of the output:
+			<p>For example, an Ant build could create a file like this to announce the availability of a new version of the output:
 		<codeblock>
 &lt;?xml version='1.0'?&gt;
 &lt;rss version='2.0'&gt;

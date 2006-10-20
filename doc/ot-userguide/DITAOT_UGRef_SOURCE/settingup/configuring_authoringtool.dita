@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "../dtd/task.dtd">
+<!-- 
+This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
+See the accompanying license.txt file for applicable licenses.
+-->
 <task id="configuring_authoringtool">
-	<title>Configuring your authoring tool</title>
-	<shortdesc>How to configure your authoring tool to use the catalog (using XMLSpy as an example).</shortdesc>
+	<title>Configuring your authoring tool to use the Toolkit catalog</title>
+	
 	<prolog>
 		<author type="creator">Richard Johnson</author>
 		<author type="contributor">Anna van Raaphorst</author>
@@ -13,7 +17,7 @@
 		</copyright>
 		<critdates>
 			<created date="2006-June-06"/>
-			<revised modified="2006-August-09"/>
+			<revised modified="2006-August-31"/>
 		</critdates>
 		<metadata>
 			<keywords>
@@ -31,7 +35,7 @@
 			<prodinfo>
 				<prodname>DITA Open Toolkit</prodname>
 				<vrmlist>
-					<vrm version="1.2.2"/>
+					<vrm version="1.3"/>
 				</vrmlist>
 			</prodinfo>
 		</metadata>
@@ -51,11 +55,11 @@
 			<p> 
 		By modifying XMLSpy's <filepath>CustomCatalog.xml</filepath> file, you can move your source files to a new location without having to worry about incorrect URIs in your DITA source files.
 		</p>
-			<p>Follow these steps to modify <filepath>c:\Program Files\Altova\XMLSpy2006/CustomCatalog.xml</filepath>.</p>
+			<p>Follow these steps to modify <filepath>C:\Program Files\Altova\XMLSpy2006/CustomCatalog.xml</filepath>.</p>
 		</context>
 		<steps>
 			<step>
-				<cmd>Save the <filepath>CustomCatalog.xml</filepath> stub file under a new name (for example, <filepath>CustomCatalogOLD.xml</filepath>.</cmd>
+				<cmd>Save the <filepath>CustomCatalog.xml</filepath> stub file under a new name (for example, <filepath>CustomCatalogOLD.xml</filepath>).</cmd>
 			</step>
 			<step>
 				<cmd>Open the <filepath>CustomCatalog.xml</filepath> stub file.</cmd>
@@ -101,13 +105,13 @@ Catalog.xsd"&gt;
 
 &lt;!-- XMLSPY custom XML catalog for DITA DTDs --&gt;
 
-&lt;public publicId="-//IBM//DTD DITA Concept//EN" uri="c:/ditaot/dtd/dita132/concept.dtd"&gt;&lt;/public&gt;
-&lt;public publicId="-//IBM//ELEMENTS DITA Concept//EN" uri="c:/ditaot/dtd/dita132/concept.mod"&gt;&lt;/public&gt;
+&lt;public publicId="-//IBM//DTD DITA Concept//EN" uri="C:/ditaot/dtd/dita132/concept.dtd"&gt;&lt;/public&gt;
+&lt;public publicId="-//IBM//ELEMENTS DITA Concept//EN" uri="C:/ditaot/dtd/dita132/concept.mod"&gt;&lt;/public&gt;
 
-&lt;public publicId="-//IBM//DTD DITA Composite//EN" uri="c:/ditaot/dtd/dita132/ditabase.dtd"&gt;&lt;/public&gt;
+&lt;public publicId="-//IBM//DTD DITA Composite//EN" uri="C:/ditaot/dtd/dita132/ditabase.dtd"&gt;&lt;/public&gt;
 
-&lt;public publicId="-//IBM//DTD DITA Reference//EN" uri="c:/ditaot/dtd/dita132/reference.dtd"&gt;&lt;/public&gt;
-&lt;public publicId="-//IBM//ELEMENTS DITA Reference//EN" uri="c:/ditaot/dtd/dita132/reference.mod"&gt;&lt;/public&gt;
+&lt;public publicId="-//IBM//DTD DITA Reference//EN" uri="C:/ditaot/dtd/dita132/reference.dtd"&gt;&lt;/public&gt;
+&lt;public publicId="-//IBM//ELEMENTS DITA Reference//EN" uri="C:/ditaot/dtd/dita132/reference.mod"&gt;&lt;/public&gt;
 . . .
 				</codeblock>
 				</info>
@@ -144,99 +148,99 @@ Catalog.xsd"&gt;
 
 &lt;!-- XMLSPY custom XML catalog for DITA DTDs --&gt;
 
-&lt;public publicId="-//IBM//DTD DITA Concept//EN" uri="c:/ditaot/dtd/dita132/concept.dtd"&gt;&lt;/public&gt;
-&lt;public publicId="-//IBM//ELEMENTS DITA Concept//EN" uri="c:/ditaot/dtd/dita132/concept.mod"&gt;&lt;/public&gt;
+&lt;public publicId="-//IBM//DTD DITA Concept//EN" uri="C:/ditaot/dtd/dita132/concept.dtd"&gt;&lt;/public&gt;
+&lt;public publicId="-//IBM//ELEMENTS DITA Concept//EN" uri="C:/ditaot/dtd/dita132/concept.mod"&gt;&lt;/public&gt;
 
-&lt;public publicId="-//IBM//DTD DITA Composite//EN" uri="c:/ditaot/dtd/dita132/ditabase.dtd"&gt;&lt;/public&gt;
+&lt;public publicId="-//IBM//DTD DITA Composite//EN" uri="C:/ditaot/dtd/dita132/ditabase.dtd"&gt;&lt;/public&gt;
 
-&lt;public publicId="-//IBM//DTD DITA Reference//EN" uri="c:/ditaot/dtd/dita132/reference.dtd"&gt;&lt;/public&gt;
-&lt;public publicId="-//IBM//ELEMENTS DITA Reference//EN" uri="c:/ditaot/dtd/dita132/reference.mod"&gt;&lt;/public&gt;
+&lt;public publicId="-//IBM//DTD DITA Reference//EN" uri="C:/ditaot/dtd/dita132/reference.dtd"&gt;&lt;/public&gt;
+&lt;public publicId="-//IBM//ELEMENTS DITA Reference//EN" uri="C:/ditaot/dtd/dita132/reference.mod"&gt;&lt;/public&gt;
 
-&lt;public publicId="-//IBM//DTD DITA Task//EN" uri="c:/ditaot/dtd/dita132/task.dtd"&gt;&lt;/public&gt;
-&lt;public publicId="-//IBM//ELEMENTS DITA Task//EN" uri="c:/ditaot/dtd/dita132/task.mod"&gt;&lt;/public&gt;
+&lt;public publicId="-//IBM//DTD DITA Task//EN" uri="C:/ditaot/dtd/dita132/task.dtd"&gt;&lt;/public&gt;
+&lt;public publicId="-//IBM//ELEMENTS DITA Task//EN" uri="C:/ditaot/dtd/dita132/task.mod"&gt;&lt;/public&gt;
 
-&lt;public publicId="-//IBM//DTD DITA Topic//EN" uri="c:/ditaot/dtd/dita132/topic.dtd"&gt;&lt;/public&gt;
-&lt;public publicId="-//IBM//ELEMENTS DITA Topic//EN" uri="c:/ditaot/dtd/dita132/topic.mod"&gt;&lt;/public&gt;
-&lt;public publicId="-//IBM//ENTITIES DITA Topic Class//EN" uri="c:/ditaot/dtd/dita132/topic_class.ent"&gt;&lt;/public&gt;
-&lt;public publicId="-//IBM//ENTITIES DITA Topic Definitions//EN" uri="c:/ditaot/dtd/dita132/topic_defn.ent"&gt;&lt;/public&gt;
+&lt;public publicId="-//IBM//DTD DITA Topic//EN" uri="C:/ditaot/dtd/dita132/topic.dtd"&gt;&lt;/public&gt;
+&lt;public publicId="-//IBM//ELEMENTS DITA Topic//EN" uri="C:/ditaot/dtd/dita132/topic.mod"&gt;&lt;/public&gt;
+&lt;public publicId="-//IBM//ENTITIES DITA Topic Class//EN" uri="C:/ditaot/dtd/dita132/topic_class.ent"&gt;&lt;/public&gt;
+&lt;public publicId="-//IBM//ENTITIES DITA Topic Definitions//EN" uri="C:/ditaot/dtd/dita132/topic_defn.ent"&gt;&lt;/public&gt;
 
-&lt;public publicId="-//IBM//DTD DITA Map//EN" uri="c:/ditaot/dtd/dita132/map.dtd"&gt;&lt;/public&gt;
-&lt;public publicId="-//IBM//ELEMENTS DITA Map//EN" uri="c:/ditaot/dtd/dita132/map.mod"&gt;&lt;/public&gt;
-&lt;public publicId="-//IBM//ENTITIES DITA Map Group Domain//EN" uri="c:/ditaot/dtd/dita132/mapgroup.ent"&gt;&lt;/public&gt;
-&lt;public publicId="-//IBM//ELEMENTS DITA Map Group Domain//EN" uri="c:/ditaot/dtd/dita132/mapgroup.mod"&gt;&lt;/public&gt;
+&lt;public publicId="-//IBM//DTD DITA Map//EN" uri="C:/ditaot/dtd/dita132/map.dtd"&gt;&lt;/public&gt;
+&lt;public publicId="-//IBM//ELEMENTS DITA Map//EN" uri="C:/ditaot/dtd/dita132/map.mod"&gt;&lt;/public&gt;
+&lt;public publicId="-//IBM//ENTITIES DITA Map Group Domain//EN" uri="C:/ditaot/dtd/dita132/mapgroup.ent"&gt;&lt;/public&gt;
+&lt;public publicId="-//IBM//ELEMENTS DITA Map Group Domain//EN" uri="C:/ditaot/dtd/dita132/mapgroup.mod"&gt;&lt;/public&gt;
 
-&lt;public publicId="-//IBM//ELEMENTS DITA Highlight Domain//EN" uri="c:/ditaot/dtd/dita132/highlight-domain.mod"&gt;&lt;/public&gt;
-&lt;public publicId="-//IBM//ENTITIES DITA Highlight Domain//EN" uri="c:/ditaot/dtd/dita132/highlight-domain.ent"&gt;&lt;/public&gt;
+&lt;public publicId="-//IBM//ELEMENTS DITA Highlight Domain//EN" uri="C:/ditaot/dtd/dita132/highlight-domain.mod"&gt;&lt;/public&gt;
+&lt;public publicId="-//IBM//ENTITIES DITA Highlight Domain//EN" uri="C:/ditaot/dtd/dita132/highlight-domain.ent"&gt;&lt;/public&gt;
 
-&lt;public publicId="-//IBM//ELEMENTS DITA Programming Domain//EN" uri="c:/ditaot/dtd/dita132/programming-domain.mod"&gt;&lt;/public&gt;
-&lt;public publicId="-//IBM//ENTITIES DITA Programming Domain//EN" uri="c:/ditaot/dtd/dita132/programming-domain.ent"&gt;&lt;/public&gt;
+&lt;public publicId="-//IBM//ELEMENTS DITA Programming Domain//EN" uri="C:/ditaot/dtd/dita132/programming-domain.mod"&gt;&lt;/public&gt;
+&lt;public publicId="-//IBM//ENTITIES DITA Programming Domain//EN" uri="C:/ditaot/dtd/dita132/programming-domain.ent"&gt;&lt;/public&gt;
 
-&lt;public publicId="-//IBM//ELEMENTS DITA Software Domain//EN" uri="c:/ditaot/dtd/dita132/software-domain.mod"&gt;&lt;/public&gt;
-&lt;public publicId="-//IBM//ENTITIES DITA Software Domain//EN" uri="c:/ditaot/dtd/dita132/software-domain.ent"&gt;&lt;/public&gt;
+&lt;public publicId="-//IBM//ELEMENTS DITA Software Domain//EN" uri="C:/ditaot/dtd/dita132/software-domain.mod"&gt;&lt;/public&gt;
+&lt;public publicId="-//IBM//ENTITIES DITA Software Domain//EN" uri="C:/ditaot/dtd/dita132/software-domain.ent"&gt;&lt;/public&gt;
 
-&lt;public publicId="-//IBM//ELEMENTS DITA User Interface Domain//EN" uri="c:/ditaot/dtd/dita132/ui-domain.mod"&gt;&lt;/public&gt;
-&lt;public publicId="-//IBM//ENTITIES DITA User Interface Domain//EN" uri="c:/ditaot/dtd/dita132/ui-domain.ent"&gt;&lt;/public&gt;
+&lt;public publicId="-//IBM//ELEMENTS DITA User Interface Domain//EN" uri="C:/ditaot/dtd/dita132/ui-domain.mod"&gt;&lt;/public&gt;
+&lt;public publicId="-//IBM//ENTITIES DITA User Interface Domain//EN" uri="C:/ditaot/dtd/dita132/ui-domain.ent"&gt;&lt;/public&gt;
 
-&lt;public publicId="-//IBM//ELEMENTS DITA Utilities Domain//EN" uri="c:/ditaot/dtd/dita132/utilities-domain.mod"&gt;&lt;/public&gt;
-&lt;public publicId="-//IBM//ENTITIES DITA Utilities Domain//EN" uri="c:/ditaot/dtd/dita132/utilities-domain.ent"&gt;&lt;/public&gt;
+&lt;public publicId="-//IBM//ELEMENTS DITA Utilities Domain//EN" uri="C:/ditaot/dtd/dita132/utilities-domain.mod"&gt;&lt;/public&gt;
+&lt;public publicId="-//IBM//ENTITIES DITA Utilities Domain//EN" uri="C:/ditaot/dtd/dita132/utilities-domain.ent"&gt;&lt;/public&gt;
 
-&lt;public publicId="-//IBM//ELEMENTS DITA Metadata//EN" uri="c:/ditaot/dtd/dita132/meta_xml.mod"&gt;&lt;/public&gt;
-&lt;public publicId="-//IBM//ELEMENTS DITA CALS Tables//EN" uri="c:/ditaot/dtd/dita132/tbl_xml.mod"&gt;&lt;/public&gt;
+&lt;public publicId="-//IBM//ELEMENTS DITA Metadata//EN" uri="C:/ditaot/dtd/dita132/meta_xml.mod"&gt;&lt;/public&gt;
+&lt;public publicId="-//IBM//ELEMENTS DITA CALS Tables//EN" uri="C:/ditaot/dtd/dita132/tbl_xml.mod"&gt;&lt;/public&gt;
           
-&lt;public publicId="-//OASIS//DTD DITA Concept//EN" uri="c:/ditaot/dtd/concept.dtd"&gt;&lt;/public&gt;
-&lt;public publicId="-//OASIS//ELEMENTS DITA Concept//EN" uri="c:/ditaot/dtd/concept.mod"&gt;&lt;/public&gt;
+&lt;public publicId="-//OASIS//DTD DITA Concept//EN" uri="C:/ditaot/dtd/concept.dtd"&gt;&lt;/public&gt;
+&lt;public publicId="-//OASIS//ELEMENTS DITA Concept//EN" uri="C:/ditaot/dtd/concept.mod"&gt;&lt;/public&gt;
 
-&lt;public publicId="-//OASIS//DTD DITA Composite//EN" uri="c:/ditaot/dtd/ditabase.dtd"&gt;&lt;/public&gt;
+&lt;public publicId="-//OASIS//DTD DITA Composite//EN" uri="C:/ditaot/dtd/ditabase.dtd"&gt;&lt;/public&gt;
 
-&lt;public publicId="-//OASIS//DTD DITA Reference//EN" uri="c:/ditaot/dtd/reference.dtd"&gt;&lt;/public&gt;
-&lt;public publicId="-//OASIS//ELEMENTS DITA Reference//EN" uri="c:/ditaot/dtd/reference.mod"&gt;&lt;/public&gt;
+&lt;public publicId="-//OASIS//DTD DITA Reference//EN" uri="C:/ditaot/dtd/reference.dtd"&gt;&lt;/public&gt;
+&lt;public publicId="-//OASIS//ELEMENTS DITA Reference//EN" uri="C:/ditaot/dtd/reference.mod"&gt;&lt;/public&gt;
 
-&lt;public publicId="-//OASIS//DTD DITA Task//EN" uri="c:/ditaot/dtd/task.dtd"&gt;&lt;/public&gt;
-&lt;public publicId="-//OASIS//ELEMENTS DITA Task//EN" uri="c:/ditaot/dtd/task.mod"&gt;&lt;/public&gt;
+&lt;public publicId="-//OASIS//DTD DITA Task//EN" uri="C:/ditaot/dtd/task.dtd"&gt;&lt;/public&gt;
+&lt;public publicId="-//OASIS//ELEMENTS DITA Task//EN" uri="C:/ditaot/dtd/task.mod"&gt;&lt;/public&gt;
 
-&lt;public publicId="-//OASIS//DTD DITA Topic//EN" uri="c:/ditaot/dtd/topic.dtd"&gt;&lt;/public&gt;
-&lt;public publicId="-//OASIS//ELEMENTS DITA Topic//EN" uri="c:/ditaot/dtd/topic.mod"&gt;&lt;/public&gt;
-&lt;public publicId="-//OASIS//ENTITIES DITA Topic Class//EN" uri="c:/ditaot/dtd/topicAttr.mod"&gt;&lt;/public&gt;
-&lt;public publicId="-//OASIS//ENTITIES DITA Topic Definitions//EN" uri="c:/ditaot/dtd/topicDefn.ent"&gt;&lt;/public&gt;
+&lt;public publicId="-//OASIS//DTD DITA Topic//EN" uri="C:/ditaot/dtd/topic.dtd"&gt;&lt;/public&gt;
+&lt;public publicId="-//OASIS//ELEMENTS DITA Topic//EN" uri="C:/ditaot/dtd/topic.mod"&gt;&lt;/public&gt;
+&lt;public publicId="-//OASIS//ENTITIES DITA Topic Class//EN" uri="C:/ditaot/dtd/topicAttr.mod"&gt;&lt;/public&gt;
+&lt;public publicId="-//OASIS//ENTITIES DITA Topic Definitions//EN" uri="C:/ditaot/dtd/topicDefn.ent"&gt;&lt;/public&gt;
 
-&lt;public publicId="-//OASIS//DTD DITA Map//EN" uri="c:/ditaot/dtd/map.dtd"&gt;&lt;/public&gt;
-&lt;public publicId="-//OASIS//ELEMENTS DITA Map//EN" uri="c:/ditaot/dtd/map.mod"&gt;&lt;/public&gt;
-&lt;public publicId="-//OASIS//ENTITIES DITA Map Group Domain//EN" uri="c:/ditaot/dtd/mapGroup.ent"&gt;&lt;/public&gt;
-&lt;public publicId="-//OASIS//ELEMENTS DITA Map Group Domain//EN" uri="c:/ditaot/dtd/mapGroup.mod"&gt;&lt;/public&gt;
+&lt;public publicId="-//OASIS//DTD DITA Map//EN" uri="C:/ditaot/dtd/map.dtd"&gt;&lt;/public&gt;
+&lt;public publicId="-//OASIS//ELEMENTS DITA Map//EN" uri="C:/ditaot/dtd/map.mod"&gt;&lt;/public&gt;
+&lt;public publicId="-//OASIS//ENTITIES DITA Map Group Domain//EN" uri="C:/ditaot/dtd/mapGroup.ent"&gt;&lt;/public&gt;
+&lt;public publicId="-//OASIS//ELEMENTS DITA Map Group Domain//EN" uri="C:/ditaot/dtd/mapGroup.mod"&gt;&lt;/public&gt;
 
-&lt;public publicId="-//OASIS//ELEMENTS DITA Highlight Domain//EN" uri="c:/ditaot/dtd/highlightDomain.mod"&gt;&lt;/public&gt;
-&lt;public publicId="-//OASIS//ENTITIES DITA Highlight Domain//EN" uri="c:/ditaot/dtd/highlightDomain.ent"&gt;&lt;/public&gt;
+&lt;public publicId="-//OASIS//ELEMENTS DITA Highlight Domain//EN" uri="C:/ditaot/dtd/highlightDomain.mod"&gt;&lt;/public&gt;
+&lt;public publicId="-//OASIS//ENTITIES DITA Highlight Domain//EN" uri="C:/ditaot/dtd/highlightDomain.ent"&gt;&lt;/public&gt;
 
-&lt;public publicId="-//OASIS//ELEMENTS DITA Programming Domain//EN" uri="c:/ditaot/dtd/programmingDomain.mod"&gt;&lt;/public&gt;
-&lt;public publicId="-//OASIS//ENTITIES DITA Programming Domain//EN" uri="c:/ditaot/dtd/programmingDomain.ent"&gt;&lt;/public&gt;
+&lt;public publicId="-//OASIS//ELEMENTS DITA Programming Domain//EN" uri="C:/ditaot/dtd/programmingDomain.mod"&gt;&lt;/public&gt;
+&lt;public publicId="-//OASIS//ENTITIES DITA Programming Domain//EN" uri="C:/ditaot/dtd/programmingDomain.ent"&gt;&lt;/public&gt;
 
-&lt;public publicId="-//OASIS//ELEMENTS DITA Software Domain//EN" uri="c:/ditaot/dtd/softwareDomain.mod"&gt;&lt;/public&gt;
-&lt;public publicId="-//OASIS//ENTITIES DITA Software Domain//EN" uri="c:/ditaot/dtd/softwareDomain.ent"&gt;&lt;/public&gt;
+&lt;public publicId="-//OASIS//ELEMENTS DITA Software Domain//EN" uri="C:/ditaot/dtd/softwareDomain.mod"&gt;&lt;/public&gt;
+&lt;public publicId="-//OASIS//ENTITIES DITA Software Domain//EN" uri="C:/ditaot/dtd/softwareDomain.ent"&gt;&lt;/public&gt;
 
-&lt;public publicId="-//OASIS//ELEMENTS DITA User Interface Domain//EN" uri="c:/ditaot/dtd/uiDomain.mod"&gt;&lt;/public&gt;
-&lt;public publicId="-//OASIS//ENTITIES DITA User Interface Domain//EN" uri="c:/ditaot/dtd/uiDomain.ent"&gt;&lt;/public&gt;
+&lt;public publicId="-//OASIS//ELEMENTS DITA User Interface Domain//EN" uri="C:/ditaot/dtd/uiDomain.mod"&gt;&lt;/public&gt;
+&lt;public publicId="-//OASIS//ENTITIES DITA User Interface Domain//EN" uri="C:/ditaot/dtd/uiDomain.ent"&gt;&lt;/public&gt;
 
-&lt;public publicId="-//OASIS//ELEMENTS DITA Utilities Domain//EN" uri="c:/ditaot/dtd/utilitiesDomain.mod"&gt;&lt;/public&gt;
-&lt;public publicId="-//OASIS//ENTITIES DITA Utilities Domain//EN" uri="c:/ditaot/dtd/utilitiesDomain.ent"&gt;&lt;/public&gt;
+&lt;public publicId="-//OASIS//ELEMENTS DITA Utilities Domain//EN" uri="C:/ditaot/dtd/utilitiesDomain.mod"&gt;&lt;/public&gt;
+&lt;public publicId="-//OASIS//ENTITIES DITA Utilities Domain//EN" uri="C:/ditaot/dtd/utilitiesDomain.ent"&gt;&lt;/public&gt;
 
-&lt;public publicId="-//OASIS//ELEMENTS DITA Metadata//EN" uri="c:/ditaot/dtd/metaDecl.mod"&gt;&lt;/public&gt;
-&lt;public publicId="-//OASIS//ELEMENTS DITA CALS Tables//EN" uri="c:/ditaot/dtd/tblDecl.mod"&gt;&lt;/public&gt;
-&lt;public publicId="-//OASIS//ELEMENTS DITA Exchange Table Model//EN" uri="c:/ditaot/dtd/tblDecl.mod"&gt;&lt;/public&gt;
+&lt;public publicId="-//OASIS//ELEMENTS DITA Metadata//EN" uri="C:/ditaot/dtd/metaDecl.mod"&gt;&lt;/public&gt;
+&lt;public publicId="-//OASIS//ELEMENTS DITA CALS Tables//EN" uri="C:/ditaot/dtd/tblDecl.mod"&gt;&lt;/public&gt;
+&lt;public publicId="-//OASIS//ELEMENTS DITA Exchange Table Model//EN" uri="C:/ditaot/dtd/tblDecl.mod"&gt;&lt;/public&gt;
 
-&lt;public publicId="-//IBM//DTD DITA Element Reference//EN" uri="c:/ditaot/demo/elementref/elementref_shell.dtd"&gt;&lt;/public&gt;
-&lt;public publicId="-//IBM//ELEMENTS DITA Element Reference//EN" uri="c:/ditaot/demo/elementref/elementref.mod"&gt;&lt;/public&gt;
+&lt;public publicId="-//IBM//DTD DITA Element Reference//EN" uri="C:/ditaot/demo/elementref/elementref_shell.dtd"&gt;&lt;/public&gt;
+&lt;public publicId="-//IBM//ELEMENTS DITA Element Reference//EN" uri="C:/ditaot/demo/elementref/elementref.mod"&gt;&lt;/public&gt;
 
-&lt;public publicId="-//IBM//DTD DITA FAQ//EN" uri="c:/ditaot/demo/faq/faq_shell.dtd"&gt;&lt;/public&gt;
-&lt;public publicId="-//IBM//ELEMENTS DITA FAQ//EN" uri="c:/ditaot/demo/faq/faq.mod"&gt;&lt;/public&gt;
+&lt;public publicId="-//IBM//DTD DITA FAQ//EN" uri="C:/ditaot/demo/faq/faq_shell.dtd"&gt;&lt;/public&gt;
+&lt;public publicId="-//IBM//ELEMENTS DITA FAQ//EN" uri="C:/ditaot/demo/faq/faq.mod"&gt;&lt;/public&gt;
 
-&lt;public publicId="-//IBM//DTD DITA eNote//EN" uri="c:/ditaot/demo/enote/enote_shell.dtd"&gt;&lt;/public&gt;
-&lt;public publicId="-//IBM//ELEMENTS DITA eNote//EN" uri="c:/ditaot/demo/enote/enote.mod"&gt;&lt;/public&gt;
+&lt;public publicId="-//IBM//DTD DITA eNote//EN" uri="C:/ditaot/demo/enote/enote_shell.dtd"&gt;&lt;/public&gt;
+&lt;public publicId="-//IBM//ELEMENTS DITA eNote//EN" uri="C:/ditaot/demo/enote/enote.mod"&gt;&lt;/public&gt;
 
-&lt;public publicId="-//IBM//DTD DITA BookMap//EN" uri="c:/ditaot/demo/book/bookmap.dtd"&gt;&lt;/public&gt;
-&lt;public publicId="-//IBM//ELEMENTS DITA BookMap//EN" uri="c:/ditaot/demo/book/bookmap.mod"&gt;&lt;/public&gt;
+&lt;public publicId="-//IBM//DTD DITA BookMap//EN" uri="C:/ditaot/demo/book/bookmap.dtd"&gt;&lt;/public&gt;
+&lt;public publicId="-//IBM//ELEMENTS DITA BookMap//EN" uri="C:/ditaot/demo/book/bookmap.mod"&gt;&lt;/public&gt;
 
-&lt;public publicId="-//IBM//DTD DITA Book Information//EN" uri="c:/ditaot/demo/book/bkinfo.dtd"&gt;&lt;/public&gt;
-&lt;public publicId="-//IBM//ELEMENTS DITA Book Information//EN" uri="c:/ditaot/demo/book/bkinfo.mod"&gt;&lt;/public&gt;
+&lt;public publicId="-//IBM//DTD DITA Book Information//EN" uri="C:/ditaot/demo/book/bkinfo.dtd"&gt;&lt;/public&gt;
+&lt;public publicId="-//IBM//ELEMENTS DITA Book Information//EN" uri="C:/ditaot/demo/book/bkinfo.mod"&gt;&lt;/public&gt;
 
 &lt;/catalog&gt;
         </codeblock>

@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "../dtd/task.dtd">
+<!-- 
+This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
+See the accompanying license.txt file for applicable licenses.
+-->
 <task id="linux_installingxalan" xml:lang="en-us">
 	<title>Installing Xalan on Linux</title>
-	<shortdesc>How to install Xalan in the Linux operating environment. Install either Xalan or SAXON: you do not need both.</shortdesc>
+	
 	<prolog>
 		<author type="creator">Jen Linton</author>
 		<author type="creator">JoAnn Hackos</author>
@@ -16,7 +20,7 @@
 		</copyright>
 		<critdates>
 			<created date="2005-November-01"/>
-			<revised modified="2006-August-08"/>
+			<revised modified="2006-October-12"/>
 		</critdates>
 		<metadata>
 			<keywords>
@@ -33,7 +37,7 @@
 			<prodinfo>
 				<prodname>DITA Open Toolkit</prodname>
 				<vrmlist>
-					<vrm version="1.2.2"/>
+					<vrm version="1.3"/>
 				</vrmlist>
 			</prodinfo>
 		</metadata>
@@ -50,14 +54,13 @@
           download.</cmd>
 			</step>
 			<step>
-				<cmd> Save and unzip the xalan-j_2_7_0-bin.tar.gz file to a linux home 
+				<cmd> Save and unzip the <filepath>xalan-j_2_7_0-bin.tar.gz</filepath> file to a linux home 
           directory.</cmd>
 			</step>
 			<step>
-				<cmd>Set the <varname>CLASSPATH</varname>
-					<xref href="linux_settingenvvariables.dita" scope="local">environment variable</xref> for following .jar files: 
-          <filepath>xalan.jar</filepath> file and the 
-          <filepath>xercesImpl.jar</filepath> file</cmd>
+				<cmd>Add Xalan to the <varname>CLASSPATH</varname>
+					environment variable: <userinput>export CLASSPATH=${CLASSPATH}:${xalan_dir}/bin </userinput>
+					</cmd>
 			</step>
 		</steps>
 	</taskbody>

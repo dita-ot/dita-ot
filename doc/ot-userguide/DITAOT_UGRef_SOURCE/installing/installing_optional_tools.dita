@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "../dtd/concept.dtd">
+<!-- 
+This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
+See the accompanying license.txt file for applicable licenses.
+-->
 <concept id="installing_optional_tools">
 	<title>Installing the optional tools</title>
-	<shortdesc>Information about installing the optional tools.</shortdesc>
 	<prolog>
 		<author type="creator">Anna van Raaphorst</author>
 		<author type="contributor">Richard Johnson</author>
@@ -13,7 +16,7 @@
 		</copyright>
 		<critdates>
 			<created date="2006-July-01"/>
-			<revised modified="2006-August-09"/>
+			<revised modified="2006-October-11"/>
 		</critdates>
 		<metadata>
 			<keywords>
@@ -49,7 +52,7 @@
 				</indexterm>
 				<indexterm>HTML Help compiler<indexterm>downloading</indexterm>
 				</indexterm>
-				<indexterm>Sun JavaHelp processor<indexterm>downloading</indexterm>
+				<indexterm>Sun Microsystems JavaHelp processor<indexterm>downloading</indexterm>
 				</indexterm>
 				<indexterm>JavaHelp processor<indexterm>downloading</indexterm>
 				</indexterm>
@@ -73,7 +76,7 @@
 			<prodinfo>
 				<prodname>DITA Open Toolkit</prodname>
 				<vrmlist>
-					<vrm version="1.2.2"/>
+					<vrm version="1.3"/>
 				</vrmlist>
 			</prodinfo>
 		</metadata>
@@ -83,18 +86,14 @@
 		<p>
 			<b>(If you plan to publish HTML Help) The Microsoft HTML Help processor</b>
 		</p>
-		<p>Download the Microsoft HTML Help processor from <xref href="http://archive.apache.org/dist/xml/xalan-j/" format="html" scope="external"/>.</p>
 		<p>
 			<b>(If you plan to publish JavaHelp files) The Sun JavaHelp processor</b>
 		</p>
-		<p>Download the Sun JavaHelp processor from <xref href="http://archive.apache.org/dist/xml/xalan-j/" format="html" scope="external"/>.</p>
 		<p>
 			<b>(If you plan to publish PDF files) The Apache FOP processor or the RenderX XEP processor</b>
 		</p>
 		<p>The default processing script uses Apache FOP for converting FO files into PDF. With some modification of the build scripts, you can use the RenderX XEP processor, instead. FOP is free. XEP is free for personal use.
 		</p>
-		<p>Download the Apache FOP processor from <xref href="http://archive.apache.org/dist/xml/xalan-j/" format="html" scope="external"/>.</p>
-		<p>Download the RenderX XEP processor from <xref href="http://www.renderx.net/Content/download/" format="html" scope="external"/>.</p>
 		<p>
 			<b>(If you plan to publish Eclipse content) The IBM Eclipse content processor</b>
 		</p>

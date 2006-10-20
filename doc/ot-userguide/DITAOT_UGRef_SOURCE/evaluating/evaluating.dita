@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "../dtd/concept.dtd">
+<!-- 
+This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
+See the accompanying license.txt file for applicable licenses.
+-->
 <concept id="evaluating">
 	<title>Evaluating DITA and DITA Open Toolkit</title>
-	<shortdesc>How to determine what it would take to create your DITA and DITA Open Toolkit authoring and production system.</shortdesc>
+	<shortdesc>This section contains information on how to determine what it would take to create your DITA and DITA Open Toolkit authoring and production system.</shortdesc>
 	<prolog>
 		<author type="creator">Anna van Raaphorst</author>
 		<author type="contributor">Richard Johnson</author>
@@ -24,7 +28,7 @@
 			<prodinfo>
 				<prodname>DITA Open Toolkit</prodname>
 				<vrmlist>
-					<vrm version="1.2.2"/>
+					<vrm version="1.3"/>
 				</vrmlist>
 			</prodinfo>
 		</metadata>
@@ -37,5 +41,18 @@
 			</ul>
 		</p>
 		<p>A key goal of this chapter is to help answer those questions, and to provide pointers to additional sources of information.</p>
+		<p>Sections in this topic:
+		<sl otherprops="pdf">
+				<sli>
+					<xref href="./framework.dita#framework">The DITA authoring/production framework</xref>
+				</sli>
+				<sli>
+					<xref href="./usecases.dita#usecases">Use cases</xref>
+				</sli>
+				<sli>
+					<xref href="./usecase_template.dita#usecase_template">Use case template</xref>
+				</sli>
+			</sl>
+		</p>
 	</conbody>
 </concept>

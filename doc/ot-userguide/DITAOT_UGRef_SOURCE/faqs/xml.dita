@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "../dtd/concept.dtd">
+<!-- 
+This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
+See the accompanying license.txt file for applicable licenses.
+-->
 <concept id="xml">
 	<title>Do I need to know XML to use DITA?</title>
-	<shortdesc>Deborah Pickett's answer to the question.</shortdesc>
+	
 	<prolog>
 		<author type="creator">Deborah Pickett</author>
 		<author type="contributor">Anna van Raaphorst</author>
@@ -13,7 +17,7 @@
 		</copyright>
 		<critdates>
 			<created date="2006-May-31"/>
-			<revised modified="2006-August-05"/>
+			<revised modified="2006-September-28"/>
 		</critdates>
 		<metadata>
 			<keywords>
@@ -23,7 +27,7 @@
 			<prodinfo>
 				<prodname>DITA Open Toolkit</prodname>
 				<vrmlist>
-					<vrm version="1.2.2"/>
+					<vrm version="1.3"/>
 				</vrmlist>
 			</prodinfo>
 		</metadata>
@@ -33,11 +37,11 @@
 	<p><b>Date: </b>June 9, 2006</p>
 		<p>XML's a funny beast—people imagine that it has all kinds of mystical powers, but it's little more than a set of rules for how to structure data.  
 		I'll try to work in a reference to the emperor's new clothes here.</p>
-		<p>If all you plan to do is write topics in DITA, then you need to know very little about XML.  If you're going to use a newfangled WYSIWYM editor to hide
+		<p>If all you plan to do is write topics in DITA, then you need to know very little about XML.  If you're going to use a newfangled WYSIWYG editor to hide
 	the structure from you, then you might be able to get by knowing nothing at all about XML.  If you stay in plaintext-land, then I'd list the following XML ideas as essential:
 	<ul>
 				<li>Elements and attributes</li>
-				<li>Angle brackets (&lt; and &gt;), ampersand (&amp;), slashes, and quotation marks</li>
+				<li>Angle brackets (&lt; and &gt;), ampersand (&amp;), slashes, and quotation marks(" and ")</li>
 				<li>Content models (the idea that elements contain other elements)</li>
 			</ul>
 		</p>
@@ -49,7 +53,7 @@
 		</p>
 		<p>Don't let anyone try to talk you into studying these in the short term:
 		<ul>
-				<li>DTDs and Schemas</li>
+				<li>DTDs and schemas</li>
 				<li>XSLT</li>
 				<li>Namespaces</li>
 			</ul>

@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "../dtd/concept.dtd">
+<!-- 
+This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
+See the accompanying license.txt file for applicable licenses.
+-->
 <concept id="linking">
 	<title>Linking content</title>
-	<shortdesc>How to link content using cross-references (xrefs), related links, and relationship tables.</shortdesc>
+	<shortdesc>This section contains information on how to link DITA topics using cross-references (xrefs), related links, and relationship tables.</shortdesc>
 	<prolog>
 		<author type="creator">Anna van Raaphorst</author>
 		<author type="contributor">Richard Johnson</author>
@@ -22,12 +26,33 @@
 			<prodinfo>
 				<prodname>DITA Open Toolkit</prodname>
 				<vrmlist>
-					<vrm version="1.2.2"/>
+					<vrm version="1.3"/>
 				</vrmlist>
 			</prodinfo>
 		</metadata>
 	</prolog>
 	<conbody>
-		<p/>
+		<p>Sections in this topic:
+		<sl otherprops="pdf">
+				<sli>
+					<xref href="./aboutlinking.dita#aboutlinking">About linking</xref>
+				</sli>
+				<sli>
+					<xref href="./linking_xrefs.dita#linking_xrefs">Linking using cross-references (xrefs)</xref>
+				</sli>
+				<sli>
+					<xref href="./related_links.dita#related_links">Linking using related links</xref>
+				</sli>
+				<sli>
+					<xref href="./relationship_tables.dita#relationship_tables">Linking using relationship tables</xref>
+				</sli>
+				<sli>
+					<xref href="./linking_production_notes.dita#linking_production_notes">Production notes (linking)</xref>
+				</sli>
+				<sli>
+					<xref href="./linking_formoreinfo.dita#linking_formoreinfo">For more information (linking)</xref>
+				</sli>
+			</sl>
+		</p>
 	</conbody>
 </concept>

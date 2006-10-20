@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+ Sourceforge.net. See the accompanying license.txt file for 
+ applicable licenses.-->
+<!--
+  | (C) Copyright IBM Corporation 2005 - 2006. All Rights Reserved.
+  *-->
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN"
+ "task.dtd">
+<concept id="integratingwithwtp" xml:lang="en-us">
+	<title>Eclipse integration of DITA documentation plug-ins</title>
+	<prolog>
+		<author type="creator">IBM</author>
+		<author type="contributor">Richard Johnson</author>
+		<publisher>OASIS (Organization for the Advancement of Structured Information Standards)</publisher>
+		<copyright>
+			<copyryear year="2006"/>
+			<copyrholder>IBM</copyrholder>
+		</copyright>
+		<critdates>
+			<created date="2006-May-01"/>
+			<revised modified="2006-October-12"/>
+		</critdates>
+		<metadata>
+			<keywords>
+				<indexterm>release 1.3 features
+					<indexterm>Eclipse integration</indexterm>
+				</indexterm>
+				<indexterm>Eclipse integration (release 1.3 feature)</indexterm>
+			</keywords>
+			<prodinfo>
+				<prodname>DITA Open Toolkit</prodname>
+				<vrmlist>
+					<vrm version="1.3"/>
+				</vrmlist>
+			</prodinfo>
+		</metadata>
+	</prolog>
+	<conbody>
+		<p>
+		You can use a template to develop documentation plug-ins with DITA
+in Eclipse PDE, and use DITA Open Toolkit 1.3 to build and pack the final plug-in. 
+If you want to develop a documentation plug-in with DITA in Eclipse, you cannot
+use the previous releases of the Toolkit  in Eclipse to transform DITA to HTML.
+Although previous releases of the Toolkit support the feature to transform DITA
+files to an Eclipse documentation plug-in, they are not integrated with Eclipse.
+See <xref href="../processing/processing_eclipse_integration.dita"/> for more information.</p>
+	</conbody>
+</concept>

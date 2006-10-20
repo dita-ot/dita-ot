@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "../dtd/concept.dtd">
+<!-- 
+This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
+See the accompanying license.txt file for applicable licenses.
+-->
 <concept id="localizing_production_notes">
 	<title>Production notes (localizing)</title>
-	<shortdesc>Production notes for the localizing (translating) section of this document.</shortdesc>
+	
 	<prolog>
 		<author type="creator">Anna van Raaphorst</author>
 		<author type="contributor">Richard Johnson</author>
@@ -13,7 +17,7 @@
 		</copyright>
 		<critdates>
 			<created date="2006-May-01"/>
-			<revised modified="2006-August-08"/>
+			<revised modified="2006-September-19"/>
 		</critdates>
 		<metadata>
 			<keywords>
@@ -29,7 +33,7 @@
 			<prodinfo>
 				<prodname>DITA Open Toolkit</prodname>
 				<vrmlist>
-					<vrm version="1.2.2"/>
+					<vrm version="1.3"/>
 				</vrmlist>
 			</prodinfo>
 		</metadata>
@@ -41,7 +45,7 @@
 			<ul>
 				<li>The document was written using DITA, an XML vocabulary that supports 9 output formats and over 40 languages</li>
 				<li>The core vocabulary set could provide a translation center with basic information about the Toolkit and related products.</li>
-				<li>Most of the "about" topics have been "conref'ed" from the core vocabulary, to that content needs to be translated only once.</li>
+				<li>Most of the "about" topics have been "conref'ed" from the core vocabulary, so that content needs to be translated only once.</li>
 			</ul>
 		</section>
 	</conbody>

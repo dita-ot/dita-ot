@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "../dtd/concept.dtd">
+<!-- 
+This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
+See the accompanying license.txt file for applicable licenses.
+-->
 <concept id="gettinginformation">
 	<title>Getting information (general)</title>
-	<shortdesc>Sources of information about DITA and DITA Open Toolkit.</shortdesc>
+	<shortdesc>This section contains sources of information about DITA and DITA Open Toolkit.</shortdesc>
 	<prolog>
 		<author type="creator">Anna van Raaphorst</author>
 		<author type="contributor">Richard Johnson</author>
@@ -13,7 +17,7 @@
 		</copyright>
 		<critdates>
 			<created date="2006-May-01"/>
-			<revised modified="2006-August-09"/>
+			<revised modified="2006-October-17"/>
 		</critdates>
 		<metadata>
 			<keywords>
@@ -27,19 +31,19 @@
 			<prodinfo>
 				<prodname>DITA Open Toolkit</prodname>
 				<vrmlist>
-					<vrm version="1.2.2"/>
+					<vrm version="1.3"/>
 				</vrmlist>
 			</prodinfo>
 		</metadata>
 	</prolog>
 	<conbody>
 		<p>Sections in this topic:
-		<sl>
+		<sl otherprops="pdf">
 				<sli>
 					<xref href="#gettinginformation/generalfaqs">General information and FAQs</xref>
 				</sli>
 				<sli>
-					<xref href="#gettinginformation/toolsdownloads">Tools, downloads</xref>
+					<xref href="#gettinginformation/toolsdownloads">Tools, plugins, downloads</xref>
 				</sli>
 				<sli>
 					<xref href="#gettinginformation/trainingeducation">Training, education</xref>
@@ -215,6 +219,19 @@
 						<xref href="http://www-128.ibm.com/developerworks/xml/library/x-dita9a/" format="html" scope="external"/>
 					</stentry>
 				</strow>
+				<strow>
+					<stentry>
+						<p>
+							<cite>
+								<b>Developing Quality Technical Information: A Handbook for Writors and Editors</b>
+							</cite>
+						</p>
+						<p>Authors: Gretchen Hargis et al. Publisher: IBM, 2nd edition, 2004. How to apply quality characteristics that make technical information easy to use, easy to understand, and easy to find.</p>
+					</stentry>
+					<stentry>
+						<xref href="http://www-128.ibm.com/developerworks/xml/library/x-dita9a/" format="html" scope="external"/>
+					</stentry>
+				</strow>
 			</simpletable>
 		</section>
 		<!-- Consulting -->
@@ -369,7 +386,7 @@
 				<strow>
 					<stentry>
 						<p>
-							<b>Apache Derby documentation:</b>
+							<b>Apache Derby documentation</b>
 						</p>
 						<p>Apache Derby, an Apache database subproject, is a relational database implemented entirely in Java, and available under the Apache license, version 2.0. The Derby documentation manuals are sourced in DITA.</p>
 					</stentry>

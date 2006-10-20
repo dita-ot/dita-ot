@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "../dtd/concept.dtd">
+<!-- 
+This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
+See the accompanying license.txt file for applicable licenses.
+-->
 <concept id="reusing">
 	<title>Reuse concepts and techniques</title>
-	<shortdesc>How to reuse content, information design (using specializations), and processing code.</shortdesc>
+	<shortdesc>This section contains information on how to reuse content (using conrefs), information design (using specializations), and processing code.</shortdesc>
 	<prolog>
 		<author type="creator">Anna van Raaphorst</author>
 		<author type="contributor">Richard Johnson</author>
@@ -27,12 +31,30 @@
 			<prodinfo>
 				<prodname>DITA Open Toolkit</prodname>
 				<vrmlist>
-					<vrm version="1.2.2"/>
+					<vrm version="1.3"/>
 				</vrmlist>
 			</prodinfo>
 		</metadata>
 	</prolog>
 	<conbody>
-		<p/>
+		<p>Sections in this topic:
+		<sl otherprops="pdf">
+				<sli>
+					<xref href="./aboutreuse.dita#aboutreuse">About reuse</xref>
+				</sli>
+				<sli>
+					<xref href="./implementing_infodesign_reuse.dita#implementing_infodesign_reuse">Implementing information design reuse</xref>
+				</sli>
+				<sli>
+					<xref href="./implementing_processing_reuse.dita#implementing_processing_reuse">Implementing processing reuse</xref>
+				</sli>
+				<sli>
+					<xref href="./reusing_production_notes.dita#reusing_production_notes">Production notes (reuse)</xref>
+				</sli>
+				<sli>
+					<xref href="./reusing_formoreinfo.dita#reusing_formoreinfo">For more information (reuse)</xref>
+				</sli>
+			</sl>
+		</p>
 	</conbody>
 </concept>

@@ -1,18 +1,31 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!-- (c) Copyright VR Communications, Inc. All Rights Reserved. -->
 <!-- Ant script for the DITA Open Toolkit User Guide and Reference (DITAOT_UGRef) -->
-<project name="toolkitug" default="xhtml" basedir="c:/ditaot">
+<project name="toolkitug" default="xhtml">
+
+  <echo>Building DITA Open Toolkit User Guide.</echo>
+
+  <!-- allow access to environment variables -->
+  <property environment="env"/>
 
   <!-- project global properties -->
   <property name="projdir" value="${user.dir}"/>
-  <property name="outdir" value="c:/DITAOT_UGRef_OUTPUT"/>
-  <property name="PHPexe" value="c:/wamp/php/php.exe"/>
+  <property name="outdir" value="C:/DITAOT_UGRef_OUTPUT"/>
+  <property name="PHPexe" value="C:/wamp/php/php.exe"/>
   <property name="args.logdir" value="${outdir}"/>
   <property name="MAP_file" value="DITAOT_UGRef.ditamap"/>
+  <property name="EXTNAME" value=".dita"/>
+
+  <!-- set toolkit directory from environment variable -->
+  <property name="toolkit_dir" value="${env.DITA_DIR}"/>
+
+  <!-- file for using otherprops filtering for non-pdf output -->
+  <property name="ditaval_nonpdf" value="${projdir}/ditaval_files/otherprops_filtering.ditaval"/>
+
 
   <!-- define path to Java code -->
   <path id="dost.class.path">
-    <pathelement location="${basedir}${file.separator}lib${file.separator}dost.jar"/>
+    <pathelement location="${toolkit_dir}${file.separator}lib${file.separator}dost.jar"/>
   </path>
   
   <!-- define the Ant targets and initialize the processing environment -->
@@ -24,13 +37,13 @@
   <target name="xhtml" depends="integrate, ditadebug, ditalinks, dita2xhtml">
   </target>
   <target name="integrate">
-    <integrate ditadir="${basedir}"/>
+    <integrate ditadir="${toolkit_dir}"/>
   </target>
   
   <!-- create all output types -->
   <target name="alltargets" depends="integrate, dita2xhtml, dita2htmlhelp, 
-     dita2pdf2, dita2troff, dita2docbook, dita2javahelp, dita2wordrtf, dita2eclipsecontent,
-     dita2eclipsehelp, dita2fmxml, dita2pdf">
+     dita2troff, dita2docbook, dita2javahelp, dita2wordrtf, dita2eclipsecontent,
+     dita2eclipsehelp, dita2pdf2">
   </target>
   <!-- handy abbreviation -->
   <target name="all" depends="allreports, alltargets" />
@@ -45,6 +58,17 @@
     <exec executable="${PHPexe}" dir = "${projdir}" output="${outdir}/debug_files/ditadebug.txt">
       <arg value="${projdir}/project/tools/ditadebug.php"/>
       <arg value="${MAP_file}"/>
+    </exec>
+  </target>
+
+  <!-- create plausible preview -->
+  <target name="preview">
+    <echo>Building XHTML plausible preview</echo>
+    <mkdir dir="${outdir}/debug_files"/>
+    <exec executable="${PHPexe}" dir = "${projdir}" output="${outdir}/debug_files/ditapreview.txt">
+      <arg value="${projdir}/project/tools/ditapreview.php"/>
+      <arg value="${MAP_file}"/>
+      <arg value="L"/>
     </exec>
   </target>
 
@@ -90,17 +114,18 @@
 
   <!-- create xhtml output -->
   <target name="dita2xhtml">
-    <ant antfile="${basedir}${file.separator}conductor.xml" target="init">
+    <ant antfile="${toolkit_dir}${file.separator}conductor.xml" target="init">
       <property name="args.input" value="${projdir}/${MAP_file}"/>
       <property name="output.dir" value="${outdir}/xhtml"/>
       <property name="dita.temp.dir" value="${outdir}/temp"/>
       <property name="transtype" value="xhtml"/>
       <property name="args.draft" value="yes"/>
       <property name="args.indexshow" value="yes"/>
-      <property name="dita.extname" value=".dita"/>
-      <!-- Conditional processing (filtering) by platform (Windows or Linux)
-      <property name="dita.input.valfile" value="${projdir}/ditaval_files/platform_filtering.ditaval"/>
-      -->
+      <property name="args.css" value="${projdir}/css_files/DITAOT_UGRef_CSS.css"/>
+      <property name="args.csspath" value="CSS"/>
+      <property name="args.copycss" value="yes"/>
+      <property name="dita.extname" value="${EXTNAME}"/>
+      <property name="dita.input.valfile" value="${ditaval_nonpdf}"/>
     </ant>
     <!-- copy entire set of garage sample files as DITA files (these should not be processed) -->   
     <!-- <copy todir="${outdir}/garage"> 
@@ -110,130 +135,152 @@
 
   <!-- create htmlhelp output -->
   <target name="dita2htmlhelp">
-    <ant antfile="${basedir}${file.separator}conductor.xml" target="init">
+    <ant antfile="${toolkit_dir}${file.separator}conductor.xml" target="init">
       <property name="args.input" value="${projdir}/${MAP_file}"/>
       <property name="output.dir" value="${outdir}/htmlhelp"/>
       <property name="dita.temp.dir" value="${outdir}/temp"/>
       <property name="transtype" value="htmlhelp"/>
       <property name="args.draft" value="yes"/>
       <property name="args.indexshow" value="yes"/>
-      <property name="dita.extname" value=".dita"/>
+      <property name="args.css" value="${projdir}/css_files/DITAOT_UGRef_CSS.css"/>
+      <property name="args.csspath" value="CSS"/>
+      <property name="args.copycss" value="yes"/>
+      <property name="dita.extname" value="${EXTNAME}"/>
+      <property name="dita.input.valfile" value="${ditaval_nonpdf}"/>
+    </ant>
+  </target>
+
+  <!-- create tocjs output -->
+  <target name="dita2tocjs">
+    <ant antfile="${toolkit_dir}${file.separator}conductor.xml" target="init">
+      <property name="args.input" value="${projdir}/${MAP_file}"/>
+      <property name="output.dir" value="${outdir}/tocjs"/>
+      <property name="dita.temp.dir" value="${outdir}/temp"/>
+      <property name="transtype" value="tocjs"/>
+      <property name="args.draft" value="yes"/>
+      <property name="args.indexshow" value="yes"/>
+      <property name="args.css" value="${projdir}/css_files/DITAOT_UGRef_CSS.css"/>
+      <property name="args.csspath" value="CSS"/>
+      <property name="args.copycss" value="yes"/>
+      <property name="dita.extname" value="${EXTNAME}"/>
+      <property name="dita.input.valfile" value="${ditaval_nonpdf}"/>
     </ant>
   </target>
 
   <!-- create pdf output -->
   <target name="dita2pdf">
-    <ant antfile="${basedir}${file.separator}conductor.xml" target="init">
+    <ant antfile="${toolkit_dir}${file.separator}conductor.xml" target="init">
       <property name="args.input" value="${projdir}/${MAP_file}"/>
       <property name="output.dir" value="${outdir}/pdf"/>
       <property name="dita.temp.dir" value="${outdir}/temp"/>
       <property name="transtype" value="pdf"/>
       <property name="args.draft" value="yes"/>
       <property name="args.indexshow" value="yes"/>
-      <property name="args.xsl" value="${basedir}/xsl/xdita2fo-shell.xsl"/>
-      <property name="dita.extname" value=".dita"/>
+ <!-- <property name="args.xsl" value="${toolkit_dir}/xsl/xdita2fo-shell.xsl"/> -->
+      <property name="dita.extname" value="${EXTNAME}"/>
     </ant>
   </target>
 
   <!-- create docbook output -->
   <target name="dita2docbook">
-    <ant antfile="${basedir}${file.separator}conductor.xml" target="init">
+    <ant antfile="${toolkit_dir}${file.separator}conductor.xml" target="init">
       <property name="args.input" value="${projdir}/${MAP_file}"/>
       <property name="output.dir" value="${outdir}/docbook"/>
       <property name="dita.temp.dir" value="${outdir}/temp"/>
       <property name="transtype" value="docbook"/>
       <property name="args.draft" value="yes"/>
       <property name="args.indexshow" value="yes"/>
-      <property name="dita.extname" value=".dita"/>
+      <property name="dita.extname" value="${EXTNAME}"/>
     </ant>
   </target>
 
   <!-- create javahelp output -->
   <target name="dita2javahelp">
-    <ant antfile="${basedir}${file.separator}conductor.xml" target="init">
+    <ant antfile="${toolkit_dir}${file.separator}conductor.xml" target="init">
       <property name="args.input" value="${projdir}/${MAP_file}"/>
       <property name="output.dir" value="${outdir}/javahelp"/>
       <property name="dita.temp.dir" value="${outdir}/temp"/>
       <property name="transtype" value="javahelp"/>
       <property name="args.draft" value="yes"/>
       <property name="args.indexshow" value="yes"/>
-      <property name="dita.extname" value=".dita"/>
+      <property name="dita.extname" value="${EXTNAME}"/>
+      <property name="dita.input.valfile" value="${ditaval_nonpdf}"/>
     </ant>
   </target>
 
   <!-- create troff output -->
   <target name="dita2troff">
-    <ant antfile="${basedir}${file.separator}conductor.xml" target="init">
+    <ant antfile="${toolkit_dir}${file.separator}conductor.xml" target="init">
       <property name="args.input" value="${projdir}/${MAP_file}"/>
       <property name="output.dir" value="${outdir}/troff"/>
       <property name="dita.temp.dir" value="${outdir}/temp"/>
       <property name="transtype" value="troff"/>
       <property name="args.draft" value="yes"/>
       <property name="args.indexshow" value="yes"/>
-      <property name="dita.extname" value=".dita"/>
+      <property name="dita.extname" value="${EXTNAME}"/>
     </ant>
   </target>
 
   <!-- create wordrtf output -->
   <target name="dita2wordrtf">
-    <ant antfile="${basedir}${file.separator}conductor.xml" target="init">
+    <ant antfile="${toolkit_dir}${file.separator}conductor.xml" target="init">
       <property name="args.input" value="${projdir}/${MAP_file}"/>
       <property name="output.dir" value="${outdir}/wordrtf"/>
       <property name="dita.temp.dir" value="${outdir}/temp"/>
       <property name="transtype" value="wordrtf"/>
       <property name="args.draft" value="yes"/>
       <property name="args.indexshow" value="yes"/>
-      <property name="dita.extname" value=".dita"/>
+      <property name="dita.extname" value="${EXTNAME}"/>
     </ant>
   </target>
 
   <!-- create eclipsecontent output -->
   <target name="dita2eclipsecontent">
-    <ant antfile="${basedir}${file.separator}conductor.xml" target="init">
+    <ant antfile="${toolkit_dir}${file.separator}conductor.xml" target="init">
       <property name="args.input" value="${projdir}/${MAP_file}"/>
       <property name="output.dir" value="${outdir}/eclipsecontent"/>
       <property name="dita.temp.dir" value="${outdir}/temp"/>
       <property name="transtype" value="eclipsecontent"/>
       <property name="args.draft" value="yes"/>
       <property name="args.indexshow" value="yes"/>
-      <property name="dita.extname" value=".dita"/>
+      <property name="dita.extname" value="${EXTNAME}"/>
     </ant>
   </target>
 
   <!-- create eclipsehelp output -->
   <target name="dita2eclipsehelp">
-    <ant antfile="${basedir}${file.separator}conductor.xml" target="init">
+    <ant antfile="${toolkit_dir}${file.separator}conductor.xml" target="init">
       <property name="args.input" value="${projdir}/${MAP_file}"/>
       <property name="output.dir" value="${outdir}/eclipsehelp"/>
       <property name="dita.temp.dir" value="${outdir}/temp"/>
       <property name="transtype" value="eclipsehelp"/>
       <property name="args.draft" value="yes"/>
       <property name="args.indexshow" value="yes"/>
-      <property name="dita.extname" value=".dita"/>
+      <property name="dita.extname" value="${EXTNAME}"/>
     </ant>
   </target>
 
   <!-- create FrameMaker Adapter output -->
   <target name="dita2fmxml">
-    <ant antfile="${basedir}${file.separator}conductor.xml" target="init">
+    <ant antfile="${toolkit_dir}${file.separator}conductor.xml" target="init">
       <property name="args.input" value="${projdir}/${MAP_file}"/>
       <property name="output.dir" value="${outdir}/fmxml"/>
       <property name="dita.temp.dir" value="${outdir}/temp"/>
       <property name="transtype" value="fmxml"/>
-      <property name="dita.extname" value=".dita"/>
+      <property name="dita.extname" value="${EXTNAME}"/>
     </ant>
   </target>
 
   <!-- create Idiom FO output -->
   <target name="dita2pdf2">
-    <ant antfile="${basedir}${file.separator}conductor.xml" target="init">
+    <ant antfile="${toolkit_dir}${file.separator}conductor.xml" target="init">
       <property name="args.input" value="${projdir}/${MAP_file}"/>
       <property name="output.dir" value="${outdir}/pdf2"/>
       <property name="dita.temp.dir" value="${outdir}/temp"/>
       <property name="transtype" value="pdf2"/>
       <property name="args.draft" value="yes"/>
       <property name="args.indexshow" value="yes"/>
-      <property name="dita.extname" value=".dita"/>
+      <property name="dita.extname" value="${EXTNAME}"/>
     </ant>
   </target>
 

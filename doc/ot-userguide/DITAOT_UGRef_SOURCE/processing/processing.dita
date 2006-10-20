@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "../dtd/concept.dtd">
+<!-- 
+This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
+See the accompanying license.txt file for applicable licenses.
+-->
 <concept id="processing">
 	<title>Processing (building) and publishing DITA documents</title>
-	<shortdesc>How to process (build) and publish DITA documents.</shortdesc>
+	<shortdesc>This section contains information on how to process (build) and publish DITA documents.</shortdesc>
 	<prolog>
 		<author type="creator">Anna van Raaphorst</author>
 		<author type="contributor">Richard Johnson</author>
@@ -34,12 +38,72 @@
 			<prodinfo>
 				<prodname>DITA Open Toolkit</prodname>
 				<vrmlist>
-					<vrm version="1.2.2"/>
+					<vrm version="1.3"/>
 				</vrmlist>
 			</prodinfo>
 		</metadata>
 	</prolog>
 	<conbody>
-		<p/>
+		<p>Sections in this topic:
+		<sl otherprops="pdf">
+				<sli>
+					<xref href="./processing_overview.dita#processing_overview">Overview of the processing components and task flow</xref>
+				</sli>
+				<sli>
+					<xref href="./aboutant.dita#aboutant">About Ant</xref>
+				</sli>
+				<sli>
+					<xref href="./aboutantscripts.dita#aboutantscripts">About Ant scripts</xref>
+				</sli>
+				<sli>
+					<xref href="./antparms.dita#antparms">Ant processing parameters</xref>
+				</sli>
+				<sli>
+					<xref href="./aboutgarage_sample.dita#aboutgarage_sample">About the garage sample</xref>
+				</sli>
+				<sli>
+					<xref href="./processing_xhtml.dita#processing_xhtml">Processing to XHTML targets</xref>
+				</sli>
+				<sli>
+					<xref href="./processing_htmlhelp.dita#processing_htmlhelp">Processing to HTML help targets</xref>
+				</sli>
+				<sli>
+					<xref href="./processing_pdf2.dita#processing_pdf2">Processing to PDF2 targets</xref>
+				</sli>
+				<sli>
+					<xref href="./processing_docbook.dita#processing_docbook">Processing to DocBook targets</xref>
+				</sli>
+				<sli>
+					<xref href="./processing_eclipsecontent.dita#processing_eclipsecontent">Processing to Eclipse Content targets</xref>
+				</sli>
+				<sli>
+					<xref href="./processing_eclipsehelp.dita#processing_eclipsehelp">Processing to Eclipse Help targets</xref>
+				</sli>
+				<sli>
+					<xref href="./processing_eclipse_integration.dita#processing_eclipse_integration">Processing an Eclipse DITA documentation plugin</xref>
+				</sli>
+				<sli>
+					<xref href="./processing_PDEeclipsehelp.dita#processing_PDEeclipsehelp">Processing to Eclipse help targets using Eclipse</xref>
+				</sli>
+				<sli>
+					<xref href="./processing_javahelp.dita#processing_javahelp">Processing to Java Help targets</xref>
+				</sli>
+				<sli>
+					<xref href="./processing_troff.dita#processing_troff">Processing to troff targets</xref>
+				</sli>
+				<sli>
+					<xref href="./processing_wordrtf.dita#processing_wordrtf">Processing to Word RTF targets</xref>
+				</sli>
+				<sli>
+					<xref href="./processing_javacmd.dita#processing_javacmd">Processing from the Java command line</xref>
+				</sli>
+				<sli>
+					<xref href="./processing_production_notes.dita#processing_production_notes">Production notes (processing)</xref>
+				</sli>
+				<sli>
+					<xref href="./processing_formoreinfo.dita#processing_formoreinfo">For more information (processing)</xref>
+				</sli>
+			</sl>
+		</p>
 	</conbody>
 </concept>

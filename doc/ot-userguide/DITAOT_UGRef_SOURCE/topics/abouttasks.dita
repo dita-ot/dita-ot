@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "../dtd/concept.dtd">
+<!-- 
+This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
+See the accompanying license.txt file for applicable licenses.
+-->
 <concept id="abouttasks">
 	<title>About tasks</title>
-	<shortdesc>Overview information about tasks and the task information type.</shortdesc>
 	<prolog>
 		<author type="creator">Anna van Raaphorst</author>
 		<author type="contributor">Richard Johnson</author>
@@ -13,19 +16,18 @@
 		</copyright>
 		<critdates>
 			<created date="2006-June-13"/>
-			<revised modified="2006-August-08"/>
+			<revised modified="2006-October-11"/>
 		</critdates>
 		<metadata>
 			<keywords>
 				<keyword>topic</keyword>
 				<keyword>task</keyword>
-				<indexterm>task topic<indexterm>about</indexterm>
-				</indexterm>
+				<indexterm>task topic</indexterm>
 			</keywords>
 			<prodinfo>
 				<prodname>DITA Open Toolkit</prodname>
 				<vrmlist>
-					<vrm version="1.2.2"/>
+					<vrm version="1.3"/>
 				</vrmlist>
 			</prodinfo>
 		</metadata>

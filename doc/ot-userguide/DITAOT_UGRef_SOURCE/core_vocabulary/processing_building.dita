@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "../dtd/concept.dtd">
+<!-- 
+This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
+See the accompanying license.txt file for applicable licenses.
+-->
 <concept id="processing_building">
 	<title>Processing (building)</title>
-	<shortdesc/>
+	
 	<prolog>
 		<author type="creator">Anna van Raaphorst</author>
 		<author type="contributor">Richard Johnson</author>
@@ -13,7 +17,7 @@
 		</copyright>
 		<critdates>
 			<created date="2006-May-01"/>
-			<revised modified="2006-August-08"/>
+			<revised modified="2006-September-29"/>
 		</critdates>
 		<metadata>
 			<keywords>
@@ -27,20 +31,16 @@
 			<prodinfo>
 				<prodname>DITA Open Toolkit</prodname>
 				<vrmlist>
-					<vrm version="1.2.2"/>
+					<vrm version="1.3"/>
 				</vrmlist>
 			</prodinfo>
 		</metadata>
 	</prolog>
 	<conbody>
 		<section id="processing_building_term">
-			<p>
-				<b>Definition</b>
-			</p>
-			<p>Producing output files from a set of DITA source files.</p>
-			<p>
-				<b>Usage</b>
-			</p>
+			
+			<p>Processing is producing output files from a set of DITA source files.</p>
+			
 			<p>DITA Open Toolkit, working with other tools like the Java Development Kit (JDK) and Ant, provides a method to process DITA documents. </p>
 		</section>
 	</conbody>

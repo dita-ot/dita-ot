@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "../dtd/concept.dtd">
+<!-- 
+This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
+See the accompanying license.txt file for applicable licenses.
+-->
 <concept id="settingup_formoreinfo">
 	<title>For more information (setting up)</title>
-	<shortdesc>Additional sources of information for the setting up section of this document.</shortdesc>
+	
 	<prolog>
 		<author type="creator">Anna van Raaphorst</author>
 		<author type="contributor">Richard Johnson</author>
@@ -26,7 +30,7 @@
 			<prodinfo>
 				<prodname>DITA Open Toolkit</prodname>
 				<vrmlist>
-					<vrm version="1.2.2"/>
+					<vrm version="1.3"/>
 				</vrmlist>
 			</prodinfo>
 		</metadata>
@@ -45,7 +49,7 @@
 						</p>
 					</stentry>
 					<stentry>
-						<xref href="http://www.altove.com/support.center.html" format="html" scope="external"/>
+						<xref href="http://www.altova.com/support_center.html" format="html" scope="external"/>
 					</stentry>
 				</strow>
 				<strow>
@@ -56,6 +60,22 @@
 					</stentry>
 					<stentry>
 						<xref href="http://forrest.apache.org/docs_0_70/catalog.html" format="html" scope="external"/>
+					</stentry>
+				</strow>
+				<strow>
+					<stentry>
+						<p> Customizing XMetaL Author</p>
+					</stentry>
+					<stentry>
+						<xref href="http://www.xmetal.com/en_us/_pdf/user_guides/XMetaL46_Customization_Guide.pdf" format="pdf" scope="external"/>
+					</stentry>
+				</strow>
+				<strow>
+					<stentry>
+						<p> XMLMind XML Editor and DITA</p>
+					</stentry>
+					<stentry>
+						<xref href="http://www.xmlmind.com/xmleditor/_distrib/doc/dita/index.html" format="html" scope="external"/>
 					</stentry>
 				</strow>
 			</simpletable>

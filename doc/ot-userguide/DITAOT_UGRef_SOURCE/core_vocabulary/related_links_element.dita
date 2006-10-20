@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "../dtd/concept.dtd">
+<!-- 
+This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
+See the accompanying license.txt file for applicable licenses.
+-->
 <concept id="related_links_element">
 	<title>Related links element (&lt;related-links&gt;)</title>
-	<shortdesc/>
+	
 	<prolog>
 		<author type="creator">Anna van Raaphorst</author>
 		<author type="contributor">Richard Johnson</author>
@@ -13,7 +17,7 @@
 		</copyright>
 		<critdates>
 			<created date="2006-May-01"/>
-			<revised modified="2006-August-09"/>
+			<revised modified="2006-September-29"/>
 		</critdates>
 		<metadata>
 			<keywords>
@@ -25,17 +29,15 @@
 			<prodinfo>
 				<prodname>DITA Open Toolkit</prodname>
 				<vrmlist>
-					<vrm version="1.2.2"/>
+					<vrm version="1.3"/>
 				</vrmlist>
 			</prodinfo>
 		</metadata>
 	</prolog>
 	<conbody>
 		<section id="related_links_element_term">
-			<p>
-				<b>Definition</b>
-			</p>
-			<p>Container for linking related topics to a given topic.</p>
+			
+			<p>A related links element is a container for linking related topics to a given topic.</p>
 			<p>
 				<b>Example</b>
 			</p>
@@ -46,7 +48,7 @@
 &lt;link href="../evaluating/framework.dita" scope="local"/&gt;
 &lt;/related-links&gt;		
 			</codeblock>
-			<note>For 'scope="peer"' to work in the example, you must set a navtitle in the target (<filepath>audience.dita</filepath>).</note>
+			<note>If you use scope="peer" to work in this example instead of scope="local", you must set a navtitle in the target (<filepath>audience.dita</filepath>).</note>
 			</p>
 		</section>
 	</conbody>

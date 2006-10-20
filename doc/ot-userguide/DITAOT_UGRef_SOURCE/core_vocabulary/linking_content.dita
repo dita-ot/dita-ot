@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "../dtd/concept.dtd">
+<!-- 
+This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
+See the accompanying license.txt file for applicable licenses.
+-->
 <concept id="linking_content">
 	<title>Linking content</title>
-	<shortdesc/>
 	<prolog>
 		<author type="creator">Anna van Raaphorst</author>
 		<author type="contributor">Richard Johnson</author>
@@ -13,7 +16,7 @@
 		</copyright>
 		<critdates>
 			<created date="2006-May-01"/>
-			<revised modified="2006-August-08"/>
+			<revised modified="2006-October-11"/>
 		</critdates>
 		<metadata>
 			<keywords>
@@ -25,21 +28,15 @@
 			<prodinfo>
 				<prodname>DITA Open Toolkit</prodname>
 				<vrmlist>
-					<vrm version="1.2.2"/>
+					<vrm version="1.3"/>
 				</vrmlist>
 			</prodinfo>
 		</metadata>
 	</prolog>
 	<conbody>
 		<section id="linking_content_term">
-			<p>
-				<b>Definition</b>
-			</p>
-			<p>Various methods that connect topics to each other or to external references. </p>
-			<p>
-				<b>Usage</b>
-			</p>
-			<p>In DITA linking can be implemented through various elements, such as &lt;xref&gt; and &lt;related-links&gt;, and through <term>relationship tables</term>.</p>
+			<p>In DITA, linking content involves various methods that connect topics to each other or to external references. </p>
+			<p>In DITA linking can be implemented through various elements, such as &lt;xref&gt; and &lt;related-links&gt;, and through relationship tables.</p>
 		</section>
 	</conbody>
 	<related-links>

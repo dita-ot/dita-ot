@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "../dtd/concept.dtd">
+<!-- 
+This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
+See the accompanying license.txt file for applicable licenses.
+-->
 <concept id="filtering">
-	<title>Filtering (conditional processing)</title>
-	<shortdesc/>
+	<title>Filtering and flagging content</title>
+	
 	<prolog>
 		<author type="creator">Anna van Raaphorst</author>
 		<author type="contributor">Richard Johnson</author>
@@ -13,23 +17,19 @@
 		</copyright>
 		<critdates>
 			<created date="2006-May-01"/>
-			<revised modified="2006-August-09"/>
+			<revised modified="2006-September-29"/>
 		</critdates>
 		<metadata>
 			<keywords>
 				<keyword>DITA core vocabulary</keyword>
 				<keyword>DITA controlled vocabulary</keyword>
-				<keyword>filtering content</keyword>
-				<keyword>conditional processing</keyword>
-				<keyword>ditaval file</keyword>
-				<indexterm>filtering content</indexterm>
-				<indexterm>conditional processing</indexterm>
-				<indexterm>ditaval file</indexterm>
+				<keyword>filtering</keyword>
+				<indexterm>flagging</indexterm>
 			</keywords>
 			<prodinfo>
 				<prodname>DITA Open Toolkit</prodname>
 				<vrmlist>
-					<vrm version="1.2.2"/>
+					<vrm version="1.3"/>
 				</vrmlist>
 			</prodinfo>
 		</metadata>
@@ -37,17 +37,10 @@
 	<conbody>
 		<section id="filtering_term">
 			<p>
-				<b>Definition</b>
+				<b>See</b>
 			</p>
-			<p>Selective processing of content in a DITA document.</p>
 			<p>
-				<b>Usage</b>
-			</p>
-			<p>Say you have a need for two versions of your installation instructions, one for Windows and one for Linux. You can create a topic file with both sets of instructions (with each set properly labeled as either Windows or Linux), and then use a ditaval file to specify your processing rules (for example, whether to produce a Windows or Linux version of the document, or whether to produce a single output file with the content flagged appropriately with Windows and Linux icons).</p>
+				<xref href="conditional_processing.dita">conditional processing</xref>.</p>
 		</section>
 	</conbody>
-	<related-links>
-		<link href="../accessing/aboutfiltering.dita" scope="local"/>
-		<link href="../core_vocabulary/garage_sample.dita" scope="local"/>
-	</related-links>
 </concept>

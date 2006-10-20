@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "../dtd/concept.dtd">
+<!-- 
+This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
+See the accompanying license.txt file for applicable licenses.
+-->
 <concept id="processing_reuse">
 	<title>Processing reuse</title>
-	<shortdesc/>
 	<prolog>
 		<author type="creator">Anna van Raaphorst</author>
 		<author type="contributor">Richard Johnson</author>
@@ -13,7 +16,7 @@
 		</copyright>
 		<critdates>
 			<created date="2006-May-01"/>
-			<revised modified="2006-August-09"/>
+			<revised modified="2006-September-29"/>
 		</critdates>
 		<metadata>
 			<keywords>
@@ -25,21 +28,18 @@
 			<prodinfo>
 				<prodname>DITA Open Toolkit</prodname>
 				<vrmlist>
-					<vrm version="1.2.2"/>
+					<vrm version="1.3"/>
 				</vrmlist>
 			</prodinfo>
 		</metadata>
 	</prolog>
 	<conbody>
 		<section id="processing_reuse_term">
-			<p>
-				<b>Usage</b>
-			</p>
-			<p>In the final stage of processing, the Toolkit runs XSLT stylesheet transforms to produce the output. In certain cases, it is possible to override stylesheet processing to customize the output.</p>
+			<p>In the final stage of processing, the DITA Open Toolkit runs XSLT stylesheet transforms to produce the output. In certain cases, it is possible to override stylesheet processing to customize the output.</p>
 		</section>
 	</conbody>
 	<related-links>
-		<link href="../reusing/implementingprocessing_reuse.dita" scope="local"/>
+		<link href="../reusing/implementing_processing_reuse.dita" scope="local"/>
 		<link href="../core_vocabulary/reuse.dita" scope="local"/>
 	</related-links>
 </concept>

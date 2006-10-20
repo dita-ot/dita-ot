@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+ Sourceforge.net. See the accompanying license.txt file for 
+ applicable licenses.-->
+<!--
+  | (C) Copyright IBM Corporation 2005 - 2006. All Rights Reserved.
+  *-->
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN"
+  "concept.dtd">
+<concept id="data_element" xml:lang="en-us">
+	<title>New element &lt;data&gt;</title>
+	<prolog>
+		<author type="creator">IBM</author>
+		<author type="contributor">Richard Johnson</author>
+		<publisher>OASIS (Organization for the Advancement of Structured Information Standards)</publisher>
+		<copyright>
+			<copyryear year="2006"/>
+			<copyrholder>IBM</copyrholder>
+		</copyright>
+		<critdates>
+			<created date="2006-Sepember-19"/>
+			<revised modified="2006-October-10"/>
+		</critdates>
+		<metadata>
+			<keywords>
+				<keyword>release 1.3 features</keyword>
+				<keyword>data element</keyword>
+				<indexterm>release 1.3 features</indexterm>
+				<indexterm>data element</indexterm>
+			</keywords>
+			<prodinfo>
+				<prodname>DITA Open Toolkit</prodname>
+				<vrmlist>
+					<vrm version="1.3"/>
+				</vrmlist>
+			</prodinfo>
+		</metadata>
+	</prolog>
+	<conbody>
+		<p>DITA 1.1 includes a new element, &lt;data&gt;. This element and the content
+inside it is ignored in the transformation process of DITA files.</p>
+<note>Because OASIS DITA 1.1 was not yet approved at the time DITA Open Toolkit 1.3 was released, 
+the functionality described here should be considered preliminary until DITA 1.1 is approved, the 1.3 Toolkit assessed relative
+to DITA 1.1, and appropriate changes made to the Toolkit, if necessary.</note>
+		<p>As a DITA content author you can add the &lt;data&gt; element,
+and put content inside it. When you transform the DITA files to the output
+that you want, the transformation ignores the &lt;data&gt; element and any content
+inside it.</p>
+		<p>If you specialize the &lt;data&gt; element, and
+put information inside the specialized element, you can create a transform
+override to use the information. </p>
+	</conbody>
+</concept>

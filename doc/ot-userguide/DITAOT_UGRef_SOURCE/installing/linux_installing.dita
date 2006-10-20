@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "../dtd/concept.dtd">
+<!-- 
+This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
+See the accompanying license.txt file for applicable licenses.
+-->
 <concept id="linux_installing">
-	<title>Installing on Linux</title>
-	<shortdesc>How to install DITA Open Toolkit and its prerequisite software on Linux.</shortdesc>
+	<title>Installing small package on Linux</title>
 	<prolog>
 		<author type="creator">Anna van Raaphorst</author>
 		<author type="contributor">Richard Johnson</author>
@@ -13,7 +16,7 @@
 		</copyright>
 		<critdates>
 			<created date="2006-May-01"/>
-			<revised modified="2006-July-19"/>
+			<revised modified="2006-October-11"/>
 		</critdates>
 		<metadata>
 			<keywords>
@@ -26,16 +29,16 @@
 			<prodinfo>
 				<prodname>DITA Open Toolkit</prodname>
 				<vrmlist>
-					<vrm version="1.2.2"/>
+					<vrm version="1.3"/>
 				</vrmlist>
 			</prodinfo>
 		</metadata>
 	</prolog>
 	<conbody>
-		<p>Before installing DITA Open Toolkit and its prerequisite software on Linux, check to see if any of the tools are already installed on your system and, if so, whether the version you have is supported (see <xref href="../release_current/sysreqs.dita" scope="local">System requirements and supported applications).</xref>
+		<p>Before installing DITA Open Toolkit small package on Linux, check to see if any of the required tools are already installed on your system and, if so, whether the version you have is supported (see <xref href="../release_current/sysreqs.dita" scope="local">System requirements and supported applications).</xref>
 		</p>
 		<p>
-			<note>As an example, if you are using Fedora Core 5 Linux, software installation is done using the Package Manager. From this application, if you install the "Java Development" package within the "Development" group, you will install:<ul>
+			<note>As an example, if you are using Fedora Core 5 Linux, software installation is done using the Package Manager. From this application, if you install the Java Development package within the Development group, you will install:<ul>
 					<li>Ant 1.6.5</li>
 					<li>Java SDK 1.4.2</li>
 					<li>Xalan-J 2.6.0</li>

@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "../dtd/concept.dtd">
+<!-- 
+This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
+See the accompanying license.txt file for applicable licenses.
+-->
 <concept id="content_specialist">
 	<title>Content specialist audience category</title>
-	<shortdesc/>
+	
 	<prolog>
 		<author type="creator">Anna van Raaphorst</author>
 		<author type="contributor">Richard Johnson</author>
@@ -13,7 +17,7 @@
 		</copyright>
 		<critdates>
 			<created date="2006-July-04"/>
-			<revised modified="2006-August-09"/>
+			<revised modified="2006-September-28"/>
 		</critdates>
 		<metadata>
 			<keywords>
@@ -27,21 +31,17 @@
 			<prodinfo>
 				<prodname>DITA Open Toolkit</prodname>
 				<vrmlist>
-					<vrm version="1.2.2"/>
+					<vrm version="1.3"/>
 				</vrmlist>
 			</prodinfo>
 		</metadata>
 	</prolog>
 	<conbody>
 		<section id="content_specialist_term">
-			<p>
-				<b>Definition</b>
-			</p>
-			<p>Person primarily responsible for the content of a DITA project.</p>
-			<p>
-				<b>Usage</b>
-			</p>
-			<p>Target audience category for this document. Includes information architects; content creators and editors; and graphic, interface, print-document, and website designers.</p>
+			
+			<p>Content specialists are primarily responsible for the content of a DITA project.</p>
+			
+			<p>This category is a target audience category for this document. It includes information architects; content creators and editors; and graphic, interface, print-document, and website designers.</p>
 		</section>
 	</conbody>
 	<related-links>

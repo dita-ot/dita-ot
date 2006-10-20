@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "../dtd/concept.dtd">
+<!-- 
+This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
+See the accompanying license.txt file for applicable licenses.
+-->
 <concept id="hoverhelp">
 	<title>Hover help</title>
-	<shortdesc/>
+	
 	<prolog>
 		<author type="creator">Anna van Raaphorst</author>
 		<author type="contributor">Richard Johnson</author>
@@ -13,7 +17,7 @@
 		</copyright>
 		<critdates>
 			<created date="2006-July-06"/>
-			<revised modified="2006-August-08"/>
+			<revised modified="2006-September-29"/>
 		</critdates>
 		<metadata>
 			<keywords>
@@ -25,16 +29,14 @@
 			<prodinfo>
 				<prodname>DITA Open Toolkit</prodname>
 				<vrmlist>
-					<vrm version="1.2.2"/>
+					<vrm version="1.3"/>
 				</vrmlist>
 			</prodinfo>
 		</metadata>
 	</prolog>
 	<conbody>
 		<section id="hoverhelp_term">
-			<p>
-				<b>Definition</b>
-			</p>
+			
 			<p>Hover help is a form of context-sensitive help. Similar to What's This? help and balloon help, hover help displays a small pop-up window when the mouse pointer is over an element of the interface. A brief description of the interface element is displayed in the pop-up window.
 </p>
 		</section>

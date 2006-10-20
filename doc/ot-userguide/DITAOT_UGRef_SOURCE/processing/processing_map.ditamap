@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- (c) Copyright 2006 by VR Communications, Inc. All rights reserved. -->
 <!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN"  "../dtd/map.dtd">
+<!-- 
+This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
+See the accompanying license.txt file for applicable licenses.
+-->
 <map id="processing_map" title="Processing (building) and publishing DITA documents">
 	<topicref href="processing.dita">
 		<topicref href="processing_overview.dita"/>
@@ -14,6 +18,7 @@
 		<topicref href="processing_docbook.dita"/>
 		<topicref href="processing_eclipsecontent.dita"/>
 		<topicref href="processing_eclipsehelp.dita"/>
+		<topicref href="processing_eclipse_integration.dita"/>
 		<topicref href="processing_PDEeclipsehelp.dita"/>
 		<topicref href="processing_javahelp.dita"/>
 		<topicref href="processing_troff.dita"/>

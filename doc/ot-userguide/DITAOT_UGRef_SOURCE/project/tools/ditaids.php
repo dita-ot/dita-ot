@@ -5,6 +5,8 @@
  *
  * Author: Richard Johnson, www.vrcommunications.com
  *
+ * This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
+ * See the accompanying license.txt file for applicable licenses.
  */
 
 /**************************************************************
@@ -22,6 +24,7 @@ include 'ditautil.inc';
 
 $dbg_flag = false; /* control debug printing */
 $ref_flag = false; /* check id references */
+$problems=0;
 
 /* pick up ditamap from arguments */
 if( count($argv)!=2 )
@@ -63,7 +66,7 @@ if( $rc )
   /* look for IDs in all the files found in the map */
   foreach($fused as $f)
   {
-    if( !isURL($f) && !isIMAGE($f) )
+    if( !isURL($f) && !isIMAGE($f) && ($f !== $ditamap) )
     {
       $irc = get_ids($dbg_flag, $f, $idfile, $idid);
     }
@@ -76,11 +79,15 @@ if( $rc )
   for($i=0; $i<count($idfile); $i++)
   {
     if( $lastid == $idid[$i] )
+    {
       $xx = "* ";
+      $problems++;
+    }
     else
       $xx = "  ";
     print(substr($xx . $idid[$i] . $padding,0,$idl) . " " . $idfile[$i] . "\n");
     $lastid = $idid[$i];
+
   }
 } /* get_map_lists worked */
 else
@@ -88,4 +95,11 @@ else
   print("Error: failure walking ditamap.\n");
 }
 
+print("\n");
+if($problems>0)
+{
+  print($problems . " duplicate IDs found.\n");
+}
+else
+  print("no duplicate IDs found.\n");
 ?>

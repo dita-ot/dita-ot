@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "../dtd/concept.dtd">
+<!-- 
+This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
+See the accompanying license.txt file for applicable licenses.
+-->
 <concept id="managing">
 	<title>Managing your content</title>
-	<shortdesc>Information about how to manage your DITA content.</shortdesc>
+	<shortdesc>This section contains information on how to manage your content using backup, source control, and content management.</shortdesc>
 	<prolog>
 		<author type="creator">Anna van Raaphorst</author>
 		<author type="contributor">Richard Johnson</author>
@@ -13,7 +17,7 @@
 		</copyright>
 		<critdates>
 			<created date="2006-June-01"/>
-			<revised modified="2006-August-08"/>
+			<revised modified="2006-October-11"/>
 		</critdates>
 		<metadata>
 			<keywords>
@@ -25,12 +29,30 @@
 			<prodinfo>
 				<prodname>DITA Open Toolkit</prodname>
 				<vrmlist>
-					<vrm version="1.2.2"/>
+					<vrm version="1.3"/>
 				</vrmlist>
 			</prodinfo>
 		</metadata>
 	</prolog>
 	<conbody>
-		<p/>
+		<p>Sections in this topic:
+		<sl otherprops="pdf">
+				<sli>
+					<xref href="./backingup.dita#backingup">Backing up your source files</xref>
+				</sli>
+				<sli>
+					<xref href="./library_system.dita#library_system">Using a library or source control system</xref>
+				</sli>
+				<sli>
+					<xref href="./cms.dita#cms">Using a a content management system</xref>
+				</sli>
+				<sli>
+					<xref href="./managing_production_notes.dita#managing_production_notes">Production notes (managing content)</xref>
+				</sli>
+				<sli>
+					<xref href="./managing_formoreinfo.dita#managing_formoreinfo">For more information (managing content)</xref>
+				</sli>
+			</sl>
+		</p>
 	</conbody>
 </concept>

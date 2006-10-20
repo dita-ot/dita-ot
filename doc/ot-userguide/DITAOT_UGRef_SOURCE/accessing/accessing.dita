@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "../dtd/concept.dtd">
+<!-- 
+This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
+See the accompanying license.txt file for applicable licenses.
+-->
 <concept id="accessing">
 	<title>Expanding and customizing access to your information</title>
-	<shortdesc>How to expand access to your information through indexing, the use of metadata, and filtering (conditional processing).</shortdesc>
+	<shortdesc>This section contains information on how to expand access to your information through indexing, the use of metadata, and filtering (conditional processing).</shortdesc>
 	<prolog>
 		<author type="creator">Anna van Raaphorst</author>
 		<author type="contributor">Richard Johnson</author>
@@ -22,20 +26,41 @@
 				<indexterm>customizing access to your information</indexterm>
 				<indexterm>indexing</indexterm>
 				<indexterm>metadata</indexterm>
-				<indexterm>RDF/OWL</indexterm>
-				<indexterm>OWL/RDF</indexterm>
+				<indexterm>RDF</indexterm>
+				<indexterm>OWL</indexterm>
 				<indexterm>filtering content</indexterm>
 				<indexterm>conditional processing</indexterm>
 			</keywords>
 			<prodinfo>
 				<prodname>DITA Open Toolkit</prodname>
 				<vrmlist>
-					<vrm version="1.2.2"/>
+					<vrm version="1.3"/>
 				</vrmlist>
 			</prodinfo>
 		</metadata>
 	</prolog>
 	<conbody>
-		<p/>
+	<p>Sections in this topic:
+		<sl otherprops="pdf">
+				<sli>
+					<xref href="./aboutindexing.dita#aboutindexing">About indexing</xref>
+				</sli>
+				<sli>
+					<xref href="./aboutmetadata.dita#aboutmetadata">About metadata</xref>
+				</sli>
+				<sli>
+					<xref href="./aboutcondproc.dita#aboutcondproc">About conditional processing</xref>
+				</sli>
+				<sli>
+					<xref href="./aboutrdfowl.dita#aboutrdfowl">About RDF and the DITA Open Toolkit</xref>
+				</sli>
+				<sli>
+					<xref href="./accessing_production_notes.dita#accessing_production_notes">Production notes (accessing)</xref>
+				</sli>
+				<sli>
+					<xref href="./accessing_formoreinfo.dita#accessing_formoreinfo">For more information (accessing)</xref>
+				</sli>
+			</sl>
+		</p>
 	</conbody>
 </concept>

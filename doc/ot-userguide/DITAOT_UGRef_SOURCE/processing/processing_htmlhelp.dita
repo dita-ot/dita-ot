@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "../dtd/task.dtd">
+<!-- 
+This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
+See the accompanying license.txt file for applicable licenses.
+-->
 <task id="processing_htmlhelp">
 	<title>Processing to HTML Help targets</title>
-	<shortdesc>How to process (build) to HTML Help output targets using the garage sample.</shortdesc>
+	
 	<prolog>
 		<author type="creator">Richard Johnson</author>
 		<author type="contributor">Anna van Raaphorst</author>
@@ -13,7 +17,7 @@
 		</copyright>
 		<critdates>
 			<created date="2006-June-10"/>
-			<revised modified="2006-August-08"/>
+			<revised modified="2006-September-12"/>
 		</critdates>
 		<metadata>
 			<keywords>
@@ -31,7 +35,7 @@
 			<prodinfo>
 				<prodname>DITA Open Toolkit</prodname>
 				<vrmlist>
-					<vrm version="1.2.2"/>
+					<vrm version="1.3"/>
 				</vrmlist>
 			</prodinfo>
 		</metadata>
@@ -41,7 +45,7 @@
 		<context>In general, the instructions in this topic assume the Windows environment; the procedure is very similar in other operating system environments.</context>
 		<steps>
 			<step>
-				<cmd>If you have not already done so, create <filepath>MY_DITAOUTPUT</filepath> and <filepath>MY_DITA_SOURCE</filepath> directories in the root directory of your <filepath>C:</filepath> drive (or your <filepath>/home</filepath> directory in Linux).</cmd>
+				<cmd>If you have not already done so, create <filepath>MY_DITA_OUTPUT</filepath> and <filepath>MY_DITA_SOURCE</filepath> directories in the root directory of your <filepath>C:</filepath> drive (or your <filepath>/home</filepath> directory in Linux).</cmd>
 			</step>
 			<step>
 				<cmd>If you have not already done so, copy  the sample files into the <filepath>MY_DITA_SOURCE</filepath> directory.</cmd>
@@ -56,14 +60,14 @@
 				<cmd>View and edit, if necessary for your specific working environment, <filepath>MY_DITA_SOURCE/ant_scripts/garage_hierarchy_htmlhelp.xml</filepath>.</cmd>
 				<info>
 					<p>These are the significant Ant parameters and how they are set:
-				<ol>
+				<ul>
 							<li>
 								<b>args.outdir</b> is set to send the output to <filepath>MY_DITA_OUTPUT</filepath>.</li>
 							<li>
 								<b>args.input</b> is set to use the hierarchy ditamap.</li>
 							<li>
 								<b>transtype</b> is set to htmlhelp.</li>
-						</ol>
+						</ul>
 					</p>
 				</info>
 			</step>

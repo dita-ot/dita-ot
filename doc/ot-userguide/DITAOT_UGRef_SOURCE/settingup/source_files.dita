@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "../dtd/task.dtd">
+<!-- 
+This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
+See the accompanying license.txt file for applicable licenses.
+-->
 <task id="source_files">
 	<title>Setting up your source and output file directories</title>
-	<shortdesc>How to set up your source and output file directory.</shortdesc>
+	
 	<prolog>
 		<author type="creator">Richard Johnson</author>
 		<author type="contributor">Anna van Raaphorst</author>
@@ -28,7 +32,7 @@
 			<prodinfo>
 				<prodname>DITA Open Toolkit</prodname>
 				<vrmlist>
-					<vrm version="1.2.2"/>
+					<vrm version="1.3"/>
 				</vrmlist>
 			</prodinfo>
 		</metadata>
@@ -38,7 +42,7 @@
 			<p>In general, it is a good idea to store the DITA files you create separately from DITA Open Toolkit, because:</p>
 			<ul>
 				<li>It is easier to create, back up, and migrate DITA source files if they are all together in a separate master directory.</li>
-				<li>It is easier to migrate to a new version of the Toolkit if the you don't have to separate out and migrate your source files at the same time.</li>
+				<li>It is easier to migrate to a new version of the Toolkit if you don't have to separate out and migrate your source files at the same time.</li>
 				<li>You are less likely to accidentally change or erase Toolkit files if they are not mixed in with the source files you work with every day.</li>
 			</ul>
 			<note>The most likely reasons you might have to modify files in the <filepath>ditaot</filepath> directory are (1) to create a specialization and (2) in processing reuse, to customize the output through XSLT changes.</note>
@@ -48,10 +52,10 @@
 		<steps>
 			<step>
 				<cmd>Create two new directories in your <filepath>C:</filepath> root directory (on Windows) or <filepath>/home/userid</filepath> (on Linux).</cmd>
-				<info>In this and other examples in this document, we assume the two directories are: <filepath>C:/MY_DITA_SOURCE</filepath> and <filepath>C:/MY_DITA_OUTPUT</filepath>. We recommend building frequently, and it is easier to find and check the output files if they are in close proximity in your directory structure to the source files.</info>
+				<info>In this and other examples in this document, we assume the two directories are: <filepath>C:/MY_DITA_SOURCE</filepath> and <filepath>C:/MY_DITA_OUTPUT</filepath>. We recommend building frequently, and it is easier to find and check the output files if they are in close proximity to the source files in your directory structure.</info>
 			</step>
 			<step>
-				<cmd>Within <filepath>c:/MY_DITA_SOURCE</filepath> create a <filepath>samples</filepath> subdirectory.</cmd>
+				<cmd>Within <filepath>C:/MY_DITA_SOURCE</filepath> create a <filepath>samples</filepath> subdirectory.</cmd>
 			</step>
 			<step>
 				<cmd>Copy the garage sample files from <filepath>ditaot/samples</filepath> to the <filepath>samples</filepath> directory you just created.</cmd>

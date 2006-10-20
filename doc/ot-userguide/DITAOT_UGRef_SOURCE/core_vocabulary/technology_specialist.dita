@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "../dtd/concept.dtd">
+<!-- 
+This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
+See the accompanying license.txt file for applicable licenses.
+-->
 <concept id="technology_specialist">
 	<title>Technology specialist audience category</title>
-	<shortdesc/>
 	<prolog>
 		<author type="creator">Anna van Raaphorst</author>
 		<author type="contributor">Richard Johnson</author>
@@ -13,7 +16,7 @@
 		</copyright>
 		<critdates>
 			<created date="2006-July-04"/>
-			<revised modified="2006-August-09"/>
+			<revised modified="2006-October-11"/>
 		</critdates>
 		<metadata>
 			<keywords>
@@ -27,21 +30,15 @@
 			<prodinfo>
 				<prodname>DITA Open Toolkit</prodname>
 				<vrmlist>
-					<vrm version="1.2.2"/>
+					<vrm version="1.3"/>
 				</vrmlist>
 			</prodinfo>
 		</metadata>
 	</prolog>
 	<conbody>
 		<section id="technology_specialist_term">
-			<p>
-				<b>Definition</b>
-			</p>
-			<p>Persons responsible for the technology of DITA projects.</p>
-			<p>
-				<b>Usage</b>
-			</p>
-			<p>Target audience category for this document. Includes application designers and developers, content managers, and database and system administrators.</p>
+			<p>Technology specialists are persons responsible for the technology of DITA projects.</p>
+			<p>Technology specialist is a target audience category for this document. The category includes application designers and developers, content managers, and database and system administrators.</p>
 		</section>
 	</conbody>
 	<related-links>

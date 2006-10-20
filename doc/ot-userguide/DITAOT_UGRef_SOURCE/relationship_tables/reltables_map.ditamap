@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- (c) Copyright 2006 by VR Communications, Inc. All rights reserved. -->
 <!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN"  "../dtd/map.dtd">
+<!-- 
+This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
+See the accompanying license.txt file for applicable licenses.
+-->
 <map id="reltables_map" title="Relationship tables">
 	<!-- Relationship table -->
 	<reltable>
@@ -11,7 +15,8 @@
 					<topicref href="../installing/installing_overview.dita"/>
 				</topicgroup>
 			</relcell>
-			<relcell/>
+			<relcell>
+			</relcell>
 		</relrow>
 		<relrow>
 			<relcell>
@@ -37,7 +42,7 @@
 				<topicref href="../core_vocabulary/eclipse_help.dita" linking="targetonly"/>
 			</relcell>
 		</relrow>
-			<relrow>
+		<relrow>
 			<relcell>
 				<topicref href="../introduction/aboutditaot.dita"/>
 			</relcell>
@@ -53,7 +58,7 @@
 				<topicref href="../core_vocabulary/javahelp.dita" linking="targetonly"/>
 			</relcell>
 		</relrow>
-			<relrow>
+		<relrow>
 			<relcell>
 				<topicref href="../introduction/aboutditaot.dita"/>
 			</relcell>
@@ -69,7 +74,7 @@
 				<topicref href="../core_vocabulary/troff.dita" linking="targetonly"/>
 			</relcell>
 		</relrow>
-			<relrow>
+		<relrow>
 			<relcell>
 				<topicref href="../introduction/aboutditaot.dita"/>
 			</relcell>
@@ -77,7 +82,7 @@
 				<topicref href="../core_vocabulary/wordrtf.dita" linking="targetonly"/>
 			</relcell>
 		</relrow>
-			<relrow>
+		<relrow>
 			<relcell>
 				<topicref href="../introduction/aboutditaot.dita"/>
 			</relcell>
@@ -86,4 +91,4 @@
 			</relcell>
 		</relrow>
 	</reltable>
-</map>
+	</map>

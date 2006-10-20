@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "../dtd/concept.dtd">
+<!-- 
+This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
+See the accompanying license.txt file for applicable licenses.
+-->
+<concept id="installing_authoring_tools">
+	<title>Installing the DITA authoring tools</title>
+	
+	<prolog>
+		<author type="creator">Anna van Raaphorst</author>
+		<author type="contributor">Richard Johnson</author>
+		<publisher>OASIS (Organization for the Advancement of Structured Information Standards)</publisher>
+		<copyright>
+			<copyryear year="2006"/>
+			<copyrholder>VR Communications, Inc.</copyrholder>
+		</copyright>
+		<critdates>
+			<created date="2006-July-01"/>
+			<revised modified="2006-iSeptember-26"/>
+		</critdates>
+		<metadata>
+			<keywords>
+				<keyword>installing DITA Open Toolkit</keyword>
+				<keyword>DITA Open Toolkit</keyword>
+				<keyword>Adobe FrameMaker</keyword>
+				<keyword>FrameMaker editor</keyword>
+				<keyword>Altova XMLSpy</keyword>
+				<keyword>XMLSpy editor</keyword>
+				<keyword>Arbortext Editor</keyword>
+				<keyword>justSystems XMetaL</keyword>
+				<keyword>XMetaL editor</keyword>
+				<keyword>Pixware XMLmind</keyword>
+				<keyword>XMLmind editor</keyword>
+				<keyword>Syntext Serna</keyword>
+				<keyword>Serna editor</keyword>
+				<keyword>Microsoft Notepad</keyword>
+				<keyword>Notepad editor</keyword>
+				<keyword>Java Development Kit</keyword>
+				<keyword>JDK</keyword>
+				<keyword>Ant</keyword>
+				<keyword>XSLT processor</keyword>
+				<keyword>SAXON XSLT processor</keyword>
+				<keyword>Xalan XSLT processor</keyword>
+				
+				<indexterm>DITA authoring tools</indexterm>
+				<indexterm>Adobe FrameMaker</indexterm>
+				<indexterm>FrameMaker editor</indexterm>
+				<indexterm>Altova XMLSpy</indexterm>
+				<indexterm>XMLSpy editor</indexterm>
+				<indexterm>Arbortext Editor</indexterm>
+				<indexterm>justSystems XMetaL</indexterm>
+				<indexterm>XMetaL editor</indexterm>
+				<indexterm>Pixware XMLmind</indexterm>
+				<indexterm>XMLmind editor</indexterm>
+				<indexterm>Syntext Serna</indexterm>
+				<indexterm>Serna editor</indexterm>
+				<indexterm>Microsoft Notepad</indexterm>
+				<indexterm>Notepad editor</indexterm>
+				
+			</keywords>
+			<prodinfo>
+				<prodname>DITA Open Toolkit</prodname>
+				<vrmlist>
+					<vrm version="1.3"/>
+				</vrmlist>
+			</prodinfo>
+		</metadata>
+	</prolog>
+	<conbody>
+		<p>You can create DITA source files with a plain text editor, for example Microsoft Notepad for Windows. Editors at varying levels of "DITA-awareness" are also available, both free and for purchase. These editors help you create DITA documents that are well-formed and valid. </p>
+		<p>
+		Some well-known DITA-aware editors are Adobe FrameMaker, Altova XMLSpy, Arbortext Editor, justsystems XMetaL (DITA edition), Pixware XMLmind, Stylus Studio, SyncRO Soft &lt;Oxygen/&gt;, and Syntext Serna.</p>
+		<p>Authoring tools are not part of DITA Open Toolkit or any of the prerequisite tools for the Toolkit.</p>
+		<p>Some of these DITA authoring products contain embedded copies of the DITA Open Toolkit and hence you will not need to install the Toolkit separately.</p>
+	</conbody>
+</concept>

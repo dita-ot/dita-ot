@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "../dtd/concept.dtd">
+<!-- 
+This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
+See the accompanying license.txt file for applicable licenses.
+-->
 <concept id="distributing">
 	<title>Distributing your published content</title>
-	<shortdesc>How to distribute your published content.</shortdesc>
+	<shortdesc>This section contains information about distributing your published DITA content.</shortdesc>
 	<prolog>
 		<author type="creator">Anna van Raaphorst</author>
 		<author type="contributor">Richard Johnson</author>
@@ -23,12 +27,27 @@
 			<prodinfo>
 				<prodname>DITA Open Toolkit</prodname>
 				<vrmlist>
-					<vrm version="1.2.2"/>
+					<vrm version="1.3"/>
 				</vrmlist>
 			</prodinfo>
 		</metadata>
 	</prolog>
 	<conbody>
-		<p/>
+		<p>Sections in this topic:
+		<sl otherprops="pdf">
+				<sli>
+					<xref href="./aboutdistributing.dita#aboutdistributing">About distributing content</xref>
+				</sli>
+				<sli>
+					<xref href="./rss_overview.dita#rss_overview">Distributing information about published DITA content </xref>
+				</sli>
+				<sli>
+					<xref href="./server.dita#server">Distributing information by publishing DITA content on a web server</xref>
+				</sli>
+				<sli>
+					<xref href="./distributing_formoreinfo.dita#distributing_formoreinfo">For more information (distributing)</xref>
+				</sli>
+			</sl>
+		</p>
 	</conbody>
 </concept>

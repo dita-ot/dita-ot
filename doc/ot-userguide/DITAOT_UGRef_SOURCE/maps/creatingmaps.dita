@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "../dtd/task.dtd">
+<!-- 
+This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
+See the accompanying license.txt file for applicable licenses.
+-->
 <task id="creatingmaps" xml:lang="en-us">
 	<title>Creating maps</title>
-	<shortdesc>How to create the map for the grocery shopping sample.</shortdesc>
 	<prolog>
 		<author type="creator">Richard Johnson</author>
 		<copyright>
@@ -11,14 +14,14 @@
 		</copyright>
 		<critdates>
 			<created date="2006-June-14"/>
-			<revised modified="2006-August-08"/>
+			<revised modified="2006-October-11"/>
 		</critdates>
 		<metadata>
 			<keywords>
 				<keyword>map</keyword>
 				<keyword>ditamap</keyword>
 				<keyword>grocery shopping sample</keyword>
-				<indexterm>maps<indexterm>creating</indexterm>
+				<indexterm>map<indexterm>creating</indexterm>
 				</indexterm>
 				<indexterm>creating<indexterm>maps</indexterm>
 				</indexterm>
@@ -61,7 +64,7 @@ You could display those pages in any order. --&gt;
 &lt;/topicref&gt;
 &lt;!-- The relationship table goes below --&gt;
 &lt;!-- The related concept, task, 
-nd reference files point to each other --&gt;
+          and reference files point to each other --&gt;
 &lt;/map&gt;
 				</codeblock>
 				</info>

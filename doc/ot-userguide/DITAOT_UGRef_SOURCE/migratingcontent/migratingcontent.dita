@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "../dtd/concept.dtd">
+<!-- 
+This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
+See the accompanying license.txt file for applicable licenses.
+-->
 <concept id="migratingcontent">
 	<title>Migrating legacy content to DITA</title>
-	<shortdesc>How to migrate legacy content to DITA.</shortdesc>
+	<shortdesc>This section contains information about migrating legacy content to DITA.</shortdesc>
 	<prolog>
 		<author type="creator">Anna van Raaphorst</author>
 		<author type="contributor">Richard Johnson</author>
@@ -13,7 +17,7 @@
 		</copyright>
 		<critdates>
 			<created date="2006-May-01"/>
-			<revised modified="2006-August-08"/>
+			<revised modified="2006-October-05"/>
 		</critdates>
 		<metadata>
 			<keywords>
@@ -23,12 +27,24 @@
 			<prodinfo>
 				<prodname>DITA Open Toolkit</prodname>
 				<vrmlist>
-					<vrm version="1.2.2"/>
+					<vrm version="1.3"/>
 				</vrmlist>
 			</prodinfo>
 		</metadata>
 	</prolog>
 	<conbody>
-		<p/>
+		<p>Sections in this topic:
+		<sl otherprops="pdf">
+				<sli>
+					<xref href="./migratingcontent_overview.dita#migratingcontent_overview">Content migration overview</xref>
+				</sli>
+				<sli>
+					<xref href="./migratingcontent_production_notes.dita#migratingcontent_production_notes">Production notes (migrating)</xref>
+				</sli>
+				<sli>
+					<xref href="./migratingcontent_formoreinfo.dita#migratingcontent_formoreinfo">For more information (migrating)</xref>
+				</sli>
+			</sl>
+		</p>
 	</conbody>
 </concept>

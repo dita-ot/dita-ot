@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "../dtd/task.dtd">
+<!-- 
+This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
+See the accompanying license.txt file for applicable licenses.
+-->
 <task id="windows_installingfop" xml:lang="en-us">
 	<title>(Optional) Installing FOP on Windows</title>
-	<shortdesc>(If you plan to publish PDFs) How to install FOP in the Windows operating environment.</shortdesc>
+	
 	<prolog>
 		<author type="creator">Jen Linton</author>
 		<author type="creator">JoAnn Hackos</author>
@@ -16,7 +20,7 @@
 		</copyright>
 		<critdates>
 			<created date="2005-November-01"/>
-			<revised modified="2006-August-08"/>
+			<revised modified="2006-October-10"/>
 		</critdates>
 		<metadata>
 			<keywords>
@@ -42,7 +46,7 @@
 			<prodinfo>
 				<prodname>DITA Open Toolkit</prodname>
 				<vrmlist>
-					<vrm version="1.2.2"/>
+					<vrm version="1.3"/>
 				</vrmlist>
 			</prodinfo>
 		</metadata>
@@ -50,39 +54,26 @@
 	<taskbody>
 		<steps>
 			<step>
-				<cmd>Enter the URL: <xref format="html" href="http://apache.tradebit.com/pub/xml/fop/" scope="external">http://apache.tradebit.com/pub/xml/fop/</xref>
+				<cmd>Enter the URL: <xref format="html" href="http://apache.tradebit.com/pub/xml/fop/" scope="external">http://apache.tradebit.com/pub/xml/fop/</xref>.
 				</cmd>
 			</step>
 			<step>
 				<cmd>From the FOP page, in the Name column, select <uicontrol>
 						<image href="../images/compressed.gif"/>"fop-0.20.5-bin.zip" 
-          </uicontrol>
+          </uicontrol>.
 				</cmd>
 			</step>
 			<step>
-				<cmd>Click <uicontrol>Save</uicontrol> to unzip the fop-0.20.5-bin.zip 
-          file and save it to the C:\ directory as 
-          <filepath>fop-0.20.5</filepath>
+				<cmd>Click <uicontrol>Save</uicontrol> to unzip the <filepath>fop-0.20.5-bin.zip </filepath>
+          file and save it to the <filepath>C:\</filepath> directory as 
+          <filepath>fop-0.20.5</filepath>.
 				</cmd>
 			</step>
 			<step>
-				<cmd>Set the <varname>CLASSPATH </varname>
-					<xref href="windows_settingenvvariables.dita" scope="local">environment 
-          variable</xref> for the following jar files:</cmd>
+				<cmd>Add to the <varname>CLASSPATH </varname> for the following jar files:</cmd>
 				<info>
-					<sl>
-						<sli>
-							<filepath>\build\fop.jar</filepath>
-						</sli>
-						<sli>
-							<filepath>\lib\batik.jar</filepath>
-						</sli>
-						<sli>
-							<filepath>\lib\avalon-framework-cvs-20020806.jar</filepath>
-						</sli>
-					</sl>
+					<codeph>C:\fop-0.20.5\build\fop.jar;C:\fop-0.20.5\lib\batik.jar;C:\fop-0.20.5\lib \avalon-framework-cvs-20020806.jar</codeph>
 				</info>
-				<?Pub Caret?>
 			</step>
 		</steps>
 	</taskbody>

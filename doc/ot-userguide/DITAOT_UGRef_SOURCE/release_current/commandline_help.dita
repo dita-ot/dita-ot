@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "../dtd/concept.dtd">
+<!-- 
+This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
+See the accompanying license.txt file for applicable licenses.
+-->
+<concept id="commandline_help">
+	<title>Command-line help</title>
+	<prolog>
+		<author type="creator">IBM</author>
+		<author type="contributor">Richard Johnson</author>
+		<publisher>OASIS (Organization for the Advancement of Structured Information Standards)</publisher>
+		<copyright>
+			<copyryear year="2006"/>
+			<copyrholder>IBM</copyrholder>
+		</copyright>
+		<critdates>
+			<created date="2006-May-01"/>
+			<revised modified="2006-October-12"/>
+		</critdates>
+		<metadata>
+			<keywords>
+				<indexterm>release 1.3 features
+					<indexterm>command-line help</indexterm>
+				</indexterm>
+				<indexterm>command-line help</indexterm>
+			</keywords>
+			<prodinfo>
+				<prodname>DITA Open Toolkit</prodname>
+				<vrmlist>
+					<vrm version="1.3"/>
+				</vrmlist>
+			</prodinfo>
+		</metadata>
+	</prolog>
+	<conbody>
+		<p>In DITA OT 1.3, the command line help function has been enhanced
+to improve usability. You can display the version of the Toolkit and the usage of
+the command line by using the following commands: <lines>
+				<codeph>java -jar lib/dost.jar <b>-version</b>
+				</codeph>
+				<codeph>java -jar lib/dost.jar <b>-h</b>
+				</codeph>
+			</lines>
+		</p>
+		<p>You can display a brief description of the supported parameters
+in the command line window when you type a specific command. For example,
+if you type <userinput>java -jar lib/dost.jar -h</userinput>, you
+will get the following result:
+<screen>D:\DITA-OT1.3_fullpackage_bin\DITA-OT1.3>java -jar lib/dost.jar -h
+
+java -jar lib/dost.jar [mandatory parameters] [options]
+Mandatory parameters:
+  /i:{args.input}        specify the input file
+  /transtype:{transtype} specify the transformation type
+Options:
+  -help, -h              print this message
+  -version               print the version information and exit
+  /basedir:{basedir}     specify the working directory
+  /ditadir:{dita.dir}    specify the toolkit's home directory
+  /outdir:{output.dir}   specify the output directory
+  /tempdir:{dita.temp.dir} specify the temporary directory
+  /logdir:{args.logdir}  specify the log directory
+  /ditaext:{dita.extname} specify the dita file extension
+  ...
+</screen>
+		</p>
+	</conbody>
+</concept>

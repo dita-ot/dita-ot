@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "../dtd/task.dtd">
+<!-- 
+This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
+See the accompanying license.txt file for applicable licenses.
+-->
 <task id="windows_verifying" xml:lang="en-us">
 	<title>Verifying the installation on Windows</title>
-	<shortdesc>How to verify the installation in the Windows operating environment.</shortdesc>
 	<prolog>
 		<author type="creator">Jen Linton</author>
 		<author type="creator">JoAnn Hackos</author>
@@ -16,7 +19,7 @@
 		</copyright>
 		<critdates>
 			<created date="2005-November-01"/>
-			<revised modified="2006-August-08"/>
+			<revised modified="2006-October-12"/>
 		</critdates>
 		<metadata>
 			<keywords>
@@ -29,7 +32,7 @@
 			<prodinfo>
 				<prodname>DITA Open Toolkit</prodname>
 				<vrmlist>
-					<vrm version="1.2.2"/>
+					<vrm version="1.3"/>
 				</vrmlist>
 			</prodinfo>
 		</metadata>
@@ -70,17 +73,17 @@
 				</choicetable>
 			</step>
 			<step>
-				<cmd>At the prompt, type <codeph>cd ditaot</codeph>
+				<cmd>At the prompt, type <userinput>cd ditaot</userinput>
 				</cmd>
 				<stepresult>The command prompt changes to <codeph>C:\ditaot</codeph>
 				</stepresult>
 			</step>
 			<step>
-				<cmd>Type <codeph>ant all</codeph> and press Enter to process the DITA files in the <filepath>demo</filepath>, <filepath>doc</filepath>, <filepath>docbook</filepath>, and <filepath>samples</filepath> directories. This procedure also verifies the Toolkit installation.
+				<cmd>Type <userinput>ant -f build_demo.xml all</userinput> and press Enter to process the DITA files in the <filepath>demo</filepath>, <filepath>doc</filepath>, <filepath>docbook</filepath>, and <filepath>samples</filepath> directories. This procedure also verifies the Toolkit installation.
           </cmd>
 				<stepresult>The testing process completes in 3-10 minutes depending on 
           the speed of your machine. When testing completes, the confirmation 
-          message "BUILD SUCCESSFUL" displays.
+          message"BUILD SUCCESSFUL displays.
 				</stepresult>
 			</step>
 		</steps>

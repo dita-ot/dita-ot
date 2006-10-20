@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "../dtd/task.dtd">
-<task id="processing_pdf">
+<!-- 
+This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
+See the accompanying license.txt file for applicable licenses.
+-->
+<task id="processing_docbook">
 	<title>Processing to DocBook targets</title>
-	<shortdesc>How to process (build) to DocBook output targets using the garage sample.</shortdesc>
+	
 	<prolog>
 		<author type="creator">Richard Johnson</author>
 		<author type="contributor">Anna van Raaphorst</author>
@@ -13,7 +17,7 @@
 		</copyright>
 		<critdates>
 			<created date="2006-June-10"/>
-			<revised modified="2006-August-08"/>
+			<revised modified="2006-October-10"/>
 		</critdates>
 		<metadata>
 			<keywords>
@@ -31,14 +35,14 @@
 			<prodinfo>
 				<prodname>DITA Open Toolkit</prodname>
 				<vrmlist>
-					<vrm version="1.2.2"/>
+					<vrm version="1.3"/>
 				</vrmlist>
 			</prodinfo>
 		</metadata>
 	</prolog>
 	<taskbody>
 		<prereq>This topic assumes you have already installed DITA Open Toolkit and its prerequisite products, and have verified your installation, as described in the installation chapter of this document.</prereq>
-		<context>In general, the instructions in this topic assume the Windows environment; the procedure is very similar in other operating system environments..</context>
+		<context>In general, the instructions in this topic assume the Windows environment; the procedure is very similar in other operating system environments.</context>
 		<steps>
 			<step>
 				<cmd>If you have not already done so, create <filepath>MY_DITA_OUTPUT</filepath> and <filepath>MY_DITA_SOURCE</filepath> directories in the root directory of your <filepath>C:</filepath> drive (or your <filepath>/home</filepath> directory in Linux).</cmd>

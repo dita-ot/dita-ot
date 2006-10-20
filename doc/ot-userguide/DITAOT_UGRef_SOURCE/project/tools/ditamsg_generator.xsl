@@ -9,6 +9,9 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 <!-- Stylesheet to convert messages.xml to a DITA reference topic messages.dita -->
 <!-- Author: Richard Johnson -->
 <!-- Copyright 2006 VR Communications, Inc. All rights reserved. -->
+<!-- This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
+     See the accompanying license.txt file for applicable licenses. -->
+
 
 <xsl:template match="//messages">
 

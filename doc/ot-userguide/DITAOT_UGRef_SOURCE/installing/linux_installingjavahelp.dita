@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "../dtd/task.dtd">
+<!-- 
+This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
+See the accompanying license.txt file for applicable licenses.
+-->
 <task id="linux_installingjavahelp" xml:lang="en-us">
 	<title>(Optional) Installing JavaHelp on Linux</title>
-	<shortdesc>(If you plan to publish JavaHelp) How to install JavaHelp in the Linux operating environment.</shortdesc>
+	
 	<prolog>
 		<author type="creator">Jen Linton</author>
 		<author type="creator">JoAnn Hackos</author>
@@ -16,7 +20,7 @@
 		</copyright>
 		<critdates>
 			<created date="2005-November-01"/>
-			<revised modified="2006-August-08"/>
+			<revised modified="2006-October-17"/>
 		</critdates>
 		<metadata>
 			<keywords>
@@ -34,7 +38,7 @@
 			<prodinfo>
 				<prodname>DITA Open Toolkit</prodname>
 				<vrmlist>
-					<vrm version="1.2.2"/>
+					<vrm version="1.3"/>
 				</vrmlist>
 			</prodinfo>
 		</metadata>
@@ -42,12 +46,12 @@
 	<taskbody>
 		<steps>
 			<step>
-				<cmd>Enter the URL: <xref href="http://java.sun.com/products/javahelp/download_binary.html" format="html" scope="external">http://java.sun.com/products/javahelp/download_binary.html</xref>
+				<cmd>Enter the URL: <xref href="http://java.sun.com/products/javahelp/download_binary.html" format="html" scope="external">http://java.sun.com/products/javahelp/download_binary.html</xref>.
 				</cmd>
 			</step>
 			<step>
 				<cmd>From the Sun Developer Network page, scroll to find the 
-          heading<uicontrol> JavaHelp 2.0_02 (Zip)</uicontrol>
+          heading<uicontrol> JavaHelp 2.0_02 (Zip)</uicontrol>.
 				</cmd>
 			</step>
 			<step>
@@ -55,10 +59,10 @@
 			</step>
 			<step>
 				<cmd>From the Sun Developer Network page, accept the license agreement 
-          and scroll to the heading "Platform - JavaHelp API 2.0_02 FCS"</cmd>
+          and scroll to the heading "Platform - JavaHelp API 2.0_02 FCS".</cmd>
 			</step>
 			<step>
-				<cmd>Select <uicontrol>javahelp-2_0_02.zip, 6.49 MB</uicontrol>
+				<cmd>Select <uicontrol>javahelp-2_0_02.zip, 6.49 MB</uicontrol>.
 				</cmd>
 				<stepresult>The <systemoutput>File Download</systemoutput> window 
           opens.</stepresult>
@@ -68,9 +72,8 @@
           file and save it to a Linux home directory.</cmd>
 			</step>
 			<step>
-				<cmd>Add the <varname>JHHOME </varname>
-					<xref href="linux_settingenvvariables.dita" scope="local">environment 
-          variable</xref>.</cmd>
+				<cmd>Add the <varname>JHHOME </varname> environment variable:
+				<codeph>export JHHOME=${javahelp_dir}</codeph>.</cmd>
 			</step>
 		</steps>
 	</taskbody>

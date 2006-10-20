@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "../dtd/task.dtd">
+<!-- 
+This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
+See the accompanying license.txt file for applicable licenses.
+-->
 <task id="processing_troff">
 	<title>Processing to troff targets</title>
-	<shortdesc>How to process (build) to troff output targets using the garage sample.</shortdesc>
+	
 	<prolog>
 		<author type="creator">Richard Johnson</author>
 		<author type="contributor">Anna van Raaphorst</author>
@@ -13,7 +17,7 @@
 		</copyright>
 		<critdates>
 			<created date="2006-June-14"/>
-			<revised modified="2006-August-08"/>
+			<revised modified="2006-September-12"/>
 		</critdates>
 		<metadata>
 			<keywords>
@@ -31,7 +35,7 @@
 			<prodinfo>
 				<prodname>DITA Open Toolkit</prodname>
 				<vrmlist>
-					<vrm version="1.2.2"/>
+					<vrm version="1.3"/>
 				</vrmlist>
 			</prodinfo>
 		</metadata>
@@ -78,14 +82,14 @@
 				<p>
 						<image href="../images/processing_troff1.jpg"/>
 					</p>
-					<p>The <filepath>hierarchy</filepath> subdirectory should contain these directories and files:</p>
+					<p>The <filepath>troff</filepath> subdirectory should contain these directories and files:</p>
 					<p>
 						<image href="../images/processing_troff2.jpg"/>
 					</p>
 				</info>
 			</step>
 			<step>
-				<cmd>Open the file <filepath>troff.xml</filepath> to view the troff output.</cmd>
+				<cmd>Open the file <filepath>concepts/garageconcepts.cli</filepath> to view the troff output.</cmd>
 				<info>The file should look something like this:
 				<p>
 						<image href="../images/processing_troff_wordpad.jpg"/>

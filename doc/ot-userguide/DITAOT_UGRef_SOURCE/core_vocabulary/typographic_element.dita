@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "../dtd/concept.dtd">
+<!-- 
+This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
+See the accompanying license.txt file for applicable licenses.
+-->
 <concept id="typographic_element">
 	<title>Typographic element</title>
-	<shortdesc/>
+	
 	<prolog>
 		<author type="creator">Anna van Raaphorst</author>
 		<author type="contributor">Richard Johnson</author>
@@ -13,7 +17,7 @@
 		</copyright>
 		<critdates>
 			<created date="2006-May-01"/>
-			<revised modified="2006-August-08"/>
+			<revised modified="2006-September-30"/>
 		</critdates>
 		<metadata>
 			<keywords>
@@ -25,17 +29,15 @@
 			<prodinfo>
 				<prodname>DITA Open Toolkit</prodname>
 				<vrmlist>
-					<vrm version="1.2.2"/>
+					<vrm version="1.3"/>
 				</vrmlist>
 			</prodinfo>
 		</metadata>
 	</prolog>
 	<conbody>
 		<section id="typographic_element_term">
-			<p>
-				<b>Definition</b>
-			</p>
-			<p>Element to mark words or phrases to display in bold, italic, underlined, as a subscript or superscript, and in teletype (monospace, usually Courier) font.</p>
+			
+			<p>A typographic element is an element to mark words or phrases to display in bold, italic, underlined, as a subscript or superscript, and in teletype (monospace, usually Courier) font.</p>
 			<p>
 				<b>Example</b>
 			</p>

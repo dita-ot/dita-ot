@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "../dtd/concept.dtd">
+<!-- 
+This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
+See the accompanying license.txt file for applicable licenses.
+-->
 <concept id="task_modeler">
 	<title>Task Modeler</title>
-	<shortdesc/>
+	
 	<prolog>
 		<author type="creator">Anna van Raaphorst</author>
 		<author type="contributor">Richard Johnson</author>
@@ -13,7 +17,7 @@
 		</copyright>
 		<critdates>
 			<created date="2006-May-01"/>
-			<revised modified="2006-August-09"/>
+			<revised modified="2006-October-02"/>
 		</critdates>
 		<metadata>
 			<keywords>
@@ -22,7 +26,11 @@
 				<keyword>Task Modeler</keyword>
 				<keyword>IBM Task Modeler</keyword>
 				<indexterm>Task Modeler (IBM)</indexterm>
-				<indexterm>IBM Task Modeler</indexterm>
+				<indexterm>IBM Task Modeler
+				<indexterm>DITA map editor</indexterm>
+				<indexterm>Eclipse 3.0</indexterm>
+				<indexterm>XMLBuddy</indexterm>
+				</indexterm>
 				<indexterm>Hierarchical Task Analysis (HTA) diagram</indexterm>
 				<indexterm>HTA (Hierarchical Task Analysis) diagram</indexterm>
 				<indexterm>Roles and Goals (RAG) diagram</indexterm>
@@ -31,26 +39,23 @@
 			<prodinfo>
 				<prodname>DITA Open Toolkit</prodname>
 				<vrmlist>
-					<vrm version="1.2.2"/>
+					<vrm version="1.3"/>
 				</vrmlist>
 			</prodinfo>
 		</metadata>
 	</prolog>
 	<conbody>
 		<section id="task_modeler_term">
-			<p>
-				<b>Definition</b>
-			</p>
-			<p>An IBM-produced, Eclipse-based software tool for modeling human activity as a hierarchy of task and related elements.</p>
-			<p>
-				<b>Usage</b>
-			</p>
-			<p>An information architect can use it to design DITA maps. A usability practitioner can produce either classic HTA (Hierarchical Task Analysis) diagrams or RAG (Roles and Goals) diagrams.</p>
+			
+			<p>Task Modeler is an IBM-produced, Eclipse-based software tool for modeling human activity as a hierarchy of task and related elements.</p>
+			
+			<p>An information architect can use Task Modeler to design DITA maps. A usability practitioner can produce either classic HTA (Hierarchical Task Analysis) diagrams or RAG (Roles and Goals) diagrams.</p>
 			<p>
 				<b>For more information</b>
 			</p>
-			<p>For more information about the Task Modeler, see <xref href="http://www.alphaworks.ibm.com/tech/taskmodeler" format="html" scope="external"/>.
+			<p>For more information about Task Modeler, see <xref href="http://www.alphaworks.ibm.com/tech/taskmodeler" format="html" scope="external"/>.
 			</p>
+			<p>The Task Modeler download contains Eclipse version 3.0 with Task Modeling and XML file editing (XMLBuddy) already configured.</p>
 		</section>
 	</conbody>
 </concept>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "../dtd/concept.dtd">
+<!-- 
+This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
+See the accompanying license.txt file for applicable licenses.
+-->
+<concept id="installing_full_package">
+	<title>Installing the DITA Tookit full package distribution</title>
+	<prolog>
+		<author type="creator">Richard Johnson</author>
+		<author type="contributor">Anna van Raaphorst</author>
+		<publisher>OASIS (Organization for the Advancement of Structured Information Standards)</publisher>
+		<copyright>
+			<copyryear year="2006"/>
+			<copyrholder>VR Communications, Inc.</copyrholder>
+		</copyright>
+		<critdates>
+			<created date="2006-September-26"/>
+			<revised modified="2006-October-11"/>
+		</critdates>
+		<metadata>
+			<keywords>
+				<keyword>installing DITA Open Toolkit</keyword>
+				<keyword>DITA Open Toolkit distributions</keyword>
+				<indexterm>DITA Open Toolkit
+				  <indexterm>distributions</indexterm>
+					<indexterm>full package distribution</indexterm>
+				</indexterm>
+			</keywords>
+			<prodinfo>
+				<prodname>DITA Open Toolkit</prodname>
+				<vrmlist>
+					<vrm version="1.3"/>
+				</vrmlist>
+			</prodinfo>
+		</metadata>
+	</prolog>
+	<conbody>
+		<p>To install the full package distribution:
+	<ul>
+				<li>Download the full package from <xref href="http://sourceforge.net/projects/dita-ot" format="html" scope="external"/>.</li>
+				<li>Unzip the package into the <filepath>C:\ditaot</filepath> directory on Windows, or into a home directory on Linux.</li>
+				<li>On Windows, create a new shortcut for <filepath>C:\ditaot\startcmd.bat</filepath> to be used to run DITA builds. On Linux execute the shell script <filepath>startcmd.sh</filepath> before running a DITA build.</li>
+			</ul>
+		</p>
+		<note>You cannot run a DITA Toolkit build until you have installed the Java SDK.</note>
+		<note>You may want to install other optional tools to complete your build environment.</note>
+	</conbody>
+</concept>

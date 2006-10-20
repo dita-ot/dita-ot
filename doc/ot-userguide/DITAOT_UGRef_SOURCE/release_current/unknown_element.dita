@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+ Sourceforge.net. See the accompanying license.txt file for 
+ applicable licenses.-->
+ <!--
+  | (C) Copyright IBM Corporation 2005 - 2006. All Rights Reserved.
+  *-->   
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN"
+ "concept.dtd">
+<concept id="unknown_element" xml:lang="en-us">
+<title>Support for foreign content vocabulary (&lt;unknown&gt; element)</title>
+<prolog>
+		<author type="creator">IBM</author>
+		<author type="contributor">Richard Johnson</author>
+		<publisher>OASIS (Organization for the Advancement of Structured Information Standards)</publisher>
+		<copyright>
+			<copyryear year="2006"/>
+			<copyrholder>IBM</copyrholder>
+		</copyright>
+		<critdates>
+			<created date="2006-Sepember-19"/>
+			<revised modified="2006-October-10"/>
+		</critdates>
+		<metadata>
+			<keywords>
+				<indexterm>release 1.3 features</indexterm>
+				<indexterm>unknown element</indexterm>
+			</keywords>
+			<prodinfo>
+				<prodname>DITA Open Toolkit</prodname>
+				<vrmlist>
+					<vrm version="1.3"/>
+				</vrmlist>
+			</prodinfo>
+		</metadata>
+	</prolog>
+<conbody>
+<p>DITA 1.1 introduces the &lt;unknown&gt; element to incorporate existing
+standard vocabularies for special content, like MathML and SVG, as inline
+objects.</p>
+<note>Because OASIS DITA 1.1 was not yet approved at the time DITA Open Toolkit 1.3 was released, 
+the functionality described here should be considered preliminary until DITA 1.1 is approved, the 1.3 Toolkit assessed relative
+to DITA 1.1, and appropriate changes made to the Toolkit, if necessary.</note>
+<p>As a DITA content author you can add the &lt;unknown&gt; element,
+and put content inside it. When you transform the DITA files to the output
+you want, the transformation ignores the &lt;data&gt; element and any content
+inside it.</p>
+		<p>If you specialize the &lt;data&gt; element, and
+put information inside the specialized element, you can create a transform
+override that allows the information to appear correctly in the output. </p>
+</conbody>
+</concept>

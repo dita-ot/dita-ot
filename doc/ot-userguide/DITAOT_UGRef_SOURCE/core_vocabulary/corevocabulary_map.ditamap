@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- (c) Copyright 2006 by VR Communications, Inc. All rights reserved. -->
 <!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN"  "../dtd/map.dtd">
+<!-- 
+This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
+See the accompanying license.txt file for applicable licenses.
+-->
 <map id="ditacore_map" title="DITA core vocabulary">
 	<topicref href="core_vocabulary.dita" type="concept">
 		<topicref href="aboutditacore.dita" type="concept"/>
 		<topicref href="administrator_manager.dita" type="concept"/>
 		<topicref href="ant.dita" type="concept"/>
-		<topicref href="antscripts.dita" type="concept"/>
+		<topicref href="antscript.dita" type="concept"/>
 		<topicref href="audience.dita" type="concept"/>
-		<topicref href="best_practices.dita" type="concept"/>
+		<topicref href="best_practice.dita" type="concept"/>
 		<topicref href="block_element.dita" type="concept"/>
 		<topicref href="body_element.dita" type="concept"/>
 		<topicref href="build_file.dita" type="concept"/>
@@ -25,7 +29,6 @@
 		<topicref href="contentref_attribute.dita" type="concept"/>
 		<topicref href="content_reuse.dita" type="concept"/>
 		<topicref href="content_specialist.dita" type="concept"/>
-		<topicref href="contentref_attribute.dita" type="concept"/>
 		<topicref href="context_element.dita" type="concept"/>
 		<topicref href="controlled_vocabulary.dita" type="concept"/>
 		<topicref href="crossreference_element.dita" type="concept"/>
@@ -52,7 +55,7 @@
 		<topicref href="garage_sample.dita" type="concept"/>
 		<topicref href="groceryshopping_sample.dita" type="concept"/>
 		<topicref href="graphic_designer.dita" type="concept"/>
-		<topicref href="guidelines.dita" type="concept"/>
+		<topicref href="guideline.dita" type="concept"/>
 		<topicref href="hoverhelp.dita" type="concept"/>
 		<topicref href="htmlhelp.dita" type="concept"/>
 		<topicref href="htmlhelp_compiler.dita" type="concept"/>
@@ -76,8 +79,9 @@
 		<topicref href="navigation_title.dita" type="concept"/>
 		<topicref href="oasis.dita" type="concept"/>
 		<topicref href="ordered_list.dita" type="concept"/>
+		<topicref href="owl.dita" type="concept"/>
 		<topicref href="pdf.dita" type="concept"/>
-		<topicref href="phrase_elements.dita" type="concept"/>
+		<topicref href="phrase_element.dita" type="concept"/>
 		<topicref href="plugin.dita" type="concept"/>
 		<topicref href="post_requirement_element.dita" type="concept"/>
 		<topicref href="prerequisite_element.dita" type="concept"/>
@@ -87,7 +91,7 @@
 		<topicref href="processing_reuse.dita" type="concept"/>
 		<topicref href="project_manager.dita" type="concept"/>
 		<topicref href="prolog_element.dita" type="concept"/>
-		<topicref href="rdfowl.dita" type="concept"/>
+		<topicref href="rdf.dita" type="concept"/>
 		<topicref href="reference_analysis.dita" type="concept"/>
 		<topicref href="reference_infotype.dita" type="concept"/>
 		<topicref href="related_links_element.dita" type="concept"/>

@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- (c) Copyright 2006 by VR Communications, Inc. All rights reserved. -->
 <!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN"  "../dtd/map.dtd">
+<!-- 
+This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
+See the accompanying license.txt file for applicable licenses.
+-->
 <map id="faqs_map" title="Frequently asked questions (FAQs)">
 	<topicref href="faqs.dita">
-		<topicref href="darwin_name.dita"/>
-		<topicref href="topic_length.dita"/>
 		<topicref href="xml.dita"/>
+		<topicref href="topic_authoring.dita"/>
+		<topicref href="darwin_name.dita"/>
 		<topicref href="dita_docbook.dita"/>
+		<topicref href="dita_wrapper.dita"/>
+		<topicref href="cond_proc.dita"/>
+		<topicref href="info_arch.dita"/>
 	</topicref>
 </map>

@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "../dtd/task.dtd">
+<!-- 
+This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
+See the accompanying license.txt file for applicable licenses.
+-->
 <task id="windows_installingant" xml:lang="en-us">
 	<title>Installing Ant on Windows</title>
-	<shortdesc>How to install the Ant processing (build) tool in the Windows operating environment.</shortdesc>
+	
 	<prolog>
 		<author type="creator">Jen Linton</author>
 		<author type="creator">JoAnn Hackos</author>
@@ -16,7 +20,7 @@
 		</copyright>
 		<critdates>
 			<created date="2005-November-01"/>
-			<revised modified="2006-August-08"/>
+			<revised modified="2006-October-10"/>
 		</critdates>
 		<metadata>
 			<keywords>
@@ -36,7 +40,7 @@
 			<prodinfo>
 				<prodname>DITA Open Toolkit</prodname>
 				<vrmlist>
-					<vrm version="1.2.2"/>
+					<vrm version="1.3"/>
 				</vrmlist>
 			</prodinfo>
 		</metadata>
@@ -44,12 +48,12 @@
 	<taskbody>
 		<steps>
 			<step>
-				<cmd>Enter the URL: <xref href="http://ant.apache.org/bindownload.cgi" format="html" scope="external">http://ant.apache.org/bindownload.cgi</xref>
+				<cmd>Enter the URL: <xref href="http://ant.apache.org/bindownload.cgi" format="html" scope="external">http://ant.apache.org/bindownload.cgi</xref>.
 				</cmd>
 			</step>
 			<step>
 				<cmd>On the Apache Ant Project page, find the heading 
-          <uicontrol>Current Release of Ant</uicontrol>
+          <uicontrol>Current Release of Ant</uicontrol>.
 				</cmd>
 			</step>
 			<step>
@@ -64,18 +68,13 @@
 			</step>
 			<step>
 				<cmd>Add the <codeph>bin</codeph> directory to your 
-          <varname>PATH</varname>
-					<xref href="windows_settingenvvariables.dita">environment variable</xref>.</cmd>
+          <varname>PATH</varname>	environment variable.</cmd>
 			</step>
 			<step>
-				<cmd>Add the <varname>ANT_HOME</varname>
-					<xref href="windows_settingenvvariables.dita" scope="local">environment 
-          variable</xref>.</cmd>
+				<cmd>Add the <varname>ANT_HOME</varname> environment variable set to <codeph>C:\ant</codeph>.</cmd>
 			</step>
 			<step>
-				<cmd>Add the <varname>ANT_OPTS</varname>
-					<xref href="windows_settingenvvariables.dita" scope="local">environment 
-          variable</xref>.</cmd>
+				<cmd>Add the <varname>ANT_OPTS</varname> environment variable set to <codeph>-Xmx256M</codeph>.</cmd>
 			</step>
 		</steps>
 	</taskbody>

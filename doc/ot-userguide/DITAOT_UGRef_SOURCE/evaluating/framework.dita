@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "../dtd/concept.dtd">
+<!-- 
+This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
+See the accompanying license.txt file for applicable licenses.
+-->
 <concept id="framework">
 	<title>The DITA authoring/production framework</title>
-	<shortdesc>Information about the DITA information development framework and the components required to support it.</shortdesc>
+	
 	<prolog>
 		<author type="creator">Don Day</author>
 		<author type="contributor">Anna van Raaphorst</author>
@@ -51,14 +55,14 @@
 			<prodinfo>
 				<prodname>DITA Open Toolkit</prodname>
 				<vrmlist>
-					<vrm version="1.2.2"/>
+					<vrm version="1.3"/>
 				</vrmlist>
 			</prodinfo>
 		</metadata>
 	</prolog>
 	<conbody>
 		<p>Sections in this topic:
-		<sl>
+		<sl otherprops="pdf">
 				<sli>
 					<xref href="#framework/expansible">Creating an expansible authoring and production system</xref>
 				</sli>
@@ -127,7 +131,7 @@
 			<p>
 				<b>Basic end-to-end system level</b>
 			</p>
-			<p>Individuals and organizations working at this level need to create a more formal process, and plan for the acquisition of tools that will serve you at this level and also at the enterprise level, if your project plans will take you that far. This level may require processing scripts (perhaps even with user interfaces for setting parameters and saving profiles) that link the components together and provide consistency for repeatable processing. Branding is a probably a factor important for the DITA output.</p>
+			<p>Individuals and organizations working at this level need to create a more formal process, and plan for the acquisition of tools that will serve at this level and also at the enterprise level, if project plans extend that far. This level may require processing scripts (perhaps even with user interfaces for setting parameters and saving profiles) that link the components together and provide consistency for repeatable processing. Branding is a probably a factor important for the DITA output.</p>
 			<p>At this level, documentation is part of a formal product cycle. The information development process probably involves multiple people. Producing output may be a collaborative process between the information development and product development organizations. Writers are probably required to follow departmental style and production guidelines. Information being developed goes through at least an informal review process. Candidate output documents may need to be formally verified or tested before being released.</p>
 			<p>When you move to this kind of production system, you may also need:
 						<ul>

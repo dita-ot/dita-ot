@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "../dtd/task.dtd">
+<!-- 
+This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
+See the accompanying license.txt file for applicable licenses.
+-->
 <task id="linux_installingsaxon" xml:lang="en-us">
 	<title>Installing SAXON on Linux</title>
-	<shortdesc>How to install SAXON in the Linux operating environment. Install either SAXON or Xalan: you do not need both.</shortdesc>
+	
 	<prolog>
 		<author type="creator">Jen Linton</author>
 		<author type="creator">JoAnn Hackos</author>
@@ -16,7 +20,7 @@
 		</copyright>
 		<critdates>
 			<created date="2005-November-01"/>
-			<revised modified="2006-August-08"/>
+			<revised modified="2006-October-12"/>
 		</critdates>
 		<metadata>
 			<keywords>
@@ -33,7 +37,7 @@
 			<prodinfo>
 				<prodname>DITA Open Toolkit</prodname>
 				<vrmlist>
-					<vrm version="1.2.2"/>
+					<vrm version="1.3"/>
 				</vrmlist>
 			</prodinfo>
 		</metadata>
@@ -60,21 +64,16 @@
 				<info> If SAXON does not appear to be downloading, wait a few minutes 
           before selecting another <image href="../images/compressed.gif"/> 
           image. You may have to select more than one <image href="../images/compressed.gif"/> image until you find one that works. 
-          <note type="note">If you are an Internet Explorer user and a yellow 
-          bar appears at the top of the screen with the message, "To help 
-          protect your security, Internet Explorer blocked this site from 
-          downloading files to your computer. Click here for options..," click 
-          on the bar and select "Download File." </note>
-				</info>
+          	</info>
 			</step>
 			<step>
-				<cmd>Download and unzip the Saxon 6.5.5.zip file and save it to a Linux 
+				<cmd>Download and unzip the <filepath>Saxon6.5.5.zip</filepath> file and save it to a Linux 
           home directory.</cmd>
 			</step>
 			<step>
-				<cmd>Set the <varname>CLASSPATH</varname>
-					<xref href="linux_settingenvvariables.dita" scope="local">environment 
-          variable</xref> the saxon.jar files.</cmd>
+				<cmd>Add Saxon to your <varname>CLASSPATH</varname> environment variable:
+				<userinput>export CLASSPATH=${CLASSPATH}:${saxon_dir}/saxon.jar </userinput>
+				</cmd>
 			</step>
 		</steps>
 	</taskbody>

@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "../dtd/concept.dtd">
-<concept id="aboutplugins">
+<!-- 
+This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
+See the accompanying license.txt file for applicable licenses.
+-->
+<concept id="plugins_overview">
 	<title>About DITA Open Toolkit plug-ins</title>
-	<shortdesc>Information about plug-ins that work with DITA Open Toolkit.</shortdesc>
+	
 	<prolog>
 		<author type="creator">Richard Johnson</author>
 		<author type="contributor">Anna van Raaphorst</author>
@@ -13,7 +17,7 @@
 		</copyright>
 		<critdates>
 			<created date="2006-June-21"/>
-			<revised modified="2006-August-09"/>
+			<revised modified="2006-October-17"/>
 		</critdates>
 		<metadata>
 			<keywords>
@@ -29,7 +33,8 @@
 				<keyword>Java API reference specialization</keyword>
 				<keyword>taxonomy specialization</keyword>
 				<keyword>thesaurus specialization</keyword>
-				<keyword>TOC Javascript plug-in</keyword>
+				<keyword>Framemaker 7.2 Application Packs for DITA</keyword>
+				
 				<indexterm>plug-ins
 				<indexterm>overview</indexterm>
 					<indexterm>downloading</indexterm>
@@ -43,7 +48,7 @@
 				<indexterm>specializations
 				<indexterm>API reference</indexterm>
 					<indexterm>Java API reference</indexterm>
-					<indexterm>SKOS</indexterm>
+					<indexterm>SKOS (Simple Knowledge Organization System) specialization</indexterm>
 					<indexterm>RDF</indexterm>
 					<indexterm>thesaurus</indexterm>
 				</indexterm>
@@ -58,11 +63,12 @@
 				<indexterm>taxonomy specialization</indexterm>
 				<indexterm>thesaurus specialization</indexterm>
 				<indexterm>TOC Javascript plug-in</indexterm>
+				<indexterm>Framemaker 7.2 Application Packs for DITA</indexterm>
 			</keywords>
 			<prodinfo>
 				<prodname>DITA Open Toolkit</prodname>
 				<vrmlist>
-					<vrm version="1.2.2"/>
+					<vrm version="1.3"/>
 				</vrmlist>
 			</prodinfo>
 		</metadata>
@@ -91,36 +97,31 @@
 				</sthead>
 				<strow>
 					<stentry>apiref0.8</stentry>
-					<stentry>The API reference specialization provides a general-purpose basis for documenting callable programming libraries.</stentry>
+					<stentry><b>The API reference specialization</b> provides a general-purpose basis for documenting callable programming libraries.</stentry>
 				</strow>
 				<strow>
 					<stentry>FrameMaker Adapter 0.8</stentry>
-					<stentry>The FrameMaker Adapter (sometimes called the Mekon FrameMaker Adapter or Moldflow FrameMaker Adapter) adds the fmxml output target that allows you to take an existing DITA project and produce a file that can be used as input to FrameMaker 7.x. You can then apply an unstructured FrameMaker template to this content and publish it using FrameMaker functionality. You cannot, however, use FrameMaker functionality to make further changes to the DITA project. The adapter was not designed to be used for authoring DITA content.
-					<note>This is not the Adobe FrameMaker Application Pack for DITA.</note>
+					<stentry><b>The FrameMaker Adapter</b> (sometimes called the Mekon FrameMaker Adapter or Moldflow FrameMaker Adapter) adds the fmxml output target that allows you to take an existing DITA project and produce a file that can be used as input to FrameMaker 7.x. You can then apply an unstructured FrameMaker template to this content and publish it using FrameMaker functionality. You cannot, however, use FrameMaker functionality to make further changes to the DITA project. The adapter was not designed to be used for authoring DITA content.
+					<note>This is <i>not</i> the Adobe <b>FrameMaker Application Pack for DITA</b>.</note>
 					</stentry>
 				</strow>
 				<strow>
 					<stentry>Idiom FO 1.1</stentry>
-					<stentry>The Idiom FO plug-in uses the RenderX XEP processor (in place of the base-level Apache FOP processor) to enhance Toolkit support for PDF processing. The target name is pdf2 (the base-level target name is pdf.) For specific installation instructions, see <xref href="installing_fo.dita" format="dita" scope="local">Installing the Idiom FO plug-in</xref>.</stentry>
-				</strow>
-				<strow>
-					<stentry>indextermlist-plugin.zip</stentry>
-					<stentry>The index term list plug-in extracts index terms from a map.</stentry>
+					<stentry>The <b>Idiom FO plug-in</b> uses the RenderX XEP processor (in place of the base-level Apache FOP processor) to enhance Toolkit support for PDF processing. The target name is pdf2 (the base-level target name is pdf.) For specific installation instructions, see <xref href="installing_fo.dita" format="dita" scope="local">Installing the Idiom FO plug-in</xref>.</stentry>
 				</strow>
 				<strow>
 					<stentry>javaapiref0.8</stentry>
-					<stentry>The Java API reference specialization provides a basis for documenting Java class libraries.</stentry>
+					<stentry>The <b>Java API reference</b> specialization provides a basis for documenting Java class libraries.</stentry>
 				</strow>
 				<strow>
 					<stentry>Thesaurus0.8.1</stentry>
-					<stentry>The Thesaurus (also called Taxonomy) specialization defines formal subjects and the relationships between them, so you can classify your content. This specialization conforms closely to the SKOS standard and generates RDF.</stentry>
-				</strow>
-				<strow>
-					<stentry>tocjs-plugin-0.9.zip</stentry>
-					<stentry>The TOC Javascript plug-in builds a table of contents for DITA XHTML output.</stentry>
+					<stentry>The <b>Thesaurus</b> (also called Taxonomy) specialization defines formal subjects and the relationships between them, so you can classify your content. This specialization conforms closely to the SKOS (Simple Knowledge organization System) standard and generates RDF.</stentry>
 				</strow>
 			</simpletable>
 			<p/>
 		</section>
 	</conbody>
+	<related-links>
+		<link href="http://labs.adobe.com/technologies/framemaker_ap/" scope="external" format="html"><linktext>FrameMaker 7.2 Application Pack for DITA</linktext></link>
+	</related-links>
 </concept>

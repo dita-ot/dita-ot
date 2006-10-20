@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "../dtd/task.dtd">
+<!-- 
+This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
+See the accompanying license.txt file for applicable licenses.
+-->
 <task id="windows_installinghtmlhelp" xml:lang="en-us">
 	<title>(Optional) Installing HTML Help on Windows</title>
-	<shortdesc>(If you plan to publish HTML Help) How to install HTML Help in the Windows operating environment.</shortdesc>
+	
 	<prolog>
 		<author type="creator">Jen Linton</author>
 		<author type="creator">JoAnn Hackos</author>
@@ -16,7 +20,7 @@
 		</copyright>
 		<critdates>
 			<created date="2005-November-01"/>
-			<revised modified="2006-August-09"/>
+			<revised modified="2006-October-10"/>
 		</critdates>
 		<metadata>
 			<keywords>
@@ -30,7 +34,7 @@
 			<prodinfo>
 				<prodname>DITA Open Toolkit</prodname>
 				<vrmlist>
-					<vrm version="1.2.2"/>
+					<vrm version="1.3"/>
 				</vrmlist>
 			</prodinfo>
 		</metadata>
@@ -43,7 +47,7 @@
 			</step>
 			<step>
 				<cmd>From the MSDN page, scroll to find the heading <uicontrol>HTML 
-          Help Workshop</uicontrol>
+          Help Workshop</uicontrol>.
 				</cmd>
 			</step>
 			<step>
@@ -57,7 +61,7 @@
 				<cmd>Follow the steps in the HTML Help install guide wizard to complete the installation.</cmd>
 			</step>
 		</steps>
-		<postreq>If you install the Help compiler to a drive other than the C drive, you may need to customize the &lt;property&gt; value for "hhc.dir" in some of the build <filepath>.xml</filepath> scripts in the Toolkit root directory. The Toolkit assumes the compiler is installed on your C drive.
+		<postreq>If you install the Help compiler to a drive other than the C: drive, you may need to customize the &lt;property&gt; value for <filepath>hhc.dir</filepath> in some of the build <filepath>.xml</filepath> scripts in the Toolkit root directory. The Toolkit assumes the compiler is installed on your C: drive.
     </postreq>
 	</taskbody>
 </task>

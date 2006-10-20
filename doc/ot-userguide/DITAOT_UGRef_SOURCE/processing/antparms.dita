@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "../dtd/reference.dtd">
+<!-- 
+This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
+See the accompanying license.txt file for applicable licenses.
+-->
 <reference id="antparms">
 	<title>Ant processing parameters</title>
-	<shortdesc>Reference information about Ant processing parameters. Information in the parameter table includes parameter name, whether it is required, definition, usage, valid values, default value, and examples.</shortdesc>
+	
 	<prolog>
 		<author type="creator">Richard Johnson</author>
 		<author type="contributor">Anna van Raaphorst</author>
@@ -13,7 +17,7 @@
 		</copyright>
 		<critdates>
 			<created date="2006-June-06"/>
-			<revised modified="2006-August-08"/>
+			<revised modified="2006-September-12"/>
 		</critdates>
 		<metadata>
 			<keywords>
@@ -94,7 +98,7 @@
 			<prodinfo>
 				<prodname>DITA Open Toolkit</prodname>
 				<vrmlist>
-					<vrm version="1.2.2"/>
+					<vrm version="1.3"/>
 				</vrmlist>
 			</prodinfo>
 		</metadata>
@@ -102,7 +106,7 @@
 	<refbody>
 		<section>
 			<p>The parameters are listed in alphabetical order. The names of required parameters are marked with an asterisk (*).</p>
-			<p>For examples of how these parameters are used in an Ant build script, see <xref href="aboutantscripts.dita" scope="peer">About Ant scripts</xref>.</p>
+			<p>For examples of how these parameters are used in an Ant build script, see <xref href="aboutantscripts.dita" scope="local">About Ant scripts</xref>.</p>
 		</section>
 		<section>
 			<simpletable>
@@ -267,7 +271,7 @@
 									</filepath>
 							</b>
 						</p>
-						<p>Targets: eclipsecontent only</p>
+						<p>Target: eclipsecontent only</p>
 					</stentry>
 					<stentry>
 						<p>Root file name of the output Eclipse content <filepath>toc</filepath> file.
@@ -411,7 +415,7 @@
 						<p>The file must be well-formed XML.</p>
 					</stentry>
 					<stentry>
-						<p>Example: <filepath>&lt;property name="args.ftr" value="file:/c:/sandbox/myftr.xml"/&gt;</filepath>
+						<p>Example: <filepath>&lt;property name="args.ftr" value="file:/C:/sandbox/myftr.xml"/&gt;</filepath>
 						</p>
 					</stentry>
 				</strow>
@@ -431,7 +435,7 @@
 						<p>The file must be well-formed XML.</p>
 					</stentry>
 					<stentry>
-						<p>Example: <filepath>&lt;property name="args.hdf" value="file:/c:/sandbox/myhdf.xml"/&gt;</filepath>.</p>
+						<p>Example: <filepath>&lt;property name="args.hdf" value="file:/C:/sandbox/myhdf.xml"/&gt;</filepath>.</p>
 					</stentry>
 				</strow>
 				<strow>
@@ -450,7 +454,7 @@
 						<p>The file must be well-formed XML.</p>
 					</stentry>
 					<stentry>
-						<p>Example: <filepath>&lt;property name="args.hdr" value="file:/c:/sandbox/myhdr.xml"/&gt;</filepath>
+						<p>Example: <filepath>&lt;property name="args.hdr" value="file:/C:/sandbox/myhdr.xml"/&gt;</filepath>
 						</p>
 					</stentry>
 				</strow>
@@ -485,7 +489,7 @@
 						<p>These targets only: eclipsehelp, htmlhelp, javahelp, or xhtml</p>
 					</stentry>
 					<stentry>
-						<p>Whether indexterm entries should display in the output text. Makes is possible to see what has been indexed in a pre-publishing review.
+						<p>Whether indexterm entries should display in the output text. Makes it possible to see what has been indexed in a pre-publishing review.
 								</p>
 					</stentry>
 					<stentry>
@@ -587,8 +591,8 @@
 								<li>If you specified a common <filepath>logdir</filepath> for all transformations, it will be used as the log directory.</li>
 								<li>If you did not specify a common <filepath>logdir</filepath> for all transformations:
 									<ul>
-										<li>If all individual transforms have the same output directory, it will be used as the log directory</li>
-										<li>If all individual transforms do not have the same output directory, <filepath>basedir</filepath>it will be used as the log directory</li>
+										<li>If all individual transforms have the same output directory, it will be used as the log directory.</li>
+										<li>If all individual transforms do not have the same output directory, <filepath>basedir</filepath> will be used as the log directory.</li>
 									</ul>
 								</li>
 							</ul>
@@ -666,7 +670,7 @@
 						</p>
 					</stentry>
 					<stentry>
-						<p>Example: <filepath>&lt;project name="proj1" default="all" basedir="c:/ditaot"/&gt;</filepath>
+						<p>Example: <filepath>&lt;project name="proj1" default="all" basedir="C:/ditaot"/&gt;</filepath>
 						</p>
 					</stentry>
 				</strow>

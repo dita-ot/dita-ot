@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "../dtd/concept.dtd">
+<!-- 
+This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
+See the accompanying license.txt file for applicable licenses.
+-->
 <concept id="map">
 	<title>Map</title>
-	<shortdesc/>
+	
 	<prolog>
 		<author type="creator">Anna van Raaphorst</author>
 		<author type="contributor">Richard Johnson</author>
@@ -13,7 +17,7 @@
 		</copyright>
 		<critdates>
 			<created date="2006-May-01"/>
-			<revised modified="2006-August-08"/>
+			<revised modified="2006-September-29"/>
 		</critdates>
 		<metadata>
 			<keywords>
@@ -25,20 +29,16 @@
 			<prodinfo>
 				<prodname>DITA Open Toolkit</prodname>
 				<vrmlist>
-					<vrm version="1.2.2"/>
+					<vrm version="1.3"/>
 				</vrmlist>
 			</prodinfo>
 		</metadata>
 	</prolog>
 	<conbody>
 		<section id="map_term">
-			<p>
-				<b>Definition</b>
-			</p>
-			<p>Aggregation of the topics in a DITA document, with the topics arranged as a list or a hierarchy.</p>
-			<p>
-				<b>Usage</b>
-			</p>
+			
+			<p>A map is an aggregation of the topics in a DITA document, with the topics arranged as a list or a hierarchy.</p>
+			
 			<p>DITA documents can have multiple maps or sets of maps for a given document. 
 			For example, a software product available for both Windows and Linux might have two maps, each specifying the topics to include in that document version. 
 			As another example, a large, complex document might have a master map that included multiple submaps, specifying the topics to include in various "chapters" and "sections." </p>

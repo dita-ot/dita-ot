@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "../dtd/concept.dtd">
+<!-- 
+This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
+See the accompanying license.txt file for applicable licenses.
+-->
 <concept id="customizing">
 	<title>Customizing your published output</title>
-	<shortdesc>How to customize your published output.</shortdesc>
+	<shortdesc>This section contains information on how to customize your published output.</shortdesc>
 	<prolog>
 		<author type="creator">Anna van Raaphorst</author>
 		<author type="contributor">Richard Johnson</author>
@@ -13,7 +17,7 @@
 		</copyright>
 		<critdates>
 			<created date="2006-June-01"/>
-			<revised modified="2006-August-08"/>
+			<revised modified="2006-October-05"/>
 		</critdates>
 		<metadata>
 			<keywords>
@@ -23,12 +27,30 @@
 			<prodinfo>
 				<prodname>DITA Open Toolkit</prodname>
 				<vrmlist>
-					<vrm version="1.2.2"/>
+					<vrm version="1.3"/>
 				</vrmlist>
 			</prodinfo>
 		</metadata>
 	</prolog>
 	<conbody>
-		<p/>
+		<p>Sections in this topic:
+		<sl otherprops="pdf">
+				<sli>
+					<xref href="./css.dita#css">Using your own CSS (cascading style sheet)</xref>
+				</sli>
+				<sli>
+					<xref href="./tailoring_xhtml.dita#tailoring_xhtml">Tailoring XHTML output</xref>
+				</sli>
+				<sli>
+					<xref href="./pdf_cover.dita#pdf_cover">Adding product logo to PDF2 cover page</xref>
+				</sli>
+				<sli>
+					<xref href="./customizing_production_notes.dita#customizing_production_notes">Production notes (customizing)</xref>
+				</sli>
+				<sli>
+					<xref href="./customizing_formoreinfo.dita#customizing_formoreinfo">For more information (customizing)</xref>
+				</sli>
+			</sl>
+		</p>
 	</conbody>
 </concept>

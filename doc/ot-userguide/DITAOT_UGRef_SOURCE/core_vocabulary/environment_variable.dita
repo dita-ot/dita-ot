@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "../dtd/concept.dtd">
+<!-- 
+This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
+See the accompanying license.txt file for applicable licenses.
+-->
 <concept id="environment_variable">
 	<title>Environment variable</title>
-	<shortdesc/>
 	<prolog>
 		<author type="creator">Anna van Raaphorst</author>
 		<author type="contributor">Richard Johnson</author>
@@ -13,7 +16,7 @@
 		</copyright>
 		<critdates>
 			<created date="2006-May-01"/>
-			<revised modified="2006-August-08"/>
+			<revised modified="2006-October-11"/>
 		</critdates>
 		<metadata>
 			<keywords>
@@ -25,21 +28,15 @@
 			<prodinfo>
 				<prodname>DITA Open Toolkit</prodname>
 				<vrmlist>
-					<vrm version="1.2.2"/>
+					<vrm version="1.3"/>
 				</vrmlist>
 			</prodinfo>
 		</metadata>
 	</prolog>
 	<conbody>
 		<section id="environment_variable_term">
-			<p>
-				<b>Definition</b>
-			</p>
-			<p>Variable you must set for DITA Open Toolkit to function. In Windows you set the variables in the Control Panel. In Linux you set the variables in the shell profile. </p>
-			<p>
-				<b>Usage</b>
-			</p>
-			<p>In Windows you set the variables in the Control Panel. In Linux you set the variables in the shell profile. Variables you need to set are PATH, CLASSPATH, ANT_HOME, ANT_OPTS, JAVA_HOME, and JHHOME.</p>
+			<p>An environment variable is a variable you must set for an application to function.</p>
+			<p>In Windows you set the variables in the Control Panel. In Linux or UNIX you set the variables in the shell profile. Variables you need to set for DITA Open Toolkit are: PATH, CLASSPATH, ANT_HOME, ANT_OPTS, JAVA_HOME, and JHHOME.</p>
 		</section>
 	</conbody>
 	<related-links>

@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "../dtd/concept.dtd">
+<!-- 
+This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
+See the accompanying license.txt file for applicable licenses.
+-->
 <concept id="aboutantscripts">
 	<title>About Ant scripts</title>
-	<shortdesc>Information about Ant scripts.</shortdesc>
+	
 	<prolog>
 		<author type="creator">Richard Johnson</author>
 		<author type="contributor">Anna van Raaphorst</author>
@@ -13,7 +17,7 @@
 		</copyright>
 		<critdates>
 			<created date="2006-June-06"/>
-			<revised modified="2006-August-08"/>
+			<revised modified="2006-September-23"/>
 		</critdates>
 		<metadata>
 			<keywords>
@@ -47,15 +51,15 @@
 			<prodinfo>
 				<prodname>DITA Open Toolkit</prodname>
 				<vrmlist>
-					<vrm version="1.2.2"/>
+					<vrm version="1.3"/>
 				</vrmlist>
 			</prodinfo>
 		</metadata>
 	</prolog>
 	<conbody>
-		<section conref="../core_vocabulary/antscripts.dita#antscripts/antscripts_term"/>
+		<section conref="../core_vocabulary/antscript.dita#antscript/antscript_term"/>
 		<section>
-			<title>System scripts in DITA Open Toolkit</title>
+			<title>Main system scripts in DITA Open Toolkit</title>
 			<p>
 				<simpletable>
 					<sthead>
@@ -63,40 +67,35 @@
 						<stentry>Description</stentry>
 					</sthead>
 					<strow>
-						<stentry>conductor.xml</stentry>
-						<stentry>Controls the other files in the set.
-					</stentry>
+						<stentry>build.xml</stentry>
+						<stentry>Initializes the Toolkit and builds various DITA targets.</stentry>
 					</strow>
 					<strow>
-						<stentry>build.xml</stentry>
-						<stentry>Builds demos and samples.</stentry>
+						<stentry>build_demo.xml</stentry>
+						<stentry>Builds the Toolkit demos.</stentry>
+					</strow>
+					<strow>
+						<stentry>buildPackage.xml</stentry>
+						<stentry>Build source and binary packages for DITA Open Toolkit.</stentry>
 					</strow>
 					<strow>
 						<stentry>catalog-dita_template.xml and catalog-dita.xml</stentry>
 						<stentry>Contains information that directs the Toolkit to the names and locations of the DTD files. The template file creates the non-template file dynamically during every build.</stentry>
 					</strow>
 					<strow>
-						<stentry>ditatargets.xml</stentry>
-						<stentry>Runs XSLT transforms to create output.</stentry>
-					</strow>
-					<strow>
 						<stentry>integrator.xml</stentry>
 						<stentry>Adds plug-ins to the build.</stentry>
 					</strow>
-					<strow>
-						<stentry>pretargets.xml</stentry>
-						<stentry>During the first stage of processing, builds the temporary files used to create the output.</stentry>
-					</strow>
-				</simpletable>
+			</simpletable>
 			</p>
 		</section>
 		<section>
 			<title>Creating user scripts in DITA Open Toolkit</title>
-			<p>Sample Ant scripts for all target publishing environment supported by DITA Open Toolkit are located in <filepath>ditaot/samples/garage/ant_scripts</filepath>. Most of these scripts process the garage sample source files with the topics displayed in a hierarchy. One processes the garage sample to XHTML with the topics displayed as a sequence. One filters out some of the topics using a ditaval file before publishing as XHTML in a hierarchical format.</p>
+			<p>Sample Ant scripts for all target publishing environment supported by DITA Open Toolkit are located in <filepath>ditaot/doc/ot-userguide/MY_DITA_SOURCE/samples/garage/ant_scripts</filepath> of the Toolkit source distribution. Most of these scripts process the garage sample source files with the topics displayed in a hierarchy. One processes the garage sample to XHTML with the topics displayed as a sequence. One filters out some of the topics using a ditaval file before publishing as XHTML in a hierarchical format.</p>
 			<p>The following section contains one of these sample scripts for XHTML targets. You would run this build script in Windows by opening  the Command Prompt, navigating to the <filepath>ant_scripts directory</filepath>, and entering the command:
      <codeblock>ant -f garage_hierarchy_xhtml.xml</codeblock>
 			</p>
-			<p>For more information about processing (building) to XHTML targets, see <xref href="../processing/processing_xhtml.dita" scope="local">Processing to XHTML targets.</xref>
+			<p>For more information about processing (building) to XHTML targets, see <xref href="../processing/processing_xhtml.dita" scope="local">Processing to XHTML targets.</xref>.
 			</p>
 		</section>
 		<section id="sample_script">
@@ -128,19 +127,19 @@
 
 &lt;!-- default="all" means "build all the targets in the --&gt;	 
 &lt;!-- 'depends' target list" (below) --&gt;
-&lt;!-- (NOT all targets supported by DITA Open Toolkit) --&gt;
+&lt;!-- (NOT all targets supported by DITA Open Toolkit). --&gt;
 &lt;!-- basedir is the base directory for the Toolkit --&gt; 
 &lt;!-- executables (NOT the DITA source directory, --&gt; 
 &lt;!-- which is defined with projdir, below). --&gt;
 &lt;!-- OK to modify. --&gt;
-<b>&lt;project name="garage_xhtml" default="all" basedir="c:/ditaot"&gt;</b>
+<b>&lt;project name="garage_xhtml" default="all" basedir="C:/ditaot"&gt;</b>
 
 
 &lt;!-- Location of DITA source files (projdir) and target --&gt; 
 &lt;!-- output files (outdir). --&gt;
 &lt;!-- OK to modify. --&gt;
-<b>&lt;property name="projdir" value="c:/MY_DITA_SOURCE/samples/garage"/&gt;</b>
-				<b>&lt;property name="outdir" value="c:/MY_DITA_OUTPUT/samples/garage"/&gt;</b>
+<b>&lt;property name="projdir" value="C:/MY_DITA_SOURCE/samples/garage"/&gt;</b>
+				<b>&lt;property name="outdir" value="C:/MY_DITA_OUTPUT/samples/garage"/&gt;</b>
 
 &lt;!-- Location of DITA Java classes. --&gt;
 &lt;!-- DO NOT modify! --&gt;

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "../dtd/concept.dtd">
+<!-- 
+This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
+See the accompanying license.txt file for applicable licenses.
+-->
+<concept id="guidelines">
+	<title>Guideline</title>
+	<prolog>
+		<author type="creator">Anna van Raaphorst</author>
+		<author type="contributor">Richard Johnson</author>
+		<publisher>OASIS (Organization for the Advancement of Structured Information Standards)</publisher>
+		<copyright>
+			<copyryear year="2006"/>
+			<copyrholder>VR Communications, Inc.</copyrholder>
+		</copyright>
+		<critdates>
+			<created date="2006-May-01"/>
+			<revised modified="2006-October-10"/>
+		</critdates>
+		<metadata>
+			<keywords>
+				<keyword>DITA core vocabulary</keyword>
+				<keyword>DITA controlled vocabulary</keyword>
+				<keyword>guidelines for producing DITA documents</keyword>
+				<indexterm>guidelines for producing DITA documents</indexterm>
+			</keywords>
+			<prodinfo>
+				<prodname>DITA Open Toolkit</prodname>
+				<vrmlist>
+					<vrm version="1.3"/>
+				</vrmlist>
+			</prodinfo>
+		</metadata>
+	</prolog>
+	<conbody>
+		<section id="guideline_term">
+			<p>A guideline is a recommendation about how to perform a task or set of tasks.</p>
+			<p>Guidelines generally reflect  an organization's policies or "groundrules," or they explain how "best results" (in a technology sense or for consistency of results) can be obtained.</p>
+		</section>
+	</conbody>
+	<related-links>
+		<link href="../core_vocabulary/best_practice.dita" scope="local"/>
+	</related-links>
+</concept>

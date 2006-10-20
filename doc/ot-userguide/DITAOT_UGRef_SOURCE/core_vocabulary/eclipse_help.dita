@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "../dtd/concept.dtd">
+<!-- 
+This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
+See the accompanying license.txt file for applicable licenses.
+-->
 <concept id="eclipse_help">
 	<title>Eclipse help</title>
-	<shortdesc/>
+	
 	<prolog>
 		<author type="creator">Anna van Raaphorst</author>
 		<author type="contributor">Richard Johnson</author>
@@ -13,7 +17,7 @@
 		</copyright>
 		<critdates>
 			<created date="2006-May-01"/>
-			<revised modified="2006-August-086"/>
+			<revised modified="2006-September-29"/>
 		</critdates>
 		<metadata>
 			<keywords>
@@ -31,20 +35,16 @@
 			<prodinfo>
 				<prodname>DITA Open Toolkit</prodname>
 				<vrmlist>
-					<vrm version="1.2.2"/>
+					<vrm version="1.3"/>
 				</vrmlist>
 			</prodinfo>
 		</metadata>
 	</prolog>
 	<conbody>
 		<section id="eclipse_help_term">
-			<p>
-				<b>Definition</b>
-			</p>
-			<p>Eclipse is a open-source platform-independent software framework for delivering "rich-client applications," as opposed to "thin-client" browser-based applications. Originally developed by IBM, Eclipse is now managed by the Eclipse Foundation, an independent not-for-profit consortium of software industry vendors. Eclipse help is one of the documentation sytem options available in the framework.</p>
-			<p>
-				<b>Usage</b>
-			</p>
+			
+			<p>Eclipse is a open-source platform-independent software framework for delivering "rich-client" applications, as opposed to "thin-client" browser-based applications. Originally developed by IBM, Eclipse is now managed by the Eclipse Foundation, an independent not-for-profit consortium of software industry vendors. Eclipse help is one of the documentation sytem options available in the framework.</p>
+			
 			<p>Eclipse help is one of the DITA Open Toolkit target outputs.</p>
 		</section>
 	</conbody>

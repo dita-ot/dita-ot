@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "../dtd/concept.dtd">
+<!-- 
+This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
+See the accompanying license.txt file for applicable licenses.
+-->
 <concept id="htmlhelp_compiler">
 	<title>HTML Help compiler</title>
-	<shortdesc/>
+	
 	<prolog>
 		<author type="creator">Anna van Raaphorst</author>
 		<author type="contributor">Richard Johnson</author>
@@ -13,7 +17,7 @@
 		</copyright>
 		<critdates>
 			<created date="2006-May-01"/>
-			<revised modified="2006-August-08"/>
+			<revised modified="2006-October-11"/>
 		</critdates>
 		<metadata>
 			<keywords>
@@ -33,20 +37,14 @@
 			<prodinfo>
 				<prodname>DITA Open Toolkit</prodname>
 				<vrmlist>
-					<vrm version="1.2.2"/>
+					<vrm version="1.3"/>
 				</vrmlist>
 			</prodinfo>
 		</metadata>
 	</prolog>
 	<conbody>
 		<section id="htmlhelp_compiler_term">
-			<p>
-				<b>Definition</b>
-			</p>
 			<p>A Microsoft product that generates (X)HTML Help files during the DITA build process. HTML Help is a compiled help system.</p>
-			<p>
-				<b>Usage</b>
-			</p>
 			<p>HTML Help is one of the DITA Open Toolkit target outputs. The HTML Help compiler must be installed in your DITA processing environment for DITA Open Toolkit to function, but it is not part of the Toolkit installation package.</p>
 		</section>
 	</conbody>

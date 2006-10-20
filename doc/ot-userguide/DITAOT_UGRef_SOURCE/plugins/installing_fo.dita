@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "../dtd/task.dtd">
+<!-- 
+This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
+See the accompanying license.txt file for applicable licenses.
+-->
 <task id="installing_fo">
 	<title>Installing the Idiom FO plug-in</title>
-	<shortdesc>How to install the Idiom FO plug-in.</shortdesc>
+	
 	<prolog>
 		<author type="creator">Richard Johnson</author>
 		<author type="contributor">Anna van Raaphorst</author>
@@ -14,7 +18,7 @@
 		</copyright>
 		<critdates>
 			<created date="2006-June-21"/>
-			<revised modified="2006-August-09"/>
+			<revised modified="2006-September-18"/>
 		</critdates>
 		<metadata>
 			<keywords>
@@ -39,7 +43,7 @@
 			<prodinfo>
 				<prodname>DITA Open Toolkit</prodname>
 				<vrmlist>
-					<vrm version="1.2.2"/>
+					<vrm version="1.3"/>
 				</vrmlist>
 			</prodinfo>
 		</metadata>
@@ -77,7 +81,7 @@
 				</stepxmp>
 			</step>
 			<step>
-				<cmd>Copy icu4j_3_3_4.jar to the demo/fo/lib directory and then rename icu4j_3_3_4.jar to icu4j.jar.</cmd>
+				<cmd>Copy <filepath>icu4j_3_3_4.jar</filepath> to the demo/fo/lib directory and then rename <filepath>icu4j_3_3_4.jar</filepath> to <filepath>icu4j.jar</filepath>.</cmd>
 			</step>
 			<step>
 				<cmd>Edit the file <filepath>demo/fo/build.xml</filepath> and set the path information for <filepath>saxon.jar</filepath> and XEP.</cmd>
@@ -85,7 +89,7 @@
 					<p>That section of the file will look similar to the following:</p>
 					<codeblock>				
 &lt;path id="project.class.path"&gt;
-<b>&lt;pathelement location="c:/saxon6_5_3/saxon.jar"/&gt;</b>
+<b>&lt;pathelement location="C:/saxon6_5_3/saxon.jar"/&gt;</b>
 &lt;pathelement location="${fo.lib.dir}/xml-apis.jar"/&gt;
 &lt;pathelement location="${fo.lib.dir}/xercesImpl.jar"/&gt;
 &lt;pathelement location="${fo.lib.dir}/resolver.jar"/&gt;
@@ -94,14 +98,14 @@
 &lt;/path&gt;
 
 &lt;path id="xep.class.path"&gt;
-<b>&lt;fileset dir="c:/xep/lib" includes="**/*.jar"/&gt;</b>
+<b>&lt;fileset dir="C:/xep/lib" includes="**/*.jar"/&gt;</b>
 &lt;pathelement location="${fo.lib.dir}/fo.jar"/&gt;
 &lt;/path&gt;
 				</codeblock>
 				</stepxmp>
 			</step>
 			<step>
-				<cmd>Move to the root directory of the DITA Open Toolkit and issue the following command to install the plug-in:</cmd>
+				<cmd>Move to the root directory of DITA Open Toolkit and issue the following command to install the plug-in:</cmd>
 				<stepxmp>
 					<userinput>ant -f integrator.xml</userinput>
 				</stepxmp>
