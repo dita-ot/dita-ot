@@ -11,7 +11,7 @@
 
 function show_usage()
 {
-  die("Usage: php " . "ditapreview" . " ditamap-file Last | Chapter n \n");
+  die("Usage: php " . "ditapreview" . " ditamap-file|directory  Last|Chapter n \n");
 }
 
 /*
@@ -101,7 +101,7 @@ switch( $argc )
 
 /* done processing arguments, display startup message */
 
-print("\nStarting from ditamap --- " . $ditamap . "\n");
+print("\nStarting from ----------- " . $ditamap . "\n");
 print(" operation -------------- " . $opcode . "\n");
 print(" count ------------------ " . $acount . "\n");
 
@@ -127,7 +127,7 @@ $dir = dirname($ditamap) . $fsep;
 */
 
 $rc = get_map_lists($dbg_flag, $ref_flag, $ditamap, $fsep,
-                    &$fused, &$notfound, &$lf, &$rf, &$tp, &$rcon);
+                    $fused, $rcnt, $notfound, $lf, $rf, $tp, $rcon);
 
 if( $rc )
 {

@@ -26,7 +26,7 @@ $ref_flag = false; /* check id references */
 
 /* pick up ditamap from arguments */
 if( count($argv)!=2 )
-  die("Usage: php " . $argv[0] . " ditamap-file \n");
+  die("Usage: php " . $argv[0] . " ditamap-file|directory \n");
 
 if( (PHP_OS=="WIN32") || (PHP_OS=="WINNT") )
   $fsep = "\\";
@@ -36,7 +36,7 @@ else
 /* the top directory we are going to process */
 $ditamap = $argv[1];
 
-print("Starting from ditamap " . $ditamap . "\n");
+print("Starting from " . $ditamap . "\n");
 
 $map = basename($ditamap);
 $dir = dirname($ditamap) . $fsep;
@@ -46,7 +46,7 @@ $dir = dirname($ditamap) . $fsep;
 */
 
 $rc = get_map_lists($dbg_flag, $ref_flag, $ditamap, $fsep,
-                    $fused, $notfound, $lf, $rf, $tp, $rcon);
+                    $fused, $rcnt, $notfound, $lf, $rf, $tp, $rcon);
 
 if( $rc )
 {

@@ -57,7 +57,8 @@ function myscandir ($dbg_flag, $fsep, $dir, &$fused, &$unused)
 /*
   Scan a file for references to other DITA files.
 */
-function myscanfile ($dbg_flag,$ref_flag, $fin,$ids,&$ref,&$reftype,&$refcon,&$fused,&$notfound)
+function myscanfile ($dbg_flag,$ref_flag, $fin,$ids,&$ref,&$reftype,&$refcon,
+                     &$fused, &$rcnt, &$notfound)
 {
   /*
    fin = file to be scanned for references
@@ -78,6 +79,7 @@ function myscanfile ($dbg_flag,$ref_flag, $fin,$ids,&$ref,&$reftype,&$refcon,&$f
     {
       /* save http:/https: "file" */
       $fused[$fin] = $fin;
+      $rcnt[$fin]=1;
       if( $dbg_flag )
         print("ignoring URL " . $fused[$fin] . "\n");
     }
@@ -96,6 +98,7 @@ function myscanfile ($dbg_flag,$ref_flag, $fin,$ids,&$ref,&$reftype,&$refcon,&$f
       {
         /* file exists, but we ignore it */
         $fused[$finr] = $finr;
+        $rcnt[$finr]=1;
         if( $dbg_flag )
           print("ignoring " . $finr . " " . $fused[$finr] . "\n");
       }
@@ -196,6 +199,7 @@ function myscanfile ($dbg_flag,$ref_flag, $fin,$ids,&$ref,&$reftype,&$refcon,&$f
 
   if( isset($fused[$f]) )
   {
+    $rcnt[$f]++; /* add to reference count */
     /* file already was scanned, check any conref ids supplied */
     if( $ref_flag && strlen($ids) > 0 )
     {
@@ -223,6 +227,7 @@ function myscanfile ($dbg_flag,$ref_flag, $fin,$ids,&$ref,&$reftype,&$refcon,&$f
   } /* file already scanned for references */
 
   $fused[$f] = $f;
+  $rcnt[$f]=1;
 
   /* We check for "conref", "href", "object data" attributes */
   $refs = array('//object','//@href','//@conref'); /* what we look for */
@@ -470,35 +475,80 @@ function getDOCTYPE($f)
   Main workhorse routine that finds files, references, and files not
   found in a ditamap.
 */
-function get_map_lists($dbg_flag, $ref_flag, $ditamap, $fsep,
-                       &$fused, &$notfound, &$lf, &$rf, &$tp, &$rcon)
+function get_map_lists($dbg_flag, $ref_flag, $ditamap, $fsep, &$fused, &$rcnt, &$notfound, &$lf, &$rf, &$tp, &$rcon)
 {
   $getrc=true;
 
+  if( is_dir($ditamap) )
+  {
+    $nmap=0;
+    $dir=$ditamap;
+    if( $dbg_flag )
+      print("Scan for all ditamaps in " . $dir . "\n");
+    if (is_dir($dir)) 
+    {
+      if ($dh = opendir($dir)) 
+      {
+        while (($file = readdir($dh)) !== false) 
+        {
+          if( isDITAmap($file) )
+          {
+            $maps[$nmap] = $dir . $fsep . $file;
+            print("  processing ditamap " . $maps[$nmap] . "\n");
+            $nmap++;
+          }
+        }
+        closedir($dh);
+
+        if( $nmap==0 )
+        {
+          print("No maps found in " . $ditamap . "\n");
+          $getrc=false;
+          return $getrc;
+        }
+      } /* directory was opened */
+    } /* argument is a directory, not a ditamap file */
+  } /* scan for all ditamaps */
+  else
+  {
+    /* only have aingle map */
+    $nmap=1;
+    $maps[0]=$ditamap;
+  }
+
   /*
-     Begin by finding what is referenced in the input ditamap.
+     Begin by finding what is referenced in the input ditamap(s).
   */
-  $rc   = myscanfile($dbg_flag,$ref_flag, $ditamap,"",$ref,$reftype,$refcon,$fused,$notfound);
-  if(   $rc == 0 )
+  $rbase=0;
+  for($nm=0; $nm<$nmap; $nm++)
   {
-    print("No references found in " . $ditamap . "\n");
-    $getrc=false;
-    return $getrc;
-  }
+    $maparg=$maps[$nm];
+    $radd=0;
+    $rc   = myscanfile($dbg_flag,$ref_flag, $maparg,"",$ref,$reftype,$refcon,$fused,$rcnt,$notfound);
+    if(   $rc == 0 )
+    {
+      print("No references found in " . $maparg . "\n");
+      $getrc=false;
+      return $getrc;
+    }
 
-  $fused[$ditamap]   = $ditamap;
+    $fused[$maparg] = $maparg;
+    $rcnt[$maparg]=1;
 
-  if( $dbg_flag )
-    print($rc . " references found in the ditamap.\n");
+    if( $dbg_flag )
+      print($rc . " references found in the ditamap.\n");
 
-  /* store the first set of references */
-  for($i=0;   $i<count($ref); $i++)
-  {
-    $lf[$i] = $ditamap;
-    $rf[$i] = $ref[$i];
-    $tp[$i] = $reftype[$i];
-    $rcon[$i] = $refcon[$i];
-  }
+    /* store the references in the map */
+    for($i=0;   $i<count($ref); $i++)
+    {
+      $radd++;
+      $lf[$i+$rbase] = $maparg;
+      $rf[$i+$rbase] = $ref[$i];
+      $tp[$i+$rbase] = $reftype[$i];
+      $rcon[$i+$rbase] = $refcon[$i];
+    }
+    $rbase=$rbase+$radd;
+  } /* loop through the input maps */
 
   if( $dbg_flag )
      print("Base reference count is " . count($lf) . "\n");
@@ -527,7 +577,8 @@ function get_map_lists($dbg_flag, $ref_flag, $ditamap, $fsep,
           $dname="";
         $ffull = $dname . $sf;
          /* look for more references in this file */
-         $rc = myscanfile($dbg_flag,$ref_flag, $dname . $sf,$rcon[$k],$ref,$reftype,$refcon,$fused,$notfound);
+         $rc = myscanfile($dbg_flag,$ref_flag, $dname . $sf,$rcon[$k],$ref,
+                          $reftype,$refcon,$fused,$rcnt,$notfound);
         if( $rc > 0 )
         {
           /* the file contained some more references */
@@ -654,6 +705,22 @@ function isDITA($f)
   if( ($ext=="xml") ||
       ($ext=="ditamap") ||
       ($ext=="dita") )
+    $rc=true;
+
+  return $rc;
+}
+
+/*
+  return true if this file is a DITA map file
+*/
+function isDITAmap($f)
+{
+  $parts = pathinfo($f);
+  $ext = @$parts['extension'];
+
+  $rc = false;
+
+  if( ($ext=="ditamap") )
     $rc=true;
 
   return $rc;
