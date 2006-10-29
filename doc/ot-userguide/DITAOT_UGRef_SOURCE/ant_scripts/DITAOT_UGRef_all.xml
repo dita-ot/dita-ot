@@ -8,16 +8,19 @@
   <!-- allow access to environment variables -->
   <property environment="env"/>
 
-  <!-- project global properties -->
-  <property name="projdir" value="${user.dir}"/>
-  <property name="outdir" value="C:/DITAOT_UGRef_OUTPUT"/>
+  <!-- set toolkit directory from environment variable -->
+  <!-- Note: basedir is set in the script that invokes this
+             one. It is not used here, but some plugins depend
+             on it pointing to the Toolkit directory.  -->
+  <property name="toolkit_dir" value="${env.DITA_DIR}"/>
+
+  <!-- project global properties relative to the location of this script -->
+  <property name="projdir" value="${ant.file}/../.."/>
+  <property name="outdir" value="${projdir}/../DITAOT_UGRef_OUTPUT"/>
   <property name="PHPexe" value="C:/wamp/php/php.exe"/>
   <property name="args.logdir" value="${outdir}"/>
   <property name="MAP_file" value="DITAOT_UGRef.ditamap"/>
   <property name="EXTNAME" value=".dita"/>
-
-  <!-- set toolkit directory from environment variable -->
-  <property name="toolkit_dir" value="${env.DITA_DIR}"/>
 
   <!-- file for using otherprops filtering for non-pdf output -->
   <property name="ditaval_nonpdf" value="${projdir}/ditaval_files/otherprops_filtering.ditaval"/>
@@ -157,8 +160,7 @@
       <property name="output.dir" value="${outdir}/tocjs"/>
       <property name="dita.temp.dir" value="${outdir}/temp"/>
       <property name="transtype" value="tocjs"/>
-      <property name="args.draft" value="yes"/>
-      <property name="args.indexshow" value="yes"/>
+      <property name="clean.temp" value="no"/>
       <property name="args.css" value="${projdir}/css_files/DITAOT_UGRef_CSS.css"/>
       <property name="args.csspath" value="CSS"/>
       <property name="args.copycss" value="yes"/>
