@@ -132,7 +132,7 @@
 </xsl:template>
 
 <!-- "dl" as table, when outputclass="table". -->
-<xsl:template match="*[contains(@class, ' topic/dl ')][@outputclass = 'table']" mode="replace-tag">
+<xsl:template match="*[contains(@class, ' topic/dl ')][contains(@outputclass, 'table')]" mode="replace-tag">
   <xsl:call-template name="wrap-fm-pi-begin"/>
   <fm_div outputclass="fm_table_wrap">
     <table rowheader="firstCol">
@@ -162,3 +162,8 @@
 </xsl:template>
 
 </xsl:stylesheet>
+<!-- Stylus Studio meta-information - (c) 2004-2005. Progress Software Corporation. All rights reserved.
+<metaInformation>
+<scenarios/><MapperMetaTag><MapperInfo srcSchemaPathIsRelative="yes" srcSchemaInterpretAsXML="no" destSchemaPath="" destSchemaRoot="" destSchemaPathIsRelative="yes" destSchemaInterpretAsXML="no"/><MapperBlockPosition></MapperBlockPosition><TemplateContext></TemplateContext><MapperFilter side="source"></MapperFilter></MapperMetaTag>
+</metaInformation>
+-->

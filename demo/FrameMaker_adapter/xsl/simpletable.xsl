@@ -1,12 +1,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
 
-<!-- "choicetable" always has two columns. -->
-<xsl:template match="*[contains(@class, ' task/choicetable ')]" mode="count-columns" priority="20">
-  2
-</xsl:template>
-
 <!-- Number of columns in "simpletable" is greatest number of "stentry" in any given row. -->
-<xsl:template match="*[contains(@class, ' topic/simpletable ')]" mode="count-columns" priority="10">
+<xsl:template match="*[contains(@class, ' topic/simpletable ')]" mode="count-columns">
   <xsl:choose>
     <!-- If table has a "cols" attribute, use that. (Not standard DITA.) -->
     <xsl:when test="@cols">
