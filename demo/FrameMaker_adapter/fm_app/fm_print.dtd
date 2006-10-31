@@ -5,16 +5,27 @@
     "D:\Mekon\DITA\DITA-OT\demo\FrameMaker_adapter\fm_app\fm_print.dtd">
 -->
 
-<!-- 13Jun2006 added fm_div to ph element -->
-
 
 <!--D:\Mekon\DITA\DITA-OT\demo\FrameMaker_adapter\fm_app\template.fm-->
 
 <!--February 27, 2006-->
+<!-- Modifications by debbiep-sf at sourceforge, 2006-10-26. -->
 <!ENTITY hardreturn "">
 <!ELEMENT fm_topicgroup 
-                     (topic+) >
+                     (booktitle | bookmeta | topic)+ >
 
+<!ELEMENT abstract   (#PCDATA | ph | term | xref | cite | q | boolean |
+                              state | keyword | tm | p | lq | note | dl | ul |
+                              ol | sl | pre | lines | fig | image | object |
+                              fm_table_title_external | fm_table_desc_external
+                              | fm_div | draft-comment | fn | indextermref | shortdesc)* >
+<!ATTLIST abstract   id        CDATA     #IMPLIED
+                     outputclass  CDATA  #IMPLIED
+                     xtrc      CDATA     #IMPLIED
+                     xtrf      CDATA     #IMPLIED
+                     xmlns     CDATA     #IMPLIED
+                     class     CDATA     "- topic/abstract ">
+                              
 <!ELEMENT anchor     EMPTY >
 <!ATTLIST anchor     id        ID        #REQUIRED
                      xtrc      CDATA     #IMPLIED
@@ -839,15 +850,14 @@
                      xmlns     CDATA     #IMPLIED
                      class     CDATA     "topic.lq" >
 
-<!ELEMENT map        ((topicmeta)?, (navref | anchor | topicref | topic |
-                              reltable | fm_topicgroup)*) >
+<!ELEMENT map        ((booktitle)?, (bookmeta)?, (topic | fm_topicgroup)*) >
 <!ATTLIST map        title     CDATA     #IMPLIED
                      id        ID        #IMPLIED
                      anchorref  CDATA     #IMPLIED
                      translate  (yes|no)  #IMPLIED
                      xml:lang  CDATA     #IMPLIED
                      xmlns:ditaarch  CDATA     "http://dita.oasis-open.org/architecture/2005/"
-                     ditaarch:DITAArchVersion  CDATA     "1.0"
+                     ditaarch:DITAArchVersion  CDATA     "1.1"
                      domains   CDATA     #IMPLIED
                      collection-type  (choice|unordered|sequence|family)  #IMPLIED
                      type      CDATA     #IMPLIED
@@ -1055,7 +1065,7 @@
 
 <!ELEMENT ph         (#PCDATA | ph | term | xref | cite | q | boolean |
                               state | keyword | tm | image | draft-comment |
-                              fn | fm_div | indextermref)* >
+                              fn | indextermref)* >
 <!ATTLIST ph         keyref    CDATA     #IMPLIED
                      id ID     #IMPLIED
                      platform  CDATA     #IMPLIED
@@ -1568,7 +1578,7 @@
 
 <!--topic: The <topic> element-->
 <!ELEMENT topic      ((chapter-head)?, title, (titlealts)?,
-                              (shortdesc)?, (prolog)?, (body)?,
+                              (abstract | shortdesc)?, (prolog)?, (body)?,
                               (related-links)?, (topic)*) >
 <!ATTLIST topic      id ID     #IMPLIED
                      platform  CDATA     #IMPLIED
@@ -1686,3 +1696,101 @@
                      xtrf      CDATA     #IMPLIED
                      xmlns     CDATA     #IMPLIED
                      class     CDATA     "topic.xref" >
+
+<!ELEMENT booktitle  (#PCDATA | ph | term | q | boolean | state | keyword | tm | image | booklibrary | mainbooktitle | booktitlealt)* >
+
+<!ELEMENT booklibrary (#PCDATA | ph | term | q | boolean | state | keyword | tm | image )* >
+
+<!ELEMENT mainbooktitle (#PCDATA | ph | term | q | boolean | state | keyword | tm | image )* >
+
+<!ELEMENT booktitlealt (#PCDATA | ph | term | q | boolean | state | keyword | tm | image )* >
+
+<!ELEMENT bookmeta (author | authorinformation | source | publisherinformation | critdates | permissions | audience | category | keywords
+                    | prodinfo | othermeta | resourceid | bookid | bookchangehistory | bookrights)* >
+
+<!ELEMENT authorinformation (personinfo | organizationinfo) >
+
+<!ELEMENT personinfo ((namedetails)?, (addressdetails)?, (contactnumbers)?, (emailaddresses)?) >
+
+<!ELEMENT organizationinfo ((namedetails)?, (addressdetails)?, (contactnumbers)?, (emailaddresses)?, (urls)?) >
+
+<!ELEMENT namedetails (personname | organizationnamedetails)* >
+
+<!ELEMENT personname ((honorific)?, (firstname)*, (middlename)*, (lastname), (generationidentifier)?, (otherinfo)*) >
+
+<!ELEMENT honorific (#PCDATA) >
+<!ELEMENT firstname (#PCDATA) >
+<!ELEMENT middlename (#PCDATA) >
+<!ELEMENT lastname (#PCDATA) >
+<!ELEMENT generationidentifier (#PCDATA) >
+<!ELEMENT otherinfo (#PCDATA | keyword | term)* >
+
+<!ELEMENT organizationnamedetails ((organizationname)?, otherinfo)* >
+
+<!ELEMENT organizationname (#PCDATA | ph | term | xref | cite | q | boolean | state | keyword | tm | image | draft-comment | fn | indextermref)* >
+
+<!ELEMENT addressdetails (#PCDATA | keyword | term | locality | administrativearea | thoroughfare | country)* >
+
+<!ELEMENT locality (#PCDATA | keyword | term)* >
+<!ELEMENT administrativearea (#PCDATA | keyword | term)* >
+<!ELEMENT thoroughfare (#PCDATA | keyword | term)* >
+<!ELEMENT country (#PCDATA) >
+
+<!ELEMENT contactnumbers (contactnumber)* >
+<!ELEMENT contactnumber (#PCDATA) >
+
+<!ELEMENT emailaddresses (emailaddress)* >
+<!ELEMENT emailaddress (#PCDATA | keyword | term)* >
+
+<!ELEMENT urls (url)* >
+<!ELEMENT url (#PCDATA | keyword | term)* >
+
+<!ELEMENT publisherinformation ((person | organization)*, (printlocation)*, (published)*) >
+
+<!ELEMENT person (#PCDATA | keyword | term)* >
+<!ELEMENT organization (#PCDATA | keyword | term)* >
+<!ELEMENT printlocation (#PCDATA | keyword | term)* >
+
+<!ELEMENT published ((person | organization)*, (publishtype)?, (revisionid)?, (started)?, (completed)?, (summary)?) >
+
+<!ELEMENT publishtype EMPTY >
+
+<!ELEMENT revisionid (#PCDATA) >
+
+<!ELEMENT started ((year, month, (day)?)|(month, (day)?, year)|(day, month, year)) >
+
+<!ELEMENT completed ((year, month, (day)?)|(month, (day)?, year)|(day, month, year)) >
+
+<!ELEMENT day (#PCDATA) >
+<!ELEMENT month (#PCDATA) >
+<!ELEMENT year (#PCDATA) >
+
+<!ELEMENT summary (#PCDATA | keyword | term)* >
+
+<!ELEMENT bookid ((bookpartno)*, (edition)?, (isbn)?, (booknumber)?, (volume)?, (maintainer)?) >
+
+<!ELEMENT bookpartno (#PCDATA | keyword | term)* >
+<!ELEMENT edition (#PCDATA) >
+<!ELEMENT isbn (#PCDATA) >
+<!ELEMENT booknumber (#PCDATA | keyword | term)* >
+<!ELEMENT volume (#PCDATA) >
+<!ELEMENT maintainer (#PCDATA | keyword | term)* >
+
+<!ELEMENT bookchangehistory ((reviewed)*, (edited)*, (tested)*, (approved)*, (bookevent)*) >
+
+<!ELEMENT reviewed ((person | organization)*, (revisionid)?, (started)?, (completed)?, (summary)?) >
+<!ELEMENT edited ((person | organization)*, (revisionid)?, (started)?, (completed)?, (summary)?) >
+<!ELEMENT tested ((person | organization)*, (revisionid)?, (started)?, (completed)?, (summary)?) >
+<!ELEMENT approved ((person | organization)*, (revisionid)?, (started)?, (completed)?, (summary)?) >
+<!ELEMENT bookevent ((bookeventtype)?, (person | organization)*, (revisionid)?, (started)?, (completed)?, (summary)?) >
+
+<!ELEMENT bookeventtype EMPTY >
+
+<!ELEMENT bookrights ((copyrfirst)?, (copyrlast)?, bookowner, (bookrestriction)?, (summary)?) >
+
+<!ELEMENT copyrfirst (year) >
+<!ELEMENT copyrlast (year) >
+
+<!ELEMENT bookowner ( person | organization ) >
+
+<!ELEMENT bookrestriction EMPTY >
