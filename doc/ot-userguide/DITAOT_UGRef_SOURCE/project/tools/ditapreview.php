@@ -19,6 +19,9 @@ function show_usage()
 */
 function init_map(&$map)
 {
+  global $dbg_flag;
+  if( $dbg_flag )
+    print("init_map: " . $map . "\n");
   $map='<?xml version="1.0" encoding="utf-8"?>' . "\n";
   $map=$map . '<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "../dtd/map.dtd">' . "\n";
   $map=$map . '<map title="DITA XHTML Plausible Preview">' . "\n";
@@ -29,6 +32,9 @@ function init_map(&$map)
 */
 function complete_map(&$map)
 {
+  global $dbg_flag;
+  if( $dbg_flag )
+    print("complete_map: " . $map . "\n");
   $map = $map . '</map>' . "\n";
 }
 
@@ -37,10 +43,26 @@ function complete_map(&$map)
 */
 function add_to_map(&$map,$f,$fmt)
 {
-  if( isset($fmt) )
-    $map=$map . '<topicref href="' . substr($f,1) . '" format="' . $fmt . '"/>' . "\n";
+  global $dbg_flag;
+  global $fsep;
+  static $inmap;
+
+  if( substr($f,0,1) == $fsep )
+    $fadd = substr($f,1);
   else
-    $map=$map . '<topicref href="' . substr($f,1) . '"/>' . "\n";
+    $fadd = $f;
+
+  if( isset($inmap[$fadd]) )
+    return;
+
+  $inmap[$fadd]=$fadd;
+
+  if( $dbg_flag )
+    print("add_to_map: " . $f . " " . $fmt . "\n");
+  if( isset($fmt) )
+    $map=$map . ' <topicref href="' . $fadd . '" format="' . $fmt . '"/>' . "\n";
+  else
+    $map=$map . ' <topicref href="' . $fadd . '"/>' . "\n";
 }
 
 /**************************************************************
@@ -291,6 +313,8 @@ if( $rc )
 
   system($cmd,$crc);
   print("processing return code was " . $crc . "\n");
+  if( $crc === FALSE )
+    print("processing failed!\n");
 
   /* cleanup temporary file */
   if( $opc == $opL )
