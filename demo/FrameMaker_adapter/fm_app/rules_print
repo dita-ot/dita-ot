@@ -6,12 +6,28 @@ fm version is "7.1";
 
 #include "isoall.rw"
 
-element "prolog" drop;
+entity "hardreturn" is fm char 0x09;
 
 element "title" is fm element;
 element "table" {
   is fm table element;
   attribute "fm_format" is fm property table format;
+  attribute "frame" {
+    is fm property table border ruling;
+    value "top" is fm property value top;
+    value "bottom" is fm property value bottom;
+    value "topbot" is fm property value top and bottom;
+    value "all" is fm property value all;
+    value "sides" is fm property value sides;
+    value "none" is fm property value none;
+  }
+  attribute "colsep" is fm property column ruling;
+  attribute "rowsep" is fm property row ruling;
+  attribute "pgwide" is fm property page wide;
+}
+element "tgroup" {
+  attribute "colsep" is fm property column ruling;
+  attribute "rowsep" is fm property row ruling;
 }
 element "fm_table_title_internal" is fm table title element;
 element "colspec"{
@@ -36,7 +52,17 @@ element "entry" {
 }
 /* element "tgroup" unwrap; */
 
-entity "hardreturn" is fm char 0x09;
+/*
+element "pre"
+{
+  reader line break is forced return;
+} 
+
+element "lines"
+{
+  reader line break is forced return;
+} 
+*/
 
 element "image"
 {
@@ -67,3 +93,5 @@ attribute "xref:href" drop;
 
 }
 
+element "titlealts" drop;
+element "prolog" drop;

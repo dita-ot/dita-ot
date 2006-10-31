@@ -91,7 +91,7 @@
 				</xsl:when>
 		<!-- Inline images are left as-is. -->
 		<xsl:otherwise>
-					<xsl:apply-templates select="@id"/>
+				<!--	<xsl:apply-templates select="@id"/>  -->
 					<image>
 						<xsl:apply-templates select="." mode="attributes"/>
 					</image>

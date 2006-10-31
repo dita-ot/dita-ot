@@ -13,49 +13,28 @@
                         or contains(@class, ' topic/state ')
                         or contains(@class, ' topic/term ')
                         or contains(@class, ' topic/tm ')
-                        or contains(@class, ' topic/xref ')]" mode="is-block" priority="10">
+                        or contains(@class, ' topic/xref ')]" mode="is-block">
       <xsl:text>n</xsl:text>
     </xsl:template>
 
-    <!-- Inline v. block: These items are inline iff all of their child elements are inline. -->
-    <xsl:template match="*[contains(@class, ' task/info ')
-                        or contains(@class, ' task/stepresult ')
-                        or contains(@class, ' task/stepxmp ')
-                        or contains(@class, ' task/tutorialinfo ')]" mode="is-block" priority="20">
-      <xsl:variable name="childblock">
-        <xsl:apply-templates select="*" mode="is-block"/>
-      </xsl:variable>
-      <xsl:choose>
-        <xsl:when test="contains($childblock, 'y')">
-          <xsl:text>y</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:text>n</xsl:text>
-        </xsl:otherwise>
-      </xsl:choose>
-    </xsl:template>
-
     <!-- Inline v. block: These elements have no width. -->
-    <xsl:template match="*[contains(@class, ' topic/indexterm ')]" mode="is-block" priority="10">
+    <xsl:template match="*[contains(@class, ' topic/indexterm ')]" mode="is-block">
       <xsl:text></xsl:text>
     </xsl:template>
 
     <!-- Inline v. block: Text is inline. -->
-    <xsl:template match="text()" mode="is-block" priority="10">
+    <xsl:template match="text()" mode="is-block">
       <xsl:text>n</xsl:text>
     </xsl:template>
 
     <!-- Inline v. block: Whitespace inside preformatted elements is sacrosanct. -->
     <xsl:template match="*[contains(@class, ' topic/pre ')
-                        or contains(@class, ' topic/lines ')
-                        or contains(@class, ' sw-d/userinput ')
-                        or contains(@class, ' sw-d/systemoutput ')
-                        or contains(@class, ' pr-d/codeph ')]//text()" mode="is-block" priority="30">
+                        or contains(@class, ' topic/lines ')]//text()" mode="is-block" priority="1.0">
       <xsl:text>n</xsl:text>
     </xsl:template>
 
     <!-- Inline v. block: Empty text might have no width. -->
-    <xsl:template match="text()[string-length(normalize-space()) = 0]" mode="is-block" priority="20">
+    <xsl:template match="text()[string-length(normalize-space()) = 0]" mode="is-block">
       <xsl:variable name="parent-is-block">
         <xsl:apply-templates select=".." mode="is-block"/>
       </xsl:variable>
@@ -88,7 +67,7 @@
     </xsl:template>
    
     <!-- Inline v. block: Everything else is block. -->
-    <xsl:template match="*" mode="is-block" priority="0">
+    <xsl:template match="*" mode="is-block">
       <xsl:text>y</xsl:text>
     </xsl:template>
 

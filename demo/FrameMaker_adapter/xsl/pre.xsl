@@ -20,15 +20,6 @@
   </xsl:call-template>
 </xsl:template>
 
-<!-- Choose non-breaking versions of characters for sensitive elements. -->
-<xsl:template match="*[contains(@class, ' sw-d/userinput ')
-                    or contains(@class, ' sw-d/systemoutput ')
-                    or contains(@class, ' pr-d/codeph ')]//text()">
-  <!-- space into &#xA0; non-breaking space.
-       hyphen into &#x2011; non-breaking hyphen. -->
-  <xsl:value-of select="translate(.,' -','&#xA0;&#x2011;')"/>
-</xsl:template>
-
 <!-- Output "hardreturn" entity (defined in the DTD to be an empty string)
      where newlines are found.  FrameMaker read/write rules do the rest. -->
 <xsl:template name="newline-to-entity">
