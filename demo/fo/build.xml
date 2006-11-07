@@ -238,8 +238,7 @@ with those set forth herein.
         </copy>
         <copy todir="${coreArtworkDestinationDir}/Customization/OpenTopic" 
             failonerror="false">
-            <fileset dir="${basedir}" 
-                includes="${customization.dir}/common/artwork/**/*.*"/>
+            <fileset dir="${customization.dir}" includes="common/artwork/**/*.*"/>
         </copy>
     </target>    
 
