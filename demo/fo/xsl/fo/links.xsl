@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
 
 <!-- 
-Copyright © 2004-2005 by Idiom Technologies, Inc. All rights reserved. 
+Copyright © 2004-2006 by Idiom Technologies, Inc. All rights reserved. 
 IDIOM is a registered trademark of Idiom Technologies, Inc. and WORLDSERVER
 and WORLDSTART are trademarks of Idiom Technologies, Inc. All other 
 trademarks are the property of their respective owners. 
@@ -26,6 +26,9 @@ Technologies, Inc. as a result of this transaction.
 These terms and conditions supersede the terms and conditions in any
 licensing agreement to the extent that such terms and conditions conflict
 with those set forth herein.
+
+This file is part of the DITA Open Toolkit project hosted on Sourceforge.net. 
+See the accompanying license.txt file for applicable licenses.
 -->
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -103,7 +106,7 @@ with those set forth herein.
                     <xsl:with-param name="theParameters">
                         <number>
                             <xsl:for-each select="$element">
-                                <xsl:value-of select="count(preceding::*[contains(@class, ' topic/fig ')]) + 1"/>
+                                <xsl:value-of select="count(preceding::*[contains(@class, ' topic/fig ')][child::*[contains(@class, ' topic/title ')]]) + 1"/>
                             </xsl:for-each>
                         </number>
                         <title>
@@ -136,7 +139,7 @@ with those set forth herein.
                     <xsl:with-param name="theParameters">
                         <number>
                             <xsl:for-each select="$element">
-                                <xsl:value-of select="count(preceding::*[contains(@class, ' topic/table ')]) + 1"/>
+                                <xsl:value-of select="count(preceding::*[contains(@class, ' topic/table ')][child::*[contains(@class, ' topic/title ')]]) + 1"/>
                             </xsl:for-each>
                         </number>
                         <title>

@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
 
 <!--
-Copyright © 2004-2005 by Idiom Technologies, Inc. All rights reserved.
+Copyright © 2004-2006 by Idiom Technologies, Inc. All rights reserved.
 IDIOM is a registered trademark of Idiom Technologies, Inc. and WORLDSERVER
 and WORLDSTART are trademarks of Idiom Technologies, Inc. All other
 trademarks are the property of their respective owners.
@@ -26,6 +26,9 @@ Technologies, Inc. as a result of this transaction.
 These terms and conditions supersede the terms and conditions in any
 licensing agreement to the extent that such terms and conditions conflict
 with those set forth herein.
+
+This file is part of the DITA Open Toolkit project hosted on Sourceforge.net. 
+See the accompanying license.txt file for applicable licenses.
 -->
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -1598,7 +1601,7 @@ with those set forth herein.
 
         <xsl:choose>
             <xsl:when test="not(@placement = 'inline')">
-                <fo:float xsl:use-attribute-sets="image__float">
+<!--                <fo:float xsl:use-attribute-sets="image__float">-->
                     <fo:block xsl:use-attribute-sets="image__block" id="{@id}">
                         <xsl:call-template name="placeImage">
                             <xsl:with-param name="imageAlign" select="@align"/>
@@ -1607,7 +1610,7 @@ with those set forth herein.
                             <xsl:with-param name="width" select="@width"/>
                         </xsl:call-template>
                     </fo:block>
-                </fo:float>
+<!--                </fo:float>-->
             </xsl:when>
             <xsl:otherwise>
                 <fo:inline xsl:use-attribute-sets="image__inline" id="{@id}">
@@ -1778,7 +1781,8 @@ with those set forth herein.
                         </fo:list-item-label>
                         <fo:list-item-body start-indent="body-start()">
                             <fo:block>
-                                <xsl:value-of select="."/>
+<!--                                <xsl:value-of select="."/>-->
+                                <xsl:apply-templates/>
                             </fo:block>
                         </fo:list-item-body>
                     </fo:list-item>

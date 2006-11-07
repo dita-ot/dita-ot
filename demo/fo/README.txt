@@ -123,6 +123,57 @@ Idiom's FO output also provides a general configuration file called
 To modify these settings, copy "build.properties.orig" to
 "build.properties" and then modify the relevant options.
 
+History
+=======
+
+FO Plugin Release 1.2.1
+
+- rebased with Idiom's internal code as of Nov 6, 2006.
+- updated copyright/licensing notices in files.
+
+----------------------------------------------------------------------------
+
+FO Plugin Release 1.2
+Available since Sept 29, 2006
+
+- rebased with Idiom's internal code as of Sept 28, 2006
+- removed icu4j requirement: it will be used if found, otherwise the built-in
+  Java Collator will be used.
+- some preliminary DITA 1.1 support. No point going into details since the 
+  standard is still in flux.
+
+Bug fixes (IDs are Idiom's internal tracking numbers):
+- 11492: image sometimes indented too far right
+- 11625: footnote text's formatting not rendered
+- 10955: tables with titles should be numbered sequentially
+- 11273: table col span @namest/@nameend not respected
+- 11432: <p> tag should be formatted according to enclosing tag
+- 10849: nested codeblocks misrendered
+- 10755: NullPointerException processing <dita> elements
+
+Sourceforge bug fix:
+- 1523653: pdf2 transform assumes basedir = ditadir
+
+----------------------------------------------------------------------------
+
+FO Plugin Release 1.1
+Available since June 15, 2006
+
+- rebased with Idiom's internal build 8.0.1.1.7
+- improved performance for documents with many xrefs/links, such as the
+  DITA Language Reference
+- fixed indexterm in topicmeta bug
+- fixed topicmerge issues that affected (among other things) chapter 
+  division rendering for bookmaps
+- misc bug fixes
+
+----------------------------------------------------------------------------
+
+FO Plugin release 1.0
+Available since Feb. 23, 2006
+
+- first release of Idiom's open source donation.
+
 ============================================================================
 
 Copyright © 2005 by Idiom Technologies, Inc. All rights reserved. 

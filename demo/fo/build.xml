@@ -40,7 +40,7 @@ with those set forth herein.
     <!-- dita.temp.dir can be an absolute or relative path. Handle both. -->
     <available property="work.dir" value="${dita.temp.dir}"
         file="${dita.temp.dir}" type="dir" />
-    <condition property="work.dir" value="${ot.dir}/${dita.temp.dir}">
+    <condition property="work.dir" value="${caller.dir}/${dita.temp.dir}">
         <not>
             <isset property="work.dir"/>
         </not>
@@ -110,6 +110,9 @@ with those set forth herein.
     </target>
     
     <target name="publish.map.pdf">
+    	<echo message="dita.temp.dir=${dita.temp.dir} work.dir=${work.dir}"/>
+    	<echo message="dita.dir=${dita.dir}"/>
+    	<echo message="basedir=${basedir}"/>
         <antcall target="transform.topic2pdf">
             <param name="inputFile" value="${work.dir}/${merged.file}"/>
             <param name="outputFile" 
@@ -132,10 +135,6 @@ with those set forth herein.
 
     	<condition property="temp.transformation.file" value="${xsl.fo.dir}/topic2fo_shell_1.0.xsl">
             <equals arg1="${ws.runtime.publishing.map.dita.version}" arg2="1.0"/>
-        </condition>
-
-    	<condition property="temp.transformation.file" value="${xsl.fo.dir}/topic2fo_shell_1.0.xsl">
-            <equals arg1="${ws.runtime.publishing.map.dita.version}" arg2="1.1"/>
         </condition>
 
         <condition property="temp.transformation.file" value="${xsl.fo.dir}/topic2fo_shell.xsl">
@@ -220,7 +219,7 @@ with those set forth herein.
     </target>
 
     <target name="transform.fo2pdf">
-        <java classname="com.idiominc.ws.opentopic.fo.xep.Runner" resultproperty="errCode" failonerror="false" fork="true">
+        <java classname="com.idiominc.ws.opentopic.fo.xep.Runner" resultproperty="errCode" failonerror="false" fork="true" maxmemory="256m">
             <arg line='"${inputFile}" "${outputFile}" failOnError=${xep.failOnError}'/>
             <classpath refid="xep.class.path"/>
             <sysproperty key="com.renderx.xep.CONFIG" value="${xep.config.file}"/>
