@@ -151,7 +151,9 @@ with those set forth herein.
             catalogs="${xml.catalog.files}">
         </index-preprocess>
     	
-        <java classname="com.icl.saxon.StyleSheet" classpathref="project.class.path">
+    	<!-- must fork or catalog resolution will fail due to sharing of -->
+    	<!-- resolver and catalogs with the Open Toolkit -->
+        <java classname="com.icl.saxon.StyleSheet" classpathref="project.class.path" fork="true">
             <arg line='-o "${buildDir}/stage2.fo"'/>
             <arg line="${saxon.resolver.command.line}"/>
             <arg line='"${buildDir}/stage1.xml"'/>

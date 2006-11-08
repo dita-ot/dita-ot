@@ -130,6 +130,11 @@ FO Plugin Release 1.2.1
 
 - rebased with Idiom's internal code as of Nov 6, 2006.
 - updated copyright/licensing notices in files.
+- fixed image copying task for customization.
+
+Sourceforge bug fixes:
+- 1574115: Using 1.3 and Idiom FO 1.2 plugin fail
+- 1523653: pdf2 transform assumes basedir = ditadir (for real, this time!)
 
 ----------------------------------------------------------------------------
 
