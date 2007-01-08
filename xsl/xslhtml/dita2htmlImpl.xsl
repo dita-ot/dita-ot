@@ -3106,31 +3106,33 @@
     </xsl:variable>
     
     <xsl:call-template name="commonattributes"/>
-    <xsl:if test="@id and not(@id='')">
-      <xsl:variable name="topicid">
-        <xsl:value-of select="ancestor::*[contains(@class,' topic/topic ')][1]/@id"/>
-      </xsl:variable>
-      <xsl:variable name="refid">
-        <xsl:text>#</xsl:text>
-        <xsl:value-of select="$topicid"/>
-        <xsl:text>/</xsl:text>
-        <xsl:value-of select="@id"/>
-      </xsl:variable>
-      <xsl:if test="key('xref',$refid)">
+    <xsl:choose>
+      <xsl:when test="@id and not(@id='')">
+        <xsl:variable name="topicid">
+          <xsl:value-of select="ancestor::*[contains(@class,' topic/topic ')][1]/@id"/>
+        </xsl:variable>
+        <xsl:variable name="refid">
+          <xsl:text>#</xsl:text>
+          <xsl:value-of select="$topicid"/>
+          <xsl:text>/</xsl:text>
+          <xsl:value-of select="@id"/>
+        </xsl:variable>
+        <xsl:if test="key('xref',$refid)">
+          <a>
+            <xsl:call-template name="setid"/>              
+            <sup><xsl:value-of select="$convergedcallout"/></sup>
+          </a><xsl:text>  </xsl:text>
+        </xsl:if>
+      </xsl:when>
+      <xsl:otherwise>
         <a>
-          <xsl:choose>
-            <xsl:when test="@id">
-              <xsl:call-template name="setid"/>
-            </xsl:when>
-            <xsl:otherwise>
-              <xsl:attribute name="name"><xsl:text>fntarg_</xsl:text><xsl:value-of select="$fnid"/></xsl:attribute>
-              <xsl:attribute name="href"><xsl:text>#fnsrc_</xsl:text><xsl:value-of select="$fnid"/></xsl:attribute>
-            </xsl:otherwise>
-          </xsl:choose>
+          <xsl:attribute name="name"><xsl:text>fntarg_</xsl:text><xsl:value-of select="$fnid"/></xsl:attribute>
+          <xsl:attribute name="href"><xsl:text>#fnsrc_</xsl:text><xsl:value-of select="$fnid"/></xsl:attribute>
           <sup><xsl:value-of select="$convergedcallout"/></sup>
         </a><xsl:text>  </xsl:text>
-      </xsl:if>
-    </xsl:if>    
+      </xsl:otherwise>
+    </xsl:choose>
+        
     <xsl:call-template name="flagit"/>
     <xsl:call-template name="start-revflag"/>
     <xsl:apply-templates/>
