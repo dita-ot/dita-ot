@@ -163,6 +163,10 @@
     <xsl:apply-templates select="/processing-instruction()" mode="get-work-dir"/>
   </xsl:variable>
   <xsl:value-of select="$newline"/>
+  <!-- if current node is not topicgroup and not empty or current node 
+  is empty but there is a valid child, we will generate
+  the entry in toc -->
+  <xsl:if test="not(contains(@class,' mapgroup-d/topicgroup '))and (@href and not(@href='') or .//*[@href and not(@href='')])"> 
   <LI> <OBJECT type="text/sitemap">
         <xsl:element name="param">
           <xsl:attribute name="name">Name</xsl:attribute>
@@ -257,6 +261,7 @@
 
         <!-- If there is a reference to a DITA or HTML file, and it is not external: 
              allow non-dita, external values in navigation.  -->
+        <xsl:if test="@href">
           <xsl:element name="param">
             <xsl:attribute name="name">Local</xsl:attribute>
             <xsl:choose> <!-- What if targeting a nested topic? Need to keep the ID? -->
@@ -269,17 +274,18 @@
               <xsl:when test="contains(@href,'.htm') and @scope!='external'">
                 <xsl:attribute name="value"><xsl:value-of select="$pathFromMaplist"/><xsl:value-of select="@href"/></xsl:attribute>
               </xsl:when>
-              <xsl:when test="not(@href) or @href=''">
+              <!--<xsl:when test="not(@href) or @href=''">
                 <xsl:variable name="parentHREF" select="parent::*[contains(@class, ' map/topicref ')]/@href"/>
                 <xsl:if test="$parentHREF!=''">
                   <xsl:attribute name="value"><xsl:value-of select="$pathFromMaplist"/><xsl:value-of select="substring-before($parentHREF, $DITAEXT)"/><xsl:value-of select="$OUTEXT"/></xsl:attribute>
                 </xsl:if>
-              </xsl:when>
+              </xsl:when>-->
               <xsl:otherwise> <!-- If non-DITA, keep the href as-is -->
                 <xsl:attribute name="value"><xsl:value-of select="@href"/></xsl:attribute>
               </xsl:otherwise>
             </xsl:choose>
           </xsl:element>
+        </xsl:if>
        </OBJECT>
 
        <!-- If there are any children that should be in the TOC, process them -->
@@ -292,6 +298,7 @@
        </xsl:if>
   <xsl:value-of select="$newline"/>
   </LI>
+  </xsl:if>
 </xsl:template>
 
 <!-- These are here just to prevent accidental fallthrough -->

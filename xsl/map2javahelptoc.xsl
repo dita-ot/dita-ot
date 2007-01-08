@@ -60,4 +60,7 @@
   </xsl:choose>
 </xsl:template>
 
+<!-- do nothing when meeting with reltable -->
+<xsl:template match="*[contains(@class,' map/reltable ')]"/>
+
 </xsl:stylesheet>

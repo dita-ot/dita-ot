@@ -114,8 +114,7 @@ public class GenListModuleReader extends AbstractXMLReader {
 	public static void initXMLReader(String ditaDir) throws SAXException {
 		if (System.getProperty(Constants.SAX_DRIVER_PROPERTY) == null) {
 			// The default sax driver is set to xerces's sax driver
-			System.setProperty(Constants.SAX_DRIVER_PROPERTY,
-					Constants.SAX_DRIVER_DEFAULT_CLASS);
+			StringUtils.initSaxDriver();
 		}
 
 		reader = XMLReaderFactory.createXMLReader();
@@ -343,7 +342,8 @@ public class GenListModuleReader extends AbstractXMLReader {
 	private void parseAttribute(Attributes atts, String attrName) {
 		String attrValue = atts.getValue(attrName);
 		String filename = null;
-		String attrScope = atts.getValue("scope");
+		String attrScope = atts.getValue(Constants.ATTRIBUTE_NAME_SCOPE);
+		String attrFormat = atts.getValue(Constants.ATTRIBUTE_NAME_FORMAT);
 
 		if (attrValue == null) {
 			return;
@@ -380,6 +380,14 @@ public class GenListModuleReader extends AbstractXMLReader {
 				&& !Constants.ATTRIBUTE_NAME_CONREF.equals(attrName)
 				&& !Constants.ATTRIBUTE_NAME_COPY_TO.equals(attrName)) {
 			nonConrefCopytoTargets.add(filename);
+		}
+		
+		if (attrFormat != null &&
+				!Constants.ATTR_FORMAT_VALUE_DITA.equalsIgnoreCase(attrFormat)){
+			//The format of the href is not dita topic
+			//The logic after this "if" clause is not related to files other than dita topic.
+			//Therefore, we need to return here to filter out those files in other format.
+			return;
 		}
 
 		/*

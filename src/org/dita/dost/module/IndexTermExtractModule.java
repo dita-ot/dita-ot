@@ -30,6 +30,7 @@ import org.dita.dost.reader.DitamapIndexTermReader;
 import org.dita.dost.reader.IndexTermReader;
 import org.dita.dost.util.Constants;
 import org.dita.dost.util.FileUtils;
+import org.dita.dost.util.StringUtils;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
@@ -173,8 +174,7 @@ public class IndexTermExtractModule implements AbstractPipelineModule {
 
 		if (System.getProperty(Constants.SAX_DRIVER_PROPERTY) == null) {
 			// The default sax driver is set to xerces's sax driver
-			System.setProperty(Constants.SAX_DRIVER_PROPERTY,
-					Constants.SAX_DRIVER_DEFAULT_CLASS);
+			StringUtils.initSaxDriver();
 		}
 
 		xmlReader = XMLReaderFactory.createXMLReader();

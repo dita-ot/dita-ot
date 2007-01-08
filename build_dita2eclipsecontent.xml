@@ -18,7 +18,8 @@
   </target>
 
   <target name="dita.map.eclipse.content"
-    depends="dita.map.eclipsecontent.init, dita.map.eclipsecontent.toc, 
+    depends="dita.map.eclipsecontent.init, dita.map.eclipsecontent.toc,
+                     dita.map.eclipsecontent.index, 
                      dita.map.eclipsecontent.plugin" />
 
   <target name="dita.map.eclipsecontent.init"
@@ -50,6 +51,17 @@
       <mapper type="glob" from="*${dita.input.filename}"
         to="*${args.eclipsecontent.toc}.xml" />
     </xslt>
+  </target>
+  
+  <target name="dita.map.eclipsecontent.index" unless="noMap"
+    depends="dita.map.eclipsecontent.init"
+    description="Build Eclipse Help index file">
+    <pipeline message="Extract index term."
+      module="IndexTermExtract"
+      basedir="${basedir}"
+      tempdir="${dita.temp.dir}"
+      inputmap="${user.input.file}"
+      extparam="output=${output.dir}${file.separator}${user.input.file};targetext=${content.link.ext};indextype=eclipsehelp;${index.ext.param.encoding}" />
   </target>
 
   <target name="dita.map.eclipsecontent.plugin"

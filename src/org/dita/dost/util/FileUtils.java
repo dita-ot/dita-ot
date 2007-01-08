@@ -16,9 +16,11 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Properties;
 import java.util.StringTokenizer;
 
 import org.dita.dost.log.DITAOTJavaLogger;
+import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.DebugAndFilterModule;
 
 /**
@@ -104,7 +106,15 @@ public class FileUtils {
 	 * @param lcasefn
 	 * @return
 	 */
-	public static boolean isValidTarget(String lcasefn) {		
+	public static boolean isValidTarget(String lcasefn) {
+		DITAOTJavaLogger logger = new DITAOTJavaLogger();
+		Properties params = new Properties();
+		
+		if(lcasefn.indexOf(Constants.STRING_BLANK)!=-1){
+			params.put("%1", lcasefn);
+			logger.logWarn(MessageUtils.getMessage("DOTJ027W", params).toString());
+		}
+		
 		return lcasefn.endsWith(Constants.FILE_EXTENSION_DITA)
 				|| lcasefn.endsWith(Constants.FILE_EXTENSION_DITAMAP)
 				|| lcasefn.endsWith(Constants.FILE_EXTENSION_XML)
@@ -379,4 +389,25 @@ public class FileUtils {
     			: attValue;
     	}
     }
+    
+    /**
+     * Check whether a file exists on the local file systmem.
+     * @param filename
+     * @return boolean  true if the file exists, false otherwise
+     */
+    public static boolean fileExists (String filename){  //Eric
+    	
+    	filename = filename.indexOf(Constants.SHARP) != -1 
+		? filename.substring(0, filename.indexOf(Constants.SHARP))
+		: filename;
+		   
+    	
+    	if (new File(filename).exists()){
+    		return true;
+    	}
+    	
+    	return false;
+    }
+
+    
 }

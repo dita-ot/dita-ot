@@ -6,7 +6,7 @@
 <project name="ditaot-preprocess" basedir=".">
 
   <target name="preprocess"
-    depends="start-preprocess,clean-temp,gen-list,debug-filter,copy-files,move-index-entries,conref,mappull,maplink,move-links,topicpull"
+    depends="start-preprocess,clean-temp,gen-list,debug-filter,copy-files,conref,move-index-entries,mappull,maplink,move-links,topicpull"
     description="Preprocessing ended" />
 
   <!-- preprocess modules begin -->

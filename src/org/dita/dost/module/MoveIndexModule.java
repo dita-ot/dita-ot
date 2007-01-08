@@ -19,11 +19,13 @@ import java.util.Set;
 import java.util.StringTokenizer;
 
 import org.dita.dost.exception.DITAOTException;
+import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.pipeline.PipelineHashIO;
 import org.dita.dost.reader.MapIndexReader;
 import org.dita.dost.util.Constants;
+import org.dita.dost.util.FileUtils;
 import org.dita.dost.writer.DitaIndexWriter;
 
 /**
@@ -36,6 +38,7 @@ import org.dita.dost.writer.DitaIndexWriter;
 public class MoveIndexModule implements AbstractPipelineModule {
 
     private ContentImpl content;
+    private DITAOTJavaLogger logger = null;
 
     /**
      * Default constructor of MoveIndexModule class.
@@ -43,6 +46,7 @@ public class MoveIndexModule implements AbstractPipelineModule {
     public MoveIndexModule() {
         super();
         content = new ContentImpl();
+        logger = new DITAOTJavaLogger();
 
     }
 
@@ -97,7 +101,12 @@ public class MoveIndexModule implements AbstractPipelineModule {
                     targetFileName.endsWith(Constants.FILE_EXTENSION_XML)){
                 content.setValue(entry.getValue());
                 indexInserter.setContent(content);
-                indexInserter.write((String) entry.getKey());
+                if (FileUtils.fileExists((String) entry.getKey())){
+                    indexInserter.write((String) entry.getKey());
+                }else{
+                    logger.logError(" ERROR FILE DOES NOT EXIST " + (String) entry.getKey());
+                }
+
             }
         }
         return null;

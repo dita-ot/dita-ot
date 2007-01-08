@@ -104,6 +104,9 @@
 <!-- DITAEXT file extension name of dita topic file -->
 <xsl:param name="DITAEXT" select="'.xml'"/>
 
+<!-- Switch to enable or disable the generation of default meta message in html header -->
+<xsl:param name="genDefMeta" select="'no'"/>
+
 <!-- =========== "GLOBAL" DECLARATIONS (see 35) =========== -->
 
 <!-- The document tree of filterfile returned by document($FILTERFILE,/)-->
@@ -680,6 +683,7 @@
  </xsl:choose>
 </xsl:template>
 <xsl:template match="*[contains(@class,' topic/ul ')]" mode="ul-fmt">
+ <br/>
  <xsl:call-template name="flagit"/>
  <xsl:call-template name="start-revflag"/>
  <xsl:call-template name="setaname"/>
@@ -696,6 +700,7 @@
 <!-- Simple List -->
 <!-- handle all levels thru browser processing -->
 <xsl:template match="*[contains(@class,' topic/sl ')]" name="topic.sl">
+<br/>
 <xsl:call-template name="flagit"/>
   <xsl:choose> <!-- draft rev mode, add div w/ rev attr value -->
    <xsl:when test="@rev and not($FILTERFILE='') and ($DRAFT='yes')">
@@ -735,6 +740,7 @@
 <!-- Updated to use a single template, use count and mod to set the list type -->
 <xsl:template match="*[contains(@class,' topic/ol ')]" name="topic.ol">
 <xsl:variable name="olcount" select="count(ancestor-or-self::*[contains(@class,' topic/ol ')])"/>
+<br/>
 <xsl:call-template name="flagit"/>
 <xsl:call-template name="start-revflag"/>
 <xsl:call-template name="setaname"/>
@@ -1798,6 +1804,37 @@
 </xsl:template>
 
 <xsl:template name="doentry">
+  <xsl:variable name="this-colname"><xsl:value-of select="@colname"/></xsl:variable>
+  <!-- Rowsep/colsep: Skip if the last row or column. Only check the entry and colsep;
+    if set higher, will already apply to the whole table. -->
+  
+  <xsl:variable name="rowsep">
+    <xsl:choose>
+      <!-- If there are more rows, keep rows on -->
+      <xsl:when test="not(../following-sibling::*)">1</xsl:when>
+      <xsl:when test="@rowsep"><xsl:value-of select="@rowsep"/></xsl:when>
+      <xsl:when test="../@rowsep"><xsl:value-of select="../@rowsep"/></xsl:when>
+      <xsl:when test="@colname and ../../../*[contains(@class,' topic/colspec ')][@colname=$this-colname]/@rowsep"><xsl:value-of select="../../../*[contains(@class,' topic/colspec ')][@colname=$this-colname]/@rowsep"/></xsl:when>
+      <xsl:otherwise>1</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <xsl:variable name="colsep">
+    <xsl:choose>
+      <!-- If there are more columns, keep rows on -->
+      <xsl:when test="not(following-sibling::*)">1</xsl:when>
+      <xsl:when test="@colsep"><xsl:value-of select="@colsep"/></xsl:when>
+      <xsl:when test="@colname and ../../../*[contains(@class,' topic/colspec ')][@colname=$this-colname]/@colsep"><xsl:value-of select="../../../*[contains(@class,' topic/colspec ')][@colname=$this-colname]/@colsep"/></xsl:when>
+      <xsl:otherwise>1</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  
+  <xsl:choose>
+    <xsl:when test="$rowsep='0' and $colsep='0'"><xsl:attribute name="class">nocellnorowborder</xsl:attribute></xsl:when>
+    <xsl:when test="$rowsep='1' and $colsep='0'"><xsl:attribute name="class">row-nocellborder</xsl:attribute></xsl:when>
+    <xsl:when test="$rowsep='0' and $colsep='1'"><xsl:attribute name="class">cell-norowborder</xsl:attribute></xsl:when>
+    <xsl:when test="$rowsep='1' and $colsep='1'"><xsl:attribute name="class">cellrowborder</xsl:attribute></xsl:when>
+  </xsl:choose>
+    
   <xsl:call-template name="commonattributes"/>
   <xsl:if test="@morerows">
     <xsl:attribute name="rowspan"> <!-- set the number of rows to span -->
@@ -1822,7 +1859,7 @@
   </xsl:if>
   <!-- If align is specified on a colspec or spanspec, that takes priority over tgroup -->
   <xsl:if test="@colname">
-    <xsl:variable name="this-colname"><xsl:value-of select="@colname"/></xsl:variable>
+    <!-- Removed $this-colname variable, because it is declared above -->
     <xsl:if test="../../../*[contains(@class,' topic/colspec ')][@colname=$this-colname][@align]">
       <xsl:attribute name="align">
         <xsl:value-of select="../../../*[contains(@class,' topic/colspec ')][@colname=$this-colname]/@align"/>
@@ -3067,19 +3104,33 @@
         <xsl:otherwise><xsl:value-of select="$fnid"/></xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
+    
     <xsl:call-template name="commonattributes"/>
-    <a>
-     <xsl:choose>
-      <xsl:when test="@id">
-       <xsl:call-template name="setid"/>
-      </xsl:when>
-      <xsl:otherwise>
-       <xsl:attribute name="name"><xsl:text>fntarg_</xsl:text><xsl:value-of select="$fnid"/></xsl:attribute>
-       <xsl:attribute name="href"><xsl:text>#fnsrc_</xsl:text><xsl:value-of select="$fnid"/></xsl:attribute>
-      </xsl:otherwise>
-     </xsl:choose>
-     <sup><xsl:value-of select="$convergedcallout"/></sup>
-    </a><xsl:text>  </xsl:text>
+    <xsl:if test="@id and not(@id='')">
+      <xsl:variable name="topicid">
+        <xsl:value-of select="ancestor::*[contains(@class,' topic/topic ')][1]/@id"/>
+      </xsl:variable>
+      <xsl:variable name="refid">
+        <xsl:text>#</xsl:text>
+        <xsl:value-of select="$topicid"/>
+        <xsl:text>/</xsl:text>
+        <xsl:value-of select="@id"/>
+      </xsl:variable>
+      <xsl:if test="key('xref',$refid)">
+        <a>
+          <xsl:choose>
+            <xsl:when test="@id">
+              <xsl:call-template name="setid"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:attribute name="name"><xsl:text>fntarg_</xsl:text><xsl:value-of select="$fnid"/></xsl:attribute>
+              <xsl:attribute name="href"><xsl:text>#fnsrc_</xsl:text><xsl:value-of select="$fnid"/></xsl:attribute>
+            </xsl:otherwise>
+          </xsl:choose>
+          <sup><xsl:value-of select="$convergedcallout"/></sup>
+        </a><xsl:text>  </xsl:text>
+      </xsl:if>
+    </xsl:if>    
     <xsl:call-template name="flagit"/>
     <xsl:call-template name="start-revflag"/>
     <xsl:apply-templates/>
@@ -3957,7 +4008,7 @@
 <xsl:key name="table" match="*[contains(@class,' topic/table ')]" use="@id"/> <!-- uses "title" -->
 <xsl:key name="li"    match="*[contains(@class,' topic/li ')]"    use="@id"/> <!-- uses "?" -->
 <xsl:key name="fn"    match="*[contains(@class,' topic/fn ')]"    use="@id"/> <!-- uses "callout?" -->
-
+<xsl:key name="xref"  match="*[contains(@class,' topic/xref ')]"  use="@href"/> <!-- find xref which refers to footnote. -->
 
 <!-- ========== FORMATTER DECLARATIONS AND GLOBALS ========== -->
 
@@ -4233,10 +4284,12 @@
   
   <!-- Output metadata that should appear in every XHTML topic -->
   <xsl:template name="generateDefaultMeta">
-    <meta name="security" content="public" /><xsl:value-of select="$newline"/>
-    <meta name="Robots" content="index,follow" /><xsl:value-of select="$newline"/>
-    <xsl:text disable-output-escaping="yes">&lt;meta http-equiv="PICS-Label" content='(PICS-1.1 "http://www.icra.org/ratingsv02.html" l gen true r (cz 1 lz 1 nz 1 oz 1 vz 1) "http://www.rsac.org/ratingsv01.html" l gen true r (n 0 s 0 v 0 l 0) "http://www.classify.org/safesurf/" l gen true r (SS~~000 1))' /></xsl:text>
-    <xsl:value-of select="$newline"/>
+    <xsl:if test="$genDefMeta='yes'">
+      <meta name="security" content="public" /><xsl:value-of select="$newline"/>
+      <meta name="Robots" content="index,follow" /><xsl:value-of select="$newline"/>
+      <xsl:text disable-output-escaping="yes">&lt;meta http-equiv="PICS-Label" content='(PICS-1.1 "http://www.icra.org/ratingsv02.html" l gen true r (cz 1 lz 1 nz 1 oz 1 vz 1) "http://www.rsac.org/ratingsv01.html" l gen true r (n 0 s 0 v 0 l 0) "http://www.classify.org/safesurf/" l gen true r (SS~~000 1))' /></xsl:text>
+      <xsl:value-of select="$newline"/>
+    </xsl:if>
   </xsl:template>
   
   <!-- Generate links to CSS files -->

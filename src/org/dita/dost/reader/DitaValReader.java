@@ -21,6 +21,7 @@ import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.Content;
 import org.dita.dost.module.ContentImpl;
 import org.dita.dost.util.Constants;
+import org.dita.dost.util.StringUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -59,8 +60,7 @@ public class DitaValReader extends AbstractXMLReader {
 		try {
 			if (System.getProperty(Constants.SAX_DRIVER_PROPERTY) == null) {
 				// The default sax driver is set to xerces's sax driver
-				System.setProperty(Constants.SAX_DRIVER_PROPERTY,
-						Constants.SAX_DRIVER_DEFAULT_CLASS);
+				StringUtils.initSaxDriver();
 			}
 			reader = XMLReaderFactory.createXMLReader();
 			reader.setContentHandler(this);

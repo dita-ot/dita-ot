@@ -28,18 +28,34 @@
                 <xsl:apply-templates select="*[contains(@class,' topic/desc ')][1]" mode="text-only"/>
             </xsl:attribute>
         </xsl:if>
-        <!--use content as linktext if it exists, otherwise use href as linktext-->
-        <xsl:variable name="linktext">
-            <xsl:apply-templates select="*[not(contains(@class,' topic/desc '))]|text()"/>
-        </xsl:variable>
+        <!-- if there is text or sub element other than desc, apply templates to them
+        otherwise, use the href as the value of link text. -->
         <xsl:choose>
-            <xsl:when test="normalize-space($linktext)">
-                <xsl:value-of select="normalize-space($linktext)"/> <!--use xref content-->
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:call-template name="href"/> <!--use href text-->
-            </xsl:otherwise>
-        </xsl:choose>
+          <xsl:when test="@type='fn'">
+            <sup>
+              <xsl:choose>
+                <xsl:when test="*[not(contains(@class,' topic/desc '))]|text()">
+                  <xsl:apply-templates select="*[not(contains(@class,' topic/desc '))]|text()"/>
+                  <!--use xref content-->
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:call-template name="href"/><!--use href text-->
+                </xsl:otherwise>
+              </xsl:choose>
+            </sup>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:choose>
+              <xsl:when test="*[not(contains(@class,' topic/desc '))]|text()">
+                <xsl:apply-templates select="*[not(contains(@class,' topic/desc '))]|text()"/>
+                <!--use xref content-->
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:call-template name="href"/><!--use href text-->
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:otherwise>
+        </xsl:choose>        
     </a>
     <xsl:call-template name="end-revflag"/>
 </xsl:template>

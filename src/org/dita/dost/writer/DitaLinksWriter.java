@@ -37,6 +37,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
 public class DitaLinksWriter extends AbstractXMLWriter {
     private String firstMatchTopic;
     private boolean hasRelatedlinksTillNow;// whether there is <related-links> in thisfile
+    private boolean hasWritten; //Eric
 
     private String indexEntries;
     private String lastMatchTopic;
@@ -50,6 +51,7 @@ public class DitaLinksWriter extends AbstractXMLWriter {
     private boolean startTopic; //whether to insert links at this topic
     private List topicIdList; // array list that is used to keep the hierarchy of topic id
     private boolean insideCDATA;
+    private ArrayList topicSpecList;  //Eric
 
 
     /**
@@ -60,22 +62,23 @@ public class DitaLinksWriter extends AbstractXMLWriter {
         topicIdList = null;
         firstMatchTopic = null;
         hasRelatedlinksTillNow = false;
+        hasWritten = false; //Eric
         indexEntries = null;
         lastMatchTopic = null;
-        level = 0;
-        matchLevel = 0;
+        level = -1; //Eric
+       // matchLevel = -1; //Eric
         matchList = null;
         needResolveEntity = false;
         output = null;
         startTopic = false;
         insideCDATA = false;
+	topicSpecList = new ArrayList(); //Eric
         logger = new DITAOTJavaLogger();
         
         try {
             if (System.getProperty(Constants.SAX_DRIVER_PROPERTY) == null){
                 //The default sax driver is set to xerces's sax driver
-                System.setProperty(Constants.SAX_DRIVER_PROPERTY,
-                        Constants.SAX_DRIVER_DEFAULT_CLASS);
+            	StringUtils.initSaxDriver();
             }
             reader = XMLReaderFactory.createXMLReader();
             reader.setContentHandler(this);
@@ -105,23 +108,43 @@ public class DitaLinksWriter extends AbstractXMLWriter {
     	}
     }
 	
-	private boolean checkLinkAtEnd(){
-		if(!hasRelatedlinksTillNow){
-			if( level == matchLevel-1){
-				return true;
-			}
-		}
-		return false;
-	}
+//Commnented out the checkLink methods so that we use the same type of logic	
+//for both DitaIndexWriter and DitaLinksWriter
+//	private boolean checkLinkAtEnd(){ //Eric
+//		if(!hasRelatedlinksTillNow){
+//			if( level == -1){ //Eric
+//				return true;
+//			}
+//		}
+//		return false;
+//	}
 	
-	private boolean checkLinkAtStart(Attributes atts){
-		if (!hasRelatedlinksTillNow && level > 1){
-				if (atts.getValue(Constants.ATTRIBUTE_NAME_CLASS).indexOf(" topic/topic ") != -1){
-					return true;
-				}
-		}
-		return false;
-	}
+//	private boolean checkLinkAtStart(Attributes atts){
+//		//if (!hasRelatedlinksTillNow && level > 1){
+//		if (!hasRelatedlinksTillNow){
+//			if (atts.getValue(Constants.ATTRIBUTE_NAME_CLASS).indexOf("topic/topic") != -1){
+//				
+////				
+////					logger.logDebug("*****"+ atts.getValue(Constants.ATTRIBUTE_NAME_CLASS) +"******");
+//					if (level > 0){
+//						level++;
+//					}else if (level < 0){ 
+//						logger.logDebug("***** LEVEL "+ level +"******");
+////						This is equivalent to initializing level and increasing the veluw by one
+//						// ---- topicLevel=0; ----
+//						// ---- topicLevel++; ----
+//						level = 1;
+//					}else {
+//						return false;
+//					}
+//					return false;  //Eric
+//					
+//				
+//				
+//			}
+//		}
+//		return true;
+//	}
     
 //  check whether the hierarchy of current node match the matchList
     private boolean checkMatch() {
@@ -166,7 +189,8 @@ public class DitaLinksWriter extends AbstractXMLWriter {
      * 
      */
     public void endDocument() throws SAXException {
-
+        //Reset the level back to it initial state once we finished processing the document.
+    	level = -1;  //Eric
         try {
             output.flush();
         } catch (Exception e) {
@@ -180,17 +204,22 @@ public class DitaLinksWriter extends AbstractXMLWriter {
      */
     public void endElement(String uri, String localName, String qName)
             throws SAXException {
-        level--;
+    	if (topicSpecList.contains(localName)){//Eric
+    		level--;
+    	}
         if (!startTopic){
-            topicIdList.remove(topicIdList.size() - 1);
+        	topicIdList.clear();
         }
         try {
-            if (checkLinkAtEnd() && startTopic) {
+             //Using the same type of logic that's used in DITAIndexWriter.
+        	 if (!hasRelatedlinksTillNow && startTopic && !hasWritten && topicSpecList.contains(localName)) { //Eric
+                 // if <prolog> don't exist
                 output.write(Constants.RELATED_LINKS_HEAD);
                 output.write(indexEntries);
                 output.write(Constants.RELATED_LINKS_END);
                 output.write(System.getProperty("line.separator"));
                 hasRelatedlinksTillNow = true;
+                 hasWritten = true;
             }
             output.write(Constants.LESS_THAN + Constants.SLASH + qName 
                     + Constants.GREATER_THAN);
@@ -297,9 +326,31 @@ public class DitaLinksWriter extends AbstractXMLWriter {
      * 
      */
     public void startDocument() throws SAXException {
-        level = 0;
+        //Reset the level to -1 before we start processing the topics. //Eric
+    	level = -1;
     }
+    private boolean hasRelatedLinks(Attributes atts){ //Eric
+		//check whether there is <prolog> in the current topic
+		//if current element is <body> and there is no <prolog> before
+		//then this topic has no <prolog> and return false
+		if (atts.getValue(Constants.ATTRIBUTE_NAME_CLASS) != null){ //Eric
+			if (!hasRelatedlinksTillNow){
+				if (atts.getValue(Constants.ATTRIBUTE_NAME_CLASS).indexOf("topic/topic") != -1){
 
+					if (level > 0){
+						level++;
+					}else if (level == -1){ 
+						level = 1;
+					}else {
+						return false;
+					}
+					return false;  //Eric
+					
+				}
+			}
+		}
+		return true;		
+	}
     /**
      * @see org.xml.sax.ContentHandler#startElement(java.lang.String, java.lang.String, java.lang.String, org.xml.sax.Attributes)
      * 
@@ -307,67 +358,102 @@ public class DitaLinksWriter extends AbstractXMLWriter {
     public void startElement(String uri, String localName, String qName,
             Attributes atts) throws SAXException {
 		int attsLen = atts.getLength();
-        level++;
-        
-        
-        try {
-            if (checkLinkAtStart(atts) && startTopic) {
-                // if <related-links> don't exist
-            	//
-            	// Commented by Charlie at 10/21/2005 for the "related-links
-            	// position not correct" problem
-            	//
-                //output.write(Constants.RELATED_LINKS_HEAD);
-                //output.write(indexEntries);
-                //output.write(Constants.RELATED_LINKS_END);
-                //hasRelatedlinksTillNow = true;          
-            	
-            	matchLevel = level;
-            }
-            if ( !startTopic && !Constants.ELEMENT_NAME_DITA.equalsIgnoreCase(qName) ){
-                if (atts.getValue(Constants.ATTRIBUTE_NAME_ID) != null){
-                    topicIdList.add(atts.getValue(Constants.ATTRIBUTE_NAME_ID));
-                }else{
-                    topicIdList.add("null");
-                }
-                if (topicIdList.size() == matchList.size()){
-                    startTopic = checkMatch();
-                    
-                    // added by Charlie at 10/21/2005
-                    if (startTopic) {
-                    	matchLevel = level;
-                    }
-                }
-            }
-             output.write(Constants.LESS_THAN + qName);
-            for (int i = 0; i < attsLen; i++) {
-                String attQName = atts.getQName(i);
-                String attValue;
-                attValue = atts.getValue(i);
+		// level++; //Eric
 
-                // replace '&' with '&amp;'
-				//if (attValue.indexOf('&') > 0) {
-					//attValue = StringUtils.replaceAll(attValue, "&", "&amp;");
-				//}
-                attValue = StringUtils.escapeXML(attValue);
-				
-                output.write(new StringBuffer().append(Constants.STRING_BLANK)
-                        .append(attQName).append(Constants.EQUAL).append(Constants.QUOTATION)
-                		.append(attValue).append(Constants.QUOTATION).toString());
-            }
-            output.write(Constants.GREATER_THAN);
-            if (atts.getValue(Constants.ATTRIBUTE_NAME_CLASS)
-                    .indexOf(" topic/related-links ") != -1
-                    && startTopic) {
-                hasRelatedlinksTillNow = true;
-                output.write(indexEntries);
-            }
-         } catch (Exception e) {
-            if (atts.getValue(Constants.ATTRIBUTE_NAME_CLASS) != null){
-            	logger.logException(e);
-            }//prevent printing stack trace when meeting <dita> which has no class attribute
-        }
-    }
+		//only care about adding releated links to topics. 
+		if (atts.getValue(Constants.ATTRIBUTE_NAME_CLASS) != null) {// Eric
+
+			if (atts.getValue(Constants.ATTRIBUTE_NAME_CLASS).indexOf(
+					"topic/topic") != -1) {
+
+				if (!topicSpecList.contains(localName)) {
+					topicSpecList.add(localName);
+				}
+
+				if (level > 0) {
+
+					if (!hasRelatedLinks(atts) && startTopic && !hasWritten) { // Eric
+
+						// if <related-links> don't exist
+						try {
+							output.write(Constants.RELATED_LINKS_HEAD);
+							output.write(indexEntries);
+							output.write(Constants.RELATED_LINKS_END);
+							output.write(System.getProperty("line.separator"));
+						} catch (Exception e) {
+							if (atts.getValue(Constants.ATTRIBUTE_NAME_CLASS) != null) {
+								logger.logException(e);
+							}
+							hasRelatedlinksTillNow = true;
+							hasWritten = true;
+						}
+					}
+
+				} else if (level == -1) {
+					//If the level is in the initialized state and we have hit our first
+					//topic element. This is equivalient to the following steps.
+					//level = 0;
+					//level++;
+					level = 1;
+					
+				} else {
+					level++;
+				}
+			}
+		}
+		try {  //Eric
+
+			// level++;;
+			
+			if (!startTopic
+					&& !Constants.ELEMENT_NAME_DITA.equalsIgnoreCase(qName)) {
+				if (atts.getValue(Constants.ATTRIBUTE_NAME_ID) != null) {
+					topicIdList.add(atts.getValue(Constants.ATTRIBUTE_NAME_ID));
+				} else {
+					topicIdList.add("null");
+				}
+				if (topicIdList.size() == matchList.size()) {
+					startTopic = checkMatch();
+
+					// added by Charlie at 10/21/2005
+					// if (startTopic) {
+					// matchLevel = level;
+					// }
+				}
+			}
+			output.write(Constants.LESS_THAN + qName);
+			for (int i = 0; i < attsLen; i++) {
+				String attQName = atts.getQName(i);
+				String attValue;
+				attValue = atts.getValue(i);
+
+				// replace '&' with '&amp;'
+				// if (attValue.indexOf('&') > 0) {
+				// attValue = StringUtils.replaceAll(attValue, "&", "&amp;");
+				// }
+				attValue = StringUtils.escapeXML(attValue);
+
+				output.write(new StringBuffer().append(Constants.STRING_BLANK)
+						.append(attQName).append(Constants.EQUAL).append(
+								Constants.QUOTATION).append(attValue).append(
+								Constants.QUOTATION).toString());  //Eric
+			}
+			output.write(Constants.GREATER_THAN);
+			if (atts.getValue(Constants.ATTRIBUTE_NAME_CLASS).indexOf( //Eric
+					" topic/related-links ") != -1
+					&& startTopic) {
+				hasRelatedlinksTillNow = true;
+				hasWritten = true;  //Eric
+				output.write(indexEntries);
+			}
+
+		} catch (Exception e) {
+			if (atts.getValue(Constants.ATTRIBUTE_NAME_CLASS) != null) {
+				logger.logException(e);
+			}// prevent printing stack trace when meeting <dita> which has no
+				// class attribute
+		}
+	}
 
 	/**
      * @see org.xml.sax.ext.LexicalHandler#startEntity(java.lang.String)
@@ -403,12 +489,12 @@ public class DitaLinksWriter extends AbstractXMLWriter {
                 topic = filename.substring(filename.lastIndexOf(Constants.SHARP)+1);
                 setMatch(topic);
                 startTopic = false;
-                matchLevel = matchList.size();
+                //matchLevel = matchList.size(); //Eric
             }else{
                 file = filename;
                 matchList = null;
                 startTopic = true;
-                matchLevel = 1;
+                //matchLevel = 1; //Eric
             }
             
             // ignore in-exists file
@@ -418,6 +504,7 @@ public class DitaLinksWriter extends AbstractXMLWriter {
             
         	needResolveEntity = true;
             hasRelatedlinksTillNow = false;
+            hasWritten = false;
             topicIdList = new ArrayList(Constants.INT_16);
             inputFile = new File(file);
             outputFile = new File(file + Constants.FILE_EXTENSION_TEMP);

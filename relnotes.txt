@@ -1,4 +1,42 @@
 (c) Copyright IBM Corp. 2004, 2006 All Rights Reserved.
+     DITA OT release 1.3.1
+     
+     Release 1.3.1 is a maintenance release to fix defects and make patches 
+     based on release 1.3.
+     
+     [15 SF Bugs Fixed]
+       1.SF Bug 1385642 	docbook/topic2db.xsl - shortdesc 
+       2.SF Bug 1528638 	wordrtf does not correctly number steps      
+       3.SF Bug 1562518  	Flag is confusing when a list is mixed with text 
+       4.SF Bug 1563665  	Should use CSS to honor rowsep and colsep in table entries 
+       5.SF Bug 1567117  	Xref to footnote is not resolved correctly 
+       6.SF Bug 1569671  	<reltable> in nested map creates bogus TOC entries 
+       7.SF Bug 1573996	    Plugins do not work in plugins directory 
+       8.SF Bug 1574011	    Spaces in a file name prevent XHTML output 
+       9.SF Bug 1584186 	Bookmap 1.1: <title> element duplicated in mappull 
+      10.SF Bug 1588039	    Conref domain checking is sub-par 
+      11.SF Bug 1588624	    OT v1.3 map2hhc.xsl error 
+      12.SF Bug 1597444 	Java topicmerge breaks when text contains less-than 
+      13.SF Bug 1597473	    Nothing references common.css 
+      14.SF Bug 1598109	    Java topicmerge does not rewrite image/@href 
+      15.SF Bug 1598230	    jhindexer of JavaHelp breaks Search Index for DITAOT content 
+     
+     Note: SourceForge bugs, patches, and RFEs listed above can be found in 
+     SourceForge Bugs, Patches, and RFE tracker pages: 
+
+          Bugs tracker: 
+
+          http://sourceforge.net/tracker/?group_id=132728&atid=725074
+
+          Patches tracker: 
+
+          http://sourceforge.net/tracker/?group_id=132728&atid=725076
+
+          RFE tracker: 
+
+          http://sourceforge.net/tracker/?group_id=132728&atid=725077
+
+====================================================================================
      DITA OT release 1.3
 
      Release 1.3 is a major release to add new functions, fulfill new 

@@ -9,6 +9,28 @@
   <shortdesc>This document lists major changes and new features by release.</shortdesc>
   <body>
     <section>
+      <title>DITA OT release 1.3.1</title>
+      <p>Release 1.3.1 is a maintenance release to fix defects and make patches based on release 1.3.</p>
+      <p>[15 SF Bugs Fixed]</p>
+      <ol>
+        <li>SF Bug 1385642 docbook/topic2db.xsl - shortdesc</li>
+        <li>SF Bug 1528638 wordrtf does not correctly number steps</li>
+        <li>SF Bug 1562518 Flag is confusing when a list is mixed with text</li>
+        <li>SF Bug 1563665 Should use CSS to honor rowsep and colsep in table entries</li>
+        <li>SF Bug 1567117 Xref to footnote is not resolved correctly </li>
+        <li>SF Bug 1569671 &lt;reltable&gt; in nested map creates bogus TOC entries</li>
+        <li>SF Bug 1573996 Plugins do not work in plugins directory</li>
+        <li>SF Bug 1574011 Spaces in a file name prevent XHTML output</li>
+        <li>SF Bug 1584186 Bookmap 1.1: &lt;title&gt; element duplicated in mappull</li>
+        <li>SF Bug 1588039 Conref domain checking is sub-par</li>
+        <li>SF Bug 1588624 OT v1.3 map2hhc.xsl error</li>
+        <li>SF Bug 1597444 Java topicmerge breaks when text contains less-than</li>
+        <li>SF Bug 1597473 Nothing references common.css</li>
+        <li>SF Bug 1598109 Java topicmerge does not rewrite image/@href</li>
+        <li>SF Bug 1598230 jhindexer of JavaHelp breaks Search Index for DITAOT content</li>
+      </ol>
+    </section>
+    <section>
       <title>DITA OT release 1.3</title>
       <p><b>OASIS DITA 1.1 support</b></p>
       <p>Things to know about OASIS DITA 1.1 support in this release:</p>

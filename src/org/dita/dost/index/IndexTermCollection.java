@@ -9,6 +9,7 @@
  */
 package org.dita.dost.index;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -20,6 +21,7 @@ import org.dita.dost.module.ContentImpl;
 import org.dita.dost.util.Constants;
 import org.dita.dost.writer.AbstractWriter;
 import org.dita.dost.writer.CHMIndexWriter;
+import org.dita.dost.writer.EclipseIndexWriter;
 import org.dita.dost.writer.JavaHelpIndexWriter;
 
 /**
@@ -153,11 +155,25 @@ public class IndexTermCollection {
 		} else if (Constants.INDEX_TYPE_JAVAHELP.equalsIgnoreCase(indexType)) {
 			indexWriter = new JavaHelpIndexWriter();			
 			buff.append("_index.xml");			
+		}else if (Constants.INDEX_TYPE_ECLIPSEHELP.equalsIgnoreCase(indexType)) { 
+			indexWriter = new EclipseIndexWriter();		
+			//We need to get rid of the ditamap or topic name in the URL
+		    //so we can create index.xml file for Eclipse plug-ins.
+			//int filepath = buff.lastIndexOf("\\");
+			File indexDir = new File(buff.toString()).getParentFile();
+			//buff.delete(filepath, buff.length());
+			((EclipseIndexWriter)indexWriter).setFilePath(indexDir.getAbsolutePath());
+			//buff.insert(filepath, "\\index.xml");
+			buff = new StringBuffer(new File(indexDir, "index.xml").getAbsolutePath());
 		}
 		
-		content.setCollection(this.getTermList());
-		indexWriter.setContent(content);
-		indexWriter.write(buff.toString());
+		//if (!getTermList().isEmpty()){
+		//Even if there is no term in the list create an empty index file
+		//otherwise the compiler will report error.
+			content.setCollection(this.getTermList());
+			indexWriter.setContent(content);
+			indexWriter.write(buff.toString());
+		//}
 	}
 
 	/**

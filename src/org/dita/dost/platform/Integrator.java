@@ -20,6 +20,7 @@ import java.util.Set;
 import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.util.Constants;
+import org.dita.dost.util.StringUtils;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
@@ -70,7 +71,7 @@ public class Integrator {
 		}
 		
 		demoDir = new File(ditaDir + File.separatorChar + "demo");
-		pluginDir = new File(ditaDir + File.separatorChar + "plugin");
+		pluginDir = new File(ditaDir + File.separatorChar + "plugins");
 		demoFiles = demoDir.listFiles();
 		pluginFiles = pluginDir.listFiles();
 		
@@ -198,29 +199,13 @@ public class Integrator {
 		ditaDir = null;
 		try {
             if (System.getProperty(Constants.SAX_DRIVER_PROPERTY) == null){
-                initSaxDriver();
+                StringUtils.initSaxDriver();
             }
             reader = XMLReaderFactory.createXMLReader();            
         } catch (Exception e) {
         	logger.logException(e);
         }
-	}
-	
-	/**
-	 * Init sax driver info
-	 */
-	private static void initSaxDriver(){
-		//The default sax driver is set to xerces's sax driver
-    	if(System.getProperty("java.vendor").toLowerCase().indexOf("sun")==-1){
-        System.setProperty(Constants.SAX_DRIVER_PROPERTY,Constants.SAX_DRIVER_DEFAULT_CLASS);
-    	}else{
-    		if(System.getProperty("java.version").startsWith("1.5")){
-    			System.setProperty(Constants.SAX_DRIVER_PROPERTY,"com.sun.org.apache.xerces.internal.parsers.SAXParser");
-    		}else{
-    			System.setProperty(Constants.SAX_DRIVER_PROPERTY,"org.apache.crimson.parser.XMLReaderImpl");
-    		}
-    	}
-	}
+	}	
 
 	/**
 	 * Return the basedir

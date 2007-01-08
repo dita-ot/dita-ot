@@ -224,10 +224,16 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 		String msg = null;
 		Properties params = new Properties();
 		params.put("%1", currentFile);		
+		;
 		
 		try {
-			reader.setCurrentDir(new File(currentFile).getParent());
-			reader.parse(fileToParse);
+			if (FileUtils.isValidTarget(currentFile.toLowerCase()))
+			{
+				reader.setCurrentDir(new File(currentFile).getParent());
+				reader.parse(fileToParse);
+			}else{
+				javaLogger.logWarn("Input file name is not valid DITA file name.");
+			}
 
 			// don't put it into dita.list if it is invalid
 			if (reader.isValidInput()) {

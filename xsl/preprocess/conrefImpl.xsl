@@ -18,6 +18,8 @@
 <xsl:param name="DBG" select="no"/>
 <xsl:param name="FILEREF">file://</xsl:param>
 
+<xsl:variable name="ORIGINAL-DOMAINS" select="/*/@domains|/dita/*[@domains][1]/@domains"/>
+
 <xsl:template match="/">
     <xsl:apply-templates>
       <xsl:with-param name="conref-ids" select="' '"/>
@@ -81,6 +83,8 @@
      of the referencing topic. If it is equal, they allow the same elements. If the target
      is a subset, it allows fewer elements, and is valid in the source. If the target is a
      superset, it may contain elements that are not valid in the source, so do not allow. -->
+<!-- 20061031: This check is no longer needed. Keep the template in case an override uses it,
+               but remove any calls to this template from this file. -->
 <xsl:template name="compareDomains">
   <xsl:param name="sourceTopic"/>
   <xsl:param name="targetTopic"/>
@@ -206,13 +210,6 @@
         <xsl:when test="$topicpos='samefile'">
           <xsl:choose>
             <xsl:when test="//*[local-name()=$element][@id=$elemid][ancestor::*[contains(@class, ' topic/topic ')][1][@id=$topicid]]">
-              <xsl:variable name="testDomains">
-                <xsl:call-template name="compareDomains">
-                    <xsl:with-param name="sourceTopic" select="$domains"/>
-                    <xsl:with-param name="targetTopic" select="//*[contains(@class, ' topic/topic ')][@id=$topicid][1]/@domains"/>
-                </xsl:call-template>
-              </xsl:variable>
-              <xsl:if test="$testDomains='match'">
                   <xsl:choose>
                       <xsl:when test="not($source-element='')">
                            <xsl:apply-templates select="(//*[local-name()=$element][@id=$elemid][ancestor::*[contains(@class, ' topic/topic ')][1][@id=$topicid]])[1]" mode="conref-target">
@@ -240,7 +237,6 @@
                 <xsl:if test="(//*[local-name()=$element][@id=$elemid][ancestor::*[contains(@class, ' topic/topic ')][1][@id=$topicid]])[2]">
                   <xsl:call-template name="duplicateConrefTarget"/>
                 </xsl:if>
-              </xsl:if>
             </xsl:when>
             <xsl:otherwise><xsl:call-template name="missing-target-error"/></xsl:otherwise>
           </xsl:choose>
@@ -248,13 +244,6 @@
         <xsl:when test="$topicpos='otherfile'">
           <xsl:choose>
             <xsl:when test="document($file,/)//*[local-name()=$element][@id=$elemid][ancestor::*[contains(@class, ' topic/topic ')][1][@id=$topicid]]">
-              <xsl:variable name="testDomains">
-                <xsl:call-template name="compareDomains">
-                  <xsl:with-param name="sourceTopic" select="$domains"/>
-                  <xsl:with-param name="targetTopic" select="document($file,/)//*[contains(@class, ' topic/topic ')][@id=$topicid][1]/@domains"/>
-                </xsl:call-template>
-              </xsl:variable>
-              <xsl:if test="$testDomains='match'">
                   <xsl:choose>
                       <xsl:when test="not($source-element='')">
                            <xsl:apply-templates select="(document($file,/)//*[local-name()=$element][@id=$elemid][ancestor::*[contains(@class, ' topic/topic ')][1][@id=$topicid]])[1]" mode="conref-target">
@@ -284,7 +273,6 @@
                 <xsl:if test="(document($file,/)//*[local-name()=$element][@id=$elemid][ancestor::*[contains(@class, ' topic/topic ')][1][@id=$topicid]])[2]">
                   <xsl:call-template name="duplicateConrefTarget"/>
                 </xsl:if>
-              </xsl:if>
             </xsl:when>
             <xsl:otherwise><xsl:call-template name="missing-target-error"/></xsl:otherwise>
           </xsl:choose>
@@ -299,13 +287,6 @@
         <xsl:when test="$topicpos='samefile'">
           <xsl:choose>
             <xsl:when test="//*[contains(@class, ' topic/topic ')][@id=$topicid][local-name()=$element]">
-              <xsl:variable name="testDomains">
-                <xsl:call-template name="compareDomains">
-                  <xsl:with-param name="sourceTopic" select="$domains"/>
-                  <xsl:with-param name="targetTopic" select="//*[contains(@class, ' topic/topic ')][@id=$topicid][1][local-name()=$element]/@domains"/>
-                </xsl:call-template>
-              </xsl:variable>
-              <xsl:if test="$testDomains='match'">
                   <xsl:choose>
                       <xsl:when test="not($source-element='')">
                            <xsl:apply-templates select="(//*[contains(@class, ' topic/topic ')][@id=$topicid][local-name()=$element])[1]" mode="conref-target">
@@ -332,7 +313,6 @@
                 <xsl:if test="(//*[contains(@class, ' topic/topic ')][@id=$topicid][local-name()=$element])[2]">
                   <xsl:call-template name="duplicateConrefTarget"/>
                 </xsl:if>
-              </xsl:if>
             </xsl:when>
             <xsl:otherwise><xsl:call-template name="missing-target-error"/></xsl:otherwise>
           </xsl:choose>
@@ -340,13 +320,6 @@
         <xsl:when test="$topicpos='otherfile'">
           <xsl:choose>
             <xsl:when test="document($file,/)//*[contains(@class, ' topic/topic ')][@id=$topicid][local-name()=$element]">
-              <xsl:variable name="testDomains">
-                <xsl:call-template name="compareDomains">
-                  <xsl:with-param name="sourceTopic" select="$domains"/>
-                  <xsl:with-param name="targetTopic" select="document($file,/)//*[contains(@class, ' topic/topic ')][@id=$topicid][1][local-name()=$element]/@domains"/>
-                </xsl:call-template>
-              </xsl:variable>
-              <xsl:if test="$testDomains='match'">
                   <xsl:choose>
                       <xsl:when test="not($source-element='')">
                            <xsl:apply-templates select="(document($file,/)//*[contains(@class, ' topic/topic ')][@id=$topicid][local-name()=$element])[1]" mode="conref-target">
@@ -376,7 +349,6 @@
                 <xsl:if test="(document($file,/)//*[contains(@class, ' topic/topic ')][@id=$topicid][local-name()=$element])[2]">
                   <xsl:call-template name="duplicateConrefTarget"/>
                 </xsl:if>
-              </xsl:if>
             </xsl:when>
             <xsl:otherwise><xsl:call-template name="missing-target-error"/></xsl:otherwise>
           </xsl:choose>
@@ -384,13 +356,6 @@
         <xsl:when test="$topicpos='firstinfile'">
           <xsl:choose>
             <xsl:when test="document($file,/)//*[contains(@class, ' topic/topic ')][1][local-name()=$element]">
-              <xsl:variable name="testDomains">
-                <xsl:call-template name="compareDomains">
-                  <xsl:with-param name="sourceTopic" select="$domains"/>
-                  <xsl:with-param name="targetTopic" select="document($file,/)//*[contains(@class, ' topic/topic ')][1][local-name()=$element]/@domains"/>
-                </xsl:call-template>
-              </xsl:variable>
-              <xsl:if test="$testDomains='match'">
                   <xsl:choose>
                       <xsl:when test="not($source-element='')">
                            <xsl:apply-templates select="(document($file,/)//*[contains(@class, ' topic/topic ')][1][local-name()=$element])[1]" mode="conref-target">
@@ -420,7 +385,6 @@
                 <xsl:if test="(document($file,/)//*[contains(@class, ' topic/topic ')][1][local-name()=$element])[2]">
                   <xsl:call-template name="duplicateConrefTarget"/>
                 </xsl:if>
-              </xsl:if>
             </xsl:when>
             <xsl:otherwise><xsl:call-template name="missing-target-error"/></xsl:otherwise>
           </xsl:choose>
@@ -466,13 +430,6 @@
         <xsl:when test="$topicpos='otherfile'">
           <xsl:choose>
             <xsl:when test="document($file,/)//*[contains(@class, ' map/topicref ')][@id=$topicid][local-name()=$element]">
-              <xsl:variable name="testDomains">
-                <xsl:call-template name="compareDomains">
-                  <xsl:with-param name="sourceTopic" select="$domains"/>
-                  <xsl:with-param name="targetTopic" select="document($file,/)//*[contains(@class, ' map/map ')]/@domains"/>
-                </xsl:call-template>
-              </xsl:variable>
-              <xsl:if test="$testDomains='match'">
                 <xsl:choose>
                   <xsl:when test="not($source-element='')">
                     <xsl:apply-templates select="(document($file,/)//*[contains(@class, ' map/topicref ')][@id=$topicid][local-name()=$element])[1]" mode="conref-target">
@@ -498,7 +455,6 @@
                 </xsl:choose>
                 <xsl:if test="(document($file,/)//*[contains(@class, ' map/topicref ')][@id=$topicid][local-name()=$element])[2]">
                   <xsl:call-template name="duplicateConrefTarget"/>
-                </xsl:if>
               </xsl:if>
             </xsl:when>
             <xsl:otherwise><xsl:call-template name="missing-target-error"/></xsl:otherwise>
@@ -550,13 +506,6 @@
         <xsl:when test="$topicpos='otherfile'">
           <xsl:choose>
             <xsl:when test="document($file,/)//*[@id=$topicid][local-name()=$element]">
-              <xsl:variable name="testDomains">
-                <xsl:call-template name="compareDomains">
-                  <xsl:with-param name="sourceTopic" select="$domains"/>
-                  <xsl:with-param name="targetTopic" select="document($file,/)//*[contains(@class, ' map/map ')]/@domains"/>
-                </xsl:call-template>
-              </xsl:variable>
-              <xsl:if test="$testDomains='match'">
                 <xsl:choose>
                   <xsl:when test="not($source-element='')">
                     <xsl:apply-templates select="(document($file,/)//*[@id=$topicid][local-name()=$element])[1]" mode="conref-target">
@@ -582,7 +531,6 @@
                 </xsl:choose>
                 <xsl:if test="(document($file,/)//*[@id=$topicid][local-name()=$element])[2]">
                   <xsl:call-template name="duplicateConrefTarget"/>
-                </xsl:if>
               </xsl:if>
             </xsl:when>
             <xsl:otherwise><xsl:call-template name="missing-target-error"/></xsl:otherwise>
@@ -826,6 +774,78 @@
 			<xsl:value-of select="$conref-gen-id"/>
 		</xsl:when>
 	</xsl:choose>
+</xsl:template>
+
+<!-- 20061018: This template generalizes domain elements, if necessary,
+               based on @domains on the original file.
+     Example: Element <b class="+ topic/ph hi-d/b ">, domains="(topic hi-d)"
+         Result: The "hi-d" domain is valid, leave <b> as <b>
+     Example: Element <b class="+ topic/ph hi-d/b ">, domains="(topic pr-d)"
+         Result: The "hi-d" domain is NOT valid, generalize <b> to <ph>
+     Example: Element <light-b class="+ topic/ph hi-d/b shade/light-b ">, domains="(topic hi-d)"
+         Result: The "shade" domain is NOT valid, but "hi-d" is, so generalize <light-b> to <b>
+-->
+<xsl:template name="generalize-domain">
+  <xsl:param name="class" select="normalize-space(substring-after(@class,'+'))"/>
+  <xsl:variable name="evaluateNext">
+    <xsl:if test="substring-after($class,' ')!=''">
+      <xsl:call-template name="generalize-domain">
+        <xsl:with-param name="class" select="substring-after($class,' ')"/>
+      </xsl:call-template>
+    </xsl:if>
+  </xsl:variable>
+  <xsl:choose>
+    <xsl:when test="$evaluateNext!=''"><xsl:value-of select="$evaluateNext"/></xsl:when>
+    <xsl:otherwise>
+      <xsl:variable name="testModule" select="substring-before($class,'/')"/>
+      <xsl:variable name="testElement">
+        <xsl:choose>
+          <xsl:when test="contains($class,' ')"><xsl:value-of select="substring-after(substring-before($class,' '),'/')"/></xsl:when>
+          <xsl:otherwise><xsl:value-of select="substring-after($class,'/')"/></xsl:otherwise>
+        </xsl:choose>
+      </xsl:variable>
+      <xsl:choose>
+        <xsl:when test="contains($ORIGINAL-DOMAINS,concat(' ',$testModule,')'))">
+          <xsl:value-of select="$testElement"/>
+        </xsl:when>
+        <xsl:when test="$testModule='topic' or $testElement='map'"><xsl:value-of select="$testElement"/></xsl:when>
+      </xsl:choose>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+<!-- Match any domain element. This compares @domains in the current topic to @domains in the
+     original topic:
+     * If the domains match (as it would if all in the same topic), the element name stays the same
+     * Otherwise, call generalize-domains. This ensures the element is valid in the result doc. -->
+<xsl:template match="*[starts-with(@class,'+ ')]">
+  <xsl:param name="current-relative-path"/>
+  <xsl:param name="conref-filename"/>
+  <xsl:param name="topicid"/>
+  <xsl:param name="elemid"/>
+  <xsl:param name="WORKDIR">
+    <xsl:apply-templates select="/processing-instruction()" mode="get-work-dir"/>
+  </xsl:param>
+  <xsl:param name="conref-source-topicid"/>
+  <xsl:param name="conref-ids"/>
+  <xsl:variable name="domains" select="/*/@domains|/dita/*[@domains][1]/@domains"/>
+  <xsl:variable name="generalizedName">
+    <xsl:choose>
+      <xsl:when test="$domains=$ORIGINAL-DOMAINS"><xsl:value-of select="name()"/></xsl:when>
+      <xsl:otherwise><xsl:call-template name="generalize-domain"/></xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <xsl:element name="{$generalizedName}">
+    <xsl:apply-templates select="*|@*|comment()|processing-instruction()|text()">
+      <xsl:with-param name="current-relative-path"><xsl:value-of select="$current-relative-path"/></xsl:with-param>
+        <xsl:with-param name="conref-filename"><xsl:value-of select="$conref-filename"/></xsl:with-param>
+        <xsl:with-param name="topicid"><xsl:value-of select="$topicid"/></xsl:with-param>
+        <xsl:with-param name="elemid"><xsl:value-of select="$elemid"/></xsl:with-param>
+        <xsl:with-param name="WORKDIR"><xsl:value-of select="$WORKDIR"/></xsl:with-param>
+        <xsl:with-param name="conref-source-topicid"><xsl:value-of select="$conref-source-topicid"/></xsl:with-param>
+        <xsl:with-param name="conref-ids" select="$conref-ids"/>
+    </xsl:apply-templates>
+  </xsl:element>
 </xsl:template>
   
 <!--copy everything else-->

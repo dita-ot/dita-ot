@@ -15,6 +15,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.StringTokenizer;
 
+import org.dita.dost.log.DITAOTJavaLogger;
+
 /**
  * String relevant utilities.
  * 
@@ -272,5 +274,35 @@ public class StringUtils {
 				return target + value;
 			}
 		}
+	}
+	
+	/**
+	 * Init sax driver info
+	 */
+	public static void initSaxDriver(){
+		//The default sax driver is set to xerces's sax driver
+		DITAOTJavaLogger logger = new DITAOTJavaLogger();
+		try {
+			Class.forName(Constants.SAX_DRIVER_DEFAULT_CLASS);
+			System.setProperty(Constants.SAX_DRIVER_PROPERTY,Constants.SAX_DRIVER_DEFAULT_CLASS);
+			logger.logInfo("Using XERCES.");
+		} catch (ClassNotFoundException e){
+			try{
+				Class.forName(Constants.SAX_DRIVER_SUN_HACK_CLASS);
+				System.setProperty(Constants.SAX_DRIVER_PROPERTY,Constants.SAX_DRIVER_SUN_HACK_CLASS);
+				logger.logInfo("Using XERCES in SUN JDK 1.5");
+			}catch (ClassNotFoundException ex){
+				try {
+					Class.forName(Constants.SAX_DRIVER_CRIMSON_CLASS);
+					System.setProperty(Constants.SAX_DRIVER_PROPERTY,Constants.SAX_DRIVER_CRIMSON_CLASS);
+					logger.logInfo("Using CRIMSON");
+				}catch (ClassNotFoundException exc){
+					logger.logException(e);
+					logger.logException(ex);
+					logger.logException(exc);
+				}
+			}
+		}
+		
 	}
 }

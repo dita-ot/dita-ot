@@ -61,6 +61,16 @@
           </xsl:attribute>
         </xsl:element>
       </xsl:element>
+      <xsl:element name="extension">
+        <xsl:attribute name="point">
+          <xsl:text>org.eclipse.help.index</xsl:text>
+        </xsl:attribute>
+        <xsl:element name="index">
+          <xsl:attribute name="file">
+            <xsl:text>index.xml</xsl:text>
+          </xsl:attribute>
+        </xsl:element>
+      </xsl:element>
       
     </xsl:element>
   </xsl:template>

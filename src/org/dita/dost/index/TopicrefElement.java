@@ -24,6 +24,7 @@ public class TopicrefElement {
 
     /** The format attribute of the topicref element */
     private String format = null;
+    private String navtitle = null;
 
     /**
      * Default constructor.
@@ -78,5 +79,25 @@ public class TopicrefElement {
         return (href != null && format != null && !Constants.ATTRIBUTE_FORMAT_VALUE_DITA
                 .equals(format));
     }
+    
+    /**
+     * Set navtitle attribute with the given value.
+     * 
+     * @param aNavtitle
+     *            The navtitle to set.
+     */
+    public void setNavTitle (String aNavtitle){
+    	navtitle = aNavtitle;
+    }
+    
+    /**
+     * Get navtitle attribute.
+     * 
+     * @return Returns the navtitle.
+     */
+    public String getNavTitle(){
+    	return navtitle;
+    }
+
 
 }

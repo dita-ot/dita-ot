@@ -168,6 +168,11 @@
     <response>Please check whether you have set output for topic merge correctly.</response>
   </message>
   
+  <message id="DOTJ027W" type="WARN">
+    <reason>The file '%1' contains space in its file name. This file might not be transformed.</reason>
+    <response>Remove the space in the file name and restart the transformation.</response>
+  </message>
+  
   <!-- End of Java Messages -->
     
   <!-- Begin of XSL Messages -->  

@@ -701,7 +701,7 @@
       <!--if there is an element id, construct a partial classvalue and just use that-->
       <xsl:when
           test="contains(@href,'#') and contains(substring-after(@href,'#'),'/')">/<xsl:value-of select="$type"/>
-        <xsl:text/>
+        <xsl:text> </xsl:text>
       </xsl:when>
       <!-- otherwise there's a type but no element id, so construct a root element classvalue, eg task/task or concept/concept-->
       <xsl:otherwise>
@@ -1278,7 +1278,7 @@
     </xsl:variable>
     <xsl:variable name="convergedcallout">
       <xsl:choose>
-        <xsl:when test="string-length($callout)&gt;'0'">
+        <xsl:when test="string-length($callout)&gt;0">
           <xsl:value-of select="$callout"/>
         </xsl:when>
         <xsl:otherwise>

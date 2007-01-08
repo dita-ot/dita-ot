@@ -135,10 +135,12 @@ public class DitamapIndexTermReader extends AbstractXMLReader {
 			String href = attributes.getValue(Constants.ATTRIBUTE_NAME_HREF);
 			String format = attributes
 					.getValue(Constants.ATTRIBUTE_NAME_FORMAT);
+			String navtitle =  attributes.getValue(Constants.ATTRIBUTE_NAME_NAVTITLE);
 			TopicrefElement topicref = new TopicrefElement();
 
 			topicref.setHref(href);
 			topicref.setFormat(format);
+			topicref.setNavTitle(navtitle);
 			elementStack.push(topicref);
 
 			return;
@@ -176,8 +178,13 @@ public class DitamapIndexTermReader extends AbstractXMLReader {
 					targetName = targetName.substring(targetName
 							.lastIndexOf(Constants.BACK_SLASH) + 1);
 				}
+				
+				if (topicref.getNavTitle() != null){
+					target.setTargetName(topicref.getNavTitle());
+				}else {
+					target.setTargetName("");
+				}
 
-				target.setTargetName(targetName);
 				target.setTargetURI(targetURI);
 				indexTerm.addTarget(target);
 
@@ -200,6 +207,9 @@ public class DitamapIndexTermReader extends AbstractXMLReader {
 		}
 
 		if (elementStack.peek() instanceof TopicrefElement) {
+			if (!FileUtils.isHTMLFile(((TopicrefElement) elementStack.peek()).getHref())){ //Eric
+				return false;
+			}
 			return ((TopicrefElement) elementStack.peek()).needExtractTerm();
 		}
 

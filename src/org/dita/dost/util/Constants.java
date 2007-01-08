@@ -87,7 +87,8 @@ public abstract class Constants {
      * Constants for attribute names in dita files.
      */
     public static final String ATTRIBUTE_NAME_CONREF = "conref";
-    public static final String ATTRIBUTE_NAME_HREF = "href";
+    public static final String ATTRIBUTE_NAME_HREF = "href";    
+    public static final String ATTRIBUTE_NAME_NAVTITLE = "navtitle";
     public static final String ATTRIBUTE_NAME_FORMAT = "format";
     public static final String ATTRIBUTE_NAME_ATT = "att";
     public static final String ATTRIBUTE_NAME_VAL = "val";
@@ -112,7 +113,8 @@ public abstract class Constants {
      * Constants for index type. 
      */
     public static final String INDEX_TYPE_JAVAHELP = "javahelp";
-    public static final String INDEX_TYPE_HTMLHELP = "htmlhelp";    
+    public static final String INDEX_TYPE_HTMLHELP = "htmlhelp"; 
+    public static final String INDEX_TYPE_ECLIPSEHELP = "eclipsehelp";
 
     /** 
      * Constant for generated property file name. 
@@ -202,7 +204,9 @@ public abstract class Constants {
     public static final String LANGUAGE_EN = "en";    
     public static final String UTF8 = "UTF-8";
     public static final String SAX_DRIVER_PROPERTY = "org.xml.sax.driver";    
-    public static final String SAX_DRIVER_DEFAULT_CLASS = "org.apache.xerces.parsers.SAXParser";    
+    public static final String SAX_DRIVER_DEFAULT_CLASS = "org.apache.xerces.parsers.SAXParser"; 
+    public static final String SAX_DRIVER_SUN_HACK_CLASS = "com.sun.org.apache.xerces.internal.parsers.SAXParser";
+    public static final String SAX_DRIVER_CRIMSON_CLASS = "org.apache.crimson.parser.XMLReaderImpl";
     public static final String RESOLVER_CLASS = "org.apache.xml.resolver.tools.CatalogResolver";
     public static final String LEXICAL_HANDLER_PROPERTY = "http://xml.org/sax/properties/lexical-handler";    
     public static final String FEATURE_NAMESPACE_PREFIX = "http://xml.org/sax/features/namespace-prefixes";

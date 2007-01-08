@@ -46,7 +46,7 @@ public class MergeMapParser extends AbstractXMLReader {
 		try{
 			if (System.getProperty(Constants.SAX_DRIVER_PROPERTY) == null){
 				//The default sax driver is set to xerces's sax driver
-				System.setProperty(Constants.SAX_DRIVER_PROPERTY, Constants.SAX_DRIVER_DEFAULT_CLASS);
+				StringUtils.initSaxDriver();
 			}
 			if(reader == null){
 				reader = XMLReaderFactory.createXMLReader();
@@ -105,7 +105,7 @@ public class MergeMapParser extends AbstractXMLReader {
 	 * @see org.xml.sax.ContentHandler#characters(char[], int, int)
 	 */
 	public void characters(char[] ch, int start, int length) throws SAXException {
-		mapInfo.append(ch, start, length);
+		mapInfo.append(StringUtils.escapeXML(ch, start, length));
 	}
 
 	/**
@@ -139,7 +139,7 @@ public class MergeMapParser extends AbstractXMLReader {
     				if (util.isVisited(attValue)){
     					mapInfo.append(Constants.STRING_BLANK)
             			.append("ohref").append(Constants.EQUAL).append(Constants.QUOTATION)
-            			.append(attValue).append(Constants.QUOTATION);
+            			.append(StringUtils.escapeXML(attValue)).append(Constants.QUOTATION);
     					
 //    					random = RandomUtils.getRandomNum();
 //    					filename = attValue + "(" + Long.toString(random) + ")";
@@ -149,7 +149,7 @@ public class MergeMapParser extends AbstractXMLReader {
     				}else{
     					mapInfo.append(Constants.STRING_BLANK)
             			.append("ohref").append(Constants.EQUAL).append(Constants.QUOTATION)
-            			.append(attValue).append(Constants.QUOTATION);
+            			.append(StringUtils.escapeXML(attValue)).append(Constants.QUOTATION);
     					    					
     					//parse the topic
     					fileId = topicParser.parse(attValue,dirPath);
@@ -163,7 +163,7 @@ public class MergeMapParser extends AbstractXMLReader {
             //output all attributes
             mapInfo.append(Constants.STRING_BLANK)
             		.append(attQName).append(Constants.EQUAL).append(Constants.QUOTATION)
-            		.append(attValue).append(Constants.QUOTATION);
+            		.append(StringUtils.escapeXML(attValue)).append(Constants.QUOTATION);
         }
 		mapInfo.append(Constants.GREATER_THAN);
 		

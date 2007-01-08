@@ -66,7 +66,7 @@
             </xsl:otherwise>
           </xsl:choose>
         </xsl:variable>
-        <xsl:apply-templates select="document(@href,/)/*/*[not(contains(@class,' map/reltable '))]">
+        <xsl:apply-templates select="document(@href,/)/*/*[contains(@class,' map/topicref ')]">
           <xsl:with-param name="parent-linking">
             <xsl:value-of select="$mapref-linking"/>
           </xsl:with-param>

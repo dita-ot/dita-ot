@@ -80,6 +80,7 @@ public class MapIndexReader extends AbstractXMLReader {
     private boolean needResolveEntity;
     private XMLReader reader;
     private String topicPath;
+    private boolean validHref;// whether the current href target is internal dita topic file
     
 
     /**
@@ -95,6 +96,7 @@ public class MapIndexReader extends AbstractXMLReader {
         lastMatchElement = null;
         level = 0;
         match = false;
+        validHref = true;
         needResolveEntity = false;
         topicPath = null;
         inputFile = null; 
@@ -104,7 +106,7 @@ public class MapIndexReader extends AbstractXMLReader {
         try {
             if (System.getProperty(Constants.SAX_DRIVER_PROPERTY) == null){
                 //The default sax driver is set to xerces's sax driver
-                System.setProperty(Constants.SAX_DRIVER_PROPERTY,Constants.SAX_DRIVER_DEFAULT_CLASS);
+            	StringUtils.initSaxDriver();
             }
             reader = XMLReaderFactory.createXMLReader();
             reader.setContentHandler(this);
@@ -123,9 +125,9 @@ public class MapIndexReader extends AbstractXMLReader {
     public void characters(char[] ch, int start, int length)
             throws SAXException {
 
-        if (match && needResolveEntity) {
+        if (match && needResolveEntity && validHref) {
             String temp = new String(ch, start, length);
-            indexEntries.append(temp);
+            indexEntries.append(StringUtils.escapeXML(temp));
             
         }
     }
@@ -154,7 +156,9 @@ public class MapIndexReader extends AbstractXMLReader {
      * 
      */
     public void endCDATA() throws SAXException {
-	    indexEntries.append(Constants.CDATA_END);
+    	if (match && validHref){
+    		indexEntries.append(Constants.CDATA_END);
+    	}
 	    
 	}
 
@@ -166,10 +170,12 @@ public class MapIndexReader extends AbstractXMLReader {
             throws SAXException {
 
         if (match) {
-            indexEntries.append(Constants.LESS_THAN);
-            indexEntries.append(Constants.SLASH);
-            indexEntries.append(qName);
-            indexEntries.append(Constants.GREATER_THAN);
+        	if (validHref){
+        		indexEntries.append(Constants.LESS_THAN);
+        		indexEntries.append(Constants.SLASH);
+        		indexEntries.append(qName);
+        		indexEntries.append(Constants.GREATER_THAN);
+        	}
             
             level--;
         }
@@ -184,6 +190,8 @@ public class MapIndexReader extends AbstractXMLReader {
         }
 
         if (qName.equals(firstMatchElement) && verifyIndexEntries(indexEntries) && topicPath != null) {
+        	// if the href is not valid, topicPath will be null. We don't need to set the condition 
+        	// to check validHref at here.
                 String origin = (String) map.get(topicPath);
                 if (origin != null) {
                     map.put(topicPath, origin + indexEntries.toString());
@@ -223,7 +231,7 @@ public class MapIndexReader extends AbstractXMLReader {
     public void ignorableWhitespace(char[] ch, int start, int length)
             throws SAXException {
 
-        if (match) {
+        if (match && validHref) {
             String temp = new String(ch, start, length);
             indexEntries.append(temp);
            
@@ -287,7 +295,9 @@ public class MapIndexReader extends AbstractXMLReader {
      * 
      */
     public void startCDATA() throws SAXException {
-	    indexEntries.append(Constants.CDATA_HEAD);
+    	if (match && validHref){
+    		indexEntries.append(Constants.CDATA_HEAD);
+    	}
 	    
 	}
 
@@ -306,6 +316,8 @@ public class MapIndexReader extends AbstractXMLReader {
     public void startElement(String uri, String localName, String qName,
             Attributes atts) throws SAXException {
     	int attsLen = atts.getLength();
+    	String attrScope = atts.getValue(Constants.ATTRIBUTE_NAME_SCOPE);
+    	String attrFormat = atts.getValue(Constants.ATTRIBUTE_NAME_FORMAT);
     	
         if (qName.equals(firstMatchElement)) {
             String hrefValue = atts.getValue(Constants.ATTRIBUTE_NAME_HREF);
@@ -315,8 +327,16 @@ public class MapIndexReader extends AbstractXMLReader {
                 indexEntries = new StringBuffer(Constants.INT_1024);
             }
             topicPath = null;
-            if (hrefValue != null && hrefValue.indexOf(INTERNET_LINK_MARK) == -1) {
+            if (hrefValue != null && hrefValue.indexOf(INTERNET_LINK_MARK) == -1
+            		&& (attrScope == null || Constants.ATTR_SCOPE_VALUE_LOCAL.equalsIgnoreCase(attrScope))
+            		&& (attrFormat == null || Constants.ATTR_FORMAT_VALUE_DITA.equalsIgnoreCase(attrFormat))) {
+            	// If the href is internal dita topic file
             	topicPath = FileUtils.resolveTopic(filePath, hrefValue);
+            	validHref = true;
+            }else{
+            	//set up the boolean to prevent the invalid href's metadata inserted into indexEntries.
+            	topicPath = null;
+            	validHref = false;
             }
         }
         if (!match) {
@@ -329,19 +349,21 @@ public class MapIndexReader extends AbstractXMLReader {
         }
 
         if (match) {
-        	indexEntries.append(Constants.LESS_THAN + qName + Constants.STRING_BLANK);
-            
-            for (int i = 0; i < attsLen; i++) {
-            	indexEntries.append(atts.getQName(i));
-            	indexEntries.append(Constants.EQUAL);
-				indexEntries.append(Constants.QUOTATION);
-            	indexEntries.append(atts.getValue(i));
-            	indexEntries.append(Constants.QUOTATION);
-            	indexEntries.append(Constants.STRING_BLANK);
-            	
-            }
-            
-            indexEntries.append(Constants.GREATER_THAN);
+        	if (validHref){
+	        	indexEntries.append(Constants.LESS_THAN + qName + Constants.STRING_BLANK);
+	            
+	            for (int i = 0; i < attsLen; i++) {
+	            	indexEntries.append(atts.getQName(i));
+	            	indexEntries.append(Constants.EQUAL);
+					indexEntries.append(Constants.QUOTATION);
+	            	indexEntries.append(StringUtils.escapeXML(atts.getValue(i)));
+	            	indexEntries.append(Constants.QUOTATION);
+	            	indexEntries.append(Constants.STRING_BLANK);
+	            	
+	            }
+	            
+	            indexEntries.append(Constants.GREATER_THAN);
+        	}
             level++;
         }
     }
@@ -352,7 +374,7 @@ public class MapIndexReader extends AbstractXMLReader {
      */
     public void startEntity(String name) throws SAXException {
 		needResolveEntity = StringUtils.checkEntity(name);
-		if (match && !needResolveEntity) {
+		if (match && !needResolveEntity && validHref) {
             indexEntries.append(StringUtils.getEntity(name));
             
         }

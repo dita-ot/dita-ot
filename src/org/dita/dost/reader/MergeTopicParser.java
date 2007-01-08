@@ -17,6 +17,7 @@ import org.dita.dost.module.ContentImpl;
 import org.dita.dost.util.Constants;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.MergeUtils;
+import org.dita.dost.util.StringUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
@@ -48,7 +49,7 @@ public class MergeTopicParser extends AbstractXMLReader {
 		try{
 			if (System.getProperty(Constants.SAX_DRIVER_PROPERTY) == null){
 				//The default sax driver is set to xerces's sax driver
-				System.setProperty(Constants.SAX_DRIVER_PROPERTY, Constants.SAX_DRIVER_DEFAULT_CLASS);
+				StringUtils.initSaxDriver();
 			}
 			if(reader == null){
 				reader = XMLReaderFactory.createXMLReader();
@@ -75,7 +76,7 @@ public class MergeTopicParser extends AbstractXMLReader {
 	 * @see org.xml.sax.ContentHandler#characters(char[], int, int)
 	 */
 	public void characters(char[] ch, int start, int length) throws SAXException {
-		topicInfo.append(ch, start, length);
+		topicInfo.append(StringUtils.escapeXML(ch, start, length));
 	}
 
 
@@ -121,12 +122,12 @@ public class MergeTopicParser extends AbstractXMLReader {
 			if(util.findId(value)){
 				topicInfo.append(Constants.STRING_BLANK)
 				.append("oid").append(Constants.EQUAL).append(Constants.QUOTATION)
-				.append(attValue).append(Constants.QUOTATION);
+				.append(StringUtils.escapeXML(attValue)).append(Constants.QUOTATION);
 				retAttValue = util.getIdValue(value);
 			}else{
 				topicInfo.append(Constants.STRING_BLANK)
 				.append("oid").append(Constants.EQUAL).append(Constants.QUOTATION)
-				.append(attValue).append(Constants.QUOTATION);
+				.append(StringUtils.escapeXML(attValue)).append(Constants.QUOTATION);
 				retAttValue = util.addId(value);           			
 			}
 			if(isFirstTopicId){
@@ -249,11 +250,12 @@ public class MergeTopicParser extends AbstractXMLReader {
             }
             
             if(classValue != null
-            		&&(classValue.indexOf(Constants.ATTR_CLASS_VALUE_XREF) != -1
-            		|| classValue.indexOf(Constants.ATTR_CLASS_VALUE_LINK) != -1)
             		&& Constants.ATTRIBUTE_NAME_HREF.equals(attQName) 
             		&& attValue != null
             		&& !Constants.STRING_EMPTY.equalsIgnoreCase(attValue)){
+            	//If the element has valid @class attribute and current attribute
+            	//is valid @href
+            	
             	scopeValue = atts.getValue(Constants.ATTRIBUTE_NAME_SCOPE);
         		formatValue = atts.getValue(Constants.ATTRIBUTE_NAME_FORMAT);
         		sharpIndex = attValue.indexOf(Constants.SHARP);
@@ -264,9 +266,21 @@ public class MergeTopicParser extends AbstractXMLReader {
         		
         		if((scopeValue == null 
     					|| Constants.ATTR_SCOPE_VALUE_LOCAL.equalsIgnoreCase(scopeValue))
-    					&& (formatValue == null 
+    					&& attValue.indexOf(Constants.COLON_DOUBLE_SLASH) == -1) {
+        			//The scope for @href is local
+        			
+        			if((classValue.indexOf(Constants.ATTR_CLASS_VALUE_XREF) != -1
+        					|| classValue.indexOf(Constants.ATTR_CLASS_VALUE_LINK) != -1)
+        					&& (formatValue == null 
     							|| Constants.ATTR_FORMAT_VALUE_DITA.equalsIgnoreCase(formatValue))){
-        			attValue = handleLocalDita(sharpIndex, attValue);
+        				//local xref or link that refers to dita file
+        				
+        				attValue = handleLocalDita(sharpIndex, attValue);
+        			} else {
+        				//local @href other than local xref and link that refers to dita file
+        				
+        				attValue = handleLocalHref(attValue);
+        			}
     			}
         		
             }
@@ -274,9 +288,17 @@ public class MergeTopicParser extends AbstractXMLReader {
             //output all attributes
             topicInfo.append(Constants.STRING_BLANK)
             		.append(attQName).append(Constants.EQUAL).append(Constants.QUOTATION)
-            		.append(attValue).append(Constants.QUOTATION);
+            		.append(StringUtils.escapeXML(attValue)).append(Constants.QUOTATION);
         }
 		topicInfo.append(Constants.GREATER_THAN);
+	}
+
+
+
+	private String handleLocalHref(String attValue) {
+		String pathFromMap;
+        pathFromMap = FileUtils.resolveTopic(new File(filePath).getParent(),attValue);
+        return pathFromMap;
 	}
 	
 

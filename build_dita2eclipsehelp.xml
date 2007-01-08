@@ -19,7 +19,7 @@
     </target>
 
     <target name="dita.map.eclipse"
-            depends="dita.map.eclipse.init, dita.map.eclipse.toc, dita.map.eclipse.plugin" />
+        depends="dita.map.eclipse.init, dita.map.eclipse.toc, dita.map.eclipse.index, dita.map.eclipse.plugin" />
 
 
     <target name="dita.map.eclipse.init"
@@ -55,6 +55,17 @@
             <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
             <param name="WORKDIR" expression="${workdir}" if="workdir"/>
         </xslt>
+    </target>
+    
+    <target name="dita.map.eclipse.index" unless="noMap"
+            depends="dita.map.eclipse.init"
+            description="Build Eclipse Help index file">
+        <pipeline message="Extract index term."
+            module="IndexTermExtract"
+            basedir="${basedir}"
+            tempdir="${dita.temp.dir}"
+            inputmap="${user.input.file}"
+            extparam="output=${output.dir}${file.separator}${user.input.file};targetext=${out.ext};indextype=eclipsehelp;${index.ext.param.encoding}" />
     </target>
 
     <target name="dita.map.eclipse.plugin"

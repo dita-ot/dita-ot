@@ -165,7 +165,7 @@ public class MergeUtils {
 		try{
             if (System.getProperty(Constants.SAX_DRIVER_PROPERTY) == null){
                 //The default sax driver is set to xerces's sax driver
-                System.setProperty(Constants.SAX_DRIVER_PROPERTY,Constants.SAX_DRIVER_DEFAULT_CLASS);
+            	StringUtils.initSaxDriver();
             }
             reader = XMLReaderFactory.createXMLReader();
             reader.setContentHandler(parser);            

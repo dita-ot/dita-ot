@@ -47,5 +47,11 @@
           that you run the toolkit. If not, please copy them from the toolkit's 
           root directory.</p>
     </section>
+    <section>
+      <title>4. Spaces in file names</title>
+      <p>Spaces in file names will cause trouble during the processing because Ant
+      use space as the delimiter when processing batch files in a list. Please 
+      prevent using spaces in the name of dita files.</p>
+    </section>
   </refbody>
 </reference>
