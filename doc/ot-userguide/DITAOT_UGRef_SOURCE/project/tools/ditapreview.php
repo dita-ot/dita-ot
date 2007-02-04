@@ -60,7 +60,7 @@ function add_to_map(&$map,$f,$fmt)
   if( $dbg_flag )
     print("add_to_map: " . $f . " " . $fmt . "\n");
   if( isset($fmt) )
-    $map=$map . ' <topicref href="' . $fadd . '" format="' . $fmt . '"/>' . "\n";
+    $map=$map . ' <topicref href="' . $fadd . '" type="' . $fmt . '"/>' . "\n";
   else
     $map=$map . ' <topicref href="' . $fadd . '"/>' . "\n";
 }
@@ -215,7 +215,7 @@ if( $rc )
       if( isDITA($f) )
       {
         if( ( strpos($doct[$f],"map") === FALSE) && ($docdate[$f] == $lastdate) )
-          add_to_map($mfile,fshort($f,$rootd),null);
+          add_to_map($mfile,fshort($f,$rootd),$doct[$f]);
       }
     }
     complete_map($mfile);
@@ -291,7 +291,6 @@ if( $rc )
   $cmd = "java org.dita.dost.invoker.CommandLineInvoker" .
           " /ditadir:" . $_ENV['DITA_DIR'] .
           " /basedir:" . $basedir .
-          " /ditaext:/.dita" .
           " /i:" . $rtempmap . 
           " /outdir:" . $outdir . 
           " /tempdir:" . $tmpdir . 
@@ -317,7 +316,7 @@ if( $rc )
     print("processing failed!\n");
 
   /* cleanup temporary file */
-  if( $opc == $opL )
+  if( ($opc == $opL) && !dbg_flag )
   {
     unlink($tempmap);
   }
