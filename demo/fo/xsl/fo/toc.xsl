@@ -59,7 +59,7 @@ See the accompanying license.txt file for applicable licenses.
         </xsl:variable>
 
         <xsl:if test="count(exsl:node-set($toc)/*) > 0">
-            <fo:page-sequence master-reference="toc-sequence" xsl:use-attribute-sets="__force__page__count">
+            <fo:page-sequence master-reference="toc-sequence" format="i" xsl:use-attribute-sets="__force__page__count">
 
                 <xsl:call-template name="insertTocStaticContents"/>
 
@@ -96,23 +96,7 @@ See the accompanying license.txt file for applicable licenses.
                 <xsl:copy-of select="$map//*[@id = $id]"/>
             </xsl:variable>
             <xsl:variable name="topicType">
-                <xsl:choose>
-                    <xsl:when test="$mapTopic/*[position() = $topicNumber][contains(@class, ' bookmap/chapter ')]">
-                        <xsl:text>topicChapter</xsl:text>
-                    </xsl:when>
-                    <xsl:when test="$mapTopic/*[position() = $topicNumber][contains(@class, ' bookmap/appendix ')]">
-                        <xsl:text>topicAppendix</xsl:text>
-                    </xsl:when>
-                    <xsl:when test="$mapTopic/*[position() = $topicNumber][contains(@class, ' bookmap/part ')]">
-                        <xsl:text>topicPart</xsl:text>
-                    </xsl:when>
-                    <xsl:when test="$mapTopic/*[position() = $topicNumber][contains(@class, ' bookmap/preface ')]">
-                        <xsl:text>topicPreface</xsl:text>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:text>topicSimple</xsl:text>
-                    </xsl:otherwise>
-                </xsl:choose>
+                <xsl:call-template name="determineTopicType"/>
             </xsl:variable>
 
             <xsl:variable name="parentTopicHead">
@@ -174,18 +158,21 @@ See the accompanying license.txt file for applicable licenses.
                                     </xsl:call-template>
                                 </xsl:when>
                                 <xsl:when test="$topicType = 'topicPreface'">
-                                    <!--
-                                                                    <xsl:call-template name="insertVariable">
-                                                                        <xsl:with-param name="theVariableID" select="'Table of Contents Preface'"/>
-                                                                    </xsl:call-template>
-                                    -->
+                                    <xsl:call-template name="insertVariable">
+                                        <xsl:with-param name="theVariableID" select="'Table of Contents Preface'"/>
+                                    </xsl:call-template>
+                                </xsl:when>
+                                <xsl:when test="$topicType = 'topicNotices'">
+                                    <xsl:call-template name="insertVariable">
+                                        <xsl:with-param name="theVariableID" select="'Table of Contents Notices'"/>
+                                    </xsl:call-template>
                                 </xsl:when>
                             </xsl:choose>
-                            <fo:inline xsl:use-attribute-sets="__toc__title" margin-right="1in"
+                            <fo:inline xsl:use-attribute-sets="__toc__title" margin-right=".2in"
                                        keep-together.within-line="always">
                                 <xsl:value-of select="$topicTitle"/>
                             </fo:inline>
-                            <fo:inline margin-left="-1in" keep-together.within-line="always">
+                            <fo:inline margin-left="-.2in" keep-together.within-line="always">
                                 <fo:leader xsl:use-attribute-sets="__toc__leader"/>
                                 <fo:page-number-citation
                                         ref-id="{concat('_OPENTOPIC_TOC_PROCESSING_', generate-id())}"/>
@@ -209,6 +196,11 @@ See the accompanying license.txt file for applicable licenses.
                             </xsl:when>
                             <xsl:when test="$topicType = 'topicPreface'">
                                 <fo:block xsl:use-attribute-sets="__toc__preface__content">
+                                    <xsl:copy-of select="$tocItemContent"/>
+                                </fo:block>
+                            </xsl:when>
+                            <xsl:when test="$topicType = 'topicNotices'">
+                                <fo:block xsl:use-attribute-sets="__toc__notices__content">
                                     <xsl:copy-of select="$tocItemContent"/>
                                 </fo:block>
                             </xsl:when>

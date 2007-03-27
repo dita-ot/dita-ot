@@ -1,4 +1,4 @@
-<?xml version='1.0'?>
+<?xml version="1.0"?>
 
 <!-- 
 Copyright © 2004-2006 by Idiom Technologies, Inc. All rights reserved. 
@@ -6,7 +6,7 @@ IDIOM is a registered trademark of Idiom Technologies, Inc. and WORLDSERVER
 and WORLDSTART are trademarks of Idiom Technologies, Inc. All other 
 trademarks are the property of their respective owners. 
 
-IDIOM TECHNOLOGIES, INC. IS DELIVERING THE SOFTWARE "AS IS," WITH 
+IDIOM TECHNOLOGIES, INC. IS DELIVERING THE SOFTWARE &quot;AS IS,&quot; WITH 
 ABSOLUTELY NO WARRANTIES WHATSOEVER, WHETHER EXPRESS OR IMPLIED,  AND IDIOM
 TECHNOLOGIES, INC. DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING
 BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
@@ -19,7 +19,7 @@ TECHNOLOGIES, INC. HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
 
 Idiom Technologies, Inc. and its licensors shall not be liable for any
 damages suffered by any person as a result of using and/or modifying the
-Software or its derivatives. In no event shall Idiom Technologies, Inc.'s
+Software or its derivatives. In no event shall Idiom Technologies, Inc.&apos;s
 liability for any damages hereunder exceed the amounts received by Idiom
 Technologies, Inc. as a result of this transaction.
 
@@ -31,12 +31,11 @@ This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
 See the accompanying license.txt file for applicable licenses.
 -->
 
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    version="1.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
 
     <xsl:attribute-set name="codeph">
         <xsl:attribute name="font-family">Monospaced</xsl:attribute>
-        <xsl:attribute name="font-size">9pt</xsl:attribute>
+        <xsl:attribute name="font-size">10pt</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="codeblock">
@@ -49,9 +48,9 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:attribute name="background-color">#f0f0f0</xsl:attribute>
         <xsl:attribute name="font-family">Monospaced</xsl:attribute>
         <xsl:attribute name="line-height">106%</xsl:attribute>
-        <xsl:attribute name="font-size">9pt</xsl:attribute>
+        <xsl:attribute name="font-size">10pt</xsl:attribute>
         <xsl:attribute name="keep-with-previous.within-page">always</xsl:attribute>
-        <!--        <xsl:attribute name="keep-together.within-page">always</xsl:attribute>-->
+        <!--        &lt;xsl:attribute name=&quot;keep-together.within-page&quot;&gt;always&lt;/xsl:attribute&gt;-->
     </xsl:attribute-set>
 
     <xsl:attribute-set name="codeblock__top">
@@ -79,22 +78,22 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:attribute-set name="oper">
         <xsl:attribute name="font-family">Monospaced</xsl:attribute>
-        <xsl:attribute name="font-size">9pt</xsl:attribute>
+        <xsl:attribute name="font-size">10pt</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="delim">
         <xsl:attribute name="font-family">Monospaced</xsl:attribute>
-        <xsl:attribute name="font-size">9pt</xsl:attribute>
+        <xsl:attribute name="font-size">10pt</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="sep">
         <xsl:attribute name="font-family">Monospaced</xsl:attribute>
-        <xsl:attribute name="font-size">9pt</xsl:attribute>
+        <xsl:attribute name="font-size">10pt</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="apiname">
         <xsl:attribute name="font-family">Monospaced</xsl:attribute>
-        <xsl:attribute name="font-size">9pt</xsl:attribute>
+        <xsl:attribute name="font-size">10pt</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="parml">
@@ -148,7 +147,7 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:attribute-set name="kwd">
         <xsl:attribute name="font-family">Monospaced</xsl:attribute>
-        <xsl:attribute name="font-size">9pt</xsl:attribute>
+        <xsl:attribute name="font-size">10pt</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="kwd__default">
@@ -157,7 +156,7 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:attribute-set name="fragref">
         <xsl:attribute name="font-family">Monospaced</xsl:attribute>
-        <xsl:attribute name="font-size">9pt</xsl:attribute>
+        <xsl:attribute name="font-size">10pt</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="fragment.title">

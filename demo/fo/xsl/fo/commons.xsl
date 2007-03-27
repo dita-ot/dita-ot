@@ -84,10 +84,34 @@ See the accompanying license.txt file for applicable licenses.
             <xsl:when test="$mapTopic/*[position() = $topicNumber][contains(@class, ' bookmap/part ')]">
                 <xsl:text>topicPart</xsl:text>
             </xsl:when>
+            <xsl:when test="$mapTopic/*[position() = $topicNumber][contains(@class, ' bookmap/abstract ')]">
+                <xsl:text>topicAbstract</xsl:text>
+            </xsl:when>
+<!--
+            <xsl:when test="$mapTopic/*[position() = $topicNumber][contains(@class, ' bookmap/notices ')]">
+                <xsl:text>topicNotices</xsl:text>
+            </xsl:when>
+-->
             <xsl:otherwise>
                 <xsl:text>topicSimple</xsl:text>
             </xsl:otherwise>
         </xsl:choose>
+    </xsl:template>
+
+    <xsl:template name="startPageNumbering">
+        <!--BS: uncomment if you need reset page numbering at first chapter-->
+<!--
+        <xsl:variable name="id" select="ancestor-or-self::*[contains(@class, ' topic/topic ')][1]/@id"/>
+        <xsl:variable name="gid" select="generate-id(ancestor-or-self::*[contains(@class, ' topic/topic ')][1])"/>
+        <xsl:variable name="topicNumber" select="count(exsl:node-set($topicNumbers)/topic[@id = $id][following-sibling::topic[@guid = $gid]]) + 1"/>
+        <xsl:variable name="mapTopic" select="($map//*[@id = $id])[position() = $topicNumber]"/>
+
+        <xsl:if test="not(($mapTopic/preceding::*[contains(@class, ' bookmap/chapter ') or contains(@class, ' bookmap/part ')])
+            or ($mapTopic/ancestor::*[contains(@class, ' bookmap/chapter ') or contains(@class, ' bookmap/part ')]))">
+            <xsl:attribute name="initial-page-number">1</xsl:attribute>
+        </xsl:if>
+-->
+
     </xsl:template>
 
     <xsl:template name="getTopicrefShortdesc">
@@ -174,7 +198,10 @@ See the accompanying license.txt file for applicable licenses.
                 <xsl:call-template name="processTopicPart"/>
             </xsl:when>
             <xsl:when test="$topicType = 'topicPreface'">
-<!--                <xsl:call-template name="processTopicPreface"/>-->
+                <xsl:call-template name="processTopicPreface"/>
+            </xsl:when>
+            <xsl:when test="$topicType = 'topicNotices'">
+                <xsl:call-template name="processTopicNotices"/>
             </xsl:when>
             <xsl:when test="$topicType = 'topicSimple'">
                 <xsl:variable name="page-sequence-reference">
@@ -212,9 +239,13 @@ See the accompanying license.txt file for applicable licenses.
     <!--  Bookmap Chapter processing  -->
     <xsl:template name="processTopicChapter">
         <fo:page-sequence master-reference="body-sequence" xsl:use-attribute-sets="__force__page__count">
+            <xsl:call-template name="startPageNumbering"/>
             <xsl:call-template name="insertBodyStaticContents"/>
             <fo:flow flow-name="xsl-region-body">
                 <fo:block xsl:use-attribute-sets="topic">
+                    <xsl:attribute name="id">
+                        <xsl:value-of select="@id"/>
+                    </xsl:attribute>
                     <xsl:if test="not(ancestor::*[contains(@class, ' topic/topic ')])">
                         <fo:marker marker-class-name="current-topic-number">
                             <xsl:number format="1"/>
@@ -254,6 +285,9 @@ See the accompanying license.txt file for applicable licenses.
             <xsl:call-template name="insertBodyStaticContents"/>
             <fo:flow flow-name="xsl-region-body">
                 <fo:block xsl:use-attribute-sets="topic">
+                    <xsl:attribute name="id">
+                        <xsl:value-of select="@id"/>
+                    </xsl:attribute>
                     <xsl:if test="not(ancestor::*[contains(@class, ' topic/topic ')])">
                         <fo:marker marker-class-name="current-topic-number">
                             <xsl:number format="1"/>
@@ -290,9 +324,13 @@ See the accompanying license.txt file for applicable licenses.
     <!--  Bookmap Part processing  -->
     <xsl:template name="processTopicPart">
         <fo:page-sequence master-reference="body-sequence" xsl:use-attribute-sets="__force__page__count">
+            <xsl:call-template name="startPageNumbering"/>
             <xsl:call-template name="insertBodyStaticContents"/>
             <fo:flow flow-name="xsl-region-body">
                 <fo:block xsl:use-attribute-sets="topic">
+                    <xsl:attribute name="id">
+                        <xsl:value-of select="@id"/>
+                    </xsl:attribute>
                     <xsl:if test="not(ancestor::*[contains(@class, ' topic/topic ')])">
                         <fo:marker marker-class-name="current-topic-number">
                             <xsl:number format="I"/>
@@ -345,11 +383,54 @@ See the accompanying license.txt file for applicable licenses.
         </xsl:for-each>
     </xsl:template>
 
+    <xsl:template name="processTopicNotices">
+        <fo:page-sequence master-reference="body-sequence" xsl:use-attribute-sets="__force__page__count">
+            <xsl:call-template name="insertBodyStaticContents"/>
+            <fo:flow flow-name="xsl-region-body">
+                <fo:block xsl:use-attribute-sets="topic">
+                    <xsl:attribute name="id">
+                        <xsl:value-of select="@id"/>
+                    </xsl:attribute>
+                    <xsl:if test="not(ancestor::*[contains(@class, ' topic/topic ')])">
+                        <fo:marker marker-class-name="current-topic-number">
+                            <xsl:number format="1"/>
+                        </fo:marker>
+                        <fo:marker marker-class-name="current-header">
+                            <xsl:for-each select="child::*[contains(@class,' topic/title ')]">
+                                <xsl:call-template name="getTitle"/>
+                            </xsl:for-each>
+                        </fo:marker>
+                    </xsl:if>
+
+                    <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]"/>
+
+                    <xsl:call-template name="insertChapterFirstpageStaticContent">
+                        <xsl:with-param name="type" select="'notices'"/>
+                    </xsl:call-template>
+
+                    <fo:block xsl:use-attribute-sets="topic.title">
+                        <xsl:for-each select="child::*[contains(@class,' topic/title ')]">
+                            <xsl:call-template name="getTitle"/>
+                        </xsl:for-each>
+                    </fo:block>
+
+                    <xsl:call-template name="createMiniToc"/>
+
+                    <xsl:apply-templates select="*[contains(@class,' topic/topic ')]">
+                        <xsl:with-param name="include" select="'true'"/>
+                    </xsl:apply-templates>
+                </fo:block>
+            </fo:flow>
+        </fo:page-sequence>
+   </xsl:template>
+
+
     <xsl:template name="insertChapterFirstpageStaticContent">
         <xsl:param name="type"/>
         <fo:block>
-            <fo:inline id="{@id}"/>
-            <fo:inline id="{concat('_OPENTOPIC_TOC_PROCESSING_', generate-id())}"/>
+            <xsl:attribute name="id">
+                <xsl:value-of select="concat('_OPENTOPIC_TOC_PROCESSING_', generate-id())"/>
+            </xsl:attribute>
             <xsl:choose>
                 <xsl:when test="$type = 'chapter'">
                     <fo:block xsl:use-attribute-sets="__chapter__frontmatter__name__container">
@@ -415,26 +496,42 @@ See the accompanying license.txt file for applicable licenses.
                             </xsl:call-template>
                         </fo:block>
                 </xsl:when>
+                <xsl:when test="$type = 'preface'">
+                        <fo:block xsl:use-attribute-sets="__chapter__frontmatter__name__container">
+                            <xsl:call-template name="insertVariable">
+                                <xsl:with-param name="theVariableID" select="'Preface title'"/>
+                            </xsl:call-template>
+                        </fo:block>
+                </xsl:when>
+                <xsl:when test="$type = 'notices'">
+                        <fo:block xsl:use-attribute-sets="__chapter__frontmatter__name__container">
+                            <xsl:call-template name="insertVariable">
+                                <xsl:with-param name="theVariableID" select="'Notices title'"/>
+                            </xsl:call-template>
+                        </fo:block>
+                </xsl:when>
             </xsl:choose>
         </fo:block>
     </xsl:template>
 
     <xsl:template name="createMiniToc">
-        <fo:table >
+        <fo:table xsl:use-attribute-sets="__toc__mini__table">
             <fo:table-column xsl:use-attribute-sets="__toc__mini__table__column_1"/>
             <fo:table-column xsl:use-attribute-sets="__toc__mini__table__column_2"/>
-            <fo:table-body xsl:use-attribute-sets="__toc__mini__table">
+            <fo:table-body xsl:use-attribute-sets="__toc__mini__table__body">
                 <fo:table-row>
                     <fo:table-cell>
                         <fo:block xsl:use-attribute-sets="__toc__mini">
-                            <fo:block xsl:use-attribute-sets="__toc__mini__header">
-                                <xsl:call-template name="insertVariable">
-                                    <xsl:with-param name="theVariableID" select="'Mini Toc'"/>
-                                </xsl:call-template>
-                            </fo:block>
-                            <fo:list-block xsl:use-attribute-sets="__toc__mini__list">
-                                <xsl:apply-templates select="*[contains(@class, ' topic/topic ')]" mode="in-this-chapter-list"/>
-                            </fo:list-block>
+                            <xsl:if test="*[contains(@class, ' topic/topic ')]">
+                                <fo:block xsl:use-attribute-sets="__toc__mini__header">
+                                    <xsl:call-template name="insertVariable">
+                                        <xsl:with-param name="theVariableID" select="'Mini Toc'"/>
+                                    </xsl:call-template>
+                                </fo:block>
+                                <fo:list-block xsl:use-attribute-sets="__toc__mini__list">
+                                    <xsl:apply-templates select="*[contains(@class, ' topic/topic ')]" mode="in-this-chapter-list"/>
+                                </fo:list-block>
+                            </xsl:if>
                         </fo:block>
                     </fo:table-cell>
                     <fo:table-cell xsl:use-attribute-sets="__toc__mini__summary">
@@ -857,7 +954,7 @@ See the accompanying license.txt file for applicable licenses.
                 <xsl:call-template name="processTopicPart"/>
             </xsl:when>
             <xsl:when test="$topicType = 'topicPreface'">
-<!--                <xsl:call-template name="processTopicPreface"/>-->
+                <xsl:call-template name="processTopicPreface"/>
             </xsl:when>
             <xsl:when test="$topicType = 'topicSimple'">
                 <xsl:variable name="page-sequence-reference">
@@ -938,7 +1035,7 @@ See the accompanying license.txt file for applicable licenses.
                 <xsl:call-template name="processTopicPart"/>
             </xsl:when>
             <xsl:when test="$topicType = 'topicPreface'">
-<!--                <xsl:call-template name="processTopicPreface"/>-->
+                <xsl:call-template name="processTopicPreface"/>
             </xsl:when>
             <xsl:when test="$topicType = 'topicSimple'">
                 <xsl:variable name="page-sequence-reference">
@@ -1024,7 +1121,7 @@ See the accompanying license.txt file for applicable licenses.
                 <xsl:call-template name="processTopicPart"/>
             </xsl:when>
             <xsl:when test="$topicType = 'topicPreface'">
-<!--                <xsl:call-template name="processTopicPreface"/>-->
+                <xsl:call-template name="processTopicPreface"/>
             </xsl:when>
             <xsl:when test="$topicType = 'topicSimple'">
                 <xsl:variable name="page-sequence-reference">

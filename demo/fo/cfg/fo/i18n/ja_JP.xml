@@ -78,6 +78,7 @@ See the accompanying license.txt file for applicable licenses.
             
             <!-- I don't like this value, let's arrive at an official char -->
             <character>&#x27A4;</character>
+            <character>&#x2605;</character>
 
         </character-set>
     </alphabet>

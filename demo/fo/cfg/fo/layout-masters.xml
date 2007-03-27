@@ -39,8 +39,7 @@ See the accompanying license.txt file for applicable licenses.
         <fo:region-body margin-top="20mm"
             margin-bottom="20mm"
             margin-left="20mm"
-            margin-right="20mm"
-            border="1px solid black"/>
+            margin-right="20mm"/>
     </fo:simple-page-master>
 
     <fo:simple-page-master master-name="front-matter-last"

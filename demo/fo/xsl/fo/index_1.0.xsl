@@ -45,7 +45,7 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:include href="../../cfg/fo/attrs/index-attr.xsl"/>
 
     <xsl:template name="createIndex">
-        <xsl:if test="//opentopic-index:index.groups//opentopic-index:index.entry">
+        <xsl:if test="(//opentopic-index:index.groups//opentopic-index:index.entry) and (count($index-entries//opentopic-index:index.entry) &gt; 0) and ($pdfFormatter = 'xep')">
             <xsl:variable name="index">
                 <xsl:choose>
                     <xsl:when test="($ditaVersion = '1.1') and $map//*[contains(@class,' bookmap/indexlist ')][@href]"/>

@@ -8,21 +8,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 /*
-Copyright © 2004-2006 by Idiom Technologies, Inc. All rights reserved. 
+Copyright ï¿½ 2004-2006 by Idiom Technologies, Inc. All rights reserved.
 IDIOM is a registered trademark of Idiom Technologies, Inc. and WORLDSERVER
-and WORLDSTART are trademarks of Idiom Technologies, Inc. All other 
-trademarks are the property of their respective owners. 
+and WORLDSTART are trademarks of Idiom Technologies, Inc. All other
+trademarks are the property of their respective owners.
 
-IDIOM TECHNOLOGIES, INC. IS DELIVERING THE SOFTWARE "AS IS," WITH 
+IDIOM TECHNOLOGIES, INC. IS DELIVERING THE SOFTWARE "AS IS," WITH
 ABSOLUTELY NO WARRANTIES WHATSOEVER, WHETHER EXPRESS OR IMPLIED,  AND IDIOM
 TECHNOLOGIES, INC. DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING
-BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
+BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
 PURPOSE AND WARRANTY OF NON-INFRINGEMENT. IDIOM TECHNOLOGIES, INC. SHALL NOT
 BE LIABLE FOR INDIRECT, INCIDENTAL, SPECIAL, COVER, PUNITIVE, EXEMPLARY,
-RELIANCE, OR CONSEQUENTIAL DAMAGES (INCLUDING BUT NOT LIMITED TO LOSS OF 
-ANTICIPATED PROFIT), ARISING FROM ANY CAUSE UNDER OR RELATED TO  OR ARISING 
+RELIANCE, OR CONSEQUENTIAL DAMAGES (INCLUDING BUT NOT LIMITED TO LOSS OF
+ANTICIPATED PROFIT), ARISING FROM ANY CAUSE UNDER OR RELATED TO  OR ARISING
 OUT OF THE USE OF OR INABILITY TO USE THE SOFTWARE, EVEN IF IDIOM
-TECHNOLOGIES, INC. HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES. 
+TECHNOLOGIES, INC. HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
 
 Idiom Technologies, Inc. and its licensors shall not be liable for any
 damages suffered by any person as a result of using and/or modifying the
@@ -34,7 +34,7 @@ These terms and conditions supersede the terms and conditions in any
 licensing agreement to the extent that such terms and conditions conflict
 with those set forth herein.
 
-This file is part of the DITA Open Toolkit project hosted on Sourceforge.net. 
+This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
 See the accompanying license.txt file for applicable licenses.
 */
 
@@ -57,60 +57,61 @@ public class IndexConfiguration {
 	}
 
 
-	public static IndexConfiguration parse(Document theDocument)
-			throws ParseException {
-		message = "Invalid configuration format";
+    public static IndexConfiguration parse(Document theDocument)
+            throws ParseException {
+        message = "Invalid configuration format";
 
-		final IndexConfiguration indexConfiguration = new IndexConfiguration();
+        final IndexConfiguration indexConfiguration = new IndexConfiguration();
 
-		final NodeList indexConfigurationSet = theDocument.getElementsByTagName("index.configuration.set");
-		if (indexConfigurationSet.getLength() != 1) {
-			throw new ParseException(message);
-		}
-		final Node indexConfigurationSetNode = indexConfigurationSet.item(0);
+        final NodeList indexConfigurationSet = theDocument.getElementsByTagName("index.configuration.set");
+        if (indexConfigurationSet.getLength() != 1) {
+            throw new ParseException(message);
+        }
+        final Node indexConfigurationSetNode = indexConfigurationSet.item(0);
 
-		if (indexConfigurationSetNode == null) throw new ParseException(message);
+        if (indexConfigurationSetNode == null) throw new ParseException(message);
 
-		final Node indexConf = getNodeByName("index.configuration", indexConfigurationSetNode.getChildNodes());
+        final Node indexConf = getNodeByName("index.configuration", indexConfigurationSetNode.getChildNodes());
 
-		if (indexConf == null) throw new ParseException(message);
+        if (indexConf == null) throw new ParseException(message);
 
-		final Node indexGroups = getNodeByName("index.groups", indexConf.getChildNodes());
+        final Node indexGroups = getNodeByName("index.groups", indexConf.getChildNodes());
 
-		if (indexGroups == null) throw new ParseException(message);
+        if (indexGroups == null) throw new ParseException(message);
 
-		final NodeList indexGroupChilds = indexGroups.getChildNodes();
+        final NodeList indexGroupChilds = indexGroups.getChildNodes();
 
-		for (int i = 0; i < indexGroupChilds.getLength(); i++) {
-			final Node node = indexGroupChilds.item(i);
-			if ("index.group".equals(node.getNodeName())) {
-				final Node key = getNodeByName("group.key", node.getChildNodes());
-				final Node label = getNodeByName("group.label", node.getChildNodes());
-				final Node members = getNodeByName("group.members", node.getChildNodes());
+        for (int i = 0; i < indexGroupChilds.getLength(); i++) {
+            final Node node = indexGroupChilds.item(i);
+            if ("index.group".equals(node.getNodeName())) {
+                final Node key = getNodeByName("group.key", node.getChildNodes());
+                final Node label = getNodeByName("group.label", node.getChildNodes());
+                final Node members = getNodeByName("group.members", node.getChildNodes());
 
-				final String keyValue = getNodeValue(key);
-				final String labelValue = getNodeValue(label);
-				char[] groupMemmbers = new char[0];
+                final String keyValue = getNodeValue(key);
+                final String labelValue = getNodeValue(label);
+                String[] groupMembers = new String[0];
 
-				if (null != members && members.getChildNodes().getLength() > 0) {
-					StringBuffer charBuff = new StringBuffer();
-					final NodeList membersChilds = members.getChildNodes();
-					for (int j = 0; j < membersChilds.getLength(); j++) {
-						final Node membersChild = membersChilds.item(j);
-						if ("char.set".equals(membersChild.getNodeName())) {
-							final String nodeValue = getNodeValue(membersChild);
-							charBuff.append(nodeValue);
-						}
-					}
-					groupMemmbers = charBuff.toString().toCharArray();
-				}
-				final ConfigEntryImpl configEntry = new ConfigEntryImpl(labelValue, keyValue, groupMemmbers);
-				indexConfiguration.addEntry(configEntry);
-			}
-		}
+                if (null != members && members.getChildNodes().getLength() > 0) {
+                    ArrayList nodeValues = new ArrayList();
 
-		return indexConfiguration;
-	}
+                    final NodeList membersChilds = members.getChildNodes();
+                    for (int j = 0; j < membersChilds.getLength(); j++) {
+                        final Node membersChild = membersChilds.item(j);
+                        if ("char.set".equals(membersChild.getNodeName())) {
+                            final String nodeValue = getNodeValue(membersChild);
+                            nodeValues.add(nodeValue);
+                        }
+                    }
+                    groupMembers = (String[])nodeValues.toArray(new String[nodeValues.size()]);
+                }
+                final ConfigEntryImpl configEntry = new ConfigEntryImpl(labelValue, keyValue, groupMembers);
+                indexConfiguration.addEntry(configEntry);
+            }
+        }
+
+        return indexConfiguration;
+    }
 
 
 	private static String getNodeValue(Node theNode) {

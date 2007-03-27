@@ -37,6 +37,16 @@ with those set forth herein.
     <property name="merged.file" value="${dita.map.filename.root}_MERGED.xml" />
     <property name="document.locale" value="en_US" />
 
+	<!-- configure FO engines -->
+	<property name="pdf.formatter" value="xep"/>
+	<property name="fop.home" value="c:/work/fop-0.93"/>
+	<condition property="use.xep.pdf.formatter">
+		<equals arg1="${pdf.formatter}" arg2="xep"/>
+	</condition>
+	<condition property="use.fop.pdf.formatter">
+		<not><isset property="use.xep.pdf.formatter"/></not>
+	</condition>
+	
     <!-- dita.temp.dir can be an absolute or relative path. Handle both. -->
     <available property="work.dir" value="${dita.temp.dir}"
         file="${dita.temp.dir}" type="dir" />
@@ -134,7 +144,10 @@ with those set forth herein.
         <dita-version documentPath="${inputFile}"/>
 
     	<condition property="temp.transformation.file" value="${xsl.fo.dir}/topic2fo_shell_1.0.xsl">
-            <equals arg1="${ws.runtime.publishing.map.dita.version}" arg2="1.0"/>
+    		<or>
+	            <equals arg1="${ws.runtime.publishing.map.dita.version}" arg2="1.0"/>
+	            <equals arg1="${ws.runtime.publishing.map.dita.version}" arg2="1.1"/>
+			</or>
         </condition>
 
         <condition property="temp.transformation.file" value="${xsl.fo.dir}/topic2fo_shell.xsl">
@@ -164,6 +177,7 @@ with those set forth herein.
             <arg line='"fileProtocolPrefix=${file.protocol.prefix}"'/>
             <arg line='"publishRequiredCleanup=${publish.required.cleanup}"'/>
             <arg line='"disableRelatedLinks=${disableRelatedLinks}"'/>
+        	<arg line='"pdfFormatter=${pdf.formatter}"'/>
             <sysproperty key="xml.catalog.files" value="${xml.catalog.files}"/>
         </java>
                 
@@ -221,6 +235,18 @@ with those set forth herein.
     </target>
 
     <target name="transform.fo2pdf">
+        <antcall target="transform.fo2pdf.xep">
+            <param name="inputFile" value="${dita.map.output.dir}/topic.fo"/>
+            <param name="outputFile" value="${outputFile}"/>
+            <param name="xep.failOnError" value="${xep.failOnError}"/>
+        </antcall>
+        <antcall target="transform.fo2pdf.fop">
+            <param name="inputFile" value="${dita.map.output.dir}/topic.fo"/>
+            <param name="outputFile" value="${outputFile}"/>
+        </antcall>
+    </target>
+	
+	<target name="transform.fo2pdf.xep" if="use.xep.pdf.formatter">
         <java classname="com.idiominc.ws.opentopic.fo.xep.Runner" resultproperty="errCode" failonerror="false" fork="true" maxmemory="256m">
             <arg line='"${inputFile}" "${outputFile}" failOnError=${xep.failOnError}'/>
             <classpath refid="xep.class.path"/>
@@ -231,7 +257,25 @@ with those set forth herein.
              <equals arg1="${errCode}" arg2="0"/>
           </not>
         </condition>
-    </target>
+	</target>
+	
+	<target name="transform.fo2pdf.fop" if="use.fop.pdf.formatter">
+		<taskdef name="fop" classname="org.apache.fop.tools.anttasks.Fop">
+		  <classpath>
+		    <fileset dir="${fop.home}/lib">
+		      <include name="*.jar"/>
+		    </fileset>
+		    <fileset dir="${fop.home}/build">
+		      <include name="fop.jar"/>
+		      <include name="fop-hyph.jar" />
+		    </fileset>
+		  </classpath>
+		</taskdef>
+
+	    <fop format="application/pdf" fofile="${inputFile}"
+	      outfile="${outputFile}" messagelevel="info">
+	    </fop>
+	</target>
 
     <target name="copyCoreArtwork">
         <copy todir="${coreArtworkDestinationDir}/Configuration/OpenTopic"

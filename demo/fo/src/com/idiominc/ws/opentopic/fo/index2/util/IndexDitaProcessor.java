@@ -10,7 +10,7 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;
 
 /*
-Copyright © 2004-2006 by Idiom Technologies, Inc. All rights reserved. 
+Copyright ï¿½ 2004-2006 by Idiom Technologies, Inc. All rights reserved. 
 IDIOM is a registered trademark of Idiom Technologies, Inc. and WORLDSERVER
 and WORLDSTART are trademarks of Idiom Technologies, Inc. All other 
 trademarks are the property of their respective owners. 
@@ -44,8 +44,8 @@ public abstract class IndexDitaProcessor {
 	private static String elIndexSortName = "index-sort-as";
 	private static String elIndexSeeName = "index-see";
 	private static String elIndexSeeAlsoName = "index-see-also";
-    private static String elIndexRangeStartName = "index-range-start";
-	private static String elIndexRangeEndName = "index-range-end";
+    private static String elIndexRangeStartName = "start";
+	private static String elIndexRangeEndName = "end";
     private static final String SO = "<so>";
     private static final String LT = "<";
     private static final String GT = ">";
@@ -55,8 +55,8 @@ public abstract class IndexDitaProcessor {
         final NodeList childNodes = theNode.getChildNodes();
         StringBuffer textValueBuffer = new StringBuffer();;
         StringBuffer sortStringBuffer = new StringBuffer();
-        boolean startRange = false;
-        boolean endRange = false;
+        boolean startRange = theNode.getAttributes().getNamedItem(elIndexRangeStartName) != null;
+        boolean endRange = theNode.getAttributes().getNamedItem(elIndexRangeEndName) != null;
         ArrayList childEntrys = new ArrayList();
         ArrayList seeEntry = new ArrayList();
         ArrayList seeAlsoEntry = new ArrayList();
@@ -87,10 +87,6 @@ public abstract class IndexDitaProcessor {
                         if (text != null) sortStringBuffer.append(text);
                     }
                 }
-            } else if (elIndexRangeStartName.equals(child.getNodeName())) {
-                startRange = true;
-            } else if (elIndexRangeEndName.equals(child.getNodeName())) {
-                endRange = true;
             } else if (elIndexSeeName.equals(child.getNodeName())) {
                 IndexEntry[] childs = processIndexDitaNode(child,"");
                 for (int j = 0;j < childs.length;j++)
@@ -102,13 +98,26 @@ public abstract class IndexDitaProcessor {
             }
 
         }
+/*
+        if (normalizeTextValue(textValueBuffer.toString()).length() == 0) {
+            if (startRange) {
+                textValueBuffer.append(theNode.getAttributes().getNamedItem(elIndexRangeStartName).getNodeValue());
+            } else if (endRange) {
+                textValueBuffer.append(theNode.getAttributes().getNamedItem(elIndexRangeEndName).getNodeValue());
+            }
+        }
+*/
         String textValue = normalizeTextValue(textValueBuffer.toString());
         String sortString = sortStringBuffer.toString();
         IndexEntry result = createIndexEntry(textValue,sortString);
-        if (result.getValue().length() > 0) {
+        if (result.getValue().length() > 0 || endRange || startRange) {
             result.setStartRange(startRange);
             result.setEndsRange(endRange);
-            result.addRefID(normalizeTextValue(theParentValue + textValue + ":"));
+            if (startRange) {
+                result.addRefID(theNode.getAttributes().getNamedItem(elIndexRangeStartName).getNodeValue());
+            } else if (endRange) {
+                result.addRefID(theNode.getAttributes().getNamedItem(elIndexRangeEndName).getNodeValue());
+            } else result.addRefID(normalizeTextValue(theParentValue + textValue + ":")); 
             if (!seeEntry.isEmpty()) {
                 for (int j = 0; j < seeEntry.size(); j++) {
                     IndexEntry seeIndexEntry = (IndexEntry) seeEntry.get(j);

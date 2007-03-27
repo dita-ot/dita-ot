@@ -12,21 +12,21 @@ import java.util.*;
 
 
 /*
-Copyright © 2004-2006 by Idiom Technologies, Inc. All rights reserved. 
+Copyright ï¿½ 2004-2006 by Idiom Technologies, Inc. All rights reserved.
 IDIOM is a registered trademark of Idiom Technologies, Inc. and WORLDSERVER
-and WORLDSTART are trademarks of Idiom Technologies, Inc. All other 
-trademarks are the property of their respective owners. 
+and WORLDSTART are trademarks of Idiom Technologies, Inc. All other
+trademarks are the property of their respective owners.
 
-IDIOM TECHNOLOGIES, INC. IS DELIVERING THE SOFTWARE "AS IS," WITH 
+IDIOM TECHNOLOGIES, INC. IS DELIVERING THE SOFTWARE "AS IS," WITH
 ABSOLUTELY NO WARRANTIES WHATSOEVER, WHETHER EXPRESS OR IMPLIED,  AND IDIOM
 TECHNOLOGIES, INC. DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING
-BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
+BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
 PURPOSE AND WARRANTY OF NON-INFRINGEMENT. IDIOM TECHNOLOGIES, INC. SHALL NOT
 BE LIABLE FOR INDIRECT, INCIDENTAL, SPECIAL, COVER, PUNITIVE, EXEMPLARY,
-RELIANCE, OR CONSEQUENTIAL DAMAGES (INCLUDING BUT NOT LIMITED TO LOSS OF 
-ANTICIPATED PROFIT), ARISING FROM ANY CAUSE UNDER OR RELATED TO  OR ARISING 
+RELIANCE, OR CONSEQUENTIAL DAMAGES (INCLUDING BUT NOT LIMITED TO LOSS OF
+ANTICIPATED PROFIT), ARISING FROM ANY CAUSE UNDER OR RELATED TO  OR ARISING
 OUT OF THE USE OF OR INABILITY TO USE THE SOFTWARE, EVEN IF IDIOM
-TECHNOLOGIES, INC. HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES. 
+TECHNOLOGIES, INC. HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
 
 Idiom Technologies, Inc. and its licensors shall not be liable for any
 damages suffered by any person as a result of using and/or modifying the
@@ -38,7 +38,7 @@ These terms and conditions supersede the terms and conditions in any
 licensing agreement to the extent that such terms and conditions conflict
 with those set forth herein.
 
-This file is part of the DITA Open Toolkit project hosted on Sourceforge.net. 
+This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
 See the accompanying license.txt file for applicable licenses.
 */
 public class IndexPreprocessor {
@@ -48,8 +48,8 @@ public class IndexPreprocessor {
 	private String elIndexSortName = "index-sort-as";
 	private String elIndexSeeName = "index-see";
 	private String elIndexSeeAlsoName = "index-see-also";
-    private String elIndexRangeStartName = "index-range-start";
-	private String elIndexRangeEndName = "index-range-end";
+    private String elIndexRangeStartName = "start";
+	private String elIndexRangeEndName = "end";
 
 
 	public IndexPreprocessor(String prefix, String theNamespace_url) {
@@ -99,6 +99,8 @@ public class IndexPreprocessor {
 	public void createAndAddIndexGroups(final IndexEntry[] theIndexEntries, final IndexConfiguration theConfiguration, final Document theDocument, Locale theLocale) {
 		final IndexComparator indexEntryComparator = new IndexComparator(theLocale);
 
+         if (null == indexEntryComparator) System.out.println("Collator is not found, sort order of index group can be wrong");
+
 		final IndexGroup[] indexGroups = IndexGroupProcessor.process(theIndexEntries, theConfiguration, theLocale);
 
 		final Element rootElement = theDocument.getDocumentElement();
@@ -142,8 +144,10 @@ public class IndexPreprocessor {
 	private Node[] processCurrNode(Node theNode, Document theTargetDocument, IndexEntryFoundListener theIndexEntryFoundListener) {
 		NodeList childNodes = theNode.getChildNodes();
 
-		if (elIndexName.equals(theNode.getNodeName())) {
-			for (int i = 0; i < childNodes.getLength(); i++) {
+		if (checkElementName(theNode.getNodeName())) {
+            return processIndexNode(theNode, theTargetDocument, theIndexEntryFoundListener);
+/*
+            for (int i = 0; i < childNodes.getLength(); i++) {
 				Node child = childNodes.item(i);
 				if (child.getNodeType() == Node.TEXT_NODE) { //Look for the first non-empty text node
 					final String normIndex = IndexStringProcessor.normalizeTextValue(child.getNodeValue());
@@ -152,7 +156,7 @@ public class IndexPreprocessor {
 					}
 				}
 			}
-			return new Node[0]; //Only empty index strings were found, no need to process
+*/
 		} else {
 			Node result = theTargetDocument.importNode(theNode, false);
 			for (int i = 0; i < childNodes.getLength(); i++) {
@@ -166,8 +170,68 @@ public class IndexPreprocessor {
 		}
 	}
 
+    private Node[] processIndexNode(Node theNode, Document theTargetDocument, IndexEntryFoundListener theIndexEntryFoundListener) {
+        theNode.normalize();
 
-	private Node[] processIndexTextNode(Node theNode, Document theTargetDocument, IndexEntryFoundListener theIndexEntryFoundListener) {
+        boolean ditastyle = false;
+        boolean textNode = false;
+
+        NodeList childNodes = theNode.getChildNodes();
+        for (int i = 0; i < childNodes.getLength(); i++) {
+            final Node child = childNodes.item(i);
+            final String nodeName = child.getNodeName();
+            if (checkElementName(nodeName)) {
+                ditastyle = true;
+                break;
+            }
+            if (child.getNodeType() == Node.TEXT_NODE) {
+			    final String normIndex = IndexStringProcessor.normalizeTextValue(child.getNodeValue());
+				if (normIndex.length() > 0) {
+					textNode = true;
+				}
+            }
+        }
+
+        if (theNode.getAttributes().getNamedItem(elIndexRangeStartName) != null ||
+                theNode.getAttributes().getNamedItem(elIndexRangeEndName) != null) {
+            ditastyle = true;
+        }
+
+        String[] indexStrings;
+        ArrayList res = new ArrayList();
+        if ((ditastyle)) {
+            IndexEntry[] indexEntries = IndexDitaProcessor.processIndexDitaNode(theNode,"");
+
+            for (int i = 0; i < indexEntries.length; i++) {
+                theIndexEntryFoundListener.foundEntry(indexEntries[i]);
+            }
+
+            final Node[] nodes = transformToNodes(indexEntries, theTargetDocument, null);
+            for (int j = 0; j < nodes.length; j++) {
+                Node node = nodes[j];
+                res.add(node);
+            }
+
+        } else if (textNode) {
+            for (int k = 0; k < childNodes.getLength(); k++) {
+                final Node child = childNodes.item(k);
+                indexStrings = new String[]{child.getNodeValue()};
+                for (int i = 0; i < indexStrings.length; i++) {
+                    String indexString = indexStrings[i];
+                    final Node[] nodes = processIndexString(indexString, theTargetDocument, theIndexEntryFoundListener);
+                    for (int j = 0; j < nodes.length; j++) {
+                        Node node = nodes[j];
+                        res.add(node);
+                    }
+                }
+            }
+        } else return new Node[0];
+
+        return (Node[]) res.toArray(new Node[res.size()]);
+
+    }
+
+    private Node[] processIndexTextNode(Node theNode, Document theTargetDocument, IndexEntryFoundListener theIndexEntryFoundListener) {
 		theNode.normalize();
 
 		boolean ditastyle = false;
@@ -214,9 +278,40 @@ public class IndexPreprocessor {
 
     private boolean checkElementName(String nodeName) {
         return elIndexName.equals(nodeName) || elIndexSortName.equals(nodeName)
-                || elIndexSeeName.equals(nodeName) || elIndexSeeAlsoName.equals(nodeName)
-                || elIndexRangeStartName.equals(nodeName) || elIndexRangeEndName.equals(nodeName);
+                || elIndexSeeName.equals(nodeName) || elIndexSeeAlsoName.equals(nodeName);
+    }
 
+    private String[] createIndexStringFromDitastyleIndex(Node theNode) {
+        //Go through the childs and append text nodes to the index string
+        //Index elements on the same level will create separate index strings
+        ArrayList resultList = new ArrayList();
+        if (elIndexName.equals(theNode.getNodeName())) //Is index element?
+        {
+            StringBuffer resIndexString = new StringBuffer();
+            boolean skipCurrentLevel = false;
+            final NodeList childNodes = theNode.getChildNodes();
+            for (int i = 0; i < childNodes.getLength(); i++) { //Go through child nodes to find text nodes
+                final Node child = childNodes.item(i);
+                if (child.getNodeType() == Node.TEXT_NODE) {
+                    final String val = child.getNodeValue();
+                    if (null != val) {
+                        resIndexString.append(val); //append to result index string
+                    }
+                } else if (elIndexName.equals(child.getNodeName())) {
+                    skipCurrentLevel = true;		//skip adding current level index string because it has continuation on the descendant level
+                    String[] indexValues = createIndexStringFromDitastyleIndex(child); //call recursevelly but for the found child
+                    for (int j = 0; j < indexValues.length; j++) {
+                        String indexValue = indexValues[j];
+                        resultList.add(resIndexString.toString() + ':' + indexValue); //append to result list prefixed by current level
+                    }
+                }
+            }
+            if (!skipCurrentLevel) {
+                //No descendant index elements were found so add this level as final
+                resultList.add(resIndexString.toString());
+            }
+        }
+        return (String[]) resultList.toArray(new String[resultList.size()]); //return result
     }
 
 

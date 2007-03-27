@@ -81,10 +81,10 @@ See the accompanying license.txt file for applicable licenses.
     <variable id="Preface first footer"/>
 
     <!-- The header that appears on Preface odd-numbered pages. -->
-    <variable id="Preface odd header">Preface&#xA0;|&#xA0;<param ref-name="prodname"/>&#xA0;|&#xA0;<param ref-name="heading"/>&#xA0;|&#xA0;<param ref-name="pagenum"/></variable>
+    <variable id="Preface odd header">Introduction&#xA0;|&#xA0;<param ref-name="prodname"/>&#xA0;|&#xA0;<param ref-name="heading"/>&#xA0;|&#xA0;<param ref-name="pagenum"/></variable>
 
     <!-- The header that appears on Preface even-numbered pages. -->
-    <variable id="Preface even header"><param ref-name="pagenum"/>&#xA0;|&#xA0;<param ref-name="prodname"/>&#xA0;|&#xA0;Preface</variable>
+    <variable id="Preface even header"><param ref-name="pagenum"/>&#xA0;|&#xA0;<param ref-name="prodname"/>&#xA0;|&#xA0;Introduction</variable>
 
     <!-- The header that appears on Preface first page. -->
     <variable id="Preface first header"/>
@@ -148,7 +148,16 @@ See the accompanying license.txt file for applicable licenses.
     <variable id="Table of Contents Part">Part&#xA0;<param ref-name="number"/>:&#xA0;</variable>
 
     <!-- The string used to label an preface within the table of contents. -->
-    <variable id="Table of Contents Preface">Preface&#xA0;</variable>
+    <variable id="Table of Contents Preface">Preface:&#xA0;</variable>
+
+    <!-- The string used to label an preface within the table of contents. -->
+    <variable id="Table of Contents Notices"></variable>
+
+    <!-- The string used to label an preface in body text. -->
+    <variable id="Preface title">Preface</variable>
+
+    <!-- The string used to label an notices in body text. -->
+    <variable id="Notices title">Notice</variable>
 
     <!-- The heading to put at the top of a chapter when creating a
          chapter-level "mini-TOC" -->
@@ -323,6 +332,9 @@ See the accompanying license.txt file for applicable licenses.
 
     <!-- The title of the "index" button in online-help output -->
     <variable id="Index button title">Index</variable>
+
+    <!-- The separator of multiple index entries in online-help output -->
+    <variable id="Index multiple entries separator">, </variable>
 
     <!-- The title of the "search" button in online-help output -->
     <variable id="Search button title">Search</variable>

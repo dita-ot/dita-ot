@@ -82,7 +82,7 @@ See the accompanying license.txt file for applicable licenses.
 
                         </fo:block>
 
-                        <xsl:call-template name="createPreface"/>
+                        <!--<xsl:call-template name="createPreface"/>-->
 
                     </fo:flow>
                 </fo:page-sequence>
@@ -98,6 +98,9 @@ See the accompanying license.txt file for applicable licenses.
                     <!-- set the title -->
                     <fo:block xsl:use-attribute-sets="__frontmatter__title">
                         <xsl:choose>
+                            <xsl:when test="$map/*[contains(@class,' topic/title ')][1]">
+                                <xsl:apply-templates select="$map/*[contains(@class,' topic/title ')][1]"/>
+                            </xsl:when>
                             <xsl:when test="$map//*[contains(@class,' bookmap/mainbooktitle ')][1]">
                                 <xsl:apply-templates select="$map//*[contains(@class,' bookmap/mainbooktitle ')][1]"/>
                             </xsl:when>
@@ -119,7 +122,7 @@ See the accompanying license.txt file for applicable licenses.
 
                 </fo:block>
 
-                <xsl:call-template name="createPreface"/>
+                <!--<xsl:call-template name="createPreface"/>-->
 
             </fo:flow>
         </fo:page-sequence>
@@ -144,6 +147,15 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:template match="*[contains(@class, ' bookmap/booktitlealt ')]" priority="+2">
         <fo:block xsl:use-attribute-sets="__frontmatter__subtitle">
             <xsl:apply-templates/>
+        </fo:block>
+    </xsl:template>
+
+    <xsl:template match="*[contains(@class, ' bookmap/booktitle ')]" priority="+2">
+        <fo:block xsl:use-attribute-sets="__frontmatter__booklibrary">
+            <xsl:apply-templates select="*[contains(@class, ' bookmap/booklibrary ')]"/>
+        </fo:block>
+        <fo:block xsl:use-attribute-sets="__frontmatter__mainbooktitle">
+            <xsl:apply-templates select="*[contains(@class,' bookmap/mainbooktitle ')]"/>
         </fo:block>
     </xsl:template>
 

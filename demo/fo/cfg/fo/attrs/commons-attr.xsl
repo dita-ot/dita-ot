@@ -156,7 +156,7 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:attribute-set name="fig.title">
         <xsl:attribute name="font-family">Sans</xsl:attribute>
-        <xsl:attribute name="font-size">9pt</xsl:attribute>
+        <xsl:attribute name="font-size">10pt</xsl:attribute>
         <xsl:attribute name="font-weight">bold</xsl:attribute>
         <xsl:attribute name="space-before.optimum">5pt</xsl:attribute>
         <xsl:attribute name="space-after.optimum">10pt</xsl:attribute>
@@ -164,7 +164,7 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:attribute-set>
 
     <xsl:attribute-set name="topic">
-        <xsl:attribute name="font-size">9pt</xsl:attribute>
+        <xsl:attribute name="font-size">10pt</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="titlealts">
@@ -363,7 +363,7 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:attribute name="background-color">#f0f0f0</xsl:attribute>
         <xsl:attribute name="font-family">Monospaced</xsl:attribute>
         <xsl:attribute name="line-height">106%</xsl:attribute>
-        <xsl:attribute name="font-size">9pt</xsl:attribute>
+        <xsl:attribute name="font-size">10pt</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="__spectitle">
@@ -480,7 +480,7 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:attribute name="provisional-distance-between-starts">8mm</xsl:attribute>
         <xsl:attribute name="provisional-label-separation">2mm</xsl:attribute>
         <xsl:attribute name="line-height">1.2</xsl:attribute>
-        <xsl:attribute name="font-size">9pt</xsl:attribute>
+        <xsl:attribute name="font-size">10pt</xsl:attribute>
         <xsl:attribute name="start-indent">0pt</xsl:attribute>
     </xsl:attribute-set>
 

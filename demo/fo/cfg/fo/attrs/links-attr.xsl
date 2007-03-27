@@ -1,4 +1,4 @@
-<?xml version='1.0'?>
+<?xml version="1.0"?>
 
 <!-- 
 Copyright © 2004-2006 by Idiom Technologies, Inc. All rights reserved. 
@@ -6,7 +6,7 @@ IDIOM is a registered trademark of Idiom Technologies, Inc. and WORLDSERVER
 and WORLDSTART are trademarks of Idiom Technologies, Inc. All other 
 trademarks are the property of their respective owners. 
 
-IDIOM TECHNOLOGIES, INC. IS DELIVERING THE SOFTWARE "AS IS," WITH 
+IDIOM TECHNOLOGIES, INC. IS DELIVERING THE SOFTWARE &quot;AS IS,&quot; WITH 
 ABSOLUTELY NO WARRANTIES WHATSOEVER, WHETHER EXPRESS OR IMPLIED,  AND IDIOM
 TECHNOLOGIES, INC. DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING
 BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
@@ -19,7 +19,7 @@ TECHNOLOGIES, INC. HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
 
 Idiom Technologies, Inc. and its licensors shall not be liable for any
 damages suffered by any person as a result of using and/or modifying the
-Software or its derivatives. In no event shall Idiom Technologies, Inc.'s
+Software or its derivatives. In no event shall Idiom Technologies, Inc.&apos;s
 liability for any damages hereunder exceed the amounts received by Idiom
 Technologies, Inc. as a result of this transaction.
 
@@ -31,9 +31,7 @@ This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
 See the accompanying license.txt file for applicable licenses.
 -->
 
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xmlns:fo="http://www.w3.org/1999/XSL/Format"
-    version="1.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format" version="1.0">
 
     <xsl:attribute-set name="linklist">
     </xsl:attribute-set>
@@ -68,7 +66,7 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:attribute-set name="link__shortdesc">
         <xsl:attribute name="margin-left">15pt</xsl:attribute>
-        <xsl:attribute name="font-size">9pt</xsl:attribute>
+        <xsl:attribute name="font-size">10pt</xsl:attribute>
         <xsl:attribute name="space-after.optimum">5pt</xsl:attribute>
     </xsl:attribute-set>
 

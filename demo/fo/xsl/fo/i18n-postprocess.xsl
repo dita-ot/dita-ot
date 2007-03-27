@@ -43,14 +43,14 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:variable name="font-mappings" select="document('cfg:fo/font-mappings.xml')/font-mappings"/>
 
-	<xsl:template match="rx:bookmark | rx:bookmark-label" priority="+10">
+	<xsl:template match="fo:bookmark | fo:bookmark-label" priority="+10">
 		<xsl:copy>
 			<xsl:copy-of select="@*"/>
 			<xsl:apply-templates/>
 		</xsl:copy>
 	</xsl:template>
 
-	<xsl:template match="rx:bookmark//opentopic-i18n:text-fragment" priority="+10">
+	<xsl:template match="fo:bookmark//opentopic-i18n:text-fragment" priority="+10">
 		<xsl:value-of select="."/>
 	</xsl:template>
 

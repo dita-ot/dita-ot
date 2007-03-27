@@ -81,10 +81,10 @@ See the accompanying license.txt file for applicable licenses.
     <variable id="Preface first footer"/>
 
     <!-- The header that appears on Preface odd-numbered pages. -->
-    <variable id="Preface odd header">序文 | <param ref-name="prodname"/> | <param ref-name="heading"/> | <param ref-name="pagenum"/></variable>
+    <variable id="Preface odd header">はじめに | <param ref-name="prodname"/> | <param ref-name="heading"/> | <param ref-name="pagenum"/></variable>
 
     <!-- The header that appears on Preface even-numbered pages. -->
-    <variable id="Preface even header"><param ref-name="pagenum"/> | <param ref-name="prodname"/> | 序文</variable>
+    <variable id="Preface even header"><param ref-name="pagenum"/> | <param ref-name="prodname"/> | はじめに</variable>
 
     <!-- The header that appears on Preface first page. -->
     <variable id="Preface first header"/>
@@ -142,7 +142,16 @@ See the accompanying license.txt file for applicable licenses.
     <variable id="Table of Contents Part">第 <param ref-name="number"/> 部 : </variable>
 
     <!-- The string used to label an preface within the table of contents. -->
-    <variable id="Table of Contents Preface">序文</variable>
+    <variable id="Table of Contents Preface">序文 : </variable>
+
+    <!-- The string used to label an preface within the table of contents. -->
+    <variable id="Table of Contents Notices"></variable>
+
+    <!-- The string used to label an preface in body text. -->
+    <variable id="Preface title">序文</variable>
+
+    <!-- The string used to label an notices in body text. -->
+    <variable id="Notices title">特記事項</variable>
 
     <!-- The heading to put at the top of a chapter when creating a
          chapter-level "mini-TOC" -->
@@ -317,6 +326,9 @@ See the accompanying license.txt file for applicable licenses.
 
     <!-- The title of the "index" button in online-help output -->
     <variable id="Index button title">索引</variable>
+
+    <!-- The separator of multiple index entries in online-help output -->
+    <variable id="Index multiple entries separator">、 </variable>
 
     <!-- The title of the "search" button in online-help output -->
     <variable id="Search button title">検索</variable>

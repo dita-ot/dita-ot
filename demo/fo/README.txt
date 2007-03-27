@@ -8,8 +8,8 @@ Features of this code include:
 - Index (with extensions) and table of contents generation
 - Font mapping: characters can be remapped to different fonts. This is 
   particularly useful for CJK font support, and is configured per-locale.
-- Extensive customization of publishing output by setting variables (67 of them)
-  and attribute-sets (391 of them).
+- Extensive customization of publishing output by setting variables
+  (67 of them) and attribute-sets (391 of them).
 - A catalog-based customization framework where you can customize variables, 
   attribute-sets and XSLs without modifying Open Toolkit code: your custom 
   settings live in files in a separate customization hierarchy.
@@ -27,10 +27,13 @@ this plugin due to licensing and redistribution restrictions:
 - RenderX XEP: Idiom's FO output currently requires RenderX XEP to
   convert FO to PDF. The personal edition of XEP can be obtained for
   free from RenderX (http://www.renderx.com). XEP comes with Saxon
-  6.5, which this plugin also needs.
+  6.5.3, which this plugin also needs. But if you are using JDK 1.5 or 
+  newer, you will need Saxon 6.5.5 or newer which has fixes for JDK 1.5
+  compatibility. Download Saxon 6.5.5 from http://saxon.sourceforge.net.
 
 - ICU4J: You can find this library by clicking on the "Download ICU" link
-  at http://icu.sourceforge.net. Look for the ICU4J downloads.
+  at http://icu.sourceforge.net. Look for the ICU4J downloads. ICU4J is
+  an optional jar that will give you better collation of index entries.
 
  To install and use with the Open Toolkit's distribution,
 
@@ -38,8 +41,9 @@ this plugin due to licensing and redistribution restrictions:
 2. Unzip this plugin into an Open Toolkit installation's
    demo directory.
 3. Install XEP personal edition and license into demo/fo/lib/xep.
-4. Install the ICU4j jar as demo/fo/lib/icu4j.jar
-5. From the Open Toolkit directory, run "ant -f integrator.xml"
+4. If you are using JDK 1.5, install saxon.jar in demo/fo/lib/xep/lib.
+5. Install the ICU4j jar (optional) as demo/fo/lib/icu4j.jar
+6. From the Open Toolkit directory, run "ant -f integrator.xml"
 
 At this point, the FO output is fully integrated into the Open
 Toolkit's pipeline. The plugin infrastructure will detect the FO
@@ -79,9 +83,9 @@ The extended syntax consists of:
 	                page number for an entry that follows a <$nopage>
 	                building block
 
-Work is underway to extend the indexterm element for DITA 1.1. While the markup
-will be different, it should be possible in DITA 1.1 to express comparable 
-semantics.
+DITA 1.1 indexing elements have been implemented in this plugin that
+should make these extensions unnecessary. You can now express see/see
+also, sort order and page ranges using standard DITA 1.1 elements.
 
 About /Customization
 ====================
@@ -125,6 +129,15 @@ To modify these settings, copy "build.properties.orig" to
 
 History
 =======
+
+FO Plugin Release 1.3
+Currently in prerelease since March 27, 2007
+
+- Rebased with Idiom's internal code as of March 27, 2007.
+- Updated DITA 1.1 support: new bookmap and indexing elements.
+- Minor fixes
+
+----------------------------------------------------------------------------
 
 FO Plugin Release 1.2.1
 

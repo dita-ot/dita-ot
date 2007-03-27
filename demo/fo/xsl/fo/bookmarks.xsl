@@ -49,37 +49,30 @@ See the accompanying license.txt file for applicable licenses.
         </xsl:variable>
 
         <xsl:if test="count(exsl:node-set($bookmarks)/*) > 0">
-            <rx:outline>
-                <rx:bookmark internal-destination="ID_TOC_00-0F-EA-40-0D-4D">
-                    <rx:bookmark-label>
+            <fo:bookmark-tree>
+                <fo:bookmark internal-destination="ID_TOC_00-0F-EA-40-0D-4D">
+                    <fo:bookmark-title>
                         <xsl:call-template name="insertVariable">
                             <xsl:with-param name="theVariableID" select="'Table of Contents'"/>
                         </xsl:call-template>
-                    </rx:bookmark-label>
-                </rx:bookmark>
+                    </fo:bookmark-title>
+                </fo:bookmark>
                 <xsl:copy-of select="exsl:node-set($bookmarks)"/>
                 <!-- CC #6163  -->
-                <xsl:if test="//opentopic-index:index.groups//opentopic-index:index.entry">
-                    <rx:bookmark internal-destination="ID_INDEX_00-0F-EA-40-0D-4D">
-                        <rx:bookmark-label>
+                <xsl:if test="(//opentopic-index:index.groups//opentopic-index:index.entry) and (count($index-entries//opentopic-index:index.entry) &gt; 0) ">
+                    <fo:bookmark internal-destination="ID_INDEX_00-0F-EA-40-0D-4D">
+                        <fo:bookmark-title>
                             <xsl:call-template name="insertVariable">
                                 <xsl:with-param name="theVariableID" select="'Index'"/>
                             </xsl:call-template>
-                        </rx:bookmark-label>
-                    </rx:bookmark>
+                        </fo:bookmark-title>
+                    </fo:bookmark>
                 </xsl:if>
-            </rx:outline>
+            </fo:bookmark-tree>
         </xsl:if>
     </xsl:template>
 
-    <xsl:template match="/" mode="bookmark">
-        <xsl:apply-templates mode="bookmark">
-            <xsl:with-param name="include" select="'true'"/>  
-        </xsl:apply-templates>
-    </xsl:template>
-
     <xsl:template match="*[contains(@class, ' topic/topic ') and not(contains(@class, ' bkinfo/bkinfo '))]" mode="bookmark">
-        <xsl:param name="include"/>
         <xsl:variable name="topicTitle">
             <xsl:for-each select="child::*[contains(@class,' topic/title ')]">
                 <xsl:call-template name="getTitle"/>
@@ -92,23 +85,20 @@ See the accompanying license.txt file for applicable licenses.
             <xsl:copy-of select="$map//*[@id = $id]"/>
         </xsl:variable>
 
-        <xsl:if test="($mapTopic/*[position() = $topicNumber][@toc = 'yes' or not(@toc)]) or (not($mapTopic/*) and $include = 'true')">
-        <rx:bookmark internal-destination="{concat('_OPENTOPIC_TOC_PROCESSING_', generate-id())}">
-            <rx:bookmark-label>
+        <xsl:if test="($mapTopic/*[position() = $topicNumber][@toc = 'yes' or not(@toc)]) or (not($mapTopic/*))">
+        <fo:bookmark internal-destination="{concat('_OPENTOPIC_TOC_PROCESSING_', generate-id())}">
+            <fo:bookmark-title>
                 <xsl:value-of select="$topicTitle"/>
-            </rx:bookmark-label>
-            <xsl:apply-templates mode="bookmark">
-                <xsl:with-param name="include" select="'true'"/>
-            </xsl:apply-templates>
-        </rx:bookmark>
+            </fo:bookmark-title>
+            <xsl:apply-templates mode="bookmark"/>
+        </fo:bookmark>
         </xsl:if>
     </xsl:template>
 
-    <xsl:template match="node()" mode="bookmark">
-        <xsl:param name="include"/>
-        <xsl:apply-templates mode="bookmark">
-            <xsl:with-param name="include" select="$include"/>
-        </xsl:apply-templates>
+    <xsl:template match="*" mode="bookmark">
+        <xsl:apply-templates mode="bookmark"/>
     </xsl:template>
+
+    <xsl:template match="text()" mode="bookmark"/>
 
 </xsl:stylesheet>

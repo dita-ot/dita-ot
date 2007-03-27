@@ -38,7 +38,7 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:attribute-set name="__toc__header">
         <xsl:attribute name="margin-top">0pc</xsl:attribute>
         <xsl:attribute name="margin-bottom">1.4pc</xsl:attribute>
-        <xsl:attribute name="font-size">18pt</xsl:attribute>
+        <xsl:attribute name="font-size">20pt</xsl:attribute>
         <xsl:attribute name="font-weight">bold</xsl:attribute>
         <xsl:attribute name="padding-top">1.4pc</xsl:attribute>
         <xsl:attribute name="font-family">Sans</xsl:attribute>
@@ -98,6 +98,12 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:attribute name="padding-top">20pt</xsl:attribute>
     </xsl:attribute-set>
 
+    <xsl:attribute-set name="__toc__notices__content" use-attribute-sets="__toc__topic__content">
+        <xsl:attribute name="font-size">14pt</xsl:attribute>
+        <xsl:attribute name="font-weight">bold</xsl:attribute>
+        <xsl:attribute name="padding-top">20pt</xsl:attribute>
+    </xsl:attribute-set>
+
     <!-- Added for back compatibility since __toc__content was renamed into __toc__topic__content-->
     <xsl:attribute-set name="__toc__content" use-attribute-sets="__toc__topic__content">
     </xsl:attribute-set>
@@ -144,6 +150,11 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:attribute-set>
 
     <xsl:attribute-set name="__toc__mini__table">
+        <xsl:attribute name="table-layout">fixed</xsl:attribute>
+        <xsl:attribute name="width">100%</xsl:attribute>
+    </xsl:attribute-set>
+
+    <xsl:attribute-set name="__toc__mini__table__body">
         <xsl:attribute name="page-break-after">always</xsl:attribute>
     </xsl:attribute-set>
 

@@ -138,7 +138,7 @@ See the accompanying license.txt file for applicable licenses.
                 </xsl:when>
 				<xsl:otherwise>
 					<!--Using default template-->
-					<xsl:apply-templates select="self::node()"/>
+					<xsl:apply-templates select="self::node()" mode="default"/>
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:for-each>

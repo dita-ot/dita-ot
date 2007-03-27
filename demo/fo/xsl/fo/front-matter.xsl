@@ -40,7 +40,7 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:include href="../../cfg/fo/attrs/front-matter-attr.xsl"/>
 
     <xsl:template name="createFrontMatter">
-        <fo:page-sequence master-reference="front-matter" xsl:use-attribute-sets="__force__page__count">
+        <fo:page-sequence master-reference="front-matter" format="i" xsl:use-attribute-sets="__force__page__count">
             <xsl:call-template name="insertFrontMatterStaticContents"/>
             <fo:flow flow-name="xsl-region-body">
                 <fo:block xsl:use-attribute-sets="__frontmatter">
@@ -75,7 +75,7 @@ See the accompanying license.txt file for applicable licenses.
 
                 </fo:block>
 
-                <xsl:call-template name="createPreface"/>
+                <xsl:call-template name="processCopyrigth"/>
 
             </fo:flow>
         </fo:page-sequence>
@@ -136,5 +136,45 @@ See the accompanying license.txt file for applicable licenses.
             <xsl:apply-templates/>
         </fo:block>
     </xsl:template>
+
+    <xsl:template name="processCopyrigth">
+        <xsl:apply-templates select="/bookmap/*[contains(@class,' topic/topic ')]" mode="process-preface"/>
+    </xsl:template>
+
+    <xsl:template name="processTopicAbstract">
+        <fo:block xsl:use-attribute-sets="topic" page-break-before="always">
+            <xsl:if test="not(ancestor::*[contains(@class, ' topic/topic ')])">
+                <fo:marker marker-class-name="current-topic-number">
+                    <xsl:number format="1"/>
+                </fo:marker>
+                <fo:marker marker-class-name="current-header">
+                    <xsl:for-each select="child::*[contains(@class,' topic/title ')]">
+                        <xsl:call-template name="getTitle"/>
+                    </xsl:for-each>
+                </fo:marker>
+            </xsl:if>
+            <fo:inline id="{@id}"/>
+            <fo:inline id="{concat('_OPENTOPIC_TOC_PROCESSING_', generate-id())}"/>
+            <fo:block>
+                <xsl:attribute name="border-bottom">3pt solid black</xsl:attribute>
+                <xsl:attribute name="margin-bottom">1.4pc</xsl:attribute>
+            </fo:block>
+            <fo:block xsl:use-attribute-sets="body__toplevel">
+                <xsl:apply-templates select="*[not(contains(@class, ' topic/title '))]"/>
+            </fo:block>
+        </fo:block>
+    </xsl:template>
+
+    <xsl:template match="*[contains(@class, ' topic/topic ')]" mode="process-preface">
+        <xsl:param name="include" select="'true'"/>
+        <xsl:variable name="topicType">
+            <xsl:call-template name="determineTopicType"/>
+        </xsl:variable>
+
+        <xsl:if test="$topicType = 'topicAbstract'">
+            <xsl:call-template name="processTopicAbstract"/>
+        </xsl:if>
+    </xsl:template>
+
 
 </xsl:stylesheet>

@@ -3,6 +3,7 @@ package com.idiominc.ws.opentopic.fo.index2;
 import com.idiominc.ws.opentopic.fo.index2.configuration.IndexConfiguration;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
+import org.apache.tools.ant.Project;
 import org.apache.xml.resolver.tools.CatalogResolver;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
@@ -18,7 +19,7 @@ import java.io.File;
 import java.util.Locale;
 
 /*
-Copyright © 2004-2006 by Idiom Technologies, Inc. All rights reserved. 
+Copyright ï¿½ 2004-2006 by Idiom Technologies, Inc. All rights reserved. 
 IDIOM is a registered trademark of Idiom Technologies, Inc. and WORLDSERVER
 and WORLDSTART are trademarks of Idiom Technologies, Inc. All other 
 trademarks are the property of their respective owners. 
@@ -54,6 +55,8 @@ public class IndexPreprocessorTask
 	private String catalogs = null;
 	private String locale = null;
 	private String indexConfig;
+	public static boolean failOnError = false;
+	public static boolean processingFaild = false;
 	private String prefix = "opentopic-index";
 	private String namespace_url = "http://www.idiominc.com/opentopic/index";
 	private String indexElementName = "indexterm";
@@ -104,6 +107,9 @@ public class IndexPreprocessorTask
 			// Append index groups to the end of document
 			preprocessor.createAndAddIndexGroups(indexEntries, configuration, resultDoc, loc);
 
+            if (processingFaild) {
+                setActiveProjectProrerty("ws.runtime.index.preprocess.fail","true");
+            }
 			// Serialize processed document
 			TransformerFactory transformerFactory = TransformerFactory.newInstance();
 			Transformer transformer = transformerFactory.newTransformer();
@@ -160,8 +166,20 @@ public class IndexPreprocessorTask
 		this.indexConfig = theIndexConfig;
 	}
 
+    public void setFailOnError(String theFailOnErro) {
+		this.failOnError = theFailOnErro.equals("true");
+	}
+
 
 	public void setIndexElementName(String theIndexElementName) {
 		this.indexElementName = theIndexElementName;
 	}
+
+    private void setActiveProjectProrerty(String propertyName, String propertyValue) {
+        Project activeProject = getProject();
+        if (activeProject != null) {
+            activeProject.setProperty(propertyName, propertyValue);
+        }
+    }
+
 }

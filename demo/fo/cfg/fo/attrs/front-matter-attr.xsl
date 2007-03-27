@@ -73,4 +73,12 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:attribute-set name="__frontmatter__owner__container_content">
         <xsl:attribute name="text-align">center</xsl:attribute>
     </xsl:attribute-set>
+
+    <xsl:attribute-set name="__frontmatter__mainbooktitle">
+        <!--<xsl:attribute name=""></xsl:attribute>-->
+    </xsl:attribute-set>
+
+    <xsl:attribute-set name="__frontmatter__booklibrary">
+        <!--<xsl:attribute name=""></xsl:attribute>-->
+    </xsl:attribute-set>
 </xsl:stylesheet>
