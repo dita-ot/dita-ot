@@ -9,15 +9,13 @@
   </target>
 
   <target name="map2pdf2" unless="noMap" depends="dita-preprocess">
-    <xslt processor="trax"
-		in="${dita.temp.dir}${file.separator}${user.input.file}"
-		out="${dita.temp.dir}${file.separator}${dita.map.filename.root}_MERGED.xml"
-		style="${dita.dir}/demo/fo/xsl/common/topicmerge.xsl">
-	  <param name="root-path" expression="${user.input.dir}${file.separator}" />
-	  <xmlcatalog refid="dita.catalog" />
-	</xslt>
-	<ant dir="${dita.dir}/demo/fo" target="publish.map.pdf">
-		<property name="caller.dir" value="${basedir}"/>
-	</ant>
+    <pipeline message="topicmerge" module="TopicMerge"
+              inputmap="${dita.temp.dir}${file.separator}${user.input.file}"
+              extparam="output=${dita.temp.dir}${file.separator}${dita.map.filename.root}_MERGED.xml;style=${dita.dir}/demo/fo/xsl/common/topicmerge.xsl">
+    </pipeline>
+
+    <ant dir="${dita.dir}/demo/fo" target="publish.map.pdf">
+        <property name="caller.dir" value="${basedir}"/>
+    </ant>
   </target>
 </project>
