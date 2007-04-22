@@ -6,45 +6,44 @@ See the accompanying license.txt file for applicable licenses.
 -->
 <concept id="prolog_element">
 	<title>Prolog element (&lt;prolog&gt;)</title>
-	
 	<prolog>
 		<author type="creator">Anna van Raaphorst</author>
 		<author type="contributor">Richard Johnson</author>
 		<publisher>OASIS (Organization for the Advancement of Structured Information Standards)</publisher>
 		<copyright>
-			<copyryear year="2006"/>
+			<copyryear year="2007"/>
 			<copyrholder>VR Communications, Inc.</copyrholder>
 		</copyright>
 		<critdates>
 			<created date="2006-May-01"/>
-			<revised modified="2006-October-17"/>
+			<revised modified="2007-April-01"/>
 		</critdates>
 		<metadata>
 			<keywords>
-				<keyword>DITA core vocabulary</keyword>
-				<keyword>DITA controlled vocabulary</keyword>
 				<keyword>prolog element</keyword>
 				<indexterm>prolog element</indexterm>
 			</keywords>
 			<prodinfo>
 				<prodname>DITA Open Toolkit</prodname>
 				<vrmlist>
-					<vrm version="1.3"/>
+					<vrm version="1.3.1"/>
 				</vrmlist>
 			</prodinfo>
 		</metadata>
 	</prolog>
 	<conbody>
 		<section id="prolog_element_term">
-			
 			<p>A prolog elment is an element containing metadata for a topic (for example, author, creation date, and modification date).
+			</p>
+			<p>
+				<b>Example</b>
 			</p>
 			<p>
 				<codeblock>			
 &lt;prolog&gt;
 &lt;author type="creator"&gt;Anna van Raaphorst&lt;/author&gt;
 &lt;copyright&gt;
-&lt;copyryear year="2006"/&gt;
+&lt;copyryear year="2007"/&gt;
 &lt;copyrholder&gt;VR Communications, Inc.&lt;/copyrholder&gt;
 &lt;/copyright&gt;
 &lt;critdates&gt;

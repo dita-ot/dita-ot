@@ -4,39 +4,37 @@
 This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
 See the accompanying license.txt file for applicable licenses.
 -->
-<concept id="tailoring_xhtml">
-	<title>Tailoring XHTML output</title>
-	
+<concept id="xhtml_overview">
+	<title>Customizing XHTML output overview</title>
 	<prolog>
 		<author type="creator">Richard Johnson</author>
 		<author type="contributor">Anna van Raaphorst</author>
 		<publisher>OASIS (Organization for the Advancement of Structured Information Standards)</publisher>
 		<copyright>
-			<copyryear year="2006"/>
+			<copyryear year="2007"/>
 			<copyrholder>VR Communications, Inc.</copyrholder>
 		</copyright>
 		<critdates>
 			<created date="2006-May-01"/>
-			<revised modified="2006-September-19"/>
+			<revised modified="2007-April-03"/>
 		</critdates>
 		<metadata>
 			<keywords>
 				<keyword>customizing published output</keyword>
 				<keyword>XHTML</keyword>
-				<indexterm>tailoring XHTML output</indexterm>
-				<indexterm>XHTML output, tailoring</indexterm>
+				<indexterm>customizing XHTML output</indexterm>
+				<indexterm>XHTML output, customizing</indexterm>
 			</keywords>
 			<prodinfo>
 				<prodname>DITA Open Toolkit</prodname>
 				<vrmlist>
-					<vrm version="1.3"/>
+					<vrm version="1.3.1"/>
 				</vrmlist>
 			</prodinfo>
 		</metadata>
 	</prolog>
 	<conbody>
 		<section>
-			<title>XHTML tailoring overview</title>
 			<p>The Toolkit supports several &lt;property&gt; settings that can be used to customize the appearance of XHTML output. XHTML is generated when the "transtype" property has the value "xhtml". The following table shows which properties you can set that affect the appearance of your XHTML output:</p>
 			<simpletable>
 				<sthead>
@@ -53,7 +51,7 @@ See the accompanying license.txt file for applicable licenses.
 				</strow>
 				<strow>
 					<stentry>args.hdf</stentry>
-					<stentry>URI of the file containing XHTML to be placed in the head area of the output file. The file must be well-formed XML.
+					<stentry>URI of the file containing XHTML to be placed in the head area of the output file. The file must be well-formed XML, which means, for example, that you could include a JavaScript if it were labeled as CDATA.
                 </stentry>
 					<stentry>Example: &lt;property name="args.hdf" value="file:/C:/sandbox/myhdf.xml"/&gt; 
 </stentry>
@@ -66,26 +64,6 @@ See the accompanying license.txt file for applicable licenses.
 </stentry>
 				</strow>
 			</simpletable>
-		</section>
-		<section>
-			<title>Instructions for tailoring XHTML ouput (specific example)</title>
-			<p>Assume DITA source files are stored in <filepath>C:/sandbox</filepath>. In the <filepath>sandbox</filepath> directory are files <filepath>myhdr.xml</filepath> and <filepath>myftr.xml</filepath>. The files must be well-formed XML, so <filepath>myftr.xml</filepath> might look like this:</p>
-			<codeblock>
-&lt;p&gt;DRAFT&lt;/p&gt;
-		</codeblock>
-			<p>In the Ant script that builds the XHTML target, add properties for <filepath>args.hdr</filepath> and <filepath>args.ftr</filepath>. The target in the Ant script would look like this:</p>
-			<codeblock>		
-&lt;target name="tk2xhtml"&gt;
-&lt;ant antfile="${basedir}${file.separator}conductor.xml" target="init"&gt;
-&lt;property name="args.input" value="doc/toolkit.ditamap"/&gt;
-&lt;property name="output.dir" value="out/toolkit/xhtml"/&gt;
-&lt;property name="transtype" value="xhtml"/&gt;
-&lt;property name="dita.extname" value=".dita"/&gt;
-&lt;property name="args.hdr" value="file:/C:/sandbox/myhdr.xml"/&gt;
-&lt;property name="args.ftr" value="file:/C:/sandbox/myftr.xml"/&gt;
-&lt;/ant&gt;
-&lt;/target&gt;
-		</codeblock>
 		</section>
 	</conbody>
 </concept>

@@ -12,12 +12,12 @@ See the accompanying license.txt file for applicable licenses.
 		<author type="contributor">Richard Johnson</author>
 		<publisher>OASIS (Organization for the Advancement of Structured Information Standards)</publisher>
 		<copyright>
-			<copyryear year="2006"/>
+			<copyryear year="2007"/>
 			<copyrholder>VR Communications, Inc.</copyrholder>
 		</copyright>
 		<critdates>
 			<created date="2006-June-01"/>
-			<revised modified="2006-October-05"/>
+			<revised modified="2007-April-03"/>
 		</critdates>
 		<metadata>
 			<keywords>
@@ -27,7 +27,7 @@ See the accompanying license.txt file for applicable licenses.
 			<prodinfo>
 				<prodname>DITA Open Toolkit</prodname>
 				<vrmlist>
-					<vrm version="1.3"/>
+					<vrm version="1.3.1"/>
 				</vrmlist>
 			</prodinfo>
 		</metadata>
@@ -36,19 +36,22 @@ See the accompanying license.txt file for applicable licenses.
 		<p>Sections in this topic:
 		<sl otherprops="pdf">
 				<sli>
-					<xref href="./css.dita#css">Using your own CSS (cascading style sheet)</xref>
+					<xref href="condproc.dita"/>
 				</sli>
 				<sli>
-					<xref href="./tailoring_xhtml.dita#tailoring_xhtml">Tailoring XHTML output</xref>
+					<xref href="css_custom.dita"/>
 				</sli>
 				<sli>
-					<xref href="./pdf_cover.dita#pdf_cover">Adding product logo to PDF2 cover page</xref>
+					<xref href="xhtml_custom.dita"/>
 				</sli>
 				<sli>
-					<xref href="./customizing_production_notes.dita#customizing_production_notes">Production notes (customizing)</xref>
+					<xref href="pdf_cover.dita"/>
 				</sli>
 				<sli>
-					<xref href="./customizing_formoreinfo.dita#customizing_formoreinfo">For more information (customizing)</xref>
+					<xref href="customizing_ditablogs.dita"/>
+				</sli>
+				<sli>
+					<xref href="customizing_formoreinfo.dita"/>
 				</sli>
 			</sl>
 		</p>

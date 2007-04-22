@@ -6,23 +6,20 @@ See the accompanying license.txt file for applicable licenses.
 -->
 <concept id="garage_sample">
 	<title>Garage sample</title>
-	
 	<prolog>
 		<author type="creator">Anna van Raaphorst</author>
 		<author type="contributor">Richard Johnson</author>
 		<publisher>OASIS (Organization for the Advancement of Structured Information Standards)</publisher>
 		<copyright>
-			<copyryear year="2006"/>
+			<copyryear year="2007"/>
 			<copyrholder>VR Communications, Inc.</copyrholder>
 		</copyright>
 		<critdates>
 			<created date="2006-July-24"/>
-			<revised modified="2006-September-29"/>
+			<revised modified="2007-April-18"/>
 		</critdates>
 		<metadata>
 			<keywords>
-				<keyword>DITA core vocabulary</keyword>
-				<keyword>DITA controlled vocabulary</keyword>
 				<keyword>garage sample</keyword>
 				<indexterm>garage sample</indexterm>
 				<indexterm>samples<indexterm>garage</indexterm>
@@ -31,21 +28,21 @@ See the accompanying license.txt file for applicable licenses.
 			<prodinfo>
 				<prodname>DITA Open Toolkit</prodname>
 				<vrmlist>
-					<vrm version="1.3"/>
+					<vrm version="1.3.1"/>
 				</vrmlist>
 			</prodinfo>
 		</metadata>
 	</prolog>
 	<conbody>
 		<section id="garage_sample_term">
-			
-			<p>The garage sample, which is located in the <filepath>ditaot/doc/ot-usergide/MY_DITA_SOURCE/samples</filepath> directory of the Toolkit source distribution, is a set of DITA source files containing concepts and tasks related to organizing and doing tasks in a garage. The sample map files allow the topics to be published as either a hierarchy or a sequence. The sample also includes Ant scripts to allow you to publish to all supported target environments.</p>
-			
-			<p>Before you begin to use the sample files (which include both the garage sample and the grocery shopping sample), we recommend  creating two directories in your root directory called <filepath>MY_DITA_SOURCE</filepath> and <filepath>MY_DITA_OUTPUT</filepath> (Windows examples would be <filepath>C:/MY_DITA_SOURCE</filepath> and <filepath>C:/MY_DITA_OUTPUT</filepath>) and then copying both the garage and grocery shopping sample files from the <filepath>ditaot/samples</filepath> directory to <filepath>MY_DITA_SOURCE</filepath>. Your directory structure should then look like this:</p>
+			<p>The garage sample, which is downloadable from <xref href="http://dita-ot.sourceforge.net/SourceForgeFiles/doc/user_guide.html" type="html" scope="external"/>, is a set of DITA source files containing concepts and tasks related to organizing and doing tasks in a garage. The sample map files allow the topics to be published as either a hierarchy or a sequence. The sample also includes Ant scripts that allow you to publish to all target environments.
+			<note>The garage sample that is part of the <cite>DITA Open Toolkit User Guide</cite></note> is <i>not</i> exactly the same set of files as the garage sample that is part of the Toolkit package.</p>
+			<p>Before you begin to use the garage sample files, we recommend  creating two directories in your root directory called <filepath>DITASAMPLE_GARAGE_SOURCE</filepath> and <filepath>DITASAMPLE_GARAGE_OUTPUT</filepath> (Windows examples would be <filepath>C:/DITASAMPLE_GARAGE_SOURCE</filepath> and <filepath>C:/DITASAMPLE_GARAGE_OUTPUT</filepath>) and then copying the garage sample files to <filepath>DITASAMPLE_GARAGE_SOURCE</filepath>. Your directory structure should then look like this:</p>
 			<p>
-				<image href="../images/samples_directorystructure.jpg"/>
+				<image href="../images/garagesample_directory.png"/>
 			</p>
-			<p>The garage sample includes Ant scripts that process to all supported target environments. A filtering (conditional processing) script is also included: <filepath>garage_filtering_xhtml.xml</filepath>. This script filters out (excludes) all files having to do with oil or snow, which are tagged with the "otherprops" attribute. Running this script produces a hierarchically organized output file with four of the topics excluded.</p>
+			<p>We recommend that you process your first test case to the XHTML target (dita2xhtml), which generally provides predictably positive results. The dita2htmlhelp, dita2pdf2, and the Eclipse targets (dita2eclipsecontent and dita2eclipsehelp) are also very reliable. The other targets are, in our experience, somewhat problematic, and may require special coding to get acceptable results.</p>
+			<p>One of the garage sample targets (dita2filtered, which produces XHTML output) illustrates conditional processing using filtering. The output is a hierarchically organized file with four of the garage topics (those dealing with "oil" or "snow") excluded.</p>
 		</section>
 	</conbody>
 	<related-links>

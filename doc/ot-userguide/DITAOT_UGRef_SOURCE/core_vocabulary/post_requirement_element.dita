@@ -6,56 +6,61 @@ See the accompanying license.txt file for applicable licenses.
 -->
 <concept id="post_requirements_element">
 	<title>Post-requirement element (&lt;postreq&gt;)</title>
-	
 	<prolog>
 		<author type="creator">Anna van Raaphorst</author>
 		<author type="contributor">Richard Johnson</author>
 		<publisher>OASIS (Organization for the Advancement of Structured Information Standards)</publisher>
 		<copyright>
-			<copyryear year="2006"/>
+			<copyryear year="2007"/>
 			<copyrholder>VR Communications, Inc.</copyrholder>
 		</copyright>
 		<critdates>
 			<created date="2006-May-01"/>
-			<revised modified="2006-September-29"/>
+			<revised modified="2007-April-15"/>
 		</critdates>
 		<metadata>
 			<keywords>
-				<keyword>DITA core vocabulary</keyword>
-				<keyword>DITA controlled vocabulary</keyword>
 				<keyword>post-requirement element</keyword>
 				<indexterm>post-requirement element</indexterm>
 			</keywords>
 			<prodinfo>
 				<prodname>DITA Open Toolkit</prodname>
 				<vrmlist>
-					<vrm version="1.3"/>
+					<vrm version="1.3.1"/>
 				</vrmlist>
 			</prodinfo>
 		</metadata>
 	</prolog>
 	<conbody>
 		<section id="post_requirement_element_term">
-			
-			<p>In a task, a post requirement element specifies something a user needs to do after completing the task.</p>
+			<p>In a task, a post-requirement element specifies something a user needs to do after completing the task.</p>
 			<p>
 				<b>Example</b>
 			</p>
 			<p>
 				<codeblock>
+&lt;taskbody&gt;
+&lt;prereq&gt;Do your produce shopping &lt;i&gt;after&lt;/i&gt; you have bought your canned goods. 
+Otherwise, the cans might bruise the fruits and vegetables!&lt;/prereq&gt;
+&lt;context&gt;Remember to look for local produce in season. 
+The fruits and vegetables you buy will be fresher and cheaper! 
+Say you're shopping in August for peaches grown locally. 
+When you get to the produce section of your grocery store:&lt;/context&gt;
+&lt;steps&gt;
 &lt;step&gt;
-&lt;cmd&gt;Follow the steps in the HTML Help install guide 
-wizard to complete the installation.&lt;/cmd&gt;
+&lt;cmd&gt;Get a plastic or paper bag to hold the peaches.&lt;/cmd&gt;
+&lt;/step&gt;
+&lt;step&gt;
+&lt;cmd&gt;Pick out the freshest peaches you can find, and put them gently into your bag.&lt;/cmd&gt;
+&lt;info&gt;To avoid bruising, don't put more than 6 peaches in each bag.&lt;/info&gt;
+&lt;/step&gt;
+&lt;step&gt;
+&lt;cmd&gt;Put the bag gently into your grocery cart.&lt;/cmd&gt;
 &lt;/step&gt;
 &lt;/steps&gt;
-&lt;postreq&gt;If you install the Help compiler to a drive 
-other than the C drive, you may need to customize 
-the &lt;property&gt; value for "hhc.dir" in some of the 
-build &lt;filepath&gt;.xml&lt;/filepath&gt; scripts 
-in the Toolkit root directory. 
-The Toolkit assumes the compiler 
-is installed on your C drive.
-&lt;/postreq&gt;
+<b>
+&lt;postreq&gt;When you check out, be sure the grocery clerk also handles your peaches carefully.&lt;/postreq&gt;
+</b>
 &lt;/taskbody&gt;
 			</codeblock>
 			</p>

@@ -6,53 +6,43 @@ See the accompanying license.txt file for applicable licenses.
 -->
 <concept id="pdf">
 	<title>PDF (Portable Document Format)</title>
-	
 	<prolog>
 		<author type="creator">Anna van Raaphorst</author>
 		<author type="contributor">Richard Johnson</author>
 		<publisher>OASIS (Organization for the Advancement of Structured Information Standards)</publisher>
 		<copyright>
-			<copyryear year="2006"/>
+			<copyryear year="2007"/>
 			<copyrholder>VR Communications, Inc.</copyrholder>
 		</copyright>
 		<critdates>
 			<created date="2006-May-01"/>
-			<revised modified="2006-September-29"/>
+			<revised modified="2007-April-17"/>
 		</critdates>
 		<metadata>
 			<keywords>
-				<keyword>DITA core vocabulary</keyword>
-				<keyword>DITA controlled vocabulary</keyword>
 				<keyword>PDF</keyword>
 				<keyword>Portable Document Format</keyword>
 				<indexterm>PDF (Portable Document Format)</indexterm>
 				<indexterm>Portable Document Format (PDF)</indexterm>
 				<indexterm>outputs supported by DITA Open Toolkit
-				<indexterm>PDF</indexterm>
+				<indexterm>PDF (Portable Document Format)</indexterm>
 				</indexterm>
 				<indexterm>targets supported by DITA Open Toolkit
-				<indexterm>PDF</indexterm>
+				<indexterm>PDF (Portable Document Format)</indexterm>
 				</indexterm>
 			</keywords>
 			<prodinfo>
 				<prodname>DITA Open Toolkit</prodname>
 				<vrmlist>
-					<vrm version="1.3"/>
+					<vrm version="1.3.1"/>
 				</vrmlist>
 			</prodinfo>
 		</metadata>
 	</prolog>
 	<conbody>
 		<section id="pdf_term">
-			
 			<p>PDF is an open standard file format, proprietary to Adobe Systems, for representing two-dimensional documents in a device-independent and resolution-independent format. PDF files encode the exact look of a document in a device-independent way.</p>
-			
-			<p>PDF is one of the DITA Open Toolkit target outputs.</p>
+			<p>PDF (with the output processed by FOP) and PDF2 (using the Idiom plug-in, with the output processed by XEP) are DITA Open Toolkit target outputs.</p>
 		</section>
 	</conbody>
-	<related-links>
-		<link href="../installing/installing_optional_tools.dita" scope="local"/>
-		<link href="../processing/processing_pdf2.dita" scope="local"/>
-		<link href="../maps/processing_groceryshopping.dita" scope="local"/>
-	</related-links>
 </concept>

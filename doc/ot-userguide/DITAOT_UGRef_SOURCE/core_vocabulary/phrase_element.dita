@@ -11,24 +11,22 @@ See the accompanying license.txt file for applicable licenses.
 		<author type="contributor">Richard Johnson</author>
 		<publisher>OASIS (Organization for the Advancement of Structured Information Standards)</publisher>
 		<copyright>
-			<copyryear year="2006"/>
+			<copyryear year="2007"/>
 			<copyrholder>VR Communications, Inc.</copyrholder>
 		</copyright>
 		<critdates>
 			<created date="2006-May-01"/>
-			<revised modified="2006-October-11"/>
+			<revised modified="2007-April-01"/>
 		</critdates>
 		<metadata>
 			<keywords>
-				<keyword>DITA core vocabulary</keyword>
-				<keyword>DITA controlled vocabulary</keyword>
 				<keyword>phrase element</keyword>
 				<indexterm>phrase element</indexterm>
 			</keywords>
 			<prodinfo>
 				<prodname>DITA Open Toolkit</prodname>
 				<vrmlist>
-					<vrm version="1.3"/>
+					<vrm version="1.3.1"/>
 				</vrmlist>
 			</prodinfo>
 		</metadata>

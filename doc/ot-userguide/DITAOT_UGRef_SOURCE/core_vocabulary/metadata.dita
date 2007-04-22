@@ -6,43 +6,34 @@ See the accompanying license.txt file for applicable licenses.
 -->
 <concept id="metadata">
 	<title>Metadata</title>
-	
 	<prolog>
 		<author type="creator">Anna van Raaphorst</author>
 		<author type="contributor">Richard Johnson</author>
 		<publisher>OASIS (Organization for the Advancement of Structured Information Standards)</publisher>
 		<copyright>
-			<copyryear year="2006"/>
+			<copyryear year="2007"/>
 			<copyrholder>VR Communications, Inc.</copyrholder>
 		</copyright>
 		<critdates>
 			<created date="2006-May-01"/>
-			<revised modified="2006-September-29"/>
+			<revised modified="2007-April-01"/>
 		</critdates>
 		<metadata>
 			<keywords>
-				<keyword>DITA core vocabulary</keyword>
-				<keyword>DITA controlled vocabulary</keyword>
 				<keyword>metadata</keyword>
-				<indexterm>metadata
-				<indexterm>definition</indexterm>
-					
-					<indexterm>example</indexterm>
-				</indexterm>
+				<indexterm>metadata</indexterm>
 			</keywords>
 			<prodinfo>
 				<prodname>DITA Open Toolkit</prodname>
 				<vrmlist>
-					<vrm version="1.3"/>
+					<vrm version="1.3.1"/>
 				</vrmlist>
 			</prodinfo>
 		</metadata>
 	</prolog>
 	<conbody>
 		<section id="metadata_term">
-			
-			<p>Metadata is semantic information about the information in a DITA document, for example the name of the document's author, the date the document was created, the name of the product the information is describing,  the target audience, and copyright information.</p>
-			
+			<p>Metadata is semantic information about the information in a document, for example the name of the document's author, the date the document was created, the name of the product the information is describing,  the target audience, and copyright information.</p>
 			<p>In DITA you can specify metadata at the topic or map level, with map-level metadata overriding topic entries.</p>
 			<p>
 				<b>Example</b>
@@ -60,7 +51,7 @@ See the accompanying license.txt file for applicable licenses.
 &lt;prodinfo&gt;
 &lt;prodname&gt;DITA Open Toolkit&lt;/prodname&gt;
 &lt;vrmlist&gt;
-&lt;vrm version="1.3"/&gt;
+&lt;vrm version="1.3.1"/&gt;
 &lt;/vrmlist&gt;
 &lt;/prodinfo&gt;
 &lt;/metadata&gt;
@@ -68,7 +59,4 @@ See the accompanying license.txt file for applicable licenses.
 			</p>
 		</section>
 	</conbody>
-	<related-links>
-		<link href="../accessing/aboutmetadata.dita" scope="local"/>
-	</related-links>
 </concept>

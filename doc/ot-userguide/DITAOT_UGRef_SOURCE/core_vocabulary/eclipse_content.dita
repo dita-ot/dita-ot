@@ -6,24 +6,22 @@ See the accompanying license.txt file for applicable licenses.
 -->
 <concept id="eclipse_content">
 	<title>Eclipse content</title>
-	
 	<prolog>
 		<author type="creator">Anna van Raaphorst</author>
 		<author type="contributor">Richard Johnson</author>
 		<publisher>OASIS (Organization for the Advancement of Structured Information Standards)</publisher>
 		<copyright>
-			<copyryear year="2006"/>
+			<copyryear year="2007"/>
 			<copyrholder>VR Communications, Inc.</copyrholder>
 		</copyright>
 		<critdates>
 			<created date="2006-May-01"/>
-			<revised modified="2006-September-29"/>
+			<revised modified="2007-April-01"/>
 		</critdates>
 		<metadata>
 			<keywords>
-				<keyword>DITA core vocabulary</keyword>
-				<keyword>DITA controlled vocabulary</keyword>
 				<keyword>Eclipse content</keyword>
+				<keyword>infocenter</keyword>
 				<indexterm>Eclipse content</indexterm>
 				<indexterm>outputs supported by DITA Open Toolkit
 				<indexterm>Eclipse content</indexterm>
@@ -31,24 +29,21 @@ See the accompanying license.txt file for applicable licenses.
 				<indexterm>targets supported by DITA Open Toolkit
 				<indexterm>Eclipse content</indexterm>
 				</indexterm>
+				<indexterm>Infocenter (Eclipse)</indexterm>
+				<indexterm>Eclipse Infocenter</indexterm>
 			</keywords>
 			<prodinfo>
 				<prodname>DITA Open Toolkit</prodname>
 				<vrmlist>
-					<vrm version="1.3"/>
+					<vrm version="1.3.1"/>
 				</vrmlist>
 			</prodinfo>
 		</metadata>
 	</prolog>
 	<conbody>
 		<section id="eclipse_content_term">
-			
-			<p>Eclipse is a open-source platform-independent software framework for delivering "rich-client" applications, as opposed to "thin-client" browser-based applications. Originally developed by IBM, Eclipse is now managed by the Eclipse Foundation, an independent not-for-profit consortium of software industry vendors. Eclipse content is one of the documentation sytem options available in the framework.</p>
-			
-			<p>Eclipse content is one of the DITA target outputs.</p>
+			<p>Eclipse content is one of the DITA target outputs. When this output type is specified, the Toolkit produces a directory containing a set of files that can be installed as an Eclipse documentation plug-in. This allows the output to be displayed as Eclipse help or in an Eclipse Infocenter.</p>
+			<p>In contrast to Eclipse help output, which produces XHTML files to be directly displayed by a browser, Eclipse content output produces <filepath>.dita</filepath> files that are rendered into <filepath>.html</filepath> files on-the-fly by the Eclipse help processor.</p>
 		</section>
 	</conbody>
-	<related-links>
-		<link href="../processing/processing_eclipsecontent.dita" scope="local"/>
-	</related-links>
 </concept>

@@ -5,48 +5,38 @@ This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
 See the accompanying license.txt file for applicable licenses.
 -->
 <concept id="rss">
-	<title>RSS</title>
-	
+	<title>RSS (Really Simple Syndication)</title>
 	<prolog>
 		<author type="creator">Anna van Raaphorst</author>
 		<author type="contributor">Richard Johnson</author>
 		<publisher>OASIS (Organization for the Advancement of Structured Information Standards)</publisher>
 		<copyright>
-			<copyryear year="2006"/>
+			<copyryear year="2007"/>
 			<copyrholder>VR Communications, Inc.</copyrholder>
 		</copyright>
 		<critdates>
 			<created date="2006-August-05"/>
-			<revised modified="2006-August-08"/>
+			<revised modified="2007-March-31"/>
 		</critdates>
 		<metadata>
 			<keywords>
-				<keyword>DITA core vocabulary</keyword>
-				<keyword>DITA controlled vocabulary</keyword>
 				<keyword>RSS</keyword>
-				<indexterm>RSS</indexterm>
+				<keyword>Really Simple Syndication</keyword>
+				<indexterm>RSS (Really Simple Syndication)</indexterm>
+				<indexterm>Really Simple Syndication (RSS)</indexterm>
 			</keywords>
 			<prodinfo>
 				<prodname>DITA Open Toolkit</prodname>
 				<vrmlist>
-					<vrm version="1.3"/>
+					<vrm version="1.3.1"/>
 				</vrmlist>
 			</prodinfo>
 		</metadata>
 	</prolog>
 	<conbody>
 		<section id="rss_term">
-			<p>
-				<b>Definition</b>
-			</p>
-			<p>A family of web feed formats written in XML and used in content syndication by enabling applications like RSS readers to find out when new information is available on a website. </p>
-			<p>
-				<b>Usage</b>
-			</p>
+			<p>RSS is a family of web feed formats written in XML and used in content syndication by enabling applications like RSS readers to find out when new information is available on a website. </p>
 			<p>Since creation of output from DITA source files is automated by using Ant, it is possible to create or update RSS information about the output at the same time the output is produced. The RSS file can then be uploaded along with the output so its availability can be known to those subscribed to the RSS feed.</p>
 		</section>
 	</conbody>
-	<related-links>
-		<link href="../distributing/rss_overview.dita" scope="local"/>
-	</related-links>
 </concept>

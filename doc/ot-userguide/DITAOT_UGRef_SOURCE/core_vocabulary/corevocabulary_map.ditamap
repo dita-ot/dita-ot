@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- (c) Copyright 2006 by VR Communications, Inc. All rights reserved. -->
+<!-- (c) Copyright 2006-2007 by VR Communications, Inc. All rights reserved. -->
 <!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN"  "../dtd/map.dtd">
 <!-- 
 This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
@@ -10,13 +10,16 @@ See the accompanying license.txt file for applicable licenses.
 		<topicref href="aboutditacore.dita" type="concept"/>
 		<topicref href="administrator_manager.dita" type="concept"/>
 		<topicref href="ant.dita" type="concept"/>
+		<topicref href="ant_processing_parameter.dita" type="concept"/>
 		<topicref href="antscript.dita" type="concept"/>
 		<topicref href="audience.dita" type="concept"/>
+		<topicref href="authoring_tool.dita" type="concept"/>
 		<topicref href="best_practice.dita" type="concept"/>
 		<topicref href="block_element.dita" type="concept"/>
 		<topicref href="body_element.dita" type="concept"/>
 		<topicref href="build_file.dita" type="concept"/>
-		<topicref href="cascading_stylesheet.dita" type="concept"/>
+		<topicref href="cms.dita" type="concept"/>
+		<topicref href="css.dita" type="concept"/>
 		<topicref href="choice_table.dita" type="concept"/>
 		<topicref href="collectiontype_attribute.dita" type="concept"/>
 		<topicref href="command_element.dita" type="concept"/>
@@ -32,16 +35,17 @@ See the accompanying license.txt file for applicable licenses.
 		<topicref href="context_element.dita" type="concept"/>
 		<topicref href="controlled_vocabulary.dita" type="concept"/>
 		<topicref href="crossreference_element.dita" type="concept"/>
-		<topicref href="darwininfo_typingarch.dita" type="concept"/>
 		<topicref href="definition_list.dita" type="concept"/>
 		<topicref href="distributing_content.dita" type="concept"/>
+		<topicref href="distributions.dita" type="concept"/>
 		<topicref href="ditaterm.dita" type="concept"/>
 		<topicref href="ditaot.dita" type="concept"/>
-		<topicref href="ditaotugref.dita" type="concept"/>
+		<topicref href="ditaotug.dita" type="concept"/>
 		<topicref href="docbook.dita" type="concept"/>
 		<topicref href="doctype_declaration.dita" type="concept"/>
-		<topicref href="document_typedef.dita" type="concept"/>
+		<topicref href="dtd.dita" type="concept"/>
 		<topicref href="domain_element.dita" type="concept"/>
+		<topicref href="eclipse.dita" type="concept"/>
 		<topicref href="eclipse_content.dita" type="concept"/>
 		<topicref href="eclipse_help.dita" type="concept"/>
 		<topicref href="editor.dita" type="concept"/>
@@ -67,15 +71,16 @@ See the accompanying license.txt file for applicable licenses.
 		<topicref href="information_element.dita" type="concept"/>
 		<topicref href="information_type.dita" type="concept"/>
 		<topicref href="inheritance.dita" type="concept"/>
+		<topicref href="java.dita" type="concept"/>
 		<topicref href="jdk.dita" type="concept"/>
 		<topicref href="javahelp.dita" type="concept"/>
 		<topicref href="javahelp_processor.dita" type="concept"/>
 		<topicref href="keyword_element.dita" type="concept"/>
 		<topicref href="linking_attribute.dita" type="concept"/>
 		<topicref href="linking_content.dita" type="concept"/>
+		<topicref href="log.dita" type="concept"/>
 		<topicref href="map.dita" type="concept"/>
 		<topicref href="metadata.dita" type="concept"/>
-		<topicref href="migrating_content.dita" type="concept"/>
 		<topicref href="navigation_title.dita" type="concept"/>
 		<topicref href="oasis.dita" type="concept"/>
 		<topicref href="ordered_list.dita" type="concept"/>
@@ -87,8 +92,6 @@ See the accompanying license.txt file for applicable licenses.
 		<topicref href="prerequisite_element.dita" type="concept"/>
 		<topicref href="print_document_designer.dita" type="concept"/>
 		<topicref href="processing_building.dita" type="concept"/>
-		<topicref href="processing_attribute.dita" type="concept"/>
-		<topicref href="processing_reuse.dita" type="concept"/>
 		<topicref href="project_manager.dita" type="concept"/>
 		<topicref href="prolog_element.dita" type="concept"/>
 		<topicref href="rdf.dita" type="concept"/>
@@ -97,7 +100,7 @@ See the accompanying license.txt file for applicable licenses.
 		<topicref href="related_links_element.dita" type="concept"/>
 		<topicref href="relationship_table.dita" type="concept"/>
 		<topicref href="result_element.dita" type="concept"/>
-		<topicref href="reuse.dita" type="concept"/>
+		<topicref href="rss.dita" type="concept"/>
 		<topicref href="saxon.dita" type="concept"/>
 		<topicref href="schema.dita" type="concept"/>
 		<topicref href="scope_attribute.dita" type="concept"/>
@@ -109,6 +112,7 @@ See the accompanying license.txt file for applicable licenses.
 		<topicref href="specialization.dita" type="concept"/>
 		<topicref href="step_element.dita" type="concept"/>
 		<topicref href="structure_element.dita" type="concept"/>
+		<topicref href="structured_writing.dita" type="concept"/>
 		<topicref href="stylesheet.dita" type="concept"/>
 		<topicref href="staff_manager.dita" type="concept"/>
 		<topicref href="table_element.dita" type="concept"/>
@@ -117,14 +121,20 @@ See the accompanying license.txt file for applicable licenses.
 		<topicref href="task_infotype.dita" type="concept"/>
 		<topicref href="task_modeler.dita" type="concept"/>
 		<topicref href="topic_infotype.dita" type="concept"/>
+		<topicref href="topic_authoring.dita" type="concept"/>
 		<topicref href="troff.dita" type="concept"/>
 		<topicref href="typographic_element.dita" type="concept"/>
 		<topicref href="unordered_list.dita" type="concept"/>
+		<topicref href="vendor.dita" type="concept"/>
 		<topicref href="website_designer.dita" type="concept"/>
 		<topicref href="wordrtf.dita" type="concept"/>
 		<topicref href="writer.dita" type="concept"/>
 		<topicref href="xalan.dita" type="concept"/>
+		<topicref href="xep_processor.dita" type="concept"/>
 		<topicref href="xhtml.dita" type="concept"/>
+		<topicref href="xml.dita" type="concept"/>
 		<topicref href="xml_declaration.dita" type="concept"/>
+		<topicref href="xpath.dita" type="concept"/>
+		<topicref href="xslt.dita" type="concept"/>
 	</topicref>
 </map>

@@ -5,24 +5,21 @@ This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
 See the accompanying license.txt file for applicable licenses.
 -->
 <concept id="simple_list">
-	<title>Simple list</title>
-	
+	<title>Simple list (&lt;sl&gt;)</title>
 	<prolog>
 		<author type="creator">Anna van Raaphorst</author>
 		<author type="contributor">Richard Johnson</author>
 		<publisher>OASIS (Organization for the Advancement of Structured Information Standards)</publisher>
 		<copyright>
-			<copyryear year="2006"/>
+			<copyryear year="2007"/>
 			<copyrholder>VR Communications, Inc.</copyrholder>
 		</copyright>
 		<critdates>
 			<created date="2006-May-01"/>
-			<revised modified="2006-September-30"/>
+			<revised modified="2007-April-03"/>
 		</critdates>
 		<metadata>
 			<keywords>
-				<keyword>DITA core vocabulary</keyword>
-				<keyword>DITA controlled vocabulary</keyword>
 				<keyword>simple list element</keyword>
 				<indexterm>simple list element</indexterm>
 				<indexterm>lists<indexterm>simple</indexterm>
@@ -31,17 +28,19 @@ See the accompanying license.txt file for applicable licenses.
 			<prodinfo>
 				<prodname>DITA Open Toolkit</prodname>
 				<vrmlist>
-					<vrm version="1.3"/>
+					<vrm version="1.3.1"/>
 				</vrmlist>
 			</prodinfo>
 		</metadata>
 	</prolog>
 	<conbody>
 		<section id="simple_list_element_term">
-			
 			<p>A simple list is a list in which the order of list items is not significant. A simple list is similar to unordered list, but in a simple list the items are not marked with a bullet or other symbol.
 			</p>
 			<p>The following simple list functions as a topic table of contents.</p>
+			<p>
+				<b>Example</b>
+			</p>
 			<codeblock>			
 &lt;section&gt;
 &lt;p&gt;Sections in this topic:

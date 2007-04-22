@@ -11,24 +11,22 @@ See the accompanying license.txt file for applicable licenses.
 		<author type="contributor">Richard Johnson</author>
 		<publisher>OASIS (Organization for the Advancement of Structured Information Standards)</publisher>
 		<copyright>
-			<copyryear year="2006"/>
+			<copyryear year="2007"/>
 			<copyrholder>VR Communications, Inc.</copyrholder>
 		</copyright>
 		<critdates>
 			<created date="2006-May-01"/>
-			<revised modified="2006-October-11"/>
+			<revised modified="2007-April-09"/>
 		</critdates>
 		<metadata>
 			<keywords>
-				<keyword>DITA core vocabulary</keyword>
-				<keyword>DITA controlled vocabulary</keyword>
 				<keyword>linking content</keyword>
 				<indexterm>linking content</indexterm>
 			</keywords>
 			<prodinfo>
 				<prodname>DITA Open Toolkit</prodname>
 				<vrmlist>
-					<vrm version="1.3"/>
+					<vrm version="1.3.1"/>
 				</vrmlist>
 			</prodinfo>
 		</metadata>
@@ -36,10 +34,7 @@ See the accompanying license.txt file for applicable licenses.
 	<conbody>
 		<section id="linking_content_term">
 			<p>In DITA, linking content involves various methods that connect topics to each other or to external references. </p>
-			<p>In DITA linking can be implemented through various elements, such as &lt;xref&gt; and &lt;related-links&gt;, and through relationship tables.</p>
+			<p>In DITA, linking can be implemented through various elements, such as cross-reference (&lt;xref&gt;) and related links (&lt;related-links&gt;), and through relationship tables.</p>
 		</section>
 	</conbody>
-	<related-links>
-		<link href="../linking/linking.dita" scope="local"/>
-	</related-links>
 </concept>
