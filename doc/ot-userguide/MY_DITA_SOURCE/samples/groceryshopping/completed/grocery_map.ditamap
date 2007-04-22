@@ -3,7 +3,7 @@
 <!-- This is a completed file -->
 <!-- The "groceryshopping" topic page is a mini-toc for the concept, task, and reference pages, 
 which are displayed sequentially. You could display those pages in any order. -->
-<map title="Grocery shopping">
+<map title="Grocery shopping" id="grocery_top">
 	<topicref href="topics/groceryshopping.dita" type="topic">
 		<topicref href="concepts/about_produce.dita" type="concept"/>
 		<topicref href="concepts/about_cannedgoods.dita" type="concept"/>

@@ -20,7 +20,7 @@ If your editor is NOT set up to use a catalog, you must do one of the following 
 		</copyright>
 		<critdates>
 			<created date="2006-August-07"/>
-			<revised modified="2006-August-07"/>
+			<revised modified="2007-April-03"/>
 		</critdates>
 		<metadata>
 			<keywords>
@@ -31,7 +31,7 @@ If your editor is NOT set up to use a catalog, you must do one of the following 
 		</metadata>
 	</prolog>
 	<taskbody>
-	<prereq>Do your produce shopping <i>after</i> you have bought your canned goods. Otherwise, the cans might bruise the fruits and vegetables!</prereq>
+	<prereq>Do your produce shopping <i>after</i> you have selected your canned goods. Otherwise, the cans might bruise the fruits and vegetables!</prereq>
 		<context>Remember to look for local produce in season. The fruits and vegetables you buy will be fresher and cheaper! Say you're shopping in August for peaches grown locally. When you get to the produce section of your grocery store:</context>
 		<steps>
 			<step>
