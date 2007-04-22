@@ -47,7 +47,7 @@ else
 /* the top directory we are going to process */
 $ditamap = $argv[1];
 
-print("Starting from " . $ditamap . "\n");
+print("Starting from ditamap " . $ditamap . "\n");
 
 $map = basename($ditamap);
 $dir = dirname($ditamap) . $fsep;
@@ -57,7 +57,7 @@ $dir = dirname($ditamap) . $fsep;
 */
 
 $rc = get_map_lists($dbg_flag, $ref_flag, $ditamap, $fsep,
-                    $fused, $rcnt, $notfound, $lf, $rf, $tp, $rcon);
+                    $fused, $notfound, $lf, $rf, $tp, $rcon);
 
 if( $rc )
 {

@@ -11,12 +11,12 @@ See the accompanying license.txt file for applicable licenses.
 		<author type="contributor">Anna van Raaphorst</author>
 		<publisher>OASIS (Organization for the Advancement of Structured Information Standards)</publisher>
 		<copyright>
-			<copyryear year="2006"/>
+			<copyryear year="2007"/>
 			<copyrholder>VR Communications, Inc.</copyrholder>
 		</copyright>
 		<critdates>
 			<created date="2006-September-26"/>
-			<revised modified="2006-October-17"/>
+			<revised modified="2007-March-06"/>
 		</critdates>
 		<metadata>
 			<keywords>
@@ -28,52 +28,19 @@ See the accompanying license.txt file for applicable licenses.
 					<indexterm>small package distribution</indexterm>
 					<indexterm>source distribution</indexterm>
 				</indexterm>
-				<indexterm>DITA Open Toolkit User Guide and Reference
+				<indexterm>DITA Open Toolkit User Guide
 				    <indexterm>source files</indexterm>
 				</indexterm>
 			</keywords>
 			<prodinfo>
 				<prodname>DITA Open Toolkit</prodname>
 				<vrmlist>
-					<vrm version="1.3"/>
+					<vrm version="1.3.1"/>
 				</vrmlist>
 			</prodinfo>
 		</metadata>
 	</prolog>
 	<conbody>
-		<section id="distribution_overview">
-			<title>Distribution overview</title>
-			<p>Starting with Release 1.3, DITA Open Toolkit is available in several distribution formats for download. They are:
-	<ul>
-					<li>Full package distributuion</li>
-					<li>Small package distribution</li>
-					<li>Source distribution</li>
-				</ul>
-			</p>
-			<p>These distributions are all available for download from <xref href="http://sourceforge.net/projects/dita-ot" format="html" scope="external"/>.</p>
-		</section>
-		<section>
-			<title>Full package distribution</title>
-			<p>This distribution contains the Toolkit and most of the basic tools required for doing Toolkit builds. This distribution makes it easy to download and install a complete environment. Included in the full package are:
-	<ul>
-					<li>DITA Open Toolkit</li>
-					<li>Ant build processor</li>
-					<li>XML catalog resolver</li>
-					<li>FOP processor for creating PDF outputs</li>
-					<li>icu4j (ICU) globalization routines</li>
-					<li>Xalan XSLT processor</li>
-					<li>Shell scripts for setting the necessary runtime environment variables</li>
-				</ul>
-			</p>
-			<p>The only other software required to do DITA processing with this package is the Java J2SE SDK. You may optionally want to install the Microsoft HTML Help compiler and the JavaHelp processor.</p>
-		</section>
-		<section>
-			<title>Small package distribution</title>
-			<p>This distribution contains only DITA Toolkit. All the required and optional processors and tools must be installed separately to create a functioning build environment. Prior releases of the Toolkit were distributed only in this way. You might want to download this distribution if you have a prior version of the Toolkit already installed, since the release 1.3 Toolkit prerequisites are still the same as those for release 1.2.2. The small distribution is also typically the one used to embed the Toolkit in other products.</p>
-		</section>
-		<section>
-			<title>Source distribution</title>
-			<p>The source distribution contains the source and executable code for the Toolkit (it also contains the source code for this document). You might download this distribution if you need to modify Toolkit Java code or if you want a detailed look at how the Toolkit works.</p>
-		</section>
+		<section conref="../core_vocabulary/distributions.dita#distributions/distributions_term"/>
 	</conbody>
 </concept>

@@ -38,7 +38,7 @@ else
 /* the top directory we are going to process */
 $ditamap = $argv[1];
 
-print("Starting from " . $ditamap . "\n");
+print("Starting from ditamap " . $ditamap . "\n");
 
 $map = basename($ditamap);
 $dir = dirname($ditamap) . $fsep;
@@ -48,7 +48,7 @@ $dir = dirname($ditamap) . $fsep;
 */
 
 $rc = get_map_lists($dbg_flag, $ref_flag, $ditamap, $fsep,
-                    $fused, $rcnt, $notfound, $lf, $rf, $tp, $rcon);
+                    $fused, $notfound, $lf, $rf, $tp, $rcon);
 
 if( count($notfound)>0 )
 {
@@ -66,7 +66,7 @@ if( $rc )
   /* look for IDs in all the files found in the map */
   foreach($fused as $f)
   {
-    if( !isURL($f) && !isIMAGE($f) )
+    if( !isURL($f) && !isIMAGE($f) && ($f !== $ditamap) )
     {
       $irc = get_ids($dbg_flag, $f, $idfile, $idid);
     }

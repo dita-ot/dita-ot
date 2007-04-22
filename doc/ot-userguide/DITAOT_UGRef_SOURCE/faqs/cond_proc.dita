@@ -6,19 +6,18 @@ See the accompanying license.txt file for applicable licenses.
 -->
 <concept id="cond_proc">
 	<title>How can I use conditional processing effectively?</title>
-	
 	<prolog>
 		<author type="creator">Deborah Pickett</author>
 		<author type="contributor">Richard Johnson</author>
 		<author type="contributor">Anna van Raaphorst</author>
 		<publisher>OASIS (Organization for the Advancement of Structured Information Standards)</publisher>
 		<copyright>
-			<copyryear year="2006"/>
+			<copyryear year="2007"/>
 			<copyrholder>Moldflow Corporation</copyrholder>
 		</copyright>
 		<critdates>
 			<created date="2006-May-01"/>
-			<revised modified="2006-October-12"/>
+			<revised modified="2007-April-15"/>
 		</critdates>
 		<metadata>
 			<keywords>
@@ -28,7 +27,7 @@ See the accompanying license.txt file for applicable licenses.
 			<prodinfo>
 				<prodname>DITA Open Toolkit</prodname>
 				<vrmlist>
-					<vrm version="1.3"/>
+					<vrm version="1.3.1"/>
 				</vrmlist>
 			</prodinfo>
 		</metadata>
@@ -40,7 +39,7 @@ See the accompanying license.txt file for applicable licenses.
 			<b>Date: </b>Aug 16, 2006</p>
 		<p>
 			<b>Question: </b>If I have both audience and platform attributes in my topics, 
-			do I have to specify at least one value for each attribute in my ditaval file to filter on both attributes?</p>
+			do I have to specify at least one value for each attribute in my <filepath>.ditaval</filepath> file to filter on both attributes?</p>
 		<p>
 			<b>Answer: </b>If you don't specify any include/exclude properties for, say,
 platform, then all of the platform="" attributes in your topics will
@@ -59,9 +58,8 @@ file that has had its root element removed (hence is now an
 empty file, and not a valid DITA topic). The map reference becomes a
 dangling link, in just the same way as if you'd referenced a file that
 doesn't exist at all.</p>
-
-<p>I know that it's tempting to want the topic itself to be aware of
-which platforms and which audience s it's useful for, but the DITA
+		<p>I know that it's tempting to want the topic itself to be aware of
+which platforms and which audience it's useful for, but the DITA
 filtering model is unclear about whether it supports this, and DITA-OT
 certainly doesn't. (There's an open RFE on SouceForge, but it's been
 unlooked-at because it's unclear what is the "correct" behaviour.)
@@ -69,9 +67,8 @@ The way I squint at it, by putting the filtering attribute on the
 topicref rather than the topic, I'm not precluding some mad fool for
 including the topic outside its natural scope in their own map, for
 some reason I haven't thought of. In that respect, it's promoting
-more (though perhaps not better) re-use.</p>
-
-<p>You *can* mark a topic as being applicable to certain audiences
+more (though perhaps not better) reuse.</p>
+		<p>You *can* mark a topic as being applicable to certain audiences
 through using the prolog tag, but that's got nothing to do
 with filtering, and more to do with how your topic might get indexed
 in a CMS. There is likewise an element. 
@@ -89,10 +86,9 @@ in a CMS. There is likewise an element.
 there's a slight culture clash here, because bits of what you describe
 above are considered by some to be the domain of the content
 management system rather than the author. But we're getting into
-philosophical areas here, and it might be best if som eone from the
-DITA TC took over lest I put words in their mouth.</p>
-
-<p>I will close, though, by expressing a suspicion that filtering isn't
+philosophical areas here, and it might be best if someone from the
+DITA Technical Committee took over lest I put words in their mouth.</p>
+		<p>I will close, though, by expressing a suspicion that filtering isn't
 high up on DITA's list because DITA strives to solve the same problem
 by breaking up topics into pieces small enough that they can be shared
 using judicious conrefs and selected through careful use of maps.
@@ -102,6 +98,6 @@ that DITA is the wrong hammer for their nail.
 		</p>
 	</conbody>
 	<related-links>
-		<link href="../accessing/aboutcondproc.dita" scope="local"/>
+		<link href="../customizing/aboutcondproc.dita" scope="local"/>
 	</related-links>
 </concept>

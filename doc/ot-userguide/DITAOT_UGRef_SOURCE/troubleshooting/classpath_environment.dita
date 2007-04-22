@@ -6,30 +6,27 @@ See the accompanying license.txt file for applicable licenses.
 -->
 <concept id="classpath_environment">
 	<title>Troubleshooting CLASSPATH and environment variables setup</title>
-	
 	<prolog>
 		<author type="creator">Anne Gentle</author>
 		<author type="contributor">Richard Johnson</author>
 		<publisher>OASIS (Organization for the Advancement of Structured Information Standards)</publisher>
 		<copyright>
-			<copyryear year="2006"/>
+			<copyryear year="2007"/>
 			<copyrholder>VR Communications, Inc.</copyrholder>
 		</copyright>
 		<critdates>
 			<created date="2006-May-01"/>
-			<revised modified="2006-September-14"/>
+			<revised modified="2007-April-18"/>
 		</critdates>
 		<metadata>
 			<keywords>
 				<keyword>troubleshooting the build process</keyword>
-				<indexterm>troubleshooting
-				<indexterm>CLASSPATH and environment variables setup</indexterm>
-				</indexterm>
+				<indexterm>troubleshooting CLASSPATH and environment variables setup</indexterm>
 			</keywords>
 			<prodinfo>
 				<prodname>DITA Open Toolkit</prodname>
 				<vrmlist>
-					<vrm version="1.3"/>
+					<vrm version="1.3.1"/>
 				</vrmlist>
 			</prodinfo>
 		</metadata>
@@ -37,7 +34,7 @@ See the accompanying license.txt file for applicable licenses.
 	<conbody>
 		<section>
 			<p>If you see a "can't find resource\messages.xml" error message when you try to build using Ant, remove other items from your CLASSPATH variable one-by-one until you find the culprit. 
-			Your environment variable setup can be the source of the problem because sometimes other applications or jar files can override CLASSPATH settings. 
+			Your environment variable setup can be the source of the problem because sometimes other applications or <filepath>.jar</filepath> files can override CLASSPATH settings. 
 			To assist in troubleshooting the CLASSPATH, create a simple <filepath>run.bat</filepath> file that contains only SAXON, Ant, and the DITA Open Toolkit <filepath>dost.jar</filepath> paths. 
 			For example:</p>
 			<userinput>set CLASSPATH=C:\saxon\saxon.jar;C:\ant\apache-ant-1.6.5;\lib\dost.jar;.</userinput>

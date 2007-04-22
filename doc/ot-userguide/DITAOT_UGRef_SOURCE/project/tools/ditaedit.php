@@ -9,7 +9,7 @@
 
 function show_usage()
 {
-  die("Usage: php " . "ditaedit" . " ditamap-file|directory Elementdelete|Replace|Count|List source-string replacement-string\n");
+  die("Usage: php " . "ditaedit" . " ditamap-file Elementdelete|Replace|Count|List source-string replacement-string\n");
 }
 
 /*
@@ -237,7 +237,7 @@ if( $fp )
 
 /* done processing arguments, display startup message */
 
-print("\nStarting from ----------- " . $ditamap . "\n");
+print("\nStarting from ditamap --- " . $ditamap . "\n");
 print(" operation -------------- " . $opcode . "\n");
 print(" search string ---------- " . $sstring . "\n");
 if( $opcode === "R" )
@@ -257,7 +257,7 @@ $dir = dirname($ditamap) . $fsep;
 */
 
 $rc = get_map_lists($dbg_flag, $ref_flag, $ditamap, $fsep,
-                    $fused, $rcnt, $notfound, &$lf, &$rf, &$tp, &$rcon);
+                    &$fused, &$notfound, &$lf, &$rf, &$tp, &$rcon);
 
 if( $rc )
 {

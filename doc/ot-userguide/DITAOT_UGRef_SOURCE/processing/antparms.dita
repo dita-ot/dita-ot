@@ -12,12 +12,12 @@ See the accompanying license.txt file for applicable licenses.
 		<author type="contributor">Anna van Raaphorst</author>
 		<publisher>OASIS (Organization for the Advancement of Structured Information Standards)</publisher>
 		<copyright>
-			<copyryear year="2006"/>
+			<copyryear year="2007"/>
 			<copyrholder>VR Communications, Inc.</copyrholder>
 		</copyright>
 		<critdates>
 			<created date="2006-June-06"/>
-			<revised modified="2006-September-12"/>
+			<revised modified="2007-April-18"/>
 		</critdates>
 		<metadata>
 			<keywords>
@@ -98,7 +98,7 @@ See the accompanying license.txt file for applicable licenses.
 			<prodinfo>
 				<prodname>DITA Open Toolkit</prodname>
 				<vrmlist>
-					<vrm version="1.3"/>
+					<vrm version="1.3.1"/>
 				</vrmlist>
 			</prodinfo>
 		</metadata>
@@ -723,10 +723,10 @@ See the accompanying license.txt file for applicable licenses.
 					</stentry>
 					<stentry>
 						<p>File extension of the DITA source files.</p>
-						<p>If you use extensions other than the default or the one you specify with this processing option (including .ditamap, but also extensions like .jpg and .gif) you must specify the format attribute (for example, format="pdf") in your source file references. If you don't, you will get an error message.</p>
+						<p>If you use extensions other than the default or the one you specify with this processing option (for example, <filepath>.ditamap</filepath>) you must specify the format attribute (for example, format="ditamap") in your source file references. If you don't, you will get an error message.</p>
 					</stentry>
 					<stentry>
-						<p>Default: .xml in release 1.2; .dita in release 1.3</p>
+						<p>Default: .xml in release 1.2; .dita in release 1.3.1</p>
 						<p>Example: &lt;property name="dita.extname" value=".dita"/&gt;</p>
 					</stentry>
 				</strow>

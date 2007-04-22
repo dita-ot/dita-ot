@@ -11,7 +11,7 @@
 
 function show_usage()
 {
-  die("Usage: php " . "ditapreview" . " ditamap-file|directory  Last|Chapter n \n");
+  die("Usage: php " . "ditapreview" . " ditamap-file Last | Chapter n \n");
 }
 
 /*
@@ -19,9 +19,6 @@ function show_usage()
 */
 function init_map(&$map)
 {
-  global $dbg_flag;
-  if( $dbg_flag )
-    print("init_map: " . $map . "\n");
   $map='<?xml version="1.0" encoding="utf-8"?>' . "\n";
   $map=$map . '<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "../dtd/map.dtd">' . "\n";
   $map=$map . '<map title="DITA XHTML Plausible Preview">' . "\n";
@@ -32,9 +29,6 @@ function init_map(&$map)
 */
 function complete_map(&$map)
 {
-  global $dbg_flag;
-  if( $dbg_flag )
-    print("complete_map: " . $map . "\n");
   $map = $map . '</map>' . "\n";
 }
 
@@ -43,26 +37,10 @@ function complete_map(&$map)
 */
 function add_to_map(&$map,$f,$fmt)
 {
-  global $dbg_flag;
-  global $fsep;
-  static $inmap;
-
-  if( substr($f,0,1) == $fsep )
-    $fadd = substr($f,1);
-  else
-    $fadd = $f;
-
-  if( isset($inmap[$fadd]) )
-    return;
-
-  $inmap[$fadd]=$fadd;
-
-  if( $dbg_flag )
-    print("add_to_map: " . $f . " " . $fmt . "\n");
   if( isset($fmt) )
-    $map=$map . ' <topicref href="' . $fadd . '" type="' . $fmt . '"/>' . "\n";
+    $map=$map . '<topicref href="' . substr($f,1) . '" format="' . $fmt . '"/>' . "\n";
   else
-    $map=$map . ' <topicref href="' . $fadd . '"/>' . "\n";
+    $map=$map . '<topicref href="' . substr($f,1) . '"/>' . "\n";
 }
 
 /**************************************************************
@@ -123,7 +101,7 @@ switch( $argc )
 
 /* done processing arguments, display startup message */
 
-print("\nStarting from ----------- " . $ditamap . "\n");
+print("\nStarting from ditamap --- " . $ditamap . "\n");
 print(" operation -------------- " . $opcode . "\n");
 print(" count ------------------ " . $acount . "\n");
 
@@ -149,7 +127,7 @@ $dir = dirname($ditamap) . $fsep;
 */
 
 $rc = get_map_lists($dbg_flag, $ref_flag, $ditamap, $fsep,
-                    $fused, $rcnt, $notfound, $lf, $rf, $tp, $rcon);
+                    &$fused, &$notfound, &$lf, &$rf, &$tp, &$rcon);
 
 if( $rc )
 {
@@ -215,7 +193,7 @@ if( $rc )
       if( isDITA($f) )
       {
         if( ( strpos($doct[$f],"map") === FALSE) && ($docdate[$f] == $lastdate) )
-          add_to_map($mfile,fshort($f,$rootd),$doct[$f]);
+          add_to_map($mfile,fshort($f,$rootd),null);
       }
     }
     complete_map($mfile);
@@ -312,18 +290,22 @@ if( $rc )
 
   system($cmd,$crc);
   print("processing return code was " . $crc . "\n");
-  if( $crc === FALSE )
-    print("processing failed!\n");
 
   /* cleanup temporary file */
-  if( ($opc == $opL) && !dbg_flag )
+  if( $opc == $opL )
   {
     unlink($tempmap);
   }
 
-  /* launch Web browser */
-  $browser = "C:\WINDOWS\ServicepackFiles\i386\iexplore.exe";
-  system($browser . " " . $indexfile, $crc);
+  /* launch Windows Web browser */
+  $browser1 = "C:\WINDOWS\ServicepackFiles\i386\iexplore.exe"; /* IE6 */
+  $browser2 = "C:\WINDOWS\ie7\iexplore.exe"; /* IE7 */
+  if( file_exists($browser1) )
+    system($browser1 . " " . $indexfile, $crc);
+  else if ( file_exists($browser2) )
+    system($browser2 . " " . $indexfile, $crc);
+  else
+    print("Error, could not find Windows Internet Explorer.\n");
 
 } /* get_map_lists worked */
 else

@@ -11,12 +11,12 @@ See the accompanying license.txt file for applicable licenses.
 		<author type="contributor">Anna van Raaphorst</author>
 		<publisher>OASIS (Organization for the Advancement of Structured Information Standards)</publisher>
 		<copyright>
-			<copyryear year="2006"/>
+			<copyryear year="2007"/>
 			<copyrholder>VR Communications, Inc.</copyrholder>
 		</copyright>
 		<critdates>
 			<created date="2006-June-14"/>
-			<revised modified="2006-October-11"/>
+			<revised modified="2007-March-18"/>
 		</critdates>
 		<metadata>
 			<keywords>
@@ -32,17 +32,17 @@ See the accompanying license.txt file for applicable licenses.
 			<prodinfo>
 				<prodname>DITA Open Toolkit</prodname>
 				<vrmlist>
-					<vrm version="1.3"/>
+					<vrm version="1.3.1"/>
 				</vrmlist>
 			</prodinfo>
 		</metadata>
 	</prolog>
 	<taskbody>
 		<context>In this topic you will create two concept topics based on templates already provided. You will be working in the 
-		<filepath>MY_DITA_SOURCE/samples/groceryshopping</filepath> directories. This topic assumes you are familiar with the information in <xref href="aboutgroceryshopping_sample.dita">About the grocery shopping sample</xref>.</context>
+		<filepath>DITASAMPLE_GROCERY_SOURCE</filepath> directory. This topic assumes you are familiar with the information in <xref href="aboutgroceryshopping_sample.dita">About the grocery shopping sample</xref>.</context>
 		<steps>
 			<step>
-				<cmd>Go to the <filepath>groceryshopping/template/concepts</filepath> directory.</cmd>
+				<cmd>Go to the <filepath>template/concepts</filepath> directory.</cmd>
 			</step>
 			<step>
 				<cmd>Copy the <filepath>about_cannedgoods.dita</filepath> file to the "working" directory (<filepath>working/concepts</filepath>).</cmd>
@@ -76,7 +76,7 @@ canned vegetables, and canned fruits.&lt;/p&gt;
 				<cmd>If you have problems creating or validating your working file, compare it with the file by the same name in the <filepath>completed</filepath> directory.</cmd>
 			</step>
 			<step>
-				<cmd>Go back to the <filepath>groceryshopping/template/concepts</filepath> directory.</cmd>
+				<cmd>Go back to the <filepath>template/concepts</filepath> directory.</cmd>
 			</step>
 			<step>
 				<cmd>Copy the <filepath>about_produce.dita</filepath> file to the "working" directory (<filepath>working/concepts</filepath>).</cmd>

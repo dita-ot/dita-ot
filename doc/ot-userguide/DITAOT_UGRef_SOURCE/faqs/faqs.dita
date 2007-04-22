@@ -6,18 +6,18 @@ See the accompanying license.txt file for applicable licenses.
 -->
 <concept id="faqs">
 	<title>Frequently asked questions (FAQs)</title>
-	<shortdesc>This section contains frequently asked questions about DITA and DITA Open Toolkit (OT).</shortdesc>
+	<shortdesc>This section contains frequently asked questions about DITA and DITA Open Toolkit.</shortdesc>
 	<prolog>
 		<author type="creator">Anna van Raaphorst</author>
 		<author type="contributor">Richard Johnson</author>
 		<publisher>OASIS (Organization for the Advancement of Structured Information Standards)</publisher>
 		<copyright>
-			<copyryear year="2006"/>
+			<copyryear year="2007"/>
 			<copyrholder>VR Communications, Inc.</copyrholder>
 		</copyright>
 		<critdates>
 			<created date="2006-May-01"/>
-			<revised modified="2006-October-05"/>
+			<revised modified="2007-April-03"/>
 		</critdates>
 		<metadata>
 			<keywords>
@@ -29,7 +29,7 @@ See the accompanying license.txt file for applicable licenses.
 			<prodinfo>
 				<prodname>DITA Open Toolkit</prodname>
 				<vrmlist>
-					<vrm version="1.3"/>
+					<vrm version="1.3.1"/>
 				</vrmlist>
 			</prodinfo>
 		</metadata>
@@ -37,26 +37,23 @@ See the accompanying license.txt file for applicable licenses.
 	<conbody>
 		<p>Sections in this topic:
 		<sl otherprops="pdf">
-		<sli>
-					<xref href="./xml.dita#xml">Do I need to know XML to use DITA?</xref>
+				<sli>
+					<xref href="xml_knowledge.dita"/>
 				</sli>
 				<sli>
-					<xref href="./topic_authoring.dita#topic_authoring">What is topic-based authoring?</xref>
+					<xref href="darwin_name.dita"/>
 				</sli>
 				<sli>
-					<xref href="./darwin_name.dita#darwin_name">What is "Darwin" in the name of the DITA architecture and DITA Open Toolkit?</xref>
+					<xref href="dita_docbook.dita"/>
 				</sli>
 				<sli>
-					<xref href="./dita_docbook.dita#dita_docbook">How does DITA differ from DocBook?</xref>
+					<xref href="dita_wrapper.dita"/>
 				</sli>
 				<sli>
-					<xref href="./dita_wrapper.dita#dita_wrapper">Should I set my root element to &lt;dita&gt; or &lt;concept&gt; (or &lt;task&gt; or &lt;reference&gt;)?</xref>
+					<xref href="cond_proc.dita"/>
 				</sli>
 				<sli>
-					<xref href="./cond_proc.dita#cond_proc">How can I use conditional processing effectively?</xref>
-				</sli>
-				<sli>
-					<xref href="./info_arch.dita#info_arch">What steps should I follow to architect and write a large DITA document?</xref>
+					<xref href="info_arch.dita"/>
 				</sli>
 			</sl>
 		</p>

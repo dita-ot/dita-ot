@@ -6,18 +6,17 @@ See the accompanying license.txt file for applicable licenses.
 -->
 <concept id="linking_formoreinfo">
 	<title>For more information (linking)</title>
-	
 	<prolog>
 		<author type="creator">Anna van Raaphorst</author>
 		<author type="contributor">Richard Johnson</author>
 		<publisher>OASIS (Organization for the Advancement of Structured Information Standards)</publisher>
 		<copyright>
-			<copyryear year="2006"/>
+			<copyryear year="2007"/>
 			<copyrholder>VR Communications, Inc.</copyrholder>
 		</copyright>
 		<critdates>
 			<created date="2006-May-01"/>
-			<revised modified="2006-August-08"/>
+			<revised modified="2007-April-03"/>
 		</critdates>
 		<metadata>
 			<keywords>
@@ -30,12 +29,12 @@ See the accompanying license.txt file for applicable licenses.
 			<prodinfo>
 				<prodname>DITA Open Toolkit</prodname>
 				<vrmlist>
-					<vrm version="1.3"/>
+					<vrm version="1.3.1"/>
 				</vrmlist>
 			</prodinfo>
 		</metadata>
 	</prolog>
 	<conbody>
-		<p>For a complete set of reference topics for DITA language elements (including the various linking elements), see the language reference document in the <filepath>ditaot/demo</filepath> directory.</p>
+		<p>For a complete set of reference topics for DITA language elements (including the various linking elements), see the language reference document in the <filepath>ditaot/demo</filepath> directory of the DITA Open Toolkit.</p>
 	</conbody>
 </concept>

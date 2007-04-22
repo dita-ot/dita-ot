@@ -12,12 +12,12 @@ See the accompanying license.txt file for applicable licenses.
 		<author type="contributor">Anna van Raaphorst</author>
 		<publisher>OASIS (Organization for the Advancement of Structured Information Standards)</publisher>
 		<copyright>
-			<copyryear year="2006"/>
+			<copyryear year="2007"/>
 			<copyrholder>VR Communications, Inc.</copyrholder>
 		</copyright>
 		<critdates>
 			<created date="2006-June-06"/>
-			<revised modified="2006-August-08"/>
+			<revised modified="2007-April-03"/>
 		</critdates>
 		<metadata>
 			<keywords>
@@ -27,7 +27,7 @@ See the accompanying license.txt file for applicable licenses.
 			<prodinfo>
 				<prodname>DITA Open Toolkit</prodname>
 				<vrmlist>
-					<vrm version="1.3"/>
+					<vrm version="1.3.1"/>
 				</vrmlist>
 			</prodinfo>
 		</metadata>
@@ -36,19 +36,22 @@ See the accompanying license.txt file for applicable licenses.
 		<p>Sections in this topic:
 		<sl otherprops="pdf">
 				<sli>
-					<xref href="./configuring_authoringtool.dita#configuring_authoringtool">Configuring your authoring tool to use the Toolkit catalog</xref>
+					<xref href="configuring_authoringtool.dita"/>
 				</sli>
 				<sli>
-					<xref href="./configuring_authoringhttp.dita#configuring_authoringhttp">Configuring your authoring tool to use DTD or schema URLs</xref>
+					<xref href="configuring_authoringhttp.dita"/>
 				</sli>
 				<sli>
-					<xref href="./source_files.dita#source_files">Setting up your source and output file directories</xref>
+					<xref href="configuring_xmlbuddy.dita"/>
 				</sli>
 				<sli>
-					<xref href="./settingup_production_notes.dita#settingup_production_notes">Production notes (setting up)</xref>
+					<xref href="source_files.dita"/>
 				</sli>
 				<sli>
-					<xref href="./settingup_formoreinfo.dita#settingup_formoreinfo">For more information (setting up)</xref>
+					<xref href="settingup_ditablogs.dita"/>
+				</sli>
+				<sli>
+					<xref href="settingup_formoreinfo.dita"/>
 				</sli>
 			</sl>
 		</p>

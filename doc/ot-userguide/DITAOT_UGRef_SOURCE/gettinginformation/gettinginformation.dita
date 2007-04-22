@@ -6,18 +6,18 @@ See the accompanying license.txt file for applicable licenses.
 -->
 <concept id="gettinginformation">
 	<title>Getting information (general)</title>
-	<shortdesc>This section contains sources of information about DITA and DITA Open Toolkit.</shortdesc>
+	<shortdesc>Sources of information about DITA and DITA Open Toolkit.</shortdesc>
 	<prolog>
 		<author type="creator">Anna van Raaphorst</author>
 		<author type="contributor">Richard Johnson</author>
 		<publisher>OASIS (Organization for the Advancement of Structured Information Standards)</publisher>
 		<copyright>
-			<copyryear year="2006"/>
+			<copyryear year="2007"/>
 			<copyrholder>VR Communications, Inc.</copyrholder>
 		</copyright>
 		<critdates>
 			<created date="2006-May-01"/>
-			<revised modified="2006-October-17"/>
+			<revised modified="2007-April-17"/>
 		</critdates>
 		<metadata>
 			<keywords>
@@ -31,43 +31,43 @@ See the accompanying license.txt file for applicable licenses.
 			<prodinfo>
 				<prodname>DITA Open Toolkit</prodname>
 				<vrmlist>
-					<vrm version="1.3"/>
+					<vrm version="1.3.1"/>
 				</vrmlist>
 			</prodinfo>
 		</metadata>
 	</prolog>
 	<conbody>
-		<p>Sections in this topic:
-		<sl otherprops="pdf">
+		<p otherprops="pdf">Sections in this topic:
+		<sl>
 				<sli>
-					<xref href="#gettinginformation/generalfaqs">General information and FAQs</xref>
+					<xref href="#gettinginformation/generalinfo"/>
 				</sli>
 				<sli>
-					<xref href="#gettinginformation/toolsdownloads">Tools, plugins, downloads</xref>
+					<xref href="#gettinginformation/toolsdownloads"/>
 				</sli>
 				<sli>
-					<xref href="#gettinginformation/trainingeducation">Training, education</xref>
+					<xref href="#gettinginformation/trainingeducation"/>
 				</sli>
 				<sli>
-					<xref href="#gettinginformation/consulting">Consulting</xref>
+					<xref href="#gettinginformation/consulting"/>
 				</sli>
 				<sli>
-					<xref href="#gettinginformation/standardsreleases">Standards and product releases</xref>
+					<xref href="#gettinginformation/standardsreleases"/>
 				</sli>
 				<sli>
-					<xref href="#gettinginformation/usage">Usage information</xref>
+					<xref href="#gettinginformation/usage"/>
 				</sli>
 				<sli>
-					<xref href="#gettinginformation/usergroups">User groups, forums</xref>
+					<xref href="#gettinginformation/usergroups"/>
 				</sli>
 				<sli>
-					<xref href="#gettinginformation/conferences">Conferences</xref>
+					<xref href="#gettinginformation/conferences"/>
 				</sli>
 			</sl>
 		</p>
-		<!-- General information and FAQs -->
-		<section id="generalfaqs">
-			<title>General Information and Frequently Asked Questions (FAQs) about DITA and DITA Open Toolkit</title>
+		<!-- General information -->
+		<section id="generalinfo">
+			<title>General Information</title>
 			<p/>
 			<simpletable>
 				<sthead>
@@ -78,7 +78,8 @@ See the accompanying license.txt file for applicable licenses.
 					<stentry>
 						<p>
 							<b>dita.xml.org:</b> Official DITA community gathering place and information resource for the DITA OASIS Standard</p>
-						<p>Includes a knowledge base, a wiki, news items about DITA, events, products and services, case studies, user groups, forums, blogs, and a resource directory. Hosted by OASIS.</p>
+						<p>Includes a knowledge base, a wiki, news items about DITA, events, products and services, case studies, user groups, forums, blogs, and a resource directory.</p> 
+						<p>Hosted by OASIS.</p>
 					</stentry>
 					<stentry>
 						<xref href="http://dita.xml.org" format="html" scope="external"/>
@@ -100,9 +101,7 @@ See the accompanying license.txt file for applicable licenses.
 							<b>IBM site</b> containing a collection of information about DITA</p>
 					</stentry>
 					<stentry>
-						<p>
-							<xref href="http://www-128.ibm.com/developer-works/xml/library/x-dita1/" format="html" scope="external"/>
-						</p>
+						<xref href="http://www-128.ibm.com/developer-works/xml/library/x-dita1/" format="html" scope="external"/>
 					</stentry>
 				</strow>
 			</simpletable>
@@ -138,7 +137,7 @@ See the accompanying license.txt file for applicable licenses.
 				<strow>
 					<stentry>
 						<p>
-							<b>IBM download site:</b> Collection of DITA downloads</p>
+							<b>IBM download site:</b> Collection of downloads of older releases of the Toolkit</p>
 					</stentry>
 					<stentry>
 						<xref href="http://www-128.ibm.com/developerworks/xml/library/x-dita6/x-dita_downloads.html" format="html" scope="external"/>
@@ -161,7 +160,7 @@ See the accompanying license.txt file for applicable licenses.
 							<cite>
 								<b>Introduction to DITA: </b>A User Guide to the Darwin Information Typing Architecture</cite>
 						</p>
-						<p>Book (level: beginner). Authors: Jennifer Linton and Kylene Bruski. Publisher: Comtech Services, Colorado, 2006. Task-oriented approach to learning DITA. Authored using DITA markup and methodology in a variety of XML editors. Published using the Blast Radius and Mekon FrameMaker plugin in the DITA 1.2 Open Toolkit.</p>
+						<p>Book (level: beginner). Authors: Jennifer Linton and Kylene Bruski. Publisher: Comtech Services, Colorado, 2006. Task-oriented approach to learning DITA. Authored using DITA markup and methodology in a variety of XML editors. Published using the Blast Radius and Mekon FrameMaker plug-in in the DITA 1.2 Open Toolkit.</p>
 					</stentry>
 					<stentry>
 						<xref href="http://www.comtech-serv.com" format="html" scope="external"/>
@@ -203,32 +202,6 @@ See the accompanying license.txt file for applicable licenses.
 						<p>Part 1: A DITA specialization design. Article (level: intermediate). Authors: Robert Bernard and John P. Hunt. Publisher: IBM, August 2005. How topic-based DITA XML can provide the basis for developing an information architecture for single-sourced XML learning content.</p>
 					</stentry>
 					<stentry>
-						<xref href="http://www-128.ibm.com/developerworks/xml/library/x-dita9b/" format="html" scope="external"/>
-					</stentry>
-				</strow>
-				<strow>
-					<stentry>
-						<p>
-							<cite>
-								<b>An XML-based information architecture for learning content</b>
-							</cite>
-						</p>
-						<p>Part 2: A DITA content pilot. Article (level: intermediate). Authors: John P. Hunt and Robert Bernard. Publisher: IBM, August 2005. How topic-based DITA XML can provide the basis for developing an information architecture for single-sourced XML learning content.</p>
-					</stentry>
-					<stentry>
-						<xref href="http://www-128.ibm.com/developerworks/xml/library/x-dita9a/" format="html" scope="external"/>
-					</stentry>
-				</strow>
-				<strow>
-					<stentry>
-						<p>
-							<cite>
-								<b>Developing Quality Technical Information: A Handbook for Writors and Editors</b>
-							</cite>
-						</p>
-						<p>Authors: Gretchen Hargis et al. Publisher: IBM, 2nd edition, 2004. How to apply quality characteristics that make technical information easy to use, easy to understand, and easy to find.</p>
-					</stentry>
-					<stentry>
 						<xref href="http://www-128.ibm.com/developerworks/xml/library/x-dita9a/" format="html" scope="external"/>
 					</stentry>
 				</strow>
@@ -267,6 +240,17 @@ See the accompanying license.txt file for applicable licenses.
 				<strow>
 					<stentry>
 						<p>
+							<b>DITA 1.1 standard</b>
+						</p>
+						<p>Specification overview.</p>
+					</stentry>
+					<stentry>
+						<xref href="http://docs.oasis-open.org/dita/v1.1/CD01/overview/overview.html" format="html" scope="external"/>
+					</stentry>
+				</strow>
+				<strow>
+					<stentry>
+						<p>
 							<b>Roadmap for DITA development</b>
 						</p>
 						<p>Lists of proposed and committed features for future releases.</p>
@@ -293,13 +277,13 @@ See the accompanying license.txt file for applicable licenses.
 						</p>
 					</stentry>
 					<stentry>
-						<xref href="http://dita-ot.sourceforge.net/" format="html" scope="external"/>
+						<xref href="http://sourceforge.net/projects/dita-ot//" format="html" scope="external"/>
 					</stentry>
 				</strow>
 				<strow>
 					<stentry>
 						<p>
-							<b>OASIS DITA Open Toolkit 1.3 features and issues tracking</b>
+							<b>OASIS DITA Open Toolkit 1.3.1 features and issues tracking</b>
 						</p>
 					</stentry>
 					<stentry>
@@ -363,13 +347,26 @@ See the accompanying license.txt file for applicable licenses.
 					<stentry>
 						<p>
 							<cite>
-								<b>OASIS DITA Archetectural Specification version 1.0</b>
+								<b>OASIS DITA Architecture Specification version 1.1</b>
 							</cite>
 						</p>
-						<p>OASIS Standard, 09 May 2005.</p>
+						<p>OASIS Committee Draft, 13 February 2007.</p>
 					</stentry>
 					<stentry>
-						<xref href="http://docs.oasis-open.org/dita/v1.0/dita-v1.0-spec-os-ArchitecturalSpecification.pdf" format="pdf" scope="external"/>
+						<xref href="http://docs.oasis-open.org/dita/v1.1/CD01/archspec/archspec.html#concept-1" format="pdf" scope="external"/>
+					</stentry>
+				</strow>
+				<strow>
+					<stentry>
+						<p>
+							<cite>
+								<b>OASIS DITA Language Specification version 1.1</b>
+							</cite>
+						</p>
+						<p>OASIS Committee Draft, 13 February 2007.</p>
+					</stentry>
+					<stentry>
+						<xref href="http://docs.oasis-open.org/dita/v1.1/CD01/langspec/ditaref-type.pdf" format="pdf" scope="external"/>
 					</stentry>
 				</strow>
 			</simpletable>
@@ -452,7 +449,7 @@ See the accompanying license.txt file for applicable licenses.
 		<section id="conferences">
 			<title>Conferences</title>
 			<p>
-				<note>The following DITA-related conferences were or will be held in 2006. Some tentative dates are also given for 2007. For the latest information about these conferences, see the referenced websites.</note>
+				<note>The following DITA-related conferences were or will be held in 2007. For the latest information about these conferences, see the referenced websites.</note>
 			</p>
 			<simpletable>
 				<sthead>
@@ -462,45 +459,12 @@ See the accompanying license.txt file for applicable licenses.
 				<strow>
 					<stentry>
 						<p>
-							<b>XML 2006</b>
+							<b>Content Management Strategies 2007</b>
 						</p>
-						<p>Date: December 5-7. Location: Boston. Audience: Those who want to use XML and related technologies.</p>
+						<p>Date: March 26-28. Boston, MA. Conference organizer: Center for Information Development Management (CIDM).</p>
 					</stentry>
 					<stentry>
-						<xref href="http://2005.xmlconference.org/" format="html" scope="external"/>
-					</stentry>
-				</strow>
-				<strow>
-					<stentry>
-						<p>
-							<b>DITA Europe 2006</b>
-						</p>
-						<p>Date: November 2-3. Location: Frankfurt. Audience: Those who are interested in implementing XML DITA or learning more about this new standard for topic-based authoring. Conference organizer: Center for Information Development Management.</p>
-					</stentry>
-					<stentry>
-						<xref href="http://www.infomanagementcenter.com/DITAeurope/" format="html" scope="external"/>
-					</stentry>
-				</strow>
-				<strow>
-					<stentry>
-						<p>
-							<b>Tri-XML 2006</b>
-						</p>
-						<p>Date: July 27-29. Location: Raleigh, NC. Focus: Presentations on real-world use of XML. Conference organizer: Tri-XML, an interest group for the Research Triangle area, NC USA that focuses on educating members in XML-related technologies and potential uses.</p>
-					</stentry>
-					<stentry>
-						<xref href="http://www.trixml.org//confindex.shtml" format="html" scope="external"/>
-					</stentry>
-				</strow>
-				<strow>
-					<stentry>
-						<p>
-							<b>X-Pubs 2006</b>
-						</p>
-						<p>Date: June 20-21. Location:London. Focus: Seeks to critique the established business justification for the adoption of both XML and DITA in organizational publishing.</p>
-					</stentry>
-					<stentry>
-						<xref href="http://www.x-pubs.com/index.php" format="html" scope="external"/>
+						<xref href="http://www.cm-strategies.com/index.htm" format="html" scope="external"/>
 					</stentry>
 				</strow>
 				<strow>
@@ -508,35 +472,52 @@ See the accompanying license.txt file for applicable licenses.
 						<p>
 							<b>XTech 2006</b>
 						</p>
-						<p>Date: May 16-19. Location: Amsterdam. XTech 2007: Paris. Audience: Developers, information designers and managers working with web and standards-based technologies.</p>
+						<p>Date: May 15-18. Location: Paris. XTech 2007 is the premier European conference for developers, information designers and managers working with web and standards-based technologies. Focus: The theme is “The Ubiquitous Web."</p>
 					</stentry>
 					<stentry>
-						<xref href="http://xtech06.usefulinc.com/content/about" format="html" scope="external"/>
+						<xref href="http://2007.xtech.org/public/news" format="html" scope="external"/>
+					</stentry>
+				</strow>
+					<strow>
+					<stentry>
+						<p>
+							<b>X-Pubs 2007</b>
+						</p>
+						<p>Date: June 4-5. Location: Reading, UK. Focus: The theme is “How did they do it?” 
+						</p>
+					</stentry>
+					<stentry>
+						<xref href="http://www.x-pubs.com" format="html" scope="external"/>
 					</stentry>
 				</strow>
 				<strow>
 					<stentry>
 						<p>
-							<b>Content Management Strategies 2006</b>
+							<b>DITA 2007</b>
 						</p>
-						<p>Date: April 3-5. Location: San Francisco, CA. CMS 07: March 26-28, Boston, MA. Conference organizer: Center for Information Development Management (CIDM).</p>
+						<p>Date: October 6. Location: Raleigh, NC. DITA 2007. (This is the DITA East conference. DITA West was held in February in San Jose, CA.) Conference organizer: Bright Path Solutions.</p>
 					</stentry>
 					<stentry>
-						<xref href="http://www.infomanagementcenter.com/index.htm" format="html" scope="external"/>
+						<xref href="http://www.travelthepath.com/conf/ditaeast.shtml" format="html" scope="external"/>
 					</stentry>
 				</strow>
 				<strow>
 					<stentry>
 						<p>
-							<b>DITA 2006</b>
+							<b>XML 2007</b>
 						</p>
-						<p>Date: March 23-25. Location: Raleigh, NC. DITA 2007 (West Coast), February, California. DITA 2007 (East Coast), fall, Florida (tentative). Conference organizer: Bright Path Solutions.</p>
+						<p>Date: December 3-5. Location: Boston. Audience: Those who want to use XML and related technologies.</p>
 					</stentry>
 					<stentry>
-						<xref href="http://www.travelthepath.com/dita2006.html" format="html" scope="external"/>
+						<xref href="http://2007.xmlconference.org/public/content/home" format="html" scope="external"/>
 					</stentry>
 				</strow>
 			</simpletable>
+		</section>
+		<section>
+			<p>
+				<image href="../images/heron.png" placement="break"/>
+			</p>
 		</section>
 	</conbody>
 </concept>

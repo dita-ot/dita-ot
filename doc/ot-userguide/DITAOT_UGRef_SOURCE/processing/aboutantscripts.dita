@@ -6,18 +6,17 @@ See the accompanying license.txt file for applicable licenses.
 -->
 <concept id="aboutantscripts">
 	<title>About Ant scripts</title>
-	
 	<prolog>
 		<author type="creator">Richard Johnson</author>
 		<author type="contributor">Anna van Raaphorst</author>
 		<publisher>OASIS (Organization for the Advancement of Structured Information Standards)</publisher>
 		<copyright>
-			<copyryear year="2006"/>
+			<copyryear year="2007"/>
 			<copyrholder>VR Communications, Inc.</copyrholder>
 		</copyright>
 		<critdates>
 			<created date="2006-June-06"/>
-			<revised modified="2006-September-23"/>
+			<revised modified="2007-April-15"/>
 		</critdates>
 		<metadata>
 			<keywords>
@@ -25,8 +24,8 @@ See the accompanying license.txt file for applicable licenses.
 				<keyword>building DITA file</keyword>
 				<keyword>garage sample</keyword>
 				<keyword>Ant script</keyword>
+				<indexterm>Ant scripts</indexterm>
 				<indexterm>Ant scripts
-				    <indexterm>about</indexterm>
 					<indexterm>system-level</indexterm>
 					<indexterm>user-level</indexterm>
 				</indexterm>
@@ -51,7 +50,7 @@ See the accompanying license.txt file for applicable licenses.
 			<prodinfo>
 				<prodname>DITA Open Toolkit</prodname>
 				<vrmlist>
-					<vrm version="1.3"/>
+					<vrm version="1.3.1"/>
 				</vrmlist>
 			</prodinfo>
 		</metadata>
@@ -86,138 +85,263 @@ See the accompanying license.txt file for applicable licenses.
 						<stentry>integrator.xml</stentry>
 						<stentry>Adds plug-ins to the build.</stentry>
 					</strow>
-			</simpletable>
+				</simpletable>
 			</p>
 		</section>
 		<section>
-			<title>Creating user scripts in DITA Open Toolkit</title>
-			<p>Sample Ant scripts for all target publishing environment supported by DITA Open Toolkit are located in <filepath>ditaot/doc/ot-userguide/MY_DITA_SOURCE/samples/garage/ant_scripts</filepath> of the Toolkit source distribution. Most of these scripts process the garage sample source files with the topics displayed in a hierarchy. One processes the garage sample to XHTML with the topics displayed as a sequence. One filters out some of the topics using a ditaval file before publishing as XHTML in a hierarchical format.</p>
-			<p>The following section contains one of these sample scripts for XHTML targets. You would run this build script in Windows by opening  the Command Prompt, navigating to the <filepath>ant_scripts directory</filepath>, and entering the command:
-     <codeblock>ant -f garage_hierarchy_xhtml.xml</codeblock>
+			<title>Sample Ant scripts</title>
+			<p>Sample Ant scripts are located at 
+			<xref href="http://dita-ot.sourceforge.net/SourceForgeFiles/doc/user_guide.html" type="html" scope="external"/>. 
+			One of the sample scripts processes the garage sample source files with the topics displayed in a hierarchy. The other processes the garage sample with the topics displayed as a sequence. One of the targets in the hierarchy script does conditional processing.</p>
+			<p>The following section shows the script that publishes topics in a hierarchy. In Windows you would publish to XHTML by opening  the Command Prompt, navigating to the <filepath>ant_scripts directory</filepath>, and entering the command:
+     <codeblock>ant -f garage_hierarchy_all.xml xhtml</codeblock>
 			</p>
 			<p>For more information about processing (building) to XHTML targets, see <xref href="../processing/processing_xhtml.dita" scope="local">Processing to XHTML targets.</xref>.
 			</p>
 		</section>
 		<section id="sample_script">
 			<title>Sample user script</title>
-			<p>Here is an annotated script for publishing the garage sample to XHTML in a hierarchical format. The lines in bold are the actual script statements; the other lines are annotations.</p>
+			<p>Here is the annotated "hierarchy" script for the garage sample. This script is part of the <cite>DITA Open Toolkit User Guide</cite> package.</p>
 			<codeblock>
-			&nbsp;
-<b>&lt;?xml version="1.0" encoding="UTF-8"?&gt;</b>
-&lt;!-- Copyright 2006 VR Communications, Inc. --&gt; 
-&lt;!-- All rights reserved. --&gt;
-&lt;!-- SAMPLE: GARAGE --&gt;
-&lt;!-- DITAMAP: HIERARCHY --&gt;
-&lt;!-- TARGET: XHTML --&gt;
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;!-- (c) Copyright 2006-2007 VR Communications, Inc. All rights reserved. --&gt;
+&lt;!-- Ant script for the garage sample processed as  a hierarchy of topics (garage_hierarchy_all.xml) --&gt;
+&lt;!-- Depending on the argument passed to the script at runtime, 
+this script processed to one (example: dita2xhtml), multiple, or all output targets. --&gt;
+&lt;!-- This is a "user script," meant to be modified.
+However, be cautious in modifying the environment initialization section. --&gt;
 
-&lt;!-- SAMPLE ANT BUILD SCRIPT TO CREATE XHTML OUTPUT --&gt;   
-&lt;!-- from the provided sample ("garage"). --&gt;
-
-&lt;!-- This is a "user script," meant to be --&gt;
-&lt;!-- modified; however, be cautious in modifying the --&gt;
-&lt;!-- environment initialization section. --&gt;
- 
 &lt;!-- --&gt;
 &lt;!-- ENVIRONMENT INITIALIZATION SECTION --&gt;
 &lt;!-- --&gt;
 
-&lt;!-- Modify with caution. --&gt;
-&lt;!-- garage_xhtml is an arbitrary name alluding to the --&gt; 
-&lt;!-- source and target trees. --&gt;
+&lt;!-- The project name is garage. The default output target is xhtml. --&gt;
+&lt;project name="garage" default="xhtml"&gt;
 
-&lt;!-- default="all" means "build all the targets in the --&gt;	 
-&lt;!-- 'depends' target list" (below) --&gt;
-&lt;!-- (NOT all targets supported by DITA Open Toolkit). --&gt;
-&lt;!-- basedir is the base directory for the Toolkit --&gt; 
-&lt;!-- executables (NOT the DITA source directory, --&gt; 
-&lt;!-- which is defined with projdir, below). --&gt;
-&lt;!-- OK to modify. --&gt;
-<b>&lt;project name="garage_xhtml" default="all" basedir="C:/ditaot"&gt;</b>
-
-
-&lt;!-- Location of DITA source files (projdir) and target --&gt; 
-&lt;!-- output files (outdir). --&gt;
-&lt;!-- OK to modify. --&gt;
-<b>&lt;property name="projdir" value="C:/MY_DITA_SOURCE/samples/garage"/&gt;</b>
-				<b>&lt;property name="outdir" value="C:/MY_DITA_OUTPUT/samples/garage"/&gt;</b>
-
-&lt;!-- Location of DITA Java classes. --&gt;
-&lt;!-- DO NOT modify! --&gt;
-<b>&lt;path id="dost.class.path"&gt;</b>
-				<b>&lt;pathelement location="${basedir}/lib/dost.jar"/&gt;</b>
-				<b>&lt;/path&gt;</b>
-  
-&lt;!-- Ant task to initialize the processing environment. --&gt;
-&lt;!-- Defines a new Ant task called "integrate" that --&gt;
-&lt;!-- executes the code defined in "classname". --&gt;
-&lt;!-- DO NOT modify! --&gt;
-<b>&lt;taskdef name="integrate" classname="org.dita.dost.platform.IntegratorTask"&gt;</b>
-				<b>&lt;classpath refid="dost.class.path"/&gt;</b>
-				<b>&lt;/taskdef&gt;</b>
-
-&lt;!-- dita2xhtml is a somewhat arbitrary name that --&gt;
-&lt;!-- alludes to the source and target. --&gt;
-&lt;!-- It must match the target name in the instance --&gt; 
-&lt;!-- processing section below. --&gt;
-&lt;!-- ${basedir} is the "basedir" defined above. --&gt;
-&lt;!-- OK to modify. --&gt;
-<b>&lt;target name="all" depends="integrate, dita2xhtml"&gt;&lt;/target&gt;</b>
-				<b>&lt;target name="integrate"&gt;</b>
-				<b>&lt;integrate ditadir="${basedir}"/&gt;</b>
-				<b>&lt;/target&gt;</b>
-
+&lt;!-- This message is echoed to the screen at the beginning of the build process --&gt;
 &lt;!-- --&gt;
-&lt;!-- INSTANCE PROCESSING SECTION --&gt;
+&lt;!-- To process using a different map, you need to change the following statement --&gt;
+&lt;!-- --&gt;
+&lt;echo&gt; &lt;/echo&gt;
+&lt;echo&gt;Building garage sample as a hierarchy of topics.&lt;/echo&gt;
+&lt;echo&gt; &lt;/echo&gt;
+	
+&lt;!-- Allow the build process access to environment variables --&gt;
+&lt;property environment="env"/&gt;
+
+&lt;!-- Set toolkit directory from environment variable --&gt;
+&lt;property name="toolkit_dir" value="${env.DITA_DIR}"/&gt;
+
+&lt;!-- Note: basedir may be set in a higher-level script that invokes this one.
+Some plug-ins depend on its pointing to the Toolkit directory.  
+In particular, the Idiom plug-in, which is required for PDF2 processing, requires it. --&gt;
+&lt;property name="basedir" value="${env.DITA_DIR}"/&gt;
+
+&lt;!-- Define the location of the project (source file) directory.
+In this case, the project directory is up two directory levels from the location of this file. --&gt;
+&lt;property name="projdir" value="${ant.file}/../.."/&gt;
+
+&lt;!-- Define the location of the output directory.
+ In this case, it is a directory directly above the project (source file) directory. --&gt;
+&lt;property name="outdir" value="${projdir}/../DITASAMPLE_GARAGE_OUTPUT"/&gt;
+&lt;property name="args.logdir" value="${outdir}"/&gt;
+
+&lt;!-- Set the name of the (master) ditamap --&gt;
+&lt;!-- --&gt;
+&lt;!-- To process using a different map, you need to change the following value --&gt;
 &lt;!-- --&gt;
 
-&lt;!-- Modify to process a particular source instance. --&gt;
-&lt;!-- This sample builds only one target. --&gt; 
-&lt;!-- You could add other target sections --&gt;
-&lt;!-- to build to other targets --&gt; 
-&lt;!-- (for example, PDF or HTML Help). --&gt; 
-&lt;!-- If you do that, you must also add appropriate names --&gt; 
-&lt;!-- (for example, dita2pdf or dita2htmlhelp) --&gt;
-&lt;!-- to the "depends" list in the environment --&gt; 
-&lt;!-- initialization section above. --&gt;
+&lt;property name="MAP_file" value="hierarchy.ditamap"/&gt;
 
-&lt;!-- This section builds to a single target (xhtml). --&gt;
-&lt;!-- Target name must match the target name in the --&gt; 
-&lt;!-- "depends" list in the environment initialization --&gt; 
-&lt;!-- section. --&gt; 
-<b>&lt;target name="dita2xhtml"&gt;</b>
+&lt;!-- Set the extension string for the dita files (files can also be .xml) --&gt;
+&lt;property name="EXTNAME" value=".dita"/&gt;
 
-&lt;!-- The properties included below are input parameters. --&gt; 
-&lt;!-- They are listed and defined in the DITA OT User Guide --&gt; 
-&lt;!-- and Reference. --&gt;
-<b>&lt;ant antfile="${basedir}/conductor.xml" target="init"&gt;</b>
+&lt;!-- Define the path to the Java code --&gt;
+&lt;path id="dost.class.path"&gt;
+&lt;pathelement location="${toolkit_dir}${file.separator}lib${file.separator}dost.jar"/&gt;
+&lt;/path&gt;
 
-&lt;!-- projdir is defined in the environment initialization --&gt; 
-&lt;!-- section above. --&gt;
-<b>&lt;property name="args.input" value="${projdir}/hierarchy.ditamap"/&gt;</b>
+&lt;!-- Define the Ant targets and initialize the DITA processing environment --&gt;
+&lt;taskdef name="integrate" classname="org.dita.dost.platform.IntegratorTask"&gt;
+&lt;classpath refid="dost.class.path"/&gt;
+&lt;/taskdef&gt;
 
-&lt;!-- outdir is defined in the environment initialization --&gt; 
-&lt;!-- section above. --&gt;
-<b>&lt;property name="output.dir" value="${outdir}/xhtml/hierarchy/unfiltered"/&gt;</b>
+&lt;!-- Create the default XHTML output and debug cross-reference --&gt;
+&lt;target name="xhtml" depends="integrate, dita2xhtml"&gt;
+ &lt;/target&gt;
+&lt;target name="integrate"&gt;
+&lt;integrate ditadir="${toolkit_dir}"/&gt;
+&lt;/target&gt;
 
-&lt;!-- Name of the DITA temporary directory where files --&gt; 
-&lt;!-- are stored during processing. --&gt;
-<b>&lt;property name="dita.temp.dir" value="${outdir}/temp"/&gt;</b>
+&lt;!-- --&gt;
+&lt;!-- BEGIN INSTANCE PROCESSING SECTION --&gt;
+&lt;!-- --&gt;
 
-&lt;!-- transformation type (target output type). --&gt;
-<b>&lt;property name="transtype" value="xhtml"/&gt;</b>
+&lt;!-- Names of the output types this script is capable of producing --&gt;
+&lt;!-- The target names are somewhat arbitrary. The following are traditional,
+and they allude to the source and target (for example, dita2xhtml). --&gt;
+&lt;!-- JavaHelp and PDF (using FOP) are not included in this list, because they don't work in Toolkit 1.3.1! --&gt;
+&lt;target name="alltargets" depends="integrate, dita2xhtml, dita2filtered, dita2htmlhelp, dita2pdf2,  
+dita2eclipsecontent, dita2eclipsehelp, dita2docbook, dita2javahelp, dita2troff, dita2wordrtf"&gt;
+&lt;/target&gt;
 
-&lt;!-- The system default extname is .xml. --&gt; 			
-&lt;!-- The following statement changes --&gt;
-&lt;!-- the default to .dita. --&gt; 
-&lt;!-- If you use other extensions --&gt; 
-&lt;!-- (including .ditamap and .xml, --&gt;
-&lt;!-- but also extensions like .jpg and .gif), --&gt; 
-&lt;!-- you must specify the format attribute in --&gt; 
-&lt;!-- your source files (for example, format="xml"). --&gt;
-<b>&lt;property name="dita.extname" value=".dita"/&gt;</b>
-				<b>&lt;/ant&gt;</b>
-				<b>&lt;/target&gt;</b>
-				<b>&lt;/project&gt;</b>
+&lt;!-- Handy abbreviation (all) for alltargets --&gt;
+&lt;target name="all" depends="alltargets"/&gt;
+
+&lt;!-- Create xhtml output (unfiltered) --&gt;
+&lt;target name="dita2xhtml"&gt;
+&lt;ant antfile="${toolkit_dir}${file.separator}conductor.xml" target="init"&gt;
+&lt;property name="args.input" value="${projdir}/${MAP_file}"/&gt;
+
+&lt;!-- --&gt;
+&lt;!-- To process using a different map, you need to change the following value --&gt;
+&lt;!-- --&gt;
+&lt;property name="output.dir" value="${outdir}/hierarchy/xhtml"/&gt;
+
+&lt;!-- --&gt;
+&lt;!-- To process using a different map, you need to change the following value --&gt;
+&lt;!-- --&gt;
+&lt;property name="dita.temp.dir" value="${outdir}/hierarchy/temp"/&gt;
+&lt;property name="transtype" value="xhtml"/&gt;
+&lt;property name="args.draft" value="yes"/&gt;
+&lt;property name="args.indexshow" value="yes"/&gt;
+&lt;property name="dita.extname" value="${EXTNAME}"/&gt;
+&lt;/ant&gt;
+&lt;/target&gt;
+
+&lt;!-- Create xhtml output (filtered) --&gt;
+&lt;!-- The output file directory is structured so the filtered output files will not "step on" the existing files.
+They will be placed one level deeper than the existing hierarchy files. --&gt;
+&lt;target name="dita2filtered"&gt;
+&lt;ant antfile="${toolkit_dir}${file.separator}conductor.xml" target="init"&gt;
+&lt;property name="args.input" value="${projdir}/${MAP_file}"/&gt;
+&lt;property name="output.dir" value="${outdir}/hierarchy/filtered/xhtml"/&gt;
+&lt;property name="dita.temp.dir" value="${outdir}/hierarchy/filtered//temp"/&gt;
+&lt;property name="transtype" value="xhtml"/&gt;
+&lt;property name="args.draft" value="yes"/&gt;
+&lt;property name="args.indexshow" value="yes"/&gt;
+&lt;property name="dita.extname" value="${EXTNAME}"/&gt;
+
+&lt;!-- Specify the ditaval file to be used for filtering --&gt;
+&lt;!-- --&gt;
+&lt;!-- To turn on filtering, you first need to change the following ditaval file to include the filter.
+See the ditaval file for instructions.
+Then run the Ant script with the dita2filtered target name. 
+Example (using the batch to call the Ant script): runbuild dita2filtered hierarchy --&gt;
+&lt;!-- --&gt;
+&lt;property name="dita.input.valfile" value="${projdir}/ditaval_files/garage_filtering.ditaval"/&gt;
+&lt;/ant&gt;
+&lt;/target&gt;
+
+&lt;!-- Create htmlhelp output --&gt;
+&lt;target name="dita2htmlhelp"&gt;
+&lt;ant antfile="${toolkit_dir}${file.separator}conductor.xml" target="init"&gt;
+&lt;property name="args.input" value="${projdir}/${MAP_file}"/&gt;
+&lt;property name="output.dir" value="${outdir}/hierarchy/htmlhelp"/&gt;
+&lt;property name="dita.temp.dir" value="${outdir}/hierarchy/temp"/&gt;
+&lt;property name="transtype" value="htmlhelp"/&gt;
+&lt;property name="args.draft" value="yes"/&gt;
+&lt;property name="args.indexshow" value="yes"/&gt;
+&lt;property name="dita.extname" value="${EXTNAME}"/&gt;
+&lt;/ant&gt;
+&lt;/target&gt;
+
+&lt;!-- Create idiom fo pdf2 output --&gt;
+&lt;target name="dita2pdf2"&gt;
+&lt;ant antfile="${toolkit_dir}${file.separator}conductor.xml" target="init"&gt;
+&lt;property name="args.input" value="${projdir}/${MAP_file}"/&gt;
+&lt;property name="output.dir" value="${outdir}/hierarchy/pdf2"/&gt;
+&lt;property name="dita.temp.dir" value="${outdir}/hierarchy/temp"/&gt;
+&lt;property name="transtype" value="pdf2"/&gt;
+&lt;property name="args.draft" value="yes"/&gt;
+&lt;property name="args.indexshow" value="yes"/&gt;
+&lt;property name="dita.extname" value="${EXTNAME}"/&gt;
+&lt;/ant&gt;
+&lt;/target&gt;
+
+&lt;!-- Create eclipsecontent output --&gt;
+&lt;target name="dita2eclipsecontent"&gt;
+&lt;ant antfile="${toolkit_dir}${file.separator}conductor.xml" target="init"&gt;
+&lt;property name="args.input" value="${projdir}/${MAP_file}"/&gt;
+&lt;property name="output.dir" value="${outdir}/hierarchy/eclipsecontent"/&gt;
+&lt;property name="dita.temp.dir" value="${outdir}/hierarchy/temp"/&gt;
+&lt;property name="transtype" value="eclipsecontent"/&gt;
+&lt;property name="args.draft" value="yes"/&gt;
+&lt;property name="args.indexshow" value="yes"/&gt;
+&lt;property name="dita.extname" value="${EXTNAME}"/&gt;
+&lt;/ant&gt;
+&lt;/target&gt;
+
+&lt;!-- Create eclipsehelp output --&gt;
+&lt;target name="dita2eclipsehelp"&gt;
+&lt;ant antfile="${toolkit_dir}${file.separator}conductor.xml" target="init"&gt;
+&lt;property name="args.input" value="${projdir}/${MAP_file}"/&gt;
+&lt;property name="output.dir" value="${outdir}/hierarchy/eclipsehelp"/&gt;
+&lt;property name="dita.temp.dir" value="${outdir}/hierarchy/temp"/&gt;
+&lt;property name="transtype" value="eclipsehelp"/&gt;
+&lt;property name="args.draft" value="yes"/&gt;
+&lt;property name="args.indexshow" value="yes"/&gt;
+&lt;property name="dita.extname" value="${EXTNAME}"/&gt;
+&lt;/ant&gt;
+&lt;/target&gt;
+
+&lt;!-- Create docbook output --&gt;
+&lt;target name="dita2docbook"&gt;
+&lt;ant antfile="${toolkit_dir}${file.separator}conductor.xml" target="init"&gt;
+&lt;property name="args.input" value="${projdir}/${MAP_file}"/&gt;
+&lt;property name="output.dir" value="${outdir}/hierarchy/docbook"/&gt;
+&lt;property name="dita.temp.dir" value="${outdir}/hierarchy/temp"/&gt;
+&lt;property name="transtype" value="docbook"/&gt;
+&lt;property name="args.draft" value="yes"/&gt;
+&lt;property name="args.indexshow" value="yes"/&gt;
+&lt;property name="dita.extname" value="${EXTNAME}"/&gt;
+&lt;/ant&gt;
+&lt;/target&gt;
+
+&lt;!-- Create javahelp output --&gt;
+&lt;target name="dita2javahelp"&gt;
+&lt;property name="jarfile" value="${outdir}/hierarchy/javahelp/garage.jar"/&gt;
+&lt;ant antfile="${toolkit_dir}${file.separator}conductor.xml" target="init"&gt;
+&lt;property name="args.input" value="${projdir}/${MAP_file}"/&gt;
+&lt;property name="output.dir" value="${outdir}/hierarchy/javahelp"/&gt;
+&lt;property name="dita.temp.dir" value="${outdir}/hierarchy/temp"/&gt;
+&lt;property name="transtype" value="javahelp"/&gt;
+&lt;property name="args.draft" value="yes"/&gt;
+&lt;property name="args.indexshow" value="yes"/&gt;
+&lt;property name="dita.extname" value="${EXTNAME}"/&gt;
+&lt;/ant&gt;
+&lt;delete file="${jarfile}"/&gt;
+&lt;jar destfile="${jarfile}" basedir="${outdir}/hierarchy/javahelp" includes="**"&gt;
+&lt;/jar&gt;
+&lt;/target&gt;
+
+&lt;!-- Create troff output --&gt;
+&lt;target name="dita2troff"&gt;
+&lt;ant antfile="${toolkit_dir}${file.separator}conductor.xml" target="init"&gt;
+&lt;property name="args.input" value="${projdir}/${MAP_file}"/&gt;
+&lt;property name="output.dir" value="${outdir}/hierarchy/troff"/&gt;
+&lt;property name="dita.temp.dir" value="${outdir}/hierarchy/temp"/&gt;
+&lt;property name="transtype" value="troff"/&gt;
+&lt;property name="args.draft" value="yes"/&gt;
+&lt;property name="args.indexshow" value="yes"/&gt;
+&lt;property name="dita.extname" value="${EXTNAME}"/&gt;
+&lt;/ant&gt;
+&lt;/target&gt;
+	
+&lt;!-- Create wordrtf output --&gt;
+&lt;target name="dita2wordrtf"&gt;
+&lt;ant antfile="${toolkit_dir}${file.separator}conductor.xml" target="init"&gt;
+&lt;property name="args.input" value="${projdir}/${MAP_file}"/&gt;
+&lt;property name="output.dir" value="${outdir}/hierarchy/wordrtf"/&gt;
+&lt;property name="dita.temp.dir" value="${outdir}/hierarchy/temp"/&gt;
+&lt;property name="transtype" value="wordrtf"/&gt;
+&lt;property name="args.draft" value="yes"/&gt;
+&lt;property name="args.indexshow" value="yes"/&gt;
+&lt;property name="dita.extname" value="${EXTNAME}"/&gt;
+&lt;/ant&gt;
+&lt;/target&gt;
+
+&lt;/project&gt;
 			</codeblock>
 		</section>
 	</conbody>

@@ -9,19 +9,19 @@ See the accompanying license.txt file for applicable licenses.
 	<prolog>
 		<author type="creator">Richard Johnson</author>
 		<copyright>
-			<copyryear year="2006"/>
+			<copyryear year="2007"/>
 			<copyrholder>VR Communications, Inc.</copyrholder>
 		</copyright>
 		<critdates>
 			<created date="2006-June-14"/>
-			<revised modified="2006-October-11"/>
+			<revised modified="2007-April-17"/>
 		</critdates>
 		<metadata>
 			<keywords>
 				<keyword>map</keyword>
 				<keyword>ditamap</keyword>
 				<keyword>grocery shopping sample</keyword>
-				<indexterm>map<indexterm>creating</indexterm>
+				<indexterm>maps<indexterm>creating</indexterm>
 				</indexterm>
 				<indexterm>creating<indexterm>maps</indexterm>
 				</indexterm>
@@ -37,12 +37,12 @@ See the accompanying license.txt file for applicable licenses.
 		The map is based on a template already provided.
 		The map file includes topicrefs to the topics you want to aggregate, process, and publish, and also a relationship table to link the included topics
 		in a meaningful way. 
-		You will be working in the <filepath>MY_DITA_SOURCE/samples/groceryshopping</filepath> directories. 
+		You will be working in the <filepath>DITASAMPLE_GROCERY_SOURCE</filepath> directories. 
 		This topic assumes you are familiar with the information in 
 		<xref href="../topics/aboutgroceryshopping_sample.dita" scope="local">About the grocery shopping sample</xref>, and that you have created the topics according to the instructions in <xref href="../topics/topics.dita" scope="local">Topics</xref>.</context>
 		<steps>
 			<step>
-				<cmd>Go to the <filepath>groceryshopping/template</filepath> directory.</cmd>
+				<cmd>Go to the <filepath>template</filepath> directory.</cmd>
 			</step>
 			<step>
 				<cmd>Copy the <filepath>groceryshopping_map.ditamap</filepath> file to the <filepath>working</filepath> directory .</cmd>
@@ -122,7 +122,7 @@ You could display those pages in any order. --&gt;
 &lt;/relrow&gt;
 &lt;/reltable&gt;
 				</codeblock>
-				Because we have concept, task, and reference information for each "topic" (the topics would be "canned goods" and "produce") in our document, we have chosen a three-column table that links all the topics about canned goods, and also links all the topics about produce. There are other ways to design a relationship table.
+				Because we have concept, task, and reference information for each conceptual "topic" (the topics would be "canned goods" and "produce") in our document, we have chosen a three-column table that links all the topics about canned goods, and also links all the topics about produce. There are other ways to design a relationship table.
 				</info>
 			</step>
 			<step>

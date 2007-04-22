@@ -39,7 +39,7 @@ else
 /* the top directory we are going to cross-reference */
 $ditamap = $argv[1];
 
-print("Starting from dita map(s) " . $ditamap . "\n");
+print("Starting from ditamap " . $ditamap . "\n");
 
 $map = basename($ditamap);
 $dir = dirname($ditamap) . $fsep;
@@ -51,7 +51,7 @@ if( $dbg_flag )
 */
 
 $rc = get_map_lists($dbg_flag, $ref_flag, $ditamap, $fsep,
-                    $fused, $rcnt, $notfound, $lf, $rf, $tp, $rcon);
+                    $fused, $notfound, $lf, $rf, $tp, $rcon);
 
 /* maybe input was not a map, nothing found */
 if( count($notfound)>0 )
@@ -84,7 +84,7 @@ if( $rc )
   if( count($unused)>0 )
   {
     sort($unused);
-    print("\n" . count($unused) . " unused files in directories used by map(s): \n\n");
+    print("\n" . count($unused) . " unused files in directories used by this map: \n\n");
     foreach($unused as $uf)
     {
       print($uf . " , " . getDOCTYPE($uf) . " , " .getAuthor($uf) . "\n");
@@ -98,14 +98,14 @@ if( $rc )
 
   /* output list of directories used */
   sort($dirlist);
-  print("\n" . count($dirlist) . " directories in map(s): \n\n");
+  print("\n" . count($dirlist) . " directories in this map: \n\n");
   foreach($dirlist as $d)
   {
     print($d . "\n");
   }
 
 
-  print("\n" . count($fused) . " files and links in map(s): \n\n");
+  print("\n" . count($fused) . " files and links in this map: \n\n");
   /* first sort the file array */
   sort($fused);
   foreach( $fused as $f)
@@ -122,7 +122,7 @@ if( $rc )
     else   
       $dt_tot[$dt]=1;
 
-    print(fshort($f,$rdir) . " , " . $rcnt[$f] . " , " . $dt . " , " . getAuthor($f) . " , " .
+    print(fshort($f,$rdir) . " , " . $dt . " , " . getAuthor($f) . " , " .
           getSize($f) . " , " . $fmt . " , " . getdesc($f) . "\n");
   }
 
@@ -136,7 +136,7 @@ if( $rc )
   }
 
   /* print out all the references */
-  print("\n" . count($lf) . " references in map(s): \n\n");
+  print("\n" . count($lf) . " references in this map: \n\n");
   for($i=0 ; $i < count($lf); $i++)
   {
     $refp = $rf[$i];
@@ -154,7 +154,7 @@ if( $rc )
 } /* get_map_lists worked */
 else
 {
-  print("Error: failure scanning ditamap(s).\n");
+  print("Error: failure walking ditamap.\n");
 }
 
 ?>

@@ -6,7 +6,6 @@ See the accompanying license.txt file for applicable licenses.
 -->
 <concept id="release_history">
 	<title>Release history</title>
-	<shortdesc>This section contains feature and bug  information about releases 1.0-1.2+ of DITA Open Toolkit.</shortdesc>
 	<prolog>
 		<author type="creator">IBM</author>
 		<author type="contributor">Anna van Raaphorst</author>
@@ -18,7 +17,7 @@ See the accompanying license.txt file for applicable licenses.
 		<critdates>
 			<created date="2001"/>
 			<revised modified="2005"/>
-			<revised modified="2006-October-12"/>
+			<revised modified="2007-April-03"/>
 		</critdates>
 		<metadata>
 			<keywords>
@@ -32,25 +31,23 @@ See the accompanying license.txt file for applicable licenses.
 			<prodinfo>
 				<prodname>DITA Open Toolkit</prodname>
 				<vrmlist>
-					<vrm version="1.3"/>
+					<vrm version="1.3.1"/>
 				</vrmlist>
 			</prodinfo>
 		</metadata>
 	</prolog>
 	<conbody>
-		<p>Sections in this topic:
-		<sl otherprops="pdf">
-		        <sli>
-					<xref href="#release_history/release1.2.2">Release 1.2.2 features</xref>
+	<p>For information about the current release of DITA Open Toolkit, see <xref href="../release_current/release_current.dita">Release 1.3.1 and 1.3 information</xref>.</p>
+		<p otherprops="pdf">Sections in this topic:
+		<sl>
+				<sli>
+					<xref href="#release_history/release1.2"/>
 				</sli>
 				<sli>
-					<xref href="#release_history/release1.2">Release 1.2 features</xref>
+					<xref href="#release_history/release1.1"/>
 				</sli>
 				<sli>
-					<xref href="#release_history/release1.1">Release 1.1 features</xref>
-				</sli>
-				<sli>
-					<xref href="#release_history/release1.0">Release 1.0 features</xref>
+					<xref href="#release_history/release1.0"/>
 				</sli>
 			</sl>
 		</p>
@@ -90,7 +87,7 @@ See the accompanying license.txt file for applicable licenses.
 				</li>
 				<li>
 					<b>Word RTF transformation</b>
-					<p>Capabilities were added to allow transformations from DITA source files to output in a <tm tmclass="special" tmowner="Microsoft Corporation" tmtype="reg" trademark="Microsoft">Microsoft</tm> Word RTF file.</p>
+					<p>Capabilities were added to allow transformations from DITA source files to output in a Word RTF file.</p>
 				</li>
 				<li>
 					<b>HTML-to-DITA migration tool</b>
@@ -171,7 +168,7 @@ See the accompanying license.txt file for applicable licenses.
 				</li>
 				<li>
 					<b>Index information in HTML Help and JavaHelp</b>
-					<p>Index information now appeared in HTML Help and JavaHelp.
+					<p>Index information now appears in HTML Help and JavaHelp.
 					</p>
 				</li>
 				<li>
@@ -221,7 +218,7 @@ See the accompanying license.txt file for applicable licenses.
 			<ol>
 				<li>
 					<b>Java-based processing</b>
-					<p>The Java-based processing architecture supported single-threaded execution throughout.</p>
+					<p>The Java-based processing architecture supports single-threaded execution throughout.</p>
 				</li>
 				<li>
 					<b>Ant-based processing</b>
@@ -229,11 +226,11 @@ See the accompanying license.txt file for applicable licenses.
 				</li>
 				<li>
 					<b>Conditional processing</b>
-					<p>A preprocessor core supported conditional processing and conref resolution.</p>
+					<p>A preprocessor core supports conditional processing and conref resolution.</p>
 				</li>
 				<li>
 					<b>Map-driven processing</b>
-					<p>The map-driven processor generated links for transformed topics.</p>
+					<p>The map-driven processor generates links for transformed topics.</p>
 				</li>
 				<li>
 					<b>New DITA-to-HTML transform</b>

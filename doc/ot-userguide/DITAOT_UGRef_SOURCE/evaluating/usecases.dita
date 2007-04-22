@@ -6,18 +6,17 @@ See the accompanying license.txt file for applicable licenses.
 -->
 <concept id="usecases">
 	<title>Use cases</title>
-	
 	<prolog>
 		<author type="creator">Anna van Raaphorst</author>
 		<author type="contributor">Richard Johnson</author>
 		<publisher>OASIS (Organization for the Advancement of Structured Information Standards)</publisher>
 		<copyright>
-			<copyryear year="2006"/>
+			<copyryear year="2007"/>
 			<copyrholder>VR Communications, Inc.</copyrholder>
 		</copyright>
 		<critdates>
 			<created date="2006-May-01"/>
-			<revised modified="2006-August-08"/>
+			<revised modified="2007-April-08"/>
 		</critdates>
 		<metadata>
 			<keywords>
@@ -103,29 +102,35 @@ See the accompanying license.txt file for applicable licenses.
 				<indexterm>publishing environment use cases</indexterm>
 				<indexterm>industry use cases</indexterm>
 				<indexterm>access and distribution use cases</indexterm>
+				<indexterm>authoring in an IDE use case</indexterm>
+				<indexterm>Eclipse, authoring in</indexterm>
+				<indexterm>NetBeans, authoring in</indexterm>
 			</keywords>
 			<prodinfo>
 				<prodname>DITA Open Toolkit</prodname>
 				<vrmlist>
-					<vrm version="1.3"/>
+					<vrm version="1.3.1"/>
 				</vrmlist>
 			</prodinfo>
 		</metadata>
 	</prolog>
 	<conbody>
-		<p>Sections in this topic (use case categories and example types):
-		<sl otherprops="pdf">
+		<p otherprops="pdf">Sections in this topic (use case categories and example types):
+		<sl>
 				<sli>
-					<xref href="#usecases/problem">Problem/solution scenario</xref>
+					<xref href="#usecases/problem"/>
 				</sli>
 				<sli>
-					<xref href="#usecases/industry">Industry</xref>
+					<xref href="#usecases/industry"/>
 				</sli>
 				<sli>
-					<xref href="#usecases/publishing">Publishing environment</xref>
+					<xref href="#usecases/publishing"/>
 				</sli>
 				<sli>
-					<xref href="#usecases/access_scenarios">Access/distribution scenarios</xref>
+					<xref href="#usecases/access_scenarios"/>
+				</sli>
+				<sli>
+					<xref href="#usecases/ide"/>
 				</sli>
 			</sl>
 		</p>
@@ -140,7 +145,7 @@ See the accompanying license.txt file for applicable licenses.
 					</sthead>
 					<strow>
 						<stentry>Translation/localization</stentry>
-						<stentry>Producing documentation that needs to be translated into a number of languages. Working with translation centers to produce high-quality documentation in all target languages on the same schedule as the English-language version of the documentation.</stentry>
+						<stentry>Producing documentation that needs to be translated into other languages. Working with translation centers to produce high-quality documentation in all target languages on the same schedule as the English-language version of the documentation.</stentry>
 					</strow>
 					<strow>
 						<stentry>Working with internal or business partners</stentry>
@@ -160,7 +165,7 @@ See the accompanying license.txt file for applicable licenses.
 					</strow>
 					<strow>
 						<stentry>Migrating legacy content</stentry>
-						<stentry>Issues, tools, and techniques related to migration from books to topic-based information, or from unstructured to structured. A related topic could be migrating to new tools (e.g., from unstructured to structured FrameMaker, or from Microsoft Word to Arbortext Editor).</stentry>
+						<stentry>Issues, tools, and techniques related to migration from books to topic-based information, or from unstructured to structured documentation. A related topic could be migrating to new tools (for example, from unstructured to structured FrameMaker, or from Microsoft Word to Arbortext Editor).</stentry>
 					</strow>
 					<strow>
 						<stentry>Migrating to a new tool</stentry>
@@ -203,6 +208,10 @@ See the accompanying license.txt file for applicable licenses.
 					</strow>
 				</simpletable>
 			</p>
+		</section>
+		<section id="ide">
+			<title>Authroing within an integrated development environment (IDE)</title>
+			<p>Examples might include popular software development environments like Eclipse and NetBeans.</p>
 		</section>
 	</conbody>
 </concept>
