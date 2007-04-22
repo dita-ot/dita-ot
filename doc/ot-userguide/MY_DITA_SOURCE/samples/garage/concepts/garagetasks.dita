@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "../dtd/concept.dtd">
-<concept id="garagetaskoverview" xml:lang="en-us">
+<concept id="garagetasks" xml:lang="en-us">
 	<title>Garage Tasks</title>
 	<prolog>
 		<author type="creator">IBM</author>
@@ -13,11 +13,15 @@
 		<critdates>
 			<created date="2001"/>
 			<revised modified="2005"/>
-			<revised modified="2006-June-29"/>
+			<revised modified="2007-March-21"/>
 		</critdates>
 		<metadata>
 			<keywords>
-				<indexterm>garage<indexterm>tasks related to</indexterm></indexterm>
+				<keyword>garage</keyword>
+				<indexterm>garage<indexterm>tasks related to</indexterm>
+				</indexterm>
+				<indexterm>hands</indexterm>
+				<indexterm>dirty hands</indexterm>
 			</keywords>
 			<prodinfo>
 				<prodname>DITA Open Toolkit</prodname>
@@ -29,5 +33,6 @@
 	</prolog>
 	<conbody>
 		<p>When you go into the garage, be prepared to get your hands dirty!</p>
+		<p>I love working in the garage!</p>
 	</conbody>
 </concept>

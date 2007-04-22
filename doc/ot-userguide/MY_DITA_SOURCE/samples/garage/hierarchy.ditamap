@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "../dtd/map.dtd">
 <!-- (C) Copyright IBM Corporation 2001, 2006. All rights reserved. -->
-<map title="Garage (hierarchy)">
+<map title="Garage (hierarchy)" id="garage_top">
 	<topicref href="concepts/garagetasks.dita" format="dita">
 		<topicref href="tasks/changingtheoil.dita" otherprops="oil" format="dita"/>
 		<topicref href="tasks/organizing.dita" format="dita"/>
