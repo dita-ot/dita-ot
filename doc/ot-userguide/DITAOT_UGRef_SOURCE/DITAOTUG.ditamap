@@ -1,22 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- (c) Copyright 2006 by VR Communications, Inc. All rights reserved. -->
+<!-- (c) Copyright 2006-2007 by VR Communications, Inc. All rights reserved. -->
 <!DOCTYPE bookmap PUBLIC "-//IBM//DTD DITA BookMap//EN" "dtd/bookmap.dtd">
 <!-- 
 This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
 See the accompanying license.txt file for applicable licenses.
 -->
-<bookmap title="DITA Open Toolkit User Guide" id="ditaug_top">
+<bookmap title="DITA Open Toolkit User Guide" id="ditaotug_top">
 	<!-- Legal, production, and publishing information -->
-	<bkinfo href="DITAOT_UGRef_bkinfo.dita"/>
-	<preface href="DITAOT_UGRef_preface.dita"/>
-	<!-- Current release -->
-	<chapter href="release_current/relcurrent_map.ditamap" format="ditamap">
-	</chapter>
-	<!-- Release history -->
-	<chapter href="release_history/relhistory_map.ditamap" format="ditamap">
-	</chapter>
+	<bkinfo href="DITAOTUG_bkinfo.dita"/>
+	<preface href="DITAOTUG_preface.dita"/>
 	<!-- Introduction -->
 	<chapter href="introduction/introduction_map.ditamap" format="ditamap">
+	</chapter>
+	<!-- Basic concepts -->
+	<chapter href="key_concepts/key_concepts_map.ditamap" format="ditamap">
 	</chapter>
 	<!-- Getting started -->
 	<chapter href="gettingstarted/gettingstarted_map.ditamap" format="ditamap">
@@ -29,6 +26,9 @@ See the accompanying license.txt file for applicable licenses.
 	</chapter>
 	<!-- Installing and upgrading DITA Open Toolkit -->
 	<chapter href="installing/installing_map.ditamap" format="ditamap">
+	</chapter>
+	<!-- DITA Open Toolkit plug-ins -->
+	<chapter href="plugins/plugins_map.ditamap" format="ditamap">
 	</chapter>
 	<!-- Setting up your processing environment -->
 	<chapter href="settingup/settingup_map.ditamap" format="ditamap">
@@ -48,25 +48,25 @@ See the accompanying license.txt file for applicable licenses.
 	<!-- Linking DITA topics -->
 	<chapter href="linking/linking_map.ditamap" format="ditamap">
 	</chapter>
-	<!-- DITA Open Toolkit plug-ins -->
-	<chapter href="plugins/plugins_map.ditamap" format="ditamap">
-	</chapter>
-	<!-- Managing your content -->
-	<chapter href="managing/managing_map.ditamap" format="ditamap">
-	</chapter>
-	<!-- Reusing content, information design, and processing mechanisms -->
-	<chapter href="reusing/reusing_map.ditamap" format="ditamap">
-	</chapter>
 	<!-- Expanding access to your information -->
 	<chapter href="accessing/accessing_map.ditamap" format="ditamap">
+	</chapter>
+	<!-- Reusing content -->
+	<chapter href="reusing/reusing_map.ditamap" format="ditamap">
 	</chapter>
 	<!-- Customizing your published output -->
 	<chapter href="customizing/customizing_map.ditamap" format="ditamap">
 	</chapter>
+	<!-- Specialization -->
+	<chapter href="specializing/specializing_map.ditamap" format="ditamap">
+	</chapter>
 	<!-- Localizing your DITA content -->
 	<chapter href="localizing/localizing_map.ditamap" format="ditamap">
 	</chapter>
-	<!-- Distributing your published content -->
+	<!-- Managing your DITA source content -->
+	<chapter href="managing/managing_map.ditamap" format="ditamap">
+	</chapter>
+		<!-- Distributing your published content -->
 	<chapter href="distributing/distributing_map.ditamap" format="ditamap">
 	</chapter>
 	<!--Migrating legacy content to DITA -->
@@ -77,6 +77,12 @@ See the accompanying license.txt file for applicable licenses.
 	</chapter>
 	<!-- Frequently asked questions (FAQs) -->
 	<chapter href="faqs/faqs_map.ditamap" format="ditamap">
+	</chapter>
+	<!-- Current release -->
+	<chapter href="release_current/relcurrent_map.ditamap" format="ditamap">
+	</chapter>
+	<!-- Release history -->
+	<chapter href="release_history/relhistory_map.ditamap" format="ditamap">
 	</chapter>
 	<!-- DITA core vocabulary -->
 	<chapter href="core_vocabulary/corevocabulary_map.ditamap" format="ditamap">

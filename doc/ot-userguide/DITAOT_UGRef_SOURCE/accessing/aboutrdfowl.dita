@@ -11,7 +11,7 @@ See the accompanying license.txt file for applicable licenses.
 		<author type="contributor">Richard Johnson</author>
 		<publisher>OASIS (Organization for the Advancement of Structured Information Standards)</publisher>
 		<copyright>
-			<copyryear year="2006"/>
+			<copyryear year="2007"/>
 			<copyrholder>VR Communications, Inc.</copyrholder>
 		</copyright>
 		<critdates>
@@ -25,15 +25,18 @@ See the accompanying license.txt file for applicable licenses.
 				<keyword>OWL</keyword>
 				<keyword>Dublin Core metatag</keyword>
 				<keyword>SKOS</keyword>
-				<indexterm>RDF</indexterm>
-				<indexterm>OWL</indexterm>
+				<indexterm>RDF (Resource Description Framework)</indexterm>
+				<indexterm>Resource Description Framework (RDF)</indexterm>
+				<indexterm>OWL (Web Ontology Language)</indexterm>
+				<indexterm>Web Ontology Language (OWL)</indexterm>
 				<indexterm>Dublin Core metatags</indexterm>
-				<indexterm>SKOS</indexterm>
+				<indexterm>SKOS (Simple Knowledge Organization System)</indexterm>
+				<indexterm>Simple Knowledge Organization System (SKOS)</indexterm>
 			</keywords>
 			<prodinfo>
 				<prodname>DITA Open Toolkit</prodname>
 				<vrmlist>
-					<vrm version="1.3"/>
+					<vrm version="1.3.1"/>
 				</vrmlist>
 			</prodinfo>
 		</metadata>

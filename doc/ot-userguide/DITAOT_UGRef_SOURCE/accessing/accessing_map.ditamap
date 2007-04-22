@@ -1,23 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- (c) Copyright 2006 by VR Communications, Inc. All rights reserved. -->
+<!-- (c) Copyright 2006-2007 by VR Communications, Inc. All rights reserved. -->
 <!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN"  "../dtd/map.dtd">
 <!-- 
 This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
 See the accompanying license.txt file for applicable licenses.
 -->
-<map id="accessing_map" title="Expanding and customizing access to your information">
+<map id="accessing_map" title="Expanding access to your information">
 	<topicref href="accessing.dita">
 		<topicref href="aboutindexing.dita"/>
 		<topicref href="aboutmetadata.dita"/>
-		<topicref href="aboutcondproc.dita">
-			<topicref href="condproc.dita" navtitle="Conditional processing"/>
-			<topicref href="addmeta.dita" navtitle="Adding metadata to elements"/>
-			<topicref href="filtcontent.dita" navtitle="Filtering content"/>
-			<topicref href="flagcontent.dita" navtitle="Flagging content"/>
-			<topicref href="showrev.dita" navtitle="Showing revisions"/>
-		</topicref>
 		<topicref href="aboutrdfowl.dita"/>
-		<topicref href="accessing_production_notes.dita"/>
+		<topicref href="accessing_ditablogs.dita"/>
 		<topicref href="accessing_formoreinfo.dita"/>
 	</topicref>
 </map>

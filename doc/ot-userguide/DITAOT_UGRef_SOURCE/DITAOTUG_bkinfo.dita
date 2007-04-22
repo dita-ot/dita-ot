@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- (c) Copyright 2006-2007 by VR Communications, Inc. All rights reserved. -->
+<!DOCTYPE bkinfo PUBLIC "-//IBM//DTD DITA Book Information//EN" "../dtd/bkinfo.dtd">
+<!-- 
+This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
+See the accompanying license.txt file for applicable licenses.
+-->
+<bkinfo id="DITAOTUG_bkinfo">
+	<title>DITA Open Toolkit User Guide
+		<image href="images/penguin.png" placement="break"/>
+	</title>
+	<!-- The subtitle appears in XHTML and HTML help, and the abstract appears in the PDF. Therefore, both are required. -->
+	<bktitlealts>
+		<bksubtitle>Third Edition - April 18, 2007 - DITA Open Toolkit 1.3.1</bksubtitle>
+	</bktitlealts>
+	<bkabstract>Third Edition - April 18, 2007 - DITA Open Toolkit 1.3.1</bkabstract>
+	<prolog>
+		<metadata>
+			<keywords>
+				<keyword>DITA</keyword>
+				<keyword>Darwin Information Typing Architecture</keyword>
+				<keyword>DITA Open Toolkit</keyword>
+				<keyword>DITA Open Toolkit User Guide</keyword>
+			</keywords>
+			<prodinfo>
+				<prodname>DITA Open Toolkit</prodname>
+				<vrmlist>
+					<vrm version="1.3.1"/>
+				</vrmlist>
+			</prodinfo>
+		</metadata>
+	</prolog>
+	<!-- bkinfobody must be here, but it doesn't require content. -->
+	<!-- Putting in content causes an "owner" label to be inserted, which is not appropriate in this document. -->
+	<bkinfobody/>
+</bkinfo>
