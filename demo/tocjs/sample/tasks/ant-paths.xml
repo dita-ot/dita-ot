@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN"
  "../../../../dtd/task.dtd">
+ <!-- (C) Copyright Shawn McKenzie, 2007. All Rights Reserved.
+     *-->
      <?xml-stylesheet href="../../../../xsl/ditaview_shell.xsl" type="text/xsl"?>
 <task id="tocjs_antpaths" xml:lang="en-us">
     <title>Fix Ant tasks for shared projects</title>

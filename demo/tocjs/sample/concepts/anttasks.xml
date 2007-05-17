@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- (C) Copyright IBM Corporation 2001, 2005. All Rights Reserved.
+<!-- (C) Copyright Shawn McKenzie, 2007. All Rights Reserved.
  *-->
 <?xml-stylesheet href="../../../../xsl/ditaview_shell.xsl" type="text/xsl"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN"
@@ -45,6 +45,6 @@ To create tocjs JavaScript output and copy related topics into place, you could 
  </conbody>
  <related-links>
   <link href="basefiles.xml"/>
-  <link href="buildsample.xml"/>
+  <link href="paths.xml"/>
  </related-links>
 </concept>
