@@ -1,6 +1,14 @@
 
-/* sample CSS for tocjs plugin */
-/* (C) Copyright Shawn McKenzie, 2007. All Rights Reserved. */
+/* 
+ This file is part of the DITA Open Toolkit project hosted on
+ Sourceforge.net. See the accompanying license.txt file for
+ applicable licenses.
+ 
+ (C) Copyright Shawn McKenzie, 2007. All Rights Reserved.
+ *-->
+ 
+ */
+
 html,body	{
 	margin:25; 
 	padding:0px 0px 20px 0px; 

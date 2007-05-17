@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- (C) Copyright Shawn McKenzie, 2007. All Rights Reserved.
+<!-- 
+  This file is part of the DITA Open Toolkit project hosted on
+  Sourceforge.net. See the accompanying license.txt file for
+  applicable licenses.
+  
+  (C) Copyright Shawn McKenzie, 2007. All Rights Reserved.
   *-->
 <!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN"
  "../../../dtd/map.dtd">
@@ -20,6 +25,4 @@
   </topicref>
   <topicref href="concepts/knownissues.xml"/>
   <topicref href="concepts/license.xml"></topicref>
-  <topicref locktitle="yes" navtitle="External Test" scope="external" format="html"
-    href="http://wsa.sophos.com/docs/ws1000/ws1000/concepts/ReleaseNotes.html"/>
 </map>
