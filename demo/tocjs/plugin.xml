@@ -1,3 +1,4 @@
+<!-- (C) Copyright Shawn McKenzie, 2007. All Rights Reserved.-->
 <plugin id="com.sophos.tocjs">
   <feature extension="dita.conductor.transtype.check" value="tocjs" type="xml"/>
   <feature extension="dita.conductor.target" value="integrator.xml" type="file"/>

@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
+<!-- (C) Copyright Shawn McKenzie, 2007. All Rights Reserved.
+    *-->
 <project name="docondoc" default="all">
     <import file="..${file.separator}..${file.separator}conductor.xml"/>
     <property name="dita.extname" value=".xml"/>
@@ -19,6 +21,7 @@
         <!--<antcall target="sample2tocjs"/>-->
     </target>
   
+    
     <target name="sample2tocjs" description="Generate tocjs javascript file" depends="sample2html">
         <antcall target="dita2tocjs">
             <param name="transtype" value="tocjs"/>

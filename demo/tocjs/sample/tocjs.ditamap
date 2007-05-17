@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- (C) Copyright Shawn McKenzie, 2007. All Rights Reserved.
+  *-->
 <!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN"
  "../../../dtd/map.dtd">
 
@@ -8,7 +10,7 @@
   <topicref href="concepts/install.xml">
     <topicref href="tasks/integrate.xml"/>
   </topicref>
-  <topicref href="concepts/customization.xml">
+  <topicref locktitle="yes" navtitle="Customizing" href="concepts/customization.xml">
     <topicref href="concepts/basefiles.xml"/>
     <topicref href="concepts/anttasks.xml"/>
     <topicref href="concepts/paths.xml">
@@ -17,4 +19,7 @@
     <topicref href="concepts/css.xml"/>
   </topicref>
   <topicref href="concepts/knownissues.xml"/>
+  <topicref href="concepts/license.xml"></topicref>
+  <topicref locktitle="yes" navtitle="External Test" scope="external" format="html"
+    href="http://wsa.sophos.com/docs/ws1000/ws1000/concepts/ReleaseNotes.html"/>
 </map>
