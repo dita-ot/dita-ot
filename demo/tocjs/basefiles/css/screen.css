@@ -1,3 +1,15 @@
+/*
+This file is part of the DITA Open Toolkit project hosted on
+Sourceforge.net. See the accompanying license.txt file for
+applicable licenses.                                                                                                                                             
+           
+                                                                                                                                                      
+Copyright (c) 2006, Yahoo! Inc. All rights reserved.                                                                                                    
+Code licensed under the BSD License:                                                                                                                    
+http://developer.yahoo.net/yui/license.txt                                                                                                              
+version: 0.10.0                                                                                                                                         
+*/
+
 html, body { padding: 0px 0px 10px 0px; border: 0; margin: 0; }
 body { font: normal 11px arial, sans-serif; color: #333; line-height: 19px; margin: 0; }
 #containerTop { height:25px; width:144px; }
