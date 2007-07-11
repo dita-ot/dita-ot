@@ -53,6 +53,9 @@ See the accompanying license.txt file for applicable licenses.
                 <xsl:when test="($ditaVersion = '1.1') and $map//*[contains(@class,' bookmap/toc ')]">
                     <xsl:apply-templates select="/" mode="toc"/>
                 </xsl:when>
+                <xsl:when test="($ditaVersion = '1.1') and /*[contains(@class,' map/map ')][not(contains(@class,' bookmap/bookmap '))]">
+                    <xsl:apply-templates select="/" mode="toc"/>
+                </xsl:when>
                 <xsl:when test="($ditaVersion = '1.1')"/>
                 <xsl:otherwise>
                     <xsl:apply-templates select="/" mode="toc"/>

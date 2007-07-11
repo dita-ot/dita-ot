@@ -54,7 +54,8 @@ See the accompanying license.txt file for applicable licenses.
             <fo:bookmark-tree>
                 <xsl:choose>
                     <xsl:when test="($ditaVersion = '1.1') and $map//*[contains(@class,' bookmap/toc ')][@href]"/>
-                    <xsl:when test="($ditaVersion = '1.1') and $map//*[contains(@class,' bookmap/toc ')]">
+                    <xsl:when test="($ditaVersion = '1.1') and ($map//*[contains(@class,' bookmap/toc ')]
+                        				or /*[contains(@class,' map/map ')][not(contains(@class,' bookmap/bookmap '))])">
                         <fo:bookmark internal-destination="ID_TOC_00-0F-EA-40-0D-4D">
                             <fo:bookmark-title>
                                 <xsl:call-template name="insertVariable">
@@ -63,7 +64,7 @@ See the accompanying license.txt file for applicable licenses.
                             </fo:bookmark-title>
                         </fo:bookmark>
                     </xsl:when>
-                    <xsl:when test="($ditaVersion = '1.1')"/>
+					<xsl:when test="($ditaVersion = '1.1')"/>
                     <xsl:otherwise>
                         <fo:bookmark internal-destination="ID_TOC_00-0F-EA-40-0D-4D">
                             <fo:bookmark-title>
@@ -79,7 +80,8 @@ See the accompanying license.txt file for applicable licenses.
                 <xsl:if test="//opentopic-index:index.groups//opentopic-index:index.entry">
                     <xsl:choose>
                         <xsl:when test="($ditaVersion = '1.1') and $map//*[contains(@class,' bookmap/indexlist ')][@href]"/>
-                        <xsl:when test="($ditaVersion = '1.1') and $map//*[contains(@class,' bookmap/indexlist ')]">
+                        <xsl:when test="($ditaVersion = '1.1') and ($map//*[contains(@class,' bookmap/indexlist ')]
+                        				or /*[contains(@class,' map/map ')][not(contains(@class,' bookmap/bookmap '))])">
                             <fo:bookmark internal-destination="ID_INDEX_00-0F-EA-40-0D-4D">
                                 <fo:bookmark-title>
                                     <xsl:call-template name="insertVariable">

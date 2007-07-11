@@ -33,6 +33,7 @@ See the accompanying license.txt file for applicable licenses.
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:fo="http://www.w3.org/1999/XSL/Format"
+    xmlns:rx="http://www.renderx.com/XSL/Extensions"
     version="1.0">
 
     <xsl:attribute-set name="tm">
@@ -669,6 +670,7 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:attribute-set name="__fo__root">
         <xsl:attribute name="font-family">Serif</xsl:attribute>
         <xsl:attribute name="font-size">10pt</xsl:attribute>
+        <xsl:attribute name="rx:link-back">true</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="__force__page__count">

@@ -63,7 +63,9 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:variable name="warn-enabled" select="true()"/>
 
-    <xsl:variable name="index-entries">
+	<xsl:key name="index-key" match="opentopic-index:index.entry" use="@value"/>
+
+	<xsl:variable name="index-entries">
         <xsl:if test="$pdfFormatter = 'xep'">
             <xsl:apply-templates select="/" mode="index-entries"/>
         </xsl:if>
@@ -280,7 +282,7 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:variable name="value" select="@value"/>
         <xsl:variable name="refID" select="opentopic-index:refID/@value"/>
 
-        <xsl:if test="$index-entries/opentopic-index:index.entry[(@value = $value) and (opentopic-index:refID/@value = $refID)]">
+        <xsl:if test="opentopic-func:getIndexEntry($value,$refID)">
             <xsl:call-template name="make-index-ref">
 				<xsl:with-param name="idxs" select="opentopic-index:refID"/>
 				<xsl:with-param name="inner-text" select="opentopic-index:formatted-value"/>
@@ -357,7 +359,7 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:variable name="value" select="@value"/>
 
         <xsl:choose>
-            <xsl:when test="opentopic-index:index.entry">
+			<xsl:when test="opentopic-index:index.entry">
                 <fo:table rx:table-omit-initial-header="true" width="100%">
                     <fo:table-header>
                         <fo:table-row>
@@ -397,7 +399,7 @@ See the accompanying license.txt file for applicable licenses.
                                         <xsl:variable name="refID" select="opentopic-index:refID/@value"/>
 
                                         <xsl:choose>
-                                            <xsl:when test="$index-entries/opentopic-index:index.entry[(@value = $value) and (opentopic-index:refID/@value = $refID)][not(opentopic-index:index.entry)]">
+                                            <xsl:when test="opentopic-func:getIndexEntry($value,$refID)">
                                                 <xsl:call-template name="make-index-ref">
                                                     <xsl:with-param name="idxs" select="opentopic-index:refID"/>
                                                     <xsl:with-param name="inner-text" select="opentopic-index:formatted-value"/>
@@ -409,14 +411,14 @@ See the accompanying license.txt file for applicable licenses.
                                                     <xsl:for-each select="opentopic-index:index.entry">
                                                         <xsl:variable name="currValue" select="@value"/>
                                                         <xsl:variable name="currRefID" select="opentopic-index:refID/@value"/>
-                                                        <xsl:if test="$index-entries/opentopic-index:index.entry[(@value = $currValue) and (opentopic-index:refID/@value = $currRefID)]">
+                                                        <xsl:if test="opentopic-func:getIndexEntry($currValue,$currRefID)">
                                                             <xsl:text>true </xsl:text>
                                                         </xsl:if>
                                                     </xsl:for-each>
                                                 </xsl:variable>
                                                 <xsl:if test="contains($isNormalChilds,'true ')">
                                                     <xsl:call-template name="make-index-ref">
-    <!--                                                    <xsl:with-param name="idxs" select="opentopic-index:refID"/>-->
+<!--                                                    <xsl:with-param name="idxs" select="opentopic-index:refID"/>-->
                                                         <xsl:with-param name="inner-text" select="opentopic-index:formatted-value"/>
                                                         <xsl:with-param name="no-page" select="$isNoPage"/>
                                                     </xsl:call-template>
@@ -542,7 +544,15 @@ See the accompanying license.txt file for applicable licenses.
         </fo:block>
 	</xsl:template>
 
+	<exslf:function name="opentopic-func:getIndexEntry">
+		<xsl:param name="value"/>
+		<xsl:param name="refID"/>
 
+		<xsl:for-each select="$index-entries">
+			<xsl:variable name="entries" select="key('index-key',$value)"/>
+			<exslf:result select="$entries[opentopic-index:refID/@value = $refID]"/>
+		</xsl:for-each>
+	</exslf:function>
 
 
 </xsl:stylesheet>
