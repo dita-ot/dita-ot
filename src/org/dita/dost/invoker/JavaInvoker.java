@@ -63,21 +63,23 @@ public class JavaInvoker {
 		//pipelineInput.setAttribute("inputmap", "testcase" + File.separator
 		//        + "dwDT\\langref\\ditaref-book.ditamap");
         
-		pipelineInput.setAttribute("inputmap","TC5.ditamap");
-		pipelineInput.setAttribute("basedir", "C:/testcase/tc5");
-		pipelineInput.setAttribute("inputdir", "C:/testcase/tc5");
-		pipelineInput.setAttribute("tempDir", "C:/testcase/tc5/temp");
-		pipelineInput.setAttribute("ditadir", "c:/eclipse/workspace/DITA_OT");
+		pipelineInput.setAttribute("inputmap","index-see_map.ditamap");
+		pipelineInput.setAttribute("basedir", "E:/DITA-OT14/temp");
+		pipelineInput.setAttribute("inputdir", "E:/DITA-OT14/temp");
+		pipelineInput.setAttribute("output", "E:/DITA-OT14/temp/out");
+		pipelineInput.setAttribute("tempDir", "E:/DITA-OT14/temp");
+		pipelineInput.setAttribute("ditadir", "c:/eclipse/workspace/DITA-OT14");
+		pipelineInput.setAttribute("ditaext", ".dita");
 		try {
 		
 			//pipelineInput.setAttribute("ditaval", "d:\\temp\\DITA-OT\\test\\02.ditaval");
-			removeFiles("C:/testcase/tc5/temp");
+			//removeFiles("C:/testcase/tc5/temp");
 			pipelineInput.setAttribute("ditalist", "temp" + File.separator
 					+ "dita.list");
 			pipelineInput.setAttribute("maplinks", "temp\\maplinks.unordered");
-			facade.execute("GenMapAndTopicList", pipelineInput);
-			facade.execute("DebugAndFilter", pipelineInput);
-			facade.execute("MoveIndex", pipelineInput);
+			//facade.execute("GenMapAndTopicList", pipelineInput);
+			//facade.execute("DebugAndFilter", pipelineInput);
+			facade.execute("IndexTermExtract", pipelineInput);
 			//facade.execute("MoveLinks", pipelineInput);
 		} catch (DITAOTException e) {
 			// TODO Auto-generated catch block

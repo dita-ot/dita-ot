@@ -3,8 +3,8 @@
 <!--                    HEADER                                     -->
 <!-- ============================================================= -->
 <!--  MODULE:    DITA Reference XSD  Module                        -->
-<!--  VERSION:   1.0.1                                             -->
-<!--  DATE:      November 2005                                     -->
+<!--  VERSION:   1.1                                             -->
+<!--  DATE:      November 2006                                     -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -16,17 +16,16 @@
 <!-- ORIGINAL CREATION DATE:                                       -->
 <!--             March 2001                                        -->
 <!--                                                               -->
-<!--             (C) Copyright OASIS-Open.org 2005.                -->
+<!--             (C) Copyright OASIS-Open.org 2005, 2006                -->
 <!--             (C) Copyright IBM Corporation 2001, 2004.         -->
 <!--             All Rights Reserved.                              -->
 <!-- ============================================================= -->
  <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
   <!-- ==================== Import Section ======================= -->
-  <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="xml.xsd"/>
-   
-  <xs:import namespace="http://dita.oasis-open.org/architecture/2005/" schemaLocation="ditaarch.xsd"/>
+   <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="urn:oasis:names:tc:dita:xsd:xml.xsd:1.1"/>
+   <xs:import namespace="http://dita.oasis-open.org/architecture/2005/" schemaLocation="urn:oasis:names:tc:dita:xsd:ditaarch.xsd:1.1"/>
 
-  <xs:element name="reference" type="reference.class">
+  <xs:element name="reference">
     <xs:annotation>
       <xs:documentation>
         The &lt;<keyword>reference</keyword>&gt; element defines a top-level container
@@ -43,9 +42,16 @@
         and values.
       </xs:documentation>
     </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="reference.class">
+          <xs:attribute ref="class" default="- topic/topic reference/reference "/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
    
-  <xs:element name="refbody" type="refbody.class">
+  <xs:element name="refbody">
     <xs:annotation>
       <xs:documentation>
         The &lt;<keyword>refbody</keyword>&gt; element is a container for the
@@ -54,9 +60,16 @@
         generic sections and examples, in any sequence or number.
       </xs:documentation>
     </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="refbody.class">
+          <xs:attribute ref="class" default="- topic/body reference/refbody "/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
    
-  <xs:element name="refsyn" type="refsyn.class">
+  <xs:element name="refsyn">
     <xs:annotation>
       <xs:documentation>
         The &lt;<keyword>refsyn</keyword>&gt; element is a special section inside
@@ -66,9 +79,16 @@
         description of the subject's interface or high-level structure.
       </xs:documentation>
     </xs:annotation>
+    <xs:complexType mixed="true">
+      <xs:complexContent>
+        <xs:extension base="refsyn.class">
+          <xs:attribute ref="class" default="- topic/section reference/refsyn "/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
    
-  <xs:element name="properties" type="properties.class">
+  <xs:element name="properties">
     <xs:annotation>
       <xs:documentation>
         The &lt;<keyword>properties</keyword>&gt; element gives a list of properties for 
@@ -80,9 +100,16 @@
         value.
       </xs:documentation>
     </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="properties.class">
+          <xs:attribute ref="class" default="- topic/simpletable reference/properties "/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
    
-  <xs:element name="property" type="property.class">
+  <xs:element name="property">
     <xs:annotation>
       <xs:documentation>
         The &lt;<keyword>property</keyword>&gt; element represents a property
@@ -91,9 +118,16 @@
         It contains three optional elements: type, value, and description.
       </xs:documentation>
     </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="property.class">
+          <xs:attribute ref="class" default="- topic/strow  reference/property "/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
    
-  <xs:element name="propvalue" type="propvalue.class">
+  <xs:element name="propvalue">
     <xs:annotation>
       <xs:documentation>
         The &lt;<keyword>propvalue</keyword>&gt; element indicates the value or values
@@ -101,37 +135,91 @@
         need separate descriptions, and just leave the &lt;<keyword>proptype</keyword>&gt; element
         blank.
       </xs:documentation>
-    </xs:annotation>    
+    </xs:annotation>
+    <xs:complexType mixed="true">
+      <xs:complexContent>
+        <xs:extension base="propvalue.class">
+          <xs:attribute ref="class" default="- topic/stentry  reference/propvalue "/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
    
-  <xs:element name="propdesc" type="propdesc.class">
+  <xs:element name="propdesc">
     <xs:annotation>
       <xs:documentation>
         The &lt;<keyword>propdesc</keyword>&gt; element is used to provide a short description
         of the property type and its listed values (or just the value).
       </xs:documentation>
     </xs:annotation>
+    <xs:complexType mixed="true">
+      <xs:complexContent>
+        <xs:extension base="propdesc.class">
+          <xs:attribute ref="class" default="- topic/stentry  reference/propdesc "/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
    
-  <xs:element name="proptype" type="proptype.class">
+  <xs:element name="proptype">
     <xs:annotation>
       <xs:documentation>
         The proptype element describes the type of property.        
       </xs:documentation>
     </xs:annotation>
+    <xs:complexType mixed="true">
+      <xs:complexContent>
+        <xs:extension base="proptype.class">
+          <xs:attribute ref="class" default="- topic/stentry reference/proptype "/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
    
-  <xs:element name="prophead" type="prophead.class"> 
+  <xs:element name="prophead"> 
     <xs:annotation>
       <xs:documentation>
         The prophead element supports regular headings for the properties element.
       </xs:documentation>
     </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="prophead.class">
+          <xs:attribute ref="class" default="- topic/sthead  reference/prophead "/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
    
-  <xs:element name="propvaluehd" type="propvaluehd.class"/>
-  <xs:element name="propdeschd" type="propdeschd.class"/>
-  <xs:element name="proptypehd" type="proptypehd.class"/>
+  <xs:element name="propvaluehd">
+    <xs:complexType mixed="true">
+      <xs:complexContent>
+        <xs:extension base="propvaluehd.class">
+          <xs:attribute ref="class" default="- topic/stentry  reference/propvaluehd "/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+   
+  <xs:element name="propdeschd">
+    <xs:complexType mixed="true">
+     <xs:complexContent>
+       <xs:extension base="propdeschd.class">
+         <xs:attribute ref="class" default="- topic/stentry  reference/propdeschd "/>
+       </xs:extension>
+     </xs:complexContent>
+   </xs:complexType> 
+  </xs:element>
+   
+  <xs:element name="proptypehd">
+    <xs:complexType mixed="true">
+      <xs:complexContent>
+        <xs:extension base="proptypehd.class">
+          <xs:attribute ref="class" default="- topic/stentry reference/proptypehd "/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
 
    <xs:group name="reference-info-types">
     <xs:choice>
@@ -161,7 +249,6 @@
     <xs:attributeGroup ref="select-atts"/>
     <xs:attributeGroup ref="localization-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute ref="class" default="- topic/topic reference/reference "/>
   </xs:complexType>
 
   <!-- Base type: body.class -->
@@ -177,10 +264,11 @@
       <xs:group ref="foreign.unknown.incl"/>
     </xs:choice>
     <xs:attribute name="outputclass" type="xs:string"/>
+    <xs:attribute name="base" type="xs:string" />
+    <xs:attributeGroup ref="base-attribute-extensions"/>
     <xs:attributeGroup ref="id-atts"/>
     <xs:attributeGroup ref="localization-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute ref="class" default="- topic/body reference/refbody "/>
   </xs:complexType>
 
 
@@ -193,7 +281,6 @@
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute ref="class" default="- topic/section reference/refsyn "/>
   </xs:complexType>
 
   <!-- Base type: simpletable.class -->
@@ -210,7 +297,6 @@
     <xs:attributeGroup ref="display-atts"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute ref="class" default="- topic/simpletable reference/properties "/>
   </xs:complexType>
 
 
@@ -224,7 +310,6 @@
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute ref="class" default="- topic/sthead  reference/prophead "/>
   </xs:complexType>
 
   <!-- Base type: stentry.class -->
@@ -236,7 +321,6 @@
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute ref="class" default="- topic/stentry reference/proptypehd "/>
   </xs:complexType>
 
   <!-- Base type: stentry.class -->
@@ -248,7 +332,6 @@
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute ref="class" default="- topic/stentry  reference/propvaluehd "/>
   </xs:complexType>
 
   <!-- Base type: stentry.class -->
@@ -260,7 +343,6 @@
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute ref="class" default="- topic/stentry  reference/propdeschd "/>
   </xs:complexType>
 
   <!-- Base type: strow.class -->
@@ -273,7 +355,6 @@
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute ref="class" default="- topic/strow  reference/property "/>
   </xs:complexType>
 
    <!-- Base type: stentry.class -->
@@ -285,7 +366,6 @@
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute ref="class" default="- topic/stentry reference/proptype "/>
   </xs:complexType>
 
    <!-- Base type: stentry.class -->
@@ -297,7 +377,6 @@
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute ref="class" default="- topic/stentry  reference/propvalue "/>
   </xs:complexType>
 
    <!-- Base type: stentry.class -->
@@ -309,6 +388,5 @@
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute ref="class" default="- topic/stentry  reference/propdesc "/>
   </xs:complexType>
 </xs:schema>

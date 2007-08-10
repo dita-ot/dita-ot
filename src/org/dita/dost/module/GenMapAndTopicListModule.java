@@ -87,6 +87,9 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 	/** Set of sources of those copy-to that were ignored */
 	private Set ignoredCopytoSourceSet = null;
 	
+	/** Set of subsidiary files */
+	private Set subsidiarySet = null;
+	
 	/** Map of all copy-to (target,source) */
 	private Map copytoMap = null;
 	
@@ -135,6 +138,7 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 		flagImageSet = new HashSet(Constants.INT_128);
 		htmlSet = new HashSet(Constants.INT_128);
 		hrefTargetSet = new HashSet(Constants.INT_128);
+		subsidiarySet = new HashSet(Constants.INT_16);
 		waitList = new LinkedList();
 		doneList = new LinkedList();
 		conrefTargetSet = new HashSet(Constants.INT_128);
@@ -313,6 +317,7 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 		conrefTargetSet.addAll(reader.getConrefTargets());
 		nonConrefCopytoTargetSet.addAll(reader.getNonConrefCopytoTargets());
 		ignoredCopytoSourceSet.addAll(reader.getIgnoredCopytoSourceSet());
+		subsidiarySet.addAll(reader.getSubsidiaryTargets());
 	}
 
 	private void categorizeCurrentFile(String currentFile) {
@@ -365,9 +370,13 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 	 */
 	private void updateUplevels(String file) {
 		// for uplevels (../../)
-		int lastIndex = file.lastIndexOf("..");
+		//modified start by wxzhang 20070518
+		//".."-->"../"
+		int lastIndex = file.replaceAll(Constants.DOUBLE_BACK_SLASH,
+				Constants.SLASH).lastIndexOf("../");
+//		modified end by wxzhang 20070518
 		if (lastIndex != -1) {
-			int newUplevels = lastIndex / 3 + 1;
+			int newUplevels = lastIndex / 3  + 1;
 			uplevels = newUplevels > uplevels ? newUplevels : uplevels;
 		}
 	}
@@ -404,6 +413,8 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 			FilterUtils.setFilterMap(ditaValReader.getFilterMap());			
 			// Store flagging image used for image copying
 			flagImageSet.addAll(ditaValReader.getImageList());
+		}else{
+			FilterUtils.setFilterMap(null);
 		}
 	}
 	
@@ -511,6 +522,7 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 		addSetToProperties(prop, Constants.HREF_TARGET_LIST, hrefTargetSet);
 		addSetToProperties(prop, Constants.CONREF_TARGET_LIST, conrefTargetSet);
 		addSetToProperties(prop, Constants.COPYTO_SOURCE_LIST, copytoSourceSet);
+		addSetToProperties(prop, Constants.SUBSIDIARY_TARGET_LIST, subsidiarySet);
 		
 		/*
 		 * Convert copyto map into set and output

@@ -89,9 +89,14 @@ Default topic=</xsl:text>
 
 <!-- Get the title, if possible -->
 <!-- Using a single map, so get the title from that map -->
-<xsl:if test="/*[contains(@class, ' map/map ')]/@title">
-  <xsl:text>Title=</xsl:text><xsl:value-of select="/*[contains(@class, ' map/map ')]/@title"/>
-</xsl:if>
+<xsl:choose>
+  <xsl:when test="/*[contains(@class, ' map/map ')]/*[contains(@class, ' topic/title ')]">
+    <xsl:text>Title=</xsl:text><xsl:value-of select="/*[contains(@class, ' map/map ')]/*[contains(@class, ' topic/title ')]"/>
+  </xsl:when>
+  <xsl:when test="/*[contains(@class, ' map/map ')]/@title">
+    <xsl:text>Title=</xsl:text><xsl:value-of select="/*[contains(@class, ' map/map ')]/@title"/>
+  </xsl:when>
+</xsl:choose>
 </xsl:template>
 
 

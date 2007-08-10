@@ -8,6 +8,7 @@
 <shortdesc>You configure components to set up or refine your solution.
 </shortdesc>
 <body>
+<note conref="task_preface.xml#task_preface/demo_bookmap"/>
 <p>You don't have to get the best configuration the first time.
 Instead, you might start with a simple configuration and then refine
 it gradually as needed. </p>

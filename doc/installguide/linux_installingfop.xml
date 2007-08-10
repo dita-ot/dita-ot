@@ -17,8 +17,8 @@
     <steps>
       <step>
         <cmd>Enter the URL: <xref format="html" 
-          href="http://apache.tradebit.com/pub/xml/fop/" 
-          scope="external">http://apache.tradebit.com/pub/xml/fop/</xref></cmd>
+          href="http://archive.apache.org/dist/xmlgraphics/fop/binaries/" 
+          scope="external">http://archive.apache.org/dist/xmlgraphics/fop/binaries/</xref></cmd>
       </step>
       <step>
         <cmd>From the FOP page, in the Name column, select <uicontrol><image 

@@ -151,6 +151,36 @@
         </not>
       </condition>
     </dita-ot-fail>
+   <dita-ot-fail id="DOTA007E" params="%1=${args.ftr}">
+        <condition>
+        	<and>
+        	 <isset property="args.ftr" />
+        	 <not>
+        	<available file="${args.ftr}" type="file"/>
+        	</not>
+        	</and>
+        </condition>
+     </dita-ot-fail>
+    <dita-ot-fail id="DOTA008E" params="%1=${args.hdr}">
+      <condition>
+        <and>
+          <isset property="args.hdr" />
+          <not>
+            <available file="${args.hdr}" type="file"/>
+          </not>
+        </and>
+      </condition>
+    </dita-ot-fail>
+    <dita-ot-fail id="DOTA009E" params="%1=${args.hdf}">
+      <condition>
+        <and>
+          <isset property="args.hdf" />
+          <not>
+            <available file="${args.hdf}" type="file"/>
+          </not>
+        </and>
+      </condition>
+    </dita-ot-fail>
     <!-- end to check input parameters -->
 
     <!-- begin to init required parameters -->

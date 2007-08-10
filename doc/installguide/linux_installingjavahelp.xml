@@ -25,23 +25,23 @@
       </step>
       <step>
         <cmd>From the Sun Developer Network page, scroll to find the 
-          heading<uicontrol> JavaHelp 2.0_02 (Zip)</uicontrol></cmd>
+          heading<uicontrol> JavaHelp 2.0_04 (Zip)</uicontrol></cmd>
       </step>
       <step>
         <cmd>Select <uicontrol>Download</uicontrol>.</cmd>
       </step>
       <step>
         <cmd>From the Sun Developer Network page, accept the license agreement 
-          and scroll to the heading "Platform - JavaHelp API 2.0_02 FCS"</cmd>
+          and scroll to the heading "Platform - JavaHelp API 2.0_04 FCS"</cmd>
       </step>
       <step>
-        <cmd>Select <uicontrol>javahelp-2_0_02.zip, 6.49 MB</uicontrol></cmd>
+        <cmd>Select <uicontrol>javahelp-2_0_04.zip, 6.49 MB</uicontrol></cmd>
         <stepresult>The <systemoutput>File Download</systemoutput> window 
           opens.</stepresult>
       </step>
       <step>
-        <cmd>Click <uicontrol>Save</uicontrol> to unzip the javahelp-2_0_02.zip 
-          file and save it to a Linux home directory.</cmd>
+        <cmd>Click <uicontrol>Save</uicontrol> to download the javahelp-2_0_04.zip 
+          file and unzip it to a Linux home directory.</cmd>
       </step>
       <step>
         <cmd>Add the <varname>JHHOME </varname><xref href = 

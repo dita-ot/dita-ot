@@ -21,6 +21,7 @@ import org.apache.tools.ant.Task;
 import org.apache.tools.ant.util.DateUtils;
 import org.apache.tools.ant.util.StringUtils;
 import org.dita.dost.util.Constants;
+import org.dita.dost.util.LogUtils;
 
 /**
  * Class description goes here.
@@ -38,7 +39,7 @@ public class DITAOTBuildLogger implements BuildLogger {
 
 	/** Line separator */
 	protected static final String LINE_SEP = StringUtils.LINE_SEP;
-	
+
 	/**
 	 * Convenience method to format a specified length of time.
 	 * 
@@ -84,10 +85,8 @@ public class DITAOTBuildLogger implements BuildLogger {
 	 * @param priority
 	 *            The priority of the message. (Ignored in this implementation.)
 	 */
-	protected static void printMessage(
-		final String message,
-		final PrintStream stream,
-		final int priority) {
+	protected static void printMessage(final String message,
+			final PrintStream stream, final int priority) {
 		if (priority <= Project.MSG_INFO) {
 			stream.println(message);
 		}
@@ -107,7 +106,7 @@ public class DITAOTBuildLogger implements BuildLogger {
 
 	/**
 	 * Constructor to init logger
-	 *
+	 * 
 	 */
 	public DITAOTBuildLogger() {
 		logger = DITAOTFileLogger.getInstance();
@@ -115,6 +114,7 @@ public class DITAOTBuildLogger implements BuildLogger {
 
 	/**
 	 * Invoke when build finished. Do the logging.
+	 * 
 	 * @see org.apache.tools.ant.BuildListener#buildFinished(org.apache.tools.ant.BuildEvent)
 	 */
 	public void buildFinished(BuildEvent event) {
@@ -125,20 +125,29 @@ public class DITAOTBuildLogger implements BuildLogger {
 		message.append("Processing ended.");
 		message.append(LINE_SEP);
 
-		if (error == null) {
+		if (error == null && LogUtils.haveFatalOrError() == false) {
 			message.append(LINE_SEP);
 			message.append(getBuildSuccessfulMessage());
 		} else {
 			message.append(LINE_SEP);
 			message.append(getBuildFailedMessage());
 			message.append(LINE_SEP);
-			message.append(error.toString());
-			message.append(LINE_SEP);
-			if (Project.MSG_VERBOSE <= msgOutputLevel) {
-				message.append(StringUtils.getStackTrace(error));
+			// If ant have not errors
+			if (error != null) {
+				message.append(error.toString());
+				message.append(LINE_SEP);
+				if (Project.MSG_VERBOSE <= msgOutputLevel) {
+					message.append(StringUtils.getStackTrace(error));
+				}
+				// add by start wxzhang 20070514
+				warnAndErrorCaptured(error.toString());
+				// add by end wxzhang 20070514
 			}
 		}
-
+		// add by start wxzhang 20070514
+		message.append(LINE_SEP);
+		message.append(LogUtils.getLogStatisticInfo());
+		// add by end wxzhang 20070514
 		message.append(LINE_SEP);
 		message.append("Total time: ");
 		message.append(formatTime(System.currentTimeMillis() - startTime));
@@ -158,6 +167,7 @@ public class DITAOTBuildLogger implements BuildLogger {
 
 	/**
 	 * Record start time
+	 * 
 	 * @see org.apache.tools.ant.BuildListener#buildStarted(org.apache.tools.ant.BuildEvent)
 	 */
 	public void buildStarted(BuildEvent event) {
@@ -181,12 +191,8 @@ public class DITAOTBuildLogger implements BuildLogger {
 
 		if (eventTask != null) {
 			// Print out the name of the task if we're in one
-			String label =
-				new StringBuffer()
-					.append("  [")
-					.append(eventTask.getTaskName())
-					.append("] ")
-					.toString();
+			String label = new StringBuffer().append("  [").append(
+					eventTask.getTaskName()).append("] ").toString();
 			BufferedReader r = null;
 			try {
 				String line;
@@ -204,11 +210,11 @@ public class DITAOTBuildLogger implements BuildLogger {
 			} catch (IOException e) {
 				// shouldn't be possible
 				message.append(label).append(event.getMessage());
-			} finally{
-				try{
+			} finally {
+				try {
 					r.close();
-				}catch(IOException ioe){
-					
+				} catch (IOException ioe) {
+
 				}
 			}
 		} else {
@@ -216,14 +222,15 @@ public class DITAOTBuildLogger implements BuildLogger {
 		}
 
 		msg = message.toString();
-
+		// add start by wxzhang 20070518
+		warnAndErrorCaptured(msg);
+		// add end by wxzhang 20070518
 		if (priority != Project.MSG_ERR) {
 			boolean flag = false;
 			// filter out message came from XSLT in console,
 			// except those contains [DOTXxxx]
-			if (eventTask != null
-				&& "xslt".equals(eventTask.getTaskName())
-				&& msg.indexOf("DOTX") == -1) {
+			if (eventTask != null && "xslt".equals(eventTask.getTaskName())
+					&& msg.indexOf("DOTX") == -1) {
 				flag = true;
 			}
 
@@ -246,6 +253,7 @@ public class DITAOTBuildLogger implements BuildLogger {
 
 	/**
 	 * Ignored
+	 * 
 	 * @see org.apache.tools.ant.BuildLogger#setEmacsMode(boolean)
 	 */
 	public void setEmacsMode(boolean mode) {
@@ -253,6 +261,7 @@ public class DITAOTBuildLogger implements BuildLogger {
 
 	/**
 	 * Setter function for errorPrintStream
+	 * 
 	 * @see org.apache.tools.ant.BuildLogger#setErrorPrintStream(java.io.PrintStream)
 	 */
 	public void setErrorPrintStream(PrintStream errorPrintStream) {
@@ -261,6 +270,7 @@ public class DITAOTBuildLogger implements BuildLogger {
 
 	/**
 	 * Setter function for messageOutputLevel
+	 * 
 	 * @see org.apache.tools.ant.BuildLogger#setMessageOutputLevel(int)
 	 */
 	public void setMessageOutputLevel(int level) {
@@ -269,6 +279,7 @@ public class DITAOTBuildLogger implements BuildLogger {
 
 	/**
 	 * Setter function for outputPrintStream, and set it to autoflush
+	 * 
 	 * @see org.apache.tools.ant.BuildLogger#setOutputPrintStream(java.io.PrintStream)
 	 */
 	public void setOutputPrintStream(PrintStream output) {
@@ -277,6 +288,7 @@ public class DITAOTBuildLogger implements BuildLogger {
 
 	/**
 	 * Ignored
+	 * 
 	 * @see org.apache.tools.ant.BuildListener#targetFinished(org.apache.tools.ant.BuildEvent)
 	 */
 	public void targetFinished(BuildEvent event) {
@@ -288,7 +300,7 @@ public class DITAOTBuildLogger implements BuildLogger {
 	 */
 	public void targetStarted(BuildEvent event) {
 		if (Project.MSG_INFO <= msgOutputLevel
-			&& !"".equals(event.getTarget().getName())) {
+				&& !"".equals(event.getTarget().getName())) {
 			String desc = event.getTarget().getDescription();
 			String msg = desc + "...";
 			if (desc == null || Constants.STRING_EMPTY.equals(desc.trim())) {
@@ -301,6 +313,7 @@ public class DITAOTBuildLogger implements BuildLogger {
 
 	/**
 	 * Ignored
+	 * 
 	 * @see org.apache.tools.ant.BuildListener#taskFinished(org.apache.tools.ant.BuildEvent)
 	 */
 	public void taskFinished(BuildEvent event) {
@@ -308,9 +321,38 @@ public class DITAOTBuildLogger implements BuildLogger {
 
 	/**
 	 * Ignored
+	 * 
 	 * @see org.apache.tools.ant.BuildListener#taskStarted(org.apache.tools.ant.BuildEvent)
 	 */
 	public void taskStarted(BuildEvent event) {
 	}
 
+	private void warnAndErrorCaptured(String msg) {
+		if (msg != null) {
+			if (msg.toUpperCase().indexOf("PIPELINE") != -1) {
+				if (msg.toUpperCase().indexOf("[FATAL]") != -1) {
+					LogUtils.increaseNumOfFatals();
+				}
+				if (msg.toUpperCase().indexOf("[ERROR]") != -1) {
+					LogUtils.increaseNumOfErrors();
+				}
+				if (msg.toUpperCase().indexOf("[WARN]") != -1) {
+					LogUtils.increaseNumOfWarnings();
+				}
+			}
+			if (msg.toUpperCase().indexOf("DOTA") != -1) {
+				// cann't captured the FATAL message of ant in the messageLogged()
+				// so this should captured in the build finished!
+				if (msg.toUpperCase().indexOf("[FATAL]") != -1) {
+					LogUtils.increaseNumOfFatals();
+				}
+				if (msg.toUpperCase().indexOf("[ERROR]") != -1) {
+					LogUtils.increaseNumOfErrors();
+				}
+				if (msg.toUpperCase().indexOf("[WARN]") != -1) {
+					LogUtils.increaseNumOfWarnings();
+				}
+			}
+		}
+	}
 }

@@ -110,7 +110,7 @@ public class CHMIndexWriter implements AbstractWriter {
 
         printWriter.println("<li> <object type=\"text/sitemap\">");
         printWriter.print("<param name=\"Name\" value=\"");
-        printWriter.print(term.getTermName());
+        printWriter.print(term.getTermFullName());
         printWriter.print("\">");
         printWriter.println();
 

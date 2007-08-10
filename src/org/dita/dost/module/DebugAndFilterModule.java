@@ -25,10 +25,12 @@ import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.pipeline.PipelineHashIO;
 import org.dita.dost.reader.DitaValReader;
+import org.dita.dost.reader.GenListModuleReader;
 import org.dita.dost.reader.ListReader;
 import org.dita.dost.util.Constants;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.writer.DitaWriter;
+import org.xml.sax.SAXException;
 
 
 /**
@@ -95,11 +97,11 @@ public class DebugAndFilterModule implements AbstractPipelineModule {
      * 
      */
     public AbstractPipelineOutput execute(AbstractPipelineInput input) throws DITAOTException {
-        String baseDir = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_BASEDIR);
+         String baseDir = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_BASEDIR);
         String ditavalFile = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_DITAVAL);
         String tempDir = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_TEMPDIR);
         String ext = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_DITAEXT);
-
+        String ditaDir=((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_EXT_PARAM_DITADIR);;
         String inputDir = null;
         String filePathPrefix = null;
         ListReader listReader = new ListReader();
@@ -131,6 +133,11 @@ public class DebugAndFilterModule implements AbstractPipelineModule {
         }else{
             content = new ContentImpl();
         }
+        try{
+        	DitaWriter.initXMLReader(ditaDir);
+		} catch (SAXException e) {
+			throw new DITAOTException(e.getMessage(), e);
+		}
 
         fileWriter = new DitaWriter();
         content.setValue(tempDir);

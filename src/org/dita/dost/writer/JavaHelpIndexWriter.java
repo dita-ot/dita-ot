@@ -110,7 +110,7 @@ public class JavaHelpIndexWriter implements AbstractWriter {
 		 */
 		if (subTermNum > 0) { 
 			printWriter.print("<indexitem text=\"");		
-			printWriter.print(term.getTermName());
+			printWriter.print(term.getTermFullName());
 			printWriter.print("\">");	
 			
 			for (int i = 0; i < subTermNum; i++) {
@@ -135,7 +135,7 @@ public class JavaHelpIndexWriter implements AbstractWriter {
 				targetURL = targetURL.replace('.', '_');
 
 				printWriter.print("<indexitem text=\"");
-				printWriter.print(term.getTermName());
+				printWriter.print(term.getTermFullName());
 				printWriter.print("\"");
 				printWriter.print(" target=\"");
 				printWriter.print(targetURL);

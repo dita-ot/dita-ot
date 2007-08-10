@@ -3,7 +3,7 @@
 <!-- ============================================================= -->
 <!--  MODULE:    XML EXCHANGE TABLE MODEL DECLARATION MODULE       -->
 <!--  VERSION:   1.1                                               -->
-<!--  DATE:      June 2006                                         -->
+<!--  DATE:      November 2006                                     -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -15,6 +15,8 @@
 <!--    2005.11.15 RDA: Corrected the "Delivered as" system ID     -->
 <!--    2006.06.07 RDA: Make universal attributes universal        -->
 <!--                      (DITA 1.1 proposal #12)                  -->
+<!--    2006.11.30 RDA: Add -dita-use-conref-target to enumerated  -->
+<!--                      attributes                               -->
 
 <!-- ============================================================= -->
 <!--  Delivered as file "tblDecl.mod"                              -->
@@ -41,6 +43,9 @@ enables more consistent presentation of both figures and tables.
 
 
 ATTRIBUTES:
+
+For frame, align, and valign attributes on any element:
+  Add the enumerated value -dita-use-conref-target for DITA 1.1.  
 
 For the <table> element, add:
   %univ-atts; which consists of:
@@ -202,11 +207,13 @@ in useability, presentation, and possible structure information degradation.
 <!ENTITY % tbl.tgroup.att       "">
 <!ENTITY % tbl.thead.att        "">
 <!ENTITY % tbl.tbody.att        "">
-<!ENTITY % tbl.colspec.att      "">
+<!ENTITY % tbl.colspec.att      "base    CDATA   #IMPLIED
+                                 %base-attribute-extensions;">
 <!ENTITY % tbl.row.mdl          "(%entry;)+">
 <!ENTITY % tbl.row.att          "">
 <!ENTITY % tbl.entry.mdl        "(%paracon;)*">
-<!ENTITY % tbl.entry.att        "">
+<!ENTITY % tbl.entry.att        "base    CDATA   #IMPLIED
+                                 %base-attribute-extensions;">
 
 <!-- =====  Element and attribute declarations follow. =====  -->
 
@@ -223,7 +230,8 @@ in useability, presentation, and possible structure information degradation.
 <!ELEMENT %tbl.table.name; (%tbl.table.mdl;)>
 
 <!ATTLIST %tbl.table.name;
-        frame           (top|bottom|topbot|all|sides|none)      #IMPLIED
+        frame           (top|bottom|topbot|all|sides|none| 
+                         -dita-use-conref-target)               #IMPLIED
         colsep          %yesorno;                               #IMPLIED
         rowsep          %yesorno;                               #IMPLIED
         %tbl.table.att;
@@ -243,7 +251,8 @@ in useability, presentation, and possible structure information degradation.
         cols            NMTOKEN                                 #REQUIRED
         colsep          %yesorno;                               #IMPLIED
         rowsep          %yesorno;                               #IMPLIED
-        align           (left|right|center|justify|char)        #IMPLIED
+        align           (left|right|center|justify|char| 
+                         -dita-use-conref-target)               #IMPLIED
         %tbl.tgroup.att;
 >
 
@@ -261,7 +270,8 @@ in useability, presentation, and possible structure information degradation.
         colwidth        CDATA                                   #IMPLIED
         colsep          %yesorno;                               #IMPLIED
         rowsep          %yesorno;                               #IMPLIED
-        align           (left|right|center|justify|char)        #IMPLIED
+        align           (left|right|center|justify|char| 
+                         -dita-use-conref-target)               #IMPLIED
         char            CDATA                                   #IMPLIED
         charoff         NMTOKEN                                 #IMPLIED
         %tbl.colspec.att;
@@ -276,7 +286,8 @@ in useability, presentation, and possible structure information degradation.
 <!ELEMENT thead ((%row;)+)>
 
 <!ATTLIST thead
-        valign          (top|middle|bottom)                     #IMPLIED
+        valign          (top|middle|bottom|
+                         -dita-use-conref-target)               #IMPLIED
         %tbl.thead.att;
 >
 
@@ -289,7 +300,8 @@ in useability, presentation, and possible structure information degradation.
 <!ELEMENT tbody (%row;)+>
 
 <!ATTLIST tbody
-        valign          (top|middle|bottom)                     #IMPLIED
+        valign          (top|middle|bottom| 
+                         -dita-use-conref-target)               #IMPLIED
         %tbl.tbody.att;
 >
 
@@ -304,7 +316,8 @@ in useability, presentation, and possible structure information degradation.
 
 <!ATTLIST row
         rowsep          %yesorno;                               #IMPLIED
-        valign          (top|middle|bottom)                     #IMPLIED
+        valign          (top|middle|bottom| 
+                         -dita-use-conref-target)               #IMPLIED
         %tbl.row.att;
 >
 
@@ -326,10 +339,12 @@ in useability, presentation, and possible structure information degradation.
         morerows        NMTOKEN                                 #IMPLIED
         colsep          %yesorno;                               #IMPLIED
         rowsep          %yesorno;                               #IMPLIED
-        align           (left|right|center|justify|char)        #IMPLIED
+        align           (left|right|center|justify|char| 
+                         -dita-use-conref-target)               #IMPLIED
         char            CDATA                                   #IMPLIED
         charoff         NMTOKEN                                 #IMPLIED
-        valign          (top|middle|bottom)                     #IMPLIED
+        valign          (top|middle|bottom| 
+                         -dita-use-conref-target)               #IMPLIED
         %tbl.entry.att;
 >
 
@@ -339,8 +354,10 @@ in useability, presentation, and possible structure information degradation.
 <!-- ============================================================= -->
 
 <!ATTLIST %tbl.table.name;
-        rowheader   (firstcol | norowheader) #IMPLIED
-        scale (50|60|70|80|90|100|110|120|140|160|180|200) #IMPLIED
+        rowheader   (firstcol | norowheader | 
+                         -dita-use-conref-target) #IMPLIED
+        scale (50|60|70|80|90|100|110|120|140|160|180|200| 
+                         -dita-use-conref-target) #IMPLIED
         %univ-atts;
         outputclass CDATA #IMPLIED>
 <!ATTLIST tgroup

@@ -3,7 +3,7 @@
 <!-- ============================================================= -->
 <!--  MODULE:    DITA Metadata                                     -->
 <!--  VERSION:   1.1                                               -->
-<!--  DATE:      June 2006                                         -->
+<!--  DATE:      November 2006                                     -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -34,6 +34,8 @@ PUBLIC "-//OASIS//ENTITIES DITA Metadata//EN"
 <!--    2006.06.06 RDA: Move indexterm into commonElements         -->
 <!--    2006.06.07 RDA: Make universal attributes universal        -->
 <!--                      (DITA 1.1 proposal #12)                  -->
+<!--    2006.11.30 RDA: Add -dita-use-conref-target to enumerated  -->
+<!--                      attributes                               -->
 <!-- ============================================================= -->
 
 
@@ -54,11 +56,12 @@ PUBLIC "-//OASIS//ENTITIES DITA Metadata//EN"
              %univ-atts;
              href       CDATA                            #IMPLIED
              keyref     CDATA                            #IMPLIED
-             type       (creator | contributor)          #IMPLIED    >
+             type       (creator | contributor | 
+                         -dita-use-conref-target)        #IMPLIED    >
 
 
 <!--                     LONG NAME: Source                         -->
-<!ELEMENT source       (%words.cnt;)*                                >
+<!ELEMENT source        (%words.cnt;)*                               >
 <!ATTLIST source 
              %univ-atts;
              href       CDATA                            #IMPLIED
@@ -77,7 +80,8 @@ PUBLIC "-//OASIS//ENTITIES DITA Metadata//EN"
 <!ELEMENT copyright     ((%copyryear;)+, %copyrholder;)              >
 <!ATTLIST copyright 
              %univ-atts;
-             type      (primary | secondary)             #IMPLIED    >
+             type       (primary | secondary | 
+                         -dita-use-conref-target)        #IMPLIED    >
 
 
 <!--                    LONG NAME: Copyright Year                  -->
@@ -117,12 +121,13 @@ PUBLIC "-//OASIS//ENTITIES DITA Metadata//EN"
              %univ-atts;                                             >
 
 
-<!--                     LONG NAME: Permissions                    -->
-<!ELEMENT permissions  EMPTY                                         >
+<!--                    LONG NAME: Permissions                     -->
+<!ELEMENT permissions   EMPTY                                        >
 <!ATTLIST permissions
              %univ-atts;
              view       (internal | classified | all | 
-                         entitled)                       #REQUIRED   >
+                         entitled | 
+                         -dita-use-conref-target)        #REQUIRED   >
 
 
 <!--                    LONG NAME: Category                        -->
@@ -134,19 +139,22 @@ PUBLIC "-//OASIS//ENTITIES DITA Metadata//EN"
 <!--                    LONG NAME: Audience                        -->
 <!ELEMENT audience      EMPTY                                        >
 <!ATTLIST audience
-             type       (user | purchaser | administrator |
-                        programmer | executive | services |
-                        other)                           #IMPLIED
+             type       (user | purchaser |
+                         administrator | programmer |
+                         executive | services | other | 
+                         -dita-use-conref-target)        #IMPLIED
              othertype  CDATA                            #IMPLIED
              job        (installing | customizing | 
                          administering | programming |
-                         using| maintaining | troubleshooting |
-                         evaluating | planning | migrating |
-                         other)                          #IMPLIED
-             otherjob    CDATA                           #IMPLIED
+                         using | maintaining |
+                         troubleshooting | evaluating |
+                         planning | migrating | other | 
+                         -dita-use-conref-target)        #IMPLIED
+             otherjob   CDATA                            #IMPLIED
              experiencelevel
-                         (novice | general | expert)     #IMPLIED
-             name        NMTOKEN                         #IMPLIED
+                        (novice | general | expert | 
+                         -dita-use-conref-target)        #IMPLIED
+             name       NMTOKEN                          #IMPLIED
              %univ-atts;                                             >
 
 
@@ -229,7 +237,8 @@ PUBLIC "-//OASIS//ENTITIES DITA Metadata//EN"
              name       CDATA                            #REQUIRED
              content    CDATA                            #REQUIRED
              translate-content
-                        (yes | no)                       #IMPLIED
+                        (yes | no | 
+                         -dita-use-conref-target)        #IMPLIED
              %univ-atts;                                             >
 
 

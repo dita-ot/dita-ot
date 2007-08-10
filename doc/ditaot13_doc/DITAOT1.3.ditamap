@@ -20,7 +20,7 @@
 <topicref href="newelementabstract.dita" navtitle="New element &lt;abstract&gt;">
 </topicref>
 <topicref href="newelementdata.dita" navtitle="New element &lt;data&gt;"></topicref>
-<topicref href="supportingboth.ditaand.xmlinaditamap.dita" navtitle="Supporting both .dita and .xml in one ditamap">
+<topicref href="supporting_file_extension.dita" navtitle="Supporting both .dita and .xml in one ditamap">
 </topicref>
 <topicref href="supportingforeigncontentvocabulary.dita" navtitle="Supporting foreign content vocabulary">
 </topicref>

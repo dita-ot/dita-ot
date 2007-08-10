@@ -3,8 +3,8 @@
 <!--                    HEADER                                     -->
 <!-- ============================================================= -->
 <!--  MODULE:    DITA Utilities Domain                             -->
-<!--  VERSION:   1.0.1                                             -->
-<!--  DATE:      November 2005                                     -->
+<!--  VERSION:   1.1                                             -->
+<!--  DATE:      November 2006                                     -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -17,12 +17,12 @@
 <!-- ORIGINAL CREATION DATE:                                       -->
 <!--             March 2001                                        -->
 <!--                                                               -->
-<!--             (C) Copyright OASIS-Open.org 2005.                -->
+<!--             (C) Copyright OASIS-Open.org 2005, 2006                -->
 <!--             (C) Copyright IBM Corporation 2001, 2004.         -->
 <!--             All Rights Reserved.                              -->
 <!-- ============================================================= -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
-<xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="xml.xsd"/>
+  <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="urn:oasis:names:tc:dita:xsd:xml.xsd:1.1"/>
 
   <xs:group name="ut-d-fig">
     <xs:choice>
@@ -51,13 +51,21 @@
 
   <!-- Base form: Imagemap ((%image;), (%area;)+) -->
 
-  <xs:element name="imagemap" type="imagemap.class" >
+  <xs:element name="imagemap" >
     <xs:annotation>
       <xs:documentation>
         The imagemap element supports the basic functionality of the HTML <q>client-side</q> image map markup.
       </xs:documentation>
     </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="imagemap.class">
+          <xs:attribute ref="class" default="+ topic/fig ut-d/imagemap "/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
+  
   <xs:complexType name="imagemap.class">
         <xs:sequence>
           <xs:element ref="image"/>
@@ -68,15 +76,21 @@
         <xs:attribute name="spectitle" type="xs:string"/>
         <xs:attribute name="outputclass" type="xs:string"/>
         <xs:attributeGroup ref="global-atts"/>
-        <xs:attribute ref="class" default="+ topic/fig ut-d/imagemap "/>
   </xs:complexType>
 
-  <xs:element name="area" type="area.class" >
+  <xs:element name="area" >
     <xs:annotation>
       <xs:documentation>
         The area element supports the basic functionality of the HTML image map markup.
       </xs:documentation>
     </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="area.class">
+          <xs:attribute ref="class" default="+ topic/figgroup ut-d/area "/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
   <xs:complexType name="area.class">
         <xs:sequence>
@@ -87,30 +101,42 @@
         <xs:attributeGroup ref="univ-atts"/>
         <xs:attribute name="outputclass" type="xs:string"/>
         <xs:attributeGroup ref="global-atts"/>
-        <xs:attribute ref="class" default="+ topic/figgroup ut-d/area "/>
   </xs:complexType>
 
-  <xs:element name="shape" type="shape.class">
+  <xs:element name="shape" >
     <xs:annotation>
       <xs:documentation>
         The shape element supports the basic functionality of the HTML <q>client-side</q> image map markup.
       </xs:documentation>
     </xs:annotation>
+    <xs:complexType mixed="true">
+      <xs:complexContent>
+        <xs:extension base="shape.class">
+          <xs:attribute ref="class" default="+ topic/keyword ut-d/shape "/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
   <xs:complexType name="shape.class" mixed="true">
         <xs:attribute name="keyref" type="xs:string"/>
         <xs:attributeGroup ref="univ-atts-translate-no"/>
         <xs:attribute name="outputclass" type="xs:string"/>
         <xs:attributeGroup ref="global-atts"/>
-        <xs:attribute ref="class" default="+ topic/keyword ut-d/shape "/>
   </xs:complexType>
 
-  <xs:element name="coords" type="coords.class">
+  <xs:element name="coords" >
     <xs:annotation>
       <xs:documentation>
         The coords element supports the basic functionality of the HTML <q>client-side</q> image map markup.
        </xs:documentation>
     </xs:annotation>
+    <xs:complexType mixed="true">
+      <xs:complexContent>
+        <xs:extension base="coords.class">
+          <xs:attribute ref="class" default="+ topic/ph ut-d/coords "/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
   <xs:complexType name="coords.class" mixed="true">
         <xs:choice minOccurs="0" maxOccurs="unbounded">
@@ -120,7 +146,6 @@
         <xs:attributeGroup ref="univ-atts-translate-no"/>
         <xs:attribute name="outputclass" type="xs:string"/>
         <xs:attributeGroup ref="global-atts"/>
-        <xs:attribute ref="class" default="+ topic/ph ut-d/coords "/>
   </xs:complexType>
 
 </xs:schema>

@@ -10,16 +10,14 @@
   <import file="build_preprocess.xml" />
 
   <target name="dita2troff"
-    depends="build-init, start-preprocess, clean-temp, gen-list, 
-                     copy-files, debug-filter, move-index-entries, conref, mappull, 
-                     maplink, move-links, topicpull, dita.topic.troff">
+    depends="build-init, preprocess, dita.topic.troff">
   </target>
 
   <target name="dita.topic.troff" unless="noTopic"
     description="Build troff output from dita topics">
     <!-- step 1 -->
     <xslt processor="trax" basedir="${dita.temp.dir}"
-      destdir="${output.dir}" includes="${fullditatopiclist}"
+      destdir="${output.dir}" includes="${fullditatopiclist} ${chunkedtopiclist}"
       extension="${dita.ext}"
       style="${dita.script.dir}${file.separator}dita2troff-step1-shell.xsl">
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
@@ -27,7 +25,7 @@
 
     <!-- step 2 -->
     <xslt processor="trax" basedir="${dita.map.output.dir}" destdir="${dita.map.output.dir}"
-      includes="${fullditatopiclist}" extension=".cli"
+      includes="${fullditatopiclist} ${chunkedtopiclist}" extension=".cli"
       style="${dita.script.dir}${file.separator}dita2troff-step2-shell.xsl">
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
     </xslt>

@@ -3,8 +3,8 @@
 <!--                    HEADER                                     -->
 <!-- ============================================================= -->
 <!--  MODULE:    XML EXCHANGE TABLE MODEL DECLARATION MODULE       -->
-<!--  VERSION:   1.0.1                                             -->
-<!--  DATE:      November 2005                                     -->
+<!--  VERSION:   1.1                                             -->
+<!--  DATE:      November 2006                                     -->
 <!--                                                               -->
 <!-- ============================================================= -->
 <!-- ============================================================= -->
@@ -15,7 +15,7 @@
 <!-- ORIGINAL CREATION DATE:                                       -->
 <!--             Derived from OASIS Exchange Table Model base      -->
 <!--                                                               -->
-<!--             (C) Copyright OASIS-Open.org 2005.                -->
+<!--             (C) Copyright OASIS-Open.org 2005, 2006                -->
 <!--             (C) Copyright IBM Corporation 2001, 2004.         -->
 <!--             All Rights Reserved.                              -->
 <!--                                                               -->
@@ -71,7 +71,7 @@
 
      -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
-  <xs:element name="table" type="table.class">
+  <xs:element name="table">
     <xs:annotation>
       <xs:documentation>
         The &lt;<keyword>table</keyword>> element organizes arbitrarily
@@ -83,6 +83,13 @@
         of data.
       </xs:documentation>
     </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="table.class">
+          <xs:attribute ref="class" default="- topic/table "/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
   <xs:complexType name="table.class">
     <xs:sequence>
@@ -100,17 +107,17 @@
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute ref="class" default="- topic/table "/>
   </xs:complexType>
   
   <xs:simpleType name="rowheader-att.class">
     <xs:restriction base="xs:string">
       <xs:enumeration value="firstcol"/>
       <xs:enumeration value="norowheader"/>
+      <xs:enumeration value="-dita-use-conref-target"/>
     </xs:restriction>
   </xs:simpleType>
   
-  <xs:element name="tgroup" type="tgroup.class">
+  <xs:element name="tgroup">
     <xs:annotation>
       <xs:documentation>
         The &lt;<keyword>tgroup</keyword>> element in a table contains
@@ -118,6 +125,13 @@
         of the table.
       </xs:documentation>
     </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="tgroup.class">
+          <xs:attribute ref="class" default="- topic/tgroup "/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
   <xs:complexType name="tgroup.class">
     <xs:sequence>
@@ -131,7 +145,6 @@
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute ref="class" default="- topic/tgroup "/>
   </xs:complexType>
   
   <xs:attributeGroup name="colrowsep-atts">
@@ -139,7 +152,7 @@
     <xs:attribute name="rowsep" type="xs:string"/>
   </xs:attributeGroup>
   
-  <xs:element name="colspec" type="colspec.class">
+  <xs:element name="colspec">
     <xs:annotation>
       <xs:documentation>
         The &lt;<keyword>colspec</keyword>> element contains a column specification
@@ -147,6 +160,13 @@
         and column width.
       </xs:documentation>
     </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="colspec.class">
+          <xs:attribute ref="class" default="- topic/colspec "/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
   <xs:complexType name="colspec.class">
     <xs:attribute name="colnum" type="xs:NMTOKEN"/>
@@ -156,19 +176,27 @@
     <xs:attributeGroup ref="colrowsep-atts"/>
     <xs:attribute name="char" type="xs:string"/>
     <xs:attribute name="charoff" type="xs:NMTOKEN"/>
+    <xs:attribute name="base" type="xs:string" />
+    <xs:attributeGroup ref="base-attribute-extensions"/>
     <xs:attributeGroup ref="id-atts"/>
     <xs:attributeGroup ref="localization-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute ref="class" default="- topic/colspec "/>
   </xs:complexType>
   
-  <xs:element name="thead" type="thead.class">
+  <xs:element name="thead">
     <xs:annotation>
       <xs:documentation>
         The table header (&lt;<keyword>thead</keyword>>) element precedes
         the table body (&lt;<keyword>tbody</keyword>>) element in a complex table.
       </xs:documentation>
     </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="thead.class">
+          <xs:attribute ref="class" default="- topic/thead "/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
   <xs:complexType name="thead.class">
     <xs:sequence>
@@ -178,17 +206,23 @@
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute ref="class" default="- topic/thead "/>
   </xs:complexType>
   
   
-  <xs:element name="tbody" type="tbody.class">
+  <xs:element name="tbody">
     <xs:annotation>
       <xs:documentation>
         The &lt;<keyword>tbody</keyword>> element contains the rows in
         a table.
       </xs:documentation>
     </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="tbody.class">
+          <xs:attribute ref="class" default="- topic/tbody "/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
   <xs:complexType name="tbody.class">
     <xs:choice>
@@ -198,16 +232,22 @@
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute ref="class" default="- topic/tbody "/>
   </xs:complexType>
   
   
-  <xs:element name="row" type="row.class">
+  <xs:element name="row">
     <xs:annotation>
       <xs:documentation>The &lt;<keyword>row</keyword>> element contains a single row in
         a table &lt;<keyword>tgroup</keyword>>.
       </xs:documentation>
     </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="row.class">
+          <xs:attribute ref="class" default="- topic/row "/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
   <xs:complexType name="row.class">
     <xs:choice>
@@ -218,16 +258,22 @@
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute ref="class" default="- topic/row "/>
   </xs:complexType>
   
   
-  <xs:element name="entry" type="entry.class">
+  <xs:element name="entry">
     <xs:annotation>
       <xs:documentation>The &lt;<keyword>entry</keyword>> element defines a single cell
         in a table.        
       </xs:documentation>
     </xs:annotation>
+    <xs:complexType mixed="true">
+      <xs:complexContent>
+        <xs:extension base="entry.class">
+          <xs:attribute ref="class" default="- topic/entry "/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
   <xs:complexType name="entry.class" mixed="true">
     <xs:choice minOccurs="0" maxOccurs="unbounded">
@@ -245,10 +291,11 @@
     <xs:attribute name="valign" type="valign-att.class"/>
     <xs:attribute name="rev" type="xs:string"/>
     <xs:attribute name="outputclass" type="xs:string"/>
+    <xs:attribute name="base" type="xs:string" />
+    <xs:attributeGroup ref="base-attribute-extensions"/>
     <xs:attributeGroup ref="id-atts"/>
     <xs:attributeGroup ref="localization-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute ref="class" default="- topic/entry "/>
     <!-- added DITA attributes -->
   </xs:complexType>
   <xs:simpleType name="align-att.class">
@@ -257,6 +304,7 @@
       <xs:enumeration value="right"/>
       <xs:enumeration value="center"/>
       <xs:enumeration value="justify"/>
+      <xs:enumeration value="-dita-use-conref-target"/>
     </xs:restriction>
   </xs:simpleType>
   <xs:simpleType name="valign-att.class">
@@ -264,6 +312,7 @@
       <xs:enumeration value="top"/>
       <xs:enumeration value="middle"/>
       <xs:enumeration value="bottom"/>
+      <xs:enumeration value="-dita-use-conref-target"/>
     </xs:restriction>
   </xs:simpleType>
 </xs:schema>

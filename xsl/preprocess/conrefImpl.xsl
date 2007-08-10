@@ -544,6 +544,45 @@
         </xsl:otherwise>
       </xsl:choose>
     </xsl:when>
+
+    <!--targetting an element in a map ,and the source is a element  from a topic ,add by wxzhang 20070605-->
+    <xsl:when test="substring-after(@conref,'#')!=''">
+      <xsl:choose>
+        <!-- to resolve the problem of conref from map to topic -->
+        <xsl:when test="document($file,/)//*[local-name()=$element][@id=$topicid]">
+          <xsl:choose>
+            <xsl:when test="not($source-element='')">
+              <xsl:apply-templates select="(document($file,/)//*[local-name()=$element][@id=$topicid])[1]" mode="conref-target">
+                <xsl:with-param name="source-element"><xsl:copy-of select="$source-element"/></xsl:with-param>
+                <xsl:with-param name="current-relative-path"><xsl:value-of select="$current-relative-path"/><xsl:value-of select="$add-relative-path"/></xsl:with-param>
+                <xsl:with-param name="WORKDIR"><xsl:value-of select="$WORKDIR"/></xsl:with-param>
+                <xsl:with-param name="conref-filename"><xsl:value-of select="$conref-filename"/></xsl:with-param>
+                <xsl:with-param name="conref-source-topicid"><xsl:value-of select="$conref-source-topic"/></xsl:with-param>
+                <xsl:with-param name="conref-ids" select="$updated-conref-ids"/>
+              </xsl:apply-templates>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:copy>
+                <xsl:apply-templates select="." mode="original-attributes"/>
+                <xsl:apply-templates select="(document($file,/)//*[local-name()=$element][@id=$topicid])[1]" mode="conref-target">
+                  <xsl:with-param name="source-element"><xsl:call-template name="get-source-attribute"/></xsl:with-param>
+                  <xsl:with-param name="current-relative-path"><xsl:value-of select="$current-relative-path"/><xsl:value-of select="$add-relative-path"/></xsl:with-param>
+                  <xsl:with-param name="conref-filename"><xsl:value-of select="$conref-filename"/></xsl:with-param>
+                  <xsl:with-param name="WORKDIR"><xsl:value-of select="$WORKDIR"/></xsl:with-param>
+                  <xsl:with-param name="conref-source-topicid"><xsl:value-of select="$conref-source-topic"/></xsl:with-param>
+                  <xsl:with-param name="conref-ids" select="$updated-conref-ids"/>
+                </xsl:apply-templates>
+              </xsl:copy>
+            </xsl:otherwise>
+          </xsl:choose>
+          
+          <xsl:if test="(document($file,/)//*[local-name()=$element][@id=$topicid])[2]">
+            <xsl:call-template name="duplicateConrefTarget"/>
+          </xsl:if>
+        </xsl:when>
+        <xsl:otherwise><xsl:call-template name="missing-target-error"/></xsl:otherwise>
+      </xsl:choose>
+    </xsl:when>
       
     <xsl:otherwise>
       <xsl:call-template name="output-message">

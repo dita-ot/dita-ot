@@ -1,18 +1,30 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<!-- ============================================================= -->
+<!--                    HEADER                                     -->
+<!-- ============================================================= -->
+<!--  MODULE:    DITA Common Elements XSD Module                           -->
+<!--  VERSION:   1.1                                             -->
+<!--  DATE:      November 2006                                     -->
+<!--                                                               -->
+<!-- ============================================================= -->
+
+
+<!-- ============================================================= -->
+<!-- SYSTEM:     Darwin Information Typing Architecture (DITA)     -->
+<!--                                                               -->
+<!-- PURPOSE:    W3C XML Schema to describe DITA common elements          -->
+<!--                                                               -->
+<!-- ORIGINAL CREATION DATE:                                       -->
+<!--             June  2006                                        -->
+<!--                                                               -->
+<!--             (C) Copyright OASIS-Open.org 2006                -->
+<!--             All Rights Reserved.                              -->
+<!-- ============================================================= -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
     <!--  Import the XML Schema that contains the defiinitions for xml:lang and xml:space attributes -->
-    <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="xml.xsd"/>
+  <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="urn:oasis:names:tc:dita:xsd:xml.xsd:1.1"/>
     
-    <!-- ==================== Include Section - Start ======================= -->
-    <!-- ======== Table elements ======== -->
-    <xs:include schemaLocation="tblDeclMod.xsd"/>
-    
-    
-    <!-- ======= MetaData elements, plus keyword and indexterm ======= -->
-    <xs:include schemaLocation="metaDeclMod.xsd"/>
-    
-    
+     
     
     <xs:attributeGroup name="display-atts">
         <xs:annotation>
@@ -34,6 +46,7 @@
             <xs:enumeration value="all"/>
             <xs:enumeration value="sides"/>
             <xs:enumeration value="none"/>
+            <xs:enumeration value="-dita-use-conref-target"/>
         </xs:restriction>
     </xs:simpleType>
     
@@ -42,6 +55,7 @@
             <xs:enumeration value="page"/>
             <xs:enumeration value="column"/>
             <xs:enumeration value="textline"/>
+            <xs:enumeration value="-dita-use-conref-target"/>
         </xs:restriction>
     </xs:simpleType>
     
@@ -67,6 +81,8 @@
             </xs:documentation>
         </xs:annotation>
         <xs:attributeGroup ref="filter-atts" />
+      <xs:attribute name="base" type="xs:string" />
+      <xs:attributeGroup ref="base-attribute-extensions"/>
         <xs:attribute name="rev" type="xs:string"/>
         <xs:attribute name="importance" type="importance-atts.class"/>
         <xs:attribute name="status" type="status-atts.class"/>
@@ -96,6 +112,7 @@
             <xs:enumeration value="recommended"/>
             <xs:enumeration value="required"/>
             <xs:enumeration value="urgent"/>
+            <xs:enumeration value="-dita-use-conref-target"/>
         </xs:restriction>
     </xs:simpleType>
     
@@ -113,6 +130,7 @@
             <xs:enumeration value="160"/>
             <xs:enumeration value="180"/>
             <xs:enumeration value="200"/>
+            <xs:enumeration value="-dita-use-conref-target"/>
         </xs:restriction>
     </xs:simpleType>
     
@@ -122,6 +140,7 @@
             <xs:enumeration value="changed"/>
             <xs:enumeration value="deleted"/>
             <xs:enumeration value="unchanged"/>
+            <xs:enumeration value="-dita-use-conref-target"/>
         </xs:restriction>
     </xs:simpleType>
     
@@ -590,6 +609,7 @@
             <xs:enumeration value="sample"/>
             <xs:enumeration value="external"/>
             <xs:enumeration value="other"/>
+            <xs:enumeration value="-dita-use-conref-target"/>
         </xs:restriction>
     </xs:simpleType>
       
@@ -599,6 +619,7 @@
             <xs:enumeration value="classified"/>
             <xs:enumeration value="all"/>
             <xs:enumeration value="entitled"/>
+            <xs:enumeration value="-dita-use-conref-target"/>
         </xs:restriction>
     </xs:simpleType>
     
@@ -608,6 +629,7 @@
             <xs:enumeration value="editor"/>
             <xs:enumeration value="reviewer"/>
             <xs:enumeration value="publisher"/>
+            <xs:enumeration value="-dita-use-conref-target"/>
         </xs:restriction>
     </xs:simpleType>
     
@@ -624,6 +646,7 @@
             <xs:enumeration value="planning"/>
             <xs:enumeration value="migrating"/>
             <xs:enumeration value="other"/>
+            <xs:enumeration value="-dita-use-conref-target"/>
         </xs:restriction>
     </xs:simpleType>
     
@@ -632,6 +655,7 @@
             <xs:enumeration value="novice"/>
             <xs:enumeration value="general"/>
             <xs:enumeration value="expert"/>
+            <xs:enumeration value="-dita-use-conref-target"/>
         </xs:restriction>
     </xs:simpleType>
     
@@ -646,6 +670,7 @@
             <xs:enumeration value="reopened"/>
             <xs:enumeration value="unassigned"/>
             <xs:enumeration value="completed"/>
+            <xs:enumeration value="-dita-use-conref-target"/>
         </xs:restriction>
     </xs:simpleType>
     
@@ -653,11 +678,12 @@
         <xs:restriction base="xs:string">
             <xs:enumeration value="yes"/>
             <xs:enumeration value="no"/>
+            <xs:enumeration value="-dita-use-conref-target"/>
         </xs:restriction>
     </xs:simpleType>
     
     <!-- This is referenced inside CALS tables -->
-    <xs:element name="title" type="title.class">
+    <xs:element name="title">
         <xs:annotation>
             <xs:documentation>The &lt;<keyword>title</keyword>> element contains a heading or
                 label for the main parts of a document such as &lt;topic>, &lt;section>, and
@@ -665,25 +691,40 @@
                 and &lt;<keyword>table</keyword>>.
             </xs:documentation>
         </xs:annotation>
+      <xs:complexType mixed="true">
+          <xs:complexContent>
+            <xs:extension base="title.class">
+              <xs:attribute ref="class" default="- topic/title "/>
+            </xs:extension>
+          </xs:complexContent>
+        </xs:complexType>
     </xs:element>
     <xs:complexType name="title.class" mixed="true">
         <xs:choice minOccurs="0" maxOccurs="unbounded">
             <xs:group ref="title.cnt"/>
         </xs:choice>
         <xs:attribute name="outputclass" type="xs:string"/>
+        <xs:attribute name="base" type="xs:string" />
+        <xs:attributeGroup ref="base-attribute-extensions"/>
         <xs:attributeGroup ref="id-atts"/>
         <xs:attributeGroup ref="localization-atts"/>
         <xs:attributeGroup ref="global-atts"/>
-        <xs:attribute ref="class" default="- topic/title "/>
     </xs:complexType>
     
-    <xs:element name="keyword" type="keyword.class">
+    <xs:element name="keyword">
         <xs:annotation>
             <xs:documentation>The &lt;<keyword>keyword</keyword>> element identifies a keyword
                 or token, such as a single value from an enumerated list, the name of a command
                 or parameter, or a lookup key for a message (contrast with <ph><xref href="term.xml">term</xref></ph>).
             </xs:documentation>
         </xs:annotation>
+      <xs:complexType mixed="true">
+        <xs:complexContent>
+          <xs:extension base="keyword.class">
+            <xs:attribute ref="class" default="- topic/keyword "/>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
     </xs:element>
     <xs:complexType name="keyword.class" mixed="true">
         <xs:choice minOccurs="0" maxOccurs="unbounded">
@@ -693,19 +734,25 @@
         <xs:attribute name="outputclass" type="xs:string"/>
         <xs:attributeGroup ref="univ-atts"/>
         <xs:attributeGroup ref="global-atts"/>
-        <xs:attribute ref="class" default="- topic/keyword "/>
     </xs:complexType>
     
     
     
     
-    <xs:element name="desc" type="desc.class">
+    <xs:element name="desc">
         <xs:annotation>
             <xs:documentation>The &lt;<keyword>desc</keyword>> element contains the description
                 of the current element. A description should provide more information than
                 the title.
             </xs:documentation>
         </xs:annotation>
+      <xs:complexType mixed="true">
+        <xs:complexContent>
+          <xs:extension base="desc.class">
+            <xs:attribute ref="class" default="- topic/desc "/>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
     </xs:element>
     <xs:complexType name="desc.class" mixed="true">
         <xs:choice minOccurs="0" maxOccurs="unbounded">
@@ -713,17 +760,23 @@
         </xs:choice>
         <xs:attribute name="outputclass" type="xs:string"/>
         <xs:attributeGroup ref="univ-atts"/>
-        <xs:attributeGroup ref="global-atts"/>
-        <xs:attribute ref="class" default="- topic/desc "/>
+        <xs:attributeGroup ref="global-atts"/>        
     </xs:complexType>
     
-    <xs:element name="ph" type="ph.class">
+    <xs:element name="ph">
     <xs:annotation>
       <xs:documentation>The phrase (&lt;<keyword>ph</keyword>>) element is used to organize
         content for reuse or conditional processing (for example, when part of a paragraph
         applies to a particular audience). It can be used by future specializations
         of DITA to apply specific processing or formatting to marked up phrases.</xs:documentation>
     </xs:annotation>
+      <xs:complexType mixed="true">
+       <xs:complexContent>
+         <xs:extension base="ph.class">
+           <xs:attribute ref="class" default="- topic/ph "/>
+         </xs:extension>
+       </xs:complexContent>
+     </xs:complexType>
   </xs:element>
   <xs:complexType name="ph.class" mixed="true">
     <xs:annotation>
@@ -736,11 +789,10 @@
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute ref="class" default="- topic/ph "/>
   </xs:complexType>
 
   
-  <xs:element name="term" type="term.class">
+  <xs:element name="term">
     <xs:annotation>
       <xs:documentation>The &lt;<keyword>term</keyword>> element identifies words that
         represent extended definitions or explanations. In future development of DITA,
@@ -748,6 +800,13 @@
         entries.
       </xs:documentation>
     </xs:annotation>
+    <xs:complexType mixed="true">
+      <xs:complexContent>
+        <xs:extension base="term.class">
+          <xs:attribute ref="class" default="- topic/term "/>          
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
   <xs:complexType name="term.class" mixed="true">
     <xs:annotation>
@@ -760,17 +819,23 @@
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute ref="class" default="- topic/term "/>
   </xs:complexType>
 
   
-  <xs:element name="tm" type="tm.class">
+  <xs:element name="tm">
     <xs:annotation>
       <xs:documentation>The trademark (&lt;<keyword>tm</keyword>>) element in DITA is used
         to markup and identify a term or phrase that is trademarked. Trademarks include
         registered trademarks, service marks, slogans and logos.
       </xs:documentation>
     </xs:annotation>
+    <xs:complexType mixed="true">
+      <xs:complexContent>
+        <xs:extension base="tm.class">
+          <xs:attribute ref="class" default="- topic/tm "/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
   <xs:complexType name="tm.class" mixed="true">
     <xs:choice minOccurs="0" maxOccurs="unbounded">
@@ -778,23 +843,23 @@
     </xs:choice>
     <xs:attribute name="trademark" type="xs:string"/>
     <xs:attribute name="tmowner" type="xs:string"/>
-    <xs:attribute name="tmtype" type="tmtype-type-att.class" use="required"/>
+    <xs:attribute name="tmtype" type="type-tmtype-att.class" use="required"/>
     <xs:attribute name="tmclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute ref="class" default="- topic/tm "/>
   </xs:complexType>
 
-  <xs:simpleType name="tmtype-type-att.class">
+  <xs:simpleType name="type-tmtype-att.class">
     <xs:restriction base="xs:string">
       <xs:enumeration value="tm"/>
       <xs:enumeration value="reg"/>
       <xs:enumeration value="service"/>
+      <xs:enumeration value="-dita-use-conref-target"/>
     </xs:restriction>
   </xs:simpleType>
 
     
-  <xs:element name="boolean" type="boolean.class">
+  <xs:element name="boolean">
     <xs:annotation>
       <xs:documentation>( Deprecated ) - The &lt;<keyword>boolean</keyword>&gt; element is used to express
         one of two opposite values, such as yes or no, on or off, true or false, high
@@ -808,18 +873,24 @@
         part of the document.
       </xs:documentation>
     </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="boolean.class">
+          <xs:attribute ref="class" default="- topic/boolean "/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
   <xs:complexType name="boolean.class">
     <xs:attribute name="state" type="yesno-att.class" use="required"/>
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute ref="class" default="- topic/boolean "/>
   </xs:complexType>
 
 
   
-  <xs:element name="state" type="state.class">
+  <xs:element name="state">
     <xs:annotation>
       <xs:documentation>The &lt;<keyword>state</keyword>> element specifies a name/value
         pair whenever it is necessary to represent a named state that has a variable
@@ -828,6 +899,13 @@
         instrumentation states, and so forth).
       </xs:documentation>
     </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="state.class">
+          <xs:attribute ref="class" default="- topic/state "/>          
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
   <xs:complexType name="state.class">
     <xs:attribute name="name" type="xs:string" use="required"/>
@@ -835,7 +913,6 @@
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute ref="class" default="- topic/state "/>
   </xs:complexType>
 
   <!---->
@@ -844,13 +921,20 @@
   <!-- BASIC DOCUMENT ELEMENT DECLARATIONS (rich text) =========================== -->
   <!-- =========================================================================== -->
   <!-- Base form: Paragraph -->
-  
-  <xs:element name="p" type="p.class">
+    
+  <xs:element name="p">
     <xs:annotation>
       <xs:documentation>A paragraph element (&lt;<keyword>p</keyword>>) is a block of
         text containing a single main idea.
       </xs:documentation>
     </xs:annotation>
+    <xs:complexType mixed="true">
+      <xs:complexContent>
+        <xs:extension base="p.class">
+          <xs:attribute ref="class" default="- topic/p "/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
   <xs:complexType name="p.class" mixed="true">
     <xs:choice minOccurs="0" maxOccurs="unbounded">
@@ -859,12 +943,11 @@
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute ref="class" default="- topic/p "/>
   </xs:complexType>
 
   <!-- Base form: Excerpt -->
   
-  <xs:element name="lq" type="lq.class">
+  <xs:element name="lq">
     <xs:annotation>
       <xs:documentation> TThe long quote (&lt;<keyword>lq</keyword>&gt;) element indicates
         content quoted from another source. Use the quote element &lt;<keyword>q</keyword>&gt;for
@@ -873,6 +956,13 @@
         other sources. You can store a URL to the source of the quotation in the <keyword>href</keyword> attribute.
       </xs:documentation>
     </xs:annotation>
+    <xs:complexType mixed="true">
+      <xs:complexContent>
+        <xs:extension base="lq.class">
+          <xs:attribute ref="class" default="- topic/lq "/>          
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
   <xs:complexType name="lq.class" mixed="true">
     <xs:choice minOccurs="0" maxOccurs="unbounded">
@@ -885,7 +975,6 @@
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute ref="class" default="- topic/lq "/>
   </xs:complexType>
 
   <xs:simpleType name="type-lq-atts.class">
@@ -893,17 +982,25 @@
       <xs:enumeration value="internal"/>
       <xs:enumeration value="external"/>
       <xs:enumeration value="bibliographic"/>
+      <xs:enumeration value="-dita-use-conref-target"/>
     </xs:restriction>
   </xs:simpleType>
 
   <!-- Base form: Note -->
   
-  <xs:element name="note" type="note.class">
+  <xs:element name="note">
     <xs:annotation>
       <xs:documentation>A &lt;<keyword>note</keyword>> element contains information, differentiated
         from the main text, which expands on or calls attention to a particular point.
       </xs:documentation>
     </xs:annotation>
+    <xs:complexType mixed="true">
+      <xs:complexContent>
+        <xs:extension base="note.class">
+          <xs:attribute ref="class" default="- topic/note "/>          
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
   <xs:complexType name="note.class" mixed="true">
     <xs:choice minOccurs="0" maxOccurs="unbounded">
@@ -915,7 +1012,6 @@
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute ref="class" default="- topic/note "/>
   </xs:complexType>
 
   <xs:simpleType name="type-note-atts.class">
@@ -930,12 +1026,13 @@
       <xs:enumeration value="caution"/>
       <xs:enumeration value="danger"/>
       <xs:enumeration value="other"/>
+      <xs:enumeration value="-dita-use-conref-target"/>
     </xs:restriction>
   </xs:simpleType>
 
   <!-- Base form: Quoted text -->
   
-  <xs:element name="q" type="q.class">
+  <xs:element name="q">
     <xs:annotation>
       <xs:documentation> A quotation element (&lt;q>) indicates content quoted from another
         source. This element is used for short quotes which are displayed inline.
@@ -943,6 +1040,13 @@
         from the surrounding text.
       </xs:documentation>
     </xs:annotation>
+    <xs:complexType mixed="true">
+      <xs:complexContent>
+        <xs:extension base="q.class">
+          <xs:attribute ref="class" default="- topic/q "/>          
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
   <xs:complexType name="q.class" mixed="true">
     <xs:choice minOccurs="0" maxOccurs="unbounded">
@@ -951,18 +1055,24 @@
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute ref="class" default="- topic/q "/>
   </xs:complexType>
 
   <!-- Base form: Unordered list -->
   
-  <xs:element name="ul" type="ul.class">
+  <xs:element name="ul">
     <xs:annotation>
       <xs:documentation>In an unordered list (&lt;ul>), the order of the list items is
         not significant. List items are typically styled on output with a "bullet"
         character, depending on nesting level.
       </xs:documentation>
     </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="ul.class">
+          <xs:attribute ref="class" default="- topic/ul "/>          
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
   <xs:complexType name="ul.class">
     <xs:choice>
@@ -973,17 +1083,23 @@
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute ref="class" default="- topic/ul "/>
   </xs:complexType>
 
   <!-- Base form: Ordered list -->
  
-  <xs:element name="ol" type="ol.class">
+  <xs:element name="ol">
     <xs:annotation>
       <xs:documentation>An ordered list (&lt;ol>) is a list of items sorted by sequence
         or order of importance.
       </xs:documentation>
     </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="ol.class">
+          <xs:attribute ref="class" default="- topic/ol "/>          
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
   <xs:complexType name="ol.class">
     <xs:choice>
@@ -994,18 +1110,24 @@
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute ref="class" default="- topic/ol "/>
   </xs:complexType>
 
   <!-- Base form: Simple list -->
   
-  <xs:element name="sl" type="sl.class">
+  <xs:element name="sl">
     <xs:annotation>
       <xs:documentation>The &lt;<keyword>sl</keyword>> element contains a simple list of
         items of short, phrase-like content, such as in documenting the materials
         in a kit or package.
       </xs:documentation>
     </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="sl.class">
+          <xs:attribute ref="class" default="- topic/sl "/>          
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
   <xs:complexType name="sl.class">
     <xs:choice>
@@ -1016,11 +1138,10 @@
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute ref="class" default="- topic/sl "/>
   </xs:complexType>
 
   <!-- Base form: Simple List Item -->
-  <xs:element name="sli" type="sli.class">
+  <xs:element name="sli">
     <xs:annotation>
       <xs:documentation>
         A simple list item (&lt;sli>) is a single item in a simple list&lt;sl>.
@@ -1030,6 +1151,13 @@
         as a number (as in an ordered list) or bullet (as in an unordered list)..
       </xs:documentation>
     </xs:annotation>
+    <xs:complexType mixed="true">
+      <xs:complexContent>
+        <xs:extension base="sli.class">
+          <xs:attribute ref="class" default="- topic/sli "/>          
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
   <xs:complexType name="sli.class" mixed="true">
     <xs:choice minOccurs="0" maxOccurs="unbounded">
@@ -1038,12 +1166,11 @@
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute ref="class" default="- topic/sli "/>
   </xs:complexType>
 
   <!-- Base form: List Item -->
   
-  <xs:element name="li" type="li.class">
+  <xs:element name="li">
     <xs:annotation>
       <xs:documentation>A list (&lt;li>) item is a single item in an ordered &lt;ol> or
         unordered &lt;ul> list. When a DITA topic is formatted for output, numbers
@@ -1051,6 +1178,13 @@
         while bullets and dashes are usually output with list items in unordered lists.
       </xs:documentation>
     </xs:annotation>
+    <xs:complexType mixed="true">
+      <xs:complexContent>
+        <xs:extension base="li.class">
+          <xs:attribute ref="class" default="- topic/li "/>          
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
   <xs:complexType name="li.class" mixed="true">
     <xs:choice minOccurs="0" maxOccurs="unbounded">
@@ -1059,17 +1193,23 @@
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute ref="class" default="- topic/li "/>
   </xs:complexType>
 
   <!-- Base form: List Item Section-->
   
-  <xs:element name="itemgroup" type="itemgroup.class">
+  <xs:element name="itemgroup">
     <xs:annotation>
       <xs:documentation>The &lt;<keyword>itemgroup</keyword>> element is reserved for specialization
         of DITA. As a container element, it can be used to sub-divide or organize
         elements that occur inside a list item, definition, or parameter definition.</xs:documentation>
     </xs:annotation>
+    <xs:complexType mixed="true">
+      <xs:complexContent>
+        <xs:extension base="itemgroup.class">
+          <xs:attribute ref="class" default="- topic/itemgroup "/>          
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
   <xs:complexType name="itemgroup.class" mixed="true">
     <xs:choice minOccurs="0" maxOccurs="unbounded">
@@ -1078,12 +1218,11 @@
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute ref="class" default="- topic/itemgroup "/>
   </xs:complexType>
 
   <!-- Base form: Definition List -->
   
-  <xs:element name="dl" type="dl.class">
+  <xs:element name="dl">
     <xs:annotation>
       <xs:documentation>A definition list (&lt;<keyword>dl</keyword>>) is a list of terms
         and corresponding definitions.  The term (&lt;<keyword>dt</keyword>>) is usually
@@ -1092,6 +1231,13 @@
         of the term.
       </xs:documentation>
     </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="dl.class">
+          <xs:attribute ref="class" default="- topic/dl "/>          
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
   <xs:complexType name="dl.class">
     <xs:sequence>
@@ -1103,11 +1249,10 @@
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute ref="class" default="- topic/dl "/>
   </xs:complexType>
 
   
-  <xs:element name="dlhead" type="dlhead.class">
+  <xs:element name="dlhead">
     <xs:annotation>
       <xs:documentation>The &lt;<keyword>dlhead</keyword>> element contains optional headings
         for the term and description columns in a definition list. The definition
@@ -1116,6 +1261,13 @@
         of descriptions.
       </xs:documentation>
     </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="dlhead.class">
+          <xs:attribute ref="class" default="- topic/dlhead "/>          
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
   <xs:complexType name="dlhead.class">
     <xs:sequence>
@@ -1125,17 +1277,23 @@
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute ref="class" default="- topic/dlhead "/>
   </xs:complexType>
 
   
-  <xs:element name="ddhd" type="ddhd.class">
+  <xs:element name="ddhd">
     <xs:annotation>
       <xs:documentation>The definition descriptions heading (&lt;ddhd>) element contains
         an optional heading or title for a column of descriptions or definitions in
         a definition list
       </xs:documentation>
     </xs:annotation>
+    <xs:complexType mixed="true">
+      <xs:complexContent>
+        <xs:extension base="ddhd.class">
+          <xs:attribute ref="class" default="- topic/ddhd "/>          
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
   <xs:complexType name="ddhd.class" mixed="true">
     <xs:choice minOccurs="0" maxOccurs="unbounded">
@@ -1144,16 +1302,22 @@
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute ref="class" default="- topic/ddhd "/>
   </xs:complexType>
 
   
-  <xs:element name="dthd" type="dthd.class">
+  <xs:element name="dthd">
     <xs:annotation>
       <xs:documentation>The definition term heading (&lt;dthd>) element is contained in
         a definition list head (&lt;dlhead>) and provides an optional heading for
         the column of terms in a description list.</xs:documentation>
     </xs:annotation>
+    <xs:complexType mixed="true">
+      <xs:complexContent>
+        <xs:extension base="dthd.class">
+          <xs:attribute ref="class" default="- topic/dthd "/>          
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
   <xs:complexType name="dthd.class" mixed="true">
     <xs:choice minOccurs="0" maxOccurs="unbounded">
@@ -1162,11 +1326,10 @@
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute ref="class" default="- topic/dthd "/>
   </xs:complexType>
 
   
-  <xs:element name="dlentry" type="dlentry.class">
+  <xs:element name="dlentry">
     <xs:annotation>
       <xs:documentation>In a definition list, each list item is defined by the definition
         list entry (&lt;dlentry>) element. The definition list entry element includes
@@ -1174,6 +1337,13 @@
         term.
       </xs:documentation>
     </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="dlentry.class">
+          <xs:attribute ref="class" default="- topic/dlentry "/>          
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
   <xs:complexType name="dlentry.class">
     <xs:sequence>
@@ -1183,16 +1353,22 @@
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute ref="class" default="- topic/dlentry "/>
   </xs:complexType>
 
  
-  <xs:element name="dt" type="dt.class">
+  <xs:element name="dt">
     <xs:annotation>
       <xs:documentation>The definition term &lt;<keyword>dt</keyword>> element contains
         a term in a definition list entry.
       </xs:documentation>
     </xs:annotation>
+    <xs:complexType mixed="true">
+      <xs:complexContent>
+        <xs:extension base="dt.class">
+          <xs:attribute ref="class" default="- topic/dt "/>          
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
   <xs:complexType name="dt.class" mixed="true">
     <xs:choice minOccurs="0" maxOccurs="unbounded">
@@ -1202,16 +1378,22 @@
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute ref="class" default="- topic/dt "/>
   </xs:complexType>
 
   
-  <xs:element name="dd" type="dd.class">
+  <xs:element name="dd">
     <xs:annotation>
       <xs:documentation>The definition description (&lt;<keyword>dd</keyword>>) element
         contains the description of a term in a definition list entry.
       </xs:documentation>
     </xs:annotation>
+    <xs:complexType mixed="true">
+      <xs:complexContent>
+        <xs:extension base="dd.class">
+          <xs:attribute ref="class" default="- topic/dd "/>          
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
   <xs:complexType name="dd.class" mixed="true">
     <xs:choice minOccurs="0" maxOccurs="unbounded">
@@ -1220,12 +1402,11 @@
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute ref="class" default="- topic/dd "/>
   </xs:complexType>
 
   <!-- Base form: Figure -->
   
-  <xs:element name="fig" type="fig.class">
+  <xs:element name="fig">
     <xs:annotation>
       <xs:documentation>The figure (&lt;<keyword>fig</keyword>>) element is a display context
         (sometimes called an <q>exhibit</q>) with an optional title for a wide variety
@@ -1235,6 +1416,13 @@
         the content.
       </xs:documentation>
     </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="fig.class">
+          <xs:attribute ref="class" default="- topic/fig "/>          
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
   <xs:complexType name="fig.class">
     <xs:sequence>
@@ -1250,11 +1438,10 @@
     <xs:attribute name="spectitle" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute ref="class" default="- topic/fig "/>
   </xs:complexType>
 
   
-  <xs:element name="figgroup" type="figgroup.class">
+  <xs:element name="figgroup">
     <xs:annotation>
       <xs:documentation>The &lt;<keyword>figgroup</keyword>> element is used only for specialization
         at this time. Figure groups can be used to contain multiple cross-references,
@@ -1263,6 +1450,13 @@
         element.
       </xs:documentation>
     </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="figgroup.class">
+          <xs:attribute ref="class" default="- topic/figgroup "/>          
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
   <xs:complexType name="figgroup.class">
     <xs:sequence>
@@ -1278,12 +1472,11 @@
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute ref="class" default="- topic/figgroup "/>
   </xs:complexType>
 
   <!-- Base form: Preformatted Text -->
   
-  <xs:element name="pre" type="pre.class">
+  <xs:element name="pre">
     <xs:annotation>
       <xs:documentation>The preformatted element (&lt;<keyword>pre</keyword>>) preserves
         line breaks and spaces entered manually by the author in the content of the
@@ -1291,6 +1484,13 @@
         on your output formatting processor).
       </xs:documentation>
     </xs:annotation>
+    <xs:complexType mixed="true">
+      <xs:complexContent>
+        <xs:extension base="pre.class">
+          <xs:attribute ref="class" default="- topic/pre "/>          
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
   <xs:complexType name="pre.class" mixed="true">
     <xs:choice minOccurs="0" maxOccurs="unbounded">
@@ -1302,12 +1502,11 @@
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attribute ref="xml:space" fixed="preserve"/>
     <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute ref="class" default="- topic/pre "/>
   </xs:complexType>
 
   <!-- Base form: Lines Respecting Text -->
   
-  <xs:element name="lines" type="lines.class">
+  <xs:element name="lines">
     <xs:annotation>
       <xs:documentation>The &lt;<keyword>lines</keyword>> element may be used to represent
         dialogs, lists, text fragments, and so forth. The &lt;<keyword>lines</keyword>>
@@ -1316,6 +1515,13 @@
         inside the lines are not preserved. 
       </xs:documentation>
     </xs:annotation>
+    <xs:complexType mixed="true">
+      <xs:complexContent>
+        <xs:extension base="lines.class">
+          <xs:attribute ref="class" default="- topic/lines "/>          
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
   <xs:complexType name="lines.class" mixed="true">
     <xs:choice minOccurs="0" maxOccurs="unbounded">
@@ -1327,11 +1533,10 @@
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attribute ref="xml:space" fixed="preserve"/>
     <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute ref="class" default="- topic/lines "/>
   </xs:complexType>
 
   
-  <xs:element name="image" type="image.class">
+  <xs:element name="image">
     <xs:annotation>
       <xs:documentation>Include artwork or images in a DITA topic by using the &lt;<keyword>image</keyword>&gt;
         element. The &lt;<keyword>image</keyword>&gt; element has optional attributes
@@ -1344,6 +1549,13 @@
         always include a description of the image's content in the <keyword>alt </keyword>attribute.
       </xs:documentation>
     </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="image.class">
+          <xs:attribute ref="class" default="- topic/image "/>          
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
   <xs:complexType name="image.class">
     <xs:choice>
@@ -1361,13 +1573,13 @@
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute ref="class" default="- topic/image "/>
   </xs:complexType>
 
   <xs:simpleType name="image-placement-att.class">
     <xs:restriction base="xs:string">
       <xs:enumeration value="inline"/>
       <xs:enumeration value="break"/>
+      <xs:enumeration value="-dita-use-conref-target"/>
     </xs:restriction>
   </xs:simpleType>
 
@@ -1376,17 +1588,25 @@
       <xs:enumeration value="left"/>
       <xs:enumeration value="center"/>
       <xs:enumeration value="right"/>
+      <xs:enumeration value="-dita-use-conref-target"/>
     </xs:restriction>
   </xs:simpleType>
 
  
-  <xs:element name="alt" type="alt.class">
+  <xs:element name="alt">
     <xs:annotation>
       <xs:documentation>The alt element provides an element equivalent of the <apiname>alt</apiname> attribute
         on the image element. As an element, it provides direct text entry within
         an XML editor and is more easily accessed than an attribute for translation.
       </xs:documentation>
     </xs:annotation>
+    <xs:complexType mixed="true">
+      <xs:complexContent>
+        <xs:extension base="alt.class">
+          <xs:attribute ref="class" default="- topic/alt "/>          
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
   <xs:complexType name="alt.class" mixed="true">
     <xs:choice minOccurs="0" maxOccurs="unbounded">
@@ -1395,11 +1615,10 @@
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute ref="class" default="- topic/alt "/>
   </xs:complexType>
 
 
-  <xs:element name="object" type="object.class">
+  <xs:element name="object">
     <xs:annotation>
       <xs:documentation>DITA's &lt;<keyword>object</keyword>> element corresponds to the
         HTML &lt;<keyword>object</keyword>> element. The &lt;<keyword>object</keyword>>
@@ -1408,6 +1627,13 @@
         after transformation to HTML.
       </xs:documentation>
     </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="object.class">
+          <xs:attribute ref="class" default="- topic/object "/>          
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
   <xs:complexType name="object.class">
     <xs:sequence>
@@ -1415,7 +1641,13 @@
       <xs:group ref="param" minOccurs="0" maxOccurs="unbounded"/>
       <xs:group ref="foreign.unknown.incl" minOccurs="0" maxOccurs="unbounded"/>      
     </xs:sequence>
-    <xs:attribute name="declare" type="xs:string" default="declare"/>
+    <xs:attribute name="declare" >
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="declare"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
     <xs:attribute name="classid" type="xs:string"/>
     <xs:attribute name="codebase" type="xs:string"/>
     <xs:attribute name="data" type="xs:string"/>
@@ -1432,11 +1664,10 @@
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute ref="class" default="- topic/object "/>
   </xs:complexType>
 
   
-  <xs:element name="param" type="param.class">
+  <xs:element name="param">
     <xs:annotation>
       <xs:documentation>The parameter (&lt;<keyword>param</keyword>>)element specifies
         a set of values that may be required by an &lt;<keyword>object</keyword>>
@@ -1446,6 +1677,13 @@
         XHMTL &lt;<keyword>param</keyword>> element.
       </xs:documentation>
     </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="param.class">
+          <xs:attribute ref="class" default="- topic/param "/>          
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
   <xs:complexType name="param.class">
     <xs:attribute name="name" type="xs:string" use="required"/>
@@ -1454,12 +1692,11 @@
     <xs:attribute name="type" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute ref="class" default="- topic/param "/>
   </xs:complexType>
 
   <!-- Base form: Simple Table -->
  
-  <xs:element name="simpletable" type="simpletable.class">
+  <xs:element name="simpletable">
     <xs:annotation>
       <xs:documentation>The &lt;<keyword>simpletable</keyword>> element is used for tables
         that are regular in structure and do not need a caption. Choose the simple
@@ -1471,6 +1708,13 @@
         term-like column of your structure. 
       </xs:documentation>
     </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="simpletable.class">
+          <xs:attribute ref="class" default="- topic/simpletable "/>          
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
   <xs:complexType name="simpletable.class">
     <xs:sequence>
@@ -1485,16 +1729,22 @@
     <xs:attribute name="spectitle" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute ref="class" default="- topic/simpletable "/>
   </xs:complexType>
 
  
-  <xs:element name="sthead" type="sthead.class">
+  <xs:element name="sthead">
     <xs:annotation>
       <xs:documentation>The simpletable header (&lt;sthead>) element contains the table's
         header row. The header row is optional in a simple table.
       </xs:documentation>
     </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="sthead.class">
+          <xs:attribute ref="class" default="- topic/sthead "/>          
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
   <xs:complexType name="sthead.class">
     <xs:choice>
@@ -1503,17 +1753,23 @@
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute ref="class" default="- topic/sthead "/>
   </xs:complexType>
 
  
-  <xs:element name="strow" type="strow.class">
+  <xs:element name="strow">
     <xs:annotation>
       <xs:documentation>The &lt;<keyword>simpletable</keyword>> row (&lt;<keyword>strow</keyword>>)
         element specifies a row in a simple table, like row in a conventional <ph><xref
           href="table.xml">table</xref></ph>.
       </xs:documentation>
     </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="strow.class">
+          <xs:attribute ref="class" default="- topic/strow "/>          
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
   <xs:complexType name="strow.class">
     <xs:choice>
@@ -1522,11 +1778,10 @@
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute ref="class" default="- topic/strow "/>
   </xs:complexType>
 
   
-  <xs:element name="stentry" type="stentry.class">
+  <xs:element name="stentry">
     <xs:annotation>
       <xs:documentation>The simpletable entry (&lt;stentry>) element represents a single
         table cell, like &lt;entry> in &lt;table>. You can place any number of stentry
@@ -1535,6 +1790,13 @@
         rows of data).
       </xs:documentation>
     </xs:annotation>
+    <xs:complexType mixed="true">
+      <xs:complexContent>
+        <xs:extension base="stentry.class">
+          <xs:attribute ref="class" default="- topic/stentry "/>          
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
   <xs:complexType name="stentry.class" mixed="true">
     <xs:choice minOccurs="0" maxOccurs="unbounded">
@@ -1544,7 +1806,6 @@
     <xs:attribute name="specentry" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute ref="class" default="- topic/stentry "/>
   </xs:complexType>
  
     <!-- Base form: Required Cleanup Block -->
@@ -1552,7 +1813,7 @@
         CLEAN UP "ANY" CONTENT MODEL
         ================================ -->
     
-    <xs:element name="draft-comment" type="draft-comment.class">
+    <xs:element name="draft-comment">
         <xs:annotation>
             <xs:documentation>The &lt;<keyword>draft-comment</keyword>> element allows simple
                 review and discussion of topic contents within the marked-up content. Use
@@ -1561,6 +1822,13 @@
                 the status of the comment, use the author, time or disposition attributes.
             </xs:documentation>
         </xs:annotation>
+      <xs:complexType mixed="true">
+        <xs:complexContent>
+          <xs:extension base="draft-comment.class">
+            <xs:attribute ref="class" default="- topic/draft-comment "/>            
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
     </xs:element>
     <xs:complexType name="draft-comment.class" mixed="true">
         <xs:choice minOccurs="0" maxOccurs="unbounded">
@@ -1574,11 +1842,10 @@
         <xs:attribute name="outputclass" type="xs:string"/>
         <xs:attributeGroup ref="univ-atts-translate-no"/>
         <xs:attributeGroup ref="global-atts"/>
-        <xs:attribute ref="class" default="- topic/draft-comment "/>
     </xs:complexType>
     
     
-    <xs:element name="required-cleanup" type="required-cleanup.class">
+    <xs:element name="required-cleanup">
         <xs:annotation>
             <xs:documentation>A &lt;<keyword>required-cleanup</keyword>> element is used as a
                 placeholder for migrated elements that cannot be appropriately tagged without
@@ -1587,6 +1854,13 @@
                 element. Authors should not insert this element into documents. 
             </xs:documentation>
         </xs:annotation>
+      <xs:complexType mixed="true">
+        <xs:complexContent>
+          <xs:extension base="required-cleanup.class">
+            <xs:attribute ref="class" default="- topic/required-cleanup "/>            
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
     </xs:element>
     <xs:complexType name="required-cleanup.class" mixed="true">
         <xs:choice>
@@ -1596,18 +1870,24 @@
         <xs:attribute name="outputclass" type="xs:string"/>
         <xs:attributeGroup ref="univ-atts-translate-no"/>
         <xs:attributeGroup ref="global-atts"/>
-        <xs:attribute ref="class" default="- topic/required-cleanup "/>
     </xs:complexType>
     
     <!-- Base form: Footnote -->
     
-    <xs:element name="fn" type="fn.class">
+    <xs:element name="fn">
         <xs:annotation>
             <xs:documentation>Use footnote (&lt;<keyword>fn</keyword>>) to annotate text with
                 notes that are not appropriate for inclusion in line or to indicate the source
                 for facts or other material used in the text.
             </xs:documentation>
         </xs:annotation>
+      <xs:complexType mixed="true">
+        <xs:complexContent>
+          <xs:extension base="fn.class">
+            <xs:attribute ref="class" default="- topic/fn "/>            
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
     </xs:element>
     <xs:complexType name="fn.class" mixed="true">
         <xs:choice minOccurs="0" maxOccurs="unbounded">
@@ -1617,11 +1897,10 @@
         <xs:attribute name="outputclass" type="xs:string"/>
         <xs:attributeGroup ref="univ-atts"/>
         <xs:attributeGroup ref="global-atts"/>
-        <xs:attribute ref="class" default="- topic/fn "/>
     </xs:complexType>
     
     
-    <xs:element name="indextermref" type="indextermref.class">
+    <xs:element name="indextermref">
         <xs:annotation>
             <xs:documentation>An &lt;<keyword>indextermref</keyword>> is a reference to an index
                 entry in a lookup table used by the indexing process. If you want to create
@@ -1631,17 +1910,23 @@
                 a separate index entry. 
             </xs:documentation>
         </xs:annotation>
+      <xs:complexType>
+        <xs:complexContent>
+          <xs:extension base="indextermref.class">
+            <xs:attribute ref="class" default="- topic/indextermref "/>            
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
     </xs:element>
     <xs:complexType name="indextermref.class" >
         <xs:attribute name="keyref" type="xs:string" use="required"/>
         <xs:attributeGroup ref="univ-atts"/>
         <xs:attributeGroup ref="global-atts"/>
-        <xs:attribute ref="class" default="- topic/indextermref "/>
     </xs:complexType>
     
     <!-- Base form: Citation (from a bibliographic source) -->
     
-    <xs:element name="cite" type="cite.class">
+    <xs:element name="cite">
         <xs:annotation>
           <xs:documentation>The &lt;<keyword>cite</keyword>&gt; element is used when you need
                 a bibliographic citation that refers to a book or article. It specifically
@@ -1650,6 +1935,13 @@
                 (not supported yet). 
             </xs:documentation>
         </xs:annotation>
+      <xs:complexType mixed="true">
+        <xs:complexContent>
+          <xs:extension base="cite.class">
+            <xs:attribute ref="class" default="- topic/cite "/>    
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
     </xs:element>
     <xs:complexType name="cite.class" mixed="true">
         <xs:choice minOccurs="0" maxOccurs="unbounded">
@@ -1659,11 +1951,10 @@
         <xs:attribute name="outputclass" type="xs:string"/>
         <xs:attributeGroup ref="univ-atts"/>
         <xs:attributeGroup ref="global-atts"/>
-        <xs:attribute ref="class" default="- topic/cite "/>
     </xs:complexType>
     
     
-    <xs:element name="xref" type="xref.class">
+    <xs:element name="xref">
         <xs:annotation>
           <xs:documentation>Use the cross-reference (&lt;<keyword>xref</keyword>&gt;) element
                 to link to a different location within the current topic, or a different topic
@@ -1673,6 +1964,13 @@
                 or URL.
             </xs:documentation>
         </xs:annotation>
+      <xs:complexType mixed="true">
+        <xs:complexContent>
+          <xs:extension base="xref.class">
+            <xs:attribute ref="class" default="- topic/xref "/>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
     </xs:element>
     <xs:complexType name="xref.class" mixed="true">
         <xs:choice minOccurs="0" maxOccurs="unbounded">
@@ -1687,7 +1985,6 @@
         <xs:attribute name="outputclass" type="xs:string"/>
         <xs:attributeGroup ref="univ-atts"/>
         <xs:attributeGroup ref="global-atts"/>
-        <xs:attribute ref="class" default="- topic/xref "/>
     </xs:complexType>
     
     <!-- <xs:simpleType name="xref-type-att.class">
@@ -1699,6 +1996,7 @@
             <xs:enumeration value="local"/>
             <xs:enumeration value="peer"/>
             <xs:enumeration value="external"/>
+            <xs:enumeration value="-dita-use-conref-target"/>
         </xs:restriction>
     </xs:simpleType>
     <xs:simpleType name="valuetype-att.class">
@@ -1706,6 +2004,7 @@
             <xs:enumeration value="data"/>
             <xs:enumeration value="ref"/>
             <xs:enumeration value="object"/>
+            <xs:enumeration value="-dita-use-conref-target"/>
         </xs:restriction>
     </xs:simpleType>
     
@@ -1718,7 +2017,7 @@
         </xs:annotation>
     </xs:attribute>
     
-    <xs:element name="data" type="data.class">
+    <xs:element name="data">
       <xs:annotation>
         <xs:documentation>The &lt;<keyword>data</keyword>> element represents a property
           within a DITA topic or map. While the &lt;<keyword>data</keyword>> element
@@ -1728,6 +2027,13 @@
           or specialized element to format properties as sidebars or other adornments
           or to harvest properties for automated processing. </xs:documentation>
       </xs:annotation>
+      <xs:complexType mixed="true">
+        <xs:complexContent>
+          <xs:extension base="data.class">
+            <xs:attribute ref="class" default="- topic/data "/>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
     </xs:element>  
     <xs:complexType name="data.class" mixed="true">
         <xs:choice minOccurs="0" maxOccurs="unbounded">
@@ -1735,10 +2041,9 @@
         </xs:choice>
       <xs:attributeGroup ref="data-element-atts.class"/>
       <xs:attributeGroup ref="global-atts"/>
-      <xs:attribute ref="class" default="- topic/data "/>
     </xs:complexType>
     
-    <xs:element name="data-about" type="data-about.class">
+    <xs:element name="data-about">
       <xs:annotation>
         <xs:documentation><p>The &lt;<keyword>data-about</keyword>> element identifies the subject
           of a property when the subject isn't associated with the context in which
@@ -1753,7 +2058,13 @@
             of the &lt;<keyword>data</keyword>> element serves that purpose.</note></p>
         </xs:documentation>
       </xs:annotation>
-      
+      <xs:complexType>
+        <xs:complexContent>
+          <xs:extension base="data-about.class">
+            <xs:attribute ref="class" default="- topic/data-about "/>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
     </xs:element>
     <xs:complexType name="data-about.class">
       <xs:sequence>
@@ -1770,10 +2081,9 @@
       <xs:attribute name="scope" type="scope-att.class"/>
       <xs:attribute name="outputclass" type="xs:string"/>
       <xs:attributeGroup ref="global-atts"/>
-      <xs:attribute ref="class" default="- topic/data-about "/>
     </xs:complexType>
     
-    <xs:element name="foreign" type="foreign.class">
+    <xs:element name="foreign">
         <xs:annotation>
           <xs:documentation>The &lt;foreign&gt; element is an open extension that allows information architects 
             to incorporate existing standard vocabularies for non-textual content. like MathML and SVG, as inline 
@@ -1781,6 +2091,13 @@
             Specialization of &lt;foreign&gt; should be implemented as a domain, but for those looking for more 
             control over the content can implement foreign vocabulary as an element specialization.</xs:documentation>
         </xs:annotation>
+      <xs:complexType>
+        <xs:complexContent>
+          <xs:extension base="foreign.class">
+            <xs:attribute ref="class" default="- topic/foreign "/>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
     </xs:element>
     
     <xs:complexType name="foreign.class">
@@ -1790,17 +2107,23 @@
         <xs:attribute name="outoutclass" type="xs:string"/>
         <xs:attributeGroup ref="univ-atts"/>
         <xs:attributeGroup ref="global-atts"/>
-        <xs:attribute ref="class" default="- topic/foreign "/>
     </xs:complexType>
   
   <!-- Base form: Index entry  -->
-  <xs:element name="indexterm" type="indexterm.class">
+  <xs:element name="indexterm">
     <xs:annotation>
       <xs:documentation>An &lt;<keyword>indexterm</keyword>> is an index entry. You can
         nest entries to create multi-level indexes. The content is not output as part
         of topic content, only as part of the index.
       </xs:documentation>
     </xs:annotation>
+    <xs:complexType mixed="true">
+      <xs:complexContent>
+        <xs:extension base="indexterm.class">
+          <xs:attribute ref="class" default="- topic/indexterm "/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
   <xs:complexType name="indexterm.class" mixed="true">
     <xs:choice minOccurs="0" maxOccurs="unbounded">
@@ -1808,28 +2131,37 @@
       <xs:group ref="indexterm"/>
       <xs:group ref="index-base"/>
     </xs:choice>
+    <xs:attribute name="start" type="xs:string"/>
+    <xs:attribute name="end" type="xs:string"/>
     <xs:attribute name="keyref" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute ref="class" default="- topic/indexterm "/>
   </xs:complexType>
     
-    <xs:element name="index-base" type="index-base.class">
-      <xs:annotation><xs:documentation>The &lt;index-base&gt; element allows indexing extensions to be added by specializing off this
+    <xs:element name="index-base">
+      <xs:annotation>
+        <xs:documentation>The &lt;index-base&gt; element allows indexing extensions to be added by specializing off this
         element. It does not in itself have any meaning and should be ignored in processing.</xs:documentation>          
       </xs:annotation>
+      <xs:complexType>
+        <xs:complexContent mixed="true">
+          <xs:extension base="index-base.class">
+            <xs:attribute ref="class" default="- topic/index-base "/>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
     </xs:element>
-    <xs:complexType name="index-base.class">
+    <xs:complexType name="index-base.class" mixed="true">
       <xs:choice minOccurs="0" maxOccurs="unbounded">
         <xs:group ref="words.cnt"/>
         <xs:group ref="indexterm"/>
       </xs:choice>
       <xs:attribute name="keyref" type="xs:string"/>
+      <xs:attributeGroup ref="univ-atts"/>
       <xs:attributeGroup ref="global-atts"/>
-      <xs:attribute ref="class" default="- topic/index-base"/>
     </xs:complexType>
     
-    <xs:element name="unknown" type="unknown.class">
+    <xs:element name="unknown">
         <xs:annotation>
             <xs:documentation>
               The &lt;unknown&gt; element is an open extension that allows information architects to
@@ -1837,6 +2169,13 @@
               The base processing for &lt;unknown&gt; is to supress unless otherwise instructed.
             </xs:documentation>
         </xs:annotation>
+      <xs:complexType>
+        <xs:complexContent>
+          <xs:extension base="unknown.class">
+            <xs:attribute ref="class" default="- topic/unknown "/>            
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
     </xs:element>
     <xs:complexType name="unknown.class">
         <xs:sequence>
@@ -1845,7 +2184,6 @@
         <xs:attribute name="outoutclass" type="xs:string"/>
         <xs:attributeGroup ref="univ-atts"/>
         <xs:attributeGroup ref="global-atts"/>
-        <xs:attribute ref="class" default="- topic/unknown "/>
     </xs:complexType>
     
     <xs:attributeGroup name="localization-atts">
@@ -1860,6 +2198,7 @@
       <xs:enumeration value="rtl"/>
       <xs:enumeration value="lro"/>
       <xs:enumeration value="rlo"/>
+      <xs:enumeration value="-dita-use-conref-target"/>
     </xs:restriction>
   </xs:simpleType>
     
@@ -1881,19 +2220,20 @@
   
   <xs:attributeGroup name="filter-atts">
     <xs:attribute name="props" type="xs:string" />
-    <xs:attribute name="base" type="xs:string" />
     <xs:attribute name="platform" type="xs:string" />
     <xs:attribute name="product" type="xs:string" />
-    <xs:attribute name="audiance" type="xs:string" />
-    <xs:attribute name="otherprops" type="xs:string" />
-    <xs:attributeGroup ref="base-attribute-extensions"/>
+    <xs:attribute name="audience" type="xs:string" />
+    <xs:attribute name="otherprops" type="xs:string" />    
     <xs:attributeGroup ref="props-attribute-extensions"/> 
   </xs:attributeGroup>
   
-  <xs:attributeGroup name="props-attribute-extensions"/>
-     
-  <xs:attributeGroup name="base-attribute-extensions"/>
-  
-  
-  
+  <xs:complexType name="shortdesc.class" mixed="true">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="title.cnt"/>
+    </xs:choice>
+    <xs:attribute name="outputclass" type="xs:string"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
+  </xs:complexType>
+    
 </xs:schema>

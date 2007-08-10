@@ -1,5 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- ============================================================= -->
+<!--                    HEADER                                     -->
+<!-- ============================================================= -->
+<!--  MODULE:    DITA Indexing Domain                             -->
+<!--  VERSION:   1.1                                             -->
+<!--  DATE:      November 2006                                     -->
+<!--                                                               -->
+<!-- ============================================================= -->
 
+<!-- ============================================================= -->
+<!-- SYSTEM:     Darwin Information Typing Architecture (DITA)     -->
+<!--                                                               -->
+<!-- PURPOSE:    Define elements and specialization attributes     -->
+<!--             for Indexing Domain                              -->
+<!--                                                               -->
+<!-- ORIGINAL CREATION DATE:                                       -->
+<!--             June 2006                                        -->
+<!--                                                               -->
+<!--             (C) Copyright OASIS-Open.org 2006                -->
+<!--             All Rights Reserved.                              -->
+<!-- ============================================================= -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
     
     <!--<!ENTITY indexing-d-att "(topic indexing-d)"                         >-->
@@ -31,8 +51,16 @@
     </xs:group>
     
  
-    <xs:element name="index-see" type="index-see" />
-    <xs:complexType name="index-see" mixed="true">
+    <xs:element name="index-see">
+        <xs:complexType mixed="true">
+            <xs:complexContent>
+                <xs:extension base="index-see.class">
+                    <xs:attribute ref="class" default="+ topic/index-base indexing-d/index-see "/>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    <xs:complexType name="index-see.class"  mixed="true">
         <xs:choice minOccurs="0" maxOccurs="unbounded">
             <xs:group ref="words.cnt"/>
             <xs:group ref="indexterm"/>
@@ -40,11 +68,18 @@
         <xs:attribute name="keyref" type="xs:string"/>
         <xs:attributeGroup ref="univ-atts" />
         <xs:attributeGroup ref="global-atts" />
-        <xs:attribute ref="class" default="+ topic/index-base indexing-d/index-see "/>
     </xs:complexType>
     
-    <xs:element name="index-see-also" type="index-see-also" />
-    <xs:complexType name="index-see-also" mixed="true">
+    <xs:element name="index-see-also">
+        <xs:complexType mixed="true">
+            <xs:complexContent>
+                <xs:extension base="index-see-also.class">
+                    <xs:attribute ref="class" default="+ topic/index-base indexing-d/index-see-also "/>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    <xs:complexType name="index-see-also.class" mixed="true">
         <xs:choice minOccurs="0" maxOccurs="unbounded">
             <xs:group ref="words.cnt"/>
             <xs:group ref="indexterm"/>
@@ -52,11 +87,18 @@
         <xs:attribute name="keyref" type="xs:string"/>
         <xs:attributeGroup ref="univ-atts" />
         <xs:attributeGroup ref="global-atts" />
-        <xs:attribute ref="class" default="+ topic/index-base indexing-d/index-see-also "/>
     </xs:complexType>
     
-    <xs:element name="index-sort-as" type="index-sort-as" />
-    <xs:complexType name="index-sort-as"  mixed="true">
+    <xs:element name="index-sort-as">
+        <xs:complexType mixed="true">
+            <xs:complexContent>
+                <xs:extension base="index-sort-as.class">
+                    <xs:attribute ref="class" default="+ topic/index-base indexing-d/index-sort-as "/>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    <xs:complexType name="index-sort-as.class"  mixed="true">
         <xs:choice minOccurs="0" maxOccurs="unbounded">
             <xs:group ref="words.cnt"/>
             <xs:group ref="indexterm"/>
@@ -64,7 +106,6 @@
         <xs:attribute name="keyref" type="xs:string"/>
         <xs:attributeGroup ref="univ-atts" />
         <xs:attributeGroup ref="global-atts" />
-        <xs:attribute ref="class" default="+ topic/index-base indexing-d/index-sort-as "/>
     </xs:complexType>
     
 </xs:schema>

@@ -3,7 +3,7 @@
 <!-- ============================================================= -->
 <!--  MODULE:    DITA Concept                                      -->
 <!--  VERSION:   1.1                                               -->
-<!--  DATE:      June 2006                                         -->
+<!--  DATE:      November 2006                                     -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -34,6 +34,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Concept//EN"
 <!--    2006.06.07 RDA: Added <abstract> element                   -->
 <!--    2006.06.07 RDA: Make universal attributes universal        -->
 <!--                      (DITA 1.1 proposal #12)                  -->
+<!--    2006.11.30 RDA: Remove #FIXED from DITAArchVersion         -->
 <!-- ============================================================= -->
 
 
@@ -52,8 +53,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Concept//EN"
                         CDATA                              #FIXED
                        'http://dita.oasis-open.org/architecture/2005/'
              %DITAArchNSPrefix;:DITAArchVersion
-                        CDATA                              #FIXED
-                       '1.1'"                                        >
+                        CDATA                              '1.1'"    >
 
 
 <!-- ============================================================= -->
@@ -107,6 +107,8 @@ PUBLIC "-//OASIS//ELEMENTS DITA Concept//EN"
 <!ATTLIST conbody         
              %id-atts;
              %localization-atts;
+             base       CDATA                            #IMPLIED
+             %base-attribute-extensions;
              outputclass 
                         CDATA                            #IMPLIED    >
              

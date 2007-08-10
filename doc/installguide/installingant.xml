@@ -28,12 +28,12 @@
           <uicontrol>Current Release of Ant</uicontrol></cmd>
       </step>
       <step>
-        <cmd>Select <uicontrol>apache-ant-1.6.5-bin.zip [PGP] [SHA1] 
+        <cmd>Select <uicontrol>apache-ant-1.7-bin.zip [PGP] [SHA1] 
           [MD5]</uicontrol></cmd>
       </step>
       <step>
-        <cmd>Click <uicontrol>Save</uicontrol> to unzip the 
-          apache-ant-1.6.5-bin.zip [PGP] [SHA1] [MD5] file and save it to your 
+        <cmd>Click <uicontrol>Save</uicontrol> to download the 
+          apache-ant-1.7-bin.zip [PGP] [SHA1] [MD5] file and unzip it to your 
           C:\ directory as <filepath>ant</filepath>.</cmd>
       </step>
       <step>

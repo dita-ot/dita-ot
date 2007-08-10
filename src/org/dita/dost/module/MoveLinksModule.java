@@ -17,7 +17,7 @@ import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.pipeline.PipelineHashIO;
-import org.dita.dost.reader.MapIndexReader;
+import org.dita.dost.reader.MapLinksReader;
 import org.dita.dost.util.Constants;
 import org.dita.dost.writer.DitaLinksWriter;
 
@@ -50,7 +50,7 @@ public class MoveLinksModule implements AbstractPipelineModule {
     public AbstractPipelineOutput execute(AbstractPipelineInput input) throws DITAOTException {
 
         String maplinksFile = ((PipelineHashIO)input).getAttribute(Constants.ANT_INVOKER_PARAM_MAPLINKS);
-        MapIndexReader indexReader = new MapIndexReader();
+        MapLinksReader indexReader = new MapLinksReader();
 		DitaLinksWriter indexInserter = new DitaLinksWriter();
 		Set mapSet;
 		Iterator i;

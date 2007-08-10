@@ -24,26 +24,26 @@
         <cmd>In the Open field, type <codeph>cmd</codeph>.</cmd>
       </step>
       <step>
-        <cmd>Change the command prompt according to the following table.</cmd>
+        <cmd>Change the command prompt to <uicontrol>C:\&gt;</uicontrol> according to the following table.</cmd>
         <choicetable frame = "none">
           <chhead>
             <choptionhd>If this prompt displays, </choptionhd>
             <chdeschd>type the following command</chdeschd>
           </chhead>
           <chrow>
-            <choption>D:\</choption>
+            <choption>D:\&gt;</choption>
             <chdesc>
               <codeblock>C:</codeblock>
             </chdesc>
           </chrow>
           <chrow>
-            <choption>H:\</choption>
+            <choption>H:\&gt;</choption>
             <chdesc>
               <codeblock>C:</codeblock>
             </chdesc>
           </chrow>
           <chrow>
-            <choption>C:\My Documents\...</choption>
+            <choption>C:\My Documents\...&gt;</choption>
             <chdesc>
               <codeblock>cd \</codeblock>
             </chdesc>

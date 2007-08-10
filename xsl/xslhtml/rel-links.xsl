@@ -18,9 +18,15 @@
 
 <!--template for xref-->
 <xsl:template match="*[contains(@class,' topic/xref ')]" name="topic.xref">
-    
-    <xsl:call-template name="flagit"/>
-    <xsl:call-template name="start-revflag"/>
+  <xsl:variable name="flagrules">
+    <xsl:call-template name="getrules"/>
+  </xsl:variable>
+  <xsl:call-template name="start-flagit">
+    <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
+  </xsl:call-template>
+  <xsl:call-template name="start-revflag">
+    <xsl:with-param name="flagrules" select="$flagrules"/>
+  </xsl:call-template>
     <a>
         <xsl:call-template name="add-linking-attributes"/>
         <xsl:if test="*[contains(@class,' topic/desc ')]">
@@ -57,7 +63,12 @@
           </xsl:otherwise>
         </xsl:choose>        
     </a>
-    <xsl:call-template name="end-revflag"/>
+  <xsl:call-template name="end-revflag">
+    <xsl:with-param name="flagrules" select="$flagrules"/>
+  </xsl:call-template>
+  <xsl:call-template name="end-flagit">
+    <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param> 
+  </xsl:call-template>
 </xsl:template>
 
 <!--create breadcrumbs for each grouping of ancestor links; include previous, next, and ancestor links, sorted by linkpool/related-links parent. If there is more than one linkpool that contains ancestors, multiple breadcrumb trails will be generated-->
@@ -401,8 +412,15 @@ Children are displayed in a numbered list, with the target title as the cmd and 
 
 <!--breadcrumb template: next, prev-->
 <xsl:template match="*[contains(@class, ' topic/link ')][@role='next' or @role='previous']" mode="breadcrumb">
-          <xsl:call-template name="flagit"/>
-          <xsl:call-template name="start-revflag"/>
+  <xsl:variable name="flagrules">
+    <xsl:call-template name="getrules"/>
+  </xsl:variable>
+  <xsl:call-template name="start-flagit">
+    <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
+  </xsl:call-template>
+  <xsl:call-template name="start-revflag">
+    <xsl:with-param name="flagrules" select="$flagrules"/>
+  </xsl:call-template>
           <a>
              <xsl:call-template name="add-linking-attributes"/>
              <!--use link element's linktext as hoverhelp-->
@@ -427,7 +445,12 @@ Children are displayed in a numbered list, with the target title as the cmd and 
           <xsl:otherwise><!--both role values tested - no otherwise--></xsl:otherwise>
           </xsl:choose>
        </a>
-       <xsl:call-template name="end-revflag"/>
+  <xsl:call-template name="end-revflag">
+    <xsl:with-param name="flagrules" select="$flagrules"/>
+  </xsl:call-template>
+  <xsl:call-template name="end-flagit">
+    <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param> 
+  </xsl:call-template>
 </xsl:template>
 
 <!--prereq template-->
@@ -481,6 +504,14 @@ Children are displayed in a numbered list, with the target title as the cmd and 
 
 <!--basic child processing-->
 <xsl:template match="*[contains(@class, ' topic/link ')][@role='child' or @role='descendant']" priority="2" name="topic.link_child">
+  <xsl:variable name="flagrules">
+    <xsl:call-template name="getrules"/>
+  </xsl:variable>
+  <xsl:variable name="conflictexist">
+    <xsl:call-template name="conflict-check">
+      <xsl:with-param name="flagrules" select="$flagrules"/>
+    </xsl:call-template>
+  </xsl:variable>
    <xsl:variable name="el-name">
        <xsl:choose>
            <xsl:when test="contains(../@class,' topic/linklist ')">div</xsl:when>
@@ -490,8 +521,12 @@ Children are displayed in a numbered list, with the target title as the cmd and 
    <xsl:element name="{$el-name}">
        <xsl:attribute name="class">ulchildlink</xsl:attribute>
        <xsl:call-template name="commonattributes"/>
-     <xsl:call-template name="flagit"/>
-     <xsl:call-template name="start-revflag"/>
+     <xsl:call-template name="start-flagit">
+       <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
+     </xsl:call-template>
+     <xsl:call-template name="start-revflag">
+       <xsl:with-param name="flagrules" select="$flagrules"/>
+     </xsl:call-template>
      <strong>
      <a>
           <xsl:call-template name="add-linking-attributes"/>
@@ -503,7 +538,12 @@ Children are displayed in a numbered list, with the target title as the cmd and 
           </xsl:choose>
       </a>
      </strong>
-     <xsl:call-template name="end-revflag"/>
+     <xsl:call-template name="end-revflag">
+       <xsl:with-param name="flagrules" select="$flagrules"/>
+     </xsl:call-template>
+     <xsl:call-template name="end-flagit">
+       <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param> 
+     </xsl:call-template>
      <br/><xsl:value-of select="$newline"/>
      <!--add the description on the next line, like a summary-->
      <xsl:apply-templates select="*[contains(@class, ' topic/desc ')]"/>
@@ -513,6 +553,14 @@ Children are displayed in a numbered list, with the target title as the cmd and 
 
 <!--ordered child processing-->
 <xsl:template match="*[@collection-type='sequence']/*[contains(@class, ' topic/link ')][@role='child' or @role='descendant']" priority="3" name="topic.link_orderedchild">
+  <xsl:variable name="flagrules">
+    <xsl:call-template name="getrules"/>
+  </xsl:variable>
+  <xsl:variable name="conflictexist">
+    <xsl:call-template name="conflict-check">
+      <xsl:with-param name="flagrules" select="$flagrules"/>
+    </xsl:call-template>
+  </xsl:variable>
     <xsl:variable name="el-name">
         <xsl:choose>
             <xsl:when test="contains(../@class,' topic/linklist ')">div</xsl:when>
@@ -522,8 +570,12 @@ Children are displayed in a numbered list, with the target title as the cmd and 
     <xsl:element name="{$el-name}">
        <xsl:attribute name="class">olchildlink</xsl:attribute>
        <xsl:call-template name="commonattributes"/>
-     <xsl:call-template name="flagit"/>
-     <xsl:call-template name="start-revflag"/>
+      <xsl:call-template name="start-flagit">
+        <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
+      </xsl:call-template>
+      <xsl:call-template name="start-revflag">
+        <xsl:with-param name="flagrules" select="$flagrules"/>
+      </xsl:call-template>
      <a>
           <xsl:call-template name="add-linking-attributes"/>
 
@@ -533,7 +585,12 @@ Children are displayed in a numbered list, with the target title as the cmd and 
           <xsl:otherwise><!--use href--><xsl:call-template name="href"/></xsl:otherwise>
           </xsl:choose>
       </a>
-      <xsl:call-template name="end-revflag"/>
+      <xsl:call-template name="end-revflag">
+        <xsl:with-param name="flagrules" select="$flagrules"/>
+      </xsl:call-template>
+      <xsl:call-template name="end-flagit">
+        <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param> 
+      </xsl:call-template>
       <br/><xsl:value-of select="$newline"/>
      <!--add the description on a new line, unlike an info, to avoid issues with punctuation (adding a period)-->
      <xsl:apply-templates select="*[contains(@class, ' topic/desc ')]"/>
@@ -570,10 +627,22 @@ Children are displayed in a numbered list, with the target title as the cmd and 
 
 <!--creating the actual link-->
 <xsl:template name="makelink">
+  <xsl:variable name="flagrules">
+    <xsl:call-template name="getrules"/>
+  </xsl:variable>
+  <xsl:variable name="conflictexist">
+    <xsl:call-template name="conflict-check">
+      <xsl:with-param name="flagrules" select="$flagrules"/>
+    </xsl:call-template>
+  </xsl:variable>
           <xsl:call-template name="linkdupinfo"/>
-          <xsl:call-template name="flagit"/>
-          <xsl:call-template name="start-revflag"/>
-          <a>             
+  <xsl:call-template name="start-flagit">
+    <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
+  </xsl:call-template>
+  <xsl:call-template name="start-revflag">
+    <xsl:with-param name="flagrules" select="$flagrules"/>
+  </xsl:call-template>
+          <a>
              <xsl:call-template name="add-linking-attributes"/>
           <!--create hover help if desc exists-->
           <xsl:if test="*[contains(@class, ' topic/desc ')]">
@@ -586,7 +655,12 @@ Children are displayed in a numbered list, with the target title as the cmd and 
           <xsl:otherwise><!--use href--><xsl:call-template name="href"/></xsl:otherwise>
           </xsl:choose>
        </a>
-       <xsl:call-template name="end-revflag"/>
+  <xsl:call-template name="end-revflag">
+    <xsl:with-param name="flagrules" select="$flagrules"/>
+  </xsl:call-template>
+  <xsl:call-template name="end-flagit">
+    <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param> 
+  </xsl:call-template>
 </xsl:template>
 
 <!--process linktext elements by explicitly ignoring them and applying templates to their content; otherwise flagged as unprocessed content by the dit2htm transform-->

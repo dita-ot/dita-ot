@@ -8,7 +8,7 @@
  * (c) Copyright IBM Corp. 2005 All Rights Reserved.
  */
 package org.dita.dost.log;
-
+import org.dita.dost.util.LogUtils;
 /**
  * Class description goes here.
  * 
@@ -46,6 +46,9 @@ public class DITAOTJavaLogger {
 	 * @param msg
 	 */
 	public void logWarn(String msg) {
+		//add by wxzhang 20070514
+		LogUtils.increaseNumOfWarnings();
+		//add end by wxzhang 20070514
 		System.out.println(msg);
 	}
 
@@ -55,6 +58,9 @@ public class DITAOTJavaLogger {
 	 * @param msg
 	 */
 	public void logError(String msg) {
+		//add by wxzhang 20070514
+		LogUtils.increaseNumOfErrors();
+		//add end by wxzhang 20070514
 		System.err.println(msg);
 	}
 
@@ -64,6 +70,9 @@ public class DITAOTJavaLogger {
 	 * @param msg
 	 */
 	public void logFatal(String msg) {
+		//add by wxzhang 20070514
+		LogUtils.increaseNumOfFatals();
+		//add end by wxzhang 20070514
 		System.err.println(msg);
 	}
 

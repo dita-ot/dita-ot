@@ -3,7 +3,7 @@
 <!-- ============================================================= -->
 <!--  MODULE:    XNAL Domain                                       -->
 <!--  VERSION:   1.1                                               -->
-<!--  DATE:      June 2006                                         -->
+<!--  DATE:      November 2006                                     -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -73,7 +73,8 @@ PUBLIC "-//OASIS//ELEMENTS DITA XNAL Domain//EN"
              %univ-atts;
              href       CDATA                            #IMPLIED
              keyref     CDATA                            #IMPLIED
-             type       (creator | contributor)          #IMPLIED    >
+             type       (creator | contributor | 
+                         -dita-use-conref-target)        #IMPLIED    >
 
 <!--                    LONG NAME: Name Details                    -->
 <!ELEMENT namedetails   ((%personname; | %organizationnamedetails;)*)>

@@ -13,7 +13,11 @@ package org.dita.dost.util;
 import java.io.File;
 import java.util.HashMap;
 
+import org.apache.xml.resolver.Catalog;
+import org.apache.xml.resolver.CatalogManager;
+import org.apache.xml.resolver.tools.CatalogResolver;
 import org.dita.dost.log.DITAOTJavaLogger;
+import org.omg.CORBA.CTX_RESTRICT_SCOPE;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
@@ -31,6 +35,9 @@ public class CatalogUtils {
     private static HashMap map=null;
     
     private static DITAOTJavaLogger logger = new DITAOTJavaLogger();
+    
+    public static CatalogResolver catalogResolver = null;
+    
     /**
      * 
      */
@@ -70,7 +77,37 @@ public class CatalogUtils {
             return map;
         }
     }
-    
+    public static void initCatalogResolver(String ditaDir) {
+        if (catalogResolver == null) {
+            CatalogManager manager = new CatalogManager();
+            manager.setIgnoreMissingProperties(true);
+            manager.setUseStaticCatalog(false); // We'll use a private catalog.
+            manager.setPreferPublic(true);
+            //manager.setVerbosity(10);
+
+            catalogResolver = new CatalogResolver(manager);
+
+            String catalogFilePath = (ditaDir == null)? 
+                Constants.FILE_NAME_CATALOG : 
+                ditaDir + File.separator + Constants.FILE_NAME_CATALOG;
+
+            Catalog catalog = catalogResolver.getCatalog();
+            try {
+                catalog.parseCatalog(catalogFilePath);
+            } catch (Exception e) {
+                logger.logException(e);
+            }
+        }
+        
+    }
+
+    public static CatalogResolver getCatalogResolver() {
+        if (catalogResolver == null) 
+            initCatalogResolver(null);
+
+        return catalogResolver;
+    }
+        
     
 }
 

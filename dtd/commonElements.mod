@@ -3,7 +3,7 @@
 <!-- ============================================================= -->
 <!--  MODULE:    DITA Common Elements                              -->
 <!--  VERSION:   1.1                                               -->
-<!--  DATE:      June 2006                                         -->
+<!--  DATE:      November 2006                                     -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -38,6 +38,8 @@ PUBLIC "-//OASIS//ELEMENTS DITA Common Elements//EN"
 <!--                      (DITA 1.1 proposal #12)                  -->
 <!--    2006.06.07 RDA: Add unknown element                        -->
 <!--    2006.06.14 RDA: Add dir attribute to localization-atts     -->
+<!--    2006.11.30 RDA: Add -dita-use-conref-target to enumerated  -->
+<!--                      attributes                               -->
 <!-- ============================================================= -->
 
 
@@ -129,10 +131,12 @@ PUBLIC "-//OASIS//ELEMENTS DITA Common Elements//EN"
 
 <!ENTITY % display-atts  
             'scale     (50|60|70|80|90|100|110|120|140|160|
-                        180|200)                           #IMPLIED
-             frame     (top | bottom |topbot | all | 
-                        sides | none)                      #IMPLIED
-             expanse   (page | column | textline)          #IMPLIED' >
+                        180|200|-dita-use-conref-target)   #IMPLIED
+             frame     (top | bottom |topbot | all |
+                        sides | none | 
+                        -dita-use-conref-target)           #IMPLIED
+             expanse   (page | column | textline | 
+                        -dita-use-conref-target)           #IMPLIED' >
 
 <!-- Provide a default of no attribute extensions -->
 <!ENTITY % props-attribute-extensions " ">
@@ -140,23 +144,25 @@ PUBLIC "-//OASIS//ELEMENTS DITA Common Elements//EN"
 
 <!ENTITY % filter-atts
             'props      CDATA                              #IMPLIED
-             base       CDATA                              #IMPLIED
              platform   CDATA                              #IMPLIED
              product    CDATA                              #IMPLIED
              audience   CDATA                              #IMPLIED
              otherprops CDATA                              #IMPLIED
-             %props-attribute-extensions;
-             %base-attribute-extensions;                           ' >
+             %props-attribute-extensions;                          ' >
 
 <!ENTITY % select-atts   
             '%filter-atts;
+             base       CDATA                              #IMPLIED
+             %base-attribute-extensions;
              importance 
                        (obsolete | deprecated | optional | 
                         default | low | normal | high | 
-                        recommended | required | urgent )  #IMPLIED
+                        recommended | required | urgent | 
+                        -dita-use-conref-target )          #IMPLIED
              rev        CDATA                              #IMPLIED
              status    (new | changed | deleted | 
-                        unchanged)                         #IMPLIED' >
+                        unchanged | 
+                        -dita-use-conref-target)           #IMPLIED' >
 
 <!ENTITY % id-atts  
             'id         NMTOKEN                            #IMPLIED
@@ -164,16 +170,20 @@ PUBLIC "-//OASIS//ELEMENTS DITA Common Elements//EN"
 
 <!-- Attributes related to localization that are used everywhere   -->
 <!ENTITY % localization-atts  
-            'translate (yes | no)                          #IMPLIED
+            'translate (yes | no | 
+                        -dita-use-conref-target)           #IMPLIED
              xml:lang   NMTOKEN                            #IMPLIED
-             dir       (ltr | rtl | lro | rlo)             #IMPLIED' >
+             dir       (ltr | rtl | lro | rlo | 
+                        -dita-use-conref-target)           #IMPLIED' >
 <!-- The following entity should be used when defaulting a new
      element to translate="no", so that other (or new) localization
      attributes will always be included.   -->
 <!ENTITY % localization-atts-translate-no  
-            'translate (yes | no)                          "no"
+            'translate (yes | no | 
+                        -dita-use-conref-target)           "no"
              xml:lang   NMTOKEN                            #IMPLIED
-             dir       (ltr | rtl | lro | rlo)             #IMPLIED' >
+             dir       (ltr | rtl | lro | rlo | 
+                        -dita-use-conref-target)           #IMPLIED' >
              
 <!ENTITY % univ-atts     
             '%id-atts;
@@ -198,7 +208,8 @@ PUBLIC "-//OASIS//ELEMENTS DITA Common Elements//EN"
              href       CDATA                            #IMPLIED
              format     CDATA                            #IMPLIED
              type       CDATA                            #IMPLIED
-             scope      (local | peer | external)        #IMPLIED
+             scope      (local | peer | external | 
+                         -dita-use-conref-target)        #IMPLIED
              outputclass
                         CDATA                            #IMPLIED    >
 
@@ -210,7 +221,8 @@ PUBLIC "-//OASIS//ELEMENTS DITA Common Elements//EN"
              href       CDATA                            #IMPLIED
              format     CDATA                            #IMPLIED
              type       CDATA                            #IMPLIED
-             scope      (local | peer | external)        #IMPLIED
+             scope      (local | peer | external | 
+                         -dita-use-conref-target)        #IMPLIED
              outputclass
                         CDATA                            #IMPLIED'   >
              
@@ -238,6 +250,8 @@ PUBLIC "-//OASIS//ELEMENTS DITA Common Elements//EN"
 <!ATTLIST title         
              %id-atts;
              %localization-atts;
+             base       CDATA                            #IMPLIED
+             %base-attribute-extensions;
              outputclass 
                         CDATA                            #IMPLIED    >
 
@@ -280,7 +294,8 @@ PUBLIC "-//OASIS//ELEMENTS DITA Common Elements//EN"
 <!ATTLIST note            
              type       (note | tip | fastpath | restriction |
                          important | remember| attention|
-                         caution | danger| other)        #IMPLIED             
+                         caution | danger | other | 
+                         -dita-use-conref-target)        #IMPLIED             
              spectitle  CDATA                            #IMPLIED
              othertype  CDATA                            #IMPLIED
              %univ-atts;
@@ -294,7 +309,8 @@ PUBLIC "-//OASIS//ELEMENTS DITA Common Elements//EN"
              href       CDATA                           #IMPLIED
              keyref     CDATA                           #IMPLIED
              type       (external | internal | 
-                         bibliographic)                 #IMPLIED
+                         bibliographic | 
+                         -dita-use-conref-target)       #IMPLIED
              reftitle   CDATA                           #IMPLIED
              %univ-atts;
              outputclass 
@@ -312,7 +328,8 @@ PUBLIC "-//OASIS//ELEMENTS DITA Common Elements//EN"
 <!--                    LONG NAME: Simple List                     -->
 <!ELEMENT sl            (%sli;)+                                     >
 <!ATTLIST sl            
-             compact    (yes | no)                       #IMPLIED
+             compact    (yes | no | 
+                         -dita-use-conref-target)        #IMPLIED
              spectitle  CDATA                            #IMPLIED
              %univ-atts;
              outputclass 
@@ -330,7 +347,8 @@ PUBLIC "-//OASIS//ELEMENTS DITA Common Elements//EN"
 <!--                    LONG NAME: Unordered List                  -->
 <!ELEMENT ul            (%li;)+                                      >
 <!ATTLIST ul            
-             compact    (yes | no)                       #IMPLIED
+             compact    (yes | no | 
+                         -dita-use-conref-target)        #IMPLIED
              spectitle  CDATA                            #IMPLIED
              %univ-atts;
              outputclass 
@@ -340,7 +358,8 @@ PUBLIC "-//OASIS//ELEMENTS DITA Common Elements//EN"
 <!--                    LONG NAME: Ordered List                    -->
 <!ELEMENT ol            (%li;)+                                      >
 <!ATTLIST ol              
-             compact    (yes | no)                       #IMPLIED
+             compact    (yes | no | 
+                         -dita-use-conref-target)        #IMPLIED
              spectitle  CDATA                            #IMPLIED
              %univ-atts;
              outputclass 
@@ -366,7 +385,8 @@ PUBLIC "-//OASIS//ELEMENTS DITA Common Elements//EN"
 <!--                    LONG NAME: Definition List                 -->
 <!ELEMENT dl            ((%dlhead;)?, (%dlentry;)+)                  >
 <!ATTLIST dl              
-             compact    (yes | no)                       #IMPLIED
+             compact    (yes | no | 
+                         -dita-use-conref-target)        #IMPLIED
              spectitle  CDATA                            #IMPLIED
              %univ-atts;
              outputclass 
@@ -501,14 +521,16 @@ PUBLIC "-//OASIS//ELEMENTS DITA Common Elements//EN"
              %univ-atts;
              trademark  CDATA                           #IMPLIED
              tmowner    CDATA                           #IMPLIED
-             tmtype     (tm | reg | service)            #REQUIRED
+             tmtype     (tm | reg | service | 
+                         -dita-use-conref-target)       #REQUIRED
              tmclass    CDATA                           #IMPLIED     >
 
 
 <!--                    LONG NAME: Boolean  (deprecated)           -->
 <!ELEMENT boolean       EMPTY                                        >
 <!ATTLIST boolean           
-             state      (yes | no)                      #REQUIRED
+             state      (yes | no | 
+                         -dita-use-conref-target)        #REQUIRED
              %univ-atts;
              outputclass 
                         CDATA                            #IMPLIED    >
@@ -537,7 +559,8 @@ PUBLIC "-//OASIS//ELEMENTS DITA Common Elements//EN"
              width      NMTOKEN                          #IMPLIED
              align      CDATA                            #IMPLIED
              scale      NMTOKEN                          #IMPLIED
-             placement  (inline|break)                   "inline"
+             placement  (inline | break | 
+                         -dita-use-conref-target)        "inline"
              %univ-atts;
              outputclass 
                         CDATA                            #IMPLIED    >
@@ -551,6 +574,11 @@ PUBLIC "-//OASIS//ELEMENTS DITA Common Elements//EN"
 
 <!--                    LONG NAME: Object (Streaming/Executable 
                                    Data)                           -->
+<!-- The longdescre attribute is an error which appeared in the
+     original DTD implementation of OASIS DITA. It is an error that
+     is not part of the standard. It was left here to provide time
+     to change documents, but it will be removed at a later date.
+     The longdescref (with ending F) should be used instead.       -->
 <!ELEMENT object        ((%desc;)?, (%param;)*, 
                          (%foreign.unknown.incl;)*)                  >
 <!ATTLIST object
@@ -567,10 +595,12 @@ PUBLIC "-//OASIS//ELEMENTS DITA Common Elements//EN"
              usemap     CDATA                            #IMPLIED
              name       CDATA                            #IMPLIED
              tabindex   NMTOKEN                          #IMPLIED
-             longdescre CDATA                            #IMPLIED
+             longdescref
+                        CDATA                            #IMPLIED
              %univ-atts;
              outputclass 
-                        CDATA                            #IMPLIED    >
+                        CDATA                            #IMPLIED    
+             longdescre CDATA                            #IMPLIED    >
 
 
 <!--                    LONG NAME: Parameter                       -->
@@ -579,7 +609,8 @@ PUBLIC "-//OASIS//ELEMENTS DITA Common Elements//EN"
              %univ-atts;
              name       CDATA                            #REQUIRED
              value      CDATA                            #IMPLIED
-             valuetype  (data|ref|object)                #IMPLIED
+             valuetype  (data | ref | object | 
+                         -dita-use-conref-target)        #IMPLIED
              type       CDATA                            #IMPLIED    >  
 
 
@@ -630,8 +661,9 @@ PUBLIC "-//OASIS//ELEMENTS DITA Common Elements//EN"
              time       CDATA                            #IMPLIED
              disposition  
                         (issue | open | accepted | rejected |
-                         deferred| duplicate | reopened|
-                         unassigned | completed)         #IMPLIED
+                         deferred| duplicate | reopened |
+                         unassigned | completed | 
+                         -dita-use-conref-target)        #IMPLIED
              %univ-atts-translate-no;
              outputclass 
                         CDATA                            #IMPLIED    >
@@ -691,7 +723,8 @@ PUBLIC "-//OASIS//ELEMENTS DITA Common Elements//EN"
              type       CDATA                            #IMPLIED
              %univ-atts;
              format     CDATA                            #IMPLIED
-             scope      (local | peer | external)        #IMPLIED
+             scope      (local | peer | external | 
+                         -dita-use-conref-target)        #IMPLIED
              outputclass 
                         CDATA                            #IMPLIED    >
 

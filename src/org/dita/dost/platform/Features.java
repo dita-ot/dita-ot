@@ -18,6 +18,7 @@ import java.util.Set;
 import java.util.StringTokenizer;
 
 import org.dita.dost.util.Constants;
+import org.dita.dost.util.FileUtils;
 
 /**
  * Collection of features
@@ -88,7 +89,7 @@ public class Features {
 		while(valueTokenizer.hasMoreElements()){
 			String valueElement = (String) valueTokenizer.nextElement();
 			if(valueElement!=null && valueElement.trim()!=null){
-				if("file".equals(type)){
+				if("file".equals(type) && !FileUtils.isAbsolutePath(valueElement)){
 					valueBuffer.append(location).append(File.separatorChar);
 				}
 				valueBuffer.append(valueElement.trim());

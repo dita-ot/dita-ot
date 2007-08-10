@@ -88,102 +88,172 @@
 <!-- New OASIS DTD -->
 
 
-  <public publicId="-//OASIS//DTD DITA Concept//EN"
-          uri="concept.dtd"/>
-  <public publicId="-//OASIS//ELEMENTS DITA Concept//EN"
-          uri="concept.mod"/>
+        <public publicId="-//OASIS//DTD DITA Concept//EN"
+                uri="concept.dtd"/>
+        <public publicId="-//OASIS//DTD DITA 1.1 Concept//EN"
+                uri="concept.dtd"/>
+        <public publicId="-//OASIS//ELEMENTS DITA Concept//EN"
+                uri="concept.mod"/>
+        
+        <public publicId="-//OASIS//DTD DITA Composite//EN"
+                uri="ditabase.dtd"/>
+        <public publicId="-//OASIS//DTD DITA 1.1 Composite//EN"
+                uri="ditabase.dtd"/>
+        
+        <public publicId="-//OASIS//DTD DITA Glossary//EN"
+                uri="glossary.dtd"/>
+        <public publicId="-//OASIS//DTD DITA 1.1 Glossary//EN"
+                uri="glossary.dtd"/>
+        <public publicId="-//OASIS//ELEMENTS DITA Glossary//EN"
+                uri="glossary.mod"/>
+        
+        <public publicId="-//OASIS//DTD DITA Reference//EN"
+                uri="reference.dtd"/>
+        <public publicId="-//OASIS//DTD DITA 1.1 Reference//EN"
+                uri="reference.dtd"/>
+        <public publicId="-//OASIS//ELEMENTS DITA Reference//EN"
+                uri="reference.mod"/>
+        
+        <public publicId="-//OASIS//DTD DITA Task//EN"
+                uri="task.dtd"/>
+        <public publicId="-//OASIS//DTD DITA 1.1 Task//EN"
+                uri="task.dtd"/>
+        <public publicId="-//OASIS//ELEMENTS DITA Task//EN"
+                uri="task.mod"/>
+        
+        <public publicId="-//OASIS//DTD DITA Topic//EN"
+                uri="topic.dtd"/>
+        <public publicId="-//OASIS//DTD DITA 1.1 Topic//EN"
+                uri="topic.dtd"/>
+        <public publicId="-//OASIS//ELEMENTS DITA Topic//EN"
+                uri="topic.mod"/>
+        <public publicId="-//OASIS//ENTITIES DITA Topic Definitions//EN"
+                uri="topicDefn.ent"/>
+        <!-- topicAttr.mod is no longer used in DITA 1.1; kept for backwards compatibility -->
+        <public publicId="-//OASIS//ENTITIES DITA Topic Class//EN"
+                uri="topicAttr.mod"/>
+        
+        <!-- Maps -->
+        
+        <public publicId="-//OASIS//DTD DITA Map//EN"
+                uri="map.dtd"/>
+        <public publicId="-//OASIS//DTD DITA 1.1 Map//EN"
+                uri="map.dtd"/>
+        <public publicId="-//OASIS//ELEMENTS DITA Map//EN"
+                uri="map.mod"/>
+        <public publicId="-//OASIS//ENTITIES DITA Map Group Domain//EN"
+                uri="mapGroup.ent"/>
+        <public publicId="-//OASIS//ELEMENTS DITA Map Group Domain//EN"
+                uri="mapGroup.mod"/>
+        
+        <public publicId="-//OASIS//DTD DITA BookMap//EN"
+                uri="bookmap.dtd"/>
+        <public publicId="-//OASIS//DTD DITA 1.1 BookMap//EN"
+                uri="bookmap.dtd"/>
+        <public publicId="-//OASIS//ELEMENTS DITA BookMap//EN"
+                uri="bookmap.mod"/>
+        
+        <!-- Domains -->
+        
+        <public publicId="-//OASIS//ELEMENTS DITA Highlight Domain//EN"
+                uri="highlightDomain.mod"/>
+        <public publicId="-//OASIS//ENTITIES DITA Highlight Domain//EN"
+                uri="highlightDomain.ent"/>
+        
+        <public publicId="-//OASIS//ELEMENTS DITA Indexing Domain//EN"
+                uri="indexingDomain.mod"/>
+        <public publicId="-//OASIS//ENTITIES DITA Indexing Domain//EN"
+                uri="indexingDomain.ent"/>
+        
+        <public publicId="-//OASIS//ELEMENTS DITA Programming Domain//EN"
+                uri="programmingDomain.mod"/>
+        <public publicId="-//OASIS//ENTITIES DITA Programming Domain//EN"
+                uri="programmingDomain.ent"/>
+        
+        <public publicId="-//OASIS//ELEMENTS DITA Software Domain//EN"
+                uri="softwareDomain.mod"/>
+        <public publicId="-//OASIS//ENTITIES DITA Software Domain//EN"
+                uri="softwareDomain.ent"/>
+        
+        <public publicId="-//OASIS//ELEMENTS DITA User Interface Domain//EN"
+                uri="uiDomain.mod"/>
+        <public publicId="-//OASIS//ENTITIES DITA User Interface Domain//EN"
+                uri="uiDomain.ent"/>
+        
+        <public publicId="-//OASIS//ELEMENTS DITA Utilities Domain//EN"
+                uri="utilitiesDomain.mod"/>
+        <public publicId="-//OASIS//ENTITIES DITA Utilities Domain//EN"
+                uri="utilitiesDomain.ent"/>
+        
+        <public publicId="-//OASIS//ELEMENTS DITA XNAL Domain//EN"
+                uri="xnalDomain.mod"/>
+        <public publicId="-//OASIS//ENTITIES DITA XNAL Domain//EN"
+                uri="xnalDomain.ent"/>
+        
+        <!-- Common -->
+        
+        <public publicId="-//OASIS//ELEMENTS DITA Common Elements//EN"
+                uri="commonElements.mod"/>
+        <public publicId="-//OASIS//ENTITIES DITA Common Elements//EN"
+                uri="commonElements.ent"/>
+        <public publicId="-//OASIS//ELEMENTS DITA Metadata//EN"
+                uri="metaDecl.mod"/>
+        <public publicId="-//OASIS//ELEMENTS DITA Exchange Table Model//EN"
+                uri="tblDecl.mod"/>
+</group>
 
-  <public publicId="-//OASIS//DTD DITA Composite//EN"
-          uri="ditabase.dtd"/>
-
-  <public publicId="-//OASIS//DTD DITA Glossary//EN"
-          uri="glossary.dtd"/>
-  <public publicId="-//OASIS//ELEMENTS DITA Glossary//EN"
-          uri="glossary.mod"/>
-
-  <public publicId="-//OASIS//DTD DITA Reference//EN"
-          uri="reference.dtd"/>
-  <public publicId="-//OASIS//ELEMENTS DITA Reference//EN"
-          uri="reference.mod"/>
-
-  <public publicId="-//OASIS//DTD DITA Task//EN"
-          uri="task.dtd"/>
-  <public publicId="-//OASIS//ELEMENTS DITA Task//EN"
-          uri="task.mod"/>
-
-  <public publicId="-//OASIS//DTD DITA Topic//EN"
-          uri="topic.dtd"/>
-  <public publicId="-//OASIS//ELEMENTS DITA Topic//EN"
-          uri="topic.mod"/>
-  <public publicId="-//OASIS//ENTITIES DITA Topic Class//EN"
-          uri="topicAttr.mod"/>
-  <public publicId="-//OASIS//ENTITIES DITA Topic Definitions//EN"
-          uri="topicDefn.ent"/>
-
-<!-- Maps -->
-
-  <public publicId="-//OASIS//DTD DITA Map//EN"
-          uri="map.dtd"/>
-  <public publicId="-//OASIS//ELEMENTS DITA Map//EN"
-          uri="map.mod"/>
-  <public publicId="-//OASIS//ENTITIES DITA Map Group Domain//EN"
-          uri="mapGroup.ent"/>
-  <public publicId="-//OASIS//ELEMENTS DITA Map Group Domain//EN"
-          uri="mapGroup.mod"/>
-          
-  <public publicId="-//OASIS//DTD DITA BookMap//EN"
-          uri="bookmap.dtd"/>
-  <public publicId="-//OASIS//ELEMENTS DITA BookMap//EN"
-          uri="bookmap.mod"/>
-
-<!-- Domains -->
-
-  <public publicId="-//OASIS//ELEMENTS DITA Highlight Domain//EN"
-          uri="highlightDomain.mod"/>
-  <public publicId="-//OASIS//ENTITIES DITA Highlight Domain//EN"
-          uri="highlightDomain.ent"/>
-          
-  <public publicId="-//OASIS//ELEMENTS DITA Indexing Domain//EN"
-          uri="indexingDomain.mod"/>
-  <public publicId="-//OASIS//ENTITIES DITA Indexing Domain//EN"
-          uri="indexingDomain.ent"/>
-
-  <public publicId="-//OASIS//ELEMENTS DITA Programming Domain//EN"
-          uri="programmingDomain.mod"/>
-  <public publicId="-//OASIS//ENTITIES DITA Programming Domain//EN"
-          uri="programmingDomain.ent"/>
-
-  <public publicId="-//OASIS//ELEMENTS DITA Software Domain//EN"
-          uri="softwareDomain.mod"/>
-  <public publicId="-//OASIS//ENTITIES DITA Software Domain//EN"
-          uri="softwareDomain.ent"/>
-
-  <public publicId="-//OASIS//ELEMENTS DITA User Interface Domain//EN"
-          uri="uiDomain.mod"/>
-  <public publicId="-//OASIS//ENTITIES DITA User Interface Domain//EN"
-          uri="uiDomain.ent"/>
-
-  <public publicId="-//OASIS//ELEMENTS DITA Utilities Domain//EN"
-          uri="utilitiesDomain.mod"/>
-  <public publicId="-//OASIS//ENTITIES DITA Utilities Domain//EN"
-          uri="utilitiesDomain.ent"/>
-          
-  <public publicId="-//OASIS//ELEMENTS DITA XNAL Domain//EN"
-          uri="xnalDomain.mod"/>
-  <public publicId="-//OASIS//ENTITIES DITA XNAL Domain//EN"
-          uri="xnalDomain.ent"/>
-  
-<!-- Common -->
-  <public publicId="-//OASIS//ELEMENTS DITA Common Elements//EN"
-          uri="commonElements.mod"/>
-  <public publicId="-//OASIS//ENTITIES DITA Common Elements//EN"
-          uri="commonElements.ent"/>
-  <public publicId="-//OASIS//ELEMENTS DITA Metadata//EN"
-          uri="metaDecl.mod"/>
-  <public publicId="-//OASIS//ELEMENTS DITA CALS Tables//EN"
-          uri="tblDecl.mod"/>
-  <public publicId="-//OASIS//ELEMENTS DITA Exchange Table Model//EN"
-          uri="tblDecl.mod"/>
+<!-- DITA Schemas -->
+<group xml:base="schema/">
+        <system systemId="urn:oasis:names:tc:dita:xsd:topic.xsd:1.1"             uri="topic.xsd"/>
+        <system systemId="urn:oasis:names:tc:dita:xsd:topicMod.xsd:1.1"          uri="topicMod.xsd"/>
+        <system systemId="urn:oasis:names:tc:dita:xsd:topicGrp.xsd:1.1"          uri="topicGrp.xsd"/>
+        
+        <system systemId="urn:oasis:names:tc:dita:xsd:commonElementMod.xsd:1.1"  uri="commonElementMod.xsd"/>
+        <system systemId="urn:oasis:names:tc:dita:xsd:commonElementGrp.xsd:1.1"  uri="commonElementGrp.xsd"/>
+        
+        <system systemId="urn:oasis:names:tc:dita:xsd:tblDeclMod.xsd:1.1"        uri="tblDeclMod.xsd"/>
+        <system systemId="urn:oasis:names:tc:dita:xsd:tblDeclGrp.xsd:1.1"        uri="tblDeclGrp.xsd"/>
+        
+        <system systemId="urn:oasis:names:tc:dita:xsd:metaDeclMod.xsd:1.1"       uri="metaDeclMod.xsd"/>
+        <system systemId="urn:oasis:names:tc:dita:xsd:metaDeclGrp.xsd:1.1"       uri="metaDeclGrp.xsd"/>
+        
+        <system systemId="urn:oasis:names:tc:dita:xsd:map.xsd:1.1"               uri="map.xsd"/>
+        <system systemId="urn:oasis:names:tc:dita:xsd:mapMod.xsd:1.1"            uri="mapMod.xsd"/>
+        <system systemId="urn:oasis:names:tc:dita:xsd:mapGrp.xsd:1.1"            uri="mapGrp.xsd"/>
+        <system systemId="urn:oasis:names:tc:dita:xsd:mapGroupMod.xsd:1.1"       uri="mapGroupMod.xsd"/>
+        
+        <system systemId="urn:oasis:names:tc:dita:xsd:concept.xsd:1.1"           uri="concept.xsd"/>       
+        <system systemId="urn:oasis:names:tc:dita:xsd:conceptMod.xsd:1.1"        uri="conceptMod.xsd"/>       
+        <system systemId="urn:oasis:names:tc:dita:xsd:conceptGrp.xsd:1.1"        uri="conceptGrp.xsd"/>    
+        
+        <system systemId="urn:oasis:names:tc:dita:xsd:reference.xsd:1.1"         uri="reference.xsd"/>
+        <system systemId="urn:oasis:names:tc:dita:xsd:referenceMod.xsd:1.1"      uri="referenceMod.xsd"/>
+        <system systemId="urn:oasis:names:tc:dita:xsd:referenceGrp.xsd:1.1"      uri="referenceGrp.xsd"/>
+        
+        <system systemId="urn:oasis:names:tc:dita:xsd:task.xsd:1.1"              uri="task.xsd"/>
+        <system systemId="urn:oasis:names:tc:dita:xsd:taskMod.xsd:1.1"           uri="taskMod.xsd"/>
+        <system systemId="urn:oasis:names:tc:dita:xsd:taskGrp.xsd:1.1"           uri="taskGrp.xsd"/>
+        
+        <system systemId="urn:oasis:names:tc:dita:xsd:ditabase.xsd:1.1"          uri="ditabase.xsd"/>
+        
+        <system systemId="urn:oasis:names:tc:dita:xsd:glossary.xsd:1.1"  				 uri="glossary.xsd"/>
+        <system systemId="urn:oasis:names:tc:dita:xsd:glossaryMod.xsd:1.1"       uri="glossaryMod.xsd"/>
+        <system systemId="urn:oasis:names:tc:dita:xsd:glossaryGrp.xsd:1.1"       uri="glossaryGrp.xsd"/>
+        
+        <system systemId="urn:oasis:names:tc:dita:xsd:bookmap.xsd:1.1"           uri="bookmap.xsd"/>
+        <system systemId="urn:oasis:names:tc:dita:xsd:bookmapMod.xsd:1.1"        uri="bookmapMod.xsd"/>
+        <system systemId="urn:oasis:names:tc:dita:xsd:bookmapGrp.xsd:1.1"   		 uri="bookmapGrp.xsd"/>
+        
+        <system systemId="urn:oasis:names:tc:dita:xsd:indexingDomain.xsd:1.1"    uri="indexingDomain.xsd"/>
+        <system systemId="urn:oasis:names:tc:dita:xsd:softwareDomain.xsd:1.1"    uri="softwareDomain.xsd"/>
+        <system systemId="urn:oasis:names:tc:dita:xsd:programmingDomain.xsd:1.1" uri="programmingDomain.xsd"/>
+        <system systemId="urn:oasis:names:tc:dita:xsd:highlightDomain.xsd:1.1"   uri="highlightDomain.xsd"/>
+        <system systemId="urn:oasis:names:tc:dita:xsd:utilitiesDomain.xsd:1.1"   uri="utilitiesDomain.xsd"/>
+        <system systemId="urn:oasis:names:tc:dita:xsd:uiDomain.xsd:1.1"          uri="uiDomain.xsd"/>
+        <system systemId="urn:oasis:names:tc:dita:xsd:xnalDomain.xsd:1.1"        uri="xnalDomain.xsd"/>
+        
+        <system systemId="urn:oasis:names:tc:dita:xsd:ditaarch.xsd:1.1"          uri="ditaarch.xsd"/>
+        <system systemId="urn:oasis:names:tc:dita:xsd:xml.xsd:1.1"               uri="xml.xsd"/>  
 </group>
 
 <!-- Demo/Experimental -->

@@ -3,8 +3,8 @@
 <!--                    HEADER                                     -->
 <!-- ============================================================= -->
 <!--  MODULE:    DITA User Interface Domain                        -->
-<!--  VERSION:   1.0.1                                             -->
-<!--  DATE:      November 2005                                     -->
+<!--  VERSION:   1.1                                             -->
+<!--  DATE:      November 2006                                     -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -17,14 +17,14 @@
 <!-- ORIGINAL CREATION DATE:                                       -->
 <!--             March 2001                                        -->
 <!--                                                               -->
-<!--             (C) Copyright OASIS-Open.org 2005.                -->
+<!--             (C) Copyright OASIS-Open.org 2005, 2006                -->
 <!--             (C) Copyright IBM Corporation 2001, 2004.         -->
 <!--             All Rights Reserved.                              -->
 <!-- ============================================================= -->
 
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
   <!-- Import namespace for xml:space attribute for element screen -->
- <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="xml.xsd"/>
+  <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="urn:oasis:names:tc:dita:xsd:xml.xsd:1.1"/>
 
    <xs:group name="ui-d-ph">
     <xs:choice>
@@ -45,7 +45,7 @@
     </xs:choice>
   </xs:group>
 
-  <xs:element name="uicontrol" type="uicontrol.class">
+  <xs:element name="uicontrol">
     <xs:annotation>
       <xs:documentation>
         The user interface control (&lt;<keyword>uicontrol</keyword>&gt;) element represents
@@ -60,6 +60,13 @@
         to document user interface tasks, concepts and reference information.
       </xs:documentation>
     </xs:annotation>
+    <xs:complexType mixed="true">
+      <xs:complexContent>
+        <xs:extension base="uicontrol.class">
+          <xs:attribute ref="class" default="+ topic/ph ui-d/uicontrol "/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
   <xs:complexType name="uicontrol.class" mixed="true">
     <xs:choice minOccurs="0" maxOccurs="unbounded">
@@ -71,10 +78,9 @@
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="global-atts"/>
     <xs:attributeGroup ref="univ-atts"/>
-    <xs:attribute ref="class" default="+ topic/ph ui-d/uicontrol "/>
   </xs:complexType>
 
-  <xs:element name="shortcut" type="shortcut.class" >
+  <xs:element name="shortcut">
     <xs:annotation>
       <xs:documentation>
         The &lt;<keyword>shortcut</keyword>&gt; element identifies
@@ -83,16 +89,22 @@
         user interface tasks, concepts and reference information.
       </xs:documentation>
     </xs:annotation>
+    <xs:complexType mixed="true">
+      <xs:complexContent>
+        <xs:extension base="shortcut.class">
+          <xs:attribute ref="class" default="+ topic/keyword ui-d/shortcut "/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
   <xs:complexType name="shortcut.class"  mixed="true">
         <xs:attribute name="keyref" type="xs:string"/>
         <xs:attribute name="outputclass" type="xs:string"/>
         <xs:attributeGroup ref="global-atts"/>
         <xs:attributeGroup ref="univ-atts"/>
-        <xs:attribute ref="class" default="+ topic/keyword ui-d/shortcut "/>
   </xs:complexType>
 
-  <xs:element name="wintitle" type="wintitle.class" >
+  <xs:element name="wintitle">
       <xs:annotation>
         <xs:documentation>
           The window title &lt;<keyword>wintitle</keyword>&gt; element represents the title
@@ -102,16 +114,22 @@
           user interface tasks, concepts and reference information.
         </xs:documentation>
       </xs:annotation>
+    <xs:complexType mixed="true">
+      <xs:complexContent>
+        <xs:extension base="wintitle.class">
+          <xs:attribute ref="class" default="+ topic/keyword ui-d/wintitle "/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
   <xs:complexType name="wintitle.class"  mixed="true">
     <xs:attribute name="keyref" type="xs:string"/>
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="global-atts"/>
     <xs:attributeGroup ref="univ-atts"/>
-    <xs:attribute ref="class" default="+ topic/keyword ui-d/wintitle "/>
   </xs:complexType>
 
-  <xs:element name="menucascade" type="menucascade.class" >
+  <xs:element name="menucascade">
     <xs:annotation>
       <xs:documentation>
         The &lt;<keyword>menucascade</keyword>&gt; element is used to document
@@ -126,6 +144,13 @@
         reference information.
       </xs:documentation>
     </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="menucascade.class">
+          <xs:attribute ref="class" default="+ topic/ph ui-d/menucascade "/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
    <xs:complexType name="menucascade.class">
      <xs:choice maxOccurs="unbounded">
@@ -135,17 +160,23 @@
         <xs:attribute name="outputclass" type="xs:string"/>
         <xs:attributeGroup ref="global-atts"/>
   <xs:attributeGroup ref="univ-atts"/>
-        <xs:attribute ref="class" default="+ topic/ph ui-d/menucascade "/>
   </xs:complexType>
 
 
-  <xs:element name="screen" type="screen.class" >
+  <xs:element name="screen">
     <xs:annotation>
       <xs:documentation>
         The &lt;<keyword>screen</keyword>&gt; element contains or refers to a textual representation
         of a computer screen or user interface panel (window).
       </xs:documentation>
     </xs:annotation>
+    <xs:complexType mixed="true">
+      <xs:complexContent>
+        <xs:extension base="screen.class">
+          <xs:attribute ref="class" default="+ topic/pre ui-d/screen "/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
   <xs:complexType name="screen.class" mixed="true">
         <xs:choice minOccurs="0" maxOccurs="unbounded">
@@ -162,6 +193,5 @@
   <xs:attributeGroup ref="univ-atts"/>
         <xs:attributeGroup ref="display-atts"/>
         <xs:attribute ref="xml:space" fixed="preserve"/>
-        <xs:attribute ref="class" default="+ topic/pre ui-d/screen "/>
      </xs:complexType>
 </xs:schema>

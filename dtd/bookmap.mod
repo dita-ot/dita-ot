@@ -3,7 +3,7 @@
 <!-- ============================================================= -->
 <!--  MODULE:    DITA Bookmap                                      -->
 <!--  VERSION:   1.1                                               -->
-<!--  DATE:      June 2006                                         -->
+<!--  DATE:      November 2006                                     -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -158,7 +158,8 @@ PUBLIC "-//OASIS//ELEMENTS DITA BookMap//EN"
                          (%bookrights;)*,
                          (%data;)*)                                  >
 <!ATTLIST  bookmeta
-             lockmeta   (yes | no)                        #IMPLIED
+             lockmeta   (yes | no | -dita-use-conref-target)
+                                                          #IMPLIED
              %univ-atts;                                             >
 
 <!--                    LONG NAME: Front Matter                    -->
@@ -248,10 +249,12 @@ PUBLIC "-//OASIS//ELEMENTS DITA BookMap//EN"
              href       CDATA                            #IMPLIED
              format     CDATA                            #IMPLIED
              type       CDATA                            #IMPLIED
-             scope      (local | peer | external)        #IMPLIED
+             scope      (local | peer | external | 
+                         -dita-use-conref-target)        #IMPLIED
              outputclass
                         CDATA                            #IMPLIED
-             value      (beta|limited|general)           #REQUIRED   >
+             value      (beta | limited | general  | 
+                         -dita-use-conref-target)        #REQUIRED   >
              
 <!--                    LONG NAME: Revision ID                     -->
 <!ELEMENT revisionid    (#PCDATA)*>
@@ -351,7 +354,8 @@ PUBLIC "-//OASIS//ELEMENTS DITA BookMap//EN"
              href       CDATA                            #IMPLIED
              format     CDATA                            #IMPLIED
              type       CDATA                            #IMPLIED
-             scope      (local | peer | external)        #IMPLIED
+             scope      (local | peer | external | 
+                         -dita-use-conref-target)        #IMPLIED
              outputclass
                         CDATA                            #IMPLIED
              name       CDATA                            #REQUIRED   >
@@ -418,10 +422,13 @@ PUBLIC "-//OASIS//ELEMENTS DITA BookMap//EN"
              href       CDATA                            #IMPLIED
              format     CDATA                            #IMPLIED
              type       CDATA                            #IMPLIED
-             scope      (local | peer | external)        #IMPLIED
+             scope      (local | peer | external |
+                         -dita-use-conref-target)        #IMPLIED
              outputclass
                         CDATA                            #IMPLIED
-             value      (confidential|restricted|licensed|unclassified) #REQUIRED>
+             value      (confidential | restricted |
+                         licensed | unclassified | 
+                         -dita-use-conref-target)        #REQUIRED>
 
 <!--                    LONG NAME: Book Title                      -->
 <!ELEMENT booktitle     ((%booklibrary;)?,(%mainbooktitle;),
@@ -429,6 +436,8 @@ PUBLIC "-//OASIS//ELEMENTS DITA BookMap//EN"
 <!ATTLIST booktitle
              %id-atts;
              %localization-atts;
+             base       CDATA                            #IMPLIED
+             %base-attribute-extensions;
              outputclass
                         CDATA                            #IMPLIED    >
 

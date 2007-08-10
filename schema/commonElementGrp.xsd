@@ -1,8 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- ============================================================= -->
+<!--                    HEADER                                     -->
+<!-- ============================================================= -->
+<!--  MODULE:    DITA Common Element  XSD Group Decleration                -->
+<!--  VERSION:   1.1                                             -->
+<!--  DATE:      November 2006                                     -->
+<!--                                                               -->
+<!-- ============================================================= -->
+
+
+<!-- ============================================================= -->
+<!-- SYSTEM:     Darwin Information Typing Architecture (DITA)     -->
+<!--                                                               -->
+<!-- PURPOSE:    W3C XML Schema to describe DITA common elements          -->
+<!--                                                               -->
+<!-- ORIGINAL CREATION DATE:                                       -->
+<!--             June 2006                                        -->
+<!--                                                               -->
+<!--             (C) Copyright OASIS-Open.org 2006                -->
+<!--             All Rights Reserved.                              -->
+<!-- ============================================================= -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
     
-    <xs:include schemaLocation="metaDeclGrp.xsd"/>
-    <xs:include schemaLocation="tblDeclGrp.xsd"/>
     
     <xs:group name="alt">
         <xs:sequence>
@@ -297,5 +316,9 @@
             <xs:element ref="xref"/>
         </xs:sequence>
     </xs:group>
+    
+    <xs:attributeGroup name="props-attribute-extensions"/>
+    
+    <xs:attributeGroup name="base-attribute-extensions"/>
     
 </xs:schema>

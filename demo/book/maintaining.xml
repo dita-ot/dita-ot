@@ -8,6 +8,7 @@
 <shortdesc>You maintain your solution to ensure that all components
 are operating at maximum efficiency.</shortdesc>
 <body>
+<note conref="task_preface.xml#task_preface/demo_bookmap"/>
 <p>Maintenance is a task that you perform along with configuration to
 get the most from your solution. </p>
 </body>

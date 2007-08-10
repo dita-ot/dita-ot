@@ -3,7 +3,7 @@
 <!-- ============================================================= -->
 <!--  MODULE:    DITA Concept DTD                                  -->
 <!--  VERSION:   1.1                                               -->
-<!--  DATE:      June 2006                                         -->
+<!--  DATE:      November 2006                                     -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -15,6 +15,10 @@
       appropriate system identifier 
 PUBLIC "-//OASIS//DTD DITA Concept//EN"
       Delivered as file "concept.dtd"                              -->
+
+<!-- The public ID above refers to the latest version of this DTD.
+     To refer to this specific version, you may use this value:
+PUBLIC "-//OASIS//DTD DITA 1.1 Concept//EN"                        -->
 
 <!-- ============================================================= -->
 <!-- SYSTEM:     Darwin Information Typing Architecture (DITA)     -->

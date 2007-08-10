@@ -335,7 +335,7 @@ public class DitaLinksWriter extends AbstractXMLWriter {
 		//then this topic has no <prolog> and return false
 		if (atts.getValue(Constants.ATTRIBUTE_NAME_CLASS) != null){ //Eric
 			if (!hasRelatedlinksTillNow){
-				if (atts.getValue(Constants.ATTRIBUTE_NAME_CLASS).indexOf("topic/topic") != -1){
+				if (atts.getValue(Constants.ATTRIBUTE_NAME_CLASS).indexOf(" topic/topic ") != -1){
 
 					if (level > 0){
 						level++;
@@ -364,7 +364,7 @@ public class DitaLinksWriter extends AbstractXMLWriter {
 		if (atts.getValue(Constants.ATTRIBUTE_NAME_CLASS) != null) {// Eric
 
 			if (atts.getValue(Constants.ATTRIBUTE_NAME_CLASS).indexOf(
-					"topic/topic") != -1) {
+					" topic/topic ") != -1) {
 
 				if (!topicSpecList.contains(localName)) {
 					topicSpecList.add(localName);
@@ -380,12 +380,12 @@ public class DitaLinksWriter extends AbstractXMLWriter {
 							output.write(indexEntries);
 							output.write(Constants.RELATED_LINKS_END);
 							output.write(System.getProperty("line.separator"));
+							hasRelatedlinksTillNow = true;
+							hasWritten = true;
 						} catch (Exception e) {
 							if (atts.getValue(Constants.ATTRIBUTE_NAME_CLASS) != null) {
 								logger.logException(e);
 							}
-							hasRelatedlinksTillNow = true;
-							hasWritten = true;
 						}
 					}
 

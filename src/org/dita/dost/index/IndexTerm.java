@@ -39,7 +39,20 @@ public class IndexTerm implements Comparable {
     
     /** The sub indexterms contained by this indexterm */
     private List subTerms = null;
+    
+    /** The prefix added to the  term name*/
+    private String termPrefix = null;
 
+    /** The list of rtl locale*/
+    private static ArrayList rtlLocaleList = null;
+    
+    //initialization for rtlLocaleList
+    static{
+    	rtlLocaleList = new ArrayList(Constants.INT_2);
+    	rtlLocaleList.add("ar_EG");
+    	rtlLocaleList.add("he_IL");
+    }
+    
     /**
      * Constructor
      */
@@ -126,7 +139,7 @@ public class IndexTerm implements Comparable {
             }
 
             // Add targets when same term name and same term key
-            if (subTerm.getTermName().equals(term.getTermName())
+            if (subTerm.getTermFullName().equals(term.getTermFullName())
 					&& subTerm.getTermKey().equals(term.getTermKey())) {
                 subTerm.addTargets(term.getTargetList());
                 subTerm.addSubTerms(term.getSubTerms());
@@ -167,6 +180,7 @@ public class IndexTerm implements Comparable {
         boolean eqTermKey;
         boolean eqTargetList;
         boolean eqSubTerms;
+        boolean eqTermPrefix;
 
         if (o == this) {
             return true;
@@ -178,11 +192,12 @@ public class IndexTerm implements Comparable {
         
 
         eqTermName =  termName == it.getTermName() || termName != null && termName.equals(it.getTermName());
+        eqTermPrefix = termPrefix == it.getTermPrefix() || termPrefix != null && termPrefix.equals(it.getTermPrefix());
 		eqTermKey =  termKey == it.getTermKey() || termKey != null && termKey.equals(it.getTermKey());
 		eqTargetList = targetList == it.getTargetList() || targetList != null && targetList.equals(it.getTargetList());
 		eqSubTerms =  subTerms == it.getSubTerms() || subTerms != null && subTerms.equals(it.getSubTerms());
 		
-		return eqTermName && eqTermKey && eqTargetList && eqSubTerms;
+		return eqTermName && eqTermKey && eqTargetList && eqSubTerms && eqTermPrefix;
     }
 
     /**
@@ -277,14 +292,52 @@ public class IndexTerm implements Comparable {
 	public String toString() {
 		StringBuffer buffer = new StringBuffer(Constants.INT_128);
 		
-		buffer.append("{Term name: ").append(termName);
-		buffer.append(", Term key: ").append(termKey);
-		buffer.append(", Target list: ");
+		buffer.append("{Term name: ").append(termName); //$NON-NLS-1$
+		buffer.append(", Term key: ").append(termKey); //$NON-NLS-1$
+		buffer.append(", Target list: "); //$NON-NLS-1$
 		buffer.append(targetList.toString());		
-		buffer.append(", Sub-terms: ");
+		buffer.append(", Sub-terms: "); //$NON-NLS-1$
 		buffer.append(subTerms.toString());
-		buffer.append("}");
+		buffer.append("}"); //$NON-NLS-1$
 				
 		return buffer.toString();
+	}
+
+	public String getTermPrefix() {
+		return termPrefix;
+	}
+
+	public void setTermPrefix(String termPrefix) {
+		this.termPrefix = termPrefix;
+	}
+	
+	public String getTermFullName(){
+		if (termPrefix == null){
+			return termName;
+		}else{
+			if (termLocale == null){
+				return termPrefix + Constants.STRING_BLANK + termName;
+			}else if (rtlLocaleList.contains(termLocale.toString())){
+				return termName + Constants.STRING_BLANK
+				    + Messages.getString("IndexTerm." + termPrefix.toLowerCase().trim().replace(' ', '-'),
+				    		termLocale);
+			}else {
+				return Messages.getString("IndexTerm." + termPrefix.toLowerCase().trim().replace(' ', '-'),
+						termLocale)
+				    + Constants.STRING_BLANK + termName;
+			}
+		}
+	}
+	
+	public void updateSubTerm(){
+		if (subTerms.size()==1){
+			// if there is only one subterm, it is necessary to update
+			IndexTerm term = (IndexTerm)subTerms.get(0); // get the only subterm
+			if (term.getTermPrefix()!= null &&
+					"See".equalsIgnoreCase(term.getTermPrefix().trim())){ //$NON-NLS-1$
+				//if the only subterm is index-see update it to index-see-also
+				term.setTermPrefix("See also"); //$NON-NLS-1$
+			}			
+		}
 	}
 }

@@ -22,7 +22,7 @@
    <xsl:variable name="class" select="generate-id(@class)"/>
    <xsl:variable name="space" select="generate-id(@xml:space)"/>
    <xsl:copy>
-      <xsl:copy-of select="@*[generate-id(.)!=($class or $space)]" />
+      <xsl:copy-of select="@*[(generate-id(.)!=$class) and (generate-id(.)!=$space)]" />
       <xsl:apply-templates />
    </xsl:copy>
 </xsl:template>

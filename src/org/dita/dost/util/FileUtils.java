@@ -138,10 +138,13 @@ public class FileUtils {
 			String topicFilePathName) {
 		StringBuffer upPathBuffer = new StringBuffer(Constants.INT_128);
 		StringBuffer downPathBuffer = new StringBuffer(Constants.INT_128);
-
-		StringTokenizer mapTokenizer = new StringTokenizer(mapFilePathName,
+		StringTokenizer mapTokenizer = new StringTokenizer(
+				removeRedundantNames(mapFilePathName.replaceAll(Constants.DOUBLE_BACK_SLASH,Constants.SLASH),
+						Constants.SLASH),
 				Constants.SLASH);
-		StringTokenizer topicTokenizer = new StringTokenizer(topicFilePathName,
+		StringTokenizer topicTokenizer = new StringTokenizer(
+				removeRedundantNames(topicFilePathName.replaceAll(Constants.DOUBLE_BACK_SLASH,Constants.SLASH),
+						Constants.SLASH),
 				Constants.SLASH);
 
 		while (mapTokenizer.countTokens() > 1
@@ -150,6 +153,11 @@ public class FileUtils {
 			String topicToken = topicTokenizer.nextToken();
 
 			if (!(mapToken.equals(topicToken))) {
+				if(mapToken.endsWith(Constants.COLON) ||
+						topicToken.endsWith(Constants.COLON)){
+					//the two files are in different disks under Windows
+					return topicFilePathName;
+				}
 				upPathBuffer.append("..");
 				upPathBuffer.append(Constants.SLASH);
 				downPathBuffer.append(topicToken);
@@ -216,6 +224,25 @@ public class FileUtils {
 	}
 	
 	/**
+	 * Normalize topic path base on current directory and href value, by 
+	 * replacing "\\" and "\" with File.separator, and removing ".", "..","#"
+	 * from the file path.  
+	 * 
+	 * @param rootPath
+	 * @param relativePath
+	 * @return
+	 */
+	public static String resolveFile(String rootPath, String relativePath) {
+		String begin = relativePath;
+	
+		if (relativePath.indexOf("#") != -1) {
+			begin = relativePath.substring(0, relativePath.indexOf('#'));
+		}
+		
+		return normalizeDirectory(rootPath, begin);
+	}
+	
+	/**
 	 * Normalize the input file path, by replacing all the '\\', '/' with
 	 * File.seperator, and removing '..' from the directory.
 	 * 
@@ -247,6 +274,18 @@ public class FileUtils {
 	 * @return
 	 */
 	public static String removeRedundantNames(String path) {
+		return removeRedundantNames(path, File.separator);
+    }
+	
+	
+	/**
+	 * Removing redundant names ".." and "." from the given path.
+	 * 
+	 * @param path
+	 * @param separator
+	 * @return
+	 */
+	public static String removeRedundantNames(String path, String separator) {
         StringTokenizer tokenizer = null;
         StringBuffer buff = new StringBuffer(path.length());
         List dirs = new LinkedList();
@@ -257,7 +296,7 @@ public class FileUtils {
         /*
          * remove "." from the directory.
          */
-        tokenizer = new StringTokenizer(path, File.separator);
+        tokenizer = new StringTokenizer(path, separator);
         while (tokenizer.hasMoreTokens()) {
             String token = tokenizer.nextToken();
             if (!(".".equals(token))) {
@@ -288,19 +327,23 @@ public class FileUtils {
         /*
          * restore the directory.
          */
-        if (path.startsWith(File.separator)) {
-        	buff.append(File.separator);
+        if (path.startsWith(separator)) {
+        	buff.append(separator);
         }
         iter = dirs.iterator();
         while (iter.hasNext()) {
             buff.append(iter.next());
             if (iter.hasNext()) {
-                buff.append(File.separator);
+                buff.append(separator);
             }
         }
     
         return buff.toString();
     }
+	
+	
+	
+	
 
     /** 
      * Return if the path is absolute

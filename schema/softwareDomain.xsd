@@ -3,8 +3,8 @@
 <!--                    HEADER                                     -->
 <!-- ============================================================= -->
 <!--  MODULE:    DITA Software Domain                              -->
-<!--  VERSION:   1.0.1                                             -->
-<!--  DATE:      November 2005                                     -->
+<!--  VERSION:   1.1                                             -->
+<!--  DATE:      November 2006                                     -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -17,14 +17,14 @@
 <!-- ORIGINAL CREATION DATE:                                       -->
 <!--             March 2001                                        -->
 <!--                                                               -->
-<!--             (C) Copyright OASIS-Open.org 2005.                -->
+<!--             (C) Copyright OASIS-Open.org 2005, 2006                -->
 <!--             (C) Copyright IBM Corporation 2001, 2004.         -->
 <!--             All Rights Reserved.                              -->
 <!-- ============================================================= -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
 
   <!-- 20021227 EAS: Use xml:space (preserve) for pre derivs: codeblock, msgblock, screen -->
-  <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="xml.xsd"/>
+  <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="urn:oasis:names:tc:dita:xsd:xml.xsd:1.1"/>
 
   <xs:group name="sw-d-ph">
     <xs:choice>
@@ -50,7 +50,7 @@
   </xs:group>
 
 
-  <xs:element name="msgph" type="msgph.class">
+  <xs:element name="msgph">
     <xs:annotation>
       <xs:documentation>
         The message phrase (&lt;msgph&gt;) element contains the text content
@@ -61,7 +61,16 @@
         and reference information.
       </xs:documentation>
     </xs:annotation>
+    <xs:complexType mixed="true">
+      <xs:complexContent>
+        <xs:extension base="msgph.class">
+          <xs:attribute ref="class" default="+ topic/ph sw-d/msgph "/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
+  
+  
   <xs:complexType name="msgph.class" mixed="true">
         <xs:choice minOccurs="0" maxOccurs="unbounded">
           <xs:group ref="words.cnt"/>
@@ -69,10 +78,13 @@
         <xs:attribute name="outputclass" type="xs:string"/>
         <xs:attributeGroup ref="univ-atts"/>
         <xs:attributeGroup ref="global-atts"/>
-        <xs:attribute ref="class" default="+ topic/ph sw-d/msgph "/>
   </xs:complexType>
 
-  <xs:element name="msgnum" type="msgnum.class">
+  
+  
+  
+  
+  <xs:element name="msgnum">
     <xs:annotation>
       <xs:documentation>
         The message number (&lt;<keyword>msgnum</keyword>&gt;) element contains the number
@@ -81,16 +93,22 @@
         software tasks, concepts and reference information.
       </xs:documentation>
     </xs:annotation>
+    <xs:complexType mixed="true">
+      <xs:complexContent>
+        <xs:extension base="msgnum.class">
+          <xs:attribute ref="class" default="+ topic/keyword sw-d/msgnum "/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
    <xs:complexType name="msgnum.class"  mixed="true">
         <xs:attribute name="keyref" type="xs:string"/>
         <xs:attribute name="outputclass" type="xs:string"/>
         <xs:attributeGroup ref="univ-atts"/>
         <xs:attributeGroup ref="global-atts"/>
-        <xs:attribute ref="class" default="+ topic/keyword sw-d/msgnum "/>
   </xs:complexType>
 
-  <xs:element name="varname" type="varname.class" >
+  <xs:element name="varname">
     <xs:annotation>
       <xs:documentation>
         The variable name (&lt;<keyword>varname</keyword>&gt;) element defines a variable
@@ -102,16 +120,22 @@
         tasks, concepts and reference information.
       </xs:documentation>
     </xs:annotation>
+    <xs:complexType mixed="true">
+      <xs:complexContent>
+        <xs:extension base="varname.class">
+          <xs:attribute ref="class" default="+ topic/keyword sw-d/varname "/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
   <xs:complexType name="varname.class"  mixed="true">
         <xs:attribute name="keyref" type="xs:string"/>
         <xs:attribute name="outputclass" type="xs:string"/>
         <xs:attributeGroup ref="univ-atts"/>
         <xs:attributeGroup ref="global-atts"/>
-        <xs:attribute ref="class" default="+ topic/keyword sw-d/varname "/>
   </xs:complexType>
 
-  <xs:element name="msgblock" type="msgblock.class" >
+  <xs:element name="msgblock">
     <xs:annotation>
       <xs:documentation>
         The message block (&lt;<keyword>msgblock</keyword>&gt;) element contains a multi-line
@@ -122,6 +146,13 @@
         software tasks, concepts and reference information.
       </xs:documentation>
     </xs:annotation>
+    <xs:complexType mixed="true">
+      <xs:complexContent>
+        <xs:extension base="msgblock.class">
+          <xs:attribute ref="class" default="+ topic/pre sw-d/msgblock "/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
   <xs:complexType name="msgblock.class" mixed="true">
         <xs:choice minOccurs="0" maxOccurs="unbounded">
@@ -133,10 +164,9 @@
         <xs:attributeGroup ref="display-atts"/>
         <xs:attributeGroup ref="univ-atts"/>
         <xs:attributeGroup ref="global-atts"/>
-        <xs:attribute ref="class" default="+ topic/pre sw-d/msgblock "/>
   </xs:complexType>
 
-  <xs:element name="cmdname" type="cmdname.class" >
+  <xs:element name="cmdname">
     <xs:annotation>
       <xs:documentation>
         The command name (&lt;cmdname&gt;) element specifies the name of a command
@@ -145,16 +175,22 @@
         tasks, concepts and reference information.
       </xs:documentation>
     </xs:annotation>
+    <xs:complexType mixed="true">
+      <xs:complexContent>
+        <xs:extension base="cmdname.class">
+          <xs:attribute ref="class" default="+ topic/keyword sw-d/cmdname "/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
   <xs:complexType name="cmdname.class"  mixed="true">
         <xs:attribute name="keyref" type="xs:string"/>
         <xs:attribute name="outputclass" type="xs:string"/>
         <xs:attributeGroup ref="univ-atts"/>
         <xs:attributeGroup ref="global-atts"/>
-        <xs:attribute ref="class" default="+ topic/keyword sw-d/cmdname "/>
   </xs:complexType>
 
-  <xs:element name="filepath" type="filepath.class">
+  <xs:element name="filepath">
     <xs:annotation>
       <xs:documentation>
         The &lt;<keyword>filepath</keyword>&gt; element indicates
@@ -165,6 +201,13 @@
         and reference information.
       </xs:documentation>
     </xs:annotation>
+    <xs:complexType mixed="true">
+      <xs:complexContent>
+        <xs:extension base="filepath.class">
+          <xs:attribute ref="class" default="+ topic/ph sw-d/filepath "/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
   <xs:complexType name="filepath.class" mixed="true">
     <xs:choice minOccurs="0" maxOccurs="unbounded">
@@ -173,10 +216,9 @@
         <xs:attribute name="outputclass" type="xs:string"/>
         <xs:attributeGroup ref="univ-atts"/>
         <xs:attributeGroup ref="global-atts"/>
-        <xs:attribute ref="class" default="+ topic/ph sw-d/filepath "/>
   </xs:complexType>
 
-  <xs:element name="userinput" type="userinput.class">
+  <xs:element name="userinput">
     <xs:annotation>
       <xs:documentation>
         The user input (&lt;<keyword>userinput</keyword>&gt;) element represens the text
@@ -185,6 +227,13 @@
         designed to document software tasks, concepts and reference information.
       </xs:documentation>
     </xs:annotation>
+    <xs:complexType mixed="true">
+      <xs:complexContent>
+        <xs:extension base="userinput.class">
+          <xs:attribute ref="class" default="+ topic/ph sw-d/userinput "/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
   <xs:complexType name="userinput.class" mixed="true">
         <xs:choice minOccurs="0" maxOccurs="unbounded">
@@ -193,10 +242,9 @@
         <xs:attribute name="outputclass" type="xs:string"/>
         <xs:attributeGroup ref="univ-atts"/>
         <xs:attributeGroup ref="global-atts"/>
-        <xs:attribute ref="class" default="+ topic/ph sw-d/userinput "/>
   </xs:complexType>
 
-  <xs:element name="systemoutput" type="systemoutput.class">
+  <xs:element name="systemoutput">
     <xs:annotation>
       <xs:documentation>
         The system output (&lt;<keyword>systemoutput</keyword>&gt;) element
@@ -208,6 +256,13 @@
         tasks, concepts and reference information.
       </xs:documentation>
     </xs:annotation>
+    <xs:complexType mixed="true">
+      <xs:complexContent>
+        <xs:extension base="systemoutput.class">
+          <xs:attribute ref="class" default="+ topic/ph sw-d/systemoutput "/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
   <xs:complexType name="systemoutput.class" mixed="true">
         <xs:choice minOccurs="0" maxOccurs="unbounded">
@@ -216,7 +271,6 @@
         <xs:attribute name="outputclass" type="xs:string"/>
         <xs:attributeGroup ref="univ-atts"/>
         <xs:attributeGroup ref="global-atts"/>
-        <xs:attribute ref="class" default="+ topic/ph sw-d/systemoutput "/>
   </xs:complexType>
 
 </xs:schema>

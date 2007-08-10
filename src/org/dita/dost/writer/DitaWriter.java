@@ -16,9 +16,13 @@ import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Properties;
 
-import org.apache.xml.resolver.tools.CatalogResolver;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+
 import org.dita.dost.log.DITAOTJavaLogger;
+import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.Content;
 import org.dita.dost.module.DebugAndFilterModule;
 import org.dita.dost.util.CatalogUtils;
@@ -29,6 +33,8 @@ import org.dita.dost.util.StringUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+import org.xml.sax.SAXNotRecognizedException;
+import org.xml.sax.SAXNotSupportedException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
@@ -47,10 +53,15 @@ public class DitaWriter extends AbstractXMLWriter {
     private static final String ATTRIBUTE_XTRF_START = " xtrf=\"";
     private static final String COLUMN_NAME_COL = "col";
     private static final String OS_NAME_WINDOWS = "windows";
+    private static final String PI_HEAD = "<?";
     private static final String PI_END = "?>";
     private static final String PI_PATH2PROJ_HEAD = "<?path2project ";
     private static final String PI_WORKDIR_HEAD = "<?workdir ";
-
+    //To check the URL of href in topicref attribute
+    private static final String NOT_LOCAL_URL="://";
+    //To check whether the attribute of XTRC and XTRF have existed
+    private static final String ATTRIBUTE_XTRC = "xtrc";
+    private static final String ATTRIBUTE_XTRF = "xtrf";
     
     private static boolean checkDITAHREF(Attributes atts){
     	// TO DO add implementation
@@ -100,7 +111,51 @@ public class DitaWriter extends AbstractXMLWriter {
 
     	return attValue;
     }
-
+    private static boolean notLocalURL(String valueOfURL){
+    	if(valueOfURL.indexOf(NOT_LOCAL_URL)==-1) return false;
+    	else return true;
+    }
+    private  static boolean warnOfNoneTopicFormat(Attributes attrs,String valueOfHref){
+    	String hrefValue=valueOfHref;
+    	String formatValue=attrs.getValue(Constants.ATTRIBUTE_NAME_FORMAT);
+    	String extOfHref=getExtName(valueOfHref);
+    	DITAOTJavaLogger logger=new DITAOTJavaLogger();
+		Properties params = new Properties();
+		params.put("%1", hrefValue);	
+		if(notLocalURL(hrefValue)){
+			return true;
+		}
+		else{
+			if(formatValue==null && extOfHref!=null && !extOfHref.equalsIgnoreCase("DITA") && !extOfHref.equalsIgnoreCase("XML") ){
+				logger.logError(MessageUtils.getMessage("DOTJ028E", params).toString());
+				return true;
+			}
+		}
+			
+		return false;
+    }
+    public static String getExtName(String attValue){
+    	String fileName;
+        int fileExtIndex;
+        int index;
+    	
+    	index = attValue.indexOf(Constants.SHARP);
+		
+    	if (attValue.startsWith(Constants.SHARP)){
+    		return null;
+    	} else if (index != -1){
+    		fileName = attValue.substring(0,index); 
+    		fileExtIndex = fileName.lastIndexOf(Constants.DOT);
+    		return (fileExtIndex != -1)
+    			? fileName.substring(fileExtIndex+1, fileName.length())
+    			: null;
+    	} else {
+    		fileExtIndex = attValue.lastIndexOf(Constants.DOT);
+    		return (fileExtIndex != -1)
+    			? attValue.substring(fileExtIndex+1, attValue.length())
+    			: null;
+    	}
+    }
 	private static String replaceHREF (String attName, Attributes atts){
     	
     	String attValue = null;
@@ -123,13 +178,16 @@ public class DitaWriter extends AbstractXMLWriter {
     	}
     	
     	if(checkDITAHREF(atts)){
-    		return FileUtils.replaceExtName(attValue);
+    		if(warnOfNoneTopicFormat(atts,attValue)==false){
+    			return FileUtils.replaceExtName(attValue);
+    		}
+    		
         }
     	
     	return attValue;
     }
     private String absolutePath;
-    private HashMap catalogMap; //map that contains the information from XML Catalog
+    private static HashMap catalogMap; //map that contains the information from XML Catalog
     private List colSpec;
     private int columnNumber; // columnNumber is used to adjust column name
     private int columnNumberEnd; //columnNumberEnd is the end value for current entry
@@ -142,11 +200,14 @@ public class DitaWriter extends AbstractXMLWriter {
     private String path2Project;
     private String props; // contains the attribution specialization from props
     
-    private XMLReader reader;
     private String tempDir;
     private String traceFilename;
     private boolean insideCDATA;
-
+    
+    /** XMLReader instance for parsing dita file */
+    private static XMLReader reader = null;
+    private static SAXParser parser = null;
+    
     /**
      * Default constructor of DitaWriter class.
      */
@@ -168,30 +229,53 @@ public class DitaWriter extends AbstractXMLWriter {
         colSpec = null;
         props = null;
         logger = new DITAOTJavaLogger();
-                
+        Class c = null;
+        
+        reader.setContentHandler(this);
         try {
-            if (System.getProperty(Constants.SAX_DRIVER_PROPERTY) == null){
-                //The default sax driver is set to xerces's sax driver
-            	StringUtils.initSaxDriver();
-            }
-            reader = XMLReaderFactory.createXMLReader();
-            reader.setContentHandler(this);
-            reader.setProperty(Constants.LEXICAL_HANDLER_PROPERTY,this);
-            reader.setFeature(Constants.FEATURE_NAMESPACE_PREFIX, true);
-            reader.setFeature(Constants.FEATURE_VALIDATION, true); 
-            reader.setFeature(Constants.FEATURE_VALIDATION_SCHEMA, true);
-
-            try {
-    			Class c = Class.forName(Constants.RESOLVER_CLASS);
-    			reader.setEntityResolver(new CatalogResolver());
-    		}catch (ClassNotFoundException e){
-    			reader.setEntityResolver(this);
-    		}
-        } catch (Exception e) {
-        	logger.logException(e);
-        }
+			reader.setProperty(Constants.LEXICAL_HANDLER_PROPERTY,this);
+		} catch (SAXNotRecognizedException e1) {
+			logger.logException(e1);
+		} catch (SAXNotSupportedException e1) {
+			logger.logException(e1);
+		}
+		
+		
+		try {
+			c = Class.forName(Constants.RESOLVER_CLASS);
+			reader.setEntityResolver(CatalogUtils.getCatalogResolver());
+		}catch (ClassNotFoundException e){
+			reader.setEntityResolver(this);
+		}
     }
 
+    /**
+     * Init xml reader used for pipeline parsing.
+	 *
+     * @throws SAXException
+     * @param ditaDir 
+     */
+	public static void initXMLReader(String ditaDir) throws SAXException {
+		DITAOTJavaLogger logger=new DITAOTJavaLogger();
+		if (System.getProperty(Constants.SAX_DRIVER_PROPERTY) == null) {
+			// The default sax driver is set to xerces's sax driver
+			StringUtils.initSaxDriver();
+		}
+		
+		try {
+			
+			reader = XMLReaderFactory.createXMLReader();
+                
+            reader.setFeature(Constants.FEATURE_NAMESPACE_PREFIX, true);
+            reader.setFeature(Constants.FEATURE_VALIDATION, true);
+            reader.setFeature(Constants.FEATURE_VALIDATION_SCHEMA, true);
+			reader.setFeature(Constants.FEATURE_NAMESPACE, true);			
+		} catch (Exception e) {
+			logger.logException(e);
+		}
+		CatalogUtils.initCatalogResolver(ditaDir);
+		catalogMap = CatalogUtils.getCatalog(ditaDir);
+	}
     
     /**
      * @see org.xml.sax.ContentHandler#characters(char[], int, int)
@@ -234,6 +318,10 @@ public class DitaWriter extends AbstractXMLWriter {
 		for (int i = 0; i < attsLen; i++) {
 		    String attQName = atts.getQName(i);
 		    String attValue;
+		    String nsUri = atts.getURI(i);
+		    
+		    //ignore the xtrf and xtrc attribute ,and not copy
+		    if(attQName.equals(ATTRIBUTE_XTRF)|| attQName.equals(ATTRIBUTE_XTRC))continue;
 		    
 		    if(Constants.ATTRIBUTE_NAME_HREF.equals(attQName)
 		    		|| Constants.ATTRIBUTE_NAME_COPY_TO.equals(attQName)){
@@ -247,6 +335,14 @@ public class DitaWriter extends AbstractXMLWriter {
 		        attValue = atts.getValue(i);
 		    }
 
+		    if (Constants.ATTRIBUTE_NAME_DITAARCHVERSION.equals(attQName)){
+		    	String attName = Constants.ATTRIBUTE_PREFIX_DITAARCHVERSION + Constants.COLON + attQName;
+		    	
+		    	copyAttribute(attName, attValue);
+		    	copyAttribute(Constants.ATTRIBUTE_NAMESPACE_PREFIX_DITAARCHVERSION, nsUri);
+		    	
+		    }
+		    
 		    // replace '&' with '&amp;'
 			//if (attValue.indexOf('&') > 0) {
 				//attValue = StringUtils.replaceAll(attValue, "&", "&amp;");
@@ -256,6 +352,7 @@ public class DitaWriter extends AbstractXMLWriter {
 		    //output all attributes except colname
 		    if (!Constants.ATTRIBUTE_NAME_COLNAME.equals(attQName)
 		    		&& !Constants.ATTRIBUTE_NAME_NAMEST.equals(attQName)
+		    		&& !Constants.ATTRIBUTE_NAME_DITAARCHVERSION.equals(attQName)
 		    		&& !Constants.ATTRIBUTE_NAME_NAMEEND.equals(attQName)){
 		    	copyAttribute(attQName, attValue);
 		    }
@@ -412,8 +509,24 @@ public class DitaWriter extends AbstractXMLWriter {
         }
     }
 		
-    
     /**
+     * @see org.xml.sax.ContentHandler#processingInstruction(java.lang.String, java.lang.String)
+     * 
+     */
+    public void processingInstruction(String target, String data) throws SAXException {
+    	if (!exclude) { // exclude shows whether it's excluded by filtering
+            try {
+            	super.processingInstruction(target, data);
+            	String pi = (data != null) ? target + Constants.STRING_BLANK + data : target;
+                output.write(Constants.LESS_THAN + Constants.QUESTION 
+                        + pi + Constants.QUESTION + Constants.GREATER_THAN);
+            } catch (Exception e) {
+            	logger.logException(e);
+            }
+        }
+	}
+
+	/**
      * @see org.xml.sax.EntityResolver#resolveEntity(java.lang.String, java.lang.String)
      * 
      */
@@ -422,7 +535,10 @@ public class DitaWriter extends AbstractXMLWriter {
         if (catalogMap.get(publicId)!=null){
             File dtdFile = new File((String)catalogMap.get(publicId));
             return new InputSource(dtdFile.getAbsolutePath());
-       }
+        }else if (catalogMap.get(systemId) != null){
+			File schemaFile = new File((String) catalogMap.get(systemId));
+			return new InputSource(schemaFile.getAbsolutePath());
+		}
         return null;
     }
     
@@ -498,11 +614,24 @@ public class DitaWriter extends AbstractXMLWriter {
         Integer value;
         Integer nextValue;
         String domains = null;
+		Properties params = new Properties();
+		String msg = null;
         String attrValue = atts.getValue(Constants.ATTRIBUTE_NAME_CLASS);
-        
+		if(attrValue==null){
+    		params.clear();
+			msg = null;
+			params.put("%1", qName);
+			logger.logInfo(MessageUtils.getMessage("DOTJ030I", params).toString());			
+		}       
         if (attrValue != null && attrValue.indexOf(Constants.ATTR_CLASS_VALUE_TOPIC) != -1){
         	domains = atts.getValue(Constants.ATTRIBUTE_NAME_DOMAINS);
-        	props = StringUtils.getExtProps(domains);
+        	if(domains==null){
+        		params.clear();
+    			msg = null;
+				params.put("%1", qName);
+				logger.logInfo(MessageUtils.getMessage("DOTJ029I", params).toString());
+        	}else
+        		props = StringUtils.getExtProps(domains);
         }
         
         if (counterMap.containsKey(qName)) {

@@ -41,6 +41,16 @@
          <xsl:apply-templates select="*|@*|comment()|processing-instruction()|text()"/>
        </xsl:copy>
      </xsl:template>
+     
+     <xsl:template match="*[contains(@class,' topic/object ')][@data and not(@data='')][@type='DITA-foreign']" priority="10">
+          <xsl:apply-templates select="document(@data,/)/*/*" mode="specialize-foreign-unknown"/> 
+     </xsl:template>
+     
+     <xsl:template match="*|@*|text()|comment()|processing-instruction()" mode="specialize-foreign-unknown">
+          <xsl:copy>
+               <xsl:apply-templates select="*|@*|comment()|processing-instruction()|text()" mode="specialize-foreign-unknown"/>
+          </xsl:copy>
+     </xsl:template>
 
 </xsl:stylesheet>
 

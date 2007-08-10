@@ -44,13 +44,23 @@
 </xsl:text><xsl:processing-instruction name="NLS"> TYPE="org.eclipse.help.toc"</xsl:processing-instruction><xsl:text>
 </xsl:text>
   <toc>
-    <xsl:if test="not(@title)">
-      <xsl:call-template name="output-message">
+    <xsl:choose>
+      <xsl:when test="*[contains(@class,' topic/title ')]">
+        <xsl:attribute name="label">
+          <xsl:value-of select="*[contains(@class,' topic/title ')]"/>
+        </xsl:attribute>
+      </xsl:when>
+      <xsl:when test="@title">
+        <xsl:attribute name="label"><xsl:value-of select="@title"/></xsl:attribute>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:call-template name="output-message">
           <xsl:with-param name="msgnum">002</xsl:with-param>
           <xsl:with-param name="msgsev">W</xsl:with-param>
         </xsl:call-template>
-    </xsl:if>
-    <xsl:apply-templates select="@title|@anchorref"/>
+      </xsl:otherwise>
+    </xsl:choose>
+    <xsl:apply-templates select="@anchorref"/>
     <!-- Add @topic to map, using the first @href in the map -->
     <xsl:if test="*[contains(@class, ' map/topicref ')][1]/descendant-or-self::*[@href]">
       <xsl:attribute name="topic">
@@ -59,10 +69,6 @@
     </xsl:if>
     <xsl:apply-templates/>
   </toc>
-</xsl:template>
-
-<xsl:template match="@title">
-	<xsl:attribute name="label"><xsl:value-of select="."/></xsl:attribute>
 </xsl:template>
 
 <!-- anchorref must use forward slash, not back slash. Allow

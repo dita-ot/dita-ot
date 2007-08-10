@@ -18,10 +18,15 @@ import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 
-import org.apache.xml.resolver.tools.CatalogResolver;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+
 import org.dita.dost.log.DITAOTJavaLogger;
+import org.dita.dost.log.MessageUtils;
 import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.Constants;
 import org.dita.dost.util.FileUtils;
@@ -29,6 +34,10 @@ import org.dita.dost.util.FilterUtils;
 import org.dita.dost.util.StringUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
+
+import org.xml.sax.SAXNotRecognizedException;
+import org.xml.sax.SAXNotSupportedException;
+
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
@@ -45,6 +54,8 @@ public class GenListModuleReader extends AbstractXMLReader {
 	/** XMLReader instance for parsing dita file */
 	private static XMLReader reader = null;
 
+	private static SAXParser parser = null;
+	
 	/** Map of XML catalog info */
 	private static HashMap catalogMap = null;
 
@@ -65,6 +76,9 @@ public class GenListModuleReader extends AbstractXMLReader {
 	
 	/** Set of href nonConrefCopytoTargets refered in current parsing file */
 	private Set hrefTargets = null;
+	
+	/** Set of subsidiary files */
+	private Set subsidiarySet = null;
 
 	/** Set of sources of those copy-to that were ignored */
 	private Set ignoredCopytoSourceSet = null;
@@ -85,6 +99,9 @@ public class GenListModuleReader extends AbstractXMLReader {
 	
 	private DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
 	
+	private String ditaDir = null;
+	//private static GenListModuleReader parserInstance = new GenListModuleReader();
+	
 	/**
 	 * Constructor
 	 */
@@ -94,15 +111,26 @@ public class GenListModuleReader extends AbstractXMLReader {
 		hrefTargets = new HashSet(Constants.INT_32);
 		conrefTargets = new HashSet(Constants.INT_32);
 		copytoMap = new HashMap(Constants.INT_16);
+		subsidiarySet = new HashSet(Constants.INT_16);
 		ignoredCopytoSourceSet = new HashSet(Constants.INT_16);
 		props = null;
 		reader.setContentHandler(this);
 		try {
+			reader.setProperty(Constants.LEXICAL_HANDLER_PROPERTY,this);
+		} catch (SAXNotRecognizedException e1) {
+			javaLogger.logException(e1);
+		} catch (SAXNotSupportedException e1) {
+			javaLogger.logException(e1);
+		}
+		
+		try {
 			c = Class.forName(Constants.RESOLVER_CLASS);
-			reader.setEntityResolver(new CatalogResolver());
+			reader.setEntityResolver(CatalogUtils.getCatalogResolver());
 		}catch (ClassNotFoundException e){
 			reader.setEntityResolver(this);
 		}
+		
+		//System.out.println(reader.getEntityResolver());
 	}
 
 	/**
@@ -112,15 +140,19 @@ public class GenListModuleReader extends AbstractXMLReader {
      * @param ditaDir 
      */
 	public static void initXMLReader(String ditaDir) throws SAXException {
+		DITAOTJavaLogger javaLogger=new DITAOTJavaLogger();
 		if (System.getProperty(Constants.SAX_DRIVER_PROPERTY) == null) {
 			// The default sax driver is set to xerces's sax driver
 			StringUtils.initSaxDriver();
 		}
+		
 
 		reader = XMLReaderFactory.createXMLReader();
 		reader.setFeature(Constants.FEATURE_NAMESPACE_PREFIX, true);
 		reader.setFeature(Constants.FEATURE_VALIDATION, true);
 		reader.setFeature(Constants.FEATURE_VALIDATION_SCHEMA, true);
+		
+		CatalogUtils.initCatalogResolver(ditaDir);
 		catalogMap = CatalogUtils.getCatalog(ditaDir);
 	}
 
@@ -195,6 +227,15 @@ public class GenListModuleReader extends AbstractXMLReader {
 	}
 	
 	/**
+	 * Get subsidiary targets.
+	 * 
+	 * @return Returns the subsidiarySet.
+	 */
+	public Set getSubsidiaryTargets() {
+		return subsidiarySet;
+	}
+	
+	/**
 	 * Get non-conref and non-copyto targets.
 	 * 
 	 * @return Returns the nonConrefCopytoTargets.
@@ -247,8 +288,8 @@ public class GenListModuleReader extends AbstractXMLReader {
 	 * @throws IOException 
 	 * @throws FileNotFoundException
 	 */
-	public void parse(File file) throws FileNotFoundException, IOException, SAXException {		
-		reader.parse(new InputSource(new FileInputStream(file)));
+	public void parse(File file) throws FileNotFoundException, IOException, SAXException {	
+		reader.parse(new InputSource(new FileInputStream(file)));		
 	}
 
 	/**
@@ -264,11 +305,24 @@ public class GenListModuleReader extends AbstractXMLReader {
 	public void startElement(String uri, String localName, String qName,
 			Attributes atts) throws SAXException {
 		String domains = null;
+		Properties params = new Properties();
+		String msg = null;
         String attrValue = atts.getValue(Constants.ATTRIBUTE_NAME_CLASS);
-		
+		if(attrValue==null){
+    		params.clear();
+			msg = null;
+			params.put("%1", localName);
+    		javaLogger.logInfo(MessageUtils.getMessage("DOTJ030I", params).toString());			
+		}
         if (attrValue != null && attrValue.indexOf(Constants.ATTR_CLASS_VALUE_TOPIC) != -1){
         	domains = atts.getValue(Constants.ATTRIBUTE_NAME_DOMAINS);
-        	props = StringUtils.getExtProps(domains);
+        	if(domains==null){
+        		params.clear();
+				msg = null;
+				params.put("%1", localName);
+        		javaLogger.logInfo(MessageUtils.getMessage("DOTJ029I", params).toString());
+        	}else
+        		props = StringUtils.getExtProps(domains);
         }
 		
 		if (insideExcludedElement) {
@@ -296,6 +350,8 @@ public class GenListModuleReader extends AbstractXMLReader {
 			if ((attrValue.indexOf(Constants.ATTR_CLASS_VALUE_MAP) != -1)
 					|| (attrValue.indexOf(Constants.ATTR_CLASS_VALUE_TITLE) != -1)) {
 				isValidInput = true;
+			}else if (attrValue.indexOf(Constants.ATTR_CLASS_VALUE_OBJECT) != -1){
+				parseAttribute(atts, Constants.ATTRIBUTE_NAME_DATA);
 			}
 		}
 		
@@ -331,6 +387,9 @@ public class GenListModuleReader extends AbstractXMLReader {
 		if (catalogMap.get(publicId) != null) {
 			File dtdFile = new File((String) catalogMap.get(publicId));
 			return new InputSource(dtdFile.getAbsolutePath());
+		}else if (catalogMap.get(systemId) != null){
+			File schemaFile = new File((String) catalogMap.get(systemId));
+			return new InputSource(schemaFile.getAbsolutePath());
 		}
 
 		return null;
@@ -344,6 +403,7 @@ public class GenListModuleReader extends AbstractXMLReader {
 		String filename = null;
 		String attrScope = atts.getValue(Constants.ATTRIBUTE_NAME_SCOPE);
 		String attrFormat = atts.getValue(Constants.ATTRIBUTE_NAME_FORMAT);
+		String attrType = atts.getValue(Constants.ATTRIBUTE_NAME_TYPE);
 
 		if (attrValue == null) {
 			return;
@@ -354,6 +414,8 @@ public class GenListModuleReader extends AbstractXMLReader {
 		} else if (Constants.ATTRIBUTE_NAME_HREF.equals(attrName)) {
 			hasHref = true;
 		}
+		
+		
 
 		if (attrValue.startsWith(Constants.SHARP)
 				|| attrValue.indexOf(Constants.COLON_DOUBLE_SLASH) != -1){
@@ -369,6 +431,12 @@ public class GenListModuleReader extends AbstractXMLReader {
 			filename = URLDecoder.decode(filename, Constants.UTF8);
 		}catch(UnsupportedEncodingException e){
 			
+		}
+		
+		if ("DITA-foreign".equals(attrType) &&
+				Constants.ATTRIBUTE_NAME_DATA.equals(attrName)){
+			subsidiarySet.add(filename);
+			return;
 		}
 
 		/*

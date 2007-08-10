@@ -8,6 +8,7 @@
 <shortdesc>The troubleshooting tasks explain how to diagnose the cause
 of and recover from problems.</shortdesc>
 <body>
+<note conref="task_preface.xml#task_preface/demo_bookmap"/>
 <p>To fix a problem, you often have to configure or maintain a
 component.
 The troubleshooting tasks help you determine what to work on to get

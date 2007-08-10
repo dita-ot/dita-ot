@@ -3,7 +3,7 @@
 <!-- ============================================================= -->
 <!--  MODULE:    DITA Utilities Domain                             -->
 <!--  VERSION:   1.1                                               -->
-<!--  DATE:      June 2006                                         -->
+<!--  DATE:      November 2006                                     -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -59,9 +59,11 @@ PUBLIC "-//OASIS//ELEMENTS DITA Utilities Domain//EN"
 <!--<!ENTITY % univ-atts-translate-no
             '%id-atts;
              %select-atts;
-             translate  (yes | no)                       "no"
+             translate  (yes | no | 
+                         -dita-use-conref-target)        "no"
              xml:lang   NMTOKEN                          #IMPLIED
-             dir       (ltr | rtl | lro | rlo)           #IMPLIED'   >-->
+             dir       (ltr | rtl | lro | rlo | 
+                        -dita-use-conref-target)         #IMPLIED'   >-->
 
 
 <!-- ============================================================= -->

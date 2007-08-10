@@ -29,6 +29,11 @@
 <xsl:template match="/*/*[contains(@class,' map/topicmeta ')]" priority="1">
   <xsl:apply-templates select="." mode="copy-element"/>
 </xsl:template>
+
+<xsl:template match="/*/*[contains(@class,' topic/title ')]">
+  <xsl:apply-templates select="." mode="copy-element"/>
+</xsl:template>
+
 <xsl:template match="*[contains(@class,' map/topicmeta ')]"/>
 <xsl:template match="*[contains(@class,' map/navref ')]"/>
 <xsl:template match="*[contains(@class,' map/reltable ')]"/>
@@ -276,5 +281,9 @@
             </xsl:when>
         </xsl:choose>
     </xsl:template>
+
+  <xsl:template match="processing-instruction()">
+    <xsl:copy></xsl:copy>
+  </xsl:template>
 
 </xsl:stylesheet>

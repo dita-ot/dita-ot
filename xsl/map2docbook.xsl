@@ -28,11 +28,16 @@
 <xsl:template match="*[contains(@class,' map/map ')]">
   <article>
     <xsl:copy-of select="@id"/>
-    <xsl:if test="@title">
-      <title>
+    <xsl:choose>
+      <xsl:when test="*[contains(@class,' topic/title ')]">
+        <title>
+          <xsl:value-of select="*[contains(@class,' topic/title ')]"/>
+        </title>
+      </xsl:when>
+      <xsl:when test="@title">
         <xsl:value-of select="@title"/>
-      </title>
-    </xsl:if>
+      </xsl:when>
+    </xsl:choose>
     <para/>
     <!-- doesn't handle reltables or topicgroups -->
     <xsl:apply-templates select="*[contains(@class,' map/topicref ')]"/>

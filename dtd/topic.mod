@@ -3,7 +3,7 @@
 <!-- ============================================================= -->
 <!--  MODULE:    DITA DITA Topic                                   -->
 <!--  VERSION:   1.1                                               -->
-<!--  DATE:      June 2006                                         -->
+<!--  DATE:      November 2006                                     -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -45,6 +45,9 @@ PUBLIC "-//OASIS//ELEMENTS DITA Topic//EN"
 <!--    2006.06.14 RDA: Add dir attribute to localization-atts     -->
 <!--    2006.06.20 RDA: defn.cnt now explicitly sets its content   -->
 <!--    2006.07.06 RDA: Moved class attributes in from topicAttr   -->
+<!--    2006.11.30 RDA: Add -dita-use-conref-target to enumerated  -->
+<!--                      attributes                               -->
+<!--    2006.11.30 RDA: Remove #FIXED from DITAArchVersion         -->
 <!-- ============================================================= -->
 
 
@@ -63,8 +66,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Topic//EN"
                         CDATA                              #FIXED
                        'http://dita.oasis-open.org/architecture/2005/'
              %DITAArchNSPrefix;:DITAArchVersion
-                        CDATA                              #FIXED
-                       '1.1'"                                        >
+                        CDATA                              '1.1'"    >
 
 
 <!-- ============================================================= -->
@@ -110,7 +112,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Topic//EN"
 
 <!-- for use within the DTD and supported topics; these will NOT work
      outside of this DTD or dtds that specialize from it!          -->
-<!ENTITY nbsp                   "&#160;"                             >
+<!ENTITY nbsp                   "&#xA0;"                             >
 
 
 <!-- ============================================================= -->
@@ -140,7 +142,8 @@ PUBLIC "-//OASIS//ELEMENTS DITA Topic//EN"
              role      (parent | child | sibling | 
                         friend | next | previous | cousin | 
                         ancestor | descendant | sample | 
-                        external | other)                  #IMPLIED
+                        external | other | 
+                        -dita-use-conref-target)           #IMPLIED
              otherrole  CDATA                              #IMPLIED' >
 
 <!-- ============================================================= -->
@@ -303,7 +306,8 @@ PUBLIC "-//OASIS//ELEMENTS DITA Topic//EN"
              %rel-atts;
              %univ-atts;
              format     CDATA                            #IMPLIED
-             scope      (local | peer | external)        #IMPLIED
+             scope      (local | peer | external | 
+                         -dita-use-conref-target)        #IMPLIED
              outputclass 
                         CDATA                            #IMPLIED    >
 
@@ -317,7 +321,8 @@ PUBLIC "-//OASIS//ELEMENTS DITA Topic//EN"
              %rel-atts;
              %univ-atts;
              format     CDATA                            #IMPLIED
-             scope      (local | peer | external)        #IMPLIED
+             scope      (local | peer | external | 
+                         -dita-use-conref-target)        #IMPLIED
              outputclass 
                         CDATA                            #IMPLIED    >
 
@@ -334,14 +339,17 @@ PUBLIC "-//OASIS//ELEMENTS DITA Topic//EN"
 <!ATTLIST linklist        
             collection-type 
                         (unordered | sequence | choice |
-                         tree | family)                   #IMPLIED
-             duplicates (yes | no)                        #IMPLIED
-                          mapkeyref CDATA #IMPLIED
+                         tree | family | 
+                         -dita-use-conref-target)        #IMPLIED
+             duplicates (yes | no | 
+                         -dita-use-conref-target)        #IMPLIED
+             mapkeyref  CDATA                            #IMPLIED
              %rel-atts;
              %univ-atts;
              spectitle  CDATA                            #IMPLIED
              format     CDATA                            #IMPLIED
-             scope      (local | peer | external)        #IMPLIED
+             scope      (local | peer | external | 
+                         -dita-use-conref-target)        #IMPLIED
              outputclass 
                         CDATA                            #IMPLIED    >
 
@@ -357,13 +365,16 @@ PUBLIC "-//OASIS//ELEMENTS DITA Topic//EN"
 <!ATTLIST linkpool        
              collection-type 
                         (unordered | sequence | choice |
-                         tree | family)                   #IMPLIED
-             duplicates (yes | no)                        #IMPLIED
-             mapkeyref  CDATA                             #IMPLIED
+                         tree | family | 
+                         -dita-use-conref-target)        #IMPLIED
+             duplicates (yes | no | 
+                         -dita-use-conref-target)        #IMPLIED
+             mapkeyref  CDATA                            #IMPLIED
              %rel-atts;
              %univ-atts;
              format     CDATA   #IMPLIED
-             scope      (local | peer | external)        #IMPLIED
+             scope      (local | peer | external | 
+                         -dita-use-conref-target)        #IMPLIED
              outputclass 
                         CDATA                            #IMPLIED    >
 

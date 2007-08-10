@@ -1,4 +1,93 @@
-(c) Copyright IBM Corp. 2004, 2006 All Rights Reserved.
+(c) Copyright IBM Corp. 2004, 2007 All Rights Reserved.
+     DITA OT release 1.4
+     Release 1.4 is a major release to add new functions, fulfill new 
+     requirements, make some function enhancements and fix bugs over release 
+     1.3.1. Available since August 1, 2007
+     
+     The DITA-OT Release 1.4 contains full support for the OASIS DITA 1.1 standard.
+     This completes the preliminary support added in the 1.3 and 1.3.1 versions of
+     the toolkit. New and improved items for 1.1 are listed under [Improvements]
+     below. Support for the new bookmap standard is available in the latest version
+     of the FO plug-in, which uses the "pdf2" transform type; it will be released
+     together with or soon after the release of DITA-OT 1.4. The deprecated "pdf"
+     transform type has not been updated for the new bookmap.
+
+     Together with DITA 1.1 support, the toolkit development team has improved
+     error reporting so that build failures are more accurately reported at the end
+     of the build. Error handling will continue to improve in future releases.
+
+     Release 1.4 comes in two versions. The full version contains several external
+     packages that are useful or critical to running the toolkit, such as Xalan and
+     the XML Catalog resolver. The smaller package contains only core toolkit code.
+
+     NOTE ABOUT DEPRECATED CODE: changes for the new DITAVAL standard required
+     a change to code in dita2htmlImpl.xsl. The "flagit" named template is deprecated
+     and will not work with the new ditaval format. Overrides to this step should be
+     updated to use "start-flagit" and "end-flagit". The flagit template will continue
+     to work with the old ditaval but will generate a warning for each call.
+     
+     Changes:
+       1. Release 1.4 improves the processing of DITA documents using XML Schemas. 
+          One was able to process these type of documents in Release 1.3.1 but it 
+          meant that the schema location had to have the ablsolute location of the 
+          schema in order for the Toolkit properly.  
+          
+          DITA 1.1 introduces the use of URNs to normatively identify the schemas 
+          used for validation.  The URNs have the following desing pattern
+          "urn:oasis:names:tc:dita:xsd:<schemaDocument>:1.1". You should use these in 
+          as the value for the attribute xsi:noNamespaceSchemaLocation.
+
+     [13 Improvements]
+       1.  Support <title> in map 
+       2.  Ignore Index-base in default processing 
+       3.  Support for index-see and index-see-also 
+       4.  Retrieve the link text from abstract element. 
+       5.  Format shortdesc in abstract appropriately
+       6.  Add standard code to allow overrides to easily process generalized version of unknown and foreign element 
+       7.  Support @dir on every element
+       8.  Refactor mapref resolution 
+       9.  Support generalization and re-specialization of unknown/foreign elements 
+       10. Replace Move Index module with new Move Metadata module 
+       11. New DITAVAL standard support 
+       12. New chunk attribute support 
+       13. Support XML Schema validated instance document processing using XML Catalogs
+       
+     [17 SF Bugs Fixed]
+       1.  1700561 Null Pointer Exception on Missing domain= Attribute 
+       2.  1733264 pretty.xsl is broken 
+       3.  1619074 table in step screws up following steps for HTML generation 
+       4.  1728700 GenMapAndTopicList keeps filtering when called a second time 
+       5.  1732562 DitaWriter.java can duplicate @xtrf and @xtrc 
+       6.  1733108 Update Bookmap sample files to DITA 1.1
+       7.  1706263 Conrefing from a map to topic is not working properly 
+       8.  1677620 Non-DITA file is treated as DITA in pre-process 
+       9.  1717471 Links show up more than once 
+       10. 1712543 gen-list-without-flagging : NullPointerException 
+       11. 1652892 Invalid hdr/ftr arg value causes build failure 
+       12. 1647950 PIs in DITA source are dropped in the processing pipeline
+       13. 1644559 Force Toolkit to use private catalog to allow schemas to work properly 
+       14. 1642138 Move javamerge target out of build_template.xml
+       15. 1643155 Map TOC is HTML even for transtype="xhtml"
+       16. 1637564 topicpull breaks specializations of xref
+       17. 1676968 Plugins adding to classpath break when basedir != dita.dir
+
+     Note: SourceForge bugs, patches, and RFEs listed above can be found in 
+     SourceForge Bugs, Patches, and RFE tracker pages: 
+
+          Bugs tracker: 
+
+          http://sourceforge.net/tracker/?group_id=132728&atid=725074
+
+          Patches tracker: 
+
+          http://sourceforge.net/tracker/?group_id=132728&atid=725076
+
+          RFE tracker: 
+
+          http://sourceforge.net/tracker/?group_id=132728&atid=725077
+
+====================================================================================
+
      DITA OT release 1.3.1
      
      Release 1.3.1 is a maintenance release to fix defects and make patches 

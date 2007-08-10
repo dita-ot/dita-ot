@@ -3,8 +3,8 @@
 <!--                    HEADER                                     -->
 <!-- ============================================================= -->
 <!--  MODULE:    DITA Programming Domain                           -->
-<!--  VERSION:   1.0.1                                             -->
-<!--  DATE:      November 2005                                     -->
+<!--  VERSION:   1.1                                             -->
+<!--  DATE:      November 2006                                     -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -17,13 +17,13 @@
 <!-- ORIGINAL CREATION DATE:                                       -->
 <!--             March 2001                                        -->
 <!--                                                               -->
-<!--             (C) Copyright OASIS-Open.org 2005.                -->
+<!--             (C) Copyright OASIS-Open.org 2005., 2006               -->
 <!--             (C) Copyright IBM Corporation 2001, 2004.         -->
 <!--             All Rights Reserved.                              -->
 <!-- ============================================================= -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
   <!-- ==================== Import Section ======================= -->
-  <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="xml.xsd"/>
+  <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="urn:oasis:names:tc:dita:xsd:xml.xsd:1.1"/>
 
   <xs:group name="pr-d-keyword">
     <xs:choice>
@@ -60,6 +60,8 @@
 
   <xs:attributeGroup name="univ-atts-no-importance">
     <xs:attributeGroup ref="id-atts"/>
+    <xs:attribute name="base" type="xs:string" />
+    <xs:attributeGroup ref="base-attribute-extensions"/>
     <xs:attribute name="rev" type="xs:string"/>
     <xs:attribute name="status" type="status-atts.class"/>
     <xs:attributeGroup ref="localization-atts"/>
@@ -83,6 +85,7 @@
       <xs:enumeration value="optional"/>
       <xs:enumeration value="required"/>
       <xs:enumeration value="default"/>
+      <xs:enumeration value="-dita-use-conref-target"/>
     </xs:restriction>
   </xs:simpleType>
 
@@ -90,10 +93,11 @@
     <xs:restriction base="importance-atts.class">
       <xs:enumeration value="optional"/>
       <xs:enumeration value="required"/>
+      <xs:enumeration value="-dita-use-conref-target"/>
     </xs:restriction>
   </xs:simpleType>
 
-  <xs:element name="codeph" type="codeph.class">
+  <xs:element name="codeph">
     <xs:annotation>
       <xs:documentation>
         The code phrase (&lt;<keyword>codeph</keyword>&gt;) element represents a snippet
@@ -103,6 +107,13 @@
         concepts and reference information.
       </xs:documentation>
     </xs:annotation>
+    <xs:complexType mixed="true">
+      <xs:complexContent>
+        <xs:extension base="codeph.class">
+          <xs:attribute ref="class" default="+ topic/ph pr-d/codeph "/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
   <xs:complexType name="codeph.class" mixed="true">
         <xs:choice minOccurs="0" maxOccurs="unbounded">
@@ -113,10 +124,9 @@
         <xs:attribute name="outputclass" type="xs:string"/>
         <xs:attributeGroup ref="global-atts"/>
         <xs:attributeGroup ref="univ-atts"/>
-        <xs:attribute ref="class" default="+ topic/ph pr-d/codeph "/>
   </xs:complexType>
 
-  <xs:element name="codeblock" type="codeblock.class" >
+  <xs:element name="codeblock">
     <xs:annotation>
       <xs:documentation>
         The &lt;<keyword>codeblock</keyword>&gt; element represents lines of
@@ -129,6 +139,13 @@
         information.
       </xs:documentation>
     </xs:annotation>
+    <xs:complexType mixed="true">
+      <xs:complexContent>
+        <xs:extension base="codeblock.class">
+          <xs:attribute ref="class" default="+ topic/pre pr-d/codeblock "/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
   <xs:complexType name="codeblock.class" mixed="true">
         <xs:choice minOccurs="0" maxOccurs="unbounded">
@@ -143,10 +160,9 @@
         <xs:attributeGroup ref="univ-atts"/>
         <xs:attribute ref="xml:space" fixed="preserve"/>
         <xs:attributeGroup ref="global-atts"/>
-        <xs:attribute ref="class" default="+ topic/pre pr-d/codeblock "/>
   </xs:complexType>
 
-  <xs:element name="option" type="option.class" >
+  <xs:element name="option">
     <xs:annotation>
       <xs:documentation>
         The &lt;<keyword>option</keyword>&gt; element describes an option
@@ -155,16 +171,22 @@
         elements designed to document programming tasks, concepts and reference information.
       </xs:documentation>
     </xs:annotation>
+    <xs:complexType mixed="true">
+      <xs:complexContent>
+        <xs:extension base="option.class">
+          <xs:attribute ref="class" default="+ topic/keyword pr-d/option "/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
   <xs:complexType name="option.class" mixed="true">
         <xs:attribute name="keyref" type="xs:string"/>
         <xs:attribute name="outputclass" type="xs:string"/>
         <xs:attributeGroup ref="global-atts"/>
         <xs:attributeGroup ref="univ-atts"/>
-        <xs:attribute ref="class" default="+ topic/keyword pr-d/option "/>
   </xs:complexType>
 
-  <xs:element name="var" type="var.class">
+  <xs:element name="var">
     <xs:annotation>
       <xs:documentation>
         Within a syntax definition, the &lt;<keyword>var</keyword>&gt; element
@@ -174,6 +196,13 @@
         elements designed to document programming tasks, concepts and reference information.
       </xs:documentation>
     </xs:annotation>
+    <xs:complexType mixed="true">
+      <xs:complexContent>
+        <xs:extension base="var.class">
+          <xs:attribute ref="class" default="+ topic/ph pr-d/var "/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
   <xs:complexType name="var.class" mixed="true">
         <xs:choice minOccurs="0" maxOccurs="unbounded">
@@ -183,10 +212,9 @@
         <xs:attribute name="importance" type="importance-att-progdom.class"/>
         <xs:attributeGroup ref="global-atts"/>
         <xs:attributeGroup ref="univ-atts-no-importance"/>
-        <xs:attribute ref="class" default="+ topic/ph pr-d/var "/>
   </xs:complexType>
 
-  <xs:element name="parmname" type="parmname.class" >
+  <xs:element name="parmname">
     <xs:annotation>
       <xs:documentation>
         When referencing the name of an application programming interface
@@ -196,16 +224,22 @@
         to document programming tasks, concepts and reference information.
       </xs:documentation>
     </xs:annotation>
+    <xs:complexType mixed="true">
+      <xs:complexContent>
+        <xs:extension base="parmname.class">
+          <xs:attribute ref="class" default="+ topic/keyword  pr-d/parmname "/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
   <xs:complexType name="parmname.class" mixed="true">
         <xs:attribute name="keyref" type="xs:string"/>
         <xs:attribute name="outputclass" type="xs:string"/>
         <xs:attributeGroup ref="global-atts"/>
         <xs:attributeGroup ref="univ-atts"/>
-        <xs:attribute ref="class" default="+ topic/keyword  pr-d/parmname "/>
   </xs:complexType>
 
-  <xs:element name="synph" type="synph.class">
+  <xs:element name="synph">
     <xs:annotation>
       <xs:documentation>
         The syntax phrase (&lt;synph&gt;) element is a container for syntax
@@ -216,6 +250,13 @@
         concepts and reference information.
       </xs:documentation>
     </xs:annotation>
+    <xs:complexType mixed="true">
+      <xs:complexContent>
+        <xs:extension base="synph.class">
+          <xs:attribute ref="class" default="+ topic/ph pr-d/synph "/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
   <xs:complexType name="synph.class" mixed="true">
         <xs:choice minOccurs="0" maxOccurs="unbounded">
@@ -234,10 +275,9 @@
         <xs:attribute name="outputclass" type="xs:string"/>
         <xs:attributeGroup ref="global-atts"/>
         <xs:attributeGroup ref="univ-atts"/>
-        <xs:attribute ref="class" default="+ topic/ph pr-d/synph "/>
   </xs:complexType>
 
-  <xs:element name="oper" type="oper.class" >
+  <xs:element name="oper">
     <xs:annotation>
       <xs:documentation>
         The operator (&lt;<keyword>oper</keyword>&gt;) element defines an operator
@@ -247,6 +287,13 @@
         reference information.
       </xs:documentation>
     </xs:annotation>
+    <xs:complexType mixed="true">
+      <xs:complexContent>
+        <xs:extension base="oper.class">
+          <xs:attribute ref="class" default="+ topic/ph pr-d/oper "/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
   <xs:complexType name="oper.class" mixed="true">
         <xs:choice minOccurs="0" maxOccurs="unbounded">
@@ -256,10 +303,9 @@
         <xs:attributeGroup ref="univ-atts-no-importance"/>
         <xs:attribute name="importance" type="importance-att-progdom.class"/>
         <xs:attributeGroup ref="global-atts"/>
-        <xs:attribute ref="class" default="+ topic/ph pr-d/oper "/>
   </xs:complexType>
 
-  <xs:element name="delim" type="delim.class">
+  <xs:element name="delim">
     <xs:annotation>
       <xs:documentation>
         Within a syntax definition, the delimiter (&lt;delim&gt;) element defines
@@ -270,6 +316,13 @@
         concepts and reference information.
       </xs:documentation>
     </xs:annotation>
+    <xs:complexType mixed="true">
+      <xs:complexContent>
+        <xs:extension base="delim.class">
+          <xs:attribute ref="class" default="+ topic/ph pr-d/delim "/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
   <xs:complexType name="delim.class" mixed="true">
         <xs:choice minOccurs="0" maxOccurs="unbounded">
@@ -279,10 +332,9 @@
         <xs:attributeGroup ref="global-atts"/>
         <xs:attributeGroup ref="univ-atts-no-importance"/>
         <xs:attribute name="importance" type="importance-att-nodefault.class"/>
-        <xs:attribute ref="class" default="+ topic/ph pr-d/delim "/>
   </xs:complexType>
 
-  <xs:element name="sep" type="sep.class" >
+  <xs:element name="sep">
     <xs:annotation>
       <xs:documentation>
         The separator (&lt;sep&gt;) element defines a separator character that
@@ -292,6 +344,13 @@
         document programming tasks, concepts and reference information.
       </xs:documentation>
     </xs:annotation>
+    <xs:complexType mixed="true">
+      <xs:complexContent>
+        <xs:extension base="sep.class">
+          <xs:attribute ref="class" default="+ topic/ph pr-d/sep "/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
   <xs:complexType name="sep.class" mixed="true">
         <xs:choice minOccurs="0" maxOccurs="unbounded">
@@ -301,10 +360,9 @@
         <xs:attributeGroup ref="global-atts"/>
         <xs:attributeGroup ref="univ-atts-no-importance"/>
         <xs:attribute name="importance" type="importance-att-nodefault.class"/>
-        <xs:attribute ref="class" default="+ topic/ph pr-d/sep "/>
   </xs:complexType>
 
-  <xs:element name="apiname" type="apiname.class" >
+  <xs:element name="apiname">
     <xs:annotation>
       <xs:documentation>
         The &lt;<keyword>apiname</keyword>&gt; element provides the name of
@@ -314,16 +372,22 @@
         information.
       </xs:documentation>
     </xs:annotation>
+    <xs:complexType mixed="true">
+      <xs:complexContent>
+        <xs:extension base="apiname.class">
+          <xs:attribute ref="class" default="+ topic/keyword pr-d/apiname "/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
   <xs:complexType name="apiname.class" mixed="true">
         <xs:attribute name="keyref" type="xs:string"/>
         <xs:attribute name="outputclass" type="xs:string"/>
         <xs:attributeGroup ref="global-atts"/>
         <xs:attributeGroup ref="univ-atts"/>
-        <xs:attribute ref="class" default="+ topic/keyword pr-d/apiname "/>
   </xs:complexType>
 
-  <xs:element name="parml" type="parml.class" >
+  <xs:element name="parml">
     <xs:annotation>
         <xs:documentation>
           The parameter list (&lt;<keyword>parml</keyword>&gt;) element contains a list of
@@ -334,6 +398,13 @@
           concepts and reference information.
         </xs:documentation>
     </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="parml.class">
+          <xs:attribute ref="class" default="+ topic/dl pr-d/parml "/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
   <xs:complexType name="parml.class">
      <xs:choice maxOccurs="unbounded">
@@ -344,10 +415,9 @@
         <xs:attributeGroup ref="global-atts"/>
         <xs:attributeGroup ref="univ-atts"/>
         <xs:attribute name="compact" type="yesno-att.class"/>
-        <xs:attribute ref="class" default="+ topic/dl pr-d/parml "/>
   </xs:complexType>
 
-  <xs:element name="plentry" type="plentry.class">
+  <xs:element name="plentry">
     <xs:annotation>
       <xs:documentation>
         The parameter list entry element (&lt;plentry&gt;) contains one or more parameter terms and definitions (pd and pt).
@@ -355,6 +425,13 @@
         programming tasks, concepts and reference information.
       </xs:documentation>
     </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="plentry.class">
+          <xs:attribute ref="class" default="+ topic/dlentry pr-d/plentry "/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
   <xs:complexType name="plentry.class">
         <xs:sequence>
@@ -364,10 +441,9 @@
         <xs:attribute name="outputclass" type="xs:string"/>
         <xs:attributeGroup ref="global-atts"/>
         <xs:attributeGroup ref="univ-atts"/>
-        <xs:attribute ref="class" default="+ topic/dlentry pr-d/plentry "/>
   </xs:complexType>
 
-  <xs:element name="pt" type="pt.class">
+  <xs:element name="pt">
   <xs:annotation>
     <xs:documentation>
       A parameter term, within a parameter list entry, is enclosed by the &lt;<keyword>pt</keyword>&gt; element.
@@ -375,6 +451,13 @@
       programming tasks, concepts and reference information.
     </xs:documentation>
   </xs:annotation>
+    <xs:complexType mixed="true">
+      <xs:complexContent>
+        <xs:extension base="pt.class">
+          <xs:attribute ref="class" default="+ topic/dt pr-d/pt "/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
   <xs:complexType name="pt.class" mixed="true">
         <xs:choice minOccurs="0" maxOccurs="unbounded">
@@ -384,10 +467,9 @@
         <xs:attribute name="outputclass" type="xs:string"/>
         <xs:attributeGroup ref="global-atts"/>
         <xs:attributeGroup ref="univ-atts"/>
-        <xs:attribute ref="class" default="+ topic/dt pr-d/pt "/>
   </xs:complexType>
 
-  <xs:element name="pd" type="pd.class">
+  <xs:element name="pd">
     <xs:annotation>
       <xs:documentation>
         A parameter definition, within a parameter list entry, is enclosed by the &lt;<keyword>pd</keyword>&gt; element.
@@ -395,6 +477,13 @@
         programming tasks, concepts and reference information.
       </xs:documentation>
     </xs:annotation>
+    <xs:complexType mixed="true">
+      <xs:complexContent>
+        <xs:extension base="pd.class">
+          <xs:attribute ref="class" default="+ topic/dd pr-d/pd "/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
   <xs:complexType name="pd.class" mixed="true">
         <xs:choice minOccurs="0" maxOccurs="unbounded">
@@ -403,11 +492,10 @@
         <xs:attribute name="outputclass" type="xs:string"/>
         <xs:attributeGroup ref="global-atts"/>
         <xs:attributeGroup ref="univ-atts"/>
-        <xs:attribute ref="class" default="+ topic/dd pr-d/pd "/>
   </xs:complexType>
 
   <!-- Base form: Syntax Diagram -->
-  <xs:element name="syntaxdiagram" type="syntaxdiagram.class">
+  <xs:element name="syntaxdiagram">
     <xs:annotation>
       <xs:documentation>
         The syntax diagram (&lt;<keyword>syntaxdiagram</keyword>&gt;) element
@@ -421,6 +509,13 @@
         tasks, concepts and reference information.
       </xs:documentation>
     </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="syntaxdiagram.class">
+          <xs:attribute ref="class" default="+ topic/fig pr-d/syntaxdiagram "/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
   <xs:complexType name="syntaxdiagram.class">
         <xs:sequence>
@@ -435,7 +530,6 @@
         <xs:attributeGroup ref="global-atts"/>
         <xs:attributeGroup ref="univ-atts"/>
         <xs:attributeGroup ref="display-atts"/>
-        <xs:attribute ref="class" default="+ topic/fig pr-d/syntaxdiagram "/>
   </xs:complexType>
 
   <xs:group name="syntaxdiagram.grp">
@@ -459,7 +553,7 @@
     </xs:choice>
   </xs:group>
 
-  <xs:element name="synblk" type="synblk.class">
+  <xs:element name="synblk">
     <xs:annotation>
       <xs:documentation>
         The syntax block (&lt;<keyword>synblk</keyword>&gt;) element
@@ -468,6 +562,13 @@
         elements designed to document programming tasks, concepts and reference information.
       </xs:documentation>
     </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="synblk.class">
+          <xs:attribute ref="class" default="+ topic/figgroup pr-d/synblk "/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
   <xs:complexType name="synblk.class">
         <xs:sequence>
@@ -480,10 +581,9 @@
         <xs:attribute name="outputclass" type="xs:string"/>
         <xs:attributeGroup ref="global-atts"/>
         <xs:attributeGroup ref="univ-atts"/>
-        <xs:attribute ref="class" default="+ topic/figgroup pr-d/synblk "/>
   </xs:complexType>
 
-  <xs:element name="groupseq" type="groupseq.class">
+  <xs:element name="groupseq">
     <xs:annotation>
       <xs:documentation>
         The &lt;<keyword>groupseq</keyword>&gt; element is part of the subset
@@ -496,6 +596,13 @@
         information.
       </xs:documentation>
     </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="groupseq.class">
+          <xs:attribute ref="class" default="+ topic/figgroup pr-d/groupseq "/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
   <xs:complexType name="groupseq.class">
         <xs:sequence>
@@ -510,10 +617,9 @@
         <xs:attributeGroup ref="global-atts"/>
         <xs:attributeGroup ref="univ-atts-no-importance"/>
         <xs:attribute name="importance" type="importance-att-progdom.class"/>
-        <xs:attribute ref="class" default="+ topic/figgroup pr-d/groupseq "/>
   </xs:complexType>
 
-  <xs:element name="groupchoice" type="groupchoice.class" >
+  <xs:element name="groupchoice">
     <xs:annotation>
       <xs:documentation>
         The &lt;<keyword>groupchoice</keyword>&gt; element is part
@@ -525,6 +631,13 @@
         reference information.
       </xs:documentation>
     </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="groupchoice.class">
+          <xs:attribute ref="class" default="+ topic/figgroup pr-d/groupchoice "/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
   <xs:complexType name="groupchoice.class">
         <xs:sequence>
@@ -539,10 +652,9 @@
         <xs:attributeGroup ref="global-atts"/>
         <xs:attributeGroup ref="univ-atts-no-importance"/>
         <xs:attribute name="importance" type="importance-att-progdom.class"/>
-        <xs:attribute ref="class" default="+ topic/figgroup pr-d/groupchoice "/>
   </xs:complexType>
 
-  <xs:element name="groupcomp" type="groupcomp.class">
+  <xs:element name="groupcomp">
     <xs:annotation>
       <xs:documentation>
         The &lt;<keyword>groupcomp</keyword>&gt; element is part
@@ -555,6 +667,13 @@
         and reference information.
       </xs:documentation>
     </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="groupcomp.class">
+          <xs:attribute ref="class" default="+ topic/figgroup pr-d/groupcomp "/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
   <xs:complexType name="groupcomp.class">
         <xs:sequence>
@@ -569,10 +688,9 @@
         <xs:attributeGroup ref="global-atts"/>
         <xs:attributeGroup ref="univ-atts-no-importance"/>
         <xs:attribute name="importance" type="importance-att-progdom.class"/>
-        <xs:attribute ref="class" default="+ topic/figgroup pr-d/groupcomp "/>
   </xs:complexType>
 
-  <xs:element name="fragment" type="fragment.class">
+  <xs:element name="fragment">
     <xs:annotation>
       <xs:documentation>
         Within a syntax definition, a &lt;<keyword>fragment</keyword>&gt; is
@@ -583,6 +701,13 @@
         and reference information.
       </xs:documentation>
     </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="fragment.class">
+          <xs:attribute ref="class" default="+ topic/figgroup pr-d/fragment "/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
   <xs:complexType name="fragment.class">
         <xs:sequence>
@@ -594,10 +719,9 @@
         <xs:attribute name="outputclass" type="xs:string"/>
         <xs:attributeGroup ref="global-atts"/>
         <xs:attributeGroup ref="univ-atts"/>
-        <xs:attribute ref="class" default="+ topic/figgroup pr-d/fragment "/>
   </xs:complexType>
 
-  <xs:element name="fragref" type="fragref.class" >
+  <xs:element name="fragref">
     <xs:annotation>
       <xs:documentation>
         The fragment reference (&lt;<keyword>fragref</keyword>&gt;) element provides a
@@ -607,6 +731,13 @@
         concepts and reference information.
       </xs:documentation>
     </xs:annotation>
+    <xs:complexType mixed="true">
+      <xs:complexContent>
+        <xs:extension base="fragref.class">
+          <xs:attribute ref="class" default="+ topic/xref pr-d/fragref "/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
   <xs:complexType name="fragref.class" mixed="true">
         <xs:choice minOccurs="0" maxOccurs="unbounded">
@@ -617,10 +748,9 @@
         <xs:attributeGroup ref="global-atts"/>
         <xs:attributeGroup ref="univ-atts-no-importance"/>
         <xs:attribute name="importance" type="importance-att-nodefault.class"/>
-        <xs:attribute ref="class" default="+ topic/xref pr-d/fragref "/>
   </xs:complexType>
 
-  <xs:element name="synnote" type="synnote.class">
+  <xs:element name="synnote">
     <xs:annotation>
       <xs:documentation>
         The syntax note (&lt;<keyword>synnote</keyword>&gt;) element
@@ -632,6 +762,13 @@
         programming tasks, concepts and reference information.
       </xs:documentation>
     </xs:annotation>
+    <xs:complexType mixed="true">
+      <xs:complexContent>
+        <xs:extension base="synnote.class">
+          <xs:attribute ref="class" default="+ topic/fn pr-d/synnote "/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
   <xs:complexType name="synnote.class" mixed="true">
         <xs:choice minOccurs="0" maxOccurs="unbounded">
@@ -641,10 +778,9 @@
         <xs:attribute name="outputclass" type="xs:string"/>
         <xs:attributeGroup ref="global-atts"/>
         <xs:attributeGroup ref="univ-atts"/>
-        <xs:attribute ref="class" default="+ topic/fn pr-d/synnote "/>
   </xs:complexType>
 
-  <xs:element name="synnoteref" type="synnoteref.class">
+  <xs:element name="synnoteref">
     <xs:annotation>
       <xs:documentation>
         The syntax note (&lt;<keyword>synnoteref</keyword>&gt;) reference element references
@@ -655,16 +791,22 @@
         concepts and reference information.
       </xs:documentation>
     </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="synnoteref.class">
+          <xs:attribute ref="class" default="+ topic/xref pr-d/synnoteref "/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
   <xs:complexType name="synnoteref.class">
-        <xs:attribute name="href" type="xs:string" use="required"/>
+        <xs:attribute name="href" type="xs:string"  />
         <xs:attribute name="outputclass" type="xs:string"/>
         <xs:attributeGroup ref="global-atts"/>
         <xs:attributeGroup ref="univ-atts"/>
-        <xs:attribute ref="class" default="+ topic/xref pr-d/synnoteref "/>
   </xs:complexType>
 
-  <xs:element name="repsep" type="repsep.class" >
+  <xs:element name="repsep">
     <xs:annotation>
       <xs:documentation>
         The repeat separator (&lt;<keyword>repsep</keyword>&gt;) element defines
@@ -676,6 +818,13 @@
         information.
        </xs:documentation>
     </xs:annotation>
+    <xs:complexType mixed="true">
+      <xs:complexContent>
+        <xs:extension base="repsep.class">
+          <xs:attribute ref="class" default="+ topic/ph pr-d/repsep "/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
   <xs:complexType name="repsep.class" mixed="true">
         <xs:choice minOccurs="0" maxOccurs="unbounded">
@@ -685,10 +834,9 @@
         <xs:attributeGroup ref="global-atts"/>
         <xs:attributeGroup ref="univ-atts-no-importance"/>
         <xs:attribute name="importance" type="importance-att-nodefault.class"/>
-        <xs:attribute ref="class" default="+ topic/ph pr-d/repsep "/>
   </xs:complexType>
 
-  <xs:element name="kwd" type="kwd.class" >
+  <xs:element name="kwd">
     <xs:annotation>
       <xs:documentation>
         The &lt;<keyword>kwd</keyword>&gt; element defines a keyword in a syntax
@@ -697,7 +845,14 @@
         part of the DITA programming domain, a special set of DITA elements designed
         to document programming tasks, concepts and reference information.
       </xs:documentation>
-     </xs:annotation>
+    </xs:annotation>
+    <xs:complexType mixed="true">
+      <xs:complexContent>
+        <xs:extension base="kwd.class">
+          <xs:attribute ref="class" default="+ topic/keyword pr-d/kwd "/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
   <xs:complexType name="kwd.class" mixed="true">
         <xs:attribute name="keyref" type="xs:string"/>
@@ -705,7 +860,6 @@
         <xs:attributeGroup ref="global-atts"/>
         <xs:attributeGroup ref="univ-atts-no-importance"/>
         <xs:attribute name="importance" type="importance-att-progdom.class"/>
-        <xs:attribute ref="class" default="+ topic/keyword pr-d/kwd "/>
   </xs:complexType>
 
 </xs:schema>

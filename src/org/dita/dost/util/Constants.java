@@ -101,8 +101,11 @@ public abstract class Constants {
     public static final String ATTRIBUTE_NAME_DOMAINS = "domains";
     public static final String ATTRIBUTE_NAME_PROPS = "props";
     public static final String ATTRIBUTE_NAME_SCOPE = "scope";
+	public static final String ATTRIBUTE_NAME_TYPE = "type";
     public static final String ATTRIBUTE_NAME_IMG = "img";
     public static final String ATTRIBUTE_NAME_COPY_TO = "copy-to";
+	public static final String ATTRIBUTE_NAME_DATA = "data";
+	public static final String ATTRIBUTE_NAME_IMAGEREF = "imageref";
     
     /**
      * Constant for value of attribute format in dita files.
@@ -137,6 +140,9 @@ public abstract class Constants {
     public static final String CONREF_TARGET_LIST = "conreftargetslist";
     public static final String COPYTO_SOURCE_LIST = "copytosourcelist";
     public static final String COPYTO_TARGET_TO_SOURCE_MAP_LIST = "copytotarget2sourcemaplist";
+    public static final String SUBSIDIARY_TARGET_LIST = "subtargetslist";
+    public static final String CHUNKED_TOPIC_LIST="chunkedtopiclist";
+    public static final String CHUNKED_DITAMAP_LIST="chunkedditamaplist";
 
     /**
      * Constants for common params used in ant invoker.
@@ -146,7 +152,7 @@ public abstract class Constants {
     public static final String ANT_INVOKER_PARAM_BASEDIR = "basedir";
     public static final String ANT_INVOKER_PARAM_INPUTMAP = "inputmap";    
     public static final String ANT_INVOKER_PARAM_DITAVAL = "ditaval";    
-    public static final String ANT_INVOKER_PARAM_MAPLINKS = "maplinks";
+    public static final String ANT_INVOKER_PARAM_MAPLINKS = "maplinks";    
 
     /**
      * Constants for extensive params used in ant invoker.
@@ -159,6 +165,7 @@ public abstract class Constants {
     public static final String ANT_INVOKER_EXT_PARAM_DITADIR = "ditadir";
     public static final String ANT_INVOKER_EXT_PARAM_INPUTDIR = "inputdir";
     public static final String ANT_INVOKER_EXT_PARAM_STYLE = "style";
+    public static final String ANT_INVOKER_EXT_PARAM_TRANSTYPE = "transtype";
     
     /**
      * Constants for file and line separator.
@@ -210,19 +217,57 @@ public abstract class Constants {
     public static final String RESOLVER_CLASS = "org.apache.xml.resolver.tools.CatalogResolver";
     public static final String LEXICAL_HANDLER_PROPERTY = "http://xml.org/sax/properties/lexical-handler";    
     public static final String FEATURE_NAMESPACE_PREFIX = "http://xml.org/sax/features/namespace-prefixes";
+    public static final String FEATURE_NAMESPACE = "http://xml.org/sax/features/namespaces";
     public static final String FEATURE_VALIDATION = "http://xml.org/sax/features/validation";
     public static final String FEATURE_VALIDATION_SCHEMA = "http://apache.org/xml/features/validation/schema";    
     public static final String TEMP_DIR_DEFAULT = "temp";
 	public static final String FILTER_ACTION_EXCLUDE = "exclude";
-	public static final String ATTR_CLASS_VALUE_TITLE = "topic/title";
-	public static final String ATTR_CLASS_VALUE_MAP = "map/map";
-	public static final String ATTR_CLASS_VALUE_INDEXTERM = "topic/indexterm";
-	public static final String ATTR_CLASS_VALUE_TOPIC = "topic/topic";
-	public static final String ATTR_CLASS_VALUE_XREF = "topic/xref";
-	public static final String ATTR_CLASS_VALUE_LINK = "topic/link";
-	public static final String ATTR_CLASS_VALUE_TOPICREF = "map/topicref";
+	public static final String ATTR_CLASS_VALUE_TITLE = " topic/title ";
+	public static final String ATTR_CLASS_VALUE_MAP = " map/map ";
+	public static final String ATTR_CLASS_VALUE_INDEXTERM = " topic/indexterm ";
+	public static final String ATTR_CLASS_VALUE_TOPIC = " topic/topic ";
+	public static final String ATTR_CLASS_VALUE_XREF = " topic/xref ";
+	public static final String ATTR_CLASS_VALUE_LINK = " topic/link ";
+	public static final String ATTR_CLASS_VALUE_TOPICREF = " map/topicref ";
 	public static final String ATTR_SCOPE_VALUE_LOCAL = "local";
+	public static final String ATTR_SCOPE_VALUE_EXTERNAL = "external";
 	public static final String ATTR_FORMAT_VALUE_DITA = "dita";
+	public static final String ATTRIBUTE_NAME_DITAARCHVERSION = "DITAArchVersion";
+	public static final String ATTRIBUTE_PREFIX_DITAARCHVERSION = "ditaarch";
+	public static final String ATTRIBUTE_NAMESPACE_PREFIX_DITAARCHVERSION = "xmlns:ditaarch";
+	public static final String ATTR_CLASS_VALUE_OBJECT = " topic/object ";
+	public static final String ATTR_CLASS_VALUE_TOPICMETA = " map/topicmeta ";
+	public static final String ATTR_CLASS_VALUE_AUTHOR = " topic/author ";
+	public static final String ATTR_CLASS_VALUE_SOURCE = " topic/source ";
+	public static final String ATTR_CLASS_VALUE_PUBLISHER = " topic/publisher ";
+	public static final String ATTR_CLASS_VALUE_COPYRIGHT = " topic/copyright ";
+	public static final String ATTR_CLASS_VALUE_CRITDATES = " topic/critdates ";
+	public static final String ATTR_CLASS_VALUE_PERMISSIONS = " topic/permissions ";
+	public static final String ATTR_CLASS_VALUE_CATEGORY = " topic/category ";
+	public static final String ATTR_CLASS_VALUE_AUDIENCE = " topic/audience ";
+	public static final String ATTR_CLASS_VALUE_KEYWORDS = " topic/keywords ";
+	public static final String ATTR_CLASS_VALUE_PRODINFO = " topic/prodinfo ";
+	public static final String ATTR_CLASS_VALUE_OTHERMETA = " topic/othermeta ";
+	public static final String ATTR_CLASS_VALUE_RESOURCEID = " topic/resourceid ";
+	public static final String ATTR_CLASS_VALUE_DATA = " topic/data ";
+	public static final String ATTR_CLASS_VALUE_DATAABOUT = " topic/data-about ";
+	public static final String ATTR_CLASS_VALUE_FOREIGN = " topic/foreign ";
+	public static final String ATTR_CLASS_VALUE_UNKNOWN = " topic/unknown ";
+	public static final String ATTR_CLASS_VALUE_MAP_SEARCHTITLE = " map/searchtitle ";
+	public static final String ATTR_CLASS_VALUE_TOPIC_SEARCHTITLE = " topic/searchtitle ";
+	public static final String ATTR_CLASS_VALUE_PROLOG = " topic/prolog ";
+	public static final String ATTR_CLASS_VALUE_ABSTRACT = " topic/abstract ";
+	public static final String ATTR_CLASS_VALUE_SHORTDESC = " topic/shortdesc ";
+	public static final String ATTR_CLASS_VALUE_TITLEALTS = " topic/titlealts ";
+	public static final String ATTR_CLASS_VALUE_RELATED_LINKS = " topic/related-links ";
+	public static final String ATTR_CLASS_VALUE_BODY = " topic/body ";	
+	public static final String ATTR_CLASS_VALUE_RELTABLE = " map/reltable ";
+	
+    /**
+     * constants for filtering or flagging.
+     */	
+	public static final String DEFAULT_ACTION="default";
+	public static final String ATTRIBUTE_NAME_CHUNK = "chunk";	
 	
     
     /**

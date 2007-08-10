@@ -11,9 +11,7 @@
   <import file="build_general.xml" />
 
   <target name="dita2eclipsecontent" unless="noMap"
-    depends="build-init, start-preprocess, clean-temp, gen-list, 
-                     copy-files, debug-filter, move-index-entries, conref, mappull, 
-                     maplink, move-links, topicpull, dita.topics.eclipse.content, 
+    depends="build-init, preprocess, dita.topics.eclipse.content, 
                      dita.map.eclipse.content">
   </target>
 
@@ -81,7 +79,7 @@
 
   <target name="dita.topics.eclipse.content" unless="noTopic">
     <copy todir="${output.dir}">
-      <fileset dir="${dita.temp.dir}" includes="${fullditatopiclist}">
+      <fileset dir="${dita.temp.dir}" includes="${fullditatopiclist} ${chunkedtopiclist}">
       </fileset>
     </copy>
   </target>

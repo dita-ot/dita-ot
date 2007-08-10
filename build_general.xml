@@ -19,7 +19,7 @@
       </not>
     </condition>
     <xslt processor="trax" basedir="${dita.temp.dir}"
-      destdir="${output.dir}" includes="${fullditatopiclist}"
+      destdir="${output.dir}" includes="${fullditatopiclist} ${chunkedtopiclist}"
       extension="${out.ext}" style="${args.xsl}">
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
       <param name="FILTERFILE" expression="${dita.input.valfile}"
@@ -53,7 +53,7 @@
       </not>
     </condition>
     <xslt processor="trax" basedir="${dita.temp.dir}"
-      destdir="${output.dir}" includes="${fullditatopiclist}"
+      destdir="${output.dir}" includes="${fullditatopiclist} ${chunkedtopiclist}"
       extension="${out.ext}" style="${args.xsl}">
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
       <param name="FILTERFILE" expression="${dita.input.valfile}"
@@ -71,6 +71,17 @@
       <param name="INDEXSHOW" expression="${args.indexshow}"
         if="args.indexshow" />
     </xslt>
+  </target>
+
+  <target name="javamerge"  description="Merge topics" depends="dita-preprocess">
+	<basename property="temp.base" file="${user.input.file}" suffix=".ditamap"/>
+    <property name="temp.input" value="${dita.temp.dir}${file.separator}${user.input.file}"/>
+    <property name="temp.output" value="${output.dir}${file.separator}${user.input.file}"/>
+    <dirname property="temp.dir" file="${temp.input}"/>
+    <dirname property="temp.outdir" file="${temp.output}"/>
+    <pipeline message="topicmerge" module="TopicMerge" 
+      inputmap="${temp.dir}${file.separator}${temp.base}.ditamap" 
+      extparam="output=${temp.outdir}${file.separator}${temp.base}_merged.xml" /> 
   </target>
 
 </project>

@@ -3,7 +3,7 @@
 <!-- ============================================================= -->
 <!--  MODULE:    DITA BASE DTD                                     -->
 <!--  VERSION:   1.1                                               -->
-<!--  DATE:      June 2006                                         -->
+<!--  DATE:      November 2006                                     -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -14,8 +14,12 @@
 <!--  Refer to this file by the following public identifier or an 
       appropriate system identifier 
 PUBLIC "-//OASIS//DTD DITA Composite//EN"
-      Delivered as file "ditabase.dtd"                            -->
+      Delivered as file "ditabase.dtd"                             -->
 
+<!-- The public ID above refers to the latest version of this DTD.
+     To refer to this specific version, you may use this value:
+PUBLIC "-//OASIS//DTD DITA 1.1 Composite//EN"                      -->
+ 
 <!-- ============================================================= -->
 <!-- SYSTEM:     Darwin Information Typing Architecture (DITA)     -->
 <!--                                                               -->

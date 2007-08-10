@@ -11,9 +11,7 @@
     <import file="build_general.xml" />
 
     <target name="dita2xhtml"
-            depends="build-init, start-preprocess, clean-temp, gen-list, 
-                     copy-files, debug-filter, move-index-entries, conref, mappull, 
-                     maplink, move-links, topicpull, dita.map.xhtml, copy-revflag, 
+      depends="build-init, preprocess, dita.map.xhtml, copy-revflag, 
                      copy-css, dita.topics.xhtml">
     </target>
 
@@ -40,7 +38,7 @@
               basedir="${dita.temp.dir}"
               destdir="${output.dir}"
               includes="${user.input.file}"
-              style="${dita.script.dir}${file.separator}map2htmtoc.xsl">
+              style="${dita.script.dir}${file.separator}map2xhtmtoc.xsl">
             <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
             <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
             <mapper type="glob"

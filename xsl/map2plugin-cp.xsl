@@ -19,6 +19,9 @@
     <xsl:element name="plugin">
       <xsl:attribute name="name">
         <xsl:choose>
+          <xsl:when test="*[contains(@class, ' topic/title ')]">
+            <xsl:value-of select="*[contains(@class, ' topic/title ')]"/>
+          </xsl:when>
           <xsl:when test="@title">
             <xsl:value-of select="@title"/>
           </xsl:when>

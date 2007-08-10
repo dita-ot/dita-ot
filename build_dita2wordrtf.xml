@@ -10,9 +10,7 @@
   <import file="build_preprocess.xml" />
 
   <target name="dita2wordrtf"
-    depends="build-init, start-preprocess, clean-temp, gen-list, 
-                     copy-files, debug-filter, move-index-entries, conref, mappull, 
-                     maplink, move-links, topicpull, map2wordrtf, topic2wordrtf">
+    depends="build-init, preprocess, map2wordrtf, topic2wordrtf">
   </target>
     
   <target name="topic2wordrtf" if="noMap">

@@ -3,7 +3,7 @@
 <!-- ============================================================= -->
 <!--  MODULE:    DITA DITA Programming Domain                      -->
 <!--  VERSION:   1.1                                               -->
-<!--  DATE:      June 2006                                         -->
+<!--  DATE:      November 2006                                     -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -36,6 +36,8 @@ PUBLIC "-//OASIS//ELEMENTS DITA Programming Domain//EN"
 <!--    2005.11.15 RDA: Corrected the "Delivered as" system ID     -->
 <!--    2006.06.07 RDA: Make universal attributes universal        -->
 <!--                      (DITA 1.1 proposal #12)                  -->
+<!--    2006.11.30 RDA: Add -dita-use-conref-target to enumerated  -->
+<!--                      attributes                               -->
 <!-- ============================================================= -->
 
 
@@ -86,9 +88,12 @@ PUBLIC "-//OASIS//ELEMENTS DITA Programming Domain//EN"
 <!ENTITY % univ-atts-no-importance
             '%id-atts;
              %filter-atts;
+             base       CDATA                            #IMPLIED
+             %base-attribute-extensions;
              rev        CDATA                            #IMPLIED
              status     (new | changed | deleted |
-                         unchanged)                      #IMPLIED
+                         unchanged | 
+                         -dita-use-conref-target)        #IMPLIED
              %localization-atts;                                 '   > 
 
 
@@ -109,23 +114,24 @@ PUBLIC "-//OASIS//ELEMENTS DITA Programming Domain//EN"
 <!ATTLIST codeblock       
              %display-atts;
              spectitle  CDATA                            #IMPLIED
-             xml:space  (preserve)                  #FIXED 'preserve'
+             xml:space  (preserve)                #FIXED 'preserve'
              %univ-atts;                                  
              outputclass 
                         CDATA                            #IMPLIED    >
 
 
 <!--                    LONG NAME: Option                          -->
-<!ELEMENT option         (#PCDATA)>
-<!ATTLIST  option          keyref CDATA #IMPLIED
-                          %univ-atts;
-                          outputclass CDATA #IMPLIED                 >
+<!ELEMENT option        (#PCDATA)                                    >
+<!ATTLIST  option       keyref CDATA #IMPLIED
+                        %univ-atts;
+                        outputclass CDATA #IMPLIED                   >
 
 
 <!--                    LONG NAME: Variable                        -->
 <!ELEMENT var           (%words.cnt;)*                               >
 <!ATTLIST var         
-             importance (optional | required | default)  #IMPLIED
+             importance (optional | required | default | 
+                         -dita-use-conref-target)        #IMPLIED
              %univ-atts-no-importance;                             
              outputclass 
                         CDATA                            #IMPLIED    >
@@ -133,7 +139,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Programming Domain//EN"
 
 <!--                    LONG NAME: Parameter Name                  -->
 <!ELEMENT parmname      (#PCDATA)                                    >
-<!ATTLIST  parmname        
+<!ATTLIST parmname
              keyref      CDATA #IMPLIED
              %univ-atts;                                  
              outputclass 
@@ -153,25 +159,28 @@ PUBLIC "-//OASIS//ELEMENTS DITA Programming Domain//EN"
 <!--                    LONG NAME: Operator                        -->
 <!ELEMENT oper          (%words.cnt;)*                               >
 <!ATTLIST oper            
-             importance (optional | required | default)   #IMPLIED
+             importance (optional | required | default | 
+                         -dita-use-conref-target)        #IMPLIED
              %univ-atts-no-importance;                             
              outputclass 
-                        CDATA                             #IMPLIED   >
+                        CDATA                            #IMPLIED    >
 
 
 <!--                    LONG NAME: Delimiter                       -->
 <!ELEMENT delim         (%words.cnt;)*                               >
 <!ATTLIST delim           
-             importance   (optional | required)           #IMPLIED
+             importance (optional | required | 
+                         -dita-use-conref-target)        #IMPLIED
              %univ-atts-no-importance;
              outputclass
-                        CDATA                             #IMPLIED   >
+                        CDATA                            #IMPLIED    >
 
 
 <!--                    LONG NAME: Separator                       -->
 <!ELEMENT sep           (%words.cnt;)*                               >
 <!ATTLIST sep             
-             importance (optional | required)            #IMPLIED
+             importance (optional | required | 
+                         -dita-use-conref-target)        #IMPLIED
              %univ-atts-no-importance;                             
              outputclass 
                         CDATA                            #IMPLIED    >
@@ -189,7 +198,8 @@ PUBLIC "-//OASIS//ELEMENTS DITA Programming Domain//EN"
 <!--                    LONG NAME: Parameter List                  -->
 <!ELEMENT parml         (%plentry;)+                                 >
 <!ATTLIST parml           
-             compact   (yes | no)                        #IMPLIED
+             compact    (yes | no |
+                         -dita-use-conref-target)        #IMPLIED
              spectitle  CDATA                            #IMPLIED
              %univ-atts;                                  
              outputclass 
@@ -251,8 +261,9 @@ PUBLIC "-//OASIS//ELEMENTS DITA Programming Domain//EN"
                           %oper; | %sep; | %synnote; | 
                           %synnoteref;)* )                           >
 <!ATTLIST groupseq        
-             importance (optional | required | default)    
-                                                      #IMPLIED
+             importance (optional | required | default |
+                         -dita-use-conref-target)    
+                                                         #IMPLIED
              %univ-atts-no-importance;                             
              outputclass 
                         CDATA                            #IMPLIED    >
@@ -265,8 +276,8 @@ PUBLIC "-//OASIS//ELEMENTS DITA Programming Domain//EN"
                           %oper; | %sep; | %synnote; | 
                           %synnoteref;)* )                           > 
 <!ATTLIST  groupchoice     
-             importance (optional | required | default)    
-                                                      #IMPLIED
+             importance (optional | required | default | 
+                         -dita-use-conref-target)        #IMPLIED
              %univ-atts-no-importance;                             
              outputclass 
                         CDATA                            #IMPLIED    >
@@ -279,8 +290,8 @@ PUBLIC "-//OASIS//ELEMENTS DITA Programming Domain//EN"
                           %oper; | %sep; | %synnote; | 
                           %synnoteref;)* )                           > 
 <!ATTLIST  groupcomp       
-             importance (optional | required | default)    
-                                                      #IMPLIED
+             importance (optional | required | default | 
+                         -dita-use-conref-target)        #IMPLIED
              %univ-atts-no-importance;                             
              outputclass 
                         CDATA                            #IMPLIED    >
@@ -301,7 +312,8 @@ PUBLIC "-//OASIS//ELEMENTS DITA Programming Domain//EN"
 <!ELEMENT fragref       (%xrefph.cnt;)*><!--xref-->
 <!ATTLIST fragref         
              href       CDATA                            #IMPLIED
-             importance (optional | required)            #IMPLIED
+             importance (optional | required | 
+                         -dita-use-conref-target)        #IMPLIED
              %univ-atts-no-importance;                             
              outputclass 
                         CDATA                            #IMPLIED    >
@@ -328,7 +340,8 @@ PUBLIC "-//OASIS//ELEMENTS DITA Programming Domain//EN"
 <!--                    LONG NAME: Repeat Separator                -->
 <!ELEMENT repsep         (%words.cnt;)*                              >
 <!ATTLIST repsep          
-            importance  (optional | required)  #IMPLIED
+            importance  (optional | required | 
+                         -dita-use-conref-target)        #IMPLIED
              %univ-atts-no-importance;                             
              outputclass 
                         CDATA                            #IMPLIED    >
@@ -338,7 +351,8 @@ PUBLIC "-//OASIS//ELEMENTS DITA Programming Domain//EN"
 <!ELEMENT kwd           (#PCDATA)                                    >
 <!ATTLIST kwd             
              keyref     CDATA                            #IMPLIED
-             importance (optional | required | default)  #IMPLIED
+             importance (optional | required | default | 
+                         -dita-use-conref-target)        #IMPLIED
              %univ-atts-no-importance;                             
              outputclass 
                         CDATA                            #IMPLIED    >

@@ -35,6 +35,21 @@
     <reason>Local absolute 'csspath' is not supported, use the default instead.</reason>
     <response>Please use relative or URL like csspath.</response>
   </message>
+  
+  <message id="DOTA007E" type="ERROR">
+    <reason>Cann't find the user specified file  "%1".</reason>
+    <response>Please provide the existing file using Ant parameter 'args.ftr',and make sure there is no prefix of  "file:" in the 'args.ftr'.</response>
+  </message>
+  
+  <message id="DOTA008E" type="ERROR">
+    <reason>Cann't find the user specified file  "%1".</reason>
+    <response>Please provide the existing file using Ant parameter 'args.hdr',and make sure there is no prefix of  "file:" in the 'args.hdr'.</response>
+  </message>
+  
+  <message id="DOTA009E" type="ERROR">
+    <reason>Cann't find the user specified file  "%1".</reason>
+    <response>Please provide the existing file using Ant parameter 'args.hdf',and make sure there is no prefix of  "file:" in the 'args.hdf'.</response>
+  </message>
   <!-- End of Ant Messages -->
   
   <!-- Begin of Java Messages -->
@@ -172,7 +187,36 @@
     <reason>The file '%1' contains space in its file name. This file might not be transformed.</reason>
     <response>Remove the space in the file name and restart the transformation.</response>
   </message>
+
+  <message id="DOTJ028E" type="ERROR">
+    <reason>No format attribute was found.If the target '%1'is a DITA file, set the format attribute to "dita". </reason>
+    <response>If it does not point to a DITA file, set the format attribute to an appropriate value. </response>
+  </message>
   
+  <message id="DOTJ029I" type="INFO">
+    <reason>no 'domains' attribute for '%1' element was found. </reason>
+    <response>Please add domains attribute definition in the related dtd file. </response>
+  </message> 
+  
+  <message id="DOTJ030I" type="INFO">
+    <reason>no 'class' attribute for '%1' element was found. </reason>
+    <response>Please add class attribute definition in the related dtd file. </response>
+  </message> 
+  
+  <message id="DOTJ031I" type="INFO">
+    <reason>no specified rule for '%1'  was found in the ditaval file.And it will take default action or parent prop action if specified. </reason>
+    <response>To remove this message, you can specify one rule for '%1' in the ditaval file. </response>
+  </message> 
+  
+  <message id="DOTJ032E" type="ERROR">
+    <reason>An empty @href attribute is found in chunk processing.</reason>
+    <response>Please specify one value for @href attribute.</response>
+  </message> 
+  
+  <message id="DOTJ033E" type="ERROR">
+    <reason>No valid content is found in topicref '%1' during chunk processing.</reason>
+    <response>Please specify an existing and correct topic in topicref.</response>
+  </message> 
   <!-- End of Java Messages -->
     
   <!-- Begin of XSL Messages -->  
@@ -434,6 +478,21 @@
   <message id="DOTX052W" type="WARN">
     <reason>No string named '%1' was found. Using original value.</reason>
     <response>Add translation for the string '%1' in the default language, then add mapping between default language and other languages for it.</response>
+  </message>
+  
+  <message id="DOTX053E" type="ERROR">
+    <reason>A element with a mapref indirectly includes itself, which is not possible. Please fix the target of the mapref. The mapref points to '%1'. Note:'%1' might be changed to use default dita topic file extension name '.dita' or '.xml'.</reason>
+    <response>Resolve the circle mapref.</response>
+  </message>
+  
+  <message id="DOTX054W" type="WARN">
+    <reason>Conflict text style is applied on current element.</reason>
+    <response>Please check ditaval and dita source to make sure there is no style conflict on the element which needs to be flagged.</response>
+  </message>
+  
+  <message id="DOTX055W" type="WARN">
+    <reason>Customized stylesheet uses deprecated template "flagit". The DITA 1.1 condictional processing won't be supported.</reason>
+    <response>Please check your customized code to use template "start-flagit" instead of deprecated template "flagit".</response>
   </message>
   <!-- End of XSL Messages --> 
   

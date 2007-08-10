@@ -52,9 +52,14 @@
 	        $contenttarget!='NONE'">
       <base target="{$contenttarget}"/>
     </xsl:if>
-   <xsl:if test="/*[contains(@class,' map/map ')]/@title">
-    <title><xsl:value-of select="/*[contains(@class,' map/map ')]/@title"></xsl:value-of></title><xsl:value-of select="$newline"/>
-   </xsl:if>
+    <xsl:choose>
+      <xsl:when test="/*[contains(@class,' map/map ')]/*[contains(@class,' topic/title ')]">
+        <title><xsl:value-of select="/*[contains(@class,' map/map ')]/*[contains(@class,' topic/title ')]"/></title><xsl:value-of select="$newline"/>
+      </xsl:when>
+      <xsl:when test="/*[contains(@class,' map/map ')]/@title">
+        <title><xsl:value-of select="/*[contains(@class,' map/map ')]/@title"/></title><xsl:value-of select="$newline"/>
+      </xsl:when>
+    </xsl:choose>
   </head><xsl:value-of select="$newline"/>
 
    <body><xsl:value-of select="$newline"/>
@@ -70,16 +75,16 @@
 <xsl:template match="/*[contains(@class, ' map/map ')]">
   <xsl:param name="pathFromMaplist"/>
   <xsl:if test=".//*[contains(@class, ' map/topicref ')][not(@toc='no')]">
-    <UL><xsl:value-of select="$newline"/>
+    <ul><xsl:value-of select="$newline"/>
 
       <xsl:apply-templates select="*[contains(@class, ' map/topicref ')]">
         <xsl:with-param name="pathFromMaplist" select="$pathFromMaplist"/>
       </xsl:apply-templates>
-    </UL><xsl:value-of select="$newline"/>
+    </ul><xsl:value-of select="$newline"/>
   </xsl:if>
 </xsl:template>
 <!-- *********************************************************************************
-     Output each topic as an <LI> with an A-link. Each item takes 2 values:
+     Output each topic as an <li> with an A-link. Each item takes 2 values:
      - A title. If a navtitle is specified on <topicref>, use that.
        Otherwise try to open the file and retrieve the title. First look for a navigation title in the topic,
        followed by the main topic title. Last, try to use <linktext> specified in the map.
@@ -89,11 +94,11 @@
      - Ignore if TOC=no.
 
      If this topicref has any child topicref's that will be part of the navigation,
-     output a <UL> around them and process the contents.
+     output a <ul> around them and process the contents.
      ********************************************************************************* -->
 <xsl:template match="*[contains(@class, ' map/topicref ')][not(@toc='no')]">
   <xsl:param name="pathFromMaplist"/>
-  <LI>
+  <li>
       <xsl:choose>
         <!-- If there is a reference to a DITA or HTML file, and it is not external: -->
         <xsl:when test="@href and not(@href='')">
@@ -128,13 +133,13 @@
 
        <!-- If there are any children that should be in the TOC, process them -->
        <xsl:if test="descendant::*[contains(@class, ' map/topicref ')][not(contains(@toc,'no'))]">
-         <xsl:value-of select="$newline"/><UL><xsl:value-of select="$newline"/>
+         <xsl:value-of select="$newline"/><ul><xsl:value-of select="$newline"/>
            <xsl:apply-templates select="*[contains(@class, ' map/topicref ')]">
              <xsl:with-param name="pathFromMaplist" select="$pathFromMaplist"/>
            </xsl:apply-templates>
-         </UL><xsl:value-of select="$newline"/>
+         </ul><xsl:value-of select="$newline"/>
        </xsl:if>
-  </LI><xsl:value-of select="$newline"/>
+  </li><xsl:value-of select="$newline"/>
 </xsl:template>
 
 <!-- If toc=no, but a child has toc=yes, that child should bubble up to the top -->

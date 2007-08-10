@@ -99,13 +99,29 @@ public class DitaValReader extends AbstractXMLReader {
 	 */
 	public void startElement(String uri, String localName, String qName,
 			Attributes atts) throws SAXException {
-		String flagImage = atts.getValue(Constants.ATTRIBUTE_NAME_IMG);
+		String flagImage = null;
+		if(atts.getValue(Constants.ATTRIBUTE_NAME_IMG)!=null){
+			flagImage = atts.getValue(Constants.ATTRIBUTE_NAME_IMG);
+		}else if(atts.getValue(Constants.ATTRIBUTE_NAME_IMAGEREF)!=null){
+			flagImage = atts.getValue(Constants.ATTRIBUTE_NAME_IMAGEREF);
+		}
 
 		if (Constants.ELEMENT_NAME_PROP.equals(qName)) {
 			String action = atts.getValue(Constants.ELEMENT_NAME_ACTION);
 			String attName = atts.getValue(Constants.ATTRIBUTE_NAME_ATT);
 			String attValue = atts.getValue(Constants.ATTRIBUTE_NAME_VAL);
-			String key = attName + Constants.EQUAL + attValue;
+			//first to check if the att attribute and val attribute are null 
+			//which is a default action for elements without mapping with the other filter val
+			String key=null;
+			if(attName==null){
+				key=Constants.DEFAULT_ACTION;
+			}else 
+				if(attValue==null){
+					key=attName;//default action for the specified attribute
+				}
+				else{
+					key = attName + Constants.EQUAL + attValue;
+				}
 
 			if (action != null) {
 				insertAction(action, key);

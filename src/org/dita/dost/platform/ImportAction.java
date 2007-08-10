@@ -53,17 +53,22 @@ public class ImportAction implements IAction {
 				retBuf.append("<xsl:import href=\"");				
 				retBuf.append(
 						FileUtils.getRelativePathFromMap(
-								templateFilePath.replaceAll("\\\\","/"),
-								value.replaceAll("\\\\","/")));
+								templateFilePath, value));
 				retBuf.append("\"/>");
 			}else if("dita.conductor.lib.import".equals(extensionId)){
 				retBuf.append(Constants.LINE_SEPARATOR);
-				retBuf.append("<pathelement location=\"");
-				retBuf.append(
-						FileUtils.getRelativePathFromMap(
-								templateFilePath.replaceAll("\\\\","/"),
-								value.replaceAll("\\\\","/")));
-				retBuf.append("\"/>");
+                String resolvedValue = FileUtils.getRelativePathFromMap(
+                    templateFilePath, value);
+				if(FileUtils.isAbsolutePath(resolvedValue)){
+					// if resolvedValue is absolute path
+					retBuf.append("<pathelement location=\"");
+					retBuf.append(resolvedValue);
+					retBuf.append("\"/>");
+				}else{// if resolvedValue is relative path
+					retBuf.append("<pathelement location=\"${dita.dir}${file.separator}");
+					retBuf.append(resolvedValue);
+					retBuf.append("\"/>");
+				}
 			}else if("dita.conductor.transtype.check".equals(extensionId)){
 				retBuf.append("<not><equals arg1=\"${transtype}\" arg2=\"")
 					.append(value).append("\" casesensitive=\"false\"/></not>");

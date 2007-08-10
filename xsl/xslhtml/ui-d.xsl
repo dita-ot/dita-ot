@@ -31,22 +31,47 @@
  </xsl:choose>
 </xsl:template>
 <xsl:template match="*[contains(@class,' ui-d/screen ')]" mode="screen-fmt">
-<xsl:call-template name="flagit"/>
-<xsl:call-template name="start-revflag"/>
+  <xsl:variable name="flagrules">
+    <xsl:call-template name="getrules"/>
+  </xsl:variable>
+  <xsl:variable name="conflictexist">
+    <xsl:call-template name="conflict-check">
+      <xsl:with-param name="flagrules" select="$flagrules"/>
+    </xsl:call-template>
+  </xsl:variable>
+    
+  <xsl:call-template name="start-flagit">
+    <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
+  </xsl:call-template>
+  <xsl:call-template name="start-revflag">
+    <xsl:with-param name="flagrules" select="$flagrules"/>
+  </xsl:call-template>
 <xsl:call-template name="spec-title-nospace"/>
 <pre class="screen">
   <xsl:call-template name="commonattributes"/>
+  <xsl:call-template name="gen-style">
+    <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
+    <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
+  </xsl:call-template>
   <xsl:call-template name="setscale"/>
   <xsl:call-template name="setidaname"/>
   <xsl:apply-templates/>
 </pre>
-<xsl:call-template name="end-revflag"/>
+  <xsl:call-template name="end-revflag">
+    <xsl:with-param name="flagrules" select="$flagrules"/>
+  </xsl:call-template>
+  <xsl:call-template name="end-flagit">
+    <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param> 
+  </xsl:call-template>
 <xsl:value-of select="$newline"/>
 </xsl:template>
 
 <!-- ui-domain.ent domain: uicontrol | wintitle | menucascade | shortcut -->
 
 <xsl:template match="*[contains(@class,' ui-d/uicontrol ')]" name="topic.ui-d.uicontrol">
+  <xsl:variable name="flagrules">
+    <xsl:call-template name="getrules"/>
+  </xsl:variable>
 <!-- insert an arrow with leading/trailing spaces before all but the first uicontrol in a menucascade -->
 <xsl:if test="ancestor::*[contains(@class,' ui-d/menucascade ')]">
  <xsl:variable name="uicontrolcount"><xsl:number count="*[contains(@class,' ui-d/uicontrol ')]"/></xsl:variable>
@@ -58,31 +83,52 @@
   <xsl:call-template name="commonattributes"/>
   <xsl:call-template name="setidaname"/>
   <xsl:call-template name="flagcheck"/>
-  <xsl:call-template name="revtext"/></span>
+   <xsl:call-template name="revtext">
+     <xsl:with-param name="flagrules" select="$flagrules"/>
+   </xsl:call-template>
+  </span>
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' ui-d/wintitle ')]" name="topic.ui-d.wintitle">
+  <xsl:variable name="flagrules">
+    <xsl:call-template name="getrules"/>
+  </xsl:variable>
  <span class="wintitle">
   <xsl:call-template name="commonattributes"/>
   <xsl:call-template name="setidaname"/>
   <xsl:call-template name="flagcheck"/>
-  <xsl:call-template name="revtext"/></span>
+   <xsl:call-template name="revtext">
+     <xsl:with-param name="flagrules" select="$flagrules"/>
+   </xsl:call-template>
+  </span>
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' ui-d/menucascade ')]" name="topic.ui-d.menucascade">
+  <xsl:variable name="flagrules">
+    <xsl:call-template name="getrules"/>
+  </xsl:variable>
  <span class="menucascade">
   <xsl:call-template name="commonattributes"/>
   <xsl:call-template name="setidaname"/>
   <xsl:call-template name="flagcheck"/>
-  <xsl:call-template name="revtext"/></span>
+   <xsl:call-template name="revtext">
+     <xsl:with-param name="flagrules" select="$flagrules"/>
+   </xsl:call-template>
+  </span>
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' ui-d/shortcut ')]" name="topic.ui-d.shortcut">
+  <xsl:variable name="flagrules">
+    <xsl:call-template name="getrules"/>
+  </xsl:variable>
  <span class="shortcut">
   <xsl:call-template name="commonattributes"/>
   <xsl:call-template name="setidaname"/>
   <xsl:call-template name="flagcheck"/>
-  <xsl:call-template name="revtext"/></span>
+   <xsl:call-template name="revtext">
+     <xsl:with-param name="flagrules" select="$flagrules"/>
+   </xsl:call-template>
+  </span>
 </xsl:template>
 
 <xsl:template match="*[contains(@class, ' ui-d/menucascade ')]" mode="text-only">

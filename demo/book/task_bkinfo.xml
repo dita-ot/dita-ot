@@ -2,7 +2,8 @@
 <!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
 <!DOCTYPE bkinfo PUBLIC "-//IBM//DTD DITA Book Information//EN" "bkinfo.dtd">
 <bkinfo id="task_bkinfo">
-  <title>Product Tasks</title>
+  <title>Product Tasks -- NOTE: See comment at the
+top of taskbook.ditamap</title>
   <bktitlealts>
       <bksubtitle>Tasks and what they can do</bksubtitle>
   </bktitlealts>

@@ -190,7 +190,7 @@ public class IndexTermReader extends AbstractXMLReader {
 			IndexTerm term = (IndexTerm) termStack.pop();
 			IndexTerm parentTerm = (IndexTerm) termStack.peek();
 			if (term.getTermKey() == null) {
-				term.setTermKey(term.getTermName());
+				term.setTermKey(term.getTermFullName());
 			}
 			term.addTargets(parentTerm.getTargetList());
 			parentTerm.addSubTerm(term);
@@ -271,7 +271,14 @@ public class IndexTermReader extends AbstractXMLReader {
 		// is in the list.
 		if (indexSeeAlsoSpecList.contains(localName)) {
 			IndexTerm indexTerm = new IndexTerm();
-			indexTerm.setTermName("See also ");
+			IndexTerm parentTerm = null;
+			if(!termStack.isEmpty()){
+				parentTerm = (IndexTerm)termStack.peek();
+				if(parentTerm.hasSubTerms()){
+					parentTerm.updateSubTerm();
+				}
+			}
+			indexTerm.setTermPrefix("See also");
 			termStack.push(indexTerm);
 		}
 	}
@@ -281,7 +288,17 @@ public class IndexTermReader extends AbstractXMLReader {
 		// in the list.
 		if (indexSeeSpecList.contains(localName)) {
 			IndexTerm indexTerm = new IndexTerm();
-			indexTerm.setTermName("See ");
+			IndexTerm parentTerm = null;
+			
+			indexTerm.setTermPrefix("See");
+			
+			if(!termStack.isEmpty()){
+				parentTerm = (IndexTerm)termStack.peek();
+				if(parentTerm.hasSubTerms()){
+					parentTerm.updateSubTerm();
+					indexTerm.setTermPrefix("See also");
+				}
+			}
 			termStack.push(indexTerm);
 		}
 	}
@@ -293,6 +310,15 @@ public class IndexTermReader extends AbstractXMLReader {
 			IndexTerm indexTerm = new IndexTerm();
 			IndexTermTarget target = new IndexTermTarget();
 			String fragment = null;
+			
+			IndexTerm parentTerm = null;
+			if(!termStack.isEmpty()){
+				parentTerm = (IndexTerm)termStack.peek();
+				if(parentTerm.hasSubTerms()){
+					parentTerm.updateSubTerm();
+				}
+			}
+			
 			if(topicIdStack.peek() == null){
 				fragment = null;
 			}else{

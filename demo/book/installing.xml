@@ -8,6 +8,7 @@
 <shortdesc>You install components to make them available for your
 solution.</shortdesc>
 <body>
+<note conref="task_preface.xml#task_preface/demo_bookmap"/>
 <p>Usually, you can install the components once and then forget about the
 details of this task. 
 Before installing the components, you should make a plan

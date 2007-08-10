@@ -4,8 +4,17 @@
   "bookmap.dtd">
 <bookmap id="taskbook">
 
+<!-- ************************************************
+     This sample uses the deprecated demo version of
+     bookmap. There is now a standard version of
+     bookmap with several important differences.
+     As soon as you are able, you should switch to the
+     official bookmap. A sample is located at 
+     samples/taskbook.ditamap
+     ************************************************ -->
+
 <!-- inline representation of simple book information 
-     *** NOT SUPPORTED YET BY PROCESSING ***
+     *** NOT SUPPORTED BY PROCESSING ***
   <bkbasicinfo>
     <booktitle>Product Tasks</booktitle>
     <booksubtitle>Tasks and what they can do</booksubtitle>

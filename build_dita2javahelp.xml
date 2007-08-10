@@ -12,9 +12,7 @@
 
     <target name="dita2javahelp"
             unless="noMap"
-            depends="build-init, start-preprocess, clean-temp, gen-list, 
-                     copy-files, debug-filter, move-index-entries, conref, mappull, 
-                     maplink, move-links, topicpull, dita.map.javahelp, copy-css, 
+        depends="build-init, preprocess, dita.map.javahelp, copy-css, 
                      dita.topics.html, compile.Java.Help">
     </target>
 

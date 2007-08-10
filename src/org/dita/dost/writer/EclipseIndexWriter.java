@@ -134,7 +134,7 @@ public class EclipseIndexWriter implements AbstractWriter {
         int subTermNum = subTerms.size();
 
         printWriter.print("<entry keyword=\"");
-        printWriter.print(term.getTermName());
+        printWriter.print(term.getTermFullName());
         printWriter.print("\">");
         printWriter.println();
         
@@ -151,20 +151,19 @@ public class EclipseIndexWriter implements AbstractWriter {
                 printWriter.println();
         	}
         	else if (targetName != null){
-        		if (subTerms != null && subTermNum > 0){ //Eric
-                	printWriter.print("<topic");
-        		}else {
+        		if (subTerms != null && subTermNum == 0){ //Eric
         			printWriter.print("<topic href=\"");
         			printWriter.print(replaceExtName(targetUri)); //Eric
                     printWriter.print("\"");
+                    if (targetName.trim().length() > 0){
+                    	printWriter.print(" title=\"");
+                    	printWriter.print(target.getTargetName());
+                    	printWriter.print("\"");
+                    }
+                    printWriter.print("/>");
+                    printWriter.println();        		
         		}
-                if (targetName.trim().length() > 0){
-                	printWriter.print(" title=\"");
-                	printWriter.print(target.getTargetName());
-                	printWriter.print("\"");
-                }
-                printWriter.print("/>");
-                printWriter.println();
+                
         	}
         }
 

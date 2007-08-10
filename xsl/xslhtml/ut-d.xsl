@@ -18,10 +18,27 @@
 
 <!-- imagemap -->
 <xsl:template match="*[contains(@class,' ut-d/imagemap ')]" name="topic.ut-d.imagemap">
+  <xsl:variable name="flagrules">
+    <xsl:call-template name="getrules"/>
+  </xsl:variable>
+  <xsl:variable name="conflictexist">
+    <xsl:call-template name="conflict-check">
+      <xsl:with-param name="flagrules" select="$flagrules"/>
+    </xsl:call-template>
+  </xsl:variable>
+  
 <div><xsl:call-template name="commonattributes"/>
+  <xsl:call-template name="gen-style">
+    <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
+    <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
+  </xsl:call-template>
   <xsl:call-template name="setidaname"/>
-  <xsl:call-template name="flagit"/>
-  <xsl:call-template name="start-revflag"/>
+  <xsl:call-template name="start-flagit">
+    <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
+  </xsl:call-template>
+  <xsl:call-template name="start-revflag">
+    <xsl:with-param name="flagrules" select="$flagrules"/>
+  </xsl:call-template>
 
   <!-- the image -->
   <xsl:element name="img">
@@ -103,7 +120,12 @@
 </xsl:for-each>
 
 <xsl:value-of select="$newline"/></map>
-<xsl:call-template name="end-revflag"/>
+  <xsl:call-template name="end-revflag">
+    <xsl:with-param name="flagrules" select="$flagrules"/>
+  </xsl:call-template>
+  <xsl:call-template name="end-flagit">
+    <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param> 
+  </xsl:call-template>
 </div>
 </xsl:template>
 

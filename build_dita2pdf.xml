@@ -10,9 +10,7 @@
   <import file="build_preprocess.xml" />
 
   <target name="dita2pdf"
-    depends="build-init, start-preprocess, clean-temp, gen-list, 
-                     copy-files, debug-filter, move-index-entries, conref, mappull, 
-                     maplink, move-links, topicpull, map2pdf, topic2pdf">
+    depends="build-init, preprocess, map2pdf, topic2pdf">
   </target>
 
   <target name="topic2pdf" if="noMap">

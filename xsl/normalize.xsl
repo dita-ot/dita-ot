@@ -8,11 +8,7 @@
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 <!--  normalize.xsl
  | This stylesheet is the standard "identity transform" from the
- | XSLT Recommendation with indentation enabled
- | This stylesheet copies an input XML source file into its indented
- | equivalent, with the exception that fixed/defaulted attributes are
- | added as literal values to the result.
- |          [generate-id(.)!=($class or $space)]
+ | XSLT Recommendation without indentation.
  | Note: the output from the DITA identity transforms is dtd-neutral,
  | therefore the original doctype cannot be copied through.  If you
  | use identity transforms from a script, you can add logic to the

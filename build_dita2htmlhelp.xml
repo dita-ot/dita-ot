@@ -12,9 +12,7 @@
 
     <target name="dita2htmlhelp"
             unless="noMap"
-            depends="build-init, start-preprocess, clean-temp, gen-list, 
-                     copy-files, debug-filter, move-index-entries, conref, mappull, 
-                     maplink, move-links, topicpull, dita.map.htmlhelp, copy-css, 
+        depends="build-init, preprocess, dita.map.htmlhelp, copy-css, 
                      dita.topics.html, compile.HTML.Help">
     </target>
 

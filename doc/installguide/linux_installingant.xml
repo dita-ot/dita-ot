@@ -28,7 +28,7 @@
           <uicontrol>Current Release of Ant</uicontrol></cmd>
       </step>
       <step>
-        <cmd>Select <uicontrol>apache-ant-1.6.5-bin.tar.gz [PGP] [SHA1] 
+        <cmd>Select <uicontrol>apache-ant-1.7-bin.tar.gz [PGP] [SHA1] 
           [MD5]</uicontrol></cmd>
       </step>
       <step>

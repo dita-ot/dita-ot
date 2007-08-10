@@ -12,9 +12,7 @@
 
     <target name="dita2eclipsehelp"
             unless="noMap"
-            depends="build-init, start-preprocess, clean-temp, gen-list, 
-                     copy-files, debug-filter, move-index-entries, conref, mappull, 
-                     maplink, move-links, topicpull, dita.map.eclipse, copy-css, 
+        depends="build-init, preprocess, dita.map.eclipse, copy-css, 
                      dita.topics.xhtml">
     </target>
 
@@ -48,7 +46,7 @@
         <xslt processor="trax"
               basedir="${dita.temp.dir}"
               destdir="${output.dir}"
-              includes="${fullditamaplist}"
+              includes="${fullditamaplist} ${chunkedditamaplist}"
               extension=".xml"
               style="${dita.script.dir}${file.separator}map2eclipse.xsl">
             <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />

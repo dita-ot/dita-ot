@@ -218,6 +218,15 @@
 <xsl:template match="*" mode="propertiesEntry">
   <xsl:param name="width-multiplier">0</xsl:param>
   <xsl:param name="elementType"/>
+  <xsl:variable name="flagrules">
+    <xsl:call-template name="getrules"/>
+    <xsl:call-template name="getrules-parent"/>
+  </xsl:variable>
+  <xsl:variable name="conflictexist">
+    <xsl:call-template name="conflict-check">
+      <xsl:with-param name="flagrules" select="$flagrules"/>
+    </xsl:call-template>
+  </xsl:variable>
   <td valign="top">
     <xsl:call-template name="output-stentry-id"/>
     <xsl:call-template name="addPropertiesHeadersAttribute">
@@ -225,6 +234,10 @@
       <xsl:with-param name="elementType"><xsl:value-of select="$elementType"/></xsl:with-param>
     </xsl:call-template>
     <xsl:call-template name="commonattributes"/>
+    <xsl:call-template name="gen-style">
+      <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
+      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
+    </xsl:call-template>
     <xsl:variable name="localkeycol">
       <xsl:choose>
         <xsl:when test="ancestor::*[contains(@class,' topic/simpletable ')]/@keycol">
@@ -251,9 +264,15 @@
         <xsl:value-of select="$widthpercent"/><xsl:text>%</xsl:text>
       </xsl:attribute>
     </xsl:if>
-    <xsl:call-template name="flagit"/>
-    <xsl:call-template name="start-revflag-parent"/>
-    <xsl:call-template name="start-revflag"/>
+    <xsl:call-template name="start-flagit">
+      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
+    </xsl:call-template>
+    <xsl:call-template name="start-revflag-parent">
+      <xsl:with-param name="flagrules" select="$flagrules"/>
+    </xsl:call-template>
+    <xsl:call-template name="start-revflag">
+      <xsl:with-param name="flagrules" select="$flagrules"/>
+    </xsl:call-template>
     <xsl:variable name="revtest">
       <xsl:if test="@rev and not($FILTERFILE='') and ($DRAFT='yes')"> 
         <xsl:call-template name="find-active-rev-flag">               
@@ -298,8 +317,15 @@
 <xsl:call-template name="propentry-templates"/>
      </xsl:otherwise>
     </xsl:choose>
-    <xsl:call-template name="end-revflag"/>
-    <xsl:call-template name="end-revflag-parent"/>
+    <xsl:call-template name="end-revflag">
+      <xsl:with-param name="flagrules" select="$flagrules"/>
+    </xsl:call-template>
+    <xsl:call-template name="end-revflag-parent">
+      <xsl:with-param name="flagrules" select="$flagrules"/>
+    </xsl:call-template>
+    <xsl:call-template name="end-flagit">
+      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param> 
+    </xsl:call-template>
   </td><xsl:value-of select="$newline"/>
 </xsl:template>
 

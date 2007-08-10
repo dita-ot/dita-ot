@@ -49,7 +49,7 @@
 
 <!-- roles with contained topicrefs have an optional href attribute
      and divinfo -->
-<!ELEMENT draftintro ((%divinfo;)?, (%topicref;)+)>
+<!ELEMENT draftintro ((%divinfo;)?, (%topicref;)*)>
 <!ATTLIST draftintro   id       ID       #IMPLIED
                        href     CDATA    #IMPLIED
                        navtitle CDATA    #IMPLIED
@@ -84,14 +84,15 @@
                    toc       (yes|no) #IMPLIED
                    print     (yes|no) #IMPLIED >
 
-<!ELEMENT chapter ((%divinfo;)?, (%topicref;)+)>
+<!ELEMENT chapter ((%divinfo;)?, (%topicref;)*)>
 <!ATTLIST chapter  id        ID       #IMPLIED
                    href      CDATA    #IMPLIED
                    navtitle  CDATA    #IMPLIED
                    conref    CDATA    #IMPLIED
+                   format    CDATA    #IMPLIED
                    toc       (yes|no) #IMPLIED
                    print     (yes|no) #IMPLIED >
-<!ELEMENT part ((%divinfo;)?, ((%chapter;)+ | ((%appendix;)*, (%notices;)? , (%amendments;)?)))>
+<!ELEMENT part ((%divinfo;)?, ((%chapter;)* | ((%appendix;)*, (%notices;)? , (%amendments;)?)))>
 <!ATTLIST part  id        ID       #IMPLIED
                 href      CDATA    #IMPLIED
                 navtitle  CDATA    #IMPLIED
@@ -105,7 +106,7 @@
                     conref    CDATA    #IMPLIED
                     toc       (yes|no) #IMPLIED
                     print     (yes|no) #IMPLIED >
-<!ELEMENT notices ((%divinfo;)?, (%topicref;)+)>
+<!ELEMENT notices ((%divinfo;)?, (%topicref;)*)>
 <!ATTLIST notices  id        ID       #IMPLIED
                    href      CDATA    #IMPLIED
                    navtitle  CDATA    #IMPLIED

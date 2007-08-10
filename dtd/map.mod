@@ -3,7 +3,7 @@
 <!-- ============================================================= -->
 <!--  MODULE:    DITA Map                                          -->
 <!--  VERSION:   1.1                                               -->
-<!--  DATE:      June 2006                                         -->
+<!--  DATE:      November 2006                                     -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -44,6 +44,9 @@ PUBLIC "-//OASIS//ELEMENTS DITA Map//EN"
 <!--                      (DITA 1.1 proposal #12)                  -->
 <!--    2006.06.14 RDA: Add dir attribute to localization-atts     -->
 <!--    2006.06.14 RDA: Add outputclass attribute to most elemetns -->
+<!--    2006.11.30 RDA: Add -dita-use-conref-target to enumerated  -->
+<!--                      attributes                               -->
+<!--    2006.11.30 RDA: Remove #FIXED from DITAArchVersion         -->
 <!-- ============================================================= -->
 
 
@@ -62,9 +65,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Map//EN"
                         CDATA                              #FIXED
                        'http://dita.oasis-open.org/architecture/2005/'
              %DITAArchNSPrefix;:DITAArchVersion
-                        CDATA                              #FIXED
-                       '1.1'"                                        >
-
+                        CDATA                              '1.1'"    >
 
 <!-- ============================================================= -->
 <!--                   ELEMENT NAME ENTITIES                       -->
@@ -103,33 +104,47 @@ PUBLIC "-//OASIS//ELEMENTS DITA Map//EN"
 
 <!ENTITY % topicref-atts 
             'collection-type 
-                        (choice | unordered | sequence | 
-                         family)                          #IMPLIED
+                        (choice | unordered |
+                         sequence | family | 
+                         -dita-use-conref-target)         #IMPLIED
              type       CDATA                             #IMPLIED
-             scope      (local | peer | external)         #IMPLIED
-             locktitle  (yes|no)                          #IMPLIED
+             scope      (local | peer | external | 
+                         -dita-use-conref-target)         #IMPLIED
+             locktitle  (yes | no | 
+                         -dita-use-conref-target)         #IMPLIED
              format     CDATA                             #IMPLIED
-             linking    (none | normal | sourceonly | targetonly)
-                                                          #IMPLIED
-             toc        (yes | no)                        #IMPLIED
-             print      (yes | no | printonly)            #IMPLIED
-             search     (yes | no)                        #IMPLIED
+             linking    (none | normal | 
+                         sourceonly | targetonly |
+                         -dita-use-conref-target)         #IMPLIED
+             toc        (yes | no | 
+                         -dita-use-conref-target)         #IMPLIED
+             print      (yes | no | printonly | 
+                         -dita-use-conref-target)         #IMPLIED
+             search     (yes | no | 
+                         -dita-use-conref-target)         #IMPLIED
              chunk      CDATA                             #IMPLIED'  >
 
 
 <!ENTITY % topicref-atts-no-toc 
             'collection-type
-                        (choice | unordered | sequence | 
-                         family)                          #IMPLIED
+                        (choice | unordered | 
+                         sequence | family |
+                         -dita-use-conref-target)         #IMPLIED
              type       CDATA                             #IMPLIED
-             scope      (local | peer | external)         #IMPLIED
-             locktitle  (yes|no)                          #IMPLIED
+             scope      (local | peer | external | 
+                         -dita-use-conref-target)         #IMPLIED
+             locktitle  (yes | no |
+                         -dita-use-conref-target)         #IMPLIED
              format     CDATA                             #IMPLIED
              linking    (targetonly | sourceonly | 
-                         normal | none)                   #IMPLIED
-             toc        (yes | no)                        "no"
-             print      (yes | no | printonly)            #IMPLIED
-             search     (yes | no)                        #IMPLIED
+                         normal | none | 
+                         -dita-use-conref-target)         #IMPLIED
+             toc        (yes | no | 
+                         -dita-use-conref-target)         "no"
+             print      (yes | no | printonly | 
+                         -dita-use-conref-target)         #IMPLIED
+             search     (yes | no | 
+                         -dita-use-conref-target)         #IMPLIED
              chunk      CDATA                             #IMPLIED'  >
 
 
@@ -272,7 +287,8 @@ PUBLIC "-//OASIS//ELEMENTS DITA Map//EN"
                          (%data.elements.incl; | 
                           %foreign.unknown.incl;)*)                  >
 <!ATTLIST  topicmeta
-             lockmeta   (yes | no)                        #IMPLIED
+             lockmeta   (yes | no | 
+                         -dita-use-conref-target)         #IMPLIED
              %univ-atts;                                             >
 
 

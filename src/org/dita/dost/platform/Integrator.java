@@ -52,6 +52,7 @@ public class Integrator {
 		templateSet.add("xsl/dita2fo-shell_template.xsl");
 		templateSet.add("xsl/dita2docbook_template.xsl");
 		templateSet.add("xsl/preprocess/maplink_template.xsl");
+		templateSet.add("xsl/preprocess/mapref_template.xsl");
 		templateSet.add("xsl/preprocess/mappull_template.xsl");
 		templateSet.add("xsl/map2plugin_template.xsl");
 		templateSet.add("xsl/preprocess/conref_template.xsl");

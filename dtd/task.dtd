@@ -3,7 +3,7 @@
 <!-- ============================================================= -->
 <!--  MODULE:    DITA Task DTD                                     -->
 <!--  VERSION:   1.1                                               -->
-<!--  DATE:      June 2006                                         -->
+<!--  DATE:      November 2006                                     -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -14,6 +14,10 @@
 <!--  Refer to this file by the following public identifier or an 
 PUBLIC "-//OASIS//DTD DITA Task//EN"
       Delivered as file "task.dtd"                                 -->
+
+<!-- The public ID above refers to the latest version of this DTD.
+     To refer to this specific version, you may use this value:
+PUBLIC "-//OASIS//DTD DITA 1.1 Task//EN"                           -->
 
 <!-- ============================================================= -->
 <!-- SYSTEM:     Darwin Information Typing Architecture (DITA)     -->

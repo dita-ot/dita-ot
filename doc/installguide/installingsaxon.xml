@@ -46,8 +46,8 @@
           on the bar and select "Download File." </note></info>
       </step>
       <step>
-        <cmd>Click <uicontrol>Save</uicontrol> to unzip the Saxon 6.5.3.zip 
-          file and save it to the C:\ directory as 
+        <cmd>Click <uicontrol>Save</uicontrol> to download the Saxon 6.5.3.zip 
+          file and unzip it to the C:\ directory as 
           <filepath>saxon</filepath>.</cmd>
       </step>
       <step>

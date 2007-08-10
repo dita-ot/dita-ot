@@ -10,6 +10,7 @@
 package org.dita.dost.module;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.io.StringReader;
@@ -88,7 +89,7 @@ public class TopicMergeModule implements AbstractPipelineModule {
 			}
 			if (style != null){
 				TransformerFactory factory = TransformerFactory.newInstance();
-				Transformer transformer = factory.newTransformer(new StreamSource(style));
+				Transformer transformer = factory.newTransformer(new StreamSource(new FileInputStream(style)));
 				transformer.transform(new StreamSource(midStream), new StreamResult(out));
 			}else{
 				output = new OutputStreamWriter(new FileOutputStream(out),Constants.UTF8);

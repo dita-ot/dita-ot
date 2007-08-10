@@ -227,13 +227,13 @@ public class DitaIndexWriter extends AbstractXMLWriter {
 		
 		if (atts.getValue(Constants.ATTRIBUTE_NAME_CLASS) != null){
 			if (!hasPrologTillNow){
-				if (atts.getValue(Constants.ATTRIBUTE_NAME_CLASS).indexOf("topic/body") != -1){
+				if (atts.getValue(Constants.ATTRIBUTE_NAME_CLASS).indexOf(" topic/body ") != -1){
 					return false;
 				}
-				else if (atts.getValue(Constants.ATTRIBUTE_NAME_CLASS).indexOf("topic/related-links") != -1){
+				else if (atts.getValue(Constants.ATTRIBUTE_NAME_CLASS).indexOf(" topic/related-links ") != -1){
 					return false;
 				}
-				else if (atts.getValue(Constants.ATTRIBUTE_NAME_CLASS).indexOf("topic/topic") != -1){
+				else if (atts.getValue(Constants.ATTRIBUTE_NAME_CLASS).indexOf(" topic/topic ") != -1){
 
 					if (topicLevel > 0){
 						topicLevel++;
