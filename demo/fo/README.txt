@@ -53,6 +53,9 @@ line like:
 
 java -jar lib/dost.jar /i:doc/DITA-readme.ditamap /transtype:pdf2
 
+If you are using the startcmd.bat/sh script, make sure the classpath in that 
+script lists saxon.jar before xalan.jar. 
+
 About the index extensions
 ==========================
 
@@ -130,12 +133,14 @@ To modify these settings, copy "build.properties.orig" to
 History
 =======
 
-FO Plugin Release 1.3
-Currently in prerelease since March 27, 2007
+FO Plugin Release 1.4
 
-- Rebased with Idiom's internal code as of March 27, 2007.
+- Rebased with Idiom's internal code as of August 20, 2007.
 - Updated DITA 1.1 support: new bookmap and indexing elements.
 - Minor fixes
+
+Sourceforge bug fixes:
+- 1686323: Idiom FO plug-in fails during pdf2 build (15348)
 
 ----------------------------------------------------------------------------
 
