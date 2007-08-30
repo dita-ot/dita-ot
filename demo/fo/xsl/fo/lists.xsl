@@ -153,17 +153,19 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:template match="*[contains(@class, ' task/steps ')]/*[contains(@class, ' task/step ')]">
         <fo:list-item xsl:use-attribute-sets="steps.step">
             <fo:list-item-label xsl:use-attribute-sets="steps.step__label">
-                <fo:block xsl:use-attribute-sets="steps.step__label__content">
-                    <fo:inline id="{@id}"/>
-                    <xsl:call-template name="insertVariable">
-                        <xsl:with-param name="theVariableID" select="'Ordered List Number'"/>
-                        <xsl:with-param name="theParameters">
-                            <number>
-                                <xsl:number/>
-                            </number>
-                        </xsl:with-param>
-                    </xsl:call-template>
-                </fo:block>
+				<xsl:if test="preceding-sibling::*[contains(@class, ' task/step ')] | following-sibling::*[contains(@class, ' task/step ')]">
+					<fo:block xsl:use-attribute-sets="steps.step__label__content">
+						<fo:inline id="{@id}"/>
+							<xsl:call-template name="insertVariable">
+								<xsl:with-param name="theVariableID" select="'Ordered List Number'"/>
+								<xsl:with-param name="theParameters">
+									<number>
+										<xsl:number/>
+									</number>
+								</xsl:with-param>
+							</xsl:call-template>
+					</fo:block>
+				</xsl:if>
             </fo:list-item-label>
 
             <fo:list-item-body xsl:use-attribute-sets="steps.step__body">
