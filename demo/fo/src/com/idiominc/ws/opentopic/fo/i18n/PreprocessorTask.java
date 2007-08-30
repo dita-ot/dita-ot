@@ -2,7 +2,6 @@ package com.idiominc.ws.opentopic.fo.i18n;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
-import org.apache.tools.ant.types.XMLCatalog;
 import org.apache.xml.resolver.tools.CatalogResolver;
 import org.w3c.dom.Document;
 
@@ -14,6 +13,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.File;
+import java.io.FileOutputStream;
 
 import com.idiominc.ws.opentopic.fo.i18n.Configuration;
 import com.idiominc.ws.opentopic.fo.i18n.MultilanguagePreprocessor;
@@ -82,8 +82,11 @@ See the accompanying license.txt file for applicable licenses.
                 transformer.setOutputProperty(OutputKeys.DOCTYPE_PUBLIC, doc.getDoctype().getPublicId());
                 transformer.setOutputProperty(OutputKeys.DOCTYPE_SYSTEM, doc.getDoctype().getSystemId());
             }
-            StreamResult streamResult = new StreamResult(new File(this.output));
+
+            FileOutputStream out = new FileOutputStream(this.output);
+            StreamResult streamResult = new StreamResult(out);
             transformer.transform(new DOMSource(document), streamResult);
+            out.close();
         } catch (Exception e) {
             throw new BuildException(e);
         }

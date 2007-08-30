@@ -72,10 +72,10 @@ See the accompanying license.txt file for applicable licenses.
 				</xsl:variable>
 				<xsl:if test="contains($isNotTopicRef,'false')">
 					<topic id="{generate-id()}" class="- topic/topic ">
-						<title>
+						<title class=" topic/title ">
 							<xsl:value-of select="@navtitle"/>
 						</title>
-						<body/>
+						<body class=" topic/body "/>
 						<xsl:apply-templates mode="build-tree"/>
 					</topic>
 				</xsl:if>
@@ -92,7 +92,9 @@ See the accompanying license.txt file for applicable licenses.
         </xsl:copy>
     </xsl:template>
 
-    <xsl:template match="*[contains(@class,' map/topicref ')]/@href">
+    <xsl:template match="*[contains(@class,' map/topicref ')]/@id"/>
+
+	<xsl:template match="*[contains(@class,' map/topicref ')]/@href">
         <xsl:copy-of select="."/>
         <xsl:attribute name="id">
             <xsl:value-of select="substring-after(.,'#')"/>
