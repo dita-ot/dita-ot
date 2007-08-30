@@ -15,7 +15,7 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import java.io.File;
+import java.io.FileOutputStream;
 import java.util.Locale;
 
 /*
@@ -50,25 +50,29 @@ See the accompanying license.txt file for applicable licenses.
 */
 public class IndexPreprocessorTask
 		extends Task {
-	private String input = null;
-	private String output = null;
+//	private String input = null;
+	private String input = "";
+	private String output = "";
 	private String catalogs = null;
-	private String locale = null;
-	private String indexConfig;
+	private String locale = "ja";
+	private String indexConfig = "";
 	public static boolean failOnError = false;
 	public static boolean processingFaild = false;
 	private String prefix = "opentopic-index";
 	private String namespace_url = "http://www.idiominc.com/opentopic/index";
 	private String indexElementName = "indexterm";
 
-	public void execute()
+    public static void main(String[] args) {
+        new IndexPreprocessorTask().execute();
+    }
+    public void execute()
 			throws BuildException {
 		checkParameters();
 		if (this.catalogs != null) {
 			System.setProperty("xml.catalog.files", this.catalogs);
 		}
 
-		try {
+        try {
 			DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
 			documentBuilder.setEntityResolver(new CatalogResolver() {
@@ -110,7 +114,7 @@ public class IndexPreprocessorTask
             if (processingFaild) {
                 setActiveProjectProrerty("ws.runtime.index.preprocess.fail","true");
             }
-			// Serialize processed document
+            // Serialize processed document
 			TransformerFactory transformerFactory = TransformerFactory.newInstance();
 			Transformer transformer = transformerFactory.newTransformer();
 			transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
@@ -125,13 +129,15 @@ public class IndexPreprocessorTask
 					transformer.setOutputProperty(OutputKeys.DOCTYPE_SYSTEM, doc.getDoctype().getSystemId());
 				}
 			}
-			StreamResult streamResult = new StreamResult(new File(this.output));
-			transformer.transform(new DOMSource(resultDoc), streamResult);
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new BuildException(e);
-		}
-	}
+            FileOutputStream out = new FileOutputStream(this.output);
+            StreamResult streamResult = new StreamResult(out);
+            transformer.transform(new DOMSource(resultDoc), streamResult);
+            out.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new BuildException(e);
+        }
+    }
 
 
 	private void checkParameters()

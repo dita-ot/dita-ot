@@ -408,7 +408,7 @@ See the accompanying license.txt file for applicable licenses.
                                             </xsl:when>
                                             <xsl:otherwise>
                                                 <xsl:variable name="isNormalChilds">
-                                                    <xsl:for-each select="opentopic-index:index.entry">
+                                                    <xsl:for-each select="descendant::opentopic-index:index.entry">
                                                         <xsl:variable name="currValue" select="@value"/>
                                                         <xsl:variable name="currRefID" select="opentopic-index:refID/@value"/>
                                                         <xsl:if test="opentopic-func:getIndexEntry($currValue,$currRefID)">
