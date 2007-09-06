@@ -135,12 +135,14 @@ History
 
 FO Plugin Release 1.4
 
-- Rebased with Idiom's internal code as of August 20, 2007.
+- Rebased with Idiom's internal code as of August 28, 2007.
 - Updated DITA 1.1 support: new bookmap and indexing elements.
 - Minor fixes
 
 Sourceforge bug fixes:
 - 1686323: Idiom FO plug-in fails during pdf2 build (15348)
+- 1729594: Topichead not supported in pdf2 output (15247) 
+- 1647267: Single-step tasks numbers the step (15248)
 
 ----------------------------------------------------------------------------
 
