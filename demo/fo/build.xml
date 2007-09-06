@@ -200,7 +200,7 @@ with those set forth herein.
             catalogs="${xml.catalog.files}">
         </i18n-preprocess>
             
-        <java classname="com.icl.saxon.StyleSheet" classpathref="project.class.path">
+        <java classname="com.icl.saxon.StyleSheet" classpathref="project.class.path" fork="true">
             <arg line='-o "${outputFile}"'/>
             <arg line="${saxon.resolver.command.line}"/>
             <arg line='"${buildDir}/stage3.fo"'/>
