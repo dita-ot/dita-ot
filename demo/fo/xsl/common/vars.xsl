@@ -40,6 +40,8 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:template name="processVariableWithFormat">
         <xsl:param name="variableNodes"/>
         <xsl:param name="theParameters"/>
+        <xsl:param name="theVariableID"/>
+        <xsl:param name="theFormat"/>
 
         <xsl:if test="count($variableNodes) = 0">
             <xsl:message>
@@ -89,13 +91,17 @@ See the accompanying license.txt file for applicable licenses.
                         <xsl:call-template name="processVariableWithFormat">
                             <xsl:with-param name="variableNodes" select="document($customizationFilePath)/opentopic-vars:vars/opentopic-vars:variable[(@id = $theVariableID) and (@format = $theFormat)]"/>
                             <xsl:with-param name="theParameters" select="$theParameters"/>
-                        </xsl:call-template>
+							<xsl:with-param name="theVariableID" select="$theVariableID"/>
+							<xsl:with-param name="theFormat" select="$theFormat"/>
+						</xsl:call-template>
                     </xsl:when>
                     <xsl:otherwise>
                         <xsl:call-template name="processVariableWithFormat">
                             <xsl:with-param name="variableNodes" select="document(concat('../../cfg/common/vars/', $locale, '.xml'))/opentopic-vars:vars/opentopic-vars:variable[(@id = $theVariableID) and (@format = $theFormat)]"/>
                             <xsl:with-param name="theParameters" select="$theParameters"/>
-                        </xsl:call-template>
+							<xsl:with-param name="theVariableID" select="$theVariableID"/>
+							<xsl:with-param name="theFormat" select="$theFormat"/>
+						</xsl:call-template>
                     </xsl:otherwise>
                 </xsl:choose>
 			</xsl:when>

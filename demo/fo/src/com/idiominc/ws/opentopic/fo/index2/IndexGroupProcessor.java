@@ -103,7 +103,7 @@ public class IndexGroupProcessor {
 					if (key.length() > 0) {
 						String value = getValue((IndexEntry) indexMap.get(key));
 //						final char c = value.charAt(0);
-                        if (doesStart(value, groupMembers)) {
+						if (configEntry.isInRange(value,collator)) {
 							final IndexEntry entry = (IndexEntry) indexMap.remove(key);
 							group.addEntry(entry);
 						}

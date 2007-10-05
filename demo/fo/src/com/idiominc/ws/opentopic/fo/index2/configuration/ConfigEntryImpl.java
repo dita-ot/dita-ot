@@ -1,5 +1,9 @@
 package com.idiominc.ws.opentopic.fo.index2.configuration;
 
+import com.idiominc.ws.opentopic.fo.index2.IndexCollator;
+
+import java.util.ArrayList;
+
 
 /*
 Copyright � 2004-2006 by Idiom Technologies, Inc. All rights reserved.
@@ -35,12 +39,23 @@ See the accompanying license.txt file for applicable licenses.
 	private String label;
 	private String key;
 	private String[] members;
+	private CharRange[] ranges = new CharRange[0];
+	
 
 
 	public ConfigEntryImpl(String theLabel, String theKey, String[] theMembers) {
 		this.label = theLabel;
 		this.key = theKey;
 		this.members = theMembers;
+	}
+
+	public void addRange(CharRange range) {
+		ArrayList rangeList = new ArrayList();
+		for (int i = 0; i<ranges.length;i++) {
+			rangeList.add(ranges[i]);
+		}
+		rangeList.add(range);
+		ranges = (CharRange[]) rangeList.toArray(new CharRange[rangeList.size()]);
 	}
 
 
@@ -56,4 +71,21 @@ See the accompanying license.txt file for applicable licenses.
 	public String[] getGroupMembers() {
 		return this.members;
 	}
+
+	public boolean isInRange(String value, IndexCollator collator) {
+		if (value.length() > 0) {
+			for (int i = 0; i < members.length; i++) {
+				if (value.startsWith(members[i]) || members[i].startsWith(value)) {
+					return true;
+				}
+			}
+			for (int i = 0; i < ranges.length; i++) {
+				if (ranges[i].isInRange(value, collator)) {
+					return true;
+				}
+			}
+		}
+		return false;  //To change body of implemented methods use File | Settings | File Templates.
+	}
+
 }

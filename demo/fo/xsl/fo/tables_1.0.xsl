@@ -108,22 +108,24 @@ See the accompanying license.txt file for applicable licenses.
             <xsl:attribute name="column-number">
                 <xsl:number count="colspec"/>
             </xsl:attribute>
-            <xsl:attribute name="column-width">
-                <xsl:choose>
-                    <xsl:when test="$tableSpecNonProportional = 'true'">
-                        <xsl:call-template name="calculateColumnWidth.nonProportional">
-                            <xsl:with-param name="colwidth" select="@colwidth"/>
-                        </xsl:call-template>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:call-template name="calculateColumnWidth.Proportional">
-                            <xsl:with-param name="colwidth" select="@colwidth"/>
-                        </xsl:call-template>
-                    </xsl:otherwise>
-                </xsl:choose>
-            </xsl:attribute>
+			<xsl:if test="normalize-space(@colwidth) != ''"> 
+				<xsl:attribute name="column-width">
+					<xsl:choose>
+						<xsl:when test="$tableSpecNonProportional = 'true'">
+							<xsl:call-template name="calculateColumnWidth.nonProportional">
+								<xsl:with-param name="colwidth" select="@colwidth"/>
+							</xsl:call-template>
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:call-template name="calculateColumnWidth.Proportional">
+								<xsl:with-param name="colwidth" select="@colwidth"/>
+							</xsl:call-template>
+						</xsl:otherwise>
+					</xsl:choose>
+				</xsl:attribute>
+			</xsl:if>
 
-            <xsl:call-template name="applyAlignAttrs"/>
+			<xsl:call-template name="applyAlignAttrs"/>
         </fo:table-column>
     </xsl:template>
 

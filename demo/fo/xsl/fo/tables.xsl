@@ -371,7 +371,7 @@ See the accompanying license.txt file for applicable licenses.
                     <xsl:variable name="colwidth">
                         <xsl:call-template name="calculateColumnWidth"/>
                     </xsl:variable>
-                    <xsl:if test="$colwidth != 'proportional-column-width(1)'">
+                    <xsl:if test="$colwidth != 'proportional-column-width(1)' and normalize-space($colwidth) != ''">
                         <xsl:attribute name="column-width">
                             <xsl:value-of select="$colwidth"/>
                         </xsl:attribute>

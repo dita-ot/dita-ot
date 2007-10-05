@@ -88,7 +88,7 @@ See the accompanying license.txt file for applicable licenses.
 
         <xsl:variable name="element" select="key('key_anchor',$destination)[1]"/>
 
-        <xsl:choose>
+		<xsl:choose>
             <xsl:when test="not($element) or ($destination = '')">
                 <xsl:choose>
                     <xsl:when test="* | text()">
@@ -150,10 +150,24 @@ See the accompanying license.txt file for applicable licenses.
             </xsl:when>
 
             <xsl:when test="$element[contains(@class, ' topic/fn ')]">
-                <xsl:call-template name="insertVariable">
-                    <xsl:with-param name="theVariableID" select="'Foot note'"/>
-                </xsl:call-template>
-            </xsl:when>
+				<fo:inline xsl:use-attribute-sets="fn__callout">
+					<xsl:for-each select="$element">
+						<xsl:choose>
+							<xsl:when test="@callout">
+								<xsl:value-of select="@callout"/>
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:number level="any" count="*[contains(@class,' topic/fn ') and not(@callout)]"/>
+							</xsl:otherwise>
+						</xsl:choose>
+					</xsl:for-each>
+<!--
+					<xsl:call-template name="insertVariable">
+						<xsl:with-param name="theVariableID" select="'Foot note'"/>
+					</xsl:call-template>
+-->
+				</fo:inline>
+			</xsl:when>
 
             <xsl:when test="$element/*[contains(@class, ' topic/title ')]">
                 <xsl:value-of select="string($element/*[contains(@class, ' topic/title ')])"/>
@@ -175,6 +189,9 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:template match="*[contains(@class,' topic/xref ')]">
         <fo:inline id="{@id}"/>
 
+		<xsl:variable name="destination" select="opentopic-func:getDestinationId(@href)"/>
+		<xsl:variable name="element" select="key('key_anchor',$destination)[1]"/>
+
         <xsl:variable name="referenceTitle">
             <xsl:call-template name="insertReferenceTitle">
                 <xsl:with-param name="href" select="@href"/>
@@ -182,7 +199,7 @@ See the accompanying license.txt file for applicable licenses.
             </xsl:call-template>
         </xsl:variable>
 
-        <fo:basic-link xsl:use-attribute-sets="xref">
+		<fo:basic-link xsl:use-attribute-sets="xref">
             <xsl:call-template name="buildBasicLinkDestination">
                 <xsl:with-param name="scope" select="@scope"/>
                 <xsl:with-param name="href" select="@href"/>
@@ -215,7 +232,7 @@ See the accompanying license.txt file for applicable licenses.
             <xsl:call-template name="insertLinkDesc"/>
         </xsl:if>
 -->
-        <xsl:if test="not(@scope = 'external') and not($referenceTitle = '')">
+        <xsl:if test="not(@scope = 'external') and not($referenceTitle = '') and not($element[contains(@class, ' topic/fn ')])">
             <xsl:call-template name="insertPageNumberCitation"/>
         </xsl:if>
     </xsl:template>
@@ -315,7 +332,7 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:template name="insertPageNumberCitation">
         <xsl:param name="isTitleEmpty"/>
         <xsl:variable name="destination" select="opentopic-func:getDestinationId(@href)"/>
-        <xsl:variable name="element" select="ancestor::*[last()]//*[@id = $destination]"/>
+        <xsl:variable name="element" select="key('key_anchor',$destination)[1]"/>
         <xsl:choose>
             <xsl:when test="not($element) or ($destination = '')"/>
             <xsl:when test="$isTitleEmpty">

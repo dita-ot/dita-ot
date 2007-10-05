@@ -81,34 +81,52 @@ public class IndexConfiguration {
 
         final NodeList indexGroupChilds = indexGroups.getChildNodes();
 
-        for (int i = 0; i < indexGroupChilds.getLength(); i++) {
-            final Node node = indexGroupChilds.item(i);
-            if ("index.group".equals(node.getNodeName())) {
-                final Node key = getNodeByName("group.key", node.getChildNodes());
-                final Node label = getNodeByName("group.label", node.getChildNodes());
-                final Node members = getNodeByName("group.members", node.getChildNodes());
+		for (int i = 0; i < indexGroupChilds.getLength(); i++) {
+			final Node node = indexGroupChilds.item(i);
+			if ("index.group".equals(node.getNodeName())) {
+				final Node key = getNodeByName("group.key", node.getChildNodes());
+				final Node label = getNodeByName("group.label", node.getChildNodes());
+				final Node members = getNodeByName("group.members", node.getChildNodes());
 
-                final String keyValue = getNodeValue(key);
-                final String labelValue = getNodeValue(label);
-                String[] groupMembers = new String[0];
+				final String keyValue = getNodeValue(key);
+				final String labelValue = getNodeValue(label);
+				String[] groupMembers = new String[0];
+				ArrayList rangeList = new ArrayList();
 
-                if (null != members && members.getChildNodes().getLength() > 0) {
-                    ArrayList nodeValues = new ArrayList();
+				if (null != members && members.getChildNodes().getLength() > 0) {
+					ArrayList nodeValues = new ArrayList();
 
-                    final NodeList membersChilds = members.getChildNodes();
-                    for (int j = 0; j < membersChilds.getLength(); j++) {
-                        final Node membersChild = membersChilds.item(j);
-                        if ("char.set".equals(membersChild.getNodeName())) {
-                            final String nodeValue = getNodeValue(membersChild);
-                            nodeValues.add(nodeValue);
-                        }
-                    }
-                    groupMembers = (String[])nodeValues.toArray(new String[nodeValues.size()]);
-                }
-                final ConfigEntryImpl configEntry = new ConfigEntryImpl(labelValue, keyValue, groupMembers);
-                indexConfiguration.addEntry(configEntry);
-            }
-        }
+					final NodeList membersChilds = members.getChildNodes();
+					for (int j = 0; j < membersChilds.getLength(); j++) {
+						final Node membersChild = membersChilds.item(j);
+						if ("char.set".equals(membersChild.getNodeName())) {
+							if (membersChild.hasAttributes() && membersChild.getAttributes() != null) {
+								final Node startRange = membersChild.getAttributes().getNamedItem("start-range");
+								final Node endRange = membersChild.getAttributes().getNamedItem("end-range");
+								String startRangeText = getNodeValue(startRange);
+								String endRangeText = getNodeValue(endRange);
+								if (startRange != null && startRangeText.length() > 0 &&
+										endRange != null && endRangeText.length() > 0) {
+									CharRange range = new CharRange(startRangeText, endRangeText);
+									rangeList.add(range);
+									nodeValues.add(startRangeText);
+								}
+							}
+							final String nodeValue = getNodeValue(membersChild);
+							if (nodeValue.length() > 0) {
+								nodeValues.add(nodeValue);
+							}
+						}
+					}
+					groupMembers = (String[])nodeValues.toArray(new String[nodeValues.size()]);
+				}
+				final ConfigEntryImpl configEntry = new ConfigEntryImpl(labelValue, keyValue, groupMembers);
+				for(int j = 0; j<rangeList.size();j++) {
+					configEntry.addRange((CharRange)rangeList.get(j));
+				}
+				indexConfiguration.addEntry(configEntry);
+			}
+		}
 
         return indexConfiguration;
     }

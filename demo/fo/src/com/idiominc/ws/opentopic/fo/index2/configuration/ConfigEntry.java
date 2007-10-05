@@ -1,5 +1,8 @@
 package com.idiominc.ws.opentopic.fo.index2.configuration;
 
+import com.idiominc.ws.opentopic.fo.index2.IndexCollator;
+
+
 /*
 Copyright � 2004-2006 by Idiom Technologies, Inc. All rights reserved.
 IDIOM is a registered trademark of Idiom Technologies, Inc. and WORLDSERVER
@@ -47,4 +50,7 @@ See the accompanying license.txt file for applicable licenses.
 	 *         character from this array then it(string) belongs to this group
 	 */
 	String[] getGroupMembers();
+
+	boolean isInRange(String value, IndexCollator collator);
+
 }

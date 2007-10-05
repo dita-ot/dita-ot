@@ -133,6 +133,19 @@ To modify these settings, copy "build.properties.orig" to
 History
 =======
 
+FO Plugin Release 1.4.1
+Available since Oct 5, 2007
+
+- more flexible index configuration (see common/index/zh_CN.xml for example)
+
+Sourceforge bug fixes:
+- 1793307: issue with topicref in bookmap's <notices> (16587)
+- 1791403: invalid column-width attribute value (16586)
+- 1805389: XSLT errors in FO plugin
+- 1694607: Use-by-reference footnotes not rendered correctly (15249)
+
+----------------------------------------------------------------------------
+
 FO Plugin Release 1.4
 
 - Rebased with Idiom's internal code as of August 28, 2007.
