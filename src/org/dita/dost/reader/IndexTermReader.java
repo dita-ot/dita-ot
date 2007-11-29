@@ -128,7 +128,7 @@ public class IndexTermReader extends AbstractXMLReader {
 		/*
 		 * For title info
 		 */
-		if (!termStack.empty()) {
+		if (!insideSortingAs && !termStack.empty()) {
 			IndexTerm indexTerm = (IndexTerm) termStack.peek();
 			temp = StringUtils.restoreEntity(temp);
 			indexTerm.setTermName(StringUtils.setOrAppend(indexTerm.getTermName(), temp, withSpace));
