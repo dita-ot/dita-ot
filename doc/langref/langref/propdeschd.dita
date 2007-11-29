@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<reference id="propdeschd" xml:lang="en-us">
+<title>propdeschd</title>
+<shortdesc>The propdeschd element supports regular headings for the description
+column of a properties table.</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>propdeschd</indexterm><indexterm>Reference elements<indexterm>propdeschd</indexterm></indexterm>
+</keywords><?Pub Caret1?>
+</metadata></prolog>
+<refbody>
+<example></example>
+<section conref="../common/commonNavLibraryTable.dita#models/propdeschd-contains"
+otherprops="contains"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/propdeschd-containedby"
+otherprops="containedby"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/propdeschd-classvalue"
+otherprops="classvalue"></section>
+<section id="attrs"><title>Attributes</title> <simpletable id="propdeschd_attr"
+relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/specentry">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/univ-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/classandout"><stentry/><stentry/><stentry/><stentry/><stentry/></strow>
+</simpletable> </section>
+</refbody>
+</reference>
+<?Pub *0000002129?>

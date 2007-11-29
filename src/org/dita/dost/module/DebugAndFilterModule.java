@@ -44,7 +44,7 @@ public class DebugAndFilterModule implements AbstractPipelineModule {
 	private static final String [] PROPERTY_UPDATE_LIST = {"user.input.file",Constants.HREF_TARGET_LIST,
 			Constants.CONREF_LIST,Constants.HREF_DITA_TOPIC_LIST,Constants.FULL_DITA_TOPIC_LIST,
 			Constants.FULL_DITAMAP_TOPIC_LIST,Constants.CONREF_TARGET_LIST,Constants.COPYTO_SOURCE_LIST,
-			Constants.COPYTO_TARGET_TO_SOURCE_MAP_LIST};
+			Constants.COPYTO_TARGET_TO_SOURCE_MAP_LIST,Constants.OUT_DITA_FILES_LIST};
 	/**
 	 * File extension of source file
 	 */
@@ -85,13 +85,14 @@ public class DebugAndFilterModule implements AbstractPipelineModule {
     }
 	private DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
 	
+	private boolean xmlValidate=true;
 	/**
 	 * Default Construtor
 	 *
 	 */
 	public DebugAndFilterModule(){
 	}
-	
+
     /**
      * @see org.dita.dost.module.AbstractPipelineModule#execute(org.dita.dost.pipeline.AbstractPipelineInput)
      * 
@@ -108,7 +109,8 @@ public class DebugAndFilterModule implements AbstractPipelineModule {
         LinkedList parseList = null;
         Content content;
         DitaWriter fileWriter;
-        
+        File ditalist=null;
+        File xmlDitalist=null;
 		extName = ext.startsWith(Constants.DOT) ? ext : (Constants.DOT + ext);
         if (!new File(tempDir).isAbsolute()) {
         	tempDir = new File(baseDir, tempDir).getAbsolutePath();
@@ -116,8 +118,12 @@ public class DebugAndFilterModule implements AbstractPipelineModule {
         if (ditavalFile != null && !new File(ditavalFile).isAbsolute()) {
 			ditavalFile = new File(baseDir, ditavalFile).getAbsolutePath();
 		}
-        
-        listReader.read(new File(tempDir, Constants.FILE_NAME_DITA_LIST).getAbsolutePath());
+        ditalist=new File(tempDir, Constants.FILE_NAME_DITA_LIST);
+        xmlDitalist=new File(tempDir, Constants.FILE_NAME_DITA_LIST_XML);
+        if(xmlDitalist.exists())
+        	listReader.read(xmlDitalist.getAbsolutePath());
+        else 
+        	listReader.read(ditalist.getAbsolutePath());
         parseList = (LinkedList) listReader.getContent()
                 .getCollection();
         inputDir = (String) listReader.getContent().getValue();
@@ -134,7 +140,14 @@ public class DebugAndFilterModule implements AbstractPipelineModule {
             content = new ContentImpl();
         }
         try{
-        	DitaWriter.initXMLReader(ditaDir);
+    		String valueOfValidate=((PipelineHashIO) input).getAttribute("validate");
+    		if(valueOfValidate!=null){
+    			if("false".equalsIgnoreCase(valueOfValidate))
+    				xmlValidate=false;
+    			else
+    				xmlValidate=true;
+    		}
+        	DitaWriter.initXMLReader(ditaDir,xmlValidate);
 		} catch (SAXException e) {
 			throw new DITAOTException(e.getMessage(), e);
 		}
@@ -171,7 +184,11 @@ public class DebugAndFilterModule implements AbstractPipelineModule {
         
         updateList(tempDir);
         // reload the property for processing of copy-to
-        listReader.read(new File(tempDir, Constants.FILE_NAME_DITA_LIST).getAbsolutePath());
+        File xmlListFile=new File(tempDir, Constants.FILE_NAME_DITA_LIST_XML);
+        if(xmlListFile.exists())
+        	listReader.read(xmlListFile.getAbsolutePath());
+        else
+        	listReader.read(new File(tempDir, Constants.FILE_NAME_DITA_LIST).getAbsolutePath());
         performCopytoTask(tempDir, listReader.getCopytoMap());
 
         return null;
@@ -204,22 +221,26 @@ public class DebugAndFilterModule implements AbstractPipelineModule {
     private void updateList(String tempDir){
     	Properties property = new Properties();
     	FileOutputStream output = null;
+    	FileOutputStream xmlDitalist=null;
     	try{
-    		property.load(new FileInputStream( new File(tempDir, Constants.FILE_NAME_DITA_LIST)));
-    		
+    		//property.load(new FileInputStream( new File(tempDir, Constants.FILE_NAME_DITA_LIST)));
+    		property.loadFromXML(new FileInputStream( new File(tempDir, Constants.FILE_NAME_DITA_LIST_XML)));
     		for (int i = 0; i < PROPERTY_UPDATE_LIST.length; i ++){
     			updateProperty(PROPERTY_UPDATE_LIST[i], property);
     		}
     		
     		output = new FileOutputStream(new File(tempDir, Constants.FILE_NAME_DITA_LIST));
+    		xmlDitalist=new FileOutputStream(new File(tempDir,Constants.FILE_NAME_DITA_LIST_XML));
     		property.store(output, null);
+    		property.storeToXML(xmlDitalist, null);
     		output.flush();
-    		
+    		xmlDitalist.flush();
     	} catch (Exception e){
     		javaLogger.logException(e);
     	} finally{
     		try{
     			output.close();
+    			xmlDitalist.close();
     		}catch(IOException e){
 				javaLogger.logException(e);
     		}

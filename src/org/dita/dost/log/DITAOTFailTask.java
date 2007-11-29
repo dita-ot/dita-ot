@@ -15,7 +15,7 @@ import java.util.StringTokenizer;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.taskdefs.Exit;
-
+import org.dita.dost.exception.DITAOTException;
 /**
  * Class description goes here. 
  *
@@ -61,8 +61,13 @@ public class DITAOTFailTask extends Exit {
 	 */
 	public void execute() throws BuildException {
 		initMessageFile();
-		setMessage(MessageUtils.getMessage(id, prop).toString());
-		super.execute();
+		MessageBean msgBean=MessageUtils.getMessage(id, prop);
+		setMessage(msgBean.toString());
+		try{
+			super.execute();
+		}catch(BuildException ex){
+			throw new BuildException(msgBean.toString(),new DITAOTException(msgBean,null,msgBean.toString()));
+		}
 	}
 	
 	private void initMessageFile() {

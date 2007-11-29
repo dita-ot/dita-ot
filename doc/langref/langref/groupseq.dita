@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<reference id="groupseq" xml:lang="en-us">
+<title>groupseq</title>
+<shortdesc>The &lt;<keyword>groupseq</keyword>&gt; element is part of the
+subset of elements that define syntax diagrams in DITA. A group is a logical
+set of pieces of syntax that go together. Within the syntax definition, groups
+of keywords, delimiters and other syntax units act as a combined unit, and
+they occur in a specific sequence, as delimited by the &lt;<keyword>groupseq</keyword>&gt;
+element. This element is part of the DITA programming domain, a special set
+of DITA elements designed to document programming tasks, concepts and reference
+information.</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>groupseq (group sequence)</indexterm>
+<!--
+<indexterm>group sequence (groupseq)</indexterm>
+-->
+<indexterm>Programming elements<?Pub Caret?><indexterm>groupseq</indexterm></indexterm>
+</keywords>
+</metadata></prolog>
+<refbody>
+<example><title>Example</title><pre>&lt;syntaxdiagram frame="bottom"&gt;
+ &lt;title&gt;CopyFile&lt;/title&gt;
+ <b>&lt;groupseq&gt;</b>&lt;kwd&gt;COPYF&lt;/kwd&gt;<b>&lt;/groupseq&gt;</b>
+ &lt;groupcomp&gt;&lt;var&gt;input-filename&lt;/var&gt;&lt;kwd&gt;*INFILE&lt;/kwd&gt;&lt;/groupcomp&gt;
+ <b>&lt;groupseq&gt;</b>&lt;var&gt;output-filename&lt;/var&gt;&lt;kwd&gt;*OUTFILE&lt;/kwd&gt;<b>&lt;/groupseq&gt;</b>
+ &lt;groupchoice&gt;&lt;var&gt;input-filename&lt;/var&gt;&lt;kwd&gt;*INFILE&lt;/kwd&gt;&lt;/groupchoice&gt;
+ &lt;groupchoice&gt;&lt;var&gt;output-filename&lt;/var&gt;&lt;kwd&gt;*OUTFILE&lt;/kwd&gt;&lt;/groupchoice&gt;
+&lt;/syntaxdiagram&gt;</pre></example>
+<section conref="../common/commonNavLibraryTable.dita#models/groupseq-contains"
+otherprops="contains"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/groupseq-containedby"
+otherprops="containedby"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/groupseq-classvalue"
+otherprops="classvalue"></section>
+<section id="attrs"><title>Attributes</title> <simpletable id="groupseq_attr"
+relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/importance-var">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/props">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/base">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/platform">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/product">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/audience">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/otherprops">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/rev">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/status">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/id-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/localization-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/classandout"><stentry/><stentry/><stentry/><stentry/><stentry/></strow>
+</simpletable> </section>
+</refbody>
+</reference>
+<?Pub *0000004847?>

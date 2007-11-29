@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<reference id="syntaxdiagram" xml:lang="en-us">
+<title>syntaxdiagram</title>
+<shortdesc>The syntax diagram (&lt;<keyword>syntaxdiagram</keyword>&gt;) element
+is the main container for all the syntax elements that make up a syntax definition.
+The syntax diagram represents the syntax of a statement from a computer language,
+or a command, function call or programming language statement. Traditionally,
+the syntax diagram is formatted with <q>railroad tracks</q> that connect the
+units of the syntax together, but this presentation may differ depending on
+the output media. The syntax diagram element is part of the DITA programming
+domain, a special set of DITA elements designed to document programming tasks,
+concepts and reference information.</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>syntaxdiagram (syntax diagram)</indexterm><indexterm>Programming
+elements<?Pub Caret?><indexterm>syntax diagram</indexterm></indexterm></keywords>
+</metadata></prolog>
+<refbody>
+<example><title>Example</title><pre>&lt;syntaxdiagram&gt;
+ &lt;title&gt;CopyFile&lt;/title&gt;
+ &lt;groupseq&gt;&lt;kwd&gt;COPYF&lt;/kwd&gt;&lt;/groupseq&gt;
+ &lt;groupcomp&gt;&lt;var&gt;input-filename&lt;/var&gt;&lt;kwd&gt;*INFILE&lt;/kwd&gt;&lt;/groupcomp&gt;
+ &lt;groupseq&gt;&lt;var&gt;output-filename&lt;/var&gt;&lt;kwd&gt;*OUTFILE&lt;/kwd&gt;&lt;/groupseq&gt;
+ &lt;groupchoice&gt; &lt;var&gt;input-filename&lt;/var&gt; &lt;kwd&gt;*INFILE&lt;/kwd&gt;&lt;/groupchoice&gt;
+ &lt;groupchoice&gt; &lt;var&gt;output-filename&lt;/var&gt; &lt;kwd&gt;*OUTFILE&lt;/kwd&gt;&lt;/groupchoice&gt;
+&lt;/syntaxdiagram&gt;
+</pre></example>
+<section conref="../common/commonNavLibraryTable.dita#models/syntaxdiagram-contains"
+otherprops="contains"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/syntaxdiagram-containedby"
+otherprops="containedby"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/syntaxdiagram-classvalue"
+otherprops="classvalue"></section>
+<section id="attrs"><title>Attributes</title> <simpletable id="syntaxdiagram_attr"
+relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/display-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/univ-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/classandout"><stentry/><stentry/><stentry/><stentry/><stentry/></strow>
+</simpletable> </section>
+</refbody>
+</reference>
+<?Pub *0000003342?>

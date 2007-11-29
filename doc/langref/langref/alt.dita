@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<reference id="alt" xml:lang="en-us">
+<title>alt</title>
+<shortdesc rev="1.1">The alt element provides alternate text for an image.
+It is equivalent to the alt attribute on the image element; the attribute
+is deprecated, so the alt element should be used instead. As an element, alt
+provides direct text entry within an XML editor and is more easily accessed
+than an attribute for translation.</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>alt (alternate text)<?Pub Caret?></indexterm><indexterm>Body
+elements<indexterm>alt</indexterm></indexterm></keywords>
+</metadata></prolog>
+<refbody>
+<example><title>Example</title><p>The markup for alt text within an image
+looks like this:</p><codeblock>&lt;image href="tip-ing.jpg"&gt;
+  &lt;alt&gt;Here's a Tip!&lt;/alt&gt;
+&lt;/image&gt; </codeblock></example>
+<section conref="../common/commonNavLibraryTable.dita#models/alt-contains" otherprops="contains"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/alt-containedby"
+otherprops="containedby"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/alt-classvalue"
+otherprops="classvalue"></section>
+<section id="attrs"><title>Attributes</title> <simpletable id="alt_attr" relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/univ-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/classandout"><stentry/><stentry/><stentry/><stentry/><stentry/></strow>
+</simpletable> </section>
+</refbody>
+</reference>
+<?Pub *0000002331?>

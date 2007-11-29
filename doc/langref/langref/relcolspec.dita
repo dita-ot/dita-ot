@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<reference id="relcolspec" xml:lang="en-us">
+<title>relcolspec</title>
+<shortdesc>A column definition in the relationship table. You can use &lt;<keyword>relcolspec</keyword>&gt;
+column definitions to set defaults for the attributes of &lt;<keyword>topicref</keyword>&gt;
+elements in the column. For example, you can set type="concept" to treat all
+untyped &lt;<keyword>topicref</keyword>&gt; elements in the column as concepts.</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>relcolspec</indexterm><indexterm>Map elements<indexterm>relcolspec</indexterm></indexterm>
+</keywords>
+</metadata></prolog>
+<refbody>
+<section rev="1.1">W<?Pub Caret1?>hen default values are specified on a &lt;<keyword>relcell</keyword>>
+or &lt;<keyword>relrow</keyword>> element, those values are inherited before
+those on the &lt;<keyword>relcolspec</keyword>>. The values on a &lt;<keyword>relcolspec</keyword>>
+are inherited before those on the &lt;<keyword>reltable</keyword>>.</section>
+<example><title>Example</title>See <xref href="reltable.dita"></xref>.</example>
+<section conref="../common/commonNavLibraryTable.dita#models/relcolspec-contains" otherprops="contains"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/relcolspec-containedby"
+otherprops="containedby"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/relcolspec-classvalue"
+otherprops="classvalue"></section>
+<section id="attrs"><title>Attributes</title> <simpletable id="relcolspec_attr"
+relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/topicref-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/univ-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/classandout"><stentry/><stentry/><stentry/><stentry/><stentry/></strow>
+</simpletable> </section>
+</refbody>
+</reference>
+<?Pub *0000002763?>

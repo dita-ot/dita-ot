@@ -215,6 +215,11 @@
       <isset property="args.xhtml.toc"/>
     </not>
   </condition>
+  <condition property="args.xhtml.contenttarget" value="contentwin">
+    <not>
+      <isset property="args.xhtml.contenttarget"/>
+    </not>
+  </condition>
   <xslt processor="trax"
 		basedir="${dita.temp.dir}"
 		destdir="${output.dir}"
@@ -222,6 +227,10 @@
 		style="${dita.script.dir}${file.separator}map2htmtoc.xsl">
         <param name="DITAEXT" expression="${dita.ext}" if="dita.ext"/>
         <param name="OUTEXT" expression="${out.ext}" if="out.ext"/>
+        <param name="CSS" expression="${args.css.file}" if="args.css.file"/>
+        <param name="CSSPATH" expression="${user.csspath}" if="user.csspath"/>
+        <param name="contenttarget" expression="${args.xhtml.contenttarget}" if="args.xhtml.contenttarget"/>
+        <param name="OUTPUTCLASS" expression="${args.xhtml.toc.class}" if="args.xhtml.toc.class"/>
         <mapper type="glob" from="*${dita.input.filename}" to="*${args.xhtml.toc}${out.ext}"/>
     </xslt>
 </target>

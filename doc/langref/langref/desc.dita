@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<reference id="desc" xml:lang="en-us">
+<title>desc</title>
+<shortdesc>The &lt;<keyword>desc</keyword>&gt; element contains the description
+of the current element. A description should provide more information than
+the title. This is its behavior in fig/table/linklist, for example. In xref/link,
+it provides a description of the target; processors that support it may choose
+to display this as hover help. In object, it contains alternate content for
+use when in contexts that cannot display the object.</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>desc (description)</indexterm><indexterm>description
+(desc)</indexterm><indexterm>Body elements<indexterm>desc</indexterm><?Pub Caret?></indexterm>
+</keywords>
+</metadata></prolog>
+<refbody>
+<example>       <title>Example</title>       <codeblock>&lt;fig&gt;&lt;title&gt;The Handshake&lt;/title&gt;
+<b>&lt;desc&gt;</b>This image shows two hands clasped in a formal, 
+business-like handshake.<b>&lt;/desc&gt;</b>
+&lt;image href=&quot;handshake.jpg&quot;&gt;
+ &lt;alt>The handshake&lt;/alt>
+&lt;/image>
+&lt;/fig&gt;</codeblock>     </example>
+<section conref="../common/commonNavLibraryTable.dita#models/desc-contains" otherprops="contains"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/desc-containedby"
+otherprops="containedby"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/desc-classvalue"
+otherprops="classvalue"></section>
+<section id="attrs">       <title>Attributes</title>       <simpletable id="desc_attr"
+relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/univ-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/classandout"><stentry/><stentry/><stentry/><stentry/><stentry/></strow>
+</simpletable>     </section>
+</refbody>
+</reference>
+<?Pub *0000002638?>

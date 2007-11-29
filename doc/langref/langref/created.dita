@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<reference id="created" xml:lang="en-us">
+<title>created</title>
+<shortdesc>The &lt;<keyword>created</keyword>&gt; element specifies the document
+creation date using the <i><keyword>date</keyword></i> attribute.</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>created</indexterm><indexterm>Prolog elements<indexterm>created</indexterm></indexterm>
+</keywords><?Pub Caret1?>
+</metadata></prolog>
+<refbody>
+<example><title>Example</title><codeblock>&lt;prolog&gt;
+ &lt;critdates&gt;
+  &lt;created date="2001-06-12"&gt;&lt;/created&gt;
+  &lt;revised golive="2001-08-20"&gt;&lt;/revised&gt;
+ &lt;/critdates&gt;
+&lt;/prolog&gt;</codeblock></example>
+<section conref="../common/commonNavLibraryTable.dita#models/created-contains"
+otherprops="contains"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/created-containedby"
+otherprops="containedby"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/created-classvalue"
+otherprops="classvalue"></section>
+<section id="attrs"><title>Attributes</title> <simpletable id="created_attr"
+relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/date">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/golive">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/expiry">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/univ-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/classonly"><stentry/><stentry/><stentry/><stentry/><stentry/></strow>
+</simpletable> </section>
+</refbody>
+</reference>
+<?Pub *0000002520?>

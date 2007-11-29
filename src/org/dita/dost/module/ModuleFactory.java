@@ -13,6 +13,7 @@ import java.util.Properties;
 
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.MessageUtils;
+import org.dita.dost.log.MessageBean;
 
 /**
  * The factory to create instance for each module class.
@@ -64,9 +65,10 @@ public class ModuleFactory {
 			Properties params = new Properties();
 
 			params.put("%1", module);
-			msg = MessageUtils.getMessage("DOTJ005F", params).toString();
+			MessageBean msgBean=MessageUtils.getMessage("DOTJ005F", params);
+			msg = msgBean.toString();
 
-			throw new DITAOTException(msg, e);
+			throw new DITAOTException(msgBean,e,msg);	
 		}
 	}
 }

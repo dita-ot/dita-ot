@@ -15,6 +15,8 @@ import java.util.Properties;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.module.Content;
 
+import java.io.*;
+
 /**
  * This class extends AbstractWriter, used to output content to properites file.
  * 
@@ -62,5 +64,16 @@ public class PropertiesWriter implements AbstractWriter {
 				}
 			}
 		}
+	}
+	
+	public void writeToXML(String filename) throws DITAOTException{
+		FileOutputStream os=null;
+		//new dita.xml file
+        try{
+        	os=new FileOutputStream(filename);
+        	prop.storeToXML(os, null);
+        }catch(IOException ioe){
+        	throw new DITAOTException(ioe);
+        }
 	}
 }

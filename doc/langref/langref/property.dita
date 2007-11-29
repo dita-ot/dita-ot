@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<reference id="property" xml:lang="en-us">
+<title>property</title>
+<shortdesc>The &lt;<keyword>property</keyword>&gt; element represents a property
+of the current topic's subject. For example, if the current topic is a class,
+the property might show that the class is protected rather than public. It
+contains three optional elements: type, value, and description.</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>property<?Pub Caret?></indexterm><indexterm>Reference
+elements<indexterm>property</indexterm></indexterm></keywords>
+</metadata></prolog>
+<refbody>
+<example><title>Example</title>See <xref href="properties.dita"></xref>.</example>
+<section conref="../common/commonNavLibraryTable.dita#models/property-contains"
+otherprops="contains"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/property-containedby"
+otherprops="containedby"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/property-classvalue"
+otherprops="classvalue"></section>
+<section id="attrs"><title>Attributes</title> <simpletable id="property_attr"
+relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/univ-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/classandout"><stentry/><stentry/><stentry/><stentry/><stentry/></strow>
+</simpletable> </section>
+</refbody>
+</reference>
+<?Pub *0000002188?>

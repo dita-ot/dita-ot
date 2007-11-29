@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<reference id="ph" xml:lang="en-us">
+<title>ph</title>
+<shortdesc>The phrase (&lt;<keyword>ph</keyword>&gt;) element is used to organize
+content for reuse or conditional processing (for example, when part of a paragraph
+applies to a particular audience). It can be used by specializations of DITA
+to create semantic markup for content at the phrase level, which then allows
+(but does not require) specific processing or formatting.</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>ph (phrase)</indexterm><indexterm>phrase (ph)</indexterm>
+<indexterm>Body elements<indexterm>ph</indexterm></indexterm></keywords><?Pub Caret1?>
+</metadata></prolog>
+<refbody>
+<example><title>Example</title><pre>This was not changed. &lt;ph rev="v5r2"&gt;This was updated.&lt;/ph&gt; This was not.</pre></example>
+<section conref="../common/commonNavLibraryTable.dita#models/ph-contains" otherprops="contains"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/ph-containedby"
+otherprops="containedby"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/ph-classvalue" otherprops="classvalue"></section>
+<section id="attrs"><title>Attributes</title> <simpletable id="ph_attr" relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/univ-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/classoutkey"><stentry/><stentry/><stentry/><stentry/><stentry/></strow>
+</simpletable> </section>
+</refbody>
+</reference>
+<?Pub *0000002485?>

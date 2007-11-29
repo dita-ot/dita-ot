@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<reference id="keywords" xml:lang="en-us">
+<title>keywords</title>
+<shortdesc>The &lt;<keyword>keywords</keyword>&gt; element contains a list
+of key words (using &lt;<keyword>indexterm</keyword>> or &lt;<keyword>keyword</keyword>>
+<?Pub Caret?>markup) that can be used by a search engine. </shortdesc>
+<prolog><metadata>
+<keywords><indexterm>keywords</indexterm><indexterm>Prolog elements<indexterm>keywords</indexterm></indexterm>
+<indexterm>Map elements<indexterm>keywords</indexterm></indexterm></keywords>
+</metadata></prolog>
+<refbody>
+<section><p>When DITA topics are output to XHTML, any &lt;<keyword>keyword</keyword>&gt;
+or &lt;<keyword>indexterm</keyword>&gt; elements in the &lt;<keyword>keywords</keyword>&gt;
+element are placed in the Web page metadata. The index terms in this context
+are also included in any generated index.</p></section>
+<example><title>Example</title><p>The following example is metadata from an
+installation task:</p><codeblock>&lt;prolog&gt;
+ &lt;keywords&gt;
+  &lt;keyword&gt;installing&lt;/keyword&gt;
+  &lt;keyword&gt;uninstalling&lt;/keyword&gt;
+  &lt;keyword&gt;prerequisites&lt;/keyword&gt; 
+  &lt;keyword&gt;helps&lt;/keyword&gt;
+  &lt;keyword&gt;wizards&lt;/keyword&gt;
+ &lt;/keywords&gt;
+&lt;/prolog&gt;</codeblock></example>
+<section conref="../common/commonNavLibraryTable.dita#models/keywords-contains" otherprops="contains"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/keywords-containedby"
+otherprops="containedby"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/keywords-classvalue" otherprops="classvalue"></section>
+<section id="attrs"><title>Attributes</title> <simpletable id="keywords_attr"
+relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/univ-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/classonly"><stentry/><stentry/><stentry/><stentry/><stentry/></strow>
+</simpletable> </section>
+</refbody>
+</reference>
+<?Pub *0000002618?>

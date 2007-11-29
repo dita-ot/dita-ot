@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<reference id="keyword" xml:lang="en-us">
+<title>keyword</title>
+<shortdesc>The &lt;<keyword>keyword</keyword>&gt; element identifies a keyword
+or token, such as a single value from an enumerated list, the name of a command
+or parameter, product name, or a lookup key for a message.</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>keyword</indexterm><indexterm>Body elements<indexterm>keyword</indexterm></indexterm>
+</keywords><?Pub Caret1?>
+</metadata></prolog>
+<refbody>
+<section><p><q>Keyword</q> means any text that has a unique or key-like value.
+For example, a product name. Where there is a element that has a better meaning
+for what you are describing, use that element. The keyword element is a generic
+element; use it when no other element applies. The keyword element can also
+be used to contain reusable text.</p><p>Specific markup recommendations:<ul>
+<li>Use apiname for API names and cmdname for command names.</li>
+<li>Term should be used for inline paragraph definitions; to indicate what
+you're defining.</li>
+<li>PH should be used for general phrases; when you think that keyword is
+not appropriate.</li>
+<li>Inside syntax diagrams and syntax phrases, use kwd to indicate a programming
+keyword.</li>
+<li>In metadata, a keyword is used to create additional XHTML metadata.</li>
+</ul></p><p>Specialized elements derived from &lt;<keyword>keyword</keyword>&gt;
+may also have extended processing, such as different formatting or automatic
+indexing. <!--
+If the <varname>keyref</varname> attribute is used, the keyword can be turned
+into a hyperlink on output. Note that this processing is not yet implemented
+within the DITA Open Toolkit. 
+--></p><p>When DITA topics are output to XHTML, any &lt;<keyword>keyword</keyword>&gt;
+or &lt;<keyword>indexterm</keyword>&gt; elements in the &lt;<keyword>keywords</keyword>&gt;
+metadata element are placed in the Web page metadata. In addition, any index
+terms in this context are also used for supported index processing (for example,
+for print versions).</p></section>
+<example><codeblock>&lt;p&gt;The &lt;keyword&gt;assert&lt;/keyword&gt; pragma statement allows messages to be passed
+to the emulator, pre-compiler, etc..&lt;/p&gt;</codeblock></example>
+<section conref="../common/commonNavLibraryTable.dita#models/keyword-contains"
+otherprops="contains"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/keyword-containedby"
+otherprops="containedby"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/keyword-classvalue"
+otherprops="classvalue"></section>
+<section id="attrs"><title>Attributes</title> <simpletable id="keyword_attr"
+relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/univ-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/classoutkey"><stentry/><stentry/><stentry/><stentry/><stentry/></strow>
+</simpletable> </section>
+</refbody>
+</reference>
+<?Pub *0000003925?>

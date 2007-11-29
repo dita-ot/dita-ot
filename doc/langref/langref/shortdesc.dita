@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<reference id="shortdesc" rev="1.1" xml:lang="en-us">
+<title>shortdesc</title>
+<shortdesc>The short description (&lt;<keyword>shortdesc</keyword>&gt;) element
+occurs between the topic title and the topic body, as the initial paragraph-like
+content of a topic, or it can be embedded in an abstract element. The short
+description, which represents the purpose or theme of the topic, is also intended
+to be used as a link preview and for searching. When used within a DITA map,
+the short description of the &lt;topicref> can be used to override the short
+description in the topic.</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>shortdesc</indexterm><indexterm>Topic elements<indexterm>shortdesc</indexterm></indexterm>
+<indexterm>Map elements<indexterm>shortdesc</indexterm></indexterm><indexterm>short
+description</indexterm></keywords>
+</metadata></prolog>
+<refbody>
+<section><p>Use the &lt;shortdesc> element when the first paragraph of topic
+content is simple enough to be suitable for use as a link preview or for summaries.
+Otherwise use the &lt;abstract> element instead to provide richer content
+around the &lt;shortdesc>. See the <xref href="abstract.dita"></xref> description
+for more details on the behavior of shortdesc in an abstract.</p><p>While
+inclusion of the &lt;shortdesc&gt; element is not mandated by DITA or the
+tools, it is recommended that topics contain this element. In cases where
+a topic contains only one paragraph, then it is preferable to include this
+text in the &lt;shortdesc&gt; and leave the topic body empty. </p> <p conref="../common/task_shortdesc.dita#task_shortdesc/tlength"></p><table
+colsep="0" frame="topbot" rowheader="firstcol">
+<tgroup cols="2"><colspec colname="col1" colwidth="44*"/><colspec colname="col2"
+colwidth="153*"/>
+<thead>
+<row>
+<entry colname="col1" valign="top">Type</entry>
+<entry colname="col2" valign="top">Recommended content</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry colname="col1">Task</entry>
+<entry colname="col2">                 <p conref="../common/task_shortdesc.dita#task_shortdesc/twhattosay"></p> 
+               <p conref="../common/task_shortdesc.dita#task_shortdesc/tphrasing"></p> 
+             </entry>
+</row>
+<row>
+<entry colname="col1">Concept</entry>
+<entry colname="col2">                 <p conref="../common/concept_shortdesc.dita#concept_shortdesc/cwhattosay"></p> 
+               <p conref="../common/concept_shortdesc.dita#concept_shortdesc/cphrasing"></p> 
+             </entry>
+</row>
+<row>
+<entry colname="col1">Reference</entry>
+<entry colname="col2">                 <p conref="../common/ref_shortdesc.dita#ref_shortdesc/rwhattosay"></p> 
+               <p conref="../common/ref_shortdesc.dita#ref_shortdesc/rphrasing"></p> 
+             </entry>
+</row>
+</tbody>
+</tgroup>
+</table></section>
+<section conref="../common/commonNavLibraryTable.dita#models/shortdesc-contains" otherprops="contains"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/shortdesc-containedby"
+otherprops="containedby"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/shortdesc-classvalue"
+otherprops="classvalue"></section>
+<section id="attrs">       <title>Attributes</title>       <simpletable id="shortdesc_attr"
+relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/univ-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/classandout"><stentry/><stentry/><stentry/><stentry/><stentry/></strow>
+</simpletable>     </section>
+</refbody><?Pub Caret1?>
+</reference>
+<?Pub *0000004327?>

@@ -9,14 +9,14 @@
     <import file="build_init.xml" />
     <import file="build_preprocess.xml" />
     <import file="build_general.xml" />
-
+	
     <target name="dita2xhtml"
       depends="build-init, preprocess, dita.map.xhtml, copy-revflag, 
-                     copy-css, dita.topics.xhtml">
+                     copy-css , dita.topics.xhtml, dita.inner.topics.xhtml, dita.outer.topics.xhtml">
     </target>
 
     <target name="dita.map.xhtml"
-            depends="dita.map.xhtml.init, dita.map.xhtml.toc" />
+            depends="dita.map.xhtml.init, dita.map.xhtml.toc , dita.out.map.xhtml.toc" />
 
     <target name="dita.map.xhtml.init" description="">
         <condition property="out.ext" value=".html">
@@ -30,9 +30,11 @@
             </not>
         </condition>
     </target>
+    
 
+  	
     <target name="dita.map.xhtml.toc"
-            unless="noMap"
+            unless="noMap" if="old.transform"
             description="Build HTML TOC file">
         <xslt processor="trax"
               basedir="${dita.temp.dir}"
@@ -41,9 +43,34 @@
               style="${dita.script.dir}${file.separator}map2xhtmtoc.xsl">
             <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
             <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
+            <param name="contenttarget" expression="${args.xhtml.contenttarget}" if="args.xhtml.contenttarget"/>
+            <param name="CSS" expression="${args.css.file}" if="args.css.file" />
+            <param name="CSSPATH" expression="${user.csspath}" if="user.csspath" />
+            <param name="OUTPUTCLASS" expression="${args.xhtml.toc.class}" if="args.xhtml.toc.class" />
             <mapper type="glob"
                     from="*${dita.input.filename}"
                     to="*${args.xhtml.toc}${out.ext}" />
+        </xslt>
+    </target>
+    
+
+    <target name="dita.out.map.xhtml.toc"
+            unless="noMap" if="inner.transform"
+            description="Build HTML TOC file,which will adjust the directory">
+        <xslt processor="trax"
+              basedir="${dita.temp.dir}"
+              destdir="${output.dir}"
+              includes="${user.input.file}"
+              style="${dita.script.dir}${file.separator}map2xhtmtoc.xsl">
+            <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
+            <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
+            <param name="contenttarget" expression="${args.xhtml.contenttarget}" if="args.xhtml.contenttarget"/>
+            <param name="CSS" expression="${args.css.file}" if="args.css.file" />
+            <param name="CSSPATH" expression="${user.csspath}" if="user.csspath" />
+            <param name="OUTPUTCLASS" expression="${args.xhtml.toc.class}" if="args.xhtml.toc.class" />
+            <mapper type="glob"
+                    from="${user.input.file}"
+                    to="${args.xhtml.toc}${out.ext}" />
         </xslt>
     </target>
 </project>

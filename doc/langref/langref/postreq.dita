@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<reference id="postreq" xml:lang="en-us">
+<title>postreq</title>
+<shortdesc>The &lt;<keyword>postreq</keyword>&gt; element describes steps
+or tasks that the user should do after the successful completion of the current
+task. It is often supported by links to the next task or tasks in the &lt;<keyword>related-links</keyword>&gt;
+section.</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>postreq</indexterm><indexterm>Task elements<indexterm>postreq</indexterm></indexterm>
+</keywords><?Pub Caret1?>
+</metadata></prolog>
+<refbody>
+<example><title>Example</title><pre>&lt;postreq&gt;Notify the proctor upon completing this self-test.&lt;/postreq&gt; 
+</pre></example>
+<section conref="../common/commonNavLibraryTable.dita#models/postreq-contains"
+otherprops="contains"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/postreq-containedby"
+otherprops="containedby"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/postreq-classvalue"
+otherprops="classvalue"></section>
+<section id="attrs"><title>Attributes</title> <simpletable id="postreq_attr"
+relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/univ-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/classandout"><stentry/><stentry/><stentry/><stentry/><stentry/></strow>
+</simpletable> </section>
+</refbody>
+</reference>
+<?Pub *0000002206?>

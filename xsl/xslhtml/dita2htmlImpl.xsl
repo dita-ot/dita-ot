@@ -1927,6 +1927,7 @@
   </xsl:call-template>
 <xsl:call-template name="spec-title-nospace"/>
 <pre>
+  <xsl:attribute name="class"><xsl:value-of select="name()"/></xsl:attribute>
   <xsl:call-template name="commonattributes"/>
   <xsl:call-template name="gen-style">
     <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
@@ -2888,7 +2889,7 @@
   <xsl:choose>
     <!-- When entry is empty, output a blank -->
     <xsl:when test="not(*|text()|processing-instruction())">
-      <xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text>  <!-- nbsp -->
+      <xsl:text disable-output-escaping="yes">&amp;#xA0;</xsl:text>  <!-- nbsp -->
     </xsl:when>
     <xsl:otherwise>
       <xsl:variable name="revtest">
@@ -3544,7 +3545,7 @@
    <xsl:value-of select="@specentry"/>
   </xsl:when>
   <xsl:when test="not(*|text()|processing-instruction())">
-    <xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text>  <!-- nbsp -->
+    <xsl:text disable-output-escaping="yes">&amp;#xA0;</xsl:text>  <!-- nbsp -->
   </xsl:when>
   <xsl:otherwise>
    <xsl:apply-templates/>
@@ -4180,12 +4181,18 @@
           <xsl:text>/</xsl:text>
           <xsl:value-of select="@id"/>
         </xsl:variable>
-        <xsl:if test="key('xref',$refid)">
-          <a>
-            <xsl:call-template name="setid"/>              
-            <sup><xsl:value-of select="$convergedcallout"/></sup>
-          </a><xsl:text>  </xsl:text>
-        </xsl:if>
+        <xsl:choose>
+          <xsl:when test="key('xref',$refid)">
+            <a>
+              <xsl:call-template name="setid"/>              
+              <sup><xsl:value-of select="$convergedcallout"/></sup>
+            </a><xsl:text>  </xsl:text>
+          </xsl:when>
+          <xsl:otherwise>
+            <sup><xsl:value-of select="$convergedcallout"/></sup><xsl:text>  </xsl:text>
+          </xsl:otherwise>
+        </xsl:choose>
+        
       </xsl:when>
       <xsl:otherwise>
         <a>
@@ -4391,7 +4398,7 @@
     <img src="tip-ing.jpg" alt="tip-ing.jpg"/> <!-- this should be an xsl:choose with the approved list and a selection method-->
     <!-- add any other required positioning controls, if needed, but must be valid in the location
          from which the call to this template was made -->
-    <xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text>
+    <xsl:text disable-output-escaping="yes">&amp;#xA0;</xsl:text>
   </xsl:if>
 </xsl:template>
 
@@ -4401,43 +4408,67 @@
 <!-- ========== STUBS FOR USER PROVIDED OVERRIDE EXTENSIONS ========== -->
 
 <xsl:template name="gen-user-head">
+  <xsl:apply-templates select="." mode="gen-user-head"/>
+</xsl:template>
+<xsl:template match="/|node()|@*" mode="gen-user-head">
   <!-- to customize: copy this to your override transform, add the content you want. -->
   <!-- it will be placed in the HEAD section of the XHTML. -->
 </xsl:template>
 
 <xsl:template name="gen-user-header">
+  <xsl:apply-templates select="." mode="gen-user-header"/>
+</xsl:template>
+<xsl:template match="/|node()|@*" mode="gen-user-header">
   <!-- to customize: copy this to your override transform, add the content you want. -->
   <!-- it will be placed in the running heading section of the XHTML. -->
 </xsl:template>
 
 <xsl:template name="gen-user-footer">
+  <xsl:apply-templates select="." mode="gen-user-footer"/>
+</xsl:template>
+<xsl:template match="/|node()|@*" mode="gen-user-footer">
   <!-- to customize: copy this to your override transform, add the content you want. -->
   <!-- it will be placed in the running footing section of the XHTML. -->
 </xsl:template>
 
 <xsl:template name="gen-user-sidetoc">
+  <xsl:apply-templates select="." mode="gen-user-sidetoc"/>
+</xsl:template>
+<xsl:template match="/|node()|@*" mode="gen-user-sidetoc">
   <!-- to customize: copy this to your override transform, add the content you want. -->
   <!-- Uncomment the line below to have a "freebie" table of contents on the top-right -->
 </xsl:template>
 
 <xsl:template name="gen-user-scripts">
+  <xsl:apply-templates select="." mode="gen-user-scripts"/>
+</xsl:template>
+<xsl:template match="/|node()|@*" mode="gen-user-scripts">
   <!-- to customize: copy this to your override transform, add the content you want. -->
   <!-- It will be placed before the ending HEAD tag -->
   <!-- see (or enable) the named template "script-sample" for an example -->
 </xsl:template>
 
 <xsl:template name="gen-user-styles">
+  <xsl:apply-templates select="." mode="gen-user-styles"/>
+</xsl:template>
+<xsl:template match="/|node()|@*" mode="gen-user-styles">
   <!-- to customize: copy this to your override transform, add the content you want. -->
   <!-- It will be placed before the ending HEAD tag -->
 </xsl:template>
 
 <xsl:template name="gen-user-external-link">
+  <xsl:apply-templates select="." mode="gen-user-external-link"/>
+</xsl:template>
+<xsl:template match="/|node()|@*" mode="gen-user-external-link">
   <!-- to customize: copy this to your override transform, add the content you want. -->
   <!-- It will be placed after an external LINK or XREF -->
 </xsl:template>
 
 
 <xsl:template name="gen-user-panel-title-pfx">
+  <xsl:apply-templates select="." mode="gen-user-panel-title-pfx"/>
+</xsl:template>
+<xsl:template match="/|node()|@*" mode="gen-user-panel-title-pfx">
   <!-- to customize: copy this to your override transform, add the content you want. -->
   <!-- It will be placed immediately after TITLE tag, in the title -->
 </xsl:template>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<reference id="anchor" xml:lang="en-us">
+<title>anchor</title>
+<shortdesc rev="1.1">The &lt;<?Pub Caret1?><keyword>anchor</keyword>&gt; element
+is used for runtime integration of navigation. It provides an integration
+point that another map can point to in order to insert its navigation into
+the current navigation tree. <!--
+It is currently supported by Eclipse output only.
+--> For those familiar with Eclipse help systems, this serves the same purpose
+as the &lt;anchor> element in that system. It may not be supported for all
+output formats.</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>anchor</indexterm><indexterm>map reference anchor point</indexterm>
+<indexterm>Map elements<indexterm>anchor</indexterm></indexterm></keywords>
+</metadata></prolog>
+<refbody>
+<section>For build-time integration, you can use the conref attribute on an
+element inside the map (for example, a topicref) to pull in content from a
+matching element (for example, another topicref) in another map.</section>
+<example><title>Example</title>In this example, an anchor is defined with
+an ID of "a1". This ID can be referenced by the anchorref attribute on another
+map's map element.<codeblock>&lt;map title="MyComponent tasks"&gt;
+ &lt;topicref navtitle="Start here" href="start.dita" toc="yes"&gt;
+  &lt;navref mapref="othermap2.ditamap"/&gt;
+  &lt;navref mapref="othermap3.ditamap"/&gt;
+  &lt;anchor id="a1"/&gt;
+ &lt;/topicref&gt;
+&lt;/map&gt;</codeblock></example>
+<section conref="../common/commonNavLibraryTable.dita#models/anchor-contains" otherprops="contains"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/anchor-containedby" otherprops="containedby"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/anchor-classvalue" otherprops="classvalue"></section>
+<section id="attrs"><title>Attributes</title> <simpletable id="anchor_attr"
+relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/id-anchor">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/conref">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/select-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/localization-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/classandout"><stentry/><stentry/><stentry/><stentry/><stentry/></strow>
+</simpletable> </section>
+</refbody>
+</reference>
+<?Pub *0000003494?>

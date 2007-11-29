@@ -21,26 +21,31 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
+
+import org.dita.dost.exception.DITAOTXMLErrorHandler;
+import org.dita.dost.exception.DITAOTException;
 
 import org.dita.dost.log.DITAOTJavaLogger;
+import org.dita.dost.log.MessageBean;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.Constants;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.FilterUtils;
 import org.dita.dost.util.StringUtils;
+import org.dita.dost.util.OutputUtils;
+
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 
 import org.xml.sax.SAXNotRecognizedException;
 import org.xml.sax.SAXNotSupportedException;
-
+import org.xml.sax.SAXParseException;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
+
 
 /**
  * This class extends AbstractReader, used to parse relevant dita topics 
@@ -100,6 +105,18 @@ public class GenListModuleReader extends AbstractXMLReader {
 	private DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
 	
 	private String ditaDir = null;
+	
+	private boolean needValidate=true;
+	
+	/** Set of outer dita files */
+	private Set outDitaFilesSet=null;
+	
+	private static String rootDir = null;
+	
+	private static String inputDitaFile=null;
+	
+	private String currentFile=null;
+	
 	//private static GenListModuleReader parserInstance = new GenListModuleReader();
 	
 	/**
@@ -113,6 +130,7 @@ public class GenListModuleReader extends AbstractXMLReader {
 		copytoMap = new HashMap(Constants.INT_16);
 		subsidiarySet = new HashSet(Constants.INT_16);
 		ignoredCopytoSourceSet = new HashSet(Constants.INT_16);
+		outDitaFilesSet=new HashSet(Constants.INT_64);
 		props = null;
 		reader.setContentHandler(this);
 		try {
@@ -139,18 +157,27 @@ public class GenListModuleReader extends AbstractXMLReader {
      * @throws SAXException
      * @param ditaDir 
      */
-	public static void initXMLReader(String ditaDir) throws SAXException {
+	public static void initXMLReader(String ditaDir,boolean validate,String rootFile) throws SAXException {
 		DITAOTJavaLogger javaLogger=new DITAOTJavaLogger();
 		if (System.getProperty(Constants.SAX_DRIVER_PROPERTY) == null) {
 			// The default sax driver is set to xerces's sax driver
 			StringUtils.initSaxDriver();
 		}
 		
-
+		//to check whether the current parsing file's href value is out of inputmap.dir
+		rootDir=new File(rootFile).getAbsoluteFile().getParent();
+		//to check whether the current parsing file is input file.
+		inputDitaFile=rootFile;
+		
 		reader = XMLReaderFactory.createXMLReader();
 		reader.setFeature(Constants.FEATURE_NAMESPACE_PREFIX, true);
-		reader.setFeature(Constants.FEATURE_VALIDATION, true);
-		reader.setFeature(Constants.FEATURE_VALIDATION_SCHEMA, true);
+		if(validate==true){
+			reader.setFeature(Constants.FEATURE_VALIDATION, true);
+			reader.setFeature(Constants.FEATURE_VALIDATION_SCHEMA, true);
+		}else{
+			String msg=MessageUtils.getMessage("DOTJ037W").toString();
+			javaLogger.logWarn(msg);
+		}
 		
 		CatalogUtils.initCatalogResolver(ditaDir);
 		catalogMap = CatalogUtils.getCatalog(ditaDir);
@@ -172,6 +199,7 @@ public class GenListModuleReader extends AbstractXMLReader {
 		conrefTargets.clear();
 		copytoMap.clear();
 		ignoredCopytoSourceSet.clear();
+		outDitaFilesSet.clear();
 	}
 
 	/**
@@ -236,6 +264,15 @@ public class GenListModuleReader extends AbstractXMLReader {
 	}
 	
 	/**
+	 * Get outditafileslist.
+	 * 
+	 * @return Returns the outditafileslist.
+	 */
+	public Set getOutDitaFilesSet(){
+		return outDitaFilesSet;
+	}
+	
+	/**
 	 * Get non-conref and non-copyto targets.
 	 * 
 	 * @return Returns the nonConrefCopytoTargets.
@@ -289,7 +326,9 @@ public class GenListModuleReader extends AbstractXMLReader {
 	 * @throws FileNotFoundException
 	 */
 	public void parse(File file) throws FileNotFoundException, IOException, SAXException {	
-		reader.parse(new InputSource(new FileInputStream(file)));		
+		currentFile=file.getAbsolutePath();
+		reader.setErrorHandler(new DITAOTXMLErrorHandler(file.getName()));
+		reader.parse(new InputSource(new FileInputStream(file)));	
 	}
 
 	/**
@@ -308,7 +347,7 @@ public class GenListModuleReader extends AbstractXMLReader {
 		Properties params = new Properties();
 		String msg = null;
         String attrValue = atts.getValue(Constants.ATTRIBUTE_NAME_CLASS);
-		if(attrValue==null){
+		if(attrValue==null && !Constants.ELEMENT_NAME_DITA.equals(localName)){
     		params.clear();
 			msg = null;
 			params.put("%1", localName);
@@ -398,7 +437,7 @@ public class GenListModuleReader extends AbstractXMLReader {
 	/*
 	 * Parse the input attributes for needed information.
 	 */
-	private void parseAttribute(Attributes atts, String attrName) {
+	private void parseAttribute(Attributes atts, String attrName) throws SAXException {
 		String attrValue = atts.getValue(attrName);
 		String filename = null;
 		String attrScope = atts.getValue(Constants.ATTRIBUTE_NAME_SCOPE);
@@ -446,7 +485,7 @@ public class GenListModuleReader extends AbstractXMLReader {
 				(StringUtils.isEmptyString(atts.getValue(Constants.ATTRIBUTE_NAME_COPY_TO)) ||
 						!FileUtils.isTopicFile(atts.getValue(Constants.ATTRIBUTE_NAME_COPY_TO).toLowerCase()))
 				&& !Constants.ATTRIBUTE_NAME_CONREF.equals(attrName)
-				&& !Constants.ATTRIBUTE_NAME_COPY_TO.equals(attrName)) {
+				&& !Constants.ATTRIBUTE_NAME_COPY_TO.equals(attrName) && canResolved() ) {
 			nonConrefCopytoTargets.add(filename);
 		}
 		
@@ -462,8 +501,9 @@ public class GenListModuleReader extends AbstractXMLReader {
 		 * Collect only href target topic files for index extracting.
 		 */
 		if (Constants.ATTRIBUTE_NAME_HREF.equals(attrName)
-				&& FileUtils.isTopicFile(filename)) {
+				&& FileUtils.isTopicFile(filename) && canResolved()) {
 			hrefTargets.add(new File(filename).getPath());
+			toOutFile(new File(filename).getPath());
 		}
 		
 		/*
@@ -472,6 +512,7 @@ public class GenListModuleReader extends AbstractXMLReader {
 		if (Constants.ATTRIBUTE_NAME_CONREF.equals(attrName)
 				&& FileUtils.isDITAFile(filename)) {
 			conrefTargets.add(filename);
+			toOutFile(new File(filename).getPath());
 		}
 		
 		// Collect copy-to (target,source) into hash map
@@ -500,5 +541,67 @@ public class GenListModuleReader extends AbstractXMLReader {
 			}
 				
 		}
+	}
+	
+	private boolean isOutFile(String toCheckPath) {
+		String mapDir = rootDir;
+		String ditaFile = new File(FileUtils.removeRedundantNames(toCheckPath))
+				.getPath();
+		//System.out.println("Current path:"+ditaFile+"\n");
+		//System.out.println("Map path:"+mapDir+"\n");
+		if (!toCheckPath.startsWith(".."))
+			return false;
+		else
+			return true;
+
+	}
+
+	private boolean isMapFile() {
+		String current=FileUtils.removeRedundantNames(currentFile);
+		String input=FileUtils.removeRedundantNames(inputDitaFile);
+		//if (current.equalsIgnoreCase(input))
+		if(FileUtils.isDITAMapFile(current))	
+			return true;
+		else
+			return false;
+	}
+	private boolean canResolved(){
+		if ((OutputUtils.getOnlyTopicInMap() == false) || isMapFile() )
+			return true;
+		else
+			return false;
+	}
+	private void addToOutFilesSet(String hrefedFile) {
+		if (canResolved()) {
+			outDitaFilesSet.add(hrefedFile);
+		}
+
+	}
+	
+	private void toOutFile(String filename) throws SAXException {
+		//the filename is a relative path from the dita input file
+		//System.out.println("toCheck"+filename+"\n");
+		Properties prop=new Properties();
+		prop.put("%1", FileUtils.normalizeDirectory(rootDir, filename));
+		prop.put("%2", FileUtils.removeRedundantNames(currentFile));
+		if ((OutputUtils.getGeneratecopyouter() == OutputUtils.NOT_GENERATEOUTTER) 
+				|| (OutputUtils.getGeneratecopyouter() == OutputUtils.GENERATEOUTTER)) {
+			if (isOutFile(filename)) {
+				if (OutputUtils.getOutterControl().equals(OutputUtils.OUTTERCONTROL_FAIL)){
+					MessageBean msgBean=MessageUtils.getMessage("DOTJ035F", prop);	
+					throw new SAXParseException(null,null,new DITAOTException(msgBean,null,msgBean.toString()));	
+				}
+				if (OutputUtils.getOutterControl().equals(OutputUtils.OUTTERCONTROL_WARN)){
+					String message=MessageUtils.getMessage("DOTJ036W",prop).toString();
+					javaLogger.logWarn(message);
+				}
+				addToOutFilesSet(filename);
+			}
+
+		}
+
+	}
+	public Set getOutFilesSet(){
+		return outDitaFilesSet;
 	}
 }

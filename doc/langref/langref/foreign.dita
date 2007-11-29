@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<reference id="foreign" rev="1.1" xml:lang="en-us"><?Pub Caret?>
+<title>foreign</title>
+<shortdesc> The &lt;foreign&gt; element is an open extension that allows information
+architects to incorporate existing standard vocabularies for non-textual content.
+like MathML and SVG, as inline objects. If &lt;foreign&gt; contains more than
+one alternative content element, they will all be processed. Specialization
+of &lt;foreign&gt; should be implemented as a domain, but for those looking
+for more control over the content can implement foreign vocabulary as an element
+specialization.</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>Specialization elements<indexterm>foreign</indexterm></indexterm>
+<indexterm>foreign</indexterm><indexterm>Including foreign vocabularies</indexterm>
+</keywords>
+</metadata></prolog>
+<refbody>
+<example><title><b>SVG Example within a &lt;p&gt; element</b></title><pre>&lt;p&gt;... as in the formula 
+  &lt;svg&gt;
+    &lt;svg:svg width="100%" height="100%" version="1.1"
+xmlns="http://www.w3.org/2000/svg"&gt;
+
+&lt;ellipse cx="300" cy="150" rx="200" ry="80"
+style="fill:rgb(200,100,50);
+stroke:rgb(0,0,100);stroke-width:2"/&gt;
+
+    &lt;/svg:svg&gt;    
+  &lt;/svg&gt;.
+&lt;/p&gt; </pre></example>
+<example><title>MathML Example within an &lt;object&gt; element</title><pre>&lt;p&gt;... as in the formula 
+&lt;object&gt;
+  &lt;desc&gt;4 + x&lt;/desc&gt;
+  &lt;mathML&gt;
+    &lt;mml:math display="block"&gt;
+      &lt;mml:mrow&gt;
+        &lt;mml:mo&gt;&amp;sum;&lt;/mml:mo&gt;
+        &lt;mml:mn&gt;4&lt;/mml:mn&gt;
+        &lt;mml:mo&gt;+&lt;/mml:mo&gt;
+        &lt;mml:mi&gt;x&lt;/mml:mi&gt;
+      &lt;/mml:mrow&gt;
+    &lt;/mml:math&gt;    
+  &lt;/mathML&gt;
+ &lt;object&gt;.
+&lt;/p&gt; </pre></example>
+<section conref="../common/commonNavLibraryTable.dita#models/foreign-contains"
+otherprops="contains"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/foreign-containedby"
+otherprops="containedby"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/foreign-classvalue"
+otherprops="classvalue"></section>
+<section id="attrs"><title>Attributes</title> <simpletable id="foreign_attr"
+relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/univ-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/classandout"><stentry/><stentry/><stentry/><stentry/><stentry/></strow>
+</simpletable> </section>
+</refbody>
+</reference>
+<?Pub *0000003277?>

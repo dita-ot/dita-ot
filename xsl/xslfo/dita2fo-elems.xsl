@@ -484,7 +484,7 @@
 <xsl:template name="get-image-uri">
   <xsl:param name="href" select="@href" />
   <!--hard force the extension to jpg -->
-  <xsl:choose>
+  <!--xsl:choose>
     <xsl:when test="contains($href,'.gif')">
       <xsl:value-of select="concat($img-path, substring-before($href,'.gif'), $dflt-ext)"/>
     </xsl:when>
@@ -493,8 +493,9 @@
     </xsl:when>
     <xsl:otherwise>
       <xsl:value-of select="$href"/>
-    </xsl:otherwise>
-  </xsl:choose>     
+    </xsl:otherwise-->
+  <xsl:value-of select="$href"/>
+  <!--</xsl:choose> -->
 </xsl:template>
 <!-- this is unused for now, but is browser specific; must be converted! -->
 <xsl:template name="topic-image">

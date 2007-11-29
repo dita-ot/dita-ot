@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<!--             (C) Copyright OASIS Open 2005.                    -->
+<!--             (C) Copyright IBM Corporation 2001, 2004.         -->
+<!--             All Rights Reserved.                              -->
+<reference id="userid" xml:lang="en-us">
+<title>User interface elements</title>
+<shortdesc>The user interface domain elements are used to describe the user
+interface of a software program.</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>Domains elements<indexterm>user interface domain</indexterm></indexterm>
+<indexterm>User interface elements</indexterm></keywords>
+</metadata></prolog>
+<refbody></refbody><?Pub Caret1?>
+</reference>
+<?Pub *0000000834?>

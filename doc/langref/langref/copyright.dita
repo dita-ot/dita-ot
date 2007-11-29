@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<reference id="copyright" xml:lang="en-us">
+<title>copyright</title>
+<shortdesc>The &lt;<keyword>copyright</keyword>&gt; element is used for a
+single copyright entry. It includes the copyright years and the copyright
+holder.  Multiple &lt;<keyword>copyright</keyword>&gt; statements are allowed.</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>copyright</indexterm><indexterm>Prolog elements<indexterm>copyright</indexterm></indexterm>
+</keywords><?Pub Caret1?>
+</metadata></prolog>
+<refbody>
+<example><title>Example</title><codeblock>&lt;prolog&gt;
+&lt;copyright&gt;
+&lt;copyryear year="2001-04-12"&gt;&lt;/copyryear&gt;
+&lt;copyrholder&gt;IBM&lt;/copyrholder&gt;
+&lt;/copyright&gt;
+&lt;copyright type=secondary&gt;
+&lt;copyryear year="2002-03-03&gt;&lt;/copyryear&gt;
+&lt;copyrholder&gt;Schweetones Publishing, Inc.&lt;/copyrholder&gt;
+&lt;/copyright&gt;
+&lt;/prolog&gt;</codeblock></example>
+<section conref="../common/commonNavLibraryTable.dita#models/copyright-contains"
+otherprops="contains"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/copyright-containedby"
+otherprops="containedby"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/copyright-classvalue"
+otherprops="classvalue"></section>
+<section id="attrs"><title>Attributes</title> <simpletable id="copyright_attr"
+relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/type-copyright">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/univ-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/classonly"><stentry/><stentry/><stentry/><stentry/><stentry/></strow>
+</simpletable> </section>
+</refbody>
+</reference>
+<?Pub *0000002446?>

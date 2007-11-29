@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<reference id="relrow" xml:lang="en-us">
+<title>relrow</title>
+<shortdesc>A &lt;<keyword>relrow</keyword>&gt; is a row in the relationship
+table. This creates a relationship between the cells in the row, which will
+end up expressed as links among the &lt;<keyword>topicref</keyword>&gt; elements
+in the cells.</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>relrow</indexterm><indexterm>Map elements<indexterm>relrow</indexterm></indexterm>
+</keywords><?Pub Caret1?>
+</metadata></prolog>
+<refbody>
+<example><title>Example</title>See <xref href="reltable.dita"></xref>.</example>
+<section conref="../common/commonNavLibraryTable.dita#models/relrow-contains"
+otherprops="contains"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/relrow-containedby"
+otherprops="containedby"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/relrow-classvalue"
+otherprops="classvalue"></section>
+<section id="attrs"><title>Attributes</title> <simpletable id="relrow_attr"
+relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/univ-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/classandout"><stentry/><stentry/><stentry/><stentry/><stentry/></strow>
+</simpletable> </section>
+</refbody>
+</reference>
+<?Pub *0000002115?>

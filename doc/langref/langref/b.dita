@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<reference id="b" xml:lang="en-us">
+<title>b</title>
+<shortdesc>The bold (&lt;<keyword>b</keyword>&gt;) element is used to apply
+bold highlighting to the content of the element. <ph id="highlight-caution">Use
+this element only when there is not some other more proper element. For example,
+for specific items such as GUI controls, use the &lt;<keyword>uicontrol</keyword>>
+element.  This element is part of the DITA highlighting domain.</ph></shortdesc>
+<prolog><metadata>
+<keywords><indexterm>b (bold)</indexterm><indexterm>bold (b)</indexterm><indexterm>Typographic
+elements<indexterm>b (bold)</indexterm></indexterm></keywords>
+</metadata></prolog>
+<refbody><?Pub Caret?>
+<example><title>Example</title><codeblock>&lt;p&gt;&lt;b&gt;STOP!&lt;/b&gt; This is &lt;b&gt;very&lt;/b&gt; important!&lt;/p&gt;</codeblock></example>
+<section conref="../common/commonNavLibraryTable.dita#models/b-contains" otherprops="contains"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/b-containedby" otherprops="containedby"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/b-classvalue" otherprops="classvalue"></section>
+<section id="attrs"><title>Attributes</title> <simpletable id="b_attr" relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/univ-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/classandout"><stentry/><stentry/><stentry/><stentry/><stentry/></strow>
+</simpletable> </section>
+</refbody>
+</reference>
+<?Pub *0000002338?>

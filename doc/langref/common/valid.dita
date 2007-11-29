@@ -1,0 +1,22 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE reference  PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<!--             (C) Copyright OASIS Open 2005.                    -->
+<!--             (C) Copyright IBM Corporation 2001, 2004.         -->
+<!--             All Rights Reserved.                              -->
+<reference id="valid" xml:lang="en-us">
+   <title>Miscellaneous elements</title>
+   <refbody>
+      <section>
+         <p>Most DITA elements represent discourse, or information that is placed exactly
+as entered. However, there are also types of information that are usually
+authored in context with a thought or issue, but upon output, the content
+might be relocated, suppressed, or used only for purposes such as inline annotations
+for drafts. These elements include footnotes, index entries, draft comments,
+and special cleanup containers that can hold migrated data that still needs
+a writer's intervention to get into the right place.<indexterm>Miscellaneous
+elements</indexterm>
+         </p>
+      </section>
+   </refbody>
+</reference>

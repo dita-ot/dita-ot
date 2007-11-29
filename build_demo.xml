@@ -50,7 +50,7 @@
 	<property name="dita.demo.dir"
 		value="${dita.dir}${file.separator}demo"/>
 	<property name="dita.demo.book.dir"
-		value="${dita.demo.dir}${file.separator}book"/>
+		value="${dita.dir}${file.separator}samples"/>
 	<property name="dita.demo.elementref.dir"
 		value="${dita.demo.dir}${file.separator}elementref"/>
 	<property name="dita.demo.enote.dir"
@@ -138,10 +138,10 @@
 		<mkdir dir="${dita.output.demo.book.dir}"/>
 		<antcall target="dita2xhtml">
 			<param name="args.input"
-				value="${dita.demo.book.dir}${file.separator}bookmap-readme.xml"/>
+				value="${dita.demo.book.dir}${file.separator}taskbook.ditamap"/>
 			<param name="output.dir"
 				value="${dita.output.demo.book.dir}"/>
-      <param name="transtype" value="xhtml"/>
+      		<param name="transtype" value="xhtml"/>
 		</antcall>
 		<antcall target="dita2pdf">
 			<param name="args.input"
@@ -302,7 +302,7 @@
 				value="${dita.output.demo.langrefhelp.dir}"/>
             <param name="transtype" value="htmlhelp"/>
             <param name="dita.extname" value="dita"/>
-            <param name="args.ftr" value="${dita.doc.langref.dir}${file.separator}langref-footer.html"/>
+            <param name="args.ftr" value="${dita.doc.langref.dir}${file.separator}langref-footer.xml"/>
             <param name="args.css" value="${dita.doc.langref.dir}${file.separator}resource${file.separator}dita-oasis.css"/>
             <param name="args.copycss" value="yes"/>
 		</antcall>
@@ -805,5 +805,17 @@
         <param name="transtype" value="troff"/>
   		</antcall>
   	</target>
+	
+  <!-- The whole process on which javamerge depends equals to the target "dita-process" in build.xml. -->
+  <target name="javamerge"  description="Merge topics" depends="start-process, init-logger, check-arg, output-deprecated-msg, output-css-warn-message, preprocess">
+	<basename property="temp.base" file="${user.input.file}" suffix=".ditamap"/>
+    <property name="temp.input" value="${dita.temp.dir}${file.separator}${user.input.file}"/>
+    <property name="temp.output" value="${output.dir}${file.separator}${user.input.file}"/>
+    <dirname property="temp.dir" file="${temp.input}"/>
+    <dirname property="temp.outdir" file="${temp.output}"/>
+    <pipeline message="topicmerge" module="TopicMerge" 
+      inputmap="${temp.dir}${file.separator}${temp.base}.ditamap" 
+      extparam="output=${temp.outdir}${file.separator}${temp.base}_merged.xml" /> 
+  </target>
 	
 </project>

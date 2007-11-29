@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<reference id="conbody" xml:lang="en-us">
+<title>conbody</title>
+<shortdesc>The &lt;<keyword>conbody</keyword>&gt; element is the main body-level
+element for a concept. Like the &lt;body&gt; element of a general &lt;topic&gt;, &lt;<keyword>conbody</keyword>&gt;
+allows paragraphs, lists, and other elements as well as sections and examples.
+But &lt;<keyword>conbody</keyword>&gt; has a constraint that a section or
+an example can be followed only by other sections or examples.</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>conbody (concept body)</indexterm><indexterm><?Pub Caret1?>Concept
+elements<indexterm>conbody</indexterm></indexterm></keywords>
+</metadata></prolog>
+<refbody>
+<example></example>
+<section conref="../common/commonNavLibraryTable.dita#models/conbody-contains"
+otherprops="contains"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/conbody-containedby"
+otherprops="containedby"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/conbody-classvalue"
+otherprops="classvalue"></section>
+<section id="attrs"><title>Attributes</title> <simpletable id="conbody_attr"
+relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/base">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/id-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/localization-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/classandout"><stentry/><stentry/><stentry/><stentry/><stentry/></strow>
+</simpletable> </section>
+</refbody>
+</reference>
+<?Pub *0000002426?>

@@ -29,24 +29,32 @@
       <xs:element ref="imagemap"/>
     </xs:choice>
   </xs:group>
-
-  <xs:group name="ut-d-figgroup">
-    <xs:choice>
-      <xs:element ref="area"/>
-    </xs:choice>
-  </xs:group>
-
-  <xs:group name="ut-d-ph">
-    <xs:choice>
-      <xs:element ref="coords"/>
-    </xs:choice>
-  </xs:group>
-
-  <xs:group name="ut-d-keyword">
+ 
+  <xs:group name="shape">
     <xs:choice>
       <xs:element ref="shape"/>
     </xs:choice>
   </xs:group>
+  
+  <xs:group name="coords">
+    <xs:choice>
+      <xs:element ref="coords"/>
+    </xs:choice>
+  </xs:group>
+  
+  <xs:group name="area">
+    <xs:choice>
+      <xs:element ref="area"/>
+    </xs:choice>
+  </xs:group>
+  
+  <xs:group name="imagemap">
+    <xs:choice>
+      <xs:element ref="imagemap"/>
+    </xs:choice>
+  </xs:group>
+  
+  
 
 
   <!-- Base form: Imagemap ((%image;), (%area;)+) -->

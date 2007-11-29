@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<reference id="section" xml:lang="en-us">
+<title>section</title>
+<shortdesc>The &lt;<keyword>section</keyword>&gt; element represents an organizational
+division in a topic. Sections are used to organize subsets of information
+that are directly related to the topic. For example, the titles <b>Reference
+Syntax</b>, <b>Example</b> and <b>Properties</b> might represent section-level
+discourse within a topic about a command-line process—the content in each
+section relates uniquely to the subject of that topic. Multiple sections within
+a single topic do not represent a hierarchy, but rather peer divisions of
+that topic. Sections cannot be nested. A section may have an optional title.</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>section</indexterm><indexterm>Topic elements<indexterm>section</indexterm></indexterm>
+</keywords><?Pub Caret1?>
+</metadata></prolog>
+<refbody>
+<example><title>Example</title><codeblock>&lt;reference id="reference"&gt;
+ &lt;title&gt;Copy Command&lt;/title&gt;
+ &lt;refbody&gt;
+  &lt;section&gt;
+   &lt;title&gt;Purpose&lt;/title&gt;
+   This little command copies
+   things.
+  &lt;/section&gt;
+ &lt;/refbody&gt;
+&lt;/reference&gt;</codeblock></example>
+<section conref="../common/commonNavLibraryTable.dita#models/section-contains" otherprops="contains"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/section-containedby" otherprops="containedby"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/section-classvalue" otherprops="classvalue"></section>
+<section id="attrs"><title>Attributes</title> <simpletable id="section_attr"
+relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/spectitle">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/univ-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/classandout"><stentry/><stentry/><stentry/><stentry/><stentry/></strow>
+</simpletable> </section>
+</refbody>
+</reference>
+<?Pub *0000002883?>

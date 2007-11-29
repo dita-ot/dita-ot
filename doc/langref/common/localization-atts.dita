@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<reference id="localization-atts" rev="1.1" xml:lang="en-us">
+<title>%localization-atts;</title>
+<shortdesc>Localization attributes is a parameter entity declaration in the
+topic DTD, which defines a set of common attributes available on most DITA
+elements.</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>%localization-atts</indexterm><indexterm>Commonly referenced
+attribute descriptions<indexterm>%localization-atts<?Pub Caret?></indexterm></indexterm>
+</keywords>
+</metadata></prolog>
+<refbody>
+<section>The localization-atts entity includes:<ul>
+<li>           <i>             <keyword>translate</keyword>           </i> 
+        </li>
+<li>            <i>             <keyword>xml:lang</keyword>           </i> 
+       </li>
+<li>           <i>             <keyword>dir</keyword>           </i>     
+   </li>
+</ul><p>Detailed information on localization with DITA, including several
+best practices on the use of these attributes, is available in the DITA Architectural
+Specification.</p></section>
+<!--xsection conref="DitabaseNav.dita#commonCMdefs/univ-atts-contains"/-->
+<!--xsection conref="DitabaseNav.dita#commonCMdefs/univ-atts-containedby"/-->
+<section>       <title>Attributes</title>       <simpletable id="loc_atts"
+relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="commonLRdefs.dita#commonLRdefs/translate">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/xmllang">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/dir">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+</simpletable>     </section>
+<example>The translate, xml:lang, and dir attributes identify language-specific
+words or phrases for specific processing (or non-processing, in the case of
+translate=&quot;no&quot;).<codeblock>&lt;p&gt;The cordial response to the question is 
+&lt;q translate=&quot;no&quot; xml:lang=&quot;de-de&quot; dir=&quot;ltr&quot;&gt;nein.&lt;/q&gt;&lt;/p&gt;</codeblock></example>
+</refbody>
+</reference>
+<?Pub *0000002529?>

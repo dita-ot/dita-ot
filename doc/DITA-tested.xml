@@ -27,7 +27,7 @@
       </strow>
       <strow>
         <stentry>Tested JDK:</stentry>
-        <stentry>IBM 1.4.2, SUN 1.4.2</stentry>
+        <stentry>IBM 1.5, SUN 1.5</stentry>
       </strow>
       <strow>
         <stentry>Tested Ant:</stentry>

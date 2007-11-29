@@ -56,7 +56,56 @@
     <xs:choice>
         <xs:element ref="syntaxdiagram"/>
     </xs:choice >
-  </xs:group >
+   </xs:group >
+  
+  <xs:group name="syntaxdiagram">
+    <xs:choice>
+      <xs:element ref="syntaxdiagram"/>
+    </xs:choice>
+  </xs:group>
+  
+  <xs:group name="parml">
+    <xs:choice>
+      <xs:element ref="parml"/>
+    </xs:choice>
+  </xs:group>
+  
+  <xs:group name="codeblock">
+    <xs:choice>
+      <xs:element ref="codeblock"/>
+    </xs:choice>
+  </xs:group>
+  
+  <xs:group name="synph">
+    <xs:choice>
+      <xs:element ref="synph"/>
+    </xs:choice>
+  </xs:group>
+  
+  <xs:group name="codeph">
+    <xs:choice>
+      <xs:element ref="codeph"/>
+    </xs:choice>
+  </xs:group>
+  
+  <xs:group name="option">
+    <xs:choice>
+      <xs:element ref="option"/>
+    </xs:choice>
+  </xs:group>
+  
+  <xs:group name="parmname">
+    <xs:choice>
+      <xs:element ref="parmname"/>
+    </xs:choice>
+  </xs:group>
+  
+  <xs:group name="apiname">
+    <xs:choice>
+      <xs:element ref="apiname"/>
+    </xs:choice>
+  </xs:group>
+  
 
   <xs:attributeGroup name="univ-atts-no-importance">
     <xs:attributeGroup ref="id-atts"/>

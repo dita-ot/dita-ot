@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<reference id="u" xml:lang="en-us">
+<title>u</title>
+<shortdesc>The underline (&lt;<keyword>u</keyword>&gt;) element is used to
+apply underline highlighting to the content of the element.  <ph conref="b.dita#b/highlight-caution"></ph></shortdesc>
+<prolog><metadata>
+<keywords><indexterm>u (underline)</indexterm><indexterm>underline (u)</indexterm>
+<indexterm>Typographic elements<?Pub Caret?><indexterm>u (underline)</indexterm></indexterm>
+</keywords>
+</metadata></prolog>
+<refbody>
+<example><title>Example</title><codeblock>Beware: &lt;u&gt;overuse&lt;/u&gt; &lt;i&gt;of&lt;/i&gt; &lt;b&gt;highlighting&lt;/b&gt; is 
+sometimes known as font-itis!
+</codeblock></example>
+<section conref="../common/commonNavLibraryTable.dita#models/u-contains" otherprops="contains"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/u-containedby" otherprops="containedby"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/u-classvalue" otherprops="classvalue"></section>
+<section id="attrs"><title>Attributes</title> <simpletable id="u_attr" relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/univ-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/classandout"><stentry/><stentry/><stentry/><stentry/><stentry/></strow>
+</simpletable> </section>
+</refbody>
+</reference>
+<?Pub *0000002185?>

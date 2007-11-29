@@ -8,7 +8,7 @@
  * (c) Copyright IBM Corp. 2005 All Rights Reserved.
  */
 package org.dita.dost.exception;
-
+import org.dita.dost.log.MessageBean;
 /**
  * Exception class for DITAOT, used to handle exceptions in Java modules.
  *
@@ -16,12 +16,13 @@ package org.dita.dost.exception;
  */
 public class DITAOTException extends Exception {	
 	private static final long serialVersionUID = -7505646495801170017L;
-
+	private MessageBean messageBean=null;
+	private boolean captured =false;
 	/**
 	 * Constructs a new DITAOTException with <code>null</code> as its detail message.
 	 */
 	public DITAOTException() {
-		this(null, null);
+		this((String)null, null);
 	}
 
 	/**
@@ -39,7 +40,7 @@ public class DITAOTException extends Exception {
 	 * @param cause the cause 
 	 */
 	public DITAOTException(Throwable cause) {
-		this(null, cause);
+		this((String)null, cause);
 	}
 
 	/**
@@ -52,5 +53,45 @@ public class DITAOTException extends Exception {
 	public DITAOTException(String message, Throwable cause) {
 		super(message, cause);
 	}
-
+	
+	/**
+	 * Constructs a new exception with the detailed messagebean and
+     * cause. 
+     * 
+	 * @param msgBean the bean contains detailed information for log statistic.
+	 * @param cause the cause 
+	 * @param message the detail message.
+	 */
+	public DITAOTException(MessageBean msgBean,Throwable cause,String message){
+		super(message, cause);
+		messageBean=msgBean;
+	}
+	/**
+	 * Retrieve the MessageBean
+     * 
+	 * @param none
+	 * @return MessageBean
+	 */
+	public MessageBean getMessageBean(){
+		return messageBean;
+	}
+	/**
+	 * To check whether the current exception has already been captured before.
+     * 
+	 * @param none
+	 * @return true if the exception has already solved,else false
+	 */
+	public boolean alreadyCaptured(){
+		return captured;
+	}
+	/**
+	 * To set the exception's status whether it is needed to solve.
+     * 
+	 * @param isCaptured
+	 */
+	public void setCaptured(boolean isCaptured){
+		captured=isCaptured;
+	}
+	
+	
 }

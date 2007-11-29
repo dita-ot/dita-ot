@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<reference id="synnoteref" xml:lang="en-us">
+<title>synnoteref</title>
+<shortdesc>The syntax note (&lt;<keyword>synnoteref</keyword>&gt;) reference
+element references a syntax note element (&lt;<keyword>synnote</keyword>&gt;)
+that has already been defined elsewhere in the syntax diagram. The same notation
+can be used in more than one syntax definition. The syntax note reference
+element is part of the DITA programming domain, a special set of DITA elements
+designed to document programming tasks, concepts and reference information.</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>synnoteref</indexterm><indexterm>Programming elements<indexterm>synnoteref</indexterm></indexterm>
+</keywords><?Pub Caret1?>
+</metadata></prolog>
+<refbody>
+<example><title>Example</title><pre>&lt;synnoteref href=&quot;#topicid/mysyn&quot;/&gt;
+</pre> </example>
+<section conref="../common/commonNavLibraryTable.dita#models/synnoteref-contains"
+otherprops="contains"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/synnoteref-containedby"
+otherprops="containedby"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/synnoteref-classvalue"
+otherprops="classvalue"></section>
+<section id="attrs">       <title>Attributes</title>       <simpletable id="synnoteref_attr"
+relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/href-synnoteref">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/univ-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/classandout"><stentry/><stentry/><stentry/><stentry/><stentry/></strow>
+</simpletable>     </section>
+</refbody>
+</reference>
+<?Pub *0000002595?>

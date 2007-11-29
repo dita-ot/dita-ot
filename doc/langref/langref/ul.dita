@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<reference id="ul" xml:lang="en-us">
+<title>ul</title>
+<shortdesc>In an unordered list (&lt;ul&gt;), the order of the list items
+is not significant. List items are typically styled on output with a "bullet"
+character, depending on nesting level.</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>ul (unordered list)</indexterm><indexterm>unordered list
+(ul)</indexterm><indexterm>Body elements<indexterm>ul (unordered list)</indexterm></indexterm>
+<indexterm>List elements<indexterm>unordered list<?Pub Caret?></indexterm></indexterm>
+</keywords>
+</metadata></prolog>
+<refbody>
+<example><title>Example</title><codeblock>&lt;ul&gt;
+ &lt;li&gt;This is an item in an unordered list.&lt;/li&gt;
+ &lt;li&gt;To separate it from other items in the list, the
+ formatter puts a bullet beside it.&lt;/li&gt;
+ &lt;li&gt;The following paragraph, contained in the list item
+ element, is part of the list item which contains it.
+ &lt;p&gt;This is the contained paragraph.&lt;/p&gt;&lt;/li&gt;
+ &lt;li&gt;This is the last list item in our unordered list.&lt;/li&gt;
+&lt;/ul&gt;</codeblock></example>
+<section conref="../common/commonNavLibraryTable.dita#models/ul-contains" otherprops="contains"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/ul-containedby"
+otherprops="containedby"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/ul-classvalue" otherprops="classvalue"></section>
+<section id="attrs"><title>Attributes</title> <simpletable id="ul_attr" relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/compact">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/spectitle">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/univ-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/classandout"><stentry/><stentry/><stentry/><stentry/><stentry/></strow>
+</simpletable> </section>
+</refbody>
+</reference>
+<?Pub *0000002949?>

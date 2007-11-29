@@ -13,7 +13,7 @@
     <target name="dita2eclipsehelp"
             unless="noMap"
         depends="build-init, preprocess, dita.map.eclipse, copy-css, 
-                     dita.topics.xhtml">
+                     dita.topics.xhtml, dita.inner.topics.xhtml, dita.outer.topics.xhtml">
     </target>
 
     <target name="dita.map.eclipse"

@@ -23,6 +23,7 @@ import java.util.Stack;
 import javax.xml.parsers.SAXParser;
 
 import org.dita.dost.exception.DITAOTException;
+import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.Content;
@@ -419,6 +420,7 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 				}else{
 					element.appendChild(stub);
 				}
+				reader.setErrorHandler(new DITAOTXMLErrorHandler(currentParsingFile));
 				reader.parse(currentParsingFile);
 				output.flush();
 				

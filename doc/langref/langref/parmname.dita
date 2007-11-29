@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<reference id="parmname" xml:lang="en-us">
+<title>parmname</title>
+<shortdesc>When referencing the name of an application programming interface
+parameter within the text flow of your topic, use the parameter name (&lt;<keyword>parmname</keyword>&gt;)
+element to markup the parameter. This element is part of the DITA programming
+domain, a special set of DITA elements designed to document programming tasks,
+concepts and reference information.</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>parmname</indexterm><indexterm>Programming elements<indexterm>parmname</indexterm></indexterm>
+</keywords><?Pub Caret1?>
+</metadata></prolog>
+<refbody>
+<example><title>Example</title><pre>Use the &lt;parmname&gt;/env&lt;/parmname&gt; parameter of the &lt;cmdname&gt;config&lt;/cmdname&gt; 
+command to update the field value.</pre></example>
+<section conref="../common/commonNavLibraryTable.dita#models/parmname-contains"
+otherprops="contains"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/parmname-containedby"
+otherprops="containedby"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/parmname-classvalue"
+otherprops="classvalue"></section>
+<section id="attrs"><title>Attributes</title> <simpletable id="parmname_attr"
+relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/univ-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/classoutkey"><stentry/><stentry/><stentry/><stentry/><stentry/></strow>
+</simpletable> </section>
+</refbody>
+</reference>
+<?Pub *0000002548?>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE reference
+  PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference id="approved" xml:lang="en-us">
+<title>approved</title>
+<shortdesc>The &lt;approved&gt; element contains information about when and by
+whom the book was approved during its publication history.</shortdesc>
+<prolog><metadata><keywords><indexterm>Bookmap elements<indexterm>approved</indexterm></indexterm><indexterm>approved</indexterm></keywords></metadata></prolog>
+<refbody>
+<example/>
+<section otherprops="contains" conref="../common/commonNavLibraryTable.dita#models/approved-contains"/>
+<section otherprops="containedby" conref="../common/commonNavLibraryTable.dita#models/approved-containedby"/>
+<section otherprops="classvalue" conref="../common/commonNavLibraryTable.dita#models/approved-classvalue"/>
+<section id="attrs"><title>Attributes</title>
+<simpletable relcolwidth="2* 3* 1* 1* 1*" id="approved_attr">
+<sthead><stentry>Name</stentry><stentry>Description</stentry><stentry>Data Type</stentry><stentry>Default Value</stentry><stentry>Required?</stentry></sthead>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/name"><stentry/><stentry/><stentry/><stentry/><stentry/></strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/datatype"><stentry/><stentry/><stentry/><stentry/><stentry/></strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/value"><stentry/><stentry/><stentry/><stentry/><stentry/></strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/href"><stentry/><stentry/><stentry/><stentry/><stentry/></strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/format"><stentry/><stentry/><stentry/><stentry/><stentry/></strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/type"><stentry/><stentry/><stentry/><stentry/><stentry/></strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/scope"><stentry/><stentry/><stentry/><stentry/><stentry/></strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/univ-atts"><stentry/><stentry/><stentry/><stentry/><stentry/></strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/global-atts"><stentry/><stentry/><stentry/><stentry/><stentry/></strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/classandout"><stentry/><stentry/><stentry/><stentry/><stentry/></strow>
+</simpletable>
+</section>
+</refbody>
+</reference>

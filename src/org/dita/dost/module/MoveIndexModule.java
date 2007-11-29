@@ -64,6 +64,7 @@ public class MoveIndexModule implements AbstractPipelineModule {
     	String tempDir = ((PipelineHashIO)input).getAttribute(Constants.ANT_INVOKER_PARAM_TEMPDIR);
     	String inputMap = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_INPUTMAP);
 		File ditalist = null;
+    	File xmlDitalist=null;
 		Properties prop = new Properties();
 		StringTokenizer st = null;
     	
@@ -76,8 +77,14 @@ public class MoveIndexModule implements AbstractPipelineModule {
         .append(Constants.SLASH).append(Constants.ELEMENT_NAME_KEYWORDS).toString());
 		
 		ditalist = new File(tempDir, Constants.FILE_NAME_DITA_LIST);
+		xmlDitalist=new File(tempDir,Constants.FILE_NAME_DITA_LIST_XML);
 		try{
-			prop.load(new FileInputStream(ditalist));
+			
+			if(xmlDitalist.exists())
+				prop.load(new FileInputStream(ditalist));
+			else
+				prop.loadFromXML(new FileInputStream(xmlDitalist));
+			
 		}catch(IOException ioe){
 			throw new DITAOTException(ioe);
 		}

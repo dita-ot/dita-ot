@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<reference id="platform" xml:lang="en-us">
+<title>platform</title>
+<shortdesc>The &lt;<keyword>platform</keyword>&gt; metadata element contains
+a description of the operating system and/or hardware related to the product
+being described by the &lt;<keyword>prodinfo</keyword>&gt; element. <ph rev="1.1">The
+platform element may be used to provide a more detailed definition of values
+used throughout the map or topic on the platform <?Pub Caret?>attribute.</ph></shortdesc>
+<prolog><metadata>
+<keywords><indexterm>platform</indexterm><indexterm>Prolog elements<indexterm>platform</indexterm></indexterm>
+</keywords>
+</metadata></prolog>
+<refbody>
+<example><title>Example</title>See <xref href="prodinfo.dita"></xref>.</example>
+<section conref="../common/commonNavLibraryTable.dita#models/platform-contains" otherprops="contains"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/platform-containedby"
+otherprops="containedby"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/platform-classvalue" otherprops="classvalue"></section>
+<section id="attrs"><title>Attributes</title> <simpletable id="platform_attr"
+relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/univ-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/classonly"><stentry/><stentry/><stentry/><stentry/><stentry/></strow>
+</simpletable> </section>
+</refbody>
+</reference>
+<?Pub *0000002074?>

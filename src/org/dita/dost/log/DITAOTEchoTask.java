@@ -14,6 +14,7 @@ import java.util.StringTokenizer;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.taskdefs.Echo;
+import org.dita.dost.util.LogUtils;
 
 /**
  * Class description goes here.
@@ -60,6 +61,10 @@ public class DITAOTEchoTask extends Echo {
 	public void execute() throws BuildException {
 		setMessage(MessageUtils.getMessage(id, prop).toString());
 		super.execute();
+		MessageBean msgBean=MessageUtils.getMessage(id, prop);
+		if(msgBean!=null){
+			LogUtils.increaseNumOfExceptionByType(msgBean.getType());
+		}
 	}
 	
 }

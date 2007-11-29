@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<reference id="booklists" xml:lang="en-us">
+<title>booklists</title>
+<shortdesc>The &lt;booklists&gt; element references lists of various kinds
+within the book. For example, it can be used within front matter to reference
+a &lt;toc&gt;, &lt;tablelist&gt;, and &lt;figurelist&gt;, or within back matter
+to reference a &lt;glossarylist&gt;, &lt;indexlist&gt;, and &lt;abbrevlist&gt;.
+It indicates to the processing software that the author wants the lists generated
+at the &lt;booklists&gt; location. </shortdesc>
+<prolog><metadata>
+<keywords><indexterm><?Pub Caret1?>Bookmap elements<indexterm>booklists</indexterm></indexterm>
+<indexterm>booklists</indexterm></keywords>
+</metadata></prolog>
+<refbody>
+<example></example>
+<section conref="../common/commonNavLibraryTable.dita#models/booklists-contains"
+otherprops="contains"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/booklists-containedby"
+otherprops="containedby"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/booklists-classvalue"
+otherprops="classvalue"></section>
+<section id="attrs"><title>Attributes</title> <simpletable id="booklists_attr"
+relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/topicref-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/univ-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/classandkey"><stentry/><stentry/><stentry/><stentry/><stentry/></strow>
+</simpletable> </section>
+</refbody>
+</reference>
+<?Pub *0000002439?>

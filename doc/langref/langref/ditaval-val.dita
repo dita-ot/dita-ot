@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<?Pub Inc?>
+<reference id="ditaval-val" xml:lang="en-us">
+<title>val</title>
+<shortdesc>&lt;val> is the root element of a ditaval file.</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>DITAVAL elements<indexterm>val (root element)</indexterm></indexterm>
+</keywords>
+</metadata></prolog>
+<refbody>
+<section otherprops="contains"><title>Contains</title><p><xref href="ditaval-style-conflict.dita">style-conflict<?Pub Caret?></xref> (<i>optional</i
+>) then (<xref href="ditaval-prop.dita">prop</xref> <i>or</i> <xref href="ditaval-revprop.dita">revprop</xref>)
+(<i>any number</i>)</p></section>
+</refbody>
+</reference>
+<?Pub *0000000801?>

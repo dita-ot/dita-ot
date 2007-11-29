@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<reference id="linkinfo" xml:lang="en-us">
+<title>linkinfo</title>
+<shortdesc>The &lt;<keyword>linkinfo</keyword>&gt; element allows you to place
+a descriptive paragraph following a list of links in a<?Pub Caret?> &lt;<keyword>linklist</keyword>>
+element. </shortdesc>
+<prolog><metadata>
+<keywords><indexterm>linkinfo</indexterm><indexterm>Related Links elements<indexterm>linkinfo</indexterm></indexterm>
+</keywords>
+</metadata></prolog>
+<refbody>
+<example><title>Example</title><codeblock>&lt;linklist collection-type="sequence"&gt;
+  &lt;title&gt;Repairing widgets&lt;/title&gt;
+  &lt;link href="debug.dita" type="task"&gt;&lt;/link&gt;
+  &lt;link href="repair.dita" type="task"&gt;&lt;/link&gt;
+  &lt;link href="test.dita" type="task"&gt;&lt;/link&gt;
+  &lt;linkinfo&gt;To repair a reciprocating widget,
+you must follow the instructions very carefully. Note
+the sequence to follow. Do it.&lt;/linkinfo&gt;
+&lt;/linklist&gt;</codeblock></example>
+<section conref="../common/commonNavLibraryTable.dita#models/linkinfo-contains" otherprops="contains"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/linkinfo-containedby"
+otherprops="containedby"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/linkinfo-classvalue" otherprops="classvalue"></section>
+<section id="attrs"><title>Attributes</title> <simpletable id="linkinfo_attr"
+relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/univ-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/classonly"><stentry/><stentry/><stentry/><stentry/><stentry/></strow>
+</simpletable> </section>
+</refbody>
+</reference>
+<?Pub *0000002296?>

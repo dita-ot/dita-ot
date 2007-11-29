@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<reference id="organizationnamedetails" xml:lang="en-us">
+<title>organizationnamedetails</title>
+<shortdesc>The &lt;organizationnamedetails&gt; element contains information
+about the name of an authoring organization. </shortdesc>
+<prolog><metadata>
+<keywords><indexterm>organizationnamedetails<indexterm>xNAL <?Pub Caret?>elements<indexterm>organizationnamedetails</indexterm></indexterm></indexterm>
+</keywords>
+</metadata></prolog>
+<refbody>
+<example><pre>&lt;organizationinfo&gt;
+ &lt;namedetails&gt;
+  &lt;organizationnamedetails&gt;
+   &lt;organizationname&gt;WizardWorks, Inc.&lt;/organizationname&gt;
+   &lt;otherinfo&gt;'Best wizard in Oz'&lt;/otherinfo&gt;
+  &lt;organizationnamedetails&gt;
+ &lt;/namedetails&gt;
+ &lt;addressdetails&gt;
+  &lt;thoroughfare&gt;123 Yellow Brick Road&lt;/thoroughfare&gt;
+  &lt;locality&gt;Emerald City&lt;/locality&gt;
+  &lt;administrativearea&gt;Kansas&lt;/administrativearea&gt;
+  &lt;country&gt;USA&lt;/country&gt;
+ &lt;/addressdetails&gt;
+ &lt;contactnumbers&gt;&lt;contactnumber&gt;123-555-4678&lt;/contactnumber&gt;&lt;/contactnumbers&gt;
+ &lt;emailaddresses&gt;&lt;emailaddress&gt;wizard@example.org&lt;/emailaddress&gt;&lt;/emailaddresses&gt;
+ &lt;urls&gt;&lt;url&gt;www.wizardworks.example.org&lt;/url&gt;&lt;/urls&gt;
+&lt;/organizationinfo&gt;</pre></example>
+<section conref="../common/commonNavLibraryTable.dita#models/organizationnamedetails-contains"
+otherprops="contains"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/organizationnamedetails-containedby"
+otherprops="containedby"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/organizationnamedetails-classvalue"
+otherprops="classvalue"></section>
+<section id="attrs"><title>Attributes</title> <simpletable id="organizationnamedetails_attr"
+relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/univ-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/classoutkey"><stentry/><stentry/><stentry/><stentry/><stentry/></strow>
+</simpletable> </section>
+</refbody>
+</reference>
+<?Pub *0000003082?>

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<reference id="task" xml:lang="en-us">
+<title>task</title>
+<shortdesc>The &lt;<keyword>task</keyword>&gt; element is the top-level element
+for a task topic. Tasks are the main building blocks for task-oriented user
+assistance. They generally provide step-by-step instructions that will enable
+a user to perform a task. A task answers the question of "how to?" by telling
+the user precisely what to do and the order in which to do it. Tasks have
+the same high-level structure as other topics, with a title, short description
+and body.</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>task</indexterm><indexterm>Task elements<indexterm>task</indexterm></indexterm>
+</keywords><?Pub Caret1?>
+</metadata></prolog>
+<refbody>
+<example><title>Example</title><codeblock>&lt;task id="sqlj"&gt;
+ &lt;title&gt;Creating an SQLJ file&lt;/title&gt;
+ &lt;taskbody&gt;
+  &lt;context&gt;Once you have set up SQLJ, you need to create a new SQLJ file.
+  &lt;/context&gt;
+  &lt;steps&gt;
+   &lt;step&gt;&lt;cmd&gt;Open...&lt;/cmd&gt;&lt;/step&gt;
+  &lt;/steps&gt;
+ &lt;/taskbody&gt;
+&lt;/task&gt; </codeblock></example>
+<section conref="../common/commonNavLibraryTable.dita#models/task-contains" otherprops="contains"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/task-containedby" otherprops="containedby"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/task-classvalue" otherprops="classvalue"></section>
+<section id="attrs"><title>Attributes</title> <simpletable id="task_attr"
+relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/id-topic">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/conref-topic">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/xmlnsditaarch">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/DITAArchVersion">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/domains">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/select-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/localization-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/classandout"><stentry/><stentry/><stentry/><stentry/><stentry/></strow>
+</simpletable> </section>
+</refbody>
+</reference>
+<?Pub *0000003673?>

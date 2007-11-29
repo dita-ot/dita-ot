@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<reference id="step" xml:lang="en-us">
+<title>step</title>
+<shortdesc>The &lt;<keyword>step</keyword>&gt; element represents an action
+that a user must follow to accomplish a task. Each step in a task must contain
+a command &lt;<keyword>cmd</keyword>&gt; element which describes the particular
+action the user must do to accomplish the overall task. The step element can
+also contain information &lt;<keyword>info</keyword>&gt;, substeps &lt;<keyword>substeps</keyword>&gt;,
+tutorial information &lt;<keyword>tutorialinfo</keyword>&gt;, a step example &lt;<keyword>stepxmp</keyword>&gt;,
+choices &lt;<keyword>choices</keyword>&gt; or a stepresult &lt;<keyword>stepresult</keyword>&gt;,
+although these are optional.</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>step</indexterm><indexterm>Task elements<indexterm>step</indexterm></indexterm>
+</keywords>
+</metadata></prolog>
+<refbody>
+<example><title>Example</title><codeblock>&lt;task id="sqlj"&gt;
+&lt;title&gt;Creating an SQLJ file&lt;/title&gt;
+&lt;taskbody&gt;
+&lt;context&gt;Once you have set up SQLJ, you need to create a new SQLJ file.
+&lt;/context&gt;
+&lt;steps&gt;
+&lt;step&gt;
+ &lt;cmd&gt;Select &lt;menucascade&gt;&lt;uicontrol&gt;File&lt;/uicontrol&gt;&lt;uicontrol&gt;New&lt;/uicontrol&gt;&lt;/menucascade>.&lt;/cmd&gt;
+ &lt;info&gt;New files are created with default values based on a standard template.&lt;/info&gt;
+&lt;/step&gt;
+&lt;/steps&gt;
+&lt;/taskbody&gt;
+&lt;/task&gt;</codeblock></example>
+<section conref="../common/commonNavLibraryTable.dita#models/step-contains" otherprops="contains"><?Pub Caret1?></section>
+<section conref="../common/commonNavLibraryTable.dita#models/step-containedby" otherprops="containedby"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/step-classvalue" otherprops="classvalue"></section>
+<section id="attrs"><title>Attributes</title> <simpletable id="step_attr"
+relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/importance-step">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/props">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/base">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/platform">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/product">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/audience">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/otherprops">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/rev">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/status">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/id-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/localization-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/classandout"><stentry/><stentry/><stentry/><stentry/><stentry/></strow>
+</simpletable> </section>
+</refbody>
+</reference>
+<?Pub *0000004721?>

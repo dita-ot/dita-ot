@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 
+import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.Content;
@@ -77,6 +78,7 @@ public class DitaValReader extends AbstractXMLReader {
 		ditaVal = input;
 
 		try {
+			reader.setErrorHandler(new DITAOTXMLErrorHandler(ditaVal));
 			reader.parse(new InputSource(new FileInputStream(input)));
 		} catch (Exception e) {
 			logger.logException(e);

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<reference id="state" xml:lang="en-us">
+<title>state</title>
+<shortdesc>The &lt;<keyword>state</keyword>&gt; element specifies a name/value
+pair whenever it is necessary to represent a named state that has a variable
+value. The element is primarily intended for use in specializations to represent
+specific states (like logic circuit states, chemical reaction states, airplane
+instrumentation states, and so forth). </shortdesc>
+<prolog><metadata>
+<keywords><indexterm>state</indexterm><indexterm>Specialization <?Pub Caret?>elements<indexterm>state</indexterm></indexterm>
+</keywords>
+</metadata></prolog>
+<refbody>
+<example><title>Example</title><codeblock>&lt;step&gt;&lt;cmd&gt;Verify the presence of  an "on" or high condition at the input gate
+(ie,  &lt;state name="inflag" value="high"/&gt;)&lt;/cmd&gt;&lt;/step&gt;</codeblock></example>
+<section conref="../common/commonNavLibraryTable.dita#models/state-contains"
+otherprops="contains"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/state-containedby"
+otherprops="containedby"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/state-classvalue"
+otherprops="classvalue"></section>
+<section id="attrs"><title>Attributes</title> <simpletable id="state_attr"
+relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/name-state">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/value-state">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/univ-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/classandout"><stentry/><stentry/><stentry/><stentry/><stentry/></strow>
+</simpletable> </section>
+</refbody>
+</reference>
+<?Pub *0000002725?>

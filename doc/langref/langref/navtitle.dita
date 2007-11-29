@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<reference id="navtitle" xml:lang="en-us">
+<title>navtitle</title>
+<shortdesc>The navigation title (&lt;<keyword>navtitle</keyword>&gt;) element
+is one of a set of alternate titles that can be included inside the &lt;<keyword>titlealts</keyword>&gt;
+element. This navigation title may differ from the first level heading that
+shows in the main browser window. Use &lt;<keyword>navtitle</keyword>&gt;
+when the actual title of the topic isn't appropriate for use in navigation
+panes or online contents (for example, because the actual title is too long).</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>navtitle</indexterm><indexterm>Topic elements<indexterm>navtitle</indexterm></indexterm>
+</keywords><?Pub Caret1?>
+</metadata></prolog>
+<refbody>
+<example><title>Example</title><codeblock>&lt;task id=progexample"&gt;
+ &lt;title&gt;Publishing a DITA information set in PDF&lt;/title&gt;
+  &lt;titlealts&gt;&lt;navtitle&gt;Publishing in PDF&lt;/navtitle&gt;&lt;/titlealts&gt;
+ &lt;taskbody&gt; . . . &lt;/taskbody&gt;
+&lt;/task&gt;</codeblock></example>
+<section conref="../common/commonNavLibraryTable.dita#models/navtitle-contains"
+otherprops="contains"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/navtitle-containedby"
+otherprops="containedby"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/navtitle-classvalue"
+otherprops="classvalue"></section>
+<section id="attrs"><title>Attributes</title> <simpletable id="navtitle_attr"
+relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/univ-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/classonly"><stentry/><stentry/><stentry/><stentry/><stentry/></strow>
+</simpletable> </section>
+</refbody>
+</reference>
+<?Pub *0000002421?>

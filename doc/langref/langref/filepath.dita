@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<reference id="filepath" xml:lang="en-us">
+<title>filepath</title>
+<shortdesc>The &lt;<keyword>filepath</keyword>&gt; element indicates the name
+and optionally the location of a referenced file by specifying the directory
+containing the file, and other directories that may precede it in the system
+hierarchy. This element is part of the DITA software domain, a special set
+of DITA elements designed to document software tasks, concepts and reference
+information.</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>filepath</indexterm><indexterm>Software elements<?Pub Caret?><indexterm>filepath</indexterm></indexterm>
+</keywords>
+</metadata></prolog>
+<refbody>
+<example><title>Example</title><pre>&lt;p&gt;Uncompress the &lt;filepath&gt;gbbrsh.gz&lt;/filepath&gt; file to the 
+&lt;filepath&gt;/usr&lt;/filepath&gt; directory. Ensure that the
+&lt;filepath&gt;/usr/tools/data.cfg&lt;/filepath&gt; path is listed in
+the execution path system variable.&lt;/p&gt;</pre></example>
+<section conref="../common/commonNavLibraryTable.dita#models/filepath-contains"
+otherprops="contains"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/filepath-containedby"
+otherprops="containedby"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/filepath-classvalue"
+otherprops="classvalue"></section>
+<section id="attrs"><title>Attributes</title> <simpletable id="filepath_attr"
+relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/univ-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/classandout"><stentry/><stentry/><stentry/><stentry/><stentry/></strow>
+</simpletable> </section>
+</refbody>
+</reference>
+<?Pub *0000002518?>

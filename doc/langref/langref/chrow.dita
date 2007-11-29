@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<reference id="chrow" xml:lang="en-us">
+<title>chrow</title>
+<shortdesc>The &lt;<keyword>chrow</keyword>&gt; element is a container inside
+the &lt;<keyword>choicetable</keyword>&gt; element. The &lt;<keyword>chrow</keyword>&gt;
+element contains both a &lt;<keyword>choption</keyword>&gt; and &lt;<keyword>chdesc</keyword>&gt;
+element as a pair.</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>chrow (choice table row)</indexterm><indexterm>Task elements<indexterm>chrow</indexterm></indexterm>
+</keywords><?Pub Caret1?>
+</metadata></prolog>
+<refbody>
+<example><title>Example</title><pre>&lt;step&gt;&lt;cmd&gt;Then this&lt;/cmd&gt;
+ &lt;substeps&gt;
+  &lt;substep importance="optional"&gt;&lt;cmd&gt;which is done by doing this&lt;/cmd&gt;&lt;/substep&gt;
+  &lt;substep importance="required"&gt;&lt;cmd&gt;and then this.&lt;/cmd&gt;&lt;/substep&gt;
+ &lt;/substeps&gt;
+ &lt;choicetable&gt;
+  &lt;chhead&gt;
+   &lt;choptionhd&gt;Do something&lt;/choptionhd&gt;
+   &lt;chdeschd&gt;Or Else this&lt;/chdeschd&gt;
+  &lt;/chhead&gt;
+  <b>&lt;chrow&gt;</b>&lt;choption&gt;Do this&lt;/choption&gt;
+  &lt;chdesc&gt;and this will happen&lt;/chdesc&gt;<b>&lt;/chrow&gt;</b>
+  <b>&lt;chrow&gt;</b>&lt;choption&gt;Do that&lt;/choption&gt;
+  &lt;chdesc&gt;and that will happen&lt;/chdesc&gt;<b>&lt;/chrow&gt;</b>
+ &lt;/choicetable&gt;
+&lt;/step&gt;
+</pre></example>
+<section conref="../common/commonNavLibraryTable.dita#models/chrow-contains"
+otherprops="contains"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/chrow-containedby"
+otherprops="containedby"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/chrow-classvalue"
+otherprops="classvalue"></section>
+<section id="attrs"><title>Attributes</title> <simpletable id="chrow_attr"
+relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/univ-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/classandout"><stentry/><stentry/><stentry/><stentry/><stentry/></strow>
+</simpletable> </section>
+</refbody>
+</reference>
+<?Pub *0000002883?>

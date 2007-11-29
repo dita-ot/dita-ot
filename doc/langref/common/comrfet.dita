@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<!--             (C) Copyright OASIS Open 2005.                    -->
+<!--             (C) Copyright IBM Corporation 2001, 2004.         -->
+<!--             All Rights Reserved.                              -->
+<reference id="comrfet" xml:lang="en-us">
+<title>Commonly referenced attributes</title>
+<shortdesc>Several parts of a language reference are common between many locations,
+such as the descriptions for the selection and property attributes of DITA
+elements. These are described as sets to reduce unnecessary duplication of
+common information.</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>Commonly referenced attribute descriptions</indexterm>
+</keywords>
+</metadata></prolog>
+<refbody></refbody><?Pub Caret1?>
+</reference>
+<?Pub *0000000923?>

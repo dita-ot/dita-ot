@@ -237,10 +237,15 @@ public class IndexTermReader extends AbstractXMLReader {
 		if (IndexTerm.getTermLocale() == null) {
 			String xmlLang = attributes
 					.getValue(Constants.ATTRIBUTE_NAME_XML_LANG);
-
+			
 			if (xmlLang != null) {
-				Locale locale = new Locale(xmlLang.substring(0, 2), xmlLang
-						.substring(3, 5));
+				Locale locale;
+				if (xmlLang.length() == 5) {
+					locale = new Locale(xmlLang.substring(0, 2).toLowerCase(),
+							xmlLang.substring(3, 5).toUpperCase());
+				} else {
+					locale = new Locale(xmlLang.substring(0, 2).toLowerCase());
+				}
 				IndexTerm.setTermLocale(locale);
 			}
 		}

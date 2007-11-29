@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
+ "topic.dtd">
+<?Pub Inc?>
+<topic id="task_shortdesc" xml:lang="en-us"><?Pub Caret1?>
+<title>Guidelines for task short descriptions</title>
+<shortdesc>Always use the &lt;shortdesc> element in a task topic. The short
+description must make sense both as the opening text of the topic and as pop-up
+text over a related link.</shortdesc>
+<prolog>
+<author>Guidelines owner: Michelle Carey, from Content Workgroup</author>
+<critdates><created date="18 May 2004"/></critdates>
+<metadata>
+<keywords><indexterm>task short descriptions, guidelines</indexterm><indexterm>short
+descriptions, task guidelines</indexterm></keywords>
+</metadata></prolog>
+<body>
+<section><title>Length</title><p id="tlength">The short description should
+be a single, concise paragraph containing one or two sentences of no more
+than 50 words.</p></section>
+<section><title>What to say</title><p id="twhattosay">The short description
+should explain what the task information helps users accomplish, the benefits
+of the task, or the purpose of the task. Do not simply repeat the title. Try
+to include information that will help users understand when the task is appropriate
+or why the task is necessary. Avoid stating the obvious, such as <q>You can
+use XYZ to do A</q> as the only statement in the short description for Task
+A. In some cases, add more information about why the task is beneficial.</p><p><b>Example
+of an ineffective short description</b><dl><dlentry>
+<dt>Changing data types</dt>
+<dd>You can use the ALTER NICKNAME statement to change the data type of a
+column.</dd>
+</dlentry></dl></p><p>This short description is not as useful as it could
+be because it does not tell users the benefit or purpose of changing the data
+type.</p><p><b>Example of an effective short description</b><dl><dlentry>
+<dt>Changing data types</dt>
+<dd>You can change the data type of a column so that your data types are consistent
+across tables. Use the ALTER NICKNAME statement to change the data type of
+a column.</dd>
+</dlentry></dl></p><p>The effective short description is better because it
+states why changing the data type is important. The second sentence explains
+how to change the data type.</p></section>
+<section><title>Phrasing</title><p id="tphrasing">Do not use sentence fragments.
+Use complete sentences. Avoid starting short descriptions with phrases such
+as <q>This topic describes . . . .</q> or <q>This topic is about . . . .</q></p></section>
+<section><title>Examples of short descriptions in super tasks</title><p id="supertask_ex">A
+supertask is a topic that lists tasks that show users how to reach a specific
+goal. In each example, the first paragraph is the short description for the
+supertask topic. The ordered list in the example provides the topic title
+and that topic's short description.</p><dl><dlentry>
+<dt>Enabling a federated system for DB2 Cube Views</dt>
+<dd><p>To enable the federated system for DB2 Cube Views, you must define
+the remote data source, define nicknames on the federated server, and define
+informational constraints on the nicknames.</p><p>To enable a remote data
+source for DB2 Cube Views:</p><ol>
+<li><lines><b>Defining remote data sources</b>
+To define and configure a federated server for DB2 Cube Views, you provide the
+federated server with information about the remote data sources and objects
+that you want to access.</lines></li>
+<li><lines><b>Defining nicknames for remote tables for DB2 Cube Views</b>
+You can define nicknames for each remote table that is part of the star schema
+or snowflake schema that you are creating on your federated server. DB2 Cube
+Views requires the nicknames to work with the remote tables.</lines></li>
+<li><lines><b>Defining informational constraints on nicknames for DB2 Cube Views</b>
+To improve query performance, you can define informational constraints to describe
+relationships between your data. You can define informational constraints for the
+foreign keys between tables in the star schema or the snowflake schema on the
+federated server.</lines></li>
+</ol></dd>
+</dlentry><dlentry>
+<dt>Creating a complete cube model</dt>
+<dd><p>To create a complete cube model, you create an empty cube model. Then,
+you add a facts object, dimensions, and hierarchies and levels for each dimension
+in that cube model. Cube models define the relationships between the relational
+data in your star schema or snowflake schema so that you can optimize query
+performance for your relational data.</p><p>To create a complete cube model:</p><ol>
+<li><lines><b>Creating a cube model</b>
+You can create a cube model to group relevant dimension objects around a
+central facts object.</lines></li>
+<li><lines><b>Creating a facts object</b>
+You can create a facts object as part of an existing cube model. A facts
+object groups related measures that are interesting to a given application.
+A facts object is used in a cube model as the center of a star schema.
+You can create simple and calculated measures.</lines></li>
+<li><lines><b>Creating a dimension</b>
+You can create a dimension as part of a cube model, or you can create a
+dimension that you want to use at a later time.</lines></li>
+<li><lines><b>Creating a hierarchy for a dimension</b>
+You can create a hierarchy that defines relationships between two or more
+levels within a given dimension of a cube model. You can also define a hierarchy
+that uses only one level. Defining these relationships provides a navigational
+and computational means of traversing the specified dimension. For example, a
+CalendarYear hierarchy might contain levels like Year, Quarter, and Month.</lines></li>
+<li><lines><b>Creating levels for each hierarchy</b>
+You can create levels that define relationships between a set of related
+attributes. When possible, DB2 Cube Views creates functional dependencies
+that define the relationship between the level attributes.</lines></li>
+</ol></dd>
+</dlentry></dl></section>
+<section id="goodexamples"><title>Examples of effective short descriptions</title><p>Topic
+titles are in bold. Short descriptions are in plain text. Highlighting in
+a short description will not appear in the pop-up text over a related link.<dl>
+<dlentry>
+<dt>Creating a Q subscription</dt>
+<dd><p>By creating a Q subscription, you define how data from a source table
+is replicated to a target table or is passed to parameters in a stored procedure.</p></dd>
+</dlentry><dlentry>
+<dt>Applying hit counts to process breakpoints (BPEL)</dt>
+<dd><p>In the Breakpoints view, you can apply hit counts so that breakpoints
+can be processed. When you specify a hit count for a breakpoint and that hit
+count is reached, the breakpoint stops the thread.</p></dd>
+</dlentry><dlentry>
+<dt>Generating deployment code for imported enterprise bean</dt>
+<dd><p>If you generate a service for an imported enterprise bean and you want
+to test the deployment code for the service, you must generate deployment
+code for the imported enterprise bean so that it can be run on the test server.</p></dd>
+</dlentry></dl></p></section>
+<section id="badexamples"><title>Examples of ineffective short descriptions</title><p>Topic
+titles are in bold. Short descriptions are in plain text. Highlighting in
+a short description will not appear in the pop-up text over a related link.<dl>
+<dlentry>
+<dt>Creating a single Q subscription</dt>
+<dd>You can create a Q subscription from the Subscription wizard. <p>This
+short description does not tell why creating a Q subscription is important
+or beneficial. Compare this short description with the same one in <xref href="#task_shortdesc/goodexamples"
+scope="peer" type="section">Examples of good short descriptions</xref>.</p></dd>
+</dlentry><dlentry>
+<dt>Connecting to a network</dt>
+<dd>Shows you how to create network connections.<p>This short description
+is a fragment, does not supply enough information, and simply repeats the
+title.</p></dd>
+</dlentry><dlentry>
+<dt>Importing an enterprise bean JAR file</dt>
+<dd>Enterprise beans can be imported from an enterprise bean JAR file. <p>Why
+or when should users perform this function? Because this short description
+uses passive, users will not understand who or what performs the action.</p></dd>
+</dlentry><dlentry>
+<dt>Adding crawlers to a collection</dt>
+<dd>You can use the following methods to add one or more crawlers to a collection: <p>Avoid
+adding a list or table lead-in sentence to a short description. You cannot
+add an &lt;ol> or &lt;ul> element inside a short description element. If you
+add a list or table lead-in sentence and then add the list or table to the
+next available element, the list or table will not be logically associated
+with the &lt;shortdesc> element. Such a structure is semantically incorrect.
+You will not be able to reuse the list or table with its lead-in sentence.
+Also, this short description will not make sense in pop-up text for a related
+link.</p></dd>
+</dlentry></dl></p></section>
+</body>
+</topic>
+<?Pub *0000009057?>

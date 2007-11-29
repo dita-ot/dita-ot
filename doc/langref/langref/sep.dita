@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<reference id="sep" xml:lang="en-us">
+<title>sep</title>
+<shortdesc>The separator (&lt;sep&gt;) element defines a separator character
+that is inline with the content of a syntax diagram. The separator occurs
+between keywords, operators or groups in a syntax definition. This element
+is part of the DITA programming domain, a special set of DITA elements designed
+to document programming tasks, concepts and reference information.</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>sep (syntax separator)</indexterm><indexterm>syntax separator
+(sep)</indexterm><indexterm>Programming elements<?Pub Caret?><indexterm>sep
+(syntax separator)</indexterm></indexterm></keywords>
+</metadata></prolog>
+<refbody>
+<example> <title>Example</title><pre>&lt;syntaxdiagram&gt;
+ &lt;title&gt;Adding&lt;/title&gt;
+ &lt;groupseq&gt;&lt;kwd&gt;1&lt;/kwd&gt;&lt;oper&gt;+&lt;/oper&gt;<b>&lt;sep&gt;</b>(<b>&lt;/sep&gt;</b>&lt;var&gt;two&lt;/var&gt;<b>&lt;sep&gt;</b
+>)<b>&lt;/sep&gt;</b>
+&lt;delim&gt;=&lt;/delim&gt;&lt;kwd&gt;something&lt;/kwd&gt;&lt;/groupseq&gt;
+&lt;/syntaxdiagram&gt; 
+</pre></example>
+<section conref="../common/commonNavLibraryTable.dita#models/sep-contains" otherprops="contains"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/sep-containedby"
+otherprops="containedby"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/sep-classvalue"
+otherprops="classvalue"></section>
+<section id="attrs"><title>Attributes</title> <simpletable id="sep_attr" relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/importance-var">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/props">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/base">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/platform">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/product">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/audience">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/otherprops">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/rev">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/status">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/id-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/localization-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/classandout"><stentry/><stentry/><stentry/><stentry/><stentry/></strow>
+</simpletable> </section>
+</refbody>
+</reference>
+<?Pub *0000004339?>

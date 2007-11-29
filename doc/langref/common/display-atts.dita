@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<!--             (C) Copyright OASIS Open 2005.                    -->
+<!--             (C) Copyright IBM Corporation 2001, 2004.         -->
+<!--             All Rights Reserved.                              -->
+<reference id="display-atts" xml:lang="en-us">
+<title><keyword>%display-atts;</keyword></title>
+<shortdesc>Display attributes is a parameter entity declaration in the topic
+DTD that includes attributes whose values may be used for affecting the display
+of a topic or its selection by search tools.</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>%display-atts</indexterm><indexterm>C<?Pub Caret1?>ommonly
+referenced attribute descriptions<indexterm>%display-atts</indexterm></indexterm>
+</keywords>
+</metadata></prolog>
+<refbody>
+<!-- Moved the following description of @pgwide into the @expanse row -->
+<!--<section>
+<p id="pgwide-explan">In DITA tables, in place of the <apiname>expanse</apiname> attribute
+used by other DITA elements, the <apiname>pgwide</apiname> attribute is used
+instead, to conform with the OASIS Exchange Table Model. This attribute has
+a similar semantic (1=page width; 0=resize to galley or column).</p>
+</section>-->
+<!--xsection conref="DitabaseNav.dita#commonCMdefs/display-atts-contains"/-->
+<!--xsection conref="DitabaseNav.dita#commonCMdefs/display-atts-containedby"/-->
+<section><title>Attributes</title><simpletable id="display-atts_attr" relcolwidth="1* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="commonLRdefs.dita#commonLRdefs/scale">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/frame">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/expanse">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+</simpletable></section>
+<example>          <title>Example</title><p>The %display-atts; parameter entity
+is used within the DITA dtds as a common definition for attributes that affect
+presentation of certain elements. Not all of these capabilities have been
+provided yet for DITA topic processing. A typical example might be:</p>  
+        <codeblock>&lt;codeblock scale="90" frame="topbot" expanse="page">
+/* a long sample program */
+Do forever
+  Say "Hello, World"
+End
+&lt;/codeblock></codeblock>       </example>
+</refbody>
+</reference>
+<?Pub *0000002798?>

@@ -10,6 +10,7 @@
       value="catalog.xml" type="file"/>
     <feature extension="dita.xsl.maplink"
       value="xsl/maplink-plugin.xsl" type="file"/>
+    <feature extension="dita.xsl.mapref" value="xsl/mapref-plugin.xsl" type="file"/>
     <feature extension="dita.xsl.mappull"
       value="xsl/mappull-plugin.xsl" type="file"/>
     <feature extension="dita.xsl.eclipse.plugin"

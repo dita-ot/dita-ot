@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<reference id="image" xml:lang="en-us">
+<title>image</title>
+<shortdesc>Include artwork or images in a DITA topic by using the &lt;<keyword>image</keyword>&gt;
+element. The &lt;<keyword>image</keyword>&gt; element has optional attributes
+that indicate  whether the placement of the included graphic or artwork  should
+be inline (like a button or icon) or on a separate  line for a larger image.
+ There are also optional attributes  that indicate the size to which the included
+graphic or artwork  should be scaled. An <keyword>href</keyword> attribute
+is required on the image element, as this attribute creates a pointer to the
+image, and allows the output formatting processor to bring the image into
+the text flow. To make the intent of the image more accessible for users using
+screen readers or text-only readers, always include a description of the image's
+content in the <keyword>alt </keyword> elem<?Pub Caret?>ent.</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>image</indexterm><indexterm>Body elements<indexterm>image</indexterm></indexterm>
+</keywords>
+</metadata></prolog>
+<refbody>
+<example><title>Example</title><codeblock>&lt;image href="bike.gif" placement="break"&gt;&lt;alt&gt;Two-wheeled bicycle&lt;/alt&gt;&lt;/image&gt;</codeblock
+></example>
+<section conref="../common/commonNavLibraryTable.dita#models/image-contains" otherprops="contains"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/image-containedby" otherprops="containedby"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/image-classvalue" otherprops="classvalue"></section>
+<section id="attrs"><title>Attributes</title> <simpletable id="image_attr"
+relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/href-image">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/longdescref">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/height">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/width">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/align-image">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/scale-image">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/placement">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/alt">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/univ-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/classoutkey"><stentry/><stentry/><stentry/><stentry/><stentry/></strow>
+</simpletable> </section>
+</refbody>
+</reference>
+<?Pub *0000004337?>

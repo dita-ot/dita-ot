@@ -201,6 +201,52 @@
                     </entry>
                     <entry>No</entry>
                   </row>
+                  <row>
+                    <entry>validate</entry>
+                    <entry>
+                      <ph id="validate">The parameter to specify whether the ditamap/dita/xml 
+                      files to be validated. Only "true" and "false" are valid values. The default is true. </ph>
+                      <note id="validate-note">It is not recommended to turn off the validation function , 
+                      which will cause unexpected error during transformation.              
+                      </note>
+                    </entry>
+                    <entry>No</entry>
+                  </row>
+                  <row>
+                    <entry>outer.control</entry>
+                    <entry>
+                      <ph id="outercontrol">The parameter to specify how to respond to the overflowing dita/topic files. Only "fail", "warn" and "quiet" are valid values. The default is warn. </ph>
+                      <note id="outercontrol-note">The detailed introduction: 
+                      	<ul>
+                      		<li><i>fail</i>: Fail quickly if files are going to be generated/copied outside of that directory</li>
+							<li><i>warn</i>: Complete if files will be generated/copied outside, but log a warning</li>
+							<li><i>quiet</i>: Quietly finish with only those files (no warning or error)</li>             
+                      	</ul>
+                      </note>
+                    </entry>
+                    <entry>No</entry>
+                  </row>
+                  <row>
+                    <entry>generate.copy.outer</entry>
+                    <entry>
+                      <ph id="generatecopyouter">The parameter to specify how to deal with the overflowing dita/topic files. Only "1", "2" and "3" are valid values. The default is 1. </ph>
+                      <note id="generatecopyouter-note">The detailed introduction: 
+                      	<ul>
+                      		<li><i>1</i>: Only generate/copy files that fit within the designated output directory.</li>
+							<li><i>2</i>: Generate/copy all files, even those that will end up outside of the output directory.</li>
+							<li><i>3</i>: the old solution,adjust the input.dir according to the referenced files. (not default option any more but keep this as the option of backward compatibility).</li>             
+                      	</ul>
+                      </note>
+                    </entry>
+                    <entry>No</entry>
+                  </row>
+                  <row>
+                    <entry>onlytopic.in.map</entry>
+                    <entry>
+                      <ph id="onlytopicinmap">The parameter to specify whether the referenced dita/topic files which are not referenced by ditamap files should be resolved. Only "true" and "false" are valid values. The default is false. </ph>
+                    </entry>
+                    <entry>No</entry>
+                  </row>
                 </tbody>
               </tgroup>
             </table>
@@ -579,6 +625,7 @@ of the general parameters is not supported.</dd>
         targets we use here are defined in <i>conductor.xml</i>. Therefore, you 
         need to import that file before calling the target.
       </p>
+      <note>To get a more accurate error reporting about the transformation,you should add the command-line option <codeph>-logger org.dita.dost.log.DITAOTBuildLogger </codeph> after your Ant command.</note>
     </section>
   </refbody>
 </reference>

@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<!--             (C) Copyright OASIS Open 2005.                    -->
+<!--             (C) Copyright IBM Corporation 2001, 2004.         -->
+<!--             All Rights Reserved.                              -->
+<reference id="relatedl" xml:lang="en-us">
+<title>Related links elements</title>
+<shortdesc>The related-links section of DITA topics is a special structure
+that supports the navigational rules from a topic to its related neighbor
+topics.</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>Related Links elements</indexterm></keywords>
+</metadata></prolog>
+<refbody>
+<section><p>Links are different from cross-references in that cross-references
+occur only within the body of a topic and can target any element in this or
+other topics; links only represent topic-to-topic connections, or connections
+to non-DITA-topic resources. Links are located after the body of a topic,
+in the <xref href="../langref/related-links.dita">related-links</xref> element.</p><p>Related
+links can also be managed indirectly using DITA maps, which provide a more
+efficient way to manage links as an aspect of the collection of topics rather
+than as embedded pointers in each topic. </p></section>
+</refbody>
+</reference><?Pub Caret?>
+<?Pub *0000001400?>

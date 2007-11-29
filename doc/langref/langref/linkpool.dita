@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<reference id="linkpool" xml:lang="en-us">
+<title>linkpool</title>
+<shortdesc>The &lt;<keyword>linkpool</keyword>&gt; element defines a group
+of links that have common characteristics, such as type or audience or source.
+When links are not in a &lt;linklist&gt; (that is, they are in &lt;related-links&gt;
+or &lt;linkpool&gt; elements), the organization of links on final output is
+determined by the output process, not by the order that the links actually
+occur in the DITA topic.</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>linkpool</indexterm><indexterm>Related Links elements<indexterm>linkpool</indexterm></indexterm>
+</keywords><?Pub Caret1?>
+</metadata></prolog>
+<refbody>
+<section><p>There are two ways to organize related information links: add
+them all in no particular order, using the &lt;<keyword>linkpool</keyword>&gt;
+or &lt;<keyword>related-links</keyword>&gt; elements, and let the output formatting
+processor sort them; or pre-group them using one or more &lt;<keyword>linklist</keyword>&gt;
+elements. When you pre-group them using &lt;<keyword>linklist</keyword>&gt;,
+then the order of the links as you created them is preserved during the output
+formatting process.</p><p>Attributes set on &lt;<keyword>linkpool</keyword>&gt;
+are inherited by its descendants. For example, if you've got a &lt;<keyword>linkpool</keyword>&gt;
+that contains all external links, you can set <i><keyword>scope="external"</keyword></i> on
+that outer&lt;<keyword>linkpool</keyword>&gt; element and leave it off the
+links it contains.</p></section>
+<example><title>Example</title><codeblock>&lt;related-links&gt;
+&lt;linkpool type="task"&gt;
+&lt;link href="generalfaq.html#installing" role="parent"/&gt;
+&lt;link href="register.html#newuser" role="sibling"/&gt;
+&lt;/linkpool&gt;
+&lt;/related-links&gt;</codeblock></example>
+<section conref="../common/commonNavLibraryTable.dita#models/linkpool-contains"
+otherprops="contains"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/linkpool-containedby"
+otherprops="containedby"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/linkpool-classvalue"
+otherprops="classvalue"></section>
+<section id="attrs"><title>Attributes</title> <simpletable id="linkpool_attr"
+relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/collection-type">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/duplicates">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/mapkeyref">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/type">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/role">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/otherrole">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/format">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/scope">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/univ-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/classandout"><stentry/><stentry/><stentry/><stentry/><stentry/></strow>
+</simpletable> </section>
+</refbody>
+</reference>
+<?Pub *0000004751?>

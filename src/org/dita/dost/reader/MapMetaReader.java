@@ -18,6 +18,7 @@ import java.util.Map;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.module.Content;
 import org.dita.dost.module.ContentImpl;
@@ -112,6 +113,7 @@ public class MapMetaReader implements AbstractReader {
         	DocumentBuilderFactory factory = DocumentBuilderFactory
 			.newInstance();
         	DocumentBuilder builder = factory.newDocumentBuilder();
+        	builder.setErrorHandler(new DITAOTXMLErrorHandler(filename));
         	doc = builder.parse(inputFile);
         	
         	Element root = doc.getDocumentElement();
@@ -140,6 +142,7 @@ public class MapMetaReader implements AbstractReader {
 
 	private void handleTopicref(Node topicref, Hashtable inheritance) {
 		Node hrefAttr = topicref.getAttributes().getNamedItem(Constants.ATTRIBUTE_NAME_HREF);
+		Node copytoAttr = topicref.getAttributes().getNamedItem(Constants.ATTRIBUTE_NAME_COPY_TO);
 		Node scopeAttr = topicref.getAttributes().getNamedItem(Constants.ATTRIBUTE_NAME_SCOPE);
     	Node formatAttr = topicref.getAttributes().getNamedItem(Constants.ATTRIBUTE_NAME_FORMAT);
 		Hashtable current = mergeMeta(null,inheritance,cascadeSet);
@@ -170,7 +173,14 @@ public class MapMetaReader implements AbstractReader {
 		}
 		
 		if (!current.isEmpty() && hrefAttr != null){// prevent the metadata is empty
-			topicPath = FileUtils.resolveTopic(filePath,hrefAttr.getNodeValue());
+			if (copytoAttr == null){
+				// if there is no copy-to attribute in current element
+				topicPath = FileUtils.resolveTopic(filePath,hrefAttr.getNodeValue());
+			}else{
+				// if there is @copy-to, @copy-to will take the place of @href
+				topicPath = FileUtils.resolveTopic(filePath,copytoAttr.getNodeValue());
+			}
+			
 			if(resultTable.containsKey(topicPath)){
     			//if the result table already contains some result
     			//metadata for current topic path.
@@ -247,11 +257,15 @@ public class MapMetaReader implements AbstractReader {
 						//other than Element.
 						Node stub = (Node) topicMetaTable.get(key);
 						Node inheritStub = (Node) inheritance.get(key);
-						NodeList children = inheritStub.getChildNodes();
-						for(int i = 0; i < children.getLength(); i++){
-							item = children.item(i).cloneNode(true);
-							item = stub.getOwnerDocument().importNode(item,true);
-							stub.appendChild(item);
+						if (stub != inheritStub){
+							// Merge the value if stub does not equal to inheritStub
+							// Otherwise it will get into infinitive loop
+							NodeList children = inheritStub.getChildNodes();
+							for(int i = 0; i < children.getLength(); i++){
+								item = children.item(i).cloneNode(true);
+								item = stub.getOwnerDocument().importNode(item,true);
+								stub.appendChild(item);
+							}
 						}
 						
 						topicMetaTable.put(key, stub);

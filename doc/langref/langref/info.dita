@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<reference id="info" xml:lang="en-us">
+<title>info</title>
+<shortdesc>The information element (&lt;<keyword>info</keyword>&gt;) occurs
+inside a &lt;<keyword>step</keyword>&gt; element to provide additional information
+about the step.</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>info (step information)<?Pub Caret?></indexterm><indexterm>Task
+elements<indexterm>info</indexterm></indexterm></keywords>
+</metadata></prolog>
+<refbody>
+<example><title>Example</title><codeblock>&lt;step&gt;&lt;cmd&gt;Type a name for the widget.&lt;/cmd&gt;
+&lt;info&gt;The widget name is created when you configure the widget 
+in the Widget Configuration Dialog. It is not an actual class
+name or file name, just a label for the widget as used in this
+application.&lt;/info&gt;
+&lt;/step&gt;
+</codeblock></example>
+<section conref="../common/commonNavLibraryTable.dita#models/info-contains" otherprops="contains"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/info-containedby"
+otherprops="containedby"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/info-classvalue"
+otherprops="classvalue"></section>
+<section id="attrs"><title>Attributes</title> <simpletable id="info_attr"
+relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/univ-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/classandout"><stentry/><stentry/><stentry/><stentry/><stentry/></strow>
+</simpletable> </section>
+</refbody>
+</reference>
+<?Pub *0000002327?>

@@ -1,4 +1,64 @@
 (c) Copyright IBM Corp. 2004, 2007 All Rights Reserved.
+     DITA OT release 1.4.1
+     Release 1.4.1 is a maintenance release to fix defects and make patches 
+     based on release 1.4.
+     
+     [23 SF Bugs Fixed]
+     1.  1833801 Infinite loop in MapMetaReader
+     2.  1833796 move-meta-entries creates invalid XML
+     3.  1827055 Dita 1.4 move metadata method failing
+     4.  1819663 XHTML processing add &nbsp; in output files. 
+     5.  1815155 Using xref moves output directory
+     6.  1807808 Java TopicMerge calling XSLT transformer with URL not file 
+     7.  1806728 Merge doesn't normalize filenames
+     8.  1806130 chunk module wraps long lines
+     9.  1806081 <dita> without class attribute triggers warning
+     10. 1803190 XHTML: processing <xref> to <a title="">    	 
+     11.  1803183 XHTML: <b> and <xref> within <pre> 	
+     12.  1796207 topicmeta in ditamap causes build failure
+     13. 1782109 Title input to Help Compiler invalid for taskbook example 
+     14. 1779066 [DOTX031E] Errors 
+     15. 1770571 Chunk "to-content" on map not implemented 
+     16. 1732678 Map without DOCTYPE declaration produces odd error 
+     17. 1675195 No Error Location for Titleless Topic 
+     18. 1639672 The Toolkit does not properly support valid xml:lang values. 
+     19. 1639344 Xref : topicpull : the spectitle not used as linktext 
+     20. 1628937 Rename supportingboth.ditaand.xmlinaditamap.dita 
+     21. 1584187 Bookmap 1.1: <title> element breaks topicmerge 
+     22. 1563093 Difficult to find location of error 
+     23. 1505172 foimgext Considered Harmful 
+     
+     [5 SF Patches Added]
+     1.  1741302 Prevent indexterm crash with two-letter language codes 
+     2.  1630214 HTML Help HHP generator: Language tag 
+     3.  1498936 Failure when moving links with embedded mathml 
+     4.  1481586 CSS for ditamap-to-HTML TOC 
+     5.  1457541 xref to elements fails within topics in PDF      
+     
+     [5 SF RFE Added]
+     1.  1764910 Allow greater control over the output directory 
+     2.  1764905 Allow option to build only topics listed in the map 
+     3.  1725280 Improve error reporting in general 
+     4.  1686939 Make dita.list into an XML file 
+     5.  1676947 Integration points for passing params to XSL      
+     
+     Note: SourceForge bugs, patches, and RFEs listed above can be found in 
+     SourceForge Bugs, Patches, and RFE tracker pages: 
+
+          Bugs tracker: 
+
+          http://sourceforge.net/tracker/?group_id=132728&atid=725074
+
+          Patches tracker: 
+
+          http://sourceforge.net/tracker/?group_id=132728&atid=725076
+
+          RFE tracker: 
+
+          http://sourceforge.net/tracker/?group_id=132728&atid=725077
+
+====================================================================================
+
      DITA OT release 1.4
      Release 1.4 is a major release to add new functions, fulfill new 
      requirements, make some function enhancements and fix bugs over release 

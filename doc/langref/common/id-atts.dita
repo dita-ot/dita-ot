@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<!--             (C) Copyright OASIS Open 2005.                    -->
+<!--             (C) Copyright IBM Corporation 2001, 2004.         -->
+<!--             All Rights Reserved.                              -->
+<reference id="id-atts" xml:lang="en-us">
+<title><keyword>%id-atts;</keyword></title>
+<shortdesc>ID attributes (%id-atts;) is a parameter entity declaration in
+the topic DTD that includes attributes that enable the naming and referencing
+of elements in a DITA topic: <i><keyword>id</keyword></i> and <i><keyword>conref</keyword></i>.</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>%id-atts</indexterm><indexterm>Commonly referenced attribute
+descriptions<?Pub Caret?><indexterm>%id-atts</indexterm>  </indexterm></keywords>
+</metadata></prolog>
+<refbody>
+<!--xsection conref="DitabaseNav.dita#commonCMdefs/id-atts-contains"/-->
+<!--xsection conref="DitabaseNav.dita#commonCMdefs/id-atts-containedby"/-->
+<section><title>Attributes</title><simpletable id="id-atts_attr" relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="commonLRdefs.dita#commonLRdefs/id">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/conref">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+</simpletable></section>
+<example>        <title>Example</title>  <p>The %id-atts; parameter entity
+is used within the DITA dtds as a common definition for attributes available
+to most elements that enable you to name or reference (link to or fetch) the
+content of particular elements. Some typical examples include:</p>       
+   <codeblock>&lt;p id="mainpara">The war cry of Kudzu University, &lt;q id="warcry">To the victor 
+go the spoils!&lt;/q>, is often heard on campus during freshman orientation.&lt;/p>
+&lt;p id="dullpara">One often hears the cry, &lt;q conref="#topicid/warcry"/>, when 
+students are competing in intramural sports.&lt;/p></codeblock>       </example>
+</refbody>
+</reference>
+<?Pub *0000002389?>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<reference id="body" xml:lang="en-us">
+<title>body</title>
+<shortdesc>The &lt;<keyword>body</keyword>&gt; element is the container for
+the main content of a &lt;<keyword>topic</keyword>&gt;.</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>body</indexterm><indexterm>topic body</indexterm><indexterm>Topic
+elements<indexterm>body</indexterm></indexterm></keywords><?Pub Caret1?>
+</metadata></prolog>
+<refbody>
+<example><title>Example</title><codeblock>&lt;topic&gt;
+&lt;title&gt;...&lt;/title&gt;
+&lt;prolog&gt;...&lt;/prolog&gt; 
+&lt;body&gt; ... ... &lt;/body&gt; 
+&lt;/topic&gt; </codeblock></example>
+<section conref="../common/commonNavLibraryTable.dita#models/body-contains" otherprops="contains"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/body-containedby"
+otherprops="containedby"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/body-classvalue"
+otherprops="classvalue"></section>
+<section id="attrs"><title>Attributes</title> <simpletable id="body_attr"
+relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/univ-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/classandout"><stentry/><stentry/><stentry/><stentry/><stentry/></strow>
+</simpletable> </section>
+</refbody>
+</reference>
+<?Pub *0000002132?>

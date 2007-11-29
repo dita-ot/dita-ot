@@ -82,6 +82,7 @@ public abstract class Constants {
     public static final String ELEMENT_NAME_TITLE = "title";
     public static final String ELEMENT_NAME_ENTRY = "entry";
     public static final String ELEMENT_NAME_COLSPEC = "colspec";
+    public static final String ELEMENT_NAME_TOPIC = "topic";
     
     /**
      * Constants for attribute names in dita files.
@@ -123,6 +124,7 @@ public abstract class Constants {
      * Constant for generated property file name. 
      */
     public static final String FILE_NAME_DITA_LIST = "dita.list";
+    public static final String FILE_NAME_DITA_LIST_XML="dita.xml.properties";
     public static final String FILE_NAME_CATALOG = "catalog-dita.xml";
     
     /**
@@ -143,6 +145,7 @@ public abstract class Constants {
     public static final String SUBSIDIARY_TARGET_LIST = "subtargetslist";
     public static final String CHUNKED_TOPIC_LIST="chunkedtopiclist";
     public static final String CHUNKED_DITAMAP_LIST="chunkedditamaplist";
+    public static final String OUT_DITA_FILES_LIST="outditafileslist";
 
     /**
      * Constants for common params used in ant invoker.
@@ -152,7 +155,7 @@ public abstract class Constants {
     public static final String ANT_INVOKER_PARAM_BASEDIR = "basedir";
     public static final String ANT_INVOKER_PARAM_INPUTMAP = "inputmap";    
     public static final String ANT_INVOKER_PARAM_DITAVAL = "ditaval";    
-    public static final String ANT_INVOKER_PARAM_MAPLINKS = "maplinks";    
+    public static final String ANT_INVOKER_PARAM_MAPLINKS = "maplinks";
 
     /**
      * Constants for extensive params used in ant invoker.
@@ -166,7 +169,10 @@ public abstract class Constants {
     public static final String ANT_INVOKER_EXT_PARAM_INPUTDIR = "inputdir";
     public static final String ANT_INVOKER_EXT_PARAM_STYLE = "style";
     public static final String ANT_INVOKER_EXT_PARAM_TRANSTYPE = "transtype";
-    
+    public static final String ANT_INVOKER_EXT_PARAM_OUTTERCONTROL="outercontrol";
+    public static final String ANT_INVOKER_EXT_PARAM_GENERATECOPYOUTTER="generatecopyouter";
+    public static final String ANT_INVOKER_EXT_PARAM_ONLYTOPICINMAP="onlytopicinmap";
+    public static final String ANT_INVOKER_EXT_PARAM_VALIDATE="validate";
     /**
      * Constants for file and line separator.
      */
@@ -269,7 +275,6 @@ public abstract class Constants {
 	public static final String DEFAULT_ACTION="default";
 	public static final String ATTRIBUTE_NAME_CHUNK = "chunk";	
 	
-    
     /**
      * Private constructor used to forbid instantiation.
      */

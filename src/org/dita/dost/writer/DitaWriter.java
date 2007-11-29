@@ -19,10 +19,11 @@ import java.util.List;
 import java.util.Properties;
 
 import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
 
 import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.log.MessageUtils;
+import org.dita.dost.exception.DITAOTXMLErrorHandler;
+
 import org.dita.dost.module.Content;
 import org.dita.dost.module.DebugAndFilterModule;
 import org.dita.dost.util.CatalogUtils;
@@ -232,6 +233,7 @@ public class DitaWriter extends AbstractXMLWriter {
         Class c = null;
         
         reader.setContentHandler(this);
+        
         try {
 			reader.setProperty(Constants.LEXICAL_HANDLER_PROPERTY,this);
 		} catch (SAXNotRecognizedException e1) {
@@ -255,7 +257,7 @@ public class DitaWriter extends AbstractXMLWriter {
      * @throws SAXException
      * @param ditaDir 
      */
-	public static void initXMLReader(String ditaDir) throws SAXException {
+	public static void initXMLReader(String ditaDir,boolean validate) throws SAXException {
 		DITAOTJavaLogger logger=new DITAOTJavaLogger();
 		if (System.getProperty(Constants.SAX_DRIVER_PROPERTY) == null) {
 			// The default sax driver is set to xerces's sax driver
@@ -265,10 +267,12 @@ public class DitaWriter extends AbstractXMLWriter {
 		try {
 			
 			reader = XMLReaderFactory.createXMLReader();
-                
+			
             reader.setFeature(Constants.FEATURE_NAMESPACE_PREFIX, true);
-            reader.setFeature(Constants.FEATURE_VALIDATION, true);
-            reader.setFeature(Constants.FEATURE_VALIDATION_SCHEMA, true);
+            if(validate==true){
+            	reader.setFeature(Constants.FEATURE_VALIDATION, true);
+            	reader.setFeature(Constants.FEATURE_VALIDATION_SCHEMA, true);
+            }
 			reader.setFeature(Constants.FEATURE_NAMESPACE, true);			
 		} catch (Exception e) {
 			logger.logException(e);
@@ -617,10 +621,10 @@ public class DitaWriter extends AbstractXMLWriter {
 		Properties params = new Properties();
 		String msg = null;
         String attrValue = atts.getValue(Constants.ATTRIBUTE_NAME_CLASS);
-		if(attrValue==null){
+		if(attrValue==null && !Constants.ELEMENT_NAME_DITA.equals(localName)){
     		params.clear();
 			msg = null;
-			params.put("%1", qName);
+			params.put("%1", localName);
 			logger.logInfo(MessageUtils.getMessage("DOTJ030I", params).toString());			
 		}       
         if (attrValue != null && attrValue.indexOf(Constants.ATTR_CLASS_VALUE_TOPIC) != -1){
@@ -628,7 +632,7 @@ public class DitaWriter extends AbstractXMLWriter {
         	if(domains==null){
         		params.clear();
     			msg = null;
-				params.put("%1", qName);
+				params.put("%1", localName);
 				logger.logInfo(MessageUtils.getMessage("DOTJ029I", params).toString());
         	}else
         		props = StringUtils.getExtProps(domains);
@@ -735,6 +739,7 @@ public class DitaWriter extends AbstractXMLWriter {
             
             // start to parse the file and direct to output in the temp
             // directory
+            reader.setErrorHandler(new DITAOTXMLErrorHandler(traceFilename));
             reader.parse(traceFilename);
             
             output.close();

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<reference id="index-see" rev="1.1" xml:lang="en-us"><?Pub Caret?>
+<title>index-see</title>
+<shortdesc>An &lt;index-see&gt; element within an &lt;indexterm&gt; redirects
+the reader to another index entry that the reader should reference instead
+of the current one.</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>index-see</indexterm><indexterm>Indexing domain elements<indexterm>index-see</indexterm></indexterm>
+</keywords>
+</metadata></prolog>
+<refbody>
+<section id="index-redirection"><p>The &lt;index-see&gt; and &lt;index-see-also&gt;
+elements allow a form of redirection to another index entry within the generated
+index. The &lt;index-see&gt; element refers to an index entry that the reader
+should use <i>instead of</i> the current one, whereas the &lt;index-see-also&gt;
+element refers to an index entry that the reader should use <i>in addition
+to</i> the current one. </p><p>The &lt;index-see&gt; and &lt;index-see-also&gt;
+elements are ignored if their parent indexterm element contains any indexterm
+children.</p></section>
+<section><p>Because an index-see indicates a redirection to use instead of
+the current entry, it is an error if, for any index-see, there is also an
+index-see-also or an indexterm  for the same index entry (i.e., with an identical
+sort key). An implementation may (but need not) give an error  message, and
+may (but need not) recover from this error condition by treating the index-see
+as an index-see-also.</p><p>It is not an error for there to be multiple index-see
+elements for a single index entry.</p></section>
+<example><p>The following example illustrates the use of an &lt;index-see&gt;
+redirection element within an &lt;indexterm&gt;:</p><codeblock>&lt;indexterm&gt;Carassius auratus
+   &lt;index-see&gt;Goldfish&lt;/index-see&gt;
+&lt;/indexterm&gt;</codeblock><p>This will typically generate an index entry
+without a page reference:</p><ul>
+<li id="WS31ee95e0b0c9e7e91643e4b10c8d987a95-7ff7">Carassius auratus, <i>see</i> Goldfish</li>
+</ul><p>The following example illustrates the use of an &lt;index-see&gt;
+redirection element to a more complex (multilevel) &lt;indexterm&gt;:</p><codeblock>&lt;indexterm&gt;Feeding goldfish
+   &lt;index-see&gt;Goldfish &lt;indexterm&gt;feeding&lt;/indexterm&gt;&lt;/index-see&gt;
+&lt;/indexterm&gt;</codeblock><p>This is part of the indexing markup that
+might generate index entries such as:</p><ul>
+<li id="WS31ee95e0b0c9e7e91643e4b10c8d987a95-7ffe">Feeding goldfish<ul>
+<li id="WS31ee95e0b0c9e7e91643e4b10c8d987a95-7ffd"><i>see</i> Goldfish feeding</li>
+</ul></li>
+<li id="WS31ee95e0b0c9e7e91643e4b10c8d987a95-7ffc">Goldfish<ul>
+<li id="WS31ee95e0b0c9e7e91643e4b10c8d987a95-7ffb">feeding, 56</li>
+<li id="WS31ee95e0b0c9e7e91643e4b10c8d987a95-7ffa">flushing, 128, 345</li>
+</ul></li>
+</ul></example>
+<section conref="../common/commonNavLibraryTable.dita#models/index-see-contains"
+otherprops="contains"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/index-see-containedby"
+otherprops="containedby"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/index-see-classvalue"
+otherprops="classvalue"></section>
+<section id="attrs"><title>Attributes</title> <simpletable id="index-see_attr"
+relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/univ-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/classandkey"><stentry/><stentry/><stentry/><stentry/><stentry/></strow>
+</simpletable> </section>
+</refbody>
+</reference>
+<?Pub *0000004330?>

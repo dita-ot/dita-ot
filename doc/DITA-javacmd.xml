@@ -284,6 +284,33 @@
                 <ph conref="DITA-antscript.xml#antscript/htmlhelpincludefile"/>
               </entry>
             </row>
+            <row>
+              <entry colname="col1"><i>/validate</i>:{validate}</entry>
+              <entry colname="col2">
+                <ph conref="DITA-antscript.xml#antscript/validate"/>
+                <note conref="DITA-antscript.xml#antscript/validate-note"/>
+              </entry>
+            </row>
+            <row>
+              <entry colname="col1"><i>/outercontrol</i>:{outer.control}</entry>
+              <entry colname="col2">
+                <ph conref="DITA-antscript.xml#antscript/outercontrol"/>
+                <note conref="DITA-antscript.xml#antscript/outercontrol-note"/>
+              </entry>
+            </row>
+            <row>
+              <entry colname="col1"><i>/generatecopyouter</i>:{generate.copy.outer}</entry>
+              <entry colname="col2">
+                <ph conref="DITA-antscript.xml#antscript/generatecopyouter"/>
+                <note conref="DITA-antscript.xml#antscript/generatecopyouter-note"/>
+              </entry>
+            </row>
+            <row>
+              <entry colname="col1"><i>/onlytopicinmap</i>:{onlytopic.in.map}</entry>
+              <entry colname="col2">
+                <ph conref="DITA-antscript.xml#antscript/onlytopicinmap"/>
+              </entry>
+            </row>
           </tbody>
         </tgroup>
       </table>

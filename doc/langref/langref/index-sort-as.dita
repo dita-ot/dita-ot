@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<reference id="index-sort-as" rev="1.1" xml:lang="en-us"><?Pub Caret?>
+<title>index-sort-as</title>
+<shortdesc>The &lt;index-sort-as&gt; element specifies a sort phrase under
+which an index entry would be sorted.</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>index-sort-as</indexterm><indexterm>Indexing domain elements<indexterm>index-sort-as</indexterm></indexterm>
+</keywords>
+</metadata></prolog>
+<refbody>
+<section><p>This element gives an author the flexibility to sort an index
+entry in an index differently from how its text normally would be sorted.
+The common use for this is to disregard insignificant leading text, such as
+punctuation or words like "the" or "a". For example, the author may want &lt;data>
+to be sorted under the letter D rather than the left angle bracket (&lt;).
+An author may want to include such an entry under both the punctuation heading
+and the letter D, in which case there can be two index entry directives differentiated
+only by the sort order.  </p><p>Certain languages may have special sort order
+needs. For example, Japanese index entries might be written partially or wholly
+in kanji, but need to be sorted in phonetic order according to its hiragana/katakana
+rendition. There is no reliable automated way to map written to phonetic text:
+for kanji text, there can be multiple phonetic possibilities depending on
+the context. The only way to correctly sort Japanese index entries is to keep
+the phonetic counterparts with the written forms. The phonetic text would
+be presented as the sort order text for indexing purposes.</p><!--<p>While this markup allows you to specify
+different sort orders for different instances
+of the same index entry, this can lead to
+inconsistent sort orders in cases where you
+want the same sort order. You may specify
+a global default sort order by placing an
+indexterm instance in a map's metadata (map/topicmeta/keywords/indexterm).
+There, the indexterm has no content context
+and will not generate an index page reference.
+Using index-sort-as there will set the global
+sort order expression for that term. The individual
+indexterm instances in the content may override
+this global default with their own index-sort-as
+elements.</p>--><p>The &lt;index-sort-as> element's content is logically augmented
+by the textual content of its parent &lt;indexterm> element to produce the
+effective sort key (i.e., the textual content acts as a secondary sort field),
+so two indexterms with different content but the same &lt;index-sort-as> value
+would never merge into a single index entry.</p><p>An &lt;index-sort-as> element
+provides sort key information for the indexterm that is its parent; therefore,
+in a multiple level indexterm, the index-sort-as only affects the level in
+which it occurs.</p><p>It is an error if there is more than one index-sort-as
+child for a given indexterm. An implementation may (but need not) give an
+error message, and may (but need not) recover from this error condition by
+ignoring all but the last index-sort-as.</p></section>
+<example><p>This is an example of an index entry for &lt;data> that will be
+sorted as "data":</p><codeblock>&lt;indexterm>&amp;lt;data&amp;gt;&lt;index-sort-as>data&lt;/index-sort-as>&lt;/indexterm></codeblock></example>
+<section conref="../common/commonNavLibraryTable.dita#models/index-sort-as-contains"
+otherprops="contains"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/index-sort-as-containedby"
+otherprops="containedby"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/index-sort-as-classvalue"
+otherprops="classvalue"></section>
+<section id="attrs"><title>Attributes</title> <simpletable id="index-sort-as_attr"
+relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/univ-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/classandkey"><stentry/><stentry/><stentry/><stentry/><stentry/></strow>
+</simpletable> </section>
+</refbody>
+</reference>
+<?Pub *0000004808?>

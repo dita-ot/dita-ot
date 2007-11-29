@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<reference id="no-topic-nesting" xml:lang="en-us">
+<title>no-topic-nesting</title>
+<shortdesc>The &lt;<keyword>no-topic-nesting</keyword>&gt; element is a placeholder
+in the DITA architecture. It is not actually used by the default DITA document
+types; it is for use only when creating a validly customized document type
+where the information designer wants to eliminate the ability to nest topics.
+Not intended for use by authors, and has no associated output processing.</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>no-topic-nesting</indexterm><indexterm>Specialization
+elements<indexterm>no-topic-nesting</indexterm></indexterm></keywords><?Pub Caret1?>
+</metadata></prolog>
+<refbody>
+<example></example>
+<section conref="../common/commonNavLibraryTable.dita#models/no-topic-nesting-contains"
+otherprops="contains"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/no-topic-nesting-containedby"
+otherprops="containedby"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/no-topic-nesting-classvalue"
+otherprops="classvalue"></section>
+<section id="attrs"><title>Attributes</title> <simpletable id="no-topic-nesting_attr"
+relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/classonly"><stentry/><stentry/><stentry/><stentry/><stentry/></strow>
+</simpletable> </section>
+</refbody>
+</reference>
+<?Pub *0000001937?>

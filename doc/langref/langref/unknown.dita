@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<reference id="unknown" rev="1.1" xml:lang="en-us"><?Pub Caret?>
+<title>unknown</title>
+<shortdesc> The &lt;unknown&gt; element is an open extension that allows information
+architects to incorporate xml fragments that do not necessarily fit into an
+existing DITA use case. The base processing for &lt;unknown&gt; is to suppress
+unless otherwise instructed. </shortdesc>
+<prolog><metadata>
+<keywords><indexterm>Specialization elements<indexterm>unknown</indexterm></indexterm>
+<indexterm>unknown element</indexterm></keywords>
+</metadata></prolog>
+<refbody>
+<example></example>
+<section conref="../common/commonNavLibraryTable.dita#models/unknown-contains"
+otherprops="contains"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/unknown-containedby"
+otherprops="containedby"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/unknown-classvalue"
+otherprops="classvalue"></section>
+<section id="attrs"><title>Attributes</title> <simpletable id="unknown_attr"
+relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/univ-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/classandout"><stentry/><stentry/><stentry/><stentry/><stentry/></strow>
+</simpletable> </section>
+</refbody>
+</reference>
+<?Pub *0000002113?>

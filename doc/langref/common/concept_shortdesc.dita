@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
+ "topic.dtd">
+<?Pub Inc?>
+<topic id="concept_shortdesc" xml:lang="en-us">
+<title>Guidelines for concept short descriptions</title>
+<shortdesc>Always use the &lt;shortdesc> element in a concept topic. Omit
+the &lt;context> element if what you describe in the &lt;shortdesc> element
+is sufficient. The short description must make sense both as the opening text
+of the topic and as pop-up text over a related link.</shortdesc>
+<prolog>
+<author>Guidelines owner: Michelle Carey, from Content Workgroup</author>
+<critdates><created date="18 May 2004"/></critdates>
+<metadata>
+<category audience="DITA authors" status="new"></category>
+<keywords><indexterm>concept short descriptions, guidelines</indexterm><indexterm>short
+descriptions, concept guidelines</indexterm></keywords>
+</metadata></prolog>
+<body>
+<section><title>Length</title><p id="clength">Use one to three sentences or
+up to 50 words.</p></section>
+<section><title>What to say</title><p id="cwhattosay">Introduce the concept
+and provide a concise answer to the question "What is this?" and in some cases
+"Why do I care about this?" If the concept is unfamiliar, you can start with
+a brief definition. Avoid using the short description to lead in or build
+up to a topic. The short description paragraph should contain the main point
+of the conceptual topic. The concept short description should clearly apply
+to a concept. Avoid turning the concept topic into a task. Do not simply repeat
+the title.</p><p><b>Example of an ineffective short description</b> <dl><dlentry>
+<dt>Crawlers</dt>
+<dd>This topic is about crawlers, which are programs that search for information.</dd>
+</dlentry></dl></p><p>This ineffective short description provides only a vague
+description. It does not answer why users should care about what crawlers
+do or how they work.</p><p><b>Example of an effective short description</b><dl>
+<dlentry>
+<dt>Crawlers</dt>
+<dd>Crawlers are programs that search for information on the Web, in databases,
+or in other data sources. The information that the crawlers gather is added
+to the search engine index. Crawlers must run regularly to ensure that the
+search engine index is up to date.</dd>
+</dlentry></dl></p><p>The effective short description provides a more specific
+definition of crawlers and describes why crawlers are useful to search engine
+indexes.</p></section>
+<section><title>Phrasing</title><p id="cphrasing">Do not use sentence fragments.
+Use complete sentences. Avoid starting short descriptions with phrases such
+as <q>This topic describes . . . .</q> or <q>This topic is about . . . .</q></p></section>
+<section id="good_conc"><title>Examples of effective short descriptions</title><p>Topic
+titles are in bold. Short descriptions are in plain text. Highlighting in
+a short description will not appear in the pop-up text over a related link.<dl>
+<dlentry>
+<dt>Cube models</dt>
+<dd><p>A cube model is a DB2 object that describes the data that is related
+to a collection of measures. The cube model groups relevant dimension objects
+around a facts object, creating a star schema or snowflake schema.</p></dd>
+</dlentry><dlentry>
+<dt>Search collections</dt>
+<dd><p>A search collection is a set of data sources that users can search
+with a single query. A search collection can contain data from Web sites,
+file systems, and databases. You can build new collections or continue to
+update existing collections.</p></dd>
+</dlentry><dlentry>
+<dt>Enterprise Bean Deployment tool</dt>
+<dd><p>The Enterprise Bean Deployment tool helps you generate deployment code
+for your enterprise beans before you run them on a test server or a production
+server. You can use this tool from the command line or from WebSphere Studio
+Application Developer.</p></dd>
+</dlentry><dlentry>
+<dt>Class shapes</dt>
+<dd><p>In modeling diagrams, a class shape is a graphical element that represents
+a Java class, a Java interface, or an EJB component. You can use multiple
+instances of a class shape in one or more diagrams.</p></dd>
+</dlentry></dl></p></section>
+<section id="bad_conc"><title>Examples of ineffective short descriptions</title><p>Topic
+titles are in bold. Short descriptions are in plain text.<dl><dlentry>
+<dt>Cube models</dt>
+<dd>A cube model is a collection of metadata objects.<p>Compare this short
+description to the same topic in <xref href="#concept_shortdesc/good_conc"
+type="section">Examples of good short descriptions</xref>.</p></dd>
+</dlentry><dlentry>
+<dt>EJB deployment tool</dt>
+<dd>Generates deployment code.<p>This short description is a fragment.</p></dd>
+</dlentry><dlentry>
+<dt>Types of spatial indexes</dt>
+<dd>Good query performance is related to having efficient indexes defined
+on the columns of the base tables in a database. The performance of the query
+is directly related to how quickly values in the column can be found during
+the query. Queries that use an index can execute more quickly and can provide
+a significant performance improvement.<p>This short description does not address
+the topic title, and it is too long. The topic is about spatial indexes, yet
+the short description discusses query performance. The writer might be using
+the short description to lead in or build up to a point. However, the short
+description should directly state the main point.</p></dd>
+</dlentry><dlentry>
+<dt>Guidelines for writing a program for debugging</dt>
+<dd>You can make your programs easier to debug by following these simple guidelines: <p>Avoid
+adding a list or table lead-in sentence to a short description. You cannot
+add an &lt;ol> or &lt;ul> element inside a short description element. If you
+add a list or table lead-in sentence and then add the list or table to the
+next available element, the list or table will not be logically associated
+with the &lt;shortdesc> element. Such a structure is semantically incorrect.
+You will not be able to reuse the list or table with its lead-in sentence.
+Also, this short description will not make sense in pop-up text for a related
+link.</p></dd>
+</dlentry></dl></p></section>
+</body><?Pub Caret1?>
+</topic>
+<?Pub *0000006212?>

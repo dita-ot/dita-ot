@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<reference id="country" xml:lang="en-us">
+<title>country</title>
+<shortdesc>The &lt;country&gt; element contains the name of a country. </shortdesc>
+<prolog><metadata>
+<keywords><indexterm>country<indexterm>xNAL <?Pub Caret?>elements<indexterm>country</indexterm></indexterm></indexterm>
+</keywords>
+</metadata></prolog>
+<refbody>
+<example><pre>&lt;addressdetails&gt;
+ &lt;thoroughfare&gt;123 Yellow Brick Road&lt;/thoroughfare&gt;
+ &lt;locality&gt;Emerald City&lt;/locality&gt;
+ &lt;administrativearea&gt;Kansas&lt;/administrativearea&gt;
+ &lt;country&gt;USA&lt;/country&gt;
+&lt;/addressdetails&gt;</pre></example>
+<section conref="../common/commonNavLibraryTable.dita#models/country-contains"
+otherprops="contains"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/country-containedby"
+otherprops="containedby"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/country-classvalue"
+otherprops="classvalue"></section>
+<section id="attrs"><title>Attributes</title> <simpletable id="country_attr"
+relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/univ-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/classoutkey"><stentry/><stentry/><stentry/><stentry/><stentry/></strow>
+</simpletable> </section>
+</refbody>
+</reference>
+<?Pub *0000002323?>

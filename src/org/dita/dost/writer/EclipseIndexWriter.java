@@ -87,8 +87,10 @@ public class EclipseIndexWriter implements AbstractWriter {
 			printWriter = new PrintWriter(new OutputStreamWriter(
 					outputStream, "UTF-8"));
 			
-			printWriter.println("<?xml version='1.0' encoding='UTF-8' ?>");
-			printWriter.println("<index>");
+			printWriter.print("<?xml version='1.0' encoding='UTF-8' ?>");
+			printWriter.print(System.getProperty("line.separator"));
+			printWriter.print("<index>");
+			printWriter.print(System.getProperty("line.separator"));
 
 			for (int i = 0; i < termNum; i++) {
 				IndexTerm term = (IndexTerm) termList.get(i);
@@ -96,7 +98,8 @@ public class EclipseIndexWriter implements AbstractWriter {
 				outputIndexTerm(term, printWriter);
 			}
 
-			printWriter.println("</index>");
+			printWriter.print("</index>");
+			printWriter.print(System.getProperty("line.separator"));
 			
 		} finally {
 			printWriter.close();
@@ -136,7 +139,7 @@ public class EclipseIndexWriter implements AbstractWriter {
         printWriter.print("<entry keyword=\"");
         printWriter.print(term.getTermFullName());
         printWriter.print("\">");
-        printWriter.println();
+        printWriter.print(System.getProperty("line.separator"));
         
         for (int i = 0; i < targetNum; i++) {
             IndexTermTarget target = (IndexTermTarget) targets.get(i);
@@ -148,7 +151,7 @@ public class EclipseIndexWriter implements AbstractWriter {
                 printWriter.print(" title=\"");
                 printWriter.print(target.getTargetName());
                 printWriter.print("\"/>");
-                printWriter.println();
+                printWriter.print(System.getProperty("line.separator"));
         	}
         	else if (targetName != null){
         		if (subTerms != null && subTermNum == 0){ //Eric
@@ -161,7 +164,7 @@ public class EclipseIndexWriter implements AbstractWriter {
                     	printWriter.print("\"");
                     }
                     printWriter.print("/>");
-                    printWriter.println();        		
+                    printWriter.print(System.getProperty("line.separator"));       		
         		}
                 
         	}
@@ -176,7 +179,8 @@ public class EclipseIndexWriter implements AbstractWriter {
 
         }
 
-        printWriter.println("</entry>");
+        printWriter.print("</entry>");
+        printWriter.print(System.getProperty("line.separator"));
     }
     
     /**

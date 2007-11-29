@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<reference id="glossentry" xml:lang="en-us">
+<title>glossentry</title>
+<shortdesc>The &lt;<keyword>glossentry</keyword>&gt; element defines a single
+sense of a glossary term. The expected book processing is to sort and group
+the glossary entries based on the localized term so a back-of-the-book glossary
+can contain a collated list of terms with the definitions of the senses of
+the terms indented under the terms. The glossary can have a different organization
+in different languages depending on the translation of the terms. One possible
+online processing is to associate a hotspot for mentions of terms in &lt;<keyword>term</keyword>&gt;
+elements and display the definition on hover or click. Glossary entries for
+different term senses can be reused independently of one another.</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>glossentry</indexterm><indexterm>Glossentry <?Pub Caret?>elements<indexterm>glossentry</indexterm></indexterm>
+</keywords>
+</metadata></prolog>
+<refbody>
+<example><title>Example</title><codeblock>&lt;glossentry id="ddl"&gt;
+    &lt;glossterm&gt;Data Definition Language&lt;/glossterm&gt;
+    &lt;glossdef&gt;A formal language used for defining database schemas....&lt;/glossdef&gt;
+&lt;/glossentry&gt;</codeblock></example>
+<section conref="../common/commonNavLibraryTable.dita#models/glossentry-contains"
+otherprops="contains"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/glossentry-containedby"
+otherprops="containedby"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/glossentry-classvalue"
+otherprops="classvalue"></section>
+<section id="attrs"><title>Attributes</title> <simpletable id="glossentry_attr"
+relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/id-topic">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/conref-topic">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/xmlnsditaarch">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/DITAArchVersion">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/domains">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/select-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/localization-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/classandout"><stentry/><stentry/><stentry/><stentry/><stentry/></strow>
+</simpletable> </section>
+</refbody>
+</reference>
+<?Pub *0000003873?>

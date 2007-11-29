@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Properties;
 
+import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.Content;
@@ -439,7 +440,7 @@ public class DitaLinksWriter extends AbstractXMLWriter {
 								Constants.QUOTATION).toString());  //Eric
 			}
 			output.write(Constants.GREATER_THAN);
-			if (atts.getValue(Constants.ATTRIBUTE_NAME_CLASS).indexOf( //Eric
+			if (atts.getValue(Constants.ATTRIBUTE_NAME_CLASS)!=null && atts.getValue(Constants.ATTRIBUTE_NAME_CLASS).indexOf( //Eric
 					" topic/related-links ") != -1
 					&& startTopic) {
 				hasRelatedlinksTillNow = true;
@@ -510,7 +511,7 @@ public class DitaLinksWriter extends AbstractXMLWriter {
             outputFile = new File(file + Constants.FILE_EXTENSION_TEMP);
             fileOutput = new FileOutputStream(outputFile);
             output = new OutputStreamWriter(fileOutput, Constants.UTF8);
-
+            reader.setErrorHandler(new DITAOTXMLErrorHandler(file));
             reader.parse(file);
             output.close();
             

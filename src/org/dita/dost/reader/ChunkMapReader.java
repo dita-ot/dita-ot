@@ -75,33 +75,83 @@ public class ChunkMapReader implements AbstractReader {
 			Element root = doc.getDocumentElement();
 			NodeList list = root.getChildNodes();
 			
-			if("by-topic".equals(root.getAttribute(Constants.ATTRIBUTE_NAME_CHUNK))){
+			if(root.getAttribute(Constants.ATTRIBUTE_NAME_CHUNK) != null &&
+					root.getAttribute(Constants.ATTRIBUTE_NAME_CHUNK).indexOf("by-topic")!=-1){
 				mapChunk="by-topic";
 			}else{
 				mapChunk="by-document";
 			}
 			
-			
-			for (int i = 0; i < list.getLength(); i++){
-				Node node = list.item(i);
-				Node classAttr = null;
-				String classValue = null;
-				if (node.getNodeType() == Node.ELEMENT_NODE){
-					classAttr = node.getAttributes().getNamedItem("class");
-					
-					if(classAttr != null){
-						classValue = classAttr.getNodeValue();
+			if(root.getAttribute(Constants.ATTRIBUTE_NAME_CHUNK) != null &&
+					root.getAttribute(Constants.ATTRIBUTE_NAME_CHUNK).indexOf("to-content")!=-1){
+				// if to-content is specified on map element
+				
+				// create the reference to the new file on root element.
+				Random random = new Random();
+				String newFilename= "Chunk"
+					+new Integer(Math.abs(random.nextInt())).toString()+ditaext;
+				String originClassValue = root.getAttribute(Constants.ATTRIBUTE_NAME_CLASS);
+				root.setAttribute(Constants.ATTRIBUTE_NAME_CLASS, Constants.ATTR_CLASS_VALUE_TOPICREF);
+				root.setAttribute(Constants.ATTRIBUTE_NAME_HREF, newFilename);
+				
+				//create the new file
+				File newFile = new File(inputFile.getParentFile().getAbsolutePath(),newFilename);
+				OutputStreamWriter newFileWriter = null;
+				try{
+					newFileWriter = new OutputStreamWriter(new FileOutputStream(newFile), Constants.UTF8);
+					newFileWriter.write(Constants.XML_HEAD);
+					newFileWriter.write("<?workdir /"+newFile.getParentFile().getAbsolutePath()+"?>");
+					newFileWriter.write("<dita></dita>");
+					newFileWriter.flush();
+					newFileWriter.close();
+				}catch (Exception e) {
+					javaLogger.logException(e);
+				}finally{
+					try{
+						if(newFileWriter!=null){
+							newFileWriter.close();
+						}
+					}catch (Exception e) {
+						javaLogger.logException(e);
+					}					
+				}
+				
+				//process chunk
+				processTopicref(root);
+				
+				//add newly created file to changeTable
+				changeTable.put(newFile.getAbsolutePath(),newFile.getAbsolutePath());
+				
+				// restore original root element
+				if(originClassValue != null){
+					root.setAttribute(Constants.ATTRIBUTE_NAME_CLASS, originClassValue);
+				}
+				root.removeAttribute(Constants.ATTRIBUTE_NAME_HREF);
+				
+			}else{
+				// if to-content is not specified on map element
+				for (int i = 0; i < list.getLength(); i++){
+					Node node = list.item(i);
+					Node classAttr = null;
+					String classValue = null;
+					if (node.getNodeType() == Node.ELEMENT_NODE){
+						classAttr = node.getAttributes().getNamedItem("class");
+						
+						if(classAttr != null){
+							classValue = classAttr.getNodeValue();
+						}
+						
+						if(classValue != null && classValue.indexOf(Constants.ATTR_CLASS_VALUE_RELTABLE)!=-1){
+							updateReltable((Element)node);
+						}
+						if(classValue != null && classValue.indexOf(Constants.ATTR_CLASS_VALUE_TOPICREF)!=-1){
+							processTopicref(node);
+						}
+						
 					}
-					
-					if(classValue != null && classValue.indexOf(Constants.ATTR_CLASS_VALUE_RELTABLE)!=-1){
-						updateReltable((Element)node);
-					}
-					if(classValue != null && classValue.indexOf(Constants.ATTR_CLASS_VALUE_TOPICREF)!=-1){
-						processTopicref(node);
-					}
-					
 				}
 			}
+			
 			
 			outputMapFile(inputFile.getAbsolutePath()+".chunk",root);
 			if(!inputFile.delete()){
@@ -262,7 +312,7 @@ public class ChunkMapReader implements AbstractReader {
 				String hrefValue = ((Element)current).getAttribute(Constants.ATTRIBUTE_NAME_HREF);
 				if(classValue.indexOf(Constants.ATTR_CLASS_VALUE_TOPICREF)!=-1){
 					if(!hrefValue.equals(Constants.STRING_EMPTY) &&
-							FileUtils.resolveFile(filePath,hrefValue)
+							! FileUtils.resolveFile(filePath,hrefValue)
 							.equals(changeTable.get(FileUtils.resolveFile(filePath,hrefValue)))){
 						//make sure hrefValue make sense and target file 
 						//is not generated file

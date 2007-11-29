@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<reference id="data" rev="1.1" xml:lang="en-us"><?Pub Caret?>
+<title>data</title>
+<shortdesc>The &lt;<keyword>data</keyword>&gt; element represents a property
+within a DITA topic or map. While the &lt;<keyword>data</keyword>&gt; element
+can be used directly to capture properties, it is particularly useful as a
+basis for specialization. Default processing treats the property values as
+an unknown kind of metadata, but custom processing can match the <keyword>name</keyword> attribute
+or specialized element to format properties as sidebars or other adornments
+or to harvest properties for automated processing. </shortdesc>
+<prolog><metadata>
+<keywords><indexterm>data element</indexterm><indexterm>property <indexterm>data</indexterm></indexterm>
+<indexterm>Miscellaneous elements<indexterm>data</indexterm></indexterm></keywords>
+</metadata></prolog>
+<refbody>
+<section><p>The subject of the property is ordinarily the container of the &lt;<keyword>data</keyword>&gt;
+element. In the content model for the &lt;<keyword>prolog</keyword>&gt; and &lt;<keyword>metadata</keyword>&gt;
+elements, the property applies to the topic as a whole. In the &lt;<keyword>topicmeta</keyword>&gt;
+element, the property applies to the referenced topic. You can use the &lt;<keyword>data-about</keyword>&gt;
+element to identify the subject of the property with an explicit reference.</p><p>The <keyword>name</keyword> attribute
+names the property for processes. You can use a &lt;<keyword>title</keyword>&gt;
+subelement to provide a label for the property. You can use the <keyword>datatype</keyword> attribute
+to identify the type for the value. The value of the property can be any of
+the following:</p><ul>
+<li>A simple text value expressed with the <keyword>value</keyword> attribute
+or textual content.</li>
+<li>A reference to either DITA content or a non-DITA resource expressed with
+the <keyword>href</keyword> attribute.</li>
+<li>An image or other non-textual object. </li>
+<li>A brief unit of descriptive text that isn't part of the body text flow.</li>
+<li>A complex structure composed with nested &lt;<keyword>data</keyword>&gt;
+elements.</li>
+</ul><note type="caution">The &lt;<keyword>data</keyword>&gt; element should
+only be used for properties and not to embed text for formatting as part of
+the flow of the topic body. </note></section>
+<example><title>Example</title><p>The structure identifies the library and
+version demonstrated by a code sample:</p><codeblock>&lt;codeblock&gt;&lt;data name="exampleOf"&gt;
+                  &lt;data name="library" href="ajaxLibrary.js"/&gt;
+                  &lt;data name="version" value="2006-6-19"/&gt;
+              &lt;/data&gt;
+          ...
+      &lt;/codeblock&gt;</codeblock></example>
+<section conref="../common/commonNavLibraryTable.dita#models/data-contains" otherprops="contains"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/data-containedby"
+otherprops="containedby"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/data-classvalue"
+otherprops="classvalue"></section>
+<section id="attrs"><title>Attributes</title> <simpletable id="data_attr"
+relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/name">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/datatype">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/value">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/href">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/format">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/type">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/scope">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/univ-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/classandout"><stentry/><stentry/><stentry/><stentry/><stentry/></strow>
+</simpletable> </section>
+</refbody>
+</reference>
+<?Pub *0000005452?>

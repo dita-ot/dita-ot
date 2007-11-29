@@ -3,7 +3,7 @@
  Sourceforge.net. See the accompanying license.txt file for 
  applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2007 All Rights Reserved. -->
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0" xmlns:exsl="http://exslt.org/common">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0" xmlns:exsl="http://exslt.org/common" exclude-result-prefixes="exsl">
 
  <!-- ========== Flagging with flags & revisions ========== -->
  
@@ -681,6 +681,10 @@
  <xsl:param name="flagrules"/>
  <xsl:param name="revvalue"/>
  <xsl:choose>
+  <xsl:when test="not($flagrules)">
+    <!-- $flagrules was not passed in, so the call must be looking for the deprecated template -->
+    <xsl:call-template name="revstyle-deprecated"/>
+  </xsl:when>
   <xsl:when test="exsl:node-set($flagrules)/revprop[@color or @backcolor]">
    <xsl:variable name="conflictexist">
     <xsl:call-template name="conflict-check">
@@ -723,6 +727,10 @@
   <xsl:call-template name="bidi-area"/>
  </xsl:variable>
  <xsl:choose>
+  <xsl:when test="not($flagrules)">
+    <!-- $flagrules was not passed in, so the call must be looking for the deprecated template -->
+    <xsl:call-template name="start-revision-flag-deprecated"/>
+  </xsl:when>
   <xsl:when test="$biditest='bidi'">
    <xsl:choose>
     <xsl:when test="exsl:node-set($flagrules)/revprop[startflag or endflag]">
@@ -828,6 +836,10 @@
   <xsl:call-template name="bidi-area"/>
  </xsl:variable>
  <xsl:choose>
+   <xsl:when test="not($flagrules)">
+     <!-- $flagrules was not passed in, so the call must be looking for the deprecated template -->
+     <xsl:call-template name="end-revision-flag-deprecated"/>
+   </xsl:when>
   <xsl:when test="$biditest='bidi'">
    <xsl:choose>
     <xsl:when test="exsl:node-set($flagrules)/revprop[startflag or endflag]">

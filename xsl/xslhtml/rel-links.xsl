@@ -28,11 +28,16 @@
     <xsl:with-param name="flagrules" select="$flagrules"/>
   </xsl:call-template>
     <a>
-        <xsl:call-template name="add-linking-attributes"/>
+      <xsl:call-template name="add-linking-attributes"/>
         <xsl:if test="*[contains(@class,' topic/desc ')]">
-            <xsl:attribute name="title">
-                <xsl:apply-templates select="*[contains(@class,' topic/desc ')][1]" mode="text-only"/>
-            </xsl:attribute>
+          <xsl:variable name="uncleantitle">
+            <xsl:apply-templates select="*[contains(@class,' topic/desc ')][1]" mode="text-only"/>
+            </xsl:variable>
+            <xsl:if test="normalize-space($uncleantitle)!=''">
+              <xsl:attribute name="title">
+                <xsl:value-of select="normalize-space($uncleantitle)"/>
+              </xsl:attribute>
+            </xsl:if>
         </xsl:if>
         <!-- if there is text or sub element other than desc, apply templates to them
         otherwise, use the href as the value of link text. -->

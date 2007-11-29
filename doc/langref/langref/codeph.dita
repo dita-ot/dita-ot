@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<reference id="codeph" xml:lang="en-us">
+<title>codeph</title>
+<shortdesc>The code phrase (&lt;<keyword>codeph</keyword>&gt;) element represents
+a snippet of code within the main flow of text. The code phrase is displayed
+in a monospaced font for emphasis. This element is part of the DITA programming
+domain, a special set of DITA elements designed to document programming tasks,
+concepts and reference information.</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>codeph (code phrase)</indexterm><indexterm>code phrase
+(codeph)</indexterm><indexterm>Programming elements<?Pub Caret?><indexterm>codeph
+(code phrase)</indexterm></indexterm></keywords>
+</metadata></prolog>
+<refbody>
+<example><title>Example</title><codeblock>&lt;p&gt;The second line of the sample program code, &lt;codeph&gt;Do forever&lt;/codeph&gt;, 
+represents the start of a loop construct.&lt;/p&gt;</codeblock></example>
+<section conref="../common/commonNavLibraryTable.dita#models/codeph-contains"
+otherprops="contains"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/codeph-containedby"
+otherprops="containedby"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/codeph-classvalue"
+otherprops="classvalue"></section>
+<section id="attrs"><title>Attributes</title> <simpletable id="codeph_attr"
+relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/univ-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/classandout"><stentry/><stentry/><stentry/><stentry/><stentry/></strow>
+</simpletable> </section>
+</refbody>
+</reference>
+<?Pub *0000002429?>

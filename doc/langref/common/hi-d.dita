@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<!--             (C) Copyright OASIS Open 2005.                    -->
+<!--             (C) Copyright IBM Corporation 2001, 2004.         -->
+<!--             All Rights Reserved.                              -->
+<reference id="highld" xml:lang="en-us"><?Pub Caret?>
+<title>Typographic elements</title>
+<shortdesc>The typographic elements are used to highlight text with styles
+(such as bold, italic, and monospace). Never use these elements when a semantically
+specific element is available. These elements are not intended for use by
+specializers, and are intended solely for use by authors when no semantically
+appropriate element is available and a formatting effect is required.</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>Domains elements<indexterm>typographic domain</indexterm></indexterm>
+<indexterm>Typographic elements</indexterm></keywords>
+</metadata></prolog>
+<refbody></refbody>
+</reference>
+<?Pub *0000001096?>

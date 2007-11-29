@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<?Pub Inc?>
+<reference id="ditaval-endflag" xml:lang="en-us">
+<title>endflag</title>
+<shortdesc>The endflag takes an optional image reference and an optional alt-text
+element for identifying the end of flagged content. If an image is
+specified, the specified image will be used to flag the end of the content, with the
+alt-text contents as alternative text. If alt-text is specified without an
+image, that text will be used to flag the content instead of an image. If
+no image and no alt-text are specified, then this element has no defined
+purpose. The endflag element is allowed inside either prop or revprop.</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>DITAVAL elements<indexterm>endflag</indexterm></indexterm>
+</keywords>
+</metadata></prolog>
+<refbody>
+<section otherprops="contains"><title>Contains</title><p><xref href="ditaval-alt-text.dita">alt-text</xref> (<i>optional</i>)</p></section>
+<section otherprops="containedby"><title>Contained by</title><p><xref href="ditaval-prop.dita">prop</xref>, <xref
+href="ditaval-revprop.dita">revprop</xref></p></section>
+<section id="attrs"><title>Attributes</title> <simpletable id="abstract_attr"
+relcolwidth="1* 3* 1* 1* 1*"><?Pub Caret?>
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow>
+<stentry>imageref</stentry>
+<stentry>The relative path or URL to the image file. The attribute uses conventional
+URL syntax to point to the resource: href="../images/construction.gif"</stentry>
+<stentry>CDATA</stentry>
+<stentry>#IMPLIED</stentry>
+<stentry>yes</stentry>
+</strow>
+</simpletable> </section>
+</refbody>
+</reference>
+<?Pub *0000001519?>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<reference id="context" xml:lang="en-us">
+<title>context</title>
+<shortdesc>The &lt;<keyword>context</keyword>&gt; section of a task provides
+background information for the task. This information helps the user understand
+what the purpose of the task is and what they will gain by completing the
+task. This section should be brief and does not replace or recreate a concept
+topic on the same subject, although the context section may include some conceptual
+information.</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>context</indexterm><indexterm>Task elements<indexterm>context</indexterm></indexterm>
+</keywords><?Pub Caret1?>
+</metadata></prolog>
+<refbody>
+<example>       <title>Example</title>       <codeblock>&lt;task id=&quot;sqlj&quot;&gt;
+&lt;title&gt;Creating an SQLJ file&lt;/title&gt;
+&lt;taskbody&gt;
+<b>&lt;context&gt;</b>Once you have set up SQLJ, you need to create a new SQLJ file.
+<b>&lt;/context&gt;</b>
+&lt;/taskbody&gt;
+&lt;/task&gt;</codeblock>     </example>
+<section conref="../common/commonNavLibraryTable.dita#models/context-contains"
+otherprops="contains"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/context-containedby"
+otherprops="containedby"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/context-classvalue"
+otherprops="classvalue"></section>
+<section id="attrs">       <title>Attributes</title>       <simpletable id="context_attr"
+relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/univ-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/classandout"><stentry/><stentry/><stentry/><stentry/><stentry/></strow>
+</simpletable>     </section>
+</refbody>
+</reference>
+<?Pub *0000002542?>

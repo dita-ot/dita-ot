@@ -11,6 +11,7 @@ package org.dita.dost.reader;
 
 import java.io.File;
 
+import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.module.Content;
 import org.dita.dost.module.ContentImpl;
@@ -153,7 +154,7 @@ public class MergeTopicParser extends AbstractXMLReader {
 		int index;
 		String retAttValue = attValue;
 		if (sharpIndex != -1){ // href value refer to an id in a topic
-			pathFromMap = FileUtils.resolveTopic(new File(filePath).getParent(),attValue.substring(0,sharpIndex));
+			pathFromMap = FileUtils.resolveTopic(new File(filePath).getParent(),attValue.substring(0,sharpIndex)).replaceAll(Constants.DOUBLE_BACK_SLASH, Constants.SLASH);
 			topicInfo.append(Constants.STRING_BLANK)
 			.append("ohref").append(Constants.EQUAL).append(Constants.QUOTATION)
 			.append(pathFromMap)
@@ -212,6 +213,7 @@ public class MergeTopicParser extends AbstractXMLReader {
 		dirPath = dir;
 		try{
 			filePath = (index != -1) ? filename.substring(0,index):filename;
+			reader.setErrorHandler(new DITAOTXMLErrorHandler(dir + File.separator + filePath));
 			reader.parse(dir + File.separator + filePath);
 			return retId;
 		}catch (Exception e){

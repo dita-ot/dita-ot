@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<reference id="q" xml:lang="en-us">
+<title>q</title>
+<shortdesc>A quotation element (&lt;q&gt;) indicates content quoted from another
+source. This element is used for short quotes which are displayed inline.
+Use the long quote element (&lt;lq&gt;) for quotations that should be set
+off from the surrounding text.</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>q (short quote)</indexterm><indexterm>short quote (q)</indexterm>
+<indexterm>quote, short (q)</indexterm><indexterm>Body elements<indexterm>q</indexterm></indexterm>
+</keywords><?Pub Caret1?>
+</metadata></prolog>
+<refbody>
+<example><title>Example</title><codeblock>George said, &lt;q&gt;Disengage the power supply before servicing the unit.&lt;/q&gt;</codeblock></example>
+<section conref="../common/commonNavLibraryTable.dita#models/q-contains" otherprops="contains"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/q-containedby" otherprops="containedby"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/q-classvalue" otherprops="classvalue"></section>
+<section id="attrs"><title>Attributes</title> <simpletable id="q_attr" relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/univ-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/classandout"><stentry/><stentry/><stentry/><stentry/><stentry/></strow>
+</simpletable> </section>
+</refbody>
+</reference>
+<?Pub *0000002250?>

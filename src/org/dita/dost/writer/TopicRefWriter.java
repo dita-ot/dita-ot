@@ -19,6 +19,7 @@ import java.io.File;
 
 import org.dita.dost.util.Constants;
 import org.dita.dost.exception.DITAOTException;
+import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.Content;
 import org.dita.dost.util.FileUtils;
@@ -30,6 +31,7 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
 /**
+ * TopicRefWriter which updates the linking elements' value according to the mapping table
  * @author wxzhang
  * 
  */
@@ -102,7 +104,6 @@ public class TopicRefWriter extends AbstractXMLWriter {
 					: target;
 			output.write(Constants.LESS_THAN + Constants.QUESTION + pi
 					+ Constants.QUESTION + Constants.GREATER_THAN);
-			output.write(Constants.LINE_SEPARATOR);
 		} catch (Exception e) {
 			logger.logException(e);
 		}
@@ -251,7 +252,6 @@ public class TopicRefWriter extends AbstractXMLWriter {
 			copyElementName(qName, atts);
 			copyElementAttribute(atts);
 			output.write(Constants.GREATER_THAN);
-			output.write(Constants.LINE_SEPARATOR);
 		} catch (Exception e) {
 			logger.logException(e);
 		}// try
@@ -292,7 +292,12 @@ public class TopicRefWriter extends AbstractXMLWriter {
 			copyAttribute(attQName, attValue);
 		}
 	}
-
+	
+	/**
+	 * Check whether the attributes contains references
+	 * @param atts
+	 * @return true/false
+	 */
 	private boolean checkDITAHREF(Attributes atts) {
 
 		String classValue = atts.getValue(Constants.ATTRIBUTE_NAME_CLASS);
@@ -392,6 +397,11 @@ public class TopicRefWriter extends AbstractXMLWriter {
 			withoutElement=relativePath;
 		return FileUtils.resolveFile(rootPath,withoutElement);
 	}
+	/**
+	 * Retrieve the element ID from the path
+	 * @param relativePath
+	 * @return String
+	 */
 	private String getElementID(String relativePath){
 		String elementID=null;
 		String topicWithelement=null;
@@ -402,14 +412,23 @@ public class TopicRefWriter extends AbstractXMLWriter {
 		}
 		return elementID;
 	}
-
+	/**
+	 * Check whether it is a local URL
+	 * @param valueOfURL
+	 * @return boolean
+	 */
 	private boolean notLocalURL(String valueOfURL) {
 		if (valueOfURL.indexOf(NOT_LOCAL_URL) == -1)
 			return false;
 		else
 			return true;
 	}
-
+	
+	/**
+	 * Retrive the extension name from the attribute
+	 * @param attValue
+	 * @return String
+	 */
 	public String getExtName(String attValue) {
 		String fileName;
 		int fileExtIndex;
@@ -430,7 +449,12 @@ public class TopicRefWriter extends AbstractXMLWriter {
 					attValue.length()) : null;
 		}
 	}
-
+	
+	/**
+	 * Check whether it is a Topic format
+	 * @param attrs,valueOfHref
+	 * @return boolean
+	 */
 	private boolean notTopicFormat(Attributes attrs, String valueOfHref) {
 		String hrefValue = valueOfHref;
 		String formatValue = attrs.getValue(Constants.ATTRIBUTE_NAME_FORMAT);
@@ -496,7 +520,7 @@ public class TopicRefWriter extends AbstractXMLWriter {
 			fileOutput = new FileOutputStream(outputFile);
 			ditaFileOutput = new OutputStreamWriter(fileOutput, Constants.UTF8);
 			output = ditaFileOutput;
-
+			reader.setErrorHandler(new DITAOTXMLErrorHandler(file));
 			reader.parse(file);
 
 			output.close();

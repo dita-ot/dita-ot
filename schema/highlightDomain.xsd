@@ -33,6 +33,42 @@
       <xs:element ref="i" />
     </xs:choice>
   </xs:group>
+  
+  <xs:group name="sup">
+    <xs:choice>
+      <xs:element ref="sup"/>
+    </xs:choice>
+  </xs:group>
+  
+  <xs:group name="sub">
+    <xs:choice>
+      <xs:element ref="sub"/>
+    </xs:choice>
+  </xs:group>
+  
+  <xs:group name="tt">
+    <xs:choice>
+      <xs:element ref="tt"/>
+    </xs:choice>
+  </xs:group>
+  
+  <xs:group name="b">
+    <xs:choice>
+      <xs:element ref="b"/>
+    </xs:choice>
+  </xs:group>
+  
+  <xs:group name="u">
+    <xs:choice>
+      <xs:element ref="u"/>
+    </xs:choice>
+  </xs:group>
+  
+  <xs:group name="i">
+    <xs:choice>
+      <xs:element ref="i"/>
+    </xs:choice>
+  </xs:group>
 
   <!-- Basic form: Single Effect Formatting Phrases -->
   <xs:element name="sup">

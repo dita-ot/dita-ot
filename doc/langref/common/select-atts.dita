@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<!--             (C) Copyright OASIS Open 2005.                    -->
+<!--             (C) Copyright IBM Corporation 2001, 2004.         -->
+<!--             All Rights Reserved.                              -->
+<reference id="select-atts" xml:lang="en-us">
+<title>     <keyword>%select-atts;</keyword>   </title>
+<shortdesc rev="1.1">Attributes that support both filtering and flagging include <i> 
+     <keyword>props</keyword>     </i>, <i>       <keyword>platform</keyword> 
+   </i>, <i>       <keyword>product</keyword>     </i>, <i>       <keyword>audience</keyword> 
+   </i>, and <i>       <keyword>otherprops</keyword>     </i>. Attribute <i> 
+     <keyword>base</keyword>     </i> is a generic attribute that is available
+for specialization; it can be specialized for values that have a simple value
+syntax like the filter attributes, but is not itself a filtering or flagging
+attribute. Attribute <i>       <keyword>rev</keyword>     </i> only lets you
+flag information that matches a run-time parameter. Attribute <i>       <keyword>importance</keyword> 
+   </i> provides a range of values for applications to use as needed. The <keyword>%select-atts;</keyword> entity
+also includes additional entities that allow it to include specializations
+of the props and base attribute. See the DITA Architectural Specification
+for more information on filtering or flagging with attributes, as well as
+for information on specialization the base and props attributes.</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>%select-atts</indexterm><indexterm>Commonly referenced
+attribute descriptions<?Pub Caret?><indexterm>%select-atts</indexterm></indexterm>
+</keywords>
+</metadata></prolog>
+<refbody>
+<!--xsection conref="DitabaseNav.dita#commonCMdefs/select-atts-contains"/-->
+<!--xsection conref="DitabaseNav.dita#commonCMdefs/select-atts-containedby"/-->
+<section>       <title>Attributes</title>       <simpletable id="selectatts"
+relcolwidth="3* 6* 2* 2* 2*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="commonLRdefs.dita#commonLRdefs/props">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/base">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/platform">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/product">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/audience">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/otherprops">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/importance">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/rev">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="commonLRdefs.dita#commonLRdefs/status">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+</simpletable>     </section>
+<example><title>Example</title><p>The %select-atts; parameter entity is used
+within the DITA DTDs as a common definition for attributes available to most
+elements for you to enable the content for improved retrievability or for
+selection. Some typical examples include:</p><codeblock>The &lt;keyword platform=&quot;Linux&quot;&gt;chmod&lt;/keyword&gt; command...
+&lt;ph product=&quot;WhiteknuckleHandsoap&quot;&gt;Amalgamated Cleansers get the grime!&lt;/ph&gt;
+&lt;msgph audience=&quot;programmer administrator&quot;&gt;Divide by -1 error.&lt;/msgph&gt;
+&lt;ph otherprops=&quot;java&quot;&gt;When using Java, use the 
+  &lt;apiname&gt;com.ibm.obscureclass&lt;/apiname&gt; to calculate the value.&lt;/ph&gt;
+&lt;p importance=&quot;recommended&quot; rev=&quot;3.2&quot;&gt;Update anti-virus software often.&lt;/p&gt;</codeblock> Note
+that, aside from those with pre-defined values, these attributes allow multiple
+values. For example, the audience attribute in the example indicates that
+the message is of interest to both programmers and administrators.</example>
+</refbody>
+</reference>
+<?Pub *0000004913?>

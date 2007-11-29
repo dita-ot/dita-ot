@@ -50,6 +50,54 @@
   </xs:group>
 
 
+  <xs:group name="msgblock">
+    <xs:choice>
+      <xs:element ref="msgblock"/>
+    </xs:choice>
+  </xs:group>
+  
+  <xs:group name="msgnum">
+    <xs:choice>
+      <xs:element ref="msgnum"/>
+    </xs:choice>
+  </xs:group>
+  
+  <xs:group name="varname">
+    <xs:choice>
+      <xs:element ref="varname"/>
+    </xs:choice>
+  </xs:group>
+  
+  <xs:group name="msgph">
+    <xs:choice>
+      <xs:element ref="msgph"/>
+    </xs:choice>
+  </xs:group>
+  
+  <xs:group name="filepath">
+    <xs:choice>
+      <xs:element ref="filepath"/>
+    </xs:choice>
+  </xs:group>
+  
+  <xs:group name="userinput">
+    <xs:choice>
+      <xs:element ref="userinput"/>
+    </xs:choice>
+  </xs:group>
+  
+  <xs:group name="systemoutput">
+    <xs:choice>
+      <xs:element ref="systemoutput"/>
+    </xs:choice>
+  </xs:group>
+  
+  <xs:group name="cmdname">
+    <xs:choice>
+      <xs:element ref="cmdname"/>
+    </xs:choice>
+  </xs:group>
+
   <xs:element name="msgph">
     <xs:annotation>
       <xs:documentation>

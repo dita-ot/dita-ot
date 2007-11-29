@@ -11,6 +11,7 @@ package org.dita.dost.reader;
 
 import java.io.File;
 
+import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.module.Content;
 import org.dita.dost.module.ContentImpl;
@@ -83,6 +84,7 @@ public class MergeMapParser extends AbstractXMLReader {
 		try{
 			File input = new File(filename);
 			dirPath = input.getParent();
+			reader.setErrorHandler(new DITAOTXMLErrorHandler(filename));
 			reader.parse(filename);
 		}catch(Exception e){
 			logger.logException(e);

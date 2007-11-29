@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<?Pub Inc?>
+<reference id="ditaval-style-conflict" xml:lang="en-us">
+<title>style-conflict</title>
+<shortdesc>The style-conflict element declares behavior to be used when one
+or more flagging methods collide on a single content element. </shortdesc>
+<prolog><metadata>
+<keywords><indexterm>DITAVAL elements<indexterm>style-conflict</indexterm></indexterm>
+</keywords>
+</metadata></prolog>
+<refbody>
+<section><p>In case of conflicts between flagging methods at different levels
+(for example, a section is flagged green and a paragraph within the section
+is flagged red) the most deeply nested flagging method applies. </p><p>In
+case of conflicts between flagging methods on the same element (for example,
+a single element is being flagged with both green and red color) it is recommended
+that the conflicts be resolved as follows:<dl>
+<dlhead>
+<dthd>Flagging method</dthd><ddhd>Conflict behavior</ddhd>
+</dlhead>
+<dlentry>
+<dt>startflag/endflag</dt>
+<dd>Add all flags that apply.</dd>
+</dlentry><dlentry>
+<dt>color</dt>
+<dd>Follow the style-conflict @foreground-conflict-color setting, or use an
+output-appropriate default color if no conflict color is set.</dd>
+</dlentry><dlentry>
+<dt>backcolor</dt>
+<dd>Follow the style-conflict @background-conflict-color setting, or use an
+output-appropriate default color if no conflict color is set</dd>
+</dlentry><dlentry>
+<dt>style</dt>
+<dd>Add all font styles that apply. If two different kinds of underline are
+used, default to the heaviest (double underline) and use the foreground-conflict-color.</dd>
+</dlentry><dlentry>
+<dt>changebar</dt>
+<dd>Add all change bars that apply.</dd>
+</dlentry></dl></p></section>
+<section otherprops="contains"><title>Contains</title><p><i>(empty)</i></p></section>
+<section otherprops="containedby"><title>Contained by</title><p><xref href="ditaval-val.dita"><?Pub Caret?>val</xref></p></section>
+<section id="attrs"><title>Attributes</title> <simpletable id="abstract_attr"
+relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow>
+<stentry>foreground-conflict-color</stentry>
+<stentry><draft-comment>mp: question prompted by jeff ogden: should we document
+the @ convention for identifying attributes in the front part of the spec?</draft-comment><draft-comment>TC
+response: yes</draft-comment>The color to be used when more than one flagging
+color applies to a single content element.</stentry>
+<stentry>CDATA</stentry>
+<stentry>#IMPLIED</stentry>
+<stentry>no</stentry>
+</strow>
+<strow>
+<stentry>background-conflict-color</stentry>
+<stentry>The color to be used when more than one flagging background color
+applies to a single content element.</stentry>
+<stentry>CDATA</stentry>
+<stentry>#IMPLIED</stentry>
+<stentry>no</stentry>
+</strow>
+</simpletable> </section>
+</refbody>
+</reference>
+<?Pub *0000003094?>

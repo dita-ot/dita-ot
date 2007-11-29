@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<reference id="brand" xml:lang="en-us">
+<title>brand</title>
+<shortdesc>The &lt;<keyword>brand</keyword>&gt; element indicates the manufacturer
+or brand associated with the product described by the parent  &lt;<keyword>prodinfo</keyword>>
+element.</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>brand</indexterm><indexterm>Prolog elements<indexterm>brand</indexterm></indexterm>
+</keywords><?Pub Caret1?>
+</metadata></prolog>
+<refbody>
+<example><title>Example</title><codeblock>&lt;prodinfo&gt;
+&lt;prodname&gt;...&lt;/prodname&gt;
+&lt;vrmlist&gt;
+&lt;brand&gt;eServer&lt;/brand&gt;
+&lt;series&gt;iSeries&lt;/series&gt;
+&lt;opsys&gt;Linux&lt;/opsys&gt;
+&lt;/vrmlist&gt;
+&lt;/prodinfo&gt; </codeblock></example>
+<section conref="../common/commonNavLibraryTable.dita#models/brand-contains" otherprops="contains"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/brand-containedby" otherprops="containedby"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/brand-classvalue" otherprops="classvalue"></section>
+<section id="attrs"><title>Attributes</title> <simpletable id="brand_attr"
+relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/univ-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/classonly"><stentry/><stentry/><stentry/><stentry/><stentry/></strow>
+</simpletable> </section>
+</refbody>
+</reference>
+<?Pub *0000002050?>

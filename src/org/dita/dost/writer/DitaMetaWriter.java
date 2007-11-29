@@ -31,6 +31,7 @@ import java.util.Map.Entry;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.Content;
@@ -77,7 +78,7 @@ public class DitaMetaWriter extends AbstractXMLWriter {
     private boolean hasWritten; // whether metadata has been written
     private List topicIdList; // array list that is used to keep the hierarchy of topic id
     private boolean insideCDATA;
-    private ArrayList topicSpecList = new ArrayList();
+    private ArrayList topicSpecList;
     
     private static Hashtable moveTable;
     static{
@@ -150,6 +151,7 @@ public class DitaMetaWriter extends AbstractXMLWriter {
     public DitaMetaWriter() {
         super();
         topicIdList = new ArrayList(Constants.INT_16);
+        topicSpecList = new ArrayList(Constants.INT_16);
 
         metaTable = null;
         matchList = null;
@@ -255,7 +257,7 @@ public class DitaMetaWriter extends AbstractXMLWriter {
         }
         
         try {
-        	if (startTopic && topicSpecList.contains(localName)){
+        	if (startTopic && topicSpecList.contains(qName)){
         		if (startDOM){
         			startDOM = false;
         			output.write("</topic>");
@@ -285,6 +287,7 @@ public class DitaMetaWriter extends AbstractXMLWriter {
 	    	Document doc;
 	    	
 	    	if (strOutput.getBuffer().length() > 0){
+	    		builder.setErrorHandler(new DITAOTXMLErrorHandler(strOutput.toString()));
 	    		doc = builder.parse(new InputSource(new StringReader(strOutput.toString())));
 	    	}else {
 	    		doc = builder.newDocument();
@@ -332,7 +335,7 @@ public class DitaMetaWriter extends AbstractXMLWriter {
 
 
 	private void output(Text text) throws IOException{
-		output.write(text.getData());
+		output.write(StringUtils.escapeXML(text.getData()));
 	}
 
 
@@ -544,6 +547,12 @@ public class DitaMetaWriter extends AbstractXMLWriter {
     	String classAttrValue = atts.getValue(Constants.ATTRIBUTE_NAME_CLASS);
     	
         try {
+        	if (classAttrValue != null && 
+        			classAttrValue.contains(Constants.ATTR_CLASS_VALUE_TOPIC) &&
+        			!topicSpecList.contains(qName)){
+        		//add topic qName to topicSpecList
+        		topicSpecList.add(qName);
+        	}
         	
         	if ( startTopic && !startDOM && classAttrValue != null && !hasWritten 
             		&&(
@@ -606,9 +615,10 @@ public class DitaMetaWriter extends AbstractXMLWriter {
 		    attValue = atts.getValue(i);
 		    
 		    // replace '&' with '&amp;'
-			if (attValue.indexOf('&') > 0) {
-				attValue = StringUtils.replaceAll(attValue, "&", "&amp;");
-			}
+			//if (attValue.indexOf('&') > 0) {
+			//	attValue = StringUtils.replaceAll(attValue, "&", "&amp;");
+			//}
+		    attValue = StringUtils.escapeXML(attValue);
 		    
 		    output.write(new StringBuffer().append(Constants.STRING_BLANK)
 		    		.append(attQName).append(Constants.EQUAL).append(Constants.QUOTATION)

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<reference id="copyrholder" xml:lang="en-us">
+<title>copyrholder</title>
+<shortdesc>The copyright holder (&lt;<keyword>copyrholder</keyword>&gt;) element
+names the entity that holds legal rights to the material contained in the
+topic.</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>copyrholder</indexterm><indexterm>Prolog elements<indexterm>copyrholder</indexterm></indexterm>
+</keywords><?Pub Caret1?>
+</metadata></prolog>
+<refbody>
+<example><title>Example</title><codeblock>&lt;copyright&gt;
+&lt;copyryear year=2001&gt;&lt;/copyryear&gt;
+&lt;copyrholder&gt;IBM&lt;/copyrholder&gt;
+&lt;/copyright&gt;
+</codeblock></example>
+<section conref="../common/commonNavLibraryTable.dita#models/copyrholder-contains"
+otherprops="contains"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/copyrholder-containedby"
+otherprops="containedby"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/copyrholder-classvalue"
+otherprops="classvalue"></section>
+<section id="attrs"><title>Attributes</title> <simpletable id="copyrholder_attr"
+relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/univ-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/classonly"><stentry/><stentry/><stentry/><stentry/><stentry/></strow>
+</simpletable> </section>
+</refbody>
+</reference>
+<?Pub *0000002007?>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<reference id="prodinfo" xml:lang="en-us">
+<title>prodinfo</title>
+<shortdesc>The &lt;<keyword>prodinfo</keyword>&gt; metadata element in the
+prolog contains information about the product or products that are the subject
+matter of the current topic. <ph rev="1.1">The prodi<?Pub Caret?>nfo element
+may be used to provide a more detailed definition of values used throughout
+the map or topic on the product attribute.</ph></shortdesc>
+<prolog><metadata>
+<keywords><indexterm>prodinfo</indexterm><indexterm>Prolog elements<indexterm>prodinfo</indexterm></indexterm>
+</keywords>
+</metadata></prolog>
+<refbody>
+<example><title>Example</title><codeblock>&lt;prolog&gt;
+ &lt;metadata&gt;
+  &lt;prodinfo&gt;
+   &lt;prodname&gt;Transcription Assistant&lt;/prodname&gt;
+    &lt;vrmlist&gt;&lt;vrm version="1" release="3" modification="1"/&gt;&lt;/vrmlist&gt;
+   &lt;platform&gt;Linux&lt;/platform&gt;
+  &lt;/prodinfo&gt;
+ &lt;/metadata&gt;
+&lt;/prolog&gt;</codeblock></example>
+<section conref="../common/commonNavLibraryTable.dita#models/prodinfo-contains" otherprops="contains"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/prodinfo-containedby"
+otherprops="containedby"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/prodinfo-classvalue" otherprops="classvalue"></section>
+<section id="attrs"><title>Attributes</title> <simpletable id="prodinfo_attr"
+relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/univ-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/classonly"><stentry/><stentry/><stentry/><stentry/><stentry/></strow>
+</simpletable> </section>
+</refbody>
+</reference>
+<?Pub *0000002315?>

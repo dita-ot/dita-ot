@@ -44,6 +44,30 @@
       <xs:element ref="screen" />
     </xs:choice>
   </xs:group>
+  
+  <xs:group name="screen">
+    <xs:choice>
+      <xs:element ref="screen" />
+    </xs:choice>
+  </xs:group>
+  
+  <xs:group name="uicontrol">
+    <xs:choice>
+      <xs:element ref="uicontrol" />
+    </xs:choice>
+  </xs:group>
+  
+  <xs:group name="menucascade">
+    <xs:choice>
+      <xs:element ref="menucascade" />
+    </xs:choice>
+  </xs:group>
+  
+  <xs:group name="wintitle">
+    <xs:choice>
+      <xs:element ref="wintitle" />
+    </xs:choice>
+  </xs:group>
 
   <xs:element name="uicontrol">
     <xs:annotation>

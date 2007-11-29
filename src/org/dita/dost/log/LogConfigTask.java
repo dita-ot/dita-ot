@@ -15,6 +15,8 @@ import java.util.Properties;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
+import org.dita.dost.exception.DITAOTException;
+import org.dita.dost.log.MessageBean;
 
 /**
  * Class description goes here.
@@ -99,8 +101,9 @@ public class LogConfigTask extends Task {
 		}
 		
 		if (logDir == null || "".equals(logDir)) {
-			String msg = MessageUtils.getMessage("DOTJ015F").toString();
-			throw new BuildException(msg);
+			MessageBean msgBean=MessageUtils.getMessage("DOTJ015F");
+			String msg = msgBean.toString();
+			throw new BuildException(msg,new DITAOTException(msgBean,null,msg));
 		}
 		
 		if (!new File(logDir).isAbsolute()) {
@@ -114,8 +117,9 @@ public class LogConfigTask extends Task {
 				Properties params = new Properties();
 				String msg = null;
 				params.put("%1", logDir);
-				msg = MessageUtils.getMessage("DOTJ016F", params).toString();
-				throw new BuildException(msg);
+				MessageBean msgBean=MessageUtils.getMessage("DOTJ016F", params);
+				msg = msgBean.toString();
+				throw new BuildException(msg,new DITAOTException(msgBean,null,msg));
 			}
 		}
 	}
@@ -133,8 +137,9 @@ public class LogConfigTask extends Task {
 		}
 
 		if (input == null) {
-			String msg = MessageUtils.getMessage("DOTJ017F").toString();
-			throw new BuildException(msg);
+			MessageBean msgBean=MessageUtils.getMessage("DOTJ017F");
+			String msg = msgBean.toString();
+			throw new BuildException(msg,new DITAOTException(msgBean,null,msg));
 		}
 		
 		transType = project.getProperty("transtype");

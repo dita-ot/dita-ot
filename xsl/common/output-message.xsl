@@ -24,7 +24,8 @@
   
   <xsl:stylesheet version="1.0"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
-    xmlns:log="org.dita.dost.util.LogUtils" >
+    xmlns:log="org.dita.dost.util.LogUtils" 
+    exclude-result-prefixes="log">
     <xsl:template name="output-message">
       <xsl:param name="msg" select="'***'"/>
       <xsl:param name="msgnum" select="'000'"/>
@@ -64,14 +65,9 @@
         </xsl:if>
       </xsl:variable>
       
-      <xsl:message><xsl:text>
-      </xsl:text>
-        <xsl:value-of select="$debugloc"/>     <!-- Debug location, followed by a newline -->
-        <xsl:text>
-        </xsl:text>
-        <xsl:value-of select="$msgcontent"/>          <!-- Error message, followed by a newline -->
-        <xsl:text>
-        </xsl:text>
+      <xsl:message>
+        <!-- Debug location,Error message-->
+ 		<xsl:value-of select="concat($msgcontent,'The location of this problem  was at ',$debugloc)"/>
       </xsl:message>
     </xsl:template>
     
@@ -175,13 +171,19 @@
       </xsl:choose>
     </xsl:template>
     <xsl:template name="fatalIncrease">
-      <xsl:value-of select="log:increaseNumOfFatals()"/>
+    	<xsl:if test="function-available('log:increaseNumOfFatals')">
+      		<xsl:value-of select="log:increaseNumOfFatals()"/>
+      	</xsl:if>
     </xsl:template>         
     <xsl:template name="errorIncrease">
-      <xsl:value-of select="log:increaseNumOfErrors()"/>
+    	<xsl:if test="function-available('log:increaseNumOfErrors')">
+      		<xsl:value-of select="log:increaseNumOfErrors()"/>
+      	</xsl:if>
     </xsl:template>     
-    <xsl:template name="warnIncrease">
-      <xsl:value-of select="log:increaseNumOfWarnings()"/>
+    <xsl:template name="warnIncrease">  	      		
+    	<xsl:if test="function-available('log:increaseNumOfWarnings')">
+      		<xsl:value-of select="log:increaseNumOfWarnings()"/>
+      	</xsl:if>
     </xsl:template>     
     
   </xsl:stylesheet>

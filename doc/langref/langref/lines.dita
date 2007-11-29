@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<reference id="lines" xml:lang="en-us">
+<title>lines</title>
+<shortdesc>The &lt;<keyword>lines</keyword>&gt; element may be used to represent
+dialogs, lists, text fragments, and so forth. The &lt;<keyword>lines</keyword>&gt;
+element is similar to &lt;<keyword>pre</keyword>&gt; in that hard line breaks
+are preserved, but the font style is not set to monospace, and extra spaces
+inside the lines are not preserved. </shortdesc>
+<prolog><metadata>
+<keywords><indexterm>lines</indexterm><indexterm>Body elements<indexterm>lines</indexterm></indexterm>
+</keywords><?Pub Caret1?>
+</metadata></prolog>
+<refbody>
+<example><title>Example</title><codeblock>On a trip to the beach, don't forget:
+&lt;lines&gt;
+suntan lotion
+sunglasses
+a beach towel
+&lt;/lines&gt;</codeblock></example>
+<section conref="../common/commonNavLibraryTable.dita#models/lines-contains" otherprops="contains"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/lines-containedby" otherprops="containedby"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/lines-classvalue" otherprops="classvalue"></section>
+<section id="attrs"><title>Attributes</title> <simpletable id="lines_attr"
+relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/spectitle">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/display-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/univ-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/classoutspace"><stentry/><stentry/><stentry/><stentry/><stentry/></strow>
+</simpletable> </section>
+</refbody>
+</reference>
+<?Pub *0000002811?>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<reference id="systemoutput" xml:lang="en-us">
+<title>systemoutput</title>
+<shortdesc>The system output (&lt;<keyword>systemoutput</keyword>&gt;) element
+represents computer output or responses to a command or situation. A generalized
+element, it represents any kind of output from the computer, so the author
+may wish to choose more specific markup, such as msgph, for messages from
+the application. The system output element is part of the DITA software domain,
+a special set of DITA elements designed to document software tasks, concepts
+and reference information.</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>systemoutput (system output)</indexterm><indexterm>Software
+elements<?Pub Caret?><indexterm>systemoutput</indexterm></indexterm></keywords>
+</metadata></prolog>
+<refbody>
+<example><title>Example</title><codeblock>&lt;p&gt;After you type &lt;userinput&gt;mealplan dinner&lt;/userinput&gt;, the meal planning program
+will print a &lt;systemoutput&gt;For what day?&lt;/systemoutput&gt; message.
+Reply by typing the day of the week for which you want a meal plan,
+for example, &lt;userinput&gt;Thursday&lt;/userinput&gt;.&lt;/p&gt;</codeblock></example>
+<section conref="../common/commonNavLibraryTable.dita#models/systemoutput-contains"
+otherprops="contains"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/systemoutput-containedby"
+otherprops="containedby"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/systemoutput-classvalue"
+otherprops="classvalue"></section>
+<section id="attrs"><title>Attributes</title> <simpletable id="systemoutput_attr"
+relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/univ-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/classandout"><stentry/><stentry/><stentry/><stentry/><stentry/></strow>
+</simpletable> </section>
+</refbody>
+</reference>
+<?Pub *0000002726?>

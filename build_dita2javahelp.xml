@@ -13,7 +13,7 @@
     <target name="dita2javahelp"
             unless="noMap"
         depends="build-init, preprocess, dita.map.javahelp, copy-css, 
-                     dita.topics.html, compile.Java.Help">
+                     dita.topics.html, dita.inner.topics.html, dita.outer.topics.html, compile.Java.Help">
     </target>
 
     <target name="dita.map.javahelp"

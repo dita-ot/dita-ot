@@ -207,11 +207,11 @@ public class IndexTermExtractModule implements AbstractPipelineModule {
 					inputStream.close();
 				} catch (Exception e) {					
 					Properties params = new Properties();
+					StringBuffer buff=new StringBuffer();
 					String msg = null;
 					params.put("%1", target);
 					msg = MessageUtils.getMessage("DOTJ013E", params).toString();
-					javaLogger.logError(msg);
-					javaLogger.logException(e);
+					javaLogger.logError(buff.append(msg).append(e.getMessage()).toString());
 				}
 			}
 

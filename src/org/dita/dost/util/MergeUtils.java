@@ -59,8 +59,8 @@ public class MergeUtils {
 	 * @return
 	 */
 	public boolean findId(String Id){
-		return (Id != null && idMap.containsKey(Id.trim().replaceAll(Constants.DOUBLE_BACK_SLASH,
-			Constants.SLASH)))
+		return (Id != null && idMap.containsKey(FileUtils.removeRedundantNames(Id.trim().replaceAll(Constants.DOUBLE_BACK_SLASH,
+				Constants.SLASH), Constants.SLASH)))
 			? true
 			: false;
 	}
@@ -78,7 +78,7 @@ public class MergeUtils {
 		localId=Id.trim().replaceAll(Constants.DOUBLE_BACK_SLASH,
 				Constants.SLASH);
 		index ++;
-		idMap.put(localId,"unique_"+Integer.toString(index));
+		idMap.put(FileUtils.removeRedundantNames(localId, Constants.SLASH),"unique_"+Integer.toString(index));
 		return "unique_"+Integer.toString(index);
 	}
 
@@ -92,7 +92,7 @@ public class MergeUtils {
 			String localId=Id.trim().replaceAll(Constants.DOUBLE_BACK_SLASH,
 					Constants.SLASH);
 			String localValue = Value.trim();
-			idMap.put(localId, localValue);
+			idMap.put(FileUtils.removeRedundantNames(localId, Constants.SLASH), localValue);
 		}		
 	}
 	
@@ -108,7 +108,7 @@ public class MergeUtils {
 		}
 		localId = Id.trim().replaceAll(Constants.DOUBLE_BACK_SLASH,
 				Constants.SLASH);
-		return (String) idMap.get(localId);
+		return (String) idMap.get(FileUtils.removeRedundantNames(localId, Constants.SLASH));
 	}
 	
 	/**
@@ -123,8 +123,8 @@ public class MergeUtils {
 		if(idx != -1){
 			localPath=localPath.substring(0,idx);
 		}
-		return visitSet.contains(localPath.trim().replaceAll(Constants.DOUBLE_BACK_SLASH,
-				Constants.SLASH));
+		return visitSet.contains(FileUtils.removeRedundantNames(localPath.trim().replaceAll(Constants.DOUBLE_BACK_SLASH,
+				Constants.SLASH), Constants.SLASH));
 	}
 	
 	/**
@@ -137,8 +137,8 @@ public class MergeUtils {
 		if(idx != -1){
 			localPath=localPath.substring(0,idx);
 		}
-		visitSet.add(localPath.trim().replaceAll(Constants.DOUBLE_BACK_SLASH,
-				Constants.SLASH));
+		visitSet.add(FileUtils.removeRedundantNames(localPath.trim().replaceAll(Constants.DOUBLE_BACK_SLASH,
+				Constants.SLASH), Constants.SLASH));
 	}
 	
 	/**

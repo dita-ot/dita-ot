@@ -54,12 +54,16 @@
     classname="org.dita.dost.util.DITAOTCopy">
     <classpath refid="dost.jar.path" />
   </taskdef>
-
+	
+  <taskdef name="xmlpropertyreader"
+  	classname="org.dita.dost.platform.XmlPropertyTask">
+  	<classpath refid="dost.jar.path"/>
+  </taskdef>
+	
   <typedef name="isabsolute"
     classname="org.dita.dost.util.IsAbsolute">
     <classpath refid="dost.jar.path" />
   </typedef>
-
   <property name="dita.temp.dir" value="temp" />
   <property name="output.dir" value="out" />
   <property name="dita.extname" value="xml" />
@@ -334,6 +338,56 @@
         <isset property="xslt.parser" />
       </not>
     </condition>
+  	
+  	<!-- Validate the xml file or not,default is validation(true)-->
+  	<condition property="validate" value="true">
+  	   <not>
+  		 <isset property="validate" />
+  	   </not>
+  	</condition>
+  	
+  	<!--solution for the output control-->
+  	<condition property="generate.copy.outer" value="1">
+  	   <not>
+  		 <isset property="generate.copy.outer" />
+  	   </not>
+  	</condition>
+  	
+  	<condition property="onlytopic.in.map" value="false">
+  	   <not>
+  		 <isset property="onlytopic.in.map" />
+  	   </not>
+	</condition>
+  	<!--
+  	default value : warn
+	fail     :1a) Fail quickly if files are going to be generated/copied outside of that directory
+	warn  :1b) Complete if files will be generated/copied outside, but log a warning
+	quiet  :1c) Quietly finish with only those files (no warning or error)
+  	-->
+  	<condition property="outer.control" value="warn">
+  	   <not>
+  		 <isset property="outer.control" />
+  	   </not>
+  	</condition>
+  	
+  	<!-- Move the outer.transform to build_general.xml -->
+	<!--
+  	<condition property="outer.transform">
+	   <equals arg1="${generate.copy.outer}" arg2="2"></equals>
+	</condition>	
+    -->
+    
+    <condition property="inner.transform">
+	   <or>
+	 	 <equals arg1="${generate.copy.outer}" arg2="1"></equals>
+	     <equals arg1="${generate.copy.outer}" arg2="2"></equals>
+	   </or>
+  	</condition>
+  	
+  	<condition property="old.transform">
+    	<equals arg1="${generate.copy.outer}" arg2="3"></equals>
+    </condition>
+    
     <!-- output parameters info -->
     <echo>*****************************************************************</echo>
     <echo>* basedir = ${basedir}</echo>

@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+     Sourceforge.net. See the accompanying license.txt file for 
+     applicable licenses.-->
+<!-- (c) Copyright IBM Corp. 2006 All Rights Reserved. -->
+<project name="build_generaltargets">
+
+    <!--requirement 3, old solution-->
+  <target name="dita.topics.xhtml" unless="noTopic" if="old.transform"
+    description="Build XHTML output from dita inner and outer topics,which will adjust the directory.">
+    <condition property="out.ext" value=".html">
+      <not>
+        <isset property="out.ext" />
+      </not>
+    </condition>
+    <condition property="args.xsl"
+      value="${dita.script.dir}${file.separator}dita2xhtml.xsl">
+      <not>
+        <isset property="args.xsl" />
+      </not>
+    </condition>
+    <xslt processor="trax" basedir="${dita.temp.dir}"
+      destdir="${output.dir}" includes="${fullditatopiclist} ${chunkedtopiclist}"
+      extension="${out.ext}" style="${args.xsl}">
+      <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
+      <param name="FILTERFILE" expression="${dita.input.valfile}"
+        if="dita.input.valfile" />
+      <param name="CSS" expression="${args.css.file}"
+        if="args.css.file" />
+      <param name="CSSPATH" expression="${user.csspath}"
+        if="user.csspath" />
+      <param name="HDF" expression="${args.hdf}" if="args.hdf" />
+      <param name="HDR" expression="${args.hdr}" if="args.hdr" />
+      <param name="FTR" expression="${args.ftr}" if="args.ftr" />
+      <param name="DRAFT" expression="${args.draft}" if="args.draft" />
+      <param name="ARTLBL" expression="${args.artlbl}" if="args.artlbl" />
+      <param name="INDEXSHOW" expression="${args.indexshow}"
+        if="args.indexshow" />
+      <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
+      <dita:extension id="dita.conductor.xhtml.param" behavior="org.dita.dost.platform.InsertAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
+    </xslt>
+  </target>
+
+  <target name="dita.topics.html" unless="noTopic" if="old.transform"
+    description="Build HTML files from inner and outer dita topics,which will adjust the directory. ">
+    <condition property="out.ext" value=".html">
+      <not>
+        <isset property="out.ext" />
+      </not>
+    </condition>
+    <condition property="args.xsl"
+      value="${dita.script.dir}${file.separator}dita2html.xsl">
+      <not>
+        <isset property="args.xsl" />
+      </not>
+    </condition>
+    <xslt processor="trax" basedir="${dita.temp.dir}"
+      destdir="${output.dir}" includes="${fullditatopiclist} ${chunkedtopiclist}"
+      extension="${out.ext}" style="${args.xsl}">
+      <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
+      <param name="FILTERFILE" expression="${dita.input.valfile}"
+        if="dita.input.valfile" />
+      <param name="CSS" expression="${args.css.file}"
+        if="args.css.file" />
+      <param name="CSSPATH" expression="${user.csspath}"
+        if="user.csspath" />
+      <param name="HDF" expression="${args.hdf}" if="args.hdf" />
+      <param name="HDR" expression="${args.hdr}" if="args.hdr" />
+      <param name="FTR" expression="${args.ftr}" if="args.ftr" />
+      <param name="DRAFT" expression="${args.draft}" if="args.draft" />
+      <param name="ARTLBL" expression="${args.artlbl}" if="args.artlbl" />
+      <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
+	  <dita:extension id="dita.conductor.html.param" behavior="org.dita.dost.platform.InsertAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
+      <param name="INDEXSHOW" expression="${args.indexshow}"
+        if="args.indexshow" />
+    </xslt>
+  </target>
+  
+  <!--To generate&copy inner files-->
+  <!--requirement 1,2-->
+  <target name="dita.inner.topics.xhtml" unless="noTopic" if="inner.transform"
+    description="Build XHTML output from inner dita topics">
+    <condition property="out.ext" value=".html">
+      <not>
+        <isset property="out.ext" />
+      </not>
+    </condition>
+    <condition property="args.xsl"
+      value="${dita.script.dir}${file.separator}dita2xhtml.xsl">
+      <not>
+        <isset property="args.xsl" />
+      </not>
+    </condition>
+    <xslt processor="trax" basedir="${dita.temp.dir}"
+      destdir="${output.dir}" includes="${fullditatopiclist} ${chunkedtopiclist}"
+      extension="${out.ext}" style="${args.xsl}">
+      <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
+      <param name="FILTERFILE" expression="${dita.input.valfile}"
+        if="dita.input.valfile" />
+      <param name="CSS" expression="${args.css.file}"
+        if="args.css.file" />
+      <param name="CSSPATH" expression="${user.csspath}"
+        if="user.csspath" />
+      <param name="HDF" expression="${args.hdf}" if="args.hdf" />
+      <param name="HDR" expression="${args.hdr}" if="args.hdr" />
+      <param name="FTR" expression="${args.ftr}" if="args.ftr" />
+      <param name="DRAFT" expression="${args.draft}" if="args.draft" />
+      <param name="ARTLBL" expression="${args.artlbl}" if="args.artlbl" />
+      <param name="INDEXSHOW" expression="${args.indexshow}"
+        if="args.indexshow" />
+      <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
+      <dita:extension id="dita.conductor.xhtml.param" behavior="org.dita.dost.platform.InsertAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
+      <!--New,To generate&copy all dita files in the inputmap.dir,not all files in dita.temp.dir -->
+      <mapper type="regexp" 
+        from="^(${tempdirToinputmapdir.relative.value})(.*?)(\.(xml|dita))$$" 
+        to="\2${out.ext}"/>
+    </xslt>
+  </target>
+
+  <target name="dita.inner.topics.html" unless="noTopic"  if="inner.transform"
+    description="Build HTML files from inner dita topics">
+    <condition property="out.ext" value=".html">
+      <not>
+        <isset property="out.ext" />
+      </not>
+    </condition>
+    <condition property="args.xsl"
+      value="${dita.script.dir}${file.separator}dita2html.xsl">
+      <not>
+        <isset property="args.xsl" />
+      </not>
+    </condition>
+    <xslt processor="trax" basedir="${dita.temp.dir}"
+      destdir="${output.dir}" includes="${fullditatopiclist} ${chunkedtopiclist}"
+      extension="${out.ext}" style="${args.xsl}">
+      <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
+      <param name="FILTERFILE" expression="${dita.input.valfile}"
+        if="dita.input.valfile" />
+      <param name="CSS" expression="${args.css.file}"
+        if="args.css.file" />
+      <param name="CSSPATH" expression="${user.csspath}"
+        if="user.csspath" />
+      <param name="HDF" expression="${args.hdf}" if="args.hdf" />
+      <param name="HDR" expression="${args.hdr}" if="args.hdr" />
+      <param name="FTR" expression="${args.ftr}" if="args.ftr" />
+      <param name="DRAFT" expression="${args.draft}" if="args.draft" />
+      <param name="ARTLBL" expression="${args.artlbl}" if="args.artlbl" />
+      <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
+	  <dita:extension id="dita.conductor.html.param" behavior="org.dita.dost.platform.InsertAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
+      <param name="INDEXSHOW" expression="${args.indexshow}"
+        if="args.indexshow" />
+      <mapper type="regexp" 
+        from="^(${tempdirToinputmapdir.relative.value})(.*?)(\.(xml|dita))$$" 
+        to="\2${out.ext}"/>
+    </xslt>
+  </target>
+  
+  <!--requirement 2-->
+  <!--if the outditafileslist is empty ,do not execute the outer transformation-->
+  <target name="checkouterTransform">
+  	<condition property="outer.transform">
+  		<and>
+  			<equals arg1="${generate.copy.outer}" arg2="2"></equals>
+  			<and>
+  				<isset property="outditafileslist"/>
+  				<not>
+  					<equals arg1="" arg2="${outditafileslist}"/>
+  				</not>
+  			</and>
+  		</and>
+	</condition>	
+  </target>	
+  	
+  <target name="dita.outer.topics.xhtml" unless="noTopic" if="outer.transform"  depends="checkouterTransform"
+    description="Build XHTML output from outer dita topics">
+    <condition property="out.ext" value=".html">
+      <not>
+        <isset property="out.ext" />
+      </not>
+    </condition>
+    <condition property="args.xsl"
+      value="${dita.script.dir}${file.separator}dita2xhtml.xsl">
+      <not>
+        <isset property="args.xsl" />
+      </not>
+    </condition>
+    <xslt processor="trax" basedir="${dita.temp.dir}"
+      destdir="${output.dir}${file.separator}${uplevels}" includes="${outditafileslist}"
+      extension="${out.ext}" style="${args.xsl}">
+      <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
+      <param name="FILTERFILE" expression="${dita.input.valfile}"
+        if="dita.input.valfile" />
+      <param name="CSS" expression="${args.css.file}"
+        if="args.css.file" />
+      <param name="CSSPATH" expression="${user.csspath}"
+        if="user.csspath" />
+      <param name="HDF" expression="${args.hdf}" if="args.hdf" />
+      <param name="HDR" expression="${args.hdr}" if="args.hdr" />
+      <param name="FTR" expression="${args.ftr}" if="args.ftr" />
+      <param name="DRAFT" expression="${args.draft}" if="args.draft" />
+      <param name="ARTLBL" expression="${args.artlbl}" if="args.artlbl" />
+      <param name="INDEXSHOW" expression="${args.indexshow}"
+        if="args.indexshow" />
+      <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
+      <dita:extension id="dita.conductor.xhtml.param" behavior="org.dita.dost.platform.InsertAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
+    </xslt>
+  </target>
+
+  <target name="dita.outer.topics.html" unless="noTopic" if="outer.transform"  depends="checkouterTransform"
+    description="Build HTML files from outer dita topics">
+    <condition property="out.ext" value=".html">
+      <not>
+        <isset property="out.ext" />
+      </not>
+    </condition>
+    <condition property="args.xsl"
+      value="${dita.script.dir}${file.separator}dita2html.xsl">
+      <not>
+        <isset property="args.xsl" />
+      </not>
+    </condition>
+    <xslt processor="trax" basedir="${dita.temp.dir}"
+      destdir="${output.dir}${file.separator}${uplevels}" includes="${outditafileslist}"
+      extension="${out.ext}" style="${args.xsl}">
+      <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
+      <param name="FILTERFILE" expression="${dita.input.valfile}"
+        if="dita.input.valfile" />
+      <param name="CSS" expression="${args.css.file}"
+        if="args.css.file" />
+      <param name="CSSPATH" expression="${user.csspath}"
+        if="user.csspath" />
+      <param name="HDF" expression="${args.hdf}" if="args.hdf" />
+      <param name="HDR" expression="${args.hdr}" if="args.hdr" />
+      <param name="FTR" expression="${args.ftr}" if="args.ftr" />
+      <param name="DRAFT" expression="${args.draft}" if="args.draft" />
+      <param name="ARTLBL" expression="${args.artlbl}" if="args.artlbl" />
+      <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
+	  <dita:extension id="dita.conductor.html.param" behavior="org.dita.dost.platform.InsertAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
+      <param name="INDEXSHOW" expression="${args.indexshow}"
+        if="args.indexshow" />
+    </xslt>
+  </target>
+</project>

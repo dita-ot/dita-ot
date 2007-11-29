@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<!--             (C) Copyright OASIS Open 2005.                    -->
+<!--             (C) Copyright IBM Corporation 2001, 2004.         -->
+<!--             All Rights Reserved.                              -->
+<reference id="univ-atts" xml:lang="en-us">
+<title>     <keyword>%univ-atts;</keyword>   </title>
+<shortdesc>Universal attributes is a parameter entity declaration in the topic
+DTD, which defines a set of common attributes available on most DITA elements.</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>%univ-atts</indexterm><indexterm>Commonly referenced
+attribute descriptions<indexterm>%univ-atts</indexterm></indexterm></keywords>
+</metadata></prolog>
+<refbody>
+<section>The univ-atts entity includes:<ul>
+<li>the attributes in the <xref href="select-atts.dita">select-atts</xref> parameter
+entity</li>
+<li>the attributes in the <xref href="id-atts.dita">id-atts</xref> parameter
+entity</li>
+<li>the attributes in the <xref href="localization-atts.dita">localization-atts<?Pub Caret?></xref> parameter
+entity</li>
+</ul></section>
+<!--xsection conref="DitabaseNav.dita#commonCMdefs/univ-atts-contains"/-->
+<!--xsection conref="DitabaseNav.dita#commonCMdefs/univ-atts-containedby"/-->
+<section>       <title>Attributes</title><p>This section describes the attributes
+from select-atts, followed by those from id-atts, followed by those from localization-atts.</p><simpletable
+conref="select-atts.dita#select-atts/selectatts">
+<strow>
+<stentry></stentry>
+</strow>
+</simpletable><simpletable conref="id-atts.dita#id-atts/id-atts_attr">
+<strow>
+<stentry></stentry>
+</strow>
+</simpletable><simpletable conref="localization-atts.dita#localization-atts/loc_atts">
+<strow>
+<stentry></stentry>
+</strow>
+</simpletable></section>
+<example>See examples for the <xref href="select-atts.dita">select-atts</xref> and <xref
+href="id-atts.dita">id-atts</xref> parameter entries. </example>
+</refbody>
+</reference>
+<?Pub *0000002098?>

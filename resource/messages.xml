@@ -217,6 +217,26 @@
     <reason>No valid content is found in topicref '%1' during chunk processing.</reason>
     <response>Please specify an existing and correct topic in topicref.</response>
   </message> 
+  
+  <message id="DOTJ034F" type="FATAL">
+    <reason>Failed to parse the input file '%1' due to the content of the file is not valid.</reason>
+    <response>If the input file '%1' does not have or refer to the DOCTYPE declaration.Please make sure it has all class attributes present in the file.</response>
+  </message>
+  
+  <message id="DOTJ035F" type="FATAL">
+    <reason>The file "%1" referenced by "%2" is outside the scope of the input dita/map directory.</reason>
+    <response>If you want to lower the severity level,please use the Ant parameter 'outer.control', and set the value as "warn" or "quiet".Or,you can move the referenced file "%1" into the the input dita/map directory.</response>
+  </message>
+  
+   <message id="DOTJ036W" type="WARN">
+    <reason>The file "%1" referenced by "%2" is outside the scope of the input dita/map directory.</reason>
+    <response>If you do not want to see the warning message,please use the Ant parameter 'outer.control', and set the value as "quiet".Or,you can move the referenced file "%1" into the the input dita/map directory.</response>
+  </message>
+  
+  <message id="DOTJ037W" type="WARN">
+    <reason>The XML schema and DTD validition function of the parser is turned off.</reason>
+    <response>Please make sure the input is normalized DITA files with class attributes,otherwise it would cause confusing log information.</response>
+  </message>
   <!-- End of Java Messages -->
     
   <!-- Begin of XSL Messages -->  
@@ -493,6 +513,11 @@
   <message id="DOTX055W" type="WARN">
     <reason>Customized stylesheet uses deprecated template "flagit". The DITA 1.1 condictional processing won't be supported.</reason>
     <response>Please check your customized code to use template "start-flagit" instead of deprecated template "flagit".</response>
+  </message>
+  
+  <message id="DOTX056W" type="WARN">
+    <reason>The file %1 is not available to resolve link information.There are possobilities as following: the file could not be found;a DITAVAL file was used to remove the file's contents;the file is end up outside of the input directory. Be aware that the path information above may not match the link in your topic.</reason>
+    <response>Check to make sure the file exists and DITAVAL file isn't used to remove the contents of the file.And make sure the file is end up within the input directory,or turn off the ant command "onlytopic.in.map".</response>
   </message>
   <!-- End of XSL Messages --> 
   

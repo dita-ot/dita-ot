@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<reference id="note" xml:lang="en-us">
+<title>note</title>
+<shortdesc>A &lt;<keyword>note</keyword>&gt; element contains information,
+differentiated from the main text, which expands on or calls attention to
+a particular point.     </shortdesc>
+<prolog><metadata>
+<keywords><indexterm>note</indexterm><indexterm>Body elements<indexterm>note</indexterm></indexterm>
+</keywords><?Pub Caret1?>
+</metadata></prolog>
+<refbody>
+<section><note type="tip">Variant types of note (tip, caution, danger, restriction,
+etc.) can be indicated through values selected on the type attribute. This
+note is typed as a <q>tip.</q></note></section>
+<example><title>Example</title>This example:<codeblock>&lt;note type="tip"&gt;Thinking of a seashore, green meadow, or cool
+mountain overlook can help you to relax and be more
+patient.&lt;/note&gt;</codeblock>produces this result:<note type="tip">Thinking
+of a seashore, green meadow, or cool mountain overlook can help you to relax
+and be more patient.</note></example>
+<section conref="../common/commonNavLibraryTable.dita#models/note-contains" otherprops="contains"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/note-containedby"
+otherprops="containedby"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/note-classvalue"
+otherprops="classvalue"></section>
+<section id="attrs"><title>Attributes</title> <simpletable id="note_attr"
+relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/type-note">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/spectitle">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/othertype-note">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/univ-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/classandout"><stentry/><stentry/><stentry/><stentry/><stentry/></strow>
+</simpletable> </section>
+</refbody>
+</reference>
+<?Pub *0000003051?>

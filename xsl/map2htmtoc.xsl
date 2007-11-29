@@ -36,6 +36,9 @@
 <xsl:param name="DITAEXT" select="'.xml'"/>
 <xsl:param name="FILEREF" select="'file://'"/>
 <xsl:param name="contenttarget" select="'contentwin'"/>
+<xsl:param name="CSS"/>
+<xsl:param name="CSSPATH"/>
+<xsl:param name="OUTPUTCLASS"/>   <!-- class to put on body element. -->
 
 <!-- Define a newline character -->
 <xsl:variable name="newline"><xsl:text>
@@ -60,9 +63,19 @@
         <title><xsl:value-of select="/*[contains(@class,' map/map ')]/@title"/></title><xsl:value-of select="$newline"/>
       </xsl:when>
     </xsl:choose>
+  <xsl:call-template name="generateCssLinks"/>
+  <xsl:call-template name="gen-user-head"/>
+  <xsl:call-template name="gen-user-scripts"/>
+  <xsl:call-template name="gen-user-styles"/>
   </head><xsl:value-of select="$newline"/>
 
-   <body><xsl:value-of select="$newline"/>
+  <body>
+     <xsl:if test="string-length($OUTPUTCLASS) &gt; 0">
+       <xsl:attribute name="class">
+         <xsl:value-of select="$OUTPUTCLASS"/>
+       </xsl:attribute>
+     </xsl:if>
+     <xsl:value-of select="$newline"/>
     <xsl:apply-templates/>
    </body><xsl:value-of select="$newline"/>
   </html>
@@ -244,6 +257,19 @@
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
+
+<!-- Link to user CSS. -->
+<!-- Can't link to commonltr.css or commonrtl.css because we don't know what language the map is in. -->
+<xsl:template name="generateCssLinks">
+  <xsl:if test="string-length($CSS)>0">
+   <link rel="stylesheet" type="text/css" href="{$CSSPATH}{$CSS}" />
+  </xsl:if>
+</xsl:template>
+
+<!-- To be overridden by user shell. -->
+<xsl:template name="gen-user-head"/>
+<xsl:template name="gen-user-scripts"/>
+<xsl:template name="gen-user-styles"/>
 
 <!-- These are here just to prevent accidental fallthrough -->
 <xsl:template match="*[contains(@class, ' map/navref ')]"/>

@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Properties;
 
+import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.Content;
@@ -456,6 +457,7 @@ public class DitaIndexWriter extends AbstractXMLWriter {
             output = new OutputStreamWriter(fileOutput, Constants.UTF8);
 
             topicIdList.clear();
+            reader.setErrorHandler(new DITAOTXMLErrorHandler(file));
             reader.parse(file);
 
             output.close();

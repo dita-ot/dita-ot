@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<reference id="thoroughfare" xml:lang="en-us">
+<title>thoroughfare</title>
+<shortdesc>The &lt;thoroughfare&gt; element contains information about the
+thoroughfare - for example, the street, avenue, or boulevard - on which an
+address is located.</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>xNAL <?Pub Caret?>elements<indexterm>thoroughfare</indexterm></indexterm>
+<indexterm>thoroughfare</indexterm></keywords>
+</metadata></prolog>
+<refbody>
+<example><pre>&lt;addressdetails&gt;
+&lt;thoroughfare&gt;123 Yellow Brick Road&lt;/thoroughfare&gt;
+&lt;locality&gt;
+&lt;localityname&gt;Emerald City&lt;/localityname&gt;
+&lt;postalcode&gt;66780&lt;/postalcode&gt;
+&lt;/locality&gt;
+&lt;administrativearea&gt;Kansas&lt;/administrativearea&gt;
+&lt;country&gt;USA&lt;/country&gt;
+&lt;/addressdetails&gt;
+</pre></example>
+<section conref="../common/commonNavLibraryTable.dita#models/thoroughfare-contains"
+otherprops="contains"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/thoroughfare-containedby"
+otherprops="containedby"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/thoroughfare-classvalue"
+otherprops="classvalue"></section>
+<section id="attrs"><title>Attributes</title> <simpletable id="thoroughfare_attr"
+relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/univ-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/classoutkey"><stentry/><stentry/><stentry/><stentry/><stentry/></strow>
+</simpletable> </section>
+</refbody>
+</reference>
+<?Pub *0000002544?>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<reference id="msgblock" xml:lang="en-us">
+<title>msgblock</title>
+<shortdesc>The message block (&lt;<keyword>msgblock</keyword>&gt;) element
+contains a multi-line message or set of messages. The message block can contain
+multiple message numbers and message descriptions, each enclosed in a &lt;<keyword>msgnum</keyword>&gt;
+and &lt;<keyword>msgph</keyword>&gt; element. It can also contain the message
+content directly. This element is part of the DITA software domain, a special
+set of DITA elements designed to document software tasks, concepts and reference
+information.</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>msgblock</indexterm><indexterm>Software elements<?Pub Caret?><indexterm>msgblock</indexterm></indexterm>
+</keywords>
+</metadata></prolog>
+<refbody>
+<example><title>Example</title><pre>&lt;p&gt;A sequence of failed password attempts generates the following
+characteristic message stream:&lt;/p&gt;
+&lt;msgblock&gt;
+I:0
+S:3
+I:1
+S:3
+I:1
+S:4
+S:99 (lockup)
+&lt;/msgblock&gt;</pre></example>
+<section conref="../common/commonNavLibraryTable.dita#models/msgblock-contains"
+otherprops="contains"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/msgblock-containedby"
+otherprops="containedby"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/msgblock-classvalue"
+otherprops="classvalue"></section>
+<section id="attrs"><title>Attributes</title> <simpletable id="msgblock_attr"
+relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/spectitle">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/display-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/univ-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/classoutspace"><stentry/><stentry/><stentry/><stentry/><stentry/></strow>
+</simpletable> </section>
+</refbody>
+</reference>

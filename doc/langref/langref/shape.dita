@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<reference id="shape" xml:lang="en-us">
+<title>shape</title>
+<shortdesc>The shape element defines the shape of a linkable area in an imagemap.</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>shape</indexterm><indexterm>Utilities<?Pub Caret?> elements<indexterm>shape</indexterm></indexterm>
+</keywords>
+</metadata></prolog>
+<refbody>
+<section><p>The shape element supports these values: <dl><dlentry>
+<dt>rect</dt>
+<dd>Define a rectangular region. If you leave the shape element blank, this
+is assumed.</dd>
+</dlentry><dlentry>
+<dt>circle</dt>
+<dd>Define a circular region.</dd>
+</dlentry><dlentry>
+<dt>poly</dt>
+<dd>Define a polygonal region.</dd>
+</dlentry><dlentry>
+<dt>default</dt>
+<dd>Indicates the entire diagram. </dd>
+</dlentry></dl></p></section>
+<section><title>Example</title><pre>&lt;area&gt;
+ &lt;shape&gt;rect&lt;/shape&gt;
+ &lt;coords&gt;54,1,117,60&lt;/coords&gt;
+ &lt;xref href="d1-s2.dita"&gt;&lt;/xref&gt;
+&lt;/area&gt;</pre></section>
+<example></example>
+<section conref="../common/commonNavLibraryTable.dita#models/shape-contains" otherprops="contains"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/shape-containedby" otherprops="containedby"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/shape-classvalue" otherprops="classvalue"></section>
+<section id="attrs"><title>Attributes</title> <simpletable id="shape_attr"
+relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/translate-default-no">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/xmllang">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/dir">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/id-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/select-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/classoutkey"><stentry/><stentry/><stentry/><stentry/><stentry/></strow>
+</simpletable> </section>
+</refbody>
+</reference>
+<?Pub *0000003359?>

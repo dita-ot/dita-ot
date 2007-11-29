@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<reference id="dita" xml:lang="en-us">
+<title>dita</title>
+<shortdesc>The &lt;<keyword>dita</keyword>&gt; element provides a top-level
+container for multiple topics when you create documents using the ditabase
+document type. The &lt;<keyword>dita</keyword>&gt; element lets you create
+any sequence of concept, task, and reference topics, and the ditabase document
+type lets you further nest these topic types inside each other. The &lt;<keyword>dita</keyword>&gt;
+element has no particular output implications; it simply allows you to create
+multiple topics of different types at the same level in a single document.</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>dita</indexterm><indexterm>Ditabase document type<?Pub Caret?></indexterm>
+<indexterm>Composite topics</indexterm></keywords>
+</metadata></prolog>
+<refbody>
+<section><title>Inheritance</title>Not a specializable DITA element.</section>
+<example><title>Example</title><pre>&lt;dita&gt;
+  &lt;concept id="batintro"&gt;...&lt;/concept&gt;
+  &lt;reference id="batparts"&gt;...&lt;/reference&gt;
+  &lt;task id="batfeeding"&gt;...&lt;/task&gt;
+  &lt;task id="battraining"&gt;...&lt;/task&gt;
+  &lt;task id="batcleanup"&gt;...&lt;/task&gt;
+&lt;/dita&gt;</pre></example>
+<section conref="../common/commonNavLibraryTable.dita#models/dita-contains" otherprops="contains"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/dita-containedby"
+otherprops="containedby"></section>
+<section id="attrs"><title>Attributes</title> <simpletable id="dita_attr"
+relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+</simpletable> </section>
+</refbody>
+</reference>
+<?Pub *0000002126?>

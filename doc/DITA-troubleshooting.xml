@@ -53,5 +53,20 @@
       use space as the delimiter when processing batch files in a list. Please 
       prevent using spaces in the name of dita files.</p>
     </section>
+    <section>
+      <title>5. Stack Overflow</title>
+      <p>Sometimes, you will receive an error during the transformation which says
+      the stack memory overflows. Please follow the steps below to fix the problem:</p>
+      <ol>
+        <li><p>For Windows, type <codeph>set ANT_OPTS=%ANT_OPTS% -Xms512M</codeph> 
+          in the command prompt, you can also choose to add a new opition 
+          <codeph>-Xms512M</codeph> to the <codeph>ANT_OPTS</codeph> 
+          environment variable.</p>
+          <p>For Linux, type <codeph>export ANT_OPTS=${ANT_OPTS} -Xms512M</codeph> 
+            in the command prompt.</p>
+        </li>
+        <li>Run the transformation again.</li>
+      </ol>
+    </section>
   </refbody>
 </reference>

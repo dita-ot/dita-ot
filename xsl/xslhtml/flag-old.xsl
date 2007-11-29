@@ -548,7 +548,7 @@
 
 <!-- Output starting & ending flag for "blocked" text.
      Use instead of 'apply-templates' for block areas (P, Note, DD, etc) -->
-<xsl:template name="revblock">
+<xsl:template name="revblock-deprecated">
  <xsl:choose>
   <xsl:when test="@rev and not($FILTERFILE='') and ($DRAFT='yes')"> <!-- draft rev mode, add div w/ rev attr value -->
     <xsl:variable name="revtest"> 
@@ -608,7 +608,7 @@
    <xsl:call-template name="start-mark-rev">
     <xsl:with-param name="revvalue" select="@rev"/>
    </xsl:call-template>
-   <xsl:call-template name="revstyle">
+   <xsl:call-template name="revstyle-deprecated">
     <xsl:with-param name="revvalue" select="@rev"/>
    </xsl:call-template>
    <xsl:call-template name="end-mark-rev">
@@ -620,7 +620,7 @@
    <xsl:call-template name="start-mark-rev">
     <xsl:with-param name="revvalue" select="@rev"/>
    </xsl:call-template>
-   <xsl:call-template name="revstyle">
+   <xsl:call-template name="revstyle-deprecated">
     <xsl:with-param name="revvalue" select="@rev"/>
    </xsl:call-template>
    <xsl:call-template name="end-mark-rev">
@@ -640,7 +640,7 @@
   </xsl:call-template>
  </xsl:variable>
   <xsl:if test="$revtest=1">
-   <xsl:call-template name="start-revision-flag"/>
+   <xsl:call-template name="start-revision-flag-deprecated"/>
   </xsl:if>
 </xsl:template>
 
@@ -653,12 +653,12 @@
   </xsl:call-template>
  </xsl:variable>
   <xsl:if test="$revtest=1">
-   <xsl:call-template name="end-revision-flag"/>
+   <xsl:call-template name="end-revision-flag-deprecated"/>
   </xsl:if>
 </xsl:template>
 
 <!-- output the revision color & apply further templates-->
-<xsl:template name="revstyle">
+<xsl:template name="revstyle-deprecated">
  <xsl:param name="revvalue"/>
  <xsl:variable name="revcolor">
   <xsl:call-template name="find-active-rev-style"> <!-- get 1st active rev color -->
@@ -682,7 +682,7 @@
 
 <!-- output the beginning revision graphic & ALT text -->
 <!-- Reverse the artwork for BIDI languages -->
-<xsl:template name="start-revision-flag">
+<xsl:template name="start-revision-flag-deprecated">
  <xsl:variable name="biditest"> 
   <xsl:call-template name="bidi-area"/>
  </xsl:variable>
@@ -702,7 +702,7 @@
 
 <!-- output the ending revision graphic & ALT text -->
 <!-- Reverse the artwork for BIDI languages -->
-<xsl:template name="end-revision-flag">
+<xsl:template name="end-revision-flag-deprecated">
  <xsl:variable name="biditest">
   <xsl:call-template name="bidi-area"/>
  </xsl:variable>

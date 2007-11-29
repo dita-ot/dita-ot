@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Arbortext, Inc., 1988-2006, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<reference id="tm" xml:lang="en-us">
+<title>tm</title>
+<shortdesc>The trademark (&lt;<keyword>tm</keyword>&gt;) element in DITA is
+used to markup and identify a term or phrase that is trademarked. Trademarks
+include registered trademarks, service marks, slogans and logos.</shortdesc>
+<prolog><metadata>
+<keywords><indexterm>tm (trademark)</indexterm><indexterm>trademark (tm)</indexterm>
+<indexterm>Miscellaneous elements<indexterm>tm (trademark)</indexterm></indexterm>
+</keywords><?Pub Caret1?>
+</metadata></prolog>
+<refbody>
+<section><p>The business rules for indicating and displaying trademarks may
+differ from company to company and may be enforced by authoring policy and
+by specific processing.</p></section>
+<example><title>Example</title><codeblock>&lt;p&gt;The advantages of using &lt;tm trademark="DB2 Universal Database" tmtype="tm"&gt;
+&lt;tm trademark="DB2" tmtype="reg" tmclass="ibm"&gt;DB2&lt;/tm&gt; Universal Database&lt;/tm&gt; are 
+well known.&lt;/p&gt;</codeblock></example>
+<section conref="../common/commonNavLibraryTable.dita#models/tm-contains" otherprops="contains"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/tm-containedby"
+otherprops="containedby"></section>
+<section conref="../common/commonNavLibraryTable.dita#models/tm-classvalue" otherprops="classvalue"></section>
+<section id="attrs"><title>Attributes</title> <simpletable id="tm_attr" relcolwidth="2* 3* 1* 1* 1*">
+<sthead>
+<stentry>Name</stentry>
+<stentry>Description</stentry>
+<stentry>Data Type</stentry>
+<stentry>Default Value</stentry>
+<stentry>Required?</stentry>
+</sthead>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/trademark">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/tmowner">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/tmtype">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/tmclass">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/univ-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/global-atts">
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+<stentry></stentry>
+</strow>
+<strow conref="../common/commonLRdefs.dita#commonLRdefs/classonly"><stentry/><stentry/><stentry/><stentry/><stentry/></strow>
+</simpletable> </section>
+</refbody>
+</reference>
+<?Pub *0000003027?>

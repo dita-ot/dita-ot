@@ -1,0 +1,22 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE reference  PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<!--             (C) Copyright OASIS Open 2005.                    -->
+<!--             (C) Copyright IBM Corporation 2001, 2004.         -->
+<!--             All Rights Reserved.                              -->
+<reference id="special" xml:lang="en-us">
+   <title>Specialization elements</title>
+   <refbody>
+      <section>
+         <p>Several DITA elements exist either for architectural reasons
+or for support of specialized markup yet to be designed. Although there is
+little need to use these elements unless you are directed to, some of them,
+such as &lt;<apiname>state</apiname>&gt;, can be used if your content
+makes use of these semantic distinctions. A discussion of signals on a gate
+of an integrated logic circuit, for example, might use the state element to
+represent either on or off conditions of that gate.<indexterm>Specialization
+elements</indexterm>
+         </p>
+      </section>
+   </refbody>
+</reference>

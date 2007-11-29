@@ -79,6 +79,10 @@ public class CommandLineInvoker {
 		paramMap.put("/provider", "args.eclipse.provider");
 		paramMap.put("/fouserconfig", "args.fo.userconfig");
 		paramMap.put("/htmlhelpincludefile", "args.htmlhelp.includefile");
+		paramMap.put("/validate", "validate");
+		paramMap.put("/outercontrol", "outer.control");
+		paramMap.put("/generateouter", "generate.copy.outer");
+		paramMap.put("/onlytopicinmap", "onlytopic.in.map");
 	}
 	
 	private String propertyFile = null;
@@ -274,7 +278,7 @@ public class CommandLineInvoker {
 		cmd.add("org.dita.dost.log.DITAOTBuildLogger");
 		cmd.add("-propertyfile");
 		cmd.add(propertyFile);
-		
+
 		if (debugMode){
 			cmd.add("-d");
 		}
@@ -361,6 +365,10 @@ public class CommandLineInvoker {
         msg.append("  /eclipsehelptoc:       specify the root file name of the output eclipsehelp toc file in eclipsehelp transformation. Default is the name of the input ditamap file" + lSep);
         msg.append("  /eclipsecontenttoc:    specify the root file name of the output Eclipse content provider toc file in eclipsecontent transformation. Default is the name of the input ditamap file" + lSep);
         msg.append("  /xhtmltoc:             specify the root file name of the output xhtml toc file in xhtml transformation" + lSep);
+        msg.append("  /validate:             specify whether the ditamap/dita/xml files to be validated" + lSep);
+        msg.append("  /outercontrol:         specify how to respond to the overflowing dita/topic files. Only \"fail\", \"warn\" and \"quiet\" are valid values. The default is warn. " + lSep);
+        msg.append("  /generateouter:        specify how to deal with the overflowing dita/topic files. Only \"1\", \"2\" and \"3\" are valid values. The default is 1. Option 1: Only generate/copy files that fit within the designated output directory. Option 2: Generate/copy all files, even those that will end up outside of the output directory. Option 3: the old solution,adjust the input.dir according to the referenced files. (not default option any more but keep this as the option of backward compatibility)." + lSep);
+		msg.append("  /onlytopicinmap:       specify whether the referenced dita/topic files which are not referenced by ditamap files should be resolved. Only \"true\" and \"false\" are valid values. The default is false. " + lSep);
         System.out.println(msg.toString());
     }
     

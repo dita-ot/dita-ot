@@ -30,7 +30,7 @@
   <xsl:apply-templates select="." mode="copy-element"/>
 </xsl:template>
 
-<xsl:template match="/*/*[contains(@class,' topic/title ')]">
+<xsl:template match="/*[contains(@class,' map/map ')]/*[contains(@class,' topic/title ')]">
   <xsl:apply-templates select="." mode="copy-element"/>
 </xsl:template>
 
