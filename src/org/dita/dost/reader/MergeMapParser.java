@@ -117,6 +117,7 @@ public class MergeMapParser extends AbstractXMLReader {
 		
 		String scopeValue = null;
 		String formatValue = null;
+		String classValue = null;
 		String fileId = null;
 		int attsLen = atts.getLength();
 		
@@ -126,7 +127,9 @@ public class MergeMapParser extends AbstractXMLReader {
             String attQName = atts.getQName(i);
             String attValue = atts.getValue(i);
             if(Constants.ATTRIBUTE_NAME_HREF.equals(attQName) 
-            		&& !StringUtils.isEmptyString(attValue)){
+            		&& !StringUtils.isEmptyString(attValue)
+            		&& classValue != null
+            		&& classValue.indexOf(Constants.ATTR_CLASS_VALUE_TOPICREF)!=-1){
             	scopeValue = atts.getValue(Constants.ATTRIBUTE_NAME_SCOPE);
         		formatValue = atts.getValue(Constants.ATTRIBUTE_NAME_FORMAT);
         		
