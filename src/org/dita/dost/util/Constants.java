@@ -146,6 +146,7 @@ public abstract class Constants {
     public static final String CHUNKED_TOPIC_LIST="chunkedtopiclist";
     public static final String CHUNKED_DITAMAP_LIST="chunkedditamaplist";
     public static final String OUT_DITA_FILES_LIST="outditafileslist";
+    public static final String REL_FLAGIMAGE_LIST="relflagimagelist";
 
     /**
      * Constants for common params used in ant invoker.

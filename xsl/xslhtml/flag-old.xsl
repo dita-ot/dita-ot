@@ -486,9 +486,12 @@
     <img>
      <xsl:attribute name="src">
       <xsl:if test="string-length($PATH2PROJ) > 0"><xsl:value-of select="$PATH2PROJ"/></xsl:if>
+      <!--
       <xsl:call-template name="get-file-name">
         <xsl:with-param name="file-path" select="$imgsrc"/>
       </xsl:call-template>
+      -->
+      <xsl:value-of select="$imgsrc"/>
      </xsl:attribute>
      <xsl:attribute name="alt"> <!-- always insert an ALT - if it's blank, assume the user didn't want to fill it. -->
       <xsl:value-of select="$FILTERDOC/val/prop[@att=$flag-att][@val=$firstflag][@action='flag']/@alt"/>

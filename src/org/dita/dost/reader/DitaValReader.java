@@ -15,7 +15,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
+import java.util.Set;
 
+import org.dita.dost.util.FileUtils;
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.log.MessageUtils;
@@ -28,6 +30,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
+
 
 /**
  * DitaValReader reads and parses the information from ditaval file which
@@ -47,6 +50,8 @@ public class DitaValReader extends AbstractXMLReader {
 	private List imageList = null;
 
 	private String ditaVal = null;
+	
+	private List relFlagImageList= null;
 
 	/**
 	 * Default constructor of DitaValReader class.
@@ -57,6 +62,7 @@ public class DitaValReader extends AbstractXMLReader {
 		content = null;
 		logger = new DITAOTJavaLogger();
 		imageList = new ArrayList(Constants.INT_256);
+		relFlagImageList= new ArrayList(Constants.INT_256);
 
 		try {
 			if (System.getProperty(Constants.SAX_DRIVER_PROPERTY) == null) {
@@ -137,6 +143,7 @@ public class DitaValReader extends AbstractXMLReader {
 			String filterDir;
 			if (new File(flagImage).isAbsolute()) {
 				imageList.add(flagImage);
+				relFlagImageList.add(FileUtils.getRelativePathFromMap(ditaVal, flagImage));
 				return;
 			}
 
@@ -144,6 +151,7 @@ public class DitaValReader extends AbstractXMLReader {
 			filterDir = new File(new File(ditaVal).getAbsolutePath())
 					.getParent();
 			imageList.add(new File(filterDir, flagImage).getAbsolutePath());
+			relFlagImageList.add(flagImage);
 		}
 	}
 
@@ -177,5 +185,9 @@ public class DitaValReader extends AbstractXMLReader {
 	 */
 	public HashMap getFilterMap() {
 		return filterMap;
+	}
+	
+	public List getRelFlagImageList(){
+		return relFlagImageList;
 	}
 }

@@ -18,6 +18,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.LinkedHashSet;
+
 import javax.xml.parsers.ParserConfigurationException;
 import java.lang.Throwable;
 import org.dita.dost.exception.DITAOTException;
@@ -93,6 +95,9 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 	/** Set of subsidiary files */
 	private Set subsidiarySet = null;
 	
+	/** Set of relative flag image files */
+	private Set relFlagImagesSet=null;
+	
 	/** Map of all copy-to (target,source) */
 	private Map copytoMap = null;
 	
@@ -136,6 +141,7 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 	
 	private String rootFile=null;
 
+
 	/**
 	 * Create a new instance and do the initialization.
 	 * 
@@ -151,7 +157,7 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 		hrefMapSet = new HashSet(Constants.INT_128);
 		conrefSet = new HashSet(Constants.INT_128);
 		imageSet = new HashSet(Constants.INT_128);
-		flagImageSet = new HashSet(Constants.INT_128);
+		flagImageSet = new LinkedHashSet(Constants.INT_128);
 		htmlSet = new HashSet(Constants.INT_128);
 		hrefTargetSet = new HashSet(Constants.INT_128);
 		subsidiarySet = new HashSet(Constants.INT_16);
@@ -163,6 +169,7 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 		copytoSourceSet = new HashSet(Constants.INT_128);
 		ignoredCopytoSourceSet = new HashSet(Constants.INT_128);
 		outDitaFilesSet=new HashSet(Constants.INT_128);
+		relFlagImagesSet=new LinkedHashSet(Constants.INT_128);
 	}
 
 	/**
@@ -541,6 +548,7 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 			FilterUtils.setFilterMap(ditaValReader.getFilterMap());			
 			// Store flagging image used for image copying
 			flagImageSet.addAll(ditaValReader.getImageList());
+			relFlagImagesSet.addAll(ditaValReader.getRelFlagImageList());
 		}else{
 			FilterUtils.setFilterMap(null);
 		}
@@ -660,6 +668,7 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 		addSetToProperties(prop, Constants.CONREF_TARGET_LIST, conrefTargetSet);
 		addSetToProperties(prop, Constants.COPYTO_SOURCE_LIST, copytoSourceSet);
 		addSetToProperties(prop, Constants.SUBSIDIARY_TARGET_LIST, subsidiarySet);
+		addSetToProperties(prop,Constants.REL_FLAGIMAGE_LIST,relFlagImagesSet);
 		
 		/*
 		 * Convert copyto map into set and output
@@ -680,7 +689,7 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 
 	private void addSetToProperties(Properties prop, String key, Set set) {
 		String value = null;
-		Set newSet = new HashSet(Constants.INT_128);
+		Set newSet = new LinkedHashSet(Constants.INT_128);
 		Iterator iter = set.iterator();
 
 		while (iter.hasNext()) {

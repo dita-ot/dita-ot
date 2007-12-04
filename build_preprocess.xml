@@ -205,7 +205,7 @@
       <fileset dir="${dita.resource.dir}"
         includes="delta.gif,deltaend.gif" />
     </copy>
-    <dita-ot-copy todir="${output.dir}" includes="${flagimagelist}" />
+    <dita-ot-copy todir="${output.dir}" includes="${flagimagelist}" relativepaths="${relflagimagelist}" />
   </target>
   
   <target name="copy-subsidiary" unless="noSubList"

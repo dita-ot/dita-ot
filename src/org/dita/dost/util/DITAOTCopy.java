@@ -25,6 +25,7 @@ import org.dita.dost.log.DITAOTJavaLogger;
  */
 public class DITAOTCopy extends Task {
 	private String includes = null;
+	private String relativePaths = null;
 	private String destDir = null;  // the destination directory
 	private DITAOTJavaLogger logger = new DITAOTJavaLogger();
 	
@@ -50,6 +51,16 @@ public class DITAOTCopy extends Task {
     public void setTodir(String destdir) {
         this.destDir = destdir;
     }
+    
+	/**
+	 * Set the relative path from output dir.
+	 * 
+	 * @param relPaths
+	 *            the relative path .
+	 */
+	public void setRelativePaths(String relPaths) {
+		this.relativePaths = relPaths;
+	}
 
 	/** (non-Javadoc)
 	 * @see org.apache.tools.ant.Task#execute()
@@ -57,22 +68,41 @@ public class DITAOTCopy extends Task {
 	public void execute() throws BuildException {
 		FileUtils fileUitls = FileUtils.newFileUtils();
 		StringTokenizer tokenizer;
-		
+		StringTokenizer pathTokenizer;
 		if (includes == null) {
 			return;
 		}
-		
 		tokenizer = new StringTokenizer(includes, Constants.COMMA);
-		try {
-			while (tokenizer.hasMoreTokens()) {
-				File srcFile = new File(tokenizer.nextToken());
-				if (srcFile.exists()) {
-					File destFile = new File(destDir, srcFile.getName());								
-					fileUitls.copyFile(srcFile, destFile);
+		if (relativePaths == null) {
+			try {
+				while (tokenizer.hasMoreTokens()) {
+					File srcFile = new File(tokenizer.nextToken());
+					if (srcFile.exists()) {
+						File destFile = new File(destDir, srcFile.getName());
+						fileUitls.copyFile(srcFile, destFile);
+					}
 				}
+			} catch (IOException e) {
+				logger.logException(e);
 			}
-		}catch(IOException e){
-			logger.logException(e);		
+		}else{
+			pathTokenizer = new StringTokenizer(relativePaths, Constants.COMMA);
+			StringBuffer realDest=null;
+			try {
+				while (tokenizer.hasMoreTokens()) {
+					realDest=new StringBuffer();
+					if(destDir!=null && destDir.trim().length()>0){
+						realDest.append(destDir).append(File.separator).append(pathTokenizer.nextToken());
+					}
+					File srcFile = new File(tokenizer.nextToken());
+					if (srcFile.exists()) {
+						File destFile = new File(realDest.toString());
+						fileUitls.copyFile(srcFile, destFile);
+					}
+				}
+			} catch (IOException e) {
+				logger.logException(e);
+			}
 		}
 	}
 
