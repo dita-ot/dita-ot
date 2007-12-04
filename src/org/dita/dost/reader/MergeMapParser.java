@@ -122,6 +122,7 @@ public class MergeMapParser extends AbstractXMLReader {
 		int attsLen = atts.getLength();
 		
 		mapInfo.append(Constants.LESS_THAN).append(qName);
+		classValue = atts.getValue(Constants.ATTRIBUTE_NAME_CLASS);
 		
 		for (int i = 0; i < attsLen; i++) {
             String attQName = atts.getQName(i);
