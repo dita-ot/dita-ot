@@ -27,6 +27,11 @@ public final class OutputUtils {
 	public static final int NOT_GENERATEOUTTER=1;
 	public static final int GENERATEOUTTER=2;
 	public static final int OLDSOLUTION=3;
+	
+	public static String OutputDir=null;
+	
+	public static String InputMapDir=null;
+	
 	private OutputUtils(){
 		
 	}
@@ -118,5 +123,21 @@ public final class OutputUtils {
 			return;
 		}
 		generatecopyouter=NOT_GENERATEOUTTER;
+	}
+	
+	public static String getOutputDir(){
+		return OutputDir;
+	}
+	
+	public static void setOutputDir(String outputDir){
+		OutputDir=outputDir;
+	}
+	
+	public static String getInputMapPathName(){
+		return InputMapDir;
+	}
+	
+	public static void setInputMapPathName(String inputMapDir){
+		InputMapDir=inputMapDir;
 	}
 }

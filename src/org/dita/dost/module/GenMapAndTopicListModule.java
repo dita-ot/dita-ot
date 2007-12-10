@@ -230,7 +230,17 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 		OutputUtils.setGeneratecopyouter(hashIO.getAttribute(Constants.ANT_INVOKER_EXT_PARAM_GENERATECOPYOUTTER));
 		OutputUtils.setOutterControl(hashIO.getAttribute(Constants.ANT_INVOKER_EXT_PARAM_OUTTERCONTROL));
 		OutputUtils.setOnlyTopicInMap(hashIO.getAttribute(Constants.ANT_INVOKER_EXT_PARAM_ONLYTOPICINMAP));
-
+		
+        //Set the OutputDir
+		File path=new File(hashIO.getAttribute(Constants.ANT_INVOKER_EXT_PARAM_OUTPUTDIR));
+		if(path.isAbsolute())
+			OutputUtils.setOutputDir(hashIO.getAttribute(Constants.ANT_INVOKER_EXT_PARAM_OUTPUTDIR));
+		else{
+			StringBuffer buff=new StringBuffer(hashIO.getAttribute(Constants.ANT_INVOKER_PARAM_BASEDIR)).append(File.separator).append(path);
+			OutputUtils.setOutputDir(buff.toString());
+			
+		} 
+			
 		
 		
 		/*
@@ -254,6 +264,9 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 		rootDir=baseInputDir;
 		rootFile=inFile.getAbsolutePath();
 		inputFile = inFile.getName();
+		
+		//Set the mapDir
+		OutputUtils.setInputMapPathName(inFile.getAbsolutePath());	
 	}
 	
 	/**
@@ -668,7 +681,7 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 		addSetToProperties(prop, Constants.CONREF_TARGET_LIST, conrefTargetSet);
 		addSetToProperties(prop, Constants.COPYTO_SOURCE_LIST, copytoSourceSet);
 		addSetToProperties(prop, Constants.SUBSIDIARY_TARGET_LIST, subsidiarySet);
-		addSetToProperties(prop,Constants.REL_FLAGIMAGE_LIST,relFlagImagesSet);
+		addFlagImagesSetToProperties(prop,Constants.REL_FLAGIMAGE_LIST,relFlagImagesSet);
 		
 		/*
 		 * Convert copyto map into set and output
@@ -703,6 +716,43 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 				 * all the back slash with slash.
 				 */
 				newSet.add(FileUtils.removeRedundantNames(new StringBuffer(prefix).append(file).toString())
+						.replaceAll(Constants.DOUBLE_BACK_SLASH,
+								Constants.SLASH));
+			}
+		}
+
+		value = StringUtils.assembleString(newSet, Constants.COMMA);
+
+		prop.put(key, value);
+
+		// clear set
+		set.clear();
+		newSet.clear();
+	}
+	
+	/**
+	 * add FlagImangesSet to Properties, which needn't to change the dir level, just ouput to the ouput dir.
+	 * 
+	 * @param Properties 
+	 * @param key
+	 * @param set
+	 */
+	private void addFlagImagesSetToProperties(Properties prop, String key, Set set) {
+		String value = null;
+		Set newSet = new LinkedHashSet(Constants.INT_128);
+		Iterator iter = set.iterator();
+
+		while (iter.hasNext()) {
+			String file = (String) iter.next();			
+			if (new File(file).isAbsolute()) {
+				// no need to append relative path before absolute paths
+				newSet.add(FileUtils.removeRedundantNames(file));
+			} else {
+				/*
+				 * In ant, all the file separator should be slash, so we need to replace
+				 * all the back slash with slash.
+				 */
+				newSet.add(FileUtils.removeRedundantNames(new StringBuffer().append(file).toString())
 						.replaceAll(Constants.DOUBLE_BACK_SLASH,
 								Constants.SLASH));
 			}

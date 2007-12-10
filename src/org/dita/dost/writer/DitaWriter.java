@@ -17,12 +17,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
+import java.util.StringTokenizer;
 
 import javax.xml.parsers.SAXParser;
 
 import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
+import org.dita.dost.util.OutputUtils;
 
 import org.dita.dost.module.Content;
 import org.dita.dost.module.DebugAndFilterModule;
@@ -717,14 +719,40 @@ public class DitaWriter extends AbstractXMLWriter {
                 						?filename.substring(index+1)
                 						:filename.substring(index+1, fileExtIndex)+DebugAndFilterModule.extName);
                 
-                path2Project = FileUtils.getPathtoProject(filename.substring(index+1));
+                //when it is not the old solution 3
+                if(OutputUtils.getGeneratecopyouter()!=OutputUtils.OLDSOLUTION){
+                		if(isOutFile(traceFilename)){
+                			//TODO
+                			path2Project=this.getRelativePathFromOut(traceFilename);
+                		}else{
+                			path2Project=FileUtils.getRelativePathFromMap(traceFilename,OutputUtils.getInputMapPathName());
+                			path2Project=new File(path2Project).getParent();
+                			if(path2Project!=null && path2Project.length()>0){
+                				path2Project=path2Project+File.separator;
+                			}
+                		}
+                }
+                else
+                	path2Project = FileUtils.getPathtoProject(filename.substring(index+1));
             }else{
                 traceFilename = filename;
                 outputFilename.append((fileExtIndex == -1)
                 					   ? filename
                 					   : filename.substring(0, fileExtIndex)+DebugAndFilterModule.extName);
-                
-                path2Project = FileUtils.getPathtoProject(filename);
+                if(OutputUtils.getGeneratecopyouter()!=OutputUtils.OLDSOLUTION){
+            		if(isOutFile(traceFilename)){
+            			//TODO
+            			path2Project=this.getRelativePathFromOut(traceFilename);
+            		}else{
+            			path2Project=FileUtils.getRelativePathFromMap(traceFilename,OutputUtils.getInputMapPathName());
+            			path2Project=new File(path2Project).getParent();
+            			if(path2Project!=null && path2Project.length()>0){
+            				path2Project=path2Project+File.separator;
+            			}
+            		}
+                }
+                else
+                	path2Project = FileUtils.getPathtoProject(filename);
             }
             outputFile = new File(outputFilename.toString());
             counterMap = new HashMap();
@@ -752,5 +780,80 @@ public class DitaWriter extends AbstractXMLWriter {
             	logger.logException(e);
             }
         }
+    }
+    
+	/**
+	 * Just for the overflowing files
+	 * @param destFile
+	 * @param objFile
+	 */
+    public String getRelativePathFromOut(String overflowingFile){
+    	File mapPathName=new File(OutputUtils.getInputMapPathName());
+    	String mapDir=mapPathName.getParent();
+    	String currentFileDir=new File(overflowingFile).getParent();
+    	StringTokenizer mapToken=new StringTokenizer(mapDir,File.separator);
+    	StringTokenizer fileToken=new StringTokenizer(currentFileDir,File.separator);
+    	StringBuffer result=new StringBuffer();
+    	StringBuffer lastOutDir=new StringBuffer();
+    	StringBuffer diffPathToMap=new StringBuffer(".").append(File.separator);
+    	int level=0;
+    	
+    	while(mapToken.hasMoreTokens() && fileToken.hasMoreTokens()){
+    		String map=mapToken.nextToken();
+    		String file=fileToken.nextToken();
+    		if(!map.equals(file)){
+    			//get the not-equal string
+    			result=result.append(file);
+    			diffPathToMap.append("..").append(File.separator);
+    			level++;
+    			while(fileToken.hasMoreTokens()){
+    				result.append(File.separatorChar).append(fileToken.nextToken());
+    				diffPathToMap.append("..").append(File.separator);
+    				level++;
+    			}
+    			break;
+    		}
+    	}
+    	//get the level between the mapdir and outputdir
+    	int mapToOutLevel=0;
+    	File mapFileParentDir=new File(mapDir);
+    	File outputDir=new File(OutputUtils.getOutputDir());
+    	StringBuffer mapToOutPath=new StringBuffer();
+    	boolean outflow=false;
+    	while(mapFileParentDir.getParent()!=null){
+    		mapFileParentDir=new File(mapFileParentDir.getParent());
+    		mapToOutLevel++;
+    		if(outputDir.getName()!=null){
+    			mapToOutPath=new StringBuffer(outputDir.getName()).append(File.separator).append(mapToOutPath);
+    			if(outputDir.getParent()!=null)
+    				outputDir=new File(outputDir.getParent());
+    			else{
+    				//get the root path,not considering the path overflowing problem
+    				outflow=true;
+    				break;
+    			}
+    		}
+    	}
+    	if(outflow){
+    		//outputDir.getPath()
+    	}else{
+    		diffPathToMap.append(mapToOutPath);
+    	}
+    	return diffPathToMap.toString();
+    	
+//    	while(level>0){
+//    		new StringBuffer(new File(OutputUtils.getOutputDir()).getParent()).append(lastOutDir);
+//    	}
+    	
+    	
+    	
+    }
+    
+    private boolean isOutFile(String filePathName){
+    	String relativePath=FileUtils.getRelativePathFromMap(OutputUtils.getInputMapPathName(),new File(filePathName).getParent());
+    	if(relativePath==null || relativePath.length()==0 || !relativePath.startsWith("..")){
+    		return false;
+    	}
+    	return true;
     }
 }

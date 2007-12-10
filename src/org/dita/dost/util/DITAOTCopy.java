@@ -91,6 +91,8 @@ public class DITAOTCopy extends Task {
 			try {
 				while (tokenizer.hasMoreTokens()) {
 					realDest=new StringBuffer();
+					//destDir is the ouput dir
+					//pathTokenizer is the relative path with the filename
 					if(destDir!=null && destDir.trim().length()>0){
 						realDest.append(destDir).append(File.separator).append(pathTokenizer.nextToken());
 					}

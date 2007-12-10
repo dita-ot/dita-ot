@@ -29,14 +29,14 @@
     unless="dita.input.valfile">
     <pipeline message="Generate list." module="GenMapAndTopicList"
       basedir="${basedir}" inputmap="${args.input}"
-      tempdir="${dita.temp.dir}" extparam="ditadir=${dita.dir};validate=${validate};generatecopyouter=${generate.copy.outer};outercontrol=${outer.control};onlytopicinmap=${onlytopic.in.map}" />
+      tempdir="${dita.temp.dir}" extparam="ditadir=${dita.dir};validate=${validate};generatecopyouter=${generate.copy.outer};outercontrol=${outer.control};onlytopicinmap=${onlytopic.in.map};outputdir=${output.dir}" />
   </target>
 
   <target name="gen-list-with-flagging" if="dita.input.valfile">
     <pipeline message="Generate list." module="GenMapAndTopicList"
       basedir="${basedir}" inputmap="${args.input}"
       tempdir="${dita.temp.dir}"
-      extparam="ditadir=${dita.dir};ditaval=${dita.input.valfile};validate=${validate};generatecopyouter=${generate.copy.outer};outercontrol=${outer.control};onlytopicinmap=${onlytopic.in.map}" />
+      extparam="ditadir=${dita.dir};ditaval=${dita.input.valfile};validate=${validate};generatecopyouter=${generate.copy.outer};outercontrol=${outer.control};onlytopicinmap=${onlytopic.in.map};outputdir=${output.dir}" />
   </target>
 
   <target name="debug-filter" depends="gen-list, debug, debug-and-filter"

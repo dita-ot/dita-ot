@@ -174,6 +174,7 @@ public abstract class Constants {
     public static final String ANT_INVOKER_EXT_PARAM_GENERATECOPYOUTTER="generatecopyouter";
     public static final String ANT_INVOKER_EXT_PARAM_ONLYTOPICINMAP="onlytopicinmap";
     public static final String ANT_INVOKER_EXT_PARAM_VALIDATE="validate";
+    public static final String ANT_INVOKER_EXT_PARAM_OUTPUTDIR="outputdir";
     /**
      * Constants for file and line separator.
      */
