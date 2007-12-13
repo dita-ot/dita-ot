@@ -789,68 +789,25 @@ public class DitaWriter extends AbstractXMLWriter {
 	 */
     public String getRelativePathFromOut(String overflowingFile){
     	File mapPathName=new File(OutputUtils.getInputMapPathName());
-    	String mapDir=mapPathName.getParent();
-    	String currentFileDir=new File(overflowingFile).getParent();
-    	StringTokenizer mapToken=new StringTokenizer(mapDir,File.separator);
-    	StringTokenizer fileToken=new StringTokenizer(currentFileDir,File.separator);
-    	StringBuffer result=new StringBuffer();
-    	StringBuffer lastOutDir=new StringBuffer();
-    	StringBuffer diffPathToMap=new StringBuffer(".").append(File.separator);
-    	int level=0;
-    	
-    	while(mapToken.hasMoreTokens() && fileToken.hasMoreTokens()){
-    		String map=mapToken.nextToken();
-    		String file=fileToken.nextToken();
-    		if(!map.equals(file)){
-    			//get the not-equal string
-    			result=result.append(file);
-    			diffPathToMap.append("..").append(File.separator);
-    			level++;
-    			while(fileToken.hasMoreTokens()){
-    				result.append(File.separatorChar).append(fileToken.nextToken());
-    				diffPathToMap.append("..").append(File.separator);
-    				level++;
-    			}
-    			break;
-    		}
-    	}
-    	//get the level between the mapdir and outputdir
-    	int mapToOutLevel=0;
-    	File mapFileParentDir=new File(mapDir);
-    	File outputDir=new File(OutputUtils.getOutputDir());
-    	StringBuffer mapToOutPath=new StringBuffer();
-    	boolean outflow=false;
-    	while(mapFileParentDir.getParent()!=null){
-    		mapFileParentDir=new File(mapFileParentDir.getParent());
-    		mapToOutLevel++;
-    		if(outputDir.getName()!=null){
-    			mapToOutPath=new StringBuffer(outputDir.getName()).append(File.separator).append(mapToOutPath);
-    			if(outputDir.getParent()!=null)
-    				outputDir=new File(outputDir.getParent());
-    			else{
-    				//get the root path,not considering the path overflowing problem
-    				outflow=true;
-    				break;
-    			}
-    		}
-    	}
-    	if(outflow){
-    		//outputDir.getPath()
+    	File currFilePathName=new File(overflowingFile);
+    	String relativePath=FileUtils.getRelativePathFromMap( mapPathName.toString(),currFilePathName.toString());
+    	//String relativePathWithoutFileName=new File(relativePath).getParent();
+    	String outputDir=OutputUtils.getOutputDir();
+    	StringBuffer outputPathName=new StringBuffer(outputDir).append(File.separator).append("index.html");
+    	String finalOutFilePathName=FileUtils.resolveFile(outputDir,relativePath);
+    	String finalRelativePathName=FileUtils.getRelativePathFromMap(finalOutFilePathName,outputPathName.toString());
+    	String parentDir=new File(finalRelativePathName).getParent(); 
+    	StringBuffer finalRelativePath=new StringBuffer(parentDir);
+    	if(finalRelativePath.length()>0){
+    		finalRelativePath.append(File.separator);
     	}else{
-    		diffPathToMap.append(mapToOutPath);
+    		finalRelativePath.append(".").append(File.separator);
     	}
-    	return diffPathToMap.toString();
-    	
-//    	while(level>0){
-//    		new StringBuffer(new File(OutputUtils.getOutputDir()).getParent()).append(lastOutDir);
-//    	}
-    	
-    	
-    	
+    	return finalRelativePath.toString();	
     }
     
     private boolean isOutFile(String filePathName){
-    	String relativePath=FileUtils.getRelativePathFromMap(OutputUtils.getInputMapPathName(),new File(filePathName).getParent());
+    	String relativePath=FileUtils.getRelativePathFromMap(OutputUtils.getInputMapPathName(),new File(filePathName).getPath());
     	if(relativePath==null || relativePath.length()==0 || !relativePath.startsWith("..")){
     		return false;
     	}
