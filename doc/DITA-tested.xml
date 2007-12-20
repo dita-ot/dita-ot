@@ -18,7 +18,7 @@
     <simpletable>
       <strow>
         <stentry>Tested OS:</stentry>
-        <stentry>Windows, RedHat Linux 9</stentry>
+        <stentry>Windows XP, SLES 10</stentry>
       </strow>
       <strow>
         <stentry>Tested XSLT processor:</stentry>
