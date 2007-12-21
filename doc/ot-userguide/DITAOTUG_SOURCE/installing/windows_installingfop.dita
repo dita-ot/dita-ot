@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "../dtd/task.dtd">
+<!-- 
+This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
+See the accompanying license.txt file for applicable licenses.
+-->
+<task id="windows_installingfop" xml:lang="en-us">
+	<title>Installing FOP on Windows</title>
+	<prolog>
+		<author type="creator">Jen Linton</author>
+		<author type="creator">JoAnn Hackos</author>
+		<author type="creator">Kylene Bruski</author>
+		<author type="contributor">Anna van Raaphorst</author>
+		<author type="contributor">Richard Johnson</author>
+		<publisher>OASIS (Organization for the Advancement of Structured Information Standards)</publisher>
+		<copyright>
+			<copyryear year="2005"/>
+			<copyrholder>Comtech Services, Inc.</copyrholder>
+		</copyright>
+		<critdates>
+			<created date="2005-November-01"/>
+			<revised modified="2007-April-09"/>
+		</critdates>
+		<metadata>
+			<keywords>
+				<keyword>installing DITA Open Toolkit</keyword>
+				<keyword>FOP processor</keyword>
+				<indexterm>installing on Windows<indexterm>FOP</indexterm>
+				</indexterm>
+				<indexterm>FOP processor<indexterm>installing on Windows</indexterm>
+				</indexterm>
+				<indexterm>environment variables
+				<indexterm>CLASSPATH</indexterm>
+				</indexterm>
+				<indexterm>CLASSPATH environment variable</indexterm>
+				<indexterm>jar files
+				<indexterm>fop.jar</indexterm>
+					<indexterm>batik.jar</indexterm>
+					<indexterm>avalon-framework-cvs-20020806.jar</indexterm>
+				</indexterm>
+				<indexterm>fop.jar</indexterm>
+				<indexterm>batik.jar</indexterm>
+				<indexterm>avalon-framework-cvs-20020806.jar</indexterm>
+			</keywords>
+			<prodinfo>
+				<prodname>DITA Open Toolkit</prodname>
+				<vrmlist>
+					<vrm version="1.4.1"/>
+				</vrmlist>
+			</prodinfo>
+		</metadata>
+	</prolog>
+	<taskbody>
+		<steps>
+			<step>
+				<cmd>Enter the URL: <xref format="html" href="http://apache.siamwebhosting.com/xmlgraphics/fop/" scope="external">http://apache.tradebit.com/pub/xml/fop/</xref>
+				</cmd>
+			</step>
+			<step>
+				<cmd>From the FOP page, in the Name column, select <uicontrol>
+						<image href="../images/compressed.png"/>"fop-0.20.5-bin.zip" 
+          </uicontrol>.
+				</cmd>
+			</step>
+			<step>
+				<cmd>Click <uicontrol>Save</uicontrol> to unzip the <filepath>fop-0.20.5-bin.zip </filepath>
+          file and save it to the <filepath>C:\</filepath> directory as 
+          <filepath>fop-0.20.5</filepath>.
+				</cmd>
+			</step>
+			<step>
+				<cmd>Add to the <varname>CLASSPATH </varname> for the following jar files:</cmd>
+				<info>
+					<codeph>C:\fop-0.20.5\build\fop.jar;C:\fop-0.20.5\lib\batik.jar;C:\fop-0.20.5\lib \avalon-framework-cvs-20020806.jar</codeph>
+				</info>
+			</step>
+		</steps>
+	</taskbody>
+</task>
