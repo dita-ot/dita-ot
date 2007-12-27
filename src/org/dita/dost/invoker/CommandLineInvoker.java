@@ -323,7 +323,7 @@ public class CommandLineInvoker {
 	}
 	
 	private static void printVersion() {
-		System.out.println("DITA Open Toolkit 1.3");
+		System.out.println("DITA Open Toolkit 1.4.1");
 	}
 	
 	/**
