@@ -41,7 +41,7 @@ See the accompanying license.txt file for applicable licenses.
 			<title>System requirements</title>
 			<p>
 				DITA Open Toolkit is written in Java and requires at least a minimal set of Java applications be installed. 
-				Java SDK 1.4.2, 1.5, or 1.6 must be used to execute the applications and the Toolkit Java code.
+				Java SDK 1.5 or 1.6 must be used to execute the applications and the Toolkit Java code.
 				</p>
 			<p>It is highly likely that any operating system environment where the supported Java SDK can be installed will support basic Toolkit functionality. The Toolkit has been successfully installed and used on Windows XP, Mac OS X, various UNIX and Linux distributions including FreeBSD, Ubuntu Linux, NexentaGNU/OpenSolaris, Solaris, and other operating environments.
 				</p>
@@ -56,7 +56,7 @@ See the accompanying license.txt file for applicable licenses.
 			<dl>
 				<dlentry>
 					<dt>Java Development Kits (SDKs)</dt>
-					<dd>Sun. You can download the Sun JDK from <xref href="http://java.sun.com/j2se/1.4.2/download.html" format="html"/>.</dd>
+					<dd>Sun. You can download the Sun JDK from <xref href="http://java.sun.com/javase/downloads/index_jdk5.jsp" format="html"/>.</dd>
 					<dd>IBM.  You can download the IBM JDK from <xref href="http://www.ibm.com/developerworks/java/jdk" format="html"/>.</dd>
 				</dlentry>
 				<dlentry>

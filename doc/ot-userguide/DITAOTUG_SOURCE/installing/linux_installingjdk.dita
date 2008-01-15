@@ -47,21 +47,20 @@ See the accompanying license.txt file for applicable licenses.
 	<taskbody>
 		<steps>
 			<step>
-				<cmd>Enter the URL:<xref format="html" href="http://java.sun.com/j2se/1.4.2/download.html" scope="external"/>.</cmd>
+				<cmd>Enter the URL:<xref format="html" href="http://java.sun.com/javase/downloads/index_jdk5.jsp" scope="external"/>.</cmd>
 			</step>
 			<step>
 				<cmd>From the Sun Developer Network page, scroll to find the heading 
-          <uicontrol>J2SE v 1.4.2_13 SDK</uicontrol>.
+				<uicontrol>JDK 5.0 Update 14</uicontrol>.
 				</cmd>
 			</step>
 			<step>
-				<cmd>Select <uicontrol>Download J2SE SDK</uicontrol>.
+				<cmd>Select <uicontrol>Download</uicontrol>.
 				</cmd>
 			</step>
 			<step>
 				<cmd>From the Sun Developer Network page, accept the license agreement 
-          and scroll to the heading "Linux Platform - Java(TM) 2 SDK, Standard 
-          Edition 1.4.2_13".</cmd>
+					and scroll to the heading "Linux Platform - Java Development Kit 5.0 Update 14".</cmd>
 			</step>
 			<step>
 				<cmd>Select and download <uicontrol>self-extracting file 
