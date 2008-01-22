@@ -123,7 +123,8 @@ public class IndexTermCollection {
 	 */
 	public void sort() {
 		int termListSize = termList.size();
-		if (IndexTerm.getTermLocale() == null) {
+		if (IndexTerm.getTermLocale() == null ||
+				IndexTerm.getTermLocale().getLanguage().trim().length()==0) {
 			IndexTerm.setTermLocale(new Locale(Constants.LANGUAGE_EN,
 					Constants.COUNTRY_US));
 		}

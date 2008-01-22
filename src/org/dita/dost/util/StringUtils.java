@@ -12,6 +12,7 @@ package org.dita.dost.util;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.Map;
 import java.util.StringTokenizer;
 
@@ -305,4 +306,90 @@ public class StringUtils {
 		}
 		
 	}
+	
+
+		/**
+		 * Return a Java Locale object
+		 * @param anEncoding
+		 * @return
+		 */
+	
+		public static Locale getLocale(String anEncoding){
+			Locale aLocale = null;
+			String country = null;
+			String language = null;
+			String variant = null;
+			
+			//Tokenize the string using "-" as the token string as per IETF RFC4646 (superceeds RFC3066).
+			
+			StringTokenizer tokenizer = new StringTokenizer(anEncoding, "-");
+			
+			//We need to know how many tokens we have so we can create a Locale object with the proper constructor.
+			int numberOfTokens = tokenizer.countTokens();
+			
+			if (numberOfTokens == 1) { 
+				String tempString = tokenizer.nextToken().toLowerCase();
+				
+				//Note: Newer XML parsers should throw an error if the xml:lang value contains 
+				//underscore. But this is not guaranteed.
+				
+				//Check to see if some one used "en_US" instead of "en-US".  
+				//If so, the first token will contain "en_US" or "xxx_YYYYYYYY". In this case,
+				//we will only grab the value for xxx. 
+				int underscoreIndex = tempString.indexOf("_");
+				
+				if (underscoreIndex == -1){
+					language = tempString;
+				}else if (underscoreIndex == 2 | underscoreIndex == 3){
+					//check is first subtag is two or three characters in length.
+					language = tempString.substring(0, underscoreIndex);
+				}
+				
+				aLocale = new Locale(language);
+			} else if (numberOfTokens == 2) {
+				
+				language = tokenizer.nextToken().toLowerCase();
+				
+				String subtag2 = tokenizer.nextToken();
+				//All country tags should be three characters or less.  
+				//If the subtag is longer than three characters, it assumes that 
+				//is a dialect or variant. 
+				if (subtag2.length() <= 3){
+					country = subtag2.toUpperCase();
+					aLocale = new Locale(language, country);
+				}else if (subtag2.length() > 3 && subtag2.length() <= 8){
+					variant = subtag2;
+					aLocale = new Locale(language, "", variant);
+				}else if (subtag2.length() > 8){
+					//return an error!
+				}
+				
+				
+				
+			} else if (numberOfTokens >= 3) {
+				
+				language = tokenizer.nextToken().toLowerCase();
+				String subtag2 = tokenizer.nextToken();
+				if (subtag2.length() <= 3){
+					country = subtag2.toUpperCase();
+				}else if (subtag2.length() > 3 && subtag2.length() <= 8){
+					variant = subtag2;
+				}else if (subtag2.length() > 8){
+					//return an error!
+				}
+				variant = tokenizer.nextToken();
+				
+				aLocale = new Locale(language, country, variant);
+				
+			}else {
+			  //return an warning or do nothing.  
+			  //The xml:lang attribute is empty.
+				aLocale = new Locale(Constants.LANGUAGE_EN,
+						Constants.COUNTRY_US);
+				
+			}
+	
+			return aLocale; 
+		 }
+		
 }

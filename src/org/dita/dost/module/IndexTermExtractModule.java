@@ -158,9 +158,9 @@ public class IndexTermExtractModule implements AbstractPipelineModule {
 		IndexTermCollection.getInstantce().setIndexType(indextype);
 
 		if (encoding != null && encoding.trim().length() > 0) {
-			Locale locale = new Locale(encoding.substring(0, 2), encoding
-					.substring(3, 5));
-			IndexTerm.setTermLocale(locale);
+//			Locale locale = new Locale(encoding.substring(0, 2), encoding
+//					.substring(3, 5));
+			IndexTerm.setTermLocale(StringUtils.getLocale(encoding));
 		}
 	}
 

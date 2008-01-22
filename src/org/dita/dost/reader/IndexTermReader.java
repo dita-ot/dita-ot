@@ -240,13 +240,13 @@ public class IndexTermReader extends AbstractXMLReader {
 			
 			if (xmlLang != null) {
 				Locale locale;
-				if (xmlLang.length() == 5) {
-					locale = new Locale(xmlLang.substring(0, 2).toLowerCase(),
-							xmlLang.substring(3, 5).toUpperCase());
-				} else {
-					locale = new Locale(xmlLang.substring(0, 2).toLowerCase());
-				}
-				IndexTerm.setTermLocale(locale);
+//				if (xmlLang.length() == 5) {
+//					locale = new Locale(xmlLang.substring(0, 2).toLowerCase(),
+//							xmlLang.substring(3, 5).toUpperCase());
+//				} else {
+//					locale = new Locale(xmlLang.substring(0, 2).toLowerCase());
+//				}
+				IndexTerm.setTermLocale(StringUtils.getLocale(xmlLang));
 			}
 		}
 
