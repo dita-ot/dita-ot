@@ -97,7 +97,6 @@ See the accompanying license.txt file for applicable licenses.
 		<relrow>
 			<relcell>
 				<topicgroup collection-type="family">
-					<topicref href="../core_vocabulary/aboutditacore.dita"/>
 					<topicref href="../core_vocabulary/controlled_vocabulary.dita"/>
 					<topicref href="../core_vocabulary/core_vocabulary.dita"/>
 				</topicgroup>

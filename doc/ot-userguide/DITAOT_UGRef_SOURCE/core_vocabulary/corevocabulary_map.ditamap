@@ -7,7 +7,6 @@ See the accompanying license.txt file for applicable licenses.
 -->
 <map id="ditacore_map" title="DITA core vocabulary">
 	<topicref href="core_vocabulary.dita" type="concept">
-		<topicref href="aboutditacore.dita" type="concept"/>
 		<topicref href="administrator_manager.dita" type="concept"/>
 		<topicref href="ant.dita" type="concept"/>
 		<topicref href="ant_processing_parameter.dita" type="concept"/>
@@ -91,6 +90,7 @@ See the accompanying license.txt file for applicable licenses.
 		<topicref href="post_requirement_element.dita" type="concept"/>
 		<topicref href="prerequisite_element.dita" type="concept"/>
 		<topicref href="print_document_designer.dita" type="concept"/>
+		<topicref href="processing_attribute.dita" type="concept"/>
 		<topicref href="processing_building.dita" type="concept"/>
 		<topicref href="project_manager.dita" type="concept"/>
 		<topicref href="prolog_element.dita" type="concept"/>
@@ -134,6 +134,7 @@ See the accompanying license.txt file for applicable licenses.
 		<topicref href="xhtml.dita" type="concept"/>
 		<topicref href="xml.dita" type="concept"/>
 		<topicref href="xml_declaration.dita" type="concept"/>
+		<topicref href="xnal.dita" type="concept"/>
 		<topicref href="xpath.dita" type="concept"/>
 		<topicref href="xslt.dita" type="concept"/>
 	</topicref>

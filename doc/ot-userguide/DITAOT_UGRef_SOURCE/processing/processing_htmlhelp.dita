@@ -16,7 +16,7 @@ See the accompanying license.txt file for applicable licenses.
 		</copyright>
 		<critdates>
 			<created date="2006-June-10"/>
-			<revised modified="2007-April-15"/>
+			<revised modified="2007-December-02"/>
 		</critdates>
 		<metadata>
 			<keywords>
@@ -33,7 +33,7 @@ See the accompanying license.txt file for applicable licenses.
 			<prodinfo>
 				<prodname>DITA Open Toolkit</prodname>
 				<vrmlist>
-					<vrm version="1.3.1"/>
+					<vrm version="1.4.1"/>
 				</vrmlist>
 			</prodinfo>
 		</metadata>
@@ -70,14 +70,14 @@ See the accompanying license.txt file for applicable licenses.
 				</info>
 			</step>
 			<step>
-				<cmd>In the Command Prompt window, go to <filepath>MY_DITA_SOURCE/samples/garage/ant_scripts</filepath> and invoke the above Ant script.</cmd>
+				<cmd>In the Command Prompt window, go to <filepath>DITASAMPLE_GARAGE_SOURCE/samples/garage/ant_scripts</filepath> and invoke the above Ant script.</cmd>
 				<stepxmp>For example: <userinput>ant -f garage_hierarchy_htmlhelp.xml</userinput>
 				</stepxmp>
 				<info>Alternatively, if you are processing in the Windows environment, you can use the garage sample batch script (<filepath>runbuild.bat</filepath>): <userinput>runbuild dita2htmlhelp</userinput>. The batch script is in the <filepath>DITASAMPLE_GARAGE_SOURCE</filepath> directory. The processing is the same, except the batch script filters some of the processing messages into the log file, which is created in the <filepath>DITASAMPLE_GARAGE_OUTPUT</filepath> directory during processing.</info>
 				<info>Alternatively, if you are processing in the Linux or UNIX environment, you can create your own batch script to perform the same functions as <filepath>runbuild.bat</filepath>.</info>
 			</step>
 			<step>
-				<cmd>After the HTML Help file has processed successfully, move to the <filepath>MY_DITA_OUTPUT</filepath> directory.</cmd>
+				<cmd>After the HTML Help file has processed successfully, move to the <filepath>DITASAMPLE_GARAGE_OUTPUT</filepath> directory.</cmd>
 				<info>Your directory structure should look like this:
 				<p>
 						<image href="../images/processing_htmlhelp1.png"/>

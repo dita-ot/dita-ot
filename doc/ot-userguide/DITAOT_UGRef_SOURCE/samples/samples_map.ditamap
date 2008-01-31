@@ -7,5 +7,7 @@ See the accompanying license.txt file for applicable licenses.
 -->
 <map id="samples_map" title="Sample files">
 	<topicref href="samples.dita">
+		<topicref href="samples_garage.dita"/>
+		<topicref href="samples_groceryshopping.dita"/>
 	</topicref>
 </map>

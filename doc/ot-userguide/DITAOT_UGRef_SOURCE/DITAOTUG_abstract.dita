@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- (c) Copyright 2006-2007 VR Communications, Inc. All rights reserved. -->
-<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "../dtd/topic.dtd">
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "../dtd/concept.dtd">
 <!-- 
 This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
 See the accompanying license.txt file for applicable licenses.
 -->
-<topic id="ditaug_preface" xml:lang="en-us">
-	<title>Colophon</title>
+<concept id="ditaug_abstract" xml:lang="en-us">
+	<title>Abstract</title>
 	<shortdesc>Authoring and publishing information for this document.</shortdesc>
 	<prolog>
 		<author type="creator">Anna van Raaphorst</author>
@@ -18,7 +18,7 @@ See the accompanying license.txt file for applicable licenses.
 		</copyright>
 		<critdates>
 			<created date="2006-May-01"/>
-			<revised modified="2007-April-18"/>
+			<revised modified="2007-December-16"/>
 		</critdates>
 		<metadata>
 			<keywords>
@@ -64,12 +64,12 @@ See the accompanying license.txt file for applicable licenses.
 			<prodinfo>
 				<prodname>DITA Open Toolkit</prodname>
 				<vrmlist>
-					<vrm version="1.3.1"/>
+					<vrm version="1.4.1"/>
 				</vrmlist>
 			</prodinfo>
 		</metadata>
 	</prolog>
-	<body>
+	<conbody>
 		<dl>
 			<dlentry>
 				<dt>Title</dt>
@@ -79,35 +79,30 @@ See the accompanying license.txt file for applicable licenses.
 			</dlentry>
 			<dlentry>
 				<dt>Edition, release, copyright</dt>
-				<dd>Third edition, April 18, 2007. Based on release 1.3.1 of DITA Open Toolkit. All files copyright 2006-2007 by VR Communications, Inc., unless otherwise indicated. Licensing and usage of this document and related materials is regulated by a Common Public License (CPL) granted by OASIS (Organization for the Advancement of Structured Information Standards), <xref href="http://www.oasis-open.org" format="html" scope="external"/>.</dd>
+				<dd>Fourth edition, December 17, 2007. Based on release 1.4.1 of DITA Open Toolkit. All files copyright 2006-2007 by VR Communications, Inc., unless otherwise indicated. Licensing and usage of this document and related materials is regulated by a Common Public License (CPL) granted by OASIS (Organization for the Advancement of Structured Information Standards), <xref href="http://www.oasis-open.org" format="html" scope="external"/>.</dd>
 			</dlentry>
 			<dlentry>
 				<dt>Publishing information</dt>
-				<dd>DITA Open Toolkit is an open-source, reference implementation of the OASIS DITA standard (currently DITA 1.0).</dd>
+				<dd>DITA Open Toolkit is an open-source, reference implementation of the OASIS DITA standard (currently DITA 1.1).</dd>
 			</dlentry>
 			<dlentry>
 				<dt>Authors</dt>
-				<dd>Anna van Raaphorst and Richard H. (Dick) Johnson, principals, VR Communications, Inc. (<xref href="http://www.vrcommunications.com" format="html" scope="external"/>). DITA logo artwork by Elizabeth Tichenor  (<xref href="http://www.elizabethtichenor.com" format="html" scope="external"/>)
+				<dd>Anna van Raaphorst and Richard H. (Dick) Johnson, principals, VR Communications, Inc. (<xref href="http://www.vrcommunications.com" format="html" scope="external"/>). DITA logo artwork by Elizabeth Tichenor.
 				</dd>
 			</dlentry>
 			<dlentry>
 				<dt>Major changes in this edition</dt>
 				<dd>
 					<ul>
-						<li>The document title has been shortened</li>
-						<li>The document has been significantly restructured</li>
-						<li>New topics include key concepts, processing overview, localization, content reuse, building from within Eclipse, configuring the Eclipse XMLBuddy editor, creating Eclipse Infocenters, and publishing to XHTML using a frameset</li>
+						<li>Information about DITA Open Toolkit 1.4 and 1.4.1 has been added</li>
+						<li>The document has been restructured to use the 1.4 bookmap capabilities, which are part of the DITA 1.1 standard</li>
 					</ul>
 				</dd>
 			</dlentry>
 			<dlentry>
 				<dt>Acknowledgements</dt>
-				<dd>The authors would like to thank those members of the DITA community who have authored or contributed content to this document: Kylene Bruski, Don Day, Anne Gentle, JoAnn Hackos, Jennifer Linton, Deborah Pickett, Michael Priestley, Nat Wyatt, Stephen Zhang, and various anonymous IBM writers. We are also grateful to others in the community who have offered valuable encouragement, feedback, suggestions, and sources of information: Robert Anderson, Bernard Aschwanden, Ricardo Mattiazzi Baumgartner, Bob Doyle, Andy Hall, Erik Hennum, Carolyn Henry, Ellen Livengood, Shawn McKenzie, Scott Prentice, Paul Prescod, Todd Rose, Kate Wilhelm, Stacey Winn, Chris Wong, and Bonnie Yelverton.</dd>
-			</dlentry>
-			<dlentry>
-				<dt>Invitation to contribute to future editions</dt>
-				<dd>The authors invite others in the DITA community to contribute to future editions of this document. To contact us: <xref href="http://www.vrcommunications.com/aboutus.htm" format="html" scope="external"/>.</dd>
+				<dd>The authors would like to thank those members of the DITA community who have authored or contributed content to the current document or earlier editions of this document: Kylene Bruski, Don Day, Anne Gentle, JoAnn Hackos, Jennifer Linton, Deborah Pickett, Michael Priestley, Nat Wyatt, Mike Temple, and Stephen Zhang. We are also grateful to others in the community who have offered valuable encouragement, feedback, suggestions, and sources of information: Robert Anderson, Bernard Aschwanden, Ricardo Mattiazzi Baumgartner, Bob Doyle, Andy Hall, Erik Hennum, Carolyn Henry, Ellen Livengood, Shawn McKenzie, Scott Prentice, Paul Prescod, Todd Rose, Kate Wilhelm, Stacey Winn, Chris Wong, and Bonnie Yelverton.</dd>
 			</dlentry>
 		</dl>
-	</body>
-</topic>
+	</conbody>
+</concept>

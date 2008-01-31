@@ -14,6 +14,35 @@
   and reporting tools.
 */
  
+function my_simplexml_load_file($f)
+{
+  /* optional debugging output */
+  if( $dbg_flag )
+  {
+    print("**my-simplexml_load " . $f . "\n");
+  }
+
+  $s=@file_get_contents($f);
+  if($s === FALSE )
+  {
+    $xml=$s;
+    print("Error, could not read file " . $f . "\n");
+  }
+  else
+  {
+    if(strlen($s)>0)
+    {
+      $s=str_replace("><",">\n<",$s);
+      $xml=simplexml_load_string($s);
+    }
+    else
+      $xml=FALSE;
+  }
+
+  return $xml;
+
+}
+
 /*
   Scan for unused files in a directory
 */
@@ -201,7 +230,7 @@ function myscanfile ($dbg_flag,$ref_flag, $fin,$ids,&$ref,&$reftype,&$refcon,&$f
     {
       /* validate id reference(s) */
       /* try to load and parse the file */
-      $xml = @simplexml_load_file($f);
+      $xml = @my_simplexml_load_file($f);
       if( $xml != FALSE ) /* could we parse it? */
       {
         /* search for matching ids */
@@ -230,7 +259,7 @@ function myscanfile ($dbg_flag,$ref_flag, $fin,$ids,&$ref,&$reftype,&$refcon,&$f
   $nrefs = count($refs);
 
   /* try to load and parse the file */
-  $xml = @simplexml_load_file($f);
+  $xml = @my_simplexml_load_file($f);
 
   if( $xml != FALSE ) /* could we parse it? */
   {
@@ -363,6 +392,15 @@ function check_ids($dbg_flag, $xml, $idtopic, $idelem)
 
     if( !$idtopicflag || ( (strlen($idelem)>0) && !$idelemflag ) )
     {
+      if($idtopicflag==false)
+      {
+        print("topic id " . $idtopic . " not found.\n");
+      }
+      else
+      {
+        if($idelemflag==false)
+          print("element id " . $idelem . " not found.\n");
+      }
       /* one or more ids not found! */
       $rc = false;
     }
@@ -418,6 +456,12 @@ function parse_ids($dbg_flag, $ids, &$idtopic, &$idelem)
 */
 function getDOCTYPE($f)
 {
+  static $dtsave;
+
+  /* if value is cached, just return it */
+  if( isset($dtsave[$f]) )
+    return $dtsave[$f];
+
   global $dbg_flag;
   if( $dbg_flag )
     print("**getDOCTYPE " . $f . "\n");
@@ -427,11 +471,11 @@ function getDOCTYPE($f)
   if( isURL($f) )
   {
     if( substr_count($f,"http:")>0 )
-      return "http:";
+      $rc = "http:";
     if( substr_count($f,"https:")>0 )
-      return "https:";
+      $rc = "https:";
     else 
-      return "*URL*";
+      $rc = "*URL*";
   }
   else
   {
@@ -463,6 +507,7 @@ function getDOCTYPE($f)
     }
   }
 
+  $dtsave[$f]=$rc; /* cache value */
   return $rc;
 }
 
@@ -593,7 +638,7 @@ function get_ids($dbg_flag, $f, &$idfile, &$idid)
     print("**get_ids: " . $f . "\n");
 
   /* try to load and parse the file */
-  $xml = @simplexml_load_file($f);
+  $xml = @my_simplexml_load_file($f);
   if( $xml != FALSE ) /* could we parse it? */
   {
     foreach( $xml->xpath('//@id') as $ids )
@@ -618,7 +663,9 @@ function get_ids($dbg_flag, $f, &$idfile, &$idid)
 function isURL($refp)
 {
   /* check for "file" that is really a URL */
-  if( (substr_count($refp,"http:")==0) && (substr_count($refp,"https:")==0) )
+  if( (substr_count($refp,"http:")==0) && 
+      (substr_count($refp,"mailto:")==0) && 
+      (substr_count($refp,"https:")==0) )
     $rc=false;
   else
     $rc=true;
@@ -639,6 +686,21 @@ function isIMAGE($f)
     $rc=true;
   else
     $rc=false;
+  return $rc;
+}
+
+/*
+  return true if file is some kind of map
+*/
+function ismap($f)
+{
+  $dt=getDOCTYPE($f);
+
+  if( ($dt=="map") || ($dt=="chapter") )
+    $rc=true;
+  else
+    $rc=false;
+
   return $rc;
 }
 
@@ -719,7 +781,7 @@ function getdesc($f)
   if( !isURL($f) && !isIMAGE($f) )
   {
     /* try to load and parse the file */
-    $xml = @simplexml_load_file($f);
+    $xml = @my_simplexml_load_file($f);
     if( $xml != FALSE ) /* could we parse it? */
     {
       foreach( $xml->xpath('//title') as $xsd)
@@ -747,7 +809,7 @@ function getAuthor($f)
   if( !isURL($f) && !isIMAGE($f) )
   {
     /* try to load and parse the file */
-    $xml = @simplexml_load_file($f);
+    $xml = @my_simplexml_load_file($f);
     if( $xml != FALSE ) /* could we parse it? */
     {
       foreach( $xml->xpath('//author[@type="creator"]') as $xauth)

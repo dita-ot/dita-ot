@@ -16,7 +16,7 @@ See the accompanying license.txt file for applicable licenses.
 		</copyright>
 		<critdates>
 			<created date="2006-May-01"/>
-			<revised modified="2007-April-03"/>
+			<revised modified="2007-June-29"/>
 		</critdates>
 		<metadata>
 			<keywords>
@@ -30,7 +30,7 @@ See the accompanying license.txt file for applicable licenses.
 			<prodinfo>
 				<prodname>DITA Open Toolkit</prodname>
 				<vrmlist>
-					<vrm version="1.3.1"/>
+					<vrm version="1.4.1"/>
 				</vrmlist>
 			</prodinfo>
 		</metadata>
@@ -43,28 +43,6 @@ See the accompanying license.txt file for applicable licenses.
 				<li>The build failed. You got a BUILD FAILED message from Ant.</li>
 			</ul>
 		</p>
-		<p>This section helps you deal with the second and third cases, where you need to debug processing problems. It describes tools and mechanisms available to you in the Toolkit itself, other tools available for the Ant/Java environment, and various strategies you can apply to find and fix processing errors quickly.</p>
-		<p>Sections in this topic:
-		<sl otherprops="pdf">
-				<sli>
-					<xref href="aboutlog.dita"/>
-				</sli>
-				<sli>
-					<xref href="error_messages.dita"/>
-				</sli>
-				<sli>
-					<xref href="classpath_environment.dita"/>
-				</sli>
-				<sli>
-					<xref href="debugging_tools.dita"/>
-				</sli>
-				<sli>
-					<xref href="troubleshooting_ditablogs.dita"/>
-				</sli>
-				<sli>
-					<xref href="troubleshooting_formoreinfo.dita"/>
-				</sli>
-			</sl>
-		</p>
+		<p>This chapter helps you deal with the second and third cases, where you need to debug processing problems. It describes tools and mechanisms available to you in the Toolkit itself, other tools available for the Ant/Java environment, and various strategies you can apply to find and fix processing errors quickly.</p>
 	</conbody>
 </concept>

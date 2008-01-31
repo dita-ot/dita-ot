@@ -6,7 +6,6 @@ See the accompanying license.txt file for applicable licenses.
 -->
 <concept id="ditacore">
 	<title>DITA core vocabulary</title>
-	<shortdesc>This section contains information about the DITA core vocabulary, a list of the terms in the vocabulary, and links to related terms and other information.</shortdesc>
 	<prolog>
 		<author type="creator">Anna van Raaphorst</author>
 		<author type="contributor">Richard Johnson</author>
@@ -17,7 +16,7 @@ See the accompanying license.txt file for applicable licenses.
 		</copyright>
 		<critdates>
 			<created date="2006-May-30"/>
-			<revised modified="2007-March-31"/>
+			<revised modified="2007-June-27"/>
 		</critdates>
 		<metadata>
 			<keywords>
@@ -31,12 +30,24 @@ See the accompanying license.txt file for applicable licenses.
 			<prodinfo>
 				<prodname>DITA Open Toolkit</prodname>
 				<vrmlist>
-					<vrm version="1.3.1"/>
+					<vrm version="1.4.1"/>
 				</vrmlist>
 			</prodinfo>
 		</metadata>
 	</prolog>
 	<conbody>
-		<p/>
+		<p>The DITA core vocabulary is a set of terms related to the DITA standard and DITA Open Toolkit. It is intended to be used as a controlled or specialized metadata vocabulary for describing and documenting DITA, DITA Open Toolkit, and other resources related to DITA or the Toolkit.</p>
+		<p>Inspiration for this effort is the Dublin Core Metadata Initiative (DCMI), an organization dedicated to promoting the widespread adoption of interoperable metadata standards and developing specialized metadata vocabularies for describing resources that enable intelligent information discovery systems. The mission for the DCMI is to provide simple standards to facilitate the finding, sharing and management of information.
+</p>
+		<p>In the spirit of the DCMI effort, the key goals (and potential benefits) of the DITA core vocabulary are to:
+		<ul>
+				<li>Facilitate the finding, sharing and management of information about DITA, DITA Open Toolkit, and related technologies</li>
+				<li>Promote understand and widespread usage of DITA and the Toolkit</li>
+				<li>Make the terms accessible and "reusable" locally in this document and by the greater DITA community by creating the vocabulary as a set of DITA topics and publishing them in the <cite>DITA Open Toolkit User Guide</cite>
+				</li>
+				<li>As much as possible, use DCMI metadata in documenting DITA core vocabulary topics</li>
+			</ul>
+		</p>
+		<p>Without a common understanding of "what we are talking about" and how our dialog relates to resources and information that are part of DITA and the Toolkit, these goals are much more difficult to achieve. We invite the DITA community to participate in the effort to create, promote, and use the DITA core vocabulary.</p>
 	</conbody>
 </concept>

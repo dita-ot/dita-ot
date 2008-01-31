@@ -7,5 +7,13 @@ See the accompanying license.txt file for applicable licenses.
 -->
 <map id="gettinginformation_map" title="Getting started">
 	<topicref href="gettinginformation.dita">
+	<topicref href="generalinfo.dita"/>
+	<topicref href="toolsdownloads.dita"/>
+	<topicref href="trainingeducation.dita"/>
+	<topicref href="consulting.dita"/>
+	<topicref href="standardsreleases.dita"/>
+	<topicref href="usage.dita"/>
+	<topicref href="usergroups.dita"/>
+	<topicref href="conferences.dita"/>
 		</topicref>
 </map>

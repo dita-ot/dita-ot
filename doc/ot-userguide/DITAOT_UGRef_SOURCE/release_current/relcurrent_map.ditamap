@@ -6,5 +6,7 @@ This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
 See the accompanying license.txt file for applicable licenses.
 -->
 <map id="relcurrent_map" title="Current release">
-	<topicref href="release_current.dita"/>
+	<topicref href="release_current.dita">
+	<topicref href="release_14.dita"/>
+	</topicref>
 </map>

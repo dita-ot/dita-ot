@@ -34,7 +34,7 @@ See the accompanying license.txt file for applicable licenses.
 			<prodinfo>
 				<prodname>DITA Open Toolkit</prodname>
 				<vrmlist>
-					<vrm version="1.3.1"/>
+					<vrm version="1.4.1"/>
 				</vrmlist>
 			</prodinfo>
 		</metadata>

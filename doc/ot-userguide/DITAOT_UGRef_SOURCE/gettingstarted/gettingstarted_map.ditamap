@@ -7,5 +7,8 @@ See the accompanying license.txt file for applicable licenses.
 -->
 <map id="gettingstarted_map" title="Getting started">
 	<topicref href="gettingstarted.dita">
+	<topicref href="planning.dita"/>
+	<topicref href="settingup.dita"/>
+	<topicref href="implementing.dita"/>
 		</topicref>
 </map>

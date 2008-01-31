@@ -18,9 +18,9 @@ See the accompanying license.txt file for applicable licenses.
 		<topicref href="css_custom.dita"/>
 		<topicref href="xslt_processing.dita"/>
 		<topicref href="xhtml_custom.dita">
-		<topicref href="xhtml_overview.dita"/>
-		<topicref href="xhtml_headerfooter.dita"/>
-		<topicref href="xhtml_frameset.dita"/>
+			<topicref href="xhtml_overview.dita"/>
+			<topicref href="xhtml_headerfooter.dita"/>
+			<topicref href="xhtml_frameset.dita"/>
 		</topicref>
 		<topicref href="pdf_cover.dita"/>
 		<topicref href="customizing_ditablogs.dita"/>

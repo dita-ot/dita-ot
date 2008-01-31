@@ -6,7 +6,6 @@ See the accompanying license.txt file for applicable licenses.
 -->
 <reference id="antparms">
 	<title>Ant processing parameters</title>
-	
 	<prolog>
 		<author type="creator">Richard Johnson</author>
 		<author type="contributor">Anna van Raaphorst</author>
@@ -17,7 +16,7 @@ See the accompanying license.txt file for applicable licenses.
 		</copyright>
 		<critdates>
 			<created date="2006-June-06"/>
-			<revised modified="2007-April-18"/>
+			<revised modified="2007-December-02"/>
 		</critdates>
 		<metadata>
 			<keywords>
@@ -62,6 +61,10 @@ See the accompanying license.txt file for applicable licenses.
 					<indexterm>dita.temp.dir</indexterm>
 					<indexterm>output.dir</indexterm>
 					<indexterm>transtype</indexterm>
+					<indexterm>validate</indexterm>
+					<indexterm>outer.control</indexterm>
+					<indexterm>generate.copy.outer</indexterm>
+					<indexterm>onlytopic.in.map</indexterm>
 				</indexterm>
 				<indexterm>args.artlbl Ant parameter</indexterm>
 				<indexterm>args.copycss Ant parameter</indexterm>
@@ -94,11 +97,15 @@ See the accompanying license.txt file for applicable licenses.
 				<indexterm>dita.temp.dir Ant parameter</indexterm>
 				<indexterm>output.dir Ant parameter</indexterm>
 				<indexterm>transtype Ant parameter</indexterm>
+				<indexterm>validate Ant parameter</indexterm>
+				<indexterm>outer.control Ant parameter</indexterm>
+				<indexterm>generate.copy.outer Ant parameter</indexterm>
+				<indexterm>onlytopic.in.map Ant parameter</indexterm>
 			</keywords>
 			<prodinfo>
 				<prodname>DITA Open Toolkit</prodname>
 				<vrmlist>
-					<vrm version="1.3.1"/>
+					<vrm version="1.4"/>
 				</vrmlist>
 			</prodinfo>
 		</metadata>
@@ -411,11 +418,11 @@ See the accompanying license.txt file for applicable licenses.
 						<p>These targets only: eclipsehelp, htmlhelp, javahelp, or xhtml</p>
 					</stentry>
 					<stentry>
-						<p>URI of the file containing XHTML to be placed in the body running-footer area of the output file.</p>
+						<p>Path to the file containing XHTML to be placed in the body running-footer area of the output file.</p>
 						<p>The file must be well-formed XML.</p>
 					</stentry>
 					<stentry>
-						<p>Example: <filepath>&lt;property name="args.ftr" value="file:/C:/sandbox/myftr.xml"/&gt;</filepath>
+						<p>Example: <filepath>&lt;property name="args.ftr" value="C:/sandbox/myftr.xml"/&gt;</filepath>
 						</p>
 					</stentry>
 				</strow>
@@ -431,11 +438,11 @@ See the accompanying license.txt file for applicable licenses.
 						<p>These targets only: eclipsehelp, htmlhelp, javahelp, or xhtml</p>
 					</stentry>
 					<stentry>
-						<p>URI of the file containing XHTML to be placed in the header area of the output file.</p>
+						<p>Path to the file containing XHTML to be placed in the header area of the output file.</p>
 						<p>The file must be well-formed XML.</p>
 					</stentry>
 					<stentry>
-						<p>Example: <filepath>&lt;property name="args.hdf" value="file:/C:/sandbox/myhdf.xml"/&gt;</filepath>.</p>
+						<p>Example: <filepath>&lt;property name="args.hdf" value="C:/sandbox/myhdf.xml"/&gt;</filepath>.</p>
 					</stentry>
 				</strow>
 				<strow>
@@ -450,11 +457,11 @@ See the accompanying license.txt file for applicable licenses.
 						<p>These targets only: eclipsehelp, htmlhelp, javahelp, or xhtml</p>
 					</stentry>
 					<stentry>
-						<p>URI of the file containing XHTML to be placed in the body running-header area of the output file.</p>
+						<p>Path to the file containing XHTML to be placed in the body running-header area of the output file.</p>
 						<p>The file must be well-formed XML.</p>
 					</stentry>
 					<stentry>
-						<p>Example: <filepath>&lt;property name="args.hdr" value="file:/C:/sandbox/myhdr.xml"/&gt;</filepath>
+						<p>Example: <filepath>&lt;property name="args.hdr" value="C:/sandbox/myhdr.xml"/&gt;</filepath>
 						</p>
 					</stentry>
 				</strow>
@@ -770,6 +777,26 @@ See the accompanying license.txt file for applicable licenses.
 						<p>
 							<b>
 								<filepath>
+										onlytopic.in.map
+									</filepath>
+							</b>
+						</p>
+						<p>All targets</p>
+					</stentry>
+					<stentry>
+						<p>Should files not referenced in ditamap be resolved.
+						</p>
+					</stentry>
+					<stentry>
+						<p>Valid: true or false</p>
+						<p>Default: false</p>
+					</stentry>
+				</strow>
+				<strow>
+					<stentry>
+						<p>
+							<b>
+								<filepath>
 										*output.dir
 									</filepath>
 							</b>
@@ -800,6 +827,26 @@ See the accompanying license.txt file for applicable licenses.
 					<stentry>
 						<p>Valid: docbook, eclipsecontent, eclipsehelp, htmlhelp, javahelp, pdf, troff, wordrtf, or xhtml</p>
 						<p>Example: &lt;property name="transtype" value="htmlhelp"&gt;</p>
+					</stentry>
+				</strow>
+				<strow>
+					<stentry>
+						<p>
+							<b>
+								<filepath>
+										validate
+									</filepath>
+							</b>
+						</p>
+						<p>All targets</p>
+					</stentry>
+					<stentry>
+						<p>Should input files be validated.
+						</p>
+					</stentry>
+					<stentry>
+						<p>Valid: yes or no</p>
+						<p>Default: no</p>
 					</stentry>
 				</strow>
 			</simpletable>

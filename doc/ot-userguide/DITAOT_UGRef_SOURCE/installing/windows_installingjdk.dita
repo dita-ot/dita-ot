@@ -20,7 +20,7 @@ See the accompanying license.txt file for applicable licenses.
 		</copyright>
 		<critdates>
 			<created date="2005-November-01"/>
-			<revised modified="2007-April-09"/>
+			<revised modified="2007-December-02"/>
 		</critdates>
 		<metadata>
 			<keywords>
@@ -40,7 +40,7 @@ See the accompanying license.txt file for applicable licenses.
 			<prodinfo>
 				<prodname>DITA Open Toolkit</prodname>
 				<vrmlist>
-					<vrm version="1.3.1"/>
+					<vrm version="1.4.1"/>
 				</vrmlist>
 			</prodinfo>
 		</metadata>
@@ -48,19 +48,18 @@ See the accompanying license.txt file for applicable licenses.
 	<taskbody>
 		<steps>
 			<step>
-				<cmd>For the Sun version of the JDK, enter  the URL <xref format="html" href="http://java.sun.com/j2se/1.4.2/download.html" scope="external"/>.</cmd>
+				<cmd>For the Sun version of the JDK, enter  the URL <xref format="html" href="http://java.sun.com/javase/downloads/index.jsp" scope="external"/>.</cmd>
 			</step>
 			<step>
 				<cmd>From the Sun Developer Network page, scroll to find the heading 
-          <uicontrol>J2SE v 1.4.2_13 SDK</uicontrol> (that is, _13 or whatever the latest versionis that works with the Toolkit).</cmd>
+          <uicontrol>JDK 6 Update 3</uicontrol>.</cmd>
 			</step>
 			<step>
-				<cmd>Select <uicontrol>Download J2SE SDK</uicontrol>.</cmd>
+				<cmd>Select <uicontrol>Download JDK 6</uicontrol>.</cmd>
 			</step>
 			<step>
 				<cmd>From the Sun Developer Network page, accept the license agreement 
-          and scroll to the heading "Windows Platform - Java(TM) 2 SDK, 
-          Standard Edition 1.4.2_13".</cmd>
+          and scroll to the heading "Windows Platform - Java(TM) 2 SDK".</cmd>
 			</step>
 			<step>
 				<cmd>Select and download <uicontrol>Windows Installation, 
@@ -70,12 +69,9 @@ See the accompanying license.txt file for applicable licenses.
 				<cmd>Save and install the <filepath>.exe</filepath> file.
 				</cmd>
 			</step>
+			
 			<step>
-				<cmd>If prompted, install the JDK to 
-          <filepath>C:\j2sdk1.4.2_13</filepath>.</cmd>
-			</step>
-			<step>
-				<cmd>Set the <varname>JAVA_HOME</varname> environment variable to <codeph>C:\j2sdk1.4.2_13</codeph>.</cmd>
+				<cmd>Set the <varname>JAVA_HOME</varname> environment variable to <codeph>C:\Program Files\Java\jdk1.6.0_03</codeph>.</cmd>
 			</step>
 		</steps>
 		<postreq>
