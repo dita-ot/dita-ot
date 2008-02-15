@@ -174,7 +174,12 @@ public class MergeMapParser extends AbstractXMLReader {
 		mapInfo.append(Constants.GREATER_THAN);
 		
 	}
-	
-	
+
+	public void processingInstruction(String target, String data)
+			throws SAXException {
+		String pi = (data != null) ? target + Constants.STRING_BLANK + data : target;
+        mapInfo.append(Constants.LESS_THAN + Constants.QUESTION 
+                + pi + Constants.QUESTION + Constants.GREATER_THAN);
+	}
 
 }

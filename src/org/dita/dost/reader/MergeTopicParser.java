@@ -302,6 +302,15 @@ public class MergeTopicParser extends AbstractXMLReader {
         pathFromMap = FileUtils.resolveTopic(new File(filePath).getParent(),attValue);
         return pathFromMap;
 	}
+
+
+
+	public void processingInstruction(String target, String data)
+			throws SAXException {
+		String pi = (data != null) ? target + Constants.STRING_BLANK + data : target;
+        topicInfo.append(Constants.LESS_THAN + Constants.QUESTION 
+                + pi + Constants.QUESTION + Constants.GREATER_THAN);
+	}
 	
 
 }
