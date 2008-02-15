@@ -49,6 +49,8 @@ public abstract class IndexDitaProcessor {
     private static final String SO = "<so>";
     private static final String LT = "<";
     private static final String GT = ">";
+    private static final String sortStart = "[";
+    private static final String sortEnd = "]";
 
     public static IndexEntry[] processIndexDitaNode(Node theNode, String theParentValue) {
 
@@ -107,10 +109,16 @@ public abstract class IndexDitaProcessor {
             }
         }
 */
-        String textValue = normalizeTextValue(textValueBuffer.toString());
+		String textValue = normalizeTextValue(textValueBuffer.toString());
         String sortString = sortStringBuffer.toString();
+		if (textValue.indexOf(sortStart) > -1 && textValue.indexOf(sortEnd) > -1 && sortString.length() == 0) {
+			if (textValue.indexOf(sortStart) < textValue.indexOf(sortEnd)) {
+				sortString = textValue.substring(textValue.indexOf(sortStart)+1,textValue.indexOf(sortEnd));
+				textValue = textValue.substring(0,textValue.indexOf(sortStart));
+			}
+		}
         IndexEntry result = createIndexEntry(textValue,sortString);
-        if (result.getValue().length() > 0 || endRange || startRange) {
+		if (result.getValue().length() > 0 || endRange || startRange) {
             result.setStartRange(startRange);
             result.setEndsRange(endRange);
             if (startRange) {

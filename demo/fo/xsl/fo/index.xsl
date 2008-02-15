@@ -230,9 +230,14 @@ See the accompanying license.txt file for applicable licenses.
                 </xsl:when>
             </xsl:choose>
 			<!--Insert simple index entry marker-->
-            <xsl:for-each select="child::opentopic-index:refID[last()]">
-				<fo:inline index-key="{@value}"/>
-			</xsl:for-each>
+			<xsl:choose>
+				<xsl:when test="opentopic-index:index.entry"/>
+				<xsl:otherwise>
+					<xsl:for-each select="child::opentopic-index:refID[last()]">
+						<fo:inline index-key="{@value}"/>
+					</xsl:for-each>
+				</xsl:otherwise>
+			</xsl:choose>
 
 			<xsl:apply-templates/>
         </xsl:if>
