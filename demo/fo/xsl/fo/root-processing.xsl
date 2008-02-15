@@ -86,6 +86,8 @@ See the accompanying license.txt file for applicable licenses.
         </xsl:for-each>
     </xsl:variable>
 
+	<xsl:variable name="relatedTopicrefs" select="//*[contains(@class, ' map/reltable ')]//*[contains(@class, ' map/topicref ')]"/>
+
 <!-- Root template, and topicref validation mooved from topic2fo_shell.xsl to add ability for customizaing   -->
 
     <xsl:template name="validateTopicRefs">

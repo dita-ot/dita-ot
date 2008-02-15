@@ -43,11 +43,91 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:attribute-set>
 
     <xsl:attribute-set name="related-links">
-        <xsl:attribute name="space-before.optimum">10pt</xsl:attribute>
+        <xsl:attribute name="space-after.optimum">10pt</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="related-links__content">
         <xsl:attribute name="start-indent">25pt</xsl:attribute>
+    </xsl:attribute-set>
+
+    <xsl:attribute-set name="related-links.ul">
+		<xsl:attribute name="provisional-distance-between-starts">5mm</xsl:attribute>
+		<xsl:attribute name="provisional-label-separation">1mm</xsl:attribute>
+		<xsl:attribute name="space-after.optimum">7pt</xsl:attribute>
+		<xsl:attribute name="space-before.optimum">7pt</xsl:attribute>
+		<xsl:attribute name="start-indent">25pt</xsl:attribute>
+	</xsl:attribute-set>
+
+    <xsl:attribute-set name="related-links.ul.li">
+		<xsl:attribute name="space-after.optimum">1.5pt</xsl:attribute>
+		<xsl:attribute name="space-before.optimum">1.5pt</xsl:attribute>
+	</xsl:attribute-set>
+
+    <xsl:attribute-set name="related-links.ul.li__label">
+		<xsl:attribute name="keep-together.within-line">always</xsl:attribute>
+		<xsl:attribute name="keep-with-next.within-line">always</xsl:attribute>
+		<xsl:attribute name="end-indent">label-end()</xsl:attribute>
+	</xsl:attribute-set>
+
+	<xsl:attribute-set name="related-links.ul.li__label__content">
+		<xsl:attribute name="text-align">left</xsl:attribute>
+	</xsl:attribute-set>
+
+	<xsl:attribute-set name="related-links.ul.li__body">
+		<xsl:attribute name="start-indent">body-start()</xsl:attribute>
+	</xsl:attribute-set>
+
+	<xsl:attribute-set name="related-links.ul.li__content">
+	</xsl:attribute-set>
+
+	<xsl:attribute-set name="related-links.ol">
+		<xsl:attribute name="provisional-distance-between-starts">5mm</xsl:attribute>
+		<xsl:attribute name="provisional-label-separation">1mm</xsl:attribute>
+		<xsl:attribute name="space-after.optimum">7pt</xsl:attribute>
+		<xsl:attribute name="space-before.optimum">7pt</xsl:attribute>
+		<xsl:attribute name="start-indent">25pt</xsl:attribute>
+	</xsl:attribute-set>
+
+    <xsl:attribute-set name="related-links.ol.li">
+		<xsl:attribute name="space-after.optimum">1.5pt</xsl:attribute>
+		<xsl:attribute name="space-before.optimum">1.5pt</xsl:attribute>
+	</xsl:attribute-set>
+
+    <xsl:attribute-set name="related-links.ol.li__label">
+		<xsl:attribute name="keep-together.within-line">always</xsl:attribute>
+		<xsl:attribute name="keep-with-next.within-line">always</xsl:attribute>
+		<xsl:attribute name="end-indent">label-end()</xsl:attribute>
+	</xsl:attribute-set>
+
+	<xsl:attribute-set name="related-links.ol.li__label__content">
+		<xsl:attribute name="text-align">left</xsl:attribute>
+		<xsl:attribute name="font-weight">bold</xsl:attribute>
+	</xsl:attribute-set>
+
+	<xsl:attribute-set name="related-links.ol.li__body">
+		<xsl:attribute name="start-indent">body-start()</xsl:attribute>
+	</xsl:attribute-set>
+
+	<xsl:attribute-set name="related-links.ol.li__content">
+	</xsl:attribute-set>
+
+    <xsl:attribute-set name="related-links.title">
+		<xsl:attribute name="font-weight">bold</xsl:attribute>
+	</xsl:attribute-set>
+
+    <xsl:attribute-set name="linkinfo">
+    </xsl:attribute-set>
+
+    <xsl:attribute-set name="linkinfo">
+    </xsl:attribute-set>
+
+    <xsl:attribute-set name="linkinfo">
+    </xsl:attribute-set>
+
+    <xsl:attribute-set name="linkinfo">
+    </xsl:attribute-set>
+
+    <xsl:attribute-set name="linkinfo">
     </xsl:attribute-set>
 
     <xsl:attribute-set name="linkinfo">
@@ -61,7 +141,7 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:attribute-set name="link__content">
         <xsl:attribute name="color">blue</xsl:attribute>
         <xsl:attribute name="font-style">italic</xsl:attribute>
-        <xsl:attribute name="margin-left">8pt</xsl:attribute>
+        <!--<xsl:attribute name="margin-left">8pt</xsl:attribute>-->
     </xsl:attribute-set>
 
     <xsl:attribute-set name="link__shortdesc">
