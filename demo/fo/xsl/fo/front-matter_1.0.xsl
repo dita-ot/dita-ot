@@ -131,15 +131,7 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:template match="*[contains(@class, ' bookmap/bookmeta ')]">
         <fo:block-container xsl:use-attribute-sets="__frontmatter__owner__container">
             <fo:block >
-                <fo:block>
-                    <xsl:apply-templates select="//*[contains(@class, ' xnal-d/namedetails ')]"/>
-                </fo:block>
-                <fo:block>
-                    <xsl:apply-templates select="//*[contains(@class, ' xnal-d/addressdetails ')]"/>
-                </fo:block>
-                <fo:block>
-                    <xsl:apply-templates select="//*[contains(@class, ' xnal-d/contactnumbers ')]"/>
-                </fo:block>
+				<xsl:apply-templates/>
             </fo:block>
         </fo:block-container>
     </xsl:template>
@@ -158,5 +150,35 @@ See the accompanying license.txt file for applicable licenses.
             <xsl:apply-templates select="*[contains(@class,' bookmap/mainbooktitle ')]"/>
         </fo:block>
     </xsl:template>
+
+	<xsl:template match="*[contains(@class, ' xnal-d/namedetails ')]">
+		<fo:block>
+			<xsl:apply-templates/>
+		</fo:block>
+	</xsl:template>
+
+	<xsl:template match="*[contains(@class, ' xnal-d/addressdetails ')]">
+		<fo:block>
+			<xsl:apply-templates/>
+		</fo:block>
+	</xsl:template>
+
+	<xsl:template match="*[contains(@class, ' xnal-d/contactnumbers ')]">
+		<fo:block>
+			<xsl:apply-templates/>
+		</fo:block>
+	</xsl:template>
+
+	<xsl:template match="*[contains(@class, ' bookmap/bookowner ')]">
+		<fo:block xsl:use-attribute-sets="author">
+			<xsl:apply-templates/>
+		</fo:block>
+	</xsl:template>
+
+	<xsl:template match="*[contains(@class, ' bookmap/summary ')]">
+		<fo:block xsl:use-attribute-sets="bookmap.summary">
+			<xsl:apply-templates/>
+		</fo:block>
+	</xsl:template>
 
 </xsl:stylesheet>
