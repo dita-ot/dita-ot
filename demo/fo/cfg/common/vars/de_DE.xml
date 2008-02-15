@@ -127,7 +127,7 @@ See the accompanying license.txt file for applicable licenses.
     <variable id="Table of Contents">Inhalt</variable>
 
     <!-- The heading string to put at the top of the Index -->
-    <variable id="Index">Index</variable> <variable id="Index Continued String">fuhr</variable>
+    <variable id="Index">Index</variable> <variable id="Index Continued String">Fortsetzung</variable>
 
     <!-- The string used to label a chapter within the table of contents. -->
     <variable id="Table of Contents Chapter">Kapitel&#160;<param ref-name="number" />:&#160;</variable>
