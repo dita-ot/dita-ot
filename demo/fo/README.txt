@@ -133,6 +133,13 @@ To modify these settings, copy "build.properties.orig" to
 History
 =======
 
+FO Plugin Release 1.4.2
+
+- Misc internal fixes.
+
+Sourceforge bug fixes:
+- 1710233: summary element in bookmeta not handled properly (15251)
+
 FO Plugin Release 1.4.1
 Available since Oct 5, 2007
 
