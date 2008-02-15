@@ -137,21 +137,24 @@ See the accompanying license.txt file for applicable licenses.
                     <xsl:number format="1"/>
                 </fo:marker>
             </xsl:if>
-            <xsl:choose>
-                <xsl:when test="$topicrefShortdesc/*">
-                    <xsl:apply-templates select="*[contains(@class, ' topic/title ')]"/>
-                    <xsl:apply-templates select="$topicrefShortdesc/*"/>
-                    <xsl:apply-templates select="*[not(contains(@class, ' topic/title ')) and not(contains(@class, ' topic/shortdesc '))]">
-                        <xsl:with-param name="include" select="'true'"/>
-                    </xsl:apply-templates>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:apply-templates>
-                        <xsl:with-param name="include" select="'true'"/>
-                    </xsl:apply-templates>
-                </xsl:otherwise>
-            </xsl:choose>
-        </fo:block>
+			<xsl:choose>
+				<xsl:when test="$topicrefShortdesc/*">
+					<xsl:apply-templates select="*[contains(@class, ' topic/title ')]"/>
+					<xsl:apply-templates select="$topicrefShortdesc/*"/>
+					<xsl:apply-templates select="*[not(contains(@class, ' topic/title '))
+													and not(contains(@class, ' topic/shortdesc '))
+													and not(contains(@class, ' topic/topic ')]"/>
+					<xsl:call-template name="buildRelationships"/>
+					<xsl:apply-templates select="*[contains(@class,' topic/topic ')]"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:apply-templates select="*[not(contains(@class, ' topic/topic '))]"/>
+					<xsl:call-template name="buildRelationships"/>
+					<xsl:apply-templates select="*[contains(@class,' topic/topic ')]"/>
+				</xsl:otherwise>
+			</xsl:choose>
+
+		</fo:block>
     </xsl:template>
 
     <xsl:template name="processUnknowTopic">
@@ -182,7 +185,6 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' topic/topic ')]">
-        <xsl:param name="include" select="'true'"/>
         <xsl:variable name="topicType">
             <xsl:call-template name="determineTopicType"/>
         </xsl:variable>
@@ -228,7 +230,9 @@ See the accompanying license.txt file for applicable licenses.
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:when>
-            <xsl:otherwise>
+			<!--BS: skipp abstract (copyright) from usual content. It will be processed from the front-matter-->
+			<xsl:when test="$topicType = 'topicAbstract'"/>
+			<xsl:otherwise>
                 <xsl:call-template name="processUnknowTopic">
                     <xsl:with-param name="topicType" select="$topicType"/>
                 </xsl:call-template>
@@ -271,9 +275,7 @@ See the accompanying license.txt file for applicable licenses.
 
                     <xsl:call-template name="createMiniToc"/>
 
-                    <xsl:apply-templates select="*[contains(@class,' topic/topic ')]">
-                        <xsl:with-param name="include" select="'true'"/>
-                    </xsl:apply-templates>
+                    <xsl:apply-templates select="*[contains(@class,' topic/topic ')]"/>
                 </fo:block>
             </fo:flow>
         </fo:page-sequence>
@@ -313,9 +315,7 @@ See the accompanying license.txt file for applicable licenses.
 
                     <xsl:call-template name="createMiniToc"/>
 
-                    <xsl:apply-templates select="*[contains(@class,' topic/topic ')]">
-                        <xsl:with-param name="include" select="'true'"/>
-                    </xsl:apply-templates>
+                    <xsl:apply-templates select="*[contains(@class,' topic/topic ')]"/>
                 </fo:block>
             </fo:flow>
         </fo:page-sequence>
@@ -363,9 +363,7 @@ See the accompanying license.txt file for applicable licenses.
                             <xsl:call-template name="determineTopicType"/>
                         </xsl:variable>
                         <xsl:if test="$topicType = 'topicSimple'">
-                            <xsl:apply-templates select=".">
-                                <xsl:with-param name="include" select="'true'"/>
-                            </xsl:apply-templates>
+                            <xsl:apply-templates select="."/>
                         </xsl:if>
                     </xsl:for-each>
                 </fo:block>
@@ -376,9 +374,7 @@ See the accompanying license.txt file for applicable licenses.
                 <xsl:call-template name="determineTopicType"/>
             </xsl:variable>
             <xsl:if test="not($topicType = 'topicSimple')">
-                <xsl:apply-templates select=".">
-                    <xsl:with-param name="include" select="'true'"/>
-                </xsl:apply-templates>
+                <xsl:apply-templates select="."/>
             </xsl:if>
         </xsl:for-each>
     </xsl:template>
@@ -416,9 +412,7 @@ See the accompanying license.txt file for applicable licenses.
 
                     <xsl:call-template name="createMiniToc"/>
 
-                    <xsl:apply-templates select="*[contains(@class,' topic/topic ')]">
-                        <xsl:with-param name="include" select="'true'"/>
-                    </xsl:apply-templates>
+                    <xsl:apply-templates select="*[contains(@class,' topic/topic ')]"/>
                 </fo:block>
             </fo:flow>
         </fo:page-sequence>
@@ -537,7 +531,9 @@ See the accompanying license.txt file for applicable licenses.
                     <fo:table-cell xsl:use-attribute-sets="__toc__mini__summary">
                         <fo:block>
                             <xsl:apply-templates select="*[contains(@class,' topic/body ')]/*"/>
-                        </fo:block>
+
+							<!--<xsl:call-template name="buildRelationships"/>-->
+						</fo:block>
                     </fo:table-cell>
                 </fo:table-row>
             </fo:table-body>
@@ -924,21 +920,22 @@ See the accompanying license.txt file for applicable licenses.
                 <xsl:when test="$topicrefShortdesc/*">
                     <xsl:apply-templates select="*[contains(@class, ' topic/title ')]"/>
                     <xsl:apply-templates select="$topicrefShortdesc/*"/>
-                    <xsl:apply-templates select="*[not(contains(@class, ' topic/title ')) and not(contains(@class, ' topic/shortdesc '))]">
-                        <xsl:with-param name="include" select="'true'"/>
-                    </xsl:apply-templates>
+                    <xsl:apply-templates select="*[not(contains(@class, ' topic/title '))
+                    								and not(contains(@class, ' topic/shortdesc '))
+                    								and not(contains(@class, ' topic/topic ')]"/>
+					<xsl:call-template name="buildRelationships"/>
+					<xsl:apply-templates select="*[contains(@class,' topic/topic ')]"/>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:apply-templates>
-                        <xsl:with-param name="include" select="'true'"/>
-                    </xsl:apply-templates>
+					<xsl:apply-templates select="*[not(contains(@class, ' topic/topic '))]"/>
+					<xsl:call-template name="buildRelationships"/>
+					<xsl:apply-templates select="*[contains(@class,' topic/topic ')]"/>
                 </xsl:otherwise>
             </xsl:choose>
         </fo:block>
-    </xsl:template>
+	</xsl:template>
 
     <xsl:template match="*[contains(@class, ' concept/concept ')]">
-        <xsl:param name="include" select="'true'"/>
         <xsl:variable name="topicType">
             <xsl:call-template name="determineTopicType"/>
         </xsl:variable>
@@ -981,7 +978,9 @@ See the accompanying license.txt file for applicable licenses.
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:when>
-            <xsl:otherwise>
+			<!--BS: skipp abstract (copyright) from usual content. It will be processed from the front-matter-->
+			<xsl:when test="$topicType = 'topicAbstract'"/>
+			<xsl:otherwise>
                 <xsl:call-template name="processUnknowTopic">
                     <xsl:with-param name="topicType" select="$topicType"/>
                 </xsl:call-template>
@@ -1001,25 +1000,26 @@ See the accompanying license.txt file for applicable licenses.
             <xsl:call-template name="getTopicrefShortdesc"/>
         </xsl:variable>
         <fo:block xsl:use-attribute-sets="reference">
-            <xsl:choose>
-                <xsl:when test="$topicrefShortdesc/*">
-                    <xsl:apply-templates select="*[contains(@class, ' topic/title ')]"/>
-                    <xsl:apply-templates select="$topicrefShortdesc/*"/>
-                    <xsl:apply-templates select="*[not(contains(@class, ' topic/title ')) and not(contains(@class, ' topic/shortdesc '))]">
-                        <xsl:with-param name="include" select="'true'"/>
-                    </xsl:apply-templates>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:apply-templates>
-                        <xsl:with-param name="include" select="'true'"/>
-                    </xsl:apply-templates>
-                </xsl:otherwise>
-            </xsl:choose>
+			<xsl:choose>
+				<xsl:when test="$topicrefShortdesc/*">
+					<xsl:apply-templates select="*[contains(@class, ' topic/title ')]"/>
+					<xsl:apply-templates select="$topicrefShortdesc/*"/>
+					<xsl:apply-templates select="*[not(contains(@class, ' topic/title '))
+													and not(contains(@class, ' topic/shortdesc '))
+													and not(contains(@class, ' topic/topic ')]"/>
+					<xsl:call-template name="buildRelationships"/>
+					<xsl:apply-templates select="*[contains(@class,' topic/topic ')]"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:apply-templates select="*[not(contains(@class, ' topic/topic '))]"/>
+					<xsl:call-template name="buildRelationships"/>
+					<xsl:apply-templates select="*[contains(@class,' topic/topic ')]"/>
+				</xsl:otherwise>
+			</xsl:choose>
         </fo:block>
-    </xsl:template>
+	</xsl:template>
 
     <xsl:template match="*[contains(@class, ' reference/reference ')]">
-        <xsl:param name="include" select="'true'"/>
         <xsl:variable name="topicType">
             <xsl:call-template name="determineTopicType"/>
         </xsl:variable>
@@ -1062,7 +1062,9 @@ See the accompanying license.txt file for applicable licenses.
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:when>
-            <xsl:otherwise>
+			<!--BS: skipp abstract (copyright) from usual content. It will be processed from the front-matter-->
+			<xsl:when test="$topicType = 'topicAbstract'"/>
+			<xsl:otherwise>
                 <xsl:call-template name="processUnknowTopic">
                     <xsl:with-param name="topicType" select="$topicType"/>
                 </xsl:call-template>
@@ -1087,25 +1089,26 @@ See the accompanying license.txt file for applicable licenses.
             <xsl:call-template name="getTopicrefShortdesc"/>
         </xsl:variable>
         <fo:block xsl:use-attribute-sets="task">
-            <xsl:choose>
-                <xsl:when test="$topicrefShortdesc/*">
-                    <xsl:apply-templates select="*[contains(@class, ' topic/title ')]"/>
-                    <xsl:apply-templates select="$topicrefShortdesc/*"/>
-                    <xsl:apply-templates select="*[not(contains(@class, ' topic/title ')) and not(contains(@class, ' topic/shortdesc '))]">
-                        <xsl:with-param name="include" select="'true'"/>
-                    </xsl:apply-templates>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:apply-templates>
-                        <xsl:with-param name="include" select="'true'"/>
-                    </xsl:apply-templates>
-                </xsl:otherwise>
-            </xsl:choose>
+			<xsl:choose>
+				<xsl:when test="$topicrefShortdesc/*">
+					<xsl:apply-templates select="*[contains(@class, ' topic/title ')]"/>
+					<xsl:apply-templates select="$topicrefShortdesc/*"/>
+					<xsl:apply-templates select="*[not(contains(@class, ' topic/title '))
+													and not(contains(@class, ' topic/shortdesc '))
+													and not(contains(@class, ' topic/topic ')]"/>
+					<xsl:call-template name="buildRelationships"/>
+					<xsl:apply-templates select="*[contains(@class,' topic/topic ')]"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:apply-templates select="*[not(contains(@class, ' topic/topic '))]"/>
+					<xsl:call-template name="buildRelationships"/>
+					<xsl:apply-templates select="*[contains(@class,' topic/topic ')]"/>
+				</xsl:otherwise>
+			</xsl:choose>
         </fo:block>
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' task/task ')]">
-        <xsl:param name="include" select="'true'"/>
         <xsl:variable name="topicType">
             <xsl:call-template name="determineTopicType"/>
         </xsl:variable>
@@ -1148,7 +1151,9 @@ See the accompanying license.txt file for applicable licenses.
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:when>
-            <xsl:otherwise>
+			<!--BS: skipp abstract (copyright) from usual content. It will be processed from the front-matter-->
+			<xsl:when test="$topicType = 'topicAbstract'"/>
+			<xsl:otherwise>
                 <xsl:call-template name="processUnknowTopic">
                     <xsl:with-param name="topicType" select="$topicType"/>
                 </xsl:call-template>
