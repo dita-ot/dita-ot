@@ -201,7 +201,27 @@
 <!-- space-before.optimum="8pt"
      space-after.optimum="8pt" -->
 <xsl:template name="block-p">
-<xsl:text>\par \pard \s0\f2\fs24</xsl:text><xsl:if test="ancestor::*[contains(@class,' topic/table ') or contains(@class,' topic/simpletable ')]">\intbl</xsl:if><xsl:text> </xsl:text><xsl:apply-templates/><xsl:text>\par</xsl:text>
+  <!-- Tagsmiths: Suppress \par \pard when the context is first p in li -->
+  <xsl:choose>
+    <xsl:when test="parent::*[contains(@class,' topic/li ')] and position() = 1">
+      <!-- Tagsmiths: this next line resets the style, font, and size to 
+        the same values used in by p in other contexts. -->
+      <xsl:text>\s0\f2\fs24 </xsl:text>
+    </xsl:when>
+    <xsl:otherwise>
+      <!-- Tagsmiths: this next line used to appear unconditionally -->
+      <xsl:text>\par \pard \s0\f2\fs24</xsl:text>
+    </xsl:otherwise>
+  </xsl:choose>
+  <xsl:if test="ancestor::*[contains(@class,' topic/table ') or contains(@class,' topic/simpletable ')]">\intbl</xsl:if>
+  <!-- Tagsmiths: make the inserted space conditional, suppressing it for first p in li -->
+  <xsl:if test="parent::*[not(contains(@class,' topic/li '))] or position() != 1">
+    <xsl:text> </xsl:text>
+  </xsl:if><xsl:apply-templates/>
+  <!-- Tagsmiths: make the next rtf string conditional, suppressing it for first p in li -->
+  <xsl:if test="parent::*[not(contains(@class,' topic/li '))] or position() != 1">
+    <xsl:text>\par</xsl:text>
+  </xsl:if>
 </xsl:template>
 
 
