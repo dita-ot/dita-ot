@@ -299,7 +299,7 @@
               </entry>
             </row>
             <row>
-              <entry colname="col1"><i>/generatecopyouter</i>:{generate.copy.outer}</entry>
+              <entry colname="col1"><i>/generateouter</i>:{generate.copy.outer}</entry>
               <entry colname="col2">
                 <ph conref="DITA-antscript.xml#antscript/generatecopyouter"/>
                 <note conref="DITA-antscript.xml#antscript/generatecopyouter-note"/>
