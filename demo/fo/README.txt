@@ -134,11 +134,16 @@ History
 =======
 
 FO Plugin Release 1.4.2
+Available since Feb 26, 2008
 
 - Misc internal fixes.
 
 Sourceforge bug fixes:
 - 1710233: summary element in bookmeta not handled properly (15251)
+- 1744350: Navtitle not supported in PDF2
+- 1807277: FO topicmerge needs to discard reltables
+
+----------------------------------------------------------------------------
 
 FO Plugin Release 1.4.1
 Available since Oct 5, 2007
@@ -149,7 +154,7 @@ Sourceforge bug fixes:
 - 1793307: issue with topicref in bookmap's <notices> (16587)
 - 1791403: invalid column-width attribute value (16586)
 - 1805389: XSLT errors in FO plugin
-- 1694607: Use-by-reference footnotes not rendered correctly (15249)
+- 1694607: Use-by-reference footnotes not rendered correctly (15249), (not quite right).
 
 ----------------------------------------------------------------------------
 
