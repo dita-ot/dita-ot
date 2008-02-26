@@ -153,4 +153,6 @@ See the accompanying license.txt file for applicable licenses.
 		</xsl:choose>
 	</xsl:template>
 
+    <xsl:template match="*[contains(@class, ' map/reltable ')]" mode="build-tree"/>
+
 </xsl:stylesheet>
