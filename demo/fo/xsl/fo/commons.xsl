@@ -1222,6 +1222,22 @@ See the accompanying license.txt file for applicable licenses.
         </fo:block>
     </xsl:template>
 
+    <!-- Gets navigation title of current topic, used for bookmarks/TOC -->    
+    <xsl:template name="getNavTitle">
+        <xsl:variable name="id" select="@id"/>
+        <xsl:variable name="topicref" select="$map//*[@id = $id]"/>
+        <xsl:choose>
+            <xsl:when test="$topicref and $topicref/@locktitle='yes' and $topicref/@navtitle">
+                <xsl:value-of select="$topicref/@navtitle"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:for-each select="child::*[contains(@class,' topic/title ')]">
+                    <xsl:call-template name="getTitle"/>
+                 </xsl:for-each>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+    
     <xsl:template name="getTitle"><!-- get fully-processed title content by whatever mechanism -->
         <xsl:choose>
 <!--             add keycol here once implemented-->

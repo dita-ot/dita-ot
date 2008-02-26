@@ -85,9 +85,7 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:variable name="topicLevel" select="count(ancestor-or-self::*[contains(@class, ' topic/topic ')])"/>
         <xsl:if test="$topicLevel &lt; $tocMaximumLevel">
             <xsl:variable name="topicTitle">
-                <xsl:for-each select="child::*[contains(@class,' topic/title ')]">
-                    <xsl:call-template name="getTitle"/>
-                </xsl:for-each>
+                <xsl:call-template name="getNavTitle" />
             </xsl:variable>
             <xsl:variable name="id" select="@id"/>
             <xsl:variable name="gid" select="generate-id()"/>
