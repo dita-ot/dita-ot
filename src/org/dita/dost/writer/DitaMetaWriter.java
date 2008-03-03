@@ -17,7 +17,6 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -37,7 +36,6 @@ import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.Content;
 import org.dita.dost.util.Constants;
 import org.dita.dost.util.StringUtils;
-import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -399,6 +397,14 @@ public class DitaMetaWriter extends AbstractXMLWriter {
 					break;
 				} else if (name != null){
 					currentIndex = (Integer)compareTable.get(name);
+					if (currentIndex == null){
+						// if compareTable doesn't contains the number for current name
+						// change to generalized element name to search again
+						String classValue = ((Element)current).getAttribute(Constants.ATTRIBUTE_NAME_CLASS);
+						String generalizedName = classValue.substring(classValue.indexOf(Constants.SLASH)+1);
+						generalizedName = generalizedName.substring(0, generalizedName.indexOf(Constants.STRING_BLANK));
+						currentIndex = (Integer)compareTable.get(generalizedName);
+					}
 					if(currentIndex.compareTo(nextIndex) > 0){
 						// if currentIndex > nextIndex
 						// it means we have passed to location to insert
