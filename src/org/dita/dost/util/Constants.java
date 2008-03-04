@@ -54,6 +54,8 @@ public abstract class Constants {
     public static final String FILE_EXTENSION_JPEG = ".jpeg";
     public static final String FILE_EXTENSION_PNG = ".png";
     public static final String FILE_EXTENSION_SVG = ".svg";
+    public static final String FILE_EXTENSION_TIFF = ".tiff";
+	public static final String FILE_EXTENSION_TIF = ".tif";
     
     /**
      * Constants for element names in dita files.
@@ -275,7 +277,8 @@ public abstract class Constants {
      * constants for filtering or flagging.
      */	
 	public static final String DEFAULT_ACTION="default";
-	public static final String ATTRIBUTE_NAME_CHUNK = "chunk";	
+	public static final String ATTRIBUTE_NAME_CHUNK = "chunk";
+		
 	
     /**
      * Private constructor used to forbid instantiation.

@@ -85,7 +85,9 @@ public class FileUtils {
 				|| lcasefn.endsWith(Constants.FILE_EXTENSION_EPS)
 				|| lcasefn.endsWith(Constants.FILE_EXTENSION_JPEG)
 				|| lcasefn.endsWith(Constants.FILE_EXTENSION_PNG)
-				|| lcasefn.endsWith(Constants.FILE_EXTENSION_SVG);
+				|| lcasefn.endsWith(Constants.FILE_EXTENSION_SVG)
+				|| lcasefn.endsWith(Constants.FILE_EXTENSION_TIFF)
+				|| lcasefn.endsWith(Constants.FILE_EXTENSION_TIF);
 	}
 
 	/**
@@ -124,7 +126,9 @@ public class FileUtils {
 				|| lcasefn.endsWith(Constants.FILE_EXTENSION_HTML)
 				|| lcasefn.endsWith(Constants.FILE_EXTENSION_JPEG)
 				|| lcasefn.endsWith(Constants.FILE_EXTENSION_PNG)
-				|| lcasefn.endsWith(Constants.FILE_EXTENSION_SVG);
+				|| lcasefn.endsWith(Constants.FILE_EXTENSION_SVG)
+				|| lcasefn.endsWith(Constants.FILE_EXTENSION_TIFF)
+				|| lcasefn.endsWith(Constants.FILE_EXTENSION_TIF);
 	}
 
 	/**
