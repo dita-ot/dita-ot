@@ -76,6 +76,7 @@ public class IndexTermExtractModule implements AbstractPipelineModule {
 	public AbstractPipelineOutput execute(AbstractPipelineInput input)
 			throws DITAOTException {
 		try {
+			IndexTermCollection.getInstantce().clear();
 			parseAndValidateInput(input);
 			extractIndexTerm();
 			IndexTermCollection.getInstantce().sort();

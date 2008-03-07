@@ -60,6 +60,14 @@ public class IndexTermCollection {
 		}
 		return collection;
 	}
+	
+	/**
+	 * The interface to clear the result in IndexTermCollection instance
+	 * @author Stephen
+	 */
+	public void clear(){
+		termList.clear();
+	}
 
 	/**
 	 * Get the index type.
