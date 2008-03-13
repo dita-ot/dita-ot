@@ -53,12 +53,8 @@ The "\resource" directory contains the commonly used css files and default plugi
 The "\samples" directory has the following components:
 
 \samples\concepts - content for garage User Assistance
-\samples\eclipse - support for Eclipse help builds
-\samples\htmlhelp - support for HTMLHelp builds
 \samples\image - image resources for garage UA
-\samples\javahelp - support for JavaHelp builds
 \samples\tasks - content for garage UA
-\samples\web - support for Web builds
 
 
 The "\schema" directory contains the core DITA definitions in XML Schema format.
