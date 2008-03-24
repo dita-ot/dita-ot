@@ -48,9 +48,18 @@
      filename. Output each single directory, and chop it off. Keep going until
      only the filename is left. -->
 <xsl:template name="find-relative-path">
-  <xsl:param name="remainingpath"><xsl:value-of select="substring-before(@conref,'#')"/></xsl:param>
+  <xsl:param name="remainingpath">
+    <xsl:choose>
+      <xsl:when test="contains(@conref,'#')">
+        <xsl:value-of select="translate(substring-before(@conref,'#'),'\','/')"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="translate(@conref,'\','/')"/>
+      </xsl:otherwise>
+    </xsl:choose>   
+  </xsl:param>
   <xsl:if test="contains($remainingpath,'/')">
-    <xsl:value-of select="substring-before($remainingpath,'/')"/>/<xsl:text/>
+    <xsl:value-of select="substring-before($remainingpath,'/')"/><xsl:text>/</xsl:text>
     <xsl:call-template name="find-relative-path">
       <xsl:with-param name="remainingpath"><xsl:value-of select="substring-after($remainingpath,'/')"/></xsl:with-param>
     </xsl:call-template>
