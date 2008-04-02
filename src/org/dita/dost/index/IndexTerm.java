@@ -46,6 +46,13 @@ public class IndexTerm implements Comparable {
     /** The list of rtl locale*/
     private static ArrayList rtlLocaleList = null;
     
+    /** 
+     * The boolean to show whether current term is leaf term
+     * leaf means the current indexterm element doesn't contains any subterms 
+     * or only has "index-see" or "index-see-also" subterms.
+     */
+    private boolean leaf = true;
+    
     //initialization for rtlLocaleList
     static{
     	rtlLocaleList = new ArrayList(Constants.INT_2);
@@ -130,6 +137,12 @@ public class IndexTerm implements Comparable {
     public void addSubTerm(IndexTerm term) {
         int i = 0;
         int subTermNum = subTerms.size();
+        
+        if (!Constants.IndexTerm_Prefix_See.equals(term.getTermPrefix()) && 
+        		!Constants.IndexTerm_Prefix_See_Also.equals(term.getTermPrefix())){
+        	//if the term is not "index-see" or "index-see-also"
+        	leaf = false;
+        }
 
         for (; i < subTermNum; i++) {
             IndexTerm subTerm = (IndexTerm) subTerms.get(i);
@@ -334,10 +347,20 @@ public class IndexTerm implements Comparable {
 			// if there is only one subterm, it is necessary to update
 			IndexTerm term = (IndexTerm)subTerms.get(0); // get the only subterm
 			if (term.getTermPrefix()!= null &&
-					"See".equalsIgnoreCase(term.getTermPrefix().trim())){ //$NON-NLS-1$
+					Constants.IndexTerm_Prefix_See.equalsIgnoreCase(term.getTermPrefix().trim())){ //$NON-NLS-1$
 				//if the only subterm is index-see update it to index-see-also
-				term.setTermPrefix("See also"); //$NON-NLS-1$
+				term.setTermPrefix(Constants.IndexTerm_Prefix_See_Also); //$NON-NLS-1$
 			}			
 		}
+	}
+
+	/**
+	 * check whether this term is leaf term
+	 * leaf means the current indexterm element doesn't contains any subterms 
+	 * or only has "index-see" or "index-see-also" subterms.
+	 * @return boolean
+	 */
+	public boolean isLeaf() {
+		return leaf;
 	}
 }

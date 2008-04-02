@@ -33,6 +33,7 @@ import org.xml.sax.SAXException;
  * 
  * @author Wu, Zhi Qiang
  */
+@Deprecated
 public class DitamapIndexTermReader extends AbstractXMLReader {
 	/** The stack used to store elements */
 	private Stack elementStack = null;

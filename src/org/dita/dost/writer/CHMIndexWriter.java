@@ -14,6 +14,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.dita.dost.exception.DITAOTException;
@@ -113,6 +114,14 @@ public class CHMIndexWriter implements AbstractWriter {
         printWriter.print(term.getTermFullName());
         printWriter.print("\">");
         printWriter.println();
+        
+        //if term doesn't has target to link to, it won't appear in the index tab
+        //we need to create links for such terms
+        if (targets == null || targets.isEmpty()){
+        	targets = new ArrayList(Constants.INT_1);
+        	findTargets(term, targets);
+        	targetNum = targets.size();
+        }
 
         for (int i = 0; i < targetNum; i++) {
             IndexTermTarget target = (IndexTermTarget) targets.get(i);
@@ -141,5 +150,29 @@ public class CHMIndexWriter implements AbstractWriter {
 
         printWriter.println("</li>");
     }
+
+    /**
+     * find the targets in its subterms when the current term doesn't have any target
+     * 
+     * @param term
+     * The current IndexTerm instance
+     * 
+     * @param targets
+     * The list of targets to store the result found
+     */
+	private void findTargets(IndexTerm term, List targets) {
+		List subTerms = term.getSubTerms();
+		List subTargets = null;
+		if (subTerms != null && ! subTerms.isEmpty()){
+			for (int i = 0; i < subTerms.size(); i++){
+				IndexTerm subTerm = (IndexTerm) subTerms.get(i);
+				subTargets = subTerm.getTargetList();
+				if (subTargets != null && !subTargets.isEmpty()){
+					targets.addAll(subTargets);
+				}
+				findTargets(subTerm, targets);
+			}			
+		}	
+	}
 
 }

@@ -135,39 +135,44 @@ public class EclipseIndexWriter implements AbstractWriter {
         List subTerms = term.getSubTerms();
         int targetNum = targets.size();
         int subTermNum = subTerms.size();
+        String termPrefix = term.getTermPrefix();
 
         printWriter.print("<entry keyword=\"");
         printWriter.print(term.getTermFullName());
         printWriter.print("\">");
         printWriter.print(System.getProperty("line.separator"));
         
-        for (int i = 0; i < targetNum; i++) {
-            IndexTermTarget target = (IndexTermTarget) targets.get(i);
-        	String targetUri = target.getTargetURI();
-        	String targetName = target.getTargetName();
-        	if (targetUri == null) {
-        		javaLogger.logDebug("Term for " + target.getTargetName() + " does not have a target");
-            	printWriter.print("<topic");
-                printWriter.print(" title=\"");
-                printWriter.print(target.getTargetName());
-                printWriter.print("\"/>");
-                printWriter.print(System.getProperty("line.separator"));
-        	}
-        	else if (targetName != null){
-        		if (subTerms != null && subTermNum == 0){ //Eric
-        			printWriter.print("<topic href=\"");
-        			printWriter.print(replaceExtName(targetUri)); //Eric
-                    printWriter.print("\"");
-                    if (targetName.trim().length() > 0){
-                    	printWriter.print(" title=\"");
-                    	printWriter.print(target.getTargetName());
-                    	printWriter.print("\"");
-                    }
-                    printWriter.print("/>");
-                    printWriter.print(System.getProperty("line.separator"));       		
-        		}
-                
-        	}
+        //Index-see and index-see-also terms should also generate links to its target
+        //Otherwise, the term won't be displayed in the index tab.
+        if (targets != null && !targets.isEmpty()){
+	        for (int i = 0; i < targetNum; i++) {
+	            IndexTermTarget target = (IndexTermTarget) targets.get(i);
+	        	String targetUri = target.getTargetURI();
+	        	String targetName = target.getTargetName();
+	        	if (targetUri == null) {
+	        		javaLogger.logDebug("Term for " + target.getTargetName() + " does not have a target");
+	            	printWriter.print("<topic");
+	                printWriter.print(" title=\"");
+	                printWriter.print(target.getTargetName());
+	                printWriter.print("\"/>");
+	                printWriter.print(System.getProperty("line.separator"));
+	        	}
+	        	else if (targetName != null){
+//	        		if (subTerms != null && subTermNum == 0){ //Eric
+	        			printWriter.print("<topic href=\"");
+	        			printWriter.print(replaceExtName(targetUri)); //Eric
+	                    printWriter.print("\"");
+	                    if (targetName.trim().length() > 0){
+	                    	printWriter.print(" title=\"");
+	                    	printWriter.print(target.getTargetName());
+	                    	printWriter.print("\"");
+	                    }
+	                    printWriter.print("/>");
+	                    printWriter.print(System.getProperty("line.separator"));       		
+//	        		}
+	                
+	        	}
+	        }
         }
 
         if (subTerms != null && subTermNum > 0) {

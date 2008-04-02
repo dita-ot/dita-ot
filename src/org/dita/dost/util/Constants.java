@@ -276,9 +276,14 @@ public abstract class Constants {
     /**
      * constants for filtering or flagging.
      */	
-	public static final String DEFAULT_ACTION="default";
+	public static final String DEFAULT_ACTION = "default";
 	public static final String ATTRIBUTE_NAME_CHUNK = "chunk";
 		
+	/**
+	 * constants for indexterm prefix
+	 */
+	public static final String IndexTerm_Prefix_See = "See";
+	public static final String IndexTerm_Prefix_See_Also = "See also";
 	
     /**
      * Private constructor used to forbid instantiation.

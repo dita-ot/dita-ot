@@ -171,7 +171,7 @@ public class IndexTermExtractModule implements AbstractPipelineModule {
 		FileInputStream inputStream = null;
 		XMLReader xmlReader = null;
 		IndexTermReader handler = new IndexTermReader();
-		DitamapIndexTermReader ditamapIndexTermReader = new DitamapIndexTermReader();
+//		DitamapIndexTermReader ditamapIndexTermReader = new DitamapIndexTermReader();
 
 		if (System.getProperty(Constants.SAX_DRIVER_PROPERTY) == null) {
 			// The default sax driver is set to xerces's sax driver
@@ -216,38 +216,38 @@ public class IndexTermExtractModule implements AbstractPipelineModule {
 				}
 			}
 
-			xmlReader.setContentHandler(ditamapIndexTermReader);
-
-			for (int j = 0; j < ditamapNum; j++) {
-				String ditamap = (String) ditamapList.get(j);
-				String currentMapPathName = FileUtils.getRelativePathFromMap(
-						inputMap, ditamap);
-				String mapPathFromInputMap = "";
-
-				if (currentMapPathName.lastIndexOf(Constants.SLASH) != -1) {
-					mapPathFromInputMap = currentMapPathName.substring(0,
-							currentMapPathName.lastIndexOf(Constants.SLASH));
-				}
-
-				ditamapIndexTermReader.setMapPath(mapPathFromInputMap);
-				try {
-					if(!new File(baseInputDir, ditamap).exists()){
-						javaLogger.logWarn("Cannot find file "+ ditamap);
-						continue;
-					}
-					inputStream = new FileInputStream(new File(baseInputDir,
-							ditamap));
-					xmlReader.parse(new InputSource(inputStream));
-					inputStream.close();
-				} 	catch (Exception e) {
-					Properties params = new Properties();
-					String msg = null;
-					params.put("%1", ditamap);
-					msg = MessageUtils.getMessage("DOTJ013E", params).toString();
-					javaLogger.logError(msg);
-					javaLogger.logException(e);
-				}
-			}
+//			xmlReader.setContentHandler(ditamapIndexTermReader);
+//
+//			for (int j = 0; j < ditamapNum; j++) {
+//				String ditamap = (String) ditamapList.get(j);
+//				String currentMapPathName = FileUtils.getRelativePathFromMap(
+//						inputMap, ditamap);
+//				String mapPathFromInputMap = "";
+//
+//				if (currentMapPathName.lastIndexOf(Constants.SLASH) != -1) {
+//					mapPathFromInputMap = currentMapPathName.substring(0,
+//							currentMapPathName.lastIndexOf(Constants.SLASH));
+//				}
+//
+//				ditamapIndexTermReader.setMapPath(mapPathFromInputMap);
+//				try {
+//					if(!new File(baseInputDir, ditamap).exists()){
+//						javaLogger.logWarn("Cannot find file "+ ditamap);
+//						continue;
+//					}
+//					inputStream = new FileInputStream(new File(baseInputDir,
+//							ditamap));
+//					xmlReader.parse(new InputSource(inputStream));
+//					inputStream.close();
+//				} 	catch (Exception e) {
+//					Properties params = new Properties();
+//					String msg = null;
+//					params.put("%1", ditamap);
+//					msg = MessageUtils.getMessage("DOTJ013E", params).toString();
+//					javaLogger.logError(msg);
+//					javaLogger.logException(e);
+//				}
+//			}
 		} finally {
 			if (inputStream != null) {
 				try {
