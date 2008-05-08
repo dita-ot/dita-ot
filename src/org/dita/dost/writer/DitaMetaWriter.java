@@ -405,6 +405,13 @@ public class DitaMetaWriter extends AbstractXMLWriter {
 						generalizedName = generalizedName.substring(0, generalizedName.indexOf(Constants.STRING_BLANK));
 						currentIndex = (Integer)compareTable.get(generalizedName);
 					}
+					if(currentIndex==null){
+						// if there is no generalized tag corresponding this tag
+						Properties prop=new Properties();
+						prop.put("%1", name);
+						logger.logFatal(MessageUtils.getMessage("DOTJ038W", prop).toString());
+						break;
+					}
 					if(currentIndex.compareTo(nextIndex) > 0){
 						// if currentIndex > nextIndex
 						// it means we have passed to location to insert

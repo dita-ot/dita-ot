@@ -97,12 +97,15 @@ public class GenListModuleReader extends AbstractXMLReader {
 	/** Used to record the excluded level */
 	private int excludedLevel = 0;
 	
+	/** foreign/unknown nesting level */
+    private int foreignLevel = 0;
+	
 	/** Flag used to mark if current file is still valid after filtering */
 	private boolean isValidInput = false;
 	
 	private String props; // contains the attribution specialization from props
 	
-	private DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
+	private DITAOTJavaLogger javaLogger = null;
 	
 	private String ditaDir = null;
 	
@@ -117,6 +120,7 @@ public class GenListModuleReader extends AbstractXMLReader {
 	
 	private String currentFile=null;
 	
+	private static String rootFilePath=null;
 	//private static GenListModuleReader parserInstance = new GenListModuleReader();
 	
 	/**
@@ -133,6 +137,7 @@ public class GenListModuleReader extends AbstractXMLReader {
 		outDitaFilesSet=new HashSet(Constants.INT_64);
 		props = null;
 		reader.setContentHandler(this);
+		javaLogger = new DITAOTJavaLogger();
 		try {
 			reader.setProperty(Constants.LEXICAL_HANDLER_PROPERTY,this);
 		} catch (SAXNotRecognizedException e1) {
@@ -168,7 +173,7 @@ public class GenListModuleReader extends AbstractXMLReader {
 		rootDir=new File(rootFile).getAbsoluteFile().getParent();
 		//to check whether the current parsing file is input file.
 		inputDitaFile=rootFile;
-		
+		rootFilePath=new File(rootFile).getAbsolutePath();
 		reader = XMLReaderFactory.createXMLReader();
 		reader.setFeature(Constants.FEATURE_NAMESPACE_PREFIX, true);
 		if(validate==true){
@@ -193,6 +198,7 @@ public class GenListModuleReader extends AbstractXMLReader {
 		currentDir = null;
 		insideExcludedElement = false;
 		excludedLevel = 0;
+		foreignLevel = 0;
 		isValidInput = false;
 		nonConrefCopytoTargets.clear();
 		hrefTargets.clear();
@@ -346,13 +352,26 @@ public class GenListModuleReader extends AbstractXMLReader {
 		String domains = null;
 		Properties params = new Properties();
 		String msg = null;
-        String attrValue = atts.getValue(Constants.ATTRIBUTE_NAME_CLASS);
+		String attrValue = atts.getValue(Constants.ATTRIBUTE_NAME_CLASS);
+		
+		if(foreignLevel > 0){
+			//if it is an element nested in foreign/unknown element
+			//do not parse it
+			foreignLevel ++;
+			return;
+		} else if(attrValue != null && 
+        		(attrValue.indexOf(Constants.ATTR_CLASS_VALUE_FOREIGN) != -1 || 
+        				attrValue.indexOf(Constants.ATTR_CLASS_VALUE_UNKNOWN) != -1)){
+        	foreignLevel ++;
+        }
+		
 		if(attrValue==null && !Constants.ELEMENT_NAME_DITA.equals(localName)){
     		params.clear();
 			msg = null;
 			params.put("%1", localName);
     		javaLogger.logInfo(MessageUtils.getMessage("DOTJ030I", params).toString());			
-		}
+		}		
+		
         if (attrValue != null && attrValue.indexOf(Constants.ATTR_CLASS_VALUE_TOPIC) != -1){
         	domains = atts.getValue(Constants.ATTRIBUTE_NAME_DOMAINS);
         	if(domains==null){
@@ -362,7 +381,7 @@ public class GenListModuleReader extends AbstractXMLReader {
         		javaLogger.logInfo(MessageUtils.getMessage("DOTJ029I", params).toString());
         	}else
         		props = StringUtils.getExtProps(domains);
-        }
+        }        
 		
 		if (insideExcludedElement) {
 			++excludedLevel;
@@ -404,6 +423,12 @@ public class GenListModuleReader extends AbstractXMLReader {
 	 * @see org.dita.dost.reader.AbstractXMLReader#endElement(java.lang.String, java.lang.String, java.lang.String)
 	 */
 	public void endElement(String uri, String localName, String qName) throws SAXException {		
+		
+		if (foreignLevel > 0){
+			foreignLevel --;
+			return;
+		}
+		
 		if (insideExcludedElement) {
 			// end of the excluded element, mark the flag as false 
 			if (excludedLevel == 1) {
@@ -464,7 +489,12 @@ public class GenListModuleReader extends AbstractXMLReader {
 				|| "peer".equalsIgnoreCase(attrScope)) {
 			return;
 		}
-
+		
+		File target=new File(attrValue);
+		if(target.isAbsolute()){
+			attrValue=FileUtils.getRelativePathFromMap(rootFilePath,attrValue);
+		}
+		
 		filename = FileUtils.normalizeDirectory(currentDir, attrValue);
 		try{
 			filename = URLDecoder.decode(filename, Constants.UTF8);

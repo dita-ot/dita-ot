@@ -93,6 +93,7 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 		fileWriterStack = new Stack();
 		stubStack = new Stack();
 		outputFileNameStack = new Stack();
+		logger=new DITAOTJavaLogger();
 	}
 
 	public void characters(char[] ch, int start, int length) throws SAXException {

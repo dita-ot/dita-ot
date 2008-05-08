@@ -38,7 +38,7 @@ See the accompanying license.txt file for applicable licenses.
                 xmlns:exsl="http://exslt.org/common"
  	            extension-element-prefixes="exsl">
 
-    <xsl:output indent="yes"/>
+    <xsl:output indent="no"/>
 
 	<xsl:key name="topic" match="dita-merge/*[contains(@class,' topic/topic ')]" use="concat('#',@id)"/>
 	<xsl:key name="topic" match="dita-merge/dita" use="concat('#',@id)"/>

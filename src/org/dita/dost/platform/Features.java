@@ -29,6 +29,7 @@ public class Features {
 	private Hashtable featureTable;
 	private List requireList;
 	private Hashtable metaTable;
+	private List templateList;
 
 	/**
 	 * Default constructor
@@ -38,6 +39,7 @@ public class Features {
 		featureTable = new Hashtable(Constants.INT_16);
 		requireList = new ArrayList(Constants.INT_8);
 		metaTable = new Hashtable(Constants.INT_16);
+		templateList = new ArrayList(Constants.INT_8);
 		// TODO Auto-generated constructor stub
 	}
 
@@ -50,6 +52,7 @@ public class Features {
 		featureTable = new Hashtable(Constants.INT_16);
 		requireList = new ArrayList(Constants.INT_8);
 		metaTable = new Hashtable(Constants.INT_16);
+		templateList = new ArrayList(Constants.INT_8);
 	}
 	
 	/**
@@ -133,5 +136,17 @@ public class Features {
 	 */
 	public String getMeta(String type){
 		return (String) metaTable.get(type);
+	}
+	
+	/**
+	 * Add a template.
+	 * @param file
+	 */
+	public void addTemplate(String file){
+		templateList.add(file);
+	}
+	
+	public List getAllTemplates(){
+		return templateList;
 	}
 }

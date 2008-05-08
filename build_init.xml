@@ -71,7 +71,6 @@
     value="${dita.dir}${file.separator}xsl" />
   <property name="dita.resource.dir"
     value="${dita.dir}${file.separator}resource" />
-  <property name="hhc.dir" value="C:\Program Files\HTML Help Workshop" />
   <property environment="env" />
   <property name="dita.empty" value="" />
   <property name="args.message.file"
@@ -88,12 +87,23 @@
     <config-logger />
   </target>
   
-  <target name="use-init">
+  <target name="use-init.envhhcdir" if="env.HHCDIR">
+    <available file="${env.HHCDIR}${file.separator}hhc.exe" property="HTMLHelpCompiler"
+      value="${env.HHCDIR}${file.separator}hhc.exe"/>
+  </target>
+  
+  <target name="use-init.hhcdir" unless="env.HHCDIR">
+    <condition property="hhc.dir" value="C:\Program Files (x86)\HTML Help Workshop" else="C:\Program Files\HTML Help Workshop">
+      <available file="C:\Program Files (x86)\HTML Help Workshop" type="dir"/>
+    </condition>
+    <available file="${hhc.dir}${file.separator}hhc.exe" property="HTMLHelpCompiler"
+      value="${hhc.dir}${file.separator}hhc.exe" />
+  </target>
+  
+  <target name="use-init" depends="use-init.envhhcdir,use-init.hhcdir">
     <available classname="com.icl.saxon.StyleSheet" property="hasSaxon" />
     <available classname="org.apache.fop.tools.anttasks.Fop"
-      property="hasFOP" />
-    <available file="${hhc.dir}\hhc.exe" property="HTMLHelpCompiler"
-      value="${hhc.dir}\hhc.exe" />
+      property="hasFOP" />    
   </target>
 
   <!-- property value validation begin -->

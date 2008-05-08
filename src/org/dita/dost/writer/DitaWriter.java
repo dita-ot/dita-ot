@@ -104,6 +104,26 @@ public class DitaWriter extends AbstractXMLWriter {
          * all href and conref attribute
          */
         String attValue = atts.getValue(Constants.ATTRIBUTE_NAME_CONREF);
+        int sharp_index = attValue.lastIndexOf(Constants.SHARP);
+        int dot_index = attValue.lastIndexOf(Constants.DOT);
+        if(sharp_index != -1 && dot_index < sharp_index){
+        	String path = attValue.substring(0, sharp_index);
+        	String topic = attValue.substring(sharp_index);
+        	if(!path.equals(Constants.STRING_EMPTY)){
+        		String relativePath;
+        		File target = new File(path);
+        		if(target.isAbsolute()){
+        			relativePath = FileUtils.getRelativePathFromMap(OutputUtils.getInputMapPathName(), path);
+            		attValue = relativePath + topic;
+        		}
+
+        	}
+        }else{
+        	File target = new File(attValue);
+        	if(target.isAbsolute()){
+        		attValue = FileUtils.getRelativePathFromMap(OutputUtils.getInputMapPathName(), attValue);
+        	}
+        }
         if (attValue != null){
         	attValue = attValue.replaceAll(Constants.DOUBLE_BACK_SLASH, Constants.SLASH);
         }
@@ -168,9 +188,28 @@ public class DitaWriter extends AbstractXMLWriter {
     	}
     	
     	attValue = atts.getValue(attName);
-        
-    	
-    	if (attValue != null){
+        if(attValue!=null){
+        	int dot_index = attValue.lastIndexOf(Constants.DOT);
+            int sharp_index = attValue.lastIndexOf(Constants.SHARP);
+            if(sharp_index != -1 && dot_index < sharp_index){
+            	String path = attValue.substring(0, sharp_index);
+            	String topic = attValue.substring(sharp_index);
+            	if(!path.equals(Constants.STRING_EMPTY)){
+            		String relativePath;
+            		File target = new File(path);
+            		if(target.isAbsolute()){
+            			relativePath = FileUtils.getRelativePathFromMap(OutputUtils.getInputMapPathName(), path);
+                		attValue = relativePath + topic;
+            		}
+
+            	}
+            }else{
+            	File target = new File(attValue);
+            	if(target.isAbsolute()){
+            		attValue = FileUtils.getRelativePathFromMap(OutputUtils.getInputMapPathName(), attValue);
+            	}
+            }    	
+
     		/*
              * replace all the backslash with slash in 
              * all href and conref attribute
@@ -196,6 +235,7 @@ public class DitaWriter extends AbstractXMLWriter {
     private int columnNumberEnd; //columnNumberEnd is the end value for current entry
     private HashMap counterMap;
     private boolean exclude; // when exclude is true the tag will be excluded.
+    private int foreignLevel; // foreign/unknown nesting level
     private int level;// level is used to count the element level in the filtering
     private DITAOTJavaLogger logger;
     private boolean needResolveEntity; //check whether the entity need resolve.
@@ -224,6 +264,7 @@ public class DitaWriter extends AbstractXMLWriter {
         path2Project = null;
         counterMap = null;
         traceFilename = null;
+        foreignLevel = 0;
         level = 0;
         needResolveEntity = false;
         insideCDATA = false;
@@ -438,6 +479,9 @@ public class DitaWriter extends AbstractXMLWriter {
      */
     public void endElement(String uri, String localName, String qName)
             throws SAXException {
+    	if (foreignLevel > 0){
+    		foreignLevel --;
+    	}
         if (exclude) {
             if (level > 0) {
                 // If it is the end of a child of an excluded tag, level
@@ -623,21 +667,32 @@ public class DitaWriter extends AbstractXMLWriter {
 		Properties params = new Properties();
 		String msg = null;
         String attrValue = atts.getValue(Constants.ATTRIBUTE_NAME_CLASS);
-		if(attrValue==null && !Constants.ELEMENT_NAME_DITA.equals(localName)){
-    		params.clear();
-			msg = null;
-			params.put("%1", localName);
-			logger.logInfo(MessageUtils.getMessage("DOTJ030I", params).toString());			
-		}       
-        if (attrValue != null && attrValue.indexOf(Constants.ATTR_CLASS_VALUE_TOPIC) != -1){
-        	domains = atts.getValue(Constants.ATTRIBUTE_NAME_DOMAINS);
-        	if(domains==null){
-        		params.clear();
-    			msg = null;
+        
+        if (foreignLevel > 0){
+        	foreignLevel ++;
+        }else if( foreignLevel == 0){
+        
+			if(attrValue==null && !Constants.ELEMENT_NAME_DITA.equals(localName)){
+	    		params.clear();
+				msg = null;
 				params.put("%1", localName);
-				logger.logInfo(MessageUtils.getMessage("DOTJ029I", params).toString());
-        	}else
-        		props = StringUtils.getExtProps(domains);
+				logger.logInfo(MessageUtils.getMessage("DOTJ030I", params).toString());			
+			}       
+	        if (attrValue != null && attrValue.indexOf(Constants.ATTR_CLASS_VALUE_TOPIC) != -1){
+	        	domains = atts.getValue(Constants.ATTRIBUTE_NAME_DOMAINS);
+	        	if(domains==null){
+	        		params.clear();
+	    			msg = null;
+					params.put("%1", localName);
+					logger.logInfo(MessageUtils.getMessage("DOTJ029I", params).toString());
+	        	}else
+	        		props = StringUtils.getExtProps(domains);
+	        }
+	        if (attrValue != null && 
+	        		(attrValue.indexOf(Constants.ATTR_CLASS_VALUE_FOREIGN) != -1 ||
+	        				attrValue.indexOf(Constants.ATTR_CLASS_VALUE_UNKNOWN) != -1)){
+	        	foreignLevel = 1;
+	        }
         }
         
         if (counterMap.containsKey(qName)) {
@@ -653,7 +708,7 @@ public class DitaWriter extends AbstractXMLWriter {
             // If it is the start of a child of an excluded tag, level increase
             level++;
         } else { // exclude shows whether it's excluded by filtering
-            if (FilterUtils.needExclude(atts, props)){
+            if (foreignLevel <= 1 && FilterUtils.needExclude(atts, props)){
                 exclude = true;
                 level = 0;
             }else{
@@ -662,9 +717,11 @@ public class DitaWriter extends AbstractXMLWriter {
                     
                     copyElementAttribute(atts);
                     // write the xtrf and xtrc attributes which contain debug
-                    // information
-                    output.write(ATTRIBUTE_XTRF_START + traceFilename + ATTRIBUTE_END);
-                    output.write(ATTRIBUTE_XTRC_START + qName + Constants.COLON + nextValue.toString() + ATTRIBUTE_END);
+                    // information if it is dita elements (elements not in foreign/unknown)
+                    if (foreignLevel <= 1){
+                    	output.write(ATTRIBUTE_XTRF_START + traceFilename + ATTRIBUTE_END);
+                    	output.write(ATTRIBUTE_XTRC_START + qName + Constants.COLON + nextValue.toString() + ATTRIBUTE_END);
+                    }
                     output.write(Constants.GREATER_THAN);
                     
                 } catch (Exception e) {

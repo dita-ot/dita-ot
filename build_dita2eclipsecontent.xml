@@ -43,6 +43,7 @@
     description="Build EclipseContent TOC file">
     <xslt processor="trax" basedir="${dita.temp.dir}"
       destdir="${output.dir}" includes="${user.input.file}"
+      classpathref="dost.class.path"
       style="${dita.script.dir}${file.separator}map2eclipse.xsl">
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
       <param name="OUTEXT" expression="${content.link.ext}" />
@@ -68,6 +69,7 @@
     <xslt processor="trax"
       in="${dita.temp.dir}${file.separator}${user.input.file}"
       out="${dita.map.output.dir}${file.separator}plugin.xml"
+      classpathref="dost.class.path"
       style="${dita.script.dir}${file.separator}map2plugin-cp.xsl">
       <param name="TOCROOT" expression="${args.eclipsecontent.toc}" />
       <param name="version" expression="${args.eclipse.version}"

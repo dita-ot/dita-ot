@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+ Sourceforge.net. See the accompanying license.txt file for 
+ applicable licenses.-->
+ <!--
+  | (C) Copyright IBM Corporation 2005 - 2006. All Rights Reserved.
+  *-->   
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN"
+ "map.dtd">
+<map title="DITA Open Toolkit Developement Reference">
+<topicref href="supporting_file_extension.dita" navtitle="Supporting both .dita and .xml in one ditamap">
+</topicref>
+<topicref href="standardxmlcatalogresolver.dita" navtitle="Standard XML catalog resolver">
+</topicref>
+<topicref href="topicmerge.dita" navtitle="Topic merge"></topicref>
+<topicref href="workingwithdocplugin.dita" navtitle="Working with documentation plug-in">
+</topicref>
+</map>

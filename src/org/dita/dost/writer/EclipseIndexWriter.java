@@ -38,12 +38,13 @@ public class EclipseIndexWriter implements AbstractWriter {
 	
 	private String filepath = null;
 	
-	private DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
+	private DITAOTJavaLogger javaLogger = null;
 	
 	/**
 	 * Default constructor
 	 */
 	public EclipseIndexWriter() {
+		javaLogger = new DITAOTJavaLogger();
 	}
 	
 	/**

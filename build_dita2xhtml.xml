@@ -40,6 +40,7 @@
               basedir="${dita.temp.dir}"
               destdir="${output.dir}"
               includes="${user.input.file}"
+              classpathref="dost.class.path"
               style="${dita.script.dir}${file.separator}map2xhtmtoc.xsl">
             <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
             <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
@@ -61,6 +62,7 @@
               basedir="${dita.temp.dir}"
               destdir="${output.dir}"
               includes="${user.input.file}"
+              classpathref="dost.class.path"
               style="${dita.script.dir}${file.separator}map2xhtmtoc.xsl">
             <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
             <param name="OUTEXT" expression="${out.ext}" if="out.ext" />

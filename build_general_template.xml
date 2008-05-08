@@ -21,6 +21,7 @@
     </condition>
     <xslt processor="trax" basedir="${dita.temp.dir}"
       destdir="${output.dir}" includes="${fullditatopiclist} ${chunkedtopiclist}"
+      classpathref="dost.class.path"
       extension="${out.ext}" style="${args.xsl}">
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
       <param name="FILTERFILE" expression="${dita.input.valfile}"
@@ -56,6 +57,7 @@
     </condition>
     <xslt processor="trax" basedir="${dita.temp.dir}"
       destdir="${output.dir}" includes="${fullditatopiclist} ${chunkedtopiclist}"
+      classpathref="dost.class.path"
       extension="${out.ext}" style="${args.xsl}">
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
       <param name="FILTERFILE" expression="${dita.input.valfile}"
@@ -93,6 +95,7 @@
     </condition>
     <xslt processor="trax" basedir="${dita.temp.dir}"
       destdir="${output.dir}" includes="${fullditatopiclist} ${chunkedtopiclist}"
+      classpathref="dost.class.path"
       extension="${out.ext}" style="${args.xsl}">
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
       <param name="FILTERFILE" expression="${dita.input.valfile}"
@@ -132,6 +135,7 @@
     </condition>
     <xslt processor="trax" basedir="${dita.temp.dir}"
       destdir="${output.dir}" includes="${fullditatopiclist} ${chunkedtopiclist}"
+      classpathref="dost.class.path"
       extension="${out.ext}" style="${args.xsl}">
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
       <param name="FILTERFILE" expression="${dita.input.valfile}"
@@ -186,6 +190,7 @@
     </condition>
     <xslt processor="trax" basedir="${dita.temp.dir}"
       destdir="${output.dir}${file.separator}${uplevels}" includes="${outditafileslist}"
+      classpathref="dost.class.path"
       extension="${out.ext}" style="${args.xsl}">
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
       <param name="FILTERFILE" expression="${dita.input.valfile}"
@@ -221,6 +226,7 @@
     </condition>
     <xslt processor="trax" basedir="${dita.temp.dir}"
       destdir="${output.dir}${file.separator}${uplevels}" includes="${outditafileslist}"
+      classpathref="dost.class.path"
       extension="${out.ext}" style="${args.xsl}">
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
       <param name="FILTERFILE" expression="${dita.input.valfile}"

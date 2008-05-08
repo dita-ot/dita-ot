@@ -54,6 +54,11 @@ public class ChunkMapReader implements AbstractReader {
 	private String ditaext = null;
 	
 	private String transtype = null;
+	
+	private ProcessingInstruction workdir = null; // Tagsmiths modification
+
+	private ProcessingInstruction path2proj = null; // Tagsmiths modification
+
 
 	public ChunkMapReader() {
 		super();
@@ -71,6 +76,23 @@ public class ChunkMapReader implements AbstractReader {
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder builder = factory.newDocumentBuilder();
 			Document doc = builder.parse(filename);
+			
+			// Start Tagsmiths modification: Added logic to collect the 
+			// workdir and path2proj processing instructions.
+			NodeList docNodes = doc.getChildNodes();
+			for (int i = 0; i < docNodes.getLength(); i++) {
+				Node node = docNodes.item(i);
+				if (node.getNodeType() == Node.PROCESSING_INSTRUCTION_NODE) {
+					ProcessingInstruction pi = (ProcessingInstruction) node;
+					if (pi.getNodeName() == "workdir") {
+						workdir = pi;
+					} else if (pi.getNodeName() == "path2project") {
+						path2proj = pi;
+					}
+				}
+			}
+			// End Tagsmiths modification
+
 			
 			Element root = doc.getDocumentElement();
 			NodeList list = root.getChildNodes();
@@ -174,12 +196,22 @@ public class ChunkMapReader implements AbstractReader {
 	}
 
 	private void outputMapFile(String file, Element root) {
-		// TODO Auto-generated method stub
+		
 		OutputStreamWriter output = null;
 		try{
 		output = new OutputStreamWriter(
 				new FileOutputStream(file),
 				Constants.UTF8);
+		// Start Tagsmiths modification: XML_HEAD and the workdir and
+		// path2proj processing instructions were not being sent to output.
+		// The follow few lines corrects that problem.
+		output.write(Constants.XML_HEAD);
+		if (workdir != null)
+			output(workdir, output);
+		if (path2proj != null)
+			output(path2proj, output);
+		// End Tagsmiths modification
+
 		output(root,output);
 		output.flush();
 		output.close();

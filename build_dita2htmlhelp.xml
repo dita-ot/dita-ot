@@ -12,12 +12,14 @@
 
     <target name="dita2htmlhelp"
             unless="noMap"
-        depends="build-init, preprocess, dita.map.htmlhelp, copy-css, 
-                     dita.topics.html, dita.inner.topics.html, dita.outer.topics.html, compile.HTML.Help">
+        depends="build-init, preprocess, copy-css, 
+                     dita.topics.html, dita.inner.topics.html, dita.outer.topics.html">
+        <antcall target="dita.map.htmlhelp"></antcall>
+        <antcall target="compile.HTML.Help"></antcall>
     </target>
 
     <target name="dita.map.htmlhelp"
-            depends="dita.map.htmlhelp.init, dita.map.htmlhelp.hhp, dita.map.htmlhelp.hhc, dita.map.htmlhelp.hhk">
+        depends="dita.map.htmlhelp.init, dita.map.htmlhelp.hhp, dita.map.htmlhelp.hhc, dita.map.htmlhelp.hhk, dita.out.map.htmlhelp.hhp, dita.out.map.htmlhelp.hhc, dita.out.map.htmlhelp.hhk">
     </target>
 
     <target name="dita.map.htmlhelp.init"
@@ -30,13 +32,14 @@
     </target>
 
     <target name="dita.map.htmlhelp.hhp"
-            depends="dita.map.htmlhelp.init"
+            depends="dita.map.htmlhelp.init" if="old.transform"
             description="Build HTMLHelp HHP file">
         <xslt processor="trax"
               basedir="${dita.temp.dir}"
               destdir="${output.dir}"
               includes="${user.input.file}"
               extension=".hhp"
+              classpathref="dost.class.path"
               style="${dita.script.dir}${file.separator}map2hhp.xsl">
             <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
             <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
@@ -46,23 +49,58 @@
                    if="args.htmlhelp.includefile" />
         </xslt>
     </target>
+    
+    <target name="dita.out.map.htmlhelp.hhp"
+        depends="dita.map.htmlhelp.init" if="inner.transform"
+        description="Build HTMLHelp HHP file">
+        <xslt processor="trax"
+            basedir="${dita.temp.dir}"
+            destdir="${output.dir}"
+            includes="${user.input.file}"
+            classpathref="dost.class.path"
+            style="${dita.script.dir}${file.separator}map2hhp.xsl">
+            <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
+            <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
+            <param name="HHCNAME" expression="${dita.map.filename.root}.hhc" />
+            <param name="INCLUDEFILE"
+                expression="${args.htmlhelp.includefile}"
+                if="args.htmlhelp.includefile" />
+            <mapper type="glob" from="${user.input.file}" to="${dita.map.filename.root}.hhp"/>
+        </xslt>
+    </target>
 
     <target name="dita.map.htmlhelp.hhc"
-            depends="dita.map.htmlhelp.init"
+            depends="dita.map.htmlhelp.init" if="old.transform"
             description="Build HTMLHelp HHC file">
         <xslt processor="trax"
               basedir="${dita.temp.dir}"
               destdir="${output.dir}"
               includes="${user.input.file}"
               extension=".hhc"
+              classpathref="dost.class.path"
               style="${dita.script.dir}${file.separator}map2hhc.xsl">
             <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
             <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
         </xslt>
     </target>
+    
+    <target name="dita.out.map.htmlhelp.hhc"
+        depends="dita.map.htmlhelp.init" if="inner.transform"
+        description="Build HTMLHelp HHC file">
+        <xslt processor="trax"
+            basedir="${dita.temp.dir}"
+            destdir="${output.dir}"
+            includes="${user.input.file}"
+            classpathref="dost.class.path"
+            style="${dita.script.dir}${file.separator}map2hhc.xsl">
+            <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
+            <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
+            <mapper type="glob" from="${user.input.file}" to="${dita.map.filename.root}.hhc"/>
+        </xslt>
+    </target>
 
     <target name="dita.map.htmlhelp.hhk"
-            depends="dita.map.htmlhelp.init"
+            depends="dita.map.htmlhelp.init" if="old.transform"
             description="Build HTMLHelp HHK file">
         <pipeline message="Extract index term."
                   module="IndexTermExtract"
@@ -71,14 +109,31 @@
                   inputmap="${user.input.file}"
                   extparam="output=${output.dir}${file.separator}${user.input.file};targetext=${out.ext};indextype=htmlhelp;${index.ext.param.encoding}" />
     </target>
+    
+    <target name="dita.out.map.htmlhelp.hhk"
+        depends="dita.map.htmlhelp.init" if="inner.transform"
+        description="Build HTMLHelp HHK file">
+        <pipeline message="Extract index term."
+            module="IndexTermExtract"
+            basedir="${basedir}"
+            tempdir="${dita.temp.dir}"
+            inputmap="${user.input.file}"
+            extparam="output=${output.dir}${file.separator}${dita.map.filename.root}.hhk;targetext=${out.ext};indextype=htmlhelp;${index.ext.param.encoding}" />
+    </target>
 
     <target name="compile.HTML.Help"
             if="HTMLHelpCompiler"
             description="Compile HTMLHelp output">
+        <condition property="compile.dir" value="${output.dir}">
+            <isset property="inner.transform"/>
+        </condition>
+        <condition property="compile.dir" value="${dita.map.output.dir}">
+            <isset property="old.transform"/>
+        </condition>
         <exec executable="${HTMLHelpCompiler}"
               failonerror="${failonerror}"
               failifexecutionfails="${failonerror}">
-            <arg value="${dita.map.output.dir}${file.separator}${dita.map.filename.root}.hhp" />
+            <arg value="${compile.dir}${file.separator}${dita.map.filename.root}.hhp" />
         </exec>
     </target>
 

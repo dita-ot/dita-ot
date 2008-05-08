@@ -361,10 +361,10 @@
 <!-- Added for DITA 1.1 "Shortdesc proposal" -->
 <!-- called abstract processing - para at start of topic -->
 <xsl:template match="*[contains(@class,' topic/abstract ')]" mode="outofline">
-<div>
-  <xsl:call-template name="commonattributes"/>
-  <xsl:apply-templates/>
-</div><xsl:value-of select="$newline"/>
+  <div>
+    <xsl:call-template name="commonattributes"/>
+    <xsl:apply-templates select="." mode="outputContentsWithFlagsAndStyle"/>
+  </div><xsl:value-of select="$newline"/>
 </xsl:template>
 
 <!-- Updated for DITA 1.1 "Shortdesc proposal" -->
@@ -385,22 +385,35 @@
 <!-- called shortdesc processing when it is in abstract -->
 <xsl:template match="*[contains(@class,' topic/shortdesc ')]" mode="outofline.abstract">
   <xsl:choose>
-    <xsl:when test="preceding-sibling::*[contains(@class,' topic/p ')]">
+    <xsl:when test="preceding-sibling::*[contains(@class,' topic/p ') or contains(@class,' topic/dl ') or
+                                         contains(@class,' topic/fig ') or contains(@class,' topic/lines ') or
+                                         contains(@class,' topic/lq ') or contains(@class,' topic/note ') or
+                                         contains(@class,' topic/ol ') or contains(@class,' topic/pre ') or
+                                         contains(@class,' topic/simpletable ') or contains(@class,' topic/sl ') or
+                                         contains(@class,' topic/table ') or contains(@class,' topic/ul ')]">
       <div>
         <xsl:call-template name="commonattributes"/>
-        <xsl:apply-templates/>
+        <xsl:apply-templates select="." mode="outputContentsWithFlagsAndStyle"/>
       </div>
     </xsl:when>
-    <xsl:when test="following-sibling::*[contains(@class,' topic/p ')]">
+    <xsl:when test="following-sibling::*[contains(@class,' topic/p ') or contains(@class,' topic/dl ') or
+                                         contains(@class,' topic/fig ') or contains(@class,' topic/lines ') or
+                                         contains(@class,' topic/lq ') or contains(@class,' topic/note ') or
+                                         contains(@class,' topic/ol ') or contains(@class,' topic/pre ') or
+                                         contains(@class,' topic/simpletable ') or contains(@class,' topic/sl ') or
+                                         contains(@class,' topic/table ') or contains(@class,' topic/ul ')]">
       <div>
         <xsl:call-template name="commonattributes"/>
-        <xsl:apply-templates/>
+        <xsl:apply-templates select="." mode="outputContentsWithFlagsAndStyle"/>
       </div>
     </xsl:when>
     <xsl:otherwise>
+      <xsl:if test="preceding-sibling::* | preceding-sibling::text()">
+        <xsl:text> </xsl:text>
+      </xsl:if>
       <span>
         <xsl:call-template name="commonattributes"/>
-        <xsl:apply-templates/>
+        <xsl:apply-templates select="." mode="outputContentsWithFlagsAndStyle"/>
       </span>
     </xsl:otherwise>
   </xsl:choose>
@@ -409,10 +422,10 @@
 
 <!-- called shortdesc processing - para at start of topic -->
 <xsl:template match="*[contains(@class,' topic/shortdesc ')]" mode="outofline">
-<p>
-  <xsl:call-template name="commonattributes"/>
-  <xsl:apply-templates/>
-</p><xsl:value-of select="$newline"/>
+  <p>
+    <xsl:call-template name="commonattributes"/>
+    <xsl:apply-templates select="." mode="outputContentsWithFlagsAndStyle"/>
+  </p><xsl:value-of select="$newline"/>
 </xsl:template>
 
 <!-- section processor - div with no generated title -->
@@ -2740,10 +2753,24 @@
     <xsl:call-template name="getrules-parent"/>
   </xsl:variable>
   
+  <xsl:variable name="framevalue">
+    <xsl:choose>
+      <xsl:when test="ancestor::*[contains(@class,' topic/table ')][1]/@frame and ancestor::*[contains(@class,' topic/table ')][1]/@frame!=''">
+        <xsl:value-of select="ancestor::*[contains(@class,' topic/table ')][1]/@frame"/>
+      </xsl:when>
+      <xsl:otherwise>all</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  
   <xsl:variable name="rowsep">
     <xsl:choose>
       <!-- If there are more rows, keep rows on -->
-      <xsl:when test="not(../following-sibling::*)">1</xsl:when>
+      <xsl:when test="not(../following-sibling::*)">        
+        <xsl:choose>
+          <xsl:when test="$framevalue='all' or $framevalue='bottom' or $framevalue='topbot'">1</xsl:when>
+          <xsl:otherwise>0</xsl:otherwise>
+        </xsl:choose>
+      </xsl:when>
       <xsl:when test="@rowsep"><xsl:value-of select="@rowsep"/></xsl:when>
       <xsl:when test="../@rowsep"><xsl:value-of select="../@rowsep"/></xsl:when>
       <xsl:when test="@colname and ../../../*[contains(@class,' topic/colspec ')][@colname=$this-colname]/@rowsep"><xsl:value-of select="../../../*[contains(@class,' topic/colspec ')][@colname=$this-colname]/@rowsep"/></xsl:when>
@@ -2753,7 +2780,12 @@
   <xsl:variable name="colsep">
     <xsl:choose>
       <!-- If there are more columns, keep rows on -->
-      <xsl:when test="not(following-sibling::*)">1</xsl:when>
+      <xsl:when test="not(following-sibling::*)">
+        <xsl:choose>
+          <xsl:when test="$framevalue='all' or $framevalue='sides'">1</xsl:when>
+          <xsl:otherwise>0</xsl:otherwise>
+        </xsl:choose>
+      </xsl:when>
       <xsl:when test="@colsep"><xsl:value-of select="@colsep"/></xsl:when>
       <xsl:when test="@colname and ../../../*[contains(@class,' topic/colspec ')][@colname=$this-colname]/@colsep"><xsl:value-of select="../../../*[contains(@class,' topic/colspec ')][@colname=$this-colname]/@colsep"/></xsl:when>
       <xsl:otherwise>1</xsl:otherwise>
@@ -4291,29 +4323,30 @@
     <!-- title -or- title & desc -->
     <xsl:when test="*[contains(@class,' topic/title ')]">
       <caption>
-       <xsl:choose>     <!-- Hungarian: "1. Table " -->
-        <xsl:when test="( (string-length($ancestorlang)=5 and contains($ancestorlang,'hu-hu')) or (string-length($ancestorlang)=2 and contains($ancestorlang,'hu')) )">
-         <xsl:value-of select="$tbl-count-actual"/><xsl:text>. </xsl:text>
-         <xsl:call-template name="getString">
-          <xsl:with-param name="stringName" select="'Table'"/>
-         </xsl:call-template><xsl:text> </xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-         <xsl:call-template name="getString">
-          <xsl:with-param name="stringName" select="'Table'"/>
-         </xsl:call-template><xsl:text> </xsl:text><xsl:value-of select="$tbl-count-actual"/><xsl:text>. </xsl:text>
-        </xsl:otherwise>
-       </xsl:choose>
-       <xsl:apply-templates select="./*[contains(@class,' topic/title ')]" mode="tabletitle"/>
-       <xsl:if test="*[contains(@class,' topic/desc ')]">
-        <xsl:text>. </xsl:text>
-        <xsl:apply-templates select="./*[contains(@class,' topic/desc ')]" mode="tabledesc"/>
+        <span class="tablecap">
+         <xsl:choose>     <!-- Hungarian: "1. Table " -->
+          <xsl:when test="( (string-length($ancestorlang)=5 and contains($ancestorlang,'hu-hu')) or (string-length($ancestorlang)=2 and contains($ancestorlang,'hu')) )">
+           <xsl:value-of select="$tbl-count-actual"/><xsl:text>. </xsl:text>
+           <xsl:call-template name="getString">
+            <xsl:with-param name="stringName" select="'Table'"/>
+           </xsl:call-template><xsl:text> </xsl:text>
+          </xsl:when>
+          <xsl:otherwise>
+           <xsl:call-template name="getString">
+            <xsl:with-param name="stringName" select="'Table'"/>
+           </xsl:call-template><xsl:text> </xsl:text><xsl:value-of select="$tbl-count-actual"/><xsl:text>. </xsl:text>
+          </xsl:otherwise>
+         </xsl:choose>
+         <xsl:apply-templates select="./*[contains(@class,' topic/title ')]" mode="tabletitle"/>         
+        </span>
+       <xsl:if test="*[contains(@class,' topic/desc ')]"> 
+        <xsl:text>. </xsl:text><span class="tabledesc"><xsl:apply-templates select="./*[contains(@class,' topic/desc ')]" mode="tabledesc"/></span>
        </xsl:if>
       </caption>
     </xsl:when>
     <!-- desc -->
     <xsl:when test="*[contains(@class,' topic/desc ')]">
-      <div><xsl:apply-templates select="./*[contains(@class,' topic/desc ')]" mode="tabledesc"/></div>
+      <span class="tabledesc"><xsl:apply-templates select="./*[contains(@class,' topic/desc ')]" mode="tabledesc"/></span>
     </xsl:when>
   </xsl:choose>
 </xsl:template>
@@ -4572,7 +4605,9 @@
     </xsl:variable>
     <xsl:variable name="urltest"> <!-- test for URL -->
       <xsl:call-template name="url-string">
-        <xsl:with-param name="urltext" select="$CSSPATH"/>
+        <xsl:with-param name="urltext">
+          <xsl:value-of select="concat($CSSPATH,$CSS)"/>
+        </xsl:with-param>
       </xsl:call-template>
     </xsl:variable>
     
@@ -4615,10 +4650,10 @@
       <xsl:variable name="maintitle"><xsl:apply-templates select="/*[contains(@class,' topic/topic ')]/*[contains(@class,' topic/title ')]" mode="text-only"/></xsl:variable>
       <xsl:variable name="ditamaintitle"><xsl:apply-templates select="/dita/*[contains(@class,' topic/topic ')][1]/*[contains(@class,' topic/title ')]" mode="text-only"/></xsl:variable>
       <xsl:choose>
-        <xsl:when test="string-length($schtitle)>'0'"><xsl:value-of select="$schtitle"/></xsl:when>
-        <xsl:when test="string-length($ditaschtitle)>'0'"><xsl:value-of select="$ditaschtitle"/></xsl:when>
-        <xsl:when test="string-length($maintitle)>'0'"><xsl:value-of select="$maintitle"/></xsl:when>
-        <xsl:when test="string-length($ditamaintitle)>'0'"><xsl:value-of select="$ditamaintitle"/></xsl:when>
+        <xsl:when test="string-length($schtitle)>'0'"><xsl:value-of select="normalize-space($schtitle)"/></xsl:when>
+        <xsl:when test="string-length($ditaschtitle)>'0'"><xsl:value-of select="normalize-space($ditaschtitle)"/></xsl:when>
+        <xsl:when test="string-length($maintitle)>'0'"><xsl:value-of select="normalize-space($maintitle)"/></xsl:when>
+        <xsl:when test="string-length($ditamaintitle)>'0'"><xsl:value-of select="normalize-space($ditamaintitle)"/></xsl:when>
         <xsl:otherwise><xsl:text>***</xsl:text>
           <xsl:call-template name="output-message">
             <xsl:with-param name="msgnum">037</xsl:with-param>

@@ -41,6 +41,7 @@
     </condition>
     <dirname file="${output}" property="dita.rtf.outputdir" />
     <xslt processor="trax" in="${input}" out="${output}"
+      classpathref="dost.class.path"
       style="${args.xsl}">
       <param name="DRAFT" expression="${args.draft}" if="args.draft" />
       <param name="OUTPUTDIR" expression="${dita.rtf.outputdir}" />
@@ -58,11 +59,13 @@
     <dirname file="${output}" property="dita.rtf.outputdir" />
     <xslt processor="trax" in="${input}"
       out="${dita.temp.dir}${file.separator}${dita.map.filename.root}_MERGED.xml"
+      classpathref="dost.class.path"
       style="${dita.script.dir}${file.separator}topicmerge.xsl">
       <xmlcatalog refid="dita.catalog" />
     </xslt>
     <xslt processor="trax"
       in="${dita.temp.dir}${file.separator}${dita.map.filename.root}_MERGED.xml"
+      classpathref="dost.class.path"
       out="${output}" style="${args.xsl}">
       <param name="DRAFT" expression="${args.draft}" if="args.draft" />
       <param name="OUTPUTDIR" expression="${dita.rtf.outputdir}" />

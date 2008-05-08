@@ -36,7 +36,7 @@
 <!-- highlighting domain -->
 <xsl:import href="xslhtml/hi-d.xsl"/>
 
-<dita:extension id="dita.xsl.xhtml" behavior="org.dita.dost.platform.ImportAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
+<dita:extension id="dita.xsl.xhtml" behavior="org.dita.dost.platform.ImportXSLAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
 
 <!-- the dita to xhtml converter for element reference documents - not used now -->
 <!--<xsl:import href="elementrefdisp.xsl"/>-->

@@ -109,6 +109,8 @@ public abstract class Constants {
     public static final String ATTRIBUTE_NAME_COPY_TO = "copy-to";
 	public static final String ATTRIBUTE_NAME_DATA = "data";
 	public static final String ATTRIBUTE_NAME_IMAGEREF = "imageref";
+	public static final String ATTRIBUTE_NAME_START="start";
+	public static final String ATTRIBUTE_NAME_END="end";
     
     /**
      * Constant for value of attribute format in dita files.
@@ -235,6 +237,9 @@ public abstract class Constants {
 	public static final String ATTR_CLASS_VALUE_TITLE = " topic/title ";
 	public static final String ATTR_CLASS_VALUE_MAP = " map/map ";
 	public static final String ATTR_CLASS_VALUE_INDEXTERM = " topic/indexterm ";
+	public static final String ATTR_CLASS_VALUE_INDEXSEE = " indexing-d/index-see ";
+	public static final String ATTR_CLASS_VALUE_INDEXSEEALSO = " indexing-d/index-see-also ";
+	public static final String ATTR_CLASS_VALUE_INDEXSORTAS = " indexing-d/index-sort-as ";
 	public static final String ATTR_CLASS_VALUE_TOPIC = " topic/topic ";
 	public static final String ATTR_CLASS_VALUE_XREF = " topic/xref ";
 	public static final String ATTR_CLASS_VALUE_LINK = " topic/link ";

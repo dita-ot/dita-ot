@@ -284,4 +284,5 @@
           uri="demo/book/bkinfo.mod"/>
 
   <dita:extension id="dita.specialization.catalog" behavior="org.dita.dost.platform.InsertAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
+  <dita:extension id="dita.specialization.catalog.relative" behavior="org.dita.dost.platform.InsertCatalogActionRelative" xmlns:dita="http://dita-ot.sourceforge.net"/>
 </catalog>

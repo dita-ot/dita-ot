@@ -90,6 +90,7 @@
     description="Resolve conref in input files">
     <xslt processor="trax" basedir="${dita.temp.dir}"
       destdir="${dita.temp.dir}" includes="${conreflist}"
+      classpathref="dost.class.path"
       style="${dita.script.dir}${file.separator}preprocess${file.separator}conref.xsl">
       <mapper type="glob" from="*" to="*.cnrf" />
       <param name="DITAEXT" expression="${dita.ext}" />
@@ -109,6 +110,7 @@
     	destdir="${dita.temp.dir}"
     	includes="${fullditamaplist}"
     	extension=".ditamap.ref"
+        classpathref="dost.class.path"
       style="${dita.script.dir}${file.separator}preprocess${file.separator}mapref.xsl">
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
       <param name="TRANSTYPE" expression="${transtype}" />
@@ -128,6 +130,7 @@
     	destdir="${dita.temp.dir}"
   	    includes="${fullditamaplist}"
     	extension=".ditamap.pull"
+        classpathref="dost.class.path"
       style="${dita.script.dir}${file.separator}preprocess${file.separator}mappull.xsl">
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
       <param name="TRANSTYPE" expression="${transtype}" />
@@ -154,6 +157,7 @@
     <xslt processor="trax"
       in="${dita.temp.dir}${file.separator}${user.input.file}"
       out="${maplink.workdir}${file.separator}maplinks.unordered"
+      classpathref="dost.class.path"
       style="${dita.script.dir}${file.separator}preprocess${file.separator}maplink.xsl">
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
       <param name="INPUTMAP" expression="${user.input.file}" />
@@ -171,6 +175,7 @@
     description="Pull metadata for link and xref element">
     <xslt processor="trax" basedir="${dita.temp.dir}"
       destdir="${dita.temp.dir}" includes="${fullditatopiclist} ${chunkedtopiclist}"
+      classpathref="dost.class.path"
       style="${dita.script.dir}${file.separator}preprocess${file.separator}topicpull.xsl">
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
       <param name="ONLYTOPICINMAP" expression="${onlytopic.in.map}" if="onlytopic.in.map"/>

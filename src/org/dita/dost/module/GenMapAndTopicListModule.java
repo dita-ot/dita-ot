@@ -283,7 +283,15 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 	}
 
 	private void processFile(String currentFile) throws DITAOTException {
-		File fileToParse = new File(baseInputDir, currentFile);
+		File fileToParse;
+		File file=new File(currentFile);
+		if(file.isAbsolute()){
+			fileToParse=file;
+			currentFile=FileUtils.getRelativePathFromMap(rootFile,currentFile);
+			
+		}else{	
+			fileToParse = new File(baseInputDir, currentFile);
+		}
 		String msg = null;
 		Properties params = new Properties();
 		params.put("%1", currentFile);		
@@ -584,7 +592,7 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 		while (iter.hasNext()) {
 			String key = (String) iter.next();
 			String value = (String) copytoMap.get(key);
-			if (new File(baseInputDir, value).exists()) {
+			if (new File(baseInputDir + File.separator + prefix , value).exists()) {
 				tempMap.put(key, value);
 				//Add the copy-to target to conreflist when its source has conref
 				if(conrefSet.contains(value)){
@@ -715,9 +723,21 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 				 * In ant, all the file separator should be slash, so we need to replace
 				 * all the back slash with slash.
 				 */
+				int index=file.indexOf("=");
+				if(index!=-1){
+					String to=file.substring(0,index);
+					String source=file.substring(index+1);
+					newSet.add(FileUtils.removeRedundantNames(new StringBuffer(prefix).append(to).toString())
+							.replaceAll(Constants.DOUBLE_BACK_SLASH,
+									Constants.SLASH) + Constants.EQUAL +
+									FileUtils.removeRedundantNames(new StringBuffer(prefix).append(source).toString())
+							.replaceAll(Constants.DOUBLE_BACK_SLASH,
+									Constants.SLASH));
+				}else{
 				newSet.add(FileUtils.removeRedundantNames(new StringBuffer(prefix).append(file).toString())
 						.replaceAll(Constants.DOUBLE_BACK_SLASH,
 								Constants.SLASH));
+				}
 			}
 		}
 

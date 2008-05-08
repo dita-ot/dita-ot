@@ -73,8 +73,8 @@
     <xsl:when test="/*[contains(@class, ' map/map ')]/@xml:lang">
       <xsl:value-of select="concat(translate(/*[contains(@class, ' map/map ')]/@xml:lang,$lang-translate-uppercase,$lang-translate-lowercase), '-')"/>
     </xsl:when>
-    <xsl:when test="document((//*[contains(@class, ' map/topicref ')][@href and @href != ''])[1]/@href, /)//*[contains(@class, ' topic/topic ')][1]/@xml:lang">
-      <xsl:value-of select="concat(translate(document((//*[contains(@class, ' map/topicref ')][@href and @href != ''])[1]/@href, /)//*[contains(@class, ' topic/topic ')][1]/@xml:lang,$lang-translate-uppercase,$lang-translate-lowercase), '-')"/>
+    <xsl:when test="document((//*[contains(@class, ' map/topicref ')][@href and @href != '' and not(contains(@href,'://'))][not(@format) or @format='dita' or @format='DITA'][not(@scope) or @scope='local'])[1]/@href, /)//*[contains(@class, ' topic/topic ')][1]/@xml:lang">
+      <xsl:value-of select="concat(translate(document((//*[contains(@class, ' map/topicref ')][@href and @href != ''and not(contains(@href,'://'))][not(@format) or @format='dita' or @format='DITA'][not(@scope) or @scope='local'])[1]/@href, /)//*[contains(@class, ' topic/topic ')][1]/@xml:lang,$lang-translate-uppercase,$lang-translate-lowercase), '-')"/>
     </xsl:when>
     <xsl:otherwise>en-us</xsl:otherwise>
   </xsl:choose>

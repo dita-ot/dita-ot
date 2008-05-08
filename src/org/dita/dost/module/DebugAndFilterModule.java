@@ -55,7 +55,9 @@ public class DebugAndFilterModule implements AbstractPipelineModule {
     	String propValue = property.getProperty(listName);
 		String file;
 		int equalIndex;
+		int fileExtIndex;
 		StringTokenizer tokenizer = null;
+		
     	if (propValue == null || Constants.STRING_EMPTY.equals(propValue.trim())){
     		//if the propValue is null or empty
     		return;
@@ -66,7 +68,9 @@ public class DebugAndFilterModule implements AbstractPipelineModule {
     	while (tokenizer.hasMoreElements()){
     		file = (String)tokenizer.nextElement();
     		equalIndex = file.indexOf(Constants.EQUAL);
-    		if(file.indexOf(Constants.FILE_EXTENSION_DITAMAP) != -1){
+    		fileExtIndex = file.lastIndexOf(Constants.DOT);
+    		if(fileExtIndex != -1 &&
+    				Constants.FILE_EXTENSION_DITAMAP.equalsIgnoreCase(file.substring(fileExtIndex))){
     			result.append(Constants.COMMA).append(file);
     		} else if (equalIndex == -1 ){
     			//append one more comma at the beginning of property value

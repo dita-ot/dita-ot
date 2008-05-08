@@ -43,6 +43,7 @@
     <mkdir dir="${outputDir}" />
     <xslt processor="trax" in="${inputDir}${file.separator}${inputMap}"
       out="${outputDir}${file.separator}${mapRoot}.xml"
+      classpathref="dost.class.path"
       style="${args.xsl}">
       <param name="outputdir" expression="${outputDir}" />
       <xmlcatalog refid="dita.catalog" />
@@ -59,6 +60,7 @@
       </not>
     </condition>
     <xslt processor="trax" in="${inputFile}" out="${outputFile}"
+      classpathref="dost.class.path"
       style="${args.xsl}">
       <xmlcatalog refid="dita.catalog" />
     </xslt>

@@ -41,7 +41,7 @@ public class TopicRefWriter extends AbstractXMLWriter {
 	private static final String NOT_LOCAL_URL = "://";
 
 	private Hashtable changeTable = null;
-	private DITAOTJavaLogger logger = new DITAOTJavaLogger();
+	private DITAOTJavaLogger logger = null;
 	private OutputStreamWriter output;
 	private OutputStreamWriter ditaFileOutput;
 	private boolean needResolveEntity;
@@ -59,6 +59,7 @@ public class TopicRefWriter extends AbstractXMLWriter {
 		output = null;
 		logger = null;
 		insideCDATA = false;
+		logger = new DITAOTJavaLogger();
 		
         try {
             if (System.getProperty(Constants.SAX_DRIVER_PROPERTY) == null){

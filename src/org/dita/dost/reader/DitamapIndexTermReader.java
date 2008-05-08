@@ -11,6 +11,7 @@
 package org.dita.dost.reader;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Stack;
 
@@ -19,6 +20,7 @@ import org.dita.dost.index.IndexTermCollection;
 import org.dita.dost.index.IndexTermTarget;
 import org.dita.dost.index.TopicrefElement;
 import org.dita.dost.log.DITAOTJavaLogger;
+import org.dita.dost.log.MessageUtils;
 import org.dita.dost.util.Constants;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.StringUtils;
@@ -33,17 +35,26 @@ import org.xml.sax.SAXException;
  * 
  * @author Wu, Zhi Qiang
  */
-@Deprecated
+
 public class DitamapIndexTermReader extends AbstractXMLReader {
 	/** The stack used to store elements */
 	private Stack elementStack = null;
 	
-	/** List used to store all the specilized index terms */
+	/** List used to store all the specialized index terms */
 	private List indexTermSpecList = null;
+	
+	/** List used to store all the specialized topicref tags */
+	private List topicrefSpecList = null;
+	
+	/** List used to store all the specialized index-see tags */
+	private List indexSeeSpecList = null;
+	
+	/** List used to store all the specialized index-see-also tags */
+	private List indexSeeAlsoSpecList = null;
 	
 	private String mapPath = null;
 
-	private DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
+	private DITAOTJavaLogger javaLogger = null;
 
 	/**
 	 * Create a new instance of sax handler for ditamap.
@@ -51,7 +62,11 @@ public class DitamapIndexTermReader extends AbstractXMLReader {
 	public DitamapIndexTermReader() {
 		super();
 		elementStack = new Stack();
-		indexTermSpecList = new ArrayList(Constants.INT_256);
+		indexTermSpecList = new ArrayList(Constants.INT_16);
+		topicrefSpecList = new ArrayList(Constants.INT_16);
+		indexSeeSpecList = new ArrayList(Constants.INT_16);
+		indexSeeAlsoSpecList = new ArrayList(Constants.INT_16);
+		javaLogger = new DITAOTJavaLogger();
 	}
 
 	/**
@@ -83,7 +98,7 @@ public class DitamapIndexTermReader extends AbstractXMLReader {
 	 */
 	public void endElement(String uri, String localName, String qName)
 			throws SAXException {
-		if (Constants.ELEMENT_NAME_TOPICREF.equals(localName)) {
+		if (topicrefSpecList.contains(localName)) {
 			elementStack.pop();
 			return;
 		}
@@ -95,9 +110,12 @@ public class DitamapIndexTermReader extends AbstractXMLReader {
 			Object obj = null;
 
 			if (indexTerm.getTermName() == null) {
-				indexTerm.setTermName("***");
-				javaLogger
-						.logWarn("The indexterm element does not have any content. Setting the term to ***.");
+				if(indexTerm.getEndAttribute() != null && !indexTerm.hasSubTerms()){
+					return;
+				}else{
+					indexTerm.setTermName("***");
+					javaLogger.logWarn(MessageUtils.getMessage("DOTJ014W").toString());
+				}
 			}
 			
 			if(indexTerm.getTermKey() == null){
@@ -107,10 +125,70 @@ public class DitamapIndexTermReader extends AbstractXMLReader {
 			obj = elementStack.peek();
 
 			if (obj instanceof TopicrefElement) {
+				genTargets(indexTerm, (TopicrefElement)obj);
 				IndexTermCollection.getInstantce().addTerm(indexTerm);
 			} else {
 				IndexTerm parentTerm = (IndexTerm) obj;
 				parentTerm.addSubTerm(indexTerm);
+			}
+		}
+		
+		// Check to see if the index-see or index-see-also or a specialized 
+		// version is in the list.
+		if (indexSeeSpecList.contains(localName)
+				|| indexSeeAlsoSpecList.contains(localName)) {
+			IndexTerm term = (IndexTerm) elementStack.pop();
+			if (term.getTermKey() == null) {
+				term.setTermKey(term.getTermFullName());
+			}
+			if (elementStack.peek() instanceof IndexTerm){
+				IndexTerm parentTerm = (IndexTerm) elementStack.peek();
+				parentTerm.addSubTerm(term);
+			}
+		}
+	}
+
+	private void genTargets(IndexTerm indexTerm, TopicrefElement obj) {
+		
+		TopicrefElement topicref = obj;
+		IndexTermTarget target = new IndexTermTarget();
+		String targetURI = null;
+
+		String href = topicref.getHref();
+		
+		StringBuffer buffer = new StringBuffer();
+		if (!href.contains(Constants.COLON_DOUBLE_SLASH) && !FileUtils.isAbsolutePath(href)){
+			if (mapPath != null && !Constants.STRING_EMPTY.equals(mapPath)) {
+				buffer.append(mapPath);
+				buffer.append(Constants.SLASH);
+			}
+			buffer.append(href);
+			targetURI = FileUtils.removeRedundantNames(buffer
+					.toString());
+		}else{
+			targetURI = href;
+		}
+		
+		if (topicref.getNavTitle() != null){
+			target.setTargetName(topicref.getNavTitle());
+		}else {
+			target.setTargetName(href);
+		}
+		
+		target.setTargetURI(targetURI);
+			
+		assignTarget(indexTerm, target);
+			
+	}
+
+	private void assignTarget(IndexTerm indexTerm, IndexTermTarget target) {
+		if (indexTerm.isLeaf()){
+			indexTerm.addTarget(target);
+		}
+		
+		if (indexTerm.hasSubTerms()){
+			for (Object subTerm : indexTerm.getSubTerms()){
+				assignTarget((IndexTerm)subTerm, target);
 			}
 		}
 	}
@@ -124,7 +202,7 @@ public class DitamapIndexTermReader extends AbstractXMLReader {
 		String classAttr = attributes.getValue(Constants.ATTRIBUTE_NAME_CLASS);
 		
 		if (classAttr != null
-				&& classAttr.indexOf(Constants.ELEMENT_NAME_INDEXTERM) != -1) {
+				&& classAttr.contains(Constants.ATTR_CLASS_VALUE_INDEXTERM)) {
 			// add the element name to the indexterm specialization element 
 			// list if it does not already exist in that list.  
 			if (!indexTermSpecList.contains(localName)){
@@ -132,7 +210,28 @@ public class DitamapIndexTermReader extends AbstractXMLReader {
 			}
 		}
 		
-		if (Constants.ELEMENT_NAME_TOPICREF.equals(localName)) {
+		if (classAttr != null
+				&& classAttr.contains(Constants.ATTR_CLASS_VALUE_TOPICREF)){
+			if (!topicrefSpecList.contains(localName)){
+				topicrefSpecList.add(localName);
+			}
+		}
+		
+		if (classAttr != null
+				&& classAttr.contains(Constants.ATTR_CLASS_VALUE_INDEXSEE)){
+			if (!indexSeeSpecList.contains(localName)){
+				indexSeeSpecList.add(localName);
+			}
+		}
+		
+		if (classAttr != null
+				&& classAttr.contains(Constants.ATTR_CLASS_VALUE_INDEXSEEALSO)){
+			if (!indexSeeAlsoSpecList.contains(localName)){
+				indexSeeAlsoSpecList.add(localName);
+			}
+		}
+		
+		if (topicrefSpecList.contains(localName)) {
 			String href = attributes.getValue(Constants.ATTRIBUTE_NAME_HREF);
 			String format = attributes
 					.getValue(Constants.ATTRIBUTE_NAME_FORMAT);
@@ -147,54 +246,68 @@ public class DitamapIndexTermReader extends AbstractXMLReader {
 			return;
 		}
 		
+		parseIndexTerm(localName, attributes);
+		parseIndexSee(localName);
+		parseIndexSeeAlso(localName);
+				
+	}
+	
+	private void parseIndexSeeAlso(String localName) {
+		// check to see it the index-see-also element or a specialized version
+		// is in the list.
+		if (indexSeeAlsoSpecList.contains(localName)
+				&& needPushTerm()) {
+			IndexTerm indexTerm = new IndexTerm();
+			IndexTerm parentTerm = null;
+			if(!elementStack.isEmpty()					
+					&& elementStack.peek() instanceof IndexTerm){
+				parentTerm = (IndexTerm)elementStack.peek();
+				if(parentTerm.hasSubTerms()){
+					parentTerm.updateSubTerm();
+				}
+			}
+			indexTerm.setTermPrefix(Constants.IndexTerm_Prefix_See_Also);
+			elementStack.push(indexTerm);
+		}
+	}
+
+	private void parseIndexSee(String localName) {
+		// check to see it the index-see element or a specialized version is
+		// in the list.
+		if (indexSeeSpecList.contains(localName)
+				&& needPushTerm()) {
+			IndexTerm indexTerm = new IndexTerm();
+			IndexTerm parentTerm = null;
+			
+			indexTerm.setTermPrefix(Constants.IndexTerm_Prefix_See);
+			
+			if(!elementStack.isEmpty()
+					&& elementStack.peek() instanceof IndexTerm){
+				parentTerm = (IndexTerm)elementStack.peek();
+				if(parentTerm.hasSubTerms()){
+					parentTerm.updateSubTerm();
+					indexTerm.setTermPrefix(Constants.IndexTerm_Prefix_See_Also);
+				}
+			}
+			elementStack.push(indexTerm);
+		}
+	}
+	
+	private void parseIndexTerm(String localName, Attributes attributes) {
 		// check to see it the indexterm element or a specialized version is 
 		// in the list.
 		if (indexTermSpecList.contains(localName) && needPushTerm()) {
 			IndexTerm indexTerm = new IndexTerm();
-			Object obj = elementStack.peek();
-
-			if (obj instanceof TopicrefElement) {
-				TopicrefElement topicref = (TopicrefElement) obj;
-				IndexTermTarget target = new IndexTermTarget();
-				String targetURI = null;
-
-				String href = topicref.getHref();
-				String targetName = href;
-
-				StringBuffer buffer = new StringBuffer();
-				if (mapPath != null && !Constants.STRING_EMPTY.equals(mapPath)) {
-					buffer.append(mapPath);
-					buffer.append(Constants.SLASH);
+			indexTerm.setStartAttribute(attributes.getValue(Constants.ATTRIBUTE_NAME_END));
+			indexTerm.setEndAttribute(attributes.getValue(Constants.ATTRIBUTE_NAME_END));
+			IndexTerm parentTerm = null;
+			if(!elementStack.isEmpty()
+					&& elementStack.peek() instanceof IndexTerm){
+				parentTerm = (IndexTerm)elementStack.peek();
+				if(parentTerm.hasSubTerms()){
+					parentTerm.updateSubTerm();
 				}
-				buffer.append(href);
-				targetURI = FileUtils.removeRedundantNames(buffer
-						.toString());
-
-				if (targetName.lastIndexOf(Constants.SLASH) != -1) {
-					targetName = targetName.substring(targetName
-							.lastIndexOf(Constants.SLASH) + 1);
-				}
-
-				if (targetName.lastIndexOf(Constants.BACK_SLASH) != -1) {
-					targetName = targetName.substring(targetName
-							.lastIndexOf(Constants.BACK_SLASH) + 1);
-				}
-				
-				if (topicref.getNavTitle() != null){
-					target.setTargetName(topicref.getNavTitle());
-				}else {
-					target.setTargetName("");
-				}
-
-				target.setTargetURI(targetURI);
-				indexTerm.addTarget(target);
-
-			} else {
-				IndexTerm parentTerm = (IndexTerm) obj;
-
-				indexTerm.addTargets(parentTerm.getTargetList());
 			}
-
 			elementStack.push(indexTerm);
 		}
 	}
@@ -206,14 +319,19 @@ public class DitamapIndexTermReader extends AbstractXMLReader {
 		if (elementStack.empty()) {
 			return false;
 		}
+		
 
 		if (elementStack.peek() instanceof TopicrefElement) {
-			if (!FileUtils.isHTMLFile(((TopicrefElement) elementStack.peek()).getHref())){ //Eric
+//			if (!FileUtils.isHTMLFile(((TopicrefElement) elementStack.peek()).getHref())){ //Eric
+//				return false;
+//			}
+//			return ((TopicrefElement) elementStack.peek()).needExtractTerm();
+			// for dita files the indexterm has been moved to its <prolog>
+			// therefore we don't need to collect these terms again.
+			if (FileUtils.isDITAFile(((TopicrefElement) elementStack.peek()).getHref().toLowerCase())){
 				return false;
 			}
-			return ((TopicrefElement) elementStack.peek()).needExtractTerm();
 		}
-
 		return true;
 	}
 

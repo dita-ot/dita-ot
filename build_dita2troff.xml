@@ -19,6 +19,7 @@
     <xslt processor="trax" basedir="${dita.temp.dir}"
       destdir="${output.dir}" includes="${fullditatopiclist} ${chunkedtopiclist}"
       extension="${dita.ext}"
+      classpathref="dost.class.path"
       style="${dita.script.dir}${file.separator}dita2troff-step1-shell.xsl">
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
     </xslt>
@@ -26,6 +27,7 @@
     <!-- step 2 -->
     <xslt processor="trax" basedir="${dita.map.output.dir}" destdir="${dita.map.output.dir}"
       includes="${fullditatopiclist} ${chunkedtopiclist}" extension=".cli"
+      classpathref="dost.class.path"
       style="${dita.script.dir}${file.separator}dita2troff-step2-shell.xsl">
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
     </xslt>
@@ -38,6 +40,7 @@
     <xslt processor="trax" basedir="${dita.temp.dir}"
       destdir="${output.dir}" includes="${fullditatopiclist} ${chunkedtopiclist}"
       extension="${dita.ext}"
+      classpathref="dost.class.path"
       style="${dita.script.dir}${file.separator}dita2troff-step1-shell.xsl">
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
       <!--New,To generate&copy all dita files in the inputmap.dir,not all files in dita.temp.dir -->
@@ -49,6 +52,7 @@
     <!-- step 2 -->
     <xslt processor="trax" basedir="${output.dir}" destdir="${output.dir}"
       includes="${fullditatopiclist} ${chunkedtopiclist}" extension=".cli"
+      classpathref="dost.class.path"
       style="${dita.script.dir}${file.separator}dita2troff-step2-shell.xsl">
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
       <mapper type="regexp" 
@@ -79,6 +83,7 @@
     <xslt processor="trax" basedir="${dita.temp.dir}"
       destdir="${output.dir}" includes="${outditafileslist}"
       extension="${dita.ext}"
+      classpathref="dost.class.path"
       style="${dita.script.dir}${file.separator}dita2troff-step1-shell.xsl">
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
     </xslt>
@@ -86,6 +91,7 @@
     <!-- step 2 -->
     <xslt processor="trax" basedir="${output.dir}" destdir="${output.dir}${file.separator}${uplevels}"
       includes="${outditafileslist}" extension=".cli"
+      classpathref="dost.class.path"
       style="${dita.script.dir}${file.separator}dita2troff-step2-shell.xsl">
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
     </xslt>

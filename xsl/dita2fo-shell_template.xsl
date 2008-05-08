@@ -41,7 +41,7 @@
   <!-- stylesheet imports -->
   <xsl:import href="xslfo/topic2foImpl.xsl"/>
   <xsl:import href="xslfo/domains2fo.xsl"/>
-  <dita:extension id="dita.xsl.fo" behavior="org.dita.dost.platform.ImportAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
+  <dita:extension id="dita.xsl.fo" behavior="org.dita.dost.platform.ImportXSLAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
   <!-- XSL-FO output with XML syntax; no actual doctype for FO -->
   <xsl:output method="xml" version="1.0" indent="yes"/>
   <!-- CONTROL PARAMETERS: -->

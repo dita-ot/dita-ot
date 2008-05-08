@@ -118,8 +118,8 @@ public class CHMIndexWriter implements AbstractWriter {
         //if term doesn't has target to link to, it won't appear in the index tab
         //we need to create links for such terms
         if (targets == null || targets.isEmpty()){
-        	targets = new ArrayList(Constants.INT_1);
-        	findTargets(term, targets);
+        	findTargets(term);
+        	targets = term.getTargetList();
         	targetNum = targets.size();
         }
 
@@ -160,7 +160,7 @@ public class CHMIndexWriter implements AbstractWriter {
      * @param targets
      * The list of targets to store the result found
      */
-	private void findTargets(IndexTerm term, List targets) {
+	private void findTargets(IndexTerm term) {
 		List subTerms = term.getSubTerms();
 		List subTargets = null;
 		if (subTerms != null && ! subTerms.isEmpty()){
@@ -168,9 +168,9 @@ public class CHMIndexWriter implements AbstractWriter {
 				IndexTerm subTerm = (IndexTerm) subTerms.get(i);
 				subTargets = subTerm.getTargetList();
 				if (subTargets != null && !subTargets.isEmpty()){
-					targets.addAll(subTargets);
+					findTargets(subTerm);
 				}
-				findTargets(subTerm, targets);
+				term.addTargets(subTerm.getTargetList());
 			}			
 		}	
 	}

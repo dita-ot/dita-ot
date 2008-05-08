@@ -14,7 +14,7 @@
 <xsl:import href="docbook/software2db.xsl"/>
 <xsl:import href="docbook/ui2db.xsl"/>
 
-<dita:extension id="dita.xsl.docbook" behavior="org.dita.dost.platform.ImportAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
+<dita:extension id="dita.xsl.docbook" behavior="org.dita.dost.platform.ImportXSLAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
 
 <xsl:output
     method="xml"

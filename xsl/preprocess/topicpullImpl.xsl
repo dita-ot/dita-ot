@@ -221,6 +221,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
     <xsl:if test="@href=''">
       <xsl:apply-templates select="." mode="ditamsg:empty-href"/>
     </xsl:if>
+    <xsl:call-template name="verify-href-attribute"/>
     <xsl:choose>
       <!-- replace "*|text()" with "normalize-space()" to handle xref without 
         valid link content, in this situation, the xref linktext should be 
@@ -275,6 +276,102 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
     </xsl:choose>
   </xsl:template>
 
+  <!-- verify the href attribute, to check whether href target can be retrieved. -->
+  <xsl:template name="verify-href-attribute">
+    <xsl:variable name="format">
+      <xsl:choose>
+        <xsl:when test="@format">
+          <xsl:value-of select="@format"/>
+        </xsl:when>
+        <xsl:otherwise>#none#</xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="scope">
+      <xsl:choose>
+        <xsl:when test="@scope">
+          <xsl:value-of select="@scope"/>
+        </xsl:when>
+        <xsl:otherwise>#none#</xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <!--the file name of the target, if any-->
+    <xsl:variable name="file">
+      <xsl:apply-templates select="." mode="topicpull:get-stuff_file"/>
+    </xsl:variable>
+    <!--the position of the target topic relative to the current one: in the same file, referenced by id in another file, or referenced as the first topic in another file-->
+    <xsl:variable name="topicpos">
+      <xsl:apply-templates select="." mode="topicpull:get-stuff_topicpos"/>
+    </xsl:variable>
+    <!--the id of the target topic-->
+    <xsl:variable name="topicid">
+      <xsl:apply-templates select="." mode="topicpull:get-stuff_topicid"/>
+    </xsl:variable>
+    <!--the id of the target element, if any-->
+    <xsl:variable name="elemid">
+      <xsl:apply-templates select="." mode="topicpull:get-stuff_elemid"/>
+    </xsl:variable>
+    <xsl:choose>
+      <xsl:when test="not($scope='external') and not($scope='peer') and $topicpos='samefile'">
+        <xsl:choose>
+          <xsl:when test="$topicid='' or not(//*[contains(@class, ' topic/topic ')][@id=$topicid]) or $topicid='#none#' ">
+            <xsl:call-template name="output-message">
+              <xsl:with-param name="msgnum">057</xsl:with-param>
+              <xsl:with-param name="msgsev">W</xsl:with-param>
+              <xsl:with-param name="msgparams">%1=<xsl:value-of select="@href"/>
+              </xsl:with-param>
+            </xsl:call-template>
+          </xsl:when>
+          <xsl:when test="not($elemid='') and not($elemid='#none#') and not(//*[contains(@class,' topic/topic ')][@id=$topicid]//*[@id=$elemid])">
+            <xsl:call-template name="output-message">
+              <xsl:with-param name="msgnum">057</xsl:with-param>
+              <xsl:with-param name="msgsev">W</xsl:with-param>
+              <xsl:with-param name="msgparams">%1=<xsl:value-of select="@href"/>
+              </xsl:with-param>
+            </xsl:call-template>
+          </xsl:when>
+        </xsl:choose>
+      </xsl:when>
+      <xsl:when test="($format='dita' or $format='DITA' or $format='#none#') and not($scope='external') and not($scope='peer') and $topicpos='otherfile' and not(contains(@href,'://'))">
+        <xsl:choose>
+          <xsl:when test="not(document($file,/)) or not(document($file,/)/*/*)">
+            <xsl:call-template name="output-message">
+              <xsl:with-param name="msgnum">057</xsl:with-param>
+              <xsl:with-param name="msgsev">W</xsl:with-param>
+              <xsl:with-param name="msgparams">%1=<xsl:value-of select="@href"/>
+              </xsl:with-param>
+            </xsl:call-template>
+          </xsl:when>
+          <xsl:when test="not(document($file,/)//*[contains(@class,' topic/topic ')][@id=$topicid])">
+            <xsl:call-template name="output-message">
+              <xsl:with-param name="msgnum">057</xsl:with-param>
+              <xsl:with-param name="msgsev">W</xsl:with-param>
+              <xsl:with-param name="msgparams">%1=<xsl:value-of select="@href"/>
+              </xsl:with-param>
+            </xsl:call-template>
+          </xsl:when>
+          <xsl:when test="not($elemid='') and not($elemid='#none#') and not(document($file,/)//*[contains(@class, ' topic/topic ')][@id=$topicid]//*[@id=$elemid])">
+            <xsl:call-template name="output-message">
+              <xsl:with-param name="msgnum">057</xsl:with-param>
+              <xsl:with-param name="msgsev">W</xsl:with-param>
+              <xsl:with-param name="msgparams">%1=<xsl:value-of select="@href"/>
+              </xsl:with-param>
+            </xsl:call-template>
+          </xsl:when>
+        </xsl:choose>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:if test="($format='dita' or $format='DITA' or $format='#none#') and not($scope='external') and not($scope='peer') and not(document($file,/)) and not(contains(@href,'://'))">
+          <xsl:call-template name="output-message">
+            <xsl:with-param name="msgnum">057</xsl:with-param>
+            <xsl:with-param name="msgsev">W</xsl:with-param>
+            <xsl:with-param name="msgparams">%1=<xsl:value-of select="@href"/>
+            </xsl:with-param>
+          </xsl:call-template>
+        </xsl:if>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+  
   <!-- Verify that a locally specified type attribute matches the determined target type.
        If it does not, generate a message. -->
   <xsl:template match="*" mode="topicpull:verify-type-attribute">

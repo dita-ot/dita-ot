@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.util.Hashtable;
+import java.util.StringTokenizer;
 
 import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.util.Constants;
@@ -36,7 +37,7 @@ public class FileGenerator extends DefaultHandler {
 	private String templateFileName = null;
 
 	/**
-	 * Defautl Constructor
+	 * Default Constructor
 	 */
 	public FileGenerator() {
 		this(null);
@@ -111,7 +112,7 @@ public class FileGenerator extends DefaultHandler {
 	 */
 	public void endElement(String uri, String localName, String qName) throws SAXException {
 		try{
-			if(!"dita:extension".equals(qName)){
+			if(!("http://dita-ot.sourceforge.net".equals(uri) && "extension".equals(localName))){
 				output.write("</"+qName+">");
 			}
 		}catch (Exception e) {
@@ -137,11 +138,13 @@ public class FileGenerator extends DefaultHandler {
 		IAction action = null;
 		String input = null;
 		try{
-			if("dita:extension".equals(qName)){
+			if("http://dita-ot.sourceforge.net".equals(uri) && "extension".equals(localName)){
+				// Element extension: <dita:extension id="extension-point" behavior="classname"/>
 				action = (IAction)Class.forName(attributes.getValue("behavior")).newInstance();
 				action.setParam("template="+templateFileName+";extension="+attributes.getValue("id"));
 				input = (String)featureTable.get(attributes.getValue("id"));
 				if(input!=null){
+					action.setFeatures(featureTable);
 					action.setInput(input);
 					output.write(action.getResult());
 				}
@@ -149,9 +152,42 @@ public class FileGenerator extends DefaultHandler {
 				int attLen = attributes.getLength();
 				output.write("<"+qName);
 				for(int i = 0; i < attLen; i++){
-					output.write(" ");
-					output.write(new StringBuffer(attributes.getQName(i)).append("=\"").
-							append(attributes.getValue(i)).append("\"").toString());
+					if ("http://dita-ot.sourceforge.net".equals(attributes.getURI(i)))
+					{
+						// Attribute extension: <element dita:extension="localname classname ..." dita:localname="...">
+						if (!("extension".equals(attributes.getLocalName(i))))
+						{
+							String extensions = attributes.getValue("http://dita-ot.sourceforge.net", "extension");
+							StringTokenizer extensionTokenizer = new StringTokenizer(extensions);
+							// Get the classname that implements this localname.
+							while (extensionTokenizer.hasMoreTokens())
+							{
+								String thisExtension = extensionTokenizer.nextToken();
+								String thisExtensionClass = extensionTokenizer.nextToken();
+								if (thisExtension.equals(attributes.getLocalName(i)))
+								{
+									action = (IAction)Class.forName(thisExtensionClass).newInstance();
+									break;
+								}
+							}
+							action.setFeatures(featureTable);
+							action.setParam("template="+templateFileName+";localname="+attributes.getLocalName(i));
+							action.setInput(attributes.getValue(i));
+							output.write(action.getResult());
+						}
+					}
+					else if (attributes.getQName(i).startsWith("xmlns:") &&
+							"http://dita-ot.sourceforge.net".equals(attributes.getValue(i)))
+					{
+						// Ignore xmlns:dita.
+					}
+					else
+					{
+						// Normal attribute.
+						output.write(" ");
+						output.write(new StringBuffer(attributes.getQName(i)).append("=\"").
+								append(attributes.getValue(i)).append("\"").toString());
+					}
 				}
 				output.write(">");
 			}

@@ -52,6 +52,10 @@ public class FileUtils {
 	 * @return
 	 */
 	public static boolean isDITAFile(String lcasefn) {
+		if (lcasefn.contains(Constants.SHARP)){
+			lcasefn = lcasefn.substring(0, lcasefn.indexOf(Constants.SHARP));
+		}
+		
 		return isDITATopicFile(lcasefn) || isDITAMapFile(lcasefn);
 	}
 
@@ -155,8 +159,15 @@ public class FileUtils {
 				&& topicTokenizer.countTokens() > 1) {
 			String mapToken = mapTokenizer.nextToken();
 			String topicToken = topicTokenizer.nextToken();
+			boolean equals = false;
+			if (Constants.OS_NAME.toLowerCase().indexOf(Constants.OS_NAME_WINDOWS) != -1){
+				//if OS is Windows, we need to ignore case when comparing path names.
+				equals = mapToken.equalsIgnoreCase(topicToken);
+			}else{
+				equals = mapToken.equals(topicToken);
+			}
 
-			if (!(mapToken.equals(topicToken))) {
+			if (!equals) {
 				if(mapToken.endsWith(Constants.COLON) ||
 						topicToken.endsWith(Constants.COLON)){
 					//the two files are in different disks under Windows

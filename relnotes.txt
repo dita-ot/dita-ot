@@ -1,4 +1,99 @@
-(c) Copyright IBM Corp. 2004, 2007 All Rights Reserved.
+(c) Copyright IBM Corp. 2004, 2008 All Rights Reserved.
+
+     DITA OT release 1.4.2.1
+
+     Release 1.4.2.1 is a full build to provide an urgent fix to fix the 
+     following critical problem which users found in release 1.4.2.
+     1. SF Bug 1956231 OSGI Manifest for eclipsehelp transtype contains spaces.
+
+     For this fix, we have updated xsl/map2pluginImpl.xsl to prevent 
+     generating extra spaces at the head of every line in OSGI manifest 
+     file of eclipse help output.
+
+====================================================================================
+     DITA OT release 1.4.2
+     Release 1.4.2 is a maintenance release to fix defects and make patches 
+     based on release 1.4.1
+
+     Release 1.4.2 comes in three versions:
+     1. Minimal package contains only the core processing code.
+     2. Standard package contains the core processing code, plus demos,
+        documentation, and samples.
+     3. Full "easy install" package contains the standard package plus
+        external libraries useful for many toolkit processes (such as
+        Xalan and ANT), plus a batch file to setup a local environment.
+     
+     [39 SF Bugs Fixed]
+     1.  1945824 Index-see works for "ru-ru" but not for "ru"
+     2.  1944245 Null pointer error with complex filename
+     3.  1923519 Conrefs in nested, conreffed topics don't work
+     4.  1911285 files.txt is not up-to-date
+     5.  1906954 Constants.ANT_INVOKER_EXT_PARAM_OUTPUTDIR resulted in null ...
+     6.  1903830 Error when collection-type=sequence in map
+     7.  1903626 Topicref to Glossentry With Topicmeta Throws Null Pointer
+     8.  1900907 Documentation of generateouter command-line param is incorrect
+     9.  1900427 TIFF file format not a supported type
+     10. 1898810 Problem running ant with DITA-OT in path with Latin char
+     11. 1897358 Compiling CHM's in sequence results in errant index entries
+     12. 1894561 wordrtf not correctly handling p inside li
+     13. 1893234 Java TopicMerge removes processing instruction
+     14. 1868423 Null pointer exception when a PI is at the end of the file
+     15. 1857405 chunk processing fails when no section element
+     16. 1855047 startup.sh fails under OS X
+     17. 1849346 FO file generated from DITA MAP not valid
+     18. 1843652 Image referenced in map is not found, topicmerge breaks
+     19. 1843583 Extra bullet in TOC for topicref with no href or navtitle
+     20. 1839765 index-sort-as not used, content appears in index
+     21. 1908306 Index entry for external resource is ignored
+     22. 1908293 HTML Help index contains extra anchor
+     23. 1900916 Pointer to CSS is Incorrect in index.html
+     24. 1898451 HTML titles should be space-normalized for CHM consumption
+     25. 1898228 Table desc not being processed
+     26. 1897551 maplink is unawareof chunk to-content
+     27. 1893461 map file href handling
+     28. 1889918 Index link goes with wrong entry
+     29. 1883907 IndexTermReader class doesn't handle specialized titles
+     30. 1873401 XHTML: colsep in last column when @frame=none
+     31. 1872434 _merge.xml missing metadata
+     32. 1868047 htmlhelp path in demo ant script is fixed
+     33. 1864247 PIs missing from ditamaps in temp dir
+     34. 1857282 path to css output is not correct
+     35. 1848355 gen-list wants class on <foreign> descendants
+     36. 1843693 Bad XREF syntax gives confusing message about unique_193
+     37. 1841175 Need to clean up doc/ directory (remove invalid items)
+     38. 1832800 Empty end-range indexterm causes eclipse error
+     39. 1606387 Shortdesc & Abstract formatting is incorrect for XHTML
+
+     [3 SF Patches Added]
+     1.  1930220 Simplify flag templates
+     2.  1876118 Add plug-in support for string resource-files
+     3.  1818318 Path to HTML Help compiler on x64 Windows
+     
+     [6 SF Enhancements Added]
+     1.  1855523 Pass dost.class.path to XSLT tasks
+     2.  1827322 Let plugins add their own template files
+     3.  1825843 Let plugins add dependencies to Ant targets
+     4.  1824466 Subclass ImportAction
+     5.  1782256 Let plugins not have to choose to go in "demo" or "plugins"
+     6.  1859421 Add plug-in support for string resource-files
+
+     Note: SourceForge bugs, patches, and RFEs listed above can be found in 
+     SourceForge Bugs, Patches, and RFE tracker pages: 
+
+          Bugs tracker: 
+
+          http://sourceforge.net/tracker/?group_id=132728&atid=725074
+
+          Patches tracker: 
+
+          http://sourceforge.net/tracker/?group_id=132728&atid=725076
+
+          RFE tracker: 
+
+          http://sourceforge.net/tracker/?group_id=132728&atid=725077
+
+====================================================================================
+
      DITA OT release 1.4.1
      Release 1.4.1 is a maintenance release to fix defects and make patches 
      based on release 1.4.

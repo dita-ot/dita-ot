@@ -237,6 +237,11 @@
     <reason>The XML schema and DTD validition function of the parser is turned off.</reason>
     <response>Please make sure the input is normalized DITA files with class attributes,otherwise it would cause confusing log information.</response>
   </message>
+  
+  <message id="DOTJ038W" type="ERROR">
+    <reason>The tag "%1" is specialized from non-predefined metadata.</reason>
+    <response>Please make sure that tag "%1" is specialized from some predefinded metadata tag.</response>
+  </message>
   <!-- End of Java Messages -->
     
   <!-- Begin of XSL Messages -->  
@@ -518,6 +523,11 @@
   <message id="DOTX056W" type="WARN">
     <reason>The file %1 is not available to resolve link information.There are possobilities as following: the file could not be found;a DITAVAL file was used to remove the file's contents;the file is end up outside of the input directory. Be aware that the path information above may not match the link in your topic.</reason>
     <response>Check to make sure the file exists and DITAVAL file isn't used to remove the contents of the file.And make sure the file is end up within the input directory,or turn off the ant command "onlytopic.in.map".</response>
+  </message>
+  
+  <message id="DOTX057W" type="WARN">
+    <reason>The link or cross reference target %1 cannot be found, this may cause error when the processor tries to create the link or cross reference in output.</reason>
+    <response>Make sure the reference ids for topic and element are correct.</response>
   </message>
   <!-- End of XSL Messages --> 
   

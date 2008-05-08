@@ -70,6 +70,7 @@
             <ul>
               <li>It is recommended to download the latest version of the DITA 
                 Toolkit for stable usage.</li>
+              <li>If you use DITA Open Toolkit full distribution, click <xref href="#Fullsetup">here</xref> to continue.</li>
               <li>If you use <b>Linux</b>, click <xref 
                 href="#Linuxsetup">here</xref> to continue the setting up 
                 process. </li>
@@ -215,6 +216,38 @@
       </step>
     </steps>
   </taskbody>
+  <task id="Fullsetup" xml:lang="en-us">
+    <title>Installing DITA OT Full Distribution</title>
+    <shortdesc>The software that DITA OT depend on are
+      redistributed. The full distribution package of DITA OT after 1.3 includes the software,
+      so the configuration process is streamlined.</shortdesc>
+    <taskbody>
+      <prereq>Before installing DITA Open Toolkit full distribution, you need to complete the
+        following steps:<ul>
+          <li>Download and configure JDK properly.</li>
+          <li>(Optional) Download and configure HTMLHelp Compiler properly for HTMLHelp
+            transformation. </li>
+          <li>(Optional) Download and configure JavaHelp Compiler properly for JavaHelp
+            transformation.</li>
+        </ul></prereq>
+      <context>Then, you need to complete the following steps:</context>
+      <steps>
+        <step><cmd>Download the full DITA OT package. </cmd></step>
+        <step><cmd>Run the batch file "<codeph>startcmd.bat</codeph>" for Windows
+          or "<codeph>startcmd.sh</codeph>" for Linux to set up the necessary environment
+          variables.</cmd></step>
+        <step><cmd rev="r3">Run the transformation in the command-line window by using
+          Java command line or ANT.</cmd>
+        </step>
+      </steps>
+      <postreq rev="r3">You can still use the standard package to install DITA OT:<ul>
+        <li>Download the standard package.</li>
+        <li rev="r4">Configure the system environment of DITA OT, but add two more paths %DITA_HOME%\lib;%DITA_HOME%\lib\resolver.jar;
+          to the CLASSPATH parameter.</li>
+        <li> Run the package by using Java command line or Ant. </li>
+      </ul></postreq>
+    </taskbody>
+  </task>
   <task id="Linuxsetup" rev="v1r1" xml:lang="en-us">
     <title>Set up DITA Toolkit in Linux</title>
     <shortdesc>

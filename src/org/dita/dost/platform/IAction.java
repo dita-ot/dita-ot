@@ -9,6 +9,8 @@
  */
 package org.dita.dost.platform;
 
+import java.util.Hashtable;
+
 /**
  * Interface 
  * @author Zhang, Yuan Peng
@@ -29,4 +31,9 @@ public interface IAction {
 	 * @return
 	 */
 	String getResult();
+	/**
+	 * Set the feature table
+	 * @param h
+	 */
+	void setFeatures(Hashtable h);
 }

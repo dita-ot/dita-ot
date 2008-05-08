@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+  Sourceforge.net. See the accompanying license.txt file for 
+  applicable licenses.-->
+<allstrings>
+  <stringfile>strings.xml</stringfile>
+  <dita:extension id="dita.xsl.strings" behavior="org.dita.dost.platform.ImportStringsAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
+</allstrings>

@@ -39,11 +39,19 @@
 <xsl:param name="CSS"/>
 <xsl:param name="CSSPATH"/>
 <xsl:param name="OUTPUTCLASS"/>   <!-- class to put on body element. -->
+<!-- the path back to the project. Used for c.gif, delta.gif, css to allow user's to have
+  these files in 1 location. -->
+<xsl:param name="PATH2PROJ">
+  <xsl:apply-templates select="/processing-instruction('path2project')" mode="get-path2project"/>
+</xsl:param>
 
 <!-- Define a newline character -->
 <xsl:variable name="newline"><xsl:text>
 </xsl:text></xsl:variable>
 
+<xsl:template match="processing-instruction('path2project')" mode="get-path2project">
+  <xsl:value-of select="."/>
+</xsl:template>
 
 <!-- *********************************************************************************
      Setup the HTML wrapper for the table of contents
@@ -273,10 +281,35 @@
 </xsl:template>
 
 <!-- Link to user CSS. -->
+<!-- Test for URL: returns "url" when the content starts with a URL;
+  Otherwise, leave blank -->
+<xsl:template name="url-string">
+  <xsl:param name="urltext"/>
+  <xsl:choose>
+    <xsl:when test="contains($urltext,'http://')">url</xsl:when>
+    <xsl:when test="contains($urltext,'https://')">url</xsl:when>
+    <xsl:otherwise/>
+  </xsl:choose>
+</xsl:template>
+
 <!-- Can't link to commonltr.css or commonrtl.css because we don't know what language the map is in. -->
 <xsl:template name="generateCssLinks">
+  <xsl:variable name="urltest">
+    <xsl:call-template name="url-string">
+      <xsl:with-param name="urltext">
+        <xsl:value-of select="concat($CSSPATH,$CSS)"/>
+      </xsl:with-param>
+    </xsl:call-template>
+  </xsl:variable>
   <xsl:if test="string-length($CSS)>0">
-   <link rel="stylesheet" type="text/css" href="{$CSSPATH}{$CSS}" />
+  <xsl:choose>
+    <xsl:when test="$urltest='url'">
+      <link rel="stylesheet" type="text/css" href="{$CSSPATH}{$CSS}" />
+    </xsl:when>
+    <xsl:otherwise>
+      <link rel="stylesheet" type="text/css" href="{$PATH2PROJ}{$CSSPATH}{$CSS}" />
+    </xsl:otherwise>
+  </xsl:choose><xsl:value-of select="$newline"/>   
   </xsl:if>
 </xsl:template>
 

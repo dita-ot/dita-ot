@@ -7,8 +7,7 @@
 <!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
  
 <map id="mainDITAreadme" title="DITA Readme map">
-  <topicref format="ditamap" href="ditaot13_doc/DITAOT1.3.ditamap"
-    navtitle="Changes in DITAOT1.3"/>
+  <topicref href="DITA1.1-newfeature.xml" locktitle="yes" navtitle="New Feature of DITA 1.1 Standard"/>
   <topicref collection-type="family" href="DITA-readme.xml" id="DITA-doc" 
     locktitle="yes" navtitle="DITA-OT Introduction">
     <topicref href="DITA-relnotes.xml" navtitle="DITA release notes"/>
@@ -28,15 +27,9 @@
     <topicref href="DITA-log.xml" navtitle="Problem determination and log analysis"/>
     <topicref href="DITA-h2d.xml" navtitle="Migrating HTML to DITA"/>
     <topicref href="dita2word.xml#dita2word/limitation" navtitle="Transfomring DITA to Word RTF"/>
-    <topicref href="DITA-tweaks.xml" navtitle="Tweak Information">
-      <topicref href="DITA-variables.xml" 
-        navtitle="Global variable declarations" toc="no"/>
-      <topicref href="DITA-parameters.xml" 
-        navtitle="Default values for externally modifiable parameters" 
-        toc="no"/>
-      <topicref href="DITA-stubs.xml" 
-        navtitle="Stubs for user-provided override extensions" toc="no"/>
-    </topicref>
+    <topichead navtitle="Development Reference">
+      <topicref href="dev_ref/dev_ref.ditamap" format="ditamap"/>
+    </topichead>
     <topicref href="DITA-limitations.xml" navtitle="Known limitations"/>
     <topicref href="DITA-troubleshooting.xml" navtitle="Troubleshooting"/>
   </topicref>

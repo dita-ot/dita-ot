@@ -75,6 +75,7 @@ public class TopicrefElement {
      * 
      * @return true if need, false or else
      */
+    @Deprecated
     public boolean needExtractTerm() {
         return (href != null && format != null && !Constants.ATTRIBUTE_FORMAT_VALUE_DITA
                 .equals(format));

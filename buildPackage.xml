@@ -11,7 +11,7 @@
   <property name="HTMLHelpCompiler" value="C:\Program Files\HTML Help Workshop\hhc.exe"/>  
   <property name="package.output.dir" location="build\"/>
   <property name="package.name.root" value="DITA-OT"/>
-  <property name="version" value="1.4.1"/>
+  <property name="version" value="1.4.2.1"/>
   
   <property name="src.dir" location="src/"/>
   <property name="bin.dir" location="output2/"/>
@@ -29,8 +29,9 @@
   <property name="doc.out.dir" location="out/doc"/>
   
   <property name="dost.jar" location="${lib.dir}/dost.jar" />
-  <property name="binary-big" value="DITA-OT${version}_fullpackage_bin" />
-  <property name="binary" value="DITA-OT${version}_bin" />
+  <property name="binary-min" value="DITA-OT${version}_minimal_bin"/>
+  <property name="binary-big" value="DITA-OT${version}_full_easy_install_bin" />
+  <property name="binary" value="DITA-OT${version}_standard_bin" />
   <property name="source" value="DITA-OT${version}_src" />
   <property name="win32.zip.suffix" value=".zip" />
   <property name="linux.zip.suffix" value=".tar.gz" />
@@ -55,7 +56,7 @@
   
   <target name="build-java" depends="init-java">
     <javac srcdir="${src.dir}" destdir="${bin.dir}" excludes="com/**"
-      debug="on" source="1.4" target="1.4">
+      debug="on" source="1.5" target="1.5">
       <classpath location="lib/resolver.jar"></classpath>
     </javac>
   </target>
@@ -70,6 +71,20 @@
     <jar destfile="${dost.jar}" basedir="${bin.dir}" manifest="manifest.mf"
            includes="**" />
   </target>
+  
+  <patternset id="pattern.package.minimum">
+    <include name="*.*"/>
+    <include name="css/**"/>
+    <include name="dtd/**"/>
+    <include name="resource/**"/>
+    <include name="schema/**"/>      
+    <include name="xsl/**"/>
+    <include name="lib/APACHE-LICENSE-2_0.html"/>
+    <include name="lib/resolver.jar"/>
+    <include name="lib/CatalogManager.properties"/>
+    <exclude name="build.number"/>
+    <exclude name=".*"/>
+  </patternset>
     
   <patternset id="pattern.package.general">
     <include name="*.*"/>
@@ -122,6 +137,27 @@
         <exclude name="files.txt"/>
         <exclude name="startcmd.*"/>
       </tarfileset>
+    </tar>
+  </target>
+  
+  <target name="package-binary-minimum">
+    <zip destfile="${package.output.dir}/${param.out.file}${win32.zip.suffix}">
+      <zipfileset dir="./" prefix="${package.name.root}${version}">
+        <patternset refid="pattern.package.minimum"/>
+        <include name="lib/dost.jar"/>
+        <exclude name="startcmd.*"/>
+        <exclude name="buildPackage.xml" />
+      </zipfileset>      
+    </zip>
+    
+    <tar destfile="${package.output.dir}/${param.out.file}${linux.zip.suffix}"
+      compression="gzip" longfile="gnu">
+      <tarfileset dir="./" prefix="${package.name.root}${version}">
+        <patternset refid="pattern.package.minimum"/>
+        <include name="lib/dost.jar"/>
+        <exclude name="startcmd.*"/>
+        <exclude name="buildPackage.xml" />
+      </tarfileset>      
     </tar>
   </target>
   
@@ -180,6 +216,9 @@
   </target>
   
   <target name="build-package-binary" depends="package-java, update-doc, copy-updated-doc">
+    <antcall target="package-binary-minimum">
+      <param name="param.out.file" value="${binary-min}"/>
+    </antcall>
     <antcall target="package-binary-small">
       <param name="param.out.file" value="${binary}"/>
     </antcall>
@@ -194,13 +233,17 @@
     <tstamp>
       <format property="build.time" pattern="yyyyMMddhhmm"/>
     </tstamp>
+    <antcall target="package-binary-min">
+      <param name="param.out.file"
+        value="${package.name.root}${version}b${build.number}_minimal_bin.${build.time}"/>
+    </antcall>
     <antcall target="package-binary-small">
       <param name="param.out.file" 
-        value="${package.name.root}${version}b${build.number}-bin.${build.time}"/>
+        value="${package.name.root}${version}b${build.number}_standard_bin.${build.time}"/>
     </antcall>
     <antcall target="package-binary-big">
       <param name="param.out.file" 
-        value="${package.name.root}${version}b${build.number}-fullpackage-bin.${build.time}"/>
+        value="${package.name.root}${version}b${build.number}_full_easy_install_bin.${build.time}"/>
     </antcall>
   </target>
   

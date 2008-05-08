@@ -20,6 +20,7 @@ import java.util.Set;
 import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.util.Constants;
+import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.StringUtils;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
@@ -48,6 +49,7 @@ public class Integrator {
 		templateSet.add("catalog-dita_template.xml");
 		templateSet.add("build_template.xml");
 		templateSet.add("build_general_template.xml");
+		templateSet.add("xsl/common/allstrings_template.xml");
 		templateSet.add("xsl/dita2xhtml_template.xsl");
 		templateSet.add("xsl/dita2rtf_template.xsl");
 		templateSet.add("xsl/dita2fo-shell_template.xsl");
@@ -120,6 +122,7 @@ public class Integrator {
 	{
 		Set featureSet = null;
 		Iterator setIter = null;
+		Iterator templateIter = null;
 		Map.Entry currentFeature = null;
 		Features pluginFeatures = (Features) pluginTable.get(plugin);
 		if (checkPlugin(plugin)){
@@ -134,6 +137,12 @@ public class Integrator {
 				}else{
 					featureTable.put(currentFeature.getKey(),currentFeature.getValue());
 				}
+			}
+			
+			templateIter = pluginFeatures.getAllTemplates().iterator();
+			while (templateIter.hasNext()){
+				String templateName = (String) templateIter.next();
+				templateSet.add(FileUtils.getRelativePathFromMap(getDitaDir() + File.separator + "dummy", pluginFeatures.getLocation() + File.separator + templateName));
 			}
 			loadedPlugin.add(plugin);
 			return true;

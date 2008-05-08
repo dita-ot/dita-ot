@@ -123,6 +123,7 @@
             </xsl:attribute>
           </xsl:if>
           <!--parent-->
+          <xsl:if test="not(ancestor::*[contains(concat(' ', @chunk, ' '), ' to-content ')])">
           <xsl:apply-templates mode="link" 
             select="ancestor::*[contains(@class, ' map/topicref ')][@href][not(@href='')][not(@linking='none')][not(@linking='sourceonly')][1]">
             <xsl:with-param name="role">parent</xsl:with-param>
@@ -167,6 +168,8 @@
                 select="$pathBackToMapDirectory"/>
             </xsl:apply-templates>
           </xsl:if>
+          </xsl:if>
+          <xsl:if test="not(ancestor-or-self::*[contains(concat(' ', @chunk, ' '), ' to-content ')])">
           <!--children-->
           <!--???TO DO: should be linking to appropriate descendants, not just children - ie grandchildren of eg topicgroup (non-href/non-title topicrefs) children-->
           <xsl:if 
@@ -194,6 +197,7 @@
                   select="$pathBackToMapDirectory"/>
               </xsl:apply-templates>
             </linkpool>
+          </xsl:if>
           </xsl:if>
           <!--friends-->
           <xsl:if test="ancestor::*[contains(@class, ' map/relcell ')]">

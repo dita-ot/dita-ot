@@ -51,6 +51,8 @@ public class DescParser extends DefaultHandler{
 			features.addRequire(attributes.getValue("plugin"));
 		} else if ("meta".equals(currentElement)){
 			features.addMeta(attributes.getValue("type"), attributes.getValue("value"));
+		} else if ("template".equals(currentElement)){
+			features.addTemplate(attributes.getValue("file"));
 		}
 	}
 

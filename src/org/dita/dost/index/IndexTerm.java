@@ -37,6 +37,12 @@ public class IndexTerm implements Comparable {
     /** The sorting termKey of the indexterm, default will be the term name */
     private String termKey = null;
     
+    /** The start attribute */
+    private String start=null;
+    
+    /** The end attribute */
+    private String end=null;
+    
     /** The sub indexterms contained by this indexterm */
     private List subTerms = null;
     
@@ -128,7 +134,39 @@ public class IndexTerm implements Comparable {
     public List getSubTerms() {
         return subTerms;
     }
+    
+    /**
+     * Get the start attribute.
+     * @return start attribute
+     */
+    public String getStartAttribute(){
+    	return start;
+    }
 
+    /**
+     * Get the end attribute.
+     * @return end attribute
+     */
+    public String getEndAttribute(){
+    	return end;
+    }
+    
+    /**
+     * Set the start attribute.
+     * @param start attribute
+     */
+    public void setStartAttribute(String start){
+    	this.start=start;
+    }
+    
+    /**
+     * Set the end attribute.
+     * @param end attribute
+     */
+    
+    public void setEndAttribute(String end){
+    	this.end=end;
+    }
     /**
      * Add a sub term into the sub term list.
      * 

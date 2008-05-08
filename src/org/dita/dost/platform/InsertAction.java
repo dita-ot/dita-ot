@@ -31,12 +31,12 @@ import org.xml.sax.helpers.XMLReaderFactory;
  */
 public class InsertAction extends DefaultHandler implements IAction {
 
-	private XMLReader reader;
-	private DITAOTJavaLogger logger;
-	private Set fileNameSet = null;
-	private StringBuffer retBuf;
-	private Hashtable paramTable = null;
-	private int elemLevel = 0;
+	protected XMLReader reader;
+	protected DITAOTJavaLogger logger;
+	protected Set fileNameSet = null;
+	protected StringBuffer retBuf;
+	protected Hashtable paramTable = null;
+	protected int elemLevel = 0;
 	
 	/**
 	 * Default Constructor
@@ -150,6 +150,10 @@ public class InsertAction extends DefaultHandler implements IAction {
 	 */
 	public void startDocument() throws SAXException {
 		elemLevel = 0;
+	}
+
+	public void setFeatures(Hashtable h) {
+		
 	}
 
 	
