@@ -154,7 +154,12 @@ public class MergeTopicParser extends AbstractXMLReader {
 		int index;
 		String retAttValue = attValue;
 		if (sharpIndex != -1){ // href value refer to an id in a topic
-			pathFromMap = FileUtils.resolveTopic(new File(filePath).getParent(),attValue.substring(0,sharpIndex)).replaceAll(Constants.DOUBLE_BACK_SLASH, Constants.SLASH);
+			if(sharpIndex == 0){
+				pathFromMap = filePath.replaceAll(Constants.DOUBLE_BACK_SLASH, Constants.SLASH);
+			}else{
+				pathFromMap = FileUtils.resolveTopic(new File(filePath).getParent(),attValue.substring(0,sharpIndex)).replaceAll(Constants.DOUBLE_BACK_SLASH, Constants.SLASH);
+			}
+			
 			topicInfo.append(Constants.STRING_BLANK)
 			.append("ohref").append(Constants.EQUAL).append(Constants.QUOTATION)
 			.append(pathFromMap)
