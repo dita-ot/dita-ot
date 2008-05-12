@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ | (C) Copyright IBM Corporation 2001, 2004. All Rights Reserved.
+ | This file is part of the DITA package on IBM's developerWorks site.
+ | See license.txt for disclaimers and permissions.
+ |
+ | The Darwin Information Typing Architecture (DITA) was orginated by
+ | IBM's XML Workgroup and ID Workbench tools team.
+ |
+ | File: concept.xsd
+ |
+ | Release history (vrm):
+ |   1.0.0 Release 1.2 - Initial XML Schema release on IBM's developerWorks, June 2003
+ |   1.1.3 Release 1.3 March 2004: bug fixes and map updates
+ *-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+  <!-- Add the domains to the base topic XML Schema -->
+  <!--  ================ TOPIC DOMAINS =====================  -->
+  <xs:include schemaLocation="programming-domain.mod"/>
+  <xs:include schemaLocation="software-domain.mod"/>
+  <xs:include schemaLocation="highlight-domain.mod"/>
+  <xs:include schemaLocation="ui-domain.mod"/>
+  <xs:include schemaLocation="utilities-domain.mod"/>
+  
+  <xs:include schemaLocation="topic_domains.mod"/>
+  
+  <!--  ================ INFO TYPES =====================  -->
+  <xs:include schemaLocation="concept.grp"/>
+  <xs:redefine schemaLocation="topic.mod" >
+  	<xs:complexType name="topic.class">
+  		<xs:complexContent>
+  			<xs:extension base="topic.class">
+  				<xs:attribute name="domains" type="xs:string" default="(topic ui-d) (topic hi-d) (topic sw-d) (topic pr-d) (topic ut-d)"/>
+  			</xs:extension>
+  		</xs:complexContent>
+  	</xs:complexType>
+  </xs:redefine> 
+  <xs:redefine schemaLocation="concept.mod" >
+  	<xs:complexType name="concept.class">
+  		<xs:complexContent>
+  			<xs:extension base="concept.class">
+  				<xs:attribute name="domains" type="xs:string" default="(topic ui-d) (topic hi-d) (topic sw-d) (topic pr-d) (topic ut-d)"/>
+  			</xs:extension>
+  		</xs:complexContent>
+  	</xs:complexType>
+  </xs:redefine> 
+  
+  <xs:group name="info-types">
+    <xs:choice>
+      <xs:group ref="concept-info-types"/>
+    </xs:choice>
+  </xs:group>
+
+  
+</xs:schema>
