@@ -1,0 +1,397 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ============================================================= -->
+<!--                    HEADER                                     -->
+<!-- ============================================================= -->
+<!--  MODULE:    DITA Common Element  XSD Group Decleration                -->
+<!--  VERSION:   1.1                                             -->
+<!--  DATE:      November 2006                                     -->
+<!--                                                               -->
+<!-- ============================================================= -->
+
+
+<!-- ============================================================= -->
+<!-- SYSTEM:     Darwin Information Typing Architecture (DITA)     -->
+<!--                                                               -->
+<!-- PURPOSE:    W3C XML Schema to describe DITA common elements          -->
+<!--                                                               -->
+<!-- ORIGINAL CREATION DATE:                                       -->
+<!--             June 2006                                        -->
+<!--                                                               -->
+<!--             (C) Copyright OASIS-Open.org 2006                -->
+<!--             All Rights Reserved.                              -->
+<!-- ============================================================= -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    
+    
+  <xs:element name="titleAbstract" abstract="true"/>
+   <xs:group name="title">
+      <xs:choice>
+         <xs:element ref="titleAbstract"/>
+         <xs:element ref="title"/>
+      </xs:choice>
+   </xs:group>
+   <xs:element name="keywordAbstract" abstract="true"/>
+   <xs:group name="keyword">
+      <xs:choice>
+         <xs:element ref="keywordAbstract"/>
+         <xs:element ref="keyword"/>
+      </xs:choice>
+   </xs:group>
+   <xs:element name="descAbstract" abstract="true"/>
+   <xs:group name="desc">
+      <xs:choice>
+         <xs:element ref="descAbstract"/>
+         <xs:element ref="desc"/>
+      </xs:choice>
+   </xs:group>
+   <xs:element name="phAbstract" abstract="true"/>
+   <xs:group name="ph">
+      <xs:choice>
+         <xs:element ref="phAbstract"/>
+         <xs:element ref="ph"/>
+      </xs:choice>
+   </xs:group>
+   <xs:element name="termAbstract" abstract="true"/>
+   <xs:group name="term">
+      <xs:choice>
+         <xs:element ref="termAbstract"/>
+         <xs:element ref="term"/>
+      </xs:choice>
+   </xs:group>
+   <xs:element name="tmAbstract" abstract="true"/>
+   <xs:group name="tm">
+      <xs:choice>
+         <xs:element ref="tmAbstract"/>
+         <xs:element ref="tm"/>
+      </xs:choice>
+   </xs:group>
+   <xs:element name="booleanAbstract" abstract="true"/>
+   <xs:group name="boolean">
+      <xs:choice>
+         <xs:element ref="booleanAbstract"/>
+         <xs:element ref="boolean"/>
+      </xs:choice>
+   </xs:group>
+   <xs:element name="stateAbstract" abstract="true"/>
+   <xs:group name="state">
+      <xs:choice>
+         <xs:element ref="stateAbstract"/>
+         <xs:element ref="state"/>
+      </xs:choice>
+   </xs:group>
+   <xs:element name="pAbstract" abstract="true"/>
+   <xs:group name="p">
+      <xs:choice>
+         <xs:element ref="pAbstract"/>
+         <xs:element ref="p"/>
+      </xs:choice>
+   </xs:group>
+   <xs:element name="lqAbstract" abstract="true"/>
+   <xs:group name="lq">
+      <xs:choice>
+         <xs:element ref="lqAbstract"/>
+         <xs:element ref="lq"/>
+      </xs:choice>
+   </xs:group>
+   <xs:element name="noteAbstract" abstract="true"/>
+   <xs:group name="note">
+      <xs:choice>
+         <xs:element ref="noteAbstract"/>
+         <xs:element ref="note"/>
+      </xs:choice>
+   </xs:group>
+   <xs:element name="qAbstract" abstract="true"/>
+   <xs:group name="q">
+      <xs:choice>
+         <xs:element ref="qAbstract"/>
+         <xs:element ref="q"/>
+      </xs:choice>
+   </xs:group>
+   <xs:element name="ulAbstract" abstract="true"/>
+   <xs:group name="ul">
+      <xs:choice>
+         <xs:element ref="ulAbstract"/>
+         <xs:element ref="ul"/>
+      </xs:choice>
+   </xs:group>
+   <xs:element name="olAbstract" abstract="true"/>
+   <xs:group name="ol">
+      <xs:choice>
+         <xs:element ref="olAbstract"/>
+         <xs:element ref="ol"/>
+      </xs:choice>
+   </xs:group>
+   <xs:element name="slAbstract" abstract="true"/>
+   <xs:group name="sl">
+      <xs:choice>
+         <xs:element ref="slAbstract"/>
+         <xs:element ref="sl"/>
+      </xs:choice>
+   </xs:group>
+   <xs:element name="sliAbstract" abstract="true"/>
+   <xs:group name="sli">
+      <xs:choice>
+         <xs:element ref="sliAbstract"/>
+         <xs:element ref="sli"/>
+      </xs:choice>
+   </xs:group>
+   <xs:element name="liAbstract" abstract="true"/>
+   <xs:group name="li">
+      <xs:choice>
+         <xs:element ref="liAbstract"/>
+         <xs:element ref="li"/>
+      </xs:choice>
+   </xs:group>
+   <xs:element name="itemgroupAbstract" abstract="true"/>
+   <xs:group name="itemgroup">
+      <xs:choice>
+         <xs:element ref="itemgroupAbstract"/>
+         <xs:element ref="itemgroup"/>
+      </xs:choice>
+   </xs:group>
+   <xs:element name="dlAbstract" abstract="true"/>
+   <xs:group name="dl">
+      <xs:choice>
+         <xs:element ref="dlAbstract"/>
+         <xs:element ref="dl"/>
+      </xs:choice>
+   </xs:group>
+   <xs:element name="dlheadAbstract" abstract="true"/>
+   <xs:group name="dlhead">
+      <xs:choice>
+         <xs:element ref="dlheadAbstract"/>
+         <xs:element ref="dlhead"/>
+      </xs:choice>
+   </xs:group>
+   <xs:element name="ddhdAbstract" abstract="true"/>
+   <xs:group name="ddhd">
+      <xs:choice>
+         <xs:element ref="ddhdAbstract"/>
+         <xs:element ref="ddhd"/>
+      </xs:choice>
+   </xs:group>
+   <xs:element name="dthdAbstract" abstract="true"/>
+   <xs:group name="dthd">
+      <xs:choice>
+         <xs:element ref="dthdAbstract"/>
+         <xs:element ref="dthd"/>
+      </xs:choice>
+   </xs:group>
+   <xs:element name="dlentryAbstract" abstract="true"/>
+   <xs:group name="dlentry">
+      <xs:choice>
+         <xs:element ref="dlentryAbstract"/>
+         <xs:element ref="dlentry"/>
+      </xs:choice>
+   </xs:group>
+   <xs:element name="dtAbstract" abstract="true"/>
+   <xs:group name="dt">
+      <xs:choice>
+         <xs:element ref="dtAbstract"/>
+         <xs:element ref="dt"/>
+      </xs:choice>
+   </xs:group>
+   <xs:element name="ddAbstract" abstract="true"/>
+   <xs:group name="dd">
+      <xs:choice>
+         <xs:element ref="ddAbstract"/>
+         <xs:element ref="dd"/>
+      </xs:choice>
+   </xs:group>
+   <xs:element name="figAbstract" abstract="true"/>
+   <xs:group name="fig">
+      <xs:choice>
+         <xs:element ref="figAbstract"/>
+         <xs:element ref="fig"/>
+      </xs:choice>
+   </xs:group>
+   <xs:element name="figgroupAbstract" abstract="true"/>
+   <xs:group name="figgroup">
+      <xs:choice>
+         <xs:element ref="figgroupAbstract"/>
+         <xs:element ref="figgroup"/>
+      </xs:choice>
+   </xs:group>
+   <xs:element name="preAbstract" abstract="true"/>
+   <xs:group name="pre">
+      <xs:choice>
+         <xs:element ref="preAbstract"/>
+         <xs:element ref="pre"/>
+      </xs:choice>
+   </xs:group>
+   <xs:element name="linesAbstract" abstract="true"/>
+   <xs:group name="lines">
+      <xs:choice>
+         <xs:element ref="linesAbstract"/>
+         <xs:element ref="lines"/>
+      </xs:choice>
+   </xs:group>
+   <xs:element name="imageAbstract" abstract="true"/>
+   <xs:group name="image">
+      <xs:choice>
+         <xs:element ref="imageAbstract"/>
+         <xs:element ref="image"/>
+      </xs:choice>
+   </xs:group>
+   <xs:element name="altAbstract" abstract="true"/>
+   <xs:group name="alt">
+      <xs:choice>
+         <xs:element ref="altAbstract"/>
+         <xs:element ref="alt"/>
+      </xs:choice>
+   </xs:group>
+   <xs:element name="objectAbstract" abstract="true"/>
+   <xs:group name="object">
+      <xs:choice>
+         <xs:element ref="objectAbstract"/>
+         <xs:element ref="object"/>
+      </xs:choice>
+   </xs:group>
+   <xs:element name="paramAbstract" abstract="true"/>
+   <xs:group name="param">
+      <xs:choice>
+         <xs:element ref="paramAbstract"/>
+         <xs:element ref="param"/>
+      </xs:choice>
+   </xs:group>
+   <xs:element name="simpletableAbstract" abstract="true"/>
+   <xs:group name="simpletable">
+      <xs:choice>
+         <xs:element ref="simpletableAbstract"/>
+         <xs:element ref="simpletable"/>
+      </xs:choice>
+   </xs:group>
+   <xs:element name="stheadAbstract" abstract="true"/>
+   <xs:group name="sthead">
+      <xs:choice>
+         <xs:element ref="stheadAbstract"/>
+         <xs:element ref="sthead"/>
+      </xs:choice>
+   </xs:group>
+   <xs:element name="strowAbstract" abstract="true"/>
+   <xs:group name="strow">
+      <xs:choice>
+         <xs:element ref="strowAbstract"/>
+         <xs:element ref="strow"/>
+      </xs:choice>
+   </xs:group>
+   <xs:element name="stentryAbstract" abstract="true"/>
+   <xs:group name="stentry">
+      <xs:choice>
+         <xs:element ref="stentryAbstract"/>
+         <xs:element ref="stentry"/>
+      </xs:choice>
+   </xs:group>
+   <xs:element name="draft-commentAbstract" abstract="true"/>
+   <xs:group name="draft-comment">
+      <xs:choice>
+         <xs:element ref="draft-commentAbstract"/>
+         <xs:element ref="draft-comment"/>
+      </xs:choice>
+   </xs:group>
+   <xs:element name="required-cleanupAbstract" abstract="true"/>
+   <xs:group name="required-cleanup">
+      <xs:choice>
+         <xs:element ref="required-cleanupAbstract"/>
+         <xs:element ref="required-cleanup"/>
+      </xs:choice>
+   </xs:group>
+   <xs:element name="fnAbstract" abstract="true"/>
+   <xs:group name="fn">
+      <xs:choice>
+         <xs:element ref="fnAbstract"/>
+         <xs:element ref="fn"/>
+      </xs:choice>
+   </xs:group>
+   <xs:element name="indextermrefAbstract" abstract="true"/>
+   <xs:group name="indextermref">
+      <xs:choice>
+         <xs:element ref="indextermrefAbstract"/>
+         <xs:element ref="indextermref"/>
+      </xs:choice>
+   </xs:group>
+   <xs:element name="citeAbstract" abstract="true"/>
+   <xs:group name="cite">
+      <xs:choice>
+         <xs:element ref="citeAbstract"/>
+         <xs:element ref="cite"/>
+      </xs:choice>
+   </xs:group>
+   <xs:element name="xrefAbstract" abstract="true"/>
+   <xs:group name="xref">
+      <xs:choice>
+         <xs:element ref="xrefAbstract"/>
+         <xs:element ref="xref"/>
+      </xs:choice>
+   </xs:group>
+   <xs:element name="dataAbstract" abstract="true"/>
+   <xs:group name="data">
+      <xs:choice>
+         <xs:element ref="dataAbstract"/>
+         <xs:element ref="data"/>
+      </xs:choice>
+   </xs:group>
+   <xs:element name="data-aboutAbstract" abstract="true"/>
+   <xs:group name="data-about">
+      <xs:choice>
+         <xs:element ref="data-aboutAbstract"/>
+         <xs:element ref="data-about"/>
+      </xs:choice>
+   </xs:group>
+   <xs:element name="foreignAbstract" abstract="true"/>
+   <xs:group name="foreign">
+      <xs:choice>
+         <xs:element ref="foreignAbstract"/>
+         <xs:element ref="foreign"/>
+      </xs:choice>
+   </xs:group>
+   <xs:element name="indextermAbstract" abstract="true"/>
+   <xs:group name="indexterm">
+      <xs:choice>
+         <xs:element ref="indextermAbstract"/>
+         <xs:element ref="indexterm"/>
+      </xs:choice>
+   </xs:group>
+   <xs:element name="index-baseAbstract" abstract="true"/>
+   <xs:group name="index-base">
+      <xs:choice>
+         <xs:element ref="index-baseAbstract"/>
+         <xs:element ref="index-base"/>
+      </xs:choice>
+   </xs:group>
+   <xs:element name="unknownAbstract" abstract="true"/>
+   <xs:group name="unknown">
+      <xs:choice>
+         <xs:element ref="unknownAbstract"/>
+         <xs:element ref="unknown"/>
+      </xs:choice>
+   </xs:group>
+   <xs:element name="shortdescAbstract" abstract="true"/>
+   <xs:group name="shortdesc">
+      <xs:choice>
+         <xs:element ref="shortdescAbstract"/>
+         <xs:element ref="shortdesc"/>
+      </xs:choice>
+   </xs:group>
+   
+  <xs:element name="navtitleAbstract" abstract="true"/>
+  <xs:group name="navtitle">
+    <xs:choice>
+      <xs:element ref="navtitleAbstract"/>
+      <xs:element ref="navtitle"/>
+    </xs:choice>
+  </xs:group>
+  
+  <xs:element name="textAbstract" abstract="true"/>
+  <xs:group name="text">
+    <xs:choice>
+      <xs:element ref="textAbstract"/>
+      <xs:element ref="text"/>
+    </xs:choice>
+  </xs:group>
+    
+    <xs:attributeGroup name="props-attribute-extensions"/>
+    
+    <xs:attributeGroup name="base-attribute-extensions"/>
+    
+</xs:schema>

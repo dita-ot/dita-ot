@@ -1,0 +1,42 @@
+Updates included in the current draft (more details at http://wiki.oasis-open.org/dita/ImplementationStatus1.2):
+
+* 12001 Embed Version numbers in catalogs
+  http://www.oasis-open.org/committees/document.php?document_id=14943&wg_abbrev=dita
+  http://lists.oasis-open.org/archives/dita/200703/msg00067.html
+* 12009 Relax related-links content model
+  http://lists.oasis-open.org/archives/dita/200509/msg00050.html
+* 12013 Conref range
+  http://www.oasis-open.org/committees/download.php/25611/dita_1.3_conrefrange_v3.html
+* 12015 Conref push
+  http://www.oasis-open.org/committees/download.php/26290/IssueNumber17e.html
+* 12017 Reconcile metadata in topics versus maps
+  http://www.oasis-open.org/committees/download.php/24420/IssueNumber12017.html
+* 12020 Text element
+  http://www.oasis-open.org/committees/download.php/25790/IssueNumber12020.html
+* 12022 Un-enumerate attributes
+  http://www.oasis-open.org/apps/org/workgroup/dita/download.php/26496/IssueUnenumerate12022.html
+* 12023 Move @format and @scope into rel-atts
+  http://www.oasis-open.org/committees/download.php/24330/IssueNumber12023.html
+  Initial DTD: http://www.oasis-open.org/committees/document.php?document_id=22515
+* 12036 Image scale-to-fit
+  http://lists.oasis-open.org/archives/dita/200703/msg00021.html
+* 12043 draft-comment in more places
+  http://www.oasis-open.org/committees/download.php/26378/IssueNumber12043.html
+* 12046 add data element to figgroup
+  http://www.oasis-open.org/apps/org/workgroup/dita/download.php/24437/IssueNumber12046.html
+* 12047 Add mapref, topicset, topicsetref, and anchorref elements to the mapgroup domain.
+  http://www.oasis-open.org/committees/download.php/26129/IssueMapConveniences12047.html
+* 12048 add header rows to reltables
+  http://www.oasis-open.org/committees/download.php/24839/IssueReltableHeader12048.html
+* 12050 Add format, scope, type attributes to DITA referencing elements
+  http://lists.oasis-open.org/archives/dita/200707/msg00025.html
+* 12052 Add DITAArchVersion to the dita element
+  http://lists.oasis-open.org/archives/dita/200703/msg00036.html
+  http://lists.oasis-open.org/archives/dita/200704/msg00040.html
+* 12060 Verbatim inclusion of text
+  http://www.oasis-open.org/committees/download.php/26374/IssueNumber12060.html
+
+Updates partially included:
+* 12018 Create elements for text attributes with translatable text
+  http://www.oasis-open.org/committees/download.php/24592/IssueNumber12018.html
+

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ============================================================= -->
+<!--                    HEADER                                     -->
+<!-- ============================================================= -->
+<!-- ============================================================= -->
+<!--  MODULE:    DITA MAP XSD Grouping Decleration                 -->
+<!--  VERSION:   1.1                                             -->
+<!--  DATE:      November 2006                                     -->
+<!--                                                               -->
+<!-- ============================================================= -->
+
+<!-- ============================================================= -->
+<!-- SYSTEM:     Darwin Information Typing Architecture (DITA)     -->
+<!--                                                               -->
+<!-- PURPOSE:    W3C XML Schema to describe DITA maps              -->
+<!--                                                               -->
+<!-- ORIGINAL CREATION DATE:                                       -->
+<!--             March 2001                                        -->
+<!--                                                               -->
+<!--             (C) Copyright OASIS-Open.org 2005, 2006                -->
+<!--             (C) Copyright IBM Corporation 2001, 2004.         -->
+<!--             All Rights Reserved.                              -->
+<!-- ============================================================= -->
+<xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema'>
+
+  <xs:element name="mapAbstract" abstract="true"/>
+  <xs:group name="map">
+    <xs:choice>
+      <xs:element ref="mapAbstract"/>
+      <xs:element ref="map"/>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="navrefAbstract" abstract="true"/>
+  <xs:group name="navref">
+    <xs:choice>
+      <xs:element ref="navrefAbstract"/>
+      <xs:element ref="navref"/>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="topicrefAbstract" abstract="true"/>
+  <xs:group name="topicref">
+    <xs:choice>
+      <xs:element ref="topicrefAbstract"/>
+      <xs:element ref="topicref"/>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="reltableAbstract" abstract="true"/>
+  <xs:group name="reltable">
+    <xs:choice>
+      <xs:element ref="reltableAbstract"/>
+      <xs:element ref="reltable"/>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="relheaderAbstract" abstract="true"/>
+  <xs:group name="relheader">
+    <xs:choice>
+      <xs:element ref="relheaderAbstract"/>
+      <xs:element ref="relheader"/>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="relcolspecAbstract" abstract="true"/>
+  <xs:group name="relcolspec">
+    <xs:choice>
+      <xs:element ref="relcolspecAbstract"/>
+      <xs:element ref="relcolspec"/>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="relrowAbstract" abstract="true"/>
+  <xs:group name="relrow">
+    <xs:choice>
+      <xs:element ref="relrowAbstract"/>
+      <xs:element ref="relrow"/>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="relcellAbstract" abstract="true"/>
+  <xs:group name="relcell">
+    <xs:choice>
+      <xs:element ref="relcellAbstract"/>
+      <xs:element ref="relcell"/>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="anchorAbstract" abstract="true"/>
+  <xs:group name="anchor">
+    <xs:choice>
+      <xs:element ref="anchorAbstract"/>
+      <xs:element ref="anchor"/>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="topicmetaAbstract" abstract="true"/>
+  <xs:group name="topicmeta">
+    <xs:choice>
+      <xs:element ref="topicmetaAbstract"/>
+      <xs:element ref="topicmeta"/>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="linktextAbstract" abstract="true"/>
+  <xs:group name="linktext">
+    <xs:choice>
+      <xs:element ref="linktextAbstract"/>
+      <xs:element ref="linktext"/>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="searchtitleAbstract" abstract="true"/>
+  <xs:group name="searchtitle">
+    <xs:choice>
+      <xs:element ref="searchtitleAbstract"/>
+      <xs:element ref="searchtitle"/>
+    </xs:choice>
+  </xs:group>
+ 
+
+  
+
+</xs:schema>

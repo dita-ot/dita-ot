@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  
+    <xs:element name="hazardstatementAbstract" abstract="true"/>
+  <xs:group name="hazardstatement">
+    <xs:choice>
+      <xs:element ref="hazardstatementAbstract"/>
+      <xs:element ref="hazardstatement"/>
+    </xs:choice>
+  </xs:group>
+  
+  <xs:element name="messagepanelAbstract" abstract="true"/>
+  <xs:group name="messagepanel">
+    <xs:choice>
+      <xs:element ref="messagepanelAbstract"/>
+      <xs:element ref="messagepanel"/>
+    </xs:choice>
+  </xs:group>
+  
+  <xs:element name="hazardsymbolAbstract" abstract="true"/>
+  <xs:group name="hazardsymbol">
+    <xs:choice>
+      <xs:element ref="hazardsymbolAbstract"/>
+      <xs:element ref="hazardsymbol"/>
+    </xs:choice>
+  </xs:group>
+  
+  <xs:element name="typeofhazardAbstract" abstract="true"/>
+  <xs:group name="typeofhazard">
+    <xs:choice>
+      <xs:element ref="typeofhazardAbstract"/>
+      <xs:element ref="typeofhazard"/>
+    </xs:choice>
+  </xs:group>
+  
+  <xs:element name="consequenceAbstract" abstract="true"/>
+  <xs:group name="consequence">
+    <xs:choice>
+      <xs:element ref="consequenceAbstract"/>
+      <xs:element ref="consequence"/>
+    </xs:choice>
+  </xs:group>
+ 
+ <xs:element name="howtoavoidAbstract" abstract="true"/>
+  <xs:group name="howtoavoid">
+    <xs:choice>
+      <xs:element ref="howtoavoidAbstract"/>
+      <xs:element ref="howtoavoid"/>
+    </xs:choice>
+  </xs:group>
+    
+    
+<!--  
+      Any content model that includes the hazard.cnt group must also set  mixed="true" 
+   >-->
+  <xs:group name="hazard.cnt">
+    <xs:choice>
+      <xs:group ref="basic.ph"/>
+      <xs:group ref="sl"/>
+      <xs:group ref="simpletable"/>
+    </xs:choice>
+  </xs:group>
+  
+  <xs:element name="hazardstatement">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="hazardstatement.class">
+          <xs:attribute ref="class" default="+ topic/note hazard-d/hazardstatement "/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:complexType name="hazardstatement.class">
+    <xs:sequence>
+      <xs:group ref="messagepanel" maxOccurs="unbounded"/>
+      <xs:group ref="hazardsymbol" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+    <xs:attribute name="type" type="type-note-atts.class"/>
+    <xs:attribute name="spectitle" type="xs:string"/>
+    <xs:attribute name="othertype" type="xs:string"/>
+    <xs:attribute name="outputclass" type="xs:string"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
+  </xs:complexType>
+  
+  
+  <xs:element name="messagepanel" >
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="messagepanel.class">
+          <xs:attribute ref="class" default="+ topic/ul hazard-d/messagepanel "/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  
+   <xs:complexType name="messagepanel.class">
+    <xs:sequence>
+      <xs:group ref="typeofhazard" />
+      <xs:group ref="consequence" maxOccurs="unbounded"/>
+      <xs:group ref="howtoavoid" maxOccurs="unbounded"/>
+    </xs:sequence>
+    <xs:attribute name="spectitle" type="xs:string"/>
+    <xs:attribute name="outputclass" type="xs:string"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
+  </xs:complexType>
+  
+  <xs:element name="hazardsymbol" >
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="hazardsymbol.class">
+          <xs:attribute ref="class" default="+ topic/image hazard-d/hazardsymbol "/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  
+  <xs:complexType name="hazardsymbol.class">
+    <xs:choice>
+      <xs:group ref="alt" minOccurs="0"/>
+    </xs:choice>
+    <xs:attribute name="href" type="xs:string" use="required"/>
+    <xs:attribute name="keyref" type="xs:NMTOKEN"/>
+    <xs:attribute name="alt" type="xs:string"/>
+    <xs:attribute name="longdescref" type="xs:string"/>
+    <xs:attribute name="height" type="xs:NMTOKEN"/>
+    <xs:attribute name="width" type="xs:NMTOKEN"/>
+    <xs:attribute name="scale" type="xs:NMTOKEN"/>
+    <xs:attribute name="scalefit" type="yesno-att.class"/>
+    <xs:attribute name="align" type="xs:string"/>
+    <xs:attribute name="placement" type="image-placement-att.class" default="inline"/>
+    <xs:attribute name="outputclass" type="xs:string"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
+  </xs:complexType>
+  
+  <xs:element name="typeofhazard" >
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="typeofhazard.class">
+          <xs:attribute ref="class" default="+ topic/li hazard-d/typeofhazard "/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  
+  <xs:complexType name="typeofhazard.class" mixed="true">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="words.cnt"/>
+      <xs:group ref="ph"/>
+      <xs:group ref="tm"/>
+    </xs:choice>
+    <xs:attribute name="outputclass" type="xs:string"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
+  </xs:complexType>
+  
+  <xs:element name="consequence" >
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="consequence.class">
+          <xs:attribute ref="class" default="+ topic/li hazard-d/consequence "/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  
+  <xs:complexType name="consequence.class">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="words.cnt"/>
+      <xs:group ref="ph"/>
+      <xs:group ref="tm"/>
+    </xs:choice>
+    <xs:attribute name="outputclass" type="xs:string"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
+  </xs:complexType>
+  
+  <xs:element name="howtoavoid" >
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="howtoavoid.class">
+          <xs:attribute ref="class" default="+ topic/li hazard-d/howtoavoid "/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  
+  <xs:complexType name="howtoavoid.class">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="hazard.cnt"/>
+    </xs:choice>
+    <xs:attribute name="outputclass" type="xs:string"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
+  </xs:complexType>
+
+</xs:schema>

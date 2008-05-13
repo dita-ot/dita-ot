@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ============================================================= -->
+<!--                    HEADER                                     -->
+<!-- ============================================================= -->
+<!--  MODULE:    DITA Reference XSD Group Defenition               -->
+<!--  VERSION:   1.1                                             -->
+<!--  DATE:      November 2006                                     -->
+<!--                                                               -->
+<!-- ============================================================= -->
+
+<!-- ============================================================= -->
+<!-- SYSTEM:     Darwin Information Typing Architecture (DITA)     -->
+<!--                                                               -->
+<!-- PURPOSE:    W3C XML Schema to describe DITA References        -->
+<!--                                                               -->
+<!-- ORIGINAL CREATION DATE:                                       -->
+<!--             March 2001                                        -->
+<!--                                                               -->
+<!--             (C) Copyright OASIS-Open.org 2005, 2006                -->
+<!--             (C) Copyright IBM Corporation 2001, 2004.         -->
+<!--             All Rights Reserved.                              -->
+<!-- ============================================================= -->
+<xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema'>
+
+  <xs:element name="referenceAbstract" abstract="true"/>
+   <xs:group name="reference">
+      <xs:choice>
+         <xs:element ref="referenceAbstract"/>
+         <xs:element ref="reference"/>
+      </xs:choice>
+   </xs:group>
+   <xs:element name="refbodyAbstract" abstract="true"/>
+   <xs:group name="refbody">
+      <xs:choice>
+         <xs:element ref="refbodyAbstract"/>
+         <xs:element ref="refbody"/>
+      </xs:choice>
+   </xs:group>
+   <xs:element name="refsynAbstract" abstract="true"/>
+   <xs:group name="refsyn">
+      <xs:choice>
+         <xs:element ref="refsynAbstract"/>
+         <xs:element ref="refsyn"/>
+      </xs:choice>
+   </xs:group>
+   <xs:element name="propertiesAbstract" abstract="true"/>
+   <xs:group name="properties">
+      <xs:choice>
+         <xs:element ref="propertiesAbstract"/>
+         <xs:element ref="properties"/>
+      </xs:choice>
+   </xs:group>
+   <xs:element name="propertyAbstract" abstract="true"/>
+   <xs:group name="property">
+      <xs:choice>
+         <xs:element ref="propertyAbstract"/>
+         <xs:element ref="property"/>
+      </xs:choice>
+   </xs:group>
+   <xs:element name="propvalueAbstract" abstract="true"/>
+   <xs:group name="propvalue">
+      <xs:choice>
+         <xs:element ref="propvalueAbstract"/>
+         <xs:element ref="propvalue"/>
+      </xs:choice>
+   </xs:group>
+   <xs:element name="propdescAbstract" abstract="true"/>
+   <xs:group name="propdesc">
+      <xs:choice>
+         <xs:element ref="propdescAbstract"/>
+         <xs:element ref="propdesc"/>
+      </xs:choice>
+   </xs:group>
+   <xs:element name="proptypeAbstract" abstract="true"/>
+   <xs:group name="proptype">
+      <xs:choice>
+         <xs:element ref="proptypeAbstract"/>
+         <xs:element ref="proptype"/>
+      </xs:choice>
+   </xs:group>
+   <xs:element name="propheadAbstract" abstract="true"/>
+   <xs:group name="prophead">
+      <xs:choice>
+         <xs:element ref="propheadAbstract"/>
+         <xs:element ref="prophead"/>
+      </xs:choice>
+   </xs:group>
+   <xs:element name="propvaluehdAbstract" abstract="true"/>
+   <xs:group name="propvaluehd">
+      <xs:choice>
+         <xs:element ref="propvaluehdAbstract"/>
+         <xs:element ref="propvaluehd"/>
+      </xs:choice>
+   </xs:group>
+   <xs:element name="propdeschdAbstract" abstract="true"/>
+   <xs:group name="propdeschd">
+      <xs:choice>
+         <xs:element ref="propdeschdAbstract"/>
+         <xs:element ref="propdeschd"/>
+      </xs:choice>
+   </xs:group>
+   <xs:element name="proptypehdAbstract" abstract="true"/>
+   <xs:group name="proptypehd">
+      <xs:choice>
+         <xs:element ref="proptypehdAbstract"/>
+         <xs:element ref="proptypehd"/>
+      </xs:choice>
+   </xs:group>
+
+</xs:schema>

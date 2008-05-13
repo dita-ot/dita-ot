@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ============================================================= -->
+<!--                    HEADER                                     -->
+<!-- ============================================================= -->
+<!--  MODULE:    DITA Task XSD Group Definition                    -->
+<!--  VERSION:   1.1                                             -->
+<!--  DATE:      November 2006                                     -->
+<!--                                                               -->
+<!-- ============================================================= -->
+
+<!-- ============================================================= -->
+<!-- SYSTEM:     Darwin Information Typing Architecture (DITA)     -->
+<!--                                                               -->
+<!-- PURPOSE:    W3C XML Schema to describe DITA Tasks             -->
+<!--                                                               -->
+<!-- ORIGINAL CREATION DATE:                                       -->
+<!--             March 2001                                        -->
+<!--                                                               -->
+<!--             (C) Copyright OASIS-Open.org 2005, 2006                -->
+<!--             (C) Copyright IBM Corporation 2001, 2004.         -->
+<!--             All Rights Reserved.                              -->
+<!--                                                               -->
+<!--  UPDATES:                                                     -->
+<!--    2005.11.15 EAS: Corrected definitions for choption,        -->
+<!--                    chdesc, choptionhd, and chdeschd           -->
+<!-- ============================================================= -->
+<xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema'>
+  
+  <xs:element name="taskAbstract" abstract="true"/>
+  <xs:group name="task">
+    <xs:choice>
+      <xs:element ref="taskAbstract"/>
+      <xs:element ref="task"/>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="taskbodyAbstract" abstract="true"/>
+  <xs:group name="taskbody">
+    <xs:choice>
+      <xs:element ref="taskbodyAbstract"/>
+      <xs:element ref="taskbody"/>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="prereqAbstract" abstract="true"/>
+  <xs:group name="prereq">
+    <xs:choice>
+      <xs:element ref="prereqAbstract"/>
+      <xs:element ref="prereq"/>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="contextAbstract" abstract="true"/>
+  <xs:group name="context">
+    <xs:choice>
+      <xs:element ref="contextAbstract"/>
+      <xs:element ref="context"/>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="resultAbstract" abstract="true"/>
+  <xs:group name="result">
+    <xs:choice>
+      <xs:element ref="resultAbstract"/>
+      <xs:element ref="result"/>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="postreqAbstract" abstract="true"/>
+  <xs:group name="postreq">
+    <xs:choice>
+      <xs:element ref="postreqAbstract"/>
+      <xs:element ref="postreq"/>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="choiceAbstract" abstract="true"/>
+  <xs:group name="choice">
+    <xs:choice>
+      <xs:element ref="choiceAbstract"/>
+      <xs:element ref="choice"/>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="stepAbstract" abstract="true"/>
+  <xs:group name="step">
+    <xs:choice>
+      <xs:element ref="stepAbstract"/>
+      <xs:element ref="step"/>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="substepAbstract" abstract="true"/>
+  <xs:group name="substep">
+    <xs:choice>
+      <xs:element ref="substepAbstract"/>
+      <xs:element ref="substep"/>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="steps-unorderedAbstract" abstract="true"/>
+  <xs:group name="steps-unordered">
+    <xs:choice>
+      <xs:element ref="steps-unorderedAbstract"/>
+      <xs:element ref="steps-unordered"/>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="choicesAbstract" abstract="true"/>
+  <xs:group name="choices">
+    <xs:choice>
+      <xs:element ref="choicesAbstract"/>
+      <xs:element ref="choices"/>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="stepsAbstract" abstract="true"/>
+  <xs:group name="steps">
+    <xs:choice>
+      <xs:element ref="stepsAbstract"/>
+      <xs:element ref="steps"/>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="substepsAbstract" abstract="true"/>
+  <xs:group name="substeps">
+    <xs:choice>
+      <xs:element ref="substepsAbstract"/>
+      <xs:element ref="substeps"/>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="cmdAbstract" abstract="true"/>
+  <xs:group name="cmd">
+    <xs:choice>
+      <xs:element ref="cmdAbstract"/>
+      <xs:element ref="cmd"/>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="infoAbstract" abstract="true"/>
+  <xs:group name="info">
+    <xs:choice>
+      <xs:element ref="infoAbstract"/>
+      <xs:element ref="info"/>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="tutorialinfoAbstract" abstract="true"/>
+  <xs:group name="tutorialinfo">
+    <xs:choice>
+      <xs:element ref="tutorialinfoAbstract"/>
+      <xs:element ref="tutorialinfo"/>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="stepxmpAbstract" abstract="true"/>
+  <xs:group name="stepxmp">
+    <xs:choice>
+      <xs:element ref="stepxmpAbstract"/>
+      <xs:element ref="stepxmp"/>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="stepresultAbstract" abstract="true"/>
+  <xs:group name="stepresult">
+    <xs:choice>
+      <xs:element ref="stepresultAbstract"/>
+      <xs:element ref="stepresult"/>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="choicetableAbstract" abstract="true"/>
+  <xs:group name="choicetable">
+    <xs:choice>
+      <xs:element ref="choicetableAbstract"/>
+      <xs:element ref="choicetable"/>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="chheadAbstract" abstract="true"/>
+  <xs:group name="chhead">
+    <xs:choice>
+      <xs:element ref="chheadAbstract"/>
+      <xs:element ref="chhead"/>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="chrowAbstract" abstract="true"/>
+  <xs:group name="chrow">
+    <xs:choice>
+      <xs:element ref="chrowAbstract"/>
+      <xs:element ref="chrow"/>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="choptionhdAbstract" abstract="true"/>
+  <xs:group name="choptionhd">
+    <xs:choice>
+      <xs:element ref="choptionhdAbstract"/>
+      <xs:element ref="choptionhd"/>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="chdeschdAbstract" abstract="true"/>
+  <xs:group name="chdeschd">
+    <xs:choice>
+      <xs:element ref="chdeschdAbstract"/>
+      <xs:element ref="chdeschd"/>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="choptionAbstract" abstract="true"/>
+  <xs:group name="choption">
+    <xs:choice>
+      <xs:element ref="choptionAbstract"/>
+      <xs:element ref="choption"/>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="chdescAbstract" abstract="true"/>
+  <xs:group name="chdesc">
+    <xs:choice>
+      <xs:element ref="chdescAbstract"/>
+      <xs:element ref="chdesc"/>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="processAbstract" abstract="true"/>
+  <xs:group name="process">
+    <xs:choice>
+      <xs:element ref="processAbstract"/>
+      <xs:element ref="process"/>
+    </xs:choice>
+  </xs:group>
+
+</xs:schema>

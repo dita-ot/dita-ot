@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ============================================================= -->
+<!--                    HEADER                                     -->
+<!-- ============================================================= -->
+<!--  MODULE:    DITA Metadata                                     -->
+<!--  VERSION:   1.1                                             -->
+<!--  DATE:      November 2006                                     -->
+<!--                                                               -->
+<!-- ============================================================= -->
+
+<!-- ============================================================= -->
+<!-- SYSTEM:     Darwin Information Typing Architecture (DITA)     -->
+<!--                                                               -->
+<!-- PURPOSE:    Declaring the elements and specialization         -->
+<!--             attributes for the DITA XML Metadata              -->
+<!--                                                               -->
+<!-- ORIGINAL CREATION DATE:                                       -->
+<!--             March 2001                                        -->
+<!--                                                               -->
+<!--             (C) Copyright OASIS-Open.org 2005, 2006                -->
+<!--             (C) Copyright IBM Corporation 2001, 2004.         -->
+<!--             All Rights Reserved.                              -->
+<!-- ============================================================= -->
+<xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema'>
+
+  <xs:element name="metadataAbstract" abstract="true"/>
+  <xs:group name="metadata">
+    <xs:choice>
+      <xs:element ref="metadataAbstract"/>
+      <xs:element ref="metadata"/>
+    </xs:choice>
+  </xs:group>
+  
+  <xs:element name="authorAbstract" abstract="true"/>
+  <xs:group name="author">
+    <xs:choice>
+      <xs:element ref="authorAbstract"/>
+      <xs:element ref="author"/>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="sourceAbstract" abstract="true"/>
+  <xs:group name="source">
+    <xs:choice>
+      <xs:element ref="sourceAbstract"/>
+      <xs:element ref="source"/>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="publisherAbstract" abstract="true"/>
+  <xs:group name="publisher">
+    <xs:choice>
+      <xs:element ref="publisherAbstract"/>
+      <xs:element ref="publisher"/>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="copyrightAbstract" abstract="true"/>
+  <xs:group name="copyright">
+    <xs:choice>
+      <xs:element ref="copyrightAbstract"/>
+      <xs:element ref="copyright"/>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="copyryearAbstract" abstract="true"/>
+  <xs:group name="copyryear">
+    <xs:choice>
+      <xs:element ref="copyryearAbstract"/>
+      <xs:element ref="copyryear"/>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="copyrholderAbstract" abstract="true"/>
+  <xs:group name="copyrholder">
+    <xs:choice>
+      <xs:element ref="copyrholderAbstract"/>
+      <xs:element ref="copyrholder"/>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="critdatesAbstract" abstract="true"/>
+  <xs:group name="critdates">
+    <xs:choice>
+      <xs:element ref="critdatesAbstract"/>
+      <xs:element ref="critdates"/>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="revisedAbstract" abstract="true"/>
+  <xs:group name="revised">
+    <xs:choice>
+      <xs:element ref="revisedAbstract"/>
+      <xs:element ref="revised"/>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="createdAbstract" abstract="true"/>
+  <xs:group name="created">
+    <xs:choice>
+      <xs:element ref="createdAbstract"/>
+      <xs:element ref="created"/>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="resourceidAbstract" abstract="true"/>
+  <xs:group name="resourceid">
+    <xs:choice>
+      <xs:element ref="resourceidAbstract"/>
+      <xs:element ref="resourceid"/>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="audienceAbstract" abstract="true"/>
+  <xs:group name="audience">
+    <xs:choice>
+      <xs:element ref="audienceAbstract"/>
+      <xs:element ref="audience"/>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="categoryAbstract" abstract="true"/>
+  <xs:group name="category">
+    <xs:choice>
+      <xs:element ref="categoryAbstract"/>
+      <xs:element ref="category"/>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="keywordsAbstract" abstract="true"/>
+  <xs:group name="keywords">
+    <xs:choice>
+      <xs:element ref="keywordsAbstract"/>
+      <xs:element ref="keywords"/>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="othermetaAbstract" abstract="true"/>
+  <xs:group name="othermeta">
+    <xs:choice>
+      <xs:element ref="othermetaAbstract"/>
+      <xs:element ref="othermeta"/>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="permissionsAbstract" abstract="true"/>
+  <xs:group name="permissions">
+    <xs:choice>
+      <xs:element ref="permissionsAbstract"/>
+      <xs:element ref="permissions"/>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="prodinfoAbstract" abstract="true"/>
+  <xs:group name="prodinfo">
+    <xs:choice>
+      <xs:element ref="prodinfoAbstract"/>
+      <xs:element ref="prodinfo"/>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="brandAbstract" abstract="true"/>
+  <xs:group name="brand">
+    <xs:choice>
+      <xs:element ref="brandAbstract"/>
+      <xs:element ref="brand"/>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="seriesAbstract" abstract="true"/>
+  <xs:group name="series">
+    <xs:choice>
+      <xs:element ref="seriesAbstract"/>
+      <xs:element ref="series"/>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="platformAbstract" abstract="true"/>
+  <xs:group name="platform">
+    <xs:choice>
+      <xs:element ref="platformAbstract"/>
+      <xs:element ref="platform"/>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="prognumAbstract" abstract="true"/>
+  <xs:group name="prognum">
+    <xs:choice>
+      <xs:element ref="prognumAbstract"/>
+      <xs:element ref="prognum"/>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="featnumAbstract" abstract="true"/>
+  <xs:group name="featnum">
+    <xs:choice>
+      <xs:element ref="featnumAbstract"/>
+      <xs:element ref="featnum"/>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="componentAbstract" abstract="true"/>
+  <xs:group name="component">
+    <xs:choice>
+      <xs:element ref="componentAbstract"/>
+      <xs:element ref="component"/>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="prodnameAbstract" abstract="true"/>
+  <xs:group name="prodname">
+    <xs:choice>
+      <xs:element ref="prodnameAbstract"/>
+      <xs:element ref="prodname"/>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="vrmlistAbstract" abstract="true"/>
+  <xs:group name="vrmlist">
+    <xs:choice>
+      <xs:element ref="vrmlistAbstract"/>
+      <xs:element ref="vrmlist"/>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="vrmAbstract" abstract="true"/>
+  <xs:group name="vrm">
+    <xs:choice>
+      <xs:element ref="vrmAbstract"/>
+      <xs:element ref="vrm"/>
+    </xs:choice>
+  </xs:group>
+
+
+</xs:schema>
