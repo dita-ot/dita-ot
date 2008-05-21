@@ -101,7 +101,7 @@
       </xsl:apply-templates>
     </xsl:when>
     <!-- If this this a container (no href or href='', no title), just process children -->
-    <xsl:when test="(not(@href) or @href='') and not(@navtitle) and 
+    <xsl:when test="(not(@href) or @href='') and not(@navtitle) and not(*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ']) and
                     not(*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/linktext ')])">
       <xsl:apply-templates select="*[contains(@class, ' map/topicref ')][not(contains(@toc,'no'))]">
         <xsl:with-param name="pathFromMaplist" select="$pathFromMaplist"/>
@@ -174,7 +174,10 @@
           <xsl:choose>
            
            <!-- If navtitle is specified, use it -->
-           <xsl:when test="@navtitle"><xsl:value-of select="@navtitle"/></xsl:when>
+            <xsl:when test="*[contains(@class,'- map/topicmeta ')]/*[contains(@class, '- topic/navtitle ')]">
+              <xsl:value-of select="*[contains(@class,'- map/topicmeta ')]/*[contains(@class, '- topic/navtitle ')]"/>
+            </xsl:when>            
+            <xsl:when test="not(*[contains(@class,'- map/topicmeta ')]/*[contains(@class, '- topic/navtitle ')]) and @navtitle"><xsl:value-of select="@navtitle"/></xsl:when>
 
            <!-- If this references a DITA file (has @href, not "local" or "external"),
                 try to open the file and get the title -->

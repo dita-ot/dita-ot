@@ -166,7 +166,7 @@
     <xsl:when test="contains(@class, ' mapgroup/topicgroup ')">
       <xsl:apply-templates/>
     </xsl:when>
-    <xsl:when test="not(@href) and not(@navtitle) and 
+    <xsl:when test="not(@href) and not(@navtitle) and not(*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ']) and
                     not(*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/linktext ')])">
       <xsl:apply-templates/>
     </xsl:when>
@@ -174,7 +174,10 @@
 	<topic>
 		<xsl:attribute name="label">
 			<xsl:choose>
-				<xsl:when test="@navtitle"><xsl:value-of select="@navtitle"/></xsl:when>
+    		  <xsl:when test="*[contains(@class,'- map/topicmeta ')]/*[contains(@class, '- topic/navtitle ')]">
+    		    <xsl:value-of select="*[contains(@class,'- map/topicmeta ')]/*[contains(@class, '- topic/navtitle ')]"/>
+    		  </xsl:when>
+    		  <xsl:when test="not(*[contains(@class,'- map/topicmeta ')]/*[contains(@class, '- topic/navtitle ')]) and @navtitle"><xsl:value-of select="@navtitle"/></xsl:when>			  
 				<xsl:when test="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/linktext ')]"><xsl:value-of select="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/linktext ')]"/></xsl:when>
 				<xsl:otherwise>
                     			<xsl:choose>

@@ -517,6 +517,9 @@ Other modes can be found within the code, and may or may not prove useful for ov
       <xsl:when
         test="($scope='external' and not($format='dita' or $format='DITA')) or $type='external'">
         <xsl:choose>
+          <xsl:when test="*/*[contains(@class,' topic/navtitle ')]">
+            <xsl:value-of select="*/*[contains(@class,' topic/navtitle ')]"/>
+          </xsl:when>
           <xsl:when test="@navtitle"><xsl:value-of select="@navtitle"/></xsl:when>
           <xsl:when test="*/*[contains(@class,' map/linktext ')]">
             <xsl:value-of select="*/*[contains(@class,' map/linktext ')]"/>
@@ -529,6 +532,9 @@ Other modes can be found within the code, and may or may not prove useful for ov
       <!--if it's external and dita, leave it undefined as fallback, so the file extension can be processed in the final output stage-->
       <xsl:when test="$scope='external'">
         <xsl:choose>
+          <xsl:when test="*/*[contains(@class,' topic/navtitle ')]">
+            <xsl:value-of select="*/*[contains(@class,' topic/navtitle ')]"/>
+          </xsl:when>
           <xsl:when test="@navtitle">
             <xsl:value-of select="@navtitle"/>
           </xsl:when>
@@ -540,6 +546,9 @@ Other modes can be found within the code, and may or may not prove useful for ov
       </xsl:when>
       <xsl:when test="$scope='peer'">
         <xsl:choose>
+          <xsl:when test="*/*[contains(@class,' topic/navtitle ')]">
+            <xsl:value-of select="*/*[contains(@class,' topic/navtitle ')]"/>
+          </xsl:when>          
           <xsl:when test="@navtitle">
             <xsl:value-of select="@navtitle"/>
           </xsl:when>
@@ -652,30 +661,34 @@ Other modes can be found within the code, and may or may not prove useful for ov
     </xsl:apply-templates>
 
     <!--navtitle-->
-    <xsl:if test="not(@navtitle) or not($locktitle='yes')">
-      <xsl:variable name="navtitle-not-normalized">
-        <xsl:apply-templates select="." mode="mappull:get-stuff_get-navtitle">
-          <xsl:with-param name="type" select="$type"/>
-          <xsl:with-param name="scope" select="$scope"/>
-          <xsl:with-param name="topicpos" select="$topicpos"/>
-          <xsl:with-param name="format" select="$format"/>
-          <xsl:with-param name="file" select="$file"/>
-          <xsl:with-param name="classval" select="$classval"/>
-          <xsl:with-param name="topicid" select="$topicid"/>
-        </xsl:apply-templates>
-      </xsl:variable>
-      <xsl:variable name="navtitle">
-        <xsl:value-of select="normalize-space($navtitle-not-normalized)"/>
-      </xsl:variable>
-
-      <xsl:if test="not($navtitle='#none#')">
-        <xsl:attribute name="navtitle">
-          <xsl:value-of select="$navtitle"/>
-        </xsl:attribute>
-        <!--not using normal fallback of @href when format=dita and file-extension=dita; defer to rel-links to decide what to do with it, since the file extension will need to be massaged eg to .htm or .html, and that's an 
-        output-specific choice that mappull shouldn't be dictating-->
+    <xsl:variable name="navtitle-not-normalized">
+<!--there should not be a warning message now.      
+      <xsl:if test="not(*/*[contains(@class,' topic/navtitle ')]) and @navtitle">
+        <xsl:call-template name="output-message">
+          <xsl:with-param name="msgnum">058</xsl:with-param>
+          <xsl:with-param name="msgsev">W</xsl:with-param>
+        </xsl:call-template>
       </xsl:if>
-    </xsl:if>
+-->
+      <xsl:choose>
+        <xsl:when test="(not(*/*[contains(@class,' topic/navtitle ')]) and not(@navtitle)) or not($locktitle='yes')">
+          <xsl:apply-templates select="." mode="mappull:get-stuff_get-navtitle">
+            <xsl:with-param name="type" select="$type"/>
+            <xsl:with-param name="scope" select="$scope"/>
+            <xsl:with-param name="topicpos" select="$topicpos"/>
+            <xsl:with-param name="format" select="$format"/>
+            <xsl:with-param name="file" select="$file"/>
+            <xsl:with-param name="classval" select="$classval"/>
+            <xsl:with-param name="topicid" select="$topicid"/>
+          </xsl:apply-templates>
+        </xsl:when>
+        <xsl:otherwise>#none#</xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="navtitle">
+      <xsl:value-of select="normalize-space($navtitle-not-normalized)"/>
+    </xsl:variable>
+
 
     <!-- Process the topicmeta, or create a topicmeta container if one does not exist -->
     <xsl:choose>
@@ -692,6 +705,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
                 <xsl:with-param name="classval"><xsl:value-of select="$classval"/></xsl:with-param>
                 <xsl:with-param name="scope"><xsl:value-of select="$scope"/></xsl:with-param>
                 <xsl:with-param name="format"><xsl:value-of select="$format"/></xsl:with-param>
+                <xsl:with-param name="navtitle"><xsl:value-of select="$navtitle"/></xsl:with-param>
               </xsl:call-template>
             </xsl:for-each>
           </xsl:copy>
@@ -707,6 +721,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
             <xsl:with-param name="classval"><xsl:value-of select="$classval"/></xsl:with-param>
             <xsl:with-param name="scope"><xsl:value-of select="$scope"/></xsl:with-param>
             <xsl:with-param name="format"><xsl:value-of select="$format"/></xsl:with-param>
+            <xsl:with-param name="navtitle"><xsl:value-of select="$navtitle"/></xsl:with-param>
           </xsl:call-template>
         </topicmeta>
       </xsl:otherwise>
@@ -918,6 +933,20 @@ Other modes can be found within the code, and may or may not prove useful for ov
     <xsl:param name="topicpos"/>
     <xsl:param name="topicid"/>
     <xsl:param name="classval"/>
+    <xsl:param name="navtitle"></xsl:param>
+    <!--navtitle-->
+    <xsl:choose>
+      <xsl:when test="not($navtitle='#none#')">
+        <navtitle class="- topic/navtitle ">
+          <xsl:value-of select="$navtitle"/>
+        </navtitle>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:apply-templates
+          select="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ')]"
+        />
+      </xsl:otherwise>
+    </xsl:choose>
     <!--linktext-->
     <xsl:apply-templates select="." mode="mappull:getmetadata_linktext">
       <xsl:with-param name="type" select="$type"/>
@@ -940,8 +969,8 @@ Other modes can be found within the code, and may or may not prove useful for ov
     </xsl:apply-templates>
     <!--metadata to be written - if we add logic at some point to pull metadata from topics into the map-->
     <xsl:apply-templates
-      select="*[contains(@class, ' map/topicmeta ')]/*[not(contains(@class, ' map/linktext '))][not(contains(@class, ' map/shortdesc '))]|
-              *[contains(@class, ' map/topicmeta ')]/processing-instruction()"
+      select="*[contains(@class, ' map/topicmeta ')]/*[not(contains(@class, ' map/linktext '))][not(contains(@class, ' map/shortdesc '))][not(contains(@class, ' topic/navtitle '))]|
+      *[contains(@class, ' map/topicmeta ')]/processing-instruction()"
     />
   </xsl:template>
 

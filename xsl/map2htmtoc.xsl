@@ -197,7 +197,10 @@
   <xsl:choose>
 
     <!-- If navtitle is specified, use it (!?but it should only be used when locktitle=yes is specifed?!) -->
-    <xsl:when test="@navtitle"><xsl:value-of select="@navtitle"/></xsl:when>
+    <xsl:when test="*[contains(@class,'- map/topicmeta ')]/*[contains(@class, '- topic/navtitle ')]">
+      <xsl:value-of select="*[contains(@class,'- map/topicmeta ')]/*[contains(@class, '- topic/navtitle ')]"/>
+    </xsl:when>
+    <xsl:when test="not(*[contains(@class,'- map/topicmeta ')]/*[contains(@class, '- topic/navtitle ')]) and @navtitle"><xsl:value-of select="@navtitle"/></xsl:when>
 
     <!-- If this references a DITA file (has @href, not "local" or "external"),
          try to open the file and get the title -->
