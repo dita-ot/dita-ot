@@ -1867,18 +1867,25 @@ See the accompanying license.txt file for applicable licenses.
 
         <fo:inline id="{@id}"/>
         <fo:footnote>
-            <fo:inline xsl:use-attribute-sets="fn__callout">
+            <xsl:choose>
+              <xsl:when test="not(@id)">
+                <fo:inline xsl:use-attribute-sets="fn__callout">
 
-                <xsl:choose>
-                    <xsl:when test="@callout">
-                        <xsl:value-of select="@callout"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:number level="any" count="*[contains(@class,' topic/fn ') and not(@callout)]"/>
-                    </xsl:otherwise>
-                </xsl:choose>
-
-            </fo:inline>
+                    <xsl:choose>
+                        <xsl:when test="@callout">
+                            <xsl:value-of select="@callout"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:number level="any" count="*[contains(@class,' topic/fn ') and not(@callout)]"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </fo:inline>
+              </xsl:when>
+              <xsl:otherwise>
+                <!-- Footnote with id does not generate its own callout. -->
+                <fo:inline/>
+              </xsl:otherwise>
+            </xsl:choose>
 
             <fo:footnote-body>
                 <fo:list-block xsl:use-attribute-sets="fn__body">

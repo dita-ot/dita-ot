@@ -231,6 +231,28 @@ See the accompanying license.txt file for applicable licenses.
 
     </xsl:template>
 
+    <!-- xref to footnote makes a callout. -->
+    <xsl:template match="*[contains(@class,' topic/xref ')][@type='fn']" priority="2">
+        <xsl:variable name="href-fragment" select="substring-after(@href, '#')"/>
+        <xsl:variable name="footnote-target" select="//*[contains(@class, ' topic/fn ')][@id = substring-after($href-fragment, '/')][ancestor::*[contains(@class, ' topic/topic ')][1]/@id = substring-before($href-fragment, '/')]"/>
+        <xsl:apply-templates select="$footnote-target" mode="footnote-callout"/>
+    </xsl:template>
+
+    <xsl:template match="*[contains(@class, ' topic/fn ')]" mode="footnote-callout">
+            <fo:inline xsl:use-attribute-sets="fn__callout">
+
+                <xsl:choose>
+                    <xsl:when test="@callout">
+                        <xsl:value-of select="@callout"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:number level="any" count="*[contains(@class,' topic/fn ') and not(@callout)]"/>
+                    </xsl:otherwise>
+                </xsl:choose>
+
+            </fo:inline>
+    </xsl:template>
+
     <xsl:template match="*[contains(@class,' topic/related-links ')]">
         <xsl:if test="$disableRelatedLinks = 'no'">
             <fo:block xsl:use-attribute-sets="related-links">
