@@ -40,8 +40,8 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:output indent="no"/>
 
-	<xsl:key name="topic" match="dita-merge/*[contains(@class,' topic/topic ')]" use="concat('#',@id)"/>
-	<xsl:key name="topic" match="dita-merge/dita" use="concat('#',@id)"/>
+	<xsl:key name="topic" match="dita-merge//*[contains(@class,' topic/topic ')]" use="concat('#',@id)"/>
+	<xsl:key name="topic" match="dita-merge//dita" use="concat('#',@id)"/>
     <xsl:key name="topicref" match="//*[contains(@class,' map/topicref ')]" use="generate-id()"/>
 
 <!--
