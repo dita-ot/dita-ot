@@ -34,6 +34,7 @@ with those set forth herein.
     <property name="ot.dir" value="${basedir}/../.."/>
     <property name="lib.dir" value="${ot.dir}/lib"/>
     <property name="fo.lib.dir" value="${basedir}/lib"/>
+    <property name="xep.dir" value="${fo.lib.dir}/xep"/>
     <property name="merged.file" value="${dita.map.filename.root}_MERGED.xml" />
     <property name="document.locale" value="en_US" />
 
@@ -76,7 +77,7 @@ with those set forth herein.
     <condition property="xep.config.file" value = "${custom.xep.config}">
         <isset property="custom.xep.config"/>
     </condition>
-    <condition property="xep.config.file" value = "${fo.lib.dir}/xep/xep.xml">
+    <condition property="xep.config.file" value = "${xep.dir}/xep.xml">
         <not><isset property="custom.xep.config"/></not>
     </condition>
 
@@ -95,7 +96,7 @@ with those set forth herein.
     <property name="saxon.resolver.command.line" value="-w0 -x org.apache.xml.resolver.tools.ResolvingXMLReader -y org.apache.xml.resolver.tools.ResolvingXMLReader -r org.apache.xml.resolver.tools.CatalogResolver"/>
 
     <path id="project.class.path">
-        <pathelement location="${fo.lib.dir}/xep/lib/saxon.jar"/>
+        <pathelement location="${xep.dir}/lib/saxon.jar"/>
         <pathelement location="${fo.lib.dir}/xml-apis.jar"/>
         <pathelement location="${fo.lib.dir}/xercesImpl.jar"/>
         <pathelement location="${fo.lib.dir}/resolver.jar"/>
@@ -104,7 +105,7 @@ with those set forth herein.
     </path>
 
     <path id="xep.class.path">
-        <fileset dir="${fo.lib.dir}/xep/lib" includes="**/*.jar"/>
+        <fileset dir="${xep.dir}/lib" includes="**/*.jar"/>
         <pathelement location="${fo.lib.dir}/fo.jar"/>
     </path>
 
