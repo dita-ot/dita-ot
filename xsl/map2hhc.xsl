@@ -101,7 +101,7 @@
       </xsl:apply-templates>
     </xsl:when>
     <!-- If this this a container (no href or href='', no title), just process children -->
-    <xsl:when test="(not(@href) or @href='') and not(@navtitle) and not(*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ']) and
+    <xsl:when test="(not(@href) or @href='') and not(@navtitle) and not(*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ')]) and
                     not(*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/linktext ')])">
       <xsl:apply-templates select="*[contains(@class, ' map/topicref ')][not(contains(@toc,'no'))]">
         <xsl:with-param name="pathFromMaplist" select="$pathFromMaplist"/>

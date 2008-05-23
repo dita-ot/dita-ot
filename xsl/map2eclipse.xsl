@@ -166,7 +166,7 @@
     <xsl:when test="contains(@class, ' mapgroup/topicgroup ')">
       <xsl:apply-templates/>
     </xsl:when>
-    <xsl:when test="not(@href) and not(@navtitle) and not(*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ']) and
+    <xsl:when test="not(@href) and not(@navtitle) and not(*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ')]) and
                     not(*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/linktext ')])">
       <xsl:apply-templates/>
     </xsl:when>
