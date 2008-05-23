@@ -4,7 +4,7 @@
      applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
 
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:related-links="http://dita-ot.sourceforge.net/ns/200709/related-links">
 <xsl:output method="xml"
             encoding="utf-8"
             indent="yes"
@@ -133,6 +133,8 @@
 
 </xsl:template>
 
+<!-- Omit prereq links from unordered related-links (handled by mode="prereqs" template). -->
+<xsl:key name="omit-from-unordered-links" match="*[@importance='required' and (not(@role) or @role='sibling' or @role='friend' or @role='cousin')]" use="1"/>
 
 <!--main template for setting up all links after the body - applied to the related-links container-->
 <xsl:template match="*[contains(@class,' topic/related-links ')]" name="topic.related-links">
@@ -145,13 +147,22 @@
 
   <xsl:call-template name="next-prev-parent-links"/><!--handle next and previous links-->
 
-  <xsl:call-template name="concept-links"/><!--sort remaining concept links by type-->
+  <!-- Calls to typed links deprecated.  Grouping instead performed by related-links:group-unordered-links template. -->
 
-  <xsl:call-template name="task-links"/><!--sort remaining task links by type-->
+  <!--<xsl:call-template name="concept-links"/>--><!--sort remaining concept links by type-->
 
-  <xsl:call-template name="reference-links"/><!--sort remaining reference links by type-->
+  <!--<xsl:call-template name="task-links"/>--><!--sort remaining task links by type-->
 
-  <xsl:call-template name="relinfo-links"/><!--handle remaining untyped and unknown-type links-->
+  <!--<xsl:call-template name="reference-links"/>--><!--sort remaining reference links by type-->
+
+  <!--<xsl:call-template name="relinfo-links"/>--><!--handle remaining untyped and unknown-type links-->
+
+  <!-- Group all unordered links (which have not already been handled by prior sections). Skip duplicate links. -->
+ <xsl:apply-templates select="." mode="related-links:group-unordered-links">
+     <xsl:with-param name="nodes" select="descendant::*[contains(@class, ' topic/link ')]
+       [count(. | key('omit-from-unordered-links', 1)) != count(key('omit-from-unordered-links', 1))]
+       [generate-id(.)=generate-id((key('hideduplicates', concat(ancestor::*[contains(@class, ' topic/related-links ')]/parent::*[contains(@class, ' topic/topic ')]/@id, ' ',@href,@scope,@audience,@platform,@product,@otherprops,@rev,@type,normalize-space(child::*))))[1])]"/>
+ </xsl:apply-templates>  
 
   <!--linklists - last but not least, create all the linklists and their links, with no sorting or re-ordering-->
   <xsl:apply-templates select="*[contains(@class,' topic/linklist ')]"/>
@@ -192,6 +203,9 @@ Children are displayed in a numbered list, with the target title as the cmd and 
      </xsl:if>
 </xsl:template>
 
+<!-- Omit child and descendant links from unordered related-links (handled by ul-child-links and ol-child-links). -->
+<xsl:key name="omit-from-unordered-links" match="*[@role='child']" use="1"/>
+<xsl:key name="omit-from-unordered-links" match="*[@role='descendant']" use="1"/>
 
 <!--create the next and previous links, with accompanying parent link if any; create group for each unique parent, as well as for any next and previous links that aren't in the same group as a parent-->
 <xsl:template name="next-prev-parent-links">
@@ -231,9 +245,16 @@ Children are displayed in a numbered list, with the target title as the cmd and 
      </xsl:for-each>
 </xsl:template>
 
+<!-- Omit child and descendant links from unordered related-links (handled by next-prev-parent-links). -->
+<xsl:key name="omit-from-unordered-links" match="*[@role='next']" use="1"/>
+<xsl:key name="omit-from-unordered-links" match="*[@role='previous']" use="1"/>
+<xsl:key name="omit-from-unordered-links" match="*[@role='parent']" use="1"/>
+  
 <!--type templates: concept, task, reference, relinfo-->
+<!-- Deprecated! Use related-links:group-unordered-links template instead. -->
 
 <xsl:template name="concept-links">
+     <!-- Deprecated! Use related-links:group-unordered-links template instead. -->
      <!--related concepts - all the related concept links that haven't already been covered as a child/descendant/ancestor/next/previous/prerequisite, and aren't in a linklist-->
      <xsl:if test="descendant::*[contains(@class, ' topic/link ')]
           [not(ancestor::*[contains(@class,' topic/linklist ')])]
@@ -253,6 +274,7 @@ Children are displayed in a numbered list, with the target title as the cmd and 
 </xsl:template>
 
 <xsl:template name="task-links">
+     <!-- Deprecated! Use related-links:group-unordered-links template instead. -->
      <!--related tasks - all the related task links that haven't already been covered as a child/descendant/ancestor/next/previous/prerequisite, and aren't in a linklist-->
      <xsl:if test="descendant::*[contains(@class, ' topic/link ')]
           [not(ancestor::*[contains(@class,' topic/linklist ')])]
@@ -273,6 +295,7 @@ Children are displayed in a numbered list, with the target title as the cmd and 
 
 
 <xsl:template name="reference-links">
+     <!-- Deprecated! Use related-links:group-unordered-links template instead. -->
      <!--related reference - all the related reference links that haven't already been covered as a child/descendant/ancestor/next/previous/prerequisite, and aren't in a linklist-->
      <xsl:if test="descendant::*
           [contains(@class, ' topic/link ')]
@@ -294,6 +317,7 @@ Children are displayed in a numbered list, with the target title as the cmd and 
 
 
 <xsl:template name="relinfo-links">
+     <!-- Deprecated! Use related-links:group-unordered-links template instead. -->
      <!--other info- - not currently sorting by role, since already mixing any number of types in here-->
      <!--if there are links not covered by any of the other routines - ie, not in a linklist, not a child or descendant, not a concept/task/reference, not ancestor/next/previous, not prerequisite - create a section for them and create the links-->
      <xsl:if test="descendant::*
@@ -323,6 +347,7 @@ Children are displayed in a numbered list, with the target title as the cmd and 
 
 <!--template used within concept/task/reference sections to sort links-->
 <xsl:template name="sort-links-by-role">
+  <!-- Deprecated! Use related-links:group-unordered-links template instead. -->
    <xsl:param name="type">topic</xsl:param>
      <!--create all sibling links of the specified type-->
      <xsl:call-template name="create-links"><xsl:with-param name="role">sibling</xsl:with-param><xsl:with-param name="type"><xsl:value-of select="$type"/></xsl:with-param></xsl:call-template>
@@ -336,9 +361,8 @@ Children are displayed in a numbered list, with the target title as the cmd and 
      <xsl:call-template name="create-links"><xsl:with-param name="role">#none#</xsl:with-param><xsl:with-param name="type"><xsl:value-of select="$type"/></xsl:with-param></xsl:call-template>
 </xsl:template>
 
-
-
 <xsl:template name="create-links">
+     <!-- Deprecated! Use related-links:group-unordered-links template instead. -->
      <!--create links of the specified type and role-->
      <xsl:param name="type">topic</xsl:param>
      <xsl:param name="role">friend</xsl:param>
@@ -372,6 +396,34 @@ Children are displayed in a numbered list, with the target title as the cmd and 
      </xsl:choose>
 </xsl:template>
 
+<!-- Override no-name group wrapper template for HTML: output "Related Information" in a <div>. -->
+  <xsl:template match="*[contains(@class, ' topic/link ')]" mode="related-links:result-group" name="related-links:group-result.">
+    <xsl:param name="links"/>
+    <div class="relinfo">
+      <strong>
+        <xsl:call-template name="getString">
+          <xsl:with-param name="stringName" select="'Related information'"/>
+        </xsl:call-template>
+      </strong><br/><xsl:value-of select="$newline"/>
+      <xsl:copy-of select="$links"/>
+    </div><xsl:value-of select="$newline"/>
+  </xsl:template>
+  
+  <!-- Links with @type="topic" belong in no-name group. -->
+  <xsl:template match="*[contains(@class, ' topic/link ')][@type='topic']" mode="related-links:get-group-priority" name="related-links:group-priority.topic" priority="2">
+    <xsl:call-template name="related-links:group-priority."></xsl:call-template>
+  </xsl:template>
+  <xsl:template match="*[contains(@class, ' topic/link ')][@type='topic']" mode="related-links:get-group" name="related-links:group.topic" priority="2">
+    <xsl:call-template name="related-links:group."></xsl:call-template>
+  </xsl:template>
+  <xsl:template match="*[contains(@class, ' topic/link ')][@type='topic']" mode="related-links:result-group" name="related-links:group-result.topic" priority="2">
+    <xsl:param name="links"/>
+    <xsl:call-template name="related-links:group-result.">
+      <xsl:with-param name="links" select="$links"></xsl:with-param>
+    </xsl:call-template>    
+  </xsl:template>
+  
+  
 <!--calculate href-->
 <xsl:template name="href">
   <xsl:choose>
@@ -695,6 +747,9 @@ Children are displayed in a numbered list, with the target title as the cmd and 
   </xsl:choose>
   <xsl:value-of select="$newline"/>
 </xsl:template>
+
+<!-- Omit any descendants of linklist from unordered related links (handled by topic.linklist template). -->
+<xsl:key name="omit-from-unordered-links" match="*[ancestor::*[contains(@class,' topic/linklist ')]]" use="1"/>
 
 <xsl:template name="processlinklist">
             <xsl:call-template name="commonattributes"/>

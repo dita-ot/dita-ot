@@ -19,6 +19,9 @@
 <!-- the main dita to xhtml converter -->
 <xsl:import href="xslhtml/dita2htmlImpl.xsl"/>
 
+<!-- the dita to xhtml converter for concept documents -->
+<xsl:import href="xslhtml/conceptdisplay.xsl"/>
+
 <!-- the dita to xhtml converter for task documents -->
 <xsl:import href="xslhtml/taskdisplay.xsl"/>
 

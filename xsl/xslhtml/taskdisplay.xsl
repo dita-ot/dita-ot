@@ -5,7 +5,8 @@
 <!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
 
 <xsl:stylesheet version="1.0"
-     xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+     xmlns:related-links="http://dita-ot.sourceforge.net/ns/200709/related-links">
 
 <!-- XHTML output with XML syntax -->
 <xsl:output method="xml"
@@ -1144,4 +1145,27 @@
   </xsl:call-template>
 </xsl:template>
 
+  <!-- Tasks have their own group. -->
+  <xsl:template match="*[contains(@class, ' topic/link ')][@type='task']" mode="related-links:get-group" name="related-links:group.task">
+    <xsl:text>task</xsl:text>
+  </xsl:template>
+  
+  <!-- Priority of task group. -->
+  <xsl:template match="*[contains(@class, ' topic/link ')][@type='task']" mode="related-links:get-group-priority" name="related-links:group-priority.task">
+    <xsl:value-of select="2"/>
+  </xsl:template>
+  
+  <!-- Task wrapper for HTML: "Related tasks" in <div>. -->
+  <xsl:template match="*[contains(@class, ' topic/link ')][@type='task']" mode="related-links:result-group" name="related-links:result.task">
+    <xsl:param name="links"/>
+    <div class="relinfo">
+      <strong>
+        <xsl:call-template name="getString">
+          <xsl:with-param name="stringName" select="'Related tasks'"/>
+        </xsl:call-template>
+      </strong><br/><xsl:value-of select="$newline"/>
+      <xsl:copy-of select="$links"/>
+    </div><xsl:value-of select="$newline"/>
+  </xsl:template>
+  
 </xsl:stylesheet>
