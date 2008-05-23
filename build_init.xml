@@ -102,6 +102,7 @@
   
   <target name="use-init" depends="use-init.envhhcdir,use-init.hhcdir">
     <available classname="com.icl.saxon.StyleSheet" property="hasSaxon" />
+    <available classname="net.sf.saxon.Transform" property="hasSaxon" />
     <available classname="org.apache.fop.tools.anttasks.Fop"
       property="hasFOP" />    
   </target>
