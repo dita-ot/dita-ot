@@ -11,7 +11,7 @@
   <property name="HTMLHelpCompiler" value="C:\Program Files\HTML Help Workshop\hhc.exe"/>  
   <property name="package.output.dir" location="build\"/>
   <property name="package.name.root" value="DITA-OT"/>
-  <property name="version" value="1.4.2.1"/>
+  <property name="version" value="1.5"/>
   
   <property name="src.dir" location="src/"/>
   <property name="bin.dir" location="output2/"/>
