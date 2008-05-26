@@ -469,7 +469,7 @@
 	<target name="doc.installguide.web" depends="init">
 		<antcall target="dita2xhtml">
 			<param name="args.input"
-				value="${dita.doc.dir}${file.separator}installguide${file.separator}installing-ditaot.ditamap"/>
+				value="${dita.doc.dir}${file.separator}ot-userguide${file.separator}installing${file.separator}installing_map.ditamap"/>
 			<param name="output.dir" value="${dita.output.doc.dir}${file.separator}installguide"/>
       <param name="transtype" value="xhtml"/>
 		</antcall>
@@ -478,7 +478,7 @@
 	<target name="doc.installguide.chm" depends="init">
 		<antcall target="dita2htmlhelp">
 			<param name="args.input"
-				value="${dita.doc.dir}${file.separator}installguide${file.separator}installing-ditaot.ditamap"/>
+				value="${dita.doc.dir}${file.separator}ot-userguide${file.separator}installing${file.separator}installing_map.ditamap"/>
 			<param name="output.dir" value="${dita.output.doc.dir}${file.separator}installguide"/>
       <param name="transtype" value="htmlhelp"/>
 		</antcall>
@@ -487,7 +487,7 @@
 	<target name="doc.installguide.pdf" depends="init">
 		<antcall target="dita2pdf">
 			<param name="args.input"
-				value="${dita.doc.dir}${file.separator}installguide${file.separator}installing-ditaot.ditamap"/>
+				value="${dita.doc.dir}${file.separator}ot-userguide${file.separator}installing${file.separator}installing_map.ditamap"/>
 			<param name="output.dir" value="${dita.output.doc.dir}${file.separator}installguide"/>
       <param name="transtype" value="pdf"/>
 		</antcall>
