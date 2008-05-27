@@ -37,6 +37,7 @@
 
 <xsl:import href="../common/output-message.xsl"/>
 <xsl:import href="../common/dita-utilities.xsl"/>
+<xsl:import href="../common/related-links.xsl"/>
 <xsl:import href="../xslhtml/rel-links.xsl"/>
 
 <xsl:output method="xml"
