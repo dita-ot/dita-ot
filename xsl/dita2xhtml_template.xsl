@@ -22,6 +22,9 @@
 <!-- the dita to xhtml converter for concept documents -->
 <xsl:import href="xslhtml/conceptdisplay.xsl"/>
 
+<!-- the dita to xhtml converter for glossentry documents -->
+<xsl:import href="xslhtml/glossdisplay.xsl"/>
+
 <!-- the dita to xhtml converter for task documents -->
 <xsl:import href="xslhtml/taskdisplay.xsl"/>
 
