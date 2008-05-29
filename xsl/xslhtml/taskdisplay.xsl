@@ -6,7 +6,8 @@
 
 <xsl:stylesheet version="1.0"
      xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-     xmlns:related-links="http://dita-ot.sourceforge.net/ns/200709/related-links">
+     xmlns:related-links="http://dita-ot.sourceforge.net/ns/200709/related-links"
+     exclude-result-prefixes="related-links">
 
 <!-- XHTML output with XML syntax -->
 <xsl:output method="xml"

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
-    xmlns:related-links="http://dita-ot.sourceforge.net/ns/200709/related-links">
+    xmlns:related-links="http://dita-ot.sourceforge.net/ns/200709/related-links"
+    exclude-result-prefixes="related-links">
 
     <!-- Concepts have their own group. -->
     <xsl:template match="*[contains(@class, ' topic/link ')][@type='concept']" mode="related-links:get-group" name="related-links:group.concept">
