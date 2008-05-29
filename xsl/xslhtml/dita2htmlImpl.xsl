@@ -249,7 +249,7 @@
  <xsl:choose>
    <xsl:when test="parent::dita and not(preceding-sibling::*)">
      <!-- Do not reset xml:lang if it is already set on <html> -->
-     <xsl:apply-templates select="@outputclass"/>
+     <xsl:apply-templates select="." mode="set-output-class"/>
    </xsl:when>
    <xsl:otherwise><xsl:call-template name="commonattributes"/></xsl:otherwise>
  </xsl:choose>
@@ -2061,32 +2061,32 @@
     <xsl:with-param name="flagrules" select="$flagrules"/>
   </xsl:call-template>
  <div>
-  <xsl:call-template name="commonattributes"/>
+   <xsl:choose>
+     <xsl:when test="@frame='all'">
+       <xsl:attribute name="class">figborder</xsl:attribute>
+     </xsl:when>
+     <xsl:when test="@frame='sides'">
+       <xsl:attribute name="class">figsides</xsl:attribute>
+     </xsl:when>
+     <xsl:when test="@frame='top'">
+       <xsl:attribute name="class">figtop</xsl:attribute>
+     </xsl:when>
+     <xsl:when test="@frame='bottom'">
+       <xsl:attribute name="class">figbottom</xsl:attribute>
+     </xsl:when>
+     <xsl:when test="@frame='topbot'">
+       <xsl:attribute name="class">figtopbot</xsl:attribute>
+     </xsl:when>
+     <xsl:otherwise>
+       <xsl:attribute name="class">fignone</xsl:attribute>
+     </xsl:otherwise>
+   </xsl:choose>
+   <xsl:call-template name="commonattributes"/>
    <xsl:call-template name="gen-style">
      <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
    </xsl:call-template>
   <xsl:call-template name="setscale"/>
-  <xsl:choose>
-    <xsl:when test="@frame='all'">
-      <xsl:attribute name="class">figborder</xsl:attribute>
-    </xsl:when>
-    <xsl:when test="@frame='sides'">
-      <xsl:attribute name="class">figsides</xsl:attribute>
-    </xsl:when>
-    <xsl:when test="@frame='top'">
-      <xsl:attribute name="class">figtop</xsl:attribute>
-    </xsl:when>
-    <xsl:when test="@frame='bottom'">
-      <xsl:attribute name="class">figbottom</xsl:attribute>
-    </xsl:when>
-    <xsl:when test="@frame='topbot'">
-      <xsl:attribute name="class">figtopbot</xsl:attribute>
-    </xsl:when>
-    <xsl:otherwise>
-      <xsl:attribute name="class">fignone</xsl:attribute>
-    </xsl:otherwise>
-  </xsl:choose>
   <xsl:call-template name="setidaname"/>
   <xsl:call-template name="place-fig-lbl"/>
   <xsl:apply-templates select="*[not(contains(@class,' topic/title '))][not(contains(@class,' topic/desc '))] |text()|comment()|processing-instruction()"/>
@@ -3873,15 +3873,31 @@
 <!-- Process standard attributes that may appear anywhere. Previously this was "setclass" -->
 <xsl:template name="commonattributes">
   <xsl:apply-templates select="@xml:lang"/>
-  <xsl:apply-templates select="@outputclass"/>
   <xsl:apply-templates select="@dir"/>
+  <xsl:apply-templates select="." mode="set-output-class"/>
 </xsl:template>
 
+<!-- Set the class attribute on the resulting output element. -->
+<xsl:template match="*" mode="set-output-class">
+  <xsl:variable name="output-class">
+    <xsl:apply-templates select="." mode="get-output-class"/>
+  </xsl:variable>
+  <!-- If the get-output-class moded template returns a string, use that. -->
+  <xsl:if test="string-length(normalize-space($output-class)) &gt; 0">
+    <xsl:attribute name="class"><xsl:value-of select="$output-class"/></xsl:attribute>
+  </xsl:if>
+  <!-- If the element has an @outputclass attribute, use that instead. -->
+  <xsl:apply-templates select="@outputclass"></xsl:apply-templates>
+</xsl:template>
+  
 <!-- If an element has @outputclass, create a class value -->
 <xsl:template match="@outputclass">
   <xsl:attribute name="class"><xsl:value-of select="."/></xsl:attribute>
 </xsl:template>
 
+<!-- Most elements don't get a class attribute. -->
+<xsl:template match="*" mode="get-output-class"/>
+  
 <!-- If an element has @xml:lang, copy it to the output -->
 <xsl:template match="@xml:lang">
   <xsl:attribute name="xml:lang"><xsl:value-of select="."/></xsl:attribute>
