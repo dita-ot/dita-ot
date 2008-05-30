@@ -258,6 +258,7 @@
   <xsl:template mode="link" 
     match="*[@href][not(@href='')][not(@linking='none')][not(@linking='sourceonly')]">
     <xsl:param name="role">#none#</xsl:param>
+    <xsl:param name="otherrole">#none#</xsl:param>
     <xsl:param name="pathBackToMapDirectory"/>
     <!-- If going to print, and @print=no, do not create links for this topicref -->
     <xsl:if 
@@ -296,6 +297,11 @@
         <xsl:if test="not($role='#none#')">
           <xsl:attribute name="role">
             <xsl:value-of select="$role"/>
+          </xsl:attribute>
+        </xsl:if>
+        <xsl:if test="not($otherrole='#none#')">
+          <xsl:attribute name="otherrole">
+            <xsl:value-of select="$otherrole"/>
           </xsl:attribute>
         </xsl:if>
         <!--figure out the linktext and desc-->
