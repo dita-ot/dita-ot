@@ -34,18 +34,18 @@ public class Integrator {
 	/**
 	 * Plugin table which contains detected plugins
 	 */
-	public static Hashtable pluginTable = null;
-	private Set templateSet = null;
+	public static Hashtable<String,Features> pluginTable = null;
+	private Set<String> templateSet = null;
 	private String ditaDir;
 	private String basedir;
-	private Set descSet;
+	private Set<File> descSet;
 	private XMLReader reader;
 	private DITAOTJavaLogger logger;
-	private Set loadedPlugin = null;
-	private Hashtable featureTable = null;
+	private Set<String> loadedPlugin = null;
+	private Hashtable<String,String> featureTable = null;
 	
 	private void initTemplateSet(){
-		templateSet = new HashSet(Constants.INT_16);
+		templateSet = new HashSet<String>(Constants.INT_16);
 		templateSet.add("catalog-dita_template.xml");
 		templateSet.add("build_template.xml");
 		templateSet.add("build_general_template.xml");
@@ -99,13 +99,13 @@ public class Integrator {
 
 	private void integrate() {
 		//Collect information for each feature id and generate a feature table.
-		Iterator iter = pluginTable.keySet().iterator();
-		Iterator setIter = null;
+		Iterator<String> iter = pluginTable.keySet().iterator();
+		Iterator<String> setIter = null;
 		File templateFile = null;
 		String currentPlugin = null;
 		FileGenerator fileGen = new FileGenerator(featureTable);
 		while (iter.hasNext()){
-			currentPlugin = (String)iter.next();
+			currentPlugin = iter.next();
 			loadPlugin (currentPlugin);
 		}
 		
@@ -120,16 +120,16 @@ public class Integrator {
 	//load the plug-ins and aggregate them by feature and fill into feature table
 	private boolean loadPlugin (String plugin)
 	{
-		Set featureSet = null;
-		Iterator setIter = null;
-		Iterator templateIter = null;
-		Map.Entry currentFeature = null;
-		Features pluginFeatures = (Features) pluginTable.get(plugin);
+		Set<Map.Entry<String,String>> featureSet = null;
+		Iterator<Map.Entry<String,String>> setIter = null;
+		Iterator<String> templateIter = null;
+		Map.Entry<String,String> currentFeature = null;
+		Features pluginFeatures = pluginTable.get(plugin);
 		if (checkPlugin(plugin)){
 			featureSet = pluginFeatures.getAllFeatures();
 			setIter = featureSet.iterator();
 			while (setIter.hasNext()){
-				currentFeature = (Map.Entry)setIter.next();
+				currentFeature = setIter.next();
 				if(featureTable.containsKey(currentFeature.getKey())){
 					String value = (String)featureTable.remove(currentFeature.getKey());
 					featureTable.put(currentFeature.getKey(), 
@@ -153,21 +153,30 @@ public class Integrator {
 
 	//check whether the plugin can be loaded
 	private boolean checkPlugin(String currentPlugin) {
-		String requiredPlugin = null;
+		PluginRequirement requirement = null;
 		Properties prop = new Properties();		
 		Features pluginFeatures = (Features) pluginTable.get(currentPlugin);
-		Iterator iter = pluginFeatures.getRequireListIter();
+		Iterator<PluginRequirement> iter = pluginFeatures.getRequireListIter();
 		//check whether dependcy is satisfied
 		while (iter.hasNext()){
-			requiredPlugin = (String)iter.next();
-			if(pluginTable.containsKey(requiredPlugin)){
-				if (!loadedPlugin.contains(requiredPlugin)){
-					//required plug-in is not loaded
-					loadPlugin(requiredPlugin);
+			boolean anyPluginFound = false;
+			requirement = iter.next();
+			Iterator<String> requiredPluginIter = requirement.getPlugins();
+			while (requiredPluginIter.hasNext()) {
+				// Iterate over all alternatives in plugin requirement.
+				String requiredPlugin = requiredPluginIter.next();
+				if(pluginTable.containsKey(requiredPlugin)){
+					if (!loadedPlugin.contains(requiredPlugin)){
+						//required plug-in is not loaded
+						loadPlugin(requiredPlugin);
+					}
+					// As soon as any plugin is found, it's OK.
+					anyPluginFound = true;
 				}
-			}else {				
-				//not contain the plugin required by current plugin
-				prop.put("%1",requiredPlugin);
+			}
+			if (!anyPluginFound && requirement.getRequired()) {
+				//not contain any plugin required by current plugin
+				prop.put("%1",requirement.toString());
 				prop.put("%2",currentPlugin);
 				logger.logWarn(MessageUtils.getMessage("DOTJ020W",prop).toString());
 				return false;
@@ -178,10 +187,10 @@ public class Integrator {
 
 	private void parsePlugin() {
 		if(!descSet.isEmpty()){
-			Iterator iter = descSet.iterator();
+			Iterator<File> iter = descSet.iterator();
 			File descFile = null;
 			while(iter.hasNext()){
-				descFile = (File) iter.next();
+				descFile = iter.next();
 				parseDesc(descFile);
 			}
 		}
@@ -201,10 +210,10 @@ public class Integrator {
 	 */
 	public Integrator() {
 		initTemplateSet();
-		pluginTable = new Hashtable(Constants.INT_16);
-		descSet = new HashSet(Constants.INT_16);
-		loadedPlugin = new HashSet(Constants.INT_16);
-		featureTable = new Hashtable(Constants.INT_16);
+		pluginTable = new Hashtable<String,Features>(Constants.INT_16);
+		descSet = new HashSet<File>(Constants.INT_16);
+		loadedPlugin = new HashSet<String>(Constants.INT_16);
+		featureTable = new Hashtable<String,String>(Constants.INT_16);
 		logger = new DITAOTJavaLogger();
 		basedir = null;
 		ditaDir = null;

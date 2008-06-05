@@ -16,16 +16,16 @@ import java.util.StringTokenizer;
  */
 public class InsertDependsAction implements IAction {
 
-	private Hashtable paramTable = null;
+	private Hashtable<String,String> paramTable = null;
 	private String value;
-	private Hashtable featureTable = null;
+	private Hashtable<String,String> featureTable = null;
 
 	public InsertDependsAction() {
-		paramTable = new Hashtable();
+		paramTable = new Hashtable<String,String>();
 	}
 	
 	public String getResult() {
-		String localname = (String) paramTable.get("localname");
+		String localname = paramTable.get("localname");
 		StringBuffer result = new StringBuffer();
 		
 		// Parse the attribute value into comma-separated pieces.
@@ -80,7 +80,7 @@ public class InsertDependsAction implements IAction {
 		}	
 	}
 
-	public void setFeatures(Hashtable h) {
+	public void setFeatures(Hashtable<String,String> h) {
 		featureTable = h;
 	}
 

@@ -149,7 +149,7 @@
   </message>
   
   <message id="DOTJ020W" type="WARN">
-    <reason>Plugin '%1' is required by plugin '%2'. Plugin '%2' cannot be loaded because of missing plugin '%1'.</reason>
+    <reason>At least one plugin in '%1' is required by plugin '%2'. Plugin '%2' cannot be loaded.</reason>
     <response>Check and see whether all of the plugins required are installed in toolkit.</response>
   </message>
   

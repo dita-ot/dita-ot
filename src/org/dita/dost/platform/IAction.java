@@ -35,5 +35,5 @@ public interface IAction {
 	 * Set the feature table
 	 * @param h
 	 */
-	void setFeatures(Hashtable h);
+	void setFeatures(Hashtable<String,String> h);
 }

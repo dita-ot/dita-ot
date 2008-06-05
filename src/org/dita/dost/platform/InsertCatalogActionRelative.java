@@ -11,7 +11,6 @@ import org.xml.sax.SAXException;
 import org.dita.dost.util.FileUtils;
 
 import java.io.File;
-import java.net.URI;
 
 /**
  * InsertCatalogActionRelative inserts the children of the root element of an XML document

@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
@@ -26,20 +27,20 @@ import org.dita.dost.util.FileUtils;
  */
 public class Features {
 	private String location = null;
-	private Hashtable featureTable;
-	private List requireList;
-	private Hashtable metaTable;
-	private List templateList;
+	private Hashtable<String,String> featureTable;
+	private List<PluginRequirement> requireList;
+	private Hashtable<String,String> metaTable;
+	private List<String> templateList;
 
 	/**
 	 * Default constructor
 	 */
 	public Features() {
 		super();
-		featureTable = new Hashtable(Constants.INT_16);
-		requireList = new ArrayList(Constants.INT_8);
-		metaTable = new Hashtable(Constants.INT_16);
-		templateList = new ArrayList(Constants.INT_8);
+		featureTable = new Hashtable<String,String>(Constants.INT_16);
+		requireList = new ArrayList<PluginRequirement>(Constants.INT_8);
+		metaTable = new Hashtable<String,String>(Constants.INT_16);
+		templateList = new ArrayList<String>(Constants.INT_8);
 		// TODO Auto-generated constructor stub
 	}
 
@@ -49,10 +50,10 @@ public class Features {
 	 */
 	public Features(String location) {
 		this.location = location;
-		featureTable = new Hashtable(Constants.INT_16);
-		requireList = new ArrayList(Constants.INT_8);
-		metaTable = new Hashtable(Constants.INT_16);
-		templateList = new ArrayList(Constants.INT_8);
+		featureTable = new Hashtable<String,String>(Constants.INT_16);
+		requireList = new ArrayList<PluginRequirement>(Constants.INT_8);
+		metaTable = new Hashtable<String,String>(Constants.INT_16);
+		templateList = new ArrayList<String>(Constants.INT_8);
 	}
 	
 	/**
@@ -69,14 +70,14 @@ public class Features {
 	 * @return
 	 */
 	public String getFeature(String id){
-		return (String) featureTable.get(id);
+		return featureTable.get(id);
 	}
 	
 	/**
 	 * Return the set of all features.
 	 * @return
 	 */
-	public Set getAllFeatures(){
+	public Set<Map.Entry<String,String>> getAllFeatures(){
 		return featureTable.entrySet();
 	}
 	
@@ -109,14 +110,30 @@ public class Features {
 	 * @param id
 	 */
 	public void addRequire(String id){
-		requireList.add(id);
+		PluginRequirement requirement = new PluginRequirement();
+		requirement.addPlugins(id);
+		requireList.add(requirement);
 	}
-	
+
+	/**
+	 * Add the required feature id.
+	 * @param id
+	 * @param importance
+	 */
+	public void addRequire(String id, String importance){
+		PluginRequirement requirement = new PluginRequirement();
+		requirement.addPlugins(id);
+		if (importance != null) {
+			requirement.setRequired(importance.equals("required"));
+		}
+		requireList.add(requirement);
+	}
+
 	/**
 	 * Get the iterator of required list.
 	 * @return
 	 */
-	public Iterator getRequireListIter(){
+	public Iterator<PluginRequirement> getRequireListIter(){
 		return requireList.iterator();
 	}
 	
@@ -135,7 +152,7 @@ public class Features {
 	 * @return
 	 */
 	public String getMeta(String type){
-		return (String) metaTable.get(type);
+		return metaTable.get(type);
 	}
 	
 	/**
@@ -146,7 +163,7 @@ public class Features {
 		templateList.add(file);
 	}
 	
-	public List getAllTemplates(){
+	public List<String> getAllTemplates(){
 		return templateList;
 	}
 }

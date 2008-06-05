@@ -48,7 +48,7 @@ public class DescParser extends DefaultHandler{
 		} else if ("feature".equals(currentElement)){
 			features.addFeature(attributes.getValue("extension"), attributes.getValue("value"), attributes.getValue("type"));
 		} else if ("require".equals(currentElement)){
-			features.addRequire(attributes.getValue("plugin"));
+			features.addRequire(attributes.getValue("plugin"), attributes.getValue("importance"));
 		} else if ("meta".equals(currentElement)){
 			features.addMeta(attributes.getValue("type"), attributes.getValue("value"));
 		} else if ("template".equals(currentElement)){

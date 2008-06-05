@@ -33,19 +33,19 @@ public class InsertAction extends DefaultHandler implements IAction {
 
 	protected XMLReader reader;
 	protected DITAOTJavaLogger logger;
-	protected Set fileNameSet = null;
+	protected Set<String> fileNameSet = null;
 	protected StringBuffer retBuf;
-	protected Hashtable paramTable = null;
+	protected Hashtable<String,String> paramTable = null;
 	protected int elemLevel = 0;
 	
 	/**
 	 * Default Constructor
 	 */
 	public InsertAction() {
-		fileNameSet = new LinkedHashSet(Constants.INT_16);
+		fileNameSet = new LinkedHashSet<String>(Constants.INT_16);
 		logger = new DITAOTJavaLogger();
 		retBuf = new StringBuffer(Constants.INT_4096);
-		paramTable = new Hashtable();
+		paramTable = new Hashtable<String,String>();
 		try {
             if (System.getProperty(Constants.SAX_DRIVER_PROPERTY) == null){
                 //The default sax driver is set to xerces's sax driver
@@ -66,7 +66,7 @@ public class InsertAction extends DefaultHandler implements IAction {
 	public void setInput(String input) {
 		StringTokenizer inputTokenizer = new StringTokenizer(input,",");
 		while(inputTokenizer.hasMoreElements()){
-			fileNameSet.add(inputTokenizer.nextElement());
+			fileNameSet.add((String) inputTokenizer.nextElement());
 		}
 	}
 
@@ -91,11 +91,11 @@ public class InsertAction extends DefaultHandler implements IAction {
 	 * @see org.dita.dost.platform.IAction#getResult()
 	 */
 	public String getResult() {
-		Iterator iter;
+		Iterator<String> iter;
 		iter = fileNameSet.iterator();
 		try{
 			while(iter.hasNext()){
-				reader.parse((String)iter.next());
+				reader.parse(iter.next());
 			}
 		} catch (Exception e) {
 	       	logger.logException(e);
@@ -152,7 +152,7 @@ public class InsertAction extends DefaultHandler implements IAction {
 		elemLevel = 0;
 	}
 
-	public void setFeatures(Hashtable h) {
+	public void setFeatures(Hashtable<String,String> h) {
 		
 	}
 

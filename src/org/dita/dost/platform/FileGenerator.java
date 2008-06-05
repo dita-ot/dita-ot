@@ -33,7 +33,7 @@ public class FileGenerator extends DefaultHandler {
 	private XMLReader reader = null;
 	private DITAOTJavaLogger logger = null;
 	private OutputStreamWriter output = null;
-	private Hashtable featureTable = null;
+	private Hashtable<String,String> featureTable = null;
 	private String templateFileName = null;
 
 	/**
@@ -47,7 +47,7 @@ public class FileGenerator extends DefaultHandler {
 	 * Constructor init featureTable
 	 * @param featureTbl
 	 */
-	public FileGenerator(Hashtable featureTbl) {
+	public FileGenerator(Hashtable<String,String> featureTbl) {
 		this.featureTable = featureTbl;
 		output = null;
 		templateFileName = null;	

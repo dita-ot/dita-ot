@@ -22,15 +22,15 @@ import org.dita.dost.util.Constants;
  * @author Zhang, Yuan Peng
  */
 public abstract class ImportAction implements IAction {
-	protected Set valueSet = null;
-	protected Hashtable paramTable = null;
+	protected Set<String> valueSet = null;
+	protected Hashtable<String,String> paramTable = null;
 	
 	/**
 	 * Default Constructor
 	 */
 	public ImportAction() {
-		valueSet = new LinkedHashSet(Constants.INT_16);
-		paramTable = new Hashtable();
+		valueSet = new LinkedHashSet<String>(Constants.INT_16);
+		paramTable = new Hashtable<String,String>();
 	}
 
 	/**
@@ -44,7 +44,7 @@ public abstract class ImportAction implements IAction {
 	public void setInput(String input) {
 		StringTokenizer inputTokenizer = new StringTokenizer(input,",");
 		while(inputTokenizer.hasMoreElements()){
-			valueSet.add(inputTokenizer.nextElement());
+			valueSet.add((String) inputTokenizer.nextElement());
 		}
 	}
 
@@ -65,7 +65,7 @@ public abstract class ImportAction implements IAction {
 		}	
 	}
 
-	public void setFeatures(Hashtable h) {
+	public void setFeatures(Hashtable<String,String> h) {
 		
 	}
 
