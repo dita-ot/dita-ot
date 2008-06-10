@@ -1,0 +1,94 @@
+package org.dita.dost.junit;
+
+import static org.junit.Assert.*;
+
+import java.io.File;
+
+import javax.print.attribute.standard.Finishings;
+
+import org.dita.dost.util.MergeUtils;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Ignore;
+import org.junit.Test;
+
+import sun.management.snmp.jvminstr.JvmMemGCEntryImpl;
+import sun.management.snmp.jvminstr.JvmMemoryImpl;
+
+public class testMergeUtils {
+
+	public static MergeUtils mergeUtils;
+	
+	@BeforeClass
+	public static void setUp() {
+		mergeUtils=MergeUtils.getInstance();
+	}
+	
+	@Test
+	public void testGetInstance(){
+		//test if this class is singleton
+		assertEquals(mergeUtils, MergeUtils.getInstance());
+	}
+	
+	@Test
+	public void testFindId() {
+		mergeUtils.addId("dir\\\\#topicid");
+		mergeUtils.addId("dir\\\\dir1\\\\a.xml#topicid");
+		assertTrue(mergeUtils.findId("dir/#topicid"));
+		assertTrue(mergeUtils.findId("dir/dir1/a.xml#topicid"));
+		assertFalse(mergeUtils.findId("topicid"));
+		assertFalse(mergeUtils.findId("dir/a.xml#topicid"));
+		
+	}
+	
+
+	@Test
+	public void testAddIdString() {
+		assertEquals(null, mergeUtils.addId(null));
+		assertEquals("unique_3", mergeUtils.addId("a.xml#topicid"));
+	}
+
+	@Test@Ignore
+	public void testAddIdStringString() {
+		fail("Not yet implemented");
+	}
+
+	@Test
+	public void testGetIdValue() {
+		assertEquals(null, mergeUtils.getIdValue(null));
+		assertEquals("unique_3", mergeUtils.getIdValue("a.xml#topicid"));
+		assertEquals(null, mergeUtils.getIdValue(" "));
+	}
+
+	@Test
+	public void testIsVisited() {
+		//set visitSet
+		mergeUtils.visit("dir/dir1/a.xml#topicid");
+		mergeUtils.visit("dir/a.xml");
+		assertTrue(mergeUtils.isVisited("dir/a.xml"));
+		assertTrue(mergeUtils.isVisited("dir/a.xml#topicid"));
+		assertFalse(mergeUtils.isVisited("a.xml"));
+		assertTrue(mergeUtils.isVisited("dir/dir1/a.xml"));
+		assertTrue(mergeUtils.isVisited("dir/dir1/a.xml#topicid"));
+		//if topic id in the path are not the same
+		assertTrue(mergeUtils.isVisited("dir/dir1/a.xml#another"));
+		assertFalse(mergeUtils.isVisited("a.xml"));
+	}
+
+	@Test@Ignore
+	// This method has been tested in the previous method.
+	public void testVisit() {
+		fail("Not yet implemented");
+	}
+
+	@Test
+	public void testGetFirstTopicId() {
+		assertEquals("task",mergeUtils.getFirstTopicId("stub.xml", "TEST_STUB"));
+		
+	}
+	
+	@AfterClass
+	public static void destroy(){
+		//do nothing
+	}
+}
