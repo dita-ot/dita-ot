@@ -9,24 +9,28 @@
  */
 package org.dita.dost.module;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
-import java.util.LinkedHashSet;
 
 import javax.xml.parsers.ParserConfigurationException;
-import java.lang.Throwable;
+
 import org.dita.dost.exception.DITAOTException;
-import org.dita.dost.exception.SAXExceptionWrapper;
 import org.dita.dost.log.DITAOTJavaLogger;
-import org.dita.dost.log.MessageUtils;
 import org.dita.dost.log.MessageBean;
+import org.dita.dost.log.MessageUtils;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.pipeline.PipelineHashIO;
@@ -35,11 +39,12 @@ import org.dita.dost.reader.GenListModuleReader;
 import org.dita.dost.util.Constants;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.FilterUtils;
+import org.dita.dost.util.OutputUtils;
 import org.dita.dost.util.StringUtils;
 import org.dita.dost.writer.PropertiesWriter;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
-import org.dita.dost.util.OutputUtils;
+
 
 /**
  * This class extends AbstractPipelineModule, used to generate map and topic
@@ -669,6 +674,18 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 		prop.put("user.input.dir", baseInputDir);
 		prop.put("user.input.file", prefix + inputFile);
 		
+		prop.put("user.input.file.listfile", "usr.input.file.list");
+		File inputfile=new File(tempDir,"usr.input.file.list");
+		try {
+			BufferedWriter bufferedWriter=new BufferedWriter(new OutputStreamWriter(new FileOutputStream(inputfile)));
+			bufferedWriter.write(prefix+inputFile);
+			bufferedWriter.flush();
+		} catch (FileNotFoundException e) {
+			javaLogger.logException(e);
+		} catch (IOException e) {
+			javaLogger.logException(e);
+		}
+		
 		//add out.dita.files,tempdirToinputmapdir.relative.value to solve the output problem
 		relativeValue=prefix;
 		formatRelativeValue=formatRelativeValue(relativeValue);
@@ -740,11 +757,32 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 				}
 			}
 		}
-
+		
+		/*
+		 * write filename in the list to a file, in order to use the includesfile attribute in ant script
+		 */
+		String fileKey=key.substring(0,key.lastIndexOf("list"))+"file";
+		prop.put(fileKey, key.substring(0, key.lastIndexOf("list"))+".list");
+		File list = new File(tempDir, prop.getProperty(fileKey));
+		try {
+			BufferedWriter bufferedWriter=new BufferedWriter(new OutputStreamWriter(new FileOutputStream(list)));
+			Iterator it=newSet.iterator();
+			while(it.hasNext()){
+				bufferedWriter.write((String)it.next());
+				if(it.hasNext())
+					bufferedWriter.write("\n");
+			}
+			bufferedWriter.flush();
+			bufferedWriter.close();
+		} catch (FileNotFoundException e) {
+			javaLogger.logException(e);
+		} catch (IOException e) {
+			javaLogger.logException(e);
+		}
+		
 		value = StringUtils.assembleString(newSet, Constants.COMMA);
-
 		prop.put(key, value);
-
+		
 		// clear set
 		set.clear();
 		newSet.clear();
@@ -777,6 +815,29 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 								Constants.SLASH));
 			}
 		}
+
+		//write list attribute to file
+		String fileKey=key.substring(0,key.lastIndexOf("list"))+"file";
+		prop.put(fileKey, key.substring(0, key.lastIndexOf("list"))+".list");
+		File list = new File(tempDir, prop.getProperty(fileKey));
+		try {
+			BufferedWriter bufferedWriter=new BufferedWriter(new OutputStreamWriter(new FileOutputStream(list)));
+			Iterator it=newSet.iterator();
+			while(it.hasNext()){
+				bufferedWriter.write((String)it.next());
+				if(it.hasNext())
+					bufferedWriter.write("\n");
+			}
+			bufferedWriter.flush();
+			bufferedWriter.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 
 		value = StringUtils.assembleString(newSet, Constants.COMMA);
 

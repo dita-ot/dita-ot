@@ -98,7 +98,7 @@
       <not><isset property="dita.preprocess.reloadstylesheet.conref"/></not>
     </condition>
     <xslt processor="trax" basedir="${dita.temp.dir}"
-      destdir="${dita.temp.dir}" includes="${conreflist}"
+      destdir="${dita.temp.dir}" includesfile="${dita.temp.dir}${file.separator}${conreffile}"
       classpathref="dost.class.path"
       reloadstylesheet="${dita.preprocess.reloadstylesheet.conref}"
       style="${dita.script.dir}${file.separator}preprocess${file.separator}conref.xsl">
@@ -121,7 +121,7 @@
     <xslt processor="trax"
     	basedir="${dita.temp.dir}"
     	destdir="${dita.temp.dir}"
-    	includes="${fullditamaplist}"
+        includesfile="${dita.temp.dir}${file.separator}${fullditamapfile}"
     	extension=".ditamap.ref"
         classpathref="dost.class.path"
         reloadstylesheet="${dita.preprocess.reloadstylesheet.mapref}"
@@ -145,7 +145,7 @@
     <xslt processor="trax"
   	    basedir="${dita.temp.dir}"
     	destdir="${dita.temp.dir}"
-  	    includes="${fullditamaplist}"
+        includesfile="${dita.temp.dir}${file.separator}${fullditamapfile}"
     	extension=".ditamap.pull"
         classpathref="dost.class.path"
         reloadstylesheet="${dita.preprocess.reloadstylesheet.mappull}"
@@ -199,10 +199,11 @@
       <not><isset property="dita.preprocess.reloadstylesheet.topicpull"/></not>
     </condition>
     <xslt processor="trax" basedir="${dita.temp.dir}"
-      destdir="${dita.temp.dir}" includes="${fullditatopiclist} ${chunkedtopiclist}"
+      destdir="${dita.temp.dir}" includesfile="${dita.temp.dir}${file.separator}${fullditatopicfile}"
       classpathref="dost.class.path"
       reloadstylesheet="${dita.preprocess.reloadstylesheet.topicpull}"
       style="${dita.script.dir}${file.separator}preprocess${file.separator}topicpull.xsl">
+      <includesfile name="${dita.temp.dir}${file.separator}${chunkedtopicfile}" unless="noMap"/>
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
       <param name="ONLYTOPICINMAP" expression="${onlytopic.in.map}" if="onlytopic.in.map"/>
       <mapper type="glob" from="*" to="*.pull" />

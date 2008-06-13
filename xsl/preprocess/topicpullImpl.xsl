@@ -295,8 +295,15 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
       </xsl:choose>
     </xsl:variable>
     <!--the file name of the target, if any-->
-    <xsl:variable name="file">
+    <xsl:variable name="file-origin">
       <xsl:apply-templates select="." mode="topicpull:get-stuff_file"/>
+    </xsl:variable>
+    <xsl:variable name="file">
+      <xsl:call-template name="replace-blank">
+        <xsl:with-param name="file-origin">
+          <xsl:value-of select="translate($file-origin,'\','/')"/>
+        </xsl:with-param>
+      </xsl:call-template>
     </xsl:variable>
     <!--the position of the target topic relative to the current one: in the same file, referenced by id in another file, or referenced as the first topic in another file-->
     <xsl:variable name="topicpos">
@@ -372,6 +379,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
     </xsl:choose>
   </xsl:template>
   
+  
   <!-- Verify that a locally specified type attribute matches the determined target type.
        If it does not, generate a message. -->
   <xsl:template match="*" mode="topicpull:verify-type-attribute">
@@ -410,8 +418,15 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
     <xsl:param name="scope">#none#</xsl:param>
     <xsl:param name="format">#none#</xsl:param>
     <!--the file name of the target, if any-->
-    <xsl:variable name="file"><xsl:apply-templates select="." mode="topicpull:get-stuff_file"/></xsl:variable>
-
+    <xsl:variable name="file-origin"><xsl:apply-templates select="." mode="topicpull:get-stuff_file"/></xsl:variable>
+    <xsl:variable name="file">
+      <xsl:call-template name="replace-blank">
+        <xsl:with-param name="file-origin">
+          <xsl:value-of select="translate($file-origin,'\','/')"/>
+        </xsl:with-param>
+      </xsl:call-template>
+    </xsl:variable>
+    
     <!--the position of the target topic relative to the current one: in the same file, referenced by id in another file, or referenced as the first topic in another file-->
     <xsl:variable name="topicpos"><xsl:apply-templates select="." mode="topicpull:get-stuff_topicpos"/></xsl:variable>
 

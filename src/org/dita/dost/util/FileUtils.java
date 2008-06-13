@@ -20,7 +20,6 @@ import java.util.Properties;
 import java.util.StringTokenizer;
 
 import org.dita.dost.log.DITAOTJavaLogger;
-import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.DebugAndFilterModule;
 
 /**
@@ -116,11 +115,12 @@ public class FileUtils {
 		DITAOTJavaLogger logger = new DITAOTJavaLogger();
 		Properties params = new Properties();
 		
-		if(lcasefn.indexOf(Constants.STRING_BLANK)!=-1){
+/*		DITA-OT can support space in file names from 6.5 2008
+ * 		if(lcasefn.indexOf(Constants.STRING_BLANK)!=-1){
 			params.put("%1", lcasefn);
 			logger.logWarn(MessageUtils.getMessage("DOTJ027W", params).toString());
 		}
-		
+*/		
 		return lcasefn.endsWith(Constants.FILE_EXTENSION_DITA)
 				|| lcasefn.endsWith(Constants.FILE_EXTENSION_DITAMAP)
 				|| lcasefn.endsWith(Constants.FILE_EXTENSION_XML)

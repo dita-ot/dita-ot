@@ -9,31 +9,31 @@
  */
 package org.dita.dost.module;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Properties;
-import java.util.StringTokenizer;
-import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
-import org.dita.dost.writer.PropertiesWriter;
-import org.dita.dost.writer.TopicRefWriter;
+import java.util.StringTokenizer;
+
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.pipeline.PipelineHashIO;
 import org.dita.dost.reader.ChunkMapReader;
-import org.dita.dost.reader.ListReader;
 import org.dita.dost.util.Constants;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.StringUtils;
-import org.dita.dost.writer.DitaWriter;
-import org.xml.sax.SAXException;
+import org.dita.dost.writer.PropertiesWriter;
+import org.dita.dost.writer.TopicRefWriter;
 
 public class ChunkModule implements AbstractPipelineModule {
 
@@ -166,6 +166,8 @@ public class ChunkModule implements AbstractPipelineModule {
 		if(topicList!=null){
 			String newChunkedFile=null;
 			Iterator it=changeTable.entrySet().iterator();
+			File topic_list=new File(tempDir, Constants.FULL_DITA_TOPIC_LIST.substring(0, Constants.FULL_DITA_TOPIC_LIST.lastIndexOf("list"))+".list");
+			File map_list=new File(tempDir, Constants.FULL_DITAMAP_LIST.substring(0, Constants.FULL_DITAMAP_LIST.lastIndexOf("list"))+".list");
 			
 			while(it.hasNext()){
 				Map.Entry entry = (Map.Entry) it.next();
@@ -186,7 +188,64 @@ public class ChunkModule implements AbstractPipelineModule {
 				
 				}
 			}
+			String topics[]=((String)prop.getProperty(Constants.FULL_DITA_TOPIC_LIST)).split(Constants.COMMA);
+			String maps[]=((String)prop.getProperty(Constants.FULL_DITAMAP_LIST)).split(Constants.COMMA);
+			
+			try {
+			BufferedWriter topicWriter = new BufferedWriter(
+					new OutputStreamWriter(new FileOutputStream(topic_list)));
+			BufferedWriter mapWriter = new BufferedWriter(
+					new OutputStreamWriter(new FileOutputStream(map_list)));
+			for (int i = 0; i < topics.length; i++){
+				topicWriter.write(topics[i]);
+				if (i < topics.length - 1) {
+					topicWriter.write("\n");
+				}
+				topicWriter.flush();
+			}
+			for (int i = 0; i < maps.length; i++){
+				mapWriter.write(maps[i]);
+				if (i < maps.length - 1) {
+					mapWriter.write("\n");
+				}
+				mapWriter.flush();
+			}
+			} catch (FileNotFoundException e) {
+				logger.logException(e);
+			} catch (IOException e) {
+				logger.logException(e);
+			}
 		}
+		
+		/*
+		 * write filename in the list to a file, in order to use the includesfile attribute in ant script
+		 */
+		String[] keys={Constants.CHUNKED_DITAMAP_LIST,Constants.CHUNKED_TOPIC_LIST};
+		Set sets[]={chunkedDitamapSet,chunkedTopicSet};
+		for(int i=0;i<keys.length;i++){
+			String fileKey=keys[i].substring(0,keys[i].lastIndexOf("list"))+"file";
+			prop.put(fileKey, keys[i].substring(0, keys[i].lastIndexOf("list"))+".list");
+			File list = new File(tempDir, prop.getProperty(fileKey));
+			try {
+				BufferedWriter bufferedWriter=new BufferedWriter(new OutputStreamWriter(new FileOutputStream(list)));
+				Iterator it=sets[i].iterator();
+				while(it.hasNext()){
+					bufferedWriter.write((String)it.next());
+					if(it.hasNext())
+						bufferedWriter.write("\n");
+				}
+				bufferedWriter.flush();
+				bufferedWriter.close();
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+
 		addSetToProperties(prop,Constants.CHUNKED_DITAMAP_LIST,chunkedDitamapSet);
 		addSetToProperties(prop,Constants.CHUNKED_TOPIC_LIST,chunkedTopicSet);
 		content.setValue(prop);

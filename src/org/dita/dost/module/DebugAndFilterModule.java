@@ -9,10 +9,13 @@
  */
 package org.dita.dost.module;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
@@ -25,7 +28,6 @@ import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.pipeline.PipelineHashIO;
 import org.dita.dost.reader.DitaValReader;
-import org.dita.dost.reader.GenListModuleReader;
 import org.dita.dost.reader.ListReader;
 import org.dita.dost.util.Constants;
 import org.dita.dost.util.FileUtils;
@@ -49,7 +51,8 @@ public class DebugAndFilterModule implements AbstractPipelineModule {
 	 * File extension of source file
 	 */
 	public static String extName = null;
-    
+    private static String tempDir = "";
+	
     private static void updateProperty (String listName, Properties property){
     	StringBuffer result = new StringBuffer(Constants.INT_1024);
     	String propValue = property.getProperty(listName);
@@ -57,6 +60,7 @@ public class DebugAndFilterModule implements AbstractPipelineModule {
 		int equalIndex;
 		int fileExtIndex;
 		StringTokenizer tokenizer = null;
+		
 		
     	if (propValue == null || Constants.STRING_EMPTY.equals(propValue.trim())){
     		//if the propValue is null or empty
@@ -83,10 +87,38 @@ public class DebugAndFilterModule implements AbstractPipelineModule {
     			result.append(FileUtils.replaceExtName(file.substring(equalIndex+1)));
     		}
     	}
-    	
-    	property.setProperty(listName, result.substring(Constants.INT_1));
-    	
-    }
+    	String list = result.substring(Constants.INT_1);
+		property.setProperty(listName, list);
+
+		String files[] = list.split(
+				Constants.COMMA);
+		String filename = "";
+		if (listName == "user.input.file") {
+			filename = "user.input.file.list";
+		} else
+			filename = listName.substring(Constants.INT_0, listName
+					.lastIndexOf("list"))
+					+ ".list";
+		try {
+			BufferedWriter bufferedWriter = new BufferedWriter(
+					new OutputStreamWriter(new FileOutputStream(new File(
+							tempDir, filename))));
+			if(files.length>0){
+				for (int i = 0; i < files.length; i++) {
+					bufferedWriter.write(files[i]);
+					if (i < files.length - 1)
+						bufferedWriter.write("\n");
+					bufferedWriter.flush();
+				}
+			}
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	private DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
 	
 	private boolean xmlValidate=true;
@@ -104,7 +136,7 @@ public class DebugAndFilterModule implements AbstractPipelineModule {
     public AbstractPipelineOutput execute(AbstractPipelineInput input) throws DITAOTException {
          String baseDir = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_BASEDIR);
         String ditavalFile = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_DITAVAL);
-        String tempDir = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_TEMPDIR);
+        tempDir = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_TEMPDIR);
         String ext = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_DITAEXT);
         String ditaDir=((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_EXT_PARAM_DITADIR);;
         String inputDir = null;

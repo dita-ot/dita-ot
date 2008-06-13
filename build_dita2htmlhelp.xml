@@ -37,7 +37,7 @@
         <xslt processor="trax"
               basedir="${dita.temp.dir}"
               destdir="${output.dir}"
-              includes="${user.input.file}"
+              includesfile="${dita.temp.dir}${file.separator}${user.input.file.listfile}"
               extension=".hhp"
               classpathref="dost.class.path"
               style="${dita.script.dir}${file.separator}map2hhp.xsl">
@@ -56,7 +56,7 @@
         <xslt processor="trax"
             basedir="${dita.temp.dir}"
             destdir="${output.dir}"
-            includes="${user.input.file}"
+            includesfile="${dita.temp.dir}${file.separator}${user.input.file.listfile}"
             classpathref="dost.class.path"
             style="${dita.script.dir}${file.separator}map2hhp.xsl">
             <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
@@ -75,7 +75,7 @@
         <xslt processor="trax"
               basedir="${dita.temp.dir}"
               destdir="${output.dir}"
-              includes="${user.input.file}"
+              includesfile="${dita.temp.dir}${file.separator}${user.input.file.listfile}"
               extension=".hhc"
               classpathref="dost.class.path"
               style="${dita.script.dir}${file.separator}map2hhc.xsl">
@@ -90,7 +90,7 @@
         <xslt processor="trax"
             basedir="${dita.temp.dir}"
             destdir="${output.dir}"
-            includes="${user.input.file}"
+            includesfile="${dita.temp.dir}${file.separator}${user.input.file.listfile}"
             classpathref="dost.class.path"
             style="${dita.script.dir}${file.separator}map2hhc.xsl">
             <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />

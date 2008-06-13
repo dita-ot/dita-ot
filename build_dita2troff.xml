@@ -17,16 +17,17 @@
     description="Build troff output from dita inner and outer topics,which will adjust the directory.">
     <!-- step 1 -->
     <xslt processor="trax" basedir="${dita.temp.dir}"
-      destdir="${output.dir}" includes="${fullditatopiclist} ${chunkedtopiclist}"
+      destdir="${output.dir}" includesfile="${dita.temp.dir}${file.separator}${fullditatopicfile}"
       extension="${dita.ext}"
       classpathref="dost.class.path"
       style="${dita.script.dir}${file.separator}dita2troff-step1-shell.xsl">
+      <includesfile name="${dita.temp.dir}${file.separator}${chunkedtopicfile}" unless="noMap"/>
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
     </xslt>
 
     <!-- step 2 -->
     <xslt processor="trax" basedir="${dita.map.output.dir}" destdir="${dita.map.output.dir}"
-      includes="${fullditatopiclist} ${chunkedtopiclist}" extension=".cli"
+      includesfile="${dita.temp.dir}${file.separator}${fullditatopicfile}" includes="${chunkedtopiclist}" extension=".cli"
       classpathref="dost.class.path"
       style="${dita.script.dir}${file.separator}dita2troff-step2-shell.xsl">
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
@@ -38,10 +39,11 @@
     description="Build troff output from inner dita topics">
     <!-- step 1 -->
     <xslt processor="trax" basedir="${dita.temp.dir}"
-      destdir="${output.dir}" includes="${fullditatopiclist} ${chunkedtopiclist}"
+      destdir="${output.dir}" includesfile="${dita.temp.dir}${file.separator}${fullditatopicfile}" 
       extension="${dita.ext}"
       classpathref="dost.class.path"
       style="${dita.script.dir}${file.separator}dita2troff-step1-shell.xsl">
+      <includesfile name="${dita.temp.dir}${file.separator}${chunkedtopicfile}" unless="noMap"/>
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
       <!--New,To generate&copy all dita files in the inputmap.dir,not all files in dita.temp.dir -->
       <mapper type="regexp" 
@@ -51,9 +53,10 @@
 	<echo>the ditmapoutputdir is ${dita.map.output.dir}</echo>
     <!-- step 2 -->
     <xslt processor="trax" basedir="${output.dir}" destdir="${output.dir}"
-      includes="${fullditatopiclist} ${chunkedtopiclist}" extension=".cli"
+      includesfile="${dita.temp.dir}${file.separator}${fullditatopicfile}" extension=".cli"
       classpathref="dost.class.path"
       style="${dita.script.dir}${file.separator}dita2troff-step2-shell.xsl">
+      <includesfile name="${dita.temp.dir}${file.separator}${chunkedtopicfile}" unless="noMap"/>
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
       <mapper type="regexp" 
         from="^(${tempdirToinputmapdir.relative.value})(.*?)(\.(xml|dita))$$" 
@@ -81,7 +84,7 @@
     description="Build troff output from outer dita topics">
     <!-- step 1 -->
     <xslt processor="trax" basedir="${dita.temp.dir}"
-      destdir="${output.dir}" includes="${outditafileslist}"
+      destdir="${output.dir}" includesfile="${dita.temp.dir}${file.separator}${outditafilesfile}"
       extension="${dita.ext}"
       classpathref="dost.class.path"
       style="${dita.script.dir}${file.separator}dita2troff-step1-shell.xsl">
@@ -90,7 +93,7 @@
 
     <!-- step 2 -->
     <xslt processor="trax" basedir="${output.dir}" destdir="${output.dir}${file.separator}${uplevels}"
-      includes="${outditafileslist}" extension=".cli"
+      includesfile="${dita.temp.dir}${file.separator}${outditafilesfile}" extension=".cli"
       classpathref="dost.class.path"
       style="${dita.script.dir}${file.separator}dita2troff-step2-shell.xsl">
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />

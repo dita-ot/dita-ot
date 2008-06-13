@@ -8,7 +8,7 @@
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
   <xsl:import href="../common/output-message.xsl"/>
-
+  <xsl:import href="../common/dita-utilities.xsl"/>
 
 <!-- Define the error message prefix identifier -->
 <xsl:variable name="msgprefix">DOTX</xsl:variable>
@@ -157,10 +157,18 @@
 	<xsl:value-of select="$FILEREF"/><xsl:value-of select="$WORKDIR"/><xsl:value-of select="$current-relative-path"/>
   </xsl:variable>
   
-  <xsl:variable name="file">
+  <xsl:variable name="file-origin">
     <xsl:call-template name="get-file-uri">
       <xsl:with-param name="href" select="@conref"/>
       <xsl:with-param name="file-prefix" select="$file-prefix"/>
+    </xsl:call-template>
+  </xsl:variable>
+  
+  <xsl:variable name="file">
+    <xsl:call-template name="replace-blank">
+      <xsl:with-param name="file-origin">
+        <xsl:value-of select="translate($file-origin,'\','/')"/>
+      </xsl:with-param>
     </xsl:call-template>
   </xsl:variable>
 
@@ -934,4 +942,5 @@
   </xsl:choose>
 </xsl:template>
 
+  
 </xsl:stylesheet>

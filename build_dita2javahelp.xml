@@ -59,7 +59,7 @@
         <xslt processor="trax"
               basedir="${dita.temp.dir}"
               destdir="${output.dir}"
-              includes="${user.input.file}"
+              includesfile="${dita.temp.dir}${file.separator}${user.input.file.listfile}"
               classpathref="dost.class.path"
               style="${dita.script.dir}${file.separator}map2javahelptoc.xsl">
             <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
@@ -76,7 +76,7 @@
         <xslt processor="trax"
             basedir="${dita.temp.dir}"
             destdir="${output.dir}"
-            includes="${user.input.file}"
+            includesfile="${dita.temp.dir}${file.separator}${user.input.file.listfile}"
             classpathref="dost.class.path"
             style="${dita.script.dir}${file.separator}map2javahelptoc.xsl">
             <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
@@ -93,7 +93,7 @@
         <xslt processor="trax"
               basedir="${dita.temp.dir}"
               destdir="${output.dir}"
-              includes="${user.input.file}"
+              includesfile="${dita.temp.dir}${file.separator}${user.input.file.listfile}"
               classpathref="dost.class.path"
               style="${dita.script.dir}${file.separator}map2javahelpmap.xsl">
             <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
@@ -110,7 +110,7 @@
         <xslt processor="trax"
             basedir="${dita.temp.dir}"
             destdir="${output.dir}"
-            includes="${user.input.file}"
+            includesfile="${dita.temp.dir}${file.separator}${user.input.file.listfile}"
             classpathref="dost.class.path"
             style="${dita.script.dir}${file.separator}map2javahelpmap.xsl">
             <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
@@ -127,7 +127,7 @@
         <xslt processor="trax"
               basedir="${dita.temp.dir}"
               destdir="${output.dir}"
-              includes="${user.input.file}"
+              includesfile="${dita.temp.dir}${file.separator}${user.input.file.listfile}"
               classpathref="dost.class.path"
               style="${dita.script.dir}${file.separator}map2javahelpset.xsl">
             <param name="javahelpmap" expression="${args.javahelp.map}" />
@@ -144,7 +144,7 @@
         <xslt processor="trax"
             basedir="${dita.temp.dir}"
             destdir="${output.dir}"
-            includes="${user.input.file}"
+            includesfile="${dita.temp.dir}${file.separator}${user.input.file.listfile}"
             classpathref="dost.class.path"
             style="${dita.script.dir}${file.separator}map2javahelpset.xsl">
             <param name="javahelpmap" expression="${args.javahelp.map}" />

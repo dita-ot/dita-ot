@@ -20,9 +20,10 @@
       </not>
     </condition>
     <xslt processor="trax" basedir="${dita.temp.dir}"
-      destdir="${output.dir}" includes="${fullditatopiclist} ${chunkedtopiclist}"
+      destdir="${output.dir}" includesfile="${dita.temp.dir}${file.separator}${fullditatopicfile}" 
       classpathref="dost.class.path"
       extension="${out.ext}" style="${args.xsl}">
+      <includesfile name="${dita.temp.dir}${file.separator}${chunkedtopicfile}" unless="noMap"/>
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
       <param name="FILTERFILE" expression="${dita.input.valfile}"
         if="dita.input.valfile" />
@@ -56,9 +57,10 @@
       </not>
     </condition>
     <xslt processor="trax" basedir="${dita.temp.dir}"
-      destdir="${output.dir}" includes="${fullditatopiclist} ${chunkedtopiclist}"
+      destdir="${output.dir}" includesfile="${dita.temp.dir}${file.separator}${fullditatopicfile}"
       classpathref="dost.class.path"
       extension="${out.ext}" style="${args.xsl}">
+      <includesfile name="${dita.temp.dir}${file.separator}${chunkedtopicfile}" unless="noMap"/>
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
       <param name="FILTERFILE" expression="${dita.input.valfile}"
         if="dita.input.valfile" />
@@ -94,9 +96,10 @@
       </not>
     </condition>
     <xslt processor="trax" basedir="${dita.temp.dir}"
-      destdir="${output.dir}" includes="${fullditatopiclist} ${chunkedtopiclist}"
+      destdir="${output.dir}" includesfile="${dita.temp.dir}${file.separator}${fullditatopicfile}"
       classpathref="dost.class.path"
       extension="${out.ext}" style="${args.xsl}">
+      <includesfile name="${dita.temp.dir}${file.separator}${chunkedtopicfile}" unless="noMap"/>
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
       <param name="FILTERFILE" expression="${dita.input.valfile}"
         if="dita.input.valfile" />
@@ -134,9 +137,10 @@
       </not>
     </condition>
     <xslt processor="trax" basedir="${dita.temp.dir}"
-      destdir="${output.dir}" includes="${fullditatopiclist} ${chunkedtopiclist}"
+      destdir="${output.dir}" includesfile="${dita.temp.dir}${file.separator}${fullditatopicfile}"
       classpathref="dost.class.path"
       extension="${out.ext}" style="${args.xsl}">
+      <includesfile name="${dita.temp.dir}${file.separator}${chunkedtopicfile}" unless="noMap"/>
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
       <param name="FILTERFILE" expression="${dita.input.valfile}"
         if="dita.input.valfile" />
@@ -189,7 +193,7 @@
       </not>
     </condition>
     <xslt processor="trax" basedir="${dita.temp.dir}"
-      destdir="${output.dir}${file.separator}${uplevels}" includes="${outditafileslist}"
+      destdir="${output.dir}${file.separator}${uplevels}" includesfile="${dita.temp.dir}${file.separator}${outditafilesfile}"
       classpathref="dost.class.path"
       extension="${out.ext}" style="${args.xsl}">
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
@@ -225,7 +229,7 @@
       </not>
     </condition>
     <xslt processor="trax" basedir="${dita.temp.dir}"
-      destdir="${output.dir}${file.separator}${uplevels}" includes="${outditafileslist}"
+      destdir="${output.dir}${file.separator}${uplevels}" includesfile="${dita.temp.dir}${file.separator}${outditafilesfile}"
       classpathref="dost.class.path"
       extension="${out.ext}" style="${args.xsl}">
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />

@@ -205,6 +205,22 @@
     </xsl:choose>
   </xsl:template>
   
+  <!-- replace all the blank in file name or directory with %20 -->
+  <xsl:template name="replace-blank">
+    <xsl:param name="file-origin"></xsl:param>
+    <xsl:choose>
+      <xsl:when test="contains($file-origin,' ')">
+        <xsl:call-template name="replace-blank">
+          <xsl:with-param name="file-origin">
+            <xsl:value-of select="substring-before($file-origin,' ')"/>%20<xsl:value-of select="substring-after($file-origin,' ')"/>
+          </xsl:with-param>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$file-origin"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
   
   
   

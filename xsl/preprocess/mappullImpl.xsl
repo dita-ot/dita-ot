@@ -33,6 +33,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
                 xmlns:ditamsg="http://dita-ot.sourceforge.net/ns/200704/ditamsg"
                 exclude-result-prefixes="mappull ditamsg">
   <xsl:import href="../common/output-message.xsl"/>
+  <xsl:import href="../common/dita-utilities.xsl"/>
   <!-- Define the error message prefix identifier -->
   <xsl:variable name="msgprefix">DOTX</xsl:variable>
   <!-- The directory where the map resides, starting with root -->
@@ -633,10 +634,17 @@ Other modes can be found within the code, and may or may not prove useful for ov
       </xsl:call-template>
     </xsl:variable>
     <!--figure out what portion of the href is the path to the file-->
-    <xsl:variable name="file">
+    <xsl:variable name="file-origin">
       <xsl:apply-templates select="." mode="mappull:get-stuff_file">
         <xsl:with-param name="WORKDIR" select="$WORKDIR"/>
       </xsl:apply-templates>
+    </xsl:variable>
+    <xsl:variable name="file">
+      <xsl:call-template name="replace-blank">
+        <xsl:with-param name="file-origin">
+          <xsl:value-of select="translate($file-origin,'\','/')"/>
+        </xsl:with-param>
+      </xsl:call-template>
     </xsl:variable>
     <xsl:variable name="topicpos">
       <xsl:apply-templates select="." mode="mappull:get-stuff_topic-position"/>
@@ -1219,5 +1227,6 @@ Other modes can be found within the code, and may or may not prove useful for ov
       <xsl:with-param name="msgparams">%1=<xsl:value-of select="@href"/></xsl:with-param>
     </xsl:call-template>
   </xsl:template>
+
 
 </xsl:stylesheet>
