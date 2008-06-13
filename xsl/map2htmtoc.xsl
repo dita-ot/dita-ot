@@ -160,6 +160,7 @@
 
 <xsl:template name="generateMapTitle">
   <!-- Title processing - special handling for short descriptions -->
+  <xsl:if test="/*[contains(@class,' map/map ')]/*[contains(@class,' topic/title ')] or /*[contains(@class,' map/map ')]/@title">
   <title>
     <xsl:call-template name="gen-user-panel-title-pfx"/> <!-- hook for a user-XSL title prefix -->
     <xsl:choose>
@@ -171,6 +172,7 @@
       </xsl:when>
     </xsl:choose>
   </title><xsl:value-of select="$newline"/>
+  </xsl:if>
 </xsl:template>
 
 <xsl:template name="gen-user-panel-title-pfx">
