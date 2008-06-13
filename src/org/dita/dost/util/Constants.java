@@ -277,6 +277,7 @@ public abstract class Constants {
 	public static final String ATTR_CLASS_VALUE_RELATED_LINKS = " topic/related-links ";
 	public static final String ATTR_CLASS_VALUE_BODY = " topic/body ";	
 	public static final String ATTR_CLASS_VALUE_RELTABLE = " map/reltable ";
+	public static final String ATTR_CLASS_VALUE_METADATA = " topic/metadata ";
 	
     /**
      * constants for filtering or flagging.
@@ -289,6 +290,7 @@ public abstract class Constants {
 	 */
 	public static final String IndexTerm_Prefix_See = "See";
 	public static final String IndexTerm_Prefix_See_Also = "See also";
+
 	
     /**
      * Private constructor used to forbid instantiation.

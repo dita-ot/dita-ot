@@ -198,6 +198,13 @@ public class MapMetaReader implements AbstractReader {
 		
 		Hashtable topicMetaTable = new Hashtable(Constants.INT_16);
 		
+		getMeta(meta, topicMetaTable);
+		
+		return mergeMeta(topicMetaTable, inheritance, cascadeSet);		
+		
+	}
+	
+	private void getMeta(Node meta, Hashtable topicMetaTable){
 		NodeList children = meta.getChildNodes();
 		for(int i = 0; i < children.getLength(); i++){
 			Node node = children.item(i);
@@ -207,10 +214,12 @@ public class MapMetaReader implements AbstractReader {
 			}
 			if (attr != null){
 				String attrValue = attr.getNodeValue();
-				// int number 1 to remove the first "-" or "+" character in class attribute
+				// int number 1 is used to remove the first "-" or "+" character in class attribute
 				String metaKey = attrValue.substring(1,
 						attrValue.indexOf(Constants.STRING_BLANK,attrValue.indexOf(Constants.SLASH))+1 );
-				if(topicMetaTable.containsKey(metaKey)){
+				if (attrValue.contains(Constants.ATTR_CLASS_VALUE_METADATA)){
+					getMeta(node, topicMetaTable);
+				}else if(topicMetaTable.containsKey(metaKey)){
 					//append node to the list if it exist in topic meta table
 					//use clone here to prevent the node is removed from original DOM tree;
 					((Element) topicMetaTable.get(metaKey)).appendChild(node.cloneNode(true));				
@@ -221,10 +230,7 @@ public class MapMetaReader implements AbstractReader {
 					topicMetaTable.put(metaKey, stub);
 				}
 			}
-		}
-		
-		return mergeMeta(topicMetaTable, inheritance, cascadeSet);		
-		
+		}		
 	}
 
 	private Hashtable mergeMeta(Hashtable topicMetaTable, Hashtable inheritance, HashSet enableSet) {
@@ -289,7 +295,10 @@ public class MapMetaReader implements AbstractReader {
 				String attrValue = attr.getNodeValue();
 				String metaKey = attrValue.substring(1,
 						attrValue.indexOf(Constants.STRING_BLANK,attrValue.indexOf(Constants.SLASH))+1 );
-				if(cascadeSet.contains(metaKey) && globalMeta.containsKey(metaKey)){
+				if (attrValue.contains(Constants.ATTR_CLASS_VALUE_METADATA)){
+					//proceed the metadata in <metadata>
+					handleGlobalMeta(node);
+				}else if(cascadeSet.contains(metaKey) && globalMeta.containsKey(metaKey)){
 					//append node to the list if it exist in global meta table
 					//use clone here to prevent the node is removed from original DOM tree;
 					((Element) globalMeta.get(metaKey)).appendChild(node.cloneNode(true));
