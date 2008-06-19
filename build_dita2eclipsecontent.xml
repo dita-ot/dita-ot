@@ -42,7 +42,7 @@
     depends="dita.map.eclipsecontent.init"
     description="Build EclipseContent TOC file">
     <xslt processor="trax" basedir="${dita.temp.dir}"
-      destdir="${output.dir}" includesfile="${dita.temp.dir}${file.separator}${user.input.file.file}"
+      destdir="${output.dir}" includesfile="${dita.temp.dir}${file.separator}${user.input.file.listfile}"
       classpathref="dost.class.path"
       style="${dita.script.dir}${file.separator}map2eclipse.xsl">
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
