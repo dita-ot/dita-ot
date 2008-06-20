@@ -95,7 +95,7 @@
               extension=".xml"
               classpathref="dost.class.path"
               style="${dita.script.dir}${file.separator}map2eclipse.xsl">
-            <includesfile name="${dita.temp.dir}${file.separator}${chunkedditamapfile}"/>
+            <includesfile name="${dita.temp.dir}${file.separator}${chunkedditamapfile}" if="chunkedditamapfile"/>
             <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
             <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
             <param name="WORKDIR" expression="${workdir}" if="workdir"/>
@@ -111,7 +111,7 @@
             includesfile="${dita.temp.dir}${file.separator}${fullditamapfile}"
             classpathref="dost.class.path"
             style="${dita.script.dir}${file.separator}map2eclipse.xsl">
-            <includesfile name="${dita.temp.dir}${file.separator}${chunkedditamapfile}"/>
+            <includesfile name="${dita.temp.dir}${file.separator}${chunkedditamapfile}" if="chunkedditamapfile"/>
             <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
             <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
             <param name="WORKDIR" expression="${workdir}" if="workdir"/>

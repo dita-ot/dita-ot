@@ -203,7 +203,7 @@
       classpathref="dost.class.path"
       reloadstylesheet="${dita.preprocess.reloadstylesheet.topicpull}"
       style="${dita.script.dir}${file.separator}preprocess${file.separator}topicpull.xsl">
-      <includesfile name="${dita.temp.dir}${file.separator}${chunkedtopicfile}" unless="noMap"/>
+      <includesfile name="${dita.temp.dir}${file.separator}${chunkedtopicfile}" if="chunkedtopicfile"/>
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
       <param name="ONLYTOPICINMAP" expression="${onlytopic.in.map}" if="onlytopic.in.map"/>
       <mapper type="glob" from="*" to="*.pull" />
