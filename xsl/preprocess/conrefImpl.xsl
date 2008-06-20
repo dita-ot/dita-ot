@@ -148,6 +148,7 @@
   <xsl:variable name="conrefend">
     <xsl:choose>
       <xsl:when test="contains(@conrefend,'#') and contains(substring-after(@conrefend,'#'),'/')"><xsl:value-of select="substring-after(substring-after(@conrefend,'#'),'/')"/></xsl:when>
+      <xsl:when test="contains(@conref,'#')"><xsl:value-of select="substring-after(@conref,'#')"/></xsl:when>
       <xsl:otherwise>#none#</xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
@@ -192,7 +193,9 @@
 
   <!--the file name is useful to href when resolveing conref -->
   <xsl:variable name="conref-filename">
-      <xsl:value-of select="substring-after(substring-after($file,$file-prefix),$add-relative-path)"/>
+    <xsl:call-template name="replace-blank">
+      <xsl:with-param name="file-origin"><xsl:value-of select="translate(substring-after(substring-after($file-origin,$file-prefix),$add-relative-path),'\','/')"/></xsl:with-param>
+    </xsl:call-template>
   </xsl:variable>
   
   <xsl:variable name="conref-source-topic">
@@ -749,7 +752,7 @@
   </xsl:choose>
 
   <xsl:choose>
-    <xsl:when test="not ($conrefend=' #none# ')">
+    <xsl:when test="not ($conrefend='#none#')">
       <xsl:for-each select="following-sibling::*[following-sibling::*[@id=$conrefend] or self::*[@id=$conrefend]]">
         <xsl:choose>
           <xsl:when test="@conref">
