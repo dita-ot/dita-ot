@@ -223,7 +223,7 @@
   <xslt processor="trax"
 		basedir="${dita.temp.dir}"
 		destdir="${output.dir}"
-        includesfile="${dita.temp.dir}${file.separator}${user.input.file.file}"
+        includesfile="${dita.temp.dir}${file.separator}${user.input.file.listfile}"
 		style="${dita.script.dir}${file.separator}map2htmtoc.xsl">
 		
         <param name="DITAEXT" expression="${dita.ext}" if="dita.ext"/>
@@ -298,7 +298,7 @@
   <xslt processor="trax"
     basedir="${dita.temp.dir}"
 		destdir="${output.dir}"
-        includesfile="${dita.temp.dir}${file.separator}${user.input.file.file}"
+        includesfile="${dita.temp.dir}${file.separator}${user.input.file.listfile}"
 		style="${dita.script.dir}${file.separator}map2eclipse.xsl">
         <param name="DITAEXT" expression="${dita.ext}" if="dita.ext"/>
         <param name="OUTEXT" expression="${content.link.ext}"/>
@@ -343,7 +343,7 @@
   <xslt processor="trax"
     basedir="${dita.temp.dir}"
 		destdir="${output.dir}"
-        includesfile="${dita.temp.dir}${file.separator}${user.input.file.file}"
+        includesfile="${dita.temp.dir}${file.separator}${user.input.file.listfile}"
 		style="${dita.script.dir}${file.separator}map2javahelptoc.xsl">
         <param name="DITAEXT" expression="${dita.ext}" if="dita.ext"/>
         <param name="OUTEXT" expression="${out.ext}" if="out.ext"/>
@@ -352,7 +352,7 @@
   <xslt processor="trax"
     basedir="${dita.temp.dir}"
 		destdir="${output.dir}"
-        includesfile="${dita.temp.dir}${file.separator}${user.input.file.file}"
+        includesfile="${dita.temp.dir}${file.separator}${user.input.file.listfile}"
 		style="${dita.script.dir}${file.separator}map2javahelpmap.xsl">
         <param name="DITAEXT" expression="${dita.ext}" if="dita.ext"/>
         <param name="OUTEXT" expression="${out.ext}" if="out.ext"/>      
@@ -363,7 +363,7 @@
 	<xslt processor="trax"
 	      basedir="${dita.temp.dir}"
 	      destdir="${output.dir}"
-	      includesfile="${dita.temp.dir}${file.separator}${user.input.file.file}"
+	      includesfile="${dita.temp.dir}${file.separator}${user.input.file.listfile}"
 	      style="${dita.script.dir}${file.separator}map2javahelpset.xsl">
 	        <param name="javahelpmap" expression="${args.javahelp.map}"/>
             <param name="javahelptoc" expression="${args.javahelp.toc}"/>
@@ -433,7 +433,7 @@
   <xslt processor="trax"
 		basedir="${dita.temp.dir}"
 		destdir="${output.dir}"
-        includesfile="${dita.temp.dir}${file.separator}${user.input.file.file}"
+        includesfile="${dita.temp.dir}${file.separator}${user.input.file.listfile}"
 		extension=".hhc"
 		style="${dita.script.dir}${file.separator}map2hhc.xsl">
         <param name="DITAEXT" expression="${dita.ext}" if="dita.ext"/>
@@ -448,7 +448,7 @@
   <xslt processor="trax"
 		basedir="${dita.temp.dir}"
 		destdir="${output.dir}"
-        includesfile="${dita.temp.dir}${file.separator}${user.input.file.file}"
+        includesfile="${dita.temp.dir}${file.separator}${user.input.file.listfile}"
 		extension=".hhp"
 		style="${dita.script.dir}${file.separator}map2hhp.xsl">
         <param name="DITAEXT" expression="${dita.ext}" if="dita.ext"/>
