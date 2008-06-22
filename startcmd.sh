@@ -14,7 +14,7 @@ cd "$DITA_HOME"
 # Get the absolute path of DITAOT's home directory
 DITA_DIR="`pwd`"
 
-if [ -f "$DITA_DIR"/tools/ant/bin/ant -a ! -x "$DITA_DIR"/tools/ant/bin/ant ]; then
+if [ -f "$DITA_DIR"/tools/ant/bin/ant ] && [ ! -x "$DITA_DIR"/tools/ant/bin/ant ]; then
 chmod +x "$DITA_DIR"/tools/ant/bin/ant
 fi
 
