@@ -4,8 +4,8 @@
 #  applicable licenses.
 #  (c) Copyright IBM Corp. 2006 All Rights Reserved.
 
-if  [[ "$DITA_HOME" = "" ]]; then 
-   echo "DITA_HOME environment variable not set";
+if  [ "${DITA_HOME:+1}" != "1" ]; then 
+   echo "DITA_HOME environment variable is empty or not set";
    exit 127;
 fi
 
@@ -14,7 +14,7 @@ cd "$DITA_HOME"
 # Get the absolute path of DITAOT's home directory
 DITA_DIR="`pwd`"
 
-if [ ! -x "$DITA_DIR"/tools/ant/bin/ant ]; then
+if [ -f "$DITA_DIR"/tools/ant/bin/ant -a ! -x "$DITA_DIR"/tools/ant/bin/ant ]; then
 chmod +x "$DITA_DIR"/tools/ant/bin/ant
 fi
 
