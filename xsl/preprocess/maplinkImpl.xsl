@@ -216,7 +216,7 @@
   <!--children-->
   <xsl:template match="*" mode="link-to-children"/>
   <xsl:template match="*[contains(@class, ' map/topicref ')]
-    [not(ancestor::*[contains(concat(' ', @chunk, ' '), ' to-content ')])]" mode="link-to-children" name="link-to-children">
+    [not(ancestor-or-self::*[contains(concat(' ', @chunk, ' '), ' to-content ')])]" mode="link-to-children" name="link-to-children">
     <xsl:param name="pathBackToMapDirectory"/>
       <!--???TO DO: should be linking to appropriate descendants, not just children - ie grandchildren of eg topicgroup (non-href/non-title topicrefs) children-->
       <xsl:if 
