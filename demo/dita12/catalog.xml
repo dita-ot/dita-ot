@@ -128,6 +128,25 @@
             uri="dtd12/technicalContent/dtd/glossary.ent"/>
     <public publicId="-//OASIS//ENTITIES DITA 1.2 Glossary//EN"
             uri="dtd12/technicalContent/dtd/glossary.ent"/>
+            
+    <public publicId="-//OASIS//DTD DITA Glossary Group//EN"
+            uri="dtd12/technicalContent/dtd/glossgroup.dtd"/>
+    <public publicId="-//OASIS//DTD DITA 1.x Glossary Group//EN"
+            uri="dtd12/technicalContent/dtd/glossgroup.dtd"/>
+    <public publicId="-//OASIS//DTD DITA 1.2 Glossary Group//EN"
+            uri="dtd12/technicalContent/dtd/glossgroup.dtd"/>
+    <public publicId="-//OASIS//ELEMENTS DITA Glossary Group//EN"
+            uri="dtd12/technicalContent/dtd/glossgroup.mod"/>
+    <public publicId="-//OASIS//ELEMENTS DITA 1.x Glossary Group//EN"
+            uri="dtd12/technicalContent/dtd/glossgroup.mod"/>
+    <public publicId="-//OASIS//ELEMENTS DITA 1.2 Glossary Group//EN"
+            uri="dtd12/technicalContent/dtd/glossgroup.mod"/>
+    <public publicId="-//OASIS//ENTITIES DITA Glossary Group//EN"
+            uri="dtd12/technicalContent/dtd/glossgroup.ent"/>
+    <public publicId="-//OASIS//ENTITIES DITA 1.x Glossary Group//EN"
+            uri="dtd12/technicalContent/dtd/glossgroup.ent"/>
+    <public publicId="-//OASIS//ENTITIES DITA 1.2 Glossary Group//EN"
+            uri="dtd12/technicalContent/dtd/glossgroup.ent"/>
 
     <public publicId="-//OASIS//DTD DITA 1.x Reference//EN"
             uri="dtd12/technicalContent/dtd/reference.dtd"/>
@@ -176,6 +195,19 @@
             uri="dtd12/technicalContent/dtd/map.dtd"/>
 
     <!-- Domains for the technical content package -->
+    <public publicId="-//OASIS//ENTITIES DITA Abbreviated Form Domain//EN"
+            uri="dtd12/technicalContent/dtd/abbreviatedDomain.ent"/>
+    <public publicId="-//OASIS//ELEMENTS DITA Abbreviated Form Domain//EN"
+            uri="dtd12/technicalContent/dtd/abbreviatedDomain.mod"/>
+    <public publicId="-//OASIS//ENTITIES DITA 1.x Abbreviated Form Domain//EN"
+            uri="dtd12/technicalContent/dtd/abbreviatedDomain.ent"/>
+    <public publicId="-//OASIS//ELEMENTS DITA 1.x Abbreviated Form Domain//EN"
+            uri="dtd12/technicalContent/dtd/abbreviatedDomain.mod"/>
+    <public publicId="-//OASIS//ENTITIES DITA 1.2 Abbreviated Form Domain//EN"
+            uri="dtd12/technicalContent/dtd/abbreviatedDomain.ent"/>
+    <public publicId="-//OASIS//ELEMENTS DITA 1.2 Abbreviated Form Domain//EN"
+            uri="dtd12/technicalContent/dtd/abbreviatedDomain.mod"/>        
+    
     <public publicId="-//OASIS//ENTITIES DITA Hazard Statement Domain//EN"
             uri="dtd12/technicalContent/dtd/hazardstatementDomain.ent"/>
     <public publicId="-//OASIS//ELEMENTS DITA Hazard Statement Domain//EN"
@@ -215,6 +247,19 @@
             uri="dtd12/technicalContent/dtd/uiDomain.mod"/>
     <public publicId="-//OASIS//ENTITIES DITA 1.2 User Interface Domain//EN"
             uri="dtd12/technicalContent/dtd/uiDomain.ent"/>
+            
+    <public publicId="-//OASIS//ELEMENTS DITA Glossary Reference Domain//EN"
+            uri="dtd12/technicalContent/dtd/glossrefDomain.mod"/>
+    <public publicId="-//OASIS//ENTITIES DITA Glossary Reference Domain//EN"
+            uri="dtd12/technicalContent/dtd/glossrefDomain.ent"/>
+    <public publicId="-//OASIS//ELEMENTS DITA 1.x Glossary Reference Domain//EN"
+            uri="dtd12/technicalContent/dtd/glossrefDomain.mod"/>
+    <public publicId="-//OASIS//ENTITIES DITA 1.x Glossary Reference Domain//EN"
+            uri="dtd12/technicalContent/dtd/glossrefDomain.ent"/>
+    <public publicId="-//OASIS//ELEMENTS DITA 1.2 Glossary Reference Domain//EN"
+            uri="dtd12/technicalContent/dtd/glossrefDomain.mod"/>
+    <public publicId="-//OASIS//ENTITIES DITA 1.2 Glossary Reference Domain//EN"
+            uri="dtd12/technicalContent/dtd/glossrefDomain.ent"/>        
 
     <!-- Constraints in the technical content package -->
     <public publicId="-//OASIS//ELEMENTS DITA Strict Taskbody Constraints//EN" 
