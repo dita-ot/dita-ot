@@ -260,7 +260,14 @@
       classpathref="dost.class.path"
       style="${dita.script.dir}${file.separator}map2plugin.xsl">
       <outputproperty value="text" name="method"/>
-      <param name="dita.plugin.output" expression="dita.eclipse.properties"/>
+      <param name="dita.plugin.output" 
+      	  expression="dita.eclipse.properties"/>
+    	<param name="version"
+    	    expression="${args.eclipse.version}"
+    	    if="args.eclipse.version" />
+    	<param name="provider"
+    	    expression="${args.eclipse.provider}"
+    	    if="args.eclipse.provider" />
     </xslt>
   </target>
   
@@ -275,6 +282,12 @@
       style="${dita.script.dir}${file.separator}map2plugin.xsl">
       <outputproperty value="text" name="method"/>
       <param name="dita.plugin.output" expression="dita.eclipse.properties"/>
+    	<param name="version"
+          expression="${args.eclipse.version}"
+          if="args.eclipse.version" />
+      <param name="provider"
+          expression="${args.eclipse.provider}"
+          if="args.eclipse.provider" />
     </xslt>
   </target>
   
