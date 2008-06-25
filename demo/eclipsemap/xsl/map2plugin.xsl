@@ -82,14 +82,16 @@
 
   </xsl:template>
 
-  <xsl:template match="*[contains(@class,' eclipsemap/plugin ')]">
+  <xsl:template match="*[contains(@class,' eclipsemap/plugin ')]" mode="eclipse.plugin">
       <xsl:value-of select="$newline"/>
       <plugin>
-        <xsl:apply-templates select="@id"/>
+        <!--
+         <xsl:apply-templates select="@id"/>
         <xsl:apply-templates select="*[contains(@class,' eclipsemap/pluginmeta ')]/*[contains(@class,' eclipsemap/plugininfo ')]/*[contains(@class,' eclipsemap/pluginname ')]" mode="plugin"/>
         <xsl:apply-templates select="*[contains(@class,' eclipsemap/pluginmeta ')]/*[contains(@class,' eclipsemap/providerName ')]" mode="plugin"/>
         <xsl:apply-templates select="*[contains(@class,' eclipsemap/pluginmeta ')]/*[contains(@class,' eclipsemap/plugininfo ')]/*[contains(@class,' topic/vrmlist ')]" mode="plugin"/>
-        <xsl:apply-templates select="*[contains(@class,' eclipsemap/pluginmeta ')]/*[contains(@class,' eclipsemap/controllingPlugin ')]" mode="plugin"/>
+        -->
+          <xsl:apply-templates select="*[contains(@class,' eclipsemap/pluginmeta ')]/*[contains(@class,' eclipsemap/controllingPlugin ')]" mode="plugin"/>
         <xsl:if test="*[contains(@class,' eclipsemap/tocref ')][not(@toc='no')]|*[contains(@class,' eclipsemap/primarytocref ')][not(@toc='no')]">
         
           <xsl:value-of select="$newline"/>
