@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!-- ============================================================= -->
 <!--                    HEADER                                     -->
 <!-- ============================================================= -->
@@ -67,6 +68,11 @@ PUBLIC "-//OASIS//DTD DITA 1.2 Map//EN"                            -->
          "../../base/dtd/delayResolutionDomain.ent"                                                       
 >%delay-d-dec;
 
+<!ENTITY % glossref-d-dec     
+  PUBLIC "-//OASIS//ENTITIES DITA 1.2 Glossary Reference Domain//EN" 
+         "glossrefDomain.ent"                                                       
+>%glossref-d-dec;
+
 
 <!-- ============================================================= -->
 <!--                    DOMAIN ATTRIBUTE DECLARATIONS              -->
@@ -83,7 +89,8 @@ PUBLIC "-//OASIS//DTD DITA 1.2 Map//EN"                            -->
                          %delay-d-keywords;
                         ">
 <!ENTITY % topicref     "topicref | 
-                         (%mapgroup-d-topicref;)
+                         (%mapgroup-d-topicref;) |
+                         (%glossref-d-topicref;)
                         ">
 <!ENTITY % index-base   "index-base | 
                          %indexing-d-index-base;
@@ -109,6 +116,7 @@ PUBLIC "-//OASIS//DTD DITA 1.2 Map//EN"                            -->
                         "&delay-d-att;
                          &mapgroup-d-att; 
                          &indexing-d-att;
+                         &glossref-d-att;
                         ">
 
 <!-- ============================================================= -->
@@ -144,5 +152,10 @@ PUBLIC "-//OASIS//DTD DITA 1.2 Map//EN"                            -->
   PUBLIC "-//OASIS//ELEMENTS DITA 1.2 Delayed Resolution Domain//EN" 
          "../../base/dtd/delayResolutionDomain.mod"
 >%delay-d-def;
+
+<!ENTITY % glossref-d-def     
+  PUBLIC "-//OASIS//ELEMENTS DITA 1.2 Glossary Reference Domain//EN" 
+         "glossrefDomain.mod"
+>%glossref-d-def;
 
 <!-- ================== End DITA Map DTD  ======================== -->

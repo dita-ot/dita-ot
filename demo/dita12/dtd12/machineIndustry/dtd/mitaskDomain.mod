@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!-- ============================================================= -->
 <!--                    HEADER                                     -->
 <!-- ============================================================= -->
@@ -43,7 +44,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Machine Industry Task Domain//EN"
 <!ENTITY % reqcond       "reqcond"                                   >
 <!ENTITY % reqcontp      "reqcontp"                                  >
 <!ENTITY % reqpers       "reqpers"                                   >
-<!ENTITY % person        "person"                                    >
+<!ENTITY % personnel     "personnel"                                 >
 <!ENTITY % perscat       "perscat"                                   >
 <!ENTITY % perskill      "perskill"                                  >
 <!ENTITY % esttime       "esttime"                                   >
@@ -155,7 +156,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Machine Industry Task Domain//EN"
  
 <!--                    LONG NAME: Required Persons                --><!-- specialized from ol -->
 <!ENTITY % reqpers.content
-                       "((%person;),
+                       "((%personnel;),
 						 ((%perscat;)?,
                           (%perskill;)?,
                           (%esttime;)?)?)+
@@ -172,17 +173,17 @@ PUBLIC "-//OASIS//ELEMENTS DITA Machine Industry Task Domain//EN"
  
 
 <!--                    LONG NAME: Personnel                       --><!-- specialized from li -->
-<!ENTITY % person.content
+<!ENTITY % personnel.content
                        "(%listitem.cnt;)*"
 >
-<!ENTITY % person.attributes
+<!ENTITY % personnel.attributes
              "%univ-atts;
               outputclass 
                         CDATA
                                   #IMPLIED"
 >
-<!ELEMENT person    %person.content;>
-<!ATTLIST person    %person.attributes;>
+<!ELEMENT personnel    %personnel.content;>
+<!ATTLIST personnel    %personnel.attributes;>
 
 
 <!--                    LONG NAME: Personnel Category               --><!-- specialized from li -->
@@ -466,7 +467,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Machine Industry Task Domain//EN"
 <!ATTLIST reqcond     %global-atts;  class  CDATA "+ topic/li mitask-d/reqcond "        >
 <!ATTLIST reqcontp    %global-atts;  class  CDATA "+ topic/li mitask-d/reqcontp "       >
 <!ATTLIST reqpers     %global-atts;  class  CDATA "+ topic/ol mitask-d/reqpers "        >
-<!ATTLIST person      %global-atts;  class  CDATA "+ topic/li mitask-d/person "         >
+<!ATTLIST personnel   %global-atts;  class  CDATA "+ topic/li mitask-d/personnel "      >
 <!ATTLIST perscat     %global-atts;  class  CDATA "+ topic/li mitask-d/perscat "        >
 <!ATTLIST perskill    %global-atts;  class  CDATA "+ topic/li mitask-d/perskill "       >
 <!ATTLIST esttime     %global-atts;  class  CDATA "+ topic/li mitask-d/esttime "        >

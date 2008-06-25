@@ -2,9 +2,9 @@
 <!-- ============================================================= -->
 <!--                    HEADER                                     -->
 <!-- ============================================================= -->
-<!--  MODULE:    DITA Learning Assessment Entity                   -->
+<!--  MODULE:    DITA User Abbreviated Form Domain Entities        -->
 <!--  VERSION:   1.2                                               -->
-<!--  DATE:      April 2008                                        -->
+<!--  DATE:      June 2008                                         -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -14,32 +14,40 @@
 <!--                                                               -->
 <!--  Refer to this file by the following public identifier or an 
       appropriate system identifier 
-PUBLIC "-//OASIS//ENTITIES DITA Learning Assessment//EN"
-      Delivered as file "learningAssessment.ent"                   -->
+PUBLIC "-//OASIS//ENTITIES DITA Abbreviated Form Domain//EN"
+      Delivered as file "abbreviateDomain.ent"                     -->
 
 <!-- ============================================================= -->
 <!-- SYSTEM:     Darwin Information Typing Architecture (DITA)     -->
 <!--                                                               -->
-<!-- PURPOSE:    Declaring the domain entity for Learning          -->
-<!--             Assessment topics                                 -->
+<!-- PURPOSE:    Declaring the substitution context and domain     -->
+<!--             entity declarations for the Abbreviated Form      -->
+<!--             Domain                                            -->
 <!--                                                               -->
 <!-- ORIGINAL CREATION DATE:                                       -->
-<!--             April 2008                                        -->
+<!--             June 2008                                         -->
 <!--                                                               -->
-<!--             (C) Copyright OASIS Open 2008                     -->
-<!--             All Rights Reserved.                              -->
+<!--             (C) Copyright OASIS Open 2008.                    -->
 <!--                                                               -->
 <!--  UPDATES:                                                     -->
 <!-- ============================================================= -->
 
-
 <!-- ============================================================= -->
-<!--                    LEARNING ENTITIES                          -->
+<!--                    ELEMENT EXTENSION ENTITY DECLARATIONS      -->
 <!-- ============================================================= -->
 
-<!ENTITY learningAssessment-att     
-  "(topic learningBase learningAssessment)"
+<!ENTITY % abbrev-d-term
+  "abbreviated-form
+  "
 >
 
+<!-- ============================================================= -->
+<!--                    DOMAIN ENTITY DECLARATION                  -->
+<!-- ============================================================= -->
 
-<!-- ================== End Learning Entities ==================== -->
+
+<!ENTITY abbrev-d-att 
+  "(topic abbrev-d)"
+>
+
+<!-- ================== End Abbreviated Form Domain Entities ===== -->

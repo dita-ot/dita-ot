@@ -2,9 +2,9 @@
 <!-- ============================================================= -->
 <!--                    HEADER                                     -->
 <!-- ============================================================= -->
-<!--  MODULE:    DITA Delayed Resolution Domain                    -->
+<!--  MODULE:    DITA Abbreviated Form Domain                      -->
 <!--  VERSION:   1.2                                               -->
-<!--  DATE:      February 2008                                     -->
+<!--  DATE:      June 2008                                         -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -14,18 +14,17 @@
 <!--                                                               -->
 <!--  Refer to this file by the following public identifier or an 
       appropriate system identifier 
-PUBLIC "-//OASIS//ENTITIES DITA Delayed Resolution Domain//EN"
-      Delivered as file "delayResolutionDomain.ent"                -->
+PUBLIC "-//OASIS//ELEMENTS DITA Abbreviated Form Domain//EN"
+      Delivered as file "abbreviateDomain.mod"                     -->
 
 <!-- ============================================================= -->
 <!-- SYSTEM:     Darwin Information Typing Architecture (DITA)     -->
 <!--                                                               -->
-<!-- PURPOSE:    Declaring the substitution context and domain     -->
-<!--             entity declarations for the delayed resolution    -->
-<!--             domain                                            -->
+<!-- PURPOSE:    Declaring the elements and specialization         -->
+<!--             attributes for the Abbreviated Form Domain        -->
 <!--                                                               -->
 <!-- ORIGINAL CREATION DATE:                                       -->
-<!--             February 2008                                     -->
+<!--             June 2008                                         -->
 <!--                                                               -->
 <!--             (C) Copyright OASIS Open 2008.                    -->
 <!--             All Rights Reserved.                              -->
@@ -35,17 +34,39 @@ PUBLIC "-//OASIS//ENTITIES DITA Delayed Resolution Domain//EN"
 
 
 <!-- ============================================================= -->
-<!--                    DELAYED RESOLUTION DOMAIN ENTITIES         -->
+<!--                   ELEMENT NAME ENTITIES                       -->
 <!-- ============================================================= -->
 
-<!ENTITY % delay-d-keywords      
-  "exportanchors 
-  "
+ 
+<!ENTITY % abbreviated-form   "abbreviated-form"                     >
+
+
+<!-- ============================================================= -->
+<!--                    ELEMENT DECLARATIONS                       -->
+<!-- ============================================================= -->
+
+
+<!--                    LONG NAME: Abbreviated Form                -->
+<!ENTITY % abbreviated-form.content
+                       "EMPTY"
 >
-
-<!ENTITY delay-d-att     
-  "(topic delay-d)"
+<!ENTITY % abbreviated-form.attributes
+             "keyref 
+                        CDATA 
+                                  #REQUIRED
+              %univ-atts;
+              outputclass 
+                        CDATA 
+                                  #IMPLIED"
 >
+<!ELEMENT abbreviated-form    %abbreviated-form.content;>
+<!ATTLIST abbreviated-form    %abbreviated-form.attributes;>
 
+<!-- ============================================================= -->
+<!--                    SPECIALIZATION ATTRIBUTE DECLARATIONS      -->
+<!-- ============================================================= -->
+ 
 
-<!-- ================== End Delayed Resolution Domain Entities === -->
+<!ATTLIST abbreviated-form %global-atts;  class CDATA "+ topic/term abbrev-d/abbreviated-form "  >
+ 
+<!-- ================== End DITA Abbreviated Form Domain ========= -->

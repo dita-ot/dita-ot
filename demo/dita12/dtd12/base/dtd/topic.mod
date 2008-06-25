@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!-- ============================================================= -->
 <!--                    HEADER                                     -->
 <!-- ============================================================= -->
@@ -380,7 +381,8 @@ PUBLIC "-//OASIS//ELEMENTS DITA Topic//EN"
  
 <!--                    LONG NAME: Body                            -->
 <!ENTITY % body.content
-                       "(%body.cnt; | 
+                       "(%body.cnt; |
+                         %bodydiv; | 
                          %example; | 
                          %section;)*"
 >

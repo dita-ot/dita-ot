@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!-- ============================================================= -->
 <!--                    HEADER                                     -->
 <!-- ============================================================= -->
@@ -74,6 +75,11 @@ PUBLIC "-//OASIS//DTD DITA 1.2 Concept//EN"                        -->
          "../../base/dtd/hazardstatementDomain.ent"
 >%hazard-d-dec;
 
+<!ENTITY % abbrev-d-dec     
+  PUBLIC "-//OASIS//ENTITIES DITA 1.2 Abbreviated Form Domain//EN" 
+         "abbreviateDomain.ent"
+>%abbrev-d-dec;
+
 <!ENTITY % pr-d-dec     
   PUBLIC "-//OASIS//ENTITIES DITA 1.2 Programming Domain//EN" 
          "programmingDomain.ent"                                              
@@ -116,6 +122,9 @@ PUBLIC "-//OASIS//DTD DITA 1.2 Concept//EN"                        -->
                          %pr-d-ph; |
                          %sw-d-ph; | 
                          %ui-d-ph;
+                        ">
+<!ENTITY % term         "term | 
+                         %abbrev-d-term;
                         ">
 <!ENTITY % fig          "fig |
                          %pr-d-fig; |
@@ -160,6 +169,7 @@ PUBLIC "-//OASIS//DTD DITA 1.2 Concept//EN"                        -->
                            &ut-d-att; 
                            &indexing-d-att;
                            &hazard-d-att;
+                           &abbrev-d-att;
                            &pr-d-att; 
                            &sw-d-att;
                            &ui-d-att; 
@@ -210,6 +220,11 @@ PUBLIC "-//OASIS//DTD DITA 1.2 Concept//EN"                        -->
   PUBLIC "-//OASIS//ELEMENTS DITA 1.2 Hazard Statement Domain//EN" 
          "../../base/dtd/hazardstatementDomain.mod"
 >%hazard-d-def;
+
+<!ENTITY % abbrev-d-def     
+  PUBLIC "-//OASIS//ELEMENTS DITA 1.2 Abbreviated Form Domain//EN" 
+         "abbreviateDomain.mod"
+>%abbrev-d-def;
 
 <!ENTITY % ui-d-def     
   PUBLIC "-//OASIS//ELEMENTS DITA 1.2 User Interface Domain//EN" 

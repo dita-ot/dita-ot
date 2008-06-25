@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!-- ============================================================= -->
 <!--                    HEADER                                     -->
 <!-- ============================================================= -->
@@ -388,6 +389,13 @@ PUBLIC "-//OASIS//ELEMENTS DITA Glossary//EN"
              "href 
                         CDATA 
                                   #REQUIRED
+
+              scope 
+                        (external | 
+                         local | 
+                         peer | 
+                         -dita-use-conref-target) 
+                                  #IMPLIED
               keyref 
                         NMTOKEN 
                                   #IMPLIED

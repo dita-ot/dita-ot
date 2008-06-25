@@ -2,9 +2,9 @@
 <!-- ============================================================= -->
 <!--                    HEADER                                     -->
 <!-- ============================================================= -->
-<!--  MODULE:    DITA Learning Assessment Entity                   -->
+<!--  MODULE:    DITA Glossary Reference Domain Entities           -->
 <!--  VERSION:   1.2                                               -->
-<!--  DATE:      April 2008                                        -->
+<!--  DATE:      June 2008                                         -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -14,32 +14,42 @@
 <!--                                                               -->
 <!--  Refer to this file by the following public identifier or an 
       appropriate system identifier 
-PUBLIC "-//OASIS//ENTITIES DITA Learning Assessment//EN"
-      Delivered as file "learningAssessment.ent"                   -->
+PUBLIC "-//OASIS//ENTITIES DITA Glossary Reference Domain//EN"
+      Delivered as file "glossrefDomain.ent"                       -->
 
 <!-- ============================================================= -->
 <!-- SYSTEM:     Darwin Information Typing Architecture (DITA)     -->
 <!--                                                               -->
-<!-- PURPOSE:    Declaring the domain entity for Learning          -->
-<!--             Assessment topics                                 -->
+<!-- PURPOSE:    Declaring the substitution context and domain     -->
+<!--             entity declarations for the glossary reference    -->
+<!--             domain                                            -->
 <!--                                                               -->
 <!-- ORIGINAL CREATION DATE:                                       -->
-<!--             April 2008                                        -->
+<!--             June 2008                                         -->
 <!--                                                               -->
-<!--             (C) Copyright OASIS Open 2008                     -->
+<!--             (C) Copyright OASIS Open 2008.                    -->
 <!--             All Rights Reserved.                              -->
 <!--                                                               -->
 <!--  UPDATES:                                                     -->
 <!-- ============================================================= -->
 
-
 <!-- ============================================================= -->
-<!--                    LEARNING ENTITIES                          -->
+<!--                    ELEMENT EXTENSION ENTITY DECLARATIONS      -->
 <!-- ============================================================= -->
 
-<!ENTITY learningAssessment-att     
-  "(topic learningBase learningAssessment)"
+<!ENTITY % glossref-d-topicref 
+  "glossref
+  "                     
 >
 
 
-<!-- ================== End Learning Entities ==================== -->
+<!-- ============================================================= -->
+<!--                    DOMAIN ENTITY DECLARATION                  -->
+<!-- ============================================================= -->
+
+<!ENTITY glossref-d-att 
+  "(map glossref-d)"                           
+>
+
+
+<!-- ================== End Map Group Domain Entities ============ -->

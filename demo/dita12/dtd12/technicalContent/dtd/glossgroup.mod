@@ -2,9 +2,9 @@
 <!-- ============================================================= -->
 <!--                    HEADER                                     -->
 <!-- ============================================================= -->
-<!--  MODULE:    DITA Delayed Resolution Domain                    -->
+<!--  MODULE:    DITA Glossary Group                               -->
 <!--  VERSION:   1.2                                               -->
-<!--  DATE:      February 2008                                     -->
+<!--  DATE:      June 2008                                         -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -14,17 +14,17 @@
 <!--                                                               -->
 <!--  Refer to this file by the following public identifier or an 
       appropriate system identifier 
-PUBLIC "-//OASIS//ELEMENTS DITA Delayed Resolution Domain//EN"
-      Delivered as file "delayResolutionDomain.mod"                -->
+PUBLIC "-//OASIS//ELEMENTS DITA Glossary Group//EN"
+      Delivered as file "glossgroup.mod"                           -->
 
 <!-- ============================================================= -->
 <!-- SYSTEM:     Darwin Information Typing Architecture (DITA)     -->
 <!--                                                               -->
-<!-- PURPOSE:    Define elements and specialization attributes     -->
-<!--             for Delayed Resolution Domain                     -->
+<!-- PURPOSE:    Define elements and specialization atttributes    -->
+<!--             for Glossary Group topics                         -->
 <!--                                                               -->
 <!-- ORIGINAL CREATION DATE:                                       -->
-<!--             February 2008                                     -->
+<!--             June 2008                                         -->
 <!--                                                               -->
 <!--             (C) Copyright OASIS Open 2008.                    -->
 <!--             All Rights Reserved.                              -->
@@ -33,12 +33,31 @@ PUBLIC "-//OASIS//ELEMENTS DITA Delayed Resolution Domain//EN"
 <!-- ============================================================= -->
 
 <!-- ============================================================= -->
-<!--                   ELEMENT NAME ENTITIES                       -->
+<!--                   SPECIALIZATION OF DECLARED ELEMENTS         -->
 <!-- ============================================================= -->
 
-<!ENTITY % exportanchors "exportanchors"                             >
-<!ENTITY % anchorid      "anchorid"                                  >
-<!ENTITY % anchorkey     "anchorkey"                                 >
+<!-- Default nesting rules for glossgroup must be reset if this 
+     module is ever used without glossentry.                       -->
+<!ENTITY % glossgroup-info-types 
+  "glossgroup | glossentry"
+>
+
+
+<!-- ============================================================= -->
+<!--                   ELEMENT NAME ENTITIES                       -->
+<!-- ============================================================= -->
+ 
+
+<!ENTITY % glossgroup "glossgroup"                                   >
+
+<!-- ============================================================= -->
+<!--                    DOMAINS ATTRIBUTE OVERRIDE                 -->
+<!-- ============================================================= -->
+
+
+<!ENTITY included-domains 
+  ""
+>
 
 
 <!-- ============================================================= -->
@@ -46,28 +65,15 @@ PUBLIC "-//OASIS//ELEMENTS DITA Delayed Resolution Domain//EN"
 <!-- ============================================================= -->
 
 
-<!--                    LONG NAME: Export Anchor List              -->
-<!ENTITY % exportanchors.content
-                       "(%anchorid; | 
-                         %anchorkey;)*"
+<!--                    LONG NAME: Glossary Group                  -->
+<!ENTITY % glossgroup.content
+                       "((%title;), 
+                         (%prolog;)?, 
+                         (%glossgroup-info-types;)* )"
 >
-<!ENTITY % exportanchors.attributes
-             "%univ-atts;"
->
-<!ELEMENT exportanchors    %exportanchors.content;>
-<!ATTLIST exportanchors    %exportanchors.attributes;>
-
-
-<!--                    LONG NAME: Anchor ID                       -->
-<!ENTITY % anchorid.content
-                       "EMPTY"
->
-<!ENTITY % anchorid.attributes
-             "keyref 
-                        CDATA 
-                                  #IMPLIED
-              id 
-                        NMTOKEN 
+<!ENTITY % glossgroup.attributes
+             "id 
+                        ID 
                                   #REQUIRED
               %conref-atts;
               %select-atts;
@@ -76,34 +82,20 @@ PUBLIC "-//OASIS//ELEMENTS DITA Delayed Resolution Domain//EN"
                         CDATA 
                                   #IMPLIED"
 >
-<!ELEMENT anchorid    %anchorid.content;>
-<!ATTLIST anchorid    %anchorid.attributes;>
-
-
-<!--                    LONG NAME: Anchor Key                       -->
-<!ENTITY % anchorkey.content
-                       "EMPTY"
->
-<!ENTITY % anchorkey.attributes
-             "keyref 
+<!ELEMENT glossgroup    %glossgroup.content;>
+<!ATTLIST glossentry    
+              %glossgroup.attributes;
+              %arch-atts;
+              domains 
                         CDATA 
-                                  #REQUIRED
-              %univ-atts;
-              outputclass 
-                        CDATA 
-                                  #IMPLIED"
+                                  "&included-domains;"
 >
-<!ELEMENT anchorkey    %anchorkey.content;>
-<!ATTLIST anchorkey    %anchorkey.attributes;>
-
-
 
 <!-- ============================================================= -->
 <!--                    SPECIALIZATION ATTRIBUTE DECLARATIONS      -->
 <!-- ============================================================= -->
 
-<!ATTLIST exportanchors %global-atts;  class CDATA "+ topic/keywords delay-d/exportanchors "  >
-<!ATTLIST anchorid      %global-atts;  class CDATA "+ topic/keyword delay-d/anchorid "  >
-<!ATTLIST anchorkey     %global-atts;  class CDATA "+ topic/keyword delay-d/anchorkey "  >
 
-<!-- ================== End Delayed Resolution Domain  =========== -->
+<!ATTLIST glossgroup  %global-atts;  class CDATA "- topic/topic concept/concept glossgroup/glossgroup ">
+ 
+<!-- ================== End DITA Glossary Group ================== -->

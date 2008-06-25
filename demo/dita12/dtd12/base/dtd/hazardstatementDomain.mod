@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!-- ============================================================= -->
 <!--                    HEADER                                     -->
 <!-- ============================================================= -->
@@ -114,12 +115,20 @@ PUBLIC "-//OASIS//ELEMENTS DITA Hazard Statement Domain//EN"
 
 <!--                    LONG NAME: Hazard Symbol                   -->
 <!ENTITY % hazardsymbol.content
-                       "(%alt;)?"
+                       "((%alt;)?,
+                         (%longdescref;)?)"
 >
 <!ENTITY % hazardsymbol.attributes
              "href 
                         CDATA 
                                   #REQUIRED
+
+              scope 
+                        (external | 
+                         local | 
+                         peer | 
+                         -dita-use-conref-target) 
+                                  #IMPLIED
               keyref 
                         NMTOKEN 
                                   #IMPLIED
