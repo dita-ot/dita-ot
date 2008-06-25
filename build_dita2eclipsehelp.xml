@@ -159,6 +159,9 @@
             <param name="provider"
                    expression="${args.eclipse.provider}"
                    if="args.eclipse.provider" />
+        	  <outputproperty value="yes" name="indent"/>
+        	  <param name="dita.plugin.output" 
+        	        expression="dita.eclipse.plugin"/>  
         </xslt>
     </target>
     
@@ -178,6 +181,9 @@
             <param name="provider"
                 expression="${args.eclipse.provider}"
                 if="args.eclipse.provider" />
+        	  <outputproperty value="yes" name="indent"/>
+        	  <param name="dita.plugin.output" 
+        	        expression="dita.eclipse.plugin"/>  
         </xslt>
     </target>
   
