@@ -127,7 +127,7 @@
   <!--  The elipse.plugin mode teamplate is used to create a plugin.xml file. -->  
   <xsl:template match="*[contains(@class, ' map/map ')]" mode="eclipse.plugin">
     <xsl:element name="plugin">
-      <xsl:attribute name="name">
+     <!-- <xsl:attribute name="name">
         <xsl:choose>
           <xsl:when test="*[contains(@class, ' topic/title ')]">
             <xsl:value-of select="*[contains(@class, ' topic/title ')]"/>
@@ -159,7 +159,7 @@
       </xsl:attribute>
       <xsl:attribute name="provider-name">
         <xsl:value-of select="$provider"/>
-      </xsl:attribute>
+      </xsl:attribute>-->
       <xsl:element name="extension">
         <xsl:attribute name="point">
           <xsl:text>org.eclipse.help.toc</xsl:text>
