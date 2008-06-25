@@ -99,6 +99,7 @@
                           id        ID    #REQUIRED
                           %topicref-atts;
                           %select-atts;
+                          %localization-atts;
                           %arch-atts;
                           domains CDATA "&included-domains;"
 >
@@ -477,6 +478,6 @@
 <!ATTLIST versionMax %global-atts; class CDATA "- topic/vrm eclipsemap/versionMax ">
 <!ATTLIST versionLessThanMax %global-atts; class CDATA "- topic/vrm eclipsemap/versionLessThanMax ">
 <!ATTLIST versionGreaterThanMin %global-atts; class CDATA "- topic/vrm eclipsemap/versionGreaterThanMin ">
-<!ATTLIST pluginProperties %global-atts; class CDATA "- topic/othermeta eclipsemap/pluginPproperties ">
+<!ATTLIST pluginProperties %global-atts; class CDATA "- topic/othermeta eclipsemap/pluginProperties ">
 <!ATTLIST otherBundleHeaders %global-atts; class CDATA "- topic/othermeta eclipsemap/otherBundleHeaders ">
 
