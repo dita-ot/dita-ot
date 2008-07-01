@@ -107,7 +107,7 @@
     <condition property="noHtmllist">
       <equals arg1="${htmllist}" arg2="" />
     </condition>
-    <condition property="noSubList">
+    <condition property="noSublist">
       <equals arg1="${subtargetslist}" arg2="" />
     </condition>
   </target>
@@ -396,7 +396,7 @@
     unless="preprocess.copy-image.skip"
     description="Copy image files">
     <copy todir="${output.dir}">
-      <fileset dir="${user.input.dir}" includes="${imagelist}" />
+      <fileset dir="${user.input.dir}" includes="${dita.temp.dir}${file.separator}${image.file}" />
     </copy>
   </target>
   
@@ -404,7 +404,7 @@
     <condition property="preprocess.copy-image.skip">
       <or>
         <isset property="preprocess.copy-files.skip"/>
-        <isset property="noImageList"/>
+        <isset property="noImagelist"/>
       </or>
     </condition>
   </target>
@@ -416,7 +416,7 @@
     unless="preprocess.copy-html.skip"
     description="Copy html files">
     <copy todir="${output.dir}">
-      <fileset dir="${user.input.dir}" includes="${htmllist}"></fileset>
+      <fileset dir="${user.input.dir}" includesfile="${dita.temp.dir}${file.separator}${html.file}"></fileset>
     </copy>
   </target>
 
@@ -439,7 +439,7 @@
       <fileset dir="${dita.resource.dir}"
         includes="delta.gif,deltaend.gif" />
     </copy>
-    <dita-ot-copy todir="${output.dir}" includes="${flagimagelist}" relativepaths="${relflagimagelist}" />
+    <dita-ot-copy todir="${output.dir}" includes="${dita.temp.dir}${file.separator}${flagimage.file}" relativepaths="${relflagimagelist}" />
   </target>
   
   <target name="copy-flag-check">
@@ -458,7 +458,7 @@
     unless="preprocess.copy-subsidiary.skip"
     description="Copy subsidiary files">
     <copy todir="${dita.temp.dir}">
-      <fileset dir="${user.input.dir}" includes="${subtargetslist}"/>
+      <fileset dir="${user.input.dir}" includes="${dita.temp.dir}${file.separator}${subtargets.file}"/>
     </copy>
   </target>
 
@@ -467,7 +467,7 @@
     <condition property="preprocess.copy-subsidiary.skip">
       <or>
         <isset property="preprocess.copy-files.skip"/>
-        <isset property="noSubList"/>
+        <isset property="noSublist"/>
       </or>
     </condition>
   </target>
