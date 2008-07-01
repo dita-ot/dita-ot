@@ -1190,6 +1190,7 @@
        <xsl:with-param name="file-path" select="$imgsrc"/>
       </xsl:call-template>
       -->
+      <xsl:value-of select="$imgsrc"/>
      </xsl:attribute>
      <xsl:if test="endflag/alt-text">
       <xsl:attribute name="alt">

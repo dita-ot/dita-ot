@@ -3381,6 +3381,39 @@
   </xsl:if>
 </xsl:template>
 
+<!-- SF Report 2008294: support flagging in simpletable headers. Use common template to simplify
+                        sharing this with all simpletable entries and specializations. -->
+<xsl:template match="*" mode="start-stentry-flagging">
+  <xsl:param name="flagrules">
+    <xsl:call-template name="getrules"/>
+    <xsl:call-template name="getrules-parent"/>
+  </xsl:param>
+  <xsl:call-template name="start-flagit">
+    <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
+  </xsl:call-template>
+  <xsl:call-template name="start-revflag-parent">
+    <xsl:with-param name="flagrules" select="$flagrules"/>
+  </xsl:call-template>
+  <xsl:call-template name="start-revflag">
+    <xsl:with-param name="flagrules" select="$flagrules"/>
+  </xsl:call-template>
+</xsl:template>
+<xsl:template match="*" mode="end-stentry-flagging">
+  <xsl:param name="flagrules">
+    <xsl:call-template name="getrules"/>
+    <xsl:call-template name="getrules-parent"/>
+  </xsl:param>
+  <xsl:call-template name="end-revflag">
+    <xsl:with-param name="flagrules" select="$flagrules"/>
+  </xsl:call-template>
+  <xsl:call-template name="end-revflag-parent">
+    <xsl:with-param name="flagrules" select="$flagrules"/>
+  </xsl:call-template>
+  <xsl:call-template name="end-flagit">
+    <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param> 
+  </xsl:call-template>
+</xsl:template>
+
 <xsl:template match="*[contains(@class,' topic/stentry ')]" name="topic.stentry">
     <xsl:param name="width-multiplier">0</xsl:param>
     <xsl:choose>
@@ -3402,6 +3435,7 @@
   <xsl:param name="width-multiplier">0</xsl:param>
   <xsl:variable name="flagrules">
     <xsl:call-template name="getrules"/>
+    <xsl:call-template name="getrules-parent"/>
   </xsl:variable>
   <xsl:variable name="conflictexist">
     <xsl:call-template name="conflict-check">
@@ -3434,14 +3468,20 @@
         <xsl:value-of select="$widthpercent"/><xsl:text>%</xsl:text>
       </xsl:attribute>
     </xsl:if>
-       <xsl:choose>
-        <xsl:when test="not(*|text()|processing-instruction()) and @specentry">
-         <xsl:value-of select="@specentry"/>
-        </xsl:when>
-        <xsl:otherwise>
-         <xsl:apply-templates/>
-        </xsl:otherwise>
-       </xsl:choose>
+    <xsl:apply-templates select="." mode="start-stentry-flagging">
+      <xsl:with-param name="flagrules" select="$flagrules"/>
+    </xsl:apply-templates>
+    <xsl:choose>
+      <xsl:when test="not(*|text()|processing-instruction()) and @specentry">
+        <xsl:value-of select="@specentry"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:apply-templates/>
+      </xsl:otherwise>
+     </xsl:choose>
+    <xsl:apply-templates select="." mode="end-stentry-flagging">
+      <xsl:with-param name="flagrules" select="$flagrules"/>
+    </xsl:apply-templates>
   </th><xsl:value-of select="$newline"/>
 </xsl:template>
 
@@ -3508,15 +3548,9 @@
         <xsl:value-of select="$widthpercent"/><xsl:text>%</xsl:text>
       </xsl:attribute>
     </xsl:if>
-    <xsl:call-template name="start-flagit">
-      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
-    </xsl:call-template>
-    <xsl:call-template name="start-revflag-parent">
+    <xsl:apply-templates select="." mode="start-stentry-flagging">
       <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:call-template>
-    <xsl:call-template name="start-revflag">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:call-template>
+    </xsl:apply-templates>
     <xsl:variable name="revtest">
       <xsl:if test="@rev and not($FILTERFILE='') and ($DRAFT='yes')"> <!-- revision? -->
         <xsl:call-template name="find-active-rev-flag">               <!-- active? (revtest will be 1 when active)-->
@@ -3561,15 +3595,9 @@
 <xsl:call-template name="stentry-templates"/>
      </xsl:otherwise>
     </xsl:choose>
-    <xsl:call-template name="end-revflag">
+    <xsl:apply-templates select="." mode="end-stentry-flagging">
       <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:call-template>
-    <xsl:call-template name="end-revflag-parent">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:call-template>
-    <xsl:call-template name="end-flagit">
-      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param> 
-    </xsl:call-template>
+    </xsl:apply-templates>
   </td><xsl:value-of select="$newline"/>
 </xsl:template>
 <xsl:template name="stentry-templates">
