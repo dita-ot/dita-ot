@@ -40,8 +40,8 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:output indent="no"/>
 
-	<xsl:key name="topic" match="dita-merge//*[contains(@class,' topic/topic ')]" use="concat('#',@id)"/>
-	<xsl:key name="topic" match="dita-merge//dita" use="concat('#',@id)"/>
+    <xsl:key name="topic" match="dita-merge/*[contains(@class,' topic/topic ')]" use="concat('#',@id)"/>
+    <xsl:key name="topic" match="dita-merge/dita" use="concat('#',*[contains(@class, ' topic/topic ')][1]/@id)"/>
     <xsl:key name="topicref" match="//*[contains(@class,' map/topicref ')]" use="generate-id()"/>
 
 <!--
@@ -67,7 +67,7 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:template match="*[contains(@class,' map/topicref ')]" mode="build-tree">
 		<xsl:choose>
 			<xsl:when test="not(normalize-space(@href) = '')">
-				<xsl:apply-templates select="key('topic',@href)">
+				<xsl:apply-templates select="key('topic',@href)">				    
 					<xsl:with-param name="parentId" select="generate-id()"/>
 				</xsl:apply-templates>
 			</xsl:when>
@@ -93,13 +93,18 @@ See the accompanying license.txt file for applicable licenses.
 		</xsl:choose>
     </xsl:template>
 
-    <xsl:template match="*[contains(@class,' topic/topic ')] | dita-merge/dita">
+    <xsl:template match="*[contains(@class,' topic/topic ')]">
         <xsl:param name="parentId"/>
         <xsl:copy>
             <xsl:apply-templates select="@*"/>
             <xsl:apply-templates/>
             <xsl:apply-templates select="key('topicref',$parentId)/*" mode="build-tree"/>
         </xsl:copy>
+    </xsl:template>
+    
+    <xsl:template match="dita">
+        <xsl:param name="parentId"/>
+        <xsl:copy-of select="*"/>
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' map/topicref ')]/@id"/>

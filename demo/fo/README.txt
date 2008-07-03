@@ -133,6 +133,16 @@ To modify these settings, copy "build.properties.orig" to
 History
 =======
 
+FO Plugin Release 1.4.3
+Available since
+
+Sourceforge bug fixes:
+- 1803111: Idiom plug fails when processing bookmap with DITA composite
+- 1930201: FO 1.4.2 doesn't fail correctly when called from Ant
+- 1829816: Value of otherprops is written as a text element
+
+----------------------------------------------------------------------------
+
 FO Plugin Release 1.4.2
 Available since Feb 26, 2008
 

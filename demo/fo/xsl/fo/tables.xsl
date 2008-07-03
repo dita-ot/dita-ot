@@ -1240,7 +1240,7 @@ See the accompanying license.txt file for applicable licenses.
     <!--  Simpletable processing  -->
     <xsl:template match="*[contains(@class, ' topic/simpletable ')]">
         <fo:table xsl:use-attribute-sets="simpletable" id="{@id}">
-            <xsl:call-template name="univAttrs"/>
+            <!-- <xsl:call-template name="univAttrs"/> -->
             <xsl:call-template name="globalAtts"/>
             <xsl:call-template name="displayAtts">
                 <xsl:with-param name="element" select="."/>
