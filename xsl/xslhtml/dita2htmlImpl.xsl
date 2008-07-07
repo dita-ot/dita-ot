@@ -15,7 +15,10 @@
 ]>
 
 <xsl:stylesheet version="1.0"
-                xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:dita2html="http://dita-ot.sourceforge.net/ns/200801/dita2html"
+                xmlns:ditamsg="http://dita-ot.sourceforge.net/ns/200704/ditamsg"
+                exclude-result-prefixes="dita2html ditamsg">
 
 
 
@@ -2318,11 +2321,7 @@
   <xsl:if test="@width"><xsl:attribute name="width"><xsl:value-of select="@width"/></xsl:attribute></xsl:if>
   <xsl:if test="@name"><xsl:attribute name="name"><xsl:value-of select="@name"/></xsl:attribute></xsl:if>
   <xsl:if test="@longdescref">
-   <xsl:call-template name="output-message">
-    <xsl:with-param name="msgnum">038</xsl:with-param>
-    <xsl:with-param name="msgsev">I</xsl:with-param>
-    <xsl:with-param name="msgparams">%1=<xsl:value-of select="name(.)"/></xsl:with-param>
-   </xsl:call-template>
+    <xsl:apply-templates select="." mode="ditamsg:longdescref-on-object"/>
   </xsl:if>
   <xsl:apply-templates/>
  <!-- Test for Flash movie; include EMBED statement for non-IE browsers -->
@@ -3710,10 +3709,7 @@
        <xsl:with-param name="flagrules" select="$flagrules"/>
      </xsl:call-template>
    </xsl:variable>
-  <xsl:call-template name="output-message">
-   <xsl:with-param name="msgnum">039</xsl:with-param>
-   <xsl:with-param name="msgsev">W</xsl:with-param>
-  </xsl:call-template>
+   <xsl:apply-templates select="." mode="ditamsg:required-cleanup-in-content"/>
   <div style="background-color: #FFFF99; color:#CC3333; border: 1pt black solid;">
    <xsl:call-template name="commonattributes"/>
     <xsl:call-template name="gen-style">
@@ -3755,10 +3751,7 @@
        <xsl:with-param name="flagrules" select="$flagrules"/>
      </xsl:call-template>
    </xsl:variable>
-  <xsl:call-template name="output-message">
-   <xsl:with-param name="msgnum">040</xsl:with-param>
-   <xsl:with-param name="msgsev">I</xsl:with-param>
-  </xsl:call-template>
+   <xsl:apply-templates select="." mode="ditamsg:draft-comment-in-content"/>
   <div style="background-color: #99FF99; border: 1pt black solid;">
     <xsl:call-template name="commonattributes"/>
     <xsl:call-template name="gen-style">
@@ -4107,18 +4100,24 @@
 </xsl:template>
 
 <!-- Process a section heading - H4 based on: 1) title element 2) @spectitle attr -->
+<!-- DITA-OT 1.5: Deprecate this template in favor of a moded template, which allows
+     easier generated headings for a specific specialized section                 -->
 <xsl:template name="sect-heading">
+  <xsl:param name="defaulttitle"/> <!-- get param by reference -->
+  <!-- Deprecated in favor of the mode template -->
+  <xsl:apply-templates select="." mode="dita2html:section-heading">
+    <xsl:with-param name="defaulttitle" select="$defaulttitle"/>
+  </xsl:apply-templates>
+</xsl:template>
+<xsl:template match="*" mode="dita2html:section-heading">
   <xsl:param name="defaulttitle"/> <!-- get param by reference -->
   <xsl:variable name="heading">
      <xsl:choose>
       <xsl:when test="*[contains(@class,' topic/title ')]">
         <xsl:apply-templates select="*[contains(@class,' topic/title ')][1]" mode="text-only"/>
         <xsl:if test="*[contains(@class,' topic/title ')][2]">
-         <xsl:call-template name="output-message">
-           <xsl:with-param name="msgnum">041</xsl:with-param>
-           <xsl:with-param name="msgsev">W</xsl:with-param>
-         </xsl:call-template>
-      </xsl:if>
+          <xsl:apply-templates select="." mode="ditamsg:section-with-multiple-titles"/>
+        </xsl:if>
       </xsl:when>
       <xsl:when test="@spectitle">
         <xsl:value-of select="@spectitle"/>
@@ -4845,5 +4844,33 @@
   <!-- Add for index-base element. This template is used to prevent
     any processing applied on index-base element -->
   <xsl:template match="*[contains(@class,' topic/index-base ')]"/>
+
+  <!-- MESSAGES: Refactoring places each message in a moded template, so that users
+       may more easily override a message for one or all cases. -->
+  <xsl:template match="*" mode="ditamsg:longdescref-on-object">
+    <xsl:call-template name="output-message">
+     <xsl:with-param name="msgnum">038</xsl:with-param>
+     <xsl:with-param name="msgsev">I</xsl:with-param>
+     <xsl:with-param name="msgparams">%1=<xsl:value-of select="name(.)"/></xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
+  <xsl:template match="*" mode="ditamsg:required-cleanup-in-content">
+    <xsl:call-template name="output-message">
+     <xsl:with-param name="msgnum">039</xsl:with-param>
+     <xsl:with-param name="msgsev">W</xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
+  <xsl:template match="*" mode="ditamsg:draft-comment-in-content">
+    <xsl:call-template name="output-message">
+     <xsl:with-param name="msgnum">040</xsl:with-param>
+     <xsl:with-param name="msgsev">I</xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
+  <xsl:template match="*" mode="ditamsg:section-with-multiple-titles">
+    <xsl:call-template name="output-message">
+      <xsl:with-param name="msgnum">041</xsl:with-param>
+      <xsl:with-param name="msgsev">W</xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
 
 </xsl:stylesheet>
