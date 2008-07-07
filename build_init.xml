@@ -35,6 +35,12 @@
     classname="org.dita.dost.invoker.AntInvoker">
     <classpath refid="dost.jar.path" />
   </taskdef>
+
+  <taskdef name="ext-pipeline"
+    classname="org.dita.dost.invoker.ExtensibleAntInvoker">
+    <classpath refid="dost.jar.path" />
+  </taskdef>
+
   <taskdef name="config-logger"
     classname="org.dita.dost.log.LogConfigTask">
     <classpath refid="dost.jar.path" />
