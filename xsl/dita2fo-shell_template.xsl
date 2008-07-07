@@ -36,8 +36,7 @@
 ]>
 <xsl:stylesheet version="1.0"
                 xmlns:fo="http://www.w3.org/1999/XSL/Format"
-                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                xmlns:fox="http://xml.apache.org/fop/extensions">
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   <!-- stylesheet imports -->
   <xsl:import href="xslfo/topic2foImpl.xsl"/>
   <xsl:import href="xslfo/domains2fo.xsl"/>
@@ -78,6 +77,9 @@
       <xsl:apply-templates mode="outline"/>
       <!-- get the overall master page defs here -->
       <xsl:call-template name="define-page-masters-dita"/>
+      <fo:bookmark-tree>
+	<xsl:apply-templates mode="outline"/>
+      </fo:bookmark-tree>
       <!-- place generated content -->
       <xsl:call-template name="front-covers"/>
       <!--xsl:call-template name="titlepage-ednotice"/-->
@@ -102,12 +104,12 @@
         </xsl:choose>
       </xsl:variable>
       
-      <fox:outline>
+      <fo:bookmark>
         <xsl:attribute name="internal-destination">
           <!-- use id attribute node to generate anchor for PDF bookmark fix bug#1304859 -->
           <xsl:value-of select="$id-value"/>
         </xsl:attribute>
-        <fox:label>
+        <fo:bookmark-title>
           <!-- if topic contains navtitle, use that as label for PDF bookmark
                otherwise, use title -->
           <xsl:choose>
@@ -118,9 +120,9 @@
               <xsl:apply-templates select="title" mode="text-only"/>
             </xsl:otherwise>
           </xsl:choose>
-        </fox:label>
+        </fo:bookmark-title>
         <xsl:apply-templates select="child::*[contains(@class,' topic/topic ')]" mode="outline" />
-      </fox:outline>
+      </fo:bookmark>
   </xsl:template>
   
   <xsl:template match="*" mode="text-only">

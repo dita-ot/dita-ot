@@ -41,12 +41,12 @@
 <xsl:template match="@id">
 <!-- Filler for A-name anchors (empty links)-->
 <xsl:variable name="afill"></xsl:variable>
-  <fo:inline>
+  <fo:block>
     <xsl:attribute name="id">
       <!--We delete the line to get parent id here -->
       <xsl:value-of select="."/><!-- generate id according to current node -->
     </xsl:attribute>
-  <xsl:value-of select="$afill"/></fo:inline>
+  <xsl:value-of select="$afill"/></fo:block>
 </xsl:template>
 
 
@@ -64,7 +64,7 @@
       </xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
-  <fo:inline id="{$id-value}"><xsl:value-of select="$afill"/></fo:inline>
+  <fo:block id="{$id-value}"><xsl:value-of select="$afill"/></fo:block>
 </xsl:template>
 
 
