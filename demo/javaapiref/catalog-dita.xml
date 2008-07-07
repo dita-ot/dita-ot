@@ -6,30 +6,30 @@
          prefer="public">
 
   <public publicId="-//IBM//DTD DITA Java API Reference Map//EN"
-          uri="demo/javaapiref/dtd/javaAPIMap.dtd"/>
+          uri="dtd/javaAPIMap.dtd"/>
   <public publicId="-//IBM//DTD DITA Java API Package Reference Type//EN"
-          uri="demo/javaapiref/dtd/javaPackage.dtd"/>
+          uri="dtd/javaPackage.dtd"/>
   <public publicId="-//IBM//DTD DITA Java API Class Reference Type//EN"
-          uri="demo/javaapiref/dtd/javaClass.dtd"/>
+          uri="dtd/javaClass.dtd"/>
   <public publicId="-//IBM//DTD DITA Java API Interface Reference Type//EN"
-          uri="demo/javaapiref/dtd/javaInterface.dtd"/>
+          uri="dtd/javaInterface.dtd"/>
 
   <public publicId="-//IBM//ELEMENTS DITA Java API Reference Map//EN"
-          uri="demo/javaapiref/dtd/javaAPIMap.mod"/>
+          uri="dtd/javaAPIMap.mod"/>
   <public publicId="-//IBM//ELEMENTS DITA Java API Package//EN"
-          uri="demo/javaapiref/dtd/javaPackage.mod"/>
+          uri="dtd/javaPackage.mod"/>
   <public publicId="-//IBM//ELEMENTS DITA Java API Class//EN"
-          uri="demo/javaapiref/dtd/javaClass.mod"/>
+          uri="dtd/javaClass.mod"/>
   <public publicId="-//IBM//ELEMENTS DITA Java API Interface//EN"
-          uri="demo/javaapiref/dtd/javaInterface.mod"/>
+          uri="dtd/javaInterface.mod"/>
   <public publicId="-//IBM//ELEMENTS DITA Java API Field//EN"
-          uri="demo/javaapiref/dtd/javaField.mod"/>
+          uri="dtd/javaField.mod"/>
   <public publicId="-//IBM//ELEMENTS DITA Java API Method//EN"
-          uri="demo/javaapiref/dtd/javaMethod.mod"/>
+          uri="dtd/javaMethod.mod"/>
 
   <public publicId="-//IBM//ENTITIES DITA Java API Domain//EN"
-          uri="demo/javaapiref/dtd/javaAPIDomain.ent"/>
+          uri="dtd/javaAPIDomain.ent"/>
   <public publicId="-//IBM//ELEMENTS DITA Java API Domain//EN"
-          uri="demo/javaapiref/dtd/javaAPIDomain.mod"/>
+          uri="dtd/javaAPIDomain.mod"/>
 
 </catalog>

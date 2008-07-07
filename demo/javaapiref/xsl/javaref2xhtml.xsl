@@ -23,7 +23,6 @@
   <xsl:param name="stringName"/>
   <xsl:call-template name="getString">
     <xsl:with-param name="stringName" select="$stringName"/>
-    <xsl:with-param name="stringFileList">../../demo/javaapiref/xsl/javaapistrings.xml</xsl:with-param>
   </xsl:call-template>
 </xsl:template>
 
