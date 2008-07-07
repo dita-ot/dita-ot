@@ -219,11 +219,6 @@
       <xsl:apply-templates select="@spectitle"/>
     </xsl:when>
     <!-- These 2 are in the default string list. Others come from the APIRef strings.-->
-    <xsl:when test="$titleType='Syntax' or $titleType='Description'">
-      <xsl:call-template name="getString">
-        <xsl:with-param name="stringName" select="$titleType"/>
-      </xsl:call-template>
-    </xsl:when>
     <xsl:otherwise>
       <xsl:call-template name="apiGetString">
         <xsl:with-param name="stringName" select="$titleType"/>
@@ -443,7 +438,6 @@
   <xsl:param name="stringName"/>
   <xsl:call-template name="getString">
     <xsl:with-param name="stringName" select="$stringName"/>
-    <xsl:with-param name="stringFileList">../../demo/apiref/xsl/apistrings.xml</xsl:with-param>
   </xsl:call-template>
 </xsl:template>
 

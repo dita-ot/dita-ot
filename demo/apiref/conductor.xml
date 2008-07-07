@@ -3,14 +3,5 @@
  | (C) Copyright IBM Corporation 2005 - 2006. All Rights Reserved.
  *-->
 <project>
-    <!-- content targets -->
-    <target name="apiref2xhtml">
-      <!-- apiref2xhtml.xsl extends dita2xhtml via the plugin interface -->
-      <antcall target="dita2xhtml"/>
-      <copy todir="${output.dir}">
-        <fileset dir="${basedir}${file.separator}demo${file.separator}apiref${file.separator}xsl">
-          <include name="*.css"/>
-        </fileset>
-      </copy>
-    </target>
+    <import file="build.xml"/>
 </project>

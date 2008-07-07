@@ -6,30 +6,30 @@
          prefer="public">
 
   <public publicId="-//IBM//DTD DITA API Operation Reference Type//EN"
-          uri="demo/apiref/dtd/apiOperation.dtd"/>
+          uri="dtd/apiOperation.dtd"/>
   <public publicId="-//IBM//DTD DITA API Package Type//EN"
-          uri="demo/apiref/dtd/apiPackage.dtd"/>
+          uri="dtd/apiPackage.dtd"/>
   <public publicId="-//IBM//DTD DITA API Reference Type//EN"
-          uri="demo/apiref/dtd/apiRef.dtd"/>
+          uri="dtd/apiRef.dtd"/>
   <public publicId="-//IBM//DTD DITA API Classifier Reference Type//EN"
-          uri="demo/apiref/dtd/apiClassifier.dtd"/>
+          uri="dtd/apiClassifier.dtd"/>
   <public publicId="-//IBM//DTD DITA API Reference Map//EN"
-          uri="demo/apiref/dtd/apiMap.dtd"/>
+          uri="dtd/apiMap.dtd"/>
 
   <public publicId="-//IBM//ELEMENTS DITA API Reference//EN"
-          uri="demo/apiref/dtd/apiRef.mod"/>
+          uri="dtd/apiRef.mod"/>
   <public publicId="-//IBM//ELEMENTS DITA API Package//EN"
-          uri="demo/apiref/dtd/apiPackage.mod"/>
+          uri="dtd/apiPackage.mod"/>
   <public publicId="-//IBM//ELEMENTS DITA API Classifier//EN"
-          uri="demo/apiref/dtd/apiClassifier.mod"/>
+          uri="dtd/apiClassifier.mod"/>
   <public publicId="-//IBM//ELEMENTS DITA API Operation//EN"
-          uri="demo/apiref/dtd/apiOperation.mod"/>
+          uri="dtd/apiOperation.mod"/>
   <public publicId="-//IBM//ELEMENTS DITA API Value//EN"
-          uri="demo/apiref/dtd/apiValue.mod"/>
+          uri="dtd/apiValue.mod"/>
 
   <public publicId="-//IBM//ENTITIES DITA API Domain//EN"
-          uri="demo/apiref/dtd/apiDomain.ent"/>
+          uri="dtd/apiDomain.ent"/>
   <public publicId="-//IBM//ELEMENTS DITA API Domain//EN"
-          uri="demo/apiref/dtd/apiDomain.mod"/>
+          uri="dtd/apiDomain.mod"/>
 
 </catalog>
