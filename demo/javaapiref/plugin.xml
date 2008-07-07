@@ -12,4 +12,6 @@
       value="conductor.xml" type="file"/>
   <feature extension="dita.xsl.strings"
       value="xsl/javaapistrings.xml" type="file"/>
+  <feature extension="dita.xsl.topicpull"
+      value="xsl/topicpull.xsl" type="file"/>
 </plugin>
