@@ -4072,7 +4072,7 @@
   <xsl:apply-templates select="text()|*" mode="text-only"/>
 </xsl:template>
 
-<xsl:template match="text()">
+<xsl:template match="text()" mode="text-only">
   <xsl:value-of select="normalize-space(.)"/>
 </xsl:template>
 <!-- for artwork in a title, get the alt text -->
