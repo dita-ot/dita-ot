@@ -141,7 +141,8 @@ public abstract class Constants {
     public static final String CONREF_LIST = "conreflist";
     public static final String HREF_DITA_TOPIC_LIST = "hrefditatopiclist";
     public static final String FULL_DITA_TOPIC_LIST = "fullditatopiclist";
-    public static final String FULL_DITAMAP_LIST = "fullditamaplist";    
+    public static final String FULL_DITAMAP_LIST = "fullditamaplist";   
+    public static final String INPUT_DITAMAP = "user.input.file";
     public static final String FULL_DITAMAP_TOPIC_LIST = "fullditamapandtopiclist";
     public static final String CONREF_TARGET_LIST = "conreftargetslist";
     public static final String COPYTO_SOURCE_LIST = "copytosourcelist";

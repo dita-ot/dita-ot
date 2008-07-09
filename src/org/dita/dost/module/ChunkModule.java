@@ -24,7 +24,11 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.StringTokenizer;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
 import org.dita.dost.exception.DITAOTException;
+import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.pipeline.PipelineHashIO;
@@ -34,6 +38,8 @@ import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.StringUtils;
 import org.dita.dost.writer.PropertiesWriter;
 import org.dita.dost.writer.TopicRefWriter;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 public class ChunkModule implements AbstractPipelineModule {
 
@@ -57,6 +63,8 @@ public class ChunkModule implements AbstractPipelineModule {
 	    ChunkMapReader mapReader = new ChunkMapReader();
 	    Content content;
 
+	    DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
+	    
         if (!new File(tempDir).isAbsolute()) {
         	tempDir = new File(baseDir, tempDir).getAbsolutePath();
         }
@@ -73,12 +81,26 @@ public class ChunkModule implements AbstractPipelineModule {
 		}catch(IOException ioe){
 			throw new DITAOTException(ioe);
 		}
-		
-		st = new StringTokenizer(prop.getProperty(Constants.FULL_DITAMAP_LIST), Constants.COMMA);
-		while(st.hasMoreTokens()){
-			String mapFile = new File(tempDir, st.nextToken()).getAbsolutePath();        	        
-	        mapReader.read(mapFile);
+		String mapFile = new File(tempDir, prop.getProperty(Constants.INPUT_DITAMAP)).getAbsolutePath();   
+		try{
+			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder builder = factory.newDocumentBuilder();
+			Document doc = builder.parse(mapFile);
+			Element root = doc.getDocumentElement();
+			if(root.getAttribute(Constants.ATTRIBUTE_NAME_CLASS).contains(" eclipsemap/plugin ") && transtype.equals(Constants.INDEX_TYPE_ECLIPSEHELP)){
+				st = new StringTokenizer(prop.getProperty(Constants.FULL_DITAMAP_LIST), Constants.COMMA);
+				while(st.hasMoreTokens()){
+					mapFile = new File(tempDir, st.nextToken()).getAbsolutePath();        	        
+			        mapReader.read(mapFile);
+				}
+			}
+			else{
+				mapReader.read(mapFile);
+			}
+		}catch (Exception e){
+			javaLogger.logException(e);
 		}
+
 		
 		content = mapReader.getContent();
 		if(content.getValue()!=null){
