@@ -252,11 +252,14 @@
   <xsl:template name="entryatts">
     <xsl:call-template name="att-valign"/>
     <xsl:call-template name="att-align"/>
+    <!-- SF 1553905: remove invalid cellpadding attribute -->
+    <!--
     <xsl:if test="string(@colsep)">
       <xsl:if test="@colsep='1'">
         <xsl:attribute name="cellpadding">10</xsl:attribute>
       </xsl:if>
     </xsl:if>
+    -->
     <!-- IPL start -->
     <xsl:if test="string(@namest)">
       <xsl:variable name="colst" select="substring-after(@namest,'col')"/>
