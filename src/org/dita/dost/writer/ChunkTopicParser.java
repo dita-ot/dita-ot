@@ -14,10 +14,12 @@ import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Properties;
 import java.util.Random;
+import java.util.Set;
 import java.util.Stack;
 
 import javax.xml.parsers.SAXParser;
@@ -85,6 +87,8 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 
 	private String ditaext = null;
 	
+	private Set<String> topicID;
+	
 	public ChunkTopicParser() {
 		super();
 		topicSpecSet = new HashSet(Constants.INT_16);
@@ -94,6 +98,7 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 		stubStack = new Stack();
 		outputFileNameStack = new Stack();
 		logger=new DITAOTJavaLogger();
+		topicID = new HashSet<String>();
 	}
 
 	public void characters(char[] ch, int start, int length) throws SAXException {
@@ -295,6 +300,15 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 				for(int i = 0; i<atts.getLength();i++){
 					String attrName = atts.getQName(i);
 					String attrValue = atts.getValue(i);
+					if(Constants.ATTRIBUTE_NAME_ID.equals(attrName) && classValue.indexOf(Constants.ATTR_CLASS_VALUE_TOPIC)!=-1){
+						//change topic @id if there are conflicts. 
+						if(topicID.contains(attrValue)){
+							Random random = new Random();
+							attrValue = "unique_"+new Integer(Math.abs(random.nextInt())).toString();
+							topicID.add(attrValue);
+						}else
+							topicID.add(attrValue);
+					}
 					if(Constants.ATTRIBUTE_NAME_HREF.equals(attrName)){
 						//update @href value
 						output.write(Constants.STRING_BLANK);
@@ -462,6 +476,7 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 		String parseFilePath = null;
 		String outputFileName = outputFile;
 		Writer tempWriter = null;
+		Set<String> tempTopicID = null;
 		
 		targetTopicId = null;
 		selectMethod = "select-document";
@@ -485,7 +500,9 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 					//we need to create new buffer and flush the buffer to file
 					//after processing is finished					
 					tempWriter = output;
-					output = new StringWriter();	
+					tempTopicID = topicID;
+					output = new StringWriter();
+					topicID = new HashSet<String>();
 					if (!copytoValue.equals(Constants.STRING_EMPTY)){
 						// use @copy-to value as the new file name
 						outputFileName = FileUtils.resolveFile(filePath,copytoValue);
@@ -608,6 +625,7 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 					ditaFileOutput.close();
 					// restore back original output
 					output = tempWriter;
+					topicID = tempTopicID;
 				}
 			}else{
 				logger.logError(MessageUtils.getMessage("DOTJ032E").toString());
