@@ -173,12 +173,12 @@ public class MapMetaReader implements AbstractReader {
 		}
 		
 		if (!current.isEmpty() && hrefAttr != null){// prevent the metadata is empty
-			if (copytoAttr == null){
+			if (copytoAttr != null && new File(FileUtils.resolveFile(filePath, copytoAttr.getNodeValue())).exists()){
+				// if there is @copy-to and the file exists, @copy-to will take the place of @href
+				topicPath = FileUtils.resolveTopic(filePath,copytoAttr.getNodeValue());
+			}else{
 				// if there is no copy-to attribute in current element
 				topicPath = FileUtils.resolveTopic(filePath,hrefAttr.getNodeValue());
-			}else{
-				// if there is @copy-to, @copy-to will take the place of @href
-				topicPath = FileUtils.resolveTopic(filePath,copytoAttr.getNodeValue());
 			}
 			
 			if(resultTable.containsKey(topicPath)){

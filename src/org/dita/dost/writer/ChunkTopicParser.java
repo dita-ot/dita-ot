@@ -9,7 +9,9 @@
  */
 package org.dita.dost.writer;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.io.StringWriter;
@@ -17,6 +19,7 @@ import java.io.Writer;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.Properties;
 import java.util.Random;
 import java.util.Set;
@@ -89,6 +92,14 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 	
 	private Set<String> topicID;
 	
+	private Set<String> copyto;
+	
+	private Set<String>	copytoSource;
+	
+	private HashMap<String,String>	copytotarget2source;
+	
+	private Set<String> fullditamapandtopic;
+	
 	public ChunkTopicParser() {
 		super();
 		topicSpecSet = new HashSet(Constants.INT_16);
@@ -99,6 +110,10 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 		outputFileNameStack = new Stack();
 		logger=new DITAOTJavaLogger();
 		topicID = new HashSet<String>();
+		copyto = new HashSet<String>();
+		copytoSource = new HashSet<String>();
+		copytotarget2source = new HashMap<String,String>();
+		fullditamapandtopic = new HashSet<String>();
 	}
 
 	public void characters(char[] ch, int start, int length) throws SAXException {
@@ -395,9 +410,138 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 			processChunk(elem,null);
 		}else{
 			separateChunk(elem);
-		}	
+		}
+		if(!copyto.isEmpty()){
+			updateList();
+		}
 	}
 
+	private void updateList(){
+		Properties property = new Properties();
+		FileOutputStream output = null;
+		FileOutputStream xmlDitaList = null;
+		String key = null;
+		String filename = null;
+		BufferedWriter bufferedWriter = null;
+		try{
+			property.loadFromXML(new FileInputStream(new File(FileUtils.resolveFile(filePath,Constants.FILE_NAME_DITA_LIST_XML))));
+			output = new FileOutputStream(new File(FileUtils.resolveFile(filePath, Constants.FILE_NAME_DITA_LIST)));
+			xmlDitaList = new FileOutputStream(new File(FileUtils.resolveFile(filePath, Constants.FILE_NAME_DITA_LIST_XML)));
+			String fullditatopiclist[] = property.getProperty(Constants.FULL_DITA_TOPIC_LIST).split(Constants.COMMA);
+			String copytosourcelist[] = property.getProperty(Constants.COPYTO_SOURCE_LIST).split(Constants.COMMA);
+			String fullditamapandtopiclist[] = property.getProperty(Constants.FULL_DITAMAP_TOPIC_LIST).split(Constants.COMMA);
+			String copytotarget2sourcemaplist[] = property.getProperty(Constants.COPYTO_TARGET_TO_SOURCE_MAP_LIST).split(Constants.COMMA);
+			for(String topicormap:fullditamapandtopiclist){
+				fullditamapandtopic.add(topicormap);
+			}
+			for(String topic: copyto){
+				fullditamapandtopic.add(topic);
+			}
+			for(String source:copytosourcelist){
+				copytoSource.add(source);
+			}
+			for(String topic: fullditatopiclist){
+				copyto.add(topic);
+				fullditamapandtopic.add(topic);
+			}
+			for(String target2source:copytotarget2sourcemaplist){
+				if(target2source.indexOf(Constants.EQUAL)!=-1)
+					copytotarget2source.put(target2source.substring(0, target2source.indexOf(Constants.EQUAL)), target2source.substring(target2source.indexOf(Constants.EQUAL)-1));
+			}
+			for(String source: copytotarget2source.values()){
+				if(copyto.contains(source)){
+					copyto.remove(source);
+				}
+				if(fullditamapandtopic.contains(source)){
+					fullditamapandtopic.remove(source);
+				}
+			}
+			StringBuffer temp = new StringBuffer();
+			Iterator<String> it = copyto.iterator();
+			filename = Constants.FULL_DITA_TOPIC_LIST.substring(Constants.INT_0, Constants.FULL_DITA_TOPIC_LIST
+					.lastIndexOf("list"))
+					+ ".list";
+			bufferedWriter = new BufferedWriter(
+					new OutputStreamWriter(new FileOutputStream(new File(FileUtils.resolveFile(filePath, filename)
+							))));
+			while(it.hasNext()){
+				key = it.next();
+				temp.append(key);
+				bufferedWriter.append(key);
+				if(it.hasNext()){
+					temp.append(Constants.COMMA);
+					bufferedWriter.append("\n");
+				}
+				
+			}
+			property.setProperty(Constants.FULL_DITA_TOPIC_LIST, temp.toString());
+			bufferedWriter.flush();
+			
+			temp = new StringBuffer();
+			it=fullditamapandtopic.iterator();
+			filename = Constants.FULL_DITAMAP_TOPIC_LIST.substring(Constants.INT_0, Constants.FULL_DITAMAP_TOPIC_LIST
+					.lastIndexOf("list"))
+					+ ".list";
+			bufferedWriter = new BufferedWriter(
+					new OutputStreamWriter(new FileOutputStream(new File(FileUtils.resolveFile(filePath, filename)
+							))));
+			while(it.hasNext()){
+				key = it.next();
+				temp.append(key);
+				bufferedWriter.append(key);
+				if(it.hasNext())
+					temp.append(Constants.COMMA);
+					bufferedWriter.append("\n");
+			}
+			property.setProperty(Constants.FULL_DITAMAP_TOPIC_LIST, temp.toString());
+			bufferedWriter.flush();
+			
+			temp = new StringBuffer();
+			it = copytoSource.iterator();
+			filename = Constants.COPYTO_SOURCE_LIST.substring(Constants.INT_0, Constants.COPYTO_SOURCE_LIST
+					.lastIndexOf("list"))
+					+ ".list";
+			bufferedWriter = new BufferedWriter(
+					new OutputStreamWriter(new FileOutputStream(new File(FileUtils.resolveFile(filePath, filename)
+							))));
+			while(it.hasNext()){
+				key = it.next();
+				temp.append(key);
+				if(it.hasNext())
+					temp.append(Constants.COMMA);
+					bufferedWriter.append("\n");
+			}
+			property.setProperty(Constants.COPYTO_SOURCE_LIST, temp.toString());
+			bufferedWriter.flush();
+			
+			temp = new StringBuffer();
+			it = copytotarget2source.keySet().iterator();
+			filename = Constants.COPYTO_TARGET_TO_SOURCE_MAP_LIST.substring(Constants.INT_0, Constants.COPYTO_TARGET_TO_SOURCE_MAP_LIST
+					.lastIndexOf("list"))
+					+ ".list";
+			bufferedWriter = new BufferedWriter(
+					new OutputStreamWriter(new FileOutputStream(new File(FileUtils.resolveFile(filePath, filename)
+							))));
+			while(it.hasNext()){
+				key = it.next();
+				temp.append(key).append(Constants.EQUAL).append(copytotarget2source.get(key));
+				bufferedWriter.append(key).append(Constants.EQUAL).append(copytotarget2source.get(key));
+				if(it.hasNext())
+					temp.append(Constants.COMMA);
+					bufferedWriter.append("\n");
+			}
+			property.setProperty(Constants.COPYTO_TARGET_TO_SOURCE_MAP_LIST, temp.toString());
+			bufferedWriter.flush();
+			bufferedWriter.close();
+			
+    		property.store(output, null);
+    		property.storeToXML(xmlDitaList, null);
+    		
+		}catch (Exception e){
+			logger.logWarn(e.toString());
+		}
+	}
+	
 	private void separateChunk(Element element) {
 		// TODO Auto-generated method stub
 		// TODO implement separat = true logic
@@ -408,7 +552,7 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 		
 		
 		
-		if (!copytoValue.equals(Constants.STRING_EMPTY)){
+		if (!copytoValue.equals(Constants.STRING_EMPTY) && new File(FileUtils.resolveFile(filePath,copytoValue)).exists()){
 			if (hrefValue.indexOf(Constants.SHARP)!=-1){
 				parseFilePath = copytoValue + hrefValue.substring(hrefValue.indexOf(Constants.SHARP));
 			}else{
@@ -416,6 +560,19 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 			}
 		}else{
 			parseFilePath = hrefValue;
+		}
+		
+		// if @copy-to is processed in chunk module, the list file needs to be updated. 
+		// Because @copy-to are not included in fulltopiclist, and the source of coyy-to should be excluded in fulltopiclist.
+		if(!copytoValue.equals(Constants.STRING_EMPTY) && !new File(FileUtils.resolveFile(filePath, copytoValue)).exists()){
+			copyto.add(copytoValue);
+			if(hrefValue.indexOf(Constants.SHARP) != -1){
+				copytoSource.add(hrefValue.substring(0, hrefValue.indexOf(Constants.SHARP)));
+				copytotarget2source.put(copytoValue, hrefValue.substring(0, hrefValue.indexOf(Constants.SHARP)));
+			}else{
+				copytoSource.add(hrefValue);
+				copytotarget2source.put(copytoValue,hrefValue);
+			}
 		}
 		try {
 			if (parseFilePath != null && !parseFilePath.equals(Constants.STRING_EMPTY)){
@@ -483,7 +640,7 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 		include = false;
 		
 		try {			
-			if (!copytoValue.equals(Constants.STRING_EMPTY)){
+			if (!copytoValue.equals(Constants.STRING_EMPTY) && new File(FileUtils.resolveFile(filePath,copytoValue)).exists()){
 				if (hrefValue.indexOf(Constants.SHARP)!=-1){
 					parseFilePath = copytoValue + hrefValue.substring(hrefValue.indexOf(Constants.SHARP));
 				}else{
@@ -491,6 +648,19 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 				}
 			}else{
 				parseFilePath = hrefValue;
+			}
+			
+			// if @copy-to is processed in chunk module, the list file needs to be updated. 
+			// Because @copy-to are not included in fulltopiclist, and the source of coyy-to should be excluded in fulltopiclist.
+			if(!copytoValue.equals(Constants.STRING_EMPTY) && !new File(FileUtils.resolveFile(filePath, copytoValue)).exists()){
+				copyto.add(copytoValue);
+				if(hrefValue.indexOf(Constants.SHARP) != -1){
+					copytoSource.add(hrefValue.substring(0, hrefValue.indexOf(Constants.SHARP)));
+					copytotarget2source.put(copytoValue, hrefValue.substring(0, hrefValue.indexOf(Constants.SHARP)));
+				}else{
+					copytoSource.add(hrefValue);
+					copytotarget2source.put(copytoValue,hrefValue);
+				}
 			}
 		
 			if (parseFilePath != null && !parseFilePath.equals(Constants.STRING_EMPTY)){
