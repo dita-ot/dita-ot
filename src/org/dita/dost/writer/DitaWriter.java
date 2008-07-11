@@ -372,8 +372,11 @@ public class DitaWriter extends AbstractXMLWriter {
 		    
 		    if(Constants.ATTRIBUTE_NAME_HREF.equals(attQName)
 		    		|| Constants.ATTRIBUTE_NAME_COPY_TO.equals(attQName)){
-		        
-		        attValue = replaceHREF(attQName, atts);
+		        if(atts.getValue(Constants.ATTRIBUTE_NAME_SCOPE)!=null && (atts.getValue(Constants.ATTRIBUTE_NAME_SCOPE).equalsIgnoreCase("external")||atts.getValue(Constants.ATTRIBUTE_NAME_SCOPE).equalsIgnoreCase("peer"))){
+		        	attValue = atts.getValue(i);		        	
+		        }else{
+		        	attValue = replaceHREF(attQName, atts);
+		        }
 		        
 		    } else if (Constants.ATTRIBUTE_NAME_CONREF.equals(attQName)){
 		                                    
