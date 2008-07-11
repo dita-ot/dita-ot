@@ -2232,7 +2232,8 @@
     <xsl:apply-templates select="@href|@height|@width|@longdescref"/>
     <xsl:choose>
       <xsl:when test="*[contains(@class,' topic/alt ')]">
-        <xsl:attribute name="alt"><xsl:apply-templates select="*[contains(@class,' topic/alt ')]" mode="text-only"/></xsl:attribute>
+        <xsl:variable name="alt-content"><xsl:apply-templates select="*[contains(@class,' topic/alt ')]" mode="text-only"/></xsl:variable>
+        <xsl:attribute name="alt"><xsl:value-of select="normalize-space($alt-content)"/></xsl:attribute>
       </xsl:when>
       <xsl:when test="@alt">
         <xsl:attribute name="alt"><xsl:value-of select="@alt"/></xsl:attribute>
