@@ -396,7 +396,7 @@
     unless="preprocess.copy-image.skip"
     description="Copy image files">
     <copy todir="${output.dir}">
-      <fileset dir="${user.input.dir}" includes="${dita.temp.dir}${file.separator}${imagefile}" />
+      <fileset dir="${user.input.dir}" includesfile="${dita.temp.dir}${file.separator}${imagefile}" />
     </copy>
   </target>
   
@@ -439,7 +439,7 @@
       <fileset dir="${dita.resource.dir}"
         includes="delta.gif,deltaend.gif" />
     </copy>
-    <dita-ot-copy todir="${output.dir}" includes="${dita.temp.dir}${file.separator}${flagimagefile}" relativepaths="${relflagimagelist}" />
+    <dita-ot-copy todir="${output.dir}" includesfile="${dita.temp.dir}${file.separator}${flagimagefile}" relativepaths="${relflagimagelist}" />
   </target>
   
   <target name="copy-flag-check">
@@ -458,7 +458,7 @@
     unless="preprocess.copy-subsidiary.skip"
     description="Copy subsidiary files">
     <copy todir="${dita.temp.dir}">
-      <fileset dir="${user.input.dir}" includes="${dita.temp.dir}${file.separator}${subtargetsfile}"/>
+      <fileset dir="${user.input.dir}" includesfile="${dita.temp.dir}${file.separator}${subtargetsfile}"/>
     </copy>
   </target>
 
