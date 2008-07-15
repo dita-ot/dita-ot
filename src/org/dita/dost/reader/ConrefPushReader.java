@@ -118,9 +118,11 @@ public class ConrefPushReader extends AbstractXMLReader {
 				
 			}else if ("mark".equalsIgnoreCase(conactValue)){
 				target = atts.getValue("conref");
-				if (pushcontent != null && pushcontent.length() > 0){
+				if (pushcontent != null && pushcontent.length() > 0 &&
+						"pushbefore".equals(pushType)){
 					//pushcontent != null means it is pushbefore action
-					//we need to add target and content to pushtable					
+					//we need to add target and content to pushtable		
+					replaceContent();
 					addtoPushTable(target, pushcontent.toString(), pushType);
 					pushcontent = new StringBuffer(Constants.INT_256);
 					target = null;
@@ -133,6 +135,47 @@ public class ConrefPushReader extends AbstractXMLReader {
 			
 		}
 	}	
+
+	private void replaceContent() {
+		// replace all conref and href value in pushcontent according to target
+		// this is useful to "pushbefore" action because it doesn't know the target
+		// when processing these content
+		int index = 0;
+		int nextindex = 0;
+		int hrefindex = pushcontent.indexOf("href=\"", index);
+		int conrefindex = pushcontent.indexOf("conref=\"", index);
+		StringBuffer resultBuffer = new StringBuffer(Constants.INT_256);
+		if(hrefindex < 0 && conrefindex < 0){
+			return;
+		}
+		
+		while (hrefindex >= 0 ||
+				conrefindex >= 0){
+			
+			if (hrefindex > 0 && conrefindex > 0){
+				nextindex = hrefindex < conrefindex ? hrefindex : conrefindex;
+			}else if(hrefindex > 0){
+				nextindex = hrefindex;
+			}else if(conrefindex > 0){
+				nextindex = conrefindex;
+			}
+			
+			int valueindex = pushcontent.indexOf(Constants.QUOTATION,nextindex)+1;
+			resultBuffer.append(pushcontent.substring(index, valueindex));
+			resultBuffer.append(replaceURL(pushcontent.substring(valueindex, pushcontent.indexOf(Constants.QUOTATION, valueindex))));
+			index = pushcontent.indexOf(Constants.QUOTATION, valueindex);
+			
+			if(hrefindex > 0){
+				hrefindex = pushcontent.indexOf("href=\"", index);
+			}
+			if(conrefindex > 0){
+				conrefindex = pushcontent.indexOf("conref=\"", index);
+			}
+		}
+		
+		resultBuffer.append(pushcontent.substring(index));
+		pushcontent = resultBuffer;
+	}
 
 	private void putElement(StringBuffer buf, String elemName,
 			Attributes atts, boolean removeConref) {
@@ -197,15 +240,15 @@ public class ConrefPushReader extends AbstractXMLReader {
 		}
 		
 		String targetLoc = target.substring(sharpIndex+1);
-		String addon = null;
-		if ("pushbefore".equalsIgnoreCase(type)){
-			//add filePath to addon because "pushbefore" cannot know the target
-			//within the current element. href value replace should be put off
-			//to ConrefPushParser
-			addon = "|"+type+"|"+filePath;
-		}else{
-			addon = "|"+type;
-		}
+		String addon = Constants.STICK+type;
+//		if ("pushbefore".equalsIgnoreCase(type)){
+//			//add filePath to addon because "pushbefore" cannot know the target
+//			//within the current element. href value replace should be put off
+//			//to ConrefPushParser
+//			addon = "|"+type+"|"+filePath;
+//		}else{
+//			addon = "|"+type;
+//		}
 		if (table.containsKey(targetLoc+addon)){
 			//if there is something else push to the same target
 			//append content if type is 'pushbefore' or 'pushafter'
