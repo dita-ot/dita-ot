@@ -4870,4 +4870,16 @@
     </xsl:call-template>
   </xsl:template>
 
+  <!-- Add for text element.  -->
+  <xsl:template match="*[contains(@class,' topic/text ')]">
+    <xsl:apply-templates/>
+  </xsl:template>
+  
+  <!-- Add for bodydiv  and sectiondiv-->
+  <xsl:template match="*[contains(@class,' topic/bodydiv ') or contains(@class, ' topic/sectiondiv ')]">
+    <div>
+    <xsl:apply-templates/>
+    </div>
+  </xsl:template>
+
 </xsl:stylesheet>
