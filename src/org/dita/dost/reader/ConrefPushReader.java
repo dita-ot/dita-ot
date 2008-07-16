@@ -113,7 +113,7 @@ public class ConrefPushReader extends AbstractXMLReader {
 					putElement(pushcontent, name, atts, true);
 					pushType = "pushafter";
 				}
-			}else if ("replace".equalsIgnoreCase(conactValue)){
+			}else if ("pushreplace".equalsIgnoreCase(conactValue)){
 				start = true;
 				level = 0;
 				level ++;
@@ -124,7 +124,7 @@ public class ConrefPushReader extends AbstractXMLReader {
 					prop.put("%2", atts.getValue("xtrc"));
 					javaLogger.logError(MessageUtils.getMessage("DOTJ040E", prop).toString());
 				}else{
-					pushType = "replace";
+					pushType = "pushreplace";
 					putElement(pushcontent, name, atts, true);
 				}
 				
@@ -258,7 +258,7 @@ public class ConrefPushReader extends AbstractXMLReader {
 			//if there is something else push to the same target
 			//append content if type is 'pushbefore' or 'pushafter'
 			//report error if type is 'replace'
-			if ("replace".equalsIgnoreCase(type)){
+			if ("pushreplace".equalsIgnoreCase(type)){
 				Properties prop = new Properties();
 				prop.put("%1", target);
 				javaLogger.logError(MessageUtils.getMessage("DOTJ042E", prop).toString());
@@ -291,7 +291,7 @@ public class ConrefPushReader extends AbstractXMLReader {
 			//turn off start if we reach the end tag of staring element
 			start = false;
 			if ("pushafter".equals(pushType) ||
-					"replace".equals(pushType)){
+					"pushreplace".equals(pushType)){
 				//if it is pushafter or replace, we need to record content in pushtable
 				//if target == null we have already reported error in startElement;
 				if(target != null){

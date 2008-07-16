@@ -43,13 +43,13 @@ public class ConrefPushParser extends AbstractXMLWriter {
 	private HashSet<String> topicSpecSet = null;
 	
 	//boolean isReplaced show whether current content is replace
-	//because of "replace" action in conref push. If the current
+	//because of "pushreplace" action in conref push. If the current
 	//content is replaced, the output will neglect it until isReplaced
 	//is turned off
 	private boolean isReplaced = false;
 	
 	//int level is used the count the level number to the element which
-	//is the starting point that is neglected because of "replace" action
+	//is the starting point that is neglected because of "pushreplace" action
 	//The initial value of level is 0. It will add one if element level
 	//increases in startElement(....) and minus one if level decreases in 
 	//endElement(...). When it turns out to be 0 again, boolean isReplaced 
@@ -73,7 +73,7 @@ public class ConrefPushParser extends AbstractXMLWriter {
 	//In this case, we need to push the parent's value of levelForPushAfter to Stack
 	//before initializing levelForPushAfter for child element. When we finished
 	//pushafter action for child element, we need to restore the original value for
-	//parent. As to "replace" action, we don't need this because if we replaced the
+	//parent. As to "pushreplace" action, we don't need this because if we replaced the
 	//parent, the replacement of child is meaningless.
 	private Stack<Integer> levelForPushAfterStack = null;
 	
@@ -251,8 +251,8 @@ public class ConrefPushParser extends AbstractXMLWriter {
 					if (movetable.containsKey(idPath+Constants.STICK+"pushbefore")){
 						output.write(movetable.get(idPath+Constants.STICK+"pushbefore"));
 					}
-					if (movetable.containsKey(idPath+Constants.STICK+"replace")){
-						output.write(movetable.get(idPath+Constants.STICK+"replace"));
+					if (movetable.containsKey(idPath+Constants.STICK+"pushreplace")){
+						output.write(movetable.get(idPath+Constants.STICK+"pushreplace"));
 						isReplaced = true;
 						level = 0;
 						level ++;
