@@ -127,8 +127,10 @@
   <xsl:value-of select="."/><xsl:text>/</xsl:text>
 </xsl:template>
 
+<xsl:template match="*[@conaction]" priority="10"/>
+
 <!--if something has a conref attribute, jump to the target if valid and continue applying templates-->
-<xsl:template match="*[@conref][@conref!='']" priority="10">
+<xsl:template match="*[@conref][@conref!=''][not(@conaction)]" priority="10">
   <!-- If we have already followed a relative path, pick it up -->
   <xsl:param name="current-relative-path"/>
 	<xsl:param name="conref-source-topicid"/>
