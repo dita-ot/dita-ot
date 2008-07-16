@@ -417,12 +417,16 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 	}
 
 	private void updateList(){
+		//in the special case of the concurrence of copy-to and chunk='to-content', @copy-to is handled in chunk module 
+		//instead of genlist module and debugandfilter module, so the list should be updated.
+		//and this method is used to update the list file. 
 		Properties property = new Properties();
 		FileOutputStream output = null;
 		FileOutputStream xmlDitaList = null;
 		String key = null;
 		String filename = null;
 		BufferedWriter bufferedWriter = null;
+		Set<String> fullditatopic = new HashSet<String>();
 		try{
 			property.loadFromXML(new FileInputStream(new File(FileUtils.resolveFile(filePath,Constants.FILE_NAME_DITA_LIST_XML))));
 			output = new FileOutputStream(new File(FileUtils.resolveFile(filePath, Constants.FILE_NAME_DITA_LIST)));
@@ -431,33 +435,44 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 			String copytosourcelist[] = property.getProperty(Constants.COPYTO_SOURCE_LIST).split(Constants.COMMA);
 			String fullditamapandtopiclist[] = property.getProperty(Constants.FULL_DITAMAP_TOPIC_LIST).split(Constants.COMMA);
 			String copytotarget2sourcemaplist[] = property.getProperty(Constants.COPYTO_TARGET_TO_SOURCE_MAP_LIST).split(Constants.COMMA);
+			//in the following, all the 4 arrays are updated according to the set copyto and 
+			//map copytotarget2source.
+			
+			//copy all the file name in fullditamapandtopiclist to a new set
 			for(String topicormap:fullditamapandtopiclist){
 				fullditamapandtopic.add(topicormap);
 			}
-			for(String topic: copyto){
-				fullditamapandtopic.add(topic);
+			//copy the file name specified in @copy-to to a new set
+			fullditatopic.addAll(copyto);
+			//copy the file name in fullditatopiclist to a new set
+			for(String topic: fullditatopiclist){
+				fullditatopic.add(topic);
 			}
+			//copy the file name in fullditatopic to the new set, because fullditatopic contains file name in @copy-to which are not added in fullditamapandtopic
+			fullditamapandtopic.addAll(fullditatopic);
+			//copy all the file name in copytosourcelist to a new set
 			for(String source:copytosourcelist){
 				copytoSource.add(source);
 			}
-			for(String topic: fullditatopiclist){
-				copyto.add(topic);
-				fullditamapandtopic.add(topic);
-			}
+			//copy all the copytotarget2sourcemaplist to a new hashmap
 			for(String target2source:copytotarget2sourcemaplist){
 				if(target2source.indexOf(Constants.EQUAL)!=-1)
 					copytotarget2source.put(target2source.substring(0, target2source.indexOf(Constants.EQUAL)), target2source.substring(target2source.indexOf(Constants.EQUAL)-1));
 			}
+			//in the case of chunk='to-content' and copy-to='*.dita' 
+			//the @href value are added in fullditatopic and fullditamapandtopic, 
+			//while they are not supposed to be contained, so should be be removed 
 			for(String source: copytotarget2source.values()){
-				if(copyto.contains(source)){
-					copyto.remove(source);
+				if(fullditatopic.contains(source)){
+					fullditatopic.remove(source);
 				}
 				if(fullditamapandtopic.contains(source)){
 					fullditamapandtopic.remove(source);
 				}
 			}
+			//write the set and map to list file.
 			StringBuffer temp = new StringBuffer();
-			Iterator<String> it = copyto.iterator();
+			Iterator<String> it = fullditatopic.iterator();
 			filename = Constants.FULL_DITA_TOPIC_LIST.substring(Constants.INT_0, Constants.FULL_DITA_TOPIC_LIST
 					.lastIndexOf("list"))
 					+ ".list";
@@ -549,10 +564,10 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 		String copytoValue = element.getAttribute(Constants.ATTRIBUTE_NAME_COPY_TO);
 		String parseFilePath = null;
 		Writer tempOutput = null;
+		String chunkValue = element.getAttribute(Constants.ATTRIBUTE_NAME_CHUNK);
 		
 		
-		
-		if (!copytoValue.equals(Constants.STRING_EMPTY) && new File(FileUtils.resolveFile(filePath,copytoValue)).exists()){
+		if (!copytoValue.equals(Constants.STRING_EMPTY) && !chunkValue.contains("to-content")){
 			if (hrefValue.indexOf(Constants.SHARP)!=-1){
 				parseFilePath = copytoValue + hrefValue.substring(hrefValue.indexOf(Constants.SHARP));
 			}else{
@@ -564,7 +579,7 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 		
 		// if @copy-to is processed in chunk module, the list file needs to be updated. 
 		// Because @copy-to are not included in fulltopiclist, and the source of coyy-to should be excluded in fulltopiclist.
-		if(!copytoValue.equals(Constants.STRING_EMPTY) && !new File(FileUtils.resolveFile(filePath, copytoValue)).exists()){
+		if(!copytoValue.equals(Constants.STRING_EMPTY) && chunkValue.contains("to-content")){
 			copyto.add(copytoValue);
 			if(hrefValue.indexOf(Constants.SHARP) != -1){
 				copytoSource.add(hrefValue.substring(0, hrefValue.indexOf(Constants.SHARP)));
@@ -640,7 +655,7 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 		include = false;
 		
 		try {			
-			if (!copytoValue.equals(Constants.STRING_EMPTY) && new File(FileUtils.resolveFile(filePath,copytoValue)).exists()){
+			if (!copytoValue.equals(Constants.STRING_EMPTY) && !chunkValue.contains("to-content")){
 				if (hrefValue.indexOf(Constants.SHARP)!=-1){
 					parseFilePath = copytoValue + hrefValue.substring(hrefValue.indexOf(Constants.SHARP));
 				}else{
@@ -652,7 +667,7 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 			
 			// if @copy-to is processed in chunk module, the list file needs to be updated. 
 			// Because @copy-to are not included in fulltopiclist, and the source of coyy-to should be excluded in fulltopiclist.
-			if(!copytoValue.equals(Constants.STRING_EMPTY) && !new File(FileUtils.resolveFile(filePath, copytoValue)).exists()){
+			if(!copytoValue.equals(Constants.STRING_EMPTY) && chunkValue.contains("to-content")){
 				copyto.add(copytoValue);
 				if(hrefValue.indexOf(Constants.SHARP) != -1){
 					copytoSource.add(hrefValue.substring(0, hrefValue.indexOf(Constants.SHARP)));
