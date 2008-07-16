@@ -177,6 +177,7 @@ public class ConrefPushParser extends AbstractXMLWriter {
 			//write the end tag
 			try{
 				output.write(Constants.LESS_THAN);
+				output.write(Constants.SLASH);
 				output.write(name);
 				output.write(Constants.GREATER_THAN);
 			}catch (Exception e) {

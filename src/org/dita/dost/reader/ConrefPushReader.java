@@ -285,7 +285,7 @@ public class ConrefPushReader extends AbstractXMLReader {
 			throws SAXException {
 		if (start){
 			level --;
-			pushcontent.append(Constants.LESS_THAN).append(name).append(Constants.GREATER_THAN);
+			pushcontent.append(Constants.LESS_THAN).append(Constants.SLASH).append(name).append(Constants.GREATER_THAN);
 		}
 		if (level == 0){
 			//turn off start if we reach the end tag of staring element
