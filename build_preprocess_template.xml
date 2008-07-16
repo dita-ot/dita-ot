@@ -12,7 +12,7 @@
   </condition>
 
   <target name="preprocess"
-    dita:depends="{depend.preprocess.pre},start-preprocess,clean-temp,gen-list,debug-filter,copy-files,conref,move-meta-entries,mapref,mappull,chunk,maplink,move-links,topicpull,{depend.preprocess.post}"
+    dita:depends="{depend.preprocess.pre},start-preprocess,clean-temp,gen-list,debug-filter,copy-files,conrefpush,conref,move-meta-entries,mapref,mappull,chunk,maplink,move-links,topicpull,{depend.preprocess.post}"
     xmlns:dita="http://dita-ot.sourceforge.net"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     description="Preprocessing ended" />
@@ -110,6 +110,9 @@
     <condition property="noSublist">
       <equals arg1="${subtargetslist}" arg2="" />
     </condition>
+    <condition property="noConrefPush">
+      <equals arg1="${conrefpushlist}" arg2=""/>
+    </condition>
   </target>
 
   <target name="debug"
@@ -148,6 +151,24 @@
     </condition>
   </target>
   
+  <!-- conref push
+      Push information to the specified target -->
+  <target name="conrefpush"
+    dita:depends="debug-filter,{depend.preprocess.conrefpush.pre},conrefpush-check"
+    xmlns:dita="http://dita-ot.sourceforge.net"
+    dita:extension="depends org.dita.dost.platform.InsertDependsAction"
+    unless="preprocess.conrefpush.skip"
+    description="Resolve conref push">
+    <pipeline message="Resolve conref push." module="ConrefPush"
+      basedir="${basedir}" tempdir="${dita.temp.dir}"/>     
+  </target>
+  
+  <target name="conrefpush-check">
+    <condition property="preprocess.conrefpush.skip">
+      <isset property="noConrefPush"/>
+    </condition>
+  </target>
+  
   <!-- move-meta-entries
       Push information from <topicmeta> in the map into the corresponding topics. -->
   <target name="move-meta-entries" 
@@ -170,7 +191,7 @@
   <!-- conref
       Pull elements referenced by conref into their correct place. -->
   <target name="conref" 
-    dita:depends="debug-filter,{depend.preprocess.conref.pre},conref-check"
+    dita:depends="debug-filter,conrefpush,{depend.preprocess.conref.pre},conref-check"
     xmlns:dita="http://dita-ot.sourceforge.net"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     unless="preprocess.conref.skip"
