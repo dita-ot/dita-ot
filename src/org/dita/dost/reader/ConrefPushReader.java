@@ -2,12 +2,15 @@ package org.dita.dost.reader;
 
 import java.io.File;
 import java.util.Hashtable;
+import java.util.Properties;
 
 import org.dita.dost.log.DITAOTJavaLogger;
+import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.Content;
 import org.dita.dost.module.ContentImpl;
 import org.dita.dost.util.Constants;
 import org.dita.dost.util.FileUtils;
+import org.dita.dost.util.StringUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
@@ -48,14 +51,12 @@ public class ConrefPushReader extends AbstractXMLReader {
 	private String pushType = null;
 	
 	public Content getContent() {
-		// TODO Auto-generated method stub
 		Content content = new ContentImpl();
 		content.setCollection(pushtable.entrySet());
 		return content;
 	}
 
 	public void read(String filename) {
-		// TODO Auto-generated method stub
 		filePath = new File(filename).getParentFile().getAbsolutePath();
 		start = false;
 		pushcontent = new StringBuffer(Constants.INT_256);
@@ -83,7 +84,6 @@ public class ConrefPushReader extends AbstractXMLReader {
 	@Override
 	public void startElement(String uri, String localName, String name,
 			Attributes atts) throws SAXException {
-		// TODO Auto-generated method stub
 		if(start){
 			//if start is true, we need to record content in pushcontent
 			//also we need to add level to make sure start is turn off
@@ -96,21 +96,33 @@ public class ConrefPushReader extends AbstractXMLReader {
 		if (!start && conactValue != null){
 			if ("pushbefore".equalsIgnoreCase(conactValue)){
 				start = true;
+				level = 0;
+				level ++;
 				putElement(pushcontent, name, atts, true);
 				pushType = "pushbefore";
 			}else if ("pushafter".equalsIgnoreCase(conactValue)){
 				start = true;
+				level = 0;
+				level ++;
 				if (target == null){
-					//TODO report error
+					Properties prop = new Properties();
+					prop.put("%1", atts.getValue("xtrf"));
+					prop.put("%2", atts.getValue("xtrc"));
+					javaLogger.logError(MessageUtils.getMessage("DOTJ039E", prop).toString());
 				}else{
 					putElement(pushcontent, name, atts, true);
 					pushType = "pushafter";
 				}
 			}else if ("replace".equalsIgnoreCase(conactValue)){
 				start = true;
+				level = 0;
+				level ++;
 				target = atts.getValue("conref");
 				if (target == null){
-					//TODO report error
+					Properties prop = new Properties();
+					prop.put("%1", atts.getValue("xtrf"));
+					prop.put("%2", atts.getValue("xtrc"));
+					javaLogger.logError(MessageUtils.getMessage("DOTJ040E", prop).toString());
 				}else{
 					pushType = "replace";
 					putElement(pushcontent, name, atts, true);
@@ -183,7 +195,6 @@ public class ConrefPushReader extends AbstractXMLReader {
 		//conref information like @conref @conaction in current element
 		//when copying it to pushcontent. True means remove and false means
 		//not remove.
-		// TODO Auto-generated method stub
 		int index = 0;
 		buf.append(Constants.LESS_THAN).append(elemName);
 		for (index=0; index < atts.getLength(); index++){
@@ -222,11 +233,12 @@ public class ConrefPushReader extends AbstractXMLReader {
 	}
 
 	private void addtoPushTable(String target, String pushcontent, String type) {
-		// TODO Auto-generated method stub
 		int sharpIndex = target.indexOf(Constants.SHARP);
 		if (sharpIndex == -1){
 			//if there is no '#' in target string, report error
-			//TODO report error of invalid target
+			Properties prop = new Properties();
+			prop.put("%1", target);
+			javaLogger.logError(MessageUtils.getMessage("DOTJ041E", prop).toString());
 		}
 		String key = FileUtils.resolveFile(filePath, target);
 		Hashtable<String, String> table = null;
@@ -239,22 +251,17 @@ public class ConrefPushReader extends AbstractXMLReader {
 			pushtable.put(key, table);
 		}
 		
-		String targetLoc = target.substring(sharpIndex+1);
+		String targetLoc = target.substring(sharpIndex);
 		String addon = Constants.STICK+type;
-//		if ("pushbefore".equalsIgnoreCase(type)){
-//			//add filePath to addon because "pushbefore" cannot know the target
-//			//within the current element. href value replace should be put off
-//			//to ConrefPushParser
-//			addon = "|"+type+"|"+filePath;
-//		}else{
-//			addon = "|"+type;
-//		}
+
 		if (table.containsKey(targetLoc+addon)){
 			//if there is something else push to the same target
 			//append content if type is 'pushbefore' or 'pushafter'
 			//report error if type is 'replace'
 			if ("replace".equalsIgnoreCase(type)){
-				//TODO report error
+				Properties prop = new Properties();
+				prop.put("%1", target);
+				javaLogger.logError(MessageUtils.getMessage("DOTJ042E", prop).toString());
 			}else{
 				table.put(targetLoc+addon, table.get(targetLoc+addon)+pushcontent);
 			}
@@ -268,9 +275,8 @@ public class ConrefPushReader extends AbstractXMLReader {
 	@Override
 	public void characters(char[] ch, int start, int length)
 			throws SAXException {
-		// TODO Auto-generated method stub
 		if (this.start){
-			pushcontent.append(ch, start, length);
+			pushcontent.append(StringUtils.escapeXML(ch, start, length));
 		}
 	}
 
@@ -287,13 +293,12 @@ public class ConrefPushReader extends AbstractXMLReader {
 			if ("pushafter".equals(pushType) ||
 					"replace".equals(pushType)){
 				//if it is pushafter or replace, we need to record content in pushtable
+				//if target == null we have already reported error in startElement;
 				if(target != null){
 					addtoPushTable(target, pushcontent.toString(), pushType);
 					pushcontent = new StringBuffer(Constants.INT_256);
 					target = null;
 					pushType = null;
-				}else{
-					//TODO report error
 				}
 			}
 		}		

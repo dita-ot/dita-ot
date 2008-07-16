@@ -22,7 +22,6 @@ public class ConrefPushModule implements AbstractPipelineModule {
 
 	public AbstractPipelineOutput execute(AbstractPipelineInput input)
 			throws DITAOTException {
-		// TODO Auto-generated method stub
 		String tempDir = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_TEMPDIR);
 		Properties properties = null;
 		DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
@@ -37,7 +36,7 @@ public class ConrefPushModule implements AbstractPipelineModule {
 		
 		try{
 		if(ditaxmlfile.exists()){
-			properties.load(new FileInputStream(ditaxmlfile));
+			properties.loadFromXML(new FileInputStream(ditaxmlfile));
 		}else{
 			properties.load(new FileInputStream(ditafile));
 		}
@@ -51,11 +50,11 @@ public class ConrefPushModule implements AbstractPipelineModule {
 			String fileName = (String)parseList.nextElement();
 			reader.read(new File(tempDir,fileName).getAbsolutePath());
 		}
-		HashSet<Map.Entry<String, Hashtable>> pushSet = (HashSet<Map.Entry<String, Hashtable>>) reader.getContent().getCollection();
-		Iterator<Map.Entry<String, Hashtable>> iter = pushSet.iterator();
+		HashSet<Map.Entry<String, Hashtable<String, String>>> pushSet = (HashSet<Map.Entry<String, Hashtable<String,String>>>) reader.getContent().getCollection();
+		Iterator<Map.Entry<String, Hashtable<String,String>>> iter = pushSet.iterator();
 		
 		while(iter.hasNext()){
-			Map.Entry<String, Hashtable> entry = iter.next();
+			Map.Entry<String, Hashtable<String,String>> entry = iter.next();
 			ConrefPushParser parser = new ConrefPushParser();
 			Content content = new ContentImpl();
 			content.setValue(entry.getValue());
