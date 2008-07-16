@@ -202,6 +202,9 @@ public class ConrefPushParser extends AbstractXMLWriter {
 				}
 			}
 		}
+		if(!idStack.isEmpty() && topicSpecSet.contains(name)){
+			topicId = idStack.pop();
+		}
 	}
 
 	@Override
