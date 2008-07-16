@@ -114,6 +114,9 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 	
 	/** Set of outer dita files */
 	private Set outDitaFilesSet=null;
+	
+	/** Set of sources of conacion */
+	private Set conrefpushSet;
 
 	/** Basedir for processing */
 	private String baseInputDir = null;
@@ -175,6 +178,7 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 		ignoredCopytoSourceSet = new HashSet(Constants.INT_128);
 		outDitaFilesSet=new HashSet(Constants.INT_128);
 		relFlagImagesSet=new LinkedHashSet(Constants.INT_128);
+		conrefpushSet = new HashSet(Constants.INT_128);
 	}
 
 	/**
@@ -431,6 +435,10 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 			hrefTargetSet.add(currentFile);
 		}
 
+		if(reader.hasConaction()){
+			conrefpushSet.add(currentFile);
+		}
+		                        
 		if (reader.hasConRef()) {
 			conrefSet.add(currentFile);
 		}
@@ -706,6 +714,7 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 		addSetToProperties(prop, Constants.CONREF_TARGET_LIST, conrefTargetSet);
 		addSetToProperties(prop, Constants.COPYTO_SOURCE_LIST, copytoSourceSet);
 		addSetToProperties(prop, Constants.SUBSIDIARY_TARGET_LIST, subsidiarySet);
+		addSetToProperties(prop, Constants.CONREF_PUSH_LIST, conrefpushSet);
 		addFlagImagesSetToProperties(prop,Constants.REL_FLAGIMAGE_LIST,relFlagImagesSet);
 		
 		/*

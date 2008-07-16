@@ -91,6 +91,9 @@ public class GenListModuleReader extends AbstractXMLReader {
 	/** Map of copy-to target to souce	*/
 	private Map copytoMap = null;
 	
+	/** Flag for conrefpush   */
+	private boolean hasconaction = false;  
+	
 	/** Flag used to mark if parsing entered into excluded element */
 	private boolean insideExcludedElement = false;
 	
@@ -200,6 +203,7 @@ public class GenListModuleReader extends AbstractXMLReader {
 		excludedLevel = 0;
 		foreignLevel = 0;
 		isValidInput = false;
+		hasconaction = false;
 		nonConrefCopytoTargets.clear();
 		hrefTargets.clear();
 		conrefTargets.clear();
@@ -324,6 +328,12 @@ public class GenListModuleReader extends AbstractXMLReader {
 	}
 	
 	/**
+	 * Check if the current file has conaction
+	 */
+	public boolean hasConaction(){
+		return hasconaction;
+	}
+	/**
 	 * Parse input xml file.
 	 * 
 	 * @param file
@@ -417,6 +427,7 @@ public class GenListModuleReader extends AbstractXMLReader {
 		parseAttribute(atts, Constants.ATTRIBUTE_NAME_HREF);
 		parseAttribute(atts, Constants.ATTRIBUTE_NAME_COPY_TO);
 		parseAttribute(atts, Constants.ATTRIBUTE_NAME_IMG);
+		parseAttribute(atts, Constants.ATTRIBUTE_NAME_CONACTION);
 	}
 
 	/** (non-Javadoc)
@@ -569,6 +580,16 @@ public class GenListModuleReader extends AbstractXMLReader {
 				ignoredCopytoSourceSet.add(href);
 			} else if (!(atts.getValue(Constants.ATTRIBUTE_NAME_CHUNK) != null && atts.getValue(Constants.ATTRIBUTE_NAME_CHUNK).contains("to-content"))){
 				copytoMap.put(filename, FileUtils.normalizeDirectory(currentDir, href));
+			}
+				
+		}
+		
+		/*
+		 * Collect the conaction source topic file
+		 */
+		if(Constants.ATTRIBUTE_NAME_CONACTION.equals(attrName)){
+			if(attrValue.equals("mark")||attrValue.equals("pushreplace")){
+				hasconaction = true;
 			}
 				
 		}
