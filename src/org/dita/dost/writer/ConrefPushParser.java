@@ -190,7 +190,9 @@ public class ConrefPushParser extends AbstractXMLWriter {
 			if(levelForPushAfter == 0){
 				//write the pushcontent after the end tag
 				try{
-					output.write(contentForPushAfter);
+					if(contentForPushAfter != null){
+						output.write(contentForPushAfter);
+					}
 				}catch (Exception e) {
 					javaLogger.logException(e);
 				}
@@ -200,6 +202,8 @@ public class ConrefPushParser extends AbstractXMLWriter {
 					contentForPushAfter = contentForPushAfterStack.pop();
 				}else{
 					hasPushafter = false;
+					//empty the contentForPushAfter since it is write to output
+					contentForPushAfter = null; 
 				}
 			}
 		}
@@ -258,7 +262,7 @@ public class ConrefPushParser extends AbstractXMLWriter {
 						level = 0;
 						level ++;
 					}
-					if (movetable.containsKey(idPath+Constants.STICK+"pushbeafter")){
+					if (movetable.containsKey(idPath+Constants.STICK+"pushafter")){
 						if (hasPushafter && levelForPushAfter > 0){
 							//there is a "pushafter" action for an ancestor element.
 							//we need to push the levelForPushAfter to stack before
