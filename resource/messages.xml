@@ -242,6 +242,26 @@
     <reason>The tag "%1" is specialized from non-predefined metadata.</reason>
     <response>Please make sure that tag "%1" is specialized from some predefinded metadata tag.</response>
   </message>
+  
+  <message id="DOTJ039E" type="ERROR">
+    <reason>There is no target specified for conref push action "pushafter".Xtrf="%1" Xtrc="%2"</reason>
+    <response>Please add &lt;elementname conref="pushtarget" conaction="mark"&gt; before current element.</response>
+  </message>
+  
+  <message id="DOTJ040E" type="ERROR">
+    <reason>There is no target specified for conref push action "replace".Xtrf="%1" Xtrc="%2"</reason>
+    <response>Please add conref="pushtarget" to current element.</response>
+  </message>
+  
+  <message id="DOTJ041E" type="ERROR">
+    <reason>Error target "%1" value specified in conref.</reason>
+    <response>Please update the target with correct target. Valid taget should contains '#'.</response>
+  </message>
+  
+  <message id="DOTJ042E" type="ERROR">
+    <reason>There is another conref push action "replace" specified for current target "%1".</reason>
+    <response>Please delete one of the duplicate "replace" action.</response>
+  </message>
   <!-- End of Java Messages -->
     
   <!-- Begin of XSL Messages -->  
