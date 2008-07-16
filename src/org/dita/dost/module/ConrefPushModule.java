@@ -2,11 +2,11 @@ package org.dita.dost.module;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 import java.util.StringTokenizer;
 
 import org.dita.dost.exception.DITAOTException;
@@ -23,7 +23,7 @@ public class ConrefPushModule implements AbstractPipelineModule {
 	public AbstractPipelineOutput execute(AbstractPipelineInput input)
 			throws DITAOTException {
 		String tempDir = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_TEMPDIR);
-		Properties properties = null;
+		Properties properties = new Properties();
 		DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
 		ConrefPushReader reader = new ConrefPushReader();
 		
@@ -50,7 +50,7 @@ public class ConrefPushModule implements AbstractPipelineModule {
 			String fileName = (String)parseList.nextElement();
 			reader.read(new File(tempDir,fileName).getAbsolutePath());
 		}
-		HashSet<Map.Entry<String, Hashtable<String, String>>> pushSet = (HashSet<Map.Entry<String, Hashtable<String,String>>>) reader.getContent().getCollection();
+		Set<Map.Entry<String, Hashtable<String, String>>> pushSet = (Set<Map.Entry<String, Hashtable<String,String>>>) reader.getContent().getCollection();
 		Iterator<Map.Entry<String, Hashtable<String,String>>> iter = pushSet.iterator();
 		
 		while(iter.hasNext()){
