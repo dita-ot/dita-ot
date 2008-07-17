@@ -525,7 +525,7 @@ public class GenListModuleReader extends AbstractXMLReader {
 		if (FileUtils.isValidTarget(filename.toLowerCase()) && 
 				(StringUtils.isEmptyString(atts.getValue(Constants.ATTRIBUTE_NAME_COPY_TO)) ||
 						!FileUtils.isTopicFile(atts.getValue(Constants.ATTRIBUTE_NAME_COPY_TO).toLowerCase()) ||
-						atts.getValue(Constants.ATTRIBUTE_NAME_CHUNK).contains("to-content") )
+						(atts.getValue(Constants.ATTRIBUTE_NAME_CHUNK)!=null && atts.getValue(Constants.ATTRIBUTE_NAME_CHUNK).contains("to-content")) )
 				&& !Constants.ATTRIBUTE_NAME_CONREF.equals(attrName)
 				&& !Constants.ATTRIBUTE_NAME_COPY_TO.equals(attrName) && canResolved() ) {
 			nonConrefCopytoTargets.add(filename);
