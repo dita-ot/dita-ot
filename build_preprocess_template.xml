@@ -460,7 +460,7 @@
       <fileset dir="${dita.resource.dir}"
         includes="delta.gif,deltaend.gif" />
     </copy>
-    <dita-ot-copy todir="${output.dir}" includesfile="${dita.temp.dir}${file.separator}${flagimagefile}" relativepaths="${relflagimagelist}" />
+    <dita-ot-copy todir="${output.dir}" includes="${flagimagelist}" relativepaths="${relflagimagelist}" />
   </target>
   
   <target name="copy-flag-check">
