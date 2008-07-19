@@ -126,6 +126,7 @@ See the accompanying license.txt file for applicable licenses.
 
             </fo:flow>
         </fo:page-sequence>
+        <xsl:call-template name="createNotices"/>
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' bookmap/bookmeta ')]">
@@ -180,5 +181,20 @@ See the accompanying license.txt file for applicable licenses.
 			<xsl:apply-templates/>
 		</fo:block>
 	</xsl:template>
+	
+	<xsl:template name="createNotices">
+	   <xsl:apply-templates select="/bookmap/*[contains(@class,' topic/topic ')]" mode="process-notices"/>
+	</xsl:template>
+	
+	<xsl:template match="*[contains(@class, ' topic/topic ')]" mode="process-notices">
+        <xsl:param name="include" select="'true'"/>
+        <xsl:variable name="topicType">
+            <xsl:call-template name="determineTopicType"/>
+        </xsl:variable>
 
+        <xsl:if test="$topicType = 'topicNotices'">
+            <xsl:call-template name="processTopicNotices"/>
+        </xsl:if>
+    </xsl:template>
+    
 </xsl:stylesheet>

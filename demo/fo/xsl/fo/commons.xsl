@@ -203,7 +203,7 @@ See the accompanying license.txt file for applicable licenses.
                 <xsl:call-template name="processTopicPreface"/>
             </xsl:when>
             <xsl:when test="$topicType = 'topicNotices'">
-                <xsl:call-template name="processTopicNotices"/>
+                <!--  <xsl:call-template name="processTopicNotices"/> -->
             </xsl:when>
             <xsl:when test="$topicType = 'topicSimple'">
                 <xsl:variable name="page-sequence-reference">

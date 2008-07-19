@@ -94,6 +94,9 @@ See the accompanying license.txt file for applicable licenses.
             <xsl:when test="$mapTopic/*[position() = $topicNumber][contains(@class, ' bookmap/trademarklist ')]">
                 <xsl:text>topicTradeMarkList</xsl:text>
             </xsl:when>
+            <xsl:when test="$mapTopic/*[position() = $topicNumber][contains(@class, ' bookmap/notices ')]">
+                <xsl:text>topicNotices</xsl:text>
+            </xsl:when>
             <xsl:otherwise>
                 <xsl:text>topicSimple</xsl:text>
             </xsl:otherwise>
@@ -176,6 +179,9 @@ See the accompanying license.txt file for applicable licenses.
                 </xsl:when>
                 <xsl:when test="$mapTopic/*[position() = $topicNumber][contains(@class, ' bookmap/trademarklist ')]">
                     <xsl:text>topicTradeMarkList</xsl:text>
+                </xsl:when>
+                <xsl:when test="$mapTopic/*[position() = $topicNumber][contains(@class, ' bookmap/notices ')]">
+                    <xsl:text>topicNotices</xsl:text>
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:text>topicSimple</xsl:text>

@@ -140,6 +140,7 @@ Sourceforge bug fixes:
 - 1803111: Idiom plug fails when processing bookmap with DITA composite
 - 1930201: FO 1.4.2 doesn't fail correctly when called from Ant
 - 1829816: Value of otherprops is written as a text element
+- 1942252: <notices> should come before TOC in PDF output
 
 ----------------------------------------------------------------------------
 
