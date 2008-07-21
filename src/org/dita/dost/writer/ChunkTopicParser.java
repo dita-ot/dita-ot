@@ -189,7 +189,9 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 	}
 
 	public void processingInstruction(String target, String data) throws SAXException {
-		if(include){
+		if(include || 
+				"workdir".equalsIgnoreCase(target) ||
+				"path2proj".equalsIgnoreCase(target)){
 			try {
 	        	String pi = (data != null) ? target + Constants.STRING_BLANK + data : target;
 	            output.write(Constants.LESS_THAN + Constants.QUESTION 
@@ -217,7 +219,8 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 
 	public void startDocument() throws SAXException {
 		if ("select-document".equals(selectMethod)){
-			if(currentParsingFile.equals(outputFile)){
+			//currentParsingFile can never equal outputFile 
+			if((currentParsingFile).equals(outputFile)){
 				// if current file serves as root of new chunk
 				// include will be set to true in startDocument()
 				// in order to copy PIs and <dita> element
