@@ -226,13 +226,9 @@ public class ConrefPushReader extends AbstractXMLReader {
 			return value;
 		}else{
 			String source = FileUtils.resolveFile(filePath, target);
-			String urltarget = FileUtils.resolveFile(filePath, value);
-			if (urltarget.contains(Constants.SHARP)){
-				return FileUtils.getRelativePathFromMap(source, urltarget)
-				+urltarget.substring(urltarget.indexOf(Constants.SHARP));
-			}else{
-				return FileUtils.getRelativePathFromMap(source, urltarget);
-			}
+			String urltarget = FileUtils.resolveTopic(filePath, value);
+			return FileUtils.getRelativePathFromMap(source, urltarget);
+
 			
 		}
 		
