@@ -1,20 +1,34 @@
 package org.dita.dost.writer;
 
+
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
+import java.io.StringReader;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Properties;
 import java.util.Stack;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.Content;
 import org.dita.dost.util.Constants;
+import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.StringUtils;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
@@ -92,6 +106,14 @@ public class ConrefPushParser extends AbstractXMLWriter {
 	//parent. 
 	private Stack<String> contentForPushAfterStack = null;
 	
+	//if the pushcontent has @conref, it should be paid attention to it. Because the current 
+	//file may not contain any @conref attribute, it will not resolved by the conref.xsl,
+	//while it may contain @conref after pushing. So the dita.list file should be updated, if 
+	//the pushcontent has @conref.
+	private boolean hasConref = false;
+	
+	private String tempDir;
+	
 	public ConrefPushParser(){
 		javaLogger = new DITAOTJavaLogger();
 		topicSpecSet = new HashSet<String>();
@@ -111,7 +133,11 @@ public class ConrefPushParser extends AbstractXMLWriter {
 		movetable = (Hashtable<String, String>)content.getValue();
 	}
 
+	public void setTempDir(String tempDir){
+		this.tempDir = tempDir;
+	}
 	public void write(String filename) throws DITAOTException {
+		hasConref = false;
 		isReplaced = false;
 		hasPushafter = false;
 		level = 0;
@@ -125,7 +151,9 @@ public class ConrefPushParser extends AbstractXMLWriter {
 			File outputFile = new File(filename+".cnrfpush");
 			output = new OutputStreamWriter(new FileOutputStream(outputFile),Constants.UTF8);
 			parser.parse(filename);
-			
+			if(hasConref){
+				updateList(filename);
+			}
 			output.close();
             if(!inputFile.delete()){
             	Properties prop = new Properties();
@@ -150,6 +178,52 @@ public class ConrefPushParser extends AbstractXMLWriter {
 		}
 		
 		
+	}
+	
+	private void updateList(String filename){
+		Properties properties = new Properties();
+		// dita.list file in temp directory, it is used to store the list properties.
+		File ditaFile = new File(tempDir, Constants.FILE_NAME_DITA_LIST);
+		// dita.xml.properties file in temp dicrectory, 
+		// store the list properties as the dita.list in the form of xml.
+		File ditaxmlFile = new File(tempDir, Constants.FILE_NAME_DITA_LIST_XML);
+		// use ditaFile as the OutputStream, rewrite the dita.list file
+		FileOutputStream output = null;
+		// use ditaxmlFile as the outputStream, rewrite the dita.xml.properties file
+		FileOutputStream xmloutput = null;
+		// this is used to update the conref.list file.
+		BufferedWriter bufferedWriter =null;
+		try{
+			if(ditaxmlFile.exists())
+				properties.loadFromXML(new FileInputStream(ditaxmlFile));
+			else 
+				properties.load(new FileInputStream(ditaFile));
+			
+			String conreflist[] = properties.getProperty("conreflist").split(Constants.COMMA);
+			// get the reletivePath from tempDir
+			String reletivePath = filename.substring(tempDir.length() + 1);
+			for(String str: conreflist){
+				if(str.equals(reletivePath)){
+					return;
+				}
+			}
+			StringBuffer stringBuffer = new StringBuffer();
+			stringBuffer.append(properties.getProperty("conreflist")).append(Constants.COMMA).append(reletivePath);
+			properties.setProperty("conreflist", stringBuffer.toString());
+			output = new FileOutputStream (new File(tempDir, Constants.FILE_NAME_DITA_LIST));
+			xmloutput = new FileOutputStream(new File(tempDir, Constants.FILE_NAME_DITA_LIST_XML));
+			properties.store(output, null);
+			properties.storeToXML(xmloutput, null);
+			bufferedWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(new File(tempDir,"conref.list"))));
+			for(String str: conreflist){
+				bufferedWriter.append(str).append("\n");
+			}
+			bufferedWriter.append(reletivePath);
+			bufferedWriter.close();
+		}catch (Exception e){
+			javaLogger.logException(e);
+		}
+
 	}
 
 	@Override
@@ -225,7 +299,116 @@ public class ConrefPushParser extends AbstractXMLWriter {
             }
         }
 	}
+	
+	private String replaceElementName(String targetClassAttribute, String string){
+		InputSource inputSource = null;
+		Document document = null;
+		//add stub to serve as the root element
+		string = "<stub>" + string + "</stub>";
+		inputSource = new InputSource(new StringReader(string));
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		Element element = null;
+		NodeList nodeList = null;
+		String targetElementName ;
+		String type;
+		StringBuffer stringBuffer = new StringBuffer();
+		try {
+			DocumentBuilder documentBuilder = factory.newDocumentBuilder();
+			document = documentBuilder.parse(inputSource);
+			element = document.getDocumentElement();
+			if(element.hasChildNodes()){
+				nodeList = element.getChildNodes();
+				for(int i =0;i<nodeList.getLength();i++){
+					Node node = nodeList.item(i);
+					if (node.getNodeType() == Node.ELEMENT_NODE){
+						Element elem = (Element) node;
+						NodeList nList = null;
+						String clazz = elem.getAttribute(Constants.ATTRIBUTE_NAME_CLASS);
+						// get type of the target element  
+						type = targetClassAttribute.substring(Constants.INT_1, targetClassAttribute.indexOf("/")).trim();
+						if(!clazz.equalsIgnoreCase(targetClassAttribute) && clazz.contains(targetClassAttribute)){
+							// Specializing the pushing content is not handled here
+							// but we can catch such a situation to emit a warning by comparing the class values.
+							targetElementName = targetClassAttribute.substring(targetClassAttribute.indexOf("/") +1 ).trim();
+							stringBuffer.append(Constants.LESS_THAN).append(targetElementName);
+							NamedNodeMap namedNodeMap = elem.getAttributes();
+							for(int t=0; t<namedNodeMap.getLength(); t++){
+								//write the attributes to new generated element
+								if(namedNodeMap.item(t).getNodeName() == "conref" && namedNodeMap.item(i).getNodeValue() != ""){
+									hasConref = true;
+								}
+								stringBuffer.append(Constants.STRING_BLANK).append(namedNodeMap.item(t).getNodeName()).append(Constants.EQUAL).append(Constants.QUOTATION+namedNodeMap.item(t).getNodeValue()+Constants.QUOTATION);
+							}
+							stringBuffer.append(Constants.GREATER_THAN);
+							// process the child nodes of the current node
+							nList = elem.getChildNodes();
+							for(int j=0; j<nList.getLength(); j++){
+								Node subNode = nList.item(j);
+								if(subNode.getNodeType() == Node.ELEMENT_NODE){
+									//replace the subElement Name 
+									stringBuffer.append(replaceSubElementName(type, (Element)subNode));
+								}
+								if(subNode.getNodeType() == Node.PROCESSING_INSTRUCTION_NODE){
+									stringBuffer.append("<?").append(subNode.getNodeName()).append("?>");
+								}
+								if(subNode.getNodeType() == Node.TEXT_NODE){
+									stringBuffer.append(subNode.getNodeValue());
+								}
+							}
+							stringBuffer.append("</").append(targetElementName).append(Constants.GREATER_THAN);
+						}else{
+							stringBuffer.append(replaceSubElementName(Constants.STRING_BLANK, elem));
+						}
+					}
+				}
+				return stringBuffer.toString();
+			}
+			else {
+				return string;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return string;
+		}
+	}
+	
+	private String replaceSubElementName(String type, Element elem){
+		StringBuffer stringBuffer = new StringBuffer();
+		String classValue = elem.getAttribute(Constants.ATTRIBUTE_NAME_CLASS);
+		String generalizedElemName = elem.getNodeName();
+		if(classValue != null){
+			if(classValue.contains(type) && type != Constants.STRING_BLANK){
+				generalizedElemName = classValue.substring(classValue.indexOf("/") +1 , classValue.indexOf(Constants.STRING_BLANK, classValue.indexOf("/"))).trim();
+			}
+		}
+		stringBuffer.append(Constants.LESS_THAN).append(generalizedElemName);
+		NamedNodeMap namedNodeMap = elem.getAttributes();
+		for(int i=0; i<namedNodeMap.getLength(); i++){
+			if(namedNodeMap.item(i).getNodeName() == "conref" && namedNodeMap.item(i).getNodeValue() != ""){
+				hasConref = true;
+			}
+			stringBuffer.append(Constants.STRING_BLANK).append(namedNodeMap.item(i).getNodeName()).append(Constants.EQUAL).append(Constants.QUOTATION+namedNodeMap.item(i).getNodeValue()+Constants.QUOTATION);
+		}
+		stringBuffer.append(Constants.GREATER_THAN);
+		NodeList nodeList = elem.getChildNodes();
+		for(int i=0; i<nodeList.getLength(); i++){
+			Node node = nodeList.item(i);
+			if(node.getNodeType() == Node.ELEMENT_NODE){
+				// If the type of current node is ELEMENT_NODE, process current node.
+				stringBuffer.append(replaceSubElementName(type, (Element)node));
+			}
+			if(node.getNodeType() == Node.PROCESSING_INSTRUCTION_NODE){
+				stringBuffer.append("<?").append(node.getNodeName()).append("?>");
+			}
+			if(node.getNodeType() == Node.TEXT_NODE){
+				stringBuffer.append(node.getNodeValue());
+			}
+		}
+		stringBuffer.append("</").append(generalizedElemName).append(Constants.GREATER_THAN);
+		return stringBuffer.toString();
+	}
 
+	
 	@Override
 	public void startElement(String uri, String localName, String name,
 			Attributes atts) throws SAXException {
@@ -253,11 +436,12 @@ public class ConrefPushParser extends AbstractXMLWriter {
 					}
 				}else if (atts.getValue(Constants.ATTRIBUTE_NAME_ID) != null){
 					String idPath = Constants.SHARP+topicId+Constants.SLASH+atts.getValue(Constants.ATTRIBUTE_NAME_ID);
+					String classAttribute = atts.getValue(Constants.ATTRIBUTE_NAME_CLASS);
 					if (movetable.containsKey(idPath+Constants.STICK+"pushbefore")){
-						output.write(movetable.get(idPath+Constants.STICK+"pushbefore"));
+						output.write(replaceElementName(classValue, movetable.get(idPath+Constants.STICK+"pushbefore")));
 					}
 					if (movetable.containsKey(idPath+Constants.STICK+"pushreplace")){
-						output.write(movetable.get(idPath+Constants.STICK+"pushreplace"));
+						output.write(replaceElementName(classValue, movetable.get(idPath+Constants.STICK+"pushreplace")));
 						isReplaced = true;
 						level = 0;
 						level ++;
@@ -274,7 +458,7 @@ public class ConrefPushParser extends AbstractXMLWriter {
 						}						
 						levelForPushAfter = 0;
 						levelForPushAfter ++;
-						contentForPushAfter = movetable.get(idPath + Constants.STICK+"pushafter");
+						contentForPushAfter = replaceElementName(classValue, movetable.get(idPath + Constants.STICK+"pushafter"));
 						//The output for the pushcontent will be in endElement(...)
 					}
 				}

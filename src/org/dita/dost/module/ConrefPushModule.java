@@ -59,7 +59,8 @@ public class ConrefPushModule implements AbstractPipelineModule {
 			Content content = new ContentImpl();
 			content.setValue(entry.getValue());
 			parser.setContent(content);
-			
+			//pass the tempdir to ConrefPushParser
+			parser.setTempDir(tempDir);
 			parser.write(entry.getKey());
 		}
 		
