@@ -95,8 +95,16 @@ public class ConrefPushReader extends AbstractXMLReader {
 		String conactValue = atts.getValue("conaction");
 		if (!start && conactValue != null){
 			if ("pushbefore".equalsIgnoreCase(conactValue)){
+				if(pushcontent.length() != 0){
+					// there are redundant "pushbefore", create a new pushcontent and emit a warning message.
+					pushcontent = new StringBuffer();
+					Properties prop = new Properties();
+					prop.put("%1", atts.getValue("xtrf"));
+					prop.put("%2", atts.getValue("xtrc"));
+					javaLogger.logWarn(MessageUtils.getMessage("DOTJ044W",prop).toString());
+				}
 				start = true;
-				level = 0;
+				level =0;
 				level ++;
 				putElement(pushcontent, name, atts, true);
 				pushType = "pushbefore";
