@@ -9,6 +9,7 @@ import java.io.OutputStreamWriter;
 import java.io.StringReader;
 import java.util.HashSet;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.Properties;
 import java.util.Stack;
 
@@ -151,6 +152,17 @@ public class ConrefPushParser extends AbstractXMLWriter {
 			File outputFile = new File(filename+".cnrfpush");
 			output = new OutputStreamWriter(new FileOutputStream(outputFile),Constants.UTF8);
 			parser.parse(filename);
+			if(!movetable.isEmpty()){
+				Properties prop = new Properties();
+				String key = null;
+				Iterator<String> iterator = movetable.keySet().iterator();
+				while(iterator.hasNext()){
+					key = iterator.next();
+					prop.setProperty("%1", key.substring(0, key.indexOf(Constants.STICK)));
+					prop.setProperty("%2", filename);
+					javaLogger.logWarn(MessageUtils.getMessage("DOTJ043W", prop).toString());
+				}
+			}
 			if(hasConref){
 				updateList(filename);
 			}
@@ -438,10 +450,10 @@ public class ConrefPushParser extends AbstractXMLWriter {
 					String idPath = Constants.SHARP+topicId+Constants.SLASH+atts.getValue(Constants.ATTRIBUTE_NAME_ID);
 					String classAttribute = atts.getValue(Constants.ATTRIBUTE_NAME_CLASS);
 					if (movetable.containsKey(idPath+Constants.STICK+"pushbefore")){
-						output.write(replaceElementName(classValue, movetable.get(idPath+Constants.STICK+"pushbefore")));
+						output.write(replaceElementName(classValue, movetable.remove(idPath+Constants.STICK+"pushbefore")));
 					}
 					if (movetable.containsKey(idPath+Constants.STICK+"pushreplace")){
-						output.write(replaceElementName(classValue, movetable.get(idPath+Constants.STICK+"pushreplace")));
+						output.write(replaceElementName(classValue, movetable.remove(idPath+Constants.STICK+"pushreplace")));
 						isReplaced = true;
 						level = 0;
 						level ++;
@@ -458,7 +470,7 @@ public class ConrefPushParser extends AbstractXMLWriter {
 						}						
 						levelForPushAfter = 0;
 						levelForPushAfter ++;
-						contentForPushAfter = replaceElementName(classValue, movetable.get(idPath + Constants.STICK+"pushafter"));
+						contentForPushAfter = replaceElementName(classValue, movetable.remove(idPath + Constants.STICK+"pushafter"));
 						//The output for the pushcontent will be in endElement(...)
 					}
 				}
