@@ -4439,7 +4439,7 @@
        </xsl:choose>
        <xsl:apply-templates select="./*[contains(@class,' topic/title ')]" mode="figtitle"/>
       </span>
-      <xsl:if test="desc">
+      <xsl:if test="*[contains(@class,' topic/desc ')]">
        <xsl:text>. </xsl:text><span class="figdesc"><xsl:apply-templates select="./*[contains(@class,' topic/desc ')]" mode="figdesc"/></span>
       </xsl:if>
     </xsl:when>
