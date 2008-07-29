@@ -343,11 +343,12 @@ public class ChunkMapReader implements AbstractReader {
 				String classValue  = ((Element)current).getAttribute(Constants.ATTRIBUTE_NAME_CLASS);
 				String hrefValue = ((Element)current).getAttribute(Constants.ATTRIBUTE_NAME_HREF);
 				if(classValue.indexOf(Constants.ATTR_CLASS_VALUE_TOPICREF)!=-1){
-					if(!hrefValue.equals(Constants.STRING_EMPTY) &&
+					if((!hrefValue.equals(Constants.STRING_EMPTY) &&
 							! FileUtils.resolveFile(filePath,hrefValue)
-							.equals(changeTable.get(FileUtils.resolveFile(filePath,hrefValue)))){
+							.equals(changeTable.get(FileUtils.resolveFile(filePath,hrefValue)))) || 
+							classValue.contains(Constants.ATTR_CLASS_VALUE_TOPICHEAD)){
 						//make sure hrefValue make sense and target file 
-						//is not generated file
+						//is not generated file or the element is topichead
 						processTopicref(current);
 					}					
 				}

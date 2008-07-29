@@ -281,6 +281,7 @@ public abstract class Constants {
 	public static final String ATTR_CLASS_VALUE_BODY = " topic/body ";	
 	public static final String ATTR_CLASS_VALUE_RELTABLE = " map/reltable ";
 	public static final String ATTR_CLASS_VALUE_METADATA = " topic/metadata ";
+	public static final String ATTR_CLASS_VALUE_TOPICHEAD = " mapgroup-d/topichead ";
 	
     /**
      * constants for filtering or flagging.
