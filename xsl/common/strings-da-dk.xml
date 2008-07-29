@@ -11,7 +11,7 @@
 <str name="Table">Tabel</str>
 <str name="Next topic">Næste emne</str>
 <str name="Previous topic">Forrige emne</str>
-<str name="Parent topic">Parent topic</str>
+<str name="Parent topic">Overordnet emne</str>
 <str name="Required cleanup">Påkrævet oprydning</str>
 <str name="Draft comment">Kommentar til kladde</str>
 <str name="Option">Valg</str>
@@ -55,6 +55,14 @@
 <str name="Prerequisite">Forudsætning</str>
 <str name="Prerequisites">Forudsætninger</str>
 <str name="or">eller</str>
+
+<!--Task section labels -->
+<str name="task_context">Om denne opgave</str>
+<str name="task_example">Eksempel</str>
+<str name="task_postreq">Næste trin</str>
+<str name="task_prereq">Inden du begynder</str>
+<str name="task_procedure">Fremgangsmåde</str>
+<str name="task_results">Resultater</str>
 
 <str name="Copyright">Copyright</str>
 

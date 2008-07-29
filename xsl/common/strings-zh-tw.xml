@@ -56,6 +56,14 @@
 <str name="Prerequisites">必讀</str>
 <str name="or">或</str>
 
+<!--Task section labels -->
+<str name="task_context">執行這項作業的原因和時機</str>
+<str name="task_example">範例</str>
+<str name="task_prereq">開始之前</str>
+<str name="task_postreq">下一步</str>
+<str name="task_procedure">程序</str>
+<str name="task_results">結果</str>
+
 <str name="Copyright">Copyright</str>
 
 <!-- Symbols -->

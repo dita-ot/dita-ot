@@ -56,6 +56,14 @@
    <str name="Prerequisites">Preduvjeti</str>
    <str name="or">or</str>
 
+   <!--Task section labels -->
+   <str name="task_context">O ovom zadatku</str>
+   <str name="task_example">Primjer</str>
+   <str name="task_postreq">Što napraviti sljedeće</str>
+   <str name="task_prereq">Prije nego počnete</str>
+   <str name="task_procedure">Postupak</str>
+   <str name="task_results">Rezultati</str>
+
    <str name="Copyright">Autorska prava</str>
 
    <!--Symbols-->

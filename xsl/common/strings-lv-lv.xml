@@ -56,6 +56,14 @@
 <str name="Prerequisites">Priekšnoteikumi</str>
 <str name="or">vai</str>
 
+<!--Task section labels -->
+<str name="task_context">Par šo uzdevumu</str>
+<str name="task_example">Piemērs</str>
+<str name="task_postreq">Kā rīkoties tālāk</str>
+<str name="task_prereq">Pirms sākt darbu</str>
+<str name="task_procedure">Procedūra</str>
+<str name="task_results">Rezultāti</str>
+
 <str name="Copyright">Copyright</str>
 
 <!-- Symbols -->

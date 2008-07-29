@@ -56,6 +56,14 @@
 <str name="Prerequisites">Vereisten</str>
 <str name="or">of</str>
 
+<!--Task section labels -->
+<str name="task_context">Over deze taak</str>
+<str name="task_example">Voorbeeld</str>
+<str name="task_postreq">Volgende stappen</str>
+<str name="task_prereq">Voordat u begint</str>
+<str name="task_procedure">Procedure</str>
+<str name="task_results">Resultaten</str>
+
 <str name="Copyright">Copyright</str>
 
 <!-- Symbols -->

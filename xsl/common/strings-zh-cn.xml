@@ -56,6 +56,14 @@
 <str name="Prerequisites">先决条件</str>
 <str name="or">或</str>
 
+<!--Task section labels -->
+<str name="task_context">关于此任务</str>
+<str name="task_example">示例</str>
+<str name="task_postreq">下一步做什么</str>
+<str name="task_prereq">开始之前</str>
+<str name="task_procedure">过程</str>
+<str name="task_results">结果</str>
+
 <str name="Copyright">版权</str>
 
 <!-- Symbols -->

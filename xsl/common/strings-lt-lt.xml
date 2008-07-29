@@ -56,6 +56,14 @@
 <str name="Prerequisites">Nuorodos</str>
 <str name="or">arba</str>
 
+<!--Task section labels -->
+<str name="task_context">Apie šią užduotį</str>
+<str name="task_example">Pavyzdys</str>
+<str name="task_postreq">Ką daryti toliau</str>
+<str name="task_prereq">Prieš pradedant</str>
+<str name="task_procedure">Procedūra</str>
+<str name="task_results">Rezultatai</str>
+
 <str name="Copyright">Copyright</str>
 
 <!-- Symbols -->

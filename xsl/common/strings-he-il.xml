@@ -56,6 +56,14 @@
 <str name="Prerequisites">דרישות מוקדמות</str>
 <str name="or">or</str>
 
+<!--Task section labels -->
+<str name="task_context">אודות משימה זו</str>
+<str name="task_example">דוגמה</str>
+<str name="task_postreq">איך להמשיך</str>
+<str name="task_prereq">לפני שתתחילו</str>
+<str name="task_procedure">נוהל</str>
+<str name="task_results">תוצאות</str>
+
 <str name="Copyright">Copyright</str>
 
 <!-- Symbols -->

@@ -56,6 +56,14 @@
 <str name="Prerequisites">Okunması Gerekenler</str>
 <str name="or">or</str>
 
+<!--Task section labels -->
+<str name="task_context">Bu görev hakkında</str>
+<str name="task_example">Örnek</str>
+<str name="task_postreq">Sonraki adım</str>
+<str name="task_prereq">Başlamadan önce</str>
+<str name="task_procedure">Yordam</str>
+<str name="task_results">Sonuçlar</str>
+
 <str name="Copyright">Copyright</str>
 
 <!-- Symbols -->

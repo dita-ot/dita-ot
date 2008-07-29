@@ -56,6 +56,14 @@
 <str name="Prerequisites">선행 정보</str>
 <str name="or">또는</str>
 
+<!--Task section labels -->
+<str name="task_context">이 태스크 정보</str>
+<str name="task_example">예</str>
+<str name="task_prereq">시작하기 전에</str>
+<str name="task_postreq">다음에 수행할 작업</str>
+<str name="task_procedure">프로시저</str>
+<str name="task_results">결과</str>
+
 <str name="Copyright">Copyright</str>
 
 <!-- Symbols -->

@@ -56,6 +56,14 @@
 <str name="Prerequisites">สิ่งที่ต้องทำก่อน</str>
 <str name="or">หรือ</str>
 
+<!--Task section labels -->
+<str name="task_context">เกี่ยวกับภารกิจนี้</str>
+<str name="task_example">ตัวอย่าง</str>
+<str name="task_postreq">สิ่งที่ต้องทำต่อไป</str>
+<str name="task_prereq">ก่อนเริ่มต้นภารกิจ</str>
+<str name="task_procedure">กระบวนการ</str>
+<str name="task_results">ผลลัพธ์</str>
+
 <str name="Copyright">ลิขสิทธิ์ของ</str>
 
 <!-- Symbols -->

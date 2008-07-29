@@ -56,6 +56,14 @@
    <str name="Prerequisites">Predpogoji</str>
    <str name="or">or</str>
 
+   <!--Task section labels -->
+   <str name="task_context">O tej nalogi</str>
+   <str name="task_example">Zgled</str>
+   <str name="task_postreq">Kako naprej?</str>
+   <str name="task_prereq">Preden začnete</str>
+   <str name="task_procedure">Postopek</str>
+   <str name="task_results">Rezultati</str>
+
    <str name="Copyright">Copyright</str>
 
    <!-- Symbols -->

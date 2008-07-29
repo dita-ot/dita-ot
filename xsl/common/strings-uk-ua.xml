@@ -56,6 +56,14 @@
 <str name="Prerequisites">Необхідні вимоги</str>
 <str name="or">або</str>
 
+<!--Task section labels -->
+<str name="task_context">Інформація про завдання</str>
+<str name="task_example">Приклад</str>
+<str name="task_postreq">Подальші дії</str>
+<str name="task_prereq">Підготовчі дії</str>
+<str name="task_procedure">Процедура</str>
+<str name="task_results">Результати</str>
+
 <str name="Copyright">Copyright</str>
 
 <!-- Symbols -->
