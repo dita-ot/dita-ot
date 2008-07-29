@@ -282,7 +282,7 @@
                     </xsl:choose>                    
                     <xsl:choose>
                         <!-- if the element is not at the top level of reference target, @class equals to $refclass -->
-                        <xsl:when test="not(contains(@class,$refclass))"> 
+                        <xsl:when test="not(contains(@class,substring($refclass, 3)))"> 
                             <xsl:attribute name="class"><xsl:value-of select="$refclass"/></xsl:attribute>
                         </xsl:when>
                         <xsl:otherwise>
