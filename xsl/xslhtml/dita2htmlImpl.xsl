@@ -52,6 +52,9 @@
 <!-- default CSS path parameter (null)-->
 <xsl:param name="CSSPATH"/>
 
+<!-- Preserve DITA class ancestry in XHTML output; values are 'yes' or 'no' -->
+<xsl:param name="PRESERVE-DITA-CLASS" select="'no'"/>
+
 <!-- the file name containing XHTML to be placed in the HEAD area
      (file name and extension only - no path). -->
 <xsl:param name="HDF"/>
@@ -291,7 +294,9 @@
   </xsl:param>
   <xsl:element name="h{$headinglevel}">
       <xsl:attribute name="class">topictitle<xsl:value-of select="$headinglevel"/></xsl:attribute>
-      <xsl:call-template name="commonattributes"/>
+      <xsl:call-template name="commonattributes">
+        <xsl:with-param name="default-output-class">topictitle<xsl:value-of select="$headinglevel"/></xsl:with-param>
+      </xsl:call-template>
       <xsl:apply-templates/>
   </xsl:element>
   <xsl:value-of select="$newline"/>
@@ -668,7 +673,9 @@
     </xsl:call-template>
   </xsl:variable>
   <div class="note">
-    <xsl:call-template name="commonattributes"/>
+    <xsl:call-template name="commonattributes">
+      <xsl:with-param name="default-output-class" select="'note'"/>
+    </xsl:call-template>
     <xsl:call-template name="setidaname"/>
     <xsl:call-template name="gen-style">
       <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
@@ -704,7 +711,9 @@
     </xsl:call-template>
   </xsl:variable>
   <div class="tip">
-    <xsl:call-template name="commonattributes"/>
+    <xsl:call-template name="commonattributes">
+      <xsl:with-param name="default-output-class" select="'tip'"/>
+    </xsl:call-template>
     <xsl:call-template name="setidaname"/>
     <xsl:call-template name="gen-style">
       <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
@@ -740,7 +749,9 @@
     </xsl:call-template>
   </xsl:variable>
   <div class="fastpath">
-    <xsl:call-template name="commonattributes"/>
+    <xsl:call-template name="commonattributes">
+      <xsl:with-param name="default-output-class" select="'fastpath'"/>
+    </xsl:call-template>
     <xsl:call-template name="setidaname"/>
     <xsl:call-template name="gen-style">
       <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
@@ -776,7 +787,9 @@
     </xsl:call-template>
   </xsl:variable>
   <div class="important">
-    <xsl:call-template name="commonattributes"/>
+    <xsl:call-template name="commonattributes">
+      <xsl:with-param name="default-output-class" select="'important'"/>
+    </xsl:call-template>
     <xsl:call-template name="setidaname"/>
     <xsl:call-template name="gen-style">
       <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
@@ -812,7 +825,9 @@
     </xsl:call-template>
   </xsl:variable>
   <div class="remember">
-    <xsl:call-template name="commonattributes"/>
+    <xsl:call-template name="commonattributes">
+      <xsl:with-param name="default-output-class" select="'remember'"/>
+    </xsl:call-template>
     <xsl:call-template name="setidaname"/>
     <xsl:call-template name="gen-style">
       <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
@@ -848,7 +863,9 @@
     </xsl:call-template>
   </xsl:variable>
   <div class="restriction">
-    <xsl:call-template name="commonattributes"/>
+    <xsl:call-template name="commonattributes">
+      <xsl:with-param name="default-output-class" select="'restriction'"/>
+    </xsl:call-template>
     <xsl:call-template name="setidaname"/>
     <xsl:call-template name="gen-style">
       <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
@@ -884,7 +901,9 @@
     </xsl:call-template>
   </xsl:variable>
   <div class="attention">
-    <xsl:call-template name="commonattributes"/>
+    <xsl:call-template name="commonattributes">
+      <xsl:with-param name="default-output-class" select="'attention'"/>
+    </xsl:call-template>
     <xsl:call-template name="setidaname"/>
     <xsl:call-template name="gen-style">
       <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
@@ -921,6 +940,7 @@
   </xsl:variable>
   <div class="cautiontitle">
     <xsl:call-template name="commonattributes"/>
+    <xsl:attribute name="class">cautiontitle</xsl:attribute>
     <xsl:call-template name="setidaname"/>    
     <xsl:call-template name="getString">
       <xsl:with-param name="stringName" select="'Caution'"/>
@@ -930,6 +950,9 @@
     </xsl:call-template>
   </div>
   <div class="caution">
+    <xsl:call-template name="commonattributes">
+      <xsl:with-param name="default-output-class" select="'caution'"/>
+    </xsl:call-template>
     <xsl:call-template name="gen-style">
       <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
       <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
@@ -957,13 +980,16 @@
   </xsl:variable>
   <div class="dangertitle">
     <xsl:call-template name="commonattributes"/>
+    <xsl:attribute name="class">dangertitle</xsl:attribute>
     <xsl:call-template name="setidaname"/>
     <xsl:call-template name="getString">
       <xsl:with-param name="stringName" select="'Danger'"/>
     </xsl:call-template>
   </div>
   <div class="danger">
-    <xsl:call-template name="commonattributes"/>
+    <xsl:call-template name="commonattributes">
+      <xsl:with-param name="default-output-class" select="'danger'"/>
+    </xsl:call-template>
     <xsl:call-template name="gen-style">
       <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
       <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
@@ -992,7 +1018,9 @@
   <xsl:choose>
     <xsl:when test="@othertype">
       <div class="note">
-        <xsl:call-template name="commonattributes"/>
+        <xsl:call-template name="commonattributes">
+          <xsl:with-param name="default-output-class" select="'note'"/>
+        </xsl:call-template>
         <xsl:call-template name="setidaname"/>
         <xsl:call-template name="gen-style">
           <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
@@ -3894,32 +3922,99 @@
 
 <!-- Process standard attributes that may appear anywhere. Previously this was "setclass" -->
 <xsl:template name="commonattributes">
+  <xsl:param name="default-output-class"/>
   <xsl:apply-templates select="@xml:lang"/>
   <xsl:apply-templates select="@dir"/>
-  <xsl:apply-templates select="." mode="set-output-class"/>
+  <xsl:apply-templates select="." mode="set-output-class">
+    <xsl:with-param name="default" select="$default-output-class"/>
+  </xsl:apply-templates>
 </xsl:template>
 
-<!-- Set the class attribute on the resulting output element. -->
+<!-- Set the class attribute on the resulting output element. The default for a class of elements
+     may be passed in with $default, but that default can be overridden with mode="get-output-class". -->
 <xsl:template match="*" mode="set-output-class">
+  <xsl:param name="default"/>
   <xsl:variable name="output-class">
     <xsl:apply-templates select="." mode="get-output-class"/>
   </xsl:variable>
-  <!-- If the get-output-class moded template returns a string, use that. -->
-  <xsl:if test="string-length(normalize-space($output-class)) &gt; 0">
-    <xsl:attribute name="class"><xsl:value-of select="$output-class"/></xsl:attribute>
+  <xsl:variable name="using-output-class">
+    <xsl:choose>
+      <xsl:when test="string-length(normalize-space($output-class)) &gt; 0"><xsl:value-of select="$output-class"/></xsl:when>
+      <xsl:when test="string-length(normalize-space($default)) &gt; 0"><xsl:value-of select="$default"/></xsl:when>
+    </xsl:choose>
+  </xsl:variable>
+  <xsl:variable name="ancestry">
+    <xsl:if test="$PRESERVE-DITA-CLASS='yes'">
+      <xsl:apply-templates select="." mode="get-element-ancestry"/>
+    </xsl:if>
+  </xsl:variable>
+  <xsl:variable name="outputclass-attribute">
+    <xsl:apply-templates select="@outputclass" mode="get-value-for-class"/>
+  </xsl:variable>
+  <!-- Revised design with DITA-OT 1.5: include class ancestry if requested; 
+       combine user output class with element default, giving priority to the user value. -->
+  <xsl:if test="string-length(normalize-space(concat($outputclass-attribute,$using-output-class,$ancestry))) &gt; 0">
+    <xsl:attribute name="class">
+      <xsl:value-of select="$ancestry"/>
+      <xsl:if test="string-length(normalize-space($ancestry)) &gt; 0 and 
+                    string-length(normalize-space($using-output-class)) &gt; 0"><xsl:text> </xsl:text></xsl:if>
+      <xsl:value-of select="$using-output-class"/>
+      <xsl:if test="string-length(normalize-space(concat($ancestry,$using-output-class))) &gt; 0 and
+                    string-length(normalize-space($outputclass-attribute)) &gt; 0"><xsl:text> </xsl:text></xsl:if>
+      <xsl:value-of select="$outputclass-attribute"/>
+    </xsl:attribute>
   </xsl:if>
-  <!-- If the element has an @outputclass attribute, use that instead. -->
-  <xsl:apply-templates select="@outputclass"></xsl:apply-templates>
 </xsl:template>
   
 <!-- If an element has @outputclass, create a class value -->
 <xsl:template match="@outputclass">
   <xsl:attribute name="class"><xsl:value-of select="."/></xsl:attribute>
 </xsl:template>
+<!-- Determine what @outputclass value goes into XHTML's @class. If the value should
+     NOT fall through, override this template to remove it. -->
+<xsl:template match="@outputclass" mode="get-value-for-class">
+  <xsl:value-of select="."/>
+</xsl:template>
 
 <!-- Most elements don't get a class attribute. -->
 <xsl:template match="*" mode="get-output-class"/>
   
+<!-- Get the ancestry of the current element (name only, not module) -->
+<xsl:template match="*" mode="get-element-ancestry">
+  <xsl:param name="checkclass" select="@class"/>
+  <xsl:if test="contains($checkclass,'/')">
+    <xsl:variable name="lastpair">
+      <xsl:call-template name="get-last-class-pair">
+        <xsl:with-param name="checkclass" select="$checkclass"/>
+      </xsl:call-template>
+    </xsl:variable>
+    <!-- If there are any module/element pairs before the last one, process them and add a space -->
+    <xsl:if test="contains(substring-before($checkclass,$lastpair),'/')">
+      <xsl:apply-templates select="." mode="get-element-ancestry">
+        <xsl:with-param name="checkclass" select="substring-before($checkclass,$lastpair)"/>
+      </xsl:apply-templates>
+      <xsl:text> </xsl:text>
+    </xsl:if>
+    <xsl:value-of select="substring-after($lastpair,'/')"/>
+  </xsl:if>
+</xsl:template>
+
+<!-- Find the last module/element pair in a class string -->
+<xsl:template name="get-last-class-pair">
+  <xsl:param name="checkclass" select="@class"/>
+  <xsl:choose>
+    <xsl:when test="contains(substring-after($checkclass,' '),'/')">
+      <xsl:call-template name="get-last-class-pair">
+        <xsl:with-param name="checkclass" select="substring-after($checkclass,' ')"/>
+      </xsl:call-template>
+    </xsl:when>
+    <xsl:when test="contains($checkclass,'/')">
+      <xsl:value-of select="normalize-space($checkclass)"/>
+    </xsl:when>
+    <xsl:otherwise><!-- Error condition --></xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
 <!-- If an element has @xml:lang, copy it to the output -->
 <xsl:template match="@xml:lang">
   <xsl:attribute name="xml:lang"><xsl:value-of select="."/></xsl:attribute>
@@ -4385,13 +4480,20 @@
          <xsl:apply-templates select="./*[contains(@class,' topic/title ')]" mode="tabletitle"/>         
         </span>
        <xsl:if test="*[contains(@class,' topic/desc ')]"> 
-        <xsl:text>. </xsl:text><span class="tabledesc"><xsl:apply-templates select="./*[contains(@class,' topic/desc ')]" mode="tabledesc"/></span>
+        <xsl:text>. </xsl:text>
+        <span class="tabledesc">
+          <xsl:for-each select="./*[contains(@class,' topic/desc ')]"><xsl:call-template name="commonattributes"/></xsl:for-each>
+          <xsl:apply-templates select="./*[contains(@class,' topic/desc ')]" mode="tabledesc"/>
+        </span>
        </xsl:if>
       </caption>
     </xsl:when>
     <!-- desc -->
     <xsl:when test="*[contains(@class,' topic/desc ')]">
-      <span class="tabledesc"><xsl:apply-templates select="./*[contains(@class,' topic/desc ')]" mode="tabledesc"/></span>
+      <span class="tabledesc">
+        <xsl:for-each select="./*[contains(@class,' topic/desc ')]"><xsl:call-template name="commonattributes"/></xsl:for-each>
+        <xsl:apply-templates select="./*[contains(@class,' topic/desc ')]" mode="tabledesc"/>
+      </span>
     </xsl:when>
   </xsl:choose>
 </xsl:template>
@@ -4402,6 +4504,7 @@
 <xsl:template match="*[contains(@class,' topic/table ')]/*[contains(@class,' topic/desc ')]" mode="tabledesc">
   <xsl:apply-templates/>
 </xsl:template>
+<xsl:template match="*[contains(@class,' topic/table ')]/*[contains(@class,' topic/desc ')]" mode="get-output-class">tabledesc</xsl:template>
 
 <!-- These 2 rules are not actually used, but could be picked up by an override -->
 <xsl:template match="*[contains(@class,' topic/table ')]/*[contains(@class,' topic/title ')]" name="topic.table_title">
@@ -4440,12 +4543,19 @@
        <xsl:apply-templates select="./*[contains(@class,' topic/title ')]" mode="figtitle"/>
       </span>
       <xsl:if test="*[contains(@class,' topic/desc ')]">
-       <xsl:text>. </xsl:text><span class="figdesc"><xsl:apply-templates select="./*[contains(@class,' topic/desc ')]" mode="figdesc"/></span>
+       <xsl:text>. </xsl:text>
+       <span class="figdesc">
+         <xsl:for-each select="./*[contains(@class,' topic/desc ')]"><xsl:call-template name="commonattributes"/></xsl:for-each>
+         <xsl:apply-templates select="./*[contains(@class,' topic/desc ')]" mode="figdesc"/>
+       </span>
       </xsl:if>
     </xsl:when>
     <!-- desc -->
     <xsl:when test="*[contains(@class, ' topic/desc ')]">
-     <span class="figdesc"><xsl:apply-templates select="./*[contains(@class,' topic/desc ')]" mode="figdesc"/></span>
+      <span class="figdesc">
+        <xsl:for-each select="./*[contains(@class,' topic/desc ')]"><xsl:call-template name="commonattributes"/></xsl:for-each>
+        <xsl:apply-templates select="./*[contains(@class,' topic/desc ')]" mode="figdesc"/>
+      </span>
     </xsl:when>
   </xsl:choose>
 </xsl:template>
@@ -4456,6 +4566,7 @@
 <xsl:template match="*[contains(@class,' topic/fig ')]/*[contains(@class,' topic/desc ')]" mode="figdesc">
  <xsl:apply-templates/>
 </xsl:template>
+<xsl:template match="*[contains(@class,' topic/fig ')]/*[contains(@class,' topic/desc ')]" mode="get-output-class">figdesc</xsl:template>
 
 <!-- These 2 rules are not actually used, but could be picked up by an override -->
 <xsl:template match="*[contains(@class,' topic/fig ')]/*[contains(@class,' topic/title ')]" name="topic.fig_title">

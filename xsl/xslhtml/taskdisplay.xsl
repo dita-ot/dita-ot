@@ -64,6 +64,7 @@
 </div><xsl:value-of select="$newline"/>
 </xsl:template>
 
+<xsl:template match="*[contains(@class,' task/prereq ')]" mode="get-output-class">p</xsl:template>
 <xsl:template match="*[contains(@class,' task/prereq ')]" name="topic.task.prereq">
   <xsl:variable name="flagrules">
     <xsl:call-template name="getrules"/>
@@ -330,7 +331,9 @@
     </xsl:call-template>
   </xsl:variable>
 <div class="p">
-  <xsl:call-template name="commonattributes"/>
+  <xsl:call-template name="commonattributes">
+    <xsl:with-param name="default-output-class" select="'p'"/>
+  </xsl:call-template>
   <xsl:call-template name="gen-style">
     <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
     <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
@@ -690,6 +693,7 @@
    </xsl:otherwise>
  </xsl:choose>
 </xsl:template>
+<xsl:template match="*[contains(@class,' task/choicetable ')]" mode="get-output-class">choicetableborder</xsl:template>
 <xsl:template match="*[contains(@class,' task/choicetable ')]" mode="choicetable-fmt">
  <!-- Find the total number of relative units for the table. If @relcolwidth="1* 2* 2*",
       the variable is set to 5. -->
