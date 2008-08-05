@@ -213,7 +213,7 @@ public class ConrefPushParser extends AbstractXMLWriter {
 			
 			String conreflist[] = properties.getProperty("conreflist").split(Constants.COMMA);
 			// get the reletivePath from tempDir
-			String reletivePath = filename.substring(tempDir.length() + 1);
+			String reletivePath = filename.substring(FileUtils.removeRedundantNames(tempDir).length() + 1);
 			for(String str: conreflist){
 				if(str.equals(reletivePath)){
 					return;
@@ -346,7 +346,7 @@ public class ConrefPushParser extends AbstractXMLWriter {
 							NamedNodeMap namedNodeMap = elem.getAttributes();
 							for(int t=0; t<namedNodeMap.getLength(); t++){
 								//write the attributes to new generated element
-								if(namedNodeMap.item(t).getNodeName() == "conref" && namedNodeMap.item(i).getNodeValue() != ""){
+								if(namedNodeMap.item(t).getNodeName() == "conref" && namedNodeMap.item(t).getNodeValue() != ""){
 									hasConref = true;
 								}
 								stringBuffer.append(Constants.STRING_BLANK).append(namedNodeMap.item(t).getNodeName()).append(Constants.EQUAL).append(Constants.QUOTATION+namedNodeMap.item(t).getNodeValue()+Constants.QUOTATION);
