@@ -77,7 +77,7 @@ public class DebugAndFilterModule implements AbstractPipelineModule {
     		equalIndex = file.indexOf(Constants.EQUAL);
     		fileExtIndex = file.lastIndexOf(Constants.DOT);
     		parenthesisIndex = file.indexOf("(");
-    		if(parenthesisIndex != -1){
+    		if(listName.equals(Constants.KEY_LIST) && parenthesisIndex != -1){
     			// replace the extension of key definition
     			result.append(Constants.COMMA);
     			result.append(file.substring(0, equalIndex));
