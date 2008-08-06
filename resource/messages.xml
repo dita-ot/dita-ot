@@ -272,6 +272,21 @@
     <reason>There are redundant action "pushbefore". Xtrf="%1" Xtrc="%2"</reason>
     <response>Please make sure that "mark" and "pushbefore" occur in pairs.</response>
   </message>
+  
+  <message id="DOTJ045W" type="WARN">
+    <reason>Unable to find key definition for keyref="%1", href may be used as fallback if there exists it, Xtrf="%2" Xtrc="%3"</reason>
+    <response>Pleage make sure the keyname is correct or it is not defined.</response>
+  </message>
+  
+  <message id="DOTJ046W" type="WARN">
+    <reason>Duplicated key definition key="%1" href="%2" was ingnored</reason>
+    <response>Please make sure the key name is unique. </response>
+  </message>
+  
+  <message id="DOTJ047E" type="ERROR">
+    <reason>Conkeyref="%1" can not be resolved, due to lack of key or key doesn't exist. Xtrf="%2" Xtrc="%3".</reason>
+    <response>Please make sure the key name does exist. </response>
+  </message>
   <!-- End of Java Messages -->
     
   <!-- Begin of XSL Messages -->  

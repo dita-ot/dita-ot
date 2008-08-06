@@ -46,7 +46,8 @@ public class DebugAndFilterModule implements AbstractPipelineModule {
 	private static final String [] PROPERTY_UPDATE_LIST = {"user.input.file",Constants.HREF_TARGET_LIST,
 			Constants.CONREF_LIST,Constants.HREF_DITA_TOPIC_LIST,Constants.FULL_DITA_TOPIC_LIST,
 			Constants.FULL_DITAMAP_TOPIC_LIST,Constants.CONREF_TARGET_LIST,Constants.COPYTO_SOURCE_LIST,
-			Constants.COPYTO_TARGET_TO_SOURCE_MAP_LIST,Constants.OUT_DITA_FILES_LIST,Constants.CONREF_PUSH_LIST};
+			Constants.COPYTO_TARGET_TO_SOURCE_MAP_LIST,Constants.OUT_DITA_FILES_LIST,Constants.CONREF_PUSH_LIST,
+			Constants.KEY_LIST,Constants.KEYREF_LIST};
 	/**
 	 * File extension of source file
 	 */
@@ -59,6 +60,8 @@ public class DebugAndFilterModule implements AbstractPipelineModule {
 		String file;
 		int equalIndex;
 		int fileExtIndex;
+		// the index of "("
+		int parenthesisIndex;
 		StringTokenizer tokenizer = null;
 		
 		
@@ -73,18 +76,28 @@ public class DebugAndFilterModule implements AbstractPipelineModule {
     		file = (String)tokenizer.nextElement();
     		equalIndex = file.indexOf(Constants.EQUAL);
     		fileExtIndex = file.lastIndexOf(Constants.DOT);
-    		if(fileExtIndex != -1 &&
-    				Constants.FILE_EXTENSION_DITAMAP.equalsIgnoreCase(file.substring(fileExtIndex))){
-    			result.append(Constants.COMMA).append(file);
-    		} else if (equalIndex == -1 ){
-    			//append one more comma at the beginning of property value
-    			result.append(Constants.COMMA).append(FileUtils.replaceExtName(file));
-    		} else {
-    			//append one more comma at the beginning of property value
+    		parenthesisIndex = file.indexOf("(");
+    		if(parenthesisIndex != -1){
+    			// replace the extension of key definition
     			result.append(Constants.COMMA);
-    			result.append(FileUtils.replaceExtName(file.substring(0,equalIndex)));
+    			result.append(file.substring(0, equalIndex));
     			result.append(Constants.EQUAL);
-    			result.append(FileUtils.replaceExtName(file.substring(equalIndex+1)));
+    			result.append(FileUtils.replaceExtName(file.substring(equalIndex+1, parenthesisIndex)));
+    			result.append(file.substring(parenthesisIndex));
+    		}else{
+	    		if(fileExtIndex != -1 &&
+	    				Constants.FILE_EXTENSION_DITAMAP.equalsIgnoreCase(file.substring(fileExtIndex))){
+	    			result.append(Constants.COMMA).append(file);
+	    		} else if (equalIndex == -1 ){
+	    			//append one more comma at the beginning of property value
+	    			result.append(Constants.COMMA).append(FileUtils.replaceExtName(file));
+	    		} else {
+	    			//append one more comma at the beginning of property value
+	    			result.append(Constants.COMMA);
+	    			result.append(FileUtils.replaceExtName(file.substring(0,equalIndex)));
+	    			result.append(Constants.EQUAL);
+	    			result.append(FileUtils.replaceExtName(file.substring(equalIndex+1)));
+	    		}
     		}
     	}
     	String list = result.substring(Constants.INT_1);

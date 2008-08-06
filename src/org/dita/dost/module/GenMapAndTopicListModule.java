@@ -117,7 +117,13 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 	
 	/** Set of sources of conacion */
 	private Set conrefpushSet;
-
+	
+	/** Set of files containing keyref */
+	private Set keyrefSet = null;
+	
+	/** Map of all key definitions*/
+	private Map<String,String> keysDefMap = null;
+	
 	/** Basedir for processing */
 	private String baseInputDir = null;
 
@@ -179,6 +185,8 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 		outDitaFilesSet=new HashSet(Constants.INT_128);
 		relFlagImagesSet=new LinkedHashSet(Constants.INT_128);
 		conrefpushSet = new HashSet(Constants.INT_128);
+		keysDefMap = new HashMap<String, String>();
+		keyrefSet = new HashSet<String>(Constants.INT_128);
 	}
 
 	/**
@@ -381,6 +389,7 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 	private void processParseResult(String currentFile) {
 		Iterator iter = reader.getNonCopytoResult().iterator();
 		Map cpMap = reader.getCopytoMap();
+		Map<String,String> kdMap = reader.getKeysDMap();
 		
 		/*
 		 * Category non-copyto result and update uplevels accordingly
@@ -418,6 +427,26 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 			}
 		}
 		
+		/**
+		 * collect key definitions 
+		 */
+		iter = kdMap.keySet().iterator();
+		while(iter.hasNext()){
+			String key = (String)iter.next();
+			String value = (String)kdMap.get(key);
+			if(keysDefMap.containsKey(key)){
+			// if there already exists a key definition, ingnore it and emit a warning message
+				Properties prop = new Properties();
+				prop.setProperty("%1", key);
+				prop.setProperty("%2", value);
+				javaLogger.logWarn(MessageUtils.getMessage("DOTJ046W", prop).toString());
+			}else{
+				updateUplevels(key);
+				// add the ditamap where it is defined.
+				keysDefMap.put(key, value+"("+currentFile+")");
+			}
+			
+		}
 		hrefTargetSet.addAll(reader.getHrefTargets());
 		conrefTargetSet.addAll(reader.getConrefTargets());
 		nonConrefCopytoTargetSet.addAll(reader.getNonConrefCopytoTargets());
@@ -441,6 +470,10 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 		                        
 		if (reader.hasConRef()) {
 			conrefSet.add(currentFile);
+		}
+		
+		if(reader.hasKeyRef()){
+			keyrefSet.add(currentFile);
 		}
 		
 		if (FileUtils.isDITATopicFile(lcasefn)) {
@@ -673,6 +706,7 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 		File xmlDitalist=new File(tempDir, Constants.FILE_NAME_DITA_LIST_XML);
 		File dir = new File(tempDir);
 		Set copytoSet = new HashSet(Constants.INT_128);
+		Set keysDefSet = new HashSet<String>(Constants.INT_128);
 		Iterator iter = null;
 		
 		if (!dir.exists()) {
@@ -715,6 +749,8 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 		addSetToProperties(prop, Constants.COPYTO_SOURCE_LIST, copytoSourceSet);
 		addSetToProperties(prop, Constants.SUBSIDIARY_TARGET_LIST, subsidiarySet);
 		addSetToProperties(prop, Constants.CONREF_PUSH_LIST, conrefpushSet);
+		addSetToProperties(prop, Constants.KEYREF_LIST, keyrefSet);
+		
 		addFlagImagesSetToProperties(prop,Constants.REL_FLAGIMAGE_LIST,relFlagImagesSet);
 		
 		/*
@@ -725,8 +761,13 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 			Map.Entry entry = (Map.Entry) iter.next();
 			copytoSet.add(entry.toString());
 		}
+		iter = keysDefMap.entrySet().iterator();
+		while(iter.hasNext()){
+			Map.Entry<String, String> entry =(Map.Entry) iter.next();
+			keysDefSet.add(entry.toString());
+		}
 		addSetToProperties(prop, Constants.COPYTO_TARGET_TO_SOURCE_MAP_LIST, copytoSet);
-		
+		addSetToProperties(prop, Constants.KEY_LIST, keysDefSet);
 		content.setValue(prop);
 		writer.setContent(content);
 		

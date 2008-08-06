@@ -112,6 +112,9 @@ public abstract class Constants {
 	public static final String ATTRIBUTE_NAME_START="start";
 	public static final String ATTRIBUTE_NAME_END="end";
 	public static final String ATTRIBUTE_NAME_CONACTION="conaction";
+	public static final String ATTRIBUTE_NAME_KEYREF = "keyref";
+	public static final String ATTRIBUTE_NAME_CONKEYREF	="conkeyref";
+	public static final String ATTRIBUTE_NAME_KEYS = "keys";
     
     /**
      * Constant for value of attribute format in dita files.
@@ -154,6 +157,8 @@ public abstract class Constants {
     public static final String OUT_DITA_FILES_LIST="outditafileslist";
     public static final String REL_FLAGIMAGE_LIST="relflagimagelist";
     public static final String CONREF_PUSH_LIST = "conrefpushlist";
+    public static final String KEY_LIST = "keylist";
+    public static final String KEYREF_LIST = "keyreflist";
 
     /**
      * Constants for common params used in ant invoker.

@@ -72,6 +72,9 @@ public class GenListModuleReader extends AbstractXMLReader {
 
 	/** Flag for href in parsing file */
 	private boolean hasHref = false;
+	
+	/** Flag for keyref in parsing file */
+	private boolean hasKeyRef = false;
 
 	/** Set of all the non-conref and non-copyto targets refered in current parsing file */
 	private Set nonConrefCopytoTargets = null;
@@ -90,6 +93,9 @@ public class GenListModuleReader extends AbstractXMLReader {
 	
 	/** Map of copy-to target to souce	*/
 	private Map copytoMap = null;
+	
+	/** Map of key definitions */
+	private Map<String, String> keysDefMap = null;
 	
 	/** Flag for conrefpush   */
 	private boolean hasconaction = false;  
@@ -138,6 +144,7 @@ public class GenListModuleReader extends AbstractXMLReader {
 		subsidiarySet = new HashSet(Constants.INT_16);
 		ignoredCopytoSourceSet = new HashSet(Constants.INT_16);
 		outDitaFilesSet=new HashSet(Constants.INT_64);
+		keysDefMap = new HashMap<String, String>();
 		props = null;
 		reader.setContentHandler(this);
 		javaLogger = new DITAOTJavaLogger();
@@ -196,6 +203,7 @@ public class GenListModuleReader extends AbstractXMLReader {
 	 * Reset the internal variables
 	 */
     public void reset() {
+    	hasKeyRef = false;
 		hasConRef = false;
 		hasHref = false;
 		currentDir = null;
@@ -210,6 +218,7 @@ public class GenListModuleReader extends AbstractXMLReader {
 		copytoMap.clear();
 		ignoredCopytoSourceSet.clear();
 		outDitaFilesSet.clear();
+		keysDefMap.clear();
 	}
 
 	/**
@@ -219,6 +228,15 @@ public class GenListModuleReader extends AbstractXMLReader {
 	 */
 	public boolean hasConRef() {
 		return hasConRef;
+	}
+	
+	/**
+	 * To see if the parsed file has keyref inside.
+	 * 
+	 * @return 
+	 */
+	public boolean hasKeyRef(){
+		return hasKeyRef;
 	}
 
 	/**
@@ -309,6 +327,14 @@ public class GenListModuleReader extends AbstractXMLReader {
 		return copytoMap;
 	}
 	
+	/**
+	 * Get the Key definitions.
+	 * 
+	 * @return
+	 */
+	public Map<String,String> getKeysDMap(){
+		return keysDefMap;
+	}
 	/**
 	 * Set the relative directory of current file.
 	 * 
@@ -428,6 +454,9 @@ public class GenListModuleReader extends AbstractXMLReader {
 		parseAttribute(atts, Constants.ATTRIBUTE_NAME_COPY_TO);
 		parseAttribute(atts, Constants.ATTRIBUTE_NAME_IMG);
 		parseAttribute(atts, Constants.ATTRIBUTE_NAME_CONACTION);
+		parseAttribute(atts, Constants.ATTRIBUTE_NAME_KEYS);
+		parseAttribute(atts, Constants.ATTRIBUTE_NAME_CONKEYREF);
+		parseAttribute(atts, Constants.ATTRIBUTE_NAME_KEYREF);
 	}
 
 	/** (non-Javadoc)
@@ -484,13 +513,14 @@ public class GenListModuleReader extends AbstractXMLReader {
 			return;
 		}
 		
-		if (Constants.ATTRIBUTE_NAME_CONREF.equals(attrName)) {
+		// @conkeyref will be resolved to @conref in Debug&Fileter step
+		if (Constants.ATTRIBUTE_NAME_CONREF.equals(attrName) || Constants.ATTRIBUTE_NAME_CONKEYREF.equals(attrName)) {
 			hasConRef = true;
 		} else if (Constants.ATTRIBUTE_NAME_HREF.equals(attrName)) {
 			hasHref = true;
+		} else if(Constants.ATTRIBUTE_NAME_KEYREF.equals(attrName)){
+			hasKeyRef = true;
 		}
-		
-		
 
 		if (attrValue.startsWith(Constants.SHARP)
 				|| attrValue.indexOf(Constants.COLON_DOUBLE_SLASH) != -1){
@@ -499,6 +529,27 @@ public class GenListModuleReader extends AbstractXMLReader {
 		if ("external".equalsIgnoreCase(attrScope)
 				|| "peer".equalsIgnoreCase(attrScope)) {
 			return;
+		}
+		
+		// collect the key definitions
+		if(Constants.ATTRIBUTE_NAME_KEYS.equals(attrName) && !attrValue.equals(Constants.STRING_EMPTY)){
+			String target = atts.getValue(Constants.ATTRIBUTE_NAME_HREF);
+			if(!keysDefMap.containsKey(attrValue)){
+				if(target != null && !target.equals(Constants.STRING_EMPTY)){
+					if(new File(target).isAbsolute())
+						target = FileUtils.getRelativePathFromMap(rootFilePath, target);
+					target = FileUtils.normalizeDirectory(currentDir, target);
+					keysDefMap.put(attrValue, target);
+				}else{
+					// target is null or empty, it is useful in the future when consider the content of key definition
+					//TODO
+				}
+			}else{
+				Properties prop = new Properties();
+				prop.setProperty("%1", attrValue);
+				prop.setProperty("%2", target);
+				javaLogger.logWarn(MessageUtils.getMessage("DOTJ046W", prop).toString());
+			}
 		}
 		
 		File target=new File(attrValue);

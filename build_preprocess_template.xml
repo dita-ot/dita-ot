@@ -12,7 +12,7 @@
   </condition>
 
   <target name="preprocess"
-    dita:depends="{depend.preprocess.pre},start-preprocess,clean-temp,gen-list,debug-filter,copy-files,conrefpush,conref,move-meta-entries,mapref,mappull,chunk,maplink,move-links,topicpull,{depend.preprocess.post}"
+    dita:depends="{depend.preprocess.pre},start-preprocess,clean-temp,gen-list,debug-filter,copy-files,conrefpush,conref,move-meta-entries,keyref,mapref,mappull,chunk,maplink,move-links,topicpull,{depend.preprocess.post}"
     xmlns:dita="http://dita-ot.sourceforge.net"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     description="Preprocessing ended" />
@@ -112,6 +112,9 @@
     </condition>
     <condition property="noConrefPush">
       <equals arg1="${conrefpushlist}" arg2=""/>
+    </condition>
+    <condition property="noKeyref">
+      <equals arg1="${keyreflist}" arg2=""/>
     </condition>
   </target>
 
@@ -258,6 +261,24 @@
     </condition>
   </target>
   
+  <!-- keyref
+       Resolve keyref using key definition in ditamap-->
+  <target name="keyref"
+    dita:depends="mapref,{depend.preprocess.keyref.pre},keyref-check"
+    xmlns:dita="http://dita-ot.sourceforge.net"
+    dita:extension="depends org.dita.dost.platform.InsertDependsAction"
+    unless="preprocess.keyref.skip"
+    description="Resolve keyref">
+    <pipeline message="Resolve keyref." module="Keyref"
+      basedir="${basedir}" tempdir="${dita.temp.dir}"/>     
+  </target>
+  
+  <target name="keyref-check">
+    <condition property="preprocess.keyref.skip">
+      <isset property="noKeyref"/>
+    </condition>
+  </target>
+    
   <!-- mappull
       Pull metadata (such as navtitle) into the map from the referenced topics. -->
   <target name="mappull"

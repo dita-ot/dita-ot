@@ -10,12 +10,14 @@
 package org.dita.dost.writer;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
@@ -246,6 +248,8 @@ public class DitaWriter extends AbstractXMLWriter {
     private String tempDir;
     private String traceFilename;
     private boolean insideCDATA;
+
+    private Map<String, String> keys = null;
     
     /** XMLReader instance for parsing dita file */
     private static XMLReader reader = null;
@@ -356,6 +360,10 @@ public class DitaWriter extends AbstractXMLWriter {
     }
     
     /**
+     * 
+     */
+    
+    /**
 	 * @param atts
 	 * @throws IOException
 	 */
@@ -393,19 +401,58 @@ public class DitaWriter extends AbstractXMLWriter {
 		    	
 		    }
 		    
+		    // replace conkeyref with conref using key definition
+		    if(Constants.ATTRIBUTE_NAME_CONKEYREF.equals(attQName) && !attValue.equals(Constants.STRING_EMPTY)){
+		    	int sharpIndex = attValue.indexOf(Constants.SHARP);
+		    	int slashIndex = attValue.indexOf(Constants.SLASH);
+		    	int keyIndex = -1;
+		    	if(sharpIndex != -1){
+		    		keyIndex = sharpIndex;
+		    	}else if(slashIndex != -1){
+		    		keyIndex = slashIndex;
+		    	}
+		    	if(keyIndex != -1){
+		    		String key = attValue.substring(0,keyIndex);
+		    		String target;
+		    		if(!key.equals(Constants.STRING_EMPTY) && keys.containsKey(key)){
+		    			target = keys.get(key);
+		    			target = FileUtils.replaceExtName(target);
+		    			copyAttribute("conref", target + attValue.substring(keyIndex));
+		    		}else{
+		    			Properties prop = new Properties();
+		    			prop.setProperty("%1", attValue);
+		    			prop.setProperty("%2", atts.getValue(ATTRIBUTE_XTRF));
+		    			prop.setProperty("%3", atts.getValue(ATTRIBUTE_XTRC));
+		    			logger.logError(MessageUtils.getMessage("DOTJ047E", prop).toString());
+		    		}
+		    	}else{
+		    		if(keys.containsKey(attValue)){
+		    			copyAttribute("conref", FileUtils.replaceExtName(keys.get(attValue)));
+		    		}else{
+		    			Properties prop = new Properties();
+		    			prop.setProperty("%1", attValue);
+		    			prop.setProperty("%2", atts.getValue(ATTRIBUTE_XTRF));
+		    			prop.setProperty("%3", atts.getValue(ATTRIBUTE_XTRC));
+		    			logger.logError(MessageUtils.getMessage("DOTJ047E", prop).toString());
+		    		}	
+		    	}
+		    }
+		    
 		    // replace '&' with '&amp;'
 			//if (attValue.indexOf('&') > 0) {
 				//attValue = StringUtils.replaceAll(attValue, "&", "&amp;");
 			//}
 		    attValue = StringUtils.escapeXML(attValue);
 			
-		    //output all attributes except colname
+		    //output all attributes except colname and conkeyref
 		    if (!Constants.ATTRIBUTE_NAME_COLNAME.equals(attQName)
 		    		&& !Constants.ATTRIBUTE_NAME_NAMEST.equals(attQName)
 		    		&& !Constants.ATTRIBUTE_NAME_DITAARCHVERSION.equals(attQName)
-		    		&& !Constants.ATTRIBUTE_NAME_NAMEEND.equals(attQName)){
+		    		&& !Constants.ATTRIBUTE_NAME_NAMEEND.equals(attQName)
+		    		&& !Constants.ATTRIBUTE_NAME_CONKEYREF.equals(attQName)){
 		    	copyAttribute(attQName, attValue);
 		    }
+		    
 		}
 	}
 
@@ -765,6 +812,38 @@ public class DitaWriter extends AbstractXMLWriter {
 		FileOutputStream fileOutput = null;
         exclude = false;
         needResolveEntity = true;
+        if(null == keys){
+        	keys = new HashMap<String, String>();
+        	Properties prop = new Properties();
+    		if (! new File(tempDir).isAbsolute()){
+    			tempDir = new File(tempDir).getAbsolutePath();
+    		}
+    		
+    		File ditafile = new File(tempDir, Constants.FILE_NAME_DITA_LIST);
+    		File ditaxmlfile = new File(tempDir, Constants.FILE_NAME_DITA_LIST_XML);
+    		
+    		try{
+    		if(ditaxmlfile.exists()){
+    			prop.loadFromXML(new FileInputStream(ditaxmlfile));
+    		}else{
+    			prop.load(new FileInputStream(ditafile));
+    		}
+    		}catch (Exception e) {
+    			logger.logException(e);
+    		}
+    		if(prop.getProperty(Constants.KEY_LIST) != ""){
+	    		String[] keylist = prop.getProperty(Constants.KEY_LIST).split(Constants.COMMA);
+	    		String key;
+	    		String value;
+	    		for(String keyinfo: keylist){
+	    			key = keyinfo.substring(0, keyinfo.indexOf(Constants.EQUAL));
+	    			value = keyinfo.substring(keyinfo.indexOf(Constants.EQUAL)+1, keyinfo.indexOf("("));
+	    			
+	    			keys.put(key, value);
+	    		}
+
+    		}
+        }
         index = filename.indexOf(Constants.STICK);
         fileExtIndex = filename.endsWith(Constants.FILE_EXTENSION_DITAMAP)
         			 ? -1
