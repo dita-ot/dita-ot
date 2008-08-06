@@ -12,6 +12,7 @@ import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.Content;
 import org.dita.dost.util.Constants;
+import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.StringUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -29,6 +30,9 @@ public class KeyrefPaser extends AbstractXMLWriter {
 	private Content content;
 
 	private String tempDir;
+	
+	// relative path of the filename to the temp directory
+	private String filepath;
 	
 	public KeyrefPaser(){
 		javaLogger = new DITAOTJavaLogger();
@@ -126,11 +130,13 @@ public class KeyrefPaser extends AbstractXMLWriter {
 				output.write(Constants.STRING_BLANK);
 				if(atts.getQName(index).equals(Constants.ATTRIBUTE_NAME_KEYREF)){
 					String target = ((HashMap<String, String>)content.getValue()).get(atts.getValue(index));
+					String target_output;
 					if(target != null && new File(tempDir,target).exists()){
 						output.write(Constants.ATTRIBUTE_NAME_HREF);
+						target_output = FileUtils.getRelativePathFromMap(filepath, new File(tempDir,target).getAbsolutePath());
 						validKeyRef = true;
 						output.write("=\"");
-						output.write(target);
+						output.write(target_output);
 						output.write("\"");
 					}else{
 					// if the target is null or the target does not exist emit a warning message
@@ -177,6 +183,7 @@ public class KeyrefPaser extends AbstractXMLWriter {
 	public void write(String filename) throws DITAOTException {
 		try{
 			File inputFile = new File(tempDir,filename);
+			filepath = inputFile.getAbsolutePath();
 			File outputFile = new File(tempDir,filename + "keyref");
 			output = new OutputStreamWriter(new FileOutputStream(outputFile));
 			parser.parse(inputFile.getAbsolutePath());
