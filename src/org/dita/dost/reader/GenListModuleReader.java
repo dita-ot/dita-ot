@@ -527,10 +527,14 @@ public class GenListModuleReader extends AbstractXMLReader {
 			String target = atts.getValue(Constants.ATTRIBUTE_NAME_HREF);
 			if(!keysDefMap.containsKey(attrValue)){
 				if(target != null && !target.equals(Constants.STRING_EMPTY)){
-					if(new File(target).isAbsolute())
-						target = FileUtils.getRelativePathFromMap(rootFilePath, target);
-					target = FileUtils.normalizeDirectory(currentDir, target);
-					keysDefMap.put(attrValue, target);
+					if(attrScope!=null && (attrScope.equals("external") || attrScope.equals("peer"))){
+						keysDefMap.put(attrValue, target);
+					}else{
+						if(new File(target).isAbsolute())
+							target = FileUtils.getRelativePathFromMap(rootFilePath, target);
+						target = FileUtils.normalizeDirectory(currentDir, target);
+						keysDefMap.put(attrValue, target);
+					}
 				}else{
 					// target is null or empty, it is useful in the future when consider the content of key definition
 					//TODO

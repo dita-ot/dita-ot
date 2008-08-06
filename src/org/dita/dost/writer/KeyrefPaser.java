@@ -131,9 +131,12 @@ public class KeyrefPaser extends AbstractXMLWriter {
 				if(atts.getQName(index).equals(Constants.ATTRIBUTE_NAME_KEYREF)){
 					String target = ((HashMap<String, String>)content.getValue()).get(atts.getValue(index));
 					String target_output;
-					if(target != null && new File(tempDir,target).exists()){
+					if(target != null && (new File(tempDir,target).exists() || target.startsWith("http://"))){
 						output.write(Constants.ATTRIBUTE_NAME_HREF);
-						target_output = FileUtils.getRelativePathFromMap(filepath, new File(tempDir,target).getAbsolutePath());
+						if(target.startsWith("http://"))
+							target_output = target;
+						else
+							target_output = FileUtils.getRelativePathFromMap(filepath, new File(tempDir,target).getAbsolutePath());
 						validKeyRef = true;
 						output.write("=\"");
 						output.write(target_output);
