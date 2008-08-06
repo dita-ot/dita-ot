@@ -156,7 +156,7 @@ public class KeyrefPaser extends AbstractXMLWriter {
 				}
 			}
 			if(!validKeyRef && atts.getValue(Constants.ATTRIBUTE_NAME_HREF) != null){
-			// if the keyref is not valid and href exist, write it
+			// if the keyref is not valid or does not exist, but href exist, write it
 				output.write(Constants.STRING_BLANK);
 				output.write(Constants.ATTRIBUTE_NAME_HREF);
 				output.write("=\"");
@@ -164,7 +164,7 @@ public class KeyrefPaser extends AbstractXMLWriter {
 				output.write("\"");
 			}
 			if(!validKeyRef && atts.getValue(Constants.ATTRIBUTE_NAME_SCOPE) != null){
-			// if the keyref is not valid and href exist, write it
+			// if the keyref is not valid or does not exist, but scope exist, write it
 				output.write(Constants.STRING_BLANK);
 				output.write(Constants.ATTRIBUTE_NAME_SCOPE);
 				output.write("=\"");
