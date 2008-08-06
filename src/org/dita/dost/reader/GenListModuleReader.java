@@ -521,15 +521,6 @@ public class GenListModuleReader extends AbstractXMLReader {
 		} else if(Constants.ATTRIBUTE_NAME_KEYREF.equals(attrName)){
 			hasKeyRef = true;
 		}
-
-		if (attrValue.startsWith(Constants.SHARP)
-				|| attrValue.indexOf(Constants.COLON_DOUBLE_SLASH) != -1){
-			return;
-		}
-		if ("external".equalsIgnoreCase(attrScope)
-				|| "peer".equalsIgnoreCase(attrScope)) {
-			return;
-		}
 		
 		// collect the key definitions
 		if(Constants.ATTRIBUTE_NAME_KEYS.equals(attrName) && !attrValue.equals(Constants.STRING_EMPTY)){
@@ -550,6 +541,16 @@ public class GenListModuleReader extends AbstractXMLReader {
 				prop.setProperty("%2", target);
 				javaLogger.logWarn(MessageUtils.getMessage("DOTJ046W", prop).toString());
 			}
+		}
+		
+
+		if (attrValue.startsWith(Constants.SHARP)
+				|| attrValue.indexOf(Constants.COLON_DOUBLE_SLASH) != -1){
+			return;
+		}
+		if ("external".equalsIgnoreCase(attrScope)
+				|| "peer".equalsIgnoreCase(attrScope)) {
+			return;
 		}
 		
 		File target=new File(attrValue);
