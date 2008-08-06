@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA 1.2 Task//EN" "../demo/dita12/dtd12/technicalContent/dtd/task.dtd">
+<task id="topicID" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
+    <title>This is a topic for pushAfter between specialization DTD</title>
+    
+    <taskbody>
+        <steps>
+			<step conaction="pushbefore"><cmd>before</cmd></step>
+            <step conref="conrefpush_stub2.xml#X/A" conaction="mark"/>
+            <step conref="conrefpush_stub2.xml#X/B" conaction="mark"/>
+			<step conaction="pushafter"><cmd>after</cmd></step>
+			<step conref="conrefpush_stub2.xml#X/C" conaction="pushreplace"><cmd>replace</cmd></step>
+        </steps>
+    </taskbody>
+</task>
+
