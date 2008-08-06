@@ -227,7 +227,7 @@
       Produce a logical super-map from the map references
       (topicref with format="ditamap") in the input map. -->
   <target name="mapref" 
-    dita:depends="move-meta-entries,{depend.preprocess.mapref.pre},mapref-check"
+    dita:depends="keyref,{depend.preprocess.mapref.pre},mapref-check"
     xmlns:dita="http://dita-ot.sourceforge.net"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     unless="preprocess.mapref.skip"
@@ -264,7 +264,7 @@
   <!-- keyref
        Resolve keyref using key definition in ditamap-->
   <target name="keyref"
-    dita:depends="mapref,{depend.preprocess.keyref.pre},keyref-check"
+    dita:depends="move-meta-entries,{depend.preprocess.keyref.pre},keyref-check"
     xmlns:dita="http://dita-ot.sourceforge.net"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     unless="preprocess.keyref.skip"
