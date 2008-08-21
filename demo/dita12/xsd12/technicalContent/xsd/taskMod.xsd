@@ -2,8 +2,8 @@
 <!-- ============================================================= -->
 <!--                    HEADER                                     -->
 <!-- ============================================================= -->
-<!--  MODULE:    DITA Task XSD Module                              -->
-<!--  VERSION:   1.1                                             -->
+<!--  VERSION:   1.2                                             -->
+<!--  DATE:      July 2007                                     -->
 <!--  DATE:      November 2006                                     -->
 <!--                                                               -->
 <!-- ============================================================= -->
@@ -192,6 +192,21 @@
       <xs:complexContent>
         <xs:extension base="step.class">
           <xs:attribute ref="class" default="- topic/li     task/step "/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+   
+   <xs:element name="stepsection">
+    <xs:annotation>
+      <xs:documentation>
+        
+      </xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="stepsection.class">
+          <xs:attribute ref="class" default="- topic/li     task/stepsection "/>
         </xs:extension>
       </xs:complexContent>
     </xs:complexType>
@@ -517,7 +532,15 @@
 
    <!-- Base type: topic.class -->
   <xs:complexType name="task.class">
-    <xs:sequence>
+   <xs:sequence>
+     <xs:group ref="task.content"/>
+   </xs:sequence>
+    <xs:attributeGroup ref="task.attributes"/>
+  </xs:complexType>
+   
+   <xs:group name="task.content">
+     <xs:sequence>
+        <xs:sequence>
       <xs:group ref="title"/>
       <xs:group ref="titlealts" minOccurs="0"/>
       <xs:choice minOccurs="0">
@@ -529,7 +552,11 @@
       <xs:group ref="related-links" minOccurs="0"/>
       <xs:group ref="task-info-types" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
-    <xs:attribute name="id" type="xs:ID" use="required"/>
+     </xs:sequence>
+   </xs:group>
+   
+   <xs:attributeGroup name="task.attributes">
+     <xs:attribute name="id" type="xs:ID" use="required"/>
     <xs:attributeGroup ref="conref-atts" />
     <xs:attributeGroup ref="select-atts"/>
     <xs:attribute ref="ditaarch:DITAArchVersion"/>
@@ -537,7 +564,7 @@
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="localization-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-  </xs:complexType>
+   </xs:attributeGroup>
 <!--
 <!ENTITY % taskbody.content
 "(((%prereq;) | 
@@ -553,76 +580,157 @@
 
   <!-- Base type: body.class -->
   <xs:complexType name="taskbody.class">
+    <xs:choice>
+      <xs:group ref="taskbody.content"/>
+    </xs:choice>
+    <xs:attributeGroup ref="taskbody.attributes"/>
+  </xs:complexType>
+   
+   <xs:group name="taskbody.content">
     <xs:sequence>
-      <xs:group ref="task.content"/>
+      <xs:group ref="taskPreStep"/>
+      <xs:group ref="taskStep"/>
+      <xs:group ref="taskPostStep"/>
     </xs:sequence>
-    <xs:attribute name="outputclass" type="xs:string"/>
+  </xs:group>
+
+  <xs:group name="taskPreStep">
+    <xs:sequence>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:group ref="context" minOccurs="0"/>
+        <xs:group ref="prereq"  minOccurs="0"/>
+        <xs:group ref="section" minOccurs="0"/>
+      </xs:choice>
+    </xs:sequence>
+  </xs:group>
+
+  <xs:group name="taskPostStep">
+    <xs:sequence>
+      <xs:group ref="result"  minOccurs="0"/>
+      <xs:group ref="postreq"  minOccurs="0" maxOccurs="unbounded"/>  
+      <xs:group ref="example"  minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:group>
+  
+  <xs:group name="taskStep">
+    <xs:sequence>
+       <xs:choice minOccurs="0" maxOccurs="1">
+       <xs:group ref="steps" />
+       <xs:group ref="steps-unordered" />
+       <xs:group ref="process" />
+     </xs:choice>
+    </xs:sequence>
+  </xs:group>
+   
+   <xs:attributeGroup name="taskbody.attributes">
+     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attribute name="base" type="xs:string" />
     <xs:attributeGroup ref="base-attribute-extensions"/>
     <xs:attributeGroup ref="id-atts"/>
     <xs:attributeGroup ref="localization-atts" />
     <xs:attributeGroup ref="global-atts"/>
-  </xs:complexType>
-   
-   <xs:group name="task.content">
-     <xs:sequence>
-       <xs:group ref="prereq"  minOccurs="0" maxOccurs="unbounded" />
-       <xs:group ref="context"  minOccurs="0" maxOccurs="unbounded"/>
-       <xs:group ref="section"  minOccurs="0" maxOccurs="unbounded"/>
-     <xs:choice minOccurs="0" maxOccurs="1">
-       <xs:group ref="steps" />
-       <xs:group ref="steps-unordered" />
-       <xs:group ref="process" />
-     </xs:choice>
-     <xs:group ref="result" minOccurs="0"/>
-     <xs:group ref="example" minOccurs="0" maxOccurs="unbounded"/>
-     <xs:group ref="postreq" minOccurs="0" maxOccurs="unbounded"/>
-     </xs:sequence>
-   </xs:group>
+   </xs:attributeGroup>
 
    <!-- Base type: section.class -->
   <xs:complexType name="prereq.class" mixed="true">
-    <xs:choice minOccurs="0" maxOccurs="unbounded">
-      <xs:group ref="section.notitle.cnt"/>
+    <xs:sequence>
+      <xs:group ref="prereq.content"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="prereq.attributes"/>
+  </xs:complexType>
+   
+   <xs:group name="prereq.content">
+     <xs:sequence>
+       <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="section.notitle.cnt" minOccurs="0"/>
     </xs:choice>
-    <xs:attribute name="outputclass" type="xs:string"/>
+     </xs:sequence>
+   </xs:group>
+   
+    <xs:attributeGroup name="prereq.attributes">
+     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-  </xs:complexType>
+   </xs:attributeGroup>
 
   <!-- Base type: section.class -->
   <xs:complexType name="context.class" mixed="true">
-    <xs:choice minOccurs="0" maxOccurs="unbounded">
-      <xs:group ref="section.notitle.cnt"/>
+    <xs:sequence>
+      <xs:group ref="context.content"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="context.attributes"/>
+  </xs:complexType>
+   
+   <xs:group name="context.content">
+     <xs:sequence>
+       <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="section.notitle.cnt" minOccurs="0"/>
     </xs:choice>
-    <xs:attribute name="outputclass" type="xs:string"/>
+     </xs:sequence>
+   </xs:group>
+   
+    <xs:attributeGroup name="context.attributes">
+     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-  </xs:complexType>
+   </xs:attributeGroup>
 
   <!-- Base type: ol.class -->
   <xs:complexType name="steps.class">
-    <xs:choice>
+    <xs:sequence>
+      <xs:group ref="steps.content"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="steps.attributes"/>
+  </xs:complexType>
+   
+   <xs:group name="steps.content">
+     <xs:sequence>
+       <xs:choice>
+      <xs:group ref="stepsection" minOccurs="0"/>
       <xs:group ref="step" maxOccurs="unbounded"/>
     </xs:choice>
-    <xs:attribute name="outputclass" type="xs:string"/>
+     </xs:sequence>
+   </xs:group>
+   
+    <xs:attributeGroup name="steps.attributes">
+     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-  </xs:complexType>
+   </xs:attributeGroup>
 
   <!-- Base type: ul.class -->
   <xs:complexType name="steps-unordered.class">
-    <xs:choice minOccurs="1" maxOccurs="unbounded">
+    <xs:sequence>
+      <xs:group ref="steps-unordered.content"/>
+    </xs:sequence>
+   <xs:attributeGroup ref="steps-unordered.attributes"/>
+  </xs:complexType>
+   
+   <xs:group name="steps-unordered.content">
+     <xs:sequence>
+       <xs:choice minOccurs="1" maxOccurs="unbounded">
       <xs:group ref="step" />
     </xs:choice>
-    <xs:attribute name="outputclass" type="xs:string"/>
+     </xs:sequence>
+   </xs:group>
+   
+    <xs:attributeGroup name="steps-unordered.attributes">
+     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-  </xs:complexType>
+   </xs:attributeGroup>
 
   <!-- Base type: li.class -->
   <xs:complexType name="step.class">
-    <xs:sequence>
+      <xs:sequence>
+        <xs:group ref="step.content"/>
+      </xs:sequence>
+      <xs:attributeGroup ref="step.attributes"/>
+  </xs:complexType>
+   
+   <xs:group name="step.content">
+     <xs:sequence>
+       <xs:sequence>
       <xs:group ref="cmd"/>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
         <xs:group ref="info"/>
@@ -634,45 +742,95 @@
       </xs:choice>
       <xs:group ref="stepresult" minOccurs="0"/>
     </xs:sequence>
-    <xs:attribute name="outputclass" type="xs:string"/>
+     </xs:sequence>
+   </xs:group>
+   
+    <xs:attributeGroup name="step.attributes">
+      <xs:attribute name="importance" type="importance-att-nodefault-task.class"/>
+     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts-no-importance-task"/>
     <xs:attributeGroup ref="global-atts"/>
-  </xs:complexType>
+   </xs:attributeGroup>
 
   <!-- Base type: ph.class -->
   <xs:complexType name="cmd.class" mixed="true">
-    <xs:choice minOccurs="0" maxOccurs="unbounded">
-      <xs:group ref="ph.cnt"/>
+    <xs:sequence>
+      <xs:group ref="cmd.content"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="cmd.attributes"/>
+  </xs:complexType>
+   
+   <xs:group name="cmd.content">
+     <xs:sequence>
+       <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="ph.cnt" minOccurs="0"/>
     </xs:choice>
-    <xs:attribute name="keyref" type="xs:string"/>
-    <xs:attribute name="outputclass" type="xs:string"/>
+     </xs:sequence>
+   </xs:group>
+   
+    <xs:attributeGroup name="cmd.attributes">
+      <xs:attribute name="keyref" type="xs:string"/>
+     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-  </xs:complexType>
+   </xs:attributeGroup>
+
 
   <!-- Base type: itemgroup.class -->
   <xs:complexType name="info.class" mixed="true">
-    <xs:choice minOccurs="0" maxOccurs="unbounded">
-      <xs:group ref="itemgroup.cnt"/>
+    <xs:sequence>
+      <xs:group ref="info.content"/>
+    </xs:sequence>
+   <xs:attributeGroup ref="info.attributes"/>
+  </xs:complexType>
+   
+   <xs:group name="info.content">
+     <xs:sequence>
+       <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="itemgroup.cnt" minOccurs="0"/>
     </xs:choice>
-    <xs:attribute name="outputclass" type="xs:string"/>
+     </xs:sequence>
+   </xs:group>
+   
+    <xs:attributeGroup name="info.attributes">
+     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-  </xs:complexType>
+   </xs:attributeGroup>
 
   <!-- Base type: ol.class -->
   <xs:complexType name="substeps.class">
-    <xs:choice maxOccurs="unbounded">
+    <xs:sequence>
+      <xs:group ref="substeps.content"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="choices.attributes"/>
+  </xs:complexType>
+   
+   <xs:group name="substeps.content">
+     <xs:sequence>
+       <xs:choice maxOccurs="unbounded">
       <xs:group ref="substep" />
     </xs:choice>
-    <xs:attribute name="outputclass" type="xs:string"/>
+     </xs:sequence>
+   </xs:group>
+   
+    <xs:attributeGroup name="substeps.attributes">
+     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-  </xs:complexType>
+   </xs:attributeGroup>
 
   <!-- Base type: li.class -->
   <xs:complexType name="substep.class">
     <xs:sequence>
+      <xs:group ref="substep.content"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="substep.attributes"/>
+  </xs:complexType>
+   
+   <xs:group name="substep.content">
+     <xs:sequence>
+       <xs:sequence>
       <xs:group ref="cmd"/>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
         <xs:group ref="info" />
@@ -681,157 +839,355 @@
       </xs:choice>
       <xs:group ref="stepresult"  minOccurs="0"/>
     </xs:sequence>
-    <xs:attribute name="outputclass" type="xs:string"/>
+     </xs:sequence>
+   </xs:group>
+   
+   <xs:attributeGroup name="substep.attributes">
+      <xs:attribute name="importance" type="importance-att-nodefault-task.class"/>
+     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts-no-importance-task"/>
     <xs:attributeGroup ref="global-atts"/>
-  </xs:complexType>
+   </xs:attributeGroup>
 
   <!-- Base type: itemgroup.class -->
   <xs:complexType name="tutorialinfo.class" mixed="true">
-    <xs:choice minOccurs="0" maxOccurs="unbounded">
-      <xs:group ref="itemgroup.cnt"/>
+    <xs:sequence>
+      <xs:group ref="tutorialinfo.content"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="tutorialinfo.attributes"/>
+  </xs:complexType>
+   
+   <xs:group name="tutorialinfo.content">
+     <xs:sequence>
+       <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="itemgroup.cnt" minOccurs="0"/>
     </xs:choice>
-    <xs:attribute name="outputclass" type="xs:string"/>
+     </xs:sequence>
+   </xs:group>
+   
+    <xs:attributeGroup name="tutorialinfo.attributes">
+     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-  </xs:complexType>
+   </xs:attributeGroup>
 
   <!-- Base type: itemgroup.class -->
   <xs:complexType name="stepxmp.class" mixed="true">
-    <xs:choice minOccurs="0" maxOccurs="unbounded">
-      <xs:group ref="itemgroup.cnt"/>
+     <xs:sequence>
+      <xs:group ref="stepxmp.content"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="stepxmp.attributes"/>
+  </xs:complexType>
+   
+   <xs:group name="stepxmp.content">
+     <xs:sequence>
+       <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="itemgroup.cnt" minOccurs="0"/>
     </xs:choice>
-    <xs:attribute name="outputclass" type="xs:string"/>
+     </xs:sequence>
+   </xs:group>
+   
+    <xs:attributeGroup name="stepxmp.attributes">
+     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-  </xs:complexType>
+   </xs:attributeGroup>
 
   <!-- Base type: ul.class -->
   <xs:complexType name="choices.class">
-    <xs:choice maxOccurs="unbounded">
+    <xs:sequence>
+      <xs:group ref="choices.content"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="choices.attributes"/>
+  </xs:complexType>
+   
+   <xs:group name="choices.content">
+     <xs:sequence>
+       <xs:choice maxOccurs="unbounded">
       <xs:group ref="choice" />
     </xs:choice>
-    <xs:attribute name="outputclass" type="xs:string"/>
+     </xs:sequence>
+   </xs:group>
+   
+    <xs:attributeGroup name="choices.attributes">
+     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-  </xs:complexType>
+   </xs:attributeGroup>
 
   <xs:complexType name="choice.class" mixed="true">
-    <xs:choice minOccurs="0" maxOccurs="unbounded">
-      <xs:group ref="listitem.cnt"/>
+    <xs:sequence>
+      <xs:group ref="choice.content"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="choice.attributes"/>
+  </xs:complexType>
+   
+   <xs:group name="choice.content">
+     <xs:sequence>
+       <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="listitem.cnt" minOccurs="0"/>
     </xs:choice>
-    <xs:attribute name="outputclass" type="xs:string"/>
+     </xs:sequence>
+   </xs:group>
+   
+    <xs:attributeGroup name="choice.attributes">
+     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
+    </xs:attributeGroup>
+   
+   <xs:complexType name="stepsection.class" mixed="true">
+    <xs:sequence>
+      <xs:group ref="stepsection.content"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="stepsection.attributes"/>
   </xs:complexType>
+   
+   <xs:group name="stepsection.content">
+     <xs:sequence>
+       <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="listitem.cnt" minOccurs="0"/>
+    </xs:choice>
+     </xs:sequence>
+   </xs:group>
+   
+    <xs:attributeGroup name="stepsection.attributes">
+     <xs:attribute name="outputclass" type="xs:string"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
+   </xs:attributeGroup>
 
 
   <!-- Base type: itemgroup.class -->
   <xs:complexType name="stepresult.class" mixed="true">
-    <xs:choice minOccurs="0" maxOccurs="unbounded">
-      <xs:group ref="itemgroup.cnt"/>
+   <xs:sequence>
+      <xs:group ref="stepresult.content"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="stepresult.attributes"/>
+  </xs:complexType>
+   
+   <xs:group name="stepresult.content">
+     <xs:sequence>
+       <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="itemgroup.cnt" minOccurs="0"/>
     </xs:choice>
-    <xs:attribute name="outputclass" type="xs:string"/>
+     </xs:sequence>
+   </xs:group>
+   
+    <xs:attributeGroup name="stepresult.attributes">
+     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-  </xs:complexType>
+   </xs:attributeGroup>
 
    <!-- Base type: section.class -->
   <xs:complexType name="result.class" mixed="true">
-    <xs:choice minOccurs="0" maxOccurs="unbounded">
-      <xs:group ref="section.notitle.cnt"/>
+    <xs:sequence>
+      <xs:group ref="result.content"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="result.attributes"/>
+  </xs:complexType>
+   
+   <xs:group name="result.content">
+     <xs:sequence>
+       <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="section.notitle.cnt" minOccurs="0"/>
     </xs:choice>
-    <xs:attribute name="outputclass" type="xs:string"/>
+     </xs:sequence>
+   </xs:group>
+   
+   <xs:attributeGroup name="result.attributes">
+     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-  </xs:complexType>
+   </xs:attributeGroup>
 
    <!-- Base type: section.class -->
   <xs:complexType name="postreq.class" mixed="true">
-    <xs:choice minOccurs="0" maxOccurs="unbounded">
-      <xs:group ref="section.notitle.cnt"/>
+    <xs:sequence>
+      <xs:group ref="postreq.content"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="postreq.attributes"/>
+  </xs:complexType>
+   
+   <xs:group name="postreq.content">
+     <xs:sequence>
+       <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="section.notitle.cnt" minOccurs="0"/>
     </xs:choice>
-    <xs:attribute name="outputclass" type="xs:string"/>
+     </xs:sequence>
+   </xs:group>
+    
+    <xs:attributeGroup name="postreq.attributes">
+     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-  </xs:complexType>
+   </xs:attributeGroup>
+   
 
    <!-- Base type: simpletable.class -->
   <xs:complexType name="choicetable.class">
     <xs:sequence>
+      <xs:group ref="choicetable.content"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="choicetable.attributes"/>
+  </xs:complexType>
+    
+    <xs:group name="choicetable.content">
+      <xs:sequence>
+        <xs:sequence>
       <xs:group ref="chhead" minOccurs="0"/>
       <xs:group ref="chrow" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
-    <xs:attribute name="relcolwidth" type="xs:string"/>
-    <xs:attribute name="keycol" type="xs:NMTOKEN"/>
+      </xs:sequence>
+    </xs:group>
+
+    <xs:attributeGroup name="choicetable.attributes">
+      <xs:attribute name="relcolwidth" type="xs:string"/>
+    <xs:attribute name="keycol" type="xs:NMTOKEN" default="1"/>
     <xs:attribute name="refcols" type="xs:NMTOKENS"/>
     <xs:attributeGroup ref="display-atts"/>
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attribute name="spectitle" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-  </xs:complexType>
+    </xs:attributeGroup>
 
    <!-- Base type: sthead.class -->
   <xs:complexType name="chhead.class">
     <xs:sequence>
-      <xs:group ref="choptionhd"/>
-      <xs:group ref="chdeschd"/>
+      <xs:group ref="chhead.content"/>
     </xs:sequence>
-    <xs:attribute name="outputclass" type="xs:string"/>
+    <xs:attributeGroup ref="chhead.attributes"/>
+  </xs:complexType>
+   
+    <xs:group name="chhead.content">
+     <xs:sequence>
+       <xs:sequence>
+      <xs:group ref="choptionhd" />
+      <xs:group ref="chdeschd" />
+    </xs:sequence>
+     </xs:sequence>
+   </xs:group>
+
+   <xs:attributeGroup name="chhead.attributes">
+     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-  </xs:complexType>
+   </xs:attributeGroup>
 
    <xs:complexType name="choptionhd.class" mixed="true">
-    <xs:choice minOccurs="0" maxOccurs="unbounded">
-      <xs:group ref="tblcell.cnt"/>
+    <xs:sequence>
+      <xs:group ref="choptionhd.content"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="choptionhd.attributes"/>
+   </xs:complexType>
+   
+   <xs:group name="choptionhd.content">
+     <xs:sequence>
+       <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="tblcell.cnt" minOccurs="0"/>
     </xs:choice>
-    <xs:attribute name="outputclass" type="xs:string"/>
+     </xs:sequence>
+   </xs:group>
+   
+   <xs:attributeGroup name="choptionhd.attributes">
+     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attribute name="specentry" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-  </xs:complexType>
+   </xs:attributeGroup>
 
-   <xs:complexType name="chdeschd.class" mixed="true">
+
+<xs:complexType name="chdeschd.class" mixed="true">
+  <xs:sequence>
+    <xs:group ref="chdeschd.content"/>
+  </xs:sequence>
+  <xs:attributeGroup ref="chdeschd.attributes"/>
+</xs:complexType>
+
+<xs:group name="chdeschd.content">
+  <xs:sequence>
     <xs:choice minOccurs="0" maxOccurs="unbounded">
-      <xs:group ref="tblcell.cnt"/>
+      <xs:group ref="tblcell.cnt" minOccurs="0"/>
     </xs:choice>
-    <xs:attribute name="outputclass" type="xs:string"/>
-    <xs:attribute name="specentry" type="xs:string"/>
-    <xs:attributeGroup ref="univ-atts"/>
-    <xs:attributeGroup ref="global-atts"/>
-  </xs:complexType>
+  </xs:sequence>
+</xs:group>
+
+<xs:attributeGroup name="chdeschd.attributes">
+  <xs:attribute name="outputclass" type="xs:string"/>
+  <xs:attribute name="specentry" type="xs:string"/>
+  <xs:attributeGroup ref="univ-atts"/>
+  <xs:attributeGroup ref="global-atts"/>
+</xs:attributeGroup>
 
 
    <xs:complexType name="chrow.class">
     <xs:sequence>
+      <xs:group ref="chrow.content"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="chrow.attributes"/>
+   </xs:complexType>
+   
+   <xs:group name="chrow.content">
+     <xs:sequence>
+       <xs:sequence>
       <xs:group ref="choption" />
       <xs:group ref="chdesc" />
     </xs:sequence>
-    <xs:attribute name="outputclass" type="xs:string"/>
+     </xs:sequence>
+   </xs:group>
+
+   <xs:attributeGroup name="chrow.attributes">
+     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-  </xs:complexType>
-
+   </xs:attributeGroup>
+  
 
    <xs:complexType name="choption.class" mixed="true">
-    <xs:choice minOccurs="0" maxOccurs="unbounded">
-      <xs:group ref="tblcell.cnt"/>
+    <xs:sequence>
+      <xs:group ref="choption.content"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="choption.attributes"/>
+   </xs:complexType>
+   
+   <xs:group name="choption.content">
+     <xs:sequence>
+       <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="tblcell.cnt" minOccurs="0"/>
     </xs:choice>
-    <xs:attribute name="outputclass" type="xs:string"/>
+     </xs:sequence>
+   </xs:group>
+   
+   <xs:attributeGroup name="choption.attributes">
+     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attribute name="specentry" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-  </xs:complexType>
+   </xs:attributeGroup>
+
 
    <xs:complexType name="chdesc.class" mixed="true">
-    <xs:choice minOccurs="0" maxOccurs="unbounded">
-      <xs:group ref="tblcell.cnt"/>
+    <xs:sequence>
+      <xs:group ref="chdesc.content"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="chdesc.attributes"/>
+   </xs:complexType>
+   
+   <xs:group name="chdesc.content">
+     <xs:sequence>
+       <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="tblcell.cnt" minOccurs="0"/>
     </xs:choice>
-    <xs:attribute name="outputclass" type="xs:string"/>
+     </xs:sequence>
+   </xs:group>
+   
+   <xs:attributeGroup name="chdesc.attributes">
+     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attribute name="specentry" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-  </xs:complexType>
+   </xs:attributeGroup>
+
 </xs:schema>

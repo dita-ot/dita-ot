@@ -133,6 +133,14 @@
   </xs:element>
   <xs:complexType name="map.class" >
     <xs:sequence>
+      <xs:group ref="map.content"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="map.attributes"/>
+  </xs:complexType>
+   
+   <xs:group name="map.content">
+     <xs:sequence>
+       <xs:sequence>
       <xs:group ref="title" minOccurs="0" />
       <xs:group ref="topicmeta" minOccurs="0" />
       <xs:choice minOccurs="0" maxOccurs="unbounded">
@@ -140,10 +148,14 @@
         <xs:group ref="anchor" />
         <xs:group ref="topicref" />
         <xs:group ref="reltable" />
-        <xs:group ref="data.element.incl" />
+        <xs:group ref="data.elements.incl" />
       </xs:choice>      
     </xs:sequence>
-    <xs:attribute name="title" type="xs:string" />
+     </xs:sequence>
+   </xs:group>
+   
+   <xs:attributeGroup name="map.attributes">
+     <xs:attribute name="title" type="xs:string" />
     <xs:attribute name="id" type="xs:ID" />
     <xs:attributeGroup ref="conref-atts" />
     <xs:attribute name="anchorref" type="xs:string" />
@@ -154,7 +166,7 @@
     <xs:attributeGroup ref="localization-atts"/>
     <xs:attribute ref="ditaarch:DITAArchVersion"/>
     <xs:attributeGroup ref="global-atts" />
-  </xs:complexType>
+   </xs:attributeGroup>
 
   <xs:element name="navref">
     <xs:annotation>
@@ -174,12 +186,15 @@
     </xs:complexType>
   </xs:element>
   <xs:complexType name="navref.class">
-    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="navref.attributes"/>    
+  </xs:complexType>
+   
+   <xs:attributeGroup name="navref.attributes">
+     <xs:attributeGroup ref="univ-atts"/>
     <xs:attribute name="outputclass" type="xs:string" />
     <xs:attribute name="mapref" type="xs:string"/>
     <xs:attributeGroup ref="global-atts" />
-    
-  </xs:complexType>
+   </xs:attributeGroup>
 
   <xs:element name="topicref">
     <xs:annotation>
@@ -205,15 +220,27 @@
   </xs:element>
   <xs:complexType name="topicref.class">
     <xs:sequence>
+      <xs:group ref="topicref.content"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="topicref.attributes"/>
+  </xs:complexType>
+   
+   <xs:group name="topicref.content">
+     <xs:sequence>
+       <xs:sequence>
       <xs:group ref="topicmeta" minOccurs="0"/>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
         <xs:group ref="navref" />
         <xs:group ref="anchor" />
         <xs:group ref="topicref" />
-        <xs:group ref="data.element.incl" />
+        <xs:group ref="data.elements.incl" />
       </xs:choice>
     </xs:sequence>
-    <xs:attribute name="navtitle" type="xs:string"/>
+     </xs:sequence>
+   </xs:group>
+   
+   <xs:attributeGroup name="topicref.attributes">
+     <xs:attribute name="navtitle" type="xs:string"/>
     <xs:attribute name="href" type="xs:string"/>
     <xs:attribute name="keyref" type="xs:string"/>
     <xs:attribute name="query" type="xs:string"/>
@@ -222,7 +249,7 @@
     <xs:attributeGroup ref="univ-atts" />
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="global-atts" />
-  </xs:complexType>
+   </xs:attributeGroup>
 
   <xs:element name="reltable">
     <xs:annotation>
@@ -247,17 +274,29 @@
     </xs:complexType>
   </xs:element>
   <xs:complexType name="reltable.class">
-    <xs:sequence>
+     <xs:sequence>
+       <xs:group ref="reltable.content"/>
+     </xs:sequence>
+     <xs:attributeGroup ref="reltable.attributes"/>
+  </xs:complexType>
+   
+   <xs:group name="reltable.content">
+     <xs:sequence>
+       <xs:sequence>
       <xs:group ref="topicmeta" minOccurs="0" />
       <xs:group ref="relheader" minOccurs="0" />
       <xs:group ref="relrow" maxOccurs="unbounded" />
     </xs:sequence>
-       <xs:attribute name="title" type="xs:string" />
+     </xs:sequence>
+   </xs:group>
+   
+   <xs:attributeGroup name="reltable.attributes">
+     <xs:attribute name="title" type="xs:string" />
        <xs:attributeGroup ref="topicref-atts-no-toc" />
        <xs:attributeGroup ref="univ-atts" />
        <xs:attribute name="outputclass" type="xs:string"/>
        <xs:attributeGroup ref="global-atts" />
-  </xs:complexType>
+   </xs:attributeGroup>
 
   <xs:element name="relheader">
     <xs:annotation>
@@ -276,12 +315,24 @@
     </xs:complexType>
   </xs:element>
   <xs:complexType name="relheader.class">
-    <xs:sequence maxOccurs="unbounded">
+    <xs:sequence>
+      <xs:group ref="relheader.content"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="relheader.attributes"/>
+  </xs:complexType>
+   
+   <xs:group name="relheader.content">
+     <xs:sequence>
+       <xs:sequence maxOccurs="unbounded">
         <xs:group ref="relcolspec"  />
     </xs:sequence>
-    <xs:attributeGroup ref="univ-atts" />
+     </xs:sequence>
+   </xs:group>
+   
+   <xs:attributeGroup name="relheader.attributes">
+     <xs:attributeGroup ref="univ-atts" />
     <xs:attributeGroup ref="global-atts" />
-  </xs:complexType>
+   </xs:attributeGroup>
 
   <xs:element name="relcolspec">
     <xs:annotation>
@@ -303,15 +354,27 @@
    <!-- <!ELEMENT relcolspec ((%title;)?, (%topicmeta;)?, (%topicref)*)>  #12048 -->
   <xs:complexType name="relcolspec.class">
       <xs:sequence>
+        <xs:group ref="relcolspec.content"/>
+      </xs:sequence>
+      <xs:attributeGroup ref="relcolspec.attributes"/>
+  </xs:complexType>
+   
+   <xs:group name="relcolspec.content">
+     <xs:sequence>
+       <xs:sequence>
         <xs:group ref="title"     minOccurs="0"/>
         <xs:group ref="topicmeta" minOccurs="0"/>
         <xs:group ref="topicref"  minOccurs="0" maxOccurs="unbounded"/>
       </xs:sequence>
-    <xs:attributeGroup ref="univ-atts" />
+     </xs:sequence>
+   </xs:group>
+   
+   <xs:attributeGroup name="relcolspec.attributes">
+     <xs:attributeGroup ref="univ-atts" />
     <xs:attributeGroup ref="topicref-atts" />
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="global-atts" />
-  </xs:complexType>
+   </xs:attributeGroup>
 
   <xs:element name="relrow">
     <xs:annotation>
@@ -331,13 +394,25 @@
     </xs:complexType>
   </xs:element>
   <xs:complexType name="relrow.class">
-    <xs:sequence minOccurs="0" maxOccurs="unbounded">
+    <xs:sequence>
+      <xs:group ref="relrow.content"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="relrow.attributes"/>
+  </xs:complexType>
+   
+   <xs:group name="relrow.content">
+     <xs:sequence>
+       <xs:sequence minOccurs="0" maxOccurs="unbounded">
         <xs:group ref="relcell"  />
     </xs:sequence>
-    <xs:attributeGroup ref="univ-atts" />
+     </xs:sequence>
+   </xs:group>
+   
+   <xs:attributeGroup name="relrow.attributes">
+     <xs:attributeGroup ref="univ-atts" />
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="global-atts" />
-  </xs:complexType>
+   </xs:attributeGroup>
 
   <xs:element name="relcell">
     <xs:annotation>
@@ -358,15 +433,27 @@
     </xs:complexType>
   </xs:element>
   <xs:complexType name="relcell.class">
-    <xs:choice minOccurs="0" maxOccurs="unbounded">
+    <xs:sequence>
+      <xs:group ref="relcell.content"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="relcell.attributes"/>
+  </xs:complexType>
+   
+   <xs:group name="relcell.content">
+     <xs:sequence>
+       <xs:choice minOccurs="0" maxOccurs="unbounded">
         <xs:group ref="topicref"  />
-        <xs:group ref="data.element.incl"  />
+        <xs:group ref="data.elements.incl"  />
     </xs:choice>
-    <xs:attributeGroup ref="univ-atts" />
+     </xs:sequence>
+   </xs:group>
+   
+   <xs:attributeGroup name="relcell.attributes">
+     <xs:attributeGroup ref="univ-atts" />
     <xs:attributeGroup ref="topicref-atts" />
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="global-atts" />
-  </xs:complexType>
+   </xs:attributeGroup>
 
 
   <xs:element name="anchor">
@@ -387,13 +474,17 @@
     </xs:complexType>
   </xs:element>
   <xs:complexType name="anchor.class">
-    <xs:attribute name="id" type="xs:ID" use="required"/>
+    <xs:attributeGroup ref="anchor.attributes"/>
+  </xs:complexType>
+   
+   <xs:attributeGroup name="anchor.attributes">
+     <xs:attribute name="id" type="xs:ID" use="required"/>
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="conref-atts" />
     <xs:attributeGroup ref="localization-atts"/>
     <xs:attributeGroup ref="select-atts" />
     <xs:attributeGroup ref="global-atts" />
-  </xs:complexType>
+   </xs:attributeGroup>
 
   <xs:element name="topicmeta">
     <xs:annotation>
@@ -415,6 +506,14 @@
   </xs:element>
   <xs:complexType name="topicmeta.class" >
     <xs:sequence>
+      <xs:group ref="topicmeta.content"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="topicmeta.attributes"/>
+  </xs:complexType>
+   
+   <xs:group name="topicmeta.content">
+     <xs:sequence>
+       <xs:sequence>
       <xs:group ref="navtitle" minOccurs="0"/>
       <xs:group ref="linktext" minOccurs="0"/>
       <xs:group ref="searchtitle" minOccurs="0"/>
@@ -433,14 +532,18 @@
       <xs:group ref="othermeta" minOccurs="0" maxOccurs="unbounded"/>
       <xs:group ref="resourceid" minOccurs="0" maxOccurs="unbounded"/>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:group ref="data.element.incl" />
+        <xs:group ref="data.elements.incl" />
         <xs:group ref="foreign.unknown.incl" />
       </xs:choice>
     </xs:sequence>
-    <xs:attribute name="lockmeta" type="yesno-att.class"/>
+     </xs:sequence>
+   </xs:group>
+   
+   <xs:attributeGroup name="topicmeta.attributes">
+     <xs:attribute name="lockmeta" type="yesno-att.class"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts" />
-  </xs:complexType>
+   </xs:attributeGroup>
 
   <xs:element name="linktext">
     <xs:annotation>
@@ -461,13 +564,25 @@
     </xs:complexType>
   </xs:element>
   <xs:complexType name="linktext.class" mixed="true">
-    <xs:sequence minOccurs="0" maxOccurs="unbounded">
+    <xs:sequence>
+      <xs:group ref="linktext.content"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="linktext.attributes"/>
+  </xs:complexType >
+   
+   <xs:group name="linktext.content">
+     <xs:sequence>
+       <xs:sequence minOccurs="0" maxOccurs="unbounded">
       <xs:group ref="words.cnt"/>
     </xs:sequence>
-    <xs:attribute name="outputclass" type="xs:string"/>
+     </xs:sequence>
+   </xs:group>
+   
+   <xs:attributeGroup name="linktext.attributes">
+     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts" />
-  </xs:complexType>
+   </xs:attributeGroup>
 
   <xs:element name="searchtitle">
     <xs:annotation>
@@ -490,15 +605,27 @@
     </xs:complexType>
   </xs:element>
   <xs:complexType name="searchtitle.class" mixed="true">
-    <xs:sequence minOccurs="0" maxOccurs="unbounded">
+    <xs:sequence>
+      <xs:group ref="searchtitle.content"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="searchtitle.attributes"/>
+  </xs:complexType >
+   
+   <xs:group name="searchtitle.content">
+     <xs:sequence>
+       <xs:sequence minOccurs="0" maxOccurs="unbounded">
       <xs:group ref="words.cnt"/>
     </xs:sequence>
-    <xs:attribute name="outputclass" type="xs:string"/>
+     </xs:sequence>
+   </xs:group>
+   
+   <xs:attributeGroup name="searchtitle.attributes">
+     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts" />
-  </xs:complexType >
+   </xs:attributeGroup>
 
- <xs:element name="shortdesc">
+<!-- <xs:element name="shortdesc">
     <xs:annotation>
       <xs:documentation>
         The short description (&lt;<keyword>shortdesc</keyword>&gt;) element
@@ -515,7 +642,7 @@
         </xs:extension>
       </xs:complexContent>
     </xs:complexType>
-  </xs:element>
+  </xs:element>-->
    
   <!--<xs:complexType name="shortdesc.class" mixed="true">
     <xs:sequence minOccurs="0" maxOccurs="unbounded">

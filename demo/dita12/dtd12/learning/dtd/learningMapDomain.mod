@@ -64,9 +64,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Learning Map Domain//EN"
               query
                         CDATA
                                   #IMPLIED
-              conref
-                        CDATA
-                                  #IMPLIED
+              %conref-atts;
               copy-to
                         CDATA
                                   #IMPLIED

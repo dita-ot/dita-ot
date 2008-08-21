@@ -2,8 +2,8 @@
 <!-- ============================================================= -->
 <!--                    HEADER                                     -->
 <!-- ============================================================= -->
-<!--  MODULE:    DITA Concept XSD Module                           -->
-<!--  VERSION:   1.1                                             -->
+<!--  VERSION:   1.2                                             -->
+<!--  DATE:      July 2007                                     -->
 <!--  DATE:      November 2006                                     -->
 <!--                                                               -->
 <!-- ============================================================= -->
@@ -76,7 +76,15 @@
 
   <!-- Base type: topic.class -->
   <xs:complexType name="concept.class">
-        <xs:sequence>
+         <xs:sequence>
+           <xs:group ref="concept.content"/>
+         </xs:sequence>
+         <xs:attributeGroup ref="concept.attributes"></xs:attributeGroup>
+  </xs:complexType>
+   
+   <xs:group name="concept.content">
+     <xs:sequence>
+       <xs:sequence>
           <xs:group ref="title"/>
           <xs:group ref="titlealts" minOccurs="0"/>
           <xs:choice minOccurs="0">
@@ -88,7 +96,11 @@
           <xs:group ref="related-links" minOccurs="0"/>
           <xs:group ref="concept-info-types" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
-         <xs:attribute name="id" type="xs:ID" use="required"/>
+     </xs:sequence>
+   </xs:group>
+   
+   <xs:attributeGroup name="concept.attributes">
+     <xs:attribute name="id" type="xs:ID" use="required"/>
         <xs:attributeGroup ref="conref-atts" />
         <xs:attributeGroup ref="select-atts"/>
         <xs:attribute ref="ditaarch:DITAArchVersion" />
@@ -96,22 +108,34 @@
         <xs:attribute name="outputclass" type="xs:string"/>
         <xs:attributeGroup ref="localization-atts"/>
         <xs:attributeGroup ref="global-atts"/>
-  </xs:complexType>
+   </xs:attributeGroup>
 
   <!-- Base type: body.class -->
-  <xs:complexType name="conbody.class">
-        <xs:sequence>
-          <xs:group ref="body.cnt" minOccurs="0" maxOccurs="unbounded"/>
-          <xs:choice minOccurs="0" maxOccurs="unbounded">
-            <xs:group ref="section"/>
-            <xs:group ref="example"/>
-          </xs:choice>
-        </xs:sequence>
-        <xs:attribute name="outputclass" type="xs:string"/>
-        <xs:attribute name="base" type="xs:string" />
-        <xs:attributeGroup ref="base-attribute-extensions"/>
-        <xs:attributeGroup ref="id-atts"/>
-    <xs:attributeGroup ref="localization-atts"/>
-        <xs:attributeGroup ref="global-atts"/>
-  </xs:complexType>
-</xs:schema>
+   <xs:complexType name="conbody.class">
+     <xs:sequence>
+       <xs:group ref="conbody.content"/>
+     </xs:sequence>
+     <xs:attributeGroup ref="conbody.attributes"/>
+   </xs:complexType>
+   
+   <xs:group name="conbody.content">
+     <xs:sequence>
+       <xs:sequence>
+         <xs:group ref="body.cnt" minOccurs="0" maxOccurs="unbounded"/>
+         <xs:choice minOccurs="0" maxOccurs="unbounded">
+           <xs:group ref="section" minOccurs="0"/>
+           <xs:group ref="example" minOccurs="0"/>
+         </xs:choice>
+       </xs:sequence>
+     </xs:sequence>
+   </xs:group>
+   
+   <xs:attributeGroup name="conbody.attributes">
+     <xs:attribute name="outputclass" type="xs:string"/>
+     <xs:attribute name="base" type="xs:string" />
+     <xs:attributeGroup ref="base-attribute-extensions"/>
+     <xs:attributeGroup ref="id-atts"/>
+     <xs:attributeGroup ref="localization-atts"/>
+     <xs:attributeGroup ref="global-atts"/>
+   </xs:attributeGroup>
+ </xs:schema>

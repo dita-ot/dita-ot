@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:redefine schemaLocation="taskMod.xsd">
+
+    <xs:group name="taskPreStep">
+      <xs:sequence>
+        <xs:sequence>
+          <xs:group ref="prereq"  minOccurs="0"/>
+          <xs:group ref="context"  minOccurs="0"/>
+        </xs:sequence>
+      </xs:sequence>
+    </xs:group>
+
+    <xs:group name="taskPostStep">
+      <xs:sequence>
+        <xs:sequence>
+          <xs:group ref="result"  minOccurs="0"/>
+          <xs:group ref="postreq"  minOccurs="0"/>
+          <xs:group ref="example"  minOccurs="0"/>
+        </xs:sequence>
+        </xs:sequence>
+    </xs:group>
+
+  </xs:redefine>
+  
+</xs:schema>

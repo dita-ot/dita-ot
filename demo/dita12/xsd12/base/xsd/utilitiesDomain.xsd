@@ -32,29 +32,37 @@
 
   
   
-  <xs:group name="shape">
-    <xs:choice>
-      <xs:element ref="shape"/>
-    </xs:choice>
-  </xs:group>
-  
-  <xs:group name="coords">
-    <xs:choice>
-      <xs:element ref="coords"/>
-    </xs:choice>
-  </xs:group>
-  
-  <xs:group name="area">
-    <xs:choice>
-      <xs:element ref="area"/>
-    </xs:choice>
-  </xs:group>
-  
   <xs:group name="imagemap">
-    <xs:choice>
-      <xs:element ref="imagemap"/>
-    </xs:choice>
-  </xs:group>
+      <xs:sequence>
+         <xs:choice>
+            <xs:element ref="imagemap"/>
+         </xs:choice>
+      </xs:sequence>
+   </xs:group>
+
+   <xs:group name="area">
+      <xs:sequence>
+         <xs:choice>
+            <xs:element ref="area"/>
+         </xs:choice>
+      </xs:sequence>
+   </xs:group>
+
+   <xs:group name="shape">
+      <xs:sequence>
+         <xs:choice>
+            <xs:element ref="shape"/>
+         </xs:choice>
+      </xs:sequence>
+   </xs:group>
+
+   <xs:group name="coords">
+      <xs:sequence>
+         <xs:choice>
+            <xs:element ref="coords"/>
+         </xs:choice>
+      </xs:sequence>
+   </xs:group>
   
   
 
@@ -78,15 +86,27 @@
   
   <xs:complexType name="imagemap.class">
         <xs:sequence>
+          <xs:group ref="imagemap.content"/>      
+        </xs:sequence>
+       <xs:attributeGroup ref="imagemap.attributes"/>
+  </xs:complexType>
+  
+  <xs:group name="imagemap.content">
+    <xs:sequence>
+      <xs:sequence>
           <xs:group ref="image"/>
           <xs:group ref="area" maxOccurs="unbounded"/>
         </xs:sequence>
-        <xs:attributeGroup ref="univ-atts"/>
+    </xs:sequence>
+  </xs:group>
+  
+  <xs:attributeGroup name="imagemap.attributes">
+     <xs:attributeGroup ref="univ-atts"/>
         <xs:attributeGroup ref="display-atts"/>
         <xs:attribute name="spectitle" type="xs:string"/>
         <xs:attribute name="outputclass" type="xs:string"/>
         <xs:attributeGroup ref="global-atts"/>
-  </xs:complexType>
+  </xs:attributeGroup>
 
   <xs:element name="area" >
     <xs:annotation>
@@ -104,14 +124,26 @@
   </xs:element>
   <xs:complexType name="area.class">
         <xs:sequence>
+          <xs:group ref="area.content"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="area.attributes"/>
+  </xs:complexType>
+  
+  <xs:group name="area.content">
+    <xs:sequence>
+      <xs:sequence>
           <xs:group ref="shape"/>
           <xs:group ref="coords"/>
           <xs:group ref="xref"/>
         </xs:sequence>
-        <xs:attributeGroup ref="univ-atts"/>
+    </xs:sequence>
+  </xs:group>
+  
+  <xs:attributeGroup name="area.attributes">
+    <xs:attributeGroup ref="univ-atts"/>
         <xs:attribute name="outputclass" type="xs:string"/>
         <xs:attributeGroup ref="global-atts"/>
-  </xs:complexType>
+  </xs:attributeGroup>
 
   <xs:element name="shape" >
     <xs:annotation>
@@ -127,15 +159,28 @@
       </xs:complexContent>
     </xs:complexType>
   </xs:element>
+  
   <xs:complexType name="shape.class" mixed="true">
-    <xs:choice minOccurs="0" maxOccurs="unbounded">
-      <xs:group ref="text"/>
-    </xs:choice>
-        <xs:attribute name="keyref" type="xs:string"/>
+    <xs:sequence>
+      <xs:group ref="shape.content"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="shape.attributes"/>
+  </xs:complexType>
+  
+  <xs:group name="shape.content">
+    <xs:sequence>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:group ref="text"/>
+        </xs:choice>
+    </xs:sequence>
+  </xs:group>
+  
+  <xs:attributeGroup name="shape.attributes">
+    <xs:attribute name="keyref" type="xs:string"/>
         <xs:attributeGroup ref="univ-atts-translate-no"/>
         <xs:attribute name="outputclass" type="xs:string"/>
         <xs:attributeGroup ref="global-atts"/>
-  </xs:complexType>
+  </xs:attributeGroup>
 
   <xs:element name="coords" >
     <xs:annotation>
@@ -151,14 +196,27 @@
       </xs:complexContent>
     </xs:complexType>
   </xs:element>
+  
   <xs:complexType name="coords.class" mixed="true">
-        <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:sequence>
+          <xs:group ref="coords.content"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="coords.attributes"/>
+  </xs:complexType>
+  
+  <xs:group name="coords.content">
+    <xs:sequence>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
           <xs:group ref="words.cnt"/>
         </xs:choice>
-        <xs:attribute name="keyref" type="xs:string"/>
+    </xs:sequence>
+  </xs:group>
+  
+  <xs:attributeGroup name="coords.attributes">
+    <xs:attribute name="keyref" type="xs:string"/>
         <xs:attributeGroup ref="univ-atts-translate-no"/>
         <xs:attribute name="outputclass" type="xs:string"/>
         <xs:attributeGroup ref="global-atts"/>
-  </xs:complexType>
+  </xs:attributeGroup>
 
 </xs:schema>

@@ -106,9 +106,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Learning Domain//EN"
              "id
                         NMTOKEN
                                   #REQUIRED
-              conref
-                        CDATA
-                                  #IMPLIED
+              %conref-atts;
               %select-atts;
               %localization-atts;
               outputclass
@@ -132,9 +130,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Learning Domain//EN"
              "id
                         NMTOKEN
                                   #REQUIRED
-              conref
-                        CDATA
-                                  #IMPLIED
+              %conref-atts;
               %select-atts;
               %localization-atts;
               outputclass
@@ -158,9 +154,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Learning Domain//EN"
              "id
                         NMTOKEN
                                   #REQUIRED
-              conref
-                        CDATA
-                                  #IMPLIED
+              %conref-atts;
               %select-atts;
               %localization-atts;
               outputclass
@@ -184,9 +178,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Learning Domain//EN"
              "id
                         NMTOKEN
                                   #REQUIRED
-              conref
-                        CDATA
-                                  #IMPLIED
+              %conref-atts;
               %select-atts;
               %localization-atts;
               outputclass
@@ -210,9 +202,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Learning Domain//EN"
              "id
                         NMTOKEN
                                   #REQUIRED
-              conref
-                        CDATA
-                                  #IMPLIED
+              %conref-atts;
               %select-atts;
               %localization-atts;
               outputclass
@@ -235,9 +225,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Learning Domain//EN"
              "id
                         NMTOKEN
                                   #REQUIRED
-              conref
-                        CDATA
-                                  #IMPLIED
+              %conref-atts;
               %select-atts;
               %localization-atts;
               outputclass
@@ -261,9 +249,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Learning Domain//EN"
              "id
                         NMTOKEN
                                   #REQUIRED
-              conref
-                        CDATA
-                                  #IMPLIED
+              %conref-atts;
               %select-atts;
               %localization-atts;
               outputclass

@@ -126,11 +126,11 @@ PUBLIC "-//OASIS//DTD DITA 1.2 Machinery Task//EN"                 -->
 <!ENTITY % index-base   "index-base | 
                          %indexing-d-index-base;
                         ">
-<!ENTITY % section      "section | 
-                         %mitask-d-section;
+<!ENTITY % prereq       "prereq | 
+                         %mitask-d-prereq;
                         ">
-<!ENTITY % example      "example | 
-                         %mitask-d-example;
+<!ENTITY % postreq      "postreq | 
+                         %mitask-d-postreq;
                         ">
 <!ENTITY % note         "note | 
                          %hazard-d-note;

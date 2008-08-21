@@ -32,7 +32,6 @@
   <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:utilitiesDomain.xsd:1.2"/>
   <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:indexingDomain.xsd:1.2"/>
   <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:hazardstatementDomain.xsd:1.2"/>
-  <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:delayResolutionDomain.xsd:1.2"/>
   
   <!--  ================ GROUP DEFINITIONS =====================  -->
   <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:taskGrp.xsd:1.2" />
@@ -99,68 +98,22 @@
         <xs:group ref="indexing-d-index-base"/>
       </xs:choice>
     </xs:group>
+      
+      <xs:group name="note">
+      <xs:choice>
+        <xs:group ref="note"/>
+        <xs:group ref="hazard-d-note"/>
+      </xs:choice>
+    </xs:group >
 
   </xs:redefine>
 
-  <!--  ================ INFO TYPES =====================  -->
-  <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:topicMod.xsd:1.2" />
-  	<!--<xs:complexType name="topic.class">
-  		<xs:complexContent>
-  			<xs:extension base="topic.class">
-  			  <xs:attribute name="domains" type="xs:string" default="(topic ui-d) (topic hi-d) (topic sw-d) (topic pr-d) (topic ut-d) (topic indexing-d)"/>
-  			</xs:extension>
-  		</xs:complexContent>
-  	</xs:complexType>
-    
-  </xs:redefine>-->
   
-  <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:taskMod.xsd:1.2" />
-    <!--
-      <!ENTITY % taskbody.content
-      "((%prereq;)?, 
-      (%context;)?,
-      (%steps; | 
-      %steps-unordered;)?, 
-      (%result;)?, 
-      (%example;)?, 
-      (%postreq;)?)"  > -->
-    
-    
-    <!--<xs:complexType name="taskbody.class">
-      <xs:complexContent>
-        <xs:restriction base="taskbody.class">
-          <xs:sequence>
-            <xs:group ref="task-strict-content"/>
-          </xs:sequence>          
-        </xs:restriction>
-      </xs:complexContent>      
-    </xs:complexType> -->
-    
-  <!--	<xs:complexType name="task.class">
-  		<xs:complexContent>
-  			<xs:extension base="task.class">
-  			  <xs:attribute name="domains" type="xs:string" default="(topic ui-d) (topic hi-d) (topic sw-d) (topic pr-d) (topic ut-d) (topic indexing-d)"/>
-  			</xs:extension>
-  		</xs:complexContent>
-  	</xs:complexType>
-  </xs:redefine>
--->
-<!--<xs:group name="task-strict-content">
-  <xs:sequence>
-    <xs:group ref="prereq" minOccurs="0"/>  
-    <xs:group ref="context" minOccurs="0"/>
-  <xs:choice minOccurs="0" maxOccurs="1">
-    <xs:group ref="steps" />
-    <xs:group ref="steps-unordered" />
-  </xs:choice>
-  <xs:group ref="result" minOccurs="0"/>
-  <xs:group ref="example" minOccurs="0" maxOccurs="unbounded"/>
-  <xs:group ref="postreq" minOccurs="0" maxOccurs="unbounded"/>
-  </xs:sequence>
-</xs:group>-->
+  <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:strictTaskbodyConstraintMod.xsd:1.2" />
+  <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:topicMod.xsd:1.2" />  
 
   <xs:attributeGroup name="domains-att">
-     <xs:attribute name="domains" type="xs:string" default="(topic ui-d) (topic hi-d) (topic sw-d) (topic pr-d) (topic ut-d) (topic indexing-d) (topic hazard-d) (topic delay-d)"/>
+     <xs:attribute name="domains" type="xs:string" default="(topic ui-d) (topic hi-d) (topic sw-d) (topic pr-d) (topic ut-d) (topic indexing-d) (topic hazard-d) (topic task)"/>
   </xs:attributeGroup>
 
 

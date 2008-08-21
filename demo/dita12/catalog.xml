@@ -582,8 +582,43 @@
     <system systemId="urn:oasis:names:tc:dita:xsd:delayResolutionDomain.xsd:1.2"        uri="xsd12/base/xsd/delayResolutionDomain.xsd"/>
     
     <system systemId="urn:oasis:names:tc:dita:xsd:ditaarch.xsd:1.2"          uri="xsd12/base/xsd/ditaarch.xsd"/>
-    <system systemId="urn:oasis:names:tc:dita:xsd:xml.xsd:1.2"               uri="xsd12/base/xsd/xml.xsd"/>  
-    
+    <system systemId="urn:oasis:names:tc:dita:xsd:xml.xsd:1.2"               uri="xsd12/base/xsd/xml.xsd"/>
+      
+    <system systemId="urn:oasis:names:tc:dita:spec:learning:xsd:learningAssessmentGrp.xsd:1.2" uri="xsd12/learning/xsd/learningAssessmentGrp.xsd" />    
+    <system systemId="urn:oasis:names:tc:dita:spec:learning:xsd:learningAssessmentMod.xsd:1.2" uri="xsd12/learning/xsd/learningAssessmentMod.xsd"/>
+    <system systemId="urn:oasis:names:tc:dita:spec:learning:xsd:learningBaseGrp.xsd:1.2"       uri="xsd12/learning/xsd/learningBaseGrp.xsd"      />
+    <system systemId="urn:oasis:names:tc:dita:spec:learning:xsd:learningBaseMod.xsd:1.2"       uri="xsd12/learning/xsd/learningBaseMod.xsd"      />
+    <system systemId="urn:oasis:names:tc:dita:spec:learning:xsd:learningContentGrp.xsd:1.2"    uri="xsd12/learning/xsd/learningContentGrp.xsd"   />
+    <system systemId="urn:oasis:names:tc:dita:spec:learning:xsd:learningContentMod.xsd:1.2"    uri="xsd12/learning/xsd/learningContentMod.xsd"   />
+    <system systemId="urn:oasis:names:tc:dita:spec:learning:xsd:learningDomain.xsd:1.2"        uri="xsd12/learning/xsd/learningDomain.xsd"       />
+    <system systemId="urn:oasis:names:tc:dita:spec:learning:xsd:learningMapDomain.xsd:1.2"     uri="xsd12/learning/xsd/learningMapDomain.xsd"    />
+    <system systemId="urn:oasis:names:tc:dita:spec:learning:xsd:learningMapGrp.xsd:1.2"        uri="xsd12/learning/xsd/learningMapGrp.xsd"       />
+    <system systemId="urn:oasis:names:tc:dita:spec:learning:xsd:learningMetadataDomain.xsd:1.2"   uri="xsd12/learning/xsd/learningMetadataDomain.xsd"  />
+    <system systemId="urn:oasis:names:tc:dita:spec:learning:xsd:learningOverviewGrp.xsd:1.2"   uri="xsd12/learning/xsd/learningOverviewGrp.xsd"  />
+    <system systemId="urn:oasis:names:tc:dita:spec:learning:xsd:learningOverviewMod.xsd:1.2"   uri="xsd12/learning/xsd/learningOverviewMod.xsd"  />
+    <system systemId="urn:oasis:names:tc:dita:spec:learning:xsd:learningPlanMod.xsd:1.2"       uri="xsd12/learning/xsd/learningPlanMod.xsd"      />
+    <system systemId="urn:oasis:names:tc:dita:spec:learning:xsd:learningPlanGrp.xsd:1.2"       uri="xsd12/learning/xsd/learningPlanGrp.xsd"      />
+    <system systemId="urn:oasis:names:tc:dita:spec:learning:xsd:learningSummaryGrp.xsd:1.2"    uri="xsd12/learning/xsd/learningSummaryGrp.xsd"   />
+    <system systemId="urn:oasis:names:tc:dita:spec:learning:xsd:learningSummaryMod.xsd:1.2"    uri="xsd12/learning/xsd/learningSummaryMod.xsd"   />
+        
+    <system systemId="urn:oasis:names:tc:dita:spec:learning:xsd:learningAssessment.xsd:1.2" uri="xsd12/learning/xsd/learningAssessment.xsd" />     
+    <system systemId="urn:oasis:names:tc:dita:spec:learning:xsd:learningBase.xsd:1.2"       uri="xsd12/learning/xsd/learningBase.xsd"       />     
+    <system systemId="urn:oasis:names:tc:dita:spec:learning:xsd:learningContent.xsd:1.2"    uri="xsd12/learning/xsd/learningContent.xsd"    />     
+    <system systemId="urn:oasis:names:tc:dita:spec:learning:xsd:learningDitabase.xsd:1.2"   uri="xsd12/learning/xsd/learningDitabase.xsd"   />     
+    <system systemId="urn:oasis:names:tc:dita:spec:learning:xsd:learningMap.xsd:1.2"        uri="xsd12/learning/xsd/learningMap.xsd"        />     
+    <system systemId="urn:oasis:names:tc:dita:spec:learning:xsd:learningOverview.xsd:1.2"   uri="xsd12/learning/xsd/learningOverview.xsd"   />     
+    <system systemId="urn:oasis:names:tc:dita:spec:learning:xsd:learningPlan.xsd:1.2"       uri="xsd12/learning/xsd/learningPlan.xsd"       />     
+    <system systemId="urn:oasis:names:tc:dita:spec:learning:xsd:learningSummary.xsd:1.2"    uri="xsd12/learning/xsd/learningSummary.xsd"    />     
+        
+        
+    <system systemId="urn:oasis:names:tc:dita:spec:classification:xsd:subjectScheme.xsd:1.2"    uri="xsd12/subjectScheme/xsd/subjectScheme.xsd"    />
+    <system systemId="urn:oasis:names:tc:dita:spec:classification:xsd:subjectSchemeMod.xsd:1.2"    uri="xsd12/subjectScheme/xsd/subjectSchemeMod.xsd"    />
+    <system systemId="urn:oasis:names:tc:dita:spec:classification:xsd:subjectSchemeGrp.xsd:1.2"    uri="xsd12/subjectScheme/xsd/subjectSchemeGrp.xsd"    />
+        
+        
+    <system systemId="urn:oasis:names:tc:dita:spec:classification:xsd:classifyMap.xsd:1.2"    uri="xsd12/subjectScheme/xsd/classifyMap.xsd"    />
+    <system systemId="urn:oasis:names:tc:dita:spec:classification:xsd:classifyDomain.xsd:1.2"    uri="xsd12/subjectScheme/xsd/classifyDomain.xsd"    />
+
     
     <uri name="urn:oasis:names:tc:dita:xsd:topic.xsd:1.2"             uri="xsd12/technicalContent/xsd/topic.xsd"/>
     <uri name="urn:oasis:names:tc:dita:xsd:topicMod.xsd:1.2"          uri="xsd12/base/xsd/topicMod.xsd"/>
@@ -637,5 +672,38 @@
     
     <uri name="urn:oasis:names:tc:dita:xsd:ditaarch.xsd:1.2"          uri="xsd12/base/xsd/ditaarch.xsd"/>
     <uri name="urn:oasis:names:tc:dita:xsd:xml.xsd:1.2"               uri="xsd12/base/xsd/xml.xsd"/>  
+
+    <uri name="urn:oasis:names:tc:dita:spec:learning:xsd:learningAssessmentGrp.xsd:1.2" uri="xsd12/learning/xsd/learningAssessmentGrp.xsd" />
+    <uri name="urn:oasis:names:tc:dita:spec:learning:xsd:learningAssessmentMod.xsd:1.2" uri="xsd12/learning/xsd/learningAssessmentMod.xsd"/>
+    <uri name="urn:oasis:names:tc:dita:spec:learning:xsd:learningBaseGrp.xsd:1.2"       uri="xsd12/learning/xsd/learningBaseGrp.xsd"      />
+    <uri name="urn:oasis:names:tc:dita:spec:learning:xsd:learningBaseMod.xsd:1.2"       uri="xsd12/learning/xsd/learningBaseMod.xsd"      />
+    <uri name="urn:oasis:names:tc:dita:spec:learning:xsd:learningContentGrp.xsd:1.2"    uri="xsd12/learning/xsd/learningContentGrp.xsd"   />
+    <uri name="urn:oasis:names:tc:dita:spec:learning:xsd:learningContentMod.xsd:1.2"    uri="xsd12/learning/xsd/learningContentMod.xsd"   />
+    <uri name="urn:oasis:names:tc:dita:spec:learning:xsd:learningDomain.xsd:1.2"        uri="xsd12/learning/xsd/learningDomain.xsd"       />
+    <uri name="urn:oasis:names:tc:dita:spec:learning:xsd:learningMapDomain.xsd:1.2"     uri="xsd12/learning/xsd/learningMapDomain.xsd"    />
+    <uri name="urn:oasis:names:tc:dita:spec:learning:xsd:learningMapGrp.xsd:1.2"        uri="xsd12/learning/xsd/learningMapGrp.xsd"       />
+    <uri name="urn:oasis:names:tc:dita:spec:learning:xsd:learningMetadataDomain.xsd:1.2"   uri="xsd12/learning/xsd/learningMetadataDomain.xsd"  />
+    <uri name="urn:oasis:names:tc:dita:spec:learning:xsd:learningOverviewGrp.xsd:1.2"   uri="xsd12/learning/xsd/learningOverviewGrp.xsd"  />
+    <uri name="urn:oasis:names:tc:dita:spec:learning:xsd:learningOverviewMod.xsd:1.2"   uri="xsd12/learning/xsd/learningOverviewMod.xsd"  />
+    <uri name="urn:oasis:names:tc:dita:spec:learning:xsd:learningPlanMod.xsd:1.2"       uri="xsd12/learning/xsd/learningPlanMod.xsd"      />
+    <uri name="urn:oasis:names:tc:dita:spec:learning:xsd:learningPlanGrp.xsd:1.2"       uri="xsd12/learning/xsd/learningPlanGrp.xsd"      />
+    <uri name="urn:oasis:names:tc:dita:spec:learning:xsd:learningSummaryGrp.xsd:1.2"    uri="xsd12/learning/xsd/learningSummaryGrp.xsd"   />
+    <uri name="urn:oasis:names:tc:dita:spec:learning:xsd:learningSummaryMod.xsd:1.2"    uri="xsd12/learning/xsd/learningSummaryMod.xsd"   />
+        
+    <uri name="urn:oasis:names:tc:dita:spec:learning:xsd:learningAssessment.xsd:1.2" uri="xsd12/learning/xsd/learningAssessment.xsd" />
+    <uri name="urn:oasis:names:tc:dita:spec:learning:xsd:learningBase.xsd:1.2"       uri="xsd12/learning/xsd/learningBase.xsd"       />
+    <uri name="urn:oasis:names:tc:dita:spec:learning:xsd:learningContent.xsd:1.2"    uri="xsd12/learning/xsd/learningContent.xsd"    />
+    <uri name="urn:oasis:names:tc:dita:spec:learning:xsd:learningDitabase.xsd:1.2"   uri="xsd12/learning/xsd/learningDitabase.xsd"   />
+    <uri name="urn:oasis:names:tc:dita:spec:learning:xsd:learningMap.xsd:1.2"        uri="xsd12/learning/xsd/learningMap.xsd"        />
+    <uri name="urn:oasis:names:tc:dita:spec:learning:xsd:learningOverview.xsd:1.2"   uri="xsd12/learning/xsd/learningOverview.xsd"   />
+    <uri name="urn:oasis:names:tc:dita:spec:learning:xsd:learningPlan.xsd:1.2"       uri="xsd12/learning/xsd/learningPlan.xsd"       />
+    <uri name="urn:oasis:names:tc:dita:spec:learning:xsd:learningSummary.xsd:1.2"    uri="xsd12/learning/xsd/learningSummary.xsd"    />
+       
+    <uri name="urn:oasis:names:tc:dita:spec:classification:xsd:subjectScheme.xsd:1.2"    uri="xsd12/subjectScheme/xsd/subjectScheme.xsd"    />
+    <uri name="urn:oasis:names:tc:dita:spec:classification:xsd:subjectSchemeMod.xsd:1.2"    uri="xsd12/subjectScheme/xsd/subjectSchemeMod.xsd"    />
+    <uri name="urn:oasis:names:tc:dita:spec:classification:xsd:subjectSchemeGrp.xsd:1.2"    uri="xsd12/subjectScheme/xsd/subjectSchemeGrp.xsd"    />
+        
+    <uri name="urn:oasis:names:tc:dita:spec:classification:xsd:classifyMap.xsd:1.2"    uri="xsd12/subjectScheme/xsd/classifyMap.xsd"    />
+    <uri name="urn:oasis:names:tc:dita:spec:classification:xsd:classifyDomain.xsd:1.2"    uri="xsd12/subjectScheme/xsd/classifyDomain.xsd"    />
 </catalog>
 

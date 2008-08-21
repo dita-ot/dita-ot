@@ -460,31 +460,31 @@ PUBLIC "-//OASIS//ELEMENTS DITA Machine Industry Task Domain//EN"
 <!-- ============================================================= -->
 
 
-<!ATTLIST prelreqs    %global-atts;  class  CDATA "+ topic/section mitask-d/prelreqs "  >
-<!ATTLIST closereqs   %global-atts;  class  CDATA "+ topic/example mitask-d/closereqs " >
-<!ATTLIST reqconds    %global-atts;  class  CDATA "+ topic/ol mitask-d/reqconds "       >
-<!ATTLIST noconds     %global-atts;  class  CDATA "+ topic/li mitask-d/noconds "        >
-<!ATTLIST reqcond     %global-atts;  class  CDATA "+ topic/li mitask-d/reqcond "        >
-<!ATTLIST reqcontp    %global-atts;  class  CDATA "+ topic/li mitask-d/reqcontp "       >
-<!ATTLIST reqpers     %global-atts;  class  CDATA "+ topic/ol mitask-d/reqpers "        >
-<!ATTLIST personnel   %global-atts;  class  CDATA "+ topic/li mitask-d/personnel "      >
-<!ATTLIST perscat     %global-atts;  class  CDATA "+ topic/li mitask-d/perscat "        >
-<!ATTLIST perskill    %global-atts;  class  CDATA "+ topic/li mitask-d/perskill "       >
-<!ATTLIST esttime     %global-atts;  class  CDATA "+ topic/li mitask-d/esttime "        >
-<!ATTLIST supequip    %global-atts;  class  CDATA "+ topic/p mitask-d/supequip "        >
-<!ATTLIST nosupeq     %global-atts;  class  CDATA "+ topic/data mitask-d/nosupeq "      >
-<!ATTLIST supeqli     %global-atts;  class  CDATA "+ topic/ul mitask-d/supeqli "        >
-<!ATTLIST supequi     %global-atts;  class  CDATA "+ topic/li mitask-d/supequi "        >
-<!ATTLIST supplies    %global-atts;  class  CDATA "+ topic/p mitask-d/supplies "        >
-<!ATTLIST nosupply    %global-atts;  class  CDATA "+ topic/data mitask-d/nosupply "     >
-<!ATTLIST supplyli    %global-atts;  class  CDATA "+ topic/ul mitask-d/supplyli "       >
-<!ATTLIST supply      %global-atts;  class  CDATA "+ topic/li mitask-d/supply "         >
-<!ATTLIST spares      %global-atts;  class  CDATA "+ topic/p mitask-d/spares "          >
-<!ATTLIST nospares    %global-atts;  class  CDATA "+ topic/data mitask-d/nospares "     >
-<!ATTLIST sparesli    %global-atts;  class  CDATA "+ topic/ul mitask-d/sparesli "       >
-<!ATTLIST spare       %global-atts;  class  CDATA "+ topic/li mitask-d/spare "          >
-<!ATTLIST safety      %global-atts;  class  CDATA "+ topic/ol mitask-d/safety "         >
-<!ATTLIST nosafety    %global-atts;  class  CDATA "+ topic/li mitask-d/nosafety "       >
-<!ATTLIST safecond    %global-atts;  class  CDATA "+ topic/li mitask-d/safecond "       >
+<!ATTLIST prelreqs    %global-atts;  class  CDATA "+ topic/section task/prereq mitask-d/prelreqs "  >
+<!ATTLIST closereqs   %global-atts;  class  CDATA "+ topic/section task/postreq mitask-d/closereqs " >
+<!ATTLIST reqconds    %global-atts;  class  CDATA "+ topic/ol task/ol mitask-d/reqconds "       >
+<!ATTLIST noconds     %global-atts;  class  CDATA "+ topic/li task/li mitask-d/noconds "        >
+<!ATTLIST reqcond     %global-atts;  class  CDATA "+ topic/li task/li mitask-d/reqcond "        >
+<!ATTLIST reqcontp    %global-atts;  class  CDATA "+ topic/li task/li mitask-d/reqcontp "       >
+<!ATTLIST reqpers     %global-atts;  class  CDATA "+ topic/ol task/ol mitask-d/reqpers "        >
+<!ATTLIST personnel   %global-atts;  class  CDATA "+ topic/li task/li mitask-d/personnel "      >
+<!ATTLIST perscat     %global-atts;  class  CDATA "+ topic/li task/li mitask-d/perscat "        >
+<!ATTLIST perskill    %global-atts;  class  CDATA "+ topic/li task/li mitask-d/perskill "       >
+<!ATTLIST esttime     %global-atts;  class  CDATA "+ topic/li task/li mitask-d/esttime "        >
+<!ATTLIST supequip    %global-atts;  class  CDATA "+ topic/p task/p mitask-d/supequip "        >
+<!ATTLIST nosupeq     %global-atts;  class  CDATA "+ topic/data task/data mitask-d/nosupeq "      >
+<!ATTLIST supeqli     %global-atts;  class  CDATA "+ topic/ul task/ul mitask-d/supeqli "        >
+<!ATTLIST supequi     %global-atts;  class  CDATA "+ topic/li task/li mitask-d/supequi "        >
+<!ATTLIST supplies    %global-atts;  class  CDATA "+ topic/p task/p mitask-d/supplies "        >
+<!ATTLIST nosupply    %global-atts;  class  CDATA "+ topic/data task/data mitask-d/nosupply "     >
+<!ATTLIST supplyli    %global-atts;  class  CDATA "+ topic/ul task/ul mitask-d/supplyli "       >
+<!ATTLIST supply      %global-atts;  class  CDATA "+ topic/li task/li mitask-d/supply "         >
+<!ATTLIST spares      %global-atts;  class  CDATA "+ topic/p task/p mitask-d/spares "          >
+<!ATTLIST nospares    %global-atts;  class  CDATA "+ topic/data task/data mitask-d/nospares "     >
+<!ATTLIST sparesli    %global-atts;  class  CDATA "+ topic/ul task/ul mitask-d/sparesli "       >
+<!ATTLIST spare       %global-atts;  class  CDATA "+ topic/li task/li mitask-d/spare "          >
+<!ATTLIST safety      %global-atts;  class  CDATA "+ topic/ol task/ol mitask-d/safety "         >
+<!ATTLIST nosafety    %global-atts;  class  CDATA "+ topic/li task/li mitask-d/nosafety "       >
+<!ATTLIST safecond    %global-atts;  class  CDATA "+ topic/li task/li mitask-d/safecond "       >
 
 <!-- ================== End DITA Machine Industry Task Domain  =================== -->

@@ -34,14 +34,14 @@ PUBLIC "-//OASIS//ENTITIES DITA Machine Industry Task Domain//EN"
 <!--                    ELEMENT EXTENSION ENTITY DECLARATIONS      -->
 <!-- ============================================================= -->
 
-<!ENTITY % mitask-d-section "prelreqs"                               >
-<!ENTITY % mitask-d-example "closereqs"                              >
+<!ENTITY % mitask-d-prereq "prelreqs"                                >
+<!ENTITY % mitask-d-postreq "closereqs"                              >
 
 <!-- ============================================================= -->
 <!--                    DOMAIN ENTITY DECLARATION                  -->
 <!-- ============================================================= -->
 
-<!ENTITY mitask-d-att "(topic mitask-d)"                             >
+<!ENTITY mitask-d-att "(topic task mitask-d)"                        >
 
 
 <!-- ================ End Machine Industry Task Domain Entities == -->

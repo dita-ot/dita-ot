@@ -51,6 +51,14 @@
     </xs:element>
     <xs:complexType name="bookmap.class">
         <xs:sequence>
+          <xs:group ref="bookmap.content"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="bookmap.attributes"/>
+    </xs:complexType>
+  
+      <xs:group name="bookmap.content">
+        <xs:sequence>
+          <xs:sequence>
             <xs:choice minOccurs="0">
                 <xs:group ref="title"/>
                 <xs:group ref="booktitle"/>
@@ -63,6 +71,10 @@
             <xs:group ref="backmatter" minOccurs="0"/>
             <xs:group ref="reltable" minOccurs="0" maxOccurs="unbounded"/>            
         </xs:sequence>
+        </xs:sequence>
+      </xs:group>
+  
+      <xs:attributeGroup name="bookmap.attributes">
         <xs:attribute name="id" type="xs:ID"/>
         <xs:attributeGroup ref="conref-atts" />
         <xs:attribute name="anchorref" type="xs:string"/>
@@ -73,7 +85,7 @@
         <xs:attributeGroup ref="domains-att"/>
         <xs:attribute ref="ditaarch:DITAArchVersion"/>
         <xs:attributeGroup ref="global-atts" />
-    </xs:complexType>
+      </xs:attributeGroup>
     
     <xs:element name="bookmeta">
         <xs:annotation>
@@ -90,6 +102,13 @@
         </xs:complexType>
     </xs:element>
     <xs:complexType name="bookmeta.class">
+        <xs:sequence>
+            <xs:group ref="bookmeta.content"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="bookmeta.attributes"/>
+    </xs:complexType>
+  
+      <xs:group name="bookmeta.content">
         <xs:sequence>
             <xs:sequence>
                 <xs:group ref="linktext" minOccurs="0"/>
@@ -113,10 +132,13 @@
                 <xs:group ref="data"  minOccurs="0" maxOccurs="unbounded"/>
             </xs:sequence>
         </xs:sequence>
-        <xs:attribute name="lockmeta" type="yesno-att.class"/>
+      </xs:group>
+  
+     <xs:attributeGroup name="bookmeta.attributes">
+       <xs:attribute name="lockmeta" type="yesno-att.class"/>
         <xs:attributeGroup ref="univ-atts"/>
         <xs:attributeGroup ref="global-atts" />
-    </xs:complexType>
+     </xs:attributeGroup>
     
     <xs:element name="frontmatter">
         <xs:annotation>
@@ -133,23 +155,35 @@
         </xs:complexType>
     </xs:element>
     <xs:complexType name="frontmatter.class">
-        <xs:choice minOccurs="0" maxOccurs="unbounded">
-            <xs:group ref="booklists" />
-            <xs:group ref="notices" />
-            <xs:group ref="dedication" />
-            <xs:group ref="colophon" />
-            <xs:group ref="bookabstract" />
-            <xs:group ref="draftintro" />
-            <xs:group ref="preface" />
-            <xs:group ref="topicref" />
+        <xs:sequence>
+          <xs:group ref="frontmatter.content"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="frontmatter.attributes"/>
+    </xs:complexType>
+      
+       <xs:group name="frontmatter.content">
+         <xs:sequence>
+           <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:group ref="booklists" minOccurs="0"/>
+            <xs:group ref="notices" minOccurs="0"/>
+            <xs:group ref="dedication" minOccurs="0"/>
+            <xs:group ref="colophon" minOccurs="0"/>
+            <xs:group ref="bookabstract" minOccurs="0"/>
+            <xs:group ref="draftintro" minOccurs="0"/>
+            <xs:group ref="preface" minOccurs="0"/>
+            <xs:group ref="topicref" minOccurs="0"/>
         </xs:choice>
-        <xs:attribute name="keyref" type="xs:string"/>
+         </xs:sequence>
+       </xs:group>
+      
+      <xs:attributeGroup name="frontmatter.attributes">
+      <xs:attribute name="keyref" type="xs:string"/>
         <xs:attribute name="query" type="xs:string"/>
         <xs:attributeGroup ref="topicref-atts" />
         <xs:attributeGroup ref="univ-atts" />
         <xs:attribute name="outputclass" type="xs:string"/>
         <xs:attributeGroup ref="global-atts" />
-    </xs:complexType>
+    </xs:attributeGroup>
       
     <xs:element name="backmatter">
         <xs:annotation>
@@ -167,21 +201,33 @@
         </xs:complexType>
     </xs:element>
     <xs:complexType name="backmatter.class">
+         <xs:sequence>
+           <xs:group ref="backmatter.content"/>
+         </xs:sequence>
+        <xs:attributeGroup ref="backmatter.attributes"/>
+    </xs:complexType>
+  
+    <xs:group name="backmatter.content">
+      <xs:sequence>
         <xs:choice minOccurs="0" maxOccurs="unbounded">
-            <xs:group ref="booklists" />
-            <xs:group ref="notices" />
-            <xs:group ref="dedication" />
-            <xs:group ref="colophon" />
-            <xs:group ref="amendments" />
-            <xs:group ref="topicref" />
+            <xs:group ref="booklists" minOccurs="0"/>
+            <xs:group ref="notices" minOccurs="0"/>
+            <xs:group ref="dedication" minOccurs="0"/>
+            <xs:group ref="colophon" minOccurs="0"/>
+            <xs:group ref="amendments" minOccurs="0"/>
+            <xs:group ref="topicref" minOccurs="0"/>
         </xs:choice>
-        <xs:attribute name="keyref" type="xs:string"/>
+      </xs:sequence>
+    </xs:group>
+  
+    <xs:attributeGroup name="backmatter.attributes">
+      <xs:attribute name="keyref" type="xs:string"/>
         <xs:attribute name="query" type="xs:string"/>
         <xs:attributeGroup ref="topicref-atts" />
         <xs:attributeGroup ref="univ-atts" />
         <xs:attribute name="outputclass" type="xs:string"/>
         <xs:attributeGroup ref="global-atts" />
-    </xs:complexType>
+    </xs:attributeGroup>
     
     <xs:element name="publisherinformation">
         <xs:annotation>
@@ -200,15 +246,27 @@
     </xs:element>
     <!--  Update value attr as per DITA Feature 12022  -->
     <xs:complexType name="publisherinformation.class">
+        <xs:sequence>
+          <xs:group ref="publisherinformation.content"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="publisherinformation.attributes"/>
+    </xs:complexType>
+  
+    <xs:group name="publisherinformation.content">
+      <xs:sequence>
         <xs:sequence >
             <xs:choice minOccurs="0" maxOccurs="unbounded">
-                <xs:group ref="person"/>
-                <xs:group ref="organization"/>
+                <xs:group ref="person" minOccurs="0"/>
+                <xs:group ref="organization" minOccurs="0"/>
             </xs:choice>
             <xs:group ref="printlocation" minOccurs="0" maxOccurs="unbounded"/>
             <xs:group ref="published" minOccurs="0" maxOccurs="unbounded"/>
             <xs:group ref="data" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
+      </xs:sequence>
+    </xs:group>
+  
+    <xs:attributeGroup name="publisherinformation.attributes">
       <xs:attribute name="href" type="xs:string"/>
       <xs:attribute name="format" type="xs:string"/>
       <xs:attribute name="scope" type="scope-att.class"/>
@@ -216,7 +274,7 @@
       <xs:attribute name="type" type="xs:string"/>
         <xs:attributeGroup ref="univ-atts"/>
         <xs:attributeGroup ref="global-atts"/>
-    </xs:complexType>
+    </xs:attributeGroup>
     
     <xs:element name="person">
         <xs:annotation>
@@ -233,12 +291,24 @@
         </xs:complexType>
     </xs:element>
     <xs:complexType name="person.class" mixed="true">
-        <xs:choice minOccurs="0" maxOccurs="unbounded">
-            <xs:group ref="words.cnt"/>
-        </xs:choice>
-        <xs:attributeGroup ref="data-element-atts.class"/>
-        <xs:attributeGroup ref="global-atts"/>
+       <xs:sequence>
+          <xs:group ref="person.content"></xs:group>
+        </xs:sequence>
+        <xs:attributeGroup ref="person.attributes"/>
     </xs:complexType>
+  
+    <xs:group name="person.content">
+      <xs:sequence>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:group ref="words.cnt" minOccurs="0"/>
+        </xs:choice>
+      </xs:sequence>
+    </xs:group>
+  
+    <xs:attributeGroup name="person.attributes">
+      <xs:attributeGroup ref="data-element-atts.class"/>
+        <xs:attributeGroup ref="global-atts"/>
+    </xs:attributeGroup>
     
     <xs:element name="organization">
         <xs:annotation>
@@ -256,12 +326,24 @@
         </xs:complexType>
     </xs:element>
     <xs:complexType name="organization.class" mixed="true">
-        <xs:choice minOccurs="0" maxOccurs="unbounded">
-            <xs:group ref="words.cnt"/>
-        </xs:choice>
-        <xs:attributeGroup ref="data-element-atts.class"/>
-        <xs:attributeGroup ref="global-atts"/>
+        <xs:sequence>
+          <xs:group ref="organization.content"></xs:group>
+        </xs:sequence>
+        <xs:attributeGroup ref="organization.attributes"/>
     </xs:complexType>
+  
+    <xs:group name="organization.content">
+      <xs:sequence>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:group ref="words.cnt" minOccurs="0"/>
+        </xs:choice>
+      </xs:sequence>
+    </xs:group>
+  
+    <xs:attributeGroup name="organization.attributes">
+      <xs:attributeGroup ref="data-element-atts.class"/>
+        <xs:attributeGroup ref="global-atts"/>
+    </xs:attributeGroup>
     
     <xs:element name="bookchangehistory">
         <xs:annotation>
@@ -278,6 +360,14 @@
         </xs:complexType>
     </xs:element>
     <xs:complexType name="bookchangehistory.class" >
+        <xs:sequence>
+          <xs:group ref="bookchangehistory.content"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="bookchangehistory.attributes"/>
+    </xs:complexType>
+  
+    <xs:group name="bookchangehistory.content">
+      <xs:sequence>
         <xs:sequence >
             <xs:group ref="reviewed" minOccurs="0" maxOccurs="unbounded"/>
             <xs:group ref="edited" minOccurs="0" maxOccurs="unbounded"/>
@@ -285,9 +375,12 @@
             <xs:group ref="approved" minOccurs="0" maxOccurs="unbounded"/>
             <xs:group ref="bookevent" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
-        <xs:attributeGroup ref="data-element-atts.class"/>
+      </xs:sequence>
+    </xs:group>
+    <xs:attributeGroup name="bookchangehistory.attributes">
+      <xs:attributeGroup ref="data-element-atts.class"/>
         <xs:attributeGroup ref="global-atts"/>
-    </xs:complexType>
+    </xs:attributeGroup>
     
     <xs:element name="bookid">
         <xs:annotation>
@@ -303,7 +396,15 @@
         </xs:complexType>
     </xs:element>
     <xs:complexType name="bookid.class" >
-        <xs:sequence >
+        <xs:sequence>
+          <xs:group ref="bookid.content"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="bookid.attributes"/>
+    </xs:complexType>
+  
+     <xs:group name="bookid.content">
+       <xs:sequence>
+         <xs:sequence >
             <xs:group ref="bookpartno" minOccurs="0" maxOccurs="unbounded"/>
             <xs:group ref="edition" minOccurs="0" />
             <xs:group ref="isbn" minOccurs="0" />
@@ -311,9 +412,13 @@
             <xs:group ref="volume" minOccurs="0" maxOccurs="unbounded"/>
             <xs:group ref="maintainer" minOccurs="0" />
         </xs:sequence>
-        <xs:attributeGroup ref="data-element-atts.class"/>
+       </xs:sequence>
+     </xs:group>
+  
+    <xs:attributeGroup name="bookid.attributes">
+      <xs:attributeGroup ref="data-element-atts.class"/>
         <xs:attributeGroup ref="global-atts"/>
-    </xs:complexType>
+    </xs:attributeGroup>
     
     <xs:element name="summary">
         <xs:annotation>
@@ -330,14 +435,26 @@
         </xs:complexType>
     </xs:element>
     <xs:complexType name="summary.class" mixed="true">
+       <xs:sequence>
+          <xs:group ref="summary.content"></xs:group>
+        </xs:sequence>
+        <xs:attributeGroup ref="summary.attributes"/>
+    </xs:complexType>
+  
+    <xs:group name="summary.content">
+      <xs:sequence>
         <xs:choice minOccurs="0" maxOccurs="unbounded">
-            <xs:group ref="words.cnt"/>
+            <xs:group ref="words.cnt" minOccurs="0"/>
         </xs:choice>
-        <xs:attribute name="keyref" type="xs:string"/>
+      </xs:sequence>
+    </xs:group>
+  
+    <xs:attributeGroup name="summary.attributes">
+      <xs:attribute name="keyref" type="xs:string"/>
         <xs:attribute name="outputclass" type="xs:string"/>
         <xs:attributeGroup ref="univ-atts"/>
         <xs:attributeGroup ref="global-atts"/>
-    </xs:complexType>
+    </xs:attributeGroup>
     
     <xs:element name="printlocation">
         <xs:annotation>
@@ -354,12 +471,24 @@
         </xs:complexType>
     </xs:element>
     <xs:complexType name="printlocation.class" mixed="true">
-        <xs:choice minOccurs="0" maxOccurs="unbounded">
-            <xs:group ref="words.cnt"/>
-        </xs:choice>
-        <xs:attributeGroup ref="data-element-atts.class"/>
-        <xs:attributeGroup ref="global-atts"/>
+        <xs:sequence>
+          <xs:group ref="printlocation.content"></xs:group>
+        </xs:sequence>
+        <xs:attributeGroup ref="printlocation.attributes"/>
     </xs:complexType>
+  
+    <xs:group name="printlocation.content">
+      <xs:sequence>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:group ref="words.cnt" minOccurs="0"/>
+        </xs:choice>
+      </xs:sequence>
+    </xs:group>
+  
+    <xs:attributeGroup name="printlocation.attributes">
+      <xs:attributeGroup ref="data-element-atts.class"/>
+        <xs:attributeGroup ref="global-atts"/>
+    </xs:attributeGroup>
     
     <xs:element name="published">
         <xs:annotation>
@@ -376,7 +505,15 @@
         </xs:complexType>
     </xs:element>
     <xs:complexType name="published.class">
-        <xs:sequence >
+        <xs:sequence>
+          <xs:group ref="published.content"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="published.attributes"/>
+    </xs:complexType>
+  
+      <xs:group name="published.content">
+        <xs:sequence>
+          <xs:sequence >
             <xs:choice minOccurs="0" maxOccurs="unbounded">
                 <xs:group ref="person" />
                 <xs:group ref="organization"/>
@@ -388,9 +525,13 @@
             <xs:group ref="summary" minOccurs="0" />
             <xs:group ref="data" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
-        <xs:attributeGroup ref="data-element-atts.class"/>
+        </xs:sequence>
+      </xs:group>
+  
+      <xs:attributeGroup name="published.attributes">
+      <xs:attributeGroup ref="data-element-atts.class"/>
         <xs:attributeGroup ref="global-atts"/>
-    </xs:complexType>
+    </xs:attributeGroup>
     
     <xs:element name="publishtype">
         <xs:annotation>
@@ -407,7 +548,11 @@
         </xs:complexType>
     </xs:element>
     <xs:complexType name="publishtype.class">
-        <xs:attributeGroup ref="univ-atts"/>
+        <xs:attributeGroup ref="publishtype.attributes"/>
+    </xs:complexType>
+  
+    <xs:attributeGroup name="publishtype.attributes">
+      <xs:attributeGroup ref="univ-atts"/>
         <xs:attribute name="name" type="xs:string"/>
         <xs:attribute name="datatype" type="xs:string"/>
         <xs:attribute name="value" use="required" type="xs:string"/>
@@ -417,7 +562,7 @@
         <xs:attribute name="scope" type="scope-att.class"/>
         <xs:attribute name="outputclass" type="xs:string"/>
         <xs:attributeGroup ref="global-atts"/>
-    </xs:complexType>
+    </xs:attributeGroup>
     
     <xs:element name="revisionid">
         <xs:annotation>
@@ -435,14 +580,26 @@
         </xs:complexType>
     </xs:element>
     <xs:complexType name="revisionid.class" mixed="true">
-      <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:sequence>
+          <xs:group ref="revisionid.content"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="revisionid.attributes"/>
+    </xs:complexType>
+  
+    <xs:group name="revisionid.content">
+      <xs:sequence>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
         <xs:group ref="keyword"/>
-        </xs:choice>
-        <xs:attribute name="keyref" type="xs:string"/>
+      </xs:choice>
+      </xs:sequence>
+    </xs:group>
+  
+    <xs:attributeGroup name="revisionid.attributes">
+      <xs:attribute name="keyref" type="xs:string"/>
         <xs:attribute name="outputclass" type="xs:string"/>
         <xs:attributeGroup ref="univ-atts"/>
         <xs:attributeGroup ref="global-atts"/>
-    </xs:complexType>
+    </xs:attributeGroup>
     
     <xs:element name="started">
         <xs:annotation>
@@ -458,7 +615,15 @@
         </xs:complexType>
     </xs:element>
     <xs:complexType name="started.class" >
-        <xs:choice>
+        <xs:sequence>
+            <xs:group ref="started.content"/>
+          </xs:sequence>
+        <xs:attributeGroup ref="started.attributes"/>
+    </xs:complexType>
+  
+      <xs:group name="started.content">
+        <xs:sequence>
+          <xs:choice>
             <xs:sequence minOccurs="0">
                 <xs:group ref="year"/>
                 <xs:group ref="month"/>
@@ -475,11 +640,15 @@
                 <xs:group ref="year"/>
             </xs:sequence>
         </xs:choice>
-        <xs:attribute name="keyref" type="xs:string"/>
+        </xs:sequence>
+      </xs:group>
+  
+      <xs:attributeGroup name="started.attributes">
+      <xs:attribute name="keyref" type="xs:string"/>
         <xs:attribute name="outputclass" type="xs:string"/>
         <xs:attributeGroup ref="univ-atts"/>
         <xs:attributeGroup ref="global-atts"/>
-    </xs:complexType>
+    </xs:attributeGroup>
     
     <xs:element name="completed">
         <xs:annotation>
@@ -495,7 +664,15 @@
         </xs:complexType>
     </xs:element>
     <xs:complexType name="completed.class" >
-        <xs:choice>
+          <xs:sequence>
+            <xs:group ref="completed.content"/>
+          </xs:sequence>
+        <xs:attributeGroup ref="completed.attributes"/>
+    </xs:complexType>
+  
+      <xs:group name="completed.content">
+        <xs:sequence>
+          <xs:choice>
             <xs:sequence minOccurs="0">
                 <xs:group ref="year"/>
                 <xs:group ref="month"/>
@@ -512,11 +689,15 @@
                 <xs:group ref="year"/>
             </xs:sequence>
         </xs:choice>
-        <xs:attribute name="keyref" type="xs:string"/>
+        </xs:sequence>
+      </xs:group>
+  
+      <xs:attributeGroup name="completed.attributes">
+      <xs:attribute name="keyref" type="xs:string"/>
         <xs:attribute name="outputclass" type="xs:string"/>
         <xs:attributeGroup ref="univ-atts"/>
         <xs:attributeGroup ref="global-atts"/>
-    </xs:complexType>
+    </xs:attributeGroup>
     
     <xs:element name="year">
         <xs:annotation>
@@ -531,14 +712,26 @@
         </xs:complexType>
     </xs:element>
     <xs:complexType name="year.class" mixed="true">
-      <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:sequence>
+          <xs:group ref="year.content"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="year.attributes"/>
+    </xs:complexType>
+  
+    <xs:group name="year.content">
+      <xs:sequence>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
         <xs:group ref="keyword"/>
       </xs:choice>
-        <xs:attribute name="keyref" type="xs:string"/>
+      </xs:sequence>
+    </xs:group>
+  
+    <xs:attributeGroup name="year.attributes">
+      <xs:attribute name="keyref" type="xs:string"/>
         <xs:attribute name="outputclass" type="xs:string"/>
         <xs:attributeGroup ref="univ-atts"/>
         <xs:attributeGroup ref="global-atts"/>
-    </xs:complexType>
+    </xs:attributeGroup>
     
     <xs:element name="month">
         <xs:annotation>
@@ -553,14 +746,26 @@
         </xs:complexType>
     </xs:element>
     <xs:complexType name="month.class" mixed="true">
-      <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:sequence>
+          <xs:group ref="month.content"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="month.attributes"/>
+    </xs:complexType>
+  
+    <xs:group name="month.content">
+      <xs:sequence>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
         <xs:group ref="keyword"/>
       </xs:choice>
-        <xs:attribute name="keyref" type="xs:string"/>
+      </xs:sequence>
+    </xs:group>
+  
+    <xs:attributeGroup name="month.attributes">
+      <xs:attribute name="keyref" type="xs:string"/>
         <xs:attribute name="outputclass" type="xs:string"/>
         <xs:attributeGroup ref="univ-atts"/>
         <xs:attributeGroup ref="global-atts"/>
-    </xs:complexType>
+    </xs:attributeGroup>
     
     <xs:element name="day">
         <xs:annotation>
@@ -575,14 +780,26 @@
         </xs:complexType>
     </xs:element>
     <xs:complexType name="day.class" mixed="true">
-      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:sequence>
+          <xs:group ref="day.content"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="day.attributes"/>
+    </xs:complexType>
+  
+    <xs:group name="day.content">
+      <xs:sequence>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
         <xs:group ref="keyword"/>
       </xs:choice>
-        <xs:attribute name="keyref" type="xs:string"/>
+      </xs:sequence>
+    </xs:group>
+  
+    <xs:attributeGroup name="day.attributes">
+      <xs:attribute name="keyref" type="xs:string"/>
         <xs:attribute name="outputclass" type="xs:string"/>
         <xs:attributeGroup ref="univ-atts"/>
         <xs:attributeGroup ref="global-atts"/>
-    </xs:complexType>
+    </xs:attributeGroup>
     
     <xs:element name="reviewed">
         <xs:annotation>
@@ -598,6 +815,14 @@
         </xs:complexType>
     </xs:element>
     <xs:complexType name="reviewed.class">
+        <xs:sequence>
+          <xs:group ref="reviewed.content"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="reviewed.attributes"/>
+    </xs:complexType>
+  
+    <xs:group name="reviewed.content">
+      <xs:sequence>
         <xs:sequence >
             <xs:choice minOccurs="0" maxOccurs="unbounded">
                 <xs:group ref="person" />
@@ -609,9 +834,13 @@
             <xs:group ref="summary" minOccurs="0" />
             <xs:group ref="data" minOccurs="0" maxOccurs="unbounded"  />
         </xs:sequence>
-        <xs:attributeGroup ref="data-element-atts.class"/>
+      </xs:sequence>
+    </xs:group>
+    
+    <xs:attributeGroup name="reviewed.attributes">
+      <xs:attributeGroup ref="data-element-atts.class"/>
         <xs:attributeGroup ref="global-atts"/>
-    </xs:complexType>
+    </xs:attributeGroup>
     
     <xs:element name="edited">
         <xs:annotation>
@@ -627,6 +856,14 @@
         </xs:complexType>
     </xs:element>
     <xs:complexType name="edited.class">
+        <xs:sequence>
+          <xs:group ref="edited.content"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="edited.attributes"/>
+    </xs:complexType>
+  
+    <xs:group name="edited.content">
+      <xs:sequence>
         <xs:sequence >
             <xs:choice minOccurs="0" maxOccurs="unbounded">
                 <xs:group ref="person" />
@@ -638,9 +875,13 @@
             <xs:group ref="summary" minOccurs="0" />
             <xs:group ref="data" minOccurs="0" maxOccurs="unbounded"  />
         </xs:sequence>
-        <xs:attributeGroup ref="data-element-atts.class"/>
+      </xs:sequence>
+    </xs:group>
+    
+    <xs:attributeGroup name="edited.attributes">
+      <xs:attributeGroup ref="data-element-atts.class"/>
         <xs:attributeGroup ref="global-atts"/>
-    </xs:complexType>
+    </xs:attributeGroup>
     
     <xs:element name="tested">
         <xs:annotation>
@@ -656,6 +897,14 @@
         </xs:complexType>
     </xs:element>
     <xs:complexType name="tested.class">
+        <xs:sequence>
+          <xs:group ref="tested.content"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="tested.attributes"/>
+    </xs:complexType>
+  
+    <xs:group name="tested.content">
+      <xs:sequence>
         <xs:sequence >
             <xs:choice minOccurs="0" maxOccurs="unbounded">
                 <xs:group ref="person" />
@@ -667,9 +916,13 @@
             <xs:group ref="summary" minOccurs="0" />
             <xs:group ref="data" minOccurs="0" maxOccurs="unbounded"  />
         </xs:sequence>
-        <xs:attributeGroup ref="data-element-atts.class"/>
+      </xs:sequence>
+    </xs:group>
+    
+    <xs:attributeGroup name="tested.attributes">
+      <xs:attributeGroup ref="data-element-atts.class"/>
         <xs:attributeGroup ref="global-atts"/>
-    </xs:complexType>
+    </xs:attributeGroup>
     
     <xs:element name="approved">
         <xs:annotation>
@@ -685,6 +938,14 @@
         </xs:complexType>
     </xs:element>
     <xs:complexType name="approved.class">
+        <xs:sequence>
+          <xs:group ref="approved.content"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="approved.attributes"/>
+    </xs:complexType>
+  
+    <xs:group name="approved.content">
+      <xs:sequence>
         <xs:sequence >
             <xs:choice minOccurs="0" maxOccurs="unbounded">
                 <xs:group ref="person" />
@@ -696,9 +957,13 @@
             <xs:group ref="summary" minOccurs="0" />
             <xs:group ref="data" minOccurs="0" maxOccurs="unbounded"  />
         </xs:sequence>
-        <xs:attributeGroup ref="data-element-atts.class"/>
+      </xs:sequence>
+    </xs:group>
+    
+    <xs:attributeGroup name="approved.attributes">
+      <xs:attributeGroup ref="data-element-atts.class"/>
         <xs:attributeGroup ref="global-atts"/>
-    </xs:complexType>
+    </xs:attributeGroup>
     
     <xs:element name="bookevent">
         <xs:annotation>
@@ -716,7 +981,15 @@
         </xs:complexType>
     </xs:element>
     <xs:complexType name="bookevent.class">
-        <xs:sequence >
+        <xs:sequence>
+          <xs:group ref="bookevent.content"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="bookevent.attributes"/>
+    </xs:complexType>
+  
+      <xs:group name="bookevent.content">
+        <xs:sequence>
+          <xs:sequence >
             <xs:group ref="bookeventtype" minOccurs="0" />
             <xs:choice minOccurs="0" maxOccurs="unbounded">
                 <xs:group ref="person" />
@@ -728,9 +1001,13 @@
             <xs:group ref="summary" minOccurs="0" />
             <xs:group ref="data" minOccurs="0" maxOccurs="unbounded"  />
         </xs:sequence>
-        <xs:attributeGroup ref="data-element-atts.class"/>
+        </xs:sequence>
+      </xs:group>
+  
+      <xs:attributeGroup name="bookevent.attributes">
+      <xs:attributeGroup ref="data-element-atts.class"/>
         <xs:attributeGroup ref="global-atts"/>
-    </xs:complexType>
+    </xs:attributeGroup>
     
     <xs:element name="bookeventtype">
         <xs:annotation>
@@ -747,7 +1024,11 @@
         </xs:complexType>
     </xs:element>
     <xs:complexType name="bookeventtype.class">
-        <xs:attributeGroup ref="univ-atts"/>
+        <xs:attributeGroup ref="bookeventtype.attributes"/>
+    </xs:complexType>
+  
+    <xs:attributeGroup name="bookeventtype.attributes">
+      <xs:attributeGroup ref="univ-atts"/>
         <xs:attribute name="name" type="xs:string" use="required"/>
         <xs:attribute name="datatype" type="xs:string"/>
         <xs:attribute name="value" type="xs:string"/>
@@ -757,7 +1038,7 @@
         <xs:attribute name="scope" type="scope-att.class"/>
         <xs:attribute name="outputclass" type="xs:string"/>
         <xs:attributeGroup ref="global-atts"/>
-    </xs:complexType>
+    </xs:attributeGroup>
     
     <xs:element name="bookpartno">
         <xs:annotation>
@@ -774,12 +1055,24 @@
         </xs:complexType>
     </xs:element>
     <xs:complexType name="bookpartno.class" mixed="true">
-        <xs:choice minOccurs="0" maxOccurs="unbounded">
-            <xs:group ref="words.cnt"/>
-        </xs:choice>
-        <xs:attributeGroup ref="data-element-atts.class"/>
-        <xs:attributeGroup ref="global-atts"/>
+        <xs:sequence>
+          <xs:group ref="bookpartno.content"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="bookpartno.attributes"/>
     </xs:complexType>
+    
+      <xs:group name="bookpartno.content">
+        <xs:sequence>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:group ref="words.cnt"/>
+      </xs:choice>
+        </xs:sequence>
+      </xs:group>
+  
+    <xs:attributeGroup name="bookpartno.attributes">
+      <xs:attributeGroup ref="data-element-atts.class"/>
+        <xs:attributeGroup ref="global-atts"/>
+    </xs:attributeGroup>
     
     <xs:element name="edition">
         <xs:annotation>
@@ -796,12 +1089,24 @@
         </xs:complexType>
     </xs:element>
     <xs:complexType name="edition.class" mixed="true">
-      <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:sequence>
+          <xs:group ref="edition.content"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="edition.attributes"/>
+    </xs:complexType>
+    
+      <xs:group name="edition.content">
+        <xs:sequence>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
         <xs:group ref="keyword"/>
       </xs:choice>
-        <xs:attributeGroup ref="data-element-atts.class"/>
+        </xs:sequence>
+      </xs:group>
+  
+    <xs:attributeGroup name="edition.attributes">
+      <xs:attributeGroup ref="data-element-atts.class"/>
         <xs:attributeGroup ref="global-atts"/>
-    </xs:complexType>
+    </xs:attributeGroup>
     
     <xs:element name="isbn">
         <xs:annotation>
@@ -817,12 +1122,24 @@
         </xs:complexType>
     </xs:element>
     <xs:complexType name="isbn.class" mixed="true">
-      <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:sequence>
+          <xs:group ref="isbn.content"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="isbn.attributes"/>
+    </xs:complexType>
+    
+      <xs:group name="isbn.content">
+        <xs:sequence>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
         <xs:group ref="keyword"/>
       </xs:choice>
-        <xs:attributeGroup ref="data-element-atts.class"/>
+        </xs:sequence>
+      </xs:group>
+  
+    <xs:attributeGroup name="isbn.attributes">
+      <xs:attributeGroup ref="data-element-atts.class"/>
         <xs:attributeGroup ref="global-atts"/>
-    </xs:complexType>
+    </xs:attributeGroup>
     
     <xs:element name="booknumber">
         <xs:annotation>
@@ -838,12 +1155,24 @@
         </xs:complexType>
     </xs:element>
     <xs:complexType name="booknumber.class" mixed="true">
-        <xs:choice minOccurs="0" maxOccurs="unbounded">
-            <xs:group ref="words.cnt"/>
-        </xs:choice>
-        <xs:attributeGroup ref="data-element-atts.class"/>
-        <xs:attributeGroup ref="global-atts"/>
+        <xs:sequence>
+          <xs:group ref="booknumber.content"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="booknumber.attributes"/>
     </xs:complexType>
+    
+      <xs:group name="booknumber.content">
+        <xs:sequence>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:group ref="words.cnt"/>
+      </xs:choice>
+        </xs:sequence>
+      </xs:group>
+  
+    <xs:attributeGroup name="booknumber.attributes">
+      <xs:attributeGroup ref="data-element-atts.class"/>
+        <xs:attributeGroup ref="global-atts"/>
+    </xs:attributeGroup>
     
     <xs:element name="volume">
         <xs:annotation>
@@ -859,12 +1188,24 @@
         </xs:complexType>
     </xs:element>
     <xs:complexType name="volume.class" mixed="true">
-      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:sequence>
+          <xs:group ref="volume.content"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="volume.attributes"/>
+    </xs:complexType>
+    
+      <xs:group name="volume.content">
+        <xs:sequence>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
         <xs:group ref="keyword"/>
       </xs:choice>
-        <xs:attributeGroup ref="data-element-atts.class"/>
+        </xs:sequence>
+      </xs:group>
+  
+    <xs:attributeGroup name="volume.attributes">
+      <xs:attributeGroup ref="data-element-atts.class"/>
         <xs:attributeGroup ref="global-atts"/>
-    </xs:complexType>
+    </xs:attributeGroup>
     
     <xs:element name="maintainer">
         <xs:annotation>
@@ -881,15 +1222,27 @@
     </xs:element>
     <xs:complexType name="maintainer.class">
         <xs:sequence>
+          <xs:group ref="maintainer.content"/>
+        </xs:sequence>  
+        <xs:attributeGroup ref="maintainer.attributes"/>
+    </xs:complexType>
+  
+    <xs:group name="maintainer.content">
+      <xs:sequence>
+        <xs:sequence>
         <xs:choice minOccurs="0" maxOccurs="unbounded">
             <xs:group ref="person"/>
             <xs:group ref="organization"/>
         </xs:choice>
             <xs:group ref="data" minOccurs="0" maxOccurs="unbounded"/>
-        </xs:sequence>   
-        <xs:attributeGroup ref="data-element-atts.class"/>
+        </xs:sequence> 
+      </xs:sequence>
+    </xs:group>
+  
+    <xs:attributeGroup name="maintainer.attributes">
+      <xs:attributeGroup ref="data-element-atts.class"/>
         <xs:attributeGroup ref="global-atts"/>
-    </xs:complexType>
+    </xs:attributeGroup>
     
     <xs:element name="bookrights">
         <xs:annotation>
@@ -906,15 +1259,27 @@
     </xs:element>
     <xs:complexType name="bookrights.class" >
         <xs:sequence>
+          <xs:group ref="bookrights.content"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="bookrights.attributes"/>
+    </xs:complexType>
+      
+     <xs:group name="bookrights.content">
+       <xs:sequence>
+         <xs:sequence>
             <xs:group ref="copyrfirst" minOccurs="0"/>
             <xs:group ref="copyrlast" minOccurs="0"/>
             <xs:group ref="bookowner" />
             <xs:group ref="bookrestriction" minOccurs="0"/>
             <xs:group ref="summary" minOccurs="0"/>
         </xs:sequence>   
-        <xs:attributeGroup ref="data-element-atts.class"/>
+       </xs:sequence>
+     </xs:group>
+  
+    <xs:attributeGroup name="bookrights.attributes">
+      <xs:attributeGroup ref="data-element-atts.class"/>
         <xs:attributeGroup ref="global-atts"/>
-    </xs:complexType>
+    </xs:attributeGroup>
     
     <xs:element name="copyrfirst">
         <xs:annotation>
@@ -931,11 +1296,23 @@
     </xs:element>
     <xs:complexType name="copyrfirst.class">
         <xs:sequence>
+            <xs:group ref="copyrfirst.content" />
+        </xs:sequence>   
+        <xs:attributeGroup ref="copyrfirst.attributes"/>
+    </xs:complexType>
+  
+    <xs:group name="copyrfirst.content">
+      <xs:sequence>
+        <xs:sequence>
             <xs:group ref="year" />
         </xs:sequence>   
-        <xs:attributeGroup ref="data-element-atts.class"/>
+      </xs:sequence>
+    </xs:group>
+  
+    <xs:attributeGroup name="copyrfirst.attributes">
+      <xs:attributeGroup ref="data-element-atts.class"/>
         <xs:attributeGroup ref="global-atts"/>
-    </xs:complexType>
+    </xs:attributeGroup>
     
     <xs:element name="copyrlast">
         <xs:annotation>
@@ -952,11 +1329,23 @@
     </xs:element>
     <xs:complexType name="copyrlast.class" >
         <xs:sequence>
+            <xs:group ref="copyrlast.content" />
+        </xs:sequence>   
+        <xs:attributeGroup ref="copyrlast.attributes"/>
+    </xs:complexType>
+  
+    <xs:group name="copyrlast.content">
+      <xs:sequence>
+        <xs:sequence>
             <xs:group ref="year" />
         </xs:sequence>   
-        <xs:attributeGroup ref="data-element-atts.class"/>
+      </xs:sequence>
+    </xs:group>
+  
+    <xs:attributeGroup name="copyrlast.attributes">
+      <xs:attributeGroup ref="data-element-atts.class"/>
         <xs:attributeGroup ref="global-atts"/>
-    </xs:complexType>
+    </xs:attributeGroup>
     
     <xs:element name="bookowner">
         <xs:annotation>
@@ -971,13 +1360,25 @@
         </xs:complexType>
     </xs:element>
     <xs:complexType name="bookowner.class">
-            <xs:choice minOccurs="0" maxOccurs="unbounded">
-                <xs:group ref="person"/>
-                <xs:group ref="organization"/>
-            </xs:choice>
-        <xs:attributeGroup ref="data-element-atts.class"/>
-        <xs:attributeGroup ref="global-atts"/>
+            <xs:sequence>
+              <xs:group ref="bookowner.content"/>
+            </xs:sequence>
+          <xs:attributeGroup ref="bookowner.attributes"/>
     </xs:complexType>
+    
+    <xs:group name="bookowner.content">
+      <xs:sequence>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:group ref="person" minOccurs="0"/>
+                <xs:group ref="organization" minOccurs="0"/>
+            </xs:choice>
+      </xs:sequence>
+    </xs:group>
+    
+    <xs:attributeGroup name="bookowner.attributes">
+      <xs:attributeGroup ref="data-element-atts.class"/>
+        <xs:attributeGroup ref="global-atts"/>
+    </xs:attributeGroup>
     
     <xs:element name="bookrestriction">
         <xs:annotation>
@@ -996,7 +1397,11 @@
     </xs:element>
     <!--  Update value attr as per DITA Feature 12022  -->
     <xs:complexType name="bookrestriction.class">
-        <xs:attributeGroup ref="univ-atts"/>
+       <xs:attributeGroup ref="bookrestriction.attributes"/>
+    </xs:complexType>
+  
+      <xs:attributeGroup name="bookrestriction.attributes">
+         <xs:attributeGroup ref="univ-atts"/>
         <xs:attribute name="name" type="xs:string"/>
         <xs:attribute name="datatype" type="xs:string"/>
         <xs:attribute name="value" use="required" type="xs:string"/>
@@ -1006,7 +1411,7 @@
         <xs:attribute name="scope" type="scope-att.class"/>
         <xs:attribute name="outputclass" type="xs:string"/>
         <xs:attributeGroup ref="global-atts"/>
-    </xs:complexType>
+      </xs:attributeGroup>
     
     <xs:element name="booktitle">
         <xs:annotation>
@@ -1023,18 +1428,30 @@
         </xs:complexType>
     </xs:element>
     <xs:complexType name="booktitle.class">
+        <xs:sequence>
+            <xs:group ref="booktitle.content"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="booktitle.attributes"/>
+    </xs:complexType>
+  
+    <xs:group name="booktitle.content">
+      <xs:sequence>
         <xs:sequence minOccurs="0" maxOccurs="unbounded">
             <xs:group ref="booklibrary" minOccurs="0"/>
             <xs:group ref="mainbooktitle"/>
             <xs:group ref="booktitlealt" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
-        <xs:attribute name="outputclass" type="xs:string"/>
+      </xs:sequence>
+    </xs:group>
+  
+    <xs:attributeGroup name="booktitle.attributes">
+      <xs:attribute name="outputclass" type="xs:string"/>
         <xs:attribute name="base" type="xs:string"/>
         <xs:attributeGroup ref="base-attribute-extensions"/>
         <xs:attributeGroup ref="id-atts"/>
         <xs:attributeGroup ref="localization-atts"/>
         <xs:attributeGroup ref="global-atts"/>
-    </xs:complexType>
+    </xs:attributeGroup>
     
     <xs:element name="booklibrary">
         <xs:annotation>
@@ -1051,15 +1468,27 @@
         </xs:complexType>
     </xs:element>
     <xs:complexType name="booklibrary.class" mixed="true">
-        <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:sequence>
+          <xs:group ref="booklibrary.content"></xs:group>
+        </xs:sequence>
+        <xs:attributeGroup ref="booklibrary.attributes"/>
+    </xs:complexType>
+  
+      <xs:group name="booklibrary.content">
+        <xs:sequence>
+          <xs:choice minOccurs="0" maxOccurs="unbounded">
             <xs:group ref="basic.ph.noxref"/>
             <xs:group ref="image"/>
         </xs:choice>
+        </xs:sequence>
+      </xs:group>
+  
+      <xs:attributeGroup name="booklibrary.attributes">
         <xs:attribute name="keyref" type="xs:string"/>
         <xs:attribute name="outputclass" type="xs:string"/>
         <xs:attributeGroup ref="univ-atts"/>
         <xs:attributeGroup ref="global-atts"/>
-    </xs:complexType>
+      </xs:attributeGroup>
     
     <xs:element name="mainbooktitle">
         <xs:annotation>
@@ -1075,15 +1504,27 @@
         </xs:complexType>
     </xs:element>
     <xs:complexType name="mainbooktitle.class" mixed="true">
-        <xs:choice minOccurs="0" maxOccurs="unbounded">
+       <xs:sequence>
+          <xs:group ref="mainbooktitle.content"></xs:group>
+        </xs:sequence>
+        <xs:attributeGroup ref="mainbooktitle.attributes"/>
+    </xs:complexType>
+  
+      <xs:group name="mainbooktitle.content">
+        <xs:sequence>
+          <xs:choice minOccurs="0" maxOccurs="unbounded">
             <xs:group ref="basic.ph.noxref"/>
             <xs:group ref="image"/>
         </xs:choice>
+        </xs:sequence>
+      </xs:group>
+  
+      <xs:attributeGroup name="mainbooktitle.attributes">
         <xs:attribute name="keyref" type="xs:string"/>
         <xs:attribute name="outputclass" type="xs:string"/>
         <xs:attributeGroup ref="univ-atts"/>
         <xs:attributeGroup ref="global-atts"/>
-    </xs:complexType>
+      </xs:attributeGroup>
     
     <xs:element name="booktitlealt">
         <xs:annotation>
@@ -1099,15 +1540,28 @@
         </xs:complexType>
     </xs:element>
     <xs:complexType name="booktitlealt.class" mixed="true">
-        <xs:choice minOccurs="0" maxOccurs="unbounded">
-            <xs:group ref="basic.ph.noxref"/>
-            <xs:group ref="image"/>
+        <xs:sequence>
+          <xs:group ref="booktitlealt.content"></xs:group>
+        </xs:sequence>
+        <xs:attributeGroup ref="booktitlealt.attributes"/>
+    </xs:complexType>
+  
+      <xs:group name="booktitlealt.content">
+        <xs:sequence>
+          <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:group ref="basic.ph.noxref" minOccurs="0"/>
+            <xs:group ref="image" minOccurs="0"/>
         </xs:choice>
+        </xs:sequence>
+      </xs:group>
+  
+      <xs:attributeGroup name="booktitlealt.attributes">
         <xs:attribute name="keyref" type="xs:string"/>
         <xs:attribute name="outputclass" type="xs:string"/>
         <xs:attributeGroup ref="univ-atts"/>
         <xs:attributeGroup ref="global-atts"/>
-    </xs:complexType>
+      </xs:attributeGroup>
+  
     
     <xs:element name="draftintro">
         <xs:annotation>
@@ -1124,12 +1578,24 @@
     </xs:element>
     <xs:complexType name="draftintro.class">
         <xs:sequence>
-            <xs:group ref="topicmeta" minOccurs="0"/>
-             <xs:group ref="topicref" minOccurs="0" maxOccurs="unbounded"/>
+          <xs:group ref="draftintro.content"/>
         </xs:sequence>
-        <xs:attributeGroup ref="chapter-atts"/>
-        <xs:attributeGroup ref="global-atts" />
+        <xs:attributeGroup ref="draftintro.attributes"/>
     </xs:complexType>
+  
+    <xs:group name="draftintro.content">
+      <xs:sequence>
+        <xs:sequence>
+            <xs:group ref="topicmeta" minOccurs="0"/>
+            <xs:group ref="topicref" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+      </xs:sequence>
+    </xs:group>
+  
+    <xs:attributeGroup name="draftintro.attributes">
+      <xs:attributeGroup ref="chapter-atts"/>
+        <xs:attributeGroup ref="global-atts" />
+    </xs:attributeGroup>
     
     <xs:element name="bookabstract">
         <xs:annotation>
@@ -1146,9 +1612,13 @@
         </xs:complexType>
     </xs:element>
     <xs:complexType name="bookabstract.class">
-        <xs:attributeGroup ref="chapter-atts"/>
-        <xs:attributeGroup ref="global-atts" />
+        <xs:attributeGroup ref="bookabstract.attributes"/>
     </xs:complexType>
+  
+  <xs:attributeGroup name="bookabstract.attributes">
+      <xs:attributeGroup ref="chapter-atts"/>
+        <xs:attributeGroup ref="global-atts" />
+    </xs:attributeGroup>
     
     <xs:element name="dedication">
         <xs:annotation>
@@ -1164,9 +1634,13 @@
         </xs:complexType>
     </xs:element>
     <xs:complexType name="dedication.class">
-        <xs:attributeGroup ref="chapter-atts"/>
-        <xs:attributeGroup ref="global-atts" />
+        <xs:attributeGroup ref="dedication.attributes"/>
     </xs:complexType>
+  
+  <xs:attributeGroup name="dedication.attributes">
+      <xs:attributeGroup ref="chapter-atts"/>
+        <xs:attributeGroup ref="global-atts" />
+    </xs:attributeGroup>
     
     <xs:element name="preface">
         <xs:annotation>
@@ -1183,12 +1657,24 @@
     </xs:element>
     <xs:complexType name="preface.class">
         <xs:sequence>
+          <xs:group ref="preface.content"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="preface.attributes"/>
+    </xs:complexType>
+  
+    <xs:group name="preface.content">
+      <xs:sequence>
+        <xs:sequence>
             <xs:group ref="topicmeta" minOccurs="0"/>
             <xs:group ref="topicref" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
-        <xs:attributeGroup ref="chapter-atts"/>
+      </xs:sequence>
+    </xs:group>
+  
+    <xs:attributeGroup name="preface.attributes">
+      <xs:attributeGroup ref="chapter-atts"/>
         <xs:attributeGroup ref="global-atts" />
-    </xs:complexType>
+    </xs:attributeGroup>
     
     <xs:element name="chapter">
         <xs:annotation>
@@ -1205,12 +1691,24 @@
     </xs:element>
     <xs:complexType name="chapter.class">
         <xs:sequence>
+          <xs:group ref="chapter.content"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="chapter.attributes"/>
+    </xs:complexType>
+  
+    <xs:group name="chapter.content">
+      <xs:sequence>
+        <xs:sequence>
             <xs:group ref="topicmeta" minOccurs="0"/>
             <xs:group ref="topicref" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
-        <xs:attributeGroup ref="chapter-atts"/>
+      </xs:sequence>
+    </xs:group>
+  
+    <xs:attributeGroup name="chapter.attributes">
+      <xs:attributeGroup ref="chapter-atts"/>
         <xs:attributeGroup ref="global-atts" />
-    </xs:complexType>
+    </xs:attributeGroup>
     
     <xs:element name="part">
         <xs:annotation>
@@ -1230,15 +1728,28 @@
     </xs:element>
     <xs:complexType name="part.class">
         <xs:sequence>
+          <xs:group ref="part.content"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="chapter-atts"/>
+        <xs:attributeGroup ref="global-atts" />
+    </xs:complexType>
+  
+    <xs:group name="part.content">
+      <xs:sequence>
+        <xs:sequence>
             <xs:group ref="topicmeta" minOccurs="0"/>
             <xs:choice minOccurs="0" maxOccurs="unbounded">
                 <xs:group ref="topicref" />
                 <xs:group ref="chapter" />
             </xs:choice>
         </xs:sequence>
-        <xs:attributeGroup ref="chapter-atts"/>
+      </xs:sequence>
+    </xs:group>
+  
+     <xs:attributeGroup name="part.attributes">
+      <xs:attributeGroup ref="chapter-atts"/>
         <xs:attributeGroup ref="global-atts" />
-    </xs:complexType>
+    </xs:attributeGroup>
     
     <xs:element name="appendix">
         <xs:annotation>
@@ -1254,12 +1765,24 @@
     </xs:element>
     <xs:complexType name="appendix.class">
         <xs:sequence>
+          <xs:group ref="appendix.content"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="appendix.attributes"/>
+    </xs:complexType>
+  
+    <xs:group name="appendix.content">
+      <xs:sequence>
+        <xs:sequence>
             <xs:group ref="topicmeta" minOccurs="0"/>
             <xs:group ref="topicref" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
-        <xs:attributeGroup ref="chapter-atts"/>
+      </xs:sequence>
+    </xs:group>
+  
+    <xs:attributeGroup name="appendix.attributes">
+      <xs:attributeGroup ref="chapter-atts"/>
         <xs:attributeGroup ref="global-atts" />
-    </xs:complexType>
+    </xs:attributeGroup>
     
     <xs:element name="notices">
         <xs:annotation>
@@ -1277,12 +1800,24 @@
     </xs:element>
     <xs:complexType name="notices.class">
         <xs:sequence>
+          <xs:group ref="notices.content"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="notices.attributes"/>
+    </xs:complexType>
+  
+    <xs:group name="notices.content">
+      <xs:sequence>
+        <xs:sequence>
             <xs:group ref="topicmeta" minOccurs="0"/>
             <xs:group ref="topicref" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
-        <xs:attributeGroup ref="chapter-atts"/>
+      </xs:sequence>
+    </xs:group>
+  
+    <xs:attributeGroup name="notices.attributes">
+      <xs:attributeGroup ref="chapter-atts"/>
         <xs:attributeGroup ref="global-atts" />
-    </xs:complexType>
+    </xs:attributeGroup>
     
     <xs:element name="amendments">
         <xs:annotation>
@@ -1299,9 +1834,13 @@
         </xs:complexType>
     </xs:element>
     <xs:complexType name="amendments.class">
-        <xs:attributeGroup ref="chapter-atts"/>
-        <xs:attributeGroup ref="global-atts" />
+         <xs:attributeGroup ref="amendments.attributes"/>
     </xs:complexType>
+  
+    <xs:attributeGroup name="amendments.attributes">
+      <xs:attributeGroup ref="chapter-atts"/>
+        <xs:attributeGroup ref="global-atts" />
+    </xs:attributeGroup>
     
     <xs:element name="colophon">
         <xs:annotation>
@@ -1321,9 +1860,13 @@
         </xs:complexType>
     </xs:element>
     <xs:complexType name="colophon.class">
-        <xs:attributeGroup ref="chapter-atts"/>
-        <xs:attributeGroup ref="global-atts" />
+        <xs:attributeGroup ref="colophon.attributes"/>
     </xs:complexType>
+  
+    <xs:attributeGroup name="colophon.attributes">
+      <xs:attributeGroup ref="chapter-atts"/>
+        <xs:attributeGroup ref="global-atts" />
+    </xs:attributeGroup>
     
     <xs:element name="booklists">
         <xs:annotation>
@@ -1354,13 +1897,17 @@
             <xs:group ref="indexlist" />
             <xs:group ref="booklist" />
         </xs:choice>
-        <xs:attribute name="keyref" type="xs:string"/>
+        <xs:attributeGroup ref="booklists.attributes"/>
+    </xs:complexType>
+  
+    <xs:attributeGroup name="booklists.attributes">
+      <xs:attribute name="keyref" type="xs:string"/>
         <xs:attributeGroup ref="topicref-atts" />
         <xs:attributeGroup ref="id-atts" />
         <xs:attributeGroup ref="select-atts" />
         <xs:attributeGroup ref="localization-atts" />
         <xs:attributeGroup ref="global-atts" />
-    </xs:complexType>
+    </xs:attributeGroup>
     
     <xs:element name="toc">
         <xs:annotation>
@@ -1377,9 +1924,13 @@
         </xs:complexType>
     </xs:element>
     <xs:complexType name="toc.class">
-        <xs:attributeGroup ref="chapter-atts"/>
-        <xs:attributeGroup ref="global-atts" />
+        <xs:attributeGroup ref="toc.attributes"/>
     </xs:complexType>
+  
+    <xs:attributeGroup name="toc.attributes">
+      <xs:attributeGroup ref="chapter-atts"/>
+        <xs:attributeGroup ref="global-atts" />
+    </xs:attributeGroup>
     
     <xs:element name="figurelist">
         <xs:annotation>
@@ -1396,9 +1947,13 @@
         </xs:complexType>
     </xs:element>
     <xs:complexType name="figurelist.class">
-        <xs:attributeGroup ref="chapter-atts"/>
-        <xs:attributeGroup ref="global-atts" />
+        <xs:attributeGroup ref="figurelist.attributes"/>
     </xs:complexType>
+  
+    <xs:attributeGroup name="figurelist.attributes">
+      <xs:attributeGroup ref="chapter-atts"/>
+        <xs:attributeGroup ref="global-atts" />
+    </xs:attributeGroup>
     
     <xs:element name="tablelist">
         <xs:annotation>
@@ -1415,9 +1970,13 @@
         </xs:complexType>
     </xs:element>
     <xs:complexType name="tablelist.class">
-        <xs:attributeGroup ref="chapter-atts"/>
-        <xs:attributeGroup ref="global-atts" />
+        <xs:attributeGroup ref="tablelist.attributes"/>
     </xs:complexType>
+  
+    <xs:attributeGroup name="tablelist.attributes">
+      <xs:attributeGroup ref="chapter-atts"/>
+        <xs:attributeGroup ref="global-atts" />
+    </xs:attributeGroup>
     
     <xs:element name="abbrevlist">
         <xs:annotation>
@@ -1434,9 +1993,13 @@
         </xs:complexType>
     </xs:element>
     <xs:complexType name="abbrevlist.class">
-        <xs:attributeGroup ref="chapter-atts"/>
-        <xs:attributeGroup ref="global-atts" />
+        <xs:attributeGroup ref="abbrevlist.attributes"/>
     </xs:complexType>
+  
+    <xs:attributeGroup name="abbrevlist.attributes">
+      <xs:attributeGroup ref="chapter-atts"/>
+        <xs:attributeGroup ref="global-atts" />
+    </xs:attributeGroup>
     
     <xs:element name="trademarklist">
         <xs:annotation>
@@ -1453,9 +2016,13 @@
         </xs:complexType>
     </xs:element>
     <xs:complexType name="trademarklist.class">
-        <xs:attributeGroup ref="chapter-atts"/>
-        <xs:attributeGroup ref="global-atts" />
+        <xs:attributeGroup ref="trademarklist.attributes"/>
     </xs:complexType>
+  
+    <xs:attributeGroup name="trademarklist.attributes">
+      <xs:attributeGroup ref="chapter-atts"/>
+        <xs:attributeGroup ref="global-atts" />
+    </xs:attributeGroup>
     
     <xs:element name="bibliolist">
         <xs:annotation>
@@ -1474,9 +2041,13 @@
         </xs:complexType>
     </xs:element>
     <xs:complexType name="bibliolist.class">
-        <xs:attributeGroup ref="chapter-atts"/>
-        <xs:attributeGroup ref="global-atts" />
+         <xs:attributeGroup ref="bibliolist.attributes"/>
     </xs:complexType>
+  
+    <xs:attributeGroup name="bibliolist.attributes">
+      <xs:attributeGroup ref="chapter-atts"/>
+        <xs:attributeGroup ref="global-atts" />
+    </xs:attributeGroup>
     
     <xs:element name="glossarylist">
         <xs:annotation>
@@ -1494,12 +2065,24 @@
     </xs:element>
     <xs:complexType name="glossarylist.class">
         <xs:sequence>
+          <xs:group ref="glossarylist.content"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="glossarylist.attributes"/>
+    </xs:complexType>
+  
+  <xs:group name="glossarylist.content">
+    <xs:sequence>
+      <xs:sequence>
             <xs:group ref="topicmeta" minOccurs="0"/>
             <xs:group ref="topicref" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
-        <xs:attributeGroup ref="chapter-atts"/>
+    </xs:sequence>
+  </xs:group>
+  
+    <xs:attributeGroup name="glossarylist.attributes">
+      <xs:attributeGroup ref="chapter-atts"/>
         <xs:attributeGroup ref="global-atts" />
-    </xs:complexType>
+    </xs:attributeGroup>
     
     <xs:element name="indexlist">
         <xs:annotation>
@@ -1516,9 +2099,13 @@
         </xs:complexType>
     </xs:element>
     <xs:complexType name="indexlist.class">
-        <xs:attributeGroup ref="chapter-atts"/>
-        <xs:attributeGroup ref="global-atts" />
+        <xs:attributeGroup ref="indexlist.attributes"/>
     </xs:complexType>
+  
+    <xs:attributeGroup name="indexlist.attributes">
+      <xs:attributeGroup ref="chapter-atts"/>
+        <xs:attributeGroup ref="global-atts" />
+    </xs:attributeGroup>
     
     <xs:element name="booklist">
         <xs:annotation>
@@ -1538,8 +2125,12 @@
         </xs:complexType>
     </xs:element>
     <xs:complexType name="booklist.class">
-        <xs:attributeGroup ref="chapter-atts"/>
-        <xs:attributeGroup ref="global-atts" />
+        <xs:attributeGroup ref="booklist.attributes"/>
     </xs:complexType>
+  
+    <xs:attributeGroup name="booklist.attributes">
+      <xs:attributeGroup ref="chapter-atts"/>
+        <xs:attributeGroup ref="global-atts" />
+    </xs:attributeGroup>
     
 </xs:schema>

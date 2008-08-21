@@ -70,6 +70,13 @@
             </xs:choice>
         </xs:group>
         
+        <xs:group name="keywords">
+      <xs:choice>
+        <xs:group ref="keywords"/>
+        <xs:group ref="delay-d-keywords" />
+      </xs:choice>
+    </xs:group>
+        
     </xs:redefine>
     
     
@@ -96,7 +103,7 @@
     </xs:redefine>-->
     
   <xs:attributeGroup name="domains-att">
-    <xs:attribute name="domains" type="xs:string" default="(map mapgroup-d) (topic indexing-d)  (topic xnal-d) (topic delay-d)"/>
+    <xs:attribute name="domains" type="xs:string" default="(map mapgroup-d) (topic indexing-d)  (topic xnal-d) (topic delay-d) (map bookmap)"/>
   </xs:attributeGroup>
     
 </xs:schema>

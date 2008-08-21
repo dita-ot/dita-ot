@@ -225,10 +225,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Map Subject Classification Domain//EN"
                          (%topicSubjectRow;)+)"
 >
 <!ENTITY % topicSubjectTable.attributes
-             "title 
-                        CDATA 
-                                  #IMPLIED
-              %topicref-atts-no-toc;
+             "%topicref-atts-no-toc;
               %univ-atts;"
 >
 <!ELEMENT topicSubjectTable    %topicSubjectTable.content;>

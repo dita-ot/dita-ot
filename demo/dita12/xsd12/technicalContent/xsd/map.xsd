@@ -31,11 +31,18 @@
   <!-- ======= INCLUDE ======= -->
  <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:mapGroupMod.xsd:1.2" />
  <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:indexingDomain.xsd:1.2" />
-  <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:delayResolutionDomain.xsd:1.2" />
+ <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:delayResolutionDomain.xsd:1.2" />
 
   
  <!--  ================ GROUP DEFINITIONS =====================  -->
- <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:metaDeclGrp.xsd:1.2"/>
+ <xs:redefine schemaLocation="urn:oasis:names:tc:dita:xsd:metaDeclGrp.xsd:1.2">
+       <xs:group name="keywords">
+      <xs:choice>
+        <xs:group ref="keywords"/>
+        <xs:group ref="delay-d-keywords" />
+      </xs:choice>
+    </xs:group>
+  </xs:redefine>
  <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:tblDeclGrp.xsd:1.2"/>
  
  <!-- =================  MODULE INLCUDE DEFINITION  ==================  -->

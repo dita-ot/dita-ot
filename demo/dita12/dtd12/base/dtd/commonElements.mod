@@ -886,10 +886,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Common Elements//EN"
                         CDATA 
                                   #IMPLIED
               type 
-                        (bibliographic | 
-                         external | 
-                         internal | 
-                         -dita-use-conref-target) 
+                        CDATA 
                                   #IMPLIED
               reftitle 
                         CDATA 
@@ -1395,7 +1392,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Common Elements//EN"
                          -dita-use-conref-target) 
                                   #IMPLIED
               keyref 
-                        NMTOKEN 
+                        CDATA 
                                   #IMPLIED
               alt 
                         CDATA 

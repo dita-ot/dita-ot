@@ -57,9 +57,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Learning Overview//EN"
              "id
                         ID 
                                   #REQUIRED
-              conref
-                        CDATA
-                                  #IMPLIED
+              %conref-atts;
               %select-atts;
               %localization-atts;
               outputclass
@@ -78,7 +76,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Learning Overview//EN"
 
 <!ENTITY % learningOverviewbody.content
                        "((%lcIntro;)?,
-                         (%lcAudience;)?,
+                         (%lcAudience;)*,
                          (%lcDuration;)?,
                          (%lcPrereqs;)?,
                          (%lcObjectives;)?,

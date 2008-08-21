@@ -134,6 +134,12 @@ PUBLIC "-//OASIS//ELEMENTS DITA Subject Scheme Map//EN"
               format 
                         CDATA 
                                   'ditamap'
+              scope 
+                        (external |
+                         local |
+                         peer |
+                         -dita-use-conref-target) 
+                                  #IMPLIED
               %univ-atts;"
 >
 <!ELEMENT schemeref    %schemeref.content;>
@@ -164,6 +170,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Subject Scheme Map//EN"
               scope 
                         (external |
                          local |
+                         peer |
                          -dita-use-conref-target) 
                                   #IMPLIED
               format 
@@ -202,6 +209,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Subject Scheme Map//EN"
               scope 
                         (external |
                          local |
+                         peer |
                          -dita-use-conref-target) 
                                   #IMPLIED
               format 
@@ -240,6 +248,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Subject Scheme Map//EN"
               scope 
                         (external |
                          local |
+                         peer |
                          -dita-use-conref-target) 
                                   #IMPLIED
               format 
@@ -278,6 +287,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Subject Scheme Map//EN"
               scope 
                         (external |
                          local |
+                         peer |
                          -dita-use-conref-target) 
                                   #IMPLIED
               format 
@@ -321,6 +331,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Subject Scheme Map//EN"
                                   'choice'
               scope 
                         (external |
+                         peer |
                          local |
                          -dita-use-conref-target) 
                                   #IMPLIED
@@ -383,7 +394,8 @@ PUBLIC "-//OASIS//ELEMENTS DITA Subject Scheme Map//EN"
                                   #IMPLIED
               scope 
                         (external | 
-                         local | 
+                         local |
+                         peer | 
                          -dita-use-conref-target) 
                                   #IMPLIED
               locktitle 
@@ -593,6 +605,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Subject Scheme Map//EN"
               scope 
                         (external | 
                          local | 
+                         peer |
                          -dita-use-conref-target) 
                                   #IMPLIED
               locktitle 
@@ -662,6 +675,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Subject Scheme Map//EN"
               scope 
                         (external | 
                          local | 
+                         peer |
                          -dita-use-conref-target) 
                                   #IMPLIED
               format 

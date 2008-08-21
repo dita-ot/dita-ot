@@ -50,53 +50,69 @@
   </xs:group>
 
 
-  <xs:group name="msgblock">
-    <xs:choice>
-      <xs:element ref="msgblock"/>
-    </xs:choice>
-  </xs:group>
-  
-  <xs:group name="msgnum">
-    <xs:choice>
-      <xs:element ref="msgnum"/>
-    </xs:choice>
-  </xs:group>
-  
-  <xs:group name="varname">
-    <xs:choice>
-      <xs:element ref="varname"/>
-    </xs:choice>
-  </xs:group>
-  
   <xs:group name="msgph">
-    <xs:choice>
-      <xs:element ref="msgph"/>
-    </xs:choice>
-  </xs:group>
-  
-  <xs:group name="filepath">
-    <xs:choice>
-      <xs:element ref="filepath"/>
-    </xs:choice>
-  </xs:group>
-  
-  <xs:group name="userinput">
-    <xs:choice>
-      <xs:element ref="userinput"/>
-    </xs:choice>
-  </xs:group>
-  
-  <xs:group name="systemoutput">
-    <xs:choice>
-      <xs:element ref="systemoutput"/>
-    </xs:choice>
-  </xs:group>
-  
-  <xs:group name="cmdname">
-    <xs:choice>
-      <xs:element ref="cmdname"/>
-    </xs:choice>
-  </xs:group>
+      <xs:sequence>
+         <xs:choice>
+            <xs:element ref="msgph"/>
+         </xs:choice>
+      </xs:sequence>
+   </xs:group>
+
+   <xs:group name="msgnum">
+      <xs:sequence>
+         <xs:choice>
+            <xs:element ref="msgnum"/>
+         </xs:choice>
+      </xs:sequence>
+   </xs:group>
+
+   <xs:group name="varname">
+      <xs:sequence>
+         <xs:choice>
+            <xs:element ref="varname"/>
+         </xs:choice>
+      </xs:sequence>
+   </xs:group>
+
+   <xs:group name="msgblock">
+      <xs:sequence>
+         <xs:choice>
+            <xs:element ref="msgblock"/>
+         </xs:choice>
+      </xs:sequence>
+   </xs:group>
+
+   <xs:group name="cmdname">
+      <xs:sequence>
+         <xs:choice>
+            <xs:element ref="cmdname"/>
+         </xs:choice>
+      </xs:sequence>
+   </xs:group>
+
+   <xs:group name="filepath">
+      <xs:sequence>
+         <xs:choice>
+            <xs:element ref="filepath"/>
+         </xs:choice>
+      </xs:sequence>
+   </xs:group>
+
+   <xs:group name="userinput">
+      <xs:sequence>
+         <xs:choice>
+            <xs:element ref="userinput"/>
+         </xs:choice>
+      </xs:sequence>
+   </xs:group>
+
+   <xs:group name="systemoutput">
+      <xs:sequence>
+         <xs:choice>
+            <xs:element ref="systemoutput"/>
+         </xs:choice>
+      </xs:sequence>
+   </xs:group>
 
   <xs:element name="msgph">
     <xs:annotation>
@@ -120,19 +136,27 @@
   
   
   <xs:complexType name="msgph.class" mixed="true">
-        <xs:choice minOccurs="0" maxOccurs="unbounded">
-          <xs:group ref="words.cnt"/>
+        <xs:sequence>
+         <xs:group ref="msgph.content"/>
+       </xs:sequence>
+        <xs:attributeGroup ref="msgph.attributes"/>
+  </xs:complexType>
+  
+  <xs:group name="msgph.content">
+    <xs:sequence>
+       <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:group ref="words.cnt" minOccurs="0"/>
         </xs:choice>
-        <xs:attribute name="outputclass" type="xs:string"/>
+    </xs:sequence>
+  </xs:group>
+  
+  <xs:attributeGroup name="msgph.attributes">
+    <xs:attribute name="outputclass" type="xs:string"/>
         <xs:attributeGroup ref="univ-atts"/>
         <xs:attributeGroup ref="global-atts"/>
-  </xs:complexType>
+  </xs:attributeGroup>
 
-  
-  
-  
-  
-  <xs:element name="msgnum">
+    <xs:element name="msgnum">
     <xs:annotation>
       <xs:documentation>
         The message number (&lt;<keyword>msgnum</keyword>&gt;) element contains the number
@@ -150,14 +174,26 @@
     </xs:complexType>
   </xs:element>
    <xs:complexType name="msgnum.class"  mixed="true">
-     <xs:choice minOccurs="0" maxOccurs="unbounded">
-       <xs:group ref="text"/>
-     </xs:choice>
-        <xs:attribute name="keyref" type="xs:string"/>
+     <xs:sequence>
+        <xs:group ref="msgnum.content"></xs:group>
+      </xs:sequence>
+     <xs:attributeGroup ref="msgnum.attributes"/>
+  </xs:complexType>
+  
+  <xs:group name="msgnum.content">
+    <xs:sequence>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="text" minOccurs="0"/>
+    </xs:choice>
+    </xs:sequence>
+  </xs:group>
+  
+  <xs:attributeGroup name="msgnum.attributes">
+    <xs:attribute name="keyref" type="xs:string"/>
         <xs:attribute name="outputclass" type="xs:string"/>
         <xs:attributeGroup ref="univ-atts"/>
         <xs:attributeGroup ref="global-atts"/>
-  </xs:complexType>
+  </xs:attributeGroup>
 
   <xs:element name="varname">
     <xs:annotation>
@@ -180,14 +216,26 @@
     </xs:complexType>
   </xs:element>
   <xs:complexType name="varname.class"  mixed="true">
-    <xs:choice minOccurs="0" maxOccurs="unbounded">
-      <xs:group ref="text"/>
+    <xs:sequence>
+        <xs:group ref="varname.content"></xs:group>
+      </xs:sequence>
+     <xs:attributeGroup ref="varname.attributes"/>
+  </xs:complexType>
+  
+  <xs:group name="varname.content">
+    <xs:sequence>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="text" minOccurs="0"/>
     </xs:choice>
-        <xs:attribute name="keyref" type="xs:string"/>
+    </xs:sequence>
+  </xs:group>
+  
+  <xs:attributeGroup name="varname.attributes">
+    <xs:attribute name="keyref" type="xs:string"/>
         <xs:attribute name="outputclass" type="xs:string"/>
         <xs:attributeGroup ref="univ-atts"/>
         <xs:attributeGroup ref="global-atts"/>
-  </xs:complexType>
+  </xs:attributeGroup>
 
   <xs:element name="msgblock">
     <xs:annotation>
@@ -209,16 +257,28 @@
     </xs:complexType>
   </xs:element>
   <xs:complexType name="msgblock.class" mixed="true">
-        <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:sequence>
+          <xs:group ref="msgblock.content"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="msgblock.attributes"/>
+  </xs:complexType>
+  
+  <xs:group name="msgblock.content">
+    <xs:sequence>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
           <xs:group ref="words.cnt"/>
         </xs:choice>
-        <xs:attribute name="outputclass" type="xs:string"/>
+    </xs:sequence>
+  </xs:group>
+  
+  <xs:attributeGroup name="msgblock.attributes">
+    <xs:attribute name="outputclass" type="xs:string"/>
         <xs:attribute name="spectitle" type="xs:string"/>
         <xs:attribute ref="xml:space" fixed="preserve"/>
         <xs:attributeGroup ref="display-atts"/>
         <xs:attributeGroup ref="univ-atts"/>
         <xs:attributeGroup ref="global-atts"/>
-  </xs:complexType>
+  </xs:attributeGroup>
 
   <xs:element name="cmdname">
     <xs:annotation>
@@ -238,14 +298,26 @@
     </xs:complexType>
   </xs:element>
   <xs:complexType name="cmdname.class"  mixed="true">
-    <xs:choice minOccurs="0" maxOccurs="unbounded">
-      <xs:group ref="text"/>
+      <xs:sequence>
+        <xs:group ref="cmdname.content"></xs:group>
+      </xs:sequence>
+     <xs:attributeGroup ref="cmdname.attributes"/>
+  </xs:complexType>
+  
+  <xs:group name="cmdname.content">
+    <xs:sequence>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="text" minOccurs="0"/>
     </xs:choice>
-        <xs:attribute name="keyref" type="xs:string"/>
+    </xs:sequence>
+  </xs:group>
+  
+  <xs:attributeGroup name="cmdname.attributes">
+    <xs:attribute name="keyref" type="xs:string"/>
         <xs:attribute name="outputclass" type="xs:string"/>
         <xs:attributeGroup ref="univ-atts"/>
         <xs:attributeGroup ref="global-atts"/>
-  </xs:complexType>
+  </xs:attributeGroup>
 
   <xs:element name="filepath">
     <xs:annotation>
@@ -267,13 +339,25 @@
     </xs:complexType>
   </xs:element>
   <xs:complexType name="filepath.class" mixed="true">
-    <xs:choice minOccurs="0" maxOccurs="unbounded">
-           <xs:group ref="words.cnt"/>
-    </xs:choice>
-        <xs:attribute name="outputclass" type="xs:string"/>
+    <xs:sequence>
+         <xs:group ref="filepath.content"/>
+       </xs:sequence>
+        <xs:attributeGroup ref="filepath.attributes"/>
+  </xs:complexType>
+  
+  <xs:group name="filepath.content">
+    <xs:sequence>
+       <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:group ref="words.cnt" minOccurs="0"/>
+        </xs:choice>
+    </xs:sequence>
+  </xs:group>
+  
+  <xs:attributeGroup name="filepath.attributes">
+    <xs:attribute name="outputclass" type="xs:string"/>
         <xs:attributeGroup ref="univ-atts"/>
         <xs:attributeGroup ref="global-atts"/>
-  </xs:complexType>
+  </xs:attributeGroup>
 
   <xs:element name="userinput">
     <xs:annotation>
@@ -293,13 +377,25 @@
     </xs:complexType>
   </xs:element>
   <xs:complexType name="userinput.class" mixed="true">
-        <xs:choice minOccurs="0" maxOccurs="unbounded">
-          <xs:group ref="words.cnt"/>
+         <xs:sequence>
+         <xs:group ref="userinput.content"/>
+       </xs:sequence>
+        <xs:attributeGroup ref="userinput.attributes"/>
+  </xs:complexType>
+  
+  <xs:group name="userinput.content">
+    <xs:sequence>
+       <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:group ref="words.cnt" minOccurs="0"/>
         </xs:choice>
-        <xs:attribute name="outputclass" type="xs:string"/>
+    </xs:sequence>
+  </xs:group>
+  
+  <xs:attributeGroup name="userinput.attributes">
+    <xs:attribute name="outputclass" type="xs:string"/>
         <xs:attributeGroup ref="univ-atts"/>
         <xs:attributeGroup ref="global-atts"/>
-  </xs:complexType>
+  </xs:attributeGroup>
 
   <xs:element name="systemoutput">
     <xs:annotation>
@@ -322,12 +418,24 @@
     </xs:complexType>
   </xs:element>
   <xs:complexType name="systemoutput.class" mixed="true">
-        <xs:choice minOccurs="0" maxOccurs="unbounded">
-          <xs:group ref="words.cnt"/>
+       <xs:sequence>
+         <xs:group ref="systemoutput.content"/>
+       </xs:sequence>
+        <xs:attributeGroup ref="systemoutput.attributes"/>
+  </xs:complexType>
+  
+  <xs:group name="systemoutput.content">
+    <xs:sequence>
+       <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:group ref="words.cnt" minOccurs="0"/>
         </xs:choice>
-        <xs:attribute name="outputclass" type="xs:string"/>
+    </xs:sequence>
+  </xs:group>
+  
+  <xs:attributeGroup name="systemoutput.attributes">
+    <xs:attribute name="outputclass" type="xs:string"/>
         <xs:attributeGroup ref="univ-atts"/>
         <xs:attributeGroup ref="global-atts"/>
-  </xs:complexType>
+  </xs:attributeGroup>
 
 </xs:schema>

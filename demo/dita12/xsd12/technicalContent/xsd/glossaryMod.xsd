@@ -3,8 +3,8 @@
 <!--                    HEADER                                     -->
 <!-- ============================================================= -->
 <!--  MODULE:    DITA Glossary XSD Module                           -->
-<!--  VERSION:   1.1                                             -->
-<!--  DATE:      November 2006                                     -->
+<!--  VERSION:   1.2                                             -->
+<!--  DATE:      July 2007                                     -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -75,44 +75,79 @@
      
      <!-- Base type: topic.class -->
      <xs:complexType name="glossentry.class">
-         <xs:sequence>
+        <xs:sequence>
+          <xs:group ref="glossenrty.content"/>
+        </xs:sequence>
+         <xs:attributeGroup ref="glossentry.attributes"/>
+     </xs:complexType>
+   
+   <xs:group name="glossenrty.content">
+     <xs:sequence>
+        <xs:sequence>
              <xs:group ref="glossterm"/>
              <xs:group ref="glossdef" />
              <xs:group ref="related-links" minOccurs="0"/>
              <xs:group ref="glossentry-info-types" minOccurs="0" maxOccurs="unbounded"/>
          </xs:sequence>
-         <xs:attribute name="id" type="xs:ID" use="required"/>
-         <xs:attributeGroup ref="conref-atts" />
-         <xs:attributeGroup ref="select-atts"/>
-         <xs:attribute ref="ditaarch:DITAArchVersion" />
-       <xs:attributeGroup ref="domains-att"/>
-         <xs:attribute name="outputclass" type="xs:string"/>
-         <xs:attributeGroup ref="localization-atts"/>
-         <xs:attributeGroup ref="global-atts"/>
-     </xs:complexType>
+     </xs:sequence>
+   </xs:group>
+     
+   <xs:attributeGroup name="glossentry.attributes">
+     <xs:attribute name="id" type="xs:ID" use="required"/>
+     <xs:attributeGroup ref="conref-atts" />
+     <xs:attributeGroup ref="select-atts"/>
+     <xs:attribute ref="ditaarch:DITAArchVersion" />
+     <xs:attributeGroup ref="domains-att"/>
+     <xs:attribute name="outputclass" type="xs:string"/>
+     <xs:attributeGroup ref="localization-atts"/>
+     <xs:attributeGroup ref="global-atts"/>
+   </xs:attributeGroup>
      
      <xs:complexType name="glossterm.class" mixed="true">
-         <xs:choice minOccurs="0" maxOccurs="unbounded">
-             <xs:group ref="title.cnt"/>
+         <xs:sequence>
+           <xs:group ref="glostterm.content"/>
+         </xs:sequence>
+         <xs:attributeGroup ref="glossterm.attributes"/>
+     </xs:complexType>
+   
+   <xs:group name="glostterm.content">
+     <xs:sequence>
+       <xs:choice minOccurs="0" maxOccurs="unbounded">
+             <xs:group ref="title.cnt" minOccurs="0"/>
          </xs:choice>
-         <xs:attribute name="outputclass" type="xs:string"/>
+     </xs:sequence>
+   </xs:group>
+   
+   <xs:attributeGroup name="glossterm.attributes">
+     <xs:attribute name="outputclass" type="xs:string"/>
          <xs:attribute name="base" type="xs:string" />
          <xs:attributeGroup ref="base-attribute-extensions"/>
          <xs:attributeGroup ref="id-atts"/>
          <xs:attributeGroup ref="localization-atts"/>
          <xs:attributeGroup ref="global-atts"/>
-     </xs:complexType>
+   </xs:attributeGroup>
      
-     <xs:complexType name="glossdef.class" mixed="true">
-         <xs:choice minOccurs="0" maxOccurs="unbounded">
-             <xs:group ref="section.notitle.cnt"/>
-             <xs:group ref="shortdesc"/>
-         </xs:choice>
-         <xs:attribute name="outputclass" type="xs:string"/>
-         <xs:attributeGroup ref="univ-atts"/>
-         <xs:attributeGroup ref="global-atts"/>
-     </xs:complexType>
-     
-     
+   <xs:complexType name="glossdef.class" mixed="true">
+     <xs:sequence>
+       <xs:group ref="glossdef.content"></xs:group>
+     </xs:sequence>
+     <xs:attributeGroup ref="glossdef.attributes"/>
+   </xs:complexType>
+   
+   <xs:group name="glossdef.content">
+     <xs:sequence>
+       <xs:choice minOccurs="0" maxOccurs="unbounded">
+       <xs:group ref="section.notitle.cnt" minOccurs="0"/>
+       <xs:group ref="shortdesc" minOccurs="0"/>
+     </xs:choice>
+     </xs:sequence>
+   </xs:group>
+   
+   <xs:attributeGroup name="glossdef.attributes">
+     <xs:attribute name="outputclass" type="xs:string"/>
+     <xs:attributeGroup ref="univ-atts"/>
+     <xs:attributeGroup ref="global-atts"/>
+   </xs:attributeGroup>
+   
  </xs:schema>
  

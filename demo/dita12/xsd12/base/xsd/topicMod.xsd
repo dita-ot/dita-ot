@@ -58,7 +58,7 @@
       <xs:group ref="required-cleanup"/>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
         <xs:group ref="draft-comment" />
-        <xs:group ref="data.element.incl"/>
+        <xs:group ref="data.elements.incl"/>
         <xs:group ref="foreign.unknown.incl"/>
       </xs:choice>
     </xs:choice>
@@ -72,7 +72,7 @@
       <xs:group ref="title"/>
       <xs:group ref="txt.incl"/>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:group ref="data.element.incl"/>
+        <xs:group ref="data.elements.incl"/>
         <xs:group ref="foreign.unknown.incl"/>
       </xs:choice>
     </xs:choice>
@@ -85,7 +85,7 @@
       <xs:group ref="basic.block"/>
       <xs:group ref="txt.incl"/>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:group ref="data.element.incl"/>
+        <xs:group ref="data.elements.incl"/>
         <xs:group ref="foreign.unknown.incl"/>
       </xs:choice>
     </xs:choice>
@@ -138,6 +138,14 @@
   </xs:element>
   <xs:complexType name="topic.class">
     <xs:sequence>
+      <xs:group ref="topic.content"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="topic.attributes"/>
+  </xs:complexType>
+  
+  <xs:group name="topic.content">
+    <xs:sequence>
+      <xs:sequence>
       <xs:group ref="title"/>
       <xs:group ref="titlealts" minOccurs="0"/>
       <xs:choice minOccurs="0" >
@@ -149,6 +157,10 @@
       <xs:group ref="related-links" minOccurs="0"/>
       <xs:group ref="topic-info-types" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
+    </xs:sequence>
+  </xs:group>
+  
+  <xs:attributeGroup name="topic.attributes">
     <xs:attribute name="id" type="xs:ID" use="required"/>
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="conref-atts"/>
@@ -157,7 +169,7 @@
     <xs:attributeGroup ref="select-atts"/>
     <xs:attributeGroup ref="localization-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-  </xs:complexType>
+  </xs:attributeGroup>
 
   <!-- Rename null to no-topic-nesting -->
   <xs:element name="no-topic-nesting">
@@ -177,8 +189,12 @@
     </xs:complexType>
   </xs:element>
   <xs:complexType name="no-topic-nesting.class">
-    <xs:attributeGroup ref="global-atts"/>
+    <xs:attributeGroup ref="no-topic-nesting.attributes"/>
   </xs:complexType>
+  
+  <xs:attributeGroup name="no-topic-nesting.attributes">
+    <xs:attributeGroup ref="global-atts"/>
+  </xs:attributeGroup>
 
   
   <xs:element name="titlealts">
@@ -206,12 +222,24 @@
   </xs:element>
   <xs:complexType name="titlealts.class">
     <xs:sequence>
+      <xs:group ref="titlealts.content"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="titlealts.attributes"/>
+  </xs:complexType>
+  
+  <xs:group name="titlealts.content">
+    <xs:sequence>
+      <xs:sequence>
       <xs:group ref="navtitle" minOccurs="0"/>
       <xs:group ref="searchtitle" minOccurs="0"/>
     </xs:sequence>
+    </xs:sequence>
+  </xs:group>
+  
+  <xs:attributeGroup name="titlealts.attributes">
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-  </xs:complexType>
+  </xs:attributeGroup>
 
   
   
@@ -237,13 +265,25 @@
     </xs:complexType>
   </xs:element>
   <xs:complexType name="searchtitle.class" mixed="true">
-    <xs:choice minOccurs="0" maxOccurs="unbounded">
-      <xs:group ref="words.cnt"/>
-      <xs:group ref="ph"/>
+    <xs:sequence>
+      <xs:group ref="searchtitle.content"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="searchtitle.attributes"/>
+  </xs:complexType>
+  
+  <xs:group name="searchtitle.content">
+    <xs:sequence>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="words.cnt" minOccurs="0"/>
+      <xs:group ref="ph" minOccurs="0"/>
     </xs:choice>
+    </xs:sequence>
+  </xs:group>
+  
+  <xs:attributeGroup name="searchtitle.attributes">
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-  </xs:complexType>
+  </xs:attributeGroup>
 
   
   
@@ -262,16 +302,27 @@
     </xs:complexType>
   </xs:element>
   <xs:complexType name="body.class">
-    <xs:choice minOccurs="0" maxOccurs="unbounded">
-      <xs:group ref="body.cnt"/>
-      <xs:group ref="section"/>
-      <xs:group ref="example"/>
-    </xs:choice>
-    <xs:attribute name="outputclass" type="xs:string"/>
+    <xs:sequence>
+      <xs:group ref="body.content"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="body.attributes"/>
+  </xs:complexType>
+  
+  <xs:group name="body.content">
+    <xs:sequence>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="body.cnt" minOccurs="0"/>
+      <xs:group ref="section" minOccurs="0"/>
+      <xs:group ref="example" minOccurs="0"/>
+    </xs:choice>  
+    </xs:sequence>
+  </xs:group>
+
+    <xs:attributeGroup name="body.attributes">
+      <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-  </xs:complexType>
-
+    </xs:attributeGroup>
   
   <xs:element name="section">
     <xs:annotation>
@@ -294,15 +345,26 @@
     </xs:complexType>
   </xs:element>
   <xs:complexType name="section.class" mixed="true">
-    <xs:choice minOccurs="0" maxOccurs="unbounded">
-      <xs:group ref="section.cnt"/>
-    </xs:choice>
-    <xs:attribute name="spectitle" type="xs:string"/>
+    <xs:sequence>
+      <xs:group ref="section.content"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="section.attributes"/>
+  </xs:complexType>
+  
+  <xs:group name="section.content">
+    <xs:sequence>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="section.cnt" minOccurs="0"/>
+    </xs:choice>  
+    </xs:sequence>
+  </xs:group>
+
+<xs:attributeGroup name="section.attributes">
+  <xs:attribute name="spectitle" type="xs:string"/>
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-  </xs:complexType>
-
+</xs:attributeGroup>
   
   <xs:element name="example">
     <xs:annotation>
@@ -321,14 +383,26 @@
     </xs:complexType>
   </xs:element>
   <xs:complexType name="example.class" mixed="true">
-    <xs:choice minOccurs="0" maxOccurs="unbounded">
-      <xs:group ref="section.cnt"/>
+    <xs:sequence>
+      <xs:group ref="example.content"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="example.attributes"/>
+  </xs:complexType>
+  
+  <xs:group name="example.content">
+    <xs:sequence>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="section.cnt" minOccurs="0"/>
     </xs:choice>
+    </xs:sequence>
+  </xs:group>
+  
+  <xs:attributeGroup name="example.attributes">
     <xs:attribute name="spectitle" type="xs:string"/>
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-  </xs:complexType>
+  </xs:attributeGroup>
 
   
   
@@ -357,6 +431,14 @@
   </xs:element>
   <xs:complexType name="prolog.class">
     <xs:sequence>
+      <xs:group ref="prolog.content"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="prolog.attributes"/>
+  </xs:complexType>
+  
+  <xs:group name="prolog.content">
+    <xs:sequence>
+      <xs:sequence>
       <xs:group ref="author" minOccurs="0" maxOccurs="unbounded"/>
       <xs:group ref="source" minOccurs="0"/>
       <xs:group ref="publisher" minOccurs="0"/>
@@ -366,13 +448,17 @@
       <xs:group ref="metadata" minOccurs="0" maxOccurs="unbounded"/>
       <xs:group ref="resourceid" minOccurs="0" maxOccurs="unbounded"/>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:group ref="data.element.incl"/>
+        <xs:group ref="data.elements.incl"/>
         <xs:group ref="foreign.unknown.incl"/>
       </xs:choice>
     </xs:sequence>
+    </xs:sequence>
+  </xs:group>
+  
+  <xs:attributeGroup name="prolog.attributes">
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-  </xs:complexType>
+  </xs:attributeGroup>
 
  
   
@@ -397,16 +483,28 @@
     </xs:complexType>
   </xs:element>
   <xs:complexType name="related-links.class">
-    <xs:choice  minOccurs="0" maxOccurs="unbounded">
-      <xs:group ref="link"/>
-      <xs:group ref="linklist"/>
-      <xs:group ref="linkpool"/>
+    <xs:sequence>
+      <xs:group ref="related-links.content"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="related-links.attributes"/>
+  </xs:complexType>
+  
+  <xs:group name="related-links.content">
+    <xs:sequence>
+      <xs:choice  minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="link" minOccurs="0"/>
+      <xs:group ref="linklist" minOccurs="0"/>
+      <xs:group ref="linkpool" minOccurs="0"/>
     </xs:choice>
+    </xs:sequence>
+  </xs:group>
+  
+  <xs:attributeGroup name="related-links.attributes">
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="rel-atts"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-  </xs:complexType>
+  </xs:attributeGroup>
 
   
   <xs:element name="linklist">
@@ -427,6 +525,14 @@
   </xs:element>
   <xs:complexType name="linklist.class">
     <xs:sequence>
+      <xs:group ref="linklist.content"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="linklist.attributes"/>
+  </xs:complexType>
+  
+  <xs:group name="linklist.content">
+    <xs:sequence>
+      <xs:sequence>
       <xs:group ref="title" minOccurs="0"/>
       <xs:group ref="desc" minOccurs="0"/>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
@@ -435,6 +541,10 @@
       </xs:choice>
       <xs:group ref="linkinfo" minOccurs="0"/>
     </xs:sequence>
+    </xs:sequence>
+  </xs:group>
+  
+  <xs:attributeGroup name="linklist.attributes">
     <xs:attribute name="collection-type" type="collection-type.class"/>
     <xs:attribute name="duplicates" type="yesno-att.class"/>
     <xs:attribute name="mapkeyref" type="xs:string"/>
@@ -443,7 +553,7 @@
     <xs:attributeGroup ref="rel-atts"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-  </xs:complexType>
+  </xs:attributeGroup>
 
   <xs:element name="linkinfo">
     <xs:annotation>
@@ -461,12 +571,24 @@
     </xs:complexType>
   </xs:element>
   <xs:complexType name="linkinfo.class" mixed="true">
-    <xs:choice minOccurs="0" maxOccurs="unbounded">
+    <xs:sequence>
+      <xs:group ref="linkinfo.content"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="linkinfo.attributes"/>
+  </xs:complexType>
+  
+  <xs:group name="linkinfo.content">
+    <xs:sequence>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
       <xs:group ref="desc.cnt"/>
     </xs:choice>
+    </xs:sequence>
+  </xs:group>
+  
+  <xs:attributeGroup name="linkinfo.attributes">
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-  </xs:complexType>
+  </xs:attributeGroup>
 
   
   <xs:element name="linkpool">
@@ -487,10 +609,22 @@
     </xs:complexType>
   </xs:element>
   <xs:complexType name="linkpool.class">
-    <xs:choice minOccurs="0" maxOccurs="unbounded">
-      <xs:group ref="linkpool"/>
-      <xs:group ref="link"/>
+    <xs:sequence>
+      <xs:group ref="linkpool.content"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="linkpool.attributes"/>
+  </xs:complexType>
+  
+  <xs:group name="linkpool.content">
+    <xs:sequence>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="linkpool" minOccurs="0"/>
+      <xs:group ref="link" minOccurs="0"/>
     </xs:choice>
+    </xs:sequence>
+  </xs:group>
+  
+  <xs:attributeGroup name="linkpool.attributes">
     <xs:attribute name="collection-type" type="collection-type.class"/>
     <xs:attribute name="duplicates" type="yesno-att.class"/>
     <xs:attribute name="mapkeyref" type="xs:string"/>
@@ -498,7 +632,7 @@
     <xs:attributeGroup ref="rel-atts"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-  </xs:complexType>
+  </xs:attributeGroup>
 
   
   <xs:element name="linktext">
@@ -519,13 +653,25 @@
     </xs:complexType>
   </xs:element>
   <xs:complexType name="linktext.class" mixed="true">
-    <xs:choice minOccurs="0" maxOccurs="unbounded">
-      <xs:group ref="words.cnt"/>
-      <xs:group ref="ph"/>
+    <xs:sequence>
+      <xs:group ref="linktext.content"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="linktext.attributes"/>
+  </xs:complexType>
+  
+  <xs:group name="linktext.content">
+    <xs:sequence>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="words.cnt" minOccurs="0"/>
+      <xs:group ref="ph" minOccurs="0"/>
     </xs:choice>
+    </xs:sequence>
+  </xs:group>
+  
+  <xs:attributeGroup name="linktext.attributes">
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-  </xs:complexType>
+  </xs:attributeGroup>
 
   
   <xs:element name="link">
@@ -547,9 +693,21 @@
   </xs:element>
   <xs:complexType name="link.class">
     <xs:sequence>
+      <xs:group ref="link.content"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="link.attributes"/>
+  </xs:complexType>
+  
+  <xs:group name="link.content">
+    <xs:sequence>
+      <xs:sequence>
       <xs:group ref="linktext" minOccurs="0"/>
       <xs:group ref="desc" minOccurs="0"/>
     </xs:sequence>
+    </xs:sequence>
+  </xs:group>
+  
+  <xs:attributeGroup name="link.attributes">
     <xs:attribute name="href" type="xs:string"/>
     <xs:attribute name="keyref" type="xs:string"/>
     <xs:attribute name="outputclass" type="xs:string"/>
@@ -557,7 +715,7 @@
     <xs:attributeGroup ref="rel-atts"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-  </xs:complexType>
+  </xs:attributeGroup>
 
   <xs:simpleType name="collection-type.class">
     <xs:restriction base="xs:string">
@@ -583,31 +741,27 @@
     </xs:complexType>
   </xs:element>
   <xs:complexType name="abstract.class" mixed="true"> 
-    <xs:choice minOccurs="0" maxOccurs="unbounded">
-            <xs:group ref="section.notitle.cnt"/>
-            <xs:group ref="shortdesc"/>
+    <xs:sequence>
+      <xs:group ref="abstract.content"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="abstract.attributes"/>
+  </xs:complexType>
+  
+  <xs:group name="abstract.content">
+    <xs:sequence>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:group ref="section.notitle.cnt" minOccurs="0"/>
+            <xs:group ref="shortdesc" minOccurs="0"/>
     </xs:choice>
+    </xs:sequence>
+  </xs:group>
+  
+  <xs:attributeGroup name="abstract.attributes">
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-  </xs:complexType>
+  </xs:attributeGroup>
   
-  <xs:element name="shortdesc">
-    <xs:annotation>
-      <xs:documentation>The short description (&lt;<keyword>shortdesc</keyword>>) element
-        occurs between the topic title and the topic body, as the initial paragraph-like
-        content of a topic. The short description, which represents the purpose or
-        theme of the topic, is also intended to be used as a link preview and for
-        searching.
-      </xs:documentation>
-    </xs:annotation>
-    <xs:complexType mixed="true">
-      <xs:complexContent>
-        <xs:extension base="shortdesc.class">
-          <xs:attribute ref="class" default="- topic/shortdesc "/>
-        </xs:extension>
-      </xs:complexContent>
-    </xs:complexType>
-  </xs:element>
+ 
   
 </xs:schema>

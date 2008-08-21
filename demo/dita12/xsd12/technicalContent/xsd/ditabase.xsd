@@ -34,6 +34,7 @@
   <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:programmingDomain.xsd:1.2"/>
   <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:utilitiesDomain.xsd:1.2"/>
   <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:indexingDomain.xsd:1.2"/>
+    <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:hazardstatementDomain.xsd:1.2"/>
 
   <!--  ================ GROUP DEFINITIONS =====================  -->
   <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:referenceGrp.xsd:1.2" />
@@ -106,6 +107,13 @@
         <xs:group ref="indexing-d-index-base"/>
       </xs:choice>
     </xs:group >
+      
+      <xs:group name="note">
+      <xs:choice>
+        <xs:group ref="note"/>
+        <xs:group ref="hazard-d-note"/>
+      </xs:choice>
+    </xs:group >
     
   </xs:redefine>
 
@@ -159,13 +167,6 @@
   </xs:redefine>
 
   <xs:redefine schemaLocation="urn:oasis:names:tc:dita:xsd:referenceMod.xsd:1.2" >
-   <!-- <xs:complexType name="reference.class">
-      <xs:complexContent>
-        <xs:extension base="reference.class">
-          <xs:attribute name="domains" type="xs:string" default="(topic ui-d) (topic hi-d) (topic sw-d) (topic pr-d) (topic ut-d) (topic indexing-d)"/>
-        </xs:extension>
-      </xs:complexContent>
-    </xs:complexType>-->
     
     <xs:group name="reference-info-types">
       <xs:choice>
@@ -175,13 +176,6 @@
   </xs:redefine>
   
   <xs:redefine schemaLocation="urn:oasis:names:tc:dita:xsd:glossaryMod.xsd:1.2" >
-   <!-- <xs:complexType name="glossentry.class">
-      <xs:complexContent>
-        <xs:extension base="glossentry.class">
-          <xs:attribute name="domains" type="xs:string" default="(topic ui-d) (topic hi-d) (topic sw-d) (topic pr-d) (topic ut-d) (topic indexing-d)"/>
-        </xs:extension>
-      </xs:complexContent>
-    </xs:complexType>-->
     
     <xs:group name="glossentry-info-types">
       <xs:choice>

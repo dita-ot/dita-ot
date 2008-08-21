@@ -38,7 +38,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Machine Industry Task Constraint//EN"
 <!-- ============================================================= -->
 
 <!ENTITY taskbody-constraints     
-  "(topic task mitaskTaskbody-c)"
+  "(topic task+mitask-d mitaskTaskbody-c)"
 >
 
 <!ENTITY % prelreqs        "prelreqs">

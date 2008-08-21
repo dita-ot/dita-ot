@@ -3,8 +3,8 @@
 <!--                    HEADER                                     -->
 <!-- ============================================================= -->
 <!--  MODULE:    DITA Reference XSD  Module                        -->
-<!--  VERSION:   1.1                                             -->
-<!--  DATE:      November 2006                                     -->
+<!--  VERSION:   1.2                                             -->
+<!--  DATE:      July 2007                                     -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -231,6 +231,14 @@
    <!-- Base type: topic.class -->
   <xs:complexType name="reference.class">
     <xs:sequence>
+      <xs:group ref="reference.content"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="reference.attributes"/>
+  </xs:complexType>
+   
+   <xs:group name="reference.content">
+     <xs:sequence>
+       <xs:sequence>
       <xs:group ref="title"/>
       <xs:group ref="titlealts" minOccurs="0"/>
       <xs:choice minOccurs="0">
@@ -242,7 +250,11 @@
       <xs:group ref="related-links" minOccurs="0"/>
       <xs:group ref="reference-info-types" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
-    <xs:attribute name="id" type="xs:ID" use="required"/>
+     </xs:sequence>
+   </xs:group>
+   
+   <xs:attributeGroup name="reference.attributes">
+     <xs:attribute name="id" type="xs:ID" use="required"/>
     <xs:attributeGroup ref="conref-atts" />
     <xs:attributeGroup ref="domains-att"/>
     <xs:attribute ref="ditaarch:DITAArchVersion"/>
@@ -250,47 +262,83 @@
     <xs:attributeGroup ref="select-atts"/>
     <xs:attributeGroup ref="localization-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-  </xs:complexType>
+   </xs:attributeGroup>
 
   <!-- Base type: body.class -->
   <xs:complexType name="refbody.class">
-    <xs:choice minOccurs="0" maxOccurs="unbounded">
-      <xs:group ref="refsyn"/>
-      <xs:group ref="table"/>
-      <xs:group ref="simpletable"/>
-      <xs:group ref="properties"/>
-      <xs:group ref="section"/>
-      <xs:group ref="example"/>
-      <xs:group ref="data.element.incl"/>
-      <xs:group ref="foreign.unknown.incl"/>
+    <xs:sequence>
+      <xs:group ref="refbody.content"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="refbody.attributes"/>
+  </xs:complexType>
+   
+   <xs:group name="refbody.content">
+     <xs:sequence>
+       <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="refsyn" minOccurs="0"/>
+      <xs:group ref="table" minOccurs="0"/>
+      <xs:group ref="simpletable" minOccurs="0"/>
+      <xs:group ref="properties" minOccurs="0"/>
+      <xs:group ref="section" minOccurs="0"/>
+      <xs:group ref="example" minOccurs="0"/>
+      <xs:group ref="data.elements.incl" minOccurs="0"/>
+      <xs:group ref="foreign.unknown.incl" minOccurs="0"/>
     </xs:choice>
-    <xs:attribute name="outputclass" type="xs:string"/>
+     </xs:sequence>
+   </xs:group>
+   
+   <xs:attributeGroup name="refbody.attributes">
+     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attribute name="base" type="xs:string" />
     <xs:attributeGroup ref="base-attribute-extensions"/>
     <xs:attributeGroup ref="id-atts"/>
     <xs:attributeGroup ref="localization-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-  </xs:complexType>
+   </xs:attributeGroup>
 
 
    <!-- Base type: section.class -->
   <xs:complexType name="refsyn.class" mixed="true">
-    <xs:choice minOccurs="0" maxOccurs="unbounded">
+    <xs:sequence>
+      <xs:group ref="refsyn.content"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="refsyn.attributes"/>
+  </xs:complexType>
+   
+   <xs:group name="refsyn.content">
+     <xs:sequence>
+       <xs:choice minOccurs="0" maxOccurs="unbounded">
       <xs:group ref="section.cnt"/>
     </xs:choice>
-    <xs:attribute name="spectitle" type="xs:string"/>
+     </xs:sequence>
+   </xs:group>
+   
+   <xs:attributeGroup name="refsyn.attributes">
+     <xs:attribute name="spectitle" type="xs:string"/>
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-  </xs:complexType>
+   </xs:attributeGroup>
 
   <!-- Base type: simpletable.class -->
   <xs:complexType name="properties.class">
     <xs:sequence>
+      <xs:group ref="properties.content"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="properties.attributes"/>
+  </xs:complexType>
+   
+   <xs:group name="properties.content">
+     <xs:sequence>
+       <xs:sequence>
       <xs:group ref="prophead" minOccurs="0"/>
       <xs:group ref="property" maxOccurs="unbounded"/>
     </xs:sequence>
-    <xs:attribute name="relcolwidth" type="xs:string"/>
+     </xs:sequence>
+   </xs:group>
+   
+   <xs:attributeGroup name="properties.attributes">
+     <xs:attribute name="relcolwidth" type="xs:string"/>
     <xs:attribute name="keycol" type="xs:NMTOKEN"/>
     <xs:attribute name="refcols" type="xs:NMTOKENS"/>
     <xs:attribute name="outputclass" type="xs:string"/>
@@ -298,96 +346,192 @@
     <xs:attributeGroup ref="display-atts"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-  </xs:complexType>
+   </xs:attributeGroup>
 
 
   <!-- Base type: sthead.class -->
   <xs:complexType name="prophead.class">
     <xs:sequence>
+      <xs:group ref="prophead.content"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="prophead.attributes"/>
+  </xs:complexType>
+   
+   <xs:group name="prophead.content">
+     <xs:sequence>
+       <xs:sequence>
       <xs:group ref="proptypehd" minOccurs="0"/>
       <xs:group ref="propvaluehd" minOccurs="0"/>
       <xs:group ref="propdeschd" minOccurs="0"/>
     </xs:sequence>
-    <xs:attribute name="outputclass" type="xs:string"/>
+     </xs:sequence>
+   </xs:group>
+   
+   <xs:attributeGroup name="prophead.attributes">
+     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-  </xs:complexType>
+   </xs:attributeGroup>
 
   <!-- Base type: stentry.class -->
   <xs:complexType name="proptypehd.class" mixed="true">
-    <xs:choice minOccurs="0" maxOccurs="unbounded">
+    <xs:sequence>
+      <xs:group ref="proptypehd.content"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="proptypehd.attributes"/>
+  </xs:complexType>
+   
+   <xs:group name="proptypehd.content">
+     <xs:sequence>
+       <xs:choice minOccurs="0" maxOccurs="unbounded">
       <xs:group ref="tblcell.cnt"/>
     </xs:choice>
-    <xs:attribute name="specentry" type="xs:string"/>
+     </xs:sequence>
+   </xs:group>
+   
+   <xs:attributeGroup name="proptypehd.attributes">
+     <xs:attribute name="specentry" type="xs:string"/>
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-  </xs:complexType>
+   </xs:attributeGroup>
 
   <!-- Base type: stentry.class -->
   <xs:complexType name="propvaluehd.class" mixed="true">
-    <xs:choice minOccurs="0" maxOccurs="unbounded">
+     <xs:sequence>
+      <xs:group ref="propvaluehd.content"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="propvaluehd.attributes"/>
+  </xs:complexType>
+   
+   <xs:group name="propvaluehd.content">
+     <xs:sequence>
+       <xs:choice minOccurs="0" maxOccurs="unbounded">
       <xs:group ref="tblcell.cnt"/>
     </xs:choice>
-    <xs:attribute name="specentry" type="xs:string"/>
+     </xs:sequence>
+   </xs:group>
+   
+   <xs:attributeGroup name="propvaluehd.attributes">
+     <xs:attribute name="specentry" type="xs:string"/>
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-  </xs:complexType>
+   </xs:attributeGroup>
 
   <!-- Base type: stentry.class -->
   <xs:complexType name="propdeschd.class" mixed="true">
-    <xs:choice minOccurs="0" maxOccurs="unbounded">
+    <xs:sequence>
+      <xs:group ref="propdeschd.content"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="propdeschd.attributes"/>
+  </xs:complexType>
+   
+   <xs:group name="propdeschd.content">
+     <xs:sequence>
+       <xs:choice minOccurs="0" maxOccurs="unbounded">
       <xs:group ref="tblcell.cnt"/>
     </xs:choice>
-    <xs:attribute name="specentry" type="xs:string"/>
+     </xs:sequence>
+   </xs:group>
+   
+   <xs:attributeGroup name="propdeschd.attributes">
+     <xs:attribute name="specentry" type="xs:string"/>
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-  </xs:complexType>
+   </xs:attributeGroup>
 
   <!-- Base type: strow.class -->
   <xs:complexType name="property.class">
     <xs:sequence>
+      <xs:group ref="property.content"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="property.attributes"/>
+  </xs:complexType>
+   
+   <xs:group name="property.content">
+     <xs:sequence>
+       <xs:sequence>
       <xs:group ref="proptype" minOccurs="0"/>
       <xs:group ref="propvalue" minOccurs="0"/>
       <xs:group ref="propdesc" minOccurs="0"/>
     </xs:sequence>
-    <xs:attribute name="outputclass" type="xs:string"/>
+     </xs:sequence>
+   </xs:group>
+   
+   <xs:attributeGroup name="property.attributes">
+     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-  </xs:complexType>
+   </xs:attributeGroup>
 
    <!-- Base type: stentry.class -->
   <xs:complexType name="proptype.class" mixed="true">
-    <xs:choice minOccurs="0" maxOccurs="unbounded">
+    <xs:sequence>
+      <xs:group ref="proptype.content"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="proptype.attributes"/>
+  </xs:complexType>
+   
+   <xs:group name="proptype.content">
+     <xs:sequence>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
       <xs:group ref="ph.cnt"/>
     </xs:choice>
-    <xs:attribute name="specentry" type="xs:string"/>
+     </xs:sequence>
+   </xs:group>
+   
+   <xs:attributeGroup name="proptype.attributes">
+     <xs:attribute name="specentry" type="xs:string"/>
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-  </xs:complexType>
+   </xs:attributeGroup>
 
    <!-- Base type: stentry.class -->
   <xs:complexType name="propvalue.class" mixed="true">
-    <xs:choice minOccurs="0" maxOccurs="unbounded">
+    <xs:sequence>
+      <xs:group ref="propvalue.content"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="propvalue.attributes"/>
+  </xs:complexType>
+   
+   <xs:group name="propvalue.content">
+     <xs:sequence>
+       <xs:choice minOccurs="0" maxOccurs="unbounded">
       <xs:group ref="ph.cnt"/>
     </xs:choice>
-    <xs:attribute name="specentry" type="xs:string"/>
+     </xs:sequence>
+   </xs:group>
+   
+   <xs:attributeGroup name="propvalue.attributes">
+     <xs:attribute name="specentry" type="xs:string"/>
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-  </xs:complexType>
+   </xs:attributeGroup>
 
    <!-- Base type: stentry.class -->
   <xs:complexType name="propdesc.class" mixed="true">
-    <xs:choice minOccurs="0" maxOccurs="unbounded">
+    <xs:sequence>
+      <xs:group ref="propdesc.content"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="propdesc.attributes"></xs:attributeGroup>
+  </xs:complexType>
+   
+   <xs:group name="propdesc.content">
+     <xs:sequence>
+       <xs:choice minOccurs="0" maxOccurs="unbounded">
       <xs:group ref="desc.cnt"/>
     </xs:choice>
-    <xs:attribute name="specentry" type="xs:string"/>
+     </xs:sequence>
+   </xs:group>
+   
+   <xs:attributeGroup name="propdesc.attributes">
+     <xs:attribute name="specentry" type="xs:string"/>
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-  </xs:complexType>
+   </xs:attributeGroup>
 </xs:schema>
