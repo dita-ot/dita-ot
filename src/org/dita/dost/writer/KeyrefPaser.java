@@ -95,7 +95,7 @@ public class KeyrefPaser extends AbstractXMLWriter {
 	private Stack<String> keyref;
 	
 	// It is used to store the name of the element containing keyref attribute.
-	private String elemName;
+	private Stack<String> elemName;
 	
 	// It is used to store the class value of the element, because in the function of 
 	// endElement() the class value can not be acquired.
@@ -117,16 +117,7 @@ public class KeyrefPaser extends AbstractXMLWriter {
 		withHref.add("topic/xref");
 	}
 
-	static {
-		no_copy_topic.addAll(no_copy);
-		no_copy_topic.add("query");
-		no_copy_topic.add("search");
-		no_copy_topic.add("toc");
-		no_copy_topic.add("print");
-		no_copy_topic.add("locktitle");
-		no_copy_topic.add("copy-to");
-		no_copy_topic.add("chunk");
-	}
+
 
 	static {
 		no_copy.add("id");
@@ -135,7 +126,16 @@ public class KeyrefPaser extends AbstractXMLWriter {
 		no_copy.add("xtrf");
 		no_copy.add("href");
 		no_copy.add("keys");
-
+	}
+	
+	static {
+		no_copy_topic.addAll(no_copy);
+		no_copy_topic.add("query");
+		no_copy_topic.add("search");
+		no_copy_topic.add("toc");
+		no_copy_topic.add("print");
+		no_copy_topic.add("copy-to");
+		no_copy_topic.add("chunk");
 	}
 
 	static {
@@ -158,6 +158,7 @@ public class KeyrefPaser extends AbstractXMLWriter {
 		empty = true;
 		keyMap = new HashMap<String, String>();
 		keyref = new Stack<String>();
+		elemName = new Stack<String>();
 		try {
 			parser = XMLReaderFactory.createXMLReader();
 			parser.setFeature(Constants.FEATURE_NAMESPACE_PREFIX, true);
@@ -174,7 +175,8 @@ public class KeyrefPaser extends AbstractXMLWriter {
 		try {
 			if (keyrefLeval != 0 && new String(ch,start,length).trim().length() == 0) {
 				empty = true;
-			}
+			}else
+				empty = false;
 			output.write(StringUtils.escapeXML(ch, start, length));
 		} catch (IOException e) {
 
@@ -203,12 +205,8 @@ public class KeyrefPaser extends AbstractXMLWriter {
 			throws SAXException {
 		// write the end element
 		try {
-			output.write(Constants.LESS_THAN);
-			output.write(Constants.SLASH);
-			output.write(name);
-			output.write(Constants.GREATER_THAN);
 			
-			if (keyrefLeval != 0 && empty) {
+			if (keyrefLeval != 0 && empty && !elemName.peek().equals("topicref")) {
 				// If current element is in the scope of key reference element 
 				// and the element is empty
 				if (!validKeyref.isEmpty() && validKeyref.peek()) {
@@ -217,23 +215,36 @@ public class KeyrefPaser extends AbstractXMLWriter {
 					Element  elem = doc.getDocumentElement();
 					NodeList nodeList = null;
 					// If current element name doesn't equal the key reference element
-					if(!name.equals(elemName)){
+					// just grab the content from the matching element of key definition
+					if(!name.equals(elemName.peek())){
 						nodeList = elem.getElementsByTagName(name);
-						if(nodeList != null){
-							output.write(nodeList.item(0).getNodeValue());
+						if(nodeList.getLength() > 0){
+							Node node = nodeList.item(0);
+							NodeList nList = node.getChildNodes();
+							int index = 0;
+							while(index < nList.getLength()){
+								Node n = nList.item(index++);
+								if(n.getNodeType() == Node.TEXT_NODE){
+									output.write(n.getNodeValue());
+									break;
+								}
+							}
 							output.flush();
 						}
 					}else{
 						// Current element name equals the key reference element
+						// grab keyword or term from key definition
 						nodeList = elem.getElementsByTagName("keyword");
-						if(nodeList == null){
+						if(nodeList.getLength() == 0 ){
 							nodeList = elem.getElementsByTagName("term");
 						}
-						if(nodeList!=null){
+						if(nodeList.getLength() > 0){
 							if(withOutHref.contains(classValue)){
+								// only one keyword or term is used.
 								output.write(nodeToString((Element)nodeList.item(0)));
 								output.flush();
 							} else if(withHref.contains(classValue)){
+								// all keyword or term are used.
 								for(int index =0; index<nodeList.getLength(); index++){
 									Node node = nodeList.item(index);
 									if(node.getNodeType() == Node.ELEMENT_NODE)
@@ -253,9 +264,15 @@ public class KeyrefPaser extends AbstractXMLWriter {
 			}
 
 			if (keyrefLeval == 0 && !keyrefLevalStack.empty()) {
+				// To the end of key reference, pop the stacks.
 				keyrefLeval = keyrefLevalStack.pop();
 				validKeyref.pop();
+				elemName.pop();
 			}
+			output.write(Constants.LESS_THAN);
+			output.write(Constants.SLASH);
+			output.write(name);
+			output.write(Constants.GREATER_THAN);
 
 		} catch (Exception e) {
 			javaLogger.logException(e);
@@ -300,9 +317,6 @@ public class KeyrefPaser extends AbstractXMLWriter {
 			Attributes atts) throws SAXException {
 		try {
 			empty = true;
-			if (keyrefLeval != 0 ) {
-				empty = false;
-			}
 			output.write(Constants.LESS_THAN);
 			output.write(name);
 			boolean valid = false;
@@ -323,7 +337,7 @@ public class KeyrefPaser extends AbstractXMLWriter {
 				// combination.
 				// HashSet to store the attributes copied from key
 				// definition to key reference.
-				elemName = name;
+				elemName.push(name);
 				Set<String> aset = new HashSet<String>();
 
 				hasKeyref = true;
@@ -336,70 +350,78 @@ public class KeyrefPaser extends AbstractXMLWriter {
 				String definition = ((Hashtable<String, String>) content
 						.getValue()).get(atts
 						.getValue(Constants.ATTRIBUTE_NAME_KEYREF));
-				// TODO if definition is null or it can not be parsed to
-				// document
 				doc = keyDefToDoc(definition);
-				Element elem = doc.getDocumentElement();
-				NamedNodeMap namedNodeMap = elem.getAttributes();
-				// first resolve the keyref attribute
-				if (withHref.contains(classValue)) {
-					String target = keyMap.get(atts.getValue("keyref"));
-					if (target != null) {
-						String target_output = target;
-						if (elem.getAttribute("scope").equals("")
-								|| (!elem.getAttribute("scope").equals("") && elem
-										.getAttribute("scope").equals("local"))) {
-							if (new File(FileUtils.resolveFile(tempDir, target))
-									.exists()) {
-								target_output = FileUtils
-										.getRelativePathFromMap(filepath,
-												new File(tempDir, target)
-														.getAbsolutePath());
+				// If definition is not null and it can be parsed into
+				// document
+				if(definition!=null && doc!=null){
+					
+					Element elem = doc.getDocumentElement();
+					NamedNodeMap namedNodeMap = elem.getAttributes();
+					// first resolve the keyref attribute
+					if (withHref.contains(classValue)) {
+						String target = keyMap.get(atts.getValue("keyref"));
+						if (target != null && !target.equals(Constants.STRING_EMPTY)) {
+							String target_output = target;
+							// if the scope equals local, the target should be verified that
+							// it exists, and add the href and scope to aSet.
+							if (elem.getAttribute("scope").equals("")
+									|| (!elem.getAttribute("scope").equals("") && elem
+											.getAttribute("scope").equals("local"))) {
+								if (new File(FileUtils.resolveFile(tempDir, target))
+										.exists()) {
+									target_output = FileUtils
+											.getRelativePathFromMap(filepath,
+													new File(tempDir, target)
+															.getAbsolutePath());
+									valid = true;
+									aset.add("href");
+									aset.add("scope");
+									output.write(Constants.STRING_BLANK);
+									output.write(Constants.ATTRIBUTE_NAME_HREF);
+									output.write("=\"");
+									output.write(target_output);
+									output.write("\"");
+								} else {
+									// referenced file does not exist, emits a warning message.
+									Properties prop = new Properties();
+									prop.setProperty("%1", atts.getValue("keyref"));
+									prop.setProperty("%2", atts.getValue("xtrf"));
+									prop.setProperty("%3", atts.getValue("xtrc"));
+									javaLogger.logWarn(MessageUtils.getMessage(
+											"DOTJ045W", prop).toString());
+								}
+	
+							} else {
+								// scope equals peer or external
 								valid = true;
-								output.write(Constants.STRING_BLANK);
+								aset.add("scope");
+								aset.add("href");
 								output.write(Constants.ATTRIBUTE_NAME_HREF);
 								output.write("=\"");
 								output.write(target_output);
 								output.write("\"");
-							} else {
-								// referenced file does not exist
-								Properties prop = new Properties();
-								prop.setProperty("%1", atts.getValue("keyref"));
-								prop.setProperty("%2", atts.getValue("xtrf"));
-								prop.setProperty("%3", atts.getValue("xtrc"));
-								javaLogger.logWarn(MessageUtils.getMessage(
-										"DOTJ045W", prop).toString());
 							}
-
-						} else {
-							// scope equals peer or external
+	
+						} else if(target.equals(Constants.STRING_EMPTY)){
+							// Key definition does not carry an href or href equals "".
 							valid = true;
-							output.write(Constants.ATTRIBUTE_NAME_HREF);
-							output.write("=\"");
-							output.write(target_output);
-							output.write("\"");
+						}else{
+							// key does not exist.
+							Properties prop = new Properties();
+							prop.setProperty("%1", atts.getValue("keyref"));
+							prop.setProperty("%2", atts.getValue("xtrf"));
+							prop.setProperty("%3", atts.getValue("xtrc"));
+							javaLogger.logWarn(MessageUtils.getMessage("DOTJ045W",
+									prop).toString());
 						}
-
-					} else {
-						// key does not exist
-						Properties prop = new Properties();
-						prop.setProperty("%1", atts.getValue("keyref"));
-						prop.setProperty("%2", atts.getValue("xtrf"));
-						prop.setProperty("%3", atts.getValue("xtrc"));
-						javaLogger.logWarn(MessageUtils.getMessage("DOTJ045W",
-								prop).toString());
-					}
-
-				} else if (withOutHref.contains(classValue)) {
-					String target = keyMap.get(atts.getValue("keyref"));
-					if (elem.getAttribute("scope") == null
-							|| (elem.getAttribute("scope") != null && elem
-									.getAttribute("scope").equals("local"))) {
-						if (target != null
-								&& new File(FileUtils.resolveFile(filepath,
-										target)).exists()) {
+	
+					} else if (withOutHref.contains(classValue)) {
+						String target = keyMap.get(atts.getValue("keyref"));
+	
+						if (target != null) {
 							valid = true;
 						} else {
+							// key does not exist
 							Properties prop = new Properties();
 							prop.setProperty("%1", atts.getValue("keyref"));
 							prop.setProperty("%2", atts.getValue("xtrf"));
@@ -407,43 +429,20 @@ public class KeyrefPaser extends AbstractXMLWriter {
 							javaLogger.logWarn(MessageUtils.getMessage(
 									"DOTJ045W", prop).toString());
 						}
-					} else {
-						// TODO
-						// emit a warning, if the key reference element does not
-						// carry an href attribute
-						// but the scope in key definition does not equal local.
+	
 					}
-
-				}
-				
-				validKeyref.push(valid);
-
-				// copy attributes in key definition to key reference
-				if (valid) {
-					if (classValue.contains("map/topicref")) {
-						// @keyref in topicref
-						for (int index = 0; index < namedNodeMap.getLength(); index++) {
-							Node node = namedNodeMap.item(index);
-							if (node.getNodeType() == Node.ATTRIBUTE_NODE
-									&& !no_copy.contains(node.getNodeName())) {
-								aset.add(node.getNodeName());
-								output.append(Constants.STRING_BLANK);
-								output.append(node.getNodeName());
-								output.write("=\"");
-								output.write(node.getNodeValue());
-								output.write("\"");
-							}
-						}
-					} else {
-						// @keyref not in topicref
-						// different elements have different attributes
-						if (withHref.contains(classValue)) {
-							// current element with href attribute
+					
+					validKeyref.push(valid);
+	
+					// copy attributes in key definition to key reference
+					// Set no_copy and no_copy_topic define some attributes should not be copied.
+					if (valid) {
+						if (classValue.contains("map/topicref")) {
+							// @keyref in topicref
 							for (int index = 0; index < namedNodeMap.getLength(); index++) {
 								Node node = namedNodeMap.item(index);
 								if (node.getNodeType() == Node.ATTRIBUTE_NODE
-										&& !no_copy_topic.contains(node
-												.getNodeName())) {
+										&& !no_copy.contains(node.getNodeName())) {
 									aset.add(node.getNodeName());
 									output.append(Constants.STRING_BLANK);
 									output.append(node.getNodeName());
@@ -452,36 +451,57 @@ public class KeyrefPaser extends AbstractXMLWriter {
 									output.write("\"");
 								}
 							}
-						} else if (withOutHref.contains(classValue)) {
-							// current element without href attribute
-							for (int index = 0; index < namedNodeMap.getLength(); index++) {
-								Node node = namedNodeMap.item(index);
-								if (node.getNodeType() == Node.ATTRIBUTE_NODE
-										&& !no_copy_topic.contains(node
-												.getNodeName())
-										&& !(node.getNodeName().equals("scope")
-												|| node.getNodeName().equals(
-														"format") || node
-												.getNodeName().equals("type"))) {
-									aset.add(node.getNodeName());
-									output.append(Constants.STRING_BLANK);
-									output.append(node.getNodeName());
-									output.write("=\"");
-									output.write(node.getNodeValue());
-									output.write("\"");
+						} else {
+							// @keyref not in topicref
+							// different elements have different attributes
+							if (withHref.contains(classValue)) {
+								// current element with href attribute
+								for (int index = 0; index < namedNodeMap.getLength(); index++) {
+									Node node = namedNodeMap.item(index);
+									if (node.getNodeType() == Node.ATTRIBUTE_NODE
+											&& !no_copy_topic.contains(node
+													.getNodeName())) {
+										aset.add(node.getNodeName());
+										output.append(Constants.STRING_BLANK);
+										output.append(node.getNodeName());
+										output.write("=\"");
+										output.write(node.getNodeValue());
+										output.write("\"");
+									}
+								}
+							} else if (withOutHref.contains(classValue)) {
+								// current element without href attribute
+								// so attributes about href should not be copied.
+								for (int index = 0; index < namedNodeMap.getLength(); index++) {
+									Node node = namedNodeMap.item(index);
+									if (node.getNodeType() == Node.ATTRIBUTE_NODE
+											&& !no_copy_topic.contains(node
+													.getNodeName())
+											&& !(node.getNodeName().equals("scope")
+													|| node.getNodeName().equals(
+															"format") || node
+													.getNodeName().equals("type"))) {
+										aset.add(node.getNodeName());
+										output.append(Constants.STRING_BLANK);
+										output.append(node.getNodeName());
+										output.write("=\"");
+										output.write(node.getNodeValue());
+										output.write("\"");
+									}
 								}
 							}
+	
 						}
-
+					} else {
+						// keyref is not valid, don't copy any attribute.
 					}
-				} else {
-					// keyref is not valid, don't copy any attribute.
 				}
 
 				// output attributes which are not replaced in current element
-				// in the help of aSet.
+				// in the help of aSet. aSet stores the attributes which have been copied
+				// from key definition to key reference.
 				for (int index = 0; index < atts.getLength(); index++) {
-					if (!aset.contains(atts.getQName(index)) && atts.getQName(index) != Constants.ATTRIBUTE_NAME_CLASS) {
+					if (!aset.contains(atts.getQName(index)) && atts.getQName(index) != Constants.ATTRIBUTE_NAME_KEYREF ) {
 						output.append(Constants.STRING_BLANK);
 						output.append(atts.getQName(index));
 						output.write("=\"");
