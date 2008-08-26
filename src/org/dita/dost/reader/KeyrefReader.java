@@ -70,7 +70,11 @@ public class KeyrefReader extends AbstractXMLReader {
 			// to the end of the key definition, set the flag false 
 			// and put the key definition to table.
 			start = false;
-			keyDefTable.put(key, keyDefContent.toString());
+			for(String keyName: key.split(" ")){
+				if(!keyName.equals(""))
+				keyDefTable.put(keyName, keyDefContent.toString());
+				
+			}
 			keyDefContent = new StringBuffer();
 		}
 	}
@@ -103,10 +107,20 @@ public class KeyrefReader extends AbstractXMLReader {
 	public void startElement(String uri, String localName, String name,
 			Attributes atts) throws SAXException {
 		String classValue = atts.getValue(Constants.ATTRIBUTE_NAME_CLASS);
-		if(classValue.contains(" map/topicref ")){
-			String keyName = atts.getValue(Constants.ATTRIBUTE_NAME_KEYS);
+		String keyName = atts.getValue(Constants.ATTRIBUTE_NAME_KEYS);
+		if(keyName!=null && classValue.contains(" map/topicref ")){
+			
 			// if it has @keys and is valid.
-			if(keyName != null && keys.contains(keyName)){
+			boolean flag = false;
+			String[] keyNames = keyName.split(" ");
+			int index = 0;
+			while(index < keyNames.length){
+				if(keys.contains(keyNames[index++])){
+					flag = true;
+					break;
+				}
+			}
+			if(keyName != null && flag){
 				key = keyName;
 				start = true;
 				keyDefLevel ++;

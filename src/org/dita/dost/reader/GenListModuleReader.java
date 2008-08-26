@@ -525,25 +525,28 @@ public class GenListModuleReader extends AbstractXMLReader {
 		// collect the key definitions
 		if(Constants.ATTRIBUTE_NAME_KEYS.equals(attrName) && !attrValue.equals(Constants.STRING_EMPTY)){
 			String target = atts.getValue(Constants.ATTRIBUTE_NAME_HREF);
-			if(!keysDefMap.containsKey(attrValue)){
-				if(target != null && !target.equals(Constants.STRING_EMPTY)){
-					if(attrScope!=null && (attrScope.equals("external") || attrScope.equals("peer"))){
-						keysDefMap.put(attrValue, target);
+			// Many keys can be defined in a single definition, like keys="a b c", a, b and c are seperated by blank.
+			for(String key: attrValue.split(" ")){
+				if(!keysDefMap.containsKey(key) && !key.equals("")){
+					if(target != null && !target.equals(Constants.STRING_EMPTY)){
+						if(attrScope!=null && (attrScope.equals("external") || attrScope.equals("peer"))){
+							keysDefMap.put(key, target);
+						}else{
+							if(new File(target).isAbsolute())
+								target = FileUtils.getRelativePathFromMap(rootFilePath, target);
+							target = FileUtils.normalizeDirectory(currentDir, target);
+							keysDefMap.put(key, target);
+						}
 					}else{
-						if(new File(target).isAbsolute())
-							target = FileUtils.getRelativePathFromMap(rootFilePath, target);
-						target = FileUtils.normalizeDirectory(currentDir, target);
-						keysDefMap.put(attrValue, target);
+						// target is null or empty, it is useful in the future when consider the content of key definition
+						keysDefMap.put(key, "");
 					}
 				}else{
-					// target is null or empty, it is useful in the future when consider the content of key definition
-					//TODO
+					Properties prop = new Properties();
+					prop.setProperty("%1", key);
+					prop.setProperty("%2", target);
+					javaLogger.logWarn(MessageUtils.getMessage("DOTJ046W", prop).toString());
 				}
-			}else{
-				Properties prop = new Properties();
-				prop.setProperty("%1", attrValue);
-				prop.setProperty("%2", target);
-				javaLogger.logWarn(MessageUtils.getMessage("DOTJ046W", prop).toString());
 			}
 		}
 		
