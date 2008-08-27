@@ -545,7 +545,7 @@ public class GenListModuleReader extends AbstractXMLReader {
 					Properties prop = new Properties();
 					prop.setProperty("%1", key);
 					prop.setProperty("%2", target);
-					javaLogger.logWarn(MessageUtils.getMessage("DOTJ046W", prop).toString());
+					javaLogger.logWarn(MessageUtils.getMessage("DOTJ045W", prop).toString());
 				}
 			}
 		}
