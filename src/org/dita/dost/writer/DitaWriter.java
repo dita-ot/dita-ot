@@ -370,6 +370,7 @@ public class DitaWriter extends AbstractXMLWriter {
 	private void copyElementAttribute(Attributes atts) throws IOException {
 		// copy the element's attributes    
 		int attsLen = atts.getLength();
+		 boolean conkeyrefValid = false;
 		for (int i = 0; i < attsLen; i++) {
 		    String attQName = atts.getQName(i);
 		    String attValue;
@@ -423,6 +424,7 @@ public class DitaWriter extends AbstractXMLWriter {
 		    			}else
 		    				tail = attValue.substring(keyIndex);
 		    			copyAttribute("conref", target + tail);
+		    			conkeyrefValid = true;
 		    		}else{
 		    			Properties prop = new Properties();
 		    			prop.setProperty("%1", attValue);
@@ -431,6 +433,7 @@ public class DitaWriter extends AbstractXMLWriter {
 		    	}else{
 		    		if(keys.containsKey(attValue)){
 		    			copyAttribute("conref", FileUtils.replaceExtName(keys.get(attValue)));
+		    			conkeyrefValid = true;
 		    		}else{
 		    			Properties prop = new Properties();
 		    			prop.setProperty("%1", attValue);
@@ -445,15 +448,23 @@ public class DitaWriter extends AbstractXMLWriter {
 			//}
 		    attValue = StringUtils.escapeXML(attValue);
 			
-		    //output all attributes except colname and conkeyref
+		    //output all attributes except colname and conkeyref, 
+		    // if conkeyrefValid is true, then conref is not copied.
 		    if (!Constants.ATTRIBUTE_NAME_COLNAME.equals(attQName)
 		    		&& !Constants.ATTRIBUTE_NAME_NAMEST.equals(attQName)
 		    		&& !Constants.ATTRIBUTE_NAME_DITAARCHVERSION.equals(attQName)
 		    		&& !Constants.ATTRIBUTE_NAME_NAMEEND.equals(attQName)
-		    		&& !Constants.ATTRIBUTE_NAME_CONKEYREF.equals(attQName)){
-		    	copyAttribute(attQName, attValue);
+		    		&& !Constants.ATTRIBUTE_NAME_CONKEYREF.equals(attQName) 
+		    		&& !Constants.ATTRIBUTE_NAME_CONREF.equals(attQName) ){
+		    		copyAttribute(attQName, attValue);
 		    }
 		    
+		}
+		String conref = atts.getValue("conref");
+		if(conref != null && !conkeyrefValid){
+			conref = replaceCONREF(atts);
+			conref = StringUtils.escapeXML(conref);
+			copyAttribute("conref", conref);
 		}
 	}
 
