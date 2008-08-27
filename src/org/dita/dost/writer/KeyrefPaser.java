@@ -335,6 +335,10 @@ public class KeyrefPaser extends AbstractXMLWriter {
 			.getValue(Constants.ATTRIBUTE_NAME_CLASS);
 			classValue = classValue.substring(classValue.indexOf(Constants.STRING_BLANK) + 1, classValue.indexOf(Constants.STRING_BLANK, 4));
 			if (atts.getIndex(Constants.ATTRIBUTE_NAME_KEYREF) == -1) {
+				// If the keyrefLeval doesn't equal 0, it means that current element is under the key reference element
+				if(keyrefLeval != 0){
+					keyrefLeval ++;
+				}
 				// Output the attributes directly
 				for (int index = 0; index < atts.getLength(); index++) {
 					output.write(Constants.STRING_BLANK);
