@@ -426,9 +426,7 @@ public class DitaWriter extends AbstractXMLWriter {
 		    		}else{
 		    			Properties prop = new Properties();
 		    			prop.setProperty("%1", attValue);
-		    			prop.setProperty("%2", atts.getValue(ATTRIBUTE_XTRF));
-		    			prop.setProperty("%3", atts.getValue(ATTRIBUTE_XTRC));
-		    			logger.logError(MessageUtils.getMessage("DOTJ047E", prop).toString());
+		    			logger.logError(MessageUtils.getMessage("DOTJ046E", prop).toString());
 		    		}
 		    	}else{
 		    		if(keys.containsKey(attValue)){
@@ -436,9 +434,7 @@ public class DitaWriter extends AbstractXMLWriter {
 		    		}else{
 		    			Properties prop = new Properties();
 		    			prop.setProperty("%1", attValue);
-		    			prop.setProperty("%2", atts.getValue(ATTRIBUTE_XTRF));
-		    			prop.setProperty("%3", atts.getValue(ATTRIBUTE_XTRC));
-		    			logger.logError(MessageUtils.getMessage("DOTJ047E", prop).toString());
+		    			logger.logError(MessageUtils.getMessage("DOTJ046E", prop).toString());
 		    		}	
 		    	}
 		    }
