@@ -417,7 +417,12 @@ public class DitaWriter extends AbstractXMLWriter {
 		    		if(!key.equals(Constants.STRING_EMPTY) && keys.containsKey(key)){
 		    			target = keys.get(key);
 		    			target = FileUtils.replaceExtName(target);
-		    			copyAttribute("conref", target + attValue.substring(keyIndex));
+		    			String tail ;
+		    			if(sharpIndex == -1){
+		    				tail = attValue.substring(keyIndex).replaceAll(Constants.SLASH, Constants.SHARP);
+		    			}else
+		    				tail = attValue.substring(keyIndex);
+		    			copyAttribute("conref", target + tail);
 		    		}else{
 		    			Properties prop = new Properties();
 		    			prop.setProperty("%1", attValue);
