@@ -435,11 +435,16 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 			String key = (String)iter.next();
 			String value = (String)kdMap.get(key);
 			if(keysDefMap.containsKey(key)){
-			// if there already exists a key definition, ingnore it and emit a warning message
-				Properties prop = new Properties();
-				prop.setProperty("%1", key);
-				prop.setProperty("%2", value);
-				javaLogger.logWarn(MessageUtils.getMessage("DOTJ046W", prop).toString());
+			// if there already exists duplicated key definition in different map files.
+				javaLogger
+						.logInfo("key definition"
+								+ " \""
+								+ key
+								+ "="
+								+ value
+								+ "\" in "
+								+ currentFile
+								+ " has been defined in another map file, so it is ingnored.");
 			}else{
 				updateUplevels(key);
 				// add the ditamap where it is defined.
