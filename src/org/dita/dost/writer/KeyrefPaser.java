@@ -136,6 +136,7 @@ public class KeyrefPaser extends AbstractXMLWriter {
 		no_copy_topic.add("print");
 		no_copy_topic.add("copy-to");
 		no_copy_topic.add("chunk");
+		no_copy_topic.add("navtitle");
 	}
 
 	static {
@@ -241,21 +242,31 @@ public class KeyrefPaser extends AbstractXMLWriter {
 						if(nodeList.getLength() > 0){
 							if(withOutHref.contains(classValue)){
 								// only one keyword or term is used.
-								output.write(nodeToString((Element)nodeList.item(0)));
+								output.write(nodeToString((Element)nodeList.item(0), false));
 								output.flush();
-							} else if(withHref.contains(classValue)){
+							} else if(withHref.contains(classValue) && !classValue.equals("topic/link")){
+								// If the key reference element carries href attribute and it doesn't equal link,
 								// all keyword or term are used.
 								for(int index =0; index<nodeList.getLength(); index++){
 									Node node = nodeList.item(index);
 									if(node.getNodeType() == Node.ELEMENT_NODE)
-										output.write(nodeToString((Element)node));
+										output.write(nodeToString((Element)node, true));
 								}
 								output.flush();
 							}
 						}
-
+						// If the key reference element is link or its specification, 
+						// should pull in the linktext, but the element name linktext should not be copied.
+						if(classValue.equals("topic/link")){
+							NodeList linktext = elem.getElementsByTagName("linktext");
+							if(linktext.getLength()>0){
+								output.write(nodeToString((Element)linktext.item(0), true));
+							}else{
+								output.append(elem.getAttribute("navtitle"));
+							}
+							output.flush();
+						}
 					}
-
 				}
 			}
 			if (keyrefLeval != 0){
@@ -350,11 +361,10 @@ public class KeyrefPaser extends AbstractXMLWriter {
 				String definition = ((Hashtable<String, String>) content
 						.getValue()).get(atts
 						.getValue(Constants.ATTRIBUTE_NAME_KEYREF));
-				doc = keyDefToDoc(definition);
-				// If definition is not null and it can be parsed into
-				// document
-				if(definition!=null && doc!=null){
-					
+				
+				// If definition is not null 
+				if(definition!=null){
+					doc = keyDefToDoc(definition);
 					Element elem = doc.getDocumentElement();
 					NamedNodeMap namedNodeMap = elem.getAttributes();
 					// first resolve the keyref attribute
@@ -382,13 +392,14 @@ public class KeyrefPaser extends AbstractXMLWriter {
 									output.write(target_output);
 									output.write("\"");
 								} else {
-									// referenced file does not exist, emits a warning message.
-									Properties prop = new Properties();
-									prop.setProperty("%1", atts.getValue("keyref"));
-									prop.setProperty("%2", atts.getValue("xtrf"));
-									prop.setProperty("%3", atts.getValue("xtrc"));
-									javaLogger.logWarn(MessageUtils.getMessage(
-											"DOTJ045W", prop).toString());
+									// referenced file does not exist, emits a message.
+									javaLogger
+											.logInfo("Unable to find key definition for "
+													+ "\""
+													+ "keyref="
+													+ atts.getValue("keyref")
+													+ "\""
+													+ ", href may be used as fallback if it exists.");
 								}
 	
 							} else {
@@ -396,6 +407,7 @@ public class KeyrefPaser extends AbstractXMLWriter {
 								valid = true;
 								aset.add("scope");
 								aset.add("href");
+								output.write(Constants.STRING_BLANK);
 								output.write(Constants.ATTRIBUTE_NAME_HREF);
 								output.write("=\"");
 								output.write(target_output);
@@ -405,14 +417,17 @@ public class KeyrefPaser extends AbstractXMLWriter {
 						} else if(target.equals(Constants.STRING_EMPTY)){
 							// Key definition does not carry an href or href equals "".
 							valid = true;
+							aset.add("scope");
+							aset.add("href");
 						}else{
 							// key does not exist.
-							Properties prop = new Properties();
-							prop.setProperty("%1", atts.getValue("keyref"));
-							prop.setProperty("%2", atts.getValue("xtrf"));
-							prop.setProperty("%3", atts.getValue("xtrc"));
-							javaLogger.logWarn(MessageUtils.getMessage("DOTJ045W",
-									prop).toString());
+							javaLogger
+									.logInfo("Unable to find key definition for "
+											+ "\""
+											+ "keyref="
+											+ atts.getValue("keyref")
+											+ "\""
+											+ ", href may be used as fallback if it exists.");
 						}
 	
 					} else if (withOutHref.contains(classValue)) {
@@ -422,12 +437,13 @@ public class KeyrefPaser extends AbstractXMLWriter {
 							valid = true;
 						} else {
 							// key does not exist
-							Properties prop = new Properties();
-							prop.setProperty("%1", atts.getValue("keyref"));
-							prop.setProperty("%2", atts.getValue("xtrf"));
-							prop.setProperty("%3", atts.getValue("xtrc"));
-							javaLogger.logWarn(MessageUtils.getMessage(
-									"DOTJ045W", prop).toString());
+							javaLogger
+									.logInfo("Unable to find key definition for "
+											+ "\""
+											+ "keyref="
+											+ atts.getValue("keyref")
+											+ "\""
+											+ ", href may be used as fallback if it exists.");
 						}
 	
 					}
@@ -495,6 +511,9 @@ public class KeyrefPaser extends AbstractXMLWriter {
 					} else {
 						// keyref is not valid, don't copy any attribute.
 					}
+				}else{
+					// key does not exist
+					javaLogger.logInfo("Unable to find key definition for keyref="+atts.getValue("keyref")+", href may be used as fallback if it exists.");
 				}
 
 				// output attributes which are not replaced in current element
@@ -580,29 +599,37 @@ public class KeyrefPaser extends AbstractXMLWriter {
 		}
 	}
 	
-	private String nodeToString(Element elem){
+	private String nodeToString(Element elem, boolean flag){
+		// use flag to indicate that whether there is need to copy the element name
 		StringBuffer stringBuffer = new StringBuffer();
-		stringBuffer.append(Constants.LESS_THAN).append(elem.getNodeName());
-		NamedNodeMap namedNodeMap = elem.getAttributes();
-		for(int i=0; i<namedNodeMap.getLength(); i++){
-			stringBuffer.append(Constants.STRING_BLANK).append(namedNodeMap.item(i).getNodeName()).append(Constants.EQUAL).append(Constants.QUOTATION+namedNodeMap.item(i).getNodeValue()+Constants.QUOTATION);
+		if(flag){
+			stringBuffer.append(Constants.LESS_THAN).append(elem.getNodeName());
+			NamedNodeMap namedNodeMap = elem.getAttributes();
+			for(int i=0; i<namedNodeMap.getLength(); i++){
+				String classValue = namedNodeMap.item(i).getNodeValue();
+				if(namedNodeMap.item(i).getNodeName().equals("class"))
+					classValue = changeclassValue(classValue);
+				stringBuffer.append(Constants.STRING_BLANK).append(namedNodeMap.item(i).getNodeName()).append(Constants.EQUAL).append(Constants.QUOTATION+classValue+Constants.QUOTATION);
+			}
+			stringBuffer.append(Constants.GREATER_THAN);
 		}
-		stringBuffer.append(Constants.GREATER_THAN);
 		NodeList nodeList = elem.getChildNodes();
 		for(int i=0; i<nodeList.getLength(); i++){
 			Node node = nodeList.item(i);
 			if(node.getNodeType() == Node.ELEMENT_NODE){
 				// If the type of current node is ELEMENT_NODE, process current node.
-				stringBuffer.append(nodeToString((Element)node));
-			}
-			if(node.getNodeType() == Node.PROCESSING_INSTRUCTION_NODE){
-				stringBuffer.append("<?").append(node.getNodeName()).append("?>");
+				stringBuffer.append(nodeToString((Element)node, flag));
 			}
 			if(node.getNodeType() == Node.TEXT_NODE){
 				stringBuffer.append(node.getNodeValue());
 			}
 		}
-		stringBuffer.append("</").append(elem.getNodeName()).append(Constants.GREATER_THAN);
+		if(flag)
+			stringBuffer.append("</").append(elem.getNodeName()).append(Constants.GREATER_THAN);
 		return stringBuffer.toString();
+	}
+	
+	private String changeclassValue(String classValue){
+		return classValue.replaceAll("map/", "topic/");
 	}
 }
