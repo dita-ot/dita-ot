@@ -626,6 +626,7 @@
                 <xsl:with-param name="conref-filename"><xsl:value-of select="$conref-filename"/></xsl:with-param>
                 <xsl:with-param name="conref-source-topicid"><xsl:value-of select="$conref-source-topic"/></xsl:with-param>
                 <xsl:with-param name="conref-ids" select="$updated-conref-ids"/>
+                <xsl:with-param name="conrefend" select="$conrefend"/>
                 <xsl:with-param name="original-element" select="$original-element"/>
                 <xsl:with-param name="original-attributes" select="$original-attributes"/>
               </xsl:apply-templates>
@@ -638,6 +639,7 @@
                   <xsl:with-param name="WORKDIR"><xsl:value-of select="$WORKDIR"/></xsl:with-param>
                   <xsl:with-param name="conref-source-topicid"><xsl:value-of select="$conref-source-topic"/></xsl:with-param>
                   <xsl:with-param name="conref-ids" select="$updated-conref-ids"/>
+                  <xsl:with-param name="conrefend" select="$conrefend"/>
                   <xsl:with-param name="original-element" select="$original-element"/>
                   <xsl:with-param name="original-attributes" select="$original-attributes"/>
                 </xsl:apply-templates>

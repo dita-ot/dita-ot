@@ -532,10 +532,15 @@ public class GenListModuleReader extends AbstractXMLReader {
 						if(attrScope!=null && (attrScope.equals("external") || attrScope.equals("peer"))){
 							keysDefMap.put(key, target);
 						}else{
+							String tail = "";
+							if(target.indexOf(Constants.SHARP) != -1){
+								tail = target.substring(target.indexOf(Constants.SHARP));
+								target = target.substring(0, target.indexOf(Constants.SHARP));
+							}
 							if(new File(target).isAbsolute())
 								target = FileUtils.getRelativePathFromMap(rootFilePath, target);
 							target = FileUtils.normalizeDirectory(currentDir, target);
-							keysDefMap.put(key, target);
+							keysDefMap.put(key, target + tail);
 						}
 					}else{
 						// target is null or empty, it is useful in the future when consider the content of key definition

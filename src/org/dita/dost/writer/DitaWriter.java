@@ -419,10 +419,17 @@ public class DitaWriter extends AbstractXMLWriter {
 		    			target = keys.get(key);
 		    			target = FileUtils.replaceExtName(target);
 		    			String tail ;
-		    			if(sharpIndex == -1){
-		    				tail = attValue.substring(keyIndex).replaceAll(Constants.SLASH, Constants.SHARP);
-		    			}else
+		    			if(sharpIndex == -1 ){
+		    				if(target.indexOf(Constants.SHARP) == -1)
+		    					tail = attValue.substring(keyIndex).replaceAll(Constants.SLASH, Constants.SHARP);
+		    				else
+		    					tail = attValue.substring(keyIndex);
+		    			}else {
 		    				tail = attValue.substring(keyIndex);
+		    				if(target.indexOf(Constants.SHARP) != -1){
+		    					target = target.substring(0,target.indexOf(Constants.SHARP));
+		    				}
+		    			}
 		    			copyAttribute("conref", target + tail);
 		    			conkeyrefValid = true;
 		    		}else{
