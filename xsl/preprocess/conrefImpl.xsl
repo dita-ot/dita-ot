@@ -150,7 +150,9 @@
   <xsl:variable name="conrefend">
     <xsl:choose>
       <xsl:when test="contains(@conrefend,'#') and contains(substring-after(@conrefend,'#'),'/')"><xsl:value-of select="substring-after(substring-after(@conrefend,'#'),'/')"/></xsl:when>
-      <xsl:when test="contains(@conref,'#')"><xsl:value-of select="substring-after(@conref,'#')"/></xsl:when>
+      <xsl:when test="contains(@conrefend,'#')"><xsl:value-of select="substring-after(@conrefend,'#')"/></xsl:when>
+      <xsl:when test="contains(@conrefend,'/')"><xsl:value-of select="substring-after(@conrefend,'/')"/></xsl:when>
+      <xsl:when test="not( @conrefend='')"><xsl:value-of select="@conrefend"/></xsl:when>
       <xsl:otherwise>#none#</xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
