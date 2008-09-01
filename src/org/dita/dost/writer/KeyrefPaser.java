@@ -499,7 +499,6 @@ public class KeyrefPaser extends AbstractXMLWriter {
 	
 					}
 					
-					validKeyref.push(valid);
 	
 					// copy attributes in key definition to key reference
 					// Set no_copy and no_copy_topic define some attributes should not be copied.
@@ -566,6 +565,8 @@ public class KeyrefPaser extends AbstractXMLWriter {
 					// key does not exist
 					javaLogger.logInfo("Unable to find key definition for keyref="+atts.getValue("keyref")+", href may be used as fallback if it exists.");
 				}
+				
+				validKeyref.push(valid);
 
 				// output attributes which are not replaced in current element
 				// in the help of aSet. aSet stores the attributes which have been copied
