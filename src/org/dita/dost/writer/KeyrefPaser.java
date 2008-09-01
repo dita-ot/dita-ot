@@ -101,6 +101,11 @@ public class KeyrefPaser extends AbstractXMLWriter {
 	// endElement() the class value can not be acquired.
 	private String classValue;
 	
+	private boolean hasChecked;
+	
+	// It is used to indicate whether key reference element has sub element. 
+	private Stack<Boolean> hasSubElem;
+	
 	private Document doc;
 
 	static {
@@ -160,6 +165,7 @@ public class KeyrefPaser extends AbstractXMLWriter {
 		keyMap = new HashMap<String, String>();
 		keyref = new Stack<String>();
 		elemName = new Stack<String>();
+		hasSubElem = new Stack<Boolean>();
 		try {
 			parser = XMLReaderFactory.createXMLReader();
 			parser.setFeature(Constants.FEATURE_NAMESPACE_PREFIX, true);
@@ -175,9 +181,12 @@ public class KeyrefPaser extends AbstractXMLWriter {
 			throws SAXException {
 		try {
 			if (keyrefLeval != 0 && new String(ch,start,length).trim().length() == 0) {
-				empty = true;
-			}else
+				if(!hasChecked)
+					empty = true;
+			}else{
+				hasChecked = true;
 				empty = false;
+			}
 			output.write(StringUtils.escapeXML(ch, start, length));
 		} catch (IOException e) {
 
@@ -239,32 +248,52 @@ public class KeyrefPaser extends AbstractXMLWriter {
 						if(nodeList.getLength() == 0 ){
 							nodeList = elem.getElementsByTagName("term");
 						}
-						if(nodeList.getLength() > 0){
-							if(withOutHref.contains(classValue)){
-								// only one keyword or term is used.
-								output.write(nodeToString((Element)nodeList.item(0), false));
-								output.flush();
-							} else if(withHref.contains(classValue) && !classValue.equals("topic/link")){
-								// If the key reference element carries href attribute and it doesn't equal link,
-								// all keyword or term are used.
-								for(int index =0; index<nodeList.getLength(); index++){
-									Node node = nodeList.item(index);
-									if(node.getNodeType() == Node.ELEMENT_NODE)
-										output.write(nodeToString((Element)node, true));
+						if(!hasSubElem.peek()){
+							if(nodeList.getLength() > 0){
+								if(withOutHref.contains(classValue)){
+									// only one keyword or term is used.
+									output.write(nodeToString((Element)nodeList.item(0), false));
+									output.flush();
+								} else if(withHref.contains(classValue) ){
+									// If the key reference element carries href attribute 
+									// all keyword or term are used.
+									if(classValue.equals("topic/link")){
+										output.write("<linktext class=\" topic/linktext \">");
+									}
+									for(int index =0; index<nodeList.getLength(); index++){
+										Node node = nodeList.item(index);
+										if(node.getNodeType() == Node.ELEMENT_NODE){
+											output.write(nodeToString((Element)node, true));
+										}
+									}
+									if(classValue.equals("topic/link")){
+										output.write("</linktext>");
+									}
+									output.flush();
+								}
+							}else{
+								if(classValue.equals("topic/link")){
+									// If the key reference element is link or its specification, 
+									// should pull in the linktext
+									NodeList linktext = elem.getElementsByTagName("linktext");
+									if(linktext.getLength()>0){
+										output.write(nodeToString((Element)linktext.item(0), true));
+									}else{
+										output.write("<linktext class=\" topic/linktext \">");
+										output.append(elem.getAttribute("navtitle"));
+										output.write("</linktext>");
+									}
+								}else if(withHref.contains(classValue)){
+									NodeList linktext = elem.getElementsByTagName("linktext");
+									if(linktext.getLength()>0){
+										output.write(nodeToString((Element)linktext.item(0), false));
+									}else{
+										output.append(elem.getAttribute("navtitle"));
+									}
 								}
 								output.flush();
 							}
-						}
-						// If the key reference element is link or its specification, 
-						// should pull in the linktext, but the element name linktext should not be copied.
-						if(classValue.equals("topic/link")){
-							NodeList linktext = elem.getElementsByTagName("linktext");
-							if(linktext.getLength()>0){
-								output.write(nodeToString((Element)linktext.item(0), true));
-							}else{
-								output.append(elem.getAttribute("navtitle"));
-							}
-							output.flush();
+								
 						}
 					}
 				}
@@ -279,6 +308,7 @@ public class KeyrefPaser extends AbstractXMLWriter {
 				keyrefLeval = keyrefLevalStack.pop();
 				validKeyref.pop();
 				elemName.pop();
+				hasSubElem.pop();
 			}
 			output.write(Constants.LESS_THAN);
 			output.write(Constants.SLASH);
@@ -327,6 +357,7 @@ public class KeyrefPaser extends AbstractXMLWriter {
 	public void startElement(String uri, String localName, String name,
 			Attributes atts) throws SAXException {
 		try {
+			hasChecked = false;
 			empty = true;
 			output.write(Constants.LESS_THAN);
 			output.write(name);
@@ -338,6 +369,8 @@ public class KeyrefPaser extends AbstractXMLWriter {
 				// If the keyrefLeval doesn't equal 0, it means that current element is under the key reference element
 				if(keyrefLeval != 0){
 					keyrefLeval ++;
+					hasSubElem.pop();
+					hasSubElem.push(true);
 				}
 				// Output the attributes directly
 				for (int index = 0; index < atts.getLength(); index++) {
@@ -352,13 +385,16 @@ public class KeyrefPaser extends AbstractXMLWriter {
 				// combination.
 				// HashSet to store the attributes copied from key
 				// definition to key reference.
+				
 				elemName.push(name);
 				Set<String> aset = new HashSet<String>();
-
 				hasKeyref = true;
 				if (keyrefLeval != 0) {
 					keyrefLevalStack.push(keyrefLeval);
+					hasSubElem.pop();
+					hasSubElem.push(true);
 				}
+				hasSubElem.push(false);
 				keyrefLeval = 0;
 				keyrefLeval++;
 				keyref.push(atts.getValue(Constants.ATTRIBUTE_NAME_KEYREF));
@@ -381,6 +417,7 @@ public class KeyrefPaser extends AbstractXMLWriter {
 							if (elem.getAttribute("scope").equals("")
 									|| (!elem.getAttribute("scope").equals("") && elem
 											.getAttribute("scope").equals("local"))) {
+								target = FileUtils.replaceExtName(target);
 								if (new File(FileUtils.resolveFile(tempDir, target))
 										.exists()) {
 									target_output = FileUtils
@@ -390,6 +427,8 @@ public class KeyrefPaser extends AbstractXMLWriter {
 									valid = true;
 									aset.add("href");
 									aset.add("scope");
+									aset.add("type");
+									aset.add("format");
 									output.write(Constants.STRING_BLANK);
 									output.write(Constants.ATTRIBUTE_NAME_HREF);
 									output.write("=\"");
@@ -411,6 +450,8 @@ public class KeyrefPaser extends AbstractXMLWriter {
 								valid = true;
 								aset.add("scope");
 								aset.add("href");
+								aset.add("type");
+								aset.add("format");
 								output.write(Constants.STRING_BLANK);
 								output.write(Constants.ATTRIBUTE_NAME_HREF);
 								output.write("=\"");
@@ -423,6 +464,8 @@ public class KeyrefPaser extends AbstractXMLWriter {
 							valid = true;
 							aset.add("scope");
 							aset.add("href");
+							aset.add("type");
+							aset.add("format");
 						}else{
 							// key does not exist.
 							javaLogger
@@ -439,6 +482,10 @@ public class KeyrefPaser extends AbstractXMLWriter {
 	
 						if (target != null) {
 							valid = true;
+							aset.add("scope");
+							aset.add("href");
+							aset.add("type");
+							aset.add("format");
 						} else {
 							// key does not exist
 							javaLogger
