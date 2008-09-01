@@ -1228,5 +1228,6 @@ Other modes can be found within the code, and may or may not prove useful for ov
     </xsl:call-template>
   </xsl:template>
 
+  <xsl:template match="*[contains(@class,' topic/draft-comment ')]" mode="copy-shortdesc"/>
 
 </xsl:stylesheet>
