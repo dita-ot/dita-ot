@@ -51,6 +51,8 @@ public class FileUtils {
 	 * @return
 	 */
 	public static boolean isDITAFile(String lcasefn) {
+		if(lcasefn == null)
+			return false;
 		if (lcasefn.contains(Constants.SHARP)){
 			lcasefn = lcasefn.substring(0, lcasefn.indexOf(Constants.SHARP));
 		}

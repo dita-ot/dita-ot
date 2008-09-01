@@ -125,8 +125,10 @@ public class DitamapIndexTermReader extends AbstractXMLReader {
 			obj = elementStack.peek();
 
 			if (obj instanceof TopicrefElement) {
-				genTargets(indexTerm, (TopicrefElement)obj);
-				IndexTermCollection.getInstantce().addTerm(indexTerm);
+				if(((TopicrefElement)obj).getHref()!=null){
+					genTargets(indexTerm, (TopicrefElement)obj);
+					IndexTermCollection.getInstantce().addTerm(indexTerm);
+				}				
 			} else {
 				IndexTerm parentTerm = (IndexTerm) obj;
 				parentTerm.addSubTerm(indexTerm);
@@ -328,7 +330,7 @@ public class DitamapIndexTermReader extends AbstractXMLReader {
 //			return ((TopicrefElement) elementStack.peek()).needExtractTerm();
 			// for dita files the indexterm has been moved to its <prolog>
 			// therefore we don't need to collect these terms again.
-			if (FileUtils.isDITAFile(((TopicrefElement) elementStack.peek()).getHref().toLowerCase())){
+			if (FileUtils.isDITAFile(((TopicrefElement) elementStack.peek()).getHref())){
 				return false;
 			}
 		}
