@@ -131,7 +131,15 @@
 
 <!-- In the context of IMAGE - call these attribute processors -->
 <xsl:template match="*[contains(@class, ' topic/image ')]" mode="imagemap-image">
- <xsl:apply-templates select="@href|@height|@width|@longdescref"/>
+ <xsl:apply-templates select="@href|@height|@width"/>
+  <xsl:choose>
+    <xsl:when test="longdescref">
+      <xsl:apply-templates select="longdescref"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:apply-templates select="@longdescref"/>
+    </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 <!-- In the context of XREF - call it's HREF processor -->

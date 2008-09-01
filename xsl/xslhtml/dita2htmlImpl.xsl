@@ -2257,7 +2257,15 @@
   <xsl:element name="img">
     <xsl:call-template name="commonattributes"/>
     <xsl:call-template name="setid"/>
-    <xsl:apply-templates select="@href|@height|@width|@longdescref"/>
+    <xsl:choose>
+      <xsl:when test="longdescref">
+        <xsl:apply-templates select="longdescref"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:apply-templates select="@longdescref"/>
+      </xsl:otherwise>
+    </xsl:choose>
+    <xsl:apply-templates select="@href|@height|@width"/>
     <xsl:choose>
       <xsl:when test="*[contains(@class,' topic/alt ')]">
         <xsl:variable name="alt-content"><xsl:apply-templates select="*[contains(@class,' topic/alt ')]" mode="text-only"/></xsl:variable>
@@ -2331,6 +2339,21 @@
   </xsl:attribute>
 </xsl:template>
 
+<xsl:template match="*[contains(@class, ' topic/image ']/longdescref">
+  <xsl:if test="@href and not @href=''">
+    <xsl:attribute name="longdesc">
+      <xsl:choose>
+        <xsl:when test="contains(@href,$DITAEXT)">  <!-- switch extension from .dita -->
+          <xsl:value-of select="substring-before(@href,$DITAEXT)"/><xsl:value-of select="$OUTEXT"/><xsl:value-of select="substring-after(@href,$DITAEXT)"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="@href"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:attribute>
+  </xsl:if>
+</xsl:template>
+
 
 <!-- object, desc, & param -->
 <xsl:template match="*[contains(@class,' topic/object ')]" name="topic.object">
@@ -2349,7 +2372,7 @@
   <xsl:if test="@standby"><xsl:attribute name="standby"><xsl:value-of select="@standby"/></xsl:attribute></xsl:if>
   <xsl:if test="@width"><xsl:attribute name="width"><xsl:value-of select="@width"/></xsl:attribute></xsl:if>
   <xsl:if test="@name"><xsl:attribute name="name"><xsl:value-of select="@name"/></xsl:attribute></xsl:if>
-  <xsl:if test="@longdescref">
+  <xsl:if test="@longdescref or longdescref">
     <xsl:apply-templates select="." mode="ditamsg:longdescref-on-object"/>
   </xsl:if>
   <xsl:apply-templates/>
