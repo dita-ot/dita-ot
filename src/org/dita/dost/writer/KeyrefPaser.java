@@ -550,7 +550,7 @@ public class KeyrefPaser extends AbstractXMLWriter {
 			File inputFile = new File(tempDir, filename);
 			filepath = inputFile.getAbsolutePath();
 			File outputFile = new File(tempDir, filename + "keyref");
-			output = new OutputStreamWriter(new FileOutputStream(outputFile));
+			output = new OutputStreamWriter(new FileOutputStream(outputFile),Constants.UTF8);
 			parser.parse(inputFile.getAbsolutePath());
 			output.close();
 			if (!inputFile.delete()) {
