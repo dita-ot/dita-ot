@@ -2339,8 +2339,8 @@
   </xsl:attribute>
 </xsl:template>
 
-<xsl:template match="*[contains(@class, ' topic/image ']/longdescref">
-  <xsl:if test="@href and not @href=''">
+<xsl:template match="*[contains(@class, ' topic/image ')]/longdescref">
+  <xsl:if test="@href and not (@href='')">
     <xsl:attribute name="longdesc">
       <xsl:choose>
         <xsl:when test="contains(@href,$DITAEXT)">  <!-- switch extension from .dita -->
