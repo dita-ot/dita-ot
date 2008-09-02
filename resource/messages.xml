@@ -274,12 +274,12 @@
   </message>
   
   <message id="DOTJ045W" type="WARN">
-    <reason>Duplicated key definition in the same map file, key="%1" href="%2" was ingnored</reason>
+    <reason>The key "%1" is defined more than once in the same map file. The reference href="%2" is ingnored.</reason>
     <response>Please make sure the key name is unique. </response>
   </message>
   
   <message id="DOTJ046E" type="ERROR">
-    <reason>Conkeyref="%1" can not be resolved, due to lack of key or key doesn't exist. Use the conref as fallback if it exist.</reason>
+    <reason>Conkeyref="%1" can not be resolved because it does not contain a key or the key is not defined. Use the conref as fallback if it exist.</reason>
     <response>Please make sure the key name does exist. </response>
   </message>
   <!-- End of Java Messages -->
