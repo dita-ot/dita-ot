@@ -16,4 +16,5 @@
     <feature extension="dita.xsl.eclipse.plugin"
       value="xsl/map2plugin.xsl" type="file"/>
     <feature extension="dita.conductor.target" value="script.xml" type="file"/>
+    <feature extension="dita.map.eclipse.index.pre" value="dita.index.eclipsehelp.init" type="text"/> 
   </plugin>

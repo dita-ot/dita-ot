@@ -29,7 +29,7 @@ import org.dita.dost.module.Content;
  * 
  * @author Wu, Zhi Qiang
  */
-public class JavaHelpIndexWriter implements AbstractWriter {
+public class JavaHelpIndexWriter implements AbstractWriter, IDitaTranstypeIndexWriter {
 	/** List of indexterms */
 	private List termList = null;
 	
@@ -143,6 +143,15 @@ public class JavaHelpIndexWriter implements AbstractWriter {
 			}
 		}		
 		
+	}
+
+	public String getIndexFileName(String outputFileRoot) {
+		StringBuffer indexFilename;
+		
+		indexFilename = new StringBuffer(outputFileRoot);
+		indexFilename.append("_index.xml");
+		// TODO Auto-generated method stub
+		return indexFilename.toString();
 	}
 
 }
