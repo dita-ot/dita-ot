@@ -9,6 +9,7 @@
  */
 package org.dita.dost.writer;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -31,7 +32,7 @@ import org.dita.dost.util.Constants;
  *  
  *  @version 1.0 2006-10-17
  */
-public class EclipseIndexWriter implements AbstractWriter {
+public class EclipseIndexWriter implements AbstractWriter, IDitaTranstypeIndexWriter  {
 	
 	/** List of indexterms */
 	private List termList = null;
@@ -104,12 +105,6 @@ public class EclipseIndexWriter implements AbstractWriter {
 			
 		} finally {
 			printWriter.close();
-		}
-		if (getFilePath() != null){
-			addIndexExtension(getFilePath());
-		}else{
-			javaLogger.logError("The output file path to the file plugin.xml cannot be found. "+
-					"Unable to add Eclipse Index extension for this plugin");
 		}
 	
 	}
@@ -217,9 +212,20 @@ public class EclipseIndexWriter implements AbstractWriter {
     	}
     }
     
-    private void addIndexExtension(String filePath){
-    	
-    	
-    }
+
+	public String getIndexFileName(String outputFileRoot) {
+		
+		StringBuffer indexFilename;
+		
+		File indexDir = new File(outputFileRoot).getParentFile();
+		// buff.delete(filepath, buff.length());
+		setFilePath(indexDir.getAbsolutePath());
+		// buff.insert(filepath, "\\index.xml");
+		indexFilename = new StringBuffer(new File(indexDir, "index.xml")
+				.getAbsolutePath());
+		
+		// TODO Auto-generated method stub
+		return indexFilename.toString();
+	}
 
 }

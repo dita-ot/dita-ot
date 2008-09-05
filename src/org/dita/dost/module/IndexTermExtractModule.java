@@ -108,6 +108,9 @@ public class IndexTermExtractModule implements AbstractPipelineModule {
 		String indextype = hashIO
 				.getAttribute(Constants.ANT_INVOKER_EXT_PARAM_INDEXTYPE);
 		
+		String indexclass = hashIO
+				.getAttribute(Constants.ANT_INVOKER_EXT_PARAM_INDEXCLASS);
+		
 		inputMap = hashIO.getAttribute(Constants.ANT_INVOKER_PARAM_INPUTMAP);
 		targetExt = hashIO
 				.getAttribute(Constants.ANT_INVOKER_EXT_PARAM_TARGETEXT);
@@ -155,8 +158,10 @@ public class IndexTermExtractModule implements AbstractPipelineModule {
 		lastIndexOfDot = output.lastIndexOf(".");
 		outputRoot = (lastIndexOfDot == -1) ? output : output.substring(0,
 				lastIndexOfDot);
+
 		IndexTermCollection.getInstantce().setOutputFileRoot(outputRoot);
 		IndexTermCollection.getInstantce().setIndexType(indextype);
+		IndexTermCollection.getInstantce().setIndexClass(indexclass);
 
 		if (encoding != null && encoding.trim().length() > 0) {
 //			Locale locale = new Locale(encoding.substring(0, 2), encoding

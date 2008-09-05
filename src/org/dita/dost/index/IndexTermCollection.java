@@ -16,12 +16,14 @@ import java.util.List;
 import java.util.Locale;
 
 import org.dita.dost.exception.DITAOTException;
+import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.module.Content;
 import org.dita.dost.module.ContentImpl;
 import org.dita.dost.util.Constants;
 import org.dita.dost.writer.AbstractWriter;
 import org.dita.dost.writer.CHMIndexWriter;
 import org.dita.dost.writer.EclipseIndexWriter;
+import org.dita.dost.writer.IDitaTranstypeIndexWriter;
 import org.dita.dost.writer.JavaHelpIndexWriter;
 
 /**
@@ -39,14 +41,21 @@ public class IndexTermCollection {
 
 	/** The type of index term */
 	private String indexType = null;
+	
+	/** The type of index class */
+	private String indexClass = null;
+
 
 	/** The output file name of index term without extension */
 	private String outputFileRoot = null;
+	
+	private DITAOTJavaLogger javaLogger = null;
 
 	/**
 	 * Private constructor used to forbid instance.
 	 */
 	private IndexTermCollection() {
+		javaLogger = new DITAOTJavaLogger();
 	}
 	
 	/**
@@ -88,6 +97,15 @@ public class IndexTermCollection {
 		this.indexType = type;
 	}
 
+	public String getIndexClass() {
+		return indexClass;
+	}
+
+	public void setIndexClass(String indexClass) {
+		this.indexClass = indexClass;
+	}
+	
+	
 	/**
 	 * All a new term into the collection.
 	 * 
@@ -155,33 +173,68 @@ public class IndexTermCollection {
 	 */
 	public void outputTerms() throws DITAOTException {
 		StringBuffer buff = new StringBuffer(this.outputFileRoot);
-		AbstractWriter indexWriter = null;
+		AbstractWriter abstractWriter = null;
+		IDitaTranstypeIndexWriter indexWriter = null;
 		Content content = new ContentImpl();
 		
-		if (Constants.INDEX_TYPE_HTMLHELP.equalsIgnoreCase(indexType)) {
-			indexWriter = new CHMIndexWriter();			
-			buff.append(".hhk");
-		} else if (Constants.INDEX_TYPE_JAVAHELP.equalsIgnoreCase(indexType)) {
-			indexWriter = new JavaHelpIndexWriter();			
-			buff.append("_index.xml");			
-		}else if (Constants.INDEX_TYPE_ECLIPSEHELP.equalsIgnoreCase(indexType)) { 
-			indexWriter = new EclipseIndexWriter();		
-			//We need to get rid of the ditamap or topic name in the URL
-		    //so we can create index.xml file for Eclipse plug-ins.
-			//int filepath = buff.lastIndexOf("\\");
-			File indexDir = new File(buff.toString()).getParentFile();
-			//buff.delete(filepath, buff.length());
-			((EclipseIndexWriter)indexWriter).setFilePath(indexDir.getAbsolutePath());
-			//buff.insert(filepath, "\\index.xml");
-			buff = new StringBuffer(new File(indexDir, "index.xml").getAbsolutePath());
+		if (indexClass != null && indexClass.length() > 0) {
+			//Instantiate the class value 
+			Class anIndexClass = null;
+			try {
+				anIndexClass = Class.forName( indexClass );
+				abstractWriter = (AbstractWriter)anIndexClass.newInstance();
+				indexWriter = (IDitaTranstypeIndexWriter)anIndexClass.newInstance();
+				
+				
+				buff = new StringBuffer(indexWriter.getIndexFileName(this.outputFileRoot));
+				
+				
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InstantiationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			
+
+		} 
+		//Fallback to the old way of doing things.
+		else {
+
+			if (Constants.INDEX_TYPE_HTMLHELP.equalsIgnoreCase(indexType)) {
+				abstractWriter = new CHMIndexWriter();
+				buff.append(".hhk");
+			} else if (Constants.INDEX_TYPE_JAVAHELP
+					.equalsIgnoreCase(indexType)) {
+				abstractWriter = new JavaHelpIndexWriter();
+				buff.append("_index.xml");
+			} else if (Constants.INDEX_TYPE_ECLIPSEHELP
+					.equalsIgnoreCase(indexType)) {
+				abstractWriter = new EclipseIndexWriter();
+				// We need to get rid of the ditamap or topic name in the URL
+				// so we can create index.xml file for Eclipse plug-ins.
+				// int filepath = buff.lastIndexOf("\\");
+				File indexDir = new File(buff.toString()).getParentFile();
+				// buff.delete(filepath, buff.length());
+				((EclipseIndexWriter) abstractWriter).setFilePath(indexDir
+						.getAbsolutePath());
+				// buff.insert(filepath, "\\index.xml");
+				buff = new StringBuffer(new File(indexDir, "index.xml")
+						.getAbsolutePath());
+			}
 		}
 		
 		//if (!getTermList().isEmpty()){
 		//Even if there is no term in the list create an empty index file
 		//otherwise the compiler will report error.
 			content.setCollection(this.getTermList());
-			indexWriter.setContent(content);
-			indexWriter.write(buff.toString());
+			abstractWriter.setContent(content);
+			abstractWriter.write(buff.toString());
 		//}
 	}
 

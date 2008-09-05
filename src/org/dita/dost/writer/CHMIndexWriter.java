@@ -31,7 +31,7 @@ import org.dita.dost.util.Constants;
  * 
  * @author Wu, Zhi Qiang
  */
-public class CHMIndexWriter implements AbstractWriter {
+public class CHMIndexWriter implements AbstractWriter, IDitaTranstypeIndexWriter {
     /** List of indexterms */
     private List termList = null;
 
@@ -173,6 +173,16 @@ public class CHMIndexWriter implements AbstractWriter {
 				term.addTargets(subTerm.getTargetList());
 			}			
 		}	
+	}
+
+	
+	public String getIndexFileName(String outputFileRoot) {
+		StringBuffer indexFilename;
+		
+		indexFilename = new StringBuffer(outputFileRoot);
+		indexFilename.append(".hhk");
+		// TODO Auto-generated method stub
+		return indexFilename.toString();
 	}
 
 }

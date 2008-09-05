@@ -175,6 +175,7 @@ public abstract class Constants {
      */
     public static final String ANT_INVOKER_EXT_PARAM_TARGETEXT = "targetext";
     public static final String ANT_INVOKER_EXT_PARAM_INDEXTYPE = "indextype";
+    public static final String ANT_INVOKER_EXT_PARAM_INDEXCLASS = "indexclass";
     public static final String ANT_INVOKER_EXT_PARAM_ENCODING = "encoding";
     public static final String ANT_INVOKER_EXT_PARAM_OUTPUT = "output";
     public static final String ANT_INVOKER_EXT_PARAM_INPUT = "input";
