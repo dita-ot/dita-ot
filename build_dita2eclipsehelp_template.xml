@@ -10,7 +10,13 @@
     <import file="build_preprocess.xml" />
     <import file="build_general.xml" />
 	
-
+	   <target name="dita.index.eclipsehelp.init">
+	      <condition property="dita.eclipsehelp.index.class" value="org.dita.dost.writer.EclipseIndexWriter"> 
+	          <not><isset property="dita.eclipsehelp.index.class"></isset></not> 
+	      </condition> 
+	   </target>
+	
+	
     <target name="dita2eclipsehelp"
             unless="noMap"
         depends="build-init, preprocess, copy-css, 
@@ -123,14 +129,11 @@
     </target>
     
     <target name="dita.map.eclipse.index" unless="noMap"
-            depends="dita.map.eclipse.plugin.init" if="old.transform"
-    	      dita:depends="{dita.map.eclipse.index.pre},dita.map.eclipse.init" 
+            if="old.transform"
+    	      dita:depends="{dita.map.eclipse.index.pre},dita.map.eclipse.plugin.init" 
     	      xmlns:dita="http://dita-ot.sourceforge.net" 
     	      dita:extension="depends org.dita.dost.platform.InsertDependsAction" 
             description="Build Eclipse Help index file">
-    	  <condition property="dita.eclipsehelp.index.class" value="org.dita.dost.writer.EclipseIndexWriter"> 
-    	     <not><isset property="dita.eclipsehelp.index.class"/></not> 
-    	  </condition> 
         <pipeline message="Extract index term."
             module="IndexTermExtract"
             basedir="${basedir}"
@@ -140,14 +143,11 @@
     </target>
     
     <target name="dita.out.map.eclipse.index" unless="noMap"
-        depends="dita.map.eclipse.plugin.init" if="inner.transform"
-    	  dita:depends="{dita.map.eclipse.index.pre},dita.map.eclipse.init" 
+        if="inner.transform"
+    	  dita:depends="{dita.map.eclipse.index.pre},dita.map.eclipse.plugin.init" 
     	  xmlns:dita="http://dita-ot.sourceforge.net" 
     	  dita:extension="depends org.dita.dost.platform.InsertDependsAction" 
         description="Build Eclipse Help index file">
-    	  <condition property="dita.eclipsehelp.index.class" value="org.dita.dost.writer.EclipseIndexWriter"> 
-    	     <not><isset property="dita.eclipsehelp.index.class"/></not> 
-    	  </condition> 
         <pipeline message="Extract index term."
             module="IndexTermExtract"
             basedir="${basedir}"
