@@ -49,6 +49,7 @@ public class Integrator {
 		templateSet.add("catalog-dita_template.xml");
 		templateSet.add("build_template.xml");
 		templateSet.add("build_general_template.xml");
+		templateSet.add("build_dita2eclipsehelp_template.xml");
 		templateSet.add("build_preprocess_template.xml");
 		templateSet.add("xsl/common/allstrings_template.xml");
 		templateSet.add("xsl/dita2xhtml_template.xsl");
