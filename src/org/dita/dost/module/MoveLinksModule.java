@@ -57,6 +57,7 @@ public class MoveLinksModule implements AbstractPipelineModule {
         
         indexReader.setMatch(new StringBuffer(Constants.ELEMENT_NAME_MAPLINKS)
                 .append(Constants.SLASH).append(Constants.ELEMENT_NAME_LINKPOOL)
+                .append(Constants.SLASH).append(Constants.ELEMENT_NAME_LINKLIST)
                 .toString());
         
         indexReader.read(maplinksFile);

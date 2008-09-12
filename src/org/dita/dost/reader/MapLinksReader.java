@@ -12,6 +12,8 @@ package org.dita.dost.reader;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -67,7 +69,7 @@ public class MapLinksReader extends AbstractXMLReader {
     private String firstMatchElement;
     private StringBuffer indexEntries;
     private File inputFile;
-    private String lastMatchElement;
+    private HashSet<String> lastMatchElement;
     private int level;
     private DITAOTJavaLogger logger;
     private HashMap map;
@@ -94,7 +96,7 @@ public class MapLinksReader extends AbstractXMLReader {
         matchList = new ArrayList(Constants.INT_16);
         indexEntries = new StringBuffer(Constants.INT_1024);
         firstMatchElement = null;
-        lastMatchElement = null;
+        lastMatchElement = new HashSet<String>();
         level = 0;
         match = false;
         validHref = true;
@@ -145,7 +147,7 @@ public class MapLinksReader extends AbstractXMLReader {
         while (matchIterator.hasNext()) {
             currentMatchString = (String) matchIterator.next();
             ancestor = (String) ancestorIterator.next();
-            if (!currentMatchString.equals(ancestor)) {
+            if (!currentMatchString.contains(ancestor)) {
                 return false;
             }
         }
@@ -181,7 +183,7 @@ public class MapLinksReader extends AbstractXMLReader {
             level--;
         }
 
-        if (qName.equals(lastMatchElement) && level == 0) {
+        if (lastMatchElement.contains(qName) && level == 0) {
             if (match) {
                 match = false;
             }
@@ -277,19 +279,25 @@ public class MapLinksReader extends AbstractXMLReader {
     public void setMatch(String matchPattern) {
         int index = 0;
         firstMatchElement = (matchPattern.indexOf(Constants.SLASH) != -1) ? matchPattern.substring(0, matchPattern.indexOf(Constants.SLASH)) : matchPattern;
-
+        
         while (index != -1) {
-            int end = matchPattern.indexOf(Constants.SLASH, index);
-            if (end == -1) {
-                matchList.add(matchPattern.substring(index));
-                lastMatchElement = matchPattern.substring(index);
-                index = end;
-            } else {
-                matchList.add(matchPattern.substring(index, end));
-                index = end + 1;
+            int start = matchPattern.indexOf(Constants.SLASH, index);
+            int end = matchPattern.indexOf(Constants.SLASH,start + 1);
+            if(start != -1 && end != -1){
+            	lastMatchElement.add(matchPattern.substring(start+1, end));
+            	index = end;
+            } else if(start != -1 && end == -1){
+            	lastMatchElement.add(matchPattern.substring(start + 1));
+            	index = -1;
             }
         }
-
+        matchList.add(firstMatchElement);
+        Iterator<String> it = lastMatchElement.iterator();
+        StringBuffer sb = new StringBuffer();
+        while(it.hasNext()){
+        	sb.append(it.next() + Constants.STRING_BLANK);
+        }
+        matchList.add(sb.toString());
     }
 
 	/**
@@ -343,7 +351,7 @@ public class MapLinksReader extends AbstractXMLReader {
         }
         if (!match) {
             ancestorList.add(qName);
-            if (qName.equals(lastMatchElement) && checkMatch()) {
+            if (lastMatchElement.contains(qName) && checkMatch()) {
                 
                     match = true;
                     level = 0;

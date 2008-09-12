@@ -70,6 +70,7 @@ public abstract class Constants {
     public static final String ELEMENT_NAME_KEYWORDS = "keywords";
     public static final String ELEMENT_NAME_MAPLINKS = "maplinks";
     public static final String ELEMENT_NAME_LINKPOOL = "linkpool";
+    public static final String ELEMENT_NAME_LINKLIST = "linklist";
     public static final String ELEMENT_NAME_PROP = "prop";
     public static final String ELEMENT_NAME_PROLOG = "prolog";
     public static final String ELEMENT_NAME_ACTION = "action";
