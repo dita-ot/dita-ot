@@ -154,7 +154,8 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 	private String rootDir=null;
 	
 	private String rootFile=null;
-
+	
+	private OutputStreamWriter keydef;
 
 	/**
 	 * Create a new instance and do the initialization.
@@ -213,6 +214,7 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 			updateBaseDirectory();
 			refactoringResult();
 			outputResult();
+			keydef.close();
 		}catch(DITAOTException e){
 			throw e;
 		}catch (SAXException e) {
@@ -281,7 +283,15 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 		rootDir=baseInputDir;
 		rootFile=inFile.getAbsolutePath();
 		inputFile = inFile.getName();
-		
+		try {
+			keydef = new OutputStreamWriter(new FileOutputStream(new File(tempDir,"keydef.xml")));
+			keydef.write("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
+		} catch (FileNotFoundException e) {
+			javaLogger.logException(e);
+		} catch (IOException e){
+			javaLogger.logException(e);
+		}
+			
 		//Set the mapDir
 		OutputUtils.setInputMapPathName(inFile.getAbsolutePath());	
 	}
@@ -436,18 +446,27 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 			String value = (String)kdMap.get(key);
 			if(keysDefMap.containsKey(key)){
 			// if there already exists duplicated key definition in different map files.
+				Properties prop = new Properties();
+				prop.put("%1", key);
+				prop.put("%2", value);
+				prop.put("%3", currentFile);
 				javaLogger
-						.logInfo("key definition"
-								+ " \""
-								+ key
-								+ "="
-								+ value
-								+ "\" in "
-								+ currentFile
-								+ " has been defined in another map file, so it is ingnored.");
+						.logInfo(MessageUtils.getMessage("DOTJ048I", prop).toString());
 			}else{
 				updateUplevels(key);
 				// add the ditamap where it is defined.
+				try {
+					keydef.write("<keydef ");
+					keydef.write("keys=\""+key+"\" ");
+					keydef.write("href=\""+value+"\" ");
+					keydef.write("source=\""+currentFile+"\">");
+					keydef.write("\n");
+					keydef.flush();
+				} catch (IOException e) {
+
+					javaLogger.logException(e);
+				}
+				
 				keysDefMap.put(key, value+"("+currentFile+")");
 			}
 			
