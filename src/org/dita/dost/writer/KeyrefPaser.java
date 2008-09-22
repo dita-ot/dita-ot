@@ -436,13 +436,11 @@ public class KeyrefPaser extends AbstractXMLWriter {
 									output.write("\"");
 								} else {
 									// referenced file does not exist, emits a message.
+									Properties prop = new Properties();
+									prop.put("%1", atts.getValue("keyref"));
 									javaLogger
-											.logInfo("Unable to find key definition for "
-													+ "\""
-													+ "keyref="
-													+ atts.getValue("keyref")
-													+ "\""
-													+ ", href may be used as fallback if it exists.");
+											.logInfo(MessageUtils.getMessage("DOTJ047I", prop)
+													.toString());
 								}
 	
 							} else {
@@ -468,13 +466,11 @@ public class KeyrefPaser extends AbstractXMLWriter {
 							aset.add("format");
 						}else{
 							// key does not exist.
+							Properties prop = new Properties();
+							prop.put("%1", atts.getValue("keyref"));
 							javaLogger
-									.logInfo("Unable to find key definition for "
-											+ "\""
-											+ "keyref="
-											+ atts.getValue("keyref")
-											+ "\""
-											+ ", href may be used as fallback if it exists.");
+									.logInfo(MessageUtils.getMessage("DOTJ047I", prop)
+											.toString());
 						}
 	
 					} else if (withOutHref.contains(classValue)) {
@@ -488,13 +484,11 @@ public class KeyrefPaser extends AbstractXMLWriter {
 							aset.add("format");
 						} else {
 							// key does not exist
+							Properties prop = new Properties();
+							prop.put("%1", atts.getValue("keyref"));
 							javaLogger
-									.logInfo("Unable to find key definition for "
-											+ "\""
-											+ "keyref="
-											+ atts.getValue("keyref")
-											+ "\""
-											+ ", href may be used as fallback if it exists.");
+									.logInfo(MessageUtils.getMessage("DOTJ047I", prop)
+											.toString());
 						}
 	
 					}
@@ -563,7 +557,11 @@ public class KeyrefPaser extends AbstractXMLWriter {
 					}
 				}else{
 					// key does not exist
-					javaLogger.logInfo("Unable to find key definition for keyref="+atts.getValue("keyref")+", href may be used as fallback if it exists.");
+					Properties prop = new Properties();
+					prop.put("%1", atts.getValue("keyref"));
+					javaLogger
+							.logInfo(MessageUtils.getMessage("DOTJ047I", prop)
+									.toString());;
 				}
 				
 				validKeyref.push(valid);
@@ -572,7 +570,7 @@ public class KeyrefPaser extends AbstractXMLWriter {
 				// in the help of aSet. aSet stores the attributes which have been copied
 				// from key definition to key reference.
 				for (int index = 0; index < atts.getLength(); index++) {
-					if (!aset.contains(atts.getQName(index)) && atts.getQName(index) != Constants.ATTRIBUTE_NAME_KEYREF ) {
+					if (!aset.contains(atts.getQName(index))) {
 						output.append(Constants.STRING_BLANK);
 						output.append(atts.getQName(index));
 						output.write("=\"");

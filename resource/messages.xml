@@ -282,6 +282,16 @@
     <reason>Conkeyref="%1" can not be resolved because it does not contain a key or the key is not defined. Use the conref as fallback if it exist.</reason>
     <response>Please make sure the key name does exist. </response>
   </message>
+  
+  <message id="DOTJ047I" type="INFO">
+    <reason>Unable to find key definition for keyref="%1", href may be used as fallback if it exists.</reason>
+    <response>Please make sure the key name is correct.</response>
+  </message>
+  
+  <message id="DOTJ048I" type="INFO">
+    <reason>key definition "%1"="%2" in "%3" has been defined in another file, so it is ingnored.</reason>
+    <response>Please make sure the key name does not duplicate.</response>
+  </message>
   <!-- End of Java Messages -->
     
   <!-- Begin of XSL Messages -->  
