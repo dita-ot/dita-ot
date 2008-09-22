@@ -272,7 +272,7 @@
     </xsl:variable>
     <xsl:variable name="group-title">
       <xsl:apply-templates mode="grab-group-title" 
-        select="ancestor::*[contains(@class, ' map/reltable ')]/*[contains(@class, ' map/relheader ')]/*[contains(@class, ' map/relcolspec ')][position()=$position]/*[contains(@class, ' map/topicref ')]"/>
+        select="ancestor::*[contains(@class, ' map/reltable ')]/*[contains(@class, ' map/relheader ')]/*[contains(@class, ' map/relcolspec ')][position()=$position]/*[contains(@class, ' map/topicref ')][1]"/>
     </xsl:variable>
     <xsl:if test="$linklist='true' and not($group-title='#none#') and not($group-title='')">
       <title class="- topic/title ">
