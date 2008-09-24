@@ -815,6 +815,7 @@
     <dirname property="temp.outdir" file="${temp.output}"/>
     <pipeline message="topicmerge" module="TopicMerge" 
       inputmap="${temp.dir}${file.separator}${temp.base}.ditamap" 
+      tempdir="${dita.temp.dir}"
       extparam="output=${temp.outdir}${file.separator}${temp.base}_merged.xml" /> 
   </target>
 	

@@ -58,6 +58,8 @@ public class TopicMergeModule implements AbstractPipelineModule {
 		.getAttribute(Constants.ANT_INVOKER_EXT_PARAM_STYLE);
 		String out = ((PipelineHashIO) input)
 		.getAttribute(Constants.ANT_INVOKER_EXT_PARAM_OUTPUT);
+		String tempdir = ((PipelineHashIO) input)
+		.getAttribute(Constants.ANT_INVOKER_PARAM_TEMPDIR);
 		OutputStreamWriter output = null;
 		DITAOTJavaLogger logger = new DITAOTJavaLogger();
 		MergeMapParser mapParser = new MergeMapParser();
@@ -77,7 +79,7 @@ public class TopicMergeModule implements AbstractPipelineModule {
 		
 		
 
-		mapParser.read(ditaInput);
+		mapParser.read(ditaInput+"|"+tempdir);
 		midResult = new StringBuffer(Constants.XML_HEAD).append("<dita-merge>")
 			.append(((StringBuffer)mapParser.getContent().getValue())).append("</dita-merge>").toString();
 		midStream = new StringReader(midResult);

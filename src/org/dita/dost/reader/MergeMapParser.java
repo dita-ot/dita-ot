@@ -10,12 +10,16 @@
 package org.dita.dost.reader;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.util.Properties;
+import java.util.StringTokenizer;
 
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.module.Content;
 import org.dita.dost.module.ContentImpl;
 import org.dita.dost.util.Constants;
+import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.MergeUtils;
 import org.dita.dost.util.StringUtils;
 import org.xml.sax.Attributes;
@@ -38,6 +42,7 @@ public class MergeMapParser extends AbstractXMLReader {
 	private MergeUtils util;
 	private ContentImpl content;
 	private String dirPath = null;
+	private String tempdir = null;
 
 	/**
 	 * Default Constructor
@@ -80,8 +85,17 @@ public class MergeMapParser extends AbstractXMLReader {
 	/**
 	 * @see org.dita.dost.reader.AbstractReader#read(java.lang.String)
 	 */
-	public void read(String filename) {
+	public void read(String ditaInput) {
 		try{
+			String filename;
+			if(ditaInput.contains(Constants.STICK)){
+				filename = ditaInput.substring(0, ditaInput.indexOf(Constants.STICK));
+				tempdir = ditaInput.substring(ditaInput.indexOf(Constants.STICK)+1);
+			}else{
+				filename = ditaInput;
+				tempdir = new File(filename).getParent();
+			}
+			
 			File input = new File(filename);
 			dirPath = input.getParent();
 			reader.setErrorHandler(new DITAOTXMLErrorHandler(filename));
@@ -180,6 +194,38 @@ public class MergeMapParser extends AbstractXMLReader {
 		String pi = (data != null) ? target + Constants.STRING_BLANK + data : target;
         mapInfo.append(Constants.LESS_THAN + Constants.QUESTION 
                 + pi + Constants.QUESTION + Constants.GREATER_THAN);
+	}
+
+	@Override
+	public void endDocument() throws SAXException {
+		// TODO Auto-generated method stub
+		// read href dita topic list
+		// compare visitedSet with the list
+		// if list item not in visitedSet then call MergeTopicParser to parse it
+		Properties property = new Properties();
+	    File ditalist = new File(tempdir, Constants.FILE_NAME_DITA_LIST);
+        File xmlDitalist = new File(tempdir, Constants.FILE_NAME_DITA_LIST_XML);
+        try{
+	        if(xmlDitalist.exists())
+	        	property.loadFromXML(new FileInputStream(xmlDitalist));
+	        else 
+	        	property.loadFromXML(new FileInputStream(ditalist));
+	        String hrefTargetList = property.getProperty("hreftargetslist");
+			StringTokenizer tokenizer = new StringTokenizer(hrefTargetList,Constants.COMMA);
+			String element = null;
+			while(tokenizer.hasMoreElements())
+			{
+				element = (String)tokenizer.nextElement();
+				if (!new File(dirPath).equals(new File(tempdir)))
+					element = FileUtils.getRelativePathFromMap(new File(dirPath,"a.ditamap").getAbsolutePath(), new File(tempdir,element).getAbsolutePath());
+				if(!util.isVisited(element)){
+					util.visit(element);
+					topicParser.parse(element, dirPath);
+				}
+			}
+        }catch (Exception e){
+        	logger.logException(e);
+        }		
 	}
 
 }
