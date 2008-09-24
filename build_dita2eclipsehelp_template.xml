@@ -130,7 +130,7 @@
     
     <target name="dita.map.eclipse.index" unless="noMap"
             if="old.transform"
-    	      dita:depends="{dita.map.eclipse.index.pre},dita.map.eclipse.plugin.init" 
+      dita:depends="{dita.map.eclipse.index.pre},dita.map.eclipse.plugin.init,dita.index.eclipsehelp.init" 
     	      xmlns:dita="http://dita-ot.sourceforge.net" 
     	      dita:extension="depends org.dita.dost.platform.InsertDependsAction" 
             description="Build Eclipse Help index file">
@@ -144,7 +144,7 @@
     
     <target name="dita.out.map.eclipse.index" unless="noMap"
         if="inner.transform"
-    	  dita:depends="{dita.map.eclipse.index.pre},dita.map.eclipse.plugin.init" 
+      dita:depends="{dita.map.eclipse.index.pre},dita.map.eclipse.plugin.init,dita.index.eclipsehelp.init" 
     	  xmlns:dita="http://dita-ot.sourceforge.net" 
     	  dita:extension="depends org.dita.dost.platform.InsertDependsAction" 
         description="Build Eclipse Help index file">
