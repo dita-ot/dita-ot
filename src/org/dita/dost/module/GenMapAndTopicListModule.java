@@ -214,6 +214,7 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 			updateBaseDirectory();
 			refactoringResult();
 			outputResult();
+			keydef.write("</stub>");
 			keydef.close();
 		}catch(DITAOTException e){
 			throw e;
@@ -286,6 +287,7 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 		try {
 			keydef = new OutputStreamWriter(new FileOutputStream(new File(tempDir,"keydef.xml")));
 			keydef.write("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
+			keydef.write("<stub>");
 		} catch (FileNotFoundException e) {
 			javaLogger.logException(e);
 		} catch (IOException e){
@@ -459,7 +461,7 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 					keydef.write("<keydef ");
 					keydef.write("keys=\""+key+"\" ");
 					keydef.write("href=\""+value+"\" ");
-					keydef.write("source=\""+currentFile+"\">");
+					keydef.write("source=\""+currentFile+"\"/>");
 					keydef.write("\n");
 					keydef.flush();
 				} catch (IOException e) {
