@@ -834,7 +834,12 @@
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' task/chrow ')]" name="topic.task.chrow">
- <tr><xsl:call-template name="setid"/><xsl:call-template name="commonattributes"/><xsl:apply-templates/></tr>
+ <xsl:param name="width-multiplier">0</xsl:param>
+ <tr><xsl:call-template name="setid"/><xsl:call-template name="commonattributes"/>    
+    <xsl:apply-templates>     <!-- width-multiplier will be used in the first row to set widths. -->
+      <xsl:with-param name="width-multiplier"><xsl:value-of select="$width-multiplier"/></xsl:with-param>
+    </xsl:apply-templates>
+</tr>
  <xsl:value-of select="$newline"/>
 </xsl:template>
 
