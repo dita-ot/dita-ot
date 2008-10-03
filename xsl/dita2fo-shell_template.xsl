@@ -73,11 +73,10 @@
   <!-- this template rule defines the overall output organization -->
   <xsl:template name="dita-setup">
     <fo:root xmlns:fo="http://www.w3.org/1999/XSL/Format">
-      <!-- create FOP outline elements for PDF bookmarks -->
-      <xsl:apply-templates mode="outline"/>
       <!-- get the overall master page defs here -->
       <xsl:call-template name="define-page-masters-dita"/>
       <fo:bookmark-tree>
+        <!-- create FOP outline elements for PDF bookmarks -->
 	<xsl:apply-templates mode="outline"/>
       </fo:bookmark-tree>
       <!-- place generated content -->
