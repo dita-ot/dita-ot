@@ -16,7 +16,7 @@
 <str name="Draft comment">ドラフト注釈</str>
 <str name="Option">オプション</str>
 <str name="Description">説明</str> 
-<str name="Optional">任意</str>
+<str name="Optional">オプション</str>
 <str name="Required">必須</str>
 <str name="Skip visual syntax diagram">構文図をスキップする</str>
 <str name="Read syntax diagram">構文図を読む</str>
