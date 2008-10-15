@@ -133,12 +133,20 @@
 <xsl:template match="*[contains(@class, ' topic/image ')]" mode="imagemap-image">
  <xsl:apply-templates select="@href|@height|@width"/>
   <xsl:choose>
-    <xsl:when test="longdescref">
-      <xsl:apply-templates select="longdescref"/>
+    <xsl:when test="*[contains(@class, ' topic/longdescref ')]">
+      <xsl:apply-templates select="*[contains(@class, ' topic/longdescref ')]"/>
     </xsl:when>
     <xsl:otherwise>
       <xsl:apply-templates select="@longdescref"/>
     </xsl:otherwise>
+  </xsl:choose>
+  <xsl:choose>
+    <xsl:when test="*[contains(@class,' topic/alt ')]">
+      <xsl:attribute name="alt"><xsl:apply-templates select="*[contains(@class,' topic/alt ')]" mode="text-only"/></xsl:attribute>
+    </xsl:when>
+    <xsl:when test="@alt">
+      <xsl:attribute name="alt"><xsl:value-of select="@alt"/></xsl:attribute>
+    </xsl:when>
   </xsl:choose>
 </xsl:template>
 
