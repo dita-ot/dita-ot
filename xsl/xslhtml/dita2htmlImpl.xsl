@@ -2538,8 +2538,8 @@
     <xsl:call-template name="commonattributes"/>
     <xsl:call-template name="setid"/>
     <xsl:choose>
-      <xsl:when test="longdescref">
-        <xsl:apply-templates select="longdescref"/>
+      <xsl:when test="*[contains(@class, ' topic/longdescref ')]">
+        <xsl:apply-templates select="*[contains(@class, ' topic/longdescref ')]"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:apply-templates select="@longdescref"/>
@@ -2619,7 +2619,7 @@
   </xsl:attribute>
 </xsl:template>
 
-<xsl:template match="*[contains(@class, ' topic/image ')]/longdescref">
+  <xsl:template match="*[contains(@class, ' topic/image ')]/*[contains(@class, ' topic/longdescref ')]">
   <xsl:if test="@href and not (@href='')">
     <xsl:attribute name="longdesc">
       <xsl:choose>
@@ -2652,7 +2652,7 @@
   <xsl:if test="@standby"><xsl:attribute name="standby"><xsl:value-of select="@standby"/></xsl:attribute></xsl:if>
   <xsl:if test="@width"><xsl:attribute name="width"><xsl:value-of select="@width"/></xsl:attribute></xsl:if>
   <xsl:if test="@name"><xsl:attribute name="name"><xsl:value-of select="@name"/></xsl:attribute></xsl:if>
-  <xsl:if test="@longdescref or longdescref">
+  <xsl:if test="@longdescref or *[contains(@class, ' topic/longdescref ')]">
     <xsl:apply-templates select="." mode="ditamsg:longdescref-on-object"/>
   </xsl:if>
   <xsl:apply-templates/>
