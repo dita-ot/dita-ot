@@ -75,6 +75,9 @@ public class GenListModuleReader extends AbstractXMLReader {
 	
 	/** Flag for keyref in parsing file */
 	private boolean hasKeyRef = false;
+	
+	/** Flag for whether parsing file contains coderef */
+	private boolean hasCodeRef = false;
 
 	/** Set of all the non-conref and non-copyto targets refered in current parsing file */
 	private Set nonConrefCopytoTargets = null;
@@ -206,6 +209,7 @@ public class GenListModuleReader extends AbstractXMLReader {
     	hasKeyRef = false;
 		hasConRef = false;
 		hasHref = false;
+		hasCodeRef = false;
 		currentDir = null;
 		insideExcludedElement = false;
 		excludedLevel = 0;
@@ -237,6 +241,15 @@ public class GenListModuleReader extends AbstractXMLReader {
 	 */
 	public boolean hasKeyRef(){
 		return hasKeyRef;
+	}
+	
+	/**
+	 * To see if the parsed file has coderef inside.
+	 * 
+	 * @return
+	 */
+	public boolean hasCodeRef(){
+		return hasCodeRef;
 	}
 
 	/**
@@ -429,6 +442,12 @@ public class GenListModuleReader extends AbstractXMLReader {
 			insideExcludedElement = true;
 			++excludedLevel;
 			return;
+		}
+		
+		//if current element is <coderef> or its specialization
+		//set hasCodeRef to true
+		if (attrValue != null && attrValue.contains(Constants.ATTR_CLASS_VALUE_CODEREF)){
+			hasCodeRef = true;
 		}
 		
 		/* 

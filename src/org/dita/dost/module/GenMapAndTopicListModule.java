@@ -72,6 +72,9 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 
 	/** Set of dita files containing conref */
 	private Set conrefSet = null;
+	
+	/** Set of topic files containing coderef */
+	private Set coderefSet = null;
 
 	/** Set of all images */
 	private Set imageSet = null;
@@ -188,6 +191,7 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 		conrefpushSet = new HashSet(Constants.INT_128);
 		keysDefMap = new HashMap<String, String>();
 		keyrefSet = new HashSet<String>(Constants.INT_128);
+		coderefSet = new HashSet<String>(Constants.INT_128);
 	}
 
 	/**
@@ -502,6 +506,10 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 			keyrefSet.add(currentFile);
 		}
 		
+		if(reader.hasCodeRef()){
+			coderefSet.add(currentFile);
+		}
+		
 		if (FileUtils.isDITATopicFile(lcasefn)) {
 			fullTopicSet.add(currentFile);
 			if (reader.hasHref()) {
@@ -780,6 +788,7 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 		addSetToProperties(prop, Constants.SUBSIDIARY_TARGET_LIST, subsidiarySet);
 		addSetToProperties(prop, Constants.CONREF_PUSH_LIST, conrefpushSet);
 		addSetToProperties(prop, Constants.KEYREF_LIST, keyrefSet);
+		addSetToProperties(prop, Constants.CODEREF_LIST, coderefSet);
 		
 		addFlagImagesSetToProperties(prop,Constants.REL_FLAGIMAGE_LIST,relFlagImagesSet);
 		

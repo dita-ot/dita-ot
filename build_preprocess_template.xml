@@ -12,7 +12,7 @@
   </condition>
 
   <target name="preprocess"
-    dita:depends="{depend.preprocess.pre},start-preprocess,clean-temp,gen-list,debug-filter,copy-files,conrefpush,conref,move-meta-entries,keyref,mapref,mappull,chunk,maplink,move-links,topicpull,{depend.preprocess.post}"
+    dita:depends="{depend.preprocess.pre},start-preprocess,clean-temp,gen-list,debug-filter,copy-files,conrefpush,conref,move-meta-entries,keyref,coderef,mapref,mappull,chunk,maplink,move-links,topicpull,{depend.preprocess.post}"
     xmlns:dita="http://dita-ot.sourceforge.net"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     description="Preprocessing ended" />
@@ -223,11 +223,31 @@
     </condition>
   </target>
   
+  <!-- coderef -->
+  <target name="coderef"
+    dita:depends="debug-filter,keyref,{depend.preprocess.coderef.pre},coderef-check"
+    xmlns:dita="http://dita-ot.sourceforge.net"
+    dita:extension="depends org.dita.dost.platform.InsertDependsAction"
+    unless="preprocess.coderef.skip"
+    description="Resolve coderef in input files">
+    
+    <pipeline message="Resolve coderef." module="Coderef"
+      basedir="${basedir}"
+      tempdir="${dita.temp.dir}" />
+      
+  </target>
+  
+  <target name="coderef-check">
+    <condition property="preprocess.coderef.skip">
+      <isset property="noCoderef"/>
+    </condition>
+  </target>
+  
   <!-- mapref
       Produce a logical super-map from the map references
       (topicref with format="ditamap") in the input map. -->
   <target name="mapref" 
-    dita:depends="keyref,{depend.preprocess.mapref.pre},mapref-check"
+    dita:depends="coderef,{depend.preprocess.mapref.pre},mapref-check"
     xmlns:dita="http://dita-ot.sourceforge.net"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     unless="preprocess.mapref.skip"

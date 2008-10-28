@@ -169,6 +169,7 @@ public abstract class Constants {
     public static final String CONREF_PUSH_LIST = "conrefpushlist";
     public static final String KEY_LIST = "keylist";
     public static final String KEYREF_LIST = "keyreflist";
+    public static final String CODEREF_LIST = "codereflist";
 
     /**
      * Constants for common params used in ant invoker.
@@ -298,6 +299,7 @@ public abstract class Constants {
 	public static final String ATTR_CLASS_VALUE_RELTABLE = " map/reltable ";
 	public static final String ATTR_CLASS_VALUE_METADATA = " topic/metadata ";
 	public static final String ATTR_CLASS_VALUE_TOPICHEAD = " mapgroup-d/topichead ";
+	public static final String ATTR_CLASS_VALUE_CODEREF = " pr-d/coderef ";
 	
     /**
      * constants for filtering or flagging.
