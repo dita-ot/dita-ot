@@ -1965,7 +1965,7 @@
       <xsl:variable name="displaytext">
         <xsl:choose>
           <xsl:when test="normalize-space(text())!=''">
-            <xsl:value-of select="normalize-space(text())"/>
+            <xsl:value-of select="text()"/>
           </xsl:when>
         <xsl:otherwise>
           <xsl:choose>
