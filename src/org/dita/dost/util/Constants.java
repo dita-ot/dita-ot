@@ -56,6 +56,7 @@ public abstract class Constants {
     public static final String FILE_EXTENSION_SVG = ".svg";
     public static final String FILE_EXTENSION_TIFF = ".tiff";
 	public static final String FILE_EXTENSION_TIF = ".tif";
+	public static final String FILE_EXTENSION_PDF = ".pdf";
     
     /**
      * Constants for element names in dita files.
@@ -86,6 +87,14 @@ public abstract class Constants {
     public static final String ELEMENT_NAME_ENTRY = "entry";
     public static final String ELEMENT_NAME_COLSPEC = "colspec";
     public static final String ELEMENT_NAME_TOPIC = "topic";
+    public static final String ELEMENT_NAME_GLOSSENTRY = "glossentry";
+    public static final String ELEMENT_NAME_GLOSSTERM = "glossterm";
+    public static final String ELEMENT_NAME_GLOSSSURFACEFORM = "glossSurfaceForm";
+    public static final String ELEMENT_NAME_GLOSSACRONYM = "glossAcronym";
+    public static final String ELEMENT_NAME_GLOSSSTATUS = "glossStatus";
+    public static final String ELEMENT_NAME_GLOSSSYNONYM = "glossSynonym";
+    public static final String ELEMENT_NAME_GLOSSABBREVIATION = "glossAbbreviation";
+    public static final String ELEMENT_NAME_GLOSSSHORTFORM = "glossShortForm";
     
     /**
      * Constants for attribute names in dita files.

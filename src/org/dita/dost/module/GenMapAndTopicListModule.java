@@ -530,6 +530,10 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 		if (FileUtils.isHTMLFile(lcasefn)) {
 			htmlSet.add(file);
 		}
+		
+		if (FileUtils.isPDFFile(lcasefn)) {
+			htmlSet.add(file);
+		}
 	}
 
 	/*

@@ -44,6 +44,18 @@ public class FileUtils {
 		return (lcasefn.endsWith(Constants.FILE_EXTENSION_HTML) || lcasefn
 				.endsWith(Constants.FILE_EXTENSION_HTM));
 	}
+	
+	/**
+	 * Return if the file is a pdf file by its extension.
+	 * 
+	 * @param lcasefn
+	 *            File name in lower case.
+	 * @return <code>TRUE</code> if lcasefn contains an extension of "pdf",
+	 *         <code>FALSE</code> otherwise.
+	 */
+	public static boolean isPDFFile(String lcasefn) {
+		return (lcasefn.endsWith(Constants.FILE_EXTENSION_PDF));
+	}
 
 	/**
 	 * Return if the file is a dita file by extension
@@ -134,7 +146,8 @@ public class FileUtils {
 				|| lcasefn.endsWith(Constants.FILE_EXTENSION_PNG)
 				|| lcasefn.endsWith(Constants.FILE_EXTENSION_SVG)
 				|| lcasefn.endsWith(Constants.FILE_EXTENSION_TIFF)
-				|| lcasefn.endsWith(Constants.FILE_EXTENSION_TIF);
+				|| lcasefn.endsWith(Constants.FILE_EXTENSION_TIF)
+				|| lcasefn.endsWith(Constants.FILE_EXTENSION_PDF);
 	}
 
 	/**
