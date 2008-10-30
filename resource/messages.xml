@@ -579,6 +579,16 @@
     <reason>The link or cross reference target %1 cannot be found, this may cause error when the processor tries to create the link or cross reference in output.</reason>
     <response>Make sure the reference ids for topic and element are correct.</response>
   </message>
+  
+  <message id="DOTX058W" type="WARN">
+    <reason>No glossary id was found to be associated with key '%1'. Appropriate forms will be guessed from glossary entry contents by application contexts.</reason>
+    <response>Specify the glossary id when referring to a glossary in glossentry tag.</response>
+  </message>
+  
+  <message id="DOTX059I" type="INFO">
+    <reason>No language specification was found when referring to a glossary, falling back to default language 'en'.</reason>
+    <response>Speicify language preference when referring to a glossary.</response>
+  </message>
   <!-- End of XSL Messages --> 
   
 </messages>

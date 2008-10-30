@@ -1918,6 +1918,7 @@
     </xsl:call-template>
   </dfn>
 </xsl:template>
+
 <!-- terms and abbreviated-forms -->
 <xsl:template match="*[contains(@class,' topic/term ')]" name="topic.term">
   <xsl:variable name="keys" select="@keyref"/>
@@ -1930,11 +1931,39 @@
       <xsl:variable name="updatedTarget">
         <xsl:apply-templates select="." mode="find-keyref-target"/>
       </xsl:variable>
+
+      <!-- Glossary entry file we need to examine for appropriate forms -->
+      <xsl:variable name="entryfile">
+        <xsl:value-of select="concat($WORKDIR, $PATH2PROJ, substring-before($target, '.'), '.xml')"/>
+      </xsl:variable>
+      <!-- Save glossary entry file contents into a variable to workaround the infamous putDocumentCache error in Xalan -->
+      <xsl:variable name="entry-file-contents" select="document($entryfile, /)"/>
+      <!-- Glossary id defined in <glossentry> -->
+      <xsl:variable name="glossid">
+        <xsl:value-of select="substring-after($updatedTarget, '#')"/>
+      </xsl:variable>
       <!--
           Language preference.
           NOTE: glossid overrides language preference.
       -->
-      <xsl:variable name="preferlang">
+      <xsl:variable name="entrylang">
+        <xsl:choose>
+          <xsl:when test="$glossid='' and $entry-file-contents//glossentry[1]/@xml:lang">
+            <xsl:value-of select="$entry-file-contents//glossentry[1]/@xml:lang"/>
+          </xsl:when>
+          <xsl:when test="$glossid!='' and $entry-file-contents//glossentry[@id=$glossid]/@xml:lang">
+            <xsl:value-of select="$entry-file-contents//glossentry[@id=$glossid]/@xml:lang"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:call-template name="output-message">
+              <xsl:with-param name="msgnum">059</xsl:with-param>
+              <xsl:with-param name="msgsev">I</xsl:with-param>
+            </xsl:call-template>
+            <xsl:value-of select="'en'"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:variable>
+      <xsl:variable name="reflang">
         <xsl:choose>
           <xsl:when test="@xml:lang">
             <xsl:value-of select="@xml:lang"/>
@@ -1945,20 +1974,31 @@
               <xsl:when test="document($keydefsource)//*[contains(@keys, $keys)]/@xml:lang">
                 <xsl:value-of select="document($keydefsource)//*[contains(@keys, $keys)]/@xml:lang"/>
               </xsl:when>
-              <xsl:otherwise>en</xsl:otherwise>
+              <xsl:otherwise>
+                <xsl:call-template name="output-message">
+                  <xsl:with-param name="msgnum">059</xsl:with-param>
+                  <xsl:with-param name="msgsev">I</xsl:with-param>
+                </xsl:call-template>
+                <xsl:value-of select="'en'"/>
+              </xsl:otherwise>
             </xsl:choose>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:variable>
-      <!-- Glossary entry file we need to examine for appropriate forms -->
-      <xsl:variable name="entryfile">
-        <xsl:value-of select="concat($WORKDIR, $PATH2PROJ, substring-before($target, '.'), '.xml')"/>
-      </xsl:variable>
-      <!-- Save glossary entry file contents into a variable to workaround the infamous putDocumentCache error in Xalan -->
-      <xsl:variable name="entry-file-contents" select="document($entryfile, /)"/>
-      <!-- Glossary id defined in <glossentry> -->
-      <xsl:variable name="glossid">
-        <xsl:value-of select="substring-after($updatedTarget, '#')"/>
+      <xsl:variable name="preferlang">
+        <xsl:choose>
+          <xsl:when test="$entrylang=$reflang">
+            <xsl:value-of select="$entrylang"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:call-template name="output-message">
+              <xsl:with-param name="msgnum">001</xsl:with-param>
+              <xsl:with-param name="msgsev">W</xsl:with-param>
+              <xsl:with-param name="msgparams">%1=<xsl:value-of select="$keys"/>;%2=<xsl:value-of select="$reflang"/>;%3=<xsl:value-of select="$entrylang"/></xsl:with-param>
+            </xsl:call-template>
+            <xsl:value-of select="$entrylang"/>
+          </xsl:otherwise>
+        </xsl:choose>
       </xsl:variable>
 
       <!-- Text should be displayed -->
@@ -1987,9 +2027,11 @@
                   </xsl:choose>
                 </xsl:when>
                 <xsl:otherwise>
-                  <xsl:message>
-                    Warning: No glossary id specified, guessing from the glossary definition content.
-                  </xsl:message>
+                  <xsl:call-template name="output-message">
+                    <xsl:with-param name="msgnum">058</xsl:with-param>
+                    <xsl:with-param name="msgsev">W</xsl:with-param>
+                    <xsl:with-param name="msgparams">%1=<xsl:value-of select="$keys"/></xsl:with-param>
+                  </xsl:call-template>
                   <xsl:choose>
                     <xsl:when
                          test="boolean($entry-file-contents//glossentry[lang($preferlang) or not(@xml:lang)][1]/glossBody/glossSurfaceForm[normalize-space(text())!=''])">
@@ -2047,9 +2089,11 @@
                   </xsl:choose>
                 </xsl:when>
                 <xsl:otherwise>
-                  <xsl:message>
-                    Warning: No glossary id specified, guessing from the glossary definition content.
-                  </xsl:message>
+                  <xsl:call-template name="output-message">
+                    <xsl:with-param name="msgnum">058</xsl:with-param>
+                    <xsl:with-param name="msgsev">W</xsl:with-param>
+                    <xsl:with-param name="msgparams">%1=<xsl:value-of select="$keys"/></xsl:with-param>
+                  </xsl:call-template>
                   <xsl:choose>
                     <xsl:when
                          test="
@@ -2113,9 +2157,11 @@
             </xsl:choose>
           </xsl:when>
           <xsl:otherwise>
-            <xsl:message>
-              Warning: No glossary id specified, guessing from the glossary definition content.
-            </xsl:message>
+            <xsl:call-template name="output-message">
+              <xsl:with-param name="msgnum">058</xsl:with-param>
+              <xsl:with-param name="msgsev">W</xsl:with-param>
+              <xsl:with-param name="msgparams">%1=<xsl:value-of select="$keys"/></xsl:with-param>
+            </xsl:call-template>
             <xsl:choose>
               <xsl:when
                    test="boolean($entry-file-contents//glossentry[lang($preferlang) or @xml:lang='en' or not(@xml:lang)]//glossBody/glossSurfaceForm[normalize-space(text())!=''])">
@@ -2144,7 +2190,6 @@
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
-
 
 <!-- =========== BOOLEAN-STATE DATA TYPES =========== -->
 <!-- Use color to indicate these types for now -->
