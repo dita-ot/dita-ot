@@ -23,9 +23,8 @@ import java.util.Set;
 
 import javax.xml.parsers.SAXParser;
 
-import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.exception.DITAOTException;
-
+import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.log.MessageBean;
 import org.dita.dost.log.MessageUtils;
@@ -33,16 +32,14 @@ import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.Constants;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.FilterUtils;
-import org.dita.dost.util.StringUtils;
 import org.dita.dost.util.OutputUtils;
-
+import org.dita.dost.util.StringUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
-
+import org.xml.sax.SAXException;
 import org.xml.sax.SAXNotRecognizedException;
 import org.xml.sax.SAXNotSupportedException;
 import org.xml.sax.SAXParseException;
-import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
@@ -443,13 +440,7 @@ public class GenListModuleReader extends AbstractXMLReader {
 			++excludedLevel;
 			return;
 		}
-		
-		//if current element is <coderef> or its specialization
-		//set hasCodeRef to true
-		if (attrValue != null && attrValue.contains(Constants.ATTR_CLASS_VALUE_CODEREF)){
-			hasCodeRef = true;
-		}
-		
+				
 		/* 
 		 * For ditamap, set it to valid if element <map> or extended from 
 		 * <map> was found, this kind of element's class attribute must 
@@ -524,6 +515,7 @@ public class GenListModuleReader extends AbstractXMLReader {
 	private void parseAttribute(Attributes atts, String attrName) throws SAXException {
 		String attrValue = atts.getValue(attrName);
 		String filename = null;
+		String attrClass = atts.getValue(Constants.ATTRIBUTE_NAME_CLASS);
 		String attrScope = atts.getValue(Constants.ATTRIBUTE_NAME_SCOPE);
 		String attrFormat = atts.getValue(Constants.ATTRIBUTE_NAME_FORMAT);
 		String attrType = atts.getValue(Constants.ATTRIBUTE_NAME_TYPE);
@@ -536,11 +528,18 @@ public class GenListModuleReader extends AbstractXMLReader {
 		if (Constants.ATTRIBUTE_NAME_CONREF.equals(attrName) || Constants.ATTRIBUTE_NAME_CONKEYREF.equals(attrName)) {
 			hasConRef = true;
 		} else if (Constants.ATTRIBUTE_NAME_HREF.equals(attrName)) {
-			hasHref = true;
+			if(attrClass != null && 
+					attrClass.contains(Constants.ATTR_CLASS_VALUE_CODEREF) ){
+				//if current element is <coderef> or its specialization
+				//set hasCodeRef to true
+				hasCodeRef = true;
+			}else{
+				hasHref = true;
+			}			
 		} else if(Constants.ATTRIBUTE_NAME_KEYREF.equals(attrName)){
 			hasKeyRef = true;
 		}
-		
+				
 		// collect the key definitions
 		if(Constants.ATTRIBUTE_NAME_KEYS.equals(attrName) && !attrValue.equals(Constants.STRING_EMPTY)){
 			String target = atts.getValue(Constants.ATTRIBUTE_NAME_HREF);
@@ -596,8 +595,10 @@ public class GenListModuleReader extends AbstractXMLReader {
 			
 		}
 		
-		if ("DITA-foreign".equals(attrType) &&
-				Constants.ATTRIBUTE_NAME_DATA.equals(attrName)){
+		if (("DITA-foreign".equals(attrType) &&
+				Constants.ATTRIBUTE_NAME_DATA.equals(attrName))
+				|| attrClass!=null && attrClass.contains(Constants.ATTR_CLASS_VALUE_CODEREF)){
+			
 			subsidiarySet.add(filename);
 			return;
 		}

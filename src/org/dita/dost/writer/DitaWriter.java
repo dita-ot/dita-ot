@@ -143,6 +143,7 @@ public class DitaWriter extends AbstractXMLWriter {
     private  static boolean warnOfNoneTopicFormat(Attributes attrs,String valueOfHref){
     	String hrefValue=valueOfHref;
     	String formatValue=attrs.getValue(Constants.ATTRIBUTE_NAME_FORMAT);
+    	String classValue=attrs.getValue(Constants.ATTRIBUTE_NAME_CLASS);
     	String extOfHref=getExtName(valueOfHref);
     	DITAOTJavaLogger logger=new DITAOTJavaLogger();
 		Properties params = new Properties();
@@ -151,6 +152,9 @@ public class DitaWriter extends AbstractXMLWriter {
 			return true;
 		}
 		else{
+			if(classValue!=null && classValue.contains(Constants.ATTR_CLASS_VALUE_CODEREF)){
+				return true;
+			}
 			if(formatValue==null && extOfHref!=null && !extOfHref.equalsIgnoreCase("DITA") && !extOfHref.equalsIgnoreCase("XML") ){
 				logger.logError(MessageUtils.getMessage("DOTJ028E", params).toString());
 				return true;
@@ -926,7 +930,8 @@ public class DitaWriter extends AbstractXMLWriter {
             // start to parse the file and direct to output in the temp
             // directory
             reader.setErrorHandler(new DITAOTXMLErrorHandler(traceFilename));
-            reader.parse(traceFilename);
+            reader.parse(new InputSource(new FileInputStream(new File(traceFilename))));
+//            reader.parse(traceFilename);
             
             output.close();
         } catch (Exception e) {
