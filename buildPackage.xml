@@ -96,6 +96,8 @@
   	<include name="demo/faq/**"/>
   	<include name="demo/h2d/**"/>
   	<include name="demo/java/**"/>
+  	<include name="demo/dita12/**"/>
+  	<include name="demo/dita132/**"/>
     <include name="doc/**"/>
     <include name="dtd/**"/>
     <include name="plugins/**"/>
@@ -205,6 +207,10 @@
       	<include name="lib/APACHE-LICENSE-2_0.html"/>
 		<include name="lib/ICU_License.html"/>
 		<exclude name="buildPackage.xml" />
+		<exclude name="startcmd.sh"/>
+      </tarfileset>
+      <tarfileset mode="755" dir="./" prefix="${package.name.root}${version}">
+        <include name="startcmd.sh"/>
       </tarfileset>
     </tar>
   </target>
