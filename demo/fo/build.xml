@@ -148,6 +148,7 @@ with those set forth herein.
     		<or>
 	            <equals arg1="${ws.runtime.publishing.map.dita.version}" arg2="1.0"/>
 	            <equals arg1="${ws.runtime.publishing.map.dita.version}" arg2="1.1"/>
+	            <equals arg1="${ws.runtime.publishing.map.dita.version}" arg2="1.2"/>
 			</or>
         </condition>
 
