@@ -2,7 +2,7 @@ package com.idiominc.ws.opentopic.fo.i18n;
 
 
 /*
-Copyright © 2004-2006 by Idiom Technologies, Inc. All rights reserved. 
+Copyright (c) 2004-2006 by Idiom Technologies, Inc. All rights reserved. 
 IDIOM is a registered trademark of Idiom Technologies, Inc. and WORLDSERVER
 and WORLDSTART are trademarks of Idiom Technologies, Inc. All other 
 trademarks are the property of their respective owners. 
