@@ -40,7 +40,7 @@ with those set forth herein.
 
 	<!-- configure FO engines -->
 	<property name="pdf.formatter" value="xep"/>
-	<property name="fop.home" value="c:/work/fop-0.93"/>
+	<property name="fop.home" value="${basedir}/fop"/>
 	<condition property="use.xep.pdf.formatter">
 		<equals arg1="${pdf.formatter}" arg2="xep"/>
 	</condition>
