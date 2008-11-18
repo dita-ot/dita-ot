@@ -1919,25 +1919,106 @@
   </dfn>
 </xsl:template>
 
+<!-- Templates for internal usage in terms/abbreviation resolving -->
+<xsl:template name="getMatchingTarget" xmlns:exsl="http://exslt.org/common">
+  <xsl:param name="m_glossid" select="''"/>
+  <xsl:param name="m_entry-file-contents"/>
+  <xsl:param name="m_reflang" select="en_US"/>
+  <xsl:choose>
+    <xsl:when test="$m_glossid='' and $m_entry-file-contents//*[contains(@class, ' glossentry/glossentry ')][lang($m_reflang)]">
+      <xsl:copy-of select="$m_entry-file-contents//*[contains(@class, ' glossentry/glossentry ')][lang($m_reflang)]"/>
+    </xsl:when>
+    <xsl:when test="not($m_glossid='') and $m_entry-file-contents//*[contains(@class, ' glossentry/glossentry ')][@id=$m_glossid][lang($m_reflang)]">
+      <xsl:copy-of select="$m_entry-file-contents//*[contains(@class, ' glossentry/glossentry ')][@id=$m_glossid][lang($m_reflang)]"/>
+    </xsl:when>
+    <xsl:when test="$m_glossid='' and $m_entry-file-contents//*[contains(@class, ' glossentry/glossentry ')][lang($DEFAULTLANG)]">
+      <xsl:copy-of select="$m_entry-file-contents//*[contains(@class, ' glossentry/glossentry ')][lang($DEFAULTLANG)]"/>
+    </xsl:when>
+    <xsl:when test="not($m_glossid='') and $m_entry-file-contents//*[contains(@class, ' glossentry/glossentry ')][@id=$m_glossid][lang($DEFAULTLANG)]">
+      <xsl:copy-of select="$m_entry-file-contents//*[contains(@class, ' glossentry/glossentry ')][@id=$m_glossid][lang($DEFAULTLANG)]"/>
+    </xsl:when>
+    <xsl:when test="$m_glossid='' and $m_entry-file-contents//*[contains(@class, ' glossentry/glossentry ')][not(@xml:lang) or normalize-space(@xml:lang)='']">
+      <xsl:copy-of select="$m_entry-file-contents//*[contains(@class, ' glossentry/glossentry ')][not(@xml:lang) or normalize-space(@xml:lang)=''][1]"/>
+    </xsl:when>
+    <xsl:when test="not($m_glossid='') and $m_entry-file-contents//*[contains(@class, ' glossentry/glossentry ')][@id=$m_glossid][not(@xml:lang) or normalize-space(@xml:lang)='']">
+      <xsl:copy-of select="$m_entry-file-contents//*[contains(@class, ' glossentry/glossentry ')][@id=$m_glossid][not(@xml:lang) or normalize-space(@xml:lang)=''][1]"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:value-of select="'#none#'"/>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+<xsl:template name="getMatchingSurfaceForm" xmlns:exsl="http://exslt.org/common">
+  <xsl:param name="m_matched-target"/>
+  <xsl:param name="m_keys"/>
+  <xsl:choose>
+    <xsl:when test="not($m_matched-target='#none#')">
+      <xsl:choose>
+        <xsl:when test="exsl:node-set($m_matched-target)/*[contains(@class, ' glossentry/glossentry ')][1]//*[contains(@class, ' glossentry/glossSurfaceForm ')][normalize-space(text())!='']">
+          <xsl:value-of select="exsl:node-set($m_matched-target)/*[contains(@class, ' glossentry/glossentry ')][1]//*[contains(@class, ' glossentry/glossSurfaceForm ')][normalize-space(text())!='']"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="exsl:node-set($m_matched-target)/*[contains(@class, ' glossentry/glossentry ')][1]//*[contains(@class, ' glossentry/glossterm ')][normalize-space(text())!='']"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:call-template name="output-message">
+        <xsl:with-param name="msgnum">058</xsl:with-param>
+        <xsl:with-param name="msgsev">W</xsl:with-param>
+        <xsl:with-param name="msgparams">%1=<xsl:value-of select="$m_keys"/></xsl:with-param>
+      </xsl:call-template>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+<xsl:template name="getMatchingAcronym" xmlns:exsl="http://exslt.org/common">
+  <xsl:param name="m_matched-target"/>
+  <xsl:param name="m_keys"/>
+  <xsl:choose>
+    <xsl:when test="not($m_matched-target='#none#')">
+      <xsl:choose>
+        <xsl:when test="exsl:node-set($m_matched-target)/*[contains(@class, ' glossentry/glossentry ')][1]//*[contains(@class, ' glossentry/glossStatus ')][@value='preferred'][1]/preceding-sibling::*[contains(@class, ' glossentry/glossAcronym ') or contains(@class, ' glossentry/glossAbbreviation ')][normalize-space(text())!='']">
+          <xsl:value-of select="exsl:node-set($m_matched-target)/*[contains(@class, ' glossentry/glossentry ')][1]//*[contains(@class, ' glossentry/glossStatus ')][@value='preferred'][1]/preceding-sibling::*[contains(@class, ' glossentry/glossAcronym ') or contains(@class, ' glossentry/glossAbbreviation ')][normalize-space(text())!='']"/>
+        </xsl:when>
+        <xsl:when test="exsl:node-set($m_matched-target)/*[contains(@class, ' glossentry/glossentry ')][1]//*[contains(@class, ' glossentry/glossStatus ')][@value!='prohibited'][@value!='obsolete'][1]/preceding-sibling::*[contains(@class, ' glossentry/glossAcronym ') or contains(@class, ' glossentry/glossAbbreviation ')][normalize-space(text())!='']">
+          <xsl:value-of select="exsl:node-set($m_matched-target)/*[contains(@class, ' glossentry/glossentry ')][1]//*[contains(@class, ' glossentry/glossStatus ')][@value!='prohibited'][@value!='obsolete'][1]/preceding-sibling::*[contains(@class, ' glossentry/glossAcronym ') or contains(@class, ' glossentry/glossAbbreviation ')][normalize-space(text())!='']"/>
+        </xsl:when>
+        <xsl:when test="exsl:node-set($m_matched-target)/*[contains(@class, ' glossentry/glossentry ')][1]//*[contains(@class, ' glossentry/glossAlt ')][1]/*[contains(@class, ' glossentry/glossAcronym ') or contains(@class, ' glossentry/glossAbbreviation ')][count(following-sibling::glossStatus)=0][normalize-space(text())!='']">
+          <xsl:value-of select="exsl:node-set($m_matched-target)/*[contains(@class, ' glossentry/glossentry ')][1]//*[contains(@class, ' glossentry/glossAlt ')][1]/*[contains(@class, ' glossentry/glossAcronym ') or contains(@class, ' glossentry/glossAbbreviation ')][count(following-sibling::glossStatus)=0][normalize-space(text())!='']"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="exsl:node-set($m_matched-target)/*[contains(@class, ' glossentry/glossentry ')][1]/*[contains(@class, ' glossentry/glossterm ')][normalize-space(text())!='']"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:when>
+    <xsl:otherwise>
+      <!-- No matching entries found with reference language or default language. -->
+      <xsl:call-template name="output-message">
+        <xsl:with-param name="msgnum">058</xsl:with-param>
+        <xsl:with-param name="msgsev">W</xsl:with-param>
+        <xsl:with-param name="msgparams">%1=<xsl:value-of select="$m_keys"/></xsl:with-param>
+      </xsl:call-template>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+<xsl:key name="keyref" match="*[contains(@class, ' topic/term ')]" use="@keyref"/>
 <!-- terms and abbreviated-forms -->
 <xsl:template match="*[contains(@class,' topic/term ')]" name="topic.term">
   <xsl:variable name="keys" select="@keyref"/>
   <xsl:choose>
-    <xsl:when test="@keyref and document($KEYREF-FILE)//*[contains(@keys, $keys)]/@href">
+    <xsl:when test="@keyref and document($KEYREF-FILE)//*[@keys=$keys]/@href">
       <xsl:variable name="target">
-        <!-- <xsl:value-of select="$keydef-file//*[contains(@keys,$keys)]/@href"/> -->
-          <xsl:value-of select="document($KEYREF-FILE)//*[contains(@keys, $keys)]/@href"/>
+        <xsl:value-of select="document($KEYREF-FILE)//*[@keys=$keys]/@href"/>
       </xsl:variable>
       <xsl:variable name="updatedTarget">
         <xsl:apply-templates select="." mode="find-keyref-target"/>
       </xsl:variable>
 
-      <!-- Glossary entry file we need to examine for appropriate forms -->
-      <xsl:variable name="entryfile">
-        <xsl:value-of select="concat($WORKDIR, $PATH2PROJ, substring-before($target, '.'), '.xml')"/>
-      </xsl:variable>
       <!-- Save glossary entry file contents into a variable to workaround the infamous putDocumentCache error in Xalan -->
-      <xsl:variable name="entry-file-contents" select="document($entryfile, /)"/>
+        <xsl:variable name="entry-file-contents" select="document(concat($WORKDIR, $PATH2PROJ, substring-before($target, '.'), '.xml'), /)"/>
       <!-- Glossary id defined in <glossentry> -->
       <xsl:variable name="glossid">
         <xsl:value-of select="substring-after($updatedTarget, '#')"/>
@@ -1946,191 +2027,37 @@
           Language preference.
           NOTE: glossid overrides language preference.
       -->
-      <xsl:variable name="entrylang">
-        <xsl:choose>
-          <xsl:when test="$glossid='' and $entry-file-contents//glossentry[1]/@xml:lang">
-            <xsl:value-of select="$entry-file-contents//glossentry[1]/@xml:lang"/>
-          </xsl:when>
-          <xsl:when test="$glossid!='' and $entry-file-contents//glossentry[@id=$glossid]/@xml:lang">
-            <xsl:value-of select="$entry-file-contents//glossentry[@id=$glossid]/@xml:lang"/>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:call-template name="output-message">
-              <xsl:with-param name="msgnum">059</xsl:with-param>
-              <xsl:with-param name="msgsev">I</xsl:with-param>
-            </xsl:call-template>
-            <xsl:value-of select="'en'"/>
-          </xsl:otherwise>
-        </xsl:choose>
-      </xsl:variable>
       <xsl:variable name="reflang">
-        <xsl:choose>
-          <xsl:when test="@xml:lang">
-            <xsl:value-of select="@xml:lang"/>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:variable name="keydefsource" select="document($KEYREF-FILE)//*[contains(@keys, $keys)]/@source"/>
-            <xsl:choose>
-              <xsl:when test="document($keydefsource)//*[contains(@keys, $keys)]/@xml:lang">
-                <xsl:value-of select="document($keydefsource)//*[contains(@keys, $keys)]/@xml:lang"/>
-              </xsl:when>
-              <xsl:otherwise>
-                <xsl:call-template name="output-message">
-                  <xsl:with-param name="msgnum">059</xsl:with-param>
-                  <xsl:with-param name="msgsev">I</xsl:with-param>
-                </xsl:call-template>
-                <xsl:value-of select="'en'"/>
-              </xsl:otherwise>
-            </xsl:choose>
-          </xsl:otherwise>
-        </xsl:choose>
+        <xsl:call-template name="getLowerCaseLang"/>
       </xsl:variable>
-      <xsl:variable name="preferlang">
-        <xsl:choose>
-          <xsl:when test="$entrylang=$reflang">
-            <xsl:value-of select="$entrylang"/>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:call-template name="output-message">
-              <xsl:with-param name="msgnum">001</xsl:with-param>
-              <xsl:with-param name="msgsev">W</xsl:with-param>
-              <xsl:with-param name="msgparams">%1=<xsl:value-of select="$keys"/>;%2=<xsl:value-of select="$reflang"/>;%3=<xsl:value-of select="$entrylang"/></xsl:with-param>
-            </xsl:call-template>
-            <xsl:value-of select="$entrylang"/>
-          </xsl:otherwise>
-        </xsl:choose>
+      <xsl:variable name="matched-target">
+        <xsl:call-template name="getMatchingTarget">
+          <xsl:with-param name="m_entry-file-contents" select="$entry-file-contents"/>
+          <xsl:with-param name="m_glossid" select="$glossid"/>
+          <xsl:with-param name="m_reflang" select="$reflang"/>
+        </xsl:call-template>
       </xsl:variable>
+      <!-- End: Language preference. -->
 
       <!-- Text should be displayed -->
       <xsl:variable name="displaytext">
         <xsl:choose>
           <xsl:when test="normalize-space(text())!=''">
-            <xsl:value-of select="text()"/>
+            <xsl:value-of select="''"/>
           </xsl:when>
-        <xsl:otherwise>
-          <xsl:choose>
-            <xsl:when test="boolean(ancestor::copyright)">
-              <xsl:choose>
-                <xsl:when test="$glossid!=''">
-                  <xsl:choose>
-                    <xsl:when
-                         test="boolean($entry-file-contents//glossentry[@id=$glossid]/glossBody/glossSurfaceForm[normalize-space(text())!=''])">
-                      <xsl:value-of
-                           select="$entry-file-contents//glossentry[@id=$glossid]/glossBody/glossSurfaceForm[normalize-space(text())!='']"
-                      />
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <xsl:value-of
-                           select="$entry-file-contents//glossentry[@id=$glossid]/glossterm"
-                      />
-                    </xsl:otherwise>
-                  </xsl:choose>
-                </xsl:when>
-                <xsl:otherwise>
-                  <xsl:call-template name="output-message">
-                    <xsl:with-param name="msgnum">058</xsl:with-param>
-                    <xsl:with-param name="msgsev">W</xsl:with-param>
-                    <xsl:with-param name="msgparams">%1=<xsl:value-of select="$keys"/></xsl:with-param>
-                  </xsl:call-template>
-                  <xsl:choose>
-                    <xsl:when
-                         test="boolean($entry-file-contents//glossentry[lang($preferlang) or not(@xml:lang)][1]/glossBody/glossSurfaceForm[normalize-space(text())!=''])">
-                      <xsl:value-of
-                           select="$entry-file-contents//glossentry[lang($preferlang) or not(@xml:lang)][1]/glossBody/glossSurfaceForm[normalize-space(text())!='']"
-                      />
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <xsl:value-of
-                           select="$entry-file-contents//glossentry[lang($preferlang) or not(@xml:lang)][1]/glossterm"
-                      />
-                    </xsl:otherwise>
-                  </xsl:choose>
-                </xsl:otherwise>
-              </xsl:choose>
-            </xsl:when>
-            <xsl:otherwise>
-              <xsl:choose>
-                <xsl:when test="$glossid!=''">
-                  <xsl:choose>
-                    <xsl:when
-                         test="
-                         $entry-file-contents//glossentry[@id=$glossid]//glossStatus[@value='preferred'][1]/preceding-sibling::*[contains(@class, ' glossentry/glossAcronym ') or contains(@class, ' glossentry/glossAbbreviation ')][normalize-space(text())!='']
-                         or $entry-file-contents//glossentry[@id=$glossid]//glossStatus[@value='preferred'][1]/following-sibling::*[contains(@class, ' glossentry/glossAcronym ') or contains(@class, ' glossentry/glossAbbreviation ')][normalize-space(text())!='']"
-                    >
-                      <xsl:value-of
-                           select="
-                           $entry-file-contents//glossentry[@id=$glossid]//glossStatus[@value='preferred'][1]/preceding-sibling::*[contains(@class, ' glossentry/glossAcronym ') or contains(@class, ' glossentry/glossAbbreviation ')][normalize-space(text())!='']
-                           | $entry-file-contents//glossentry[@id=$glossid]//glossStatus[@value='preferred'][1]/following-sibling::*[contains(@class, ' glossentry/glossAcronym ') or contains(@class, ' glossentry/glossAbbreviation ')][normalize-space(text())!='']"/>
-                    </xsl:when>
-                    <xsl:when
-                         test="
-                         $entry-file-contents//glossentry[@id=$glossid]//glossStatus[@value!='prohibited'][@value!='obsolete'][1]/preceding-sibling::*[contains(@class, ' glossentry/glossAcronym ') or contains(@class, ' glossentry/glossAbbreviation ')][normalize-space(text())!='']
-                         or $entry-file-contents//glossentry[@id=$glossid]//glossStatus[@value!='prohibited'][@value!='obsolete'][1]/following-sibling::*[contains(@class, ' glossentry/glossAcronym ') or contains(@class, ' glossentry/glossAbbreviation ')][normalize-space(text())!='']"
-                    >
-                      <xsl:value-of
-                           select="
-                           $entry-file-contents//glossentry[@id=$glossid]//glossStatus[@value!='prohibited'][@value!='obsolete'][1]/preceding-sibling::*[contains(@class, ' glossentry/glossAcronym ') or contains(@class, ' glossentry/glossAbbreviation ')][normalize-space(text())!='']
-                           | $entry-file-contents//glossentry[@id=$glossid]//glossStatus[@value!='prohibited'][@value!='obsolete'][1]/following-sibling::*[contains(@class, ' glossentry/glossAcronym ') or contains(@class, ' glossentry/glossAbbreviation ')][normalize-space(text())!='']"/>
-                    </xsl:when>
-                    <xsl:when
-                         test="
-                         $entry-file-contents//glossentry[@id=$glossid]//glossAlt/*[contains(@class, ' glossentry/glossAcronym ') or contains(@class, ' glossentry/glossAbbreviation ')][count(following-sibling::glossStatus)=0][normalize-space(text())!='']
-                         or $entry-file-contents//glossentry[@id=$glossid]//glossAlt/*[contains(@class, ' glossentry/glossAcronym ') or contains(@class, ' glossentry/glossAbbreviation ')][count(preceding-sibling::glossStatus)=0][normalize-space(text())!='']"
-                    >
-                      <xsl:value-of
-                           select="
-                           $entry-file-contents//glossentry[@id=$glossid]//glossAlt/*[contains(@class, ' glossentry/glossAcronym ') or contains(@class, ' glossentry/glossAbbreviation ')][count(following-sibling::glossStatus)=0][normalize-space(text())!='']
-                           | $entry-file-contents//glossentry[@id=$glossid]//glossAlt/*[contains(@class, ' glossentry/glossAcronym ') or contains(@class, ' glossentry/glossAbbreviation ')][count(preceding-sibling::glossStatus)=0][normalize-space(text())!='']"
-                      />
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <xsl:value-of select="$entry-file-contents//*[@id=$glossid]//glossterm"/>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                </xsl:when>
-                <xsl:otherwise>
-                  <xsl:call-template name="output-message">
-                    <xsl:with-param name="msgnum">058</xsl:with-param>
-                    <xsl:with-param name="msgsev">W</xsl:with-param>
-                    <xsl:with-param name="msgparams">%1=<xsl:value-of select="$keys"/></xsl:with-param>
-                  </xsl:call-template>
-                  <xsl:choose>
-                    <xsl:when
-                         test="
-                         $entry-file-contents//glossentry[lang($preferlang) or not(@xml:lang)]//glossStatus[@value='preferred'][1]/preceding-sibling::*[contains(@class, ' glossentry/glossAcronym ') or contains(@class, ' glossentry/glossAbbreviation ')][normalize-space(text())!='']
-                         or $entry-file-contents//glossentry[lang($preferlang) or not(@xml:lang)]//glossStatus[@value='preferred'][1]/following-sibling::*[contains(@class, ' glossentry/glossAcronym ') or contains(@class, ' glossentry/glossAbbreviation ')][normalize-space(text())!='']"
-                    >
-                      <xsl:value-of
-                           select="
-                           $entry-file-contents//glossentry[lang($preferlang) or not(@xml:lang)]//glossStatus[@value='preferred'][1]/preceding-sibling::*[contains(@class, ' glossentry/glossAcronym ') or contains(@class, ' glossentry/glossAbbreviation ')][normalize-space(text())!='']
-                           | $entry-file-contents//glossentry[lang($preferlang) or not(@xml:lang)]//glossStatus[@value='preferred'][1]/following-sibling::*[contains(@class, ' glossentry/glossAcronym ') or contains(@class, ' glossentry/glossAbbreviation ')][normalize-space(text())!='']"/>
-                    </xsl:when>
-                    <xsl:when
-                         test="
-                         $entry-file-contents//glossentry[lang($preferlang) or not(@xml:lang)]//glossStatus[@value!='prohibited'][@value!='obsolete'][1]/preceding-sibling::*[contains(@class, ' glossentry/glossAcronym ') or contains(@class, ' glossentry/glossAbbreviation ')][normalize-space(text())!='']
-                         or $entry-file-contents//glossentry[lang($preferlang) or not(@xml:lang)]//glossStatus[@value!='prohibited'][@value!='obsolete'][1]/following-sibling::*[contains(@class, ' glossentry/glossAcronym ') or contains(@class, ' glossentry/glossAbbreviation ')][normalize-space(text())!='']"
-                    >
-                      <xsl:value-of
-                           select="
-                           $entry-file-contents//glossentry[lang($preferlang) or not(@xml:lang)]//glossStatus[@value!='prohibited'][@value!='obsolete'][1]/preceding-sibling::*[contains(@class, ' glossentry/glossAcronym ') or contains(@class, ' glossentry/glossAbbreviation ')][normalize-space(text())!='']
-                           | $entry-file-contents//glossentry[lang($preferlang) or not(@xml:lang)]//glossStatus[@value!='prohibited'][@value!='obsolete'][1]/following-sibling::*[contains(@class, ' glossentry/glossAcronym ') or contains(@class, ' glossentry/glossAbbreviation ')][normalize-space(text())!='']"/>
-                    </xsl:when>
-                    <xsl:when
-                         test="
-                         $entry-file-contents//glossentry[lang($preferlang) or not(@xml:lang)]//glossBody//glossAlt/*[contains(@class, ' glossentry/glossAcronym ') or contains(@class, ' glossentry/glossAbbreviation ')][count(following-sibling::glossStatus)=0][normalize-space(text())!='']
-                         or $entry-file-contents//glossentry[lang($preferlang) or not(@xml:lang)]//glossBody//glossAlt/*[contains(@class, ' glossentry/glossAcronym ') or contains(@class, ' glossentry/glossAbbreviation ')][count(following-sibling::glossStatus)=0][normalize-space(text())!='']"
-                    >
-                      <xsl:value-of
-                           select="
-                           $entry-file-contents//glossentry[lang($preferlang) or not(@xml:lang)]//glossBody//glossAlt/*[contains(@class, ' glossentry/glossAcronym ') or contains(@class, ' glossentry/glossAbbreviation ')][count(following-sibling::glossStatus)=0][normalize-space(text())!='']
-                           | $entry-file-contents//glossentry[lang($preferlang) or not(@xml:lang)]//glossBody//glossAlt/*[contains(@class, ' glossentry/glossAcronym ') or contains(@class, ' glossentry/glossAbbreviation ')][count(following-sibling::glossStatus)=0][normalize-space(text())!='']"/>
-                      </xsl:when>
-                      <xsl:otherwise>
-                        <xsl:value-of select="$entry-file-contents//glossentry[lang($preferlang) or not(@xml:lang)]//glossterm"/>
-                      </xsl:otherwise>
-                    </xsl:choose>
-                  </xsl:otherwise>
-                </xsl:choose>
+          <xsl:otherwise>
+            <xsl:choose>
+              <xsl:when test="boolean(ancestor::copyright) or generate-id(.)=generate-id(key('keyref',@keyref)[1])">
+                <xsl:call-template name="getMatchingSurfaceForm">
+                  <xsl:with-param name="m_matched-target" select="$matched-target"/>
+                  <xsl:with-param name="m_keys" select="$keys"/>
+                </xsl:call-template>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:call-template name="getMatchingAcronym">
+                  <xsl:with-param name="m_matched-target" select="$matched-target"/>
+                  <xsl:with-param name="m_keys" select="$keys"/>
+                </xsl:call-template>
               </xsl:otherwise>
             </xsl:choose>
           </xsl:otherwise>
@@ -2140,50 +2067,39 @@
 
       <!-- hovertip text -->
       <xsl:variable name="hovertext">
-        <xsl:choose>
-          <xsl:when test="$glossid!=''">
-            <xsl:choose>
-              <xsl:when
-                   test="boolean($entry-file-contents//glossentry[@id=$glossid]/glossBody/glossSurfaceForm[normalize-space(text())!=''])">
-                <xsl:value-of
-                     select="$entry-file-contents//glossentry[@id=$glossid]/glossBody/glossSurfaceForm[normalize-space(text())!='']"
-                />
-              </xsl:when>
-              <xsl:otherwise>
-                <xsl:value-of
-                     select="$entry-file-contents//glossentry[@id=$glossid]/glossterm"
-                />
-              </xsl:otherwise>
-            </xsl:choose>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:call-template name="output-message">
-              <xsl:with-param name="msgnum">058</xsl:with-param>
-              <xsl:with-param name="msgsev">W</xsl:with-param>
-              <xsl:with-param name="msgparams">%1=<xsl:value-of select="$keys"/></xsl:with-param>
-            </xsl:call-template>
-            <xsl:choose>
-              <xsl:when
-                   test="boolean($entry-file-contents//glossentry[lang($preferlang) or @xml:lang='en' or not(@xml:lang)]//glossBody/glossSurfaceForm[normalize-space(text())!=''])">
-                <xsl:value-of
-                     select="$entry-file-contents//glossentry[lang($preferlang) or @xml:lang='en' or not(@xml:lang)]//glossBody/glossSurfaceForm[normalize-space(text())!='']"
-                />
-              </xsl:when>
-              <xsl:otherwise>
-                <xsl:value-of
-                     select="$entry-file-contents//glossentry[lang($preferlang) or @xml:lang='en' or not(@xml:lang)]//glossterm"
-                />
-              </xsl:otherwise>
-            </xsl:choose>
-          </xsl:otherwise>
-        </xsl:choose>
+        <xsl:call-template name="getMatchingSurfaceForm">
+          <xsl:with-param name="m_matched-target" select="$matched-target"/>
+          <xsl:with-param name="m_keys" select="$keys"/>
+        </xsl:call-template>
       </xsl:variable>
       <!-- End of hovertip text -->
 
-      <a href="{$updatedTarget}" title="{$hovertext}">
-        <xsl:apply-templates select="." mode="output-term"/>
-        <xsl:value-of select="$displaytext"/>
-      </a>
+      <xsl:choose>
+        <xsl:when test="not(normalize-space($updatedTarget)=$OUTEXT)">
+          <a href="{$updatedTarget}" title="{$hovertext}">
+            <xsl:choose>
+              <xsl:when test="not(normalize-space($displaytext)='')">
+                <xsl:apply-templates select="." mode="output-term"/>
+                <xsl:value-of select="$displaytext"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:apply-templates select="." mode="output-term"/>
+              </xsl:otherwise>
+            </xsl:choose>
+          </a>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:choose>
+            <xsl:when test="not(normalize-space($displaytext)='')">
+              <xsl:apply-templates select="." mode="output-term"/>
+              <xsl:value-of select="$displaytext"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:apply-templates select="." mode="output-term"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:otherwise>
+      </xsl:choose>
     </xsl:when>
     <xsl:otherwise>
       <xsl:apply-templates select="." mode="output-term"/>
@@ -5315,7 +5231,8 @@
   <xsl:template match="*" mode="find-keyref-target">
     <xsl:param name="keys" select="@keyref"/>
     <xsl:variable name="target">
-      <xsl:value-of select="document($KEYREF-FILE)//*[contains(@keys, $keys)]/@href"/>
+      <!--<xsl:value-of select="document($KEYREF-FILE)//*[contains(@keys, $keys)]/@href"/>-->
+      <xsl:value-of select="document($KEYREF-FILE)//*[@keys=$keys]/@href"/>
     </xsl:variable>
     <xsl:choose>
       <xsl:when test="contains($target,'://')">
