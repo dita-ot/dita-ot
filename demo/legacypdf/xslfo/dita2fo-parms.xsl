@@ -33,7 +33,7 @@
 <xsl:variable name="efill">.</xsl:variable>
 
 <!-- Setup for translation/localization -->
-<xsl:variable name="StringFile" select="document('../common/strings.xml')"/>
+<xsl:variable name="StringFile" select="document('../../../xsl/common/strings.xml')"/>
 
 
 <!-- DEFAULT VALUES FOR EXTERNALLY MODIFIABLE PARAMETERS -->

@@ -66,7 +66,7 @@
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:saxon="http://icl.com/saxon" extension-element-prefixes="saxon">
   
-  <xsl:import href="../common/output-message.xsl"/>
+  <xsl:import href="../../../xsl/common/output-message.xsl"/>
     
   <!-- Page setup - used by simple-master-set -->
   <xsl:param name="paper.type" select="'A4'"/>
@@ -104,7 +104,7 @@
   <xsl:include href="dita2fo-calstable.xsl"/>
   <xsl:include href="dita2fo-subroutines.xsl"/>
   <!-- common routines -->
-  <xsl:include href="../common/dita-utilities.xsl"/>
+  <xsl:include href="../../../xsl/common/dita-utilities.xsl"/>
   
   <!-- Define the error message prefix identifier -->
   <xsl:variable name="msgprefix">DOTX</xsl:variable>
