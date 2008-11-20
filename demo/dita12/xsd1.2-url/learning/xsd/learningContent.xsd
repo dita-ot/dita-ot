@@ -3,7 +3,7 @@
      specialization working design. It is a work-in-progress by
      the OASIS DITA learning and training content specialization 
      sub-committee.-->
-<!--             (C) Copyright OASIS Open 2007.                    -->
+<!--             (C) Copyright OASIS Open 2007, 2008                    -->
 <!--             All Rights Reserved.                              -->
 <!-- ============================================================= -->
 <!--                    HEADER                                     -->
@@ -40,14 +40,15 @@
     <!--  ================ GROUP DEFINITIONS =====================  -->
   <xs:include schemaLocation="../../base/xsd/tblDeclGrp.xsd"/>
   <xs:include schemaLocation="../../base/xsd/topicGrp.xsd"/>
-  
-  <!-- =================  MODULE INLCUDE DEFINITION  ==================  -->
+
+
+    <!-- =================  MODULE INLCUDE DEFINITION  ==================  -->
   <xs:include schemaLocation="../../base/xsd/commonElementMod.xsd"/>
-  <!-- ======== Table elements ======== -->
+    <!-- ======== Table elements ======== -->
   <xs:include schemaLocation="../../base/xsd/tblDeclMod.xsd"/>    
-  <!-- ======= MetaData elements, plus keyword and indexterm ======= -->
+    <!-- ======= MetaData elements, plus keyword and indexterm ======= -->
   <xs:include schemaLocation="../../base/xsd/metaDeclMod.xsd"/>
-  
+
     <xs:include schemaLocation="../../technicalContent/xsd/referenceGrp.xsd"/>
     <xs:include schemaLocation="../../technicalContent/xsd/taskGrp.xsd"/>
     <xs:include schemaLocation="../../technicalContent/xsd/conceptGrp.xsd"/>

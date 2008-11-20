@@ -3,7 +3,7 @@
      specialization working design. It is a work-in-progress by
      the OASIS DITA learning and training content specialization 
      sub-committee.-->
-<!--             (C) Copyright OASIS Open 2007.                    -->
+<!--             (C) Copyright OASIS Open 2007, 2008                    -->
 <!--             All Rights Reserved.                              -->
 <!-- ============================================================= -->
 <!--                    HEADER                                     -->
@@ -144,6 +144,26 @@
      
      
     <!-- <!ELEMENT learningGroup ( (%topicmeta;)?,  (%learningPlanRef;)?,   ((%learningOverviewRef;) | (%learningAssessmentRef;))*,   ((%learningObject;) | (%learningGroup;))*,    ((%learningAssessmentRef;) | (%learningSummaryRef;))*     )   >-->
+  
+    <xs:attributeGroup name="learningDomain-topicref-atts">
+      <xs:attribute name="navtitle" type="xs:string"/>  
+          <xs:attribute name="id" type="xs:ID"/>
+          <xs:attribute name="href" type="xs:string"/>
+          <xs:attribute name="keyref" type="xs:string"/>  
+          <xs:attribute name="keys" type="xs:string"/>
+          <xs:attribute name="query" type="xs:string"/>
+          <xs:attributeGroup ref="conref-atts" />
+          <xs:attribute name="copy-to" type="xs:string"/>          
+          <xs:attribute name="outputclass" type="xs:string"/>    
+          <xs:attribute name="scope" type="scope-att.class"/>
+          <xs:attribute name="linking" type="linkingtypes.class"/>
+          <xs:attribute name="toc" type="yesno-att.class"/>
+          <xs:attribute name="print" type="yesno-att.class"/>
+          <xs:attribute name="search" type="yesno-att.class"/>
+          <xs:attribute name="chunk" type="xs:string"/>
+          <xs:attributeGroup ref="select-atts" />
+          <xs:attributeGroup ref="localization-atts" />
+    </xs:attributeGroup>
      
      <xs:complexType name="learningGroup.class">
           <xs:sequence>
@@ -174,25 +194,10 @@
       </xs:group>
   
       <xs:attributeGroup name="learningGroup.attributes">
-        <xs:attribute name="id" type="xs:NMTOKEN"/>
-          <xs:attribute name="conref" type="xs:string"/>
-          <xs:attribute name="navtitle" type="xs:string"/>
-          <xs:attribute name="href" type="xs:string"/>
-          <xs:attribute name="keyref" type="xs:string"/>
-          <xs:attribute name="query" type="xs:string"/>
-          <xs:attribute name="copy-to" type="xs:string"/>          
-          <xs:attribute name="outputclass" type="xs:string"/>          
           <xs:attribute name="collection-type" type="collection-type.class"/>
           <xs:attribute name="type" type="xs:string"/>
-          <xs:attribute name="scope" type="scope-att.class"/>
-          <xs:attribute name="locktitle" type="yesno-att.class"/>
           <xs:attribute name="format" type="xs:string"/>
-          <xs:attribute name="linking" type="linkingtypes.class"/>
-          <xs:attribute name="toc" type="yesno-att.class"/>
-          <xs:attribute name="print" type="yesno-att.class"/>
-          <xs:attribute name="search" type="yesno-att.class"/>
-          <xs:attribute name="chunk" type="xs:string"/>
-          <xs:attributeGroup ref="select-atts" />          
+          <xs:attributeGroup ref="learningDomain-topicref-atts"/>          
           <xs:attributeGroup ref="global-atts" />
       </xs:attributeGroup>
      
@@ -236,25 +241,10 @@
       </xs:group>
   
       <xs:attributeGroup name="learningObject.attributes">
-          <xs:attribute name="id" type="xs:NMTOKEN"/>
-          <xs:attribute name="conref" type="xs:string"/>
-          <xs:attribute name="navtitle" type="xs:string"/>
-          <xs:attribute name="href" type="xs:string"/>
-          <xs:attribute name="keyref" type="xs:string"/>
-          <xs:attribute name="query" type="xs:string"/>
-          <xs:attribute name="copy-to" type="xs:string"/>          
-          <xs:attribute name="outputclass" type="xs:string"/>          
+         <xs:attributeGroup ref="learningDomain-topicref-atts"/>
           <xs:attribute name="collection-type" type="collection-type.class"/>
           <xs:attribute name="type" type="xs:string"/>
-          <xs:attribute name="scope" type="scope-att.class"/>
-          <xs:attribute name="locktitle" type="yesno-att.class"/>
           <xs:attribute name="format" type="xs:string"/>
-          <xs:attribute name="linking" type="linkingtypes.class"/>
-          <xs:attribute name="toc" type="yesno-att.class"/>
-          <xs:attribute name="print" type="yesno-att.class"/>
-          <xs:attribute name="search" type="yesno-att.class"/>
-          <xs:attribute name="chunk" type="xs:string"/>
-          <xs:attributeGroup ref="select-atts" />          
           <xs:attributeGroup ref="global-atts" />
       </xs:attributeGroup>
      
@@ -283,25 +273,9 @@
       </xs:group>
   
       <xs:attributeGroup name="learningPlanRef.attributes">
-        <xs:attribute name="id" type="xs:NMTOKEN"/>
-          <xs:attribute name="conref" type="xs:string"/>
-          <xs:attribute name="navtitle" type="xs:string"/>
-          <xs:attribute name="href" type="xs:string"/>
-          <xs:attribute name="keyref" type="xs:string"/>
-          <xs:attribute name="query" type="xs:string"/>
-          <xs:attribute name="copy-to" type="xs:string"/>          
-          <xs:attribute name="outputclass" type="xs:string"/>          
-          <xs:attribute name="collection-type" type="collection-type.class"/>
+          <xs:attributeGroup ref="learningDomain-topicref-atts"/>
           <xs:attribute name="type" type="xs:string" default="learningPlan"/>
-          <xs:attribute name="scope" type="scope-att.class"/>
-          <xs:attribute name="locktitle" type="yesno-att.class"/>
           <xs:attribute name="format" type="xs:string" default="dita"/>
-          <xs:attribute name="linking" type="linkingtypes.class"/>
-          <xs:attribute name="toc" type="yesno-att.class"/>
-          <xs:attribute name="print" type="yesno-att.class"/>
-          <xs:attribute name="search" type="yesno-att.class"/>
-          <xs:attribute name="chunk" type="xs:string"/>
-          <xs:attributeGroup ref="select-atts" />          
           <xs:attributeGroup ref="global-atts" />
       </xs:attributeGroup>
      
@@ -330,25 +304,9 @@
       </xs:group>
   
       <xs:attributeGroup name="learningOverviewRef.attributes">
-        <xs:attribute name="id" type="xs:NMTOKEN"/>
-          <xs:attribute name="conref" type="xs:string"/>
-          <xs:attribute name="navtitle" type="xs:string"/>
-          <xs:attribute name="href" type="xs:string"/>
-          <xs:attribute name="keyref" type="xs:string"/>
-          <xs:attribute name="query" type="xs:string"/>
-          <xs:attribute name="copy-to" type="xs:string"/>          
-          <xs:attribute name="outputclass" type="xs:string"/>          
-          <xs:attribute name="collection-type" type="collection-type.class"/>
+          <xs:attributeGroup ref="learningDomain-topicref-atts"/>
           <xs:attribute name="type" type="xs:string" default="learningOverview"/>
-          <xs:attribute name="scope" type="scope-att.class"/>
-          <xs:attribute name="locktitle" type="yesno-att.class"/>
-          <xs:attribute name="format" type="xs:string" default="dita"/>
-          <xs:attribute name="linking" type="linkingtypes.class"/>
-          <xs:attribute name="toc" type="yesno-att.class"/>
-          <xs:attribute name="print" type="yesno-att.class"/>
-          <xs:attribute name="search" type="yesno-att.class"/>
-          <xs:attribute name="chunk" type="xs:string"/>
-          <xs:attributeGroup ref="select-atts" />          
+          <xs:attribute name="format" type="xs:string" default="dita"/>          
           <xs:attributeGroup ref="global-atts" />
       </xs:attributeGroup>
      
@@ -377,25 +335,9 @@
       </xs:group>
   
       <xs:attributeGroup name="learningContentRef.attributes">
-          <xs:attribute name="id" type="xs:NMTOKEN"/>
-          <xs:attribute name="conref" type="xs:string"/>
-          <xs:attribute name="navtitle" type="xs:string"/>
-          <xs:attribute name="href" type="xs:string"/>
-          <xs:attribute name="keyref" type="xs:string"/>
-          <xs:attribute name="query" type="xs:string"/>
-          <xs:attribute name="copy-to" type="xs:string"/>          
-          <xs:attribute name="outputclass" type="xs:string"/>          
-          <xs:attribute name="collection-type" type="collection-type.class"/>
+          <xs:attributeGroup ref="learningDomain-topicref-atts"/>
           <xs:attribute name="type" type="xs:string"/>
-          <xs:attribute name="scope" type="scope-att.class"/>
-          <xs:attribute name="locktitle" type="yesno-att.class"/>
           <xs:attribute name="format" type="xs:string" default="dita"/>
-          <xs:attribute name="linking" type="linkingtypes.class"/>
-          <xs:attribute name="toc" type="yesno-att.class"/>
-          <xs:attribute name="print" type="yesno-att.class"/>
-          <xs:attribute name="search" type="yesno-att.class"/>
-          <xs:attribute name="chunk" type="xs:string"/>
-          <xs:attributeGroup ref="select-atts" />          
           <xs:attributeGroup ref="global-atts" />
       </xs:attributeGroup>
      
@@ -425,24 +367,9 @@
       </xs:group>
      
      <xs:attributeGroup name="learningPreAssessmentRef.attributes">
-       <xs:attribute name="id" type="xs:NMTOKEN"/>
-          <xs:attribute name="conref" type="xs:string"/>
-          <xs:attribute name="navtitle" type="xs:string"/>
-          <xs:attribute name="href" type="xs:string"/>
-          <xs:attribute name="keyref" type="xs:string"/>
-          <xs:attribute name="query" type="xs:string"/>
-          <xs:attribute name="copy-to" type="xs:string"/>          
-          <xs:attribute name="outputclass" type="xs:string"/>          
+          <xs:attributeGroup ref="learningDomain-topicref-atts"/>  
           <xs:attribute name="type" type="xs:string" default="learningAssessment"/>
-          <xs:attribute name="scope" type="scope-att.class"/>
-          <xs:attribute name="locktitle" type="yesno-att.class"/>
-          <xs:attribute name="format" type="xs:string" default="dita"/>
-          <xs:attribute name="linking" type="linkingtypes.class"/>
-          <xs:attribute name="toc" type="yesno-att.class"/>
-          <xs:attribute name="print" type="yesno-att.class"/>
-          <xs:attribute name="search" type="yesno-att.class"/>
-          <xs:attribute name="chunk" type="xs:string"/>
-          <xs:attributeGroup ref="select-atts" />          
+          <xs:attribute name="format" type="xs:string" default="dita"/>   
           <xs:attributeGroup ref="global-atts" />
      </xs:attributeGroup>
      
@@ -474,24 +401,9 @@
       </xs:group>
      
      <xs:attributeGroup name="learningPostAssessmentRef.attributes">
-       <xs:attribute name="id" type="xs:NMTOKEN"/>
-          <xs:attribute name="conref" type="xs:string"/>
-          <xs:attribute name="navtitle" type="xs:string"/>
-          <xs:attribute name="href" type="xs:string"/>
-          <xs:attribute name="keyref" type="xs:string"/>
-          <xs:attribute name="query" type="xs:string"/>
-          <xs:attribute name="copy-to" type="xs:string"/>          
-          <xs:attribute name="outputclass" type="xs:string"/>          
+          <xs:attributeGroup ref="learningDomain-topicref-atts"/>     
           <xs:attribute name="type" type="xs:string" default="learningAssessment"/>
-          <xs:attribute name="scope" type="scope-att.class"/>
-          <xs:attribute name="locktitle" type="yesno-att.class"/>
-          <xs:attribute name="format" type="xs:string" default="dita"/>
-          <xs:attribute name="linking" type="linkingtypes.class"/>
-          <xs:attribute name="toc" type="yesno-att.class"/>
-          <xs:attribute name="print" type="yesno-att.class"/>
-          <xs:attribute name="search" type="yesno-att.class"/>
-          <xs:attribute name="chunk" type="xs:string"/>
-          <xs:attributeGroup ref="select-atts" />          
+          <xs:attribute name="format" type="xs:string" default="dita"/>       
           <xs:attributeGroup ref="global-atts" />
      </xs:attributeGroup>
      
@@ -520,25 +432,9 @@
       </xs:group>
   
       <xs:attributeGroup name="learningSummaryRef.attributes">
-        <xs:attribute name="id" type="xs:NMTOKEN"/>
-          <xs:attribute name="conref" type="xs:string"/>
-          <xs:attribute name="navtitle" type="xs:string"/>
-          <xs:attribute name="href" type="xs:string"/>
-          <xs:attribute name="keyref" type="xs:string"/>
-          <xs:attribute name="query" type="xs:string"/>
-          <xs:attribute name="copy-to" type="xs:string"/>          
-          <xs:attribute name="outputclass" type="xs:string"/>          
-          <xs:attribute name="collection-type" type="collection-type.class"/>
+        <xs:attributeGroup ref="learningDomain-topicref-atts"/>
           <xs:attribute name="type" type="xs:string" default="learningSummary"/>
-          <xs:attribute name="scope" type="scope-att.class"/>
-          <xs:attribute name="locktitle" type="yesno-att.class"/>
-          <xs:attribute name="format" type="xs:string" default="dita"/>
-          <xs:attribute name="linking" type="linkingtypes.class"/>
-          <xs:attribute name="toc" type="yesno-att.class"/>
-          <xs:attribute name="print" type="yesno-att.class"/>
-          <xs:attribute name="search" type="yesno-att.class"/>
-          <xs:attribute name="chunk" type="xs:string"/>
-          <xs:attributeGroup ref="select-atts" />          
+          <xs:attribute name="format" type="xs:string" default="dita"/>   
           <xs:attributeGroup ref="global-atts" />
       </xs:attributeGroup>
      

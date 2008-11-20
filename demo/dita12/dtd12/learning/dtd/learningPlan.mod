@@ -123,9 +123,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Learning Plan//EN"
              "id
                         ID 
                                   #REQUIRED
-              conref
-                        CDATA
-                                  #IMPLIED
+              %conref-atts;
               %select-atts;
               %localization-atts;
               outputclass

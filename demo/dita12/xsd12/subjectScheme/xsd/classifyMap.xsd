@@ -2,40 +2,22 @@
 <!-- ============================================================= -->
 <!-- HEADER -->
 <!-- ============================================================= -->
-<!-- MODULE:    DITA Classification Map DTD -->
+<!-- MODULE:    DITA Classification Map XSD -->
 <!-- VERSION:   1.2 -->
 <!-- DATE:      November 2006 -->
 <!---->
-<!-- ============================================================= -->
-<!-- ============================================================= -->
-<!-- PUBLIC DOCUMENT TYPE DEFINITION -->
-<!-- TYPICAL INVOCATION -->
-<!---->
-<!--
-  Refer to this file by the following public identifier or an
-       appropriate system identifier:
-  PUBLIC "-//OASIS//DTD DITA Classification Map//EN"
-       Delivered as file "classifyMap.dtd"
--->
-<!-- ============================================================= -->
 <!-- SYSTEM:     Darwin Information Typing Architecture (DITA) -->
 <!---->
-<!-- PURPOSE:    DTD to describe DITA Classification maps -->
+<!-- PURPOSE:    XSD to describe DITA Classification maps -->
 <!---->
 <!-- ORIGINAL CREATION DATE: -->
 <!-- March 2001 -->
 <!---->
-<!-- (C) Copyright OASIS Open 2005, 2006. -->
+<!-- (C) Copyright OASIS Open 2005,  2008. -->
 <!-- (C) Copyright IBM Corporation 2001, 2004. -->
 <!-- All Rights Reserved. -->
 <!---->
 <!-- UPDATES: -->
-<!-- ============================================================= -->
-<!-- ============================================================= -->
-<!-- MAP ENTITY DECLARATIONS -->
-<!-- ============================================================= -->
-<!-- ============================================================= -->
-<!-- DOMAIN ENTITY DECLARATIONS -->
 <!-- ============================================================= -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
   <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:mapGroupMod.xsd:1.2" />
@@ -51,19 +33,8 @@
  <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:metaDeclMod.xsd:1.2"/>
   
   <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:commonElementGrp.xsd:1.2"/>
-  <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:tblDeclGrp.xsd:1.2"/>
   <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:metaDeclGrp.xsd:1.2"/>
-  <!-- ============================================================= -->
-  <!-- DOMAIN ATTRIBUTE DECLARATIONS -->
-  <!-- ============================================================= -->
-  <!-- ============================================================= -->
-  <!-- DOMAIN EXTENSIONS -->
-  <!-- ============================================================= -->
-  <!--
-    One for each extended base element, with
-    the name of the domain(s) in which the
-    extension was declared
-  -->
+
   
   <xs:redefine schemaLocation="urn:oasis:names:tc:dita:xsd:mapGrp.xsd:1.2">
   <xs:group name="topicref">
@@ -111,4 +82,4 @@
   </xs:attributeGroup>
   
 </xs:schema>
-<!-- ================== End DITA Classification Map DTD  ========= -->
+<!-- ================== End DITA Classification Map XSD  ========= -->

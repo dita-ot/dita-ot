@@ -2,7 +2,7 @@
 <!-- ============================================================= -->
 <!--                    HEADER                                     -->
 <!-- ============================================================= -->
-<!--  MODULE:    DITA Machine Industry Task Domain Entities        -->
+<!--  MODULE:    DITA Task Requirements Domain Entities            -->
 <!--  VERSION:   1.2                                               -->
 <!--  DATE:      September 2007                                    -->
 <!--                                                               -->
@@ -14,14 +14,14 @@
 <!--                                                               -->
 <!--  Refer to this file by the following public identfier or an 
       appropriate system identifier 
-PUBLIC "-//OASIS//ENTITIES DITA Machine Industry Task Domain//EN"
-      Delivered as file "mitaskDomain.ent"                         -->
+PUBLIC "-//OASIS//ENTITIES DITA Task Requirements Domain//EN"
+      Delivered as file "taskreqDomain.ent"                        -->
 
 <!-- ============================================================= -->
 <!-- SYSTEM:     Darwin Information Typing Architecture (DITA)     -->
 <!--                                                               -->
 <!-- PURPOSE:    Declaring the substitution context and domain     -->
-<!--             entity declarations for the XNAL domain           -->
+<!--             entity declarations for the task req domain       -->
 <!--                                                               -->
 <!-- ORIGINAL CREATION DATE:                                       -->
 <!--             September 2007                                    -->
@@ -34,14 +34,14 @@ PUBLIC "-//OASIS//ENTITIES DITA Machine Industry Task Domain//EN"
 <!--                    ELEMENT EXTENSION ENTITY DECLARATIONS      -->
 <!-- ============================================================= -->
 
-<!ENTITY % mitask-d-prereq "prelreqs"                                >
-<!ENTITY % mitask-d-postreq "closereqs"                              >
+<!ENTITY % taskreq-d-prereq "prelreqs"                               >
+<!ENTITY % taskreq-d-postreq "closereqs"                             >
 
 <!-- ============================================================= -->
 <!--                    DOMAIN ENTITY DECLARATION                  -->
 <!-- ============================================================= -->
 
-<!ENTITY mitask-d-att "(topic task mitask-d)"                        >
+<!ENTITY taskreq-d-att "(topic task taskreq-d)"                      >
 
 
-<!-- ================ End Machine Industry Task Domain Entities == -->
+<!-- ================ End Task Requirements Domain Entities ====== -->

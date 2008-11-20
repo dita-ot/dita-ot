@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
     attributeFormDefault="unqualified"
     xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
@@ -11,16 +11,15 @@
 
 
     <!--  ================ GROUP DEFINITIONS =====================  -->
- <!--<xs:include schemaLocation="../../base/xsd/metaDeclGrp.xsd"/>-->
   <xs:include schemaLocation="../../base/xsd/tblDeclGrp.xsd"/>
- 
- <!-- =================  MODULE INLCUDE DEFINITION  ==================  -->
+
+    <!-- =================  MODULE INLCUDE DEFINITION  ==================  -->
   <xs:include schemaLocation="../../base/xsd/commonElementMod.xsd"/>
-  <!-- ======== Table elements ======== -->
+    <!-- ======== Table elements ======== -->
   <xs:include schemaLocation="../../base/xsd/tblDeclMod.xsd"/>    
-  <!-- ======= MetaData elements, plus keyword and indexterm ======= -->
+    <!-- ======= MetaData elements, plus keyword and indexterm ======= -->
   <xs:include schemaLocation="../../base/xsd/metaDeclMod.xsd"/>
-  
+
   <xs:redefine schemaLocation="../../base/xsd/mapGrp.xsd">
         <xs:group name="topicref">
             <xs:choice>
@@ -49,12 +48,12 @@
                 <xs:group ref="learningmeta-d-metadata"/>
             </xs:choice>
         </xs:group>
-         <xs:group name="keywords">
-      <xs:choice>
-        <xs:group ref="keywords"/>
-        <xs:group ref="delay-d-keywords" />
-      </xs:choice>
-    </xs:group>
+        <xs:group name="keywords">
+            <xs:choice>
+                <xs:group ref="keywords"/>
+                <xs:group ref="delay-d-keywords"/>
+            </xs:choice>
+        </xs:group>
     </xs:redefine>
 
 

@@ -4,7 +4,7 @@
 <!-- ============================================================= -->
 <!--  MODULE:    DITA Task XSD                                     -->
 <!--  VERSION:   1.2                                             -->
-<!--  DATE:      November 2006                                     -->
+<!--  DATE:      November 2008                                     -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -17,7 +17,7 @@
 <!-- ORIGINAL CREATION DATE:                                       -->
 <!--             March 2001                                        -->
 <!--                                                               -->
-<!--             (C) Copyright OASIS-Open.org 2005, 2006                -->
+<!--             (C) Copyright OASIS-Open.org 2005, 2008                -->
 <!--             (C) Copyright IBM Corporation 2001, 2004.         -->
 <!--             All Rights Reserved.                              -->
 <!-- ============================================================= -->
@@ -32,12 +32,13 @@
   <xs:include schemaLocation="../../base/xsd/utilitiesDomain.xsd"/>
   <xs:include schemaLocation="../../base/xsd/indexingDomain.xsd"/>
   <xs:include schemaLocation="../../base/xsd/hazardstatementDomain.xsd"/>
+  <xs:include schemaLocation="abbreviateDomain.xsd"/>
   
   <!--  ================ GROUP DEFINITIONS =====================  -->
-  <xs:include schemaLocation="taskGrp.xsd" />
   <xs:include schemaLocation="../../base/xsd/metaDeclGrp.xsd"/>
   <xs:include schemaLocation="../../base/xsd/tblDeclGrp.xsd"/>
   <xs:include schemaLocation="../../base/xsd/topicGrp.xsd"/>
+  <xs:include schemaLocation="taskGrp.xsd" />
   
   <!-- =================  MODULE INLCUDE DEFINITION  ==================  -->
   <xs:include schemaLocation="../../base/xsd/commonElementMod.xsd"/>
@@ -45,6 +46,8 @@
   <xs:include schemaLocation="../../base/xsd/tblDeclMod.xsd"/>    
   <!-- ======= MetaData elements, plus keyword and indexterm ======= -->
   <xs:include schemaLocation="../../base/xsd/metaDeclMod.xsd"/>
+  
+  
   
   <xs:redefine schemaLocation="../../base/xsd/commonElementGrp.xsd">
     <xs:group name="keyword">
@@ -104,6 +107,13 @@
         <xs:group ref="note"/>
         <xs:group ref="hazard-d-note"/>
       </xs:choice>
+      </xs:group >
+    
+    <xs:group name="term">
+      <xs:choice>
+        <xs:group ref="term"/>
+        <xs:group ref="abbrev-d-term"/>
+      </xs:choice>
     </xs:group >
 
   </xs:redefine>
@@ -111,11 +121,9 @@
   
   <xs:include schemaLocation="strictTaskbodyConstraintMod.xsd" />
   <xs:include schemaLocation="../../base/xsd/topicMod.xsd"/>
-    
-  
 
   <xs:attributeGroup name="domains-att">
-     <xs:attribute name="domains" type="xs:string" default="(topic ui-d) (topic hi-d) (topic sw-d) (topic pr-d) (topic ut-d) (topic indexing-d) (topic hazard-d) (topic delay-d)"/>
+     <xs:attribute name="domains" type="xs:string" default="(topic ui-d) (topic hi-d) (topic sw-d) (topic pr-d) (topic ut-d) (topic indexing-d) (topic hazard-d) (topic task) (topic task strictTaskbody-c)  (topic abbrev-d)"/>
   </xs:attributeGroup>
 
 

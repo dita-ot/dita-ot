@@ -2,8 +2,8 @@
 <!--                    HEADER                                     -->
 <!-- ============================================================= -->
 <!--  MODULE:    DITA Book Map XSD Module                           -->
-<!--  VERSION:   1.1                                             -->
-<!--  DATE:      November 2006                                     -->
+<!--  VERSION:   1.2                                             -->
+<!--  DATE:      November 2008                                     -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -179,9 +179,9 @@
       <xs:attributeGroup name="frontmatter.attributes">
       <xs:attribute name="keyref" type="xs:string"/>
         <xs:attribute name="query" type="xs:string"/>
+        <xs:attribute name="outputclass" type="xs:string"/>
         <xs:attributeGroup ref="topicref-atts" />
         <xs:attributeGroup ref="univ-atts" />
-        <xs:attribute name="outputclass" type="xs:string"/>
         <xs:attributeGroup ref="global-atts" />
     </xs:attributeGroup>
       

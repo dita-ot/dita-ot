@@ -5,7 +5,7 @@
 <!-- ============================================================= -->
 <!--  MODULE:    DITA MAP XSD                                      -->
 <!--  VERSION:   1.2                                             -->
-<!--  DATE:      November 2006                                     -->
+<!--  DATE:      November 2008                                     -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -17,7 +17,7 @@
 <!-- ORIGINAL CREATION DATE:                                       -->
 <!--             March 2001                                        -->
 <!--                                                               -->
-<!--             (C) Copyright OASIS-Open.org 2005, 2006                -->
+<!--             (C) Copyright OASIS-Open.org 2005, 2008                -->
 <!--             (C) Copyright IBM Corporation 2001, 2004.         -->
 <!--             All Rights Reserved.                              -->
 <!--                                                               -->
@@ -32,6 +32,7 @@
  <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:mapGroupMod.xsd:1.2" />
  <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:indexingDomain.xsd:1.2" />
  <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:delayResolutionDomain.xsd:1.2" />
+ <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:glossrefDomain.xsd:1.2" />
 
   
  <!--  ================ GROUP DEFINITIONS =====================  -->
@@ -59,6 +60,7 @@
    <xs:choice>
     <xs:group ref="topicref"/>
     <xs:group ref="mapgroup-d-topicref"/>
+    <xs:group ref="glossref-d-topicref"/>
    </xs:choice>
   </xs:group>
  </xs:redefine>
@@ -83,7 +85,7 @@
   </xs:redefine>-->
 
   <xs:attributeGroup name="domains-att">
-    <xs:attribute name="domains" type="xs:string" default="(map mapgroup-d) (topic indexing-d) (topic delay-d)"/>
+    <xs:attribute name="domains" type="xs:string" default="(map mapgroup-d) (topic indexing-d) (topic delay-d) (map glossref-d)"/>
   </xs:attributeGroup>
 
 </xs:schema>

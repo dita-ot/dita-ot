@@ -3,7 +3,7 @@
      specialization working design. It is a work-in-progress by
      the OASIS DITA learning and training content specialization 
      sub-committee.-->
-<!--             (C) Copyright OASIS Open 2007.                    -->
+<!--             (C) Copyright OASIS Open 2007, 2008                    -->
 <!--             All Rights Reserved.                              -->
 <!-- ============================================================= -->
 <!--                    HEADER                                     -->
@@ -35,7 +35,6 @@
   <xs:include schemaLocation="urn:oasis:names:tc:dita:spec:learning:xsd:learningMetadataDomain.xsd:1.2" />
     
   <!--  ================ GROUP DEFINITIONS =====================  -->
-  <!--<xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:metaDeclGrp.xsd:1.2"/>-->
   <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:tblDeclGrp.xsd:1.2"/>
   <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:topicGrp.xsd:1.2"/>
   

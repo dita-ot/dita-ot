@@ -23,7 +23,7 @@ PUBLIC "-//OASIS//DTD DITA 1.2 Machinery Task//EN"                 -->
 <!-- ============================================================= -->
 <!-- SYSTEM:     Darwin Information Typing Architecture (DITA)     -->
 <!--                                                               -->
-<!-- PURPOSE:    DTD to describe DITA Machine Industry Tasks       -->
+<!-- PURPOSE:    DTD to describe DITA Machinery Tasks              -->
 <!--                                                               -->
 <!-- ORIGINAL CREATION DATE:                                       -->
 <!--             April 2008                                        -->
@@ -48,10 +48,10 @@ PUBLIC "-//OASIS//DTD DITA 1.2 Machinery Task//EN"                 -->
 <!--                    DOMAIN ENTITY DECLARATIONS                 -->
 <!-- ============================================================= -->
 
-<!ENTITY % mitask-d-dec     
-  PUBLIC "-//OASIS//ENTITIES DITA 1.2 Machine Industry Task Domain//EN" 
-         "mitaskDomain.ent"
->%mitask-d-dec;
+<!ENTITY % taskreq-d-dec     
+  PUBLIC "-//OASIS//ENTITIES DITA 1.2 Task Requirements Domain//EN" 
+         "../../technicalContent/dtd/taskreqDomain.ent"
+>%taskreq-d-dec;
 
 <!ENTITY % hazard-d-dec     
   PUBLIC "-//OASIS//ENTITIES DITA 1.2 Hazard Statement Domain//EN" 
@@ -127,10 +127,10 @@ PUBLIC "-//OASIS//DTD DITA 1.2 Machinery Task//EN"                 -->
                          %indexing-d-index-base;
                         ">
 <!ENTITY % prereq       "prereq | 
-                         %mitask-d-prereq;
+                         %taskreq-d-prereq;
                         ">
 <!ENTITY % postreq      "postreq | 
-                         %mitask-d-postreq;
+                         %taskreq-d-postreq;
                         ">
 <!ENTITY % note         "note | 
                          %hazard-d-note;
@@ -168,7 +168,7 @@ PUBLIC "-//OASIS//DTD DITA 1.2 Machinery Task//EN"                 -->
                            &pr-d-att; 
                            &sw-d-att;
                            &ui-d-att;
-                           &mitask-d-att;
+                           &taskreq-d-att;
                            &taskbody-constraints;
   "
 >
@@ -177,10 +177,10 @@ PUBLIC "-//OASIS//DTD DITA 1.2 Machinery Task//EN"                 -->
 <!--                    CONTENT CONSTRAINT INTEGRATION             -->
 <!-- ============================================================= -->
 
-<!ENTITY % mitaskTaskbody-c-def
-  PUBLIC "-//OASIS//ELEMENTS DITA 1.2 Machine Industry Taskbody Constraints//EN" 
-  "mitaskTaskbodyConstraint.mod">
-%mitaskTaskbody-c-def;
+<!ENTITY % machineryTaskbody-c-def
+  PUBLIC "-//OASIS//ELEMENTS DITA 1.2 Machinery Taskbody Constraint//EN" 
+  "machineryTaskbodyConstraint.mod">
+%machineryTaskbody-c-def;
 
 <!-- ============================================================= -->
 <!--                    TOPIC ELEMENT INTEGRATION                  -->
@@ -204,10 +204,10 @@ PUBLIC "-//OASIS//DTD DITA 1.2 Machinery Task//EN"                 -->
 <!-- ============================================================= -->
 
 
-<!ENTITY % mitask-d-def     
-  PUBLIC "-//OASIS//ELEMENTS DITA 1.2 Machine Industry Task Domain//EN" 
-         "mitaskDomain.mod"
->%mitask-d-def;
+<!ENTITY % taskreq-d-def     
+  PUBLIC "-//OASIS//ELEMENTS DITA 1.2 Task Requirements Domain//EN" 
+         "../../technicalContent/dtd/taskreqDomain.mod"
+>%taskreq-d-def;
 
 <!ENTITY % hazard-d-def     
   PUBLIC "-//OASIS//ELEMENTS DITA 1.2 Hazard Statement Domain//EN" 

@@ -3,8 +3,8 @@
 <!--                    HEADER                                     -->
 <!-- ============================================================= -->
 <!--  MODULE:    DITA Topic XSD Module                             -->
-<!--  VERSION:   1.1                                             -->
-<!--  DATE:      November 2006                                     -->
+<!--  VERSION:   1.2                                             -->
+<!--  DATE:      October 2008                                     -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -17,7 +17,7 @@
 <!-- ORIGINAL CREATION DATE:                                       -->
 <!--             March 2001                                        -->
 <!--                                                               -->
-<!--             (C) Copyright OASIS-Open.org 2005, 2006               -->
+<!--             (C) Copyright OASIS-Open.org 2005, 2008               -->
 <!--             (C) Copyright IBM Corporation 2001, 2004.         -->
 <!--             All Rights Reserved.                              -->
 <!--                                                               -->
@@ -33,7 +33,7 @@
   <xs:attributeGroup name="rel-atts">
     <xs:annotation>
       <xs:documentation>Relational attributes (&lt;<keyword>%rel-atts;</keyword>>) is a
-        parameter entity declaration in the topic DTD that includes attributes whose
+        parameter entity declaration in the topic XSD that includes attributes whose
         values may be used for representing navigational relationships. These attributes
         occur only on elements that represent relationships between topics.
       </xs:documentation>
@@ -175,8 +175,8 @@
   <xs:element name="no-topic-nesting">
     <xs:annotation>
       <xs:documentation>The &lt;<keyword>no-topic-nesting</keyword>> element is a placeholder
-        in the DITA architecture. It is not actually used by the DITA DTDs; it is
-        for use only when creating a customized DTD where the information designer
+        in the DITA architecture. It is not actually used by the DITA XSDs; it is
+        for use only when creating a customized XSD where the information designer
         wants to eliminate the ability to nest topics. <b>Not for use by authors.</b>        
       </xs:documentation>
     </xs:annotation>
@@ -312,6 +312,7 @@
     <xs:sequence>
         <xs:choice minOccurs="0" maxOccurs="unbounded">
       <xs:group ref="body.cnt" minOccurs="0"/>
+      <xs:group ref="bodydiv" minOccurs="0"/>
       <xs:group ref="section" minOccurs="0"/>
       <xs:group ref="example" minOccurs="0"/>
     </xs:choice>  
@@ -365,6 +366,103 @@
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
 </xs:attributeGroup>
+  
+  
+  <xs:element name="bodydiv">
+    <xs:annotation>
+      <xs:documentation>
+      </xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="bodydiv.class">
+          <xs:attribute ref="class" default="- topic/bodydiv "/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:complexType name="bodydiv.class">
+    <xs:sequence>
+      <xs:group ref="bodydiv.content"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="bodydiv.attributes"/>
+  </xs:complexType>
+  
+  <xs:group name="bodydiv.content">
+    <xs:sequence>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="bodydiv.cnt" minOccurs="0"/>
+      <xs:group ref="bodydiv" minOccurs="0"/>
+      <xs:group ref="section" minOccurs="0"/>
+    </xs:choice>  
+    </xs:sequence>
+  </xs:group>
+
+    <xs:attributeGroup name="bodydiv.attributes">
+      <xs:attribute name="outputclass" type="xs:string"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
+    </xs:attributeGroup>
+  
+    <xs:group name="bodydiv.cnt">
+      <xs:sequence>
+        <xs:choice>
+          <xs:group ref="basic.block"/>
+          <xs:group ref="basic.ph"/>
+          <xs:group ref="data.elements.incl"/>
+          <xs:group ref="foreign.unknown.incl"/>
+          <xs:group ref="txt.incl"/>
+        </xs:choice>
+      </xs:sequence>
+    </xs:group>
+  
+  <xs:element name="sectiondiv">
+    <xs:annotation>
+      <xs:documentation> 
+      </xs:documentation>
+    </xs:annotation>
+    <xs:complexType mixed="true">
+      <xs:complexContent>
+        <xs:extension base="sectiondiv.class">
+          <xs:attribute ref="class" default="- topic/sectiondiv "/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:complexType name="sectiondiv.class" mixed="true">
+    <xs:sequence>
+      <xs:group ref="sectiondiv.content"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="sectiondiv.attributes"/>
+  </xs:complexType>
+  
+  <xs:group name="sectiondiv.content">
+    <xs:sequence>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="sectiondiv.cnt" minOccurs="0"/>
+      <xs:group ref="sectiondiv" minOccurs="0"/>
+    </xs:choice>  
+    </xs:sequence>
+  </xs:group>
+
+<xs:attributeGroup name="sectiondiv.attributes">
+    <xs:attribute name="outputclass" type="xs:string"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
+</xs:attributeGroup>
+  
+   <xs:group name="sectiondiv.cnt">
+      <xs:sequence>
+        <xs:choice>
+          <xs:group ref="basic.block"/>
+          <xs:group ref="basic.ph"/>
+          <xs:group ref="data.elements.incl"/>
+          <xs:group ref="foreign.unknown.incl"/>
+          <xs:group ref="txt.incl"/>
+        </xs:choice>
+      </xs:sequence>
+    </xs:group>
+  
   
   <xs:element name="example">
     <xs:annotation>
@@ -750,17 +848,47 @@
   <xs:group name="abstract.content">
     <xs:sequence>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
-            <xs:group ref="section.notitle.cnt" minOccurs="0"/>
-            <xs:group ref="shortdesc" minOccurs="0"/>
+            <xs:group ref="abstract.cnt" minOccurs="0"/>
     </xs:choice>
     </xs:sequence>
   </xs:group>
+  
+    <xs:group name="abstract.cnt">
+      <xs:sequence>
+        <xs:choice>
+          <xs:group ref="basic.block"/>
+          <xs:group ref="basic.ph"/>
+          <xs:group ref="data.elements.incl"/>
+          <xs:group ref="foreign.unknown.incl"/>
+          <xs:group ref="shortdesc"/>
+          <xs:group ref="txt.incl"/>
+        </xs:choice>
+      </xs:sequence>
+    </xs:group>
   
   <xs:attributeGroup name="abstract.attributes">
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
   </xs:attributeGroup>
+  
+   <xs:element name="shortdesc">
+    <xs:annotation>
+      <xs:documentation>The short description (&lt;<keyword>shortdesc</keyword>>) element
+        occurs between the topic title and the topic body, as the initial paragraph-like
+        content of a topic. The short description, which represents the purpose or
+        theme of the topic, is also intended to be used as a link preview and for
+        searching.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:complexType mixed="true">
+      <xs:complexContent>
+        <xs:extension base="shortdesc.class">
+          <xs:attribute ref="class" default="- topic/shortdesc "/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
   
  
   

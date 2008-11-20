@@ -45,7 +45,6 @@ PUBLIC "-//OASIS//ELEMENTS DITA Learning Base//EN"
 <!ENTITY % lcAudience "lcAudience">
 <!ENTITY % lcDuration "lcDuration">
 <!ENTITY % lcTime "lcTime">
-<!ENTITY % lcDescription "lcDescription">
 <!ENTITY % lcPrereqs "lcPrereqs">
 <!ENTITY % lcSummary "lcSummary">
 <!ENTITY % lcNextSteps "lcNextSteps">
@@ -233,22 +232,6 @@ PUBLIC "-//OASIS//ELEMENTS DITA Learning Base//EN"
 <!ATTLIST lcTime    %lcTime.attributes;>
 
 
-<!ENTITY % lcDescription.content
-                       "(%section.cnt;)*"
->
-<!ENTITY % lcDescription.attributes
-             "spectitle
-                        CDATA
-                                  #IMPLIED
-              %univ-atts;
-              outputclass
-                        CDATA
-                                  #IMPLIED"
->
-<!ELEMENT lcDescription    %lcDescription.content;>
-<!ATTLIST lcDescription    %lcDescription.attributes;>
-
-
 <!ENTITY % lcPrereqs.content
                        "(%section.cnt;)*"
 >
@@ -388,7 +371,6 @@ PUBLIC "-//OASIS//ELEMENTS DITA Learning Base//EN"
 <!ATTLIST lcAudience         %global-atts; class CDATA "- topic/section learningBase/lcAudience ">
 <!ATTLIST lcDuration         %global-atts; class CDATA "- topic/section learningBase/lcDuration ">
 <!ATTLIST lcTime             %global-atts; class CDATA "- topic/data learningBase/lcTime ">
-<!ATTLIST lcDescription      %global-atts; class CDATA "- topic/section learningBase/lcDescription ">
 <!ATTLIST lcPrereqs          %global-atts; class CDATA "- topic/section learningBase/lcPrereqs ">
 <!ATTLIST lcSummary          %global-atts; class CDATA "- topic/section learningBase/lcSummary ">
 <!ATTLIST lcNextSteps        %global-atts; class CDATA "- topic/section learningBase/lcNextSteps ">

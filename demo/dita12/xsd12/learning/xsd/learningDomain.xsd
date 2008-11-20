@@ -1,4 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- ============================================================= -->
+<!-- HEADER -->
+<!-- ============================================================= -->
+<!-- MODULE:    DITA Learning  Domains -->
+<!-- VERSION:   1.2 -->
+<!-- DATE:      February 2008 -->
+<!---->
+<!-- ============================================================= -->
+
+<!-- ============================================================= -->
+<!-- SYSTEM:     Darwin Information Typing Architecture (DITA) -->
+<!---->
+<!-- PURPOSE:    XSD to describe DITA Learning domain  -->
+<!---->
+<!-- ORIGINAL CREATION DATE: -->
+<!-- MAy 2007 -->
+<!---->
+<!-- (C) Copyright OASIS Open 2007, 2008. -->
+<!-- All Rights Reserved. -->
+<!---->
+<!-- UPDATES: -->
+<!-- ============================================================= -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
     
     <!--  Import the XML Schema that contains the defiinitions for xml:lang and xml:space attributes -->
@@ -229,7 +251,7 @@
     <xs:attributeGroup name="lcHotspot.attributes">
       <xs:attribute name="outputclass" type="xs:string"/>
         <xs:attribute name="id" type="xs:NMTOKEN" use="required"/>
-        <xs:attribute name="conref" type="xs:string"/>
+        <xs:attributeGroup ref="conref-atts"/>
         <xs:attributeGroup ref="select-atts"/>
         <xs:attributeGroup ref="localization-atts"/>
         <xs:attributeGroup ref="global-atts"/>
@@ -268,7 +290,7 @@
     <xs:attributeGroup name="lcMatching.attributes">
       <xs:attribute name="outputclass" type="xs:string"/>
         <xs:attribute name="id" type="xs:NMTOKEN" use="required"/>
-        <xs:attribute name="conref" type="xs:string"/>
+        <xs:attributeGroup ref="conref-atts"/>
         <xs:attributeGroup ref="select-atts"/>
         <xs:attributeGroup ref="localization-atts"/>
         <xs:attributeGroup ref="global-atts"/>
@@ -307,7 +329,7 @@
     <xs:attributeGroup name="lcSequencing.attributes">
       <xs:attribute name="outputclass" type="xs:string"/>
         <xs:attribute name="id" type="xs:NMTOKEN" use="required"/>
-        <xs:attribute name="conref" type="xs:string"/>
+        <xs:attributeGroup ref="conref-atts"/>
         <xs:attributeGroup ref="select-atts"/>
         <xs:attributeGroup ref="localization-atts"/>
         <xs:attributeGroup ref="global-atts"/>
@@ -346,7 +368,7 @@
     <xs:attributeGroup name="lcMultipleSelect.attributes">
       <xs:attribute name="outputclass" type="xs:string"/>
         <xs:attribute name="id" type="xs:NMTOKEN" use="required"/>
-        <xs:attribute name="conref" type="xs:string"/>
+        <xs:attributeGroup ref="conref-atts"/>
         <xs:attributeGroup ref="select-atts"/>
         <xs:attributeGroup ref="localization-atts"/>
         <xs:attributeGroup ref="global-atts"/>
@@ -377,6 +399,7 @@
         <xs:group ref="lcAnswerOptionGroup" />
         <xs:group ref="lcFeedbackIncorrect" minOccurs="0"/>
         <xs:group ref="lcFeedbackCorrect" minOccurs="0"/>
+        <xs:group ref="data" minOccurs="0" maxOccurs="unbounded"/>
       </xs:sequence>
     </xs:sequence>
   </xs:group>
@@ -414,6 +437,7 @@
         <xs:group ref="lcAnswerOptionGroup" />
         <xs:group ref="lcFeedbackIncorrect" minOccurs="0"/>
         <xs:group ref="lcFeedbackCorrect" minOccurs="0"/>
+        <xs:group ref="data" minOccurs="0" maxOccurs="unbounded"/>
       </xs:sequence>
     </xs:sequence>
   </xs:group>
@@ -421,7 +445,7 @@
      <xs:attributeGroup name="lcTrueFalse.attributes">
       <xs:attribute name="outputclass" type="xs:string"/>
         <xs:attribute name="id" type="xs:NMTOKEN" use="required"/>
-        <xs:attribute name="conref" type="xs:string"/>
+        <xs:attributeGroup ref="conref-atts"/>
         <xs:attributeGroup ref="select-atts"/>
         <xs:attributeGroup ref="localization-atts"/>
         <xs:attributeGroup ref="global-atts"/>
@@ -460,7 +484,7 @@
     <xs:attributeGroup name="lcOpenQuestion.attributes">
       <xs:attribute name="outputclass" type="xs:string"/>
         <xs:attribute name="id" type="xs:NMTOKEN" use="required"/>
-        <xs:attribute name="conref" type="xs:string"/>
+        <xs:attributeGroup ref="conref-atts"/>
         <xs:attributeGroup ref="select-atts"/>
         <xs:attributeGroup ref="localization-atts"/>
         <xs:attributeGroup ref="global-atts"/>
@@ -803,7 +827,7 @@
     </xs:element>
     <xs:complexType name="lcSequenceOptionGroup.class">
         <xs:sequence>
-            <xs:group ref="lcSequenceOptionGroup"/>
+            <xs:group ref="lcSequenceOptionGroup.content"/>
         </xs:sequence>
         <xs:attribute name="outputclass" type="xs:string"/>
         <xs:attributeGroup ref="univ-atts"/>

@@ -1,4 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- ============================================================= -->
+<!-- HEADER -->
+<!-- ============================================================= -->
+<!-- MODULE:    DITA Learning  Map  -->
+<!-- VERSION:   1.2 -->
+<!-- DATE:      February 2008 -->
+<!---->
+<!-- ============================================================= -->
+
+<!-- ============================================================= -->
+<!-- SYSTEM:     Darwin Information Typing Architecture (DITA) -->
+<!---->
+<!-- PURPOSE:    XSD to describe DITA Learning map  -->
+<!---->
+<!-- ORIGINAL CREATION DATE: -->
+<!-- MAy 2007 -->
+<!---->
+<!-- (C) Copyright OASIS Open 2007, 2008. -->
+<!-- All Rights Reserved. -->
+<!---->
+<!-- UPDATES: -->
+<!-- ============================================================= -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
     attributeFormDefault="unqualified"
     xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
@@ -11,17 +33,14 @@
 
 
     <!--  ================ GROUP DEFINITIONS =====================  -->
-    <!--  <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:metaDeclGrp.xsd:1.2"/>-->
     <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:tblDeclGrp.xsd:1.2"/>
 
     <!-- =================  MODULE INLCUDE DEFINITION  ==================  -->
     <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:commonElementMod.xsd:1.2"/>
-    <!--  <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:commonElementGrp.xsd:1.2"/>-->
     <!-- ======== Table elements ======== -->
     <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:tblDeclMod.xsd:1.2"/>
     <!-- ======= MetaData elements, plus keyword and indexterm ======= -->
     <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:metaDeclMod.xsd:1.2"/>
-
 
     <xs:redefine schemaLocation="urn:oasis:names:tc:dita:xsd:mapGrp.xsd:1.2">
         <xs:group name="topicref">

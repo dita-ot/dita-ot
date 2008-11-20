@@ -17,7 +17,7 @@
 <!-- ORIGINAL CREATION DATE:                                       -->
 <!--             March 2001                                        -->
 <!--                                                               -->
-<!--             (C) Copyright OASIS-Open.org 2005, 2006                -->
+<!--             (C) Copyright OASIS-Open.org 2005, 2008                -->
 <!--             (C) Copyright IBM Corporation 2001, 2004.         -->
 <!--             All Rights Reserved.                              -->
 <!--                                                               -->
@@ -106,6 +106,13 @@
         <xs:group ref="indexing-d-index-base"/>
       </xs:choice>
     </xs:group >
+      
+      <xs:group name="note">
+      <xs:choice>
+        <xs:group ref="note"/>
+        <xs:group ref="hazard-d-note"/>
+      </xs:choice>
+    </xs:group >
     
   </xs:redefine>
 
@@ -127,7 +134,7 @@
   </xs:redefine>
 
   <xs:redefine schemaLocation="conceptMod.xsd" >
-    <!--<xs:complexType name="concept.class">
+   <!-- <xs:complexType name="concept.class">
       <xs:complexContent>
         <xs:extension base="concept.class">
           <xs:attribute name="domains" type="xs:string" default="(topic ui-d) (topic hi-d) (topic sw-d) (topic pr-d) (topic ut-d) (topic indexing-d)"/>
@@ -159,13 +166,6 @@
   </xs:redefine>
 
   <xs:redefine schemaLocation="referenceMod.xsd" >
-    <!--<xs:complexType name="reference.class">
-      <xs:complexContent>
-        <xs:extension base="reference.class">
-          <xs:attribute name="domains" type="xs:string" default="(topic ui-d) (topic hi-d) (topic sw-d) (topic pr-d) (topic ut-d) (topic indexing-d)"/>
-        </xs:extension>
-      </xs:complexContent>
-    </xs:complexType>-->
     
     <xs:group name="reference-info-types">
       <xs:choice>
@@ -175,13 +175,6 @@
   </xs:redefine>
   
   <xs:redefine schemaLocation="glossaryMod.xsd" >
-    <!--<xs:complexType name="glossentry.class">
-      <xs:complexContent>
-        <xs:extension base="glossentry.class">
-          <xs:attribute name="domains" type="xs:string" default="(topic ui-d) (topic hi-d) (topic sw-d) (topic pr-d) (topic ut-d) (topic indexing-d)"/>
-        </xs:extension>
-      </xs:complexContent>
-    </xs:complexType>-->
     
     <xs:group name="glossentry-info-types">
       <xs:choice>
@@ -209,9 +202,9 @@
 
   <xs:annotation>
     <xs:documentation>The &lt;<keyword>dita</keyword>&gt; element provides a top-level container
-      for multiple topics when you create documents using the ditabase DTD. The
+      for multiple topics when you create documents using the ditabase XSD. The
       &lt;<keyword>dita</keyword>&gt; element lets you create any sequence of concept,
-      task, and reference topics, and the ditabase DTD lets you further nest these
+      task, and reference topics, and the ditabase XSD lets you further nest these
       topic types inside each other. The &lt;<keyword>dita</keyword>&gt; element has
       no particular output implications; it simply allows you to create multiple
       topics of different types at the same level in a single document.</xs:documentation>

@@ -182,7 +182,7 @@ PUBLIC "-//OASIS//DTD DITA 1.2 Task//EN"                           -->
 <!-- ============================================================= -->
 
 <!ENTITY % strictTaskbody-c-def  
-  PUBLIC "-//OASIS//ELEMENTS DITA 1.2 Strict Taskbody Constraints//EN" 
+  PUBLIC "-//OASIS//ELEMENTS DITA 1.2 Strict Taskbody Constraint//EN" 
   "strictTaskbodyConstraint.mod">
 %strictTaskbody-c-def;
 

@@ -4,7 +4,7 @@
 <!-- ============================================================= -->
 <!--  MODULE:    DITA Topic XSD                                    -->
 <!--  VERSION:   1.2                                             -->
-<!--  DATE:      November 2006                                     -->
+<!--  DATE:      November 2008                                     -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -17,7 +17,7 @@
 <!-- ORIGINAL CREATION DATE:                                       -->
 <!--             March 2001                                        -->
 <!--                                                               -->
-<!--             (C) Copyright OASIS-Open.org 2005, 2006                -->
+<!--             (C) Copyright OASIS-Open.org 2005, 2008                -->
 <!--             (C) Copyright IBM Corporation 2001, 2004.         -->
 <!--             All Rights Reserved.                              -->
 <!-- ============================================================= -->
@@ -32,6 +32,7 @@
   <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:utilitiesDomain.xsd:1.2"/>
   <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:indexingDomain.xsd:1.2"/>
   <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:hazardstatementDomain.xsd:1.2"/>
+  <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:abbreviateDomain.xsd:1.2" />
   
   
   <!--  ================ GROUP DEFINITIONS =====================  -->
@@ -99,10 +100,17 @@
       </xs:choice>
     </xs:group >
       
-      <xs:group name="note">
+    <xs:group name="note">
       <xs:choice>
         <xs:group ref="note"/>
         <xs:group ref="hazard-d-note"/>
+      </xs:choice>
+    </xs:group >
+    
+    <xs:group name="term">
+      <xs:choice>
+        <xs:group ref="term"/>
+        <xs:group ref="abbrev-d-term"/>
       </xs:choice>
     </xs:group >
     
@@ -124,7 +132,7 @@
   </xs:group>
   
   <xs:attributeGroup name="domains-att">
-    <xs:attribute name="domains" type="xs:string" default="(topic ui-d) (topic hi-d) (topic sw-d) (topic pr-d) (topic ut-d) (topic indexing-d) (topic hazard-d) "/>
+    <xs:attribute name="domains" type="xs:string" default="(topic ui-d) (topic hi-d) (topic sw-d) (topic pr-d) (topic ut-d) (topic indexing-d) (topic hazard-d) (topic abbrev-d)"/>
   </xs:attributeGroup>
 
 </xs:schema>

@@ -157,21 +157,23 @@
   
   <xs:group name="hazardsymbol.content">
     <xs:sequence>
-      <xs:choice>
+      <xs:sequence>
       <xs:group ref="alt" minOccurs="0"/>
-    </xs:choice>
+      <xs:group ref="longdescref" minOccurs="0"/>
+    </xs:sequence>
     </xs:sequence>
   </xs:group>
   
   <xs:attributeGroup name="hazardsymbol.attributes">
       <xs:attribute name="href" type="xs:string" use="required"/>
     <xs:attribute name="keyref" type="xs:NMTOKEN"/>
-    <xs:attribute name="alt" type="xs:string"/>
+    <!-- <xs:attribute name="alt" type="xs:string"/> -->
     <xs:attribute name="longdescref" type="xs:string"/>
     <xs:attribute name="height" type="xs:NMTOKEN"/>
     <xs:attribute name="width" type="xs:NMTOKEN"/>
     <xs:attribute name="scale" type="xs:NMTOKEN"/>
     <xs:attribute name="scalefit" type="yesno-att.class"/>
+    <xs:attribute name="scope" type="scope-att.class"/>
     <xs:attribute name="align" type="xs:string"/>
     <xs:attribute name="placement" type="image-placement-att.class" default="inline"/>
     <xs:attribute name="outputclass" type="xs:string"/>

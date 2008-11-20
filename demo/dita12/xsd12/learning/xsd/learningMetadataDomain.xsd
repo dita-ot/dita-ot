@@ -1,7 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- ============================================================= -->
+<!-- HEADER -->
+<!-- ============================================================= -->
+<!-- MODULE:    DITA Learning  metadata Domain -->
+<!-- VERSION:   1.2 -->
+<!-- DATE:      February 2008 -->
+<!---->
+<!-- ============================================================= -->
+
+<!-- ============================================================= -->
+<!-- SYSTEM:     Darwin Information Typing Architecture (DITA) -->
+<!---->
+<!-- PURPOSE:    XSD to describe DITA Learning metadata domain  -->
+<!---->
+<!-- ORIGINAL CREATION DATE: -->
+<!-- MAy 2007 -->
+<!---->
+<!-- (C) Copyright OASIS Open 2007, 2008. -->
+<!-- All Rights Reserved. -->
+<!---->
+<!-- UPDATES: -->
+<!-- ============================================================= -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
     
-    <!-- These elements are part of the learningDomain and the learningMpaDomain.  -->
     
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         - LOM Metadata
@@ -151,6 +172,7 @@
     
      <xs:attributeGroup name="lcLom.attributes">
        <xs:attributeGroup ref="univ-atts"/>
+       <xs:attribute name="mapkeyref" type="xs:string"/>
         <xs:attributeGroup ref="global-atts"/>
      </xs:attributeGroup>
     
@@ -179,6 +201,7 @@
                     <xs:enumeration value="networked"/>
                     <xs:enumeration value="linear"/>
                     <xs:enumeration value="hierarchical"/>
+                  <xs:enumeration value=" -dita-use-conref-target"/>
                 </xs:restriction>
             </xs:simpleType>
         </xs:attribute>
@@ -231,6 +254,7 @@
                     <xs:enumeration value="2"/>
                     <xs:enumeration value="3"/>
                     <xs:enumeration value="4"/>
+                    <xs:enumeration value="-dita-use-conref-target"/>
                 </xs:restriction>
             </xs:simpleType>
         </xs:attribute>
@@ -270,6 +294,7 @@
                     <xs:enumeration value="ms-internetexplorer"/>
                     <xs:enumeration value="opera"/>
                     <xs:enumeration value="amaya"/>
+                    <xs:enumeration value="-dita-use-conref-target"/>
                 </xs:restriction>
             </xs:simpleType>
         </xs:attribute>
@@ -341,6 +366,7 @@
                     <xs:enumeration value="active"/>
                     <xs:enumeration value="expositive"/>    
                     <xs:enumeration value="mixed"/>
+                    <xs:enumeration value="-dita-use-conref-target"/>
                 </xs:restriction>
             </xs:simpleType>
         </xs:attribute>
@@ -368,7 +394,7 @@
             <xs:simpleType>
                 <xs:restriction base="xs:string">
                     <xs:enumeration value="exercise"/>
-                    <xs:enumeration value="wimulation"/>    
+                    <xs:enumeration value="simulation"/>    
                     <xs:enumeration value="questionnaire"/>
                     <xs:enumeration value="diagram"/>
                     <xs:enumeration value="figure"/>
@@ -382,6 +408,7 @@
                     <xs:enumeration value="problemstatement"/>
                     <xs:enumeration value="selfassesment"/>
                     <xs:enumeration value="lecture"/>
+                    <xs:enumeration value="-dita-use-conref-target"/>
                 </xs:restriction>
             </xs:simpleType>
         </xs:attribute>
@@ -413,6 +440,7 @@
                     <xs:enumeration value="medium"/>
                     <xs:enumeration value="high"/>
                     <xs:enumeration value="veryhigh"/>
+                    <xs:enumeration value="-dita-use-conref-target"/>
                 </xs:restriction>
             </xs:simpleType>
         </xs:attribute>
@@ -444,6 +472,7 @@
                     <xs:enumeration value="medium"/>
                     <xs:enumeration value="high"/>
                     <xs:enumeration value="veryhigh"/>
+                    <xs:enumeration value="-dita-use-conref-target"/>
                 </xs:restriction>
             </xs:simpleType>
         </xs:attribute>
@@ -474,6 +503,7 @@
                     <xs:enumeration value="author"/>    
                     <xs:enumeration value="learner"/>
                     <xs:enumeration value="manager"/>
+                    <xs:enumeration value="-dita-use-conref-target"/>
                 </xs:restriction>
             </xs:simpleType>
         </xs:attribute>
@@ -504,6 +534,7 @@
                     <xs:enumeration value="highereducation"/>    
                     <xs:enumeration value="training"/>
                     <xs:enumeration value="other"/>
+                  <xs:enumeration value="-dita-use-conref-target"/>
                 </xs:restriction>
             </xs:simpleType>
         </xs:attribute>
@@ -527,7 +558,7 @@
         <xs:attributeGroup ref="univ-atts"/>
         <xs:attribute name="name" type="xs:string" default="lomTypicalAgeRange"/>
         <xs:attribute name="datatype" type="xs:string" default=""/>
-        <xs:attribute name="value"  type="xs:string" default=""/>
+        <xs:attribute name="value"  type="xs:string" use="required"/>
         <xs:attributeGroup ref="global-atts"/>
     </xs:attributeGroup>
     
@@ -556,6 +587,7 @@
                     <xs:enumeration value="medium"/>
                     <xs:enumeration value="difficult"/>
                     <xs:enumeration value="verydifficult"/>
+                    <xs:enumeration value="-dita-use-conref-target"/>
                 </xs:restriction>
             </xs:simpleType>
         </xs:attribute>

@@ -8,16 +8,6 @@
 <!---->
 <!-- ============================================================= -->
 <!-- ============================================================= -->
-<!-- PUBLIC DOCUMENT TYPE DEFINITION -->
-<!-- TYPICAL INVOCATION -->
-<!---->
-<!--
-  Refer to this file by the following public identifier or an 
-        appropriate system identifier 
-  PUBLIC "-//OASIS//ELEMENTS DITA Subject Scheme Map//EN"
-        Delivered as file "subjectScheme.mod"
--->
-<!-- ============================================================= -->
 <!-- SYSTEM:     Darwin Information Typing Architecture (DITA) -->
 <!---->
 <!-- PURPOSE:    Declaring the elements and specialization -->
@@ -33,115 +23,139 @@
 <!-- UPDATES: -->
 <!-- 2008.02.13 RDA: Created file based upon prototype from IBM -->
 <!-- ============================================================= -->
-<!-- ============================================================= -->
-<!-- ELEMENT NAME ENTITIES -->
-<!-- ============================================================= -->
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
+  xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
   <xs:import namespace="http://dita.oasis-open.org/architecture/2005/" schemaLocation="ditaarch.xsd"/>
   <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="xml.xsd"/>
-  
+
   <!-- ============================================================= -->
   <!-- ELEMENT DECLARATIONS -->
   <!-- ============================================================= -->
-  <!-- LONG NAME: Subject Scheme Map -->
-  <xs:complexType name="subjectScheme.content">
+
+  <xs:complexType name="subjectScheme.class">
     <xs:sequence>
-      <xs:group minOccurs="0" ref="title"/>
-      <xs:group minOccurs="0" ref="topicmeta"/>
-      <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:group ref="anchor"/>
-        <xs:group ref="data.elements.incl"/>
-        <xs:group ref="enumerationdef"/>
-        <xs:group ref="hasInstance"/>
-        <xs:group ref="hasKind"/>
-        <xs:group ref="hasNarrower"/>
-        <xs:group ref="hasPart"/>
-        <xs:group ref="hasRelated"/>
-        <xs:group ref="navref"/>
-        <xs:group ref="relatedSubjects"/>
-        <xs:group ref="reltable"/>
-        <xs:group ref="schemeref"/>
-        <xs:group ref="subjectdef"/>
-        <xs:group ref="subjectHead"/>
-        <xs:group ref="subjectRelTable"/>
-        <xs:group ref="topicref"/>
-      </xs:choice>
+      <xs:group ref="subjectScheme.content"/>
     </xs:sequence>
+    <xs:attributeGroup ref="subjectScheme.attributes"/>
   </xs:complexType>
+
+  <!-- LONG NAME: Subject Scheme Map -->
+  <xs:group name="subjectScheme.content">
+    <xs:sequence>
+      <xs:sequence>
+        <xs:group minOccurs="0" ref="title"/>
+        <xs:group minOccurs="0" ref="topicmeta"/>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:group ref="anchor"/>
+          <xs:group ref="data.elements.incl"/>
+          <xs:group ref="enumerationdef"/>
+          <xs:group ref="hasInstance"/>
+          <xs:group ref="hasKind"/>
+          <xs:group ref="hasNarrower"/>
+          <xs:group ref="hasPart"/>
+          <xs:group ref="hasRelated"/>
+          <xs:group ref="navref"/>
+          <xs:group ref="relatedSubjects"/>
+          <xs:group ref="reltable"/>
+          <xs:group ref="schemeref"/>
+          <xs:group ref="subjectdef"/>
+          <xs:group ref="subjectHead"/>
+          <xs:group ref="subjectRelTable"/>
+          <xs:group ref="topicref"/>
+        </xs:choice>
+      </xs:sequence>
+    </xs:sequence>
+  </xs:group>
+
   <xs:attributeGroup name="subjectScheme.attributes">
+    <xs:attribute ref="ditaarch:DITAArchVersion"/>
+    <xs:attributeGroup ref="domains-att"/>
     <xs:attribute name="id" type="xs:ID"/>
     <xs:attributeGroup ref="conref-atts"/>
-    <xs:attribute name="anchorref"/>
-    <xs:attribute name="outputclass"/>
+    <xs:attribute name="anchorref" type="xs:string"/>
+    <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="localization-atts"/>
     <xs:attributeGroup ref="topicref-atts-no-toc"/>
     <xs:attributeGroup ref="select-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
   </xs:attributeGroup>
-  
+
   <xs:element name="subjectScheme">
     <xs:complexType>
       <xs:complexContent>
-        <xs:extension base="subjectScheme.content">
-          <xs:attributeGroup ref="subjectScheme.attlist"/>
+        <xs:extension base="subjectScheme.class">
+          <xs:attribute name="class" default="- map/map subjectScheme/subjectScheme "/>
         </xs:extension>
       </xs:complexContent>
     </xs:complexType>
   </xs:element>
-  <xs:attributeGroup name="subjectScheme.attlist">
-    <xs:attributeGroup ref="subjectScheme.attributes"/>
-    <xs:attribute ref="ditaarch:DITAArchVersion"/>
-    <xs:attributeGroup ref="domains-att"/>
-    <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute name="class" default="- map/map subjectScheme/subjectScheme "/>
-  </xs:attributeGroup>
-  <!-- LONG NAME: Scheme reference -->
-  <xs:complexType name="schemeref.content">
+
+  <xs:complexType name="schemeref.class">
     <xs:sequence>
-      <xs:group minOccurs="0" ref="topicmeta"/>
-      <xs:group minOccurs="0" maxOccurs="unbounded" ref="data.elements.incl"/>
+      <xs:group ref="schemeref.content"/>
     </xs:sequence>
+    <xs:attributeGroup ref="schemeref.attributes"/>
   </xs:complexType>
+
+  <!-- LONG NAME: Scheme reference -->
+  <xs:group name="schemeref.content">
+    <xs:sequence>
+      <xs:sequence>
+        <xs:group minOccurs="0" ref="topicmeta"/>
+        <xs:group minOccurs="0" maxOccurs="unbounded" ref="data.elements.incl"/>
+      </xs:sequence>
+    </xs:sequence>
+  </xs:group>
+
   <xs:attributeGroup name="schemeref.attributes">
-    <xs:attribute name="navtitle"/>
-    <xs:attribute name="href"/>
-    <xs:attribute name="keyref"/>
-    <xs:attribute name="keys"/>
-    <xs:attribute name="query"/>
-    <xs:attribute name="type" default="scheme"/>
-    <xs:attribute name="format" default="ditamap"/>
+    <xs:attribute name="navtitle" type="xs:string"/>
+    <xs:attribute name="href" type="xs:string"/>
+    <xs:attribute name="keyref" type="xs:string"/>
+    <xs:attribute name="keys" type="xs:string"/>
+    <xs:attribute name="query" type="xs:string"/>
+    <xs:attribute name="type" default="scheme" type="xs:string"/>
+    <xs:attribute name="format" default="ditamap" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
   </xs:attributeGroup>
+
   <xs:element name="schemeref">
     <xs:complexType>
       <xs:complexContent>
-        <xs:extension base="schemeref.content">
-          <xs:attributeGroup ref="schemeref.attlist"/>
+        <xs:extension base="schemeref.class">
+          <xs:attribute name="class" default="- map/topicref subjectScheme/schemeref "/>
         </xs:extension>
       </xs:complexContent>
     </xs:complexType>
   </xs:element>
-  <xs:attributeGroup name="schemeref.attlist">
-    <xs:attributeGroup ref="schemeref.attributes"/>
-    <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute name="class" default="- map/topicref subjectScheme/schemeref "/>
-  </xs:attributeGroup>
-  <!-- LONG NAME: Has Narrower Relationship -->
-  <xs:complexType name="hasNarrower.content">
+
+  <xs:complexType name="hasNarrower.class">
     <xs:sequence>
-      <xs:group minOccurs="0" ref="topicmeta"/>
-      <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:group ref="data.elements.incl"/>
-        <xs:group ref="subjectdef"/>
-        <xs:group ref="subjectHead"/>
-        <xs:group ref="topicref"/>
-      </xs:choice>
+      <xs:group ref="hasNarrower.content"/>
     </xs:sequence>
+    <xs:attributeGroup ref="hasNarrower.attributes"/>
   </xs:complexType>
+
+  <!-- LONG NAME: Has Narrower Relationship -->
+  <xs:group name="hasNarrower.content">
+    <xs:sequence>
+      <xs:sequence>
+        <xs:group minOccurs="0" ref="topicmeta"/>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:group ref="data.elements.incl"/>
+          <xs:group ref="subjectdef"/>
+          <xs:group ref="subjectHead"/>
+          <xs:group ref="topicref"/>
+        </xs:choice>
+      </xs:sequence>
+    </xs:sequence>
+  </xs:group>
   <xs:attributeGroup name="hasNarrower.attributes">
-    <xs:attribute name="navtitle"/>
-    <xs:attribute name="href"/>
-    <xs:attribute name="keyref"/>
-    <xs:attribute name="keys"/>
+    <xs:attribute name="navtitle" type="xs:string"/>
+    <xs:attribute name="href" type="xs:string"/>
+    <xs:attribute name="keyref" type="xs:string"/>
+    <xs:attribute name="keys" type="xs:string"/>
     <xs:attribute name="scope">
       <xs:simpleType>
         <xs:restriction base="xs:token">
@@ -151,41 +165,47 @@
         </xs:restriction>
       </xs:simpleType>
     </xs:attribute>
-    <xs:attribute name="format"/>
-    <xs:attribute name="type"/>
+    <xs:attribute name="format" type="xs:string"/>
+    <xs:attribute name="type" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
   </xs:attributeGroup>
   <xs:element name="hasNarrower">
     <xs:complexType>
       <xs:complexContent>
-        <xs:extension base="hasNarrower.content">
-          <xs:attributeGroup ref="hasNarrower.attlist"/>
+        <xs:extension base="hasNarrower.class">
+          <xs:attribute name="class" default="- map/topicref subjectScheme/hasNarrower "/>
         </xs:extension>
       </xs:complexContent>
     </xs:complexType>
   </xs:element>
-  <xs:attributeGroup name="hasNarrower.attlist">
-    <xs:attributeGroup ref="hasNarrower.attributes"/>
-    <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute name="class" default="- map/topicref subjectScheme/hasNarrower "/>
-  </xs:attributeGroup>
-  <!-- LONG NAME: Has Kind Relationship -->
-  <xs:complexType name="hasKind.content">
+
+  <xs:complexType name="hasKind.class">
     <xs:sequence>
-      <xs:group minOccurs="0" ref="topicmeta"/>
-      <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:group ref="data.elements.incl"/>
-        <xs:group ref="subjectdef"/>
-        <xs:group ref="subjectHead"/>
-        <xs:group ref="topicref"/>
-      </xs:choice>
+      <xs:group ref="hasKind.content"/>
     </xs:sequence>
+    <xs:attributeGroup ref="hasKind.attributes"/>
   </xs:complexType>
+
+  <!-- LONG NAME: Has Kind Relationship -->
+  <xs:group name="hasKind.content">
+    <xs:sequence>
+      <xs:sequence>
+        <xs:group minOccurs="0" ref="topicmeta"/>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:group ref="data.elements.incl"/>
+          <xs:group ref="subjectdef"/>
+          <xs:group ref="subjectHead"/>
+          <xs:group ref="topicref"/>
+        </xs:choice>
+      </xs:sequence>
+    </xs:sequence>
+  </xs:group>
   <xs:attributeGroup name="hasKind.attributes">
-    <xs:attribute name="navtitle"/>
-    <xs:attribute name="href"/>
-    <xs:attribute name="keyref"/>
-    <xs:attribute name="keys"/>
+    <xs:attribute name="navtitle" type="xs:string"/>
+    <xs:attribute name="href" type="xs:string"/>
+    <xs:attribute name="keyref" type="xs:string"/>
+    <xs:attribute name="keys" type="xs:string"/>
     <xs:attribute name="scope">
       <xs:simpleType>
         <xs:restriction base="xs:token">
@@ -195,41 +215,47 @@
         </xs:restriction>
       </xs:simpleType>
     </xs:attribute>
-    <xs:attribute name="format"/>
-    <xs:attribute name="type"/>
+    <xs:attribute name="format" type="xs:string"/>
+    <xs:attribute name="type" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
   </xs:attributeGroup>
   <xs:element name="hasKind">
     <xs:complexType>
       <xs:complexContent>
-        <xs:extension base="hasKind.content">
-          <xs:attributeGroup ref="hasKind.attlist"/>
+        <xs:extension base="hasKind.class">
+          <xs:attribute name="class" default="- map/topicref subjectScheme/hasKind "/>
         </xs:extension>
       </xs:complexContent>
     </xs:complexType>
   </xs:element>
-  <xs:attributeGroup name="hasKind.attlist">
-    <xs:attributeGroup ref="hasKind.attributes"/>
-    <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute name="class" default="- map/topicref subjectScheme/hasKind "/>
-  </xs:attributeGroup>
+
   <!-- LONG NAME: Has Part Relationship -->
-  <xs:complexType name="hasPart.content">
+  <xs:complexType name="hasPart.class">
     <xs:sequence>
-      <xs:group minOccurs="0" ref="topicmeta"/>
-      <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:group ref="data.elements.incl"/>
-        <xs:group ref="subjectdef"/>
-        <xs:group ref="subjectHead"/>
-        <xs:group ref="topicref"/>
-      </xs:choice>
+      <xs:group ref="hasPart.content"/>
     </xs:sequence>
+    <xs:attributeGroup ref="hasPart.attributes"/>
   </xs:complexType>
+
+  <xs:group name="hasPart.content">
+    <xs:sequence>
+      <xs:sequence>
+        <xs:group minOccurs="0" ref="topicmeta"/>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:group ref="data.elements.incl"/>
+          <xs:group ref="subjectdef"/>
+          <xs:group ref="subjectHead"/>
+          <xs:group ref="topicref"/>
+        </xs:choice>
+      </xs:sequence>
+    </xs:sequence>
+  </xs:group>
   <xs:attributeGroup name="hasPart.attributes">
-    <xs:attribute name="navtitle"/>
-    <xs:attribute name="href"/>
-    <xs:attribute name="keyref"/>
-    <xs:attribute name="keys"/>
+    <xs:attribute name="navtitle" type="xs:string"/>
+    <xs:attribute name="href" type="xs:string"/>
+    <xs:attribute name="keyref" type="xs:string"/>
+    <xs:attribute name="keys" type="xs:string"/>
     <xs:attribute name="scope">
       <xs:simpleType>
         <xs:restriction base="xs:token">
@@ -239,41 +265,48 @@
         </xs:restriction>
       </xs:simpleType>
     </xs:attribute>
-    <xs:attribute name="format"/>
-    <xs:attribute name="type"/>
+    <xs:attribute name="format" type="xs:string"/>
+    <xs:attribute name="type" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
   </xs:attributeGroup>
   <xs:element name="hasPart">
     <xs:complexType>
       <xs:complexContent>
-        <xs:extension base="hasPart.content">
-          <xs:attributeGroup ref="hasPart.attlist"/>
+        <xs:extension base="hasPart.class">
+          <xs:attribute name="class" default="- map/topicref subjectScheme/hasPart "/>
         </xs:extension>
       </xs:complexContent>
     </xs:complexType>
   </xs:element>
-  <xs:attributeGroup name="hasPart.attlist">
-    <xs:attributeGroup ref="hasPart.attributes"/>
-    <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute name="class" default="- map/topicref subjectScheme/hasPart "/>
-  </xs:attributeGroup>
+
   <!-- LONG NAME: Has Instance Relationship -->
-  <xs:complexType name="hasInstance.content">
+
+  <xs:complexType name="hasInstance.class">
     <xs:sequence>
-      <xs:group minOccurs="0" ref="topicmeta"/>
-      <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:group ref="data.elements.incl"/>
-        <xs:group ref="subjectdef"/>
-        <xs:group ref="subjectHead"/>
-        <xs:group ref="topicref"/>
-      </xs:choice>
+      <xs:group ref="hasInstance.content"/>
     </xs:sequence>
+    <xs:attributeGroup ref="hasInstance.attributes"/>
   </xs:complexType>
+
+  <xs:group name="hasInstance.content">
+    <xs:sequence>
+      <xs:sequence>
+        <xs:group minOccurs="0" ref="topicmeta"/>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:group ref="data.elements.incl"/>
+          <xs:group ref="subjectdef"/>
+          <xs:group ref="subjectHead"/>
+          <xs:group ref="topicref"/>
+        </xs:choice>
+      </xs:sequence>
+    </xs:sequence>
+  </xs:group>
   <xs:attributeGroup name="hasInstance.attributes">
-    <xs:attribute name="navtitle"/>
-    <xs:attribute name="href"/>
-    <xs:attribute name="keyref"/>
-    <xs:attribute name="keys"/>
+    <xs:attribute name="navtitle" type="xs:string"/>
+    <xs:attribute name="href" type="xs:string"/>
+    <xs:attribute name="keyref" type="xs:string"/>
+    <xs:attribute name="keys" type="xs:string"/>
     <xs:attribute name="scope">
       <xs:simpleType>
         <xs:restriction base="xs:token">
@@ -283,41 +316,47 @@
         </xs:restriction>
       </xs:simpleType>
     </xs:attribute>
-    <xs:attribute name="format"/>
-    <xs:attribute name="type"/>
+    <xs:attribute name="format" type="xs:string"/>
+    <xs:attribute name="type" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
   </xs:attributeGroup>
   <xs:element name="hasInstance">
     <xs:complexType>
       <xs:complexContent>
-        <xs:extension base="hasInstance.content">
-          <xs:attributeGroup ref="hasInstance.attlist"/>
+        <xs:extension base="hasInstance.class">
+          <xs:attribute name="class" default="- map/topicref subjectScheme/hasInstance "/>
         </xs:extension>
       </xs:complexContent>
     </xs:complexType>
   </xs:element>
-  <xs:attributeGroup name="hasInstance.attlist">
-    <xs:attributeGroup ref="hasInstance.attributes"/>
-    <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute name="class" default="- map/topicref subjectScheme/hasInstance "/>
-  </xs:attributeGroup>
+
   <!-- LONG NAME: Has Related Relationship -->
-  <xs:complexType name="hasRelated.content">
+  <xs:complexType name="hasRelated.class">
     <xs:sequence>
-      <xs:group minOccurs="0" ref="topicmeta"/>
-      <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:group ref="data.elements.incl"/>
-        <xs:group ref="subjectdef"/>
-        <xs:group ref="subjectHead"/>
-        <xs:group ref="topicref"/>
-      </xs:choice>
+      <xs:group ref="hasRelated.content"/>
     </xs:sequence>
+    <xs:attributeGroup ref="hasRelated.attributes"/>
   </xs:complexType>
+
+  <xs:group name="hasRelated.content">
+    <xs:sequence>
+      <xs:sequence>
+        <xs:group minOccurs="0" ref="topicmeta"/>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:group ref="data.elements.incl"/>
+          <xs:group ref="subjectdef"/>
+          <xs:group ref="subjectHead"/>
+          <xs:group ref="topicref"/>
+        </xs:choice>
+      </xs:sequence>
+    </xs:sequence>
+  </xs:group>
   <xs:attributeGroup name="hasRelated.attributes">
-    <xs:attribute name="navtitle"/>
-    <xs:attribute name="href"/>
-    <xs:attribute name="keyref"/>
-    <xs:attribute name="keys"/>
+    <xs:attribute name="navtitle" type="xs:string"/>
+    <xs:attribute name="href" type="xs:string"/>
+    <xs:attribute name="keyref" type="xs:string"/>
+    <xs:attribute name="keys" type="xs:string"/>
     <xs:attribute name="collection-type" default="choice">
       <xs:simpleType>
         <xs:restriction base="xs:token">
@@ -337,61 +376,58 @@
         </xs:restriction>
       </xs:simpleType>
     </xs:attribute>
-    <xs:attribute name="format"/>
-    <xs:attribute name="type"/>
+    <xs:attribute name="format" type="xs:string"/>
+    <xs:attribute name="type" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
   </xs:attributeGroup>
+
   <xs:element name="hasRelated">
     <xs:complexType>
       <xs:complexContent>
-        <xs:extension base="hasRelated.content">
-          <xs:attributeGroup ref="hasRelated.attlist"/>
+        <xs:extension base="hasRelated.class">
+          <xs:attribute name="class" default="- map/topicref subjectScheme/hasRelated "/>
         </xs:extension>
       </xs:complexContent>
     </xs:complexType>
   </xs:element>
-  <xs:attributeGroup name="hasRelated.attlist">
-    <xs:attributeGroup ref="hasRelated.attributes"/>
-    <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute name="class" default="- map/topicref subjectScheme/hasRelated "/>
-  </xs:attributeGroup>
-  <!-- LONG NAME: Subject definition -->
-  <xs:complexType name="subjectdef.content">
+
+  <xs:complexType name="subjectdef.class">
     <xs:sequence>
-      <xs:group minOccurs="0" ref="topicmeta"/>
-      <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:group ref="data.elements.incl"/>
-        <xs:group ref="hasInstance"/>
-        <xs:group ref="hasKind"/>
-        <xs:group ref="hasNarrower"/>
-        <xs:group ref="hasPart"/>
-        <xs:group ref="hasRelated"/>
-        <xs:group ref="subjectdef"/>
-        <xs:group ref="subjectHead"/>
-        <xs:group ref="topicref"/>
-      </xs:choice>
+      <xs:group ref="subjectdef.content"/>
     </xs:sequence>
+    <xs:attributeGroup ref="subjectdef.attributes"/>
   </xs:complexType>
+
+  <!-- LONG NAME: Subject definition -->
+  <xs:group name="subjectdef.content">
+    <xs:sequence>
+      <xs:sequence>
+        <xs:group minOccurs="0" ref="topicmeta"/>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:group ref="data.elements.incl"/>
+          <xs:group ref="hasInstance"/>
+          <xs:group ref="hasKind"/>
+          <xs:group ref="hasNarrower"/>
+          <xs:group ref="hasPart"/>
+          <xs:group ref="hasRelated"/>
+          <xs:group ref="subjectdef"/>
+          <xs:group ref="subjectHead"/>
+          <xs:group ref="topicref"/>
+        </xs:choice>
+      </xs:sequence>
+    </xs:sequence>
+  </xs:group>
   <xs:attributeGroup name="subjectdef.attributes">
-    <xs:attribute name="navtitle"/>
-    <xs:attribute name="href"/>
-    <xs:attribute name="keyref"/>
-    <xs:attribute name="keys"/>
-    <xs:attribute name="query"/>
-    <xs:attribute name="copy-to"/>
-    <xs:attribute name="outputclass"/>
-    <xs:attribute name="collection-type">
-      <xs:simpleType>
-        <xs:restriction base="xs:token">
-          <xs:enumeration value="choice"/>
-          <xs:enumeration value="family"/>
-          <xs:enumeration value="sequence"/>
-          <xs:enumeration value="unordered"/>
-          <xs:enumeration value="-dita-use-conref-target"/>
-        </xs:restriction>
-      </xs:simpleType>
-    </xs:attribute>
-    <xs:attribute name="type"/>
+    <xs:attribute name="navtitle" type="xs:string"/>
+    <xs:attribute name="href" type="xs:string"/>
+    <xs:attribute name="keyref" type="xs:string"/>
+    <xs:attribute name="keys" type="xs:string"/>
+    <xs:attribute name="query" type="xs:string"/>
+    <xs:attribute name="copy-to" type="xs:string"/>
+    <xs:attribute name="outputclass" type="xs:string"/>
+    <xs:attribute name="collection-type" type="collection-type.class"/>
+    <xs:attribute name="type" type="xs:string"/>
     <xs:attribute name="scope">
       <xs:simpleType>
         <xs:restriction base="xs:token">
@@ -401,67 +437,49 @@
         </xs:restriction>
       </xs:simpleType>
     </xs:attribute>
-    <xs:attribute name="locktitle">
-      <xs:simpleType>
-        <xs:restriction base="xs:token">
-          <xs:enumeration value="no"/>
-          <xs:enumeration value="yes"/>
-          <xs:enumeration value="-dita-use-conref-target"/>
-        </xs:restriction>
-      </xs:simpleType>
-    </xs:attribute>
-    <xs:attribute name="format"/>
-    <xs:attribute name="linking">
-      <xs:simpleType>
-        <xs:restriction base="xs:token">
-          <xs:enumeration value="none"/>
-          <xs:enumeration value="normal"/>
-          <xs:enumeration value="sourceonly"/>
-          <xs:enumeration value="targetonly"/>
-          <xs:enumeration value="-dita-use-conref-target"/>
-        </xs:restriction>
-      </xs:simpleType>
-    </xs:attribute>
-    <xs:attribute name="toc">
-      <xs:simpleType>
-        <xs:restriction base="xs:token">
-          <xs:enumeration value="no"/>
-          <xs:enumeration value="yes"/>
-          <xs:enumeration value="-dita-use-conref-target"/>
-        </xs:restriction>
-      </xs:simpleType>
-    </xs:attribute>
+    <xs:attribute name="locktitle" type="yesno-att.class"/>
+    <xs:attribute name="format" type="xs:string"/>
+    <xs:attribute name="linking" type="linkingtypes.class"/>
+    <xs:attribute name="toc" type="yesno-att.class"/>
     <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
   </xs:attributeGroup>
+
   <xs:element name="subjectdef">
     <xs:complexType>
       <xs:complexContent>
-        <xs:extension base="subjectdef.content">
-          <xs:attributeGroup ref="subjectdef.attlist"/>
+        <xs:extension base="subjectdef.class">
+          <xs:attribute name="class" default="- map/topicref subjectScheme/subjectdef "/>
         </xs:extension>
       </xs:complexContent>
     </xs:complexType>
   </xs:element>
-  <xs:attributeGroup name="subjectdef.attlist">
-    <xs:attributeGroup ref="subjectdef.attributes"/>
-    <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute name="class" default="- map/topicref subjectScheme/subjectdef "/>
-  </xs:attributeGroup>
+
   <!-- LONG NAME: Subject Heading -->
   <!-- SKOS equivalent: concept collection -->
-  <xs:complexType name="subjectHead.content">
+  <xs:complexType name="subjectHead.class">
     <xs:sequence>
-      <xs:group minOccurs="0" ref="subjectHeadMeta"/>
-      <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:group ref="data.elements.incl"/>
-        <xs:group ref="subjectdef"/>
-        <xs:group ref="subjectHead"/>
-        <xs:group ref="topicref"/>
-      </xs:choice>
+      <xs:group ref="subjectHead.content"/>
     </xs:sequence>
+    <xs:attributeGroup ref="subjectHead.attributes"/>
   </xs:complexType>
+
+  <xs:group name="subjectHead.content">
+    <xs:sequence>
+      <xs:sequence>
+        <xs:group minOccurs="0" ref="subjectHeadMeta"/>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:group ref="data.elements.incl"/>
+          <xs:group ref="subjectdef"/>
+          <xs:group ref="subjectHead"/>
+          <xs:group ref="topicref"/>
+        </xs:choice>
+      </xs:sequence>
+    </xs:sequence>
+  </xs:group>
+
   <xs:attributeGroup name="subjectHead.attributes">
-    <xs:attribute name="navtitle"/>
+    <xs:attribute name="navtitle" type="xs:string"/>
     <xs:attribute name="collection-type">
       <xs:simpleType>
         <xs:restriction base="xs:token">
@@ -478,271 +496,202 @@
         </xs:restriction>
       </xs:simpleType>
     </xs:attribute>
-    <xs:attribute name="toc">
-      <xs:simpleType>
-        <xs:restriction base="xs:token">
-          <xs:enumeration value="no"/>
-          <xs:enumeration value="yes"/>
-          <xs:enumeration value="-dita-use-conref-target"/>
-        </xs:restriction>
-      </xs:simpleType>
-    </xs:attribute>
+    <xs:attribute name="toc" type="yesno-att.class"/>
     <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
   </xs:attributeGroup>
   <xs:element name="subjectHead">
     <xs:complexType>
       <xs:complexContent>
-        <xs:extension base="subjectHead.content">
-          <xs:attributeGroup ref="subjectHead.attlist"/>
+        <xs:extension base="subjectHead.class">
+          <xs:attribute name="class" default="- map/topicref subjectScheme/subjectHead "/>
         </xs:extension>
       </xs:complexContent>
     </xs:complexType>
   </xs:element>
-  <xs:attributeGroup name="subjectHead.attlist">
-    <xs:attributeGroup ref="subjectHead.attributes"/>
-    <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute name="class" default="- map/topicref subjectScheme/subjectHead "/>
-  </xs:attributeGroup>
+
   <!-- LONG NAME: Subject Heading Metadata -->
-  <xs:complexType name="subjectHeadMeta.content">
+  <xs:complexType name="subjectHeadMeta.class">
     <xs:sequence>
-      <xs:group minOccurs="0" ref="navtitle"/>
-      <xs:group minOccurs="0" ref="shortdesc"/>
+      <xs:group ref="subjectHeadMeta.content"/>
     </xs:sequence>
+    <xs:attributeGroup ref="subjectHeadMeta.attributes"/>
   </xs:complexType>
+
+  <xs:group name="subjectHeadMeta.content">
+    <xs:sequence>
+      <xs:sequence>
+        <xs:group minOccurs="0" ref="navtitle"/>
+        <xs:group minOccurs="0" ref="shortdesc"/>
+      </xs:sequence>
+    </xs:sequence>
+  </xs:group>
   <xs:attributeGroup name="subjectHeadMeta.attributes">
-    <xs:attribute name="lockmeta">
-      <xs:simpleType>
-        <xs:restriction base="xs:token">
-          <xs:enumeration value="no"/>
-          <xs:enumeration value="yes"/>
-          <xs:enumeration value="-dita-use-conref-target"/>
-        </xs:restriction>
-      </xs:simpleType>
-    </xs:attribute>
+    <xs:attribute name="lockmeta" type="yesno-att.class"/>
     <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
   </xs:attributeGroup>
   <xs:element name="subjectHeadMeta">
     <xs:complexType>
       <xs:complexContent>
-        <xs:extension base="subjectHeadMeta.content">
-          <xs:attributeGroup ref="subjectHeadMeta.attlist"/>
+        <xs:extension base="subjectHeadMeta.class">
+          <xs:attribute name="class" default="- map/topicmeta subjectScheme/subjectHeadMeta "/>
         </xs:extension>
       </xs:complexContent>
     </xs:complexType>
   </xs:element>
-  <xs:attributeGroup name="subjectHeadMeta.attlist">
-    <xs:attributeGroup ref="subjectHeadMeta.attributes"/>
-    <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute name="class" default="- map/topicmeta subjectScheme/subjectHeadMeta "/>
-  </xs:attributeGroup>
+
   <!-- LONG NAME: Enumeration definition -->
-  <xs:complexType name="enumerationdef.content">
+  <xs:complexType name="enumerationdef.class">
     <xs:sequence>
-      <xs:group minOccurs="0" ref="elementdef"/>
-      <xs:group ref="attributedef"/>
-      <xs:group maxOccurs="unbounded" ref="subjectdef"/>
-      <xs:group minOccurs="0" ref="defaultSubject"/>
-      <xs:group minOccurs="0" maxOccurs="unbounded" ref="data.elements.incl"/>
+      <xs:group ref="enumerationdef.content"/>
     </xs:sequence>
+    <xs:attributeGroup ref="enumerationdef.attributes"/>
   </xs:complexType>
+
+  <xs:group name="enumerationdef.content">
+    <xs:sequence>
+      <xs:sequence>
+        <xs:group minOccurs="0" ref="elementdef"/>
+        <xs:group ref="attributedef"/>
+        <xs:group maxOccurs="unbounded" ref="subjectdef"/>
+        <xs:group minOccurs="0" ref="defaultSubject"/>
+        <xs:group minOccurs="0" maxOccurs="unbounded" ref="data.elements.incl"/>
+      </xs:sequence>
+    </xs:sequence>
+  </xs:group>
   <xs:attributeGroup name="enumerationdef.attributes">
     <xs:attributeGroup ref="id-atts"/>
-    <xs:attribute name="outputclass"/>
-    <xs:attribute name="status">
-      <xs:simpleType>
-        <xs:restriction base="xs:token">
-          <xs:enumeration value="changed"/>
-          <xs:enumeration value="deleted"/>
-          <xs:enumeration value="new"/>
-          <xs:enumeration value="unchanged"/>
-          <xs:enumeration value="-dita-use-conref-target"/>
-        </xs:restriction>
-      </xs:simpleType>
-    </xs:attribute>
+    <xs:attribute name="outputclass" type="xs:string"/>
+    <xs:attribute name="status" type="status-atts.class"/>
     <xs:attribute name="base"/>
+    <xs:attributeGroup ref="global-atts"/>
   </xs:attributeGroup>
   <xs:element name="enumerationdef">
     <xs:complexType>
       <xs:complexContent>
-        <xs:extension base="enumerationdef.content">
-          <xs:attributeGroup ref="enumerationdef.attlist"/>
+        <xs:extension base="enumerationdef.class">
+          <xs:attribute name="class" default="- map/topicref subjectScheme/enumerationdef "/>
         </xs:extension>
       </xs:complexContent>
     </xs:complexType>
   </xs:element>
-  <xs:attributeGroup name="enumerationdef.attlist">
-    <xs:attributeGroup ref="enumerationdef.attributes"/>
-    <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute name="class" default="- map/topicref subjectScheme/enumerationdef "/>
-  </xs:attributeGroup>
+
   <!-- LONG NAME: Element definition -->
-  <xs:complexType name="elementdef.content">
-    <xs:group minOccurs="0" maxOccurs="unbounded" ref="data.elements.incl"/>
+  <xs:complexType name="elementdef.class">
+    <xs:sequence>
+      <xs:group ref="elementdef.content"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="elementdef.attributes"/>
   </xs:complexType>
+
+  <xs:group name="elementdef.content">
+    <xs:sequence>
+      <xs:sequence>
+        <xs:group minOccurs="0" maxOccurs="unbounded" ref="data.elements.incl"/>
+      </xs:sequence>
+    </xs:sequence>
+  </xs:group>
+
   <xs:attributeGroup name="elementdef.attributes">
     <xs:attributeGroup ref="id-atts"/>
-    <xs:attribute name="name" use="required"/>
-    <xs:attribute name="outputclass"/>
-    <xs:attribute name="status">
-      <xs:simpleType>
-        <xs:restriction base="xs:token">
-          <xs:enumeration value="changed"/>
-          <xs:enumeration value="deleted"/>
-          <xs:enumeration value="new"/>
-          <xs:enumeration value="unchanged"/>
-          <xs:enumeration value="-dita-use-conref-target"/>
-        </xs:restriction>
-      </xs:simpleType>
-    </xs:attribute>
-    <xs:attribute name="translate" default="no">
-      <xs:simpleType>
-        <xs:restriction base="xs:token">
-          <xs:enumeration value="no"/>
-          <xs:enumeration value="yes"/>
-          <xs:enumeration value="-dita-use-conref-target"/>
-        </xs:restriction>
-      </xs:simpleType>
-    </xs:attribute>
+    <xs:attribute name="name" use="required" type="xs:string"/>
+    <xs:attribute name="outputclass" type="xs:string"/>
+    <xs:attribute name="status" type="status-atts.class"/>
+    <xs:attribute name="translate" default="no" type="yesno-att.class"/>
     <xs:attribute name="base"/>
+    <xs:attributeGroup ref="global-atts"/>
   </xs:attributeGroup>
+
   <xs:element name="elementdef">
     <xs:complexType>
       <xs:complexContent>
-        <xs:extension base="elementdef.content">
-          <xs:attributeGroup ref="elementdef.attlist"/>
+        <xs:extension base="elementdef.class">
+          <xs:attribute name="class" default="- topic/data subjectScheme/elementdef "/>
         </xs:extension>
       </xs:complexContent>
     </xs:complexType>
   </xs:element>
-  <xs:attributeGroup name="elementdef.attlist">
-    <xs:attributeGroup ref="elementdef.attributes"/>
-    <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute name="class" default="- topic/data subjectScheme/elementdef "/>
-  </xs:attributeGroup>
+
   <!-- LONG NAME: Attribute definition -->
-  <xs:complexType name="attributedef.content">
-    <xs:group minOccurs="0" maxOccurs="unbounded" ref="data.elements.incl"/>
+  <xs:complexType name="attributedef.class">
+    <xs:sequence>
+      <xs:group ref="attributedef.content"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="attributedef.attributes"/>
   </xs:complexType>
+
+  <xs:group name="attributedef.content">
+    <xs:sequence>
+      <xs:sequence>
+        <xs:group minOccurs="0" maxOccurs="unbounded" ref="data.elements.incl"/>
+      </xs:sequence>
+    </xs:sequence>
+  </xs:group>
   <xs:attributeGroup name="attributedef.attributes">
     <xs:attributeGroup ref="id-atts"/>
-    <xs:attribute name="name" use="required"/>
-    <xs:attribute name="outputclass"/>
-    <xs:attribute name="status">
-      <xs:simpleType>
-        <xs:restriction base="xs:token">
-          <xs:enumeration value="changed"/>
-          <xs:enumeration value="deleted"/>
-          <xs:enumeration value="new"/>
-          <xs:enumeration value="unchanged"/>
-          <xs:enumeration value="-dita-use-conref-target"/>
-        </xs:restriction>
-      </xs:simpleType>
-    </xs:attribute>
-    <xs:attribute name="translate" default="no">
-      <xs:simpleType>
-        <xs:restriction base="xs:token">
-          <xs:enumeration value="no"/>
-          <xs:enumeration value="yes"/>
-          <xs:enumeration value="-dita-use-conref-target"/>
-        </xs:restriction>
-      </xs:simpleType>
-    </xs:attribute>
+    <xs:attribute name="name" use="required" type="xs:string"/>
+    <xs:attribute name="outputclass" type="xs:string"/>
+    <xs:attribute name="status" type="status-atts.class"/>
+    <xs:attribute name="translate" default="no" type="yesno-att.class"/>
     <xs:attribute name="base"/>
+    <xs:attributeGroup ref="global-atts"/>
   </xs:attributeGroup>
+
   <xs:element name="attributedef">
     <xs:complexType>
       <xs:complexContent>
-        <xs:extension base="attributedef.content">
-          <xs:attributeGroup ref="attributedef.attlist"/>
+        <xs:extension base="attributedef.class">
+          <xs:attribute name="class" default="- topic/data subjectScheme/attributedef "/>
         </xs:extension>
       </xs:complexContent>
     </xs:complexType>
   </xs:element>
-  <xs:attributeGroup name="attributedef.attlist">
-    <xs:attributeGroup ref="attributedef.attributes"/>
-    <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute name="class" default="- topic/data subjectScheme/attributedef "/>
-  </xs:attributeGroup>
+
   <!-- LONG NAME: Default Subject -->
-  <xs:complexType name="defaultSubject.content">
-    <xs:group minOccurs="0" maxOccurs="unbounded" ref="data.elements.incl"/>
+  <xs:complexType name="defaultSubject.class">
+    <xs:sequence>
+      <xs:group ref="defaultSubject.content"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="defaultSubject.attributes"/>
   </xs:complexType>
+
+  <xs:group name="defaultSubject.content">
+    <xs:sequence>
+      <xs:sequence>
+        <xs:group minOccurs="0" maxOccurs="unbounded" ref="data.elements.incl"/>
+      </xs:sequence>
+    </xs:sequence>
+  </xs:group>
   <xs:attributeGroup name="defaultSubject.attributes">
-    <xs:attribute name="navtitle"/>
-    <xs:attribute name="href"/>
-    <xs:attribute name="keyref"/>
-    <xs:attribute name="keys"/>
-    <xs:attribute name="query"/>
-    <xs:attribute name="copy-to"/>
-    <xs:attribute name="outputclass"/>
-    <xs:attribute name="collection-type">
-      <xs:simpleType>
-        <xs:restriction base="xs:token">
-          <xs:enumeration value="choice"/>
-          <xs:enumeration value="family"/>
-          <xs:enumeration value="sequence"/>
-          <xs:enumeration value="unordered"/>
-          <xs:enumeration value="-dita-use-conref-target"/>
-        </xs:restriction>
-      </xs:simpleType>
-    </xs:attribute>
-    <xs:attribute name="type"/>
-    <xs:attribute name="scope">
-      <xs:simpleType>
-        <xs:restriction base="xs:token">
-          <xs:enumeration value="external"/>
-          <xs:enumeration value="local"/>
-          <xs:enumeration value="-dita-use-conref-target"/>
-        </xs:restriction>
-      </xs:simpleType>
-    </xs:attribute>
-    <xs:attribute name="locktitle">
-      <xs:simpleType>
-        <xs:restriction base="xs:token">
-          <xs:enumeration value="no"/>
-          <xs:enumeration value="yes"/>
-          <xs:enumeration value="-dita-use-conref-target"/>
-        </xs:restriction>
-      </xs:simpleType>
-    </xs:attribute>
-    <xs:attribute name="format"/>
-    <xs:attribute name="linking">
-      <xs:simpleType>
-        <xs:restriction base="xs:token">
-          <xs:enumeration value="none"/>
-          <xs:enumeration value="normal"/>
-          <xs:enumeration value="sourceonly"/>
-          <xs:enumeration value="targetonly"/>
-          <xs:enumeration value="-dita-use-conref-target"/>
-        </xs:restriction>
-      </xs:simpleType>
-    </xs:attribute>
-    <xs:attribute name="toc">
-      <xs:simpleType>
-        <xs:restriction base="xs:token">
-          <xs:enumeration value="no"/>
-          <xs:enumeration value="yes"/>
-          <xs:enumeration value="-dita-use-conref-target"/>
-        </xs:restriction>
-      </xs:simpleType>
-    </xs:attribute>
+    <xs:attribute name="navtitle" type="xs:string"/>
+    <xs:attribute name="href" type="xs:string"/>
+    <xs:attribute name="keyref" type="xs:string"/>
+    <xs:attribute name="keys" type="xs:string"/>
+    <xs:attribute name="query" type="xs:string"/>
+    <xs:attribute name="copy-to" type="xs:string"/>
+    <xs:attribute name="outputclass" type="xs:string"/>
+    <xs:attribute name="collection-type" type="collection-type.class"/>
+    <xs:attribute name="type" type="xs:string"/>
+    <xs:attribute name="scope" type="scope-att.class"/>
+    <xs:attribute name="locktitle" type="yesno-att.class"/>
+    <xs:attribute name="format" type="xs:string"/>
+    <xs:attribute name="linking" type="linkingtypes.class"/>
+    <xs:attribute name="toc" type="yesno-att.class"/>
     <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
   </xs:attributeGroup>
+
   <xs:element name="defaultSubject">
     <xs:complexType>
       <xs:complexContent>
-        <xs:extension base="defaultSubject.content">
-          <xs:attributeGroup ref="defaultSubject.attlist"/>
+        <xs:extension base="defaultSubject.class">
+          <xs:attribute name="class" default="- map/topicref subjectScheme/defaultSubject "/>
         </xs:extension>
       </xs:complexContent>
     </xs:complexType>
   </xs:element>
-  <xs:attributeGroup name="defaultSubject.attlist">
-    <xs:attributeGroup ref="defaultSubject.attributes"/>
-    <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute name="class" default="- map/topicref subjectScheme/defaultSubject "/>
-  </xs:attributeGroup>
+
   <!-- LONG NAME: Related Subjects -->
   <!--
     To define roles within a relationship, you can specialize
@@ -751,68 +700,49 @@
     For instance, a dependency relationship could contain depended-on
     and dependent subjects.
   -->
-  <xs:complexType name="relatedSubjects.content">
-    <xs:choice minOccurs="0" maxOccurs="unbounded">
-      <xs:group ref="data.elements.incl"/>
-      <xs:group ref="subjectdef"/>
-      <xs:group ref="topicref"/>
-    </xs:choice>
+  <xs:complexType name="relatedSubjects.class">
+    <xs:sequence>
+      <xs:group ref="relatedSubjects.content"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="relatedSubjects.attributes"/>
   </xs:complexType>
+
+  <xs:group name="relatedSubjects.content">
+    <xs:sequence>
+      <xs:sequence>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:group ref="data.elements.incl"/>
+          <xs:group ref="subjectdef"/>
+          <xs:group ref="topicref"/>
+        </xs:choice>
+      </xs:sequence>
+    </xs:sequence>
+  </xs:group>
   <xs:attributeGroup name="relatedSubjects.attributes">
-    <xs:attribute name="navtitle"/>
-    <xs:attribute name="href"/>
-    <xs:attribute name="keyref"/>
-    <xs:attribute name="keys"/>
-    <xs:attribute name="query"/>
-    <xs:attribute name="collection-type" default="family">
-      <xs:simpleType>
-        <xs:restriction base="xs:token">
-          <xs:enumeration value="choice"/>
-          <xs:enumeration value="family"/>
-          <xs:enumeration value="sequence"/>
-          <xs:enumeration value="unordered"/>
-          <xs:enumeration value="-dita-use-conref-target"/>
-        </xs:restriction>
-      </xs:simpleType>
-    </xs:attribute>
-    <xs:attribute name="type"/>
-    <xs:attribute name="scope">
-      <xs:simpleType>
-        <xs:restriction base="xs:token">
-          <xs:enumeration value="external"/>
-          <xs:enumeration value="local"/>
-          <xs:enumeration value="-dita-use-conref-target"/>
-        </xs:restriction>
-      </xs:simpleType>
-    </xs:attribute>
-    <xs:attribute name="format"/>
-    <xs:attribute name="linking" default="normal">
-      <xs:simpleType>
-        <xs:restriction base="xs:token">
-          <xs:enumeration value="none"/>
-          <xs:enumeration value="normal"/>
-          <xs:enumeration value="sourceonly"/>
-          <xs:enumeration value="targetonly"/>
-          <xs:enumeration value="-dita-use-conref-target"/>
-        </xs:restriction>
-      </xs:simpleType>
-    </xs:attribute>
+    <xs:attribute name="navtitle" type="xs:string"/>
+    <xs:attribute name="href" type="xs:string"/>
+    <xs:attribute name="keyref" type="xs:string"/>
+    <xs:attribute name="keys" type="xs:string"/>
+    <xs:attribute name="query" type="xs:string"/>
+    <xs:attribute name="collection-type" default="family" type="collection-type.class"/>
+    <xs:attribute name="type" type="xs:string"/>
+    <xs:attribute name="scope" type="yesno-att.class"/>
+    <xs:attribute name="format" type="xs:string"/>
+    <xs:attribute name="linking" type="linkingtypes.class" default="normal"/>
     <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
   </xs:attributeGroup>
+
   <xs:element name="relatedSubjects">
     <xs:complexType>
       <xs:complexContent>
-        <xs:extension base="relatedSubjects.content">
-          <xs:attributeGroup ref="relatedSubjects.attlist"/>
+        <xs:extension base="relatedSubjects.class">
+          <xs:attribute name="class" default="- map/topicref subjectScheme/relatedSubjects "/>
         </xs:extension>
       </xs:complexContent>
     </xs:complexType>
   </xs:element>
-  <xs:attributeGroup name="relatedSubjects.attlist">
-    <xs:attributeGroup ref="relatedSubjects.attributes"/>
-    <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute name="class" default="- map/topicref subjectScheme/relatedSubjects "/>
-  </xs:attributeGroup>
+
   <!-- LONG NAME: Subject Relationship Table -->
   <!--
     Where there are many instances of a subject relationship in which
@@ -822,105 +752,135 @@
     a subject receives relationships to every subject in other columns
     within the same row.
   -->
-  <xs:complexType name="subjectRelTable.content">
+  <xs:complexType name="subjectRelTable.class">
     <xs:sequence>
-      <xs:group minOccurs="0" ref="title"/>
-      <xs:group minOccurs="0" ref="topicmeta"/>
-      <xs:group minOccurs="0" ref="subjectRelHeader"/>
-      <xs:group maxOccurs="unbounded" ref="subjectRel"/>
+      <xs:group ref="subjectRelTable.content"/>
     </xs:sequence>
+    <xs:attributeGroup ref="subjectRelTable.attributes"/>
   </xs:complexType>
+
+  <xs:group name="subjectRelTable.content">
+    <xs:sequence>
+      <xs:sequence>
+        <xs:group minOccurs="0" ref="title"/>
+        <xs:group minOccurs="0" ref="topicmeta"/>
+        <xs:group minOccurs="0" ref="subjectRelHeader"/>
+        <xs:group maxOccurs="unbounded" ref="subjectRel"/>
+      </xs:sequence>
+    </xs:sequence>
+  </xs:group>
   <xs:attributeGroup name="subjectRelTable.attributes">
     <xs:attributeGroup ref="topicref-atts-no-toc"/>
     <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
   </xs:attributeGroup>
   <xs:element name="subjectRelTable">
     <xs:complexType>
       <xs:complexContent>
-        <xs:extension base="subjectRelTable.content">
-          <xs:attributeGroup ref="subjectRelTable.attlist"/>
+        <xs:extension base="subjectRelTable.class">
+          <xs:attribute name="class" default="- map/reltable subjectScheme/subjectRelTable "/>
         </xs:extension>
       </xs:complexContent>
     </xs:complexType>
   </xs:element>
-  <xs:attributeGroup name="subjectRelTable.attlist">
-    <xs:attributeGroup ref="subjectRelTable.attributes"/>
-    <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute name="class" default="- map/reltable subjectScheme/subjectRelTable "/>
-  </xs:attributeGroup>
+
   <!-- LONG NAME: Subject Table Header -->
   <!--
     The header defines the role of subjects in each column
     The role definition can be an informal navtitle or 
         a formal reference
   -->
-  <xs:complexType name="subjectRelHeader.content">
-    <xs:group maxOccurs="unbounded" ref="subjectRole"/>
+
+  <xs:complexType name="subjectRelHeader.class">
+    <xs:sequence>
+      <xs:group ref="subjectRelHeader.content"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="subjectRelHeader.attributes"/>
   </xs:complexType>
+
+  <xs:group name="subjectRelHeader.content">
+    <xs:sequence>
+      <xs:sequence>
+        <xs:group maxOccurs="unbounded" ref="subjectRole"/>
+      </xs:sequence>
+    </xs:sequence>
+  </xs:group>
   <xs:attributeGroup name="subjectRelHeader.attributes">
     <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
   </xs:attributeGroup>
   <xs:element name="subjectRelHeader">
     <xs:complexType>
       <xs:complexContent>
-        <xs:extension base="subjectRelHeader.content">
-          <xs:attributeGroup ref="subjectRelHeader.attlist"/>
+        <xs:extension base="subjectRelHeader.class">
+          <xs:attribute name="class" default="- map/relrow subjectScheme/subjectRelHeader "/>
         </xs:extension>
       </xs:complexContent>
     </xs:complexType>
   </xs:element>
-  <xs:attributeGroup name="subjectRelHeader.attlist">
-    <xs:attributeGroup ref="subjectRelHeader.attributes"/>
-    <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute name="class" default="- map/relrow subjectScheme/subjectRelHeader "/>
-  </xs:attributeGroup>
+
   <!-- LONG NAME: Subject Table Row -->
-  <xs:complexType name="subjectRel.content">
-    <xs:group maxOccurs="unbounded" ref="subjectRole"/>
+  <xs:complexType name="subjectRel.class">
+    <xs:sequence>
+      <xs:group ref="subjectRel.content"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="subjectRel.attributes"/>
   </xs:complexType>
+
+  <xs:group name="subjectRel.content">
+    <xs:sequence>
+      <xs:sequence>
+        <xs:group maxOccurs="unbounded" ref="subjectRole"/>
+      </xs:sequence>
+    </xs:sequence>
+  </xs:group>
   <xs:attributeGroup name="subjectRel.attributes">
     <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
   </xs:attributeGroup>
   <xs:element name="subjectRel">
     <xs:complexType>
       <xs:complexContent>
-        <xs:extension base="subjectRel.content">
-          <xs:attributeGroup ref="subjectRel.attlist"/>
+        <xs:extension base="subjectRel.class">
+          <xs:attribute name="class" default="- map/relrow subjectScheme/subjectRel "/>
         </xs:extension>
       </xs:complexContent>
     </xs:complexType>
   </xs:element>
-  <xs:attributeGroup name="subjectRel.attlist">
-    <xs:attributeGroup ref="subjectRel.attributes"/>
-    <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute name="class" default="- map/relrow subjectScheme/subjectRel "/>
-  </xs:attributeGroup>
+
   <!-- LONG NAME: Subject Role -->
-  <xs:complexType name="subjectRole.content">
-    <xs:choice minOccurs="0" maxOccurs="unbounded">
-      <xs:group ref="data.elements.incl"/>
-      <xs:group ref="subjectdef"/>
-      <xs:group ref="topicref"/>
-    </xs:choice>
+  <xs:complexType name="subjectRole.class">
+    <xs:sequence>
+      <xs:group ref="subjectRole.content"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="subjectRole.attributes"/>
   </xs:complexType>
+
+  <xs:group name="subjectRole.content">
+    <xs:sequence>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:group ref="data.elements.incl"/>
+        <xs:group ref="subjectdef"/>
+        <xs:group ref="topicref"/>
+      </xs:choice>
+    </xs:sequence>
+  </xs:group>
+
   <xs:attributeGroup name="subjectRole.attributes">
     <xs:attributeGroup ref="topicref-atts"/>
     <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
   </xs:attributeGroup>
   <xs:element name="subjectRole">
     <xs:complexType>
       <xs:complexContent>
-        <xs:extension base="subjectRole.content">
-          <xs:attributeGroup ref="subjectRole.attlist"/>
+        <xs:extension base="subjectRole.class">
+          <xs:attribute name="class" default="- map/relcell subjectScheme/subjectRole "/>
         </xs:extension>
       </xs:complexContent>
     </xs:complexType>
   </xs:element>
-  <xs:attributeGroup name="subjectRole.attlist">
-    <xs:attributeGroup ref="subjectRole.attributes"/>
-    <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute name="class" default="- map/relcell subjectScheme/subjectRole "/>
-  </xs:attributeGroup>
+
   <!-- ============================================================= -->
   <!-- SPECIALIZATION ATTRIBUTE DECLARATIONS -->
   <!-- ============================================================= -->

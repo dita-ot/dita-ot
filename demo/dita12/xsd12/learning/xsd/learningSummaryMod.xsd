@@ -3,7 +3,7 @@
      specialization working design. It is a work-in-progress by
      the OASIS DITA learning and training content specialization 
      sub-committee.-->
-<!--             (C) Copyright OASIS Open 2007.                    -->
+<!--             (C) Copyright OASIS Open 2007, 2008                    -->
 <!--             All Rights Reserved.                              -->
 <!-- ============================================================= -->
 <!--                    HEADER                                     -->
@@ -26,26 +26,14 @@
   <!-- ==================== Import Section ======================= -->
   <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="urn:oasis:names:tc:dita:xsd:xml.xsd:1.2"/>
   <xs:import namespace="http://dita.oasis-open.org/architecture/2005/" schemaLocation="urn:oasis:names:tc:dita:xsd:ditaarch.xsd:1.2"/>
-  <!-- Base type: univ-atts -->
-  <xs:attributeGroup name="univ-atts-no-importance-learningSummary">
-    <xs:attributeGroup ref="id-atts"/>
-    <xs:attributeGroup ref="filter-atts"/>
-    <xs:attribute name="rev" type="xs:string"/>
-    <xs:attribute name="status" type="status-atts.class"/>
-    <xs:attributeGroup ref="localization-atts"/>
-  </xs:attributeGroup>
-  <!-- Base type: importance-atts.class -->
-  <xs:simpleType name="importance-att-nodefault-learningSummary.class">
-    <xs:restriction base="importance-atts.class">
-      <xs:enumeration value="optional"/>
-      <xs:enumeration value="required"/>
-    </xs:restriction>
-  </xs:simpleType>
+  
+  
   <xs:group name="learningSummary-info-types">
     <xs:choice>
       <xs:group ref="no-topic-nesting"/>
     </xs:choice>
   </xs:group>
+  
   <!-- Element declarations for learningSummary.mod -->
   <xs:element name="learningSummary">
     <xs:annotation>
@@ -113,7 +101,7 @@
 
    <xs:attributeGroup name="learningSummary.attributes">
         <xs:attribute name="id" type="xs:ID" use="required"/>
-        <xs:attribute name="conref" type="xs:string"/>
+        <xs:attributeGroup ref="conref-atts" />
         <xs:attributeGroup ref="select-atts"/>
         <xs:attributeGroup ref="domains-att"/>
         <xs:attribute ref="ditaarch:DITAArchVersion"/>
@@ -145,9 +133,7 @@
 
   <xs:attributeGroup name="learningSummarybody.attributes" >
     <xs:attribute name="outputclass" type="xs:string"/>
-    <xs:attributeGroup ref="id-atts"/>
-    <xs:attributeGroup ref="select-atts"/>
-    <xs:attributeGroup ref="localization-atts"/>
+    <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>      
    </xs:attributeGroup>
 </xs:schema>

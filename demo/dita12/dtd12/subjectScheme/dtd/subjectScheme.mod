@@ -331,8 +331,8 @@ PUBLIC "-//OASIS//ELEMENTS DITA Subject Scheme Map//EN"
                                   'choice'
               scope 
                         (external |
-                         peer |
                          local |
+                         peer |
                          -dita-use-conref-target) 
                                   #IMPLIED
               format 
@@ -591,13 +591,6 @@ PUBLIC "-//OASIS//ELEMENTS DITA Subject Scheme Map//EN"
                                   #IMPLIED
               outputclass 
                         CDATA 
-                                  #IMPLIED
-              collection-type 
-                        (choice | 
-                         family | 
-                         sequence | 
-                         unordered |
-                         -dita-use-conref-target) 
                                   #IMPLIED
               type 
                         CDATA 

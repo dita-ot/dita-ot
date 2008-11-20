@@ -14,8 +14,8 @@
 <!--                                                               -->
 <!--  Refer to this file by the following public identifier or an 
       appropriate system identifier 
-PUBLIC "-//OASIS//ELEMENTS DITA Machine Industry Task Constraint//EN"
-      Delivered as file "mitaskTaskConstraint.mod"                 -->
+PUBLIC "-//OASIS//ELEMENTS DITA Machinery Taskbody Constraint//EN"
+      Delivered as file "machineryTaskbodyConstraint.mod"          -->
 
 <!-- ============================================================= -->
 <!-- SYSTEM:     Darwin Information Typing Architecture (DITA)     -->
@@ -34,11 +34,11 @@ PUBLIC "-//OASIS//ELEMENTS DITA Machine Industry Task Constraint//EN"
 
 
 <!-- ============================================================= -->
-<!--                    Machine Industry Taskbody ENTITIES         -->
+<!--                    Machinery Taskbody ENTITIES                -->
 <!-- ============================================================= -->
 
 <!ENTITY taskbody-constraints     
-  "(topic task+mitask-d mitaskTaskbody-c)"
+  "(topic task+taskreq-d machineryTaskbody-c)"
 >
 
 <!ENTITY % prelreqs        "prelreqs">

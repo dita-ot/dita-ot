@@ -3,8 +3,8 @@
 <!--                    HEADER                                     -->
 <!-- ============================================================= -->
 <!--  MODULE:    DITA Common Element  XSD Group Decleration                -->
-<!--  VERSION:   1.1                                             -->
-<!--  DATE:      November 2006                                     -->
+<!--  VERSION:   1.2                                             -->
+<!--  DATE:      November 2008                                     -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -17,7 +17,7 @@
 <!-- ORIGINAL CREATION DATE:                                       -->
 <!--             June 2006                                        -->
 <!--                                                               -->
-<!--             (C) Copyright OASIS-Open.org 2006                -->
+<!--             (C) Copyright OASIS-Open.org 2006, 2008                -->
 <!--             All Rights Reserved.                              -->
 <!-- ============================================================= -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
@@ -103,10 +103,26 @@
       </xs:sequence>
    </xs:group>
 
-   <xs:group name="lq">
+   <xs:group name="longquoteref">
+      <xs:sequence>
+         <xs:choice>
+            <xs:element ref="longquoteref"/>
+         </xs:choice>
+      </xs:sequence>
+   </xs:group>
+  
+  <xs:group name="lq">
       <xs:sequence>
          <xs:choice>
             <xs:element ref="lq"/>
+         </xs:choice>
+      </xs:sequence>
+   </xs:group>
+  
+  <xs:group name="longdescref">
+      <xs:sequence>
+         <xs:choice>
+            <xs:element ref="longdescref"/>
          </xs:choice>
       </xs:sequence>
    </xs:group>

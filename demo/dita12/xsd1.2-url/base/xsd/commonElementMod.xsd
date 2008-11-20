@@ -2,8 +2,8 @@
 <!--                    HEADER                                     -->
 <!-- ============================================================= -->
 <!--  MODULE:    DITA Common Elements XSD Module                           -->
-<!--  VERSION:   1.1                                             -->
-<!--  DATE:      November 2006                                     -->
+<!--  VERSION:   1.2                                             -->
+<!--  DATE:      Octoober  2008                                    -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -16,7 +16,7 @@
 <!-- ORIGINAL CREATION DATE:                                       -->
 <!--             June  2006                                        -->
 <!--                                                               -->
-<!--             (C) Copyright OASIS-Open.org 2006                -->
+<!--             (C) Copyright OASIS-Open.org 2006, 2008                -->
 <!--             All Rights Reserved.                              -->
 <!--  UPDATES:                                                     -->
 <!--    2008.05.05 EAS:  Added navtitle element.  Moved shortdesc element declaration to mapMod.xsd and topicMod.xsd.  -->
@@ -32,7 +32,7 @@
     <xs:attributeGroup name="display-atts">
         <xs:annotation>
             <xs:documentation>Display attributes is a parameter entity declaration in the topic
-                DTD that includes attributes whose values may be used for affecting the display
+                XSD that includes attributes whose values may be used for affecting the display
                 of a topic or its selection by search tools.
             </xs:documentation>
         </xs:annotation>
@@ -65,7 +65,7 @@
     <xs:attributeGroup name="id-atts">
         <xs:annotation>
             <xs:documentation>ID attributes (%id-atts;) is a parameter entity declaration in the
-                topic DTD that includes attributes that enable the naming and referencing
+                topic XSD that includes attributes that enable the naming and referencing
                 of elements in a DITA topic: <keyword>id</keyword> and <keyword>conref</keyword>.
             </xs:documentation>
         </xs:annotation>
@@ -119,6 +119,7 @@
     <xs:attribute name="datatype" type="xs:string"/>
     <xs:attribute name="value" type="xs:string"/>
     <xs:attribute name="href" type="xs:string"/>
+    <xs:attribute name="keyref" type="xs:string"/>
     <xs:attribute name="format" type="xs:string"/>
     <xs:attribute name="type" type="xs:string"/>
     <xs:attribute name="scope" type="scope-att.class"/>
@@ -172,7 +173,7 @@
     
     <xs:attributeGroup name="univ-atts">
         <xs:annotation>
-            <xs:documentation>Universal attributes is a parameter entity declaration in the topic DTD that
+            <xs:documentation>Universal attributes is a parameter entity declaration in the topic XSD that
                 includes all of the attributes in the select-atts and id-atts attribute groups. 
             </xs:documentation>
         </xs:annotation>
@@ -509,6 +510,7 @@
             <xs:group ref="txt.incl"/>
             <xs:group ref="data.elements.incl"/>
             <xs:group ref="foreign.unknown.incl"/>
+            <xs:group ref="longquoteref"/>
         </xs:choice>
     </xs:group>
     
@@ -1106,7 +1108,7 @@
   
   <xs:element name="lq">
     <xs:annotation>
-      <xs:documentation> TThe long quote (&lt;<keyword>lq</keyword>&gt;) element indicates
+      <xs:documentation> The long quote (&lt;<keyword>lq</keyword>&gt;) element indicates
         content quoted from another source. Use the quote element &lt;<keyword>q</keyword>&gt;for
         short, inline quotations, and long quote &lt;<keyword>lq</keyword>&gt; for quotations
         that are too long for inline use, following normal guidelines for quoting
@@ -1142,6 +1144,43 @@
     <xs:attribute name="type" type="xs:string"/>
     <xs:attribute name="reftitle" type="xs:string"/>
     <xs:attribute name="outputclass" type="xs:string"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
+  </xs:attributeGroup>
+
+
+    <xs:element name="longquoteref">
+    <xs:annotation>
+      <xs:documentation> 
+      </xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="longquoteref.class">
+          <xs:attribute ref="class" default="- topic/longquoteref "/>          
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:complexType name="longquoteref.class">
+   <xs:sequence>
+      <xs:group ref="longquoteref.content"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="longquoteref.attributes"/>
+  </xs:complexType>
+  
+  <xs:group name="longquoteref.content">
+    <xs:sequence>
+    </xs:sequence>
+  </xs:group>
+    
+  <xs:attributeGroup name="longquoteref.attributes">
+    <xs:attribute name="href" type="xs:string" />
+    <xs:attribute name="keyref" type="xs:string"/>
+    <xs:attribute name="type" type="xs:string"/>
+    <xs:attribute name="format" type="xs:string"/>
+    <xs:attribute name="outputclass" type="xs:string"/>
+    <xs:attribute name="scope" type="scope-att.class"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
   </xs:attributeGroup>
@@ -1970,21 +2009,23 @@
   
    <xs:group name="image.content">
      <xs:sequence>
-       <xs:choice>
+       <xs:sequence>
       <xs:group ref="alt" minOccurs="0"/>
-    </xs:choice>
+      <xs:group ref="longdescref" minOccurs="0"/>
+    </xs:sequence>
      </xs:sequence>
    </xs:group>
   
   <xs:attributeGroup name="image.attributes">
     <xs:attribute name="href" type="xs:string" use="required"/>
-    <xs:attribute name="keyref" type="xs:NMTOKEN"/>
+    <xs:attribute name="keyref" type="xs:string"/>
     <xs:attribute name="alt" type="xs:string"/>
     <xs:attribute name="longdescref" type="xs:string"/>
     <xs:attribute name="height" type="xs:NMTOKEN"/>
     <xs:attribute name="width" type="xs:NMTOKEN"/>
     <xs:attribute name="scale" type="xs:NMTOKEN"/>
     <xs:attribute name="scalefit" type="yesno-att.class"/>
+    <xs:attribute name="scope" type="scope-att.class"/>
     <xs:attribute name="align" type="xs:string"/>
     <xs:attribute name="placement" type="image-placement-att.class" default="inline"/>
     <xs:attribute name="outputclass" type="xs:string"/>
@@ -2076,6 +2117,7 @@
     <xs:sequence>
       <xs:sequence>
       <xs:group ref="desc" minOccurs="0"/>
+      <xs:group ref="longdescref" minOccurs="0"/>
       <xs:group ref="param" minOccurs="0" maxOccurs="unbounded"/>
       <xs:group ref="foreign.unknown.incl" minOccurs="0" maxOccurs="unbounded"/>      
     </xs:sequence>
@@ -2542,6 +2584,41 @@
         <xs:attributeGroup ref="univ-atts"/>
         <xs:attributeGroup ref="global-atts"/>
     </xs:attributeGroup>
+  
+  
+    <xs:element name="longdescref">
+        <xs:annotation>
+        </xs:annotation>
+      <xs:complexType>
+        <xs:complexContent>
+          <xs:extension base="longdescref.class">
+            <xs:attribute ref="class" default="- topic/longdescref "/>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+    </xs:element>
+    <xs:complexType name="longdescref.class">
+        <xs:sequence>
+          <xs:group ref="longdescref.content"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="longdescref.attributes"/>
+    </xs:complexType>
+  
+    <xs:group name="longdescref.content">
+      <xs:sequence>
+      </xs:sequence>
+    </xs:group>
+  
+    <xs:attributeGroup name="longdescref.attributes">
+      <xs:attribute name="href" type="xs:string"/>
+        <xs:attribute name="keyref" type="xs:string"/>
+        <xs:attribute name="type" type="xs:string"/>
+        <xs:attribute name="format" type="xs:string"/>
+        <xs:attribute name="scope" type="scope-att.class"/>
+        <xs:attribute name="outputclass" type="xs:string"/>
+        <xs:attributeGroup ref="univ-atts"/>
+        <xs:attributeGroup ref="global-atts"/>
+    </xs:attributeGroup>
     
     <!-- <xs:simpleType name="xref-type-att.class">
         <xs:union memberTypes="xref-type-attlist.class topicreftypes-att.class"/>
@@ -2656,6 +2733,7 @@
     <xs:attributeGroup name="data-about.attributes">
       <xs:attributeGroup ref="univ-atts"/>
       <xs:attribute name="href" type="xs:string"/>
+      <xs:attribute name="keyref" type="xs:string"/>
       <xs:attribute name="format" type="xs:string"/>
       <xs:attribute name="type" type="xs:string"/>
       <xs:attribute name="scope" type="scope-att.class"/>
@@ -2920,22 +2998,6 @@
     <xs:attributeGroup ref="global-atts"/>    
   </xs:attributeGroup>
   
-   <xs:element name="shortdesc">
-    <xs:annotation>
-      <xs:documentation>The short description (&lt;<keyword>shortdesc</keyword>>) element
-        occurs between the topic title and the topic body, as the initial paragraph-like
-        content of a topic. The short description, which represents the purpose or
-        theme of the topic, is also intended to be used as a link preview and for
-        searching.
-      </xs:documentation>
-    </xs:annotation>
-    <xs:complexType mixed="true">
-      <xs:complexContent>
-        <xs:extension base="shortdesc.class">
-          <xs:attribute ref="class" default="- topic/shortdesc "/>
-        </xs:extension>
-      </xs:complexContent>
-    </xs:complexType>
-  </xs:element>
+  
     
 </xs:schema>

@@ -5,7 +5,7 @@
 <!-- ============================================================= -->
 <!--  MODULE:    DITA BOOKMAP XSD                                      -->
 <!--  VERSION:   1.2                                             -->
-<!--  DATE:      November 2006                                     -->
+<!--  DATE:      November 2008                                     -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -29,13 +29,13 @@
 
     <!-- ==================== Include Section - Start ======================= -->
     <xs:include schemaLocation="../../base/xsd/mapGroupMod.xsd" />
- <xs:include schemaLocation="../../base/xsd/indexingDomain.xsd" />
     <xs:include schemaLocation="../../base/xsd/commonElementMod.xsd"/>
     <!-- ======== Table elements ======== -->
   <xs:include schemaLocation="../../base/xsd/tblDeclMod.xsd"/>    
   <!-- ======= MetaData elements, plus keyword and indexterm ======= -->
   <xs:include schemaLocation="../../base/xsd/metaDeclMod.xsd"/>
 
+    <xs:include schemaLocation="../../base/xsd/indexingDomain.xsd" />
     <xs:include schemaLocation="../../xnal/xsd/xnalDomain.xsd" />
     <xs:include schemaLocation="../../base/xsd/delayResolutionDomain.xsd" />
     <xs:include schemaLocation="learningMapDomain.xsd"/>
@@ -95,7 +95,6 @@
 
     <xs:include schemaLocation="../../base/xsd/mapMod.xsd" />
     <xs:include schemaLocation="../../bookmap/xsd/bookmapMod.xsd" />
-    
 
 
     <xs:attributeGroup name="domains-att">

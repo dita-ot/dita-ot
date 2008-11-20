@@ -17,7 +17,7 @@
 <!-- ORIGINAL CREATION DATE:                                       -->
 <!--             March 2001                                        -->
 <!--                                                               -->
-<!--             (C) Copyright OASIS-Open.org 2005, 2006                -->
+<!--             (C) Copyright OASIS-Open.org 2005, 2008                -->
 <!--             (C) Copyright IBM Corporation 2001, 2004.         -->
 <!--             All Rights Reserved.                              -->
 <!--                                                               -->
@@ -25,7 +25,6 @@
 <!--  2008.03.20 EAS: Added xml:lang and DITAArchVersion attribute to dita element   -->
 <!-- ============================================================= -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
-  <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="urn:oasis:names:tc:dita:xsd:xml.xsd:1.2"/>
   <!-- Add the domains to the base topic XML Schema -->
   <!--  ================ TOPIC DOMAINS =====================  -->
   <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:uiDomain.xsd:1.2"/>
@@ -203,9 +202,9 @@
 
   <xs:annotation>
     <xs:documentation>The &lt;<keyword>dita</keyword>&gt; element provides a top-level container
-      for multiple topics when you create documents using the ditabase DTD. The
+      for multiple topics when you create documents using the ditabase XSD. The
       &lt;<keyword>dita</keyword>&gt; element lets you create any sequence of concept,
-      task, and reference topics, and the ditabase DTD lets you further nest these
+      task, and reference topics, and the ditabase XSD lets you further nest these
       topic types inside each other. The &lt;<keyword>dita</keyword>&gt; element has
       no particular output implications; it simply allows you to create multiple
       topics of different types at the same level in a single document.</xs:documentation>

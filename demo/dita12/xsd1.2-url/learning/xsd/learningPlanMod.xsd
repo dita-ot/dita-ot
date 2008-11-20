@@ -3,7 +3,7 @@
      specialization working design. It is a work-in-progress by
      the OASIS DITA learning and training content specialization 
      sub-committee.-->
-<!--             (C) Copyright OASIS Open 2007.                    -->
+<!--             (C) Copyright OASIS Open 2007, 2008                    -->
 <!--             All Rights Reserved.                              -->
 <!-- ============================================================= -->
 <!--                    HEADER                                     -->
@@ -25,27 +25,9 @@
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
   attributeFormDefault="unqualified" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
   <!-- ==================== Import Section ======================= -->
-  <xs:import namespace="http://www.w3.org/XML/1998/namespace"
-    schemaLocation="urn:oasis:names:tc:dita:xsd:xml.xsd:1.2"/>
-  <xs:import namespace="http://dita.oasis-open.org/architecture/2005/"
-    schemaLocation="urn:oasis:names:tc:dita:xsd:ditaarch.xsd:1.2"/>
+  <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="../../base/xsd/xml.xsd"/>
+   <xs:import namespace="http://dita.oasis-open.org/architecture/2005/" schemaLocation="../../base/xsd/ditaarch.xsd"/>
 
-  <!-- Base type: univ-atts -->
-  <xs:attributeGroup name="univ-atts-no-importance-learningPlan">
-    <xs:attributeGroup ref="id-atts"/>
-    <xs:attributeGroup ref="filter-atts"/>
-    <xs:attribute name="rev" type="xs:string"/>
-    <xs:attribute name="status" type="status-atts.class"/>
-    <xs:attributeGroup ref="localization-atts"/>
-  </xs:attributeGroup>
-
-  <!-- Base type: importance-atts.class -->
-  <xs:simpleType name="importance-att-nodefault-learningPlan.class">
-    <xs:restriction base="importance-atts.class">
-      <xs:enumeration value="optional"/>
-      <xs:enumeration value="required"/>
-    </xs:restriction>
-  </xs:simpleType>
 
   <!-- Element declarations for learningPlan.mod -->
   <xs:element name="learningPlan">
@@ -119,7 +101,7 @@
   
   <xs:attributeGroup name="learningPlan.attributes">
     <xs:attribute name="id" type="xs:ID" use="required"/>
-    <xs:attribute name="conref" type="xs:string"/>
+    <xs:attributeGroup ref="conref-atts" />
     <xs:attributeGroup ref="select-atts"/>
     <xs:attributeGroup ref="domains-att"/>
     <xs:attribute ref="ditaarch:DITAArchVersion"/>
@@ -151,7 +133,6 @@
   
   <xs:attributeGroup name="learningPlanbody.attributes">
     <xs:attribute name="outputclass" type="xs:string"/>
-    <xs:attribute name="spectitle" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
   </xs:attributeGroup>
@@ -179,7 +160,6 @@
     <xs:sequence>
       <xs:sequence>
       <xs:group ref="title" minOccurs="0"/>
-      <xs:group ref="desc" minOccurs="0"/>
       <xs:group ref="lcClient" minOccurs="0"/>
       <xs:group ref="lcPlanTitle" minOccurs="0"/>
       <xs:group ref="lcCIN" minOccurs="0"/>
@@ -221,7 +201,6 @@
     <xs:sequence>
       <xs:sequence>
       <xs:group ref="title" minOccurs="0"/>
-      <xs:group ref="desc" minOccurs="0"/>
       <xs:group ref="lcOrganizational" minOccurs="0"/>
       <xs:group ref="lcPlanAudience" minOccurs="0"/>
       <xs:group ref="lcWorkEnv" minOccurs="0"/>
@@ -259,7 +238,6 @@
     <xs:sequence>
       <xs:sequence>
       <xs:group ref="title" minOccurs="0"/>
-      <xs:group ref="desc" minOccurs="0"/>
       <xs:group ref="lcGapItem" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
     </xs:sequence>
@@ -294,7 +272,6 @@
     <xs:sequence>
       <xs:sequence>
       <xs:group ref="title" minOccurs="0"/>
-      <xs:group ref="desc" minOccurs="0"/>
       <xs:group ref="lcInterventionItem" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
     </xs:sequence>
@@ -329,7 +306,6 @@
     <xs:sequence>
       <xs:sequence>
       <xs:group ref="title" minOccurs="0"/>
-      <xs:group ref="desc" minOccurs="0"/>
       <xs:group ref="lcLMS" minOccurs="0"/>
       <xs:group ref="lcNoLMS" minOccurs="0"/>
       <xs:group ref="lcHandouts" minOccurs="0"/>
@@ -376,13 +352,13 @@
     <xs:sequence>
       <xs:sequence>
       <xs:group ref="title" minOccurs="0"/>
-      <xs:group ref="desc" minOccurs="0"/>
       <xs:group ref="fig.cnt" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
     </xs:sequence>
   </xs:group>
   
   <xs:attributeGroup name="lcClient.attributes">
+    <xs:attributeGroup ref="display-atts"/>
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attribute name="spectitle" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
@@ -411,13 +387,13 @@
     <xs:sequence>
       <xs:sequence>
       <xs:group ref="title" minOccurs="0"/>
-      <xs:group ref="desc" minOccurs="0"/>
       <xs:group ref="fig.cnt" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
     </xs:sequence>
   </xs:group>
   
   <xs:attributeGroup name="lcPlanTitle.attributes">
+    <xs:attributeGroup ref="display-atts"/>
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attribute name="spectitle" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
@@ -445,13 +421,13 @@
     <xs:sequence>
       <xs:sequence>
       <xs:group ref="title" minOccurs="0"/>
-      <xs:group ref="desc" minOccurs="0"/>
       <xs:group ref="fig.cnt" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
     </xs:sequence>
   </xs:group>
   
   <xs:attributeGroup name="lcCIN.attributes">
+    <xs:attributeGroup ref="display-atts"/>
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attribute name="spectitle" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
@@ -479,13 +455,13 @@
     <xs:sequence>
       <xs:sequence>
       <xs:group ref="title" minOccurs="0"/>
-      <xs:group ref="desc" minOccurs="0"/>
       <xs:group ref="fig.cnt" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
     </xs:sequence>
   </xs:group>
   
   <xs:attributeGroup name="lcModDate.attributes">
+    <xs:attributeGroup ref="display-atts"/>
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attribute name="spectitle" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
@@ -514,13 +490,13 @@
     <xs:sequence>
       <xs:sequence>
       <xs:group ref="title" minOccurs="0"/>
-      <xs:group ref="desc" minOccurs="0"/>
       <xs:group ref="fig.cnt" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
     </xs:sequence>
   </xs:group>
   
   <xs:attributeGroup name="lcDelivDate.attributes">
+    <xs:attributeGroup ref="display-atts"/>
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attribute name="spectitle" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
@@ -549,13 +525,13 @@
     <xs:sequence>
       <xs:sequence>
       <xs:group ref="title" minOccurs="0"/>
-      <xs:group ref="desc" minOccurs="0"/>
       <xs:group ref="fig.cnt" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
     </xs:sequence>
   </xs:group>
   
   <xs:attributeGroup name="lcPlanSubject.attributes">
+    <xs:attributeGroup ref="display-atts"/>
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attribute name="spectitle" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
@@ -584,13 +560,13 @@
     <xs:sequence>
       <xs:sequence>
       <xs:group ref="title" minOccurs="0"/>
-      <xs:group ref="desc" minOccurs="0"/>
       <xs:group ref="fig.cnt" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
     </xs:sequence>
   </xs:group>
   
   <xs:attributeGroup name="lcPlanDescrip.attributes">
+    <xs:attributeGroup ref="display-atts"/>
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attribute name="spectitle" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
@@ -619,13 +595,13 @@
     <xs:sequence>
       <xs:sequence>
       <xs:group ref="title" minOccurs="0"/>
-      <xs:group ref="desc" minOccurs="0"/>
       <xs:group ref="fig.cnt" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
     </xs:sequence>
   </xs:group>
   
   <xs:attributeGroup name="lcPlanPrereqs.attributes">
+    <xs:attributeGroup ref="display-atts"/>
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attribute name="spectitle" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
@@ -664,6 +640,7 @@
   </xs:group>
   
   <xs:attributeGroup name="lcOrganizational.attributes">
+    <xs:attributeGroup ref="display-atts"/>
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attribute name="spectitle" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
@@ -705,6 +682,7 @@
   </xs:group>
   
   <xs:attributeGroup name="lcPlanAudience.attributes">
+    <xs:attributeGroup ref="display-atts"/>
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attribute name="spectitle" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
@@ -740,6 +718,7 @@
   </xs:group>
   
   <xs:attributeGroup name="lcWorkEnv.attributes">
+    <xs:attributeGroup ref="display-atts"/>
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attribute name="spectitle" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
@@ -776,6 +755,7 @@
   </xs:group>
   
   <xs:attributeGroup name="lcTask.attributes">
+    <xs:attributeGroup ref="display-atts"/>
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attribute name="spectitle" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
@@ -811,6 +791,7 @@
   </xs:group>
   
   <xs:attributeGroup name="lcGapItem.attributes">
+    <xs:attributeGroup ref="display-atts"/>
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attribute name="spectitle" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
@@ -839,7 +820,6 @@
     <xs:sequence>
       <xs:sequence>
       <xs:group ref="title" minOccurs="0"/>
-      <xs:group ref="desc" minOccurs="0"/>
       <xs:group ref="lcLearnStrat" minOccurs="0"/>
       <xs:group ref="lcPlanObjective" minOccurs="0"/>
       <xs:group ref="lcAssessment" minOccurs="0"/>
@@ -849,6 +829,7 @@
   </xs:group>
   
   <xs:attributeGroup name="lcInterventionItem.attributes">
+    <xs:attributeGroup ref="display-atts"/>
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attribute name="spectitle" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
@@ -876,13 +857,13 @@
     <xs:sequence>
       <xs:sequence>
       <xs:group ref="title" minOccurs="0"/>
-      <xs:group ref="desc" minOccurs="0"/>
       <xs:group ref="fig.cnt" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
     </xs:sequence>
   </xs:group>
   
   <xs:attributeGroup name="lcLMS.attributes">
+    <xs:attributeGroup ref="display-atts"/>
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attribute name="spectitle" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
@@ -893,7 +874,6 @@
     <xs:complexType mixed="true">
       <xs:complexContent>
         <xs:extension base="lcNoLMS.class">
-
           <xs:attribute ref="class" default="- topic/fig learningBase/fig learningPlan/lcNoLMS "/>
         </xs:extension>
       </xs:complexContent>
@@ -911,13 +891,13 @@
     <xs:sequence>
       <xs:sequence>
       <xs:group ref="title" minOccurs="0"/>
-      <xs:group ref="desc" minOccurs="0"/>
       <xs:group ref="fig.cnt" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
     </xs:sequence>
   </xs:group>
   
   <xs:attributeGroup name="lcNoLMS.attributes">
+    <xs:attributeGroup ref="display-atts"/>
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attribute name="spectitle" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
@@ -946,13 +926,13 @@
     <xs:sequence>
       <xs:sequence>
       <xs:group ref="title" minOccurs="0"/>
-      <xs:group ref="desc" minOccurs="0"/>
       <xs:group ref="fig.cnt" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
     </xs:sequence>
   </xs:group>
   
   <xs:attributeGroup name="lcHandouts.attributes">
+    <xs:attributeGroup ref="display-atts"/>
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attribute name="spectitle" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
@@ -981,13 +961,13 @@
     <xs:sequence>
       <xs:sequence>
       <xs:group ref="title" minOccurs="0"/>
-      <xs:group ref="desc" minOccurs="0"/>
       <xs:group ref="fig.cnt" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
     </xs:sequence>
   </xs:group>
   
   <xs:attributeGroup name="lcClassroom.attributes">
+    <xs:attributeGroup ref="display-atts"/>
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attribute name="spectitle" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
@@ -1015,13 +995,13 @@
     <xs:sequence>
       <xs:sequence>
       <xs:group ref="title" minOccurs="0"/>
-      <xs:group ref="desc" minOccurs="0"/>
       <xs:group ref="fig.cnt" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
     </xs:sequence>
   </xs:group>
   
   <xs:attributeGroup name="lcOJT.attributes">
+    <xs:attributeGroup ref="display-atts"/>
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attribute name="spectitle" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
@@ -1050,13 +1030,13 @@
     <xs:sequence>
       <xs:sequence>
       <xs:group ref="title" minOccurs="0"/>
-      <xs:group ref="desc" minOccurs="0"/>
       <xs:group ref="fig.cnt" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
     </xs:sequence>
   </xs:group>
   
   <xs:attributeGroup name="lcConstraints.attributes">
+    <xs:attributeGroup ref="display-atts"/>
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attribute name="spectitle" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
@@ -1084,13 +1064,13 @@
     <xs:sequence>
       <xs:sequence>
       <xs:group ref="title" minOccurs="0"/>
-      <xs:group ref="desc" minOccurs="0"/>
       <xs:group ref="fig.cnt" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
     </xs:sequence>
   </xs:group>
   
   <xs:attributeGroup name="lcW3C.attributes">
+    <xs:attributeGroup ref="display-atts"/>
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attribute name="spectitle" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
@@ -1119,13 +1099,13 @@
     <xs:sequence>
       <xs:sequence>
       <xs:group ref="title" minOccurs="0"/>
-      <xs:group ref="desc" minOccurs="0"/>
       <xs:group ref="fig.cnt" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
     </xs:sequence>
   </xs:group>
   
   <xs:attributeGroup name="lcPlayers.attributes">
+    <xs:attributeGroup ref="display-atts"/>
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attribute name="spectitle" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
@@ -1154,13 +1134,13 @@
     <xs:sequence>
       <xs:sequence>
       <xs:group ref="title" minOccurs="0"/>
-      <xs:group ref="desc" minOccurs="0"/>
       <xs:group ref="fig.cnt" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
     </xs:sequence>
   </xs:group>
   
   <xs:attributeGroup name="lcGraphics.attributes">
+    <xs:attributeGroup ref="display-atts"/>
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attribute name="spectitle" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
@@ -1188,13 +1168,13 @@
     <xs:sequence>
       <xs:sequence>
       <xs:group ref="title" minOccurs="0"/>
-      <xs:group ref="desc" minOccurs="0"/>
       <xs:group ref="fig.cnt" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
     </xs:sequence>
   </xs:group>
   
   <xs:attributeGroup name="lcViewers.attributes">
+    <xs:attributeGroup ref="display-atts"/>
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attribute name="spectitle" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
@@ -1223,13 +1203,13 @@
     <xs:sequence>
       <xs:sequence>
       <xs:group ref="title" minOccurs="0"/>
-      <xs:group ref="desc" minOccurs="0"/>
       <xs:group ref="fig.cnt" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
     </xs:sequence>
   </xs:group>
   
   <xs:attributeGroup name="lcResolution.attributes">
+    <xs:attributeGroup ref="display-atts"/>
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attribute name="spectitle" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
@@ -1259,13 +1239,13 @@
     <xs:sequence>
       <xs:sequence>
       <xs:group ref="title" minOccurs="0"/>
-      <xs:group ref="desc" minOccurs="0"/>
       <xs:group ref="fig.cnt" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
     </xs:sequence>
   </xs:group>
   
   <xs:attributeGroup name="lcFileSizeLimitations.attributes">
+    <xs:attributeGroup ref="display-atts"/>
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attribute name="spectitle" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
@@ -1294,13 +1274,13 @@
     <xs:sequence>
       <xs:sequence>
       <xs:group ref="title" minOccurs="0"/>
-      <xs:group ref="desc" minOccurs="0"/>
       <xs:group ref="fig.cnt" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
     </xs:sequence>
   </xs:group>
   
   <xs:attributeGroup name="lcDownloadTime.attributes">
+    <xs:attributeGroup ref="display-atts"/>
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attribute name="spectitle" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
@@ -1329,13 +1309,13 @@
     <xs:sequence>
       <xs:sequence>
       <xs:group ref="title" minOccurs="0"/>
-      <xs:group ref="desc" minOccurs="0"/>
       <xs:group ref="fig.cnt" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
     </xs:sequence>
   </xs:group>
   
   <xs:attributeGroup name="lcSecurity.attributes">
+    <xs:attributeGroup ref="display-atts"/>
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attribute name="spectitle" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
@@ -1371,6 +1351,7 @@
   <xs:attributeGroup name="lcGeneralDescription.attributes">
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
   </xs:attributeGroup>
 
   <xs:element name="lcGoals">
@@ -1400,6 +1381,7 @@
   <xs:attributeGroup name="lcGoals.attributes">
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
   </xs:attributeGroup>
 
   <xs:element name="lcNeeds">
@@ -1429,6 +1411,7 @@
   <xs:attributeGroup name="lcNeeds.attributes">
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
   </xs:attributeGroup>
 
   <xs:element name="lcValues">
@@ -1458,6 +1441,7 @@
   <xs:attributeGroup name="lcValues.attributes">
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
   </xs:attributeGroup>
 
   <xs:element name="lcOrgConstraints">
@@ -1488,6 +1472,7 @@
   <xs:attributeGroup name="lcOrgConstraints.attributes">
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
   </xs:attributeGroup>
   
   <xs:element name="lcEdLevel">
@@ -1518,6 +1503,7 @@
   <xs:attributeGroup name="lcEdLevel.attributes">
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
   </xs:attributeGroup>
 
   <xs:element name="lcAge">
@@ -1547,6 +1533,7 @@
   <xs:attributeGroup name="lcAge.attributes">
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
   </xs:attributeGroup>
 
   <xs:element name="lcBackground">
@@ -1577,6 +1564,7 @@
   <xs:attributeGroup name="lcBackground.attributes">
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
   </xs:attributeGroup>
 
   <xs:element name="lcSkills">
@@ -1606,6 +1594,7 @@
   <xs:attributeGroup name="lcSkills.attributes">
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
   </xs:attributeGroup>
 
   <xs:element name="lcKnowledge">
@@ -1635,6 +1624,7 @@
   <xs:attributeGroup name="lcKnowledge.attributes">
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
   </xs:attributeGroup>
 
   <xs:element name="lcMotivation">
@@ -1664,6 +1654,7 @@
   <xs:attributeGroup name="lcMotivation.attributes">
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
   </xs:attributeGroup>
 
   <xs:element name="lcSpecChars">
@@ -1692,6 +1683,7 @@
   <xs:attributeGroup name="lcSpecChars.attributes">
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
   </xs:attributeGroup>
 
   <xs:element name="lcWorkEnvDescription">
@@ -1722,6 +1714,7 @@
   <xs:attributeGroup name="lcWorkEnvDescription.attributes">
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
   </xs:attributeGroup>
 
   <xs:element name="lcPlanResources">
@@ -1752,6 +1745,7 @@
   <xs:attributeGroup name="lcPlanResources.attributes">
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
   </xs:attributeGroup>
 
   <xs:element name="lcProcesses">
@@ -1781,6 +1775,7 @@
   <xs:attributeGroup name="lcProcesses.attributes">
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
   </xs:attributeGroup>
 
   <xs:element name="lcTaskItem">
@@ -1810,6 +1805,7 @@
   <xs:attributeGroup name="lcTaskItem.attributes">
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
   </xs:attributeGroup>
 
   <xs:element name="lcAttitude">
@@ -1840,6 +1836,7 @@
   <xs:attributeGroup name="lcAttitude.attributes">
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
   </xs:attributeGroup>
 
   <xs:element name="lcPlanObjective">
@@ -1870,6 +1867,7 @@
   <xs:attributeGroup name="lcPlanObjective.attributes">
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
   </xs:attributeGroup>
 
   <xs:element name="lcJtaItem">
@@ -1899,6 +1897,7 @@
   <xs:attributeGroup name="lcJtaItem.attributes">
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
   </xs:attributeGroup>
 
   <xs:element name="lcGapItemDelta">
@@ -1929,6 +1928,7 @@
   <xs:attributeGroup name="lcGapItemDelta.attributes">
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
   </xs:attributeGroup>
 
   <xs:element name="lcLearnStrat">
@@ -1958,6 +1958,7 @@
   <xs:attributeGroup name="lcLearnStrat.attributes">
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
   </xs:attributeGroup>
 
 
@@ -1988,6 +1989,7 @@
   <xs:attributeGroup name="lcAssessment.attributes">
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
   </xs:attributeGroup>
 
 
@@ -2019,6 +2021,7 @@
   <xs:attributeGroup name="lcDelivery.attributes">
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
   </xs:attributeGroup>
 
 </xs:schema>

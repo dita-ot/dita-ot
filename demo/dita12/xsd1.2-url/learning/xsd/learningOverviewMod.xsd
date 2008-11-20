@@ -3,7 +3,7 @@
      specialization working design. It is a work-in-progress by
      the OASIS DITA learning and training content specialization 
      sub-committee.-->
-<!--             (C) Copyright OASIS Open 2007.                    -->
+<!--             (C) Copyright OASIS Open 2007, 2008                    -->
 <!--             All Rights Reserved.                              -->
 <!-- ============================================================= -->
 <!--                    HEADER                                     -->
@@ -105,7 +105,7 @@
   
   <xs:attributeGroup name="leariningOverview.attributes">
     <xs:attribute name="id" type="xs:ID" use="required"/>
-    <xs:attribute name="conref" type="xs:string"/>
+    <xs:attributeGroup ref="conref-atts"/>
     <xs:attributeGroup ref="select-atts"/>
     <xs:attributeGroup ref="domains-att"/>
     <xs:attribute ref="ditaarch:DITAArchVersion"/>
@@ -125,24 +125,22 @@
   
   <xs:group name="learningOverviewbody.content">
     <xs:sequence>
+      <xs:sequence>
       <xs:group ref="lcIntro" minOccurs="0"/>
-      <xs:choice>
         <xs:group ref="lcAudience" minOccurs="0" maxOccurs="unbounded"/>
         <xs:group ref="lcDuration" minOccurs="0"/>
         <xs:group ref="lcPrereqs" minOccurs="0"/>
         <xs:group ref="lcObjectives" minOccurs="0"/>
         <xs:group ref="lcResources" minOccurs="0"/>
         <xs:group ref="section" minOccurs="0" maxOccurs="unbounded"/>
-      </xs:choice>      
-    </xs:sequence>
+      </xs:sequence>
+      </xs:sequence>
   </xs:group>
   
   
   <xs:attributeGroup name="learningOverviewbody.attributes">
     <xs:attribute name="outputclass" type="xs:string"/>
-    <xs:attributeGroup ref="id-atts"/>
-    <xs:attributeGroup ref="select-atts"/>
-    <xs:attributeGroup ref="localization-atts"/>
+    <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
   </xs:attributeGroup>
 </xs:schema>

@@ -5,7 +5,7 @@
 <!-- ============================================================= -->
 <!--  MODULE:    DITA BOOKMAP XSD                                      -->
 <!--  VERSION:   1.2                                             -->
-<!--  DATE:      November 2006                                     -->
+<!--  DATE:      November 2008                                     -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -70,33 +70,23 @@
             </xs:choice>
         </xs:group>
         
+        <xs:group name="keywords">
+      <xs:choice>
+        <xs:group ref="keywords"/>
+        <xs:group ref="delay-d-keywords" />
+      </xs:choice>
+    </xs:group>
+        
     </xs:redefine>
     
     
     
     
     <xs:include schemaLocation="../../base/xsd/mapMod.xsd" />
-      <!--  <xs:complexType name="map.class">
-            <xs:complexContent>
-                <xs:extension base="map.class">
-                    <xs:attribute name="domains" type="xs:string" default="(map mapgroup-d) (topic indexing-d)  (topic xnal-d)"/>
-                </xs:extension>
-            </xs:complexContent>
-        </xs:complexType>
-    </xs:redefine>
-    -->
     <xs:include schemaLocation="bookmapMod.xsd" />
-        <!--<xs:complexType name="bookmap.class">
-            <xs:complexContent>
-                <xs:extension base="bookmap.class">
-                    <xs:attribute name="domains" type="xs:string" default="(map mapgroup-d) (topic indexing-d)  (topic xnal-d)"/>
-                </xs:extension>
-            </xs:complexContent>
-        </xs:complexType>
-    </xs:redefine>-->
-    
+        
   <xs:attributeGroup name="domains-att">
-    <xs:attribute name="domains" type="xs:string" default="(map mapgroup-d) (topic indexing-d)  (topic xnal-d) (topic delay-d)"/>
+    <xs:attribute name="domains" type="xs:string" default="(map mapgroup-d) (topic indexing-d)  (topic xnal-d) (topic delay-d) (map bookmap)"/>
   </xs:attributeGroup>
     
 </xs:schema>

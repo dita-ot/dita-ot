@@ -76,7 +76,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Map//EN"
                                   #FIXED 'http://dita.oasis-open.org/architecture/2005/'
               %DITAArchNSPrefix;:DITAArchVersion
                         CDATA
-                                  '1.1'
+                                  '1.2'
   "
 >
 

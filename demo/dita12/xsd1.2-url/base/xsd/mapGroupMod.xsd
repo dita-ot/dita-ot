@@ -3,8 +3,8 @@
 <!--                    HEADER                                     -->
 <!-- ============================================================= -->
 <!--  MODULE:    DITA Map Group Domain                             -->
-<!--  VERSION:   1.1                                             -->
-<!--  DATE:      November 2006                                     -->
+<!--  VERSION:   1.2                                             -->
+<!--  DATE:      November 2008                                     -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -17,7 +17,7 @@
 <!-- ORIGINAL CREATION DATE:                                       -->
 <!--             March 2001                                        -->
 <!--                                                               -->
-<!--             (C) Copyright OASIS-Open.org 2005, 2006                -->
+<!--             (C) Copyright OASIS-Open.org 2005, 2008                -->
 <!--             (C) Copyright IBM Corporation 2001, 2004.         -->
 <!--             All Rights Reserved.                              -->
 <!-- ============================================================= -->
@@ -93,10 +93,10 @@
       </xs:sequence>
    </xs:group>
    
-  <xs:attributeGroup name="topicref-atts-no-format">
+  <xs:attributeGroup name="topicref-atts-without-format">
     <xs:annotation>
       <xs:documentation>
-        The %topicref-atts-no-format; parameter entity represents a group of attributes
+        The %topicref-atts-without-format; parameter entity represents a group of attributes
         used in numerous map elements: mapref,
         and topicgroup. The set is similar to those documented in <ph><xref href="topicref-atts.xml">topicref-atts</xref></ph> but
         excludes the <i><keyword>format</keyword></i> attribute.
@@ -150,7 +150,7 @@
   </xs:group>
   
   <xs:attributeGroup name="topichead.attributes">
-    <xs:attribute name="navtitle" type="xs:string" use="required"/>
+    <xs:attribute name="navtitle" type="xs:string"/>
         <xs:attribute name="outputclass" type="xs:string"/>
         <xs:attributeGroup ref="topicref-atts" />
         <xs:attributeGroup ref="univ-atts"/>
@@ -247,7 +247,16 @@
     <xs:attribute name="query" type="xs:string"/>
     <xs:attribute name="copy-to" type="xs:string"/>
     <xs:attribute name="outputclass" type="xs:string"/>
-    <xs:attributeGroup ref="topicref-atts" />
+    <xs:attribute name="collection-type" type="collection-type.class"/>
+     <xs:attribute name="type" type="xs:string" default="anchor"/>
+     <xs:attribute name="scope" type="scope-att.class"/>
+     <xs:attribute name="locktitle" type="yesno-att.class"/>
+     <xs:attribute name="format" type="xs:string" default="ditamap"/>
+     <xs:attribute name="linking" type="linkingtypes.class"/>
+     <xs:attribute name="toc" type="yesno-att.class" />
+     <xs:attribute name="print" type="print-att.class"/>
+     <xs:attribute name="search" type="yesno-att.class"/>
+     <xs:attribute name="chunk" type="xs:string" default="to-navigation"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts" />
   </xs:attributeGroup>
@@ -293,8 +302,8 @@
     <xs:attribute name="query" type="xs:string"/>
     <xs:attribute name="copy-to" type="xs:string"/>
     <xs:attribute name="outputclass" type="xs:string"/>
-    <xs:attributeGroup ref="topicref-atts-no-format" />
-    <xs:attribute name="format" type="xs:string" fixed="ditamap"/>
+    <xs:attributeGroup ref="topicref-atts-without-format" />
+    <xs:attribute name="format" type="xs:string" default="ditamap"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts" />
   </xs:attributeGroup>
@@ -354,7 +363,7 @@
     <xs:attribute name="toc" type="yesno-att.class"/>
     <xs:attribute name="print" type="yesno-att.class"/>
     <xs:attribute name="search" type="yesno-att.class"/>
-    <xs:attribute name="chunk" type="xs:string" fixed="to-navigation"/>
+    <xs:attribute name="chunk" type="xs:string" default="to-navigation"/>
     <xs:attribute name="id" type="xs:NMTOKEN" use="required"/>
     <xs:attributeGroup ref="select-atts"/>
     <xs:attributeGroup ref="localization-atts"/>
@@ -407,10 +416,10 @@
     <xs:attribute name="outputclass" type="xs:string"/>
     <!-- topic-ref-att plus chuck fixed to "to-navigation" -->
     <xs:attribute name="collection-type" type="collection-type.class"/>
-    <xs:attribute name="type" type="xs:string" fixed="topicset"/>
+    <xs:attribute name="type" type="xs:string" default="topicset"/>
     <xs:attribute name="scope" type="scope-att.class"/>
     <xs:attribute name="locktitle" type="yesno-att.class"/>
-    <xs:attribute name="format" type="xs:string" fixed="ditamap"/>
+    <xs:attribute name="format" type="xs:string" default="ditamap"/>
     <xs:attribute name="linking" type="linkingtypes.class"/>
     <xs:attribute name="toc" type="yesno-att.class"/>
     <xs:attribute name="print" type="yesno-att.class"/>
@@ -472,8 +481,8 @@
     <xs:attribute name="locktitle" type="yesno-att.class"/>
     <xs:attribute name="format" type="xs:string"/>
     <xs:attribute name="linking" type="linkingtypes.class"/>
-    <xs:attribute name="toc" type="yesno-att.class" fixed="no"/>
-    <xs:attribute name="print" type="yesno-att.class" fixed="no"/>
+    <xs:attribute name="toc" type="yesno-att.class" default="no"/>
+    <xs:attribute name="print" type="yesno-att.class" default="no"/>
     <xs:attribute name="search" type="yesno-att.class"/>
     <xs:attribute name="chunk" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>

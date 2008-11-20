@@ -3,7 +3,7 @@
      specialization working design. It is a work-in-progress by
      the OASIS DITA learning and training content specialization 
      sub-committee.-->
-<!--             (C) Copyright OASIS Open 2007.                    -->
+<!--             (C) Copyright OASIS Open 2007, 2008                    -->
 <!--             All Rights Reserved.                              -->
 <!-- ============================================================= -->
 <!--                    HEADER                                     -->
@@ -26,10 +26,8 @@
   xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" elementFormDefault="qualified"
   attributeFormDefault="unqualified">
   <!-- ==================== Import Section ======================= -->
-  <xs:import namespace="http://www.w3.org/XML/1998/namespace"
-    schemaLocation="urn:oasis:names:tc:dita:xsd:xml.xsd:1.2"/>
-  <xs:import namespace="http://dita.oasis-open.org/architecture/2005/"
-    schemaLocation="urn:oasis:names:tc:dita:xsd:ditaarch.xsd:1.2"/>
+  <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="../../base/xsd/xml.xsd"/>
+   <xs:import namespace="http://dita.oasis-open.org/architecture/2005/" schemaLocation="../../base/xsd/ditaarch.xsd"/>
   <!-- Base type: univ-atts -->
   <xs:attributeGroup name="univ-atts-no-importance-learningContent">
     <xs:attributeGroup ref="id-atts"/>
@@ -129,7 +127,7 @@
   <xs:group name="learningContentbody.content">
     <xs:sequence>
       <xs:sequence>
-        <xs:choice>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
           <xs:group ref="lcIntro" minOccurs="0"/>
           <xs:group ref="lcDuration" minOccurs="0"/>
           <xs:group ref="lcObjectives" minOccurs="0"/>
@@ -143,15 +141,13 @@
 
   <xs:attributeGroup name="learningContentbody.attributes">
     <xs:attribute name="outputclass" type="xs:string"/>
-    <xs:attributeGroup ref="id-atts"/>
-    <xs:attributeGroup ref="select-atts"/>
-    <xs:attributeGroup ref="localization-atts"/>
+    <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
   </xs:attributeGroup>
 
   <xs:attributeGroup name="learningContent.attributes">
     <xs:attribute name="id" type="xs:ID" use="required"/>
-    <xs:attribute name="conref" type="xs:string"/>
+    <xs:attributeGroup ref="conref-atts"/>
     <xs:attributeGroup ref="select-atts"/>
     <xs:attributeGroup ref="domains-att"/>
     <xs:attribute ref="ditaarch:DITAArchVersion"/>

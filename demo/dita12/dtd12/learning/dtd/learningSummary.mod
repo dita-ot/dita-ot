@@ -79,12 +79,12 @@ PUBLIC "-//OASIS//ELEMENTS DITA Learning Summary//EN"
 
 
 <!ENTITY % learningSummarybody.content
-                        "((%lcSummary;)?,
-                          (%lcObjectives;)?,
-                          (%lcReview;)?,
-                          (%lcNextSteps;)?,
-                          (%lcResources;)?,
-                          (%section;)*)"
+                        "(((%lcSummary;) |
+                          (%lcObjectives;) |
+                          (%lcReview;) |
+                          (%lcNextSteps;) |
+                          (%lcResources;) |
+                          (%section;))*)"
 >
 <!ENTITY % learningSummarybody.attributes
              "%univ-atts;

@@ -3,8 +3,8 @@
 <!--                    HEADER                                     -->
 <!-- ============================================================= -->
 <!--  MODULE:    DITA Topic XSD Group Decleration                  -->
-<!--  VERSION:   1.1                                             -->
-<!--  DATE:      November 2006                                     -->
+<!--  VERSION:   1.2                                             -->
+<!--  DATE:      November 2008                                     -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -17,7 +17,7 @@
 <!-- ORIGINAL CREATION DATE:                                       -->
 <!--             March 2001                                        -->
 <!--                                                               -->
-<!--             (C) Copyright OASIS-Open.org 2005, 2006                -->
+<!--             (C) Copyright OASIS-Open.org 2005, 2008                -->
 <!--             (C) Copyright IBM Corporation 2001, 2004.         -->
 <!--             All Rights Reserved.                              -->
 <!-- ============================================================= -->
@@ -67,6 +67,22 @@
       <xs:sequence>
          <xs:choice>
             <xs:element ref="section"/>
+         </xs:choice>
+      </xs:sequence>
+   </xs:group>
+  
+  <xs:group name="bodydiv">
+      <xs:sequence>
+         <xs:choice>
+            <xs:element ref="bodydiv"/>
+         </xs:choice>
+      </xs:sequence>
+   </xs:group>
+
+   <xs:group name="sectiondiv">
+      <xs:sequence>
+         <xs:choice>
+            <xs:element ref="sectiondiv"/>
          </xs:choice>
       </xs:sequence>
    </xs:group>

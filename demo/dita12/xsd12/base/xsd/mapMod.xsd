@@ -4,8 +4,8 @@
 <!-- ============================================================= -->
 <!-- ============================================================= -->
 <!--  MODULE:    DITA MAP XSD Module                               -->
-<!--  VERSION:   1.1                                             -->
-<!--  DATE:      November 2006                                     -->
+<!--  VERSION:   1.2                                             -->
+<!--  DATE:      November 2008                                     -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -17,7 +17,7 @@
 <!-- ORIGINAL CREATION DATE:                                       -->
 <!--             March 2001                                        -->
 <!--                                                               -->
-<!--             (C) Copyright OASIS-Open.org 2005, 2006                -->
+<!--             (C) Copyright OASIS-Open.org 2005, 2008                -->
 <!--             (C) Copyright IBM Corporation 2001, 2004.         -->
 <!--             All Rights Reserved.                              -->
 <!--                                                               -->
@@ -60,7 +60,7 @@
      <xs:attribute name="format" type="xs:string"/>
      <xs:attribute name="linking" type="linkingtypes.class"/>
      <xs:attribute name="toc" type="yesno-att.class"/>
-     <xs:attribute name="print" type="yesno-att.class"/>
+     <xs:attribute name="print" type="print-att.class"/>
      <xs:attribute name="search" type="yesno-att.class"/>
      <xs:attribute name="chunk" type="xs:string"/>
   </xs:attributeGroup>
@@ -106,10 +106,19 @@
      <xs:attribute name="format" type="xs:string"/>
      <xs:attribute name="linking" type="linkingtypes.class"/>
      <xs:attribute name="toc" type="yesno-att.class" default="no"/>
-     <xs:attribute name="print" type="yesno-att.class"/>
+     <xs:attribute name="print" type="print-att.class"/>
      <xs:attribute name="search" type="yesno-att.class"/>
      <xs:attribute name="chunk" type="xs:string"/>
   </xs:attributeGroup>
+   
+   <xs:simpleType name="print-att.class">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+            <xs:enumeration value="printonly"/>
+            <xs:enumeration value="-dita-use-conref-target"/>
+        </xs:restriction>
+    </xs:simpleType>
 
   
 
@@ -193,6 +202,7 @@
      <xs:attributeGroup ref="univ-atts"/>
     <xs:attribute name="outputclass" type="xs:string" />
     <xs:attribute name="mapref" type="xs:string"/>
+    <xs:attribute name="keyref" type="xs:string"/>
     <xs:attributeGroup ref="global-atts" />
    </xs:attributeGroup>
 
@@ -240,8 +250,9 @@
    </xs:group>
    
    <xs:attributeGroup name="topicref.attributes">
-     <xs:attribute name="navtitle" type="xs:string"/>
+    <xs:attribute name="navtitle" type="xs:string"/>
     <xs:attribute name="href" type="xs:string"/>
+    <xs:attribute name="keys" type="xs:string"/>
     <xs:attribute name="keyref" type="xs:string"/>
     <xs:attribute name="query" type="xs:string"/>
     <xs:attribute name="copy-to" type="xs:string"/>
@@ -625,7 +636,7 @@
     <xs:attributeGroup ref="global-atts" />
    </xs:attributeGroup>
 
-<!-- <xs:element name="shortdesc">
+<xs:element name="shortdesc">
     <xs:annotation>
       <xs:documentation>
         The short description (&lt;<keyword>shortdesc</keyword>&gt;) element
@@ -642,7 +653,7 @@
         </xs:extension>
       </xs:complexContent>
     </xs:complexType>
-  </xs:element>-->
+  </xs:element>
    
   <!--<xs:complexType name="shortdesc.class" mixed="true">
     <xs:sequence minOccurs="0" maxOccurs="unbounded">

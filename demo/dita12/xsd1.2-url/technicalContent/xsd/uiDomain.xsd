@@ -3,8 +3,8 @@
 <!--                    HEADER                                     -->
 <!-- ============================================================= -->
 <!--  MODULE:    DITA User Interface Domain                        -->
-<!--  VERSION:   1.1                                             -->
-<!--  DATE:      November 2006                                     -->
+<!--  VERSION:   1.2                                             -->
+<!--  DATE:      November 2008                                     -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -17,7 +17,7 @@
 <!-- ORIGINAL CREATION DATE:                                       -->
 <!--             March 2001                                        -->
 <!--                                                               -->
-<!--             (C) Copyright OASIS-Open.org 2005, 2006                -->
+<!--             (C) Copyright OASIS-Open.org 2005, 2008                -->
 <!--             (C) Copyright IBM Corporation 2001, 2004.         -->
 <!--             All Rights Reserved.                              -->
 <!-- ============================================================= -->
@@ -25,8 +25,7 @@
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
   attributeFormDefault="unqualified">
   <!-- Import namespace for xml:space attribute for element screen -->
-  <xs:import namespace="http://www.w3.org/XML/1998/namespace"
-    schemaLocation="urn:oasis:names:tc:dita:xsd:xml.xsd:1.2"/>
+  <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="../../base/xsd/xml.xsd"/>
 
   <xs:group name="ui-d-ph">
     <xs:choice>

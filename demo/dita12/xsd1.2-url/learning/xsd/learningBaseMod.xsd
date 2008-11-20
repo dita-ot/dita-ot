@@ -3,7 +3,7 @@
      specialization working design. It is a work-in-progress by
      the OASIS DITA learning and training content specialization 
      sub-committee.-->
-<!--             (C) Copyright OASIS Open 2007.                    -->
+<!--             (C) Copyright OASIS Open 2007, 2008                    -->
 <!--             All Rights Reserved.                              -->
 <!-- ============================================================= -->
 <!--                    HEADER                                     -->
@@ -381,33 +381,15 @@
    
    <xs:group name="learningBasebody.content">
      <xs:sequence>
-       <xs:sequence>
-      <xs:group ref="lcIntro" minOccurs="0"/>
-      <xs:group ref="lcObjectives" minOccurs="0"/>
-      <xs:group ref="lcAudience" minOccurs="0"/>
-      <xs:group ref="lcDuration" minOccurs="0"/>
-      <xs:group ref="lcTime" minOccurs="0"/>
-      <xs:group ref="lcDescription" minOccurs="0"/>
-      <xs:group ref="lcPrereqs" minOccurs="0"/>
-      <xs:group ref="lcSubject" minOccurs="0"/>
-      <xs:group ref="lcAuthorInfo" minOccurs="0"/>
-      <xs:group ref="lcSummary" minOccurs="0"/>
-      <xs:group ref="lcNextSteps" minOccurs="0"/>
-      <xs:group ref="lcReview" minOccurs="0"/>
-      <xs:group ref="lcResources" minOccurs="0"/>
-      <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:group ref="data.elements.incl"/>
-        <xs:group ref="foreign.unknown.incl"/>
-      </xs:choice>
-    </xs:sequence>
+       <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="section.cnt"/>
+    </xs:choice>
      </xs:sequence>
    </xs:group>
    
    <xs:attributeGroup name="learningBasebody.attributes">
      <xs:attribute name="outputclass" type="xs:string"/>
-    <xs:attributeGroup ref="id-atts"/>
-    <xs:attributeGroup ref="select-atts"/>
-    <xs:attributeGroup ref="localization-atts" />
+    <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
    </xs:attributeGroup>
 
@@ -428,13 +410,14 @@
    </xs:group>
    
     <xs:attributeGroup name="lcIntro.attributes">
+      <xs:attribute name="spectitle" type="xs:string"/>
        <xs:attribute name="outputclass" type="xs:string"/>
      <xs:attributeGroup ref="univ-atts"/>
       <xs:attributeGroup ref="global-atts"/>  
    </xs:attributeGroup>
 
   <!-- Base type: section.class  ((%title;)?,(%lobjStem;)?,(%lobjList;)*) -->
-  <xs:complexType name="lcObjectives.class" mixed="true">
+  <xs:complexType name="lcObjectives.class">
     <xs:sequence>
       <xs:group ref="lcObjectives.content"/>
     </xs:sequence>
@@ -452,7 +435,8 @@
    </xs:group>
    
    <xs:attributeGroup name="lcObjectives.attributes">
-       <xs:attribute name="outputclass" type="xs:string"/>
+      <xs:attribute name="outputclass" type="xs:string"/>
+      <xs:attribute name="spectitle" type="xs:string"/>
      <xs:attributeGroup ref="univ-atts"/>
       <xs:attributeGroup ref="global-atts"/>  
    </xs:attributeGroup>
@@ -563,7 +547,11 @@
    </xs:group>
    
    <xs:attributeGroup name="lcTime.attributes">
-      <xs:attributeGroup ref="data-element-atts.class"/>
+     <xs:attribute name="name" type="xs:string" default="lcTime"/>
+    <xs:attribute name="datatype" type="xs:string" default="TimeValue"/>
+    <xs:attribute name="value" type="xs:string" use="required"/>
+     <xs:attribute name="outputclass" type="xs:string"/>
+     <xs:attributeGroup ref="univ-atts"/>
       <xs:attributeGroup ref="global-atts"/>
    </xs:attributeGroup>
    
@@ -608,6 +596,7 @@
    
    <xs:attributeGroup name="lcPrereqs.attributes">
        <xs:attribute name="outputclass" type="xs:string"/>
+     <xs:attribute name="spectitle" type="xs:string"/>
      <xs:attributeGroup ref="univ-atts"/>
       <xs:attributeGroup ref="global-atts"/>  
    </xs:attributeGroup>
@@ -674,6 +663,7 @@
    
    <xs:attributeGroup name="lcSummary.attributes">
        <xs:attribute name="outputclass" type="xs:string"/>
+     <xs:attribute name="spectitle" type="xs:string"/>
      <xs:attributeGroup ref="univ-atts"/>
       <xs:attributeGroup ref="global-atts"/>  
    </xs:attributeGroup>
@@ -696,6 +686,7 @@
    
    <xs:attributeGroup name="lcNextSteps.attributes">
        <xs:attribute name="outputclass" type="xs:string"/>
+     <xs:attribute name="spectitle" type="xs:string"/>
      <xs:attributeGroup ref="univ-atts"/>
       <xs:attributeGroup ref="global-atts"/>  
    </xs:attributeGroup>
@@ -718,6 +709,7 @@
    
    <xs:attributeGroup name="lcReview.attributes">
        <xs:attribute name="outputclass" type="xs:string"/>
+     <xs:attribute name="spectitle" type="xs:string"/>
      <xs:attributeGroup ref="univ-atts"/>
      <xs:attributeGroup ref="global-atts"/>  
    </xs:attributeGroup>
@@ -740,6 +732,7 @@
    
    <xs:attributeGroup name="lcAudience.attributes">
        <xs:attribute name="outputclass" type="xs:string"/>
+     <xs:attribute name="spectitle" type="xs:string"/>
      <xs:attributeGroup ref="univ-atts"/>
      <xs:attributeGroup ref="global-atts"/>  
    </xs:attributeGroup>
@@ -798,6 +791,7 @@
    
    <xs:attributeGroup name="lcChallenge.attributes">
        <xs:attribute name="outputclass" type="xs:string"/>
+     <xs:attribute name="spectitle" type="xs:string"/>
      <xs:attributeGroup ref="univ-atts"/>
      <xs:attributeGroup ref="global-atts"/>  
    </xs:attributeGroup>
@@ -833,6 +827,7 @@
    
    <xs:attributeGroup name="lcInstruction.attributes">
        <xs:attribute name="outputclass" type="xs:string"/>
+     <xs:attribute name="spectitle" type="xs:string"/>
      <xs:attributeGroup ref="univ-atts"/>
      <xs:attributeGroup ref="global-atts"/>  
    </xs:attributeGroup>

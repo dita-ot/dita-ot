@@ -4,7 +4,7 @@
 <!-- ============================================================= -->
 <!--  MODULE:    DITA Reference XSD                                -->
 <!--  VERSION:   1.2                                             -->
-<!--  DATE:      November 2006                                     -->
+<!--  DATE:      November 2008                                     -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -17,7 +17,7 @@
 <!-- ORIGINAL CREATION DATE:                                       -->
 <!--             March 2001                                        -->
 <!--                                                               -->
-<!--             (C) Copyright OASIS-Open.org 2005, 2006                -->
+<!--             (C) Copyright OASIS-Open.org 2005, 2008                -->
 <!--             (C) Copyright IBM Corporation 2001, 2004.         -->
 <!--             All Rights Reserved.                              -->
 <!-- ============================================================= -->
@@ -32,8 +32,7 @@
   <xs:include schemaLocation="../../base/xsd/utilitiesDomain.xsd"/>
   <xs:include schemaLocation="../../base/xsd/indexingDomain.xsd"/>
   <xs:include schemaLocation="../../base/xsd/hazardstatementDomain.xsd"/>
-  <xs:include schemaLocation="../../base/xsd/delayResolutionDomain.xsd"/>
-  
+  <xs:include schemaLocation="abbreviateDomain.xsd"/>
   
   <!--  ================ GROUP DEFINITIONS =====================  -->
   <xs:include schemaLocation="referenceGrp.xsd"/>
@@ -100,31 +99,29 @@
         <xs:group ref="indexing-d-index-base"/>
       </xs:choice>
     </xs:group>
+      
+      <xs:group name="note">
+      <xs:choice>
+        <xs:group ref="note"/>
+        <xs:group ref="hazard-d-note"/>
+      </xs:choice>
+      </xs:group >
+    
+      <xs:group name="term">
+      <xs:choice>
+        <xs:group ref="term"/>
+        <xs:group ref="abbrev-d-term"/>
+      </xs:choice>
+    </xs:group >
 
   </xs:redefine>
 
   <!--  ================ INFO TYPES =====================  -->
   <xs:include schemaLocation="../../base/xsd/topicMod.xsd" />
-  	<!--<xs:complexType name="topic.class">
-  		<xs:complexContent>
-  			<xs:extension base="topic.class">
-  			  <xs:attribute name="domains" type="xs:string" default="(topic ui-d) (topic hi-d) (topic sw-d) (topic pr-d) (topic ut-d) (topic indexing-d)"/>
-  			</xs:extension>
-  		</xs:complexContent>
-  	</xs:complexType>
-  </xs:redefine>-->
   <xs:include schemaLocation="referenceMod.xsd" />
-  	<!--<xs:complexType name="reference.class">
-  		<xs:complexContent>
-  			<xs:extension base="reference.class">
-  			  <xs:attribute name="domains" type="xs:string" default="(topic ui-d) (topic hi-d) (topic sw-d) (topic pr-d) (topic ut-d) (topic indexing-d)"/>
-  			</xs:extension>
-  		</xs:complexContent>
-  	</xs:complexType>
-  </xs:redefine>-->
 
   <xs:attributeGroup name="domains-att">
-    <xs:attribute name="domains" type="xs:string" default="(topic ui-d) (topic hi-d) (topic sw-d) (topic pr-d) (topic ut-d) (topic indexing-d) (topic hazard-d) (topic delay-d)"/>
+    <xs:attribute name="domains" type="xs:string" default="(topic ui-d) (topic hi-d) (topic sw-d) (topic pr-d) (topic ut-d) (topic indexing-d) (topic hazard-d) (topic reference) (topic abbrev-d)"/>
   </xs:attributeGroup>
 
   <xs:group name="info-types">

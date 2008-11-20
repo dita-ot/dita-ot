@@ -64,7 +64,7 @@ PUBLIC "-//OASIS//DTD DITA 1.2 Map//EN"                            -->
 >%indexing-d-dec;
 
 <!ENTITY % delay-d-dec     
-  PUBLIC "-//OASIS//ENTITIES DITA 1.2 User Delayed Resolution Domain//EN" 
+  PUBLIC "-//OASIS//ENTITIES DITA 1.2 Delayed Resolution Domain//EN" 
          "../../base/dtd/delayResolutionDomain.ent"                                                       
 >%delay-d-dec;
 

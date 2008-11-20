@@ -4,7 +4,7 @@
 <!-- ============================================================= -->
 <!--  VERSION:   1.2                                             -->
 <!--  DATE:      July 2007                                     -->
-<!--  DATE:      November 2006                                     -->
+<!--  DATE:      November 2008                                     -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -16,7 +16,7 @@
 <!-- ORIGINAL CREATION DATE:                                       -->
 <!--             March 2001                                        -->
 <!--                                                               -->
-<!--             (C) Copyright OASIS-Open.org 2005, 2006                -->
+<!--             (C) Copyright OASIS-Open.org 2005, 2008                -->
 <!--             (C) Copyright IBM Corporation 2001, 2004.         -->
 <!--             All Rights Reserved.                              -->
 <!-- ============================================================= -->
@@ -520,7 +520,35 @@
      </xs:complexType>
    </xs:element>
    
-   <xs:element name="process"/>
+   <xs:element name="process">
+     <xs:complexType mixed="true">
+      <xs:complexContent>
+        <xs:extension base="process.class">
+          <xs:attribute ref="class" default="- topic/section task/process "/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:complexType name="process.class" mixed="true">
+    <xs:sequence>
+      <xs:group ref="process.content"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="process.attributes"/>
+  </xs:complexType>
+  
+  <xs:group name="process.content">
+    <xs:sequence>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="section.notitle.cnt" minOccurs="0"/>
+    </xs:choice>  
+    </xs:sequence>
+  </xs:group>
+
+<xs:attributeGroup name="process.attributes">
+    <xs:attribute name="outputclass" type="xs:string"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
+  </xs:attributeGroup>
 
   <!-- Element declarations for task.mod -->
   <xs:group name="task-info-types">
