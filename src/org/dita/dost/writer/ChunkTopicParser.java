@@ -100,6 +100,9 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 	
 	private Set<String> fullditamapandtopic;
 	
+	private final String ditaarchNSQName = "xmlns:ditaarch";
+	private final String ditaarchNSValue = "http://dita.oasis-open.org/architecture/2005/";
+	
 	public ChunkTopicParser() {
 		super();
 		topicSpecSet = new HashSet(Constants.INT_16);
@@ -365,6 +368,19 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 						output.write("\"");
 					}
 				}
+				
+				if (classValue != null && 
+						classValue.contains(Constants.ATTR_CLASS_VALUE_TOPIC) &&
+						atts.getValue("xmlns:ditaarch") == null){
+					//if there is none declaration for ditaarch namespace, 
+					//processor need to add it
+					output.write(Constants.STRING_BLANK);
+					output.write(ditaarchNSQName);
+					output.write("=\"");
+					output.write(ditaarchNSValue);
+					output.write("\"");
+				}
+				
 				output.write(">");
 			}
 		}catch(Exception e){
