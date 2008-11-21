@@ -43,7 +43,8 @@ public class ChunkMapReader implements AbstractReader {
 	
 	private DITAOTJavaLogger javaLogger = null;
 	
-	private String mapChunk = null;
+//	private String mapChunk = null;
+	private boolean chunkByTopic = false;
 	
 	private String filePath = null;
 	
@@ -63,7 +64,8 @@ public class ChunkMapReader implements AbstractReader {
 	public ChunkMapReader() {
 		super();
 		javaLogger = new DITAOTJavaLogger();
-		mapChunk="by-document";
+//		mapChunk="by-document";
+		chunkByTopic=false;// By default, processor should chunk by document.
 		changeTable = new Hashtable(Constants.INT_128);
 		refFileSet = new HashSet(Constants.INT_128);
 		
@@ -96,12 +98,14 @@ public class ChunkMapReader implements AbstractReader {
 			
 			Element root = doc.getDocumentElement();
 			NodeList list = root.getChildNodes();
-			
-			if(root.getAttribute(Constants.ATTRIBUTE_NAME_CHUNK) != null &&
-					root.getAttribute(Constants.ATTRIBUTE_NAME_CHUNK).indexOf("by-topic")!=-1){
-				mapChunk="by-topic";
+			String rootChunkValue = root.getAttribute(Constants.ATTRIBUTE_NAME_CHUNK);
+			if(rootChunkValue != null &&
+					rootChunkValue.contains("by-topic")){
+//				mapChunk="by-topic";
+				chunkByTopic = true;
 			}else{
-				mapChunk="by-document";
+//				mapChunk="by-document";
+				chunkByTopic = false;
 			}
 			
 			if(root.getAttribute(Constants.ATTRIBUTE_NAME_CHUNK) != null &&
@@ -272,6 +276,7 @@ public class ChunkMapReader implements AbstractReader {
 		String hrefValue = null;
 		String chunkValue = null;
 		String copytoValue = null;
+		boolean prevChunkByTopic = false;
 		
 		attr = node.getAttributes();
 		
@@ -287,6 +292,15 @@ public class ChunkMapReader implements AbstractReader {
 		if(copytoAttr != null){
 			copytoValue = copytoAttr.getNodeValue();
 		}	
+		
+		//set chunkByTopic if there is "by-topic" or "by-document" in chunkValue
+		if(chunkValue != null && 
+				(chunkValue.contains("by-topic") || 
+						chunkValue.contains("by-document"))){
+			prevChunkByTopic = chunkByTopic;
+			//if there is "by-topic" then chunkByTopic should be set to true;
+			chunkByTopic = chunkValue.contains("by-topic");
+		}
 		
 		if(chunkValue != null && 
 				chunkValue.indexOf("to-content") != -1){
@@ -311,7 +325,7 @@ public class ChunkMapReader implements AbstractReader {
 			// generate new file
 			outputMapFile(FileUtils.resolveFile(filePath,newMapFile),(Element)root);
 			
-		}else if("by-topic".equals(mapChunk)){
+		}else if(chunkByTopic){
 			processChunk((Element)node,true);
 			processChildTopicref(node);
 		}else{
@@ -332,6 +346,14 @@ public class ChunkMapReader implements AbstractReader {
 			
 			processChildTopicref(node);
 		}	
+		
+		//restore chunkByTopic if there is "by-topic" or "by-document" in chunkValue
+		if(chunkValue != null && 
+				(chunkValue.contains("by-topic") || 
+						chunkValue.contains("by-document"))){
+			chunkByTopic = prevChunkByTopic;
+		}
+		
 	}	
 	
 
