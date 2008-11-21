@@ -1515,6 +1515,10 @@
     <xsl:call-template name="end-flagit">
       <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param> 
     </xsl:call-template>
+    <xsl:apply-templates select="." mode="pull-in-title">
+      <xsl:with-param name="type" select="' dt '"/>
+      <xsl:with-param name="displaytext" select="normalize-space(text())"/>
+    </xsl:apply-templates>
   </dt>
 </xsl:template>
 
@@ -1525,10 +1529,17 @@
     <xsl:when test="@keyref and document($KEYREF-FILE)//*[contains(@keys, $keys)]">
       <xsl:variable name="updatedTarget">
         <xsl:apply-templates select="." mode="find-keyref-target"/>
-      </xsl:variable>      
-      <a href="{$updatedTarget}">
-        <xsl:apply-templates select="." mode="output-dt"/>
-      </a>
+      </xsl:variable>
+      <xsl:choose>
+        <xsl:when test="normalize-space($updatedTarget)!=$OUTEXT">
+          <a href="{$updatedTarget}">
+            <xsl:apply-templates select="." mode="output-dt"/>
+          </a>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:apply-templates select="." mode="output-dt"/>
+        </xsl:otherwise>
+      </xsl:choose>
     </xsl:when>
     <xsl:otherwise>
       <xsl:apply-templates select="." mode="output-dt"/>
@@ -1897,6 +1908,7 @@
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' topic/term ')]" mode="output-term">
+  <xsl:param name="displaytext" select="''"/>
   <xsl:variable name="flagrules">
     <xsl:call-template name="getrules"/>
   </xsl:variable>
@@ -1916,6 +1928,10 @@
     <xsl:call-template name="revtext">
       <xsl:with-param name="flagrules" select="$flagrules"/>
     </xsl:call-template>
+    <xsl:apply-templates select="." mode="pull-in-title">
+      <xsl:with-param name="type" select="' term '"/>
+      <xsl:with-param name="displaytext" select="normalize-space($displaytext)"/>
+    </xsl:apply-templates>
   </dfn>
 </xsl:template>
 
@@ -2005,20 +2021,44 @@
 </xsl:template>
 
 <xsl:key name="keyref" match="*[contains(@class, ' topic/term ')]" use="@keyref"/>
+<xsl:template match="*[contains(@class,' abbrev-d/abbreviated-form ')]" name="topic.abbreviated-form" priority="5">
+  <xsl:variable name="keys" select="@keyref"/>
+  <xsl:if test="@keyref and document($KEYREF-FILE)//*[@keys=$keys][normalize-space(@href)!='']/@href">
+    <xsl:variable name="target">
+      <xsl:value-of select="document($KEYREF-FILE)//*[@keys=$keys][normalize-space(@href)!='']/@href"/>
+    </xsl:variable>
+    <xsl:variable name="entry-file" select="concat($WORKDIR, $PATH2PROJ, substring-before($target, '.'), $DITAEXT)"/>
+    <xsl:variable name="entry-file-contents" select="document($entry-file, /)"/>
+    <xsl:choose>
+      <xsl:when test="$entry-file-contents//*[contains(@class,' glossentry/glossentry ')]">
+        <xsl:call-template name="topic.term"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <!-- TODO: Throw a warning for incorrect usage of <abbreviated-form> -->
+        <xsl:call-template name="output-message">
+          <xsl:with-param name="msgnum">060</xsl:with-param>
+          <xsl:with-param name="msgsev">W</xsl:with-param>
+          <xsl:with-param name="msgparams">%1=<xsl:value-of select="$keys"/></xsl:with-param>
+        </xsl:call-template>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:if>
+</xsl:template>
 <!-- terms and abbreviated-forms -->
 <xsl:template match="*[contains(@class,' topic/term ')]" name="topic.term">
   <xsl:variable name="keys" select="@keyref"/>
   <xsl:choose>
-    <xsl:when test="@keyref and document($KEYREF-FILE)//*[@keys=$keys]/@href">
+    <xsl:when test="@keyref and document($KEYREF-FILE)//*[@keys=$keys][normalize-space(@href)!='']/@href">
       <xsl:variable name="target">
-        <xsl:value-of select="document($KEYREF-FILE)//*[@keys=$keys]/@href"/>
+        <xsl:value-of select="document($KEYREF-FILE)//*[@keys=$keys][normalize-space(@href)!='']/@href"/>
       </xsl:variable>
       <xsl:variable name="updatedTarget">
         <xsl:apply-templates select="." mode="find-keyref-target"/>
       </xsl:variable>
 
+      <xsl:variable name="entry-file" select="concat($WORKDIR, $PATH2PROJ, substring-before($target, '.'), $DITAEXT)"/>
       <!-- Save glossary entry file contents into a variable to workaround the infamous putDocumentCache error in Xalan -->
-        <xsl:variable name="entry-file-contents" select="document(concat($WORKDIR, $PATH2PROJ, substring-before($target, '.'), '.xml'), /)"/>
+      <xsl:variable name="entry-file-contents" select="document($entry-file, /)"/>
       <!-- Glossary id defined in <glossentry> -->
       <xsl:variable name="glossid">
         <xsl:value-of select="substring-after($updatedTarget, '#')"/>
@@ -2043,7 +2083,7 @@
       <xsl:variable name="displaytext">
         <xsl:choose>
           <xsl:when test="normalize-space(text())!=''">
-            <xsl:value-of select="''"/>
+            <xsl:value-of select="normalize-space(text())"/>
           </xsl:when>
           <xsl:otherwise>
             <xsl:choose>
@@ -2077,32 +2117,22 @@
       <xsl:choose>
         <xsl:when test="not(normalize-space($updatedTarget)=$OUTEXT)">
           <a href="{$updatedTarget}" title="{$hovertext}">
-            <xsl:choose>
-              <xsl:when test="not(normalize-space($displaytext)='')">
-                <xsl:apply-templates select="." mode="output-term"/>
-                <xsl:value-of select="$displaytext"/>
-              </xsl:when>
-              <xsl:otherwise>
-                <xsl:apply-templates select="." mode="output-term"/>
-              </xsl:otherwise>
-            </xsl:choose>
+            <xsl:apply-templates select="." mode="output-term">
+              <xsl:with-param name="displaytext" select="normalize-space($displaytext)"/>
+            </xsl:apply-templates>
           </a>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:choose>
-            <xsl:when test="not(normalize-space($displaytext)='')">
-              <xsl:apply-templates select="." mode="output-term"/>
-              <xsl:value-of select="$displaytext"/>
-            </xsl:when>
-            <xsl:otherwise>
-              <xsl:apply-templates select="." mode="output-term"/>
-            </xsl:otherwise>
-          </xsl:choose>
+          <xsl:apply-templates select="." mode="output-term">
+            <xsl:with-param name="displaytext" select="normalize-space($displaytext)"/>
+          </xsl:apply-templates>
         </xsl:otherwise>
       </xsl:choose>
     </xsl:when>
     <xsl:otherwise>
-      <xsl:apply-templates select="." mode="output-term"/>
+      <xsl:apply-templates select="." mode="output-term">
+        <xsl:with-param name="displaytext" select="normalize-space(text())"/>
+      </xsl:apply-templates>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
@@ -5247,6 +5277,33 @@
     </xsl:choose>
   </xsl:template>
 
+  <!-- This template pulls in topic/title -->
+  <xsl:template match="*" mode="pull-in-title">
+    <xsl:param name="type"/>
+    <xsl:param name="displaytext" select="''"/>
+    <xsl:param name="keys" select="@keyref"/>
+    <xsl:variable name="TAGS" select="' keyword term '"/>
+    <xsl:choose>
+      <xsl:when test="$displaytext=''">
+        <xsl:variable name="target">
+          <xsl:choose>
+            <xsl:when test="contains(document($KEYREF-FILE)//*[@keys=$keys]/@href, '#')">
+              <xsl:value-of select="concat(substring-before(substring-before(document($KEYREF-FILE)//*[@keys=$keys]/@href, '#'), '.'), $DITAEXT)"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="concat(substring-before(document($KEYREF-FILE)//*[@keys=$keys]/@href, '.'), $DITAEXT)"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:variable>
+        <xsl:if test="not(contains($target, '://'))">
+          <xsl:value-of select="document(concat($WORKDIR, $PATH2PROJ, $target))//*[contains(@class, ' topic/title ')][normalize-space(text())!=''][1]"/>
+        </xsl:if>
+      </xsl:when>
+      <xsl:when test="normalize-space(text())=''">
+        <xsl:value-of select="$displaytext"/>
+      </xsl:when>
+    </xsl:choose>
+  </xsl:template>
   <!-- This template converts phrase-like elements into links based on keyref. -->
   <xsl:template match="*" mode="turning-to-link">
     <xsl:param name="keys">#none#</xsl:param>
@@ -5257,21 +5314,47 @@
       <xsl:when test="document($KEYREF-FILE)//*[contains(@keys, $keys)]">
         <xsl:variable name="updatedTarget">
           <xsl:apply-templates select="." mode="find-keyref-target"/>
-        </xsl:variable>      
-        <a href="{$updatedTarget}">
-          <span class="{$type}">
-            <xsl:call-template name="commonattributes"/>
-            <xsl:call-template name="gen-style">
-              <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
-              <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
-            </xsl:call-template>
-            <xsl:call-template name="setidaname"/>   
-            <xsl:call-template name="flagcheck"/>
-            <xsl:call-template name="revtext">
-              <xsl:with-param name="flagrules" select="$flagrules"/>
-            </xsl:call-template>
-          </span>
-        </a>
+        </xsl:variable>
+        <xsl:choose>
+          <xsl:when test="normalize-space($updatedTarget)!=$OUTEXT">
+            <a href="{$updatedTarget}">
+              <span class="{$type}">
+                <xsl:call-template name="commonattributes"/>
+                <xsl:call-template name="gen-style">
+                  <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
+                  <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
+                </xsl:call-template>
+                <xsl:call-template name="setidaname"/>   
+                <xsl:call-template name="flagcheck"/>
+                <xsl:call-template name="revtext">
+                  <xsl:with-param name="flagrules" select="$flagrules"/>
+                </xsl:call-template>
+                <xsl:apply-templates select="." mode="pull-in-title">
+                  <xsl:with-param name="type" select="$type"/>
+                  <xsl:with-param name="displaytext" select="normalize-space(text())"/>
+                </xsl:apply-templates>
+              </span>
+            </a>
+          </xsl:when>
+          <xsl:otherwise>
+            <span class="{$type}">
+              <xsl:call-template name="commonattributes"/>
+              <xsl:call-template name="gen-style">
+                <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
+                <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
+              </xsl:call-template>
+              <xsl:call-template name="setidaname"/>   
+              <xsl:call-template name="flagcheck"/>
+              <xsl:call-template name="revtext">
+                <xsl:with-param name="flagrules" select="$flagrules"/>
+              </xsl:call-template>
+              <xsl:apply-templates select="." mode="pull-in-title">
+                <xsl:with-param name="type" select="$type"/>
+                <xsl:with-param name="displaytext" select="normalize-space(text())"/>
+              </xsl:apply-templates>
+            </span>
+          </xsl:otherwise>
+        </xsl:choose>
       </xsl:when>
       <xsl:otherwise>
         <span class="{$type}">

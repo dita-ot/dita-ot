@@ -589,6 +589,11 @@
     <reason>No language specification was found when referring to a glossary, falling back to default language 'en'.</reason>
     <response>Speicify language preference when referring to a glossary.</response>
   </message>
+  
+  <message id="DOTX060W" type="WARN">
+    <reason>Key '%1' was used in abbreviated-form tag but not defined with any glossary entry. Abbreviated-form should ONLY be used to reference to a glossary entry.</reason>
+    <response>Correct the keyref attribute in abbreviated-form to point to a glossary entry or use other appropriate tags referencing non-glossentry term.</response>
+  </message>
   <!-- End of XSL Messages --> 
   
 </messages>

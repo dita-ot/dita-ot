@@ -278,7 +278,7 @@ public class KeyrefPaser extends AbstractXMLWriter {
 									NodeList linktext = elem.getElementsByTagName("linktext");
 									if(linktext.getLength()>0){
 										output.write(nodeToString((Element)linktext.item(0), true));
-									}else{
+									}else if (!StringUtils.isEmptyString(elem.getAttribute("navtitle"))){
 										output.write("<linktext class=\" topic/linktext \">");
 										output.append(elem.getAttribute("navtitle"));
 										output.write("</linktext>");
