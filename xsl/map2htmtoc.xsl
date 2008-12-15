@@ -213,10 +213,16 @@
                   <xsl:when test="contains(@copy-to, $DITAEXT)">
                     <xsl:if test="not(@scope='external')"><xsl:value-of select="$pathFromMaplist"/></xsl:if>
                     <xsl:value-of select="substring-before(@copy-to,$DITAEXT)"/><xsl:value-of select="$OUTEXT"/>
+                    <xsl:if test="contains(@href, '#')">
+                      <xsl:value-of select="concat('#', substring-after(@href, '#'))"/>
+                    </xsl:if>
                   </xsl:when>
                   <xsl:when test="contains(@href,$DITAEXT)">
                     <xsl:if test="not(@scope='external')"><xsl:value-of select="$pathFromMaplist"/></xsl:if>
                     <xsl:value-of select="substring-before(@href,$DITAEXT)"/><xsl:value-of select="$OUTEXT"/>
+                    <xsl:if test="contains(@href, '#')">
+                      <xsl:value-of select="concat('#', substring-after(@href, '#'))"/>
+                    </xsl:if>
                   </xsl:when>
                   <xsl:otherwise>  <!-- If non-DITA, keep the href as-is -->
                     <xsl:if test="not(@scope='external')"><xsl:value-of select="$pathFromMaplist"/></xsl:if>
