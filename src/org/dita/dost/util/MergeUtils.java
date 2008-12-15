@@ -54,6 +54,15 @@ public class MergeUtils {
 	}
 	
 	/**
+	 * Resets all internal data structures.
+	 */
+	public void reset(){
+		idMap.clear();
+		visitSet.clear();
+		index = 0;
+	}
+	
+	/**
 	 * Find the topic id from idMap
 	 * @param Id
 	 * @return

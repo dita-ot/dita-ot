@@ -70,6 +70,10 @@ public class MergeTopicParser extends AbstractXMLReader {
 			logger.logException(e);
 		}
 	}
+	
+	public void reset() {
+		topicInfo.delete(0, topicInfo.length());
+	}
 
 
 

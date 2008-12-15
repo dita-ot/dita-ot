@@ -67,8 +67,10 @@ public class MergeMapParser extends AbstractXMLReader {
 			}
 			
 			topicParser = new MergeTopicParser();
+			topicParser.reset();
 			content = new ContentImpl();
 			util = MergeUtils.getInstance();
+			util.reset();
 		}catch (Exception e){
 			logger.logException(e);
 		}
