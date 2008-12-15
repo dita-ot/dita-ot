@@ -249,8 +249,11 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 					fileWriterStack.push(output);
 					outputFileNameStack.push(outputFile);
 					Random random = new Random();
-					String newFileName = FileUtils.resolveFile(filePath,"Chunk"
-							+new Integer(Math.abs(random.nextInt())).toString())+ditaext;
+					String newFileName = FileUtils.resolveFile(filePath, idValue+ditaext);
+					if(StringUtils.isEmptyString(idValue) || FileUtils.fileExists(newFileName)) {
+						newFileName = FileUtils.resolveFile(filePath,"Chunk"
+								+new Integer(Math.abs(random.nextInt())).toString())+ditaext;
+					} 
 					outputFile = newFileName;
 					output = new OutputStreamWriter(
 							new FileOutputStream(newFileName)
@@ -627,7 +630,8 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 					element.appendChild(stub);
 				}
 				reader.setErrorHandler(new DITAOTXMLErrorHandler(currentParsingFile));
-				reader.parse(currentParsingFile);
+				if(FileUtils.fileExists(currentParsingFile))
+					reader.parse(currentParsingFile);
 				output.flush();
 				
 			}
@@ -664,6 +668,7 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 		String hrefValue = element.getAttribute(Constants.ATTRIBUTE_NAME_HREF);
 		String chunkValue = element.getAttribute(Constants.ATTRIBUTE_NAME_CHUNK);
 		String copytoValue = element.getAttribute(Constants.ATTRIBUTE_NAME_COPY_TO);
+		String scopeValue = element.getAttribute(Constants.ATTRIBUTE_NAME_SCOPE);
 		String parseFilePath = null;
 		String outputFileName = outputFile;
 		Writer tempWriter = null;
@@ -717,8 +722,17 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 					}else{
 						// use randomly generated file name
 						Random random = new Random();
-						outputFileName = FileUtils.resolveFile(filePath,"Chunk"
-								+new Integer(Math.abs(random.nextInt())).toString())+ditaext;
+						String targetFileName;
+						if (currentParsingFile != null && currentParsingFile.lastIndexOf('.') != -1) {
+							targetFileName = currentParsingFile.substring(0, currentParsingFile.lastIndexOf('.')) + ditaext;
+						} else {
+							targetFileName = currentParsingFile + ditaext;
+						}
+						outputFileName = FileUtils.resolveFile(filePath, targetFileName);
+						if(StringUtils.isEmptyString(currentParsingFile) || FileUtils.fileExists(outputFileName)) {
+							outputFileName = FileUtils.resolveFile(filePath,"Chunk"
+									+new Integer(Math.abs(random.nextInt())).toString())+ditaext;
+						}
 						// add newly generated file to changTable
 						// the new entry in changeTable has same key and value
 						// in order to indicate it is a newly generated file
@@ -771,7 +785,8 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 				String tempPath = currentParsingFile;
 				currentParsingFile = FileUtils.resolveFile(filePath,parseFilePath);
 				
-				reader.parse(currentParsingFile);
+				if(FileUtils.fileExists(currentParsingFile))
+					reader.parse(currentParsingFile);
 				currentParsingFile = tempPath;
 			
 				if (element.hasChildNodes() && 

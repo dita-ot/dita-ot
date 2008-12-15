@@ -10,6 +10,7 @@
 package org.dita.dost.reader;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -114,14 +115,20 @@ public class ChunkMapReader implements AbstractReader {
 				
 				// create the reference to the new file on root element.
 				Random random = new Random();
-				String newFilename= "Chunk"
-					+new Integer(Math.abs(random.nextInt())).toString()+ditaext;
+				String newFilename = inputFile.getName().substring(
+						0, inputFile.getName().indexOf(Constants.FILE_EXTENSION_DITAMAP)) + ditaext;
+				File newFile = new File(inputFile.getParentFile().getAbsolutePath(),newFilename);
+				if (newFile.exists()) {
+					newFilename = "Chunk"
+							+new Integer(Math.abs(random.nextInt())).toString()+ditaext;
+					newFile = new File(inputFile.getParentFile().getAbsolutePath(), newFilename);
+				} 
+
 				String originClassValue = root.getAttribute(Constants.ATTRIBUTE_NAME_CLASS);
 				root.setAttribute(Constants.ATTRIBUTE_NAME_CLASS, Constants.ATTR_CLASS_VALUE_TOPICREF);
 				root.setAttribute(Constants.ATTRIBUTE_NAME_HREF, newFilename);
 				
 				//create the new file
-				File newFile = new File(inputFile.getParentFile().getAbsolutePath(),newFilename);
 				OutputStreamWriter newFileWriter = null;
 				try{
 					newFileWriter = new OutputStreamWriter(new FileOutputStream(newFile), Constants.UTF8);
