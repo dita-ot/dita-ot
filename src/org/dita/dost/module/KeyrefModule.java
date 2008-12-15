@@ -54,9 +54,9 @@ public class KeyrefModule implements AbstractPipelineModule {
 			String[] keys = ((String)properties.get(Constants.KEY_LIST)).split(Constants.COMMA);
 			for(String key: keys){
 				keymap.put(key.substring(0, key.indexOf(Constants.EQUAL)), 
-						key.substring(key.indexOf(Constants.EQUAL)+1, key.indexOf("(")));
+						key.substring(key.indexOf(Constants.EQUAL)+1, key.lastIndexOf("(")));
 				// map name
-				String map = key.substring(key.indexOf("(") + 1, key.indexOf(")"));
+				String map = key.substring(key.lastIndexOf("(") + 1, key.lastIndexOf(")"));
 				// put the keyname into corresponding map which defines it.
 				if(maps.containsKey(map)){
 					maps.get(map).add(key.substring(0,key.indexOf(Constants.EQUAL)));
