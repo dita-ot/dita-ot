@@ -57,7 +57,10 @@
         </and>
       </condition>
     </dita-ot-fail>
-    <antcall target="dita2${transtype}"/>
+    <condition property="transtarget" value="pdf2" else="${transtype}">
+      <equals arg1="${transtype}" arg2="pdf" casesensitive="false"/>
+    </condition>
+    <antcall target="dita2${transtarget}"/>
   </target>
   
   <target name="all">

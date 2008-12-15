@@ -109,8 +109,11 @@
   <target name="use-init" depends="use-init.envhhcdir,use-init.hhcdir">
     <available classname="com.icl.saxon.StyleSheet" property="hasSaxon" />
     <available classname="net.sf.saxon.Transform" property="hasSaxon" />
-    <available classname="org.apache.fop.tools.anttasks.Fop"
-      property="hasFOP" />    
+    <available classname="org.apache.fop.tools.anttasks.Fop" property="hasFOP">
+      <classpath>
+        <pathelement location="${dita.dir}/demo/legacypdf/lib/fop.jar"/>
+      </classpath>
+    </available>
   </target>
 
   <!-- property value validation begin -->

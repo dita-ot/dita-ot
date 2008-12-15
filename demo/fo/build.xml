@@ -39,7 +39,7 @@ with those set forth herein.
     <property name="document.locale" value="en_US" />
 
 	<!-- configure FO engines -->
-	<property name="pdf.formatter" value="xep"/>
+	<property name="pdf.formatter" value="fop"/>
 	<property name="fop.home" value="${basedir}/fop"/>
 	<condition property="use.xep.pdf.formatter">
 		<equals arg1="${pdf.formatter}" arg2="xep"/>
@@ -96,7 +96,7 @@ with those set forth herein.
     <property name="saxon.resolver.command.line" value="-w0 -x org.apache.xml.resolver.tools.ResolvingXMLReader -y org.apache.xml.resolver.tools.ResolvingXMLReader -r org.apache.xml.resolver.tools.CatalogResolver"/>
 
     <path id="project.class.path">
-        <pathelement location="${xep.dir}/lib/saxon.jar"/>
+        <pathelement location="${basedir}/lib/saxon.jar"/>
         <pathelement location="${fo.lib.dir}/xml-apis.jar"/>
         <pathelement location="${fo.lib.dir}/xercesImpl.jar"/>
         <pathelement location="${fo.lib.dir}/resolver.jar"/>
@@ -276,8 +276,9 @@ with those set forth herein.
 		  </classpath>
 		</taskdef>
 
-	    <fop format="application/pdf" fofile="${inputFile}"
-	      outfile="${outputFile}" messagelevel="info">
+	    <fop format="application/pdf" fofile="${inputFile}" basedir="${dita.map.output.dir}"
+	      outfile="${outputFile}" messagelevel="info" relativebase="true"
+	      force="true" userconfig="${fop.home}/conf/fop.xconf">
 	    </fop>
 	</target>
 

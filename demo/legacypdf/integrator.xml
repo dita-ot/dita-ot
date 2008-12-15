@@ -77,7 +77,17 @@
             and Batik relevant jar files in CLASSPATH -->
         <target name="dita.fo2pdf" if="hasFOP"
             description="Build PDF from FO using FOP">
-            <taskdef name="fop" classname="org.apache.fop.tools.anttasks.Fop" />
+            <property name="fop.home" value="${dita.dir}/demo/legacypdf"/>
+            <taskdef name="fop" classname="org.apache.fop.tools.anttasks.Fop" >
+                <classpath>
+                    <fileset dir="${fop.home}/lib">
+                        <include name="*.jar"/>
+                    </fileset>
+                    <fileset dir="${dita.dir}/lib">
+                        <include name="*.jar"/>
+                    </fileset>
+                </classpath>
+            </taskdef>
             <antcall target="dita.fo2pdf.userconfig" />
             <antcall target="dita.fo2pdf.nouserconfig" />
         </target>
