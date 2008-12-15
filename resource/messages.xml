@@ -594,6 +594,11 @@
     <reason>Key '%1' was used in abbreviated-form tag but not defined with any glossary entry. Abbreviated-form should ONLY be used to reference to a glossary entry.</reason>
     <response>Correct the keyref attribute in abbreviated-form to point to a glossary entry or use other appropriate tags referencing non-glossentry term.</response>
   </message>
+  
+  <message id="DOTX061W" type="WARN">
+    <reason>ID '%1' was used in topicref tag but did not point to a topic element. HREF attribute in topicref tag should only point to topic level elements.</reason>
+    <response>Correct the ID '%1' and make sure it point to a topic level element.</response>
+  </message>
   <!-- End of XSL Messages --> 
   
 </messages>

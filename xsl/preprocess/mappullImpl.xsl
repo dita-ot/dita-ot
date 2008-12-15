@@ -460,6 +460,14 @@ Other modes can be found within the code, and may or may not prove useful for ov
                   <xsl:value-of select="local-name(document($file,/)//*[contains(@class, $classval)][@id=$topicid])"/>
                 </xsl:attribute>
               </xsl:when>
+              <xsl:when test="$topicid!='#none#' and not(document($file,/)//*[contains(@class, ' topic/topic ')][@id=$topicid])">
+                <!-- topicid does not point to a valid topic -->
+                <xsl:call-template name="output-message">
+                  <xsl:with-param name="msgnum">061</xsl:with-param>
+                  <xsl:with-param name="msgsev">W</xsl:with-param>
+                  <xsl:with-param name="msgparams">%1=<xsl:value-of select="$topicid"/></xsl:with-param>
+                </xsl:call-template>
+              </xsl:when>
               <xsl:otherwise><!-- do nothing - omit attribute--></xsl:otherwise>
             </xsl:choose>
           </xsl:when>
@@ -481,8 +489,16 @@ Other modes can be found within the code, and may or may not prove useful for ov
       </xsl:when>
       <!-- Type is set locally for a dita topic; warn if it is not correct. -->
       <xsl:when test="contains($file,$DITAEXT) and $scope!='external' and $scope!='peer' and ($format='#none#' or $format='dita' or $format='DITA')">
+        <xsl:if test="$topicid!='#none#' and not(document($file,/)//*[contains(@class, ' topic/topic ')][@id=$topicid])">
+          <!-- topicid does not point to a valid topic -->
+          <xsl:call-template name="output-message">
+            <xsl:with-param name="msgnum">061</xsl:with-param>
+            <xsl:with-param name="msgsev">W</xsl:with-param>
+            <xsl:with-param name="msgparams">%1=<xsl:value-of select="$topicid"/></xsl:with-param>
+          </xsl:call-template>
+        </xsl:if>
         <xsl:choose>
-          <!--finding type based on name of the target element in a particular topic in another file-->
+          <!--finding type based on name of the target elemenkt in a particular topic in another file-->
           <xsl:when test="$topicpos='otherfile' and document($file,/)//*[contains(@class, ' topic/topic ')][@id=$topicid]">
             <xsl:call-template name="verify-type-value">
               <xsl:with-param name="type"><xsl:value-of select="$type"/></xsl:with-param>
