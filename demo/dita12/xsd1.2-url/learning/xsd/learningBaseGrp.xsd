@@ -84,12 +84,6 @@
   	</xs:sequence>
   </xs:group>
 
-  <xs:group name="lcDescription">
-  	<xs:sequence>
-  	  <xs:element ref="lcDescription" />
-  	</xs:sequence>
-  </xs:group>
-
   <xs:group name="lcPrereqs">
   	<xs:sequence>
   	  <xs:element ref="lcPrereqs" />

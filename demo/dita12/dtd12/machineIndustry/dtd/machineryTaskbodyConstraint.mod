@@ -46,7 +46,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Machinery Taskbody Constraint//EN"
 <!ENTITY % section         "section">
 <!ENTITY % steps           "steps">
 <!ENTITY % steps-unordered "steps-unordered">
-<!ENTITY % process         "process">
+<!ENTITY % steps-informal         "steps-informal">
 <!ENTITY % result          "result">
 <!ENTITY % example         "example">
 <!ENTITY % closereqs       "closereqs">
@@ -57,7 +57,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Machinery Taskbody Constraint//EN"
                  (%section;))*,
                 ((%steps; | 
                   %steps-unordered; |
-                  %process;))?, 
+                  %steps-informal;))?, 
                 (%result;)?, 
                 (%example;)*, 
                 (%closereqs;)?)"

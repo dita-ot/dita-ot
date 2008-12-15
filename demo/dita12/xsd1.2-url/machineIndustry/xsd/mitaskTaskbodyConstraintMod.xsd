@@ -36,8 +36,8 @@
 <!-- ============================================================= -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
    
-   <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="../../base/xsd/xml.xsd"/>
-   <xs:import namespace="http://dita.oasis-open.org/architecture/2005/" schemaLocation="../../base/xsd/ditaarch.xsd"/>
+   <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="urn:oasis:names:tc:dita:xsd:xml.xsd:1.2"/>
+   <xs:import namespace="http://dita.oasis-open.org/architecture/2005/" schemaLocation="urn:oasis:names:tc:dita:xsd:ditaarch.xsd:1.2"/>
   
   <xs:group name="prelreqs">
     <xs:sequence>

@@ -2418,8 +2418,8 @@
   
      <xs:group name="required-cleanup.content">
        <xs:sequence>
-         <xs:choice>
-            <xs:any processContents="skip" maxOccurs="unbounded"/>
+         <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:any processContents="skip" maxOccurs="unbounded" minOccurs="0"/>
         </xs:choice>
        </xs:sequence>
      </xs:group>
@@ -2598,9 +2598,9 @@
       </xs:complexType>
     </xs:element>
     <xs:complexType name="longdescref.class">
-        <xs:sequence>
+        <!--<xs:sequence>
           <xs:group ref="longdescref.content"/>
-        </xs:sequence>
+        </xs:sequence>-->
         <xs:attributeGroup ref="longdescref.attributes"/>
     </xs:complexType>
   

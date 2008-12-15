@@ -11,12 +11,7 @@
 <!-- PUBLIC DOCUMENT TYPE DEFINITION -->
 <!-- TYPICAL INVOCATION -->
 <!---->
-<!--
-  Refer to this file by the following public identifier or an 
-        appropriate system identifier 
-  PUBLIC "-//OASIS//ELEMENTS DITA Map Subject Classification Domain//EN"
-        Delivered as file "classifyDomain.mod"
--->
+
 <!-- ============================================================= -->
 <!-- SYSTEM:     Darwin Information Typing Architecture (DITA) -->
 <!---->
@@ -31,11 +26,8 @@
 <!-- All Rights Reserved. -->
 <!---->
 <!-- UPDATES: -->
-<!-- 2008.02.13 RDA: Created file based upon prototype from IBM -->
 <!-- ============================================================= -->
-<!-- ============================================================= -->
-<!-- ELEMENT NAME ENTITIES -->
-<!-- ============================================================= -->
+
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
   xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
   

@@ -191,22 +191,7 @@
     </xs:complexType>
   </xs:element>
 
-  <xs:element name="lcDescription">
-    <xs:annotation>
-      <xs:documentation>
-        The &lt;<keyword>lcDescription</keyword>>) section...
-      </xs:documentation>
-    </xs:annotation>
-    <xs:complexType>
-      <xs:complexContent>
-        <xs:extension base="lcDescription.class">
-          <xs:attribute ref="class" default="- topic/section  learningBase/lcDescription "/>
-        </xs:extension>
-      </xs:complexContent>
-    </xs:complexType>
-  </xs:element>
-
-  <xs:element name="lcPrereqs" >
+    <xs:element name="lcPrereqs" >
     <xs:annotation>
       <xs:documentation>
         The &lt;<keyword>lcPrereqs</keyword>>) section...
@@ -556,29 +541,6 @@
      <xs:attributeGroup ref="global-atts"/>
    </xs:attributeGroup>
    
-
-  <!-- Base type: section.class -->
-  <xs:complexType name="lcDescription.class" mixed="true">
-    <xs:sequence>
-       <xs:group ref="lcDescription.content"/>
-     </xs:sequence>
-     <xs:attributeGroup ref="lcDescription.attributes"/>
-   </xs:complexType>
-   
-   <xs:group name="lcDescription.content">
-     <xs:sequence>
-       <xs:choice minOccurs="0" maxOccurs="unbounded">
-       <xs:group ref="section.cnt"/>
-     </xs:choice>
-     </xs:sequence>
-   </xs:group>
-   
-   <xs:attributeGroup name="lcDescription.attributes">
-       <xs:attribute name="outputclass" type="xs:string"/>
-     <xs:attribute name="spectitle" type="xs:string"/>
-     <xs:attributeGroup ref="univ-atts"/>
-      <xs:attributeGroup ref="global-atts"/>  
-   </xs:attributeGroup>
 
   <!-- Base type: section.class -->
   <xs:complexType name="lcPrereqs.class" mixed="true">

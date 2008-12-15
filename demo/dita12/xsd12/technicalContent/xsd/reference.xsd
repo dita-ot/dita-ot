@@ -118,23 +118,7 @@
 
   <!--  ================ INFO TYPES =====================  -->
   <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:topicMod.xsd:1.2" />
-  	<!--<xs:complexType name="topic.class">
-  		<xs:complexContent>
-  			<xs:extension base="topic.class">
-  			  <xs:attribute name="domains" type="xs:string" default="(topic ui-d) (topic hi-d) (topic sw-d) (topic pr-d) (topic ut-d) (topic indexing-d)"/>
-  			</xs:extension>
-  		</xs:complexContent>
-  	</xs:complexType>
-  </xs:redefine>-->
   <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:referenceMod.xsd:1.2" />
-  	<!--<xs:complexType name="reference.class">
-  		<xs:complexContent>
-  			<xs:extension base="reference.class">
-  			  <xs:attribute name="domains" type="xs:string" default="(topic ui-d) (topic hi-d) (topic sw-d) (topic pr-d) (topic ut-d) (topic indexing-d)"/>
-  			</xs:extension>
-  		</xs:complexContent>
-  	</xs:complexType>
-  </xs:redefine>-->
 
   <xs:attributeGroup name="domains-att">
     <xs:attribute name="domains" type="xs:string" default="(topic ui-d) (topic hi-d) (topic sw-d) (topic pr-d) (topic ut-d) (topic indexing-d) (topic hazard-d) (topic reference) (topic abbrev-d)"/>

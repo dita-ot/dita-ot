@@ -1,4 +1,26 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
+<!-- ============================================================= -->
+<!-- HEADER -->
+<!-- ============================================================= -->
+<!-- MODULE:    DITA Learning  Map  -->
+<!-- VERSION:   1.2 -->
+<!-- DATE:      February 2008 -->
+<!---->
+<!-- ============================================================= -->
+
+<!-- ============================================================= -->
+<!-- SYSTEM:     Darwin Information Typing Architecture (DITA) -->
+<!---->
+<!-- PURPOSE:    XSD to describe DITA Learning map  -->
+<!---->
+<!-- ORIGINAL CREATION DATE: -->
+<!-- MAy 2007 -->
+<!---->
+<!-- (C) Copyright OASIS Open 2007, 2008. -->
+<!-- All Rights Reserved. -->
+<!---->
+<!-- UPDATES: -->
+<!-- ============================================================= -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
     attributeFormDefault="unqualified"
     xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">

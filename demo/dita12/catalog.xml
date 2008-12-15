@@ -138,6 +138,13 @@
             uri="dtd12/base/dtd/hazardstatementDomain.ent"/>
     <public publicId="-//OASIS//ELEMENTS DITA 1.2 Hazard Statement Domain//EN"
             uri="dtd12/base/dtd/hazardstatementDomain.mod"/>
+            
+    <public publicId="-//OASIS//DTD DITA DITAVAL//EN"
+            uri="dtd12/ditaval/dtd/ditaval.dtd"/>
+    <public publicId="-//OASIS//DTD DITA 1.x DITAVAL//EN"
+            uri="dtd12/ditaval/dtd/ditaval.dtd"/>
+    <public publicId="-//OASIS//DTD DITA 1.2 DITAVAL//EN"
+            uri="dtd12/ditaval/dtd/ditaval.dtd"/>
 
     <!-- Document types and modules used by the Technical Content package -->
     <public publicId="-//OASIS//DTD DITA Concept//EN"
@@ -613,7 +620,7 @@
     <system systemId="urn:oasis:names:tc:dita:xsd:topicGrp.xsd:1.2" uri="xsd12/base/xsd/topicGrp.xsd"/>
     
 
-    <system systemId="blDeclMod.xsd" uri="xsd12/base/xsd/tblDeclMod.xsd"/>
+    <system systemId="tblDeclMod.xsd" uri="xsd12/base/xsd/tblDeclMod.xsd"/>
     <system systemId="urn:oasis:names:tc:dita:xsd:tblDeclMod.xsd" uri="xsd12/base/xsd/tblDeclMod.xsd"/>
     <system systemId="urn:oasis:names:tc:dita:xsd:tblDeclMod.xsd:1.x" uri="xsd12/base/xsd/tblDeclMod.xsd"/>
     <system systemId="urn:oasis:names:tc:dita:xsd:tblDeclMod.xsd:1.2" uri="xsd12/base/xsd/tblDeclMod.xsd"/>
@@ -685,8 +692,8 @@
     <system systemId="urn:oasis:names:tc:dita:xsd:xml.xsd:1.2" uri="xsd12/base/xsd/xml.xsd"/>
 
     <system systemId="commonElementMod.xsd"      uri="xsd12/base/xsd/commonElementMod.xsd"/>
-    <system systemId="urn:oasis:names:tc:dita:xsd:commonElementMod.xsd:1.2"      uri="xsd12/base/xsd/commonElementMod.xsd"/>
-    <system systemId="urn:oasis:names:tc:dita:xsd:commonElementMod.xsd:1.2"      uri="xsd12/base/xsd/commonElementMod.xsd"/>
+    <system systemId="urn:oasis:names:tc:dita:xsd:commonElementMod.xsd"      uri="xsd12/base/xsd/commonElementMod.xsd"/>
+    <system systemId="urn:oasis:names:tc:dita:xsd:commonElementMod.xsd:1.x"      uri="xsd12/base/xsd/commonElementMod.xsd"/>
     <system systemId="urn:oasis:names:tc:dita:xsd:commonElementMod.xsd:1.2"      uri="xsd12/base/xsd/commonElementMod.xsd"/>
     
     <system systemId="commonElementGrp.xsd"      uri="xsd12/base/xsd/commonElementGrp.xsd"/>
@@ -707,7 +714,7 @@
     <uri name="urn:oasis:names:tc:dita:xsd:topicGrp.xsd:1.2" uri="xsd12/base/xsd/topicGrp.xsd"/>
     
 
-    <uri name="blDeclMod.xsd" uri="xsd12/base/xsd/tblDeclMod.xsd"/>
+    <uri name="tblDeclMod.xsd" uri="xsd12/base/xsd/tblDeclMod.xsd"/>
     <uri name="urn:oasis:names:tc:dita:xsd:tblDeclMod.xsd" uri="xsd12/base/xsd/tblDeclMod.xsd"/>
     <uri name="urn:oasis:names:tc:dita:xsd:tblDeclMod.xsd:1.x" uri="xsd12/base/xsd/tblDeclMod.xsd"/>
     <uri name="urn:oasis:names:tc:dita:xsd:tblDeclMod.xsd:1.2" uri="xsd12/base/xsd/tblDeclMod.xsd"/>
@@ -1113,7 +1120,7 @@
     
     <system systemId="learningBaseGrp.xsd"      uri="xsd12/learning/xsd/learningBaseGrp.xsd"/>
     <system systemId="urn:oasis:names:tc:dita:spec:learning:xsd:learningBaseGrp.xsd"      uri="xsd12/learning/xsd/learningBaseGrp.xsd"/>
-    <system systemId="urn:oasis:names:tc:dita:spec:learning:xsd:learningBaseGrp.xsd:1.2"      uri="xsd12/learning/xsd/learningBaseGrp.xsd"/>
+    <system systemId="urn:oasis:names:tc:dita:spec:learning:xsd:learningBaseGrp.xsd:1.x"      uri="xsd12/learning/xsd/learningBaseGrp.xsd"/>
     <system systemId="urn:oasis:names:tc:dita:spec:learning:xsd:learningBaseGrp.xsd:1.2"      uri="xsd12/learning/xsd/learningBaseGrp.xsd"/>
     
     <system systemId="learningBaseMod.xsd"      uri="xsd12/learning/xsd/learningBaseMod.xsd"/>
@@ -1136,10 +1143,10 @@
     <system systemId="urn:oasis:names:tc:dita:spec:learning:xsd:learningContentMod.xsd:1.x"      uri="xsd12/learning/xsd/learningContentMod.xsd"/>
     <system systemId="urn:oasis:names:tc:dita:spec:learning:xsd:learningContentMod.xsd:1.2"      uri="xsd12/learning/xsd/learningContentMod.xsd"/>
     
-    <system systemId="learningDitabase.xsd"      uri="xsd12/learning/xsd/learningBookmap.xsd"/>
-    <system systemId="urn:oasis:names:tc:dita:spec:learning:xsd:learningDitabase.xsd"      uri="xsd12/learning/xsd/learningBookmap.xsd"/>
-    <system systemId="urn:oasis:names:tc:dita:spec:learning:xsd:learningDitabase.xsd:1.x"      uri="xsd12/learning/xsd/learningBookmap.xsd"/>
-    <system systemId="urn:oasis:names:tc:dita:spec:learning:xsd:learningDitabase.xsd:1.2"      uri="xsd12/learning/xsd/learningBookmap.xsd"/>
+    <system systemId="learningBookmap.xsd"      uri="xsd12/learning/xsd/learningBookmap.xsd"/>
+    <system systemId="urn:oasis:names:tc:dita:spec:learning:xsd:learningBookmap.xsd"      uri="xsd12/learning/xsd/learningBookmap.xsd"/>
+    <system systemId="urn:oasis:names:tc:dita:spec:learning:xsd:learningBookmap.xsd:1.x"      uri="xsd12/learning/xsd/learningBookmap.xsd"/>
+    <system systemId="urn:oasis:names:tc:dita:spec:learning:xsd:learningBookmap.xsd:1.2"      uri="xsd12/learning/xsd/learningBookmap.xsd"/>
     
     <system systemId="learningMap.xsd"      uri="xsd12/learning/xsd/learningMap.xsd"/>
     <system systemId="urn:oasis:names:tc:dita:spec:learning:xsd:learningMap.xsd"      uri="xsd12/learning/xsd/learningMap.xsd"/>
@@ -1229,7 +1236,7 @@
     
     <uri name="learningBaseGrp.xsd"      uri="xsd12/learning/xsd/learningBaseGrp.xsd"/>
     <uri name="urn:oasis:names:tc:dita:spec:learning:xsd:learningBaseGrp.xsd"      uri="xsd12/learning/xsd/learningBaseGrp.xsd"/>
-    <uri name="urn:oasis:names:tc:dita:spec:learning:xsd:learningBaseGrp.xsd:1.2"      uri="xsd12/learning/xsd/learningBaseGrp.xsd"/>
+    <uri name="urn:oasis:names:tc:dita:spec:learning:xsd:learningBaseGrp.xsd:1.x"      uri="xsd12/learning/xsd/learningBaseGrp.xsd"/>
     <uri name="urn:oasis:names:tc:dita:spec:learning:xsd:learningBaseGrp.xsd:1.2"      uri="xsd12/learning/xsd/learningBaseGrp.xsd"/>
     
     <uri name="learningBaseMod.xsd"      uri="xsd12/learning/xsd/learningBaseMod.xsd"/>
@@ -1363,25 +1370,35 @@
      <uri name="urn:oasis:names:tc:dita:spec:classification:xsd:classifyDomain.xsd:1.x"      uri="xsd12/subjectScheme/xsd/classifyDomain.xsd"/>
      <uri name="urn:oasis:names:tc:dita:spec:classification:xsd:classifyDomain.xsd:1.2"      uri="xsd12/subjectScheme/xsd/classifyDomain.xsd"/>
 
-    <system systemId="machineIndustry.xsd"      uri="xsd12/machineIndustry/xsd/machineIndustry.xsd"/>
-    <system systemId="urn:oasis:names:tc:dita:spec:machinery:xsd:machineIndustry.xsd"      uri="xsd12/machineIndustry/xsd/machineIndustry.xsd"/>
-    <system systemId="urn:oasis:names:tc:dita:spec:machinery:xsd:machineIndustry.xsd:1.x"      uri="xsd12/machineIndustry/xsd/machineIndustry.xsd"/>
-    <system systemId="urn:oasis:names:tc:dita:spec:machinery:xsd:machineIndustry.xsd:1.2"      uri="xsd12/machineIndustry/xsd/machineIndustry.xsd"/>
+    <system systemId="machineryTask.xsd"      uri="xsd12/machineIndustry/xsd/machineryTask.xsd"/>
+    <system systemId="urn:oasis:names:tc:dita:spec:machinery:xsd:machineryTask.xsd"      uri="xsd12/machineIndustry/xsd/machineryTask.xsd"/>
+    <system systemId="urn:oasis:names:tc:dita:spec:machinery:xsd:machineryTask.xsd:1.x"      uri="xsd12/machineIndustry/xsd/machineryTask.xsd"/>
+    <system systemId="urn:oasis:names:tc:dita:spec:machinery:xsd:machineryTask.xsd:1.2"      uri="xsd12/machineIndustry/xsd/machineryTask.xsd"/>
     
     <system systemId="mitaskTaskbodyConstraintMod.xsd"      uri="xsd12/machineIndustry/xsd/mitaskTaskbodyConstraintMod.xsd"/>
     <system systemId="urn:oasis:names:tc:dita:spec:machinery:xsd:mitaskTaskbodyConstraintMod.xsd"      uri="xsd12/machineIndustry/xsd/mitaskTaskbodyConstraintMod.xsd"/>
     <system systemId="urn:oasis:names:tc:dita:spec:machinery:xsd:mitaskTaskbodyConstraintMod.xsd:1.x"      uri="xsd12/machineIndustry/xsd/mitaskTaskbodyConstraintMod.xsd"/>
     <system systemId="urn:oasis:names:tc:dita:spec:machinery:xsd:mitaskTaskbodyConstraintMod.xsd:1.2"      uri="xsd12/machineIndustry/xsd/mitaskTaskbodyConstraintMod.xsd"/>
 
-    <uri name="machineIndustry.xsd"      uri="xsd12/machineIndustry/xsd/machineIndustry.xsd"/>
-    <uri name="urn:oasis:names:tc:dita:spec:machinery:xsd:machineIndustry.xsd"      uri="xsd12/machineIndustry/xsd/machineIndustry.xsd"/>
-    <uri name="urn:oasis:names:tc:dita:spec:machinery:xsd:machineIndustry.xsd:1.x"      uri="xsd12/machineIndustry/xsd/machineIndustry.xsd"/>
-    <uri name="urn:oasis:names:tc:dita:spec:machinery:xsd:machineIndustry.xsd:1.2"      uri="xsd12/machineIndustry/xsd/machineIndustry.xsd"/>
+    <uri name="machineryTask.xsd"      uri="xsd12/machineIndustry/xsd/machineryTask.xsd"/>
+    <uri name="urn:oasis:names:tc:dita:spec:machinery:xsd:machineryTask.xsd"      uri="xsd12/machineIndustry/xsd/machineryTask.xsd"/>
+    <uri name="urn:oasis:names:tc:dita:spec:machinery:xsd:machineryTask.xsd:1.x"      uri="xsd12/machineIndustry/xsd/machineryTask.xsd"/>
+    <uri name="urn:oasis:names:tc:dita:spec:machinery:xsd:machineryTask.xsd:1.2"      uri="xsd12/machineIndustry/xsd/machineryTask.xsd"/>
     
     <uri name="mitaskTaskbodyConstraintMod.xsd"      uri="xsd12/machineIndustry/xsd/mitaskTaskbodyConstraintMod.xsd"/>
     <uri name="urn:oasis:names:tc:dita:spec:machinery:xsd:mitaskTaskbodyConstraintMod.xsd"      uri="xsd12/machineIndustry/xsd/mitaskTaskbodyConstraintMod.xsd"/>
     <uri name="urn:oasis:names:tc:dita:spec:machinery:xsd:mitaskTaskbodyConstraintMod.xsd:1.x"      uri="xsd12/machineIndustry/xsd/mitaskTaskbodyConstraintMod.xsd"/>
     <uri name="urn:oasis:names:tc:dita:spec:machinery:xsd:mitaskTaskbodyConstraintMod.xsd:1.2"      uri="xsd12/machineIndustry/xsd/mitaskTaskbodyConstraintMod.xsd"/>
 
+    <system systemId="ditaval.xsd"      uri="xsd12/ditaval/xsd/ditaval.xsd"/>
+    <system systemId="urn:oasis:names:tc:dita:xsd:ditaval.xsd"      uri="xsd12/ditaval/xsd/ditaval.xsd"/>
+    <system systemId="urn:oasis:names:tc:dita:xsd:ditaval.xsd:1.x"      uri="xsd12/ditaval/xsd/ditaval.xsd"/>
+    <system systemId="urn:oasis:names:tc:dita:xsd:ditaval.xsd:1.2"      uri="xsd12/ditaval/xsd/ditaval.xsd"/>
+                
+    <uri name="ditaval.xsd"      uri="xsd12/ditaval/xsd/ditaval.xsd"/>
+    <uri name="urn:oasis:names:tc:dita:xsd:ditaval.xsd"      uri="xsd12/ditaval/xsd/ditaval.xsd"/>
+    <uri name="urn:oasis:names:tc:dita:xsd:ditaval.xsd:1.x"      uri="xsd12/ditaval/xsd/ditaval.xsd"/>
+    <uri name="urn:oasis:names:tc:dita:xsd:ditaval.xsd:1.2"      uri="xsd12/ditaval/xsd/ditaval.xsd"/>
+        
 </catalog>
 

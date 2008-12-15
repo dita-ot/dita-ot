@@ -49,6 +49,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Task//EN"
 <!--                    process and stepsection elements           -->
 <!--    2008.02.13 RDA: Create .content and .attributes entities   -->
 <!--    2008.05.06 RDA: Added sectiondiv to section specializations-->
+<!--    2008.12.02 RDA: Rename process to steps-informal           -->
 <!-- ============================================================= -->
 
 
@@ -100,7 +101,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Task//EN"
 <!ENTITY % stepresult  "stepresult"                                  >
 <!ENTITY % choices     "choices"                                     >
 <!ENTITY % choice      "choice"                                      >
-<!ENTITY % process     "process"                                     >
+<!ENTITY % steps-informal "steps-informal"                           >
 <!ENTITY % result      "result"                                      >
 <!ENTITY % prereq      "prereq"                                      >
 <!ENTITY % postreq     "postreq"                                     >
@@ -203,7 +204,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Task//EN"
                           (%section;))*,
                          ((%steps; | 
                            %steps-unordered; |
-                           %process;))?, 
+                           %steps-informal;))?, 
                          (%result;)?, 
                          (%example;)*, 
                          (%postreq;)*)"
@@ -253,18 +254,18 @@ PUBLIC "-//OASIS//ELEMENTS DITA Task//EN"
 <!ATTLIST context    %context.attributes;>
 
 
-<!--                    LONG NAME: Process                         -->
-<!ENTITY % process.content
+<!--                    LONG NAME: Informal Steps                  -->
+<!ENTITY % steps-informal.content
                        "(%section.notitle.cnt;)*"
 >
-<!ENTITY % process.attributes
+<!ENTITY % steps-informal.attributes
              "%univ-atts; 
               outputclass 
                         CDATA 
                                   #IMPLIED"
 >
-<!ELEMENT process    %process.content;>
-<!ATTLIST process    %process.attributes;>
+<!ELEMENT steps-informal    %steps-informal.content;>
+<!ATTLIST steps-informal    %steps-informal.attributes;>
 
 
 <!--                    LONG NAME: Steps                           -->
@@ -672,11 +673,11 @@ PUBLIC "-//OASIS//ELEMENTS DITA Task//EN"
 
 <!ATTLIST choices     %global-atts;  class  CDATA "- topic/ul task/choices "        >
 <!ATTLIST choice      %global-atts;  class  CDATA "- topic/li task/choice "         >
-<!ATTLIST result       %global-atts;  class  CDATA "- topic/section task/result "   >
+<!ATTLIST result      %global-atts;  class  CDATA "- topic/section task/result "    >
 <!ATTLIST prereq      %global-atts;  class  CDATA "- topic/section task/prereq "    >
 <!ATTLIST postreq     %global-atts;  class  CDATA "- topic/section task/postreq "   >
 <!ATTLIST context     %global-atts;  class  CDATA "- topic/section task/context "   >
-<!ATTLIST process     %global-atts;  class  CDATA "- topic/section task/process "   >
+<!ATTLIST steps-informal %global-atts; class CDATA "- topic/section task/steps-informal ">
 
 <!ATTLIST choicetable %global-atts;  class  CDATA "- topic/simpletable task/choicetable ">
 <!ATTLIST chhead      %global-atts;  class  CDATA "- topic/sthead task/chhead "     >

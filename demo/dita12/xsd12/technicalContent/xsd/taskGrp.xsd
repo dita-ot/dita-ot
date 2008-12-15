@@ -234,10 +234,10 @@
       </xs:sequence>
    </xs:group>
 
-   <xs:group name="process">
+   <xs:group name="steps-informal">
       <xs:sequence>
          <xs:choice>
-            <xs:element ref="process"/>
+            <xs:element ref="steps-informal"/>
          </xs:choice>
       </xs:sequence>
    </xs:group>

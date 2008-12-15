@@ -15,17 +15,11 @@
 <!-- ORIGINAL CREATION DATE: -->
 <!-- March 2001 -->
 <!---->
-<!-- (C) Copyright OASIS Open 2005, 2006. -->
+<!-- (C) Copyright OASIS Open 2005,  2008. -->
 <!-- (C) Copyright IBM Corporation 2001, 2004. -->
 <!-- All Rights Reserved. -->
 <!---->
 <!-- UPDATES: -->
-<!-- ============================================================= -->
-<!-- ============================================================= -->
-<!-- MAP ENTITY DECLARATIONS -->
-<!-- ============================================================= -->
-<!-- ============================================================= -->
-<!-- DOMAIN ENTITY DECLARATIONS -->
 <!-- ============================================================= -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
   <xs:include schemaLocation="../../base/xsd/mapGroupMod.xsd" />
@@ -42,17 +36,7 @@
   
   <xs:include schemaLocation="../../base/xsd/commonElementGrp.xsd"/>
   <xs:include schemaLocation="../../base/xsd/metaDeclGrp.xsd"/>
-  <!-- ============================================================= -->
-  <!-- DOMAIN ATTRIBUTE DECLARATIONS -->
-  <!-- ============================================================= -->
-  <!-- ============================================================= -->
-  <!-- DOMAIN EXTENSIONS -->
-  <!-- ============================================================= -->
-  <!--
-    One for each extended base element, with
-    the name of the domain(s) in which the
-    extension was declared
-  -->
+
   
   <xs:redefine schemaLocation="../../base/xsd/mapGrp.xsd">
   <xs:group name="topicref">

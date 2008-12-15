@@ -48,7 +48,6 @@
   <!-- ======= MetaData elements, plus keyword and indexterm ======= -->
   <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:metaDeclMod.xsd:1.2"/>
   
-  <!-- <xs:include schemaLocation="topicDomainsMod.xsd"/>-->
   <xs:redefine schemaLocation="urn:oasis:names:tc:dita:xsd:commonElementGrp.xsd:1.2">
     <xs:group name="keyword">
       <xs:choice>

@@ -723,8 +723,7 @@
     <xs:attribute name="href" type="xs:string"/>
     <xs:attribute name="keyref" type="xs:string"/>
     <xs:attribute name="keys" type="xs:string"/>
-    <xs:attribute name="query" type="xs:string"/>
-    <xs:attribute name="collection-type" default="family" type="collection-type.class"/>
+    <xs:attribute name="query" type="xs:string"/>    
     <xs:attribute name="type" type="xs:string"/>
     <xs:attribute name="scope" type="yesno-att.class"/>
     <xs:attribute name="format" type="xs:string"/>

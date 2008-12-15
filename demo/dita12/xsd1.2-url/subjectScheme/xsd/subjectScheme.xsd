@@ -6,6 +6,7 @@
 <!-- VERSION:   1.2 -->
 <!-- DATE:      February 2008 -->
 <!---->
+<!-- ============================================================= -->
 
 <!-- ============================================================= -->
 <!-- SYSTEM:     Darwin Information Typing Architecture (DITA) -->
@@ -20,7 +21,6 @@
 <!-- All Rights Reserved. -->
 <!---->
 <!-- UPDATES: -->
-<!-- 2008.02.13 RDA: Created file based upon prototype from IBM -->
 <!-- ============================================================= -->
 
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">

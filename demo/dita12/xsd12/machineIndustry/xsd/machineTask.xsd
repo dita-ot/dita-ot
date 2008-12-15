@@ -19,29 +19,28 @@
 <!---->
 <!-- ============================================================= -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
-     
-  <xs:include schemaLocation="../../technicalContent/xsd/uiDomain.xsd"/>
-  <xs:include schemaLocation="../../base/xsd/highlightDomain.xsd"/>
-  <xs:include schemaLocation="../../base/xsd/utilitiesDomain.xsd"/>
-  <xs:include schemaLocation="../../base/xsd/indexingDomain.xsd"/>
-  <xs:include schemaLocation="../../base/xsd/hazardstatementDomain.xsd"/>
-  <xs:include schemaLocation="../../technicalContent/xsd/taskRequirementsDomain.xsd"/>
+
+  <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:highlightDomain.xsd:1.2"/>
+  <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:uiDomain.xsd:1.2"/>
+  <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:utilitiesDomain.xsd:1.2"/>
+  <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:indexingDomain.xsd:1.2"/>
+  <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:hazardstatementDomain.xsd:1.2"/>
+  <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:taskRequirementsDomain.xsd:1.2"/>
     
   <!--  ================ GROUP DEFINITIONS =====================  -->
-  <xs:include schemaLocation="../../base/xsd/metaDeclGrp.xsd"/>
-  <xs:include schemaLocation="../../base/xsd/tblDeclGrp.xsd"/>
-  <xs:include schemaLocation="../../base/xsd/topicGrp.xsd"/>
+  <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:metaDeclGrp.xsd:1.2"/>
+  <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:tblDeclGrp.xsd:1.2"/>
+  <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:topicGrp.xsd:1.2"/> 
   
   <!-- =================  MODULE INLCUDE DEFINITION  ==================  -->
-  <xs:include schemaLocation="../../base/xsd/commonElementMod.xsd"/>
+  <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:commonElementMod.xsd:1.2"/>
   <!-- ======== Table elements ======== -->
-  <xs:include schemaLocation="../../base/xsd/tblDeclMod.xsd"/>    
+  <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:tblDeclMod.xsd:1.2"/>    
   <!-- ======= MetaData elements, plus keyword and indexterm ======= -->
-  <xs:include schemaLocation="../../base/xsd/metaDeclMod.xsd"/>
+  <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:metaDeclMod.xsd:1.2"/>
   
-
-  <xs:include schemaLocation="../../base/xsd/topicMod.xsd" />
-  <xs:include schemaLocation="../../technicalContent/xsd/taskMod.xsd" /> 
+  <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:topicMod.xsd:1.2" />
+  <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:taskMod.xsd:1.2" /> 
   
   
   <!-- ============================================================= -->
@@ -55,7 +54,7 @@
     the name of the domain(s) in which the
     extension was declared
   -->
-  <xs:redefine schemaLocation="../../base/xsd/commonElementGrp.xsd">
+  <xs:redefine schemaLocation="urn:oasis:names:tc:dita:xsd:commonElementGrp.xsd:1.2">
   <xs:group name="pre">
     <xs:choice>
       <xs:group ref="pre"/>
@@ -97,9 +96,7 @@
   </xs:group>
   </xs:redefine>
   
-  
-  
-  <xs:redefine schemaLocation="../../technicalContent/xsd/taskGrp.xsd">
+  <xs:redefine schemaLocation="urn:oasis:names:tc:dita:xsd:taskGrp.xsd:1.2">
     <xs:group name="prereq">
     <xs:choice>
       <xs:group ref="prereq"/>
@@ -114,7 +111,7 @@
   </xs:group>
   </xs:redefine>
   
-  <xs:include schemaLocation="mitaskTaskbodyConstraintMod.xsd"/>
+  <xs:include schemaLocation="urn:oasis:names:tc:dita:spec:machinery:xsd:mitaskTaskbodyConstraintMod.xsd:1.2"/>
   
   <!-- ============================================================= -->
   <!-- DOMAIN ATTRIBUTE EXTENSIONS -->
@@ -130,8 +127,6 @@
   <!-- ============================================================= -->
   <!-- DOMAINS ATTRIBUTE OVERRIDE -->
   <!-- ============================================================= -->
-  
-  
   <xs:attributeGroup name="domains-att">
      <xs:attribute name="domains" type="xs:string" default="(topic ui-d) (topic hi-d) (topic ut-d) (topic indexing-d) (topic hazard-d) (topic task) (topic task mitask-d) (topic task strictTaskbody-c)"/>
   </xs:attributeGroup>

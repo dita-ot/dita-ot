@@ -8,16 +8,6 @@
 <!---->
 <!-- ============================================================= -->
 <!-- ============================================================= -->
-<!-- PUBLIC DOCUMENT TYPE DEFINITION -->
-<!-- TYPICAL INVOCATION -->
-<!---->
-<!--
-  Refer to this file by the following public identifier or an 
-        appropriate system identifier 
-  PUBLIC "-//OASIS//ELEMENTS DITA Subject Scheme Map//EN"
-        Delivered as file "subjectScheme.mod"
--->
-<!-- ============================================================= -->
 <!-- SYSTEM:     Darwin Information Typing Architecture (DITA) -->
 <!---->
 <!-- PURPOSE:    Declaring the elements and specialization -->
@@ -33,9 +23,7 @@
 <!-- UPDATES: -->
 <!-- 2008.02.13 RDA: Created file based upon prototype from IBM -->
 <!-- ============================================================= -->
-<!-- ============================================================= -->
-<!-- ELEMENT NAME ENTITIES -->
-<!-- ============================================================= -->
+
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
   xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
   
@@ -738,7 +726,6 @@
     <xs:attribute name="keyref" type="xs:string"/>
     <xs:attribute name="keys" type="xs:string"/>
     <xs:attribute name="query" type="xs:string"/>
-    <xs:attribute name="collection-type" default="family" type="collection-type.class"/>
     <xs:attribute name="type" type="xs:string"/>
     <xs:attribute name="scope" type="yesno-att.class"/>
     <xs:attribute name="format" type="xs:string"/>

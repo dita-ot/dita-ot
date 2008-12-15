@@ -1,4 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- ============================================================= -->
+<!--                    HEADER                                     -->
+<!-- ============================================================= -->
+<!-- ============================================================= -->
+<!--  MODULE:    DITA Glossref Domain                  -->
+<!--  VERSION:   1.2                                             -->
+<!--  DATE:      November 2008                                     -->
+<!--                                                               -->
+<!-- ============================================================= -->
+
+<!-- ============================================================= -->
+<!-- SYSTEM:     Darwin Information Typing Architecture (DITA)     -->
+<!--                                                               -->
+<!-- PURPOSE:    W3C XML Schema to describe the glossref domain      -->
+<!--                                                               -->
+<!-- ORIGINAL CREATION DATE:                                       -->
+<!--             September 2008                                        -->
+<!--                                                               -->
+<!--             (C) Copyright OASIS-Open.org 2008                -->
+<!--             All Rights Reserved.                              -->
+<!-- ============================================================= -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
   
   <xs:group name="glossref-d-topicref">

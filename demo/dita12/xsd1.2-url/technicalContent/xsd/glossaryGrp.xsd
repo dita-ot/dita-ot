@@ -2,7 +2,7 @@
 <!-- ============================================================= -->
 <!--                    HEADER                                     -->
 <!-- ============================================================= -->
-<!--  MODULE:    DITA Concept XSD Group Decleration                -->
+<!--  MODULE:    DITA Glossary XSD Group Decleration                -->
 <!--  VERSION:   1.2                                             -->
 <!--  DATE:      July 2007                                     -->
 <!--                                                               -->
@@ -17,7 +17,7 @@
 <!-- ORIGINAL CREATION DATE:                                       -->
 <!--             June 2006                                       -->
 <!--                                                               -->
-<!--             (C) Copyright OASIS-Open.org 2006                -->
+<!--             (C) Copyright OASIS-Open.org 2006, 2008                -->
 <!--             All Rights Reserved.                              -->
 <!-- ============================================================= -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">

@@ -180,7 +180,7 @@
   <xs:attributeGroup name="prelreqs.attlist">
     <xs:attributeGroup ref="prelreqs.attributes"/>
     <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute name="class" default="+ topic/section task/prereq mitask-d/prelreqs "/>
+    <xs:attribute name="class" default="+ topic/section task/prereq taskreq-d/prelreqs "/>
   </xs:attributeGroup>
   <!-- LONG NAME: Closing Requirements -->
   <xs:complexType name="closereqs.content">
@@ -194,7 +194,7 @@
   <xs:attributeGroup name="closereqs.attlist">
     <xs:attributeGroup ref="closereqs.attributes"/>
     <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute name="class" default="+ topic/section task/postreq mitask-d/closereqs "/>
+    <xs:attribute name="class" default="+ topic/section task/postreq taskreq-d/closereqs "/>
   </xs:attributeGroup>
   <!-- LONG NAME: Required Conditions -->
   <xs:complexType name="reqconds.content">
@@ -222,7 +222,7 @@
   <xs:attributeGroup name="reqconds.attlist">
     <xs:attributeGroup ref="reqconds.attributes"/>
     <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute name="class" default="+ topic/ol task/ol mitask-d/reqconds "/>
+    <xs:attribute name="class" default="+ topic/ol task/ol taskreq-d/reqconds "/>
   </xs:attributeGroup>
   <!-- LONG NAME: No Required Conditions -->
   <!-- specialized from li -->
@@ -238,7 +238,7 @@
   <xs:attributeGroup name="noconds.attlist">
     <xs:attributeGroup ref="noconds.attributes"/>
     <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute name="class" default="+ topic/li task/li mitask-d/noconds "/>
+    <xs:attribute name="class" default="+ topic/li task/li taskreq-d/noconds "/>
   </xs:attributeGroup>
   <!-- LONG NAME: Required Condition -->
   <!-- specialized from li -->
@@ -261,7 +261,7 @@
   <xs:attributeGroup name="reqcond.attlist">
     <xs:attributeGroup ref="reqcond.attributes"/>
     <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute name="class" default="+ topic/li task/li mitask-d/reqcond "/>
+    <xs:attribute name="class" default="+ topic/li task/li taskreq-d/reqcond "/>
   </xs:attributeGroup>
   <!-- LONG NAME: Required Condition Technical Publication -->
   <!-- specialized from li -->
@@ -284,7 +284,7 @@
   <xs:attributeGroup name="reqcontp.attlist">
     <xs:attributeGroup ref="reqcontp.attributes"/>
     <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute name="class" default="+ topic/li task/li mitask-d/reqcontp "/>
+    <xs:attribute name="class" default="+ topic/li task/li taskreq-d/reqcontp "/>
   </xs:attributeGroup>
   <!-- LONG NAME: Required Persons -->
   <!-- specialized from ol -->
@@ -314,7 +314,7 @@
   <xs:attributeGroup name="reqpers.attlist">
     <xs:attributeGroup ref="reqpers.attributes"/>
     <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute name="class" default="+ topic/ol task/ol mitask-d/reqpers "/>
+    <xs:attribute name="class" default="+ topic/ol task/ol taskreq-d/reqpers "/>
   </xs:attributeGroup>
   <!-- LONG NAME: Personnel -->
   <!-- specialized from li -->
@@ -337,7 +337,7 @@
   <xs:attributeGroup name="personnel.attlist">
     <xs:attributeGroup ref="personnel.attributes"/>
     <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute name="class" default="+ topic/li task/li mitask-d/personnel "/>
+    <xs:attribute name="class" default="+ topic/li task/li taskreq-d/personnel "/>
   </xs:attributeGroup>
   <!-- LONG NAME: Personnel Category -->
   <!-- specialized from li -->
@@ -360,7 +360,7 @@
   <xs:attributeGroup name="perscat.attlist">
     <xs:attributeGroup ref="perscat.attributes"/>
     <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute name="class" default="+ topic/li task/li mitask-d/perscat "/>
+    <xs:attribute name="class" default="+ topic/li task/li taskreq-d/perscat "/>
   </xs:attributeGroup>
   <!-- LONG NAME: Personnel Skill Level -->
   <!-- specialized from li -->
@@ -383,7 +383,7 @@
   <xs:attributeGroup name="perskill.attlist">
     <xs:attributeGroup ref="perskill.attributes"/>
     <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute name="class" default="+ topic/li task/li mitask-d/perskill "/>
+    <xs:attribute name="class" default="+ topic/li task/li taskreq-d/perskill "/>
   </xs:attributeGroup>
   <!-- LONG NAME: Esttime -->
   <!-- specialized from li -->
@@ -406,7 +406,7 @@
   <xs:attributeGroup name="esttime.attlist">
     <xs:attributeGroup ref="esttime.attributes"/>
     <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute name="class" default="+ topic/li task/li mitask-d/esttime "/>
+    <xs:attribute name="class" default="+ topic/li task/li taskreq-d/esttime "/>
   </xs:attributeGroup>
   <!-- LONG NAME: Support Equipment -->
   <!-- specialized from p -->
@@ -432,7 +432,7 @@
   <xs:attributeGroup name="supequip.attlist">
     <xs:attributeGroup ref="supequip.attributes"/>
     <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute name="class" default="+ topic/p task/p mitask-d/supequip "/>
+    <xs:attribute name="class" default="+ topic/p task/p taskreq-d/supequip "/>
   </xs:attributeGroup>
   <!-- LONG NAME: No Support Equipment -->
   <!-- specialized from data -->
@@ -447,7 +447,7 @@
   <xs:attributeGroup name="nosupeq.attlist">
     <xs:attributeGroup ref="nosupeq.attributes"/>
     <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute name="class" default="+ topic/data task/data mitask-d/nosupeq "/>
+    <xs:attribute name="class" default="+ topic/data task/data taskreq-d/nosupeq "/>
   </xs:attributeGroup>
   <!-- LONG NAME: Support Equipment List -->
   <!-- specialized from ul -->
@@ -480,7 +480,7 @@
   <xs:attributeGroup name="supeqli.attlist">
     <xs:attributeGroup ref="supeqli.attributes"/>
     <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute name="class" default="+ topic/ul task/ul mitask-d/supeqli "/>
+    <xs:attribute name="class" default="+ topic/ul task/ul taskreq-d/supeqli "/>
   </xs:attributeGroup>
   <!-- LONG NAME: Support Equipment Item -->
   <!-- specialized from li -->
@@ -503,7 +503,7 @@
   <xs:attributeGroup name="supequi.attlist">
     <xs:attributeGroup ref="supequi.attributes"/>
     <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute name="class" default="+ topic/li task/li mitask-d/supequi "/>
+    <xs:attribute name="class" default="+ topic/li task/li taskreq-d/supequi "/>
   </xs:attributeGroup>
   <!-- LONG NAME: Supplies -->
   <!-- specialized from p -->
@@ -529,7 +529,7 @@
   <xs:attributeGroup name="supplies.attlist">
     <xs:attributeGroup ref="supplies.attributes"/>
     <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute name="class" default="+ topic/p task/p mitask-d/supplies "/>
+    <xs:attribute name="class" default="+ topic/p task/p taskreq-d/supplies "/>
   </xs:attributeGroup>
   <!-- LONG NAME: No Supplies -->
   <!-- specialized from data -->
@@ -544,7 +544,7 @@
   <xs:attributeGroup name="nosupply.attlist">
     <xs:attributeGroup ref="nosupply.attributes"/>
     <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute name="class" default="+ topic/data task/data mitask-d/nosupply "/>
+    <xs:attribute name="class" default="+ topic/data task/data taskreq-d/nosupply "/>
   </xs:attributeGroup>
   <!-- LONG NAME: Supply List -->
   <!-- specialized from ul -->
@@ -577,7 +577,7 @@
   <xs:attributeGroup name="supplyli.attlist">
     <xs:attributeGroup ref="supplyli.attributes"/>
     <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute name="class" default="+ topic/ul task/ul mitask-d/supplyli "/>
+    <xs:attribute name="class" default="+ topic/ul task/ul taskreq-d/supplyli "/>
   </xs:attributeGroup>
   <!-- LONG NAME: Supply Item -->
   <!-- specialized from li -->
@@ -600,7 +600,7 @@
   <xs:attributeGroup name="supply.attlist">
     <xs:attributeGroup ref="supply.attributes"/>
     <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute name="class" default="+ topic/li task/li mitask-d/supply "/>
+    <xs:attribute name="class" default="+ topic/li task/li taskreq-d/supply "/>
   </xs:attributeGroup>
   <!-- LONG NAME: Spares -->
   <!-- specialized from p -->
@@ -626,7 +626,7 @@
   <xs:attributeGroup name="spares.attlist">
     <xs:attributeGroup ref="spares.attributes"/>
     <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute name="class" default="+ topic/p task/p mitask-d/spares "/>
+    <xs:attribute name="class" default="+ topic/p task/p taskreq-d/spares "/>
   </xs:attributeGroup>
   <!-- LONG NAME: No Spares -->
   <!-- specialized from data -->
@@ -641,7 +641,7 @@
   <xs:attributeGroup name="nospares.attlist">
     <xs:attributeGroup ref="nospares.attributes"/>
     <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute name="class" default="+ topic/data task/data mitask-d/nospares "/>
+    <xs:attribute name="class" default="+ topic/data task/data taskreq-d/nospares "/>
   </xs:attributeGroup>
   <!-- LONG NAME: Spare List -->
   <!-- specialized from ul -->
@@ -674,7 +674,7 @@
   <xs:attributeGroup name="sparesli.attlist">
     <xs:attributeGroup ref="sparesli.attributes"/>
     <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute name="class" default="+ topic/ul task/ul mitask-d/sparesli "/>
+    <xs:attribute name="class" default="+ topic/ul task/ul taskreq-d/sparesli "/>
   </xs:attributeGroup>
   <!-- LONG NAME: Spare Item -->
   <!-- specialized from li -->
@@ -697,7 +697,7 @@
   <xs:attributeGroup name="spare.attlist">
     <xs:attributeGroup ref="spare.attributes"/>
     <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute name="class" default="+ topic/li task/li mitask-d/spare "/>
+    <xs:attribute name="class" default="+ topic/li task/li taskreq-d/spare "/>
   </xs:attributeGroup>
   <!-- LONG NAME: Safety Conditions -->
   <!-- specialized from ol -->
@@ -723,7 +723,7 @@
   <xs:attributeGroup name="safety.attlist">
     <xs:attributeGroup ref="safety.attributes"/>
     <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute name="class" default="+ topic/ol task/ol mitask-d/safety "/>
+    <xs:attribute name="class" default="+ topic/ol task/ol taskreq-d/safety "/>
   </xs:attributeGroup>
   <!-- LONG NAME: No Safety Conditions -->
   <!-- specialized from li -->
@@ -739,7 +739,7 @@
   <xs:attributeGroup name="nosafety.attlist">
     <xs:attributeGroup ref="nosafety.attributes"/>
     <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute name="class" default="+ topic/li task/li mitask-d/nosafety "/>
+    <xs:attribute name="class" default="+ topic/li task/li taskreq-d/nosafety "/>
   </xs:attributeGroup>
   <!-- LONG NAME: Safety Condition -->
   <!-- specialized from li -->
@@ -762,7 +762,7 @@
   <xs:attributeGroup name="safecond.attlist">
     <xs:attributeGroup ref="safecond.attributes"/>
     <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute name="class" default="+ topic/li task/li mitask-d/safecond "/>
+    <xs:attribute name="class" default="+ topic/li task/li taskreq-d/safecond "/>
   </xs:attributeGroup>
   <!-- ============================================================= -->
   <!-- SPECIALIZATION ATTRIBUTE DECLARATIONS -->

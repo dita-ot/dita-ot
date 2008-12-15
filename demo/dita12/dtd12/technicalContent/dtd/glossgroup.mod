@@ -83,7 +83,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Glossary Group//EN"
                                   #IMPLIED"
 >
 <!ELEMENT glossgroup    %glossgroup.content;>
-<!ATTLIST glossentry    
+<!ATTLIST glossgroup    
               %glossgroup.attributes;
               %arch-atts;
               domains 

@@ -8,14 +8,14 @@
 <!-- ============================================================= -->
 <!--                    HEADER                                     -->
 <!-- ============================================================= -->
-<!--  MODULE:    DITA learningMap XSD Group Definition             -->
+<!--  MODULE:    DITA learningMap XSD Map Domain             -->
 <!--  VERSION:   0.1                                               -->
 <!--  DATE:      May 2007                                          -->
 <!--                                                               -->
 <!-- ============================================================= -->
 <!-- SYSTEM:     Darwin Information Typing Architecture (DITA)     -->
 <!--                                                               -->
-<!-- PURPOSE:    W3C XML Schema to describe DITA Learning Base     -->
+<!-- PURPOSE:    W3C XML Schema to describe DITA Learning map domain     -->
 <!--                                                               -->
 <!-- ORIGINAL CREATION DATE:                                       -->
 <!--             May 2007                                          -->

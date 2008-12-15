@@ -45,23 +45,7 @@
    </xs:choice>
   </xs:group>
  </xs:redefine>
-  <!-- ============================================================= -->
-  <!-- DOMAIN ATTRIBUTE EXTENSIONS -->
-  <!-- ============================================================= -->
-  <!-- ============================================================= -->
-  <!-- DOMAINS ATTRIBUTE OVERRIDE -->
-  <!-- ============================================================= -->
-  <!--
-    Must be declared ahead of the XSDs, which
-    puts @domains first in order
-  -->
-  <!-- ============================================================= -->
-  <!-- MAP ELEMENT INTEGRATION -->
-  <!-- ============================================================= -->
-  <!-- Embed map to get generic elements -->
-  <!-- ============================================================= -->
-  <!-- DOMAIN ELEMENT INTEGRATION -->
-  <!-- ============================================================= -->
+
   <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:mapMod.xsd:1.2" />
   <xs:include schemaLocation="urn:oasis:names:tc:dita:spec:classification:xsd:subjectSchemeMod.xsd:1.2" />
   <xs:include schemaLocation="urn:oasis:names:tc:dita:spec:classification:xsd:subjectSchemeGrp.xsd:1.2" />

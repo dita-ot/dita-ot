@@ -520,23 +520,23 @@
      </xs:complexType>
    </xs:element>
    
-   <xs:element name="process">
+   <xs:element name="steps-informal">
      <xs:complexType mixed="true">
       <xs:complexContent>
-        <xs:extension base="process.class">
-          <xs:attribute ref="class" default="- topic/section task/process "/>
+        <xs:extension base="steps-informal.class">
+          <xs:attribute ref="class" default="- topic/section task/steps-informal "/>
         </xs:extension>
       </xs:complexContent>
     </xs:complexType>
   </xs:element>
-  <xs:complexType name="process.class" mixed="true">
+  <xs:complexType name="steps-informal.class" mixed="true">
     <xs:sequence>
-      <xs:group ref="process.content"/>
+      <xs:group ref="steps-informal.content"/>
     </xs:sequence>
-    <xs:attributeGroup ref="process.attributes"/>
+    <xs:attributeGroup ref="steps-informal.attributes"/>
   </xs:complexType>
   
-  <xs:group name="process.content">
+  <xs:group name="steps-informal.content">
     <xs:sequence>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
       <xs:group ref="section.notitle.cnt" minOccurs="0"/>
@@ -544,7 +544,7 @@
     </xs:sequence>
   </xs:group>
 
-<xs:attributeGroup name="process.attributes">
+<xs:attributeGroup name="steps-informal.attributes">
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
@@ -600,7 +600,7 @@
 (%section;))*,
 ((%steps; | 
 %steps-unordered; |
-%process;))?, 
+%steps-informal;))?, 
 (%result;)?, 
 (%example;)*, 
 (%postreq;)*)"          
@@ -645,7 +645,7 @@
        <xs:choice minOccurs="0" maxOccurs="1">
        <xs:group ref="steps" />
        <xs:group ref="steps-unordered" />
-       <xs:group ref="process" />
+       <xs:group ref="steps-informal" />
      </xs:choice>
     </xs:sequence>
   </xs:group>
