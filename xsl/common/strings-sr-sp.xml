@@ -3,8 +3,10 @@
     Sourceforge.net. See the accompanying license.txt file for 
     applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
+<!-- Note that this file is used when the toolkit encounters
+     xml:lang="sr-sp" as well as xml:lang="sr-rs" -->
 
-<strings xml:lang="sr-sp">        <!-- Serbian -->
+<strings xml:lang="sr">        <!-- Serbian -->
 
 <!-- various labels (not author controlled) -->
 <str name="Figure">Илустрација</str>

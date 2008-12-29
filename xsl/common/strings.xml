@@ -3,7 +3,7 @@
      Sourceforge.net. See the accompanying license.txt file for 
      applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
-
+<!-- Updated 20081229 to add sr-rs as alternative to sr-sp   -->
 <langlist>
     <lang xml:lang="ar"    filename="strings-ar-eg.xml"/>
     <lang xml:lang="ar-eg" filename="strings-ar-eg.xml"/>
@@ -77,6 +77,7 @@
     <lang xml:lang="sl"    filename="strings-sl-si.xml"/>
     <lang xml:lang="sl-si" filename="strings-sl-si.xml"/>
     <lang xml:lang="sr"    filename="strings-sr-sp.xml"/>
+    <lang xml:lang="sr-rs" filename="strings-sr-sp.xml"/>
     <lang xml:lang="sr-sp" filename="strings-sr-sp.xml"/>
     <lang xml:lang="sv"    filename="strings-sv-se.xml"/>
     <lang xml:lang="sv-se" filename="strings-sv-se.xml"/>
