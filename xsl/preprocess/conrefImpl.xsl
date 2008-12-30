@@ -7,6 +7,8 @@
 <xsl:stylesheet version="1.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
   xmlns:exsl="http://exslt.org/common"
+  xmlns:conref="http://dita-ot.sourceforge.net/ns/200704/conref"
+  xmlns:ditamsg="http://dita-ot.sourceforge.net/ns/200704/ditamsg"
   exclude-result-prefixes="exsl">
 
   <xsl:import href="../common/output-message.xsl"/>
@@ -30,20 +32,12 @@
 
 <!-- If the target element does not exist, this template will be called to issue an error -->
 <xsl:template name="missing-target-error">
-  <xsl:call-template name="output-message">    
-    <xsl:with-param name="msgnum">010</xsl:with-param>
-    <xsl:with-param name="msgsev">E</xsl:with-param>
-    <xsl:with-param name="msgparams">%1=<xsl:value-of select="@conref"/></xsl:with-param>
-  </xsl:call-template>
+  <xsl:apply-templates select="." mode="ditamsg:missing-conref-target-error"/>
 </xsl:template>
 
 <!-- If an ID is duplicated, and there are 2 possible targets, issue a warning -->
 <xsl:template name="duplicateConrefTarget">
-  <xsl:call-template name="output-message">    
-    <xsl:with-param name="msgnum">011</xsl:with-param>
-    <xsl:with-param name="msgsev">W</xsl:with-param>
-    <xsl:with-param name="msgparams">%1=<xsl:value-of select="@conref"/></xsl:with-param>
-  </xsl:call-template>
+  <xsl:apply-templates select="." mode="ditamsg:duplicateConrefTarget"/>
 </xsl:template>
 
 <!-- Determine the relative path to a conref'ed file. Start with the path and
@@ -113,10 +107,7 @@
           </xsl:call-template>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:call-template name="output-message">
-            <xsl:with-param name="msgnum">012</xsl:with-param>
-            <xsl:with-param name="msgsev">W</xsl:with-param>
-          </xsl:call-template>
+          <xsl:apply-templates select="." mode="ditamsg:domainMismatch"/>
         </xsl:otherwise>
       </xsl:choose>
     </xsl:otherwise>
@@ -240,11 +231,7 @@
   <xsl:choose>
     <!-- If this conref has already been followed, stop to prevent an infinite loop -->
     <xsl:when test="contains($conref-ids,concat(' ',generate-id(.),' '))">
-      <xsl:call-template name="output-message">
-        <xsl:with-param name="msgnum">013</xsl:with-param>
-        <xsl:with-param name="msgsev">E</xsl:with-param>
-        <xsl:with-param name="msgparams">%1=<xsl:value-of select="@conref"/></xsl:with-param>
-      </xsl:call-template>
+      <xsl:apply-templates select="." mode="ditamsg:conrefLoop"/>
     </xsl:when>
     <!--targetting an element inside a topic-->
     <xsl:when test="contains(substring-after(@conref,'#'),'/')">
@@ -280,10 +267,10 @@
                   </xsl:choose>
                
                 <xsl:if test="(//*[local-name()=$element][@id=$elemid][ancestor::*[contains(@class, ' topic/topic ')][1][@id=$topicid]])[2]">
-                  <xsl:call-template name="duplicateConrefTarget"/>
+                  <xsl:apply-templates select="." mode="ditamsg:duplicateConrefTarget"/>
                 </xsl:if>
             </xsl:when>
-            <xsl:otherwise><xsl:call-template name="missing-target-error"/></xsl:otherwise>
+            <xsl:otherwise><xsl:apply-templates select="." mode="ditamsg:missing-conref-target-error"/></xsl:otherwise>
           </xsl:choose>
         </xsl:when>
         <xsl:when test="$topicpos='otherfile'">
@@ -319,10 +306,10 @@
                   </xsl:choose>
                 
                 <xsl:if test="(document($file,/)//*[local-name()=$element][@id=$elemid][ancestor::*[contains(@class, ' topic/topic ')][1][@id=$topicid]])[2]">
-                  <xsl:call-template name="duplicateConrefTarget"/>
+                  <xsl:apply-templates select="." mode="ditamsg:duplicateConrefTarget"/>
                 </xsl:if>
             </xsl:when>
-            <xsl:otherwise><xsl:call-template name="missing-target-error"/></xsl:otherwise>
+            <xsl:otherwise><xsl:apply-templates select="." mode="ditamsg:missing-conref-target-error"/></xsl:otherwise>
           </xsl:choose>
         </xsl:when>
         <xsl:otherwise/><!--never happens - only other value is firstinfile, but we know there's a # in the conref so it's either samefile or otherfile-->
@@ -362,10 +349,10 @@
                       </xsl:otherwise>
                   </xsl:choose>
                 <xsl:if test="(//*[contains(@class, ' topic/topic ')][@id=$topicid][local-name()=$element])[2]">
-                  <xsl:call-template name="duplicateConrefTarget"/>
+                  <xsl:apply-templates select="." mode="ditamsg:duplicateConrefTarget"/>
                 </xsl:if>
             </xsl:when>
-            <xsl:otherwise><xsl:call-template name="missing-target-error"/></xsl:otherwise>
+            <xsl:otherwise><xsl:apply-templates select="." mode="ditamsg:missing-conref-target-error"/></xsl:otherwise>
           </xsl:choose>
         </xsl:when>
         <xsl:when test="$topicpos='otherfile'">
@@ -401,10 +388,10 @@
                   </xsl:choose>
                 
                 <xsl:if test="(document($file,/)//*[contains(@class, ' topic/topic ')][@id=$topicid][local-name()=$element])[2]">
-                  <xsl:call-template name="duplicateConrefTarget"/>
+                  <xsl:apply-templates select="." mode="ditamsg:duplicateConrefTarget"/>
                 </xsl:if>
             </xsl:when>
-            <xsl:otherwise><xsl:call-template name="missing-target-error"/></xsl:otherwise>
+            <xsl:otherwise><xsl:apply-templates select="." mode="ditamsg:missing-conref-target-error"/></xsl:otherwise>
           </xsl:choose>
         </xsl:when>
         <xsl:when test="$topicpos='firstinfile'">
@@ -440,10 +427,10 @@
                   </xsl:choose>
                 
                 <xsl:if test="(document($file,/)//*[contains(@class, ' topic/topic ')][1][local-name()=$element])[2]">
-                  <xsl:call-template name="duplicateConrefTarget"/>
+                  <xsl:apply-templates select="." mode="ditamsg:duplicateConrefTarget"/>
                 </xsl:if>
             </xsl:when>
-            <xsl:otherwise><xsl:call-template name="missing-target-error"/></xsl:otherwise>
+            <xsl:otherwise><xsl:apply-templates select="." mode="ditamsg:missing-conref-target-error"/></xsl:otherwise>
           </xsl:choose>
         </xsl:when>
         <xsl:otherwise/><!--never happens - only three possible values for topicpos, all are tested-->
@@ -481,10 +468,10 @@
                 </xsl:otherwise>
               </xsl:choose>
               <xsl:if test="(//*[contains(@class, ' map/topicref ')][@id=$topicid][local-name()=$element])[2]">
-                <xsl:call-template name="duplicateConrefTarget"/>
+                <xsl:apply-templates select="." mode="ditamsg:duplicateConrefTarget"/>
               </xsl:if>
             </xsl:when>
-            <xsl:otherwise><xsl:call-template name="missing-target-error"/></xsl:otherwise>
+            <xsl:otherwise><xsl:apply-templates select="." mode="ditamsg:missing-conref-target-error"/></xsl:otherwise>
           </xsl:choose>
         </xsl:when>
         <xsl:when test="$topicpos='otherfile'">
@@ -517,17 +504,14 @@
                   </xsl:otherwise>
                 </xsl:choose>
                 <xsl:if test="(document($file,/)//*[contains(@class, ' map/topicref ')][@id=$topicid][local-name()=$element])[2]">
-                  <xsl:call-template name="duplicateConrefTarget"/>
+                  <xsl:apply-templates select="." mode="ditamsg:duplicateConrefTarget"/>
               </xsl:if>
             </xsl:when>
-            <xsl:otherwise><xsl:call-template name="missing-target-error"/></xsl:otherwise>
+            <xsl:otherwise><xsl:apply-templates select="." mode="ditamsg:missing-conref-target-error"/></xsl:otherwise>
           </xsl:choose>
         </xsl:when>        
         <xsl:otherwise>
-          <xsl:call-template name="output-message">
-            <xsl:with-param name="msgnum">014</xsl:with-param>
-            <xsl:with-param name="msgsev">E</xsl:with-param>
-          </xsl:call-template>
+          <xsl:apply-templates select="." mode="ditamsg:malformedConrefInMap"/>
         </xsl:otherwise>
       </xsl:choose>
     </xsl:when>
@@ -563,10 +547,10 @@
                 </xsl:otherwise>
               </xsl:choose>
               <xsl:if test="(//*[@id=$topicid][local-name()=$element])[2]">
-                <xsl:call-template name="duplicateConrefTarget"/>
+                <xsl:apply-templates select="." mode="ditamsg:duplicateConrefTarget"/>
               </xsl:if>
             </xsl:when>
-            <xsl:otherwise><xsl:call-template name="missing-target-error"/></xsl:otherwise>
+            <xsl:otherwise><xsl:apply-templates select="." mode="ditamsg:missing-conref-target-error"/></xsl:otherwise>
           </xsl:choose>
         </xsl:when>
         <xsl:when test="$topicpos='otherfile'">
@@ -599,17 +583,14 @@
                   </xsl:otherwise>
                 </xsl:choose>
                 <xsl:if test="(document($file,/)//*[@id=$topicid][local-name()=$element])[2]">
-                  <xsl:call-template name="duplicateConrefTarget"/>
+                  <xsl:apply-templates select="." mode="ditamsg:duplicateConrefTarget"/>
               </xsl:if>
             </xsl:when>
-            <xsl:otherwise><xsl:call-template name="missing-target-error"/></xsl:otherwise>
+            <xsl:otherwise><xsl:apply-templates select="." mode="ditamsg:missing-conref-target-error"/></xsl:otherwise>
           </xsl:choose>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:call-template name="output-message">
-            <xsl:with-param name="msgnum">014</xsl:with-param>
-            <xsl:with-param name="msgsev">E</xsl:with-param>
-          </xsl:call-template>
+          <xsl:apply-templates select="." mode="ditamsg:malformedConrefInMap"/>
         </xsl:otherwise>
       </xsl:choose>
     </xsl:when>
@@ -649,19 +630,15 @@
           </xsl:choose>
           
           <xsl:if test="(document($file,/)//*[local-name()=$element][@id=$topicid])[2]">
-            <xsl:call-template name="duplicateConrefTarget"/>
+            <xsl:apply-templates select="." mode="ditamsg:duplicateConrefTarget"/>
           </xsl:if>
         </xsl:when>
-        <xsl:otherwise><xsl:call-template name="missing-target-error"/></xsl:otherwise>
+        <xsl:otherwise><xsl:apply-templates select="." mode="ditamsg:missing-conref-target-error"/></xsl:otherwise>
       </xsl:choose>
     </xsl:when>
       
     <xsl:otherwise>
-      <xsl:call-template name="output-message">
-    	  <xsl:with-param name="msgnum">015</xsl:with-param>
-        <xsl:with-param name="msgsev">E</xsl:with-param>
-        <xsl:with-param name="msgparams">%1=<xsl:value-of select="@conref"/></xsl:with-param>
-      </xsl:call-template>
+      <xsl:apply-templates select="." mode="ditamsg:malformedConref"/>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
@@ -1061,6 +1038,52 @@
 
 <xsl:template name="get-original-element">
   <xsl:value-of select="local-name(.)"/>
+</xsl:template>
+
+<!-- If the target element does not exist, this template will be called to issue an error -->
+<xsl:template match="*" mode="ditamsg:missing-conref-target-error">
+  <xsl:call-template name="output-message">    
+    <xsl:with-param name="msgnum">010</xsl:with-param>
+    <xsl:with-param name="msgsev">E</xsl:with-param>
+    <xsl:with-param name="msgparams">%1=<xsl:value-of select="@conref"/></xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+<!-- If an ID is duplicated, and there are 2 possible targets, issue a warning -->
+<xsl:template match="*" mode="ditamsg:duplicateConrefTarget">
+  <xsl:call-template name="output-message">    
+    <xsl:with-param name="msgnum">011</xsl:with-param>
+    <xsl:with-param name="msgsev">W</xsl:with-param>
+    <xsl:with-param name="msgparams">%1=<xsl:value-of select="@conref"/></xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+<!-- Message is no longer used - appeared when domain mismatch prevented conref -->
+<xsl:template match="*" mode="ditamsg:domainMismatch">
+  <xsl:call-template name="output-message">
+    <xsl:with-param name="msgnum">012</xsl:with-param>
+    <xsl:with-param name="msgsev">W</xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+<!-- If this conref has already been followed, stop to prevent an infinite loop -->
+<xsl:template match="*" mode="ditamsg:conrefLoop">
+  <xsl:call-template name="output-message">
+    <xsl:with-param name="msgnum">013</xsl:with-param>
+    <xsl:with-param name="msgsev">E</xsl:with-param>
+    <xsl:with-param name="msgparams">%1=<xsl:value-of select="@conref"/></xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+<!-- Following msg is used on topicref and map -->
+<xsl:template match="*" mode="ditamsg:malformedConrefInMap">
+  <xsl:call-template name="output-message">
+    <xsl:with-param name="msgnum">014</xsl:with-param>
+    <xsl:with-param name="msgsev">E</xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+<xsl:template match="*" mode="ditamsg:malformedConref">
+  <xsl:call-template name="output-message">
+      <xsl:with-param name="msgnum">015</xsl:with-param>
+    <xsl:with-param name="msgsev">E</xsl:with-param>
+    <xsl:with-param name="msgparams">%1=<xsl:value-of select="@conref"/></xsl:with-param>
+  </xsl:call-template>
 </xsl:template>
 
 </xsl:stylesheet>
