@@ -1,5 +1,8 @@
 <?xml version="1.0"?>
 
+<!-- PLEASE DON'T USE.  This file is for backwards compatibility.  Please use the
+settings in basic-settings.xsl or layout-masters.xsl instead. -->
+
 <!-- 
 Copyright © 2004-2006 by Idiom Technologies, Inc. All rights reserved. 
 IDIOM is a registered trademark of Idiom Technologies, Inc. and WORLDSERVER
@@ -30,6 +33,11 @@ with those set forth herein.
 This file is part of the DITA Open Toolkit project hosted on Sourceforge.net. 
 See the accompanying license.txt file for applicable licenses.
 -->
+
+<!-- PLEASE DON'T USE.  This file is for backwards compatibility.  Please use the
+settings in basic-settings.xsl or layout-masters.xsl instead. -->
+
+<?opentopic do not use?>
 
 <fo:layout-master-set xmlns:fo="http://www.w3.org/1999/XSL/Format">
 
