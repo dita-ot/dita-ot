@@ -60,7 +60,7 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:attribute name="background-color">#f0f0f0</xsl:attribute>
         <xsl:attribute name="font-family">Monospaced</xsl:attribute>
         <xsl:attribute name="line-height">106%</xsl:attribute>
-        <xsl:attribute name="font-size">10pt</xsl:attribute>
+        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="screen__top">

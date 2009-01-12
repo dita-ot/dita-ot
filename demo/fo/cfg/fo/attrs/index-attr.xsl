@@ -42,7 +42,7 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:attribute-set name="__index__page__link">
         <xsl:attribute name="color">blue</xsl:attribute>
-        <xsl:attribute name="font-size">10pt</xsl:attribute>
+        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
         <xsl:attribute name="link-back">true</xsl:attribute>
     </xsl:attribute-set>
 

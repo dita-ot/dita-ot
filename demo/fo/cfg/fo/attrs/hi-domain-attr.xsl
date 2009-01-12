@@ -47,7 +47,7 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:attribute-set name="tt">
         <xsl:attribute name="font-family">Monospaced</xsl:attribute>
-        <xsl:attribute name="font-size">10pt</xsl:attribute>
+        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="sup">

@@ -35,7 +35,7 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:attribute-set name="msgph">
         <xsl:attribute name="font-family">Monospaced</xsl:attribute>
-        <xsl:attribute name="font-size">10pt</xsl:attribute>
+        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="msgblock">
@@ -46,7 +46,7 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:attribute-set name="cmdname">
         <xsl:attribute name="font-family">Monospaced</xsl:attribute>
-        <xsl:attribute name="font-size">10pt</xsl:attribute>
+        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="varname">
@@ -55,17 +55,17 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:attribute-set name="filepath">
         <xsl:attribute name="font-family">Monospaced</xsl:attribute>
-        <xsl:attribute name="font-size">10pt</xsl:attribute>
+        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="userinput">
         <xsl:attribute name="font-family">Monospaced</xsl:attribute>
-        <xsl:attribute name="font-size">10pt</xsl:attribute>
+        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="systemoutput">
         <xsl:attribute name="font-family">Monospaced</xsl:attribute>
-        <xsl:attribute name="font-size">10pt</xsl:attribute>
+        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
     </xsl:attribute-set>
 
 </xsl:stylesheet>

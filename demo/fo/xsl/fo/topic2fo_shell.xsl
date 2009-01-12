@@ -43,6 +43,7 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:import href="../common/attr-set-reflection.xsl"/>
     <xsl:import href="../common/vars.xsl"/>
 
+    <xsl:import href="../../cfg/fo/attrs/basic-settings.xsl"/>
     <xsl:import href="links.xsl"/>
     <xsl:import href="lists.xsl"/>
     <xsl:import href="tables.xsl"/>

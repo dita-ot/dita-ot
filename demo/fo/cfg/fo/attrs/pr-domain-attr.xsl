@@ -35,7 +35,7 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:attribute-set name="codeph">
         <xsl:attribute name="font-family">Monospaced</xsl:attribute>
-        <xsl:attribute name="font-size">10pt</xsl:attribute>
+        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="codeblock">
@@ -48,7 +48,7 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:attribute name="background-color">#f0f0f0</xsl:attribute>
         <xsl:attribute name="font-family">Monospaced</xsl:attribute>
         <xsl:attribute name="line-height">106%</xsl:attribute>
-        <xsl:attribute name="font-size">10pt</xsl:attribute>
+        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
         <xsl:attribute name="keep-with-previous.within-page">always</xsl:attribute>
         <!--        &lt;xsl:attribute name=&quot;keep-together.within-page&quot;&gt;always&lt;/xsl:attribute&gt;-->
     </xsl:attribute-set>
@@ -78,22 +78,22 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:attribute-set name="oper">
         <xsl:attribute name="font-family">Monospaced</xsl:attribute>
-        <xsl:attribute name="font-size">10pt</xsl:attribute>
+        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="delim">
         <xsl:attribute name="font-family">Monospaced</xsl:attribute>
-        <xsl:attribute name="font-size">10pt</xsl:attribute>
+        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="sep">
         <xsl:attribute name="font-family">Monospaced</xsl:attribute>
-        <xsl:attribute name="font-size">10pt</xsl:attribute>
+        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="apiname">
         <xsl:attribute name="font-family">Monospaced</xsl:attribute>
-        <xsl:attribute name="font-size">10pt</xsl:attribute>
+        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="parml">
@@ -103,7 +103,7 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:attribute-set>
 
     <xsl:attribute-set name="pt">
-        <xsl:attribute name="font-size">10pt</xsl:attribute>
+        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
         <xsl:attribute name="font-weight">bold</xsl:attribute>
         <xsl:attribute name="text-indent">0em</xsl:attribute>
         <xsl:attribute name="end-indent">24pt</xsl:attribute>
@@ -114,7 +114,7 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:attribute-set>
 
     <xsl:attribute-set name="pd">
-        <xsl:attribute name="font-size">10pt</xsl:attribute>
+        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
         <xsl:attribute name="space-before">0.3em</xsl:attribute>
         <xsl:attribute name="space-after">0.5em</xsl:attribute>
         <xsl:attribute name="start-indent">6pc</xsl:attribute>
@@ -147,7 +147,7 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:attribute-set name="kwd">
         <xsl:attribute name="font-family">Monospaced</xsl:attribute>
-        <xsl:attribute name="font-size">10pt</xsl:attribute>
+        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="kwd__default">
@@ -156,7 +156,7 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:attribute-set name="fragref">
         <xsl:attribute name="font-family">Monospaced</xsl:attribute>
-        <xsl:attribute name="font-size">10pt</xsl:attribute>
+        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="fragment.title">
