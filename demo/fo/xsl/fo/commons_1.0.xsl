@@ -115,6 +115,17 @@ See the accompanying license.txt file for applicable licenses.
             <xsl:otherwise>
                 <xsl:choose>
                     <xsl:when test="not(ancestor::*[contains(@class,' topic/topic ')])">
+                        <xsl:variable name="page-sequence-reference">
+                            <xsl:choose>
+                                <xsl:when test="$mapType = 'bookmap'">
+                                    <xsl:value-of select="'body-sequence'"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:value-of select="'ditamap-body-sequence'"/>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </xsl:variable>
+
                         <fo:page-sequence master-reference="{$page-sequence-reference}" xsl:use-attribute-sets="__force__page__count">
                             <xsl:call-template name="insertBodyStaticContents"/>
                             <fo:flow flow-name="xsl-region-body">
