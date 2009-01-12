@@ -96,6 +96,7 @@ with those set forth herein.
     <property name="saxon.resolver.command.line" value="-w0 -x org.apache.xml.resolver.tools.ResolvingXMLReader -y org.apache.xml.resolver.tools.ResolvingXMLReader -r org.apache.xml.resolver.tools.CatalogResolver"/>
 
     <path id="project.class.path">
+        <pathelement path="${java.class.path}"/>
         <pathelement location="${basedir}/lib/saxon.jar"/>
         <pathelement location="${fo.lib.dir}/xml-apis.jar"/>
         <pathelement location="${fo.lib.dir}/xercesImpl.jar"/>
