@@ -166,7 +166,11 @@ with those set forth herein.
             locale="${document.locale}"
             catalogs="${xml.catalog.files}">
         </index-preprocess>
-    	
+        
+        <!--makeurl seems to output file:/C: style instead of file:///C:, but
+            xep, fop, and ah all accept it.-->
+        <makeurl property="artworkPrefixUrl" file="${artworkPrefix}" />
+        
     	<!-- must fork or catalog resolution will fail due to sharing of -->
     	<!-- resolver and catalogs with the Open Toolkit -->
         <java classname="com.icl.saxon.StyleSheet" classpathref="project.class.path" fork="true">
@@ -176,7 +180,7 @@ with those set forth herein.
             <arg line='"${temp.transformation.file}"'/>
             <arg line='"locale=${document.locale}"'/>
             <arg line='"customizationDir=${customization.dir}"'/>
-            <arg line='"artworkPrefix=${artworkPrefix}"'/>
+            <arg line='"artworkPrefix=${artworkPrefixUrl}"'/>
             <arg line='"fileProtocolPrefix=${file.protocol.prefix}"'/>
             <arg line='"publishRequiredCleanup=${publish.required.cleanup}"'/>
             <arg line='"disableRelatedLinks=${disableRelatedLinks}"'/>
@@ -232,7 +236,9 @@ with those set forth herein.
         </antcall>
 
         <delete>
-            <fileset dir="${buildDir}" includes="stage?.*"/>
+            <!--Deleting the stage files isn't necessary, since it will be cleaned by
+                clean-temp, and is useful for debugging.-->
+            <!--<fileset dir="${buildDir}" includes="stage?.*"/>-->
             <fileset dir="${dita.map.output.dir}" includes="topic.fo"/>
         </delete>
     </target>

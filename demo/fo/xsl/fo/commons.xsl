@@ -1489,7 +1489,7 @@ See the accompanying license.txt file for applicable licenses.
                         <fo:table-row>
                                 <fo:table-cell xsl:use-attribute-sets="note__image__entry">
                                     <fo:block>
-                                        <fo:external-graphic src="url({concat($artworkPrefix, '/', $noteImagePath)})" xsl:use-attribute-sets="image"/>
+                                        <fo:external-graphic src="url({concat($artworkPrefix, $noteImagePath)})" xsl:use-attribute-sets="image"/>
                                     </fo:block>
                                 </fo:table-cell>
                                 <fo:table-cell xsl:use-attribute-sets="note__text__entry">
@@ -1953,7 +1953,7 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:template match="@background-image" mode="layout-masters-processing">
         <xsl:attribute name="background-image">
-            <xsl:value-of select="concat('url(',$artworkPrefix,'/',substring-after(.,'artwork:'),')')"/>
+            <xsl:value-of select="concat('url(',$artworkPrefix,substring-after(.,'artwork:'),')')"/>
         </xsl:attribute>
     </xsl:template>
 
