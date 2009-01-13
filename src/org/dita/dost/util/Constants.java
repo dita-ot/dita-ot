@@ -149,6 +149,8 @@ public abstract class Constants {
      * Constants for all the properties's name.
      */
     public static final String HREF_TARGET_LIST = "hreftargetslist";
+    public static final String HREF_TOPIC_LIST = "canditopicslist";
+    public static final String CHUNK_TOPIC_LIST = "skipchunklist";
     public static final String HTML_LIST = "htmllist";
     public static final String IMAGE_LIST = "imagelist";
     public static final String FLAG_IMAGE_LIST = "flagimagelist";
@@ -300,6 +302,8 @@ public abstract class Constants {
 	public static final String ATTR_CLASS_VALUE_METADATA = " topic/metadata ";
 	public static final String ATTR_CLASS_VALUE_TOPICHEAD = " mapgroup-d/topichead ";
 	public static final String ATTR_CLASS_VALUE_CODEREF = " pr-d/coderef ";
+	public static final String ATTR_CLASS_VALUE_TOPIC_GROUP = " mapgroup-d/topicgroup ";
+	public static final String ATTR_CLASS_VALUE_TOPIC_HEAD = " mapgroup-d/topichead ";
 	
     /**
      * constants for filtering or flagging.

@@ -101,13 +101,12 @@ public class ChunkModule implements AbstractPipelineModule {
 			javaLogger.logException(e);
 		}
 
-		
 		content = mapReader.getContent();
 		if(content.getValue()!=null){
 			// update dita.list to include new generated files
-			updateList((Hashtable)content.getValue(),input);	
+			updateList((Hashtable)content.getValue(), mapReader.getConflicTable(),input);
 			// update references in dita files
-			updateRefOfDita(content,input);
+			updateRefOfDita(content, mapReader.getConflicTable(),input);
 		}
 
 		
@@ -116,7 +115,7 @@ public class ChunkModule implements AbstractPipelineModule {
 		return null;
 	}
 	
-	private void updateRefOfDita(Content changeTable,AbstractPipelineInput input){
+	private void updateRefOfDita(Content changeTable, Hashtable conflictTable, AbstractPipelineInput input){
 	    Properties prop = new Properties();	 
 	    org.dita.dost.log.DITAOTJavaLogger logger=new org.dita.dost.log.DITAOTJavaLogger();
 	    String baseDir = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_BASEDIR);
@@ -138,7 +137,9 @@ public class ChunkModule implements AbstractPipelineModule {
 	    }
 	    TopicRefWriter topicRefWriter=new TopicRefWriter();
 		topicRefWriter.setContent(changeTable);
-		StringTokenizer fullTopicList=new StringTokenizer(prop.getProperty(Constants.FULL_DITA_TOPIC_LIST), Constants.COMMA);
+		topicRefWriter.setup(conflictTable);
+		//StringTokenizer fullTopicList=new StringTokenizer(prop.getProperty(Constants.FULL_DITA_TOPIC_LIST), Constants.COMMA);
+		StringTokenizer fullTopicList=new StringTokenizer(prop.getProperty(Constants.FULL_DITAMAP_TOPIC_LIST), Constants.COMMA);
 		try{
 			while(fullTopicList.hasMoreTokens()){
 				topicRefWriter.write(new File(tempDir,fullTopicList.nextToken()).getAbsolutePath());
@@ -150,7 +151,7 @@ public class ChunkModule implements AbstractPipelineModule {
 	}
 	
 	
-	private void updateList(Hashtable changeTable,AbstractPipelineInput input){
+	private void updateList(Hashtable changeTable, Hashtable conflictTable, AbstractPipelineInput input){
 		
 	    Properties prop = new Properties();	 
 	    HashSet chunkedTopicSet=new HashSet(Constants.INT_128);
@@ -177,39 +178,148 @@ public class ChunkModule implements AbstractPipelineModule {
 			logger.logException(ex);
 		}
 		
-		StringBuffer topicList=new StringBuffer();
+		Set<String> topicList = new HashSet<String>(Constants.INT_128);
+		Set<String> oldTopicList = null;
 		//StringBuffer fullDitamapAndTopicList=new StringBuffer();
-		StringBuffer ditamapList=new StringBuffer();
+		Set<String> ditamapList = null;
 		
-		topicList=topicList.append((String)prop.getProperty(Constants.FULL_DITA_TOPIC_LIST));
+		Set<String> hrefTopics = null;
+		Set<String> chunkTopics = null;
+		
+		//oldTopicList=oldTopicList.append((String)prop.getProperty(Constants.FULL_DITA_TOPIC_LIST));
+		oldTopicList = StringUtils.restoreSet((String)prop.getProperty(Constants.FULL_DITA_TOPIC_LIST));
 		//fullDitamapAndTopicList=fullDitamapAndTopicList.append((String)prop.getProperty(Constants.FULL_DITAMAP_LIST));
-		ditamapList=ditamapList.append((String)prop.getProperty(Constants.FULL_DITA_TOPIC_LIST));
+//		ditamapList=ditamapList.append((String)prop.getProperty(Constants.FULL_DITAMAP_LIST));
+		ditamapList = StringUtils.restoreSet((String)prop.getProperty(Constants.FULL_DITAMAP_LIST));
+		
+		//hrefTopics = hrefTopics.append(prop.getProperty(Constants.HREF_TOPIC_LIST));
+		hrefTopics = StringUtils.restoreSet((String)prop.getProperty(Constants.HREF_TOPIC_LIST));
+		//chunkTopics = chunkTopics.append(prop.getProperty(Constants.CHUNK_TOPIC_LIST));
+		chunkTopics = StringUtils.restoreSet((String)prop.getProperty(Constants.CHUNK_TOPIC_LIST));
+		
+		if (hrefTopics != null && chunkTopics != null) {
+			int start;
+			for (String s : chunkTopics) {
+//				if (!StringUtils.isEmptyString(s) && (start = hrefTopics.indexOf(s)) != -1) {
+//					hrefTopics.delete(start, 
+//							(start+s.length()+1 > hrefTopics.length() ? start+s.length() : start+s.length() + 1 ));
+//				}
+				if (!StringUtils.isEmptyString(s) && hrefTopics.contains(s)) {
+					hrefTopics.remove(s);
+				}
+			}
+		}
+		
+		if (hrefTopics != null && hrefTopics.size() > 0) {
+			for (String t : hrefTopics) {
+				if (t.lastIndexOf(Constants.SHARP) != -1) {
+					t = t.substring(0, t.lastIndexOf(Constants.SHARP));
+				}
+				if (t.lastIndexOf(Constants.FILE_EXTENSION_DITAMAP) == -1) {
+					t = changeExtName(t, Constants.FILE_EXTENSION_DITA, Constants.FILE_EXTENSION_XML);
+				}
+				t = FileUtils.getRelativePathFromMap(xmlDitalist.getAbsolutePath(), FileUtils.resolveFile(tempDir, t));
+				//topicList.append(t).append(Constants.COMMA);
+				topicList.add(t);
+				if (oldTopicList.contains(t)) {
+					oldTopicList.remove(t);
+				}
+			}
+			//topicList.delete(topicList.length() - 1 < 0 ? 0 : topicList.length() - 1, topicList.length());
+		}
 		 
 		if(topicList!=null){
 			String newChunkedFile=null;
 			Iterator it=changeTable.entrySet().iterator();
 			File topic_list=new File(tempDir, Constants.FULL_DITA_TOPIC_LIST.substring(0, Constants.FULL_DITA_TOPIC_LIST.lastIndexOf("list"))+".list");
 			File map_list=new File(tempDir, Constants.FULL_DITAMAP_LIST.substring(0, Constants.FULL_DITAMAP_LIST.lastIndexOf("list"))+".list");
-			
 			while(it.hasNext()){
 				Map.Entry entry = (Map.Entry) it.next();
 				String oldFile=(String)entry.getKey();
 				if(entry.getValue().toString().equals(oldFile)){
-					
 					newChunkedFile=entry.getValue().toString();
 					newChunkedFile=FileUtils.getRelativePathFromMap(xmlDitalist.getAbsolutePath(), newChunkedFile);
 					String extName=getExtName(newChunkedFile);
 					//prop.setProperty(Constants.FULL_DITAMAP_TOPIC_LIST,fullDitamapAndTopicList.append(Constants.COMMA).append(newChunkedFile).toString());
 					if(extName!=null && !extName.equalsIgnoreCase("DITAMAP")){
 						chunkedTopicSet.add(newChunkedFile);
-						prop.setProperty(Constants.FULL_DITA_TOPIC_LIST,topicList.append(Constants.COMMA).append(newChunkedFile).toString());
+						if (!topicList.contains(newChunkedFile)) {
+							//prop.setProperty(Constants.FULL_DITA_TOPIC_LIST,topicList.append(Constants.COMMA).append(newChunkedFile).toString());
+							//if (topicList.length() > 0)
+							//	topicList.append(Constants.COMMA);
+							topicList.add(newChunkedFile);
+							if (oldTopicList.contains(newChunkedFile)) {
+								//oldTopicList.delete(oldTopicList.indexOf(newChunkedFile), oldTopicList.indexOf(newChunkedFile) + newChunkedFile.length());
+								oldTopicList.remove(newChunkedFile);
+							}
+						}
 					}else{
-						prop.setProperty(Constants.FULL_DITAMAP_LIST,ditamapList.append(Constants.COMMA).append(newChunkedFile).toString());
+						if (!ditamapList.contains(newChunkedFile)) {
+							//prop.setProperty(Constants.FULL_DITAMAP_LIST,ditamapList.append(Constants.COMMA).append(newChunkedFile).toString());
+							//if (ditamapList.length() > 0) 
+							//	ditamapList.append(Constants.COMMA);
+							ditamapList.add(newChunkedFile);
+							if (oldTopicList.contains(newChunkedFile)) {
+								//oldTopicList.delete(oldTopicList.indexOf(newChunkedFile), oldTopicList.indexOf(newChunkedFile) + newChunkedFile.length());
+								oldTopicList.remove(newChunkedFile);
+							}
+						}
 						chunkedDitamapSet.add(newChunkedFile);
 					}
 				
 				}
 			}
+			
+			//String[] filesToRemove = oldTopicList.toString().split(Constants.COMMA);
+			
+			for (String s : oldTopicList) {
+				if (!StringUtils.isEmptyString(s)) {
+					File f = new File(tempDir, s);
+					if(f.exists())
+						f.delete();
+				}
+			}
+			
+			//TODO we have refined topic list and removed extra topic files, next we need to clean up
+			// conflictTable and try to resolve file name conflicts.
+			Iterator iter = changeTable.entrySet().iterator();
+			while(iter.hasNext()) {
+				Map.Entry entry = (Map.Entry) iter.next();
+				String oldFile = (String)entry.getKey();
+				if (entry.getValue().toString().equals(oldFile)) {
+					// newly chunked file
+					String targetPath = ((String)conflictTable.get((String)entry.getKey()));
+					if (targetPath != null) {
+						File target = new File(targetPath);
+						if (!FileUtils.fileExists(target.getAbsolutePath())) {
+							File from = new File(entry.getValue().toString());
+							String relativePath = FileUtils.getRelativePathFromMap(xmlDitalist.getAbsolutePath(), from.getAbsolutePath());
+							target.delete();
+							from.renameTo(target);
+							if (topicList.contains(relativePath)) {
+								//int len = topicList.indexOf(relativePath) + relativePath.length();
+								//if (len < topicList.length()) len++; 
+								//topicList.delete(topicList.indexOf(relativePath), len);
+								topicList.remove(relativePath);
+							}
+							relativePath = FileUtils.getRelativePathFromMap(xmlDitalist.getAbsolutePath(), target.getAbsolutePath());
+							//if (topicList.length() > 0) {
+							//	topicList.append(Constants.COMMA);
+							//}
+							topicList.add(relativePath);
+						} else {
+							conflictTable.remove(entry.getKey());
+						}
+					}
+				}
+			}
+			
+			prop.setProperty(Constants.FULL_DITA_TOPIC_LIST,StringUtils.assembleString(topicList, Constants.COMMA));
+			prop.setProperty(Constants.FULL_DITAMAP_LIST, StringUtils.assembleString(ditamapList, Constants.COMMA));
+			//prop.setProperty(Constants.FULL_DITAMAP_TOPIC_LIST, topicList.append(Constants.COMMA).append(ditamapList).toString());
+			topicList.addAll(ditamapList);
+			prop.setProperty(Constants.FULL_DITAMAP_TOPIC_LIST, StringUtils.assembleString(topicList, Constants.COMMA));
+			
 			String topics[]=((String)prop.getProperty(Constants.FULL_DITA_TOPIC_LIST)).split(Constants.COMMA);
 			String maps[]=((String)prop.getProperty(Constants.FULL_DITAMAP_LIST)).split(Constants.COMMA);
 			
@@ -301,6 +411,21 @@ public class ChunkModule implements AbstractPipelineModule {
 					file.length()) : null;
 		}
 	}
+	
+	private String changeExtName(String filename, String from, String to) {
+		if (StringUtils.isEmptyString(filename)) {
+			return null;
+		}
+		if (filename.indexOf(to) != -1) return filename;
+		if (from == null) from = "";
+		if (to == null) to = "";
+		if (filename.lastIndexOf(from) != -1) {
+			return filename.substring(0, filename.lastIndexOf(from)) + to; 
+		} else {
+			return filename + to;
+		}
+	}
+	
 	private void addSetToProperties(Properties prop, String key, Set set) {
 		String value = null;
 		value = StringUtils.assembleString(set, Constants.COMMA);

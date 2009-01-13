@@ -76,7 +76,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
            match="*[contains(@class, ' topic/table ')][*[contains(@class, ' topic/title ')]]"
            use="'include'"/>
 
-  <xsl:template match="processing-instruction('workdir')" mode="get-work-dir">
+  <xsl:template match="processing-instruction('workdir')[1]" mode="get-work-dir">
     <xsl:value-of select="."/>
     <xsl:text>/</xsl:text>
   </xsl:template>

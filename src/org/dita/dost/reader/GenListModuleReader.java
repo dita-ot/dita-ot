@@ -85,6 +85,12 @@ public class GenListModuleReader extends AbstractXMLReader {
 	/** Set of href nonConrefCopytoTargets refered in current parsing file */
 	private Set hrefTargets = null;
 	
+	/** Set of href targets with anchor appended */
+	private Set hrefTopicSet = null;
+	
+	/** Set of chunk targets */
+	private Set chunkTopicSet = null;
+	
 	/** Set of subsidiary files */
 	private Set subsidiarySet = null;
 
@@ -108,7 +114,16 @@ public class GenListModuleReader extends AbstractXMLReader {
 	
 	/** foreign/unknown nesting level */
     private int foreignLevel = 0;
+    
+    /** chunk nesting level */
+    private int chunkLevel = 0;
+    
+    /** chunk to-navigation level */
+    private int chunkToNavLevel = 0;
 	
+    /** Topic group nesting level */
+    private int topicGroupLevel = 0;
+    
 	/** Flag used to mark if current file is still valid after filtering */
 	private boolean isValidInput = false;
 	
@@ -139,12 +154,14 @@ public class GenListModuleReader extends AbstractXMLReader {
 		Class c = null;
 		nonConrefCopytoTargets = new HashSet(Constants.INT_64);
 		hrefTargets = new HashSet(Constants.INT_32);
+		hrefTopicSet = new HashSet(Constants.INT_32);
+		chunkTopicSet = new HashSet(Constants.INT_32);
 		conrefTargets = new HashSet(Constants.INT_32);
 		copytoMap = new HashMap(Constants.INT_16);
 		subsidiarySet = new HashSet(Constants.INT_16);
 		ignoredCopytoSourceSet = new HashSet(Constants.INT_16);
 		outDitaFilesSet=new HashSet(Constants.INT_64);
-		keysDefMap = new HashMap<String, String>();
+		keysDefMap = new HashMap();
 		props = null;
 		reader.setContentHandler(this);
 		javaLogger = new DITAOTJavaLogger();
@@ -211,10 +228,15 @@ public class GenListModuleReader extends AbstractXMLReader {
 		insideExcludedElement = false;
 		excludedLevel = 0;
 		foreignLevel = 0;
+		chunkLevel = 0;
+		chunkToNavLevel = 0;
+		topicGroupLevel = 0;
 		isValidInput = false;
 		hasconaction = false;
 		nonConrefCopytoTargets.clear();
 		hrefTargets.clear();
+		hrefTopicSet.clear();
+		chunkTopicSet.clear();
 		conrefTargets.clear();
 		copytoMap.clear();
 		ignoredCopytoSourceSet.clear();
@@ -411,6 +433,26 @@ public class GenListModuleReader extends AbstractXMLReader {
         	foreignLevel ++;
         }
 		
+		if(chunkLevel > 0) {
+			chunkLevel++;
+		} else if(atts.getValue(Constants.ATTRIBUTE_NAME_CHUNK) != null) {
+			chunkLevel++;
+		}
+		
+		if(chunkToNavLevel > 0) {
+			chunkToNavLevel++;
+		} else if(atts.getValue(Constants.ATTRIBUTE_NAME_CHUNK) != null
+				&& atts.getValue(Constants.ATTRIBUTE_NAME_CHUNK).indexOf("to-navigation") != -1){
+			chunkToNavLevel++;
+		}
+		
+		if(topicGroupLevel > 0) {
+			topicGroupLevel++;
+		} else if (atts.getValue(Constants.ATTRIBUTE_NAME_CLASS) != null
+				&& atts.getValue(Constants.ATTRIBUTE_NAME_CLASS).contains(Constants.ATTR_CLASS_VALUE_TOPIC_GROUP)) {
+			topicGroupLevel++;
+		}
+		
 		if(attrValue==null && !Constants.ELEMENT_NAME_DITA.equals(localName)){
     		params.clear();
 			msg = null;
@@ -477,6 +519,18 @@ public class GenListModuleReader extends AbstractXMLReader {
 		if (foreignLevel > 0){
 			foreignLevel --;
 			return;
+		}
+		
+		if (chunkLevel > 0) {
+			chunkLevel--;
+		}
+		
+		if (chunkToNavLevel > 0) {
+			chunkToNavLevel--;
+		}
+		
+		if (topicGroupLevel > 0) {
+			topicGroupLevel--;
 		}
 		
 		if (insideExcludedElement) {
@@ -630,6 +684,13 @@ public class GenListModuleReader extends AbstractXMLReader {
 				&& FileUtils.isTopicFile(filename) && canResolved()) {
 			hrefTargets.add(new File(filename).getPath());
 			toOutFile(new File(filename).getPath());
+			
+			String pathWithID = FileUtils.resolveTopic(currentDir, attrValue);
+			if (chunkLevel > 0 && chunkToNavLevel == 0 && topicGroupLevel == 0) {
+				chunkTopicSet.add(pathWithID);
+			} else {
+				hrefTopicSet.add(pathWithID);
+			}
 		}
 		
 		/*
@@ -739,5 +800,19 @@ public class GenListModuleReader extends AbstractXMLReader {
 	}
 	public Set getOutFilesSet(){
 		return outDitaFilesSet;
+	}
+
+	/**
+	 * @return the hrefTopicSet
+	 */
+	public Set getHrefTopicSet() {
+		return hrefTopicSet;
+	}
+
+	/**
+	 * @return the chunkTopicSet
+	 */
+	public Set getChunkTopicSet() {
+		return chunkTopicSet;
 	}
 }

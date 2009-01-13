@@ -66,6 +66,12 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 
 	/** Set of topic files containing href */
 	private Set hrefTopicSet = null;
+	
+	/** Set of href topic files with anchor ID */
+	private Set hrefWithIDSet = null;
+	
+	/** Set of chunk topic with anchor ID */
+	private Set chunkTopicSet = null;
 
 	/** Set of map files containing href */
 	private Set hrefMapSet = null;
@@ -172,6 +178,8 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 		fullTopicSet = new HashSet(Constants.INT_128);
 		fullMapSet = new HashSet(Constants.INT_128);
 		hrefTopicSet = new HashSet(Constants.INT_128);
+		hrefWithIDSet = new HashSet(Constants.INT_128);
+		chunkTopicSet = new HashSet(Constants.INT_128);
 		hrefMapSet = new HashSet(Constants.INT_128);
 		conrefSet = new HashSet(Constants.INT_128);
 		imageSet = new HashSet(Constants.INT_128);
@@ -478,6 +486,8 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 			
 		}
 		hrefTargetSet.addAll(reader.getHrefTargets());
+		hrefWithIDSet.addAll(reader.getHrefTopicSet());
+		chunkTopicSet.addAll(reader.getChunkTopicSet());
 		conrefTargetSet.addAll(reader.getConrefTargets());
 		nonConrefCopytoTargetSet.addAll(reader.getNonConrefCopytoTargets());
 		ignoredCopytoSourceSet.addAll(reader.getIgnoredCopytoSourceSet());
@@ -783,6 +793,8 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 		addSetToProperties(prop, Constants.FLAG_IMAGE_LIST, flagImageSet);
 		addSetToProperties(prop, Constants.HTML_LIST, htmlSet);
 		addSetToProperties(prop, Constants.HREF_TARGET_LIST, hrefTargetSet);
+		addSetToProperties(prop, Constants.HREF_TOPIC_LIST, hrefWithIDSet);
+		addSetToProperties(prop, Constants.CHUNK_TOPIC_LIST, chunkTopicSet);
 		addSetToProperties(prop, Constants.CONREF_TARGET_LIST, conrefTargetSet);
 		addSetToProperties(prop, Constants.COPYTO_SOURCE_LIST, copytoSourceSet);
 		addSetToProperties(prop, Constants.SUBSIDIARY_TARGET_LIST, subsidiarySet);

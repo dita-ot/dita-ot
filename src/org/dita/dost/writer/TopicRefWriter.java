@@ -41,6 +41,7 @@ public class TopicRefWriter extends AbstractXMLWriter {
 	private static final String NOT_LOCAL_URL = "://";
 
 	private Hashtable changeTable = null;
+	private Hashtable conflictTable = null;
 	private DITAOTJavaLogger logger = null;
 	private OutputStreamWriter output;
 	private OutputStreamWriter ditaFileOutput;
@@ -73,6 +74,10 @@ public class TopicRefWriter extends AbstractXMLWriter {
         } catch (Exception e) {
         	logger.logException(e);
         }
+	}
+	
+	public void setup(Hashtable conflictTable) {
+		this.conflictTable = conflictTable;
 	}
 
 
@@ -357,31 +362,41 @@ public class TopicRefWriter extends AbstractXMLWriter {
 			String topicFilePathName=(String)changeTable.get(FileUtils.resolveFile(currentFilePath, attValue));
 			String elementID=getElementID(attValue);
 			if(!notTopicFormat(atts,attValue)){
-					if(topicFileWithTopicPathName==null || (!changeTable.containsKey(topicFileWithTopicPathName)
-							&&!changeTable.containsKey(topicFilePathName))){
-						return attValue;//no change
-					}else{
-						//chunked file
-						if(changeTable.containsKey(topicFileWithTopicPathName)){
-							if(rootPathName.equalsIgnoreCase(topicFilePathName)){
-								if(attValue.indexOf(Constants.SHARP)!=-1)
-									return attValue.substring(attValue.indexOf(Constants.SHARP));
-							}
-							if (elementID == null)
-								return FileUtils.getRelativePathFromMap(
-										rootPathName, topicFileWithTopicPathName);
-							else
-								return new StringBuffer().append(
-										FileUtils.getRelativePathFromMap(
-												rootPathName,
-												topicFileWithTopicPathName))
-												.append(Constants.SLASH).append(elementID)
-												.toString();
-						}
-							
+				if(topicFileWithTopicPathName==null || (!changeTable.containsKey(topicFileWithTopicPathName)
+						&&!changeTable.containsKey(topicFilePathName))){
+					return attValue;//no change
+				}else{
+					//chunked file
+					String conTarget = (String)conflictTable.get(FileUtils.resolveFile(currentFilePath, attValue));
+					if (!StringUtils.isEmptyString(conTarget)) {
+						if (elementID == null)
+							return FileUtils.getRelativePathFromMap(
+									rootPathName, conTarget);
 						else
-							return FileUtils.getRelativePathFromMap(rootPathName,topicFilePathName);
-					}				
+							return FileUtils.getRelativePathFromMap(
+									rootPathName, conTarget) + Constants.SHARP + elementID;
+					}
+					
+					if(changeTable.containsKey(topicFileWithTopicPathName)){
+						if(rootPathName.equalsIgnoreCase(topicFilePathName)){
+							if(attValue.indexOf(Constants.SHARP)!=-1)
+								return attValue.substring(attValue.indexOf(Constants.SHARP));
+						}
+						if (elementID == null)
+							return FileUtils.getRelativePathFromMap(
+									rootPathName, topicFileWithTopicPathName);
+						else
+							return new StringBuffer().append(
+									FileUtils.getRelativePathFromMap(
+											rootPathName,
+											topicFileWithTopicPathName))
+											.append(Constants.SHARP).append(elementID)
+											.toString();
+					}
+						
+					else
+						return FileUtils.getRelativePathFromMap(rootPathName,topicFilePathName);
+				}				
 			}
 		}	
 		return attValue;
@@ -410,6 +425,7 @@ public class TopicRefWriter extends AbstractXMLWriter {
 			topicWithelement=relativePath.substring(relativePath.lastIndexOf(Constants.SHARP)+1);
 			if(topicWithelement.lastIndexOf(Constants.SLASH)!=-1)
 				elementID=topicWithelement.substring(topicWithelement.lastIndexOf(Constants.SLASH)+1);
+			else elementID = topicWithelement;
 		}
 		return elementID;
 	}
@@ -501,7 +517,7 @@ public class TopicRefWriter extends AbstractXMLWriter {
 		File outputFile = null;
 		FileOutputStream fileOutput = null;
 		needResolveEntity=true;
-
+		
 		try {
 			if (filename.endsWith(Constants.SHARP)) {
 				// prevent the empty topic id causing error

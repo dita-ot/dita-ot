@@ -11,9 +11,11 @@ package org.dita.dost.util;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.StringTokenizer;
 
 import org.dita.dost.log.DITAOTJavaLogger;
@@ -244,6 +246,24 @@ public class StringUtils {
         }
         
         return copytoMap;
+	}
+	
+	/**
+	 * Break down a string separated by commas into a string set. 
+	 * @param s
+	 * @return
+	 */
+	public static Set<String> restoreSet(String s) {
+		Set<String> copytoSet = new HashSet<String>();
+		StringTokenizer st = new StringTokenizer(s, Constants.COMMA);
+		
+		while (st.hasMoreTokens()) {
+			String entry = st.nextToken();
+			if (!StringUtils.isEmptyString(entry)) {
+				copytoSet.add(entry);
+			}
+		}
+		return copytoSet;
 	}
 	
 	/**

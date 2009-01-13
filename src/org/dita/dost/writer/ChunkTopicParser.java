@@ -35,6 +35,7 @@ import org.dita.dost.module.Content;
 import org.dita.dost.util.Constants;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.StringUtils;
+import org.dita.dost.util.TopicIdParser;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -48,11 +49,15 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 
 	private Hashtable changeTable = null;
 	
+	private Hashtable conflictTable = null;
+	
 	private HashSet refFileSet = null;
 	
 	private Element elem = null;
 	
 	private boolean separate = false;
+	
+	private boolean chunkByTopic = false;
 	
 	private String filePath = null;
 	
@@ -65,8 +70,12 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 	private String selectMethod = "select-document";
 	
 	private boolean include = false;
+	private boolean skip = false;
+	//private boolean skipGroup = false;
 	
 	private int includelevel = 0;
+	private int skipLevel = 0;
+	//private int skipGroupLevel = 0;
 	
 	private HashSet topicSpecSet = null;
 	
@@ -83,6 +92,7 @@ public class ChunkTopicParser extends AbstractXMLWriter {
     
     private Stack fileWriterStack = null;
     private Stack stubStack = null;
+    //private Stack tagStack = null;
     
     private Element stub = null;
     
@@ -139,10 +149,27 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 
 	public void endDocument() throws SAXException {
 		include = false;
+		skip = false;
 	}
 
 
 	public void endElement(String uri, String localName, String qName) throws SAXException {
+		if (skip && skipLevel > 0) {
+			skipLevel--;
+		} else if (skip) {
+			include = true;
+			skip = false;
+			skipLevel = 0;
+		}
+		
+//		if (skipGroup && skipGroupLevel > 0) {
+//			skipGroupLevel--;
+//		} else if (skipGroup) {
+//			include = true;
+//			skipGroup = false;
+//			skipGroupLevel = 0;
+//		}
+		
 		if(include){
 			try{
 				includelevel--;
@@ -230,9 +257,17 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 				// otherwise, if current file is copied to other file
 				// do not copy PIs and <dita>element
 				include = true;
+				skip = false;
+				skipLevel = 0;
+//				skipGroup = false;
+//				skipGroupLevel = 0;
 			}else{
 				include = false;
 				startFromFirstTopic = true;
+				skip = false;
+				skipLevel = 0;
+//				skipGroup = false;
+//				skipGroupLevel = 0;
 			}
 		}
 		
@@ -242,6 +277,15 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 		// TODO Auto-generated method stub
 		String classValue = atts.getValue(Constants.ATTRIBUTE_NAME_CLASS);
 		String idValue = atts.getValue(Constants.ATTRIBUTE_NAME_ID);
+		
+		if (skip && skipLevel > 0) {
+			skipLevel++;
+		}
+		
+//		if (skipGroup && skipGroupLevel > 0) {
+//			skipGroupLevel++;
+//		}
+		
 		try{
 			if(classValue!=null && classValue.indexOf(Constants.ATTR_CLASS_VALUE_TOPIC)!=-1){
 				topicSpecSet.add(qName);
@@ -251,8 +295,11 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 					Random random = new Random();
 					String newFileName = FileUtils.resolveFile(filePath, idValue+ditaext);
 					if(StringUtils.isEmptyString(idValue) || FileUtils.fileExists(newFileName)) {
+						String t = newFileName;
 						newFileName = FileUtils.resolveFile(filePath,"Chunk"
 								+new Integer(Math.abs(random.nextInt())).toString())+ditaext;
+						//changeTable.put(t, newFileName);
+						conflictTable.put(newFileName, t);
 					} 
 					outputFile = newFileName;
 					output = new OutputStreamWriter(
@@ -288,7 +335,10 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 					//current topic is the nested topic in 
 					//target topic.
 					include = false;
-					output.write("</"+qName+">");
+					skipLevel = 1;
+					skip = true;
+					// Fix: no need to close the tag, just skip the nested topic.
+					//output.write("</"+qName+">");
 				}else if(include){
 					//if select method is "select-document" or "select-branch"
 					// and current topic is the nested topic in target topic.
@@ -301,6 +351,8 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 							changeTable.put(currentParsingFile, outputFile);
 						}
 					}
+				} else if(skip) {
+					skipLevel = 1;
 				}
 				
 				else if(!include && idValue!=null &&
@@ -310,6 +362,8 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 					//current topic is the target topic
 					include = true;
 					includelevel = 0;
+					skip = false;
+					skipLevel = 0;
 					startFromFirstTopic = false;
 					if(!currentParsingFile.equals(outputFile)){
 						changeTable.put(currentParsingFile+Constants.SHARP+idValue,
@@ -386,6 +440,7 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 				
 				output.write(">");
 			}
+			
 		}catch(Exception e){
 			logger.logException(e);
 		}
@@ -581,12 +636,14 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 	
 	private void separateChunk(Element element) {
 		// TODO Auto-generated method stub
-		// TODO implement separat = true logic
+		// TODO implement separate = true logic
 		String hrefValue = element.getAttribute(Constants.ATTRIBUTE_NAME_HREF);
 		String copytoValue = element.getAttribute(Constants.ATTRIBUTE_NAME_COPY_TO);
+		String scopeValue = element.getAttribute(Constants.ATTRIBUTE_NAME_SCOPE);
 		String parseFilePath = null;
 		Writer tempOutput = null;
 		String chunkValue = element.getAttribute(Constants.ATTRIBUTE_NAME_CHUNK);
+		boolean dotchunk = false;
 		
 		
 		if (!copytoValue.equals(Constants.STRING_EMPTY) && !chunkValue.contains("to-content")){
@@ -612,17 +669,62 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 			}
 		}
 		try {
-			if (parseFilePath != null && !parseFilePath.equals(Constants.STRING_EMPTY)){
+			if (!StringUtils.isEmptyString(parseFilePath) 
+					&& !"external".equalsIgnoreCase(scopeValue)) {
 				// if the path to target file make sense
 				currentParsingFile = FileUtils.resolveFile(filePath,parseFilePath);
+				String outputFileName = null;
+				/*
+				 * FIXME: we have code flaws here, references in ditamap need to be updated to 
+				 * new created file.
+				 */
+				String id = null;
+				if (parseFilePath.contains(Constants.SHARP) 
+						&& parseFilePath.indexOf(Constants.SHARP) < parseFilePath.length() - 1) {
+					id = parseFilePath.substring(parseFilePath.indexOf(Constants.SHARP)+1);
+					outputFileName = FileUtils.resolveFile(filePath, id) + ditaext;
+					this.targetTopicId = id;
+				} else {
+					String firstTopicID = this.getFirstTopicId(FileUtils.resolveFile(filePath, parseFilePath));
+					if(!StringUtils.isEmptyString(firstTopicID)) {
+						outputFileName = FileUtils.resolveFile(filePath, firstTopicID) + ditaext;
+						this.targetTopicId = firstTopicID;
+					} else {
+						outputFileName = currentParsingFile + ".chunk";
+						dotchunk = true;
+						this.targetTopicId = null;
+					}
+				}
+				
+				if (FileUtils.fileExists(outputFileName)) {
+					Random random = new Random();
+					String t = outputFileName;
+					outputFileName = FileUtils.resolveFile(filePath,"Chunk"
+							+new Integer(Math.abs(random.nextInt())).toString())+ditaext;
+					conflictTable.put(outputFileName, t);
+					dotchunk = false;
+				}
+				
 				tempOutput = output;
 				output = new OutputStreamWriter(new FileOutputStream(
-						currentParsingFile+".chunk"),
+						outputFileName),
 						Constants.UTF8);
-				outputFile = currentParsingFile+".chunk";
-				targetTopicId = null;
+				outputFile = outputFileName;
+				if (!dotchunk) {
+					changeTable.put(parseFilePath, outputFileName + (id == null ? "" : "#"+id));
+					changeTable.put(outputFileName, outputFileName);
+				}
+				element.setAttribute(Constants.ATTRIBUTE_NAME_HREF,
+						FileUtils.getRelativePathFromMap(filePath+Constants.SLASH+"stub.ditamap"
+								,outputFileName));
+				//targetTopicId = null;
 				include = false;
-				selectMethod = "select-document";
+				if (chunkValue.contains("select-topic") || id != null) {
+					selectMethod = "select-topic";
+				} else {
+					selectMethod = "select-document";
+					targetTopicId = null;
+				}
 				stub = element.getOwnerDocument().createElement("stub");
 				if(element.hasChildNodes()){
 					element.insertBefore(stub,element.getFirstChild());
@@ -630,9 +732,9 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 					element.appendChild(stub);
 				}
 				reader.setErrorHandler(new DITAOTXMLErrorHandler(currentParsingFile));
-				if(FileUtils.fileExists(currentParsingFile))
-					reader.parse(currentParsingFile);
+				reader.parse(currentParsingFile);
 				output.flush();
+				stub.getParentNode().removeChild(stub);
 				
 			}
 		}catch (Exception e) {
@@ -641,13 +743,13 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 			try{
 				if(output!=null){
 					output.close();
-					if(!new File(currentParsingFile).delete()){
+					if(dotchunk && !new File(currentParsingFile).delete()){
 		            	Properties prop = new Properties();
 		            	prop.put("%1", currentParsingFile);
 		            	prop.put("%2", outputFile);
 		            	logger.logError(MessageUtils.getMessage("DOTJ009E", prop).toString());
 		            }
-		            if(!new File(outputFile).renameTo(new File(currentParsingFile))){
+		            if(dotchunk && !new File(outputFile).renameTo(new File(currentParsingFile))){
 		            	Properties prop = new Properties();
 		            	prop.put("%1", currentParsingFile);
 		            	prop.put("%2", outputFile);
@@ -669,6 +771,7 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 		String chunkValue = element.getAttribute(Constants.ATTRIBUTE_NAME_CHUNK);
 		String copytoValue = element.getAttribute(Constants.ATTRIBUTE_NAME_COPY_TO);
 		String scopeValue = element.getAttribute(Constants.ATTRIBUTE_NAME_SCOPE);
+		String classValue = element.getAttribute(Constants.ATTRIBUTE_NAME_CLASS);
 		String parseFilePath = null;
 		String outputFileName = outputFile;
 		Writer tempWriter = null;
@@ -702,42 +805,72 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 				}
 			}
 		
-			if (parseFilePath != null && !parseFilePath.equals(Constants.STRING_EMPTY)){
-				// if the path to target file make sense
+			if (StringUtils.isEmptyString(classValue) 
+					|| ( !classValue.contains(Constants.ATTR_CLASS_VALUE_TOPIC_GROUP)
+							&& StringUtils.isEmptyString(parseFilePath))) {
+				logger.logError(MessageUtils.getMessage("DOTJ032E").toString());
+			} else if ("external".equalsIgnoreCase(scopeValue)) {
+				//TODO Either scope is "external" or file doesn't exist. What to do?
+				//Shall we throw out a warning?
+			} else if (!StringUtils.isEmptyString(classValue) 
+					&& ( !classValue.contains(Constants.ATTR_CLASS_VALUE_TOPIC_GROUP))) {
+				// now the path to target file make sense
 				if(chunkValue.indexOf("to-content")!=-1){
 					//if current element cotains "to-content" in chunk attribute
 					//we need to create new buffer and flush the buffer to file
-					//after processing is finished					
+					//after processing is finished
 					tempWriter = output;
 					tempTopicID = topicID;
 					output = new StringWriter();
 					topicID = new HashSet<String>();
-					if (!copytoValue.equals(Constants.STRING_EMPTY)){
+					if (Constants.ELEMENT_NAME_MAP.equalsIgnoreCase(element.getNodeName())) {
+						// Very special case, we have a map element with href value.
+						// This is a map that needs to be chunked to content.
+						// No need to parse any file, just generate a stub output.
+						outputFileName = FileUtils.resolveFile(filePath, parseFilePath);
+					} else if (!copytoValue.equals(Constants.STRING_EMPTY)){
 						// use @copy-to value as the new file name
 						outputFileName = FileUtils.resolveFile(filePath,copytoValue);
-					}else if (!hrefValue.equals(Constants.STRING_EMPTY)
-							&& hrefValue.indexOf(Constants.SHARP)==-1){
-						// use @href value as the new file name
-						outputFileName = FileUtils.resolveFile(filePath,hrefValue);
-					}else{
+					} else if (!hrefValue.equals(Constants.STRING_EMPTY)) {
+						// try to use href value as the new file name
+						if (chunkValue.contains("select-topic") || chunkValue.contains("select-branch")) {
+							if (hrefValue.contains(Constants.SHARP)
+									&& hrefValue.indexOf(Constants.SHARP) < hrefValue.length() - 1) {
+								// if we have an ID here, use it.
+								outputFileName = FileUtils.resolveFile(filePath,hrefValue.substring(hrefValue.indexOf(Constants.SHARP)+1))+ditaext;
+							} else {
+								// Find the first topic id in target file if any.
+								String firstTopic = this.getFirstTopicId(FileUtils.resolveFile(filePath, hrefValue));
+								if (!StringUtils.isEmptyString(firstTopic)) {
+									outputFileName = FileUtils.resolveFile(filePath, firstTopic) + ditaext;
+								} else {
+									outputFileName = FileUtils.resolveFile(filePath,hrefValue);
+								}
+							}
+						} else {
+							// otherwise, use the href value instead
+							outputFileName = FileUtils.resolveFile(filePath,hrefValue);
+						}
+					} else {
 						// use randomly generated file name
 						Random random = new Random();
-						String targetFileName;
-						if (currentParsingFile != null && currentParsingFile.lastIndexOf('.') != -1) {
-							targetFileName = currentParsingFile.substring(0, currentParsingFile.lastIndexOf('.')) + ditaext;
-						} else {
-							targetFileName = currentParsingFile + ditaext;
-						}
-						outputFileName = FileUtils.resolveFile(filePath, targetFileName);
-						if(StringUtils.isEmptyString(currentParsingFile) || FileUtils.fileExists(outputFileName)) {
-							outputFileName = FileUtils.resolveFile(filePath,"Chunk"
-									+new Integer(Math.abs(random.nextInt())).toString())+ditaext;
-						}
-						// add newly generated file to changTable
-						// the new entry in changeTable has same key and value
-						// in order to indicate it is a newly generated file
-						changeTable.put(outputFileName,outputFileName);
-					}					
+						outputFileName = FileUtils.resolveFile(filePath,"Chunk"
+								+new Integer(Math.abs(random.nextInt())).toString())+ditaext;
+					}
+					
+					// Check if there is any conflict
+					if(FileUtils.fileExists(outputFileName)
+							&& !Constants.ELEMENT_NAME_MAP.equalsIgnoreCase(element.getNodeName())) {
+						String t = outputFileName;
+						Random random = new Random();
+						outputFileName = FileUtils.resolveFile(filePath,"Chunk"
+								+new Integer(Math.abs(random.nextInt())).toString())+ditaext;
+						conflictTable.put(outputFileName, t);
+					}
+					// add newly generated file to changTable
+					// the new entry in changeTable has same key and value
+					// in order to indicate it is a newly generated file
+					changeTable.put(outputFileName,outputFileName);
 				}
 				
 				this.outputFile = outputFileName;
@@ -748,7 +881,12 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 					if(path.indexOf(Constants.SHARP)!=-1){
 						newpath = outputFileName + path.substring(path.indexOf(Constants.SHARP));
 					}else{
-						newpath = outputFileName;
+						String firstTopicID = this.getFirstTopicId(path);
+						if(!StringUtils.isEmptyString(firstTopicID)) {
+							newpath = outputFileName + "#" + firstTopicID;
+						} else {
+							newpath = outputFileName;
+						}
 					}
 					// add file name changes to changeTable
 					changeTable.put(path, newpath);
@@ -785,8 +923,7 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 				String tempPath = currentParsingFile;
 				currentParsingFile = FileUtils.resolveFile(filePath,parseFilePath);
 				
-				if(FileUtils.fileExists(currentParsingFile))
-					reader.parse(currentParsingFile);
+				reader.parse(currentParsingFile);
 				currentParsingFile = tempPath;
 			
 				if (element.hasChildNodes() && 
@@ -814,8 +951,7 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 						Properties prop=new Properties();
 						prop.put("%1", hrefValue);
 						logger.logError(MessageUtils.getMessage("DOTJ033E",prop).toString());
-					}else{
-					
+					} else {
 						if (Constants.ELEMENT_NAME_DITA.equalsIgnoreCase(parentResult.substring(insertpoint,end).trim())){
 							insertpoint = parentResult.lastIndexOf("</",insertpoint);
 						}
@@ -846,23 +982,23 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 					output = tempWriter;
 					topicID = tempTopicID;
 				}
-			}else{
-				logger.logError(MessageUtils.getMessage("DOTJ032E").toString());
 			}
-			
 		} catch (Exception e) {
 			logger.logException(e);
 		}
 	
 	}
 
-	public void setup(Hashtable changeTable, HashSet refFileSet, Element elem, boolean separate, String ditaext) {
+	public void setup(Hashtable changeTable, Hashtable conflictTable, 
+			HashSet refFileSet, Element elem, boolean separate, boolean chunkByTopic, String ditaext) {
 		// Initialize ChunkTopicParser
 		this.changeTable = changeTable;
 		this.refFileSet = refFileSet;
 		this.elem = elem;
 		this.separate = separate;
 		this.ditaext  = ditaext;
+		this.conflictTable = conflictTable;
+		this.chunkByTopic = chunkByTopic;
 		
 		logger=new DITAOTJavaLogger();
 		if (System.getProperty(Constants.SAX_DRIVER_PROPERTY) == null) {
@@ -904,5 +1040,36 @@ public class ChunkTopicParser extends AbstractXMLWriter {
     	
     	return true;
     }
+	
+	/**
+	 * 
+	 * Get the first topic id from the given dita file.
+	 * @param absolutePathToFile The absolute path to a dita file.
+	 * @return The first topic id from the given dita file if success,
+	 * otherwise an empty string is returned.
+	 */
+	private String getFirstTopicId(String absolutePathToFile){
+		TopicIdParser parser;
+		XMLReader reader;
+		StringBuffer firstTopicId = new StringBuffer("");
+		
+		if(absolutePathToFile == null || !FileUtils.isAbsolutePath(absolutePathToFile))
+			return firstTopicId.toString();
+		
+		parser = new TopicIdParser(firstTopicId);
+		try{
+            if (System.getProperty(Constants.SAX_DRIVER_PROPERTY) == null){
+                //The default sax driver is set to xerces's sax driver
+            	StringUtils.initSaxDriver();
+            }
+            reader = XMLReaderFactory.createXMLReader();
+            reader.setContentHandler(parser);            
+            reader.parse(absolutePathToFile);
+        }catch (Exception e){
+            logger.logException(e);
+        }
+		return firstTopicId.toString();
+		
+	}
 
 }
