@@ -323,6 +323,8 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 					newChild.setAttribute(Constants.ATTRIBUTE_NAME_HREF,
 							FileUtils.getRelativePathFromMap(filePath+Constants.SLASH+"stub.ditamap"
 									,newFileName));
+					newChild.setAttribute(Constants.ATTRIBUTE_NAME_CLASS,
+							Constants.ATTR_CLASS_VALUE_TOPICREF);
 					if(stub!=null){
 						stub.getParentNode().insertBefore(newChild,stub);
 						stubStack.push(stub);
@@ -727,7 +729,24 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 				}
 				stub = element.getOwnerDocument().createElement("stub");
 				if(element.hasChildNodes()){
-					element.insertBefore(stub,element.getFirstChild());
+					NodeList children = element.getChildNodes();
+					boolean stubPlaced = false;
+					Node child = element.getFirstChild();
+					for (int j = 0; j < children.getLength(); j++){
+						if (children.item(j) instanceof Element){
+							String childClass = ((Element)children.item(j)).getAttribute(Constants.ATTRIBUTE_NAME_CLASS);
+							if (childClass != null && childClass.contains(Constants.ATTR_CLASS_VALUE_TOPICREF)){
+								element.insertBefore(stub, children.item(j));
+								stubPlaced = true;
+								break;
+							}
+						}
+					}
+					
+					if (!stubPlaced){
+						element.appendChild(stub);
+					}
+	
 				}else{
 					element.appendChild(stub);
 				}
