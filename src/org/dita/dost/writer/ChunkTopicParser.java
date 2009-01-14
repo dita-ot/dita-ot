@@ -94,7 +94,11 @@ public class ChunkTopicParser extends AbstractXMLWriter {
     private Stack stubStack = null;
     //private Stack tagStack = null;
     
+    //stub is used as the anchor to mark where to insert generated child topicref inside current topicref
     private Element stub = null;
+    
+    //siblingStub is similar to stub. The only different is it is used to insert generated topicref sibling to current topicref
+    private Element siblingStub = null;
     
     DITAOTJavaLogger logger = null;
 
@@ -324,9 +328,18 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 							FileUtils.getRelativePathFromMap(filePath+Constants.SLASH+"stub.ditamap"
 									,newFileName));
 					newChild.setAttribute(Constants.ATTRIBUTE_NAME_CLASS,
-							Constants.ATTR_CLASS_VALUE_TOPICREF);
+							"-" + Constants.ATTR_CLASS_VALUE_TOPICREF);
+					newChild.setAttribute(Constants.ATTRIBUTE_NAME_XTRF, "generated_by_chunk");
 					if(stub!=null){
-						stub.getParentNode().insertBefore(newChild,stub);
+						if (includelevel == 0 && siblingStub != null){
+							//if it is the following sibling topic to the first topic in ditabase
+							//The first topic will not enter the logic at here because when meeting
+							//with first topic in ditabase, the include value is false
+							siblingStub.getParentNode().insertBefore(newChild, siblingStub);
+							
+						}else{
+							stub.getParentNode().insertBefore(newChild,stub);
+						}
 						stubStack.push(stub);
 						stub = (Element)stub.cloneNode(false);
 						newChild.appendChild(stub);
@@ -727,7 +740,11 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 					selectMethod = "select-document";
 					targetTopicId = null;
 				}
+				
+				
 				stub = element.getOwnerDocument().createElement("stub");
+				siblingStub = element.getOwnerDocument().createElement("stub");
+				//Place stub
 				if(element.hasChildNodes()){
 					NodeList children = element.getChildNodes();
 					boolean stubPlaced = false;
@@ -750,10 +767,21 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 				}else{
 					element.appendChild(stub);
 				}
+				
+				//Place siblingStub
+				if(element.getNextSibling() != null){
+					element.getParentNode().insertBefore(siblingStub, element.getNextSibling());
+				}else{
+					element.getParentNode().appendChild(siblingStub);
+				}
+				
 				reader.setErrorHandler(new DITAOTXMLErrorHandler(currentParsingFile));
 				reader.parse(currentParsingFile);
 				output.flush();
+				
+				//remove stub and siblingStub
 				stub.getParentNode().removeChild(stub);
+				siblingStub.getParentNode().removeChild(siblingStub);
 				
 			}
 		}catch (Exception e) {

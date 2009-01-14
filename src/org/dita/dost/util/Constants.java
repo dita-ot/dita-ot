@@ -125,6 +125,7 @@ public abstract class Constants {
 	public static final String ATTRIBUTE_NAME_KEYREF = "keyref";
 	public static final String ATTRIBUTE_NAME_CONKEYREF	="conkeyref";
 	public static final String ATTRIBUTE_NAME_KEYS = "keys";
+	public static final String ATTRIBUTE_NAME_XTRF = "xtrf";
     
     /**
      * Constant for value of attribute format in dita files.
