@@ -265,14 +265,24 @@
         <!-- If there is a reference to a DITA or HTML file, and it is not external: 
              allow non-dita, external values in navigation.  -->
         <xsl:if test="@href">
+          <xsl:variable name="topicID">
+            <xsl:choose>
+              <xsl:when test="contains(@href, '#')">
+                <xsl:value-of select="concat('#', substring-after(@href, '#'))"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:value-of select="''"/>
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:variable>
           <xsl:element name="param">
             <xsl:attribute name="name">Local</xsl:attribute>
             <xsl:choose> <!-- What if targeting a nested topic? Need to keep the ID? -->
               <xsl:when test="contains(@copy-to, $DITAEXT)">
-                <xsl:attribute name="value"><xsl:value-of select="$pathFromMaplist"/><xsl:value-of select="substring-before(@copy-to, $DITAEXT)"/><xsl:value-of select="$OUTEXT"/></xsl:attribute>
+                <xsl:attribute name="value"><xsl:value-of select="$pathFromMaplist"/><xsl:value-of select="substring-before(@copy-to, $DITAEXT)"/><xsl:value-of select="$OUTEXT"/><xsl:value-of select="$topicID"/></xsl:attribute>
               </xsl:when>
               <xsl:when test="contains(@href, $DITAEXT)">
-                <xsl:attribute name="value"><xsl:value-of select="$pathFromMaplist"/><xsl:value-of select="substring-before(@href, $DITAEXT)"/><xsl:value-of select="$OUTEXT"/></xsl:attribute>
+                <xsl:attribute name="value"><xsl:value-of select="$pathFromMaplist"/><xsl:value-of select="substring-before(@href, $DITAEXT)"/><xsl:value-of select="$OUTEXT"/><xsl:value-of select="$topicID"/></xsl:attribute>
               </xsl:when>
               <xsl:when test="contains(@href,'.htm') and @scope!='external'">
                 <xsl:attribute name="value"><xsl:value-of select="$pathFromMaplist"/><xsl:value-of select="@href"/></xsl:attribute>

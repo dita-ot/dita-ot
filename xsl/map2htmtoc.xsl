@@ -210,10 +210,10 @@
             <xsl:element name="a">
               <xsl:attribute name="href">
                 <xsl:choose>        <!-- What if targeting a nested topic? Need to keep the ID? -->
-                  <xsl:when test="contains(@copy-to, $DITAEXT)">
+                  <xsl:when test="contains(@copy-to, $DITAEXT) and not(contains(@chunk, 'to-content'))">
                     <xsl:if test="not(@scope='external')"><xsl:value-of select="$pathFromMaplist"/></xsl:if>
                     <xsl:value-of select="substring-before(@copy-to,$DITAEXT)"/><xsl:value-of select="$OUTEXT"/>
-                    <xsl:if test="contains(@href, '#')">
+                    <xsl:if test="not(contains(@copy-to, '#')) and contains(@href, '#')">
                       <xsl:value-of select="concat('#', substring-after(@href, '#'))"/>
                     </xsl:if>
                   </xsl:when>
@@ -296,10 +296,24 @@
                     not ((ancestor-or-self::*/@type)[last()]='local')">
       <!-- Need to worry about targeting a nested topic? Not for now. -->
       <!--<xsl:variable name="FileWithPath"><xsl:value-of select="$WORKDIR"/><xsl:choose>-->
-      <xsl:variable name="FileWithPath"><xsl:choose>
-        <xsl:when test="@copy-to"><xsl:value-of select="$WORKDIR"/><xsl:value-of select="@copy-to"/></xsl:when>
-        <xsl:when test="contains(@href,'#')"><xsl:value-of select="$WORKDIR"/><xsl:value-of select="substring-before(@href,'#')"/></xsl:when>
-        <xsl:otherwise><xsl:value-of select="$WORKDIR"/><xsl:value-of select="@href"/></xsl:otherwise></xsl:choose></xsl:variable>
+      <xsl:variable name="FileWithPath">
+	    <xsl:choose>
+	      <xsl:when test="@copy-to and not(contains(@chunk, 'to-content'))">
+	        <xsl:value-of select="$WORKDIR"/><xsl:value-of select="@copy-to"/>
+	        <xsl:if test="not(contains(@copy-to, '#')) and contains(@href, '#')">
+	          <xsl:value-of select="concat('#', substring-after(@href, '#'))"/>
+	        </xsl:if>
+	      </xsl:when>
+	      <!-- 
+	      <xsl:when test="contains(@href,'#')">
+	        <xsl:value-of select="$WORKDIR"/><xsl:value-of select="substring-before(@href,'#')"/>
+	      </xsl:when>
+	       -->
+	      <xsl:otherwise>
+	        <xsl:value-of select="$WORKDIR"/><xsl:value-of select="@href"/>
+	      </xsl:otherwise>
+	    </xsl:choose>
+      </xsl:variable>
       <xsl:variable name="TargetFile" select="document($FileWithPath,/)"/>
 
       <xsl:choose>
