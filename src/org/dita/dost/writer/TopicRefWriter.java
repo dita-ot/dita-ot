@@ -14,7 +14,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.Hashtable;
-import java.util.Map;
 import java.util.Properties;
 
 import org.dita.dost.exception.DITAOTException;
@@ -363,9 +362,18 @@ public class TopicRefWriter extends AbstractXMLWriter {
 			String changeTarget=(String)changeTable.get(FileUtils.resolveFile(currentFilePath, attValue));
 //			String topicFilePathName=(String)changeTable.get(FileUtils.resolveFile(currentFilePath, attValue));
 			String elementID=getElementID(attValue);
+			String pathtoElem = null;
+			if (elementID != null){
+				pathtoElem = attValue.substring(attValue.indexOf(Constants.SHARP)+1);
+			}
 			
 			if (StringUtils.isEmptyString(changeTarget)) {
-				changeTarget = (String)changeTable.get(FileUtils.resolveTopic(currentFilePath, attValue));
+				String absolutePath = FileUtils.resolveTopic(currentFilePath, attValue);
+				if (absolutePath.contains(Constants.SHARP) &&
+						absolutePath.substring(absolutePath.indexOf(Constants.SHARP)).contains(Constants.SLASH)){
+					absolutePath = absolutePath.substring(0, absolutePath.indexOf(Constants.SLASH, absolutePath.indexOf(Constants.SHARP)));
+				}
+				changeTarget = (String)changeTable.get(absolutePath);
 			}
 //			if (StringUtils.isEmptyString(topicFilePathName)) {
 //				topicFilePathName=(String)changeTable.get(FileUtils.resolveTopic(currentFilePath, attValue));
@@ -390,20 +398,28 @@ public class TopicRefWriter extends AbstractXMLWriter {
 						if (elementID == null) {
 							return FileUtils.getRelativePathFromMap(
 									rootPathName, conTarget);
-						}
-						else {
-							return FileUtils.getRelativePathFromMap(
-									rootPathName, conTarget) + Constants.SHARP + elementID;
+						}else {
+							if (conTarget.contains(Constants.SHARP)){
+								return FileUtils.getRelativePathFromMap(
+										rootPathName, conTarget) + Constants.SLASH + elementID;
+							}else{
+								return FileUtils.getRelativePathFromMap(
+										rootPathName, conTarget) + Constants.SHARP + pathtoElem;
+							}							
 						}
 					} else {
-						if (elementID != null && !changeTarget.contains(Constants.SHARP)) {
-							return FileUtils.getRelativePathFromMap(
-									rootPathName, changeTarget) + Constants.SHARP + elementID;
-						}
-						else {
+						if (elementID == null){
 							return FileUtils.getRelativePathFromMap(
 									rootPathName, changeTarget);
-						}
+						}else{
+							if (changeTarget.contains(Constants.SHARP)){
+								return FileUtils.getRelativePathFromMap(
+										rootPathName, changeTarget) + Constants.SLASH + elementID;
+							}else{
+								return FileUtils.getRelativePathFromMap(
+										rootPathName, changeTarget) + Constants.SHARP + pathtoElem;
+							}
+						}						
 					}
 					
 //					conTarget = (String)changeTable.get(topicFileWithTopicPathName);
