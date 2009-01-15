@@ -401,8 +401,8 @@ public class TopicRefWriter extends AbstractXMLWriter {
 						}else {
 							if (conTarget.contains(Constants.SHARP)){
 								//conTarget points to topic
-								if (elementID.equals(pathtoElem)){
-									//if elementID is topic id
+								if (!pathtoElem.contains(Constants.SLASH)){
+									//if pathtoElem does no have '/' slash. it means elementID is topic id
 									return FileUtils.getRelativePathFromMap(
 											rootPathName, conTarget);
 								}else{
@@ -422,8 +422,8 @@ public class TopicRefWriter extends AbstractXMLWriter {
 						}else{
 							if (changeTarget.contains(Constants.SHARP)){
 								//changeTarget points to topic
-								if(elementID.equals(pathtoElem)){
-									//if elementID is topic id
+								if(!pathtoElem.contains(Constants.SLASH)){
+									//if pathtoElem does no have '/' slash. it means elementID is topic id
 									return FileUtils.getRelativePathFromMap(
 											rootPathName, changeTarget);
 								}else{
