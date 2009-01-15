@@ -73,7 +73,7 @@
     <xsl:param name="pathFromMaplist"/>
     <xsl:variable name="use-href">
       <xsl:choose>
-        <xsl:when test="@copy-to and contains(@copy-to,$DITAEXT)">
+        <xsl:when test="@copy-to and contains(@copy-to,$DITAEXT) and not(contains(@chunk, 'to-content'))">
           <xsl:call-template name="simplifyLink">
             <xsl:with-param name="originalLink">
               <xsl:value-of select="@copy-to"/>
@@ -425,7 +425,7 @@
               <xsl:value-of select="@href"/>
             </xsl:when>
             <!-- If the target has a copy-to value, link to that -->
-            <xsl:when test="@copy-to">
+            <xsl:when test="@copy-to and not(contains(@chunk, 'to-content'))">
               <xsl:call-template name="simplifyLink">
                 <xsl:with-param name="originalLink">
                   <xsl:value-of select="$pathBackToMapDirectory"/><xsl:value-of select="@copy-to"/>
