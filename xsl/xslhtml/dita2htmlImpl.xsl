@@ -18,7 +18,8 @@
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:dita2html="http://dita-ot.sourceforge.net/ns/200801/dita2html"
                 xmlns:ditamsg="http://dita-ot.sourceforge.net/ns/200704/ditamsg"
-                exclude-result-prefixes="dita2html ditamsg">
+                xmlns:exsl="http://exslt.org/common"
+                exclude-result-prefixes="dita2html ditamsg exsl">
 
 
 
