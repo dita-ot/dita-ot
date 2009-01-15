@@ -400,8 +400,16 @@ public class TopicRefWriter extends AbstractXMLWriter {
 									rootPathName, conTarget);
 						}else {
 							if (conTarget.contains(Constants.SHARP)){
-								return FileUtils.getRelativePathFromMap(
-										rootPathName, conTarget) + Constants.SLASH + elementID;
+								//conTarget points to topic
+								if (elementID.equals(pathtoElem)){
+									//if elementID is topic id
+									return FileUtils.getRelativePathFromMap(
+											rootPathName, conTarget);
+								}else{
+									return FileUtils.getRelativePathFromMap(
+											rootPathName, conTarget) + Constants.SLASH + elementID;
+								}
+								
 							}else{
 								return FileUtils.getRelativePathFromMap(
 										rootPathName, conTarget) + Constants.SHARP + pathtoElem;
@@ -413,8 +421,15 @@ public class TopicRefWriter extends AbstractXMLWriter {
 									rootPathName, changeTarget);
 						}else{
 							if (changeTarget.contains(Constants.SHARP)){
-								return FileUtils.getRelativePathFromMap(
-										rootPathName, changeTarget) + Constants.SLASH + elementID;
+								//changeTarget points to topic
+								if(elementID.equals(pathtoElem)){
+									//if elementID is topic id
+									return FileUtils.getRelativePathFromMap(
+											rootPathName, changeTarget);
+								}else{
+									return FileUtils.getRelativePathFromMap(
+											rootPathName, changeTarget) + Constants.SLASH + elementID;
+								}
 							}else{
 								return FileUtils.getRelativePathFromMap(
 										rootPathName, changeTarget) + Constants.SHARP + pathtoElem;
