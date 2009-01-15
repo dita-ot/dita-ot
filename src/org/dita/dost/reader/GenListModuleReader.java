@@ -684,8 +684,12 @@ public class GenListModuleReader extends AbstractXMLReader {
 				&& FileUtils.isTopicFile(filename) && canResolved()) {
 			hrefTargets.add(new File(filename).getPath());
 			toOutFile(new File(filename).getPath());
-			
+//			String id = null;
+//			if (attrValue.contains(Constants.SHARP) && attrValue.lastIndexOf(Constants.SHARP) < attrValue.length() - 1) {
+//				id = attrValue.substring(attrValue.lastIndexOf(Constants.SHARP) + 1);
+//			}
 			String pathWithID = FileUtils.resolveTopic(currentDir, attrValue);
+			//String pathWithID = FileUtils.resolveTopic(rootFilePath, attrValue);
 			if (chunkLevel > 0 && chunkToNavLevel == 0 && topicGroupLevel == 0) {
 				chunkTopicSet.add(pathWithID);
 			} else {

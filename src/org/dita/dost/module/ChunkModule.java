@@ -161,6 +161,7 @@ public class ChunkModule implements AbstractPipelineModule {
 		Content content = new ContentImpl();
 		String baseDir = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_BASEDIR);
 		String tempDir = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_TEMPDIR);
+		String ditaext = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_DITAEXT);
         if (!new File(tempDir).isAbsolute()) {
         	tempDir = new File(baseDir, tempDir).getAbsolutePath();
         	
@@ -198,13 +199,21 @@ public class ChunkModule implements AbstractPipelineModule {
 		chunkTopics = StringUtils.restoreSet((String)prop.getProperty(Constants.CHUNK_TOPIC_LIST));
 		
 		if (hrefTopics != null && chunkTopics != null) {
-			int start;
 			for (String s : chunkTopics) {
-//				if (!StringUtils.isEmptyString(s) && (start = hrefTopics.indexOf(s)) != -1) {
-//					hrefTopics.delete(start, 
-//							(start+s.length()+1 > hrefTopics.length() ? start+s.length() : start+s.length() + 1 ));
-//				}
-				if (!StringUtils.isEmptyString(s) && hrefTopics.contains(s)) {
+				if (!StringUtils.isEmptyString(s) && !s.contains(Constants.SHARP)) {
+					// This entry does not have an anchor, we assume that this topic will
+					// be fully chunked. Thus it should not produce any output. 
+					Iterator<String> hrefit = hrefTopics.iterator();
+					while(hrefit.hasNext()) {
+						String ent = hrefit.next();
+						if (FileUtils.resolveFile(tempDir, ent).equalsIgnoreCase(
+								FileUtils.resolveFile(tempDir, s)))  {
+							// The entry in hrefTopics points to the same target
+							// as entry in chunkTopics, it should be removed.
+							hrefit.remove();
+						}
+					}
+				} else if (!StringUtils.isEmptyString(s) && hrefTopics.contains(s)) {
 					hrefTopics.remove(s);
 				}
 			}
@@ -216,7 +225,7 @@ public class ChunkModule implements AbstractPipelineModule {
 					t = t.substring(0, t.lastIndexOf(Constants.SHARP));
 				}
 				if (t.lastIndexOf(Constants.FILE_EXTENSION_DITAMAP) == -1) {
-					t = changeExtName(t, Constants.FILE_EXTENSION_DITA, Constants.FILE_EXTENSION_XML);
+					t = changeExtName(t, Constants.FILE_EXTENSION_DITA, ditaext);
 				}
 				t = FileUtils.getRelativePathFromMap(xmlDitalist.getAbsolutePath(), FileUtils.resolveFile(tempDir, t));
 				//topicList.append(t).append(Constants.COMMA);

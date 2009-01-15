@@ -122,10 +122,10 @@ public class ChunkMapReader implements AbstractReader {
 					newFilename = "Chunk"
 							+new Integer(Math.abs(random.nextInt())).toString()+ditaext;
 					String oldpath = newFile.getAbsolutePath();
-					newFile = new File(inputFile.getParentFile().getAbsolutePath(), newFilename);
+					newFile = new File(FileUtils.resolveFile(inputFile.getParentFile().getAbsolutePath(), newFilename));
 					// Mark up the possible name changing, in case that references might be updated.
 					//changeTable.put(oldpath, newFile.getAbsolutePath());
-					conflictTable.put(newFile.getAbsolutePath(), oldpath);
+					conflictTable.put(newFile.getAbsolutePath(), FileUtils.removeRedundantNames(oldpath));
 				} 
 
 				String originClassValue = root.getAttribute(Constants.ATTRIBUTE_NAME_CLASS);
@@ -287,11 +287,13 @@ public class ChunkMapReader implements AbstractReader {
 		Node copytoAttr = null;
 		Node scopeAttr = null;
 		Node classAttr = null;
+		Node xtrfAttr = null;
 		String hrefValue = null;
 		String chunkValue = null;
 		String copytoValue = null;
 		String scopeValue = null;
 		String classValue = null;
+		String xtrfValue = null;
 		boolean prevChunkByTopic = false;
 		
 		attr = node.getAttributes();
@@ -301,6 +303,7 @@ public class ChunkMapReader implements AbstractReader {
 		copytoAttr = attr.getNamedItem(Constants.ATTRIBUTE_NAME_COPY_TO);
 		scopeAttr = attr.getNamedItem(Constants.ATTRIBUTE_NAME_SCOPE);
 		classAttr = attr.getNamedItem(Constants.ATTRIBUTE_NAME_CLASS);
+		xtrfAttr = attr.getNamedItem(Constants.ATTRIBUTE_NAME_XTRF);
 		
 		if(hrefAttr != null){
 			hrefValue = hrefAttr.getNodeValue();
@@ -317,6 +320,11 @@ public class ChunkMapReader implements AbstractReader {
 		if(classAttr != null) {
 			classValue = classAttr.getNodeValue();
 		}
+		if(xtrfAttr != null) {
+			xtrfValue = xtrfAttr.getNodeValue();
+		}
+		
+		if (xtrfValue != null && xtrfValue.contains("generated_by_chunk")) return;
 		
 		//set chunkByTopic if there is "by-topic" or "by-document" in chunkValue
 		if(chunkValue != null && 
@@ -430,8 +438,10 @@ public class ChunkMapReader implements AbstractReader {
 			if(current.getNodeType()==Node.ELEMENT_NODE){
 				String classValue  = ((Element)current).getAttribute(Constants.ATTRIBUTE_NAME_CLASS);
 				String hrefValue = ((Element)current).getAttribute(Constants.ATTRIBUTE_NAME_HREF);
+				String xtrfValue = ((Element)current).getAttribute(Constants.ATTRIBUTE_NAME_XTRF);
 				if(classValue.indexOf(Constants.ATTR_CLASS_VALUE_TOPICREF)!=-1){
 					if((!hrefValue.equals(Constants.STRING_EMPTY) &&
+							!"generated_by_chunk".equals(xtrfValue) &&
 							! FileUtils.resolveFile(filePath,hrefValue)
 							.equals(changeTable.get(FileUtils.resolveFile(filePath,hrefValue)))) || 
 							classValue.contains(Constants.ATTR_CLASS_VALUE_TOPICHEAD)){

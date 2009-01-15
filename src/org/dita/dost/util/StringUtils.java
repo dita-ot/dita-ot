@@ -255,6 +255,11 @@ public class StringUtils {
 	 */
 	public static Set<String> restoreSet(String s) {
 		Set<String> copytoSet = new HashSet<String>();
+		
+		if (StringUtils.isEmptyString(s)) {
+			return copytoSet;
+		}
+		
 		StringTokenizer st = new StringTokenizer(s, Constants.COMMA);
 		
 		while (st.hasMoreTokens()) {

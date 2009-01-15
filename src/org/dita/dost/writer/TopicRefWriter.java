@@ -9,26 +9,27 @@
  */
 package org.dita.dost.writer;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Map;
 import java.util.Properties;
-import java.io.File;
 
-import org.dita.dost.util.Constants;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
+import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.Content;
+import org.dita.dost.util.Constants;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.StringUtils;
-import org.dita.dost.log.DITAOTJavaLogger;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
+
 
 /**
  * TopicRefWriter which updates the linking elements' value according to the mapping table
@@ -340,7 +341,7 @@ public class TopicRefWriter extends AbstractXMLWriter {
 		}
 
 		attValue = atts.getValue(attQName);
-
+		
 		if (attValue != null) {
 			/*
 			 * replace all the backslash with slash in all href and conref
@@ -358,48 +359,87 @@ public class TopicRefWriter extends AbstractXMLWriter {
 		if (checkDITAHREF(atts)) {
 				// replace the href value if it's referenced topic is extracted.
 			String rootPathName=currentFilePathName;
-			String topicFileWithTopicPathName=(String)changeTable.get(resolveTopicWithoutElement(currentFilePath, attValue));
-			String topicFilePathName=(String)changeTable.get(FileUtils.resolveFile(currentFilePath, attValue));
+//			String topicFileWithTopicPathName=(String)changeTable.get(resolveTopicWithoutElement(currentFilePath, attValue));
+			String changeTarget=(String)changeTable.get(FileUtils.resolveFile(currentFilePath, attValue));
+//			String topicFilePathName=(String)changeTable.get(FileUtils.resolveFile(currentFilePath, attValue));
 			String elementID=getElementID(attValue);
+			
+			if (StringUtils.isEmptyString(changeTarget)) {
+				changeTarget = (String)changeTable.get(FileUtils.resolveTopic(currentFilePath, attValue));
+			}
+//			if (StringUtils.isEmptyString(topicFilePathName)) {
+//				topicFilePathName=(String)changeTable.get(FileUtils.resolveTopic(currentFilePath, attValue));
+//			}
 			if(!notTopicFormat(atts,attValue)){
-				if(topicFileWithTopicPathName==null || (!changeTable.containsKey(topicFileWithTopicPathName)
-						&&!changeTable.containsKey(topicFilePathName))){
+//				if(topicFileWithTopicPathName==null || (!changeTable.containsKey(topicFileWithTopicPathName)
+//						&& !changeTable.containsKey(topicFilePathName)
+//						&& !conflictTable.containsKey(removeAnchor(topicFileWithTopicPathName))
+//						&& !conflictTable.containsKey(removeAnchor(topicFilePathName)))){
+				if(changeTarget == null) {
 					return attValue;//no change
 				}else{
+//					java.util.Iterator<Map.Entry<String, String>> it = conflictTable.entrySet().iterator();
+//					while (it.hasNext()) {
+//						Map.Entry<String, String> entry = it.next();
+//						System.out.println("Key: " + entry.getKey() + " ---- Value: " + entry.getValue());
+//					}
 					//chunked file
-					String conTarget = (String)conflictTable.get(FileUtils.resolveFile(currentFilePath, attValue));
+//					String conTarget = (String)conflictTable.get(FileUtils.resolveFile(currentFilePath, attValue));
+					String conTarget = (String)conflictTable.get(removeAnchor(changeTarget));
 					if (!StringUtils.isEmptyString(conTarget)) {
-						if (elementID == null)
+						if (elementID == null) {
 							return FileUtils.getRelativePathFromMap(
 									rootPathName, conTarget);
-						else
+						}
+						else {
 							return FileUtils.getRelativePathFromMap(
 									rootPathName, conTarget) + Constants.SHARP + elementID;
+						}
+					} else {
+						if (elementID != null && !changeTarget.contains(Constants.SHARP)) {
+							return FileUtils.getRelativePathFromMap(
+									rootPathName, changeTarget) + Constants.SHARP + elementID;
+						}
+						else {
+							return FileUtils.getRelativePathFromMap(
+									rootPathName, changeTarget);
+						}
 					}
 					
-					if(changeTable.containsKey(topicFileWithTopicPathName)){
-						if(rootPathName.equalsIgnoreCase(topicFilePathName)){
-							if(attValue.indexOf(Constants.SHARP)!=-1)
-								return attValue.substring(attValue.indexOf(Constants.SHARP));
-						}
-						if (elementID == null)
-							return FileUtils.getRelativePathFromMap(
-									rootPathName, topicFileWithTopicPathName);
-						else
-							return new StringBuffer().append(
-									FileUtils.getRelativePathFromMap(
-											rootPathName,
-											topicFileWithTopicPathName))
-											.append(Constants.SHARP).append(elementID)
-											.toString();
-					}
-						
-					else
-						return FileUtils.getRelativePathFromMap(rootPathName,topicFilePathName);
+//					conTarget = (String)changeTable.get(topicFileWithTopicPathName);
+//					if(!StringUtils.isEmptyString(conTarget)){
+//						if(rootPathName.equalsIgnoreCase(topicFilePathName)){
+//							if(attValue.indexOf(Constants.SHARP)!=-1)
+//								return attValue.substring(attValue.indexOf(Constants.SHARP));
+//						}
+//						if (elementID == null) {
+//							return FileUtils.getRelativePathFromMap(
+//									rootPathName, topicFileWithTopicPathName);
+//						}
+//						else {
+//							return new StringBuffer().append(
+//									FileUtils.getRelativePathFromMap(
+//											rootPathName,
+//											topicFileWithTopicPathName))
+//											.append(Constants.SHARP).append(elementID)
+//											.toString();
+//						}
+//					}
+//					else {
+//						return FileUtils.getRelativePathFromMap(rootPathName,topicFilePathName);
+//					}
 				}				
 			}
-		}	
+		}
 		return attValue;
+	}
+	
+	private String removeAnchor(String s) {
+		if (s.lastIndexOf(Constants.SHARP) != -1) {
+			return s.substring(0, s.lastIndexOf(Constants.SHARP));
+		} else {
+			return s;
+		}
 	}
 	
 	private String resolveTopicWithoutElement(String rootPath, String relativePath){
