@@ -46,6 +46,10 @@ import org.xml.sax.helpers.XMLReaderFactory;
 
 
 public class ChunkTopicParser extends AbstractXMLWriter {
+	
+	private static final String OS_NAME_WINDOWS = "windows";
+    private static final String PI_END = "?>";
+    private static final String PI_WORKDIR_HEAD = "<?workdir ";
 
 	private Hashtable changeTable = null;
 	
@@ -310,7 +314,12 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 							,Constants.UTF8);
 					//write xml header and workdir PI to the new generated file
 					output.write(Constants.XML_HEAD);
-					output.write("<?workdir /"+filePath+"?>");
+					if(Constants.OS_NAME.toLowerCase().indexOf(OS_NAME_WINDOWS)==-1)
+		            {
+		                output.write(PI_WORKDIR_HEAD + filePath + PI_END);
+		            }else{
+		                output.write(PI_WORKDIR_HEAD + Constants.SLASH + filePath + PI_END);
+		            }
 					changeTable.put(newFileName,newFileName);
 					if(idValue != null){
 						changeTable.put(currentParsingFile+Constants.SHARP+idValue,
