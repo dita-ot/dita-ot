@@ -884,7 +884,7 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 			if (StringUtils.isEmptyString(classValue) 
 					|| ( !classValue.contains(Constants.ATTR_CLASS_VALUE_TOPIC_GROUP)
 							&& StringUtils.isEmptyString(parseFilePath))) {
-				logger.logError(MessageUtils.getMessage("DOTJ032E").toString());
+//				logger.logError(MessageUtils.getMessage("DOTJ032E").toString());
 			} else if ("external".equalsIgnoreCase(scopeValue)) {
 				//TODO Either scope is "external" or file doesn't exist. What to do?
 				//Shall we throw out a warning?
