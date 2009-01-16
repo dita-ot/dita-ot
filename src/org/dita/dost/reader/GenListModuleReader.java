@@ -730,6 +730,13 @@ public class GenListModuleReader extends AbstractXMLReader {
 			} else if (!(atts.getValue(Constants.ATTRIBUTE_NAME_CHUNK) != null && atts.getValue(Constants.ATTRIBUTE_NAME_CHUNK).contains("to-content"))){
 				copytoMap.put(filename, FileUtils.normalizeDirectory(currentDir, href));
 			}
+			
+			String pathWithID = FileUtils.resolveTopic(currentDir, attrValue);
+			if (chunkLevel > 0 && chunkToNavLevel == 0 && topicGroupLevel == 0) {
+				chunkTopicSet.add(pathWithID);
+			} else {
+				hrefTopicSet.add(pathWithID);
+			}
 				
 		}
 		
