@@ -1054,7 +1054,7 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 			            {
 			                ditaFileOutput.write(PI_WORKDIR_HEAD + new File(outputFileName).getParent() + PI_END);
 			            }else{
-			                output.write(PI_WORKDIR_HEAD + Constants.SLASH + new File(outputFileName).getParent() + PI_END);
+			                ditaFileOutput.write(PI_WORKDIR_HEAD + Constants.SLASH + new File(outputFileName).getParent() + PI_END);
 			            }
 					}
 					if (needWriteDitaTag) ditaFileOutput.write("<dita>");
