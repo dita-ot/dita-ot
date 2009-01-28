@@ -29,11 +29,18 @@
     <pathelement location="${dita.dir}${file.separator}lib${file.separator}dost.jar"/>
   </path>
   
+  <condition property="properties" value="${dita.dir}${file.separator}integrator.properties">
+    <not>
+      <isset property="properties"/>
+    </not>
+  </condition>
+
   <taskdef name="integrate" classname="org.dita.dost.platform.IntegratorTask">
     <classpath refid="dost.class.path"/>
   </taskdef>
   
   <target name="integrate">
-    <integrate basedir="${basedir}" ditadir="${dita.dir}"/>
+    <integrate basedir="${basedir}" ditadir="${dita.dir}" properties="${properties}"/>
   </target>
+
 </project>

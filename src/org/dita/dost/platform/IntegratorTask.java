@@ -9,6 +9,7 @@
  */
 package org.dita.dost.platform;
 
+import java.io.File;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 import org.dita.dost.util.Constants;
@@ -71,4 +72,21 @@ public class IntegratorTask extends Task {
 	public void setDitadir(String ditaDir) {
 		adaptee.setDitaDir(ditaDir);
 	}
+
+	/**
+	 * Return the properties file
+	 * @return
+	 */
+	public File getProperties() {
+		return adaptee.getProperties();
+	}
+
+	/**
+	 * Set the properties file
+	 * @param propertiesFile
+	 */
+	public void setProperties(File propertiesFile) {
+		adaptee.setProperties(propertiesFile);
+	}
+
 }

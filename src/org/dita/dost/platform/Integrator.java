@@ -10,6 +10,7 @@
 package org.dita.dost.platform;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -43,6 +44,7 @@ public class Integrator {
 	private DITAOTJavaLogger logger;
 	private Set<String> loadedPlugin = null;
 	private Hashtable<String,String> featureTable = null;
+        private File propertiesFile = null;
 	
 	private void initTemplateSet(){
 		templateSet = new HashSet<String>(Constants.INT_16);
@@ -69,32 +71,45 @@ public class Integrator {
 	 * execute point of Integrator
 	 */
 	public void execute() {
-		File demoDir = null;
-		File pluginDir = null;
-		File[] demoFiles = null;
-		File[] pluginFiles = null;
 		if (!new File(ditaDir).isAbsolute()) {
 			ditaDir = new File(basedir, ditaDir).getAbsolutePath();
 		}
-		
-		demoDir = new File(ditaDir + File.separatorChar + "demo");
-		pluginDir = new File(ditaDir + File.separatorChar + "plugins");
-		demoFiles = demoDir.listFiles();
-		pluginFiles = pluginDir.listFiles();
-		
-		for (int i=0; (demoFiles != null) && (i < demoFiles.length); i++){
-			File descFile = new File(demoFiles[i],"plugin.xml");
-			if (demoFiles[i].isDirectory() && descFile.exists()){
-				descSet.add(descFile);
-			}
-		}
-		
-		for (int i=0; (pluginFiles != null) && (i < pluginFiles.length); i++){
+
+                // Read the properties file, if it exists.
+                Properties properties = new Properties();
+                if (propertiesFile != null) {
+                  try {
+                    FileInputStream propertiesStream = new FileInputStream(propertiesFile);
+                    properties.load(propertiesStream);
+                  }
+                  catch (Exception e)
+                  {
+        	     logger.logException(e);
+                  }
+                }
+                else
+                {
+                  // Set reasonable defaults.
+                  properties.setProperty("plugindirs", "plugins;demo");
+                }
+        
+                // Get the list of plugin directories from the properties.
+                String[] pluginDirs = properties.getProperty("plugindirs").split(";");
+                
+                for (int j = 0; j < pluginDirs.length; j++)
+                {
+		  File pluginDir = null;
+		  File[] pluginFiles = null;
+		  pluginDir = new File(ditaDir + File.separatorChar + pluginDirs[j]);
+		  pluginFiles = pluginDir.listFiles();
+ 
+		  for (int i=0; (pluginFiles != null) && (i < pluginFiles.length); i++){
 			File descFile = new File(pluginFiles[i],"plugin.xml");
 			if (pluginFiles[i].isDirectory() && descFile.exists()){
 				descSet.add(descFile);
 			}
-		}
+		  }
+                }
 		
 		parsePlugin();
 		integrate();
@@ -263,6 +278,22 @@ public class Integrator {
 	}
 	
 	/**
+	 * Return the properties file
+	 * @return
+	 */
+	public File getProperties() {
+		return propertiesFile;
+	}
+
+	/**
+	 * Set the properties file
+	 * @param propertiesfile
+	 */
+	public void setProperties(File propertiesfile) {
+		this.propertiesFile = propertiesfile;
+	}
+	
+	/**
 	 * Test function
 	 * @param args
 	 */
@@ -271,6 +302,7 @@ public class Integrator {
 		File currentDir = new File(".");
 		String currentPath = currentDir.getAbsolutePath();
 		abc.setDitaDir(currentPath.substring(0,currentPath.lastIndexOf(Constants.FILE_SEPARATOR)));
+		abc.setProperties(new File("integrator.properties"));
 		abc.execute();
 	}
 
