@@ -118,29 +118,9 @@
     <xsl:if 
       test="not(($FINALOUTPUTTYPE='PDF' or $FINALOUTPUTTYPE='IDD') and @print='no')">
       <maplinks href="{$hrefFromOriginalMap}">
-        <linklist class="- topic/linklist ">
-          <xsl:copy-of select="@xtrf | @xtrc"/>
-          <xsl:if test="/*[@id]">
-            <xsl:attribute name="mapkeyref">
-              <xsl:value-of select="/*/@id"/>
-            </xsl:attribute>
-          </xsl:if>
-          <xsl:apply-templates select="." mode="link-to-friends">
-            <xsl:with-param name="pathBackToMapDirectory" select="$pathBackToMapDirectory"/>
-            <xsl:with-param name="linklist">true</xsl:with-param>
-          </xsl:apply-templates>
-        </linklist>
-        <linkpool class="- topic/linkpool ">
-          <xsl:copy-of select="@xtrf | @xtrc"/>
-          <xsl:if test="/*[@id]">
-            <xsl:attribute name="mapkeyref">
-              <xsl:value-of select="/*/@id"/>
-            </xsl:attribute>
-          </xsl:if>
-          <xsl:apply-templates select="." mode="link-from">
-            <xsl:with-param name="pathBackToMapDirectory" select="$pathBackToMapDirectory"/>
-          </xsl:apply-templates>
-        </linkpool>
+        <xsl:apply-templates select="." mode="generate-all-links">
+          <xsl:with-param name="pathBackToMapDirectory" select="$pathBackToMapDirectory"/>
+        </xsl:apply-templates>
       </maplinks>
     </xsl:if>
     <xsl:apply-templates>
@@ -148,6 +128,50 @@
     </xsl:apply-templates>
   </xsl:template>
   
+  <!-- Generate both unordered <linkpool> and ordered <linklist> links. -->
+  <xsl:template match="*[contains(@class, ' map/topicref ')]" mode="generate-all-links">
+    <xsl:param name="pathBackToMapDirectory"/>
+    <xsl:apply-templates select="." mode="generate-ordered-links">
+      <xsl:with-param name="pathBackToMapDirectory" select="$pathBackToMapDirectory"/>
+    </xsl:apply-templates>
+    <xsl:apply-templates select="." mode="generate-unordered-links">
+      <xsl:with-param name="pathBackToMapDirectory" select="$pathBackToMapDirectory"/>
+    </xsl:apply-templates>
+  </xsl:template>
+
+  <!-- Generated ordered links to friends (with linklist) -->
+  <xsl:template match="*[contains(@class, ' map/topicref ')]" mode="generate-ordered-links">
+    <xsl:param name="pathBackToMapDirectory"/>
+    <linklist class="- topic/linklist ">
+      <xsl:copy-of select="@xtrf | @xtrc"/>
+      <xsl:if test="/*[@id]">
+        <xsl:attribute name="mapkeyref">
+          <xsl:value-of select="/*/@id"/>
+        </xsl:attribute>
+      </xsl:if>
+      <xsl:apply-templates select="." mode="link-to-friends">
+        <xsl:with-param name="pathBackToMapDirectory" select="$pathBackToMapDirectory"/>
+        <xsl:with-param name="linklist">true</xsl:with-param>
+      </xsl:apply-templates>
+    </linklist>
+  </xsl:template>
+
+  <!-- Generate unordered links (with linkpool) -->
+  <xsl:template match="*[contains(@class, ' map/topicref ')]" mode="generate-unordered-links">
+    <xsl:param name="pathBackToMapDirectory"/>
+    <linkpool class="- topic/linkpool ">
+      <xsl:copy-of select="@xtrf | @xtrc"/>
+      <xsl:if test="/*[@id]">
+        <xsl:attribute name="mapkeyref">
+          <xsl:value-of select="/*/@id"/>
+        </xsl:attribute>
+      </xsl:if>
+      <xsl:apply-templates select="." mode="link-from">
+        <xsl:with-param name="pathBackToMapDirectory" select="$pathBackToMapDirectory"/>
+      </xsl:apply-templates>
+    </linkpool>
+  </xsl:template>
+
   <!-- To do: When XSLT 2.0 is a minimum requirement, do this again with hearty use of xsl:next-match. -->
   <xsl:template match="*[contains(@class, ' map/topicref ')]" mode="link-from">
     <xsl:param name="pathBackToMapDirectory"/>
