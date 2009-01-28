@@ -1,0 +1,12 @@
+<plugin id="com.moldflow.dita.plus-htmlhelp-alias-map">
+
+  <require plugin="com.moldflow.dita.plus-transtype-htmlhelp"/>
+
+  <feature extension="dita.conductor.target.relative" value="build.xml" type="file"/>
+
+  <feature extension="plus.htmlhelp.map2hhp.param" value="insert-ant-htmlhelp-map2hhp-xslt.xml" type="file"/>
+
+  <feature extension="depend.plus-transtype-htmlhelp.map.basic.hhp.pre" value="plus-htmlhelp-alias.make-absolute" type="text"/>
+  <feature extension="depend.plus-transtype-htmlhelp.map.basic.hhp.pre" value="plus-htmlhelp-map.make-absolute" type="text"/>
+
+</plugin>

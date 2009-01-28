@@ -1,0 +1,23 @@
+<plugin id="com.moldflow.dita.plus-allhtml-mathml-svginline">
+
+  <require plugin="com.moldflow.dita.plus-allhtml-xhtml-namespace"/>
+  <require plugin="com.moldflow.dita.plus-allhtml-mathml"/>
+  <require plugin="com.moldflow.dita.mathml2svg"/>
+
+  <template file="build_plus-allhtml-mathml-svginline_template.xml"/>
+
+  <feature extension="dita.conductor.target.relative" value="build.xml" type="file"/>
+
+  <feature extension="xsl.plus-eclipsehelp-topics-twopass.stage1" value="xsl/xhtml.xsl" type="file"/>
+  <feature extension="xsl.plus-xhtml-topics-twopass.stage1" value="xsl/xhtml.xsl" type="file"/>
+
+  <feature extension="xsl.plus-eclipsehelp-topics-twopass.stage2" value="xsl/xhtml-stage2.xsl" type="file"/>
+  <feature extension="xsl.plus-xhtml-topics-twopass.stage2" value="xsl/xhtml-stage2.xsl" type="file"/>
+
+  <feature extension="depend.plus-eclipsehelp-topics-twopass.stage1.pre" value="plus-allhtml-mathml-svginline.init" type="text"/>
+  <feature extension="depend.plus-eclipsehelp-topics-twopass.stage1.post" value="plus-allhtml-mathml-svginline.call" type="text"/>
+
+  <feature extension="depend.plus-xhtml-topics-twopass.stage1.pre" value="plus-allhtml-mathml-svginline.init" type="text"/>
+  <feature extension="depend.plus-xhtml-topics-twopass.stage1.post" value="plus-allhtml-mathml-svginline.call" type="text"/>
+
+</plugin>

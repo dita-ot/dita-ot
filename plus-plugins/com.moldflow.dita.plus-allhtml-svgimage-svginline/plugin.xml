@@ -1,0 +1,15 @@
+<plugin id="com.moldflow.dita.plus-allhtml-svgimage-svginline">
+
+  <require plugin="com.moldflow.dita.plus-allhtml-xhtml-namespace"/>
+  <require plugin="com.moldflow.dita.plus-allhtml-svgimage"/>
+
+  <template file="build_plus-allhtml-svgimage-svginline_template.xml"/>
+
+  <feature extension="dita.conductor.target.relative" value="build.xml" type="file"/>
+
+  <feature extension="xsl.plus-xhtml-topics-twopass.stage1" value="xsl/svgimage.xsl" type="file"/>
+  <feature extension="xsl.plus-eclipsehelp-topics-twopass.stage1" value="xsl/svgimage.xsl" type="file"/>
+
+  <feature extension="depend.plus-eclipsehelp-topics-twopass.stage1.pre" value="plus-allhtml-svgimage-svginline.before.stage1" type="text"/>
+  <feature extension="depend.plus-html-topics-twopass.stage1.pre" value="plus-allhtml-svgimage-svginline.before.stage1" type="text"/>
+</plugin>

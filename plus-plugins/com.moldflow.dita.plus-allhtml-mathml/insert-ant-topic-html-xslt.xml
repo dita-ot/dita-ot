@@ -1,0 +1,7 @@
+<xslt>
+
+      <!-- MathML parameters. -->
+      <param name="plus-mathml-format" expression="${plus.mathml.format}" if="plus.mathml.format"/>
+
+
+</xslt>

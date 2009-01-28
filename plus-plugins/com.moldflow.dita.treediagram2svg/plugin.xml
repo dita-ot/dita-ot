@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin id="com.moldflow.dita.treediagram2svg">
+
+  <feature extension="dita.conductor.target.relative" value="build.xml" type="file"/>
+
+  <feature extension="treediagram2svg.pull.xsl" value="xsl/treediagram2svg.xsl" type="file"/>
+
+</plugin>

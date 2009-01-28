@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin id="com.moldflow.dita.specialization.tree-d">
+    <feature extension="dita.specialization.catalog.relative"
+        value="catalog.xml" type="file"/>
+</plugin>

@@ -1,0 +1,8 @@
+<plugin id="com.moldflow.dita.plus-transtype-xhtml">
+  <require plugin="com.moldflow.dita.plus-allhtml-topic2html"/>
+  <template file="build_plus-transtype-xhtml_template.xml"/>
+  <template file="xsl/dita2xhtml-shell_template.xsl"/>
+  <template file="xsl/map2xhtmtoc-shell_template.xsl"/>
+  <feature extension="dita.conductor.transtype.check" value="xhtml+" type="txt"/>
+  <feature extension="dita.conductor.target.relative" value="build.xml" type="file"/>
+</plugin>

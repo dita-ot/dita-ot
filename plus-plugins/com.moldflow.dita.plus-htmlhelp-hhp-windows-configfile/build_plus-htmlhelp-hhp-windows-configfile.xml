@@ -1,0 +1,11 @@
+<project name="plus-htmlhelp-hhp-windows-configfile">
+
+  <target name="plus-htmlhelp-hhp-windows-configfile.init">
+  </target>
+
+  <target name="plus-htmlhelp-hhp-windows-configfile.make-url"
+      depends="plus-htmlhelp-hhp-windows-configfile.init" if="plus.htmlhelp.windows.configfile">
+    <makeurl property="plus.htmlhelp.windows.configfile.url" file="${plus.htmlhelp.windows.configfile}"/>
+  </target>
+
+</project>

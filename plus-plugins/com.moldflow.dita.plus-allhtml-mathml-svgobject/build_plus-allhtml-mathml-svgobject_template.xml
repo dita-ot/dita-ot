@@ -1,0 +1,32 @@
+<project name="plus-allhtml-mathml-svgobject">
+
+  <target name="plus-allhtml-mathml-svgobject.init" depends="plus-allhtml-mathml.init,plus-allhtml-svgobject.init">
+    <!-- MathML format to be placed into XHTML output. -->
+    <condition property="plus.mathml.format" value="svgobject">
+      <not>
+        <isset property="plus.mathml.format"/>
+      </not>
+    </condition>
+  </target>
+
+  <target name="plus-allhtml-mathml-svgobject.check.mathml2svg.required">
+    <condition property="plus-allhtml-mathml-svgobject.mathml2svg.required">
+      <and>
+        <equals arg1="${plus.mathml.format}" arg2="svgobject"/>
+        <available file="${dita.temp.dir}/${plus.svgobject.path}" type="dir"/>
+        <available classname="com.moldflow.jeuclid.ant.MathML2SVG" classpathref="dost.class.path"/>
+      </and>
+    </condition>
+  </target>
+
+  <target name="plus-allhtml-mathml-svgobject.call" depends="plus-allhtml-mathml-svgobject.check.mathml2svg.required"
+     if="plus-allhtml-mathml-svgobject.mathml2svg.required">
+    <taskdef name="mathml2svg" classname="com.moldflow.jeuclid.ant.MathML2SVG" classpathref="dost.class.path"/>
+
+    <mathml2svg toDir="${dita.temp.dir}/${plus.svgobject.path}" size="14" baselineExtension=".baseline">
+      <fileset dir="${dita.temp.dir}/${plus.svgobject.path}" includes="**/*.mml" />
+      <globmapper from="*.mml" to="*.svg"/>
+    </mathml2svg>
+  </target>
+
+</project>

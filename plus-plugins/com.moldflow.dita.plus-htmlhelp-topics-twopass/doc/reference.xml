@@ -1,0 +1,138 @@
+<?xml version="1.0"?>
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference id="reference_F16A859F9B0E426B8BB110ECFA794EAA"><title><keyword
+            >plus-htmlhelp-topics-twopass</keyword></title>
+    <abstract>
+        <shortdesc>The <keyword>plus-htmlhelp-topics-twopass</keyword> plugin extends the <keyword
+                >htmlhelp+</keyword> transtype by processing topics in two XSLT stages. While this
+            has no effect in itself, it permits other plugins to insert processing between the
+            stages.</shortdesc>
+        <p>Stage 1 performs most processing, producing XHTML as the <keyword>basic</keyword> topic
+            processing in <keyword>xhtml+</keyword> does. Stage 2 is an almost-identity
+            transformation, which transforms the XHTML into HTML 4. Plugins can add processing to
+            stage 1 or stage 2, adding processing between the stages if the final HTML requires
+            results from the intermediate processing.</p>
+        <p>This plugin does not affect map processing.</p>
+    </abstract><refbody>
+        <section id="section_1ED97B49069548D2931AC1152152F57B">
+            <title>Plugin ID</title>
+            <p><apiname>com.moldflow.dita.plus-htmlhelp-topics-twopass</apiname></p>
+        </section>
+        <section id="section_7F6DEEA4E1E5488586C8FF7C57D2F169">
+            <title>Prerequisite plugins</title>
+            <ul id="ul_0B933A1C52A64D7184DA6015365D7FB7">
+                <li id="li_4075D23FB26C4B039FF173AE5E1E593F"><apiname
+                    >com.moldflow.dita.doctype.xhtml</apiname></li>
+                <li id="li_38A3F5B1927A496585696E4E82BC0ABD"><apiname
+                        >com.moldflow.dita.plus-transtype-htmlhelp</apiname></li>
+            </ul>
+        </section>
+        <section id="section_E9B277640879405C81E175FD55792C70">
+            <title>XSLT requirements</title>
+            <p>An XSLT 1.0 or later processor with EXSLT extensions.</p>
+        </section>
+        <section id="section_79304AD677314F11BE689B842F0F16FB">
+            <title>Ant requirements</title>
+            <p>Ant 1.7.0 or later.</p>
+        </section>
+        <section id="section_5862E90B644642CCA38E345D69240316">
+            <title>Java requirements</title>
+            <p>None.</p>
+        </section>
+        <section id="section_1490F6131D504A26859B66608759EFE0">
+            <title>Limitations</title>
+            <p>None.</p>
+        </section>
+        <table id="table_88E41E91DE074FA3BFB2209B742D8BB3">
+            <title>Ant properties defined in <keyword>plus-htmlhelp-topics-twopass</keyword></title>
+            <tgroup cols="3">
+                <colspec colnum="1" colname="col1" colwidth="1.00*"/>
+                <colspec colname="col02" colnum="2" colwidth="1.29*"/>
+                <colspec colnum="3" colname="col2" colwidth="1.34*"/>
+                <thead>
+                    <row>
+                        <entry colname="col1">Name</entry>
+                        <entry colname="col02">Value</entry>
+                        <entry colname="col2">Description</entry>
+                    </row>
+                </thead>
+                <tbody>
+                    <row>
+                        <entry colname="col1"><keyword>plus-htmlhelp-topics-twopass.dir</keyword></entry>
+                        <entry colname="col02"/>
+                        <entry colname="col2">Absolute path of directory where plugin is
+                        installed.</entry>
+                    </row>
+                    <row>
+                        <entry colname="col1"><keyword>plus.topics.class</keyword></entry>
+                        <entry colname="col02"><codeph>twopass</codeph></entry>
+                        <entry colname="col2">Set if <keyword>plus.topics.class</keyword> is
+                        unset.</entry>
+                    </row>
+                    <row>
+                        <entry colname="col1"><keyword>plus.topics.class.twopass</keyword></entry>
+                        <entry colname="col02"><codeph>true</codeph></entry>
+                        <entry colname="col2">Set if <keyword>plus.topics.class</keyword> is unset,
+                            or is set to <codeph>twopass</codeph>.</entry>
+                    </row>
+                </tbody>
+            </tgroup>
+        </table>
+        <table id="table_EC511B34E89F4EC69E65EABCB42E136D">
+            <title>Plugin extension points defined in <keyword
+                >plus-htmlhelp-topics-twopass</keyword></title>
+            <tgroup cols="3">
+                <colspec colnum="1" colname="col1" colwidth="1.06*"/>
+                <colspec colnum="2" colname="col2" colwidth="1.00*"/>
+                <colspec colnum="3" colname="col3" colwidth="1.52*"/>
+                <thead>
+                    <row>
+                        <entry colname="col1">Extension point</entry>
+                        <entry colname="col2">Behavior</entry>
+                        <entry colname="col3">Description</entry>
+                    </row>
+                </thead>
+                <tbody>
+                    <row>
+                        <entry colname="col1"><keyword
+                                >depend.plus-htmlhelp-topics-twopass.stage1.pre</keyword></entry>
+                        <entry colname="col2"><apiname
+                            >org.dita.dost.platform.ImportXSLAction</apiname></entry>
+                        <entry colname="col3">Ant target executed before stage 1 of two-pass
+                                processing.<p>Inserted targets should use <codeph
+                                    >if="plus.topics.class.twopass"</codeph>.</p></entry>
+                    </row>
+                    <row>
+                        <entry colname="col1"><keyword
+                                >depend.plus-htmlhelp-topics-twopass.stage1.post</keyword></entry>
+                        <entry colname="col2"><apiname
+                            >org.dita.dost.platform.ImportXSLAction</apiname></entry>
+                        <entry colname="col3">Ant target executed after stage 1 of two-pass
+                                processing.<p>Inserted targets should use <codeph
+                                    >if="plus.topics.class.twopass"</codeph> and <codeph
+                                    >depends="plus-htmlhelp-topics-twopass.stage1.perform"</codeph>.</p></entry>
+                    </row>
+                    <row>
+                        <entry colname="col1"><keyword
+                                >depend.plus-htmlhelp-topics-twopass.stage2.pre</keyword></entry>
+                        <entry colname="col2"><apiname
+                            >org.dita.dost.platform.ImportXSLAction</apiname></entry>
+                        <entry colname="col3">Ant target executed before stage 2 of two-pass
+                                processing.<p>Inserted targets should use <codeph
+                                    >if="plus.topics.class.twopass"</codeph> and <codeph
+                                    >depends="plus-htmlhelp-topics-twopass.stage1.milestone"</codeph>.</p></entry>
+                    </row>
+                    <row>
+                        <entry colname="col1"><keyword
+                                >depend.plus-htmlhelp-topics-twopass.stage2.post</keyword></entry>
+                        <entry colname="col2"><apiname
+                            >org.dita.dost.platform.ImportXSLAction</apiname></entry>
+                        <entry colname="col3">Ant target executed after stage 2 of two-pass
+                                processing.<p>Inserted targets should use <codeph
+                                    >if="plus.topics.class.twopass"</codeph> and <codeph
+                                    >depends="plus-htmlhelp-topics-twopass.stage2.perform"</codeph>.</p></entry>
+                    </row>
+                </tbody>
+            </tgroup>
+        </table>
+    </refbody></reference>

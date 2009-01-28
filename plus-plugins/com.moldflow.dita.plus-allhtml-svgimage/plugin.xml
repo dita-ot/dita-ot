@@ -1,0 +1,7 @@
+<plugin id="com.moldflow.dita.plus-allhtml-svgimage">
+
+  <require plugin="com.moldflow.dita.plus-transtype-anyhtml"/>
+
+  <feature extension="dita.conductor.xhtml.param" value="insert-ant-topic-html-xslt.xml" type="file"/>
+
+</plugin>

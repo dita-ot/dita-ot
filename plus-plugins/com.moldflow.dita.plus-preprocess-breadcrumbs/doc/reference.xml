@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference id="reference_F16A859F9B0E426B8BB110ECFA794EAA"><title>
+    <keyword>plus-preprocess-breadcrumbs</keyword>
+  </title>
+  <abstract>
+    <shortdesc>Breadcrumbs are the links that show the ancestry of a topic in a hierarchy.  In interactive output, clicking on a breadcrumb link usually takes the reader to that ancestor topic.  For each topic, the <keyword>plus-preprocess-breadcrumbs</keyword> plugin generates related links to each topic that is a direct ancestor of it in the map.</shortdesc>
+    <p>A set of breadcrumb links is generated for a topic by consulting the map that contains a reference to that topic.  Links to that topic's parent, grandparent, and so on are added to a link pool for that topic.<codeblock>&lt;linkpool role="ancestor">
+  &lt;link href="top-level-topic.xml" role="anceator"/>
+  &lt;!-- As many levels as needed go here. -->
+  &lt;link href="grandparentparent-topic.xml" role="ancestor"/>
+  &lt;link href="parent-topic.xml" role="ancestor"/>
+&lt;/linkpool></codeblock>If a topic appears in more than one place in the hierarchy, a set of breadcrumb links will be generated for each ancestry.</p>
+  </abstract>
+  <refbody>
+    <section id="section_1ED97B49069548D2931AC1152152F57B">
+      <title>Plugin ID</title>
+      <p>
+        <apiname>com.moldflow.dita.plus-preprocess-breadcrumbs</apiname>
+      </p>
+    </section>
+    <section id="section_7F6DEEA4E1E5488586C8FF7C57D2F169">
+      <title>Prerequisite plugins</title>
+      <p>None.</p>
+    </section>
+    <section id="section_E9B277640879405C81E175FD55792C70">
+      <title>XSLT requirements</title>
+      <p>An XSLT 2.0 or later processor.</p>
+    </section>
+    <section id="section_79304AD677314F11BE689B842F0F16FB">
+      <title>Ant requirements</title>
+      <p>Ant 1.7.0 or later.</p>
+    </section>
+    <section id="section_5862E90B644642CCA38E345D69240316">
+      <title>Java requirements</title>
+      <p>None.</p>
+    </section>
+    <section id="section_1490F6131D504A26859B66608759EFE0">
+      <title>Limitations</title>
+      <p>None.</p>
+    </section>
+    <table id="table_88E41E91DE074FA3BFB2209B742D8BB3">
+      <title>Ant properties defined in <keyword>plus-preprocess-breadcrumbs</keyword></title>
+      <tgroup cols="3">
+        <colspec colnum="1" colname="col1" colwidth="1.00*"/>
+        <colspec colname="col02" colnum="2" colwidth="1.29*"/>
+        <colspec colnum="3" colname="col2" colwidth="1.34*"/>
+        <thead>
+          <row>
+            <entry colname="col1">Name</entry>
+            <entry colname="col02">Value</entry>
+            <entry colname="col2">Description</entry>
+          </row>
+        </thead>
+        <tbody>
+          <row>
+            <entry colname="col1"><keyword>plus.breadcrumbs</keyword>
+            </entry>
+            <entry colname="col02">
+              <codeph>no</codeph></entry>
+            <entry colname="col2">Set to <codeph>yes</codeph> if breadcrumb related links should be generated.  Passed to the maplink stylesheet as the parameter <codeph>BREADCRUMBS</codeph>.</entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+  </refbody></reference>

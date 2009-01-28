@@ -1,0 +1,966 @@
+<!--
+   Extensible HTML version 1.0 Strict DTD
+
+   This is the same as HTML 4 Strict except for
+   changes due to the differences between XML and SGML.
+
+   Namespace = http://www.w3.org/1999/xhtml
+
+   For further information, see: http://www.w3.org/TR/xhtml1
+
+   Copyright (c) 1998-2002 W3C (MIT, INRIA, Keio),
+   All Rights Reserved. 
+
+   This DTD module is identified by the PUBLIC and SYSTEM identifiers:
+
+   PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   SYSTEM "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"
+
+   $Revision: 1.1.2.1 $
+   $Date: 2009/01/28 05:49:09 $
+
+-->
+
+<!--================ Character mnemonic entities =========================-->
+
+<!ENTITY % HTMLlat1 PUBLIC
+   "-//W3C//ENTITIES Latin 1 for XHTML//EN"
+   "xhtml-lat1.ent">
+%HTMLlat1;
+
+<!ENTITY % HTMLsymbol PUBLIC
+   "-//W3C//ENTITIES Symbols for XHTML//EN"
+   "xhtml-symbol.ent">
+%HTMLsymbol;
+
+<!ENTITY % HTMLspecial PUBLIC
+   "-//W3C//ENTITIES Special for XHTML//EN"
+   "xhtml-special.ent">
+%HTMLspecial;
+
+<!--================== Imported Names ====================================-->
+
+<!ENTITY % ContentType "CDATA">
+    <!-- media type, as per [RFC2045] -->
+
+<!ENTITY % ContentTypes "CDATA">
+    <!-- comma-separated list of media types, as per [RFC2045] -->
+
+<!ENTITY % Charset "CDATA">
+    <!-- a character encoding, as per [RFC2045] -->
+
+<!ENTITY % Charsets "CDATA">
+    <!-- a space separated list of character encodings, as per [RFC2045] -->
+
+<!ENTITY % LanguageCode "NMTOKEN">
+    <!-- a language code, as per [RFC3066] -->
+
+<!ENTITY % Character "CDATA">
+    <!-- a single character, as per section 2.2 of [XML] -->
+
+<!ENTITY % Number "CDATA">
+    <!-- one or more digits -->
+
+<!ENTITY % LinkTypes "CDATA">
+    <!-- space-separated list of link types -->
+
+<!ENTITY % MediaDesc "CDATA">
+    <!-- single or comma-separated list of media descriptors -->
+
+<!ENTITY % URI "CDATA">
+    <!-- a Uniform Resource Identifier, see [RFC2396] -->
+
+<!ENTITY % UriList "CDATA">
+    <!-- a space separated list of Uniform Resource Identifiers -->
+
+<!ENTITY % Datetime "CDATA">
+    <!-- date and time information. ISO date format -->
+
+<!ENTITY % Script "CDATA">
+    <!-- script expression -->
+
+<!ENTITY % StyleSheet "CDATA">
+    <!-- style sheet data -->
+
+<!ENTITY % Text "CDATA">
+    <!-- used for titles etc. -->
+
+<!ENTITY % Length "CDATA">
+    <!-- nn for pixels or nn% for percentage length -->
+
+<!ENTITY % MultiLength "CDATA">
+    <!-- pixel, percentage, or relative -->
+
+<!ENTITY % Pixels "CDATA">
+    <!-- integer representing length in pixels -->
+
+<!-- these are used for image maps -->
+
+<!ENTITY % Shape "(rect|circle|poly|default)">
+
+<!ENTITY % Coords "CDATA">
+    <!-- comma separated list of lengths -->
+
+<!--=================== Generic Attributes ===============================-->
+
+<!-- core attributes common to most elements
+  id       document-wide unique id
+  class    space separated list of classes
+  style    associated style info
+  title    advisory title/amplification
+-->
+<!ENTITY % coreattrs
+ "id          ID             #IMPLIED
+  class       CDATA          #IMPLIED
+  style       %StyleSheet;   #IMPLIED
+  title       %Text;         #IMPLIED"
+  >
+
+<!-- internationalization attributes
+  lang        language code (backwards compatible)
+  xml:lang    language code (as per XML 1.0 spec)
+  dir         direction for weak/neutral text
+-->
+<!ENTITY % i18n
+ "lang        %LanguageCode; #IMPLIED
+  xml:lang    %LanguageCode; #IMPLIED
+  dir         (ltr|rtl)      #IMPLIED"
+  >
+
+<!-- attributes for common UI events
+  onclick     a pointer button was clicked
+  ondblclick  a pointer button was double clicked
+  onmousedown a pointer button was pressed down
+  onmouseup   a pointer button was released
+  onmousemove a pointer was moved onto the element
+  onmouseout  a pointer was moved away from the element
+  onkeypress  a key was pressed and released
+  onkeydown   a key was pressed down
+  onkeyup     a key was released
+-->
+<!ENTITY % events
+ "onclick     %Script;       #IMPLIED
+  ondblclick  %Script;       #IMPLIED
+  onmousedown %Script;       #IMPLIED
+  onmouseup   %Script;       #IMPLIED
+  onmouseover %Script;       #IMPLIED
+  onmousemove %Script;       #IMPLIED
+  onmouseout  %Script;       #IMPLIED
+  onkeypress  %Script;       #IMPLIED
+  onkeydown   %Script;       #IMPLIED
+  onkeyup     %Script;       #IMPLIED"
+  >
+
+<!-- attributes for elements that can get the focus
+  accesskey   accessibility key character
+  tabindex    position in tabbing order
+  onfocus     the element got the focus
+  onblur      the element lost the focus
+-->
+<!ENTITY % focus
+ "accesskey   %Character;    #IMPLIED
+  tabindex    %Number;       #IMPLIED
+  onfocus     %Script;       #IMPLIED
+  onblur      %Script;       #IMPLIED"
+  >
+
+<!ENTITY % attrs "%coreattrs; %i18n; %events;">
+
+<!--=================== Text Elements ====================================-->
+
+<!ENTITY % special.pre
+   "br | span | bdo | map">
+
+
+<!ENTITY % special
+   "%special.pre; | object | img ">
+
+<!ENTITY % fontstyle "tt | i | b | big | small ">
+
+<!ENTITY % phrase "em | strong | dfn | code | q |
+                   samp | kbd | var | cite | abbr | acronym | sub | sup ">
+
+<!ENTITY % inline.forms "input | select | textarea | label | button">
+
+<!-- these can occur at block or inline level -->
+<!ENTITY % misc.inline "ins | del | script">
+
+<!-- these can only occur at block level -->
+<!ENTITY % misc "noscript | %misc.inline;">
+
+<!ENTITY % inline "a | %special; | %fontstyle; | %phrase; | %inline.forms;">
+
+<!-- %Inline; covers inline or "text-level" elements -->
+<!ENTITY % Inline "(#PCDATA | %inline; | %misc.inline;)*">
+
+<!--================== Block level elements ==============================-->
+
+<!ENTITY % heading "h1|h2|h3|h4|h5|h6">
+<!ENTITY % lists "ul | ol | dl">
+<!ENTITY % blocktext "pre | hr | blockquote | address">
+
+<!ENTITY % block
+     "p | %heading; | div | %lists; | %blocktext; | fieldset | table">
+
+<!ENTITY % Block "(%block; | form | %misc;)*">
+
+<!-- %Flow; mixes block and inline and is used for list items etc. -->
+<!ENTITY % Flow "(#PCDATA | %block; | form | %inline; | %misc;)*">
+
+<!--================== Content models for exclusions =====================-->
+
+<!-- a elements use %Inline; excluding a -->
+
+<!ENTITY % a.content
+   "(#PCDATA | %special; | %fontstyle; | %phrase; | %inline.forms; | %misc.inline;)*">
+
+<!-- pre uses %Inline excluding big, small, sup or sup -->
+
+<!ENTITY % pre.content
+   "(#PCDATA | a | %fontstyle; | %phrase; | %special.pre; | %misc.inline;
+      | %inline.forms;)*">
+
+<!-- form uses %Block; excluding form -->
+
+<!ENTITY % form.content "(%block; | %misc;)*">
+
+<!-- button uses %Flow; but excludes a, form and form controls -->
+
+<!ENTITY % button.content
+   "(#PCDATA | p | %heading; | div | %lists; | %blocktext; |
+    table | %special; | %fontstyle; | %phrase; | %misc;)*">
+
+<!--================ Document Structure ==================================-->
+
+<!--doc:This element identifies the document to be XHTML. The remainder of the XHTML document is contained by this element.-->
+<!ELEMENT html (head, body)>
+<!ATTLIST html
+  %i18n;
+  id          ID             #IMPLIED
+  xmlns       %URI;          #FIXED 'http://www.w3.org/1999/xhtml'
+  >
+
+<!--================ Document Head =======================================-->
+
+<!ENTITY % head.misc "(script|style|meta|link|object)*">
+
+ 
+<!--doc:The HEAD element contains information about the current document,for example the title and the list of keywords that may be used by the search engines.-->
+<!ELEMENT head (%head.misc;,
+     ((title, %head.misc;, (base, %head.misc;)?) |
+      (base, %head.misc;, (title, %head.misc;))))>
+
+<!ATTLIST head
+  %i18n;
+  id          ID             #IMPLIED
+  profile     %URI;          #IMPLIED
+  >
+
+<!--doc:The TITLE element is not considered part of the flow of text. It is displayed as the page header or window title.-->
+<!ELEMENT title (#PCDATA)>
+<!ATTLIST title 
+  %i18n;
+  id          ID             #IMPLIED
+  >
+
+<!--doc:The BASE element allows authors to specify a document's base URI explicitly. The path information specified by the BASE element only affects relative URIs from the same document.-->
+<!ELEMENT base EMPTY>
+<!ATTLIST base
+  href        %URI;          #REQUIRED
+  id          ID             #IMPLIED
+  >
+
+<!--doc:The META element can be used to identify properties of a document (e.g., author, expiration date, a list of key words, etc.). The specification does not define a normative set of properties.-->
+<!ELEMENT meta EMPTY>
+<!ATTLIST meta
+  %i18n;
+  id          ID             #IMPLIED
+  http-equiv  CDATA          #IMPLIED
+  name        CDATA          #IMPLIED
+  content     CDATA          #REQUIRED
+  scheme      CDATA          #IMPLIED
+  >
+
+<!--doc:This element defines a link. Unlike A, it may only appear in the HEAD section of a document, although it may appear any number of times. Although LINK has no content, it conveys relationship information that may be rendered by user agents in a variety of ways (e.g., a tool-bar with a drop-down menu of links).-->
+<!ELEMENT link EMPTY>
+<!ATTLIST link
+  %attrs;
+  charset     %Charset;      #IMPLIED
+  href        %URI;          #IMPLIED
+  hreflang    %LanguageCode; #IMPLIED
+  type        %ContentType;  #IMPLIED
+  rel         %LinkTypes;    #IMPLIED
+  rev         %LinkTypes;    #IMPLIED
+  media       %MediaDesc;    #IMPLIED
+  >
+
+<!--doc:The STYLE element allows authors to put style sheet rules in the head of the document. XHTML permits any number of STYLE elements in the HEAD section of a document. Some style sheet implementations may allow a wider variety of rules in the STYLE element than in the style attribute. For example, with CSS, rules may be declared within a STYLE element.-->
+<!ELEMENT style (#PCDATA)>
+<!ATTLIST style
+  %i18n;
+  id          ID             #IMPLIED
+  type        %ContentType;  #REQUIRED
+  media       %MediaDesc;    #IMPLIED
+  title       %Text;         #IMPLIED
+  xml:space   (preserve)     #FIXED 'preserve'
+  >
+
+<!--doc:The SCRIPT element places a script within a document. This element may appear any number of times in the HEAD or BODY of an XHTML document.-->
+<!ELEMENT script (#PCDATA)>
+<!ATTLIST script
+  id          ID             #IMPLIED
+  charset     %Charset;      #IMPLIED
+  type        %ContentType;  #REQUIRED
+  src         %URI;          #IMPLIED
+  defer       (defer)        #IMPLIED
+  xml:space   (preserve)     #FIXED 'preserve'
+  >
+
+
+<!--doc:The NOSCRIPT element allows authors to provide alternate content when a script is not executed. The content of a NOSCRIPT element should only be rendered by a script-aware user agent in the following cases: 1. The user agent is configured not to evaluate scripts; 2The user agent doesn't support a scripting language invoked by a SCRIPT element earlier in the document.-->
+<!ELEMENT noscript %Block;>
+<!ATTLIST noscript
+  %attrs;
+  >
+
+<!--=================== Document Body ====================================-->
+
+<!--doc:The body of a document contains the document's content. The content may be presented by a user agent in a variety of ways. For example, for visual browsers, you can think of the body as a canvas where the content appears: text, images, colors, graphics, etc.-->
+<!ELEMENT body %Block;>
+<!ATTLIST body
+  %attrs;
+  onload          %Script;   #IMPLIED
+  onunload        %Script;   #IMPLIED
+  >
+
+<!--doc:The DIV element defines a division/section in a document. It offer a generic mechanism for adding structure to documents. This element define content to be block-level but impose no other presentational idioms on the content.-->
+<!ELEMENT div %Flow;>  
+<!ATTLIST div
+  %attrs;
+  >
+
+<!--=================== Paragraphs =======================================-->
+<!--doc:The P element represents a paragraph. It cannot contain block-level elements (including P itself).-->
+<!ELEMENT p %Inline;>
+<!ATTLIST p
+  %attrs;
+  >
+
+<!--=================== Headings =========================================-->
+
+
+<!--doc:There are six levels of headings in XHTML with H1 as the most important and H6 as the least. Visual browsers usually render more important headings in larger fonts than less important ones.-->
+<!ELEMENT h1  %Inline;>
+<!ATTLIST h1
+   %attrs;
+   >
+<!--doc:There are six levels of headings in XHTML with H1 as the most important and H6 as the least. Visual browsers usually render more important headings in larger fonts than less important ones.-->
+<!ELEMENT h2 %Inline;>
+<!ATTLIST h2
+   %attrs;
+   >
+<!--doc:There are six levels of headings in XHTML with H1 as the most important and H6 as the least. Visual browsers usually render more important headings in larger fonts than less important ones.-->
+<!ELEMENT h3 %Inline;>
+<!ATTLIST h3
+   %attrs;
+   >
+<!--doc:There are six levels of headings in XHTML with H1 as the most important and H6 as the least. Visual browsers usually render more important headings in larger fonts than less important ones.-->
+<!ELEMENT h4 %Inline;>
+<!ATTLIST h4
+   %attrs;
+   >
+<!--doc:There are six levels of headings in XHTML with H1 as the most important and H6 as the least. Visual browsers usually render more important headings in larger fonts than less important ones.-->
+<!ELEMENT h5 %Inline;>
+<!ATTLIST h5
+   %attrs;
+   >
+<!--doc:There are six levels of headings in XHTML with H1 as the most important and H6 as the least. Visual browsers usually render more important headings in larger fonts than less important ones.-->
+<!ELEMENT h6 %Inline;>
+<!ATTLIST h6
+   %attrs;
+   >
+
+<!--=================== Lists ============================================-->
+
+
+<!--doc:The UL element defines an unordered list. Unordered list items are not numbered.-->
+<!ELEMENT ul (li)+>
+<!ATTLIST ul
+  %attrs;
+  >
+
+<!--doc:The OL element defines an ordered list. Ordered list items are numbered.-->
+<!ELEMENT ol (li)+>
+<!ATTLIST ol
+  %attrs;
+  >
+
+<!--doc:The LI element is used to define a list item. The LI element is used in ordered (OL) and unordered lists (UL).-->
+<!ELEMENT li %Flow;>
+<!ATTLIST li
+  %attrs;
+  >
+
+<!--doc:The DL element is used to define a definition list. They consist consist of two parts for each item: a term (DT) and a description (DD).-->
+<!ELEMENT dl (dt|dd)+>
+<!ATTLIST dl
+  %attrs;
+  >
+
+<!--doc:The DT element defines a term in a definition list.-->
+<!ELEMENT dt %Inline;>
+<!ATTLIST dt
+  %attrs;
+  >
+
+<!--doc:The DD element defines the description of a term in a definition list.-->
+<!ELEMENT dd %Flow;>
+<!ATTLIST dd
+  %attrs;
+  >
+
+<!--=================== Address ==========================================-->
+
+<!--doc:The ADDRESS element may be used by authors to supply contact information for a document or a major part of a document such as a form. This element often appears at the beginning or end of a document.-->
+<!ELEMENT address %Inline;>
+<!ATTLIST address
+  %attrs;
+  >
+
+<!--=================== Horizontal Rule ==================================-->
+<!--doc:The HR element causes a horizontal rule to be rendered by visual user agents.-->
+<!ELEMENT hr EMPTY>
+<!ATTLIST hr
+  %attrs;
+  >
+
+<!--=================== Preformatted Text ================================-->
+
+<!--doc:The PRE element defines blocks of preformatted text. The text enclosed in the pre element preserves spaces and line breaks and is rendered in a fixed-pitch font.-->
+<!ELEMENT pre %pre.content;>
+<!ATTLIST pre
+  %attrs;
+  xml:space (preserve) #FIXED 'preserve'
+  >
+
+<!--=================== Block-like Quotes ================================-->
+<!--doc:The BLOCKQUOTE element defines the start of a long quotation (block-level content) . It creates white space on both sides of the text.-->
+<!ELEMENT blockquote %Block;>
+<!ATTLIST blockquote
+  %attrs;
+  cite        %URI;          #IMPLIED
+  >
+
+<!--=================== Inserted/Deleted Text ============================-->
+
+<!--doc:INS is used to markup sections of the document that have been inserted with respect to a different version of a document (e.g., in draft legislation where lawmakers need to view the changes).-->
+<!ELEMENT ins %Flow;>
+<!ATTLIST ins
+  %attrs;
+  cite        %URI;          #IMPLIED
+  datetime    %Datetime;     #IMPLIED
+  >
+
+<!--doc:DEL is used to markup sections of the document that have been deleted with respect to a different version of a document (e.g., in draft legislation where lawmakers need to view the changes).-->
+<!ELEMENT del %Flow;>
+<!ATTLIST del
+  %attrs;
+  cite        %URI;          #IMPLIED
+  datetime    %Datetime;     #IMPLIED
+  >
+
+<!--================== The Anchor Element ================================-->
+
+
+<!--doc:The A element defines an anchor element. An anchor can be used: 1.To create a link to another document by using the href attribute; 2.To create a bookmark inside a document by using the name or id attribute.-->
+<!ELEMENT a %a.content;>
+<!ATTLIST a
+  %attrs;
+  %focus;
+  charset     %Charset;      #IMPLIED
+  type        %ContentType;  #IMPLIED
+  name        NMTOKEN        #IMPLIED
+  href        %URI;          #IMPLIED
+  hreflang    %LanguageCode; #IMPLIED
+  rel         %LinkTypes;    #IMPLIED
+  rev         %LinkTypes;    #IMPLIED
+  shape       %Shape;        "rect"
+  coords      %Coords;       #IMPLIED
+  >
+
+<!--===================== Inline Elements ================================-->
+
+<!--doc:The SPAN element is used to group inline-elements in a document. Use the SPAN element to group inline-elements to format them with styles.-->
+<!ELEMENT span %Inline;> 
+<!ATTLIST span
+  %attrs;
+  >
+
+<!--doc:The BDO element overrides the default text direction. It should be used in scenarios where absolute control over sequence order is required (e.g., multi-language part numbers).-->
+<!ELEMENT bdo %Inline;>  
+<!ATTLIST bdo
+  %coreattrs;
+  %events;
+  lang        %LanguageCode; #IMPLIED
+  xml:lang    %LanguageCode; #IMPLIED
+  dir         (ltr|rtl)      #REQUIRED
+  >
+
+<!--doc:The BR element forcibly breaks (ends) the current line of text. Use the BR element to enter blank lines, not to separate paragraphs.-->
+<!ELEMENT br EMPTY>   
+<!ATTLIST br
+  %coreattrs;
+  >
+
+<!--doc:Renders as emphasized text. Generally, visual user agents present EM text in italics.-->
+<!ELEMENT em %Inline;>   
+<!ATTLIST em %attrs;>
+
+<!--doc:Renders as strong emphasized text. Generally, visual user agents present STRONG text in bold font.-->
+<!ELEMENT strong %Inline;>   
+<!ATTLIST strong %attrs;>
+
+<!--doc:Indicates that this is the defining instance of the enclosed term.-->
+<!ELEMENT dfn %Inline;>   
+<!ATTLIST dfn %attrs;>
+
+<!--doc:Designates a fragment of computer code.-->
+<!ELEMENT code %Inline;>   
+<!ATTLIST code %attrs;>
+
+<!--doc:Designates sample output from programs, scripts, etc.-->
+<!ELEMENT samp %Inline;>   
+<!ATTLIST samp %attrs;>
+
+<!--doc:Indicates text to be entered by the user.-->
+<!ELEMENT kbd %Inline;>  
+<!ATTLIST kbd %attrs;>
+
+<!--doc:Indicates an instance of a variable or program argument.-->
+<!ELEMENT var %Inline;>   
+<!ATTLIST var %attrs;>
+
+<!--doc:Contains a citation or a reference to other sources.-->
+<!ELEMENT cite %Inline;>   
+<!ATTLIST cite %attrs;>
+
+<!--doc:The ABBR element is used to indicates an abbreviated form, like "ie.", "Ltd.", "etc.".-->
+<!ELEMENT abbr %Inline;>   
+<!ATTLIST abbr %attrs;>
+
+<!--doc:The ACRONYM element defines an acronym, like "USA" or "F.B.I".-->
+<!ELEMENT acronym %Inline;>   
+<!ATTLIST acronym %attrs;>
+
+<!--doc:The Q element defines the start of a short quotation. It does not render as anything special, you have to use styles to format the text.-->
+<!ELEMENT q %Inline;>   
+<!ATTLIST q
+  %attrs;
+  cite        %URI;          #IMPLIED
+  >
+
+<!--doc:The SUB element defines subscript text.-->
+<!ELEMENT sub %Inline;> 
+<!ATTLIST sub %attrs;>
+
+<!--doc:The SUP element defines superscript text.-->
+<!ELEMENT sup %Inline;> 
+<!ATTLIST sup %attrs;>
+
+<!--doc:Renders as teletype or mono spaced text.-->
+<!ELEMENT tt %Inline;>   
+<!ATTLIST tt %attrs;>
+
+<!--doc:Renders as italic text style.-->
+<!ELEMENT i %Inline;>   
+<!ATTLIST i %attrs;>
+
+<!--doc:Renders as bold text style.-->
+<!ELEMENT b %Inline;>   
+<!ATTLIST b %attrs;>
+
+<!--doc:Renders text in a "large" font.-->
+<!ELEMENT big %Inline;>   
+<!ATTLIST big %attrs;>
+
+<!--doc:Renders text in a "small" font.-->
+<!ELEMENT small %Inline;>   
+<!ATTLIST small %attrs;>
+
+<!--==================== Object ======================================-->
+<!--Defines an embedded object. This element allows you to specify the data and parameters for objects inserted into XHTML documents, and the code that can be used to display/manipulate that data.
+-->
+
+<!--doc:Defines an embedded object. This element allows to specify the data and parameters for objects inserted into documents.-->
+<!ELEMENT object (#PCDATA | param | %block; | form | %inline; | %misc;)*>
+<!ATTLIST object
+  %attrs;
+  declare     (declare)      #IMPLIED
+  classid     %URI;          #IMPLIED
+  codebase    %URI;          #IMPLIED
+  data        %URI;          #IMPLIED
+  type        %ContentType;  #IMPLIED
+  codetype    %ContentType;  #IMPLIED
+  archive     %UriList;      #IMPLIED
+  standby     %Text;         #IMPLIED
+  height      %Length;       #IMPLIED
+  width       %Length;       #IMPLIED
+  usemap      %URI;          #IMPLIED
+  name        NMTOKEN        #IMPLIED
+  tabindex    %Number;       #IMPLIED
+  >
+
+<!--doc:PARAM elements specify a set of values that may be required by an object at run-time. Any number of PARAM elements may appear in the content of an OBJECT or APPLET element, in any order, but must be placed at the start of the content of the enclosing OBJECT or APPLET element.-->
+<!ELEMENT param EMPTY>
+<!ATTLIST param
+  id          ID             #IMPLIED
+  name        CDATA          #IMPLIED
+  value       CDATA          #IMPLIED
+  valuetype   (data|ref|object) "data"
+  type        %ContentType;  #IMPLIED
+  >
+
+<!--=================== Images ===========================================-->
+
+
+<!--doc:The IMG element embeds an image in the current document at the location of the element's definition. The IMG element has no content; it is usually replaced inline by the image designated by the src attribute, the exception being for left or right-aligned images that are "floated" out of line. Note that in this DTD there is no name attribute. That is only available in the transitional and frameset DTD.-->
+<!ELEMENT img EMPTY>
+<!ATTLIST img
+  %attrs;
+  src         %URI;          #REQUIRED
+  alt         %Text;         #REQUIRED
+  longdesc    %URI;          #IMPLIED
+  height      %Length;       #IMPLIED
+  width       %Length;       #IMPLIED
+  usemap      %URI;          #IMPLIED
+  ismap       (ismap)        #IMPLIED
+  >
+
+<!-- usemap points to a map element which may be in this document
+  or an external document, although the latter is not widely supported -->
+
+<!--================== Client-side image maps ============================-->
+
+
+<!--doc:The MAP element specifies a client-side image map (or other navigation mechanism) that may be associated with another elements (IMG, OBJECT, or INPUT). An image map is associated with an element via the element's usemap attribute. The MAP element may be used without an associated image for general navigation mechanisms.-->
+<!ELEMENT map ((%block; | form | %misc;)+ | area+)>
+<!ATTLIST map
+  %i18n;
+  %events;
+  id          ID             #REQUIRED
+  class       CDATA          #IMPLIED
+  style       %StyleSheet;   #IMPLIED
+  title       %Text;         #IMPLIED
+  name        NMTOKEN        #IMPLIED
+  >
+
+<!--doc:Defines a region in an image map. This element is always nested inside a MAP element. This element has no content but specify the geometric region of the image map and the link associated with the region. Note that user agents do not generally render AREA elements. Therefore, authors must provide alternate text for each AREA with the alt attribute.-->
+<!ELEMENT area EMPTY>
+<!ATTLIST area
+  %attrs;
+  %focus;
+  shape       %Shape;        "rect"
+  coords      %Coords;       #IMPLIED
+  href        %URI;          #IMPLIED
+  nohref      (nohref)       #IMPLIED
+  alt         %Text;         #REQUIRED
+  >
+
+<!--================ Forms ===============================================-->
+
+<!--doc:The FORM element creates a form. A form can contain textfields, checkboxes, radio-buttons etc. Forms are used to pass user-data to a specified URL, usually a CGI.-->
+<!ELEMENT form %form.content;>   
+
+<!ATTLIST form
+  %attrs;
+  action      %URI;          #REQUIRED
+  method      (get|post)     "get"
+  enctype     %ContentType;  "application/x-www-form-urlencoded"
+  onsubmit    %Script;       #IMPLIED
+  onreset     %Script;       #IMPLIED
+  accept      %ContentTypes; #IMPLIED
+  accept-charset %Charsets;  #IMPLIED
+  >
+
+<!--doc:The LABEL element may be used to attach information to controls. Each LABEL element is associated with exactly one form control. The "for" attribute binds a label to another element. Set the value of the "for" attribute equal to the value of the "id" attribute of the related element.-->
+<!ELEMENT label %Inline;>
+<!ATTLIST label
+  %attrs;
+  for         IDREF          #IMPLIED
+  accesskey   %Character;    #IMPLIED
+  onfocus     %Script;       #IMPLIED
+  onblur      %Script;       #IMPLIED
+  >
+
+<!ENTITY % InputType
+  "(text | password | checkbox |
+    radio | submit | reset |
+    file | hidden | image | button)"
+   >
+   
+<!--doc:The INPUT element defines the start of an input field where the user can enter data. The INPUT element is empty, it contains attributes only.-->
+<!ELEMENT input EMPTY>     
+<!ATTLIST input
+  %attrs;
+  %focus;
+  type        %InputType;    "text"
+  name        CDATA          #IMPLIED
+  value       CDATA          #IMPLIED
+  checked     (checked)      #IMPLIED
+  disabled    (disabled)     #IMPLIED
+  readonly    (readonly)     #IMPLIED
+  size        CDATA          #IMPLIED
+  maxlength   %Number;       #IMPLIED
+  src         %URI;          #IMPLIED
+  alt         CDATA          #IMPLIED
+  usemap      %URI;          #IMPLIED
+  onselect    %Script;       #IMPLIED
+  onchange    %Script;       #IMPLIED
+  accept      %ContentTypes; #IMPLIED
+  >
+
+<!--doc:The select element creates a drop-down list. Use this element in the FORM element to accept user input.-->
+<!ELEMENT select (optgroup|option)+>  
+<!ATTLIST select
+  %attrs;
+  name        CDATA          #IMPLIED
+  size        %Number;       #IMPLIED
+  multiple    (multiple)     #IMPLIED
+  disabled    (disabled)     #IMPLIED
+  tabindex    %Number;       #IMPLIED
+  onfocus     %Script;       #IMPLIED
+  onblur      %Script;       #IMPLIED
+  onchange    %Script;       #IMPLIED
+  >
+
+<!--doc:The OPTGROUP element allows authors to group choices logically. This is particularly helpful when the user must choose from a long list of options; groups of related choices are easier to grasp and remember than a single long list of options.-->
+<!ELEMENT optgroup (option)+>   
+<!ATTLIST optgroup
+  %attrs;
+  disabled    (disabled)     #IMPLIED
+  label       %Text;         #REQUIRED
+  >
+
+<!--doc:The option element defines an option in the drop-down list. Use this element in conjunction with the SELECT element, elsewhere it is meaningless.-->
+<!ELEMENT option (#PCDATA)>     
+<!ATTLIST option
+  %attrs;
+  selected    (selected)     #IMPLIED
+  disabled    (disabled)     #IMPLIED
+  label       %Text;         #IMPLIED
+  value       CDATA          #IMPLIED
+  >
+
+<!--doc:The TEXTAREA element creates a multi-line text input control. User agents should use the contents of this element as the initial value of the control and should render this text initially.-->
+<!ELEMENT textarea (#PCDATA)>     
+<!ATTLIST textarea
+  %attrs;
+  %focus;
+  name        CDATA          #IMPLIED
+  rows        %Number;       #REQUIRED
+  cols        %Number;       #REQUIRED
+  disabled    (disabled)     #IMPLIED
+  readonly    (readonly)     #IMPLIED
+  onselect    %Script;       #IMPLIED
+  onchange    %Script;       #IMPLIED
+  >
+
+<!--doc:The FIELDSET element allows authors to group thematically related controls and labels. Grouping controls makes it easier for users to understand their purpose while simultaneously facilitating tabbing navigation for visual user agents and speech navigation for speech-oriented user agents. The proper use of this element makes documents more accessible.-->
+<!ELEMENT fieldset (#PCDATA | legend | %block; | form | %inline; | %misc;)*>
+<!ATTLIST fieldset
+  %attrs;
+  >
+
+<!--doc:The LEGEND element allows authors to assign a caption to a FIELDSET. The legend improves accessibility when the FIELDSET is rendered non-visually.-->
+<!ELEMENT legend %Inline;>     
+<!ATTLIST legend
+  %attrs;
+  accesskey   %Character;    #IMPLIED
+  >
+
+<!--
+ Content is %Flow; excluding a, form and form controls
+--> 
+<!--doc:The BUTTON element defines a push button. Inside a button element you can put content for example images, text.-->
+<!ELEMENT button %button.content;>  
+<!ATTLIST button
+  %attrs;
+  %focus;
+  name        CDATA          #IMPLIED
+  value       CDATA          #IMPLIED
+  type        (button|submit|reset) "submit"
+  disabled    (disabled)     #IMPLIED
+  >
+
+<!--======================= Tables =======================================-->
+
+<!-- Derived from IETF HTML table standard, see [RFC1942] -->
+
+<!--
+ The border attribute sets the thickness of the frame around the table. The default units are screen pixels.
+
+ The frame attribute specifies which parts of the frame around the table should be rendered. 
+ The values are not the same as CALS to avoid a name clash with the valign attribute.
+-->
+<!ENTITY % TFrame "(void|above|below|hsides|lhs|rhs|vsides|box|border)">
+
+<!--
+ The rules attribute defines which rules to draw between cells:
+
+ If rules is absent then assume:
+     "none" if border is absent or border="0" otherwise "all"
+-->
+
+<!ENTITY % TRules "(none | groups | rows | cols | all)">
+  
+<!-- horizontal alignment attributes for cell contents
+
+  char        alignment char, e.g. char=':'
+  charoff     offset for alignment char
+-->
+<!ENTITY % cellhalign
+  "align      (left|center|right|justify|char) #IMPLIED
+   char       %Character;    #IMPLIED
+   charoff    %Length;       #IMPLIED"
+  >
+
+<!-- vertical alignment attributes for cell contents -->
+<!ENTITY % cellvalign
+  "valign     (top|middle|bottom|baseline) #IMPLIED"
+  >
+  
+<!--doc:The TABLE element defines a table. Inside a TABLE element there can be table headers, table rows, table cells.-->
+<!ELEMENT table
+     (caption?, (col*|colgroup*), thead?, tfoot?, (tbody+|tr+))>
+<!--doc:The CAPTION element defines a table caption.-->
+<!ELEMENT caption  %Inline;>
+<!--doc:Defines a table header. Table rows may be grouped into a table head, table foot, and one or more table body sections, using the THEAD, TFOOT and TBODY elements, respectively. This division enables user agents to support scrolling of table bodies independently of the table head and foot. When long tables are printed, the table head and foot information may be repeated on each page that contains table data.-->
+<!ELEMENT thead    (tr)+>
+<!--doc:Defines a table footer. Table rows may be grouped into a table head, table foot, and one or more table body sections, using the THEAD, TFOOT and TBODY elements, respectively. This division enables user agents to support scrolling of table bodies independently of the table head and foot. When long tables are printed, the table head and foot information may be repeated on each page that contains table data.-->
+<!ELEMENT tfoot    (tr)+>
+<!--doc:Defines a table body. Table rows may be grouped into a table head, table foot, and one or more table body sections, using the THEAD, TFOOT and TBODY elements, respectively. This division enables user agents to support scrolling of table bodies independently of the table head and foot. When long tables are printed, the table head and foot information may be repeated on each page that contains table data.-->
+<!ELEMENT tbody    (tr)+>
+<!--doc:Defines different formatting groups of table columns. The colgroup element is an empty element that contains attributes only. To create columns, you must specify td elements within a tr element.-->
+<!ELEMENT colgroup (col)*>
+<!--doc:The COL element allows authors to group together attribute specifications for table columns. The COL does not group columns together structurally that is the role of the COLGROUP element. COL elements are empty and serve only as a support for attributes. They may appear inside or outside an explicit column group (i.e., COLGROUP element).-->
+<!ELEMENT col      EMPTY>
+<!--doc:The TR elements acts as a container for a row of table cells.-->
+<!ELEMENT tr       (th|td)+>
+<!--doc:The TH element defines a cell in a table that contains header information. User agents have two pieces of header information available: the contents of the TH element and the value of the abbr attribute.-->
+<!ELEMENT th       %Flow;>
+<!--doc:The TD element defines a cell in a table that contains data.-->
+<!ELEMENT td       %Flow;>
+
+<!ATTLIST table
+  %attrs;
+  summary     %Text;         #IMPLIED
+  width       %Length;       #IMPLIED
+  border      %Pixels;       #IMPLIED
+  frame       %TFrame;       #IMPLIED
+  rules       %TRules;       #IMPLIED
+  cellspacing %Length;       #IMPLIED
+  cellpadding %Length;       #IMPLIED
+  >
+
+<!ATTLIST caption
+  %attrs;
+  >
+
+<!--
+colgroup groups a set of col elements. It allows you to group
+several semantically related columns together.
+-->
+<!ATTLIST colgroup
+  %attrs;
+  span        %Number;       "1"
+  width       %MultiLength;  #IMPLIED
+  %cellhalign;
+  %cellvalign;
+  >
+
+<!--
+ col elements define the alignment properties for cells in
+ one or more columns.
+
+ The width attribute specifies the width of the columns, e.g.
+
+     width=64        width in screen pixels
+     width=0.5*      relative width of 0.5
+
+ The span attribute causes the attributes of one
+ col element to apply to more than one column.
+-->
+<!ATTLIST col
+  %attrs;
+  span        %Number;       "1"
+  width       %MultiLength;  #IMPLIED
+  %cellhalign;
+  %cellvalign;
+  >
+
+<!--
+    Use thead to duplicate headers when breaking table
+    across page boundaries, or for static headers when
+    tbody sections are rendered in scrolling panel.
+
+    Use tfoot to duplicate footers when breaking table
+    across page boundaries, or for static footers when
+    tbody sections are rendered in scrolling panel.
+
+    Use multiple tbody sections when rules are needed
+    between groups of table rows.
+-->
+<!ATTLIST thead
+  %attrs;
+  %cellhalign;
+  %cellvalign;
+  >
+
+<!ATTLIST tfoot
+  %attrs;
+  %cellhalign;
+  %cellvalign;
+  >
+
+<!ATTLIST tbody
+  %attrs;
+  %cellhalign;
+  %cellvalign;
+  >
+
+<!ATTLIST tr
+  %attrs;
+  %cellhalign;
+  %cellvalign;
+  >
+
+
+<!-- Scope is simpler than headers attribute for common tables -->
+<!ENTITY % Scope "(row|col|rowgroup|colgroup)">
+
+<!-- th is for headers, td for data and for cells acting as both -->
+
+<!ATTLIST th
+  %attrs;
+  abbr        %Text;         #IMPLIED
+  axis        CDATA          #IMPLIED
+  headers     IDREFS         #IMPLIED
+  scope       %Scope;        #IMPLIED
+  rowspan     %Number;       "1"
+  colspan     %Number;       "1"
+  %cellhalign;
+  %cellvalign;
+  >
+
+<!ATTLIST td
+  %attrs;
+  abbr        %Text;         #IMPLIED
+  axis        CDATA          #IMPLIED
+  headers     IDREFS         #IMPLIED
+  scope       %Scope;        #IMPLIED
+  rowspan     %Number;       "1"
+  colspan     %Number;       "1"
+  %cellhalign;
+  %cellvalign;
+  >
+

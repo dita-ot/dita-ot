@@ -1,0 +1,26 @@
+<plugin id="com.moldflow.dita.plus-allhtml-syntaxdiagram-svgobject">
+  <require plugin="com.moldflow.dita.plus-allhtml-syntaxdiagram"/>
+  <require plugin="com.moldflow.dita.plus-allhtml-svgobject"/>
+  <require plugin="com.moldflow.dita.syntaxdiagram2svg"/>
+
+  <template file="build_plus-allhtml-syntaxdiagram-svgobject_template.xml"/>
+  <template file="xsl/xhtml_template.xsl"/>
+
+  <feature extension="dita.conductor.target.relative" value="build.xml" type="file"/>
+
+  <feature extension="dita.conductor.xhtml.param" value="insert-ant-topic-html-xslt.xml" type="file"/>
+
+  <feature extension="xsl.plus-eclipsehelp-topics-twopass.stage1" value="xsl/xhtml.xsl" type="file"/>
+  <feature extension="xsl.plus-htmlhelp-topics-twopass.stage1" value="xsl/xhtml.xsl" type="file"/>
+  <feature extension="xsl.plus-html-topics-twopass.stage1" value="xsl/xhtml.xsl" type="file"/>
+  <feature extension="xsl.plus-xhtml-topics-twopass.stage1" value="xsl/xhtml.xsl" type="file"/>
+
+  <feature extension="depend.plus-eclipsehelp-topics-twopass.stage1.pre" value="plus-allhtml-syntaxdiagram-svgobject.init" type="text"/>
+  <feature extension="depend.plus-htmlhelp-topics-twopass.stage1.pre" value="plus-allhtml-syntaxdiagram-svgobject.init" type="text"/>
+  <feature extension="depend.plus-html-topics-twopass.stage1.pre" value="plus-allhtml-syntaxdiagram-svgobject.init" type="text"/>
+  <feature extension="depend.plus-xhtml-topics-twopass.stage1.pre" value="plus-allhtml-syntaxdiagram-svgobject.init" type="text"/>
+
+  <feature extension="xsl.plus-allhtml-svgobject.svg2imagemap" value="xsl/svg2imagemap.xsl" type="file"/>
+
+  <feature extension="depend.plus-allhtml-svgobject.make-static.pre" value="plus-allhtml-syntaxdiagram-svgobject.copy-files" type="text"/>
+</plugin>

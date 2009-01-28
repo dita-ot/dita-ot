@@ -1,0 +1,3 @@
+<plugin id="com.moldflow.dita.plus-transtype-anyhtml">
+  <require plugin="com.moldflow.dita.plus-transtype-html|com.moldflow.dita.plus-transtype-xhtml|com.moldflow.dita.plus-transtype-htmlhelp|com.moldflow.dita.plus-transtype-eclipsehelp"/>
+</plugin>

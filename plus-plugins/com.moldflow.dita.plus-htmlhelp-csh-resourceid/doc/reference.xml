@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference id="reference_plus-htmlhelp-currentencoding"><title><keyword
+        >plus-htmlhelp-csh-resourceid</keyword></title><abstract>
+        <shortdesc>The <keyword>plus-htmlhelp-csh-resourceid</keyword> plugin lets maps nominate
+            topics, and topics nominate themselves, as HTML Help context-sensitive help targets
+            using the <keyword>resourceid</keyword> element.</shortdesc>
+        <p>In topics, a <keyword>resourceid</keyword> element with the <keyword>appname</keyword>
+            attribute set to <codeph>WindowsHelpId</codeph> (case-sensitive) associates the value in
+            the element's <keyword>value</keyword> attribute with the current topic.</p>
+        <p>In maps, a <keyword>resourceid</keyword> element with the <keyword>appname</keyword>
+            attribute set to <codeph>WindowsHelpId</codeph> (case-sensitive) associates the value in
+            the element's <keyword>value</keyword> attribute with the topic referenced in the
+            nearest ancestor <keyword>topicref</keyword> element.</p>
+    </abstract><refbody>
+        <section>
+            <title>Plugin ID</title>
+            <p><apiname>com.moldflow.dita.plus-htmlhelp-csh-resourceid</apiname></p>
+        </section>
+        <section>
+            <title>Prerequisite plugins</title>
+            <ul>
+                <li><apiname>com.moldflow.dita.plus-htmlhelp-csh</apiname></li>
+            </ul>
+        </section>
+        <section>
+            <title>XSLT requirements</title>
+            <p>An XSLT 1.0 or later processor.</p>
+        </section>
+        <section>
+            <title>Ant requirements</title>
+            <p>Ant 1.7.0 or later.</p>
+        </section>
+        <section>
+            <title>Java requirements</title>
+            <p>None.</p>
+        </section>
+        <section>
+            <title>Limitations</title>
+            <p>None.</p>
+        </section>
+    </refbody></reference>

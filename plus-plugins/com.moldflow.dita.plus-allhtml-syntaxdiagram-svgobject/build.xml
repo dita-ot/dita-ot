@@ -1,0 +1,3 @@
+<project>
+  <import file="build_plus-allhtml-syntaxdiagram-svgobject.xml"/>
+</project>

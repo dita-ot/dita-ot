@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin id="com.moldflow.dita.mathml2svg">
+    <feature extension="dita.conductor.lib.import" value="lib/mml2svg.jar" type="file"/>
+</plugin>

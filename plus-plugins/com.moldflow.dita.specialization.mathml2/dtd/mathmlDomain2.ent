@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    <public publicId="-//Moldflow//ENTITIES DITA 1.1 MathML Domain 2//EN" uri="mathmlDomain2.ent"/>
+    <system systemId="http://www.moldflow.com/schema/dtd/dita/1.1/mathml/2/mathmlDomain2.ent" uri="mathmlDomain2.ent"/>
+-->
+
+<!ENTITY % mathml-d-foreign      "mathph | math"                 >
+<!ENTITY % mathml-d-fig          "equation"                 >
+
+<!ENTITY   mathml-d-att     "(topic mathml-d)" >
