@@ -12,6 +12,9 @@
     <xsl:param name="plus-allhtml-syntaxdiagram-svgobject-csspath" select="''"/>
     <xsl:param name="plus-allhtml-syntaxdiagram-svgobject-jspath" select="''"/>
 
+    <xsl:param name="CURRENDIR"/>
+    <xsl:param name="CURRENTFILE"/>
+
     <!-- Entry point. -->
     <xsl:template match="*[contains(@class, ' pr-d/syntaxdiagram ')]">
         <xsl:choose>
