@@ -101,7 +101,7 @@ public class FileGenerator extends DefaultHandler {
 	 */
 	public void characters(char[] ch, int start, int length) throws SAXException {
 		try{
-			output.write(ch,start,length);
+			output.write(StringUtils.escapeXML(ch,start,length));
 		}catch (Exception e) {
         	logger.logException(e);
         }
