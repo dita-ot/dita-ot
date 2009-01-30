@@ -34,6 +34,7 @@ may include:
 * Saxon 9 Basic, an XSLT 2.0 processor [saxon9.jar, saxon9-dom.jar]
 * Mozilla Rhino, a JavaScript interpreter [js.jar]
 * Apache Commons External APIs [xml-apis-ext.jar]
+* Apache Commons Logging APIs [commons-logging-api-1.1.jar]
 Ensure that these are available in the classpath before invoking the
 transform.  Each plugin contains a document doc/reference.xml which
 describes its prerequisites.
