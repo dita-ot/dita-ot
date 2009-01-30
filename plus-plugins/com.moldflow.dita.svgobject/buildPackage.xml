@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 
-<project basedir="." default="build" name="SVGTranscoder">
+<project basedir="." default="jar" name="SVGTranscoder">
     <target name="clean">
         <delete>
             <fileset dir="build" includes="**/*.class"/>
