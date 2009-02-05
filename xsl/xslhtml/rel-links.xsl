@@ -428,29 +428,29 @@ Children are displayed in a numbered list, with the target title as the cmd and 
 <!--calculate href-->
 <xsl:template name="href">
   <xsl:choose>
+    <xsl:when test="normalize-space(@href)='' or not(@href)"/>
     <!-- For non-DITA formats - use the href as is -->
     <xsl:when test="(not(@format) and (@type='external' or @scope='external')) or (@format and not(@format='dita' or @format='DITA'))">
-        <xsl:value-of select="@href"/>
-      </xsl:when>
-      <!-- For DITA - process the internal href -->
-      <xsl:when test="starts-with(@href,'#')">
-        <xsl:call-template name="parsehref">
-          <xsl:with-param name="href" select="@href"/>
-        </xsl:call-template>
-      </xsl:when>
-      <!-- It's to a DITA file - process the file name (adding the html extension)
-      and process the rest of the href -->
-      <xsl:when test="contains(@href,$DITAEXT)">
-        <xsl:value-of select="substring-before(@href,$DITAEXT)"/><xsl:value-of select="$OUTEXT"/><xsl:call-template name="parsehref"><xsl:with-param name="href" select="substring-after(@href,$DITAEXT)"/></xsl:call-template>
-      </xsl:when>
-      <xsl:when test="@href=''"/>
-      <xsl:otherwise>
-        <xsl:call-template name="output-message">
-          <xsl:with-param name="msgnum">006</xsl:with-param>
-          <xsl:with-param name="msgsev">E</xsl:with-param>
-          <xsl:with-param name="msgparams">%1=<xsl:value-of select="@href"/></xsl:with-param>
-        </xsl:call-template>
-        <xsl:value-of select="@href"/>
+      <xsl:value-of select="@href"/>
+    </xsl:when>
+    <!-- For DITA - process the internal href -->
+    <xsl:when test="starts-with(@href,'#')">
+      <xsl:call-template name="parsehref">
+        <xsl:with-param name="href" select="@href"/>
+      </xsl:call-template>
+    </xsl:when>
+    <!-- It's to a DITA file - process the file name (adding the html extension)
+         and process the rest of the href -->
+    <xsl:when test="contains(@href,$DITAEXT)">
+      <xsl:value-of select="substring-before(@href,$DITAEXT)"/><xsl:value-of select="$OUTEXT"/><xsl:call-template name="parsehref"><xsl:with-param name="href" select="substring-after(@href,$DITAEXT)"/></xsl:call-template>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:call-template name="output-message">
+        <xsl:with-param name="msgnum">006</xsl:with-param>
+        <xsl:with-param name="msgsev">E</xsl:with-param>
+        <xsl:with-param name="msgparams">%1=<xsl:value-of select="@href"/></xsl:with-param>
+      </xsl:call-template>
+      <xsl:value-of select="@href"/>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
@@ -802,9 +802,11 @@ Children are displayed in a numbered list, with the target title as the cmd and 
 </xsl:template>
 
 <xsl:template name="add-linking-attributes">
-  <xsl:attribute name="href">
-    <xsl:call-template name="href" />
-  </xsl:attribute>
+  <xsl:if test="@href and normalize-space(@href)!=''">
+    <xsl:attribute name="href">
+      <xsl:call-template name="href" />
+    </xsl:attribute>
+  </xsl:if>
   <xsl:call-template name="commonattributes" />
   <xsl:call-template name="add-link-target-attribute" />
   <xsl:call-template name="add-user-link-attributes" />

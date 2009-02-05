@@ -218,11 +218,17 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
   <!-- Process an in-line cross reference. Retrieve link text, type, and
        description if possible (and not already specified locally). -->
   <xsl:template match="*[contains(@class, ' topic/xref ')]">
-    <xsl:if test="@href=''">
-      <xsl:apply-templates select="." mode="ditamsg:empty-href"/>
-    </xsl:if>
-    <xsl:call-template name="verify-href-attribute"/>
+    <!--<xsl:call-template name="verify-href-attribute"/>-->
     <xsl:choose>
+      <xsl:when test="normalize-space(@href)='' or not(@href)">
+        <xsl:if test="not(@keyref)">
+          <!-- If keyref is specified, keyref code can generate message about unresolved key -->
+          <xsl:apply-templates select="." mode="ditamsg:empty-href"/>
+        </xsl:if>
+        <xsl:copy>
+          <xsl:apply-templates select="*|@*|comment()|processing-instruction()|text()"/>
+        </xsl:copy>
+      </xsl:when>
       <!-- replace "*|text()" with "normalize-space()" to handle xref without 
         valid link content, in this situation, the xref linktext should be 
         grabbed from href target. -->
@@ -272,6 +278,9 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
       <!-- Ignore <xref></xref>, <xref href=""></xref> -->
       <xsl:otherwise>
         <xsl:apply-templates select="." mode="ditamsg:missing-href"/>
+        <xsl:copy>
+          <xsl:apply-templates select="*|@*|comment()|processing-instruction()|text()"/>
+        </xsl:copy>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
