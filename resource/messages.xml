@@ -228,7 +228,7 @@
     <response>If you want to lower the severity level,please use the Ant parameter 'outer.control', and set the value as "warn" or "quiet".Or,you can move the referenced file "%1" into the the input dita/map directory.</response>
   </message>
   
-   <message id="DOTJ036W" type="WARN">
+  <message id="DOTJ036W" type="WARN">
     <reason>The file "%1" referenced by "%2" is outside the scope of the input dita/map directory.</reason>
     <response>If you do not want to see the warning message,please use the Ant parameter 'outer.control', and set the value as "quiet".Or,you can move the referenced file "%1" into the the input dita/map directory.</response>
   </message>
@@ -431,8 +431,8 @@
   </message>
   
   <message id="DOTX028E" type="ERROR">
-    <reason>Link or Xref must contain an unempty href attribute.</reason>
-    <response>Add an unempty href attribute for link or xref element.</response>
+    <reason>Link or Xref must include an href attribute.</reason>
+    <response>Add an href attribute for the link or xref element.</response>
   </message>
   
   <message id="DOTX029I" type="INFO">
