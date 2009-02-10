@@ -4,7 +4,10 @@
   applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2004, 2006 All Rights Reserved. -->
 
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:stylesheet version="1.0" 
+                xmlns:exsl="http://exslt.org/common"
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                exclude-result-prefixes="exsl">
   <xsl:import href="../common/output-message.xsl"/>
   <xsl:import href="../common/dita-utilities.xsl"/>
   <xsl:output method="xml" encoding="utf-8" indent="no" />
@@ -117,15 +120,37 @@
     <!-- If going to print, and @print=no, do not create links for this topicref -->
     <xsl:if 
       test="not(($FINALOUTPUTTYPE='PDF' or $FINALOUTPUTTYPE='IDD') and @print='no')">
-      <maplinks href="{$hrefFromOriginalMap}">
-        <xsl:apply-templates select="." mode="generate-all-links">
-          <xsl:with-param name="pathBackToMapDirectory" select="$pathBackToMapDirectory"/>
-        </xsl:apply-templates>
-      </maplinks>
+      <xsl:variable name="newlinks">
+        <maplinks href="{$hrefFromOriginalMap}">
+          <xsl:apply-templates select="." mode="generate-all-links">
+            <xsl:with-param name="pathBackToMapDirectory" select="$pathBackToMapDirectory"/>
+          </xsl:apply-templates>
+        </maplinks>
+      </xsl:variable>
+      <xsl:apply-templates select="exsl:node-set($newlinks)" mode="add-links-to-temp-file"/>
     </xsl:if>
     <xsl:apply-templates>
       <xsl:with-param name="pathFromMaplist" select="$pathFromMaplist"/>
     </xsl:apply-templates>
+  </xsl:template>
+
+  <!-- "add-links-to-temp-file" mode added with SF Bug 2573681  -->
+  <!-- If <maplinks> has any links in the linklist or linkpool, -->
+  <!-- then add it to the temp file.                            -->
+  <xsl:template match="maplinks" mode="add-links-to-temp-file">
+    <xsl:if test="*/*">
+      <xsl:copy>
+        <xsl:copy-of select="@*"/>
+        <xsl:apply-templates mode="add-links-to-temp-file"/>
+      </xsl:copy>
+    </xsl:if>
+  </xsl:template>
+  <!-- Match the linklist or linkpool. If it has any children, add it to the temp file. -->
+  <!-- If the linklist or linkpool are empty, they will not be added. -->
+  <xsl:template match="*" mode="add-links-to-temp-file">
+    <xsl:if test="*">
+      <xsl:copy-of select="."/>
+    </xsl:if>
   </xsl:template>
   
   <!-- Generate both unordered <linkpool> and ordered <linklist> links. -->
