@@ -28,20 +28,22 @@
   <xsl:call-template name="start-revflag">
     <xsl:with-param name="flagrules" select="$flagrules"/>
   </xsl:call-template>
-    <a>
-      <xsl:call-template name="add-linking-attributes"/>
+  <xsl:choose>
+    <xsl:when test="@href and normalize-space(@href)!=''">
+      <a>
+        <xsl:call-template name="add-linking-attributes"/>
         <xsl:if test="*[contains(@class,' topic/desc ')]">
           <xsl:variable name="uncleantitle">
             <xsl:apply-templates select="*[contains(@class,' topic/desc ')][1]" mode="text-only"/>
-            </xsl:variable>
-            <xsl:if test="normalize-space($uncleantitle)!=''">
-              <xsl:attribute name="title">
-                <xsl:value-of select="normalize-space($uncleantitle)"/>
-              </xsl:attribute>
-            </xsl:if>
+          </xsl:variable>
+          <xsl:if test="normalize-space($uncleantitle)!=''">
+            <xsl:attribute name="title">
+              <xsl:value-of select="normalize-space($uncleantitle)"/>
+            </xsl:attribute>
+          </xsl:if>
         </xsl:if>
         <!-- if there is text or sub element other than desc, apply templates to them
-        otherwise, use the href as the value of link text. -->
+          otherwise, use the href as the value of link text. -->
         <xsl:choose>
           <xsl:when test="@type='fn'">
             <sup>
@@ -68,7 +70,13 @@
             </xsl:choose>
           </xsl:otherwise>
         </xsl:choose>        
-    </a>
+      </a>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:apply-templates select="*|text()|comment()|processing-instruction()"/>
+    </xsl:otherwise>
+  </xsl:choose>
+    
   <xsl:call-template name="end-revflag">
     <xsl:with-param name="flagrules" select="$flagrules"/>
   </xsl:call-template>
