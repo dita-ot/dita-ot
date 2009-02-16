@@ -1966,7 +1966,7 @@
   </xsl:choose>
 </xsl:template>
 
-<xsl:template name="getMatchingSurfaceForm" xmlns:exsl="http://exslt.org/common">
+<xsl:template match="*" mode="getMatchingSurfaceForm" xmlns:exsl="http://exslt.org/common">
   <xsl:param name="m_matched-target"/>
   <xsl:param name="m_keys"/>
   <xsl:choose>
@@ -1981,16 +1981,14 @@
       </xsl:choose>
     </xsl:when>
     <xsl:otherwise>
-      <xsl:call-template name="output-message">
-        <xsl:with-param name="msgnum">058</xsl:with-param>
-        <xsl:with-param name="msgsev">W</xsl:with-param>
-        <xsl:with-param name="msgparams">%1=<xsl:value-of select="$m_keys"/></xsl:with-param>
-      </xsl:call-template>
+      <xsl:apply-templates select="." mode="ditamsg:no-glossentry-for-key">
+        <xsl:with-param name="matching-keys" select="$m_keys"/>
+      </xsl:apply-templates>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
 
-<xsl:template name="getMatchingAcronym" xmlns:exsl="http://exslt.org/common">
+<xsl:template match="*" mode="getMatchingAcronym" xmlns:exsl="http://exslt.org/common">
   <xsl:param name="m_matched-target"/>
   <xsl:param name="m_keys"/>
   <xsl:choose>
@@ -2012,11 +2010,9 @@
     </xsl:when>
     <xsl:otherwise>
       <!-- No matching entries found with reference language or default language. -->
-      <xsl:call-template name="output-message">
-        <xsl:with-param name="msgnum">058</xsl:with-param>
-        <xsl:with-param name="msgsev">W</xsl:with-param>
-        <xsl:with-param name="msgparams">%1=<xsl:value-of select="$m_keys"/></xsl:with-param>
-      </xsl:call-template>
+      <xsl:apply-templates select="." mode="ditamsg:no-glossentry-for-key">
+        <xsl:with-param name="matching-keys" select="$m_keys"/>
+      </xsl:apply-templates>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
@@ -2036,11 +2032,9 @@
       </xsl:when>
       <xsl:otherwise>
         <!-- TODO: Throw a warning for incorrect usage of <abbreviated-form> -->
-        <xsl:call-template name="output-message">
-          <xsl:with-param name="msgnum">060</xsl:with-param>
-          <xsl:with-param name="msgsev">W</xsl:with-param>
-          <xsl:with-param name="msgparams">%1=<xsl:value-of select="$keys"/></xsl:with-param>
-        </xsl:call-template>
+        <xsl:apply-templates select="." mode="ditamsg:no-glossentry-for-abbreviated-form">
+          <xsl:with-param name="keys" select="$keys"/>
+        </xsl:apply-templates>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:if>
@@ -2088,17 +2082,17 @@
           </xsl:when>
           <xsl:otherwise>
             <xsl:choose>
-              <xsl:when test="boolean(ancestor::copyright) or generate-id(.)=generate-id(key('keyref',@keyref)[1])">
-                <xsl:call-template name="getMatchingSurfaceForm">
+              <xsl:when test="boolean(ancestor::*[contains(@class,' topic/copyright ')]) or generate-id(.)=generate-id(key('keyref',@keyref)[1])">
+                <xsl:apply-templates select="." mode="getMatchingSurfaceForm">
                   <xsl:with-param name="m_matched-target" select="$matched-target"/>
                   <xsl:with-param name="m_keys" select="$keys"/>
-                </xsl:call-template>
+                </xsl:apply-templates>
               </xsl:when>
               <xsl:otherwise>
-                <xsl:call-template name="getMatchingAcronym">
+                <xsl:apply-templates select="." mode="getMatchingAcronym">
                   <xsl:with-param name="m_matched-target" select="$matched-target"/>
                   <xsl:with-param name="m_keys" select="$keys"/>
-                </xsl:call-template>
+                </xsl:apply-templates>
               </xsl:otherwise>
             </xsl:choose>
           </xsl:otherwise>
@@ -2108,10 +2102,10 @@
 
       <!-- hovertip text -->
       <xsl:variable name="hovertext">
-        <xsl:call-template name="getMatchingSurfaceForm">
+        <xsl:apply-templates select="." mode="getMatchingSurfaceForm">
           <xsl:with-param name="m_matched-target" select="$matched-target"/>
           <xsl:with-param name="m_keys" select="$keys"/>
-        </xsl:call-template>
+        </xsl:apply-templates>
       </xsl:variable>
       <!-- End of hovertip text -->
 
@@ -5076,10 +5070,7 @@
         <xsl:when test="string-length($maintitle)>'0'"><xsl:value-of select="normalize-space($maintitle)"/></xsl:when>
         <xsl:when test="string-length($ditamaintitle)>'0'"><xsl:value-of select="normalize-space($ditamaintitle)"/></xsl:when>
         <xsl:otherwise><xsl:text>***</xsl:text>
-          <xsl:call-template name="output-message">
-            <xsl:with-param name="msgnum">037</xsl:with-param>
-            <xsl:with-param name="msgsev">W</xsl:with-param>
-          </xsl:call-template>
+          <xsl:apply-templates select="." mode="ditamsg:no-title-for-topic"/>
         </xsl:otherwise>
       </xsl:choose>
     </title><xsl:value-of select="$newline"/>
@@ -5220,6 +5211,28 @@
 
   <!-- MESSAGES: Refactoring places each message in a moded template, so that users
        may more easily override a message for one or all cases. -->
+  <xsl:template match="*" mode="ditamsg:no-glossentry-for-key">
+    <xsl:param name="matching-keys"/>
+    <xsl:call-template name="output-message">
+      <xsl:with-param name="msgnum">058</xsl:with-param>
+      <xsl:with-param name="msgsev">W</xsl:with-param>
+      <xsl:with-param name="msgparams">%1=<xsl:value-of select="$matching-keys"/></xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
+  <xsl:template match="*" mode="ditamsg:no-glossentry-for-abbreviated-form">
+    <xsl:param name="keys"/>
+    <xsl:call-template name="output-message">
+      <xsl:with-param name="msgnum">060</xsl:with-param>
+      <xsl:with-param name="msgsev">W</xsl:with-param>
+      <xsl:with-param name="msgparams">%1=<xsl:value-of select="$keys"/></xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
+  <xsl:template match="*" mode="ditamsg:no-title-for-topic">
+    <xsl:call-template name="output-message">
+      <xsl:with-param name="msgnum">037</xsl:with-param>
+      <xsl:with-param name="msgsev">W</xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
   <xsl:template match="*" mode="ditamsg:longdescref-on-object">
     <xsl:call-template name="output-message">
      <xsl:with-param name="msgnum">038</xsl:with-param>
