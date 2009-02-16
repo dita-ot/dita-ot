@@ -231,12 +231,24 @@
      In an override stylesheet, the same call to "chapter-setup" must be issued to
      maintain the consistency of overall look'n'feel of the output HTML.
      Match on the first DITA element -or- the first root 'topic' element. -->
-<xsl:template match="/dita | /*[contains(@class,' topic/topic ')]" priority="1" name="root_element">
+<xsl:template match="/dita | *[contains(@class,' topic/topic ')]">
+  <xsl:choose>
+    <xsl:when test="not(parent::*)">
+      <xsl:apply-templates select="." mode="root_element"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:apply-templates select="." mode="child.topic"/>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+<!-- Matches /dita or a root topic -->
+<xsl:template match="*" mode="root_element" name="root_element">
   <xsl:call-template name="chapter-setup"/>
 </xsl:template>
 
 <!-- child topics get a div wrapper and fall through -->
-<xsl:template match="*[contains(@class,' topic/topic ')]" name="child.topic">
+<xsl:template match="*[contains(@class,' topic/topic ')]" mode="child.topic" name="child.topic">
   <xsl:param name="nestlevel">
       <xsl:choose>
           <!-- Limit depth for historical reasons, could allow any depth. Previously limit was 5. -->
