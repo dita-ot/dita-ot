@@ -215,9 +215,11 @@ public class StringUtils {
 	}
 	
 	/**
-	 * Restore entity
-	 * @param s
-	 * @return
+	 * Restores standard XML entities such as &amp; to the string.
+	 * These entities were resolved by the parser but must be
+	 * written back out as entities.
+	 * @param String s
+	 * @return String with &, <, >, ', and " converted to XML entities
 	 */
 	public static String restoreEntity(String s) {
 		String localEntity = s;
