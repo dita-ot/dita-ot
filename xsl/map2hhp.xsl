@@ -93,9 +93,9 @@ Display compile progress=No
 </xsl:text>
 <xsl:if test="$USEINDEX='yes'">
 <xsl:text>Index file=</xsl:text><xsl:value-of select="substring-before($HHCNAME,'.hhc')"/><xsl:text>.hhk
-Binary Index=No
-Language=</xsl:text>
+Binary Index=No</xsl:text>
 </xsl:if>
+<xsl:text>Language=</xsl:text>
 <xsl:choose>
   <xsl:when test="starts-with($target-language, 'ar-')"><xsl:text>0x0c01 Arabic (EGYPT)</xsl:text></xsl:when>
   <xsl:when test="starts-with($target-language, 'be-')"><xsl:text>0x0423 Byelorussian</xsl:text></xsl:when>
