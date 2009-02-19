@@ -55,7 +55,7 @@
   </target>
   
   <target name="build-java" depends="init-java">
-    <javac srcdir="${src.dir}" destdir="${bin.dir}" excludes="com/**"
+    <javac srcdir="${src.dir}" destdir="${bin.dir}" excludes="com/**,org/dita/dost/junit/**"
       debug="on" source="1.5" target="1.5">
       <classpath location="lib/resolver.jar"></classpath>
     </javac>
