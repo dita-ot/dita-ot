@@ -1,19 +1,15 @@
 package org.dita.dost.junit;
 
-import static org.junit.Assert.*;
-
-import java.io.File;
-
-import javax.print.attribute.standard.Finishings;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import org.dita.dost.util.MergeUtils;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
-
-import sun.management.snmp.jvminstr.JvmMemGCEntryImpl;
-import sun.management.snmp.jvminstr.JvmMemoryImpl;
 
 public class testMergeUtils {
 
