@@ -18,14 +18,14 @@ import org.dita.dost.util.Constants;
 import org.dita.dost.util.DITAOTCollator;
 
 /**
- * This class represent indexterm.
+ * This class represents an indexterm.
  * 
  * @version 1.0 2005-04-30
  * 
  * @author Wu, Zhi Qiang
  */
 public class IndexTerm implements Comparable {
-    /** The locale of indexterm, used for sorting */
+    /** The locale of  the indexterm, used for sorting */
     private static Locale termLocale = null;
 
     /** The name of the indexterm */
@@ -46,7 +46,7 @@ public class IndexTerm implements Comparable {
     /** The sub indexterms contained by this indexterm */
     private List subTerms = null;
     
-    /** The prefix added to the  term name*/
+    /** The prefix added to the term name (such as IndexTerm_Prefix_See or IndexTerm_Prefix_See_Also) */
     private String termPrefix = null;
 
     /** The list of rtl locale*/
@@ -84,7 +84,7 @@ public class IndexTerm implements Comparable {
     }
 
     /**
-     * Set the global local of indexterm.
+     * Set the global locale of indexterm.
      * 
      * @param locale
      */
@@ -93,7 +93,7 @@ public class IndexTerm implements Comparable {
     }
 
     /**
-     * Get term name.
+     * Get the index term name.
      * 
      * @return
      */
@@ -102,7 +102,7 @@ public class IndexTerm implements Comparable {
     }
 
     /**
-     * Set term name.
+     * Set the index term name.
      * 
      * @param name
      */
@@ -111,7 +111,7 @@ public class IndexTerm implements Comparable {
     }
 
     /**
-     * Getter of termkey
+     * Get the key used for sorting this term
 	 * @return Returns the termKey.
 	 */
 	public String getTermKey() {
@@ -119,7 +119,7 @@ public class IndexTerm implements Comparable {
 	}
 
 	/**
-	 * Setter of termKey
+	 * Set the key used for sorting this term
 	 * @param key The termKey to set.
 	 */
 	public void setTermKey(String key) {
@@ -300,7 +300,7 @@ public class IndexTerm implements Comparable {
     }
 
     /**
-     * All a new target.
+     * Add a new indexterm target.
      * 
      * @param target
      */
@@ -311,7 +311,7 @@ public class IndexTerm implements Comparable {
     }
 
     /**
-     * All all the targets in the list.
+     * Add all the indexterm targets in the list.
      * 
      * @param targets
      */
@@ -353,15 +353,25 @@ public class IndexTerm implements Comparable {
 				
 		return buffer.toString();
 	}
-
+	
+    /**
+     * Get the term prefix (such as IndexTerm_Prefix_See_Also).
+     */
 	public String getTermPrefix() {
 		return termPrefix;
 	}
 
+    /**
+     * Set the term prefix (such as IndexTerm_Prefix_See_Also).
+     */
 	public void setTermPrefix(String termPrefix) {
 		this.termPrefix = termPrefix;
 	}
 	
+    /**
+     * Get the full term, with any prefix.
+     * @return full term with prefix
+     */
 	public String getTermFullName(){
 		if (termPrefix == null){
 			return termName;
@@ -380,6 +390,9 @@ public class IndexTerm implements Comparable {
 		}
 	}
 	
+    /**
+     * Update the sub-term prefix from "See also" to "See" if there is only one sub-term.
+     */
 	public void updateSubTerm(){
 		if (subTerms.size()==1){
 			// if there is only one subterm, it is necessary to update
