@@ -123,12 +123,18 @@ public class IndexTermReader extends AbstractXMLReader {
 	 */
 	public void characters(char[] ch, int start, int length)
 			throws SAXException {
-		String temp = new String(ch, start, length).trim();
-		boolean withSpace = (ch[start] == '\n' || temp.startsWith(Constants.LINE_SEPARATOR));
-
-		if (temp.length() == 0) {
-			return;
+		//SF Bug 2010062: Do not trim white space from text nodes. Convert newline
+		//                to space, but leave all spaces. Also do not drop space-only nodes.
+		//String temp = new String(ch, start, length).trim();
+		//boolean withSpace = (ch[start] == '\n' || temp.startsWith(Constants.LINE_SEPARATOR));
+		String temp = new String(ch, start, length);
+		if (ch[start] == '\n' || temp.startsWith(Constants.LINE_SEPARATOR)) {
+			temp = " " + temp.substring(1);
 		}
+		
+		//if (temp.length() == 0) {
+		//	return;
+		//}
 		
 		/*
 		 * For title info
@@ -136,15 +142,16 @@ public class IndexTermReader extends AbstractXMLReader {
 		if (!insideSortingAs && !termStack.empty()) {
 			IndexTerm indexTerm = (IndexTerm) termStack.peek();
 			temp = StringUtils.restoreEntity(temp);
-			indexTerm.setTermName(StringUtils.setOrAppend(indexTerm.getTermName(), temp, withSpace));
+			indexTerm.setTermName(StringUtils.setOrAppend(indexTerm.getTermName(), temp, false));
 		} else if (insideSortingAs && temp.length() > 0) {
 			IndexTerm indexTerm = (IndexTerm) termStack.peek();
 			temp = StringUtils.restoreEntity(temp);
-			indexTerm.setTermKey(StringUtils.setOrAppend(indexTerm.getTermKey(), temp, withSpace));
+			indexTerm.setTermKey(StringUtils.setOrAppend(indexTerm.getTermKey(), temp, false));
 		} else if (inTitleElement) {
 			temp = StringUtils.restoreEntity(temp);
 			//Always append space if: <title>abc<ph/>df</title>
-			title = StringUtils.setOrAppend(title, temp, true);
+			//Updated with SF 2010062 - should only add space if one is in source
+			title = StringUtils.setOrAppend(title, temp, false);
 		}
 	}
 	
@@ -166,11 +173,12 @@ public class IndexTermReader extends AbstractXMLReader {
 	 */
 	public void endElement(String uri, String localName, String qName)
 			throws SAXException {
-		// Check to see it the indexterm element or a specialized version is 
+		// Check to see if the indexterm element or a specialized version is 
 		// in the list.
 		if (indexTermSpecList.contains(localName)) {
 			IndexTerm term = (IndexTerm) termStack.pop();
-			if (term.getTermName() == null){ 
+			//SF Bug 2010062: Also set to *** when the term is only white-space.
+			if (term.getTermName() == null || term.getTermName().trim().equals("")){
 				if(term.getEndAttribute() != null && !term.hasSubTerms()){
 					return;
 				} else{
