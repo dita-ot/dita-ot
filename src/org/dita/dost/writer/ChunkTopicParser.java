@@ -513,7 +513,7 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 			separateChunk(elem);
 		}
 		if(!copyto.isEmpty()){
-			updateList();
+			updateList(); // now only update copyto list and does not update any topic ditamap ditamaptopic list
 		}
 	}
 
@@ -527,31 +527,31 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 		String key = null;
 		String filename = null;
 		BufferedWriter bufferedWriter = null;
-		Set<String> fullditatopic = new HashSet<String>();
+//		Set<String> fullditatopic = new HashSet<String>();
 		try{
 			property.loadFromXML(new FileInputStream(new File(FileUtils.resolveFile(filePath,Constants.FILE_NAME_DITA_LIST_XML))));
 			output = new FileOutputStream(new File(FileUtils.resolveFile(filePath, Constants.FILE_NAME_DITA_LIST)));
 			xmlDitaList = new FileOutputStream(new File(FileUtils.resolveFile(filePath, Constants.FILE_NAME_DITA_LIST_XML)));
-			String fullditatopiclist[] = property.getProperty(Constants.FULL_DITA_TOPIC_LIST).split(Constants.COMMA);
+//			String fullditatopiclist[] = property.getProperty(Constants.FULL_DITA_TOPIC_LIST).split(Constants.COMMA);
 			String copytosourcelist[] = property.getProperty(Constants.COPYTO_SOURCE_LIST).split(Constants.COMMA);
-			String fullditamapandtopiclist[] = property.getProperty(Constants.FULL_DITAMAP_TOPIC_LIST).split(Constants.COMMA);
+//			String fullditamapandtopiclist[] = property.getProperty(Constants.FULL_DITAMAP_TOPIC_LIST).split(Constants.COMMA);
 			String copytotarget2sourcemaplist[] = property.getProperty(Constants.COPYTO_TARGET_TO_SOURCE_MAP_LIST).split(Constants.COMMA);
 			//in the following, all the 4 arrays are updated according to the set copyto and 
 			//map copytotarget2source.
 			
-			//copy all the file name in fullditamapandtopiclist to a new set
-			for(String topicormap:fullditamapandtopiclist){
-				fullditamapandtopic.add(topicormap);
-			}
-			//copy the file name specified in @copy-to to a new set
-			fullditatopic.addAll(copyto);
-			//copy the file name in fullditatopiclist to a new set
-			for(String topic: fullditatopiclist){
-				fullditatopic.add(topic);
-			}
-			//copy the file name in fullditatopic to the new set, because fullditatopic contains file name in @copy-to which are not added in fullditamapandtopic
-			fullditamapandtopic.addAll(fullditatopic);
-			//copy all the file name in copytosourcelist to a new set
+//			//copy all the file name in fullditamapandtopiclist to a new set
+//			for(String topicormap:fullditamapandtopiclist){
+//				fullditamapandtopic.add(topicormap);
+//			}
+//			//copy the file name specified in @copy-to to a new set
+//			fullditatopic.addAll(copyto);
+//			//copy the file name in fullditatopiclist to a new set
+//			for(String topic: fullditatopiclist){
+//				fullditatopic.add(topic);
+//			}
+//			//copy the file name in fullditatopic to the new set, because fullditatopic contains file name in @copy-to which are not added in fullditamapandtopic
+//			fullditamapandtopic.addAll(fullditatopic);
+//			//copy all the file name in copytosourcelist to a new set
 			for(String source:copytosourcelist){
 				copytoSource.add(source);
 			}
@@ -563,57 +563,57 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 			//in the case of chunk='to-content' and copy-to='*.dita' 
 			//the @href value are added in fullditatopic and fullditamapandtopic, 
 			//while they are not supposed to be contained, so should be be removed 
-			for(String source: copytotarget2source.values()){
-				if(fullditatopic.contains(source)){
-					fullditatopic.remove(source);
-				}
-				if(fullditamapandtopic.contains(source)){
-					fullditamapandtopic.remove(source);
-				}
-			}
-			//write the set and map to list file.
-			StringBuffer temp = new StringBuffer();
-			Iterator<String> it = fullditatopic.iterator();
-			filename = Constants.FULL_DITA_TOPIC_LIST.substring(Constants.INT_0, Constants.FULL_DITA_TOPIC_LIST
-					.lastIndexOf("list"))
-					+ ".list";
-			bufferedWriter = new BufferedWriter(
-					new OutputStreamWriter(new FileOutputStream(new File(FileUtils.resolveFile(filePath, filename)
-							))));
-			while(it.hasNext()){
-				key = it.next();
-				temp.append(key);
-				bufferedWriter.append(key);
-				if(it.hasNext()){
-					temp.append(Constants.COMMA);
-					bufferedWriter.append("\n");
-				}
-				
-			}
-			property.setProperty(Constants.FULL_DITA_TOPIC_LIST, temp.toString());
-			bufferedWriter.flush();
+//			for(String source: copytotarget2source.values()){
+//				if(fullditatopic.contains(source)){
+//					fullditatopic.remove(source);
+//				}
+//				if(fullditamapandtopic.contains(source)){
+//					fullditamapandtopic.remove(source);
+//				}
+//			}
+//			//write the set and map to list file.
+//			StringBuffer temp = new StringBuffer();
+//			Iterator<String> it = fullditatopic.iterator();
+//			filename = Constants.FULL_DITA_TOPIC_LIST.substring(Constants.INT_0, Constants.FULL_DITA_TOPIC_LIST
+//					.lastIndexOf("list"))
+//					+ ".list";
+//			bufferedWriter = new BufferedWriter(
+//					new OutputStreamWriter(new FileOutputStream(new File(FileUtils.resolveFile(filePath, filename)
+//							))));
+//			while(it.hasNext()){
+//				key = it.next();
+//				temp.append(key);
+//				bufferedWriter.append(key);
+//				if(it.hasNext()){
+//					temp.append(Constants.COMMA);
+//					bufferedWriter.append("\n");
+//				}
+//				
+//			}
+//			property.setProperty(Constants.FULL_DITA_TOPIC_LIST, temp.toString());
+//			bufferedWriter.flush();
+//			
+//			temp = new StringBuffer();
+//			it=fullditamapandtopic.iterator();
+//			filename = Constants.FULL_DITAMAP_TOPIC_LIST.substring(Constants.INT_0, Constants.FULL_DITAMAP_TOPIC_LIST
+//					.lastIndexOf("list"))
+//					+ ".list";
+//			bufferedWriter = new BufferedWriter(
+//					new OutputStreamWriter(new FileOutputStream(new File(FileUtils.resolveFile(filePath, filename)
+//							))));
+//			while(it.hasNext()){
+//				key = it.next();
+//				temp.append(key);
+//				bufferedWriter.append(key);
+//				if(it.hasNext())
+//					temp.append(Constants.COMMA);
+//					bufferedWriter.append("\n");
+//			}
+//			property.setProperty(Constants.FULL_DITAMAP_TOPIC_LIST, temp.toString());
+//			bufferedWriter.flush();
 			
 			temp = new StringBuffer();
-			it=fullditamapandtopic.iterator();
-			filename = Constants.FULL_DITAMAP_TOPIC_LIST.substring(Constants.INT_0, Constants.FULL_DITAMAP_TOPIC_LIST
-					.lastIndexOf("list"))
-					+ ".list";
-			bufferedWriter = new BufferedWriter(
-					new OutputStreamWriter(new FileOutputStream(new File(FileUtils.resolveFile(filePath, filename)
-							))));
-			while(it.hasNext()){
-				key = it.next();
-				temp.append(key);
-				bufferedWriter.append(key);
-				if(it.hasNext())
-					temp.append(Constants.COMMA);
-					bufferedWriter.append("\n");
-			}
-			property.setProperty(Constants.FULL_DITAMAP_TOPIC_LIST, temp.toString());
-			bufferedWriter.flush();
-			
-			temp = new StringBuffer();
-			it = copytoSource.iterator();
+			Iterator<String> it = copytoSource.iterator();
 			filename = Constants.COPYTO_SOURCE_LIST.substring(Constants.INT_0, Constants.COPYTO_SOURCE_LIST
 					.lastIndexOf("list"))
 					+ ".list";

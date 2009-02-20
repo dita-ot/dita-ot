@@ -242,6 +242,7 @@ public class ChunkModule implements AbstractPipelineModule {
 			Iterator it=changeTable.entrySet().iterator();
 			File topic_list=new File(tempDir, Constants.FULL_DITA_TOPIC_LIST.substring(0, Constants.FULL_DITA_TOPIC_LIST.lastIndexOf("list"))+".list");
 			File map_list=new File(tempDir, Constants.FULL_DITAMAP_LIST.substring(0, Constants.FULL_DITAMAP_LIST.lastIndexOf("list"))+".list");
+			File all_list=new File(tempDir, Constants.FULL_DITAMAP_TOPIC_LIST.substring(0, Constants.FULL_DITAMAP_TOPIC_LIST.lastIndexOf("list"))+".list");
 			while(it.hasNext()){
 				Map.Entry entry = (Map.Entry) it.next();
 				String oldFile=(String)entry.getKey();
@@ -311,11 +312,15 @@ public class ChunkModule implements AbstractPipelineModule {
 								//topicList.delete(topicList.indexOf(relativePath), len);
 								topicList.remove(relativePath);
 							}
+							if (chunkedTopicSet.contains(relativePath)){
+								chunkedTopicSet.remove(relativePath);
+							}
 							relativePath = FileUtils.getRelativePathFromMap(xmlDitalist.getAbsolutePath(), target.getAbsolutePath());
 							//if (topicList.length() > 0) {
 							//	topicList.append(Constants.COMMA);
 							//}
 							topicList.add(relativePath);
+							chunkedTopicSet.add(relativePath);
 						} else {
 							conflictTable.remove(entry.getKey());
 						}
@@ -331,12 +336,15 @@ public class ChunkModule implements AbstractPipelineModule {
 			
 			String topics[]=((String)prop.getProperty(Constants.FULL_DITA_TOPIC_LIST)).split(Constants.COMMA);
 			String maps[]=((String)prop.getProperty(Constants.FULL_DITAMAP_LIST)).split(Constants.COMMA);
+			String all[]=((String)prop.getProperty(Constants.FULL_DITAMAP_TOPIC_LIST)).split(Constants.COMMA);
 			
 			try {
 			BufferedWriter topicWriter = new BufferedWriter(
 					new OutputStreamWriter(new FileOutputStream(topic_list)));
 			BufferedWriter mapWriter = new BufferedWriter(
 					new OutputStreamWriter(new FileOutputStream(map_list)));
+			BufferedWriter allWriter = new BufferedWriter(
+					new OutputStreamWriter(new FileOutputStream(all_list)));
 			for (int i = 0; i < topics.length; i++){
 				topicWriter.write(topics[i]);
 				if (i < topics.length - 1) {
@@ -350,6 +358,13 @@ public class ChunkModule implements AbstractPipelineModule {
 					mapWriter.write("\n");
 				}
 				mapWriter.flush();
+			}
+			for (int i = 0; i < all.length; i++){
+				allWriter.write(all[i]);
+				if (i < all.length -1){
+					allWriter.write("\n");
+				}
+				allWriter.flush();
 			}
 			} catch (FileNotFoundException e) {
 				logger.logException(e);

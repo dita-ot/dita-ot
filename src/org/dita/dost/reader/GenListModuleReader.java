@@ -688,12 +688,12 @@ public class GenListModuleReader extends AbstractXMLReader {
 //			if (attrValue.contains(Constants.SHARP) && attrValue.lastIndexOf(Constants.SHARP) < attrValue.length() - 1) {
 //				id = attrValue.substring(attrValue.lastIndexOf(Constants.SHARP) + 1);
 //			}
-			String pathWithID = FileUtils.resolveTopic(currentDir, attrValue);
+			String pathWithoutID = FileUtils.resolveFile(currentDir, attrValue);
 			//String pathWithID = FileUtils.resolveTopic(rootFilePath, attrValue);
 			if (chunkLevel > 0 && chunkToNavLevel == 0 && topicGroupLevel == 0) {
-				chunkTopicSet.add(pathWithID);
+				chunkTopicSet.add(pathWithoutID);
 			} else {
-				hrefTopicSet.add(pathWithID);
+				hrefTopicSet.add(pathWithoutID);
 			}
 		}
 		
@@ -731,11 +731,11 @@ public class GenListModuleReader extends AbstractXMLReader {
 				copytoMap.put(filename, FileUtils.normalizeDirectory(currentDir, href));
 			}
 			
-			String pathWithID = FileUtils.resolveTopic(currentDir, attrValue);
+			String pathWithoutID = FileUtils.resolveFile(currentDir, attrValue);
 			if (chunkLevel > 0 && chunkToNavLevel == 0 && topicGroupLevel == 0) {
-				chunkTopicSet.add(pathWithID);
+				chunkTopicSet.add(pathWithoutID);
 			} else {
-				hrefTopicSet.add(pathWithID);
+				hrefTopicSet.add(pathWithoutID);
 			}
 				
 		}
