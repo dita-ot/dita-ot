@@ -74,13 +74,18 @@ public class DitamapIndexTermReader extends AbstractXMLReader {
 	 */
 	public void characters(char[] ch, int start, int length)
 			throws SAXException {
-		String temp = new String(ch, start, length).trim();
+		//SF Bug 2010062: Do not trim white space from text nodes. Convert newline
+		//                to space, but leave all spaces. Also do not drop space-only nodes.
+		String temp = new String(ch, start, length);
 		IndexTerm indexTerm = null;
-		boolean withSpace = (ch[start] == '\n' || temp.startsWith(Constants.LINE_SEPARATOR));
-
-		if (temp.length() == 0) {
-			return;
+		//boolean withSpace = (ch[start] == '\n' || temp.startsWith(Constants.LINE_SEPARATOR));
+		if (ch[start] == '\n' || temp.startsWith(Constants.LINE_SEPARATOR)) {
+			temp = " " + temp.substring(1);
 		}
+
+//		if (temp.length() == 0) {
+//			return;
+//		}
 
 		if (elementStack.empty() || !(elementStack.peek() instanceof IndexTerm)) {
 			return;
@@ -88,7 +93,7 @@ public class DitamapIndexTermReader extends AbstractXMLReader {
 
 		indexTerm = (IndexTerm) elementStack.peek();
 		
-		indexTerm.setTermName(StringUtils.setOrAppend(indexTerm.getTermName(), temp, withSpace));
+		indexTerm.setTermName(StringUtils.setOrAppend(indexTerm.getTermName(), temp, false));
 
 	}
 
@@ -109,7 +114,7 @@ public class DitamapIndexTermReader extends AbstractXMLReader {
 			IndexTerm indexTerm = (IndexTerm) elementStack.pop();
 			Object obj = null;
 
-			if (indexTerm.getTermName() == null) {
+			if (indexTerm.getTermName() == null || indexTerm.getTermName().trim().equals("")) {
 				if(indexTerm.getEndAttribute() != null && !indexTerm.hasSubTerms()){
 					return;
 				}else{
