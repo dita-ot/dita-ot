@@ -98,10 +98,10 @@ with those set forth herein.
     <path id="project.class.path">
         <pathelement path="${java.class.path}"/>
         <pathelement location="${basedir}/lib/saxon.jar"/>
-        <pathelement location="${fo.lib.dir}/xml-apis.jar"/>
-        <pathelement location="${fo.lib.dir}/xercesImpl.jar"/>
-        <pathelement location="${fo.lib.dir}/resolver.jar"/>
-        <pathelement location="${fo.lib.dir}/icu4j.jar"/>        
+        <pathelement location="${lib.dir}/xml-apis.jar"/>
+        <pathelement location="${lib.dir}/xercesImpl.jar"/>
+        <pathelement location="${lib.dir}/resolver.jar"/>
+        <pathelement location="${lib.dir}/icu4j.jar"/>        
         <pathelement location="${fo.lib.dir}/fo.jar"/>
     </path>
 
@@ -206,14 +206,14 @@ with those set forth herein.
             config="${i18n.config.file}"
             catalogs="${xml.catalog.files}">
         </i18n-preprocess>
-            
+
         <java classname="com.icl.saxon.StyleSheet" classpathref="project.class.path" fork="true">
             <arg line='-o "${outputFile}"'/>
             <arg line="${saxon.resolver.command.line}"/>
             <arg line='"${buildDir}/stage3.fo"'/>
             <arg line='"${xsl.fo.dir}/i18n-postprocess.xsl"'/>
             <sysproperty key="xml.catalog.files" value="${xml.catalog.files}"/>
-        </java>            
+        </java>
     </target>
 
     <target name="transform.topic2pdf">
