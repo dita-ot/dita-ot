@@ -1,33 +1,22 @@
-Welcome to Idiom's FO output for the DITA Open Toolkit
+Welcome to Idiom FO output for the DITA Open Toolkit
 ======================================================
 
-Idiom Technologies has donated its production quality PDF output for use with 
-the DITA Open Toolkit. This has been integrated into the Toolkit as a plugin. 
-Features of this code include:
+Apache FOP (Formatting Objects Processor) is a print formatter driven 
+by XSL formatting objects (XSL-FO) and an output independent formatter. 
+It is a Java application that reads a formatting object (FO) tree and 
+renders the resulting pages to a specified output. Output formats  
+currently supported include PDF, PS, PCL, AFP, XML (area tree representation), 
+Print, AWT and PNG, and to a lesser extent, RTF and TXT. The primary 
+output target is PDF. 
 
-- Index (with extensions) and table of contents generation
-- Font mapping: characters can be remapped to different fonts. This is 
-  particularly useful for CJK font support, and is configured per-locale.
-- Extensive customization of publishing output by setting variables
-  (67 of them) and attribute-sets (391 of them).
-- A catalog-based customization framework where you can customize variables, 
-  attribute-sets and XSLs without modifying Open Toolkit code: your custom 
-  settings live in files in a separate customization hierarchy.
-- Bookmap/bookinfo support.
-
-This plugin has only been tested with Sun's JDK 1.4 and may not work
-with the IBM JDK due to a conflict with XEP's crimson.jar.
-
-Building and installing Idiom's FO output
+Installing Idiom FO output
 =========================================
 
 You will need the following software, which we cannot include with
 this plugin due to licensing and redistribution restrictions:
 
-- RenderX XEP: Idiom's FO output currently requires RenderX XEP to
-  convert FO to PDF. The personal edition of XEP can be obtained for
-  free from RenderX (http://www.renderx.com). XEP comes with Saxon
-  6.5.3, which this plugin also needs. But if you are using JDK 1.5 or 
+- Apache FOP: Apache FOP can be obtained from http://xmlgraphics.apache.org/fop/
+  This plugin also requires Saxon 6.5.3. But if you are using JDK 1.5 or 
   newer, you will need Saxon 6.5.5 or newer which has fixes for JDK 1.5
   compatibility. Download Saxon 6.5.5 from http://saxon.sourceforge.net.
 
@@ -40,8 +29,10 @@ this plugin due to licensing and redistribution restrictions:
 1. Install the DITA Open Toolkit.
 2. Unzip this plugin into an Open Toolkit installation's
    demo directory.
-3. Install XEP personal edition and license into demo/fo/lib/xep.
-4. If you are using JDK 1.5, install saxon.jar in demo/fo/lib/xep/lib.
+3. Install Apache FOP into demo/fop. The minimum requirements are to place
+   fop.jar into demo/fop/build/ and all library jar files provided in Apache
+   FOP package into demo/fop/lib/.
+4. If you are using JDK 1.5, install saxon.jar in demo/fo/lib/.
 5. Install the ICU4j jar (optional) as demo/fo/lib/icu4j.jar
 6. From the Open Toolkit directory, run "ant -f integrator.xml"
 
@@ -237,7 +228,7 @@ Available since Feb. 23, 2006
 
 ============================================================================
 
-Copyright © 2005 by Idiom Technologies, Inc. All rights reserved. 
+Copyright ?2005 by Idiom Technologies, Inc. All rights reserved. 
 IDIOM is a registered trademark of Idiom Technologies, Inc. and WORLDSERVER
 and WORLDSTART are trademarks of Idiom Technologies, Inc. All other 
 trademarks are the property of their respective owners. 
