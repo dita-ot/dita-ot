@@ -98,6 +98,8 @@
   	<include name="demo/java/**"/>
   	<include name="demo/dita12/**"/>
   	<include name="demo/dita132/**"/>
+		<include name="demo/fo/**" />
+		<include name="demo/legacypdf/**" />
     <include name="doc/**"/>
     <include name="dtd/**"/>
     <include name="plugins/**"/>
