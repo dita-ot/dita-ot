@@ -35,7 +35,7 @@
 	
   <target name="build-java" depends="init-java">
     <javac srcdir="${src.dir}" destdir="${bin.dir}" classpath="${ant.jar}"
-      debug="on">
+      debug="on" excludes="com/idiominc/ws/opentopic/fo/xep/**">
       <classpath refid="build.class.path"/>
     </javac>
   </target>
