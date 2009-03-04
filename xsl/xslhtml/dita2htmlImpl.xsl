@@ -2029,28 +2029,8 @@
   </xsl:choose>
 </xsl:template>
 
+<!-- Note: processing for the term specialization abbreviated-form is located in abbrev-d.xsl. -->
 <xsl:key name="keyref" match="*[contains(@class, ' topic/term ')]" use="@keyref"/>
-<xsl:template match="*[contains(@class,' abbrev-d/abbreviated-form ')]" name="topic.abbreviated-form" priority="5">
-  <xsl:variable name="keys" select="@keyref"/>
-  <xsl:if test="@keyref and document($KEYREF-FILE)//*[@keys=$keys][normalize-space(@href)!='']/@href">
-    <xsl:variable name="target">
-      <xsl:value-of select="document($KEYREF-FILE)//*[@keys=$keys][normalize-space(@href)!='']/@href"/>
-    </xsl:variable>
-    <xsl:variable name="entry-file" select="concat($WORKDIR, $PATH2PROJ, substring-before($target, '.'), $DITAEXT)"/>
-    <xsl:variable name="entry-file-contents" select="document($entry-file, /)"/>
-    <xsl:choose>
-      <xsl:when test="$entry-file-contents//*[contains(@class,' glossentry/glossentry ')]">
-        <xsl:call-template name="topic.term"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <!-- TODO: Throw a warning for incorrect usage of <abbreviated-form> -->
-        <xsl:apply-templates select="." mode="ditamsg:no-glossentry-for-abbreviated-form">
-          <xsl:with-param name="keys" select="$keys"/>
-        </xsl:apply-templates>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:if>
-</xsl:template>
 <!-- terms and abbreviated-forms -->
 <xsl:template match="*[contains(@class,' topic/term ')]" name="topic.term">
   <xsl:variable name="keys" select="@keyref"/>
@@ -2513,7 +2493,8 @@
 </xsl:template>
 
 <!-- Process image attributes. Using priority, in case default @href is added at some point. -->
-<xsl:template match="*[contains(@class,' topic/image ')]/@href" priority="1">
+<!-- 20090303: Removed priority; does not appear to be needed. -->
+<xsl:template match="*[contains(@class,' topic/image ')]/@href">
   <xsl:attribute name="src"><xsl:value-of select="."/></xsl:attribute>
 </xsl:template>
 <xsl:template match="*[contains(@class,' topic/image ')]/@height">
@@ -5229,14 +5210,6 @@
       <xsl:with-param name="msgnum">058</xsl:with-param>
       <xsl:with-param name="msgsev">W</xsl:with-param>
       <xsl:with-param name="msgparams">%1=<xsl:value-of select="$matching-keys"/></xsl:with-param>
-    </xsl:call-template>
-  </xsl:template>
-  <xsl:template match="*" mode="ditamsg:no-glossentry-for-abbreviated-form">
-    <xsl:param name="keys"/>
-    <xsl:call-template name="output-message">
-      <xsl:with-param name="msgnum">060</xsl:with-param>
-      <xsl:with-param name="msgsev">W</xsl:with-param>
-      <xsl:with-param name="msgparams">%1=<xsl:value-of select="$keys"/></xsl:with-param>
     </xsl:call-template>
   </xsl:template>
   <xsl:template match="*" mode="ditamsg:no-title-for-topic">

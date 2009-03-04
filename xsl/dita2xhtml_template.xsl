@@ -41,6 +41,8 @@
 <xsl:import href="xslhtml/ui-d.xsl"/>
 <!-- highlighting domain -->
 <xsl:import href="xslhtml/hi-d.xsl"/>
+<!-- abbreviated-form domain -->
+<xsl:import href="xslhtml/abbrev-d.xsl"/>
 
 <dita:extension id="dita.xsl.xhtml" behavior="org.dita.dost.platform.ImportXSLAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
 
