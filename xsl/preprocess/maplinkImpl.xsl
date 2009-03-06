@@ -470,7 +470,7 @@
           <xsl:choose>
             <xsl:when 
               test="starts-with(@href,'http://') or starts-with(@href,'/') or
-                          starts-with(@href,'https://') or starts-with(@href,'ftp:/')">
+                          starts-with(@href,'https://') or starts-with(@href,'ftp:/') or @scope='external'">
               <xsl:value-of select="@href"/>
             </xsl:when>
             <!-- If the target has a copy-to value, link to that -->

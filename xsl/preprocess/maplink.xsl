@@ -35,7 +35,7 @@
     <!-- Href that points from this map to the topic this href references. -->
     <xsl:variable name="hrefFromOriginalMap">
       <xsl:choose>
-        <xsl:when test="@copy-to and contains(@copy-to,$DITAEXT)">
+        <xsl:when test="@copy-to and contains(@copy-to,$DITAEXT) and not(contains(@chunk, 'to-content'))">
           <xsl:call-template name="simplifyLink">
             <xsl:with-param name="originalLink">
               <xsl:value-of select="@copy-to"/>
@@ -197,11 +197,11 @@
           <xsl:choose>
             <xsl:when 
               test="starts-with(@href,'http://') or starts-with(@href,'/') or
-                          starts-with(@href,'https://') or starts-with(@href,'ftp:/')">
+                          starts-with(@href,'https://') or starts-with(@href,'ftp:/') or @scope='external'">
               <xsl:value-of select="@href"/>
             </xsl:when>
             <!-- If the target has a copy-to value, link to that -->
-            <xsl:when test="@copy-to">
+            <xsl:when test="@copy-to and not(contains(@chunk, 'to-content'))">
               <xsl:call-template name="simplifyLink">
                 <xsl:with-param name="originalLink">
                   <xsl:value-of select="$pathBackToMapDirectory"/><xsl:value-of select="@copy-to"/>
