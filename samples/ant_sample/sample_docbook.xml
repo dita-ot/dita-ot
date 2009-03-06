@@ -2,8 +2,7 @@
 <!-- This file is part of the DITA Open Toolkit project hosted on 
      Sourceforge.net. See the accompanying license.txt file for 
      applicable licenses.-->
-<!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
-<!-- revise @PLACEHOLDER@ names and values-->
+<!-- (c) Copyright IBM Corp. 2004, 2006 All Rights Reserved. -->
 
 <!-- 
   | basedir can be specified to other places base on your need.
@@ -12,21 +11,23 @@
   | they are relative paths.
   * -->
 
-<project name="@PROJECT.NAME@_docbook" default="@DELIVERABLE.NAME@2docbook" basedir=".">
-    
+<project name="sample_docbook" default="sample2docbook" basedir=".">
+  
   <!-- dita.dir should point to the toolkit's root directory -->
-  <property name="dita.dir" value="${basedir}${file.separator}.."/>
+  <property name="dita.dir" value="${basedir}${file.separator}..${file.separator}.."/>
   
   <!-- if file is a relative file name, the file name will be resolved 
        relative to the importing file -->
   <import file="${dita.dir}${file.separator}integrator.xml"/>
   
-  <target name="@DELIVERABLE.NAME@2docbook" depends="integrate">
+  <target name="sample2docbook" depends="integrate">
     <ant antfile="${dita.dir}${file.separator}build.xml" target="init">
       <!-- please refer to the toolkit's document for supported parameters, and 
            specify them base on your needs -->
-      <property name="args.input" value="@DITA.INPUT@"/>
-      <property name="output.dir" value="@OUTPUT.DIR@"/>
+      <property name="args.input"
+        value="${dita.dir}${file.separator}samples${file.separator}hierarchy.ditamap"/>
+      <property name="output.dir"
+        value="out${file.separator}samples${file.separator}docbook"/>
       <property name="transtype" value="docbook"/>
     </ant>
   </target>

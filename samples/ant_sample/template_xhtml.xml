@@ -14,7 +14,7 @@
 <project name="@PROJECT.NAME@_xhtml" default="@DELIVERABLE.NAME@2xhtml" basedir=".">
   
   <!-- dita.dir should point to the toolkit's root directory -->
-  <property name="dita.dir" value="${basedir}${file.separator}.."/>
+  <property name="dita.dir" value="${basedir}${file.separator}..${file.separator}.."/>
   
   <!-- if file is a relative file name, the file name will be resolved 
        relative to the importing file -->
