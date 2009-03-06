@@ -12,8 +12,11 @@ output target is PDF.
 Installing Idiom FO output
 =========================================
 
-You will need the following software, which we cannot include with
-this plugin due to licensing and redistribution restrictions:
+* If you are using a full-easy-install package, you don't need to do additional
+  work to run pdf conversion. Just use the pdf transtype to build your pdf output.
+
+* If you are NOT using a full-easy-install package, some additional efforts are
+  needed to get pdf conversion run. You will need the following software:
 
 - Apache FOP: Apache FOP can be obtained from http://xmlgraphics.apache.org/fop/
   This plugin also requires Saxon 6.5.3. But if you are using JDK 1.5 or 
@@ -29,20 +32,25 @@ this plugin due to licensing and redistribution restrictions:
 1. Install the DITA Open Toolkit.
 2. Unzip this plugin into an Open Toolkit installation's
    demo directory.
-3. Install Apache FOP into demo/fop. The minimum requirements are to place
-   fop.jar into demo/fop/build/ and all library jar files provided in Apache
-   FOP package into demo/fop/lib/.
-4. If you are using JDK 1.5, install saxon.jar in demo/fo/lib/.
-5. Install the ICU4j jar (optional) as demo/fo/lib/icu4j.jar
-6. From the Open Toolkit directory, run "ant -f integrator.xml"
+3. Install Apache FOP into demo/fo/fop. The minimum requirements are to place
+   fop.jar into demo/fo/fop/build/ and all library jar files provided in Apache
+   FOP package into demo/fo/fop/lib/.
+4. Copy "fop.xconf", which is shipped together within the Apache FOP package
+   in the conf directory, to demo/fo/fop/conf/.
+5. Edit the copied fop.xconf, add this line:
+   <strict-validation>false</strict-validation>
+   below the line "<base>.</base>". Save and close fop.xconf.
+6. If you are using JDK 1.5, install saxon.jar in OT's library directory lib/.
+7. Install the ICU4j jar (optional) into OT's library directory lib/icu4j.jar
+8. From the Open Toolkit directory, run "ant -f integrator.xml"
 
 At this point, the FO output is fully integrated into the Open
 Toolkit's pipeline. The plugin infrastructure will detect the FO
-plugin in step 5 and provide a "pdf2" output: this will invoke this FO
+plugin and provide a "pdf" output: this will invoke this FO
 output instead of the previous FOP-based output. Invoke with a command
 line like:
 
-java -jar lib/dost.jar /i:doc/DITA-readme.ditamap /transtype:pdf2
+java -jar lib/dost.jar /i:doc/DITA-readme.ditamap /transtype:pdf
 
 If you are using the startcmd.bat/sh script, make sure the classpath in that 
 script lists saxon.jar before xalan.jar. 
