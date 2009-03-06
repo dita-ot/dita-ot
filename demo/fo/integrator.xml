@@ -8,8 +8,9 @@
       <isset property="pdf2.dir"/>
     </not>
   </condition>
-
-  <dirname property="dita.temp.dir.fullpath" file="${dita.temp.dir}${file.separator}dummy.file"/>
+  <!-- Don't use global property because global properties may get initialized only once in one
+       build sequence of ant which will cause FileNotFound exceptions due to incorrect paths. -->
+  <!--<dirname property="dita.temp.dir.fullpath" file="${dita.temp.dir}${file.separator}dummy.file"/>-->
   
   <target name="dita2pdf2" depends="pdfswitch-warning, dita-preprocess, map2pdf2, topic2pdf2"/> 
   
@@ -32,6 +33,7 @@
   </target>
 
   <target name="map2pdf2" unless="noMap" depends="dita-preprocess">
+  	<dirname property="dita.temp.dir.fullpath" file="${dita.temp.dir}${file.separator}dummy.file"/>
     <pipeline message="topicmerge" module="TopicMerge"
               inputmap="${dita.temp.dir.fullpath}${file.separator}${user.input.file}"
               tempdir="${dita.temp.dir.fullpath}"
