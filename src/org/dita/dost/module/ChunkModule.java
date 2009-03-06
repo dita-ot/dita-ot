@@ -225,7 +225,7 @@ public class ChunkModule implements AbstractPipelineModule {
 					t = t.substring(0, t.lastIndexOf(Constants.SHARP));
 				}
 				if (t.lastIndexOf(Constants.FILE_EXTENSION_DITAMAP) == -1) {
-					t = changeExtName(t, Constants.FILE_EXTENSION_DITA, ditaext);
+					t = changeExtName(t, ditaext, ditaext);
 				}
 				t = FileUtils.getRelativePathFromMap(xmlDitalist.getAbsolutePath(), FileUtils.resolveFile(tempDir, t));
 				//topicList.append(t).append(Constants.COMMA);

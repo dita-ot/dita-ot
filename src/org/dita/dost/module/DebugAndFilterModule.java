@@ -47,7 +47,7 @@ public class DebugAndFilterModule implements AbstractPipelineModule {
 			Constants.CONREF_LIST,Constants.HREF_DITA_TOPIC_LIST,Constants.FULL_DITA_TOPIC_LIST,
 			Constants.FULL_DITAMAP_TOPIC_LIST,Constants.CONREF_TARGET_LIST,Constants.COPYTO_SOURCE_LIST,
 			Constants.COPYTO_TARGET_TO_SOURCE_MAP_LIST,Constants.OUT_DITA_FILES_LIST,Constants.CONREF_PUSH_LIST,
-			Constants.KEYREF_LIST,Constants.CODEREF_LIST};
+			Constants.KEYREF_LIST,Constants.CODEREF_LIST,Constants.CHUNK_TOPIC_LIST,Constants.HREF_TOPIC_LIST};
 	/**
 	 * File extension of source file
 	 */
