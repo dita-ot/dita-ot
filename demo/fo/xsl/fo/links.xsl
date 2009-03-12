@@ -432,27 +432,42 @@ See the accompanying license.txt file for applicable licenses.
     <exslf:function name="opentopic-func:getDestinationId">
         <xsl:param name="href"/>
         <xsl:variable name="destination">
-            <xsl:variable name="topic-id">
-                <xsl:value-of select="substring-after($href, '#')"/>
-            </xsl:variable>
-
-            <xsl:variable name="element-id">
-                <xsl:value-of select="substring-after($topic-id, '/')"/>
-            </xsl:variable>
-
-            <xsl:choose>
-                <xsl:when test="$element-id = ''">
-                    <xsl:value-of select="$topic-id"/>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:value-of select="$element-id"/>
-                </xsl:otherwise>
-            </xsl:choose>
+            <xsl:call-template name="getDestinationIdImpl">
+                <xsl:with-param name="href" select="$href"/>
+            </xsl:call-template>
         </xsl:variable>
         <exslf:result select="$destination"/>
     </exslf:function>
 
-	<!--Related links-->
+    <xsl:function version="2.0" name="opentopic-func:getDestinationId">
+        <xsl:param name="href"/>
+        <xsl:call-template name="getDestinationIdImpl">
+            <xsl:with-param name="href" select="$href"/>
+        </xsl:call-template>
+    </xsl:function>
+
+    <xsl:template name="getDestinationIdImpl">
+        <xsl:param name="href"/>
+        
+        <xsl:variable name="topic-id">
+            <xsl:value-of select="substring-after($href, '#')"/>
+        </xsl:variable>
+
+        <xsl:variable name="element-id">
+            <xsl:value-of select="substring-after($topic-id, '/')"/>
+        </xsl:variable>
+
+        <xsl:choose>
+            <xsl:when test="$element-id = ''">
+                <xsl:value-of select="$topic-id"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="$element-id"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+    
+        <!--Related links-->
 
 	<xsl:template name="buildRelationships">
 <!--

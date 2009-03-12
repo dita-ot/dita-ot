@@ -77,7 +77,7 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:param name="locale"/>
 
-    <xsl:param name="customizationDir" select=""/>
+    <xsl:param name="customizationDir"/>
 
     <xsl:param name="artworkPrefix"/>
 

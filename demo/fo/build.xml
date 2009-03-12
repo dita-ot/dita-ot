@@ -172,10 +172,14 @@ with those set forth herein.
         <!--makeurl seems to output file:/C: style instead of file:///C:, but
             xep, fop, and ah all accept it.-->
         <makeurl property="artworkPrefixUrl" file="${artworkPrefix}" />
+
+        <!--Decide which version of saxon to use.-->
+        <available classname="net.sf.saxon.Transform" property="fo.saxon.classname" value="net.sf.saxon.Transform" classpathref="project.class.path"/>
+        <property name="fo.saxon.classname" value="com.icl.saxon.StyleSheet"/>
         
     	<!-- must fork or catalog resolution will fail due to sharing of -->
     	<!-- resolver and catalogs with the Open Toolkit -->
-        <java classname="com.icl.saxon.StyleSheet" classpathref="project.class.path" fork="true">
+        <java classname="${fo.saxon.classname}" classpathref="project.class.path" fork="true">
             <arg line='-o "${buildDir}/stage2.fo"'/>
             <arg line="${saxon.resolver.command.line}"/>
             <arg line='"${buildDir}/stage1.xml"'/>
@@ -209,7 +213,7 @@ with those set forth herein.
             catalogs="${xml.catalog.files}">
         </i18n-preprocess>
 
-        <java classname="com.icl.saxon.StyleSheet" classpathref="project.class.path" fork="true">
+        <java classname="${fo.saxon.classname}" classpathref="project.class.path" fork="true">
             <arg line='-o "${outputFile}"'/>
             <arg line="${saxon.resolver.command.line}"/>
             <arg line='"${buildDir}/stage3.fo"'/>
