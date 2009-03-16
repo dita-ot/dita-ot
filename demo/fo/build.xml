@@ -97,7 +97,10 @@ with those set forth herein.
 
     <path id="project.class.path">
         <pathelement path="${java.class.path}"/>
-        <pathelement location="${fo.lib.dir}/saxon.jar"/>
+    	<fileset dir="${lib.dir}/saxon">
+    	   <include name="**/*.jar"/>
+    	</fileset>
+
     	<!--
         <pathelement location="${lib.dir}/xml-apis.jar"/>
         <pathelement location="${lib.dir}/xercesImpl.jar"/>
