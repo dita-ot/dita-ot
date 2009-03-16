@@ -338,6 +338,7 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 		params.put("%1", currentFile);		
 
 		try {
+			fileToParse = fileToParse.getCanonicalFile();
 			if (FileUtils.isValidTarget(currentFile.toLowerCase()))
 			{
 				reader.setCurrentDir(new File(currentFile).getParent());
