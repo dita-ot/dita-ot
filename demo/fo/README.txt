@@ -40,7 +40,7 @@ Installing Idiom FO output
 5. Edit the copied fop.xconf, add this line:
    <strict-validation>false</strict-validation>
    below the line "<base>.</base>". Save and close fop.xconf.
-6. If you are using JDK 1.5, install saxon.jar in OT's library directory lib/.
+6. If you are using JDK 1.5, install saxon.jar in FO plug-in's library directory demo/fo/lib/.
 7. Install the ICU4j jar (optional) into OT's library directory lib/icu4j.jar
 8. From the Open Toolkit directory, run "ant -f integrator.xml"
 
