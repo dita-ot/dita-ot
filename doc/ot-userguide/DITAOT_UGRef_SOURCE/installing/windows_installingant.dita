@@ -13,6 +13,7 @@ See the accompanying license.txt file for applicable licenses.
 		<author type="creator">Kylene Bruski</author>
 		<author type="contributor">Anna van Raaphorst</author>
 		<author type="contributor">Richard Johnson</author>
+		<author type="contributor">Youyi Zhou</author>
 		<publisher>OASIS (Organization for the Advancement of Structured Information Standards)</publisher>
 		<copyright>
 			<copyryear year="2005"/>
@@ -21,6 +22,7 @@ See the accompanying license.txt file for applicable licenses.
 		<critdates>
 			<created date="2005-November-01"/>
 			<revised modified="2006-October-10"/>
+			<revised modified="2009-March-16"/>
 		</critdates>
 		<metadata>
 			<keywords>
@@ -57,13 +59,13 @@ See the accompanying license.txt file for applicable licenses.
 				</cmd>
 			</step>
 			<step>
-				<cmd>Select <uicontrol>apache-ant-1.6.5-bin.zip [PGP] [SHA1] 
+				<cmd>Select <uicontrol>apache-ant-1.7.1-bin.zip [PGP] [SHA1] 
           [MD5]</uicontrol>
 				</cmd>
 			</step>
 			<step>
 				<cmd>Click <uicontrol>Save</uicontrol> to unzip the 
-          apache-ant-1.6.5-bin.zip [PGP] [SHA1] [MD5] file and save it to your 
+          apache-ant-1.7.1-bin.zip [PGP] [SHA1] [MD5] file and save it to your 
           C:\ directory as <filepath>ant</filepath>.</cmd>
 			</step>
 			<step>

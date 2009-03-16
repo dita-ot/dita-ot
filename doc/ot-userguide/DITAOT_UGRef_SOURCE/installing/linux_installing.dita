@@ -9,6 +9,7 @@ See the accompanying license.txt file for applicable licenses.
 	<prolog>
 		<author type="creator">Anna van Raaphorst</author>
 		<author type="contributor">Richard Johnson</author>
+		<author type="contributor">Youyi Zhou</author>
 		<publisher>OASIS (Organization for the Advancement of Structured Information Standards)</publisher>
 		<copyright>
 			<copyryear year="2007"/>
@@ -17,6 +18,7 @@ See the accompanying license.txt file for applicable licenses.
 		<critdates>
 			<created date="2006-May-01"/>
 			<revised modified="2007-April-17"/>
+			<revised modified="2009-March-16"/>
 		</critdates>
 		<metadata>
 			<keywords>
@@ -38,9 +40,9 @@ See the accompanying license.txt file for applicable licenses.
 		</p>
 		<p>
 			<note>As an example, if you are using Fedora Core 5 Linux, software installation is done using the Package Manager. From this application, if you install the Java Development package within the Development group, you will install:<ul>
-					<li>Ant 1.6.5</li>
+					<li>Ant 1.7.1</li>
 					<li>Java SDK 1.5</li>
-					<li>Xalan-J 2.6.0</li>
+					<li>Saxon 9B</li>
 				</ul>
 			</note>
 		</p>

@@ -22,13 +22,13 @@
       </step>
       <step>
         <cmd>From the FOP page, in the Name column, select <uicontrol><image 
-          href="pic/compressed.gif"></image>"fop-0.20.5-bin.zip" 
+          href="pic/compressed.gif"></image>"fop-0.95-bin.zip" 
           </uicontrol></cmd>
       </step>
       <step>
-        <cmd>Click <uicontrol>Save</uicontrol> to download the fop-0.20.5-bin.zip 
+        <cmd>Click <uicontrol>Save</uicontrol> to download the fop-0.95-bin.zip 
           file and unzip it to the C:\ directory as 
-          <filepath>fop-0.20.5</filepath></cmd>
+          <filepath>fop-0.95</filepath></cmd>
       </step>
       <step>
         <cmd>Set the <varname>CLASSPATH </varname><xref 
@@ -37,14 +37,38 @@
         <info>
           <sl>
             <sli>
-              <filepath>\build\fop.jar</filepath>
-            </sli>
-            <sli>
-              <filepath>\lib\batik.jar</filepath>
-            </sli>
-            <sli>
-              <filepath>\lib\avalon-framework-cvs-20020806.jar</filepath>
-            </sli>
+							<filepath>build/fop.jar</filepath>
+						</sli>
+						<sli>
+							<filepath>lib/avalon-framework-4.2.0.jar</filepath>
+						</sli>
+						<sli>
+							<filepath>lib/batik-all-1.7.jar</filepath>
+						</sli>
+						<sli>
+							<filepath>lib/commons-io-1.3.1.jar</filepath>
+						</sli>
+						<sli>
+							<filepath>lib/commons-logging-1.0.4.jar</filepath>
+						</sli>
+						<sli>
+							<filepath>lib/serializer-2.7.0.jar</filepath>
+						</sli>
+						<sli>
+							<filepath>lib/servlet-2.2.jar</filepath>
+						</sli>
+						<sli>
+							<filepath>lib/xalan-2.7.0.jar</filepath>
+						</sli>
+						<sli>
+							<filepath>lib/xercesImpl-2.7.1.jar</filepath>
+						</sli>
+						<sli>
+							<filepath>lib/xml-apis-ext-1.3.04.jar</filepath>
+						</sli>
+						<sli>
+							<filepath>lib/xmlgraphics-commons-1.3.1.jar</filepath>
+						</sli>
           </sl>
         </info>
         <?Pub Caret?>

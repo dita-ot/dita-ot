@@ -119,7 +119,12 @@
                   click on <uicontrol>New</uicontrol> under the System 
                   variables section.</li>
                 <li>Type 
-                  <codeph>C:\fop-0.20.5\build\fop.jar;C:\fop-0.20.5\lib\batik.jar;C:\fop-0.20.5\lib \avalon-framework-cvs-20020806.jar</codeph><note 
+                  <codeph>C:\fop-0.95\build\fop.jar;C:\fop-0.95\lib\avalon-framework-4.2.0.jar;
+                  C:\fop-0.95\lib\batik-all-1.7.jar;C:\fop-0.95\lib\commons-io-1.3.1.jar;
+                  C:\fop-0.95\lib\commons-logging-1.0.4.jar;C:\fop-0.95\lib\serializer-2.7.0.jar;
+                  C:\fop-0.95\lib\xalan-2.7.0.jar;C:\fop-0.95\lib\xercesImpl-2.7.1.jar;
+                  C:\fop-0.95\lib\xml-apis-1.3.04.jar;C:\fop-0.95\lib\xml-apis-ext-1.3.04.jar;
+                  C:\fop-0.95\lib\xmlgraphics-commons-1.3.1.jar</codeph><note 
                   type="important">If there are other variables listed, create 
                   new variable separated by a semicolon. Ensure there are no 
                   spaces before or after the semicolon.</note></li>

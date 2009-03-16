@@ -111,10 +111,6 @@ See the accompanying license.txt file for applicable licenses.
 				</stentry>
 				</strow>
 				<strow>
-					<stentry>ant</stentry>
-					<stentry>Ant scripts that can be used as-is to process sample files or modified for your use.</stentry>
-				</strow>
-				<strow>
 					<stentry>css</stentry>
 					<stentry>Sample CSS (cascading style sheet) files.</stentry>
 				</strow>
@@ -124,13 +120,15 @@ See the accompanying license.txt file for applicable licenses.
 				Includes:
 				<ul>
 							<li>book: bookmap specialization</li>
+							<li>dita12: DTD and XSD files for DITA 1.2</li>
+							<li>dita132: DTD and XSD files for DITA 1.3</li>
 							<li>elementref: simple element reference description markup</li>
 							<li>enote: data object specialization</li>
 							<li>faq: faq (frequently asked questions) specialization</li>
 							<li>fo: plug-in files to produce PDF output</li>
-							<li>FrameMaker_adapter: plug-in to produce a structured FrameMaker (7.0+) input file </li>
 							<li>h2d: plug-in to convert XHTML to DITA topics</li>
 							<li>java: validators for DITA schemas</li>
+							<li>legacypdf: Legacy PDF transformation plug-in.</li>
 						</ul>
 					Many of these directories have README files that provide information about how to use the specializations.
 				</stentry>
@@ -165,7 +163,7 @@ See the accompanying license.txt file for applicable licenses.
 				</strow>
 				<strow>
 					<stentry>tools</stentry>
-					<stentry>Ant 1.6.5 processor.</stentry>
+					<stentry>Ant 1.7.1 processor.</stentry>
 				</strow>
 				<strow>
 					<stentry>xsl</stentry>

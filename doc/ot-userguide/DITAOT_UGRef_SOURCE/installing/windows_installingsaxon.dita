@@ -13,6 +13,7 @@ See the accompanying license.txt file for applicable licenses.
 		<author type="creator">Kylene Bruski</author>
 		<author type="contributor">Anna van Raaphorst</author>
 		<author type="contributor">Richard Johnson</author>
+		<author type="contributor">Youyi Zhou</author>
 		<publisher>OASIS (Organization for the Advancement of Structured Information Standards)</publisher>
 		<copyright>
 			<copyryear year="2005"/>
@@ -21,6 +22,7 @@ See the accompanying license.txt file for applicable licenses.
 		<critdates>
 			<created date="2005-November-01"/>
 			<revised modified="2006-October-12"/>
+			<revised modified="2009-March-16"/>
 		</critdates>
 		<metadata>
 			<keywords>
@@ -50,7 +52,7 @@ See the accompanying license.txt file for applicable licenses.
 			</step>
 			<step>
 				<cmd>From SAXON: The XSLT and XQuery Processor page, scroll to find the 
-          heading <uicontrol>Saxon 6.5.5</uicontrol>.
+          heading <uicontrol>Saxon-B 9.1</uicontrol>.
 				</cmd>
 			</step>
 			<step>
@@ -64,18 +66,18 @@ See the accompanying license.txt file for applicable licenses.
 				
 			</step>
 			<step>
-				<cmd>Click <uicontrol>Save</uicontrol> to unzip the <filepath>saxon6.5.5.zip</filepath> 
+				<cmd>Click <uicontrol>Save</uicontrol> to unzip the <filepath>saxonb9-1-0-5j.zip</filepath> 
           file and save it to the <filepath>C:\</filepath> directory as 
           <filepath>saxon</filepath>.</cmd>
 			</step>
 			<step>
-				<cmd>Add <codeph>C:\saxon\saxon.jar</codeph> to the  <varname>CLASSPATH</varname> environment variable.
+				<cmd>Add <codeph>C:\saxon\saxon9.jar;C:\saxon\saxon9-dom.jar;C:\saxon\saxon9-dom4j.jar;C:\saxon\saxon9-jdom.jar;C:\saxon\saxon9-s9api.jar;C:\saxon\saxon9-sql.jar;C:\saxon\saxon9-xom.jar;C:\saxon\saxon9-xpath.jar;C:\saxon\saxon9-xqj.jar;</codeph> to the  <varname>CLASSPATH</varname> environment variable.
 				</cmd>
 			</step>
 			<step>
 				<cmd>Set up ANT_OPTS. For example: 
 				<userinput>set ANT_OPTS=%ANT_OPTS% -Djavax.xml.transform.TransformerFactory=
-			       com.icl.saxon.TransformerFactoryImpl</userinput>
+			       net.sf.saxon.TransformerFactoryImpl</userinput>
  	           </cmd>
 			</step>
 		</steps>

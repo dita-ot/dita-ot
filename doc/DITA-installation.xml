@@ -46,7 +46,7 @@
             choice.</p></dd>
         </dlentry>
         <dlentry id="antbuild">
-          <dt>Ant 1.6.5 build tool</dt>
+          <dt>Ant 1.7.1 build tool</dt>
           <dd>Provides the standard setup and sequencing of processing 
             steps.</dd>
           <dd>See <xref href="DITA-setupant.xml#setupant"></xref> for more 

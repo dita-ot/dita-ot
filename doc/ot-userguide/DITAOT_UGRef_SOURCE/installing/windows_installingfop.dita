@@ -12,6 +12,7 @@ See the accompanying license.txt file for applicable licenses.
 		<author type="creator">Kylene Bruski</author>
 		<author type="contributor">Anna van Raaphorst</author>
 		<author type="contributor">Richard Johnson</author>
+		<author type="contributor">Youyi Zhou</author>
 		<publisher>OASIS (Organization for the Advancement of Structured Information Standards)</publisher>
 		<copyright>
 			<copyryear year="2005"/>
@@ -20,6 +21,7 @@ See the accompanying license.txt file for applicable licenses.
 		<critdates>
 			<created date="2005-November-01"/>
 			<revised modified="2007-April-09"/>
+			<revised modified="2009-March-16"/>
 		</critdates>
 		<metadata>
 			<keywords>
@@ -58,20 +60,54 @@ See the accompanying license.txt file for applicable licenses.
 			</step>
 			<step>
 				<cmd>From the FOP page, in the Name column, select <uicontrol>
-						<image href="../images/compressed.png"/>"fop-0.20.5-bin.zip" 
+						<image href="../images/compressed.png"/>"fop-0.95-bin.zip" 
           </uicontrol>.
 				</cmd>
 			</step>
 			<step>
-				<cmd>Click <uicontrol>Save</uicontrol> to unzip the <filepath>fop-0.20.5-bin.zip </filepath>
+				<cmd>Click <uicontrol>Save</uicontrol> to unzip the <filepath>fop-0.95-bin.zip </filepath>
           file and save it to the <filepath>C:\</filepath> directory as 
-          <filepath>fop-0.20.5</filepath>.
+          <filepath>fop-0.95</filepath>.
 				</cmd>
 			</step>
 			<step>
 				<cmd>Add to the <varname>CLASSPATH </varname> for the following jar files:</cmd>
 				<info>
-					<codeph>C:\fop-0.20.5\build\fop.jar;C:\fop-0.20.5\lib\batik.jar;C:\fop-0.20.5\lib \avalon-framework-cvs-20020806.jar</codeph>
+					<sl>
+						<sli>
+							<filepath>build/fop.jar</filepath>
+						</sli>
+						<sli>
+							<filepath>lib/avalon-framework-4.2.0.jar</filepath>
+						</sli>
+						<sli>
+							<filepath>lib/batik-all-1.7.jar</filepath>
+						</sli>
+						<sli>
+							<filepath>lib/commons-io-1.3.1.jar</filepath>
+						</sli>
+						<sli>
+							<filepath>lib/commons-logging-1.0.4.jar</filepath>
+						</sli>
+						<sli>
+							<filepath>lib/serializer-2.7.0.jar</filepath>
+						</sli>
+						<sli>
+							<filepath>lib/servlet-2.2.jar</filepath>
+						</sli>
+						<sli>
+							<filepath>lib/xalan-2.7.0.jar</filepath>
+						</sli>
+						<sli>
+							<filepath>lib/xercesImpl-2.7.1.jar</filepath>
+						</sli>
+						<sli>
+							<filepath>lib/xml-apis-ext-1.3.04.jar</filepath>
+						</sli>
+						<sli>
+							<filepath>lib/xmlgraphics-commons-1.3.1.jar</filepath>
+						</sli>
+					</sl>
 				</info>
 			</step>
 		</steps>

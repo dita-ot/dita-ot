@@ -37,7 +37,7 @@ See the accompanying license.txt file for applicable licenses.
 			Your environment variable setup can be the source of the problem because sometimes other applications or <filepath>.jar</filepath> files can override CLASSPATH settings. 
 			To assist in troubleshooting the CLASSPATH, create a simple <filepath>run.bat</filepath> file that contains only SAXON, Ant, and the DITA Open Toolkit <filepath>dost.jar</filepath> paths. 
 			For example:</p>
-			<userinput>set CLASSPATH=C:\saxon\saxon.jar;C:\ant\apache-ant-1.6.5;\lib\dost.jar;.</userinput>
+			<userinput>set CLASSPATH=C:\saxon\saxon.jar;C:\ant\apache-ant-1.7.1;\lib\dost.jar;.</userinput>
 			<p>
 				<userinput>ant demo.faq.</userinput>
 			</p>
