@@ -304,11 +304,9 @@
 	          <xsl:value-of select="concat('#', substring-after(@href, '#'))"/>
 	        </xsl:if>
 	      </xsl:when>
-	      <!-- 
 	      <xsl:when test="contains(@href,'#')">
 	        <xsl:value-of select="$WORKDIR"/><xsl:value-of select="substring-before(@href,'#')"/>
 	      </xsl:when>
-	       -->
 	      <xsl:otherwise>
 	        <xsl:value-of select="$WORKDIR"/><xsl:value-of select="@href"/>
 	      </xsl:otherwise>

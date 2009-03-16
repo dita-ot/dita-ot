@@ -46,9 +46,19 @@
 
 <xsl:template match="*[contains(@class,' map/topicref ')]" name="topicref">
   <xsl:param name="element" select="'section'"/>
+  <xsl:variable name="hrefValue">
+    <xsl:choose>
+      <xsl:when test="contains(@href, '#')">
+        <xsl:value-of select="substring-before(@href, '#')"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="@href"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
   <xsl:choose>
-  <xsl:when test="@href and not(@href='')">
-    <xsl:apply-templates select="document(@href, /)/*">
+  <xsl:when test="$hrefValue and not($hrefValue='')">
+    <xsl:apply-templates select="document($hrefValue, /)/*">
       <xsl:with-param name="element" select="$element"/>
       <xsl:with-param name="childrefs"
           select="*[contains(@class,' map/topicref ')]"/>
