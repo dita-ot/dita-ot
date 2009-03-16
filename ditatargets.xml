@@ -31,7 +31,7 @@
         out="${outputDir}${file.separator}${mapRoot}.xml"
         style="${args.xsl}">
     <param name="outputdir" expression="${outputDir}" />
-    <xmlcatalog refid="dita.catalog" />
+    <!--<xmlcatalog refid="dita.catalog" />-->
   </xslt>
 </target>
 
@@ -46,7 +46,7 @@
         in="${inputFile}"
         out="${outputFile}"
         style="${args.xsl}">
-    <xmlcatalog refid="dita.catalog" />
+    <!--<xmlcatalog refid="dita.catalog" />-->
   </xslt>
 </target>
 
@@ -64,7 +64,7 @@
         style="${args.xsl}">    
     <param name="DRAFT" expression="${args.draft}" if="args.draft"/>
     <param name="OUTPUTDIR" expression="${dita.rtf.outputdir}"/>
-    <xmlcatalog refid="dita.catalog" />
+    <!--<xmlcatalog refid="dita.catalog" />-->
   </xslt>
 </target>
 
@@ -79,7 +79,7 @@
 	    in="${input}"
 	    out="${dita.temp.dir}${file.separator}${dita.map.filename.root}_MERGED.xml"
         style="${dita.script.dir}${file.separator}topicmerge.xsl">
-    <xmlcatalog refid="dita.catalog" />
+    <!--<xmlcatalog refid="dita.catalog" />-->
   </xslt>
   <xslt processor="trax"
 	    in="${dita.temp.dir}${file.separator}${dita.map.filename.root}_MERGED.xml"
@@ -87,7 +87,7 @@
         style="${args.xsl}">
     <param name="DRAFT" expression="${args.draft}" if="args.draft"/>
     <param name="OUTPUTDIR" expression="${dita.rtf.outputdir}"/>
-    <xmlcatalog refid="dita.catalog" />
+    <!--<xmlcatalog refid="dita.catalog" />-->
   </xslt>
 </target>
 
@@ -103,13 +103,13 @@
 	    in="${input}"
 	    out="${dita.merged.dir}${file.separator}${dita.map.filename.root}_MERGED.xml"
         style="${dita.script.dir}${file.separator}topicmerge.xsl">
-    <xmlcatalog refid="dita.catalog" />
+    <!--<xmlcatalog refid="dita.catalog" />-->
   </xslt>
   <xslt processor="trax"
 	    in="${dita.merged.dir}${file.separator}${dita.map.filename.root}_MERGED.xml"
       out="${output}"
       style="${args.xsl}">
-    <xmlcatalog refid="dita.catalog" />
+    <!--<xmlcatalog refid="dita.catalog" />-->
     <param name="output-related-links" expression="${args.fo.output.rel.links}" if="args.fo.output.rel.links"/>
     <param name="DITAEXT" expression="${dita.ext}" if="dita.ext"/>
     <param name="DRAFT" expression="${args.draft}" if="args.draft"/>
@@ -156,7 +156,7 @@
         in="${input}"
         out="${output}"
         style="${args.xsl}">
-    <xmlcatalog refid="dita.catalog" />
+    <!--<xmlcatalog refid="dita.catalog" />-->
     <param name="output-related-links" expression="${args.fo.output.rel.links}" if="args.fo.output.rel.links"/>
     <param name="DITAEXT" expression="${dita.ext}" if="dita.ext"/>
     <param name="DRAFT" expression="${args.draft}" if="args.draft"/>
@@ -477,7 +477,7 @@
 			in="${inputFile}"
 			out="${outputFile}"
 			style="${dita.script.dir}${file.separator}generalize.xsl">
-		<xmlcatalog refid="dita.catalog"/>
+		<!--<xmlcatalog refid="dita.catalog"/>-->
 	</xslt>
 </target>
   
@@ -487,7 +487,7 @@
 				in="${inputFile}"
 				out="${outputFile}"
 				style="${dita.script.dir}${file.separator}specialize.xsl">
-			<xmlcatalog refid="dita.catalog"/>
+			<!--<xmlcatalog refid="dita.catalog"/>-->
 		</xslt>
 	</target>
 
@@ -497,7 +497,7 @@
 				in="${inputFile}"
 				out="${outputFile}"
 				style="${dita.script.dir}${file.separator}normalize.xsl">
-			<xmlcatalog refid="dita.catalog"/>
+			<!--<xmlcatalog refid="dita.catalog"/>-->
 		</xslt>
 	</target>
 
@@ -508,7 +508,7 @@
 				includes="*.xml"
 				extension=".xml"
 				style="${dita.script.dir}${file.separator}normalize.xsl">
-			<xmlcatalog refid="dita.catalog"/>
+			<!--<xmlcatalog refid="dita.catalog"/>-->
 		</xslt>
 	</target>
 
@@ -518,7 +518,7 @@
 				in="${inputFile}"
 				out="${outputFile}"
 				style="${dita.script.dir}${file.separator}pretty.xsl">
-			<xmlcatalog refid="dita.catalog"/>
+			<!--<xmlcatalog refid="dita.catalog"/>-->
 		</xslt>
 	</target>
 

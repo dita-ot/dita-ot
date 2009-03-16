@@ -46,7 +46,7 @@
       classpathref="dost.class.path"
       style="${args.xsl}">
       <param name="outputdir" expression="${outputDir}" />
-      <xmlcatalog refid="dita.catalog" />
+      <!--<xmlcatalog refid="dita.catalog" />-->
     </xslt>
   </target>
 
@@ -62,7 +62,7 @@
     <xslt processor="trax" in="${inputFile}" out="${outputFile}"
       classpathref="dost.class.path"
       style="${args.xsl}">
-      <xmlcatalog refid="dita.catalog" />
+      <!--<xmlcatalog refid="dita.catalog" />-->
     </xslt>
   </target>
 </project>

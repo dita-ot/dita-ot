@@ -11,7 +11,7 @@
   <import file="${basedir}${file.separator}build.xml"/>
 
 	<target name="use.init">
-        <available classname="com.icl.saxon.StyleSheet"
+        <available classname="net.sf.saxon.StyleSheet"
 			property="hasSaxon"/>
 		<available classname="org.apache.fop.tools.anttasks.Fop"
 			property="hasFOP"/>
@@ -184,7 +184,7 @@
 				out="${outputFile}"
 				style="${dita.demo.elementref.dir}${file.separator}elementref2xhtml_shell.xsl">
 			<param name="OUTEXT" expression=".html"/>
-			<xmlcatalog refid="dita.catalog"/>
+			<!--<xmlcatalog refid="dita.catalog"/>-->
 		</xslt>
 	</target>
 	
@@ -211,7 +211,7 @@
 				out="${outputFile}"
 				style="${dita.demo.enote.dir}${file.separator}enote2xhtml_shell.xsl">
 			<param name="OUTEXT" expression=".html"/>
-			<xmlcatalog refid="dita.catalog"/>
+			<!--<xmlcatalog refid="dita.catalog"/>-->
 		</xslt>
 	</target>
 
@@ -248,7 +248,7 @@
 				in="${inputFile}"
 				out="${outputFile}"
 				style="${dita.demo.faq.dir}${file.separator}faq2xhtml_shell.xsl">
-			<xmlcatalog refid="dita.catalog"/>
+			<!--<xmlcatalog refid="dita.catalog"/>-->
 		</xslt>
 	</target>
 
@@ -267,7 +267,7 @@
 			in="${inputFile}"
 			out="${outputFile}"
 			style="${dita.script.dir}${file.separator}generalize.xsl">
-			<xmlcatalog refid="dita.catalog"/>
+			<!--<xmlcatalog refid="dita.catalog"/>-->
 		</xslt>
 	</target>
 

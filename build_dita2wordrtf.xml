@@ -45,7 +45,7 @@
       style="${args.xsl}">
       <param name="DRAFT" expression="${args.draft}" if="args.draft" />
       <param name="OUTPUTDIR" expression="${dita.rtf.outputdir}" />
-      <xmlcatalog refid="dita.catalog" />
+      <!--<xmlcatalog refid="dita.catalog" />-->
     </xslt>
   </target>
 
@@ -61,7 +61,7 @@
       out="${dita.temp.dir}${file.separator}${dita.map.filename.root}_MERGED.xml"
       classpathref="dost.class.path"
       style="${dita.script.dir}${file.separator}topicmerge.xsl">
-      <xmlcatalog refid="dita.catalog" />
+      <!--<xmlcatalog refid="dita.catalog" />-->
     </xslt>
     <xslt processor="trax"
       in="${dita.temp.dir}${file.separator}${dita.map.filename.root}_MERGED.xml"
@@ -69,7 +69,7 @@
       out="${output}" style="${args.xsl}">
       <param name="DRAFT" expression="${args.draft}" if="args.draft" />
       <param name="OUTPUTDIR" expression="${dita.rtf.outputdir}" />
-      <xmlcatalog refid="dita.catalog" />
+      <!--<xmlcatalog refid="dita.catalog" />-->
     </xslt>
   </target>
 

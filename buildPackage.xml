@@ -110,6 +110,7 @@
     <include name="lib/APACHE-LICENSE-2_0.html"/>
     <include name="lib/resolver.jar"/>
     <include name="lib/CatalogManager.properties"/>
+  	<include name="lib/saxon/**" />
     <exclude name="doc/userguide-orig/**"/>
 	<exclude name="doc/ot-userguide/**"/>
     <exclude name="build.number"/>
