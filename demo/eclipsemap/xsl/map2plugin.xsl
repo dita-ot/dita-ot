@@ -365,7 +365,7 @@
     
   </xsl:template>
   
-  <xsl:template name="eclipse.manifest.init" mode="eclipse.manifest">
+  <xsl:template name="eclipse.manifest.init" mode="eclipse.manifest" match="*">
     <xsl:text>Manifest-Version: 1.0</xsl:text><xsl:value-of select="$newline"/>
     <xsl:text>Bundle-ManifestVersion: 2</xsl:text><xsl:value-of select="$newline"/>
     <xsl:text>Bundle-Localization: plugin</xsl:text><xsl:value-of select="$newline"/>
