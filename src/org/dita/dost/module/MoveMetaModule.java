@@ -20,6 +20,7 @@ import java.util.StringTokenizer;
 
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTJavaLogger;
+import org.dita.dost.log.MessageUtils;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.pipeline.PipelineHashIO;
@@ -89,6 +90,22 @@ public class MoveMetaModule implements AbstractPipelineModule {
 		while(st.hasMoreTokens()){
 			mapFile = new File(tempDir, st.nextToken()).getAbsolutePath();        	        
 	        metaReader.read(mapFile);
+	        File oldMap = new File(mapFile);
+	        File newMap = new File(mapFile+".temp");
+	        if (newMap.exists()) {
+	        	if (!oldMap.delete()) {
+	        		Properties p = new Properties();
+	            	p.put("%1", oldMap.getPath());
+	            	p.put("%2", newMap.getAbsolutePath()+".chunk");
+	            	logger.logError(MessageUtils.getMessage("DOTJ009E", p).toString());
+	        	}
+	        	if (!newMap.renameTo(oldMap)) {
+	        		Properties p = new Properties();
+	            	p.put("%1", oldMap.getPath());
+	            	p.put("%2", newMap.getAbsolutePath()+".chunk");
+	            	logger.logError(MessageUtils.getMessage("DOTJ009E", p).toString());
+	        	}
+	        }
 		}		
 		
         mapSet = (Set) metaReader.getContent().getCollection();

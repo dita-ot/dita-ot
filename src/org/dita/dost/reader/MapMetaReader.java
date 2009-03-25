@@ -13,10 +13,14 @@ import java.io.File;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
-import java.util.Map;
+import java.util.Vector;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.DITAOTJavaLogger;
@@ -63,23 +67,46 @@ public class MapMetaReader implements AbstractReader {
 	
 	static{
 		metaSet = new HashSet(Constants.INT_16);
-		metaSet.add(Constants.ATTR_CLASS_VALUE_AUDIENCE);
+		metaSet.add(Constants.ATTR_CLASS_VALUE_MAP_SEARCHTITLE);
 		metaSet.add(Constants.ATTR_CLASS_VALUE_AUTHOR);
-		metaSet.add(Constants.ATTR_CLASS_VALUE_CATEGORY);
+		metaSet.add(Constants.ATTR_CLASS_VALUE_SOURCE);
+		metaSet.add(Constants.ATTR_CLASS_VALUE_PUBLISHER);
 		metaSet.add(Constants.ATTR_CLASS_VALUE_COPYRIGHT);
 		metaSet.add(Constants.ATTR_CLASS_VALUE_CRITDATES);
+		metaSet.add(Constants.ATTR_CLASS_VALUE_PERMISSIONS);
+		metaSet.add(Constants.ATTR_CLASS_VALUE_AUDIENCE);
+		metaSet.add(Constants.ATTR_CLASS_VALUE_CATEGORY);
+		metaSet.add(Constants.ATTR_CLASS_VALUE_KEYWORDS);
+		metaSet.add(Constants.ATTR_CLASS_VALUE_PRODINFO);
+		metaSet.add(Constants.ATTR_CLASS_VALUE_OTHERMETA);
+		metaSet.add(Constants.ATTR_CLASS_VALUE_RESOURCEID);
 		metaSet.add(Constants.ATTR_CLASS_VALUE_DATA);
 		metaSet.add(Constants.ATTR_CLASS_VALUE_DATAABOUT);
 		metaSet.add(Constants.ATTR_CLASS_VALUE_FOREIGN);
-		metaSet.add(Constants.ATTR_CLASS_VALUE_KEYWORDS);
-		metaSet.add(Constants.ATTR_CLASS_VALUE_MAP_SEARCHTITLE);
-		metaSet.add(Constants.ATTR_CLASS_VALUE_OTHERMETA);		
-		metaSet.add(Constants.ATTR_CLASS_VALUE_PERMISSIONS);
-		metaSet.add(Constants.ATTR_CLASS_VALUE_PRODINFO);
-		metaSet.add(Constants.ATTR_CLASS_VALUE_PUBLISHER);
-		metaSet.add(Constants.ATTR_CLASS_VALUE_RESOURCEID);
-		metaSet.add(Constants.ATTR_CLASS_VALUE_SOURCE);
 		metaSet.add(Constants.ATTR_CLASS_VALUE_UNKNOWN);
+	}
+	
+	private static Vector<String> metaPos;
+	
+	static {
+		metaPos = new Vector<String>(Constants.INT_16);
+		metaPos.add(Constants.ATTR_CLASS_VALUE_MAP_SEARCHTITLE);
+		metaPos.add(Constants.ATTR_CLASS_VALUE_AUTHOR);
+		metaPos.add(Constants.ATTR_CLASS_VALUE_SOURCE);
+		metaPos.add(Constants.ATTR_CLASS_VALUE_PUBLISHER);
+		metaPos.add(Constants.ATTR_CLASS_VALUE_COPYRIGHT);
+		metaPos.add(Constants.ATTR_CLASS_VALUE_CRITDATES);
+		metaPos.add(Constants.ATTR_CLASS_VALUE_PERMISSIONS);
+		metaPos.add(Constants.ATTR_CLASS_VALUE_AUDIENCE);
+		metaPos.add(Constants.ATTR_CLASS_VALUE_CATEGORY);
+		metaPos.add(Constants.ATTR_CLASS_VALUE_KEYWORDS);
+		metaPos.add(Constants.ATTR_CLASS_VALUE_PRODINFO);
+		metaPos.add(Constants.ATTR_CLASS_VALUE_OTHERMETA);
+		metaPos.add(Constants.ATTR_CLASS_VALUE_RESOURCEID);
+		metaPos.add(Constants.ATTR_CLASS_VALUE_DATA);
+		metaPos.add(Constants.ATTR_CLASS_VALUE_DATAABOUT);
+		metaPos.add(Constants.ATTR_CLASS_VALUE_FOREIGN);
+		metaPos.add(Constants.ATTR_CLASS_VALUE_UNKNOWN);
 	}
 
 	private DITAOTJavaLogger javaLogger = null;
@@ -132,12 +159,103 @@ public class MapMetaReader implements AbstractReader {
         				classAttr.getNodeValue().indexOf(Constants.ATTR_CLASS_VALUE_TOPICREF) != -1){
         			//if this node is topicref node under root
         			handleTopicref(node, globalMeta);
-        		}
-        			
+        		}	
         	}
+        	
+        	// Append global meta data to topic references.
+			if (!globalMeta.isEmpty()) {
+				for (int i = 0; i < list.getLength(); i++) {
+					Node node = list.item(i);
+					Node classAttr = null;
+					if (node.getNodeType() == Node.ELEMENT_NODE) {
+						classAttr = node.getAttributes().getNamedItem(
+								Constants.ATTRIBUTE_NAME_CLASS);
+					}
+					if (classAttr != null
+							&& classAttr.getNodeValue().indexOf(
+									Constants.ATTR_CLASS_VALUE_TOPICREF) != -1) {
+						appendGlobalMeta(node);
+					}
+				}
+
+				File file = new File(inputFile.getCanonicalPath()+ ".temp");
+				StreamResult res = new StreamResult(file);
+				DOMSource ds = new DOMSource(doc);
+				TransformerFactory tff = TransformerFactory.newInstance();
+				Transformer tf = tff.newTransformer();
+				tf.transform(ds, res);
+				res.getOutputStream().close();
+			}
+        	
         }catch (Exception e){
         	javaLogger.logException(e);
         }
+	}
+	
+	private void appendGlobalMeta(Node topicref) {
+		Node hrefAttr = topicref.getAttributes().getNamedItem(Constants.ATTRIBUTE_NAME_HREF);
+		Node copytoAttr = topicref.getAttributes().getNamedItem(Constants.ATTRIBUTE_NAME_COPY_TO);
+		Node scopeAttr = topicref.getAttributes().getNamedItem(Constants.ATTRIBUTE_NAME_SCOPE);
+    	Node formatAttr = topicref.getAttributes().getNamedItem(Constants.ATTRIBUTE_NAME_FORMAT);
+		String topicPath = null;
+    	
+    	NodeList children = topicref.getChildNodes();
+    	
+    	Node metaNode = null;
+    	
+		for (int i = 0; i < children.getLength(); i++){
+			Node node = children.item(i);
+    		Node classAttr = null;
+    		if(node.getNodeType()==node.ELEMENT_NODE){
+    			classAttr = node.getAttributes().getNamedItem(Constants.ATTRIBUTE_NAME_CLASS);
+    		}
+    		 
+    		if(classAttr != null && hrefAttr != null &&
+    				classAttr.getNodeValue().indexOf(Constants.ATTR_CLASS_VALUE_TOPICMETA) != -1 &&
+    				hrefAttr != null && hrefAttr.getNodeValue().indexOf(INTERNET_LINK_MARK) == -1
+            		&& (scopeAttr == null || Constants.ATTR_SCOPE_VALUE_LOCAL.equalsIgnoreCase(scopeAttr.getNodeValue()))
+            		&& (formatAttr == null || Constants.ATTR_FORMAT_VALUE_DITA.equalsIgnoreCase(formatAttr.getNodeValue()))
+    				){
+    			//if this node is topicmeta and the parent topicref refers to a valid dita topic
+    			//current = handleMeta(node, inheritance);
+    			metaNode = node;
+    			
+    		}else if(classAttr != null &&
+    				classAttr.getNodeValue().indexOf(Constants.ATTR_CLASS_VALUE_TOPICREF) != -1){
+    			appendGlobalMeta(node);
+    		}
+		}
+		
+		if (!resultTable.isEmpty() && hrefAttr != null){// prevent the metadata is empty
+			if (copytoAttr != null && new File(FileUtils.resolveFile(filePath, copytoAttr.getNodeValue())).exists()){
+				// if there is @copy-to and the file exists, @copy-to will take the place of @href
+				topicPath = FileUtils.resolveTopic(filePath,copytoAttr.getNodeValue());
+			}else{
+				// if there is no copy-to attribute in current element
+				topicPath = FileUtils.resolveTopic(filePath,hrefAttr.getNodeValue());
+			}
+			
+			if(resultTable.containsKey(topicPath)){
+    			//if the result table already contains some result
+    			//metadata for current topic path.
+				Hashtable metas = (Hashtable)resultTable.get(topicPath);
+				if (!metas.isEmpty()) {
+					if (metaNode != null) topicref.removeChild(metaNode);
+					Element newMeta = doc.createElement(Constants.ELEMENT_NAME_TOPICMETA);
+					newMeta.setAttribute(Constants.ATTRIBUTE_NAME_CLASS, "-" + Constants.ATTR_CLASS_VALUE_TOPICMETA);
+					for (int i = 0; i < metaPos.size(); i++) {
+						Node stub = (Node)metas.get(metaPos.get(i));
+						if (stub != null) {
+							NodeList clist = stub.getChildNodes();
+							for (int j = 0; j < clist.getLength(); j++) {
+								newMeta.appendChild(clist.item(j).cloneNode(true));
+							}
+						}
+					}
+					topicref.insertBefore(newMeta, topicref.getFirstChild());
+				}
+    		}
+		}
 	}
 
 	private void handleTopicref(Node topicref, Hashtable inheritance) {
@@ -188,9 +306,8 @@ public class MapMetaReader implements AbstractReader {
 				resultTable.put(topicPath, mergeMeta(previous, current, metaSet));
     		}else{
     			resultTable.put(topicPath, current);
-    		}    		
+    		}
 		}
-		
 	}
 
 
