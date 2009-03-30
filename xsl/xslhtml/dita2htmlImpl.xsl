@@ -2284,7 +2284,22 @@
  </xsl:choose>
 </xsl:template>
 
+<!-- Determine the default XHTML class attribute for a figure -->
+<xsl:template match="*" mode="dita2html:get-default-fig-class">
+  <xsl:choose>
+    <xsl:when test="@frame='all'">figborder</xsl:when>
+    <xsl:when test="@frame='sides'">figsides</xsl:when>
+    <xsl:when test="@frame='top'">figtop</xsl:when>
+    <xsl:when test="@frame='bottom'">figbottom</xsl:when>
+    <xsl:when test="@frame='topbot'">figtopbot</xsl:when>
+    <xsl:otherwise>fignone</xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
 <xsl:template match="*[contains(@class,' topic/fig ')]" mode="fig-fmt">
+  <xsl:variable name="default-fig-class">
+    <xsl:apply-templates select="." mode="dita2html:get-default-fig-class"/>
+  </xsl:variable>
   <xsl:variable name="flagrules">
     <xsl:call-template name="getrules"/>
   </xsl:variable>
@@ -2300,27 +2315,12 @@
     <xsl:with-param name="flagrules" select="$flagrules"/>
   </xsl:call-template>
  <div>
-   <xsl:choose>
-     <xsl:when test="@frame='all'">
-       <xsl:attribute name="class">figborder</xsl:attribute>
-     </xsl:when>
-     <xsl:when test="@frame='sides'">
-       <xsl:attribute name="class">figsides</xsl:attribute>
-     </xsl:when>
-     <xsl:when test="@frame='top'">
-       <xsl:attribute name="class">figtop</xsl:attribute>
-     </xsl:when>
-     <xsl:when test="@frame='bottom'">
-       <xsl:attribute name="class">figbottom</xsl:attribute>
-     </xsl:when>
-     <xsl:when test="@frame='topbot'">
-       <xsl:attribute name="class">figtopbot</xsl:attribute>
-     </xsl:when>
-     <xsl:otherwise>
-       <xsl:attribute name="class">fignone</xsl:attribute>
-     </xsl:otherwise>
-   </xsl:choose>
-   <xsl:call-template name="commonattributes"/>
+   <xsl:if test="$default-fig-class!=''">
+     <xsl:attribute name="class"><xsl:value-of select="$default-fig-class"/></xsl:attribute>
+   </xsl:if>
+   <xsl:call-template name="commonattributes">
+     <xsl:with-param name="default-output-class" select="$default-fig-class"/>
+   </xsl:call-template>
    <xsl:call-template name="gen-style">
      <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
