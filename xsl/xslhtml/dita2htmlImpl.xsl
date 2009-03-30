@@ -5275,24 +5275,28 @@
   </xsl:template>
 
   <!-- This template pulls in topic/title -->
+  <!-- 20090330: Add error checking to ensre $keys is defined, that the key
+                 is defined in KEYREF-FILE, and that $target != '' -->
   <xsl:template match="*" mode="pull-in-title">
     <xsl:param name="type"/>
     <xsl:param name="displaytext" select="''"/>
     <xsl:param name="keys" select="@keyref"/>
     <xsl:variable name="TAGS" select="' keyword term '"/>
     <xsl:choose>
-      <xsl:when test="$displaytext=''">
+      <xsl:when test="$displaytext='' and $keys!=''">
         <xsl:variable name="target">
-          <xsl:choose>
-            <xsl:when test="contains(document($KEYREF-FILE)//*[@keys=$keys]/@href, '#')">
-              <xsl:value-of select="concat(substring-before(substring-before(document($KEYREF-FILE)//*[@keys=$keys]/@href, '#'), '.'), $DITAEXT)"/>
-            </xsl:when>
-            <xsl:otherwise>
-              <xsl:value-of select="concat(substring-before(document($KEYREF-FILE)//*[@keys=$keys]/@href, '.'), $DITAEXT)"/>
-            </xsl:otherwise>
-          </xsl:choose>
+          <xsl:if test="document($KEYREF-FILE)//*[@keys=$keys]">
+            <xsl:choose>
+              <xsl:when test="contains(document($KEYREF-FILE)//*[@keys=$keys]/@href, '#')">
+                <xsl:value-of select="concat(substring-before(substring-before(document($KEYREF-FILE)//*[@keys=$keys]/@href, '#'), '.'), $DITAEXT)"/>
+              </xsl:when>
+              <xsl:when test="document($KEYREF-FILE)//*[@keys=$keys]/@href">
+                <xsl:value-of select="concat(substring-before(document($KEYREF-FILE)//*[@keys=$keys]/@href, '.'), $DITAEXT)"/>
+              </xsl:when>
+            </xsl:choose>
+          </xsl:if>
         </xsl:variable>
-        <xsl:if test="not(contains($target, '://'))">
+        <xsl:if test="not($target='' or contains($target, '://'))">
           <xsl:value-of select="document(concat($WORKDIR, $PATH2PROJ, $target))//*[contains(@class, ' topic/title ')][normalize-space(text())!=''][1]"/>
         </xsl:if>
       </xsl:when>
