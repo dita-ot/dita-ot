@@ -4598,7 +4598,6 @@
           <xsl:value-of select="ancestor::*[contains(@class,' topic/topic ')][1]/@id"/>
         </xsl:variable>
         <xsl:variable name="refid">
-          <xsl:text>#</xsl:text>
           <xsl:value-of select="$topicid"/>
           <xsl:text>/</xsl:text>
           <xsl:value-of select="@id"/>
@@ -4674,7 +4673,7 @@
 <xsl:key name="table" match="*[contains(@class,' topic/table ')]" use="@id"/> <!-- uses "title" -->
 <xsl:key name="li"    match="*[contains(@class,' topic/li ')]"    use="@id"/> <!-- uses "?" -->
 <xsl:key name="fn"    match="*[contains(@class,' topic/fn ')]"    use="@id"/> <!-- uses "callout?" -->
-<xsl:key name="xref"  match="*[contains(@class,' topic/xref ')]"  use="@href"/> <!-- find xref which refers to footnote. -->
+<xsl:key name="xref"  match="*[contains(@class,' topic/xref ')]"  use="substring-after(@href,'#')"/> <!-- find xref which refers to footnote. -->
 
 <!-- ========== FORMATTER DECLARATIONS AND GLOBALS ========== -->
 
