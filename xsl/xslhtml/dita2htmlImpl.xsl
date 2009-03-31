@@ -1483,6 +1483,13 @@
 <xsl:template match="*[contains(@class,' topic/dt ')]" mode="output-dt">
   <!-- insert a blank line before only the first DT in a DLENTRY; count which DT this is -->
   <xsl:variable name="dtcount"><xsl:number count="*[contains(@class,' topic/dt ')]"/></xsl:variable>
+  <xsl:variable name="dt-class">
+    <xsl:choose>
+      <!-- handle non-compact list items -->
+      <xsl:when test="$dtcount=1 and ../../@compact='no'">dltermexpand</xsl:when>
+      <xsl:otherwise>dlterm</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
   <xsl:variable name="flagrules">
     <xsl:call-template name="getrules"/>
     <xsl:call-template name="getrules-parent"/>
@@ -1492,15 +1499,11 @@
       <xsl:with-param name="flagrules" select="$flagrules"/>
     </xsl:call-template>
   </xsl:variable>
-  <dt class="dlterm">
-    <!-- handle non-compact list items -->
-    <xsl:if test="$dtcount=1">
-      <xsl:if test="../../@compact='no'">
-        <xsl:attribute name="class">dltermexpand</xsl:attribute>
-      </xsl:if>
-    </xsl:if>
+  <dt class="{$dt-class}">
     <xsl:apply-templates select="../@xml:lang"/> <!-- Get from DLENTRY, then override with local -->
-    <xsl:call-template name="commonattributes"/>
+    <xsl:call-template name="commonattributes">
+      <xsl:with-param name="default-output-class" select="$dt-class"/>
+    </xsl:call-template>
     <xsl:call-template name="setidaname"/>
     <xsl:call-template name="gen-style">
       <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
@@ -5305,11 +5308,19 @@
     </xsl:choose>
   </xsl:template>
   <!-- This template converts phrase-like elements into links based on keyref. -->
+  <!-- 20090331: Update to ensure cite with keyref continues to use <cite>,
+                 plus move common code to single template -->
   <xsl:template match="*" mode="turning-to-link">
     <xsl:param name="keys">#none#</xsl:param>
     <xsl:param name="conflictexist"></xsl:param>
     <xsl:param name="flagrules"></xsl:param>
     <xsl:param name="type"></xsl:param>
+    <xsl:variable name="elementName">
+      <xsl:choose>
+        <xsl:when test="$type='cite' or contains($type,' cite ')">cite</xsl:when>
+        <xsl:otherwise>span</xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
     <xsl:choose>
       <xsl:when test="document($KEYREF-FILE)//*[contains(@keys, $keys)]">
         <xsl:variable name="updatedTarget">
@@ -5318,59 +5329,64 @@
         <xsl:choose>
           <xsl:when test="normalize-space($updatedTarget)!=$OUTEXT">
             <a href="{$updatedTarget}">
-              <span class="{$type}">
-                <xsl:call-template name="commonattributes"/>
-                <xsl:call-template name="gen-style">
-                  <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
-                  <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
-                </xsl:call-template>
-                <xsl:call-template name="setidaname"/>   
-                <xsl:call-template name="flagcheck"/>
-                <xsl:call-template name="revtext">
+              <xsl:element name="{$elementName}">
+                <xsl:apply-templates select="." mode="common-processing-phrase-within-link">
+                  <xsl:with-param name="type" select="$type"/>
+                  <xsl:with-param name="conflictexist" select="$conflictexist"/>
                   <xsl:with-param name="flagrules" select="$flagrules"/>
-                </xsl:call-template>
+                </xsl:apply-templates>
                 <xsl:apply-templates select="." mode="pull-in-title">
                   <xsl:with-param name="type" select="$type"/>
                   <xsl:with-param name="displaytext" select="normalize-space(text())"/>
                 </xsl:apply-templates>
-              </span>
+              </xsl:element>
             </a>
           </xsl:when>
           <xsl:otherwise>
-            <span class="{$type}">
-              <xsl:call-template name="commonattributes"/>
-              <xsl:call-template name="gen-style">
-                <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
-                <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
-              </xsl:call-template>
-              <xsl:call-template name="setidaname"/>   
-              <xsl:call-template name="flagcheck"/>
-              <xsl:call-template name="revtext">
+            <xsl:element name="{$elementName}">
+              <xsl:apply-templates select="." mode="common-processing-phrase-within-link">
+                <xsl:with-param name="type" select="$type"/>
+                <xsl:with-param name="conflictexist" select="$conflictexist"/>
                 <xsl:with-param name="flagrules" select="$flagrules"/>
-              </xsl:call-template>
+              </xsl:apply-templates>
               <xsl:apply-templates select="." mode="pull-in-title">
                 <xsl:with-param name="type" select="$type"/>
                 <xsl:with-param name="displaytext" select="normalize-space(text())"/>
               </xsl:apply-templates>
-            </span>
+            </xsl:element>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:when>
       <xsl:otherwise>
-        <span class="{$type}">
-          <xsl:call-template name="commonattributes"/>
-          <xsl:call-template name="gen-style">
-            <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
-            <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
-          </xsl:call-template>
-          <xsl:call-template name="setidaname"/>   
-          <xsl:call-template name="flagcheck"/>
-          <xsl:call-template name="revtext">
+        <xsl:element name="{$elementName}">
+          <xsl:apply-templates select="." mode="common-processing-phrase-within-link">
+            <xsl:with-param name="type" select="$type"/>
+            <xsl:with-param name="conflictexist" select="$conflictexist"/>
             <xsl:with-param name="flagrules" select="$flagrules"/>
-          </xsl:call-template>
-        </span>
+          </xsl:apply-templates>
+        </xsl:element>
       </xsl:otherwise>
     </xsl:choose>
+  </xsl:template>
+
+  <xsl:template match="*" mode="common-processing-phrase-within-link">
+    <xsl:param name="type"/>
+    <xsl:param name="conflictexist"></xsl:param>
+    <xsl:param name="flagrules"></xsl:param>
+    <xsl:call-template name="commonattributes">
+      <xsl:with-param name="default-output-class">
+        <xsl:if test="normalize-space($type)!=name()"><xsl:value-of select="$type"/></xsl:if>
+      </xsl:with-param>
+    </xsl:call-template>
+    <xsl:call-template name="gen-style">
+      <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
+      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
+    </xsl:call-template>
+    <xsl:call-template name="setidaname"/>   
+    <xsl:call-template name="flagcheck"/>
+    <xsl:call-template name="revtext">
+      <xsl:with-param name="flagrules" select="$flagrules"/>
+    </xsl:call-template>
   </xsl:template>
 
   <xsl:template match="processing-instruction('workdir')" mode="get-work-dir">
