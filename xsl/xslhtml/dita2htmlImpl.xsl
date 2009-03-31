@@ -1403,14 +1403,14 @@
   <xsl:if test="$itemgroupcount&gt;'1'">
     <xsl:text> </xsl:text>
   </xsl:if>
-  <xsl:call-template name="setidaname"/>
-  <xsl:call-template name="gen-style">
-    <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
-    <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
+  <xsl:call-template name="start-flagit">
+    <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
   </xsl:call-template>
-  <xsl:call-template name="flagcheck"/>
-  <xsl:call-template name="revtext">
-    <xsl:with-param name="flagrules" select="$flagrules"/>
+  <xsl:call-template name="revblock">
+    <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param> 
+  </xsl:call-template>
+  <xsl:call-template name="end-flagit">
+    <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param> 
   </xsl:call-template>
 </xsl:template>
 
