@@ -582,7 +582,6 @@
       If so, use div_class="p" instead of p -->
  <xsl:choose>
   <xsl:when test="descendant::*[contains(@class,' topic/pre ')] or
-       descendant::*[contains(@class,' topic/screen ')] or
        descendant::*[contains(@class,' topic/ul ')] or
        descendant::*[contains(@class,' topic/sl ')] or
        descendant::*[contains(@class,' topic/ol ')] or
@@ -1406,7 +1405,7 @@
   <xsl:call-template name="start-flagit">
     <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
   </xsl:call-template>
-  <xsl:call-template name="revblock">
+  <xsl:call-template name="revtext">
     <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param> 
   </xsl:call-template>
   <xsl:call-template name="end-flagit">
