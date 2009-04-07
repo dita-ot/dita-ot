@@ -368,7 +368,7 @@
   <!-- main toc generator -->
   <xsl:template name="gen-toc">
     <!-- get by main part: body -->
-    <xsl:for-each select="//bookmap/*[contains(@class,' topic/topic ')]|//map/*[contains(@class,' topic/topic ')]">
+    <xsl:for-each select="//bookmap//*[contains(@class,' topic/topic ')]|//map/*[contains(@class,' topic/topic ')]">
       <fo:block text-align-last="justify" margin-top="6pt" margin-left="4.9pc">
         <fo:inline font-weight="bold">
           <!--Chapter <xsl:number level="any" from="bookmap"/>. -->
