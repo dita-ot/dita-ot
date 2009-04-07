@@ -139,7 +139,9 @@
                  </xsl:attribute>
                </xsl:if>
                <xsl:if test="$alt">
-                 <xsl:apply-templates select="$alt"/>
+                 <xsl:attribute name="alt">
+                   <xsl:apply-templates select="$alt"/>
+                 </xsl:attribute>
                </xsl:if>
            </img>
            <xsl:if test="$imagemap = 'yes' and $plus-svgobject-raster-imagemap = 'yes'">
