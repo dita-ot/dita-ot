@@ -275,12 +275,12 @@
    </xsl:when>
    <xsl:otherwise><xsl:call-template name="commonattributes"/></xsl:otherwise>
  </xsl:choose>
- <xsl:call-template name="setidaname"/>
  <xsl:call-template name="gen-toc-id"/>
   <xsl:call-template name="gen-style">
     <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
     <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
   </xsl:call-template>
+  <xsl:call-template name="setidaname"/>
   <xsl:call-template name="start-flagit">
     <xsl:with-param name="flagrules" select="$flagrules"/>     
   </xsl:call-template>
@@ -335,11 +335,11 @@
   </xsl:variable>
 <div>
   <xsl:call-template name="commonattributes"/>
-  <xsl:call-template name="setidaname"/>
   <xsl:call-template name="gen-style">
     <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
     <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
   </xsl:call-template>
+  <xsl:call-template name="setidaname"/>
   <xsl:call-template name="start-flagit">
     <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
   </xsl:call-template>
@@ -514,8 +514,8 @@
 <xsl:template match="*[contains(@class,' topic/example ')]" name="topic.example">
 <div class="example">
  <xsl:call-template name="commonattributes"/>
- <xsl:call-template name="setidaname"/>
  <xsl:call-template name="gen-toc-id"/>
+ <xsl:call-template name="setidaname"/>
  <xsl:variable name="revtest">
    <xsl:if test="@rev and not($FILTERFILE='') and ($DRAFT='yes')"> 
      <xsl:call-template name="find-active-rev-flag">
@@ -594,11 +594,11 @@
        descendant::*[contains(@class,' topic/simpletable ')]">
      <div class="p">
      <xsl:call-template name="commonattributes"/>
-     <xsl:call-template name="setidaname"/>
        <xsl:call-template name="gen-style">
          <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
          <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
        </xsl:call-template>
+       <xsl:call-template name="setidaname"/>
        <xsl:call-template name="start-flagit">
          <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
        </xsl:call-template>
@@ -612,12 +612,12 @@
      </xsl:when>
   <xsl:otherwise>
   <p>
-  <xsl:call-template name="commonattributes"/>
-  <xsl:call-template name="setidaname"/>
+    <xsl:call-template name="commonattributes"/>
     <xsl:call-template name="gen-style">
       <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
       <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
     </xsl:call-template>
+    <xsl:call-template name="setidaname"/>
     <xsl:call-template name="start-flagit">
       <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
     </xsl:call-template>
@@ -691,11 +691,11 @@
     <xsl:call-template name="commonattributes">
       <xsl:with-param name="default-output-class" select="'note'"/>
     </xsl:call-template>
-    <xsl:call-template name="setidaname"/>
     <xsl:call-template name="gen-style">
       <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
       <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
     </xsl:call-template>
+    <xsl:call-template name="setidaname"/>
     <span class="notetitle">
       <xsl:call-template name="getString">
         <xsl:with-param name="stringName" select="'Note'"/>
@@ -767,11 +767,11 @@
     <xsl:call-template name="commonattributes">
       <xsl:with-param name="default-output-class" select="'fastpath'"/>
     </xsl:call-template>
-    <xsl:call-template name="setidaname"/>
     <xsl:call-template name="gen-style">
       <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
       <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
     </xsl:call-template>
+    <xsl:call-template name="setidaname"/>
     <span class="fastpathtitle">
       <xsl:call-template name="getString">
         <xsl:with-param name="stringName" select="'Fastpath'"/>
@@ -805,11 +805,11 @@
     <xsl:call-template name="commonattributes">
       <xsl:with-param name="default-output-class" select="'important'"/>
     </xsl:call-template>
-    <xsl:call-template name="setidaname"/>
     <xsl:call-template name="gen-style">
       <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
       <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
     </xsl:call-template>
+    <xsl:call-template name="setidaname"/>
     <span class="importanttitle">
       <xsl:call-template name="getString">
         <xsl:with-param name="stringName" select="'Important'"/>
@@ -843,11 +843,11 @@
     <xsl:call-template name="commonattributes">
       <xsl:with-param name="default-output-class" select="'remember'"/>
     </xsl:call-template>
-    <xsl:call-template name="setidaname"/>
     <xsl:call-template name="gen-style">
       <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
       <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
     </xsl:call-template>
+    <xsl:call-template name="setidaname"/>
     <span class="remembertitle">
       <xsl:call-template name="getString">
         <xsl:with-param name="stringName" select="'Remember'"/>
@@ -881,11 +881,11 @@
     <xsl:call-template name="commonattributes">
       <xsl:with-param name="default-output-class" select="'restriction'"/>
     </xsl:call-template>
-    <xsl:call-template name="setidaname"/>
     <xsl:call-template name="gen-style">
       <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
       <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
     </xsl:call-template>
+    <xsl:call-template name="setidaname"/>
     <span class="restrictiontitle">
       <xsl:call-template name="getString">
         <xsl:with-param name="stringName" select="'Restriction'"/>
@@ -919,11 +919,11 @@
     <xsl:call-template name="commonattributes">
       <xsl:with-param name="default-output-class" select="'attention'"/>
     </xsl:call-template>
-    <xsl:call-template name="setidaname"/>
     <xsl:call-template name="gen-style">
       <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
       <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
     </xsl:call-template>
+    <xsl:call-template name="setidaname"/>
     <xsl:call-template name="start-flagit">
       <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
     </xsl:call-template>
@@ -1078,11 +1078,11 @@
   </xsl:variable>
 <blockquote>
   <xsl:call-template name="commonattributes"/>
-  <xsl:call-template name="setidaname"/>
   <xsl:call-template name="gen-style">
     <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
     <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
   </xsl:call-template>
+  <xsl:call-template name="setidaname"/>
   <xsl:call-template name="start-flagit">
     <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
   </xsl:call-template>
@@ -1332,11 +1332,11 @@
   <xsl:attribute name="class">liexpand</xsl:attribute>
  </xsl:if>
   <xsl:call-template name="commonattributes"/>
-  <xsl:call-template name="setidaname"/>
   <xsl:call-template name="gen-style">
     <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
     <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
   </xsl:call-template>
+  <xsl:call-template name="setidaname"/>
   <xsl:call-template name="start-flagit">
     <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
   </xsl:call-template>
@@ -1359,16 +1359,24 @@
     </xsl:call-template>
   </xsl:variable>
 <li>
- <!-- handle non-compact list items -->
- <xsl:if test="parent::*/@compact='no'">
-  <xsl:attribute name="class">sliexpand</xsl:attribute>
- </xsl:if>
+  <xsl:choose>
+    <xsl:when test="parent::*/@compact='no'">
+      <xsl:attribute name="class">sliexpand</xsl:attribute>
+      <!-- handle non-compact list items -->
+      <xsl:call-template name="commonattributes">
+        <xsl:with-param name="default-output-class" select="'sliexpand'"/>
+      </xsl:call-template>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:call-template name="commonattributes"/>
+    </xsl:otherwise>
+  </xsl:choose>
   <xsl:call-template name="commonattributes"/>
-  <xsl:call-template name="setidaname"/>
   <xsl:call-template name="gen-style">
     <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
     <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
   </xsl:call-template>
+  <xsl:call-template name="setidaname"/>
   <xsl:call-template name="start-flagit">
     <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
   </xsl:call-template>
@@ -1503,11 +1511,11 @@
     <xsl:call-template name="commonattributes">
       <xsl:with-param name="default-output-class" select="$dt-class"/>
     </xsl:call-template>
-    <xsl:call-template name="setidaname"/>
     <xsl:call-template name="gen-style">
       <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
       <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
     </xsl:call-template>
+    <xsl:call-template name="setidaname"/>
     <!-- handle ID on a DLENTRY -->
     <xsl:if test="$dtcount=1 and parent::*/@id">
       <xsl:call-template name="parent-id"/>
@@ -1580,11 +1588,11 @@
     </xsl:if>
     <xsl:apply-templates select="../@xml:lang"/> <!-- Get from DLENTRY, then override with local -->
     <xsl:call-template name="commonattributes"/>
-    <xsl:call-template name="setidaname"/>
     <xsl:call-template name="gen-style">
       <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
       <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
     </xsl:call-template>
+    <xsl:call-template name="setidaname"/>
     <xsl:call-template name="start-flagit">
       <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
     </xsl:call-template>
@@ -1622,11 +1630,11 @@
 <dt>
  <xsl:apply-templates select="../@xml:lang"/> <!-- Get from DLHEAD, then override with local -->
  <xsl:call-template name="commonattributes"/>
- <xsl:call-template name="setidaname"/>
   <xsl:call-template name="gen-style">
     <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
     <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
   </xsl:call-template>
+  <xsl:call-template name="setidaname"/>
   <xsl:call-template name="start-flagit">
     <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
   </xsl:call-template>
@@ -1660,11 +1668,11 @@
 <dd>
  <xsl:apply-templates select="../@xml:lang"/> <!-- Get from DLHEAD, then override with local -->
  <xsl:call-template name="commonattributes"/>
- <xsl:call-template name="setidaname"/>
   <xsl:call-template name="gen-style">
     <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
     <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
   </xsl:call-template>
+  <xsl:call-template name="setidaname"/>
   <xsl:call-template name="start-flagit">
     <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
   </xsl:call-template>
@@ -3979,11 +3987,11 @@
       <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
       <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
     </xsl:call-template>
-   <xsl:call-template name="setidaname"/>
     <xsl:call-template name="gen-style">
       <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
       <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
     </xsl:call-template>
+    <xsl:call-template name="setidaname"/>
     <xsl:call-template name="start-revflag">
       <xsl:with-param name="flagrules" select="$flagrules"/>
     </xsl:call-template>
