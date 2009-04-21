@@ -553,6 +553,15 @@
   </simplelist>
 </xsl:template>
 
+<xsl:template match="*[contains(@class,' topic/sli ')]">
+  <member>
+    <xsl:call-template name="setStandardAttr">
+      <xsl:with-param name="IDPrefix" select="'sli'"/>
+    </xsl:call-template>
+    <xsl:apply-templates/>
+  </member>
+</xsl:template>
+
 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
    - VERBATIM BLOCKS
