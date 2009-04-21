@@ -46,7 +46,7 @@
      * 1947566 pdf2: allow XEP to be installed elsewhere
      * 2477370 Refactor of conrefImpl.xsl
      
-     [30 SF Bugs Fixed]
+     [31 SF Bugs Fixed]
      * 2008294 End flag does not work in ditaval
      * 2078563 Keyref not working for external links
      * 2027170 maprefImpl.xsl removes part of class attr from topichead
@@ -77,6 +77,7 @@
      * 1999117 Ubuntu 8.04 | startcmd.sh doesn't work
      * 2020317 Many duplicated id in xxx_MERGED.xml in PDF2 output.
      * 2614006 Conref processing ignores -dita-use-conref-target
+     * 1727863 <groupchoice> has an extra "|" character 
      
 ====================================================================================
      DITA OT release 1.4.2.1
