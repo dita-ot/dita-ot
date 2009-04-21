@@ -1,5 +1,84 @@
-(c) Copyright IBM Corp. 2004, 2008 All Rights Reserved.
+(c) Copyright IBM Corp. 2004, 2009 All Rights Reserved.
 
+     DITA OT release 1.4.3
+     
+     Release 1.4.3 is a maintenance release and is intended to be the last
+     released based fully on DITA 1.1. It contains a significant amount of
+     preview function for the upcoming DITA 1.2 standard, but the DITA 1.2
+     document types must be specifically referenced in order to use this
+     capability.
+     
+     The 1.4.3 release contains the following major updates:
+     1.  The PDF codebase switched from the older deprecated code to the 
+         plugin previously known as PDF2. Running a build with the transform
+         type PDF or PDF2 will now run the new code. To continue using the
+         older code, set your transform type to "legacypdf".
+     2. The PDF plugin now runs with FOP, as well as with the latest version
+        of Saxon.
+     3. The Full Easy Install package now ships with Saxon 9B instead of
+        with Xalan, and code in the DITA-OT package has been updated to work
+        with Saxon 9B.
+     4. The Full Easy Install package updates the versions of many open
+        source libraries (including Ant and FOP)
+     5. RFE 1982567 Allow spaces in DITA file names
+     6. Preview function for the majority of the upcoming OASIS DITA 1.2
+        standard, including everything from milestone builds one through
+        twelve of DITA-OT 1.5
+        
+     The full list of fixes includes:
+     [10 SF Enhancements Added]
+     * 1982567 Allow spaces in DITA file names
+     * 2631145 dita2htmlImpl.xsl should not define doctype
+     * 2562718 Rename the ant directory to avoid naming collisions with 
+       ant
+     * 2314086 Let maplink generate <linklist> elements
+     * 2258659 Extend integrator to allow addition of messages.
+     * 2117337 Customize Integrator to integrate custom directories
+     * 2074933 Make index output for new transtypes more extensible
+     * 1995667 Add plugin extension points to preprocess pipeline
+     * 1972537 Let users specify reloadstylesheet on xslt tasks
+     * 1803199 Allow ability to include class ancestry in XHTML class 
+       attribute
+     
+     [4 Patches Added]
+     * 1996733 Structure Ant <pipeline> better
+     * 1796007 Refactor of related links HTML for specialized processing
+     * 1947566 pdf2: allow XEP to be installed elsewhere
+     * 2477370 Refactor of conrefImpl.xsl
+     
+     [30 SF Bugs Fixed]
+     * 2008294 End flag does not work in ditaval
+     * 2078563 Keyref not working for external links
+     * 2027170 maprefImpl.xsl removes part of class attr from topichead
+     * 2027058 Topichead element stops map processing in ChunkMapReader
+     * 2001268 DITA-OT documentation wants JDK 1.4
+     * 2008317 Chunking one topic from a large file hogs memory
+     * 2219479 <prodinfo> subelement associations are lost in HTML output
+     * 2340727 No link in TOC to topics in ditabase
+     * 2317627 Chunking map to create one file should use map file name
+     * 2143078 Relcolwidth not respected in choicetable
+     * 1995223 bookmap: bookmeta->bookrights information is not generated
+     * 1990167 reltable doesn't generate external links correctly
+     * 1953553 FO 1.4.2 plugin: Inconsistent display of "on page" in xref
+     * 1951879 Link generation is disabled for bookmaps
+     * 1997171 topic body suppressed in chapter topics
+     * 2417980 Toolkit should support both versions of Serbian lang code
+     * 1947817 Extra topics appear in PDF output when using reltables
+     * 2004588 Image alt text needs space normalized
+     * 1954463 Conditional processing multiple PDFs in the same JVM
+     * 2061301 Useless import of xslt4j stops dost.jar being built
+     * 2317659 Chunking "by-topic" does not work
+     * 1955211 Footnotes-by-reference rendered naively
+     * 2010062 Spaces dropped in indexterm that has keyword
+     * 2607496 USEINDEX=no breaks HTML Help HHP
+     * 2570118 <xref> without href drops content
+     * 2414891 Map contains wrong reference after chunking
+     * 2010092 example or section title can be orphaned in PDF2
+     * 1999117 Ubuntu 8.04 | startcmd.sh doesn't work
+     * 2020317 Many duplicated id in xxx_MERGED.xml in PDF2 output.
+     * 2614006 Conref processing ignores -dita-use-conref-target
+     
+====================================================================================
      DITA OT release 1.4.2.1
 
      Release 1.4.2.1 is a full build to provide an urgent fix to fix the 
