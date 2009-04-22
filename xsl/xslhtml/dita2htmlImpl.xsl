@@ -2234,9 +2234,7 @@
   <!-- build any post break indicated by style -->
   <xsl:if test="not(@placement='inline')"><br/></xsl:if>
   <!-- image name for review -->
-  <xsl:if test="$ARTLBL='yes'">
-    [<xsl:value-of select="@href"/>]
-  </xsl:if>
+  <xsl:if test="$ARTLBL='yes'"> [<xsl:value-of select="@href"/>] </xsl:if>
 </xsl:template>
 
 <xsl:template name="topic-image">
@@ -4653,6 +4651,9 @@
   </xsl:template>
   
   <xsl:template name="chapterHead">
+    <xsl:apply-templates select="." mode="chapterHead"/>
+  </xsl:template>
+  <xsl:template match="*" mode="chapterHead">
     <head><xsl:value-of select="$newline"/>
       <!-- initial meta information -->
       <xsl:call-template name="generateCharset"/>   <!-- Set the character set to UTF-8 -->
@@ -4786,6 +4787,9 @@
   </xsl:template>
   
   <xsl:template name="chapterBody">
+    <xsl:apply-templates select="." mode="chapterBody"/>
+  </xsl:template>
+  <xsl:template match="*" mode="chapterBody">
     <xsl:variable name="flagrules">
       <xsl:call-template name="getrules"/>
     </xsl:variable>
@@ -4795,6 +4799,16 @@
         <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
       </xsl:call-template>
       <xsl:call-template name="setidaname"/>
+      <!--output parent or first "topic" tag's outputclass as class -->
+      <xsl:if test="@outputclass">
+       <xsl:attribute name="class"><xsl:value-of select="@outputclass" /></xsl:attribute>
+      </xsl:if>
+      <xsl:if test="self::dita">
+          <xsl:if test="*[contains(@class,' topic/topic ')][1]/@outputclass">
+           <xsl:attribute name="class"><xsl:value-of select="*[contains(@class,' topic/topic ')][1]/@outputclass" /></xsl:attribute>
+          </xsl:if>
+      </xsl:if>
+      <xsl:apply-templates select="." mode="addAttributesToBody"/>
       <xsl:value-of select="$newline"/>
       <xsl:call-template name="start-flagit">
         <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
@@ -4825,6 +4839,12 @@
       </xsl:call-template>
     </body>
     <xsl:value-of select="$newline"/>
+  </xsl:template>
+
+  <!-- Override this template to add any standard attributes to
+       the HTML <body> element. Current context is the root
+       element of the doc. -->
+  <xsl:template match="*" mode="addAttributesToBody">
   </xsl:template>
   
   <xsl:template name="generateBreadcrumbs">
