@@ -160,7 +160,10 @@
     <xsl:call-template name="setStandardAttr">
       <xsl:with-param name="IDPrefix" select="'pblshr'"/>
     </xsl:call-template>
+   <!-- dhjohnso: publisher must be inside publishername -->
+   <publishername>
     <xsl:apply-templates/>
+   </publishername>
   </publisher>
 </xsl:template>
 
@@ -189,6 +192,16 @@
     </xsl:call-template>
     <xsl:apply-templates/>
   </holder>
+</xsl:template>
+
+<!-- dhjohnso: template added for missing year element -->
+<xsl:template match="*[contains(@class,' topic/copyryear ')]">
+  <year>
+    <xsl:call-template name="setStandardAttr">
+      <xsl:with-param name="IDPrefix" select="'cpryear'"/>
+    </xsl:call-template>
+    <xsl:value-of select="@year" />
+  </year>
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' topic/critdates ')]">
