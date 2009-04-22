@@ -263,11 +263,6 @@
   <xsl:variable name="flagrules">
     <xsl:call-template name="getrules"/>
   </xsl:variable>
-  <xsl:variable name="conflictexist">
-    <xsl:call-template name="conflict-check">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:call-template>
-  </xsl:variable>
  <xsl:choose>
    <xsl:when test="parent::dita and not(preceding-sibling::*)">
      <!-- Do not reset xml:lang if it is already set on <html> -->
@@ -277,23 +272,10 @@
  </xsl:choose>
  <xsl:call-template name="gen-toc-id"/>
   <xsl:call-template name="gen-style">
-    <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
     <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
   </xsl:call-template>
   <xsl:call-template name="setidaname"/>
-  <xsl:call-template name="start-flagit">
-    <xsl:with-param name="flagrules" select="$flagrules"/>     
-  </xsl:call-template>
-  <xsl:call-template name="start-revflag">
-    <xsl:with-param name="flagrules" select="$flagrules"/>  
-  </xsl:call-template>
- <xsl:apply-templates/>
-  <xsl:call-template name="end-revflag">
-    <xsl:with-param name="flagrules" select="$flagrules"/>  
-  </xsl:call-template>
-  <xsl:call-template name="end-flagit">
-    <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param> 
-  </xsl:call-template>
+  <xsl:apply-templates select="." mode="outputContentsWithFlags"/>
 </xsl:template>
 
 
@@ -328,15 +310,9 @@
   <xsl:variable name="flagrules">
     <xsl:call-template name="getrules"/>
   </xsl:variable>
-  <xsl:variable name="conflictexist">
-    <xsl:call-template name="conflict-check">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:call-template>
-  </xsl:variable>
 <div>
   <xsl:call-template name="commonattributes"/>
   <xsl:call-template name="gen-style">
-    <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
     <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
   </xsl:call-template>
   <xsl:call-template name="setidaname"/>
@@ -458,16 +434,10 @@
   <xsl:variable name="flagrules">
     <xsl:call-template name="getrules"/>
   </xsl:variable>
-  <xsl:variable name="conflictexist">
-    <xsl:call-template name="conflict-check">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:call-template>
-  </xsl:variable>
   
 <div class="section">
  <xsl:call-template name="commonattributes"/>
  <xsl:call-template name="gen-style">
-   <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
    <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
  </xsl:call-template>
  <xsl:call-template name="gen-toc-id"/>
@@ -538,13 +508,7 @@
   <xsl:variable name="flagrules">
     <xsl:call-template name="getrules"/>
   </xsl:variable>
-  <xsl:variable name="conflictexist">
-    <xsl:call-template name="conflict-check">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:call-template>
-  </xsl:variable>
   <xsl:call-template name="gen-style">
-    <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
     <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
   </xsl:call-template>
   <xsl:call-template name="start-flagit">
@@ -573,11 +537,6 @@
   <xsl:variable name="flagrules">
     <xsl:call-template name="getrules"/>
   </xsl:variable>
-  <xsl:variable name="conflictexist">
-    <xsl:call-template name="conflict-check">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:call-template>
-  </xsl:variable>
  <!-- To ensure XHTML validity, need to determine whether the DITA kids are block elements.
       If so, use div_class="p" instead of p -->
  <xsl:choose>
@@ -595,7 +554,6 @@
      <div class="p">
      <xsl:call-template name="commonattributes"/>
        <xsl:call-template name="gen-style">
-         <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
          <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
        </xsl:call-template>
        <xsl:call-template name="setidaname"/>
@@ -614,7 +572,6 @@
   <p>
     <xsl:call-template name="commonattributes"/>
     <xsl:call-template name="gen-style">
-      <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
       <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
     </xsl:call-template>
     <xsl:call-template name="setidaname"/>
@@ -682,17 +639,11 @@
   <xsl:variable name="flagrules">
     <xsl:call-template name="getrules"/>
   </xsl:variable>
-  <xsl:variable name="conflictexist">
-    <xsl:call-template name="conflict-check">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:call-template>
-  </xsl:variable>
   <div class="note">
     <xsl:call-template name="commonattributes">
       <xsl:with-param name="default-output-class" select="'note'"/>
     </xsl:call-template>
     <xsl:call-template name="gen-style">
-      <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
       <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
     </xsl:call-template>
     <xsl:call-template name="setidaname"/>
@@ -720,18 +671,12 @@
   <xsl:variable name="flagrules">
     <xsl:call-template name="getrules"/>
   </xsl:variable>
-  <xsl:variable name="conflictexist">
-    <xsl:call-template name="conflict-check">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:call-template>
-  </xsl:variable>
   <div class="tip">
     <xsl:call-template name="commonattributes">
       <xsl:with-param name="default-output-class" select="'tip'"/>
     </xsl:call-template>
     <xsl:call-template name="setidaname"/>
     <xsl:call-template name="gen-style">
-      <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
       <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
     </xsl:call-template>
     <span class="tiptitle">
@@ -758,17 +703,11 @@
   <xsl:variable name="flagrules">
     <xsl:call-template name="getrules"/>
   </xsl:variable>
-  <xsl:variable name="conflictexist">
-    <xsl:call-template name="conflict-check">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:call-template>
-  </xsl:variable>
   <div class="fastpath">
     <xsl:call-template name="commonattributes">
       <xsl:with-param name="default-output-class" select="'fastpath'"/>
     </xsl:call-template>
     <xsl:call-template name="gen-style">
-      <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
       <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
     </xsl:call-template>
     <xsl:call-template name="setidaname"/>
@@ -796,17 +735,11 @@
   <xsl:variable name="flagrules">
     <xsl:call-template name="getrules"/>
   </xsl:variable>
-  <xsl:variable name="conflictexist">
-    <xsl:call-template name="conflict-check">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:call-template>
-  </xsl:variable>
   <div class="important">
     <xsl:call-template name="commonattributes">
       <xsl:with-param name="default-output-class" select="'important'"/>
     </xsl:call-template>
     <xsl:call-template name="gen-style">
-      <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
       <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
     </xsl:call-template>
     <xsl:call-template name="setidaname"/>
@@ -834,17 +767,11 @@
   <xsl:variable name="flagrules">
     <xsl:call-template name="getrules"/>
   </xsl:variable>
-  <xsl:variable name="conflictexist">
-    <xsl:call-template name="conflict-check">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:call-template>
-  </xsl:variable>
   <div class="remember">
     <xsl:call-template name="commonattributes">
       <xsl:with-param name="default-output-class" select="'remember'"/>
     </xsl:call-template>
     <xsl:call-template name="gen-style">
-      <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
       <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
     </xsl:call-template>
     <xsl:call-template name="setidaname"/>
@@ -872,17 +799,11 @@
   <xsl:variable name="flagrules">
     <xsl:call-template name="getrules"/>
   </xsl:variable>
-  <xsl:variable name="conflictexist">
-    <xsl:call-template name="conflict-check">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:call-template>
-  </xsl:variable>
   <div class="restriction">
     <xsl:call-template name="commonattributes">
       <xsl:with-param name="default-output-class" select="'restriction'"/>
     </xsl:call-template>
     <xsl:call-template name="gen-style">
-      <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
       <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
     </xsl:call-template>
     <xsl:call-template name="setidaname"/>
@@ -910,17 +831,11 @@
   <xsl:variable name="flagrules">
     <xsl:call-template name="getrules"/>
   </xsl:variable>
-  <xsl:variable name="conflictexist">
-    <xsl:call-template name="conflict-check">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:call-template>
-  </xsl:variable>
   <div class="attention">
     <xsl:call-template name="commonattributes">
       <xsl:with-param name="default-output-class" select="'attention'"/>
     </xsl:call-template>
     <xsl:call-template name="gen-style">
-      <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
       <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
     </xsl:call-template>
     <xsl:call-template name="setidaname"/>
@@ -948,11 +863,6 @@
   <xsl:variable name="flagrules">
     <xsl:call-template name="getrules"/>
   </xsl:variable>
-  <xsl:variable name="conflictexist">
-    <xsl:call-template name="conflict-check">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:call-template>
-  </xsl:variable>
   <div class="cautiontitle">
     <xsl:call-template name="commonattributes"/>
     <xsl:attribute name="class">cautiontitle</xsl:attribute>
@@ -969,7 +879,6 @@
       <xsl:with-param name="default-output-class" select="'caution'"/>
     </xsl:call-template>
     <xsl:call-template name="gen-style">
-      <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
       <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
     </xsl:call-template>
     <xsl:call-template name="start-flagit">
@@ -988,11 +897,6 @@
   <xsl:variable name="flagrules">
     <xsl:call-template name="getrules"/>
   </xsl:variable>
-  <xsl:variable name="conflictexist">
-    <xsl:call-template name="conflict-check">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:call-template>
-  </xsl:variable>
   <div class="dangertitle">
     <xsl:call-template name="commonattributes"/>
     <xsl:attribute name="class">dangertitle</xsl:attribute>
@@ -1006,7 +910,6 @@
       <xsl:with-param name="default-output-class" select="'danger'"/>
     </xsl:call-template>
     <xsl:call-template name="gen-style">
-      <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
       <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
     </xsl:call-template>
     <xsl:call-template name="start-flagit">
@@ -1025,11 +928,6 @@
   <xsl:variable name="flagrules">
     <xsl:call-template name="getrules"/>
   </xsl:variable>
-  <xsl:variable name="conflictexist">
-    <xsl:call-template name="conflict-check">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:call-template>
-  </xsl:variable>
   <xsl:choose>
     <xsl:when test="@othertype">
       <div class="note">
@@ -1037,7 +935,6 @@
           <xsl:with-param name="default-output-class" select="'note'"/>
         </xsl:call-template>
         <xsl:call-template name="gen-style">
-          <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
           <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
         </xsl:call-template>
         <xsl:call-template name="setidaname"/>
@@ -1071,15 +968,9 @@
   <xsl:variable name="flagrules">
     <xsl:call-template name="getrules"/>
   </xsl:variable>
-  <xsl:variable name="conflictexist">
-    <xsl:call-template name="conflict-check">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:call-template>
-  </xsl:variable>
 <blockquote>
   <xsl:call-template name="commonattributes"/>
   <xsl:call-template name="gen-style">
-    <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
     <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
   </xsl:call-template>
   <xsl:call-template name="setidaname"/>
@@ -1176,11 +1067,6 @@
   <xsl:variable name="flagrules">
     <xsl:call-template name="getrules"/>
   </xsl:variable>
-  <xsl:variable name="conflictexist">
-    <xsl:call-template name="conflict-check">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:call-template>
-  </xsl:variable>
  <br/>
   <xsl:call-template name="start-flagit">
     <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
@@ -1192,7 +1078,6 @@
  <ul>
    <xsl:call-template name="commonattributes"/>
    <xsl:call-template name="gen-style">
-     <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
    </xsl:call-template>
    <xsl:apply-templates select="@compact"/>
@@ -1244,11 +1129,6 @@
   <xsl:variable name="flagrules">
     <xsl:call-template name="getrules"/>
   </xsl:variable>
-  <xsl:variable name="conflictexist">
-    <xsl:call-template name="conflict-check">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:call-template>
-  </xsl:variable>
   <xsl:call-template name="start-revflag">
     <xsl:with-param name="flagrules" select="$flagrules"/>
   </xsl:call-template>
@@ -1256,7 +1136,6 @@
 <ul class="simple">
   <xsl:call-template name="commonattributes"/>
   <xsl:call-template name="gen-style">
-    <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
     <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
   </xsl:call-template>
   <xsl:apply-templates select="@compact"/>
@@ -1278,11 +1157,6 @@
   <xsl:variable name="flagrules">
     <xsl:call-template name="getrules"/>
   </xsl:variable>
-  <xsl:variable name="conflictexist">
-    <xsl:call-template name="conflict-check">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:call-template>
-  </xsl:variable>
 <xsl:variable name="olcount" select="count(ancestor-or-self::*[contains(@class,' topic/ol ')])"/>
 <br/>
   <xsl:call-template name="start-flagit">
@@ -1295,7 +1169,6 @@
 <ol>
   <xsl:call-template name="commonattributes"/>
   <xsl:call-template name="gen-style">
-    <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
     <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
   </xsl:call-template>
   <xsl:apply-templates select="@compact"/>
@@ -1321,11 +1194,6 @@
   <xsl:variable name="flagrules">
     <xsl:call-template name="getrules"/>
   </xsl:variable>
-  <xsl:variable name="conflictexist">
-    <xsl:call-template name="conflict-check">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:call-template>
-  </xsl:variable>
 <li>
  <!-- handle non-compact list items -->
  <xsl:if test="parent::*/@compact='no'">
@@ -1333,7 +1201,6 @@
  </xsl:if>
   <xsl:call-template name="commonattributes"/>
   <xsl:call-template name="gen-style">
-    <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
     <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
   </xsl:call-template>
   <xsl:call-template name="setidaname"/>
@@ -1353,11 +1220,6 @@
   <xsl:variable name="flagrules">
     <xsl:call-template name="getrules"/>
   </xsl:variable>
-  <xsl:variable name="conflictexist">
-    <xsl:call-template name="conflict-check">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:call-template>
-  </xsl:variable>
 <li>
   <xsl:choose>
     <xsl:when test="parent::*/@compact='no'">
@@ -1373,7 +1235,6 @@
   </xsl:choose>
   <xsl:call-template name="commonattributes"/>
   <xsl:call-template name="gen-style">
-    <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
     <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
   </xsl:call-template>
   <xsl:call-template name="setidaname"/>
@@ -1401,11 +1262,6 @@
 <xsl:variable name="itemgroupcount"><xsl:number count="*[contains(@class,' topic/itemgroup ')]"/></xsl:variable>
   <xsl:variable name="flagrules">
     <xsl:call-template name="getrules"/>
-  </xsl:variable>
-  <xsl:variable name="conflictexist">
-    <xsl:call-template name="conflict-check">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:call-template>
   </xsl:variable>
   <xsl:if test="$itemgroupcount&gt;'1'">
     <xsl:text> </xsl:text>
@@ -1445,11 +1301,6 @@
   <xsl:variable name="flagrules">
     <xsl:call-template name="getrules"/>
   </xsl:variable>
-  <xsl:variable name="conflictexist">
-    <xsl:call-template name="conflict-check">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:call-template>
-  </xsl:variable>
   <xsl:call-template name="start-flagit">
     <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
   </xsl:call-template>
@@ -1464,7 +1315,6 @@
   </xsl:if>
   <xsl:call-template name="commonattributes"/>
   <xsl:call-template name="gen-style">
-    <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
     <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
   </xsl:call-template>
   <xsl:apply-templates select="@compact"/>
@@ -1501,18 +1351,12 @@
     <xsl:call-template name="getrules"/>
     <xsl:call-template name="getrules-parent"/>
   </xsl:variable>
-  <xsl:variable name="conflictexist">
-    <xsl:call-template name="conflict-check">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:call-template>
-  </xsl:variable>
   <dt class="{$dt-class}">
     <xsl:apply-templates select="../@xml:lang"/> <!-- Get from DLENTRY, then override with local -->
     <xsl:call-template name="commonattributes">
       <xsl:with-param name="default-output-class" select="$dt-class"/>
     </xsl:call-template>
     <xsl:call-template name="gen-style">
-      <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
       <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
     </xsl:call-template>
     <xsl:call-template name="setidaname"/>
@@ -1577,11 +1421,6 @@
   <xsl:variable name="flagrules">
     <xsl:call-template name="getrules"/>
   </xsl:variable>
-  <xsl:variable name="conflictexist">
-    <xsl:call-template name="conflict-check">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:call-template>
-  </xsl:variable>
   <dd>
     <xsl:if test="$ddcount!=1">  <!-- para space before 2 thru N -->
       <xsl:attribute name="class">ddexpand</xsl:attribute>
@@ -1589,7 +1428,6 @@
     <xsl:apply-templates select="../@xml:lang"/> <!-- Get from DLENTRY, then override with local -->
     <xsl:call-template name="commonattributes"/>
     <xsl:call-template name="gen-style">
-      <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
       <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
     </xsl:call-template>
     <xsl:call-template name="setidaname"/>
@@ -1622,16 +1460,10 @@
   <xsl:variable name="flagrules">
     <xsl:call-template name="getrules"/>
   </xsl:variable>
-  <xsl:variable name="conflictexist">
-    <xsl:call-template name="conflict-check">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:call-template>
-  </xsl:variable>
 <dt>
  <xsl:apply-templates select="../@xml:lang"/> <!-- Get from DLHEAD, then override with local -->
  <xsl:call-template name="commonattributes"/>
   <xsl:call-template name="gen-style">
-    <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
     <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
   </xsl:call-template>
   <xsl:call-template name="setidaname"/>
@@ -1660,16 +1492,10 @@
   <xsl:variable name="flagrules">
     <xsl:call-template name="getrules"/>
   </xsl:variable>
-  <xsl:variable name="conflictexist">
-    <xsl:call-template name="conflict-check">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:call-template>
-  </xsl:variable>
 <dd>
  <xsl:apply-templates select="../@xml:lang"/> <!-- Get from DLHEAD, then override with local -->
  <xsl:call-template name="commonattributes"/>
   <xsl:call-template name="gen-style">
-    <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
     <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
   </xsl:call-template>
   <xsl:call-template name="setidaname"/>
@@ -1701,16 +1527,10 @@
   <xsl:variable name="flagrules">
     <xsl:call-template name="getrules"/>
   </xsl:variable>
-  <xsl:variable name="conflictexist">
-    <xsl:call-template name="conflict-check">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:call-template>
-  </xsl:variable>
   <xsl:choose>
     <xsl:when test="@keyref">
       <xsl:apply-templates select="." mode="turning-to-link">
         <xsl:with-param name="keys" select="@keyref"/>
-        <xsl:with-param name="conflictexist" select="$conflictexist"/>
         <xsl:with-param name="flagrules" select="$flagrules"/>
         <xsl:with-param name="type" select="'ph'"/>
       </xsl:apply-templates>
@@ -1719,7 +1539,6 @@
       <span>
         <xsl:call-template name="commonattributes"/>
         <xsl:call-template name="gen-style">
-          <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
           <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
         </xsl:call-template>
         <xsl:call-template name="setidaname"/>   
@@ -1747,16 +1566,10 @@
   <xsl:variable name="flagrules">
     <xsl:call-template name="getrules"/>
   </xsl:variable>
-  <xsl:variable name="conflictexist">
-    <xsl:call-template name="conflict-check">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:call-template>
-  </xsl:variable>
   <xsl:choose>
     <xsl:when test="@keyref">
       <xsl:apply-templates select="." mode="turning-to-link">
         <xsl:with-param name="keys" select="@keyref"/>
-        <xsl:with-param name="conflictexist" select="$conflictexist"/>
         <xsl:with-param name="flagrules" select="$flagrules"/>
         <xsl:with-param name="type" select="'keyword'"/>
       </xsl:apply-templates>
@@ -1765,7 +1578,6 @@
       <span class="keyword">
         <xsl:call-template name="commonattributes"/>
         <xsl:call-template name="gen-style">
-          <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
           <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
         </xsl:call-template>
         <xsl:call-template name="setidaname"/>   
@@ -1868,16 +1680,10 @@
   <xsl:variable name="flagrules">
     <xsl:call-template name="getrules"/>
   </xsl:variable>
-  <xsl:variable name="conflictexist">
-    <xsl:call-template name="conflict-check">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:call-template>
-  </xsl:variable>
   <xsl:choose>
     <xsl:when test="@keyref">
       <xsl:apply-templates select="." mode="turning-to-link">
         <xsl:with-param name="keys" select="@keyref"/>
-        <xsl:with-param name="conflictexist" select="$conflictexist"/>
         <xsl:with-param name="flagrules" select="$flagrules"/>
         <xsl:with-param name="type" select="'cite'"/>
       </xsl:apply-templates>
@@ -1886,7 +1692,6 @@
       <cite>
         <xsl:call-template name="commonattributes"/>
         <xsl:call-template name="gen-style">
-          <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
           <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
         </xsl:call-template>
         <xsl:call-template name="setidaname"/>
@@ -1904,15 +1709,9 @@
   <xsl:variable name="flagrules">
     <xsl:call-template name="getrules"/>
   </xsl:variable>
-  <xsl:variable name="conflictexist">
-    <xsl:call-template name="conflict-check">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:call-template>
-  </xsl:variable>
 <span class="q">
   <xsl:call-template name="commonattributes"/>
   <xsl:call-template name="gen-style">
-    <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
     <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
   </xsl:call-template>
   <xsl:call-template name="getString">
@@ -1933,15 +1732,9 @@
   <xsl:variable name="flagrules">
     <xsl:call-template name="getrules"/>
   </xsl:variable>
-  <xsl:variable name="conflictexist">
-    <xsl:call-template name="conflict-check">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:call-template>
-  </xsl:variable>
   <dfn class="term">
     <xsl:call-template name="commonattributes"/>
     <xsl:call-template name="gen-style">
-      <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
       <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
     </xsl:call-template>
     <xsl:call-template name="setidaname"/>   
@@ -2176,11 +1969,6 @@
   <xsl:variable name="flagrules">
     <xsl:call-template name="getrules"/>
   </xsl:variable>
-  <xsl:variable name="conflictexist">
-    <xsl:call-template name="conflict-check">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:call-template>
-  </xsl:variable>
 <xsl:if test="contains(@frame,'top')"><hr /></xsl:if>
   <xsl:call-template name="start-flagit">
     <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
@@ -2193,7 +1981,6 @@
   <xsl:attribute name="class"><xsl:value-of select="name()"/></xsl:attribute>
   <xsl:call-template name="commonattributes"/>
   <xsl:call-template name="gen-style">
-    <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
     <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
   </xsl:call-template>
   <xsl:call-template name="setscale"/>
@@ -2232,11 +2019,6 @@
   <xsl:variable name="flagrules">
     <xsl:call-template name="getrules"/>
   </xsl:variable>
-  <xsl:variable name="conflictexist">
-    <xsl:call-template name="conflict-check">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:call-template>
-  </xsl:variable>
 <xsl:if test="contains(@frame,'top')"><hr /></xsl:if>
   <xsl:call-template name="start-flagit">
     <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
@@ -2248,7 +2030,6 @@
  <p>
   <xsl:call-template name="commonattributes"/>
    <xsl:call-template name="gen-style">
-     <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
    </xsl:call-template>
   <xsl:call-template name="setscale"/>
@@ -2313,11 +2094,6 @@
   <xsl:variable name="flagrules">
     <xsl:call-template name="getrules"/>
   </xsl:variable>
-  <xsl:variable name="conflictexist">
-    <xsl:call-template name="conflict-check">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:call-template>
-  </xsl:variable>
   <xsl:call-template name="start-flagit">
     <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
   </xsl:call-template>
@@ -2332,7 +2108,6 @@
      <xsl:with-param name="default-output-class" select="$default-fig-class"/>
    </xsl:call-template>
    <xsl:call-template name="gen-style">
-     <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
    </xsl:call-template>
   <xsl:call-template name="setscale"/>
@@ -2371,11 +2146,6 @@
   <xsl:variable name="flagrules">
     <xsl:call-template name="getrules"/>
   </xsl:variable>
-  <xsl:variable name="conflictexist">
-    <xsl:call-template name="conflict-check">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:call-template>
-  </xsl:variable>
   <xsl:call-template name="start-flagit">
     <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
   </xsl:call-template>
@@ -2385,7 +2155,6 @@
  <span>
   <xsl:call-template name="commonattributes"/>
    <xsl:call-template name="gen-style">
-     <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
    </xsl:call-template>
   <xsl:call-template name="setidaname"/>
@@ -2730,11 +2499,6 @@
   <xsl:variable name="flagrules">
     <xsl:call-template name="getrules"/>
   </xsl:variable>
-  <xsl:variable name="conflictexist">
-    <xsl:call-template name="conflict-check">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:call-template>
-  </xsl:variable>
   <xsl:call-template name="start-flagit">
     <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
   </xsl:call-template>
@@ -2758,7 +2522,6 @@
   <xsl:call-template name="setid"/>
   <xsl:call-template name="commonattributes"/>
    <xsl:call-template name="gen-style">
-     <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
    </xsl:call-template>
   <xsl:call-template name="setscale"/>
@@ -2855,15 +2618,9 @@
   <xsl:variable name="flagrules">
     <xsl:call-template name="getrules"/>
   </xsl:variable>
-  <xsl:variable name="conflictexist">
-    <xsl:call-template name="conflict-check">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:call-template>
-  </xsl:variable>
   <thead>
   <xsl:call-template name="commonattributes"/>
     <xsl:call-template name="gen-style">
-      <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
       <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
     </xsl:call-template>
     <xsl:choose>
@@ -2902,15 +2659,9 @@
   <xsl:variable name="flagrules">
     <xsl:call-template name="getrules"/>
   </xsl:variable>
-  <xsl:variable name="conflictexist">
-    <xsl:call-template name="conflict-check">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:call-template>
-  </xsl:variable>
   <tbody>
     <xsl:call-template name="commonattributes"/>
     <xsl:call-template name="gen-style">
-      <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
       <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
     </xsl:call-template>
     <xsl:if test="@align">
@@ -2948,16 +2699,10 @@
   <xsl:variable name="flagrules">
     <xsl:call-template name="getrules"/>
   </xsl:variable>
-  <xsl:variable name="conflictexist">
-    <xsl:call-template name="conflict-check">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:call-template>
-  </xsl:variable>
   <tr>
     <xsl:call-template name="setid"/>
     <xsl:call-template name="commonattributes"/>
     <xsl:call-template name="gen-style">
-      <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
       <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
     </xsl:call-template>
     <xsl:if test="@align">
@@ -3492,11 +3237,6 @@
   <xsl:variable name="flagrules">
     <xsl:call-template name="getrules"/>
   </xsl:variable>
-  <xsl:variable name="conflictexist">
-    <xsl:call-template name="conflict-check">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:call-template>
-  </xsl:variable>
   <xsl:variable name="totalwidth">
     <xsl:if test="@relcolwidth">
       <xsl:call-template name="find-total-table-width"/>
@@ -3535,7 +3275,6 @@
     </xsl:choose>
     <xsl:call-template name="commonattributes"/>
     <xsl:call-template name="gen-style">
-      <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
       <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
     </xsl:call-template>
     <xsl:call-template name="setscale"/>
@@ -3556,16 +3295,10 @@
   <xsl:variable name="flagrules">
     <xsl:call-template name="getrules"/>
   </xsl:variable>
-  <xsl:variable name="conflictexist">
-    <xsl:call-template name="conflict-check">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:call-template>
-  </xsl:variable>
   <tr>
    <xsl:call-template name="setid"/>
     <xsl:call-template name="commonattributes"/>
     <xsl:call-template name="gen-style">
-      <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
       <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
     </xsl:call-template>
     <xsl:choose>
@@ -3707,11 +3440,6 @@
     <xsl:call-template name="getrules"/>
     <xsl:call-template name="getrules-parent"/>
   </xsl:variable>
-  <xsl:variable name="conflictexist">
-    <xsl:call-template name="conflict-check">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:call-template>
-  </xsl:variable>
   <th valign="bottom">
     <xsl:call-template name="th-align"/>
     <!-- Determine which column this entry is in. -->
@@ -3729,7 +3457,6 @@
     <xsl:call-template name="output-stentry-id"/>
     <xsl:call-template name="commonattributes"/>
     <xsl:call-template name="gen-style">
-      <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
       <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
     </xsl:call-template>
     <!-- If we calculated a width, create the width attribute. -->
@@ -3779,17 +3506,11 @@
     <xsl:call-template name="getrules"/>
     <xsl:call-template name="getrules-parent"/>
   </xsl:variable>
-  <xsl:variable name="conflictexist">
-    <xsl:call-template name="conflict-check">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:call-template>
-  </xsl:variable>
   <td valign="top">
     <xsl:call-template name="output-stentry-id"/>
     <xsl:call-template name="set.stentry.headers"/>
     <xsl:call-template name="commonattributes"/>
     <xsl:call-template name="gen-style">
-      <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
       <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
     </xsl:call-template>
     <xsl:variable name="localkeycol">
@@ -3975,23 +3696,16 @@
    <xsl:variable name="flagrules">
      <xsl:call-template name="getrules"/>
    </xsl:variable>
-   <xsl:variable name="conflictexist">
-     <xsl:call-template name="conflict-check">
-       <xsl:with-param name="flagrules" select="$flagrules"/>
-     </xsl:call-template>
-   </xsl:variable>
    <xsl:apply-templates select="." mode="ditamsg:required-cleanup-in-content"/>
   <div style="background-color: #FFFF99; color:#CC3333; border: 1pt black solid;">
    <xsl:call-template name="commonattributes"/>
     <xsl:call-template name="gen-style">
-      <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
-      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
-    </xsl:call-template>
-    <xsl:call-template name="gen-style">
-      <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
       <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
     </xsl:call-template>
     <xsl:call-template name="setidaname"/>
+    <xsl:call-template name="start-flagit">
+      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
+    </xsl:call-template>
     <xsl:call-template name="start-revflag">
       <xsl:with-param name="flagrules" select="$flagrules"/>
     </xsl:call-template>
@@ -4017,16 +3731,10 @@
    <xsl:variable name="flagrules">
      <xsl:call-template name="getrules"/>
    </xsl:variable>
-   <xsl:variable name="conflictexist">
-     <xsl:call-template name="conflict-check">
-       <xsl:with-param name="flagrules" select="$flagrules"/>
-     </xsl:call-template>
-   </xsl:variable>
    <xsl:apply-templates select="." mode="ditamsg:draft-comment-in-content"/>
   <div style="background-color: #99FF99; border: 1pt black solid;">
     <xsl:call-template name="commonattributes"/>
     <xsl:call-template name="gen-style">
-      <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
       <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
     </xsl:call-template>
     <xsl:call-template name="setidaname"/>
@@ -4582,11 +4290,6 @@
   <xsl:variable name="flagrules">
     <xsl:call-template name="getrules"/>
   </xsl:variable>
-  <xsl:variable name="conflictexist">
-    <xsl:call-template name="conflict-check">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:call-template>
-  </xsl:variable>
   <div class="p">
     <xsl:variable name="fnid"><xsl:number from="/" level="any"/></xsl:variable>
     <xsl:variable name="callout"><xsl:value-of select="@callout"/></xsl:variable>
@@ -4599,7 +4302,6 @@
     
     <xsl:call-template name="commonattributes"/>
     <xsl:call-template name="gen-style">
-      <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
       <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
     </xsl:call-template>
     <xsl:choose>
@@ -5087,15 +4789,9 @@
     <xsl:variable name="flagrules">
       <xsl:call-template name="getrules"/>
     </xsl:variable>
-    <xsl:variable name="conflictexist">
-      <xsl:call-template name="conflict-check">
-        <xsl:with-param name="flagrules" select="$flagrules"/>
-      </xsl:call-template>
-    </xsl:variable>
     <body>
       <!-- Already put xml:lang on <html>; do not copy to body with commonattributes -->
       <xsl:call-template name="gen-style">
-        <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
         <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
       </xsl:call-template>
       <xsl:call-template name="setidaname"/>
@@ -5209,48 +4905,6 @@
     any processing applied on index-base element -->
   <xsl:template match="*[contains(@class,' topic/index-base ')]"/>
 
-  <!-- MESSAGES: Refactoring places each message in a moded template, so that users
-       may more easily override a message for one or all cases. -->
-  <xsl:template match="*" mode="ditamsg:no-glossentry-for-key">
-    <xsl:param name="matching-keys"/>
-    <xsl:call-template name="output-message">
-      <xsl:with-param name="msgnum">058</xsl:with-param>
-      <xsl:with-param name="msgsev">W</xsl:with-param>
-      <xsl:with-param name="msgparams">%1=<xsl:value-of select="$matching-keys"/></xsl:with-param>
-    </xsl:call-template>
-  </xsl:template>
-  <xsl:template match="*" mode="ditamsg:no-title-for-topic">
-    <xsl:call-template name="output-message">
-      <xsl:with-param name="msgnum">037</xsl:with-param>
-      <xsl:with-param name="msgsev">W</xsl:with-param>
-    </xsl:call-template>
-  </xsl:template>
-  <xsl:template match="*" mode="ditamsg:longdescref-on-object">
-    <xsl:call-template name="output-message">
-     <xsl:with-param name="msgnum">038</xsl:with-param>
-     <xsl:with-param name="msgsev">I</xsl:with-param>
-     <xsl:with-param name="msgparams">%1=<xsl:value-of select="name(.)"/></xsl:with-param>
-    </xsl:call-template>
-  </xsl:template>
-  <xsl:template match="*" mode="ditamsg:required-cleanup-in-content">
-    <xsl:call-template name="output-message">
-     <xsl:with-param name="msgnum">039</xsl:with-param>
-     <xsl:with-param name="msgsev">W</xsl:with-param>
-    </xsl:call-template>
-  </xsl:template>
-  <xsl:template match="*" mode="ditamsg:draft-comment-in-content">
-    <xsl:call-template name="output-message">
-     <xsl:with-param name="msgnum">040</xsl:with-param>
-     <xsl:with-param name="msgsev">I</xsl:with-param>
-    </xsl:call-template>
-  </xsl:template>
-  <xsl:template match="*" mode="ditamsg:section-with-multiple-titles">
-    <xsl:call-template name="output-message">
-      <xsl:with-param name="msgnum">041</xsl:with-param>
-      <xsl:with-param name="msgsev">W</xsl:with-param>
-    </xsl:call-template>
-  </xsl:template>
-
   <!-- Add for text element.  -->
   <xsl:template match="*[contains(@class,' topic/text ')]">
     <xsl:apply-templates/>
@@ -5319,7 +4973,6 @@
                  plus move common code to single template -->
   <xsl:template match="*" mode="turning-to-link">
     <xsl:param name="keys">#none#</xsl:param>
-    <xsl:param name="conflictexist"></xsl:param>
     <xsl:param name="flagrules"></xsl:param>
     <xsl:param name="type"></xsl:param>
     <xsl:variable name="elementName">
@@ -5339,7 +4992,6 @@
               <xsl:element name="{$elementName}">
                 <xsl:apply-templates select="." mode="common-processing-phrase-within-link">
                   <xsl:with-param name="type" select="$type"/>
-                  <xsl:with-param name="conflictexist" select="$conflictexist"/>
                   <xsl:with-param name="flagrules" select="$flagrules"/>
                 </xsl:apply-templates>
                 <xsl:apply-templates select="." mode="pull-in-title">
@@ -5353,7 +5005,6 @@
             <xsl:element name="{$elementName}">
               <xsl:apply-templates select="." mode="common-processing-phrase-within-link">
                 <xsl:with-param name="type" select="$type"/>
-                <xsl:with-param name="conflictexist" select="$conflictexist"/>
                 <xsl:with-param name="flagrules" select="$flagrules"/>
               </xsl:apply-templates>
               <xsl:apply-templates select="." mode="pull-in-title">
@@ -5368,7 +5019,6 @@
         <xsl:element name="{$elementName}">
           <xsl:apply-templates select="." mode="common-processing-phrase-within-link">
             <xsl:with-param name="type" select="$type"/>
-            <xsl:with-param name="conflictexist" select="$conflictexist"/>
             <xsl:with-param name="flagrules" select="$flagrules"/>
           </xsl:apply-templates>
         </xsl:element>
@@ -5378,7 +5028,6 @@
 
   <xsl:template match="*" mode="common-processing-phrase-within-link">
     <xsl:param name="type"/>
-    <xsl:param name="conflictexist"></xsl:param>
     <xsl:param name="flagrules"></xsl:param>
     <xsl:call-template name="commonattributes">
       <xsl:with-param name="default-output-class">
@@ -5386,7 +5035,6 @@
       </xsl:with-param>
     </xsl:call-template>
     <xsl:call-template name="gen-style">
-      <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
       <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
     </xsl:call-template>
     <xsl:call-template name="setidaname"/>   
@@ -5399,4 +5047,47 @@
   <xsl:template match="processing-instruction('workdir')" mode="get-work-dir">
     <xsl:value-of select="."/><xsl:text>/</xsl:text>
   </xsl:template>
+
+  <!-- MESSAGES: Refactoring places each message in a moded template, so that users
+       may more easily override a message for one or all cases. -->
+  <xsl:template match="*" mode="ditamsg:no-glossentry-for-key">
+    <xsl:param name="matching-keys"/>
+    <xsl:call-template name="output-message">
+      <xsl:with-param name="msgnum">058</xsl:with-param>
+      <xsl:with-param name="msgsev">W</xsl:with-param>
+      <xsl:with-param name="msgparams">%1=<xsl:value-of select="$matching-keys"/></xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
+  <xsl:template match="*" mode="ditamsg:no-title-for-topic">
+    <xsl:call-template name="output-message">
+      <xsl:with-param name="msgnum">037</xsl:with-param>
+      <xsl:with-param name="msgsev">W</xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
+  <xsl:template match="*" mode="ditamsg:longdescref-on-object">
+    <xsl:call-template name="output-message">
+     <xsl:with-param name="msgnum">038</xsl:with-param>
+     <xsl:with-param name="msgsev">I</xsl:with-param>
+     <xsl:with-param name="msgparams">%1=<xsl:value-of select="name(.)"/></xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
+  <xsl:template match="*" mode="ditamsg:required-cleanup-in-content">
+    <xsl:call-template name="output-message">
+     <xsl:with-param name="msgnum">039</xsl:with-param>
+     <xsl:with-param name="msgsev">W</xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
+  <xsl:template match="*" mode="ditamsg:draft-comment-in-content">
+    <xsl:call-template name="output-message">
+     <xsl:with-param name="msgnum">040</xsl:with-param>
+     <xsl:with-param name="msgsev">I</xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
+  <xsl:template match="*" mode="ditamsg:section-with-multiple-titles">
+    <xsl:call-template name="output-message">
+      <xsl:with-param name="msgnum">041</xsl:with-param>
+      <xsl:with-param name="msgsev">W</xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
+
 </xsl:stylesheet>

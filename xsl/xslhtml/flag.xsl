@@ -2,8 +2,20 @@
 <!-- This file is part of the DITA Open Toolkit project hosted on 
  Sourceforge.net. See the accompanying license.txt file for 
  applicable licenses.-->
-<!-- (c) Copyright IBM Corp. 2007 All Rights Reserved. -->
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0" xmlns:exsl="http://exslt.org/common" exclude-result-prefixes="exsl">
+<!-- (c) Copyright IBM Corp. 2007, 2009 All Rights Reserved. -->
+<!-- Updates:
+     20090421 robander: Updated so that "flagrules" in all templates
+              specifies a default. Can simplify calls from other XSL
+              to these templates, with a slight trade-off in processing
+              time. Default for "conflictexist" simplifies XSL
+              elsewhere with no processing trade-off.
+              -->
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
+  version="1.0" 
+  xmlns:exsl="http://exslt.org/common" 
+  xmlns:dita2html="http://dita-ot.sourceforge.net/ns/200801/dita2html"
+  xmlns:ditamsg="http://dita-ot.sourceforge.net/ns/200704/ditamsg"
+  exclude-result-prefixes="exsl dita2html ditamsg">
 
  <!-- ========== Flagging with flags & revisions ========== -->
  
@@ -242,32 +254,24 @@
   
  <xsl:if test="$DBG='yes' and not($FILTERFILE='')">
   <xsl:if test="@audience">
-   <xsl:call-template name="output-message">
-    <xsl:with-param name="msgnum">042</xsl:with-param>
-    <xsl:with-param name="msgsev">I</xsl:with-param>
-    <xsl:with-param name="msgparams">%1=audience</xsl:with-param>
-   </xsl:call-template>
+    <xsl:apply-templates select="." mode="ditamsg:cannot-flag-inline-element">
+      <xsl:with-param name="attr-name" select="'audience'"/>
+    </xsl:apply-templates>
   </xsl:if>
   <xsl:if test="@platform">
-   <xsl:call-template name="output-message">
-    <xsl:with-param name="msgnum">042</xsl:with-param>
-    <xsl:with-param name="msgsev">I</xsl:with-param>
-    <xsl:with-param name="msgparams">%1=platform</xsl:with-param>
-   </xsl:call-template>
+    <xsl:apply-templates select="." mode="ditamsg:cannot-flag-inline-element">
+      <xsl:with-param name="attr-name" select="'platform'"/>
+    </xsl:apply-templates>
   </xsl:if>
   <xsl:if test="@product">
-   <xsl:call-template name="output-message">
-    <xsl:with-param name="msgnum">042</xsl:with-param>
-    <xsl:with-param name="msgsev">I</xsl:with-param>
-    <xsl:with-param name="msgparams">%1=product</xsl:with-param>
-   </xsl:call-template>
+    <xsl:apply-templates select="." mode="ditamsg:cannot-flag-inline-element">
+      <xsl:with-param name="attr-name" select="'product'"/>
+    </xsl:apply-templates>
   </xsl:if>
   <xsl:if test="@otherprops">
-   <xsl:call-template name="output-message">
-    <xsl:with-param name="msgnum">042</xsl:with-param>
-    <xsl:with-param name="msgsev">I</xsl:with-param>
-    <xsl:with-param name="msgparams">%1=otherprops</xsl:with-param>
-   </xsl:call-template>
+    <xsl:apply-templates select="." mode="ditamsg:cannot-flag-inline-element">
+      <xsl:with-param name="attr-name" select="'otherprops'"/>
+    </xsl:apply-templates>
   </xsl:if>
    <xsl:if test="not($props='')">
      <xsl:call-template name="ext-flagcheck">
@@ -292,11 +296,9 @@
           </xsl:call-template>
         </xsl:variable>
         <xsl:if test="not($propsValue='')">
-          <xsl:call-template name="output-message">
-            <xsl:with-param name="msgnum">042</xsl:with-param>
-            <xsl:with-param name="msgsev">I</xsl:with-param>
-            <xsl:with-param name="msgparams">%1=<xsl:value-of select="$propName"/></xsl:with-param>
-          </xsl:call-template>
+          <xsl:apply-templates select="." mode="ditamsg:cannot-flag-inline-element">
+            <xsl:with-param name="attr-name" select="$propName"/>
+          </xsl:apply-templates>
         </xsl:if>
         
         <xsl:call-template name="ext-flagcheck">
@@ -315,11 +317,9 @@
           </xsl:call-template>
         </xsl:variable>
         <xsl:if test="not($propsValue='')">
-          <xsl:call-template name="output-message">
-            <xsl:with-param name="msgnum">042</xsl:with-param>
-            <xsl:with-param name="msgsev">I</xsl:with-param>
-            <xsl:with-param name="msgparams">%1=<xsl:value-of select="$propName"/></xsl:with-param>
-          </xsl:call-template>
+          <xsl:apply-templates select="." mode="ditamsg:cannot-flag-inline-element">
+            <xsl:with-param name="attr-name" select="$propName"/>
+          </xsl:apply-templates>
         </xsl:if>
       </xsl:otherwise>
     </xsl:choose>
@@ -556,7 +556,9 @@
 
 <!-- Output starting flag only -->
 <xsl:template name="start-revflag">
- <xsl:param name="flagrules"/>
+ <xsl:param name="flagrules">
+   <xsl:call-template name="getrules"/>
+ </xsl:param>
  <xsl:if test="@rev and not($FILTERFILE='')">
   <xsl:call-template name="start-mark-rev">
    <xsl:with-param name="revvalue" select="@rev"/>
@@ -567,7 +569,9 @@
 
 <!-- Output ending flag only -->
 <xsl:template name="end-revflag">
- <xsl:param name="flagrules"/>
+ <xsl:param name="flagrules">
+   <xsl:call-template name="getrules"/>
+ </xsl:param>
  <xsl:if test="@rev and not($FILTERFILE='')">
   <xsl:call-template name="end-mark-rev">
    <xsl:with-param name="revvalue" select="@rev"/>
@@ -578,7 +582,9 @@
 
 <!-- for table entries - if the parent (row) has a rev but the cell does not - output the rev -->
 <xsl:template name="start-revflag-parent">
- <xsl:param name="flagrules"/>
+ <xsl:param name="flagrules">
+   <xsl:call-template name="getrules-parent"/>
+ </xsl:param>
  <xsl:if test="../@rev and not(@rev) and not($FILTERFILE='')">
   <xsl:call-template name="start-mark-rev">
    <xsl:with-param name="revvalue" select="../@rev"/>
@@ -587,7 +593,9 @@
  </xsl:if>
 </xsl:template>
 <xsl:template name="end-revflag-parent">
- <xsl:param name="flagrules"/>
+ <xsl:param name="flagrules">
+   <xsl:call-template name="getrules-parent"/>
+ </xsl:param>
  <xsl:if test="../@rev and not(@rev) and not($FILTERFILE='')">
   <xsl:call-template name="end-mark-rev">
    <xsl:with-param name="revvalue" select="../@rev"/>
@@ -599,7 +607,9 @@
 <!-- Output starting & ending flag for "blocked" text.
      Use instead of 'apply-templates' for block areas (P, Note, DD, etc) -->
 <xsl:template name="revblock">
- <xsl:param name="flagrules"/>
+ <xsl:param name="flagrules">
+   <xsl:call-template name="getrules"/>
+ </xsl:param>
  <xsl:choose>
   <xsl:when test="@rev and not($FILTERFILE='') and ($DRAFT='yes')"> <!-- draft rev mode, add div w/ rev attr value -->
     <xsl:variable name="revtest"> 
@@ -644,7 +654,9 @@
 <!-- Output starting & ending flag & color for phrase text.
      Use instead of 'apply-templates' for phrase areas (PH, B, DT, etc) -->
 <xsl:template name="revtext">
- <xsl:param name="flagrules"/>
+ <xsl:param name="flagrules">
+   <xsl:call-template name="getrules"/>
+ </xsl:param>
  <xsl:variable name="revtest">
    <xsl:if test="@rev and not($FILTERFILE='') and ($DRAFT='yes')"> 
      <xsl:call-template name="find-active-rev-flag">               
@@ -689,7 +701,9 @@
 
 <!-- There's a rev attr - test for active rev values -->
 <xsl:template name="start-mark-rev">
- <xsl:param name="flagrules"/>
+ <xsl:param name="flagrules">
+   <xsl:call-template name="getrules"/>
+ </xsl:param>
  <xsl:param name="revvalue"/>
  <xsl:variable name="revtest">
   <xsl:call-template name="find-active-rev-flag">
@@ -705,7 +719,9 @@
 
 <!-- There's a rev attr - test for active rev values -->
 <xsl:template name="end-mark-rev">
- <xsl:param name="flagrules"/>
+ <xsl:param name="flagrules">
+   <xsl:call-template name="getrules"/>
+ </xsl:param>
  <xsl:param name="revvalue"/>
  <xsl:variable name="revtest">
   <xsl:call-template name="find-active-rev-flag">
@@ -721,7 +737,9 @@
 
 <!-- output the revision color & apply further templates-->
 <xsl:template name="revstyle">
- <xsl:param name="flagrules"/>
+ <xsl:param name="flagrules">
+   <xsl:call-template name="getrules"/>
+ </xsl:param>
  <xsl:param name="revvalue"/>
  <xsl:choose>
   <xsl:when test="not($flagrules)">
@@ -765,7 +783,9 @@
 <!-- output the beginning revision graphic & ALT text -->
 <!-- Reverse the artwork for BIDI languages -->
 <xsl:template name="start-revision-flag">
- <xsl:param name="flagrules"/>
+ <xsl:param name="flagrules">
+   <xsl:call-template name="getrules"/>
+ </xsl:param>
  <xsl:variable name="biditest"> 
   <xsl:call-template name="bidi-area"/>
  </xsl:variable>
@@ -810,12 +830,16 @@
 </xsl:template>
 
  <xsl:template name="start-revflagit">
-  <xsl:param name="flagrules"/>
+  <xsl:param name="flagrules">
+    <xsl:call-template name="getrules"/>
+  </xsl:param>
   <xsl:apply-templates select="exsl:node-set($flagrules)/revprop[1]" mode="start-revflagit"/>
  </xsl:template>
  
  <xsl:template name="end-revflagit">
-  <xsl:param name="flagrules"/>
+  <xsl:param name="flagrules">
+    <xsl:call-template name="getrules"/>
+  </xsl:param>
   <xsl:apply-templates select="exsl:node-set($flagrules)/revprop[last()]" mode="end-revflagit"/>
  </xsl:template>
  
@@ -880,7 +904,9 @@
 <!-- output the ending revision graphic & ALT text -->
 <!-- Reverse the artwork for BIDI languages -->
 <xsl:template name="end-revision-flag">
- <xsl:param name="flagrules"/>
+ <xsl:param name="flagrules">
+   <xsl:call-template name="getrules"/>
+ </xsl:param>
  <xsl:variable name="biditest">
   <xsl:call-template name="bidi-area"/>
  </xsl:variable>
@@ -1051,7 +1077,9 @@
 </xsl:template>
 
  <xsl:template name="conflict-check">
-  <xsl:param name="flagrules"/>
+  <xsl:param name="flagrules">
+    <xsl:call-template name="getrules"/>
+  </xsl:param>
   <xsl:choose>
    <xsl:when test="exsl:node-set($flagrules)/*">
     <xsl:apply-templates select="exsl:node-set($flagrules)/*[1]" mode="conflict-check"/>
@@ -1081,16 +1109,23 @@
    </xsl:otherwise>
   </xsl:choose>
  </xsl:template>
- 
+
+ <!-- Currently, gen-style is never called without conflictexist in the OT
+      code, so the default is never used. If we replace the default with the
+      default code used elsewhere, then most or all calls to gen-style can be
+      simplified. -->
  <xsl:template name="gen-style">
-  <xsl:param name="conflictexist" select="'false'"/>
-  <xsl:param name="flagrules"/>
+   <xsl:param name="flagrules">
+     <xsl:call-template name="getrules"/>
+   </xsl:param>
+  <xsl:param name="conflictexist">
+    <xsl:call-template name="conflict-check">
+      <xsl:with-param name="flagrules" select="$flagrules"/>
+    </xsl:call-template>
+  </xsl:param>
   <xsl:choose>  
    <xsl:when test="$conflictexist='true' and $FILTERDOC/val/style-conflict[@foreground-conflict-color or @background-conflict-color]">
-    <xsl:call-template name="output-message">
-     <xsl:with-param name="msgnum">054</xsl:with-param>
-     <xsl:with-param name="msgsev">W</xsl:with-param>
-    </xsl:call-template>
+     <xsl:apply-templates select="." mode="ditamsg:conflict-text-style-applied"/>
     <xsl:attribute name="style">     
      <xsl:if test="$FILTERDOC/val/style-conflict[@foreground-conflict-color]">
       <xsl:text>color:</xsl:text>
@@ -1122,7 +1157,9 @@
  </xsl:template>
  
  <xsl:template name="start-flagit">
-  <xsl:param name="flagrules"/>
+  <xsl:param name="flagrules">
+    <xsl:call-template name="getrules"/>
+  </xsl:param>
   <xsl:apply-templates select="exsl:node-set($flagrules)/prop[1]" mode="start-flagit"/>
  </xsl:template>
  
@@ -1174,7 +1211,9 @@
  </xsl:template>
 
  <xsl:template name="end-flagit">
-  <xsl:param name="flagrules"/>
+  <xsl:param name="flagrules">
+    <xsl:call-template name="getrules"/>
+  </xsl:param>
   <xsl:apply-templates select="exsl:node-set($flagrules)/prop[last()]" mode="end-flagit"/>
  </xsl:template>
  
@@ -1207,6 +1246,22 @@
   </xsl:choose>
   <xsl:apply-templates select="preceding-sibling::prop[1]" mode="end-flagit"/>
  </xsl:template>
+
+ <xsl:template match="*" mode="ditamsg:cannot-flag-inline-element">
+   <xsl:param name="attr-name"/>
+   <xsl:call-template name="output-message">
+     <xsl:with-param name="msgnum">042</xsl:with-param>
+     <xsl:with-param name="msgsev">W</xsl:with-param>
+     <xsl:with-param name="msgparams">%i=<xsl:value-of select="$attr-name"/></xsl:with-param>
+   </xsl:call-template>
+ </xsl:template>
+ <xsl:template match="*" mode="ditamsg:conflict-text-style-applied">
+   <xsl:call-template name="output-message">
+    <xsl:with-param name="msgnum">054</xsl:with-param>
+    <xsl:with-param name="msgsev">W</xsl:with-param>
+   </xsl:call-template>
+ </xsl:template>
+
 
 <!-- ===================================================================== -->
 </xsl:stylesheet>
