@@ -436,11 +436,12 @@ public class KeyrefPaser extends AbstractXMLWriter {
 									output.write("\"");
 								} else {
 									// referenced file does not exist, emits a message.
-									Properties prop = new Properties();
+									// Should only emit this if in a debug mode; comment out for now
+									/*Properties prop = new Properties();
 									prop.put("%1", atts.getValue("keyref"));
 									javaLogger
 											.logInfo(MessageUtils.getMessage("DOTJ047I", prop)
-													.toString());
+													.toString());*/
 								}
 	
 							} else {
