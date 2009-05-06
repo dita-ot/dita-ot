@@ -241,7 +241,7 @@
     <xsl:choose>
       <!-- test to see if the cell contains any sensible text or other element... -->
       <xsl:when test="not(text()[normalize-space(.)] | *)">
-        <fo:inline>&rbl;'</fo:inline>
+        <fo:inline>&rbl;</fo:inline>
       </xsl:when>
       <xsl:otherwise>
         <xsl:apply-templates/>
