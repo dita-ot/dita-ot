@@ -19,21 +19,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.StringTokenizer;
 
-import javax.xml.parsers.SAXParser;
-
+import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.log.MessageUtils;
-import org.dita.dost.exception.DITAOTXMLErrorHandler;
-import org.dita.dost.util.OutputUtils;
-
 import org.dita.dost.module.Content;
 import org.dita.dost.module.DebugAndFilterModule;
 import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.Constants;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.FilterUtils;
+import org.dita.dost.util.OutputUtils;
 import org.dita.dost.util.StringUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
@@ -58,7 +54,6 @@ public class DitaWriter extends AbstractXMLWriter {
     private static final String ATTRIBUTE_XTRF_START = " xtrf=\"";
     private static final String COLUMN_NAME_COL = "col";
     private static final String OS_NAME_WINDOWS = "windows";
-    private static final String PI_HEAD = "<?";
     private static final String PI_END = "?>";
     private static final String PI_PATH2PROJ_HEAD = "<?path2project ";
     private static final String PI_WORKDIR_HEAD = "<?workdir ";
@@ -69,7 +64,6 @@ public class DitaWriter extends AbstractXMLWriter {
     private static final String ATTRIBUTE_XTRF = "xtrf";
     
     private static boolean checkDITAHREF(Attributes atts){
-    	// TO DO add implementation
     	String classValue = atts.getValue(Constants.ATTRIBUTE_NAME_CLASS);
     	String scopeValue = atts.getValue(Constants.ATTRIBUTE_NAME_SCOPE);
     	String formatValue = atts.getValue(Constants.ATTRIBUTE_NAME_FORMAT);
@@ -235,11 +229,11 @@ public class DitaWriter extends AbstractXMLWriter {
     	return attValue;
     }
     private String absolutePath;
-    private static HashMap catalogMap; //map that contains the information from XML Catalog
-    private List colSpec;
+    private static HashMap<String, String> catalogMap; //map that contains the information from XML Catalog
+    private List<String> colSpec;
     private int columnNumber; // columnNumber is used to adjust column name
     private int columnNumberEnd; //columnNumberEnd is the end value for current entry
-    private HashMap counterMap;
+    private HashMap<String, Integer> counterMap;
     private boolean exclude; // when exclude is true the tag will be excluded.
     private int foreignLevel; // foreign/unknown nesting level
     private int level;// level is used to count the element level in the filtering
@@ -257,8 +251,6 @@ public class DitaWriter extends AbstractXMLWriter {
     
     /** XMLReader instance for parsing dita file */
     private static XMLReader reader = null;
-    private static SAXParser parser = null;
-    
     /**
      * Default constructor of DitaWriter class.
      */
@@ -281,8 +273,6 @@ public class DitaWriter extends AbstractXMLWriter {
         colSpec = null;
         props = null;
         logger = new DITAOTJavaLogger();
-        Class c = null;
-        
         reader.setContentHandler(this);
         
         try {
@@ -294,12 +284,7 @@ public class DitaWriter extends AbstractXMLWriter {
 		}
 		
 		
-		try {
-			c = Class.forName(Constants.RESOLVER_CLASS);
-			reader.setEntityResolver(CatalogUtils.getCatalogResolver());
-		}catch (ClassNotFoundException e){
-			reader.setEntityResolver(this);
-		}
+		reader.setEntityResolver(CatalogUtils.getCatalogResolver());
     }
 
     /**
@@ -490,7 +475,7 @@ public class DitaWriter extends AbstractXMLWriter {
 		if (Constants.ELEMENT_NAME_TGROUP.equals(qName)){
 			columnNumber = 1; // initialize the column number
 		    columnNumberEnd = 0;
-		    colSpec = new ArrayList(Constants.INT_16);
+		    colSpec = new ArrayList<String>(Constants.INT_16);
 		}else if(Constants.ELEMENT_NAME_ROW.equals(qName)) {
 		    columnNumber = 1; // initialize the column number
 		    columnNumberEnd = 0;
@@ -738,8 +723,7 @@ public class DitaWriter extends AbstractXMLWriter {
         Integer nextValue;
         String domains = null;
 		Properties params = new Properties();
-		String msg = null;
-        String attrValue = atts.getValue(Constants.ATTRIBUTE_NAME_CLASS);
+		String attrValue = atts.getValue(Constants.ATTRIBUTE_NAME_CLASS);
         
         if (foreignLevel > 0){
         	foreignLevel ++;
@@ -747,7 +731,6 @@ public class DitaWriter extends AbstractXMLWriter {
         
 			if(attrValue==null && !Constants.ELEMENT_NAME_DITA.equals(localName)){
 	    		params.clear();
-				msg = null;
 				params.put("%1", localName);
 				logger.logInfo(MessageUtils.getMessage("DOTJ030I", params).toString());			
 			}       
@@ -755,8 +738,7 @@ public class DitaWriter extends AbstractXMLWriter {
 	        	domains = atts.getValue(Constants.ATTRIBUTE_NAME_DOMAINS);
 	        	if(domains==null){
 	        		params.clear();
-	    			msg = null;
-					params.put("%1", localName);
+	    			params.put("%1", localName);
 					logger.logInfo(MessageUtils.getMessage("DOTJ029I", params).toString());
 	        	}else
 	        		props = StringUtils.getExtProps(domains);
@@ -917,7 +899,7 @@ public class DitaWriter extends AbstractXMLWriter {
                 	path2Project = FileUtils.getPathtoProject(filename);
             }
             outputFile = new File(outputFilename.toString());
-            counterMap = new HashMap();
+            counterMap = new HashMap<String, Integer>();
             dirFile = outputFile.getParentFile();
             if (!dirFile.exists()) {
                 dirFile.mkdirs();
@@ -931,7 +913,6 @@ public class DitaWriter extends AbstractXMLWriter {
             // directory
             reader.setErrorHandler(new DITAOTXMLErrorHandler(traceFilename));
             reader.parse(new InputSource(new FileInputStream(new File(traceFilename))));
-//            reader.parse(traceFilename);
             
             output.close();
         } catch (Exception e) {
@@ -954,7 +935,6 @@ public class DitaWriter extends AbstractXMLWriter {
     	File mapPathName=new File(OutputUtils.getInputMapPathName());
     	File currFilePathName=new File(overflowingFile);
     	String relativePath=FileUtils.getRelativePathFromMap( mapPathName.toString(),currFilePathName.toString());
-    	//String relativePathWithoutFileName=new File(relativePath).getParent();
     	String outputDir=OutputUtils.getOutputDir();
     	StringBuffer outputPathName=new StringBuffer(outputDir).append(File.separator).append("index.html");
     	String finalOutFilePathName=FileUtils.resolveFile(outputDir,relativePath);

@@ -43,16 +43,15 @@ public class ChunkMapReader implements AbstractReader {
 	
 	private DITAOTJavaLogger javaLogger = null;
 	
-//	private String mapChunk = null;
 	private boolean chunkByTopic = false;
 	
 	private String filePath = null;
 	
-	private Hashtable changeTable = null;
+	private Hashtable<String, String> changeTable = null;
 	
-	private Hashtable conflictTable = null;
+	private Hashtable<String, String> conflictTable = null;
 	
-	private HashSet refFileSet = null;
+	private HashSet<String> refFileSet = null;
 	
 	private String ditaext = null;
 	
@@ -65,11 +64,10 @@ public class ChunkMapReader implements AbstractReader {
 	public ChunkMapReader() {
 		super();
 		javaLogger = new DITAOTJavaLogger();
-//		mapChunk="by-document";
 		chunkByTopic=false;// By default, processor should chunk by document.
-		changeTable = new Hashtable(Constants.INT_128);
-		refFileSet = new HashSet(Constants.INT_128);
-		conflictTable = new Hashtable(Constants.INT_128);
+		changeTable = new Hashtable<String, String>(Constants.INT_128);
+		refFileSet = new HashSet<String>(Constants.INT_128);
+		conflictTable = new Hashtable<String, String>(Constants.INT_128);
 	}
 
 	public void read(String filename) {
@@ -102,10 +100,8 @@ public class ChunkMapReader implements AbstractReader {
 			String rootChunkValue = root.getAttribute(Constants.ATTRIBUTE_NAME_CHUNK);
 			if(rootChunkValue != null &&
 					rootChunkValue.contains("by-topic")){
-//				mapChunk="by-topic";
 				chunkByTopic = true;
 			}else{
-//				mapChunk="by-document";
 				chunkByTopic = false;
 			}
 			
@@ -124,7 +120,6 @@ public class ChunkMapReader implements AbstractReader {
 					String oldpath = newFile.getAbsolutePath();
 					newFile = new File(FileUtils.resolveFile(inputFile.getParentFile().getAbsolutePath(), newFilename));
 					// Mark up the possible name changing, in case that references might be updated.
-					//changeTable.put(oldpath, newFile.getAbsolutePath());
 					conflictTable.put(newFile.getAbsolutePath(), FileUtils.removeRedundantNames(oldpath));
 				} 
 
@@ -335,17 +330,12 @@ public class ChunkMapReader implements AbstractReader {
 			chunkByTopic = chunkValue.contains("by-topic");
 		}
 		
-		//Skip external links or non-existing files.
 		if("external".equalsIgnoreCase(scopeValue) 
-				|| (hrefValue != null 
-						&& !FileUtils.fileExists(FileUtils.resolveFile(filePath, hrefValue)))) {
-			if(chunkValue != null && 
-					(chunkValue.contains("by-topic") || 
-							chunkValue.contains("by-document"))){
-				chunkByTopic = prevChunkByTopic;
-			}
-			processChildTopicref(node);
-		} else if (classValue.contains(Constants.ATTR_CLASS_VALUE_TOPIC_HEAD)) {
+				|| (hrefValue != null && !FileUtils.fileExists(FileUtils.resolveFile(filePath, hrefValue)))
+				|| (classValue.contains(Constants.ATTR_CLASS_VALUE_TOPIC_HEAD))) {
+			//Skip external links or non-existing files.
+			//Skip topic head entries.
+			//Skip @processing-role=resource-only entries.
 			if(chunkValue != null && 
 					(chunkValue.contains("by-topic") || 
 							chunkValue.contains("by-document"))){
@@ -405,19 +395,18 @@ public class ChunkMapReader implements AbstractReader {
 					refFileSet.add(currentPath);
 				}			
 			}
+			
 			// Here, we have a "by-document" chunk, simply
 			// send it to the output.
-			/*
-			 * FIXME: Code flaws here, there may be name conflicts, but it should 
-			 * be a very rare case. Scheduled to fix it later.
-			 */
-			if (currentPath != null)
+			if ((chunkValue != null || !chunkByTopic) && currentPath != null)
 				changeTable.put(currentPath, currentPath);
-			if(chunkValue != null && 
+			
+			if (chunkValue != null && 
 					(chunkValue.contains("by-topic") || 
 							chunkValue.contains("by-document"))){
 				chunkByTopic = prevChunkByTopic;
 			}
+			
 			processChildTopicref(node);
 		}	
 		
@@ -467,7 +456,6 @@ public class ChunkMapReader implements AbstractReader {
 	}
 
 	private void updateReltable(Element elem) {
-		// TODO Auto-generated method stub
 		String hrefValue = elem.getAttribute(Constants.ATTRIBUTE_NAME_HREF);
 		String resulthrefValue = null;
 		if (!hrefValue.equals(Constants.STRING_EMPTY)){
@@ -501,7 +489,7 @@ public class ChunkMapReader implements AbstractReader {
 		return content;
 	}
 	
-	public Hashtable getConflicTable() {
+	public Hashtable<String, String> getConflicTable() {
 		return this.conflictTable;
 	}
 
