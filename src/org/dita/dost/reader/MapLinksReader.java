@@ -35,6 +35,21 @@ import org.xml.sax.helpers.XMLReaderFactory;
  * MapLinksReader reads and parse the index information. It is also used to parse
  * map link information in "maplinks.unordered" file.
  * 
+ * NOTE: Result of this reader is a map organized as HashMap<String, HashMap<String, String> >.
+ * Logically it is organized as:
+ * 
+ * 		topic-file-path --+-- topic-id-1 --+-- index-entry-1-1
+ * 		                  |                +-- index-entry-1-2
+ *                        |                +-- ...
+ *                        |                +-- index-entry-1-n
+ *                        |
+ *                        +-- topic-id-1 --+-- ...
+ *                        +-- ...
+ *                        +-- topic-id-m --+-- ...
+ * 
+ * IF the input URL DOES NOT specify a topic ID explicitly, we use the special character '#' to
+ * stand for the first topic ID this parser encounters.
+ * 
  * @author Zhang, Yuan Peng
  */
 public class MapLinksReader extends AbstractXMLReader {
@@ -63,23 +78,22 @@ public class MapLinksReader extends AbstractXMLReader {
         }
         return false;
     }
-    private List ancestorList;
+    private List<String> ancestorList;
     private String filePath = null;
-    private String filePathName = null;
     private String firstMatchElement;
     private StringBuffer indexEntries;
     private File inputFile;
     private HashSet<String> lastMatchElement;
     private int level;
     private DITAOTJavaLogger logger;
-    private HashMap map;
+    private HashMap<String, HashMap<String,String> > map;
     private boolean match;
 
     /*
      * meta shows whether the event is in metadata when using sax to parse
      * ditmap file.
      */
-    private List matchList;
+    private List<String> matchList;
     private boolean needResolveEntity;
     private XMLReader reader;
     private String topicPath;
@@ -91,9 +105,9 @@ public class MapLinksReader extends AbstractXMLReader {
      */
     public MapLinksReader() {
         super();
-        map = new HashMap();
-        ancestorList = new ArrayList(Constants.INT_16);
-        matchList = new ArrayList(Constants.INT_16);
+        map = new HashMap<String, HashMap<String,String> >();
+        ancestorList = new ArrayList<String>(Constants.INT_16);
+        matchList = new ArrayList<String>(Constants.INT_16);
         indexEntries = new StringBuffer(Constants.INT_1024);
         firstMatchElement = null;
         lastMatchElement = new HashSet<String>();
@@ -139,8 +153,8 @@ public class MapLinksReader extends AbstractXMLReader {
     private boolean checkMatch() {
         int matchSize = matchList.size();
         int ancestorSize = ancestorList.size();
-        ListIterator matchIterator = matchList.listIterator();
-        ListIterator ancestorIterator = ancestorList.listIterator(ancestorSize
+        ListIterator<String> matchIterator = matchList.listIterator();
+        ListIterator<String> ancestorIterator = ancestorList.listIterator(ancestorSize
                 - matchSize);
         String currentMatchString;
         String ancestor;
@@ -195,6 +209,7 @@ public class MapLinksReader extends AbstractXMLReader {
         if (qName.equals(firstMatchElement) && verifyIndexEntries(indexEntries) && topicPath != null) {
         	// if the href is not valid, topicPath will be null. We don't need to set the condition 
         	// to check validHref at here.
+        	/*
                 String origin = (String) map.get(topicPath);
                 if (origin != null) {
                     map.put(topicPath, origin + indexEntries.toString());
@@ -202,6 +217,23 @@ public class MapLinksReader extends AbstractXMLReader {
                     map.put(topicPath, indexEntries.toString());
                 }
                 indexEntries = new StringBuffer(Constants.INT_1024);
+                */
+        	String t = topicPath;
+        	String frag = Constants.SHARP;
+        	if (t.contains(Constants.SHARP)) {
+        		frag = t.indexOf(Constants.SHARP) + 1 >= t.length() ?
+        				Constants.SHARP : t.substring(t.indexOf(Constants.SHARP) + 1);
+        		t = t.substring(0, t.indexOf(Constants.SHARP));
+        	}
+        	HashMap<String, String> m = (HashMap<String, String>)map.get(t);
+        	if (m != null) {
+        		String orig = m.get(frag);
+        		m.put(frag, StringUtils.setOrAppend(orig, indexEntries.toString(), false));
+        	} else {
+        		m = new HashMap<String, String>(Constants.INT_16);
+        		m.put(frag, indexEntries.toString());
+        		map.put(t, m);
+        	}
             
         }
     }
@@ -255,7 +287,7 @@ public class MapLinksReader extends AbstractXMLReader {
             needResolveEntity = true;
             inputFile = new File(filename);
             filePath = inputFile.getParent();
-            filePathName = inputFile.getPath();
+            inputFile.getPath();
             if(indexEntries.length() != 0){
 				//delete all the content in indexEntries
 				indexEntries = new StringBuffer(Constants.INT_1024);
@@ -332,8 +364,26 @@ public class MapLinksReader extends AbstractXMLReader {
         if (qName.equals(firstMatchElement)) {
             String hrefValue = atts.getValue(Constants.ATTRIBUTE_NAME_HREF);
             if (verifyIndexEntries(indexEntries) && topicPath != null) {
+            	/*
                 String origin = (String) map.get(topicPath);
                 map.put(topicPath, StringUtils.setOrAppend(origin, indexEntries.toString(), false));
+                */
+            	String t = topicPath;
+            	String frag = Constants.SHARP;
+            	if (t.contains(Constants.SHARP)) {
+            		frag = t.indexOf(Constants.SHARP) + 1 >= t.length() ?
+            				Constants.SHARP : t.substring(t.indexOf(Constants.SHARP) + 1);
+            		t = t.substring(0, t.indexOf(Constants.SHARP));
+            	}
+            	HashMap<String, String> m = (HashMap<String, String>)map.get(t);
+            	if (m != null) {
+            		String orig = m.get(frag);
+            		m.put(frag, StringUtils.setOrAppend(orig, indexEntries.toString(), false));
+            	} else {
+            		m = new HashMap<String, String>(Constants.INT_16);
+            		m.put(frag, indexEntries.toString());
+            		map.put(t, m);
+            	}
                 indexEntries = new StringBuffer(Constants.INT_1024);
             }
             topicPath = null;

@@ -14,7 +14,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
@@ -55,10 +54,10 @@ public class IndexTermExtractModule implements AbstractPipelineModule {
 	private String baseInputDir = null;
 
 	/** The list of topics */
-	private List topicList = null;
+	private List<String> topicList = null;
 
 	/** The list of ditamap files */
-	private List ditamapList = null;
+	private List<String> ditamapList = null;
 
 	private DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
 
@@ -95,6 +94,7 @@ public class IndexTermExtractModule implements AbstractPipelineModule {
 		String outputRoot = null;
 		int lastIndexOfDot;
 		String ditalist;
+		String resource_only_list;
 		Properties params = new Properties();
 		PipelineHashIO hashIO = (PipelineHashIO) input;
 		
@@ -143,16 +143,21 @@ public class IndexTermExtractModule implements AbstractPipelineModule {
 		 */
 		tokenizer = new StringTokenizer(prop
 				.getProperty(Constants.FULL_DITA_TOPIC_LIST), Constants.COMMA);
-		topicList = new ArrayList(tokenizer.countTokens());
+		resource_only_list = prop.getProperty(Constants.RESOURCE_ONLY_LIST, "");
+		topicList = new ArrayList<String>(tokenizer.countTokens());
 		while (tokenizer.hasMoreTokens()) {
-			topicList.add(tokenizer.nextToken());
+			String t = tokenizer.nextToken();
+			if (!resource_only_list.contains(t))
+				topicList.add(t);
 		}
 
 		tokenizer = new StringTokenizer(prop
 				.getProperty(Constants.FULL_DITAMAP_LIST), Constants.COMMA);
-		ditamapList = new ArrayList(tokenizer.countTokens());
+		ditamapList = new ArrayList<String>(tokenizer.countTokens());
 		while (tokenizer.hasMoreTokens()) {
-			ditamapList.add(tokenizer.nextToken());
+			String t = tokenizer.nextToken();
+			if (!resource_only_list.contains(t))
+				ditamapList.add(t);
 		}
 		
 		lastIndexOfDot = output.lastIndexOf(".");
@@ -164,8 +169,6 @@ public class IndexTermExtractModule implements AbstractPipelineModule {
 		IndexTermCollection.getInstantce().setIndexClass(indexclass);
 
 		if (encoding != null && encoding.trim().length() > 0) {
-//			Locale locale = new Locale(encoding.substring(0, 2), encoding
-//					.substring(3, 5));
 			IndexTerm.setTermLocale(StringUtils.getLocale(encoding));
 		}
 	}

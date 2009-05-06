@@ -12,7 +12,6 @@ package org.dita.dost.reader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Stack;
 
@@ -51,51 +50,59 @@ public class IndexTermReader extends AbstractXMLReader {
 	private boolean insideSortingAs = false;
 	
 	/** Stack used to store index term */
-	private Stack termStack = null;
+	private Stack<IndexTerm> termStack = null;
 	
 	/** Stack used to store topic id */
-	private Stack topicIdStack = null;
+	private Stack<String> topicIdStack = null;
 
 	/** List used to store all the specialized index terms */
-	private List indexTermSpecList = null;
+	private List<String> indexTermSpecList = null;
 	
 	/** List used to store all the specialized index-see */
-	private List indexSeeSpecList = null;
+	private List<String> indexSeeSpecList = null;
 	
 	/** List used to store all the specialized index-see-also */
-	private List indexSeeAlsoSpecList = null;
+	private List<String> indexSeeAlsoSpecList = null;
 	
 	/** List used to store all the specialized index-sort-as */
-	private List indexSortAsSpecList = null;
+	private List<String> indexSortAsSpecList = null;
 	
 	/** List used to store all the specialized topics */
-	private List topicSpecList;
+	private List<String> topicSpecList;
 	
 	/** List used to store all specialized titles */
-	private List titleSpecList;
+	private List<String> titleSpecList;
 	
 	/** List used to store all the indexterm found in this topic file */
-	private List indexTermList;
+	private List<IndexTerm> indexTermList;
 	
 	/** Map used to store the title info accessed by its topic id*/
-	private Map titleMap;
+	private Map<String, String> titleMap;
 	
+	/** Stack for "@processing-role" value */
+	private Stack<String> processRoleStack;
+	
+	/** Depth inside a "@processing-role" parent */
+    private int processRoleLevel = 0;
+    
 	private DITAOTJavaLogger javaLogger = null;
 
 	/**
 	 * Constructor
 	 */
 	public IndexTermReader() {
-		termStack = new Stack();
-		topicIdStack = new Stack();
-		indexTermSpecList = new ArrayList(Constants.INT_16);
-		indexSeeSpecList = new ArrayList(Constants.INT_16);
-		indexSeeAlsoSpecList = new ArrayList(Constants.INT_16);
-		indexSortAsSpecList = new ArrayList(Constants.INT_16);
-		topicSpecList = new ArrayList(Constants.INT_16);
-		titleSpecList = new ArrayList(Constants.INT_16);
-		indexTermList = new ArrayList(Constants.INT_256);		
-		titleMap = new HashMap(Constants.INT_256);
+		termStack = new Stack<IndexTerm>();
+		topicIdStack = new Stack<String>();
+		indexTermSpecList = new ArrayList<String>(Constants.INT_16);
+		indexSeeSpecList = new ArrayList<String>(Constants.INT_16);
+		indexSeeAlsoSpecList = new ArrayList<String>(Constants.INT_16);
+		indexSortAsSpecList = new ArrayList<String>(Constants.INT_16);
+		topicSpecList = new ArrayList<String>(Constants.INT_16);
+		titleSpecList = new ArrayList<String>(Constants.INT_16);
+		indexTermList = new ArrayList<IndexTerm>(Constants.INT_256);		
+		titleMap = new HashMap<String, String>(Constants.INT_256);
+		processRoleStack = new Stack<String>();
+		processRoleLevel = 0;
 		javaLogger = new DITAOTJavaLogger();
 	}
 
@@ -115,6 +122,8 @@ public class IndexTermReader extends AbstractXMLReader {
 		indexSortAsSpecList.clear();
 		topicSpecList.clear();
 		indexTermList.clear();
+		processRoleStack.clear();
+		processRoleLevel = 0;
 		titleMap.clear();
 	}
 
@@ -132,26 +141,25 @@ public class IndexTermReader extends AbstractXMLReader {
 			temp = " " + temp.substring(1);
 		}
 		
-		//if (temp.length() == 0) {
-		//	return;
-		//}
-		
 		/*
 		 * For title info
 		 */
-		if (!insideSortingAs && !termStack.empty()) {
-			IndexTerm indexTerm = (IndexTerm) termStack.peek();
-			temp = StringUtils.restoreEntity(temp);
-			indexTerm.setTermName(StringUtils.setOrAppend(indexTerm.getTermName(), temp, false));
-		} else if (insideSortingAs && temp.length() > 0) {
-			IndexTerm indexTerm = (IndexTerm) termStack.peek();
-			temp = StringUtils.restoreEntity(temp);
-			indexTerm.setTermKey(StringUtils.setOrAppend(indexTerm.getTermKey(), temp, false));
-		} else if (inTitleElement) {
-			temp = StringUtils.restoreEntity(temp);
-			//Always append space if: <title>abc<ph/>df</title>
-			//Updated with SF 2010062 - should only add space if one is in source
-			title = StringUtils.setOrAppend(title, temp, false);
+		if (processRoleStack.isEmpty() || 
+				!Constants.ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equalsIgnoreCase(processRoleStack.peek())) {
+			if (!insideSortingAs && !termStack.empty()) {
+				IndexTerm indexTerm = (IndexTerm) termStack.peek();
+				temp = StringUtils.restoreEntity(temp);
+				indexTerm.setTermName(StringUtils.setOrAppend(indexTerm.getTermName(), temp, false));
+			} else if (insideSortingAs && temp.length() > 0) {
+				IndexTerm indexTerm = (IndexTerm) termStack.peek();
+				temp = StringUtils.restoreEntity(temp);
+				indexTerm.setTermKey(StringUtils.setOrAppend(indexTerm.getTermKey(), temp, false));
+			} else if (inTitleElement) {
+				temp = StringUtils.restoreEntity(temp);
+				//Always append space if: <title>abc<ph/>df</title>
+				//Updated with SF 2010062 - should only add space if one is in source
+				title = StringUtils.setOrAppend(title, temp, false);
+			}
 		}
 	}
 	
@@ -173,6 +181,20 @@ public class IndexTermReader extends AbstractXMLReader {
 	 */
 	public void endElement(String uri, String localName, String qName)
 			throws SAXException {
+		
+		//Skip the topic if @processing-role="resource-only"
+		if (processRoleLevel > 0) {
+			String role = processRoleStack.peek();
+			if (processRoleLevel == processRoleStack.size()) {
+				role = processRoleStack.pop();
+			}
+			processRoleLevel--;
+			if (Constants.ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY
+					.equalsIgnoreCase(role)) {
+				return;
+			}
+		}
+		
 		// Check to see if the indexterm element or a specialized version is 
 		// in the list.
 		if (indexTermSpecList.contains(localName)) {
@@ -279,6 +301,25 @@ public class IndexTermReader extends AbstractXMLReader {
 	 */
 	public void startElement(String uri, String localName, String qName,
 			Attributes attributes) throws SAXException {
+		
+		//Skip the topic if @processing-role="resource-only"
+		String attrValue = attributes
+				.getValue(Constants.ATTRIBUTE_NAME_PROCESSING_ROLE);
+		if (attrValue != null) {
+			processRoleStack.push(attrValue);
+			processRoleLevel++;
+			if (Constants.ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY
+					.equals(attrValue)) {
+				return;
+			}
+		} else if (processRoleLevel > 0) {
+			processRoleLevel++;
+			if (Constants.ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY
+					.equals(processRoleStack.peek())) {
+				return;
+			}
+		}
+		
 		String classAttr = attributes.getValue(Constants.ATTRIBUTE_NAME_CLASS);
 		
 		handleSpecialization(localName, classAttr);
@@ -293,13 +334,6 @@ public class IndexTermReader extends AbstractXMLReader {
 					.getValue(Constants.ATTRIBUTE_NAME_XML_LANG);
 			
 			if (xmlLang != null) {
-				Locale locale;
-//				if (xmlLang.length() == 5) {
-//					locale = new Locale(xmlLang.substring(0, 2).toLowerCase(),
-//							xmlLang.substring(3, 5).toUpperCase());
-//				} else {
-//					locale = new Locale(xmlLang.substring(0, 2).toLowerCase());
-//				}
 				IndexTerm.setTermLocale(StringUtils.getLocale(xmlLang));
 			}
 		}
@@ -369,8 +403,6 @@ public class IndexTermReader extends AbstractXMLReader {
 			IndexTerm indexTerm = new IndexTerm();
 			indexTerm.setStartAttribute(attributes.getValue(Constants.ATTRIBUTE_NAME_END));
 			indexTerm.setEndAttribute(attributes.getValue(Constants.ATTRIBUTE_NAME_END));
-//			IndexTermTarget target = new IndexTermTarget();
-//			String fragment = null;
 			
 			IndexTerm parentTerm = null;
 			if(!termStack.isEmpty()){
@@ -380,22 +412,6 @@ public class IndexTermReader extends AbstractXMLReader {
 				}
 			}
 			
-//			if(topicIdStack.peek() == null){
-//				fragment = null;
-//			}else{
-//				fragment = topicIdStack.peek().toString();
-//			}
-//
-//			if (title != null) {
-//				target.setTargetName(title);
-//			} else {
-//				target.setTargetName(targetFile);
-//			}
-//			if(fragment != null)
-//				target.setTargetURI(targetFile + Constants.SHARP + fragment);
-//			else
-//				target.setTargetURI(targetFile);
-//			indexTerm.addTarget(target);
 			termStack.push(indexTerm);
 		}
 	}
