@@ -183,6 +183,7 @@
         includesfile="${dita.temp.dir}${file.separator}${fullditatopicfile}"
 		extension="${out.ext}"
 		style="${args.xsl}">
+  	    <excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
         <param name="DITAEXT" expression="${dita.ext}" if="dita.ext"/>
         <param name="FILTERFILE" expression="${dita.input.valfile}" if="dita.input.valfile"/>
         <param name="CSS" expression="${args.css.file}" if="args.css.file"/>
@@ -225,7 +226,7 @@
 		destdir="${output.dir}"
         includesfile="${dita.temp.dir}${file.separator}${user.input.file.listfile}"
 		style="${dita.script.dir}${file.separator}map2htmtoc.xsl">
-		
+  	    <excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
         <param name="DITAEXT" expression="${dita.ext}" if="dita.ext"/>
         <param name="OUTEXT" expression="${out.ext}" if="out.ext"/>
         <param name="CSS" expression="${args.css.file}" if="args.css.file"/>
@@ -259,6 +260,7 @@
     includesfile="${dita.temp.dir}${file.separator}${fullditamapfile}"
     extension=".xml"
 		style="${dita.script.dir}${file.separator}map2eclipse.xsl">
+  	    <excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
         <param name="DITAEXT" expression="${dita.ext}" if="dita.ext"/>
         <param name="OUTEXT" expression="${out.ext}" if="out.ext"/>
     </xslt>    
@@ -300,6 +302,7 @@
 		destdir="${output.dir}"
         includesfile="${dita.temp.dir}${file.separator}${user.input.file.listfile}"
 		style="${dita.script.dir}${file.separator}map2eclipse.xsl">
+  	    <excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
         <param name="DITAEXT" expression="${dita.ext}" if="dita.ext"/>
         <param name="OUTEXT" expression="${content.link.ext}"/>
         <mapper type="glob" from="*${dita.input.filename}" to="*${args.eclipsecontent.toc}.xml"/>
@@ -345,6 +348,7 @@
 		destdir="${output.dir}"
         includesfile="${dita.temp.dir}${file.separator}${user.input.file.listfile}"
 		style="${dita.script.dir}${file.separator}map2javahelptoc.xsl">
+  	    <excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
         <param name="DITAEXT" expression="${dita.ext}" if="dita.ext"/>
         <param name="OUTEXT" expression="${out.ext}" if="out.ext"/>
         <mapper type="glob" from="*${dita.input.filename}" to="*${args.javahelp.toc}.xml"/>
@@ -354,6 +358,7 @@
 		destdir="${output.dir}"
         includesfile="${dita.temp.dir}${file.separator}${user.input.file.listfile}"
 		style="${dita.script.dir}${file.separator}map2javahelpmap.xsl">
+  	    <excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
         <param name="DITAEXT" expression="${dita.ext}" if="dita.ext"/>
         <param name="OUTEXT" expression="${out.ext}" if="out.ext"/>      
         <mapper type="glob" from="*${dita.input.filename}" to="*${args.javahelp.map}.jhm"/>
@@ -365,6 +370,7 @@
 	      destdir="${output.dir}"
 	      includesfile="${dita.temp.dir}${file.separator}${user.input.file.listfile}"
 	      style="${dita.script.dir}${file.separator}map2javahelpset.xsl">
+		    <excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
 	        <param name="javahelpmap" expression="${args.javahelp.map}"/>
             <param name="javahelptoc" expression="${args.javahelp.toc}"/>
             <mapper type="glob" from="*${dita.input.filename}" to="*${dita.map.toc.root}_helpset.hs"/>
@@ -397,6 +403,7 @@
         includesfile="${dita.temp.dir}${file.separator}${fullditatopicfile}"
 		extension="${out.ext}"
 		style="${args.xsl}">
+  	    <excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
         <param name="DITAEXT" expression="${dita.ext}" if="dita.ext"/>
         <param name="FILTERFILE" expression="${dita.input.valfile}" if="dita.input.valfile"/>
         <param name="CSS" expression="${args.css.file}" if="args.css.file"/>
@@ -436,6 +443,7 @@
         includesfile="${dita.temp.dir}${file.separator}${user.input.file.listfile}"
 		extension=".hhc"
 		style="${dita.script.dir}${file.separator}map2hhc.xsl">
+  	    <excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
         <param name="DITAEXT" expression="${dita.ext}" if="dita.ext"/>
         <param name="OUTEXT" expression="${out.ext}" if="out.ext"/>
   </xslt>  
@@ -451,6 +459,7 @@
         includesfile="${dita.temp.dir}${file.separator}${user.input.file.listfile}"
 		extension=".hhp"
 		style="${dita.script.dir}${file.separator}map2hhp.xsl">
+  	    <excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
         <param name="DITAEXT" expression="${dita.ext}" if="dita.ext"/>
         <param name="OUTEXT" expression="${out.ext}" if="out.ext"/>
         <param name="HHCNAME" expression="${dita.map.filename.root}.hhc"/>
@@ -551,6 +560,7 @@
         includesfile="${dita.temp.dir}${file.separator}${fullditatopicfile}"
   		extension="${dita.ext}"
   		style="${dita.script.dir}${file.separator}dita2troff-step1-shell.xsl">
+      	  <excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
           <param name="DITAEXT" expression="${dita.ext}" if="dita.ext"/>
       </xslt>
       
@@ -561,6 +571,7 @@
   		  includesfile="${dita.temp.dir}${file.separator}${fullditatopicfile}"
           extension=".cli"
           style="${dita.script.dir}${file.separator}dita2troff-step2-shell.xsl">
+  			<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
   			<param name="DITAEXT" expression="${dita.ext}" if="dita.ext"/>
   		</xslt>
   	</target>

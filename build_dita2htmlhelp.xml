@@ -41,6 +41,7 @@
               extension=".hhp"
               classpathref="dost.class.path"
               style="${dita.script.dir}${file.separator}map2hhp.xsl">
+        	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
             <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
             <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
             <param name="HHCNAME" expression="${dita.map.filename.root}.hhc" />
@@ -59,6 +60,7 @@
             includesfile="${dita.temp.dir}${file.separator}${user.input.file.listfile}"
             classpathref="dost.class.path"
             style="${dita.script.dir}${file.separator}map2hhp.xsl">
+        	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
             <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
             <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
             <param name="HHCNAME" expression="${dita.map.filename.root}.hhc" />
@@ -79,6 +81,7 @@
               extension=".hhc"
               classpathref="dost.class.path"
               style="${dita.script.dir}${file.separator}map2hhc.xsl">
+        	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
             <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
             <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
         </xslt>
@@ -93,6 +96,7 @@
             includesfile="${dita.temp.dir}${file.separator}${user.input.file.listfile}"
             classpathref="dost.class.path"
             style="${dita.script.dir}${file.separator}map2hhc.xsl">
+        	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
             <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
             <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
             <mapper type="glob" from="${user.input.file}" to="${dita.map.filename.root}.hhc"/>

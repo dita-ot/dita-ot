@@ -21,6 +21,7 @@
       extension="${dita.ext}"
       classpathref="dost.class.path"
       style="${dita.script.dir}${file.separator}dita2troff-step1-shell.xsl">
+    	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
       <includesfile name="${dita.temp.dir}${file.separator}${chunkedtopicfile}" if="chunkedtopicfile"/>
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
     </xslt>
@@ -30,6 +31,7 @@
       includesfile="${dita.temp.dir}${file.separator}${fullditatopicfile}" includes="${chunkedtopiclist}" extension=".cli"
       classpathref="dost.class.path"
       style="${dita.script.dir}${file.separator}dita2troff-step2-shell.xsl">
+    	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
     </xslt>
   </target>
@@ -43,6 +45,7 @@
       extension="${dita.ext}"
       classpathref="dost.class.path"
       style="${dita.script.dir}${file.separator}dita2troff-step1-shell.xsl">
+    	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
       <includesfile name="${dita.temp.dir}${file.separator}${chunkedtopicfile}" if="chunkedtopicfile"/>
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
       <!--New,To generate&copy all dita files in the inputmap.dir,not all files in dita.temp.dir -->
@@ -56,6 +59,7 @@
       includesfile="${dita.temp.dir}${file.separator}${fullditatopicfile}" extension=".cli"
       classpathref="dost.class.path"
       style="${dita.script.dir}${file.separator}dita2troff-step2-shell.xsl">
+    	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
       <includesfile name="${dita.temp.dir}${file.separator}${chunkedtopicfile}" if="chunkedtopicfile"/>
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
       <mapper type="regexp" 
@@ -88,6 +92,7 @@
       extension="${dita.ext}"
       classpathref="dost.class.path"
       style="${dita.script.dir}${file.separator}dita2troff-step1-shell.xsl">
+    	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
     </xslt>
 
@@ -96,6 +101,7 @@
       includesfile="${dita.temp.dir}${file.separator}${outditafilesfile}" extension=".cli"
       classpathref="dost.class.path"
       style="${dita.script.dir}${file.separator}dita2troff-step2-shell.xsl">
+    	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
     </xslt>
   </target>
