@@ -96,7 +96,7 @@
   	<include name="demo/faq/**"/>
   	<include name="demo/h2d/**"/>
   	<include name="demo/java/**"/>
-  	<include name="demo/dita12/**"/>
+  	<include name="demo/dita11/**"/>
   	<include name="demo/dita132/**"/>
 		<include name="demo/fo/**" />
 		<include name="demo/legacypdf/**" />
