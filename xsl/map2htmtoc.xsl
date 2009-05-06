@@ -148,7 +148,7 @@
      ********************************************************************************* -->
 <xsl:template match="/*[contains(@class, ' map/map ')]">
   <xsl:param name="pathFromMaplist"/>
-  <xsl:if test=".//*[contains(@class, ' map/topicref ')][not(@toc='no')]">
+  <xsl:if test=".//*[contains(@class, ' map/topicref ')][not(@toc='no')][not(@processing-role='resource-only')]">
     <ul><xsl:value-of select="$newline"/>
 
       <xsl:apply-templates select="*[contains(@class, ' map/topicref ')]">
@@ -196,7 +196,7 @@
      If this topicref has any child topicref's that will be part of the navigation,
      output a <ul> around them and process the contents.
      ********************************************************************************* -->
-<xsl:template match="*[contains(@class, ' map/topicref ')][not(@toc='no')]">
+<xsl:template match="*[contains(@class, ' map/topicref ')][not(@toc='no')][not(@processing-role='resource-only')]">
   <xsl:param name="pathFromMaplist"/>
   <xsl:variable name="title">
     <xsl:call-template name="navtitle"/>
@@ -243,7 +243,7 @@
         </xsl:choose>
         
         <!-- If there are any children that should be in the TOC, process them -->
-        <xsl:if test="descendant::*[contains(@class, ' map/topicref ')][not(contains(@toc,'no'))]">
+        <xsl:if test="descendant::*[contains(@class, ' map/topicref ')][not(contains(@toc,'no'))][not(@processing-role='resource-only')]">
           <xsl:value-of select="$newline"/><ul><xsl:value-of select="$newline"/>
             <xsl:apply-templates select="*[contains(@class, ' map/topicref ')]">
               <xsl:with-param name="pathFromMaplist" select="$pathFromMaplist"/>
@@ -263,7 +263,7 @@
 </xsl:template>
 
 <!-- If toc=no, but a child has toc=yes, that child should bubble up to the top -->
-<xsl:template match="*[contains(@class, ' map/topicref ')][@toc='no']">
+<xsl:template match="*[contains(@class, ' map/topicref ')][@toc='no'][not(@processing-role='resource-only')]">
   <xsl:param name="pathFromMaplist"/>
   <xsl:apply-templates select="*[contains(@class, ' map/topicref ')]">
     <xsl:with-param name="pathFromMaplist" select="$pathFromMaplist"/>

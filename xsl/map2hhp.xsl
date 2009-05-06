@@ -159,7 +159,9 @@ Binary Index=No</xsl:text>
 <xsl:text>
 Default topic=</xsl:text>
 <!-- in a single map, get the first valid topic -->
-<xsl:text/><xsl:apply-templates select="descendant::*[contains(@class, ' map/topicref ')][@href][contains(@href,$DITAEXT) or contains(@href,'.htm')][not(contains(@toc,'no'))][1]" mode="defaulttopic"/><xsl:text/>
+<xsl:text/>
+<xsl:apply-templates select="descendant::*[contains(@class, ' map/topicref ')][not(@processing-role='resource-only')][@href][contains(@href,$DITAEXT) or contains(@href,'.htm')][not(contains(@toc,'no'))][not(@processing-role='resource-only')][1]" mode="defaulttopic"/>
+<xsl:text/>
 
 <!-- Get the title, if possible -->
 <!-- Using a single map, so get the title from that map -->
@@ -257,7 +259,8 @@ Default topic=</xsl:text>
 <xsl:template match="*[contains(@class, ' map/topicref ')]">
   <xsl:param name="pathFromMaplist"/>
   <xsl:variable name="thisFilename">
-    <xsl:if test="@href and not ((ancestor-or-self::*/@type)[last()]='external') and not((ancestor-or-self::*/@scope)[last()]='external')">
+    <xsl:if test="@href and not ((ancestor-or-self::*/@type)[last()]='external') and not((ancestor-or-self::*/@scope)[last()]='external')
+    			  and not(@processing-role='resource-only')">
       <xsl:choose>
         <!-- For dita files, change the extension; for HTML files, output the name as-is. Use the copy-to value first. -->
         <xsl:when test="contains(@copy-to,$DITAEXT)"><xsl:value-of select="$pathFromMaplist"/><xsl:value-of select="substring-before(@copy-to,$DITAEXT)"/><xsl:value-of select="$OUTEXT"/></xsl:when>

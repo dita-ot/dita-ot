@@ -63,6 +63,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
     <!-- used for mapref target to see whether @linking should be override by the source of mapref -->
     <xsl:param name="parent-toc">#none#</xsl:param>
     <!-- used for mapref target to see whether @toc should be override by the source of mapref -->
+    <xsl:param name="parent-processing-role">#none#</xsl:param>
     
     <!--need to create these variables regardless, for passing as a parameter to get-stuff template-->
         <xsl:variable name="type">
@@ -110,6 +111,14 @@ Other modes can be found within the code, and may or may not prove useful for ov
           <xsl:if test="not(@toc) and not($parent-toc='no')">
             <xsl:apply-templates select="." mode="mappull:inherit-and-set-attribute"><xsl:with-param name="attrib">toc</xsl:with-param></xsl:apply-templates>
           </xsl:if>
+          <xsl:if test="$parent-processing-role='resource-only'">
+            <xsl:attribute name="processing-role">resource-only</xsl:attribute>
+          </xsl:if>
+          <xsl:if test="not(@processing-role) and not($parent-processing-role='resource-only')">
+            <xsl:apply-templates select="." mode="mappull:inherit-and-set-attribute">
+          	  <xsl:with-param name="attrib">processing-role</xsl:with-param>
+            </xsl:apply-templates>
+      	  </xsl:if>
           <xsl:if test="not(@print) and $print!='#none#'">
             <xsl:attribute name="print"><xsl:value-of select="$print"/></xsl:attribute>
           </xsl:if>

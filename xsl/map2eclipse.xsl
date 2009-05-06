@@ -161,7 +161,7 @@
 
 <!-- If the topicref is a "topicgroup", or some other topicref that does not point
      to a file or have link text, then just move on to children. -->
-<xsl:template match="*[contains(@class, ' map/topicref ')][not(@toc='no')]">
+<xsl:template match="*[contains(@class, ' map/topicref ')][not(@toc='no')][not(@processing-role='resource-only')]">
   <xsl:choose>
     <xsl:when test="contains(@class, ' mapgroup/topicgroup ')">
       <xsl:apply-templates/>

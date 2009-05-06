@@ -37,12 +37,14 @@
   <xsl:param name="subtopicNodes"/>
   <xsl:param name="title"/>
   <xsl:choose>
-  <xsl:when test="@toc and translate(@toc, 
-      'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')='no'">
-    <xsl:variable name="results">
-      <xsl:apply-templates select="$subtopicNodes"/>
-    </xsl:variable>
-    <xsl:text/>
+  <xsl:when test="(@toc and translate(@toc, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')='no')
+  					or (@processing-role='resource-only')">
+    <!-- <xsl:variable name="results">  -->
+    <!-- Process children nodes. -->
+<!--     <xsl:apply-templates select="$subtopicNodes"/> -->
+    <xsl:apply-templates select="./*[contains(@class, ' map/topicref ')]"/>
+    <!-- </xsl:variable>  -->
+    <!-- <xsl:text/>  -->
   </xsl:when>
   <xsl:when test="$title">
     <tocitem text="{$title}">

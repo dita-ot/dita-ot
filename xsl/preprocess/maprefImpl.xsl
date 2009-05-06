@@ -47,6 +47,7 @@
         <xsl:param name="parent-platform">#none#</xsl:param>
         <xsl:param name="parent-otherprops">#none#</xsl:param>
         <xsl:param name="parent-props">#none#</xsl:param>
+        <xsl:param name="parent-processing-role">#none#</xsl:param>
         <xsl:param name="mapref-id-path"/>    <!-- record each target's id of mapref to prevent loop reference -->
         <xsl:variable name="filename">
             <xsl:choose>
@@ -231,6 +232,17 @@
                                             <xsl:otherwise>#none#</xsl:otherwise>
                                         </xsl:choose>
                                     </xsl:with-param>
+                                    <xsl:with-param name="parent-processing-role">
+                                      <xsl:choose>
+                                        <xsl:when test="not($parent-processing-role='#none#')">
+                                            <xsl:value-of select="$parent-processing-role"/>
+                                        </xsl:when>
+                                        <xsl:when test="@processing-role and not(@processing-role='')">
+                                            <xsl:value-of select="@processing-role"/>
+                                        </xsl:when>
+                                        <xsl:otherwise>#none#</xsl:otherwise>
+                                      </xsl:choose>
+                                    </xsl:with-param>
                                 </xsl:apply-templates>
                             </xsl:when>
                             <xsl:otherwise>
@@ -256,6 +268,17 @@
                                                 </xsl:call-template>
                                             </xsl:otherwise>
                                         </xsl:choose>
+                                    </xsl:with-param>
+                                    <xsl:with-param name="parent-processing-role">
+                                      <xsl:choose>
+                                        <xsl:when test="not($parent-processing-role='#none#')">
+                                            <xsl:value-of select="$parent-processing-role"/>
+                                        </xsl:when>
+                                        <xsl:when test="@processing-role and not(@processing-role='')">
+                                            <xsl:value-of select="@processing-role"/>
+                                        </xsl:when>
+                                        <xsl:otherwise>#none#</xsl:otherwise>
+                                      </xsl:choose>
                                     </xsl:with-param>
                                 </xsl:apply-templates>
                             </xsl:otherwise>
@@ -351,6 +374,14 @@
                         </xsl:when>
                         <xsl:when test="@props and not(@props='')">
                             <xsl:attribute name="props"><xsl:value-of select="@props"/></xsl:attribute>
+                        </xsl:when>
+                    </xsl:choose>
+                    <xsl:choose>
+                        <xsl:when test="not($parent-processing-role='#none#')">
+                            <xsl:attribute name="processing-role"><xsl:value-of select="$parent-processing-role"/></xsl:attribute>
+                        </xsl:when>
+                        <xsl:when test="@processing-role and not(@processing-role='')">
+                            <xsl:attribute name="processing-role"><xsl:value-of select="@processing-role"/></xsl:attribute>
                         </xsl:when>
                     </xsl:choose>
                     

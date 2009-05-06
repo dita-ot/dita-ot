@@ -832,7 +832,7 @@
     <xsl:choose>
       <xsl:when test="../@scope='external'"><xsl:value-of select="."/></xsl:when>
         
-        <xsl:when test="starts-with(.,'http://') or starts-with(.,'ftp://') or @scope='external'"><xsl:value-of select="."/></xsl:when>
+        <xsl:when test="starts-with(.,'http://') or starts-with(.,'ftp://')"><xsl:value-of select="."/></xsl:when>
         
         <xsl:when test="starts-with(.,'#')">
             <xsl:choose>
