@@ -558,6 +558,15 @@ See the accompanying license.txt file for applicable licenses.
 			<exslf:result select="$entries[opentopic-index:refID/@value = $refID]"/>
 		</xsl:for-each>
 	</exslf:function>
+	
+	<xsl:function version="2.0" name="opentopic-func:getIndexEntry">
+		<xsl:param name="value"/>
+		<xsl:param name="refID"/>
 
-
+		<xsl:for-each select="$index-entries">
+			<xsl:variable name="entries" select="key('index-key',$value)"/>
+			<xsl:value-of select="$entries[opentopic-index:refID/@value = $refID]"/>
+		</xsl:for-each>
+	</xsl:function>
+	
 </xsl:stylesheet>

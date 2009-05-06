@@ -1934,6 +1934,18 @@ See the accompanying license.txt file for applicable licenses.
             </xsl:otherwise>
         </xsl:choose>
     </exslf:function>
+    
+    <xsl:function version="2.0" name="opentopic-func:getSortString">
+        <xsl:param name="text"/>
+        <xsl:choose>
+            <xsl:when test="contains($text, '[') and contains($text, ']')">
+                <xsl:value-of select="substring-before(substring-after($text, '['),']')"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="$text"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:function>
 
     <exslf:function name="opentopic-func:fetchValueableText">
         <xsl:param name="node"/>
@@ -1945,6 +1957,17 @@ See the accompanying license.txt file for applicable licenses.
         <exslf:result select="$res"/>
 
     </exslf:function>
+    
+    <xsl:function version="2.0" name="opentopic-func:fetchValueableText">
+        <xsl:param name="node"/>
+
+        <xsl:variable name="res">
+            <xsl:apply-templates select="$node" mode="insert-text"/>
+        </xsl:variable>
+
+        <xsl:value-of select="$res"/>
+
+    </xsl:function>
 
     <xsl:template match="*" mode="insert-text">
         <xsl:apply-templates mode="insert-text"/>

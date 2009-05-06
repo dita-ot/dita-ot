@@ -202,6 +202,64 @@ See the accompanying license.txt file for applicable licenses.
 
         <exslf:result select="$topicType"/>
     </exslf:function>
+    
+    <xsl:function version="2.0" name="opentopic-func:determineTopicType">
+        <xsl:variable name="id" select="ancestor-or-self::*[contains(@class, ' topic/topic ')][1]/@id"/>
+        <xsl:variable name="gid" select="generate-id(ancestor-or-self::*[contains(@class, ' topic/topic ')][1])"/>
+        <xsl:variable name="topicNumber" select="count(exsl:node-set($topicNumbers)/topic[@id = $id][following-sibling::topic[@guid = $gid]]) + 1"/>
+        <xsl:variable name="mapTopic">
+            <xsl:copy-of select="$map//*[@id = $id]"/>
+        </xsl:variable>
+
+        <xsl:variable name="topicType">
+            <xsl:choose>
+                <xsl:when test="$mapTopic/*[position() = $topicNumber][contains(@class, ' bookmap/chapter ')]">
+                    <xsl:text>topicChapter</xsl:text>
+                </xsl:when>
+                <xsl:when test="$mapTopic/*[position() = $topicNumber][contains(@class, ' bookmap/appendix ')]">
+                    <xsl:text>topicAppendix</xsl:text>
+                </xsl:when>
+                <xsl:when test="$mapTopic/*[position() = $topicNumber][contains(@class, ' bookmap/preface ')]">
+                    <xsl:text>topicPreface</xsl:text>
+                </xsl:when>
+                <xsl:when test="$mapTopic/*[position() = $topicNumber][contains(@class, ' bookmap/part ')]">
+                    <xsl:text>topicPart</xsl:text>
+                </xsl:when>
+                <xsl:when test="$mapTopic/*[position() = $topicNumber][contains(@class, ' bookmap/abbrevlist ')]">
+                    <xsl:text>topicAbbrevList</xsl:text>
+                </xsl:when>
+                <xsl:when test="$mapTopic/*[position() = $topicNumber][contains(@class, ' bookmap/bibliolist ')]">
+                    <xsl:text>topicBiblioList</xsl:text>
+                </xsl:when>
+                <xsl:when test="$mapTopic/*[position() = $topicNumber][contains(@class, ' bookmap/booklist ')]">
+                    <xsl:text>topicBookList</xsl:text>
+                </xsl:when>
+                <xsl:when test="$mapTopic/*[position() = $topicNumber][contains(@class, ' bookmap/figurelist ')]">
+                    <xsl:text>topicFigureList</xsl:text>
+                </xsl:when>
+                <xsl:when test="$mapTopic/*[position() = $topicNumber][contains(@class, ' bookmap/indexlist ')]">
+                    <xsl:text>topicIndexList</xsl:text>
+                </xsl:when>
+                <xsl:when test="$mapTopic/*[position() = $topicNumber][contains(@class, ' bookmap/toc ')]">
+                    <xsl:text>topicTocList</xsl:text>
+                </xsl:when>
+                <xsl:when test="$mapTopic/*[position() = $topicNumber][contains(@class, ' bookmap/glossarylist ')]">
+                    <xsl:text>topicGlossaryList</xsl:text>
+                </xsl:when>
+                <xsl:when test="$mapTopic/*[position() = $topicNumber][contains(@class, ' bookmap/trademarklist ')]">
+                    <xsl:text>topicTradeMarkList</xsl:text>
+                </xsl:when>
+                <xsl:when test="$mapTopic/*[position() = $topicNumber][contains(@class, ' bookmap/notices ')]">
+                    <xsl:text>topicNotices</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>topicSimple</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+
+        <xsl:value-of select="$topicType"/>
+    </xsl:function>
 
 
 </xsl:stylesheet>

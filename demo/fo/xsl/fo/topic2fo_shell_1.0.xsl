@@ -91,7 +91,7 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:param name="ditaVersion" select="/*[contains(@class,' map/map ')]/@ditaarch:DITAArchVersion"/>
 
-    <xsl:param name="pdfFormatter" select="'xep'"/>
+    <xsl:param name="pdfFormatter" select="'fop'"/>
 
     <xsl:output method="xml" encoding="utf-8" indent="no"/>
 
