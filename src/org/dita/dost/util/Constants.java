@@ -126,6 +126,8 @@ public abstract class Constants {
 	public static final String ATTRIBUTE_NAME_CONKEYREF	="conkeyref";
 	public static final String ATTRIBUTE_NAME_KEYS = "keys";
 	public static final String ATTRIBUTE_NAME_XTRF = "xtrf";
+	public static final String ATTRIBUTE_NAME_PROCESSING_ROLE = "processing-role";
+	public static final String ATTRIBUTE_NAME_TOC = "toc";
     
     /**
      * Constant for value of attribute format in dita files.
@@ -173,6 +175,7 @@ public abstract class Constants {
     public static final String KEY_LIST = "keylist";
     public static final String KEYREF_LIST = "keyreflist";
     public static final String CODEREF_LIST = "codereflist";
+    public static final String RESOURCE_ONLY_LIST = "resourceonlylist";
 
     /**
      * Constants for common params used in ant invoker.
@@ -305,6 +308,10 @@ public abstract class Constants {
 	public static final String ATTR_CLASS_VALUE_CODEREF = " pr-d/coderef ";
 	public static final String ATTR_CLASS_VALUE_TOPIC_GROUP = " mapgroup-d/topicgroup ";
 	public static final String ATTR_CLASS_VALUE_TOPIC_HEAD = " mapgroup-d/topichead ";
+	
+	public static final String ATTR_PROCESSING_ROLE_VALUE_NORMAL = "normal";
+	public static final String ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY = "resource-only";
+
 	
     /**
      * constants for filtering or flagging.
