@@ -36,12 +36,12 @@ import org.dita.dost.writer.PropertiesWriter;
  */
 
 public class CommandLineInvoker {
-	private static Map paramMap = null;
+	private static Map<String, String> paramMap = null;
     
 	private static DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
 	
 	static {
-		paramMap = new HashMap();
+		paramMap = new HashMap<String,String>();
 
 		paramMap.put("/basedir", "basedir");
 		paramMap.put("/ditadir", "dita.dir");
@@ -268,7 +268,7 @@ public class CommandLineInvoker {
 	 * @throws IOException
 	 */
 	public void startAnt() throws IOException {
-		List cmd = new ArrayList(Constants.INT_8);
+		List<String> cmd = new ArrayList<String>(Constants.INT_8);
 		String[] cmds = null;
 		
 		cmd.add(getCommandRunner());
@@ -323,7 +323,7 @@ public class CommandLineInvoker {
 	}
 	
 	private static void printVersion() {
-		System.out.println("DITA Open Toolkit 1.4.1");
+		System.out.println("DITA Open Toolkit 1.5");
 	}
 	
 	/**
