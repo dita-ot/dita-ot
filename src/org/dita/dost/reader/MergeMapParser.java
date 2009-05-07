@@ -158,10 +158,17 @@ public class MergeMapParser extends AbstractXMLReader {
     					|| Constants.ATTR_SCOPE_VALUE_LOCAL.equalsIgnoreCase(scopeValue))
     					&& (formatValue == null 
     							|| Constants.ATTR_FORMAT_VALUE_DITA.equalsIgnoreCase(formatValue))){
+        			String ohref = attValue;
+                    String copyToValue = atts.getValue(Constants.ATTRIBUTE_NAME_COPY_TO);
+                    if (!StringUtils.isEmptyString(copyToValue)) attValue = copyToValue;
     				if (util.isVisited(attValue)){
+//    					mapInfo.append(Constants.STRING_BLANK)
+//            			.append("ohref").append(Constants.EQUAL).append(Constants.QUOTATION)
+//            			.append(StringUtils.escapeXML(attValue)).append(Constants.QUOTATION);
+    					
     					mapInfo.append(Constants.STRING_BLANK)
             			.append("ohref").append(Constants.EQUAL).append(Constants.QUOTATION)
-            			.append(StringUtils.escapeXML(attValue)).append(Constants.QUOTATION);
+            			.append(StringUtils.escapeXML(ohref)).append(Constants.QUOTATION);
     					
 //    					random = RandomUtils.getRandomNum();
 //    					filename = attValue + "(" + Long.toString(random) + ")";
@@ -169,9 +176,13 @@ public class MergeMapParser extends AbstractXMLReader {
     					//parse the file but give it another file name
 //    					topicParser.read(filename);
     				}else{
+//    					mapInfo.append(Constants.STRING_BLANK)
+//            			.append("ohref").append(Constants.EQUAL).append(Constants.QUOTATION)
+//            			.append(StringUtils.escapeXML(attValue)).append(Constants.QUOTATION);
+    					
     					mapInfo.append(Constants.STRING_BLANK)
             			.append("ohref").append(Constants.EQUAL).append(Constants.QUOTATION)
-            			.append(StringUtils.escapeXML(attValue)).append(Constants.QUOTATION);
+            			.append(StringUtils.escapeXML(ohref)).append(Constants.QUOTATION);
     					    					
     					//parse the topic
     					fileId = topicParser.parse(attValue,dirPath);
