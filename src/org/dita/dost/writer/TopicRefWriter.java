@@ -40,8 +40,8 @@ public class TopicRefWriter extends AbstractXMLWriter {
 	// To check the URL of href in topicref attribute
 	private static final String NOT_LOCAL_URL = "://";
 
-	private Hashtable changeTable = null;
-	private Hashtable conflictTable = null;
+	private Hashtable<String, String> changeTable = null;
+	private Hashtable<String, String> conflictTable = null;
 	private DITAOTJavaLogger logger = null;
 	private OutputStreamWriter output;
 	private OutputStreamWriter ditaFileOutput;
@@ -76,7 +76,7 @@ public class TopicRefWriter extends AbstractXMLWriter {
         }
 	}
 	
-	public void setup(Hashtable conflictTable) {
+	public void setup(Hashtable<String,String> conflictTable) {
 		this.conflictTable = conflictTable;
 	}
 
@@ -209,7 +209,7 @@ public class TopicRefWriter extends AbstractXMLWriter {
 	 */
 
 	public void setContent(Content content) {
-		changeTable = (Hashtable) content.getValue();
+		changeTable = (Hashtable<String,String>) content.getValue();
 	}
 
 	/*
@@ -473,17 +473,6 @@ public class TopicRefWriter extends AbstractXMLWriter {
 		}
 	}
 	
-	private String resolveTopicWithoutElement(String rootPath, String relativePath){
-		String withoutElement=null;
-		if(relativePath.indexOf(Constants.SHARP)!=-1)
-			if(relativePath.lastIndexOf(Constants.SLASH)!=-1)
-				withoutElement=relativePath.substring(0, relativePath.lastIndexOf(Constants.SLASH));
-			else
-				withoutElement=relativePath;
-		else
-			withoutElement=relativePath;
-		return FileUtils.resolveFile(rootPath,withoutElement);
-	}
 	/**
 	 * Retrieve the element ID from the path
 	 * @param relativePath
@@ -581,7 +570,6 @@ public class TopicRefWriter extends AbstractXMLWriter {
 	public void write(String outputFilename) throws DITAOTException {
 		String filename = outputFilename;
 		String file = null;
-		String topic = null;
 		currentFilePathName=new File(outputFilename).getAbsolutePath();
 		currentFilePath = new File(outputFilename).getParent();
 		File inputFile = null;
@@ -598,8 +586,6 @@ public class TopicRefWriter extends AbstractXMLWriter {
 			if (filename.lastIndexOf(Constants.SHARP) != -1) {
 				file = filename.substring(0, filename
 						.lastIndexOf(Constants.SHARP));
-				topic = filename.substring(filename
-						.lastIndexOf(Constants.SHARP) + 1);
 			} else {
 				file = filename;
 			}

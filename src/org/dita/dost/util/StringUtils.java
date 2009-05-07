@@ -41,6 +41,7 @@ public class StringUtils {
 	 *            Description of the Parameter
 	 * @return java.lang.String
 	 */
+	@SuppressWarnings("unchecked")
 	public static String assembleString(Collection coll, String delim) {
 		StringBuffer buff = new StringBuffer(Constants.INT_256);
 		Iterator iter = null;
@@ -237,8 +238,8 @@ public class StringUtils {
 	 * @param s
 	 * @return
 	 */
-	public static Map restoreMap(String s) {
-		Map copytoMap = new HashMap();
+	public static Map<String, String> restoreMap(String s) {
+		Map<String,String> copytoMap = new HashMap<String,String>();
 		StringTokenizer st = new StringTokenizer(s, Constants.COMMA);
 		
         while (st.hasMoreTokens()) {

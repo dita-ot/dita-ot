@@ -17,7 +17,6 @@ import org.apache.xml.resolver.Catalog;
 import org.apache.xml.resolver.CatalogManager;
 import org.apache.xml.resolver.tools.CatalogResolver;
 import org.dita.dost.log.DITAOTJavaLogger;
-import org.omg.CORBA.CTX_RESTRICT_SCOPE;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
@@ -32,7 +31,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
 
 public class CatalogUtils {
 
-    private static HashMap map=null;
+    private static HashMap<String, String> map=null;
     
     private static DITAOTJavaLogger logger = new DITAOTJavaLogger();
     
@@ -51,7 +50,7 @@ public class CatalogUtils {
      * @return
      * 
      */
-    public static HashMap getCatalog(String ditaDir){
+    public static HashMap<String, String> getCatalog(String ditaDir){
     	CatalogParser parser;
 		XMLReader reader;
         String catalogFilePath;
@@ -59,7 +58,7 @@ public class CatalogUtils {
         if (map!=null){
             return map;
         }else{
-            map = new HashMap();
+            map = new HashMap<String, String>();
             parser = new CatalogParser(map, ditaDir);
             try{
                 if (System.getProperty(Constants.SAX_DRIVER_PROPERTY) == null){

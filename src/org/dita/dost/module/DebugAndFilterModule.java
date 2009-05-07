@@ -47,7 +47,8 @@ public class DebugAndFilterModule implements AbstractPipelineModule {
 			Constants.CONREF_LIST,Constants.HREF_DITA_TOPIC_LIST,Constants.FULL_DITA_TOPIC_LIST,
 			Constants.FULL_DITAMAP_TOPIC_LIST,Constants.CONREF_TARGET_LIST,Constants.COPYTO_SOURCE_LIST,
 			Constants.COPYTO_TARGET_TO_SOURCE_MAP_LIST,Constants.OUT_DITA_FILES_LIST,Constants.CONREF_PUSH_LIST,
-			Constants.KEYREF_LIST,Constants.CODEREF_LIST,Constants.CHUNK_TOPIC_LIST,Constants.HREF_TOPIC_LIST};
+			Constants.KEYREF_LIST,Constants.CODEREF_LIST,Constants.CHUNK_TOPIC_LIST,Constants.HREF_TOPIC_LIST,
+			Constants.RESOURCE_ONLY_LIST};
 	/**
 	 * File extension of source file
 	 */
@@ -145,7 +146,7 @@ public class DebugAndFilterModule implements AbstractPipelineModule {
         String inputDir = null;
         String filePathPrefix = null;
         ListReader listReader = new ListReader();
-        LinkedList parseList = null;
+        LinkedList<String> parseList = null;
         Content content;
         DitaWriter fileWriter;
         File ditalist=null;
@@ -163,7 +164,7 @@ public class DebugAndFilterModule implements AbstractPipelineModule {
         	listReader.read(xmlDitalist.getAbsolutePath());
         else 
         	listReader.read(ditalist.getAbsolutePath());
-        parseList = (LinkedList) listReader.getContent()
+        parseList = (LinkedList<String>) listReader.getContent()
                 .getCollection();
         inputDir = (String) listReader.getContent().getValue();
         
@@ -237,10 +238,10 @@ public class DebugAndFilterModule implements AbstractPipelineModule {
     /*
      * Execute copy-to task, generate copy-to targets base on sources
      */
-	private void performCopytoTask(String tempDir, Map copytoMap) {
-        Iterator iter = copytoMap.entrySet().iterator();
+	private void performCopytoTask(String tempDir, Map<String, String> copytoMap) {
+        Iterator<Map.Entry<String, String>> iter = copytoMap.entrySet().iterator();
         while (iter.hasNext()) {
-        	Map.Entry entry = (Map.Entry) iter.next();
+        	Map.Entry<String, String> entry = iter.next();
         	String copytoTarget = (String) entry.getKey();
         	String copytoSource = (String) entry.getValue();        	
         	File srcFile = new File(tempDir, copytoSource);

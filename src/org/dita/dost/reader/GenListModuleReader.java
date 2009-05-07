@@ -20,8 +20,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
-
-import javax.xml.parsers.SAXParser;
+import java.util.Stack;
 
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
@@ -56,10 +55,8 @@ public class GenListModuleReader extends AbstractXMLReader {
 	/** XMLReader instance for parsing dita file */
 	private static XMLReader reader = null;
 
-	private static SAXParser parser = null;
-	
 	/** Map of XML catalog info */
-	private static HashMap catalogMap = null;
+	private static HashMap<String, String> catalogMap = null;
 
 	/** Basedir of the current parsing file */
 	private String currentDir = null;
@@ -77,28 +74,28 @@ public class GenListModuleReader extends AbstractXMLReader {
 	private boolean hasCodeRef = false;
 
 	/** Set of all the non-conref and non-copyto targets refered in current parsing file */
-	private Set nonConrefCopytoTargets = null;
+	private Set<String> nonConrefCopytoTargets = null;
 	
 	/** Set of conref targets refered in current parsing file */
-	private Set conrefTargets = null;
+	private Set<String> conrefTargets = null;
 	
 	/** Set of href nonConrefCopytoTargets refered in current parsing file */
-	private Set hrefTargets = null;
+	private Set<String> hrefTargets = null;
 	
 	/** Set of href targets with anchor appended */
-	private Set hrefTopicSet = null;
+	private Set<String> hrefTopicSet = null;
 	
 	/** Set of chunk targets */
-	private Set chunkTopicSet = null;
+	private Set<String> chunkTopicSet = null;
 	
 	/** Set of subsidiary files */
-	private Set subsidiarySet = null;
+	private Set<String> subsidiarySet = null;
 
 	/** Set of sources of those copy-to that were ignored */
-	private Set ignoredCopytoSourceSet = null;
+	private Set<String> ignoredCopytoSourceSet = null;
 	
 	/** Map of copy-to target to souce	*/
-	private Map copytoMap = null;
+	private Map<String, String> copytoMap = null;
 	
 	/** Map of key definitions */
 	private Map<String, String> keysDefMap = null;
@@ -131,37 +128,40 @@ public class GenListModuleReader extends AbstractXMLReader {
 	
 	private DITAOTJavaLogger javaLogger = null;
 	
-	private String ditaDir = null;
-	
-	private boolean needValidate=true;
-	
 	/** Set of outer dita files */
-	private Set outDitaFilesSet=null;
+	private Set<String> outDitaFilesSet=null;
 	
 	private static String rootDir = null;
-	
-	private static String inputDitaFile=null;
 	
 	private String currentFile=null;
 	
 	private static String rootFilePath=null;
-	//private static GenListModuleReader parserInstance = new GenListModuleReader();
+	
+    private Stack<String> processRoleStack; // stack for @processing-role value
+    private int processRoleLevel; // Depth inside a @processing-role parent
+    private Set<String> resourceOnlySet; // Topics with role of "resource-only"
+    private Set<String> crossSet;
 	
 	/**
 	 * Constructor
 	 */
 	public GenListModuleReader() {
-		Class c = null;
-		nonConrefCopytoTargets = new HashSet(Constants.INT_64);
-		hrefTargets = new HashSet(Constants.INT_32);
-		hrefTopicSet = new HashSet(Constants.INT_32);
-		chunkTopicSet = new HashSet(Constants.INT_32);
-		conrefTargets = new HashSet(Constants.INT_32);
-		copytoMap = new HashMap(Constants.INT_16);
-		subsidiarySet = new HashSet(Constants.INT_16);
-		ignoredCopytoSourceSet = new HashSet(Constants.INT_16);
-		outDitaFilesSet=new HashSet(Constants.INT_64);
-		keysDefMap = new HashMap();
+		nonConrefCopytoTargets = new HashSet<String>(Constants.INT_64);
+		hrefTargets = new HashSet<String>(Constants.INT_32);
+		hrefTopicSet = new HashSet<String>(Constants.INT_32);
+		chunkTopicSet = new HashSet<String>(Constants.INT_32);
+		conrefTargets = new HashSet<String>(Constants.INT_32);
+		copytoMap = new HashMap<String, String>(Constants.INT_16);
+		subsidiarySet = new HashSet<String>(Constants.INT_16);
+		ignoredCopytoSourceSet = new HashSet<String>(Constants.INT_16);
+		outDitaFilesSet=new HashSet<String>(Constants.INT_64);
+		keysDefMap = new HashMap<String, String>();
+		
+		processRoleLevel = 0;
+		processRoleStack = new Stack<String>();
+		resourceOnlySet = new HashSet<String>(Constants.INT_32);
+		crossSet = new HashSet<String>(Constants.INT_32);
+		
 		props = null;
 		reader.setContentHandler(this);
 		javaLogger = new DITAOTJavaLogger();
@@ -174,13 +174,12 @@ public class GenListModuleReader extends AbstractXMLReader {
 		}
 		
 		try {
-			c = Class.forName(Constants.RESOLVER_CLASS);
+			Class.forName(Constants.RESOLVER_CLASS);
 			reader.setEntityResolver(CatalogUtils.getCatalogResolver());
 		}catch (ClassNotFoundException e){
 			reader.setEntityResolver(this);
 		}
 		
-		//System.out.println(reader.getEntityResolver());
 	}
 
 	/**
@@ -198,8 +197,6 @@ public class GenListModuleReader extends AbstractXMLReader {
 		
 		//to check whether the current parsing file's href value is out of inputmap.dir
 		rootDir=new File(rootFile).getAbsoluteFile().getParent();
-		//to check whether the current parsing file is input file.
-		inputDitaFile=rootFile;
 		rootFilePath=new File(rootFile).getAbsolutePath();
 		reader = XMLReaderFactory.createXMLReader();
 		reader.setFeature(Constants.FEATURE_NAMESPACE_PREFIX, true);
@@ -242,6 +239,16 @@ public class GenListModuleReader extends AbstractXMLReader {
 		ignoredCopytoSourceSet.clear();
 		outDitaFilesSet.clear();
 		keysDefMap.clear();
+		
+		//@processing-role
+		processRoleLevel = 0;
+		processRoleStack.clear();
+		/* 
+		 * Don't clean up these sets, we need them through
+		 * the whole phase to determine a topic's processing-role.
+		 */
+		//resourceOnlySet.clear();
+		//crossSet.clear();
 	}
 
 	/**
@@ -285,8 +292,8 @@ public class GenListModuleReader extends AbstractXMLReader {
 	 * 
 	 * @return Returns allTargets.
 	 */
-	public Set getNonCopytoResult() {
-		Set nonCopytoSet = new HashSet(Constants.INT_128);
+	public Set<String> getNonCopytoResult() {
+		Set<String> nonCopytoSet = new HashSet<String>(Constants.INT_128);
 		
 		nonCopytoSet.addAll(nonConrefCopytoTargets);
 		nonCopytoSet.addAll(conrefTargets);
@@ -301,7 +308,7 @@ public class GenListModuleReader extends AbstractXMLReader {
 	 * 
 	 * @return Returns the hrefTargets.
 	 */
-	public Set getHrefTargets() {
+	public Set<String> getHrefTargets() {
 		return hrefTargets;
 	}
 	
@@ -310,7 +317,7 @@ public class GenListModuleReader extends AbstractXMLReader {
 	 * 
 	 * @return Returns the conrefTargets.
 	 */
-	public Set getConrefTargets() {
+	public Set<String> getConrefTargets() {
 		return conrefTargets;
 	}
 	
@@ -319,7 +326,7 @@ public class GenListModuleReader extends AbstractXMLReader {
 	 * 
 	 * @return Returns the subsidiarySet.
 	 */
-	public Set getSubsidiaryTargets() {
+	public Set<String> getSubsidiaryTargets() {
 		return subsidiarySet;
 	}
 	
@@ -328,7 +335,7 @@ public class GenListModuleReader extends AbstractXMLReader {
 	 * 
 	 * @return Returns the outditafileslist.
 	 */
-	public Set getOutDitaFilesSet(){
+	public Set<String> getOutDitaFilesSet(){
 		return outDitaFilesSet;
 	}
 	
@@ -337,7 +344,7 @@ public class GenListModuleReader extends AbstractXMLReader {
 	 * 
 	 * @return Returns the nonConrefCopytoTargets.
 	 */
-	public Set getNonConrefCopytoTargets() {
+	public Set<String> getNonConrefCopytoTargets() {
 		return nonConrefCopytoTargets;
 	}
 	
@@ -346,7 +353,7 @@ public class GenListModuleReader extends AbstractXMLReader {
      *
      * @return Returns the ignoredCopytoSourceSet.
      */
-	public Set getIgnoredCopytoSourceSet() {
+	public Set<String> getIgnoredCopytoSourceSet() {
 		return ignoredCopytoSourceSet;
 	}
 
@@ -355,7 +362,7 @@ public class GenListModuleReader extends AbstractXMLReader {
 	 * 
 	 * @return
 	 */
-	public Map getCopytoMap() {
+	public Map<String, String> getCopytoMap() {
 		return copytoMap;
 	}
 	
@@ -419,8 +426,41 @@ public class GenListModuleReader extends AbstractXMLReader {
 			Attributes atts) throws SAXException {
 		String domains = null;
 		Properties params = new Properties();
-		String msg = null;
-		String attrValue = atts.getValue(Constants.ATTRIBUTE_NAME_CLASS);
+		
+		String attrValue = atts.getValue(Constants.ATTRIBUTE_NAME_PROCESSING_ROLE);
+		String href = atts.getValue(Constants.ATTRIBUTE_NAME_HREF);
+	    if (attrValue != null) {
+	        processRoleStack.push(attrValue);
+	        processRoleLevel++;
+	        if (Constants.ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(attrValue)) {
+	            if (href != null) {
+	                resourceOnlySet.add(FileUtils.resolveFile(currentDir, href));
+	            }
+	        } else if (Constants.ATTR_PROCESSING_ROLE_VALUE_NORMAL.equalsIgnoreCase(attrValue)) {
+	            if (href != null) {
+	                crossSet.add(FileUtils.resolveFile(currentDir, href));
+	            }
+	        }
+	    } else if (processRoleLevel > 0) {
+	        processRoleLevel++;
+	        if (Constants.ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equalsIgnoreCase(
+	                processRoleStack.peek())) {
+	            if (href != null) {
+	                resourceOnlySet.add(FileUtils.resolveFile(currentDir, href));
+	            }
+	        } else if (Constants.ATTR_PROCESSING_ROLE_VALUE_NORMAL.equalsIgnoreCase(
+	        		processRoleStack.peek())) {
+	            if (href != null) {
+	                crossSet.add(FileUtils.resolveFile(currentDir, href));
+	            }
+	        }
+	    } else {
+            if (href != null) {
+                crossSet.add(FileUtils.resolveFile(currentDir, href));
+            }
+	    }
+		
+		attrValue = atts.getValue(Constants.ATTRIBUTE_NAME_CLASS);
 		
 		if(foreignLevel > 0){
 			//if it is an element nested in foreign/unknown element
@@ -455,7 +495,6 @@ public class GenListModuleReader extends AbstractXMLReader {
 		
 		if(attrValue==null && !Constants.ELEMENT_NAME_DITA.equals(localName)){
     		params.clear();
-			msg = null;
 			params.put("%1", localName);
     		javaLogger.logInfo(MessageUtils.getMessage("DOTJ030I", params).toString());			
 		}		
@@ -464,7 +503,6 @@ public class GenListModuleReader extends AbstractXMLReader {
         	domains = atts.getValue(Constants.ATTRIBUTE_NAME_DOMAINS);
         	if(domains==null){
         		params.clear();
-				msg = null;
 				params.put("%1", localName);
         		javaLogger.logInfo(MessageUtils.getMessage("DOTJ029I", params).toString());
         	}else
@@ -511,10 +549,45 @@ public class GenListModuleReader extends AbstractXMLReader {
 		parseAttribute(atts, Constants.ATTRIBUTE_NAME_KEYREF);
 	}
 
+	/**
+	 * Clean up.
+	 * @see org.dita.dost.reader.AbstractXMLReader#endDocument()
+	 */
+	@Override
+	public void endDocument() throws SAXException {
+		if (processRoleLevel > 0) {
+			processRoleLevel--;
+			processRoleStack.pop();
+		}
+	}
+
+	/**
+	 * Check if the current file is a ditamap with "@processing-role=resource-only".
+	 * @see org.dita.dost.reader.AbstractXMLReader#startDocument()
+	 */
+	@Override
+	public void startDocument() throws SAXException {
+		String href = FileUtils.getRelativePathFromMap(rootFilePath, currentFile);
+		if (FileUtils.isDITAMapFile(currentFile)
+				&& resourceOnlySet.contains(href)
+				&& !crossSet.contains(href)) {
+			processRoleLevel++;
+			processRoleStack.push(Constants.ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY);
+		}
+	}
+
 	/** (non-Javadoc)
 	 * @see org.dita.dost.reader.AbstractXMLReader#endElement(java.lang.String, java.lang.String, java.lang.String)
 	 */
 	public void endElement(String uri, String localName, String qName) throws SAXException {		
+		
+		//@processing-role
+		if (processRoleLevel > 0) {
+	        if (processRoleLevel == processRoleStack.size()) {
+	            processRoleStack.pop();
+	        }
+	        processRoleLevel--;
+	    }
 		
 		if (foreignLevel > 0){
 			foreignLevel --;
@@ -752,22 +825,14 @@ public class GenListModuleReader extends AbstractXMLReader {
 	}
 	
 	private boolean isOutFile(String toCheckPath) {
-		String mapDir = rootDir;
-		String ditaFile = new File(FileUtils.removeRedundantNames(toCheckPath))
-				.getPath();
-		//System.out.println("Current path:"+ditaFile+"\n");
-		//System.out.println("Map path:"+mapDir+"\n");
 		if (!toCheckPath.startsWith(".."))
 			return false;
 		else
 			return true;
-
 	}
 
 	private boolean isMapFile() {
 		String current=FileUtils.removeRedundantNames(currentFile);
-		String input=FileUtils.removeRedundantNames(inputDitaFile);
-		//if (current.equalsIgnoreCase(input))
 		if(FileUtils.isDITAMapFile(current))	
 			return true;
 		else
@@ -788,7 +853,6 @@ public class GenListModuleReader extends AbstractXMLReader {
 	
 	private void toOutFile(String filename) throws SAXException {
 		//the filename is a relative path from the dita input file
-		//System.out.println("toCheck"+filename+"\n");
 		Properties prop=new Properties();
 		prop.put("%1", FileUtils.normalizeDirectory(rootDir, filename));
 		prop.put("%2", FileUtils.removeRedundantNames(currentFile));
@@ -809,21 +873,30 @@ public class GenListModuleReader extends AbstractXMLReader {
 		}
 
 	}
-	public Set getOutFilesSet(){
+	public Set<String> getOutFilesSet(){
 		return outDitaFilesSet;
 	}
 
 	/**
 	 * @return the hrefTopicSet
 	 */
-	public Set getHrefTopicSet() {
+	public Set<String> getHrefTopicSet() {
 		return hrefTopicSet;
 	}
 
 	/**
 	 * @return the chunkTopicSet
 	 */
-	public Set getChunkTopicSet() {
+	public Set<String> getChunkTopicSet() {
 		return chunkTopicSet;
 	}
+	
+	/**
+	 * List of files with "@processing-role=resource-only"
+	 * @return the resource-only set
+	 */
+	public Set<String> getResourceOnlySet() {
+		resourceOnlySet.removeAll(crossSet);
+        return resourceOnlySet;
+    }
 }

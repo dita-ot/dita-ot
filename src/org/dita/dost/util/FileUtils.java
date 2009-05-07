@@ -16,7 +16,6 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Properties;
 import java.util.StringTokenizer;
 
 import org.dita.dost.log.DITAOTJavaLogger;
@@ -126,10 +125,7 @@ public class FileUtils {
 	 * @return
 	 */
 	public static boolean isValidTarget(String lcasefn) {
-		DITAOTJavaLogger logger = new DITAOTJavaLogger();
-		Properties params = new Properties();
-		
-/*		DITA-OT can support space in file names from 6.5 2008
+		/*		DITA-OT can support space in file names from 6.5 2008
  * 		if(lcasefn.indexOf(Constants.STRING_BLANK)!=-1){
 			params.put("%1", lcasefn);
 			logger.logWarn(MessageUtils.getMessage("DOTJ027W", params).toString());
@@ -318,8 +314,8 @@ public class FileUtils {
 	public static String removeRedundantNames(String path, String separator) {
         StringTokenizer tokenizer = null;
         StringBuffer buff = new StringBuffer(path.length());
-        List dirs = new LinkedList();
-        Iterator iter = null;
+        List<String> dirs = new LinkedList<String>();
+        Iterator<String> iter = null;
         int dirNum = 0;
         int i = 0;
     

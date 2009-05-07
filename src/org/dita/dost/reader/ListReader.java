@@ -31,17 +31,17 @@ import org.dita.dost.util.StringUtils;
  */
 public class ListReader implements AbstractReader {
 
-    private LinkedList refList;
+    private LinkedList<String> refList;
     private ContentImpl content;
     private DITAOTJavaLogger logger;
-    private Map copytoMap = new HashMap();
+    private Map<String, String> copytoMap = new HashMap<String, String>();
 
     /**
      * Default constructor of ListReader class.
      */
     public ListReader() {
         super();
-        refList = new LinkedList();
+        refList = new LinkedList<String>();
         logger = new DITAOTJavaLogger();
         content = new ContentImpl();
         content.setCollection(refList);
@@ -116,7 +116,7 @@ public class ListReader implements AbstractReader {
      * Return the copy-to map
 	 * @return
 	 */
-	public Map getCopytoMap() {
+	public Map<String, String> getCopytoMap() {
     	return copytoMap;
     }
 }
