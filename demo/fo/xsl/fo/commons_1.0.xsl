@@ -203,6 +203,8 @@ See the accompanying license.txt file for applicable licenses.
         <exslf:result select="$topicType"/>
     </exslf:function>
     
+    <!-- TODO: Need to support XSLT 2.0? Not for now. -->
+    <!-- 
     <xsl:function version="2.0" name="opentopic-func:determineTopicType">
         <xsl:variable name="id" select="ancestor-or-self::*[contains(@class, ' topic/topic ')][1]/@id"/>
         <xsl:variable name="gid" select="generate-id(ancestor-or-self::*[contains(@class, ' topic/topic ')][1])"/>
@@ -260,6 +262,6 @@ See the accompanying license.txt file for applicable licenses.
 
         <xsl:value-of select="$topicType"/>
     </xsl:function>
-
+     -->
 
 </xsl:stylesheet>
