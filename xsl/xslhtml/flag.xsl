@@ -551,7 +551,30 @@
    </xsl:when>
    <xsl:otherwise/> <!-- no more values -->
   </xsl:choose>
-  
+ </xsl:template>
+
+ <!-- Shortcuts for generating both rev flags and property flags -->
+ <xsl:template name="start-flags-and-rev">
+   <xsl:param name="flagrules">
+     <xsl:call-template name="getrules"/>
+   </xsl:param>
+   <xsl:call-template name="start-flagit">
+     <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
+   </xsl:call-template>
+   <xsl:call-template name="start-revflag">
+     <xsl:with-param name="flagrules" select="$flagrules"/>
+   </xsl:call-template>
+ </xsl:template>
+ <xsl:template name="end-flags-and-rev">
+   <xsl:param name="flagrules">
+     <xsl:call-template name="getrules"/>
+   </xsl:param>
+   <xsl:call-template name="end-revflag">
+     <xsl:with-param name="flagrules" select="$flagrules"/>
+   </xsl:call-template>
+   <xsl:call-template name="end-flagit">
+     <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param> 
+   </xsl:call-template>
  </xsl:template>
 
 <!-- Output starting flag only -->

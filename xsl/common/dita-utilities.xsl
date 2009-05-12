@@ -222,7 +222,37 @@
     </xsl:choose>
   </xsl:template>
   
-  
+<!-- Return the portion of an HREF value up to the file's extension. This assumes
+     that the file has an extension, and that the topic and/or element ID does not
+     contain a period. Written to allow references such as com.example.dita.files/file.dita#topic -->
+<xsl:template match="*" mode="parseHrefUptoExtension">
+  <xsl:param name="href" select="@href"/>
+  <xsl:variable name="uptoDot"><xsl:value-of select="substring-before($href,'.')"/></xsl:variable>
+  <xsl:variable name="afterDot"><xsl:value-of select="substring-after($href,'.')"/></xsl:variable>
+  <xsl:value-of select="$uptoDot"/>
+  <xsl:choose>
+    <!-- No more periods, so this is at the extension -->
+    <xsl:when test="not(contains($afterDot,'.'))"/>
+    <!-- Multiple slashes; at least one must be a directory, so it's before the extension -->
+    <xsl:when test="contains(substring-after($afterDot,'/'),'/')">
+      <xsl:text>.</xsl:text>
+      <xsl:value-of select="substring-before($afterDot,'/')"/>
+      <xsl:text>/</xsl:text>
+      <xsl:apply-templates select="." mode="parseHrefUptoExtension"><xsl:with-param name="href" select="substring-after($afterDot,'/')"/></xsl:apply-templates>
+    </xsl:when>
+    <!-- Multiple periods, no slashes, no topic or element ID, so the file name contains more periods -->
+    <xsl:when test="not(contains($afterDot,'#'))">
+      <xsl:text>.</xsl:text>
+      <xsl:apply-templates select="." mode="parseHrefUptoExtension"><xsl:with-param name="href" select="$afterDot"/></xsl:apply-templates>
+    </xsl:when>
+    <!-- Multiple periods, no slashes, with #. Move to next period. Needs additional work to support
+         IDs containing periods. -->
+    <xsl:otherwise>
+      <xsl:text>.</xsl:text>
+      <xsl:apply-templates select="." mode="parseHrefUptoExtension"><xsl:with-param name="href" select="$afterDot"/></xsl:apply-templates>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
   
   
 </xsl:stylesheet>
