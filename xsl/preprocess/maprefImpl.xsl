@@ -280,10 +280,22 @@
                                         <xsl:otherwise>#none#</xsl:otherwise>
                                       </xsl:choose>
                                     </xsl:with-param>
+									<!-- edited by William on 2009-05-08 for toc bug start -->
+                                    <xsl:with-param name="parent-toc">
+                                      <xsl:choose>
+                                        <xsl:when test="not($parent-toc='#none#')">
+                                            <xsl:value-of select="$parent-toc"/>
+                                        </xsl:when>
+                                        <xsl:when test="@toc and not(@toc='')">
+                                            <xsl:value-of select="@toc"/>
+                                        </xsl:when>
+                                        <xsl:otherwise>#none#</xsl:otherwise>
+                                      </xsl:choose>
+                                    </xsl:with-param>
+                                    <!-- edited by William on 2009-05-08 for toc bug end-->
                                 </xsl:apply-templates>
                             </xsl:otherwise>
                         </xsl:choose>
-                        
                     </xsl:otherwise>
                 </xsl:choose>
                     
@@ -321,12 +333,14 @@
                         </xsl:when>
                     </xsl:choose>
                     <xsl:choose>
+                    	<!-- edited by William on 2009-05-08 for toc bug start -->
+                    	<xsl:when test="@toc and not(@toc='')">
+                            <xsl:attribute name="toc"><xsl:value-of select="@toc"/></xsl:attribute>
+                        </xsl:when>
                         <xsl:when test="not($parent-toc='#none#')">
                             <xsl:attribute name="toc"><xsl:value-of select="$parent-toc"/></xsl:attribute>
                         </xsl:when>
-                        <xsl:when test="@toc and not(@toc='')">
-                            <xsl:attribute name="toc"><xsl:value-of select="@toc"/></xsl:attribute>
-                        </xsl:when>
+                        <!-- edited by William on 2009-05-08 for toc bug end -->
                     </xsl:choose>
                     <xsl:choose>
                         <xsl:when test="not($parent-print='#none#')">
