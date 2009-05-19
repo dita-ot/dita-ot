@@ -855,12 +855,43 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 				if(index!=-1){
 					String to=file.substring(0,index);
 					String source=file.substring(index+1);
-					newSet.add(FileUtils.removeRedundantNames(new StringBuffer(prefix).append(to).toString())
+					
+						//Added by William on 2009-05-14 for keyref bug start
+						//When generating key.list
+						if(Constants.KEY_LIST.equals(key)){
+						String repStr = FileUtils.removeRedundantNames(new StringBuffer(prefix).append(to).toString())
+						.replaceAll(Constants.DOUBLE_BACK_SLASH,
+								Constants.SLASH) + Constants.EQUAL +
+								FileUtils.removeRedundantNames(new StringBuffer(prefix).append(source).toString())
+						.replaceAll(Constants.DOUBLE_BACK_SLASH,
+								Constants.SLASH);
+						
+						//move the prefix position
+						//maps/target_topic_1=topics/target-topic-a.xml(root-map-01.ditamap)-->
+						//target_topic_1=topics/target-topic-a.xml(maps/root-map-01.ditamap)
+						if(!"".equals(prefix)){
+							String prefix1 = prefix.replace("\\", "/");
+							if(repStr.indexOf(prefix1)!=-1){
+								StringBuffer sb = new StringBuffer();
+								sb.append(repStr.substring(prefix1.length()));
+								sb.insert(sb.lastIndexOf("(")+1, prefix1);
+								newSet.add(sb.toString());
+								//System.out.println("kk");
+							}
+						}else{
+							//no prefix
+							newSet.add(repStr);
+						}
+					}else{
+						//Added by William on 2009-05-14 for keyref bug end
+						//other case do nothing
+						newSet.add(FileUtils.removeRedundantNames(new StringBuffer(prefix).append(to).toString())
 							.replaceAll(Constants.DOUBLE_BACK_SLASH,
 									Constants.SLASH) + Constants.EQUAL +
 									FileUtils.removeRedundantNames(new StringBuffer(prefix).append(source).toString())
 							.replaceAll(Constants.DOUBLE_BACK_SLASH,
 									Constants.SLASH));
+					}
 				}else{
 				newSet.add(FileUtils.removeRedundantNames(new StringBuffer(prefix).append(file).toString())
 						.replaceAll(Constants.DOUBLE_BACK_SLASH,
