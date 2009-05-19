@@ -102,8 +102,10 @@ See the accompanying license.txt file for applicable licenses.
             </xsl:variable>
 
             <!--        <xsl:if test="(($mapTopic/*[position() = $topicNumber][@toc = 'yes' or not(@toc)]) or (not($mapTopic/*) and $include = 'true')) and not($parentTopicHead/*[position() = $topicNumber]/@toc = 'no')">-->
-            <xsl:if test="($mapTopic/*[position() = $topicNumber][@toc = 'yes' or not(@toc)]) or (not($mapTopic/*) and $include = 'true')">
-                <fo:basic-link internal-destination="{concat('_OPENTOPIC_TOC_PROCESSING_', generate-id())}" xsl:use-attribute-sets="__toc__link">
+            <!-- added by William on 2009-05-11 for toc bug start -->
+            <xsl:choose>
+            	<xsl:when test="($mapTopic/*[position() = $topicNumber][@toc = 'yes' or not(@toc)]) or (not($mapTopic/*) and $include = 'true')">
+            		<fo:basic-link internal-destination="{concat('_OPENTOPIC_TOC_PROCESSING_', generate-id())}" xsl:use-attribute-sets="__toc__link">
                     <fo:block xsl:use-attribute-sets="__toc__indent">
                         <xsl:variable name="tocItemContent">
                             <xsl:choose>
@@ -209,11 +211,18 @@ See the accompanying license.txt file for applicable licenses.
                             </xsl:otherwise>
                         </xsl:choose>
                     </fo:block>
-                </fo:basic-link>
-                <xsl:apply-templates mode="toc">
-                    <xsl:with-param name="include" select="'true'"/>
-                </xsl:apply-templates>
-            </xsl:if>
+                	</fo:basic-link>
+	                <xsl:apply-templates mode="toc">
+	                    <xsl:with-param name="include" select="'true'"/>
+	                </xsl:apply-templates>
+            	</xsl:when>
+            	<xsl:otherwise>
+	            	<xsl:apply-templates mode="toc">
+		                    <xsl:with-param name="include" select="'true'"/>
+		            </xsl:apply-templates>
+            	</xsl:otherwise>
+            </xsl:choose>
+            <!-- added by William on 2009-05-11 for toc bug end -->
         </xsl:if>
     </xsl:template>
 

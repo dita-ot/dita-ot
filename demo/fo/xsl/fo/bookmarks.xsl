@@ -82,15 +82,23 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:variable name="mapTopic">
             <xsl:copy-of select="$map//*[@id = $id]"/>
         </xsl:variable>
-
-        <xsl:if test="($mapTopic/*[position() = $topicNumber][@toc = 'yes' or not(@toc)]) or (not($mapTopic/*))">
-        <fo:bookmark internal-destination="{concat('_OPENTOPIC_TOC_PROCESSING_', generate-id())}">
-            <fo:bookmark-title>
-                <xsl:value-of select="$topicTitle"/>
-            </fo:bookmark-title>
-            <xsl:apply-templates mode="bookmark"/>
-        </fo:bookmark>
-        </xsl:if>
+        
+        <!-- added by William on 2009-05-11 for toc bug start -->
+        <xsl:choose>
+        	<xsl:when test="($mapTopic/*[position() = $topicNumber][@toc = 'yes' or not(@toc)]) or (not($mapTopic/*))">
+        		<fo:bookmark internal-destination="{concat('_OPENTOPIC_TOC_PROCESSING_', generate-id())}">
+            		<fo:bookmark-title>
+                		<xsl:value-of select="$topicTitle"/>
+            		</fo:bookmark-title>
+            		<xsl:apply-templates mode="bookmark"/>
+        		</fo:bookmark>
+        	</xsl:when>
+        	<xsl:otherwise>
+        		<xsl:apply-templates mode="bookmark"/>
+        	</xsl:otherwise>
+        </xsl:choose>
+        <!-- added by William on 2009-05-11 for toc bug end -->
+        
     </xsl:template>
 
     <xsl:template match="*" mode="bookmark">
