@@ -518,14 +518,29 @@
         </xsl:if>
         <xsl:if 
           test="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/shortdesc ')]">
-          <desc class="- topic/desc ">
-            <xsl:value-of 
-              select="normalize-space(*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/shortdesc ')])"/>
-          </desc>
+          <!-- edited by William on 2009-05-07 for shortdesc bug start -->
+          <!--desc class="- topic/desc "-->
+          <!-- add desc node and text -->
+          <xsl:apply-templates select="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/shortdesc ')]"/>
+            <!-- xsl:value-of 
+              select="normalize-space(*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/shortdesc ')])"/-->
+          <!-- /desc-->
+          <!-- edited by William on 2009-05-07 for shortdesc bug start -->
         </xsl:if>
       </link>
     </xsl:if>
   </xsl:template>
+  
+  <!-- added by William on 2009-05-07 for shortdesc bug start -->
+  <!-- create a template to get child nodes and text -->
+  <xsl:template match="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/shortdesc ')]" name="node">
+       <!--xsl:copy-of select="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/shortdesc ')]"/-->
+       <desc class="- topic/desc ">
+       	<!-- get child node and text -->
+       	<xsl:copy-of select="node()"/>
+       </desc>	
+  </xsl:template>
+  <!-- added by William on 2009-05-07 for shortdesc bug start -->
   
   <!-- Make sure that pathFromMaplist parameter gets passed down -->
   <xsl:template match="*">
