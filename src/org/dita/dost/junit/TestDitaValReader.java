@@ -2,6 +2,7 @@ package org.dita.dost.junit;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.File;
 import java.util.HashMap;
 
 import org.dita.dost.exception.DITAOTException;
@@ -11,7 +12,7 @@ import org.dita.dost.reader.DitaValReader;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-//please create the temp dir manually first.
+
 public class TestDitaValReader {
 	
 	public static DitaValReader reader;
@@ -23,6 +24,11 @@ public class TestDitaValReader {
 	public static void setUp() throws Exception{
 		reader = new DitaValReader();
 
+		//Create the temp dir
+		File dir = new File(baseDir, tempDir);
+		if(!dir.exists()){
+			dir.mkdir();
+		}
 		
 		PipelineFacade facade = new PipelineFacade();
 		PipelineHashIO pipelineInput = new PipelineHashIO();
@@ -49,7 +55,7 @@ public class TestDitaValReader {
 		
 		facade.execute("GenMapAndTopicList", pipelineInput);
 		
-	
+		
 	}
 	
 	@Test
