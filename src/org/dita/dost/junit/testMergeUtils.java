@@ -14,7 +14,6 @@ import org.junit.Test;
 public class testMergeUtils {
 
 	public static MergeUtils mergeUtils;
-	
 	@BeforeClass
 	public static void setUp() {
 		mergeUtils=MergeUtils.getInstance();
@@ -79,7 +78,8 @@ public class testMergeUtils {
 
 	@Test
 	public void testGetFirstTopicId() {
-		assertEquals("task",mergeUtils.getFirstTopicId("stub.xml", "TEST_STUB"));
+		//assertEquals("task",mergeUtils.getFirstTopicId("stub.xml", "TEST_STUB"));
+		assertEquals("task",mergeUtils.getFirstTopicId("stub.xml", "test-stub"));
 		
 	}
 	
