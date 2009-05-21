@@ -68,15 +68,6 @@ public class TestDitaValReader {
 		assertEquals("exclude", map.get("keyword=key1"));
 		assertEquals("flag", map.get("keyword=key2"));
 		assertEquals("include", map.get("keyword=key3"));
-		
-		/*Set<Map.Entry> set = map.entrySet();
-		Iterator<Map.Entry> itr = set.iterator();
-		while (itr.hasNext()) {
-			Map.Entry mapEntry = (Map.Entry) itr.next();
-			mapEntry.getKey();
-			mapEntry.getValue();
-			//....	
-		}*/
 	}
 	
 }
