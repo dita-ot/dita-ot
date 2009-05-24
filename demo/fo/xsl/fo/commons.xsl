@@ -529,7 +529,17 @@ See the accompanying license.txt file for applicable licenses.
                         </fo:block>
                     </fo:table-cell>
                     <fo:table-cell xsl:use-attribute-sets="__toc__mini__summary">
+                        <!--Really, it would be better to just apply-templates, but the attribute sets for shortdesc, body
+                        and abstract might indent the text.  Here, the topic body is in a table cell, and should
+                        not be indented, so each element is handled specially.-->
                         <fo:block>
+                            <xsl:if test="*[contains(@class,' topic/shortdesc ')
+                                  or contains(@class, ' topic/abstract ')]/node()">
+                              <fo:block xsl:use-attribute-sets="p">
+                                <xsl:apply-templates select="*[contains(@class,' topic/shortdesc ')
+                                  or contains(@class, ' topic/abstract ')]/node()"/>
+                              </fo:block>
+                            </xsl:if>
                             <xsl:apply-templates select="*[contains(@class,' topic/body ')]/*"/>
 
 							<!--<xsl:call-template name="buildRelationships"/>-->
