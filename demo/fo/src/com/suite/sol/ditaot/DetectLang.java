@@ -1,4 +1,4 @@
-package com.idiominc.ws.opentopic.xsl.extension;
+package com.suite.sol.ditaot;
 
 import org.xml.sax.SAXException;
 import org.xml.sax.Attributes;
@@ -43,7 +43,7 @@ See the accompanying license.txt file for applicable licenses.
 
 Parts copyright by Suite Solutions, released under the same terms as the DITA-OT.
 */
-public class DitaVersion extends Task {
+public class DetectLang extends Task {
 
     private String documentPath;
 
@@ -60,6 +60,14 @@ public class DitaVersion extends Task {
      * Executes the Ant task.
      */
     public void execute() {
+
+        Project activeProject = getProject();
+        if (activeProject != null) {
+            if (activeProject.getProperty("document.locale") != null) {
+                /* document.locale already set, nothing to do. */
+                return;
+            }
+        }
 
         try {
 
@@ -85,7 +93,7 @@ public class DitaVersion extends Task {
              */
             if (e.getMessage() != null &&
                 e.getMessage().equals("Search finished")) {
-                System.out.println("Search finished");
+                System.out.println("Lang search finished");
             } else {
                 e.printStackTrace();
             }
@@ -97,17 +105,30 @@ public class DitaVersion extends Task {
             extends DefaultHandler {
 
         public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
+            String processedString;
             String classAttr = attributes.getValue("class");
+            String langAttr = attributes.getValue("xml:lang");
 
-            if(classAttr != null) {
+            if(classAttr != null && langAttr != null) {
                 if ((classAttr.indexOf(" map/map ") > -1) ||
                     (classAttr.indexOf(" topic/topic ") > -1)) {
-                    if (attributes.getIndex("ditaarch:DITAArchVersion") > -1)
-                        setActiveProjectProperty("ws.runtime.publishing.map.dita.version",attributes.getValue("ditaarch:DITAArchVersion"));
-                    else
-                        setActiveProjectProperty("ws.runtime.publishing.map.dita.version","132");
-                    /* Successfully found ditaarch, so stop parsing. */
-                    throw new SAXException("Search finished");
+                        String partProcessedString = langAttr.replace('-','_')
+                            .toLowerCase();
+                        int length;
+                        if ((length = partProcessedString.length()) > 4) {
+                            processedString
+                                = partProcessedString.substring(0, length - 2)
+                                + partProcessedString.substring(length - 2, length).toUpperCase();
+                        }
+                        else {
+                            processedString = partProcessedString;
+                        }
+
+
+                        setActiveProjectProperty("document.locale",
+                                processedString);
+                        /* Successfully found xml:lang, so stop parsing. */
+                        throw new SAXException("Search finished");
                 }
 
             }

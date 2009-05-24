@@ -36,7 +36,6 @@ with those set forth herein.
     <property name="fo.lib.dir" value="${basedir}/lib"/>
     <property name="xep.dir" value="${fo.lib.dir}/xep"/>
     <property name="merged.file" value="${dita.map.filename.root}_MERGED.xml" />
-    <property name="document.locale" value="en_US" />
 
 	<!-- configure FO engines -->
 	<!-- default is FOP.  Can be changed here, or with pdf.formatter property. -->
@@ -158,8 +157,21 @@ with those set forth herein.
             classpathref="project.class.path"/>
         <taskdef name="dita-version" classname="com.idiominc.ws.opentopic.xsl.extension.DitaVersion"
             classpathref="project.class.path"/>
+        <taskdef name="detect-lang" classname="com.suite.sol.ditaot.DetectLang"
+            classpathref="project.class.path"/>
 
         <dita-version documentPath="${inputFile}"/>
+
+        <!-- Set document.locale from xml:lang -->
+        <!-- The map takes precedence, followed by the first topic -->
+        <detect-lang documentPath="${inputFile}"/>
+
+        <condition property="document.locale" value="en_US">
+            <not><isset property="document.locale"></isset></not>
+        </condition>
+
+        <echo>Using document.locale=${document.locale}
+        </echo>
 
     	<condition property="temp.transformation.file" value="${xsl.fo.dir}/topic2fo_shell_1.0.xsl">
     		<or>

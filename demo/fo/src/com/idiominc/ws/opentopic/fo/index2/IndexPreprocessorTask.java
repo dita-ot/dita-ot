@@ -112,7 +112,7 @@ public class IndexPreprocessorTask
 			preprocessor.createAndAddIndexGroups(indexEntries, configuration, resultDoc, loc);
 
             if (processingFaild) {
-                setActiveProjectProrerty("ws.runtime.index.preprocess.fail","true");
+                setActiveProjectProperty("ws.runtime.index.preprocess.fail","true");
             }
             // Serialize processed document
 			TransformerFactory transformerFactory = TransformerFactory.newInstance();
@@ -181,7 +181,7 @@ public class IndexPreprocessorTask
 		this.indexElementName = theIndexElementName;
 	}
 
-    private void setActiveProjectProrerty(String propertyName, String propertyValue) {
+    private void setActiveProjectProperty(String propertyName, String propertyValue) {
         Project activeProject = getProject();
         if (activeProject != null) {
             activeProject.setProperty(propertyName, propertyValue);
