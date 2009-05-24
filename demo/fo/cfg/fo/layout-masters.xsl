@@ -254,7 +254,11 @@ See the accompanying license.txt file for applicable licenses.
                     margin-top="{$page-margin-top}"
                     margin-bottom="{$page-margin-bottom}"
                     margin-left="{$page-margin-left}"
-                    margin-right="{$page-margin-right}"/>
+                    margin-right="{$page-margin-right}">
+                      <xsl:if test="$pdfFormatter != 'xep'">
+                        <xsl:attribute name="column-count">2</xsl:attribute>
+                      </xsl:if>
+                </fo:region-body>
                 <fo:region-before extent="{$page-margin-top}"
                     display-align="before"
                     region-name="odd-index-header"/>
@@ -271,7 +275,11 @@ See the accompanying license.txt file for applicable licenses.
                     margin-top="{$page-margin-top}"
                     margin-bottom="{$page-margin-bottom}"
                     margin-left="{$page-margin-left}"
-                    margin-right="{$page-margin-right}"/>
+                    margin-right="{$page-margin-right}">
+                      <xsl:if test="$pdfFormatter != 'xep'">
+                        <xsl:attribute name="column-count">2</xsl:attribute>
+                      </xsl:if>
+                </fo:region-body>
                 <fo:region-before extent="{$page-margin-top}"
                     display-align="before"
                     region-name="even-index-header"/>
@@ -288,7 +296,11 @@ See the accompanying license.txt file for applicable licenses.
                     margin-top="{$page-margin-top}"
                     margin-bottom="{$page-margin-bottom}"
                     margin-left="{$page-margin-left}"
-                    margin-right="{$page-margin-right}"/>
+                    margin-right="{$page-margin-right}">
+                      <xsl:if test="$pdfFormatter != 'xep'">
+                        <xsl:attribute name="column-count">2</xsl:attribute>
+                      </xsl:if>
+                </fo:region-body>
                 <fo:region-before extent="{$page-margin-top}"
                     display-align="before"
                     region-name="odd-index-header"/>

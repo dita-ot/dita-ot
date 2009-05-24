@@ -173,7 +173,15 @@ with those set forth herein.
         <echo>Using document.locale=${document.locale}
         </echo>
 
-    	<condition property="temp.transformation.file" value="${xsl.fo.dir}/topic2fo_shell_1.0.xsl">
+        <condition property="formatter.specific.ext" value="_axf">
+            <equals arg1="ah" arg2="${pdf.formatter}"/>
+        </condition>
+        
+        <condition property="formatter.specific.ext" value="">
+            <not><isset property="formatter.specific.ext"></isset></not>
+        </condition>
+
+        <condition property="temp.transformation.file" value="${xsl.fo.dir}/topic2fo_shell_1.0${formatter.specific.ext}.xsl">
     		<or>
 	            <equals arg1="${ws.runtime.publishing.map.dita.version}" arg2="1.0"/>
 	            <equals arg1="${ws.runtime.publishing.map.dita.version}" arg2="1.1"/>
@@ -181,7 +189,7 @@ with those set forth herein.
 			</or>
         </condition>
 
-        <condition property="temp.transformation.file" value="${xsl.fo.dir}/topic2fo_shell.xsl">
+        <condition property="temp.transformation.file" value="${xsl.fo.dir}/topic2fo_shell${formatter.specific.ext}.xsl">
             <not>
                 <isset property="temp.transformation.file"/>
             </not>
