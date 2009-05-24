@@ -383,4 +383,6 @@ See the accompanying license.txt file for applicable licenses.
 	<variable id="Search Search in Progress Message">Search in progress...</variable>
 	<variable id="Search Search Give No Results Message">No matches were found.</variable>
 
+    <!--Label for a step with importance="optional"-->
+    <variable id="Optional Step">Optional:</variable>
 </vars>

@@ -1189,8 +1189,14 @@ See the accompanying license.txt file for applicable licenses.
         </fo:block>
     </xsl:template>
 
-    <xsl:template match="*[contains(@class, ' task/cmd ')]">
+    <xsl:template match="*[contains(@class, ' task/cmd ')]" priority="1">
         <fo:block xsl:use-attribute-sets="cmd" id="{@id}">
+            <xsl:if test="../@importance='optional'">
+              <xsl:call-template name="insertVariable">
+                <xsl:with-param name="theVariableID" select="'Optional Step'"/>
+              </xsl:call-template>
+              <xsl:text> </xsl:text>
+            </xsl:if>
             <xsl:apply-templates/>
         </fo:block>
     </xsl:template>

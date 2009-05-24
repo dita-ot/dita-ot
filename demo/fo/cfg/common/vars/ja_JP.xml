@@ -383,4 +383,6 @@ See the accompanying license.txt file for applicable licenses.
 	<variable id="Search Search in Progress Message">検索中...</variable>
 	<variable id="Search Search Give No Results Message">一致は見つかりませんでした。</variable>
 
+    <!--Label for a step with importance="optional"-->
+    <variable id="Optional Step">オプション:</variable>
 </vars>
