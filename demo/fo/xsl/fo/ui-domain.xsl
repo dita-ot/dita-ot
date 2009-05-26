@@ -44,7 +44,7 @@ See the accompanying license.txt file for applicable licenses.
                 <xsl:number count="*[contains(@class,' ui-d/uicontrol ')]"/>
             </xsl:variable>
             <xsl:if test="$uicontrolcount&gt;'1'">
-                <xsl:text> &#x27A4; </xsl:text>
+                <xsl:text> &gt; </xsl:text>
             </xsl:if>
         </xsl:if>
         <fo:inline xsl:use-attribute-sets="uicontrol" id="{@id}">
