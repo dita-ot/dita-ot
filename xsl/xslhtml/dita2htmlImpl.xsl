@@ -4804,7 +4804,6 @@
       <xsl:call-template name="gen-style">
         <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
       </xsl:call-template>
-      <xsl:call-template name="setidaname"/>
       <!--output parent or first "topic" tag's outputclass as class -->
       <xsl:if test="@outputclass">
        <xsl:attribute name="class"><xsl:value-of select="@outputclass" /></xsl:attribute>
@@ -4815,6 +4814,7 @@
           </xsl:if>
       </xsl:if>
       <xsl:apply-templates select="." mode="addAttributesToBody"/>
+      <xsl:call-template name="setidaname"/>
       <xsl:value-of select="$newline"/>
       <xsl:call-template name="start-flagit">
         <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
