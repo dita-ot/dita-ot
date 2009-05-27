@@ -358,14 +358,10 @@ public class TopicRefWriter extends AbstractXMLWriter {
 		if (checkDITAHREF(atts)) {
 				// replace the href value if it's referenced topic is extracted.
 			String rootPathName=currentFilePathName;
-//			String topicFileWithTopicPathName=(String)changeTable.get(resolveTopicWithoutElement(currentFilePath, attValue));
 			String changeTarget=(String)changeTable.get(FileUtils.resolveFile(currentFilePath, attValue));
-//			String topicFilePathName=(String)changeTable.get(FileUtils.resolveFile(currentFilePath, attValue));
 			String elementID=getElementID(attValue);
-			String pathtoElem = null;
-			if (elementID != null){
-				pathtoElem = attValue.substring(attValue.indexOf(Constants.SHARP)+1);
-			}
+			String pathtoElem = 
+				attValue.contains(Constants.SHARP) ? attValue.substring(attValue.indexOf(Constants.SHARP)+1) : "";
 			
 			if (StringUtils.isEmptyString(changeTarget)) {
 				String absolutePath = FileUtils.resolveTopic(currentFilePath, attValue);
@@ -375,29 +371,16 @@ public class TopicRefWriter extends AbstractXMLWriter {
 				}
 				changeTarget = (String)changeTable.get(absolutePath);
 			}
-//			if (StringUtils.isEmptyString(topicFilePathName)) {
-//				topicFilePathName=(String)changeTable.get(FileUtils.resolveTopic(currentFilePath, attValue));
-//			}
 			if(!notTopicFormat(atts,attValue)){
-//				if(topicFileWithTopicPathName==null || (!changeTable.containsKey(topicFileWithTopicPathName)
-//						&& !changeTable.containsKey(topicFilePathName)
-//						&& !conflictTable.containsKey(removeAnchor(topicFileWithTopicPathName))
-//						&& !conflictTable.containsKey(removeAnchor(topicFilePathName)))){
 				if(changeTarget == null) {
 					return attValue;//no change
 				}else{
-//					java.util.Iterator<Map.Entry<String, String>> it = conflictTable.entrySet().iterator();
-//					while (it.hasNext()) {
-//						Map.Entry<String, String> entry = it.next();
-//						System.out.println("Key: " + entry.getKey() + " ---- Value: " + entry.getValue());
-//					}
-					//chunked file
-//					String conTarget = (String)conflictTable.get(FileUtils.resolveFile(currentFilePath, attValue));
 					String conTarget = (String)conflictTable.get(removeAnchor(changeTarget));
 					if (!StringUtils.isEmptyString(conTarget)) {
 						if (elementID == null) {
+							String idpath = getElementID(changeTarget);
 							return FileUtils.getRelativePathFromMap(
-									rootPathName, conTarget);
+									rootPathName, conTarget) + (idpath != null ? Constants.SHARP + idpath : "");
 						}else {
 							if (conTarget.contains(Constants.SHARP)){
 								//conTarget points to topic
@@ -436,29 +419,6 @@ public class TopicRefWriter extends AbstractXMLWriter {
 							}
 						}						
 					}
-					
-//					conTarget = (String)changeTable.get(topicFileWithTopicPathName);
-//					if(!StringUtils.isEmptyString(conTarget)){
-//						if(rootPathName.equalsIgnoreCase(topicFilePathName)){
-//							if(attValue.indexOf(Constants.SHARP)!=-1)
-//								return attValue.substring(attValue.indexOf(Constants.SHARP));
-//						}
-//						if (elementID == null) {
-//							return FileUtils.getRelativePathFromMap(
-//									rootPathName, topicFileWithTopicPathName);
-//						}
-//						else {
-//							return new StringBuffer().append(
-//									FileUtils.getRelativePathFromMap(
-//											rootPathName,
-//											topicFileWithTopicPathName))
-//											.append(Constants.SHARP).append(elementID)
-//											.toString();
-//						}
-//					}
-//					else {
-//						return FileUtils.getRelativePathFromMap(rootPathName,topicFilePathName);
-//					}
 				}				
 			}
 		}

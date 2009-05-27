@@ -60,6 +60,8 @@ public class ChunkMapReader implements AbstractReader {
 	private ProcessingInstruction workdir = null; // Tagsmiths modification
 
 	private ProcessingInstruction path2proj = null; // Tagsmiths modification
+	
+	private String processingRole = "normal";
 
 	public ChunkMapReader() {
 		super();
@@ -124,7 +126,7 @@ public class ChunkMapReader implements AbstractReader {
 				} 
 
 				String originClassValue = root.getAttribute(Constants.ATTRIBUTE_NAME_CLASS);
-				root.setAttribute(Constants.ATTRIBUTE_NAME_CLASS, Constants.ATTR_CLASS_VALUE_TOPICREF);
+				root.setAttribute(Constants.ATTRIBUTE_NAME_CLASS, originClassValue + Constants.ATTR_CLASS_VALUE_TOPICREF);
 				root.setAttribute(Constants.ATTRIBUTE_NAME_HREF, newFilename);
 				
 				//create the new file
@@ -283,12 +285,15 @@ public class ChunkMapReader implements AbstractReader {
 		Node scopeAttr = null;
 		Node classAttr = null;
 		Node xtrfAttr = null;
+		Node processAttr = null;
 		String hrefValue = null;
 		String chunkValue = null;
 		String copytoValue = null;
 		String scopeValue = null;
 		String classValue = null;
 		String xtrfValue = null;
+		String processValue = null;
+		String tempRole = processingRole;
 		boolean prevChunkByTopic = false;
 		
 		attr = node.getAttributes();
@@ -299,6 +304,7 @@ public class ChunkMapReader implements AbstractReader {
 		scopeAttr = attr.getNamedItem(Constants.ATTRIBUTE_NAME_SCOPE);
 		classAttr = attr.getNamedItem(Constants.ATTRIBUTE_NAME_CLASS);
 		xtrfAttr = attr.getNamedItem(Constants.ATTRIBUTE_NAME_XTRF);
+		processAttr = attr.getNamedItem(Constants.ATTRIBUTE_NAME_PROCESSING_ROLE);
 		
 		if(hrefAttr != null){
 			hrefValue = hrefAttr.getNodeValue();
@@ -318,6 +324,10 @@ public class ChunkMapReader implements AbstractReader {
 		if(xtrfAttr != null) {
 			xtrfValue = xtrfAttr.getNodeValue();
 		}
+		if(processAttr != null) {
+			processValue = processAttr.getNodeValue();
+			processingRole = processValue;
+		}
 		
 		if (xtrfValue != null && xtrfValue.contains("generated_by_chunk")) return;
 		
@@ -333,6 +343,7 @@ public class ChunkMapReader implements AbstractReader {
 		if("external".equalsIgnoreCase(scopeValue) 
 				|| (hrefValue != null && !FileUtils.fileExists(FileUtils.resolveFile(filePath, hrefValue)))
 				|| (classValue.contains(Constants.ATTR_CLASS_VALUE_TOPIC_HEAD))) {
+				//|| (Constants.ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equalsIgnoreCase(processValue))) {
 			//Skip external links or non-existing files.
 			//Skip topic head entries.
 			//Skip @processing-role=resource-only entries.
@@ -398,7 +409,8 @@ public class ChunkMapReader implements AbstractReader {
 			
 			// Here, we have a "by-document" chunk, simply
 			// send it to the output.
-			if ((chunkValue != null || !chunkByTopic) && currentPath != null)
+			if ((chunkValue != null || !chunkByTopic) && currentPath != null
+					&& !Constants.ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(processingRole))
 				changeTable.put(currentPath, currentPath);
 			
 			if (chunkValue != null && 
@@ -416,6 +428,8 @@ public class ChunkMapReader implements AbstractReader {
 						chunkValue.contains("by-document"))){
 			chunkByTopic = prevChunkByTopic;
 		}
+		
+		processingRole = tempRole;
 		
 	}	
 	
