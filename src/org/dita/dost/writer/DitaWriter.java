@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -249,6 +250,9 @@ public class DitaWriter extends AbstractXMLWriter {
 
     private Map<String, String> keys = null;
     
+    private HashMap<String, HashMap<String, HashSet<String>>> validateMap = null;
+	private HashMap<String, HashMap<String, String>> defaultValueMap = null;
+    
     /** XMLReader instance for parsing dita file */
     private static XMLReader reader = null;
     /**
@@ -272,6 +276,7 @@ public class DitaWriter extends AbstractXMLWriter {
         tempDir = null;
         colSpec = null;
         props = null;
+        validateMap = null;
         logger = new DITAOTJavaLogger();
         reader.setContentHandler(this);
         
@@ -356,17 +361,28 @@ public class DitaWriter extends AbstractXMLWriter {
 	 * @param atts
 	 * @throws IOException
 	 */
-	private void copyElementAttribute(Attributes atts) throws IOException {
+	private void copyElementAttribute(String qName, Attributes atts) throws IOException {
 		// copy the element's attributes    
 		int attsLen = atts.getLength();
 		 boolean conkeyrefValid = false;
 		for (int i = 0; i < attsLen; i++) {
 		    String attQName = atts.getQName(i);
-		    String attValue;
+		    String attValue = atts.getValue(i);
 		    String nsUri = atts.getURI(i);
 		    
 		    //ignore the xtrf and xtrc attribute ,and not copy
 		    if(attQName.equals(ATTRIBUTE_XTRF)|| attQName.equals(ATTRIBUTE_XTRC))continue;
+		    
+		  //Probe for default values
+			if (StringUtils.isEmptyString(attValue) && this.defaultValueMap != null) {
+				HashMap<String, String> defaultMap = this.defaultValueMap.get(attQName);
+				if (defaultMap != null) {
+					String defaultValue = defaultMap.get(qName);
+					if (defaultValue != null) {
+						attValue = defaultValue;
+					}
+				}
+			}
 		    
 		    if(Constants.ATTRIBUTE_NAME_HREF.equals(attQName)
 		    		|| Constants.ATTRIBUTE_NAME_COPY_TO.equals(attQName)){
@@ -750,6 +766,8 @@ public class DitaWriter extends AbstractXMLWriter {
 	        }
         }
         
+        this.validateAttributeValues(qName, atts);
+        
         if (counterMap.containsKey(qName)) {
             value = (Integer) counterMap.get(qName);
             nextValue = new Integer(value.intValue()+1);
@@ -770,7 +788,7 @@ public class DitaWriter extends AbstractXMLWriter {
                 try {
                 	copyElementName(qName, atts);
                     
-                    copyElementAttribute(atts);
+                    copyElementAttribute(qName, atts);
                     // write the xtrf and xtrc attributes which contain debug
                     // information if it is dita elements (elements not in foreign/unknown)
                     if (foreignLevel <= 1){
@@ -956,4 +974,57 @@ public class DitaWriter extends AbstractXMLWriter {
     	}
     	return true;
     }
+    
+    private void validateAttributeValues(String qName, Attributes atts) {
+    	
+    	if (this.validateMap == null) return;
+
+		Properties prop = new Properties();
+
+		for (int i = 0; i < atts.getLength(); i++) {
+			String attrName = atts.getQName(i);
+			String attrValue = atts.getValue(i);
+			
+			HashMap<String, HashSet<String>> valueMap = this.validateMap.get(attrName);
+			if (valueMap != null) {
+				HashSet<String> valueSet = valueMap.get(qName);
+				if (valueSet == null)
+					valueSet = valueMap.get("*");
+				if (valueSet != null) {
+					String[] keylist = attrValue.trim().split("\\s+");
+					for (String s : keylist) {
+						// Warning ? Value not valid.
+						if (!StringUtils.isEmptyString(s) && !valueSet.contains(s)) {
+							prop.clear();
+							prop.put("%1", attrName);
+							prop.put("%2", qName);
+							prop.put("%3", attrValue);
+							prop.put("%4", StringUtils.assembleString(valueSet,
+									Constants.COMMA));
+							logger.logWarn(MessageUtils.getMessage("DOTJ049W",
+									prop).toString());
+						}
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * @return the validateMap
+	 */
+	public HashMap<String, HashMap<String, HashSet<String>>> getValidateMap() {
+		return validateMap;
+	}
+
+	/**
+	 * @param validateMap the validateMap to set
+	 */
+	public void setValidateMap(HashMap<String, HashMap<String, HashSet<String>>> validateMap) {
+		this.validateMap = validateMap;
+	}
+	
+	public void setDefaultValueMap(HashMap<String, HashMap<String, String>> defaultMap) {
+		this.defaultValueMap  = defaultMap;
+	}
 }

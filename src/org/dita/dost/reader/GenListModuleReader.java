@@ -17,6 +17,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
@@ -88,6 +90,9 @@ public class GenListModuleReader extends AbstractXMLReader {
 	/** Set of chunk targets */
 	private Set<String> chunkTopicSet = null;
 	
+	/** Set of subject schema files */
+	private Set<String> schemeSet = null;
+	
 	/** Set of subsidiary files */
 	private Set<String> subsidiarySet = null;
 
@@ -141,6 +146,15 @@ public class GenListModuleReader extends AbstractXMLReader {
     private int processRoleLevel; // Depth inside a @processing-role parent
     private Set<String> resourceOnlySet; // Topics with role of "resource-only"
     private Set<String> crossSet;
+    
+    /** Subject scheme document root */
+    //private Document schemeRoot = null;
+    
+    /** Current processing node */
+    //private Element currentElement = null;
+    
+    /** Relationship graph between subject schema */
+    private Map<String, Set<String>> relationGraph = null;
 	
 	/**
 	 * Constructor
@@ -150,6 +164,7 @@ public class GenListModuleReader extends AbstractXMLReader {
 		hrefTargets = new HashSet<String>(Constants.INT_32);
 		hrefTopicSet = new HashSet<String>(Constants.INT_32);
 		chunkTopicSet = new HashSet<String>(Constants.INT_32);
+		schemeSet = new HashSet<String>(Constants.INT_32);
 		conrefTargets = new HashSet<String>(Constants.INT_32);
 		copytoMap = new HashMap<String, String>(Constants.INT_16);
 		subsidiarySet = new HashSet<String>(Constants.INT_16);
@@ -161,6 +176,9 @@ public class GenListModuleReader extends AbstractXMLReader {
 		processRoleStack = new Stack<String>();
 		resourceOnlySet = new HashSet<String>(Constants.INT_32);
 		crossSet = new HashSet<String>(Constants.INT_32);
+		
+		//schemeRoot = null;
+		//currentElement = null;
 		
 		props = null;
 		reader.setContentHandler(this);
@@ -462,6 +480,29 @@ public class GenListModuleReader extends AbstractXMLReader {
 		
 		attrValue = atts.getValue(Constants.ATTRIBUTE_NAME_CLASS);
 		
+		// Generate Scheme relationship graph
+		if (attrValue != null) {
+			if (attrValue.contains(Constants.ATTR_CLASS_VALUE_SUBJECT_SCHEME)) {
+				if (this.relationGraph == null)
+					this.relationGraph = new LinkedHashMap<String, Set<String>>();
+				Set<String> children = this.relationGraph.get("ROOT");
+				if (children == null || children.isEmpty()) {
+					children = new LinkedHashSet<String>();
+				}
+				children.add(this.currentFile);
+				this.relationGraph.put("ROOT", children);
+				schemeSet.add(FileUtils.getRelativePathFromMap(rootFilePath, currentFile));
+			} else if (attrValue.contains(Constants.ATTR_CLASS_VALUE_SCHEME_REF)) {
+				Set<String> children = this.relationGraph.get(this.currentFile);
+				if (children == null) {
+					children = new LinkedHashSet<String>();
+					this.relationGraph.put(currentFile, children);
+				}
+				if (href != null)
+					children.add(FileUtils.resolveFile(rootDir, href));
+			}
+		}
+		
 		if(foreignLevel > 0){
 			//if it is an element nested in foreign/unknown element
 			//do not parse it
@@ -580,6 +621,11 @@ public class GenListModuleReader extends AbstractXMLReader {
 	 * @see org.dita.dost.reader.AbstractXMLReader#endElement(java.lang.String, java.lang.String, java.lang.String)
 	 */
 	public void endElement(String uri, String localName, String qName) throws SAXException {		
+		
+		//subject scheme
+		//if (currentElement != null && currentElement != schemeRoot.getDocumentElement()) {
+		//	currentElement = (Element)currentElement.getParentNode();
+		//}
 		
 		//@processing-role
 		if (processRoleLevel > 0) {
@@ -701,12 +747,26 @@ public class GenListModuleReader extends AbstractXMLReader {
 		}
 		
 
+		/*
 		if (attrValue.startsWith(Constants.SHARP)
 				|| attrValue.indexOf(Constants.COLON_DOUBLE_SLASH) != -1){
 			return;
 		}
+		*/
+		/*
+		 * SF Bug 2724090, broken links in conref'ed footnotes.
+		 * 
+		 * NOTE: Need verification.
+		 
+		if (attrValue.startsWith(Constants.SHARP)) {
+			attrValue = currentFile;
+		}
+		*/
+		
 		if ("external".equalsIgnoreCase(attrScope)
-				|| "peer".equalsIgnoreCase(attrScope)) {
+				|| "peer".equalsIgnoreCase(attrScope)
+				|| attrValue.indexOf(Constants.COLON_DOUBLE_SLASH) != -1
+				|| attrValue.startsWith(Constants.SHARP)) {
 			return;
 		}
 		
@@ -757,12 +817,7 @@ public class GenListModuleReader extends AbstractXMLReader {
 				&& FileUtils.isTopicFile(filename) && canResolved()) {
 			hrefTargets.add(new File(filename).getPath());
 			toOutFile(new File(filename).getPath());
-//			String id = null;
-//			if (attrValue.contains(Constants.SHARP) && attrValue.lastIndexOf(Constants.SHARP) < attrValue.length() - 1) {
-//				id = attrValue.substring(attrValue.lastIndexOf(Constants.SHARP) + 1);
-//			}
 			String pathWithoutID = FileUtils.resolveFile(currentDir, attrValue);
-			//String pathWithID = FileUtils.resolveTopic(rootFilePath, attrValue);
 			if (chunkLevel > 0 && chunkToNavLevel == 0 && topicGroupLevel == 0) {
 				chunkTopicSet.add(pathWithoutID);
 			} else {
@@ -850,7 +905,19 @@ public class GenListModuleReader extends AbstractXMLReader {
 		}
 
 	}
-	
+	/*
+	private Element createElement(String uri, String qName,
+			Attributes atts) {
+		if (schemeRoot != null) {
+			Element element = schemeRoot.createElementNS(uri, qName);
+			for (int i = 0; i < atts.getLength(); i++) {
+				element.setAttribute(atts.getQName(i), atts.getValue(i));
+			}
+			return element;
+		}
+		return null;
+	}
+	*/
 	private void toOutFile(String filename) throws SAXException {
 		//the filename is a relative path from the dita input file
 		Properties prop=new Properties();
@@ -891,6 +958,10 @@ public class GenListModuleReader extends AbstractXMLReader {
 		return chunkTopicSet;
 	}
 	
+	public Set<String> getSchemeSet() {
+		return this.schemeSet;
+	}
+	
 	/**
 	 * List of files with "@processing-role=resource-only"
 	 * @return the resource-only set
@@ -899,4 +970,23 @@ public class GenListModuleReader extends AbstractXMLReader {
 		resourceOnlySet.removeAll(crossSet);
         return resourceOnlySet;
     }
+	
+	/**
+	 * Get document root of the merged subject schema.
+	 * @return
+	 */
+	//public Document getSchemeRoot() {
+	//	return schemeRoot;
+	//}
+	
+	public Map<String, Set<String>> getRelationshipGrap() {
+		return this.relationGraph;
+	}
+
+	/**
+	 * @return the catalogMap
+	 */
+	public static HashMap<String, String> getCatalogMap() {
+		return catalogMap;
+	}
 }

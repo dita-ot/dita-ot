@@ -20,6 +20,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 import java.util.StringTokenizer;
 
 import org.dita.dost.exception.DITAOTException;
@@ -31,6 +32,7 @@ import org.dita.dost.reader.DitaValReader;
 import org.dita.dost.reader.ListReader;
 import org.dita.dost.util.Constants;
 import org.dita.dost.util.FileUtils;
+import org.dita.dost.util.FilterUtils;
 import org.dita.dost.writer.DitaWriter;
 import org.xml.sax.SAXException;
 
@@ -171,13 +173,22 @@ public class DebugAndFilterModule implements AbstractPipelineModule {
         if (!new File(inputDir).isAbsolute()) {
         	inputDir = new File(baseDir, inputDir).getAbsolutePath();
         }
+        DitaValReader filterReader = new DitaValReader();
+        
+        Set<String> schemaSet = listReader.getSchemeSet();
+        Iterator<String> iter = schemaSet.iterator();
+        while (iter.hasNext()) {
+        	filterReader.loadSubjectScheme(FileUtils.resolveFile(
+        			DebugAndFilterModule.tempDir, iter.next()));
+        }
         
         if (ditavalFile!=null){
-            DitaValReader filterReader = new DitaValReader();
             filterReader.read(ditavalFile);
             content = filterReader.getContent();
+            FilterUtils.setFilterMap(filterReader.getFilterMap());
         }else{
             content = new ContentImpl();
+            //FilterUtils.setFilterMap(null);
         }
         try{
     		String valueOfValidate=((PipelineHashIO) input).getAttribute("validate");
@@ -195,6 +206,8 @@ public class DebugAndFilterModule implements AbstractPipelineModule {
         fileWriter = new DitaWriter();
         content.setValue(tempDir);
         fileWriter.setContent(content);
+        fileWriter.setValidateMap(filterReader.getValidValuesMap());
+        fileWriter.setDefaultValueMap(filterReader.getDefaultValueMap());
         
         if(inputDir != null){
             filePathPrefix = inputDir + Constants.STICK;

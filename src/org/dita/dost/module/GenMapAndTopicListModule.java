@@ -11,6 +11,7 @@ package org.dita.dost.module;
 
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -23,10 +24,17 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Queue;
 import java.util.Set;
 import java.util.Map.Entry;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTJavaLogger;
@@ -43,6 +51,12 @@ import org.dita.dost.util.FilterUtils;
 import org.dita.dost.util.OutputUtils;
 import org.dita.dost.util.StringUtils;
 import org.dita.dost.writer.PropertiesWriter;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.EntityResolver;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
@@ -168,6 +182,8 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 	
 	private OutputStreamWriter keydef;
 
+	private Set<String> schemeSet;
+
 	/**
 	 * Create a new instance and do the initialization.
 	 * 
@@ -182,6 +198,7 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 		hrefTopicSet = new HashSet<String>(Constants.INT_128);
 		hrefWithIDSet = new HashSet<String>(Constants.INT_128);
 		chunkTopicSet = new HashSet<String>(Constants.INT_128);
+		schemeSet = new HashSet<String>(Constants.INT_128);
 		hrefMapSet = new HashSet<String>(Constants.INT_128);
 		conrefSet = new HashSet<String>(Constants.INT_128);
 		imageSet = new HashSet<String>(Constants.INT_128);
@@ -494,6 +511,7 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 		hrefTargetSet.addAll(reader.getHrefTargets());
 		hrefWithIDSet.addAll(reader.getHrefTopicSet());
 		chunkTopicSet.addAll(reader.getChunkTopicSet());
+		schemeSet.addAll(reader.getSchemeSet());
 		conrefTargetSet.addAll(reader.getConrefTargets());
 		nonConrefCopytoTargetSet.addAll(reader.getNonConrefCopytoTargets());
 		ignoredCopytoSourceSet.addAll(reader.getIgnoredCopytoSourceSet());
@@ -802,6 +820,7 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 		addSetToProperties(prop, Constants.HREF_TARGET_LIST, hrefTargetSet);
 		addSetToProperties(prop, Constants.HREF_TOPIC_LIST, hrefWithIDSet);
 		addSetToProperties(prop, Constants.CHUNK_TOPIC_LIST, chunkTopicSet);
+		addSetToProperties(prop, Constants.SUBJEC_SCHEME_LIST, schemeSet);
 		addSetToProperties(prop, Constants.CONREF_TARGET_LIST, conrefTargetSet);
 		addSetToProperties(prop, Constants.COPYTO_SOURCE_LIST, copytoSourceSet);
 		addSetToProperties(prop, Constants.SUBSIDIARY_TARGET_LIST, subsidiarySet);
@@ -834,6 +853,9 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 		
 		writer.write(outputFile.getAbsolutePath());
 		writer.writeToXML(xmlDitalist.getAbsolutePath());
+		
+		//Output merged subject scheme file
+		outputSubjectScheme();
 	}
 
 	private void addSetToProperties(Properties prop, String key, Set<String> set) {
@@ -986,6 +1008,195 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 		// clear set
 		set.clear();
 		newSet.clear();
+	}
+	
+	private class InternalEntityResolver implements EntityResolver {
+
+		private HashMap<String, String> catalogMap = null;
+		
+		public InternalEntityResolver(HashMap<String, String> map) {
+			this.catalogMap = map;
+		}
+		
+		public InputSource resolveEntity(String publicId, String systemId)
+				throws SAXException, IOException {
+			if (catalogMap.get(publicId) != null) {
+				File dtdFile = new File((String) catalogMap.get(publicId));
+				return new InputSource(dtdFile.getAbsolutePath());
+			}else if (catalogMap.get(systemId) != null){
+				File schemaFile = new File((String) catalogMap.get(systemId));
+				return new InputSource(schemaFile.getAbsolutePath());
+			}
+
+			return null;
+		}
+		
+	}
+	
+	private void outputSubjectScheme() throws DITAOTException {
+		
+		Map<String, Set<String>> graph = reader.getRelationshipGrap();
+		if (graph == null || graph.isEmpty()) return;
+		
+		Queue<String> queue = new LinkedList<String>();
+		Set<String> visitedSet = new HashSet<String>();
+		Iterator<Map.Entry<String, Set<String>>> graphIter = graph.entrySet().iterator();
+		if (graphIter.hasNext()) {
+			Map.Entry<String, Set<String>> entry = graphIter.next();
+			queue.offer(entry.getKey());
+		}
+		
+		try {
+			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder builder = factory.newDocumentBuilder();
+			if (GenListModuleReader.getCatalogMap() != null) {
+				builder.setEntityResolver(new InternalEntityResolver(GenListModuleReader.getCatalogMap()));
+			}
+			
+			while (!queue.isEmpty()) {
+				String parent = queue.poll();
+				Set<String> children = graph.get(parent);
+				
+				if (children != null)
+					queue.addAll(children);
+				if ("ROOT".equals(parent) || visitedSet.contains(parent)) continue;
+				visitedSet.add(parent);
+				String tmprel = FileUtils.getRelativePathFromMap(rootFile, parent);
+				tmprel = FileUtils.resolveFile(this.tempDir, tmprel);
+				Document parentRoot = null;
+				if (!FileUtils.fileExists(tmprel))
+					parentRoot = builder.parse(new InputSource(new FileInputStream(parent)));
+				else
+					parentRoot = builder.parse(new InputSource(new FileInputStream(tmprel)));
+				if (children != null) {
+					Iterator<String> child = children.iterator();
+					while (child.hasNext()) {
+						String childpath = child.next();
+						Document childRoot = builder.parse(new InputSource(new FileInputStream(childpath)));
+						mergeScheme(parentRoot, childRoot);
+						String rel = FileUtils.getRelativePathFromMap(rootFile, childpath);
+						rel = FileUtils.resolveFile(this.tempDir, rel);
+						generateScheme(rel, childRoot);
+					}
+				}
+				
+				//Output parent scheme
+				String rel = FileUtils.getRelativePathFromMap(rootFile, parent);
+				rel = FileUtils.resolveFile(this.tempDir, rel);
+				generateScheme(rel, parentRoot);
+			}
+		} catch (Exception e) {
+			javaLogger.logException(e);
+			throw new DITAOTException(e);
+		}
+		
+	}
+	
+	private void mergeScheme(Document parentRoot, Document childRoot) {
+		Queue<Element> pQueue = new LinkedList<Element>();
+		pQueue.offer(parentRoot.getDocumentElement());
+		
+		while (!pQueue.isEmpty()) {
+			Element pe = pQueue.poll();
+			NodeList pList = pe.getChildNodes();
+			for (int i = 0; i < pList.getLength(); i++) {
+				Node node = pList.item(i);
+				if (node.getNodeType() == Node.ELEMENT_NODE)
+					pQueue.offer((Element)node);
+			}
+			
+			String value = pe.getAttribute(Constants.ATTRIBUTE_NAME_CLASS);
+			if (StringUtils.isEmptyString(value) 
+					|| !value.contains(Constants.ATTR_CLASS_VALUE_SUBJECT_DEF))
+				continue;
+			
+			if (!StringUtils.isEmptyString(
+					value = pe.getAttribute(Constants.ATTRIBUTE_NAME_KEYREF))) {
+				// extend child scheme
+				Element target = searchForKey(childRoot.getDocumentElement(), value);
+				if (target == null) {
+					/* 
+					 * TODO: we have a keyref here to extend into child scheme, but can't
+					 * find any matching <subjectdef> in child scheme. Shall we throw out
+					 * a warning?
+					 * 
+					 * Not for now, just bypass it.
+					 */
+					continue;
+				}
+				
+				// target found
+				pList = pe.getChildNodes();
+				for (int i = 0; i < pList.getLength(); i++) {
+					Node tmpnode = childRoot.importNode(pList.item(i), false);
+					if (tmpnode.getNodeType() == Node.ELEMENT_NODE
+							&& searchForKey(target, 
+									((Element)tmpnode).getAttribute(Constants.ATTRIBUTE_NAME_KEYS)) != null)
+						continue;
+					target.appendChild(tmpnode);
+				}
+				
+			} else if (!StringUtils.isEmptyString(
+					value = pe.getAttribute(Constants.ATTRIBUTE_NAME_KEYS))) {
+				// merge into parent scheme
+				Element target = searchForKey(childRoot.getDocumentElement(), value);
+				if (target != null) {
+					pList = target.getChildNodes();
+					for (int i = 0; i < pList.getLength(); i++) {
+						Node tmpnode = parentRoot.importNode(pList.item(i), false);
+						if (tmpnode.getNodeType() == Node.ELEMENT_NODE
+								&& searchForKey(pe, 
+										((Element)tmpnode).getAttribute(Constants.ATTRIBUTE_NAME_KEYS)) != null)
+							continue;
+						pe.appendChild(tmpnode);
+					}
+				}
+			}
+		}
+	}
+	
+	private Element searchForKey(Element root, String key) {
+		if (root == null || StringUtils.isEmptyString(key)) return null;
+		Queue<Element> queue = new LinkedList<Element>();
+		queue.offer(root);
+		
+		while (!queue.isEmpty()) {
+			Element pe = queue.poll();
+			NodeList pchildrenList = pe.getChildNodes();
+			for (int i = 0; i < pchildrenList.getLength(); i++) {
+				Node node = pchildrenList.item(i);
+				if (node.getNodeType() == Node.ELEMENT_NODE)
+					queue.offer((Element)node);
+			}
+			
+			String value = pe.getAttribute(Constants.ATTRIBUTE_NAME_CLASS);
+			if (StringUtils.isEmptyString(value) 
+					|| !value.contains(Constants.ATTR_CLASS_VALUE_SUBJECT_DEF))
+				continue;
+			
+			value = pe.getAttribute(Constants.ATTRIBUTE_NAME_KEYS);
+			if (StringUtils.isEmptyString(value)) continue;
+			
+			if (value.equals(key)) return pe;
+		}
+		return null;
+	}
+	
+	private void generateScheme(String filename, Document root) throws DITAOTException {
+		try {
+			FileOutputStream file = new FileOutputStream(new File(filename));
+			StreamResult res = new StreamResult(file);
+			DOMSource ds = new DOMSource(root);
+			TransformerFactory tff = TransformerFactory.newInstance();
+			Transformer tf = tff.newTransformer();
+			tf.transform(ds, res);
+			if (res.getOutputStream() != null)
+				res.getOutputStream().close();
+			if (file != null) file.close();
+		} catch (Exception e) {
+			javaLogger.logException(e);
+			throw new DITAOTException(e);
+		}
 	}
 
 }

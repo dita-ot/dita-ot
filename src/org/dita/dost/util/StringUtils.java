@@ -257,13 +257,23 @@ public class StringUtils {
 	 * @return
 	 */
 	public static Set<String> restoreSet(String s) {
+		return restoreSet(s, Constants.COMMA);
+	}
+	
+	/**
+	 * Break down a string separated by <code>delim</code> into a string set. 
+	 * @param s String to be splitted
+	 * @param delim Delimiter to be used.
+	 * @return
+	 */
+	public static Set<String> restoreSet(String s, String delim) {
 		Set<String> copytoSet = new HashSet<String>();
 		
 		if (StringUtils.isEmptyString(s)) {
 			return copytoSet;
 		}
 		
-		StringTokenizer st = new StringTokenizer(s, Constants.COMMA);
+		StringTokenizer st = new StringTokenizer(s, delim);
 		
 		while (st.hasMoreTokens()) {
 			String entry = st.nextToken();

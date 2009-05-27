@@ -9,12 +9,14 @@
  */
 package org.dita.dost.reader;
 
-import java.io.FileInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 import java.util.StringTokenizer;
 
 import org.dita.dost.log.DITAOTJavaLogger;
@@ -35,6 +37,7 @@ public class ListReader implements AbstractReader {
     private ContentImpl content;
     private DITAOTJavaLogger logger;
     private Map<String, String> copytoMap = new HashMap<String, String>();
+    private Set<String> schemeSet = new HashSet<String>();
 
     /**
      * Default constructor of ListReader class.
@@ -65,6 +68,8 @@ public class ListReader implements AbstractReader {
 			else
 				property.load(listInput);
 			setList(property);
+			schemeSet.addAll(StringUtils.restoreSet(
+					property.getProperty(Constants.SUBJEC_SCHEME_LIST, "")));
 		} catch (Exception e) {
 			logger.logException(e);
 		} finally {
@@ -119,4 +124,12 @@ public class ListReader implements AbstractReader {
 	public Map<String, String> getCopytoMap() {
     	return copytoMap;
     }
+
+
+	/**
+	 * @return the schemeSet
+	 */
+	public Set<String> getSchemeSet() {
+		return schemeSet;
+	}
 }

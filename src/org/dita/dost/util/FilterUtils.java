@@ -11,13 +11,14 @@ package org.dita.dost.util;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.StringTokenizer;
 import java.util.HashSet;
-import org.xml.sax.Attributes;
+import java.util.List;
+import java.util.Properties;
+import java.util.StringTokenizer;
+
 import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.log.MessageUtils;
-import java.util.Properties;
+import org.xml.sax.Attributes;
 
 /**
  * Utility class used for flagging and filtering.
@@ -25,8 +26,8 @@ import java.util.Properties;
  * @author Wu, Zhi Qiang
  */
 public class FilterUtils {
-	private static HashMap filterMap = null;
-	private static HashSet notMappingRules=new HashSet();
+	private static HashMap<String, String> filterMap = null;
+	private static HashSet<String> notMappingRules=new HashSet<String>();
 	/**
 	 * Default Constructor
 	 *
@@ -38,8 +39,16 @@ public class FilterUtils {
 	 * @param filtermap
 	 *            The filterMap to set.
 	 */
-	public static void setFilterMap(HashMap filtermap) {
+	public static void setFilterMap(HashMap<String, String> filtermap) {
 		FilterUtils.filterMap = filtermap;
+	}
+	
+	/**
+	 * Getter for filter map
+	 * @return
+	 */
+	public static HashMap<String, String> getFilterMap() {
+		return filterMap;
 	}
 
 	/**
@@ -60,7 +69,7 @@ public class FilterUtils {
 		String propName = null;
 		String propValue = null;
 		String propPath = null;
-		List propList = null;
+		List<String> propList = null;
 		int propListIndex = 0;
 		String attrPropsValue = null;
 		int propStart;
@@ -88,9 +97,9 @@ public class FilterUtils {
 		while(prop.hasMoreElements()){
 			propPath = (String)prop.nextElement();
 			propPathTokenizer = new StringTokenizer(propPath, Constants.STRING_BLANK);
-			propList = new ArrayList(Constants.INT_128);
+			propList = new ArrayList<String>(Constants.INT_128);
 			while(propPathTokenizer.hasMoreElements()){
-				propList.add(propPathTokenizer.nextElement());
+				propList.add((String)propPathTokenizer.nextElement());
 			}
 			propListIndex = propList.size()-1;
 			propName = (String)propList.get(propListIndex);
@@ -127,7 +136,7 @@ public class FilterUtils {
 	 * @param attValue
 	 * @return
 	 */
-	private static boolean extCheckExclude(List propList, String attValue){
+	private static boolean extCheckExclude(List<String> propList, String attValue){
 		int propListIndex = 0;
 		boolean hasNullAction = false;
 		boolean hasExcludeAction = false;
@@ -208,6 +217,9 @@ public class FilterUtils {
 		
 		return false;
 	}
+	
+
+    
 	
 	
 	/**

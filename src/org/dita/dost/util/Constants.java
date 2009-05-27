@@ -95,6 +95,11 @@ public abstract class Constants {
     public static final String ELEMENT_NAME_GLOSSSYNONYM = "glossSynonym";
     public static final String ELEMENT_NAME_GLOSSABBREVIATION = "glossAbbreviation";
     public static final String ELEMENT_NAME_GLOSSSHORTFORM = "glossShortForm";
+    public static final String ELEMENT_NAME_SUBJECT_SCHEME = "subjectScheme";
+    public static final String ELEMENT_NAME_SUBJECT_DEF = "subjectdef";
+    public static final String ELEMENT_NAME_ATTRIBUTE_DEF = "attributedef";
+    public static final String ELEMENT_NAME_ELEMENT_DEF = "elementdef";
+    public static final String ELEMENT_NAME_DEFAULT_SUBJECT = "defaultSubject";
     
     /**
      * Constants for attribute names in dita files.
@@ -147,6 +152,7 @@ public abstract class Constants {
     public static final String FILE_NAME_DITA_LIST = "dita.list";
     public static final String FILE_NAME_DITA_LIST_XML="dita.xml.properties";
     public static final String FILE_NAME_CATALOG = "catalog-dita.xml";
+    public static final String FILE_NAME_SUBJECT_SCHEME_MERGED = "subject_scheme_merged.xml";
     
     /**
      * Constants for all the properties's name.
@@ -176,6 +182,7 @@ public abstract class Constants {
     public static final String KEYREF_LIST = "keyreflist";
     public static final String CODEREF_LIST = "codereflist";
     public static final String RESOURCE_ONLY_LIST = "resourceonlylist";
+    public static final String SUBJEC_SCHEME_LIST = "subjectschemelist";
 
     /**
      * Constants for common params used in ant invoker.
@@ -308,6 +315,14 @@ public abstract class Constants {
 	public static final String ATTR_CLASS_VALUE_CODEREF = " pr-d/coderef ";
 	public static final String ATTR_CLASS_VALUE_TOPIC_GROUP = " mapgroup-d/topicgroup ";
 	public static final String ATTR_CLASS_VALUE_TOPIC_HEAD = " mapgroup-d/topichead ";
+	public static final String ATTR_CLASS_VALUE_SUBJECT_SCHEME = " subjectScheme/subjectScheme ";
+	public static final String ATTR_CLASS_VALUE_SUBJECT_DEF = " subjectScheme/subjectdef ";
+	public static final String ATTR_CLASS_VALUE_SCHEME_REF = " subjectScheme/schemeref ";
+	public static final String ATTR_CLASS_VALUE_ENUMERATION_DEF = " subjectScheme/enumerationdef ";
+	public static final String ATTR_CLASS_VALUE_ATTRIBUTE_DEF = " subjectScheme/attributedef ";
+	public static final String ATTR_CLASS_VALUE_ELEMENT_DEF = " subjectScheme/elementdef ";
+	public static final String ATTR_CLASS_VALUE_DEFAULT_SUBJECT = " subjectScheme/defaultSubject ";
+	public static final String ATTR_CLASS_VALUE_SUBJECT_SCHEME_BASE = " subjectScheme/";
 	
 	public static final String ATTR_PROCESSING_ROLE_VALUE_NORMAL = "normal";
 	public static final String ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY = "resource-only";
@@ -324,6 +339,7 @@ public abstract class Constants {
 	 */
 	public static final String IndexTerm_Prefix_See = "See";
 	public static final String IndexTerm_Prefix_See_Also = "See also";
+	public static final String ATTRIBUTE_NAME_NAME = "name";
 
 	
     /**
