@@ -789,7 +789,8 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 						tempTopicID = topicID;
 						output = new StringWriter();
 						topicID = new HashSet<String>();
-						if (Constants.ELEMENT_NAME_MAP.equalsIgnoreCase(element.getNodeName())) {
+						//if (Constants.ELEMENT_NAME_MAP.equalsIgnoreCase(element.getNodeName())) {
+						if (classValue.contains(Constants.ATTR_CLASS_VALUE_MAP)) {
 							// Very special case, we have a map element with href value.
 							// This is a map that needs to be chunked to content.
 							// No need to parse any file, just generate a stub output.
@@ -827,7 +828,7 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 						
 						// Check if there is any conflict
 						if(FileUtils.fileExists(outputFileName)
-								&& !Constants.ELEMENT_NAME_MAP.equalsIgnoreCase(element.getNodeName())) {
+								&& !classValue.contains(Constants.ATTR_CLASS_VALUE_MAP)) {
 							String t = outputFileName;
 							Random random = new Random();
 							outputFileName = FileUtils.resolveFile(filePath,"Chunk"
@@ -892,7 +893,7 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 					if ( !Constants.ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equalsIgnoreCase(processRoleValue))
 						reader.parse(currentParsingFile);
 					currentParsingFile = tempPath;
-					}
+				}
 			
 				if (element.hasChildNodes()){
 					//if current element has child nodes and chunk results for this element has value
@@ -911,7 +912,10 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 					
 					// merge results
 					StringBuffer parentResult = temp.getBuffer();
-					if (parentResult.length() > 0) {
+					// Skip empty parents and @processing-role='resource-only' entries.
+					if (parentResult.length() > 0
+							&& !StringUtils.isEmptyString(parseFilePath)
+							&& !Constants.ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equalsIgnoreCase(processRoleValue)) {
 						int insertpoint = parentResult.lastIndexOf("</");
 						int end = parentResult.indexOf(">",insertpoint);
 						
