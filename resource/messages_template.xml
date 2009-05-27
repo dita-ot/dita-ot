@@ -292,6 +292,12 @@
     <reason>key definition "%1"="%2" in "%3" has been defined in another file, so it is ingnored.</reason>
     <response>Please make sure the key name does not duplicate.</response>
   </message>
+  
+  <message id="DOTJ049W" type="WARN">
+  	<reason>Attribute "%1" in element "%2" has been assigned a value of "%3" which does not comply with its subject scheme.</reason>
+  	<response>The attribute value should be one of "%4" as defined in subject schema.</response>
+  </message>
+  
   <!-- End of Java Messages -->
     
   <!-- Begin of XSL Messages -->  
