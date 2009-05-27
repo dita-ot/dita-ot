@@ -55,10 +55,7 @@ public class MergeTopicParser extends AbstractXMLReader {
 			if(reader == null){
 				reader = XMLReaderFactory.createXMLReader();
 				reader.setContentHandler(this);
-//				reader.setProperty(Constants.LEXICAL_HANDLER_PROPERTY,this);
 				reader.setFeature(Constants.FEATURE_NAMESPACE_PREFIX, true);
-//				reader.setFeature(Constants.FEATURE_VALIDATION, true); 
-//				reader.setFeature(Constants.FEATURE_VALIDATION_SCHEMA, true);
 			}
 			if(topicInfo == null){
 				topicInfo = new StringBuffer(Constants.INT_1024);
@@ -96,6 +93,10 @@ public class MergeTopicParser extends AbstractXMLReader {
 	 * @see org.xml.sax.ContentHandler#endElement(java.lang.String, java.lang.String, java.lang.String)
 	 */
 	public void endElement(String uri, String localName, String qName) throws SAXException {
+		// Skip redundant <dita> tags.
+		if (Constants.ELEMENT_NAME_DITA.equalsIgnoreCase(qName)) {
+			return;
+		}
 		topicInfo.append(Constants.LESS_THAN)
 		.append(Constants.SLASH)
 		.append(qName)
@@ -248,6 +249,11 @@ public class MergeTopicParser extends AbstractXMLReader {
 		String formatValue = null;
 		int attsLen = atts.getLength();
 		int sharpIndex;
+		
+		// Skip redundant <dita> tags.
+		if (Constants.ELEMENT_NAME_DITA.equalsIgnoreCase(qName)) {
+			return;
+		}
 		
 		topicInfo.append(Constants.LESS_THAN).append(qName);
 		classValue = atts.getValue(Constants.ATTRIBUTE_NAME_CLASS);		

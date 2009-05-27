@@ -80,7 +80,8 @@ public class TopicMergeModule implements AbstractPipelineModule {
 		
 
 		mapParser.read(ditaInput+"|"+tempdir);
-		midResult = new StringBuffer(Constants.XML_HEAD).append("<dita-merge>")
+		midResult = new StringBuffer(Constants.XML_HEAD).append(
+				"<dita-merge xmlns:ditaarch=\"http://dita.oasis-open.org/architecture/2005/\">")
 			.append(((StringBuffer)mapParser.getContent().getValue())).append("</dita-merge>").toString();
 		midStream = new StringReader(midResult);
 		
