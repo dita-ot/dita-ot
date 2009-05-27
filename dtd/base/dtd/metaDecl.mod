@@ -201,7 +201,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Metadata//EN"
 
 <!--                    LONG NAME: Critical Dates                  -->
 <!ENTITY % critdates.content
-                       "((%created;), 
+                       "((%created;)?, 
                          (%revised;)*)"
 >
 <!ENTITY % critdates.attributes
