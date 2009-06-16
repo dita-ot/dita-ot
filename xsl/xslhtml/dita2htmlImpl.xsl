@@ -93,10 +93,15 @@
 
 <!-- the path back to the project. Used for c.gif, delta.gif, css to allow user's to have
      these files in 1 location. -->
-<xsl:param name="PATH2PROJ">
-    <xsl:apply-templates select="/processing-instruction('path2project')" mode="get-path2project"/>
-</xsl:param>
-
+    <xsl:param name="PATH2PROJ">
+        <xsl:apply-templates select="/processing-instruction('path2project')" mode="get-path2project"/>
+    </xsl:param>
+  <!--added by William on 2009-06-05 for flagging support start -->
+  <xsl:param name="CURRENTFILE">
+    <xsl:apply-templates select="/processing-instruction()" mode="get-current-file"/>
+  </xsl:param>
+  <!--added by William on 2009-06-05 for flagging support end  -->
+  
 <!-- the file name (file name and extension only - no path) of the document being transformed.
      Needed to help with debugging.
      default is 'myfile.xml')-->
@@ -5073,7 +5078,12 @@
   <xsl:template match="processing-instruction('workdir')" mode="get-work-dir">
     <xsl:value-of select="."/><xsl:text>/</xsl:text>
   </xsl:template>
-
+  <!--added by William on 2009-06-05 for flagging support start -->
+  <xsl:template match="processing-instruction('filename')[1]" mode="get-current-file">
+    <xsl:value-of select="."/>
+  </xsl:template>
+  <!--added by William on 2009-06-05 for flagging support end -->
+  
   <!-- MESSAGES: Refactoring places each message in a moded template, so that users
        may more easily override a message for one or all cases. -->
   <xsl:template match="*" mode="ditamsg:no-glossentry-for-key">
