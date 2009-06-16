@@ -1072,7 +1072,10 @@
   <xsl:variable name="flagrules">
     <xsl:call-template name="getrules"/>
   </xsl:variable>
- <br/>
+  <!-- edited by William on 2009-06-16 for bullet bug:2782503 start-->
+    <!--br/-->
+  <!-- edited by William on 2009-06-16 for bullet bug:2782503 end-->
+  
   <xsl:call-template name="start-flagit">
     <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
   </xsl:call-template>
@@ -1104,7 +1107,10 @@
   <xsl:variable name="flagrules">
     <xsl:call-template name="getrules"/>
   </xsl:variable>
-<br/>
+  <!-- edited by William on 2009-06-16 for bullet bug:2782503 start-->
+     <!--br/-->
+  <!-- edited by William on 2009-06-16 for bullet bug:2782503 end-->
+  
   <xsl:call-template name="start-flagit">
     <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
   </xsl:call-template>
@@ -1163,7 +1169,9 @@
     <xsl:call-template name="getrules"/>
   </xsl:variable>
 <xsl:variable name="olcount" select="count(ancestor-or-self::*[contains(@class,' topic/ol ')])"/>
-<br/>
+  <!-- edited by William on 2009-06-16 for bullet bug:2782503 start-->
+     <!--br/-->
+  <!-- edited by William on 2009-06-16 for bullet bug:2782503 end-->
   <xsl:call-template name="start-flagit">
     <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
   </xsl:call-template>
