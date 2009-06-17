@@ -70,7 +70,11 @@
     classname="org.dita.dost.util.IsAbsolute">
     <classpath refid="dost.jar.path" />
   </typedef>
-  <property name="dita.temp.dir" value="temp" />
+  <tstamp>
+    <format property="current.date" pattern="yyyyMMddHHmmssSSS"/>
+  </tstamp>
+  <property name="base.temp.dir" value="temp"/>
+  <property name="dita.temp.dir" value="${base.temp.dir}${file.separator}temp${current.date}" />
   <property name="output.dir" value="out" />
   <property name="dita.extname" value="xml" />
   <property name="dita.script.dir"

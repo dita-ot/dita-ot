@@ -61,6 +61,14 @@
       <equals arg1="${transtype}" arg2="pdf" casesensitive="false"/>
     </condition>
     <antcall target="dita2${transtarget}"/>
+  	<condition property="clean_temp">
+  	  <and>
+  	    <isset property="clean.temp" />
+  	    <equals arg1="${clean.temp}" arg2="no" casesensitive="false" />
+  	  </and>
+  	</condition>
+  	<antcall target="clean-temp">
+  	</antcall>
   </target>
   
   <target name="all">

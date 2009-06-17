@@ -12,7 +12,7 @@
   </condition>
 
   <target name="preprocess"
-    dita:depends="{depend.preprocess.pre},start-preprocess,clean-temp,gen-list,debug-filter,copy-files,conrefpush,conref,move-meta-entries,keyref,coderef,mapref,mappull,chunk,maplink,move-links,topicpull,{depend.preprocess.post}"
+    dita:depends="{depend.preprocess.pre},start-preprocess,gen-list,debug-filter,copy-files,conrefpush,conref,move-meta-entries,keyref,coderef,mapref,mappull,chunk,maplink,move-links,topicpull,{depend.preprocess.post}"
     xmlns:dita="http://dita-ot.sourceforge.net"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     description="Preprocessing ended" />

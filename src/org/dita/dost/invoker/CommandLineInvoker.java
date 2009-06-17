@@ -232,8 +232,18 @@ public class CommandLineInvoker {
 		
 		/*
 		 * Init temp directory
+		 * 
 		 */
-		tempDir = prop.getProperty("dita.temp.dir", Constants.TEMP_DIR_DEFAULT);
+		if (prop.containsKey("dita.temp.dir")) {
+			tempDir = prop.getProperty("dita.temp.dir");
+		} else {
+			java.text.DateFormat format = new java.text.SimpleDateFormat("yyyyMMddHHmmssSSS");
+			String timestamp = format.format(new java.util.Date());
+			prop.setProperty("dita.temp.dir", Constants.TEMP_DIR_DEFAULT + Constants.FILE_SEPARATOR
+					+ "temp" + timestamp);
+			tempDir = prop.getProperty("dita.temp.dir");
+		}
+		//tempDir = prop.getProperty("dita.temp.dir", Constants.TEMP_DIR_DEFAULT);
 		tempPath = new File(tempDir);
 		if (!tempPath.isAbsolute()) {
 			tempPath = new File(baseDir, tempDir);
