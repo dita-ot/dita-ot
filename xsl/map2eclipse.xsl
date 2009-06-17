@@ -47,7 +47,9 @@
     <xsl:choose>
       <xsl:when test="*[contains(@class,' topic/title ')]">
         <xsl:attribute name="label">
-          <xsl:value-of select="*[contains(@class,' topic/title ')]"/>
+        <!-- edited by William on 2009-05-27 for bug:2796993 start-->
+          <xsl:value-of select="normalize-space(*[contains(@class,' topic/title ')])"/>
+        <!-- edited by William on 2009-05-27 for bug:2796993 end-->
         </xsl:attribute>
       </xsl:when>
       <xsl:when test="@title">
@@ -82,7 +84,10 @@
   <xsl:attribute name="link_to">
     <xsl:choose>
       <xsl:when test="contains($fix-anchorref,'.ditamap')">
-	      <xsl:value-of select="$work.dir"/><xsl:text>/</xsl:text><xsl:value-of select="substring-before($fix-anchorref,'.ditamap')"/>.xml<xsl:value-of select="substring-after($fix-anchorref,'.ditamap')"/>
+        <!-- edited  by William on 2009-05-26 for bug:2796614 start-->
+	      <!-- xsl:value-of select="$work.dir"/><xsl:text>/</xsl:text><xsl:value-of select="substring-before($fix-anchorref,'.ditamap')"/>.xml<xsl:value-of select="substring-after($fix-anchorref,'.ditamap')"/ -->
+              <xsl:value-of select="$work.dir"/><xsl:value-of select="substring-before($fix-anchorref,'.ditamap')"/>.xml<xsl:value-of select="substring-after($fix-anchorref,'.ditamap')"/>
+        <!-- edited  by William on 2009-05-26 for bug:2796614 end -->
       </xsl:when>
       <xsl:when test="contains($fix-anchorref,'.xml')"><xsl:value-of select="$work.dir"/><xsl:value-of select="$fix-anchorref"/></xsl:when>
       <xsl:otherwise> <!-- should be dita, but name does not include .ditamap -->
