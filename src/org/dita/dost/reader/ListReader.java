@@ -38,6 +38,7 @@ public class ListReader implements AbstractReader {
     private DITAOTJavaLogger logger;
     private Map<String, String> copytoMap = new HashMap<String, String>();
     private Set<String> schemeSet = new HashSet<String>();
+    private String inputMap;
 
     /**
      * Default constructor of ListReader class.
@@ -70,6 +71,7 @@ public class ListReader implements AbstractReader {
 			setList(property);
 			schemeSet.addAll(StringUtils.restoreSet(
 					property.getProperty(Constants.SUBJEC_SCHEME_LIST, "")));
+			inputMap = property.getProperty(Constants.INPUT_DITAMAP);
 		} catch (Exception e) {
 			logger.logException(e);
 		} finally {
@@ -131,5 +133,13 @@ public class ListReader implements AbstractReader {
 	 */
 	public Set<String> getSchemeSet() {
 		return schemeSet;
+	}
+
+
+	/**
+	 * @return the inputMap
+	 */
+	public String getInputMap() {
+		return inputMap;
 	}
 }

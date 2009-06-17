@@ -16,12 +16,22 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Queue;
 import java.util.Set;
 import java.util.StringTokenizer;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTJavaLogger;
@@ -29,11 +39,20 @@ import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.pipeline.PipelineHashIO;
 import org.dita.dost.reader.DitaValReader;
+import org.dita.dost.reader.GenListModuleReader;
 import org.dita.dost.reader.ListReader;
+import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.Constants;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.FilterUtils;
+import org.dita.dost.util.StringUtils;
 import org.dita.dost.writer.DitaWriter;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.EntityResolver;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 
@@ -128,6 +147,12 @@ public class DebugAndFilterModule implements AbstractPipelineModule {
 	private DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
 	
 	private boolean xmlValidate=true;
+	
+	private String inputMap = null;
+	
+	private String ditaDir = null;
+	
+	private String inputDir = null;
 	/**
 	 * Default Construtor
 	 *
@@ -140,12 +165,12 @@ public class DebugAndFilterModule implements AbstractPipelineModule {
      * 
      */
     public AbstractPipelineOutput execute(AbstractPipelineInput input) throws DITAOTException {
-         String baseDir = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_BASEDIR);
+        String baseDir = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_BASEDIR);
         String ditavalFile = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_DITAVAL);
         tempDir = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_TEMPDIR);
         String ext = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_DITAEXT);
-        String ditaDir=((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_EXT_PARAM_DITADIR);;
-        String inputDir = null;
+        ditaDir=((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_EXT_PARAM_DITADIR);;
+        inputDir = null;
         String filePathPrefix = null;
         ListReader listReader = new ListReader();
         LinkedList<String> parseList = null;
@@ -169,18 +194,15 @@ public class DebugAndFilterModule implements AbstractPipelineModule {
         parseList = (LinkedList<String>) listReader.getContent()
                 .getCollection();
         inputDir = (String) listReader.getContent().getValue();
+        inputMap = new File(inputDir + File.separator + listReader.getInputMap()).getAbsolutePath();
+        
+        // Output subject schemas
+        this.outputSubjectScheme();
         
         if (!new File(inputDir).isAbsolute()) {
         	inputDir = new File(baseDir, inputDir).getAbsolutePath();
         }
         DitaValReader filterReader = new DitaValReader();
-        
-        Set<String> schemaSet = listReader.getSchemeSet();
-        Iterator<String> iter = schemaSet.iterator();
-        while (iter.hasNext()) {
-        	filterReader.loadSubjectScheme(FileUtils.resolveFile(
-        			DebugAndFilterModule.tempDir, iter.next()));
-        }
         
         if (ditavalFile!=null){
             filterReader.read(ditavalFile);
@@ -206,15 +228,41 @@ public class DebugAndFilterModule implements AbstractPipelineModule {
         fileWriter = new DitaWriter();
         content.setValue(tempDir);
         fileWriter.setContent(content);
-        fileWriter.setValidateMap(filterReader.getValidValuesMap());
-        fileWriter.setDefaultValueMap(filterReader.getDefaultValueMap());
         
         if(inputDir != null){
             filePathPrefix = inputDir + Constants.STICK;
         }
         
+        Map<String, Set<String>> dic = readMapFromXML(Constants.FILE_NAME_SUBJECT_DICTIONARY);
+        
         while (!parseList.isEmpty()) {
         	String filename = (String) parseList.removeLast();
+        	
+        	Set<String> schemaSet = dic.get(filename);
+        	filterReader.reset();
+        	if (schemaSet != null) {
+	            Iterator<String> iter = schemaSet.iterator();
+	            while (iter.hasNext()) {
+	            	filterReader.loadSubjectScheme(FileUtils.resolveFile(
+	            			DebugAndFilterModule.tempDir, iter.next())+".subm");
+	            }
+	            if (ditavalFile!=null){
+	            	filterReader.filterReset();
+	                filterReader.read(ditavalFile);
+	                FilterUtils.setFilterMap(filterReader.getFilterMap());
+	            } else {
+	            	FilterUtils.setFilterMap(null);
+	            }
+	            
+	            fileWriter.setValidateMap(filterReader.getValidValuesMap());
+	            fileWriter.setDefaultValueMap(filterReader.getDefaultValueMap());
+        	} else {
+        		if (ditavalFile!=null){
+	                FilterUtils.setFilterMap(filterReader.getFilterMap());
+	            } else {
+	            	FilterUtils.setFilterMap(null);
+	            }
+        	}
         	
         	if (!new File(inputDir, filename).exists()) {
         		// This is an copy-to target file, ignore it
@@ -246,6 +294,217 @@ public class DebugAndFilterModule implements AbstractPipelineModule {
 
         return null;
     }
+    
+    private class InternalEntityResolver implements EntityResolver {
+
+		private HashMap<String, String> catalogMap = null;
+		
+		public InternalEntityResolver(HashMap<String, String> map) {
+			this.catalogMap = map;
+		}
+		
+		public InputSource resolveEntity(String publicId, String systemId)
+				throws SAXException, IOException {
+			if (catalogMap.get(publicId) != null) {
+				File dtdFile = new File((String) catalogMap.get(publicId));
+				return new InputSource(dtdFile.getAbsolutePath());
+			}else if (catalogMap.get(systemId) != null){
+				File schemaFile = new File((String) catalogMap.get(systemId));
+				return new InputSource(schemaFile.getAbsolutePath());
+			}
+
+			return null;
+		}
+		
+	}
+    
+    private Map<String, Set<String>> readMapFromXML(String filename) {
+    	File inputFile = new File(tempDir, filename);
+    	Map<String, Set<String>> graph = new HashMap<String, Set<String>>();
+    	if (!inputFile.exists()) return graph;
+		Properties prop = new Properties();
+		
+		try {
+			FileInputStream in = new FileInputStream(inputFile);
+			prop.loadFromXML(in);
+			in.close();
+		} catch (IOException e) {
+			this.javaLogger.logException(e);
+		}
+		
+		Iterator<Object> it = prop.keySet().iterator();
+		while (it.hasNext()) {
+			String key = (String)it.next();
+			String value = prop.getProperty(key);
+			graph.put(key, StringUtils.restoreSet(value, Constants.COMMA));
+		}
+		
+		return graph;
+    }
+	
+	private void outputSubjectScheme() throws DITAOTException {
+		
+		Map<String, Set<String>> graph = readMapFromXML(Constants.FILE_NAME_SUBJECT_RELATION);
+		
+		Queue<String> queue = new LinkedList<String>();
+		Set<String> visitedSet = new HashSet<String>();
+		Iterator<Map.Entry<String, Set<String>>> graphIter = graph.entrySet().iterator();
+		if (graphIter.hasNext()) {
+			Map.Entry<String, Set<String>> entry = graphIter.next();
+			queue.offer(entry.getKey());
+		}
+		
+		try {
+			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder builder = factory.newDocumentBuilder();
+			builder.setEntityResolver(new InternalEntityResolver(
+					CatalogUtils.getCatalog(ditaDir)));
+			
+			while (!queue.isEmpty()) {
+				String parent = queue.poll();
+				Set<String> children = graph.get(parent);
+				
+				if (children != null)
+					queue.addAll(children);
+				if ("ROOT".equals(parent) || visitedSet.contains(parent)) continue;
+				visitedSet.add(parent);
+				String tmprel = FileUtils.getRelativePathFromMap(inputMap, parent);
+				tmprel = FileUtils.resolveFile(DebugAndFilterModule.tempDir, tmprel)+".subm";
+				Document parentRoot = null;
+				if (!FileUtils.fileExists(tmprel))
+					parentRoot = builder.parse(new InputSource(new FileInputStream(parent)));
+				else
+					parentRoot = builder.parse(new InputSource(new FileInputStream(tmprel)));
+				if (children != null) {
+					Iterator<String> child = children.iterator();
+					while (child.hasNext()) {
+						String childpath = child.next();
+						Document childRoot = builder.parse(new InputSource(new FileInputStream(childpath)));
+						mergeScheme(parentRoot, childRoot);
+						String rel = FileUtils.getRelativePathFromMap(inputMap, childpath);
+						rel = FileUtils.resolveFile(DebugAndFilterModule.tempDir, rel)+".subm";
+						generateScheme(rel, childRoot);
+					}
+				}
+				
+				//Output parent scheme
+				String rel = FileUtils.getRelativePathFromMap(inputMap, parent);
+				rel = FileUtils.resolveFile(DebugAndFilterModule.tempDir, rel)+".subm";
+				generateScheme(rel, parentRoot);
+			}
+		} catch (Exception e) {
+			javaLogger.logException(e);
+			throw new DITAOTException(e);
+		}
+		
+	}
+	
+	private void mergeScheme(Document parentRoot, Document childRoot) {
+		Queue<Element> pQueue = new LinkedList<Element>();
+		pQueue.offer(parentRoot.getDocumentElement());
+		
+		while (!pQueue.isEmpty()) {
+			Element pe = pQueue.poll();
+			NodeList pList = pe.getChildNodes();
+			for (int i = 0; i < pList.getLength(); i++) {
+				Node node = pList.item(i);
+				if (node.getNodeType() == Node.ELEMENT_NODE)
+					pQueue.offer((Element)node);
+			}
+			
+			String value = pe.getAttribute(Constants.ATTRIBUTE_NAME_CLASS);
+			if (StringUtils.isEmptyString(value) 
+					|| !value.contains(Constants.ATTR_CLASS_VALUE_SUBJECT_DEF))
+				continue;
+			
+			if (!StringUtils.isEmptyString(
+					value = pe.getAttribute(Constants.ATTRIBUTE_NAME_KEYREF))) {
+				// extend child scheme
+				Element target = searchForKey(childRoot.getDocumentElement(), value);
+				if (target == null) {
+					/* 
+					 * TODO: we have a keyref here to extend into child scheme, but can't
+					 * find any matching <subjectdef> in child scheme. Shall we throw out
+					 * a warning?
+					 * 
+					 * Not for now, just bypass it.
+					 */
+					continue;
+				}
+				
+				// target found
+				pList = pe.getChildNodes();
+				for (int i = 0; i < pList.getLength(); i++) {
+					Node tmpnode = childRoot.importNode(pList.item(i), false);
+					if (tmpnode.getNodeType() == Node.ELEMENT_NODE
+							&& searchForKey(target, 
+									((Element)tmpnode).getAttribute(Constants.ATTRIBUTE_NAME_KEYS)) != null)
+						continue;
+					target.appendChild(tmpnode);
+				}
+				
+			} else if (!StringUtils.isEmptyString(
+					value = pe.getAttribute(Constants.ATTRIBUTE_NAME_KEYS))) {
+				// merge into parent scheme
+				Element target = searchForKey(childRoot.getDocumentElement(), value);
+				if (target != null) {
+					pList = target.getChildNodes();
+					for (int i = 0; i < pList.getLength(); i++) {
+						Node tmpnode = parentRoot.importNode(pList.item(i), false);
+						if (tmpnode.getNodeType() == Node.ELEMENT_NODE
+								&& searchForKey(pe, 
+										((Element)tmpnode).getAttribute(Constants.ATTRIBUTE_NAME_KEYS)) != null)
+							continue;
+						pe.appendChild(tmpnode);
+					}
+				}
+			}
+		}
+	}
+	
+	private Element searchForKey(Element root, String key) {
+		if (root == null || StringUtils.isEmptyString(key)) return null;
+		Queue<Element> queue = new LinkedList<Element>();
+		queue.offer(root);
+		
+		while (!queue.isEmpty()) {
+			Element pe = queue.poll();
+			NodeList pchildrenList = pe.getChildNodes();
+			for (int i = 0; i < pchildrenList.getLength(); i++) {
+				Node node = pchildrenList.item(i);
+				if (node.getNodeType() == Node.ELEMENT_NODE)
+					queue.offer((Element)node);
+			}
+			
+			String value = pe.getAttribute(Constants.ATTRIBUTE_NAME_CLASS);
+			if (StringUtils.isEmptyString(value) 
+					|| !value.contains(Constants.ATTR_CLASS_VALUE_SUBJECT_DEF))
+				continue;
+			
+			value = pe.getAttribute(Constants.ATTRIBUTE_NAME_KEYS);
+			if (StringUtils.isEmptyString(value)) continue;
+			
+			if (value.equals(key)) return pe;
+		}
+		return null;
+	}
+	
+	private void generateScheme(String filename, Document root) throws DITAOTException {
+		try {
+			FileOutputStream file = new FileOutputStream(new File(filename));
+			StreamResult res = new StreamResult(file);
+			DOMSource ds = new DOMSource(root);
+			TransformerFactory tff = TransformerFactory.newInstance();
+			Transformer tf = tff.newTransformer();
+			tf.transform(ds, res);
+			if (res.getOutputStream() != null)
+				res.getOutputStream().close();
+			if (file != null) file.close();
+		} catch (Exception e) {
+			javaLogger.logException(e);
+			throw new DITAOTException(e);
+		}
+	}
     
     
     /*

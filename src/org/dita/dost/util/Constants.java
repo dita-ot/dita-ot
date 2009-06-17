@@ -153,6 +153,7 @@ public abstract class Constants {
     public static final String FILE_NAME_DITA_LIST_XML="dita.xml.properties";
     public static final String FILE_NAME_CATALOG = "catalog-dita.xml";
     public static final String FILE_NAME_SUBJECT_SCHEME_MERGED = "subject_scheme_merged.xml";
+    public static final String FILE_NAME_SUBJECT_RELATION = "subrelation.xml";
     
     /**
      * Constants for all the properties's name.
@@ -340,6 +341,8 @@ public abstract class Constants {
 	public static final String IndexTerm_Prefix_See = "See";
 	public static final String IndexTerm_Prefix_See_Also = "See also";
 	public static final String ATTRIBUTE_NAME_NAME = "name";
+	public static final String ATTR_TYPE_VALUE_SUBJECT_SCHEME = "subjectScheme";
+	public static final String FILE_NAME_SUBJECT_DICTIONARY = "subject_scheme.dictionary";
 
 	
     /**

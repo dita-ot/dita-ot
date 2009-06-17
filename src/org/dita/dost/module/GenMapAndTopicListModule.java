@@ -11,7 +11,6 @@ package org.dita.dost.module;
 
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -24,17 +23,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Queue;
 import java.util.Set;
 import java.util.Map.Entry;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTJavaLogger;
@@ -51,12 +43,6 @@ import org.dita.dost.util.FilterUtils;
 import org.dita.dost.util.OutputUtils;
 import org.dita.dost.util.StringUtils;
 import org.dita.dost.writer.PropertiesWriter;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.EntityResolver;
-import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
@@ -181,8 +167,14 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 	private String rootFile=null;
 	
 	private OutputStreamWriter keydef;
+	// TODO Added by William on 2009-06-09 for scheme key bug start
+	// keydef file from keys used in schema files
+	private OutputStreamWriter schemekeydef;
+	// TODO Added by William on 2009-06-09 for scheme key bug end
 
 	private Set<String> schemeSet;
+	
+	private Map<String, Set<String>> schemeDictionary = null;
 
 	/**
 	 * Create a new instance and do the initialization.
@@ -220,6 +212,8 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 		keyrefSet = new HashSet<String>(Constants.INT_128);
 		coderefSet = new HashSet<String>(Constants.INT_128);
 		
+		this.schemeDictionary = new HashMap<String, Set<String>>();
+		
 		//@processing-role
 		resourceOnlySet = new HashSet<String>(Constants.INT_128);
 	}
@@ -250,6 +244,12 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 			outputResult();
 			keydef.write("</stub>");
 			keydef.close();
+			// TODO Added by William on 2009-06-09 for scheme key bug start
+			// write the end tag
+			schemekeydef.write("</stub>");
+			// close the steam
+			schemekeydef.close();
+			// TODO Added by William on 2009-06-09 for scheme key bug end
 		}catch(DITAOTException e){
 			throw e;
 		}catch (SAXException e) {
@@ -321,6 +321,14 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 			keydef = new OutputStreamWriter(new FileOutputStream(new File(tempDir,"keydef.xml")));
 			keydef.write("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
 			keydef.write("<stub>");
+			// TODO Added by William on 2009-06-09 for scheme key bug start
+			// create the keydef file for scheme files
+			schemekeydef = new OutputStreamWriter(new FileOutputStream(
+					new File(tempDir, "schemekeydef.xml")));
+			// write the head
+			schemekeydef.write("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
+			schemekeydef.write("<stub>");
+			// TODO Added by William on 2009-06-09 for scheme key bug end
 		} catch (FileNotFoundException e) {
 			javaLogger.logException(e);
 		} catch (IOException e){
@@ -472,7 +480,9 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 				copytoMap.put(key, value);				
 			}
 		}
-		
+		// TODO Added by William on 2009-06-09 for scheme key bug start
+		schemeSet.addAll(reader.getSchemeRefSet());
+		// TODO Added by William on 2009-06-09 for scheme key bug end
 		/**
 		 * collect key definitions 
 		 */
@@ -506,18 +516,54 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 				
 				keysDefMap.put(key, value+"("+currentFile+")");
 			}
-			
+			// TODO Added by William on 2009-06-09 for scheme key bug start
+			// if the current file is also a schema file
+			if (schemeSet.contains(currentFile)) {
+				// write the keydef into the scheme keydef file
+				try {
+					schemekeydef.write("<keydef ");
+					schemekeydef.write("keys=\"" + key + "\" ");
+					schemekeydef.write("href=\"" + value + "\" ");
+					schemekeydef.write("source=\"" + currentFile + "\"/>");
+					schemekeydef.write("\n");
+					schemekeydef.flush();
+				} catch (IOException e) {
+
+					javaLogger.logException(e);
+				}
+			}
+			// TODO Added by William on 2009-06-09 for scheme key bug end
 		}
 		hrefTargetSet.addAll(reader.getHrefTargets());
 		hrefWithIDSet.addAll(reader.getHrefTopicSet());
 		chunkTopicSet.addAll(reader.getChunkTopicSet());
-		schemeSet.addAll(reader.getSchemeSet());
+		schemeSet.addAll(reader.getSchemeRefSet());
 		conrefTargetSet.addAll(reader.getConrefTargets());
 		nonConrefCopytoTargetSet.addAll(reader.getNonConrefCopytoTargets());
 		ignoredCopytoSourceSet.addAll(reader.getIgnoredCopytoSourceSet());
 		subsidiarySet.addAll(reader.getSubsidiaryTargets());
 		outDitaFilesSet.addAll(reader.getOutFilesSet());
 		resourceOnlySet.addAll(reader.getResourceOnlySet());
+		
+		// Generate topic-scheme dictionary
+		Set<String> hrfSet = reader.getHrefTargets();
+		Set<String> children = null;
+		if (reader.getSchemeSet() != null && reader.getSchemeSet().size() > 0) {
+			children = this.schemeDictionary.get(currentFile);
+			if (children == null)
+				children = new HashSet<String>();
+			children.addAll(reader.getSchemeSet());
+			this.schemeDictionary.put(currentFile, children);
+			Iterator<String> it = hrfSet.iterator();
+			while (it.hasNext()) {
+				String filename = it.next();
+				children = this.schemeDictionary.get(filename);
+				if (children == null)
+					children = new HashSet<String>();
+				children.addAll(reader.getSchemeSet());
+				this.schemeDictionary.put(filename, children);
+			}
+		}
 	}
 
 	private void categorizeCurrentFile(String currentFile) {
@@ -854,8 +900,30 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 		writer.write(outputFile.getAbsolutePath());
 		writer.writeToXML(xmlDitalist.getAbsolutePath());
 		
-		//Output merged subject scheme file
-		outputSubjectScheme();
+		// Output relation-graph
+		writeMapToXML(reader.getRelationshipGrap(), Constants.FILE_NAME_SUBJECT_RELATION);
+		// Output topic-scheme dictionary
+		writeMapToXML(this.schemeDictionary, Constants.FILE_NAME_SUBJECT_DICTIONARY);
+	}
+	
+	private void writeMapToXML(Map<String, Set<String>> m, String filename) {
+		if (m == null) return;
+		Properties prop = new Properties();
+		Iterator<Map.Entry<String, Set<String>>> iter = m.entrySet().iterator();
+		while (iter.hasNext()) {
+			Map.Entry<String, Set<String>> entry = iter.next();
+			String key = entry.getKey();
+			String value = StringUtils.assembleString(entry.getValue(), Constants.COMMA);
+			prop.setProperty(key, value);
+		}
+		File outputFile = new File(tempDir, filename);
+		try {
+			FileOutputStream os = new FileOutputStream(outputFile);
+			prop.storeToXML(os, null);
+			os.close();
+		} catch (IOException e) {
+			this.javaLogger.logException(e);
+		}
 	}
 
 	private void addSetToProperties(Properties prop, String key, Set<String> set) {
@@ -1010,193 +1078,6 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 		newSet.clear();
 	}
 	
-	private class InternalEntityResolver implements EntityResolver {
-
-		private HashMap<String, String> catalogMap = null;
-		
-		public InternalEntityResolver(HashMap<String, String> map) {
-			this.catalogMap = map;
-		}
-		
-		public InputSource resolveEntity(String publicId, String systemId)
-				throws SAXException, IOException {
-			if (catalogMap.get(publicId) != null) {
-				File dtdFile = new File((String) catalogMap.get(publicId));
-				return new InputSource(dtdFile.getAbsolutePath());
-			}else if (catalogMap.get(systemId) != null){
-				File schemaFile = new File((String) catalogMap.get(systemId));
-				return new InputSource(schemaFile.getAbsolutePath());
-			}
-
-			return null;
-		}
-		
-	}
 	
-	private void outputSubjectScheme() throws DITAOTException {
-		
-		Map<String, Set<String>> graph = reader.getRelationshipGrap();
-		if (graph == null || graph.isEmpty()) return;
-		
-		Queue<String> queue = new LinkedList<String>();
-		Set<String> visitedSet = new HashSet<String>();
-		Iterator<Map.Entry<String, Set<String>>> graphIter = graph.entrySet().iterator();
-		if (graphIter.hasNext()) {
-			Map.Entry<String, Set<String>> entry = graphIter.next();
-			queue.offer(entry.getKey());
-		}
-		
-		try {
-			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-			DocumentBuilder builder = factory.newDocumentBuilder();
-			if (GenListModuleReader.getCatalogMap() != null) {
-				builder.setEntityResolver(new InternalEntityResolver(GenListModuleReader.getCatalogMap()));
-			}
-			
-			while (!queue.isEmpty()) {
-				String parent = queue.poll();
-				Set<String> children = graph.get(parent);
-				
-				if (children != null)
-					queue.addAll(children);
-				if ("ROOT".equals(parent) || visitedSet.contains(parent)) continue;
-				visitedSet.add(parent);
-				String tmprel = FileUtils.getRelativePathFromMap(rootFile, parent);
-				tmprel = FileUtils.resolveFile(this.tempDir, tmprel);
-				Document parentRoot = null;
-				if (!FileUtils.fileExists(tmprel))
-					parentRoot = builder.parse(new InputSource(new FileInputStream(parent)));
-				else
-					parentRoot = builder.parse(new InputSource(new FileInputStream(tmprel)));
-				if (children != null) {
-					Iterator<String> child = children.iterator();
-					while (child.hasNext()) {
-						String childpath = child.next();
-						Document childRoot = builder.parse(new InputSource(new FileInputStream(childpath)));
-						mergeScheme(parentRoot, childRoot);
-						String rel = FileUtils.getRelativePathFromMap(rootFile, childpath);
-						rel = FileUtils.resolveFile(this.tempDir, rel);
-						generateScheme(rel, childRoot);
-					}
-				}
-				
-				//Output parent scheme
-				String rel = FileUtils.getRelativePathFromMap(rootFile, parent);
-				rel = FileUtils.resolveFile(this.tempDir, rel);
-				generateScheme(rel, parentRoot);
-			}
-		} catch (Exception e) {
-			javaLogger.logException(e);
-			throw new DITAOTException(e);
-		}
-		
-	}
-	
-	private void mergeScheme(Document parentRoot, Document childRoot) {
-		Queue<Element> pQueue = new LinkedList<Element>();
-		pQueue.offer(parentRoot.getDocumentElement());
-		
-		while (!pQueue.isEmpty()) {
-			Element pe = pQueue.poll();
-			NodeList pList = pe.getChildNodes();
-			for (int i = 0; i < pList.getLength(); i++) {
-				Node node = pList.item(i);
-				if (node.getNodeType() == Node.ELEMENT_NODE)
-					pQueue.offer((Element)node);
-			}
-			
-			String value = pe.getAttribute(Constants.ATTRIBUTE_NAME_CLASS);
-			if (StringUtils.isEmptyString(value) 
-					|| !value.contains(Constants.ATTR_CLASS_VALUE_SUBJECT_DEF))
-				continue;
-			
-			if (!StringUtils.isEmptyString(
-					value = pe.getAttribute(Constants.ATTRIBUTE_NAME_KEYREF))) {
-				// extend child scheme
-				Element target = searchForKey(childRoot.getDocumentElement(), value);
-				if (target == null) {
-					/* 
-					 * TODO: we have a keyref here to extend into child scheme, but can't
-					 * find any matching <subjectdef> in child scheme. Shall we throw out
-					 * a warning?
-					 * 
-					 * Not for now, just bypass it.
-					 */
-					continue;
-				}
-				
-				// target found
-				pList = pe.getChildNodes();
-				for (int i = 0; i < pList.getLength(); i++) {
-					Node tmpnode = childRoot.importNode(pList.item(i), false);
-					if (tmpnode.getNodeType() == Node.ELEMENT_NODE
-							&& searchForKey(target, 
-									((Element)tmpnode).getAttribute(Constants.ATTRIBUTE_NAME_KEYS)) != null)
-						continue;
-					target.appendChild(tmpnode);
-				}
-				
-			} else if (!StringUtils.isEmptyString(
-					value = pe.getAttribute(Constants.ATTRIBUTE_NAME_KEYS))) {
-				// merge into parent scheme
-				Element target = searchForKey(childRoot.getDocumentElement(), value);
-				if (target != null) {
-					pList = target.getChildNodes();
-					for (int i = 0; i < pList.getLength(); i++) {
-						Node tmpnode = parentRoot.importNode(pList.item(i), false);
-						if (tmpnode.getNodeType() == Node.ELEMENT_NODE
-								&& searchForKey(pe, 
-										((Element)tmpnode).getAttribute(Constants.ATTRIBUTE_NAME_KEYS)) != null)
-							continue;
-						pe.appendChild(tmpnode);
-					}
-				}
-			}
-		}
-	}
-	
-	private Element searchForKey(Element root, String key) {
-		if (root == null || StringUtils.isEmptyString(key)) return null;
-		Queue<Element> queue = new LinkedList<Element>();
-		queue.offer(root);
-		
-		while (!queue.isEmpty()) {
-			Element pe = queue.poll();
-			NodeList pchildrenList = pe.getChildNodes();
-			for (int i = 0; i < pchildrenList.getLength(); i++) {
-				Node node = pchildrenList.item(i);
-				if (node.getNodeType() == Node.ELEMENT_NODE)
-					queue.offer((Element)node);
-			}
-			
-			String value = pe.getAttribute(Constants.ATTRIBUTE_NAME_CLASS);
-			if (StringUtils.isEmptyString(value) 
-					|| !value.contains(Constants.ATTR_CLASS_VALUE_SUBJECT_DEF))
-				continue;
-			
-			value = pe.getAttribute(Constants.ATTRIBUTE_NAME_KEYS);
-			if (StringUtils.isEmptyString(value)) continue;
-			
-			if (value.equals(key)) return pe;
-		}
-		return null;
-	}
-	
-	private void generateScheme(String filename, Document root) throws DITAOTException {
-		try {
-			FileOutputStream file = new FileOutputStream(new File(filename));
-			StreamResult res = new StreamResult(file);
-			DOMSource ds = new DOMSource(root);
-			TransformerFactory tff = TransformerFactory.newInstance();
-			Transformer tf = tff.newTransformer();
-			tf.transform(ds, res);
-			if (res.getOutputStream() != null)
-				res.getOutputStream().close();
-			if (file != null) file.close();
-		} catch (Exception e) {
-			javaLogger.logException(e);
-			throw new DITAOTException(e);
-		}
-	}
 
 }

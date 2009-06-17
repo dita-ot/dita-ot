@@ -58,6 +58,7 @@ public class DitaWriter extends AbstractXMLWriter {
     private static final String PI_END = "?>";
     private static final String PI_PATH2PROJ_HEAD = "<?path2project ";
     private static final String PI_WORKDIR_HEAD = "<?workdir ";
+    private static final String PI_FILENAME_HEAD = "<?filename ";
     //To check the URL of href in topicref attribute
     private static final String NOT_LOCAL_URL="://";
     //To check whether the attribute of XTRC and XTRF have existed
@@ -247,6 +248,7 @@ public class DitaWriter extends AbstractXMLWriter {
     private String tempDir;
     private String traceFilename;
     private boolean insideCDATA;
+    private String relname;
 
     private Map<String, String> keys = null;
     
@@ -716,6 +718,7 @@ public class DitaWriter extends AbstractXMLWriter {
             }else{
                 output.write(PI_WORKDIR_HEAD + Constants.SLASH + absolutePath + PI_END);
             }
+            output.write(PI_FILENAME_HEAD + relname + PI_END);
             output.write(Constants.LINE_SEPARATOR);
             if(path2Project != null){
             	output.write(PI_PATH2PROJ_HEAD + path2Project + PI_END);
@@ -925,6 +928,7 @@ public class DitaWriter extends AbstractXMLWriter {
             absolutePath = dirFile.getCanonicalPath();
             fileOutput = new FileOutputStream(outputFile);
             output = new OutputStreamWriter(fileOutput, Constants.UTF8);
+            relname = FileUtils.getRelativePathFromMap(OutputUtils.getInputMapPathName(), traceFilename);
 
             
             // start to parse the file and direct to output in the temp

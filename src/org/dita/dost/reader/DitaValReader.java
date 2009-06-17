@@ -83,6 +83,9 @@ public class DitaValReader extends AbstractXMLReader {
 		logger = new DITAOTJavaLogger();
 		imageList = new ArrayList<String>(Constants.INT_256);
 		relFlagImageList= new ArrayList<String>(Constants.INT_256);
+		validValuesMap = new HashMap<String, HashMap<String, HashSet<String>>>();
+		defaultValueMap = new HashMap<String, HashMap<String, String>>();
+		bindingMap = new HashMap<String, HashMap<String, HashSet<Element>>>();
 		
 		try {
 			if (System.getProperty(Constants.SAX_DRIVER_PROPERTY) == null) {
@@ -234,12 +237,13 @@ public class DitaValReader extends AbstractXMLReader {
 					key = attName + Constants.EQUAL + key;
 					if (schemeFilterMap.get(key) == null) {
 						schemeFilterMap.put(key, action);
-					} else {
-						Properties prop = new Properties();
-						prop.put("%1", key);
-						logger.logError(MessageUtils.getMessage("DOTJ007E", prop)
-								.toString());
-					}
+					} 
+//					else {
+//						Properties prop = new Properties();
+//						prop.put("%1", key);
+//						logger.logError(MessageUtils.getMessage("DOTJ007E", prop)
+//								.toString());
+//					}
 				}
 			}
 		}
@@ -262,6 +266,16 @@ public class DitaValReader extends AbstractXMLReader {
 		return schemeFilterMap;
 	}
 	
+	public void reset() {
+		schemeFilterMap.clear();
+		validValuesMap.clear();
+		defaultValueMap.clear();
+	}
+	
+	public void filterReset() {
+		filterMap.clear();
+	}
+	
 	public List<String> getRelFlagImageList(){
 		return relFlagImageList;
 	}
@@ -281,8 +295,6 @@ public class DitaValReader extends AbstractXMLReader {
 					new File(scheme))));
 			schemeRoot = doc.getDocumentElement();
 			if (schemeRoot == null) return;
-			if (bindingMap == null) bindingMap = new HashMap<String, HashMap<String, HashSet<Element>>>();
-			if (defaultValueMap == null) this.defaultValueMap = new HashMap<String, HashMap<String, String>>();
 			NodeList rootChildren = schemeRoot.getChildNodes();
 			for (int i = 0; i < rootChildren.getLength(); i++) {
 				if (rootChildren.item(i).getNodeType() == Node.ELEMENT_NODE) {
@@ -361,8 +373,6 @@ public class DitaValReader extends AbstractXMLReader {
 	private void putValuePairsIntoMap(Element subtree, String elementName, String attName) {
 		if (subtree == null || attName == null) return;
 		
-		if (this.validValuesMap == null)
-			this.validValuesMap = new HashMap<String, HashMap<String, HashSet<String>>>();
 		HashMap<String, HashSet<String>> valueMap = this.validValuesMap.get(attName);
 		if (valueMap == null)
 			valueMap = new HashMap<String, HashSet<String>>();

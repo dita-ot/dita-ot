@@ -146,6 +146,7 @@ public class GenListModuleReader extends AbstractXMLReader {
     private int processRoleLevel; // Depth inside a @processing-role parent
     private Set<String> resourceOnlySet; // Topics with role of "resource-only"
     private Set<String> crossSet;
+    private Set<String> schemeRefSet = null;
     
     /** Subject scheme document root */
     //private Document schemeRoot = null;
@@ -155,7 +156,7 @@ public class GenListModuleReader extends AbstractXMLReader {
     
     /** Relationship graph between subject schema */
     private Map<String, Set<String>> relationGraph = null;
-	
+    
 	/**
 	 * Constructor
 	 */
@@ -165,6 +166,7 @@ public class GenListModuleReader extends AbstractXMLReader {
 		hrefTopicSet = new HashSet<String>(Constants.INT_32);
 		chunkTopicSet = new HashSet<String>(Constants.INT_32);
 		schemeSet = new HashSet<String>(Constants.INT_32);
+		schemeRefSet = new HashSet<String>(Constants.INT_32);
 		conrefTargets = new HashSet<String>(Constants.INT_32);
 		copytoMap = new HashMap<String, String>(Constants.INT_16);
 		subsidiarySet = new HashSet<String>(Constants.INT_16);
@@ -257,6 +259,8 @@ public class GenListModuleReader extends AbstractXMLReader {
 		ignoredCopytoSourceSet.clear();
 		outDitaFilesSet.clear();
 		keysDefMap.clear();
+		schemeSet.clear();
+		schemeRefSet.clear();
 		
 		//@processing-role
 		processRoleLevel = 0;
@@ -491,7 +495,7 @@ public class GenListModuleReader extends AbstractXMLReader {
 				}
 				children.add(this.currentFile);
 				this.relationGraph.put("ROOT", children);
-				schemeSet.add(FileUtils.getRelativePathFromMap(rootFilePath, currentFile));
+				schemeRefSet.add(FileUtils.getRelativePathFromMap(rootFilePath, currentFile));
 			} else if (attrValue.contains(Constants.ATTR_CLASS_VALUE_SCHEME_REF)) {
 				Set<String> children = this.relationGraph.get(this.currentFile);
 				if (children == null) {
@@ -782,6 +786,12 @@ public class GenListModuleReader extends AbstractXMLReader {
 			
 		}
 		
+		if (attrClass.contains(Constants.ATTR_CLASS_VALUE_TOPICREF)) {
+			if (Constants.ATTR_TYPE_VALUE_SUBJECT_SCHEME.equalsIgnoreCase(attrType)) {
+				schemeSet.add(filename);
+			}
+		}
+		
 		if (("DITA-foreign".equals(attrType) &&
 				Constants.ATTRIBUTE_NAME_DATA.equals(attrName))
 				|| attrClass!=null && attrClass.contains(Constants.ATTR_CLASS_VALUE_CODEREF)){
@@ -960,6 +970,10 @@ public class GenListModuleReader extends AbstractXMLReader {
 	
 	public Set<String> getSchemeSet() {
 		return this.schemeSet;
+	}
+	
+	public Set<String> getSchemeRefSet() {
+		return this.schemeRefSet;
 	}
 	
 	/**
