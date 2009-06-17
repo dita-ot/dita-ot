@@ -220,9 +220,11 @@ public class MapLinksReader extends AbstractXMLReader {
                 */
         	String t = topicPath;
         	String frag = Constants.SHARP;
+        	//Get topic id
         	if (t.contains(Constants.SHARP)) {
         		frag = t.indexOf(Constants.SHARP) + 1 >= t.length() ?
         				Constants.SHARP : t.substring(t.indexOf(Constants.SHARP) + 1);
+        		//remove the "#" in topic file path
         		t = t.substring(0, t.indexOf(Constants.SHARP));
         	}
         	HashMap<String, String> m = (HashMap<String, String>)map.get(t);
@@ -234,6 +236,9 @@ public class MapLinksReader extends AbstractXMLReader {
         		m.put(frag, indexEntries.toString());
         		map.put(t, m);
         	}
+        	//TODO Added by William on 2009-06-16 for bug:2791696 reltable bug start
+        	indexEntries = new StringBuffer(Constants.INT_1024);
+        	//TODO Added by William on 2009-06-16 for bug:2791696 reltable bug end
             
         }
     }
