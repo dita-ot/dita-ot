@@ -22,6 +22,7 @@
  <!-- Single template to set flag variables, generate props and revision flagging, and output
   contents. Can be used by any element that does not use any markup between flags and contents. -->
  <xsl:template match="*" mode="outputContentsWithFlags">
+  
   <xsl:variable name="flagrules">
    <xsl:call-template name="getrules"/>
   </xsl:variable>
@@ -537,6 +538,50 @@
    <xsl:when test="$FILTERDOC/val/prop[@att=$flag-att][@val=$firstflag][@action='flag']">
     <xsl:copy-of select="$FILTERDOC/val/prop[@att=$flag-att][@val=$firstflag][@action='flag']"/>
    </xsl:when>
+   <!-- Added by William on 2009-06-01 for flag process start-->
+   <xsl:when test="$FILTERDOC/val/prop[@att=$flag-att][not(@val=$firstflag)][@action='flag']">
+    
+    <xsl:for-each select="$FILTERDOC/val/prop[@att=$flag-att][not(@val=$firstflag)][@action='flag']">
+           <!-- get the val -->
+           <xsl:variable name="val">
+                    <xsl:apply-templates select="." mode="getVal"/>
+           </xsl:variable>
+           <!-- get the backcolor -->
+           <xsl:variable name="backcolor">
+                     <xsl:apply-templates select="." mode="getBgcolor"/>
+           </xsl:variable>
+           <!-- get the color -->
+           <xsl:variable name="color">
+                  <xsl:apply-templates select="." mode="getColor"/>
+           </xsl:variable>
+           <!-- get the style -->
+           <xsl:variable name="style">
+            <xsl:apply-templates select="." mode="getStyle"/>
+           </xsl:variable>
+           <!-- get child node -->
+           <xsl:variable name="childnode">
+                   <xsl:apply-templates select="." mode="getChildNode"/>
+           </xsl:variable>
+           <!-- get the location of schemekeydef.xml -->
+           <xsl:variable name="KEYDEF-FILE">
+                 <xsl:value-of select="concat($WORKDIR,$PATH2PROJ,'schemekeydef.xml')"/>
+          </xsl:variable>
+          <!--keydef.xml contains the val  -->
+          <xsl:if test="(document($KEYDEF-FILE, /)//*[@keys=$val])">
+            <!-- copy needed elements -->
+              <xsl:apply-templates select="(document($KEYDEF-FILE, /)//*[@keys=$val])" mode="copy-element">
+                 <xsl:with-param name="att" select="$flag-att"/>
+                 <xsl:with-param name="bgcolor" select="$backcolor"/>
+                 <xsl:with-param name="fcolor" select="$color"/>
+                 <xsl:with-param name="style" select="$style"/>
+                 <xsl:with-param name="value" select="$val"/>
+                 <xsl:with-param name="flag" select="$firstflag"/>
+                 <xsl:with-param name="childnodes" select="$childnode"/>
+              </xsl:apply-templates>
+           </xsl:if>
+        </xsl:for-each>
+   </xsl:when>
+   <!-- Added by William on 2009-06-01 for flag process end-->
    <xsl:otherwise/> <!-- that flag not active -->
   </xsl:choose>
   
@@ -552,7 +597,110 @@
    <xsl:otherwise/> <!-- no more values -->
   </xsl:choose>
  </xsl:template>
-
+ 
+ <!-- Added by William on 2009-06-01 for flag process start-->
+ <!-- copy needed elements -->
+ <xsl:template match="*" mode="copy-element">
+     <xsl:param name="att"/>
+     <xsl:param name="bgcolor"/>
+     <xsl:param name="fcolor"/>
+     <xsl:param name="style"/>
+     <xsl:param name="value"/>
+     <xsl:param name="flag"/>
+     <xsl:param name="cvffilename" select="@source"/>
+     <xsl:param name="childnodes"/>
+    <!--get the location of dita.xml.properties-->
+    <xsl:variable name="PROPERTIES-FILE">
+     <xsl:value-of select="concat($WORKDIR,$PATH2PROJ,'subject_scheme.dictionary')"/>
+    </xsl:variable>
+  <!-- get the scheme list -->
+  <xsl:variable name="schemeList">
+         <xsl:apply-templates select="document($PROPERTIES-FILE,/)//*[@key=$CURRENTFILE]" mode="check"/>
+  </xsl:variable>
+  <!-- scheme list contains the scheme file -->
+    <xsl:if test="contains($schemeList, $cvffilename)">
+          <!-- get the path of scheme file -->
+          <xsl:variable name="submfile">
+              <xsl:value-of select="$cvffilename"/><xsl:text>.subm</xsl:text>
+          </xsl:variable>
+          <xsl:variable name="cvffilepath">
+               <xsl:value-of select="concat($WORKDIR,$PATH2PROJ,$submfile)"/>
+          </xsl:variable>
+     <xsl:if test="document($cvffilepath,/)//*[@keys=$value]//*[@keys=$flag]">
+         <!-- copy the child node for flag and just copy the first element whose keys=$flag-->
+      <!--xsl:for-each select="document($cvffilepath,/)//*[@keys=$value]/*"-->
+      <xsl:for-each select="document($cvffilepath,/)//*[@keys=$value]//*[@keys=$flag][1]">
+            <xsl:element name="prop">
+             <xsl:attribute name="att">
+              <xsl:value-of select="$att"/>
+             </xsl:attribute>
+             <xsl:attribute name="val">
+              <xsl:value-of select="@keys"/>
+             </xsl:attribute>
+             <xsl:attribute name="action">
+              <xsl:value-of select="'flag'"/>
+             </xsl:attribute>
+             <xsl:attribute name="backcolor">
+              <xsl:value-of select="$bgcolor"/>
+             </xsl:attribute>
+             <xsl:attribute name="color">
+              <xsl:value-of select="$fcolor"/>
+             </xsl:attribute>
+             <xsl:attribute name="style">
+              <xsl:value-of select="$style"/>
+             </xsl:attribute>
+             <xsl:copy-of select="$childnodes"/>
+            </xsl:element>
+           </xsl:for-each>
+     </xsl:if>
+  </xsl:if>
+ </xsl:template>
+ <!-- get the scheme list -->
+ <xsl:template match="*" mode="check">
+  <xsl:value-of select="."/>
+ </xsl:template>
+ <xsl:template match="*" mode="getVal">
+     <xsl:value-of select="@val"/>
+ </xsl:template>
+ <!-- get background color -->
+ <xsl:template match="*" mode="getBgcolor">
+  <xsl:choose>
+   <xsl:when test="@backcolor">
+    <xsl:value-of select="@backcolor"/>
+   </xsl:when>
+   <xsl:otherwise>
+    <xsl:value-of select="''"/>
+   </xsl:otherwise>
+  </xsl:choose>
+ </xsl:template>
+ <!-- get font color -->
+ <xsl:template match="*" mode="getColor">
+       <xsl:choose>
+           <xsl:when test="@color">
+            <xsl:value-of select="@color"/>
+           </xsl:when>
+           <xsl:otherwise>
+            <xsl:value-of select="''"/>
+           </xsl:otherwise>
+       </xsl:choose>
+ </xsl:template>
+ <!-- get font style -->
+ <xsl:template match="*" mode="getStyle">
+  <xsl:choose>
+   <xsl:when test="@style">
+    <xsl:value-of select="@style"/>
+   </xsl:when>
+   <xsl:otherwise>
+    <xsl:value-of select="''"/>
+   </xsl:otherwise>
+  </xsl:choose>
+ </xsl:template>
+ <!-- get child nodes -->
+ <xsl:template match="*" mode="getChildNode">
+        <xsl:copy-of select="node()"/>
+  </xsl:template>
+ <!-- Added by William on 2009-06-01 for flag process end-->
+ 
  <!-- Shortcuts for generating both rev flags and property flags -->
  <xsl:template name="start-flags-and-rev">
    <xsl:param name="flagrules">
