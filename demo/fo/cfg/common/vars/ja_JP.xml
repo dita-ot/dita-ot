@@ -255,7 +255,7 @@ See the accompanying license.txt file for applicable licenses.
 
     <!-- Template for generated page number of a reference 
          in printed manual. -->
-    <variable id="On the page"> <param ref-name="pagenum"/> ページの</variable>
+    <variable id="On the page">(<param ref-name="pagenum"/> ページ)</variable>
 
     <!-- Template for generated page number of a reference
          in printed manual, when referenced element has no title. -->
