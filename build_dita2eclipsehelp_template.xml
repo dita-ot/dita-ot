@@ -8,7 +8,7 @@
     
     <import file="build_init.xml" />
     <import file="build_preprocess.xml" />
-    <import file="build_general.xml" />
+    <import file="build_general.xml"/>
 	
 	   <target name="dita.index.eclipsehelp.init">
 	      <condition property="dita.eclipsehelp.index.class" value="org.dita.dost.writer.EclipseIndexWriter"> 
@@ -212,7 +212,7 @@
     description="Build Eclipsehelp manifest.mf file">
     <xslt processor="trax"
       in="${dita.temp.dir}${file.separator}${user.input.file}"
-      out="${dita.map.output.dir}${file.separator}meta-inf${file.separator}Manifest.mf"
+      out="${dita.map.output.dir}${file.separator}META-INF${file.separator}MANIFEST.MF"
       classpathref="dost.class.path"
       style="${dita.script.dir}${file.separator}map2plugin.xsl">
       <param name="version"
@@ -241,7 +241,7 @@
     description="Build Eclipsehelp manifest.mf file">
     <xslt processor="trax"
       in="${dita.temp.dir}${file.separator}${user.input.file}"
-      out="${dita.map.output.dir}${file.separator}meta-inf${file.separator}Manifest.mf"
+      out="${dita.map.output.dir}${file.separator}META-INF${file.separator}MANIFEST.MF"
       classpathref="dost.class.path"
       style="${dita.script.dir}${file.separator}map2plugin.xsl">
       <param name="version"
@@ -329,7 +329,7 @@
   
   <target name="dita.map.eclipse.fragment.move.files"
     if="old.transform">
-    <defaultexcludes add="**/meta-inf/**"/>
+    <defaultexcludes add="**/META-INF/**"/>
     <defaultexcludes add="**/nl/**"/>
     <move todir="${dita.map.output.dir}${file.separator}${fragment.dirname}" includeemptydirs="yes">
       <fileset dir="${dita.map.output.dir}" defaultexcludes="yes">
@@ -342,7 +342,7 @@
   
   <target name="dita.out.map.eclipse.fragment.move.files"
     if="inner.transform">
-    <defaultexcludes add="**/meta-inf/**"/>
+    <defaultexcludes add="**/META-INF/**"/>
     <defaultexcludes add="**/nl/**"/>
     <move todir="${output.dir}${file.separator}${fragment.dirname}" includeemptydirs="yes">
       <fileset dir="${output.dir}" defaultexcludes="yes">
