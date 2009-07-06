@@ -113,6 +113,9 @@ public abstract class Constants {
     public static final String ATTRIBUTE_NAME_ID = "id";
     public static final String ATTRIBUTE_NAME_CLASS = "class";
     public static final String ATTRIBUTE_NAME_COLNAME = "colname";
+    //Added by William on 2009-06-30 for colname bug:2811358 start
+    public static final String ATTRIBUTE_NAME_MOREROWS = "morerows";
+    //Added by William on 2009-06-30 for colname bug:2811358 start
     public static final String ATTRIBUTE_NAME_NAMEST = "namest";
     public static final String ATTRIBUTE_NAME_NAMEEND = "nameend";
     public static final String ATTRIBUTE_NAME_XML_LANG = "xml:lang";    
@@ -152,7 +155,7 @@ public abstract class Constants {
     public static final String FILE_NAME_DITA_LIST = "dita.list";
     public static final String FILE_NAME_DITA_LIST_XML="dita.xml.properties";
     public static final String FILE_NAME_CATALOG = "catalog-dita.xml";
-    public static final String FILE_NAME_SUBJECT_SCHEME_MERGED = "subject_scheme_merged.xml";
+    //store the scheme files refered by a scheme file in the form of Map<String Set<String>>
     public static final String FILE_NAME_SUBJECT_RELATION = "subrelation.xml";
     
     /**
@@ -183,6 +186,7 @@ public abstract class Constants {
     public static final String KEYREF_LIST = "keyreflist";
     public static final String CODEREF_LIST = "codereflist";
     public static final String RESOURCE_ONLY_LIST = "resourceonlylist";
+    //list all of the scheme files
     public static final String SUBJEC_SCHEME_LIST = "subjectschemelist";
 
     /**
@@ -286,6 +290,12 @@ public abstract class Constants {
 	public static final String ATTRIBUTE_NAMESPACE_PREFIX_DITAARCHVERSION = "xmlns:ditaarch";
 	public static final String ATTR_CLASS_VALUE_OBJECT = " topic/object ";
 	public static final String ATTR_CLASS_VALUE_TOPICMETA = " map/topicmeta ";
+	//Added by William on 2009-06-24 for req #12014 start
+	public static final String ATTR_CLASS_VALUE_EXPORTANCHORS = " delay-d/exportanchors ";
+	public static final String ATTR_CLASS_VALUE_ANCHORKEY = " delay-d/anchorkey ";
+	public static final String ATTR_CLASS_VALUE_ANCHORID = " delay-d/anchorid ";
+	//Added by William on 2009-06-24 for req #12014 end
+	
 	public static final String ATTR_CLASS_VALUE_AUTHOR = " topic/author ";
 	public static final String ATTR_CLASS_VALUE_SOURCE = " topic/source ";
 	public static final String ATTR_CLASS_VALUE_PUBLISHER = " topic/publisher ";
@@ -342,8 +352,12 @@ public abstract class Constants {
 	public static final String IndexTerm_Prefix_See_Also = "See also";
 	public static final String ATTRIBUTE_NAME_NAME = "name";
 	public static final String ATTR_TYPE_VALUE_SUBJECT_SCHEME = "subjectScheme";
+	//store how many scheme files a ditamap file used in form of Map<String, Set<String>>
 	public static final String FILE_NAME_SUBJECT_DICTIONARY = "subject_scheme.dictionary";
-
+	//Added by William on 2009-06-24 for req #12014 start
+	//export.xml to store exported elements
+	public static final String FILE_NAME_EXPORT_XML = "export.xml";
+	//Added by William on 2009-06-24 for req #12014 start
 	
     /**
      * Private constructor used to forbid instantiation.

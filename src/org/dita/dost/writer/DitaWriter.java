@@ -17,9 +17,14 @@ import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Queue;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.DITAOTJavaLogger;
@@ -32,6 +37,10 @@ import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.FilterUtils;
 import org.dita.dost.util.OutputUtils;
 import org.dita.dost.util.StringUtils;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -58,12 +67,13 @@ public class DitaWriter extends AbstractXMLWriter {
     private static final String PI_END = "?>";
     private static final String PI_PATH2PROJ_HEAD = "<?path2project ";
     private static final String PI_WORKDIR_HEAD = "<?workdir ";
-    private static final String PI_FILENAME_HEAD = "<?filename ";
     //To check the URL of href in topicref attribute
     private static final String NOT_LOCAL_URL="://";
     //To check whether the attribute of XTRC and XTRF have existed
     private static final String ATTRIBUTE_XTRC = "xtrc";
     private static final String ATTRIBUTE_XTRF = "xtrf";
+    
+    private Document root = null;
     
     private static boolean checkDITAHREF(Attributes atts){
     	String classValue = atts.getValue(Constants.ATTRIBUTE_NAME_CLASS);
@@ -235,6 +245,14 @@ public class DitaWriter extends AbstractXMLWriter {
     private List<String> colSpec;
     private int columnNumber; // columnNumber is used to adjust column name
     private int columnNumberEnd; //columnNumberEnd is the end value for current entry
+    //Added by William on 2009-06-30 for colname bug:2811358 start
+    //store row number
+    private int rowNumber;
+    //store total column count
+    private int totalColumns;
+    //store morerows attribute
+    private Map<String, Integer> rowsMap;
+    //Added by William on 2009-06-30 for colname bug:2811358 end
     private HashMap<String, Integer> counterMap;
     private boolean exclude; // when exclude is true the tag will be excluded.
     private int foreignLevel; // foreign/unknown nesting level
@@ -248,7 +266,6 @@ public class DitaWriter extends AbstractXMLWriter {
     private String tempDir;
     private String traceFilename;
     private boolean insideCDATA;
-    private String relname;
 
     private Map<String, String> keys = null;
     
@@ -265,6 +282,14 @@ public class DitaWriter extends AbstractXMLWriter {
         exclude = false;
         columnNumber = 1;
         columnNumberEnd = 0;
+        //Added by William on 2009-06-30 for colname bug:2811358 start
+        //initialize row number
+        rowNumber = 0;
+        //initialize total column count
+        totalColumns = 0;
+        //initialize the map
+        rowsMap = new HashMap<String, Integer>();
+        //Added by William on 2009-06-30 for colname bug:2811358 start
         catalogMap = CatalogUtils.getCatalog(null);
         absolutePath = null;
         path2Project = null;
@@ -281,6 +306,8 @@ public class DitaWriter extends AbstractXMLWriter {
         validateMap = null;
         logger = new DITAOTJavaLogger();
         reader.setContentHandler(this);
+        
+        
         
         try {
 			reader.setProperty(Constants.LEXICAL_HANDLER_PROPERTY,this);
@@ -409,7 +436,7 @@ public class DitaWriter extends AbstractXMLWriter {
 		    	
 		    }
 		    
-		    // replace conkeyref with conref using key definition
+		    // replace conref with conkeyref(using key definition)
 		    if(Constants.ATTRIBUTE_NAME_CONKEYREF.equals(attQName) && !attValue.equals(Constants.STRING_EMPTY)){
 		    	int sharpIndex = attValue.indexOf(Constants.SHARP);
 		    	int slashIndex = attValue.indexOf(Constants.SLASH);
@@ -420,34 +447,76 @@ public class DitaWriter extends AbstractXMLWriter {
 		    		keyIndex = slashIndex;
 		    	}
 		    	if(keyIndex != -1){
+		    		//get keyref value
 		    		String key = attValue.substring(0,keyIndex);
 		    		String target;
 		    		if(!key.equals(Constants.STRING_EMPTY) && keys.containsKey(key)){
-		    			target = keys.get(key);
-		    			target = FileUtils.replaceExtName(target);
-		    			String tail ;
-		    			if(sharpIndex == -1 ){
-		    				if(target.indexOf(Constants.SHARP) == -1)
-		    					tail = attValue.substring(keyIndex).replaceAll(Constants.SLASH, Constants.SHARP);
-		    				else
-		    					tail = attValue.substring(keyIndex);
+		    			
+		    			//target = FileUtils.replaceExtName(target);
+		    			//Added by William on 2009-06-25 for #12014 start
+		    			//get key's href
+		    			String href = keys.get(key);
+		    			
+		    			//href = FileUtils.getRelativePathFromMap(tempDir, href);
+		    			href = FileUtils.normalizeDirectory(null, href);
+			    		//get element/topic id
+			    		String id = attValue.substring(keyIndex+1);
+			    		
+			    		List<Boolean> list = checkExport(href, id, key);
+			    		boolean idExported = list.get(0).booleanValue();
+			    		boolean keyrefExported = list.get(1).booleanValue();
+		    			if(idExported && keyrefExported){
+		    				copyAttribute("conref", attValue);
+		    			//Added by William on 2009-06-25 for #12014 end
 		    			}else {
-		    				tail = attValue.substring(keyIndex);
-		    				if(target.indexOf(Constants.SHARP) != -1){
-		    					target = target.substring(0,target.indexOf(Constants.SHARP));
-		    				}
+		    				//normal process
+		    				target = keys.get(key);
+			    			target = FileUtils.replaceExtName(target);
+			    			String tail ;
+			    			if(sharpIndex == -1 ){
+			    				if(target.indexOf(Constants.SHARP) == -1)
+			    					//change to topic id
+			    					tail = attValue.substring(keyIndex).replaceAll(Constants.SLASH, Constants.SHARP);
+			    				else
+			    					//change to element id
+			    					tail = attValue.substring(keyIndex);
+			    			}else {
+			    				//change to topic id
+			    				tail = attValue.substring(keyIndex);
+			    				//replace former topic id 
+			    				if(target.indexOf(Constants.SHARP) != -1){
+			    					target = target.substring(0,target.indexOf(Constants.SHARP));
+			    				}
+			    			}
+			    			copyAttribute("conref", target + tail);
+			    			conkeyrefValid = true;
 		    			}
-		    			copyAttribute("conref", target + tail);
-		    			conkeyrefValid = true;
 		    		}else{
 		    			Properties prop = new Properties();
 		    			prop.setProperty("%1", attValue);
 		    			logger.logError(MessageUtils.getMessage("DOTJ046E", prop).toString());
 		    		}
 		    	}else{
+		    		//conkeyref just has keyref
 		    		if(keys.containsKey(attValue)){
-		    			copyAttribute("conref", FileUtils.replaceExtName(keys.get(attValue)));
-		    			conkeyrefValid = true;
+		    			//get key's href
+		    			String href = keys.get(attValue);
+		    			//remove "#"
+		    			href = FileUtils.normalizeDirectory(tempDir, href);
+		    			//Added by William on 2009-06-25 for #12014 start
+		    			String id = null;
+		    			//change for "\\", "/" to "\"
+		    			href = FileUtils.normalizeDirectory(tempDir, href);
+		    			List<Boolean> list = checkExport(href, id, attValue);
+		    			boolean keyrefExported = list.get(1).booleanValue();
+		    			if(keyrefExported){
+		    				copyAttribute("conref", attValue);
+		    			//Added by William on 2009-06-25 for #12014 end
+		    			}else{
+		    				//e.g conref = c.xml 
+		    				copyAttribute("conref", FileUtils.replaceExtName(keys.get(attValue)));
+			    			conkeyrefValid = true;
+		    			}
 		    		}else{
 		    			Properties prop = new Properties();
 		    			prop.setProperty("%1", attValue);
@@ -481,7 +550,93 @@ public class DitaWriter extends AbstractXMLWriter {
 			copyAttribute("conref", conref);
 		}
 	}
-
+	
+	//Added by William on 2009-06-25 for #12014 start
+	/**check whether the keyref/id element has been exported. 
+	 * @param href
+	 * @param id
+	 * @param key
+	 */
+	private List<Boolean> checkExport(String href, String id, String key) {
+		//parsed export .xml to get exported elements
+		String exportFile = (new File(tempDir, Constants.FILE_NAME_EXPORT_XML)).
+		getAbsolutePath();
+		
+		boolean idExported = false;
+		boolean keyrefExported = false;
+		try {
+			//load export.xml only once
+			if(root==null){
+				DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+				factory.setFeature("http://xml.org/sax/features/validation", false);
+				DocumentBuilder builder = factory.newDocumentBuilder();
+				root = builder.parse(new InputSource(new FileInputStream(exportFile)));
+			}
+			//if dita file's extension name is ".xml"
+			if(href.endsWith(Constants.FILE_EXTENSION_XML)){
+				//change the extension to ".dita"
+				href = href.replace(Constants.FILE_EXTENSION_XML, Constants.FILE_EXTENSION_DITA);
+			}
+			//get file node which contains the export node
+			Element fileNode = searchForKey(root.getDocumentElement(), href, "file");
+			if(fileNode!=null){
+				NodeList pList = fileNode.getChildNodes();
+				for (int j = 0; j < pList.getLength(); j++) {
+					Node node = pList.item(j);
+					if(Node.ELEMENT_NODE == node.getNodeType()){
+						Element child = (Element)node;
+						if(child.getNodeName().equals("keyref")&&
+						   child.getAttribute(Constants.ATTRIBUTE_NAME_NAME)
+						   .equals(key)){
+							keyrefExported = true;
+						}else if(child.getNodeName().equals("id")&&
+							child.getAttribute(Constants.ATTRIBUTE_NAME_NAME)
+							.equals(id)){
+							idExported = true;
+						}
+					}
+					if(idExported && keyrefExported){
+						break;
+					}
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		List<Boolean> list = new ArrayList<Boolean>();
+		list.add(Boolean.valueOf(idExported));
+		list.add(Boolean.valueOf(keyrefExported));
+		return list;
+	}
+	
+	private Element searchForKey(Element root, String key, String tagName) {
+		if (root == null || StringUtils.isEmptyString(key)) return null;
+		Queue<Element> queue = new LinkedList<Element>();
+		queue.offer(root);
+		
+		while (!queue.isEmpty()) {
+			Element pe = queue.poll();
+			NodeList pchildrenList = pe.getChildNodes();
+			for (int i = 0; i < pchildrenList.getLength(); i++) {
+				Node node = pchildrenList.item(i);
+				if (node.getNodeType() == Node.ELEMENT_NODE)
+					queue.offer((Element)node);
+			}
+			String value = pe.getNodeName();
+			if(StringUtils.isEmptyString(value)||
+				!value.equals(tagName)){
+				continue;
+			}
+			
+			value = pe.getAttribute(Constants.ATTRIBUTE_NAME_NAME);
+			if (StringUtils.isEmptyString(value)) continue;
+			
+			if (value.equals(key)) return pe;
+		}
+		return null;
+	}
+	//Added by William on 2009-06-25 for #12014 end
+	
 	/**
 	 * @param qName
 	 * @param atts
@@ -492,11 +647,15 @@ public class DitaWriter extends AbstractXMLWriter {
 		output.write(Constants.LESS_THAN + qName);
 		if (Constants.ELEMENT_NAME_TGROUP.equals(qName)){
 			columnNumber = 1; // initialize the column number
-		    columnNumberEnd = 0;
+		    columnNumberEnd = 0;//totally columns
 		    colSpec = new ArrayList<String>(Constants.INT_16);
 		}else if(Constants.ELEMENT_NAME_ROW.equals(qName)) {
 		    columnNumber = 1; // initialize the column number
 		    columnNumberEnd = 0;
+		    //Added by William on 2009-06-30 for colname bug:2811358 start
+		    //store the row number
+		    rowNumber++;
+		    //Added by William on 2009-06-30 for colname bug:2811358 end
 		}else if(Constants.ELEMENT_NAME_COLSPEC.equals(qName)){
 			columnNumber = columnNumberEnd +1;
 			if(atts.getValue(Constants.ATTRIBUTE_NAME_COLNAME) != null){
@@ -506,9 +665,13 @@ public class DitaWriter extends AbstractXMLWriter {
 			}
 			columnNumberEnd = columnNumber;
 			copyAttribute(Constants.ATTRIBUTE_NAME_COLNAME, COLUMN_NAME_COL+columnNumber);
+			//Added by William on 2009-06-30 for colname bug:2811358 start
+			//total columns count
+			totalColumns = columnNumberEnd;
+			//Added by William on 2009-06-30 for colname bug:2811358 end
 		}else if(Constants.ELEMENT_NAME_ENTRY.equals(qName)){
-			//TO DO
-			columnNumber = getStartNumber(atts, columnNumberEnd);
+			
+			/*columnNumber = getStartNumber(atts, columnNumberEnd);
 			if(columnNumber > columnNumberEnd){
 				copyAttribute(Constants.ATTRIBUTE_NAME_COLNAME, COLUMN_NAME_COL+columnNumber);
 				if (atts.getValue(Constants.ATTRIBUTE_NAME_NAMEST) != null){
@@ -518,7 +681,98 @@ public class DitaWriter extends AbstractXMLWriter {
 					copyAttribute(Constants.ATTRIBUTE_NAME_NAMEEND, COLUMN_NAME_COL+getEndNumber(atts, columnNumber));
 				}
 			}
+			columnNumberEnd = getEndNumber(atts, columnNumber);*/
+			
+			//Added by William on 2009-06-30 for colname bug:2811358 start
+			columnNumber = getStartNumber(atts, columnNumberEnd);
+			//if has morerows attribute
+			if(atts.getValue(Constants.ATTRIBUTE_NAME_MOREROWS)!=null){
+				String pos = String.valueOf(rowNumber) + String.valueOf(columnNumber);
+				//total span rows
+				int total = Integer.parseInt(atts.getValue(Constants.ATTRIBUTE_NAME_MOREROWS))+
+				rowNumber;
+				rowsMap.put(pos, Integer.valueOf(total));
+				
+			}
+			
+			if(columnNumber > columnNumberEnd){
+				//The first row
+				if(rowNumber == 1){
+					copyAttribute(Constants.ATTRIBUTE_NAME_COLNAME, COLUMN_NAME_COL+columnNumber);
+					if (atts.getValue(Constants.ATTRIBUTE_NAME_NAMEST) != null){
+						copyAttribute(Constants.ATTRIBUTE_NAME_NAMEST, COLUMN_NAME_COL+columnNumber);
+					}
+					if (atts.getValue(Constants.ATTRIBUTE_NAME_NAMEEND) != null){
+						copyAttribute(Constants.ATTRIBUTE_NAME_NAMEEND, COLUMN_NAME_COL+getEndNumber(atts, columnNumber));
+					}
+				//other row
+				}else{
+					//flag show whether former row spans rows
+					boolean spanRows = false;
+					int offset = 0;
+					//search from first row
+					for(int row=1;row<rowNumber;row++){
+						String pos = String.valueOf(row) + String.valueOf(columnNumber);
+						if(rowsMap.containsKey(pos)){
+							//get total span rows
+							int totalSpanRows = rowsMap.get(pos).intValue();
+							if(rowNumber <= totalSpanRows){
+								spanRows = true;
+								offset ++;
+								break;
+							}
+						}
+					}
+					//if former row doesn't span rows
+					if(!spanRows){
+						copyAttribute(Constants.ATTRIBUTE_NAME_COLNAME, COLUMN_NAME_COL+columnNumber);
+						if (atts.getValue(Constants.ATTRIBUTE_NAME_NAMEST) != null){
+							copyAttribute(Constants.ATTRIBUTE_NAME_NAMEST, COLUMN_NAME_COL+columnNumber);
+						}
+						if (atts.getValue(Constants.ATTRIBUTE_NAME_NAMEEND) != null){
+							copyAttribute(Constants.ATTRIBUTE_NAME_NAMEEND, COLUMN_NAME_COL+getEndNumber(atts, columnNumber));
+						}
+					//if former row spans rows	
+					}else{
+						//neigbouring column may also span rows
+						//flag show whether meet nearest column which doesn't span rows
+						boolean shouldStopSearch = false;
+						for(int col = columnNumber + 1; col <= totalColumns; col++){
+							if(shouldStopSearch){
+								break;
+							}
+							for(int row = 1; row < rowNumber; row++){
+								String pos = String.valueOf(row) + String.valueOf(col);
+								if(rowsMap.containsKey(pos)){
+									//get total span rows
+									int totalSpanRows = rowsMap.get(pos).intValue();
+									if(rowNumber <= totalSpanRows){
+										offset ++;
+										//move to the next colum
+										break;
+									}
+								}
+								//meet the first column span no rows
+								if(row == rowNumber -1){
+									//should stop search
+									shouldStopSearch = true; 
+								}
+							}
+							
+						}
+						//adjust the col name
+						copyAttribute(Constants.ATTRIBUTE_NAME_COLNAME, COLUMN_NAME_COL+(columnNumber+offset));
+						if (atts.getValue(Constants.ATTRIBUTE_NAME_NAMEST) != null){
+							copyAttribute(Constants.ATTRIBUTE_NAME_NAMEST, COLUMN_NAME_COL+(columnNumber+offset));
+						}
+						if (atts.getValue(Constants.ATTRIBUTE_NAME_NAMEEND) != null){
+							copyAttribute(Constants.ATTRIBUTE_NAME_NAMEEND, COLUMN_NAME_COL+getEndNumber(atts, (columnNumber+offset)));
+						}
+					}
+				}
+			}
 			columnNumberEnd = getEndNumber(atts, columnNumber);
+			//Added by William on 2009-06-30 for colname bug:2811358 end
 		}
 	}
 
@@ -718,7 +972,6 @@ public class DitaWriter extends AbstractXMLWriter {
             }else{
                 output.write(PI_WORKDIR_HEAD + Constants.SLASH + absolutePath + PI_END);
             }
-            output.write(PI_FILENAME_HEAD + relname + PI_END);
             output.write(Constants.LINE_SEPARATOR);
             if(path2Project != null){
             	output.write(PI_PATH2PROJ_HEAD + path2Project + PI_END);
@@ -862,7 +1115,9 @@ public class DitaWriter extends AbstractXMLWriter {
 	    		String key;
 	    		String value;
 	    		for(String keyinfo: keylist){
+	    			//get the key name
 	    			key = keyinfo.substring(0, keyinfo.indexOf(Constants.EQUAL));
+	    			//get the href value
 	    			value = keyinfo.substring(keyinfo.indexOf(Constants.EQUAL)+1, keyinfo.indexOf("("));
 	    			
 	    			keys.put(key, value);
@@ -887,7 +1142,7 @@ public class DitaWriter extends AbstractXMLWriter {
                 //when it is not the old solution 3
                 if(OutputUtils.getGeneratecopyouter()!=OutputUtils.OLDSOLUTION){
                 		if(isOutFile(traceFilename)){
-                			//TODO
+                			
                 			path2Project=this.getRelativePathFromOut(traceFilename);
                 		}else{
                 			path2Project=FileUtils.getRelativePathFromMap(traceFilename,OutputUtils.getInputMapPathName());
@@ -906,7 +1161,7 @@ public class DitaWriter extends AbstractXMLWriter {
                 					   : filename.substring(0, fileExtIndex)+DebugAndFilterModule.extName);
                 if(OutputUtils.getGeneratecopyouter()!=OutputUtils.OLDSOLUTION){
             		if(isOutFile(traceFilename)){
-            			//TODO
+            			
             			path2Project=this.getRelativePathFromOut(traceFilename);
             		}else{
             			path2Project=FileUtils.getRelativePathFromMap(traceFilename,OutputUtils.getInputMapPathName());
@@ -928,7 +1183,6 @@ public class DitaWriter extends AbstractXMLWriter {
             absolutePath = dirFile.getCanonicalPath();
             fileOutput = new FileOutputStream(outputFile);
             output = new OutputStreamWriter(fileOutput, Constants.UTF8);
-            relname = FileUtils.getRelativePathFromMap(OutputUtils.getInputMapPathName(), traceFilename);
 
             
             // start to parse the file and direct to output in the temp
@@ -938,6 +1192,7 @@ public class DitaWriter extends AbstractXMLWriter {
             
             output.close();
         } catch (Exception e) {
+        	e.printStackTrace();
         	logger.logException(e);
         }finally {
             try {

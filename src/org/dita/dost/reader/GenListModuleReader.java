@@ -12,7 +12,9 @@ package org.dita.dost.reader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.HashMap;
@@ -157,6 +159,31 @@ public class GenListModuleReader extends AbstractXMLReader {
     /** Relationship graph between subject schema */
     private Map<String, Set<String>> relationGraph = null;
     
+    //Added by William on 2009-06-25 for req #12014 start
+    //StringBuffer to store <exportanchors> elements
+    private StringBuffer result = new StringBuffer();
+    //flag to show whether a file has <exportanchors> tag
+	private boolean hasExport = false;
+	//store the href of topicref tag
+	private String topicHref = null;
+	//topicmeta set
+	private HashSet<String> topicMetaSet = null;
+	//Added by William on 2009-06-25 for req #12014 end
+	
+	/**
+	 * @return the result
+	 */
+	public StringBuffer getResult() {
+		return result;
+	}
+
+	/**
+	 * @param result the result to set
+	 */
+	public void setResult(StringBuffer result) {
+		this.result = result;
+	}
+
 	/**
 	 * Constructor
 	 */
@@ -178,6 +205,10 @@ public class GenListModuleReader extends AbstractXMLReader {
 		processRoleStack = new Stack<String>();
 		resourceOnlySet = new HashSet<String>(Constants.INT_32);
 		crossSet = new HashSet<String>(Constants.INT_32);
+		
+		//store the topicmeta element
+		topicMetaSet = new HashSet<String>(Constants.INT_16);
+	
 		
 		//schemeRoot = null;
 		//currentElement = null;
@@ -428,8 +459,10 @@ public class GenListModuleReader extends AbstractXMLReader {
 	 * @throws IOException 
 	 * @throws FileNotFoundException
 	 */
-	public void parse(File file) throws FileNotFoundException, IOException, SAXException {	
+	public void parse(File file) throws FileNotFoundException, IOException, SAXException {
+		
 		currentFile=file.getAbsolutePath();
+		
 		reader.setErrorHandler(new DITAOTXMLErrorHandler(file.getName()));
 		reader.parse(new InputSource(new FileInputStream(file)));	
 	}
@@ -484,11 +517,58 @@ public class GenListModuleReader extends AbstractXMLReader {
 		
 		attrValue = atts.getValue(Constants.ATTRIBUTE_NAME_CLASS);
 		
+		//Added by William on 2009-06-24 for req #12014 start
+		//has class attribute
+		if(attrValue!=null){
+			//merge multiple exportanchors into one <topicmeta>
+			//and <metadata> can have more than one exportanchors
+			if(attrValue.contains(Constants.ATTR_CLASS_VALUE_TOPICMETA)||
+					attrValue.contains(Constants.ATTR_CLASS_VALUE_METADATA)){
+				topicMetaSet.add(qName);
+			}
+			//If the file has <exportanchors> tags
+			if(attrValue.contains(Constants.ATTR_CLASS_VALUE_EXPORTANCHORS)){
+				hasExport = true;
+				//If current file is a ditamap file
+				if(FileUtils.isDITAMapFile(currentFile)){
+					//if dita file's extension name is ".xml"
+					if(topicHref.endsWith(Constants.FILE_EXTENSION_XML)){
+						//change the extension to ".dita"
+						topicHref = topicHref.replace(Constants.FILE_EXTENSION_XML, Constants.FILE_EXTENSION_DITA);
+					}
+					//create file element in the StringBuffer
+					result.append("<file name=\""+topicHref+"\">");
+				//If current file is topic file
+				}else if(FileUtils.isDITATopicFile(currentFile)){
+					String filename = FileUtils.getRelativePathFromMap(rootFilePath, currentFile);
+					//if dita file's extension name is ".xml"
+					if(filename.endsWith(Constants.FILE_EXTENSION_XML)){
+						//change the extension to ".dita"
+						filename = filename.replace(Constants.FILE_EXTENSION_XML, Constants.FILE_EXTENSION_DITA);
+					}
+					//create file element in the StringBuffer
+					result.append("<file name=\""+filename+"\">");
+				}
+			//meet <anchorkey> tag
+			}else if(attrValue.contains(Constants.ATTR_CLASS_VALUE_ANCHORKEY)){
+				//create keyref element in the StringBuffer
+				String keyref = atts.getValue(Constants.ATTRIBUTE_NAME_KEYREF);
+				result.append("<keyref name=\""+keyref+"\"/>");
+			//meet <anchorid> tag
+			}else if(attrValue.contains(Constants.ATTR_CLASS_VALUE_ANCHORID)){
+				//create keyref element in the StringBuffer
+				String id = atts.getValue(Constants.ATTRIBUTE_NAME_ID);
+				result.append("<id name=\""+id+"\"/>");
+			}
+		}
+		//Added by William on 2009-06-24 for req #12014 end
+		
 		// Generate Scheme relationship graph
 		if (attrValue != null) {
 			if (attrValue.contains(Constants.ATTR_CLASS_VALUE_SUBJECT_SCHEME)) {
 				if (this.relationGraph == null)
 					this.relationGraph = new LinkedHashMap<String, Set<String>>();
+				//Make it easy to do the BFS later.
 				Set<String> children = this.relationGraph.get("ROOT");
 				if (children == null || children.isEmpty()) {
 					children = new LinkedHashSet<String>();
@@ -592,6 +672,7 @@ public class GenListModuleReader extends AbstractXMLReader {
 		parseAttribute(atts, Constants.ATTRIBUTE_NAME_KEYS);
 		parseAttribute(atts, Constants.ATTRIBUTE_NAME_CONKEYREF);
 		parseAttribute(atts, Constants.ATTRIBUTE_NAME_KEYREF);
+
 	}
 
 	/**
@@ -663,6 +744,15 @@ public class GenListModuleReader extends AbstractXMLReader {
 			}
 			--excludedLevel;
 		}
+		//Added by William on 2009-06-24 for req #12014 start
+		//<exportanchors> over should write </file> tag
+		if(topicMetaSet.contains(qName) && hasExport){
+			result.append("</file>");
+			hasExport = false;
+			topicMetaSet.clear();
+		}
+		//Added by William on 2009-06-24 for req #12014 start
+		
 	}
 
 	/**
@@ -719,7 +809,11 @@ public class GenListModuleReader extends AbstractXMLReader {
 				
 		// collect the key definitions
 		if(Constants.ATTRIBUTE_NAME_KEYS.equals(attrName) && !attrValue.equals(Constants.STRING_EMPTY)){
+			
 			String target = atts.getValue(Constants.ATTRIBUTE_NAME_HREF);
+			//store the target
+			String temp = target;
+			
 			// Many keys can be defined in a single definition, like keys="a b c", a, b and c are seperated by blank.
 			for(String key: attrValue.split(" ")){
 				if(!keysDefMap.containsKey(key) && !key.equals("")){
@@ -747,6 +841,8 @@ public class GenListModuleReader extends AbstractXMLReader {
 					prop.setProperty("%2", target);
 					javaLogger.logWarn(MessageUtils.getMessage("DOTJ045W", prop).toString());
 				}
+				//restore target
+				target = temp;
 			}
 		}
 		
@@ -790,6 +886,11 @@ public class GenListModuleReader extends AbstractXMLReader {
 			if (Constants.ATTR_TYPE_VALUE_SUBJECT_SCHEME.equalsIgnoreCase(attrType)) {
 				schemeSet.add(filename);
 			}
+			//Added by William on 2009-06-24 for req #12014 start
+			if(attrName.equals(Constants.ATTRIBUTE_NAME_HREF)){
+				topicHref = filename;
+			}
+			//Added by William on 2009-06-24 for req #12014 end
 		}
 		
 		if (("DITA-foreign".equals(attrType) &&
@@ -1003,4 +1104,5 @@ public class GenListModuleReader extends AbstractXMLReader {
 	public static HashMap<String, String> getCatalogMap() {
 		return catalogMap;
 	}
+	
 }
