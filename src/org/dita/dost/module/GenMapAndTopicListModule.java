@@ -167,11 +167,15 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 	private String rootFile=null;
 	
 	private OutputStreamWriter keydef;
-	// TODO Added by William on 2009-06-09 for scheme key bug start
+	
 	// keydef file from keys used in schema files
 	private OutputStreamWriter schemekeydef;
-	// TODO Added by William on 2009-06-09 for scheme key bug end
-
+	
+	//Added by William on 2009-06-25 for req #12014 start
+	//export file
+	private OutputStreamWriter export;
+	//Added by William on 2009-06-25 for req #12014 start
+	
 	private Set<String> schemeSet;
 	
 	private Map<String, Set<String>> schemeDictionary = null;
@@ -244,12 +248,19 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 			outputResult();
 			keydef.write("</stub>");
 			keydef.close();
-			// TODO Added by William on 2009-06-09 for scheme key bug start
+			//Added by William on 2009-06-09 for scheme key bug start
 			// write the end tag
 			schemekeydef.write("</stub>");
 			// close the steam
 			schemekeydef.close();
-			// TODO Added by William on 2009-06-09 for scheme key bug end
+			//Added by William on 2009-06-09 for scheme key bug end
+			
+			//Added by William on 2009-06-25 for req #12014 start
+			// write the end tag
+			export.write("</stub>");
+			// close the steam
+			export.close();
+			//Added by William on 2009-06-25 for req #12014 end
 		}catch(DITAOTException e){
 			throw e;
 		}catch (SAXException e) {
@@ -321,14 +332,22 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 			keydef = new OutputStreamWriter(new FileOutputStream(new File(tempDir,"keydef.xml")));
 			keydef.write("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
 			keydef.write("<stub>");
-			// TODO Added by William on 2009-06-09 for scheme key bug start
+			// TODO Added by William on 2009-06-09 for scheme key bug(331-337)
 			// create the keydef file for scheme files
 			schemekeydef = new OutputStreamWriter(new FileOutputStream(
 					new File(tempDir, "schemekeydef.xml")));
 			// write the head
 			schemekeydef.write("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
 			schemekeydef.write("<stub>");
-			// TODO Added by William on 2009-06-09 for scheme key bug end
+			
+			//Added by William on 2009-06-25 for req #12014 start
+			// create the export file for exportanchors
+			// write the head
+			export = new OutputStreamWriter(new FileOutputStream(
+					new File(tempDir, "export.xml")));
+			export.write("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
+			export.write("<stub>");
+			//Added by William on 2009-06-25 for req #12014 start
 		} catch (FileNotFoundException e) {
 			javaLogger.logException(e);
 		} catch (IOException e){
@@ -384,6 +403,7 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 				javaLogger.logWarn(MessageUtils.getMessage("DOTJ021W", params).toString());
 			}	
 		}catch(SAXParseException sax){
+			sax.printStackTrace();
 			// To check whether the inner third level is DITAOTBuildException
 			// :FATALERROR
 				Exception inner = sax.getException();
@@ -405,6 +425,7 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 				javaLogger.logError(buff.toString());
 		}
 		catch (Exception e) {
+			e.printStackTrace();
 			if (currentFile.equals(inputFile)) {
 				// stop the build if exception thrown when parsing input file.
 				MessageBean msgBean=MessageUtils.getMessage("DOTJ012F", params);
@@ -480,9 +501,9 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 				copytoMap.put(key, value);				
 			}
 		}
-		// TODO Added by William on 2009-06-09 for scheme key bug start
+		// TODO Added by William on 2009-06-09 for scheme key bug(497)
 		schemeSet.addAll(reader.getSchemeRefSet());
-		// TODO Added by William on 2009-06-09 for scheme key bug end
+		
 		/**
 		 * collect key definitions 
 		 */
@@ -516,7 +537,7 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 				
 				keysDefMap.put(key, value+"("+currentFile+")");
 			}
-			// TODO Added by William on 2009-06-09 for scheme key bug start
+			// TODO Added by William on 2009-06-09 for scheme key bug(532-547)
 			// if the current file is also a schema file
 			if (schemeSet.contains(currentFile)) {
 				// write the keydef into the scheme keydef file
@@ -532,12 +553,26 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 					javaLogger.logException(e);
 				}
 			}
-			// TODO Added by William on 2009-06-09 for scheme key bug end
+			
 		}
+		//Added by William on 2009-06-25 for req #12014 start
+		//get the export result
+		StringBuffer result = reader.getResult();
+		try {
+			//write the result into the file
+			export.write(result.toString());
+			//restore the result
+			reader.setResult(new StringBuffer());
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		//Added by William on 2009-06-25 for req #12014 start
+		
 		hrefTargetSet.addAll(reader.getHrefTargets());
 		hrefWithIDSet.addAll(reader.getHrefTopicSet());
 		chunkTopicSet.addAll(reader.getChunkTopicSet());
-		schemeSet.addAll(reader.getSchemeRefSet());
+		//schemeSet.addAll(reader.getSchemeRefSet());
 		conrefTargetSet.addAll(reader.getConrefTargets());
 		nonConrefCopytoTargetSet.addAll(reader.getNonConrefCopytoTargets());
 		ignoredCopytoSourceSet.addAll(reader.getIgnoredCopytoSourceSet());
@@ -946,7 +981,7 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 					String to=file.substring(0,index);
 					String source=file.substring(index+1);
 					
-						//Added by William on 2009-05-14 for keyref bug start
+						//TODO Added by William on 2009-05-14 for keyref bug(972-997)
 						//When generating key.list
 						if(Constants.KEY_LIST.equals(key)){
 						String repStr = FileUtils.removeRedundantNames(new StringBuffer(prefix).append(to).toString())
@@ -973,7 +1008,6 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 							newSet.add(repStr);
 						}
 					}else{
-						//Added by William on 2009-05-14 for keyref bug end
 						//other case do nothing
 						newSet.add(FileUtils.removeRedundantNames(new StringBuffer(prefix).append(to).toString())
 							.replaceAll(Constants.DOUBLE_BACK_SLASH,
