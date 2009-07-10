@@ -140,6 +140,35 @@ public class IndexTermReader extends AbstractXMLReader {
 		if (ch[start] == '\n' || temp.startsWith(Constants.LINE_SEPARATOR)) {
 			temp = " " + temp.substring(1);
 		}
+		//TODO Added by William on 2009-05-22 for space bug:2793836 start
+		//used for store the space
+		char[] chars = temp.toCharArray();
+		char flag = '\n';
+		//used for store the new String
+		StringBuffer sb = new StringBuffer();
+		for(char c : chars){
+			//when a whitespace is met
+			if(c==' '){
+				//this is the first whitespace
+				if(flag!=' '){
+					//put it in the result string
+					sb.append(c);
+					//store the space in the flag
+					flag = c;
+				}else{
+					//abundant space, ignore it
+					continue;
+				}
+			//the consecutive whitespace is interrupted
+			}else{
+				//put it in the result string
+				sb.append(c);
+				//clear the flag
+				flag = c;	
+			}
+		}
+		temp = sb.toString();
+		//TODO Added by William on 2009-05-22 for space bug:2793836 end
 		
 		/*
 		 * For title info
@@ -224,8 +253,10 @@ public class IndexTermReader extends AbstractXMLReader {
 			}
 				
 			if (termStack.empty()) {
+				//most parent indexterm
 				indexTermList.add(term);
 			} else {
+				//Assign parent indexterm to 
 				IndexTerm parentTerm = (IndexTerm) termStack.peek();
 				parentTerm.addSubTerm(term);
 			}
