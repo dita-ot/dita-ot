@@ -100,7 +100,9 @@
     <xslt processor="trax" basedir="${dita.temp.dir}"
       destdir="${output.dir}" includesfile="${dita.temp.dir}${file.separator}${fullditatopicfile}"
       classpathref="dost.class.path"
-      extension="${out.ext}" style="${args.xsl}">
+      extension="${out.ext}" style="${args.xsl}"
+      filenameparameter="filename"
+  	  filedirparameter="filedir">
     	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
       <includesfile name="${dita.temp.dir}${file.separator}${chunkedtopicfile}" if="chunkedtopicfile"/>
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />

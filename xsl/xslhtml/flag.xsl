@@ -614,8 +614,14 @@
      <xsl:value-of select="concat($WORKDIR,$PATH2PROJ,'subject_scheme.dictionary')"/>
     </xsl:variable>
   <!-- get the scheme list -->
+  <!-- check CURRENT File -->
+  <xsl:variable name="editedFileName">
+      <xsl:call-template name="checkFile">
+       <xsl:with-param name="in" select="$CURRENTFILE"/>
+      </xsl:call-template>
+  </xsl:variable>
   <xsl:variable name="schemeList">
-         <xsl:apply-templates select="document($PROPERTIES-FILE,/)//*[@key=$CURRENTFILE]" mode="check"/>
+     <xsl:apply-templates select="document($PROPERTIES-FILE,/)//*[@key=$editedFileName]" mode="check"/>
   </xsl:variable>
   <!-- scheme list contains the scheme file -->
     <xsl:if test="contains($schemeList, $cvffilename)">
@@ -654,6 +660,18 @@
            </xsl:for-each>
      </xsl:if>
   </xsl:if>
+ </xsl:template>
+ <!-- check CURRENT File -->
+ <xsl:template name="checkFile">
+    <xsl:param name="in"/>
+  <xsl:choose>
+   <xsl:when test="starts-with($in, '.\')">
+    <xsl:value-of select="substring-after($in, '.\')"/>
+   </xsl:when>
+   <xsl:otherwise>
+    <xsl:value-of select="$in"/>
+   </xsl:otherwise>
+  </xsl:choose>
  </xsl:template>
  <!-- get the scheme list -->
  <xsl:template match="*" mode="check">
