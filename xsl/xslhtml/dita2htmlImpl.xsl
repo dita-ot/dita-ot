@@ -1140,7 +1140,9 @@
   </xsl:call-template>
 <xsl:call-template name="setaname"/>
 <ul class="simple">
-  <xsl:call-template name="commonattributes"/>
+  <xsl:call-template name="commonattributes">
+    <xsl:with-param name="default-output-class" select="'simple'"/>
+  </xsl:call-template>
   <xsl:call-template name="gen-style">
     <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
   </xsl:call-template>
@@ -2248,7 +2250,17 @@
 <xsl:template name="topic-image">
   <!-- now invoke the actual content and its alt text -->
   <xsl:element name="img">
-    <xsl:call-template name="commonattributes"/>
+    <xsl:call-template name="commonattributes">
+      <xsl:with-param name="default-output-class">
+        <xsl:if test="@placement='break'"><!--Align only works for break-->
+         <xsl:choose>
+          <xsl:when test="@align='left'">imageleft</xsl:when>
+          <xsl:when test="@align='right'">imageright</xsl:when>
+          <xsl:when test="@align='center'">imagecenter</xsl:when>
+         </xsl:choose>
+        </xsl:if>
+      </xsl:with-param>
+    </xsl:call-template>
     <xsl:call-template name="setid"/>
     <xsl:choose>
       <xsl:when test="*[contains(@class, ' topic/longdescref ')]">
@@ -4250,12 +4262,16 @@
 <!-- Test for in BIDI area: returns "bidi" when parent's @xml:lang is a bidi language;
      Otherwise, leave blank -->
 <xsl:template name="bidi-area">
- <xsl:variable name="parentlang">
+ <xsl:param name="parentlang">
   <xsl:call-template name="getLowerCaseLang"/>
+ </xsl:param>
+ <xsl:variable name="direction">
+   <xsl:apply-templates select="." mode="get-render-direction">
+     <xsl:with-param name="lang" select="$parentlang"/>
+   </xsl:apply-templates>
  </xsl:variable>
  <xsl:choose>
-  <xsl:when test="$parentlang='ar-eg' or $parentlang='ar'">bidi</xsl:when>
-  <xsl:when test="$parentlang='he' or $parentlang='he-il'">bidi</xsl:when>
+  <xsl:when test="$direction='rtl'">bidi</xsl:when>
   <xsl:otherwise/>
  </xsl:choose>
 </xsl:template>
@@ -4651,9 +4667,14 @@
         <xsl:otherwise><xsl:call-template name="getLowerCaseLang"/></xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
+    <xsl:variable name="direction">
+      <xsl:call-template name="bidi-area">
+        <xsl:with-param name="parentLang" select="$childlang"/>
+      </xsl:call-template>
+    </xsl:variable>
     <xsl:attribute name="lang"><xsl:value-of select="$childlang"/></xsl:attribute>
     <xsl:attribute name="xml:lang"><xsl:value-of select="$childlang"/></xsl:attribute>
-    <xsl:if test="$childlang='ar-eg' or $childlang='ar' or $childlang='he' or $childlang='he-il'">
+    <xsl:if test="$direction='bidi'">
       <xsl:attribute name="dir">rtl</xsl:attribute>
     </xsl:if>
   </xsl:template>
@@ -4723,11 +4744,17 @@
   <xsl:template name="generateCssLinks">
     <xsl:variable name="childlang">
       <xsl:choose>
-        <xsl:when test="self::dita">
+        <!-- Update with DITA 1.2: /dita can have xml:lang -->
+        <xsl:when test="self::dita[not(@xml:lang)]">
           <xsl:for-each select="*[1]"><xsl:call-template name="getLowerCaseLang"/></xsl:for-each>
         </xsl:when>
         <xsl:otherwise><xsl:call-template name="getLowerCaseLang"/></xsl:otherwise>
       </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="direction">
+      <xsl:apply-templates select="." mode="get-render-direction">
+        <xsl:with-param name="lang" select="$childlang"/>
+      </xsl:apply-templates>
     </xsl:variable>
     <xsl:variable name="urltest"> <!-- test for URL -->
       <xsl:call-template name="url-string">
@@ -4738,13 +4765,13 @@
     </xsl:variable>
     
     <xsl:choose>
-      <xsl:when test="($childlang='ar-eg' or $childlang='ar' or $childlang='he' or $childlang='he-il') and ($urltest='url')">
+      <xsl:when test="($direction='rtl') and ($urltest='url') ">
         <link rel="stylesheet" type="text/css" href="{$CSSPATH}{$bidi-dita-css}" />
       </xsl:when>
-      <xsl:when test="($childlang='ar-eg' or $childlang='ar' or $childlang='he' or $childlang='he-il') and ($urltest='')">
+      <xsl:when test="($direction='rtl') and ($urltest='')">
         <link rel="stylesheet" type="text/css" href="{$PATH2PROJ}{$CSSPATH}{$bidi-dita-css}" />
       </xsl:when>
-      <xsl:when test="not($childlang='ar-eg' or $childlang='ar' or $childlang='he' or $childlang='he-il') and ($urltest='url')">
+      <xsl:when test="($urltest='url')">
         <link rel="stylesheet" type="text/css" href="{$CSSPATH}{$dita-css}" />
       </xsl:when>
       <xsl:otherwise>

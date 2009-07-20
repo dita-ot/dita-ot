@@ -35,6 +35,32 @@
       <xsl:with-param name="inputval" select="$ancestorlangUpper"/>
     </xsl:call-template>
   </xsl:template>
+
+  <xsl:template match="*" mode="get-first-topic-lang">
+    <xsl:variable name="first-topic-lang">
+      <xsl:choose>
+        <xsl:when test="/*[@xml:lang]"><xsl:value-of select="/*/@xml:lang"/></xsl:when>
+        <xsl:when test="/dita/*[@xml:lang]"><xsl:value-of select="/dita/*[1][@xml:lang]/@xml:lang"/></xsl:when>
+        <xsl:otherwise><xsl:value-of select="$DEFAULTLANG"/></xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:call-template name="convert-to-lower">
+      <xsl:with-param name="inputval" select="$first-topic-lang"/>
+    </xsl:call-template>
+  </xsl:template>
+
+  <xsl:template match="*" mode="get-render-direction">
+    <xsl:param name="lang">
+      <xsl:apply-templates select="/*" mode="get-first-topic-lang"/>
+    </xsl:param>
+    <xsl:choose>
+      <xsl:when test="$lang='ar-eg' or $lang='ar'">rtl</xsl:when>
+      <xsl:when test="$lang='he-il' or $lang='he'">rtl</xsl:when>
+      <xsl:when test="$lang='ur-pk' or $lang='ur'">rtl</xsl:when>
+      <xsl:otherwise>ltr</xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
   <!-- Function to get translated text for a common string.
      * Each language is stored in a unique file. The association between a language and
      its translations is stored in $stringFileList.
