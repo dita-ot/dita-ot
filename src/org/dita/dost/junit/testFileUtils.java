@@ -190,9 +190,9 @@ public class testFileUtils {
 
 	@Test
 	public void testFileExists() {
-		assertTrue(FileUtils.fileExists("C:\\ibmrnr.txt"));
-		assertTrue(FileUtils.fileExists("C:\\ibmrnr.txt#topicid"));
-		assertFalse(FileUtils.fileExists("C:\\ibmrnr"));
+		assertTrue(FileUtils.fileExists("test-stub\\ibmrnr.txt"));
+		assertTrue(FileUtils.fileExists("test-stub\\ibmrnr.txt#topicid"));
+		assertFalse(FileUtils.fileExists("test-stub\\ibmrnr"));
 	}
 
 }
