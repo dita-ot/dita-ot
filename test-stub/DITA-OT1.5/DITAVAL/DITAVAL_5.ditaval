@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<val>
+  <prop att="audience" val="twoattr_ph1" action="flag" />
+  <prop att="audience" val="Cindy" action="include" />
+  <prop att="platform" val="aix" action="exclude" />
+</val>

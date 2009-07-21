@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA 1.1 Topic//EN" "file:/C:/DITA-OT1.4/dtd/topic.dtd">
+<topic id="defaulbehavior" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
+    <title>defaulbehavior</title>
+    <body>
+     <p platform="linux">this is b linux paragraph</p>
+     <p product="windows">this is b windows paragraph</p>
+       <p platform="">this is b paragraph with blank attribute</p>
+        <p product="">this is b paragraph with null attribute</p>
+        
+    </body>
+</topic>
+

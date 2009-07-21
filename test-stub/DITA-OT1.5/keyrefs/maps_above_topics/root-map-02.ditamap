@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/map.dtd">
+<map>
+  <title>Root Map 02</title>
+  <topicref
+    href="topics/xreffing-topic-1.xml"/>
+  <topicref
+    href="topics/target-topic-b.xml"
+    keys="target_topic_1"/>
+  <topicref
+    href="topics/target-topic-c.xml"
+    keys="target_topic_2"/>
+</map>
