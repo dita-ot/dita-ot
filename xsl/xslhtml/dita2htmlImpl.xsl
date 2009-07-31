@@ -4660,16 +4660,11 @@
 
   <xsl:template name="setTopicLanguage">
     <xsl:variable name="childlang">
-      <xsl:choose>
-        <xsl:when test="self::dita">
-          <xsl:for-each select="*[1]"><xsl:call-template name="getLowerCaseLang"/></xsl:for-each>
-        </xsl:when>
-        <xsl:otherwise><xsl:call-template name="getLowerCaseLang"/></xsl:otherwise>
-      </xsl:choose>
+      <xsl:apply-templates select="/*" mode="get-first-topic-lang"/>
     </xsl:variable>
     <xsl:variable name="direction">
       <xsl:call-template name="bidi-area">
-        <xsl:with-param name="parentLang" select="$childlang"/>
+        <xsl:with-param name="parentlang" select="$childlang"/>
       </xsl:call-template>
     </xsl:variable>
     <xsl:attribute name="lang"><xsl:value-of select="$childlang"/></xsl:attribute>
