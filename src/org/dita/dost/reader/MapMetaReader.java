@@ -108,6 +108,10 @@ public class MapMetaReader implements AbstractReader {
 		metaPos.add(Constants.ATTR_CLASS_VALUE_DATAABOUT);
 		metaPos.add(Constants.ATTR_CLASS_VALUE_FOREIGN);
 		metaPos.add(Constants.ATTR_CLASS_VALUE_UNKNOWN);
+		//Added by William on 2009-07-25 for bug:2826143 start
+		metaPos.add(Constants.ATTR_CLASS_VALUE_MAP_LINKTEXT);
+		metaPos.add(Constants.ATTR_CLASS_VALUE_MAP_SHORTDESC);
+		//Added by William on 2009-07-25 for bug:2826143 end
 	}
 
 	private DITAOTJavaLogger javaLogger = null;
