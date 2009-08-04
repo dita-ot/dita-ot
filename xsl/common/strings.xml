@@ -43,6 +43,8 @@
     <lang xml:lang="hr-hr" filename="strings-hr-hr.xml"/>
     <lang xml:lang="hu"    filename="strings-hu-hu.xml"/>
     <lang xml:lang="hu-hu" filename="strings-hu-hu.xml"/>
+    <lang xml:lang="hi"    filename="strings-hi-in.xml"/>
+    <lang xml:lang="hi-in" filename="strings-hi-in.xml"/>
     <lang xml:lang="is"    filename="strings-is-is.xml"/>
     <lang xml:lang="is-is" filename="strings-is-is.xml"/>
     <lang xml:lang="it"    filename="strings-it-it.xml"/>
@@ -87,6 +89,8 @@
     <lang xml:lang="tr-tr" filename="strings-tr-tr.xml"/>
     <lang xml:lang="uk"    filename="strings-uk-ua.xml"/>
     <lang xml:lang="uk-ua" filename="strings-uk-ua.xml"/>
+    <lang xml:lang="ur"    filename="strings-ur-pk.xml"/>
+    <lang xml:lang="ur-pk" filename="strings-ur-pk.xml"/>
     <lang xml:lang="zh"    filename="strings-zh-cn.xml"/>
     <lang xml:lang="zh-cn" filename="strings-zh-cn.xml"/>
     <lang xml:lang="zh-tw" filename="strings-zh-tw.xml"/>
