@@ -124,7 +124,7 @@
     description="Debug input files">
     <pipeline message="Debug and filtering." module="DebugAndFilter"
       basedir="${basedir}" tempdir="${dita.temp.dir}"
-      extparam="ditaext=${dita.extname};ditadir=${dita.dir};validate=${validate}"/>
+      extparam="ditaext=${dita.extname};ditadir=${dita.dir};validate=${validate};transtype=${transtype}"/>
   </target>
 
   <target name="debug-and-filter"
@@ -133,7 +133,7 @@
     description="Debug and filter input files">
     <pipeline message="Debug and filtering." module="DebugAndFilter"
       basedir="${basedir}" tempdir="${dita.temp.dir}"
-      extparam="ditaval=${dita.input.valfile};ditaext=${dita.extname};ditadir=${dita.dir};validate=${validate}" />
+      extparam="ditaval=${dita.input.valfile};ditaext=${dita.extname};ditadir=${dita.dir};validate=${validate};transtype=${transtype}" />
   </target>
 
   <target name="debug-filter-flag-check">
@@ -209,6 +209,11 @@
       style="${dita.script.dir}${file.separator}preprocess${file.separator}conref.xsl">
       <mapper type="glob" from="*" to="*.cnrf" />
       <param name="DITAEXT" expression="${dita.ext}" />
+      <!-- added by William on 2009-06-26 for req #12014 start -->
+      <param name="BASEDIR" expression="${basedir}"/>
+      <param name="TEMPDIR" expression="${dita.temp.dir}"/>
+      <param name="TRANSTYPE" expression="${transtype}"/>
+      <!-- added by William on 2009-06-26 for req #12014 start -->
       <dita:extension id="dita.preprocess.conref.param" behavior="org.dita.dost.platform.InsertAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
     </xslt>
     <move todir="${dita.temp.dir}">

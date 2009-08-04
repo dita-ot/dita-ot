@@ -233,9 +233,13 @@
 </xsl:template>
 
 <!--makes sure that any literal text in topicmeta does not get output as literal text in the output TOC file, which should only have text in attributes, as pulled in by the topicref template-->
-<xsl:template match="text()">
+<!--xsl:template match="text()">
 	<xsl:apply-templates/>
-</xsl:template>
+</xsl:template-->
+  
+<!-- edited by William on 2009-07-23 for bug:2824907 start-->
+<xsl:template match="text()"/>
+<!-- edited by William on 2009-07-23 for bug:2824907 end-->
 
 <!-- do nothing when meeting with reltable -->
 <xsl:template match="*[contains(@class,' map/reltable ')]"/>

@@ -18,7 +18,12 @@
 <xsl:variable name="msgprefix">DOTX</xsl:variable>
   
   
-  <!--xsl:param name="WORKDIR" select="'./'"/-->
+<!--xsl:param name="WORKDIR" select="'./'"/-->
+<!-- Added by William on 2009-07-09 for req #12014 start  -->
+ <xsl:param name="BASEDIR"/>
+ <xsl:param name="TEMPDIR"/>
+ <xsl:param name="TRANSTYPE"></xsl:param> 
+<!-- Added by William on 2009-07-09 for req #12014 end  -->
 <xsl:param name="PROJDIR" select="'.'"/>
 <xsl:param name="DBG" select="no"/>
 <xsl:param name="FILEREF">file://</xsl:param>
@@ -128,6 +133,7 @@
 <xsl:template match="*[@conaction]" priority="10"/>
 
 <!--if something has a conref attribute, jump to the target if valid and continue applying templates-->
+  
 <xsl:template match="*[@conref][@conref!=''][not(@conaction)]" priority="10">
   <!-- If we have already followed a relative path, pick it up -->
   <xsl:param name="current-relative-path"/>
@@ -215,14 +221,35 @@
     
   <!-- added by William on 2009-06-26 for req #12014 start -->
   <!-- conref file name with relative path -->
-  <xsl:variable name="filename" select="translate(substring-after($file-origin, $file-prefix),'/','\')"/>
+  <xsl:variable name="filename" select="substring-after($file-origin, $file-prefix)"/>
+  <!--xsl:variable name="filename" select="translate(substring-after($file-origin, $file-prefix),'/','\')"/-->
  
   <!-- replace the extension name -->
   <xsl:variable name="FILENAME" select="concat(substring-before($filename, '.'), '.dita')"/>
-  
+  <!-- get export.xml's path -->
+  <xsl:variable name="tempfiledir">
+    <xsl:choose>
+      <xsl:when test="contains($TEMPDIR, ':\') or contains($TEMPDIR, ':/')">
+        <!--xsl:value-of select="concat($FILEREF,'/')"/-->
+        <xsl:value-of select="'file:/'"/><xsl:value-of select="concat($TEMPDIR, '/')"/>
+      </xsl:when>
+      <xsl:when test="starts-with($TEMPDIR, '/')">
+        <xsl:value-of select="'file://'"/><xsl:value-of select="concat($TEMPDIR, '/')"/>
+      </xsl:when>
+      <xsl:when test="starts-with($BASEDIR, '/')">
+        <xsl:value-of select="'file://'"/><xsl:value-of select="concat($BASEDIR, '/')"/><xsl:value-of select="concat($TEMPDIR, '/')"/>
+       </xsl:when>
+      <xsl:otherwise>
+        <!--xsl:value-of select="concat($FILEREF,'/')"/-->
+        <xsl:value-of select="'file:/'"/><xsl:value-of select="concat($BASEDIR, '/')"/><xsl:value-of select="concat($TEMPDIR, '/')"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
   <!-- get the export.xml -->
-  <xsl:variable name="EXPORTFILE" select="concat($file-prefix, 'export.xml')"/>
-  <!-- added by William on 2009-06-26 for req #12014 start -->
+  <xsl:variable name="EXPORTFILE" select="concat($tempfiledir, 'export.xml')"/>
+  <!-- get plugin.xml -->
+  <xsl:variable name="PLUGINFILE" select="concat($tempfiledir, 'plugin.xml')"/>
+  <!-- added by William on 2009-06-26 for req #12014 end -->
   
   <xsl:variable name="topicid">
   <xsl:choose>
@@ -242,8 +269,10 @@
   
   <!-- added by William on 2009-06-26 for req #12014 start -->
   <xsl:choose>
-    <!-- element id is exported -->
-    <xsl:when test="document($EXPORTFILE, /)//file[@name=$FILENAME]/id[@name=$elemid]">
+    <!-- exportanchors defined in topicmeta-->
+    <xsl:when test=" ($TRANSTYPE = 'eclipsehelp' )
+      and (document($EXPORTFILE, /)//file[@name=$FILENAME]/id[@name=$elemid])
+      and (document($EXPORTFILE, /)//file[@name=$FILENAME]/topicid[@name=$topicid]) ">
       <!-- just copy -->
       <xsl:copy>
         <xsl:apply-templates select="*|@*|comment()|processing-instruction()|text()">
@@ -257,9 +286,9 @@
         </xsl:apply-templates>
       </xsl:copy>
     </xsl:when>
-    <xsl:when test="(document($EXPORTFILE, /)//file[@name=$FILENAME]/id[@name=$topicid]) and 
-      (not(document($EXPORTFILE, /)//file[@name=$FILENAME]/id[@name=$elemid]))">
-      <!--topic id is exported skip the case that topic id is delayed while element id not-->
+    <!-- exportanchors defined in prolog-->
+    <xsl:when test="($TRANSTYPE = 'eclipsehelp' ) 
+      and document($EXPORTFILE, /)//file[@name=$FILENAME]/topicid[@name=$topicid]/id[@name=$elemid]">
       <!-- just copy -->
       <xsl:copy>
         <xsl:apply-templates select="*|@*|comment()|processing-instruction()|text()">
@@ -272,6 +301,23 @@
           <xsl:with-param name="conref-ids" select="$conref-ids"/>
         </xsl:apply-templates>
       </xsl:copy>
+    </xsl:when>
+    <!-- just has topic id -->
+    <xsl:when test="($elemid = '#none#' ) and ($TRANSTYPE = 'eclipsehelp' ) 
+      and (document($EXPORTFILE, /)//file[@name=$FILENAME]/topicid[@name=$topicid]
+      or document($EXPORTFILE, /)//file[@name=$FILENAME]/topicid[@name=$topicid]/id[@name=$elemid])">
+        <!-- just copy -->
+        <xsl:copy>
+          <xsl:apply-templates select="*|@*|comment()|processing-instruction()|text()">
+            <xsl:with-param name="current-relative-path"><xsl:value-of select="$current-relative-path"/></xsl:with-param>
+            <xsl:with-param name="conref-filename"><xsl:value-of select="$conref-filename"/></xsl:with-param>
+            <xsl:with-param name="topicid"><xsl:value-of select="$topicid"/></xsl:with-param>
+            <xsl:with-param name="elemid"><xsl:value-of select="$elemid"/></xsl:with-param>
+            <xsl:with-param name="WORKDIR"><xsl:value-of select="$WORKDIR"/></xsl:with-param>
+            <xsl:with-param name="conref-source-topicid"><xsl:value-of select="$conref-source-topicid"/></xsl:with-param>
+            <xsl:with-param name="conref-ids" select="$conref-ids"/>
+          </xsl:apply-templates>
+        </xsl:copy>
     </xsl:when>
     <xsl:otherwise>
       <!-- added by William on 2009-06-26 for req #12014 end -->
@@ -453,11 +499,12 @@
               <xsl:when test="$topicpos='firstinfile'">
                 <xsl:choose>
                   <xsl:when test="document($file,/)//*[contains(@class, ' topic/topic ')][1][local-name()=$element]">
-                       <!-- added by William on 2009-06-26 for req #12014 start -->
+                     <!-- added by William on 2009-06-26 for req #12014 start -->
                     <xsl:variable name="firstTopicId" select="document($file,/)//*[contains(@class, ' topic/topic ')][1][local-name()=$element]/@id"/>
                     <xsl:choose>
-                      <!-- if the first topic id is exported -->
-                      <xsl:when test="document($EXPORTFILE, /)//file[@name=$FILENAME]/id[@name=$firstTopicId]">
+                      <!-- if the first topic id is exported and transtype is eclipsehelp-->
+                      <xsl:when test="document($EXPORTFILE, /)//file[@name=$FILENAME]/topicid[@name=$firstTopicId]
+                        and ($TRANSTYPE = 'eclipsehelp' )">
                         <!--xsl:value-of select="'this is good!'"/-->
                         <!-- just copy -->
                         <xsl:copy>
@@ -473,6 +520,7 @@
                         </xsl:copy>
                       </xsl:when>
                       <xsl:otherwise>
+                        <!-- added by William on 2009-06-26 for req #12014 end -->
                         <!-- do the normal process -->
                         <xsl:choose>
                           <xsl:when test="not($source-element='')">
@@ -717,28 +765,6 @@
               <xsl:otherwise><xsl:apply-templates select="." mode="ditamsg:missing-conref-target-error"/></xsl:otherwise>
             </xsl:choose>
           </xsl:when>
-          <!-- added  by William on 2009-06-26 for req #12014 start -->
-          <!-- for perserved keyref -->
-          <xsl:when test="$topicid='#none#' and $elemid='#none#'">
-            <xsl:variable name="keyref" select="substring-before(@conref, '/')"/>
-            <xsl:variable name="id" select="substring-after(@conref, '/')"/>
-            <xsl:if test="$keyref or $id ">
-                <!-- just copy -->
-                <xsl:copy>
-                  <xsl:apply-templates select="*|@*|comment()|processing-instruction()|text()">
-                    <xsl:with-param name="current-relative-path"><xsl:value-of select="$current-relative-path"/></xsl:with-param>
-                    <xsl:with-param name="conref-filename"><xsl:value-of select="$conref-filename"/></xsl:with-param>
-                    <xsl:with-param name="topicid"><xsl:value-of select="$topicid"/></xsl:with-param>
-                    <xsl:with-param name="elemid"><xsl:value-of select="$elemid"/></xsl:with-param>
-                    <xsl:with-param name="WORKDIR"><xsl:value-of select="$WORKDIR"/></xsl:with-param>
-                    <xsl:with-param name="conref-source-topicid"><xsl:value-of select="$conref-source-topicid"/></xsl:with-param>
-                    <xsl:with-param name="conref-ids" select="$conref-ids"/>
-                  </xsl:apply-templates>
-                </xsl:copy>
-            </xsl:if>
-          </xsl:when>
-          <!-- added  by William on 2009-06-26 for req #12014 end -->
-          
             <xsl:otherwise>
               <xsl:apply-templates select="." mode="ditamsg:malformedConref"/>
             </xsl:otherwise>
