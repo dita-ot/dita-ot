@@ -46,7 +46,14 @@ See the accompanying license.txt file for applicable licenses.
 
     <!--  In order to not process any data under opentopic:map  -->
     <xsl:template match="opentopic:map"/>
-
+    
+    <!-- added by William on 2009-07-07 for bug:2815492 start -->
+    <!-- get the max chars for shortdesc-->
+    <xsl:variable name="maxCharsInShortDesc">
+        <xsl:call-template name="getMaxCharsForShortdescKeep"/>
+    </xsl:variable>
+    <!-- added by William on 2009-07-07 for bug:2815492 end -->
+    
     <xsl:template match="*[@conref]" priority="99">
         <fo:block xsl:use-attribute-sets="__unresolved__conref">
             <xsl:call-template name="insertReferenceTitle">
@@ -268,6 +275,10 @@ See the accompanying license.txt file for applicable licenses.
                     </xsl:call-template>
 
                     <fo:block xsl:use-attribute-sets="topic.title">
+                        <!-- added by William on 2009-07-02 for indexterm bug:2815485 start-->
+                        <xsl:call-template name="pullPrologIndexTerms"/>
+                        <!-- added by William on 2009-07-02 for indexterm bug:2815485 end-->
+                        
                         <xsl:for-each select="child::*[contains(@class,' topic/title ')]">
                             <xsl:call-template name="getTitle"/>
                         </xsl:for-each>
@@ -308,6 +319,9 @@ See the accompanying license.txt file for applicable licenses.
                     </xsl:call-template>
 
                     <fo:block xsl:use-attribute-sets="topic.title">
+                        <!-- added by William on 2009-07-02 for indexterm bug:2815485 start-->
+                        <xsl:call-template name="pullPrologIndexTerms"/>
+                        <!-- added by William on 2009-07-02 for indexterm bug:2815485 end-->
                         <xsl:for-each select="child::*[contains(@class,' topic/title ')]">
                             <xsl:call-template name="getTitle"/>
                         </xsl:for-each>
@@ -349,6 +363,9 @@ See the accompanying license.txt file for applicable licenses.
                     </xsl:call-template>
 
                     <fo:block xsl:use-attribute-sets="topic.title">
+                        <!-- added by William on 2009-07-02 for indexterm bug:2815485 start-->
+                        <xsl:call-template name="pullPrologIndexTerms"/>
+                        <!-- added by William on 2009-07-02 for indexterm bug:2815485 end-->
                         <xsl:for-each select="child::*[contains(@class,' topic/title ')]">
                             <xsl:call-template name="getTitle"/>
                         </xsl:for-each>
@@ -405,6 +422,9 @@ See the accompanying license.txt file for applicable licenses.
                     </xsl:call-template>
 
                     <fo:block xsl:use-attribute-sets="topic.title">
+                        <!-- added by William on 2009-07-02 for indexterm bug:2815485 start-->
+                        <xsl:call-template name="pullPrologIndexTerms"/>
+                        <!-- added by William on 2009-07-02 for indexterm bug:2815485 end-->
                         <xsl:for-each select="child::*[contains(@class,' topic/title ')]">
                             <xsl:call-template name="getTitle"/>
                         </xsl:for-each>
@@ -606,6 +626,9 @@ See the accompanying license.txt file for applicable licenses.
                 </xsl:call-template>
                 <fo:inline id="{parent::node()/@id}"/>
                 <fo:inline id="{concat('_OPENTOPIC_TOC_PROCESSING_', generate-id(..))}"/>
+                <!-- added by William on 2009-07-02 for indexterm bug:2815485 start-->
+                <xsl:call-template name="pullPrologIndexTerms"/>
+                <!-- added by William on 2009-07-02 for indexterm bug:2815485 end-->
                 <xsl:call-template name="getTitle"/>
             </fo:block>
         </fo:block>
@@ -643,6 +666,9 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:template match="*[contains(@class,' topic/section ')]/*[contains(@class,' topic/title ')]">
         <fo:block xsl:use-attribute-sets="section.title" id="{@id}">
+            <!-- added by William on 2009-07-02 for indexterm bug:2815485 start-->
+            <xsl:call-template name="pullPrologIndexTerms"/>
+            <!-- added by William on 2009-07-02 for indexterm bug:2815485 end-->
             <xsl:call-template name="getTitle"/>
         </fo:block>
     </xsl:template>
@@ -1297,17 +1323,39 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' map/searchtitle ')]"/>
-
+    
     <xsl:template match="*[contains(@class,' topic/shortdesc ')]">
+        <!--Edited by William on 2009-07-07 for bug:2815492 start-->
+        <!--fo:block xsl:use-attribute-sets="shortdesc" id="{@id}">
+            <xsl:apply-templates/>
+        </fo:block-->
+        <!--compare the length of shortdesc with the got max chars-->
         <fo:block xsl:use-attribute-sets="shortdesc" id="{@id}">
+            <!-- If the shortdesc is sufficiently short, add keep-with-next. -->
+            <xsl:if test="string-length(.) &lt;= $maxCharsInShortDesc">
+                <!-- Low-strength keep to avoid conflict with keeps on titles. -->
+                <xsl:attribute name="keep-with-next.within-page">5</xsl:attribute>
+            </xsl:if>
             <xsl:apply-templates/>
         </fo:block>
+        <!--Edited by William on 2009-07-07 for bug:2815492 end-->
     </xsl:template>
-
+    
     <xsl:template match="*[contains(@class,' map/shortdesc ')]">
+        <!--Edited by William on 2009-07-07 for bug:2815492 start-->
+        <!--fo:block xsl:use-attribute-sets="topic__shortdesc">
+            <xsl:apply-templates/>
+        </fo:block-->
+        <!--compare the length of shortdesc with the got max chars-->
         <fo:block xsl:use-attribute-sets="topic__shortdesc">
+            <!-- If the shortdesc is sufficiently short, add keep-with-next. -->
+            <xsl:if test="string-length(.) &lt;= $maxCharsInShortDesc">
+                <!-- Low-strength keep to avoid conflict with keeps on titles. -->
+                <xsl:attribute name="keep-with-next.within-page">5</xsl:attribute>
+            </xsl:if>
             <xsl:apply-templates/>
         </fo:block>
+        <!--Edited by William on 2009-07-07 for bug:2815492 end-->
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' topic/topic ')]/*[contains(@class,' topic/shortdesc ')]" priority="1">
@@ -1319,13 +1367,53 @@ See the accompanying license.txt file for applicable licenses.
             <xsl:when test="(topicType = 'topicChapter') or (topicType = 'topicAppendix')"/>
             <!--   Normal processing         -->
             <xsl:otherwise>
+                <!--Edited by William on 2009-07-07 for bug:2815492 start-->
+                <!--fo:block xsl:use-attribute-sets="topic__shortdesc" id="{@id}">
+                    <xsl:apply-templates/>
+                </fo:block-->
+                
+                <!--compare the length of shortdesc with the got max chars-->
                 <fo:block xsl:use-attribute-sets="topic__shortdesc" id="{@id}">
+                    <!-- If the shortdesc is sufficiently short, add keep-with-next. -->
+                    <xsl:if test="string-length(.) &lt;= $maxCharsInShortDesc">
+                        <!-- Low-strength keep to avoid conflict with keeps on titles. -->
+                        <xsl:attribute name="keep-with-next.within-page">5</xsl:attribute>
+                    </xsl:if>
                     <xsl:apply-templates/>
                 </fo:block>
+              <!--Edited by William on 2009-07-07 for bug:2815492 end-->
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
-
+    
+    <!--Added by William on 2009-07-07 for bug:2815492 start -->
+    <xsl:template name="getMaxCharsForShortdescKeep">
+    <!-- These values specify the length of a short description that will
+        render with keep-with-next set, which should be (approximately) the
+        character count in three lines of rendered shortdesc text. If you customize the
+        default font, page margins, or shortdesc attribute sets, you may need
+        to change these values. -->
+        <xsl:choose>
+            <xsl:when test="$locale = 'en_US' or $locale = 'fr_FR' ">
+                <xsl:value-of select="'360'"/>
+            </xsl:when>
+            <xsl:when test="$locale = 'ja_JP'">
+                <xsl:value-of select="'141'"/>
+            </xsl:when>
+            <xsl:when test="$locale = 'zh_CN'">
+                <xsl:value-of select="'141'"/>
+            </xsl:when>
+            <!-- Other languages require a template override to generate
+            keep-with-next
+            on shortdesc. Data was not available at the time this code released.
+            -->
+            <xsl:otherwise>
+                <xsl:value-of select="'0'"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+    <!--Added by William on 2009-07-07 for bug:2815492 end -->
+    
     <!-- this is the fallthrough body for nested topics -->
     <xsl:template match="*[contains(@class,' topic/body ')]">
         <xsl:variable name="level" select="count(ancestor::*[contains(@class,' topic/topic ')])"/>
@@ -1367,15 +1455,25 @@ See the accompanying license.txt file for applicable licenses.
         </fo:inline>
     </xsl:template>
 
-    <xsl:template match="*[contains(@class,' topic/prolog ')]">
+    <xsl:template match="*[contains(@class,' topic/prolog ')]"/>
 <!--
         <fo:block xsl:use-attribute-sets="prolog">
             <xsl:apply-templates/>
         </fo:block>
 -->
-        <xsl:apply-templates select="descendant::opentopic-index:index.entry[not(parent::opentopic-index:index.entry)]"/>
+        <!--xsl:copy-of select="node()"/-->
+        <!-- edited by William on 2009-07-02 for indexterm bug:2815485 start -->
+        <!--xsl:apply-templates select="descendant::opentopic-index:index.entry[not(parent::opentopic-index:index.entry)]"/-->
+        <!-- edited by William on 2009-07-02 for indexterm bug:2815485 end -->
+    <!--/xsl:template-->
+    
+    <!-- added by William on 2009-07-02 for indexterm bug:2815485 start -->
+    <xsl:template name="pullPrologIndexTerms">
+        <xsl:apply-templates select="ancestor-or-self::*[contains(@class, ' topic/topic ')]/*[contains(@class, ' topic/prolog ')]
+            //opentopic-index:index.entry[not(parent::opentopic-index:index.entry)]"/>
     </xsl:template>
-
+    <!-- added by William on 2009-07-02 for indexterm bug:2815485 end -->
+    
     <xsl:template match="*[contains(@class, ' topic/metadata ')]">
 <!--
         <fo:block xsl:use-attribute-sets="metadata">
