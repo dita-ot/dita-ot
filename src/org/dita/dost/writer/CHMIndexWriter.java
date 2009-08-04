@@ -168,10 +168,20 @@ public class CHMIndexWriter implements AbstractWriter, IDitaTranstypeIndexWriter
 				IndexTerm subTerm = (IndexTerm) subTerms.get(i);
 				subTargets = subTerm.getTargetList();
 				if (subTargets != null && !subTargets.isEmpty()){
+				// edited by William on 2009-07-13 for indexterm bug:2819853 start
+					//findTargets(subTerm);
+					//add targets(child term)
+					term.addTargets(subTerm.getTargetList());
+				}else{
+					//term.addTargets(subTerm.getTargetList());
+					//recursive search child's child term
 					findTargets(subTerm);
 				}
+				//add target to parent indexterm
 				term.addTargets(subTerm.getTargetList());
-			}			
+				// edited by William on 2009-07-13 for indexterm bug:2819853 end
+			}
+			
 		}	
 	}
 

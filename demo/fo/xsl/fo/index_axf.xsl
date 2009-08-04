@@ -110,9 +110,24 @@ exclude-result-prefixes="opentopic-index opentopic">
             </xsl:when>
         </xsl:choose>
         <!--Insert simple index entry marker-->
-        <xsl:for-each select="descendant::opentopic-index:refID[last()]">
+        <!-- edited by william on 2009-07-13 for bug:2819853 start -->
+        <!--xsl:for-each select="descendant::opentopic-index:refID[last()]">
             <fo:inline index-key="{@value}"/>
-        </xsl:for-each>
+        </xsl:for-each-->
+        <xsl:choose>
+            <!--xsl:when test="opentopic-index:index.entry"/-->
+            <xsl:when test="opentopic-index:index.entry">
+                <xsl:for-each select="child::opentopic-index:refID[last()]">
+                    <fo:inline index-key="{@value}"/>
+                </xsl:for-each>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:for-each select="child::opentopic-index:refID[last()]">
+                    <fo:inline index-key="{@value}"/>
+                </xsl:for-each>
+            </xsl:otherwise>
+        </xsl:choose>
+        <!-- edited by william on 2009-07-13 for bug:2819853 start -->
         <xsl:apply-templates/>
     </xsl:if>
 </xsl:template>
