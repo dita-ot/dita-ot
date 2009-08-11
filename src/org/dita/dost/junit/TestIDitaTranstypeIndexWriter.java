@@ -14,9 +14,11 @@ public class TestIDitaTranstypeIndexWriter {
 	@Test
 	public void testiditatranstypeindexwriter()
 	{
+		String rootpath=System.getProperty("user.dir");
+		String path=rootpath+"\\test-stub\\index.xml";
 		String outputfilename="test-stub\\iditatranstypewriter";
 		assertEquals("test-stub\\iditatranstypewriter.hhk",idita1.getIndexFileName(outputfilename));
-		assertEquals("C:\\eclipse\\workspace\\DITA-OT\\test-stub\\index.xml",idita2.getIndexFileName(outputfilename));
+		assertEquals(path,idita2.getIndexFileName(outputfilename));
 		assertEquals("test-stub\\iditatranstypewriter_index.xml",idita3.getIndexFileName(outputfilename));
 	}
 

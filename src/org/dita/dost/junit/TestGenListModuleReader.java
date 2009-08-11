@@ -8,6 +8,7 @@ import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Map;
 import java.util.Set;
 
@@ -40,8 +41,11 @@ public class TestGenListModuleReader {
 		boolean validate = false;
 		
 		try {
-			reader.initXMLReader(ditaDir, validate, rootFile);
+			reader.initXMLReader(ditaDir, validate, new File(baseDir, rootFile).getCanonicalPath());
 		} catch (SAXException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
