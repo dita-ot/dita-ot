@@ -40,7 +40,7 @@
     <xsl:variable name="first-topic-lang">
       <xsl:choose>
         <xsl:when test="/*[@xml:lang]"><xsl:value-of select="/*/@xml:lang"/></xsl:when>
-        <xsl:when test="/dita/*[@xml:lang]"><xsl:value-of select="/dita/*[1][@xml:lang]/@xml:lang"/></xsl:when>
+        <xsl:when test="/dita/*[@xml:lang]"><xsl:value-of select="/dita/*[@xml:lang][1]/@xml:lang"/></xsl:when>
         <xsl:otherwise><xsl:value-of select="$DEFAULTLANG"/></xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
