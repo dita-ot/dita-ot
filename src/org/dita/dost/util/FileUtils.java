@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 import org.dita.dost.log.DITAOTJavaLogger;
-import org.dita.dost.module.DebugAndFilterModule;
+
 
 /**
  * Class description goes here.
@@ -436,7 +436,7 @@ public class FileUtils {
      * @param attValue
      * @return
      */
-    public static String replaceExtName(String attValue){
+    public static String replaceExtName(String attValue, String extName){
     	String fileName;
         int fileExtIndex;
         int index;
@@ -449,12 +449,12 @@ public class FileUtils {
     		fileName = attValue.substring(0,index); 
     		fileExtIndex = fileName.lastIndexOf(Constants.DOT);
     		return (fileExtIndex != -1)
-    			? fileName.substring(0, fileExtIndex) + DebugAndFilterModule.extName + attValue.substring(index)
+    			? fileName.substring(0, fileExtIndex) + extName + attValue.substring(index)
     			: attValue;
     	} else {
     		fileExtIndex = attValue.lastIndexOf(Constants.DOT);
     		return (fileExtIndex != -1)
-    			? (attValue.substring(0, fileExtIndex) + DebugAndFilterModule.extName) 
+    			? (attValue.substring(0, fileExtIndex) + extName) 
     			: attValue;
     	}
     }
