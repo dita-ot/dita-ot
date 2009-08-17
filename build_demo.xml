@@ -143,12 +143,12 @@
 				value="${dita.output.demo.book.dir}"/>
       		<param name="transtype" value="xhtml"/>
 		</antcall>
-		<antcall target="dita2pdf">
-			<param name="args.input"
+		<!-- DOST is the project name of imported build.xml-->
+		<antcall target="DOST.init">
+			<param name="args.input"      
 				value="${dita.demo.book.dir}${file.separator}taskbook.ditamap"/>
-			<param name="output.dir"
-				value="${dita.output.demo.book.dir}"/>
-      <param name="transtype" value="pdf"/>
+			<param name="output.dir"      value="${dita.output.demo.book.dir}"/>
+      		<param name="transtype" value="pdf"/>
 		</antcall>
 	</target>
 
@@ -163,13 +163,13 @@
 		</antcall>
 		<antcall target="dita.elementref.html">
 			<param name="inputFile"
-				value="${basedir}${file.separator}temp${file.separator}map.xml"/>
+				value="${basedir}${file.separator}${dita.temp.dir}${file.separator}map.xml"/>
 			<param name="outputFile"
 				value="${dita.output.demo.elementref.dir}${file.separator}map.html"/>
 		</antcall>
 		<antcall target="dita.elementref.html">
 			<param name="inputFile"
-				value="${basedir}${file.separator}temp${file.separator}topicref.xml"/>
+				value="${basedir}${file.separator}${dita.temp.dir}${file.separator}topicref.xml"/>
 			<param name="outputFile"
 				value="${dita.output.demo.elementref.dir}${file.separator}topicref.html"/>
 		</antcall>
@@ -196,7 +196,7 @@
 			<param name="args.input"
 				value="${dita.demo.enote.dir}${file.separator}testnote2.xml"/>
 			<param name="inputFile"
-				value="${basedir}${file.separator}temp${file.separator}testnote2.xml"/>
+				value="${basedir}${file.separator}${dita.temp.dir}${file.separator}testnote2.xml"/>
 			<param name="output.dir"
 				value="${dita.output.demo.enote.dir}"/>
 			<param name="outputFile"
@@ -220,8 +220,10 @@
 		depends="init.demo">
 		<mkdir dir="${dita.output.demo.faq.dir}"/>
 		<antcall target="dita.faq.html">
+			<!--param name="inputFile"
+				value="${basedir}${file.separator}temp${file.separator}DITA-faq.xml"/-->
 			<param name="inputFile"
-				value="${basedir}${file.separator}temp${file.separator}DITA-faq.xml"/>
+				value="${basedir}${file.separator}${dita.temp.dir}${file.separator}DITA-faq.xml"/>
 			<param name="args.input"
 				value="${dita.demo.faq.dir}${file.separator}DITA-faq.xml"/>
 			<param name="output.dir"
@@ -230,8 +232,10 @@
 				value="${dita.output.demo.faq.dir}${file.separator}DITA-faq.html"/>
 		</antcall>
 		<antcall target="dita.faq.html">
+			<!--param name="inputFile"
+				value="${basedir}${file.separator}temp${file.separator}ditafaq.xml"/-->
 			<param name="inputFile"
-				value="${basedir}${file.separator}temp${file.separator}ditafaq.xml"/>
+				value="${basedir}${file.separator}${dita.temp.dir}${file.separator}ditafaq.xml"/>
 			<param name="args.input"
 				value="${dita.demo.faq.dir}${file.separator}ditafaq.xml"/>
 			<param name="output.dir"
@@ -282,13 +286,14 @@
 
 
 	<target name="demo.langref.pdf" depends="init.demo.langref">
-		<antcall target="dita2pdf">
-			<param name="args.input"       
+		<!-- DOST is the project name of imported build.xml-->
+		<antcall target="DOST.init">
+			<param name="args.input"      
 				value="${dita.doc.langref.dir}${file.separator}ditaref-book.ditamap"/>
 			<param name="output.dir"      value="${dita.output.demo.langref.dir}"/>
-            <param name="transtype" value="pdf"/>
-            <param name="dita.extname" value="dita"/>
-            <param name="args.fo.img.ext" value=".gif"/>
+      		<param name="transtype" value="pdf"/>
+			<param name="dita.extname" value="dita"/>
+			<param name="args.fo.img.ext" value=".gif"/>
 		</antcall>
 	</target>
 
@@ -385,13 +390,14 @@
     
     <target name="doc.langref.pdf" depends="init.doc.langref"
 		description="Build the langref document.">
-		<antcall target="dita2pdf">
-			<param name="args.input"
+    	<!-- DOST is the project name of imported build.xml-->
+		<antcall target="DOST.init">
+			<param name="args.input"      
 				value="${dita.doc.langref.dir}${file.separator}ditaref-alpha.ditamap"/>
-			<param name="output.dir" value="${dita.output.doc.langref.dir}"/>
-            <param name="transtype" value="pdf"/>		   
-            <param name="dita.extname" value="dita"/>
-            <param name="args.fo.img.ext" value=".gif"/>
+			<param name="output.dir"      value="${dita.output.doc.langref.dir}"/>
+      		<param name="transtype" value="pdf"/>
+			<param name="dita.extname" value="dita"/>
+			<param name="args.fo.img.ext" value=".gif"/>
 		</antcall>
 	</target>
 	
@@ -426,11 +432,12 @@
     
     <target name="doc.articles.pdf" depends="init.doc.articles"
 		description="Build the articles of dita as document.">
-		<antcall target="dita2pdf">
-			<param name="args.input"
+    	<!-- DOST is the project name of imported build.xml-->
+		<antcall target="DOST.init">
+			<param name="args.input"      
 				value="${dita.doc.articles.dir}${file.separator}DITA-articles.ditamap"/>
-			<param name="output.dir"     value="${dita.output.doc.articles.dir}"/>
-      <param name="transtype" value="pdf"/>
+			<param name="output.dir"      value="${dita.output.doc.articles.dir}"/>
+      		<param name="transtype" value="pdf"/>
 		</antcall>
 	</target>
 	
@@ -458,11 +465,12 @@
 	</target>
     
     <target name="doc.readme.pdf" depends="init">
-		<antcall target="dita2pdf">
-			<param name="args.input"
+    	<!-- DOST is the project name of imported build.xml-->
+		<antcall target="DOST.init">
+			<param name="args.input"      
 				value="${dita.doc.dir}${file.separator}DITA-readme.ditamap"/>
-			<param name="output.dir"     value="${dita.output.doc.dir}"/>
-      <param name="transtype" value="pdf"/>
+			<param name="output.dir"      value="${dita.output.doc.dir}"/>
+      		<param name="transtype" value="pdf"/>
 		</antcall>
 	</target>
 	
@@ -485,11 +493,12 @@
 	</target>
   
 	<target name="doc.installguide.pdf" depends="init">
-		<antcall target="dita2pdf">
-			<param name="args.input"
+		<!-- DOST is the project name of imported build.xml-->
+		<antcall target="DOST.init">
+			<param name="args.input"      
 				value="${dita.doc.dir}${file.separator}ot-userguide${file.separator}DITAOT_UGRef_SOURCE${file.separator}installing${file.separator}installing_map.ditamap"/>
-			<param name="output.dir" value="${dita.output.doc.dir}${file.separator}installguide"/>
-      <param name="transtype" value="pdf"/>
+			<param name="output.dir"      value="${dita.output.doc.dir}${file.separator}installguide"/>
+      		<param name="transtype" value="pdf"/>
 		</antcall>
 	</target>
 
@@ -560,11 +569,12 @@
 	<target name="samples.pdf"
 		description="build the samples as PDF"
 		depends="samples.init">
-		<antcall target="dita2pdf">
-			<param name="args.input"       
+		<!-- DOST is the project name of imported build.xml-->
+		<antcall target="DOST.init">
+			<param name="args.input"      
 				value="${dita.samples.dir}${file.separator}sequence.ditamap"/>
-			<param name="output.dir" value="${dita.output.samples.pdf.dir}"/>
-      <param name="transtype" value="pdf"/>
+			<param name="output.dir"      value="${dita.output.samples.pdf.dir}"/>
+      		<param name="transtype" value="pdf"/>
 		</antcall>
 	</target>
 	
@@ -775,12 +785,13 @@
 
 	<target name="prompt.output.pdf" depends="prompt.output.init"
 		if="isPDFOutput">
-		<antcall target="dita2pdf">
+		<!-- DOST is the project name of imported build.xml-->
+		<antcall target="DOST.init">
 			<param name="args.input"      
 				value="${prompt.ditamap.filename}"/>
 			<param name="output.dir"      value="${prompt.output.directory}"/>
 			<param name="dita.temp.dir" value="temp"/>
-      <param name="transtype" value="pdf"/>
+      		<param name="transtype" value="pdf"/>
 		</antcall>
 	</target>
 
