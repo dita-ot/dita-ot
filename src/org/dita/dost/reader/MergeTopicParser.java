@@ -198,7 +198,7 @@ public class MergeTopicParser extends AbstractXMLReader {
 			if(util.findId(pathFromMap)){
 				retAttValue = Constants.SHARP + util.getIdValue(pathFromMap);
 			}else{
-				fileId = util.getFirstTopicId(pathFromMap, dirPath);
+				fileId = util.getFirstTopicId(pathFromMap, dirPath , false);
 				if (util.findId(pathFromMap + Constants.SHARP + fileId)){
 					util.addId(pathFromMap,util.getIdValue(pathFromMap + Constants.SHARP + fileId));
 					retAttValue = Constants.SHARP + util.getIdValue(pathFromMap + Constants.SHARP + fileId);
