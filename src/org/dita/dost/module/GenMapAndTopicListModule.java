@@ -634,12 +634,31 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 		}
 	}
 
-	private void categorizeResultFile(String file) {		
-		String lcasefn = file.toLowerCase();
-		if (FileUtils.isDITAFile(lcasefn)) {
-			addToWaitList(file);
+	private void categorizeResultFile(String file) {
+		//edited by william on 2009-08-06 for bug:2832696 start
+		String lcasefn = null;
+		String format = null;
+		//has format attribute set
+		if(file.contains(Constants.STICK)){
+			//get lower case file name
+			lcasefn = file.substring(0, file.indexOf(Constants.STICK)).toLowerCase();
+			//get format attribute
+			format = file.substring(file.indexOf(Constants.STICK)+1);
+			file = file.substring(0, file.indexOf(Constants.STICK));
+		}else{
+			lcasefn = file.toLowerCase();
 		}
-
+		
+		if (FileUtils.isDITAFile(lcasefn)
+			&& (format == null ||
+			Constants.ATTR_FORMAT_VALUE_DITA.equalsIgnoreCase(format)||
+			Constants.ATTR_FORMAT_VALUE_DITAMAP.equalsIgnoreCase(format))) {
+			
+			addToWaitList(file);
+		}else if(!FileUtils.isSupportedImageFile(lcasefn)){
+			htmlSet.add(file);
+		}
+		//edited by william on 2009-08-06 for bug:2832696 end
 		if (FileUtils.isSupportedImageFile(lcasefn)) {
 			imageSet.add(file);
 		}
@@ -659,6 +678,13 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 	 * @param file
 	 */
 	private void updateUplevels(String file) {
+		
+		//Added by william on 2009-08-06 for bug:2832696 start
+		if(file.contains(Constants.STICK)){
+			file = file.substring(0, file.indexOf(Constants.STICK));
+		}
+		//Added by william on 2009-08-06 for bug:2832696 end
+		
 		// for uplevels (../../)
 		//modified start by wxzhang 20070518
 		//".."-->"../"
