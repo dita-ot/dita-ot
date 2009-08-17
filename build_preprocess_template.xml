@@ -295,7 +295,7 @@
     unless="preprocess.keyref.skip"
     description="Resolve keyref">
     <pipeline message="Resolve keyref." module="Keyref"
-      basedir="${basedir}" tempdir="${dita.temp.dir}"/>     
+      basedir="${basedir}" tempdir="${dita.temp.dir}" extparam="ditaext=${dita.extname}"/>     
   </target>
   
   <target name="keyref-check">
