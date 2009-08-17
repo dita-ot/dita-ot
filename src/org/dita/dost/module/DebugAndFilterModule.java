@@ -169,7 +169,12 @@ public class DebugAndFilterModule implements AbstractPipelineModule {
         String ditavalFile = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_DITAVAL);
         tempDir = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_TEMPDIR);
         String ext = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_DITAEXT);
-        ditaDir=((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_EXT_PARAM_DITADIR);;
+        ditaDir=((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_EXT_PARAM_DITADIR);
+        //Added by William on 2009-07-18 for req #12014 start
+        //get transtype
+        String transtype = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_EXT_PARAM_TRANSTYPE);
+        //Added by William on 2009-07-18 for req #12014 start
+        
         inputDir = null;
         String filePathPrefix = null;
         ListReader listReader = new ListReader();
@@ -228,7 +233,11 @@ public class DebugAndFilterModule implements AbstractPipelineModule {
         fileWriter = new DitaWriter();
         content.setValue(tempDir);
         fileWriter.setContent(content);
-        
+
+        //added by William on 2009-07-18 for req #12014 start
+        //set transtype
+        fileWriter.setTranstype(transtype);
+        //added by William on 2009-07-18 for req #12014 end
         if(inputDir != null){
             filePathPrefix = inputDir + Constants.STICK;
         }
