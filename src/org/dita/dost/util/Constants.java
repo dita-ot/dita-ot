@@ -313,6 +313,10 @@ public abstract class Constants {
 	public static final String ATTR_CLASS_VALUE_FOREIGN = " topic/foreign ";
 	public static final String ATTR_CLASS_VALUE_UNKNOWN = " topic/unknown ";
 	public static final String ATTR_CLASS_VALUE_MAP_SEARCHTITLE = " map/searchtitle ";
+	//Added by William on 2009-07-25 for bug:2826143 start
+	public static final String ATTR_CLASS_VALUE_MAP_LINKTEXT = " map/linktext ";
+	public static final String ATTR_CLASS_VALUE_MAP_SHORTDESC = " map/shortdesc ";
+	//Added by William on 2009-07-25 for bug:2826143 start
 	public static final String ATTR_CLASS_VALUE_TOPIC_SEARCHTITLE = " topic/searchtitle ";
 	public static final String ATTR_CLASS_VALUE_PROLOG = " topic/prolog ";
 	public static final String ATTR_CLASS_VALUE_ABSTRACT = " topic/abstract ";
