@@ -155,9 +155,10 @@ public class MergeUtils {
 	 * Get the first topic id
 	 * @param path
 	 * @param dir
+	 * @param useCatalog
 	 * @return
 	 */
-	public String getFirstTopicId(String path, String dir){
+	public String getFirstTopicId(String path, String dir, boolean useCatalog){
 		String localPath = path;
 		String localDir = dir;
 		TopicIdParser parser;
@@ -176,8 +177,18 @@ public class MergeUtils {
                 //The default sax driver is set to xerces's sax driver
             	StringUtils.initSaxDriver();
             }
+            
             reader = XMLReaderFactory.createXMLReader();
-            reader.setContentHandler(parser);            
+            reader.setContentHandler(parser);
+            
+            if(useCatalog){
+            	try {
+        			Class.forName(Constants.RESOLVER_CLASS);
+        			reader.setEntityResolver(CatalogUtils.getCatalogResolver());
+        		}catch (ClassNotFoundException e){
+        			logger.logException(e);
+        		}
+            }
             reader.parse(localDir+File.separator+localPath);
         }catch (Exception e){
             logger.logException(e);
@@ -185,4 +196,5 @@ public class MergeUtils {
 		return firstTopicId.toString();
 		
 	}
+	
 }
