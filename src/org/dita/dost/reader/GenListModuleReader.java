@@ -12,9 +12,7 @@ package org.dita.dost.reader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.HashMap;
@@ -33,8 +31,10 @@ import org.dita.dost.log.MessageBean;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.Constants;
+import org.dita.dost.util.DelayConrefUtils;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.FilterUtils;
+import org.dita.dost.util.MergeUtils;
 import org.dita.dost.util.OutputUtils;
 import org.dita.dost.util.StringUtils;
 import org.xml.sax.Attributes;
@@ -164,25 +164,32 @@ public class GenListModuleReader extends AbstractXMLReader {
     private StringBuffer result = new StringBuffer();
     //flag to show whether a file has <exportanchors> tag
 	private boolean hasExport = false;
+	//for topic/dita files whether a </file> tag should be added
+	private boolean shouldAppendEndTag = false;
 	//store the href of topicref tag
-	private String topicHref = null;
-	//topicmeta set
+	private String topicHref = "";
+	//topicmeta set for merge multiple exportanchors into one
+	//each topicmeta/prolog can define many exportanchors
 	private HashSet<String> topicMetaSet = null;
-	//Added by William on 2009-06-25 for req #12014 end
+	//refered topic id
+	private String topicId = "";
+	//Map to store plugin id
+	private Map<String, Set<String>> pluginMap = new HashMap<String, Set<String>>();
 	
+	/**
+	 * @return the pluginMap
+	 */
+	public Map<String, Set<String>> getPluginMap() {
+		return pluginMap;
+	}
+
 	/**
 	 * @return the result
 	 */
 	public StringBuffer getResult() {
 		return result;
 	}
-
-	/**
-	 * @param result the result to set
-	 */
-	public void setResult(StringBuffer result) {
-		this.result = result;
-	}
+	//Added by William on 2009-06-25 for req #12014 end
 
 	/**
 	 * Constructor
@@ -249,6 +256,8 @@ public class GenListModuleReader extends AbstractXMLReader {
 		//to check whether the current parsing file's href value is out of inputmap.dir
 		rootDir=new File(rootFile).getAbsoluteFile().getParent();
 		rootFilePath=new File(rootFile).getAbsolutePath();
+		rootFilePath = FileUtils.removeRedundantNames(rootFilePath);
+		rootDir = FileUtils.removeRedundantNames(rootDir);
 		reader = XMLReaderFactory.createXMLReader();
 		reader.setFeature(Constants.FEATURE_NAMESPACE_PREFIX, true);
 		if(validate==true){
@@ -520,10 +529,30 @@ public class GenListModuleReader extends AbstractXMLReader {
 		//Added by William on 2009-06-24 for req #12014 start
 		//has class attribute
 		if(attrValue!=null){
-			//merge multiple exportanchors into one <topicmeta>
+			
+			//when meets topic tag
+			if(attrValue.contains(Constants.ATTR_CLASS_VALUE_TOPIC)){
+				topicId = atts.getValue(Constants.ATTRIBUTE_NAME_ID);
+				
+			}
+			//get plugin id
+			if(FileUtils.isDITAMapFile(currentFile)&&
+				currentFile.equals(rootFilePath)&&
+				attrValue.contains(Constants.ATTR_CLASS_VALUE_MAP)){
+				String pluginId = atts.getValue(Constants.ATTRIBUTE_NAME_ID);
+				if(pluginId == null){
+					pluginId = "org.sample.help.doc";
+				}
+				Set<String> set = StringUtils.restoreSet(pluginId);
+				pluginMap.put("pluginId", set);
+			}
+			
+			//merge multiple exportanchors into one
+			//Each <topicref> can only have one <topicmeta>.
+			//Each <topic> can only have one <prolog>
 			//and <metadata> can have more than one exportanchors
 			if(attrValue.contains(Constants.ATTR_CLASS_VALUE_TOPICMETA)||
-					attrValue.contains(Constants.ATTR_CLASS_VALUE_METADATA)){
+					attrValue.contains(Constants.ATTR_CLASS_VALUE_PROLOG)){
 				topicMetaSet.add(qName);
 			}
 			//If the file has <exportanchors> tags
@@ -532,33 +561,71 @@ public class GenListModuleReader extends AbstractXMLReader {
 				//If current file is a ditamap file
 				if(FileUtils.isDITAMapFile(currentFile)){
 					//if dita file's extension name is ".xml"
+					String editedHref = "";
 					if(topicHref.endsWith(Constants.FILE_EXTENSION_XML)){
-						//change the extension to ".dita"
-						topicHref = topicHref.replace(Constants.FILE_EXTENSION_XML, Constants.FILE_EXTENSION_DITA);
+						//change the extension to ".dita" for latter compare
+						editedHref = topicHref.replace(Constants.FILE_EXTENSION_XML, Constants.FILE_EXTENSION_DITA);
+					}else{
+						editedHref = topicHref;
 					}
+					//editedHref = editedHref.replace(File.separator, "/");
 					//create file element in the StringBuffer
-					result.append("<file name=\""+topicHref+"\">");
+					result.append("<file name=\""+editedHref+"\">");
+					//if <exportanchors> is defined in topicmeta(topicref), there is only one topic id
+					result.append("<topicid name=\""+topicId+"\"/>");
+					
 				//If current file is topic file
 				}else if(FileUtils.isDITATopicFile(currentFile)){
 					String filename = FileUtils.getRelativePathFromMap(rootFilePath, currentFile);
 					//if dita file's extension name is ".xml"
 					if(filename.endsWith(Constants.FILE_EXTENSION_XML)){
-						//change the extension to ".dita"
+						//change the extension to ".dita" for latter compare
 						filename = filename.replace(Constants.FILE_EXTENSION_XML, Constants.FILE_EXTENSION_DITA);
 					}
+					//filename = FileUtils.normalizeDirectory(currentDir, filename);
+					filename = filename.replace(Constants.BACK_SLASH, Constants.SLASH);
 					//create file element in the StringBuffer
 					result.append("<file name=\""+filename+"\">");
+					//if <exportanchors> is defined in metadata(topic), there can be many topic ids
+					result.append("<topicid name=\""+topicId+"\">");
+					
+					shouldAppendEndTag =true;
 				}
 			//meet <anchorkey> tag
 			}else if(attrValue.contains(Constants.ATTR_CLASS_VALUE_ANCHORKEY)){
 				//create keyref element in the StringBuffer
+				//TODO in topic file is no keys
 				String keyref = atts.getValue(Constants.ATTRIBUTE_NAME_KEYREF);
 				result.append("<keyref name=\""+keyref+"\"/>");
 			//meet <anchorid> tag
 			}else if(attrValue.contains(Constants.ATTR_CLASS_VALUE_ANCHORID)){
 				//create keyref element in the StringBuffer
 				String id = atts.getValue(Constants.ATTRIBUTE_NAME_ID);
-				result.append("<id name=\""+id+"\"/>");
+				//If current file is a ditamap file
+				boolean found = false;
+				if(FileUtils.isDITAMapFile(currentFile)){
+					//only for dita format
+					if(!"".equals(topicHref)){
+						String absolutePathToFile = FileUtils.resolveFile((new File(rootFilePath)).getParent(),topicHref);
+						//whether the id is a topic id
+						if(FileUtils.isDITAFile(absolutePathToFile)){
+							found = DelayConrefUtils.getInstance().findTopicId(absolutePathToFile, id);
+						}
+						//other format file
+					}else{
+						found = false;
+					}
+				}
+				
+				//id shouldn't be same as topic id in the case of duplicate insert
+				if(!topicId.equals(id)){
+					//topic id found
+					if(found){
+						result.append("<topicid name=\""+id+"\"/>");
+					}else{
+						result.append("<id name=\""+id+"\"/>");
+					}
+				}
 			}
 		}
 		//Added by William on 2009-06-24 for req #12014 end
@@ -685,6 +752,13 @@ public class GenListModuleReader extends AbstractXMLReader {
 			processRoleLevel--;
 			processRoleStack.pop();
 		}
+		//Added by William on 2009-07-15 for req #12014 start
+		if(FileUtils.isDITATopicFile(currentFile) && shouldAppendEndTag){
+			result.append("</file>");
+			//should reset
+			shouldAppendEndTag = false;
+		}
+		//Added by William on 2009-07-15 for req #12014 end
 	}
 
 	/**
@@ -746,8 +820,15 @@ public class GenListModuleReader extends AbstractXMLReader {
 		}
 		//Added by William on 2009-06-24 for req #12014 start
 		//<exportanchors> over should write </file> tag
+		
 		if(topicMetaSet.contains(qName) && hasExport){
-			result.append("</file>");
+			//If current file is a ditamap file
+			if(FileUtils.isDITAMapFile(currentFile)){
+				result.append("</file>");
+			//If current file is topic file
+			}else if(FileUtils.isDITATopicFile(currentFile)){
+				result.append("</topicid>");
+			}
 			hasExport = false;
 			topicMetaSet.clear();
 		}
@@ -886,9 +967,31 @@ public class GenListModuleReader extends AbstractXMLReader {
 			if (Constants.ATTR_TYPE_VALUE_SUBJECT_SCHEME.equalsIgnoreCase(attrType)) {
 				schemeSet.add(filename);
 			}
+			
+			
 			//Added by William on 2009-06-24 for req #12014 start
-			if(attrName.equals(Constants.ATTRIBUTE_NAME_HREF)){
-				topicHref = filename;
+			//For only format of the href is dita topic
+			if (attrFormat == null ||
+					Constants.ATTR_FORMAT_VALUE_DITA.equalsIgnoreCase(attrFormat)){
+				if(attrName.equals(Constants.ATTRIBUTE_NAME_HREF)){
+					topicHref = filename;
+					
+					topicHref = topicHref.replace(Constants.BACK_SLASH, Constants.SLASH);
+					//attrValue has topicId
+					if(attrValue.lastIndexOf(Constants.SHARP) != -1){
+						//get the topicId position
+						int position = attrValue.lastIndexOf(Constants.SHARP);
+						topicId = attrValue.substring(position + 1);
+					}else{
+						//get the first topicId(vaild href file)
+						if(FileUtils.isDITAFile(topicHref)){
+							topicId = MergeUtils.getInstance().getFirstTopicId(topicHref, (new File(rootFilePath)).getParent(), true);
+						}
+					}
+				}
+			}else{
+				topicHref = "";
+				topicId = "";
 			}
 			//Added by William on 2009-06-24 for req #12014 end
 		}
