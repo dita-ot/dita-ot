@@ -1013,7 +1013,14 @@ public class GenListModuleReader extends AbstractXMLReader {
 						(atts.getValue(Constants.ATTRIBUTE_NAME_CHUNK)!=null && atts.getValue(Constants.ATTRIBUTE_NAME_CHUNK).contains("to-content")) )
 				&& !Constants.ATTRIBUTE_NAME_CONREF.equals(attrName)
 				&& !Constants.ATTRIBUTE_NAME_COPY_TO.equals(attrName) && canResolved() ) {
-			nonConrefCopytoTargets.add(filename);
+			//edited by william on 2009-08-06 for bug:2832696 start
+			if(attrFormat!=null){
+				nonConrefCopytoTargets.add(filename + Constants.STICK + attrFormat);
+			}else{
+				nonConrefCopytoTargets.add(filename);
+			}
+			//nonConrefCopytoTargets.add(filename);
+			//edited by william on 2009-08-06 for bug:2832696 end
 		}
 		
 		if (attrFormat != null &&

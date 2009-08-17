@@ -224,33 +224,37 @@ public class MapMetaReader implements AbstractReader {
 				topicPath = FileUtils.resolveTopic(filePath,hrefAttr.getNodeValue());
 			}
 			
-			if(resultTable.containsKey(topicPath)){
-    			//if the result table already contains some result
-    			//metadata for current topic path.
-				Hashtable<String, Element> previous = resultTable.get(topicPath);
-				resultTable.put(topicPath, mergeMeta(previous, current, metaSet));
-    		}else{
-    			resultTable.put(topicPath, current);
-    		}
-			
-			Hashtable<String, Element> metas = resultTable.get(topicPath);
-			if (!metas.isEmpty()) {
-				if (metaNode != null) topicref.removeChild(metaNode);
-				Element newMeta = doc.createElement(Constants.ELEMENT_NAME_TOPICMETA);
-				newMeta.setAttribute(Constants.ATTRIBUTE_NAME_CLASS, "-" + Constants.ATTR_CLASS_VALUE_TOPICMETA);
-				for (int i = 0; i < metaPos.size(); i++) {
-					Node stub = (Node)metas.get(metaPos.get(i));
-					if (stub != null) {
-						NodeList clist = stub.getChildNodes();
-						for (int j = 0; j < clist.getLength(); j++) {
-							newMeta.appendChild(topicref.getOwnerDocument().importNode(clist.item(j), true));
+			//edited by william on 2009-08-06 for bug:2832696 start
+			if(formatAttr == null || Constants.ATTR_FORMAT_VALUE_DITA.equalsIgnoreCase(formatAttr.getNodeValue())){
+				if(resultTable.containsKey(topicPath)){
+	    			//if the result table already contains some result
+	    			//metadata for current topic path.
+					Hashtable<String, Element> previous = resultTable.get(topicPath);
+					resultTable.put(topicPath, mergeMeta(previous, current, metaSet));
+	    		}else{
+	    			resultTable.put(topicPath, current);
+	    		}
+				
+				Hashtable<String, Element> metas = resultTable.get(topicPath);
+				if (!metas.isEmpty()) {
+					if (metaNode != null) topicref.removeChild(metaNode);
+					Element newMeta = doc.createElement(Constants.ELEMENT_NAME_TOPICMETA);
+					newMeta.setAttribute(Constants.ATTRIBUTE_NAME_CLASS, "-" + Constants.ATTR_CLASS_VALUE_TOPICMETA);
+					for (int i = 0; i < metaPos.size(); i++) {
+						Node stub = (Node)metas.get(metaPos.get(i));
+						if (stub != null) {
+							NodeList clist = stub.getChildNodes();
+							for (int j = 0; j < clist.getLength(); j++) {
+								newMeta.appendChild(topicref.getOwnerDocument().importNode(clist.item(j), true));
+							}
 						}
 					}
+					topicref.insertBefore(
+							newMeta,
+							topicref.getFirstChild());
 				}
-				topicref.insertBefore(
-						newMeta,
-						topicref.getFirstChild());
 			}
+			//edited by william on 2009-08-06 for bug:2832696 end
 		}
 	}
 
