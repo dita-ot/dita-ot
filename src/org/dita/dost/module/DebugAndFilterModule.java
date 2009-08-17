@@ -39,7 +39,6 @@ import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.pipeline.PipelineHashIO;
 import org.dita.dost.reader.DitaValReader;
-import org.dita.dost.reader.GenListModuleReader;
 import org.dita.dost.reader.ListReader;
 import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.Constants;
@@ -102,13 +101,13 @@ public class DebugAndFilterModule implements AbstractPipelineModule {
     			result.append(Constants.COMMA).append(file);
     		} else if (equalIndex == -1 ){
     			//append one more comma at the beginning of property value
-    			result.append(Constants.COMMA).append(FileUtils.replaceExtName(file));
+    			result.append(Constants.COMMA).append(FileUtils.replaceExtName(file,extName));
     		} else {
     			//append one more comma at the beginning of property value
     			result.append(Constants.COMMA);
-    			result.append(FileUtils.replaceExtName(file.substring(0,equalIndex)));
+    			result.append(FileUtils.replaceExtName(file.substring(0,equalIndex),extName));
     			result.append(Constants.EQUAL);
-    			result.append(FileUtils.replaceExtName(file.substring(equalIndex+1)));
+    			result.append(FileUtils.replaceExtName(file.substring(equalIndex+1),extName));
     		}
 
     	}
@@ -137,10 +136,8 @@ public class DebugAndFilterModule implements AbstractPipelineModule {
 				}
 			}
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -233,7 +230,10 @@ public class DebugAndFilterModule implements AbstractPipelineModule {
         fileWriter = new DitaWriter();
         content.setValue(tempDir);
         fileWriter.setContent(content);
-
+		
+		//Added by Alan Date:2009-08-04 --begin
+        fileWriter.setExtName(extName);
+		
         //added by William on 2009-07-18 for req #12014 start
         //set transtype
         fileWriter.setTranstype(transtype);
