@@ -174,7 +174,7 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 	//Added by William on 2009-06-25 for req #12014 start
 	//export file
 	private OutputStreamWriter export;
-	//Added by William on 2009-06-25 for req #12014 start
+	//Added by William on 2009-06-25 for req #12014 end
 	
 	private Set<String> schemeSet;
 	
@@ -332,7 +332,7 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 			keydef = new OutputStreamWriter(new FileOutputStream(new File(tempDir,"keydef.xml")));
 			keydef.write("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
 			keydef.write("<stub>");
-			// TODO Added by William on 2009-06-09 for scheme key bug(331-337)
+			//Added by William on 2009-06-09 for scheme key bug
 			// create the keydef file for scheme files
 			schemekeydef = new OutputStreamWriter(new FileOutputStream(
 					new File(tempDir, "schemekeydef.xml")));
@@ -347,7 +347,7 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 					new File(tempDir, "export.xml")));
 			export.write("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
 			export.write("<stub>");
-			//Added by William on 2009-06-25 for req #12014 start
+			//Added by William on 2009-06-25 for req #12014 end
 		} catch (FileNotFoundException e) {
 			javaLogger.logException(e);
 		} catch (IOException e){
@@ -555,19 +555,6 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 			}
 			
 		}
-		//Added by William on 2009-06-25 for req #12014 start
-		//get the export result
-		StringBuffer result = reader.getResult();
-		try {
-			//write the result into the file
-			export.write(result.toString());
-			//restore the result
-			reader.setResult(new StringBuffer());
-			
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		//Added by William on 2009-06-25 for req #12014 start
 		
 		hrefTargetSet.addAll(reader.getHrefTargets());
 		hrefWithIDSet.addAll(reader.getHrefTopicSet());
@@ -588,10 +575,16 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 			if (children == null)
 				children = new HashSet<String>();
 			children.addAll(reader.getSchemeSet());
+			//for Linux support
+			currentFile = currentFile.replace(Constants.BACK_SLASH, Constants.SLASH);
+			
 			this.schemeDictionary.put(currentFile, children);
 			Iterator<String> it = hrfSet.iterator();
 			while (it.hasNext()) {
 				String filename = it.next();
+				//for Linux support
+				filename = filename.replace(Constants.BACK_SLASH, Constants.SLASH);
+				
 				children = this.schemeDictionary.get(filename);
 				if (children == null)
 					children = new HashSet<String>();
@@ -939,6 +932,20 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 		writeMapToXML(reader.getRelationshipGrap(), Constants.FILE_NAME_SUBJECT_RELATION);
 		// Output topic-scheme dictionary
 		writeMapToXML(this.schemeDictionary, Constants.FILE_NAME_SUBJECT_DICTIONARY);
+		
+		//added by Willam on 2009-07-17 for req #12014 start
+		// Output plugin id
+		writeMapToXML(reader.getPluginMap(), Constants.FILE_NAME_PLUGIN_XML);
+		//write the result into the file
+		StringBuffer result = reader.getResult();
+		try {
+			export.write(result.toString());
+		} catch (IOException e) {
+			
+			e.printStackTrace();
+		}
+		//added by Willam on 2009-07-17 for req #12014 end
+		
 	}
 	
 	private void writeMapToXML(Map<String, Set<String>> m, String filename) {
