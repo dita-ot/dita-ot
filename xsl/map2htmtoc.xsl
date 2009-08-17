@@ -210,14 +210,19 @@
             <xsl:element name="a">
               <xsl:attribute name="href">
                 <xsl:choose>        <!-- What if targeting a nested topic? Need to keep the ID? -->
-                  <xsl:when test="contains(@copy-to, $DITAEXT) and not(contains(@chunk, 'to-content'))">
+                  <!-- edited by william on 2009-08-06 for bug:2832696 start -->
+                  <xsl:when test="contains(@copy-to, $DITAEXT) and not(contains(@chunk, 'to-content')) and 
+                    (not(@format) or @format = 'dita' or @format='ditamap' ) ">
+                  <!-- edited by william on 2009-08-06 for bug:2832696 end -->
                     <xsl:if test="not(@scope='external')"><xsl:value-of select="$pathFromMaplist"/></xsl:if>
                     <xsl:value-of select="substring-before(@copy-to,$DITAEXT)"/><xsl:value-of select="$OUTEXT"/>
                     <xsl:if test="not(contains(@copy-to, '#')) and contains(@href, '#')">
                       <xsl:value-of select="concat('#', substring-after(@href, '#'))"/>
                     </xsl:if>
                   </xsl:when>
-                  <xsl:when test="contains(@href,$DITAEXT)">
+                  <!-- edited by william on 2009-08-06 for bug:2832696 start -->
+                  <xsl:when test="contains(@href,$DITAEXT) and (not(@format) or @format = 'dita' or @format='ditamap')">
+                  <!-- edited by william on 2009-08-06 for bug:2832696 end -->
                     <xsl:if test="not(@scope='external')"><xsl:value-of select="$pathFromMaplist"/></xsl:if>
                     <xsl:value-of select="substring-before(@href,$DITAEXT)"/><xsl:value-of select="$OUTEXT"/>
                     <xsl:if test="contains(@href, '#')">
