@@ -285,6 +285,9 @@ public abstract class Constants {
 	public static final String ATTR_SCOPE_VALUE_LOCAL = "local";
 	public static final String ATTR_SCOPE_VALUE_EXTERNAL = "external";
 	public static final String ATTR_FORMAT_VALUE_DITA = "dita";
+	//added by william on 2009-08-06 for bug:2832696 start
+	public static final String ATTR_FORMAT_VALUE_DITAMAP = "ditamap";
+	//added by william on 2009-08-06 for bug:2832696 end
 	public static final String ATTRIBUTE_NAME_DITAARCHVERSION = "DITAArchVersion";
 	public static final String ATTRIBUTE_PREFIX_DITAARCHVERSION = "ditaarch";
 	public static final String ATTRIBUTE_NAMESPACE_PREFIX_DITAARCHVERSION = "xmlns:ditaarch";
