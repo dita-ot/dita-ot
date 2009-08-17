@@ -6,6 +6,7 @@
 <!-- VERSION:   1.2 -->
 <!-- DATE:      November 2006 -->
 <!---->
+<!-- ============================================================= -->
 <!-- SYSTEM:     Darwin Information Typing Architecture (DITA) -->
 <!---->
 <!-- PURPOSE:    XSD to describe DITA Classification maps -->
@@ -74,7 +75,7 @@
   <xs:include schemaLocation="urn:oasis:names:tc:dita:spec:classification:xsd:classifyDomain.xsd:1.2" />
   
   <xs:attributeGroup name="domains-att">
-    <xs:attribute name="domains" type="xs:string" default="(map mapgroup-d) (topic indexing-d) (topic delay-d)"/>
+    <xs:attribute name="domains" type="xs:string" default="(map mapgroup-d) (topic indexing-d) (topic delay-d) (map classify-d)"/>
   </xs:attributeGroup>
   
 </xs:schema>

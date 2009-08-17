@@ -21,6 +21,14 @@
 <!--             All Rights Reserved.                              -->
 <!-- ============================================================= -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  
+    <xs:annotation>
+       <xs:appinfo>(topic hazard-d)</xs:appinfo>
+        <xs:documentation>
+         
+       </xs:documentation>
+    </xs:annotation>
+
     
     <xs:group name="hazard-d-note">
         <xs:choice>

@@ -27,6 +27,13 @@
   <!-- ==================== Import Section ======================= -->
   <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="urn:oasis:names:tc:dita:xsd:xml.xsd:1.2"/>
    <xs:import namespace="http://dita.oasis-open.org/architecture/2005/" schemaLocation="urn:oasis:names:tc:dita:xsd:ditaarch.xsd:1.2"/>
+   
+   <xs:annotation>
+    <xs:appinfo>(topic learningBase)</xs:appinfo>
+    <xs:documentation> 
+    
+    </xs:documentation>
+  </xs:annotation>
 
   <!-- Base type: univ-atts -->
   <xs:attributeGroup name="univ-atts-no-importance-learningBase">

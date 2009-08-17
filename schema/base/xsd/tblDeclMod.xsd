@@ -112,7 +112,7 @@
   
   <xs:attributeGroup name="table.attributes">
     <xs:attributeGroup ref="colrowsep-atts"/>
-    <xs:attribute name="pgwide" type="yesno-att.class"/>
+    <xs:attribute name="pgwide" type="xs:NMTOKEN"/>
     <xs:attribute name="scale" type="scale-atts.class"/>
     <xs:attribute name="frame" type="frame-att.class"/>
     <xs:attribute name="rowheader" type="rowheader-att.class"/>
@@ -172,8 +172,8 @@
   </xs:attributeGroup>
   
   <xs:attributeGroup name="colrowsep-atts">
-    <xs:attribute name="colsep" type="yesno-att.class"/>
-    <xs:attribute name="rowsep" type="yesno-att.class"/>
+    <xs:attribute name="colsep" type="xs:NMTOKEN"/>
+    <xs:attribute name="rowsep" type="xs:NMTOKEN"/>
   </xs:attributeGroup>
   
   <xs:element name="colspec">

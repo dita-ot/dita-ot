@@ -51,7 +51,7 @@
   <xs:include schemaLocation="urn:oasis:names:tc:dita:spec:classification:xsd:subjectSchemeGrp.xsd:1.2" />
   
   <xs:attributeGroup name="domains-att">
-    <xs:attribute name="domains" type="xs:string" default="(map mapgroup-d)"/>
+    <xs:attribute name="domains" type="xs:string" default="(map mapgroup-d) (map subjectScheme)"/>
   </xs:attributeGroup>
   
 </xs:schema>

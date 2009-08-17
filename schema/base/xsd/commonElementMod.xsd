@@ -1084,6 +1084,7 @@
       </xs:complexContent>
     </xs:complexType>
   </xs:element>
+  
   <xs:complexType name="p.class" mixed="true">
      <xs:sequence>
       <xs:group ref="p.content"/>
@@ -1241,8 +1242,6 @@
     <xs:restriction base="xs:string">
       <xs:enumeration value="attention"/>
       <xs:enumeration value="caution"/>
-      <xs:enumeration value="caution1"/>
-      <xs:enumeration value="caution2"/>
       <xs:enumeration value="danger"/>
       <xs:enumeration value="fastpath"/>
       <xs:enumeration value="important"/>
@@ -1267,6 +1266,8 @@
         from the surrounding text.
       </xs:documentation>
     </xs:annotation>
+    
+    
     <xs:complexType mixed="true">
       <xs:complexContent>
         <xs:extension base="q.class">
@@ -1275,6 +1276,8 @@
       </xs:complexContent>
     </xs:complexType>
   </xs:element>
+  
+  
   <xs:complexType name="q.class" mixed="true">
      <xs:sequence>
       <xs:group ref="q.content"/>
@@ -2636,7 +2639,7 @@
         </xs:restriction>
     </xs:simpleType>
   
-  <xs:simpleType name="processing-role-att.class">
+  <xs:simpleType name="processing-role-att.class" >
         <xs:restriction base="xs:string">
             <xs:enumeration value="normal"/>
             <xs:enumeration value="resource-only"/>

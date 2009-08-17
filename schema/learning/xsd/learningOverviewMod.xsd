@@ -26,6 +26,14 @@
   <!-- ==================== Import Section ======================= -->
   <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="urn:oasis:names:tc:dita:xsd:xml.xsd:1.2"/>
   <xs:import namespace="http://dita.oasis-open.org/architecture/2005/" schemaLocation="urn:oasis:names:tc:dita:xsd:ditaarch.xsd:1.2"/>
+  
+  <xs:annotation>
+    <xs:appinfo>(topic learningBase learningOverview)</xs:appinfo>
+    <xs:documentation> 
+    
+    </xs:documentation>
+  </xs:annotation>
+  
   <!-- Base type: univ-atts -->
   <xs:attributeGroup name="univ-atts-no-importance-learningOverview">
     <xs:attributeGroup ref="id-atts"/>
@@ -43,8 +51,7 @@
   </xs:simpleType>
   <xs:group name="learningOverview-info-types">
     <xs:choice>
-      <xs:group ref="learningOverview"/>
-      <xs:group ref="info-types"/>
+      <xs:group ref="no-topic-nesting"/>
     </xs:choice>
   </xs:group>
   <!-- Element declarations for learningOverview.mod -->

@@ -335,7 +335,7 @@
   <xs:group name="critdates.content">
     <xs:sequence>
       <xs:sequence>
-      <xs:group ref="created"/>
+      <xs:group ref="created" minOccurs="0"/>
       <xs:group ref="revised" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
     </xs:sequence>

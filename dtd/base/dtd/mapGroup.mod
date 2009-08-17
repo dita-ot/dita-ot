@@ -74,6 +74,9 @@ PUBLIC "-//OASIS//ELEMENTS DITA Map Group Domain//EN"
               outputclass 
                         CDATA 
                                   #IMPLIED
+              keys 
+                        CDATA 
+                                  #IMPLIED
               %topicref-atts;
               %univ-atts;"
 >

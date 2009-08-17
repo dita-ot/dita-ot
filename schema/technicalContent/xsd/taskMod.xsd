@@ -25,6 +25,13 @@
    <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="urn:oasis:names:tc:dita:xsd:xml.xsd:1.2"/>
    <xs:import namespace="http://dita.oasis-open.org/architecture/2005/" schemaLocation="urn:oasis:names:tc:dita:xsd:ditaarch.xsd:1.2"/>
 
+    <xs:annotation>
+    <xs:appinfo>(topic task)</xs:appinfo>
+    <xs:documentation> 
+    
+    </xs:documentation>
+    </xs:annotation>
+   
   <!-- Base type: univ-atts -->
   <xs:attributeGroup name="univ-atts-no-importance-task">
     <xs:attributeGroup ref="id-atts"/>
@@ -635,8 +642,8 @@
   <xs:group name="taskPostStep">
     <xs:sequence>
       <xs:group ref="result"  minOccurs="0"/>
-      <xs:group ref="postreq"  minOccurs="0" maxOccurs="unbounded"/>  
       <xs:group ref="example"  minOccurs="0" maxOccurs="unbounded"/>
+      <xs:group ref="postreq"  minOccurs="0" maxOccurs="unbounded"/>  
     </xs:sequence>
   </xs:group>
   

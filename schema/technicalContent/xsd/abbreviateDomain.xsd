@@ -25,6 +25,13 @@
 
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
   
+  <xs:annotation>
+    <xs:appinfo>(topic abbrev-d)</xs:appinfo>
+    <xs:documentation>
+      
+    </xs:documentation>
+  </xs:annotation>
+  
   <xs:group name="abbrev-d-term">
     <xs:choice>
       <xs:element ref="abbreviated-form"/>

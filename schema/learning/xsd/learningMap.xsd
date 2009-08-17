@@ -84,7 +84,7 @@
 
     <xs:attributeGroup name="domains-att">
         <xs:attribute name="domains" type="xs:string"
-            default="(map mapgroup-d) (topic delay-d)  (topic indexing-d) (topic learningmeta-d) (topic+ut-d learning-d) "
+            default="(map mapgroup-d) (topic delay-d)  (topic indexing-d) (topic learningmeta-d) (map learningmap-d) "
         />
     </xs:attributeGroup>
 

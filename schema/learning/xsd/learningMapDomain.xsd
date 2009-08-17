@@ -24,19 +24,20 @@
 <!-- ============================================================= -->
 
 <xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema'>
+  
+  <xs:annotation>
+    <xs:appinfo>(map learningmap-d)</xs:appinfo>
+    <xs:documentation> 
+    
+    </xs:documentation>
+  </xs:annotation>
      
      <xs:group name="learningmap-d-topicref">
           <xs:choice>
                <xs:element ref="learningObject" />
-          </xs:choice>
-     </xs:group>
-     
-     <xs:group name="learningmap-d-group">
-          <xs:choice>
                <xs:element ref="learningGroup" />
           </xs:choice>
      </xs:group>
-     
      <xs:group name="learningObject">
           <xs:choice>
   	  <xs:element ref="learningObject" />

@@ -29,7 +29,15 @@
   <xs:import namespace="http://www.w3.org/XML/1998/namespace"
     schemaLocation="urn:oasis:names:tc:dita:xsd:xml.xsd:1.2"/>
   <xs:import namespace="http://dita.oasis-open.org/architecture/2005/"
-    schemaLocation="urn:oasis:names:tc:dita:xsd:ditaarch.xsd:1.2"/>
+  schemaLocation="urn:oasis:names:tc:dita:xsd:ditaarch.xsd:1.2"/>
+  
+  <xs:annotation>
+    <xs:appinfo>(topic learningBase learningContent)</xs:appinfo>
+    <xs:documentation> 
+    
+    </xs:documentation>
+  </xs:annotation>
+  
   <!-- Base type: univ-atts -->
   <xs:attributeGroup name="univ-atts-no-importance-learningContent">
     <xs:attributeGroup ref="id-atts"/>
@@ -83,14 +91,9 @@
   <!-- <!ENTITY % learningContent-info-types "(concept | task | reference | topic)*, (learningAssessment)?, (learningSummary)?"> -->
   <xs:group name="learningContent-info-types">
     <xs:sequence>
-      <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element ref="topic"/>
-        <xs:element ref="task"/>
-        <xs:element ref="concept"/>
-        <xs:element ref="reference"/>
+      <xs:choice>
+        <xs:group ref="no-topic-nesting"/>
       </xs:choice>
-      <xs:element ref="learningAssessment" minOccurs="0"/>
-      <xs:element ref="learningSummary" minOccurs="0"/>
     </xs:sequence>
   </xs:group>
   <!-- Base type: topic.class -->

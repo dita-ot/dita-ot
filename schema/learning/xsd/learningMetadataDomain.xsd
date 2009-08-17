@@ -23,6 +23,12 @@
 <!-- ============================================================= -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
     
+    <xs:annotation>
+       <xs:appinfo>(topic learningmeta-d)</xs:appinfo>
+       <xs:documentation> 
+       
+       </xs:documentation>
+    </xs:annotation>
     
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         - LOM Metadata

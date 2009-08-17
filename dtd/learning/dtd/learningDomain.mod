@@ -561,59 +561,59 @@ PUBLIC "-//OASIS//ELEMENTS DITA Learning Domain//EN"
     class CDATA "+ topic/note learning-d/lcInstructornote ">
 
 <!ATTLIST lcTrueFalse %global-atts;
-    class CDATA "+ topic/fig learning-d/lcTrueFalse ">
+    class CDATA "+ topic/fig ut-d/fig learning-d/lcTrueFalse ">
 <!ATTLIST lcSingleSelect %global-atts;
-    class CDATA "+ topic/fig learning-d/lcSingleSelect ">
+    class CDATA "+ topic/fig ut-d/fig learning-d/lcSingleSelect ">
 <!ATTLIST lcMultipleSelect %global-atts;
-    class CDATA "+ topic/fig learning-d/lcMultipleSelect ">
+    class CDATA "+ topic/fig ut-d/fig learning-d/lcMultipleSelect ">
 <!ATTLIST lcSequencing %global-atts;
-    class CDATA "+ topic/fig learning-d/lcSequencing ">
+    class CDATA "+ topic/fig ut-d/fig learning-d/lcSequencing ">
 <!ATTLIST lcMatching %global-atts;
-    class CDATA "+ topic/fig learning-d/lcMatching ">
+    class CDATA "+ topic/fig ut-d/fig learning-d/lcMatching ">
 <!ATTLIST lcHotspot %global-atts;
-    class CDATA "+ topic/fig learning-d/lcHotspot ">
+    class CDATA "+ topic/fig ut-d/fig learning-d/lcHotspot ">
 <!ATTLIST lcOpenQuestion %global-atts;
-    class CDATA "+ topic/fig learning-d/lcOpenQuestion ">
+    class CDATA "+ topic/fig ut-d/fig learning-d/lcOpenQuestion ">
 
 
 <!ATTLIST lcQuestion %global-atts;
-    class CDATA "+ topic/p learning-d/lcQuestion ">
+    class CDATA "+ topic/p ut-d/p learning-d/lcQuestion ">
 <!ATTLIST lcOpenAnswer %global-atts;
-    class CDATA "+ topic/p learning-d/lcOpenAnswer ">
+    class CDATA "+ topic/p ut-d/p learning-d/lcOpenAnswer ">
 <!ATTLIST lcAsset %global-atts;
-    class CDATA "+ topic/p learning-d/lcAsset ">
+    class CDATA "+ topic/p ut-d/p learning-d/lcAsset ">
 <!ATTLIST lcFeedback %global-atts;
-    class CDATA "+ topic/p learning-d/lcFeedback ">
+    class CDATA "+ topic/p ut-d/p learning-d/lcFeedback ">
 <!ATTLIST lcFeedbackCorrect %global-atts;
-    class CDATA "+ topic/p learning-d/lcFeedbackCorrect ">
+    class CDATA "+ topic/p ut-d/p learning-d/lcFeedbackCorrect ">
 <!ATTLIST lcFeedbackIncorrect %global-atts;
-    class CDATA "+ topic/p learning-d/lcFeedbackIncorrect ">
+    class CDATA "+ topic/p ut-d/p learning-d/lcFeedbackIncorrect ">
 <!ATTLIST lcAnswerOption %global-atts;
-    class CDATA "+ topic/li learning-d/lcAnswerOption ">
+    class CDATA "+ topic/li ut-d/li learning-d/lcAnswerOption ">
 <!ATTLIST lcAnswerOptionGroup     %global-atts; 
-    class CDATA "+ topic/ul learning-d/lcAnswerOptionGroup ">
+    class CDATA "+ topic/ul ut-d/ul learning-d/lcAnswerOptionGroup ">
 <!ATTLIST lcAnswerContent %global-atts;
-    class CDATA "+ topic/p learning-d/lcAnswerContent ">
+    class CDATA "+ topic/p ut-d/p learning-d/lcAnswerContent ">
 <!ATTLIST lcMatchTable %global-atts;
-    class CDATA "+ topic/simpletable learning-d/lcMatchTable ">
+    class CDATA "+ topic/simpletable ut-d/simpletable learning-d/lcMatchTable ">
 <!ATTLIST lcMatchingHeader %global-atts;
-    class CDATA "+ topic/sthead learning-d/lcMatchingHeader ">
+    class CDATA "+ topic/sthead ut-d/sthead learning-d/lcMatchingHeader ">
 <!ATTLIST lcMatchingPair %global-atts;
-    class CDATA "+ topic/strow learning-d/lcMatchingPair ">
+    class CDATA "+ topic/strow ut-d/strow learning-d/lcMatchingPair ">
 <!ATTLIST lcItem %global-atts;
-    class CDATA "+ topic/stentry learning-d/lcItem ">
+    class CDATA "+ topic/stentry ut-d/stentry learning-d/lcItem ">
 <!ATTLIST lcMatchingItem %global-atts;
-    class CDATA "+ topic/stentry learning-d/lcMatchingItem ">
+    class CDATA "+ topic/stentry ut-d/stentry learning-d/lcMatchingItem ">
 <!ATTLIST lcSequenceOptionGroup     %global-atts; 
-    class CDATA "+ topic/ol learning-d/lcSequenceOptionGroup ">
+    class CDATA "+ topic/ol ut-d/ol learning-d/lcSequenceOptionGroup ">
 <!ATTLIST lcSequenceOption %global-atts;
-    class CDATA "+ topic/li learning-d/lcSequenceOption ">
+    class CDATA "+ topic/li ut-d/li learning-d/lcSequenceOption ">
 <!ATTLIST lcSequence %global-atts;
-    class CDATA "+ topic/data learning-d/lcSequence ">
+    class CDATA "+ topic/data ut-d/data learning-d/lcSequence ">
 <!ATTLIST lcCorrectResponse %global-atts;
-    class CDATA "+ topic/data learning-d/lcCorrectResponse ">
+    class CDATA "+ topic/data ut-d/data learning-d/lcCorrectResponse ">
 
 <!ATTLIST lcHotspotMap %global-atts; 
-   class CDATA "+ topic/fig learning-d/lcHotspotMap " >
+   class CDATA "+ topic/fig ut-d/fig learning-d/lcHotspotMap " >
 <!ATTLIST lcArea       %global-atts; 
-   class CDATA "+ topic/figgroup learning-d/lcArea ">
+   class CDATA "+ topic/figgroup ut-d/figgroup learning-d/lcArea ">

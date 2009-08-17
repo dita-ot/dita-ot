@@ -25,6 +25,14 @@
     <!-- ======= IMPORT - XML attributes and namespace ======= -->
     <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="urn:oasis:names:tc:dita:xsd:xml.xsd:1.2"/>
     <xs:import namespace="http://dita.oasis-open.org/architecture/2005/" schemaLocation="urn:oasis:names:tc:dita:xsd:ditaarch.xsd:1.2"/>
+  
+  <xs:annotation>
+    <xs:appinfo>(map bookmap)</xs:appinfo>
+    <xs:documentation> 
+    
+    </xs:documentation>
+  </xs:annotation>
+  
         
     <xs:attributeGroup name="chapter-atts">
         <xs:attribute name="navtitle" type="xs:string" />

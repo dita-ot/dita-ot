@@ -814,8 +814,6 @@ PUBLIC "-//OASIS//ELEMENTS DITA Common Elements//EN"
              "type 
                         (attention|
                          caution | 
-                         caution1 | 
-                         caution2 | 
                          danger | 
                          fastpath | 
                          important | 

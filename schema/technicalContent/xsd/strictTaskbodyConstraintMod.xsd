@@ -2,6 +2,15 @@
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
   <xs:redefine schemaLocation="taskMod.xsd">
+    
+    <xs:annotation>
+    <xs:appinfo>(topic task strictTaskbody-c)</xs:appinfo>
+    <xs:documentation> 
+    
+    </xs:documentation>
+  </xs:annotation>
+    
+    
 
     <xs:group name="taskPreStep">
       <xs:sequence>
@@ -16,8 +25,8 @@
       <xs:sequence>
         <xs:sequence>
           <xs:group ref="result"  minOccurs="0"/>
-          <xs:group ref="postreq"  minOccurs="0"/>
           <xs:group ref="example"  minOccurs="0"/>
+          <xs:group ref="postreq"  minOccurs="0"/>
         </xs:sequence>
         </xs:sequence>
     </xs:group>

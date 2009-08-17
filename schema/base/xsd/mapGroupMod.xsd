@@ -24,6 +24,12 @@
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
 
   <!--<!ENTITY mapgroup-d-att "(map mapgroup-d)"                           >-->
+  <xs:annotation>
+    <xs:appinfo>(topic mapgroup-d)</xs:appinfo>
+    <xs:documentation> 
+    
+    </xs:documentation>
+  </xs:annotation>
   
   <xs:group name="mapgroup-d-topicref">
       <xs:choice>
@@ -151,8 +157,9 @@
   </xs:group>
   
   <xs:attributeGroup name="topichead.attributes">
-    <xs:attribute name="navtitle" type="xs:string"/>
+        <xs:attribute name="navtitle" type="xs:string"/>
         <xs:attribute name="outputclass" type="xs:string"/>
+        <xs:attribute name="keys" type="xs:string"/>
         <xs:attributeGroup ref="topicref-atts" />
         <xs:attributeGroup ref="univ-atts"/>
         <xs:attributeGroup ref="global-atts" />
@@ -480,7 +487,7 @@
     <xs:attribute name="outputclass" type="xs:string"/>
     <!-- topic-ref-att plus chuck defaulted to "to-navigation" -->
     <xs:attribute name="collection-type" type="collection-type.class"/>
-    <xs:attribute name="processing-role" type="processing-role-att.class" />
+    <xs:attribute name="processing-role" type="processing-role-att.class" default="resource-only"/>
     <xs:attribute name="type" type="xs:string"/>
     <xs:attribute name="scope" type="scope-att.class"/>
     <xs:attribute name="locktitle" type="yesno-att.class"/>

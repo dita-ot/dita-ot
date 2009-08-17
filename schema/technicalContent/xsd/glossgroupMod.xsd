@@ -24,6 +24,13 @@
   
   <xs:import namespace="http://dita.oasis-open.org/architecture/2005/" schemaLocation="urn:oasis:names:tc:dita:xsd:ditaarch.xsd:1.2"/>
   
+  <xs:annotation>
+    <xs:appinfo>(topic concept glossgroup)</xs:appinfo>
+    <xs:documentation> 
+    
+    </xs:documentation>
+  </xs:annotation>
+  
   <xs:element name="glossgroup">
      <xs:complexType>
        <xs:complexContent>

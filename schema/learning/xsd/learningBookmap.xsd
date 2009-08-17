@@ -99,7 +99,7 @@
 
     <xs:attributeGroup name="domains-att">
         <xs:attribute name="domains" type="xs:string"
-            default="(map mapgroup-d) (topic indexing-d)  (topic xnal-d) (topic delay-d)  (topic learningmeta-d) (topic+ut-d learning-d) (map bookmap)"
+            default="(map mapgroup-d) (topic indexing-d)  (topic xnal-d) (topic delay-d)  (topic learningmeta-d) (topic ut-d learning-d) (map bookmap)"
         />
     </xs:attributeGroup>
 

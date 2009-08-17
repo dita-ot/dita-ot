@@ -25,6 +25,13 @@
 
   <!-- 20021227 EAS: Use xml:space (preserve) for pre derivs: codeblock, msgblock, screen -->
   <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="urn:oasis:names:tc:dita:xsd:xml.xsd:1.2"/>
+  
+  <xs:annotation>
+    <xs:appinfo>(topic sw-d)</xs:appinfo>
+    <xs:documentation> 
+    
+    </xs:documentation>
+  </xs:annotation>
 
   <xs:group name="sw-d-ph">
     <xs:choice>

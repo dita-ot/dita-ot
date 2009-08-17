@@ -37,8 +37,8 @@ PUBLIC "-//OASIS//ENTITIES DITA Learning Domain//EN"
 <!-- ============================================================= -->
 
 <!-- Module relies on topic and utilities domain (for imagemap), so
-     domain value must include topic+ut-d                          -->
-<!ENTITY learning-d-att "(topic+ut-d learning-d)">
+     domain value must include topic ut-d                          -->
+<!ENTITY learning-d-att "(topic ut-d learning-d)">
 <!ENTITY % learning-d-note 
                        "lcInstructornote"
 >

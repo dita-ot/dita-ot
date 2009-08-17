@@ -30,7 +30,12 @@
   <xs:import namespace="http://dita.oasis-open.org/architecture/2005/"
     schemaLocation="urn:oasis:names:tc:dita:xsd:ditaarch.xsd:1.2"/>
 
-  
+  <xs:annotation>
+    <xs:appinfo>(topic learningBase learningPlan)</xs:appinfo>
+    <xs:documentation> 
+    
+    </xs:documentation>
+  </xs:annotation>
 
   <!-- Element declarations for learningPlan.mod -->
   <xs:element name="learningPlan">
@@ -72,8 +77,7 @@
   <!-- Element declarations for learningPlan.mod -->
   <xs:group name="learningPlan-info-types">
     <xs:choice>
-      <xs:group ref="learningPlan"/>
-      <xs:group ref="info-types"/>
+      <xs:group ref="no-topic-nesting"/>
     </xs:choice>
   </xs:group>
 

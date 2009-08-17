@@ -26,7 +26,13 @@
     <!--  Import the XML Schema that contains the defiinitions for xml:lang and xml:space attributes -->
     <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="urn:oasis:names:tc:dita:xsd:xml.xsd:1.2"/>
     
-    <!-- <!ENTITY % learning-d-att "(topic+ut-d learning-d)"> -->
+    <!-- <!ENTITY % learning-d-att "(topic ut-d learning-d)"> -->
+  <xs:annotation>
+    <xs:appinfo>(topic ut-d learning-d)</xs:appinfo>
+    <xs:documentation> 
+    
+    </xs:documentation>
+  </xs:annotation>
     
     <xs:group name="learning-d-note">
         <xs:choice>
@@ -223,7 +229,7 @@
         <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="lcHotspot.class">
-                    <xs:attribute ref="class" default="+ topic/fig learning-d/lcHotspot "/>
+                    <xs:attribute ref="class" default="+ topic/fig ut-d/fig learning-d/lcHotspot "/>
                 </xs:extension>
             </xs:complexContent>
         </xs:complexType>
@@ -261,7 +267,7 @@
         <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="lcMatching.class">
-                    <xs:attribute ref="class" default="+ topic/fig learning-d/lcMatching "/>
+                    <xs:attribute ref="class" default="+ topic/fig ut-d/fig learning-d/lcMatching "/>
                 </xs:extension>
             </xs:complexContent>
         </xs:complexType>
@@ -300,7 +306,7 @@
         <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="lcSequencing.class">
-                    <xs:attribute ref="class" default="+ topic/fig learning-d/lcSequencing "/>
+                    <xs:attribute ref="class" default="+ topic/fig ut-d/fig learning-d/lcSequencing "/>
                 </xs:extension>
             </xs:complexContent>
         </xs:complexType>
@@ -339,7 +345,7 @@
         <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="lcMultipleSelect.class">
-                    <xs:attribute ref="class" default="+ topic/fig learning-d/lcMultipleSelect "/>
+                    <xs:attribute ref="class" default="+ topic/fig ut-d/fig learning-d/lcMultipleSelect "/>
                 </xs:extension>
             </xs:complexContent>
         </xs:complexType>
@@ -378,7 +384,7 @@
         <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="lcSingleSelect.class">
-                    <xs:attribute ref="class" default="+ topic/fig learning-d/lcSingleSelect "/>
+                    <xs:attribute ref="class" default="+ topic/fig ut-d/fig learning-d/lcSingleSelect "/>
                 </xs:extension>
             </xs:complexContent>
         </xs:complexType>
@@ -417,7 +423,7 @@
         <xs:complexType>
         <xs:complexContent>
             <xs:extension base="lcTrueFalse.class">
-                <xs:attribute ref="class" default="+ topic/fig learning-d/lcTrueFalse "/>   
+                <xs:attribute ref="class" default="+ topic/fig ut-d/fig learning-d/lcTrueFalse "/>   
             </xs:extension>
         </xs:complexContent>
     </xs:complexType></xs:element>
@@ -455,7 +461,7 @@
         <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="lcOpenQuestion.class">
-                    <xs:attribute ref="class" default="+ topic/fig learning-d/lcOpenQuestion "/>
+                    <xs:attribute ref="class" default="+ topic/fig ut-d/fig learning-d/lcOpenQuestion "/>
                 </xs:extension>
             </xs:complexContent>
         </xs:complexType>
@@ -507,7 +513,7 @@
         <xs:complexType mixed="true">
         <xs:complexContent>
             <xs:extension base="lcInstructornote.class">
-                <xs:attribute ref="class" default="+ topic/note learning-d/lcInstructornote "/>            
+                <xs:attribute ref="class" default="+ topic/note ut-d/note learning-d/lcInstructornote "/>            
             </xs:extension>
         </xs:complexContent>
         </xs:complexType>
@@ -542,7 +548,7 @@
         <xs:complexType mixed="true">
         <xs:complexContent>
             <xs:extension base="lcQuestion.class">
-                <xs:attribute ref="class" default="+ topic/p learning-d/lcQuestion "/>
+                <xs:attribute ref="class" default="+ topic/p ut-d/p learning-d/lcQuestion "/>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
@@ -572,7 +578,7 @@
         <xs:complexType mixed="true">
         <xs:complexContent>
             <xs:extension base="lcOpenAnswer.class">
-                <xs:attribute ref="class" default="+ topic/p learning-d/lcOpenAnswer "/>
+                <xs:attribute ref="class" default="+ topic/p ut-d/p learning-d/lcOpenAnswer "/>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
@@ -602,7 +608,7 @@
         <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="lcArea.class">
-                    <xs:attribute ref="class" default="+ topic/figgroup learning-d/lcArea "/>
+                    <xs:attribute ref="class" default="+ topic/figgroup ut-d/figgroup learning-d/lcArea "/>
                 </xs:extension>
             </xs:complexContent>
         </xs:complexType>
@@ -637,7 +643,7 @@
         <xs:complexType>
         <xs:complexContent>
             <xs:extension base="lcAnswerOptionGroup.class">
-                <xs:attribute ref="class" default="+ topic/ul learning-d/lcAnswerOptionGroup "/>
+                <xs:attribute ref="class" default="+ topic/ul ut-d/ul learning-d/lcAnswerOptionGroup "/>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
@@ -667,7 +673,7 @@
         <xs:complexType>
         <xs:complexContent>
             <xs:extension base="lcAsset.class">
-                <xs:attribute ref="class" default="+ topic/p learning-d/lcAsset "/>
+                <xs:attribute ref="class" default="+ topic/p ut-d/p learning-d/lcAsset "/>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
@@ -699,7 +705,7 @@
         <xs:complexType mixed="true">
         <xs:complexContent>
             <xs:extension base="lcFeedbackCorrect.class">
-                <xs:attribute ref="class" default="+ topic/p learning-d/lcFeedbackCorrect "/>
+                <xs:attribute ref="class" default="+ topic/p ut-d/p learning-d/lcFeedbackCorrect "/>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
@@ -729,7 +735,7 @@
         <xs:complexType mixed="true">
         <xs:complexContent>
             <xs:extension base="lcFeedbackIncorrect.class">
-                <xs:attribute ref="class" default="+ topic/data learning-d/lcFeedbackIncorrect "/>
+                <xs:attribute ref="class" default="+ topic/data ut-d/data learning-d/lcFeedbackIncorrect "/>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
@@ -755,10 +761,11 @@
         <xs:attributeGroup ref="global-atts"/>
      </xs:attributeGroup>
         
-    <xs:element name="lcAnswerOption"><xs:complexType>
+    <xs:element name="lcAnswerOption">
+      <xs:complexType>
         <xs:complexContent>
             <xs:extension base="lcAnswerOption.class">
-                <xs:attribute ref="class" default="+ topic/li learning-d/lcAnswerOption "/>
+                <xs:attribute ref="class" default="+ topic/li ut-d/li learning-d/lcAnswerOption "/>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
@@ -790,7 +797,7 @@
         <xs:complexType mixed="true">
         <xs:complexContent>
             <xs:extension base="lcAnswerContent.class">
-                <xs:attribute ref="class" default="+ topic/p learning-d/lcAnswerContent "/>
+                <xs:attribute ref="class" default="+ topic/p ut-d/p learning-d/lcAnswerContent "/>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
@@ -820,7 +827,7 @@
         <xs:complexType>
         <xs:complexContent>
             <xs:extension base="lcSequenceOptionGroup.class">
-                <xs:attribute ref="class" default="+ topic/ol learning-d/lcSequenceOptionGroup "/>
+                <xs:attribute ref="class" default="+ topic/ol ut-d/ol learning-d/lcSequenceOptionGroup "/>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
@@ -849,10 +856,11 @@
         <xs:attributeGroup ref="global-atts"/>
      </xs:attributeGroup>
     
-    <xs:element name="lcSequenceOption"><xs:complexType>
+    <xs:element name="lcSequenceOption">
+      <xs:complexType>
         <xs:complexContent>
             <xs:extension base="lcSequenceOption.class">
-                <xs:attribute ref="class" default="+ topic/li learning-d/lcSequenceOption "/>
+                <xs:attribute ref="class" default="+ topic/li ut-d/li learning-d/lcSequenceOption "/>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
@@ -883,7 +891,7 @@
         <xs:complexType mixed="true">
             <xs:complexContent>
                 <xs:extension base="lcFeedback.class">
-                    <xs:attribute ref="class" default="+ topic/p learning-d/lcFeedback "/>
+                    <xs:attribute ref="class" default="+ topic/p ut-d/p learning-d/lcFeedback "/>
                 </xs:extension>
             </xs:complexContent>
         </xs:complexType>
@@ -913,7 +921,7 @@
         <xs:complexType>
         <xs:complexContent>
             <xs:extension base="lcMatchTable.class">
-                <xs:attribute ref="class" default="+ topic/simpletable learning-d/lcMatchTable "/>
+                <xs:attribute ref="class" default="+ topic/simpletable ut-d/simpletable learning-d/lcMatchTable "/>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
@@ -944,7 +952,7 @@
         <xs:complexType>
         <xs:complexContent>
             <xs:extension base="lcMatchingPair.class">
-                <xs:attribute ref="class" default="+ topic/strow learning-d/lcMatchingPair "/>
+                <xs:attribute ref="class" default="+ topic/strow ut-d/strow learning-d/lcMatchingPair "/>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
@@ -975,7 +983,7 @@
         <xs:complexType>
         <xs:complexContent>
             <xs:extension base="lcMatchingHeader.class">
-                <xs:attribute ref="class" default="+ topic/sthead learning-d/lcMatchingHeader "/>
+                <xs:attribute ref="class" default="+ topic/sthead ut-d/sthead learning-d/lcMatchingHeader "/>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
@@ -1006,7 +1014,7 @@
         <xs:complexType mixed="true">
         <xs:complexContent>
             <xs:extension base="lcItem.class">
-                <xs:attribute ref="class" default="+ topic/stentry learning-d/lcItem "/>
+                <xs:attribute ref="class" default="+ topic/stentry ut-d/stentry learning-d/lcItem "/>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
@@ -1036,7 +1044,7 @@
         <xs:complexType mixed="true">
         <xs:complexContent>
             <xs:extension base="lcMatchingItem.class">
-                <xs:attribute ref="class" default="+ topic/stentry learning-d/lcMatchingItem "/>
+                <xs:attribute ref="class" default="+ topic/stentry ut-d/stentry learning-d/lcMatchingItem "/>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
@@ -1066,7 +1074,7 @@
         <xs:complexType>
         <xs:complexContent>
             <xs:extension base="lcHotspotMap.class">
-                <xs:attribute ref="class" default="+ topic/fig learning-d/lcHotspotMap "/>
+                <xs:attribute ref="class" default="+ topic/fig ut-d/fig learning-d/lcHotspotMap "/>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
@@ -1099,7 +1107,7 @@
         <xs:complexType>
         <xs:complexContent>
             <xs:extension base="lcCorrectResponse.class">
-                <xs:attribute ref="class" default="+ topic/data learning-d/lcCorrectResponse "/>
+                <xs:attribute ref="class" default="+ topic/data ut-d/data learning-d/lcCorrectResponse "/>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
@@ -1120,7 +1128,7 @@
         <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="lcSequence.class">
-                    <xs:attribute ref="class" default="+ topic/data learning-d/lcSequence "/>
+                    <xs:attribute ref="class" default="+ topic/data ut-d/data learning-d/lcSequence "/>
                 </xs:extension>
             </xs:complexContent>
         </xs:complexType>

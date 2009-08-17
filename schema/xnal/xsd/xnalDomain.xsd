@@ -23,6 +23,12 @@
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
     
     <!-- <!ENTITY xnal-d-att "(topic xnal-d)"                                 >-->
+  <xs:annotation>
+    <xs:appinfo>(topic xnal-d)</xs:appinfo>
+    <xs:documentation> 
+    
+    </xs:documentation>
+  </xs:annotation>
 
     <xs:group name="xnal-d-author">
         <xs:choice>
