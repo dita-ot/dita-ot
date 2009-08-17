@@ -130,7 +130,7 @@ public class DitaWriter extends AbstractXMLWriter {
         }
         
         if(attValue.indexOf(Constants.FILE_EXTENSION_DITAMAP) == -1){
-        	return FileUtils.replaceExtName(attValue);
+        	return FileUtils.replaceExtName(attValue, extName);
         }
 
     	return attValue;
@@ -226,7 +226,7 @@ public class DitaWriter extends AbstractXMLWriter {
     	
     	if(checkDITAHREF(atts)){
     		if(warnOfNoneTopicFormat(atts,attValue)==false){
-    			return FileUtils.replaceExtName(attValue);
+    			return FileUtils.replaceExtName(attValue, extName);
     		}
     		
         }
@@ -474,7 +474,7 @@ public class DitaWriter extends AbstractXMLWriter {
 		    			}else {
 		    				//normal process
 		    				target = keys.get(key);
-			    			target = FileUtils.replaceExtName(target);
+			    			target = FileUtils.replaceExtName(target, extName);
 			    			String tail ;
 			    			if(sharpIndex == -1 ){
 			    				if(target.indexOf(Constants.SHARP) == -1)
@@ -520,7 +520,7 @@ public class DitaWriter extends AbstractXMLWriter {
 		    			}else{
 		    				//e.g conref = c.xml
 		    				String target = keys.get(attValue);
-		    				copyAttribute("conref", FileUtils.replaceExtName(target));
+		    				copyAttribute("conref", FileUtils.replaceExtName(target, extName));
 			    			conkeyrefValid = true;
 		    			}
 		    		}else{
@@ -1222,5 +1222,17 @@ public class DitaWriter extends AbstractXMLWriter {
 		this.transtype = transtype;
 	}
 	//Added by William on 2009-07-18 for req #12014 end
-		
+	
+	//Added by Alan Date:2009-08-04 --begin
+	private static String extName;
+
+	public String getExtName() {
+		return extName;
+	}
+
+	public void setExtName(String extName) {
+		this.extName = extName;
+	}
+	//Added by Alan Date:2009-08-04 --end
+	
 }

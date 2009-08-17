@@ -417,7 +417,7 @@ public class KeyrefPaser extends AbstractXMLWriter {
 							if (elem.getAttribute("scope").equals("")
 									|| (!elem.getAttribute("scope").equals("") && elem
 											.getAttribute("scope").equals("local"))) {
-								target = FileUtils.replaceExtName(target);
+								target = FileUtils.replaceExtName(target, extName);
 								if (new File(FileUtils.resolveFile(tempDir, target))
 										.exists()) {
 									target_output = FileUtils
@@ -683,4 +683,16 @@ public class KeyrefPaser extends AbstractXMLWriter {
 	private String changeclassValue(String classValue){
 		return classValue.replaceAll("map/", "topic/");
 	}
+	
+	//Added by Alan Date:2009-08-04 --begin
+	private static String extName;
+
+	public String getExtName() {
+		return extName;
+	}
+
+	public void setExtName(String extName) {
+		this.extName = extName;
+	}
+	//Added by Alan Date:2009-08-04 --end
 }
