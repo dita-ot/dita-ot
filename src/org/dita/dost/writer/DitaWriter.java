@@ -17,14 +17,9 @@ import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Queue;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.DITAOTJavaLogger;
@@ -33,14 +28,12 @@ import org.dita.dost.module.Content;
 import org.dita.dost.module.DebugAndFilterModule;
 import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.Constants;
+import org.dita.dost.util.DelayConrefUtils;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.FilterUtils;
 import org.dita.dost.util.OutputUtils;
 import org.dita.dost.util.StringUtils;
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -253,6 +246,11 @@ public class DitaWriter extends AbstractXMLWriter {
     //store morerows attribute
     private Map<String, Integer> rowsMap;
     //Added by William on 2009-06-30 for colname bug:2811358 end
+    //Added by William on 2009-07-18 for req #12014 start
+    //transtype
+    private String transtype;
+    //Added by William on 2009-07-18 for req #12014 start
+    
     private HashMap<String, Integer> counterMap;
     private boolean exclude; // when exclude is true the tag will be excluded.
     private int foreignLevel; // foreign/unknown nesting level
@@ -458,15 +456,20 @@ public class DitaWriter extends AbstractXMLWriter {
 		    			String href = keys.get(key);
 		    			
 		    			//href = FileUtils.getRelativePathFromMap(tempDir, href);
+		    			//remove "#", change for "\\", "/" to File.Seperator
 		    			href = FileUtils.normalizeDirectory(null, href);
+		    			href = href.replace(Constants.BACK_SLASH, Constants.SLASH);
 			    		//get element/topic id
 			    		String id = attValue.substring(keyIndex+1);
 			    		
-			    		List<Boolean> list = checkExport(href, id, key);
+			    		List<Boolean> list = DelayConrefUtils.getInstance().checkExport(href, id, key, tempDir);
 			    		boolean idExported = list.get(0).booleanValue();
 			    		boolean keyrefExported = list.get(1).booleanValue();
-		    			if(idExported && keyrefExported){
-		    				copyAttribute("conref", attValue);
+			    		//both id and key are exported and transtype is eclipsehelp
+		    			if(idExported && keyrefExported 
+		    					&& transtype.equals(Constants.INDEX_TYPE_ECLIPSEHELP)){
+		    			//remain the conkeyref attribute.
+		    				copyAttribute("conkeyref", attValue);
 		    			//Added by William on 2009-06-25 for #12014 end
 		    			}else {
 		    				//normal process
@@ -483,7 +486,7 @@ public class DitaWriter extends AbstractXMLWriter {
 			    			}else {
 			    				//change to topic id
 			    				tail = attValue.substring(keyIndex);
-			    				//replace former topic id 
+			    				//replace the topic id defined in the key's href 
 			    				if(target.indexOf(Constants.SHARP) != -1){
 			    					target = target.substring(0,target.indexOf(Constants.SHARP));
 			    				}
@@ -501,20 +504,23 @@ public class DitaWriter extends AbstractXMLWriter {
 		    		if(keys.containsKey(attValue)){
 		    			//get key's href
 		    			String href = keys.get(attValue);
-		    			//remove "#"
-		    			href = FileUtils.normalizeDirectory(tempDir, href);
+		    			//remove "#", change for "\\", "/" to "File.Seperator"
+		    			href = FileUtils.normalizeDirectory(null, href);
+		    			href = href.replace(Constants.BACK_SLASH, Constants.SLASH);
 		    			//Added by William on 2009-06-25 for #12014 start
 		    			String id = null;
-		    			//change for "\\", "/" to "\"
-		    			href = FileUtils.normalizeDirectory(tempDir, href);
-		    			List<Boolean> list = checkExport(href, id, attValue);
+		    			
+		    			List<Boolean> list = DelayConrefUtils.getInstance().checkExport(href, id, attValue, tempDir);
 		    			boolean keyrefExported = list.get(1).booleanValue();
-		    			if(keyrefExported){
-		    				copyAttribute("conref", attValue);
+		    			//key is exported and transtype is eclipsehelp
+		    			if(keyrefExported && transtype.equals(Constants.INDEX_TYPE_ECLIPSEHELP)){
+		    			//remain the conkeyref attribute.
+		    				copyAttribute("conkeyref", attValue);
 		    			//Added by William on 2009-06-25 for #12014 end
 		    			}else{
-		    				//e.g conref = c.xml 
-		    				copyAttribute("conref", FileUtils.replaceExtName(keys.get(attValue)));
+		    				//e.g conref = c.xml
+		    				String target = keys.get(attValue);
+		    				copyAttribute("conref", FileUtils.replaceExtName(target));
 			    			conkeyrefValid = true;
 		    			}
 		    		}else{
@@ -550,92 +556,6 @@ public class DitaWriter extends AbstractXMLWriter {
 			copyAttribute("conref", conref);
 		}
 	}
-	
-	//Added by William on 2009-06-25 for #12014 start
-	/**check whether the keyref/id element has been exported. 
-	 * @param href
-	 * @param id
-	 * @param key
-	 */
-	private List<Boolean> checkExport(String href, String id, String key) {
-		//parsed export .xml to get exported elements
-		String exportFile = (new File(tempDir, Constants.FILE_NAME_EXPORT_XML)).
-		getAbsolutePath();
-		
-		boolean idExported = false;
-		boolean keyrefExported = false;
-		try {
-			//load export.xml only once
-			if(root==null){
-				DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-				factory.setFeature("http://xml.org/sax/features/validation", false);
-				DocumentBuilder builder = factory.newDocumentBuilder();
-				root = builder.parse(new InputSource(new FileInputStream(exportFile)));
-			}
-			//if dita file's extension name is ".xml"
-			if(href.endsWith(Constants.FILE_EXTENSION_XML)){
-				//change the extension to ".dita"
-				href = href.replace(Constants.FILE_EXTENSION_XML, Constants.FILE_EXTENSION_DITA);
-			}
-			//get file node which contains the export node
-			Element fileNode = searchForKey(root.getDocumentElement(), href, "file");
-			if(fileNode!=null){
-				NodeList pList = fileNode.getChildNodes();
-				for (int j = 0; j < pList.getLength(); j++) {
-					Node node = pList.item(j);
-					if(Node.ELEMENT_NODE == node.getNodeType()){
-						Element child = (Element)node;
-						if(child.getNodeName().equals("keyref")&&
-						   child.getAttribute(Constants.ATTRIBUTE_NAME_NAME)
-						   .equals(key)){
-							keyrefExported = true;
-						}else if(child.getNodeName().equals("id")&&
-							child.getAttribute(Constants.ATTRIBUTE_NAME_NAME)
-							.equals(id)){
-							idExported = true;
-						}
-					}
-					if(idExported && keyrefExported){
-						break;
-					}
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		List<Boolean> list = new ArrayList<Boolean>();
-		list.add(Boolean.valueOf(idExported));
-		list.add(Boolean.valueOf(keyrefExported));
-		return list;
-	}
-	
-	private Element searchForKey(Element root, String key, String tagName) {
-		if (root == null || StringUtils.isEmptyString(key)) return null;
-		Queue<Element> queue = new LinkedList<Element>();
-		queue.offer(root);
-		
-		while (!queue.isEmpty()) {
-			Element pe = queue.poll();
-			NodeList pchildrenList = pe.getChildNodes();
-			for (int i = 0; i < pchildrenList.getLength(); i++) {
-				Node node = pchildrenList.item(i);
-				if (node.getNodeType() == Node.ELEMENT_NODE)
-					queue.offer((Element)node);
-			}
-			String value = pe.getNodeName();
-			if(StringUtils.isEmptyString(value)||
-				!value.equals(tagName)){
-				continue;
-			}
-			
-			value = pe.getAttribute(Constants.ATTRIBUTE_NAME_NAME);
-			if (StringUtils.isEmptyString(value)) continue;
-			
-			if (value.equals(key)) return pe;
-		}
-		return null;
-	}
-	//Added by William on 2009-06-25 for #12014 end
 	
 	/**
 	 * @param qName
@@ -1286,4 +1206,21 @@ public class DitaWriter extends AbstractXMLWriter {
 	public void setDefaultValueMap(HashMap<String, HashMap<String, String>> defaultMap) {
 		this.defaultValueMap  = defaultMap;
 	}
+	
+	//Added by William on 2009-07-18 for req #12014 start
+	/**
+	 * @return the transtype
+	 */
+	public String getTranstype() {
+		return transtype;
+	}
+
+	/**
+	 * @param transtype the transtype to set
+	 */
+	public void setTranstype(String transtype) {
+		this.transtype = transtype;
+	}
+	//Added by William on 2009-07-18 for req #12014 end
+		
 }
