@@ -28,7 +28,10 @@ public class KeyrefModule implements AbstractPipelineModule {
 		if (! new File(tempDir).isAbsolute()){
 			tempDir = new File(tempDir).getAbsolutePath();
 		}
-		
+		//Added by Alan Date:2009-08-04 --begin
+		String ext = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_DITAEXT);
+		String extName = ext.startsWith(Constants.DOT) ? ext : (Constants.DOT + ext);
+		//Added by Alan Date:2009-08-04 --end
 		File ditafile = new File(tempDir, Constants.FILE_NAME_DITA_LIST);
 		File ditaxmlfile = new File(tempDir, Constants.FILE_NAME_DITA_LIST_XML);
 		
@@ -41,7 +44,7 @@ public class KeyrefModule implements AbstractPipelineModule {
 		}catch (Exception e) {
 			javaLogger.logException(e);
 		}
-		
+		//get files which have keyref attr
 		String[] parseList = ((String)properties.get(Constants.KEYREF_LIST)).split(Constants.COMMA);
 		// maps of keyname and target 
 		Map<String, String> keymap =new HashMap<String, String>();
@@ -55,9 +58,10 @@ public class KeyrefModule implements AbstractPipelineModule {
 			for(String key: keys){
 				keymap.put(key.substring(0, key.indexOf(Constants.EQUAL)), 
 						key.substring(key.indexOf(Constants.EQUAL)+1, key.lastIndexOf("(")));
-				// map name
+				// map file which define the keys
 				String map = key.substring(key.lastIndexOf("(") + 1, key.lastIndexOf(")"));
 				// put the keyname into corresponding map which defines it.
+				//a map file can define many keys
 				if(maps.containsKey(map)){
 					maps.get(map).add(key.substring(0,key.indexOf(Constants.EQUAL)));
 				}else{
@@ -79,7 +83,9 @@ public class KeyrefModule implements AbstractPipelineModule {
 			KeyrefPaser parser = new KeyrefPaser();
 			parser.setContent(content);
 			parser.setTempDir(tempDir);
-			parser.setKeyMap(keymap);
+			parser.setKeyMap(keymap);		
+			//Added by Alan Date:2009-08-04
+			parser.setExtName(extName);
 			parser.write(file);
 			
 		}
