@@ -36,6 +36,7 @@
                           conref CDATA #IMPLIED
                           outputclass CDATA #IMPLIED
                           %localization-atts;
+                          %select-atts;
                           %arch-atts;
                           domains CDATA "&included-domains;"
 >
