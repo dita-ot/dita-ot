@@ -1,5 +1,5 @@
 <!--
- | (C) Copyright IBM Corporation 2005 - 2006. All Rights Reserved.
+ | (C) Copyright IBM Corporation 2005, 2009. All Rights Reserved.
  *-->
 
 <!ENTITY % javaAPIMap             "javaAPIMap">
@@ -15,9 +15,8 @@
                           anchorref CDATA #IMPLIED
                           %topicref-atts;
                           %select-atts;
-             translate  (yes | no)                        #IMPLIED
-             xml:lang   NMTOKEN                           #IMPLIED
-             %arch-atts;
+                          %localization-atts;
+                          %arch-atts;
                           domains    CDATA "&included-domains;"
 >
 
@@ -30,16 +29,17 @@
   query        CDATA     #IMPLIED
   conref       CDATA     #IMPLIED
   copy-to      CDATA     #IMPLIED
-  collection-type    (choice|unordered|sequence|family) #IMPLIED
+  collection-type    (choice|unordered|sequence|family | -dita-use-conref-target) #IMPLIED
   type         CDATA     "javaPackage"
-  scope       (local | peer | external) #IMPLIED
-  locktitle   (yes|no)   #IMPLIED
+  scope       (local | peer | external | -dita-use-conref-target) #IMPLIED
+  locktitle   (yes|no | -dita-use-conref-target)   #IMPLIED
   format       CDATA     #IMPLIED
-  linking     (targetonly|sourceonly|normal|none) #IMPLIED
-  toc         (yes|no)   #IMPLIED
-  print       (yes|no)   #IMPLIED
-  search      (yes|no)   #IMPLIED
+  linking     (targetonly|sourceonly|normal|none | -dita-use-conref-target) #IMPLIED
+  toc         (yes|no | -dita-use-conref-target)   #IMPLIED
+  print       (yes|no | -dita-use-conref-target)   #IMPLIED
+  search      (yes|no | -dita-use-conref-target)   #IMPLIED
   chunk        CDATA     #IMPLIED
+  %localization-atts;
   %select-atts;
 >
 <!ELEMENT javaInterfaceRef ((%topicmeta;)?, (%topicref;)*)>
@@ -51,16 +51,17 @@
   query        CDATA     #IMPLIED
   conref       CDATA     #IMPLIED
   copy-to      CDATA     #IMPLIED
-  collection-type    (choice|unordered|sequence|family) #IMPLIED
+  collection-type    (choice|unordered|sequence|family | -dita-use-conref-target) #IMPLIED
   type         CDATA     "javaInterface"
-  scope       (local | peer | external) #IMPLIED
-  locktitle   (yes|no)   #IMPLIED
+  scope       (local | peer | external | -dita-use-conref-target) #IMPLIED
+  locktitle   (yes|no | -dita-use-conref-target)   #IMPLIED
   format       CDATA     #IMPLIED
-  linking     (targetonly|sourceonly|normal|none) #IMPLIED
-  toc         (yes|no)   #IMPLIED
-  print       (yes|no)   #IMPLIED
-  search      (yes|no)   #IMPLIED
+  linking     (targetonly|sourceonly|normal|none | -dita-use-conref-target) #IMPLIED
+  toc         (yes|no | -dita-use-conref-target)   #IMPLIED
+  print       (yes|no | -dita-use-conref-target)   #IMPLIED
+  search      (yes|no | -dita-use-conref-target)   #IMPLIED
   chunk        CDATA     #IMPLIED
+  %localization-atts;
   %select-atts;
 >
 <!ELEMENT javaClassRef ((%topicmeta;)?, (%topicref;)*)>
@@ -72,16 +73,17 @@
   query        CDATA     #IMPLIED
   conref       CDATA     #IMPLIED
   copy-to      CDATA     #IMPLIED
-  collection-type    (choice|unordered|sequence|family) #IMPLIED
+  collection-type    (choice|unordered|sequence|family | -dita-use-conref-target) #IMPLIED
   type         CDATA     "javaClass"
-  scope       (local | peer | external) #IMPLIED
-  locktitle   (yes|no)   #IMPLIED
+  scope       (local | peer | external | -dita-use-conref-target) #IMPLIED
+  locktitle   (yes|no | -dita-use-conref-target)   #IMPLIED
   format       CDATA     #IMPLIED
-  linking     (targetonly|sourceonly|normal|none) #IMPLIED
-  toc         (yes|no)   #IMPLIED
-  print       (yes|no)   #IMPLIED
-  search      (yes|no)   #IMPLIED
+  linking     (targetonly|sourceonly|normal|none | -dita-use-conref-target) #IMPLIED
+  toc         (yes|no | -dita-use-conref-target)   #IMPLIED
+  print       (yes|no | -dita-use-conref-target)   #IMPLIED
+  search      (yes|no | -dita-use-conref-target)   #IMPLIED
   chunk        CDATA     #IMPLIED
+  %localization-atts;
   %select-atts;
 >
 <!ELEMENT javaExceptionClassRef ((%topicmeta;)?, (%topicref;)*)>
@@ -93,16 +95,17 @@
   query        CDATA     #IMPLIED
   conref       CDATA     #IMPLIED
   copy-to      CDATA     #IMPLIED
-  collection-type    (choice|unordered|sequence|family) #IMPLIED
+  collection-type    (choice|unordered|sequence|family | -dita-use-conref-target) #IMPLIED
   type         CDATA     "javaClass"
-  scope       (local | peer | external) #IMPLIED
-  locktitle   (yes|no)   #IMPLIED
+  scope       (local | peer | external | -dita-use-conref-target) #IMPLIED
+  locktitle   (yes|no | -dita-use-conref-target)   #IMPLIED
   format       CDATA     #IMPLIED
-  linking     (targetonly|sourceonly|normal|none) #IMPLIED
-  toc         (yes|no)   #IMPLIED
-  print       (yes|no)   #IMPLIED
-  search      (yes|no)   #IMPLIED
+  linking     (targetonly|sourceonly|normal|none | -dita-use-conref-target) #IMPLIED
+  toc         (yes|no | -dita-use-conref-target)   #IMPLIED
+  print       (yes|no | -dita-use-conref-target)   #IMPLIED
+  search      (yes|no | -dita-use-conref-target)   #IMPLIED
   chunk        CDATA     #IMPLIED
+  %localization-atts;
   %select-atts;
 >
 <!ELEMENT javaErrorClassRef ((%topicmeta;)?, (%topicref;)*)>
@@ -114,16 +117,17 @@
   query        CDATA     #IMPLIED
   conref       CDATA     #IMPLIED
   copy-to      CDATA     #IMPLIED
-  collection-type    (choice|unordered|sequence|family) #IMPLIED
+  collection-type    (choice|unordered|sequence|family | -dita-use-conref-target) #IMPLIED
   type         CDATA     "javaClass"
-  scope       (local | peer | external) #IMPLIED
-  locktitle   (yes|no)   #IMPLIED
+  scope       (local | peer | external | -dita-use-conref-target) #IMPLIED
+  locktitle   (yes|no | -dita-use-conref-target)   #IMPLIED
   format       CDATA     #IMPLIED
-  linking     (targetonly|sourceonly|normal|none) #IMPLIED
-  toc         (yes|no)   #IMPLIED
-  print       (yes|no)   #IMPLIED
-  search      (yes|no)   #IMPLIED
+  linking     (targetonly|sourceonly|normal|none | -dita-use-conref-target) #IMPLIED
+  toc         (yes|no | -dita-use-conref-target)   #IMPLIED
+  print       (yes|no | -dita-use-conref-target)   #IMPLIED
+  search      (yes|no | -dita-use-conref-target)   #IMPLIED
   chunk        CDATA     #IMPLIED
+  %localization-atts;
   %select-atts;
 >
 

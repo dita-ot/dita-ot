@@ -1,5 +1,5 @@
 <!--
- | (C) Copyright IBM Corporation 2005 - 2006. All Rights Reserved.
+ | (C) Copyright IBM Corporation 2005, 2009. All Rights Reserved.
  *-->
 
 <!-- ============ Hooks for domain extension ============ -->
@@ -25,15 +25,14 @@
 <!ATTLIST apiClassifier   id ID #REQUIRED
                           conref CDATA #IMPLIED
                           outputclass CDATA #IMPLIED
-                          xml:lang NMTOKEN #IMPLIED
+                          %localization-atts;
                           %arch-atts;
                           domains CDATA "&included-domains;"
 >
 
 <!ELEMENT apiClassifierDetail  (((%apiSyntax;)*|(%apiClassifierDef;)*), (%apiDesc;)*, (%example;|%section;|%apiImpl;)*)>
 <!ATTLIST apiClassifierDetail  %id-atts;
-                          translate (yes|no) #IMPLIED
-                          xml:lang NMTOKEN #IMPLIED
+                          %localization-atts;
                           outputclass CDATA #IMPLIED>
 
 <!ELEMENT apiClassifierDef  (%apiBaseClassifier;|%apiDefinition.cnt;|%apiClassifierMember;|%apiItemName;)* >
@@ -48,7 +47,7 @@
                           type   CDATA  #IMPLIED
                           %univ-atts;
                           format        CDATA   #IMPLIED
-                          scope (local | peer | external) #IMPLIED
+                          scope (local | peer | external | -dita-use-conref-target) #IMPLIED
                           outputclass CDATA #IMPLIED
 >
 
@@ -64,7 +63,7 @@
                           type   CDATA  #IMPLIED
                           %univ-atts;
                           format        CDATA   #IMPLIED
-                          scope (local | peer | external) #IMPLIED
+                          scope (local | peer | external | -dita-use-conref-target) #IMPLIED
                           outputclass CDATA #IMPLIED
 >
 

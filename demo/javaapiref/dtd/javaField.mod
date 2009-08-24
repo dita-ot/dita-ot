@@ -1,5 +1,5 @@
 <!--
- | (C) Copyright IBM Corporation 2005 - 2006. All Rights Reserved.
+ | (C) Copyright IBM Corporation 2005. All Rights Reserved.
  *-->
 
 <!-- ============ Hooks for domain extension ============ -->
@@ -29,15 +29,14 @@
 <!ATTLIST javaField    id ID #REQUIRED
                           conref CDATA #IMPLIED
                           outputclass CDATA #IMPLIED
-                          xml:lang NMTOKEN #IMPLIED
+                          %localization-atts;
                           %arch-atts;
                           domains CDATA "&included-domains;"
 >
 
 <!ELEMENT javaFieldDetail  ((%javaFieldDef;), (%apiDesc;)?, (%example;|%section;|%apiImpl;)*)>
 <!ATTLIST javaFieldDetail  %id-atts;
-                          translate (yes|no) #IMPLIED
-                          xml:lang NMTOKEN #IMPLIED
+                          %localization-atts;
                           outputclass CDATA #IMPLIED>
 
 <!ELEMENT javaFieldDef   ( (%javaFinalField;)?, (%javaStaticField;)?, (%javaTransientField;)?, (%javaVolatileField;)?, (%javaFieldAccess;)?, (%javaFieldClass; | %javaFieldInterface; | %javaFieldPrimitive; ), (%javaFieldArray;)*, (%apiData;)? ) >
@@ -72,7 +71,7 @@
 >
 <!ELEMENT javaFieldAccess  EMPTY>
 <!ATTLIST javaFieldAccess  name CDATA #FIXED "access"
-                          value (public | protected | private) #REQUIRED
+                          value (public | protected | private | -dita-use-conref-target) #REQUIRED
                           %univ-atts;
                           outputclass CDATA #IMPLIED
 >
@@ -83,7 +82,7 @@
                           type   CDATA  #IMPLIED
                           %univ-atts;
                           format        CDATA   #IMPLIED
-                          scope (local | peer | external) #IMPLIED
+                          scope (local | peer | external | -dita-use-conref-target) #IMPLIED
                           outputclass CDATA #IMPLIED
 >
 
@@ -93,13 +92,13 @@
                           type   CDATA  #IMPLIED
                           %univ-atts;
                           format        CDATA   #IMPLIED
-                          scope (local | peer | external) #IMPLIED
+                          scope (local | peer | external | -dita-use-conref-target) #IMPLIED
                           outputclass CDATA #IMPLIED
 >
 
 <!ELEMENT javaFieldPrimitive  EMPTY>
 <!ATTLIST javaFieldPrimitive  name CDATA #FIXED "type"
-                          value ( boolean | byte | char | double | float | int | long | short ) #REQUIRED
+                          value ( boolean | byte | char | double | float | int | long | short | -dita-use-conref-target) #REQUIRED
                           %univ-atts;
                           outputclass CDATA #IMPLIED
 >

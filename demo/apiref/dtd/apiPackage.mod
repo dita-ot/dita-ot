@@ -1,5 +1,5 @@
 <!--
- | (C) Copyright IBM Corporation 2005 - 2006. All Rights Reserved.
+ | (C) Copyright IBM Corporation 2005, 2009. All Rights Reserved.
  *-->
 
 <!-- ============ Hooks for domain extension ============ -->
@@ -20,7 +20,7 @@
 <!ATTLIST apiPackage      id ID #REQUIRED
                           conref CDATA #IMPLIED
                           outputclass CDATA #IMPLIED
-                          xml:lang NMTOKEN #IMPLIED
+                          %localization-atts;
                           %arch-atts;
                           domains CDATA "&included-domains;"
 >

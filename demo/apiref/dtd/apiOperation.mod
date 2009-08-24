@@ -1,5 +1,5 @@
 <!--
- | (C) Copyright IBM Corporation 2005 - 2006. All Rights Reserved.
+ | (C) Copyright IBM Corporation 2005, 2009. All Rights Reserved.
  *-->
 
 <!-- ============ Hooks for domain extension ============ -->
@@ -27,15 +27,14 @@
 <!ATTLIST apiOperation    id ID #REQUIRED
                           conref CDATA #IMPLIED
                           outputclass CDATA #IMPLIED
-                          xml:lang NMTOKEN #IMPLIED
+                          %localization-atts;
                           %arch-atts;
                           domains CDATA "&included-domains;"
 >
 
 <!ELEMENT apiOperationDetail  (((%apiSyntax;)*|(%apiConstructorDef;)*|(%apiOperationDef;)*), (%apiDesc;)*, (%example; | %section; | %apiImpl;)*)>
 <!ATTLIST apiOperationDetail  %id-atts;
-                          translate (yes|no) #IMPLIED
-                          xml:lang NMTOKEN #IMPLIED
+                          %localization-atts;
                           outputclass CDATA #IMPLIED>
 
 
@@ -81,7 +80,7 @@
                           type   CDATA  #IMPLIED
                           %univ-atts;
                           format        CDATA   #IMPLIED
-                          scope (local | peer | external) #IMPLIED
+                          scope (local | peer | external | -dita-use-conref-target) #IMPLIED
                           outputclass CDATA #IMPLIED
 >
 
