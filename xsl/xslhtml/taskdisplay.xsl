@@ -7,13 +7,18 @@
 <xsl:stylesheet version="1.0"
      xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
      xmlns:related-links="http://dita-ot.sourceforge.net/ns/200709/related-links"
-     exclude-result-prefixes="related-links">
+     xmlns:dita2html="http://dita-ot.sourceforge.net/ns/200801/dita2html"
+     xmlns:ditamsg="http://dita-ot.sourceforge.net/ns/200704/ditamsg"
+     exclude-result-prefixes="related-links dita2html ditamsg">
 
 <!-- XHTML output with XML syntax -->
 <xsl:output method="xml"
             encoding="utf-8"
             indent="no"
 />
+
+<!-- Determines whether to generate titles for task sections. Values are YES and NO. -->
+<xsl:param name="GENERATE-TASK-LABELS" select="'NO'"/>
 
 <!-- == TASK UNIQUE SUBSTRUCTURES == -->
 
@@ -119,7 +124,6 @@
   </xsl:if>
 </xsl:template>
 
-
 <xsl:template match="*[contains(@class,' task/steps ')]" name="topic.task.steps">
  <!-- If there's one of these elements somewhere in a step, expand the whole step list -->
  <xsl:variable name="step_expand"> <!-- set & save step_expand=yes/no for expanding/compacting list items -->
@@ -167,11 +171,19 @@
     <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param> 
   </xsl:call-template>
 </xsl:template>
+
 <xsl:template match="*[contains(@class,' task/steps ')]" mode="steps-fmt">
  <xsl:param name="step_expand"/> 
   <xsl:variable name="flagrules">
     <xsl:call-template name="getrules"/>
   </xsl:variable>
+  <xsl:apply-templates select="." mode="generate-task-label">
+    <xsl:with-param name="use-label">
+      <xsl:call-template name="getString">
+        <xsl:with-param name="stringName" select="'task_procedure'"/>
+      </xsl:call-template>
+    </xsl:with-param>
+  </xsl:apply-templates>
  <xsl:choose> 
   <xsl:when test="*[contains(@class,' task/step ')][2]">
    <xsl:call-template name="setaname"/>
@@ -241,12 +253,19 @@
     <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param> 
   </xsl:call-template>
 </xsl:template>
+
 <xsl:template match="*[contains(@class,' task/steps-unordered ')]" mode="stepsunord-fmt">
  <xsl:param name="step_expand"/> 
   <xsl:variable name="flagrules">
     <xsl:call-template name="getrules"/>
   </xsl:variable>
-  
+  <xsl:apply-templates select="." mode="generate-task-label">
+    <xsl:with-param name="use-label">
+      <xsl:call-template name="getString">
+        <xsl:with-param name="stringName" select="'task_procedure'"/>
+      </xsl:call-template>
+    </xsl:with-param>
+  </xsl:apply-templates>
  <xsl:choose> 
   <xsl:when test="*[contains(@class,' task/step ')][2]">
    <xsl:call-template name="setaname"/>
@@ -1066,6 +1085,83 @@
   <xsl:call-template name="revblock">
     <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
   </xsl:call-template>
+</xsl:template>
+
+
+<xsl:template match="*[contains(@class,' task/prereq ')]" mode="dita2html:section-heading">
+  <xsl:apply-templates select="." mode="generate-task-label">
+    <xsl:with-param name="use-label">
+      <xsl:call-template name="getString">
+        <xsl:with-param name="stringName" select="'task_prereq'"/>
+      </xsl:call-template>
+    </xsl:with-param>
+  </xsl:apply-templates>
+</xsl:template>
+
+<xsl:template match="*[contains(@class,' task/context ')]" mode="dita2html:section-heading">
+  <xsl:apply-templates select="." mode="generate-task-label">
+    <xsl:with-param name="use-label">
+      <xsl:call-template name="getString">
+        <xsl:with-param name="stringName" select="'task_context'"/>
+      </xsl:call-template>
+    </xsl:with-param>
+  </xsl:apply-templates>
+</xsl:template>
+    
+<xsl:template match="*[contains(@class,' task/result ')]" mode="dita2html:section-heading">
+  <xsl:apply-templates select="." mode="generate-task-label">
+    <xsl:with-param name="use-label">
+      <xsl:call-template name="getString">
+        <xsl:with-param name="stringName" select="'task_results'"/>
+      </xsl:call-template>
+    </xsl:with-param>
+  </xsl:apply-templates>
+</xsl:template>
+
+<xsl:template match="*[contains(@class,' task/postreq ')]" mode="dita2html:section-heading">
+  <xsl:apply-templates select="." mode="generate-task-label">
+    <xsl:with-param name="use-label">
+      <xsl:call-template name="getString">
+        <xsl:with-param name="stringName" select="'task_postreq'"/>
+      </xsl:call-template>
+    </xsl:with-param>
+  </xsl:apply-templates>
+</xsl:template>
+
+<xsl:template match="*[contains(@class,' task/taskbody ')]/*[contains(@class,' topic/example ')][not(*[contains(@class,' topic/title ')])]" mode="dita2html:section-heading">
+  <xsl:apply-templates select="." mode="generate-task-label">
+    <xsl:with-param name="use-label">
+      <xsl:call-template name="getString">
+        <xsl:with-param name="stringName" select="'task_example'"/>
+      </xsl:call-template>
+    </xsl:with-param>
+  </xsl:apply-templates>
+</xsl:template>
+
+<!-- 
+     To override the task label for a specific element, match that element with this mode. 
+     For example, you can turn off labels for <context> with this rule:
+     <xsl:template match="*[contains(@class,' task/context ')]" mode="generate-task-label"/>
+-->
+<xsl:template match="*" mode="generate-task-label">
+  <xsl:param name="use-label"/>
+  <xsl:if test="$GENERATE-TASK-LABELS='YES'">
+    <xsl:variable name="headLevel">
+      <xsl:variable name="headCount">
+        <xsl:value-of select="count(ancestor::*[contains(@class,' topic/topic ')])+1"/>
+      </xsl:variable>
+      <xsl:choose>
+        <xsl:when test="$headCount > 6">h6</xsl:when>
+        <xsl:otherwise>h<xsl:value-of select="$headCount"/></xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <div class="tasklabel">
+      <xsl:element name="{$headLevel}">
+        <xsl:attribute name="class">sectiontitle tasklabel</xsl:attribute>
+        <xsl:value-of select="$use-label"/>
+      </xsl:element>
+    </div>
+  </xsl:if>
 </xsl:template>
 
   <!-- Tasks have their own group. -->
