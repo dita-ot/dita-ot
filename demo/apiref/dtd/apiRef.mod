@@ -168,7 +168,7 @@
 <!ATTLIST apiDefItem   %global-atts;
     class  CDATA "- topic/ph reference/ph apiRef/apiDefItem ">
 <!ATTLIST apiQualifier   %global-atts;
-    class  CDATA "- topic/state reference/state apiRef/apiQualifier ">
+    class  CDATA "- topic/data reference/data apiRef/apiQualifier ">
 <!ATTLIST apiRelation   %global-atts;
     class  CDATA "- topic/xref reference/xref apiRef/apiRelation ">
 <!ATTLIST apiType   %global-atts;
