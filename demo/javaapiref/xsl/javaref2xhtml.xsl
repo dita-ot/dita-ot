@@ -232,11 +232,16 @@
       *[contains(@class,' topic/link ') and
           contains(@mapclass,' javaAPIMap/javaPackageRef ') and
           @role='child']"/>
+  <!-- 20090825: per RFE 2018376, changed 
+       contains(@mapclass,' javaAPIMap/javaInterfaceRef ')
+       to
+       @type='javaInterface'
+       in the following variable. -->
   <xsl:variable name="interfaceNodes" select="
       *[contains(@class,' topic/linkpool ')] /
       *[contains(@class,' topic/linkpool ')] /
       *[contains(@class,' topic/link ') and
-          contains(@mapclass,' javaAPIMap/javaInterfaceRef ') and
+          @type='javaInterface' and
           @role='child']"/>
   <xsl:variable name="classNodes" select="
       *[contains(@class,' topic/linkpool ')] /
