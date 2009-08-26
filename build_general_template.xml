@@ -93,18 +93,26 @@
         <isset property="out.ext" />
       </not>
     </condition>
+    <!-- added by William on 2009-07-22 for req #12014 start -->
+    <condition property="transtype.ext" value="_eclipsehelp.xsl" else=".xsl">
+      <equals arg1="eclipsehelp" arg2="${transtype}"/>
+    </condition>
+    <!-- added by William on 2009-07-22 for req #12014 end -->
+    
     <condition property="args.xsl"
-      value="${dita.script.dir}${file.separator}dita2xhtml.xsl">
+      value="${dita.script.dir}${file.separator}dita2xhtml${transtype.ext}">
       <not>
         <isset property="args.xsl" />
       </not>
     </condition>
+    
+    
     <xslt processor="trax" basedir="${dita.temp.dir}"
       destdir="${output.dir}" includesfile="${dita.temp.dir}${file.separator}${fullditatopicfile}"
       classpathref="dost.class.path"
       extension="${out.ext}" style="${args.xsl}"
       filenameparameter="filename"
-  	  filedirparameter="filedir">
+      filedirparameter="filedir">
     	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
       <includesfile name="${dita.temp.dir}${file.separator}${chunkedtopicfile}" if="chunkedtopicfile"/>
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
