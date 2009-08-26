@@ -64,7 +64,7 @@
 <!-- added by William on 2009-06-24 for flag support start -->
 <xsl:param name="filename"/>
 <xsl:param name="filedir"/>
-<xsl:param name="CURRENTFILE" select="concat($filedir, '\', substring-before($filename, '.'), '.dita')"/>
+<xsl:param name="CURRENTFILE" select="concat($filedir, '/', substring-before($filename, '.'), '.dita')"/>
 <!-- added by William on 2009-06-24 for flag support end -->     
      
 <!-- root rule -->
