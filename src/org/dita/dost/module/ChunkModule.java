@@ -19,6 +19,7 @@ import java.io.OutputStreamWriter;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
@@ -161,8 +162,8 @@ public class ChunkModule implements AbstractPipelineModule {
 	private void updateList(Hashtable<String, String> changeTable, Hashtable<String, String> conflictTable, AbstractPipelineInput input){
 		
 	    Properties prop = new Properties();	 
-	    HashSet<String> chunkedTopicSet=new HashSet<String>(Constants.INT_128);
-	    HashSet<String> chunkedDitamapSet=new HashSet<String>(Constants.INT_128);
+	    HashSet<String> chunkedTopicSet=new LinkedHashSet<String>(Constants.INT_128);
+	    HashSet<String> chunkedDitamapSet=new LinkedHashSet<String>(Constants.INT_128);
 	    org.dita.dost.log.DITAOTJavaLogger logger=new org.dita.dost.log.DITAOTJavaLogger();
 		PropertiesWriter writer = new PropertiesWriter();
 		Content content = new ContentImpl();
@@ -186,7 +187,7 @@ public class ChunkModule implements AbstractPipelineModule {
 			logger.logException(ex);
 		}
 		
-		Set<String> topicList = new HashSet<String>(Constants.INT_128);
+		Set<String> topicList = new LinkedHashSet<String>(Constants.INT_128);
 		Set<String> oldTopicList = null;
 		Set<String> ditamapList = null;
 		
