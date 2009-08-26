@@ -371,6 +371,11 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 				for(int i = 0; i<atts.getLength();i++){
 					String attrName = atts.getQName(i);
 					String attrValue = atts.getValue(i);
+					
+					//Added by William on 2009-08-18 for chunkbug id:2839035 start
+					attrValue = StringUtils.escapeXML(attrValue);
+			    	//Added by William on 2009-08-18 for chunkbug id:2839035 end
+					
 					if(Constants.ATTRIBUTE_NAME_ID.equals(attrName) && classValue.indexOf(Constants.ATTR_CLASS_VALUE_TOPIC)!=-1){
 						//change topic @id if there are conflicts. 
 						if(topicID.contains(attrValue)){
@@ -1003,7 +1008,9 @@ public class ChunkTopicParser extends AbstractXMLWriter {
     	// check whether current href needs to be updated
     	String scopeValue = atts.getValue(Constants.ATTRIBUTE_NAME_SCOPE);
     	String hrefValue = atts.getValue(Constants.ATTRIBUTE_NAME_HREF);
-    	
+    	//Added by William on 2009-08-18 for chunkbug id:2839035 start
+    	hrefValue = StringUtils.escapeXML(hrefValue);
+    	//Added by William on 2009-08-18 for chunkbug id:2839035 end
     	if (scopeValue == null){
     		scopeValue = Constants.ATTR_SCOPE_VALUE_LOCAL;
     	}
