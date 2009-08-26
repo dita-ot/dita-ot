@@ -38,6 +38,7 @@ import org.dita.dost.pipeline.PipelineHashIO;
 import org.dita.dost.reader.DitaValReader;
 import org.dita.dost.reader.GenListModuleReader;
 import org.dita.dost.util.Constants;
+import org.dita.dost.util.DelayConrefUtils;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.FilterUtils;
 import org.dita.dost.util.OutputUtils;
@@ -961,7 +962,8 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 		
 		//added by Willam on 2009-07-17 for req #12014 start
 		// Output plugin id
-		writeMapToXML(reader.getPluginMap(), Constants.FILE_NAME_PLUGIN_XML);
+		File pluginIdFile = new File(tempDir, Constants.FILE_NAME_PLUGIN_XML);
+		DelayConrefUtils.getInstance().writeMapToXML(reader.getPluginMap(),pluginIdFile);
 		//write the result into the file
 		StringBuffer result = reader.getResult();
 		try {

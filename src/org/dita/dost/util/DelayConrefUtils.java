@@ -12,16 +12,29 @@ package org.dita.dost.util;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 import java.util.Queue;
+import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
+import org.dita.dost.log.DITAOTJavaLogger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -36,6 +49,8 @@ import org.xml.sax.SAXException;
 public class DelayConrefUtils {
 	
 	private Document root = null;
+
+	private DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
 	
 	private static DelayConrefUtils instance = null;
 	/**
@@ -222,6 +237,61 @@ public class DelayConrefUtils {
 			if (value.equals(key)) return pe;
 		}
 		return null;
+	}
+	public void writeMapToXML(Map<String, Set<String>> m, File outputFile) {
+
+		if (m == null)
+			return;
+		Properties prop = new Properties();
+		Iterator<Map.Entry<String, Set<String>>> iter = m.entrySet().iterator();
+		while (iter.hasNext()) {
+			Map.Entry<String, Set<String>> entry = iter.next();
+			String key = entry.getKey();
+			String value = StringUtils.assembleString(entry.getValue(),
+					Constants.COMMA);
+			prop.setProperty(key, value);
+		}
+		//File outputFile = new File(tempDir, filename);
+		
+		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+		DocumentBuilder db = null;
+		try {
+			db = dbf.newDocumentBuilder();
+		} catch (ParserConfigurationException pce) {
+			assert (false);
+		}
+		Document doc = db.newDocument();
+		Element properties = (Element) doc.appendChild(doc
+				.createElement("properties"));
+
+		Set keys = prop.keySet();
+		Iterator i = keys.iterator();
+		while (i.hasNext()) {
+			String key = (String) i.next();
+			Element entry = (Element) properties.appendChild(doc
+					.createElement("entry"));
+			entry.setAttribute("key", key);
+			entry.appendChild(doc.createTextNode(prop.getProperty(key)));
+		}
+		TransformerFactory tf = TransformerFactory.newInstance();
+		Transformer t = null;
+		try {
+			t = tf.newTransformer();
+			t.setOutputProperty(OutputKeys.INDENT, "yes");
+			t.setOutputProperty(OutputKeys.METHOD, "xml");
+			t.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+		} catch (TransformerConfigurationException tce) {
+			assert (false);
+		}
+		DOMSource doms = new DOMSource(doc);
+        try {
+        	StreamResult sr = new StreamResult(new FileOutputStream(outputFile));
+            t.transform(doms, sr);
+        } catch (TransformerException te) {
+            this.javaLogger.logException(te);
+        } catch (IOException te) {
+			this.javaLogger.logException(te);
+		}
 	}
 
 }
