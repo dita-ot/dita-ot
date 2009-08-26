@@ -67,7 +67,7 @@
       
       <xsl:message>
         <!-- Debug location,Error message-->
- 		<xsl:value-of select="concat($msgcontent,'The location of this problem  was at ',$debugloc)"/>
+ 		<xsl:value-of select="concat($msgcontent,'The location of this problem was at ',$debugloc)"/>
       </xsl:message>
     </xsl:template>
     
