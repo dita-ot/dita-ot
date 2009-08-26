@@ -605,6 +605,13 @@
     <reason>ID '%1' was used in topicref tag but did not point to a topic element. HREF attribute in topicref tag should only point to topic level elements.</reason>
     <response>Correct the ID '%1' and make sure it point to a topic level element.</response>
   </message>
+  
+  <!-- added by William on 2009-08-20 for #12008 start-->
+  <message id="DOTX062I" type="INFO">
+    <reason>It appears that this document uses constraints, but the conref processor cannot validate that the target of a conref is valid.</reason>
+    <response>To enable constraint checking, please upgrade to an XSLT 2.0 processor.</response>
+  </message>
+  <!-- added by William on 2009-08-20 for #12008 end-->
   <!-- End of XSL Messages --> 
   
   <!-- Add any messages defined by plugins. -->
