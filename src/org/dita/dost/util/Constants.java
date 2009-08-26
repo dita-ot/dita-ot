@@ -364,8 +364,8 @@ public abstract class Constants {
 	//Added by William on 2009-06-24 for req #12014 start
 	//export.xml to store exported elements
 	public static final String FILE_NAME_EXPORT_XML = "export.xml";
-	//plugin.xml to store the plugin id
-	public static final String FILE_NAME_PLUGIN_XML = "plugin.xml";
+	//pluginId.xml to store the plugin id
+	public static final String FILE_NAME_PLUGIN_XML = "pluginId.xml";
 	//Added by William on 2009-06-24 for req #12014 start
 	
     /**
