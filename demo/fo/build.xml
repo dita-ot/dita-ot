@@ -31,6 +31,8 @@ with those set forth herein.
 <project name="dita.build"  basedir=".">
 
     <property name="customization.dir" value="${basedir}/Customization"/>
+    <property file="${customization.dir}/build.properties"/>
+
     <property name="ot.dir" value="${basedir}/../.."/>
     <property name="lib.dir" value="${ot.dir}/lib"/>
     <property name="fo.lib.dir" value="${basedir}/lib"/>
@@ -79,8 +81,6 @@ with those set forth herein.
             <isset property="file.protocol.prefix"/>
         </not>
     </condition>
-
-    <property file="${customization.dir}/build.properties"/>
 
     <property name="xml.catalog.files" value="${customization.dir}/catalog.xml;${basedir}/cfg/catalog.xml"/>
     
