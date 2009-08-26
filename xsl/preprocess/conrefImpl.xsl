@@ -9,6 +9,7 @@
   xmlns:exsl="http://exslt.org/common"
   xmlns:conref="http://dita-ot.sourceforge.net/ns/200704/conref"
   xmlns:ditamsg="http://dita-ot.sourceforge.net/ns/200704/ditamsg"
+  xmlns:fn="http://www.w3.org/2005/xpath-functions"
   exclude-result-prefixes="exsl">
 
   <xsl:import href="../common/output-message.xsl"/>
@@ -246,8 +247,6 @@
   </xsl:variable>
   <!-- get the export.xml -->
   <xsl:variable name="EXPORTFILE" select="concat($tempfiledir, 'export.xml')"/>
-  <!-- get plugin.xml -->
-  <xsl:variable name="PLUGINFILE" select="concat($tempfiledir, 'plugin.xml')"/>
   <!-- added by William on 2009-06-26 for req #12014 end -->
   
   <xsl:variable name="topicid">
@@ -380,14 +379,11 @@
                 <xsl:variable name="domains" select="document($file, /)/*/@domains|/dita/*[@domains][1]/@domains"/>
                 <!-- format domains attribute in the source file -->
                 <xsl:variable name ="preDomains" select="normalize-space($ORIGINAL-DOMAINS)"/>
-                <xsl:variable name="subDomains" select="reverse(tokenize($preDomains, '\(|\)\s*?\(|\)' ))"/>
-                <!--xsl:value-of select="'subDomains:'"/><xsl:value-of select="$subDomains[contains(., '-c')]"/>
-                <xsl:value-of select="'domains:'"/><xsl:value-of select="$domains"/-->
                 <xsl:variable name="isValid">
-                    <xsl:call-template name="checkValid">
-                      <xsl:with-param name ="sourceDomains" select="$subDomains[contains(., '-c')]"/>
-                      <xsl:with-param name="targetDomains" select="normalize-space($domains)"/>
-                    </xsl:call-template>
+                  <xsl:call-template name="checkValid">
+                    <xsl:with-param name ="sourceDomains" select="$preDomains"/>
+                    <xsl:with-param name="targetDomains" select="normalize-space(concat( '(topic) ', $domains ))"/>
+                  </xsl:call-template>
                 </xsl:variable>
                 <!-- debug code -->
                 <!--xsl:value-of select="'isValid:'"/><xsl:value-of select="$isValid"/-->
@@ -488,14 +484,13 @@
                       <!-- get domains attribute in the target file -->
                       <xsl:variable name="domains" select="document($file, /)/*/@domains|/dita/*[@domains][1]/@domains"/>
                       <!-- format domains attribute in the source file -->
-                      <xsl:variable name ="preDomains" select="normalize-space($ORIGINAL-DOMAINS)"/>
-                      <xsl:variable name="subDomains" select="reverse(tokenize($preDomains, '\(|\)\s*?\(|\)' ))"/>
-                      <xsl:variable name="isValid">
-                        <xsl:call-template name="checkValid">
-                          <xsl:with-param name ="sourceDomains" select="$subDomains[contains(., '-c')]"/>
-                          <xsl:with-param name="targetDomains" select="normalize-space($domains)"/>
-                        </xsl:call-template>
-                      </xsl:variable>
+	                  <xsl:variable name ="preDomains" select="normalize-space($ORIGINAL-DOMAINS)"/>
+	                  <xsl:variable name="isValid">
+	                    <xsl:call-template name="checkValid">
+	                      <xsl:with-param name ="sourceDomains" select="$preDomains"/>
+	                      <xsl:with-param name="targetDomains" select="normalize-space(concat( '(topic) ', $domains ))"/>
+	                    </xsl:call-template>
+	                  </xsl:variable>
                       <!-- determine wether conref is allowed -->
                       <xsl:choose>
                         <xsl:when test="$isValid='true'">
@@ -551,11 +546,10 @@
                 <xsl:variable name="domains" select="document($file, /)/*/@domains|/dita/*[@domains][1]/@domains"/>
                 <!-- format domains attribute in the source file -->
                 <xsl:variable name ="preDomains" select="normalize-space($ORIGINAL-DOMAINS)"/>
-                <xsl:variable name="subDomains" select="reverse(tokenize($preDomains, '\(|\)\s*?\(|\)' ))"/>
                 <xsl:variable name="isValid">
                   <xsl:call-template name="checkValid">
-                    <xsl:with-param name ="sourceDomains" select="$subDomains[contains(., '-c')]"/>
-                    <xsl:with-param name="targetDomains" select="normalize-space($domains)"/>
+                    <xsl:with-param name ="sourceDomains" select="$preDomains"/>
+                    <xsl:with-param name="targetDomains" select="normalize-space(concat( '(topic) ', $domains ))"/>
                   </xsl:call-template>
                 </xsl:variable>
                   <!-- determine wether conref is allowed -->
@@ -680,11 +674,10 @@
                 <xsl:variable name="domains" select="document($file, /)/*/@domains|/dita/*[@domains][1]/@domains"/>
                 <!-- format domains attribute in the source file -->
                 <xsl:variable name ="preDomains" select="normalize-space($ORIGINAL-DOMAINS)"/>
-                <xsl:variable name="subDomains" select="reverse(tokenize($preDomains, '\(|\)\s*?\(|\)' ))"/>
                 <xsl:variable name="isValid">
                   <xsl:call-template name="checkValid">
-                    <xsl:with-param name ="sourceDomains" select="$subDomains[contains(., '-c')]"/>
-                    <xsl:with-param name="targetDomains" select="normalize-space($domains)"/>
+                    <xsl:with-param name ="sourceDomains" select="$preDomains"/>
+                    <xsl:with-param name="targetDomains" select="normalize-space(concat( '(topic) ', $domains ))"/>
                   </xsl:call-template>
                 </xsl:variable>
                 <!-- determine wether conref is allowed -->
@@ -782,11 +775,10 @@
                 <xsl:variable name="domains" select="document($file, /)/*/@domains|/dita/*[@domains][1]/@domains"/>
                 <!-- format domains attribute in the source file -->
                 <xsl:variable name ="preDomains" select="normalize-space($ORIGINAL-DOMAINS)"/>
-                <xsl:variable name="subDomains" select="reverse(tokenize($preDomains, '\(|\)\s*?\(|\)' ))"/>
                 <xsl:variable name="isValid">
                   <xsl:call-template name="checkValid">
-                    <xsl:with-param name ="sourceDomains" select="$subDomains[contains(., '-c')]"/>
-                    <xsl:with-param name="targetDomains" select="normalize-space($domains)"/>
+                    <xsl:with-param name ="sourceDomains" select="$preDomains"/>
+                    <xsl:with-param name="targetDomains" select="normalize-space(concat( '(topic) ', $domains ))"/>
                   </xsl:call-template>
                 </xsl:variable>
                 <!-- determine wether conref is allowed -->
@@ -848,11 +840,10 @@
             <xsl:variable name="domains" select="document($file, /)/*/@domains|/dita/*[@domains][1]/@domains"/>
             <!-- format domains attribute in the source file -->
             <xsl:variable name ="preDomains" select="normalize-space($ORIGINAL-DOMAINS)"/>
-            <xsl:variable name="subDomains" select="reverse(tokenize($preDomains, '\(|\)\s*?\(|\)' ))"/>
             <xsl:variable name="isValid">
               <xsl:call-template name="checkValid">
-                <xsl:with-param name ="sourceDomains" select="$subDomains[contains(., '-c')]"/>
-                <xsl:with-param name="targetDomains" select="normalize-space($domains)"/>
+                <xsl:with-param name ="sourceDomains" select="$preDomains"/>
+                <xsl:with-param name="targetDomains" select="normalize-space(concat( '(topic) ', $domains ))"/>
               </xsl:call-template>
             </xsl:variable>
             <!-- determine wether conref is allowed -->
@@ -1241,7 +1232,6 @@
      * If the domains match (as it would if all in the same topic), the element name stays the same
      * Otherwise, call generalize-domains. This ensures the element is valid in the result doc. -->
 <xsl:template match="*[starts-with(@class,'+ ')]">
-<!--xsl:template match="*[starts-with(@class,'- ')]"-->
   <xsl:param name="current-relative-path"/>
   <xsl:param name="conref-filename"/>
   <xsl:param name="topicid"/>
@@ -1277,78 +1267,106 @@
     <xsl:param name="targetDomains"/>
     
     <xsl:choose>
-      <xsl:when test="count($sourceDomains)=0">
-        <xsl:value-of select="'true'"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <!--e.g topic hi-d basicHighlight-c-->
-        <xsl:variable name="compareItem" select="$sourceDomains[position()=1]"/>
-        <!-- format compare item -->
-        <!--e.g (topic hi-d basicHighlight-c)-->
-        <xsl:variable name="constraintItem" select="concat('(', $compareItem, ')')"/>
-        
-        <!--find out what the original module is. e.g topic, hi-d-->
-        <xsl:variable name="originalItem" select="tokenize($compareItem,' ')[not(contains(., '-c'))]"/>
-       
-        <!-- if $compareItem is (topic shortdescReq-c task shortdescTaskReq-c), 
-        we should remove the compatible values:shortdescReq-c-->
-        <xsl:variable name="lastConstraint" select="tokenize($compareItem,' ')[position()=last()][contains(., '-c')]"/>
-        
-        
-        <!-- cast sequence to string for compare -->
-        <xsl:variable name="module">
-          <xsl:for-each select="$originalItem">
-            <xsl:value-of select="concat(., ' ')"/>
-          </xsl:for-each>
-        </xsl:variable>
-        <!-- format the string topic hi-d remove tail space to (topic hi-d) -->
-        <xsl:variable name="originalModule" select="concat('(', normalize-space($module), ')')"/>
-        <!--  -->
-        <xsl:variable name="editedConstraintItem" select="concat('(', normalize-space($module), ' ', $lastConstraint)"/>
-        <!--debug  code-->
-        <!--xsl:value-of select="$editedConstraintItem"/-->
-        <!--xsl:value-of select="'originalModule:'"/><xsl:value-of select="$originalModule"/-->
-        
+      <!-- function is supported -->
+      <xsl:when test="function-available('fn:reverse' ) and function-available('fn:tokenize' )
+        and function-available('fn:remove' )">
+        <!-- break string into node-set -->
+        <xsl:variable name="subDomains" select="fn:reverse(fn:tokenize($sourceDomains, '\(|\)\s*?\(|\)' ))"/>
+        <!-- get domains value having constraints e.g [topic simpleSection-c]-->
+        <xsl:variable name="sDomains" select="$subDomains[contains(., '-c')]"/>
         <xsl:choose>
-          <!-- If the target has constraint item (topic hi-d basicHighlight-c) and there is only one constraint mode left-->
-          <!-- If the target has a value that begins with constraint item and there is only one constraint mode left-->
-          <xsl:when test="(contains($targetDomains, $constraintItem) and count($sourceDomains) = 1)
-            or (contains($targetDomains, $editedConstraintItem) and count($sourceDomains)=1) ">
+        <!-- no more constraints -->
+          <xsl:when test="count($sDomains)=0">
             <xsl:value-of select="'true'"/>
           </xsl:when>
-          <xsl:when test="count($sourceDomains)>1 and (contains($targetDomains, $constraintItem) or 
-            contains($targetDomains, $editedConstraintItem) ) ">
-            <xsl:variable name="result">
-              <xsl:call-template name="checkValid">
-                <xsl:with-param name="sourceDomains" select="remove($sourceDomains, 1)"/>
-                <xsl:with-param name="targetDomains" select="$targetDomains"/>
-              </xsl:call-template>
+          <xsl:otherwise>
+            <!--get first item in the constraints node set-->
+            <xsl:variable name="compareItem" select="$sDomains[position()=1]"/>
+            <!-- format the item -->
+            <!--e.g (topic hi-d basicHighlight-c)-->
+            <xsl:variable name="constraintItem" select="concat('(', $compareItem, ')')"/>
+            <!--find out what the original module is. e.g topic, hi-d-->
+            <xsl:variable name="originalItem" select="fn:tokenize($compareItem,' ')[not(contains(., '-c'))]"/>
+            <!-- if $compareItem is (topic shortdescReq-c task shortdescTaskReq-c), 
+             we should remove the compatible values:shortdescReq-c-->
+            <xsl:variable name="lastConstraint" select="fn:tokenize($compareItem,' ')[contains(., '-c')][position()=last()]"/>
+            <!-- cast sequence to string for compare -->
+            <xsl:variable name="module">
+              <xsl:for-each select="$originalItem">
+                <xsl:value-of select="concat(., ' ')"/>
+              </xsl:for-each>
             </xsl:variable>
-            <xsl:value-of select="$result"/>
-          </xsl:when>
-          <!--If the target does not have (topic hi-d) and (topic hi-d, continue to test #2-->
-          <xsl:when test="not(contains($targetDomains, $originalModule)) and
-            not(contains($targetDomains, substring-before($originalModule, ')' )))">
-            <xsl:variable name="result">
-              <xsl:call-template name="checkValid">
-                <xsl:with-param name="sourceDomains" select="remove($sourceDomains, 1)"/>
-                <xsl:with-param name="targetDomains" select="$targetDomains"/>
-              </xsl:call-template>
-            </xsl:variable>
-            <xsl:value-of select="$result"/>  
-          </xsl:when>
-          <!--If the target topic has the original module (topic hi-d) but does not have constraintItem (topic hi-d basicHighlight-c)
-          or If the target topic has the beginning original module (topic hi-d but does not have constraintItem (topic hi-d basicHighlight-c)-->
-          <!--conref is not allowed  -->
-          <xsl:when test="(contains($targetDomains, $originalModule) and not(contains($targetDomains, $constraintItem)))
-            or (contains($targetDomains, substring-before($originalModule, ')' )) and not(contains($targetDomains, $constraintItem)))">
-            <xsl:value-of select="'false'"/>
-          </xsl:when>
+            <!-- format the string topic hi-d remove tail space to (topic hi-d) -->
+            <xsl:variable name="originalModule" select="concat('(', normalize-space($module), ')')"/>
+            <!--remove compatible constraints-->
+            <xsl:variable name="editedConstraintItem" select="concat('(', normalize-space($module), ' ', $lastConstraint)"/>
+            <xsl:choose>
+              <!-- If the target has constraint item (topic hi-d basicHighlight-c) and there is only one constraint mode left-->
+              <!-- If the target has a value that begins with constraint item and there is only one constraint mode left-->
+              <xsl:when test="(contains($targetDomains, $constraintItem) and count($sDomains) = 1)
+                or (contains($targetDomains, $editedConstraintItem) and count($sDomains)=1) ">
+                <xsl:value-of select="'true'"/>
+              </xsl:when>
+              <xsl:when test="count($sDomains)>1 and (contains($targetDomains, $constraintItem) or 
+                contains($targetDomains, $editedConstraintItem) ) ">
+                <!-- move to next item -->
+                <xsl:variable name="remainsItem" select="fn:remove($sDomains, 1)"/>
+                <!-- cast node set to string recursively call the template-->
+                <xsl:variable name="remainString">
+                  <xsl:for-each select="$remainsItem">
+                    <xsl:value-of select="concat( '(', ., ')' , ' ')"/>
+                  </xsl:for-each>
+                </xsl:variable>
+                <xsl:variable name="result">
+                  <xsl:call-template name="checkValid">
+                    <xsl:with-param name="sourceDomains" select="normalize-space($remainString)"/>
+                    <xsl:with-param name="targetDomains" select="$targetDomains"/>
+                  </xsl:call-template>
+                </xsl:variable>
+                <xsl:value-of select="$result"/>
+              </xsl:when>
+              <!--If the target does not have (topic hi-d) and (topic hi-d, continue to test #2-->
+              <xsl:when test="not(contains($targetDomains, $originalModule)) and
+                not(contains($targetDomains, substring-before($originalModule, ')' )))">
+                <!-- move to next item -->
+                <xsl:variable name="remainsItem" select="fn:remove($sDomains, 1)"/>
+                <!-- cast node set to string recursively call the template-->
+                <xsl:variable name="remainString">
+                  <xsl:for-each select="$remainsItem">
+                    <xsl:value-of select="concat( '(', ., ')' , ' ')"/>
+                  </xsl:for-each>
+                </xsl:variable>
+                <xsl:variable name="result">
+                  <xsl:call-template name="checkValid">
+                    <xsl:with-param name="sourceDomains" select="normalize-space($remainString)"/>
+                    <xsl:with-param name="targetDomains" select="$targetDomains"/>
+                  </xsl:call-template>
+                </xsl:variable>
+                <xsl:value-of select="$result"/>
+              </xsl:when>
+              <!--If the target topic has the original module (topic hi-d) but does not have constraintItem (topic hi-d basicHighlight-c)
+              or If the target topic has the beginning original module (topic hi-d but does not have constraintItem (topic hi-d basicHighlight-c)-->
+              <!--conref is not allowed  -->
+              <xsl:when test="(contains($targetDomains, $originalModule) and not(contains($targetDomains, $constraintItem)))
+                or (contains($targetDomains, substring-before($originalModule, ')' )) and not(contains($targetDomains, $constraintItem)))">
+                <xsl:value-of select="'false'"/>
+              </xsl:when>
+            </xsl:choose>
+          </xsl:otherwise>
         </xsl:choose>
+      </xsl:when>
+      <!-- function not support -->
+      <xsl:when test="contains($sourceDomains, '-c')">
+      	<xsl:apply-templates select="." mode="ditamsg:parserUnsupported"/>
+      	<xsl:value-of select="'true'"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="'true'"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
-<!-- added by William on 20090804 for req #12008 end-->
+  <!-- added by William on 20090804 for req #12008 end-->
+
   
 <!--copy everything else-->
 <xsl:template match="*|@*|comment()|processing-instruction()|text()">
@@ -1437,5 +1455,12 @@
     <xsl:with-param name="msgparams">%1=<xsl:value-of select="@conref"/></xsl:with-param>
   </xsl:call-template>
 </xsl:template>
-
+<!-- added by William on 2009-08-20 for #12008 start -->
+  <xsl:template match="*" mode="ditamsg:parserUnsupported">
+    <xsl:call-template name="output-message">
+      <xsl:with-param name="msgnum">062</xsl:with-param>
+      <xsl:with-param name="msgsev">I</xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
+<!-- added by William on 2009-08-20 for #12008 end -->
 </xsl:stylesheet>
