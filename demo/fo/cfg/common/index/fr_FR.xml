@@ -174,7 +174,7 @@ See the accompanying license.txt file for applicable licenses.
 <group.label>I</group.label>
 <group.members>
 <char.set>I</char.set>
-<char.set>I</char.set>
+<char.set>i</char.set>
 <char.set>î</char.set>
 <char.set>ï</char.set>
 </group.members>
