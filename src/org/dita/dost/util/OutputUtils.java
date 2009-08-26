@@ -33,7 +33,7 @@ public final class OutputUtils {
 	public static String InputMapDir=null;
 	
 	private OutputUtils(){
-		
+		// leave blank as designed 
 	}
 	
 	/**
@@ -48,24 +48,17 @@ public final class OutputUtils {
 	/**
 	 * Set the outercontrol
 	 * @param control
-	 */
+	 */	
 	public static void setOutterControl(String control){
-		if(control==null) {
-			outercontrol=OUTTERCONTROL_WARN;
-			return;
-		}
-		if(control.equalsIgnoreCase(OUTTERCONTROL_FAIL)){
+		if(OUTTERCONTROL_FAIL.equalsIgnoreCase(control)){
 			outercontrol=OUTTERCONTROL_FAIL;
 			return;
 		}
-		if(control.equalsIgnoreCase(OUTTERCONTROL_WARN)){
-			outercontrol=OUTTERCONTROL_WARN;
-			return;
-		}
-		if(control.equalsIgnoreCase(OUTTERCONTROL_QUIET)){
+		if(OUTTERCONTROL_QUIET.equalsIgnoreCase(control)){
 			outercontrol=OUTTERCONTROL_QUIET;
 			return;
 		}
+		//default: if control equals "1" or other values
 		outercontrol=OUTTERCONTROL_WARN;
 	}
 	
@@ -82,11 +75,7 @@ public final class OutputUtils {
 	 * @param flag
 	 */
 	public static void setOnlyTopicInMap(String flag){
-		if(flag==null){
-			onlytopicinmap=false;
-			return;
-		}
-		if(flag.equalsIgnoreCase("true")){
+		if("true".equalsIgnoreCase(flag)){
 			onlytopicinmap=true;
 		}else{
 			onlytopicinmap=false;
@@ -106,24 +95,17 @@ public final class OutputUtils {
 	 * @param flag
 	 */
 	public static void setGeneratecopyouter(String flag){
-		if(flag==null){
-			generatecopyouter=NOT_GENERATEOUTTER;
-			return;
-		}
-		if(flag.equals("1")){
-			generatecopyouter=NOT_GENERATEOUTTER;
-			return;
-		}
-		if(flag.equals("2")){
+		if("2".equals(flag)){
 			generatecopyouter=GENERATEOUTTER;
 			return;
 		}
-		if(flag.equals("3")){
+		if("3".equals(flag)){
 			generatecopyouter=OLDSOLUTION;
 			return;
 		}
 		generatecopyouter=NOT_GENERATEOUTTER;
 	}
+	
 	
 	public static String getOutputDir(){
 		return OutputDir;

@@ -345,7 +345,7 @@ public class DitaWriter extends AbstractXMLWriter {
 		} catch (Exception e) {
 			logger.logException(e);
 		}
-		CatalogUtils.initCatalogResolver(ditaDir);
+		CatalogUtils.setDitaDir(ditaDir);
 		catalogMap = CatalogUtils.getCatalog(ditaDir);
 	}
     

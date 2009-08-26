@@ -268,7 +268,7 @@ public class GenListModuleReader extends AbstractXMLReader {
 			javaLogger.logWarn(msg);
 		}
 		
-		CatalogUtils.initCatalogResolver(ditaDir);
+		CatalogUtils.setDitaDir(ditaDir);
 		catalogMap = CatalogUtils.getCatalog(ditaDir);
 	}
 

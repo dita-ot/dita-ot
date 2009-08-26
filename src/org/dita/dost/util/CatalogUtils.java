@@ -37,11 +37,12 @@ public class CatalogUtils {
     
     public static CatalogResolver catalogResolver = null;
     
+	private static String ditaDir;
     /**
      * 
      */
     private CatalogUtils() {
-        super();
+        // leave blank as designed
     }
 
     /**
@@ -50,45 +51,54 @@ public class CatalogUtils {
      * @return
      * 
      */
-    public static HashMap<String, String> getCatalog(String ditaDir){
-    	CatalogParser parser;
-		XMLReader reader;
-        String catalogFilePath;
-    	
-        if (map!=null){
-            return map;
-        }else{
-            map = new HashMap<String, String>();
-            parser = new CatalogParser(map, ditaDir);
-            try{
-                if (System.getProperty(Constants.SAX_DRIVER_PROPERTY) == null){
-                    //The default sax driver is set to xerces's sax driver
-                	StringUtils.initSaxDriver();
-                }
-                reader = XMLReaderFactory.createXMLReader();
-                reader.setContentHandler(parser);
-                catalogFilePath = (ditaDir == null) ? Constants.FILE_NAME_CATALOG : ditaDir+File.separator+Constants.FILE_NAME_CATALOG;
-                reader.parse(catalogFilePath);
-            }catch (Exception e){
-                logger.logException(e);
-            }
-            
-            return map;
-        }
+    public static HashMap<String, String> getCatalog(String ditaDir) {
+		if (map != null) {
+			return map;
+		}
+		
+		String catalogFilePath = (ditaDir == null) ? Constants.FILE_NAME_CATALOG : ditaDir + File.separator + Constants.FILE_NAME_CATALOG;
+		
+		map = new HashMap<String, String>();
+		CatalogParser parser = new CatalogParser(map, ditaDir);
+		if (System.getProperty(Constants.SAX_DRIVER_PROPERTY) == null) {
+			// The default sax driver is set to xerces's sax driver
+			StringUtils.initSaxDriver();
+		}	
+		try {
+			XMLReader reader = XMLReaderFactory.createXMLReader();
+			reader.setContentHandler(parser);
+			reader.parse(catalogFilePath);
+		} catch (Exception e) {
+			logger.logException(e);
+		}
+
+		return map;
+	}
+    
+    
+    public static void setDitaDir(String ditaDir){
+    	catalogResolver=null;
+    	CatalogUtils.ditaDir=ditaDir;
     }
-    public static void initCatalogResolver(String ditaDir) {
+    
+    public static String getDitaDir(){
+    	if(StringUtils.isEmptyString(ditaDir)){
+    		return "";
+    	}
+    	return ditaDir+File.separator;
+    }
+
+    public static CatalogResolver getCatalogResolver() {
         if (catalogResolver == null) {
             CatalogManager manager = new CatalogManager();
             manager.setIgnoreMissingProperties(true);
             manager.setUseStaticCatalog(false); // We'll use a private catalog.
             manager.setPreferPublic(true);
+            
             //manager.setVerbosity(10);
-
             catalogResolver = new CatalogResolver(manager);
-
-            String catalogFilePath = (ditaDir == null)? 
-                Constants.FILE_NAME_CATALOG : 
-                ditaDir + File.separator + Constants.FILE_NAME_CATALOG;
+            
+            String catalogFilePath = getDitaDir() + Constants.FILE_NAME_CATALOG;
 
             Catalog catalog = catalogResolver.getCatalog();
             try {
@@ -98,15 +108,7 @@ public class CatalogUtils {
             }
         }
         
-    }
-
-    public static CatalogResolver getCatalogResolver() {
-        if (catalogResolver == null) 
-            initCatalogResolver(null);
-
         return catalogResolver;
     }
-        
-    
 }
 
