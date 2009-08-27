@@ -31,7 +31,7 @@
 
 
 <!-- ============ Topic specializations ============ -->
-<!ELEMENT javaMethod   ( (%apiName;), (%shortdesc;), (%prolog;)?, (%javaMethodDetail;), (%related-links;)?, (%javaMethod-info-types;)* )>
+<!ELEMENT javaMethod   ( (%apiName;), (%shortdesc; | %abstract;), (%prolog;)?, (%javaMethodDetail;), (%related-links;)?, (%javaMethod-info-types;)* )>
 <!ATTLIST javaMethod      id ID #REQUIRED
                           conref CDATA #IMPLIED
                           outputclass CDATA #IMPLIED

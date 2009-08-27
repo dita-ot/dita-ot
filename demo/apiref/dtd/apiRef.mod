@@ -34,7 +34,7 @@
 
 <!-- ============ Element definitions ============ -->
 
-<!ELEMENT apiRef         ((%apiName;), (%shortdesc;), (%prolog;)?, (%apiDetail;), (%related-links;)?, ( %apiRef-info-types;)*)>
+<!ELEMENT apiRef         ((%apiName;), (%shortdesc; | %abstract;), (%prolog;)?, (%apiDetail;), (%related-links;)?, ( %apiRef-info-types;)*)>
 <!ATTLIST apiRef          id ID #REQUIRED
                           conref CDATA #IMPLIED
                           outputclass CDATA #IMPLIED

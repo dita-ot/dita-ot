@@ -15,7 +15,7 @@
 
 
 <!-- ============ Topic specializations ============ -->
-<!ELEMENT javaPackage     ((%apiSyntax;)?, (%apiName;), (%shortdesc;), (%prolog;)?, (%javaPackageDetail;), (%related-links;)?, (%javaPackage-info-types;)*)>
+<!ELEMENT javaPackage     ((%apiSyntax;)?, (%apiName;), (%shortdesc; | %abstract;), (%prolog;)?, (%javaPackageDetail;), (%related-links;)?, (%javaPackage-info-types;)*)>
 <!ATTLIST javaPackage     id ID #REQUIRED
                           conref CDATA #IMPLIED
                           outputclass CDATA #IMPLIED

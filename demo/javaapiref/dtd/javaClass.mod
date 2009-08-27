@@ -23,7 +23,7 @@
 
 
 <!-- ============ Topic specializations ============ -->
-<!ELEMENT javaClass   ((%apiName;), (%shortdesc;), (%prolog;)?, (%javaClassDetail;), (%related-links;)?, (%javaClass-info-types;)*)>
+<!ELEMENT javaClass   ((%apiName;), (%shortdesc; | %abstract;), (%prolog;)?, (%javaClassDetail;), (%related-links;)?, (%javaClass-info-types;)*)>
 <!ATTLIST javaClass       id ID #REQUIRED
                           conref CDATA #IMPLIED
                           outputclass CDATA #IMPLIED

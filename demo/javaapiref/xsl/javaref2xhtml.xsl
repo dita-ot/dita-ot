@@ -30,7 +30,8 @@
    - Suppressed processing
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 <!-- always process definitions in a mode for a specific purpose -->
-<xsl:template match="*[contains(@class,' apiRef/apiDef ')]"/>
+<!-- Removed with P019897: Generic rule in apiref2xhtml should be used -->
+<!--<xsl:template match="*[contains(@class,' apiRef/apiDef ')]"/>-->
 
 <!-- process the package, class, and interface name as part of the
      body processing -->
@@ -133,13 +134,21 @@
     <xsl:call-template name="processHDR"/>
     <!-- Include a user's XSL call here to generate a toc based on what's a child of topic -->
     <xsl:call-template name="javaapi-gen-user-sidetoc"/>
-    <xsl:apply-templates/> <!-- this will include all things within topic; therefore, -->
+    <!-- RDA: for javaClass and javaInterface, the related-links is being processed both here
+              and from within the body. Remove the processing from this section. P019420 -->
+    <xsl:choose>
+      <xsl:when test="contains(@class,' javaClass/javaClass ') or contains(@class,' javaInterface/javaInterface ')">
+        <xsl:apply-templates select="*[not(contains(@class,' topic/related-links '))]|comment()|processing-instruction()"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:apply-templates/> <!-- this will include all things within topic; therefore, -->
                            <!-- title content will appear here by fall-through -->
                            <!-- followed by prolog (but no fall-through is permitted for it) -->
                            <!-- followed by body content, again by fall-through in document order -->
                            <!-- followed by related links -->
                            <!-- followed by child topics by fall-through -->
-
+      </xsl:otherwise>
+    </xsl:choose>
     <xsl:call-template name="gen-endnotes"/>    <!-- include footnote-endnotes -->
     <xsl:call-template name="javaapi-gen-user-footer"/> <!-- include user's XSL running footer here -->
     <xsl:call-template name="processFTR"/>      <!-- Include XHTML footer, if specified -->
@@ -434,44 +443,56 @@
   <xsl:param name="baseRef"/>
   <xsl:param name="isFirstBase"/>
   <xsl:choose>
-  <xsl:when test="$baseRef and $baseRef/@href and
-        (not($baseRef/@format) or $baseRef/@format='dita')">
-    <xsl:variable name="href" select="$baseRef/@href"/>
-    <xsl:variable name="file">
-      <xsl:call-template name="getTopicFile">
-        <xsl:with-param name="href" select="$href"/>
-      </xsl:call-template>
-    </xsl:variable>
-    <xsl:variable name="topicID">
-      <xsl:call-template name="getTopicID">
+    <!-- P018698: add check to make sure the scope is local. -->
+    <xsl:when test="$baseRef and $baseRef/@href and 
+                    (not($baseRef/@format) or $baseRef/@format='dita') and
+                    (not($baseRef/@scope) or $baseRef/@scope='local')">
+      <xsl:variable name="href" select="$baseRef/@href"/>
+      <xsl:variable name="file">
+        <xsl:call-template name="getTopicFile">
           <xsl:with-param name="href" select="$href"/>
         </xsl:call-template>
-    </xsl:variable>
-    <xsl:variable name="baseDocument" select="document($file, /)"/>
-    <xsl:variable name="baseClass" select="
-        ($baseDocument[$topicID = '#none#'] //
-            *[contains(@class, ' topic/topic ')])[1] |
-        $baseDocument[$topicID != '#none#'] //
-            *[contains(@class, ' topic/topic ')][@id=$topicID]"/>
-    <xsl:choose>
-    <xsl:when test="$baseClass">
+      </xsl:variable>
+      <xsl:variable name="topicID">
+        <xsl:call-template name="getTopicID">
+          <xsl:with-param name="href" select="$href"/>
+        </xsl:call-template>
+      </xsl:variable>
+      <xsl:variable name="baseDocument" select="document($file, /)"/>
+      <xsl:variable name="baseClass" select="
+             ($baseDocument[$topicID = '#none#'] //
+                 *[contains(@class, ' topic/topic ')])[1] |
+             $baseDocument[$topicID != '#none#'] //
+                 *[contains(@class, ' topic/topic ')][@id=$topicID]"/>
       <xsl:choose>
-      <xsl:when test="$isFirstBase">
-        <xsl:apply-templates select="$baseClass" mode="checkClass">
-          <xsl:with-param name="classDetail" select="$classDetail"/>
-          <xsl:with-param name="baseClasses" select="$baseClass"/>
-          <xsl:with-param name="baseRefs"    select="$baseRef"/>
-          <xsl:with-param name="isFirstBase" select="false()"/>
-        </xsl:apply-templates>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:apply-templates select="$baseClass" mode="checkClass">
-          <xsl:with-param name="classDetail" select="$classDetail"/>
-          <xsl:with-param name="baseClasses" select="$baseClass|$baseClasses"/>
-          <xsl:with-param name="baseRefs"    select="$baseRef|$baseRefs"/>
-          <xsl:with-param name="isFirstBase" select="false()"/>
-        </xsl:apply-templates>
-      </xsl:otherwise>
+        <xsl:when test="$baseClass">
+          <xsl:choose>
+            <xsl:when test="$isFirstBase">
+              <xsl:apply-templates select="$baseClass" mode="checkClass">
+                <xsl:with-param name="classDetail" select="$classDetail"/>
+                <xsl:with-param name="baseClasses" select="$baseClass"/>
+                <xsl:with-param name="baseRefs"    select="$baseRef"/>
+                <xsl:with-param name="isFirstBase" select="false()"/>
+              </xsl:apply-templates>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:apply-templates select="$baseClass" mode="checkClass">
+                <xsl:with-param name="classDetail" select="$classDetail"/>
+                <xsl:with-param name="baseClasses" select="$baseClass|$baseClasses"/>
+                <xsl:with-param name="baseRefs"    select="$baseRef|$baseRefs"/>
+                <xsl:with-param name="isFirstBase" select="false()"/>
+              </xsl:apply-templates>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:call-template name="formatClass">
+            <xsl:with-param name="classDetail" select="$classDetail"/>
+            <xsl:with-param name="baseClasses" select="$baseClasses"/>
+            <xsl:with-param name="baseRefs"    select="$baseRefs"/>
+            <xsl:with-param name="hasBase"     select="not($isFirstBase)"/>
+          </xsl:call-template>
+        </xsl:otherwise>
       </xsl:choose>
     </xsl:when>
     <xsl:otherwise>
@@ -482,16 +503,6 @@
         <xsl:with-param name="hasBase"     select="not($isFirstBase)"/>
       </xsl:call-template>
     </xsl:otherwise>
-    </xsl:choose>
-  </xsl:when>
-  <xsl:otherwise>
-    <xsl:call-template name="formatClass">
-      <xsl:with-param name="classDetail" select="$classDetail"/>
-      <xsl:with-param name="baseClasses" select="$baseClasses"/>
-      <xsl:with-param name="baseRefs"    select="$baseRefs"/>
-      <xsl:with-param name="hasBase"     select="not($isFirstBase)"/>
-    </xsl:call-template>
-  </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
 
@@ -775,7 +786,7 @@
   <pre>
     <xsl:choose>
     <xsl:when test="$hasBase">
-      <xsl:apply-templates select="$baseClasses[1]" mode="formatTopBase">
+      <xsl:apply-templates select="$baseClasses[last()]" mode="formatTopBase">
         <xsl:with-param name="baseClasses" select="$baseClasses"/>
         <xsl:with-param name="baseRefs"    select="$baseRefs"/>
         <xsl:with-param name="hasBase"     select="$hasBase"/>
@@ -842,12 +853,14 @@
     <xsl:choose>
     <xsl:when test="$topBase/@href">
       <a class="ancestrylink" href="{$topBase/@href}">
-        <xsl:value-of select="$topBase"/>
+        <!--<xsl:value-of select="$topBase"/>-->
+        <xsl:apply-templates select="$topBase" mode="formatClassLink"/>
       </a>
     </xsl:when>
     <xsl:otherwise>
       <span class="ancestrybase">
-        <xsl:value-of select="$topBase"/>
+        <!--<xsl:value-of select="$topBase"/>-->
+        <xsl:apply-templates select="$topBase" mode="formatClassLink"/>
       </span>
     </xsl:otherwise>
     </xsl:choose>
@@ -869,6 +882,11 @@
     </xsl:call-template>
   </xsl:otherwise>
   </xsl:choose>
+</xsl:template>
+
+<!-- P019419: ensure <desc> stays out of the class link -->
+<xsl:template match="*" mode="formatClassLink">
+  <xsl:apply-templates select="text()|*[not(contains(@class,' topic/desc '))]" mode="text-only"/>
 </xsl:template>
 
 <xsl:template name="completeBaseSummary">
@@ -901,18 +919,19 @@
   <xsl:param name="currClass"/>
   <xsl:param name="currBase"  select="1"/>
   <xsl:param name="baseCount" select="count($baseClasses)"/>
+  <xsl:param name="printItem" select="number($baseCount - $currBase + 1)"/>
   <xsl:param name="indent"    select="''"/>
   <xsl:choose>
   <xsl:when test="$currBase &lt;= $baseCount">
     <xsl:variable name="filename">
       <xsl:call-template name="getOutputFile">
-        <xsl:with-param name="href" select="$baseRefs[$currBase]/@href"/>
+        <xsl:with-param name="href" select="$baseRefs[$printItem]/@href"/>
       </xsl:call-template>
     </xsl:variable>
     <xsl:value-of select="$indent"/>
     <xsl:text>+-- </xsl:text>
     <a class="ancestrylink" href="{$filename}">
-      <xsl:value-of select="$baseClasses[$currBase] /
+      <xsl:value-of select="$baseClasses[$printItem] /
           *[contains(@class,' apiRef/apiName ')]"/>
     </a>
     <xsl:value-of select="$newline"/>
@@ -973,9 +992,12 @@
 
 <xsl:template match="*[contains(@class,' javaPackage/javaPackage ')]"
       mode="nametype">
+  <!--
+  Remove by M Alupului 15.12.2006
   <xsl:call-template name="javaGetString">
     <xsl:with-param name="stringName" select="'javaPackage'"/>
   </xsl:call-template>
+   -->
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' javaClass/javaClass ')]"
@@ -1243,12 +1265,10 @@
         <xsl:with-param name="stringName" select="'javaImplementedInterface'"/>
       </xsl:call-template>
       <xsl:text> </xsl:text>
-	  <xsl:for-each select="$implementedInterfaceNodes">
+      <xsl:for-each select="$implementedInterfaceNodes">
         <xsl:apply-templates select="."/>
-        <xsl:if test="position()&lt;last()">
-          <xsl:text>, </xsl:text>
-        </xsl:if>
-	  </xsl:for-each>
+        <xsl:if test="position()!=last()">, </xsl:if>
+      </xsl:for-each>
     </xsl:if>
   </p>
 </xsl:template>
@@ -1415,14 +1435,20 @@
 
 <xsl:template match="*[contains(@class,' javaField/javaFieldDef ')]"
       mode="apiDatatype">
-  <xsl:variable name="fieldQualifierNodes" select="*[
+  <xsl:if test="*[
       contains(@class,' javaField/javaFieldAccess '         ) or
       contains(@class,' javaField/javaFinalField '          ) or
       contains(@class,' javaField/javaStaticField '         ) or
       contains(@class,' javaField/javaTransientField '      ) or
-      contains(@class,' javaField/javaVolatileField '       )]"/>
-  <xsl:if test="$fieldQualifierNodes">
-    <xsl:apply-templates select="$fieldQualifierNodes"/>
+      contains(@class,' javaField/javaVolatileField '       )]">
+    <xsl:if test="*[contains(@class,' javaField/javaFieldAccess ')]">
+      <xsl:apply-templates select="*[contains(@class,' javaField/javaFieldAccess ')]"/>
+      <xsl:text> </xsl:text>
+    </xsl:if>
+    <xsl:apply-templates select="*[contains(@class,' javaField/javaStaticField ')]"/>
+    <xsl:apply-templates select="*[contains(@class,' javaField/javaFinalField ')]"/>
+    <xsl:apply-templates select="*[contains(@class,' javaField/javaTransientField ')]"/>
+    <xsl:apply-templates select="*[contains(@class,' javaField/javaVolatileField ')]"/>
     <xsl:text> </xsl:text>
   </xsl:if>
   <xsl:apply-templates
@@ -1492,13 +1518,15 @@
         *[contains(@class,' javaMethod/javaVoid '   )]"/>
   <xsl:comment>signature summary</xsl:comment>
   <p class="javaMethodSignature">
-    <xsl:apply-templates select="*[
-        contains(@class,' javaMethod/javaMethodAccess '       ) or
-        contains(@class,' javaMethod/javaFinalMethod '        ) or
-        contains(@class,' javaMethod/javaAbstractMethod '     ) or
-        contains(@class,' javaMethod/javaStaticMethod '       ) or
-        contains(@class,' javaMethod/javaNativeMethod '       ) or
-        contains(@class,' javaMethod/javaSynchronizedMethod ' )]"/>
+    <xsl:if test="*[contains(@class,' javaMethod/javaMethodAccess ')]">
+      <xsl:apply-templates select="*[contains(@class,' javaMethod/javaMethodAccess ')]"/>
+      <xsl:text> </xsl:text>
+    </xsl:if>
+    <xsl:apply-templates select="*[contains(@class,' javaMethod/javaFinalMethod ')]"/>
+    <xsl:apply-templates select="*[contains(@class,' javaMethod/javaAbstractMethod ')]"/>
+    <xsl:apply-templates select="*[contains(@class,' javaMethod/javaStaticMethod ')]"/>
+    <xsl:apply-templates select="*[contains(@class,' javaMethod/javaNativeMethod ')]"/>
+    <xsl:apply-templates select="*[contains(@class,' javaMethod/javaSynchronizedMethod ')]"/>
     <xsl:text> </xsl:text>
     <xsl:if test="$returnNodes">
       <xsl:apply-templates select="$returnNodes"/>
@@ -1577,10 +1605,19 @@
   </xsl:apply-templates>
 </xsl:template>
 
+<!-- RDA: copied in gen-topic. The related-links element is processed
+          in the topic body, so it should not also be processed by gen-topic. -->
 <xsl:template match="*[contains(@class,' javaMethod/javaMethod ')]"
       mode="memberDetail">
   <div class="nested0">
-    <xsl:call-template name="gen-topic"/>
+    <!--<xsl:call-template name="gen-topic"/>-->
+    <xsl:call-template name="commonattributes"/>
+    <xsl:call-template name="setidaname"/>
+    <xsl:call-template name="gen-toc-id"/>
+    <xsl:call-template name="flagit"/>
+    <xsl:call-template name="start-revflag"/>
+    <xsl:apply-templates select="*[not(contains(@class,' topic/related-links '))]|comment()|processing-instruction()"/>
+    <xsl:call-template name="end-revflag"/>
   </div>
   <xsl:value-of select="$newline"/>
 </xsl:template>
@@ -1589,12 +1626,13 @@
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
    - General API processing
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-<xsl:template match="*[contains(@class,' apiRef/apiRelation ') and 
+<!-- Removed for P019897 -->
+<!--<xsl:template match="*[contains(@class,' apiRef/apiRelation ') and 
       not(@href)]">
   <span class="{@class}">
     <xsl:apply-templates/>
   </span>
-</xsl:template>
+</xsl:template>-->
 
 <xsl:template match="*[contains(@class,' topic/xref ') and 
       contains(@class,' javaapi-d/') and 
@@ -1626,20 +1664,26 @@
   </span>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' apiRef/apiArray ')]">
+<!-- P019897: added condition for java ancestors -->
+<xsl:template match="*[contains(@class,' apiRef/apiArray ')]
+                      [ancestor::*[contains(@class,' javaClass/') or contains(@class,' javaInterface/') or contains(@class,' javaField/') or contains(@class,' javaMethod/') or contains(@class,' javaPackage/')]]">
   <xsl:text>[</xsl:text>
     <xsl:apply-templates select="*[contains(@class,' apiRef/apiArraySize ')]"/>
   <xsl:text>]</xsl:text>
   <xsl:apply-templates select="*[contains(@class,' apiRef/apiArray ')]"/>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' apiRef/apiDesc ')]">
+<!-- P019897: added condition for java ancestors -->
+<xsl:template match="*[contains(@class,' apiRef/apiDesc ')]
+                      [ancestor::*[contains(@class,' javaClass/') or contains(@class,' javaInterface/') or contains(@class,' javaField/') or contains(@class,' javaMethod/') or contains(@class,' javaPackage/')]]">
   <div class="apiDescription">
     <xsl:apply-templates/>
   </div>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' apiRef/apiDefNote ')]">
+<!-- P019897: added condition for java ancestors -->
+<xsl:template match="*[contains(@class,' apiRef/apiDefNote ')]
+                      [ancestor::*[contains(@class,' javaClass/') or contains(@class,' javaInterface/') or contains(@class,' javaField/') or contains(@class,' javaMethod/') or contains(@class,' javaPackage/')]]">
   <xsl:param name="insertText"/>
   <div class="{@class}">
     <xsl:if test="$insertText">
@@ -1649,13 +1693,16 @@
   </div>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' apiRef/apiSyntax ')]">
+<!-- Removed for P019897 -->
+<!--<xsl:template match="*[contains(@class,' apiRef/apiSyntax ')]">
   <pre class="{@class}">
     <xsl:apply-templates/>
   </pre>
-</xsl:template>
+</xsl:template>-->
 
-<xsl:template match="*[contains(@class,' apiRef/apiItemName ' )]">
+<!-- P019897: added condition for java ancestors -->
+<xsl:template match="*[contains(@class,' apiRef/apiItemName ' )]
+                      [ancestor::*[contains(@class,' javaClass/') or contains(@class,' javaInterface/') or contains(@class,' javaField/') or contains(@class,' javaMethod/') or contains(@class,' javaPackage/')]]">
   <xsl:apply-templates select="*|text()"/>
 </xsl:template>
 

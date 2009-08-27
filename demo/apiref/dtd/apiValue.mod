@@ -18,7 +18,7 @@
 
 
 <!-- ============ Element definitions ============ -->
-<!ELEMENT apiValue       ((%apiName;), (%shortdesc;), (%prolog;)?, (%apiValueDetail;), (%related-links;)?, (%apiValue-info-types;)*)>
+<!ELEMENT apiValue       ((%apiName;), (%shortdesc; | %abstract;), (%prolog;)?, (%apiValueDetail;), (%related-links;)?, (%apiValue-info-types;)*)>
 <!ATTLIST apiValue        id ID #REQUIRED
                           conref CDATA #IMPLIED
                           outputclass CDATA #IMPLIED

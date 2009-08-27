@@ -23,7 +23,7 @@
 
 
 <!-- ============ Element definitions ============ -->
-<!ELEMENT apiOperation   ( (%apiName;), (%shortdesc;), (%prolog;)?, (%apiOperationDetail;), (%related-links;)?, (%apiOperation-info-types;)* )>
+<!ELEMENT apiOperation   ( (%apiName;), (%shortdesc; | %abstract;), (%prolog;)?, (%apiOperationDetail;), (%related-links;)?, (%apiOperation-info-types;)* )>
 <!ATTLIST apiOperation    id ID #REQUIRED
                           conref CDATA #IMPLIED
                           outputclass CDATA #IMPLIED

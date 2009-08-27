@@ -213,7 +213,7 @@
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attribute name="outputclass"/>
     <xs:attributeGroup ref="global-atts"/>
-    <xs:attribute name="class" default="- topic/state reference/state apiRef/apiQualifier "/>
+    <xs:attribute name="class" default="- topic/data reference/data apiRef/apiQualifier "/>
   </xs:attributeGroup>
   <xs:element name="apiRelation">
     <xs:complexType mixed="true">

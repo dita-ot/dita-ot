@@ -18,7 +18,7 @@
 
 
 <!-- ============ Topic specializations ============ -->
-<!ELEMENT javaInterface   ( (%apiName;), (%shortdesc;), (%prolog;)?, (%javaInterfaceDetail;), (%related-links;)?, (%javaInterface-info-types;)* )>
+<!ELEMENT javaInterface   ( (%apiName;), (%shortdesc; | %abstract;), (%prolog;)?, (%javaInterfaceDetail;), (%related-links;)?, (%javaInterface-info-types;)* )>
 <!ATTLIST javaInterface   id ID #REQUIRED
                           conref CDATA #IMPLIED
                           outputclass CDATA #IMPLIED

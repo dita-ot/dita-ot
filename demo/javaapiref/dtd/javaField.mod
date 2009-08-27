@@ -25,7 +25,7 @@
 
 
 <!-- ============ Topic specializations ============ -->
-<!ELEMENT javaField       ( (%apiName;), (%shortdesc;), (%prolog;)?, (%javaFieldDetail;), (%related-links;)?, ( %javaField-info-types;)* )>
+<!ELEMENT javaField       ( (%apiName;), (%shortdesc; | %abstract;), (%prolog;)?, (%javaFieldDetail;), (%related-links;)?, ( %javaField-info-types;)* )>
 <!ATTLIST javaField    id ID #REQUIRED
                           conref CDATA #IMPLIED
                           outputclass CDATA #IMPLIED

@@ -21,7 +21,7 @@
 
 <!-- ============ Element definitions ============ -->
 
-<!ELEMENT apiClassifier   ( (%apiName;), (%shortdesc;), (%prolog;)?, (%apiClassifierDetail;), (%related-links;)?, (%apiClassifier-info-types;)* )>
+<!ELEMENT apiClassifier   ( (%apiName;), (%shortdesc; | %abstract;), (%prolog;)?, (%apiClassifierDetail;), (%related-links;)?, (%apiClassifier-info-types;)* )>
 <!ATTLIST apiClassifier   id ID #REQUIRED
                           conref CDATA #IMPLIED
                           outputclass CDATA #IMPLIED
