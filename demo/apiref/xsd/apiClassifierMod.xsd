@@ -25,7 +25,10 @@
   <xs:complexType name="apiClassifier.class">
     <xs:sequence>
       <xs:group ref="apiName"/>
-      <xs:group ref="shortdesc"/>
+      <xs:choice>
+        <xs:group ref="shortdesc" />
+        <xs:group ref="abstract" />
+      </xs:choice>      
       <xs:group minOccurs="0" ref="prolog"/>
       <xs:group ref="apiClassifierDetail"/>
       <xs:group minOccurs="0" ref="related-links"/>
@@ -38,7 +41,8 @@
     <xs:attribute name="id" use="required" type="xs:ID"/>
     <xs:attribute name="conref"/>
     <xs:attribute name="outputclass"/>
-    <xs:attribute ref="xml:lang"/>
+    <xs:attributeGroup ref="select-atts"/>
+    <xs:attributeGroup ref="localization-atts"/>
     <xs:attribute ref="ditaarch:DITAArchVersion"/>
     <xs:attributeGroup ref="global-atts"/>
     <xs:attribute name="class" default="- topic/topic reference/reference apiRef/apiRef apiClassifier/apiClassifier "/>
@@ -62,15 +66,7 @@
   </xs:element>
   <xs:attributeGroup name="apiClassifierDetail.attlist">
     <xs:attributeGroup ref="id-atts"/>
-    <xs:attribute name="translate">
-      <xs:simpleType>
-        <xs:restriction base="xs:token">
-          <xs:enumeration value="yes"/>
-          <xs:enumeration value="no"/>
-        </xs:restriction>
-      </xs:simpleType>
-    </xs:attribute>
-    <xs:attribute ref="xml:lang"/>
+    <xs:attributeGroup ref="localization-atts"/>
     <xs:attribute name="outputclass"/>
     <xs:attributeGroup ref="global-atts"/>
     <xs:attribute name="class" default="- topic/body reference/refbody apiRef/apiDetail apiClassifier/apiClassifierDetail "/>
@@ -110,6 +106,7 @@
           <xs:enumeration value="local"/>
           <xs:enumeration value="peer"/>
           <xs:enumeration value="external"/>
+          <xs:enumeration value="-dita-use-conref-target"/>
         </xs:restriction>
       </xs:simpleType>
     </xs:attribute>
@@ -152,6 +149,7 @@
           <xs:enumeration value="local"/>
           <xs:enumeration value="peer"/>
           <xs:enumeration value="external"/>
+          <xs:enumeration value="-dita-use-conref-target"/>
         </xs:restriction>
       </xs:simpleType>
     </xs:attribute>

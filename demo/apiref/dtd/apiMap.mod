@@ -28,7 +28,7 @@
   collection-type    (choice|unordered|sequence|family | -dita-use-conref-target) #IMPLIED
   type         CDATA     "apiRef"
   scope       (local | peer | external | -dita-use-conref-target) #IMPLIED
-  locktitle   (yes|no)   #IMPLIED
+  locktitle   (yes|no|-dita-use-conref-target)   #IMPLIED
   format       CDATA     #IMPLIED
   linking     (targetonly|sourceonly|normal|none | -dita-use-conref-target) #IMPLIED
   toc         (yes|no | -dita-use-conref-target)   #IMPLIED
