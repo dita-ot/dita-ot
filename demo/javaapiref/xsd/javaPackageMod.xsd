@@ -22,7 +22,6 @@
   <xs:element name="javaPackage" type="javaPackage.class"/>
   <xs:complexType name="javaPackage.class">
     <xs:sequence>
-      <xs:group minOccurs="0" ref="apiSyntax"/>
       <xs:group ref="apiName"/>
       <xs:choice>
         <xs:group ref="shortdesc" />
