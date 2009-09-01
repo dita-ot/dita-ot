@@ -12,7 +12,7 @@ import org.dita.dost.util.FileUtils;
 import org.junit.Ignore;
 import org.junit.Test;
 
-public class testFileUtils {
+public class TestFileUtils {
 
 	@Test
 	public void testIsHTMLFile() {

@@ -11,7 +11,7 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
-public class testMergeUtils {
+public class TestMergeUtils {
 
 	public static MergeUtils mergeUtils;
 	@BeforeClass
@@ -79,7 +79,7 @@ public class testMergeUtils {
 	@Test
 	public void testGetFirstTopicId() {
 		//assertEquals("task",mergeUtils.getFirstTopicId("stub.xml", "TEST_STUB"));
-		assertEquals("task",mergeUtils.getFirstTopicId("stub.xml", "test-stub"));
+		assertEquals("task",mergeUtils.getFirstTopicId("stub.xml", "test-stub",false));
 		
 	}
 	

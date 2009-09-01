@@ -70,10 +70,6 @@ public class TestStringUtils {
 		String result = null;
 		result = StringUtils.replaceAll("abababa", "aba", "c");
 		assertEquals("cbc", result);
-	
-		//this method must not recognize regular expression pattern
-		result = StringUtils.replaceAll("abababa", "^a", "c");
-		assertEquals("abababa",result);
 	}
 
 	@Test
