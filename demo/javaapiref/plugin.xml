@@ -4,6 +4,7 @@
  *-->
 <plugin id="org.dita.specialization.javaapiref">
   <require plugin="org.dita.specialization.apiref"/>
+  <feature extension="package.version" value="0.9.0"/>
   <feature extension="dita.specialization.catalog.relative"
       value="catalog-dita.xml" type="file"/>
   <feature extension="dita.xsl.xhtml"
