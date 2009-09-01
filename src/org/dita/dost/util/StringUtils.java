@@ -139,31 +139,28 @@ public class StringUtils {
 	}
 
 	/**
-	 * Replace all the pattern with replacement
-	 * @param input
-	 * @param pattern
-	 * @param replacement
-	 * @return
+	 * Replaces each substring of this string that matches the given string 
+	 * with the given replacement. Differ from the JDK String.replaceAll function,
+	 * this method does not support regular expression based replacement on purpose.
+	 * 
+	 * @param pattern This pattern is recognized as it is. It will not solve
+	 *        as an regular expression.
 	 */
-//	public static String replaceAll(final String input,
-//			final String pattern, final String replacement) {
-//		StringBuffer result = new StringBuffer();
-//		int startIndex = 0;
-//		int newIndex = 0;
-//
-//		while ((newIndex = input.indexOf(pattern, startIndex)) >= 0) {			
-//			result.append(input.substring(startIndex, newIndex));			
-//			result.append(replacement);			
-//			startIndex = newIndex + pattern.length();
-//		}
-//		
-//		result.append(input.substring(startIndex));
-//		
-//		return result.toString();
-//	}
-	//AlanTODO:
-	public static String replaceAll(String input, String pattern, String replacement){
-		return input.replaceAll(pattern, replacement);
+	public static String replaceAll(final String input,
+			final String pattern, final String replacement) {
+		StringBuffer result = new StringBuffer();
+		int startIndex = 0;
+		int newIndex = 0;
+
+		while ((newIndex = input.indexOf(pattern, startIndex)) >= 0) {			
+			result.append(input.substring(startIndex, newIndex));			
+			result.append(replacement);			
+			startIndex = newIndex + pattern.length();
+		}
+		
+		result.append(input.substring(startIndex));
+		
+		return result.toString();
 	}
 	
 	/**
