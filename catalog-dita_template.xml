@@ -22,11 +22,6 @@
 			uri="topicDefn.ent" />
 		<public publicId="-//OASIS//ENTITIES DITA 1.2 Topic Definitions//EN"
 			uri="topicDefn.ent" />
-		<!--
-			topicAttr.mod is only used in DITA 1.0; kept for backwards
-			compatibility
-		-->
-		<public publicId="-//OASIS//ENTITIES DITA Topic Class//EN" uri="topicAttr.mod" />
 
 		<!-- Maps -->
 		<public publicId="-//OASIS//ELEMENTS DITA Map//EN" uri="map.mod" />
@@ -555,7 +550,7 @@
 		Modules and document types from the OASIS DITA Machine Industry
 		Subcommittee
 	-->
-	<group uri="dtd/machineryIndustry/dtd/">
+	<group xml:base="dtd/machineryIndustry/dtd/">
 		<public publicId="-//OASIS//DTD DITA Machinery Task//EN" uri="machineryTask.dtd" />
 		<public publicId="-//OASIS//DTD DITA 1.x Machinery Task//EN"
 			uri="machineryTask.dtd" />
