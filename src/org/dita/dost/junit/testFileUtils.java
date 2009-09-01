@@ -172,20 +172,20 @@ public class testFileUtils {
 	@Test
 	public void testReplaceExtName() {
 		// initial the extName of Class DebugAndFilterModule.
-		DebugAndFilterModule.extName = ".dita";
-		assertEquals("filename.dita", FileUtils.replaceExtName("filename.xml"));
+		String extName = ".dita";
+		assertEquals("filename.dita", FileUtils.replaceExtName("filename.xml", extName));
 		// if there is a topic marked with sharp
 		assertEquals("filename.dita#topicid", FileUtils
-				.replaceExtName("filename.xml#topicid"));
+				.replaceExtName("filename.xml#topicid", extName));
 		// if the input just is a topicid
-		assertEquals("#topicid", FileUtils.replaceExtName("#topicid"));
+		assertEquals("#topicid", FileUtils.replaceExtName("#topicid", extName));
 		// if there is an extra dot.
 		assertEquals("file.name.dita", FileUtils
-				.replaceExtName("file.name.xml"));
+				.replaceExtName("file.name.xml", extName));
 		assertEquals("file.name.dita#topicid", FileUtils
-				.replaceExtName("file.name.xml#topicid"));
+				.replaceExtName("file.name.xml#topicid", extName));
 		// if there is no extension.
-		assertEquals("file", FileUtils.replaceExtName("file"));
+		assertEquals("file", FileUtils.replaceExtName("file", extName));
 	}
 
 	@Test
