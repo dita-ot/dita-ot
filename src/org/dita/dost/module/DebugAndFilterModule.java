@@ -178,8 +178,8 @@ public class DebugAndFilterModule implements AbstractPipelineModule {
         LinkedList<String> parseList = null;
         Content content;
         DitaWriter fileWriter;
-        File ditalist=null;
-        File xmlDitalist=null;
+
+
 		extName = ext.startsWith(Constants.DOT) ? ext : (Constants.DOT + ext);
         if (!new File(tempDir).isAbsolute()) {
         	tempDir = new File(baseDir, tempDir).getAbsolutePath();
@@ -187,14 +187,11 @@ public class DebugAndFilterModule implements AbstractPipelineModule {
         if (ditavalFile != null && !new File(ditavalFile).isAbsolute()) {
 			ditavalFile = new File(baseDir, ditavalFile).getAbsolutePath();
 		}
-        ditalist=new File(tempDir, Constants.FILE_NAME_DITA_LIST);
-        xmlDitalist=new File(tempDir, Constants.FILE_NAME_DITA_LIST_XML);
-        if(xmlDitalist.exists())
-        	listReader.read(xmlDitalist.getAbsolutePath());
-        else 
-        	listReader.read(ditalist.getAbsolutePath());
-        parseList = (LinkedList<String>) listReader.getContent()
-                .getCollection();
+
+        //null means default path: tempdir/dita.xml.properties
+        listReader.read(null);
+
+        parseList = (LinkedList<String>) listReader.getContent().getCollection();
         inputDir = (String) listReader.getContent().getValue();
         inputMap = new File(inputDir + File.separator + listReader.getInputMap()).getAbsolutePath();
         

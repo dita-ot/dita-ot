@@ -2,12 +2,15 @@ package org.dita.dost.module;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.StringTokenizer;
+import java.util.Map.Entry;
 
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTJavaLogger;
@@ -15,7 +18,11 @@ import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.pipeline.PipelineHashIO;
 import org.dita.dost.reader.ConrefPushReader;
+import org.dita.dost.resolver.DitaURIResolverFactory;
+import org.dita.dost.resolver.URIResolverAdapter;
 import org.dita.dost.util.Constants;
+import org.dita.dost.util.ListUtils;
+import org.dita.dost.util.StringUtils;
 import org.dita.dost.writer.ConrefPushParser;
 
 public class ConrefPushModule implements AbstractPipelineModule {
@@ -23,33 +30,25 @@ public class ConrefPushModule implements AbstractPipelineModule {
 	public AbstractPipelineOutput execute(AbstractPipelineInput input)
 			throws DITAOTException {
 		String tempDir = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_TEMPDIR);
-		Properties properties = new Properties();
-		DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
-		ConrefPushReader reader = new ConrefPushReader();
-		
 		if (! new File(tempDir).isAbsolute()){
 			tempDir = new File(tempDir).getAbsolutePath();
 		}
-		
-		File ditafile = new File(tempDir, Constants.FILE_NAME_DITA_LIST);
-		File ditaxmlfile = new File(tempDir, Constants.FILE_NAME_DITA_LIST_XML);
-		
+
+		Properties properties = null;
 		try{
-		if(ditaxmlfile.exists()){
-			properties.loadFromXML(new FileInputStream(ditaxmlfile));
-		}else{
-			properties.load(new FileInputStream(ditafile));
-		}
-		}catch (Exception e) {
+			properties = ListUtils.getDitaList();
+		}catch(IOException e){
+			DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
 			javaLogger.logException(e);
 		}
-		
-		StringTokenizer parseList = new StringTokenizer(properties.getProperty("conrefpushlist"),Constants.COMMA);
-		
-		while (parseList.hasMoreElements()){
-			String fileName = (String)parseList.nextElement();
+
+		Set<String> conrefpushlist = StringUtils.restoreSet(properties.getProperty(Constants.CONREF_PUSH_LIST));
+		ConrefPushReader reader = new ConrefPushReader();
+		for(String fileName:conrefpushlist){
+			//FIXME: this reader calculate parent directory
 			reader.read(new File(tempDir,fileName).getAbsolutePath());
 		}
+		
 		Set<Map.Entry<String, Hashtable<String, String>>> pushSet = (Set<Map.Entry<String, Hashtable<String,String>>>) reader.getContent().getCollection();
 		Iterator<Map.Entry<String, Hashtable<String,String>>> iter = pushSet.iterator();
 		
@@ -61,6 +60,7 @@ public class ConrefPushModule implements AbstractPipelineModule {
 			parser.setContent(content);
 			//pass the tempdir to ConrefPushParser
 			parser.setTempDir(tempDir);
+			//FIXME:This writer creates and renames files, have to 
 			parser.write(entry.getKey());
 		}
 		

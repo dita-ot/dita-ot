@@ -23,6 +23,7 @@ import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.module.Content;
 import org.dita.dost.module.ContentImpl;
 import org.dita.dost.util.Constants;
+import org.dita.dost.util.ListUtils;
 import org.dita.dost.util.StringUtils;
 
 /**
@@ -35,7 +36,6 @@ public class ListReader implements AbstractReader {
 
     private LinkedList<String> refList;
     private ContentImpl content;
-    private DITAOTJavaLogger logger;
     private Map<String, String> copytoMap = new HashMap<String, String>();
     private Set<String> schemeSet = new HashSet<String>();
     private String inputMap;
@@ -46,7 +46,6 @@ public class ListReader implements AbstractReader {
     public ListReader() {
         super();
         refList = new LinkedList<String>();
-        logger = new DITAOTJavaLogger();
         content = new ContentImpl();
         content.setCollection(refList);
     }
@@ -57,30 +56,17 @@ public class ListReader implements AbstractReader {
      * 
      */
     public void read(String filename) {
-
-		FileInputStream listInput = null;
-
+    	Properties propterties = null; 	
 		try {
-			Properties property = new Properties();
-			File listFile=new File(filename);
-			listInput = new FileInputStream(filename);
-			if(listFile.getName().equalsIgnoreCase(Constants.FILE_NAME_DITA_LIST_XML))
-				property.loadFromXML(listInput);
-			else
-				property.load(listInput);
-			setList(property);
-			schemeSet.addAll(StringUtils.restoreSet(
-					property.getProperty(Constants.SUBJEC_SCHEME_LIST, "")));
-			inputMap = property.getProperty(Constants.INPUT_DITAMAP);
+			propterties=ListUtils.getDitaList();
 		} catch (Exception e) {
+			DITAOTJavaLogger logger = new DITAOTJavaLogger();
 			logger.logException(e);
-		} finally {
-			try {
-				listInput.close();
-			} catch (Exception e) {
-				logger.logException(e);
-			}
 		}
+		
+		setList(propterties);			
+		schemeSet.addAll(StringUtils.restoreSet(propterties.getProperty(Constants.SUBJEC_SCHEME_LIST, "")));
+		inputMap = propterties.getProperty(Constants.INPUT_DITAMAP);
 	}
     
     private void setList(Properties property){

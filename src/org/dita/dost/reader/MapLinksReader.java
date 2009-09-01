@@ -22,10 +22,13 @@ import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.Content;
 import org.dita.dost.module.ContentImpl;
+import org.dita.dost.resolver.DitaURIResolverFactory;
+import org.dita.dost.resolver.URIResolverAdapter;
 import org.dita.dost.util.Constants;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.StringUtils;
 import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
@@ -300,7 +303,8 @@ public class MapLinksReader extends AbstractXMLReader {
                          
             try {
             	reader.setErrorHandler(new DITAOTXMLErrorHandler(filename));
-                reader.parse(filename);
+            	InputSource source=URIResolverAdapter.convertToInputSource(DitaURIResolverFactory.getURIResolver().resolve(filename, null));
+                reader.parse(source);
             } catch (Exception e) {
             	logger.logException(e);
             }

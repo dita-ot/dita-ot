@@ -1,6 +1,5 @@
 package org.dita.dost.reader;
 
-import java.io.File;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Set;
@@ -8,10 +7,12 @@ import java.util.Set;
 import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.module.Content;
 import org.dita.dost.module.ContentImpl;
+import org.dita.dost.resolver.DitaURIResolverFactory;
+import org.dita.dost.resolver.URIResolverAdapter;
 import org.dita.dost.util.Constants;
-import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.StringUtils;
 import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
@@ -92,8 +93,11 @@ public class KeyrefReader extends AbstractXMLReader {
 		keyDefContent = new StringBuffer();
 		start = false;
 		try {
-			filename = tempDir + File.separator + filename;
-			reader.parse(filename);
+			//AlanChanged: by refactoring Adding URIResolver Date:2009-08-13 --begin
+			/* filename = tempDir + File.separator + filename; */
+			InputSource source = URIResolverAdapter.convertToInputSource(DitaURIResolverFactory.getURIResolver().resolve(filename, null));			
+			reader.parse(source);
+			//edit by Alan: by refactoring Adding URIResolver Date:2009-08-13 --end
 		} catch (Exception ex) {
 			javaLogger.logException(ex);
 		}

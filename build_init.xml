@@ -46,6 +46,12 @@
     <classpath refid="dost.jar.path" />
   </taskdef>
 
+  <!-- Add by Alan to refacter:URIResolver Date2009-08-07 -->
+  <taskdef name="config-URIResolver"
+  	classname="org.dita.dost.resolver.URIResolverConfigTask">
+  	<classpath refid="dost.jar.path"/>
+  </taskdef>
+
   <taskdef name="dita-ot-echo"
     classname="org.dita.dost.log.DITAOTEchoTask">
     <classpath refid="dost.jar.path" />
@@ -87,14 +93,20 @@
     value="${dita.dir}${file.separator}resource${file.separator}messages.xml" />
   <!-- property values end -->
 
+  <!-- Changed by Alan to refacter:URIResolver Date2009-08-07 -->
   <target name="build-init"
-    depends="start-process, init-logger, use-init, check-arg, output-msg" />
+    depends="start-process, init-logger, init-URIResolver, use-init, check-arg, output-msg" />
     
   <target name="start-process" description="Processing started" />
 
   <target name="init-logger"
     description="Initialize log directory and file name">
     <config-logger />
+  </target>
+  
+  <!-- Add by Alan to refacter:URIResolver Date2009-08-07 -->
+  <target name="init-URIResolver">
+  	<config-URIResolver basedir="${basedir}" tempdir="${dita.temp.dir}"/>
   </target>
   
   <target name="use-init.envhhcdir" if="env.HHCDIR">

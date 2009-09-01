@@ -16,6 +16,8 @@ import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.pipeline.PipelineHashIO;
 import org.dita.dost.reader.KeyrefReader;
 import org.dita.dost.util.Constants;
+import org.dita.dost.util.ListUtils;
+import org.dita.dost.util.StringUtils;
 import org.dita.dost.writer.KeyrefPaser;
 
 public class KeyrefModule implements AbstractPipelineModule {
@@ -23,8 +25,7 @@ public class KeyrefModule implements AbstractPipelineModule {
 	public AbstractPipelineOutput execute(AbstractPipelineInput input)
 			throws DITAOTException {
 		String tempDir = ((PipelineHashIO)input).getAttribute(Constants.ANT_INVOKER_PARAM_TEMPDIR);
-		Properties properties = new Properties();
-		DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
+		
 		if (! new File(tempDir).isAbsolute()){
 			tempDir = new File(tempDir).getAbsolutePath();
 		}
@@ -32,20 +33,15 @@ public class KeyrefModule implements AbstractPipelineModule {
 		String ext = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_DITAEXT);
 		String extName = ext.startsWith(Constants.DOT) ? ext : (Constants.DOT + ext);
 		//Added by Alan Date:2009-08-04 --end
-		File ditafile = new File(tempDir, Constants.FILE_NAME_DITA_LIST);
-		File ditaxmlfile = new File(tempDir, Constants.FILE_NAME_DITA_LIST_XML);
 		
+		Properties properties = null;
 		try{
-		if(ditaxmlfile.exists()){
-			properties.loadFromXML(new FileInputStream(ditaxmlfile));
-		}else{
-			properties.load(new FileInputStream(ditafile));
-		}
-		}catch (Exception e) {
+			properties = ListUtils.getDitaList();
+		}catch(Exception e){
+			DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
 			javaLogger.logException(e);
 		}
-		//get files which have keyref attr
-		String[] parseList = ((String)properties.get(Constants.KEYREF_LIST)).split(Constants.COMMA);
+
 		// maps of keyname and target 
 		Map<String, String> keymap =new HashMap<String, String>();
 		// store the key name defined in a map
@@ -53,8 +49,9 @@ public class KeyrefModule implements AbstractPipelineModule {
 		
 		// get the key definitions from the dita.list, and the ditamap where it is defined
 		// are not handle yet.
-		if(!((String)properties.get(Constants.KEY_LIST)).equals(Constants.STRING_EMPTY)){
-			String[] keys = ((String)properties.get(Constants.KEY_LIST)).split(Constants.COMMA);
+		String keylist = properties.getProperty(Constants.KEY_LIST);
+		if(!StringUtils.isEmptyString(keylist)){
+			Set<String> keys = StringUtils.restoreSet(keylist);
 			for(String key: keys){
 				keymap.put(key.substring(0, key.indexOf(Constants.EQUAL)), 
 						key.substring(key.indexOf(Constants.EQUAL)+1, key.lastIndexOf("(")));
@@ -78,7 +75,8 @@ public class KeyrefModule implements AbstractPipelineModule {
 			reader.read(mapFile);
 		}		
 		Content content = reader.getContent();
-//		content.setValue(keymap);
+		//get files which have keyref attr
+		Set<String> parseList = StringUtils.restoreSet(properties.getProperty(Constants.KEYREF_LIST));
 		for(String file: parseList){
 			KeyrefPaser parser = new KeyrefPaser();
 			parser.setContent(content);
