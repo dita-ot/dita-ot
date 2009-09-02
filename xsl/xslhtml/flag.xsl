@@ -1328,7 +1328,7 @@
      </xsl:if>     
     </xsl:attribute>
    </xsl:when>
-   <xsl:when test="$conflictexist='false' and exsl:node-set($flagrules)/*[@color or @backcolor]">
+   <xsl:when test="$conflictexist='false' and exsl:node-set($flagrules)/*[@color or @backcolor or @style]">
     <xsl:attribute name="style">     
      <xsl:if test="exsl:node-set($flagrules)/*[@color]">
       <xsl:text>color:</xsl:text>
@@ -1339,6 +1339,21 @@
       <xsl:text>background-color:</xsl:text>
       <xsl:value-of select="exsl:node-set($flagrules)/*[@backcolor]/@backcolor"/>
       <xsl:text>;</xsl:text>
+     </xsl:if>     
+     <xsl:if test="exsl:node-set($flagrules)/*/@style='italics'">
+      <xsl:text>font-style:italic;</xsl:text>
+     </xsl:if>     
+     <xsl:if test="exsl:node-set($flagrules)/*/@style='bold'">
+      <xsl:text>font-weight:bold;</xsl:text>
+     </xsl:if>     
+     <xsl:if test="exsl:node-set($flagrules)/*/@style='underline' or 
+                   exsl:node-set($flagrules)/*/@style='double-underline'">
+      <!-- For double-underline, style="border-bottom: 3px double;" seems to work
+           in some cases, but not in all. For now, treat it as underline. -->
+      <xsl:text>text-decoration:underline;</xsl:text>
+     </xsl:if>     
+     <xsl:if test="exsl:node-set($flagrules)/*/@style='overline'">
+      <xsl:text>text-decoration:overline;</xsl:text>
      </xsl:if>     
     </xsl:attribute>
    </xsl:when>
