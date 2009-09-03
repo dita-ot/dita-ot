@@ -38,9 +38,13 @@
       <param name="DRAFT" expression="${args.draft}" if="args.draft" />
       <param name="ARTLBL" expression="${args.artlbl}" if="args.artlbl" />
       <param name="GENERATE-TASK-LABELS" expression="${args.gen.task.lbl}" if="args.gen.task.lbl" />
-      <param name="INDEXSHOW" expression="${args.indexshow}"
-        if="args.indexshow" />
+      <param name="PRESERVE-DITA-CLASS" expression="${args.xhtml.classattr}" if "args.xhtml.classattr"/>
+      <param name="NOPARENTLINK" expression="${args.use.parent.link}" if "args.use.parent.link"/>
+      <param name="BREADCRUMBS" expression="${args.breadcrumbs}" if "args.breadcrumbs"/>
+      <param name="INDEXSHOW" expression="${args.indexshow}" if="args.indexshow" />
+      <param name="genDefMeta" expression="${args.gen.default.meta}" if="args.gen.default.meta" />
       <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
+      <param name="DBG" expression="${args.debug}" if "args.debug"/>
       <dita:extension id="dita.conductor.xhtml.param" behavior="org.dita.dost.platform.InsertAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
     </xslt>
   </target>
@@ -77,10 +81,14 @@
       <param name="DRAFT" expression="${args.draft}" if="args.draft" />
       <param name="ARTLBL" expression="${args.artlbl}" if="args.artlbl" />
       <param name="GENERATE-TASK-LABELS" expression="${args.gen.task.lbl}" if="args.gen.task.lbl" />
+      <param name="PRESERVE-DITA-CLASS" expression="${args.xhtml.classattr}" if "args.xhtml.classattr"/>
+      <param name="NOPARENTLINK" expression="${args.use.parent.link}" if "args.use.parent.link"/>
+      <param name="BREADCRUMBS" expression="${args.breadcrumbs}" if "args.breadcrumbs"/>
+      <param name="INDEXSHOW" expression="${args.indexshow}" if="args.indexshow" />
+      <param name="genDefMeta" expression="${args.gen.default.meta}" if="args.gen.default.meta" />
       <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
+      <param name="DBG" expression="${args.debug}" if "args.debug"/>
 	  <dita:extension id="dita.conductor.html.param" behavior="org.dita.dost.platform.InsertAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
-      <param name="INDEXSHOW" expression="${args.indexshow}"
-        if="args.indexshow" />
     </xslt>
   </target>
   
@@ -128,9 +136,13 @@
       <param name="DRAFT" expression="${args.draft}" if="args.draft" />
       <param name="ARTLBL" expression="${args.artlbl}" if="args.artlbl" />
       <param name="GENERATE-TASK-LABELS" expression="${args.gen.task.lbl}" if="args.gen.task.lbl" />
-      <param name="INDEXSHOW" expression="${args.indexshow}"
-        if="args.indexshow" />
+      <param name="PRESERVE-DITA-CLASS" expression="${args.xhtml.classattr}" if "args.xhtml.classattr"/>
+      <param name="NOPARENTLINK" expression="${args.use.parent.link}" if "args.use.parent.link"/>
+      <param name="BREADCRUMBS" expression="${args.breadcrumbs}" if "args.breadcrumbs"/>
+      <param name="INDEXSHOW" expression="${args.indexshow}" if="args.indexshow" />
+      <param name="genDefMeta" expression="${args.gen.default.meta}" if="args.gen.default.meta" />
       <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
+      <param name="DBG" expression="${args.debug}" if "args.debug"/>
       <dita:extension id="dita.conductor.xhtml.param" behavior="org.dita.dost.platform.InsertAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
       <!--New,To generate&copy all dita files in the inputmap.dir,not all files in dita.temp.dir -->
       <mapper type="regexp" 
@@ -171,10 +183,14 @@
       <param name="DRAFT" expression="${args.draft}" if="args.draft" />
       <param name="ARTLBL" expression="${args.artlbl}" if="args.artlbl" />
       <param name="GENERATE-TASK-LABELS" expression="${args.gen.task.lbl}" if="args.gen.task.lbl" />
+      <param name="PRESERVE-DITA-CLASS" expression="${args.xhtml.classattr}" if "args.xhtml.classattr"/>
+      <param name="NOPARENTLINK" expression="${args.use.parent.link}" if "args.use.parent.link"/>
+      <param name="BREADCRUMBS" expression="${args.breadcrumbs}" if "args.breadcrumbs"/>
+      <param name="INDEXSHOW" expression="${args.indexshow}" if="args.indexshow" />
+      <param name="genDefMeta" expression="${args.gen.default.meta}" if="args.gen.default.meta" />
       <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
+      <param name="DBG" expression="${args.debug}" if "args.debug"/>
 	  <dita:extension id="dita.conductor.html.param" behavior="org.dita.dost.platform.InsertAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
-      <param name="INDEXSHOW" expression="${args.indexshow}"
-        if="args.indexshow" />
       <mapper type="regexp" 
         from="^(${tempdirToinputmapdir.relative.value})(.*?)(\.(xml|dita))$$" 
         to="\2${out.ext}"/>
@@ -228,9 +244,13 @@
       <param name="DRAFT" expression="${args.draft}" if="args.draft" />
       <param name="ARTLBL" expression="${args.artlbl}" if="args.artlbl" />
       <param name="GENERATE-TASK-LABELS" expression="${args.gen.task.lbl}" if="args.gen.task.lbl" />
-      <param name="INDEXSHOW" expression="${args.indexshow}"
-        if="args.indexshow" />
+      <param name="PRESERVE-DITA-CLASS" expression="${args.xhtml.classattr}" if "args.xhtml.classattr"/>
+      <param name="NOPARENTLINK" expression="${args.use.parent.link}" if "args.use.parent.link"/>
+      <param name="BREADCRUMBS" expression="${args.breadcrumbs}" if "args.breadcrumbs"/>
+      <param name="INDEXSHOW" expression="${args.indexshow}" if="args.indexshow" />
+      <param name="genDefMeta" expression="${args.gen.default.meta}" if="args.gen.default.meta" />
       <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
+      <param name="DBG" expression="${args.debug}" if "args.debug"/>
       <dita:extension id="dita.conductor.xhtml.param" behavior="org.dita.dost.platform.InsertAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
     </xslt>
   </target>
@@ -266,10 +286,14 @@
       <param name="DRAFT" expression="${args.draft}" if="args.draft" />
       <param name="ARTLBL" expression="${args.artlbl}" if="args.artlbl" />
       <param name="GENERATE-TASK-LABELS" expression="${args.gen.task.lbl}" if="args.gen.task.lbl" />
+      <param name="PRESERVE-DITA-CLASS" expression="${args.xhtml.classattr}" if "args.xhtml.classattr"/>
+      <param name="NOPARENTLINK" expression="${args.use.parent.link}" if "args.use.parent.link"/>
+      <param name="BREADCRUMBS" expression="${args.breadcrumbs}" if "args.breadcrumbs"/>
+      <param name="INDEXSHOW" expression="${args.indexshow}" if="args.indexshow" />
+      <param name="genDefMeta" expression="${args.gen.default.meta}" if="args.gen.default.meta" />
       <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
+      <param name="DBG" expression="${args.debug}" if "args.debug"/>
 	  <dita:extension id="dita.conductor.html.param" behavior="org.dita.dost.platform.InsertAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
-      <param name="INDEXSHOW" expression="${args.indexshow}"
-        if="args.indexshow" />
     </xslt>
   </target>
 </project>
