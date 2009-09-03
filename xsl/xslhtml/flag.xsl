@@ -1312,6 +1312,18 @@
       <xsl:with-param name="flagrules" select="$flagrules"/>
     </xsl:call-template>
   </xsl:param>
+  <xsl:variable name="validstyle">
+    <!-- This variable is used to prevent using pre-OASIS or unrecognized ditaval styles -->
+    <xsl:if test="$conflictexist='false' and exsl:node-set($flagrules)/*[@style]">
+      <xsl:choose>
+        <xsl:when test="exsl:node-set($flagrules)/*/@style='italics'">YES</xsl:when>
+        <xsl:when test="exsl:node-set($flagrules)/*/@style='bold'">YES</xsl:when>
+        <xsl:when test="exsl:node-set($flagrules)/*/@style='underline'">YES</xsl:when>
+        <xsl:when test="exsl:node-set($flagrules)/*/@style='double-underline'">YES</xsl:when>
+        <xsl:when test="exsl:node-set($flagrules)/*/@style='overline'">YES</xsl:when>
+      </xsl:choose>
+    </xsl:if>
+  </xsl:variable>
   <xsl:choose>  
    <xsl:when test="$conflictexist='true' and $FILTERDOC/val/style-conflict[@foreground-conflict-color or @background-conflict-color]">
      <xsl:apply-templates select="." mode="ditamsg:conflict-text-style-applied"/>
@@ -1328,7 +1340,8 @@
      </xsl:if>     
     </xsl:attribute>
    </xsl:when>
-   <xsl:when test="$conflictexist='false' and exsl:node-set($flagrules)/*[@color or @backcolor or @style]">
+   <xsl:when test="$conflictexist='false' and 
+                   (exsl:node-set($flagrules)/*[@color or @backcolor] or $validstyle='YES')">
     <xsl:attribute name="style">     
      <xsl:if test="exsl:node-set($flagrules)/*[@color]">
       <xsl:text>color:</xsl:text>
