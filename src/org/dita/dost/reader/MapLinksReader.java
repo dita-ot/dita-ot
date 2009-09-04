@@ -448,4 +448,18 @@ public class MapLinksReader extends AbstractXMLReader {
             
         }
 	}
+
+	@Override
+	public void processingInstruction(String target, String data)
+			throws SAXException {		
+		
+		String pi = (data != null) ? target + Constants.STRING_BLANK + data : target;
+		
+        if (match && needResolveEntity && validHref) {
+            String temp = Constants.LESS_THAN + Constants.QUESTION 
+            + pi + Constants.QUESTION + Constants.GREATER_THAN;
+            indexEntries.append(StringUtils.escapeXML(temp));            
+        }
+        
+	}
 }
