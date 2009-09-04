@@ -26,6 +26,8 @@ mode="mappull:getmetadata_linktext", mode="mappull:getmetadata_shortdesc"
 
 Other modes can be found within the code, and may or may not prove useful for overrides.
      -->
+<!-- 20090903 RDA: added <?ditaot gentext?> and <?ditaot linktext?> PIs for RFE 1367897.
+                   Allows downstream processes to identify original text vs. generated link text. -->
 
 <xsl:stylesheet version="1.0" 
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -813,6 +815,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
     <xsl:choose>
       <!-- If linktext is already specified, use that -->
       <xsl:when test="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/linktext ')]">
+        <xsl:apply-templates select="." mode="mappull:add-usertext-PI"/>
         <xsl:apply-templates select="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/linktext ')]"/>
       </xsl:when>
       <xsl:otherwise>
@@ -876,6 +879,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
           </xsl:choose>
         </xsl:variable>
         <xsl:if test="not($linktext='#none#')">
+          <xsl:apply-templates select="." mode="mappull:add-gentext-PI"/>
           <linktext class="- map/linktext ">
             <xsl:value-of select="$linktext"/>
           </linktext>
@@ -1254,5 +1258,14 @@ Other modes can be found within the code, and may or may not prove useful for ov
   </xsl:template>
 
   <xsl:template match="*[contains(@class,' topic/draft-comment ')]" mode="copy-shortdesc"/>
+
+  <!-- Added for RFE 1367897 -->
+  <xsl:template match="*" mode="mappull:add-gentext-PI">
+    <xsl:processing-instruction name="ditaot">gentext</xsl:processing-instruction>
+  </xsl:template>
+  <xsl:template match="*" mode="mappull:add-usertext-PI">
+    <xsl:processing-instruction name="ditaot">usertext</xsl:processing-instruction>
+  </xsl:template>
+  
 
 </xsl:stylesheet>
