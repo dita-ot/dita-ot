@@ -58,7 +58,7 @@ public class KeyrefPaser extends AbstractXMLWriter {
 	private int keyrefLeval;
 
 	// flat for whether the ancestor element has keyref
-	private boolean hasKeyref;
+	//private boolean hasKeyref;
 
 	// relative path of the filename to the temp directory
 	private String filepath;
@@ -92,7 +92,7 @@ public class KeyrefPaser extends AbstractXMLWriter {
 
 	// It is used to store the value of attribute keyref,
 	// Because keyref can be nested.
-	private Stack<String> keyref;
+	//private Stack<String> keyref;
 	
 	// It is used to store the name of the element containing keyref attribute.
 	private Stack<String> elemName;
@@ -158,12 +158,12 @@ public class KeyrefPaser extends AbstractXMLWriter {
 	public KeyrefPaser() {
 		javaLogger = new DITAOTJavaLogger();
 		keyrefLeval = 0;
-		hasKeyref = false;
+		//hasKeyref = false;
 		keyrefLevalStack = new Stack<Integer>();
 		validKeyref = new Stack<Boolean>();
 		empty = true;
 		keyMap = new HashMap<String, String>();
-		keyref = new Stack<String>();
+		//keyref = new Stack<String>();
 		elemName = new Stack<String>();
 		hasSubElem = new Stack<Boolean>();
 		try {
@@ -388,7 +388,7 @@ public class KeyrefPaser extends AbstractXMLWriter {
 				
 				elemName.push(name);
 				Set<String> aset = new HashSet<String>();
-				hasKeyref = true;
+				//hasKeyref = true;
 				if (keyrefLeval != 0) {
 					keyrefLevalStack.push(keyrefLeval);
 					hasSubElem.pop();
@@ -397,10 +397,23 @@ public class KeyrefPaser extends AbstractXMLWriter {
 				hasSubElem.push(false);
 				keyrefLeval = 0;
 				keyrefLeval++;
-				keyref.push(atts.getValue(Constants.ATTRIBUTE_NAME_KEYREF));
-				String definition = ((Hashtable<String, String>) content
+				//keyref.push(atts.getValue(Constants.ATTRIBUTE_NAME_KEYREF));
+				//Edit by Alan for bug ID: 2849078   date:2009-09-03  --start
+				//the @keyref could be in the following forms:
+				// 1.keyName 2.keyName/elementId 
+				/*String definition = ((Hashtable<String, String>) content
 						.getValue()).get(atts
-						.getValue(Constants.ATTRIBUTE_NAME_KEYREF));
+						.getValue(Constants.ATTRIBUTE_NAME_KEYREF));*/
+				String keyrefValue=atts.getValue(Constants.ATTRIBUTE_NAME_KEYREF);
+				int slashIndex=keyrefValue.indexOf(Constants.SLASH);
+				String keyName= keyrefValue;
+				String tail= "";
+				if (slashIndex != -1) {
+					keyName = keyrefValue.substring(0, slashIndex);
+					tail = keyrefValue.substring(slashIndex);
+				}
+				String definition = ((Hashtable<String, String>)content.getValue()).get(keyName);
+				//Edit by Alan for bug ID: 2849078   date:2009-09-03  --End
 				
 				// If definition is not null 
 				if(definition!=null){
@@ -409,14 +422,13 @@ public class KeyrefPaser extends AbstractXMLWriter {
 					NamedNodeMap namedNodeMap = elem.getAttributes();
 					// first resolve the keyref attribute
 					if (withHref.contains(classValue)) {
-						String target = keyMap.get(atts.getValue("keyref"));
+						String target = keyMap.get(keyName);
 						if (target != null && !target.equals(Constants.STRING_EMPTY)) {
 							String target_output = target;
 							// if the scope equals local, the target should be verified that
 							// it exists, and add the href and scope to aSet.
-							if (elem.getAttribute("scope").equals("")
-									|| (!elem.getAttribute("scope").equals("") && elem
-											.getAttribute("scope").equals("local"))) {
+							String scopeValue=elem.getAttribute(Constants.ATTRIBUTE_NAME_SCOPE);						 
+							if ("".equals(scopeValue) || "local".equals(scopeValue)) {
 								target = FileUtils.replaceExtName(target, extName);
 								if (new File(FileUtils.resolveFile(tempDir, target))
 										.exists()) {
@@ -432,6 +444,7 @@ public class KeyrefPaser extends AbstractXMLWriter {
 									output.write(Constants.STRING_BLANK);
 									output.write(Constants.ATTRIBUTE_NAME_HREF);
 									output.write("=\"");
+									target_output = normalizeHrefValue(target_output, tail);
 									output.write(target_output);
 									output.write("\"");
 								} else {
@@ -454,6 +467,7 @@ public class KeyrefPaser extends AbstractXMLWriter {
 								output.write(Constants.STRING_BLANK);
 								output.write(Constants.ATTRIBUTE_NAME_HREF);
 								output.write("=\"");
+								target_output = normalizeHrefValue(target_output, tail);
 								output.write(target_output);
 								output.write("\"");
 							}
@@ -475,7 +489,7 @@ public class KeyrefPaser extends AbstractXMLWriter {
 						}
 	
 					} else if (withOutHref.contains(classValue)) {
-						String target = keyMap.get(atts.getValue("keyref"));
+						String target = keyMap.get(keyName);
 	
 						if (target != null) {
 							valid = true;
@@ -685,7 +699,7 @@ public class KeyrefPaser extends AbstractXMLWriter {
 	}
 	
 	//Added by Alan Date:2009-08-04 --begin
-	private static String extName;
+	private String extName;
 
 	public String getExtName() {
 		return extName;
@@ -695,4 +709,14 @@ public class KeyrefPaser extends AbstractXMLWriter {
 		this.extName = extName;
 	}
 	//Added by Alan Date:2009-08-04 --end
+	
+	//Added by Alan Date:2009-09-03 Bug ID: 2849078
+	//change elementId into topicId if there is no topicId in key definition.
+	private static String normalizeHrefValue(String keyName, String tail) {
+		int sharpIndex=keyName.indexOf(Constants.SHARP);
+		if(sharpIndex == -1){
+			return keyName + tail.replaceAll(Constants.SLASH, Constants.SHARP);
+		}
+		return keyName + tail;
+	}
 }
