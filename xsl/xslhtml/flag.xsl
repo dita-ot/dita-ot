@@ -668,6 +668,10 @@
    <xsl:when test="starts-with($in, '.\')">
     <xsl:value-of select="substring-after($in, '.\')"/>
    </xsl:when>
+   <!-- The file dir passed in by ant cannot by none -->
+   <xsl:when test="starts-with($in, './')">
+   	<xsl:value-of select="substring-after($in, './')"/>
+   </xsl:when>
    <xsl:otherwise>
     <xsl:value-of select="$in"/>
    </xsl:otherwise>
