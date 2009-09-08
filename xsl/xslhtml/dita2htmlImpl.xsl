@@ -119,6 +119,36 @@
 
 <!-- Name of the keyref file that contains key definitions -->
 <xsl:param name="KEYREF-FILE" select="concat($WORKDIR,$PATH2PROJ,'keydef.xml')"/>
+<!-- added by William on 2009-09-03 for keyref bug:2849078 start-->
+<xsl:param name="BASEDIR"/>
+  
+<xsl:param name="OUTPUTDIR"/>
+  <!-- get destination dir with BASEDIR and OUTPUTDIR-->
+  <xsl:variable name="desDir">
+    <xsl:choose>
+      <xsl:when test="not($BASEDIR)"/> <!-- If no filterfile leave empty -->
+      <xsl:when test="starts-with($BASEDIR,'file:')">
+        <xsl:value-of select="translate(concat($BASEDIR, '/', $OUTPUTDIR, '/'), '\', '/')"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:choose>
+          <xsl:when test="contains($OUTPUTDIR, ':\') or contains($OUTPUTDIR, ':/')">
+            <xsl:value-of select="'file:/'"/><xsl:value-of select="concat($OUTPUTDIR, '/')"/>
+          </xsl:when>
+          <xsl:when test="starts-with($OUTPUTDIR, '/')">
+            <xsl:value-of select="'file://'"/><xsl:value-of select="concat($OUTPUTDIR, '/')"/>
+          </xsl:when>
+          <xsl:when test="starts-with($BASEDIR,'/')">
+            <xsl:text>file://</xsl:text><xsl:value-of select="concat($BASEDIR, '/', $OUTPUTDIR, '/')"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:text>file:/</xsl:text><xsl:value-of select="concat($BASEDIR, '/', $OUTPUTDIR, '/')"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+<!-- added by William on 2009-09-03 for keyref bug:2849078 start-->
 
 <!-- =========== "GLOBAL" DECLARATIONS (see 35) =========== -->
 
@@ -4985,10 +5015,10 @@
         <xsl:value-of select="$target"/>
       </xsl:when>
       <xsl:when test="contains($target,'#')">
-        <xsl:value-of select="concat(substring-before(substring-before($target,'#'),'.'),$OUTEXT,'#',substring-after($target,'#'))"/>
+        <xsl:value-of select="concat($desDir, substring-before(substring-before($target,'#'),'.'),$OUTEXT,'#',substring-after($target,'#'))"/>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:value-of select="concat(substring-before($target,'.'),$OUTEXT)"/>
+        <xsl:value-of select="concat($desDir, substring-before($target,'.'),$OUTEXT)"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
