@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+     Sourceforge.net. See the accompanying license.txt file in the
+     main toolkit package for applicable licenses.-->
+<!-- (C) Copyright IBM Corporation 2006 All Rights Reserved. -->
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN"
+ "map.dtd">
+<map title="Music Collection Specialization">
+<topicref href="musicoverview.dita" navtitle="Music Collection Specialization">
+<topicref href="musicreference.dita" navtitle="Music Collection Elements">
+<topicref href="musicCollection.dita" navtitle="musicCollection">
+<topicref href="musicBody.dita" navtitle="musicBody">
+<topicref href="cdList.dita" navtitle="cdList">
+<topicref href="cdHeader.dita" navtitle="cdHeader">
+<topicref href="bandHeader.dita" navtitle="bandHeader"></topicref>
+<topicref href="albumsHeader.dita" navtitle="albumsHeader"></topicref>
+<topicref href="commentsHeader.dita" navtitle="commentsHeader"></topicref>
+</topicref>
+<topicref href="cdRow.dita" navtitle="cdRow">
+<topicref href="band.dita" navtitle="band"></topicref>
+<topicref href="albums.dita" navtitle="albums"></topicref>
+<topicref href="comments.dita" navtitle="comments"></topicref>
+</topicref>
+</topicref>
+</topicref>
+</topicref>
+</topicref>
+</topicref>
+</map>

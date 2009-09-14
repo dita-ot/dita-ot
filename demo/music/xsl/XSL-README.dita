@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+     Sourceforge.net. See the accompanying license.txt file in the
+     main toolkit package for applicable licenses.-->
+<!-- (C) Copyright IBM Corporation 2006 All Rights Reserved. -->
+<reference id="xsldirectoryinformation" xml:lang="en-us">
+<title>XSL directory information</title>
+<shortdesc>The files in the XSL directory are primarily used for generating
+output from DITA topics that use the Music specialization. The directory should
+contain any XSLT and associated files used for overriding existing transforms,
+or used for new transforms. There is no requirement on file organization within
+the xsl/ directory.</shortdesc>
+<refbody>
+<section><p>The following files are included in this directory:</p><ul>
+<li>music2xhtml.xsl: This is an override for XHTML output. It generates headers
+for the music table, and adds a heading before each table of CDs. Most content
+falls back to default DITA processing; the only reason for the length of this
+override is the complexity of the original table code that must be overridden.</li>
+<li>musicstrings.xml: This file informs output transforms what languages are
+available for generated text, and where to find each language.</li>
+<li>music-en-us.xml: English translations of generated text.</li>
+<li>music-ru-ru.xml: Russian translations of generated text.</li>
+<li>music-sv-se.xml: Swedish translations of generated text.</li>
+<li>music2id.xsl: Unusable in the toolkit at present, this is an XSLT file
+that overrides a conversion from DITA into the IBMIDDoc SGML DTD.</li>
+<li>itune2dit.xsl: an early attempt to place my entire music library into
+a DITA specialization (the DTD for that specialization is lost in the mists
+of time, though it may be resurrected later).</li>
+<li>library2xhtml.xsl: XSL code that would convert said library into XHTML,
+with special header information.</li>
+</ul></section>
+<section><title>XSL Files for new plugins</title><p>If a new specialization
+does not change any output behavior, then there is no need for an XSL directory
+or for XSLT overrides.</p><p>If a file does change output behavior, then each
+generated format will likely need an override template. This plugin includes
+one for XHTML, which overrides the CD List table to create generated text.</p><p>If
+a file creates generated text, then several additional files are required: <ul>
+<li>A strings file similar to the musicstrings.xml file in this directory.
+This file is used to determine which languages are available, and to determine
+the file name for each language.</li>
+<li>Each language should be stored in an XML file. For example, this plugin
+includes files for English, Russian, and Swedish. By convention, these files
+all use the same name, apart from a standard language code based on acceptable
+DITA language values (acceptable values are explained in the DITA specification;
+the values are taken from an external definition used for many XML languages).</li>
+</ul></p></section>
+</refbody>
+</reference>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+     Sourceforge.net. See the accompanying license.txt file in the
+     main toolkit package for applicable licenses.-->
+<!-- (C) Copyright IBM Corporation 2006 All Rights Reserved. -->
+<project name="music" default="all" basedir="..\..">
+
+  <import file="${basedir}${file.separator}build.xml"/>
+
+	<target name="all"
+        description="Build sample Music output"
+        depends="SampleMusic2Xhtml"/>
+
+    <!-- sample content targets -->
+	<target name="SampleMusic2Xhtml"
+        description="Build XHTML for the Music samples"
+        depends="use-init">
+      <mkdir dir="${basedir}${file.separator}demo${file.separator}music${file.separator}out" />
+
+      <antcall target="dita2xhtml">
+		<param name="dita.extname" value=".dita"/>
+		<param name="args.input"
+            value="${basedir}${file.separator}demo${file.separator}music${file.separator}sample${file.separator}music.ditamap"/>
+		<param name="output.dir"
+            value="${basedir}${file.separator}demo${file.separator}music${file.separator}out"/>
+      </antcall>
+
+	</target>
+
+</project>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+     Sourceforge.net. See the accompanying license.txt file in the
+     main toolkit package for applicable licenses.-->
+<!-- (C) Copyright IBM Corporation 2006 All Rights Reserved. -->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<reference id="dtddirectoryinformation" xml:lang="en-us">
+<title>DTD directory information</title>
+<shortdesc>The files in the DTD directory declare the Music specialization.
+The DTD file includes all of the OASIS DITA 1.0 domains, and includes the
+music specialization module. OASIS modules are pulled in from the toolkit's
+DTD directory; new files for this specialization are all located
+in this directory.</shortdesc>
+</reference>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN"
+ "map.dtd">
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+     Sourceforge.net. See the accompanying license.txt file in the
+     main toolkit package for applicable licenses.-->
+<!-- (C) Copyright IBM Corporation 2006 All Rights Reserved. -->
+<map title="Music is the key">
+<topicref href="samplecollection.dita"></topicref>
+<topicref href="RecentAdditions.dita"></topicref>
+<topicref href="NordicRoots.dita"></topicref>
+</map>
+

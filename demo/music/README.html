@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+     Sourceforge.net. See the accompanying license.txt file in the
+     main toolkit package for applicable licenses.-->
+<!-- (C) Copyright IBM Corporation 2006 All Rights Reserved. -->
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="copyright" content="(C) Copyright IBM Corporation 2006" />
+<meta name="DC.rights.owner" content="(C) Copyright IBM Corporation 2006" />
+<meta name="security" content="public" />
+<meta name="Robots" content="index,follow" />
+<meta http-equiv="PICS-Label" content='(PICS-1.1 "http://www.icra.org/ratingsv02.html" l gen true r (cz 1 lz 1 nz 1 oz 1 vz 1) "http://www.rsac.org/ratingsv01.html" l gen true r (n 0 s 0 v 0 l 0) "http://www.classify.org/safesurf/" l gen true r (SS~~000 1))' />
+<meta name="DC.Type" content="reference" />
+<meta name="DC.Title" content="The Music Specialization" />
+<meta name="abstract" content="The music specialization is a set of sample files that demonstrates how to create a new specialization plugin. It should be placed in the demo/ directory inside the DITA Open Toolkit." />
+<meta name="description" content="The music specialization is a set of sample files that demonstrates how to create a new specialization plugin. It should be placed in the demo/ directory inside the DITA Open Toolkit." />
+<meta name="DC.Format" content="XHTML" />
+<meta name="DC.Identifier" content="README" />
+<meta name="DC.Language" content="en-us" />
+<link rel="stylesheet" type="text/css" href="./ibmdita.css" />
+<title>The Music Specialization</title>
+</head>
+<body id="README"><a name="README"><!-- --></a>
+<h1 class="topictitle1">The Music Specialization</h1>
+<div><p>The music specialization is a set of sample files that demonstrates
+how to create a new specialization plugin. It should be placed in the demo/
+directory inside the DITA Open Toolkit. This version has been updated for
+DITA-OT version 1.4, to remove calls to deprecated code.</p>
+<div class="section"><h2 class="sectiontitle">Purpose</h2><p>This specialization allows authors to document
+their musical tastes and collections. It is intended primarily as a sample
+to demonstrate various aspects of a specialization plugin for DITA.</p>
+<p>The
+specialization creates a new topic type with a root element of musicCollection.
+This topic type is based on the DITA Reference topic type, which is part of
+the OASIS DITA standard. Within the musicCollection element, authors may enter
+the usual title and short description, followed by a special body created
+for this type. The contents of musicBody are limited to a CD list, section,
+and the familiar simpletable element. The body could have been limited to
+only the CD table, but the section is included so that authors may provide
+additional information about their music, such as longer commentary about
+one set of CDs. The simpletable element is kept in case additional reference
+information is desired that does not fit into the strictly controlled CD list.</p>
+<p>The
+CD list element is the focus of this specialization. It is based on a properties
+table from the reference specialization. Like that table, it has an optional
+set of headers; if no headers are included, a default set of generated headers
+is used in the output. Each row of this table has three columns. The first
+column takes a band name; the second contains one or more album name; and
+the third column contains any comments about the band or albums.</p>
+<p>This
+plugin comes with a DTD implementation, documentation, sample files, and XSLT
+overrides that create generated headings for each music topic.</p>
+</div>
+<div class="section"><h2 class="sectiontitle">How to use this with the DITA Open Toolkit</h2><p>Unzip
+music.zip into the demo directory. Then run a build using the default toolkit
+builds (using the supplied ANT files, or the Java™ command line). Each of these calls
+the plugin integrator, which will install the plugin files; this will happen
+regardless of whether the files you build make use of this plugin.</p>
+<p>To
+build files with the specialization, you have several simple options. First,
+ensure that your environment variables are set up properly (remember that
+the toolkit requires things like the CLASSPATH and ANT_HOME variables). Then,
+try any of these:</p>
+<ul><li>Use your normal build process, with the sample music map as your input
+file.</li>
+<li>Open a command prompt and go into the main toolkit directory. Run this
+command: <pre><kbd class="userinput">ant -f demo/music/run-sample.xml</kbd></pre>
+The
+XHTML output files will be generated in the directory <tt class="sysout">demo/music/out</tt>.</li>
+<li>From the main toolkit directory, use this command line:<pre><kbd class="userinput">java -jar lib/dost.jar /i:demo/music/sample/music.ditamap /transtype:xhtml /outdir:demo/music/out</kbd></pre>
+</li>
+<li>Use the prompted ant demo build. After running the command <kbd class="userinput">ant
+-f build_demo.xml</kbd> in the main toolkit directory, enter the input
+file name <kbd class="userinput">demo/music/sample/music.ditamap</kbd>; then set
+other options as appropriate.</li>
+</ul>
+<p>Once you've discovered how easy it is to write with the music specialization,
+you can create new music topics, and mix them in to all of your other content.
+Point any of your maps at a music topic, and it will build just like all of
+your other topics.</p>
+</div>
+<div class="section"><h2 class="sectiontitle">Plugin organization</h2><p>The plugin is organized into
+several directories, which mirror the organization of the toolkit itself.
+Other specializations should follow this same organization.</p>
+<ul><li>The root directory must contain at least two files. The file catalog-dita.xml
+is required in order to add your DTD files to the main catalog. The file plugin.xml
+is required (with this name) in order for the toolkit to recognize your plugin;
+it also tells the toolkit where to find important files within the plugin.
+The ANT build file is a good idea, if you wish to provide an easy way to build
+any sample files; the included file run-sample.xml generates XHTML from the
+samples.</li>
+<li>The docs/ directory contains all documentation for new elements in the
+music specialization. There is no requirement for how to organize the files
+within this directory; however, it is easy to separate them into a source
+directory and an output directory. Each output format could get its own directory
+(this plugin includes a win/ directory for the compiled HTML Help output).</li>
+<li>The dtd/ directory contains all DTD related files for this specialization.</li>
+<li>The epic/ directory is used by one tool that imbeds the toolkit, and can
+be ignored by most users. Other applications that use overrides for the music
+specialization could store them in similar directories.</li>
+<li>The sample/ directory contains sample topics that use the music specialization.</li>
+<li>There is not yet a schema implementation of the music specialization;
+if one existed, it would be in the schema directory.</li>
+<li>The xsl/ directory contains all XSL files used by this specialization.</li>
+</ul>
+</div>
+<div class="section"><h2 class="sectiontitle">Using this plugin as a template</h2><div class="p">This plugin can
+easily be used as a template to create your own specialization plugins. Here
+are the files you will need to change to create your own plugin:<ol><li>In the plugin.xml file, change the plugin.xml file so that it extends
+all of the tasks you expect to extend.</li>
+<li>In the catalog-dita.xml file, replace the music values with your new DTD
+files.</li>
+<li>In the file run-sample.xml, replace any references to music with your
+own specialization, and replace the music input file and output directory
+with your own samples.</li>
+<li>In the DTD directory, replace the music DTDs with your own specialization.
+If you wish, you can rename them and use them as a model for your own specialization.
+They are based off of reference, so they will be most easily used as a template
+for a different reference specialization.</li>
+<li>If there is a schema implementation, store it in the schema directory.</li>
+<li>Replace the sample files with your own samples.</li>
+<li>In the XSL directory, remove the music overrides, or modify them to match
+elements from your own specialization. Remember that the XSLT templates should <strong>only</strong> match
+elements from your specialization, and should be ignored for any other topic
+type. For example, to override the related links within a music topic, I should
+match a related-links element <em>within</em> a music topic, not just any related-links
+element. This will allow your topic types and processing to mix with other
+topic types and their processing. Here is an example of how to match related-links
+within a specific topic type:<pre>&lt;xsl:template match="*[contains(@class,' musicCollection/musicCollection ')]//
+                     *[contains(@class,' topic/related-links ')]"&gt;
+  &lt;!-- Create special processing for links within a music topic --&gt;
+&lt;/xsl:template&gt;</pre>
+</li>
+<li>Files that enable the music specialization for a specific application
+should be stored in a directory specific to that application, such as the
+epic directory in this plugin.</li>
+</ol>
+</div>
+</div>
+<div class="section"><h2 class="sectiontitle">Items of interest</h2><p>This specialization include elements
+that produce new generated text. In order for this to work, the generated
+text must be shipped as part of the plugin. These files are included within
+the xsl/ directory. Each language is placed in an individual file, and one
+lookup file allows processes to determine what languages are available. Within
+the XSL files, there is a local template called musicGetString, which in turn
+calls the standard getString template. The difference is that it passes an
+extra parameter, which allows the default template to find translations for
+the new strings. The musicGetString template is shown here:</p>
+<pre>&lt;xsl:template name="musicGetString"&gt;
+   &lt;xsl:param name="stringName"/&gt;
+   &lt;xsl:call-template name="getString"&gt;
+      &lt;xsl:with-param name="stringFileList"&gt;../../demo/music/xsl/musicstrings.xml&lt;/xsl:with-param&gt;
+      &lt;xsl:with-param name="stringName" select="$stringName"/&gt;
+   &lt;/xsl:call-template&gt;
+&lt;/xsl:template&gt;</pre>
+<p>The stringFileList parameter must be a relative path from the file
+that contains the common template, back to the plugin file that lists available
+languages.</p>
+<p>If the override needs to use generated text from the standard
+transform code, such as the word Note, then it should call the normal getString
+template without any extra parameters.</p>
+</div>
+</div>
+</body>
+</html>
