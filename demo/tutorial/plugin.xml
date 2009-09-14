@@ -5,6 +5,7 @@
 <!-- (C) Copyright IBM Corporation 2005, 2009 All Rights Reserved. -->
 
 <plugin id="com.ibm.specialization.tutorial">
+  <feature extension="package.version" value="1.0.0"/>
   <!-- Extend the toolkit catalog to include DTDs. -->
   <feature extension="dita.specialization.catalog.relative"
       value="catalog-dita.xml" type="file"/>
