@@ -28,6 +28,7 @@
     <lang xml:lang="en-us" filename="strings-en-us.xml"/>
     <lang xml:lang="es"    filename="strings-es-es.xml"/>
     <lang xml:lang="es-es" filename="strings-es-es.xml"/>
+    <lang xml:lang="es-419" filename="strings-es-es.xml"/>
     <lang xml:lang="et"    filename="strings-et-ee.xml"/>
     <lang xml:lang="et-ee" filename="strings-et-ee.xml"/>
     <lang xml:lang="fi"    filename="strings-fi-fi.xml"/>
@@ -81,6 +82,7 @@
     <lang xml:lang="sr"    filename="strings-sr-sp.xml"/>
     <lang xml:lang="sr-rs" filename="strings-sr-sp.xml"/>
     <lang xml:lang="sr-sp" filename="strings-sr-sp.xml"/>
+    <lang xml:lang="sr-latn-rs" filename="strings-sr-latn-rs.xml"/>
     <lang xml:lang="sv"    filename="strings-sv-se.xml"/>
     <lang xml:lang="sv-se" filename="strings-sv-se.xml"/>
     <lang xml:lang="th"    filename="strings-th-th.xml"/>
@@ -93,5 +95,7 @@
     <lang xml:lang="ur-pk" filename="strings-ur-pk.xml"/>
     <lang xml:lang="zh"    filename="strings-zh-cn.xml"/>
     <lang xml:lang="zh-cn" filename="strings-zh-cn.xml"/>
+    <lang xml:lang="zh-hans" filename="strings-zh-cn.xml"/>
     <lang xml:lang="zh-tw" filename="strings-zh-tw.xml"/>
+    <lang xml:lang="zh-hant" filename="strings-zh-tw.xml"/>
 </langlist>
