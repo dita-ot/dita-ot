@@ -25,6 +25,7 @@
       extension="${out.ext}" style="${args.xsl}">
     	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
       <includesfile name="${dita.temp.dir}${file.separator}${chunkedtopicfile}" if="chunkedtopicfile"/>
+      <param name="TRANSTYPE" expression="${transtype}" />
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
       <param name="FILTERFILE" expression="${dita.input.valfile}"
         if="dita.input.valfile" />
@@ -68,6 +69,7 @@
       extension="${out.ext}" style="${args.xsl}">
     	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
       <includesfile name="${dita.temp.dir}${file.separator}${chunkedtopicfile}" if="chunkedtopicfile"/>
+      <param name="TRANSTYPE" expression="${transtype}" />
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
       <param name="FILTERFILE" expression="${dita.input.valfile}"
         if="dita.input.valfile" />
@@ -123,6 +125,7 @@
       filedirparameter="filedir">
     	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
       <includesfile name="${dita.temp.dir}${file.separator}${chunkedtopicfile}" if="chunkedtopicfile"/>
+      <param name="TRANSTYPE" expression="${transtype}" />
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
       <param name="FILTERFILE" expression="${dita.input.valfile}"
         if="dita.input.valfile" />
@@ -174,6 +177,7 @@
       extension="${out.ext}" style="${args.xsl}">
     	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
       <includesfile name="${dita.temp.dir}${file.separator}${chunkedtopicfile}" if="chunkedtopicfile"/>
+      <param name="TRANSTYPE" expression="${transtype}" />
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
       <param name="FILTERFILE" expression="${dita.input.valfile}"
         if="dita.input.valfile" />
@@ -235,6 +239,7 @@
       classpathref="dost.class.path"
       extension="${out.ext}" style="${args.xsl}">
     	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
+      <param name="TRANSTYPE" expression="${transtype}" />
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
       <param name="FILTERFILE" expression="${dita.input.valfile}"
         if="dita.input.valfile" />
@@ -277,6 +282,7 @@
       classpathref="dost.class.path"
       extension="${out.ext}" style="${args.xsl}">
     	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
+      <param name="TRANSTYPE" expression="${transtype}" />
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
       <param name="FILTERFILE" expression="${dita.input.valfile}"
         if="dita.input.valfile" />

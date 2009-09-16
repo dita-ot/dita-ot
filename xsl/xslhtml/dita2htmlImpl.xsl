@@ -48,6 +48,9 @@
 <xsl:param name="dita-css" select="'commonltr.css'"/> <!-- left to right languages -->
 <xsl:param name="bidi-dita-css" select="'commonrtl.css'"/> <!-- bidirectional languages -->
 
+<!-- Transform type, such as 'xhtml', 'htmlhelp', or 'eclipsehelp' -->
+<xsl:param name="TRANSTYPE" select="'xhtml'"/>
+
 <!-- default CSS path parameter (null)-->
 <xsl:param name="CSSPATH"/>
 
