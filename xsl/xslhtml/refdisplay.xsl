@@ -340,7 +340,7 @@
   <!-- Reference wrapper for HTML: "Related reference" in <div>. -->
   <xsl:template match="*[contains(@class, ' topic/link ')][@type='reference']" mode="related-links:result-group" name="related-links:result.reference">
     <xsl:param name="links"/>
-    <div class="relinfo">
+    <div class="relinfo relref">
       <strong>
         <xsl:call-template name="getString">
           <xsl:with-param name="stringName" select="'Related reference'"/>

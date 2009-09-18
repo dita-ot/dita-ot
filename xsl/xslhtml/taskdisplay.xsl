@@ -1236,7 +1236,7 @@
   <!-- Task wrapper for HTML: "Related tasks" in <div>. -->
   <xsl:template match="*[contains(@class, ' topic/link ')][@type='task']" mode="related-links:result-group" name="related-links:result.task">
     <xsl:param name="links"/>
-    <div class="relinfo">
+    <div class="relinfo reltasks">
       <strong>
         <xsl:call-template name="getString">
           <xsl:with-param name="stringName" select="'Related tasks'"/>

@@ -16,7 +16,7 @@
     <!-- Wrapper for concept group: "Related concepts" in a <div>. -->
     <xsl:template match="*[contains(@class, ' topic/link ')][@type='concept']" mode="related-links:result-group" name="related-links:result.concept">
         <xsl:param name="links"/>
-        <div class="relinfo">
+        <div class="relinfo relconcepts">
             <strong>
                 <xsl:call-template name="getString">
                     <xsl:with-param name="stringName" select="'Related concepts'"/>
