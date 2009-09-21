@@ -107,6 +107,10 @@ public class KeyrefPaser extends AbstractXMLWriter {
 	private Stack<Boolean> hasSubElem;
 	
 	private Document doc;
+	
+	// added By Alan for ID: 2860433 on 2009-09-17
+	// file name with relative path to the tempDir of input file.
+	private String fileName;
 
 	static {
 		withHref.add("topic/author");
@@ -428,7 +432,7 @@ public class KeyrefPaser extends AbstractXMLWriter {
 							// if the scope equals local, the target should be verified that
 							// it exists, and add the href and scope to aSet.
 							String scopeValue=elem.getAttribute(Constants.ATTRIBUTE_NAME_SCOPE);						 
-							if ("".equals(scopeValue) || "local".equals(scopeValue)) {
+							if (("".equals(scopeValue) || "local".equals(scopeValue)) && !"topic/image".equals(classValue)){
 								target = FileUtils.replaceExtName(target, extName);
 								if (new File(FileUtils.resolveFile(tempDir, target))
 										.exists()) {
@@ -456,9 +460,14 @@ public class KeyrefPaser extends AbstractXMLWriter {
 											.logInfo(MessageUtils.getMessage("DOTJ047I", prop)
 													.toString());*/
 								}
-	
-							} else {
-								// scope equals peer or external
+							} 
+							// scope equals peer or external
+							else {
+								// added By Alan for ID: 2860433 on 2009-09-17
+								// get the relative path
+								if("topic/image".equals(classValue)){
+									target_output = FileUtils.getRelativePathFromMap(fileName, target_output);
+								}							
 								valid = true;
 								aset.add("scope");
 								aset.add("href");
@@ -607,6 +616,8 @@ public class KeyrefPaser extends AbstractXMLWriter {
 
 	@Override
 	public void write(String filename) throws DITAOTException {
+		// added By Alan for ID: 2860433 on 2009-09-17
+		this.fileName=filename;
 		try {
 			File inputFile = new File(tempDir, filename);
 			filepath = inputFile.getAbsolutePath();
