@@ -8,7 +8,8 @@
  
   <xsl:param name="javahelpmap"/>
   <xsl:param name="javahelptoc"/>
-  
+  <xsl:param name="ditadir"/>
+  <xsl:param name="outputdir"/>
   
   <xsl:output
     method="xml"
@@ -35,7 +36,45 @@
         </xsl:choose>
       </title>
       <maps>
-        <homeID>home</homeID>        
+        <homeID>
+        	<xsl:variable name="filePath">
+        		<xsl:choose>
+ 					<xsl:when test="contains($outputdir, ':\') or contains($outputdir, ':/')">
+			            <xsl:value-of select="concat('file:/', $outputdir)"/>
+			        </xsl:when>
+					<xsl:when test="starts-with($outputdir, '/')">
+						<xsl:value-of select="concat('file://', $outputdir)" />
+					</xsl:when>
+					<xsl:when test="starts-with($ditadir,'/')">
+						<xsl:value-of select="concat('file://', $ditadir, '/', $outputdir)" />
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:value-of select="concat('file:/', $ditadir, '/', $outputdir)" />
+					</xsl:otherwise>
+        		</xsl:choose>
+        	</xsl:variable>
+        	<xsl:variable name="file">
+        		<xsl:choose>
+        			<xsl:when test="ends-with($filePath,'/') or ends-with($filePath, '\')">
+        				<xsl:value-of select="concat($filePath, $javahelpmap, '.jhm')"/>
+        			</xsl:when>
+        			<xsl:otherwise>
+        				<xsl:value-of select="concat($filePath ,'/', $javahelpmap, '.jhm')"/>
+        			</xsl:otherwise>
+        		</xsl:choose>
+        	</xsl:variable>
+        	<xsl:variable name="homeId">
+        		<xsl:value-of select="document($file)/map/mapID[1]/@target" />
+        	</xsl:variable>
+			<xsl:choose>
+				<xsl:when test="$homeId">
+					<xsl:value-of select="$homeId" />
+				</xsl:when>
+				<xsl:otherwise>
+					home
+				</xsl:otherwise>
+			</xsl:choose>
+		</homeID>
         <mapref>
           <xsl:attribute name="location">
             <xsl:value-of select="$javahelpmap"/><xsl:text>.jhm</xsl:text>

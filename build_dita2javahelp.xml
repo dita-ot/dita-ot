@@ -137,6 +137,9 @@
         	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
             <param name="javahelpmap" expression="${args.javahelp.map}" />
             <param name="javahelptoc" expression="${args.javahelp.toc}" />
+        	<param name="ditadir" expression="${dita.dir}"/>
+        	<param name="outputdir" expression="${output.dir}"/>
+        	<!--param name="outputdir" expression="${dita.dir}${file.separator}${output.dir}${file.separator}" /-->
             <mapper type="glob"
                     from="*${dita.input.filename}"
                     to="*${dita.map.toc.root}_helpset.hs" />
@@ -155,6 +158,9 @@
         	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
             <param name="javahelpmap" expression="${args.javahelp.map}" />
             <param name="javahelptoc" expression="${args.javahelp.toc}" />
+        	<param name="ditadir" expression="${dita.dir}"/>
+        	<param name="outputdir" expression="${output.dir}"/>
+        	<!--param name="outputdir" expression="${dita.dir}${file.separator}${output.dir}${file.separator}" /-->
             <mapper type="glob"
                 from="${user.input.file}"
                 to="${dita.map.toc.root}_helpset.hs" />
