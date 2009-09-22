@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
 
 <!--
-Copyright © 2004-2006 by Idiom Technologies, Inc. All rights reserved.
+Copyright ? 2004-2006 by Idiom Technologies, Inc. All rights reserved.
 IDIOM is a registered trademark of Idiom Technologies, Inc. and WORLDSERVER
 and WORLDSTART are trademarks of Idiom Technologies, Inc. All other
 trademarks are the property of their respective owners.
@@ -140,11 +140,13 @@ See the accompanying license.txt file for applicable licenses.
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
-
-    <xsl:template match="*[contains(@class, ' topic/data ')]">
+    <!-- edited by William on 2009-09-18 for output bug #2860168 start-->
+    <!--xsl:template match="*[contains(@class, ' topic/data ')]">
         <xsl:apply-templates/>
-    </xsl:template>
-
+      </xsl:template-->
+    <xsl:template match="*[contains(@class, ' topic/data ')]"/>
+    <xsl:template match="*[contains(@class, ' topic/data-about ')]"/>
+    <!-- edited by William on 2009-09-18 for output bug #2860168 end-->
     <exslf:function name="opentopic-func:determineTopicType">
         <xsl:variable name="id" select="ancestor-or-self::*[contains(@class, ' topic/topic ')][1]/@id"/>
         <xsl:variable name="gid" select="generate-id(ancestor-or-self::*[contains(@class, ' topic/topic ')][1])"/>

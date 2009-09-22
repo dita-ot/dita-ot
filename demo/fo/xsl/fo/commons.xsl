@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
 
 <!--
-Copyright © 2004-2006 by Idiom Technologies, Inc. All rights reserved.
+Copyright ? 2004-2006 by Idiom Technologies, Inc. All rights reserved.
 IDIOM is a registered trademark of Idiom Technologies, Inc. and WORLDSERVER
 and WORLDSTART are trademarks of Idiom Technologies, Inc. All other
 trademarks are the property of their respective owners.
@@ -1642,7 +1642,7 @@ See the accompanying license.txt file for applicable licenses.
                 <fo:block xsl:use-attribute-sets="lq_link">
                     <fo:basic-link>
                         <xsl:call-template name="buildBasicLinkDestination">
-                            <xsl:with-param name="scope" select="@type"/>
+                            <xsl:with-param name="scope" select="@scope"/>
                             <xsl:with-param name="href" select="@href"/>
                         </xsl:call-template>
 
