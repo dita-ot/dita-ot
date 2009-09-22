@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Properties;
 import java.util.Random;
 import java.util.Set;
@@ -44,13 +45,13 @@ import org.xml.sax.helpers.XMLReaderFactory;
 
 
 public class ChunkTopicParser extends AbstractXMLWriter {
-	
-	private static final String OS_NAME_WINDOWS = "windows";
+
+    private static final String OS_NAME_WINDOWS = "windows";
     private static final String PI_END = "?>";
     private static final String PI_WORKDIR_HEAD = "<?workdir ";
-
-	private Hashtable<String,String> changeTable = null;
-	
+    //edited by william on 2009-09-10 for maintain iteration order start
+	private LinkedHashMap<String,String> changeTable = null;
+	//edited by william on 2009-09-10 for maintain iteration order start
 	private Hashtable<String,String> conflictTable = null;
 	
 	private Element elem = null;
@@ -66,7 +67,7 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 	private String targetTopicId = null;
 	
 	private String selectMethod = "select-document";
-	
+	//flag whether output the nested nodes
 	private boolean include = false;
 	private boolean skip = false;
 	
@@ -233,8 +234,11 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 
 	public void startDocument() throws SAXException {
 		//dontWriteDita = true;
+		//difference between to-content & select-topic
 		if ("select-document".equals(selectMethod)){
-			//currentParsingFile can never equal outputFile 
+			//currentParsingFile can never equal outputFile except when chunk="to-content"
+			//is set at map level
+			//TODO former is set and line 606(895) and the later is set at line 838
 			if((currentParsingFile).equals(outputFile)){
 				// if current file serves as root of new chunk
 				// include will be set to true in startDocument()
@@ -267,9 +271,12 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 			if(classValue!=null && classValue.indexOf(Constants.ATTR_CLASS_VALUE_TOPIC)!=-1){
 				topicSpecSet.add(qName);
 				if (separate && include && !"select-topic".equals(selectMethod)){
+					//chunk="by-topic" and next topic element found
 					fileWriterStack.push(output);
 					outputFileNameStack.push(outputFile);
 					Random random = new Random();
+					
+					//need generate new file based on new topic id
 					String newFileName = FileUtils.resolveFile(filePath, idValue+ditaext);
 					if(StringUtils.isEmptyString(idValue) || FileUtils.fileExists(newFileName)) {
 						String t = newFileName;
@@ -318,6 +325,14 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 						}else{
 							stub.getParentNode().insertBefore(newChild,stub);
 						}
+						//<element>
+						//  <newchild/>
+						//      <stub/>
+						//  <stub/>
+						//  ...
+						//</element>  
+						//<siblingstub/>
+						//...
 						stubStack.push(stub);
 						stub = (Element)stub.cloneNode(false);
 						newChild.appendChild(stub);
@@ -326,7 +341,7 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 				if(include && "select-topic".equals(selectMethod)){
 					//if select method is "select-topic" and
 					//current topic is the nested topic in 
-					//target topic.
+					//target topic-->skip it.
 					include = false;
 					skipLevel = 1;
 					skip = true;
@@ -480,10 +495,13 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 		// pass map's directory path 
 		filePath = filename;
 		needResolveEntity = true;
+		//not chunk "by-topic"
 		if(!separate){
+			//TODO create the initial output
 			output = new StringWriter();
 			processChunk(elem,null);
 		}else{
+			//chunk "by-topic"
 			separateChunk(elem);
 		}
 		if(!copyto.isEmpty()){
@@ -591,7 +609,7 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 		}
 		
 		// if @copy-to is processed in chunk module, the list file needs to be updated. 
-		// Because @copy-to are not included in fulltopiclist, and the source of coyy-to should be excluded in fulltopiclist.
+		// Because @copy-to should be included in fulltopiclist, and the source of coyy-to should be excluded in fulltopiclist.
 		if(!copytoValue.equals(Constants.STRING_EMPTY) && chunkValue.contains("to-content")){
 			copyto.add(copytoValue);
 			if(hrefValue.indexOf(Constants.SHARP) != -1){
@@ -665,7 +683,6 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 					conflictTable.put(outputFileName, t);
 					dotchunk = false;
 				}
-				
 				tempOutput = output;
 				output = new OutputStreamWriter(new FileOutputStream(
 						outputFileName),
@@ -674,8 +691,10 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 				if (!dotchunk) {
 					changeTable.put(FileUtils.resolveTopic(filePath, parseFilePath),
 							outputFileName + (id == null ? "" : "#"+id));
+					//new generated file
 					changeTable.put(outputFileName, outputFileName);
 				}
+				//change the href value
 				if (StringUtils.isEmptyString(firstTopicID)) {
 					element.setAttribute(Constants.ATTRIBUTE_NAME_HREF,
 							FileUtils.getRelativePathFromMap(filePath+Constants.SLASH+"stub.ditamap"
@@ -688,6 +707,12 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 				include = false;
 				stub = element.getOwnerDocument().createElement("stub");
 				siblingStub = element.getOwnerDocument().createElement("stub");
+				//<element>
+				//	<stub/>
+				//  ...
+				//</element>
+				//<siblingstub/>
+				//...
 				//Place stub
 				if(element.hasChildNodes()){
 					element.insertBefore(stub,element.getFirstChild());
@@ -746,6 +771,7 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 		String scopeValue = element.getAttribute(Constants.ATTRIBUTE_NAME_SCOPE);
 		String classValue = element.getAttribute(Constants.ATTRIBUTE_NAME_CLASS);
 		String processRoleValue = element.getAttribute(Constants.ATTRIBUTE_NAME_PROCESSING_ROLE);
+		//file which will be parsed
 		String parseFilePath = null;
 		String outputFileName = outputFile;
 		Writer tempWriter = null;
@@ -758,6 +784,7 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 		boolean needWriteDitaTag = true;
 		
 		try {			
+			//Get target chunk file name
 			if (!copytoValue.equals(Constants.STRING_EMPTY) && !chunkValue.contains("to-content")){
 				if (hrefValue.indexOf(Constants.SHARP)!=-1){
 					parseFilePath = copytoValue + hrefValue.substring(hrefValue.indexOf(Constants.SHARP));
@@ -769,7 +796,7 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 			}
 			
 			// if @copy-to is processed in chunk module, the list file needs to be updated. 
-			// Because @copy-to are not included in fulltopiclist, and the source of coyy-to should be excluded in fulltopiclist.
+			// Because @copy-to should be included in fulltopiclist, and the source of coyy-to should be excluded in fulltopiclist.
 			if(!copytoValue.equals(Constants.STRING_EMPTY) && chunkValue.contains("to-content")){
 				copyto.add(copytoValue);
 				if(hrefValue.indexOf(Constants.SHARP) != -1){
@@ -845,7 +872,7 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 						// in order to indicate it is a newly generated file
 						changeTable.put(outputFileName,outputFileName);
 					}
-					
+					//"by-topic" couldn't reach here
 					this.outputFile = outputFileName;
 					
 					{
@@ -861,7 +888,8 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 								newpath = outputFileName;
 							}
 						}
-						// add file name changes to changeTable
+						// add file name changes to changeTable, this will be used in 
+						//TopicRefWriter's updateHref method, very important!!!
 						changeTable.put(path, newpath);
 						// update current element's @href value
 						element.setAttribute(Constants.ATTRIBUTE_NAME_HREF,
@@ -896,7 +924,9 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 					currentParsingFile = FileUtils.resolveFile(filePath,parseFilePath);
 					
 					if ( !Constants.ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equalsIgnoreCase(processRoleValue))
+						//TODO recursive point
 						reader.parse(currentParsingFile);
+					//restore the currentParsingFile
 					currentParsingFile = tempPath;
 				}
 			
@@ -937,7 +967,7 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 					} else {
 						parentResult.append(((StringWriter)output).getBuffer());
 					}
-					//restore back to parent's output
+					//restore back to parent's output this is a different temp
 					output = temp;
 					
 				}
@@ -961,6 +991,7 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 			            }
 					}
 					if (needWriteDitaTag) ditaFileOutput.write("<dita>");
+					//write the final result to the output file
 					ditaFileOutput.write(((StringWriter)output).getBuffer().toString());
 					if (needWriteDitaTag) ditaFileOutput.write("</dita>");
 					ditaFileOutput.flush();
@@ -975,8 +1006,7 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 		}
 	
 	}
-
-	public void setup(Hashtable<String, String> changeTable, Hashtable<String, String> conflictTable, 
+	public void setup(LinkedHashMap<String, String> changeTable, Hashtable<String, String> conflictTable, 
 			HashSet<String> refFileSet, Element elem, boolean separate, boolean chunkByTopic, String ditaext) {
 		// Initialize ChunkTopicParser
 		this.changeTable = changeTable;

@@ -19,6 +19,7 @@ import java.io.OutputStreamWriter;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Properties;
@@ -113,7 +114,7 @@ public class ChunkModule implements AbstractPipelineModule {
 		content = mapReader.getContent();
 		if(content.getValue()!=null){
 			// update dita.list to include new generated files
-			updateList((Hashtable<String,String>)content.getValue(), mapReader.getConflicTable(),input);
+			updateList((LinkedHashMap<String,String>)content.getValue(), mapReader.getConflicTable(),input);
 			// update references in dita files
 			updateRefOfDita(content, mapReader.getConflicTable(),input);
 		}
@@ -123,7 +124,7 @@ public class ChunkModule implements AbstractPipelineModule {
 	        
 		return null;
 	}
-	
+	//update the href in ditamap and topic files
 	private void updateRefOfDita(Content changeTable, Hashtable<String, String> conflictTable, AbstractPipelineInput input){
 	    Properties prop = new Properties();	 
 	    org.dita.dost.log.DITAOTJavaLogger logger=new org.dita.dost.log.DITAOTJavaLogger();
@@ -159,7 +160,7 @@ public class ChunkModule implements AbstractPipelineModule {
 	}
 	
 	
-	private void updateList(Hashtable<String, String> changeTable, Hashtable<String, String> conflictTable, AbstractPipelineInput input){
+	private void updateList(LinkedHashMap<String, String> changeTable, Hashtable<String, String> conflictTable, AbstractPipelineInput input){
 		
 	    Properties prop = new Properties();	 
 	    HashSet<String> chunkedTopicSet=new LinkedHashSet<String>(Constants.INT_128);
@@ -249,6 +250,7 @@ public class ChunkModule implements AbstractPipelineModule {
 				Map.Entry<String, String> entry = it.next();
 				String oldFile=(String)entry.getKey();
 				if(entry.getValue().toString().equals(oldFile)){
+					//newly chunked file
 					newChunkedFile=entry.getValue().toString();
 					newChunkedFile=FileUtils.getRelativePathFromMap(xmlDitalist.getAbsolutePath(), newChunkedFile);
 					String extName=getExtName(newChunkedFile);
@@ -257,6 +259,7 @@ public class ChunkModule implements AbstractPipelineModule {
 						if (!topicList.contains(newChunkedFile)) {
 							topicList.add(newChunkedFile);
 							if (oldTopicList.contains(newChunkedFile)) {
+								//newly chunked file shouldn't be deleted
 								oldTopicList.remove(newChunkedFile);
 							}
 						}
@@ -272,7 +275,7 @@ public class ChunkModule implements AbstractPipelineModule {
 				
 				}
 			}
-			
+			//removed extra topic files
 			for (String s : oldTopicList) {
 				if (!StringUtils.isEmptyString(s)) {
 					File f = new File(tempDir, s);
@@ -288,14 +291,17 @@ public class ChunkModule implements AbstractPipelineModule {
 				Map.Entry<String,String> entry = iter.next();
 				String oldFile = (String)entry.getKey();
 				if (entry.getValue().toString().equals(oldFile)) {
-					// newly chunked file
+					// original topic file
 					String targetPath = ((String)conflictTable.get((String)entry.getKey()));
 					if (targetPath != null) {
 						File target = new File(targetPath);
 						if (!FileUtils.fileExists(target.getAbsolutePath())) {
+							// newly chunked file
 							File from = new File(entry.getValue().toString());
 							String relativePath = FileUtils.getRelativePathFromMap(xmlDitalist.getAbsolutePath(), from.getAbsolutePath());
+							//ensure the rename
 							target.delete();
+							//ensure the newly chunked file to the old one
 							from.renameTo(target);
 							if (topicList.contains(relativePath)) {
 								topicList.remove(relativePath);
