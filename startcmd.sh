@@ -35,4 +35,4 @@ else
 export CLASSPATH="$NEW_CLASSPATH"
 fi
 
-sh
+"$SHELL"
