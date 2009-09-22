@@ -178,9 +178,9 @@
   <xsl:variable name="element">
     <xsl:value-of select="local-name(.)"/>
   </xsl:variable>
-  <xsl:variable name="domains">
+  <!--xsl:variable name="domains">
       <xsl:value-of select="ancestor-or-self::*[@domains][1]/@domains"/>
-  </xsl:variable>
+  </xsl:variable-->
   
   <xsl:variable name="file-prefix">
 	<xsl:value-of select="$FILEREF"/><xsl:value-of select="$WORKDIR"/><xsl:value-of select="$current-relative-path"/>
@@ -200,7 +200,10 @@
       </xsl:with-param>
     </xsl:call-template>
   </xsl:variable>
-
+  <!-- added by William on 2009-09-14 for bug:2857167 start-->
+  <!-- get domains attribute in the target file -->
+  <xsl:variable name="domains" select="document($file, /)/*/@domains|/dita/*[@domains][1]/@domains"/>
+  <!-- added by William on 2009-09-14 for bug:2857167 end-->
   <!--the file name is useful to href when resolveing conref -->
   <xsl:variable name="conref-filename">
     <xsl:call-template name="replace-blank">
@@ -375,8 +378,6 @@
               </xsl:when>
               <xsl:when test="$topicpos='otherfile'">
                 <!-- added by William on 20090808 for req #12008 start-->
-                <!-- get domains attribute in the target file -->
-                <xsl:variable name="domains" select="document($file, /)/*/@domains|/dita/*[@domains][1]/@domains"/>
                 <!-- format domains attribute in the source file -->
                 <xsl:variable name ="preDomains" select="normalize-space($ORIGINAL-DOMAINS)"/>
                 <xsl:variable name="isValid">
@@ -481,8 +482,6 @@
               </xsl:when>
               <xsl:when test="$topicpos='otherfile'">
                       <!-- added by William on 20090808 for req #12008 start-->
-                      <!-- get domains attribute in the target file -->
-                      <xsl:variable name="domains" select="document($file, /)/*/@domains|/dita/*[@domains][1]/@domains"/>
                       <!-- format domains attribute in the source file -->
 	                  <xsl:variable name ="preDomains" select="normalize-space($ORIGINAL-DOMAINS)"/>
 	                  <xsl:variable name="isValid">
@@ -542,8 +541,6 @@
               </xsl:when>
               <xsl:when test="$topicpos='firstinfile'">
                 <!-- added by William on 20090808 for req #12008 start-->
-                <!-- get domains attribute in the target file -->
-                <xsl:variable name="domains" select="document($file, /)/*/@domains|/dita/*[@domains][1]/@domains"/>
                 <!-- format domains attribute in the source file -->
                 <xsl:variable name ="preDomains" select="normalize-space($ORIGINAL-DOMAINS)"/>
                 <xsl:variable name="isValid">
@@ -670,8 +667,6 @@
               </xsl:when>
               <xsl:when test="$topicpos='otherfile'">
                 <!-- added by William on 20090808 for req #12008 start-->
-                <!-- get domains attribute in the target file -->
-                <xsl:variable name="domains" select="document($file, /)/*/@domains|/dita/*[@domains][1]/@domains"/>
                 <!-- format domains attribute in the source file -->
                 <xsl:variable name ="preDomains" select="normalize-space($ORIGINAL-DOMAINS)"/>
                 <xsl:variable name="isValid">
@@ -771,8 +766,6 @@
               </xsl:when>
               <xsl:when test="$topicpos='otherfile'">
                 <!-- added by William on 20090808 for req #12008 start-->
-                <!-- get domains attribute in the target file -->
-                <xsl:variable name="domains" select="document($file, /)/*/@domains|/dita/*[@domains][1]/@domains"/>
                 <!-- format domains attribute in the source file -->
                 <xsl:variable name ="preDomains" select="normalize-space($ORIGINAL-DOMAINS)"/>
                 <xsl:variable name="isValid">
@@ -836,8 +829,6 @@
           <!--targetting an element in a map ,and the source is a element  from a topic ,add by wxzhang 20070605-->
           <xsl:when test="substring-after(@conref,'#')!=''">
             <!-- added by William on 20090808 for req #12008 start-->
-            <!-- get domains attribute in the target file -->
-            <xsl:variable name="domains" select="document($file, /)/*/@domains|/dita/*[@domains][1]/@domains"/>
             <!-- format domains attribute in the source file -->
             <xsl:variable name ="preDomains" select="normalize-space($ORIGINAL-DOMAINS)"/>
             <xsl:variable name="isValid">
