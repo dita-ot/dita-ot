@@ -3,6 +3,7 @@ package org.dita.dost.reader;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Set;
+import java.util.Stack;
 
 import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.module.Content;
@@ -19,24 +20,32 @@ import org.xml.sax.helpers.XMLReaderFactory;
 
 public class KeyrefReader extends AbstractXMLReader {
 
+	protected static class KeyDef
+	{
+		protected String key;
+		protected StringBuffer keyDefContent;
+		protected int keyDefLevel = 0;
+		public KeyDef(String key)
+		{
+			this.key=key;
+			keyDefContent = new StringBuffer();
+		}
+	}
 	private DITAOTJavaLogger javaLogger;
 	
 	private XMLReader reader;
 	
 	private Hashtable<String, String> keyDefTable;
 	
-	private StringBuffer keyDefContent;
+	private Stack<KeyDef> keyDefs;
 	
 	private Set<String> keys;
 	
 	private String tempDir;
 	
-	private String key;
 	
 	// flag for the start of key definition;
-	private boolean start;
 	
-	private int keyDefLevel = 0;
 	
 	public KeyrefReader(){
 		javaLogger = new DITAOTJavaLogger();
@@ -55,28 +64,30 @@ public class KeyrefReader extends AbstractXMLReader {
 	@Override
 	public void characters(char[] ch, int start, int length)
 			throws SAXException {
-		if(this.start)
-			keyDefContent.append(StringUtils.escapeXML(ch, start, length));
+		if(isStart())
+			keyDefAppend(StringUtils.escapeXML(ch, start, length));
 	}
 
 
 	@Override
 	public void endElement(String uri, String localName, String name)
 			throws SAXException {
-		if(start){
-			keyDefLevel --;
-			keyDefContent.append(Constants.LESS_THAN).append(Constants.SLASH).append(name).append(Constants.GREATER_THAN);
+		if(isStart()){
+			decKeyDefLevel();
+			keyDefAppend(Constants.LESS_THAN);
+			keyDefAppend(Constants.SLASH);
+			keyDefAppend(name);
+			keyDefAppend(Constants.GREATER_THAN);
 		}
-		if(start && keyDefLevel == 0){
+		if(isStart() && getKeyDefLevel() == 0){
 			// to the end of the key definition, set the flag false 
 			// and put the key definition to table.
-			start = false;
-			for(String keyName: key.split(" ")){
+			KeyDef keyDef = popKeyDef();
+			for(String keyName: keyDef.key.split(" ")){
 				if(!keyName.equals(""))
-				keyDefTable.put(keyName, keyDefContent.toString());
+				keyDefTable.put(keyName, keyDef.keyDefContent.toString());
 				
 			}
-			keyDefContent = new StringBuffer();
 		}
 	}
 
@@ -90,8 +101,7 @@ public class KeyrefReader extends AbstractXMLReader {
 
 	@Override
 	public void read(String filename) {
-		keyDefContent = new StringBuffer();
-		start = false;
+		keyDefs = new Stack<KeyDef>();
 		try {
 			//AlanChanged: by refactoring Adding URIResolver Date:2009-08-13 --begin
 			/* filename = tempDir + File.separator + filename; */
@@ -125,31 +135,69 @@ public class KeyrefReader extends AbstractXMLReader {
 				}
 			}
 			if(keyName != null && flag){
-				key = keyName;
-				start = true;
-				keyDefLevel ++;
-				putElement(keyDefContent, name, atts);
+				pushKeyDef(keyName);
+				incKeyDefLevel();
+				putElement(name, atts);
 			}
-		}else if(start){
-			keyDefLevel++;
-			putElement(keyDefContent, name, atts);
+		}else if(isStart()){
+			incKeyDefLevel();
+			putElement(name, atts);
 		}
 	}
 
-	private void putElement(StringBuffer buf, String elemName,
+	private void putElement(String elemName,
 			Attributes atts) {
 		int index = 0;
-		buf.append(Constants.LESS_THAN).append(elemName);
+		keyDefAppend(Constants.LESS_THAN);
+		keyDefAppend(elemName);
 		for (index=0; index < atts.getLength(); index++){
-			buf.append(Constants.STRING_BLANK);
-			buf.append(atts.getQName(index)).append(Constants.EQUAL).append(Constants.QUOTATION);
+			keyDefAppend(Constants.STRING_BLANK);
+			keyDefAppend(atts.getQName(index));
+			keyDefAppend(Constants.EQUAL);
+			keyDefAppend(Constants.QUOTATION);
 			String value = atts.getValue(index);
-			buf.append(value).append(Constants.QUOTATION);
+			keyDefAppend(value);
+			keyDefAppend(Constants.QUOTATION);
 		}
-		buf.append(Constants.GREATER_THAN);
+		keyDefAppend(Constants.GREATER_THAN);
 	}
 	
 	public void setTempDir(String tempDir){
 		this.tempDir = tempDir;
+	}
+	private void pushKeyDef(String keyName)
+	{
+		keyDefs.push(new KeyDef(keyName));
+	}
+	private KeyDef popKeyDef()
+	{
+		return keyDefs.pop();
+	}
+	private void keyDefAppend(String content)
+	{
+		for (KeyDef keyDef : keyDefs)
+		{
+			keyDef.keyDefContent.append(content);
+		}
+	}
+	private boolean isStart()
+	{
+		return keyDefs.size()>0;
+	}
+	private void incKeyDefLevel()
+	{
+		addKeyDefLevel(1);
+	}
+	private void decKeyDefLevel()
+	{
+		addKeyDefLevel(-1);
+	}
+	private void addKeyDefLevel(int dif)
+	{
+		keyDefs.peek().keyDefLevel+=dif;
+	}
+	private int getKeyDefLevel()
+	{
+		return keyDefs.peek().keyDefLevel;
 	}
 }
