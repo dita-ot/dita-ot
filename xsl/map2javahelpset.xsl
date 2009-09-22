@@ -37,11 +37,12 @@
       </title>
       <maps>
         <homeID>
-        	<xsl:variable name="filePath">
-        		<xsl:choose>
- 					<xsl:when test="contains($outputdir, ':\') or contains($outputdir, ':/')">
-			            <xsl:value-of select="concat('file:/', $outputdir)"/>
-			        </xsl:when>
+			<xsl:variable name="filePath">
+				<xsl:choose>
+					<xsl:when
+						test="contains($outputdir, ':\') or contains($outputdir, ':/')">
+						<xsl:value-of select="concat('file:/', $outputdir)" />
+					</xsl:when>
 					<xsl:when test="starts-with($outputdir, '/')">
 						<xsl:value-of select="concat('file://', $outputdir)" />
 					</xsl:when>
@@ -51,21 +52,11 @@
 					<xsl:otherwise>
 						<xsl:value-of select="concat('file:/', $ditadir, '/', $outputdir)" />
 					</xsl:otherwise>
-        		</xsl:choose>
-        	</xsl:variable>
-        	<xsl:variable name="file">
-        		<xsl:choose>
-        			<xsl:when test="ends-with($filePath,'/') or ends-with($filePath, '\')">
-        				<xsl:value-of select="concat($filePath, $javahelpmap, '.jhm')"/>
-        			</xsl:when>
-        			<xsl:otherwise>
-        				<xsl:value-of select="concat($filePath ,'/', $javahelpmap, '.jhm')"/>
-        			</xsl:otherwise>
-        		</xsl:choose>
-        	</xsl:variable>
-        	<xsl:variable name="homeId">
-        		<xsl:value-of select="document($file)/map/mapID[1]/@target" />
-        	</xsl:variable>
+				</xsl:choose>
+			</xsl:variable>
+			<xsl:variable name="homeId">
+				<xsl:value-of select="document(concat($filePath ,'/', $javahelpmap, '.jhm'))/map/mapID[1]/@target" />
+			</xsl:variable>
 			<xsl:choose>
 				<xsl:when test="$homeId">
 					<xsl:value-of select="$homeId" />
