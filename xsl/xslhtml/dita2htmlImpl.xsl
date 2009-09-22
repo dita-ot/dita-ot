@@ -151,7 +151,7 @@
       </xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
-<!-- added by William on 2009-09-03 for keyref bug:2849078 start-->
+<!-- added by William on 2009-09-03 for keyref bug:2849078 end-->
 
 <!-- =========== "GLOBAL" DECLARATIONS (see 35) =========== -->
 
@@ -5019,6 +5019,9 @@
       </xsl:when>
       <xsl:when test="contains($target,'#')">
         <xsl:value-of select="concat($desDir, substring-before(substring-before($target,'#'),'.'),$OUTEXT,'#',substring-after($target,'#'))"/>
+      </xsl:when>
+      <xsl:when test="$target = ''">
+        <xsl:value-of select="$OUTEXT"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="concat($desDir, substring-before($target,'.'),$OUTEXT)"/>

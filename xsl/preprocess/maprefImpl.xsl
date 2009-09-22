@@ -19,7 +19,7 @@
     <xsl:param name="FILEREF">file://</xsl:param>
     <!-- The directory where the topic resides, starting with root -->
     <xsl:param name="WORKDIR" select="'./'"/>
-    
+    <!-- list of attributes that can be overided. -->
     <xsl:variable name="special-atts" select="' href class linking toc print audience product platform otherprops props '"/>
     
     <!-- the xsl:key to get all maprefs in the document in order to get reltable -->
@@ -100,7 +100,7 @@
                     <xsl:apply-templates select="*|@*|comment()|text()|processing-instruction()" />
                 </xsl:copy>
             </xsl:when>
-            <!-- added by William on 2009-09-01 for updated mapref behavior start-->
+            <!-- added by William on 2009-09-01 for updated mapref behavior end-->
             <xsl:when test="@format='ditamap'">  <!-- it is mapref and pass the loop dependency check -->
                 <!-- update mapref id path -->
                 <xsl:variable name="updated-id-path" select="concat($mapref-id-path,' ',generate-id(.),' ')"/> 

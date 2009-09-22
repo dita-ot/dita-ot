@@ -127,7 +127,7 @@ exclude-result-prefixes="opentopic-index opentopic">
                 </xsl:for-each>
             </xsl:otherwise>
         </xsl:choose>
-        <!-- edited by william on 2009-07-13 for bug:2819853 start -->
+        <!-- edited by william on 2009-07-13 for bug:2819853 end -->
         <xsl:apply-templates/>
     </xsl:if>
 </xsl:template>

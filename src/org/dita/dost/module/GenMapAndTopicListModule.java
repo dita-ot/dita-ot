@@ -1016,7 +1016,7 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 					String to=file.substring(0,index);
 					String source=file.substring(index+1);
 					
-						//TODO Added by William on 2009-05-14 for keyref bug(972-997)
+						//TODO Added by William on 2009-05-14 for keyref bug start
 						//When generating key.list
 						if(Constants.KEY_LIST.equals(key)){
 						String repStr = FileUtils.removeRedundantNames(new StringBuffer(prefix).append(to).toString())
@@ -1042,6 +1042,7 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 							//no prefix
 							newSet.add(repStr);
 						}
+						//TODO Added by William on 2009-05-14 for keyref bug end
 					}else{
 						//other case do nothing
 						newSet.add(FileUtils.removeRedundantNames(new StringBuffer(prefix).append(to).toString())
