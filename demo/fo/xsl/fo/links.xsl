@@ -359,6 +359,13 @@ See the accompanying license.txt file for applicable licenses.
                     <xsl:value-of select="concat('url(', $href, ')')"/>
                 </xsl:attribute>
             </xsl:when>
+        	<!-- added by William on 2009-09-09 for xref pdf bug:2854546 start-->
+        	<xsl:when test="$scope = 'peer'">
+        		<xsl:attribute name="internal-destination">
+        			<xsl:value-of select="$href"/>
+        		</xsl:attribute>
+        	</xsl:when>
+        	<!-- added by William on 2009-09-09 for xref pdf bug:2854546 end-->
             <xsl:otherwise>
                 <xsl:attribute name="internal-destination">
                     <xsl:value-of select="opentopic-func:getDestinationId($href)"/>
