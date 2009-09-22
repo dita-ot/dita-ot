@@ -14,6 +14,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.Hashtable;
+import java.util.LinkedHashMap;
 import java.util.Properties;
 
 import org.dita.dost.exception.DITAOTException;
@@ -40,7 +41,7 @@ public class TopicRefWriter extends AbstractXMLWriter {
 	// To check the URL of href in topicref attribute
 	private static final String NOT_LOCAL_URL = "://";
 
-	private Hashtable<String, String> changeTable = null;
+	private LinkedHashMap<String, String> changeTable = null;
 	private Hashtable<String, String> conflictTable = null;
 	private DITAOTJavaLogger logger = null;
 	private OutputStreamWriter output;
@@ -209,7 +210,7 @@ public class TopicRefWriter extends AbstractXMLWriter {
 	 */
 
 	public void setContent(Content content) {
-		changeTable = (Hashtable<String,String>) content.getValue();
+		changeTable = (LinkedHashMap<String,String>) content.getValue();
 	}
 
 	/*
