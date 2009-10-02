@@ -22,5 +22,7 @@ To install and test the plugin:
 For more detailed documentation and licensing information, see README.html 
 in the 'docs' directory.
 
+Testing commit. This file and otherw will change shortly.
+
 
      
