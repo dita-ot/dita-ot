@@ -1237,6 +1237,71 @@ See the accompanying license.txt file for applicable licenses.
         </fo:table-cell>
     </xsl:template>
 
+    <!-- SourceForge bug tracker item 2872988:
+         Count the max number of cells in any row of a simpletable -->
+    <xsl:template match="*" mode="count-max-simpletable-cells">
+      <xsl:param name="maxcount">0</xsl:param>
+      <xsl:variable name="newmaxcount">
+        <xsl:choose>
+          <xsl:when test="count(*)>$maxcount"><xsl:value-of select="count(*)"/></xsl:when>
+          <xsl:otherwise><xsl:value-of select="$maxcount"/></xsl:otherwise>
+        </xsl:choose>
+      </xsl:variable>
+      <xsl:choose>
+        <xsl:when test="not(following-sibling::*)">
+          <xsl:value-of select="$newmaxcount"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:apply-templates select="following-sibling::*[1]" mode="count-max-simpletable-cells">
+            <xsl:with-param name="maxcount" select="$newmaxcount"/>
+          </xsl:apply-templates>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:template>
+
+    <!-- SourceForge bug tracker item 2872988:
+         Count the number of values in @relcolwidth (to add values if one is missing) -->
+    <xsl:template match="*" mode="count-colwidths">
+      <xsl:param name="relcolwidth" select="@relcolwidth"/>
+      <xsl:param name="count" select="'0'"/>
+      <xsl:choose>
+        <xsl:when test="not(contains($relcolwidth,' '))">
+          <xsl:value-of select="$count + 1"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:apply-templates select="." mode="count-colwidths">
+            <xsl:with-param name="relcolwidth" select="substring-after($relcolwidth,' ')"/>
+            <xsl:with-param name="count" select="$count + 1"/>
+          </xsl:apply-templates>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:template>
+
+    <!-- SourceForge bug tracker item 2872988:
+         If there are more cells in any row than there are relcolwidth values, 
+         add 1* for each missing cell, otherwise the FO processor may crash. -->
+    <xsl:template match="*" mode="fix-relcolwidth">
+      <xsl:param name="update-relcolwidth" select="@relcolwidth"/>
+      <xsl:param name="number-cells">
+        <xsl:apply-templates select="*[1]" mode="count-max-simpletable-cells"/>
+      </xsl:param>
+      <xsl:param name="number-relwidths">
+        <xsl:apply-templates select="." mode="count-colwidths"/>
+      </xsl:param>
+      <xsl:choose>
+        <xsl:when test="$number-relwidths &lt; $number-cells">
+          <xsl:apply-templates select="." mode="fix-relcolwidth">
+            <xsl:with-param name="update-relcolwidth" select="concat($update-relcolwidth,' *1')"/>
+            <xsl:with-param name="number-cells" select="$number-cells"/>
+            <xsl:with-param name="number-relwidths" select="$number-relwidths+1"/>
+          </xsl:apply-templates>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="$update-relcolwidth"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:template>
+
     <!--  Simpletable processing  -->
     <xsl:template match="*[contains(@class, ' topic/simpletable ')]">
         <fo:table xsl:use-attribute-sets="simpletable" id="{@id}">
@@ -1247,8 +1312,11 @@ See the accompanying license.txt file for applicable licenses.
             </xsl:call-template>
 
             <xsl:if test="@relcolwidth">
+                <xsl:variable name="fix-relcolwidth">
+                    <xsl:apply-templates select="." mode="fix-relcolwidth"/>
+                </xsl:variable>
                 <xsl:call-template name="createSimpleTableColumns">
-                    <xsl:with-param name="theColumnWidthes" select="@relcolwidth"/>
+                    <xsl:with-param name="theColumnWidthes" select="$fix-relcolwidth"/>
                 </xsl:call-template>
             </xsl:if>
 
@@ -1385,8 +1453,11 @@ See the accompanying license.txt file for applicable licenses.
             </xsl:call-template>
 
             <xsl:if test="@relcolwidth">
+                <xsl:variable name="fix-relcolwidth">
+                    <xsl:apply-templates select="." mode="fix-relcolwidth"/>
+                </xsl:variable>
                 <xsl:call-template name="createSimpleTableColumns">
-                    <xsl:with-param name="theColumnWidthes" select="@relcolwidth"/>
+                    <xsl:with-param name="theColumnWidthes" select="$fix-relcolwidth"/>
                 </xsl:call-template>
             </xsl:if>
 
@@ -1654,15 +1725,18 @@ See the accompanying license.txt file for applicable licenses.
         </fo:table-cell>
     </xsl:template>
 
-    <!--  Choisetable processing  -->
+    <!--  Choicetable processing  -->
     <xsl:template match="*[contains(@class, ' task/choicetable ')]">
         <fo:table xsl:use-attribute-sets="choicetable" id="{@id}">
             <xsl:call-template name="univAttrs"/>
             <xsl:call-template name="globalAtts"/>
 
             <xsl:if test="@relcolwidth">
+                <xsl:variable name="fix-relcolwidth">
+                    <xsl:apply-templates select="." mode="fix-relcolwidth"/>
+                </xsl:variable>
                 <xsl:call-template name="createSimpleTableColumns">
-                    <xsl:with-param name="theColumnWidthes" select="@relcolwidth"/>
+                    <xsl:with-param name="theColumnWidthes" select="$fix-relcolwidth"/>
                 </xsl:call-template>
             </xsl:if>
 
