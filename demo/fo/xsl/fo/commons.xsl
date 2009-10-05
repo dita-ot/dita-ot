@@ -1266,10 +1266,19 @@ See the accompanying license.txt file for applicable licenses.
 
     <!-- Gets navigation title of current topic, used for bookmarks/TOC -->    
     <xsl:template name="getNavTitle">
+        <!-- topicNumber = the # of times this topic has appeared. When topicNumber=3,
+             this copy of the topic is based on its third appearance in the map. -->
+        <xsl:param name="topicNumber"/>
         <xsl:variable name="id" select="@id"/>
         <xsl:variable name="topicref" select="$map//*[@id = $id]"/>
         <xsl:choose>
-            <xsl:when test="$topicref and $topicref/@locktitle='yes' and $topicref/@navtitle">
+            <xsl:when test="$topicNumber!='' and 
+                            $topicref and 
+                            $topicref[position()=$topicNumber]/@locktitle='yes' and 
+                            $topicref[position()=$topicNumber]/@navtitle">
+                <xsl:value-of select="$topicref[position()=$topicNumber]/@navtitle"/>
+            </xsl:when>
+            <xsl:when test="$topicNumber='' and $topicref and $topicref/@locktitle='yes' and $topicref/@navtitle">
                 <xsl:value-of select="$topicref/@navtitle"/>
             </xsl:when>
             <xsl:otherwise>

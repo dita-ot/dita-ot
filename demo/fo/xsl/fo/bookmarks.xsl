@@ -73,12 +73,14 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' topic/topic ') and not(contains(@class, ' bkinfo/bkinfo '))]" mode="bookmark">
-        <xsl:variable name="topicTitle">
-            <xsl:call-template name="getNavTitle"/>
-        </xsl:variable>
         <xsl:variable name="id" select="@id"/>
         <xsl:variable name="gid" select="generate-id()"/>
         <xsl:variable name="topicNumber" select="count(exsl:node-set($topicNumbers)/topic[@id = $id][following-sibling::topic[@guid = $gid]]) + 1"/>
+        <xsl:variable name="topicTitle">
+            <xsl:call-template name="getNavTitle">
+              <xsl:with-param name="topicNumber" select="$topicNumber"/>
+            </xsl:call-template>
+        </xsl:variable>
         <xsl:variable name="mapTopic">
             <xsl:copy-of select="$map//*[@id = $id]"/>
         </xsl:variable>
