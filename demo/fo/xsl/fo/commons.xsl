@@ -1443,11 +1443,22 @@ See the accompanying license.txt file for applicable licenses.
                     </fo:block>
                 </xsl:otherwise>
             </xsl:choose>
+    </xsl:template>
 
+    <xsl:template match="*[contains(@class,' topic/bodydiv ')]">
+        <fo:block id="{@id}">
+            <xsl:apply-templates/>
+        </fo:block>
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' topic/section ')]">
         <fo:block xsl:use-attribute-sets="section" id="{@id}">
+            <xsl:apply-templates/>
+        </fo:block>
+    </xsl:template>
+
+    <xsl:template match="*[contains(@class,' topic/sectiondiv ')]">
+        <fo:block id="{@id}">
             <xsl:apply-templates/>
         </fo:block>
     </xsl:template>
@@ -1759,6 +1770,12 @@ See the accompanying license.txt file for applicable licenses.
         </fo:block>
     </xsl:template>
 
+    <!-- The text element has no default semantics or formatting -->
+    <xsl:template match="*[contains(@class,' topic/text ')]">
+        <fo:inline id="{@id}">
+            <xsl:apply-templates/>
+        </fo:inline>
+    </xsl:template>
 
     <xsl:template match="*[contains(@class,' topic/keyword ')]">
         <fo:inline xsl:use-attribute-sets="keyword" id="{@id}">
