@@ -1304,6 +1304,10 @@ See the accompanying license.txt file for applicable licenses.
 
     <!--  Simpletable processing  -->
     <xsl:template match="*[contains(@class, ' topic/simpletable ')]">
+        <xsl:variable name="number-cells">
+            <!-- Contains the number of cells in the widest row -->
+            <xsl:apply-templates select="*[1]" mode="count-max-simpletable-cells"/>
+        </xsl:variable>
         <fo:table xsl:use-attribute-sets="simpletable" id="{@id}">
             <!-- <xsl:call-template name="univAttrs"/> -->
             <xsl:call-template name="globalAtts"/>
@@ -1313,7 +1317,9 @@ See the accompanying license.txt file for applicable licenses.
 
             <xsl:if test="@relcolwidth">
                 <xsl:variable name="fix-relcolwidth">
-                    <xsl:apply-templates select="." mode="fix-relcolwidth"/>
+                    <xsl:apply-templates select="." mode="fix-relcolwidth">
+                        <xsl:with-param name="number-cells" select="$number-cells"/>
+                    </xsl:apply-templates>
                 </xsl:variable>
                 <xsl:call-template name="createSimpleTableColumns">
                     <xsl:with-param name="theColumnWidthes" select="$fix-relcolwidth"/>
@@ -1321,11 +1327,15 @@ See the accompanying license.txt file for applicable licenses.
             </xsl:if>
 
             <xsl:if test="*[contains(@class, ' topic/sthead ')]">
-                <xsl:apply-templates select="*[contains(@class, ' topic/sthead ')]"/>
+                    <xsl:apply-templates select="*[contains(@class, ' topic/sthead ')]">
+                      <xsl:with-param name="number-cells" select="$number-cells"/>
+                    </xsl:apply-templates>
             </xsl:if>
 
             <fo:table-body xsl:use-attribute-sets="simpletable__body">
-                <xsl:apply-templates select="*[contains(@class, ' topic/strow ')]"/>
+                <xsl:apply-templates select="*[contains(@class, ' topic/strow ')]">
+                    <xsl:with-param name="number-cells" select="$number-cells"/>
+                </xsl:apply-templates>
             </fo:table-body>
 
         </fo:table>
@@ -1362,17 +1372,70 @@ See the accompanying license.txt file for applicable licenses.
 
     </xsl:template>
 
+    <!-- SourceForge RFE 2874200:
+         Fill in empty cells when one is missing from strow or sthead.
+         Context for this call is strow or sthead. -->
+    <xsl:template match="*" mode="fillInMissingSimpletableCells">
+      <xsl:param name="fill-in-count" select="'0'"/>
+      <xsl:if test="$fill-in-count > 0">
+        <fo:table-cell xsl:use-attribute-sets="strow.stentry" id="{@id}">
+            <xsl:variable name="frame" select="../@frame"/>
+            <xsl:if test="following-sibling::*[contains(@class, ' topic/strow ')]">
+                <xsl:call-template name="generateSimpleTableHorizontalBorders">
+                    <xsl:with-param name="frame" select="$frame"/>
+                </xsl:call-template>
+            </xsl:if>
+            <xsl:if test="$frame = 'all' or $frame = 'topbot' or $frame = 'top' or not($frame)">
+                <xsl:call-template name="processAttrSetReflection">
+                    <xsl:with-param name="attrSet" select="'__tableframe__top'"/>
+                    <xsl:with-param name="path" select="$tableAttrs"/>
+                </xsl:call-template>
+            </xsl:if>
+            <xsl:if test="($frame = 'all') or ($frame = 'topbot') or ($frame = 'sides') or not($frame)">
+                <xsl:call-template name="processAttrSetReflection">
+                    <xsl:with-param name="attrSet" select="'__tableframe__left'"/>
+                    <xsl:with-param name="path" select="$tableAttrs"/>
+                </xsl:call-template>
+                <xsl:call-template name="processAttrSetReflection">
+                    <xsl:with-param name="attrSet" select="'__tableframe__right'"/>
+                    <xsl:with-param name="path" select="$tableAttrs"/>
+                </xsl:call-template>
+            </xsl:if>
+            <fo:block><fo:inline>&#160;</fo:inline></fo:block> <!-- Non-breaking space -->
+        </fo:table-cell>
+        <xsl:apply-templates select="." mode="fillInMissingSimpletableCells">
+            <xsl:with-param name="fill-in-count" select="$fill-in-count - 1"/>
+        </xsl:apply-templates>
+      </xsl:if>
+    </xsl:template>
+
     <xsl:template match="*[contains(@class, ' topic/sthead ')]">
+        <xsl:param name="number-cells">
+            <xsl:apply-templates select="../*[1]" mode="count-max-simpletable-cells"/>
+        </xsl:param>
         <fo:table-header xsl:use-attribute-sets="sthead" id="{@id}">
             <fo:table-row xsl:use-attribute-sets="sthead__row">
                 <xsl:apply-templates/>
+                <xsl:if test="count(*) &lt; $number-cells">
+                  <xsl:apply-templates select="." mode="fillInMissingSimpletableCells">
+                      <xsl:with-param name="fill-in-count" select="$number-cells - count(*)"/>
+                  </xsl:apply-templates>
+                </xsl:if>
             </fo:table-row>
         </fo:table-header>
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' topic/strow ')]">
+        <xsl:param name="number-cells">
+            <xsl:apply-templates select="../*[1]" mode="count-max-simpletable-cells"/>
+        </xsl:param>
         <fo:table-row xsl:use-attribute-sets="strow" id="{@id}">
             <xsl:apply-templates/>
+            <xsl:if test="count(*) &lt; $number-cells">
+                <xsl:apply-templates select="." mode="fillInMissingSimpletableCells">
+                    <xsl:with-param name="fill-in-count" select="$number-cells - count(*)"/>
+                </xsl:apply-templates>
+            </xsl:if>
         </fo:table-row>
     </xsl:template>
 
