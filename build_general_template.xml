@@ -40,7 +40,7 @@
       <param name="ARTLBL" expression="${args.artlbl}" if="args.artlbl" />
       <param name="GENERATE-TASK-LABELS" expression="${args.gen.task.lbl}" if="args.gen.task.lbl" />
       <param name="PRESERVE-DITA-CLASS" expression="${args.xhtml.classattr}" if="args.xhtml.classattr"/>
-      <param name="NOPARENTLINK" expression="${args.use.parent.link}" if="args.use.parent.link"/>
+      <param name="NOPARENTLINK" expression="${args.hide.parent.link}" if="args.hide.parent.link"/>
       <param name="BREADCRUMBS" expression="${args.breadcrumbs}" if="args.breadcrumbs"/>
       <param name="INDEXSHOW" expression="${args.indexshow}" if="args.indexshow" />
       <param name="genDefMeta" expression="${args.gen.default.meta}" if="args.gen.default.meta" />
@@ -84,7 +84,7 @@
       <param name="ARTLBL" expression="${args.artlbl}" if="args.artlbl" />
       <param name="GENERATE-TASK-LABELS" expression="${args.gen.task.lbl}" if="args.gen.task.lbl" />
       <param name="PRESERVE-DITA-CLASS" expression="${args.xhtml.classattr}" if="args.xhtml.classattr"/>
-      <param name="NOPARENTLINK" expression="${args.use.parent.link}" if="args.use.parent.link"/>
+      <param name="NOPARENTLINK" expression="${args.hide.parent.link}" if="args.hide.parent.link"/>
       <param name="BREADCRUMBS" expression="${args.breadcrumbs}" if="args.breadcrumbs"/>
       <param name="INDEXSHOW" expression="${args.indexshow}" if="args.indexshow" />
       <param name="genDefMeta" expression="${args.gen.default.meta}" if="args.gen.default.meta" />
@@ -140,7 +140,7 @@
       <param name="ARTLBL" expression="${args.artlbl}" if="args.artlbl" />
       <param name="GENERATE-TASK-LABELS" expression="${args.gen.task.lbl}" if="args.gen.task.lbl" />
       <param name="PRESERVE-DITA-CLASS" expression="${args.xhtml.classattr}" if="args.xhtml.classattr"/>
-      <param name="NOPARENTLINK" expression="${args.use.parent.link}" if="args.use.parent.link"/>
+      <param name="NOPARENTLINK" expression="${args.hide.parent.link}" if="args.hide.parent.link"/>
       <param name="BREADCRUMBS" expression="${args.breadcrumbs}" if="args.breadcrumbs"/>
       <param name="INDEXSHOW" expression="${args.indexshow}" if="args.indexshow" />
       <param name="genDefMeta" expression="${args.gen.default.meta}" if="args.gen.default.meta" />
@@ -192,7 +192,7 @@
       <param name="ARTLBL" expression="${args.artlbl}" if="args.artlbl" />
       <param name="GENERATE-TASK-LABELS" expression="${args.gen.task.lbl}" if="args.gen.task.lbl" />
       <param name="PRESERVE-DITA-CLASS" expression="${args.xhtml.classattr}" if="args.xhtml.classattr"/>
-      <param name="NOPARENTLINK" expression="${args.use.parent.link}" if="args.use.parent.link"/>
+      <param name="NOPARENTLINK" expression="${args.hide.parent.link}" if="args.hide.parent.link"/>
       <param name="BREADCRUMBS" expression="${args.breadcrumbs}" if="args.breadcrumbs"/>
       <param name="INDEXSHOW" expression="${args.indexshow}" if="args.indexshow" />
       <param name="genDefMeta" expression="${args.gen.default.meta}" if="args.gen.default.meta" />
@@ -254,7 +254,7 @@
       <param name="ARTLBL" expression="${args.artlbl}" if="args.artlbl" />
       <param name="GENERATE-TASK-LABELS" expression="${args.gen.task.lbl}" if="args.gen.task.lbl" />
       <param name="PRESERVE-DITA-CLASS" expression="${args.xhtml.classattr}" if="args.xhtml.classattr"/>
-      <param name="NOPARENTLINK" expression="${args.use.parent.link}" if="args.use.parent.link"/>
+      <param name="NOPARENTLINK" expression="${args.hide.parent.link}" if="args.hide.parent.link"/>
       <param name="BREADCRUMBS" expression="${args.breadcrumbs}" if="args.breadcrumbs"/>
       <param name="INDEXSHOW" expression="${args.indexshow}" if="args.indexshow" />
       <param name="genDefMeta" expression="${args.gen.default.meta}" if="args.gen.default.meta" />
@@ -297,7 +297,7 @@
       <param name="ARTLBL" expression="${args.artlbl}" if="args.artlbl" />
       <param name="GENERATE-TASK-LABELS" expression="${args.gen.task.lbl}" if="args.gen.task.lbl" />
       <param name="PRESERVE-DITA-CLASS" expression="${args.xhtml.classattr}" if="args.xhtml.classattr"/>
-      <param name="NOPARENTLINK" expression="${args.use.parent.link}" if="args.use.parent.link"/>
+      <param name="NOPARENTLINK" expression="${args.hide.parent.link}" if="args.hide.parent.link"/>
       <param name="BREADCRUMBS" expression="${args.breadcrumbs}" if="args.breadcrumbs"/>
       <param name="INDEXSHOW" expression="${args.indexshow}" if="args.indexshow" />
       <param name="genDefMeta" expression="${args.gen.default.meta}" if="args.gen.default.meta" />
