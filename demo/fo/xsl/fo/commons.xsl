@@ -1332,8 +1332,45 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' map/searchtitle ')]"/>
-    
+
+    <xsl:template match="*[contains(@class,' topic/abstract ')]">
+        <fo:block id="{@id}">
+            <xsl:apply-templates/>
+        </fo:block>
+    </xsl:template>
+
+    <!-- For SF Bug 2879171: modify so that shortdesc is inline when inside
+         abstract with only other text or inline markup. -->
     <xsl:template match="*[contains(@class,' topic/shortdesc ')]">
+        <xsl:variable name="format-as-block">
+            <xsl:choose>
+                <xsl:when test="not(parent::*[contains(@class,' topic/abstract ')])">yes</xsl:when>
+                <xsl:when test="preceding-sibling::*[contains(@class,' topic/p ') or contains(@class,' topic/dl ') or
+                                         contains(@class,' topic/fig ') or contains(@class,' topic/lines ') or
+                                         contains(@class,' topic/lq ') or contains(@class,' topic/note ') or
+                                         contains(@class,' topic/ol ') or contains(@class,' topic/pre ') or
+                                         contains(@class,' topic/simpletable ') or contains(@class,' topic/sl ') or
+                                         contains(@class,' topic/table ') or contains(@class,' topic/ul ')]">yes</xsl:when>
+                <xsl:when test="following-sibling::*[contains(@class,' topic/p ') or contains(@class,' topic/dl ') or
+                                         contains(@class,' topic/fig ') or contains(@class,' topic/lines ') or
+                                         contains(@class,' topic/lq ') or contains(@class,' topic/note ') or
+                                         contains(@class,' topic/ol ') or contains(@class,' topic/pre ') or
+                                         contains(@class,' topic/simpletable ') or contains(@class,' topic/sl ') or
+                                         contains(@class,' topic/table ') or contains(@class,' topic/ul ')]">yes</xsl:when>
+                <xsl:otherwise>no</xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:choose>
+            <xsl:when test="$format-as-block='yes'">
+                <xsl:apply-templates select="." mode="format-shortdesc-as-block"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:apply-templates select="." mode="format-shortdesc-as-inline"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+
+    <xsl:template match="*" mode="format-shortdesc-as-block">
         <!--Edited by William on 2009-07-07 for bug:2815492 start-->
         <!--fo:block xsl:use-attribute-sets="shortdesc" id="{@id}">
             <xsl:apply-templates/>
@@ -1349,22 +1386,18 @@ See the accompanying license.txt file for applicable licenses.
         </fo:block>
         <!--Edited by William on 2009-07-07 for bug:2815492 end-->
     </xsl:template>
-    
-    <xsl:template match="*[contains(@class,' map/shortdesc ')]">
-        <!--Edited by William on 2009-07-07 for bug:2815492 start-->
-        <!--fo:block xsl:use-attribute-sets="topic__shortdesc">
-            <xsl:apply-templates/>
-        </fo:block-->
-        <!--compare the length of shortdesc with the got max chars-->
-        <fo:block xsl:use-attribute-sets="topic__shortdesc">
-            <!-- If the shortdesc is sufficiently short, add keep-with-next. -->
-            <xsl:if test="string-length(.) &lt;= $maxCharsInShortDesc">
-                <!-- Low-strength keep to avoid conflict with keeps on titles. -->
-                <xsl:attribute name="keep-with-next.within-page">5</xsl:attribute>
+
+    <xsl:template match="*" mode="format-shortdesc-as-inline">
+        <fo:inline xsl:use-attribute-sets="shortdesc" id="{@id}">
+            <xsl:if test="preceding-sibling::* | preceding-sibling::text()">
+                <xsl:text> </xsl:text>
             </xsl:if>
             <xsl:apply-templates/>
-        </fo:block>
-        <!--Edited by William on 2009-07-07 for bug:2815492 end-->
+        </fo:inline>
+    </xsl:template>
+    
+    <xsl:template match="*[contains(@class,' map/shortdesc ')]">
+        <xsl:apply-templates select="." mode="format-shortdesc-as-block"/>
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' topic/topic ')]/*[contains(@class,' topic/shortdesc ')]" priority="1">
@@ -1376,21 +1409,7 @@ See the accompanying license.txt file for applicable licenses.
             <xsl:when test="(topicType = 'topicChapter') or (topicType = 'topicAppendix')"/>
             <!--   Normal processing         -->
             <xsl:otherwise>
-                <!--Edited by William on 2009-07-07 for bug:2815492 start-->
-                <!--fo:block xsl:use-attribute-sets="topic__shortdesc" id="{@id}">
-                    <xsl:apply-templates/>
-                </fo:block-->
-                
-                <!--compare the length of shortdesc with the got max chars-->
-                <fo:block xsl:use-attribute-sets="topic__shortdesc" id="{@id}">
-                    <!-- If the shortdesc is sufficiently short, add keep-with-next. -->
-                    <xsl:if test="string-length(.) &lt;= $maxCharsInShortDesc">
-                        <!-- Low-strength keep to avoid conflict with keeps on titles. -->
-                        <xsl:attribute name="keep-with-next.within-page">5</xsl:attribute>
-                    </xsl:if>
-                    <xsl:apply-templates/>
-                </fo:block>
-              <!--Edited by William on 2009-07-07 for bug:2815492 end-->
+                <xsl:apply-templates select="." mode="format-shortdesc-as-block"/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
