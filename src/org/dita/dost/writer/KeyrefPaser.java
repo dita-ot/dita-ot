@@ -381,7 +381,7 @@ public class KeyrefPaser extends AbstractXMLWriter {
 					output.write(Constants.STRING_BLANK);
 					output.write(atts.getQName(index));
 					output.write("=\"");
-					output.write(atts.getValue(index));
+					output.write(StringUtils.escapeXML(atts.getValue(index))); //2878446
 					output.write("\"");
 				}
 			} else {
@@ -598,7 +598,7 @@ public class KeyrefPaser extends AbstractXMLWriter {
 						output.append(Constants.STRING_BLANK);
 						output.append(atts.getQName(index));
 						output.write("=\"");
-						output.write(atts.getValue(index));
+                        output.write(StringUtils.escapeXML(atts.getValue(index))); //2878446
 						output.write("\"");
 					}
 				}
