@@ -534,7 +534,26 @@
     <xsl:call-template name="setStandardAttr">
       <xsl:with-param name="IDPrefix" select="'dle'"/>
     </xsl:call-template>
-    <xsl:apply-templates/>
+    <xsl:choose>
+      <xsl:when test="*[contains(@class,' topic/dd ')][2]">
+        <xsl:apply-templates select="*[contains(@class,' topic/dt ')]"/>
+        <listitem>
+          <xsl:for-each select="*[contains(@class,' topic/dd ')]">
+           <orderedlist>
+             <listitem>
+               <xsl:call-template name="setStandardAttr">
+                 <xsl:with-param name="IDPrefix" select="'dd'"/>
+               </xsl:call-template>
+               <xsl:call-template name="makeBlock"/>
+             </listitem>
+           </orderedlist>
+          </xsl:for-each>
+        </listitem>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:apply-templates/>
+      </xsl:otherwise>
+    </xsl:choose>
   </varlistentry>
 </xsl:template>
 
