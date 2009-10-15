@@ -57,6 +57,7 @@ public abstract class Constants {
     public static final String FILE_EXTENSION_TIFF = ".tiff";
 	public static final String FILE_EXTENSION_TIF = ".tif";
 	public static final String FILE_EXTENSION_PDF = ".pdf";
+	public static final String FILE_EXTENSION_SWF = ".swf";
     
     /**
      * Constants for element names in dita files.
