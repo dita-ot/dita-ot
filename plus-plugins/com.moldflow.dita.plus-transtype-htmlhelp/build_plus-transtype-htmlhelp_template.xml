@@ -18,7 +18,7 @@
                     {depend.plus-transtype-htmlhelp.map.dispatch}, plus-transtype-htmlhelp.map.basic,
                     copy-css, 
                     {depend.plus-transtype-htmlhelp.topics.dispatch}, plus-transtype-htmlhelp.topics.basic,
-                    {depend.plus-transtype-htmlhelp.compile.pre},plus-transtype-htmlhelp.compile.perform,{depend.plus-transtype-htmlhelp.compile.post},
+                    {depend.plus-transtype-htmlhelp.compile.dispatch}, plus-transtype-htmlhelp.compile.basic,
                     {depend.plus-transtype-htmlhelp.post}"
       xmlns:dita="http://dita-ot.sourceforge.net"
       dita:extension="depends org.dita.dost.platform.InsertDependsAction"
@@ -158,8 +158,33 @@
       </antcall>
     </target>
 
-    <target name="plus-transtype-htmlhelp.compile.perform"
-            if="HTMLHelpCompiler"
+    <target name="plus-transtype-htmlhelp.compile.basic"
+       dita:depends="{depend.plus-transtype-htmlhelp.compile.basic.pre},
+                     plus-transtype-htmlhelp.compile.basic.perform,
+                     {depend.plus-transtype-htmlhelp.compile.basic.post}"
+      xmlns:dita="http://dita-ot.sourceforge.net"
+      dita:extension="depends org.dita.dost.platform.InsertDependsAction"/>
+
+    <target name="plus-transtype-htmlhelp.compile.basic.class.fallback">
+      <condition property="plus.htmlhelp.compile.class.basic">
+        <and>
+          <isset property="HTMLHelpCompiler"/>
+          <or>
+            <not>
+              <isset property="plus.htmlhelp.compile.class"/>
+            </not>
+            <equals arg1="${plus.htmlhelp.compile.class}" arg2="basic"/>
+          </or>
+        </and>
+      </condition>
+    </target>
+
+    <target name="plus-transtype-htmlhelp.compile.basic.class.init"/>
+
+    <target name="plus-transtype-htmlhelp.compile.basic.perform"
+            depends="plus-transtype-htmlhelp.compile.basic.class.fallback,
+              plus-transtype-htmlhelp.compile.basic.class.init"
+            if="plus.htmlhelp.compile.class.basic"
             description="Compile HTMLHelp output">
         <exec executable="${HTMLHelpCompiler}"
               failonerror="${failonerror}"
