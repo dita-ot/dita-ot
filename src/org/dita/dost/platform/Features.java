@@ -92,7 +92,7 @@ public class Features {
 		StringBuffer valueBuffer = new StringBuffer();
 		while(valueTokenizer.hasMoreElements()){
 			String valueElement = (String) valueTokenizer.nextElement();
-			if(valueElement!=null && valueElement.trim()!=null){
+			if(valueElement!=null && valueElement.trim().length() != 0){
 				if("file".equals(type) && !FileUtils.isAbsolutePath(valueElement)){
 					valueBuffer.append(location).append(File.separatorChar);
 				}
