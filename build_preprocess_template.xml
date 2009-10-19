@@ -28,8 +28,7 @@
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     description="Clean temp directory">
     <delete includeemptydirs="true">
-      <fileset dir="${dita.temp.dir}" includes="**/*"
-        excludes="property.temp" />
+      <fileset dir="${dita.temp.dir}"/>
     </delete>
   </target>
 
