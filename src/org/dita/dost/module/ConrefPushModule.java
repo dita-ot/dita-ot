@@ -1,16 +1,12 @@
 package org.dita.dost.module;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
-import java.util.StringTokenizer;
-import java.util.Map.Entry;
 
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTJavaLogger;
@@ -18,8 +14,6 @@ import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.pipeline.PipelineHashIO;
 import org.dita.dost.reader.ConrefPushReader;
-import org.dita.dost.resolver.DitaURIResolverFactory;
-import org.dita.dost.resolver.URIResolverAdapter;
 import org.dita.dost.util.Constants;
 import org.dita.dost.util.ListUtils;
 import org.dita.dost.util.StringUtils;
@@ -30,10 +24,13 @@ public class ConrefPushModule implements AbstractPipelineModule {
 	public AbstractPipelineOutput execute(AbstractPipelineInput input)
 			throws DITAOTException {
 		String tempDir = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_TEMPDIR);
+		String basedir = ((PipelineHashIO) input)
+		.getAttribute(Constants.ANT_INVOKER_PARAM_BASEDIR);
+		
 		if (! new File(tempDir).isAbsolute()){
-			tempDir = new File(tempDir).getAbsolutePath();
+			tempDir = new File(basedir, tempDir).getAbsolutePath();
 		}
-
+		
 		Properties properties = null;
 		try{
 			properties = ListUtils.getDitaList();

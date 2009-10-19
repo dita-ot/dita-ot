@@ -448,6 +448,15 @@ public class ConrefPushParser extends AbstractXMLWriter {
 					}
 				}else if (atts.getValue(Constants.ATTRIBUTE_NAME_ID) != null){
 					String idPath = Constants.SHARP+topicId+Constants.SLASH+atts.getValue(Constants.ATTRIBUTE_NAME_ID);
+					//Added by William on 2009-10-10 for conrefPush bug:2872954 start
+					//enable conref push at map level
+					if(classValue != null && (classValue.contains(Constants.ATTR_CLASS_VALUE_TOPICREF)
+						|| classValue.contains(Constants.ATTR_CLASS_VALUE_MAP))){
+						String mapId = atts.getValue(Constants.ATTRIBUTE_NAME_ID);
+						idPath = Constants.SHARP + mapId;
+						idStack.push(mapId);
+					}
+					//Added by William on 2009-10-10 for conrefPush bug:2872954 end
 					String classAttribute = atts.getValue(Constants.ATTRIBUTE_NAME_CLASS);
 					if (movetable.containsKey(idPath+Constants.STICK+"pushbefore")){
 						output.write(replaceElementName(classValue, movetable.remove(idPath+Constants.STICK+"pushbefore")));

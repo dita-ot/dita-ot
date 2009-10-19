@@ -15,47 +15,56 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
-
+/**
+ * Class for reading conref push content.
+ * @author william
+ *
+ */
 public class ConrefPushReader extends AbstractXMLReader {
-	
+	/** push table.*/
 	private Hashtable<String, Hashtable<String, String>> pushtable;
-	
+	/** push table.*/
 	private DITAOTJavaLogger javaLogger = null;
-	
+	/** push table.*/
 	private XMLReader reader = null;
 	
-	//keep the file path of current file under parse
-	//filePath is useful to get the absolute path of the target file
+	/**keep the file path of current file under parse
+	filePath is useful to get the absolute path of the target file.*/
 	private String filePath = null; 
 	
-	//pushcontent is used to store the content copied to target
-	//in pushcontent href will be resolved if it is relative path
-	//if @conref is in pushconref the target name should be recorded so that it could be added to conreflist for conref resolution
+	/**pushcontent is used to store the content copied to target
+	 in pushcontent href will be resolved if it is relative path
+	 if @conref is in pushconref the target name should be recorded so that it 
+	 could be added to conreflist for conref resolution.*/
 	private StringBuffer pushcontent = null;
 	
-	//boolean start is used to control whether sax parser can start to
-	//record push content into String pushcontent.
+	/**boolean start is used to control whether sax parser can start to
+	 record push content into String pushcontent.*/
 	private boolean start = false;
-	//level is used to record the level number to the root element in pushcontent
-	//In endElement(...) we can turn start off to terminate adding content to pushcontent
-	//if level is zero. That means we reach the end tag of the starting element.
+	/**level is used to record the level number to the root element in pushcontent
+	 In endElement(...) we can turn start off to terminate adding content to pushcontent
+	 if level is zero. That means we reach the end tag of the starting element.*/
 	private int level = 0;
 
-	//target is used to record the target of the conref push
-	//if we reach pushafter action but there is no target recorded before, we need
-	//to report error.
+	/**target is used to record the target of the conref push
+	 if we reach pushafter action but there is no target recorded before, we need
+	 to report error.*/
 	private String target = null;
 	
-	//pushType is used to record the current type of push
-	//it is used in endElement(....) to tell whether it is pushafter or replace
+	/**pushType is used to record the current type of push
+	 it is used in endElement(....) to tell whether it is pushafter or replace.*/
 	private String pushType = null;
-	
+	/**
+	 * @return Content
+	 */
 	public Content getContent() {
 		Content content = new ContentImpl();
 		content.setCollection(pushtable.entrySet());
 		return content;
 	}
-
+	/**
+	 * @param filename filename
+	 */
 	public void read(String filename) {
 		filePath = new File(filename).getParentFile().getAbsolutePath();
 		start = false;
@@ -67,7 +76,9 @@ public class ConrefPushReader extends AbstractXMLReader {
 			javaLogger.logException(e);
 		}
 	}
-	
+	/**
+	 * Constructor.
+	 */
 	public ConrefPushReader(){
 		pushtable = new Hashtable<String, Hashtable<String,String>>();
 		javaLogger = new DITAOTJavaLogger();
@@ -155,7 +166,9 @@ public class ConrefPushReader extends AbstractXMLReader {
 			
 		}
 	}	
-
+	/**
+	 * replace content.
+	 */
 	private void replaceContent() {
 		// replace all conref and href value in pushcontent according to target
 		// this is useful to "pushbefore" action because it doesn't know the target
@@ -196,7 +209,13 @@ public class ConrefPushReader extends AbstractXMLReader {
 		resultBuffer.append(pushcontent.substring(index));
 		pushcontent = resultBuffer;
 	}
-
+	/**
+	 * 
+	 * @param buf buffer
+	 * @param elemName element name
+	 * @param atts attribute
+	 * @param removeConref whether remeove conref info
+	 */
 	private void putElement(StringBuffer buf, String elemName,
 			Attributes atts, boolean removeConref) {
 		//parameter boolean removeConref specifies whether to remove
@@ -221,9 +240,41 @@ public class ConrefPushReader extends AbstractXMLReader {
 			}
 			
 		}
+		//Added by William on 2009-10-10 for conrefPush bug:2872954 start
+		//id attribute should only be added to the starting element
+		//which dosen't have id attribute set
+		if("pushreplace".equals(pushType) && 
+				atts.getValue(Constants.ATTRIBUTE_NAME_ID) == null &&
+				level == 1){
+			int sharpIndex = target.indexOf(Constants.SHARP);
+			if (sharpIndex == -1){
+				//if there is no '#' in target string, report error
+				Properties prop = new Properties();
+				prop.put("%1", target);
+				javaLogger.logError(MessageUtils.getMessage("DOTJ041E", prop).toString());
+			}else{
+				String targetLoc = target.substring(sharpIndex + 1);
+				String id = "";
+				//has element id
+				if(targetLoc.contains(Constants.SLASH)){
+					id = targetLoc.substring(targetLoc.lastIndexOf(Constants.SLASH) + 1);
+				}else{
+					id = targetLoc;
+				}
+				//add id attribute
+				buf.append(Constants.STRING_BLANK);
+				buf.append(Constants.ATTRIBUTE_NAME_ID).append(Constants.EQUAL).append(Constants.QUOTATION);
+				buf.append(id).append(Constants.QUOTATION);
+			}
+		}
+		//Added by William on 2009-10-10 for conrefPush bug:2872954 end
 		buf.append(Constants.GREATER_THAN);
 	}
-	
+	/**
+	 * 
+	 * @param value string
+	 * @return URL
+	 */
 	private String replaceURL(String value) {
 		if(value == null){
 			return null;
@@ -241,7 +292,12 @@ public class ConrefPushReader extends AbstractXMLReader {
 		}
 		
 	}
-
+	/**
+	 * 
+	 * @param target target
+	 * @param pushcontent content
+	 * @param type push type
+	 */
 	private void addtoPushTable(String target, String pushcontent, String type) {
 		int sharpIndex = target.indexOf(Constants.SHARP);
 		if (sharpIndex == -1){
