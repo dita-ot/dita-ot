@@ -55,7 +55,21 @@ public class FileUtils {
 	public static boolean isPDFFile(String lcasefn) {
 		return (lcasefn.endsWith(Constants.FILE_EXTENSION_PDF));
 	}
-
+	
+	//Added by William on 2009-10-10 for resources bug:2873560 start
+	/**
+	 * Return if the file is a swf file by its extension.
+	 * 
+	 * @param lcasefn
+	 *            File name in lower case.
+	 * @return <code>TRUE</code> if lcasefn contains an extension of "swf",
+	 *         <code>FALSE</code> otherwise.
+	 */
+	public static boolean isSWFile(String lcasefn) {
+		return (lcasefn.endsWith(Constants.FILE_EXTENSION_SWF));
+	}
+	//Added by William on 2009-10-10 for resources bug:2873560 end
+	
 	/**
 	 * Return if the file is a dita file by extension
 	 * @param lcasefn
@@ -102,7 +116,6 @@ public class FileUtils {
 				|| lcasefn.endsWith(Constants.FILE_EXTENSION_JPEG)
 				|| lcasefn.endsWith(Constants.FILE_EXTENSION_PNG)
 				|| lcasefn.endsWith(Constants.FILE_EXTENSION_SVG)
-				|| lcasefn.endsWith(Constants.FILE_EXTENSION_SWF)
 				|| lcasefn.endsWith(Constants.FILE_EXTENSION_TIFF)
 				|| lcasefn.endsWith(Constants.FILE_EXTENSION_TIF);
 	}
@@ -142,10 +155,10 @@ public class FileUtils {
 				|| lcasefn.endsWith(Constants.FILE_EXTENSION_JPEG)
 				|| lcasefn.endsWith(Constants.FILE_EXTENSION_PNG)
 				|| lcasefn.endsWith(Constants.FILE_EXTENSION_SVG)
-				|| lcasefn.endsWith(Constants.FILE_EXTENSION_SWF)
 				|| lcasefn.endsWith(Constants.FILE_EXTENSION_TIFF)
 				|| lcasefn.endsWith(Constants.FILE_EXTENSION_TIF)
-				|| lcasefn.endsWith(Constants.FILE_EXTENSION_PDF);
+				|| lcasefn.endsWith(Constants.FILE_EXTENSION_PDF)
+				|| lcasefn.endsWith(Constants.FILE_EXTENSION_SWF);
 	}
 
 	/**

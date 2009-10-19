@@ -48,6 +48,9 @@ public abstract class Constants {
     public static final String FILE_EXTENSION_HTML = ".html";
     public static final String FILE_EXTENSION_HTM = ".htm";
     public static final String FILE_EXTENSION_JPG = ".jpg";
+    //Added by William on 2009-10-10 for resources bug:2873560 start
+    public static final String FILE_EXTENSION_SWF = ".swf";
+    //Added by William on 2009-10-10 for resources bug:2873560 end
     public static final String FILE_EXTENSION_EPS = ".eps";
     public static final String FILE_EXTENSION_DITAMAP = ".ditamap";
     public static final String FILE_EXTENSION_TEMP = ".temp";    
@@ -57,7 +60,6 @@ public abstract class Constants {
     public static final String FILE_EXTENSION_TIFF = ".tiff";
 	public static final String FILE_EXTENSION_TIF = ".tif";
 	public static final String FILE_EXTENSION_PDF = ".pdf";
-	public static final String FILE_EXTENSION_SWF = ".swf";
     
     /**
      * Constants for element names in dita files.
