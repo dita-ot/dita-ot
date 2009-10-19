@@ -892,6 +892,13 @@ public class GenListModuleReader extends AbstractXMLReader {
 		if(Constants.ATTRIBUTE_NAME_KEYS.equals(attrName) && !attrValue.equals(Constants.STRING_EMPTY)){
 			
 			String target = atts.getValue(Constants.ATTRIBUTE_NAME_HREF);
+			//Added by Alan for bug ID: 2870935 on Date: 2009-10-10 begin
+			String copy_to = atts.getValue(Constants.ATTRIBUTE_NAME_COPY_TO);
+			if (!StringUtils.isEmptyString(copy_to)) {
+				target = copy_to;
+			}
+			//Added by Alan for bug ID: 2870935 on Date: 2009-10-10 end
+			
 			//store the target
 			String temp = target;
 			
