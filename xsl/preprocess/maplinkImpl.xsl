@@ -525,8 +525,12 @@
             test="not(($FINALOUTPUTTYPE='PDF' or $FINALOUTPUTTYPE='IDD') and (not(@scope) or @scope='local') and (not(@format) or @format='dita' or @format='DITA') and (not(@locktitle) or @locktitle='no'))">
             <linktext class="- topic/linktext ">
               <xsl:copy-of select="*[contains(@class, ' map/topicmeta ')]/processing-instruction()[name()='ditaot'][.='usertext' or .='gentext']"/>
-              <xsl:value-of 
-                select="normalize-space(*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/linktext ')])"/>
+              <!-- edited by Alan for bug ID: 2875373 on Date: 2009-10-12 begin-->
+              <!-- xsl:value-of 
+                select="normalize-space(*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/linktext ')])"/ -->
+              <xsl:copy-of
+                select="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/linktext ')]/node()"/>
+              <!-- edited by Alan for bug ID: 2875373 on Date: 2009-10-12 end-->
             </linktext>
           </xsl:if>
         </xsl:if>
