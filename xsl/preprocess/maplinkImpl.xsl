@@ -298,16 +298,53 @@
               and descendant::*[contains(@class, ' map/topicref ')][@href][not(@href='')][not(@linking='none')][not(@linking='sourceonly')][not(@processing-role='resource-only')]">
         <linkpool class="- topic/linkpool ">
           <xsl:copy-of select="@xtrf | @xtrc | @collection-type"/>
-          <xsl:apply-templates mode="link" 
-            select="*[@href][not(@href='')][not(@linking='none')][not(@linking='sourceonly')]">
+          <!-- added by William on 2009-10-14 for relink bug:2866322 start-->
+          <xsl:apply-templates select="child::*[contains(@class, ' map/topicref ')]" mode="recusive">
+            <xsl:with-param name="pathBackToMapDirectory" select="$pathBackToMapDirectory"/>
+          </xsl:apply-templates>
+          <!-- added by William on 2009-10-14 for relink bug:2866322 end-->
+          <!--xsl:apply-templates mode="link" 
+            select="child::*[@href][not(@href='')][not(@linking='none')][not(@linking='sourceonly')][not(@processing-role='resource-only')]">
             <xsl:with-param name="role">child</xsl:with-param>
             <xsl:with-param name="pathBackToMapDirectory" 
               select="$pathBackToMapDirectory"/>
-          </xsl:apply-templates>
+          </xsl:apply-templates-->
         </linkpool>
       </xsl:if>
   </xsl:template>
-
+  
+  <!-- added by William on 2009-10-14 for relink bug:2866322 start-->
+  <xsl:template match="*" mode="recusive" name="recusive">
+    <xsl:param name="pathBackToMapDirectory"/>
+    <xsl:choose>
+      <xsl:when test="self::*[contains(@class, ' mapgroup-d/mapref ')][local-name()='topicref']">
+        <xsl:apply-templates mode="link" 
+          select="self::*[@href][not(@href='')][not(@linking='none')][not(@linking='sourceonly')][not(@processing-role='resource-only')]">
+          <xsl:with-param name="role">child</xsl:with-param>
+          <xsl:with-param name="pathBackToMapDirectory" 
+            select="$pathBackToMapDirectory"/>
+        </xsl:apply-templates>
+      </xsl:when>
+      <xsl:when test="self::*[contains(@class, ' mapgroup-d/mapref ')]">
+        <xsl:apply-templates mode="link" 
+          select="self::*[contains(@class, ' mapgroup-d/mapref ')]/descendant::*[@href][not(@href='')][not(@linking='none')][not(@linking='sourceonly')][not(@processing-role='resource-only')]">
+          <xsl:with-param name="role">child</xsl:with-param>
+          <xsl:with-param name="pathBackToMapDirectory" 
+            select="$pathBackToMapDirectory"/>
+        </xsl:apply-templates>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:apply-templates mode="link" 
+          select="self::*[@href][not(@href='')][not(@linking='none')][not(@linking='sourceonly')][not(@processing-role='resource-only')]">
+          <xsl:with-param name="role">child</xsl:with-param>
+          <xsl:with-param name="pathBackToMapDirectory" 
+            select="$pathBackToMapDirectory"/>
+        </xsl:apply-templates>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+  <!-- added by William on 2009-10-14 for relink bug:2866322 end-->
+  
   <!--friends-->
   <xsl:template match="*" mode="link-to-friends"/>
   <xsl:template match="*[contains(@class, ' map/relcell ')]//*[contains(@class, ' map/topicref ')]"
@@ -457,14 +494,14 @@
       <!--xsl:template mode="link" 
           match="*[@href][not(@href='')][not(@linking='none')][not(@linking='sourceonly')][not(@processing-role='resource-only')]"-->
   <xsl:template mode="link" 
-              match="*[@href][not(@href='')][not(@linking='none')][not(@linking='sourceonly')]">
+              match="*[@href][not(@href='')][not(@linking='none')][not(@linking='sourceonly')][not(@processing-role='resource-only')]">
       <!--edited by William on 2009-06-10 for bug:2799543 link bug  end  -->
     <xsl:param name="role">#none#</xsl:param>
     <xsl:param name="otherrole">#none#</xsl:param>
     <xsl:param name="pathBackToMapDirectory"/>
           <!--Added by William on 2009-06-10 for bug:2799543 link bug  start  -->
           <!-- child found tag -->
-          <xsl:param name="found">notfound</xsl:param>
+          <xsl:param name="found">found</xsl:param>
           <!--Added by William on 2009-06-10 for bug:2799543 link bug  end  -->
     <!-- If going to print, and @print=no, do not create links for this topicref -->
           <!--edited by William on 2009-06-10 for bug:2799543 link bug  start  -->
@@ -472,7 +509,7 @@
               test="not(($FINALOUTPUTTYPE='PDF' or $FINALOUTPUTTYPE='IDD') and @print='no')"-->
     <xsl:if 
               test="not(($FINALOUTPUTTYPE='PDF' or $FINALOUTPUTTYPE='IDD') and @print='no') and 
-              not(@processing-role='resource-only') and ($found='notfound')">
+              not(@processing-role='resource-only') and ($found='found')">
           <!--edited by William on 2009-06-10 for bug:2799543 link bug  end  -->
       <link class="- topic/link ">
         <xsl:if test="@class">
@@ -547,23 +584,6 @@
         </xsl:if>
       </link>
     </xsl:if>
-          <!--Added by William on 2009-06-10 for bug:2799543 link bug  start  -->
-          <xsl:if test="$found='notfound'">
-              <xsl:apply-templates select="*" mode="link">
-                  <xsl:with-param name="role" select="$role"/>
-                  <xsl:with-param name="otherrole" select="$otherrole"/>
-                  <xsl:with-param name="pathBackToMapDirectory" select="$pathBackToMapDirectory"/>
-                  <xsl:with-param name="found">
-                      <xsl:choose>
-                          <xsl:when test="@processing-role='resource-only'">
-                              <xsl:value-of select="'notfound'"/>
-                          </xsl:when>
-                          <xsl:otherwise>found</xsl:otherwise>
-                      </xsl:choose>
-                  </xsl:with-param>
-              </xsl:apply-templates>
-          </xsl:if>
-          <!--Added by William on 2009-06-10 for bug:2799543 link bug  end  -->
   </xsl:template>
   
   <!-- added by William on 2009-05-07 for shortdesc bug start -->
