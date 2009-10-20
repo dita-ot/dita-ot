@@ -135,6 +135,10 @@ public class KeyrefPaser extends AbstractXMLWriter {
 		no_copy.add("xtrf");
 		no_copy.add("href");
 		no_copy.add("keys");
+		//added by William on 2009-09-25 for keyref bug:2866204 start
+		no_copy.add(Constants.ATTRIBUTE_NAME_TOC);
+		no_copy.add(Constants.ATTRIBUTE_NAME_PROCESSING_ROLE);
+		//added by William on 2009-09-25 for keyref bug:2866204 end
 	}
 	
 	static {
