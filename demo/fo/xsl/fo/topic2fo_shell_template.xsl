@@ -1,4 +1,5 @@
 <?xml version='1.0'?>
+
 <!--
 Copyright © 2004-2006 by Idiom Technologies, Inc. All rights reserved.
 IDIOM is a registered trademark of Idiom Technologies, Inc. and WORLDSERVER
@@ -61,6 +62,8 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:import href="ui-domain.xsl"/>
 
     <xsl:import href="static-content.xsl"/>
+
+    <dita:extension id="dita.xsl.xslfo" behavior="org.dita.dost.platform.ImportXSLAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
 
     <xsl:import href="cfg:fo/attrs/custom.xsl"/>
     <xsl:import href="cfg:fo/xsl/custom.xsl"/>

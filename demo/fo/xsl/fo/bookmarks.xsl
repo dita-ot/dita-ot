@@ -51,6 +51,9 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:if test="count(exsl:node-set($bookmarks)/*) > 0">
             <fo:bookmark-tree>
                 <fo:bookmark internal-destination="ID_TOC_00-0F-EA-40-0D-4D">
+                    <xsl:if test="$bookmarkStyle!='EXPANDED'">
+                        <xsl:attribute name="starting-state">hide</xsl:attribute>
+                    </xsl:if>
                     <fo:bookmark-title>
                         <xsl:call-template name="insertVariable">
                             <xsl:with-param name="theVariableID" select="'Table of Contents'"/>
@@ -61,6 +64,9 @@ See the accompanying license.txt file for applicable licenses.
                 <!-- CC #6163  -->
                 <xsl:if test="(//opentopic-index:index.groups//opentopic-index:index.entry) and (count($index-entries//opentopic-index:index.entry) &gt; 0) ">
                     <fo:bookmark internal-destination="ID_INDEX_00-0F-EA-40-0D-4D">
+                        <xsl:if test="$bookmarkStyle!='EXPANDED'">
+                            <xsl:attribute name="starting-state">hide</xsl:attribute>
+                        </xsl:if>
                         <fo:bookmark-title>
                             <xsl:call-template name="insertVariable">
                                 <xsl:with-param name="theVariableID" select="'Index'"/>
@@ -89,6 +95,9 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:choose>
         	<xsl:when test="($mapTopic/*[position() = $topicNumber][@toc = 'yes' or not(@toc)]) or (not($mapTopic/*))">
         		<fo:bookmark internal-destination="{concat('_OPENTOPIC_TOC_PROCESSING_', generate-id())}">
+                    <xsl:if test="$bookmarkStyle!='EXPANDED'">
+                        <xsl:attribute name="starting-state">hide</xsl:attribute>
+                    </xsl:if>
             		<fo:bookmark-title>
                 		<xsl:value-of select="$topicTitle"/>
             		</fo:bookmark-title>

@@ -11,6 +11,14 @@
     README.txt in the main plugin directory for more information.
 -->
 
+    <!-- Values are COLLAPSED or EXPANDED. If a value is passed in from Ant, use that value. -->
+    <xsl:param name="bookmarkStyle">
+      <xsl:choose>
+        <xsl:when test="$antArgsBookmarkStyle!=''"><xsl:value-of select="$antArgsBookmarkStyle"/></xsl:when>
+        <xsl:otherwise>COLLAPSED</xsl:otherwise>
+      </xsl:choose>
+    </xsl:param>
+
     <!-- The default of 215.9mm x 279.4mm is US Letter size (8.5x11in) -->
     <xsl:variable name="page-width">215.9mm</xsl:variable>
     <xsl:variable name="page-height">279.4mm</xsl:variable>

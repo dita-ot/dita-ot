@@ -224,6 +224,7 @@ with those set forth herein.
             <arg line='"fileProtocolPrefix=${file.protocol.prefix}"'/>
             <arg line='"publishRequiredCleanup=${publish.required.cleanup}"'/>
             <arg line='"disableRelatedLinks=${disableRelatedLinks}"'/>
+            <arg line='"antArgsBookmarkStyle=${args.bookmark.style}"'/>
         	<arg line='"pdfFormatter=${pdf.formatter}"'/>
             <sysproperty key="xml.catalog.files" value="${xml.catalog.files}"/>
         </java>

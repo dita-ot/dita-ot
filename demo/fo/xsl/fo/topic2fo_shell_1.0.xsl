@@ -75,23 +75,23 @@ See the accompanying license.txt file for applicable licenses.
 
 <!--    <xsl:strip-space elements="*"/>-->
 
+    <!-- Parameters in the following group are always passed in from Ant. -->
     <xsl:param name="locale"/>
-
     <xsl:param name="customizationDir"/>
-
     <xsl:param name="artworkPrefix"/>
-
     <xsl:param name="fileProtocolPrefix"/>
-
     <xsl:param name="publishRequiredCleanup"/>
-
     <xsl:param name="disableRelatedLinks" select="'yes'"/>
+    <xsl:param name="pdfFormatter" select="'fop'"/>
 
+    <!-- Parameters in the following group are passed in from Ant only to
+         change defaults for related XSLT parameters. -->
+    <xsl:param name="antArgsBookmarkStyle"/>
+
+    <!-- Remaining parameters are not passed in with the default Ant code. -->
     <xsl:param name="tocMaximumLevel" select="'4'"/>
-
     <xsl:param name="ditaVersion" select="/*[contains(@class,' map/map ')]/@ditaarch:DITAArchVersion"/>
 
-    <xsl:param name="pdfFormatter" select="'fop'"/>
 
     <xsl:output method="xml" encoding="utf-8" indent="no"/>
 
