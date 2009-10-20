@@ -695,21 +695,22 @@ See the accompanying license.txt file for applicable licenses.
         </fo:block>
     </xsl:template>
 
-    <xsl:template match="*[contains(@class, ' topic/dita ')]">
+    <!-- The following three template matches are based on class attributes
+         that do not exist. They have been commented out starting with
+         the DITA-OT 1.5 release, with SourceForge tracker #2882085. -->
+    <!--<xsl:template match="*[contains(@class, ' topic/dita ')]">
         <xsl:apply-templates/>
     </xsl:template>
-
     <xsl:template match="*[contains(@class, ' topic/topichead ')]">
         <fo:block xsl:use-attribute-sets="topichead" id="{@id}">
             <xsl:apply-templates/>
         </fo:block>
     </xsl:template>
-
     <xsl:template match="*[contains(@class, ' topic/topicgroup ')]">
         <fo:block xsl:use-attribute-sets="topicgroup" id="{@id}">
             <xsl:apply-templates/>
         </fo:block>
-    </xsl:template>
+    </xsl:template>-->
 
     <xsl:template match="*[contains(@class, ' topic/topicmeta ')]">
 <!--
