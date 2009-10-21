@@ -129,11 +129,15 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:template match="*" priority="-1">
         <xsl:copy>
             <xsl:apply-templates select="@*"/>
-            <xsl:apply-templates/>
+            <xsl:apply-templates select="*|text()|processing-instruction()"/>
         </xsl:copy>
     </xsl:template>
 
     <xsl:template match="@*" priority="-1">
+        <xsl:copy-of select="."/>
+    </xsl:template>
+
+    <xsl:template match="processing-instruction()" priority="-1">
         <xsl:copy-of select="."/>
     </xsl:template>
 
