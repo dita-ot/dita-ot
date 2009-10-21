@@ -225,6 +225,7 @@ with those set forth herein.
             <arg line='"publishRequiredCleanup=${publish.required.cleanup}"'/>
             <arg line='"disableRelatedLinks=${disableRelatedLinks}"'/>
             <arg line='"antArgsBookmarkStyle=${args.bookmark.style}"'/>
+            <arg line='"antArgsChapterLayout=${args.chapter.layout}"'/>
         	<arg line='"pdfFormatter=${pdf.formatter}"'/>
             <sysproperty key="xml.catalog.files" value="${xml.catalog.files}"/>
         </java>
