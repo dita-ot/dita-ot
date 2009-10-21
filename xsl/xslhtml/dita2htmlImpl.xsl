@@ -3329,7 +3329,10 @@
       <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
     </xsl:call-template>
     <xsl:call-template name="setscale"/>
-    <xsl:apply-templates>     <!-- width-multiplier will be used in the first row to set widths. -->
+    <xsl:apply-templates select="." mode="dita2html:simpletable-heading">
+      <xsl:with-param name="width-multiplier"><xsl:value-of select="$width-multiplier"/></xsl:with-param>
+    </xsl:apply-templates>
+    <xsl:apply-templates select="*[contains(@class,' topic/strow ')]|processing-instruction()">     <!-- width-multiplier will be used in the first row to set widths. -->
       <xsl:with-param name="width-multiplier"><xsl:value-of select="$width-multiplier"/></xsl:with-param>
     </xsl:apply-templates>
   </table>
@@ -3365,6 +3368,15 @@
       </xsl:otherwise>
     </xsl:choose>
   </tr><xsl:value-of select="$newline"/>
+</xsl:template>
+
+<!-- Specialized simpletables may match this rule to create default column 
+     headings. By default, process the sthead if available. -->
+<xsl:template match="*" mode="dita2html:simpletable-heading">
+  <xsl:param name="width-multiplier"/>
+  <xsl:apply-templates select="*[contains(@class,' topic/sthead ')]">
+    <xsl:with-param name="width-multiplier"><xsl:value-of select="$width-multiplier"/></xsl:with-param>
+  </xsl:apply-templates>
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' topic/sthead ')]" name="topic.sthead">

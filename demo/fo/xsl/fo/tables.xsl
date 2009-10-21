@@ -33,11 +33,12 @@ See the accompanying license.txt file for applicable licenses.
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:fo="http://www.w3.org/1999/XSL/Format"
+    xmlns:dita2xslfo="http://dita-ot.sourceforge.net/ns/200910/dita2xslfo"
     xmlns:exsl="http://exslt.org/common"
     xmlns:exslf="http://exslt.org/functions"
     xmlns:opentopic-func="http://www.idiominc.com/opentopic/exsl/function"
     extension-element-prefixes="exsl"
-    exclude-result-prefixes="opentopic-func exslf exsl"
+    exclude-result-prefixes="opentopic-func exslf exsl dita2xslfo"
     version="1.1">
 
     <xsl:include href="../../cfg/fo/attrs/tables-attr.xsl"/>
@@ -1326,11 +1327,11 @@ See the accompanying license.txt file for applicable licenses.
                 </xsl:call-template>
             </xsl:if>
 
-            <xsl:if test="*[contains(@class, ' topic/sthead ')]">
-                    <xsl:apply-templates select="*[contains(@class, ' topic/sthead ')]">
-                      <xsl:with-param name="number-cells" select="$number-cells"/>
-                    </xsl:apply-templates>
-            </xsl:if>
+            <!-- Toss processing to another template to process the simpletable
+                 heading, and/or create a default table heading row. -->
+            <xsl:apply-templates select="." mode="dita2xslfo:simpletable-heading">
+                <xsl:with-param name="number-cells" select="$number-cells"/>
+            </xsl:apply-templates>
 
             <fo:table-body xsl:use-attribute-sets="simpletable__body">
                 <xsl:apply-templates select="*[contains(@class, ' topic/strow ')]">
@@ -1407,6 +1408,18 @@ See the accompanying license.txt file for applicable licenses.
             <xsl:with-param name="fill-in-count" select="$fill-in-count - 1"/>
         </xsl:apply-templates>
       </xsl:if>
+    </xsl:template>
+
+    <!-- Specialized simpletable elements may override this rule to add
+         default headings for the table. By default, the existing sthead
+         element is used when specified. -->
+    <xsl:template match="*[contains(@class,' topic/simpletable ')]" mode="dita2xslfo:simpletable-heading">
+        <xsl:param name="number-cells">
+            <xsl:apply-templates select="*[1]" mode="count-max-simpletable-cells"/>
+        </xsl:param>
+        <xsl:apply-templates select="*[contains(@class, ' topic/sthead ')]">
+            <xsl:with-param name="number-cells" select="$number-cells"/>
+        </xsl:apply-templates>
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' topic/sthead ')]">
