@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Arbortext, Inc., 1988-2008, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<?Pub Sty _display FontColor="red"?>
+<?Pub Inc?>
+<reference id="ditaot_r_dita2pdf" xml:lang="en-us">
+<title>dita2pdf</title>
+<shortdesc>Use the dita2pdf target to generate a Portable Document
+Format (PDF) file<?Pub Caret?>.</shortdesc>
+<prolog>
+<author>Kristen James Eberlein</author>
+<critdates><created date="9 May 2009"/></critdates>
+</prolog>
+<refbody>
+<section><title>Parameters</title><parml><plentry
+conref="ditaot_ditabase_conref.dita#reference/args.artlbl">
+<pt></pt>
+<pd></pd>
+</plentry><plentry
+conref="ditaot_ditabase_conref.dita#reference/args.draft">
+<pt></pt>
+<pd></pd>
+</plentry><plentry
+conref="ditaot_ditabase_conref.dita#reference/args.fo.img.ext">
+<pt></pt>
+<pd></pd>
+</plentry><plentry
+conref="ditaot_ditabase_conref.dita#reference/args.fo.output.rel.links">
+<pt></pt>
+<pd></pd>
+</plentry><plentry
+conref="ditaot_ditabase_conref.dita#reference/args.fo.userconfig">
+<pt></pt>
+<pd></pd>
+</plentry><plentry
+conref="ditaot_ditabase_conref.dita#reference/args.input">
+<pt></pt>
+<pd></pd>
+</plentry><plentry
+conref="ditaot_ditabase_conref.dita#reference/args.logdir">
+<pt></pt>
+<pd></pd>
+</plentry><plentry
+conref="ditaot_ditabase_conref.dita#reference/args.xsl">
+<pt></pt>
+<pd></pd>
+</plentry><plentry conref="ditaot_ditabase_conref.dita#reference/basedir">
+<pt></pt>
+<pd></pd>
+</plentry><plentry
+conref="ditaot_ditabase_conref.dita#reference/clean.temp">
+<pt></pt>
+<pd></pd>
+</plentry><plentry
+conref="ditaot_ditabase_conref.dita#reference/dita.dir">
+<pt></pt>
+<pd></pd>
+</plentry><plentry
+conref="ditaot_ditabase_conref.dita#reference/dita.extname">
+<pt></pt>
+<pd></pd>
+</plentry><plentry
+conref="ditaot_ditabase_conref.dita#reference/generate.copy.outer">
+<pt></pt>
+<pd></pd>
+</plentry><plentry
+conref="ditaot_ditabase_conref.dita#reference/dita.input">
+<pt></pt>
+<pd></pd>
+</plentry><plentry
+conref="ditaot_ditabase_conref.dita#reference/dita.input.dirname">
+<pt></pt>
+<pd></pd>
+</plentry><plentry
+conref="ditaot_ditabase_conref.dita#reference/dita.input.valfile">
+<pt></pt>
+<pd></pd>
+</plentry><plentry
+conref="ditaot_ditabase_conref.dita#reference/dita.temp.dir">
+<pt></pt>
+<pd></pd>
+</plentry><plentry
+conref="ditaot_ditabase_conref.dita#reference/onlytopic.in.map">
+<pt></pt>
+<pd></pd>
+</plentry><plentry
+conref="ditaot_ditabase_conref.dita#reference/outer.control">
+<pt></pt>
+<pd></pd>
+</plentry><plentry
+conref="ditaot_ditabase_conref.dita#reference/output.dir">
+<pt></pt>
+<pd></pd>
+</plentry><plentry
+conref="ditaot_ditabase_conref.dita#reference/validate">
+<pt></pt>
+<pd></pd>
+</plentry></parml></section>
+</refbody>
+</reference>
+<?Pub *0000002739?>

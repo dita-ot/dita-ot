@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Arbortext, Inc., 1988-2008, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<?Pub Sty _display FontColor="red"?>
+<?Pub Inc?>
+<reference id="ditaot_r_dita2eclipsecontent" xml:lang="en-us">
+<title>dita2eclipsecontent</title>
+<shortdesc>Put your short description here; used for first paragraph
+and abstract.</shortdesc><?Pub Caret?>
+<refbody>
+<section><title>Parameters</title><parml><plentry
+conref="ditaot_ditabase_conref.dita#reference/args.eclipsecontent.toc">
+<pt></pt>
+<pd></pd>
+</plentry></parml><draft-comment><ul>
+<li>Do the parameters that apply to the dita2eclipsehelp transformation
+also apply here?</li>
+<li>What does this transformation do? Original documentation stated
+"Transforms a DITA topic or DITA map into Eclipse help plugin for
+Eclipse dynamic content provider based on xhtml".</li>
+</ul></draft-comment></section>
+</refbody>
+</reference>
+<?Pub *0000000965?>

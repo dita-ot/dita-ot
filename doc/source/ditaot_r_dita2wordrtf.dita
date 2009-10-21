@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Arbortext, Inc., 1988-2008, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<?Pub Sty _display FontColor="red"?>
+<?Pub Inc?>
+<reference id="ditaot_r_dita2wordrtf" xml:lang="en-us">
+<title>dita2wordrtf</title>
+<shortdesc>Use the dita2wordrtf target to generate Rich Text Format
+(RTF).</shortdesc>
+<refbody>
+<section><title>Parameters</title><parml><plentry
+conref="ditaot_ditabase_conref.dita#reference/args.draft"><?Pub Caret1?>
+<pt></pt>
+<pd></pd>
+</plentry><plentry
+conref="ditaot_ditabase_conref.dita#reference/args.input">
+<pt></pt>
+<pd></pd>
+</plentry><plentry
+conref="ditaot_ditabase_conref.dita#reference/args.logdir">
+<pt></pt>
+<pd></pd>
+</plentry><plentry
+conref="ditaot_ditabase_conref.dita#reference/args.xsl">
+<pt></pt>
+<pd></pd>
+</plentry><plentry conref="ditaot_ditabase_conref.dita#reference/basedir">
+<pt></pt>
+<pd></pd>
+</plentry><plentry
+conref="ditaot_ditabase_conref.dita#reference/clean.temp">
+<pt></pt>
+<pd></pd>
+</plentry><plentry
+conref="ditaot_ditabase_conref.dita#reference/dita.dir">
+<pt></pt>
+<pd></pd>
+</plentry><plentry
+conref="ditaot_ditabase_conref.dita#reference/dita.extname">
+<pt></pt>
+<pd></pd>
+</plentry><plentry
+conref="ditaot_ditabase_conref.dita#reference/generate.copy.outer">
+<pt></pt>
+<pd></pd>
+</plentry><plentry
+conref="ditaot_ditabase_conref.dita#reference/dita.input">
+<pt></pt>
+<pd></pd>
+</plentry><plentry
+conref="ditaot_ditabase_conref.dita#reference/dita.input.dirname">
+<pt></pt>
+<pd></pd>
+</plentry><plentry
+conref="ditaot_ditabase_conref.dita#reference/dita.input.valfile">
+<pt></pt>
+<pd></pd>
+</plentry><plentry
+conref="ditaot_ditabase_conref.dita#reference/dita.temp.dir">
+<pt></pt>
+<pd></pd>
+</plentry><plentry
+conref="ditaot_ditabase_conref.dita#reference/onlytopic.in.map">
+<pt></pt>
+<pd></pd>
+</plentry><plentry
+conref="ditaot_ditabase_conref.dita#reference/outer.control">
+<pt></pt>
+<pd></pd>
+</plentry><plentry
+conref="ditaot_ditabase_conref.dita#reference/output.dir">
+<pt></pt>
+<pd></pd>
+</plentry><plentry
+conref="ditaot_ditabase_conref.dita#reference/validate">
+<pt></pt>
+<pd></pd>
+</plentry></parml></section>
+</refbody>
+</reference>
+<?Pub *0000002206?>

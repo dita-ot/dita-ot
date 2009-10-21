@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Arbortext, Inc., 1988-2008, v.4002-->
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN"
+ "task.dtd">
+<?Pub Sty _display FontColor="red"?>
+<task id="ditaot_t_generating_output_java" xml:lang="en-us">
+<title>Generating output using the Java command-line interface</title>
+<shortdesc>If you are not familiar with Ant, you can use the command
+line to perform the transformations. The DITA Open Toolkit creates
+a properties file (<filepath>property.temp</filepath>) that contains
+the information that you provided at the command line and then passes
+the property file to Ant. The properties file is saved in the <varname>args.logdir</varname> directory.</shortdesc>
+<prolog>
+<author>Kristen James Eberlein</author>
+<critdates><created date="9 May 2009"/></critdates>
+</prolog><?Pub Caret?>
+<taskbody>
+<steps>
+<step conref="ditaot_ditabase_conref.dita#task/run_startcmd"><cmd></cmd>
+</step>
+<step><cmd>From the command prompt, type the following string and
+press Enter:</cmd><info><codeblock>java -jar lib/dost.jar /i:<varname>input_file</varname> /outdir:<varname>output_directory</varname> /transtype:<varname>transformation</varname> [options]</codeblock>where<ul>
+<li><varname>input_file</varname> is the name of the DITA file or
+DITA map that is the input for the transformation.</li>
+<li><varname>output_directory</varname> is the directory where the
+DITA Open Toolkit writes the output of the transformation.</li>
+<li><varname>transformation</varname> is one of the following options:<ul
+conref="ditaot_ditabase_conref.dita#reference/ul_transtype_options">
+<li></li>
+</ul></li>
+<li>[options] are optional parameters.</li>
+</ul></info></step>
+</steps>
+</taskbody>
+</task>
+<?Pub *0000001737?>

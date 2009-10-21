@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Arbortext, Inc., 1988-2008, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<?Pub Sty _display FontColor="red"?>
+<?Pub Inc?>
+<reference id="ditaot_r_xslt_parameters" xml:lang="en-us">
+<title>XSLT parameters</title>
+<shortdesc>Short description needed</shortdesc><?Pub Caret?>
+<refbody>
+<section><table><title></title>
+<tgroup cols="2"><colspec colname="col1"/><colspec colname="col2"/>
+<thead>
+<row valign="bottom">
+<entry colname="col1">Ant parameters</entry>
+<entry colname="col2">XSLT parameters</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry colname="col1"><parmname
+conref="ditaot_ditabase_conref.dita#reference/parmname_args.artlbl"></parmname></entry>
+<entry colname="col2"><parmname>ARTLBL</parmname></entry>
+</row>
+<row>
+<entry colname="col1"><parmname
+conref="ditaot_ditabase_conref.dita#reference/parmname_args.breadcrumbs"></parmname></entry>
+<entry colname="col2"><parmname>BREADCRUMBS</parmname></entry>
+</row>
+<row>
+<entry colname="col1"><parmname
+conref="ditaot_ditabase_conref.dita#reference/parmname_args.copycss"></parmname></entry>
+<entry colname="col2"><parmname></parmname></entry>
+</row>
+<row>
+<entry colname="col1"><parmname
+conref="ditaot_ditabase_conref.dita#reference/parmname_args.css"></parmname></entry>
+<entry colname="col2"><parmname></parmname></entry>
+</row>
+<row>
+<entry colname="col1"><parmname
+conref="ditaot_ditabase_conref.dita#reference/parmname_args.csspath"></parmname></entry>
+<entry colname="col2"><parmname>CSSPATH</parmname></entry>
+</row>
+<row>
+<entry colname="col1"><parmname
+conref="ditaot_ditabase_conref.dita#reference/parmname_args.cssroot"></parmname></entry>
+<entry colname="col2"><parmname></parmname></entry>
+</row>
+<row>
+<entry colname="col1"><parmname
+conref="ditaot_ditabase_conref.dita#reference/parmname_args.debug"></parmname></entry>
+<entry colname="col2"><parmname>DBG</parmname></entry>
+</row>
+<row>
+<entry colname="col1"><parmname
+conref="ditaot_ditabase_conref.dita#reference/parmname_args.dita.locale"></parmname></entry>
+<entry colname="col2"><parmname></parmname></entry>
+</row>
+<row>
+<entry colname="col1"><parmname
+conref="ditaot_ditabase_conref.dita#reference/parmname_args.draft"></parmname></entry>
+<entry colname="col2"><parmname>DRAFT</parmname></entry>
+</row>
+<row>
+<entry colname="col1"><parmname
+conref="ditaot_ditabase_conref.dita#reference/parmname_args.eclipse.provider"></parmname></entry>
+<entry colname="col2"><parmname></parmname></entry>
+</row>
+<row>
+<entry colname="col1"><parmname
+conref="ditaot_ditabase_conref.dita#reference/parmname_args.eclipse.version"></parmname></entry>
+<entry colname="col2"><parmname></parmname></entry>
+</row>
+<row>
+<entry colname="col1"><parmname
+conref="ditaot_ditabase_conref.dita#reference/parmname_args.eclipsecontent.toc"></parmname></entry>
+<entry colname="col2"><parmname></parmname></entry>
+</row>
+<row>
+<entry colname="col1"><parmname
+conref="ditaot_ditabase_conref.dita#reference/parmname_args.eclipsehelp.toc"></parmname></entry>
+<entry colname="col2"><parmname></parmname></entry>
+</row>
+<row>
+<entry colname="col1"><parmname
+conref="ditaot_ditabase_conref.dita#reference/parmname_arg.figurelink.style"></parmname></entry>
+<entry colname="col2"><parmname>FIGURELINK</parmname></entry>
+</row>
+<row>
+<entry colname="col1"><parmname
+conref="ditaot_ditabase_conref.dita#reference/parmname_args.fo.img.ext"></parmname></entry>
+<entry colname="col2"><parmname></parmname></entry>
+</row>
+<row>
+<entry colname="col1"><parmname
+conref="ditaot_ditabase_conref.dita#reference/parmname_args.fo.output.rel.links"></parmname></entry>
+<entry colname="col2"><parmname></parmname></entry>
+</row>
+<row>
+<entry colname="col1"><parmname
+conref="ditaot_ditabase_conref.dita#reference/parmname_args.fo.userconfig"></parmname></entry>
+<entry colname="col2"><parmname></parmname></entry>
+</row>
+<row>
+<entry colname="col1"><parmname
+conref="ditaot_ditabase_conref.dita#reference/parmname_args.ftr"></parmname></entry>
+<entry colname="col2"><parmname>FTR</parmname></entry>
+</row>
+<row>
+<entry colname="col1"><parmname
+conref="ditaot_ditabase_conref.dita#reference/parmname_args.gen.default.meta"></parmname></entry>
+<entry colname="col2"><parmname>genDefMeta</parmname></entry>
+</row>
+<row>
+<entry colname="col1"><parmname
+conref="ditaot_ditabase_conref.dita#reference/parmname_args.gen.default.meta"></parmname></entry>
+<entry colname="col2"></entry>
+</row>
+<row>
+<entry colname="col1"><parmname
+conref="ditaot_ditabase_conref.dita#reference/parmname_args.gen.task.lbl"></parmname></entry>
+<entry colname="col2"><parmname>GENERATE-TASK-LABELS</parmname></entry>
+</row>
+<row>
+<entry colname="col1"><parmname
+conref="ditaot_ditabase_conref.dita#reference/parmname_args.hdf"></parmname></entry>
+<entry colname="col2"><parmname>HDF</parmname></entry>
+</row>
+<row>
+<entry colname="col1"><parmname
+conref="ditaot_ditabase_conref.dita#reference/parmname_args.hdr"></parmname></entry>
+<entry colname="col2"><parmname>HDR</parmname></entry>
+</row>
+<row>
+<entry colname="col1"><parmname
+conref="ditaot_ditabase_conref.dita#reference/parmname_args.hide.parent.link"></parmname></entry>
+<entry colname="col2"><parmname>NOPARENTLINK</parmname></entry>
+</row>
+<row>
+<entry colname="col1"><parmname
+conref="ditaot_ditabase_conref.dita#reference/parmname_args.indexshow"></parmname></entry>
+<entry colname="col2"><parmname>INDEXSHOW</parmname></entry>
+</row>
+<row>
+<entry colname="col1"><parmname
+conref="ditaot_ditabase_conref.dita#reference/parmname_args.input"></parmname></entry>
+<entry colname="col2"><parmname></parmname></entry>
+</row>
+<row>
+<entry colname="col1"><parmname
+conref="ditaot_ditabase_conref.dita#reference/parmname_args.javahelp.map"></parmname></entry>
+<entry colname="col2"><parmname></parmname></entry>
+</row>
+<row>
+<entry colname="col1"><parmname
+conref="ditaot_ditabase_conref.dita#reference/parmname_args.javahelp.map"></parmname><parmname
+conref="ditaot_ditabase_conref.dita#reference/parmname_args.logdir"></parmname></entry>
+<entry colname="col2"><parmname></parmname></entry>
+</row>
+<row>
+<entry colname="col1"><parmname
+conref="ditaot_ditabase_conref.dita#reference/parmname_args.outext"></parmname></entry>
+<entry colname="col2"><parmname>OUTEXT</parmname></entry>
+</row>
+<row>
+<entry colname="col1"><parmname
+conref="ditaot_ditabase_conref.dita#reference/parmname_args.tablelink.style"></parmname></entry>
+<entry colname="col2"><parmname></parmname></entry>
+</row>
+<row>
+<entry colname="col1"><parmname
+conref="ditaot_ditabase_conref.dita#reference/parmname_args.xhtml.classattr"></parmname></entry>
+<entry colname="col2"><parmname>PRESERVE-DITA-CLASS</parmname></entry>
+</row>
+<row>
+<entry colname="col1"><parmname
+conref="ditaot_ditabase_conref.dita#reference/parmname_args.xsl"></parmname></entry>
+<entry colname="col2"><parmname></parmname></entry>
+</row>
+<row>
+<entry colname="col1"><parmname
+conref="ditaot_ditabase_conref.dita#reference/parmname_basedir"></parmname></entry>
+<entry colname="col2"><parmname></parmname></entry>
+</row>
+<row>
+<entry colname="col1"><parmname
+conref="ditaot_ditabase_conref.dita#reference/parmname_clean.temp"></parmname></entry>
+<entry colname="col2"><parmname></parmname></entry>
+</row>
+<row>
+<entry colname="col1"><parmname
+conref="ditaot_ditabase_conref.dita#reference/parmname_dita.dir"></parmname></entry>
+<entry colname="col2"><parmname></parmname></entry>
+</row>
+<row>
+<entry colname="col1"><parmname
+conref="ditaot_ditabase_conref.dita#reference/parmname_dita.extname"></parmname></entry>
+<entry colname="col2"><parmname></parmname></entry>
+</row>
+<row>
+<entry colname="col1"></entry>
+<entry colname="col2"><parmname></parmname></entry>
+</row>
+<row>
+<entry colname="col1"><parmname
+conref="ditaot_ditabase_conref.dita#reference/parmname_dita.input"></parmname></entry>
+<entry colname="col2"><parmname></parmname></entry>
+</row>
+<row>
+<entry colname="col1"><parmname
+conref="ditaot_ditabase_conref.dita#reference/parmname_dita.input.dirname"></parmname><parmname
+conref="ditaot_ditabase_conref.dita#reference/parmname_dita.input.valfile"></parmname></entry>
+<entry colname="col2"><parmname></parmname></entry>
+</row>
+<row>
+<entry colname="col1"><parmname
+conref="ditaot_ditabase_conref.dita#reference/parmname_dita.temp.dir"></parmname></entry>
+<entry colname="col2"><parmname></parmname></entry>
+</row>
+<row>
+<entry colname="col1"><parmname
+conref="ditaot_ditabase_conref.dita#reference/parmname_generate.copy.outer"></parmname></entry>
+<entry colname="col2"><parmname></parmname></entry>
+</row>
+<row>
+<entry colname="col1"><parmname
+conref="ditaot_ditabase_conref.dita#reference/parmname_onlytopic.in.map"></parmname></entry>
+<entry colname="col2"><parmname></parmname></entry>
+</row>
+<row>
+<entry colname="col1"><parmname
+conref="ditaot_ditabase_conref.dita#reference/parmname_output.dir"></parmname></entry>
+<entry colname="col2"><parmname></parmname></entry>
+</row>
+<row>
+<entry colname="col1"><parmname
+conref="ditaot_ditabase_conref.dita#reference/parmname_validate"></parmname></entry>
+<entry colname="col2"><parmname></parmname></entry>
+</row>
+</tbody>
+</tgroup>
+</table></section>
+</refbody>
+</reference>
+<?Pub *0000009187?>

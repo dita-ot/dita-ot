@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Arbortext, Inc., 1988-2008, v.4002-->
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN"
+ "task.dtd">
+<?Pub Inc?>
+<task id="ditaot_t_generating_output" xml:lang="en-us">
+<title>Generating output with your DITA files<?Pub Caret?></title>
+<shortdesc>After you have installed the DITA Open Toolkit and run
+the samples, you might want to use the Toolkit with your own DITA
+files. You either can use an Ant file or the Java command-line interface
+to run the transformations.</shortdesc>
+<prolog>
+<author>Kristen James Eberlein</author>
+<critdates><created date="9 May 2009"/></critdates>
+</prolog>
+<taskbody></taskbody>
+</task>
+<?Pub *0000000687?>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Arbortext, Inc., 1988-2008, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<?Pub Sty _display FontColor="red"?>
+<?Pub Inc?>
+<reference id="ditaot_r_dita2docbook" xml:lang="en-us">
+<title>dita2docbook</title>
+<shortdesc>Use the dita2docbook target to generate DocB<?Pub Caret?>ook.</shortdesc>
+<refbody>
+<section><title>Parameters</title><parml><plentry
+conref="ditaot_ditabase_conref.dita#reference/args.artlbl">
+<pt></pt>
+<pd></pd>
+</plentry><plentry
+conref="ditaot_ditabase_conref.dita#reference/args.draft">
+<pt></pt>
+<pd></pd>
+</plentry><plentry
+conref="ditaot_ditabase_conref.dita#reference/args.input">
+<pt></pt>
+<pd></pd>
+</plentry><plentry
+conref="ditaot_ditabase_conref.dita#reference/args.logdir">
+<pt></pt>
+<pd></pd>
+</plentry><plentry
+conref="ditaot_ditabase_conref.dita#reference/args.xsl">
+<pt></pt>
+<pd></pd>
+</plentry><plentry conref="ditaot_ditabase_conref.dita#reference/basedir">
+<pt></pt>
+<pd></pd>
+</plentry><plentry
+conref="ditaot_ditabase_conref.dita#reference/clean.temp">
+<pt></pt>
+<pd></pd>
+</plentry><plentry
+conref="ditaot_ditabase_conref.dita#reference/dita.dir">
+<pt></pt>
+<pd></pd>
+</plentry><plentry
+conref="ditaot_ditabase_conref.dita#reference/dita.extname">
+<pt></pt>
+<pd></pd>
+</plentry><plentry
+conref="ditaot_ditabase_conref.dita#reference/dita.temp.dir">
+<pt></pt>
+<pd></pd>
+</plentry><plentry
+conref="ditaot_ditabase_conref.dita#reference/generate.copy.outer">
+<pt></pt>
+<pd></pd>
+</plentry></parml></section>
+</refbody>
+</reference>
+<?Pub *0000001580?>

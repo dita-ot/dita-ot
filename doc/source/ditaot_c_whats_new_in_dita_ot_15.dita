@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Arbortext, Inc., 1988-2008, v.4002-->
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN"
+ "concept.dtd">
+<concept id="ditaot_c_whats_new_in_dita_ot_15" xml:lang="en-us">
+<title>What's new in DITA Open Toolkit, version 1.5</title>
+<shortdesc>Short description needed</shortdesc>
+<conbody>
+<dl><dlentry>
+<dt>New parameters</dt>
+<dd>DITA 1.5 contains the following new Ant parameters:<dl><dlentry>
+<dt>args.breadscrumbs</dt>
+<dd></dd>
+</dlentry><dlentry>
+<dt>args.debug</dt>
+<dd></dd>
+</dlentry><dlentry>
+<dt>args.gen.task.lbl</dt>
+<dd></dd>
+</dlentry><dlentry>
+<dt>args.hide.parent.link</dt>
+<dd></dd>
+</dlentry><dlentry>
+<dt>args.figurelink.style</dt>
+<dd></dd>
+</dlentry><dlentry>
+<dt>args.tablelink.style<?Pub Caret?></dt>
+<dd></dd>
+</dlentry></dl></dd>
+</dlentry></dl>
+</conbody>
+</concept>
+<?Pub *0000000863?>
