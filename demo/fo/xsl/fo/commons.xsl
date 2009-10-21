@@ -72,6 +72,9 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template name="determineTopicType">
+        <xsl:apply-templates select="." mode="determineTopicType"/>
+    </xsl:template>
+    <xsl:template match="*" mode="determineTopicType">
         <xsl:variable name="id" select="ancestor-or-self::*[contains(@class, ' topic/topic ')][1]/@id"/>
         <xsl:variable name="gid" select="generate-id(ancestor-or-self::*[contains(@class, ' topic/topic ')][1])"/>
         <xsl:variable name="topicNumber" select="count(exsl:node-set($topicNumbers)/topic[@id = $id][following-sibling::topic[@guid = $gid]]) + 1"/>
@@ -655,6 +658,9 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template name="processTopicTitle">
+        <xsl:apply-templates select="." mode="processTopicTitle"/>
+    </xsl:template>
+    <xsl:template match="*" mode="processTopicTitle">
         <xsl:variable name="level" select="count(ancestor::*[contains(@class,' topic/topic ')])"/>
         <xsl:variable name="attrSet1">
             <xsl:call-template name="createTopicAttrsName">
@@ -699,6 +705,14 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:template name="createTopicAttrsName">
         <xsl:param name="theCounter"/>
         <xsl:param name="theName" select="''"/>
+        <xsl:apply-templates select="." mode="createTopicAttrsName">
+          <xsl:with-param name="theCounter" select="$theCounter"/>
+          <xsl:with-param name="theName" select="$theName"/>
+        </xsl:apply-templates>
+    </xsl:template>
+    <xsl:template match="*" mode="createTopicAttrsName">
+      <xsl:param name="theCounter"/>
+      <xsl:param name="theName" select="''"/>
         <xsl:choose>
             <xsl:when test="number($theCounter) > 0">
                 <xsl:call-template name="createTopicAttrsName">
@@ -1339,6 +1353,9 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
     
     <xsl:template name="getTitle"><!-- get fully-processed title content by whatever mechanism -->
+        <xsl:apply-templates select="." mode="getTitle"/>
+    </xsl:template>
+    <xsl:template match="*" mode="getTitle">
         <xsl:choose>
 <!--             add keycol here once implemented-->
             <xsl:when test="@spectitle">
@@ -1586,6 +1603,9 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template name="placeNoteContent">
+        <xsl:apply-templates select="." mode="placeNoteContent"/>
+    </xsl:template>
+    <xsl:template match="*" mode="placeNoteContent">
         <fo:block xsl:use-attribute-sets="note" id="{@id}">
             <fo:inline xsl:use-attribute-sets="note__label">
                 <xsl:choose>
@@ -1973,6 +1993,19 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template name="placeImage">
+        <xsl:param name="imageAlign"/>
+        <xsl:param name="href"/>
+        <xsl:param name="height"/>
+        <xsl:param name="width"/>
+        <xsl:apply-templates select="." mode="placeImage">
+            <xsl:with-param name="imageAlign" select="$imageAlign"/>
+            <xsl:with-param name="href" select="$href"/>
+            <xsl:with-param name="height" select="$height"/>
+            <xsl:with-param name="width" select="$width"/>
+        </xsl:apply-templates>
+    </xsl:template>
+
+    <xsl:template match="*" mode="placeImage">
         <xsl:param name="imageAlign"/>
         <xsl:param name="href"/>
         <xsl:param name="height"/>

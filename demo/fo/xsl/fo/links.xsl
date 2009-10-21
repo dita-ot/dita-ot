@@ -477,6 +477,9 @@ See the accompanying license.txt file for applicable licenses.
         <!--Related links-->
 
 	<xsl:template name="buildRelationships">
+        <xsl:apply-templates select="." mode="buildRelationships"/>
+    </xsl:template>
+    <xsl:template match="*" mode="buildRelationships">
 <!--
 		<xsl:param name="context" select="."/>
 		<xsl:for-each select=".">
