@@ -36,9 +36,8 @@
   <xsl:param name="dita.plugin.output" />
   <xsl:param name="plugin"/>
 
-  <xsl:variable name="newline"><xsl:text>
-</xsl:text>
-  </xsl:variable>
+  <xsl:variable name="newline">
+<xsl:text>&#13;&#10;</xsl:text></xsl:variable>
   
   
 
@@ -370,6 +369,11 @@
     <xsl:text>Bundle-ManifestVersion: 2</xsl:text><xsl:value-of select="$newline"/>
     <xsl:text>Bundle-Localization: plugin</xsl:text><xsl:value-of select="$newline"/>
     <xsl:text>Bundle-Name: %name</xsl:text><xsl:value-of select="$newline"/>
+    <!--  Fix for Eclipse defect 2871017 -->
+  <xsl:if test="not(*[contains(@class,' eclipsemap/pluginmeta ')]/*[contains(@class,' eclipsemap/plugininfo ')]/*[contains(@class,' topic/vrmlist ')]/*[contains(@class,' topic/vrm ')][position() = 1]/@version > 0)">
+      <xsl:text>Bundle-Version: 1.0.0</xsl:text><xsl:value-of select="$newline"/>
+  </xsl:if>
+    
     <xsl:text>Bundle-Vendor: %providerName</xsl:text><xsl:value-of select="$newline"/>
     <xsl:choose>
       <xsl:when test="$plugin='true'">
@@ -379,7 +383,7 @@
             <xsl:text>Bundle-SymbolicName: </xsl:text><xsl:value-of select="@id"/>;<xsl:text> singleton:=true</xsl:text><xsl:value-of select="$newline"/>
           </xsl:when>
           <xsl:otherwise>
-            <xsl:text>Bundle-SymbolicName: </xsl:text><xsl:value-of select="@id"/>;<xsl:text> singleton:=true</xsl:text><xsl:value-of select="$newline"/>
+            <xsl:text>Bundle-SymbolicName: org.sample.help.doc; singleton:=true</xsl:text><xsl:value-of select="$newline"/>
             <xsl:call-template name="output-message">
               <xsl:with-param name="msgnum">050</xsl:with-param>
               <xsl:with-param name="msgsev">W</xsl:with-param>
