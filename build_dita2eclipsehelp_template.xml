@@ -28,7 +28,7 @@
         depends="dita.map.eclipse.init, dita.map.eclipse.toc, dita.map.eclipse.index, dita.map.eclipse.plugin, dita.out.map.eclipse.toc, dita.out.map.eclipse.index, dita.out.map.eclipse.plugin" />-->
 
   <target name="dita.map.eclipse"
-    depends=" dita.map.eclipse.init, dita.map.eclipse.fragment.language.init, dita.map.eclipse.fragment.language.country.init, dita.map.eclipse.fragment.error">
+    depends=" dita.map.eclipse.init, copy-plugin-files, dita.map.eclipse.fragment.language.init, dita.map.eclipse.fragment.language.country.init, dita.map.eclipse.fragment.error">
     
   </target>
 	
@@ -331,26 +331,46 @@
     if="old.transform">
     <defaultexcludes add="**/META-INF/**"/>
     <defaultexcludes add="**/nl/**"/>
+  	<delete file="${output.dir}${file.separator}plugin.xml"/>
+  	<delete file="${output.dir}${file.separator}plugincustomization.ini"/>
     <move todir="${dita.map.output.dir}${file.separator}${fragment.dirname}" includeemptydirs="yes">
       <fileset dir="${dita.map.output.dir}" defaultexcludes="yes">
-        <exclude name="*.xml"/>
-        <exclude name="*.properties"/>
+        <exclude name="helpData.xml"/>
+      	<exclude name="plugin.properties"/>
+      	<exclude name="plugin_${fragment.property.name}.properties"/>
         <exclude name="*.list"/>
+      	<exclude name="disabled_book.css"/>
+      	<exclude name="narrow_book.css"/>
+      	<exclude name="${os}_narrow_book.css"/>
+      	<exclude name="book.css"/>
+      	<exclude name="plugincustomization.ini"/>
       </fileset>
-    </move>     
+    </move>
+  	<move file="${output.dir}${file.separator}plugin.properties" tofile="${output.dir}${file.separator}plugin_${fragment.property.name}.properties"/>
+
+  	
   </target>
   
   <target name="dita.out.map.eclipse.fragment.move.files"
     if="inner.transform">
     <defaultexcludes add="**/META-INF/**"/>
     <defaultexcludes add="**/nl/**"/>
+  	<delete file="${output.dir}${file.separator}plugin.xml"/>
+  	<delete file="${output.dir}${file.separator}plugincustomization.ini"/>
     <move todir="${output.dir}${file.separator}${fragment.dirname}" includeemptydirs="yes">
       <fileset dir="${output.dir}" defaultexcludes="yes">
-        <exclude name="*.xml"/>
-        <exclude name="*.properties"/>
+        <exclude name="helpData.xml"/>
+      	<exclude name="plugin.properties"/>
+      	<exclude name="plugin_${fragment.property.name}.properties"/>
         <exclude name="*.list"/>
+      	<exclude name="disabled_book.css"/>
+      	<exclude name="narrow_book.css"/>
+      	<exclude name="${os}_narrow_book.css"/>
+      	<exclude name="book.css"/>
+      	<exclude name="plugincustomization.ini"/>
       </fileset>
-    </move>     
+    </move>
+  	<move file="${output.dir}${file.separator}plugin.properties" tofile="${output.dir}${file.separator}plugin_${fragment.property.name}.properties"/>
   </target>
   
   <!--<target name="dita.map.eclipse"
@@ -397,5 +417,21 @@
 
     <!-- depecrated: keep for back-compatibility, will be remvoed in a later release -->
     <target name="dita.topics.eclipse" depends="dita.topics.xhtml" />
+	
+	<target name="copy-plugin-files">
+	  	<!-- Look for files that override behavior in Eclipse plugins -->
+	  	<!-- <echo>* dita.input.dirname = ${user.input.dir}</echo> -->
+	  	<copy todir="${output.dir}">
+	  	      <fileset dir="${user.input.dir}">
+	  	      	<include name="disabled_book.css"/>
+	  	        <include name="narrow_book.css"/>
+	  	        <include name="${os}_narrow_book.css"/>
+	  	        <include name="book.css"/>
+	  	        <include name="plugincustomization.ini"/>
+	  	        <include name="helpData.xml"/>
+	  	      </fileset>
+	  		  
+	  	</copy>
+	</target>
 
 </project>
