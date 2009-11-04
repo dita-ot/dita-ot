@@ -37,7 +37,9 @@
   <xsl:param name="plugin"/>
 
   <xsl:variable name="newline">
-<xsl:text>&#13;&#10;</xsl:text></xsl:variable>
+<xsl:text>&#10;</xsl:text></xsl:variable>
+
+
   
   
 
@@ -406,7 +408,25 @@
           </xsl:when>
           <xsl:otherwise>
             
-            <xsl:text>Bundle-SymbolicName: org.sample.help.doc.</xsl:text>
+            <!--  <xsl:text>Bundle-SymbolicName: org.sample.help.doc.</xsl:text> -->
+            <xsl:text>Bundle-SymbolicName: org.sample.help.doc</xsl:text>
+            <!--   <xsl:choose>
+              <xsl:when test="$fragment.lang!=''">
+                <xsl:choose>
+                  <xsl:when test="$fragment.country!=''">
+                    <xsl:value-of select="$fragment.lang"/>.<xsl:value-of select="$fragment.country"/>;<xsl:text/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <xsl:value-of select="$fragment.lang"/>;<xsl:text/>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:text>lang; </xsl:text>
+              </xsl:otherwise>
+            </xsl:choose>  -->
+            <xsl:value-of select="$newline"/>
+            <xsl:text>Fragment-Host: org.sample.help.doc.</xsl:text>
             <xsl:choose>
               <xsl:when test="$fragment.lang!=''">
                 <xsl:choose>
@@ -424,7 +444,6 @@
               </xsl:otherwise>
             </xsl:choose>
             <xsl:value-of select="$newline"/>
-            <xsl:text>Fragment-Host: org.sample.help.doc.nl1;</xsl:text><xsl:value-of select="$newline"/>
             <xsl:call-template name="output-message">
               <xsl:with-param name="msgnum">050</xsl:with-param>
               <xsl:with-param name="msgsev">W</xsl:with-param>

@@ -18,7 +18,8 @@
   <xsl:param name="plugin"/>
   
   <xsl:variable name="newline">
-<xsl:text>&#13;&#10;</xsl:text></xsl:variable>
+<xsl:text>&#10;</xsl:text></xsl:variable>
+
   
   <!-- Define the error message prefix identifier -->
   <xsl:variable name="msgprefix">DOTX</xsl:variable>
