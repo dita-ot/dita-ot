@@ -612,6 +612,13 @@
     <response>To enable constraint checking, please upgrade to an XSLT 2.0 processor.</response>
   </message>
   <!-- added by William on 2009-08-20 for #12008 end-->
+  
+  <!-- added by William on 2009-10-26 for bug:1880097 start -->
+  <message id="DOTX063W" type="WARN">
+    <reason>It appears that dita file '%1' is not referred by topicref tag in the ditamap file, so a broken link is created.</reason>
+    <response>Please make sure that '%1' is referenced in the ditamap file.</response>
+  </message>
+  <!-- added by William on 2009-10-26 for bug:1880097 end -->
   <!-- End of XSL Messages --> 
   
   <!-- Add any messages defined by plugins. -->

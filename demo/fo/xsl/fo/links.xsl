@@ -39,9 +39,14 @@ See the accompanying license.txt file for applicable licenses.
     xmlns:opentopic-func="http://www.idiominc.com/opentopic/exsl/function"
     exclude-result-prefixes="opentopic-mapmerge opentopic-func exslf exsl"
     version="1.1">
-
-    <xsl:include href="../../cfg/fo/attrs/links-attr.xsl"/>
-
+	
+	<!-- added by William on 2009-10-26 for bug:1880097 start -->
+	<xsl:import href="../../../../xsl/common/output-message.xsl"/>
+	<xsl:variable name="msgprefix">DOTX</xsl:variable>
+	<!-- added by William on 2009-10-26 for bug:1880097 end -->
+    
+	<xsl:include href="../../cfg/fo/attrs/links-attr.xsl"/>
+	
     <xsl:key name="key_anchor" match="*[@id][not(contains(@class,' map/topicref '))]" use="@id"/>
 <!--[not(contains(@class,' map/topicref '))]-->
     <xsl:template name="insertLinkShortDesc">
@@ -399,11 +404,24 @@ See the accompanying license.txt file for applicable licenses.
         		</xsl:attribute>
         	</xsl:when>
         	<!-- added by William on 2009-09-09 for xref pdf bug:2854546 end-->
+        	<xsl:when test="contains($href, '#')">
+        		<xsl:attribute name="internal-destination">
+        			<xsl:value-of select="opentopic-func:getDestinationId($href)"/>
+        		</xsl:attribute>
+        	</xsl:when>       	
             <xsl:otherwise>
+            	<xsl:attribute name="internal-destination">
+            		<xsl:value-of select="$href"/>
+            	</xsl:attribute>
+            	<xsl:call-template name="brokenLinks">
+            		<xsl:with-param name="href" select="$href"/>
+            	</xsl:call-template>
+            </xsl:otherwise>
+            <!--xsl:otherwise>
                 <xsl:attribute name="internal-destination">
                     <xsl:value-of select="opentopic-func:getDestinationId($href)"/>
                 </xsl:attribute>
-            </xsl:otherwise>
+            </xsl:otherwise-->
         </xsl:choose>
     </xsl:template>
 
@@ -975,6 +993,13 @@ See the accompanying license.txt file for applicable licenses.
 		</xsl:if>
 	</xsl:template>
 
-
+	<xsl:template name="brokenLinks">
+		<xsl:param name="href"/>
+		<xsl:call-template name="output-message">
+			<xsl:with-param name="msgnum">063</xsl:with-param>
+			<xsl:with-param name="msgsev">W</xsl:with-param>
+			<xsl:with-param name="msgparams">%1=<xsl:value-of select="$href"/></xsl:with-param>
+		</xsl:call-template>
+	</xsl:template>
 
 </xsl:stylesheet>
