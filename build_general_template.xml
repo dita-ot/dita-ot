@@ -16,7 +16,7 @@
   	
   	<!-- added by William on 2009-07-22 for req #12014 start -->
     <condition property="transtype.ext" value="_eclipsehelp.xsl" else=".xsl">
-      <equals arg1="eclipsehelp" arg2="${transtype}"/>
+      <equals arg1="eclipsehelp" arg2="${transtype}" casesensitive="no"/>
     </condition>
   	<!-- added by William on 2009-07-22 for req #12014 end -->
   	
@@ -53,6 +53,10 @@
       <param name="INDEXSHOW" expression="${args.indexshow}" if="args.indexshow" />
       <param name="genDefMeta" expression="${args.gen.default.meta}" if="args.gen.default.meta" />
       <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
+      <!-- added by William on 2009-09-03 for keyref bug #2849078 start -->
+      <param name="BASEDIR" expression="${basedir}"/>
+      <param name="OUTPUTDIR" expression="${output.dir}"/>
+      <!-- added by William on 2009-09-03 for keyref bug #2849078 end -->
       <param name="DBG" expression="${args.debug}" if="args.debug"/>
       <dita:extension id="dita.conductor.xhtml.param" behavior="org.dita.dost.platform.InsertAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
     </xslt>
@@ -97,6 +101,10 @@
       <param name="INDEXSHOW" expression="${args.indexshow}" if="args.indexshow" />
       <param name="genDefMeta" expression="${args.gen.default.meta}" if="args.gen.default.meta" />
       <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
+	  <!-- added by William on 2009-09-03 for keyref bug #2849078 start -->
+      <param name="BASEDIR" expression="${basedir}"/>
+      <param name="OUTPUTDIR" expression="${output.dir}"/>
+      <!-- added by William on 2009-09-03 for keyref bug #2849078 end -->
       <param name="DBG" expression="${args.debug}" if="args.debug"/>
 	  <dita:extension id="dita.conductor.html.param" behavior="org.dita.dost.platform.InsertAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
     </xslt>
@@ -113,7 +121,7 @@
     </condition>
     <!-- added by William on 2009-07-22 for req #12014 start -->
     <condition property="transtype.ext" value="_eclipsehelp.xsl" else=".xsl">
-      <equals arg1="eclipsehelp" arg2="${transtype}"/>
+      <equals arg1="eclipsehelp" arg2="${transtype}" casesensitive="no"/>
     </condition>
     <!-- added by William on 2009-07-22 for req #12014 end -->
     
@@ -174,7 +182,7 @@
       </not>
     </condition>
     <condition property="args.xsl"
-      value="${dita.script.dir}${file.separator}dita2html.xsl" else="">
+      value="${dita.script.dir}${file.separator}dita2html.xsl">
       <not>
         <isset property="args.xsl" />
       </not>
@@ -205,6 +213,10 @@
       <param name="INDEXSHOW" expression="${args.indexshow}" if="args.indexshow" />
       <param name="genDefMeta" expression="${args.gen.default.meta}" if="args.gen.default.meta" />
       <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
+      <!-- added by William on 2009-09-03 for keyref bug #2849078 start -->
+      <param name="BASEDIR" expression="${basedir}"/>
+      <param name="OUTPUTDIR" expression="${output.dir}"/>
+      <!-- added by William on 2009-09-03 for keyref bug #2849078 end -->
       <param name="DBG" expression="${args.debug}" if="args.debug"/>
 	  <dita:extension id="dita.conductor.html.param" behavior="org.dita.dost.platform.InsertAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
       <mapper type="regexp" 
@@ -227,8 +239,8 @@
   			</and>
   		</and>
 	</condition>	
-  </target>
-		
+  </target>	
+  	
   <target name="dita.outer.topics.xhtml" unless="noTopic" if="outer.transform"  depends="checkouterTransform"
     description="Build XHTML output from outer dita topics">
     <condition property="out.ext" value=".html">
@@ -239,7 +251,7 @@
   	
   	<!-- added by William on 2009-07-22 for req #12014 start -->
     <condition property="transtype.ext" value="_eclipsehelp.xsl" else=".xsl">
-      <equals arg1="eclipsehelp" arg2="${transtype}"/>
+      <equals arg1="eclipsehelp" arg2="${transtype}" casesensitive="no"/>
     </condition>
   	<!-- added by William on 2009-07-22 for req #12014 end -->
   	
@@ -274,11 +286,15 @@
       <param name="INDEXSHOW" expression="${args.indexshow}" if="args.indexshow" />
       <param name="genDefMeta" expression="${args.gen.default.meta}" if="args.gen.default.meta" />
       <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
+      <!-- added by William on 2009-09-03 for keyref bug #2849078 start -->
+      <param name="BASEDIR" expression="${basedir}"/>
+      <param name="OUTPUTDIR" expression="${output.dir}"/>
+      <!-- added by William on 2009-09-03 for keyref bug #2849078 end -->
       <param name="DBG" expression="${args.debug}" if="args.debug"/>
       <dita:extension id="dita.conductor.xhtml.param" behavior="org.dita.dost.platform.InsertAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
     </xslt>
   </target>
-	
+
   <target name="dita.outer.topics.html" unless="noTopic" if="outer.transform"  depends="checkouterTransform"
     description="Build HTML files from outer dita topics">
     <condition property="out.ext" value=".html">
@@ -292,7 +308,6 @@
         <isset property="args.xsl" />
       </not>
     </condition>
-  	
     <xslt processor="trax" basedir="${dita.temp.dir}"
       destdir="${output.dir}${file.separator}${uplevels}" includesfile="${dita.temp.dir}${file.separator}${outditafilesfile}"
       classpathref="dost.class.path"
@@ -318,6 +333,10 @@
       <param name="INDEXSHOW" expression="${args.indexshow}" if="args.indexshow" />
       <param name="genDefMeta" expression="${args.gen.default.meta}" if="args.gen.default.meta" />
       <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
+      <!-- added by William on 2009-09-03 for keyref bug #2849078 start -->
+      <param name="BASEDIR" expression="${basedir}"/>
+      <param name="OUTPUTDIR" expression="${output.dir}"/>
+      <!-- added by William on 2009-09-03 for keyref bug #2849078 end -->
       <param name="DBG" expression="${args.debug}" if="args.debug"/>
 	  <dita:extension id="dita.conductor.html.param" behavior="org.dita.dost.platform.InsertAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
     </xslt>
