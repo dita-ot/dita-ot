@@ -23,13 +23,20 @@
      * 2698921 Add a way to set attributes on <body>
      * 2120219 Add PDF to the supported image
      * 2002857 homeID in javahelp .hs file is not set
-     * 1725284: add support for headings for sections within task (XHTML only)
+     * 1725284 add support for headings for sections within task (XHTML only)
      * 1623246 Support RFC4646 language tags in Index modules
-     * 1367897 Xref content generation enforces formatting choices 
+     * 1367897 Xref content generation enforces formatting choices
+     * 2882109 Convert named PDF templates to mode template
+     * 2883406 Add extension point for modifying PDF link text
+     * 2882870 Add parameter to control PDF Chapter style
+     * 2882103 Provide hook for specializations to add custom headers
+     * 2882072 Add parameter to control PDF bookmarks (default collapsed)
      
      [SourceForge Patches Added]
      * 2790337 Add extension points to related-links code
      * 2778178 Flagging code duplicates XSL
+     * 2715750 plus-transtype-htmlhelp: support alternate compilers
+     * 2804311 Feature value trim test bug
      
      [SourceForge Bugs Fixed]
      * 2860433 Keyref on <image> fails to resolve
@@ -86,7 +93,24 @@
      * 2317581 inline formatting in shortdesc
      * 1931457 Need to identify transtype during XHTML output step
      * 1629094 docbook creates empty simplelists
-     * 1628936 transtype=docbook does not handle publisher and copyright element 
+     * 1628936 transtype=docbook does not handle publisher and copyright element
+     * 2875373 tm in linktext is dropped
+     * 2870935 keyref within topics ignore @copy-to attributes
+     * 2873560 SWF flash not defined as resources to be copied
+     * 2872954 Conref push not working at map level
+     * 2871009 Temp directory leaves behind single directory and file
+     * 2866322 Generated links have bad URLs
+     * 2873654 PDF missing rules for new DITA 1.2 content elements
+     * 2872988 Bad relcolwidth crashes PDF output
+     * 2866204 Topicref with keyref fails to produce output
+     * 2878446 Issue with ampersand in xrefs in attributes
+     * 1629096 docbook creates invalid varlistentry
+     * 2871326 Cannot use different TOC titles for same topic in PDF
+     * 1880097 PDF2 ingnores contents of <xref> elements
+     * 1815571 Invalid property in fo:table-body
+     * 2879171 Shortdesc & Abstract formatting is incorrect for PDF
+     * 2882085 Obsolete code in PDF plug-in should be removed
+     * 2661418 make the TOC in pdf2 output link to topics in pdf
      
 
 ====================================================================================
