@@ -1262,7 +1262,21 @@
       <xsl:when test="function-available('fn:reverse' ) and function-available('fn:tokenize' )
         and function-available('fn:remove' )">
         <!-- break string into node-set -->
-        <xsl:variable name="subDomains" select="fn:reverse(fn:tokenize($sourceDomains, '\(|\)\s*?\(|\)' ))"/>
+        <xsl:variable name="input" select="fn:tokenize($sourceDomains, '\)\s*?')"/>
+        <!-- filter out domains that begins with 's' -->
+        <xsl:variable name="mid" select="$input[starts-with(., 's')]"/>
+        <!-- cast sequence to string for next step -->
+        <xsl:variable name="out">
+          <xsl:for-each select="$mid">
+            <xsl:value-of select="concat(substring-after(., 's'), ')', ' ')"/>
+          </xsl:for-each>
+        </xsl:variable>
+        <!-- format the out -->
+        <xsl:variable name="output" select="normalize-space($out)"/>
+        
+        <!-- break string into node-set -->
+        <!--xsl:variable name="subDomains" select="fn:reverse(fn:tokenize($sourceDomains, '\(|\)\s*?\(|\)' ))"/-->
+        <xsl:variable name="subDomains" select="fn:reverse(fn:tokenize($output, '\(|\)\s*?\(|\)' ))"/>
         <!-- get domains value having constraints e.g [topic simpleSection-c]-->
         <xsl:variable name="sDomains" select="$subDomains[contains(., '-c')]"/>
         <xsl:choose>
@@ -1302,10 +1316,11 @@
                 contains($targetDomains, $editedConstraintItem) ) ">
                 <!-- move to next item -->
                 <xsl:variable name="remainsItem" select="fn:remove($sDomains, 1)"/>
-                <!-- cast node set to string recursively call the template-->
+                <!-- cast node set to string recursively call the template.
+                note:should begins with letter s-->
                 <xsl:variable name="remainString">
                   <xsl:for-each select="$remainsItem">
-                    <xsl:value-of select="concat( '(', ., ')' , ' ')"/>
+                    <xsl:value-of select="concat( 's(', ., ')' , ' ')"/>
                   </xsl:for-each>
                 </xsl:variable>
                 <xsl:variable name="result">
@@ -1321,10 +1336,11 @@
                 not(contains($targetDomains, substring-before($originalModule, ')' )))">
                 <!-- move to next item -->
                 <xsl:variable name="remainsItem" select="fn:remove($sDomains, 1)"/>
-                <!-- cast node set to string recursively call the template-->
+                <!-- cast node set to string recursively call the template
+                  note:should begins with letter s.-->
                 <xsl:variable name="remainString">
                   <xsl:for-each select="$remainsItem">
-                    <xsl:value-of select="concat( '(', ., ')' , ' ')"/>
+                    <xsl:value-of select="concat( 's(', ., ')' , ' ')"/>
                   </xsl:for-each>
                 </xsl:variable>
                 <xsl:variable name="result">
@@ -1347,7 +1363,7 @@
         </xsl:choose>
       </xsl:when>
       <!-- function not support -->
-      <xsl:when test="contains($sourceDomains, '-c')">
+      <xsl:when test="contains($sourceDomains, 's(')">
       	<xsl:apply-templates select="." mode="ditamsg:parserUnsupported"/>
       	<xsl:value-of select="'true'"/>
       </xsl:when>
