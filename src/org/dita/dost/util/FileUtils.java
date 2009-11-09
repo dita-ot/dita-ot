@@ -427,8 +427,10 @@ public class FileUtils {
 			fos.flush();
 		} catch (IOException ex) {
 			DITAOTJavaLogger logger = new DITAOTJavaLogger();
-			logger.logWarn("Failed to copy file from '" + src + "' to '"
-					+ target + "'");
+			//removed by Alan on Date:2009-11-02 for Work Item:#1590 start
+			/*logger.logWarn("Failed to copy file from '" + src + "' to '"
+					+ target + "'");*/
+			//removed by Alan on Date:2009-11-02 for Work Item:#1590 end
 			logger.logException(ex);
 			
 		} finally {

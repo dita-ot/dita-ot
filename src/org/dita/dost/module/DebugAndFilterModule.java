@@ -35,6 +35,7 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTJavaLogger;
+import org.dita.dost.log.MessageUtils;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.pipeline.PipelineHashIO;
@@ -526,10 +527,15 @@ public class DebugAndFilterModule implements AbstractPipelineModule {
         	File targetFile = new File(tempDir, copytoTarget);
         	
         	if (targetFile.exists()) {
-        		javaLogger
+        		//edited by Alan on Date:2009-11-02 for Work Item:#1590 start
+        		/*javaLogger
 						.logWarn(new StringBuffer("Copy-to task [copy-to=\"")
 								.append(copytoTarget)
-								.append("\"] which points to an existed file was ignored.").toString());
+								.append("\"] which points to an existed file was ignored.").toString());*/
+        		Properties prop = new Properties();
+        		prop.setProperty("%1", copytoTarget);
+        		javaLogger.logWarn(MessageUtils.getMessage("DOTX064W", prop).toString());
+        		//edited by Alan on Date:2009-11-02 for Work Item:#1590 end
         	}else{
         		FileUtils.copyFile(srcFile, targetFile);
         	}

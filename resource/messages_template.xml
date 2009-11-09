@@ -621,6 +621,18 @@
   <!-- added by William on 2009-10-26 for bug:1880097 end -->
   <!-- End of XSL Messages --> 
   
+  <!-- added by Alan on Date:2009-11-02 for Work Item:#1590 start -->
+  <message id="DOTX064W" type="WARN">
+    <reason>The copy-to attribute [copy-to="%1"] points to an existed file, so this attribute is ignored.</reason>
+    <response>Please make sure copy-to attribute points to a file name that does no exist in your project.</response>
+  </message>
+  
+  <message id="DOTX065W" type="WARN">
+    <reason>The copy-to attribute [href="%1" copy-to="%2"] points to another copy-to target, so this attribute is ignored.</reason>
+    <response>Please make sure that this attribute value is unique within your project.</response>
+  </message>
+  <!-- added by Alan on Date:2009-11-02 for Work Item:#1590 end   -->
+  
   <!-- Add any messages defined by plugins. -->
   <dita:extension xmlns:dita="http://dita-ot.sourceforge.net"
     behavior="org.dita.dost.platform.InsertAction" id="dita.xsl.messages"/>

@@ -206,10 +206,12 @@ public class IndexTermExtractModule implements AbstractPipelineModule {
 						.toString());
 				
 				try {
-					if(!new File(baseInputDir, target).exists()){
+					//removed by Alan on Date:2009-11-02 for Work Item:#1590 start
+					/*if(!new File(baseInputDir, target).exists()){
 						javaLogger.logWarn("Cannot find file "+ target);
 						continue;
-					}
+					}*/
+					//removed by Alan on Date:2009-11-02 for Work Item:#1590 end
 					inputStream = new FileInputStream(
 							new File(baseInputDir, target));
 					xmlReader.parse(new InputSource(inputStream));
@@ -239,10 +241,12 @@ public class IndexTermExtractModule implements AbstractPipelineModule {
 
 				ditamapIndexTermReader.setMapPath(mapPathFromInputMap);
 				try {
-					if(!new File(baseInputDir, ditamap).exists()){
+					//removed by Alan on Date:2009-11-02 for Work Item:#1590 start
+					/*if(!new File(baseInputDir, ditamap).exists()){
 						javaLogger.logWarn("Cannot find file "+ ditamap);
 						continue;
-					}
+					}*/
+					//end by Alan on Date:2009-11-02 for Work Item:#1590 start
 					inputStream = new FileInputStream(new File(baseInputDir,
 							ditamap));
 					xmlReader.parse(new InputSource(inputStream));

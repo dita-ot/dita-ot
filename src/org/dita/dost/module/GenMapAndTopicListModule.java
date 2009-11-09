@@ -393,7 +393,12 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 				reader.setCurrentDir(new File(currentFile).getParent());
 				reader.parse(fileToParse);
 			}else{
-				javaLogger.logWarn("Input file name is not valid DITA file name.");
+				//edited by Alan on Date:2009-11-02 for Work Item:#1590 start
+				/*javaLogger.logWarn("Input file name is not valid DITA file name.");*/
+				Properties prop = new Properties();
+				prop.put("%1", fileToParse);
+				javaLogger.logWarn(MessageUtils.getMessage("DOTJ021W", params).toString());
+				//edited by Alan on Date:2009-11-02 for Work Item:#1590 end
 			}
 
 			// don't put it into dita.list if it is invalid
@@ -488,14 +493,20 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 			String value = (String) cpMap.get(key);
 			
 			if (copytoMap.containsKey(key)) {
-				StringBuffer buff = new StringBuffer();
+				//edited by Alan on Date:2009-11-02 for Work Item:#1590 start
+				/*StringBuffer buff = new StringBuffer();
 				buff.append("Copy-to task [href=\"");
 				buff.append(value);
 				buff.append("\" copy-to=\"");
 				buff.append(key);
 				buff.append("\"] which points to another copy-to target");
 				buff.append(" was ignored.");
-				javaLogger.logWarn(buff.toString());
+				javaLogger.logWarn(buff.toString());*/
+        		Properties prop = new Properties();
+        		prop.setProperty("%1", value);
+        		prop.setProperty("%2", key);
+        		javaLogger.logWarn(MessageUtils.getMessage("DOTX065W", prop).toString());
+				//edited by Alan on Date:2009-11-02 for Work Item:#1590 end
 				ignoredCopytoSourceSet.add(value);
 			} else {
 				updateUplevels(key);

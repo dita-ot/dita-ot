@@ -583,7 +583,10 @@ public class ChunkTopicParser extends AbstractXMLWriter {
     		property.storeToXML(xmlDitaList, null);
     		
 		}catch (Exception e){
-			logger.logWarn(e.toString());
+			//edited by Alan on Date:2009-11-02 for Work Item:#1590 start
+			/*logger.logWarn(e.toString());*/
+			logger.logException(e);
+			//edited by Alan on Date:2009-11-02 for Work Item:#1590 end
 		}
 	}
 	

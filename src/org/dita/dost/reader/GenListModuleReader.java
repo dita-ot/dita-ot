@@ -1073,19 +1073,25 @@ public class GenListModuleReader extends AbstractXMLReader {
 			
 			if (StringUtils.isEmptyString(href)) {
 				StringBuffer buff = new StringBuffer();
-				buff.append("Copy-to task [href=\"\" copy-to=\"");
+				buff.append("[WARN]: Copy-to task [href=\"\" copy-to=\"");
 				buff.append(filename);
 				buff.append("\"] was ignored.");
 				javaLogger.logWarn(buff.toString());
 			} else if (copytoMap.get(filename) != null){
-				StringBuffer buff = new StringBuffer();
+				//edited by Alan on Date:2009-11-02 for Work Item:#1590 start
+				/*StringBuffer buff = new StringBuffer();
 				buff.append("Copy-to task [href=\"");
 				buff.append(href);
 				buff.append("\" copy-to=\"");
 				buff.append(filename);
 				buff.append("\"] which points to another copy-to target");
 				buff.append(" was ignored.");
-				javaLogger.logWarn(buff.toString());
+				javaLogger.logWarn(buff.toString());*/
+        		Properties prop = new Properties();
+        		prop.setProperty("%1", href);
+        		prop.setProperty("%2", filename);
+        		javaLogger.logWarn(MessageUtils.getMessage("DOTX065W", prop).toString());
+				//edited by Alan on Date:2009-11-02 for Work Item:#1590 end
 				ignoredCopytoSourceSet.add(href);
 			} else if (!(atts.getValue(Constants.ATTRIBUTE_NAME_CHUNK) != null && atts.getValue(Constants.ATTRIBUTE_NAME_CHUNK).contains("to-content"))){
 				copytoMap.put(filename, FileUtils.normalizeDirectory(currentDir, href));
