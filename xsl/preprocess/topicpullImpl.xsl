@@ -531,9 +531,21 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
 
   <!-- Get the file name for a reference that goes out of the file -->
   <xsl:template match="*" mode="topicpull:get-stuff_file">
-    <xsl:param name="WORKDIR">
+  	<!-- edited by Alan on Date: 2009-11-02 for Bug:#2887331 begin -->
+    <!--xsl:param name="WORKDIR">
       <xsl:apply-templates select="/processing-instruction()" mode="get-work-dir"/>
-    </xsl:param>
+    </xsl:param-->
+    <xsl:param name="WORKDIR">
+	    <xsl:choose>
+	        <xsl:when test="contains(@class, ' topic/link ')">
+	            <xsl:apply-templates select="./preceding::processing-instruction('workdir')[1]" mode="get-work-dir"/>
+	        </xsl:when>
+	        <xsl:otherwise>
+	            <xsl:apply-templates select="/processing-instruction()" mode="get-work-dir"/>
+	        </xsl:otherwise>
+	    </xsl:choose>
+	</xsl:param>
+	<!-- edited by Alan on Date: 2009-11-02 for Bug:#2887331 end -->
     <xsl:choose>
       <xsl:when test="contains(@href,'://') and contains(@href,'#')">
         <xsl:value-of select="substring-before(@href,'#')"/>
