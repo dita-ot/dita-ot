@@ -169,7 +169,7 @@
   <target name="package-source">
     <zip destfile="${package.output.dir}/${param.out.file}${win32.zip.suffix}">
       <zipfileset dir="./" prefix="${package.name.root}${version}-src">
-        <patternset refid="pattern.package.general"/>
+        <patternset refid="pattern.package.small"/>
         <include name="src/**"/>
       	<include name="lib/APACHE-LICENSE-2_0.html"/>
         <exclude name="files.txt"/>
@@ -179,7 +179,7 @@
     <tar destfile="${package.output.dir}/${param.out.file}${linux.zip.suffix}" 
       compression="gzip" longfile="gnu">
       <tarfileset dir="./" prefix="${package.name.root}${version}-src">
-        <patternset refid="pattern.package.general"/>
+        <patternset refid="pattern.package.small"/>
         <include name="src/**"/>
       	<include name="lib/APACHE-LICENSE-2_0.html"/>
         <exclude name="files.txt"/>
@@ -223,7 +223,7 @@
     <tar destfile="${package.output.dir}/${param.out.file}${linux.zip.suffix}" 
       compression="gzip" longfile="gnu">
       <tarfileset dir="./" prefix="${package.name.root}${version}">
-        <patternset refid="pattern.package.general"/>
+        <patternset refid="pattern.package.small"/>
         <include name="lib/dost.jar"/>
       	<include name="lib/APACHE-LICENSE-2_0.html"/>
         <exclude name="startcmd.*"/>
