@@ -11,9 +11,17 @@
 -->
 <strings xml:lang="ru-ru">        <!-- Russian -->
 
-<str name="Band">Группа</str>
+<str name="Artist">Группа</str>
 <str name="Albums">Диски</str>
 <str name="Comments">Комментарии</str>
 <str name="My Discs">Я лублю свои компакт диски!</str>
+
+<str name="Song">Песня</str>
+<str name="Album">Групп</str>
+<!--<str name="Artist">Artist</str>-->
+<str name="Genre">Жанр</str>
+<str name="Rating">Номинальность</str>
+<str name="Count">Отсчет</str>
+<str name="Play date">Последнее сыграло</str>
 
 </strings>

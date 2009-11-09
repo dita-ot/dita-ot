@@ -11,10 +11,18 @@
 -->
 <strings xml:lang="en-us">        <!-- US English -->
 
-<str name="Band">Band</str>
+<str name="Artist">Artist</str>
 <str name="Albums">Albums</str>
 <str name="Comments">Comments</str>
 <str name="My Discs">I love these discs!</str>
 <str name="My Discs">My Songs!</str>
+
+<str name="Song">Song</str>
+<str name="Album">Album</str>
+<!--<str name="Artist">Artist</str>-->
+<str name="Genre">Genre</str>
+<str name="Rating">Rating</str>
+<str name="Count">Play count</str>
+<str name="Play date">Last played</str>
 
 </strings>

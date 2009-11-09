@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE musicCollection PUBLIC "-//RDA//DTD DITA Musical Reference//EN"
- "music.dtd">
+ "../dtd/music.dtd">
 <!-- This file is part of the DITA Open Toolkit project hosted on 
      Sourceforge.net. See the accompanying license.txt file in the
      main toolkit package for applicable licenses.-->
@@ -11,24 +11,24 @@
 <musicBody>
 <cdList>
 <cdRow>
-<band>Intro5pect</band>
+<artist>Intro5pect</artist>
 <albums>Self titled</albums>
 <comments>What an odd name! But it's the perfect music to listen to while
 coding. Or running. Or reading. Not for the folkies.</comments>
 </cdRow>
 <cdRow>
-<band>Guitar Islancio</band>
+<artist>Guitar Islancio</artist>
 <albums>Icelandic Folk</albums>
 <comments>Wonderful guitar music, with a bit of trumpet thrown in. Pairs nicely
 with a salmon dinner and white wine. </comments>
 </cdRow>
 <cdRow>
-<band>Alejandro Escavedo</band>
+<artist>Alejandro Escavedo</artist>
 <albums>The Boxing Mirror</albums>
 <comments>What a nice discovery as a free gift.</comments>
 </cdRow>
 <cdRow>
-<band>John Williams and Dean Magraw</band>
+<artist>John Williams and Dean Magraw</artist>
 <albums>Raven</albums>
 <comments>Great guitar and super squeeze boxing.</comments>
 </cdRow>

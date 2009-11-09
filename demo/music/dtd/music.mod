@@ -35,25 +35,6 @@ PUBLIC "-//RDA//ELEMENTS DITA Musical Reference//EN"
 
 
 <!-- ============================================================= -->
-<!--                   ARCHITECTURE ENTITIES                       -->
-<!-- ============================================================= -->
-
-<!-- default namespace prefix for DITAArchVersion attribute can be
-     overridden through predefinition in the document type shell   -->
-<!ENTITY % DITAArchNSPrefix
-                       "ditaarch"                                    >
-
-<!-- must be instanced on each topic type                          -->
-<!ENTITY % arch-atts "
-             xmlns:%DITAArchNSPrefix; 
-                        CDATA                              #FIXED
-                       'http://dita.oasis-open.org/architecture/2005/'
-             %DITAArchNSPrefix;:DITAArchVersion
-                        CDATA                              #FIXED
-                       '1.0'"                                        >
-
-
-<!-- ============================================================= -->
 <!--                   SPECIALIZATION OF DECLARED ELEMENTS         -->
 <!-- ============================================================= -->
 
@@ -72,11 +53,11 @@ PUBLIC "-//RDA//ELEMENTS DITA Musical Reference//EN"
 <!ENTITY % musicBody   "musicBody"                                   >
 <!ENTITY % cdList      "cdList"                                      >
 <!ENTITY % cdHeader    "cdHeader"                                    >
-<!ENTITY % bandHeader  "bandHeader"                                  >
+<!ENTITY % artistHeader  "artistHeader"                                  >
 <!ENTITY % albumsHeader "albumsHeader"                               >
 <!ENTITY % commentsHeader "commentsHeader"                           >
 <!ENTITY % cdRow       "cdRow"                                       >
-<!ENTITY % band        "band"                                        >
+<!ENTITY % artist        "artist"                                        >
 <!ENTITY % albums      "albums"                                      >
 <!ENTITY % comments    "comments"                                    >
 
@@ -91,8 +72,11 @@ PUBLIC "-//RDA//ELEMENTS DITA Musical Reference//EN"
             '%id-atts;
              %select-atts;
              translate 
-                       (yes | no)                          "no"
-             xml:lang   NMTOKEN                            #IMPLIED' >
+                       (yes | no |-dita-use-conref-target) "no"
+             xml:lang   NMTOKEN                            #IMPLIED
+             dir       (lro | ltr | 
+                        rlo | rtl | -dita-use-conref-target) 
+                                                           #IMPLIED' >
 
 <!-- ============================================================= -->
 <!--                    ELEMENT DECLARATIONS                       -->
@@ -100,14 +84,14 @@ PUBLIC "-//RDA//ELEMENTS DITA Musical Reference//EN"
 
 
 <!--                    LONG NAME: Music Collection                -->
-<!ELEMENT musicCollection     (%title;, (%titlealts;)?, (%shortdesc;)?, 
+<!ELEMENT musicCollection     (%title;, (%titlealts;)?, (%abstract; | %shortdesc;)?, 
                          (%prolog;)?, (%musicBody;)?, (%related-links;)?, 
                          (%music-info-types;)* )                     >
 <!ATTLIST musicCollection
              id         ID                               #REQUIRED
              conref     CDATA                            #IMPLIED
              %select-atts;
-             xml:lang   NMTOKEN                          #IMPLIED
+             %localization-atts;
              %arch-atts;
              domains    CDATA                  "&included-domains;"
              outputclass 
@@ -118,8 +102,7 @@ PUBLIC "-//RDA//ELEMENTS DITA Musical Reference//EN"
 <!ELEMENT musicBody       ((%section; | %simpletable; | %cdList;)* )          >
 <!ATTLIST musicBody         
              %id-atts;
-             translate  (yes | no)                       #IMPLIED
-             xml:lang   NMTOKEN                          #IMPLIED
+             %localization-atts;
              outputclass 
                         CDATA                            #IMPLIED    >
 
@@ -139,7 +122,7 @@ PUBLIC "-//RDA//ELEMENTS DITA Musical Reference//EN"
 
 
 <!--                    LONG NAME:  Property Head                  -->
-<!ELEMENT cdHeader      ((%bandHeader;)?, (%albumsHeader;)?, 
+<!ELEMENT cdHeader      ((%artistHeader;)?, (%albumsHeader;)?, 
                          (%commentsHeader;)?)                            >
 <!ATTLIST cdHeader       
              %univ-atts;                                  
@@ -147,8 +130,8 @@ PUBLIC "-//RDA//ELEMENTS DITA Musical Reference//EN"
                         CDATA                            #IMPLIED    >
 
 <!--                    LONG NAME: Property Type Head              -->
-<!ELEMENT bandHeader    (%tblcell.cnt;)*                             >
-<!ATTLIST bandHeader     
+<!ELEMENT artistHeader    (%tblcell.cnt;)*                             >
+<!ATTLIST artistHeader     
              specentry  CDATA                            #IMPLIED
              %univ-atts;                                  
              outputclass 
@@ -174,7 +157,7 @@ PUBLIC "-//RDA//ELEMENTS DITA Musical Reference//EN"
 
 
 <!--                    LONG NAME: Property                        -->
-<!ELEMENT cdRow      ((%band;)?, (%albums;)?, 
+<!ELEMENT cdRow      ((%artist;)?, (%albums;)?, 
                          (%comments;)?)                              >
 <!ATTLIST cdRow       
              %univ-atts;                                  
@@ -183,8 +166,8 @@ PUBLIC "-//RDA//ELEMENTS DITA Musical Reference//EN"
 
 
 <!--                    LONG NAME: Property Type                   -->
-<!ELEMENT band      (%ph.cnt;)*                                  >
-<!ATTLIST band       
+<!ELEMENT artist      (%ph.cnt;)*                                  >
+<!ATTLIST artist       
              specentry  CDATA                            #IMPLIED
              %univ-atts-translate-off;                                  
              outputclass 
@@ -213,12 +196,12 @@ PUBLIC "-//RDA//ELEMENTS DITA Musical Reference//EN"
 <!ATTLIST musicBody     %global-atts;  class  CDATA "- topic/body        reference/refbody    musicCollection/musicBody "   >
 <!ATTLIST cdList  %global-atts;  class  CDATA "- topic/simpletable       reference/properties musicCollection/cdList ">
 <!ATTLIST cdHeader    %global-atts;  class  CDATA "- topic/sthead        reference/prophead   musicCollection/cdHeader "  >
-<!ATTLIST bandHeader    %global-atts;  class  CDATA "- topic/stentry     reference/proptypehd   musicCollection/bandHeader "  >
+<!ATTLIST artistHeader    %global-atts;  class  CDATA "- topic/stentry     reference/proptypehd   musicCollection/artistHeader "  >
 <!ATTLIST albumsHeader   %global-atts;  class  CDATA "- topic/stentry    reference/propvaluehd  musicCollection/albumsHeader " >
 <!ATTLIST commentsHeader    %global-atts;  class  CDATA "- topic/stentry reference/propdeschd   musicCollection/commentsHeader "  >
 
 <!ATTLIST cdRow    %global-atts;  class  CDATA "- topic/strow       reference/property  musicCollection/cdRow "  >
-<!ATTLIST band     %global-atts;  class  CDATA "- topic/stentry     reference/proptype  musicCollection/band ">
+<!ATTLIST artist     %global-atts;  class  CDATA "- topic/stentry     reference/proptype  musicCollection/artist ">
 <!ATTLIST albums   %global-atts;  class  CDATA "- topic/stentry     reference/propvalue musicCollection/albums ">
 <!ATTLIST comments %global-atts;  class  CDATA "- topic/stentry     reference/propdesc  musicCollection/comments ">
 

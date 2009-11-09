@@ -30,12 +30,20 @@
   <feature extension="package.version" value="1.1.0"/>
 
   <!-- Extend the toolkit catalog to include your DTDs. -->
-  <feature extension="dita.specialization.catalog"
+  <feature extension="dita.specialization.catalog.relative"
       value="catalog-dita.xml" type="file"/>
 
   <!-- Extend the toolkit's XHTML processing to override XHTML output. -->
   <feature extension="dita.xsl.xhtml"
       value="xsl/music2xhtml.xsl" type="file"/>
+
+  <!-- Extend the toolkit's XSLFO processing to override PDF output. -->
+  <feature extension="dita.xsl.xslfo"
+      value="xsl/songlist2xslfo.xsl" type="file"/>
+
+  <!-- Define generated text for this plug-in -->
+  <feature extension="dita.xsl.strings" 
+    value="xsl/musicstrings.xml" type="file"/> 
 
   <!--  ************************************************************
         Any other extensions to standard toolkit files will be listed here.
@@ -44,7 +52,7 @@
         <feature extension="dita.xsl.rtf" value="xsl/music2rtf.xsl" type="file"/>
 
         To extend the docbook transform:
-        <feature extension="dita.xsl.docbook" value="xsl/music2rtf.xsl" type="file"/>
+        <feature extension="dita.xsl.docbook" value="xsl/music2docbook.xsl" type="file"/>
         
        -->
 
