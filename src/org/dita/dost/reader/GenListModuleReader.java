@@ -192,7 +192,7 @@ public class GenListModuleReader extends AbstractXMLReader {
 	//Added by William on 2009-06-25 for req #12014 end
 
 	/**
-	 * Constructor
+	 * Constructor.
 	 */
 	public GenListModuleReader() {
 		nonConrefCopytoTargets = new HashSet<String>(Constants.INT_64);
@@ -243,8 +243,10 @@ public class GenListModuleReader extends AbstractXMLReader {
 	/**
      * Init xml reader used for pipeline parsing.
 	 *
-     * @throws SAXException
-     * @param ditaDir 
+     * @param ditaDir ditaDir
+     * @param validate whether validate input file
+     * @param rootFile input file
+     * @throws SAXException parsing exception
      */
 	public static void initXMLReader(String ditaDir,boolean validate,String rootFile) throws SAXException {
 		DITAOTJavaLogger javaLogger=new DITAOTJavaLogger();
@@ -893,7 +895,9 @@ public class GenListModuleReader extends AbstractXMLReader {
 			
 			String target = atts.getValue(Constants.ATTRIBUTE_NAME_HREF);
 			//Added by William on 2009-10-15 for ampersand bug:2878492 start
-			target = StringUtils.escapeXML(target);
+			if(target != null){
+				target = StringUtils.escapeXML(target);
+			}
 			//Added by William on 2009-10-15 for ampersand bug:2878492 end
 			
 			//Added by Alan for bug ID: 2870935 on Date: 2009-10-10 begin
