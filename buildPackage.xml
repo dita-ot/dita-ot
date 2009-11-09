@@ -117,6 +117,49 @@
     <exclude name=".*"/>
   </patternset>
 	
+	<patternset id="pattern.package.small">
+
+		<exclude name="demo/fo/fop/build/*" />
+		<exclude name="demo/fo/fop/conf/*" />
+		<exclude name="demo/fo/fop/lib/*" />
+		<exclude name="demo/fo/lib/icu4j.jar" />
+		<exclude name="build.log"/>
+		<!--<exclude name="demo/fo/lib/saxon.jar" />-->
+
+		<exclude name="testcase/" />
+		<exclude name="testdata/" />
+		<exclude name="testresult/" />
+		<include name="*.*" />
+		<include name="ant/**" />
+		<include name="css/**" />
+		<include name="demo/book/**" />
+		<include name="demo/elementref/**" />
+		<include name="demo/enote/**" />
+		<include name="demo/faq/**" />
+		<include name="demo/h2d/**" />
+		<include name="demo/java/**" />
+		<include name="demo/dita11/**" />
+		<include name="demo/dita132/**" />
+		<include name="demo/fo/**" />
+		<include name="demo/legacypdf/**" />
+		<include name="demo/video/**" />
+		<include name="doc/**" />
+		<include name="dtd/**" />
+		<include name="plugins/**" />
+		<include name="resource/**" />
+		<include name="samples/**" />
+		<include name="schema/**" />
+		<include name="xsl/**" />
+		<include name="lib/APACHE-LICENSE-2_0.html" />
+		<include name="lib/resolver.jar" />
+		<include name="lib/CatalogManager.properties" />
+		<exclude name="lib/saxon/**" />
+		<exclude name="doc/userguide-orig/**" />
+		<exclude name="doc/ot-userguide/**" />
+		<exclude name="build.number" />
+		<exclude name=".*" />
+	</patternset>
+	
   <patternset id="pattern.package.ant">
   	<include name="tools/ant/*.*" />
   	<include name="tools/ant/bin/**" />
@@ -169,7 +212,7 @@
   <target name="package-binary-small">    
     <zip destfile="${package.output.dir}/${param.out.file}${win32.zip.suffix}">
       <zipfileset dir="./" prefix="${package.name.root}${version}">
-        <patternset refid="pattern.package.general"/>
+        <patternset refid="pattern.package.small"/>
         <include name="lib/dost.jar"/>
       	<include name="lib/APACHE-LICENSE-2_0.html"/>
         <exclude name="startcmd.*"/>
