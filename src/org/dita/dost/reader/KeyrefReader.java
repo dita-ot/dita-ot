@@ -156,6 +156,9 @@ public class KeyrefReader extends AbstractXMLReader {
 			keyDefAppend(Constants.EQUAL);
 			keyDefAppend(Constants.QUOTATION);
 			String value = atts.getValue(index);
+			//Added by William on 2009-10-15 for ampersand bug:2878492 start
+			value = StringUtils.escapeXML(value);
+			//Added by William on 2009-10-15 for ampersand bug:2878492 end
 			keyDefAppend(value);
 			keyDefAppend(Constants.QUOTATION);
 		}
