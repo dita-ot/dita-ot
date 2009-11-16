@@ -27,7 +27,10 @@ import org.dita.dost.log.DITAOTJavaLogger;
  */
 public class StringUtils {
 
+	//Edited by william on 2009-11-8 for ampbug:2893664 start
 	private static final String NOT_RESOLVE_ENTITY_LIST = "|lt|gt|quot|amp|";
+	private static final String NOT_RESOLVE_ENTITY_CHAR = "|#38|";
+	//Edited by william on 2009-11-8 for ampbug:2893664 end
 
 	private StringUtils() {
 	}
@@ -83,7 +86,8 @@ public class StringUtils {
 	 */
 	public static String escapeXML(char[] chars, int offset, int length){
 		StringBuffer escaped = new StringBuffer();
-
+		
+		String test = new String(chars,offset, length);
         int end = offset + length;
         for (int i = offset; i < end; ++i) {
             char c = chars[i];
@@ -119,6 +123,13 @@ public class StringUtils {
 	 * @return entity
 	 */
 	public static String getEntity(String name) {
+		//Edited by william on 2009-11-8 for ampbug:2893664 start
+		//resolve char entity
+		if (NOT_RESOLVE_ENTITY_CHAR.indexOf(Constants.STICK + name.trim()
+				+ Constants.STICK) != -1 &&!name.startsWith("%")) {
+			return "&amp;" + name + ";";
+		}
+		//Edited by william on 2009-11-8 for ampbug:2893664 end
 		return (name.startsWith("%")) ? (name + ";") : ("&" + name + ";");
 	}
 
@@ -131,7 +142,11 @@ public class StringUtils {
 	public static boolean checkEntity(String name) {
 		// check whether this entity need resolve
 		if (NOT_RESOLVE_ENTITY_LIST.indexOf(Constants.STICK + name.trim()
-				+ Constants.STICK) != -1) {
+				+ Constants.STICK) != -1 ||
+			//Edited by william on 2009-11-8 for ampbug:2893664 start
+				NOT_RESOLVE_ENTITY_CHAR.indexOf(Constants.STICK + name.trim()
+						+ Constants.STICK) != -1 ) {
+			//Edited by william on 2009-11-8 for ampbug:2893664 end
 			return false;
 		}
 		return true;
