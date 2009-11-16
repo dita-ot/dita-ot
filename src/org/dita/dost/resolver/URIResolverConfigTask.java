@@ -6,13 +6,15 @@ import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 
 /**
- * 
+ * URIResolverConfigTask to setup DitaURIResolverFactory.
  * @author Alan
  */
 public class URIResolverConfigTask extends Task {
 	private String basedir = null;
 	private String tempdir = null;
-
+	/**
+	 * Constructor.
+	 */
 	public URIResolverConfigTask() {
 		// nop
 	}
@@ -29,19 +31,31 @@ public class URIResolverConfigTask extends Task {
 		// DitaURIResolverFactory.setURIResolver(/*? extends URIResolver*/
 		// resolver);
 	}
-
+	/**
+	 * Get basedir.
+	 * @return base dir
+	 */
 	public String getBasedir() {
 		return basedir;
 	}
-
+	/**
+	 * Set basedir.
+	 * @param basedir basedir
+	 */
 	public void setBasedir(String basedir) {
 		this.basedir = basedir;
 	}
-
+	/**
+	 * Get tempdir.
+	 * @return temp dir
+	 */
 	public String getTempdir() {
 		return tempdir;
 	}
-
+	/**
+	 * Set tempdir.
+	 * @param tempdir tempdir
+	 */
 	public void setTempdir(String tempdir) {
 		this.tempdir = tempdir;
 	}

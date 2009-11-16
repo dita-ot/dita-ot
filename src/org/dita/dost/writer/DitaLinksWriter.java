@@ -82,10 +82,7 @@ public class DitaLinksWriter extends AbstractXMLWriter {
 
     }
 
-    /**
-     * @see org.xml.sax.ContentHandler#characters(char[], int, int)
-     * 
-     */
+    @Override
     public void characters(char[] ch, int start, int length)
             throws SAXException {
     	if(needResolveEntity){
@@ -100,10 +97,7 @@ public class DitaLinksWriter extends AbstractXMLWriter {
     	}
     }
 	
-	/**
-     * @see org.xml.sax.ext.LexicalHandler#endCDATA()
-     * 
-     */
+    @Override
     public void endCDATA() throws SAXException {
     	insideCDATA = false;
 	    try{
@@ -113,10 +107,7 @@ public class DitaLinksWriter extends AbstractXMLWriter {
 	    }
 	}
 
-    /**
-     * @see org.xml.sax.ContentHandler#endDocument()
-     * 
-     */
+    @Override
     public void endDocument() throws SAXException {
         try {
             output.flush();
@@ -125,10 +116,7 @@ public class DitaLinksWriter extends AbstractXMLWriter {
         }
     }
 
-    /**
-     * @see org.xml.sax.ContentHandler#endElement(java.lang.String, java.lang.String, java.lang.String)
-     * 
-     */
+    @Override
     public void endElement(String uri, String localName, String qName)
             throws SAXException {
     	if (topicSpecList.contains(localName)){//Eric
@@ -153,10 +141,7 @@ public class DitaLinksWriter extends AbstractXMLWriter {
         }
     }
 
-	/**
-     * @see org.xml.sax.ext.LexicalHandler#endEntity(java.lang.String)
-     * 
-     */
+    @Override
     public void endEntity(String name) throws SAXException {
 		if(!needResolveEntity){
 			needResolveEntity = true;
@@ -164,10 +149,7 @@ public class DitaLinksWriter extends AbstractXMLWriter {
 	}
 
 
-    /**
-     * @see org.xml.sax.ContentHandler#ignorableWhitespace(char[], int, int)
-     * 
-     */
+    @Override
     public void ignorableWhitespace(char[] ch, int start, int length)
             throws SAXException {
         try {
@@ -178,10 +160,7 @@ public class DitaLinksWriter extends AbstractXMLWriter {
     }
 
 
-    /**
-     * @see org.xml.sax.ContentHandler#processingInstruction(java.lang.String, java.lang.String)
-     * 
-     */
+    @Override
     public void processingInstruction(String target, String data)
             throws SAXException {
         String pi;
@@ -194,19 +173,13 @@ public class DitaLinksWriter extends AbstractXMLWriter {
         }
     }
     
-    /**
-     * @see org.dita.dost.writer.AbstractWriter#setContent(org.dita.dost.module.Content)
-     * 
-     */
+    @Override
     public void setContent(Content content) {
         indexEntries = (HashMap<String, String>)content.getValue();
         topicSet = indexEntries.keySet();
     }
     
-    /**
-     * @see org.xml.sax.ContentHandler#skippedEntity(java.lang.String)
-     * 
-     */
+    @Override
     public void skippedEntity(String name) throws SAXException {
         try {
             output.write(StringUtils.getEntity(name));
@@ -215,10 +188,7 @@ public class DitaLinksWriter extends AbstractXMLWriter {
         }
     }
 	
-	/**
-     * @see org.xml.sax.ext.LexicalHandler#startCDATA()
-     * 
-     */
+    @Override
     public void startCDATA() throws SAXException {
     	insideCDATA = true;
 	    try{
@@ -228,19 +198,13 @@ public class DitaLinksWriter extends AbstractXMLWriter {
 	    }
 	}
 
-    /**
-     * @see org.xml.sax.ContentHandler#startDocument()
-     * 
-     */
+    @Override
     public void startDocument() throws SAXException {
     	topicIdStack.clear();
     	firstTopic = true;
     }
     
-    /**
-     * @see org.xml.sax.ContentHandler#startElement(java.lang.String, java.lang.String, java.lang.String, org.xml.sax.Attributes)
-     * 
-     */
+    @Override
     public void startElement(String uri, String localName, String qName,
             Attributes atts) throws SAXException {
 		int attsLen = atts.getLength();
@@ -318,10 +282,7 @@ public class DitaLinksWriter extends AbstractXMLWriter {
 		}
 	}
 
-	/**
-     * @see org.xml.sax.ext.LexicalHandler#startEntity(java.lang.String)
-     * 
-     */
+    @Override
     public void startEntity(String name) throws SAXException {
 		try {
            	needResolveEntity = StringUtils.checkEntity(name);
@@ -334,10 +295,7 @@ public class DitaLinksWriter extends AbstractXMLWriter {
         
 	}
 
-    /**
-     * @see org.dita.dost.writer.AbstractWriter#write(java.lang.String)
-     * 
-     */
+    @Override
     public void write(String filename) {
 		String file = null;
 		File inputFile = null;

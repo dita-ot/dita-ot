@@ -23,32 +23,31 @@ import org.xml.sax.helpers.XMLReaderFactory;
 
 
 /**
- * Class description goes here.
- * 
+ * General catalog file resolving utilities.
  * @version 1.0 2005-4-11
  * @author Zhang, Yuan Peng
  */
 
 public class CatalogUtils {
-
+	/**map to keep the resolved catalog mappings.*/
     private static HashMap<String, String> map=null;
-    
+    /**logger to log informations.*/
     private static DITAOTJavaLogger logger = new DITAOTJavaLogger();
-    
+    /**apache catalogResolver.*/
     public static CatalogResolver catalogResolver = null;
-    
+    /**directory to find catalog-dita.xml.*/
 	private static String ditaDir;
     /**
-     * 
+     * Instances should NOT be constructed in standard programming.
      */
     private CatalogUtils() {
         // leave blank as designed
     }
 
     /**
-     * Parse the catalog file.
-     * @param ditaDir
-     * @return
+     * Parse the catalog file to get catalog map.
+     * @param ditaDir ditaDir to find catalog-dita.xml
+     * @return catalog map
      * 
      */
     public static HashMap<String, String> getCatalog(String ditaDir) {
@@ -75,19 +74,28 @@ public class CatalogUtils {
 		return map;
 	}
     
-    
+    /**
+     * Set directory to find catalog-dita.xml.
+     * @param ditaDir ditaDir
+     */
     public static void setDitaDir(String ditaDir){
     	catalogResolver=null;
     	CatalogUtils.ditaDir=ditaDir;
     }
-    
+    /**
+     * Get the current set directory to find catalog-dita.xml.
+     * @return ditaDir, empty string if ditaDir is set to null or "".
+     */
     public static String getDitaDir(){
     	if(StringUtils.isEmptyString(ditaDir)){
     		return "";
     	}
     	return ditaDir+File.separator;
     }
-
+    /**
+     * Get CatalogResolver.
+     * @return CatalogResolver
+     */
     public static CatalogResolver getCatalogResolver() {
         if (catalogResolver == null) {
             CatalogManager manager = new CatalogManager();

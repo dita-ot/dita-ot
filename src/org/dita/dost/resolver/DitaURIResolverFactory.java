@@ -2,7 +2,6 @@ package org.dita.dost.resolver;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 
 import javax.xml.transform.Source;
 import javax.xml.transform.TransformerException;
@@ -54,15 +53,24 @@ public class DitaURIResolverFactory {
 			}
 		};
 	}
-
+	/**
+	 * Get URIResolver.
+	 * @return resolver
+	 */
 	public static URIResolver getURIResolver() {
 		return resolver;
 	}
-
+	/**
+	 * Set URIResolver.
+	 * @param resolver URIResolver
+	 */
 	public static void setURIResolver(URIResolver resolver) {
 		DitaURIResolverFactory.resolver = resolver;
 	}
-
+	/**
+	 * Set DitaURIResolverFactory's path to create resolver.
+	 * @param path path
+	 */
 	public static void setPath(String path) {
 		DitaURIResolverFactory.path = path;
 	}

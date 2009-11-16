@@ -10,26 +10,30 @@
 package org.dita.dost.util;
 
 /**
- * OutputUtils to control the output behavior
+ * OutputUtils to control the output behavior.
  * @author wxzhang
  *
  */
 public final class OutputUtils {
 	private static int generatecopyouter=1;//default:only generate&copy the non-overflowing files 
 	private static boolean onlytopicinmap=false;//default:only the topic files will be resolved in the map
-
+	/**fail behavior.*/
 	public static final String OUTTERCONTROL_FAIL="FAIL";
+	/**warn behavior.*/
 	public static final String OUTTERCONTROL_WARN="WARN";
+	/**quiet behavior.*/
 	public static final String OUTTERCONTROL_QUIET="QUIET";
 	
 	private static String outercontrol=OUTTERCONTROL_WARN;
-	
+	/**not generate outer files.*/
 	public static final int NOT_GENERATEOUTTER=1;
+	/**generate outer files.*/
 	public static final int GENERATEOUTTER=2;
+	/**old solution.*/
 	public static final int OLDSOLUTION=3;
-	
+	/**Output Dir.*/
 	public static String OutputDir=null;
-	
+	/**Input Map Dir.*/
 	public static String InputMapDir=null;
 	
 	private OutputUtils(){
@@ -37,8 +41,8 @@ public final class OutputUtils {
 	}
 	
 	/**
-	 * Retrieve the outercontrol
-	 * @return String
+	 * Retrieve the outercontrol.
+	 * @return String outercontrol behavior
 	 *
 	 */
 	public static String getOutterControl(){
@@ -46,8 +50,8 @@ public final class OutputUtils {
 	}
 	
 	/**
-	 * Set the outercontrol
-	 * @param control
+	 * Set the outercontrol.
+	 * @param control control
 	 */	
 	public static void setOutterControl(String control){
 		if(OUTTERCONTROL_FAIL.equalsIgnoreCase(control)){
@@ -63,16 +67,16 @@ public final class OutputUtils {
 	}
 	
 	/**
-	 * Retrieve the flag of onlytopicinmap
-	 * @return boolean
+	 * Retrieve the flag of onlytopicinmap.
+	 * @return boolean if only topic in map
 	 */
 	public static boolean getOnlyTopicInMap(){
 		return onlytopicinmap;
 	}
 	
 	/**
-	 * Set the onlytopicinmap
-	 * @param flag
+	 * Set the onlytopicinmap.
+	 * @param flag onlytopicinmap flag
 	 */
 	public static void setOnlyTopicInMap(String flag){
 		if("true".equalsIgnoreCase(flag)){
@@ -83,16 +87,16 @@ public final class OutputUtils {
 	}
 	
 	/**
-	 * Retrieve the flag of generatecopyouter
-	 * @return int
+	 * Retrieve the flag of generatecopyouter.
+	 * @return int generatecopyouter flag
 	 */
 	public static int getGeneratecopyouter(){
 		return generatecopyouter;
 	}
 	
 	/**
-	 * Set the generatecopyouter
-	 * @param flag
+	 * Set the generatecopyouter.
+	 * @param flag generatecopyouter flag
 	 */
 	public static void setGeneratecopyouter(String flag){
 		if("2".equals(flag)){
@@ -106,19 +110,31 @@ public final class OutputUtils {
 		generatecopyouter=NOT_GENERATEOUTTER;
 	}
 	
-	
+	/**
+	 * Get output dir.
+	 * @return output dir
+	 */
 	public static String getOutputDir(){
 		return OutputDir;
 	}
-	
+	/**
+	 * Set output dir.
+	 * @param outputDir output dir
+	 */
 	public static void setOutputDir(String outputDir){
 		OutputDir=outputDir;
 	}
-	
+	/**
+	 * Get input map path.
+	 * @return input map path
+	 */
 	public static String getInputMapPathName(){
 		return InputMapDir;
 	}
-	
+	/**
+	 * Set input map path.
+	 * @param inputMapDir input map path
+	 */
 	public static void setInputMapPathName(String inputMapDir){
 		InputMapDir=inputMapDir;
 	}

@@ -34,7 +34,7 @@ public class JavaHelpIndexWriter implements AbstractWriter, IDitaTranstypeIndexW
 	private List termList = null;
 	
 	/**
-	 * Default constructor
+	 * Default constructor.
 	 */
 	public JavaHelpIndexWriter() {
 	}
@@ -51,8 +51,8 @@ public class JavaHelpIndexWriter implements AbstractWriter, IDitaTranstypeIndexW
 	/**
 	 * Output the java help index to the output stream.
      * 
-	 * @param outputStream
-	 * @throws UnsupportedEncodingException 
+	 * @param outputStream outputStream
+	 * @throws UnsupportedEncodingException encoding not supported exception
 	 */
 	public void write(OutputStream outputStream) throws UnsupportedEncodingException {
 		PrintWriter printWriter = null;
@@ -82,7 +82,7 @@ public class JavaHelpIndexWriter implements AbstractWriter, IDitaTranstypeIndexW
 		}
 	}
 	
-	/** (non-Javadoc)
+	/**
 	 * @see org.dita.dost.writer.AbstractWriter#write(java.lang.String)
 	 */
 	public void write(String filename) throws DITAOTException {		
@@ -144,7 +144,11 @@ public class JavaHelpIndexWriter implements AbstractWriter, IDitaTranstypeIndexW
 		}		
 		
 	}
-
+	/**
+	 * Get index file name.
+	 * @param outputFileRoot root
+	 * @return index file name
+	 */
 	public String getIndexFileName(String outputFileRoot) {
 		StringBuffer indexFilename;
 		

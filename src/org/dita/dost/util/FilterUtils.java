@@ -35,17 +35,16 @@ public class FilterUtils {
 	private FilterUtils(){
 	}
 	/**
-	 * Set the filter map
-	 * @param filtermap
-	 *            The filterMap to set.
+	 * Set the filter map.
+	 * @param filtermap The filterMap to set.
 	 */
 	public static void setFilterMap(HashMap<String, String> filtermap) {
 		FilterUtils.filterMap = filtermap;
 	}
 	
 	/**
-	 * Getter for filter map
-	 * @return
+	 * Getter for filter map.
+	 * @return filter map
 	 */
 	public static HashMap<String, String> getFilterMap() {
 		return filterMap;
@@ -53,13 +52,10 @@ public class FilterUtils {
 
 	/**
 	 * Check if the given Attributes need to be excluded.
-	 * 
-	 * @param atts
+	 * @param atts attributes
+	 * @param extProps props a(props...)
 	 * @return true if any one of attributes 'audience', 'platform', 
-	 * 'product', 'otherprops' was excluded, 
-	 * 
-	 * @param atts
-	 * @param extProps
+	 * 'product', 'otherprops' was excluded.
 	 */
 	public static boolean needExclude(Attributes atts, String extProps) {
 		boolean ret = false;

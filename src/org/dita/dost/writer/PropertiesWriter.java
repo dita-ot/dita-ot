@@ -29,13 +29,12 @@ public class PropertiesWriter implements AbstractWriter {
 	private Properties prop = null;
 
 	/**
-	 * Default Constructor
+	 * Default Constructor.
 	 */
 	public PropertiesWriter() {
 	}
 
 	/**
-	 * (non-Javadoc)
 	 * 
 	 * @see org.dita.dost.writer.AbstractWriter#setContent(org.dita.dost.module.Content)
 	 */
@@ -43,7 +42,7 @@ public class PropertiesWriter implements AbstractWriter {
 		prop = (Properties) content.getValue();
 	}
 
-	/** (non-Javadoc)
+	/**
 	 * @see org.dita.dost.writer.AbstractWriter#write(java.lang.String)
 	 */
 	public void write(String filename) throws DITAOTException {
@@ -65,7 +64,11 @@ public class PropertiesWriter implements AbstractWriter {
 			}
 		}
 	}
-	
+	/**
+	 * Write into xml file.
+	 * @param filename xml file name
+	 * @throws DITAOTException DITAOTException
+	 */
 	public void writeToXML(String filename) throws DITAOTException{
 		FileOutputStream os=null;
 		//new dita.xml file

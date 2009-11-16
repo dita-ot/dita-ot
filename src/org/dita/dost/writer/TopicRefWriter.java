@@ -32,7 +32,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
 
 
 /**
- * TopicRefWriter which updates the linking elements' value according to the mapping table
+ * TopicRefWriter which updates the linking elements' value according to the mapping table.
  * @author wxzhang
  * 
  */
@@ -76,16 +76,16 @@ public class TopicRefWriter extends AbstractXMLWriter {
         	logger.logException(e);
         }
 	}
-	
+	/**
+	 * Set up class.
+	 * @param conflictTable conflictTable
+	 */
 	public void setup(Hashtable<String,String> conflictTable) {
 		this.conflictTable = conflictTable;
 	}
 
 
-	/**
-	 * @see org.xml.sax.ext.LexicalHandler#startEntity(java.lang.String)
-	 * 
-	 */
+	@Override
 	public void startEntity(String name) throws SAXException {
 		try {
 			needResolveEntity = StringUtils.checkEntity(name);
@@ -98,11 +98,7 @@ public class TopicRefWriter extends AbstractXMLWriter {
 
 	}
 
-	/**
-	 * @see org.xml.sax.ContentHandler#processingInstruction(java.lang.String,
-	 *      java.lang.String)
-	 * 
-	 */
+	@Override
 	public void processingInstruction(String target, String data)
 			throws SAXException {
 		String pi;
@@ -116,10 +112,7 @@ public class TopicRefWriter extends AbstractXMLWriter {
 		}
 	}
 
-	/**
-	 * @see org.xml.sax.ContentHandler#ignorableWhitespace(char[], int, int)
-	 * 
-	 */
+	@Override
 	public void ignorableWhitespace(char[] ch, int start, int length)
 			throws SAXException {
 		try {
@@ -129,10 +122,7 @@ public class TopicRefWriter extends AbstractXMLWriter {
 		}
 	}
 
-	/**
-	 * @see org.xml.sax.ContentHandler#characters(char[], int, int)
-	 * 
-	 */
+	@Override
 	public void characters(char[] ch, int start, int length)
 			throws SAXException {
 		if (needResolveEntity) {
@@ -147,10 +137,7 @@ public class TopicRefWriter extends AbstractXMLWriter {
 		}
 	}
 
-	/**
-	 * @see org.xml.sax.ext.LexicalHandler#endEntity(java.lang.String)
-	 * 
-	 */
+	@Override
 	public void endEntity(String name) throws SAXException {
 		if (!needResolveEntity) {
 			needResolveEntity = true;
@@ -162,7 +149,7 @@ public class TopicRefWriter extends AbstractXMLWriter {
 	 * 
 	 * @see org.dita.dost.writer.AbstractXMLWriter#endCDATA()
 	 */
-
+	@Override
 	public void endCDATA() throws SAXException {
 		insideCDATA = false;
 		try {
@@ -177,7 +164,7 @@ public class TopicRefWriter extends AbstractXMLWriter {
 	 * 
 	 * @see org.dita.dost.writer.AbstractXMLWriter#endDocument()
 	 */
-
+	@Override
 	public void endDocument() throws SAXException {
 		try {
 			output.flush();
@@ -192,7 +179,7 @@ public class TopicRefWriter extends AbstractXMLWriter {
 	 * @see org.dita.dost.writer.AbstractXMLWriter#endElement(java.lang.String,
 	 *      java.lang.String, java.lang.String)
 	 */
-
+	@Override
 	public void endElement(String uri, String localName, String qName)
 			throws SAXException {
 		try {
@@ -208,7 +195,7 @@ public class TopicRefWriter extends AbstractXMLWriter {
 	 * 
 	 * @see org.dita.dost.writer.AbstractXMLWriter#setContent(org.dita.dost.module.Content)
 	 */
-
+	@Override
 	public void setContent(Content content) {
 		changeTable = (LinkedHashMap<String,String>) content.getValue();
 	}
@@ -218,7 +205,7 @@ public class TopicRefWriter extends AbstractXMLWriter {
 	 * 
 	 * @see org.dita.dost.writer.AbstractXMLWriter#startCDATA()
 	 */
-
+	@Override
 	public void startCDATA() throws SAXException {
 		try {
 			insideCDATA = true;
@@ -233,7 +220,7 @@ public class TopicRefWriter extends AbstractXMLWriter {
 	 * 
 	 * @see org.dita.dost.writer.AbstractXMLWriter#startDocument()
 	 */
-
+	@Override
 	public void startDocument() throws SAXException {
 		// TODO Auto-generated method stub
 		super.startDocument();
@@ -251,7 +238,7 @@ public class TopicRefWriter extends AbstractXMLWriter {
 	 * @see org.dita.dost.writer.AbstractXMLWriter#startElement(java.lang.String,
 	 *      java.lang.String, java.lang.String, org.xml.sax.Attributes)
 	 */
-
+	@Override
 	public void startElement(String uri, String localName, String qName,
 			Attributes atts) throws SAXException {
 		
@@ -463,9 +450,9 @@ public class TopicRefWriter extends AbstractXMLWriter {
 	}
 	
 	/**
-	 * Retrive the extension name from the attribute
-	 * @param attValue
-	 * @return String
+	 * Retrive the extension name from the attribute.
+	 * @param attValue attribute value
+	 * @return String the extension
 	 */
 	public String getExtName(String attValue) {
 		String fileName;
@@ -490,7 +477,8 @@ public class TopicRefWriter extends AbstractXMLWriter {
 	
 	/**
 	 * Check whether it is a Topic format
-	 * @param attrs,valueOfHref
+	 * @param attrs attributes to check
+	 * @param valueOfHref href attribute value
 	 * @return boolean
 	 */
 	private boolean notTopicFormat(Attributes attrs, String valueOfHref) {
@@ -527,7 +515,7 @@ public class TopicRefWriter extends AbstractXMLWriter {
 	 * 
 	 * @see org.dita.dost.writer.AbstractXMLWriter#write(java.lang.String)
 	 */
-
+	@Override
 	public void write(String outputFilename) throws DITAOTException {
 		String filename = outputFilename;
 		String file = null;

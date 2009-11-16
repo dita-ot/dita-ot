@@ -14,7 +14,6 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.dita.dost.exception.DITAOTException;
@@ -39,12 +38,12 @@ public class HTMLIndexWriter implements AbstractWriter, IDitaTranstypeIndexWrite
     private List termList = null;
 
     /**
-     * Default Constructor
+     * Default Constructor.
      */
     public HTMLIndexWriter() {
     }
 
-    /** (non-Javadoc)
+    /**
      * @see org.dita.dost.writer.AbstractWriter#setContent(org.dita.dost.module.Content)
      */
     public void setContent(Content content) {
@@ -54,7 +53,8 @@ public class HTMLIndexWriter implements AbstractWriter, IDitaTranstypeIndexWrite
     /**
      * Write the index term into given OutputStream.
      * 
-     * @param outputStream
+     * @param outputStream outputStream
+     * @throws UnsupportedEncodingException encoding not supported exception
      */
     public void write(OutputStream outputStream) throws UnsupportedEncodingException{
         PrintWriter printWriter = null;
@@ -101,7 +101,7 @@ public class HTMLIndexWriter implements AbstractWriter, IDitaTranstypeIndexWrite
     }
 
 
-    /** (non-Javadoc)
+    /**
 	 * @see org.dita.dost.writer.AbstractWriter#write(java.lang.String)
 	 */
 	public void write(String filename) throws DITAOTException {		
@@ -189,7 +189,11 @@ public class HTMLIndexWriter implements AbstractWriter, IDitaTranstypeIndexWrite
 		}	
 	}
 
-	
+	/**
+	 * Get index file name.
+	 * @param outputFileRoot root
+	 * @return index file name
+	 */
 	public String getIndexFileName(String outputFileRoot) {
 		StringBuffer indexFilename;
 		

@@ -19,7 +19,11 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
-
+/**
+ * CoderefResolver class, resolving 
+ * coderef attribute in topic file.
+ *
+ */
 public class CoderefResolver extends AbstractXMLWriter {
 	
 	private OutputStreamWriter output = null;
@@ -31,7 +35,9 @@ public class CoderefResolver extends AbstractXMLWriter {
 	private File currentFile = null;
 	
 	private HashSet<String> coderefSpec = null;
-
+	/**
+	 * Constructor.
+	 */
 	public CoderefResolver() {
 		// TODO Auto-generated constructor stub
 		logger = new DITAOTJavaLogger();
@@ -52,12 +58,12 @@ public class CoderefResolver extends AbstractXMLWriter {
         }
 
 	}
-
+	@Override
 	public void setContent(Content content) {
 		// TODO Auto-generated method stub
 
 	}
-
+	@Override
 	public void write(String filename) throws DITAOTException {
 		// TODO Auto-generated method stub
 		String file = null;

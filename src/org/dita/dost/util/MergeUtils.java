@@ -19,7 +19,7 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
 /**
- * Utility that topic merge utilize 
+ * Utility that topic merge utilize. 
  * 
  */
 public class MergeUtils {
@@ -44,7 +44,7 @@ public class MergeUtils {
 
 	/**
 	 * Return the MergeUtils instance. Singleton.
-	 * @return
+	 * @return MergeUtils
 	 */
 	public static MergeUtils getInstance(){
 		if(instance == null){
@@ -63,9 +63,9 @@ public class MergeUtils {
 	}
 	
 	/**
-	 * Find the topic id from idMap
-	 * @param Id
-	 * @return
+	 * Find the topic id from idMap.
+	 * @param Id topic id
+	 * @return true if find and false otherwise
 	 */
 	public boolean findId(String Id){
 		return (Id != null && idMap.containsKey(FileUtils.removeRedundantNames(Id.trim().replaceAll(Constants.DOUBLE_BACK_SLASH,
@@ -75,9 +75,9 @@ public class MergeUtils {
 	}
 	
 	/**
-	 * Add topic id to the idMap
-	 * @param Id
-	 * @return
+	 * Add topic id to the idMap.
+	 * @param Id topic id
+	 * @return updated topic id
 	 */
 	public String addId (String Id){
 		String localId = Id;
@@ -92,9 +92,9 @@ public class MergeUtils {
 	}
 
 	/**
-	 * Add topic id-value pairs to idMap
-	 * @param Id
-	 * @param Value
+	 * Add topic id-value pairs to idMap.
+	 * @param Id id
+	 * @param Value value
 	 */
 	public void addId (String Id, String Value){
 		if(Id != null && Value != null){
@@ -106,9 +106,9 @@ public class MergeUtils {
 	}
 	
 	/**
-	 * Return the value corresponding to the id
-	 * @param Id
-	 * @return
+	 * Return the value corresponding to the id.
+	 * @param Id id
+	 * @return value
 	 */
 	public String getIdValue (String Id){
 		String localId = Id;
@@ -121,9 +121,9 @@ public class MergeUtils {
 	}
 	
 	/**
-	 * Return if this path has been visited before
-	 * @param path
-	 * @return
+	 * Return if this path has been visited before.
+	 * @param path path
+	 * @return true if has been visited
 	 */
 	public boolean isVisited(String path){
 		int idx;
@@ -137,8 +137,8 @@ public class MergeUtils {
 	}
 	
 	/**
-	 * Visit the path
-	 * @param path
+	 * Visit the path.
+	 * @param path path
 	 */
 	public void visit(String path){
 		String localPath = path;
@@ -152,11 +152,11 @@ public class MergeUtils {
 	
 	/**
 	 * 
-	 * Get the first topic id
-	 * @param path
-	 * @param dir
-	 * @param useCatalog
-	 * @return
+	 * Get the first topic id.
+	 * @param path file path
+	 * @param dir file dir
+	 * @param useCatalog whether use catalog file for validation
+	 * @return topic id
 	 */
 	public String getFirstTopicId(String path, String dir, boolean useCatalog){
 		String localPath = path;

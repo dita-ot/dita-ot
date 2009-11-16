@@ -42,7 +42,7 @@ public class EclipseIndexWriter implements AbstractWriter, IDitaTranstypeIndexWr
 	private DITAOTJavaLogger javaLogger = null;
 	
 	/**
-	 * Default constructor
+	 * Default constructor.
 	 */
 	public EclipseIndexWriter() {
 		javaLogger = new DITAOTJavaLogger();
@@ -78,8 +78,8 @@ public class EclipseIndexWriter implements AbstractWriter, IDitaTranstypeIndexWr
 	/**
 	 * Output the eclipse help index to the output stream.
      * 
-	 * @param outputStream
-	 * @throws UnsupportedEncodingException 
+	 * @param outputStream outputStream
+	 * @throws UnsupportedEncodingException UnsupportedEncodingException
 	 */
 	public void write(OutputStream outputStream) throws UnsupportedEncodingException {
 		PrintWriter printWriter = null;
@@ -109,7 +109,7 @@ public class EclipseIndexWriter implements AbstractWriter, IDitaTranstypeIndexWr
 	
 	}
 	
-	/** (non-Javadoc)
+	/**
 	 * @see org.dita.dost.writer.AbstractWriter#write(java.lang.String)
 	 */
 	public void write(String filename) throws DITAOTException {			
@@ -185,9 +185,9 @@ public class EclipseIndexWriter implements AbstractWriter, IDitaTranstypeIndexWr
     }
     
     /**
-     * Replace the file extension
-     * @param aFileName
-     * @return
+     * Replace the file extension.
+     * @param aFileName file name to be replaced
+     * @return repaced file name
      */
     public String replaceExtName(String aFileName){
     	String fileName;
@@ -212,7 +212,11 @@ public class EclipseIndexWriter implements AbstractWriter, IDitaTranstypeIndexWr
     	}
     }
     
-
+    /**
+     * Get index file name.
+     * @param outputFileRoot root path
+     * @return index file name
+     */
 	public String getIndexFileName(String outputFileRoot) {
 		
 		StringBuffer indexFilename;

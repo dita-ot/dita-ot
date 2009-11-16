@@ -43,7 +43,12 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
-
+/**
+ * ChunkTopicParser class, writing chunking content into relative topic files
+ * and then update list.
+ * 
+ *
+ */
 public class ChunkTopicParser extends AbstractXMLWriter {
 
     private static final String OS_NAME_WINDOWS = "windows";
@@ -108,7 +113,9 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 	
 	private final String ditaarchNSQName = "xmlns:ditaarch";
 	private final String ditaarchNSValue = "http://dita.oasis-open.org/architecture/2005/";
-	
+	/**
+	 * Constructor.
+	 */
 	public ChunkTopicParser() {
 		super();
 		topicSpecSet = new HashSet<String>(Constants.INT_16);
@@ -124,7 +131,7 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 		copytotarget2source = new HashMap<String,String>();
 		new HashSet<String>();
 	}
-
+	@Override
 	public void characters(char[] ch, int start, int length) throws SAXException {
 		if (include && needResolveEntity) { 
             try {
@@ -137,17 +144,17 @@ public class ChunkTopicParser extends AbstractXMLWriter {
             }
         }
 	}
-
+	@Override
 	public void comment(char[] ch, int start, int length) throws SAXException {
 		super.comment(ch, start, length);
 	}
-
+	@Override
 	public void endDocument() throws SAXException {
 		include = false;
 		skip = false;
 	}
 
-
+	@Override
 	public void endElement(String uri, String localName, String qName) throws SAXException {
 		if (skip && skipLevel > 0) {
 			skipLevel--;
@@ -183,17 +190,17 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 		}
 		
 	}
-
+	@Override
 	public void endEntity(String name) throws SAXException {
 		if(!needResolveEntity){
 			needResolveEntity = true;
 		}
 	}
-
+	@Override
 	public void endPrefixMapping(String prefix) throws SAXException {
 		super.endPrefixMapping(prefix);
 	}
-
+	@Override
 	public void ignorableWhitespace(char[] ch, int start, int length) throws SAXException {
 		if (include) {
             try {
@@ -203,7 +210,7 @@ public class ChunkTopicParser extends AbstractXMLWriter {
             }
         }
 	}
-
+	@Override
 	public void processingInstruction(String target, String data) throws SAXException {
 		if(include || 
 				"workdir".equalsIgnoreCase(target) ||
@@ -217,11 +224,11 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 	        }	
 		}
 	}
-
+	@Override
 	public void setContent(Content content) {
 		super.setContent(content);
 	}
-
+	@Override
 	public void skippedEntity(String name) throws SAXException {
 		if(include){
 			try {
@@ -231,7 +238,7 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 	        }
 		}		
 	}
-
+	@Override
 	public void startDocument() throws SAXException {
 		//dontWriteDita = true;
 		//difference between to-content & select-topic
@@ -258,7 +265,7 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 		}
 		
 	}
-
+	@Override
 	public void startElement(String uri, String localName, String qName, Attributes atts) throws SAXException {
 		String classValue = atts.getValue(Constants.ATTRIBUTE_NAME_CLASS);
 		String idValue = atts.getValue(Constants.ATTRIBUTE_NAME_ID);
@@ -458,7 +465,7 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 			logger.logException(e);
 		}
 	}
-
+	@Override
 	public void startEntity(String name) throws SAXException {
 		if (include) {
             try {
@@ -472,7 +479,7 @@ public class ChunkTopicParser extends AbstractXMLWriter {
         }
 	}
 
-
+	@Override
 	public void endCDATA() throws SAXException {
 		insideCDATA = false;
 	    try{
@@ -481,7 +488,7 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 	    	logger.logException(e);
 	    }
 	}
-
+	@Override
 	public void startCDATA() throws SAXException {
 		try{
 	    	insideCDATA = true;
@@ -490,7 +497,7 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 	    	logger.logException(e);
 	    }
 	}
-
+	@Override
 	public void write(String filename) throws DITAOTException {
 		// pass map's directory path 
 		filePath = filename;
@@ -1009,6 +1016,16 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 		}
 	
 	}
+	/**
+	 * Set up the class.
+	 * @param changeTable changeTable
+	 * @param conflictTable conflictTable
+	 * @param refFileSet refFileSet
+	 * @param elem elem
+	 * @param separate separate
+	 * @param chunkByTopic chunkByTopic
+	 * @param ditaext ditaext
+	 */
 	public void setup(LinkedHashMap<String, String> changeTable, Hashtable<String, String> conflictTable, 
 			HashSet<String> refFileSet, Element elem, boolean separate, boolean chunkByTopic, String ditaext) {
 		// Initialize ChunkTopicParser

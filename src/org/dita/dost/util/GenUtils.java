@@ -14,43 +14,68 @@ import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 
 import org.dita.dost.log.DITAOTJavaLogger;
-
+/**
+ * GenUtils class writing xml contents into xml files.
+ *
+ */
 public class GenUtils {
 
 	private static StringBuffer buffer;
 	private static String outputFile;
 	private static DITAOTJavaLogger logger = new DITAOTJavaLogger();
-	
+	/**
+	 * Constructor.
+	 */
 	public GenUtils() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	
+	/**
+	 * Clear up.
+	 */
 	public static void clear(){
 		buffer = new StringBuffer();
 		buffer.append(Constants.XML_HEAD);
 	}
-	
+	/**
+	 * Set output file.
+	 * @param file file
+	 */
 	public static void setOutput(String file){
 		outputFile = file;
 	}
-	
+	/**
+	 * Set start element.
+	 * @param name element name
+	 */
 	public static void startElement(String name){
 		buffer.append("<").append(name).append(">");
 	}
-	
+	/**
+	 * Set end element.
+	 * @param name element name
+	 */
 	public static void endElement(String name){
 		buffer.append("</").append(name).append(">");
 	}
-	
+	/**
+	 * Add attribute.
+	 * @param name attribute name
+	 * @param value attribute value
+	 */
 	public static void addAttr(String name, String value){
 		buffer.insert(buffer.lastIndexOf(">")," "+name+"=\""+value+"\"");
 	}
-	
+	/**
+	 * Added text.
+	 * @param text text
+	 */
 	public static void addText(String text){
 		buffer.append(text);
 	}
-	
+	/**
+	 * write into file.
+	 */
 	public static void flush(){
 		OutputStreamWriter output = null;
 		try{

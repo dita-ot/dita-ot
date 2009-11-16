@@ -43,6 +43,8 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 /**
+ * 
+ * Delay conref feature related utility functions.
  * @author william
  *
  */
@@ -54,8 +56,8 @@ public class DelayConrefUtils {
 	
 	private static DelayConrefUtils instance = null;
 	/**
-	 * Return the MergeUtils instance. Singleton.
-	 * @return
+	 * Return the DelayConrefUtils instance. Singleton.
+	 * @return DelayConrefUtils
 	 */
 	public static DelayConrefUtils getInstance(){
 		if(instance == null){
@@ -67,7 +69,7 @@ public class DelayConrefUtils {
 	
 	
 	/**
-	 * constructor
+	 * Constructor.
 	 */
 	public DelayConrefUtils() {
 		super();
@@ -77,10 +79,10 @@ public class DelayConrefUtils {
 
 
 	/**
-	 * find whether an id is refer to a topic in a dita file
-	 * @param absolutePathToFile
-	 * @param id
-	 * @return
+	 * Find whether an id is refer to a topic in a dita file.
+	 * @param absolutePathToFile the absolute path of dita file
+	 * @param id topic id
+	 * @return true if id find and false otherwise
 	 */
 	public boolean findTopicId(String absolutePathToFile, String id) {
 		
@@ -135,10 +137,12 @@ public class DelayConrefUtils {
 		return false;
 	}
 	
-	/**check whether the keyref/id element has been exported. 
-	 * @param href
-	 * @param id
-	 * @param key
+	/**check whether the href/id element defined by keys has been exported. 
+	 * @param href href
+	 * @param id id
+	 * @param key keyname
+	 * @param tempDir temp dir
+	 * @return result list
 	 */
 	public List<Boolean> checkExport(String href, String id, String key, String tempDir) {
 		//parsed export .xml to get exported elements
@@ -206,11 +210,11 @@ public class DelayConrefUtils {
 		return list;
 	}
 	/**
-	 * Search specific element by key and tagName
-	 * @param root
-	 * @param key
-	 * @param tagName
-	 * @return
+	 * Search specific element by key and tagName.
+	 * @param root root element
+	 * @param key search keyword
+	 * @param tagName search tag name
+	 * @return search result, null of either input is invalid or the looking result is not found.
 	 */
 	public Element searchForKey(Element root, String key, String tagName) {
 		if (root == null || StringUtils.isEmptyString(key)) return null;
@@ -238,6 +242,11 @@ public class DelayConrefUtils {
 		}
 		return null;
 	}
+	/**
+	 * Write map into xml file.
+	 * @param m map
+	 * @param outputFile output xml file
+	 */
 	public void writeMapToXML(Map<String, Set<String>> m, File outputFile) {
 
 		if (m == null)

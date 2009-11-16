@@ -12,7 +12,10 @@ import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
 import org.xml.sax.InputSource;
-
+/**
+ * URIResolverAdapter class, convert source into inputsteam.
+ *
+ */
 public class URIResolverAdapter {
 	private URIResolverAdapter() {
 		// nop

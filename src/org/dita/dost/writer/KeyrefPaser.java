@@ -33,7 +33,10 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
-
+/**
+ * KeyrefPaser class parsing keyref attribute.
+ *
+ */
 public class KeyrefPaser extends AbstractXMLWriter {
 
 	private XMLReader parser = null;
@@ -162,7 +165,9 @@ public class KeyrefPaser extends AbstractXMLWriter {
 		withOutHref.add("topic/index-base");
 		withOutHref.add("topic/indextermref");
 	}
-
+	/**
+	 * Constructor.
+	 */
 	public KeyrefPaser() {
 		javaLogger = new DITAOTJavaLogger();
 		keyrefLeval = 0;
@@ -655,11 +660,17 @@ public class KeyrefPaser extends AbstractXMLWriter {
 		}
 
 	}
-
+	/**
+	 * Set temp dir.
+	 * @param tempDir temp dir
+	 */
 	public void setTempDir(String tempDir) {
 		this.tempDir = tempDir;
 	}
-
+	/**
+	 * Set key map.
+	 * @param map key map
+	 */
 	public void setKeyMap(Map<String, String> map) {
 		this.keyMap = map;
 	}
@@ -715,11 +726,17 @@ public class KeyrefPaser extends AbstractXMLWriter {
 	
 	//Added by Alan Date:2009-08-04 --begin
 	private String extName;
-
+	/**
+	 * Get extension name.
+	 * @return extension name
+	 */
 	public String getExtName() {
 		return extName;
 	}
-
+	/**
+	 * Set extension name.
+	 * @param extName extension name
+	 */
 	public void setExtName(String extName) {
 		this.extName = extName;
 	}

@@ -18,7 +18,7 @@ import java.util.Locale;
 import org.dita.dost.log.DITAOTJavaLogger;
 
 /**
- * Class description goes here. 
+ * DITAOTCollator class. 
  *
  * @author Wu, Zhi Qiang
  */
@@ -26,17 +26,17 @@ public class DITAOTCollator implements Comparator {
 	static HashMap cache = new HashMap();
 	
 	/**
-	 * Return the DITAOTCollator instance, Locale.US is default
-	 * @return
+	 * Return the DITAOTCollator instance, Locale.US is default.
+	 * @return DITAOTCollator
 	 */
 	public static DITAOTCollator getInstance() {
 			return getInstance(Locale.US);
 	}
 	
 	/**
-	 * Return the DITAOTCollator instance specifying Locale
-	 * @param locale
-	 * @return
+	 * Return the DITAOTCollator instance specifying Locale.
+	 * @param locale the locale
+	 * @return DITAOTCollator
 	 */
 	public static DITAOTCollator getInstance(Locale locale) {
 		DITAOTCollator instance = null;
@@ -60,7 +60,7 @@ public class DITAOTCollator implements Comparator {
 	}
 	
 	/**
-	 * Constructor specifying Locale
+	 * Constructor specifying Locale.
 	 * @param locale
 	 */
 	private DITAOTCollator(Locale locale) {
@@ -68,7 +68,7 @@ public class DITAOTCollator implements Comparator {
 	}
 	
 	/**
-	 * Comparing method required to compare
+	 * Comparing method required to compare.
 	 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
 	 */
 	public int compare(Object source, Object target) {
@@ -81,7 +81,7 @@ public class DITAOTCollator implements Comparator {
 	}
 	
 	/**
-	 * Initialization
+	 * Initialization.
 	 * @param locale
 	 */
 	private void init(Locale locale) {

@@ -35,9 +35,9 @@ public class FileUtils {
 	}
 
 	/**
-	 * Return if the file is a html file by extension
-	 * @param lcasefn
-	 * @return
+	 * Return if the file is a html file by extension.
+	 * @param lcasefn file name
+	 * @return true if is html file and false otherwise
 	 */
 	public static boolean isHTMLFile(String lcasefn) {
 		return (lcasefn.endsWith(Constants.FILE_EXTENSION_HTML) || lcasefn
@@ -46,9 +46,7 @@ public class FileUtils {
 	
 	/**
 	 * Return if the file is a pdf file by its extension.
-	 * 
-	 * @param lcasefn
-	 *            File name in lower case.
+	 * @param lcasefn File name in lower case.
 	 * @return <code>TRUE</code> if lcasefn contains an extension of "pdf",
 	 *         <code>FALSE</code> otherwise.
 	 */
@@ -59,9 +57,7 @@ public class FileUtils {
 	//Added by William on 2009-10-10 for resources bug:2873560 start
 	/**
 	 * Return if the file is a swf file by its extension.
-	 * 
-	 * @param lcasefn
-	 *            File name in lower case.
+	 * @param lcasefn File name in lower case.
 	 * @return <code>TRUE</code> if lcasefn contains an extension of "swf",
 	 *         <code>FALSE</code> otherwise.
 	 */
@@ -71,9 +67,9 @@ public class FileUtils {
 	//Added by William on 2009-10-10 for resources bug:2873560 end
 	
 	/**
-	 * Return if the file is a dita file by extension
-	 * @param lcasefn
-	 * @return
+	 * Return if the file is a dita file by extension.
+	 * @param lcasefn file name
+	 * @return ture if is DITA file and false otherwise
 	 */
 	public static boolean isDITAFile(String lcasefn) {
 		if(lcasefn == null)
@@ -86,9 +82,9 @@ public class FileUtils {
 	}
 
 	/**
-	 * Return if the file is a dita topic file by extension
-	 * @param lcasefn
-	 * @return
+	 * Return if the file is a dita topic file by extension.
+	 * @param lcasefn file name
+	 * @return true if is dita file and false otherwise
 	 */
 	public static boolean isDITATopicFile(String lcasefn) {
 		return lcasefn.endsWith(Constants.FILE_EXTENSION_DITA)
@@ -96,18 +92,18 @@ public class FileUtils {
 	}
 
 	/**
-	 * Return if the file is a dita map file by extension
-	 * @param lcasefn
-	 * @return
+	 * Return if the file is a dita map file by extension.
+	 * @param lcasefn file name
+	 * @return true if is ditamap file and false otherwise
 	 */
 	public static boolean isDITAMapFile(String lcasefn) {
 		return lcasefn.endsWith(Constants.FILE_EXTENSION_DITAMAP);
 	}
 
 	/**
-	 * Return if the file is a supported image file by extension
-	 * @param lcasefn
-	 * @return
+	 * Return if the file is a supported image file by extension.
+	 * @param lcasefn filename
+	 * @return true if is supported image and false otherwise
 	 */
 	public static boolean isSupportedImageFile(String lcasefn) {
 		return lcasefn.endsWith(Constants.FILE_EXTENSION_JPG)
@@ -121,9 +117,9 @@ public class FileUtils {
 	}
 
 	/**
-	 * Return if the file is a topic file by extension
-	 * @param lcasefn
-	 * @return
+	 * Return if the file is a topic file by extension.
+	 * @param lcasefn filename
+	 * @return true if is topic file and false otherwise
 	 */
 	public static boolean isTopicFile(String lcasefn) {
 		if(StringUtils.isEmptyString(lcasefn)){
@@ -134,9 +130,9 @@ public class FileUtils {
 	}
 
 	/**
-	 * Return if the file is a valid target file by extension
-	 * @param lcasefn
-	 * @return
+	 * Return if the file is a valid target file by extension.
+	 * @param lcasefn filename
+	 * @return true is the target is valid and false otherwise
 	 */
 	public static boolean isValidTarget(String lcasefn) {
 		/*		DITA-OT can support space in file names from 6.5 2008
@@ -164,9 +160,9 @@ public class FileUtils {
 	/**
 	 * Get the path of topicFile relative to the input map.
 	 * 
-	 * @param mapFilePathName
-	 * @param topicFilePathName
-	 * @return
+	 * @param mapFilePathName map file with file path
+	 * @param topicFilePathName topic file with file path
+	 * @return relative path
 	 */
 	public static String getRelativePathFromMap(String mapFilePathName,
 			String topicFilePathName) {
@@ -225,8 +221,9 @@ public class FileUtils {
 	}
 	
 	/**
-	 * Get path2Project from the relative path of a file
-	 * @param relativePath
+	 * Get path2Project from the relative path of a file.
+	 * @param relativePath relative path
+	 * @return path relative to project
 	 */
 	public static String getPathtoProject (String relativePath){
 		StringTokenizer tokenizer = new StringTokenizer(relativePath, Constants.SLASH);
@@ -248,9 +245,9 @@ public class FileUtils {
 	 * replacing "\\" and "\" with File.separator, and removing ".", ".."
 	 * from the file path, with no change to substring behind "#".  
 	 * 
-	 * @param rootPath
-	 * @param relativePath
-	 * @return
+	 * @param rootPath root path
+	 * @param relativePath relative path
+	 * @return resolved topic file
 	 */
 	public static String resolveTopic(String rootPath, String relativePath) {
 		String begin = relativePath;
@@ -269,9 +266,9 @@ public class FileUtils {
 	 * replacing "\\" and "\" with File.separator, and removing ".", "..","#"
 	 * from the file path.  
 	 * 
-	 * @param rootPath
-	 * @param relativePath
-	 * @return
+	 * @param rootPath root path
+	 * @param relativePath relative path
+	 * @return resolved topic file
 	 */
 	public static String resolveFile(String rootPath, String relativePath) {
 		String begin = relativePath;
@@ -288,8 +285,9 @@ public class FileUtils {
 	 * File.seperator, and removing '..' from the directory.
 	 * 
 	 * Note: the substring behind "#" will be removed. 
-	 * @param basedir
-	 * @param filepath
+	 * @param basedir base dir
+	 * @param filepath file path
+	 * @return normalized path
 	 */
 	public static String normalizeDirectory(String basedir, String filepath) {
 		String normilizedPath = null;
@@ -311,8 +309,8 @@ public class FileUtils {
 	/**
 	 * Removing redundant names ".." and "." from the given path.
 	 * 
-	 * @param path
-	 * @return
+	 * @param path input path
+	 * @return processed path
 	 */
 	public static String removeRedundantNames(String path) {
 		return removeRedundantNames(path, File.separator);
@@ -322,9 +320,9 @@ public class FileUtils {
 	/**
 	 * Removing redundant names ".." and "." from the given path.
 	 * 
-	 * @param path
-	 * @param separator
-	 * @return
+	 * @param path input path
+	 * @param separator file separator
+	 * @return processed path
 	 */
 	public static String removeRedundantNames(String path, String separator) {
         StringTokenizer tokenizer = null;
@@ -387,9 +385,9 @@ public class FileUtils {
 	
 
     /** 
-     * Return if the path is absolute
-     * @param path
-     * @return
+     * Return if the path is absolute.
+     * @param path test path
+     * @return true if path is absolute and false otherwise.
      */
     public static boolean isAbsolutePath (String path) {
     	if (path == null || Constants.STRING_EMPTY.equals(path.trim())) {
@@ -408,9 +406,9 @@ public class FileUtils {
     }
 
     /**
-     * Copy file from src to target, overwrite if needed
-     * @param src
-     * @param target
+     * Copy file from src to target, overwrite if needed.
+     * @param src source file
+     * @param target target file
      */
     public static void copyFile(File src, File target) {
 		FileInputStream fis = null;
@@ -449,9 +447,10 @@ public class FileUtils {
 	}
     
     /**
-     * Replace the file extension
-     * @param attValue
-     * @return
+     * Replace the file extension.
+     * @param attValue value to be replaced
+     * @param extName value used to replace with
+     * @return replaced value
      */
     public static String replaceExtName(String attValue, String extName){
     	String fileName;
@@ -478,7 +477,7 @@ public class FileUtils {
     
     /**
      * Check whether a file exists on the local file systmem.
-     * @param filename
+     * @param filename filename
      * @return boolean  true if the file exists, false otherwise
      */
     public static boolean fileExists (String filename){  //Eric
