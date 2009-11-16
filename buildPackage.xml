@@ -190,24 +190,28 @@
   </target>
   
   <target name="package-binary-minimum">
-    <zip destfile="${package.output.dir}/${param.out.file}${win32.zip.suffix}">
-      <zipfileset dir="./" prefix="${package.name.root}${version}">
-        <patternset refid="pattern.package.minimum"/>
-        <include name="lib/dost.jar"/>
-        <exclude name="startcmd.*"/>
-        <exclude name="buildPackage.xml" />
-      </zipfileset>      
-    </zip>
-    
-    <tar destfile="${package.output.dir}/${param.out.file}${linux.zip.suffix}"
-      compression="gzip" longfile="gnu">
-      <tarfileset dir="./" prefix="${package.name.root}${version}">
-        <patternset refid="pattern.package.minimum"/>
-        <include name="lib/dost.jar"/>
-        <exclude name="startcmd.*"/>
-        <exclude name="buildPackage.xml" />
-      </tarfileset>      
-    </tar>
+  	<sequential>
+	  	<delete dir="demo" includeemptydirs="true" failonerror="no"/>
+	  	<ant antfile="integrator.xml" target="integrate" />
+	    <zip destfile="${package.output.dir}/${param.out.file}${win32.zip.suffix}">
+	      <zipfileset dir="./" prefix="${package.name.root}${version}">
+	        <patternset refid="pattern.package.minimum"/>
+	        <include name="lib/dost.jar"/>
+	        <exclude name="startcmd.*"/>
+	        <exclude name="buildPackage.xml" />
+	      </zipfileset>      
+	    </zip>
+	    
+	    <tar destfile="${package.output.dir}/${param.out.file}${linux.zip.suffix}"
+	      compression="gzip" longfile="gnu">
+	      <tarfileset dir="./" prefix="${package.name.root}${version}">
+	        <patternset refid="pattern.package.minimum"/>
+	        <include name="lib/dost.jar"/>
+	        <exclude name="startcmd.*"/>
+	        <exclude name="buildPackage.xml" />
+	      </tarfileset>      
+	    </tar>
+	 </sequential>
   </target>
   
   <target name="package-binary-standard">    
@@ -269,15 +273,17 @@
   </target>
   
   <target name="build-package-binary" depends="package-java, update-doc, copy-updated-doc">
-    <antcall target="package-binary-minimum">
-      <param name="param.out.file" value="${binary-min}"/>
-    </antcall>
-    <antcall target="package-binary-standard">
-      <param name="param.out.file" value="${binary}"/>
-    </antcall>
-    <antcall target="package-binary-full">
-      <param name="param.out.file" value="${binary-big}"/>
-    </antcall>
+  	<sequential>
+	  	<antcall target="package-binary-full">
+	  	   <param name="param.out.file" value="${binary-big}"/>
+	  	</antcall>
+	    <antcall target="package-binary-standard">
+	      <param name="param.out.file" value="${binary}"/>
+	    </antcall>
+	  	<antcall target="package-binary-minimum">
+	  	  <param name="param.out.file" value="${binary-min}"/>
+	  	</antcall>
+  	</sequential>
   </target>
     
   <target name="build-package-binary-with-buildnum" 
@@ -286,18 +292,20 @@
     <tstamp>
       <format property="build.time" pattern="yyyyMMddhhmm"/>
     </tstamp>
-    <antcall target="package-binary-min">
-      <param name="param.out.file"
-        value="${package.name.root}${version}b${build.number}_minimal_bin.${build.time}"/>
-    </antcall>
-    <antcall target="package-binary-standard">
-      <param name="param.out.file" 
-        value="${package.name.root}${version}b${build.number}_standard_bin.${build.time}"/>
-    </antcall>
-    <antcall target="package-binary-full">
-      <param name="param.out.file" 
-        value="${package.name.root}${version}b${build.number}_full_easy_install_bin.${build.time}"/>
-    </antcall>
+  	<sequential>
+  		<antcall target="package-binary-full">
+	      <param name="param.out.file" 
+	        value="${package.name.root}${version}b${build.number}_full_easy_install_bin.${build.time}"/>
+	    </antcall>
+	    <antcall target="package-binary-standard">
+	      <param name="param.out.file" 
+	        value="${package.name.root}${version}b${build.number}_standard_bin.${build.time}"/>
+	    </antcall>
+		<antcall target="package-binary-minimum">
+	      <param name="param.out.file"
+	        value="${package.name.root}${version}b${build.number}_minimal_bin.${build.time}"/>
+	    </antcall>
+  	</sequential>
   </target>
   
   <target name="build-all-packages" depends="init-package, build-package-binary, build-package-source"/>
