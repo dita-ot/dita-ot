@@ -308,7 +308,7 @@
   	</sequential>
   </target>
   
-  <target name="build-all-packages" depends="init-package, build-package-binary, build-package-source"/>
+  <target name="build-all-packages" depends="init-package, build-package-source, build-package-binary"/>
   
   <target name="update-doc">
     <ant antfile="integrator.xml" target="integrate"/> 
