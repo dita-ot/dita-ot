@@ -329,11 +329,10 @@ public class DitaWriter extends AbstractXMLWriter {
     }
 
     /**
-     * Init xml reader used for pipeline parsing.
-	 *
-     * @throws SAXException SAXException
+     * Initialize XML reader used for pipeline parsing.
      * @param ditaDir ditaDir
      * @param validate whether validate
+     * @throws SAXException SAXException
      */
 	public static void initXMLReader(String ditaDir,boolean validate) throws SAXException {
 		DITAOTJavaLogger logger=new DITAOTJavaLogger();
@@ -470,9 +469,14 @@ public class DitaWriter extends AbstractXMLWriter {
 			    		//get element/topic id
 			    		String id = attValue.substring(keyIndex+1);
 			    		
-			    		List<Boolean> list = DelayConrefUtils.getInstance().checkExport(href, id, key, tempDir);
-			    		boolean idExported = list.get(0).booleanValue();
-			    		boolean keyrefExported = list.get(1).booleanValue();
+			    		boolean idExported = false;
+			    		boolean keyrefExported = false;
+			    		List<Boolean> list = null;
+			    		if(transtype.equals(Constants.INDEX_TYPE_ECLIPSEHELP)){
+				    		 list = DelayConrefUtils.getInstance().checkExport(href, id, key, tempDir);
+				    		 idExported = list.get(0).booleanValue();
+				    		 keyrefExported = list.get(1).booleanValue();
+			    		}
 			    		//both id and key are exported and transtype is eclipsehelp
 		    			if(idExported && keyrefExported 
 		    					&& transtype.equals(Constants.INDEX_TYPE_ECLIPSEHELP)){

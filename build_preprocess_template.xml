@@ -47,7 +47,7 @@
     unless="preprocess.gen-list-without-flagging.skip">
     <pipeline message="Generate list." module="GenMapAndTopicList"
       basedir="${basedir}" inputmap="${args.input}"
-      tempdir="${dita.temp.dir}" extparam="ditadir=${dita.dir};validate=${validate};generatecopyouter=${generate.copy.outer};outercontrol=${outer.control};onlytopicinmap=${onlytopic.in.map};outputdir=${output.dir}" />
+      tempdir="${dita.temp.dir}" extparam="ditadir=${dita.dir};validate=${validate};generatecopyouter=${generate.copy.outer};outercontrol=${outer.control};onlytopicinmap=${onlytopic.in.map};outputdir=${output.dir};transtype=${transtype}" />
   </target>
 
   <target name="gen-list-with-flagging"
@@ -56,7 +56,7 @@
     <pipeline message="Generate list." module="GenMapAndTopicList"
       basedir="${basedir}" inputmap="${args.input}"
       tempdir="${dita.temp.dir}"
-      extparam="ditadir=${dita.dir};ditaval=${dita.input.valfile};validate=${validate};generatecopyouter=${generate.copy.outer};outercontrol=${outer.control};onlytopicinmap=${onlytopic.in.map};outputdir=${output.dir}" />
+      extparam="ditadir=${dita.dir};ditaval=${dita.input.valfile};validate=${validate};generatecopyouter=${generate.copy.outer};outercontrol=${outer.control};onlytopicinmap=${onlytopic.in.map};outputdir=${output.dir};transtype=${transtype}" />
   </target>
 
   <target name="gen-list-flag-check">

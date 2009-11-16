@@ -180,6 +180,9 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 	private Set<String> schemeSet;
 	
 	private Map<String, Set<String>> schemeDictionary = null;
+	//Added by William on 2009-07-18 for req #12014 start
+	private String transtype;
+	//Added by William on 2009-07-18 for req #12014 end
 
 	/**
 	 * Create a new instance and do the initialization.
@@ -281,6 +284,12 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 		ditaDir = hashIO.getAttribute(Constants.ANT_INVOKER_EXT_PARAM_DITADIR);
 		ditavalFile = hashIO.getAttribute(Constants.ANT_INVOKER_PARAM_DITAVAL);
 		String valueOfValidate=hashIO.getAttribute(Constants.ANT_INVOKER_EXT_PARAM_VALIDATE);
+		
+		//Added by William on 2009-07-18 for req #12014 start
+        //get transtype
+        transtype = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_EXT_PARAM_TRANSTYPE);
+        //Added by William on 2009-07-18 for req #12014 start
+        
 		if(valueOfValidate!=null){
 			if("false".equalsIgnoreCase(valueOfValidate))
 				xmlValidate=false;
@@ -341,7 +350,7 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 			// create the export file for exportanchors
 			// write the head
 			export = new OutputStreamWriter(new FileOutputStream(
-					new File(tempDir, "export.xml")));
+					new File(tempDir, Constants.FILE_NAME_EXPORT_XML)));
 			export.write("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
 			export.write("<stub>");
 			//Added by William on 2009-06-25 for req #12014 end
@@ -362,7 +371,10 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 	 */
 	private void processWaitList() throws DITAOTException {
 		reader = new GenListModuleReader();
-
+		//Added by William on 2009-07-18 for req #12014 start
+		reader.setTranstype(transtype);
+		//Added by William on 2009-07-18 for req #12014 end
+		
 		while (!waitList.isEmpty()) {
 			processFile((String) waitList.remove(0));
 		}
@@ -973,16 +985,18 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 		writeMapToXML(this.schemeDictionary, Constants.FILE_NAME_SUBJECT_DICTIONARY);
 		
 		//added by Willam on 2009-07-17 for req #12014 start
-		// Output plugin id
-		File pluginIdFile = new File(tempDir, Constants.FILE_NAME_PLUGIN_XML);
-		DelayConrefUtils.getInstance().writeMapToXML(reader.getPluginMap(),pluginIdFile);
-		//write the result into the file
-		StringBuffer result = reader.getResult();
-		try {
-			export.write(result.toString());
-		} catch (IOException e) {
-			
-			e.printStackTrace();
+		if(transtype.equals(Constants.INDEX_TYPE_ECLIPSEHELP)){
+			// Output plugin id
+			File pluginIdFile = new File(tempDir, Constants.FILE_NAME_PLUGIN_XML);
+			DelayConrefUtils.getInstance().writeMapToXML(reader.getPluginMap(),pluginIdFile);
+			//write the result into the file
+			StringBuffer result = reader.getResult();
+			try {
+				export.write(result.toString());
+			} catch (IOException e) {
+				
+				e.printStackTrace();
+			}
 		}
 		//added by Willam on 2009-07-17 for req #12014 end
 		

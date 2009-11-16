@@ -175,6 +175,23 @@ public class GenListModuleReader extends AbstractXMLReader {
 	private String topicId = "";
 	//Map to store plugin id
 	private Map<String, Set<String>> pluginMap = new HashMap<String, Set<String>>();
+    //transtype
+    private String transtype;
+    /**
+	 * Get transtype.
+	 * @return the transtype
+	 */
+	public String getTranstype() {
+		return transtype;
+	}
+
+	/**
+	 * Set transtype.
+	 * @param transtype the transtype to set
+	 */
+	public void setTranstype(String transtype) {
+		this.transtype = transtype;
+	}
 	
 	/**
 	 * @return the pluginMap
@@ -529,10 +546,11 @@ public class GenListModuleReader extends AbstractXMLReader {
 				topicId = atts.getValue(Constants.ATTRIBUTE_NAME_ID);
 				
 			}
-			//get plugin id
+			//get plugin id only transtype = eclipsehelp
 			if(FileUtils.isDITAMapFile(currentFile)&&
 				currentFile.equals(rootFilePath)&&
-				attrValue.contains(Constants.ATTR_CLASS_VALUE_MAP)){
+				attrValue.contains(Constants.ATTR_CLASS_VALUE_MAP)&&
+				transtype.equals(Constants.INDEX_TYPE_ECLIPSEHELP)){
 				String pluginId = atts.getValue(Constants.ATTRIBUTE_NAME_ID);
 				if(pluginId == null){
 					pluginId = "org.sample.help.doc";
@@ -545,79 +563,95 @@ public class GenListModuleReader extends AbstractXMLReader {
 			//Each <topicref> can only have one <topicmeta>.
 			//Each <topic> can only have one <prolog>
 			//and <metadata> can have more than one exportanchors
-			if(attrValue.contains(Constants.ATTR_CLASS_VALUE_TOPICMETA)||
-					attrValue.contains(Constants.ATTR_CLASS_VALUE_PROLOG)){
-				topicMetaSet.add(qName);
-			}
-			//If the file has <exportanchors> tags
-			if(attrValue.contains(Constants.ATTR_CLASS_VALUE_EXPORTANCHORS)){
-				hasExport = true;
-				//If current file is a ditamap file
-				if(FileUtils.isDITAMapFile(currentFile)){
-					//if dita file's extension name is ".xml"
-					String editedHref = "";
-					if(topicHref.endsWith(Constants.FILE_EXTENSION_XML)){
-						//change the extension to ".dita" for latter compare
-						editedHref = topicHref.replace(Constants.FILE_EXTENSION_XML, Constants.FILE_EXTENSION_DITA);
-					}else{
-						editedHref = topicHref;
-					}
-					//editedHref = editedHref.replace(File.separator, "/");
-					//create file element in the StringBuffer
-					result.append("<file name=\""+editedHref+"\">");
-					//if <exportanchors> is defined in topicmeta(topicref), there is only one topic id
-					result.append("<topicid name=\""+topicId+"\"/>");
-					
-				//If current file is topic file
-				}else if(FileUtils.isDITATopicFile(currentFile)){
-					String filename = FileUtils.getRelativePathFromMap(rootFilePath, currentFile);
-					//if dita file's extension name is ".xml"
-					if(filename.endsWith(Constants.FILE_EXTENSION_XML)){
-						//change the extension to ".dita" for latter compare
-						filename = filename.replace(Constants.FILE_EXTENSION_XML, Constants.FILE_EXTENSION_DITA);
-					}
-					//filename = FileUtils.normalizeDirectory(currentDir, filename);
-					filename = filename.replace(Constants.BACK_SLASH, Constants.SLASH);
-					//create file element in the StringBuffer
-					result.append("<file name=\""+filename+"\">");
-					//if <exportanchors> is defined in metadata(topic), there can be many topic ids
-					result.append("<topicid name=\""+topicId+"\">");
-					
-					shouldAppendEndTag =true;
+			if (transtype.equals(Constants.INDEX_TYPE_ECLIPSEHELP)) {
+				if (attrValue.contains(Constants.ATTR_CLASS_VALUE_TOPICMETA)
+						|| attrValue.contains(Constants.ATTR_CLASS_VALUE_PROLOG)) {
+					topicMetaSet.add(qName);
 				}
-			//meet <anchorkey> tag
-			}else if(attrValue.contains(Constants.ATTR_CLASS_VALUE_ANCHORKEY)){
-				//create keyref element in the StringBuffer
-				//TODO in topic file is no keys
-				String keyref = atts.getValue(Constants.ATTRIBUTE_NAME_KEYREF);
-				result.append("<keyref name=\""+keyref+"\"/>");
-			//meet <anchorid> tag
-			}else if(attrValue.contains(Constants.ATTR_CLASS_VALUE_ANCHORID)){
-				//create keyref element in the StringBuffer
-				String id = atts.getValue(Constants.ATTRIBUTE_NAME_ID);
-				//If current file is a ditamap file
-				boolean found = false;
-				if(FileUtils.isDITAMapFile(currentFile)){
-					//only for dita format
-					if(!"".equals(topicHref)){
-						String absolutePathToFile = FileUtils.resolveFile((new File(rootFilePath)).getParent(),topicHref);
-						//whether the id is a topic id
-						if(FileUtils.isDITAFile(absolutePathToFile)){
-							found = DelayConrefUtils.getInstance().findTopicId(absolutePathToFile, id);
+				// If the file has <exportanchors> tags only transtype =
+				// eclipsehelp
+				if (attrValue.contains(Constants.ATTR_CLASS_VALUE_EXPORTANCHORS)) {
+					hasExport = true;
+					// If current file is a ditamap file
+					if (FileUtils.isDITAMapFile(currentFile)) {
+						// if dita file's extension name is ".xml"
+						String editedHref = "";
+						if (topicHref.endsWith(Constants.FILE_EXTENSION_XML)) {
+							// change the extension to ".dita" for latter
+							// compare
+							editedHref = topicHref.replace(
+									Constants.FILE_EXTENSION_XML,
+									Constants.FILE_EXTENSION_DITA);
+						} else {
+							editedHref = topicHref;
 						}
-						//other format file
-					}else{
-						found = false;
+						// editedHref = editedHref.replace(File.separator, "/");
+						// create file element in the StringBuffer
+						result.append("<file name=\"" + editedHref + "\">");
+						// if <exportanchors> is defined in topicmeta(topicref),
+						// there is only one topic id
+						result.append("<topicid name=\"" + topicId + "\"/>");
+
+						// If current file is topic file
+					} else if (FileUtils.isDITATopicFile(currentFile)) {
+						String filename = FileUtils.getRelativePathFromMap(
+								rootFilePath, currentFile);
+						// if dita file's extension name is ".xml"
+						if (filename.endsWith(Constants.FILE_EXTENSION_XML)) {
+							// change the extension to ".dita" for latter
+							// compare
+							filename = filename.replace(
+									Constants.FILE_EXTENSION_XML,
+									Constants.FILE_EXTENSION_DITA);
+						}
+						// filename = FileUtils.normalizeDirectory(currentDir,
+						// filename);
+						filename = filename.replace(Constants.BACK_SLASH,
+								Constants.SLASH);
+						// create file element in the StringBuffer
+						result.append("<file name=\"" + filename + "\">");
+						// if <exportanchors> is defined in metadata(topic),
+						// there can be many topic ids
+						result.append("<topicid name=\"" + topicId + "\">");
+
+						shouldAppendEndTag = true;
 					}
-				}
-				
-				//id shouldn't be same as topic id in the case of duplicate insert
-				if(!topicId.equals(id)){
-					//topic id found
-					if(found){
-						result.append("<topicid name=\""+id+"\"/>");
-					}else{
-						result.append("<id name=\""+id+"\"/>");
+					// meet <anchorkey> tag
+				} else if (attrValue
+						.contains(Constants.ATTR_CLASS_VALUE_ANCHORKEY)) {
+					// create keyref element in the StringBuffer
+					// TODO in topic file is no keys
+					String keyref = atts
+							.getValue(Constants.ATTRIBUTE_NAME_KEYREF);
+					result.append("<keyref name=\"" + keyref + "\"/>");
+					// meet <anchorid> tag
+				} else if (attrValue.contains(Constants.ATTR_CLASS_VALUE_ANCHORID)) {
+					// create keyref element in the StringBuffer
+					String id = atts.getValue(Constants.ATTRIBUTE_NAME_ID);
+					// If current file is a ditamap file
+					// The id can only be element id within a topic
+					if (FileUtils.isDITAMapFile(currentFile)) {
+						// only for dita format
+						/*
+						 * if(!"".equals(topicHref)){ String absolutePathToFile
+						 * = FileUtils.resolveFile((new
+						 * File(rootFilePath)).getParent(),topicHref); //whether
+						 * the id is a topic id
+						 * if(FileUtils.isDITAFile(absolutePathToFile)){ found =
+						 * DelayConrefUtils
+						 * .getInstance().findTopicId(absolutePathToFile, id); }
+						 * //other format file }else{ found = false; }
+						 */
+						// id shouldn't be same as topic id in the case of duplicate insert
+						if (!topicId.equals(id)) {
+							result.append("<id name=\"" + id + "\"/>");
+						}
+					} else if (FileUtils.isDITATopicFile(currentFile)) {
+						// id shouldn't be same as topic id in the case of duplicate insert
+						if (!topicId.equals(id)) {
+							// topic id found
+							result.append("<id name=\"" + id + "\"/>");
+						}
 					}
 				}
 			}
@@ -975,30 +1009,32 @@ public class GenListModuleReader extends AbstractXMLReader {
 				schemeSet.add(filename);
 			}
 			
-			
 			//Added by William on 2009-06-24 for req #12014 start
-			//For only format of the href is dita topic
-			if (attrFormat == null ||
-					Constants.ATTR_FORMAT_VALUE_DITA.equalsIgnoreCase(attrFormat)){
-				if(attrName.equals(Constants.ATTRIBUTE_NAME_HREF)){
-					topicHref = filename;
-					
-					topicHref = topicHref.replace(Constants.BACK_SLASH, Constants.SLASH);
-					//attrValue has topicId
-					if(attrValue.lastIndexOf(Constants.SHARP) != -1){
-						//get the topicId position
-						int position = attrValue.lastIndexOf(Constants.SHARP);
-						topicId = attrValue.substring(position + 1);
-					}else{
-						//get the first topicId(vaild href file)
-						if(FileUtils.isDITAFile(topicHref)){
-							topicId = MergeUtils.getInstance().getFirstTopicId(topicHref, (new File(rootFilePath)).getParent(), true);
+			//only transtype = eclipsehelp
+			if(transtype.equals(Constants.INDEX_TYPE_ECLIPSEHELP)){
+				//For only format of the href is dita topic
+				if (attrFormat == null ||
+						Constants.ATTR_FORMAT_VALUE_DITA.equalsIgnoreCase(attrFormat)){
+					if(attrName.equals(Constants.ATTRIBUTE_NAME_HREF)){
+						topicHref = filename;
+						
+						topicHref = topicHref.replace(Constants.BACK_SLASH, Constants.SLASH);
+						//attrValue has topicId
+						if(attrValue.lastIndexOf(Constants.SHARP) != -1){
+							//get the topicId position
+							int position = attrValue.lastIndexOf(Constants.SHARP);
+							topicId = attrValue.substring(position + 1);
+						}else{
+							//get the first topicId(vaild href file)
+							if(FileUtils.isDITAFile(topicHref)){
+								topicId = MergeUtils.getInstance().getFirstTopicId(topicHref, (new File(rootFilePath)).getParent(), true);
+							}
 						}
 					}
+				}else{
+					topicHref = "";
+					topicId = "";
 				}
-			}else{
-				topicHref = "";
-				topicId = "";
 			}
 			//Added by William on 2009-06-24 for req #12014 end
 		}
