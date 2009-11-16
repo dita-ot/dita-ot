@@ -36,8 +36,9 @@ import org.dita.dost.writer.PropertiesWriter;
  */
 
 public class CommandLineInvoker {
+	/** Map to store input parameters.*/
 	private static Map<String, String> paramMap = null;
-    
+    /**logger.*/
 	private static DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
 	
 	static {
@@ -84,10 +85,13 @@ public class CommandLineInvoker {
 		paramMap.put("/generateouter", "generate.copy.outer");
 		paramMap.put("/onlytopicinmap", "onlytopic.in.map");
 	}
-	
+	/**propertyFile store input params.*/
 	private String propertyFile = null;
+	/**antBuildFile run the ant.*/
 	private String antBuildFile = null;
+	/**ditaDir.*/
 	private String ditaDir = null;
+	/**debugMode.*/
 	private boolean debugMode = false;
 
 	/**
@@ -97,7 +101,7 @@ public class CommandLineInvoker {
 	private boolean readyToRun = false;
 
 	/**
-	 * Constructor: CommandLineInvoker
+	 * Constructor: CommandLineInvoker.
 	 */
 	public CommandLineInvoker() {
 	}
@@ -110,7 +114,7 @@ public class CommandLineInvoker {
 		return ditaDir;
 	}
 	/**
-	 * Getter function for readytorun
+	 * Getter function for readytorun.
 	 * @return if ready to run
 	 */
 	public boolean getReadyToRun() {
@@ -120,8 +124,8 @@ public class CommandLineInvoker {
 	/**
 	 * Process input arguments.
 	 * 
-	 * @param args
-	 * @throws DITAOTException
+	 * @param args args
+	 * @throws DITAOTException Exception
 	 */
 	public void processArguments(String[] args) throws DITAOTException {
 		Properties prop = new Properties();
@@ -219,6 +223,15 @@ public class CommandLineInvoker {
 
 				throw new DITAOTException(msg);
 			}
+			
+			//Added by William on 2009-11-09 for bug:2893493 start
+			if(antArg.equals("clean.temp")&&
+				!("yes".equalsIgnoreCase(antArgValue)||
+				"no".equalsIgnoreCase(antArgValue))){
+				antArgValue = "yes";
+				
+			}
+			//Added by William on 2009-11-09 for bug:2893493 end
 
 			prop.put(antArg, antArgValue);
 		}
@@ -275,7 +288,7 @@ public class CommandLineInvoker {
 	/**
 	 * Start ant process to execute the build process.
 	 * 
-	 * @throws IOException
+	 * @throws IOException IOException
 	 */
 	public void startAnt() throws IOException {
 		List<String> cmd = new ArrayList<String>(Constants.INT_8);
@@ -298,13 +311,20 @@ public class CommandLineInvoker {
 		
 		startTransformation(cmds);
 	}
-	
+	/**
+	 * 
+	 * @return String
+	 */
 	private static String getCommandRunner() {
 		return (Constants.OS_NAME.toLowerCase().indexOf(Constants.OS_NAME_WINDOWS) != -1)
 				? "ant.bat" 
 				: "ant";
 	}
-
+	/**
+	 * begin transformation.
+	 * @param cmd cmd
+	 * @throws IOException exception
+	 */
 	private static void startTransformation(String[] cmd) throws IOException {
 		BufferedReader reader = null;
 		Process antProcess = Runtime.getRuntime().exec(cmd);
@@ -331,7 +351,9 @@ public class CommandLineInvoker {
 			System.err.println(line);
 		}
 	}
-	
+	/**
+	 * print dita version.
+	 */
 	private static void printVersion() {
 		System.out.println("DITA Open Toolkit 1.5");
 	}
@@ -386,7 +408,7 @@ public class CommandLineInvoker {
 	 * Get the input parameter and map them into parameters which can be
 	 * accepted by Ant build task. Then start the building process
 	 * 
-	 * @param args
+	 * @param args args
 	 * 
 	 */
 	public static void main(String[] args) {
