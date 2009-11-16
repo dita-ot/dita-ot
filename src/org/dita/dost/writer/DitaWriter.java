@@ -162,6 +162,11 @@ public class DitaWriter extends AbstractXMLWriter {
 			
 		return false;
     }
+    /**
+     * Get file extension name.
+     * @param attValue file name
+     * @return extension name
+     */
     public static String getExtName(String attValue){
     	String fileName;
         int fileExtIndex;
@@ -322,8 +327,9 @@ public class DitaWriter extends AbstractXMLWriter {
     /**
      * Init xml reader used for pipeline parsing.
 	 *
-     * @throws SAXException
-     * @param ditaDir 
+     * @throws SAXException SAXException
+     * @param ditaDir ditaDir
+     * @param validate whether validate
      */
 	public static void initXMLReader(String ditaDir,boolean validate) throws SAXException {
 		DITAOTJavaLogger logger=new DITAOTJavaLogger();
@@ -349,12 +355,10 @@ public class DitaWriter extends AbstractXMLWriter {
 		catalogMap = CatalogUtils.getCatalog(ditaDir);
 	}
     
-    /**
-     * @see org.xml.sax.ContentHandler#characters(char[], int, int)
-     * 
-     */
+	@Override
     public void characters(char[] ch, int start, int length)
             throws SAXException {
+    	String test = new String(ch, start, length);
         if (!exclude && needResolveEntity) { 
         	// exclude shows whether it's excluded by filtering
         	// isEntity shows whether it's an entity.
@@ -696,10 +700,7 @@ public class DitaWriter extends AbstractXMLWriter {
 		}
 	}
 
-	/**
-     * @see org.xml.sax.ext.LexicalHandler#endCDATA()
-     * 
-     */
+	@Override
     public void endCDATA() throws SAXException {
     	insideCDATA = false;
 	    try{
@@ -710,10 +711,7 @@ public class DitaWriter extends AbstractXMLWriter {
 	}
 
     
-    /**
-     * @see org.xml.sax.ContentHandler#endDocument()
-     * 
-     */
+	@Override
     public void endDocument() throws SAXException {
         try {
             output.flush();
@@ -723,10 +721,7 @@ public class DitaWriter extends AbstractXMLWriter {
     }
 
     
-    /**
-     * @see org.xml.sax.ContentHandler#endElement(java.lang.String, java.lang.String, java.lang.String)
-     * 
-     */
+	@Override
     public void endElement(String uri, String localName, String qName)
             throws SAXException {
     	if (foreignLevel > 0){
@@ -750,10 +745,7 @@ public class DitaWriter extends AbstractXMLWriter {
         }
     }
 
-	/**
-     * @see org.xml.sax.ext.LexicalHandler#endEntity(java.lang.String)
-     * 
-     */
+	@Override
     public void endEntity(String name) throws SAXException {
 		if(!needResolveEntity){
 			needResolveEntity = true;
@@ -794,10 +786,7 @@ public class DitaWriter extends AbstractXMLWriter {
 		}
 	}
 
-    /**
-     * @see org.xml.sax.ContentHandler#ignorableWhitespace(char[], int, int)
-     * 
-     */
+	@Override
     public void ignorableWhitespace(char[] ch, int start, int length)
             throws SAXException {
         if (!exclude) { // exclude shows whether it's excluded by filtering
@@ -809,10 +798,7 @@ public class DitaWriter extends AbstractXMLWriter {
         }
     }
 		
-    /**
-     * @see org.xml.sax.ContentHandler#processingInstruction(java.lang.String, java.lang.String)
-     * 
-     */
+	@Override
     public void processingInstruction(String target, String data) throws SAXException {
     	if (!exclude) { // exclude shows whether it's excluded by filtering
             try {
@@ -826,10 +812,7 @@ public class DitaWriter extends AbstractXMLWriter {
         }
 	}
 
-	/**
-     * @see org.xml.sax.EntityResolver#resolveEntity(java.lang.String, java.lang.String)
-     * 
-     */
+	@Override
     public InputSource resolveEntity(String publicId, String systemId)
             throws SAXException, IOException {
         if (catalogMap.get(publicId)!=null){
@@ -842,18 +825,12 @@ public class DitaWriter extends AbstractXMLWriter {
         return null;
     }
     
-    /**
-     * @see org.dita.dost.writer.AbstractWriter#setContent(org.dita.dost.module.Content)
-     * 
-     */
+	@Override
     public void setContent(Content content) {        
         tempDir = (String) content.getValue();
     }
 
-    /**
-     * @see org.xml.sax.ContentHandler#skippedEntity(java.lang.String)
-     * 
-     */
+    @Override
     public void skippedEntity(String name) throws SAXException {
         if (!exclude) { // exclude shows whether it's excluded by filtering
             try {
@@ -864,10 +841,7 @@ public class DitaWriter extends AbstractXMLWriter {
         }
     }
 	
-	/**
-     * @see org.xml.sax.ext.LexicalHandler#startCDATA()
-     * 
-     */
+    @Override
     public void startCDATA() throws SAXException {
 	    try{
 	    	insideCDATA = true;
@@ -878,10 +852,7 @@ public class DitaWriter extends AbstractXMLWriter {
 	}
 
     
-    /**
-     * @see org.xml.sax.ContentHandler#startDocument()
-     * 
-     */
+    @Override
     public void startDocument() throws SAXException {
         try {
             output.write(Constants.XML_HEAD);
@@ -905,10 +876,7 @@ public class DitaWriter extends AbstractXMLWriter {
     }
 
     
-    /**
-     * @see org.xml.sax.ContentHandler#startElement(java.lang.String, java.lang.String, java.lang.String, org.xml.sax.Attributes)
-     * 
-     */
+    @Override
     public void startElement(String uri, String localName, String qName,
             Attributes atts) throws SAXException {
         Integer value;
@@ -980,10 +948,7 @@ public class DitaWriter extends AbstractXMLWriter {
         }
     }
 
-	/**
-     * @see org.xml.sax.ext.LexicalHandler#startEntity(java.lang.String)
-     * 
-     */
+    @Override
     public void startEntity(String name) throws SAXException {
 		if (!exclude) { // exclude shows whether it's excluded by filtering
             try {
@@ -999,10 +964,7 @@ public class DitaWriter extends AbstractXMLWriter {
 	}
 
    
-    /**
-     * @see org.dita.dost.writer.AbstractWriter#write(java.lang.String)
-     * 
-     */
+    @Override
     public void write(String filename) {
 		int index;
 		int fileExtIndex;
@@ -1124,9 +1086,9 @@ public class DitaWriter extends AbstractXMLWriter {
     }
     
 	/**
-	 * Just for the overflowing files
-	 * @param destFile
-	 * @param objFile
+	 * Just for the overflowing files.
+	 * @param overflowingFile overflowingFile
+	 * @return relative path to out
 	 */
     public String getRelativePathFromOut(String overflowingFile){
     	File mapPathName=new File(OutputUtils.getInputMapPathName());
@@ -1202,13 +1164,17 @@ public class DitaWriter extends AbstractXMLWriter {
 	public void setValidateMap(HashMap<String, HashMap<String, HashSet<String>>> validateMap) {
 		this.validateMap = validateMap;
 	}
-	
+	/**
+	 * Set default value map.
+	 * @param defaultMap default value map
+	 */
 	public void setDefaultValueMap(HashMap<String, HashMap<String, String>> defaultMap) {
 		this.defaultValueMap  = defaultMap;
 	}
 	
 	//Added by William on 2009-07-18 for req #12014 start
 	/**
+	 * Get transtype.
 	 * @return the transtype
 	 */
 	public String getTranstype() {
@@ -1216,6 +1182,7 @@ public class DitaWriter extends AbstractXMLWriter {
 	}
 
 	/**
+	 * Set transtype.
 	 * @param transtype the transtype to set
 	 */
 	public void setTranstype(String transtype) {
@@ -1225,11 +1192,17 @@ public class DitaWriter extends AbstractXMLWriter {
 	
 	//Added by Alan Date:2009-08-04 --begin
 	private static String extName;
-
+	/**
+	 * Get extension name.
+	 * @return extension name
+	 */
 	public String getExtName() {
 		return extName;
 	}
-
+	/**
+	 * Set extension name.
+	 * @param extName extension name
+	 */
 	public void setExtName(String extName) {
 		this.extName = extName;
 	}

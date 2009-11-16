@@ -63,10 +63,10 @@ public class StringUtils {
 	}
 	
 	/**
-	 * Escape XML characters
+	 * Escape XML characters.
 	 * Suggested by hussein_shafie
-	 * @param s
-	 * @return
+	 * @param s value needed to be escaped
+	 * @return escaped value
 	 */
 	public static String escapeXML(String s){
 		char[] chars = s.toCharArray();
@@ -74,12 +74,12 @@ public class StringUtils {
 	}
 	
 	/**
-	 * Escape XML characters
+	 * Escape XML characters.
 	 * Suggested by hussein_shafie
-	 * @param chars
-	 * @param offset
-	 * @param length
-	 * @return
+	 * @param chars char arrays
+	 * @param offset start position
+	 * @param length arrays lenth
+	 * @return escaped value
 	 */
 	public static String escapeXML(char[] chars, int offset, int length){
 		StringBuffer escaped = new StringBuffer();
@@ -115,8 +115,8 @@ public class StringUtils {
 	/**
 	 * Get entity.
 	 * 
-	 * @param name
-	 * @return
+	 * @param name entity name
+	 * @return entity
 	 */
 	public static String getEntity(String name) {
 		return (name.startsWith("%")) ? (name + ";") : ("&" + name + ";");
@@ -125,8 +125,8 @@ public class StringUtils {
 	/**
 	 * Check entity.
 	 * 
-	 * @param name
-	 * @return
+	 * @param name entity name
+	 * @return ture if this entity needs to be resolved
 	 */
 	public static boolean checkEntity(String name) {
 		// check whether this entity need resolve
@@ -135,7 +135,7 @@ public class StringUtils {
 			return false;
 		}
 		return true;
-
+		
 	}
 
 	/**
@@ -143,8 +143,12 @@ public class StringUtils {
 	 * with the given replacement. Differ from the JDK String.replaceAll function,
 	 * this method does not support regular expression based replacement on purpose.
 	 * 
+	 * @param input input string
 	 * @param pattern This pattern is recognized as it is. It will not solve
 	 *        as an regular expression.
+	 * @param replacement string used to replace with
+	 * @return replaced string
+	 * 
 	 */
 	public static String replaceAll(final String input,
 			final String pattern, final String replacement) {
@@ -164,9 +168,9 @@ public class StringUtils {
 	}
 	
 	/**
-	 * Get ASCII code of a string
-	 * @param inStr
-	 * @return
+	 * Get ASCII code of a string.
+	 * @param inStr input string
+	 * @return asscii code
 	 */
 	public static String getAscii(String inStr){
 		byte [] input = inStr.getBytes();
@@ -199,9 +203,9 @@ public class StringUtils {
 	}
 	
 	/**
-	 * Get the props
-	 * @param domains
-	 * @return
+	 * Get the props.
+	 * @param domains input domain
+	 * @return prop
 	 */
 	public static String getExtProps (String domains){
 		StringBuffer propsBuffer = new StringBuffer();
@@ -220,7 +224,7 @@ public class StringUtils {
 	 * Restores standard XML entities such as &amp; to the string.
 	 * These entities were resolved by the parser but must be
 	 * written back out as entities.
-	 * @param String s
+	 * @param s entity
 	 * @return String with &, <, >, ', and " converted to XML entities
 	 */
 	public static String restoreEntity(String s) {
@@ -235,9 +239,9 @@ public class StringUtils {
 	}
 	
 	/**
-	 * Restore map
-	 * @param s
-	 * @return
+	 * Restore map.
+	 * @param s input string
+	 * @return map created from string
 	 */
 	public static Map<String, String> restoreMap(String s) {
 		Map<String,String> copytoMap = new HashMap<String,String>();
@@ -254,8 +258,8 @@ public class StringUtils {
 	
 	/**
 	 * Break down a string separated by commas into a string set. 
-	 * @param s
-	 * @return
+	 * @param s input string
+	 * @return string set
 	 */
 	public static Set<String> restoreSet(String s) {
 		return restoreSet(s, Constants.COMMA);
@@ -265,7 +269,7 @@ public class StringUtils {
 	 * Break down a string separated by <code>delim</code> into a string set. 
 	 * @param s String to be splitted
 	 * @param delim Delimiter to be used.
-	 * @return
+	 * @return string set
 	 */
 	public static Set<String> restoreSet(String s, String delim) {
 		Set<String> copytoSet = new HashSet<String>();
@@ -286,9 +290,9 @@ public class StringUtils {
 	}
 	
 	/**
-	 * Return is the string is null or ""
-	 * @param s
-	 * @return
+	 * Return is the string is null or "".
+	 * @param s input string
+	 * @return true if the string is null or ""
 	 */
 	public static boolean isEmptyString(String s){
 		return (s == null || Constants.STRING_EMPTY.equals(s.trim()));
@@ -297,10 +301,10 @@ public class StringUtils {
 	/**
 	 * If target is null, return the value; else append value to target. 
 	 * If withSpace is true, insert a blank between them.
-	 * @param target
-	 * @param value
-	 * @param withSpace
-	 * @return
+	 * @param target target to be appended
+	 * @param value value to append
+	 * @param withSpace whether insert a blank
+	 * @return processed string
 	 */
 	public static String setOrAppend(String target, String value, boolean withSpace){
 		if(target == null){
@@ -317,7 +321,7 @@ public class StringUtils {
 	}
 	
 	/**
-	 * Init sax driver info
+	 * Init sax driver info.
 	 */
 	public static void initSaxDriver(){
 		//The default sax driver is set to xerces's sax driver
@@ -348,9 +352,9 @@ public class StringUtils {
 	
 
 		/**
-		 * Return a Java Locale object
-		 * @param anEncoding
-		 * @return
+		 * Return a Java Locale object.
+		 * @param anEncoding encoding
+		 * @return locale
 		 */
 	
 		public static Locale getLocale(String anEncoding){
