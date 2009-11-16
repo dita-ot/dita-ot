@@ -276,7 +276,7 @@ public class GenListModuleReader extends AbstractXMLReader {
 
 	/**
 	 * 
-	 * Reset the internal variables
+	 * Reset the internal variables.
 	 */
     public void reset() {
     	hasKeyRef = false;
@@ -318,7 +318,7 @@ public class GenListModuleReader extends AbstractXMLReader {
 	/**
 	 * To see if the parsed file has conref inside.
 	 * 
-	 * @return
+	 * @return true if has conref and false otherwise
 	 */
 	public boolean hasConRef() {
 		return hasConRef;
@@ -327,7 +327,7 @@ public class GenListModuleReader extends AbstractXMLReader {
 	/**
 	 * To see if the parsed file has keyref inside.
 	 * 
-	 * @return 
+	 * @return true if has keyref and false otherwise
 	 */
 	public boolean hasKeyRef(){
 		return hasKeyRef;
@@ -336,7 +336,7 @@ public class GenListModuleReader extends AbstractXMLReader {
 	/**
 	 * To see if the parsed file has coderef inside.
 	 * 
-	 * @return
+	 * @return true if has coderef and false otherwise
 	 */
 	public boolean hasCodeRef(){
 		return hasCodeRef;
@@ -345,7 +345,7 @@ public class GenListModuleReader extends AbstractXMLReader {
 	/**
 	 * To see if the parsed file has href inside.
 	 * 
-	 * @return
+	 * @return true if has href and false otherwise
 	 */
 	public boolean hasHref() {
 		return hasHref;
@@ -413,7 +413,7 @@ public class GenListModuleReader extends AbstractXMLReader {
 	}
 	
 	/**
-     * Returns the ignoredCopytoSourceSet
+     * Returns the ignoredCopytoSourceSet.
      *
      * @return Returns the ignoredCopytoSourceSet.
      */
@@ -424,7 +424,7 @@ public class GenListModuleReader extends AbstractXMLReader {
 	/**
 	 * Get the copy-to map.
 	 * 
-	 * @return
+	 * @return copy-to map
 	 */
 	public Map<String, String> getCopytoMap() {
 		return copytoMap;
@@ -433,7 +433,7 @@ public class GenListModuleReader extends AbstractXMLReader {
 	/**
 	 * Get the Key definitions.
 	 * 
-	 * @return
+	 * @return Key definitions map
 	 */
 	public Map<String,String> getKeysDMap(){
 		return keysDefMap;
@@ -441,7 +441,7 @@ public class GenListModuleReader extends AbstractXMLReader {
 	/**
 	 * Set the relative directory of current file.
 	 * 
-	 * @param dir
+	 * @param dir dir
 	 */
 	public void setCurrentDir(String dir) {
 		this.currentDir = dir;
@@ -450,14 +450,15 @@ public class GenListModuleReader extends AbstractXMLReader {
 	/**
 	 * Check if the current file is valid after filtering.
 	 * 
-	 * @return
+	 * @return true if valid and false otherwise
 	 */
 	public boolean isValidInput() {
 		return isValidInput;
 	}
 	
 	/**
-	 * Check if the current file has conaction
+	 * Check if the current file has conaction.
+	 * @return true if has conaction and false otherwise
 	 */
 	public boolean hasConaction(){
 		return hasconaction;
@@ -465,10 +466,10 @@ public class GenListModuleReader extends AbstractXMLReader {
 	/**
 	 * Parse input xml file.
 	 * 
-	 * @param file
-	 * @throws SAXException 
-	 * @throws IOException 
-	 * @throws FileNotFoundException
+	 * @param file file
+	 * @throws SAXException SAXException
+	 * @throws IOException IOException
+	 * @throws FileNotFoundException FileNotFoundException
 	 */
 	public void parse(File file) throws FileNotFoundException, IOException, SAXException {
 		
@@ -478,16 +479,7 @@ public class GenListModuleReader extends AbstractXMLReader {
 		reader.parse(new InputSource(new FileInputStream(file)));	
 	}
 
-	/**
-	 * Parse specific attributes for info used in later process.
-	 * 
-	 * @param uri
-	 * @param localName
-	 * @param qName
-	 * @param atts
-	 * 
-	 * @exception org.xml.sax.SAXException
-	 */
+	@Override
 	public void startElement(String uri, String localName, String qName,
 			Attributes atts) throws SAXException {
 		String domains = null;
@@ -778,7 +770,7 @@ public class GenListModuleReader extends AbstractXMLReader {
 		}
 	}
 
-	/** (non-Javadoc)
+	/**
 	 * @see org.dita.dost.reader.AbstractXMLReader#endElement(java.lang.String, java.lang.String, java.lang.String)
 	 */
 	public void endElement(String uri, String localName, String qName) throws SAXException {		
@@ -840,11 +832,11 @@ public class GenListModuleReader extends AbstractXMLReader {
 
 	/**
 	 * Resolve the publicId used in XMLCatalog.
-	 * 
-	 * @param publicId
-	 * @param systemId
-	 * @throws java.io.IOException
-	 * @exception org.xml.sax.SAXException
+	 * @see org.dita.dost.reader.AbstractXMLReader#resolveEntity(String, String)
+	 * @param publicId publicId in doctype declarations
+	 * @param systemId systemId in doctype declarations
+	 * @throws java.io.IOException if dita-catalog.xml is not available 
+	 * @exception org.xml.sax.SAXException if dita-catalog.xml is not in valid format.
 	 */
 	public InputSource resolveEntity(String publicId, String systemId)
 			throws SAXException, IOException {
@@ -1182,6 +1174,10 @@ public class GenListModuleReader extends AbstractXMLReader {
 		}
 
 	}
+	/**
+	 * Get out file set.
+	 * @return out file set
+	 */
 	public Set<String> getOutFilesSet(){
 		return outDitaFilesSet;
 	}
@@ -1199,17 +1195,23 @@ public class GenListModuleReader extends AbstractXMLReader {
 	public Set<String> getChunkTopicSet() {
 		return chunkTopicSet;
 	}
-	
+	/**
+	 * Get scheme set.
+	 * @return scheme set
+	 */
 	public Set<String> getSchemeSet() {
 		return this.schemeSet;
 	}
-	
+	/**
+	 * Get scheme ref set.
+	 * @return scheme ref set
+	 */
 	public Set<String> getSchemeRefSet() {
 		return this.schemeRefSet;
 	}
 	
 	/**
-	 * List of files with "@processing-role=resource-only"
+	 * List of files with "@processing-role=resource-only".
 	 * @return the resource-only set
 	 */
 	public Set<String> getResourceOnlySet() {
@@ -1224,7 +1226,10 @@ public class GenListModuleReader extends AbstractXMLReader {
 	//public Document getSchemeRoot() {
 	//	return schemeRoot;
 	//}
-	
+	/**
+	 * Get getRelationshipGrap.
+	 * @return relationship grap
+	 */
 	public Map<String, Set<String>> getRelationshipGrap() {
 		return this.relationGraph;
 	}

@@ -184,8 +184,8 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 	/**
 	 * Create a new instance and do the initialization.
 	 * 
-	 * @throws ParserConfigurationException
-	 * @throws SAXException
+	 * @throws ParserConfigurationException never throw such exception
+	 * @throws SAXException never throw such exception
 	 */
 	public GenMapAndTopicListModule() throws SAXException,
 			ParserConfigurationException {
@@ -223,13 +223,9 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 		resourceOnlySet = new HashSet<String>(Constants.INT_128);
 	}
 
-	/**
-	 * Execute the module.
-	 * 
-	 * @param input
-	 * @return
-	 * @throws DITAOTException
-	 */
+    /**
+     * {@inheritDoc}
+     */
 	public AbstractPipelineOutput execute(AbstractPipelineInput input)
 			throws DITAOTException {
 		try {
