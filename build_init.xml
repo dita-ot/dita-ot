@@ -286,8 +286,17 @@
         <contains string="${args.fo.img.ext}" substring="." />
       </and>
     </condition>
-
-    <condition property="clean_temp">
+  	
+	<!--Added by William on 2009-11-17 for bug:2893493 start-->
+  	<condition property="clean.temp"
+      value="true">
+	      <not>
+	        <isset property="clean.temp" />
+	      </not>
+  	</condition>
+  	<!--Added by William on 2009-11-17 for bug:2893493 start-->
+    
+  	<condition property="clean_temp">
       <and>
         <isset property="clean.temp" />
         <equals arg1="${clean.temp}" arg2="no" casesensitive="false" />
