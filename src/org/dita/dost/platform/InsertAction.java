@@ -21,6 +21,7 @@ import org.dita.dost.util.StringUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
+import org.xml.sax.ext.LexicalHandler;
 import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.XMLReaderFactory;
 
@@ -29,7 +30,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
  * provided by plug-ins into the xsl files, ant scripts and xml catalog.
  * @author Zhang, Yuan Peng
  */
-public class InsertAction extends DefaultHandler implements IAction {
+public class InsertAction extends DefaultHandler implements IAction, LexicalHandler {
 
 	protected XMLReader reader;
 	protected DITAOTJavaLogger logger;
@@ -54,7 +55,9 @@ public class InsertAction extends DefaultHandler implements IAction {
             reader = XMLReaderFactory.createXMLReader();
             reader.setContentHandler(this);
             reader.setFeature(Constants.FEATURE_NAMESPACE_PREFIX, true);
-
+            //added by Alan for bug: #2893316 on Date: 2009-11-09 begin
+            reader.setProperty(Constants.LEXICAL_HANDLER_PROPERTY, this);
+            //added by Alan for bug: #2893316 on Date: 2009-11-09 end
         } catch (Exception e) {
         	logger.logException(e);
         }
@@ -155,6 +158,35 @@ public class InsertAction extends DefaultHandler implements IAction {
 	public void setFeatures(Hashtable<String,String> h) {
 		
 	}
+	//added by Alan for bug: #2893316 on Date: 2009-11-09 begin
+	public void startCDATA() throws SAXException {
+		retBuf.append(Constants.CDATA_HEAD);
 
-	
+	}
+
+	public void endCDATA() throws SAXException {
+		retBuf.append(Constants.CDATA_END);
+	}
+
+	public void startDTD(String name, String publicId, String systemId)
+			throws SAXException {
+		// nop;
+	}
+
+	public void endDTD() throws SAXException {
+		// nop;
+	}
+
+	public void startEntity(String name) throws SAXException {
+		// nop;
+	}
+
+	public void endEntity(String name) throws SAXException {
+		// nop;
+	}
+
+	public void comment(char[] ch, int start, int length) throws SAXException {
+		// nop;
+	}
+	//added by Alan for bug: #2893316 on Date: 2009-11-09 end
 }
