@@ -7,7 +7,7 @@
 <project name="build_DITA-OT_package" default="build-all-packages" 
             basedir=".">
   <description>Build source and binary packages for DITA Open Toolkit</description>
-
+  
   <property name="HTMLHelpCompiler" value="C:\Program Files\HTML Help Workshop\hhc.exe"/>  
   <property name="package.output.dir" location="build\"/>
   <property name="package.name.root" value="DITA-OT"/>
@@ -73,6 +73,12 @@
   </target>
   
   <patternset id="pattern.package.minimum">
+  	
+  	<exclude name="demo/fo/fop/build/*" />
+	<exclude name="demo/fo/fop/conf/*" />
+	<exclude name="demo/fo/fop/lib/*" />
+	<exclude name="demo/fo/lib/icu4j.jar" />
+	<exclude name="build.log"/>
     <include name="*.*"/>
     <include name="css/**"/>
     <include name="dtd/**"/>
@@ -100,6 +106,7 @@
   	<include name="demo/dita132/**"/>
 	<include name="demo/fo/**" />
 	<include name="demo/legacypdf/**" />
+  	<include name="demo/video/**" />
     <include name="doc/**"/>
     <include name="dtd/**"/>
     <include name="plugins/**"/>
@@ -117,8 +124,15 @@
     <exclude name=".*"/>
   </patternset>
 	
-	<patternset id="pattern.package.small">
-		<include name="*.*"/>
+	<patternset id="pattern.package.standard">
+			
+			<exclude name="demo/fo/fop/build/*" />
+			<exclude name="demo/fo/fop/conf/*" />
+			<exclude name="demo/fo/fop/lib/*" />
+			<exclude name="demo/fo/lib/icu4j.jar" />
+			<exclude name="build.log"/>
+		
+			<include name="*.*"/>
 		    <include name="ant/**"/>
 		    <include name="css/**"/>    
 		    <include name="demo/book/**"/>
@@ -131,6 +145,7 @@
 		  	<include name="demo/dita132/**"/>
 			<include name="demo/fo/**" />
 			<include name="demo/legacypdf/**" />
+			<include name="demo/video/**" />
 		    <include name="doc/**"/>
 		    <include name="dtd/**"/>
 		    <include name="plugins/**"/>
@@ -157,7 +172,7 @@
   <target name="package-source">
     <zip destfile="${package.output.dir}/${param.out.file}${win32.zip.suffix}">
       <zipfileset dir="./" prefix="${package.name.root}${version}-src">
-        <patternset refid="pattern.package.small"/>
+        <patternset refid="pattern.package.standard"/>
         <include name="src/**"/>
       	<include name="lib/APACHE-LICENSE-2_0.html"/>
         <exclude name="files.txt"/>
@@ -167,7 +182,7 @@
     <tar destfile="${package.output.dir}/${param.out.file}${linux.zip.suffix}" 
       compression="gzip" longfile="gnu">
       <tarfileset dir="./" prefix="${package.name.root}${version}-src">
-        <patternset refid="pattern.package.small"/>
+        <patternset refid="pattern.package.standard"/>
         <include name="src/**"/>
       	<include name="lib/APACHE-LICENSE-2_0.html"/>
         <exclude name="files.txt"/>
@@ -177,6 +192,9 @@
   </target>
   
   <target name="package-binary-minimum">
+  	<delete dir="demo" includeemptydirs="true" failonerror="no"/>
+  	<ant antfile="integrator.xml" target="integrate"/>
+  	
     <zip destfile="${package.output.dir}/${param.out.file}${win32.zip.suffix}">
       <zipfileset dir="./" prefix="${package.name.root}${version}">
         <patternset refid="pattern.package.minimum"/>
@@ -197,10 +215,10 @@
     </tar>
   </target>
   
-  <target name="package-binary-small">    
+  <target name="package-binary-standard">    
     <zip destfile="${package.output.dir}/${param.out.file}${win32.zip.suffix}">
       <zipfileset dir="./" prefix="${package.name.root}${version}">
-        <patternset refid="pattern.package.small"/>
+        <patternset refid="pattern.package.standard"/>
         <include name="lib/dost.jar"/>
       	<include name="lib/APACHE-LICENSE-2_0.html"/>
         <exclude name="startcmd.*"/>
@@ -211,7 +229,7 @@
     <tar destfile="${package.output.dir}/${param.out.file}${linux.zip.suffix}" 
       compression="gzip" longfile="gnu">
       <tarfileset dir="./" prefix="${package.name.root}${version}">
-        <patternset refid="pattern.package.small"/>
+        <patternset refid="pattern.package.standard"/>
         <include name="lib/dost.jar"/>
       	<include name="lib/APACHE-LICENSE-2_0.html"/>
         <exclude name="startcmd.*"/>
@@ -220,7 +238,7 @@
     </tar>
   </target>
   
-  <target name="package-binary-big">    
+  <target name="package-binary-full">    
     <zip destfile="${package.output.dir}/${param.out.file}${win32.zip.suffix}">
       <zipfileset dir="./" prefix="${package.name.root}${version}">
         <patternset refid="pattern.package.general"/>
@@ -259,10 +277,10 @@
     <antcall target="package-binary-minimum">
       <param name="param.out.file" value="${binary-min}"/>
     </antcall>
-    <antcall target="package-binary-small">
+    <antcall target="package-binary-standard">
       <param name="param.out.file" value="${binary}"/>
     </antcall>
-    <antcall target="package-binary-big">
+    <antcall target="package-binary-full">
       <param name="param.out.file" value="${binary-big}"/>
     </antcall>
   </target>
@@ -277,11 +295,11 @@
       <param name="param.out.file"
         value="${package.name.root}${version}b${build.number}_minimal_bin.${build.time}"/>
     </antcall>
-    <antcall target="package-binary-small">
+    <antcall target="package-binary-standard">
       <param name="param.out.file" 
         value="${package.name.root}${version}b${build.number}_standard_bin.${build.time}"/>
     </antcall>
-    <antcall target="package-binary-big">
+    <antcall target="package-binary-full">
       <param name="param.out.file" 
         value="${package.name.root}${version}b${build.number}_full_easy_install_bin.${build.time}"/>
     </antcall>
