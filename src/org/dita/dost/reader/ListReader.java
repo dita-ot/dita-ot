@@ -9,8 +9,6 @@
  */
 package org.dita.dost.reader;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -106,8 +104,8 @@ public class ListReader implements AbstractReader {
     }
 
     /**
-     * Return the copy-to map
-	 * @return
+     * Return the copy-to map.
+	 * @return copy-to map
 	 */
 	public Map<String, String> getCopytoMap() {
     	return copytoMap;

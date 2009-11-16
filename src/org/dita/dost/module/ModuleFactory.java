@@ -27,7 +27,7 @@ public class ModuleFactory {
 	private final String packagePrefix = "org.dita.dost.module.";
 
 	/**
-	 * Automatically generated constructor: ModuleFactory
+	 * Automatically generated constructor: ModuleFactory.
 	 */
 	public ModuleFactory() {
 
@@ -49,9 +49,9 @@ public class ModuleFactory {
 	/**
 	 * Create the Module class instance according to moduleName.
 	 * 
-	 * @param moduleName
+	 * @param moduleName moduleName
 	 * @return AbstractPipelineModule
-	 * @throws DITAOTException
+	 * @throws DITAOTException DITAOTException
 	 */
 	public AbstractPipelineModule createModule(String moduleName)
 			throws DITAOTException {

@@ -250,36 +250,46 @@ public class DitaValReader extends AbstractXMLReader {
 	}
 
 	/**
-	 * Return the image list
-	 * @return
+	 * Return the image list.
+	 * @return image list
 	 */
 	public List<String> getImageList() {
 		return imageList;
 	}
 	
 	/**
-	 * Return the filter map
-	 * @return
+	 * Return the filter map.
+	 * @return filter map
 	 */
 	public HashMap<String, String> getFilterMap() {
 		schemeFilterMap.putAll(filterMap);
 		return schemeFilterMap;
 	}
-	
+	/**
+	 * reset.
+	 */
 	public void reset() {
 		schemeFilterMap.clear();
 		validValuesMap.clear();
 		defaultValueMap.clear();
 	}
-	
+	/**
+	 * reset filter map.
+	 */
 	public void filterReset() {
 		filterMap.clear();
 	}
-	
+	/**
+	 * get image list relative to the .ditaval file.
+	 * @return image list
+	 */
 	public List<String> getRelFlagImageList(){
 		return relFlagImageList;
 	}
-	
+	/**
+	 * load schema file.
+	 * @param scheme scheme file
+	 */
 	public void loadSubjectScheme(String scheme) {
 		
 		if (!FileUtils.fileExists(scheme)) {
@@ -431,7 +441,10 @@ public class DitaValReader extends AbstractXMLReader {
 	public HashMap<String, HashMap<String,HashSet<String>>> getValidValuesMap() {
 		return validValuesMap;
 	}
-	
+	/**
+	 * get map of default value.
+	 * @return default value map
+	 */
 	public HashMap<String, HashMap<String, String>> getDefaultValueMap() {
 		return this.defaultValueMap;
 	}

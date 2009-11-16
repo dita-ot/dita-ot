@@ -56,7 +56,7 @@ public class MessageUtils {
 	}
 
 	/**
-	 * Just bypass to invoke member function loadDefMsg();
+	 * Just bypass to invoke member function loadDefMsg().
 	 *
 	 */
 	public static void loadDefaultMessages() {
@@ -77,7 +77,7 @@ public class MessageUtils {
 	
 	/**
 	 * Load message from message file.
-	 * @param newMessageFile
+	 * @param newMessageFile newMessageFile
 	 */
 	public static void loadMessages(String newMessageFile) {
 		if (!updateMessageFile(newMessageFile)) {
@@ -159,8 +159,8 @@ public class MessageUtils {
 	 * Get the message respond to the given id, if no message found, 
 	 * an empty message with this id will be returned. 
 	 * 
-	 * @param id
-	 * @return
+	 * @param id message di
+	 * @return messageBean
 	 */
 	public static MessageBean getMessage(String id) {
 		MessageBean message = null;
@@ -190,9 +190,9 @@ public class MessageUtils {
 	 * are replaced by those in the given 'prop', if no message found, 
 	 * an empty message with this id will be returned. 
 	 * 
-	 * @param id
-	 * @param prop
-	 * @return
+	 * @param id id
+	 * @param prop prop
+	 * @return MessageBean
 	 */
 	public static MessageBean getMessage(String id, Properties prop) {		
 		String reason = null;

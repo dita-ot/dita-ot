@@ -26,19 +26,23 @@ public abstract class ImportAction implements IAction {
 	protected Hashtable<String,String> paramTable = null;
 	
 	/**
-	 * Default Constructor
+	 * Default Constructor.
 	 */
 	public ImportAction() {
 		valueSet = new LinkedHashSet<String>(Constants.INT_16);
 		paramTable = new Hashtable<String,String>();
 	}
-
+	
 	/**
+	 * get result.
+	 * @return result
 	 * @see org.dita.dost.platform.IAction#getResult()
 	 */
 	public abstract String getResult();
 
 	/**
+	 * set input.
+	 * @param input input
 	 * @see org.dita.dost.platform.IAction#setInput(java.lang.String)
 	 */
 	public void setInput(String input) {
@@ -49,6 +53,8 @@ public abstract class ImportAction implements IAction {
 	}
 
 	/**
+	 * Set the input parameters.
+	 * @param param param
 	 * @see org.dita.dost.platform.IAction#setParam(java.lang.String)
 	 */
 	public void setParam(String param) {
@@ -64,7 +70,10 @@ public abstract class ImportAction implements IAction {
 			}
 		}	
 	}
-
+	/**
+	 * Set the feature table.
+	 * @param h hastable
+	 */
 	public void setFeatures(Hashtable<String,String> h) {
 		
 	}

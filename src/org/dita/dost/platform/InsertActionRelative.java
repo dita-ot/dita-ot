@@ -18,11 +18,16 @@ import java.util.Iterator;
 public abstract class InsertActionRelative extends InsertAction implements IAction {
 
 	protected String currentFile;
-	
+	/**
+	 * Constructor.
+	 */
 	public InsertActionRelative() {
 		super();
 	}
-
+	/**
+	 * Return the result.
+	 * @return result
+	 */
 	public String getResult() {
 		Iterator<String> iter;
 		iter = fileNameSet.iterator();

@@ -24,7 +24,7 @@ public class ContentImpl implements Content {
     private Object object;
 
     /**
-     * Automatically generated constructor: ContentImpl
+     * Automatically generated constructor: ContentImpl.
      */
     public ContentImpl() {
     	collection = null;
@@ -34,6 +34,7 @@ public class ContentImpl implements Content {
 
     /**
      * @see org.dita.dost.module.Content#getCollection()
+     * @return collection
      * 
      */
     public Collection getCollection() {
@@ -43,6 +44,7 @@ public class ContentImpl implements Content {
 
     /**
      * @see org.dita.dost.module.Content#getValue()
+     * @return object
      * 
      */
     public Object getValue() { 
@@ -51,8 +53,8 @@ public class ContentImpl implements Content {
 
 
     /**
-     * Set the collection-like content
-     * @param col
+     * Set the collection-like content.
+     * @param col collection
      */
     public void setCollection(Collection col) {
         this.collection = col;
@@ -60,8 +62,8 @@ public class ContentImpl implements Content {
 
 
     /**
-     * Set the object-like content
-     * @param obj
+     * Set the object-like content.
+     * @param obj object
      */
     public void setValue(Object obj) {
         this.object = obj;

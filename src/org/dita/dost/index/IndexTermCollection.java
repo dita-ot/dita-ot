@@ -34,21 +34,20 @@ import org.dita.dost.writer.JavaHelpIndexWriter;
  * @author Wu, Zhi Qiang
  */
 public class IndexTermCollection {
-	
+	/** The collection of index terms. */
 	private static IndexTermCollection collection = null;
-	/** The list of all index term */
+	/** The list of all index term. */
 	private List termList = new ArrayList(Constants.INT_16);
 
-	/** The type of index term */
+	/** The type of index term. */
 	private String indexType = null;
 	
-	/** The type of index class */
+	/** The type of index class. */
 	private String indexClass = null;
 
-
-	/** The output file name of index term without extension */
+	/** The output file name of index term without extension. */
 	private String outputFileRoot = null;
-	
+	/** The logger. */
 	private DITAOTJavaLogger javaLogger = null;
 
 	/**
@@ -59,7 +58,7 @@ public class IndexTermCollection {
 	}
 	
 	/**
-	 * The only interface to access IndexTermCollection instance
+	 * The only interface to access IndexTermCollection instance.
 	 * @return Singleton IndexTermCollection instance
 	 * @author Marshall
 	 */
@@ -71,7 +70,7 @@ public class IndexTermCollection {
 	}
 	
 	/**
-	 * The interface to clear the result in IndexTermCollection instance
+	 * The interface to clear the result in IndexTermCollection instance.
 	 * @author Stephen
 	 */
 	public void clear(){
@@ -81,7 +80,7 @@ public class IndexTermCollection {
 	/**
 	 * Get the index type.
 	 * 
-	 * @return
+	 * @return index type
 	 */
 	public String getIndexType() {
 		return this.indexType;
@@ -90,17 +89,22 @@ public class IndexTermCollection {
 	/**
 	 * Set the index type.
 	 * 
-	 * @param type
-	 *            The indexType to set.
+	 * @param type The indexType to set.
 	 */
 	public void setIndexType(String type) {
 		this.indexType = type;
 	}
-
+	/**
+	 * get index class.
+	 * @return index class
+	 */
 	public String getIndexClass() {
 		return indexClass;
 	}
-
+	/**
+	 * set index class.
+	 * @param indexClass index class
+	 */
 	public void setIndexClass(String indexClass) {
 		this.indexClass = indexClass;
 	}
@@ -109,7 +113,7 @@ public class IndexTermCollection {
 	/**
 	 * All a new term into the collection.
 	 * 
-	 * @param term
+	 * @param term index term
 	 */
 	public void addTerm(IndexTerm term) {
 		int i = 0;
@@ -138,7 +142,7 @@ public class IndexTermCollection {
 	/**
 	 * Get all the term list from the collection.
 	 * 
-	 * @return
+	 * @return term list
 	 */
 	public List getTermList() {
 		return termList;
@@ -169,7 +173,7 @@ public class IndexTermCollection {
 	/**
 	 * Output index terms into index file.
 	 * 
-	 * @throws DITAOTException
+	 * @throws DITAOTException exception
 	 */
 	public void outputTerms() throws DITAOTException {
 		StringBuffer buff = new StringBuffer(this.outputFileRoot);
@@ -239,10 +243,8 @@ public class IndexTermCollection {
 	}
 
 	/**
-	 * Set the output file
-	 * 
-	 * @param fileRoot
-	 *            The outputFile to set.
+	 * Set the output file.
+	 * @param fileRoot The outputFile to set.
 	 */
 	public void setOutputFileRoot(String fileRoot) {
 		this.outputFileRoot = fileRoot;

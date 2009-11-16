@@ -33,7 +33,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
  */
 public class Integrator {
 	/**
-	 * Plugin table which contains detected plugins
+	 * Plugin table which contains detected plugins.
 	 */
 	public static Hashtable<String,Features> pluginTable = null;
 	private Set<String> templateSet = null;
@@ -68,7 +68,7 @@ public class Integrator {
 	}
 
 	/**
-	 * execute point of Integrator
+	 * Execute point of Integrator.
 	 */
 	public void execute() {
 		if (!new File(ditaDir).isAbsolute()) {
@@ -224,7 +224,7 @@ public class Integrator {
 	}
 
 	/**
-	 * Default Constructor
+	 * Default Constructor.
 	 */
 	public Integrator() {
 		initTemplateSet();
@@ -246,56 +246,56 @@ public class Integrator {
 	}	
 
 	/**
-	 * Return the basedir
-	 * @return
+	 * Return the basedir.
+	 * @return String
 	 */
 	public String getBasedir() {
 		return basedir;
 	}
 
 	/**
-	 * Set the basedir
-	 * @param baseDir
+	 * Set the basedir.
+	 * @param baseDir baseDir
 	 */
 	public void setBasedir(String baseDir) {
 		this.basedir = baseDir;
 	}
 	
 	/**
-	 * Return the ditaDir
-	 * @return
+	 * Return the ditaDir.
+	 * @return ditaDir
 	 */
 	public String getDitaDir() {
 		return ditaDir;
 	}
 
 	/**
-	 * Set the ditaDir
-	 * @param ditadir
+	 * Set the ditaDir.
+	 * @param ditadir ditaDir
 	 */
 	public void setDitaDir(String ditadir) {
 		this.ditaDir = ditadir;
 	}
 	
 	/**
-	 * Return the properties file
-	 * @return
+	 * Return the properties file.
+	 * @return file
 	 */
 	public File getProperties() {
 		return propertiesFile;
 	}
 
 	/**
-	 * Set the properties file
-	 * @param propertiesfile
+	 * Set the properties file.
+	 * @param propertiesfile propertiesfile
 	 */
 	public void setProperties(File propertiesfile) {
 		this.propertiesFile = propertiesfile;
 	}
 	
 	/**
-	 * Test function
-	 * @param args
+	 * Test function.
+	 * @param args args
 	 */
 	public static void main(String[] args) {
 		Integrator abc = new Integrator();

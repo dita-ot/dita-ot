@@ -154,37 +154,54 @@ public class InsertAction extends DefaultHandler implements IAction, LexicalHand
 	public void startDocument() throws SAXException {
 		elemLevel = 0;
 	}
-
+	/**
+	 * @see  org.dita.dost.platform.IAction#setFeatures(Hashtable)
+	 */
 	public void setFeatures(Hashtable<String,String> h) {
 		
 	}
 	//added by Alan for bug: #2893316 on Date: 2009-11-09 begin
+	/**
+	 * @see org.xml.sax.ext.LexicalHandler#startCDATA()
+	 */
 	public void startCDATA() throws SAXException {
 		retBuf.append(Constants.CDATA_HEAD);
 
 	}
-
+	/**
+	 * @see org.xml.sax.ext.LexicalHandler#endCDATA()
+	 */
 	public void endCDATA() throws SAXException {
 		retBuf.append(Constants.CDATA_END);
 	}
-
+	/**
+	 * @see org.xml.sax.ext.LexicalHandler#startDTD(String, String, String)
+	 */
 	public void startDTD(String name, String publicId, String systemId)
 			throws SAXException {
 		// nop;
 	}
-
+	/**
+	 * @see org.xml.sax.ext.LexicalHandler#endDTD()
+	 */
 	public void endDTD() throws SAXException {
 		// nop;
 	}
-
+	/**
+	 * @see org.xml.sax.ext.LexicalHandler#startEntity(String)
+	 */
 	public void startEntity(String name) throws SAXException {
 		// nop;
 	}
-
+	/**
+	 * @see org.xml.sax.ext.LexicalHandler#endEntity(String)
+	 */
 	public void endEntity(String name) throws SAXException {
 		// nop;
 	}
-
+	/**
+	 * @see org.xml.sax.ext.LexicalHandler#comment(char[], int, int)
+	 */
 	public void comment(char[] ch, int start, int length) throws SAXException {
 		// nop;
 	}

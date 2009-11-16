@@ -50,9 +50,13 @@ public class MoveMetaModule implements AbstractPipelineModule {
         logger = new DITAOTJavaLogger();
     }
 
-    /** (non-Javadoc)
-     * @see org.dita.dost.module.AbstractPipelineModule#execute(org.dita.dost.pipeline.AbstractPipelineInput)
-     */
+    /**
+	 * Entry point of MoveMetaModule.
+	 * @see org.dita.dost.module.AbstractPipelineModule#execute(org.dita.dost.pipeline.AbstractPipelineInput)
+	 * @param input Input parameters and resources.
+	 * @return null
+	 * @throws DITAOTException exception
+	 */
     public AbstractPipelineOutput execute(AbstractPipelineInput input) throws DITAOTException {
 		String baseDir = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_BASEDIR);
     	String tempDir = ((PipelineHashIO)input).getAttribute(Constants.ANT_INVOKER_PARAM_TEMPDIR);

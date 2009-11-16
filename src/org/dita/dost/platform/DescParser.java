@@ -14,7 +14,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 /**
- * Parser to parse description file of plugin
+ * Parser to parse description file of plugin.
  * @author Zhang, Yuan Peng
  */
 public class DescParser extends DefaultHandler{
@@ -23,7 +23,7 @@ public class DescParser extends DefaultHandler{
 	private Features features = null;
 	
 	/**
-	 * DescParser Constructor
+	 * DescParser Constructor.
 	 *
 	 */
 	public DescParser(){
@@ -31,8 +31,8 @@ public class DescParser extends DefaultHandler{
 	}
 	
 	/**
-	 * Constructor initialize Feature with location
-	 * @param location
+	 * Constructor initialize Feature with location.
+	 * @param location location
 	 */
 	public DescParser(String location) {
 		features = new Features(location);

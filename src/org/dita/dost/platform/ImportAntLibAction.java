@@ -9,16 +9,24 @@ import java.util.Iterator;
 
 import org.dita.dost.util.Constants;
 import org.dita.dost.util.FileUtils;
-
+/**
+ * ImportAntLibAction class.
+ *
+ */
 public class ImportAntLibAction extends ImportAction {
 
 	private StringBuffer retBuf = null;
-
+	/**
+	 * Constructor.
+	 */
 	public ImportAntLibAction() {
 		super();
 		retBuf = new StringBuffer(Constants.INT_1024);
 	}
-	
+	/**
+	 * get result.
+	 * @return result
+	 */
 	public String getResult() {
 		Iterator<String> iter;
 		String templateFilePath = paramTable.get("template");

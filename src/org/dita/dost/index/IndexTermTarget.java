@@ -19,10 +19,10 @@ import org.dita.dost.util.Constants;
  * @author Wu, Zhi Qiang
  */
 public class IndexTermTarget {
-    /** Name (title) of the target topic */
+    /** Name (title) of the target topic. */
     private String targetName = null;
 
-    /** URI of the target topic */
+    /** URI of the target topic. */
     private String targetURI = null;
 
     /**
@@ -42,9 +42,7 @@ public class IndexTermTarget {
 
     /**
      * Set the target topic's name (title).
-     * 
-     * @param name
-     *            The targetName to set.
+     * @param name The targetName to set.         
      */
     public void setTargetName(String name) {
         this.targetName = name;
@@ -61,9 +59,7 @@ public class IndexTermTarget {
 
     /**
      * Set the target topic's URI.
-     * 
-     * @param uri
-     *            The targetURI to set.
+     * @param uri The targetURI to set.
      */
     public void setTargetURI(String uri) {
         this.targetURI = uri;
@@ -72,7 +68,8 @@ public class IndexTermTarget {
     /**
      * The index term targets will be equal if the target topics have same name and URI value.
      * 
-     * @param obj
+     * @param obj object to compare
+     * @return boolean true if equals
      */
     public boolean equals(Object obj) {
         if (obj instanceof IndexTermTarget) {
@@ -88,7 +85,8 @@ public class IndexTermTarget {
     }
     
     /**
-     * Generate hash code for IndexTermTarget
+     * Generate hash code for IndexTermTarget.
+     * @return has code.
      */
     public int hashCode() {
         int result = Constants.INT_17;
@@ -100,8 +98,9 @@ public class IndexTermTarget {
     }
 
 	/** 
-	 * Generate String for IndexTermTarget, with the format "{Target name: name, Target URL: uri}"
+	 * Generate String for IndexTermTarget, with the format "{Target name: name, Target URL: uri}".
 	 * @see java.lang.Object#toString()
+	 * @return string
 	 */
 	public String toString() {
 		return new StringBuffer("{Target name: ").append(targetName).append(

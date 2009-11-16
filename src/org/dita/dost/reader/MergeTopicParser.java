@@ -43,7 +43,7 @@ public class MergeTopicParser extends AbstractXMLReader {
 	private MergeUtils util;
 	
 	/**
-	 * Default Constructor
+	 * Default Constructor.
 	 */
 	public MergeTopicParser() {
 		logger = new DITAOTJavaLogger();
@@ -67,7 +67,9 @@ public class MergeTopicParser extends AbstractXMLReader {
 			logger.logException(e);
 		}
 	}
-	
+	/**
+	 * reset.
+	 */
 	public void reset() {
 		topicInfo.delete(0, topicInfo.length());
 	}
@@ -213,10 +215,10 @@ public class MergeTopicParser extends AbstractXMLReader {
 	}
 
     /**
-     * Parse the file
-	 * @param filename
-	 * @param dir
-	 * @return
+     * Parse the file to update id.
+	 * @param filename filename
+	 * @param dir file dir
+	 * @return updated id
 	 */
 	public String parse(String filename,String dir){
 		int index = filename.indexOf(Constants.SHARP);
@@ -319,7 +321,7 @@ public class MergeTopicParser extends AbstractXMLReader {
 	}
 
 
-
+	@Override
 	public void processingInstruction(String target, String data)
 			throws SAXException {
 		String pi = (data != null) ? target + Constants.STRING_BLANK + data : target;

@@ -18,9 +18,19 @@ import org.dita.dost.util.Constants;
 import org.dita.dost.util.ListUtils;
 import org.dita.dost.util.StringUtils;
 import org.dita.dost.writer.ConrefPushParser;
-
+/**
+ * Conref push module.
+ * 
+ *
+ */
 public class ConrefPushModule implements AbstractPipelineModule {
 
+	/**
+	 * @see org.dita.dost.module.AbstractPipelineModule#execute(AbstractPipelineInput)
+	 * @param input input
+	 * @return output
+	 * @throws DITAOTException exception
+	 */
 	public AbstractPipelineOutput execute(AbstractPipelineInput input)
 			throws DITAOTException {
 		String tempDir = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_TEMPDIR);

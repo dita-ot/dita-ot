@@ -219,7 +219,7 @@ public class XmlPropertyTask extends Task {
 	}
 
 	/**
-	 * the prefix to prepend to each property
+	 * the prefix to prepend to each property.
 	 * @param prefix the prefix to prepend to each property
 	 */
 	public void setPrefix(String prefix) {
@@ -227,7 +227,7 @@ public class XmlPropertyTask extends Task {
 	}
 
 	/**
-	 * flag to validate the XML file; optional, default false
+	 * flag to validate the XML file; optional, default false.
 	 * @param validate if true validate the XML file, default false
 	 */
 	public void setValidate(boolean validate) {

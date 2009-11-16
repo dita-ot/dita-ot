@@ -8,7 +8,7 @@ package org.dita.dost.platform;
 import java.util.Hashtable;
 import java.util.StringTokenizer;
 
-/*
+/**
  * InsertDependsAction implements IAction.
  * Parses an attribute value containing comma-separated identifiers.
  * Identifiers inside braces are replaced with the plugin features for the corresponding extension point.
@@ -19,11 +19,16 @@ public class InsertDependsAction implements IAction {
 	private Hashtable<String,String> paramTable = null;
 	private String value;
 	private Hashtable<String,String> featureTable = null;
-
+	/**
+	 * Constructor.
+	 */
 	public InsertDependsAction() {
 		paramTable = new Hashtable<String,String>();
 	}
-	
+	/**
+	 * Get result.
+	 * @return result
+	 */
 	public String getResult() {
 		String localname = paramTable.get("localname");
 		StringBuffer result = new StringBuffer();
@@ -61,11 +66,19 @@ public class InsertDependsAction implements IAction {
 			return "";
 		}
 	}
-
+	/**
+	 * Set input.
+	 * @param input input
+	 * @see org.dita.dost.platform.IAction#setInput(java.lang.String)
+	 */
 	public void setInput(String input) {
 		value = input;
 	}
-
+	/**
+	 * Set the input parameters.
+	 * @param param param
+	 * @see org.dita.dost.platform.IAction#setParam(java.lang.String)
+	 */
 	public void setParam(String param) {
 		StringTokenizer paramTokenizer = new StringTokenizer(param,";");
 		String paramExpression = null;
@@ -79,7 +92,10 @@ public class InsertDependsAction implements IAction {
 			}
 		}	
 	}
-
+	/**
+	 * Set the feature table.
+	 * @param h hastable
+	 */
 	public void setFeatures(Hashtable<String,String> h) {
 		featureTable = h;
 	}

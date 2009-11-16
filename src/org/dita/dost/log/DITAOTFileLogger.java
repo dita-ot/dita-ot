@@ -43,7 +43,7 @@ public class DITAOTFileLogger {
 
 	/**
 	 * Get the DITAOTFileLogger instance. Singleton.
-	 * @return
+	 * @return DITAOTFileLogger logger
 	 */
 	public static DITAOTFileLogger getInstance() {
 		if (logger == null) {
@@ -104,7 +104,7 @@ public class DITAOTFileLogger {
 	/**
 	 * This method used to set the log file.
 	 * 
-	 * @param filename
+	 * @param filename filename
 	 */
 	public void setLogFile(String filename) {
 		this.logFile = filename;
@@ -112,47 +112,47 @@ public class DITAOTFileLogger {
 
 	/**
 	 * The logDir to set.
-	 * @param logdir           
+	 * @param logdir logdir          
 	 */
 	public void setLogDir(String logdir) {
 		this.logDir = logdir;
 	}
 
 	/**
-	 * Log the message at info level
-	 * @param msg
+	 * Log the message at info level.
+	 * @param msg msg
 	 */
 	public void logInfo(String msg) {
 		logMessage(msg);
 	}
 	
 	/**
-	 * Log the message at warning level
-	 * @param msg
+	 * Log the message at warning level.
+	 * @param msg msg
 	 */
 	public void logWarn(String msg) {
 		logMessage(msg);
 	}
 
 	/**
-	 * Log the message at error level
-	 * @param msg
+	 * Log the message at error level.
+	 * @param msg msg
 	 */
 	public void logError(String msg) {
 		logMessage(msg);
 	}
 
 	/**
-	 * Log the message at debug level
-	 * @param msg
+	 * Log the message at debug level.
+	 * @param msg msg
 	 */
 	public void logDebug(String msg) {
 		logMessage(msg);
 	}
 
 	/**
-	 * Log the exception
-	 * @param t
+	 * Log the exception.
+	 * @param t exception
 	 */
 	public void logException(Throwable t) {
 		logError(t.getMessage());

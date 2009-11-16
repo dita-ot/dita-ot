@@ -71,7 +71,7 @@ public class DebugAndFilterModule implements AbstractPipelineModule {
 			Constants.KEYREF_LIST,Constants.CODEREF_LIST,Constants.CHUNK_TOPIC_LIST,Constants.HREF_TOPIC_LIST,
 			Constants.RESOURCE_ONLY_LIST};
 	/**
-	 * File extension of source file
+	 * File extension of source file.
 	 */
 	public static String extName = null;
     private static String tempDir = "";
@@ -152,7 +152,7 @@ public class DebugAndFilterModule implements AbstractPipelineModule {
 	
 	private String inputDir = null;
 	/**
-	 * Default Construtor
+	 * Default Construtor.
 	 *
 	 */
 	public DebugAndFilterModule(){

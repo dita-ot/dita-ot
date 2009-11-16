@@ -25,7 +25,7 @@ import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.XMLReaderFactory;
 
 /**
- * Generate outputfile with templates
+ * Generate outputfile with templates.
  * @author Zhang, Yuan Peng
  */
 public class FileGenerator extends DefaultHandler {
@@ -37,15 +37,15 @@ public class FileGenerator extends DefaultHandler {
 	private String templateFileName = null;
 
 	/**
-	 * Default Constructor
+	 * Default Constructor.
 	 */
 	public FileGenerator() {
 		this(null);
 	}
 
 	/**
-	 * Constructor init featureTable
-	 * @param featureTbl
+	 * Constructor init featureTable.
+	 * @param featureTbl featureTbl
 	 */
 	public FileGenerator(Hashtable<String,String> featureTbl) {
 		this.featureTable = featureTbl;
@@ -71,8 +71,8 @@ public class FileGenerator extends DefaultHandler {
 	}
 	
 	/**
-	 * Generator the output file
-	 * @param fileName
+	 * Generator the output file.
+	 * @param fileName filename
 	 */
 	public void generate(String fileName){
 		FileOutputStream fileOutput = null;

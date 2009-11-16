@@ -49,7 +49,7 @@ public class MergeMapParser extends AbstractXMLReader {
 	private int processLevel = 0;
 
 	/**
-	 * Default Constructor
+	 * Default Constructor.
 	 */
 	public MergeMapParser() {
 		logger = new DITAOTJavaLogger();
@@ -219,7 +219,7 @@ public class MergeMapParser extends AbstractXMLReader {
 		mapInfo.append(Constants.GREATER_THAN);
 		
 	}
-
+	@Override
 	public void processingInstruction(String target, String data)
 			throws SAXException {
 		String pi = (data != null) ? target + Constants.STRING_BLANK + data : target;

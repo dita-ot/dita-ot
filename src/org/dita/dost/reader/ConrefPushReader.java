@@ -17,7 +17,6 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 /**
  * Class for reading conref push content.
- * @author william
  *
  */
 public class ConrefPushReader extends AbstractXMLReader {

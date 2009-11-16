@@ -13,13 +13,23 @@ import org.dita.dost.util.Constants;
 import org.dita.dost.util.ListUtils;
 import org.dita.dost.util.StringUtils;
 import org.dita.dost.writer.CoderefResolver;
-
+/**
+ * Coderef Module class.
+ *
+ */
 public class CoderefModule implements AbstractPipelineModule {
-
+	/**
+	 * Constructor.
+	 */
 	public CoderefModule() {
 		super();
 	}
-
+	/**
+	 * Entry point of Coderef Module.
+	 * @param input Input parameters and resources.
+	 * @return null
+	 * @throws DITAOTException exception
+	 */
 	public AbstractPipelineOutput execute(AbstractPipelineInput input)
 			throws DITAOTException {
 		String baseDir = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_BASEDIR);

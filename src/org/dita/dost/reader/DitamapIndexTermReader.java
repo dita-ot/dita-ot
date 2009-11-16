@@ -11,7 +11,6 @@
 package org.dita.dost.reader;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Stack;
 
@@ -375,7 +374,7 @@ public class DitamapIndexTermReader extends AbstractXMLReader {
 	/**
 	 * Set map path.
 	 * 
-	 * @param mappath
+	 * @param mappath path of map file
 	 */
 	public void setMapPath(String mappath) {
 		this.mapPath = mappath;

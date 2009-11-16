@@ -88,7 +88,7 @@ public class IndexTermReader extends AbstractXMLReader {
 	private DITAOTJavaLogger javaLogger = null;
 
 	/**
-	 * Constructor
+	 * Constructor.
 	 */
 	public IndexTermReader() {
 		termStack = new Stack<IndexTerm>();
@@ -496,10 +496,8 @@ public class IndexTermReader extends AbstractXMLReader {
 	}
 
 	/**
-	 * Set the current parsing file
-	 * 
-	 * @param target
-	 *            The parsingFile to set.
+	 * Set the current parsing file.
+	 * @param target The parsingFile to set.
 	 */
 	public void setTargetFile(String target) {
 		this.targetFile = target;
@@ -521,7 +519,7 @@ public class IndexTermReader extends AbstractXMLReader {
 	}
 	
 	/**
-	 * Update the target name of each IndexTerm, recursively
+	 * Update the target name of each IndexTerm, recursively.
 	 * @param indexterm
 	 */
 	private void updateIndexTermTargetName(IndexTerm indexterm){

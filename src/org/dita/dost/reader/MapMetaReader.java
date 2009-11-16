@@ -33,7 +33,10 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
+/**
+ * MapMetaReader class which reads map meta data. 
+ *
+ */
 public class MapMetaReader implements AbstractReader {
 	private static final String INTERNET_LINK_MARK = "://";
 	
@@ -123,14 +126,19 @@ public class MapMetaReader implements AbstractReader {
 	private String filePath = null;
 	
 	
-	
+	/**
+	 * Constructor.
+	 */
 	public MapMetaReader() {
 		super();
 		javaLogger = new DITAOTJavaLogger();
 		globalMeta = new Hashtable<String, Element>(Constants.INT_16);
         resultTable = new Hashtable<String, Hashtable<String, Element>>(Constants.INT_16);
 	}
-
+	/**
+	 * read map files.
+	 * @param filename filename
+	 */
 	public void read(String filename) {
 		File inputFile = new File(filename);
         filePath = inputFile.getParent();
@@ -377,7 +385,9 @@ public class MapMetaReader implements AbstractReader {
 		}
 		
 	}
-
+	/**
+	 * @see  org.dita.dost.reader.AbstractReader#getContent()
+	 */
 	public Content getContent() {
 		ContentImpl result = new ContentImpl();
         result.setCollection( resultTable.entrySet());

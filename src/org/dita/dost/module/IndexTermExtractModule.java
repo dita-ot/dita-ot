@@ -68,7 +68,6 @@ public class IndexTermExtractModule implements AbstractPipelineModule {
 	}
 
 	/**
-	 * (non-Javadoc)
 	 * 
 	 * @see org.dita.dost.module.AbstractPipelineModule#execute(org.dita.dost.pipeline.AbstractPipelineInput)
 	 */

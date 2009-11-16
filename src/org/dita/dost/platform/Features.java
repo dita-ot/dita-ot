@@ -22,7 +22,7 @@ import org.dita.dost.util.Constants;
 import org.dita.dost.util.FileUtils;
 
 /**
- * Collection of features
+ * Collection of features.
  * @author Zhang, Yuan Peng
  */
 public class Features {
@@ -33,7 +33,7 @@ public class Features {
 	private List<String> templateList;
 
 	/**
-	 * Default constructor
+	 * Default constructor.
 	 */
 	public Features() {
 		super();
@@ -45,8 +45,8 @@ public class Features {
 	}
 
 	/**
-	 * Constructor init location 
-	 * @param location
+	 * Constructor init location. 
+	 * @param location location
 	 */
 	public Features(String location) {
 		this.location = location;
@@ -57,8 +57,8 @@ public class Features {
 	}
 	
 	/**
-	 * Return the feature location
-	 * @return
+	 * Return the feature location.
+	 * @return location
 	 */
 	public String getLocation(){
 		return location;
@@ -66,8 +66,8 @@ public class Features {
 	
 	/**
 	 * Return the feature name by id.
-	 * @param id
-	 * @return
+	 * @param id feature id
+	 * @return feature name
 	 */
 	public String getFeature(String id){
 		return featureTable.get(id);
@@ -75,7 +75,7 @@ public class Features {
 	
 	/**
 	 * Return the set of all features.
-	 * @return
+	 * @return features
 	 */
 	public Set<Map.Entry<String,String>> getAllFeatures(){
 		return featureTable.entrySet();
@@ -83,9 +83,9 @@ public class Features {
 	
 	/**
 	 * Add feature to the feature table.
-	 * @param id
-	 * @param value
-	 * @param type
+	 * @param id feature id
+	 * @param value feature value
+	 * @param type feature type
 	 */
 	public void addFeature(String id, String value, String type){
 		StringTokenizer valueTokenizer = new StringTokenizer(value,",");
@@ -107,7 +107,7 @@ public class Features {
 	
 	/**
 	 * Add the required feature id.
-	 * @param id
+	 * @param id feature id
 	 */
 	public void addRequire(String id){
 		PluginRequirement requirement = new PluginRequirement();
@@ -117,8 +117,8 @@ public class Features {
 
 	/**
 	 * Add the required feature id.
-	 * @param id
-	 * @param importance
+	 * @param id feature id
+	 * @param importance importance
 	 */
 	public void addRequire(String id, String importance){
 		PluginRequirement requirement = new PluginRequirement();
@@ -131,25 +131,25 @@ public class Features {
 
 	/**
 	 * Get the iterator of required list.
-	 * @return
+	 * @return iterator
 	 */
 	public Iterator<PluginRequirement> getRequireListIter(){
 		return requireList.iterator();
 	}
 	
 	/**
-	 * Add meta info to meta table
-	 * @param type
-	 * @param value
+	 * Add meta info to meta table.
+	 * @param type type
+	 * @param value value
 	 */
 	public void addMeta(String type, String value){
 		metaTable.put(type, value);
 	}
 	
 	/**
-	 * Return meat info specifying type
-	 * @param type
-	 * @return
+	 * Return meat info specifying type.
+	 * @param type type
+	 * @return meat info
 	 */
 	public String getMeta(String type){
 		return metaTable.get(type);
@@ -157,12 +157,15 @@ public class Features {
 	
 	/**
 	 * Add a template.
-	 * @param file
+	 * @param file file name
 	 */
 	public void addTemplate(String file){
 		templateList.add(file);
 	}
-	
+	/**
+	 * get all templates.
+	 * @return templates list
+	 */
 	public List<String> getAllTemplates(){
 		return templateList;
 	}

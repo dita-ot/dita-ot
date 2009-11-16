@@ -34,8 +34,8 @@ public class PipelineHashIO implements AbstractPipelineInput,
     /**
      * Set the attribute vale with name into hash map.
      * 
-     * @param name
-     * @param value
+     * @param name name
+     * @param value value
      */
     public void setAttribute(String name, String value) {
         hash.put(name, value);
@@ -44,8 +44,8 @@ public class PipelineHashIO implements AbstractPipelineInput,
     /**
      * Get the attribute value according to its name.
      * 
-     * @param name
-     * @return String
+     * @param name name
+     * @return String value
      */
     public String getAttribute(String name) {
         String value = null;

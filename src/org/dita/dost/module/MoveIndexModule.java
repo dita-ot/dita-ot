@@ -10,13 +10,11 @@
 package org.dita.dost.module;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
-import java.util.StringTokenizer;
 
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTJavaLogger;
@@ -52,9 +50,13 @@ public class MoveIndexModule implements AbstractPipelineModule {
 
     }
 
-    /** (non-Javadoc)
-     * @see org.dita.dost.module.AbstractPipelineModule#execute(org.dita.dost.pipeline.AbstractPipelineInput)
-     */
+    /**
+	 * Entry point of MoveIndexModule.
+	 * @see org.dita.dost.module.AbstractPipelineModule#execute(org.dita.dost.pipeline.AbstractPipelineInput)
+	 * @param input Input parameters and resources.
+	 * @return null
+	 * @throws DITAOTException exception
+	 */
     public AbstractPipelineOutput execute(AbstractPipelineInput input) throws DITAOTException {
     	String mapFile;
     	Set mapSet;

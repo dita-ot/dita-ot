@@ -17,7 +17,14 @@ import org.dita.dost.util.Constants;
  * This class replace all non-ASCII characters to their RTF Unicode-escaped forms. 
  */
 public class EscapeUnicodeModule implements AbstractPipelineModule {
-
+	
+	/**
+	 * Entry point of EscapeUnicodeModule.
+	 * @see org.dita.dost.module.AbstractPipelineModule#execute(org.dita.dost.pipeline.AbstractPipelineInput)
+	 * @param input Input parameters and resources.
+	 * @return null
+	 * @throws DITAOTException exception
+	 */
 	public AbstractPipelineOutput execute(AbstractPipelineInput input)
 			throws DITAOTException {
 		String inputFile = ((PipelineHashIO)input).getAttribute(Constants.ANT_INVOKER_EXT_PARAM_INPUT);

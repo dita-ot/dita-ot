@@ -28,10 +28,15 @@ import java.io.File;
 public class InsertCatalogActionRelative extends InsertActionRelative implements
 		IAction {
 
+	/**
+	 * Constructor.
+	 */
 	public InsertCatalogActionRelative() {
 		super();
 	}
-
+	/**
+	 * @see org.xml.sax.ContentHandler#startElement(java.lang.String, java.lang.String, java.lang.String, org.xml.sax.Attributes)
+	 */
 	public void startElement(String uri, String localName, String qName,
 			Attributes attributes) throws SAXException {
 		if(elemLevel != 0){

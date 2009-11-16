@@ -39,7 +39,10 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.ProcessingInstruction;
 import org.w3c.dom.Text;
 
-
+/**
+ * ChunkMapReader class, read ditamap file for chunking.
+ *
+ */
 public class ChunkMapReader implements AbstractReader {
 	
 	private DITAOTJavaLogger javaLogger = null;
@@ -65,7 +68,9 @@ public class ChunkMapReader implements AbstractReader {
 	private ProcessingInstruction path2proj = null; // Tagsmiths modification
 	
 	private String processingRole = "normal";
-
+	/**
+	 * Constructor.
+	 */
 	public ChunkMapReader() {
 		super();
 		javaLogger = new DITAOTJavaLogger();
@@ -74,7 +79,10 @@ public class ChunkMapReader implements AbstractReader {
 		refFileSet = new HashSet<String>(Constants.INT_128);
 		conflictTable = new Hashtable<String, String>(Constants.INT_128);
 	}
-
+	/**
+	 * read input file.
+	 * @param filename filename
+	 */
 	public void read(String filename) {
 		File inputFile = new File(filename);
         filePath = inputFile.getParent();
@@ -522,17 +530,27 @@ public class ChunkMapReader implements AbstractReader {
 			}
 		}
 	}
-
+	/**
+	 * get content.
+	 * @return Content
+	 */
 	public Content getContent() {
 		Content content = new ContentImpl();
 		content.setValue(changeTable);
 		return content;
 	}
-	
+	/**
+	 * get conflict table.
+	 * @return conflict table
+	 */
 	public Hashtable<String, String> getConflicTable() {
 		return this.conflictTable;
 	}
-
+	/**
+	 * Set up environment.
+	 * @param ditaext ditaext
+	 * @param transtype transtype
+	 */
 	public void setup(String ditaext, String transtype) {
 		this.ditaext = ditaext;
 		this.transtype = transtype;

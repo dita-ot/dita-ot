@@ -17,7 +17,10 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
-
+/**
+ * KeyrefReader class which reads ditamap file to collect key definitions.
+ *
+ */
 public class KeyrefReader extends AbstractXMLReader {
 
 	protected static class KeyDef
@@ -46,7 +49,9 @@ public class KeyrefReader extends AbstractXMLReader {
 	
 	// flag for the start of key definition;
 	
-	
+	/**
+	 * Constructor.
+	 */
 	public KeyrefReader(){
 		javaLogger = new DITAOTJavaLogger();
 		keyDefTable = new Hashtable<String, String>();
@@ -112,7 +117,10 @@ public class KeyrefReader extends AbstractXMLReader {
 			javaLogger.logException(ex);
 		}
 	}
-
+	/**
+	 * set keys set for later comparison.
+	 * @param set keys set
+	 */
 	public void setKeys(Set<String> set){
 		this.keys = set;
 	}
@@ -164,7 +172,10 @@ public class KeyrefReader extends AbstractXMLReader {
 		}
 		keyDefAppend(Constants.GREATER_THAN);
 	}
-	
+	/**
+	 * Set temp dir.
+	 * @param tempDir temp dir
+	 */
 	public void setTempDir(String tempDir){
 		this.tempDir = tempDir;
 	}

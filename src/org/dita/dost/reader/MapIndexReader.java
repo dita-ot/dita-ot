@@ -276,7 +276,7 @@ public class MapIndexReader extends AbstractXMLReader {
      * Set the match pattern in the reader. The match pattern is used to see whether
      * current element can be include in the result of parsing.
      * 
-     * @param matchPattern
+     * @param matchPattern the match pattern
      */
     public void setMatch(String matchPattern) {
         int index = 0;

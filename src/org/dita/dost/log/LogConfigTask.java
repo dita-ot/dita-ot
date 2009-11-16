@@ -29,14 +29,14 @@ public class LogConfigTask extends Task {
 	private String logFile = null;
 	
 	/**
-	 * Default Construtor
+	 * Default Construtor.
 	 *
 	 */
 	public LogConfigTask(){		
 	}
 	/**
-	 * Task execution point
-	 * 
+	 * Task execution point.
+	 * @throws BuildException exception
 	 * @see org.apache.tools.ant.Task#execute()
 	 */
 	public void execute() throws BuildException {

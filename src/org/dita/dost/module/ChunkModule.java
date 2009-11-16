@@ -42,9 +42,15 @@ import org.dita.dost.writer.PropertiesWriter;
 import org.dita.dost.writer.TopicRefWriter;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-
+/**
+ * The chunking module class.
+ *
+ */
 public class ChunkModule implements AbstractPipelineModule {
 
+	/**
+	 * Constructor.
+	 */
 	public ChunkModule() {
 		super();
 	}
@@ -54,9 +60,9 @@ public class ChunkModule implements AbstractPipelineModule {
 	 * processes chunk attribute, writes out the "chunked" results and finally
 	 * update references pointing to "chunked" topics in other dita topics.
 	 * 
-	 * @throws DITAOTException
 	 * @param input Input parameters and resources.
 	 * @return null
+	 * @throws DITAOTException exception
 	 */
 	@SuppressWarnings("unchecked")
 	public AbstractPipelineOutput execute(AbstractPipelineInput input)

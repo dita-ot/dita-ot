@@ -43,10 +43,12 @@ public class MoveLinksModule implements AbstractPipelineModule {
 
 
     /**
-     * execution point of MoveLinksModule
-     * @param input
-     * @throws DITAOTException
-     */
+     * execution point of MoveLinksModule.
+     * @see org.dita.dost.module.AbstractPipelineModule#execute(org.dita.dost.pipeline.AbstractPipelineInput)
+	 * @param input Input parameters and resources.
+	 * @return null
+	 * @throws DITAOTException exception
+	 */
     public AbstractPipelineOutput execute(AbstractPipelineInput input) throws DITAOTException {
 
         String maplinksFile = ((PipelineHashIO)input).getAttribute(Constants.ANT_INVOKER_PARAM_MAPLINKS);

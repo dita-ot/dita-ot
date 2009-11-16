@@ -1,7 +1,6 @@
 package org.dita.dost.module;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
@@ -19,9 +18,19 @@ import org.dita.dost.util.Constants;
 import org.dita.dost.util.ListUtils;
 import org.dita.dost.util.StringUtils;
 import org.dita.dost.writer.KeyrefPaser;
-
+/**
+ * Keyref Module.
+ *
+ */
 public class KeyrefModule implements AbstractPipelineModule {
-
+	
+	/**
+	 * Entry point of KeyrefModule.
+	 * @see org.dita.dost.module.AbstractPipelineModule#execute(org.dita.dost.pipeline.AbstractPipelineInput)
+	 * @param input Input parameters and resources.
+	 * @return null
+	 * @throws DITAOTException exception
+	 */
 	public AbstractPipelineOutput execute(AbstractPipelineInput input)
 			throws DITAOTException {
 		String tempDir = ((PipelineHashIO)input).getAttribute(Constants.ANT_INVOKER_PARAM_TEMPDIR);

@@ -8,16 +8,24 @@ package org.dita.dost.platform;
 import java.util.Iterator;
 
 import org.dita.dost.util.Constants;
-
+/**
+ * CheckTranstypeAction class.
+ *
+ */
 public class CheckTranstypeAction extends ImportAction {
 
 	private StringBuffer retBuf = null;
-
+	/**
+	 * Constructor.
+	 */
 	public CheckTranstypeAction() {
 		super();
 		retBuf = new StringBuffer(Constants.INT_1024);
 	}
-
+	/**
+	 * Get result.
+	 * @return result
+	 */
 	public String getResult() {
 		Iterator<String> iter;
 		String value = null;

@@ -22,10 +22,10 @@ public interface AbstractFacade {
     /**
      * Excute the specified Java Module.
      * 
-     * @param pipelineModule
-     * @param input
+     * @param pipelineModule pipelineModule name
+     * @param input input
      * @return AbstractPipelineOutput
-     * @throws DITAOTException 
+     * @throws DITAOTException DITAOTException
      */
     AbstractPipelineOutput execute(String pipelineModule,
             AbstractPipelineInput input) throws DITAOTException;

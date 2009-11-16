@@ -23,16 +23,18 @@ import org.dita.dost.module.ModuleFactory;
 public class PipelineFacade implements AbstractFacade {
 
     /**
-     * Automatically generated constructor: PipelineFacade
+     * Automatically generated constructor: PipelineFacade.
      */
     public PipelineFacade() {
     }
 
 
     /**
-     * @throws DITAOTException 
      * @see org.dita.dost.pipeline.AbstractFacade#execute(java.lang.String, org.dita.dost.pipeline.AbstractPipelineInput)
-     * 
+     * @param input input
+     * @param pipelineModuleName pipelineModuleName
+     * @return AbstractPipelineOutput
+     * @throws DITAOTException DITAOTException
      */
     public AbstractPipelineOutput execute(String pipelineModuleName,
             AbstractPipelineInput input) throws DITAOTException {
