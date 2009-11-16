@@ -12,7 +12,9 @@
   <property name="package.output.dir" location="build\"/>
   <property name="package.name.root" value="DITA-OT"/>
   <property name="version" value="1.5"/>
-  
+  <!--This property should be edited manually in each milestone release?-->
+  <property name="milestone" value="M23"/>
+	
   <property name="src.dir" location="src/"/>
   <property name="bin.dir" location="output2/"/>
   <property name="lib.dir" location="lib/"/>
@@ -55,7 +57,18 @@
   </target>
   
   <target name="build-java" depends="init-java">
-    <javac srcdir="${src.dir}" destdir="${bin.dir}" excludes="com/**,org/dita/dost/junit/**"
+  	
+  	<!-- Copying the files to a build directory before we modify the files -->
+  	<copy todir="${bin.dir}/build">
+  		<fileset dir="${src.dir}" excludes="com/**,org/dita/dost/junit/**"/>
+  	</copy>
+  	
+  	<!-- Update the token so that we can find out what the version of DITA-OT users
+  	are using -->
+  	<replace file="${bin.dir}/build/org/dita/dost/util/Version.java" 
+  	             token="@@VERSION@@" value="${package.name.root} ${version}${milestone}"/>
+  	
+    <javac srcdir="${bin.dir}/build" destdir="${bin.dir}" excludes="com/**,org/dita/dost/junit/**"
       debug="on" source="1.5" target="1.5">
       <classpath location="lib/resolver.jar"></classpath>
     </javac>
@@ -79,6 +92,8 @@
 	<exclude name="demo/fo/fop/lib/*" />
 	<exclude name="demo/fo/lib/icu4j.jar" />
 	<exclude name="build.log"/>
+  	<include name="demo/tocjs/**"/>
+  	<include name="demo/fo/**" />
     <include name="*.*"/>
     <include name="css/**"/>
     <include name="dtd/**"/>
@@ -92,7 +107,7 @@
     <exclude name=".*"/>
   </patternset>
     
-  <patternset id="pattern.package.general">
+  <patternset id="pattern.package.full">
     <include name="*.*"/>
     <include name="ant/**"/>
     <include name="css/**"/>    
@@ -106,6 +121,7 @@
   	<include name="demo/dita132/**"/>
 	<include name="demo/fo/**" />
 	<include name="demo/legacypdf/**" />
+  	<include name="demo/tocjs/**"/>
     <include name="doc/**"/>
     <include name="dtd/**"/>
     <include name="plugins/**"/>
@@ -144,6 +160,7 @@
 		  	<include name="demo/dita132/**"/>
 			<include name="demo/fo/**" />
 			<include name="demo/legacypdf/**" />
+			<include name="demo/tocjs/**"/>
 		    <include name="doc/**"/>
 		    <include name="dtd/**"/>
 		    <include name="plugins/**"/>
@@ -191,7 +208,12 @@
   
   <target name="package-binary-minimum">
   	<sequential>
-	  	<delete dir="demo" includeemptydirs="true" failonerror="no"/>
+  		<delete failonerror="no" includeemptydirs="true">
+			<fileset dir="demo">
+				<exclude name="fo/"/>
+				<exclude name="tocjs/"/>
+			</fileset>
+  		</delete>
 	  	<ant antfile="integrator.xml" target="integrate" />
 	    <zip destfile="${package.output.dir}/${param.out.file}${win32.zip.suffix}">
 	      <zipfileset dir="./" prefix="${package.name.root}${version}">
@@ -240,7 +262,7 @@
   <target name="package-binary-full">    
     <zip destfile="${package.output.dir}/${param.out.file}${win32.zip.suffix}">
       <zipfileset dir="./" prefix="${package.name.root}${version}">
-        <patternset refid="pattern.package.general"/>
+        <patternset refid="pattern.package.full"/>
         <include name="lib/*.jar"/>
       	<patternset refid="pattern.package.ant"/>
       	<include name="lib/APACHE-LICENSE-2_0.html"/>
@@ -252,7 +274,7 @@
     <tar destfile="${package.output.dir}/${param.out.file}${linux.zip.suffix}" 
       compression="gzip" longfile="gnu">
       <tarfileset dir="./" prefix="${package.name.root}${version}">
-        <patternset refid="pattern.package.general"/>
+        <patternset refid="pattern.package.full"/>
         <include name="lib/*.jar"/>
         <patternset refid="pattern.package.ant"/>
       	<include name="lib/APACHE-LICENSE-2_0.html"/>

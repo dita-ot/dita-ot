@@ -26,6 +26,7 @@ import org.dita.dost.module.Content;
 import org.dita.dost.module.ContentImpl;
 import org.dita.dost.platform.Integrator;
 import org.dita.dost.util.Constants;
+import org.dita.dost.util.Version;
 import org.dita.dost.writer.PropertiesWriter;
 
 /**
@@ -355,7 +356,8 @@ public class CommandLineInvoker {
 	 * print dita version.
 	 */
 	private static void printVersion() {
-		System.out.println("DITA Open Toolkit 1.5");
+		//System.out.println("DITA Open Toolkit 1.5");
+		System.out.println(Version.getVersion());
 	}
 	
 	/**
