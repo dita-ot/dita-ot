@@ -106,7 +106,6 @@
   	<include name="demo/dita132/**"/>
 	<include name="demo/fo/**" />
 	<include name="demo/legacypdf/**" />
-  	<include name="demo/video/**" />
     <include name="doc/**"/>
     <include name="dtd/**"/>
     <include name="plugins/**"/>
@@ -145,7 +144,6 @@
 		  	<include name="demo/dita132/**"/>
 			<include name="demo/fo/**" />
 			<include name="demo/legacypdf/**" />
-			<include name="demo/video/**" />
 		    <include name="doc/**"/>
 		    <include name="dtd/**"/>
 		    <include name="plugins/**"/>
@@ -192,9 +190,6 @@
   </target>
   
   <target name="package-binary-minimum">
-  	<delete dir="demo" includeemptydirs="true" failonerror="no"/>
-  	<ant antfile="integrator.xml" target="integrate"/>
-  	
     <zip destfile="${package.output.dir}/${param.out.file}${win32.zip.suffix}">
       <zipfileset dir="./" prefix="${package.name.root}${version}">
         <patternset refid="pattern.package.minimum"/>
