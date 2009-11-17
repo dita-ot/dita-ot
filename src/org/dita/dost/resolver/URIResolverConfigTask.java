@@ -13,7 +13,7 @@ public class URIResolverConfigTask extends Task {
 	private String basedir = null;
 	private String tempdir = null;
 	/**
-	 * Constructor.
+	 * Construct a new instance of URIResolverConfigTask.
 	 */
 	public URIResolverConfigTask() {
 		// nop

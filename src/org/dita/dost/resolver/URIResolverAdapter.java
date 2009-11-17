@@ -14,13 +14,18 @@ import javax.xml.transform.stream.StreamSource;
 import org.xml.sax.InputSource;
 /**
  * URIResolverAdapter class, convert source into inputsteam.
- *
  */
 public class URIResolverAdapter {
 	private URIResolverAdapter() {
 		// nop
 	}
-
+	
+	/**
+	 * Translate Source object to InputSource object.
+	 * @param source target object
+	 * @return InputSource instance if target object is instance of either SAXSource, DOMSource, StreamSource
+	 *         or their derived class. null, if not.
+	 */
 	public static InputSource convertToInputSource(Source source) {
 		if(source==null){
 			return null;
@@ -46,6 +51,13 @@ public class URIResolverAdapter {
 			return null;
 		}
 	}
+	
+	/**
+	 * Translate Source object to InputStream object.
+	 * @param source target object
+	 * @return InputStream instance if target object is instance of either SAXSource, DOMSource, StreamSource
+	 *         or their derived class. null, if not.
+	 */
 	public static InputStream convertTOInputStream(Source source){
 		InputSource result=convertToInputSource(source);
 		if(result==null){
