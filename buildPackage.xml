@@ -93,6 +93,7 @@
 	<exclude name="demo/fo/lib/icu4j.jar" />
 	<exclude name="build.log"/>
   	<include name="demo/tocjs/**"/>
+  	<include name="demo/h2d/**"/>
   	<include name="demo/fo/**" />
     <include name="*.*"/>
     <include name="css/**"/>
@@ -212,6 +213,7 @@
 			<fileset dir="demo">
 				<exclude name="fo/"/>
 				<exclude name="tocjs/"/>
+				<exclude name="h2d/"/>
 			</fileset>
   		</delete>
 	  	<ant antfile="integrator.xml" target="integrate" />
