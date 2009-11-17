@@ -40,7 +40,7 @@ public class InsertAction extends DefaultHandler implements IAction, LexicalHand
 	protected int elemLevel = 0;
 	
 	/**
-	 * Default Constructor
+	 * Default Constructor.
 	 */
 	public InsertAction() {
 		fileNameSet = new LinkedHashSet<String>(Constants.INT_16);
@@ -58,6 +58,12 @@ public class InsertAction extends DefaultHandler implements IAction, LexicalHand
             //added by Alan for bug: #2893316 on Date: 2009-11-09 begin
             reader.setProperty(Constants.LEXICAL_HANDLER_PROPERTY, this);
             //added by Alan for bug: #2893316 on Date: 2009-11-09 end
+            
+            //Edited by william on 2009-11-8 for ampbug:2893664 start
+			reader.setFeature("http://apache.org/xml/features/scanner/notify-char-refs", true);
+			reader.setFeature("http://apache.org/xml/features/scanner/notify-builtin-refs", true);
+			//Edited by william on 2009-11-8 for ampbug:2893664 end
+			
         } catch (Exception e) {
         	logger.logException(e);
         }

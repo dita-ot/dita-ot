@@ -26,6 +26,10 @@ public class ConrefPushReader extends AbstractXMLReader {
 	private DITAOTJavaLogger javaLogger = null;
 	/** push table.*/
 	private XMLReader reader = null;
+	//Added by william on 2009-11-8 for ampbug:2893664 start
+	/**whether an entity needs to be resolved or not flag. */
+	private boolean needResolveEntity = true;
+	//Added by william on 2009-11-8 for ampbug:2893664 end
 	
 	/**keep the file path of current file under parse
 	filePath is useful to get the absolute path of the target file.*/
@@ -85,6 +89,13 @@ public class ConrefPushReader extends AbstractXMLReader {
 			reader = XMLReaderFactory.createXMLReader();
 			reader.setFeature(Constants.FEATURE_NAMESPACE_PREFIX, true);
 			reader.setFeature(Constants.FEATURE_NAMESPACE, true);
+			
+			//Added by william on 2009-11-8 for ampbug:2893664 start
+			reader.setProperty(Constants.LEXICAL_HANDLER_PROPERTY,this);
+			reader.setFeature("http://apache.org/xml/features/scanner/notify-char-refs", true);
+			reader.setFeature("http://apache.org/xml/features/scanner/notify-builtin-refs", true);
+			needResolveEntity = true;
+			//Added by william on 2009-11-8 for ampbug:2893664 end
 		}catch (Exception e) {
 			javaLogger.logException(e);
 		}
@@ -230,6 +241,9 @@ public class ConrefPushReader extends AbstractXMLReader {
 				buf.append(Constants.STRING_BLANK);
 				buf.append(atts.getQName(index)).append(Constants.EQUAL).append(Constants.QUOTATION);
 				String value = atts.getValue(index);
+				//Added by william on 2009-11-8 for ampbug:2893664 start
+				value = StringUtils.escapeXML(value);
+				//Added by william on 2009-11-8 for ampbug:2893664 end
 				if ("href".equals(atts.getQName(index)) ||
 						"conref".equals(atts.getQName(index))){
 					// adjust href for pushbefore and replace					
@@ -340,7 +354,7 @@ public class ConrefPushReader extends AbstractXMLReader {
 	@Override
 	public void characters(char[] ch, int start, int length)
 			throws SAXException {
-		if (this.start){
+		if (this.start && needResolveEntity){
 			pushcontent.append(StringUtils.escapeXML(ch, start, length));
 		}
 	}
@@ -368,5 +382,25 @@ public class ConrefPushReader extends AbstractXMLReader {
 			}
 		}		
 	}
-
+	
+	//Added by william on 2009-11-8 for ampbug:2893664 start
+	@Override
+	public void startEntity(String name) throws SAXException {
+		 try {
+         	needResolveEntity = StringUtils.checkEntity(name);
+         	if(!needResolveEntity){
+         		pushcontent.append(StringUtils.getEntity(name));
+         	}
+         } catch (Exception e) {
+         	//logger.logException(e);
+         }
+	}
+	
+	@Override
+	public void endEntity(String name) throws SAXException {
+		if(!needResolveEntity){
+			needResolveEntity = true;
+		}
+	}
+	//Added by william on 2009-11-8 for ampbug:2893664 end
 }

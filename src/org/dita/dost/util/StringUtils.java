@@ -123,13 +123,7 @@ public class StringUtils {
 	 * @return entity
 	 */
 	public static String getEntity(String name) {
-		//Edited by william on 2009-11-8 for ampbug:2893664 start
-		//resolve char entity
-		if (NOT_RESOLVE_ENTITY_CHAR.indexOf(Constants.STICK + name.trim()
-				+ Constants.STICK) != -1 &&!name.startsWith("%")) {
-			return "&amp;" + name + ";";
-		}
-		//Edited by william on 2009-11-8 for ampbug:2893664 end
+	
 		return (name.startsWith("%")) ? (name + ";") : ("&" + name + ";");
 	}
 
@@ -144,7 +138,7 @@ public class StringUtils {
 		if (NOT_RESOLVE_ENTITY_LIST.indexOf(Constants.STICK + name.trim()
 				+ Constants.STICK) != -1 ||
 			//Edited by william on 2009-11-8 for ampbug:2893664 start
-				NOT_RESOLVE_ENTITY_CHAR.indexOf(Constants.STICK + name.trim()
+			NOT_RESOLVE_ENTITY_CHAR.indexOf(Constants.STICK + name.trim()
 						+ Constants.STICK) != -1 ) {
 			//Edited by william on 2009-11-8 for ampbug:2893664 end
 			return false;

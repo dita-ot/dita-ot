@@ -54,6 +54,10 @@ public class ConrefPushParser extends AbstractXMLWriter {
 	private DITAOTJavaLogger javaLogger = null;
 	/**output.*/
 	private OutputStreamWriter output = null;
+	//Added by william on 2009-11-8 for ampbug:2893664 start
+	/**whether an entity needs to be resolved or not flag. */
+	private boolean needResolveEntity = true;
+	//Added by william on 2009-11-8 for ampbug:2893664 end
 	
 	/**topicSpecSet is used to store all kinds of names for elements which is 
 	specialized from <topic>. It is useful in endElement(...) because we don't
@@ -127,11 +131,17 @@ public class ConrefPushParser extends AbstractXMLWriter {
 		topicSpecSet = new HashSet<String>();
 		levelForPushAfterStack = new Stack<Integer>();
 		contentForPushAfterStack = new Stack<String>();
+		needResolveEntity = true;
 		try{
 			parser = XMLReaderFactory.createXMLReader();
 			parser.setFeature(Constants.FEATURE_NAMESPACE_PREFIX, true);
 			parser.setFeature(Constants.FEATURE_NAMESPACE, true);
 			parser.setContentHandler(this);
+			//Added by william on 2009-11-8 for ampbug:2893664 start
+			parser.setProperty(Constants.LEXICAL_HANDLER_PROPERTY,this);
+			parser.setFeature("http://apache.org/xml/features/scanner/notify-char-refs", true);
+			parser.setFeature("http://apache.org/xml/features/scanner/notify-builtin-refs", true);
+			//Added by william on 2009-11-8 for ampbug:2893664 end
 		}catch (Exception e) {
 			javaLogger.logException(e);
 		}
@@ -260,7 +270,7 @@ public class ConrefPushParser extends AbstractXMLWriter {
 	@Override
 	public void characters(char[] ch, int start, int length)
 			throws SAXException {
-		if (!isReplaced){
+		if (!isReplaced && needResolveEntity){
 			try{
 				output.write(StringUtils.escapeXML(ch, start, length));
 			}catch (Exception e) {
@@ -373,7 +383,10 @@ public class ConrefPushParser extends AbstractXMLWriter {
 								if(namedNodeMap.item(t).getNodeName() == "conref" && namedNodeMap.item(t).getNodeValue() != ""){
 									hasConref = true;
 								}
-								stringBuffer.append(Constants.STRING_BLANK).append(namedNodeMap.item(t).getNodeName()).append(Constants.EQUAL).append(Constants.QUOTATION+namedNodeMap.item(t).getNodeValue()+Constants.QUOTATION);
+								stringBuffer.append(Constants.STRING_BLANK).append(namedNodeMap.item(t).getNodeName()).
+								append(Constants.EQUAL).append(Constants.QUOTATION+
+										StringUtils.escapeXML(namedNodeMap.item(t).getNodeValue())
+										+Constants.QUOTATION);
 							}
 							stringBuffer.append(Constants.GREATER_THAN);
 							// process the child nodes of the current node
@@ -388,7 +401,10 @@ public class ConrefPushParser extends AbstractXMLWriter {
 									stringBuffer.append("<?").append(subNode.getNodeName()).append("?>");
 								}
 								if(subNode.getNodeType() == Node.TEXT_NODE){
-									stringBuffer.append(subNode.getNodeValue());
+									//stringBuffer.append(subNode.getNodeValue());
+									//Added by William on 2009-06-30 for colname bug:2811358 start
+									stringBuffer.append(StringUtils.escapeXML(subNode.getNodeValue()));
+									//Added by William on 2009-06-30 for colname bug:2811358 start
 								}
 							}
 							stringBuffer.append("</").append(targetElementName).append(Constants.GREATER_THAN);
@@ -428,7 +444,10 @@ public class ConrefPushParser extends AbstractXMLWriter {
 			if(namedNodeMap.item(i).getNodeName() == "conref" && namedNodeMap.item(i).getNodeValue() != ""){
 				hasConref = true;
 			}
-			stringBuffer.append(Constants.STRING_BLANK).append(namedNodeMap.item(i).getNodeName()).append(Constants.EQUAL).append(Constants.QUOTATION+namedNodeMap.item(i).getNodeValue()+Constants.QUOTATION);
+			stringBuffer.append(Constants.STRING_BLANK).append(namedNodeMap.item(i).getNodeName()).
+			append(Constants.EQUAL).append(Constants.QUOTATION+
+			  StringUtils.escapeXML(namedNodeMap.item(i).getNodeValue())
+			  +Constants.QUOTATION);
 		}
 		stringBuffer.append(Constants.GREATER_THAN);
 		NodeList nodeList = elem.getChildNodes();
@@ -442,7 +461,10 @@ public class ConrefPushParser extends AbstractXMLWriter {
 				stringBuffer.append("<?").append(node.getNodeName()).append("?>");
 			}
 			if(node.getNodeType() == Node.TEXT_NODE){
-				stringBuffer.append(node.getNodeValue());
+				//stringBuffer.append(node.getNodeValue());
+				//Added by William on 2009-06-30 for colname bug:2811358 start
+				stringBuffer.append(StringUtils.escapeXML(node.getNodeValue()));
+				//Added by William on 2009-06-30 for colname bug:2811358 start
 			}
 		}
 		stringBuffer.append("</").append(generalizedElemName).append(Constants.GREATER_THAN);
@@ -523,7 +545,11 @@ public class ConrefPushParser extends AbstractXMLWriter {
 						output.write(Constants.STRING_BLANK);
 						output.write(atts.getQName(index));
 						output.write("=\"");
-						output.write(atts.getValue(index));
+						//Edited by william on 2009-11-8 for ampbug:2893664 start
+						String value =  atts.getValue(index);
+						value =  StringUtils.escapeXML(value);
+						//Edited by william on 2009-11-8 for ampbug:2893664 end
+						output.write(value);
 						output.write("\"");
 					}
 					output.write(Constants.GREATER_THAN);
@@ -566,6 +592,26 @@ public class ConrefPushParser extends AbstractXMLWriter {
 	@Override
 	public void startDocument() throws SAXException {
 		super.startDocument();
-	}	
-
+	}
+	
+	//Added by william on 2009-11-8 for ampbug:2893664 start
+	@Override
+	public void startEntity(String name) throws SAXException {
+            try {
+            	needResolveEntity = StringUtils.checkEntity(name);
+            	if(!needResolveEntity){
+            		output.write(StringUtils.getEntity(name));
+            	}
+            } catch (Exception e) {
+            	//logger.logException(e);
+            }
+    }
+	
+	@Override
+	public void endEntity(String name) throws SAXException {
+		if(!needResolveEntity){
+			needResolveEntity = true;
+		}
+	}
+	//Added by william on 2009-11-8 for ampbug:2893664 end
 }

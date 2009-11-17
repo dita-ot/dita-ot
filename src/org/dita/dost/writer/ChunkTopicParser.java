@@ -1048,7 +1048,13 @@ public class ChunkTopicParser extends AbstractXMLWriter {
             reader = XMLReaderFactory.createXMLReader();
             reader.setContentHandler(this);
             reader.setProperty(Constants.LEXICAL_HANDLER_PROPERTY,this);
-            reader.setFeature(Constants.FEATURE_NAMESPACE_PREFIX, true);	
+            reader.setFeature(Constants.FEATURE_NAMESPACE_PREFIX, true);
+            
+            //Edited by william on 2009-11-8 for ampbug:2893664 start
+			reader.setFeature("http://apache.org/xml/features/scanner/notify-char-refs", true);
+			reader.setFeature("http://apache.org/xml/features/scanner/notify-builtin-refs", true);
+			//Edited by william on 2009-11-8 for ampbug:2893664 end
+			
 		} catch (Exception e) {
 			logger.logException(e);
 		}
