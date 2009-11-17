@@ -15,6 +15,7 @@ import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Vector;
+import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -29,6 +30,7 @@ import org.dita.dost.module.Content;
 import org.dita.dost.module.ContentImpl;
 import org.dita.dost.util.Constants;
 import org.dita.dost.util.FileUtils;
+import org.dita.dost.util.StringUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -174,6 +176,20 @@ public class MapMetaReader implements AbstractReader {
         		}	
         	}
         	
+			// Fix bug on SourceForge ID:#2891736
+			// Indexterm elements with either start or end attribute should not been
+			// move to referenced dita file's prolog section.
+			// <!--start
+			for (Hashtable<String, Element> resultTableEntry : resultTable.values()) {
+				for (Map.Entry<String, Element> mapEntry : resultTableEntry.entrySet()) {
+					String key = mapEntry.getKey();
+					if (Constants.ATTR_CLASS_VALUE_KEYWORDS.equals(key)) {
+						removeIndexTermRecursive(mapEntry.getValue());
+					}
+				}
+			}
+			// end -->
+        	
 			FileOutputStream file = new FileOutputStream(inputFile.getCanonicalPath()+ ".temp");
 			StreamResult res = new StreamResult(file);
 			DOMSource ds = new DOMSource(doc);
@@ -188,6 +204,36 @@ public class MapMetaReader implements AbstractReader {
         	javaLogger.logException(e);
         }
 	}
+
+	
+	//added by Alan for bug ID:#2891736 on Date: 2009-11-16 begin
+	/**
+	 * traverse the node tree and remove all indexterm elements with either start or 
+	 * end attribute.
+	 * @param parent root element
+	 */
+	private void removeIndexTermRecursive(Element parent) {
+		if (parent == null) {
+			return;
+		}
+		NodeList children = parent.getChildNodes();
+		Element child = null;
+		for (int i = 0; i < children.getLength(); i++) {
+			if(children.item(i).getNodeType() == Node.ELEMENT_NODE){
+				child = (Element) children.item(i);
+				boolean isIndexTerm = child.getAttribute(Constants.ATTRIBUTE_NAME_CLASS).contains(Constants.ATTR_CLASS_VALUE_INDEXTERM);
+				boolean hasStart = !StringUtils.isEmptyString(child.getAttribute(Constants.ATTRIBUTE_NAME_START));
+				boolean hasEnd = !StringUtils.isEmptyString(child.getAttribute(Constants.ATTRIBUTE_NAME_END));
+				
+				if(isIndexTerm && (hasStart || hasEnd)){
+					parent.removeChild(child);
+				} else{
+					removeIndexTermRecursive(child);
+				}
+			}
+		}
+	}
+	//added by Alan for bug ID:#2891736 on Date: 2009-11-16 end
 	
 	private void handleTopicref(Node topicref, Hashtable<String, Element> inheritance) {
 		Node hrefAttr = topicref.getAttributes().getNamedItem(Constants.ATTRIBUTE_NAME_HREF);
