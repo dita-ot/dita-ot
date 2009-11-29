@@ -2,32 +2,83 @@
 <!--Arbortext, Inc., 1988-2008, v.4002-->
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN"
  "concept.dtd">
+<?Pub Sty _display FontColor="red"?>
+<?Pub Inc?>
 <concept id="ditaot_c_whats_new_in_dita_ot_15" xml:lang="en-us">
 <title>What's new in DITA Open Toolkit, version 1.5</title>
 <shortdesc>Short description needed</shortdesc>
 <conbody>
 <dl><dlentry>
-<dt>New parameters</dt>
-<dd>DITA 1.5 contains the following new Ant parameters:<dl><dlentry>
-<dt>args.breadscrumbs</dt>
-<dd></dd>
+<dt>New general-processing parameters</dt>
+<dd>DITA OT 1.5 contains the following new Ant parameters:<parml>
+<plentry
+conref="ditaot_ditabase_conref.dita#reference/args.figurelink.style">
+<pt></pt>
+<pd></pd>
+</plentry><plentry
+conref="ditaot_ditabase_conref.dita#reference/args.tablelink.style">
+<pt></pt>
+<pd></pd>
+</plentry></parml></dd>
 </dlentry><dlentry>
-<dt>args.debug</dt>
-<dd></dd>
+<dt>New parameters for XHTML transformations</dt>
+<dd>DITA OT 1.5 contains the following new Ant parameters for XHTML-based
+output:<parml><plentry
+conref="ditaot_ditabase_conref.dita#reference/args.breadcrumbs">
+<pt></pt>
+<pd></pd>
+</plentry><plentry
+conref="ditaot_ditabase_conref.dita#reference/args.debug">
+<pt></pt>
+<pd></pd>
+</plentry><plentry
+conref="ditaot_ditabase_conref.dita#reference/args.gen.default.meta">
+<pt></pt>
+<pd></pd>
+</plentry><plentry
+conref="ditaot_ditabase_conref.dita#reference/args.gen.task.lbl">
+<pt></pt>
+<pd></pd>
+</plentry><plentry
+conref="ditaot_ditabase_conref.dita#reference/args.hide.parent.link">
+<pt></pt>
+<pd></pd>
+</plentry><plentry
+conref="ditaot_ditabase_conref.dita#reference/args.xhtml.classattr">
+<pt></pt>
+<pd></pd>
+</plentry></parml></dd>
 </dlentry><dlentry>
-<dt>args.gen.task.lbl</dt>
-<dd></dd>
-</dlentry><dlentry>
-<dt>args.hide.parent.link</dt>
-<dd></dd>
-</dlentry><dlentry>
-<dt>args.figurelink.style</dt>
-<dd></dd>
-</dlentry><dlentry>
-<dt>args.tablelink.style<?Pub Caret?></dt>
-<dd></dd>
-</dlentry></dl></dd>
+<dt>New parameters for PDF transformations</dt>
+<dd>DITA OT 1.5 contains the following new parameters for PDF transformations:<parml>
+<plentry
+conref="ditaot_ditabase_conref.dita#reference/args.bookmark.style">
+<pt></pt>
+<pd></pd>
+</plentry><plentry
+conref="ditaot_ditabase_conref.dita#reference/artworkPrefixUrl">
+<pt></pt>
+<pd></pd>
+</plentry><plentry
+conref="ditaot_ditabase_conref.dita#reference/customization.dir">
+<pt></pt>
+<pd></pd>
+</plentry><plentry
+conref="ditaot_ditabase_conref.dita#reference/disableRelatedLinks">
+<pt></pt>
+<pd></pd>
+</plentry><plentry
+conref="ditaot_ditabase_conref.dita#reference/document.locale">
+</plentry><plentry
+conref="ditaot_ditabase_conref.dita#reference/file.protocol.prefix">
+<pt></pt>
+<pd></pd>
+</plentry><plentry
+conref="ditaot_ditabase_conref.dita#reference/pdf.formatter">
+<pt></pt>
+<pd></pd>
+</plentry></parml><?Pub Caret?></dd>
 </dlentry></dl>
 </conbody>
 </concept>
-<?Pub *0000000863?>
+<?Pub *0000002500?>
