@@ -240,7 +240,7 @@ not provided.</note></pd>
 the root name of the JavaHelp map file. The default value is the root
 name of the DITA map file.</pd>
 </plentry><plentry id="args.javahelp.toc">
-<pt><parmname id="parmname_args.javahelp.map">args.javahelp.toc</parmname></pt>
+<pt><parmname id="parmname_args.javahelp.toc">args.javahelp.toc</parmname></pt>
 <pd id="pd_args.javahelp.toc">An optional parameter that specifies
 the root name of the JavaHelp table of contents (TOC) file. The default
 value is the root name of the DITA map file.</pd>
@@ -256,8 +256,8 @@ all transformations, the directory specified by the <parmname>args.logdir</parmn
 is used.</li>
 <li>If the value of <parmname>args.logdir</parmname> varies among
 the transformations, but the transformations share a common output
-directory, the generated log files are written to the common <?Pub
-Caret?>output directory.</li>
+directory, the generated log files are written to the common output
+directory.</li>
 <li>If the values of both <parmname>args.logdir</parmname> and <parmname>output.dir</parmname> vary
 among the transformations, the generated log files are written to
 the <parmname>basedir</parmname> directory.</li>
@@ -401,7 +401,7 @@ topics. By default, anything referenced by an &lt;xref> will be built;
 it is not part of the navigation, and is only findable if you go through
 the topic that referenced it."</draft-comment></pd>
 </plentry><plentry id="outer.control" rev="1">
-<pt><parmname id="parmname_onlytopic.in.map">outer.control</parmname></pt>
+<pt><parmname id="parmname_outer.control"><?Pub Caret?>outer.control</parmname></pt>
 <pd id="pd_outer.control">An optional parameter that specifies how
 the DITA Open Toolkit responds if files would be generated outside
 of the output directory. The following values are valid:<dl><dlentry>
@@ -585,4 +585,4 @@ Toolkit.</pd>
 </taskbody>
 </task>
 </dita>
-<?Pub *0000032958?>
+<?Pub *0000032955?>
