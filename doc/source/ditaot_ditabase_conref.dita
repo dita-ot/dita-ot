@@ -271,13 +271,13 @@ The default value is html.</pd>
 </plentry><plentry id="args.tablelink.style" rev="1">
 <pt><parmname id="parmname_args.tablelink.style">args.tablelink.style</parmname></pt>
 <pd>An optional parameter that specifies how cross references to tables
-are rendered. The valid values are figure and title. The default value
+are rendered. The valid values are number and title. The default value
 is number.</pd>
 </plentry><plentry id="args.xhtml.classattr" rev="1">
 <pt><parmname id="parmname_args.xhtml.classattr">args.xhtml.classattr</parmname></pt>
 <pd id="pd_args.xhtml.classattr">An optional parameter that specifies
-whether to include information about DITA class ancestry within generated
-XHTML elements. <ph conref="#reference/valid_values_yes_no"></ph></pd>
+whether to include information about DITA class ancestry within the
+generated XHTML elements. <ph conref="#reference/valid_values_yes_no"></ph></pd>
 </plentry><plentry id="args.xsl">
 <pt><parmname id="parmname_args.xsl">args.xsl</parmname></pt>
 <pd id="pd_args.xsl">An optional parameter that specifies the XSL
@@ -401,7 +401,7 @@ topics. By default, anything referenced by an &lt;xref> will be built;
 it is not part of the navigation, and is only findable if you go through
 the topic that referenced it."</draft-comment></pd>
 </plentry><plentry id="outer.control" rev="1">
-<pt><parmname id="parmname_outer.control"><?Pub Caret?>outer.control</parmname></pt>
+<pt><parmname id="parmname_outer.control">outer.control</parmname></pt>
 <pd id="pd_outer.control">An optional parameter that specifies how
 the DITA Open Toolkit responds if files would be generated outside
 of the output directory. The following values are valid:<dl><dlentry>
@@ -435,6 +435,32 @@ The default value is true.</pd>
 <pd id="pd_args.xhtml.toc">An optional parameter that specifies the
 name of the table of contents (TOC) file for the XHTML transformation.
 The default value is index.</pd>
+</plentry>
+<!--New PDF parameters-->
+<plentry id="args.bookmark.style">
+<pt><parmname>args.bookmark.style</parmname></pt>
+<pd>Description needed</pd>
+</plentry><plentry id="artworkPrefixUrl">
+<pt><parmname>artworkPrefixUrl</parmname></pt>
+<pd>Description needed</pd>
+</plentry><plentry id="customization.dir">
+<pt><parmname>customization.dir</parmname></pt>
+<pd>Description needed</pd>
+</plentry><plentry id="disableRelatedLinks">
+<pt><parmname>disableRelatedLinks</parmname></pt>
+<pd>Description needed</pd>
+</plentry><plentry id="document.locale">
+<pt><parmname>document.locale</parmname></pt>
+<pd>Description needed</pd>
+</plentry><plentry id="file.protocol.prefix">
+<pt><parmname>file.protocol.prefix</parmname></pt>
+<pd>Description needed</pd>
+</plentry><plentry id="pdf.formatter">
+<pt><parmname>pdf.formatter</parmname></pt>
+<pd>Description needed</pd>
+</plentry><plentry id="publish.required.cleanup">
+<pt><parmname>publish.required.cleanup</parmname></pt>
+<pd>Description needed</pd><?Pub Caret?>
 </plentry></parml></section>
 <section>       <title>Parameters used for the Java command-line interface</title> 
      <parml><plentry id="artlbl">
@@ -585,4 +611,4 @@ Toolkit.</pd>
 </taskbody>
 </task>
 </dita>
-<?Pub *0000032955?>
+<?Pub *0000033952?>
