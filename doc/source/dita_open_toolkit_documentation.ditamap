@@ -5,9 +5,12 @@
 <?Pub Sty _display FontColor="red"?>
 <map title="DITA Open Toolkit documentation" xml:lang="en-us">
 <topicgroup>
+<topicref href="ditaot_ditabase_conref.dita" linking="none"
+navtitle="Reuse topic" print="no" search="no" toc="no"></topicref>
 <topicref href="ditaot_c_overview_of_the_dita_open_toolkit.dita"
 navtitle="Overview of the DITA Open Toolkit" type="concept"></topicref>
-<topicref href="ditaot_c_whats_new_in_dita_ot_15.dita"></topicref>
+<topicref href="ditaot_c_whats_new_in_dita_ot_15.dita"
+navtitle="What's new in the DITA Open Toolkit, version 1.5"></topicref>
 <topicref href="ditaot_t_installing.dita" navtitle="Installing">
 <topicref href="ditaot_c_prerequisite_software.dita"
 navtitle="Prerequisite software"></topicref>
@@ -106,7 +109,7 @@ navtitle="Java command-line parameters">
 <topicref href="ditaot_r_xhtml.dita" navtitle="xhtml"></topicref>
 </topicref>
 <topicref href="ditaot_r_xslt_parameters.dita" navtitle="XSLT parameters">
-</topicref><?Pub Caret1?>
+</topicref>
 </topicref>
 </topicgroup>
 <reltable title="CTR">
@@ -141,4 +144,4 @@ navtitle="Java command-line parameters"></topicref>
 </relrow>
 </reltable>
 </map>
-<?Pub *0000006035?>
+<?Pub *0000006208?>
