@@ -6,9 +6,11 @@
 <?Pub Inc?>
 <reference id="ditaot_r_xslt_parameters" xml:lang="en-us">
 <title>XSLT parameters</title>
-<shortdesc>Short description needed</shortdesc><?Pub Caret?>
+<shortdesc>If you are writing XSLT overrides or creating plug-ins
+that modify the default values for the Ant parameters, you need to
+know the XSLT parameters that correspond to the Ant parameters</shortdesc>
 <refbody>
-<section><table><title></title>
+<section><table>
 <tgroup cols="2"><colspec colname="col1"/><colspec colname="col2"/>
 <thead>
 <row valign="bottom">
@@ -29,23 +31,8 @@ conref="ditaot_ditabase_conref.dita#reference/parmname_args.breadcrumbs"></parmn
 </row>
 <row>
 <entry colname="col1"><parmname
-conref="ditaot_ditabase_conref.dita#reference/parmname_args.copycss"></parmname></entry>
-<entry colname="col2"><parmname></parmname></entry>
-</row>
-<row>
-<entry colname="col1"><parmname
-conref="ditaot_ditabase_conref.dita#reference/parmname_args.css"></parmname></entry>
-<entry colname="col2"><parmname></parmname></entry>
-</row>
-<row>
-<entry colname="col1"><parmname
 conref="ditaot_ditabase_conref.dita#reference/parmname_args.csspath"></parmname></entry>
 <entry colname="col2"><parmname>CSSPATH</parmname></entry>
-</row>
-<row>
-<entry colname="col1"><parmname
-conref="ditaot_ditabase_conref.dita#reference/parmname_args.cssroot"></parmname></entry>
-<entry colname="col2"><parmname></parmname></entry>
 </row>
 <row>
 <entry colname="col1"><parmname
@@ -54,53 +41,13 @@ conref="ditaot_ditabase_conref.dita#reference/parmname_args.debug"></parmname></
 </row>
 <row>
 <entry colname="col1"><parmname
-conref="ditaot_ditabase_conref.dita#reference/parmname_args.dita.locale"></parmname></entry>
-<entry colname="col2"><parmname></parmname></entry>
-</row>
-<row>
-<entry colname="col1"><parmname
 conref="ditaot_ditabase_conref.dita#reference/parmname_args.draft"></parmname></entry>
 <entry colname="col2"><parmname>DRAFT</parmname></entry>
 </row>
 <row>
 <entry colname="col1"><parmname
-conref="ditaot_ditabase_conref.dita#reference/parmname_args.eclipse.provider"></parmname></entry>
-<entry colname="col2"><parmname></parmname></entry>
-</row>
-<row>
-<entry colname="col1"><parmname
-conref="ditaot_ditabase_conref.dita#reference/parmname_args.eclipse.version"></parmname></entry>
-<entry colname="col2"><parmname></parmname></entry>
-</row>
-<row>
-<entry colname="col1"><parmname
-conref="ditaot_ditabase_conref.dita#reference/parmname_args.eclipsecontent.toc"></parmname></entry>
-<entry colname="col2"><parmname></parmname></entry>
-</row>
-<row>
-<entry colname="col1"><parmname
-conref="ditaot_ditabase_conref.dita#reference/parmname_args.eclipsehelp.toc"></parmname></entry>
-<entry colname="col2"><parmname></parmname></entry>
-</row>
-<row>
-<entry colname="col1"><parmname
 conref="ditaot_ditabase_conref.dita#reference/parmname_arg.figurelink.style"></parmname></entry>
 <entry colname="col2"><parmname>FIGURELINK</parmname></entry>
-</row>
-<row>
-<entry colname="col1"><parmname
-conref="ditaot_ditabase_conref.dita#reference/parmname_args.fo.img.ext"></parmname></entry>
-<entry colname="col2"><parmname></parmname></entry>
-</row>
-<row>
-<entry colname="col1"><parmname
-conref="ditaot_ditabase_conref.dita#reference/parmname_args.fo.output.rel.links"></parmname></entry>
-<entry colname="col2"><parmname></parmname></entry>
-</row>
-<row>
-<entry colname="col1"><parmname
-conref="ditaot_ditabase_conref.dita#reference/parmname_args.fo.userconfig"></parmname></entry>
-<entry colname="col2"><parmname></parmname></entry>
 </row>
 <row>
 <entry colname="col1"><parmname
@@ -111,11 +58,6 @@ conref="ditaot_ditabase_conref.dita#reference/parmname_args.ftr"></parmname></en
 <entry colname="col1"><parmname
 conref="ditaot_ditabase_conref.dita#reference/parmname_args.gen.default.meta"></parmname></entry>
 <entry colname="col2"><parmname>genDefMeta</parmname></entry>
-</row>
-<row>
-<entry colname="col1"><parmname
-conref="ditaot_ditabase_conref.dita#reference/parmname_args.gen.default.meta"></parmname></entry>
-<entry colname="col2"></entry>
 </row>
 <row>
 <entry colname="col1"><parmname
@@ -144,103 +86,22 @@ conref="ditaot_ditabase_conref.dita#reference/parmname_args.indexshow"></parmnam
 </row>
 <row>
 <entry colname="col1"><parmname
-conref="ditaot_ditabase_conref.dita#reference/parmname_args.input"></parmname></entry>
-<entry colname="col2"><parmname></parmname></entry>
-</row>
-<row>
-<entry colname="col1"><parmname
-conref="ditaot_ditabase_conref.dita#reference/parmname_args.javahelp.map"></parmname></entry>
-<entry colname="col2"><parmname></parmname></entry>
-</row>
-<row>
-<entry colname="col1"><parmname
-conref="ditaot_ditabase_conref.dita#reference/parmname_args.javahelp.map"></parmname><parmname
-conref="ditaot_ditabase_conref.dita#reference/parmname_args.logdir"></parmname></entry>
-<entry colname="col2"><parmname></parmname></entry>
-</row>
-<row>
-<entry colname="col1"><parmname
 conref="ditaot_ditabase_conref.dita#reference/parmname_args.outext"></parmname></entry>
 <entry colname="col2"><parmname>OUTEXT</parmname></entry>
 </row>
 <row>
 <entry colname="col1"><parmname
 conref="ditaot_ditabase_conref.dita#reference/parmname_args.tablelink.style"></parmname></entry>
-<entry colname="col2"><parmname></parmname></entry>
+<entry colname="col2"><parmname>TABLELINK<?Pub Caret?></parmname></entry>
 </row>
 <row>
 <entry colname="col1"><parmname
 conref="ditaot_ditabase_conref.dita#reference/parmname_args.xhtml.classattr"></parmname></entry>
 <entry colname="col2"><parmname>PRESERVE-DITA-CLASS</parmname></entry>
 </row>
-<row>
-<entry colname="col1"><parmname
-conref="ditaot_ditabase_conref.dita#reference/parmname_args.xsl"></parmname></entry>
-<entry colname="col2"><parmname></parmname></entry>
-</row>
-<row>
-<entry colname="col1"><parmname
-conref="ditaot_ditabase_conref.dita#reference/parmname_basedir"></parmname></entry>
-<entry colname="col2"><parmname></parmname></entry>
-</row>
-<row>
-<entry colname="col1"><parmname
-conref="ditaot_ditabase_conref.dita#reference/parmname_clean.temp"></parmname></entry>
-<entry colname="col2"><parmname></parmname></entry>
-</row>
-<row>
-<entry colname="col1"><parmname
-conref="ditaot_ditabase_conref.dita#reference/parmname_dita.dir"></parmname></entry>
-<entry colname="col2"><parmname></parmname></entry>
-</row>
-<row>
-<entry colname="col1"><parmname
-conref="ditaot_ditabase_conref.dita#reference/parmname_dita.extname"></parmname></entry>
-<entry colname="col2"><parmname></parmname></entry>
-</row>
-<row>
-<entry colname="col1"></entry>
-<entry colname="col2"><parmname></parmname></entry>
-</row>
-<row>
-<entry colname="col1"><parmname
-conref="ditaot_ditabase_conref.dita#reference/parmname_dita.input"></parmname></entry>
-<entry colname="col2"><parmname></parmname></entry>
-</row>
-<row>
-<entry colname="col1"><parmname
-conref="ditaot_ditabase_conref.dita#reference/parmname_dita.input.dirname"></parmname><parmname
-conref="ditaot_ditabase_conref.dita#reference/parmname_dita.input.valfile"></parmname></entry>
-<entry colname="col2"><parmname></parmname></entry>
-</row>
-<row>
-<entry colname="col1"><parmname
-conref="ditaot_ditabase_conref.dita#reference/parmname_dita.temp.dir"></parmname></entry>
-<entry colname="col2"><parmname></parmname></entry>
-</row>
-<row>
-<entry colname="col1"><parmname
-conref="ditaot_ditabase_conref.dita#reference/parmname_generate.copy.outer"></parmname></entry>
-<entry colname="col2"><parmname></parmname></entry>
-</row>
-<row>
-<entry colname="col1"><parmname
-conref="ditaot_ditabase_conref.dita#reference/parmname_onlytopic.in.map"></parmname></entry>
-<entry colname="col2"><parmname></parmname></entry>
-</row>
-<row>
-<entry colname="col1"><parmname
-conref="ditaot_ditabase_conref.dita#reference/parmname_output.dir"></parmname></entry>
-<entry colname="col2"><parmname></parmname></entry>
-</row>
-<row>
-<entry colname="col1"><parmname
-conref="ditaot_ditabase_conref.dita#reference/parmname_validate"></parmname></entry>
-<entry colname="col2"><parmname></parmname></entry>
-</row>
 </tbody>
 </tgroup>
 </table></section>
 </refbody>
 </reference>
-<?Pub *0000009187?>
+<?Pub *0000003990?>
