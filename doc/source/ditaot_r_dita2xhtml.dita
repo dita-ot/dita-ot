@@ -16,6 +16,10 @@ conref="ditaot_ditabase_conref.dita#reference/args.artlbl">
 <pt></pt>
 <pd></pd>
 </plentry><plentry
+conref="ditaot_ditabase_conref.dita#reference/args.breadcrumbs">
+<pt></pt>
+<pd></pd>
+</plentry><plentry
 conref="ditaot_ditabase_conref.dita#reference/args.copycss">
 <pt></pt>
 <pd></pd>
@@ -36,6 +40,10 @@ conref="ditaot_ditabase_conref.dita#reference/args.cssroot">
 <pt></pt>
 <pd></pd>
 </plentry><plentry
+conref="ditaot_ditabase_conref.dita#reference/args.debug">
+<pt></pt>
+<pd></pd>
+</plentry><plentry
 conref="ditaot_ditabase_conref.dita#reference/args.draft">
 <pt></pt>
 <pd></pd>
@@ -48,11 +56,23 @@ conref="ditaot_ditabase_conref.dita#reference/args.ftr">
 <pt></pt>
 <pd></pd>
 </plentry><plentry
+conref="ditaot_ditabase_conref.dita#reference/args.gen.default.meta">
+<pt></pt>
+<pd></pd>
+</plentry><plentry
+conref="ditaot_ditabase_conref.dita#reference/args.gen.task.lbl">
+<pt></pt>
+<pd></pd>
+</plentry><plentry
 conref="ditaot_ditabase_conref.dita#reference/args.hdf">
 <pt></pt>
 <pd></pd>
 </plentry><plentry
 conref="ditaot_ditabase_conref.dita#reference/args.hdr">
+<pt></pt>
+<pd></pd>
+</plentry><plentry
+conref="ditaot_ditabase_conref.dita#reference/args.hide.parent.link">
 <pt></pt>
 <pd></pd>
 </plentry><plentry
@@ -81,6 +101,10 @@ conref="ditaot_ditabase_conref.dita#reference/args.outext">
 of Contents (TOC) file. The default value is index.</pd>
 </plentry><plentry
 conref="ditaot_ditabase_conref.dita#reference/args.tablelink.style">
+<pt></pt>
+<pd></pd>
+</plentry><plentry
+conref="ditaot_ditabase_conref.dita#reference/args.xhtml.classattr">
 <pt></pt>
 <pd></pd>
 </plentry><?Pub Caret?><plentry
@@ -141,4 +165,4 @@ conref="ditaot_ditabase_conref.dita#reference/validate">
 </plentry></parml></section>
 </refbody>
 </reference>
-<?Pub *0000003889?>
+<?Pub *0000004522?>
