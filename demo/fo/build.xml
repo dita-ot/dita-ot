@@ -328,20 +328,30 @@ with those set forth herein.
           </and>
         </condition>
         
-        <!--We try to hunt for Antenna House in different directories-->
+        <!--We try to hunt for Antenna House in different directories.
+            This should really be set externally, but we're incorporating
+            existing Antenna House tools which provided this feature.  -->
+        
         <condition property="axf.path" value="${env.AXF_DIR}">
           <and>
             <isset property="env.AXF_DIR"/>
             <or>
               <available file="${env.AXF_DIR}/run.sh"/>
               <available file="${env.AXF_DIR}/XSLCmd.exe"/>
+              <available file="${env.AXF_DIR}/AHFCmd.exe"/>
             </or>
+          </and>
+        </condition>
+        <condition property="axf.path" value="C:\Program Files\AntennaHouse\AHFormatterV51">
+          <and>
+            <not><isset property="axf.path"/></not>
+            <available file="C:\Program Files\AntennaHouse\AHFormatterV51\AHFCmd.exe"/>
           </and>
         </condition>
         <condition property="axf.path" value="C:\Program Files\AntennaHouse\AHFormatterV5">
           <and>
             <not><isset property="axf.path"/></not>
-            <available file="C:\Program Files\AntennaHouse\AHFormatterV5\XSLCmd.exe"/>
+            <available file="C:\Program Files\AntennaHouse\AHFormatterV5\AHFCmd.exe"/>
           </and>
         </condition>
         <condition property="axf.path" value="C:\Program Files\Antenna\XSLFormatterV43">
@@ -375,10 +385,13 @@ with those set forth herein.
           </and>
         </condition>
         
-        <!-- run.sh on Linux, XSLCmd.exe on Windows -->
+        <!-- run.sh on Linux, AHFCmd.exe or XSLCmd.exe on Windows -->
         <condition property="fo.ah.program.name" value="run.sh">
           <os family="unix"/>
         </condition>
+        <condition property="fo.ah.program.name" value="AHFCmd.exe">
+            <available file="${axf.path}/AHFCmd.exe"/>
+        </condition>        
         <condition property="fo.ah.program.name" value="XSLCmd.exe">
           <not>
             <isset property="fo.ah.program.name" />
