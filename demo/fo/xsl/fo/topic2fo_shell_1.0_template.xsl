@@ -63,6 +63,8 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:import href="front-matter_1.0.xsl"/>
     <xsl:import href="preface.xsl"/>
 
+    <xsl:import href="task-elements.xsl"/>
+
     <xsl:import href="sw-domain.xsl"/>
     <xsl:import href="pr-domain.xsl"/>
     <xsl:import href="hi-domain.xsl"/>

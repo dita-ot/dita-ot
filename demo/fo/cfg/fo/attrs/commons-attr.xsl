@@ -613,41 +613,6 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:attribute-set name="refsyn">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="task">
-    </xsl:attribute-set>
-
-    <xsl:attribute-set name="taskbody">
-    </xsl:attribute-set>
-
-    <xsl:attribute-set name="prereq">
-    </xsl:attribute-set>
-
-    <xsl:attribute-set name="context">
-    </xsl:attribute-set>
-
-    <xsl:attribute-set name="cmd">
-    </xsl:attribute-set>
-
-    <xsl:attribute-set name="info">
-        <xsl:attribute name="space-before.optimum">3pt</xsl:attribute>
-        <xsl:attribute name="space-after.optimum">3pt</xsl:attribute>
-    </xsl:attribute-set>
-
-    <xsl:attribute-set name="tutorialinfo">
-    </xsl:attribute-set>
-
-    <xsl:attribute-set name="stepresult">
-    </xsl:attribute-set>
-
-    <xsl:attribute-set name="result">
-    </xsl:attribute-set>
-
-    <xsl:attribute-set name="postreq">
-    </xsl:attribute-set>
-
-    <xsl:attribute-set name="stepxmp">
-    </xsl:attribute-set>
-
     <xsl:attribute-set name="metadata">
     </xsl:attribute-set>
 
