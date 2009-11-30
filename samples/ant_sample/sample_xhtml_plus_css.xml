@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+     Sourceforge.net. See the accompanying license.txt file for 
+     applicable licenses.-->
+<!-- (c) Copyright IBM Corp. 2004, 2009 All Rights Reserved. -->
+
+<!-- 
+  | basedir can be specified to other places base on your need.
+  |
+  | Note: input, output, and temp directories will base on the basedir if 
+  | they are relative paths.
+  * -->
+
+<project name="sample_xhtml_plus_css" default="sample2xhtml_plus_css" basedir=".">
+  
+  <!-- dita.dir should point to the toolkit's root directory -->
+  <property name="dita.dir" value="${basedir}${file.separator}..${file.separator}.."/>
+  
+  <property name="sample.output.dir" value="out${file.separator}xhtml_plus_css"/>
+  <property name="css.source.dir" value="${dita.dir}${file.separator}samples${file.separator}css"/>
+
+  <!-- if file is a relative file name, the file name will be resolved 
+       relative to the importing file -->
+  <import file="${dita.dir}${file.separator}integrator.xml"/>
+  
+  <target name="sample2xhtml_plus_css" depends="integrate">
+    <echo>This sample file uses a simple CSS file to create
+a new, more colorful look and feel for generated
+XHTML files.</echo>
+
+    <ant antfile="${dita.dir}${file.separator}build.xml" target="init">
+      <!-- please refer to the toolkit's document for supported parameters, and 
+           specify them base on your needs -->
+      <property name="args.input"
+        value="${dita.dir}${file.separator}samples${file.separator}hierarchy.ditamap"/>
+      <property name="output.dir"
+        value="${sample.output.dir}"/>
+      <property name="transtype" value="xhtml"/>
+
+      <!-- args.css = the name of the CSS file -->
+      <property name="args.css"
+        value="style.css"/>
+      <!-- args.csspath = the path relative to the output directory; in
+           this case, the CSS will be in out/css -->
+      <property name="args.csspath"
+        value="css"/>
+      <!-- args.copycss = whether to copy the CSS file to the output directory. -->
+      <property name="args.copycss"
+        value="yes"/>
+      <!-- args.cssroot = where to find the CSS file on the local file system. -->
+      <property name="args.cssroot"
+        value="${css.source.dir}"/>
+    </ant>
+
+    <!-- The toolkit currently does not scan CSS files to retrieve
+         related resources. The sample CSS above references two JPG files;
+         copy those files to the output CSS directory (output.dir + csspath). -->
+    <copy todir="${sample.output.dir}${file.separator}css">
+        <fileset dir="${css.source.dir}"
+            includes="*.jpg"/>
+    </copy>
+
+  </target>
+</project>
