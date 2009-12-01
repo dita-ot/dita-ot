@@ -191,6 +191,7 @@
         <patternset refid="pattern.package.standard"/>
         <include name="src/**"/>
       	<include name="lib/APACHE-LICENSE-2_0.html"/>
+      	<include name="lib/commons-logging-1.1.1.jar"/>
         <exclude name="files.txt"/>
         <exclude name="startcmd.*"/>
       </zipfileset>
@@ -201,6 +202,7 @@
         <patternset refid="pattern.package.standard"/>
         <include name="src/**"/>
       	<include name="lib/APACHE-LICENSE-2_0.html"/>
+      	<include name="lib/commons-logging-1.1.1.jar"/>
         <exclude name="files.txt"/>
         <exclude name="startcmd.*"/>
       </tarfileset>
@@ -221,6 +223,7 @@
 	      <zipfileset dir="./" prefix="${package.name.root}${version}">
 	        <patternset refid="pattern.package.minimum"/>
 	        <include name="lib/dost.jar"/>
+	      	<include name="lib/commons-logging-1.1.1.jar"/>
 	        <exclude name="startcmd.*"/>
 	        <exclude name="buildPackage.xml" />
 	      </zipfileset>      
@@ -231,6 +234,7 @@
 	      <tarfileset dir="./" prefix="${package.name.root}${version}">
 	        <patternset refid="pattern.package.minimum"/>
 	        <include name="lib/dost.jar"/>
+	      	<include name="lib/commons-logging-1.1.1.jar"/>
 	        <exclude name="startcmd.*"/>
 	        <exclude name="buildPackage.xml" />
 	      </tarfileset>      
@@ -243,6 +247,7 @@
       <zipfileset dir="./" prefix="${package.name.root}${version}">
         <patternset refid="pattern.package.standard"/>
         <include name="lib/dost.jar"/>
+      	<include name="lib/commons-logging-1.1.1.jar"/>
       	<include name="lib/APACHE-LICENSE-2_0.html"/>
         <exclude name="startcmd.*"/>
 		<exclude name="buildPackage.xml" />
@@ -254,6 +259,7 @@
       <tarfileset dir="./" prefix="${package.name.root}${version}">
         <patternset refid="pattern.package.standard"/>
         <include name="lib/dost.jar"/>
+		<include name="lib/commons-logging-1.1.1.jar"/>
       	<include name="lib/APACHE-LICENSE-2_0.html"/>
         <exclude name="startcmd.*"/>
 		<exclude name="buildPackage.xml" />
