@@ -4,7 +4,7 @@
 <!-- ============================================================= -->
 <!--  MODULE:    DITA DITA Topic                                   -->
 <!--  VERSION:   1.2                                               -->
-<!--  DATE:      November 2006                                     -->
+<!--  DATE:      November 2009                                     -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -26,7 +26,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Topic//EN"
 <!-- ORIGINAL CREATION DATE:                                       -->
 <!--             March 2001                                        -->
 <!--                                                               -->
-<!--             (C) Copyright OASIS Open 2005, 2006.              -->
+<!--             (C) Copyright OASIS Open 2005, 2009.              -->
 <!--             (C) Copyright IBM Corporation 2001, 2004.         -->
 <!--             All Rights Reserved.                              -->
 <!--                                                               -->

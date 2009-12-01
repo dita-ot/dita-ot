@@ -4,7 +4,7 @@
 <!-- ============================================================= -->
 <!--  MODULE:    DITA BASE DTD                                     -->
 <!--  VERSION:   1.2                                               -->
-<!--  DATE:      November 2006                                     -->
+<!--  DATE:      November 2009                                     -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -29,7 +29,7 @@ PUBLIC "-//OASIS//DTD DITA 1.2 Composite//EN"                      -->
 <!-- ORIGINAL CREATION DATE:                                       -->
 <!--             March 2001                                        -->
 <!--                                                               -->
-<!--             (C) Copyright OASIS Open 2005, 2006.              -->
+<!--             (C) Copyright OASIS Open 2005, 2009.              -->
 <!--             (C) Copyright IBM Corporation 2001, 2004.         -->
 <!--             All Rights Reserved.                              -->
 <!--                                                               -->
@@ -41,6 +41,8 @@ PUBLIC "-//OASIS//DTD DITA 1.2 Composite//EN"                      -->
 <!--    2008.02.01 RDA: Added references to topic ENT files        -->
 <!--    2008.02.12 RDA: Modify imbeds to use specific 1.2 version  -->
 <!--    2008.04.15 RDA: Added hazard domain                        -->
+<!--    2009.11.10 RDA: Added taskbody constraint                  -->
+<!--    2009.11.10 RDA: Added glossgroup                           -->
 <!-- ============================================================= -->
 
 
@@ -53,10 +55,15 @@ PUBLIC "-//OASIS//DTD DITA 1.2 Composite//EN"                      -->
          "concept.ent"
 >%concept-dec;
 
-<!ENTITY % glossary-dec     
-  PUBLIC "-//OASIS//ENTITIES DITA 1.2 Glossary//EN" 
-         "glossary.ent"
->%glossary-dec;
+<!ENTITY % glossentry-dec     
+  PUBLIC "-//OASIS//ENTITIES DITA 1.2 Glossary Entry//EN" 
+         "glossentry.ent"
+>%glossentry-dec;
+
+<!ENTITY % glossgroup-dec     
+  PUBLIC "-//OASIS//ENTITIES DITA 1.2 Glossary Group//EN" 
+         "glossgroup.ent"
+>%glossgroup-dec;
 
 <!ENTITY % reference-dec     
   PUBLIC "-//OASIS//ENTITIES DITA 1.2 Reference//EN" 
@@ -174,7 +181,7 @@ PUBLIC "-//OASIS//DTD DITA 1.2 Composite//EN"                      -->
 <!ENTITY % glossentry-info-types 
                         "no-topic-nesting"                           >
 <!ENTITY % info-types   "topic | concept | task | reference |
-                         glossentry"                                 >
+                         glossentry | glossgroup"                    >
 
 
 <!-- ============================================================= -->
@@ -205,9 +212,18 @@ PUBLIC "-//OASIS//DTD DITA 1.2 Composite//EN"                      -->
                            &pr-d-att; 
                            &sw-d-att;
                            &ui-d-att; 
+                           &taskbody-constraints; 
   "
 >
 
+<!-- ============================================================= -->
+<!--                    CONTENT CONSTRAINT INTEGRATION             -->
+<!-- ============================================================= -->
+
+<!ENTITY % strictTaskbody-c-def  
+  PUBLIC "-//OASIS//ELEMENTS DITA 1.2 Strict Taskbody Constraint//EN" 
+  "strictTaskbodyConstraint.mod">
+%strictTaskbody-c-def;
 
 <!-- ============================================================= -->
 <!--                    TOPIC ELEMENT INTEGRATION                  -->
@@ -239,12 +255,18 @@ PUBLIC "-//OASIS//DTD DITA 1.2 Composite//EN"                      -->
 "reference.mod">
 %reference-typemod;
 
-<!--                    Embed glossary to get specific elements    -->
-<!ENTITY % glossary-typemod 
+<!--                    Embed glossary entry to get specific elements    -->
+<!ENTITY % glossentry-typemod 
                         PUBLIC 
-"-//OASIS//ELEMENTS DITA 1.2 Glossary//EN" 
-"glossary.mod">
-%glossary-typemod;
+"-//OASIS//ELEMENTS DITA 1.2 Glossary Entry//EN" 
+"glossentry.mod">
+%glossentry-typemod;
+
+<!ENTITY % glossgroup-typemod 
+                        PUBLIC 
+"-//OASIS//ELEMENTS DITA 1.2 Glossary Group//EN" 
+"glossgroup.mod"                                                     >                                                     
+%glossgroup-typemod;
 
 <!-- ============================================================= -->
 <!--                    DOMAIN ELEMENT INTEGRATION                 -->

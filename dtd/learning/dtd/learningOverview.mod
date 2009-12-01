@@ -4,7 +4,7 @@
 <!-- ============================================================= -->
 <!--  MODULE:    DITA learningOverview                             -->
 <!--  VERSION:   1.2                                               -->
-<!--  DATE:      May 2007                                          -->
+<!--  DATE:      November 2009                                     -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -26,7 +26,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Learning Overview//EN"
 <!-- ORIGINAL CREATION DATE:                                       -->
 <!--             May 2007                                          -->
 <!--                                                               -->
-<!--             (C) Copyright OASIS Open 2007, 2008.              -->
+<!--             (C) Copyright OASIS Open 2007, 2009.              -->
 <!--             All Rights Reserved.                              -->
 <!-- ============================================================= -->
 
@@ -39,7 +39,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Learning Overview//EN"
 <!ENTITY % learningOverviewbody "learningOverviewbody">
 
 
-<!ENTITY % learningOverview-info-types "">
+<!ENTITY % learningOverview-info-types "no-topic-nesting">
 <!ENTITY included-domains 
                         "" >
 

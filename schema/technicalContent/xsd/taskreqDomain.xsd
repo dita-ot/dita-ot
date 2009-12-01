@@ -4,10 +4,9 @@
 <!-- ============================================================= -->
 <!-- MODULE:    Machine Industry Task Domain -->
 <!-- VERSION:   1.2 -->
-<!-- DATE:      September 2008  -->
+<!-- DATE:      September 2009  -->
 <!---->
 <!-- ============================================================= -->
-
 <!-- ============================================================= -->
 <!-- SYSTEM:     Darwin Information Typing Architecture (DITA) -->
 <!---->
@@ -17,17 +16,20 @@
 <!-- ORIGINAL CREATION DATE: -->
 <!-- September 2007 -->
 <!---->
-<!-- (C) Copyright OASIS Open 2007, 2008. -->
+<!-- (C) Copyright OASIS Open 2007, 2009. -->
 <!-- All Rights Reserved. -->
 <!-- UPDATES: -->
+<!--    2009.10.20 CHK: Make safecond unbound               -->
 <!-- ============================================================= -->
-
+<!-- ================== DITA Machine Industry Task Domain  =================== -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
    <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="urn:oasis:names:tc:dita:xsd:xml.xsd:1.2"/>
    <xs:import namespace="http://dita.oasis-open.org/architecture/2005/" schemaLocation="urn:oasis:names:tc:dita:xsd:ditaarch.xsd:1.2"/>
   
   <xs:annotation>
-    <xs:appinfo>(topic task taskreq-d)</xs:appinfo>
+    <xs:appinfo>
+      <dita:domainsModule xmlns:dita="http://dita.oasis-open.org/architecture/2005/">(topic task taskreq-d)</dita:domainsModule>
+    </xs:appinfo>
     <xs:documentation> 
     
     </xs:documentation>
@@ -711,7 +713,7 @@
   <xs:complexType name="safety.content">
     <xs:choice>
       <xs:group ref="nosafety"/>
-      <xs:group ref="safecond"/>
+       <xs:group ref="safecond" maxOccurs="unbounded"/>
     </xs:choice>
   </xs:complexType>
   <xs:attributeGroup name="safety.attributes">

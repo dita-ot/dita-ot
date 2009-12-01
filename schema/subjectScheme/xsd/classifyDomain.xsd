@@ -4,7 +4,7 @@
 <!-- ============================================================= -->
 <!-- MODULE:    DITA Subject Classification Domain -->
 <!-- VERSION:   1.2 -->
-<!-- DATE:      February 2008 -->
+<!-- DATE:      February 2009 -->
 <!---->
 <!-- ============================================================= -->
 <!-- ============================================================= -->
@@ -19,9 +19,9 @@
 <!-- for Map Subject Classification Domain -->
 <!---->
 <!-- ORIGINAL CREATION DATE: -->
-<!-- February 2008 -->
+<!-- February 2009 -->
 <!---->
-<!-- (C) Copyright OASIS Open 2008. -->
+<!-- (C) Copyright OASIS Open 2009. -->
 <!-- (C) Copyright IBM Corporation 2005, 2007. -->
 <!-- All Rights Reserved. -->
 <!---->
@@ -31,14 +31,13 @@
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
   xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
 
-
-  <xs:import namespace="http://www.w3.org/XML/1998/namespace"
-    schemaLocation="urn:oasis:names:tc:dita:xsd:xml.xsd:1.2"/>
-  <xs:import namespace="http://dita.oasis-open.org/architecture/2005/"
-  schemaLocation="urn:oasis:names:tc:dita:xsd:ditaarch.xsd:1.2"/>
+  <xs:import namespace="http://www.w3.org/XML/1998/namespace"   schemaLocation="urn:oasis:names:tc:dita:xsd:xml.xsd:1.2"/>
+  <xs:import namespace="http://dita.oasis-open.org/architecture/2005/"    schemaLocation="urn:oasis:names:tc:dita:xsd:ditaarch.xsd:1.2"/>
   
   <xs:annotation>
-    <xs:appinfo>(map classify-d)</xs:appinfo>
+    <xs:appinfo>
+      <dita:domainsModule xmlns:dita="http://dita.oasis-open.org/architecture/2005/">(map classify-d)</dita:domainsModule>
+    </xs:appinfo>
     <xs:documentation> 
     
     </xs:documentation>

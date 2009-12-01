@@ -3,7 +3,7 @@
      specialization working design. It is a work-in-progress by
      the OASIS DITA learning and training content specialization 
      sub-committee.-->
-<!--             (C) Copyright OASIS Open 2007, 2008                    -->
+<!--             (C) Copyright OASIS Open 2007, 2009                    -->
 <!--             All Rights Reserved.                              -->
 <!-- ============================================================= -->
 <!--                    HEADER                                     -->
@@ -25,13 +25,13 @@
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
   attributeFormDefault="unqualified" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
   <!-- ==================== Import Section ======================= -->
-  <xs:import namespace="http://www.w3.org/XML/1998/namespace"
-    schemaLocation="urn:oasis:names:tc:dita:xsd:xml.xsd:1.2"/>
-  <xs:import namespace="http://dita.oasis-open.org/architecture/2005/"
-    schemaLocation="urn:oasis:names:tc:dita:xsd:ditaarch.xsd:1.2"/>
+  <xs:import namespace="http://www.w3.org/XML/1998/namespace"     schemaLocation="urn:oasis:names:tc:dita:xsd:xml.xsd:1.2"/>
+  <xs:import namespace="http://dita.oasis-open.org/architecture/2005/"     schemaLocation="urn:oasis:names:tc:dita:xsd:ditaarch.xsd:1.2"/>
 
   <xs:annotation>
-    <xs:appinfo>(topic learningBase learningPlan)</xs:appinfo>
+    <xs:appinfo>
+      <dita:domainsModule xmlns:dita="http://dita.oasis-open.org/architecture/2005/">(topic learningBase learningPlan)</dita:domainsModule>
+    </xs:appinfo>
     <xs:documentation> 
     
     </xs:documentation>

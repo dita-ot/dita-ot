@@ -4,7 +4,7 @@
 <!-- ============================================================= -->
 <!--  MODULE:    DITA Learning Domain                              -->
 <!--  VERSION:   1.2                                               -->
-<!--  DATE:      May 2007                                          -->
+<!--  DATE:      November 2009                                     -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -26,7 +26,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Learning Domain//EN"
 <!-- ORIGINAL CREATION DATE:                                       -->
 <!--             May 2007                                          -->
 <!--                                                               -->
-<!--             (C) Copyright OASIS Open 2007, 2008.              -->
+<!--             (C) Copyright OASIS Open 2007, 2009.              -->
 <!--             All Rights Reserved.                              -->
 <!-- ============================================================= -->
 
@@ -558,8 +558,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Learning Domain//EN"
    - CLASS ATTRIBUTES FOR ANCESTRY DECLARATION
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 <!ATTLIST lcInstructornote        %global-atts; 
-    class CDATA "+ topic/note learning-d/lcInstructornote ">
-
+    class CDATA "+ topic/note ut-d/note learning-d/lcInstructornote ">
 <!ATTLIST lcTrueFalse %global-atts;
     class CDATA "+ topic/fig ut-d/fig learning-d/lcTrueFalse ">
 <!ATTLIST lcSingleSelect %global-atts;

@@ -4,7 +4,7 @@
 <!-- ============================================================= -->
 <!--  MODULE:    DITA Glossary Entity                              -->
 <!--  VERSION:   1.2                                               -->
-<!--  DATE:      February 2008                                     -->
+<!--  DATE:      November 2009                                     -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -17,28 +17,16 @@
 PUBLIC "-//OASIS//ENTITIES DITA Glossary//EN"
       Delivered as file "glossary.ent"                             -->
 
-<!-- ============================================================= -->
-<!-- SYSTEM:     Darwin Information Typing Architecture (DITA)     -->
-<!--                                                               -->
-<!-- PURPOSE:    Declaring the domain entity for glossary topics   -->
-<!--                                                               -->
-<!-- ORIGINAL CREATION DATE:                                       -->
-<!--             February 2008                                     -->
-<!--                                                               -->
-<!--             (C) Copyright OASIS Open 2008                     -->
-<!--             All Rights Reserved.                              -->
-<!--                                                               -->
-<!--  UPDATES:                                                     -->
-<!-- ============================================================= -->
+<!-- NOTE: The glossary.ent file was misnamed in DITA 1.1. As of 
+     DITA 1.2, this file simply redirects to the correctly-named
+     file.
+  -->
 
+<!ENTITY % glossentryEnt
+  PUBLIC "-//OASIS//ENTITIES DITA Glossary Entry//EN" 
+         "glossentry.ent"
+>%glossentryEnt;
 
-<!-- ============================================================= -->
-<!--                    GLOSSARY ENTITIES                          -->
-<!-- ============================================================= -->
-
-<!ENTITY glossentry-att     
-  "(topic concept glossentry)"
->
 
 
 <!-- ================== End Glossary Entities ==================== -->

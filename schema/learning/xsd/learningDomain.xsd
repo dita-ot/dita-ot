@@ -4,7 +4,7 @@
 <!-- ============================================================= -->
 <!-- MODULE:    DITA Learning  Domains -->
 <!-- VERSION:   1.2 -->
-<!-- DATE:      February 2008 -->
+<!-- DATE:      February 2009 -->
 <!---->
 <!-- ============================================================= -->
 
@@ -16,7 +16,7 @@
 <!-- ORIGINAL CREATION DATE: -->
 <!-- MAy 2007 -->
 <!---->
-<!-- (C) Copyright OASIS Open 2007, 2008. -->
+<!-- (C) Copyright OASIS Open 2007, 2009. -->
 <!-- All Rights Reserved. -->
 <!---->
 <!-- UPDATES: -->
@@ -28,7 +28,9 @@
     
     <!-- <!ENTITY % learning-d-att "(topic ut-d learning-d)"> -->
   <xs:annotation>
-    <xs:appinfo>(topic ut-d learning-d)</xs:appinfo>
+    <xs:appinfo>
+      <dita:domainsModule xmlns:dita="http://dita.oasis-open.org/architecture/2005/">(topic ut-d learning-d)</dita:domainsModule>
+    </xs:appinfo>
     <xs:documentation> 
     
     </xs:documentation>

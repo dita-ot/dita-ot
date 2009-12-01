@@ -5,7 +5,7 @@
 <!-- ============================================================= -->
 <!--  MODULE:    DITA Delay Resolution Domain                  -->
 <!--  VERSION:   1.2                                             -->
-<!--  DATE:      November 2008                                     -->
+<!--  DATE:      November 2009                                     -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -15,15 +15,17 @@
 <!-- PURPOSE:    W3C XML Schema to describe the delay resolution domain      -->
 <!--                                                               -->
 <!-- ORIGINAL CREATION DATE:                                       -->
-<!--             September 2008                                        -->
+<!--             September 2009                                        -->
 <!--                                                               -->
-<!--             (C) Copyright OASIS-Open.org 2008                -->
+<!--             (C) Copyright OASIS-Open.org 2009                -->
 <!--             All Rights Reserved.                              -->
 <!-- ============================================================= -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
   
   <xs:annotation>
-    <xs:appinfo>(topic delay-d)</xs:appinfo>
+    <xs:appinfo>
+      <dita:domainsModule xmlns:dita="http://dita.oasis-open.org/architecture/2005/">(topic delay-d)</dita:domainsModule>
+    </xs:appinfo>
     <xs:documentation>
       
     </xs:documentation>

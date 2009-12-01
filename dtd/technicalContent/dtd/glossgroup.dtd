@@ -4,7 +4,7 @@
 <!-- ============================================================= -->
 <!--  MODULE:    DITA Glossary Group DTD                           -->
 <!--  VERSION:   1.2                                               -->
-<!--  DATE:      June 2008                                         -->
+<!--  DATE:      November 2009                                     -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -29,7 +29,7 @@ PUBLIC "-//OASIS//DTD DITA 1.2 Glossary Group//EN"                 -->
 <!-- ORIGINAL CREATION DATE:                                       -->
 <!--             June 2008                                         -->
 <!--                                                               -->
-<!--             (C) Copyright OASIS Open 2008.                    -->
+<!--             (C) Copyright OASIS Open 2008, 2009.              -->
 <!--             All Rights Reserved.                              -->
 <!--                                                               -->
 <!--  UPDATES:                                                     -->
@@ -45,10 +45,10 @@ PUBLIC "-//OASIS//DTD DITA 1.2 Glossary Group//EN"                 -->
          "concept.ent"
 >%concept-dec;
 
-<!ENTITY % glossary-dec     
-  PUBLIC "-//OASIS//ENTITIES DITA 1.2 Glossary//EN" 
-         "glossary.ent"
->%glossary-dec;
+<!ENTITY % glossentry-dec     
+  PUBLIC "-//OASIS//ENTITIES DITA 1.2 Glossary Entry//EN" 
+         "glossentry.ent"
+>%glossentry-dec;
 
 <!ENTITY % glossgroup-dec     
   PUBLIC "-//OASIS//ENTITIES DITA 1.2 Glossary Group//EN" 
@@ -202,11 +202,11 @@ PUBLIC "-//OASIS//DTD DITA 1.2 Glossary Group//EN"                 -->
 "concept.mod"                                                        >                                                     
 %concept-typemod;
 
-<!ENTITY % glossary-typemod 
+<!ENTITY % glossentry-typemod 
                         PUBLIC 
-"-//OASIS//ELEMENTS DITA 1.2 Glossary//EN" 
-"glossary.mod"                                                       >                                                     
-%glossary-typemod;
+"-//OASIS//ELEMENTS DITA 1.2 Glossary Entry//EN" 
+"glossentry.mod"                                                       >                                                     
+%glossentry-typemod;
 
 <!ENTITY % glossgroup-typemod 
                         PUBLIC 

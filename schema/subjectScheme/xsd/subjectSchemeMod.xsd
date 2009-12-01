@@ -4,7 +4,7 @@
 <!-- ============================================================= -->
 <!-- MODULE:    DITA Subject Scheme Map -->
 <!-- VERSION:   1.2 -->
-<!-- DATE:      February 2008 -->
+<!-- DATE:      February 2009 -->
 <!---->
 <!-- ============================================================= -->
 <!-- ============================================================= -->
@@ -14,14 +14,14 @@
 <!-- attributes for DITA Subject Scheme Maps -->
 <!---->
 <!-- ORIGINAL CREATION DATE: -->
-<!-- February 2008 -->
+<!-- February 2009 -->
 <!---->
-<!-- (C) Copyright OASIS Open 2008. -->
+<!-- (C) Copyright OASIS Open 2009. -->
 <!-- (C) Copyright IBM Corporation 2005, 2007. -->
 <!-- All Rights Reserved. -->
 <!---->
 <!-- UPDATES: -->
-<!-- 2008.02.13 RDA: Created file based upon prototype from IBM -->
+<!-- 2009.02.13 RDA: Created file based upon prototype from IBM -->
 <!-- ============================================================= -->
 
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
@@ -31,7 +31,9 @@
   <xs:import namespace="http://dita.oasis-open.org/architecture/2005/" schemaLocation="urn:oasis:names:tc:dita:xsd:ditaarch.xsd:1.2"/>
   
   <xs:annotation>
-    <xs:appinfo>(map subjectScheme)</xs:appinfo>
+    <xs:appinfo>
+      <dita:domainsModule xmlns:dita="http://dita.oasis-open.org/architecture/2005/">(map subjectScheme)</dita:domainsModule>
+    </xs:appinfo>
     <xs:documentation> 
     
     </xs:documentation>

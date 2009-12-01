@@ -3,8 +3,8 @@
 <!--                    HEADER                                     -->
 <!-- ============================================================= -->
 <!--  MODULE:    XNAL Domain                                       -->
-<!--  VERSION:   1.1                                               -->
-<!--  DATE:      November 2006                                     -->
+<!--  VERSION:   1.2                                               -->
+<!--  DATE:      November 2009                                     -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -26,7 +26,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA XNAL Domain//EN"
 <!-- ORIGINAL CREATION DATE:                                       -->
 <!--             June 2006                                         -->
 <!--                                                               -->
-<!--             (C) Copyright OASIS Open 2006.                    -->
+<!--             (C) Copyright OASIS Open 2006, 2009.              -->
 <!--             All Rights Reserved.                              -->
 <!--  UPDATES:                                                     -->
 <!--    2007.12.01 EK:  Reformatted DTD modules for DITA 1.2       -->

@@ -4,7 +4,7 @@
 <!-- ============================================================= -->
 <!--  MODULE:    DITA BASE XSD                                     -->
 <!--  VERSION:   1.2                                             -->
-<!--  DATE:      March 2008                                     -->
+<!--  DATE:      March 2009                                     -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -17,12 +17,12 @@
 <!-- ORIGINAL CREATION DATE:                                       -->
 <!--             March 2001                                        -->
 <!--                                                               -->
-<!--             (C) Copyright OASIS-Open.org 2005, 2008                -->
+<!--             (C) Copyright OASIS-Open.org 2005, 2009                -->
 <!--             (C) Copyright IBM Corporation 2001, 2004.         -->
 <!--             All Rights Reserved.                              -->
 <!--                                                               -->
 <!--  UPDATES                                           -->
-<!--  2008.03.20 EAS: Added xml:lang and DITAArchVersion attribute to dita element   -->
+<!--  2009.03.20 EAS: Added xml:lang and DITAArchVersion attribute to dita element   -->
 <!-- ============================================================= -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
   <!-- Add the domains to the base topic XML Schema -->
@@ -39,7 +39,8 @@
   <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:referenceGrp.xsd:1.2" />
   <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:taskGrp.xsd:1.2" />
   <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:conceptGrp.xsd:1.2" />
-  <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:glossaryGrp.xsd:1.2" />
+  <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:glossentryGrp.xsd:1.2" />
+  <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:glossgroupGrp.xsd:1.2" />
   <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:metaDeclGrp.xsd:1.2"/>
   <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:tblDeclGrp.xsd:1.2"/>
   <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:topicGrp.xsd:1.2"/>
@@ -174,11 +175,21 @@
     </xs:group>
   </xs:redefine>
   
-  <xs:redefine schemaLocation="urn:oasis:names:tc:dita:xsd:glossaryMod.xsd:1.2" >
+  <xs:redefine schemaLocation="urn:oasis:names:tc:dita:xsd:glossentryMod.xsd:1.2" >
     
     <xs:group name="glossentry-info-types">
       <xs:choice>
         <xs:group ref="no-topic-nesting"/>
+      </xs:choice>
+    </xs:group>
+    
+  </xs:redefine>
+  
+   <xs:redefine schemaLocation="urn:oasis:names:tc:dita:xsd:glossgroupMod.xsd:1.2" >
+    
+    <xs:group name="glossgroup-info-types">
+      <xs:choice>
+        <xs:group ref="info-types"/>
       </xs:choice>
     </xs:group>
     
@@ -197,6 +208,7 @@
       <xs:element ref="concept"/>
       <xs:element ref="reference"/>
       <xs:element ref="glossentry"/>
+      <xs:element ref="glossgroup"/>
     </xs:choice>
   </xs:group>
 

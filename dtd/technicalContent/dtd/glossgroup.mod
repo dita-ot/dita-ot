@@ -4,7 +4,7 @@
 <!-- ============================================================= -->
 <!--  MODULE:    DITA Glossary Group                               -->
 <!--  VERSION:   1.2                                               -->
-<!--  DATE:      June 2008                                         -->
+<!--  DATE:      November 2009                                     -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -26,7 +26,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Glossary Group//EN"
 <!-- ORIGINAL CREATION DATE:                                       -->
 <!--             June 2008                                         -->
 <!--                                                               -->
-<!--             (C) Copyright OASIS Open 2008.                    -->
+<!--             (C) Copyright OASIS Open 2008, 2009.              -->
 <!--             All Rights Reserved.                              -->
 <!--                                                               -->
 <!--  UPDATES:                                                     -->

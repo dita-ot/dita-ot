@@ -3,7 +3,7 @@
      specialization working design. It is a work-in-progress by
      the OASIS DITA learning and training content specialization 
      sub-committee.-->
-<!--             (C) Copyright OASIS Open 2007, 2008                    -->
+<!--             (C) Copyright OASIS Open 2007, 2009                    -->
 <!--             All Rights Reserved.                              -->
 <!-- ============================================================= -->
 <!--                    HEADER                                     -->
@@ -26,7 +26,9 @@
 <xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema'>
   
   <xs:annotation>
-    <xs:appinfo>(map learningmap-d)</xs:appinfo>
+    <xs:appinfo>
+      <dita:domainsModule xmlns:dita="http://dita.oasis-open.org/architecture/2005/">(map learningmap-d)</dita:domainsModule>
+    </xs:appinfo>
     <xs:documentation> 
     
     </xs:documentation>
@@ -62,7 +64,13 @@
           </xs:choice>
      </xs:group>
      
-     <xs:group name="learningPreAssessmentRef">
+     <xs:group name="learningContentComponentRef">
+    <xs:choice>
+      <xs:element ref="learningContentComponentRef" />
+    </xs:choice>
+  </xs:group>
+  
+  <xs:group name="learningPreAssessmentRef">
           <xs:sequence>
                <xs:element ref="learningPreAssessmentRef" />
           </xs:sequence>
@@ -332,6 +340,7 @@
           <xs:sequence>
             <xs:sequence>
                <xs:group ref="topicmeta" minOccurs="0"/>
+               <xs:group ref="learningContentComponentRef" minOccurs="0" maxOccurs="unbounded"/>
           </xs:sequence>
           </xs:sequence>
       </xs:group>
@@ -343,7 +352,39 @@
           <xs:attributeGroup ref="global-atts" />
       </xs:attributeGroup>
      
-     <xs:element name="learningPreAssessmentRef">
+     <xs:element name="learningContentComponentRef">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="learningContentComponentRef.class">
+          <xs:attribute ref="class" default="+ map/topicref learningmap-d/learningContentComponentRef " />
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:complexType name="learningContentComponentRef.class">
+    <xs:sequence>
+      <xs:group ref="learningContentComponentRef.content"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="learningContentComponentRef.attributes"/>
+  </xs:complexType>
+  
+  <xs:group name="learningContentComponentRef.content">
+    <xs:sequence>
+      <xs:sequence>
+        <xs:group ref="topicmeta" minOccurs="0"/>
+        <xs:group ref="learningContentComponentRef" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:sequence>
+  </xs:group>
+  
+  <xs:attributeGroup name="learningContentComponentRef.attributes">
+    <xs:attributeGroup ref="learningDomain-topicref-atts"/>
+    <xs:attribute name="type" type="xs:string"/>
+    <xs:attribute name="format" type="xs:string" default="dita"/>
+    <xs:attributeGroup ref="global-atts" />
+  </xs:attributeGroup>
+  
+  <xs:element name="learningPreAssessmentRef">
           <xs:complexType>
                <xs:complexContent>
                     <xs:extension base="learningPreAssessmentRef.class">

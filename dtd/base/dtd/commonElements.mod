@@ -3,8 +3,8 @@
 <!--                    HEADER                                     -->
 <!-- ============================================================= -->
 <!--  MODULE:    DITA Common Elements                              -->
-<!--  VERSION:   1.1                                               -->
-<!--  DATE:      November 2006                                     -->
+<!--  VERSION:   1.2                                               -->
+<!--  DATE:      November 2009                                     -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -27,7 +27,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Common Elements//EN"
 <!-- ORIGINAL CREATION DATE:                                       -->
 <!--             June 2006                                         -->
 <!--                                                               -->
-<!--             (C) Copyright OASIS Open 2005, 2006.              -->
+<!--             (C) Copyright OASIS Open 2005, 2009.              -->
 <!--             (C) Copyright IBM Corporation 2001, 2004.         -->
 <!--             All Rights Reserved.                              -->
 <!--                                                               -->
@@ -55,6 +55,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Common Elements//EN"
 <!--    2008.02.12 RDA: Modify imbeds to use specific 1.2 version  -->
 <!--    2008.02.12 RDA: Move navtitle decl. here from topic.mod    -->
 <!--    2008.02.13 RDA: Create .content and .attributes entities   -->
+<!--    2008.11.10 RDA: Make href optional on image                -->
 <!-- ============================================================= -->
 
 
@@ -1390,7 +1391,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Common Elements//EN"
 <!ENTITY % image.attributes
              "href 
                         CDATA 
-                                  #REQUIRED
+                                  #IMPLIED
 
               scope 
                         (external | 

@@ -3,8 +3,8 @@
 <!--                    HEADER                                     -->
 <!-- ============================================================= -->
 <!--  MODULE:    DITA Bookmap                                      -->
-<!--  VERSION:   1.1                                               -->
-<!--  DATE:      November 2006                                     -->
+<!--  VERSION:   1.2                                               -->
+<!--  DATE:      November 2009                                     -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -26,7 +26,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA BookMap//EN"
 <!-- ORIGINAL CREATION DATE:                                       -->
 <!--             March 2004                                        -->
 <!--                                                               -->
-<!--             (C) Copyright OASIS Open 2005, 2006.              -->
+<!--             (C) Copyright OASIS Open 2005, 2009.              -->
 <!--             (C) Copyright IBM Corporation 2004, 2005.         -->
 <!--             All Rights Reserved.                              -->
 <!--  UPDATES:                                                     -->

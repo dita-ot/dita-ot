@@ -4,7 +4,7 @@
 <!-- ============================================================= -->
 <!--  MODULE:    DITA learningContent                              -->
 <!--  VERSION:   1.2                                               -->
-<!--  DATE:      May 2007                                          -->
+<!--  DATE:      November 2009                                     -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -26,7 +26,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Learning Content//EN"
 <!-- ORIGINAL CREATION DATE:                                       -->
 <!--             May 2007                                          -->
 <!--                                                               -->
-<!--             (C) Copyright OASIS Open 2007, 2008.              -->
+<!--             (C) Copyright OASIS Open 2007, 2009.              -->
 <!--             All Rights Reserved.                              -->
 <!-- ============================================================= -->
 
@@ -44,7 +44,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Learning Content//EN"
 
 <!-- declare the class derivations -->
 
-<!ENTITY % learningContent-info-types "">
+<!ENTITY % learningContent-info-types "no-topic-nesting">
 <!ENTITY included-domains    "" >
 
 <!ENTITY % learningContent.content

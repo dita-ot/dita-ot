@@ -3,7 +3,7 @@
      specialization working design. It is a work-in-progress by
      the OASIS DITA learning and training content specialization 
      sub-committee.-->
-<!--             (C) Copyright OASIS Open 2007, 2008                    -->
+<!--             (C) Copyright OASIS Open 2007, 2009                    -->
 <!--             All Rights Reserved.                              -->
 <!-- ============================================================= -->
 <!--                    HEADER                                     -->
@@ -155,6 +155,7 @@
     <xs:redefine schemaLocation="urn:oasis:names:tc:dita:spec:learning:xsd:learningContentMod.xsd:1.2">
         <xs:group name="learningContent-info-types">
             <xs:sequence>
+               <xs:group ref="learningContent-info-types"/>
                 <xs:choice minOccurs="0" maxOccurs="unbounded">
                     <xs:element ref="topic"/>
                     <xs:element ref="task"/>

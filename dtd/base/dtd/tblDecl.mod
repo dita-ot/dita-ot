@@ -3,12 +3,12 @@
 <!--                    HEADER                                     -->
 <!-- ============================================================= -->
 <!--  MODULE:    XML EXCHANGE TABLE MODEL DECLARATION MODULE       -->
-<!--  VERSION:   1.1                                               -->
-<!--  DATE:      November 2006                                     -->
+<!--  VERSION:   1.2                                               -->
+<!--  DATE:      November 2009                                     -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
-<!--             (C) Copyright OASIS Open 2005, 2006.              -->
+<!--             (C) Copyright OASIS Open 2005, 2009.              -->
 <!--             (C) Copyright IBM Corporation 2001, 2004.         -->
 <!--             All Rights Reserved.                              -->
 <!--                                                               -->

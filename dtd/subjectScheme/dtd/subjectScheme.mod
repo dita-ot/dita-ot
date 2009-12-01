@@ -4,7 +4,7 @@
 <!-- ============================================================= -->
 <!--  MODULE:    DITA Subject Scheme Map                           -->
 <!--  VERSION:   1.2                                               -->
-<!--  DATE:      February 2008                                     -->
+<!--  DATE:      November 2009                                     -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -26,7 +26,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Subject Scheme Map//EN"
 <!-- ORIGINAL CREATION DATE:                                       -->
 <!--             February 2008                                     -->
 <!--                                                               -->
-<!--             (C) Copyright OASIS Open 2008.                    -->
+<!--             (C) Copyright OASIS Open 2008, 2009.              -->
 <!--             (C) Copyright IBM Corporation 2005, 2007.         -->
 <!--             All Rights Reserved.                              -->
 <!--                                                               -->

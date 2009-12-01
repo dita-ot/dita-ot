@@ -4,7 +4,7 @@
 <!-- ============================================================= -->
 <!--  MODULE:    DITA Indexing Domain                             -->
 <!--  VERSION:   1.2                                             -->
-<!--  DATE:      November 2008                                     -->
+<!--  DATE:      November 2009                                     -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -17,15 +17,16 @@
 <!-- ORIGINAL CREATION DATE:                                       -->
 <!--             June 2006                                        -->
 <!--                                                               -->
-<!--             (C) Copyright OASIS-Open.org 2006, 2008                -->
+<!--             (C) Copyright OASIS-Open.org 2006, 2009                -->
 <!--             All Rights Reserved.                              -->
 <!-- ============================================================= -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
-  <!--<!ENTITY indexing-d-att "(topic indexing-d)"                         >-->
-
+  
   <xs:annotation>
-    <xs:appinfo>(topic indexing-d)</xs:appinfo>
+    <xs:appinfo>
+      <dita:domainsModule xmlns:dita="http://dita.oasis-open.org/architecture/2005/">(topic indexing-d)</dita:domainsModule>
+    </xs:appinfo>
     <xs:documentation> 
     
     </xs:documentation>

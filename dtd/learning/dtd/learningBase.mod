@@ -4,7 +4,7 @@
 <!-- ============================================================= -->
 <!--  MODULE:    DITA learningBase                                 -->
 <!--  VERSION:   1.2                                               -->
-<!--  DATE:      May 2007                                          -->
+<!--  DATE:      November 2009                                     -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -26,7 +26,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Learning Base//EN"
 <!-- ORIGINAL CREATION DATE:                                       -->
 <!--             May 2007                                          -->
 <!--                                                               -->
-<!--             (C) Copyright OASIS Open 2007, 2008.              -->
+<!--             (C) Copyright OASIS Open 2007, 2009.              -->
 <!--             All Rights Reserved.                              -->
 <!-- ============================================================= -->
 
@@ -66,7 +66,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Learning Base//EN"
                          (%shortdesc; | 
                           %abstract;)?,
                          (%prolog;)?,
-                         (%learningBasebody;),
+                         (%learningBasebody;)?,
                          (%related-links;)?,
                          (%learningBase-info-types;)* )"
 >

@@ -3,7 +3,7 @@
      specialization working design. It is a work-in-progress by
      the OASIS DITA learning and training content specialization 
      sub-committee.-->
-<!--             (C) Copyright OASIS Open 2007, 2008                    -->
+<!--             (C) Copyright OASIS Open 2007, 2009                    -->
 <!--             All Rights Reserved.                              -->
 <!-- ============================================================= -->
 <!--                    HEADER                                     -->
@@ -26,13 +26,13 @@
   xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" elementFormDefault="qualified"
   attributeFormDefault="unqualified">
   <!-- ==================== Import Section ======================= -->
-  <xs:import namespace="http://www.w3.org/XML/1998/namespace"
-    schemaLocation="urn:oasis:names:tc:dita:xsd:xml.xsd:1.2"/>
-  <xs:import namespace="http://dita.oasis-open.org/architecture/2005/"
-  schemaLocation="urn:oasis:names:tc:dita:xsd:ditaarch.xsd:1.2"/>
+  <xs:import namespace="http://www.w3.org/XML/1998/namespace"     schemaLocation="urn:oasis:names:tc:dita:xsd:xml.xsd:1.2"/>
+  <xs:import namespace="http://dita.oasis-open.org/architecture/2005/"   schemaLocation="urn:oasis:names:tc:dita:xsd:ditaarch.xsd:1.2"/>
   
   <xs:annotation>
-    <xs:appinfo>(topic learningBase learningContent)</xs:appinfo>
+    <xs:appinfo>
+      <dita:domainsModule xmlns:dita="http://dita.oasis-open.org/architecture/2005/">(topic learningBase learningContent)</dita:domainsModule>
+    </xs:appinfo>
     <xs:documentation> 
     
     </xs:documentation>
@@ -91,8 +91,8 @@
   <!-- <!ENTITY % learningContent-info-types "(concept | task | reference | topic)*, (learningAssessment)?, (learningSummary)?"> -->
   <xs:group name="learningContent-info-types">
     <xs:sequence>
-      <xs:choice>
-        <xs:group ref="no-topic-nesting"/>
+      <xs:choice  minOccurs="0" maxOccurs="unbounded">
+        <xs:group ref="no-topic-nesting" />
       </xs:choice>
     </xs:sequence>
   </xs:group>

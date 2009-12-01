@@ -1,9 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!-- ============================================================= -->
 <!--                    HEADER                                     -->
 <!-- ============================================================= -->
 <!--  MODULE:    DITA Book Map XSD Module                           -->
 <!--  VERSION:   1.2                                             -->
-<!--  DATE:      November 2008                                     -->
+<!--  DATE:      November 2009                                     -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -16,7 +17,7 @@
 <!-- ORIGINAL CREATION DATE:                                       -->
 <!--             June 2006                                        -->
 <!--                                                               -->
-<!--             (C) Copyright OASIS-Open.org 2006, 2008                -->
+<!--             (C) Copyright OASIS-Open.org 2006, 2009                -->
 <!--             All Rights Reserved.                              -->
 <!-- ============================================================= -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
@@ -27,12 +28,13 @@
     <xs:import namespace="http://dita.oasis-open.org/architecture/2005/" schemaLocation="urn:oasis:names:tc:dita:xsd:ditaarch.xsd:1.2"/>
   
   <xs:annotation>
-    <xs:appinfo>(map bookmap)</xs:appinfo>
+    <xs:appinfo>
+      <dita:domainsModule xmlns:dita="http://dita.oasis-open.org/architecture/2005/">(map bookmap)</dita:domainsModule>
+    </xs:appinfo>
     <xs:documentation> 
     
     </xs:documentation>
   </xs:annotation>
-  
         
     <xs:attributeGroup name="chapter-atts">
         <xs:attribute name="navtitle" type="xs:string" />

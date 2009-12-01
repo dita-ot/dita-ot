@@ -2,7 +2,7 @@
 <!-- ============================================================= -->
 <!--                    HEADER                                     -->
 <!-- ============================================================= -->
-<!--  MODULE:    DITA Reference Entity                             -->
+<!--  MODULE:    DITA Glossary Entity                              -->
 <!--  VERSION:   1.2                                               -->
 <!--  DATE:      November 2009                                     -->
 <!--                                                               -->
@@ -14,13 +14,13 @@
 <!--                                                               -->
 <!--  Refer to this file by the following public identifier or an 
       appropriate system identifier 
-PUBLIC "-//OASIS//ENTITIES DITA Reference//EN"
-      Delivered as file "reference.ent"                            -->
+PUBLIC "-//OASIS//ENTITIES DITA Glossary Entry//EN"
+      Delivered as file "glossentry.ent"                             -->
 
 <!-- ============================================================= -->
 <!-- SYSTEM:     Darwin Information Typing Architecture (DITA)     -->
 <!--                                                               -->
-<!-- PURPOSE:    Declaring the domain entity for reference topics  -->
+<!-- PURPOSE:    Declaring the domain entity for glossary topics   -->
 <!--                                                               -->
 <!-- ORIGINAL CREATION DATE:                                       -->
 <!--             February 2008                                     -->
@@ -29,16 +29,17 @@ PUBLIC "-//OASIS//ENTITIES DITA Reference//EN"
 <!--             All Rights Reserved.                              -->
 <!--                                                               -->
 <!--  UPDATES:                                                     -->
+<!--    2009.09.21 WEK: Renamed glossentry.mod                     -->
 <!-- ============================================================= -->
 
 
 <!-- ============================================================= -->
-<!--                    REFERENCE ENTITIES                         -->
+<!--                    GLOSSARY ENTITIES                          -->
 <!-- ============================================================= -->
 
-<!ENTITY reference-att     
-  "(topic reference)"
+<!ENTITY glossentry-att     
+  "(topic concept glossentry)"
 >
 
 
-<!-- ================== End Reference Entities =================== -->
+<!-- ================== End Glossary Entities ==================== -->

@@ -4,7 +4,7 @@
 <!-- ============================================================= -->
 <!--  MODULE:    DITA Strict Taskbody Constraint                   -->
 <!--  VERSION:   1.2                                               -->
-<!--  DATE:      April 2008                                        -->
+<!--  DATE:      November 2009                                     -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -26,7 +26,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Strict Taskbody Constraint//EN"
 <!-- ORIGINAL CREATION DATE:                                       -->
 <!--             April 2008                                        -->
 <!--                                                               -->
-<!--             (C) Copyright OASIS Open 2008                     -->
+<!--             (C) Copyright OASIS Open 2008, 2009.              -->
 <!--             All Rights Reserved.                              -->
 <!--                                                               -->
 <!--  UPDATES:                                                     -->

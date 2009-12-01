@@ -4,7 +4,7 @@
 <!-- ============================================================= -->
 <!--  MODULE:    Task Requirements Domain                          -->
 <!--  VERSION:   1.2                                               -->
-<!--  DATE:      September 2007                                    -->
+<!--  DATE:      November 2009                                     -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -26,9 +26,10 @@ PUBLIC "-//OASIS//ELEMENTS DITA Task Requirements Domain//EN"
 <!-- ORIGINAL CREATION DATE:                                       -->
 <!--             September 2007                                    -->
 <!--                                                               -->
-<!--             (C) Copyright OASIS Open 2007, 2008.              -->
+<!--             (C) Copyright OASIS Open 2007, 2009.              -->
 <!--             All Rights Reserved.                              -->
 <!--  UPDATES:                                                     -->
+<!--    2009.10.20 CHK: Make safecond unbound               -->
 <!-- ============================================================= -->
 
 
@@ -417,7 +418,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Task Requirements Domain//EN"
 <!--                    LONG NAME: Safety Conditions             --><!-- specialized from ol -->
 <!ENTITY % safety.content
                        "((%nosafety;) |
-                         (%safecond;))">
+                         (%safecond;)+)">
 <!ENTITY % safety.attributes
              "%univ-atts; 
               outputclass 

@@ -4,7 +4,9 @@
   <xs:redefine schemaLocation="taskMod.xsd">
     
     <xs:annotation>
-    <xs:appinfo>(topic task strictTaskbody-c)</xs:appinfo>
+    <xs:appinfo>
+      <dita:domainsModule xmlns:dita="http://dita.oasis-open.org/architecture/2005/">(topic task strictTaskbody-c)</dita:domainsModule>
+    </xs:appinfo>
     <xs:documentation> 
     
     </xs:documentation>
@@ -14,10 +16,12 @@
 
     <xs:group name="taskPreStep">
       <xs:sequence>
+          <xs:choice> 
         <xs:sequence>
           <xs:group ref="prereq"  minOccurs="0"/>
           <xs:group ref="context"  minOccurs="0"/>
         </xs:sequence>
+            </xs:choice>
       </xs:sequence>
     </xs:group>
 
