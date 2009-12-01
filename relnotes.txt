@@ -111,6 +111,13 @@
      * 2879171 Shortdesc & Abstract formatting is incorrect for PDF
      * 2882085 Obsolete code in PDF plug-in should be removed
      * 2661418 make the TOC in pdf2 output link to topics in pdf
+     * 2871017 eclipsehelp plugin.xml invalid in 1.5M20
+     * 2887331 chunk="to-content" on a sub-map causes path error
+     * 2891736 indexterm in topicref level are copied into topic/prolog
+     * 2893316 This is a bug in the integrator.xml
+     * 2893493 ${clean.temp} is not set to true per documentation
+     * 2893664 ampersand entity with conref actions causes build to fail
+     * 2893924 htmlhelp transtype requires video plugin
      
 
 ====================================================================================
