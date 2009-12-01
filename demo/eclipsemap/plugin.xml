@@ -6,7 +6,7 @@
   | (C) Copyright IBM Corporation 2006. All Rights Reserved.
   *-->
   <plugin id="org.dita.specialization.eclipsemap">
-    <feature extension="dita.specialization.catalog"
+    <feature extension="dita.specialization.catalog.relative"
       value="catalog.xml" type="file"/>
     <feature extension="dita.xsl.maplink"
       value="xsl/maplink-plugin.xsl" type="file"/>

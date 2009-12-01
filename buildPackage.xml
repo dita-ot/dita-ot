@@ -114,6 +114,7 @@
     <include name="css/**"/>    
     <include name="demo/book/**"/>
   	<include name="demo/elementref/**"/>
+  	<include name="demo/eclipsemap/**"/>
    	<include name="demo/enote/**"/>
   	<include name="demo/faq/**"/>
   	<include name="demo/h2d/**"/>
@@ -153,6 +154,7 @@
 		    <include name="css/**"/>    
 		    <include name="demo/book/**"/>
 		  	<include name="demo/elementref/**"/>
+		    <include name="demo/eclipsemap/**"/>
 		   	<include name="demo/enote/**"/>
 		  	<include name="demo/faq/**"/>
 		  	<include name="demo/h2d/**"/>

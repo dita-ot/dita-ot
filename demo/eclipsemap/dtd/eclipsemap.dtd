@@ -38,7 +38,10 @@ PUBLIC "-//IBM//DTD DITA Eclipse Map Collection//EN"
 <!-- ============================================================= -->
 <!--                    ENTITY DECLARATIONS                        -->
 <!-- ============================================================= -->
-
+<!ENTITY % eclipsemap-dec     PUBLIC 
+"-//IBM//ENTITIES DITA Eclipse Map Collection//EN" 
+"plugin.ent"                                                            >
+%eclipsemap-dec;
 
 <!--                    One for each extended base element, with
                         the name of the domain(s) in which the
@@ -52,7 +55,7 @@ PUBLIC "-//IBM//DTD DITA Eclipse Map Collection//EN"
                         puts @domains first in order               -->
 
 <!ENTITY included-domains 
-                        ""                                           >
+                        "&plugin-att;"                                           >
 
 
 <!-- ============================================================= -->
@@ -68,7 +71,7 @@ PUBLIC "-//IBM//DTD DITA Eclipse Map Collection//EN"
 
 <!ENTITY % eclipsemap-type     PUBLIC 
 "-//IBM//ELEMENTS DITA Eclipse Map Collection//EN" 
-"eclipsemap.mod"                                                            >
+"plugin.mod"                                                            >
 %eclipsemap-type;
 
 <!-- ============================================================= -->

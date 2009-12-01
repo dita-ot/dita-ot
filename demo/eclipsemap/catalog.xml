@@ -9,6 +9,12 @@
   prefer="public">
   
   <public publicId="-//IBM//DTD DITA Eclipse Map Collection//EN"
-    uri="demo/eclipsemap/dtd/eclipsemap.dtd"/>
+    uri="dtd/eclipsemap.dtd"/>
+      
+  <public publicId="-//IBM//ELEMENTS DITA Eclipse Map Collection//EN"
+    uri="dtd/plugin.mod"/>
+  
+  <public publicId="-//IBM//ENTITIES DITA Eclipse Map Collection//EN"
+    uri="dtd/plugin.ent"/>
   
 </catalog>
