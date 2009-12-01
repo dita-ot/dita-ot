@@ -19,7 +19,8 @@
                 xmlns:dita2html="http://dita-ot.sourceforge.net/ns/200801/dita2html"
                 xmlns:ditamsg="http://dita-ot.sourceforge.net/ns/200704/ditamsg"
                 xmlns:exsl="http://exslt.org/common"
-                exclude-result-prefixes="dita2html ditamsg exsl">
+                exclude-result-prefixes="dita2html ditamsg exsl"
+                xmlns:java="org.dita.dost.util.ImgUtils">
 
 
 
@@ -2304,6 +2305,9 @@
       </xsl:otherwise>
     </xsl:choose>
     <xsl:apply-templates select="@href|@height|@width"/>
+    <!-- Add by Alan for Bug:#2900417 on Date: 2009-11-23 begin -->
+    <xsl:apply-templates select="@scale"/>
+    <!-- Add by Alan for Bug:#2900417 on Date: 2009-11-23 end   -->
     <xsl:choose>
       <xsl:when test="*[contains(@class,' topic/alt ')]">
         <xsl:variable name="alt-content"><xsl:apply-templates select="*[contains(@class,' topic/alt ')]" mode="text-only"/></xsl:variable>
@@ -2325,6 +2329,39 @@
 <xsl:template match="*[contains(@class,' topic/image ')]/@href">
   <xsl:attribute name="src"><xsl:value-of select="."/></xsl:attribute>
 </xsl:template>
+
+<!-- Add by Alan for Bug:#2900417 on Date: 2009-11-23 begin -->
+<!-- AM: handling for scale attribute -->
+<xsl:template match="*[contains(@class,' topic/image ')]/@scale">
+    <xsl:variable name="height">
+      <xsl:choose>
+        <xsl:when test="not(contains(@href,'://'))">
+          <!-- AM: currently dost.jar returns the height in function getWidth instead of width -->
+          <xsl:value-of select="java:getWidth($OUTPUTDIR, string(../@href))"/>
+        </xsl:when>
+        <xsl:otherwise/>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="width">
+      <xsl:choose>
+        <xsl:when test="not(contains(@href,'://'))">
+          <!-- AM: currently dost.jar returns the width in function getHeight instead of height -->
+          <xsl:value-of select="java:getHeight($OUTPUTDIR, string(../@href))"/>
+        </xsl:when>
+        <xsl:otherwise/>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:if test="not(../@width) and not(../@height)">
+      <xsl:attribute name="height">
+        <xsl:value-of select="number($height) * number(.) div 100"/>
+      </xsl:attribute>
+      <xsl:attribute name="width">
+        <xsl:value-of select="number($width) * number(.) div 100"/>
+      </xsl:attribute>
+    </xsl:if>
+</xsl:template>
+<!-- Add by Alan for Bug:#2900417 on Date: 2009-11-23 end -->
+
 <xsl:template match="*[contains(@class,' topic/image ')]/@height">
   <xsl:variable name="height-in-pixel">
     <xsl:call-template name="length-to-pixels">
@@ -2333,14 +2370,16 @@
   </xsl:variable>
   <xsl:if test="not($height-in-pixel='100%')">
     <xsl:attribute name="height">
-      <xsl:choose>
+      <!-- Edit by Alan for Bug:#2900417 on Date: 2009-11-23 begin -->
+      <!--xsl:choose>
         <xsl:when test="../@scale and string(number(../@scale))!='NaN'">          
           <xsl:value-of select="number($height-in-pixel) * number(../@scale)"/>
         </xsl:when>
-        <xsl:otherwise>
+        <xsl:otherwise-->
           <xsl:value-of select="number($height-in-pixel)"/>
-        </xsl:otherwise>
-      </xsl:choose>
+        <!--/xsl:otherwise>
+      </xsl:choose-->
+      <!-- Edit by Alan for Bug:#2900417 on Date: 2009-11-23 end -->
     </xsl:attribute>
   </xsl:if>  
 </xsl:template>
@@ -2353,14 +2392,16 @@
   </xsl:variable>
   <xsl:if test="not($width-in-pixel = '100%')">
     <xsl:attribute name="width">
-      <xsl:choose>
+      <!-- Edit by Alan for Bug:#2900417 on Date: 2009-11-23 begin -->
+      <!--xsl:choose>
         <xsl:when test="../@scale and string(number(../@scale))!='NaN'">          
           <xsl:value-of select="number($width-in-pixel) * number(../@scale)"/>
         </xsl:when>
-        <xsl:otherwise>
+        <xsl:otherwise-->
           <xsl:value-of select="number($width-in-pixel)"/>
-        </xsl:otherwise>
-      </xsl:choose>
+        <!--/xsl:otherwise>
+      </xsl:choose-->
+      <!-- Edit by Alan for Bug:#2900417 on Date: 2009-11-23 end -->
     </xsl:attribute>
   </xsl:if>  
 </xsl:template>
