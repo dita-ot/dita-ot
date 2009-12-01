@@ -2335,7 +2335,7 @@
 <xsl:template match="*[contains(@class,' topic/image ')]/@scale">
     <xsl:variable name="height">
       <xsl:choose>
-        <xsl:when test="not(contains(@href,'://'))">
+        <xsl:when test="not(contains(../@href,'://'))">
           <!-- AM: currently dost.jar returns the height in function getWidth instead of width -->
           <xsl:value-of select="java:getWidth($OUTPUTDIR, string(../@href))"/>
         </xsl:when>
@@ -2344,7 +2344,7 @@
     </xsl:variable>
     <xsl:variable name="width">
       <xsl:choose>
-        <xsl:when test="not(contains(@href,'://'))">
+        <xsl:when test="not(contains(../@href,'://'))">
           <!-- AM: currently dost.jar returns the width in function getHeight instead of height -->
           <xsl:value-of select="java:getHeight($OUTPUTDIR, string(../@href))"/>
         </xsl:when>
