@@ -68,7 +68,13 @@
 <!-- *********************************************************************************
      Setup the HTML wrapper for the table of contents
      ********************************************************************************* -->
-<xsl:template match="/">
+  <!--Added by William on 2009-11-23 for bug:2900047 extension bug start -->
+  <xsl:template match="/">
+    <xsl:call-template name="generate-toc"/>
+  </xsl:template>
+  <!--Added by William on 2009-11-23 for bug:2900047 extension bug end -->
+<!--  -->
+<xsl:template name="generate-toc">
   <html><xsl:value-of select="$newline"/>
   <head><xsl:value-of select="$newline"/>
     <xsl:if test="string-length($contenttarget)>0 and
