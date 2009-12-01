@@ -89,6 +89,12 @@ See the accompanying license.txt file for applicable licenses.
                     <xsl:with-param name="element" select=".."/>
                 </xsl:call-template>
 
+                <xsl:if test="(parent::*/@pgwide) = '1'">
+                    <xsl:attribute name="start-indent">0</xsl:attribute>
+                    <xsl:attribute name="end-indent">0</xsl:attribute>
+                    <xsl:attribute name="width">auto</xsl:attribute>
+                </xsl:if>
+
                 <xsl:apply-templates/>
             </fo:table>
         </xsl:variable>
