@@ -173,8 +173,8 @@
 		    <include name="lib/resolver.jar"/>
 		    <include name="lib/CatalogManager.properties"/>
 		  	<exclude name="lib/saxon/**" />
-		    <include name="doc/userguide-orig/**"/>
-			<include name="doc/ot-userguide/**"/>
+		    <exclude name="doc/userguide-orig/**"/>
+			<exclude name="doc/ot-userguide/**"/>
 		    <exclude name="build.number"/>
 		    <exclude name=".*"/>
 	</patternset>
