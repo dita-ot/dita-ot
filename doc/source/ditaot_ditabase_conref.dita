@@ -23,7 +23,7 @@ resources about the DITA OT parameters: <ul>
 scope="external"></xref></li>
 <li><xref
 href="http://dita.xml.org/wiki/parameters-to-the-dita-ot-transform"></xref></li>
-</ul></draft-comment><lines><!--The <ph id="valid_values_yes_no"> element is used in many <pd> elements.--><ph
+</ul></draft-comment><?Pub Caret?><lines><!--The <ph id="valid_values_yes_no"> element is used in many <pd> elements.--><ph
 id="valid_values_yes_no">The valid values are yes and no. The default value is no.</ph></lines><parml>
 <plentry id="args.artlbl">
 <pt><parmname id="parmname_args.artlbl">args.artlbl</parmname></pt>
@@ -60,29 +60,29 @@ issue the <parmname>args.cssroot</parmname> parameter.</li>
 </plentry><plentry id="args.csspath">
 <pt><parmname id="parmname_args.csspath">args.csspath</parmname></pt>
 <pd id="pd_args.csspath">An optional parameter that specifies the
-path of the href attribute for the &lt;link> element in the HTML output.
-This can be useful if you want all the CSS files to be located in
-a subdirectory of the output directory, or if you want to refer to
-a CSS file located on a Web server. Valid values are one of the following:<ul>
+path of the @href attribute for the &lt;link> element in the HTML
+output. This can be useful if you want all the CSS files to be located
+in a subdirectory of the output directory, or if you want to refer
+to a CSS file located on a Web server. Valid values are one of the
+following:<ul>
 <li>A local relative path. Use <userinput>/</userinput> as the path
 separator; do not append a path separator to the end of the value.</li>
-<li>An absolute path that begins with <userinput>http://</userinput> or <userinput>https://</userinput>.<draft-comment>Does
-this work at all? Where did this information come from?</draft-comment></li>
+<li>An absolute path that begins with <userinput>http://</userinput> or <userinput>https://</userinput>.</li>
 </ul>The default value is no path.</pd>
 </plentry><plentry id="args.cssroot">
 <pt><parmname id="parmname_args.cssroot">args.cssroot</parmname></pt>
 <pd id="pd_args.cssroot">An optional parameter that specifies the
 root directory of a user-specified CSS file. If this parameter is
 set, the value of the <parmname>args.css</parmname> parameter must
-be a file path relative to <parmname>args.cssroot</parmname>.<draft-comment>Here
-are some messages from the Yahoo! list that are pertinent:<ul>
+be a file path relative to <parmname>args.cssroot</parmname>.<!--<draft-comment>Here are some messages from the Yahoo! list that are
+pertinent:<ul>
 <li><xref
 href="https://sourceforge.net/tracker/index.php?func=detail&amp;aid=1400140&amp;group_id=132728&amp;atid=725077"
 scope="external">Deborah Pickett's original feature request</xref></li>
 <li><xref
 href="http://tech.groups.yahoo.com/group/dita-users/message/4912"
 scope="external"></xref></li>
-</ul></draft-comment></pd>
+</ul></draft-comment>--></pd>
 </plentry><plentry id="args.debug" rev="1">
 <pt><parmname id="parmname_args.debug">args.debug</parmname></pt>
 <pd id="pd_args.debug">An optional parameter that specifies whether
@@ -93,7 +93,7 @@ conref="#reference/valid_values_yes_no"></ph></pd>
 <pd id="pd_args.dita.locale">An optional parameter that specifies
 the locale that is used to sort the &lt;indexterm> elements. The valid
 values are specified in  the <filepath>string.xml</filepath> file
-located in the <filepath><varname>DITAOT</varname>\xsl\common</filepath> directory,
+that is located in the <filepath><varname>DITAOT</varname>\xsl\common</filepath> directory,
 where <varname>DITAOT</varname> is the directory where the DITA Open
 Toolkit is installed. By default, the value of the first occurrence
 of the @xml-lang attribute found in the DITA source is used. If no
@@ -460,7 +460,7 @@ The default value is index.</pd>
 <pd>Description needed</pd>
 </plentry><plentry id="publish.required.cleanup">
 <pt><parmname>publish.required.cleanup</parmname></pt>
-<pd>Description needed</pd><?Pub Caret?>
+<pd>Description needed</pd>
 </plentry></parml></section>
 <section>       <title>Parameters used for the Java command-line interface</title> 
      <parml><plentry id="artlbl">
@@ -611,4 +611,4 @@ Toolkit.</pd>
 </taskbody>
 </task>
 </dita>
-<?Pub *0000033952?>
+<?Pub *0000033877?>
