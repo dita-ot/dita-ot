@@ -760,9 +760,6 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:template match="*[contains(@class,' topic/section ')]/*[contains(@class,' topic/title ')]">
         <fo:block xsl:use-attribute-sets="section.title" id="{@id}">
-            <!-- added by William on 2009-07-02 for indexterm bug:2815485 start-->
-            <xsl:call-template name="pullPrologIndexTerms"/>
-            <!-- added by William on 2009-07-02 for indexterm bug:2815485 end-->
             <xsl:call-template name="getTitle"/>
         </fo:block>
     </xsl:template>
@@ -1440,7 +1437,7 @@ See the accompanying license.txt file for applicable licenses.
     
     <!-- added by William on 2009-07-02 for indexterm bug:2815485 start -->
     <xsl:template name="pullPrologIndexTerms">
-        <xsl:apply-templates select="ancestor-or-self::*[contains(@class, ' topic/topic ')]/*[contains(@class, ' topic/prolog ')]
+        <xsl:apply-templates select="ancestor-or-self::*[contains(@class, ' topic/topic ')][1]/*[contains(@class, ' topic/prolog ')]
             //opentopic-index:index.entry[not(parent::opentopic-index:index.entry)]"/>
     </xsl:template>
     <!-- added by William on 2009-07-02 for indexterm bug:2815485 end -->
