@@ -20,6 +20,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Stack;
 
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.DITAOTJavaLogger;
@@ -243,6 +244,11 @@ public class DitaWriter extends AbstractXMLWriter {
     private List<String> colSpec;
     private int columnNumber; // columnNumber is used to adjust column name
     private int columnNumberEnd; //columnNumberEnd is the end value for current entry
+    //Added by William on 2009-11-27 for bug:1846993 embedded table bug start
+    //stack to store colspec list
+    private Stack<List> colSpecStack; 
+    //Added by William on 2009-11-27 for bug:1846993 embedded table bug end
+    
     //Added by William on 2009-06-30 for colname bug:2811358 start
     //store row number
     private int rowNumber;
@@ -305,6 +311,9 @@ public class DitaWriter extends AbstractXMLWriter {
         output = null;
         tempDir = null;
         colSpec = null;
+        //initial the stack
+        colSpecStack = new Stack<List>();
+        
         props = null;
         validateMap = null;
         logger = new DITAOTJavaLogger();
@@ -580,7 +589,11 @@ public class DitaWriter extends AbstractXMLWriter {
 		if (Constants.ELEMENT_NAME_TGROUP.equals(qName)){
 			columnNumber = 1; // initialize the column number
 		    columnNumberEnd = 0;//totally columns
+		    //Edited by William on 2009-11-27 for bug:1846993 start
 		    colSpec = new ArrayList<String>(Constants.INT_16);
+		    //pushed into the stack.
+		    colSpecStack.push(colSpec);
+		    //Edited by William on 2009-11-27 for bug:1846993 end
 		}else if(Constants.ELEMENT_NAME_ROW.equals(qName)) {
 		    columnNumber = 1; // initialize the column number
 		    columnNumberEnd = 0;
@@ -596,6 +609,7 @@ public class DitaWriter extends AbstractXMLWriter {
 				colSpec.add(COLUMN_NAME_COL+columnNumber);
 			}
 			columnNumberEnd = columnNumber;
+			//change the col name of colspec
 			copyAttribute(Constants.ATTRIBUTE_NAME_COLNAME, COLUMN_NAME_COL+columnNumber);
 			//Added by William on 2009-06-30 for colname bug:2811358 start
 			//total columns count
@@ -729,6 +743,7 @@ public class DitaWriter extends AbstractXMLWriter {
     }
 
     
+	@SuppressWarnings("unchecked")
 	@Override
     public void endElement(String uri, String localName, String qName)
             throws SAXException {
@@ -751,6 +766,19 @@ public class DitaWriter extends AbstractXMLWriter {
             	logger.logException(e);
             }
         }
+        //Added by William on 2009-11-27 for bug:1846993 embedded table bug start
+        if(Constants.ELEMENT_NAME_TGROUP.equals(qName)){
+        	colSpecStack.pop();
+        	//has tgroup tag
+        	if(!colSpecStack.isEmpty()){
+        		colSpec = colSpecStack.peek();
+        	}else{
+        		//no more tgroup tag
+        		colSpec = null;
+        	}
+        }
+        //Added by William on 2009-11-27 for bug:1846993 embedded table bug end
+        
     }
 
 	@Override
