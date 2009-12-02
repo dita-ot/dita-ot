@@ -29,7 +29,10 @@ with those set forth herein.
 -->
 
 <project name="dita.build"  basedir=".">
-
+	<!--Added by William on 2009-11-23 for bug:2893745 start -->
+	<import file="../../build_init.xml"/>
+	<!--Added by William on 2009-11-23 for bug:2893745 end -->
+	
     <property name="customization.dir" value="${basedir}/Customization"/>
     <property file="${customization.dir}/build.properties"/>
 
@@ -45,6 +48,20 @@ with those set forth herein.
 	
 	<property name="fop.home" value="${basedir}/fop"/>
 	
+	<!--Added by William on 2009-11-23 for bug:2893745 start -->
+	<condition property="hasFopLib">
+	   <available classname="org.apache.fop.tools.anttasks.Fop">
+		 <classpath id="project.classpath">  
+		 	<fileset dir="${fop.home}">
+		 		<include name="build/fop.jar"/>   
+		 		<include name="lib/*.jar"/>
+		 		<include name="build/fop-hyph.jar"/>   
+		 	</fileset>
+		 </classpath>  
+		</available>
+	</condition>
+	<!--Added by William on 2009-11-23 for bug:2893745 end -->
+	
 	<condition property="use.xep.pdf.formatter">
 		<equals arg1="${pdf.formatter}" arg2="xep"/>
 	</condition>
@@ -59,8 +76,22 @@ with those set forth herein.
           </or>
         </not>
 	</condition>
+	<!--Added by William on 2009-11-23 for bug:2893745 start -->
+	<target name="checkFOPLib">
+	  <dita-ot-fail id="DOTA066F">
+		<condition>
+			<and>
+				<not>
+					<isset property="hasFopLib"/>
+				</not>
+				<isset property="use.fop.pdf.formatter"/>
+			</and>
+		</condition>
+	  </dita-ot-fail>
+	</target>
+	<!--Added by William on 2009-11-23 for bug:2893745 end -->
 	
-    <!-- dita.temp.dir can be an absolute or relative path. Handle both. -->
+	<!-- dita.temp.dir can be an absolute or relative path. Handle both. -->
     <available property="work.dir" value="${dita.temp.dir}"
         file="${dita.temp.dir}" type="dir" />
     <condition property="work.dir" value="${caller.dir}/${dita.temp.dir}">
@@ -262,7 +293,7 @@ with those set forth herein.
         <antcall target="copyCoreArtwork">
             <param name="coreArtworkDestinationDir" value="${artwork.dir}"/>
         </antcall>
-
+        
         <antcall target="transform.topic2fo">
             <param name="inputFile" value="${file.protocol.prefix}${inputFile}"/>
             <param name="outputFile" value="${dita.map.output.dir}/topic.fo"/>
@@ -276,8 +307,8 @@ with those set forth herein.
             <param name="outputFile" value="${outputFile}"/>
             <param name="xep.failOnError" value="${xep.failOnError}"/>
         </antcall>
-
-        <antcall target="delete.fo2pdf.topic.fo"/>
+    	
+    	<antcall target="delete.fo2pdf.topic.fo"/>
     </target>
 
     <target name="delete.fo2pdf.topic.fo" unless="retain.topic.fo">
@@ -435,6 +466,8 @@ with those set forth herein.
 	
 	<!--Run FOP-->
 	<target name="transform.fo2pdf.fop" if="use.fop.pdf.formatter">
+		<!--Check fop lib-->
+		<antcall target="checkFOPLib"/>
 		<taskdef name="fop" classname="org.apache.fop.tools.anttasks.Fop">
 		  <classpath>
 		    <fileset dir="${fop.home}/lib">

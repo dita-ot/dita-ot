@@ -87,9 +87,9 @@
   
   <patternset id="pattern.package.minimum">
   	
-  	<exclude name="demo/fo/fop/build/*" />
-	<exclude name="demo/fo/fop/conf/*" />
-	<exclude name="demo/fo/fop/lib/*" />
+  	<exclude name="demo/fo/fop/build/" />
+	<exclude name="demo/fo/fop/conf/" />
+	<exclude name="demo/fo/fop/lib/" />
 	<exclude name="demo/fo/lib/icu4j.jar" />
 	<exclude name="build.log"/>
   	<include name="demo/tocjs/**"/>
@@ -143,9 +143,9 @@
 	
 	<patternset id="pattern.package.standard">
 			
-			<exclude name="demo/fo/fop/build/*" />
-			<exclude name="demo/fo/fop/conf/*" />
-			<exclude name="demo/fo/fop/lib/*" />
+			<exclude name="demo/fo/fop/build/" />
+			<exclude name="demo/fo/fop/conf/" />
+			<exclude name="demo/fo/fop/lib/" />
 			<exclude name="demo/fo/lib/icu4j.jar" />
 			<exclude name="build.log"/>
 		
