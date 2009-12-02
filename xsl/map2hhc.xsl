@@ -18,7 +18,9 @@
 -->
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                version="1.0">
+                version="1.0"
+                xmlns:java="org.dita.dost.util.StringUtils"
+  >
 
 <!-- Include error message template -->
 <xsl:import href="common/output-message.xsl"/>
@@ -279,10 +281,26 @@
             <xsl:attribute name="name">Local</xsl:attribute>
             <xsl:choose> <!-- What if targeting a nested topic? Need to keep the ID? -->
               <xsl:when test="contains(@copy-to, $DITAEXT)">
-                <xsl:attribute name="value"><xsl:value-of select="$pathFromMaplist"/><xsl:value-of select="substring-before(@copy-to, $DITAEXT)"/><xsl:value-of select="$OUTEXT"/><xsl:value-of select="$topicID"/></xsl:attribute>
+                <xsl:attribute name="value">
+                  <xsl:value-of select="$pathFromMaplist"/>
+                  <!-- added by William on 2009-11-26 for bug:1628937 start-->
+                  <!--xsl:value-of select="substring-before(@copy-to,$DITAEXT)"/-->
+                  <xsl:value-of select="java:getFileName(@copy-to,$DITAEXT)"/>
+                  <!-- added by William on 2009-11-26 for bug:1628937 end-->
+                  
+                  <xsl:value-of select="$OUTEXT"/><xsl:value-of select="$topicID"/>
+                </xsl:attribute>
               </xsl:when>
               <xsl:when test="contains(@href, $DITAEXT)">
-                <xsl:attribute name="value"><xsl:value-of select="$pathFromMaplist"/><xsl:value-of select="substring-before(@href, $DITAEXT)"/><xsl:value-of select="$OUTEXT"/><xsl:value-of select="$topicID"/></xsl:attribute>
+                <xsl:attribute name="value">
+                  <xsl:value-of select="$pathFromMaplist"/>
+                  <!-- added by William on 2009-11-26 for bug:1628937 start-->
+                  <!--xsl:value-of select="substring-before(@href,$DITAEXT)"/-->
+                  <xsl:value-of select="java:getFileName(@href,$DITAEXT)"/>
+                  <!-- added by William on 2009-11-26 for bug:1628937 end-->
+                  <xsl:value-of select="$OUTEXT"/>
+                  <xsl:value-of select="$topicID"/>
+                </xsl:attribute>
               </xsl:when>
               <xsl:when test="contains(@href,'.htm') and @scope!='external'">
                 <xsl:attribute name="value"><xsl:value-of select="$pathFromMaplist"/><xsl:value-of select="@href"/></xsl:attribute>

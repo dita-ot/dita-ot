@@ -444,4 +444,21 @@ public class StringUtils {
 			return aLocale; 
 		 }
 		
+		//added by William on 2009-11-26 for bug:1628937 start
+		/**
+		 * Get file's main name.
+		 * @param input input filename
+		 * @param marker delimiter
+		 * @return file's main name 
+		 */
+		public static String getFileName(String input, String marker){
+			int index = input.lastIndexOf(marker);
+			if(index != -1){
+				return input.substring(0, index);
+			}else{
+				return input;
+			}
+		}
+		//added by William on 2009-11-26 for bug:1628937 end
+		
 }
