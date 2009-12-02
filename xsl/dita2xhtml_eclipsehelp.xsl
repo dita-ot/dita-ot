@@ -1047,12 +1047,12 @@
         <xsl:element name="include">
             <xsl:variable name="path">
                 <xsl:choose>
-                    <xsl:when test="not($topicid = '#none' ) and not($elemid = '#none')">
+                    <xsl:when test="not($topicid = '#none#' ) and not($elemid = '#none#')">
                         <xsl:value-of select="$pluginId"/>/<xsl:value-of select="concat(substring-before(translate($FILENAME, '\', '/'), '.')
                             , '.html')"/>/<xsl:value-of select="$topicid"/>__<xsl:value-of select="$elemid"/>
                     </xsl:when>
                     <!-- has elemid -->
-                    <xsl:when test="not($elemid = '#none' )">
+                    <xsl:when test="not($elemid = '#none#' )">
                         <!-- change the element id to topic id -->
                         <xsl:value-of select="$pluginId"/>/<xsl:value-of select="concat(substring-before(translate($FILENAME, '\', '/'), '.')
                             , '.html')"/>/<xsl:value-of select="$elemid"/>

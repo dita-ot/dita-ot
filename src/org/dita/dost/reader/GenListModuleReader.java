@@ -543,6 +543,13 @@ public class GenListModuleReader extends AbstractXMLReader {
 			//when meets topic tag
 			if(attrValue.contains(Constants.ATTR_CLASS_VALUE_TOPIC)){
 				topicId = atts.getValue(Constants.ATTRIBUTE_NAME_ID);
+				//relpace place holder with first topic id
+				//Get relative file name
+				String filename = FileUtils.getRelativePathFromMap(
+						rootFilePath, currentFile);
+				if(result.indexOf(filename + Constants.QUESTION) != -1){
+					result = new StringBuffer(result.toString().replace(filename + Constants.QUESTION, topicId));
+				}
 				
 			}
 			//get plugin id only transtype = eclipsehelp
@@ -1026,7 +1033,9 @@ public class GenListModuleReader extends AbstractXMLReader {
 						}else{
 							//get the first topicId(vaild href file)
 							if(FileUtils.isDITAFile(topicHref)){
-								topicId = MergeUtils.getInstance().getFirstTopicId(topicHref, (new File(rootFilePath)).getParent(), true);
+								//topicId = MergeUtils.getInstance().getFirstTopicId(topicHref, (new File(rootFilePath)).getParent(), true);
+								//to be unique
+								topicId = topicHref + Constants.QUESTION;
 							}
 						}
 					}
