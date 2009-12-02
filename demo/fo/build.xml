@@ -78,7 +78,7 @@ with those set forth herein.
 	</condition>
 	<!--Added by William on 2009-11-23 for bug:2893745 start -->
 	<target name="checkFOPLib">
-	  <dita-ot-fail id="DOTA066F">
+	  <dita-ot-fail id="DOTA010E">
 		<condition>
 			<and>
 				<not>
