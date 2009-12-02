@@ -1901,7 +1901,7 @@ See the accompanying license.txt file for applicable licenses.
                     </xsl:choose>-->
                 </xsl:attribute>
             </xsl:if>
-            <xsl:if test="not($width) and not($height)">
+            <xsl:if test="not($width) and not($height) and @scale">
                 <xsl:attribute name="content-width">
                     <xsl:value-of select="concat(@scale,'%')"/>
                 </xsl:attribute>
