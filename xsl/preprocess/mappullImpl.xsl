@@ -376,10 +376,12 @@ Other modes can be found within the code, and may or may not prove useful for ov
       <!-- If the actual class contains the specified type; reference can be called topic,
            specializedReference can be called reference -->
       <xsl:when test="contains($actual-class,concat(' ',$type,'/',$type,' '))">
-        <xsl:apply-templates select="." mode="ditamsg:type-mismatch-info">
+        <!-- commented out for bug:1771123 start -->
+        <!--xsl:apply-templates select="." mode="ditamsg:type-mismatch-info">
           <xsl:with-param name="type" select="$type"/>
           <xsl:with-param name="actual-name" select="$actual-name"/>
-        </xsl:apply-templates>
+        </xsl:apply-templates-->
+        <!-- commented out for bug:1771123 end -->
       </xsl:when>
       <!-- Otherwise: incorrect type is specified -->
       <xsl:otherwise>
