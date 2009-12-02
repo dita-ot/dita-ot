@@ -94,6 +94,7 @@
      * 1931457 Need to identify transtype during XHTML output step
      * 1629094 docbook creates empty simplelists
      * 1628936 transtype=docbook does not handle publisher and copyright element
+     * 2849078 Problems using keyrefs with DITA OT 1.5 M19 - ID: 2849078
      * 2875373 tm in linktext is dropped
      * 2870935 keyref within topics ignore @copy-to attributes
      * 2873560 SWF flash not defined as resources to be copied
@@ -118,7 +119,16 @@
      * 2893493 ${clean.temp} is not set to true per documentation
      * 2893664 ampersand entity with conref actions causes build to fail
      * 2893924 htmlhelp transtype requires video plugin
-     
+     * 1628937 Rename supportingboth.ditaand.xmlinaditamap.dita
+     * 1771123 Inappropriate Message 018 On type= value
+     * 1819660 Eclipse Help issue producing toc file.
+     * 1848313 ditaval file sent to XSLT not URL
+     * 1897542 Chunk to-content may need to rewrite topic IDs
+     * 2875946 PDF: table @pgwide semantics not implemented
+     * 2893745 missing fop's file/directory in standard package
+     * 2900047 map2htmtoc.xsl doesn't allow for extension of root template
+     * 2900417 html transform does not use image/@scale properly
+     * 2906957 Update Eclipse plugin DTDs and packaging
 
 ====================================================================================
 
