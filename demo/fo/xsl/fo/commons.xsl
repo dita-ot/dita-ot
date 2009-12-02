@@ -1901,6 +1901,11 @@ See the accompanying license.txt file for applicable licenses.
                     </xsl:choose>-->
                 </xsl:attribute>
             </xsl:if>
+            <xsl:if test="not($width) and not($height)">
+                <xsl:attribute name="content-width">
+                    <xsl:value-of select="concat(@scale,'%')"/>
+                </xsl:attribute>
+            </xsl:if>
         </fo:external-graphic>
     </xsl:template>
 
