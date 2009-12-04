@@ -229,14 +229,9 @@ See the accompanying license.txt file for applicable licenses.
             <xsl:when test="$topicType = 'topicPreface'">
                 <xsl:call-template name="processTopicPreface"/>
             </xsl:when>
-            <xsl:when test="$topicType = 'topicNotices' and 
-                            not(contains(@class,' concept/concept ') or 
-                                contains(@class,' reference/reference ') or 
-                                contains(@class,' task/task '))">
-                <!-- When combining this template with the C/T/R templates, those
-                     templates did not have a check for topicNotices. So, continue
-                     to skip that check for those three types. -->
-                <!--  <xsl:call-template name="processTopicNotices"/> -->
+            <xsl:when test="$topicType = 'topicNotices'">
+                <!-- Suppressed in normal processing, since it goes at the beginning of the book. -->
+                <!-- <xsl:call-template name="processTopicNotices"/> -->
             </xsl:when>
             <xsl:when test="$topicType = 'topicSimple'">
                 <xsl:variable name="page-sequence-reference">
