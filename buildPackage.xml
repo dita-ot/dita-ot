@@ -13,7 +13,7 @@
   <property name="package.name.root" value="DITA-OT"/>
   <property name="version" value="1.5"/>
   <!--This property should be edited manually in each milestone release?-->
-  <property name="milestone" value="M23"/>
+  <property name="milestone" value="M25"/>
 	
   <property name="src.dir" location="src/"/>
   <property name="bin.dir" location="output2/"/>
@@ -72,6 +72,7 @@
       debug="on" source="1.5" target="1.5">
       <classpath location="lib/resolver.jar"></classpath>
     </javac>
+  	<delete dir="${bin.dir}/build" includeemptydirs="yes"/>
   </target>
   
   <target name="package-java" depends="build-java">
