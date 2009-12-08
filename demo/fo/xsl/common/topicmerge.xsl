@@ -95,27 +95,92 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' map/topicref ') and @print='no']" priority="5"/>
+    <xsl:template match="*[contains(@class,' topic/topic ')] | dita-merge/dita">
 
-    <xsl:template match="*[contains(@class,' topic/topic ')]">
         <xsl:param name="parentId"/>
+      <xsl:variable name="idcount">
+        <!--for-each is used to change context.  There's only one entry with a key of $parentId-->
+        <xsl:for-each select="key('topicref',$parentId)">
+          <xsl:value-of select="count(preceding::*[@href = current()/@href][not(ancestor::*[contains(@class, ' map/reltable ')])]) + count(ancestor::*[@href = current()/@href])"/>
+        </xsl:for-each>
+      </xsl:variable>
         <xsl:copy>
-            <xsl:apply-templates select="@*"/>
-            <xsl:apply-templates/>
+            <xsl:apply-templates select="@*[name() != 'id']"/>
+            <xsl:variable name="new_id">
+                <xsl:choose>
+                    <xsl:when test="$idcount &gt; 0">
+                        <xsl:value-of select="concat(@id,'_ssol',$idcount)"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="@id"/>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:variable>
+            <xsl:attribute name="id">
+              <xsl:value-of select="$new_id"/>
+            </xsl:attribute>
+            <xsl:apply-templates>
+                <xsl:with-param name="newid" select="$new_id"/>
+            </xsl:apply-templates>
             <xsl:apply-templates select="key('topicref',$parentId)/*" mode="build-tree"/>
         </xsl:copy>
     </xsl:template>
     
-    <xsl:template match="dita">
-        <xsl:param name="parentId"/>
-        <xsl:copy-of select="*"/>
-    </xsl:template>
-
     <xsl:template match="*[contains(@class,' map/topicref ')]/@id"/>
+
+    <xsl:template match="@href">
+        <xsl:param name="newid"/>
+        <xsl:variable name="topic-rest">
+            <xsl:value-of select="substring-after(., '#')"/>
+        </xsl:variable>
+
+        <xsl:variable name="topic-id">
+            <xsl:value-of select="substring-before($topic-rest, '/')"/>
+        </xsl:variable>
+
+        <xsl:variable name="element-id">
+            <xsl:value-of select="substring-after($topic-rest, '/')"/>
+        </xsl:variable>
+
+        <xsl:attribute name="href">
+        <xsl:choose>
+            <xsl:when test="$element-id = '' or not(starts-with(., '#unique'))">
+                <xsl:value-of select="."/>
+            </xsl:when>
+            <xsl:when test="ancestor::*[contains(@class, ' topic/topic ')][1]/@id = $topic-id">
+                <xsl:text>#</xsl:text>
+                <xsl:value-of select="$newid"/>
+                <xsl:text>/</xsl:text>
+                <xsl:value-of select="$newid"/>
+                <xsl:text>_Connect_42_</xsl:text>
+                <xsl:value-of select="$element-id"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="concat('#',$topic-id,'/',$topic-id,'_Connect_42_',$element-id)"/>
+            </xsl:otherwise>
+        </xsl:choose>
+        
+            
+        </xsl:attribute>
+    </xsl:template>
 
 	<xsl:template match="*[contains(@class,' map/topicref ')]/@href">
         <xsl:copy-of select="."/>
         <xsl:attribute name="id">
+            <xsl:variable name="fragmentId">
             <xsl:value-of select="substring-after(.,'#')"/>
+            </xsl:variable>
+            <xsl:variable name="idcount">
+                <xsl:value-of select="count(../preceding::*[@href = current()][not(ancestor::*[contains(@class, ' map/reltable ')])]) + count(../ancestor::*[@href = current()])"/>
+            </xsl:variable>
+            <xsl:choose>
+                <xsl:when test="$idcount &gt; 0">
+                        <xsl:value-of select="concat($fragmentId,'_ssol',$idcount)"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="$fragmentId"/>
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:attribute>
     </xsl:template>
 
@@ -127,9 +192,14 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:template match="text()" mode="build-tree" priority="-1"/>
 
     <xsl:template match="*" priority="-1">
+        <xsl:param name="newid"/>
         <xsl:copy>
-            <xsl:apply-templates select="@*"/>
-            <xsl:apply-templates select="*|text()|processing-instruction()"/>
+            <xsl:apply-templates select="@*">
+                <xsl:with-param name="newid" select="$newid"/>
+            </xsl:apply-templates>
+            <xsl:apply-templates select="*|text()|processing-instruction()">
+                <xsl:with-param name="newid" select="$newid"/>
+            </xsl:apply-templates>
         </xsl:copy>
     </xsl:template>
 
@@ -139,6 +209,15 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:template match="processing-instruction()" priority="-1">
         <xsl:copy-of select="."/>
+    </xsl:template>
+
+    <xsl:template match="@id[not(parent::*[contains(@class, ' topic/topic ')])]">
+        <xsl:param name="newid"/>
+        <xsl:attribute name="id">
+            <xsl:value-of select="$newid"/>
+            <xsl:text>_Connect_42_</xsl:text>
+            <xsl:value-of select="."/>
+        </xsl:attribute>
     </xsl:template>
 
 	<xsl:template name="isNotTopicRef">
