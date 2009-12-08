@@ -19,6 +19,7 @@
                 xmlns:saxon="http://icl.com/saxon"
                 extension-element-prefixes="saxon"
                 xmlns:java="org.dita.dost.util.StringUtils"
+                exclude-result-prefixes="java"
                 >
 
 <!-- map2htmltoc.xsl   main stylesheet

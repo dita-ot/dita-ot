@@ -19,7 +19,7 @@
                 xmlns:dita2html="http://dita-ot.sourceforge.net/ns/200801/dita2html"
                 xmlns:ditamsg="http://dita-ot.sourceforge.net/ns/200704/ditamsg"
                 xmlns:exsl="http://exslt.org/common"
-                exclude-result-prefixes="dita2html ditamsg exsl"
+                exclude-result-prefixes="dita2html ditamsg exsl java"
                 xmlns:java="org.dita.dost.util.ImgUtils">
 
 

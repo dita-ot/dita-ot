@@ -20,6 +20,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 version="1.0"
                 xmlns:java="org.dita.dost.util.StringUtils"
+                exclude-result-prefixes="java"
   >
 
 <!-- Include error message template -->
