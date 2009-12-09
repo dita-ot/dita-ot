@@ -13,6 +13,7 @@
      * New parameter to generate output for only the topics referenced in a map
      * Use fileparameter in Ant 1.7 to replace processing instruction in 
        intermediate dita files
+     * Determine the version of DITA-OT via the class org.dita.dost.util.Version
        
      [SourceForge Enhancements Added]
      * 2859612 Add support for Serbian (Latin)
