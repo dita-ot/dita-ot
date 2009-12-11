@@ -126,7 +126,7 @@ See the accompanying license.txt file for applicable licenses.
         </xsl:copy>
     </xsl:template>
     
-    <xsl:template match="*[contains(@class,' map/topicref ')]/@id"/>
+    <xsl:template match="*[contains(@class,' map/topicref ')]/@id" priority="5"/>
 
     <xsl:template match="@href">
         <xsl:param name="newid"/>
