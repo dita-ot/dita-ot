@@ -9,6 +9,7 @@
   
   <xsl:template match="*[contains(@class, ' mapgroup-d/topichead ')]">
     <xsl:param name="parent"/>
+    <xsl:param name="contentwin"/>
    <!-- <xsl:variable name="self" 
      select="translate(translate(translate(@navtitle, '/', ''), '.', ''), ' ', '')"/>-->
     <xsl:variable name="apos">'</xsl:variable>
@@ -30,6 +31,7 @@
     
       <xsl:apply-templates>
       <xsl:with-param name="parent" select="$self"/>
+        <xsl:with-param name="contentwin" select="$contentwin"/>
       </xsl:apply-templates>
     
   </xsl:template>

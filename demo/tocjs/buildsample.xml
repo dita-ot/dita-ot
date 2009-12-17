@@ -9,6 +9,7 @@
 <project name="docondoc" default="all">
     <import file="..${file.separator}..${file.separator}conductor.xml"/>
     <property name="dita.extname" value=".xml"/>
+    <property name="content.frame" value="contentwin"/>
    
     <target name="sample2html" depends="use-init">
         <antcall target="dita2xhtml">

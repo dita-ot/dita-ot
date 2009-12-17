@@ -12,7 +12,9 @@
 <concept id="tocjs_knownissues" xml:lang="en-us">
  <title>Known Issues</title>
  <conbody>
-  <p>Doc topicref problems for external URLs and navtitles...</p>
+  <p>The <filepath>topicref.xsl</filepath> file hard codes <codeph>contentwin</codeph> into the code
+  to display content. This matches the supplied <filepath>frameset.html</filepath> file, but does
+   not support passing in a <codeph>contenttarget</codeph> parameter from the ant task.</p>
   
  </conbody>
 </concept>

@@ -25,6 +25,7 @@
   <target name="dita.map.tocjs" description="generate merged for tocjs">
     <xslt processor="trax" in="${input}" out="${output.file}"
       style="${dita.dir}/demo/tocjs/xsl/tocjs.xsl">
+      <param name="contentwin" expression="${content.frame}" if="content.frame"/>
       <param name="ditaext" expression="${dita.extname}"/>
       <param name="htmlext" expression="${out.ext}"/>
       <xmlcatalog refid="dita.catalog"/>

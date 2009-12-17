@@ -35,7 +35,7 @@ form {
 #header h4 { position: relative; float: right; font-size:11px; 
              letter-spacing: 1px; top: 10px; right: 30px; 
              line-height: 15px; padding: 0 0 0 13px; margin: 0px; }
-#content { float: left; width: 200px; min-height:72px; padding:6px 0px; border: 0px solid #C13B00;
+#content { float: left; width: 255px; min-height:72px; padding:6px 0px; border: 0px solid #C13B00;
            margin-left: 5px; top:0px; }
 #content h1 { font-size:18px; margin:0px;      }
 . { padding-bottom:25px; margin-bottom:10px; overflow: hidden; }
