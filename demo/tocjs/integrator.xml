@@ -28,7 +28,7 @@
       <param name="contentwin" expression="${content.frame}" if="content.frame"/>
       <param name="ditaext" expression="${dita.extname}"/>
       <param name="htmlext" expression="${out.ext}"/>
-      <xmlcatalog refid="dita.catalog"/>
+      <!--<xmlcatalog refid="dita.catalog"/>-->
     </xslt>
   </target>
 
