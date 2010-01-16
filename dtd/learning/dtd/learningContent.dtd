@@ -76,6 +76,11 @@ PUBLIC "-//OASIS//DTD DITA Learning Content//EN"
 <!--                    DOMAIN ENTITY DECLARATIONS                 -->
 <!-- ============================================================= -->
 
+<!ENTITY % learningInteractionBase-d-dec 
+  PUBLIC "-//OASIS//ENTITIES DITA 1.2 Learning Interaction Base Domain//EN" 
+         "learningInteractionBaseDomain.ent">
+  %learningInteractionBase-d-dec;
+
 <!ENTITY % learning-d-dec 
   PUBLIC "-//OASIS//ENTITIES DITA 1.2 Learning Domain//EN" 
          "learningDomain.ent">
@@ -112,8 +117,12 @@ PUBLIC "-//OASIS//DTD DITA Learning Content//EN"
                         ">
 <!ENTITY % fig          "fig |
                          %ut-d-fig; |
+                         %learningInteractionBase-d-fig; |
                          %learning-d-fig;
                         ">
+<!ENTITY % lcInteractionBase "lcInteractionBase |
+                         %learning-d-lcInteractionBase;
+                        ">                        
 <!ENTITY % index-base   "index-base | 
                          %indexing-d-index-base;
                         ">
@@ -164,12 +173,13 @@ PUBLIC "-//OASIS//DTD DITA Learning Content//EN"
                            &concept-att; 
                            &reference-att; 
                            &task-att; 
+                           &learningInteractionBase-d-att;
                            &learning-d-att;
                            &learningmeta-d-att; 
                            &learningBase-att;
                            &learningContent-att;
                            &learningSummary-att; 
-                           &learningAssessment-att;  
+                           &learningAssessment-att;
   "
 >
 
@@ -237,6 +247,11 @@ PUBLIC "-//OASIS//DTD DITA Learning Content//EN"
   PUBLIC "-//OASIS//ELEMENTS DITA 1.2 Indexing Domain//EN" 
          "../../base/dtd/indexingDomain.mod"
 >%indexing-d-def;
+
+<!ENTITY % learningInteractionBase-d-def
+  PUBLIC "-//OASIS//ELEMENTS DITA 1.2 Learning Interaction Base Domain//EN" 
+         "learningInteractionBaseDomain.mod">
+  %learningInteractionBase-d-def;
 
 <!ENTITY % learning-d-def
   PUBLIC "-//OASIS//ELEMENTS DITA 1.2 Learning Domain//EN" 

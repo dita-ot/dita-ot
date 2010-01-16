@@ -2,7 +2,7 @@
 <!-- ============================================================= -->
 <!--                    HEADER                                     -->
 <!-- ============================================================= -->
-<!--  MODULE:    DITA Learning Domain                              -->
+<!--  MODULE:    DITA Interaction Base Domain                      -->
 <!--  VERSION:   1.2                                               -->
 <!--  DATE:      November 2009                                     -->
 <!--                                                               -->
@@ -24,9 +24,9 @@ PUBLIC "-//OASIS//ENTITIES DITA Learning Domain//EN"
 <!--             entity declarations for the learning domain       -->
 <!--                                                               -->
 <!-- ORIGINAL CREATION DATE:                                       -->
-<!--             May 2007                                          -->
+<!--             November 2009                                     -->
 <!--                                                               -->
-<!--             (C) Copyright OASIS Open 2007, 2009.              -->
+<!--             (C) Copyright OASIS Open 2009.                    -->
 <!--             All Rights Reserved.                              -->
 <!--                                                               -->
 <!--  UPDATES:                                                     -->
@@ -36,35 +36,21 @@ PUBLIC "-//OASIS//ENTITIES DITA Learning Domain//EN"
 <!--                    LEARNING DOMAIN ENTITIES                   -->
 <!-- ============================================================= -->
 
-<!ENTITY learning-d-att "(topic learningInteractionBase-d learning-d)">
-<!ENTITY % learning-d-note 
-                       "lcInstructornote"
+<!ENTITY learningInteractionBase-d-att "(topic learningInteractionBase-d)">
+
+
+<!-- NOTE: The interactionBase element type is intended to be used
+           for specialization and should never be used directly
+           in DITA documents. This parameter entity should always
+           be redefined in shell DTDs to list only specializations
+           of lcInteractionBase
+  -->
+
+<!ENTITY % learningInteractionBase-d-fig 
+                       "lcInteractionBase"
 >
 
-<!-- The following elements are specializations of lcInteractionBase, 
-     which is a specialization of fig. So, they are available as 
-     replacements for each of those elements. -->
-<!ENTITY % learning-d-fig 
-                       "lcTrueFalse |
-                        lcSingleSelect |
-                        lcMultipleSelect |
-                        lcSequencing |
-                        lcMatching |
-                        lcHotspot |
-                        lcOpenQuestion"
->
-
-<!ENTITY % learning-d-lcInteractionBase 
-                       "lcTrueFalse |
-                        lcSingleSelect |
-                        lcMultipleSelect |
-                        lcSequencing |
-                        lcMatching |
-                        lcHotspot |
-                        lcOpenQuestion"
->
-
-<!-- ================== End Learning Domain Entities ============= -->
+<!-- ==== End Learning Interaction Base Domain Entities ========== -->
 
 
 

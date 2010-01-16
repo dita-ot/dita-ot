@@ -79,6 +79,11 @@ PUBLIC "-//OASIS//ELEMENTS DITA Map Subject Classification Domain//EN"
               type 
                         CDATA 
                                   #IMPLIED
+              processing-role
+                        (normal |
+                         resource-only |
+                         -dita-use-conref-target)
+                                  'resource-only'
               scope 
                         (external | 
                          local | 
@@ -132,6 +137,11 @@ PUBLIC "-//OASIS//ELEMENTS DITA Map Subject Classification Domain//EN"
               type 
                         CDATA 
                                   #IMPLIED
+              processing-role
+                        (normal |
+                         resource-only |
+                         -dita-use-conref-target)
+                                  'resource-only'
               scope 
                         (external | 
                          local | 
@@ -190,6 +200,11 @@ PUBLIC "-//OASIS//ELEMENTS DITA Map Subject Classification Domain//EN"
               type 
                         CDATA 
                                   #IMPLIED
+              processing-role
+                        (normal |
+                         resource-only |
+                         -dita-use-conref-target)
+                                  'resource-only'
               scope 
                         (external | 
                          local | 

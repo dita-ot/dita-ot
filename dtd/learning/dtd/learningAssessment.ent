@@ -38,7 +38,7 @@ PUBLIC "-//OASIS//ENTITIES DITA Learning Assessment//EN"
 <!-- ============================================================= -->
 
 <!ENTITY learningAssessment-att     
-  "(topic learningBase learningAssessment)"
+  "(topic learningBase+learningInteractionBase-d learningAssessment)"
 >
 
 

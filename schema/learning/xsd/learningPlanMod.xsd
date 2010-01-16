@@ -30,7 +30,7 @@
 
   <xs:annotation>
     <xs:appinfo>
-      <dita:domainsModule xmlns:dita="http://dita.oasis-open.org/architecture/2005/">(topic learningBase learningPlan)</dita:domainsModule>
+      <dita:domainsModule xmlns:dita="http://dita.oasis-open.org/architecture/2005/">(topic learningBase+learningInteractionBase-dlearningPlan)</dita:domainsModule>
     </xs:appinfo>
     <xs:documentation> 
     

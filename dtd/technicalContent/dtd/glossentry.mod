@@ -321,8 +321,6 @@ PUBLIC "-//OASIS//ELEMENTS DITA Glossary Entry//EN"
              "type 
                         (attention|
                          caution | 
-                         caution1 | 
-                         caution2 | 
                          danger | 
                          fastpath | 
                          important | 
@@ -355,8 +353,6 @@ PUBLIC "-//OASIS//ELEMENTS DITA Glossary Entry//EN"
              "type 
                         (attention|
                          caution | 
-                         caution1 | 
-                         caution2 | 
                          danger | 
                          fastpath | 
                          important | 
@@ -398,7 +394,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Glossary Entry//EN"
                          -dita-use-conref-target) 
                                   #IMPLIED
               keyref 
-                        NMTOKEN 
+                        CDATA 
                                   #IMPLIED
               longdescref 
                         CDATA 

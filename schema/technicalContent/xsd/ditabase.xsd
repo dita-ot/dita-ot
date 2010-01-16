@@ -119,14 +119,7 @@
 
   <!--  ================ INFO TYPES =====================  -->
   <xs:redefine schemaLocation="urn:oasis:names:tc:dita:xsd:topicMod.xsd:1.2" >
-   <!-- <xs:complexType name="topic.class">
-      <xs:complexContent>
-        <xs:extension base="topic.class">
-          <xs:attribute name="domains" type="xs:string" default="(topic ui-d) (topic hi-d) (topic sw-d) (topic pr-d) (topic ut-d) (topic indexing-d)"/>
-        </xs:extension>
-      </xs:complexContent>
-    </xs:complexType>-->
-    
+     
     <xs:group name="topic-info-types">
       <xs:choice>
         <xs:group ref="info-types"/>
@@ -135,14 +128,7 @@
   </xs:redefine>
 
   <xs:redefine schemaLocation="urn:oasis:names:tc:dita:xsd:conceptMod.xsd:1.2" >
-   <!-- <xs:complexType name="concept.class">
-      <xs:complexContent>
-        <xs:extension base="concept.class">
-          <xs:attribute name="domains" type="xs:string" default="(topic ui-d) (topic hi-d) (topic sw-d) (topic pr-d) (topic ut-d) (topic indexing-d)"/>
-        </xs:extension>
-      </xs:complexContent>
-    </xs:complexType>-->
-    
+  
     <xs:group name="concept-info-types">
       <xs:choice>
         <xs:group ref="info-types"/>
@@ -151,13 +137,30 @@
   </xs:redefine>
 
   <xs:redefine schemaLocation="urn:oasis:names:tc:dita:xsd:taskMod.xsd:1.2" >
-    <!--<xs:complexType name="task.class">
-      <xs:complexContent>
-        <xs:extension base="task.class">
-          <xs:attribute name="domains" type="xs:string" default="(topic ui-d) (topic hi-d) (topic sw-d) (topic pr-d) (topic ut-d) (topic indexing-d)"/>
-        </xs:extension>
-      </xs:complexContent>
-    </xs:complexType>-->
+    
+    <!-- ===== CONTENTS OF strictTaskbodyConstraint.xsd === START  ===== -->
+     <xs:group name="taskPreStep">
+      <xs:sequence>
+        <xs:choice> 
+        <xs:sequence>
+          <xs:group ref="prereq"  minOccurs="0"/>
+          <xs:group ref="context"  minOccurs="0"/>
+        </xs:sequence>
+      </xs:choice>
+      </xs:sequence>
+    </xs:group>
+
+    <xs:group name="taskPostStep">
+      <xs:sequence>
+        <xs:sequence>
+          <xs:group ref="result"  minOccurs="0"/>
+          <xs:group ref="example"  minOccurs="0"/>
+          <xs:group ref="postreq"  minOccurs="0"/>
+        </xs:sequence>
+        </xs:sequence>
+    </xs:group>
+    
+    <!-- ===== CONTENTS OF strictTaskbodyConstraint.xsd === END  ===== -->
     
     <xs:group name="task-info-types">
       <xs:choice>
@@ -232,7 +235,7 @@
   </xs:complexType>
   
   <xs:attributeGroup name="domains-att">
-    <xs:attribute name="domains" type="xs:string" default="(topic ui-d) (topic hi-d) (topic sw-d) (topic pr-d) (topic ut-d) (topic indexing-d) (topic hazard-d) (topic concept) (topic reference) (topic task)"/>
+    <xs:attribute name="domains" type="xs:string" default="(topic ui-d) (topic hi-d) (topic sw-d) (topic pr-d) (topic ut-d) (topic indexing-d) (topic hazard-d) (topic concept) (topic reference) (topic task) (topic task strictTaskbody-c) (topic concept glossentry) (topic concept glossgroup)"/>
   </xs:attributeGroup>
 
 </xs:schema>

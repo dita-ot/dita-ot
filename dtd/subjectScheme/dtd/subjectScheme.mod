@@ -62,6 +62,67 @@ PUBLIC "-//OASIS//ELEMENTS DITA Subject Scheme Map//EN"
 <!--                    ELEMENT DECLARATIONS                       -->
 <!-- ============================================================= -->
 
+<!-- This differs from topicref-atts-no-toc only by providing a
+     default for @processing-role                                  -->
+<!ENTITY % topicref-atts-for-subjectScheme 
+             'collection-type 
+                        (choice | 
+                         family | 
+                         sequence | 
+                         unordered |
+                         -dita-use-conref-target) 
+                                  #IMPLIED
+              type 
+                        CDATA 
+                                  #IMPLIED
+              processing-role
+                        (normal |
+                         resource-only |
+                         -dita-use-conref-target)
+                                  "resource-only"
+              scope 
+                        (external | 
+                         local | 
+                         peer | 
+                         -dita-use-conref-target) 
+                                  #IMPLIED
+              locktitle 
+                        (no | 
+                         yes | 
+                         -dita-use-conref-target) 
+                                  #IMPLIED
+              format 
+                        CDATA 
+                                  #IMPLIED
+              linking 
+                        (none | 
+                         normal | 
+                         sourceonly | 
+                         targetonly |
+                         -dita-use-conref-target) 
+                                  #IMPLIED
+              toc 
+                        (no | 
+                         yes | 
+                         -dita-use-conref-target)
+                                  "no"
+              print 
+                        (no | 
+                         printonly | 
+                         yes | 
+                         -dita-use-conref-target) 
+                                  #IMPLIED
+              search 
+                        (no | 
+                         yes | 
+                         -dita-use-conref-target) 
+                                  #IMPLIED
+              chunk 
+                        CDATA 
+                                  #IMPLIED
+  '
+>
+
 <!--                    LONG NAME: Subject Scheme Map              -->
 <!ENTITY % subjectScheme.content
                        "((%title;)?,
@@ -95,7 +156,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Subject Scheme Map//EN"
                         CDATA 
                                   #IMPLIED
               %localization-atts;
-              %topicref-atts-no-toc;
+              %topicref-atts-for-subjectScheme;
               %select-atts;"
 >
 <!ELEMENT subjectScheme    %subjectScheme.content;>

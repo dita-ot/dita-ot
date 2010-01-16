@@ -533,6 +533,10 @@
 
   <group xml:base="learning/xsd/">
 
+    <system systemId="learningInteractionBaseDomain.xsd" uri="learningInteractionBaseDomain.xsd"/>
+    <system systemId="urn:oasis:names:tc:dita:spec:learning:xsd:learningInteractionBaseDomain.xsd" uri="learningInteractionBaseDomain.xsd"/>
+    <system systemId="urn:oasis:names:tc:dita:spec:learning:xsd:learningInteractionBaseDomain.xsd:1.x" uri="learningInteractionBaseDomain.xsd"/>
+    <system systemId="urn:oasis:names:tc:dita:spec:learning:xsd:learningInteractionBaseDomain.xsd:1.2" uri="learningInteractionBaseDomain.xsd"/>
     
     <system systemId="learningDomain.xsd"      uri="learningDomain.xsd"/>
     <system systemId="urn:oasis:names:tc:dita:spec:learning:xsd:learningDomain.xsd"      uri="learningDomain.xsd"/>
@@ -841,7 +845,11 @@
     <uri name="urn:oasis:names:tc:dita:spec:machinery:xsd:machineryTaskbodyConstraintMod.xsd"      uri="machineryTaskbodyConstraintMod.xsd"/>
     <uri name="urn:oasis:names:tc:dita:spec:machinery:xsd:machineryTaskbodyConstraintMod.xsd:1.x"      uri="machineryTaskbodyConstraintMod.xsd"/>
     <uri name="urn:oasis:names:tc:dita:spec:machinery:xsd:machineryTaskbodyConstraintMod.xsd:1.2"      uri="machineryTaskbodyConstraintMod.xsd"/>
-
+    
+    <system systemId="machineryTaskbodyConstraintIntMod.xsd" uri="machineryTaskbodyConstraintIntMod.xsd"/>
+    <system systemId="urn:oasis:names:tc:dita:spec:machinery:xsd:machineryTaskbodyConstraintIntMod.xsd" uri="machineryTaskbodyConstraintIntMod.xsd"/>
+    <system systemId="urn:oasis:names:tc:dita:spec:machinery:xsd:machineryTaskbodyConstraintIntMod.xsd:1.x" uri="machineryTaskbodyConstraintIntMod.xsd"/>
+    <system systemId="urn:oasis:names:tc:dita:spec:machinery:xsd:machineryTaskbodyConstraintIntMod.xsd:1.2" uri="machineryTaskbodyConstraintIntMod.xsd"/>
   </group>
   <group xml:base="ditaval/xsd/">
       <system systemId="ditaval.xsd"      uri="ditaval.xsd"/>

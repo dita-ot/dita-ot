@@ -515,6 +515,10 @@
 		<public publicId="-//OASIS//ELEMENTS DITA Learning Map Domain//EN"
 			uri="learningMapDomain.mod" />
 
+    <public publicId="-//OASIS//ENTITIES DITA 1.x Learning Interaction Base Domain//EN"
+            uri="learningInteractionBaseDomain.ent"/>
+    <public publicId="-//OASIS//ELEMENTS DITA 1.x Learning Interaction Base Domain//EN"
+            uri="learningInteractionBaseDomain.mod"/>
 		<public publicId="-//OASIS//ENTITIES DITA 1.x Learning Domain//EN"
 			uri="learningDomain.ent" />
 		<public publicId="-//OASIS//ELEMENTS DITA 1.x Learning Domain//EN"
@@ -528,6 +532,10 @@
 		<public publicId="-//OASIS//ELEMENTS DITA 1.x Learning Map Domain//EN"
 			uri="learningMapDomain.mod" />
 
+    <public publicId="-//OASIS//ENTITIES DITA 1.2 Learning Interaction Base Domain//EN"
+            uri="learningInteractionBaseDomain.ent"/>
+    <public publicId="-//OASIS//ELEMENTS DITA 1.2 Learning Interaction Base Domain//EN"
+            uri="learningInteractionBaseDomain.mod"/>
 		<public publicId="-//OASIS//ENTITIES DITA 1.2 Learning Domain//EN"
 			uri="learningDomain.ent" />
 		<public publicId="-//OASIS//ELEMENTS DITA 1.2 Learning Domain//EN"
@@ -1099,6 +1107,10 @@
     <system systemId="urn:oasis:names:tc:dita:spec:learning:xsd:learningDomain.xsd:1.x"      uri="learningDomain.xsd"/>
     <system systemId="urn:oasis:names:tc:dita:spec:learning:xsd:learningDomain.xsd:1.2"      uri="learningDomain.xsd"/>
     
+    <system systemId="learningInteractionBaseDomain.xsd" uri="learningInteractionBaseDomain.xsd"/>
+    <system systemId="urn:oasis:names:tc:dita:spec:learning:xsd:learningInteractionBaseDomain.xsd" uri="learningInteractionBaseDomain.xsd"/>
+    <system systemId="urn:oasis:names:tc:dita:spec:learning:xsd:learningInteractionBaseDomain.xsd:1.x" uri="learningInteractionBaseDomain.xsd"/>
+    <system systemId="urn:oasis:names:tc:dita:spec:learning:xsd:learningInteractionBaseDomain.xsd:1.2" uri="learningInteractionBaseDomain.xsd"/>
     <system systemId="learningMapDomain.xsd"      uri="learningMapDomain.xsd"/>
     <system systemId="urn:oasis:names:tc:dita:spec:learning:xsd:learningMapDomain.xsd"      uri="learningMapDomain.xsd"/>
     <system systemId="urn:oasis:names:tc:dita:spec:learning:xsd:learningMapDomain.xsd:1.x"      uri="learningMapDomain.xsd"/>
@@ -1401,6 +1413,10 @@
     <uri name="urn:oasis:names:tc:dita:spec:machinery:xsd:machineryTaskbodyConstraintMod.xsd"      uri="machineryTaskbodyConstraintMod.xsd"/>
     <uri name="urn:oasis:names:tc:dita:spec:machinery:xsd:machineryTaskbodyConstraintMod.xsd:1.x"      uri="machineryTaskbodyConstraintMod.xsd"/>
     <uri name="urn:oasis:names:tc:dita:spec:machinery:xsd:machineryTaskbodyConstraintMod.xsd:1.2"      uri="machineryTaskbodyConstraintMod.xsd"/>
+	<system systemId="machineryTaskbodyConstraintIntMod.xsd" uri="machineryTaskbodyConstraintIntMod.xsd"/>
+    <system systemId="urn:oasis:names:tc:dita:spec:machinery:xsd:machineryTaskbodyConstraintIntMod.xsd" uri="machineryTaskbodyConstraintIntMod.xsd"/>
+    <system systemId="urn:oasis:names:tc:dita:spec:machinery:xsd:machineryTaskbodyConstraintIntMod.xsd:1.x" uri="machineryTaskbodyConstraintIntMod.xsd"/>
+    <system systemId="urn:oasis:names:tc:dita:spec:machinery:xsd:machineryTaskbodyConstraintIntMod.xsd:1.2" uri="machineryTaskbodyConstraintIntMod.xsd"/>
 
 	</group>
 	<group xml:base="schema/ditaval/xsd/">

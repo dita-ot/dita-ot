@@ -138,6 +138,11 @@
           </xs:sequence>
      </xs:group>
      
+      <xs:group name="lcInteraction">
+          <xs:sequence>
+               <xs:element ref="lcInteraction" />
+          </xs:sequence>
+     </xs:group>
      
      
 </xs:schema>

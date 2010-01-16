@@ -28,6 +28,11 @@ PUBLIC "-//OASIS//ELEMENTS DITA Learning Base//EN"
 <!--                                                               -->
 <!--             (C) Copyright OASIS Open 2007, 2009.              -->
 <!--             All Rights Reserved.                              -->
+<!--                                                               -->
+<!--  CHANGE LOG:                                                  -->
+<!--                                                               -->
+<!--    Sept 2009: WEK: Make learningBasebody optional per         -->
+<!--    TC decision.                                               -->
 <!-- ============================================================= -->
 
 
@@ -92,7 +97,19 @@ PUBLIC "-//OASIS//ELEMENTS DITA Learning Base//EN"
 
 
 <!ENTITY % learningBasebody.content
-                       "((%section;)*)"
+                       "((%lcAudience; |
+                          %lcChallenge; |
+                          %lcDuration; |
+                          %lcInstruction; |
+                          %lcInteraction; |
+                          %lcIntro; |
+                          %lcNextSteps; |
+                          %lcObjectives; |
+                          %lcPrereqs; |
+                          %lcResources; |
+                          %lcReview; |
+                          %lcSummary; |
+                          %section;)*)"
 >
 <!ENTITY % learningBasebody.attributes
              "%univ-atts;
@@ -345,7 +362,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Learning Base//EN"
 
 
 <!ENTITY % lcInteraction.content
-                       "(%learning-d-fig;)*"
+                       "(%lcInteractionBase;)*"
 >
 <!ENTITY % lcInteraction.attributes
              "spectitle

@@ -31,6 +31,8 @@ PUBLIC "-//OASIS//ELEMENTS DITA Learning Map Domain//EN"
 <!--                                                               -->
 <!--                                                               -->
 <!--  16 Aug 2009: WEK Added learningContentComponentRef per TC    -->
+<!--  07 Dec 2009: RDA combined @id, conref-atts, select-atts, and -->
+<!--               localization-atts into a single ref to univ-atts-->
 <!--                                                               -->
 <!--                                                               -->
 <!-- ============================================================= -->
@@ -55,9 +57,6 @@ PUBLIC "-//OASIS//ELEMENTS DITA Learning Map Domain//EN"
              "navtitle
                         CDATA
                                   #IMPLIED
-              id
-                        ID
-                                  #IMPLIED
               href
                         CDATA
                                   #IMPLIED
@@ -70,7 +69,6 @@ PUBLIC "-//OASIS//ELEMENTS DITA Learning Map Domain//EN"
               query
                         CDATA
                                   #IMPLIED
-              %conref-atts;
               copy-to
                         CDATA
                                   #IMPLIED
@@ -115,8 +113,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Learning Map Domain//EN"
                          no | 
                          -dita-use-conref-target)
                                    #IMPLIED
-              %select-atts;
-              %localization-atts;"
+              %univ-atts;"
 >
 
 <!ENTITY % learningDomain-topicref-atts "

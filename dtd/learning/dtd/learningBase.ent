@@ -37,7 +37,7 @@ PUBLIC "-//OASIS//ENTITIES DITA Learning Base//EN"
 <!-- ============================================================= -->
 
 <!ENTITY learningBase-att     
-  "(topic learningBase)"
+  "(topic learningBase+learningInteractionBase-d)"
 >
 
 

@@ -21,7 +21,7 @@
 <!--             May 2007                                          -->
 <!--                                                               -->
 <!--  UPDATES:                                                     -->
-<!--  EAS:  20090729 -  Updating the design pattern for the content models  -->
+<!--  EAS:  20080729 -  Updating the design pattern for the content models  -->
 <!-- ============================================================= -->
  <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
   <!-- ==================== Import Section ======================= -->
@@ -30,7 +30,7 @@
    
    <xs:annotation>
     <xs:appinfo>
-      <dita:domainsModule xmlns:dita="http://dita.oasis-open.org/architecture/2005/">(topic learningBase)</dita:domainsModule>
+      <dita:domainsModule xmlns:dita="http://dita.oasis-open.org/architecture/2005/">(topic learningBase+learningInteractionBase-d)</dita:domainsModule>
     </xs:appinfo>
     <xs:documentation> 
     
@@ -373,10 +373,23 @@
     <xs:attributeGroup ref="learningBasebody.attributes"/>
   </xs:complexType>
    
+
    <xs:group name="learningBasebody.content">
      <xs:sequence>
        <xs:choice minOccurs="0" maxOccurs="unbounded">
-      <xs:group ref="section.cnt"/>
+         <xs:group ref="lcAudience"/>
+         <xs:group ref="lcChallenge"/>
+         <xs:group ref="lcDuration"/>
+         <xs:group ref="lcInstruction"/>
+         <xs:group ref="lcInteraction"/>
+         <xs:group ref="lcIntro"/>
+         <xs:group ref="lcNextSteps"/>
+         <xs:group ref="lcObjectives"/>
+         <xs:group ref="lcPrereqs"/>
+         <xs:group ref="lcResources"/>
+         <xs:group ref="lcReview"/>
+         <xs:group ref="lcSummary"/>
+         <xs:group ref="section"/>
     </xs:choice>
      </xs:sequence>
    </xs:group>
@@ -818,7 +831,7 @@
    <xs:group name="lcInteraction.content">
      <xs:sequence>
        <xs:choice minOccurs="0" maxOccurs="unbounded">
-       <xs:group ref="learning-d-fig"/>
+       <xs:group ref="lcInteractionBase"/>
      </xs:choice>
      </xs:sequence>
    </xs:group>

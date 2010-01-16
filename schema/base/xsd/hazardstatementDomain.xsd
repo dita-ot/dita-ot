@@ -196,7 +196,7 @@
   
   <xs:attributeGroup name="hazardsymbol.attributes">
       <xs:attribute name="href" type="xs:string" use="required"/>
-    <xs:attribute name="keyref" type="xs:NMTOKEN"/>
+    <xs:attribute name="keyref" type="xs:string"/>
     <!-- <xs:attribute name="alt" type="xs:string"/> -->
     <xs:attribute name="longdescref" type="xs:string"/>
     <xs:attribute name="height" type="xs:NMTOKEN"/>

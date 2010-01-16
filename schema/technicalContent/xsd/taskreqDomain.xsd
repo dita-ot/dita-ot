@@ -37,11 +37,23 @@
   
    <xs:group name="taskreq-d-prereq">
     <xs:choice>
-      <xs:element ref="prelreqs"/>
+      <xs:group ref="prelreqs"/>
     </xs:choice>
   </xs:group>
   
   <xs:group name="taskreq-d-postreq">
+    <xs:choice>
+      <xs:group ref="closereqs"/>
+    </xs:choice>
+  </xs:group>
+  
+   <xs:group name="prelreqs">
+    <xs:choice>
+      <xs:element ref="prelreqs"/>
+    </xs:choice>
+  </xs:group>
+  
+  <xs:group name="closereqs">
     <xs:choice>
       <xs:element ref="closereqs"/>
     </xs:choice>
@@ -713,7 +725,7 @@
   <xs:complexType name="safety.content">
     <xs:choice>
       <xs:group ref="nosafety"/>
-       <xs:group ref="safecond" maxOccurs="unbounded"/>
+      <xs:group ref="safecond" maxOccurs="unbounded"/>
     </xs:choice>
   </xs:complexType>
   <xs:attributeGroup name="safety.attributes">

@@ -202,6 +202,7 @@ PUBLIC "-//OASIS//DTD DITA 1.2 Composite//EN"                      -->
 <!ENTITY included-domains 
                           "&concept-att;
                            &glossentry-att;
+                           &glossgroup-att;
                            &reference-att;
                            &task-att;
                            &hi-d-att; 

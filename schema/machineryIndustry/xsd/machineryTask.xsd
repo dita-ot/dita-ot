@@ -18,15 +18,18 @@
 <!-- All Rights Reserved. -->
 <!---->
 <!-- ============================================================= -->
+<!DOCTYPE xs:schema [ 
+    <!ENTITY machineryConstraint    SYSTEM "machineryTaskbodyConstraintMod.xsd">
+]>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
-
+  
   <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:highlightDomain.xsd:1.2"/>
   <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:uiDomain.xsd:1.2"/>
   <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:utilitiesDomain.xsd:1.2"/>
   <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:indexingDomain.xsd:1.2"/>
   <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:hazardstatementDomain.xsd:1.2"/>
   <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:taskreqDomain.xsd:1.2"/>
-    
+  
   <!--  ================ GROUP DEFINITIONS =====================  -->
   <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:metaDeclGrp.xsd:1.2"/>
   <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:tblDeclGrp.xsd:1.2"/>
@@ -40,7 +43,7 @@
   <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:metaDeclMod.xsd:1.2"/>
   
   <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:topicMod.xsd:1.2" />
-  <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:taskMod.xsd:1.2" /> 
+  <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:taskMod.xsd:1.2" />
   
   
   <!-- ============================================================= -->
@@ -55,63 +58,53 @@
     extension was declared
   -->
   <xs:redefine schemaLocation="urn:oasis:names:tc:dita:xsd:commonElementGrp.xsd:1.2">
-  <xs:group name="pre">
-    <xs:choice>
-      <xs:group ref="pre"/>
-      <xs:group ref="ui-d-pre"/>
-    </xs:choice>
-  </xs:group>
-  <xs:group name="keyword">
-    <xs:choice>
-      <xs:group ref="keyword"/>
-      <xs:group ref="ui-d-keyword"/>
-    </xs:choice>
-  </xs:group>
-  <xs:group name="ph">
-    <xs:choice>
-      <xs:group ref="ph"/>
-      <xs:group ref="hi-d-ph"/>
-      <xs:group ref="ui-d-ph"/>
-    </xs:choice>
-  </xs:group>
-  <xs:group name="fig">
-    <xs:choice>
-      <xs:group ref="fig"/>
-      <xs:group ref="ut-d-fig"/>
-    </xs:choice>
-  </xs:group>
+    <xs:group name="pre">
+      <xs:choice>
+        <xs:group ref="pre"/>
+        <xs:group ref="ui-d-pre"/>
+      </xs:choice>
+    </xs:group>
+    <xs:group name="keyword">
+      <xs:choice>
+        <xs:group ref="keyword"/>
+        <xs:group ref="ui-d-keyword"/>
+      </xs:choice>
+    </xs:group>
+    <xs:group name="ph">
+      <xs:choice>
+        <xs:group ref="ph"/>
+        <xs:group ref="hi-d-ph"/>
+        <xs:group ref="ui-d-ph"/>
+      </xs:choice>
+    </xs:group>
+    <xs:group name="fig">
+      <xs:choice>
+        <xs:group ref="fig"/>
+        <xs:group ref="ut-d-fig"/>
+      </xs:choice>
+    </xs:group>
+    
+    <xs:group name="index-base">
+      <xs:choice>
+        <xs:group ref="index-base"/>
+        <xs:group ref="indexing-d-index-base"/>
+      </xs:choice>
+    </xs:group>
+    
+    <xs:group name="note">
+      <xs:choice>
+        <xs:group ref="note"/>
+        <xs:group ref="hazard-d-note"/>
+      </xs:choice>
+    </xs:group>
+  </xs:redefine>
+  
  
-  <xs:group name="index-base">
-    <xs:choice>
-      <xs:group ref="index-base"/>
-      <xs:group ref="indexing-d-index-base"/>
-    </xs:choice>
-  </xs:group>
-  
-  <xs:group name="note">
-    <xs:choice>
-      <xs:group ref="note"/>
-      <xs:group ref="hazard-d-note"/>
-    </xs:choice>
-  </xs:group>
+  <xs:redefine schemaLocation="urn:oasis:names:tc:dita:spec:machinery:xsd:machineryTaskbodyConstraintIntMod.xsd:1.2" >
+   
+  &machineryConstraint;
+    
   </xs:redefine>
-  
-  <xs:redefine schemaLocation="urn:oasis:names:tc:dita:xsd:taskGrp.xsd:1.2">
-    <xs:group name="prereq">
-    <xs:choice>
-      <xs:group ref="prereq"/>
-      <xs:group ref="taskreq-d-prereq"/>
-    </xs:choice>
-  </xs:group>
-  <xs:group name="postreq">
-    <xs:choice>
-      <xs:group ref="postreq"/>
-      <xs:group ref="taskreq-d-postreq"/>
-    </xs:choice>
-  </xs:group>
-  </xs:redefine>
-  
-  <xs:include schemaLocation="urn:oasis:names:tc:dita:spec:machinery:xsd:machineryTaskbodyConstraintMod.xsd:1.2"/>
   
   <!-- ============================================================= -->
   <!-- DOMAIN ATTRIBUTE EXTENSIONS -->
@@ -123,17 +116,17 @@
     Redefine the infotype entity to exclude 
     other topic types and disallow nesting
   -->
-    
+  
   <!-- ============================================================= -->
   <!-- DOMAINS ATTRIBUTE OVERRIDE -->
   <!-- ============================================================= -->
   <xs:attributeGroup name="domains-att">
-     <xs:attribute name="domains" type="xs:string" default="(topic ui-d) (topic hi-d) (topic ut-d) (topic pr-d) (topic sw-d) (topic indexing-d) (topic hazard-d) (topic task) (topic task taskreq-d) (topic task+taskreq-d machineryTaskbody-c)"/>
+    <xs:attribute name="domains" type="xs:string" default="(topic ui-d) (topic hi-d) (topic ut-d)  (topic indexing-d) (topic hazard-d) (topic task) (topic task taskreq-d) (topic task+taskreq-d machineryTaskbody-c)"/>
   </xs:attributeGroup>
   
-   <xs:group name="info-types">
+  <xs:group name="info-types">
     <xs:sequence/>    
-   </xs:group>
+  </xs:group>
   
 </xs:schema>
 <!-- ================== End DITA Machinery Task XSD  ============= -->

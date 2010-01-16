@@ -28,6 +28,11 @@ PUBLIC "-//OASIS//ELEMENTS DITA Learning Domain//EN"
 <!--                                                               -->
 <!--             (C) Copyright OASIS Open 2007, 2009.              -->
 <!--             All Rights Reserved.                              -->
+<!--                                                               -->
+<!--  CHANGE LOG:                                                  -->
+<!--                                                               -->
+<!--    Sept 2009: WEK: added lcMatchingItemFeedback per           -->
+<!--    TC decision.                                               -->
 <!-- ============================================================= -->
 
  
@@ -66,9 +71,12 @@ PUBLIC "-//OASIS//ELEMENTS DITA Learning Domain//EN"
 <!ENTITY % lcMatchingPair           "lcMatchingPair">
 <!ENTITY % lcItem                   "lcItem">
 <!ENTITY % lcMatchingItem           "lcMatchingItem">
+<!ENTITY % lcMatchingItemFeedback   "lcMatchingItemFeedback">
 
 <!ENTITY % lcHotspotMap             "lcHotspotMap">
 <!ENTITY % lcArea                   "lcArea">
+<!ENTITY % lcAreaShape              "lcAreaShape">
+<!ENTITY % lcAreaCoords             "lcAreaCoords">
 
 <!ENTITY % lcCorrectResponse        "lcCorrectResponse">
 <!ENTITY % lcFeedback               "lcFeedback">
@@ -442,7 +450,8 @@ PUBLIC "-//OASIS//ELEMENTS DITA Learning Domain//EN"
 
 <!ENTITY % lcMatchingPair.content
                        "((%lcItem;),
-                         (%lcMatchingItem;))">
+                         (%lcMatchingItem;),
+                         (%lcMatchingItemFeedback;)?)">
 <!ENTITY % lcMatchingPair.attributes
              "%univ-atts;
               outputclass
@@ -478,41 +487,87 @@ PUBLIC "-//OASIS//ELEMENTS DITA Learning Domain//EN"
 <!ELEMENT lcMatchingItem    %lcMatchingItem.content;>
 <!ATTLIST lcMatchingItem    %lcMatchingItem.attributes;>
 
+<!ENTITY % lcMatchingItemFeedback.content
+                       "((%lcFeedback;) |
+                         (%lcFeedbackCorrect;) |
+                         (%lcFeedbackIncorrect;))*"
+>
+<!ENTITY % lcMatchingItemFeedback.attributes
+             "%univ-atts;
+              outputclass
+                        CDATA
+                                  #IMPLIED"
+>
+<!ELEMENT lcMatchingItemFeedback    %lcMatchingItemFeedback.content;>
+<!ATTLIST lcMatchingItemFeedback    %lcMatchingItemFeedback.attributes;>
+
 
 <!ENTITY % lcHotspotMap.content
                        "((%image;),
                          (%lcArea;)+)"
 >
-<!ENTITY % lcHotspotMap.attributes
-             "%display-atts;
-              spectitle
-                        CDATA
-                                  #IMPLIED
-              %univ-atts; 
+<!ENTITY % lcHotspotMap.attributes 
+              "%univ-atts; 
               outputclass 
-                        CDATA
-                                  #IMPLIED"
->
+                        CDATA 
+                                  #IMPLIED" 
+> 
 <!ELEMENT lcHotspotMap    %lcHotspotMap.content;>
 <!ATTLIST lcHotspotMap    %lcHotspotMap.attributes;>
 
 
-<!ENTITY % lcArea.content
-                       "((%shape;),
-                         (%coords;),
+<!ENTITY % lcArea.content 
+                       "((%lcAreaShape;), 
+                         (%lcAreaCoords;), 
                          (%xref;)?, 
-                         (%lcCorrectResponse;)?,
-                         (%lcFeedback;)?)"
->
-<!ENTITY % lcArea.attributes
-             "%univ-atts; 
+                         (%lcCorrectResponse;)?, 
+                         (%lcFeedback;)?)" 
+> 
+<!ENTITY % lcArea.attributes 
+              "%univ-atts; 
               outputclass 
-                        CDATA
-                                  #IMPLIED"
->
+                        CDATA 
+                                  #IMPLIED" 
+> 
 <!ELEMENT lcArea    %lcArea.content;>
 <!ATTLIST lcArea    %lcArea.attributes;>
 
+<!--                    LONG NAME: Shape of the Hotspot            --> 
+<!ENTITY % lcAreaShape.content 
+                       "(#PCDATA | 
+                         %text;)* 
+"> 
+<!ENTITY % lcAreaShape.attributes 
+             "keyref 
+                        CDATA 
+                                  #IMPLIED 
+              %univ-atts-translate-no; 
+              outputclass 
+                        CDATA 
+                                  #IMPLIED" 
+> 
+
+
+<!ELEMENT lcAreaShape    %lcAreaShape.content;> 
+<!ATTLIST lcAreaShape    %lcAreaShape.attributes;> 
+
+
+
+<!--                    LONG NAME: Coordinates of the Hotspot      --> 
+<!ENTITY % lcAreaCoords.content 
+                       "(%words.cnt;)*" 
+> 
+<!ENTITY % lcAreaCoords.attributes 
+             "keyref 
+                        CDATA 
+                                  #IMPLIED 
+              %univ-atts-translate-no; 
+              outputclass 
+                        CDATA 
+                                  #IMPLIED" 
+> 
+<!ELEMENT lcAreaCoords    %lcAreaCoords.content;> 
+<!ATTLIST lcAreaCoords    %lcAreaCoords.attributes;> 
 
 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -558,61 +613,68 @@ PUBLIC "-//OASIS//ELEMENTS DITA Learning Domain//EN"
    - CLASS ATTRIBUTES FOR ANCESTRY DECLARATION
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 <!ATTLIST lcInstructornote        %global-atts; 
-    class CDATA "+ topic/note ut-d/note learning-d/lcInstructornote ">
+    class CDATA "+ topic/note learningInteractionBase-d/note learning-d/lcInstructornote ">
 <!ATTLIST lcTrueFalse %global-atts;
-    class CDATA "+ topic/fig ut-d/fig learning-d/lcTrueFalse ">
+    class CDATA "+ topic/fig learningInteractionBase-d/lcInteractionBase learning-d/lcTrueFalse ">
 <!ATTLIST lcSingleSelect %global-atts;
-    class CDATA "+ topic/fig ut-d/fig learning-d/lcSingleSelect ">
+    class CDATA "+ topic/fig learningInteractionBase-d/lcInteractionBase learning-d/lcSingleSelect ">
 <!ATTLIST lcMultipleSelect %global-atts;
-    class CDATA "+ topic/fig ut-d/fig learning-d/lcMultipleSelect ">
+    class CDATA "+ topic/fig learningInteractionBase-d/lcInteractionBase learning-d/lcMultipleSelect ">
 <!ATTLIST lcSequencing %global-atts;
-    class CDATA "+ topic/fig ut-d/fig learning-d/lcSequencing ">
+    class CDATA "+ topic/fig learningInteractionBase-d/lcInteractionBase learning-d/lcSequencing ">
 <!ATTLIST lcMatching %global-atts;
-    class CDATA "+ topic/fig ut-d/fig learning-d/lcMatching ">
+    class CDATA "+ topic/fig learningInteractionBase-d/lcInteractionBase learning-d/lcMatching ">
 <!ATTLIST lcHotspot %global-atts;
-    class CDATA "+ topic/fig ut-d/fig learning-d/lcHotspot ">
+    class CDATA "+ topic/fig learningInteractionBase-d/lcInteractionBase learning-d/lcHotspot ">
 <!ATTLIST lcOpenQuestion %global-atts;
-    class CDATA "+ topic/fig ut-d/fig learning-d/lcOpenQuestion ">
-
+    class CDATA "+ topic/fig learningInteractionBase-d/lcInteractionBase learning-d/lcOpenQuestion ">
 
 <!ATTLIST lcQuestion %global-atts;
-    class CDATA "+ topic/p ut-d/p learning-d/lcQuestion ">
+    class CDATA "+ topic/p learningInteractionBase-d/lcQuestionBase learning-d/lcQuestion ">
 <!ATTLIST lcOpenAnswer %global-atts;
-    class CDATA "+ topic/p ut-d/p learning-d/lcOpenAnswer ">
+    class CDATA "+ topic/p learningInteractionBase-d/p learning-d/lcOpenAnswer ">
 <!ATTLIST lcAsset %global-atts;
-    class CDATA "+ topic/p ut-d/p learning-d/lcAsset ">
+    class CDATA "+ topic/p learningInteractionBase-d/p learning-d/lcAsset ">
 <!ATTLIST lcFeedback %global-atts;
-    class CDATA "+ topic/p ut-d/p learning-d/lcFeedback ">
+    class CDATA "+ topic/p learningInteractionBase-d/p learning-d/lcFeedback ">
 <!ATTLIST lcFeedbackCorrect %global-atts;
-    class CDATA "+ topic/p ut-d/p learning-d/lcFeedbackCorrect ">
+    class CDATA "+ topic/p learningInteractionBase-d/p learning-d/lcFeedbackCorrect ">
 <!ATTLIST lcFeedbackIncorrect %global-atts;
-    class CDATA "+ topic/p ut-d/p learning-d/lcFeedbackIncorrect ">
+    class CDATA "+ topic/p learningInteractionBase-d/p learning-d/lcFeedbackIncorrect ">
 <!ATTLIST lcAnswerOption %global-atts;
-    class CDATA "+ topic/li ut-d/li learning-d/lcAnswerOption ">
+    class CDATA "+ topic/li learningInteractionBase-d/li learning-d/lcAnswerOption ">
 <!ATTLIST lcAnswerOptionGroup     %global-atts; 
-    class CDATA "+ topic/ul ut-d/ul learning-d/lcAnswerOptionGroup ">
+    class CDATA "+ topic/ul learningInteractionBase-d/ul learning-d/lcAnswerOptionGroup ">
 <!ATTLIST lcAnswerContent %global-atts;
-    class CDATA "+ topic/p ut-d/p learning-d/lcAnswerContent ">
+    class CDATA "+ topic/p learningInteractionBase-d/p learning-d/lcAnswerContent ">
 <!ATTLIST lcMatchTable %global-atts;
-    class CDATA "+ topic/simpletable ut-d/simpletable learning-d/lcMatchTable ">
+    class CDATA "+ topic/simpletable learningInteractionBase-d/simpletable learning-d/lcMatchTable ">
 <!ATTLIST lcMatchingHeader %global-atts;
-    class CDATA "+ topic/sthead ut-d/sthead learning-d/lcMatchingHeader ">
+    class CDATA "+ topic/sthead learningInteractionBase-d/sthead learning-d/lcMatchingHeader ">
 <!ATTLIST lcMatchingPair %global-atts;
-    class CDATA "+ topic/strow ut-d/strow learning-d/lcMatchingPair ">
+    class CDATA "+ topic/strow learningInteractionBase-d/strow learning-d/lcMatchingPair ">
 <!ATTLIST lcItem %global-atts;
-    class CDATA "+ topic/stentry ut-d/stentry learning-d/lcItem ">
+    class CDATA "+ topic/stentry learningInteractionBase-d/stentry learning-d/lcItem ">
 <!ATTLIST lcMatchingItem %global-atts;
-    class CDATA "+ topic/stentry ut-d/stentry learning-d/lcMatchingItem ">
+    class CDATA "+ topic/stentry learningInteractionBase-d/stentry learning-d/lcMatchingItem ">
+<!ATTLIST lcMatchingItemFeedback %global-atts;
+    class CDATA "+ topic/stentry learningInteractionBase-d/stentry learning-d/lcMatchingItemFeedback ">
 <!ATTLIST lcSequenceOptionGroup     %global-atts; 
-    class CDATA "+ topic/ol ut-d/ol learning-d/lcSequenceOptionGroup ">
+    class CDATA "+ topic/ol learningInteractionBase-d/ol learning-d/lcSequenceOptionGroup ">
 <!ATTLIST lcSequenceOption %global-atts;
-    class CDATA "+ topic/li ut-d/li learning-d/lcSequenceOption ">
+    class CDATA "+ topic/li learningInteractionBase-d/li learning-d/lcSequenceOption ">
 <!ATTLIST lcSequence %global-atts;
-    class CDATA "+ topic/data ut-d/data learning-d/lcSequence ">
+    class CDATA "+ topic/data learningInteractionBase-d/data learning-d/lcSequence ">
 <!ATTLIST lcCorrectResponse %global-atts;
-    class CDATA "+ topic/data ut-d/data learning-d/lcCorrectResponse ">
+    class CDATA "+ topic/data learningInteractionBase-d/data learning-d/lcCorrectResponse ">
 
 <!ATTLIST lcHotspotMap %global-atts; 
-   class CDATA "+ topic/fig ut-d/fig learning-d/lcHotspotMap " >
+   class CDATA "+ topic/fig learningInteractionBase-d/figgroup learning-d/lcHotspotMap " >
 <!ATTLIST lcArea       %global-atts; 
-   class CDATA "+ topic/figgroup ut-d/figgroup learning-d/lcArea ">
+   class CDATA "+ topic/figgroup learningInteractionBase-d/figgroup learning-d/lcArea ">
+<!ATTLIST lcAreaShape    %global-atts;  
+    class CDATA "+ topic/keyword learningInteractionBase-d/keyword learning-d/lcAreaShape "> 
+<!ATTLIST lcAreaCoords   %global-atts;  
+    class CDATA "+ topic/ph learningInteractionBase-d/ph learning-d/lcAreaCoords "    > 
+
+<!-- End of declaration set -->

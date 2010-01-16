@@ -722,10 +722,10 @@
    
    <xs:group name="steps.content">
      <xs:sequence>
-       <xs:choice>
-      <xs:group ref="stepsection" minOccurs="0"/>
-      <xs:group ref="step" maxOccurs="unbounded"/>
-    </xs:choice>
+       <xs:sequence>
+         <xs:group ref="stepsection" minOccurs="0"/>
+         <xs:group ref="step" maxOccurs="unbounded"/>
+       </xs:sequence>
      </xs:sequence>
    </xs:group>
    

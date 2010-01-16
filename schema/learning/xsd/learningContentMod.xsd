@@ -31,7 +31,7 @@
   
   <xs:annotation>
     <xs:appinfo>
-      <dita:domainsModule xmlns:dita="http://dita.oasis-open.org/architecture/2005/">(topic learningBase learningContent)</dita:domainsModule>
+      <dita:domainsModule xmlns:dita="http://dita.oasis-open.org/architecture/2005/">(topic learningBase+learningInteractionBase-d learningContent)</dita:domainsModule>
     </xs:appinfo>
     <xs:documentation> 
     
@@ -91,7 +91,7 @@
   <!-- <!ENTITY % learningContent-info-types "(concept | task | reference | topic)*, (learningAssessment)?, (learningSummary)?"> -->
   <xs:group name="learningContent-info-types">
     <xs:sequence>
-      <xs:choice  minOccurs="0" maxOccurs="unbounded">
+      <xs:choice>
         <xs:group ref="no-topic-nesting" />
       </xs:choice>
     </xs:sequence>
