@@ -71,7 +71,22 @@ See the accompanying license.txt file for applicable licenses.
 		<xsl:param name="theVariableID"/>
 		<xsl:param name="theParameters"/>
 		<xsl:param name="theFormat"/>
-        <xsl:variable name="customizationFilePath" select="concat($fileProtocolPrefix, $customizationDir, '/common/vars/', $locale, '.xml')"/> 
+		<!-- We use the default $locale, unless there's an xml:lang attribute that applies to the current element. -->
+        <xsl:variable name="currentLocale">
+            <xsl:choose>
+                <xsl:when test="ancestor-or-self::*/@xml:lang">
+                    <xsl:variable name="tempLang" select="ancestor-or-self::*[@xml:lang][1]/@xml:lang"/>
+                    <xsl:value-of select="concat(
+                        substring($tempLang,1,2),
+                        translate(substring($tempLang,3),'abcdefghijklmnopqrstuvwxyz-','ABCDEFGHIJKLMNOPQRSTUVWXYZ_')         
+                    )"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="$locale"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:variable name="customizationFilePath" select="concat($fileProtocolPrefix, $customizationDir, '/common/vars/', $currentLocale, '.xml')"/> 
 
         <xsl:variable name="customVariableIsDefined">
             <xsl:choose>
@@ -97,7 +112,7 @@ See the accompanying license.txt file for applicable licenses.
                     </xsl:when>
                     <xsl:otherwise>
                         <xsl:call-template name="processVariableWithFormat">
-                            <xsl:with-param name="variableNodes" select="document(concat('../../cfg/common/vars/', $locale, '.xml'))/opentopic-vars:vars/opentopic-vars:variable[(@id = $theVariableID) and (@format = $theFormat)]"/>
+                            <xsl:with-param name="variableNodes" select="document(concat('../../cfg/common/vars/', $currentLocale, '.xml'))/opentopic-vars:vars/opentopic-vars:variable[(@id = $theVariableID) and (@format = $theFormat)]"/>
                             <xsl:with-param name="theParameters" select="$theParameters"/>
 							<xsl:with-param name="theVariableID" select="$theVariableID"/>
 							<xsl:with-param name="theFormat" select="$theFormat"/>
@@ -115,7 +130,7 @@ See the accompanying license.txt file for applicable licenses.
                     </xsl:when>
                     <xsl:otherwise>
                         <xsl:call-template name="processVariableWithoutFormat">
-                            <xsl:with-param name="variableNodes" select="document(concat('../../cfg/common/vars/', $locale, '.xml'))/opentopic-vars:vars/opentopic-vars:variable[@id = $theVariableID]"/>
+                            <xsl:with-param name="variableNodes" select="document(concat('../../cfg/common/vars/', $currentLocale, '.xml'))/opentopic-vars:vars/opentopic-vars:variable[@id = $theVariableID]"/>
                             <xsl:with-param name="theParameters" select="$theParameters"/>
                         </xsl:call-template>
                     </xsl:otherwise>

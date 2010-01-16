@@ -1,0 +1,3 @@
+<project>
+  <import file="treediagram2svg.xml"/>
+</project>

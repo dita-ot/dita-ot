@@ -6,8 +6,6 @@
 package org.dita.dost.platform;
 
 import java.util.Iterator;
-import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
 
 /**
  * InsertActionRelative is an abstract base class for InsertAction classes that need
@@ -20,17 +18,22 @@ import org.xml.sax.SAXException;
 public abstract class InsertActionRelative extends InsertAction implements IAction {
 
 	protected String currentFile;
-	
+	/**
+	 * Constructor.
+	 */
 	public InsertActionRelative() {
 		super();
 	}
-
+	/**
+	 * Return the result.
+	 * @return result
+	 */
 	public String getResult() {
-		Iterator iter;
+		Iterator<String> iter;
 		iter = fileNameSet.iterator();
 		try{
 			while(iter.hasNext()){
-				currentFile = (String) iter.next();
+				currentFile = iter.next();
 				reader.parse(currentFile);
 			}
 		} catch (Exception e) {

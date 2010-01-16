@@ -56,6 +56,14 @@
 <str name="Prerequisites">Forsendur</str>
 <str name="or">eða</str>
 
+<!--Task section labels -->
+<str name="task_context">Um þetta verk</str>
+<str name="task_example">Dæmi</str>
+<str name="task_postreq">Það sem gera þarf næst</str>
+<str name="task_prereq">Áður en þú byrjar</str>
+<str name="task_procedure">Aðferð</str>
+<str name="task_results">Niðurstöður</str>
+
 <str name="Copyright IBM">Copyright IBM Corp.</str>
 
 <!-- Symbols -->

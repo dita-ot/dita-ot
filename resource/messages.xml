@@ -149,7 +149,7 @@
   </message>
   
   <message id="DOTJ020W" type="WARN">
-    <reason>Plugin '%1' is required by plugin '%2'. Plugin '%2' cannot be loaded because of missing plugin '%1'.</reason>
+    <reason>At least one plugin in '%1' is required by plugin '%2'. Plugin '%2' cannot be loaded.</reason>
     <response>Check and see whether all of the plugins required are installed in toolkit.</response>
   </message>
   
@@ -228,7 +228,7 @@
     <response>If you want to lower the severity level,please use the Ant parameter 'outer.control', and set the value as "warn" or "quiet".Or,you can move the referenced file "%1" into the the input dita/map directory.</response>
   </message>
   
-   <message id="DOTJ036W" type="WARN">
+  <message id="DOTJ036W" type="WARN">
     <reason>The file "%1" referenced by "%2" is outside the scope of the input dita/map directory.</reason>
     <response>If you do not want to see the warning message,please use the Ant parameter 'outer.control', and set the value as "quiet".Or,you can move the referenced file "%1" into the the input dita/map directory.</response>
   </message>
@@ -241,6 +241,56 @@
   <message id="DOTJ038W" type="ERROR">
     <reason>The tag "%1" is specialized from non-predefined metadata.</reason>
     <response>Please make sure that tag "%1" is specialized from some predefinded metadata tag.</response>
+  </message>
+  
+  <message id="DOTJ039E" type="ERROR">
+    <reason>There is no target specified for conref push action "pushafter".Xtrf="%1" Xtrc="%2"</reason>
+    <response>Please add &lt;elementname conref="pushtarget" conaction="mark"&gt; before current element.</response>
+  </message>
+  
+  <message id="DOTJ040E" type="ERROR">
+    <reason>There is no target specified for conref push action "replace".Xtrf="%1" Xtrc="%2"</reason>
+    <response>Please add conref="pushtarget" to current element.</response>
+  </message>
+  
+  <message id="DOTJ041E" type="ERROR">
+    <reason>Error target "%1" value specified in conref.</reason>
+    <response>Please update the target with correct target. Valid taget should contains '#'.</response>
+  </message>
+  
+  <message id="DOTJ042E" type="ERROR">
+    <reason>There is another conref push action "replace" specified for current target "%1".</reason>
+    <response>Please delete one of the duplicate "replace" action.</response>
+  </message>
+  
+  <message id="DOTJ043W" type="WARN">
+    <reason>There is no target "%1" in "%2" specified for the conref push action.</reason>
+    <response>Please make sure that the target does exist and is not filtered out.</response>
+  </message>
+  
+  <message id="DOTJ044W" type="WARN">
+    <reason>There are redundant action "pushbefore". Xtrf="%1" Xtrc="%2"</reason>
+    <response>Please make sure that "mark" and "pushbefore" occur in pairs.</response>
+  </message>
+  
+  <message id="DOTJ045W" type="WARN">
+    <reason>The key "%1" is defined more than once in the same map file. The reference href="%2" is ingnored.</reason>
+    <response>Please make sure the key name is unique. </response>
+  </message>
+  
+  <message id="DOTJ046E" type="ERROR">
+    <reason>Conkeyref="%1" can not be resolved because it does not contain a key or the key is not defined. Use the conref as fallback if it exist.</reason>
+    <response>Please make sure the key name does exist. </response>
+  </message>
+  
+  <message id="DOTJ047I" type="INFO">
+    <reason>Unable to find key definition for keyref="%1", href may be used as fallback if it exists.</reason>
+    <response>Please make sure the key name is correct.</response>
+  </message>
+  
+  <message id="DOTJ048I" type="INFO">
+    <reason>key definition "%1"="%2" in "%3" has been defined in another file, so it is ingnored.</reason>
+    <response>Please make sure the key name does not duplicate.</response>
   </message>
   <!-- End of Java Messages -->
     
@@ -381,8 +431,8 @@
   </message>
   
   <message id="DOTX028E" type="ERROR">
-    <reason>Link or Xref must contain an unempty href attribute.</reason>
-    <response>Add an unempty href attribute for link or xref element.</response>
+    <reason>Link or Xref must include an href attribute.</reason>
+    <response>Add an href attribute for the link or xref element.</response>
   </message>
   
   <message id="DOTX029I" type="INFO">
@@ -528,6 +578,26 @@
   <message id="DOTX057W" type="WARN">
     <reason>The link or cross reference target %1 cannot be found, this may cause error when the processor tries to create the link or cross reference in output.</reason>
     <response>Make sure the reference ids for topic and element are correct.</response>
+  </message>
+  
+  <message id="DOTX058W" type="WARN">
+    <reason>No glossary id was found to be associated with key '%1'. Appropriate forms will be guessed from glossary entry contents by application contexts.</reason>
+    <response>Specify the glossary id when referring to a glossary in glossentry tag.</response>
+  </message>
+  
+  <message id="DOTX059I" type="INFO">
+    <reason>No language specification was found when referring to a glossary, falling back to default language 'en'.</reason>
+    <response>Speicify language preference when referring to a glossary.</response>
+  </message>
+  
+  <message id="DOTX060W" type="WARN">
+    <reason>Key '%1' was used in abbreviated-form tag but not defined with any glossary entry. Abbreviated-form should ONLY be used to reference to a glossary entry.</reason>
+    <response>Correct the keyref attribute in abbreviated-form to point to a glossary entry or use other appropriate tags referencing non-glossentry term.</response>
+  </message>
+  
+  <message id="DOTX061W" type="WARN">
+    <reason>ID '%1' was used in topicref tag but did not point to a topic element. HREF attribute in topicref tag should only point to topic level elements.</reason>
+    <response>Correct the ID '%1' and make sure it point to a topic level element.</response>
   </message>
   <!-- End of XSL Messages --> 
   

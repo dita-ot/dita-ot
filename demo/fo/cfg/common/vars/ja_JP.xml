@@ -255,7 +255,7 @@ See the accompanying license.txt file for applicable licenses.
 
     <!-- Template for generated page number of a reference 
          in printed manual. -->
-    <variable id="On the page"> <param ref-name="pagenum"/> ページの</variable>
+    <variable id="On the page">(<param ref-name="pagenum"/> ページ)</variable>
 
     <!-- Template for generated page number of a reference
          in printed manual, when referenced element has no title. -->
@@ -383,4 +383,6 @@ See the accompanying license.txt file for applicable licenses.
 	<variable id="Search Search in Progress Message">検索中...</variable>
 	<variable id="Search Search Give No Results Message">一致は見つかりませんでした。</variable>
 
+    <!--Label for a step with importance="optional"-->
+    <variable id="Optional Step">オプション:</variable>
 </vars>

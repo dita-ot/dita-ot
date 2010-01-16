@@ -12,28 +12,28 @@ package org.dita.dost.platform;
 import java.util.Hashtable;
 
 /**
- * Interface 
+ * Interface. 
  * @author Zhang, Yuan Peng
  */
 public interface IAction {
 	/**
-	 * Set the input string
-	 * @param input
+	 * Set the input string.
+	 * @param input input
 	 */
 	void setInput(String input);
 	/**
-	 * Set the input parameters
-	 * @param param
+	 * Set the input parameters.
+	 * @param param param
 	 */
 	void setParam(String param);
 	/**
-	 * Return the result
-	 * @return
+	 * Return the result.
+	 * @return result
 	 */
 	String getResult();
 	/**
-	 * Set the feature table
-	 * @param h
+	 * Set the feature table.
+	 * @param h hastable
 	 */
-	void setFeatures(Hashtable h);
+	void setFeatures(Hashtable<String,String> h);
 }

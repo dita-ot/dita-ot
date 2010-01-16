@@ -21,15 +21,9 @@
   <xsl:variable name="flagrules">
     <xsl:call-template name="getrules"/>
   </xsl:variable>
-  <xsl:variable name="conflictexist">
-    <xsl:call-template name="conflict-check">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:call-template>
-  </xsl:variable>
   
 <div><xsl:call-template name="commonattributes"/>
   <xsl:call-template name="gen-style">
-    <xsl:with-param name="conflictexist" select="$conflictexist"></xsl:with-param> 
     <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
   </xsl:call-template>
   <xsl:call-template name="setidaname"/>
@@ -131,7 +125,23 @@
 
 <!-- In the context of IMAGE - call these attribute processors -->
 <xsl:template match="*[contains(@class, ' topic/image ')]" mode="imagemap-image">
- <xsl:apply-templates select="@href|@height|@width|@longdescref"/>
+ <xsl:apply-templates select="@href|@height|@width"/>
+  <xsl:choose>
+    <xsl:when test="*[contains(@class, ' topic/longdescref ')]">
+      <xsl:apply-templates select="*[contains(@class, ' topic/longdescref ')]"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:apply-templates select="@longdescref"/>
+    </xsl:otherwise>
+  </xsl:choose>
+  <xsl:choose>
+    <xsl:when test="*[contains(@class,' topic/alt ')]">
+      <xsl:attribute name="alt"><xsl:apply-templates select="*[contains(@class,' topic/alt ')]" mode="text-only"/></xsl:attribute>
+    </xsl:when>
+    <xsl:when test="@alt">
+      <xsl:attribute name="alt"><xsl:value-of select="@alt"/></xsl:attribute>
+    </xsl:when>
+  </xsl:choose>
 </xsl:template>
 
 <!-- In the context of XREF - call it's HREF processor -->

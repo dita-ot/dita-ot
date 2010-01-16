@@ -9,13 +9,14 @@
  */
 package org.dita.dost.platform;
 
+import java.io.File;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 import org.dita.dost.util.Constants;
 import org.dita.dost.util.StringUtils;
 
 /**
- * Task run by ant scripts, invoking Task
+ * Task run by ant scripts, invoking Task.
  * @author Zhang, Yuan Peng
  */
 public class IntegratorTask extends Task {
@@ -23,7 +24,7 @@ public class IntegratorTask extends Task {
 	private Integrator adaptee;
 	
 	/**
-	 * Default Constructor
+	 * Default Constructor.
 	 */
 	public IntegratorTask() {
 		if (System.getProperty(Constants.SAX_DRIVER_PROPERTY) == null){
@@ -41,34 +42,51 @@ public class IntegratorTask extends Task {
 	}
 
 	/**
-	 * Return the basedir
-	 * @return
+	 * Return the basedir.
+	 * @return basedir
 	 */
 	public String getBasedir() {
 		return adaptee.getBasedir();
 	}
 	
 	/**
-	 * Set the basedir
-	 * @param basedir
+	 * Set the basedir.
+	 * @param basedir basedir
 	 */
 	public void setBasedir(String basedir) {
 		adaptee.setBasedir(basedir);
 	}
 	
 	/**
-	 * Return the ditaDir
-	 * @return
+	 * Return the ditaDir.
+	 * @return ditaDir
 	 */
 	public String getDitadir() {
 		return adaptee.getDitaDir();
 	}
 
 	/**
-	 * Set the ditaDir
-	 * @param ditaDir
+	 * Set the ditaDir.
+	 * @param ditaDir ditaDir
 	 */
 	public void setDitadir(String ditaDir) {
 		adaptee.setDitaDir(ditaDir);
 	}
+
+	/**
+	 * Return the properties file.
+	 * @return file
+	 */
+	public File getProperties() {
+		return adaptee.getProperties();
+	}
+
+	/**
+	 * Set the properties file.
+	 * @param propertiesFile propertiesFile
+	 */
+	public void setProperties(File propertiesFile) {
+		adaptee.setProperties(propertiesFile);
+	}
+
 }

@@ -1,0 +1,491 @@
+<?xml version="1.0"?>
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference id="reference_F16A859F9B0E426B8BB110ECFA794EAA"><title>
+    <keyword>plus-allhtml-svgobject</keyword>
+  </title>
+  <abstract>
+    <shortdesc>Other plugins can use the <keyword>plus-allhtml-svgobject</keyword> plugin to insert
+      SVG (Scalable Vector Graphics) images into HTML output. SVG images can be embedded in an HTML
+        <keyword>object</keyword> element for display by SVG-aware browsers, with a rasterized image
+      as a fallback version that all browsers are able to display.</shortdesc>
+    <p>The <keyword>plus-allhtml-svgobject</keyword> plugin makes use of the Batik SVG toolkit to
+      execute JavaScript embedded into an SVG file, to convert SVG text into strokes, to rasterize
+      SVG images into bitmaps, and to produce client-side image maps corresponding to hyperlinks in
+      the SVG.</p>
+    <p>The <keyword>plus-allhtml-svgobject</keyword> plugin takes advantage of two-pass HTML
+      generation, slotting its processing between stage 1 and stage 2. During stage 1, other plugins
+      may have created dynamically-sized SVG, containing JavaScript code to resize the SVG canvas
+      according to the content. This SVG is processed by <keyword>plus-allhtml-svgobject</keyword>,
+      and the modified SVG and rasterized versions (and possibly imagemaps) are tied back into the
+      output during stage 2, using hooks placed during stage 1.</p>
+    <p>Because <keyword>plus-allhtml-svgobject</keyword> writes to external files from XSLT, an XSLT
+      2.0 processor is required.</p>
+  </abstract>
+  <refbody>
+    <section id="section_1ED97B49069548D2931AC1152152F57B">
+      <title>Plugin ID</title>
+      <p>
+        <apiname>com.moldflow.dita.plus-allhtml-svgobject</apiname>
+      </p>
+    </section>
+    <section id="section_7F6DEEA4E1E5488586C8FF7C57D2F169">
+      <title>Prerequisite plugins</title>
+      <ul id="ul_0B933A1C52A64D7184DA6015365D7FB7">
+        <li id="li_4075D23FB26C4B039FF173AE5E1E593F">
+          <apiname>com.moldflow.dita.plus-anyhtml-topics-twopass</apiname>
+        </li>
+        <li id="li_8DFA6B2A7A7745F49C89E95C5794E5C5"><apiname
+            >com.moldflow.dita.plus-allhtml-xhtml-namespace</apiname> (optional, loaded before this
+          plugin)</li>
+      </ul>
+    </section>
+    <section id="section_E9B277640879405C81E175FD55792C70">
+      <title>XSLT requirements</title>
+      <p>An XSLT 2.0 or later processor. Trigonometric functions in EXSLT extensions are required
+        for generation of image maps if the SVG contains any rotation or skew transforms.</p>
+    </section>
+    <section id="section_79304AD677314F11BE689B842F0F16FB">
+      <title>Ant requirements</title>
+      <p>Ant 1.7.0 or later.</p>
+    </section>
+    <section id="section_5862E90B644642CCA38E345D69240316">
+      <title>Java requirements</title>
+      <p>The Java classpath must include a number of classes:<ul
+          id="ul_028036AC2649488FA3162E88C16E9B9C">
+          <li id="li_809C2765C6384FCAACA6660AF6414BDF">From Apache Batik 1.7 or later:<ul
+              id="ul_7ED2E76B2758456AA2C14E9EEE4990FA">
+              <li id="li_8CBDA70A125B477EA3F19A1668873F59"><filepath>batik-all.jar</filepath> from
+                the Batik distribution.</li>
+              <li id="li_D5388853D6E64F86B29FEA2DEC8B955A"><filepath>RasterizerTask.jar</filepath>
+                compiled against the Batik library.</li>
+            </ul></li>
+          <li id="li_030928A2E7F24A38BADA9E4B40DAAC48"><filepath>js.jar</filepath> from Mozilla
+            Rhino 1.6r5 or later (if any SVG has an <codeph>onload</codeph> attribute).</li>
+          <li id="li_523D83EA91984D37B143DD436432FD7F">From the Moldflow <filepath
+              >svgrenderingtranscoder.jar</filepath> library:<ul
+              id="ul_9308B29BB4AC432882848C656260390A">
+              <li id="li_D26C010C8D1540E3B530EB41A4325942">
+                <apiname>com.moldflow.batik.ant.SVGMakeStatic</apiname>
+              </li>
+              <li id="li_612303BE620E4EC597AA97E0F3308D8E">
+                <apiname>com.moldflow.batik.ant.SVGRender</apiname>
+              </li>
+              <li id="li_AF4EC98F140C4512A673DE2E209412AF">
+                <apiname>com.moldflow.batik.transcoder.SVGScriptExecutor</apiname>
+              </li>
+              <li id="li_E3E10AC6326B49E58539706AE92D0899">
+                <apiname>com.moldflow.batik.transcoder.SVGRenderingTranscoder</apiname>
+              </li>
+            </ul></li>
+        </ul>Some of these classes require Java 1.5 or later.</p>
+      <p>It is also recommended that you include in the classpath the Moldflow <filepath
+        >hash.jar</filepath> library, which defines the class <apiname
+        >com.moldflow.xslt.hash</apiname>. The XSLT extension that this class provides ensures
+        neater filenames in the <filepath>svgobject</filepath> directory and may prevent filename
+        clashes.</p>
+    </section>
+    <section id="section_1490F6131D504A26859B66608759EFE0">
+      <title>Limitations</title>
+      <p>Converting text to paths destroys hyperlinks in the SVG. If hyperlinks are important,
+        either set <keyword>plus.svgobject.format</keyword> to <keyword>raster</keyword> and rely on
+        the image map, or set <keyword>plus.svgobject.object.convert-to-path</keyword> to <codeph
+        >no</codeph> (but read on for side-effects), or avoid this plugin entirely and have your
+        plugin generate inline SVG.</p>
+      <p>The <keyword>plus.svgobject.object.convert-to-path</keyword> property is less useful than
+        it seems:<ul id="ul_F3C06C880D404FD49392F4035666DADB">
+          <li id="li_9FF9A5B47B9B4A86B9488AD617C21DE9">Setting <keyword
+              >plus.svgobject.object.convert-to-path</keyword> to <codeph>no</codeph> may produce
+            text that overflows its container because the SVG renderer used in the user's browser
+            probably has different ideas about font metrics than Batik does.</li>
+          <li id="li_9AD763A17FEE4560A3A5EDFB3968376C">Most browsers render SVG objects as an inline
+            frame, so hyperlinks in an embedded SVG (if they work at all) may try to put the link
+            target into that frame. This seems to be handled inconsistently across browsers.</li>
+        </ul> It is probably best to leave <keyword>plus.svgobject.object.convert-to-path</keyword>
+        with its default value, and let plugins using <keyword>plus-allhtml-svgobject</keyword> opt
+        out by setting the <codeph>convert-to-path</codeph> XSLT parameter to <codeph>no</codeph> if
+        they know they will neither generate hyperlinks nor care about font metrics that do not
+        match.</p>
+      <p>MD5 hashes (used if <filepath>hash.jar</filepath> is installed) can theoretically produce
+        filename clashes in the generated filenames. The likelihood of this is vanishingly
+      small.</p>
+    </section>
+    <table id="table_88E41E91DE074FA3BFB2209B742D8BB3">
+      <title>Ant properties defined in <keyword>plus-allhtml-svgobject</keyword></title>
+      <tgroup cols="3">
+        <colspec colnum="1" colname="col1" colwidth="1.00*"/>
+        <colspec colname="col02" colnum="2" colwidth="1.29*"/>
+        <colspec colnum="3" colname="col2" colwidth="1.34*"/>
+        <thead>
+          <row>
+            <entry colname="col1">Name</entry>
+            <entry colname="col02">Value</entry>
+            <entry colname="col2">Description</entry>
+          </row>
+        </thead>
+        <tbody>
+          <row>
+            <entry colname="col1">
+              <keyword>plus-allhtml-svgobject.dir</keyword>
+            </entry>
+            <entry colname="col02"/>
+            <entry colname="col2">Absolute path of directory where plugin is installed.</entry>
+          </row>
+          <row>
+            <entry colname="col1">
+              <keyword>plus.svgobject.format</keyword>
+            </entry>
+            <entry colname="col02">
+              <codeph>object</codeph>
+            </entry>
+            <entry colname="col2">String specifying how SVG is to be embedded in HTML:<dl>
+                <dlentry>
+                  <dt>
+                    <codeph>raster</codeph>
+                  </dt>
+                  <dd>HTML image of rasterized version.</dd>
+                </dlentry>
+                <dlentry>
+                  <dt>
+                    <codeph>object</codeph>
+                  </dt>
+                  <dd>HTML object with type <codeph>image/svg+xml</codeph> with rasterized version
+                    as fallback.</dd>
+                </dlentry>
+              </dl></entry>
+          </row>
+          <row>
+            <entry colname="col1">
+              <keyword>plus.svgobject.raster.mimetype</keyword>
+            </entry>
+            <entry colname="col02">
+              <codeph>image/png</codeph>
+            </entry>
+            <entry colname="col2">String specifying the format to be used for the rasterized
+                version:<dl>
+                <dlentry>
+                  <dt>
+                    <codeph>image/png</codeph>
+                  </dt>
+                  <dd>PNG</dd>
+                </dlentry>
+                <dlentry>
+                  <dt>
+                    <codeph>image/jpeg</codeph>
+                  </dt>
+                  <dd>JPEG</dd>
+                </dlentry>
+                <dlentry>
+                  <dt>
+                    <codeph>image/tiff</codeph>
+                  </dt>
+                  <dd>TIFF</dd>
+                </dlentry>
+              </dl></entry>
+          </row>
+          <row>
+            <entry colname="col1">
+              <keyword>plus.svgobject.object.convert-to-path</keyword>
+            </entry>
+            <entry colname="col02"><codeph>yes</codeph> if <keyword>plus.svgobject.format</keyword>
+              is <codeph>object</codeph>; <codeph>no</codeph> otherwise.</entry>
+            <entry colname="col2">String specifying whether to convert SVG text to lines:<dl>
+                <dlentry>
+                  <dt>
+                    <codeph>yes</codeph>
+                  </dt>
+                  <dd>Text is converted to paths. This is useful if the output depends on the
+                    metrics of the font being rendered, but hyperlinks in the SVG will no longer
+                    function.</dd>
+                </dlentry>
+                <dlentry>
+                  <dt>
+                    <codeph>no</codeph>
+                  </dt>
+                  <dd>Text is left as text. This usually produces smaller SVG files, but if the
+                    required font is not available to the renderer, text may be longer or shorter
+                    than expected.</dd>
+                </dlentry>
+              </dl></entry>
+          </row>
+          <row>
+            <entry colname="col1">
+              <keyword>plus.svgobject.raster.imagemap</keyword>
+            </entry>
+            <entry colname="col02">
+              <codeph>yes</codeph>
+            </entry>
+            <entry colname="col2">String specifying whether SVG containing hyperlinks should
+              generate a corresponding image map for the rasterized version of the file.</entry>
+          </row>
+          <row>
+            <entry colname="col1">
+              <keyword>plus.svgobject.path</keyword>
+            </entry>
+            <entry colname="col02">
+              <codeph>svgobject</codeph>
+            </entry>
+            <entry colname="col2">Relative path from the output root where generated files should be
+              stored.</entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+    <table id="table_EC511B34E89F4EC69E65EABCB42E136D">
+      <title>Plugin extension points defined in <keyword>plus-allhtml-svgobject</keyword></title>
+      <tgroup cols="3">
+        <colspec colnum="1" colname="col1" colwidth="1.06*"/>
+        <colspec colnum="2" colname="col2" colwidth="1.00*"/>
+        <colspec colnum="3" colname="col3" colwidth="1.52*"/>
+        <thead>
+          <row>
+            <entry colname="col1">Extension point</entry>
+            <entry colname="col2">Behavior</entry>
+            <entry colname="col3">Description</entry>
+          </row>
+        </thead>
+        <tbody>
+          <row>
+            <entry colname="col1">
+              <keyword>depend.plus-allhtml-svgobject.make-static.pre</keyword>
+            </entry>
+            <entry colname="col2">
+              <apiname>org.dita.dost.platform.ImportDependsAction</apiname>
+            </entry>
+            <entry colname="col3">Ant target executed before Javascript <keyword>onload</keyword> is
+              performed on dynamic SVG files.</entry>
+          </row>
+          <row>
+            <entry colname="col1">
+              <keyword>depend.plus-allhtml-svgobject.makeimagemaps.pre</keyword>
+            </entry>
+            <entry colname="col2">
+              <apiname>org.dita.dost.platform.ImportDependsAction</apiname>
+            </entry>
+            <entry colname="col3">Ant target executed before image maps are created.<p>Inserted
+                targets should use <codeph
+                >if="plus-allhtml-svgobject.make-imagemaps.required"</codeph> if they are to be
+                suppressed when image maps are not to be generated.</p></entry>
+          </row>
+          <row>
+            <entry colname="col1">
+              <keyword>depend.plus-allhtml-svgobject.convert-to-path.pre</keyword>
+            </entry>
+            <entry colname="col2">
+              <apiname>org.dita.dost.platform.ImportDependsAction</apiname>
+            </entry>
+            <entry colname="col3">Ant target executed before SVG text is converted to paths.<p
+                >Inserted targets should use <codeph
+                  >if="plus-allhtml-svgobject.convert-to-path.required"</codeph> if they are to be
+                suppressed when SVG text is not converted to paths.</p></entry>
+          </row>
+          <row>
+            <entry colname="col1">
+              <keyword>xsl.plus-allhtml-svgobject.svg2imagemap</keyword>
+            </entry>
+            <entry colname="col2">
+              <apiname>org.dita.dost.platform.ImportXSLAction</apiname>
+            </entry>
+            <entry colname="col3">XSLT stylesheets for plugins to add areas to image maps.<p>Plugins
+                that use <keyword>plus-allhtml-svgobject</keyword> may have their own knowledge
+                about what constitutes a hotspot in the SVG image. They can override templates for
+                those parts of the SVG and output an <keyword>area</keyword> element with the
+                appropriate coordinates and <keyword>href</keyword>.</p></entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+    <table id="table_1A6935C1FAF94CC387A042D4F487071D">
+      <title>Callable Ant targets defined in <keyword>plus-allhtml-svgobject</keyword></title>
+      <tgroup cols="3">
+        <colspec colnum="1" colname="col1" colwidth="1.00*"/>
+        <colspec colnum="2" colname="col2" colwidth="1.11*"/>
+        <colspec colnum="3" colname="col3" colwidth="1.27*"/>
+        <thead>
+          <row>
+            <entry colname="col1">Target</entry>
+            <entry colname="col2">Parameters</entry>
+            <entry colname="col3">Description</entry>
+          </row>
+        </thead>
+        <tbody>
+          <row>
+            <entry colname="col1">
+              <keyword>plus-allhtml-svgobject.copy-files.css</keyword>
+            </entry>
+            <entry colname="col2">
+              <dl>
+                <dlentry>
+                  <dt><codeph>csspath</codeph> (property)</dt>
+                  <dd>Relative path from the output root to store CSS files.</dd>
+                </dlentry>
+                <dlentry>
+                  <dt><codeph>fileset</codeph> (reference to resource collection)</dt>
+                  <dd>Set of files to copy to the output.</dd>
+                </dlentry>
+              </dl>
+            </entry>
+            <entry colname="col3">Call this target to ask <keyword>plus-allhtml-svgobject</keyword>
+              to install CSS that the SVG needs at rendering time.</entry>
+          </row>
+          <row>
+            <entry colname="col1">
+              <keyword>plus-allhtml-svgobject.copy-files.js</keyword>
+            </entry>
+            <entry colname="col2">
+              <dl>
+                <dlentry>
+                  <dt><codeph>jspath</codeph> (property)</dt>
+                  <dd>Relative path from the output root to store script files.</dd>
+                </dlentry>
+                <dlentry>
+                  <dt><codeph>fileset</codeph> (reference to resource collection)</dt>
+                  <dd>Set of files to copy to the output.</dd>
+                </dlentry>
+              </dl>
+            </entry>
+            <entry colname="col3">Call this target to ask <keyword>plus-allhtml-svgobject</keyword>
+              to install scripts that the SVG needs at rendering time.</entry>
+          </row>
+          <row>
+            <entry colname="col1">
+              <keyword>plus-allhtml-svgobject.gen-file.js</keyword>
+            </entry>
+            <entry colname="col2">
+              <dl>
+                <dlentry>
+                  <dt><codeph>jspath</codeph> (property)</dt>
+                  <dd>Relative path from the output root to store script files.</dd>
+                </dlentry>
+                <dlentry>
+                  <dt>
+                    <codeph>style</codeph>
+                  </dt>
+                  <dd>XSLT stylesheet used to produce script.</dd>
+                </dlentry>
+                <dlentry>
+                  <dt><codeph>in</codeph> (property)</dt>
+                  <dd>Input file to give to stylesheet.</dd>
+                </dlentry>
+                <dlentry>
+                  <dt><codeph>out</codeph> (property)</dt>
+                  <dd>Output filename (relative to <codeph>jspath</codeph>) to store resulting
+                    script.</dd>
+                </dlentry>
+              </dl>
+            </entry>
+            <entry colname="col3">Call this target for scripts that must be generated at build time
+              and that the SVG needs at rendering time.</entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+    <table id="table_403B6AE1A51F4DD688A483BC4F2F0240">
+      <title>Callable XSLT templates defined in <keyword>plus-svgobject-plus</keyword> (stage 1)</title>
+      <tgroup cols="3">
+        <colspec colnum="1" colname="col1" colwidth="1.00*"/>
+        <colspec colnum="2" colname="col2" colwidth="1.13*"/>
+        <colspec colnum="3" colname="col3" colwidth="1.06*"/>
+        <thead>
+          <row>
+            <entry colname="col1">Template</entry>
+            <entry colname="col2">Parameters</entry>
+            <entry colname="col3">Description</entry>
+          </row>
+        </thead>
+        <tbody>
+          <row>
+            <entry colname="col1">
+              <codeph>&lt;xsl:template match="*" mode="svgobject:generate-reference"
+                xmlns:svgobject="http://www.moldflow.com/namespace/2008/dita/svgobject"&gt;</codeph>
+            </entry>
+            <entry colname="col2">
+              <dl>
+                <dlentry>
+                  <dt>
+                    <codeph>doctype-public</codeph>
+                  </dt>
+                  <dd>Public ID of file to create. By default, <codeph>-//W3C//DTD SVG
+                    1.1//EN</codeph>.</dd>
+                </dlentry>
+                <dlentry>
+                  <dt>
+                    <codeph>doctype-system</codeph>
+                  </dt>
+                  <dd>System ID of file to create. By default, <codeph
+                      >http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd</codeph>.</dd>
+                </dlentry>
+                <dlentry>
+                  <dt>
+                    <codeph>content</codeph>
+                  </dt>
+                  <dd>Sequence containing content to dump to an external file. Usually an SVG root
+                    element.</dd>
+                </dlentry>
+                <dlentry>
+                  <dt>
+                    <codeph>suffix</codeph>
+                  </dt>
+                  <dd>Suffix to append to name of generated file. By default, <codeph
+                  >.svg</codeph>.</dd>
+                </dlentry>
+                <dlentry>
+                  <dt>
+                    <codeph>make-static</codeph>
+                  </dt>
+                  <dd><codeph>yes</codeph> or <codeph>no</codeph> (default is <codeph>no</codeph>).
+                    Set to <codeph>yes</codeph> if the generated file needs to have its <codeph
+                      >onload</codeph> Javascript executed before its canvas size can be known.</dd>
+                </dlentry>
+                <dlentry>
+                  <dt>
+                    <codeph>alt</codeph>
+                  </dt>
+                  <dd>Alternate text for the rasterized image.</dd>
+                </dlentry>
+                <dlentry>
+                  <dt>
+                    <codeph>baseline-shift</codeph>
+                  </dt>
+                  <dd><codeph>yes</codeph> or <codeph>no</codeph> (default is <codeph>no</codeph>).
+                    Set to <codeph>yes</codeph> if the generated image has a baseline. You must
+                    create an XML file with <filepath>.baseline</filepath> suffix whose string value
+                    is the number of pixels the image must be shifted downwards in order to sit on
+                    the baseline.</dd>
+                </dlentry>
+                <dlentry>
+                  <dt>
+                    <codeph>convert-to-path</codeph>
+                  </dt>
+                  <dd><codeph>yes</codeph> or <codeph>no</codeph> (default is <codeph>yes</codeph>).
+                    Set to <codeph>no</codeph> if this generated file should skip conversion to
+                    paths. Set to <keyword>yes</keyword> to use the global value of <keyword
+                      >plus.svgobject.object.convert-to-path</keyword>.</dd>
+                </dlentry>
+                <dlentry>
+                  <dt>
+                    <codeph>imagemap</codeph>
+                  </dt>
+                  <dd><codeph>yes</codeph> or <codeph>no</codeph> (default is <codeph>yes</codeph>).
+                    Set to <codeph>no</codeph> if this generated file should skip image map
+                    creation. Set to <keyword>yes</keyword> to use the global value of <keyword
+                      >plus.svgobject.raster.imagemap</keyword>.</dd>
+                </dlentry>
+              </dl>
+            </entry>
+            <entry colname="col3">Dumps the sequence in <codeph>$content</codeph> into a generated
+              file, and produces a reference to the file in the XHTML output. Hooks are left in the
+              XHTML to be resolved in stage 2 XSLT processing.</entry>
+          </row>
+          <row>
+            <entry colname="col1">
+              <codeph>&lt;xsl:template name="svgobject:svgobject-reverse-path"
+                xmlns:svgobject="http://www.moldflow.com/namespace/2008/dita/svgobject"&gt;</codeph>
+            </entry>
+            <entry colname="col2">None.</entry>
+            <entry colname="col3">Returns the relative path from the generated file in the <keyword
+                >plus.svgobject.path</keyword> directory back to the output root.</entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+  </refbody></reference>

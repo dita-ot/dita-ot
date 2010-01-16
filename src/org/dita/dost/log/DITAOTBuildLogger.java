@@ -39,7 +39,7 @@ public class DITAOTBuildLogger implements BuildLogger {
 	 */
 	public static final int LEFT_COLUMN_SIZE = 12;
 
-	/** Line separator */
+	/** Line separator.*/
 	protected static final String LINE_SEP = StringUtils.LINE_SEP;
 
 	/**
@@ -108,7 +108,7 @@ public class DITAOTBuildLogger implements BuildLogger {
 	/** Set which contains already captured exceptions */
 	private HashSet exceptionsCaptured=new HashSet();
 	/**
-	 * Constructor to init logger
+	 * Constructor to init logger.
 	 * 
 	 */
 	public DITAOTBuildLogger() {
@@ -117,7 +117,7 @@ public class DITAOTBuildLogger implements BuildLogger {
 
 	/**
 	 * Invoke when build finished. Do the logging.
-	 * 
+	 * @param event event
 	 * @see org.apache.tools.ant.BuildListener#buildFinished(org.apache.tools.ant.BuildEvent)
 	 */
 	public void buildFinished(BuildEvent event) {
@@ -168,8 +168,8 @@ public class DITAOTBuildLogger implements BuildLogger {
 	}
 
 	/**
-	 * Record start time
-	 * 
+	 * Record start time.
+	 * @param event event
 	 * @see org.apache.tools.ant.BuildListener#buildStarted(org.apache.tools.ant.BuildEvent)
 	 */
 	public void buildStarted(BuildEvent event) {
@@ -177,7 +177,7 @@ public class DITAOTBuildLogger implements BuildLogger {
 	}
 
 	/**
-	 * 
+	 * @param event event
 	 * @see org.apache.tools.ant.BuildListener#messageLogged(org.apache.tools.ant.BuildEvent)
 	 */
 	public void messageLogged(BuildEvent event) {
@@ -254,16 +254,16 @@ public class DITAOTBuildLogger implements BuildLogger {
 	}
 
 	/**
-	 * Ignored
-	 * 
+	 * Ignored.
+	 * @param mode mode
 	 * @see org.apache.tools.ant.BuildLogger#setEmacsMode(boolean)
 	 */
 	public void setEmacsMode(boolean mode) {
 	}
 
 	/**
-	 * Setter function for errorPrintStream
-	 * 
+	 * Setter function for errorPrintStream.
+	 * @param errorPrintStream errorPrintStream
 	 * @see org.apache.tools.ant.BuildLogger#setErrorPrintStream(java.io.PrintStream)
 	 */
 	public void setErrorPrintStream(PrintStream errorPrintStream) {
@@ -271,8 +271,8 @@ public class DITAOTBuildLogger implements BuildLogger {
 	}
 
 	/**
-	 * Setter function for messageOutputLevel
-	 * 
+	 * Setter function for messageOutputLevel.
+	 * @param level outputlevel
 	 * @see org.apache.tools.ant.BuildLogger#setMessageOutputLevel(int)
 	 */
 	public void setMessageOutputLevel(int level) {
@@ -280,8 +280,8 @@ public class DITAOTBuildLogger implements BuildLogger {
 	}
 
 	/**
-	 * Setter function for outputPrintStream, and set it to autoflush
-	 * 
+	 * Setter function for outputPrintStream, and set it to autoflush.
+	 * @param output output file
 	 * @see org.apache.tools.ant.BuildLogger#setOutputPrintStream(java.io.PrintStream)
 	 */
 	public void setOutputPrintStream(PrintStream output) {
@@ -289,15 +289,15 @@ public class DITAOTBuildLogger implements BuildLogger {
 	}
 
 	/**
-	 * Ignored
-	 * 
+	 * Ignored.
+	 * @param event event
 	 * @see org.apache.tools.ant.BuildListener#targetFinished(org.apache.tools.ant.BuildEvent)
 	 */
 	public void targetFinished(BuildEvent event) {
 	}
 
 	/**
-	 * 
+	 * @param event event
 	 * @see org.apache.tools.ant.BuildListener#targetStarted(org.apache.tools.ant.BuildEvent)
 	 */
 	public void targetStarted(BuildEvent event) {
@@ -314,8 +314,8 @@ public class DITAOTBuildLogger implements BuildLogger {
 	}
 
 	/**
-	 * Ignored
-	 * 
+	 * Ignored.
+	 * @param event event
 	 * @see org.apache.tools.ant.BuildListener#taskFinished(org.apache.tools.ant.BuildEvent)
 	 */
 	public void taskFinished(BuildEvent event) {
@@ -361,7 +361,7 @@ public class DITAOTBuildLogger implements BuildLogger {
 	}
 
 	/**
-	 * Ignored
+	 * Ignored.
 	 * 
 	 * @see org.apache.tools.ant.BuildListener#taskStarted(org.apache.tools.ant.BuildEvent)
 	 */

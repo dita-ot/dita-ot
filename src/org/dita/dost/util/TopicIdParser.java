@@ -15,7 +15,7 @@ import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 
 /**
- * SAX Parser that handles topic id identification
+ * SAX Parser that handles topic id identification.
  * 
  */
 public class TopicIdParser implements ContentHandler {
@@ -23,7 +23,7 @@ public class TopicIdParser implements ContentHandler {
 	private StringBuffer firstId = null;
 	
 	/**
-	 * Default Constructor
+	 * Default Constructor.
 	 *
 	 */
 	public TopicIdParser(){
@@ -31,8 +31,8 @@ public class TopicIdParser implements ContentHandler {
 	}
 	
 	/**
-	 * Constructor
-	 * @param result
+	 * Constructor.
+	 * @param result to store the topic id
 	 */
 	public TopicIdParser(StringBuffer result) {
 		firstId = result;

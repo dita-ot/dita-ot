@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ============================================================= -->
+<!-- HEADER -->
+<!-- ============================================================= -->
+<!-- MODULE:    DITA Machine Industry Taskbody Constraint -->
+<!-- VERSION:   1.2 -->
+<!-- DATE:      April 2008 -->
+<!---->
+<!-- ============================================================= -->
+<!-- ============================================================= -->
+<!-- PUBLIC DOCUMENT TYPE DEFINITION -->
+<!-- TYPICAL INVOCATION -->
+<!---->
+<!--
+  Refer to this file by the following public identifier or an 
+        appropriate system identifier 
+  PUBLIC "-//OASIS//ELEMENTS DITA Machine Industry Task Constraint//EN"
+        Delivered as file "mitaskTaskConstraint.mod"
+-->
+<!-- ============================================================= -->
+<!-- SYSTEM:     Darwin Information Typing Architecture (DITA) -->
+<!---->
+<!-- PURPOSE:    Declaring the domain entity for the strict task -->
+<!-- constraint module -->
+<!---->
+<!-- ORIGINAL CREATION DATE: -->
+<!-- April 2008 -->
+<!---->
+<!-- (C) Copyright OASIS Open 2008 -->
+<!-- All Rights Reserved. -->
+<!---->
+<!-- UPDATES: -->
+<!-- ============================================================= -->
+<!-- ============================================================= -->
+<!-- Machine Industry Taskbody ENTITIES -->
+<!-- ============================================================= -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
+   
+   <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="urn:oasis:names:tc:dita:xsd:xml.xsd:1.2"/>
+   <xs:import namespace="http://dita.oasis-open.org/architecture/2005/" schemaLocation="urn:oasis:names:tc:dita:xsd:ditaarch.xsd:1.2"/>
+  
+  <xs:group name="prelreqs">
+    <xs:sequence>
+      <xs:element ref="prelreqs"/>
+    </xs:sequence>
+  </xs:group>
+  
+  <!--<xs:group name="context">
+    <xs:sequence>
+      <xs:element ref="context"/>
+    </xs:sequence>
+  </xs:group>
+  
+  <xs:group name="steps">
+    <xs:sequence>
+      <xs:element ref="steps"/>
+    </xs:sequence>
+  </xs:group>
+  
+  <xs:group name="steps-unordered">
+    <xs:sequence>
+      <xs:element ref="steps-unordered"/>
+    </xs:sequence>
+  </xs:group>
+  
+  <xs:group name="process">
+    <xs:sequence>
+      <xs:element ref="process"/>
+    </xs:sequence>
+  </xs:group>
+  
+  <xs:group name="result">
+    <xs:sequence>
+      <xs:element ref="result"/>
+    </xs:sequence>
+  </xs:group>-->
+  
+  <xs:group name="closereqs">
+    <xs:sequence>
+      <xs:element ref="closereqs"/>
+    </xs:sequence>
+  </xs:group>
+  
+  <xs:complexType name="taskbody.content">
+    <xs:sequence>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:group ref="prelreqs"/>
+        <xs:group ref="context"/>
+        <xs:group ref="section"/>
+      </xs:choice>
+      <xs:choice minOccurs="0">
+        <xs:group ref="steps"/>
+        <xs:group ref="steps-unordered"/>
+        <xs:group ref="process"/>
+      </xs:choice>
+      <xs:group minOccurs="0" ref="result"/>
+      <xs:group minOccurs="0" maxOccurs="unbounded" ref="example"/>
+      <xs:group minOccurs="0" ref="closereqs"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>
+<!-- ================== End Machinery Taskbody Entities ========== -->

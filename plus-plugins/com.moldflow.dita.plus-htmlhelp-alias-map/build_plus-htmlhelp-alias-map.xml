@@ -1,0 +1,14 @@
+<project name="plus-htmlhelp-alias-map">
+
+  <target name="plus-htmlhelp-alias-map.init">
+  </target>
+
+  <target name="plus-htmlhelp-alias.make-absolute" depends="plus-htmlhelp-alias-map.init" if="plus.htmlhelp.alias">
+    <property name="plus.htmlhelp.alias.absolute" location="${plus.htmlhelp.alias}"/>
+  </target>
+
+  <target name="plus-htmlhelp-map.make-absolute" depends="plus-htmlhelp-alias-map.init" if="plus.htmlhelp.map">
+    <property name="plus.htmlhelp.map.absolute" location="${plus.htmlhelp.map}"/>
+  </target>
+
+</project>

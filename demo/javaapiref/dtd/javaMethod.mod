@@ -1,5 +1,5 @@
 <!--
- | (C) Copyright IBM Corporation 2005 - 2006. All Rights Reserved.
+ | (C) Copyright IBM Corporation 2005, 2009. All Rights Reserved.
  *-->
 
 <!-- ============ Hooks for domain extension ============ -->
@@ -31,19 +31,19 @@
 
 
 <!-- ============ Topic specializations ============ -->
-<!ELEMENT javaMethod   ( (%apiName;), (%shortdesc;), (%prolog;)?, (%javaMethodDetail;), (%related-links;)?, (%javaMethod-info-types;)* )>
+<!ELEMENT javaMethod   ( (%apiName;), (%shortdesc; | %abstract;), (%prolog;)?, (%javaMethodDetail;), (%related-links;)?, (%javaMethod-info-types;)* )>
 <!ATTLIST javaMethod      id ID #REQUIRED
                           conref CDATA #IMPLIED
                           outputclass CDATA #IMPLIED
-                          xml:lang NMTOKEN #IMPLIED
+                          %localization-atts;
+                          %select-atts;
                           %arch-atts;
                           domains CDATA "&included-domains;"
 >
 
 <!ELEMENT javaMethodDetail  ((%javaMethodDef;|%javaConstructorDef;), (%apiDesc;)?, (%example;|%section;|%apiImpl;)*)>
 <!ATTLIST javaMethodDetail  %id-atts;
-                          translate (yes|no) #IMPLIED
-                          xml:lang NMTOKEN #IMPLIED
+                          %localization-atts;
                           outputclass CDATA #IMPLIED>
 
 <!ELEMENT javaMethodDef   ((%javaFinalMethod;)?, (%javaAbstractMethod;)?, (%javaStaticMethod;)?, (%javaNativeMethod;)?, (%javaSynchronizedMethod;)?, (%javaMethodAccess;)?, (%javaReturn;|%javaVoid;), (%javaParam;)*, (%javaException;)*) >
@@ -108,7 +108,7 @@
 >
 <!ELEMENT javaMethodAccess  EMPTY>
 <!ATTLIST javaMethodAccess  name CDATA #FIXED "access"
-                          value (public | protected | private) #REQUIRED
+                          value (public | protected | private | -dita-use-conref-target) #REQUIRED
                           %univ-atts;
                           outputclass CDATA #IMPLIED
 >
@@ -119,7 +119,7 @@
                           type   CDATA  #IMPLIED
                           %univ-atts;
                           format        CDATA   #IMPLIED
-                          scope (local | peer | external) #IMPLIED
+                          scope (local | peer | external | -dita-use-conref-target) #IMPLIED
                           outputclass CDATA #IMPLIED
 >
 
@@ -129,13 +129,13 @@
                           type   CDATA  #IMPLIED
                           %univ-atts;
                           format        CDATA   #IMPLIED
-                          scope (local | peer | external) #IMPLIED
+                          scope (local | peer | external | -dita-use-conref-target) #IMPLIED
                           outputclass CDATA #IMPLIED
 >
 
 <!ELEMENT javaMethodPrimitive  EMPTY>
 <!ATTLIST javaMethodPrimitive  name CDATA #FIXED "type"
-                          value ( boolean | byte | char | double | float | int | long | short ) #REQUIRED
+                          value ( boolean | byte | char | double | float | int | long | short | -dita-use-conref-target ) #REQUIRED
                           %univ-atts;
                           outputclass CDATA #IMPLIED
 >

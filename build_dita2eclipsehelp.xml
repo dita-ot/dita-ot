@@ -9,6 +9,7 @@
     <import file="build_init.xml" />
     <import file="build_preprocess.xml" />
     <import file="build_general.xml" />
+	
 
     <target name="dita2eclipsehelp"
             unless="noMap"
@@ -91,10 +92,11 @@
         <xslt processor="trax"
               basedir="${dita.temp.dir}"
               destdir="${output.dir}"
-              includes="${fullditamaplist} ${chunkedditamaplist}"
+              includesfile="${dita.temp.dir}${file.separator}${fullditamapfile}"
               extension=".xml"
               classpathref="dost.class.path"
               style="${dita.script.dir}${file.separator}map2eclipse.xsl">
+            <includesfile name="${dita.temp.dir}${file.separator}${chunkedditamapfile}" if="chunkedditamapfile"/>
             <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
             <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
             <param name="WORKDIR" expression="${workdir}" if="workdir"/>
@@ -107,9 +109,10 @@
         <xslt processor="trax"
             basedir="${dita.temp.dir}"
             destdir="${output.dir}"
-            includes="${fullditamaplist} ${chunkedditamaplist}"
+            includesfile="${dita.temp.dir}${file.separator}${fullditamapfile}"
             classpathref="dost.class.path"
             style="${dita.script.dir}${file.separator}map2eclipse.xsl">
+            <includesfile name="${dita.temp.dir}${file.separator}${chunkedditamapfile}" if="chunkedditamapfile"/>
             <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
             <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
             <param name="WORKDIR" expression="${workdir}" if="workdir"/>
@@ -122,23 +125,29 @@
     <target name="dita.map.eclipse.index" unless="noMap"
             depends="dita.map.eclipse.plugin.init" if="old.transform"
             description="Build Eclipse Help index file">
+    	  <condition property="dita.eclipsehelp.index.class" value="org.dita.dost.writer.EclipseIndexWriter"> 
+    	     <not><isset property="dita.eclipsehelp.index.class"/></not> 
+    	  </condition> 
         <pipeline message="Extract index term."
             module="IndexTermExtract"
             basedir="${basedir}"
             tempdir="${dita.temp.dir}"
             inputmap="${user.input.file}"
-            extparam="output=${output.dir}${file.separator}${user.input.file};targetext=${out.ext};indextype=eclipsehelp;${index.ext.param.encoding}" />
+            extparam="output=${output.dir}${file.separator}${user.input.file};targetext=${out.ext};indextype=eclipsehelp;indexclass=${dita.eclipsehelp.index.class};${index.ext.param.encoding}" />
     </target>
     
     <target name="dita.out.map.eclipse.index" unless="noMap"
         depends="dita.map.eclipse.plugin.init" if="inner.transform"
         description="Build Eclipse Help index file">
+    	  <condition property="dita.eclipsehelp.index.class" value="org.dita.dost.writer.EclipseIndexWriter"> 
+    	     <not><isset property="dita.eclipsehelp.index.class"/></not> 
+    	  </condition> 
         <pipeline message="Extract index term."
             module="IndexTermExtract"
             basedir="${basedir}"
             tempdir="${dita.temp.dir}"
             inputmap="${user.input.file}"
-            extparam="output=${output.dir}${file.separator}index.xml;targetext=${out.ext};indextype=eclipsehelp;${index.ext.param.encoding}" />
+            extparam="output=${output.dir}${file.separator}index.xml;targetext=${out.ext};indextype=eclipsehelp;indexclass=${dita.eclipsehelp.index.class};${index.ext.param.encoding}" />
     </target>
 
     <target name="dita.map.eclipse.plugin"
@@ -157,6 +166,9 @@
             <param name="provider"
                    expression="${args.eclipse.provider}"
                    if="args.eclipse.provider" />
+        	  <outputproperty value="yes" name="indent"/>
+        	  <param name="dita.plugin.output" 
+        	        expression="dita.eclipse.plugin"/>  
         </xslt>
     </target>
     
@@ -176,6 +188,9 @@
             <param name="provider"
                 expression="${args.eclipse.provider}"
                 if="args.eclipse.provider" />
+        	  <outputproperty value="yes" name="indent"/>
+        	  <param name="dita.plugin.output" 
+        	        expression="dita.eclipse.plugin"/>  
         </xslt>
     </target>
   
@@ -252,7 +267,14 @@
       classpathref="dost.class.path"
       style="${dita.script.dir}${file.separator}map2plugin.xsl">
       <outputproperty value="text" name="method"/>
-      <param name="dita.plugin.output" expression="dita.eclipse.properties"/>
+      <param name="dita.plugin.output" 
+      	  expression="dita.eclipse.properties"/>
+    	<param name="version"
+    	    expression="${args.eclipse.version}"
+    	    if="args.eclipse.version" />
+    	<param name="provider"
+    	    expression="${args.eclipse.provider}"
+    	    if="args.eclipse.provider" />
     </xslt>
   </target>
   
@@ -267,6 +289,12 @@
       style="${dita.script.dir}${file.separator}map2plugin.xsl">
       <outputproperty value="text" name="method"/>
       <param name="dita.plugin.output" expression="dita.eclipse.properties"/>
+    	<param name="version"
+          expression="${args.eclipse.version}"
+          if="args.eclipse.version" />
+      <param name="provider"
+          expression="${args.eclipse.provider}"
+          if="args.eclipse.provider" />
     </xslt>
   </target>
   

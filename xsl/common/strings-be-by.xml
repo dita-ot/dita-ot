@@ -50,6 +50,15 @@
   <str name="Prerequisite">Перадумова</str> 
   <str name="Prerequisites">Перадумовы</str> 
   <str name="or">або</str> 
+
+  <!--Task section labels -->
+  <str name="task_context">Аб гэтай задачы</str>
+  <str name="task_example">Прыклад</str>
+  <str name="task_postreq">Далейшыя дзеяннi</str>
+  <str name="task_prereq">Перад пачаткам работы</str>
+  <str name="task_procedure">Парадак выканання</str>
+  <str name="task_results">Рэзультаты</str>
+
   <str name="Copyright">Copyright</str> 
   <!-- Symbols --> 
   <str name="OpenQuote">"</str> 

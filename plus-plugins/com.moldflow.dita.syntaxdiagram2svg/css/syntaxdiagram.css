@@ -1,0 +1,137 @@
+@namespace "http://www.w3.org/2000/svg";
+
+svg[class="syntaxdiagram"] *.arrow {
+  fill: none;
+  stroke: black;
+}
+
+svg[class="syntaxdiagram"] *.arrowhead {
+  stroke: black;
+  fill: black;
+}
+
+svg[class="syntaxdiagram"] a[class~="boxed"] > rect {
+    fill: none;
+    stroke: black;
+}
+
+svg[class="syntaxdiagram"] g[class~="boxed"] > rect {
+    fill: none;
+    stroke: black;
+}
+
+svg[class="syntaxdiagram"] g[class~="kwd"] text {
+    fill: #000000;
+    fill-opacity: 1;
+    font-family: Sans-serif;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 8pt;
+    stroke: #000000;
+    stroke-width: 0.1;
+}
+
+svg[class="syntaxdiagram"] g[class~="var"] text {
+    fill: #000000;
+    fill-opacity: 1;
+    font-family: Sans-serif;
+    font-style: italic;
+    font-size: 8pt;
+    stroke: #000000;
+    stroke-width: 0.1;
+}
+
+svg[class="syntaxdiagram"] g[class~="delim"] text {
+    fill: #000000;
+    fill-opacity: 1;
+    font-family: Sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 8pt;
+    stroke: #000000;
+    stroke-width: 0.1;
+}
+
+svg[class="syntaxdiagram"] g[class~="oper"] text {
+    fill: #000000;
+    fill-opacity: 1;
+    font-family: Sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 8pt;
+    stroke: #000000;
+    stroke-width: 0.1;
+}
+
+svg[class="syntaxdiagram"] g[class~="sep"] text {
+    fill: #000000;
+    fill-opacity: 1;
+    font-family: Sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 8pt;
+    stroke: #000000;
+    stroke-width: 0.1;
+}
+
+svg[class="syntaxdiagram"] g[class~="repsep"] text {
+    fill: #000000;
+    fill-opacity: 1;
+    font-family: Sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 8pt;
+    stroke: #000000;
+    stroke-width: 0.1;
+}
+
+svg[class="syntaxdiagram"] a[class~="fragref"] text {
+    fill: blue;
+    fill-opacity: 1;
+    font-family: Sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 8pt;
+    stroke: #000000;
+    stroke-width: 0.1;
+}
+
+svg[class="syntaxdiagram"] g[class~="note"] text {
+    font-family: Sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 6pt;
+    stroke: #000000;
+    stroke-width: 0.1;
+}
+
+svg[class="syntaxdiagram"] g[class~="boxed"] > g[class~="note"] text {
+    font-family: Sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 6pt;
+    stroke: #000000;
+    stroke-width: 0.1;
+}
+
+svg[class="syntaxdiagram"] a[class~="note"] text {
+    fill: blue;
+    fill-opacity: 1;
+    font-family: Sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 6pt;
+    stroke: #000000;
+    stroke-width: 0.1;
+}
+
+svg[class="syntaxdiagram"] a[class~="boxed"] > g[class~="note"] text {
+    fill: blue;
+    fill-opacity: 1;
+    font-family: Sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 6pt;
+    stroke: #000000;
+    stroke-width: 0.1;
+}

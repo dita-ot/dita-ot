@@ -47,7 +47,9 @@
     <xsl:choose>
       <xsl:when test="*[contains(@class,' topic/title ')]">
         <xsl:attribute name="label">
-          <xsl:value-of select="*[contains(@class,' topic/title ')]"/>
+        <!-- edited by William on 2009-05-27 for bug:2796993 start-->
+          <xsl:value-of select="normalize-space(*[contains(@class,' topic/title ')])"/>
+        <!-- edited by William on 2009-05-27 for bug:2796993 end-->
         </xsl:attribute>
       </xsl:when>
       <xsl:when test="@title">
@@ -82,7 +84,10 @@
   <xsl:attribute name="link_to">
     <xsl:choose>
       <xsl:when test="contains($fix-anchorref,'.ditamap')">
-	      <xsl:value-of select="$work.dir"/><xsl:text>/</xsl:text><xsl:value-of select="substring-before($fix-anchorref,'.ditamap')"/>.xml<xsl:value-of select="substring-after($fix-anchorref,'.ditamap')"/>
+        <!-- edited  by William on 2009-05-26 for bug:2796614 start-->
+	      <!-- xsl:value-of select="$work.dir"/><xsl:text>/</xsl:text><xsl:value-of select="substring-before($fix-anchorref,'.ditamap')"/>.xml<xsl:value-of select="substring-after($fix-anchorref,'.ditamap')"/ -->
+              <xsl:value-of select="$work.dir"/><xsl:value-of select="substring-before($fix-anchorref,'.ditamap')"/>.xml<xsl:value-of select="substring-after($fix-anchorref,'.ditamap')"/>
+        <!-- edited  by William on 2009-05-26 for bug:2796614 end -->
       </xsl:when>
       <xsl:when test="contains($fix-anchorref,'.xml')"><xsl:value-of select="$work.dir"/><xsl:value-of select="$fix-anchorref"/></xsl:when>
       <xsl:otherwise> <!-- should be dita, but name does not include .ditamap -->
@@ -161,12 +166,12 @@
 
 <!-- If the topicref is a "topicgroup", or some other topicref that does not point
      to a file or have link text, then just move on to children. -->
-<xsl:template match="*[contains(@class, ' map/topicref ')][not(@toc='no')]">
+<xsl:template match="*[contains(@class, ' map/topicref ')][not(@toc='no')][not(@processing-role='resource-only')]">
   <xsl:choose>
     <xsl:when test="contains(@class, ' mapgroup/topicgroup ')">
       <xsl:apply-templates/>
     </xsl:when>
-    <xsl:when test="not(@href) and not(@navtitle) and 
+    <xsl:when test="not(@href) and not(@navtitle) and not(*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ')]) and
                     not(*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/linktext ')])">
       <xsl:apply-templates/>
     </xsl:when>
@@ -174,7 +179,10 @@
 	<topic>
 		<xsl:attribute name="label">
 			<xsl:choose>
-				<xsl:when test="@navtitle"><xsl:value-of select="@navtitle"/></xsl:when>
+    		  <xsl:when test="*[contains(@class,'- map/topicmeta ')]/*[contains(@class, '- topic/navtitle ')]">
+    		    <xsl:value-of select="*[contains(@class,'- map/topicmeta ')]/*[contains(@class, '- topic/navtitle ')]"/>
+    		  </xsl:when>
+    		  <xsl:when test="not(*[contains(@class,'- map/topicmeta ')]/*[contains(@class, '- topic/navtitle ')]) and @navtitle"><xsl:value-of select="@navtitle"/></xsl:when>			  
 				<xsl:when test="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/linktext ')]"><xsl:value-of select="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/linktext ')]"/></xsl:when>
 				<xsl:otherwise>
                     			<xsl:choose>
@@ -225,9 +233,13 @@
 </xsl:template>
 
 <!--makes sure that any literal text in topicmeta does not get output as literal text in the output TOC file, which should only have text in attributes, as pulled in by the topicref template-->
-<xsl:template match="text()">
+<!--xsl:template match="text()">
 	<xsl:apply-templates/>
-</xsl:template>
+</xsl:template-->
+  
+<!-- edited by William on 2009-07-23 for bug:2824907 start-->
+<xsl:template match="text()"/>
+<!-- edited by William on 2009-07-23 for bug:2824907 end-->
 
 <!-- do nothing when meeting with reltable -->
 <xsl:template match="*[contains(@class,' map/reltable ')]"/>

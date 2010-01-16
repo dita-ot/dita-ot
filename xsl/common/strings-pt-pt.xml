@@ -9,7 +9,7 @@
 <!-- various labels (not author controlled) -->
 <str name="Figure">Figura</str>
 <str name="Table">Tabela</str>
-<str name="Next topic">Tópico Seguinte</str>
+<str name="Next topic">Tópico seguinte</str>
 <str name="Previous topic">Tópico anterior</str>
 <str name="Parent topic">Tópico ascendente</str>
 <str name="Required cleanup">Limpeza necessária</str>
@@ -20,10 +20,10 @@
 <str name="Required">Necessário</str>
 <str name="Skip visual syntax diagram">Manter visual do diagrama de sintaxe</str>
 <str name="Read syntax diagram">Ler diagrama de sintaxe</str>
-<str name="Start of change">Início de Alteração</str>
-<str name="End of change">Fim de Alteração</str>
-<str name="Index">Índice Remissivo</str>
-<str name="Special characters">Caracteres Especiais</str>
+<str name="Start of change">Início de alteração</str>
+<str name="End of change">Fim de alteração</str>
+<str name="Index">Índice remissivo</str>
+<str name="Special characters">Caracteres especiais</str>
 <str name="Numerics">Numérico</str>
 <str name="End notes">Notas finais</str>
 <str name="Artwork">Gráficos</str>
@@ -55,6 +55,14 @@
 <str name="Prerequisite">Pré-requisito</str>
 <str name="Prerequisites">Pré-requisitos</str>
 <str name="or">or</str>
+
+<!--Task section labels -->
+<str name="task_context">Sobre esta tarefa</str>
+<str name="task_example">Exemplo</str>
+<str name="task_postreq">Como proceder a seguir</str>
+<str name="task_prereq">Antes de começar</str>
+<str name="task_procedure">Procedimento</str>
+<str name="task_results">Resultados</str>
 
 <str name="Copyright">Copyright</str>
 

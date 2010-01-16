@@ -12,7 +12,7 @@ import org.apache.tools.ant.Task;
 import org.apache.tools.ant.Project;
 
 /*
-Copyright © 2004-2006 by Idiom Technologies, Inc. All rights reserved. 
+Copyright (c) 2004-2006 by Idiom Technologies, Inc. All rights reserved. 
 IDIOM is a registered trademark of Idiom Technologies, Inc. and WORLDSERVER
 and WORLDSTART are trademarks of Idiom Technologies, Inc. All other 
 trademarks are the property of their respective owners. 
@@ -40,13 +40,15 @@ with those set forth herein.
 
 This file is part of the DITA Open Toolkit project hosted on Sourceforge.net. 
 See the accompanying license.txt file for applicable licenses.
+
+Parts copyright by Suite Solutions, released under the same terms as the DITA-OT.
 */
 public class DitaVersion extends Task {
 
     private String documentPath;
 
     /**
-     * Sets the database connection URL; required.
+     * Sets the path to the _MERGED file which will be parsed.
      *
      * @param path The path to set
      */
@@ -55,7 +57,7 @@ public class DitaVersion extends Task {
     }
 
     /**
-     * Executes the task.
+     * Executes the Ant task.
      */
     public void execute() {
 
@@ -78,6 +80,9 @@ public class DitaVersion extends Task {
             saxParser.parse(file, new DefaultHandlerImpl());
 
         } catch (Exception e) {
+            /* Since an exception is used to stop parsing when the search
+             * is successful, catch the exception.
+             */
             if (e.getMessage() != null &&
                 e.getMessage().equals("Search finished")) {
                 System.out.println("Search finished");
@@ -98,9 +103,10 @@ public class DitaVersion extends Task {
                 if ((classAttr.indexOf(" map/map ") > -1) ||
                     (classAttr.indexOf(" topic/topic ") > -1)) {
                     if (attributes.getIndex("ditaarch:DITAArchVersion") > -1)
-                        setActiveProjectProrerty("ws.runtime.publishing.map.dita.version",attributes.getValue("ditaarch:DITAArchVersion"));
+                        setActiveProjectProperty("ws.runtime.publishing.map.dita.version",attributes.getValue("ditaarch:DITAArchVersion"));
                     else
-                        setActiveProjectProrerty("ws.runtime.publishing.map.dita.version","132");
+                        setActiveProjectProperty("ws.runtime.publishing.map.dita.version","132");
+                    /* Successfully found ditaarch, so stop parsing. */
                     throw new SAXException("Search finished");
                 }
 
@@ -114,7 +120,7 @@ public class DitaVersion extends Task {
      * Sets property in active ant project with name specified inpropertyName,
      * and value specified in propertyValue parameter
      */
-    private void setActiveProjectProrerty(String propertyName, String propertyValue) {
+    private void setActiveProjectProperty(String propertyName, String propertyValue) {
         Project activeProject = getProject();
         if (activeProject != null) {
             activeProject.setProperty(propertyName, propertyValue);

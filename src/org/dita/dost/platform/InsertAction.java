@@ -21,6 +21,7 @@ import org.dita.dost.util.StringUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
+import org.xml.sax.ext.LexicalHandler;
 import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.XMLReaderFactory;
 
@@ -29,23 +30,23 @@ import org.xml.sax.helpers.XMLReaderFactory;
  * provided by plug-ins into the xsl files, ant scripts and xml catalog.
  * @author Zhang, Yuan Peng
  */
-public class InsertAction extends DefaultHandler implements IAction {
+public class InsertAction extends DefaultHandler implements IAction, LexicalHandler {
 
 	protected XMLReader reader;
 	protected DITAOTJavaLogger logger;
-	protected Set fileNameSet = null;
+	protected Set<String> fileNameSet = null;
 	protected StringBuffer retBuf;
-	protected Hashtable paramTable = null;
+	protected Hashtable<String,String> paramTable = null;
 	protected int elemLevel = 0;
 	
 	/**
-	 * Default Constructor
+	 * Default Constructor.
 	 */
 	public InsertAction() {
-		fileNameSet = new LinkedHashSet(Constants.INT_16);
+		fileNameSet = new LinkedHashSet<String>(Constants.INT_16);
 		logger = new DITAOTJavaLogger();
 		retBuf = new StringBuffer(Constants.INT_4096);
-		paramTable = new Hashtable();
+		paramTable = new Hashtable<String,String>();
 		try {
             if (System.getProperty(Constants.SAX_DRIVER_PROPERTY) == null){
                 //The default sax driver is set to xerces's sax driver
@@ -54,7 +55,15 @@ public class InsertAction extends DefaultHandler implements IAction {
             reader = XMLReaderFactory.createXMLReader();
             reader.setContentHandler(this);
             reader.setFeature(Constants.FEATURE_NAMESPACE_PREFIX, true);
-
+            //added by Alan for bug: #2893316 on Date: 2009-11-09 begin
+            reader.setProperty(Constants.LEXICAL_HANDLER_PROPERTY, this);
+            //added by Alan for bug: #2893316 on Date: 2009-11-09 end
+            
+            //Edited by william on 2009-11-8 for ampbug:2893664 start
+			reader.setFeature("http://apache.org/xml/features/scanner/notify-char-refs", true);
+			reader.setFeature("http://apache.org/xml/features/scanner/notify-builtin-refs", true);
+			//Edited by william on 2009-11-8 for ampbug:2893664 end
+			
         } catch (Exception e) {
         	logger.logException(e);
         }
@@ -66,7 +75,7 @@ public class InsertAction extends DefaultHandler implements IAction {
 	public void setInput(String input) {
 		StringTokenizer inputTokenizer = new StringTokenizer(input,",");
 		while(inputTokenizer.hasMoreElements()){
-			fileNameSet.add(inputTokenizer.nextElement());
+			fileNameSet.add((String) inputTokenizer.nextElement());
 		}
 	}
 
@@ -91,11 +100,11 @@ public class InsertAction extends DefaultHandler implements IAction {
 	 * @see org.dita.dost.platform.IAction#getResult()
 	 */
 	public String getResult() {
-		Iterator iter;
+		Iterator<String> iter;
 		iter = fileNameSet.iterator();
 		try{
 			while(iter.hasNext()){
-				reader.parse((String)iter.next());
+				reader.parse(iter.next());
 			}
 		} catch (Exception e) {
 	       	logger.logException(e);
@@ -151,10 +160,56 @@ public class InsertAction extends DefaultHandler implements IAction {
 	public void startDocument() throws SAXException {
 		elemLevel = 0;
 	}
-
-	public void setFeatures(Hashtable h) {
+	/**
+	 * @see  org.dita.dost.platform.IAction#setFeatures(Hashtable)
+	 */
+	public void setFeatures(Hashtable<String,String> h) {
 		
 	}
+	//added by Alan for bug: #2893316 on Date: 2009-11-09 begin
+	/**
+	 * @see org.xml.sax.ext.LexicalHandler#startCDATA()
+	 */
+	public void startCDATA() throws SAXException {
+		retBuf.append(Constants.CDATA_HEAD);
 
-	
+	}
+	/**
+	 * @see org.xml.sax.ext.LexicalHandler#endCDATA()
+	 */
+	public void endCDATA() throws SAXException {
+		retBuf.append(Constants.CDATA_END);
+	}
+	/**
+	 * @see org.xml.sax.ext.LexicalHandler#startDTD(String, String, String)
+	 */
+	public void startDTD(String name, String publicId, String systemId)
+			throws SAXException {
+		// nop;
+	}
+	/**
+	 * @see org.xml.sax.ext.LexicalHandler#endDTD()
+	 */
+	public void endDTD() throws SAXException {
+		// nop;
+	}
+	/**
+	 * @see org.xml.sax.ext.LexicalHandler#startEntity(String)
+	 */
+	public void startEntity(String name) throws SAXException {
+		// nop;
+	}
+	/**
+	 * @see org.xml.sax.ext.LexicalHandler#endEntity(String)
+	 */
+	public void endEntity(String name) throws SAXException {
+		// nop;
+	}
+	/**
+	 * @see org.xml.sax.ext.LexicalHandler#comment(char[], int, int)
+	 */
+	public void comment(char[] ch, int start, int length) throws SAXException {
+		// nop;
+	}
+	//added by Alan for bug: #2893316 on Date: 2009-11-09 end
 }

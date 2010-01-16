@@ -4,10 +4,22 @@
      applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
 
+<!DOCTYPE xsl:stylesheet [
+
+  <!ENTITY gt            "&gt;">
+  <!ENTITY lt            "&lt;">
+  <!ENTITY rbl           " ">
+  <!ENTITY nbsp          "&#xA0;">    <!-- &#160; -->
+  <!ENTITY quot          "&#34;">
+  <!ENTITY copyr         "&#169;">
+  ]>
+  
 <xsl:stylesheet version="1.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:saxon="http://icl.com/saxon"
                 extension-element-prefixes="saxon"
+                xmlns:java="org.dita.dost.util.StringUtils"
+                exclude-result-prefixes="java"
                 >
 
 <!-- map2htmltoc.xsl   main stylesheet
@@ -24,8 +36,9 @@
 
 <!-- Include error message template -->
 <xsl:import href="common/output-message.xsl"/>
+<xsl:import href="common/dita-utilities.xsl"/>
 
-<xsl:output method="html" indent="no"/>
+<xsl:output method="html" indent="no" encoding="UTF-8"/>
 
 <!-- Set the prefix for error message numbers -->
 <xsl:variable name="msgprefix">DOTX</xsl:variable>
@@ -44,7 +57,8 @@
 <xsl:param name="PATH2PROJ">
   <xsl:apply-templates select="/processing-instruction('path2project')" mode="get-path2project"/>
 </xsl:param>
-
+<xsl:param name="genDefMeta" select="'no'"/>
+<xsl:param name="YEAR" select="'2005'"/>
 <!-- Define a newline character -->
 <xsl:variable name="newline"><xsl:text>
 </xsl:text></xsl:variable>
@@ -56,25 +70,30 @@
 <!-- *********************************************************************************
      Setup the HTML wrapper for the table of contents
      ********************************************************************************* -->
-<xsl:template match="/">
+  <!--Added by William on 2009-11-23 for bug:2900047 extension bug start -->
+  <xsl:template match="/">
+    <xsl:call-template name="generate-toc"/>
+  </xsl:template>
+  <!--Added by William on 2009-11-23 for bug:2900047 extension bug end -->
+<!--  -->
+<xsl:template name="generate-toc">
   <html><xsl:value-of select="$newline"/>
   <head><xsl:value-of select="$newline"/>
     <xsl:if test="string-length($contenttarget)>0 and
 	        $contenttarget!='NONE'">
       <base target="{$contenttarget}"/>
+      <xsl:value-of select="$newline"/>
     </xsl:if>
-    <xsl:choose>
-      <xsl:when test="/*[contains(@class,' map/map ')]/*[contains(@class,' topic/title ')]">
-        <title><xsl:value-of select="/*[contains(@class,' map/map ')]/*[contains(@class,' topic/title ')]"/></title><xsl:value-of select="$newline"/>
-      </xsl:when>
-      <xsl:when test="/*[contains(@class,' map/map ')]/@title">
-        <title><xsl:value-of select="/*[contains(@class,' map/map ')]/@title"/></title><xsl:value-of select="$newline"/>
-      </xsl:when>
-    </xsl:choose>
-  <xsl:call-template name="generateCssLinks"/>
-  <xsl:call-template name="gen-user-head"/>
-  <xsl:call-template name="gen-user-scripts"/>
-  <xsl:call-template name="gen-user-styles"/>
+    <!-- initial meta information -->
+    <xsl:call-template name="generateCharset"/>   <!-- Set the character set to UTF-8 -->
+    <xsl:call-template name="generateDefaultCopyright"/> <!-- Generate a default copyright, if needed -->
+    <xsl:call-template name="generateDefaultMeta"/> <!-- Standard meta for security, robots, etc -->
+    <xsl:call-template name="copyright"/>         <!-- Generate copyright, if specified manually -->
+    <xsl:call-template name="generateCssLinks"/>  <!-- Generate links to CSS files -->
+    <xsl:call-template name="generateMapTitle"/> <!-- Generate the <title> element -->
+    <xsl:call-template name="gen-user-head" />    <!-- include user's XSL HEAD processing here -->
+    <xsl:call-template name="gen-user-scripts" /> <!-- include user's XSL javascripts here -->
+    <xsl:call-template name="gen-user-styles" />  <!-- include user's XSL style element and content here -->
   </head><xsl:value-of select="$newline"/>
 
   <body>
@@ -89,13 +108,55 @@
   </html>
 </xsl:template>
 
+<xsl:template name="generateCharset">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><xsl:value-of select="$newline"/>
+</xsl:template>
+
+<!-- If there is no copyright in the document, make the standard one -->
+<xsl:template name="generateDefaultCopyright">
+  <xsl:if test="not(//*[contains(@class,' topic/copyright ')])">
+    <meta name="copyright">
+      <xsl:attribute name="content">
+        <xsl:text>(C) </xsl:text>
+        <xsl:call-template name="getString">
+          <xsl:with-param name="stringName" select="'Copyright'"/>
+        </xsl:call-template>
+        <xsl:text> </xsl:text><xsl:value-of select="$YEAR"/>
+      </xsl:attribute>
+    </meta>
+    <xsl:value-of select="$newline"/>
+    <meta name="DC.rights.owner">
+      <xsl:attribute name="content">
+        <xsl:text>(C) </xsl:text>
+        <xsl:call-template name="getString">
+          <xsl:with-param name="stringName" select="'Copyright'"/>
+        </xsl:call-template>
+        <xsl:text> </xsl:text><xsl:value-of select="$YEAR"/>
+      </xsl:attribute>
+    </meta>
+    <xsl:value-of select="$newline"/>
+  </xsl:if>
+</xsl:template>
+
+<xsl:template name="generateDefaultMeta">
+  <xsl:if test="$genDefMeta='yes'">
+    <meta name="security" content="public" /><xsl:value-of select="$newline"/>
+    <meta name="Robots" content="index,follow" /><xsl:value-of select="$newline"/>
+    <xsl:text disable-output-escaping="yes">&lt;meta http-equiv="PICS-Label" content='(PICS-1.1 "http://www.icra.org/ratingsv02.html" l gen true r (cz 1 lz 1 nz 1 oz 1 vz 1) "http://www.rsac.org/ratingsv01.html" l gen true r (n 0 s 0 v 0 l 0) "http://www.classify.org/safesurf/" l gen true r (SS~~000 1))' /></xsl:text>
+    <xsl:value-of select="$newline"/>
+  </xsl:if>
+</xsl:template>
+
+<xsl:template name="copyright">
+  
+</xsl:template>
 <!-- *********************************************************************************
      If processing only a single map, setup the HTML wrapper and output the contents.
      Otherwise, just process the contents.
      ********************************************************************************* -->
 <xsl:template match="/*[contains(@class, ' map/map ')]">
   <xsl:param name="pathFromMaplist"/>
-  <xsl:if test=".//*[contains(@class, ' map/topicref ')][not(@toc='no')]">
+  <xsl:if test=".//*[contains(@class, ' map/topicref ')][not(@toc='no')][not(@processing-role='resource-only')]">
     <ul><xsl:value-of select="$newline"/>
 
       <xsl:apply-templates select="*[contains(@class, ' map/topicref ')]">
@@ -104,6 +165,32 @@
     </ul><xsl:value-of select="$newline"/>
   </xsl:if>
 </xsl:template>
+
+<xsl:template name="generateMapTitle">
+  <!-- Title processing - special handling for short descriptions -->
+  <xsl:if test="/*[contains(@class,' map/map ')]/*[contains(@class,' topic/title ')] or /*[contains(@class,' map/map ')]/@title">
+  <title>
+    <xsl:call-template name="gen-user-panel-title-pfx"/> <!-- hook for a user-XSL title prefix -->
+    <xsl:choose>
+      <xsl:when test="/*[contains(@class,' map/map ')]/*[contains(@class,' topic/title ')]">
+        <xsl:value-of select="normalize-space(/*[contains(@class,' map/map ')]/*[contains(@class,' topic/title ')])"/>
+      </xsl:when>
+      <xsl:when test="/*[contains(@class,' map/map ')]/@title">
+        <xsl:value-of select="/*[contains(@class,' map/map ')]/@title"/>
+      </xsl:when>
+    </xsl:choose>
+  </title><xsl:value-of select="$newline"/>
+  </xsl:if>
+</xsl:template>
+
+<xsl:template name="gen-user-panel-title-pfx">
+  <xsl:apply-templates select="." mode="gen-user-panel-title-pfx"/>
+</xsl:template>
+<xsl:template match="/|node()|@*" mode="gen-user-panel-title-pfx">
+  <!-- to customize: copy this to your override transform, add the content you want. -->
+  <!-- It will be placed immediately after TITLE tag, in the title -->
+</xsl:template>
+
 <!-- *********************************************************************************
      Output each topic as an <li> with an A-link. Each item takes 2 values:
      - A title. If a navtitle is specified on <topicref>, use that.
@@ -117,7 +204,7 @@
      If this topicref has any child topicref's that will be part of the navigation,
      output a <ul> around them and process the contents.
      ********************************************************************************* -->
-<xsl:template match="*[contains(@class, ' map/topicref ')][not(@toc='no')]">
+<xsl:template match="*[contains(@class, ' map/topicref ')][not(@toc='no')][not(@processing-role='resource-only')]">
   <xsl:param name="pathFromMaplist"/>
   <xsl:variable name="title">
     <xsl:call-template name="navtitle"/>
@@ -131,13 +218,31 @@
             <xsl:element name="a">
               <xsl:attribute name="href">
                 <xsl:choose>        <!-- What if targeting a nested topic? Need to keep the ID? -->
-                  <xsl:when test="contains(@copy-to, $DITAEXT)">
+                  <!-- edited by william on 2009-08-06 for bug:2832696 start -->
+                  <xsl:when test="contains(@copy-to, $DITAEXT) and not(contains(@chunk, 'to-content')) and 
+                    (not(@format) or @format = 'dita' or @format='ditamap' ) ">
+                  <!-- edited by william on 2009-08-06 for bug:2832696 end -->
                     <xsl:if test="not(@scope='external')"><xsl:value-of select="$pathFromMaplist"/></xsl:if>
-                    <xsl:value-of select="substring-before(@copy-to,$DITAEXT)"/><xsl:value-of select="$OUTEXT"/>
+                    <!-- added by William on 2009-11-26 for bug:1628937 start-->
+                    <xsl:value-of select="java:getFileName(@copy-to,$DITAEXT)"/>
+                    <!-- added by William on 2009-11-26 for bug:1628937 end-->
+                    <xsl:value-of select="$OUTEXT"/>
+                    <xsl:if test="not(contains(@copy-to, '#')) and contains(@href, '#')">
+                      <xsl:value-of select="concat('#', substring-after(@href, '#'))"/>
+                    </xsl:if>
                   </xsl:when>
-                  <xsl:when test="contains(@href,$DITAEXT)">
+                  <!-- edited by william on 2009-08-06 for bug:2832696 start -->
+                  <xsl:when test="contains(@href,$DITAEXT) and (not(@format) or @format = 'dita' or @format='ditamap')">
+                  <!-- edited by william on 2009-08-06 for bug:2832696 end -->
                     <xsl:if test="not(@scope='external')"><xsl:value-of select="$pathFromMaplist"/></xsl:if>
-                    <xsl:value-of select="substring-before(@href,$DITAEXT)"/><xsl:value-of select="$OUTEXT"/>
+                    <!-- added by William on 2009-11-26 for bug:1628937 start-->
+                    <!--xsl:value-of select="substring-before(@href,$DITAEXT)"/-->
+                    <xsl:value-of select="java:getFileName(@href,$DITAEXT)"/>
+                    <!-- added by William on 2009-11-26 for bug:1628937 end-->
+                    <xsl:value-of select="$OUTEXT"/>
+                    <xsl:if test="contains(@href, '#')">
+                      <xsl:value-of select="concat('#', substring-after(@href, '#'))"/>
+                    </xsl:if>
                   </xsl:when>
                   <xsl:otherwise>  <!-- If non-DITA, keep the href as-is -->
                     <xsl:if test="not(@scope='external')"><xsl:value-of select="$pathFromMaplist"/></xsl:if>
@@ -158,7 +263,7 @@
         </xsl:choose>
         
         <!-- If there are any children that should be in the TOC, process them -->
-        <xsl:if test="descendant::*[contains(@class, ' map/topicref ')][not(contains(@toc,'no'))]">
+        <xsl:if test="descendant::*[contains(@class, ' map/topicref ')][not(contains(@toc,'no'))][not(@processing-role='resource-only')]">
           <xsl:value-of select="$newline"/><ul><xsl:value-of select="$newline"/>
             <xsl:apply-templates select="*[contains(@class, ' map/topicref ')]">
               <xsl:with-param name="pathFromMaplist" select="$pathFromMaplist"/>
@@ -178,7 +283,7 @@
 </xsl:template>
 
 <!-- If toc=no, but a child has toc=yes, that child should bubble up to the top -->
-<xsl:template match="*[contains(@class, ' map/topicref ')][@toc='no']">
+<xsl:template match="*[contains(@class, ' map/topicref ')][@toc='no'][not(@processing-role='resource-only')]">
   <xsl:param name="pathFromMaplist"/>
   <xsl:apply-templates select="*[contains(@class, ' map/topicref ')]">
     <xsl:with-param name="pathFromMaplist" select="$pathFromMaplist"/>
@@ -197,7 +302,10 @@
   <xsl:choose>
 
     <!-- If navtitle is specified, use it (!?but it should only be used when locktitle=yes is specifed?!) -->
-    <xsl:when test="@navtitle"><xsl:value-of select="@navtitle"/></xsl:when>
+    <xsl:when test="*[contains(@class,'- map/topicmeta ')]/*[contains(@class, '- topic/navtitle ')]">
+      <xsl:value-of select="*[contains(@class,'- map/topicmeta ')]/*[contains(@class, '- topic/navtitle ')]"/>
+    </xsl:when>
+    <xsl:when test="not(*[contains(@class,'- map/topicmeta ')]/*[contains(@class, '- topic/navtitle ')]) and @navtitle"><xsl:value-of select="@navtitle"/></xsl:when>
 
     <!-- If this references a DITA file (has @href, not "local" or "external"),
          try to open the file and get the title -->
@@ -208,10 +316,22 @@
                     not ((ancestor-or-self::*/@type)[last()]='local')">
       <!-- Need to worry about targeting a nested topic? Not for now. -->
       <!--<xsl:variable name="FileWithPath"><xsl:value-of select="$WORKDIR"/><xsl:choose>-->
-      <xsl:variable name="FileWithPath"><xsl:choose>
-        <xsl:when test="@copy-to"><xsl:value-of select="$WORKDIR"/><xsl:value-of select="@copy-to"/></xsl:when>
-        <xsl:when test="contains(@href,'#')"><xsl:value-of select="$WORKDIR"/><xsl:value-of select="substring-before(@href,'#')"/></xsl:when>
-        <xsl:otherwise><xsl:value-of select="$WORKDIR"/><xsl:value-of select="@href"/></xsl:otherwise></xsl:choose></xsl:variable>
+      <xsl:variable name="FileWithPath">
+	    <xsl:choose>
+	      <xsl:when test="@copy-to and not(contains(@chunk, 'to-content'))">
+	        <xsl:value-of select="$WORKDIR"/><xsl:value-of select="@copy-to"/>
+	        <xsl:if test="not(contains(@copy-to, '#')) and contains(@href, '#')">
+	          <xsl:value-of select="concat('#', substring-after(@href, '#'))"/>
+	        </xsl:if>
+	      </xsl:when>
+	      <xsl:when test="contains(@href,'#')">
+	        <xsl:value-of select="$WORKDIR"/><xsl:value-of select="substring-before(@href,'#')"/>
+	      </xsl:when>
+	      <xsl:otherwise>
+	        <xsl:value-of select="$WORKDIR"/><xsl:value-of select="@href"/>
+	      </xsl:otherwise>
+	    </xsl:choose>
+      </xsl:variable>
       <xsl:variable name="TargetFile" select="document($FileWithPath,/)"/>
 
       <xsl:choose>
@@ -314,9 +434,63 @@
 </xsl:template>
 
 <!-- To be overridden by user shell. -->
-<xsl:template name="gen-user-head"/>
-<xsl:template name="gen-user-scripts"/>
-<xsl:template name="gen-user-styles"/>
+
+<xsl:template name="gen-user-head">
+  <xsl:apply-templates select="." mode="gen-user-head"/>
+</xsl:template>
+<xsl:template match="/|node()|@*" mode="gen-user-head">
+  <!-- to customize: copy this to your override transform, add the content you want. -->
+  <!-- it will be placed in the HEAD section of the XHTML. -->
+</xsl:template>
+
+<xsl:template name="gen-user-header">
+  <xsl:apply-templates select="." mode="gen-user-header"/>
+</xsl:template>
+<xsl:template match="/|node()|@*" mode="gen-user-header">
+  <!-- to customize: copy this to your override transform, add the content you want. -->
+  <!-- it will be placed in the running heading section of the XHTML. -->
+</xsl:template>
+
+<xsl:template name="gen-user-footer">
+  <xsl:apply-templates select="." mode="gen-user-footer"/>
+</xsl:template>
+<xsl:template match="/|node()|@*" mode="gen-user-footer">
+  <!-- to customize: copy this to your override transform, add the content you want. -->
+  <!-- it will be placed in the running footing section of the XHTML. -->
+</xsl:template>
+
+<xsl:template name="gen-user-sidetoc">
+  <xsl:apply-templates select="." mode="gen-user-sidetoc"/>
+</xsl:template>
+<xsl:template match="/|node()|@*" mode="gen-user-sidetoc">
+  <!-- to customize: copy this to your override transform, add the content you want. -->
+  <!-- Uncomment the line below to have a "freebie" table of contents on the top-right -->
+</xsl:template>
+
+<xsl:template name="gen-user-scripts">
+  <xsl:apply-templates select="." mode="gen-user-scripts"/>
+</xsl:template>
+<xsl:template match="/|node()|@*" mode="gen-user-scripts">
+  <!-- to customize: copy this to your override transform, add the content you want. -->
+  <!-- It will be placed before the ending HEAD tag -->
+  <!-- see (or enable) the named template "script-sample" for an example -->
+</xsl:template>
+
+<xsl:template name="gen-user-styles">
+  <xsl:apply-templates select="." mode="gen-user-styles"/>
+</xsl:template>
+<xsl:template match="/|node()|@*" mode="gen-user-styles">
+  <!-- to customize: copy this to your override transform, add the content you want. -->
+  <!-- It will be placed before the ending HEAD tag -->
+</xsl:template>
+
+<xsl:template name="gen-user-external-link">
+  <xsl:apply-templates select="." mode="gen-user-external-link"/>
+</xsl:template>
+<xsl:template match="/|node()|@*" mode="gen-user-external-link">
+  <!-- to customize: copy this to your override transform, add the content you want. -->
+  <!-- It will be placed after an external LINK or XREF -->
+</xsl:template>
 
 <!-- These are here just to prevent accidental fallthrough -->
 <xsl:template match="*[contains(@class, ' map/navref ')]"/>

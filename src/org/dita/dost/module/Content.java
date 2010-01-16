@@ -22,7 +22,7 @@ public interface Content {
     /**
      * Get the collection contained in the content container.
      * 
-     * @return
+     * @return collection
      * 
      */
     Collection getCollection();
@@ -30,7 +30,7 @@ public interface Content {
     /**
      * Get the object contained in the content container.
      * 
-     * @return
+     * @return object
      * 
      */
     Object getValue();
@@ -38,7 +38,7 @@ public interface Content {
     /**
      * Set the collection to the content container.
      * 
-     * @param collection
+     * @param collection collection
      * 
      */
     void setCollection(Collection collection);
@@ -46,7 +46,7 @@ public interface Content {
     /**
      * Set the object to the content container.
      * 
-     * @param object
+     * @param object object
      * 
      */
     void setValue(Object object);

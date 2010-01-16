@@ -18,7 +18,7 @@ public class DITAOTJavaLogger {
 	private static boolean debugMode = false;
 	
 	/**
-	 * Default Constructor
+	 * Default Constructor.
 	 *
 	 */
 	public DITAOTJavaLogger(){
@@ -34,7 +34,7 @@ public class DITAOTJavaLogger {
 	/**
 	 * Log information.
 	 * 
-	 * @param msg
+	 * @param msg message
 	 */
 	public void logInfo(String msg) {
 		System.out.println(msg);
@@ -43,7 +43,7 @@ public class DITAOTJavaLogger {
 	/**
 	 * Log warning message.
 	 * 
-	 * @param msg
+	 * @param msg message
 	 */
 	public void logWarn(String msg) {
 		//add by wxzhang 20070514
@@ -55,7 +55,7 @@ public class DITAOTJavaLogger {
 	/**
 	 * Log error message.
 	 * 
-	 * @param msg
+	 * @param msg message
 	 */
 	public void logError(String msg) {
 		//add by wxzhang 20070514
@@ -67,7 +67,7 @@ public class DITAOTJavaLogger {
 	/**
 	 * Log fatal error message.
 	 * 
-	 * @param msg
+	 * @param msg message
 	 */
 	public void logFatal(String msg) {
 		//add by wxzhang 20070514
@@ -79,7 +79,7 @@ public class DITAOTJavaLogger {
 	/**
 	 * Log debug info when DEBUG mode enabled. 
 	 * 
-	 * @param msg
+	 * @param msg message
 	 */
 	public void logDebug(String msg) {
 		if (debugMode) {
@@ -90,7 +90,7 @@ public class DITAOTJavaLogger {
 	/**
 	 * Log exception.
 	 * 
-	 * @param t
+	 * @param t exception
 	 */
 	public void logException(Throwable t) {
 		logError(t.toString());

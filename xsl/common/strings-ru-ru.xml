@@ -56,6 +56,14 @@
 <str name="Prerequisites">Предварительные условия</str>
 <str name="or">or</str>
 
+<!--Task section labels -->
+<str name="task_context">Об этой задаче</str>
+<str name="task_example">Пример</str>
+<str name="task_postreq">Дальнейшие действия</str>
+<str name="task_prereq">Подготовка</str>
+<str name="task_procedure">Процедура</str>
+<str name="task_results">Результат</str>
+
 <str name="Copyright">Copyright</str>
 
 <!-- Symbols -->

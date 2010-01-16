@@ -24,6 +24,11 @@
     <pathelement location="${xep.jar}" />
   </path>
 
+  <!--We will only build the XEP classes if XEP is in the build.class.path-->
+  <available classname="com.renderx.xep.FOTarget" property="xep-available">
+    <classpath refid="build.class.path"/>
+  </available>
+
   <target name="clean-java">
     <delete dir="${bin.dir}"/>
     <delete file="${fo.jar}"/>
@@ -32,9 +37,26 @@
   <target name="init-java" depends="clean-java">
     <mkdir dir="${bin.dir}"/>
   </target>
+
+  <target name="check-icu4j">
+    <available classname="com.ibm.icu.text.Collator" property="icu4j-available">
+      <classpath refid="build.class.path"/>
+    </available>
+    <fail unless="icu4j-available" message="In order to build fo.jar, icu4j.jar must be present in the lib directory."/>
+  </target>
 	
-  <target name="build-java" depends="init-java">
-    <javac srcdir="${src.dir}" destdir="${bin.dir}" classpath="${ant.jar}"
+  <target name="build-java" depends="init-java, check-icu4j, build-xep-java">
+    <javac srcdir="${src.dir}" destdir="${bin.dir}"
+      debug="on" excludes="com/idiominc/ws/opentopic/fo/xep/**"
+      source="1.5" target="1.5">
+      <classpath refid="build.class.path"/>
+    </javac>
+  </target>
+
+  <target name="build-xep-java" depends="init-java" if="xep-available">
+    <javac srcdir="${src.dir}/com/idiominc/ws/opentopic/fo/xep/"
+           destdir="${bin.dir}"
+           source="1.5" target="1.5"
       debug="on">
       <classpath refid="build.class.path"/>
     </javac>

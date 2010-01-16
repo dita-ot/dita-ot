@@ -1,0 +1,82 @@
+<project name="plus-html-topics-twopass">
+  
+  <dirname property="plus-html-topics-twopass.dir" file="${ant.file.plus-html-topics-twopass}"/>
+
+  <target name="plus-html-topics-twopass.check.class">
+    <condition property="plus.topics.class" value="twopass">
+      <not>
+        <isset property="plus.topics.class"/>
+      </not>
+    </condition>
+    <condition property="plus.topics.class.twopass">
+      <equals arg1="${plus.topics.class}" arg2="twopass"/>
+    </condition>
+  </target>
+
+  <target name="plus-html-topics-twopass.dispatch"
+     if="plus.topics.class.twopass"
+     dita:depends="plus-html-topics-twopass.check.class,
+              {depend.plus-html-topics-twopass.stage1.pre},
+              plus-html-topics-twopass.stage1.perform,
+              {depend.plus-html-topics-twopass.stage1.post},
+              plus-html-topics-twopass.stage1.milestone,
+              {depend.plus-html-topics-twopass.stage2.pre},
+              plus-html-topics-twopass.stage2.perform,
+              {depend.plus-html-topics-twopass.stage2.post}"
+     xmlns:dita="http://dita-ot.sourceforge.net"
+     dita:extension="depends org.dita.dost.platform.InsertDependsAction">
+  </target>
+
+  <target name="plus-html-topics-twopass.stage1.perform"
+    depends="plus-html-topics-twopass.check.class"
+    if="plus.topics.class.twopass">
+    <antcall target="plus-allhtml-topic2html.xhtml.globmapper">
+      <param name="includes" value="${fullditatopiclist} ${chunkedtopiclist}"></param>
+      <param name="destdir" value="${dita.temp.dir}"></param>
+      <param name="args.xsl" value="${plus-html-topics-twopass.dir}/xsl/stage1-html-shell.xsl"/>
+      <param name="mapperfrom" value="*"></param>
+      <param name="mapperto" value="*.stage1"></param>
+    </antcall>
+    <move todir="${dita.temp.dir}">
+      <fileset dir="${dita.temp.dir}" includes="**/*.stage1"></fileset>
+      <mapper type="glob" from="*.stage1" to="*"></mapper>
+    </move>
+  </target>
+
+  <target name="plus-html-topics-twopass.stage1.milestone"/>
+
+  <target name="plus-html-topics-twopass.stage2.perform"
+    depends="plus-html-topics-twopass.check.class"
+    if="plus.topics.class.twopass">
+    <condition property="out.ext" value=".html">
+      <not><isset property="out.ext"/></not>
+    </condition>
+    <antcall target="plus-html-topics-twopass.stage2.all"/>
+    <antcall target="plus-html-topics-twopass.stage2.inner"/>
+    <antcall target="plus-html-topics-twopass.stage2.outer"/>
+  </target>
+
+  <target name="plus-html-topics-twopass.stage2.all" if="old.transform">
+    <xslt processor="trax" basedir="${dita.temp.dir}" destdir="${output.dir}" includes="${fullditatopiclist} ${chunkedtopiclist}" extension="${out.ext}" style="${plus-html-topics-twopass.dir}/xsl/stage2-html-shell.xsl" classpathref="dost.class.path">
+      <dita:extension id="plus-html-topics-twopass.stage2.param" behavior="org.dita.dost.platform.InsertAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
+      <xmlcatalog refid="dita.catalog"/>
+    </xslt>
+  </target>
+
+  <target name="plus-html-topics-twopass.stage2.inner" if="inner.transform">
+    <xslt processor="trax" basedir="${dita.temp.dir}" destdir="${output.dir}" includes="${fullditatopiclist} ${chunkedtopiclist}" style="${plus-html-topics-twopass.dir}/xsl/stage2-html-shell.xsl" classpathref="dost.class.path">
+      <regexpmapper from="^(${tempdirToinputmapdir.relative.value})(.*?)(\.(xml|dita))$$"
+        to="\2${out.ext}"/>
+      <dita:extension id="plus-html-topics-twopass.stage2.param" behavior="org.dita.dost.platform.InsertAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
+      <xmlcatalog refid="dita.catalog"/>
+    </xslt>
+  </target>
+
+  <target name="plus-html-topics-twopass.stage2.outer" depends="checkouterTransform" if="outer.transform">
+    <xslt processor="trax" basedir="${dita.temp.dir}" destdir="${output.dir}${file.separator}${uplevels}" includes="${outditafileslist}" extension="${out.ext}" style="${plus-html-topics-twopass.dir}/xsl/stage2-html-shell.xsl" classpathref="dost.class.path">
+      <dita:extension id="plus-html-topics-twopass.stage2.param" behavior="org.dita.dost.platform.InsertAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
+      <xmlcatalog refid="dita.catalog"/>
+    </xslt>
+  </target>
+  
+</project>

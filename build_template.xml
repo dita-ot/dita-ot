@@ -57,7 +57,18 @@
         </and>
       </condition>
     </dita-ot-fail>
-    <antcall target="dita2${transtype}"/>
+    <condition property="transtarget" value="pdf2" else="${transtype}">
+      <equals arg1="${transtype}" arg2="pdf" casesensitive="false"/>
+    </condition>
+    <antcall target="dita2${transtarget}"/>
+  	<condition property="clean_temp">
+  	  <and>
+  	    <isset property="clean.temp" />
+  	    <equals arg1="${clean.temp}" arg2="no" casesensitive="false" />
+  	  </and>
+  	</condition>
+  	<antcall target="clean-temp">
+  	</antcall>
   </target>
   
   <target name="all">
@@ -66,7 +77,7 @@
       ant all -f build_demo.xml</echo>
   </target>
   
-  <target name="dita-preprocess" depends="start-process, init-logger, check-arg, output-deprecated-msg, output-css-warn-message, preprocess"/>
+  <target name="dita-preprocess" depends="start-process, init-logger, init-URIResolver, check-arg, output-deprecated-msg, output-css-warn-message, preprocess"/>
 
   <dita:extension id="dita.conductor.target" behavior="org.dita.dost.platform.InsertAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
   <dita:extension id="dita.conductor.target.relative" behavior="org.dita.dost.platform.InsertAntActionRelative" xmlns:dita="http://dita-ot.sourceforge.net"/>

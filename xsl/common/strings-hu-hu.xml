@@ -56,6 +56,14 @@
 <str name="Prerequisites">Előfeltételek</str>
 <str name="or">vagy</str>
 
+<!--Task section labels -->
+<str name="task_context">Erről a feladatról</str>
+<str name="task_example">Példa</str>
+<str name="task_postreq">Mi a következő lépés?</str>
+<str name="task_prereq">Mielőtt elkezdené</str>
+<str name="task_procedure">Eljárás</str>
+<str name="task_results">Eredmények</str>
+
 <str name="Copyright">Copyright</str>
 
 <!-- Symbols -->

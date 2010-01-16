@@ -11,7 +11,6 @@ import org.xml.sax.SAXException;
 import org.dita.dost.util.FileUtils;
 
 import java.io.File;
-import java.net.URI;
 
 /**
  * InsertCatalogActionRelative inserts the children of the root element of an XML document
@@ -29,10 +28,15 @@ import java.net.URI;
 public class InsertCatalogActionRelative extends InsertActionRelative implements
 		IAction {
 
+	/**
+	 * Constructor.
+	 */
 	public InsertCatalogActionRelative() {
 		super();
 	}
-
+	/**
+	 * @see org.xml.sax.ContentHandler#startElement(java.lang.String, java.lang.String, java.lang.String, org.xml.sax.Attributes)
+	 */
 	public void startElement(String uri, String localName, String qName,
 			Attributes attributes) throws SAXException {
 		if(elemLevel != 0){

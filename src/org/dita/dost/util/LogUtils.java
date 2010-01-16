@@ -29,33 +29,61 @@ public class LogUtils {
 	private static final String LINE_SEP = System.getProperty("line.separator");
 	private LogUtils(){
 	}
+	/**
+	 * Increase fatal number by 1.
+	 */
 	public static void increaseNumOfFatals(){
 		numOfFatals++;
 	}
+	/**
+	 * Increase error number by 1.
+	 */
 	public static void increaseNumOfErrors(){
 		numOfErrors++;
 	}
+	/**
+	 * Increase warning number by 1.
+	 */
 	public static void increaseNumOfWarnings(){
 		numOfWarnings++;
 	}
+	/**
+	 * Increase info number by 1.
+	 */
 	public static void increaseNumOfInfo(){
 		numOfInfo++;
 	}
+	/**
+	 * Get fatals number.
+	 * @return number of fatals
+	 */
 	public static int getNumOfFatals(){
 		return numOfFatals;
 	}
+	/**
+	 * Get errors number.
+	 * @return number of errors
+	 */
 	public static int getNumOfErrors(){
 		return numOfErrors;
 	}
+	/**
+	 * Get warnings number.
+	 * @return number of warnings
+	 */
 	public static int getNumOfWarnings(){
 		return numOfWarnings;
 	}
+	/**
+	 * Get info number.
+	 * @return number of info
+	 */
 	public static int getNumOfInfo(){
 		return numOfInfo;
 	}
 	
 	/**
-	 * Initial the class
+	 * Initial the class.
 	 */
 	public static void clear(){
 		numOfFatals=0;
@@ -65,7 +93,7 @@ public class LogUtils {
 	}
 	
 	/**
-	 * Check whether error exists in the whole transforming process
+	 * Check whether error exists in the whole transforming process.
 	 * @return boolean
 	 */
 	public  static boolean haveFatalOrError(){
@@ -76,8 +104,7 @@ public class LogUtils {
 	} 
 	
 	/**
-	 * print the statics message
-	 * @return String
+	 * print the statics message.
 	 */
 	public static void print(){
 		System.out.println("Number of Fatals : " + numOfFatals );
@@ -87,8 +114,8 @@ public class LogUtils {
 	}
 	
 	/**
-	 * Get the statics message
-	 * @return String
+	 * Get the statics message.
+	 * @return String message
 	 */
 	public static String getLogStatisticInfo(){
 		String logStaticticInfo;
@@ -99,8 +126,8 @@ public class LogUtils {
 	}
 	
 	/**
-	 * Increase the number of Exceptions by severity level 
-	 * @param msgType
+	 * Increase the number of Exceptions by severity level.
+	 * @param msgType message type:error warn info
 	 */
 	public static void increaseNumOfExceptionByType(String msgType){
 		

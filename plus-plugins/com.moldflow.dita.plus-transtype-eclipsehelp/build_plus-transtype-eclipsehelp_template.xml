@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+     Sourceforge.net. See the accompanying license.txt file for 
+     applicable licenses.-->
+<!-- (c) Copyright IBM Corp. 2006 All Rights Reserved. -->
+<project name="plus-transtype-eclipsehelp" default="dita2eclipsehelp+">
+    <property name="transtype" value="eclipsehelp+"/>
+
+    <dirname property="plus-transtype-eclipsehelp.dir" file="${ant.file.plus-transtype-eclipsehelp}"/>
+    
+    <import file="../../build_init.xml" />
+    <import file="../../build_preprocess.xml" />
+    <!-- <import file="../../build_general.xml" /> -->
+	
+    <target name="dita2eclipsehelp+"
+      dita:depends="{depend.plus-transtype-eclipsehelp.pre},
+                    build-init, preprocess,
+                    {depend.plus-transtype-eclipsehelp.map.dispatch}, plus-transtype-eclipsehelp.map.basic,
+                    copy-revflag, copy-css,
+                    {depend.plus-transtype-eclipsehelp.topics.dispatch}, plus-transtype-eclipsehelp.topics.basic,
+                    {depend.plus-transtype-eclipsehelp.post}"
+      xmlns:dita="http://dita-ot.sourceforge.net"
+      dita:extension="depends org.dita.dost.platform.InsertDependsAction"
+     >
+    </target>
+
+    <target name="plus-transtype-eclipsehelp.map.basic"
+      if="plus.map.class.basic"
+      dita:depends="plus-transtype-eclipsehelp.map.basic.class.fallback,
+                    plus-transtype-eclipsehelp.map.basic.init,
+                    {depend.plus-transtype-eclipsehelp.map.basic.pre},
+                    {depend.plus-transtype-eclipsehelp.map.basic.toc.pre},
+                    plus-transtype-eclipsehelp.map.basic.toc,
+                    {depend.plus-transtype-eclipsehelp.map.basic.toc.post},
+                    {depend.plus-transtype-eclipsehelp.map.basic.index.pre},
+                    plus-transtype-eclipsehelp.map.basic.index,
+                    {depend.plus-transtype-eclipsehelp.map.basic.index.post},
+                    {depend.plus-transtype-eclipsehelp.map.basic.plugin.pre},
+                    plus-transtype-eclipsehelp.map.basic.plugin,
+                    {depend.plus-transtype-eclipsehelp.map.basic.plugin.post},
+                    {depend.plus-transtype-eclipsehelp.map.basic.post}"
+      xmlns:dita="http://dita-ot.sourceforge.net"
+      dita:extension="depends org.dita.dost.platform.InsertDependsAction"
+    />
+
+    <target name="plus-transtype-eclipsehelp.map.basic.class.fallback">
+      <condition property="plus.map.class.basic">
+        <or>
+          <not>
+            <isset property="plus.map.class"/>
+          </not>
+          <equals arg1="${plus.map.class}" arg2="basic"/>
+        </or>
+      </condition>
+    </target>
+
+    <target name="plus-transtype-eclipsehelp.map.basic.init" 
+        if="plus.map.class.basic">
+        <basename property="dita.map.toc.root"
+                  file="${dita.input.filename}"
+                  suffix=".ditamap" />
+        <condition property="args.eclipsehelp.toc" value="${dita.map.toc.root}">
+            <not>
+                <isset property="args.eclipsehelp.toc" />
+            </not>
+        </condition>
+        <condition property="out.ext" value=".html">
+            <not>
+                <isset property="out.ext" />
+            </not>
+        </condition>
+<!--
+        <condition property="noPlugin">
+            <equals arg1="${dita.eclipse.plugin}" arg2="no" />
+        </condition>
+-->
+    </target>
+    
+    <target name="plus-transtype-eclipsehelp.map.basic.toc"
+       depends="plus-transtype-eclipsehelp.map.basic.init"
+       if="plus.map.class.basic">
+        <xslt processor="trax"
+              basedir="${dita.temp.dir}"
+              destdir="${output.dir}"
+              includes="${fullditamaplist} ${chunkedditamaplist}"
+              extension=".xml"
+              style="${plus-transtype-eclipsehelp.dir}/xsl/map2eclipse-shell.xsl">
+            <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
+            <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
+            <param name="WORKDIR" expression="${workdir}" if="workdir"/>
+        </xslt>
+    </target>
+
+    <target name="plus-transtype-eclipsehelp.map.basic.index"
+       depends="plus-transtype-eclipsehelp.map.basic.init"
+       if="plus.map.class.basic">
+        <pipeline message="Extract index term."
+            module="IndexTermExtract"
+            basedir="${basedir}"
+            tempdir="${dita.temp.dir}"
+            inputmap="${user.input.file}"
+            extparam="output=${output.dir}${file.separator}${user.input.file};targetext=${out.ext};indextype=eclipsehelp;${index.ext.param.encoding}" />
+    </target>
+
+    <target name="plus-transtype-eclipsehelp.map.basic.plugin"
+       depends="plus-transtype-eclipsehelp.map.basic.init"
+       if="plus.map.class.basic">
+        <xslt processor="trax"
+              in="${dita.temp.dir}${file.separator}${user.input.file}"
+              out="${dita.map.output.dir}${file.separator}plugin.xml"
+              style="${plus-transtype-eclipsehelp.dir}/xsl/map2plugin-shell.xsl">
+            <param name="TOCROOT" expression="${args.eclipsehelp.toc}" />
+            <param name="version"
+                   expression="${args.eclipse.version}"
+                   if="args.eclipse.version" />
+            <param name="provider"
+                   expression="${args.eclipse.provider}"
+                   if="args.eclipse.provider" />
+        </xslt>
+    </target>
+
+
+    <target name="plus-transtype-eclipsehelp.topics.basic"
+      if="plus.topics.class.basic"
+      dita:depends="plus-transtype-eclipsehelp.topics.basic.class.fallback,
+                    {depend.plus-transtype-eclipsehelp.topics.basic.pre},
+                    plus-transtype-eclipsehelp.topics.basic.perform,
+                    {depend.plus-transtype-eclipsehelp.topics.basic.post}"
+      xmlns:dita="http://dita-ot.sourceforge.net"
+      dita:extension="depends org.dita.dost.platform.InsertDependsAction"
+     />
+
+    <target name="plus-transtype-eclipsehelp.topics.basic.class.fallback">
+      <condition property="plus.topics.class.basic">
+        <or>
+          <not>
+            <isset property="plus.topics.class"/>
+          </not>
+          <equals arg1="${plus.topics.class}" arg2="basic"/>
+        </or>
+      </condition>
+    </target>
+
+    <target name="plus-transtype-eclipsehelp.topics.basic.perform"
+      if="plus.topics.class.basic">
+      <antcall target="plus-transtype-eclipsehelp.topics.basic.all"/>
+      <antcall target="plus-transtype-eclipsehelp.topics.basic.inner"/>
+      <antcall target="plus-transtype-eclipsehelp.topics.basic.outer"/>
+    </target>
+
+    <target name="plus-transtype-eclipsehelp.topics.basic.all" if="old.transform">
+      <antcall target="plus-allhtml-topic2html.xhtml.nomapper">
+        <param name="includes" value="${fullditatopiclist} ${chunkedtopiclist}"></param>
+        <param name="destdir" value="${output.dir}"></param>
+        <param name="args.xsl" value="${plus-transtype-eclipsehelp.dir}/xsl/dita2html-shell.xsl"/>
+      </antcall>
+    </target>
+
+    <target name="plus-transtype-eclipsehelp.topics.basic.inner" if="inner.transform">
+      <antcall target="plus-allhtml-topic2html.xhtml.regexpmapper">
+        <param name="includes" value="${fullditatopiclist} ${chunkedtopiclist}"></param>
+        <param name="destdir" value="${output.dir}"></param>
+        <param name="args.xsl" value="${plus-transtype-eclipsehelp.dir}/xsl/dita2html-shell.xsl"/>
+        <param name="mapperfrom" value="^(${tempdirToinputmapdir.relative.value})(.*?)(\.(xml|dita))$$"/>
+        <param name="mapperto" value="\2${out.ext}"/>
+      </antcall>
+    </target>
+
+    <target name="plus-transtype-eclipsehelp.topics.basic.outer" depends="checkouterTransform" if="outer.transform">
+      <antcall target="plus-allhtml-topic2html.xhtml.nomapper">
+        <param name="includes" value="${outditafileslist}"></param>
+        <param name="destdir" value="${output.dir}${file.separator}${uplevels}"></param>
+        <param name="args.xsl" value="${plus-transtype-eclipsehelp.dir}/xsl/dita2html-shell.xsl"/>
+      </antcall>
+    </target>
+
+</project>

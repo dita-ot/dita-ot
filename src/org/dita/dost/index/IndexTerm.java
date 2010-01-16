@@ -18,38 +18,38 @@ import org.dita.dost.util.Constants;
 import org.dita.dost.util.DITAOTCollator;
 
 /**
- * This class represent indexterm.
+ * This class represents an indexterm.
  * 
  * @version 1.0 2005-04-30
  * 
  * @author Wu, Zhi Qiang
  */
 public class IndexTerm implements Comparable {
-    /** The locale of indexterm, used for sorting */
+    /** The locale of  the indexterm, used for sorting. */
     private static Locale termLocale = null;
 
-    /** The name of the indexterm */
+    /** The name of the indexterm. */
     private String termName = null;
 
-    /** The target list of the indexterm */
+    /** The target list of the indexterm. */
     private List targetList = null;
 
-    /** The sorting termKey of the indexterm, default will be the term name */
+    /** The sorting termKey of the indexterm, default will be the term name. */
     private String termKey = null;
     
-    /** The start attribute */
+    /** The start attribute. */
     private String start=null;
     
-    /** The end attribute */
+    /** The end attribute. */
     private String end=null;
     
-    /** The sub indexterms contained by this indexterm */
+    /** The sub indexterms contained by this indexterm. */
     private List subTerms = null;
     
-    /** The prefix added to the  term name*/
+    /** The prefix added to the term name (such as IndexTerm_Prefix_See or IndexTerm_Prefix_See_Also). */
     private String termPrefix = null;
 
-    /** The list of rtl locale*/
+    /** The list of rtl locale.*/
     private static ArrayList rtlLocaleList = null;
     
     /** 
@@ -67,7 +67,7 @@ public class IndexTerm implements Comparable {
     }
     
     /**
-     * Constructor
+     * Constructor.
      */
     public IndexTerm() {
         subTerms = new ArrayList(Constants.INT_1);
@@ -77,41 +77,41 @@ public class IndexTerm implements Comparable {
     /**
      * Get the global locale of indexterm.
      * 
-     * @return
+     * @return Locale language
      */
     public static Locale getTermLocale() {
         return termLocale;
     }
 
     /**
-     * Set the global local of indexterm.
+     * Set the global locale of indexterm.
      * 
-     * @param locale
+     * @param locale locale
      */
     public static void setTermLocale(Locale locale) {
         termLocale = locale;
     }
 
     /**
-     * Get term name.
+     * Get the index term name.
      * 
-     * @return
+     * @return term name
      */
     public String getTermName() {
         return termName;
     }
 
     /**
-     * Set term name.
+     * Set the index term name.
      * 
-     * @param name
+     * @param name name to set
      */
     public void setTermName(String name) {
         this.termName = name;
     }
 
     /**
-     * Getter of termkey
+     * Get the key used for sorting this term.
 	 * @return Returns the termKey.
 	 */
 	public String getTermKey() {
@@ -119,7 +119,7 @@ public class IndexTerm implements Comparable {
 	}
 
 	/**
-	 * Setter of termKey
+	 * Set the key used for sorting this term.
 	 * @param key The termKey to set.
 	 */
 	public void setTermKey(String key) {
@@ -129,7 +129,7 @@ public class IndexTerm implements Comparable {
 	/**
      * Get the sub term list.
      * 
-     * @return
+     * @return sub term list
      */
     public List getSubTerms() {
         return subTerms;
@@ -170,7 +170,7 @@ public class IndexTerm implements Comparable {
     /**
      * Add a sub term into the sub term list.
      * 
-     * @param term
+     * @param term index term to be added
      */
     public void addSubTerm(IndexTerm term) {
         int i = 0;
@@ -206,7 +206,7 @@ public class IndexTerm implements Comparable {
     /**
      * Add all the sub terms in the list.
      *  
-     * @param terms
+     * @param terms terms list
      */
     public void addSubTerms(List terms) {
     	int subTermsNum = 0;
@@ -223,7 +223,8 @@ public class IndexTerm implements Comparable {
     /**
      * IndexTerm will be equal if they have same name, target and subterms.
      * 
-     * @param o
+     * @param o object to compare with.
+     * @return boolean
      */
     public boolean equals(Object o) {
         IndexTerm it = (IndexTerm) o;
@@ -252,7 +253,8 @@ public class IndexTerm implements Comparable {
     }
 
     /**
-     * Generate hash code for IndexTerm
+     * Generate hash code for IndexTerm.
+     * @return hashcode
      */
     public int hashCode() {
         int result = Constants.INT_17;
@@ -283,7 +285,8 @@ public class IndexTerm implements Comparable {
     /**
      * Compare the given indexterm with current term.
      * 
-     * @param obj
+     * @param obj object to compare with
+     * @return int
      */
     public int compareTo(Object obj) {
         return DITAOTCollator.getInstance(termLocale).compare(termKey,
@@ -300,9 +303,9 @@ public class IndexTerm implements Comparable {
     }
 
     /**
-     * All a new target.
+     * Add a new indexterm target.
      * 
-     * @param target
+     * @param target indexterm target
      */
     public void addTarget(IndexTermTarget target) {
         if (!targetList.contains(target)) {
@@ -311,9 +314,9 @@ public class IndexTerm implements Comparable {
     }
 
     /**
-     * All all the targets in the list.
+     * Add all the indexterm targets in the list.
      * 
-     * @param targets
+     * @param targets list of targets
      */
     public void addTargets(List targets) {
     	int targetNum = 0;
@@ -339,6 +342,7 @@ public class IndexTerm implements Comparable {
 
 	/**
 	 * @see java.lang.Object#toString()
+	 * @return string
 	 */
 	public String toString() {
 		StringBuffer buffer = new StringBuffer(Constants.INT_128);
@@ -353,15 +357,27 @@ public class IndexTerm implements Comparable {
 				
 		return buffer.toString();
 	}
-
+	
+    /**
+     * Get the term prefix (such as IndexTerm_Prefix_See_Also).
+     * @return term prefix
+     */
 	public String getTermPrefix() {
 		return termPrefix;
 	}
 
+    /**
+     * Set the term prefix (such as IndexTerm_Prefix_See_Also).
+     * @param termPrefix term prefix to set
+     */
 	public void setTermPrefix(String termPrefix) {
 		this.termPrefix = termPrefix;
 	}
 	
+    /**
+     * Get the full term, with any prefix.
+     * @return full term with prefix
+     */
 	public String getTermFullName(){
 		if (termPrefix == null){
 			return termName;
@@ -380,6 +396,9 @@ public class IndexTerm implements Comparable {
 		}
 	}
 	
+    /**
+     * Update the sub-term prefix from "See also" to "See" if there is only one sub-term.
+     */
 	public void updateSubTerm(){
 		if (subTerms.size()==1){
 			// if there is only one subterm, it is necessary to update

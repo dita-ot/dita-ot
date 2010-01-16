@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
+
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA 1.1 Topic//EN" "file:/C:/DITA-OT1.4/dtd/topic.dtd">
+<topic id="twoattr_ph" xml:lang="en-us">
+<title>twoattr_ph</title>
+<shortdesc>You maintain your solution to ensure that all components
+are operating at maximum efficiency.</shortdesc>
+<body>
+<lines>
+<ph id="prodname">
+<ph product="twoattr_ph1" platform="aix">ThisProduct</ph>
+<ph product="twoattr_ph2" platform="linux">ThisProduct</ph>
+<ph product="twoattr_ph3" platform="windows">AnotherProduct</ph>
+</ph>
+</lines>
+</body>
+</topic>

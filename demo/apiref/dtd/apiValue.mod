@@ -1,5 +1,5 @@
 <!--
- | (C) Copyright IBM Corporation 2005 - 2006. All Rights Reserved.
+ | (C) Copyright IBM Corporation 2005. All Rights Reserved.
  *-->
 
 <!-- ============ Hooks for domain extension ============ -->
@@ -18,19 +18,19 @@
 
 
 <!-- ============ Element definitions ============ -->
-<!ELEMENT apiValue       ((%apiName;), (%shortdesc;), (%prolog;)?, (%apiValueDetail;), (%related-links;)?, (%apiValue-info-types;)*)>
+<!ELEMENT apiValue       ((%apiName;), (%shortdesc; | %abstract;), (%prolog;)?, (%apiValueDetail;), (%related-links;)?, (%apiValue-info-types;)*)>
 <!ATTLIST apiValue        id ID #REQUIRED
                           conref CDATA #IMPLIED
                           outputclass CDATA #IMPLIED
-                          xml:lang NMTOKEN #IMPLIED
+                          %localization-atts;
+                          %select-atts;
                           %arch-atts;
                           domains CDATA "&included-domains;"
 >
 
 <!ELEMENT apiValueDetail  (((%apiSyntax;)*|(%apiValueDef;)*), (%apiDesc;)*, (%example;|%section;|%apiImpl;)*)>
 <!ATTLIST apiValueDetail  %id-atts;
-                          translate (yes|no) #IMPLIED
-                          xml:lang NMTOKEN #IMPLIED
+                          %localization-atts;
                           outputclass CDATA #IMPLIED>
 
 <!ELEMENT apiValueDef    (%apiValueClassifier;|%apiDefinition.cnt;|%apiValueMember;|%apiItemName;)* >
@@ -51,7 +51,7 @@
                           type   CDATA  #IMPLIED
                           %univ-atts;
                           format        CDATA   #IMPLIED
-                          scope (local | peer | external) #IMPLIED
+                          scope (local | peer | external | -dita-use-conref-target) #IMPLIED
                           outputclass CDATA #IMPLIED
 >
 

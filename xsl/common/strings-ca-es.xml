@@ -56,6 +56,14 @@
 <str name="Prerequisites">Requisits</str>
 <str name="or">or</str>
 
+<!--Task section labels -->
+<str name="task_context">Quant a aquesta tasca</str>
+<str name="task_example">Exemple</str>
+<str name="task_postreq">Què cal fer posteriorment</str>
+<str name="task_prereq">Abans de començar</str>
+<str name="task_procedure">Procediment</str>
+<str name="task_results">Resultats</str>
+
 <str name="Copyright">Copyright</str>
 
 <!-- Symbols -->

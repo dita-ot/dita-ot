@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+     Sourceforge.net. See the accompanying license.txt file in the
+     main toolkit package for applicable licenses.-->
+<!-- (C) Copyright IBM Corporation 2005, 2009 All Rights Reserved. -->
+<strings xml:lang="is-is"> <!-- Icelandic -->
+  <str name="tutorialNext">Næsta</str>
+  <str name="tutorialPrevious">Fyrra</str>
+  <str name="Modules in this tutorial">Einingar i kennsluefninu</str>
+  <str name="Lessons in this tutorial">Lexíur í kennsluefninu</str>
+  <str name="Lessons in this module">Lexíur í einingunni</str>
+</strings>

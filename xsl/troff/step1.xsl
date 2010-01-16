@@ -37,6 +37,7 @@
 
 <xsl:import href="../common/output-message.xsl"/>
 <xsl:import href="../common/dita-utilities.xsl"/>
+<xsl:import href="../common/related-links.xsl"/>
 <xsl:import href="../xslhtml/rel-links.xsl"/>
 
 <xsl:output method="xml"
@@ -60,6 +61,8 @@
 <xsl:template name="gen-style"/>
 <xsl:template name="getrules"/>
 <xsl:template name="conflict-check"/>
+<xsl:template name="end-flags-and-rev"/>
+<xsl:template name="start-flags-and-rev"/>
 
 <!-- Copy debug attributes to the elements we are creating -->
 <xsl:template name="debug"><xsl:apply-templates select="@xtrf|@xtrc"/></xsl:template>

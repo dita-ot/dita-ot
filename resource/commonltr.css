@@ -54,6 +54,8 @@
 .sectiontitle { margin-top: 1em; margin-bottom: 0em; color: black; font-size: 1.17em; font-weight: bold;}
 .section { margin-top: 1em; margin-bottom: 1em }
 .example { margin-top: 1em; margin-bottom: 1em }
+div.tasklabel { margin-top: 1em; margin-bottom: 1em; }
+h2.tasklabel, h3.tasklabel, h4.tasklabel, h5.tasklabel, h6.tasklabel { font-size: 100%; }
 
 /* All note formats have the same default presentation */
 .note { margin-top: 1em; margin-bottom : 1em;}
@@ -128,3 +130,4 @@ div.imagejustify { text-align: justify }
 
 pre.screen { padding: 5px 5px 5px 5px; border: outset; background-color: #CCCCCC; margin-top: 2px; margin-bottom : 2px; white-space: pre}
 
+span.filepath { font-family:monospace }

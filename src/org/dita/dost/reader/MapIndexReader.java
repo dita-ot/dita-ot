@@ -20,10 +20,13 @@ import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.Content;
 import org.dita.dost.module.ContentImpl;
+import org.dita.dost.resolver.DitaURIResolverFactory;
+import org.dita.dost.resolver.URIResolverAdapter;
 import org.dita.dost.util.Constants;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.StringUtils;
 import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
@@ -112,6 +115,10 @@ public class MapIndexReader extends AbstractXMLReader {
             reader = XMLReaderFactory.createXMLReader();
             reader.setContentHandler(this);
             reader.setProperty(Constants.LEXICAL_HANDLER_PROPERTY,this);
+            //Edited by william on 2009-11-8 for ampbug:2893664 start
+			reader.setFeature("http://apache.org/xml/features/scanner/notify-char-refs", true);
+			reader.setFeature("http://apache.org/xml/features/scanner/notify-builtin-refs", true);
+			//Edited by william on 2009-11-8 for ampbug:2893664 end
             
         } catch (Exception e) {
         	logger.logException(e);
@@ -261,7 +268,8 @@ public class MapIndexReader extends AbstractXMLReader {
                          
             try {
             	reader.setErrorHandler(new DITAOTXMLErrorHandler(filename));
-                reader.parse(filename);
+            	InputSource source=URIResolverAdapter.convertToInputSource(DitaURIResolverFactory.getURIResolver().resolve(filename, null));
+                reader.parse(source);
             } catch (Exception e) {
             	logger.logException(e);
             }
@@ -272,7 +280,7 @@ public class MapIndexReader extends AbstractXMLReader {
      * Set the match pattern in the reader. The match pattern is used to see whether
      * current element can be include in the result of parsing.
      * 
-     * @param matchPattern
+     * @param matchPattern the match pattern
      */
     public void setMatch(String matchPattern) {
         int index = 0;

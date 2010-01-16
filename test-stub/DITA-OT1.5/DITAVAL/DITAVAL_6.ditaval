@@ -1,0 +1,16 @@
+<val>
+<prop att="audience" val="Cindy" action="include"/>
+<prop att="produt" val="p1" action="flag">
+    <startflag><alt-text>Product P1:</alt-text></startflag>
+</prop>
+<prop att="product" val="ABase_ph" action="passthrough"/>
+<prop att="product" val="AExtra_ph" action="include">
+    <startflag><alt-text>This is for ph</alt-text></startflag>
+</prop>
+<prop att="product" val="Another_ph" action="flag"/>
+<prop att="platform" val="Windows" action="include"/>
+<prop att="platform" val="Linux" action="exclude"/>
+<prop att="keyword" val="key1" action="include"/>
+<prop att="keyword" val="key2" action="flag"/>
+<prop att="keyword" val="key3" action="include"/>
+</val>

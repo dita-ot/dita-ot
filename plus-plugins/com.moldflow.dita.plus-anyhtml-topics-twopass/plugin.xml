@@ -1,0 +1,3 @@
+<plugin id="com.moldflow.dita.plus-anyhtml-topics-twopass">
+  <require plugin="com.moldflow.dita.plus-html-topics-twopass|com.moldflow.dita.plus-xhtml-topics-twopass|com.moldflow.dita.plus-htmlhelp-topics-twopass|com.moldflow.dita.plus-eclipsehelp-topics-twopass"/>
+</plugin>

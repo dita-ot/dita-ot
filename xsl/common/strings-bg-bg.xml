@@ -56,6 +56,14 @@
 <str name="Prerequisites">Необходими условия</str>
 <str name="or">or</str>
 
+<!--Task section labels -->
+<str name="task_context">За тази дейност</str>
+<str name="task_example">Пример</str>
+<str name="task_postreq">Какво да направим после</str>
+<str name="task_prereq">Преди да започнете</str>
+<str name="task_procedure">Процедура</str>
+<str name="task_results">Резултати</str>
+
 <str name="Copyright">Авторско право</str>
 
 <!-- Symbols -->

@@ -35,7 +35,7 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:attribute-set name="table.title">
         <xsl:attribute name="font-family">Sans</xsl:attribute>
-        <xsl:attribute name="font-size">10pt</xsl:attribute>
+        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
         <xsl:attribute name="font-weight">bold</xsl:attribute>
         <xsl:attribute name="space-before.optimum">10pt</xsl:attribute>
         <xsl:attribute name="space-after.optimum">10pt</xsl:attribute>
@@ -77,7 +77,7 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:attribute-set name="table">
         <!--It is a table container -->
-        <xsl:attribute name="font-size">10pt</xsl:attribute>
+        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
         <xsl:attribute name="space-after.optimum">10pt</xsl:attribute>
     </xsl:attribute-set>
 
@@ -244,7 +244,7 @@ See the accompanying license.txt file for applicable licenses.
 	<xsl:attribute-set name="simpletable">
 		<!--It is a table container -->
         <xsl:attribute name="width">100%</xsl:attribute>
-		<xsl:attribute name="font-size">10pt</xsl:attribute>
+		<xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
 		<xsl:attribute name="space-before.optimum">8pt</xsl:attribute>
 		<xsl:attribute name="space-after.optimum">10pt</xsl:attribute>
 	</xsl:attribute-set>
@@ -290,7 +290,7 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:attribute-set name="properties">
         <!--It is a table container -->
-        <xsl:attribute name="font-size">10pt</xsl:attribute>
+        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
         <xsl:attribute name="width">100%</xsl:attribute>
         <xsl:attribute name="space-before.optimum">8pt</xsl:attribute>
         <xsl:attribute name="space-after.optimum">10pt</xsl:attribute>
@@ -338,7 +338,7 @@ See the accompanying license.txt file for applicable licenses.
 	<xsl:attribute-set name="choicetable">
 		<!--It is a table container -->
         <xsl:attribute name="width">100%</xsl:attribute>
-		<xsl:attribute name="font-size">10pt</xsl:attribute>
+		<xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
 		<xsl:attribute name="space-after.optimum">10pt</xsl:attribute>
 	</xsl:attribute-set>
 

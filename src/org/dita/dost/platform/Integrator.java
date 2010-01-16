@@ -10,6 +10,7 @@
 package org.dita.dost.platform;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -32,23 +33,27 @@ import org.xml.sax.helpers.XMLReaderFactory;
  */
 public class Integrator {
 	/**
-	 * Plugin table which contains detected plugins
+	 * Plugin table which contains detected plugins.
 	 */
-	public static Hashtable pluginTable = null;
-	private Set templateSet = null;
+	public static Hashtable<String,Features> pluginTable = null;
+	private Set<String> templateSet = null;
 	private String ditaDir;
 	private String basedir;
-	private Set descSet;
+	private Set<File> descSet;
 	private XMLReader reader;
 	private DITAOTJavaLogger logger;
-	private Set loadedPlugin = null;
-	private Hashtable featureTable = null;
+	private Set<String> loadedPlugin = null;
+	private Hashtable<String,String> featureTable = null;
+        private File propertiesFile = null;
 	
 	private void initTemplateSet(){
-		templateSet = new HashSet(Constants.INT_16);
+		templateSet = new HashSet<String>(Constants.INT_16);
 		templateSet.add("catalog-dita_template.xml");
 		templateSet.add("build_template.xml");
 		templateSet.add("build_general_template.xml");
+		templateSet.add("build_dita2eclipsehelp_template.xml");
+		templateSet.add("build_preprocess_template.xml");
+		templateSet.add("resource/messages_template.xml");
 		templateSet.add("xsl/common/allstrings_template.xml");
 		templateSet.add("xsl/dita2xhtml_template.xsl");
 		templateSet.add("xsl/dita2rtf_template.xsl");
@@ -63,35 +68,48 @@ public class Integrator {
 	}
 
 	/**
-	 * execute point of Integrator
+	 * Execute point of Integrator.
 	 */
 	public void execute() {
-		File demoDir = null;
-		File pluginDir = null;
-		File[] demoFiles = null;
-		File[] pluginFiles = null;
 		if (!new File(ditaDir).isAbsolute()) {
 			ditaDir = new File(basedir, ditaDir).getAbsolutePath();
 		}
-		
-		demoDir = new File(ditaDir + File.separatorChar + "demo");
-		pluginDir = new File(ditaDir + File.separatorChar + "plugins");
-		demoFiles = demoDir.listFiles();
-		pluginFiles = pluginDir.listFiles();
-		
-		for (int i=0; (demoFiles != null) && (i < demoFiles.length); i++){
-			File descFile = new File(demoFiles[i],"plugin.xml");
-			if (demoFiles[i].isDirectory() && descFile.exists()){
-				descSet.add(descFile);
-			}
-		}
-		
-		for (int i=0; (pluginFiles != null) && (i < pluginFiles.length); i++){
+
+                // Read the properties file, if it exists.
+                Properties properties = new Properties();
+                if (propertiesFile != null) {
+                  try {
+                    FileInputStream propertiesStream = new FileInputStream(propertiesFile);
+                    properties.load(propertiesStream);
+                  }
+                  catch (Exception e)
+                  {
+        	     logger.logException(e);
+                  }
+                }
+                else
+                {
+                  // Set reasonable defaults.
+                  properties.setProperty("plugindirs", "plugins;demo");
+                }
+        
+                // Get the list of plugin directories from the properties.
+                String[] pluginDirs = properties.getProperty("plugindirs").split(";");
+                
+                for (int j = 0; j < pluginDirs.length; j++)
+                {
+		  File pluginDir = null;
+		  File[] pluginFiles = null;
+		  pluginDir = new File(ditaDir + File.separatorChar + pluginDirs[j]);
+		  pluginFiles = pluginDir.listFiles();
+ 
+		  for (int i=0; (pluginFiles != null) && (i < pluginFiles.length); i++){
 			File descFile = new File(pluginFiles[i],"plugin.xml");
 			if (pluginFiles[i].isDirectory() && descFile.exists()){
 				descSet.add(descFile);
 			}
-		}
+		  }
+                }
 		
 		parsePlugin();
 		integrate();
@@ -99,13 +117,13 @@ public class Integrator {
 
 	private void integrate() {
 		//Collect information for each feature id and generate a feature table.
-		Iterator iter = pluginTable.keySet().iterator();
-		Iterator setIter = null;
+		Iterator<String> iter = pluginTable.keySet().iterator();
+		Iterator<String> setIter = null;
 		File templateFile = null;
 		String currentPlugin = null;
 		FileGenerator fileGen = new FileGenerator(featureTable);
 		while (iter.hasNext()){
-			currentPlugin = (String)iter.next();
+			currentPlugin = iter.next();
 			loadPlugin (currentPlugin);
 		}
 		
@@ -120,16 +138,16 @@ public class Integrator {
 	//load the plug-ins and aggregate them by feature and fill into feature table
 	private boolean loadPlugin (String plugin)
 	{
-		Set featureSet = null;
-		Iterator setIter = null;
-		Iterator templateIter = null;
-		Map.Entry currentFeature = null;
-		Features pluginFeatures = (Features) pluginTable.get(plugin);
+		Set<Map.Entry<String,String>> featureSet = null;
+		Iterator<Map.Entry<String,String>> setIter = null;
+		Iterator<String> templateIter = null;
+		Map.Entry<String,String> currentFeature = null;
+		Features pluginFeatures = pluginTable.get(plugin);
 		if (checkPlugin(plugin)){
 			featureSet = pluginFeatures.getAllFeatures();
 			setIter = featureSet.iterator();
 			while (setIter.hasNext()){
-				currentFeature = (Map.Entry)setIter.next();
+				currentFeature = setIter.next();
 				if(featureTable.containsKey(currentFeature.getKey())){
 					String value = (String)featureTable.remove(currentFeature.getKey());
 					featureTable.put(currentFeature.getKey(), 
@@ -153,21 +171,30 @@ public class Integrator {
 
 	//check whether the plugin can be loaded
 	private boolean checkPlugin(String currentPlugin) {
-		String requiredPlugin = null;
+		PluginRequirement requirement = null;
 		Properties prop = new Properties();		
 		Features pluginFeatures = (Features) pluginTable.get(currentPlugin);
-		Iterator iter = pluginFeatures.getRequireListIter();
+		Iterator<PluginRequirement> iter = pluginFeatures.getRequireListIter();
 		//check whether dependcy is satisfied
 		while (iter.hasNext()){
-			requiredPlugin = (String)iter.next();
-			if(pluginTable.containsKey(requiredPlugin)){
-				if (!loadedPlugin.contains(requiredPlugin)){
-					//required plug-in is not loaded
-					loadPlugin(requiredPlugin);
+			boolean anyPluginFound = false;
+			requirement = iter.next();
+			Iterator<String> requiredPluginIter = requirement.getPlugins();
+			while (requiredPluginIter.hasNext()) {
+				// Iterate over all alternatives in plugin requirement.
+				String requiredPlugin = requiredPluginIter.next();
+				if(pluginTable.containsKey(requiredPlugin)){
+					if (!loadedPlugin.contains(requiredPlugin)){
+						//required plug-in is not loaded
+						loadPlugin(requiredPlugin);
+					}
+					// As soon as any plugin is found, it's OK.
+					anyPluginFound = true;
 				}
-			}else {				
-				//not contain the plugin required by current plugin
-				prop.put("%1",requiredPlugin);
+			}
+			if (!anyPluginFound && requirement.getRequired()) {
+				//not contain any plugin required by current plugin
+				prop.put("%1",requirement.toString());
 				prop.put("%2",currentPlugin);
 				logger.logWarn(MessageUtils.getMessage("DOTJ020W",prop).toString());
 				return false;
@@ -178,10 +205,10 @@ public class Integrator {
 
 	private void parsePlugin() {
 		if(!descSet.isEmpty()){
-			Iterator iter = descSet.iterator();
+			Iterator<File> iter = descSet.iterator();
 			File descFile = null;
 			while(iter.hasNext()){
-				descFile = (File) iter.next();
+				descFile = iter.next();
 				parseDesc(descFile);
 			}
 		}
@@ -197,14 +224,14 @@ public class Integrator {
 	}
 
 	/**
-	 * Default Constructor
+	 * Default Constructor.
 	 */
 	public Integrator() {
 		initTemplateSet();
-		pluginTable = new Hashtable(Constants.INT_16);
-		descSet = new HashSet(Constants.INT_16);
-		loadedPlugin = new HashSet(Constants.INT_16);
-		featureTable = new Hashtable(Constants.INT_16);
+		pluginTable = new Hashtable<String,Features>(Constants.INT_16);
+		descSet = new HashSet<File>(Constants.INT_16);
+		loadedPlugin = new HashSet<String>(Constants.INT_16);
+		featureTable = new Hashtable<String,String>(Constants.INT_16);
 		logger = new DITAOTJavaLogger();
 		basedir = null;
 		ditaDir = null;
@@ -219,46 +246,63 @@ public class Integrator {
 	}	
 
 	/**
-	 * Return the basedir
-	 * @return
+	 * Return the basedir.
+	 * @return String
 	 */
 	public String getBasedir() {
 		return basedir;
 	}
 
 	/**
-	 * Set the basedir
-	 * @param baseDir
+	 * Set the basedir.
+	 * @param baseDir baseDir
 	 */
 	public void setBasedir(String baseDir) {
 		this.basedir = baseDir;
 	}
 	
 	/**
-	 * Return the ditaDir
-	 * @return
+	 * Return the ditaDir.
+	 * @return ditaDir
 	 */
 	public String getDitaDir() {
 		return ditaDir;
 	}
 
 	/**
-	 * Set the ditaDir
-	 * @param ditadir
+	 * Set the ditaDir.
+	 * @param ditadir ditaDir
 	 */
 	public void setDitaDir(String ditadir) {
 		this.ditaDir = ditadir;
 	}
 	
 	/**
-	 * Test function
-	 * @param args
+	 * Return the properties file.
+	 * @return file
+	 */
+	public File getProperties() {
+		return propertiesFile;
+	}
+
+	/**
+	 * Set the properties file.
+	 * @param propertiesfile propertiesfile
+	 */
+	public void setProperties(File propertiesfile) {
+		this.propertiesFile = propertiesfile;
+	}
+	
+	/**
+	 * Test function.
+	 * @param args args
 	 */
 	public static void main(String[] args) {
 		Integrator abc = new Integrator();
 		File currentDir = new File(".");
 		String currentPath = currentDir.getAbsolutePath();
 		abc.setDitaDir(currentPath.substring(0,currentPath.lastIndexOf(Constants.FILE_SEPARATOR)));
+		abc.setProperties(new File("integrator.properties"));
 		abc.execute();
 	}
 

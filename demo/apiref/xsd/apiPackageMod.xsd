@@ -27,7 +27,10 @@
   <xs:complexType name="apiPackage.class">
       <xs:sequence>
         <xs:group ref="apiName"/>
-        <xs:group ref="shortdesc"/>
+        <xs:choice>
+          <xs:group ref="shortdesc" />
+          <xs:group ref="abstract" />
+        </xs:choice>      
         <xs:group minOccurs="0" ref="prolog"/>
         <xs:group ref="apiDetail"/>
         <xs:group minOccurs="0" ref="related-links"/>
@@ -40,8 +43,9 @@
     <xs:attribute name="id" use="required" type="xs:ID"/>
     <xs:attribute name="conref"/>
     <xs:attribute name="outputclass"/>
-    <xs:attribute ref="xml:lang"/>
     <xs:attribute ref="ditaarch:DITAArchVersion"/>
+    <xs:attributeGroup ref="select-atts"/>
+    <xs:attributeGroup ref="localization-atts"/>
     <xs:attributeGroup ref="global-atts"/>
     <xs:attribute name="class" default="- topic/topic reference/reference apiRef/apiRef apiPackage/apiPackage "/>
   </xs:attributeGroup>

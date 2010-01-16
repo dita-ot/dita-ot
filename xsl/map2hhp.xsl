@@ -28,6 +28,7 @@
                 xmlns:saxon="http://icl.com/saxon"
                 xmlns:xalanredirect="org.apache.xalan.xslt.extensions.Redirect"
                 xmlns:exsl="http://exslt.org/common"
+                xmlns:java="org.dita.dost.util.StringUtils"
                 extension-element-prefixes="saxon xalanredirect exsl">
 
 <!-- Include error message template -->
@@ -93,9 +94,9 @@ Display compile progress=No
 </xsl:text>
 <xsl:if test="$USEINDEX='yes'">
 <xsl:text>Index file=</xsl:text><xsl:value-of select="substring-before($HHCNAME,'.hhc')"/><xsl:text>.hhk
-Binary Index=No
-Language=</xsl:text>
+Binary Index=No</xsl:text>
 </xsl:if>
+<xsl:text>Language=</xsl:text>
 <xsl:choose>
   <xsl:when test="starts-with($target-language, 'ar-')"><xsl:text>0x0c01 Arabic (EGYPT)</xsl:text></xsl:when>
   <xsl:when test="starts-with($target-language, 'be-')"><xsl:text>0x0423 Byelorussian</xsl:text></xsl:when>
@@ -159,7 +160,9 @@ Language=</xsl:text>
 <xsl:text>
 Default topic=</xsl:text>
 <!-- in a single map, get the first valid topic -->
-<xsl:text/><xsl:apply-templates select="descendant::*[contains(@class, ' map/topicref ')][@href][contains(@href,$DITAEXT) or contains(@href,'.htm')][not(contains(@toc,'no'))][1]" mode="defaulttopic"/><xsl:text/>
+<xsl:text/>
+<xsl:apply-templates select="descendant::*[contains(@class, ' map/topicref ')][not(@processing-role='resource-only')][@href][contains(@href,$DITAEXT) or contains(@href,'.htm')][not(contains(@toc,'no'))][not(@processing-role='resource-only')][1]" mode="defaulttopic"/>
+<xsl:text/>
 
 <!-- Get the title, if possible -->
 <!-- Using a single map, so get the title from that map -->
@@ -257,11 +260,26 @@ Default topic=</xsl:text>
 <xsl:template match="*[contains(@class, ' map/topicref ')]">
   <xsl:param name="pathFromMaplist"/>
   <xsl:variable name="thisFilename">
-    <xsl:if test="@href and not ((ancestor-or-self::*/@type)[last()]='external') and not((ancestor-or-self::*/@scope)[last()]='external')">
+    <xsl:if test="@href and not ((ancestor-or-self::*/@type)[last()]='external') and not((ancestor-or-self::*/@scope)[last()]='external')
+    			  and not(@processing-role='resource-only')">
       <xsl:choose>
         <!-- For dita files, change the extension; for HTML files, output the name as-is. Use the copy-to value first. -->
-        <xsl:when test="contains(@copy-to,$DITAEXT)"><xsl:value-of select="$pathFromMaplist"/><xsl:value-of select="substring-before(@copy-to,$DITAEXT)"/><xsl:value-of select="$OUTEXT"/></xsl:when>
-        <xsl:when test="contains(@href,$DITAEXT)"><xsl:value-of select="$pathFromMaplist"/><xsl:value-of select="substring-before(@href,$DITAEXT)"/><xsl:value-of select="$OUTEXT"/></xsl:when>
+        <xsl:when test="contains(@copy-to,$DITAEXT)">
+          <xsl:value-of select="$pathFromMaplist"/>
+          <!-- added by William on 2009-11-26 for bug:1628937 start-->
+          <!--xsl:value-of select="substring-before(@copy-to,$DITAEXT)"/-->
+          <xsl:value-of select="java:getFileName(@copy-to,$DITAEXT)"/>
+          <!-- added by William on 2009-11-26 for bug:1628937 end-->
+          <xsl:value-of select="$OUTEXT"/>
+        </xsl:when>
+        <xsl:when test="contains(@href,$DITAEXT)">
+          <xsl:value-of select="$pathFromMaplist"/>
+          <!-- added by William on 2009-11-26 for bug:1628937 start-->
+          <!--xsl:value-of select="substring-before(@href,$DITAEXT)"/-->
+          <xsl:value-of select="java:getFileName(@href,$DITAEXT)"/>
+          <!-- added by William on 2009-11-26 for bug:1628937 end-->
+          <xsl:value-of select="$OUTEXT"/>
+        </xsl:when>
         <!-- For local HTML files, add any path from the maplist -->
         <xsl:when test="contains(@href,'.htm') and not(@scope='external')"><xsl:value-of select="$pathFromMaplist"/><xsl:value-of select="@href"/></xsl:when>
         <xsl:when test="contains(@href,'.htm')"><xsl:value-of select="$pathFromMaplist"/><xsl:value-of select="@href"/></xsl:when>
@@ -292,12 +310,22 @@ Default topic=</xsl:text>
     <!-- If copy-to is specified, that copy should be used in place of the original -->
     <xsl:when test="contains(@copy-to,$DITAEXT)">
       <xsl:if test="not(@scope='external')"><xsl:value-of select="$pathFromMaplist"/></xsl:if>
-      <xsl:value-of select="substring-before(@copy-to,$DITAEXT)"/><xsl:value-of select="$OUTEXT"/><xsl:text>
+      <!-- added by William on 2009-11-26 for bug:1628937 start-->
+      <!--xsl:value-of select="substring-before(@copy-to,$DITAEXT)"/-->
+      <xsl:value-of select="java:getFileName(@copy-to,$DITAEXT)"/>
+      <!-- added by William on 2009-11-26 for bug:1628937 end-->
+      
+      <xsl:value-of select="$OUTEXT"/><xsl:text>
 </xsl:text></xsl:when>
     <!-- For dita files, change the extension to OUTEXT -->
     <xsl:when test="contains(@href,$DITAEXT)">
       <xsl:if test="not(@scope='external')"><xsl:value-of select="$pathFromMaplist"/></xsl:if>
-      <xsl:value-of select="substring-before(@href,$DITAEXT)"/><xsl:value-of select="$OUTEXT"/><xsl:text>
+      <!-- added by William on 2009-11-26 for bug:1628937 start-->
+      <!--xsl:value-of select="substring-before(@href,$DITAEXT)"/-->
+      <xsl:value-of select="java:getFileName(@href,$DITAEXT)"/>
+      <!-- added by William on 2009-11-26 for bug:1628937 end-->
+      
+      <xsl:value-of select="$OUTEXT"/><xsl:text>
 </xsl:text></xsl:when>
     <!-- For local HTML files, add any path from the maplist -->
     <xsl:when test="contains(@href,'.htm') and not(@scope='external')">

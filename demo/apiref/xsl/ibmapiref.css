@@ -22,7 +22,9 @@ TR.itemdefs {
 }
 TD.itemdefname {
   padding-left:   1.2em;
-  padding-right:  .33em;
+  padding-right:  1em;
+  patting-above:  .33em;
+  text-align: right;
   font-style:     italic;
 }
 TD.itemdefnote {

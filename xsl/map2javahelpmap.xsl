@@ -17,8 +17,6 @@
     method="xml"
     omit-xml-declaration="no"
     encoding="UTF-8"
-    doctype-public="-//Sun Microsystems Inc.//DTD JavaHelp Map Version 1.0//EN"
-    doctype-system="http://java.sun.com/products/javahelp/map_1_0.dtd"
     indent="yes"
 />
 

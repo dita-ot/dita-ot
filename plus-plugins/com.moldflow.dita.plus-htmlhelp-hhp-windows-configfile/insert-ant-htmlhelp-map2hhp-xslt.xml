@@ -1,0 +1,3 @@
+<xslt>
+  <param name="plus-htmlhelp-windows-configfile" expression="${plus.htmlhelp.windows.configfile.url}" if="plus.htmlhelp.windows.configfile"/>
+</xslt>

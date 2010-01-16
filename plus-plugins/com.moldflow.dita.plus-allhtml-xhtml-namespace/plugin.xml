@@ -1,0 +1,17 @@
+<plugin id="com.moldflow.dita.plus-allhtml-xhtml-namespace">
+  <require plugin="com.moldflow.dita.plus-xhtml-topics-twopass|com.moldflow.dita.plus-eclipsehelp-topics-twopass"/>
+
+  <template file="build_plus-allhtml-xhtml-namespace_template.xml"/>
+
+  <feature extension="plus-xhtml-topics-twopass.stage2.param" value="insert-ant-topic-html-xslt.xml" type="file"/>
+  <feature extension="plus-eclipsehelp-topics-twopass.stage2.param" value="insert-ant-topic-html-xslt.xml" type="file"/>
+
+  <feature extension="dita.conductor.target.relative" value="build.xml" type="file"/>
+
+  <feature extension="depend.plus-xhtml-topics-twopass.stage2.pre" value="plus-allhtml-xhtml-namespace.init" type="text"/>
+  <feature extension="depend.plus-eclipsehelp-topics-twopass.stage2.pre" value="plus-allhtml-xhtml-namespace.init" type="text"/>
+
+  <feature extension="xsl.plus-xhtml-topics-twopass.stage2" value="xsl/stage2-xhtml-impl.xsl" type="file"/>
+  <feature extension="xsl.plus-eclipsehelp-topics-twopass.stage2" value="xsl/stage2-xhtml-impl.xsl" type="file"/>
+
+</plugin>

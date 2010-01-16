@@ -1,0 +1,10 @@
+<val>
+    <style-conflict background-conflict-color="red"/>
+    <prop att="audience" val="Cindy" action="include"/>
+    <prop att="product" val="twoattr_ph1" action="flag">
+        <startflag><alt-text>this is a pig</alt-text></startflag>
+    </prop>
+    <prop att="platform" val="aix" action="exclude">
+        <startflag><alt-text>aix:</alt-text></startflag>
+    </prop>
+</val>

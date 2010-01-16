@@ -16,12 +16,14 @@ import java.util.List;
 import java.util.Locale;
 
 import org.dita.dost.exception.DITAOTException;
+import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.module.Content;
 import org.dita.dost.module.ContentImpl;
 import org.dita.dost.util.Constants;
 import org.dita.dost.writer.AbstractWriter;
 import org.dita.dost.writer.CHMIndexWriter;
 import org.dita.dost.writer.EclipseIndexWriter;
+import org.dita.dost.writer.IDitaTranstypeIndexWriter;
 import org.dita.dost.writer.JavaHelpIndexWriter;
 
 /**
@@ -32,25 +34,31 @@ import org.dita.dost.writer.JavaHelpIndexWriter;
  * @author Wu, Zhi Qiang
  */
 public class IndexTermCollection {
-	
+	/** The collection of index terms. */
 	private static IndexTermCollection collection = null;
-	/** The list of all index term */
+	/** The list of all index term. */
 	private List termList = new ArrayList(Constants.INT_16);
 
-	/** The type of index term */
+	/** The type of index term. */
 	private String indexType = null;
+	
+	/** The type of index class. */
+	private String indexClass = null;
 
-	/** The output file name of index term without extension */
+	/** The output file name of index term without extension. */
 	private String outputFileRoot = null;
+	/** The logger. */
+	private DITAOTJavaLogger javaLogger = null;
 
 	/**
 	 * Private constructor used to forbid instance.
 	 */
 	private IndexTermCollection() {
+		javaLogger = new DITAOTJavaLogger();
 	}
 	
 	/**
-	 * The only interface to access IndexTermCollection instance
+	 * The only interface to access IndexTermCollection instance.
 	 * @return Singleton IndexTermCollection instance
 	 * @author Marshall
 	 */
@@ -62,7 +70,7 @@ public class IndexTermCollection {
 	}
 	
 	/**
-	 * The interface to clear the result in IndexTermCollection instance
+	 * The interface to clear the result in IndexTermCollection instance.
 	 * @author Stephen
 	 */
 	public void clear(){
@@ -72,7 +80,7 @@ public class IndexTermCollection {
 	/**
 	 * Get the index type.
 	 * 
-	 * @return
+	 * @return index type
 	 */
 	public String getIndexType() {
 		return this.indexType;
@@ -81,17 +89,31 @@ public class IndexTermCollection {
 	/**
 	 * Set the index type.
 	 * 
-	 * @param type
-	 *            The indexType to set.
+	 * @param type The indexType to set.
 	 */
 	public void setIndexType(String type) {
 		this.indexType = type;
 	}
-
+	/**
+	 * get index class.
+	 * @return index class
+	 */
+	public String getIndexClass() {
+		return indexClass;
+	}
+	/**
+	 * set index class.
+	 * @param indexClass index class
+	 */
+	public void setIndexClass(String indexClass) {
+		this.indexClass = indexClass;
+	}
+	
+	
 	/**
 	 * All a new term into the collection.
 	 * 
-	 * @param term
+	 * @param term index term
 	 */
 	public void addTerm(IndexTerm term) {
 		int i = 0;
@@ -120,7 +142,7 @@ public class IndexTermCollection {
 	/**
 	 * Get all the term list from the collection.
 	 * 
-	 * @return
+	 * @return term list
 	 */
 	public List getTermList() {
 		return termList;
@@ -151,45 +173,78 @@ public class IndexTermCollection {
 	/**
 	 * Output index terms into index file.
 	 * 
-	 * @throws DITAOTException
+	 * @throws DITAOTException exception
 	 */
 	public void outputTerms() throws DITAOTException {
 		StringBuffer buff = new StringBuffer(this.outputFileRoot);
-		AbstractWriter indexWriter = null;
+		AbstractWriter abstractWriter = null;
+		IDitaTranstypeIndexWriter indexWriter = null;
 		Content content = new ContentImpl();
 		
-		if (Constants.INDEX_TYPE_HTMLHELP.equalsIgnoreCase(indexType)) {
-			indexWriter = new CHMIndexWriter();			
-			buff.append(".hhk");
-		} else if (Constants.INDEX_TYPE_JAVAHELP.equalsIgnoreCase(indexType)) {
-			indexWriter = new JavaHelpIndexWriter();			
-			buff.append("_index.xml");			
-		}else if (Constants.INDEX_TYPE_ECLIPSEHELP.equalsIgnoreCase(indexType)) { 
-			indexWriter = new EclipseIndexWriter();		
-			//We need to get rid of the ditamap or topic name in the URL
-		    //so we can create index.xml file for Eclipse plug-ins.
-			//int filepath = buff.lastIndexOf("\\");
-			File indexDir = new File(buff.toString()).getParentFile();
-			//buff.delete(filepath, buff.length());
-			((EclipseIndexWriter)indexWriter).setFilePath(indexDir.getAbsolutePath());
-			//buff.insert(filepath, "\\index.xml");
-			buff = new StringBuffer(new File(indexDir, "index.xml").getAbsolutePath());
+		if (indexClass != null && indexClass.length() > 0) {
+			//Instantiate the class value 
+			Class anIndexClass = null;
+			try {
+				anIndexClass = Class.forName( indexClass );
+				abstractWriter = (AbstractWriter)anIndexClass.newInstance();
+				indexWriter = (IDitaTranstypeIndexWriter)anIndexClass.newInstance();
+				
+				
+				buff = new StringBuffer(indexWriter.getIndexFileName(this.outputFileRoot));
+				
+				
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InstantiationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			
+
+		} 
+		//Fallback to the old way of doing things.
+		else {
+
+			if (Constants.INDEX_TYPE_HTMLHELP.equalsIgnoreCase(indexType)) {
+				abstractWriter = new CHMIndexWriter();
+				buff.append(".hhk");
+			} else if (Constants.INDEX_TYPE_JAVAHELP
+					.equalsIgnoreCase(indexType)) {
+				abstractWriter = new JavaHelpIndexWriter();
+				buff.append("_index.xml");
+			} else if (Constants.INDEX_TYPE_ECLIPSEHELP
+					.equalsIgnoreCase(indexType)) {
+				abstractWriter = new EclipseIndexWriter();
+				// We need to get rid of the ditamap or topic name in the URL
+				// so we can create index.xml file for Eclipse plug-ins.
+				// int filepath = buff.lastIndexOf("\\");
+				File indexDir = new File(buff.toString()).getParentFile();
+				// buff.delete(filepath, buff.length());
+				((EclipseIndexWriter) abstractWriter).setFilePath(indexDir
+						.getAbsolutePath());
+				// buff.insert(filepath, "\\index.xml");
+				buff = new StringBuffer(new File(indexDir, "index.xml")
+						.getAbsolutePath());
+			}
 		}
 		
 		//if (!getTermList().isEmpty()){
 		//Even if there is no term in the list create an empty index file
 		//otherwise the compiler will report error.
 			content.setCollection(this.getTermList());
-			indexWriter.setContent(content);
-			indexWriter.write(buff.toString());
+			abstractWriter.setContent(content);
+			abstractWriter.write(buff.toString());
 		//}
 	}
 
 	/**
-	 * Set the output file
-	 * 
-	 * @param fileRoot
-	 *            The outputFile to set.
+	 * Set the output file.
+	 * @param fileRoot The outputFile to set.
 	 */
 	public void setOutputFileRoot(String fileRoot) {
 		this.outputFileRoot = fileRoot;

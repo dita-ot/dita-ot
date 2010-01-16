@@ -22,7 +22,7 @@ public interface AbstractReader {
     /**
      * Use reader to parse a document.
      * 
-     * @param filename
+     * @param filename filename
      */
     void read(String filename);
 

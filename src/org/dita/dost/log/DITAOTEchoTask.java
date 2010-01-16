@@ -27,13 +27,13 @@ public class DITAOTEchoTask extends Echo {
 	private Properties prop = null;
 
 	/**
-	 * Default Construtor
+	 * Default Construtor.
 	 *
 	 */
 	public DITAOTEchoTask(){
 	}
 	/**
-	 * Setter function for id
+	 * Setter function for id.
 	 * @param identifier The id to set.         
 	 */
 	public void setId(String identifier) {
@@ -41,7 +41,7 @@ public class DITAOTEchoTask extends Echo {
 	}
 
 	/**
-	 * Set the parameters
+	 * Set the parameters.
 	 * @param params  The prop to set.     
 	 */
 	public void setParams(String params) {
@@ -55,7 +55,8 @@ public class DITAOTEchoTask extends Echo {
 	}
 
 	/**
-	 * Task execute point
+	 * Task execute point.
+	 * @throws BuildException exception
 	 * @see org.apache.tools.ant.taskdefs.Echo#execute()
 	 */
 	public void execute() throws BuildException {

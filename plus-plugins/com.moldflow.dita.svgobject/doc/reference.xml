@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference id="reference_svgobject">
+    <title>
+        <keyword>svgobject</keyword></title>
+    <shortdesc>The <keyword>svgobject</keyword> plugin is a convenience plugin which contains the
+            <filepath>svgrenderingtranscoder.jar</filepath> library and adds it to the classpath.</shortdesc>
+    <refbody>
+        <section>
+            <title>Plugin ID</title>
+            <p><apiname>com.moldflow.dita.svgobject</apiname></p>
+        </section>
+        <section id="section_5862E90B644642CCA38E345D69240316">
+            <title>Java requirements</title>
+            <p>Java 1.5 or later.</p>
+        </section>
+    </refbody>
+</reference>

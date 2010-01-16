@@ -22,15 +22,7 @@
     <xs:attribute name="anchorref"/>
     <xs:attributeGroup ref="topicref-atts"/>
     <xs:attributeGroup ref="select-atts"/>
-    <xs:attribute name="translate">
-      <xs:simpleType>
-        <xs:restriction base="xs:token">
-          <xs:enumeration value="yes"/>
-          <xs:enumeration value="no"/>
-        </xs:restriction>
-      </xs:simpleType>
-    </xs:attribute>
-    <xs:attribute ref="xml:lang"/>
+    <xs:attributeGroup ref="localization-atts"/>
     <xs:attribute ref="ditaarch:DITAArchVersion"/>
     <xs:attributeGroup ref="global-atts"/>
     <xs:attribute name="class" default="- map/map apiMap/apiMap javaAPIMap/javaAPIMap "/>
@@ -64,6 +56,7 @@
           <xs:enumeration value="unordered"/>
           <xs:enumeration value="sequence"/>
           <xs:enumeration value="family"/>
+          <xs:enumeration value="-dita-use-conref-target"/>
         </xs:restriction>
       </xs:simpleType>
     </xs:attribute>
@@ -74,6 +67,7 @@
           <xs:enumeration value="local"/>
           <xs:enumeration value="peer"/>
           <xs:enumeration value="external"/>
+          <xs:enumeration value="-dita-use-conref-target"/>
         </xs:restriction>
       </xs:simpleType>
     </xs:attribute>
@@ -82,6 +76,7 @@
         <xs:restriction base="xs:token">
           <xs:enumeration value="yes"/>
           <xs:enumeration value="no"/>
+          <xs:enumeration value="-dita-use-conref-target"/>
         </xs:restriction>
       </xs:simpleType>
     </xs:attribute>
@@ -93,6 +88,7 @@
           <xs:enumeration value="sourceonly"/>
           <xs:enumeration value="normal"/>
           <xs:enumeration value="none"/>
+          <xs:enumeration value="-dita-use-conref-target"/>
         </xs:restriction>
       </xs:simpleType>
     </xs:attribute>
@@ -101,6 +97,7 @@
         <xs:restriction base="xs:token">
           <xs:enumeration value="yes"/>
           <xs:enumeration value="no"/>
+          <xs:enumeration value="-dita-use-conref-target"/>
         </xs:restriction>
       </xs:simpleType>
     </xs:attribute>
@@ -109,6 +106,7 @@
         <xs:restriction base="xs:token">
           <xs:enumeration value="yes"/>
           <xs:enumeration value="no"/>
+          <xs:enumeration value="-dita-use-conref-target"/>
         </xs:restriction>
       </xs:simpleType>
     </xs:attribute>
@@ -117,6 +115,7 @@
         <xs:restriction base="xs:token">
           <xs:enumeration value="yes"/>
           <xs:enumeration value="no"/>
+          <xs:enumeration value="-dita-use-conref-target"/>
         </xs:restriction>
       </xs:simpleType>
     </xs:attribute>
@@ -149,6 +148,7 @@
           <xs:enumeration value="unordered"/>
           <xs:enumeration value="sequence"/>
           <xs:enumeration value="family"/>
+          <xs:enumeration value="-dita-use-conref-target"/>
         </xs:restriction>
       </xs:simpleType>
     </xs:attribute>
@@ -159,6 +159,7 @@
           <xs:enumeration value="local"/>
           <xs:enumeration value="peer"/>
           <xs:enumeration value="external"/>
+          <xs:enumeration value="-dita-use-conref-target"/>
         </xs:restriction>
       </xs:simpleType>
     </xs:attribute>
@@ -167,6 +168,7 @@
         <xs:restriction base="xs:token">
           <xs:enumeration value="yes"/>
           <xs:enumeration value="no"/>
+          <xs:enumeration value="-dita-use-conref-target"/>
         </xs:restriction>
       </xs:simpleType>
     </xs:attribute>
@@ -178,6 +180,7 @@
           <xs:enumeration value="sourceonly"/>
           <xs:enumeration value="normal"/>
           <xs:enumeration value="none"/>
+          <xs:enumeration value="-dita-use-conref-target"/>
         </xs:restriction>
       </xs:simpleType>
     </xs:attribute>
@@ -186,6 +189,7 @@
         <xs:restriction base="xs:token">
           <xs:enumeration value="yes"/>
           <xs:enumeration value="no"/>
+          <xs:enumeration value="-dita-use-conref-target"/>
         </xs:restriction>
       </xs:simpleType>
     </xs:attribute>
@@ -194,6 +198,7 @@
         <xs:restriction base="xs:token">
           <xs:enumeration value="yes"/>
           <xs:enumeration value="no"/>
+          <xs:enumeration value="-dita-use-conref-target"/>
         </xs:restriction>
       </xs:simpleType>
     </xs:attribute>
@@ -202,6 +207,7 @@
         <xs:restriction base="xs:token">
           <xs:enumeration value="yes"/>
           <xs:enumeration value="no"/>
+          <xs:enumeration value="-dita-use-conref-target"/>
         </xs:restriction>
       </xs:simpleType>
     </xs:attribute>
@@ -234,6 +240,7 @@
           <xs:enumeration value="unordered"/>
           <xs:enumeration value="sequence"/>
           <xs:enumeration value="family"/>
+          <xs:enumeration value="-dita-use-conref-target"/>
         </xs:restriction>
       </xs:simpleType>
     </xs:attribute>
@@ -244,6 +251,7 @@
           <xs:enumeration value="local"/>
           <xs:enumeration value="peer"/>
           <xs:enumeration value="external"/>
+          <xs:enumeration value="-dita-use-conref-target"/>
         </xs:restriction>
       </xs:simpleType>
     </xs:attribute>
@@ -252,6 +260,7 @@
         <xs:restriction base="xs:token">
           <xs:enumeration value="yes"/>
           <xs:enumeration value="no"/>
+          <xs:enumeration value="-dita-use-conref-target"/>
         </xs:restriction>
       </xs:simpleType>
     </xs:attribute>
@@ -263,6 +272,7 @@
           <xs:enumeration value="sourceonly"/>
           <xs:enumeration value="normal"/>
           <xs:enumeration value="none"/>
+          <xs:enumeration value="-dita-use-conref-target"/>
         </xs:restriction>
       </xs:simpleType>
     </xs:attribute>
@@ -271,6 +281,7 @@
         <xs:restriction base="xs:token">
           <xs:enumeration value="yes"/>
           <xs:enumeration value="no"/>
+          <xs:enumeration value="-dita-use-conref-target"/>
         </xs:restriction>
       </xs:simpleType>
     </xs:attribute>
@@ -279,6 +290,7 @@
         <xs:restriction base="xs:token">
           <xs:enumeration value="yes"/>
           <xs:enumeration value="no"/>
+          <xs:enumeration value="-dita-use-conref-target"/>
         </xs:restriction>
       </xs:simpleType>
     </xs:attribute>
@@ -287,6 +299,7 @@
         <xs:restriction base="xs:token">
           <xs:enumeration value="yes"/>
           <xs:enumeration value="no"/>
+          <xs:enumeration value="-dita-use-conref-target"/>
         </xs:restriction>
       </xs:simpleType>
     </xs:attribute>
@@ -319,6 +332,7 @@
           <xs:enumeration value="unordered"/>
           <xs:enumeration value="sequence"/>
           <xs:enumeration value="family"/>
+          <xs:enumeration value="-dita-use-conref-target"/>
         </xs:restriction>
       </xs:simpleType>
     </xs:attribute>
@@ -329,6 +343,7 @@
           <xs:enumeration value="local"/>
           <xs:enumeration value="peer"/>
           <xs:enumeration value="external"/>
+          <xs:enumeration value="-dita-use-conref-target"/>
         </xs:restriction>
       </xs:simpleType>
     </xs:attribute>
@@ -337,6 +352,7 @@
         <xs:restriction base="xs:token">
           <xs:enumeration value="yes"/>
           <xs:enumeration value="no"/>
+          <xs:enumeration value="-dita-use-conref-target"/>
         </xs:restriction>
       </xs:simpleType>
     </xs:attribute>
@@ -348,6 +364,7 @@
           <xs:enumeration value="sourceonly"/>
           <xs:enumeration value="normal"/>
           <xs:enumeration value="none"/>
+          <xs:enumeration value="-dita-use-conref-target"/>
         </xs:restriction>
       </xs:simpleType>
     </xs:attribute>
@@ -356,6 +373,7 @@
         <xs:restriction base="xs:token">
           <xs:enumeration value="yes"/>
           <xs:enumeration value="no"/>
+          <xs:enumeration value="-dita-use-conref-target"/>
         </xs:restriction>
       </xs:simpleType>
     </xs:attribute>
@@ -364,6 +382,7 @@
         <xs:restriction base="xs:token">
           <xs:enumeration value="yes"/>
           <xs:enumeration value="no"/>
+          <xs:enumeration value="-dita-use-conref-target"/>
         </xs:restriction>
       </xs:simpleType>
     </xs:attribute>
@@ -372,6 +391,7 @@
         <xs:restriction base="xs:token">
           <xs:enumeration value="yes"/>
           <xs:enumeration value="no"/>
+          <xs:enumeration value="-dita-use-conref-target"/>
         </xs:restriction>
       </xs:simpleType>
     </xs:attribute>
@@ -404,6 +424,7 @@
           <xs:enumeration value="unordered"/>
           <xs:enumeration value="sequence"/>
           <xs:enumeration value="family"/>
+          <xs:enumeration value="-dita-use-conref-target"/>
         </xs:restriction>
       </xs:simpleType>
     </xs:attribute>
@@ -414,6 +435,7 @@
           <xs:enumeration value="local"/>
           <xs:enumeration value="peer"/>
           <xs:enumeration value="external"/>
+          <xs:enumeration value="-dita-use-conref-target"/>
         </xs:restriction>
       </xs:simpleType>
     </xs:attribute>
@@ -422,6 +444,7 @@
         <xs:restriction base="xs:token">
           <xs:enumeration value="yes"/>
           <xs:enumeration value="no"/>
+          <xs:enumeration value="-dita-use-conref-target"/>
         </xs:restriction>
       </xs:simpleType>
     </xs:attribute>
@@ -433,6 +456,7 @@
           <xs:enumeration value="sourceonly"/>
           <xs:enumeration value="normal"/>
           <xs:enumeration value="none"/>
+          <xs:enumeration value="-dita-use-conref-target"/>
         </xs:restriction>
       </xs:simpleType>
     </xs:attribute>
@@ -441,6 +465,7 @@
         <xs:restriction base="xs:token">
           <xs:enumeration value="yes"/>
           <xs:enumeration value="no"/>
+          <xs:enumeration value="-dita-use-conref-target"/>
         </xs:restriction>
       </xs:simpleType>
     </xs:attribute>
@@ -449,6 +474,7 @@
         <xs:restriction base="xs:token">
           <xs:enumeration value="yes"/>
           <xs:enumeration value="no"/>
+          <xs:enumeration value="-dita-use-conref-target"/>
         </xs:restriction>
       </xs:simpleType>
     </xs:attribute>
@@ -457,6 +483,7 @@
         <xs:restriction base="xs:token">
           <xs:enumeration value="yes"/>
           <xs:enumeration value="no"/>
+          <xs:enumeration value="-dita-use-conref-target"/>
         </xs:restriction>
       </xs:simpleType>
     </xs:attribute>

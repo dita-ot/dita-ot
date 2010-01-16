@@ -1,0 +1,19 @@
+<plugin id="com.moldflow.dita.plus-allhtml-treediagram-svginline">
+  <require plugin="com.moldflow.dita.plus-allhtml-treediagram"/>
+  <require plugin="com.moldflow.dita.plus-allhtml-xhtml-namespace"/>
+  <require plugin="com.moldflow.dita.treediagram2svg"/>
+
+  <template file="build_plus-allhtml-treediagram-svginline_template.xml"/>
+  <template file="xsl/xhtml_template.xsl"/>
+
+  <feature extension="dita.conductor.target.relative" value="build.xml" type="file"/>
+
+  <feature extension="dita.conductor.xhtml.param" value="insert-ant-topic-html-xslt.xml" type="file"/>
+
+  <feature extension="xsl.plus-eclipsehelp-topics-twopass.stage1" value="xsl/xhtml.xsl" type="file"/>
+  <feature extension="xsl.plus-xhtml-topics-twopass.stage1" value="xsl/xhtml.xsl" type="file"/>
+
+  <feature extension="depend.plus-eclipsehelp-topics-twopass.stage1.pre" value="plus-allhtml-treediagram-svginline.copy-files" type="text"/>
+  <feature extension="depend.plus-xhtml-topics-twopass.stage1.pre" value="plus-allhtml-treediagram-svginline.copy-files" type="text"/>
+
+</plugin>

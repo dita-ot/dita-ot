@@ -22,33 +22,39 @@ import org.dita.dost.util.Constants;
  * @author Zhang, Yuan Peng
  */
 public abstract class ImportAction implements IAction {
-	protected Set valueSet = null;
-	protected Hashtable paramTable = null;
+	protected Set<String> valueSet = null;
+	protected Hashtable<String,String> paramTable = null;
 	
 	/**
-	 * Default Constructor
+	 * Default Constructor.
 	 */
 	public ImportAction() {
-		valueSet = new LinkedHashSet(Constants.INT_16);
-		paramTable = new Hashtable();
+		valueSet = new LinkedHashSet<String>(Constants.INT_16);
+		paramTable = new Hashtable<String,String>();
 	}
-
+	
 	/**
+	 * get result.
+	 * @return result
 	 * @see org.dita.dost.platform.IAction#getResult()
 	 */
 	public abstract String getResult();
 
 	/**
+	 * set input.
+	 * @param input input
 	 * @see org.dita.dost.platform.IAction#setInput(java.lang.String)
 	 */
 	public void setInput(String input) {
 		StringTokenizer inputTokenizer = new StringTokenizer(input,",");
 		while(inputTokenizer.hasMoreElements()){
-			valueSet.add(inputTokenizer.nextElement());
+			valueSet.add((String) inputTokenizer.nextElement());
 		}
 	}
 
 	/**
+	 * Set the input parameters.
+	 * @param param param
 	 * @see org.dita.dost.platform.IAction#setParam(java.lang.String)
 	 */
 	public void setParam(String param) {
@@ -64,8 +70,11 @@ public abstract class ImportAction implements IAction {
 			}
 		}	
 	}
-
-	public void setFeatures(Hashtable h) {
+	/**
+	 * Set the feature table.
+	 * @param h hastable
+	 */
+	public void setFeatures(Hashtable<String,String> h) {
 		
 	}
 

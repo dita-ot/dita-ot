@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<project basedir="." default="jar" name="SVGTranscoder">
+    <target name="clean">
+        <delete>
+            <fileset dir="build" includes="**/*.class"/>
+        </delete>
+    </target>
+
+    <target name="build">
+        <mkdir dir="build"/>
+        <javac destdir="build" source="1.5" target="1.5">
+            <src path="src"/>
+        </javac>
+    </target>
+
+    <target depends="build" name="jar">
+        <mkdir dir="lib"/>
+        <jar basedir="build" destfile="lib/svgrenderingtranscoder.jar" includes="**/*.class"/>
+    </target>
+
+</project>

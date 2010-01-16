@@ -10,22 +10,23 @@
 package org.dita.dost.module;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
-import java.util.StringTokenizer;
 
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTJavaLogger;
+import org.dita.dost.log.MessageUtils;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.pipeline.PipelineHashIO;
 import org.dita.dost.reader.MapMetaReader;
 import org.dita.dost.util.Constants;
 import org.dita.dost.util.FileUtils;
+import org.dita.dost.util.ListUtils;
+import org.dita.dost.util.StringUtils;
 import org.dita.dost.writer.DitaMetaWriter;
 
 /**
@@ -47,55 +48,61 @@ public class MoveMetaModule implements AbstractPipelineModule {
         super();
         content = new ContentImpl();
         logger = new DITAOTJavaLogger();
-
     }
 
-    /** (non-Javadoc)
-     * @see org.dita.dost.module.AbstractPipelineModule#execute(org.dita.dost.pipeline.AbstractPipelineInput)
-     */
+    /**
+	 * Entry point of MoveMetaModule.
+	 * @see org.dita.dost.module.AbstractPipelineModule#execute(org.dita.dost.pipeline.AbstractPipelineInput)
+	 * @param input Input parameters and resources.
+	 * @return null
+	 * @throws DITAOTException exception
+	 */
     public AbstractPipelineOutput execute(AbstractPipelineInput input) throws DITAOTException {
-    	String mapFile;
-    	Set mapSet;
-		Iterator i;
-		String targetFileName;
-		MapMetaReader metaReader = new MapMetaReader();
-		DitaMetaWriter inserter = new DitaMetaWriter();
 		String baseDir = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_BASEDIR);
     	String tempDir = ((PipelineHashIO)input).getAttribute(Constants.ANT_INVOKER_PARAM_TEMPDIR);
-    	String inputMap = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_INPUTMAP);
-		File ditalist = null;
-    	File xmlDitalist=null;
-		Properties prop = new Properties();
-		StringTokenizer st = null;
-    	
+       	
+		MapMetaReader metaReader = new MapMetaReader();
+		DitaMetaWriter inserter = new DitaMetaWriter();
+
 		if (!new File(tempDir).isAbsolute()) {
         	tempDir = new File(baseDir, tempDir).getAbsolutePath();
         }
 		
-		ditalist = new File(tempDir, Constants.FILE_NAME_DITA_LIST);
-		xmlDitalist= new File(tempDir, Constants.FILE_NAME_DITA_LIST_XML);
+		Properties properties = null;
 		try{
-			
-			if(xmlDitalist.exists())
-				prop.loadFromXML(new FileInputStream(xmlDitalist));
-			else
-				prop.load(new FileInputStream(ditalist));
-			
-		}catch(IOException ioe){
-			throw new DITAOTException(ioe);
+			properties = ListUtils.getDitaList();
+		}catch(IOException e){
+			throw new DITAOTException(e);
 		}
 		
-		st = new StringTokenizer(prop.getProperty(Constants.FULL_DITAMAP_LIST), Constants.COMMA);
-		while(st.hasMoreTokens()){
-			mapFile = new File(tempDir, st.nextToken()).getAbsolutePath();        	        
-	        metaReader.read(mapFile);
-		}		
-		
-        mapSet = (Set) metaReader.getContent().getCollection();
-
-        i = mapSet.iterator();
+		Set<String> fullditamaplist = StringUtils.restoreSet(properties.getProperty(Constants.FULL_DITAMAP_LIST));
+		for(String mapFile:fullditamaplist){
+			mapFile = new File(tempDir, mapFile).getAbsolutePath();
+			//FIXME: this reader gets the parent path of input file
+			metaReader.read(mapFile);
+	        File oldMap = new File(mapFile);
+	        File newMap = new File(mapFile+".temp");
+	        if (newMap.exists()) {
+	        	if (!oldMap.delete()) {
+	        		Properties p = new Properties();
+	            	p.put("%1", oldMap.getPath());
+	            	p.put("%2", newMap.getAbsolutePath()+".chunk");
+	            	logger.logError(MessageUtils.getMessage("DOTJ009E", p).toString());
+	        	}
+	        	if (!newMap.renameTo(oldMap)) {
+	        		Properties p = new Properties();
+	            	p.put("%1", oldMap.getPath());
+	            	p.put("%2", newMap.getAbsolutePath()+".chunk");
+	            	logger.logError(MessageUtils.getMessage("DOTJ009E", p).toString());
+	        	}
+	        }
+		}
+				
+		Set<?> mapSet = (Set<?>) metaReader.getContent().getCollection();
+        Iterator<?> i = mapSet.iterator();
+		String targetFileName = null;
         while (i.hasNext()) {
-            Map.Entry entry = (Map.Entry) i.next();
+            Map.Entry<?,?> entry = (Map.Entry<?,?>) i.next();
             targetFileName = (String) entry.getKey();
             targetFileName = targetFileName.indexOf(Constants.SHARP) != -1 
             				? targetFileName.substring(0, targetFileName.indexOf(Constants.SHARP))
@@ -114,5 +121,4 @@ public class MoveMetaModule implements AbstractPipelineModule {
         }
         return null;
     }
-
 }

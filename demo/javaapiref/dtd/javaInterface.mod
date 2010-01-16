@@ -1,5 +1,5 @@
 <!--
- | (C) Copyright IBM Corporation 2005 - 2006. All Rights Reserved.
+ | (C) Copyright IBM Corporation 2005, 2009. All Rights Reserved.
  *-->
 
 <!-- ============ Hooks for domain extension ============ -->
@@ -18,19 +18,19 @@
 
 
 <!-- ============ Topic specializations ============ -->
-<!ELEMENT javaInterface   ( (%apiName;), (%shortdesc;), (%prolog;)?, (%javaInterfaceDetail;), (%related-links;)?, (%javaInterface-info-types;)* )>
+<!ELEMENT javaInterface   ( (%apiName;), (%shortdesc; | %abstract;), (%prolog;)?, (%javaInterfaceDetail;), (%related-links;)?, (%javaInterface-info-types;)* )>
 <!ATTLIST javaInterface   id ID #REQUIRED
                           conref CDATA #IMPLIED
                           outputclass CDATA #IMPLIED
-                          xml:lang NMTOKEN #IMPLIED
+                          %localization-atts;
+                          %select-atts;
                           %arch-atts;
                           domains CDATA "&included-domains;"
 >
 
 <!ELEMENT javaInterfaceDetail  ((%javaInterfaceDef;)?, (%apiDesc;)?, (%example;|%section;|%apiImpl;)*)>
 <!ATTLIST javaInterfaceDetail  %id-atts;
-                          translate (yes|no) #IMPLIED
-                          xml:lang NMTOKEN #IMPLIED
+                          %localization-atts;
                           outputclass CDATA #IMPLIED>
 
 <!-- MULTIPLE BASE INTERFACES? ADDED FOR NOW -->
@@ -53,7 +53,7 @@
                           type   CDATA  #IMPLIED
                           %univ-atts;
                           format        CDATA   #IMPLIED
-                          scope (local | peer | external) #IMPLIED
+                          scope (local | peer | external | -dita-use-conref-target) #IMPLIED
                           outputclass CDATA #IMPLIED
 >
 

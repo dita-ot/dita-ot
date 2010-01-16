@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- DITA n-ary tree domain specialization. -->
+
+<!--
+    <public publicId="-//Moldflow//ENTITIES DITA 1.1 Tree Domain 1//EN" uri="treeDomain1.ent"/>
+    <sysem systemId="http://www.moldflow.com/schema/dtd/dita/1.1/tree/1/treeDomain1.ent" uri="treeDomain1.ent"/>
+-->
+
+<!-- Specialized elements. -->
+<!ENTITY % tree-d-fig "tree" >
+
+<!-- This domain's name for topic/@domains. -->
+<!ENTITY tree-d-att "(topic tree-d)" >

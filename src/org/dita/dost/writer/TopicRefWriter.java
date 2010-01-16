@@ -9,29 +9,30 @@
  */
 package org.dita.dost.writer;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.LinkedHashMap;
 import java.util.Properties;
-import java.io.File;
 
-import org.dita.dost.util.Constants;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
+import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.Content;
+import org.dita.dost.util.Constants;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.StringUtils;
-import org.dita.dost.log.DITAOTJavaLogger;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
+
 /**
- * TopicRefWriter which updates the linking elements' value according to the mapping table
+ * TopicRefWriter which updates the linking elements' value according to the mapping table.
  * @author wxzhang
  * 
  */
@@ -40,7 +41,8 @@ public class TopicRefWriter extends AbstractXMLWriter {
 	// To check the URL of href in topicref attribute
 	private static final String NOT_LOCAL_URL = "://";
 
-	private Hashtable changeTable = null;
+	private LinkedHashMap<String, String> changeTable = null;
+	private Hashtable<String, String> conflictTable = null;
 	private DITAOTJavaLogger logger = null;
 	private OutputStreamWriter output;
 	private OutputStreamWriter ditaFileOutput;
@@ -70,16 +72,24 @@ public class TopicRefWriter extends AbstractXMLWriter {
             reader.setContentHandler(this);
             reader.setProperty(Constants.LEXICAL_HANDLER_PROPERTY,this);
             reader.setFeature(Constants.FEATURE_NAMESPACE_PREFIX, true);
+            //Edited by william on 2009-11-8 for ampbug:2893664 start
+			reader.setFeature("http://apache.org/xml/features/scanner/notify-char-refs", true);
+			reader.setFeature("http://apache.org/xml/features/scanner/notify-builtin-refs", true);
+			//Edited by william on 2009-11-8 for ampbug:2893664 end
         } catch (Exception e) {
         	logger.logException(e);
         }
 	}
-
-
 	/**
-	 * @see org.xml.sax.ext.LexicalHandler#startEntity(java.lang.String)
-	 * 
+	 * Set up class.
+	 * @param conflictTable conflictTable
 	 */
+	public void setup(Hashtable<String,String> conflictTable) {
+		this.conflictTable = conflictTable;
+	}
+
+
+	@Override
 	public void startEntity(String name) throws SAXException {
 		try {
 			needResolveEntity = StringUtils.checkEntity(name);
@@ -92,11 +102,7 @@ public class TopicRefWriter extends AbstractXMLWriter {
 
 	}
 
-	/**
-	 * @see org.xml.sax.ContentHandler#processingInstruction(java.lang.String,
-	 *      java.lang.String)
-	 * 
-	 */
+	@Override
 	public void processingInstruction(String target, String data)
 			throws SAXException {
 		String pi;
@@ -110,10 +116,7 @@ public class TopicRefWriter extends AbstractXMLWriter {
 		}
 	}
 
-	/**
-	 * @see org.xml.sax.ContentHandler#ignorableWhitespace(char[], int, int)
-	 * 
-	 */
+	@Override
 	public void ignorableWhitespace(char[] ch, int start, int length)
 			throws SAXException {
 		try {
@@ -123,10 +126,7 @@ public class TopicRefWriter extends AbstractXMLWriter {
 		}
 	}
 
-	/**
-	 * @see org.xml.sax.ContentHandler#characters(char[], int, int)
-	 * 
-	 */
+	@Override
 	public void characters(char[] ch, int start, int length)
 			throws SAXException {
 		if (needResolveEntity) {
@@ -141,10 +141,7 @@ public class TopicRefWriter extends AbstractXMLWriter {
 		}
 	}
 
-	/**
-	 * @see org.xml.sax.ext.LexicalHandler#endEntity(java.lang.String)
-	 * 
-	 */
+	@Override
 	public void endEntity(String name) throws SAXException {
 		if (!needResolveEntity) {
 			needResolveEntity = true;
@@ -156,7 +153,7 @@ public class TopicRefWriter extends AbstractXMLWriter {
 	 * 
 	 * @see org.dita.dost.writer.AbstractXMLWriter#endCDATA()
 	 */
-
+	@Override
 	public void endCDATA() throws SAXException {
 		insideCDATA = false;
 		try {
@@ -171,7 +168,7 @@ public class TopicRefWriter extends AbstractXMLWriter {
 	 * 
 	 * @see org.dita.dost.writer.AbstractXMLWriter#endDocument()
 	 */
-
+	@Override
 	public void endDocument() throws SAXException {
 		try {
 			output.flush();
@@ -186,7 +183,7 @@ public class TopicRefWriter extends AbstractXMLWriter {
 	 * @see org.dita.dost.writer.AbstractXMLWriter#endElement(java.lang.String,
 	 *      java.lang.String, java.lang.String)
 	 */
-
+	@Override
 	public void endElement(String uri, String localName, String qName)
 			throws SAXException {
 		try {
@@ -202,9 +199,9 @@ public class TopicRefWriter extends AbstractXMLWriter {
 	 * 
 	 * @see org.dita.dost.writer.AbstractXMLWriter#setContent(org.dita.dost.module.Content)
 	 */
-
+	@Override
 	public void setContent(Content content) {
-		changeTable = (Hashtable) content.getValue();
+		changeTable = (LinkedHashMap<String,String>) content.getValue();
 	}
 
 	/*
@@ -212,7 +209,7 @@ public class TopicRefWriter extends AbstractXMLWriter {
 	 * 
 	 * @see org.dita.dost.writer.AbstractXMLWriter#startCDATA()
 	 */
-
+	@Override
 	public void startCDATA() throws SAXException {
 		try {
 			insideCDATA = true;
@@ -227,7 +224,7 @@ public class TopicRefWriter extends AbstractXMLWriter {
 	 * 
 	 * @see org.dita.dost.writer.AbstractXMLWriter#startDocument()
 	 */
-
+	@Override
 	public void startDocument() throws SAXException {
 		// TODO Auto-generated method stub
 		super.startDocument();
@@ -245,7 +242,7 @@ public class TopicRefWriter extends AbstractXMLWriter {
 	 * @see org.dita.dost.writer.AbstractXMLWriter#startElement(java.lang.String,
 	 *      java.lang.String, java.lang.String, org.xml.sax.Attributes)
 	 */
-
+	@Override
 	public void startElement(String uri, String localName, String qName,
 			Attributes atts) throws SAXException {
 		
@@ -335,7 +332,7 @@ public class TopicRefWriter extends AbstractXMLWriter {
 		}
 
 		attValue = atts.getValue(attQName);
-
+		
 		if (attValue != null) {
 			/*
 			 * replace all the backslash with slash in all href and conref
@@ -353,51 +350,81 @@ public class TopicRefWriter extends AbstractXMLWriter {
 		if (checkDITAHREF(atts)) {
 				// replace the href value if it's referenced topic is extracted.
 			String rootPathName=currentFilePathName;
-			String topicFileWithTopicPathName=(String)changeTable.get(resolveTopicWithoutElement(currentFilePath, attValue));
-			String topicFilePathName=(String)changeTable.get(FileUtils.resolveFile(currentFilePath, attValue));
+			String changeTarget=(String)changeTable.get(FileUtils.resolveFile(currentFilePath, attValue));
 			String elementID=getElementID(attValue);
-			if(!notTopicFormat(atts,attValue)){
-					if(topicFileWithTopicPathName==null || (!changeTable.containsKey(topicFileWithTopicPathName)
-							&&!changeTable.containsKey(topicFilePathName))){
-						return attValue;//no change
-					}else{
-						//chunked file
-						if(changeTable.containsKey(topicFileWithTopicPathName)){
-							if(rootPathName.equalsIgnoreCase(topicFilePathName)){
-								if(attValue.indexOf(Constants.SHARP)!=-1)
-									return attValue.substring(attValue.indexOf(Constants.SHARP));
-							}
-							if (elementID == null)
-								return FileUtils.getRelativePathFromMap(
-										rootPathName, topicFileWithTopicPathName);
-							else
-								return new StringBuffer().append(
-										FileUtils.getRelativePathFromMap(
-												rootPathName,
-												topicFileWithTopicPathName))
-												.append(Constants.SLASH).append(elementID)
-												.toString();
-						}
-							
-						else
-							return FileUtils.getRelativePathFromMap(rootPathName,topicFilePathName);
-					}				
+			String pathtoElem = 
+				attValue.contains(Constants.SHARP) ? attValue.substring(attValue.indexOf(Constants.SHARP)+1) : "";
+			
+			if (StringUtils.isEmptyString(changeTarget)) {
+				String absolutePath = FileUtils.resolveTopic(currentFilePath, attValue);
+				if (absolutePath.contains(Constants.SHARP) &&
+						absolutePath.substring(absolutePath.indexOf(Constants.SHARP)).contains(Constants.SLASH)){
+					absolutePath = absolutePath.substring(0, absolutePath.indexOf(Constants.SLASH, absolutePath.indexOf(Constants.SHARP)));
+				}
+				changeTarget = (String)changeTable.get(absolutePath);
 			}
-		}	
+			if(!notTopicFormat(atts,attValue)){
+				if(changeTarget == null) {
+					return attValue;//no change
+				}else{
+					String conTarget = (String)conflictTable.get(removeAnchor(changeTarget));
+					if (!StringUtils.isEmptyString(conTarget)) {
+						if (elementID == null) {
+							String idpath = getElementID(changeTarget);
+							return FileUtils.getRelativePathFromMap(
+									rootPathName, conTarget) + (idpath != null ? Constants.SHARP + idpath : "");
+						}else {
+							if (conTarget.contains(Constants.SHARP)){
+								//conTarget points to topic
+								if (!pathtoElem.contains(Constants.SLASH)){
+									//if pathtoElem does no have '/' slash. it means elementID is topic id
+									return FileUtils.getRelativePathFromMap(
+											rootPathName, conTarget);
+								}else{
+									return FileUtils.getRelativePathFromMap(
+											rootPathName, conTarget) + Constants.SLASH + elementID;
+								}
+								
+							}else{
+								return FileUtils.getRelativePathFromMap(
+										rootPathName, conTarget) + Constants.SHARP + pathtoElem;
+							}							
+						}
+					} else {
+						if (elementID == null){
+							return FileUtils.getRelativePathFromMap(
+									rootPathName, changeTarget);
+						}else{
+							if (changeTarget.contains(Constants.SHARP)){
+								//changeTarget points to topic
+								if(!pathtoElem.contains(Constants.SLASH)){
+									//if pathtoElem does no have '/' slash. it means elementID is topic id
+									return FileUtils.getRelativePathFromMap(
+											rootPathName, changeTarget);
+								}else{
+									return FileUtils.getRelativePathFromMap(
+											rootPathName, changeTarget) + Constants.SLASH + elementID;
+								}
+							}else{
+								return FileUtils.getRelativePathFromMap(
+										rootPathName, changeTarget) + Constants.SHARP + pathtoElem;
+							}
+						}						
+					}
+				}				
+			}
+		}
 		return attValue;
 	}
 	
-	private String resolveTopicWithoutElement(String rootPath, String relativePath){
-		String withoutElement=null;
-		if(relativePath.indexOf(Constants.SHARP)!=-1)
-			if(relativePath.lastIndexOf(Constants.SLASH)!=-1)
-				withoutElement=relativePath.substring(0, relativePath.lastIndexOf(Constants.SLASH));
-			else
-				withoutElement=relativePath;
-		else
-			withoutElement=relativePath;
-		return FileUtils.resolveFile(rootPath,withoutElement);
+	private String removeAnchor(String s) {
+		if (s.lastIndexOf(Constants.SHARP) != -1) {
+			return s.substring(0, s.lastIndexOf(Constants.SHARP));
+		} else {
+			return s;
+		}
 	}
+	
 	/**
 	 * Retrieve the element ID from the path
 	 * @param relativePath
@@ -410,6 +437,7 @@ public class TopicRefWriter extends AbstractXMLWriter {
 			topicWithelement=relativePath.substring(relativePath.lastIndexOf(Constants.SHARP)+1);
 			if(topicWithelement.lastIndexOf(Constants.SLASH)!=-1)
 				elementID=topicWithelement.substring(topicWithelement.lastIndexOf(Constants.SLASH)+1);
+			else elementID = topicWithelement;
 		}
 		return elementID;
 	}
@@ -426,9 +454,9 @@ public class TopicRefWriter extends AbstractXMLWriter {
 	}
 	
 	/**
-	 * Retrive the extension name from the attribute
-	 * @param attValue
-	 * @return String
+	 * Retrive the extension name from the attribute.
+	 * @param attValue attribute value
+	 * @return String the extension
 	 */
 	public String getExtName(String attValue) {
 		String fileName;
@@ -453,7 +481,8 @@ public class TopicRefWriter extends AbstractXMLWriter {
 	
 	/**
 	 * Check whether it is a Topic format
-	 * @param attrs,valueOfHref
+	 * @param attrs attributes to check
+	 * @param valueOfHref href attribute value
 	 * @return boolean
 	 */
 	private boolean notTopicFormat(Attributes attrs, String valueOfHref) {
@@ -490,18 +519,17 @@ public class TopicRefWriter extends AbstractXMLWriter {
 	 * 
 	 * @see org.dita.dost.writer.AbstractXMLWriter#write(java.lang.String)
 	 */
-
+	@Override
 	public void write(String outputFilename) throws DITAOTException {
 		String filename = outputFilename;
 		String file = null;
-		String topic = null;
 		currentFilePathName=new File(outputFilename).getAbsolutePath();
 		currentFilePath = new File(outputFilename).getParent();
 		File inputFile = null;
 		File outputFile = null;
 		FileOutputStream fileOutput = null;
 		needResolveEntity=true;
-
+		
 		try {
 			if (filename.endsWith(Constants.SHARP)) {
 				// prevent the empty topic id causing error
@@ -511,8 +539,6 @@ public class TopicRefWriter extends AbstractXMLWriter {
 			if (filename.lastIndexOf(Constants.SHARP) != -1) {
 				file = filename.substring(0, filename
 						.lastIndexOf(Constants.SHARP));
-				topic = filename.substring(filename
-						.lastIndexOf(Constants.SHARP) + 1);
 			} else {
 				file = filename;
 			}

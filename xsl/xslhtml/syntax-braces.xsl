@@ -66,7 +66,7 @@ and if so, produce an associative link. -->
 
 <xsl:template match="*[contains(@class,' pr-d/var ')]" mode="process-syntaxdiagram">
  <var>
-  <xsl:if test="name(parent::*)='groupchoice'"> | </xsl:if>
+  <xsl:if test="parent::*[contains(@class,' pr-d/groupchoice ')]"><xsl:if test="count(preceding-sibling::*)!=0"> | </xsl:if></xsl:if>
   <xsl:if test="@importance='optional'"> [</xsl:if>
   <xsl:choose>
     <xsl:when test="@importance='default'"><u><xsl:value-of select="."/></u></xsl:when>
@@ -140,14 +140,14 @@ and if so, produce an associative link. -->
 
 
 <xsl:template name="dogroup">
-	<xsl:if test="name(parent::*)='groupchoice'">
-		<xsl:if test="count(preceding-sibling::*)!=0"> |</xsl:if>
-	</xsl:if>
+    <xsl:if test="parent::*[contains(@class,' pr-d/groupchoice ')]">
+      <xsl:if test="count(preceding-sibling::*)!=0"> |</xsl:if>
+    </xsl:if>
 	<xsl:if test="@importance='optional'"> [</xsl:if>
-	<xsl:if test="name()='groupchoice'"> {</xsl:if>
+	<xsl:if test="contains(@class,' pr-d/groupchoice ')"> {</xsl:if>
 	  <xsl:text> </xsl:text><xsl:apply-templates mode="process-syntaxdiagram"/><xsl:text> </xsl:text>
 <!-- repid processed here before -->
-	<xsl:if test="name()='groupchoice'">} </xsl:if>
+	<xsl:if test="contains(@class,' pr-d/groupchoice ')">} </xsl:if>
 	<xsl:if test="@importance='optional'">] </xsl:if>
 </xsl:template>
 
@@ -161,7 +161,7 @@ and if so, produce an associative link. -->
 
 <xsl:template match="*[contains(@class,' pr-d/syntaxdiagram ')]//*[contains(@class,' pr-d/kwd ')] | *[contains(@class,' pr-d/synph ')]//*[contains(@class,' pr-d/kwd ')]"  mode="process-syntaxdiagram">
 <kbd><b>
-  <xsl:if test="name(parent::*)='groupchoice'"><xsl:if test="count(preceding-sibling::*)!=0"> | </xsl:if></xsl:if>
+  <xsl:if test="parent::*[contains(@class,' pr-d/groupchoice ')]"><xsl:if test="count(preceding-sibling::*)!=0"> | </xsl:if></xsl:if>
   <xsl:if test="@importance='optional'"> [</xsl:if>
   <xsl:choose>
     <xsl:when test="@importance='default'"><u><xsl:value-of select="."/></u></xsl:when>
@@ -173,9 +173,7 @@ and if so, produce an associative link. -->
 
 
 <xsl:template match="*[contains(@class,' pr-d/oper ')]"  mode="process-syntaxdiagram">
-  <xsl:if test="name(parent::*)='groupchoice'">
-    <xsl:if test="count(preceding-sibling::*)!=0"> | </xsl:if>
-  </xsl:if>
+  <xsl:if test="parent::*[contains(@class,' pr-d/groupchoice ')]"><xsl:if test="count(preceding-sibling::*)!=0"> | </xsl:if></xsl:if>
   <kbd>
     <xsl:call-template name="commonattributes"/>
     <xsl:apply-templates select="@id"/>
@@ -185,9 +183,7 @@ and if so, produce an associative link. -->
 
 
 <xsl:template match="*[contains(@class,' pr-d/delim ')]" mode="process-syntaxdiagram">
-  <xsl:if test="name(parent::*)='groupchoice'">
-    <xsl:if test="count(preceding-sibling::*)!=0"> | </xsl:if>
-  </xsl:if>
+  <xsl:if test="parent::*[contains(@class,' pr-d/groupchoice ')]"><xsl:if test="count(preceding-sibling::*)!=0"> | </xsl:if></xsl:if>
   <kbd>
     <xsl:call-template name="commonattributes"/>
     <xsl:apply-templates select="@id"/>
@@ -197,9 +193,7 @@ and if so, produce an associative link. -->
 
 
 <xsl:template match="*[contains(@class,' pr-d/sep ')]" mode="process-syntaxdiagram">
-  <xsl:if test="name(parent::*)='groupchoice'">
-    <xsl:if test="count(preceding-sibling::*)!=0"> | </xsl:if>
-  </xsl:if>
+  <xsl:if test="parent::*[contains(@class,' pr-d/groupchoice ')]"><xsl:if test="count(preceding-sibling::*)!=0"> | </xsl:if></xsl:if>
   <kbd>
     <xsl:call-template name="commonattributes"/>
     <xsl:apply-templates select="@id"/>

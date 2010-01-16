@@ -19,11 +19,12 @@ import org.dita.dost.util.Constants;
  * @author Wu, Zhi Qiang
  */
 public class TopicrefElement {
-    /** The href attribute of the topicref element */
+    /** The href attribute of the topicref element. */
     private String href = null;
 
-    /** The format attribute of the topicref element */
+    /** The format attribute of the topicref element. */
     private String format = null;
+    /**the navtitle attribute of topicref element.*/
     private String navtitle = null;
 
     /**
@@ -44,8 +45,7 @@ public class TopicrefElement {
     /**
      * Set the format attribute with the given value.
      * 
-     * @param formatValue
-     *            The format to set.
+     * @param formatValue The format to set.
      */
     public void setFormat(String formatValue) {
         this.format = formatValue;
@@ -63,8 +63,7 @@ public class TopicrefElement {
     /**
      * Set href attribute with the given value.
      * 
-     * @param hrefValue
-     *            The href to set.
+     * @param hrefValue The href to set.
      */
     public void setHref(String hrefValue) {
         this.href = hrefValue;
@@ -83,9 +82,7 @@ public class TopicrefElement {
     
     /**
      * Set navtitle attribute with the given value.
-     * 
-     * @param aNavtitle
-     *            The navtitle to set.
+     * @param aNavtitle The navtitle to set.
      */
     public void setNavTitle (String aNavtitle){
     	navtitle = aNavtitle;

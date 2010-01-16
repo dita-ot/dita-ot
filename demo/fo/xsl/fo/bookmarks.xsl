@@ -51,6 +51,9 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:if test="count(exsl:node-set($bookmarks)/*) > 0">
             <fo:bookmark-tree>
                 <fo:bookmark internal-destination="ID_TOC_00-0F-EA-40-0D-4D">
+                    <xsl:if test="$bookmarkStyle!='EXPANDED'">
+                        <xsl:attribute name="starting-state">hide</xsl:attribute>
+                    </xsl:if>
                     <fo:bookmark-title>
                         <xsl:call-template name="insertVariable">
                             <xsl:with-param name="theVariableID" select="'Table of Contents'"/>
@@ -61,6 +64,9 @@ See the accompanying license.txt file for applicable licenses.
                 <!-- CC #6163  -->
                 <xsl:if test="(//opentopic-index:index.groups//opentopic-index:index.entry) and (count($index-entries//opentopic-index:index.entry) &gt; 0) ">
                     <fo:bookmark internal-destination="ID_INDEX_00-0F-EA-40-0D-4D">
+                        <xsl:if test="$bookmarkStyle!='EXPANDED'">
+                            <xsl:attribute name="starting-state">hide</xsl:attribute>
+                        </xsl:if>
                         <fo:bookmark-title>
                             <xsl:call-template name="insertVariable">
                                 <xsl:with-param name="theVariableID" select="'Index'"/>
@@ -73,24 +79,37 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' topic/topic ') and not(contains(@class, ' bkinfo/bkinfo '))]" mode="bookmark">
-        <xsl:variable name="topicTitle">
-            <xsl:call-template name="getNavTitle"/>
-        </xsl:variable>
         <xsl:variable name="id" select="@id"/>
         <xsl:variable name="gid" select="generate-id()"/>
         <xsl:variable name="topicNumber" select="count(exsl:node-set($topicNumbers)/topic[@id = $id][following-sibling::topic[@guid = $gid]]) + 1"/>
+        <xsl:variable name="topicTitle">
+            <xsl:call-template name="getNavTitle">
+              <xsl:with-param name="topicNumber" select="$topicNumber"/>
+            </xsl:call-template>
+        </xsl:variable>
         <xsl:variable name="mapTopic">
             <xsl:copy-of select="$map//*[@id = $id]"/>
         </xsl:variable>
-
-        <xsl:if test="($mapTopic/*[position() = $topicNumber][@toc = 'yes' or not(@toc)]) or (not($mapTopic/*))">
-        <fo:bookmark internal-destination="{concat('_OPENTOPIC_TOC_PROCESSING_', generate-id())}">
-            <fo:bookmark-title>
-                <xsl:value-of select="$topicTitle"/>
-            </fo:bookmark-title>
-            <xsl:apply-templates mode="bookmark"/>
-        </fo:bookmark>
-        </xsl:if>
+        
+        <!-- added by William on 2009-05-11 for toc bug start -->
+        <xsl:choose>
+        	<xsl:when test="($mapTopic/*[position() = $topicNumber][@toc = 'yes' or not(@toc)]) or (not($mapTopic/*))">
+        		<fo:bookmark internal-destination="{concat('_OPENTOPIC_TOC_PROCESSING_', generate-id())}">
+                    <xsl:if test="$bookmarkStyle!='EXPANDED'">
+                        <xsl:attribute name="starting-state">hide</xsl:attribute>
+                    </xsl:if>
+            		<fo:bookmark-title>
+                		<xsl:value-of select="$topicTitle"/>
+            		</fo:bookmark-title>
+            		<xsl:apply-templates mode="bookmark"/>
+        		</fo:bookmark>
+        	</xsl:when>
+        	<xsl:otherwise>
+        		<xsl:apply-templates mode="bookmark"/>
+        	</xsl:otherwise>
+        </xsl:choose>
+        <!-- added by William on 2009-05-11 for toc bug end -->
+        
     </xsl:template>
 
     <xsl:template match="*" mode="bookmark">

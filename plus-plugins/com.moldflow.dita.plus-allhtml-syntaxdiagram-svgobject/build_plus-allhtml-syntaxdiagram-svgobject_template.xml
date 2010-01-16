@@ -1,0 +1,60 @@
+<project name="plus-allhtml-syntaxdiagram-svgobject">
+
+  <target name="plus-allhtml-syntaxdiagram-svgobject.init" depends="plus-allhtml-syntaxdiagram.init,plus-allhtml-svgobject.init,syntaxdiagram2svg.copy-files.init">
+    <!-- Syntax Diagram format to be placed into XHTML output. -->
+    <condition property="plus.syntaxdiagram.format" value="svgobject">
+      <not>
+        <isset property="plus.syntaxdiagram.format"/>
+      </not>
+    </condition>
+
+    <!-- Default location for CSS that applies to syntaxdiagrams,
+         relative to root of temp dir. -->
+    <condition property="plus-allhtml-syntaxdiagram-svgobject.csspath" value="css/">
+      <and>
+        <equals arg1="${plus.syntaxdiagram.format}" arg2="svgobject"/>
+        <not><isset property="plus-allhtml-syntaxdiagram-svgobject.csspath"/></not>
+      </and>
+    </condition>
+
+    <!-- Default location for Javascript that processes syntaxdiagrams,
+         relative to root of temp dir. -->
+    <condition property="plus-allhtml-syntaxdiagram-svgobject.jspath" value="js/syntaxdiagram-svg/">
+      <and>
+        <equals arg1="${plus.syntaxdiagram.format}" arg2="svgobject"/>
+        <not><isset property="plus-allhtml-syntaxdiagram-svgobject.jspath"/></not>
+      </and>
+    </condition>
+
+    <fileset id="plus-allhtml-syntaxdiagram-svgobject.files.css" dir="${syntaxdiagram2svg.css.root}" includes="*.css"/>
+    <fileset id="plus-allhtml-syntaxdiagram-svgobject.files.js" dir="${syntaxdiagram2svg.js.root}" includes="*.js"/>
+
+  </target>
+
+  <target name="plus-allhtml-syntaxdiagram-svgobject.copy-files" depends="plus-allhtml-syntaxdiagram-svgobject.init,
+     syntaxdiagram2svg.copy-files.init,
+     plus-allhtml-syntaxdiagram-svgobject.copy-files.js,
+     plus-allhtml-syntaxdiagram-svgobject.copy-files.css">
+  </target>
+
+  <target name="plus-allhtml-syntaxdiagram-svgobject.copy-files.js" if="plus-allhtml-syntaxdiagram-svgobject.jspath">
+    <antcall target="plus-allhtml-svgobject.copy-files.js">
+      <param name="jspath" value="${plus-allhtml-syntaxdiagram-svgobject.jspath}"/>
+      <reference torefid="fileset" refid="plus-allhtml-syntaxdiagram-svgobject.files.js"/>
+    </antcall>
+    <antcall target="plus-allhtml-svgobject.gen-file.js">
+      <param name="style" value="${syntaxdiagram2svg.dir}/xsl/make-constants.xsl"/>
+      <param name="jspath" value="${plus-allhtml-syntaxdiagram-svgobject.jspath}"/>
+      <param name="in" value="${syntaxdiagram2svg.constants}"/>
+      <param name="out" value="constants.js"/>
+    </antcall>
+  </target>
+
+  <target name="plus-allhtml-syntaxdiagram-svgobject.copy-files.css" if="plus-allhtml-syntaxdiagram-svgobject.csspath">
+    <antcall target="plus-allhtml-svgobject.copy-files.css">
+      <param name="csspath" value="${plus-allhtml-syntaxdiagram-svgobject.csspath}"/>
+      <reference torefid="fileset" refid="plus-allhtml-syntaxdiagram-svgobject.files.css"/>
+    </antcall>
+  </target>
+
+</project>

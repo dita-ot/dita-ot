@@ -56,6 +56,14 @@
 <str name="Prerequisites">Eeltingimused</str>
 <str name="or">või</str>
 
+<!--Task section labels -->
+<str name="task_context">Teave selle toimingu kohta</str>
+<str name="task_example">Näide</str>
+<str name="task_postreq">Mis saab edasi?</str>
+<str name="task_prereq">Enne alustamist</str>
+<str name="task_procedure">Toimimisviis</str>
+<str name="task_results">Tulemused</str>
+
 <str name="Copyright">Autoriõigus</str>
 
 <!-- Symbols -->

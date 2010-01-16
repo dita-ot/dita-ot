@@ -1,0 +1,111 @@
+<?xml version="1.0"?>
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference id="reference_plus-htmlhelp-currentencoding"><title><keyword
+        >plus-htmlhelp-csh</keyword></title><abstract>
+        <shortdesc>The <keyword>plus-htmlhelp-csh</keyword> plugin lets lets maps nominate topics,
+            and topics nominate themselves, as HTML Help context-sensitive help targets.</shortdesc>
+        <p>The plugin creates a file <filepath>alias.h</filepath> in the output directory and adds
+            the filename to the <codeph>ALIAS</codeph> secton in the project (<filepath
+            >*.hhp</filepath>) file.  It runs XSLT stylesheets on the input map and all topics.
+            Output produced by the stylesheets is concatenated into <filepath>alias.h</filepath>.</p>
+        <p>By itself, <keyword>plus-htmlhelp-csh</keyword> produces an empty <filepath
+            >alias.h</filepath> file, because its stylesheets produce no output as they traverse the
+            entire input map or topic. By overriding templates, dependent plugins can detect their
+            own context-sensitive help markup and produce the necessary output.</p>
+    </abstract><refbody>
+        <section>
+            <title>Plugin ID</title>
+            <p><apiname>com.moldflow.dita.plus-htmlhelp-csh</apiname></p>
+        </section>
+        <section>
+            <title>Prerequisite plugins</title>
+            <ul>
+                <li><apiname>com.moldflow.dita.plus-htmlhelp-alias-map</apiname></li>
+            </ul>
+        </section>
+        <section>
+            <title>XSLT requirements</title>
+            <p>An XSLT 1.0 or later processor.</p>
+        </section>
+        <section>
+            <title>Ant requirements</title>
+            <p>Ant 1.7.0 or later.</p>
+        </section>
+        <section>
+            <title>Java requirements</title>
+            <p>None.</p>
+        </section>
+        <section>
+            <title>Limitations</title>
+            <p>None.</p>
+        </section>
+        <table id="table_88E41E91DE074FA3BFB2209B742D8BB3">
+            <title>Ant properties defined in <keyword>plus-htmlhelp-csh</keyword></title>
+            <tgroup cols="3">
+                <colspec colnum="1" colname="col1" colwidth="1.00*"/>
+                <colspec colname="col02" colnum="2" colwidth="1.29*"/>
+                <colspec colnum="3" colname="col2" colwidth="1.34*"/>
+                <thead>
+                    <row>
+                        <entry colname="col1">Name</entry>
+                        <entry colname="col02">Value</entry>
+                        <entry colname="col2">Description</entry>
+                    </row>
+                </thead>
+                <tbody>
+                    <row>
+                        <entry colname="col1">
+                            <keyword>plus-htmlhelp-csh.dir</keyword>
+                        </entry>
+                        <entry colname="col02"/>
+                        <entry colname="col2">Absolute path of directory where plugin is
+                        installed.</entry>
+                    </row>
+                </tbody>
+            </tgroup>
+        </table>
+        <table id="table_EC511B34E89F4EC69E65EABCB42E136D">
+            <title>Plugin extension points defined in <keyword>plus-htmlhelp-csh</keyword></title>
+            <tgroup cols="3">
+                <colspec colnum="1" colname="col1" colwidth="1.06*"/>
+                <colspec colnum="2" colname="col2" colwidth="1.00*"/>
+                <colspec colnum="3" colname="col3" colwidth="1.52*"/>
+                <thead>
+                    <row>
+                        <entry colname="col1">Extension point</entry>
+                        <entry colname="col2">Behavior</entry>
+                        <entry colname="col3">Description</entry>
+                    </row>
+                </thead>
+                <tbody>
+                    <row>
+                        <entry colname="col1"><keyword>plus-htmlhelp-csh.alias.map.param</keyword></entry>
+                        <entry colname="col2"><apiname>org.dita.dost.platform.InsertAction</apiname></entry>
+                        <entry colname="col3">XML document with a root element containing <keyword
+                                >param</keyword> elements to pass to the map-to-alias
+                        stylesheet.</entry>
+                    </row>
+                    <row>
+                        <entry><keyword>plus-htmlhelp-csh.alias.topics.param</keyword></entry>
+                        <entry><apiname>org.dita.dost.platform.InsertAction</apiname></entry>
+                        <entry>XML document with a root element containing <keyword>param</keyword>
+                            elements to pass to the topics-to-alias stylesheet.</entry>
+                    </row>
+                    <row>
+                        <entry><keyword>xsl.plus-htmlhelp-csh.map2alias</keyword></entry>
+                        <entry><apiname>org.dita.dost.platform.ImportXSLAction</apiname></entry>
+                        <entry>XSLT stylesheets for plugins to add output to <filepath
+                            >alias.h</filepath>.</entry>
+                    </row>
+                    <row>
+                        <entry><keyword>xsl.plus-htmlhelp-csh.topic2alias</keyword></entry>
+                        <entry><apiname>org.dita.dost.platform.ImportXSLAction</apiname></entry>
+                        <entry>XSLT stylesheets for plugins to add output to <filepath
+                            >alias.h</filepath>. Parameters <keyword>CURRENTDIR</keyword> and
+                                <keyword>CURRENTFILE</keyword> identify the path to the file
+                            currently being processed.</entry>
+                    </row>
+                </tbody>
+            </tgroup>
+        </table>
+    </refbody></reference>

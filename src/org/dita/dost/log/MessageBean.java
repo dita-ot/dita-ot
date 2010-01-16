@@ -33,11 +33,11 @@ public class MessageBean {
 	}
 
 	/**
-	 * Constructor with params to init
-	 * @param mbId
-	 * @param mbType
-	 * @param mbReason
-	 * @param mbResponse
+	 * Constructor with params to init.
+	 * @param mbId id
+	 * @param mbType type
+	 * @param mbReason reason
+	 * @param mbResponse response
 	 */
 	public MessageBean(String mbId, String mbType, String mbReason, String mbResponse) {
 		this.id = mbId;
@@ -49,7 +49,7 @@ public class MessageBean {
 	/**
 	 * Copy constructor.
 	 * 
-	 * @param message
+	 * @param message message
 	 */
 	public MessageBean(MessageBean message) {
 		this(message.getId(), message.getType(), message.getReason(), message.getResponse());
@@ -88,7 +88,7 @@ public class MessageBean {
 	}
 
 	/**
-	 * Getter function of response
+	 * Getter function of response.
 	 * @return Returns the response.
 	 */
 	public String getResponse() {
@@ -96,16 +96,15 @@ public class MessageBean {
 	}
 
 	/**
-	 * Setter function of response
-	 * @param mbResponse
-	 *            The response to set.
+	 * Setter function of response.
+	 * @param mbResponse The response to set.
 	 */
 	public void setResponse(String mbResponse) {
 		this.response = mbResponse;
 	}
 
 	/**
-	 * Getter function of type
+	 * Getter function of type.
 	 * @return Returns the type.
 	 */
 	public String getType() {
@@ -113,17 +112,16 @@ public class MessageBean {
 	}
 
 	/**
-	 * Setter function of type
-	 * @param mbType
-	 *            The type to set.
+	 * Setter function of type.
+	 * @param mbType The type to set.
 	 */
 	public void setType(String mbType) {
 		this.type = mbType;
 	}
 
 	/**
-	 * Generate string for MessageBean
-	 * 
+	 * Generate string for MessageBean.
+	 * @return string
 	 * @see java.lang.Object#toString()
 	 */
 	public String toString() {

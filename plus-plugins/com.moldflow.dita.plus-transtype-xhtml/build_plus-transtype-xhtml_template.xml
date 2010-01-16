@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+     Sourceforge.net. See the accompanying license.txt file for 
+     applicable licenses.-->
+<!-- (c) Copyright IBM Corp. 2006 All Rights Reserved. -->
+<project name="plus-transtype-xhtml" default="dita2xhtml+">
+    <property name="transtype" value="xhtml+"/>
+
+    <dirname property="plus-transtype-xhtml.dir" file="${ant.file.plus-transtype-xhtml}"/>
+    
+    <import file="../../build_init.xml" />
+    <import file="../../build_preprocess.xml" />
+    <!-- <import file="../../build_general.xml" /> -->
+	
+    <target name="dita2xhtml+"
+      dita:depends="{depend.plus-transtype-xhtml.pre},
+                    build-init, preprocess,
+                    {depend.plus-transtype-xhtml.map.dispatch}, plus-transtype-xhtml.map.basic,
+                    copy-revflag, copy-css,
+                    {depend.plus-transtype-xhtml.topics.dispatch}, plus-transtype-xhtml.topics.basic,
+                    {depend.plus-transtype-xhtml.post}"
+      xmlns:dita="http://dita-ot.sourceforge.net"
+      dita:extension="depends org.dita.dost.platform.InsertDependsAction"
+     >
+    </target>
+
+    <target name="plus-transtype-xhtml.map.basic"
+      if="plus.map.class.basic"
+      dita:depends="plus-transtype-xhtml.map.basic.class.fallback,
+                    plus-transtype-xhtml.map.basic.init,
+                    {depend.plus-transtype-xhtml.map.basic.pre},
+                    plus-transtype-xhtml.map.basic.perform,
+                    {depend.plus-transtype-xhtml.map.basic.post}"
+      xmlns:dita="http://dita-ot.sourceforge.net"
+      dita:extension="depends org.dita.dost.platform.InsertDependsAction"
+    />
+
+    <target name="plus-transtype-xhtml.map.basic.class.fallback">
+      <condition property="plus.map.class.basic">
+        <or>
+          <not>
+            <isset property="plus.map.class"/>
+          </not>
+          <equals arg1="${plus.map.class}" arg2="basic"/>
+        </or>
+      </condition>
+    </target>
+
+    <target name="plus-transtype-xhtml.map.basic.perform"
+       if="plus.map.class.basic">
+       <antcall target="plus-transtype-xhtml.map.basic.toc"/>
+       <antcall target="plus-transtype-xhtml.map.basic.outer.toc"/>
+    </target>
+
+    <target name="plus-transtype-xhtml.map.basic.init" 
+        if="plus.map.class.basic">
+        <condition property="out.ext" value=".html">
+            <not>
+                <isset property="out.ext" />
+            </not>
+        </condition>
+        <condition property="args.xhtml.toc" value="index">
+            <not>
+                <isset property="args.xhtml.toc" />
+            </not>
+        </condition>
+    </target>
+    
+
+    <target name="plus-transtype-xhtml.map.basic.toc.transform" unless="noMap">
+        <xslt processor="trax"
+              basedir="${dita.temp.dir}"
+              destdir="${output.dir}"
+              includes="${user.input.file}"
+              style="${plus-transtype-xhtml.dir}/xsl/map2xhtmtoc-shell.xsl"
+              classpathref="dost.class.path">
+            <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
+            <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
+            <param name="contenttarget" expression="${args.xhtml.contenttarget}" if="args.xhtml.contenttarget"/>
+            <param name="CSS" expression="${args.css.file}" if="args.css.file" />
+            <param name="CSSPATH" expression="${user.csspath}" if="user.csspath" />
+            <param name="OUTPUTCLASS" expression="${args.xhtml.toc.class}" if="args.xhtml.toc.class" />
+            <mapper type="glob" from="${mapperfrom}" to="${mapperto}" />
+        </xslt>
+    </target>
+  	
+    <target name="plus-transtype-xhtml.map.basic.toc" if="old.transform"
+            description="Build HTML TOC file">
+        <antcall target="plus-transtype-xhtml.map.basic.toc.transform">
+            <param name="mapperfrom" value="*${dita.input.filename}"/>
+            <param name="mapperto" value="*${args.xhtml.toc}${out.ext}"/>
+        </antcall>
+    </target>
+    
+
+    <target name="plus-transtype-xhtml.map.basic.outer.toc" if="inner.transform"
+            description="Build HTML TOC file,which will adjust the directory">
+        <antcall target="plus-transtype-xhtml.map.basic.toc.transform">
+            <param name="mapperfrom" value="${user.input.file}"/>
+            <param name="mapperto" value="${args.xhtml.toc}${out.ext}"/>
+        </antcall>
+    </target>
+
+    <target name="plus-transtype-xhtml.topics.basic"
+      if="plus.topics.class.basic"
+      dita:depends="plus-transtype-xhtml.topics.basic.class.fallback,
+                    {depend.plus-transtype-xhtml.topics.basic.pre},
+                    plus-transtype-xhtml.topics.basic.perform,
+                    {depend.plus-transtype-xhtml.topics.basic.post}"
+      xmlns:dita="http://dita-ot.sourceforge.net"
+      dita:extension="depends org.dita.dost.platform.InsertDependsAction"
+     />
+
+    <target name="plus-transtype-xhtml.topics.basic.class.fallback">
+      <condition property="plus.topics.class.basic">
+        <or>
+          <not>
+            <isset property="plus.topics.class"/>
+          </not>
+          <equals arg1="${plus.topics.class}" arg2="basic"/>
+        </or>
+      </condition>
+    </target>
+
+    <target name="plus-transtype-xhtml.topics.basic.perform"
+      if="plus.topics.class.basic">
+      <antcall target="plus-transtype-xhtml.topics.basic.all"/>
+      <antcall target="plus-transtype-xhtml.topics.basic.inner"/>
+      <antcall target="plus-transtype-xhtml.topics.basic.outer"/>
+    </target>
+
+    <target name="plus-transtype-xhtml.topics.basic.all" if="old.transform">
+      <antcall target="plus-allhtml-topic2html.xhtml.nomapper">
+        <param name="includes" value="${fullditatopiclist} ${chunkedtopiclist}"></param>
+        <param name="destdir" value="${output.dir}"></param>
+        <param name="args.xsl" value="${plus-transtype-xhtml.dir}/xsl/dita2xhtml-shell.xsl"/>
+      </antcall>
+    </target>
+
+    <target name="plus-transtype-xhtml.topics.basic.inner" if="inner.transform">
+      <antcall target="plus-allhtml-topic2html.xhtml.regexpmapper">
+        <param name="includes" value="${fullditatopiclist} ${chunkedtopiclist}"></param>
+        <param name="destdir" value="${output.dir}"></param>
+        <param name="args.xsl" value="${plus-transtype-xhtml.dir}/xsl/dita2xhtml-shell.xsl"/>
+        <param name="mapperfrom" value="^(${tempdirToinputmapdir.relative.value})(.*?)(\.(xml|dita))$$"/>
+        <param name="mapperto" value="\2${out.ext}"/>
+      </antcall>
+    </target>
+
+    <target name="plus-transtype-xhtml.topics.basic.outer" depends="checkouterTransform" if="outer.transform">
+      <antcall target="plus-allhtml-topic2html.xhtml.nomapper">
+        <param name="includes" value="${outditafileslist}"></param>
+        <param name="destdir" value="${output.dir}${file.separator}${uplevels}"></param>
+        <param name="args.xsl" value="${plus-transtype-xhtml.dir}/xsl/dita2xhtml-shell.xsl"/>
+      </antcall>
+    </target>
+
+</project>

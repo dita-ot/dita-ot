@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference id="reference_plus-htmlhelp-currentencoding">
+    <title><keyword>plus-htmlhelp-alias-map</keyword></title>
+    <shortdesc>The <keyword>plus-htmlhelp-alias-map</keyword> plugin gives applications the ability
+        to define context-sensitive help topics using the HTML Help <codeph>MAP</codeph> and <codeph
+            >ALIAS</codeph> sections in the project (<filepath>*.hhp</filepath>) file, by naming
+        files to be referenced in those sections. It is the user's responsibility to create the
+        files themselves.</shortdesc>
+    <refbody>
+        <section>
+            <title>Plugin ID</title>
+            <p><apiname>com.moldflow.dita.plus-htmlhelp-alias-map</apiname></p>
+        </section>
+        <section>
+            <title>Prerequisite plugins</title>
+            <ul>
+                <li><apiname>com.moldflow.dita.plus-transtype-htmlhelp</apiname></li>
+            </ul>
+        </section>
+        <section>
+            <title>XSLT requirements</title>
+            <p>None.</p>
+        </section>
+        <section>
+            <title>Ant requirements</title>
+            <p>None.</p>
+        </section>
+        <section>
+            <title>Java requirements</title>
+            <p>None.</p>
+        </section>
+        <section>
+            <title>Limitations</title>
+            <p>None.</p>
+        </section>
+        <table id="table_88E41E91DE074FA3BFB2209B742D8BB3">
+            <title>Ant properties defined in <keyword>plus-htmlhelp-alias-map</keyword></title>
+            <tgroup cols="3">
+                <colspec colnum="1" colname="col1" colwidth="1.00*"/>
+                <colspec colname="col02" colnum="2" colwidth="1.29*"/>
+                <colspec colnum="3" colname="col2" colwidth="1.34*"/>
+                <thead>
+                    <row>
+                        <entry colname="col1">Name</entry>
+                        <entry colname="col02">Value</entry>
+                        <entry colname="col2">Description</entry>
+                    </row>
+                </thead>
+                <tbody>
+                    <row>
+                        <entry colname="col1">
+                            <keyword>plus.htmlhelp.alias</keyword>
+                        </entry>
+                        <entry colname="col02">Specified by user.</entry>
+                        <entry colname="col2">Path (relative to basedir) of alias file.</entry>
+                    </row>
+                    <row>
+                        <entry><keyword>plus.htmlhelp.alias.absolute</keyword></entry>
+                        <entry>Computed from <keyword>plus.htmlhelp.alias</keyword></entry>
+                        <entry>Absolute path of alias file. Passed to <keyword>map2hhp</keyword>
+                            XSLT as <keyword>HELPALIAS</keyword>.</entry>
+                    </row>
+                    <row>
+                        <entry colname="col1">
+                            <keyword>plus.htmlhelp.map</keyword>
+                        </entry>
+                        <entry colname="col02">Specified by user.</entry>
+                        <entry colname="col2">Path (relative to basedir) of map file.</entry>
+                    </row>
+                    <row>
+                        <entry><keyword>plus.htmlhelp.map.absolute</keyword></entry>
+                        <entry>Computed from <keyword>plus.htmlhelp.map</keyword></entry>
+                        <entry>Absolute path of map file. Passed to <keyword>map2hhp</keyword> XSLT
+                            as <keyword>HELPMAP</keyword>.</entry>
+                    </row>
+                </tbody>
+            </tgroup>
+        </table>
+    </refbody>
+</reference>

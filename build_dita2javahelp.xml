@@ -59,9 +59,10 @@
         <xslt processor="trax"
               basedir="${dita.temp.dir}"
               destdir="${output.dir}"
-              includes="${user.input.file}"
+              includesfile="${dita.temp.dir}${file.separator}${user.input.file.listfile}"
               classpathref="dost.class.path"
               style="${dita.script.dir}${file.separator}map2javahelptoc.xsl">
+        	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
             <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
             <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
             <mapper type="glob"
@@ -76,9 +77,10 @@
         <xslt processor="trax"
             basedir="${dita.temp.dir}"
             destdir="${output.dir}"
-            includes="${user.input.file}"
+            includesfile="${dita.temp.dir}${file.separator}${user.input.file.listfile}"
             classpathref="dost.class.path"
             style="${dita.script.dir}${file.separator}map2javahelptoc.xsl">
+        	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
             <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
             <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
             <mapper type="glob"
@@ -93,9 +95,10 @@
         <xslt processor="trax"
               basedir="${dita.temp.dir}"
               destdir="${output.dir}"
-              includes="${user.input.file}"
+              includesfile="${dita.temp.dir}${file.separator}${user.input.file.listfile}"
               classpathref="dost.class.path"
               style="${dita.script.dir}${file.separator}map2javahelpmap.xsl">
+        	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
             <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
             <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
             <mapper type="glob"
@@ -110,9 +113,10 @@
         <xslt processor="trax"
             basedir="${dita.temp.dir}"
             destdir="${output.dir}"
-            includes="${user.input.file}"
+            includesfile="${dita.temp.dir}${file.separator}${user.input.file.listfile}"
             classpathref="dost.class.path"
             style="${dita.script.dir}${file.separator}map2javahelpmap.xsl">
+        	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
             <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
             <param name="OUTEXT" expression="${out.ext}" if="out.ext" />
             <mapper type="glob"
@@ -122,16 +126,20 @@
     </target>
 
     <target name="dita.map.javahelp.set"
-            depends="dita.map.javahelp.init" if="old.transform"
+            depends="dita.map.javahelp.init, dita.map.javahelp.map" if="old.transform"
             description="Build JavaHelp Set file">
         <xslt processor="trax"
               basedir="${dita.temp.dir}"
               destdir="${output.dir}"
-              includes="${user.input.file}"
+              includesfile="${dita.temp.dir}${file.separator}${user.input.file.listfile}"
               classpathref="dost.class.path"
               style="${dita.script.dir}${file.separator}map2javahelpset.xsl">
+        	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
             <param name="javahelpmap" expression="${args.javahelp.map}" />
             <param name="javahelptoc" expression="${args.javahelp.toc}" />
+        	<param name="basedir" expression="${basedir}"/>
+        	<param name="outputdir" expression="${output.dir}"/>
+        	<!--param name="outputdir" expression="${dita.dir}${file.separator}${output.dir}${file.separator}" /-->
             <mapper type="glob"
                     from="*${dita.input.filename}"
                     to="*${dita.map.toc.root}_helpset.hs" />
@@ -139,16 +147,20 @@
     </target>
     
     <target name="dita.out.map.javahelp.set"
-        depends="dita.map.javahelp.init" if="inner.transform"
+        depends="dita.map.javahelp.init, dita.out.map.javahelp.map" if="inner.transform"
         description="Build JavaHelp Set file">
         <xslt processor="trax"
             basedir="${dita.temp.dir}"
             destdir="${output.dir}"
-            includes="${user.input.file}"
+            includesfile="${dita.temp.dir}${file.separator}${user.input.file.listfile}"
             classpathref="dost.class.path"
             style="${dita.script.dir}${file.separator}map2javahelpset.xsl">
+        	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
             <param name="javahelpmap" expression="${args.javahelp.map}" />
             <param name="javahelptoc" expression="${args.javahelp.toc}" />
+        	<param name="basedir" expression="${basedir}"/>
+        	<param name="outputdir" expression="${output.dir}"/>
+        	<!--param name="outputdir" expression="${dita.dir}${file.separator}${output.dir}${file.separator}" /-->
             <mapper type="glob"
                 from="${user.input.file}"
                 to="${dita.map.toc.root}_helpset.hs" />

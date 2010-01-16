@@ -3,7 +3,7 @@
      Sourceforge.net. See the accompanying license.txt file for 
      applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
-
+<!-- Updated 20081229 to add sr-rs as alternative to sr-sp   -->
 <langlist>
     <lang xml:lang="ar"    filename="strings-ar-eg.xml"/>
     <lang xml:lang="ar-eg" filename="strings-ar-eg.xml"/>
@@ -28,6 +28,7 @@
     <lang xml:lang="en-us" filename="strings-en-us.xml"/>
     <lang xml:lang="es"    filename="strings-es-es.xml"/>
     <lang xml:lang="es-es" filename="strings-es-es.xml"/>
+    <lang xml:lang="es-419" filename="strings-es-es.xml"/>
     <lang xml:lang="et"    filename="strings-et-ee.xml"/>
     <lang xml:lang="et-ee" filename="strings-et-ee.xml"/>
     <lang xml:lang="fi"    filename="strings-fi-fi.xml"/>
@@ -43,6 +44,8 @@
     <lang xml:lang="hr-hr" filename="strings-hr-hr.xml"/>
     <lang xml:lang="hu"    filename="strings-hu-hu.xml"/>
     <lang xml:lang="hu-hu" filename="strings-hu-hu.xml"/>
+    <lang xml:lang="hi"    filename="strings-hi-in.xml"/>
+    <lang xml:lang="hi-in" filename="strings-hi-in.xml"/>
     <lang xml:lang="is"    filename="strings-is-is.xml"/>
     <lang xml:lang="is-is" filename="strings-is-is.xml"/>
     <lang xml:lang="it"    filename="strings-it-it.xml"/>
@@ -77,7 +80,9 @@
     <lang xml:lang="sl"    filename="strings-sl-si.xml"/>
     <lang xml:lang="sl-si" filename="strings-sl-si.xml"/>
     <lang xml:lang="sr"    filename="strings-sr-sp.xml"/>
+    <lang xml:lang="sr-rs" filename="strings-sr-sp.xml"/>
     <lang xml:lang="sr-sp" filename="strings-sr-sp.xml"/>
+    <lang xml:lang="sr-latn-rs" filename="strings-sr-latn-rs.xml"/>
     <lang xml:lang="sv"    filename="strings-sv-se.xml"/>
     <lang xml:lang="sv-se" filename="strings-sv-se.xml"/>
     <lang xml:lang="th"    filename="strings-th-th.xml"/>
@@ -86,7 +91,11 @@
     <lang xml:lang="tr-tr" filename="strings-tr-tr.xml"/>
     <lang xml:lang="uk"    filename="strings-uk-ua.xml"/>
     <lang xml:lang="uk-ua" filename="strings-uk-ua.xml"/>
+    <lang xml:lang="ur"    filename="strings-ur-pk.xml"/>
+    <lang xml:lang="ur-pk" filename="strings-ur-pk.xml"/>
     <lang xml:lang="zh"    filename="strings-zh-cn.xml"/>
     <lang xml:lang="zh-cn" filename="strings-zh-cn.xml"/>
+    <lang xml:lang="zh-hans" filename="strings-zh-cn.xml"/>
     <lang xml:lang="zh-tw" filename="strings-zh-tw.xml"/>
+    <lang xml:lang="zh-hant" filename="strings-zh-tw.xml"/>
 </langlist>

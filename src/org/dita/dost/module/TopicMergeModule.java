@@ -29,14 +29,13 @@ import org.dita.dost.pipeline.PipelineHashIO;
 import org.dita.dost.reader.MergeMapParser;
 import org.dita.dost.util.Constants;
 
-/**
- * 
- * The module handles topic merge in issues as PDF
+/** 
+ * The module handles topic merge in issues as PDF. 
  */
 public class TopicMergeModule implements AbstractPipelineModule {
 	
 	/**
-	 * Default Constructor
+	 * Default Constructor.
 	 *
 	 */
 	public TopicMergeModule() {
@@ -45,9 +44,11 @@ public class TopicMergeModule implements AbstractPipelineModule {
 	}
 	
 	/**
-	 * Module execution point
+	 * Entry point of TopicMergeModule.
 	 * @see org.dita.dost.module.AbstractPipelineModule#execute(org.dita.dost.pipeline.AbstractPipelineInput)
-	 * @author Stephen
+	 * @param input Input parameters and resources.
+	 * @return null
+	 * @throws DITAOTException exception
 	 */
 	public AbstractPipelineOutput execute(AbstractPipelineInput input)
 			throws DITAOTException {
@@ -58,6 +59,8 @@ public class TopicMergeModule implements AbstractPipelineModule {
 		.getAttribute(Constants.ANT_INVOKER_EXT_PARAM_STYLE);
 		String out = ((PipelineHashIO) input)
 		.getAttribute(Constants.ANT_INVOKER_EXT_PARAM_OUTPUT);
+		String tempdir = ((PipelineHashIO) input)
+		.getAttribute(Constants.ANT_INVOKER_PARAM_TEMPDIR);
 		OutputStreamWriter output = null;
 		DITAOTJavaLogger logger = new DITAOTJavaLogger();
 		MergeMapParser mapParser = new MergeMapParser();
@@ -77,8 +80,9 @@ public class TopicMergeModule implements AbstractPipelineModule {
 		
 		
 
-		mapParser.read(ditaInput);
-		midResult = new StringBuffer(Constants.XML_HEAD).append("<dita-merge>")
+		mapParser.read(ditaInput+"|"+tempdir);
+		midResult = new StringBuffer(Constants.XML_HEAD).append(
+				"<dita-merge xmlns:ditaarch=\"http://dita.oasis-open.org/architecture/2005/\">")
 			.append(((StringBuffer)mapParser.getContent().getValue())).append("</dita-merge>").toString();
 		midStream = new StringReader(midResult);
 		

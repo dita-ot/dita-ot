@@ -149,13 +149,16 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:attribute name="start-indent">body-start()</xsl:attribute>
     </xsl:attribute-set>
 
+    <!-- SF Bug 1815571: page-break-after must be on fo:table rather than fo:table-body
+                         in order to produce valid XSL-FO 1.1 output. -->
     <xsl:attribute-set name="__toc__mini__table">
         <xsl:attribute name="table-layout">fixed</xsl:attribute>
         <xsl:attribute name="width">100%</xsl:attribute>
+        <xsl:attribute name="page-break-after">always</xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="__toc__mini__table__body">
-        <xsl:attribute name="page-break-after">always</xsl:attribute>
+        <!-- SF Bug 1815571: moved page-break-after to __toc__mini__table -->
     </xsl:attribute-set>
 
     <xsl:attribute-set name="__toc__mini__table__column_1">

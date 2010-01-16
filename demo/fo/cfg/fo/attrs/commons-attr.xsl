@@ -106,7 +106,7 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:attribute-set name="topic.topic.topic.topic.title">
         <xsl:attribute name="font-family">Sans</xsl:attribute>
-        <xsl:attribute name="font-size">10pt</xsl:attribute>
+        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
         <xsl:attribute name="margin-top">10pt</xsl:attribute>
         <xsl:attribute name="margin-left">25pt</xsl:attribute>
         <xsl:attribute name="font-weight">bold</xsl:attribute>
@@ -118,7 +118,7 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:attribute-set name="topic.topic.topic.topic.topic.title">
         <xsl:attribute name="font-family">Sans</xsl:attribute>
-        <xsl:attribute name="font-size">10pt</xsl:attribute>
+        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
         <xsl:attribute name="margin-left">25pt</xsl:attribute>
         <xsl:attribute name="font-weight">bold</xsl:attribute>
         <xsl:attribute name="keep-with-next.within-column">always</xsl:attribute>
@@ -129,7 +129,7 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:attribute-set name="topic.topic.topic.topic.topic.topic.title">
         <xsl:attribute name="font-family">Sans</xsl:attribute>
-        <xsl:attribute name="font-size">10pt</xsl:attribute>
+        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
         <xsl:attribute name="margin-left">25pt</xsl:attribute>
         <xsl:attribute name="font-style">italic</xsl:attribute>
         <xsl:attribute name="keep-with-next.within-column">always</xsl:attribute>
@@ -157,7 +157,7 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:attribute-set name="fig.title">
         <xsl:attribute name="font-family">Sans</xsl:attribute>
-        <xsl:attribute name="font-size">10pt</xsl:attribute>
+        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
         <xsl:attribute name="font-weight">bold</xsl:attribute>
         <xsl:attribute name="space-before.optimum">5pt</xsl:attribute>
         <xsl:attribute name="space-after.optimum">10pt</xsl:attribute>
@@ -165,7 +165,7 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:attribute-set>
 
     <xsl:attribute-set name="topic">
-        <xsl:attribute name="font-size">10pt</xsl:attribute>
+        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="titlealts">
@@ -192,17 +192,17 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:attribute-set name="body__toplevel">
         <xsl:attribute name="margin-left">25pt</xsl:attribute>
-        <xsl:attribute name="font-size">10pt</xsl:attribute>
+        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="body__secondLevel">
         <xsl:attribute name="margin-left">25pt</xsl:attribute>
-        <xsl:attribute name="font-size">10pt</xsl:attribute>
+        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="body">
         <xsl:attribute name="margin-left">25pt</xsl:attribute>
-        <xsl:attribute name="font-size">10pt</xsl:attribute>
+        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="shortdesc">
@@ -214,13 +214,13 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:attribute-set name="section">
         <xsl:attribute name="line-height">12pt</xsl:attribute>
         <xsl:attribute name="space-before">0.6em</xsl:attribute>
-        <xsl:attribute name="font-size">10pt</xsl:attribute>
+        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="example">
         <xsl:attribute name="line-height">12pt</xsl:attribute>
         <xsl:attribute name="space-before">0.6em</xsl:attribute>
-        <xsl:attribute name="font-size">10pt</xsl:attribute>
+        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
         <xsl:attribute name="margin-left">0.5in</xsl:attribute>
         <xsl:attribute name="margin-right">0.5in</xsl:attribute>
         <xsl:attribute name="border">thin solid black</xsl:attribute>
@@ -234,11 +234,11 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:attribute-set name="prolog">
         <xsl:attribute name="start-indent">72pt</xsl:attribute>
-        <xsl:attribute name="font-size">10pt</xsl:attribute>
+        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="p">
-<!--        <xsl:attribute name="font-size">10pt</xsl:attribute>-->
+<!--        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>-->
         <xsl:attribute name="text-indent">0em</xsl:attribute>
         <xsl:attribute name="space-before">0.6em</xsl:attribute>
         <xsl:attribute name="space-after">0.6em</xsl:attribute>
@@ -246,7 +246,7 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:attribute-set>
 
     <xsl:attribute-set name="lq">
-        <xsl:attribute name="font-size">10pt</xsl:attribute>
+        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
         <xsl:attribute name="space-before">10pt</xsl:attribute>
         <xsl:attribute name="padding-left">6pt</xsl:attribute>
         <xsl:attribute name="start-indent">92pt</xsl:attribute>
@@ -258,7 +258,7 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:attribute-set>
 
     <xsl:attribute-set name="lq_simple">
-        <xsl:attribute name="font-size">10pt</xsl:attribute>
+        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
         <xsl:attribute name="space-before">10pt</xsl:attribute>
         <xsl:attribute name="space-after">10pt</xsl:attribute>
         <xsl:attribute name="padding-left">6pt</xsl:attribute>
@@ -271,7 +271,7 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:attribute-set>
 
     <xsl:attribute-set name="lq_link">
-        <xsl:attribute name="font-size">10pt</xsl:attribute>
+        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
         <xsl:attribute name="space-after">10pt</xsl:attribute>
         <xsl:attribute name="end-indent">92pt</xsl:attribute>
         <xsl:attribute name="text-align">right</xsl:attribute>
@@ -281,7 +281,7 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:attribute-set>
 
     <xsl:attribute-set name="lq_title">
-        <xsl:attribute name="font-size">10pt</xsl:attribute>
+        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
         <xsl:attribute name="space-after">10pt</xsl:attribute>
         <xsl:attribute name="end-indent">92pt</xsl:attribute>
         <xsl:attribute name="text-align">right</xsl:attribute>
@@ -364,7 +364,7 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:attribute name="background-color">#f0f0f0</xsl:attribute>
         <xsl:attribute name="font-family">Monospaced</xsl:attribute>
         <xsl:attribute name="line-height">106%</xsl:attribute>
-        <xsl:attribute name="font-size">10pt</xsl:attribute>
+        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
     </xsl:attribute-set>
 
     <xsl:attribute-set name="__spectitle">
@@ -395,7 +395,7 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:attribute-set>
 
     <xsl:attribute-set name="lines">
-        <xsl:attribute name="font-size">10pt</xsl:attribute>
+        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
         <xsl:attribute name="space-before">0.8em</xsl:attribute>
         <xsl:attribute name="space-after">0.8em</xsl:attribute>
 <!--        <xsl:attribute name="white-space-treatment">ignore-if-after-linefeed</xsl:attribute>-->
@@ -481,7 +481,7 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:attribute name="provisional-distance-between-starts">8mm</xsl:attribute>
         <xsl:attribute name="provisional-label-separation">2mm</xsl:attribute>
         <xsl:attribute name="line-height">1.2</xsl:attribute>
-        <xsl:attribute name="font-size">10pt</xsl:attribute>
+        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
         <xsl:attribute name="start-indent">0pt</xsl:attribute>
     </xsl:attribute-set>
 
@@ -613,41 +613,6 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:attribute-set name="refsyn">
     </xsl:attribute-set>
 
-    <xsl:attribute-set name="task">
-    </xsl:attribute-set>
-
-    <xsl:attribute-set name="taskbody">
-    </xsl:attribute-set>
-
-    <xsl:attribute-set name="prereq">
-    </xsl:attribute-set>
-
-    <xsl:attribute-set name="context">
-    </xsl:attribute-set>
-
-    <xsl:attribute-set name="cmd">
-    </xsl:attribute-set>
-
-    <xsl:attribute-set name="info">
-        <xsl:attribute name="space-before.optimum">3pt</xsl:attribute>
-        <xsl:attribute name="space-after.optimum">3pt</xsl:attribute>
-    </xsl:attribute-set>
-
-    <xsl:attribute-set name="tutorialinfo">
-    </xsl:attribute-set>
-
-    <xsl:attribute-set name="stepresult">
-    </xsl:attribute-set>
-
-    <xsl:attribute-set name="result">
-    </xsl:attribute-set>
-
-    <xsl:attribute-set name="postreq">
-    </xsl:attribute-set>
-
-    <xsl:attribute-set name="stepxmp">
-    </xsl:attribute-set>
-
     <xsl:attribute-set name="metadata">
     </xsl:attribute-set>
 
@@ -669,7 +634,7 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:attribute-set name="__fo__root">
         <xsl:attribute name="font-family">Serif</xsl:attribute>
-        <xsl:attribute name="font-size">10pt</xsl:attribute>
+        <xsl:attribute name="font-size"><xsl:value-of select="$default-font-size"/></xsl:attribute>
         <xsl:attribute name="rx:link-back">true</xsl:attribute>
     </xsl:attribute-set>
 

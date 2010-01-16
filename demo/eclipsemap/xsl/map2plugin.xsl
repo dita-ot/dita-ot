@@ -36,9 +36,10 @@
   <xsl:param name="dita.plugin.output" />
   <xsl:param name="plugin"/>
 
-  <xsl:variable name="newline"><xsl:text>
-</xsl:text>
-  </xsl:variable>
+  <xsl:variable name="newline">
+<xsl:text>&#10;</xsl:text></xsl:variable>
+
+
   
   
 
@@ -82,14 +83,16 @@
 
   </xsl:template>
 
-  <xsl:template match="*[contains(@class,' eclipsemap/plugin ')]">
+  <xsl:template match="*[contains(@class,' eclipsemap/plugin ')]" mode="eclipse.plugin">
       <xsl:value-of select="$newline"/>
       <plugin>
-        <xsl:apply-templates select="@id"/>
+        <!--
+         <xsl:apply-templates select="@id"/>
         <xsl:apply-templates select="*[contains(@class,' eclipsemap/pluginmeta ')]/*[contains(@class,' eclipsemap/plugininfo ')]/*[contains(@class,' eclipsemap/pluginname ')]" mode="plugin"/>
         <xsl:apply-templates select="*[contains(@class,' eclipsemap/pluginmeta ')]/*[contains(@class,' eclipsemap/providerName ')]" mode="plugin"/>
         <xsl:apply-templates select="*[contains(@class,' eclipsemap/pluginmeta ')]/*[contains(@class,' eclipsemap/plugininfo ')]/*[contains(@class,' topic/vrmlist ')]" mode="plugin"/>
-        <xsl:apply-templates select="*[contains(@class,' eclipsemap/pluginmeta ')]/*[contains(@class,' eclipsemap/controllingPlugin ')]" mode="plugin"/>
+        -->
+          <xsl:apply-templates select="*[contains(@class,' eclipsemap/pluginmeta ')]/*[contains(@class,' eclipsemap/controllingPlugin ')]" mode="plugin"/>
         <xsl:if test="*[contains(@class,' eclipsemap/tocref ')][not(@toc='no')]|*[contains(@class,' eclipsemap/primarytocref ')][not(@toc='no')]">
         
           <xsl:value-of select="$newline"/>
@@ -363,11 +366,16 @@
     
   </xsl:template>
   
-  <xsl:template name="eclipse.manifest.init" mode="eclipse.manifest">
+  <xsl:template name="eclipse.manifest.init" mode="eclipse.manifest" match="*">
     <xsl:text>Manifest-Version: 1.0</xsl:text><xsl:value-of select="$newline"/>
     <xsl:text>Bundle-ManifestVersion: 2</xsl:text><xsl:value-of select="$newline"/>
     <xsl:text>Bundle-Localization: plugin</xsl:text><xsl:value-of select="$newline"/>
     <xsl:text>Bundle-Name: %name</xsl:text><xsl:value-of select="$newline"/>
+    <!--  Fix for Eclipse defect 2871017 -->
+  <xsl:if test="not(*[contains(@class,' eclipsemap/pluginmeta ')]/*[contains(@class,' eclipsemap/plugininfo ')]/*[contains(@class,' topic/vrmlist ')]/*[contains(@class,' topic/vrm ')][position() = 1]/@version > 0)">
+      <xsl:text>Bundle-Version: 1.0.0</xsl:text><xsl:value-of select="$newline"/>
+  </xsl:if>
+    
     <xsl:text>Bundle-Vendor: %providerName</xsl:text><xsl:value-of select="$newline"/>
     <xsl:choose>
       <xsl:when test="$plugin='true'">
@@ -377,7 +385,7 @@
             <xsl:text>Bundle-SymbolicName: </xsl:text><xsl:value-of select="@id"/>;<xsl:text> singleton:=true</xsl:text><xsl:value-of select="$newline"/>
           </xsl:when>
           <xsl:otherwise>
-            <xsl:text>Bundle-SymbolicName: </xsl:text><xsl:value-of select="@id"/>;<xsl:text> singleton:=true</xsl:text><xsl:value-of select="$newline"/>
+            <xsl:text>Bundle-SymbolicName: org.sample.help.doc; singleton:=true</xsl:text><xsl:value-of select="$newline"/>
             <xsl:call-template name="output-message">
               <xsl:with-param name="msgnum">050</xsl:with-param>
               <xsl:with-param name="msgsev">W</xsl:with-param>
@@ -400,7 +408,25 @@
           </xsl:when>
           <xsl:otherwise>
             
-            <xsl:text>Bundle-SymbolicName: org.sample.help.doc.</xsl:text>
+            <!--  <xsl:text>Bundle-SymbolicName: org.sample.help.doc.</xsl:text> -->
+            <xsl:text>Bundle-SymbolicName: org.sample.help.doc</xsl:text>
+            <!--   <xsl:choose>
+              <xsl:when test="$fragment.lang!=''">
+                <xsl:choose>
+                  <xsl:when test="$fragment.country!=''">
+                    <xsl:value-of select="$fragment.lang"/>.<xsl:value-of select="$fragment.country"/>;<xsl:text/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <xsl:value-of select="$fragment.lang"/>;<xsl:text/>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:text>lang; </xsl:text>
+              </xsl:otherwise>
+            </xsl:choose>  -->
+            <xsl:value-of select="$newline"/>
+            <xsl:text>Fragment-Host: org.sample.help.doc.</xsl:text>
             <xsl:choose>
               <xsl:when test="$fragment.lang!=''">
                 <xsl:choose>
@@ -418,7 +444,6 @@
               </xsl:otherwise>
             </xsl:choose>
             <xsl:value-of select="$newline"/>
-            <xsl:text>Fragment-Host: org.sample.help.doc.nl1;</xsl:text><xsl:value-of select="$newline"/>
             <xsl:call-template name="output-message">
               <xsl:with-param name="msgnum">050</xsl:with-param>
               <xsl:with-param name="msgsev">W</xsl:with-param>

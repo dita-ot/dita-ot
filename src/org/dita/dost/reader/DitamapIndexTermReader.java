@@ -11,7 +11,6 @@
 package org.dita.dost.reader;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Stack;
 
@@ -74,21 +73,56 @@ public class DitamapIndexTermReader extends AbstractXMLReader {
 	 */
 	public void characters(char[] ch, int start, int length)
 			throws SAXException {
-		String temp = new String(ch, start, length).trim();
+		//SF Bug 2010062: Do not trim white space from text nodes. Convert newline
+		//                to space, but leave all spaces. Also do not drop space-only nodes.
+		String temp = new String(ch, start, length);
 		IndexTerm indexTerm = null;
-		boolean withSpace = (ch[start] == '\n' || temp.startsWith(Constants.LINE_SEPARATOR));
-
-		if (temp.length() == 0) {
-			return;
+		//boolean withSpace = (ch[start] == '\n' || temp.startsWith(Constants.LINE_SEPARATOR));
+		if (ch[start] == '\n' || temp.startsWith(Constants.LINE_SEPARATOR)) {
+			temp = " " + temp.substring(1);
 		}
 
+//		if (temp.length() == 0) {
+//			return;
+//		}
+		
+		//TODO Added by William on 2009-05-22 for space bug:2793836 start
+		//used for store the space
+		char[] chars = temp.toCharArray();
+		char flag = '\n';
+		//used for store the new String
+		StringBuffer sb = new StringBuffer();
+		for(char c : chars){
+			//when a whitespace is met
+			if(c==' '){
+				//this is the first whitespace
+				if(flag!=' '){
+					//put it in the result string
+					sb.append(c);
+					//store the space in the flag
+					flag = c;
+				}else{
+					//abundant space, ignore it
+					continue;
+				}
+			//the consecutive whitespace is interrupted
+			}else{
+				//put it in the result string
+				sb.append(c);
+				//clear the flag
+				flag = c;	
+			}
+		}
+		temp = sb.toString();
+		//TODO Added by William on 2009-05-22 for space bug:2793836 end
+		
 		if (elementStack.empty() || !(elementStack.peek() instanceof IndexTerm)) {
 			return;
 		}
 
 		indexTerm = (IndexTerm) elementStack.peek();
 		
-		indexTerm.setTermName(StringUtils.setOrAppend(indexTerm.getTermName(), temp, withSpace));
+		indexTerm.setTermName(StringUtils.setOrAppend(indexTerm.getTermName(), temp, false));
 
 	}
 
@@ -109,7 +143,7 @@ public class DitamapIndexTermReader extends AbstractXMLReader {
 			IndexTerm indexTerm = (IndexTerm) elementStack.pop();
 			Object obj = null;
 
-			if (indexTerm.getTermName() == null) {
+			if (indexTerm.getTermName() == null || indexTerm.getTermName().trim().equals("")) {
 				if(indexTerm.getEndAttribute() != null && !indexTerm.hasSubTerms()){
 					return;
 				}else{
@@ -125,8 +159,10 @@ public class DitamapIndexTermReader extends AbstractXMLReader {
 			obj = elementStack.peek();
 
 			if (obj instanceof TopicrefElement) {
-				genTargets(indexTerm, (TopicrefElement)obj);
-				IndexTermCollection.getInstantce().addTerm(indexTerm);
+				if(((TopicrefElement)obj).getHref()!=null){
+					genTargets(indexTerm, (TopicrefElement)obj);
+					IndexTermCollection.getInstantce().addTerm(indexTerm);
+				}				
 			} else {
 				IndexTerm parentTerm = (IndexTerm) obj;
 				parentTerm.addSubTerm(indexTerm);
@@ -328,7 +364,7 @@ public class DitamapIndexTermReader extends AbstractXMLReader {
 //			return ((TopicrefElement) elementStack.peek()).needExtractTerm();
 			// for dita files the indexterm has been moved to its <prolog>
 			// therefore we don't need to collect these terms again.
-			if (FileUtils.isDITAFile(((TopicrefElement) elementStack.peek()).getHref().toLowerCase())){
+			if (FileUtils.isDITAFile(((TopicrefElement) elementStack.peek()).getHref())){
 				return false;
 			}
 		}
@@ -338,7 +374,7 @@ public class DitamapIndexTermReader extends AbstractXMLReader {
 	/**
 	 * Set map path.
 	 * 
-	 * @param mappath
+	 * @param mappath path of map file
 	 */
 	public void setMapPath(String mappath) {
 		this.mapPath = mappath;

@@ -3,10 +3,13 @@
  | (C) Copyright IBM Corporation 2005 - 2006. All Rights Reserved.
  *-->
 <plugin id="org.dita.specialization.apiref">
-  <feature extension="dita.specialization.catalog"
+  <feature extension="package.version" value="0.9.0"/>
+  <feature extension="dita.specialization.catalog.relative"
       value="catalog-dita.xml" type="file"/>
   <feature extension="dita.xsl.xhtml"
       value="xsl/apiref2xhtml.xsl" type="file"/>
-  <feature extension="dita.conductor.target"
+  <feature extension="dita.conductor.target.relative"
       value="conductor.xml" type="file"/>
+  <feature extension="dita.xsl.strings"
+      value="xsl/apistrings.xml" type="file"/>
 </plugin>

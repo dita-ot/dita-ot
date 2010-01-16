@@ -14,7 +14,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
@@ -55,10 +54,10 @@ public class IndexTermExtractModule implements AbstractPipelineModule {
 	private String baseInputDir = null;
 
 	/** The list of topics */
-	private List topicList = null;
+	private List<String> topicList = null;
 
 	/** The list of ditamap files */
-	private List ditamapList = null;
+	private List<String> ditamapList = null;
 
 	private DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
 
@@ -69,7 +68,6 @@ public class IndexTermExtractModule implements AbstractPipelineModule {
 	}
 
 	/**
-	 * (non-Javadoc)
 	 * 
 	 * @see org.dita.dost.module.AbstractPipelineModule#execute(org.dita.dost.pipeline.AbstractPipelineInput)
 	 */
@@ -95,6 +93,7 @@ public class IndexTermExtractModule implements AbstractPipelineModule {
 		String outputRoot = null;
 		int lastIndexOfDot;
 		String ditalist;
+		String resource_only_list;
 		Properties params = new Properties();
 		PipelineHashIO hashIO = (PipelineHashIO) input;
 		
@@ -107,6 +106,9 @@ public class IndexTermExtractModule implements AbstractPipelineModule {
 				.getAttribute(Constants.ANT_INVOKER_EXT_PARAM_ENCODING);
 		String indextype = hashIO
 				.getAttribute(Constants.ANT_INVOKER_EXT_PARAM_INDEXTYPE);
+		
+		String indexclass = hashIO
+				.getAttribute(Constants.ANT_INVOKER_EXT_PARAM_INDEXCLASS);
 		
 		inputMap = hashIO.getAttribute(Constants.ANT_INVOKER_PARAM_INPUTMAP);
 		targetExt = hashIO
@@ -140,27 +142,32 @@ public class IndexTermExtractModule implements AbstractPipelineModule {
 		 */
 		tokenizer = new StringTokenizer(prop
 				.getProperty(Constants.FULL_DITA_TOPIC_LIST), Constants.COMMA);
-		topicList = new ArrayList(tokenizer.countTokens());
+		resource_only_list = prop.getProperty(Constants.RESOURCE_ONLY_LIST, "");
+		topicList = new ArrayList<String>(tokenizer.countTokens());
 		while (tokenizer.hasMoreTokens()) {
-			topicList.add(tokenizer.nextToken());
+			String t = tokenizer.nextToken();
+			if (!resource_only_list.contains(t))
+				topicList.add(t);
 		}
 
 		tokenizer = new StringTokenizer(prop
 				.getProperty(Constants.FULL_DITAMAP_LIST), Constants.COMMA);
-		ditamapList = new ArrayList(tokenizer.countTokens());
+		ditamapList = new ArrayList<String>(tokenizer.countTokens());
 		while (tokenizer.hasMoreTokens()) {
-			ditamapList.add(tokenizer.nextToken());
+			String t = tokenizer.nextToken();
+			if (!resource_only_list.contains(t))
+				ditamapList.add(t);
 		}
 		
 		lastIndexOfDot = output.lastIndexOf(".");
 		outputRoot = (lastIndexOfDot == -1) ? output : output.substring(0,
 				lastIndexOfDot);
+
 		IndexTermCollection.getInstantce().setOutputFileRoot(outputRoot);
 		IndexTermCollection.getInstantce().setIndexType(indextype);
+		IndexTermCollection.getInstantce().setIndexClass(indexclass);
 
 		if (encoding != null && encoding.trim().length() > 0) {
-//			Locale locale = new Locale(encoding.substring(0, 2), encoding
-//					.substring(3, 5));
 			IndexTerm.setTermLocale(StringUtils.getLocale(encoding));
 		}
 	}
@@ -198,10 +205,12 @@ public class IndexTermExtractModule implements AbstractPipelineModule {
 						.toString());
 				
 				try {
-					if(!new File(baseInputDir, target).exists()){
+					//removed by Alan on Date:2009-11-02 for Work Item:#1590 start
+					/*if(!new File(baseInputDir, target).exists()){
 						javaLogger.logWarn("Cannot find file "+ target);
 						continue;
-					}
+					}*/
+					//removed by Alan on Date:2009-11-02 for Work Item:#1590 end
 					inputStream = new FileInputStream(
 							new File(baseInputDir, target));
 					xmlReader.parse(new InputSource(inputStream));
@@ -231,10 +240,12 @@ public class IndexTermExtractModule implements AbstractPipelineModule {
 
 				ditamapIndexTermReader.setMapPath(mapPathFromInputMap);
 				try {
-					if(!new File(baseInputDir, ditamap).exists()){
+					//removed by Alan on Date:2009-11-02 for Work Item:#1590 start
+					/*if(!new File(baseInputDir, ditamap).exists()){
 						javaLogger.logWarn("Cannot find file "+ ditamap);
 						continue;
-					}
+					}*/
+					//end by Alan on Date:2009-11-02 for Work Item:#1590 start
 					inputStream = new FileInputStream(new File(baseInputDir,
 							ditamap));
 					xmlReader.parse(new InputSource(inputStream));

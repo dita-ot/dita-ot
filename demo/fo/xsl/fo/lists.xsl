@@ -31,6 +31,9 @@ This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
 See the accompanying license.txt file for applicable licenses.
 -->
 
+<!-- Elements for steps have been relocated to task-elements.xsl -->
+<!-- Templates for <dl> are in tables.xsl -->
+
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:fo="http://www.w3.org/1999/XSL/Format"
     version="1.1">
@@ -134,114 +137,6 @@ See the accompanying license.txt file for applicable licenses.
                 </fo:block>
             </fo:list-item-body>
 
-        </fo:list-item>
-    </xsl:template>
-
-    <!--Steps-->
-    <xsl:template match="*[contains(@class, ' task/steps ')]">
-        <fo:list-block xsl:use-attribute-sets="steps" id="{@id}">
-            <xsl:apply-templates/>
-        </fo:list-block>
-    </xsl:template>
-
-    <xsl:template match="*[contains(@class, ' task/steps-unordered ')]">
-        <fo:list-block xsl:use-attribute-sets="steps-unordered" id="{@id}">
-            <xsl:apply-templates/>
-        </fo:list-block>
-    </xsl:template>
-
-    <xsl:template match="*[contains(@class, ' task/steps ')]/*[contains(@class, ' task/step ')]">
-        <fo:list-item xsl:use-attribute-sets="steps.step">
-            <fo:list-item-label xsl:use-attribute-sets="steps.step__label">
-				<xsl:if test="preceding-sibling::*[contains(@class, ' task/step ')] | following-sibling::*[contains(@class, ' task/step ')]">
-					<fo:block xsl:use-attribute-sets="steps.step__label__content">
-						<fo:inline id="{@id}"/>
-							<xsl:call-template name="insertVariable">
-								<xsl:with-param name="theVariableID" select="'Ordered List Number'"/>
-								<xsl:with-param name="theParameters">
-									<number>
-										<xsl:number/>
-									</number>
-								</xsl:with-param>
-							</xsl:call-template>
-					</fo:block>
-				</xsl:if>
-            </fo:list-item-label>
-
-            <fo:list-item-body xsl:use-attribute-sets="steps.step__body">
-                <fo:block xsl:use-attribute-sets="steps.step__content">
-                    <xsl:apply-templates/>
-                </fo:block>
-            </fo:list-item-body>
-
-        </fo:list-item>
-    </xsl:template>
-
-    <xsl:template match="*[contains(@class, ' task/steps-unordered ')]/*[contains(@class, ' task/step ')]">
-        <fo:list-item xsl:use-attribute-sets="steps-unordered.step">
-            <fo:list-item-label xsl:use-attribute-sets="steps-unordered.step__label">
-                <fo:block xsl:use-attribute-sets="steps-unordered.step__label__content">
-                    <fo:inline id="{@id}"/>
-                    <xsl:call-template name="insertVariable">
-                        <xsl:with-param name="theVariableID" select="'Unordered List bullet'"/>
-                    </xsl:call-template>
-                </fo:block>
-            </fo:list-item-label>
-
-            <fo:list-item-body xsl:use-attribute-sets="steps-unordered.step__body">
-                <fo:block xsl:use-attribute-sets="steps-unordered.step__content">
-                    <xsl:apply-templates/>
-                </fo:block>
-            </fo:list-item-body>
-
-        </fo:list-item>
-    </xsl:template>
-
-    <!--Substeps-->
-    <xsl:template match="*[contains(@class, ' task/substeps ')]">
-        <fo:list-block xsl:use-attribute-sets="substeps" id="{@id}">
-            <xsl:apply-templates/>
-        </fo:list-block>
-    </xsl:template>
-
-    <xsl:template match="*[contains(@class, ' task/substeps ')]/*[contains(@class, ' task/substep ')]">
-        <fo:list-item xsl:use-attribute-sets="substeps.substep">
-            <fo:list-item-label xsl:use-attribute-sets="substeps.substep__label">
-                <fo:block xsl:use-attribute-sets="substeps.substep__label__content">
-                    <fo:inline id="{@id}"/>
-                	<xsl:number format="a) "/>
-                </fo:block>
-            </fo:list-item-label>
-            <fo:list-item-body xsl:use-attribute-sets="substeps.substep__body">
-                <fo:block xsl:use-attribute-sets="substeps.substep__content">
-                    <xsl:apply-templates/>
-                </fo:block>
-            </fo:list-item-body>
-        </fo:list-item>
-    </xsl:template>
-
-    <!--Choices-->
-    <xsl:template match="*[contains(@class, ' task/choices ')]">
-        <fo:list-block xsl:use-attribute-sets="choices" id="{@id}">
-            <xsl:apply-templates/>
-        </fo:list-block>
-    </xsl:template>
-
-    <xsl:template match="*[contains(@class, ' task/choice ')]">
-        <fo:list-item xsl:use-attribute-sets="choices.choice">
-            <fo:list-item-label xsl:use-attribute-sets="choices.choice__label">
-                <fo:block xsl:use-attribute-sets="choices.choice__label__content">
-                    <fo:inline id="{@id}"/>
-                    <xsl:call-template name="insertVariable">
-                        <xsl:with-param name="theVariableID" select="'Unordered List bullet'"/>
-                    </xsl:call-template>
-                </fo:block>
-            </fo:list-item-label>
-            <fo:list-item-body xsl:use-attribute-sets="choices.choice__body">
-                <fo:block xsl:use-attribute-sets="choices.choice__content">
-                    <xsl:apply-templates/>
-                </fo:block>
-            </fo:list-item-body>
         </fo:list-item>
     </xsl:template>
 

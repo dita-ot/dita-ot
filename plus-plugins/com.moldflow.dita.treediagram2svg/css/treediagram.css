@@ -1,0 +1,11 @@
+@namespace "http://www.w3.org/2000/svg";
+
+svg[class="treediagram"] g[class~="boxed"] > rect {
+    fill: none;
+    stroke: black;
+}
+
+svg[class="treediagram"] polyline {
+  fill: none;
+  stroke: black;
+}

@@ -1,0 +1,578 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference id="reference_plus-htmlhelp-hhp-windows-configfile"><title><keyword
+            >plus-htmlhelp-hhp-windows-configfile</keyword></title><abstract>
+        <shortdesc>The <keyword>plus-htmlhelp-hhp-windows-configfile</keyword> module creates a
+                <codeph>[WINDOWS]</codeph> section in an HTML Help project (<filepath
+            >*.hhp</filepath>) file using a configuration file.</shortdesc>
+        <p>The configuration file is an XML file with root element <keyword>windows</keyword>.Each
+            child element called <keyword>window</keyword> corresponds to one row in the resulting
+                <codeph>[WINDOWS]</codeph> section.</p>
+    </abstract><refbody>
+        <section>
+            <title>Plugin ID</title>
+            <p><apiname>com.moldflow.dita.plus-htmlhelp-hhp-windows-configfile</apiname></p>
+        </section>
+        <section>
+            <title>Prerequisite plugins</title>
+            <ul>
+                <li><apiname>com.moldflow.dita.plus-htmlhelp-hhp-modular</apiname></li>
+            </ul>
+        </section>
+        <section>
+            <title>XSLT requirements</title>
+            <p>An XSLT 1.0 or later processor. An XSLT 2.0 processor is recommended.</p>
+        </section>
+        <section>
+            <title>Ant requirements</title>
+            <p>None.</p>
+        </section>
+        <section>
+            <title>Java requirements</title>
+            <p>None.</p>
+        </section>
+        <section>
+            <title>Limitations</title>
+            <p>None.</p>
+        </section>
+        <table id="table_88E41E91DE074FA3BFB2209B742D8BB3">
+            <title>Ant properties defined in <keyword>plus-htmlhelp-hhp-windows-configfile</keyword></title>
+            <tgroup cols="3">
+                <colspec colnum="1" colname="col1" colwidth="1.00*"/>
+                <colspec colname="col02" colnum="2" colwidth="1.29*"/>
+                <colspec colnum="3" colname="col2" colwidth="1.34*"/>
+                <thead>
+                    <row>
+                        <entry colname="col1">Name</entry>
+                        <entry colname="col02">Value</entry>
+                        <entry colname="col2">Description</entry>
+                    </row>
+                </thead>
+                <tbody>
+                    <row>
+                        <entry colname="col1">
+                            <keyword>plus.htmlhelp.windows.configfile</keyword>
+                        </entry>
+                        <entry colname="col02">Specified by user.</entry>
+                        <entry colname="col2">Path (relative to basedir) of windows configuration
+                            file.</entry>
+                    </row>
+                    <row>
+                        <entry><keyword>plus.htmlhelp.windows.configfile.url</keyword></entry>
+                        <entry>Computed from <keyword>plus.htmlhelp.windows.configfile</keyword></entry>
+                        <entry>Absolute path of windows configuration file.</entry>
+                    </row>
+                </tbody>
+            </tgroup>
+        </table>
+        <table id="table_88E41E91DE074FA3BFB2209B742D8BB3">
+            <title>Window configuration properties defined in <keyword
+                    >plus-htmlhelp-hhp-windows-configfile</keyword></title>
+            <tgroup cols="3">
+                <colspec colnum="1" colname="col1" colwidth="1.00*"/>
+                <colspec colname="col02" colnum="2" colwidth="1.29*"/>
+                <colspec colnum="3" colname="col2" colwidth="1.34*"/>
+                <thead>
+                    <row>
+                        <entry colname="col1">XPath</entry>
+                        <entry colname="col02">Default value</entry>
+                        <entry colname="col2">Description</entry>
+                    </row>
+                </thead>
+                <tbody>
+                    <row>
+                        <entry colname="col1">
+                            <codeph>/windows/window/@type</codeph>
+                        </entry>
+                        <entry colname="col02">None.</entry>
+                        <entry colname="col2">Window type.<p>The window type is named in invocations
+                                of <codeph>HtmlHelp()</codeph> as the part of the data string
+                                following the <codeph>></codeph> character. Each window type may
+                                have independent properties.</p></entry>
+                    </row>
+                    <row>
+                        <entry colname="col1">
+                            <codeph>/windows/window/@searchtab</codeph>
+                        </entry>
+                        <entry colname="col02"><codeph>yes</codeph></entry>
+                        <entry colname="col2">Display a full-text-search tab in the navigation
+                        pane.</entry>
+                    </row>
+                    <row>
+                        <entry colname="col1">
+                            <codeph>/windows/window/@historytab</codeph>
+                        </entry>
+                        <entry colname="col02"><codeph>no</codeph></entry>
+                        <entry colname="col2">Display a history tab in the navigation pane.</entry>
+                    </row>
+                    <row>
+                        <entry colname="col1">
+                            <codeph>/windows/window/@favoritestab</codeph>
+                        </entry>
+                        <entry colname="col02"><codeph>yes</codeph></entry>
+                        <entry colname="col2">Display a favorites tab in the navigation
+                        pane.</entry>
+                    </row>
+                    <row>
+                        <entry colname="col1">
+                            <codeph>/windows/window/@indextab</codeph>
+                        </entry>
+                        <entry colname="col02"><codeph>yes</codeph></entry>
+                        <entry colname="col2">Display an index tab in the navigation pane.</entry>
+                    </row>
+                    <row>
+                        <entry colname="col1">
+                            <codeph>/windows/window/@defaulttopic</codeph>
+                        </entry>
+                        <entry colname="col02">First topic in map.</entry>
+                        <entry colname="col2">The path, relative to the map, of the topic that is
+                            displayed when the user first opens the help.</entry>
+                    </row>
+                    <row>
+                        <entry colname="col1">
+                            <codeph>/windows/window/@hometopic</codeph>
+                        </entry>
+                        <entry colname="col02">First topic in map.</entry>
+                        <entry colname="col2">The path, relative to the map, of the topic that is
+                            displayed when the user presses the <keyword>Home</keyword> toolbar
+                            button.</entry>
+                    </row>
+                    <row>
+                        <entry colname="col1">
+                            <codeph>/windows/window/@jump1topic</codeph>
+                        </entry>
+                        <entry colname="col02">None.</entry>
+                        <entry colname="col2">The path, relative to the map, of the topic that is
+                            displayed when the user presses the <keyword>Jump 1</keyword> toolbar
+                            button.</entry>
+                    </row>
+                    <row>
+                        <entry colname="col1">
+                            <codeph>/windows/window/@jump2topic</codeph>
+                        </entry>
+                        <entry colname="col02">None.</entry>
+                        <entry colname="col2">The path, relative to the map, of the topic that is
+                            displayed when the user presses the <keyword>Jump 2</keyword> toolbar
+                            button.</entry>
+                    </row>
+                    <row>
+                        <entry colname="col1">
+                            <codeph>/windows/window/@jump1text</codeph>
+                        </entry>
+                        <entry colname="col02">None.</entry>
+                        <entry colname="col2">The text that accompanies the <keyword>Jump
+                            1</keyword> button in the toolbar.<note>This is poor
+                                internationalization.  This behaviour may change.</note></entry>
+                    </row>
+                    <row>
+                        <entry colname="col1">
+                            <codeph>/windows/window/@jump2text</codeph>
+                        </entry>
+                        <entry colname="col02">None.</entry>
+                        <entry colname="col2">The text that accompanies the <keyword>Jump
+                            2</keyword> button in the toolbar.<note>This is poor
+                                internationalization.  This behaviour may change.</note></entry>
+                    </row>
+                    <row>
+                        <entry colname="col1">
+                            <codeph>/windows/window/@hideshow</codeph>
+                        </entry>
+                        <entry colname="col02"><codeph>normal</codeph></entry>
+                        <entry colname="col2">When set to <codeph>auto</codeph>, the navigation pane
+                            hides itself when the help window loses focus.</entry>
+                    </row>
+                    <row>
+                        <entry colname="col1">
+                            <codeph>/windows/window/@titlebar</codeph>
+                        </entry>
+                        <entry colname="col02"><codeph>yes</codeph></entry>
+                        <entry colname="col2">Display the title bar of the help window.</entry>
+                    </row>
+                    <row>
+                        <entry colname="col1">
+                            <codeph>/windows/window/@alwaysontop</codeph>
+                        </entry>
+                        <entry colname="col02"><codeph>no</codeph></entry>
+                        <entry colname="col2">The help window is always in front of other
+                        windows.</entry>
+                    </row>
+                    <row>
+                        <entry colname="col1">
+                            <codeph>/windows/window/@windowstyles</codeph>
+                        </entry>
+                        <entry colname="col02"><codeph>default</codeph></entry>
+                        <entry colname="col2">Set to <codeph>nodefault</codeph> when this window is
+                            embedded in another window.</entry>
+                    </row>
+                    <row>
+                        <entry colname="col1">
+                            <codeph>/windows/window/@extendedwindowstyles</codeph>
+                        </entry>
+                        <entry colname="col02"><codeph>default</codeph></entry>
+                        <entry colname="col2">Set to <codeph>nodefault</codeph> when this window is
+                            embedded in another window.</entry>
+                    </row>
+                    <row>
+                        <entry colname="col1">
+                            <codeph>/windows/window/@tripane</codeph>
+                        </entry>
+                        <entry colname="col02"><codeph>yes</codeph></entry>
+                        <entry colname="col2">Set to <codeph>no</codeph> to disable the tri-pane
+                            window.</entry>
+                    </row>
+                    <row>
+                        <entry colname="col1">
+                            <codeph>/windows/window/@toolbarbuttontext</codeph>
+                        </entry>
+                        <entry colname="col02"><codeph>yes</codeph></entry>
+                        <entry colname="col2">Set to <codeph>no</codeph> to use smaller toolbar
+                            buttons with no text.</entry>
+                    </row>
+                    <row>
+                        <entry colname="col1">
+                            <codeph>/windows/window/@sendquitmessage</codeph>
+                        </entry>
+                        <entry colname="col02"><codeph>no</codeph></entry>
+                        <entry colname="col2">Window sends a <codeph>WM_QUIT</codeph> message when
+                            it is closed.</entry>
+                    </row>
+                    <row>
+                        <entry colname="col1">
+                            <codeph>/windows/window/@syncpanes</codeph>
+                        </entry>
+                        <entry colname="col02"><codeph>yes</codeph></entry>
+                        <entry colname="col2">Synchronize the navigation pane with the content
+                        pane.</entry>
+                    </row>
+                    <row>
+                        <entry colname="col1">
+                            <codeph>/windows/window/@sendtrackingmessages</codeph>
+                        </entry>
+                        <entry colname="col02"><codeph>no</codeph></entry>
+                        <entry colname="col2">Send tracking notification messages.</entry>
+                    </row>
+                    <row>
+                        <entry colname="col1">
+                            <codeph>/windows/window/@currentintitlebar</codeph>
+                        </entry>
+                        <entry colname="col02"><codeph>no</codeph></entry>
+                        <entry colname="col2">Put the current HTML topic's title in the title
+                        bar.</entry>
+                    </row>
+                    <row>
+                        <entry colname="col1">
+                            <codeph>/windows/window/@hidecontentwindow</codeph>
+                        </entry>
+                        <entry colname="col02"><codeph>no</codeph></entry>
+                        <entry colname="col2">Only display the navigation window.</entry>
+                    </row>
+                    <row>
+                        <entry colname="col1">
+                            <codeph>/windows/window/@hidetoolbar</codeph>
+                        </entry>
+                        <entry colname="col02"><codeph>no</codeph></entry>
+                        <entry colname="col2">Hide the toolbar.</entry>
+                    </row>
+                    <row>
+                        <entry colname="col1">
+                            <codeph>/windows/window/@msdnmenu</codeph>
+                        </entry>
+                        <entry colname="col02"><codeph>no</codeph></entry>
+                        <entry colname="col2">MSDN menu.</entry>
+                    </row>
+                    <row>
+                        <entry colname="col1">
+                            <codeph>/windows/window/@advancedsearch</codeph>
+                        </entry>
+                        <entry colname="col02"><codeph>yes</codeph></entry>
+                        <entry colname="col2">Use advanced user interface in full-text-search
+                        tab.</entry>
+                    </row>
+                    <row>
+                        <entry colname="col1">
+                            <codeph>/windows/window/@remembersize</codeph>
+                        </entry>
+                        <entry colname="col02"><codeph>yes</codeph></entry>
+                        <entry colname="col2">User controls the window's position and size after
+                            first opening.</entry>
+                    </row>
+                    <row>
+                        <entry colname="col1">
+                            <codeph>/windows/window/@customtabs</codeph>
+                        </entry>
+                        <entry colname="col02">None.</entry>
+                        <entry colname="col2">Space-separated list of custom tabs (1 to 9) to
+                            display.</entry>
+                    </row>
+                    <row>
+                        <entry colname="col1">
+                            <codeph>/windows/window/@windowmargin</codeph>
+                        </entry>
+                        <entry colname="col02"><codeph>no</codeph></entry>
+                        <entry colname="col2">The window type has a margin.</entry>
+                    </row>
+                    <row>
+                        <entry colname="col1">
+                            <codeph>/windows/window/@navwidth</codeph>
+                        </entry>
+                        <entry colname="col02">None.</entry>
+                        <entry colname="col2">Width of the navigation pane in pixels.</entry>
+                    </row>
+                    <row>
+                        <entry colname="col1">
+                            <codeph>/windows/window/@x</codeph>
+                        </entry>
+                        <entry colname="col02">100</entry>
+                        <entry colname="col2">Left edge of window.</entry>
+                    </row>
+                    <row>
+                        <entry colname="col1">
+                            <codeph>/windows/window/@y</codeph>
+                        </entry>
+                        <entry colname="col02">100</entry>
+                        <entry colname="col2">Top edge of window.</entry>
+                    </row>
+                    <row>
+                        <entry colname="col1">
+                            <codeph>/windows/window/@width</codeph>
+                        </entry>
+                        <entry colname="col02">300</entry>
+                        <entry colname="col2">Width of window, including navigation pane if
+                        any.</entry>
+                    </row>
+                    <row>
+                        <entry colname="col1">
+                            <codeph>/windows/window/@height</codeph>
+                        </entry>
+                        <entry colname="col02">200</entry>
+                        <entry colname="col2">Height of window.</entry>
+                    </row>
+                    <row>
+                        <entry colname="col1">
+                            <codeph>/windows/window/@style</codeph>
+                        </entry>
+                        <entry colname="col02">0xb0000</entry>
+                        <entry colname="col2">Win32 CreateWindow style.</entry>
+                    </row>
+                    <row>
+                        <entry colname="col1">
+                            <codeph>/windows/window/@exstyle</codeph>
+                        </entry>
+                        <entry colname="col02">0x0</entry>
+                        <entry colname="col2">Win32 CreateWindowEx style.</entry>
+                    </row>
+                    <row>
+                        <entry colname="col1">
+                            <codeph>/windows/window/@showstate</codeph>
+                        </entry>
+                        <entry colname="col02">None.</entry>
+                        <entry colname="col2">Win32 ShowWindow state.</entry>
+                    </row>
+                    <row>
+                        <entry colname="col1">
+                            <codeph>/windows/window/@navigationstart</codeph>
+                        </entry>
+                        <entry colname="col2"><codeph>open</codeph></entry>
+                        <entry>Set to <codeph>closed</codeph> for navigation pane to start in hidden
+                            state.</entry>
+                    </row>
+                    <row>
+                        <entry colname="col1">
+                            <codeph>/windows/window/@navigationdefault</codeph>
+                        </entry>
+                        <entry colname="col02"><codeph>toc</codeph></entry>
+                        <entry colname="col2">Tab to display in navigation pane by default.
+                            Allowable values: <codeph>toc</codeph>, <codeph>index</codeph>, <codeph
+                                >search</codeph>, <codeph>favorites</codeph>, <codeph
+                            >history</codeph>, <codeph>author</codeph>, <codeph>custom<varname
+                                >n</varname></codeph> (where <varname>n</varname> is from 1 to
+                        9).</entry>
+                    </row>
+                    <row>
+                        <entry colname="col1">
+                            <codeph>/windows/window/@tabposition</codeph>
+                        </entry>
+                        <entry colname="col02"><codeph>top</codeph></entry>
+                        <entry colname="col02">Position of tabs in navigation pane. Allowable
+                            values: <codeph>top</codeph> or <codeph>left</codeph> or <codeph
+                            >bottom</codeph>.</entry>
+                    </row>
+                    <row>
+                        <entry colname="col1">
+                            <codeph>/windows/window/@notifyid</codeph>
+                        </entry>
+                        <entry colname="col02">None.</entry>
+                        <entry colname="col2">ID used for <codeph>WM_NOTIFY</codeph>
+                        messages.</entry>
+                    </row>
+                    <row>
+                        <entry colname="col1">
+                            <codeph>/windows/window/buttons/@hideshow</codeph>
+                        </entry>
+                        <entry colname="col02"><codeph>yes</codeph></entry>
+                        <entry colname="col2">Include button in toolbar: Hide/Show navigation
+                        pane.</entry>
+                    </row>
+                    <row>
+                        <entry colname="col1">
+                            <codeph>/windows/window/buttons/@back</codeph>
+                        </entry>
+                        <entry colname="col02"><codeph>yes</codeph></entry>
+                        <entry colname="col2">Include button in toolbar: Go to prior topic in
+                            history.</entry>
+                    </row>
+                    <row>
+                        <entry colname="col1">
+                            <codeph>/windows/window/buttons/@forward</codeph>
+                        </entry>
+                        <entry colname="col02"><codeph>no</codeph></entry>
+                        <entry colname="col2">Include button in toolbar: Go to following topic in
+                            history.</entry>
+                    </row>
+                    <row>
+                        <entry colname="col1">
+                            <codeph>/windows/window/buttons/@stop</codeph>
+                        </entry>
+                        <entry colname="col02"><codeph>no</codeph></entry>
+                        <entry colname="col2">Include button in toolbar: Stop displaying the
+                        page.</entry>
+                    </row>
+                    <row>
+                        <entry colname="col1">
+                            <codeph>/windows/window/buttons/@refresh</codeph>
+                        </entry>
+                        <entry colname="col02"><codeph>no</codeph></entry>
+                        <entry colname="col2">Include button in toolbar: Reload the page.</entry>
+                    </row>
+                    <row>
+                        <entry colname="col1">
+                            <codeph>/windows/window/buttons/@home</codeph>
+                        </entry>
+                        <entry colname="col02"><codeph>yes</codeph></entry>
+                        <entry colname="col2">Include button in toolbar: Go to home topic</entry>
+                    </row>
+                    <row>
+                        <entry colname="col1">
+                            <codeph>/windows/window/buttons/@next</codeph>
+                        </entry>
+                        <entry colname="col02"><codeph>no</codeph></entry>
+                        <entry colname="col2">Include button in toolbar: Next.</entry>
+                    </row>
+                    <row>
+                        <entry colname="col1">
+                            <codeph>/windows/window/buttons/@previous</codeph>
+                        </entry>
+                        <entry colname="col02"><codeph>no</codeph></entry>
+                        <entry colname="col2">Include button in toolbar: Previous.</entry>
+                    </row>
+                    <row>
+                        <entry colname="col1">
+                            <codeph>/windows/window/buttons/@notes</codeph>
+                        </entry>
+                        <entry colname="col02"><codeph>no</codeph></entry>
+                        <entry colname="col2">Include button in toolbar: Notes.</entry>
+                    </row>
+                    <row>
+                        <entry colname="col1">
+                            <codeph>/windows/window/buttons/@contents</codeph>
+                        </entry>
+                        <entry colname="col02"><codeph>no</codeph></entry>
+                        <entry colname="col2">Include button in toolbar: Contents.</entry>
+                    </row>
+                    <row>
+                        <entry colname="col1">
+                            <codeph>/windows/window/buttons/@locate</codeph>
+                        </entry>
+                        <entry colname="col02"><codeph>no</codeph></entry>
+                        <entry colname="col2">Include button in toolbar: Show current topic in
+                        ToC.</entry>
+                    </row>
+                    <row>
+                        <entry colname="col1">
+                            <codeph>/windows/window/buttons/@options</codeph>
+                        </entry>
+                        <entry colname="col02"><codeph>yes</codeph></entry>
+                        <entry colname="col2">Include button in toolbar: Options.</entry>
+                    </row>
+                    <row>
+                        <entry colname="col1">
+                            <codeph>/windows/window/buttons/@print</codeph>
+                        </entry>
+                        <entry colname="col02"><codeph>yes</codeph></entry>
+                        <entry colname="col2">Include button in toolbar: Print.</entry>
+                    </row>
+                    <row>
+                        <entry colname="col1">
+                            <codeph>/windows/window/buttons/@index</codeph>
+                        </entry>
+                        <entry colname="col02"><codeph>no</codeph></entry>
+                        <entry colname="col2">Include button in toolbar: Index.</entry>
+                    </row>
+                    <row>
+                        <entry colname="col1">
+                            <codeph>/windows/window/buttons/@search</codeph>
+                        </entry>
+                        <entry colname="col02"><codeph>no</codeph></entry>
+                        <entry colname="col2">Include button in toolbar: Search.</entry>
+                    </row>
+                    <row>
+                        <entry colname="col1">
+                            <codeph>/windows/window/buttons/@history</codeph>
+                        </entry>
+                        <entry colname="col02"><codeph>no</codeph></entry>
+                        <entry colname="col2">Include button in toolbar: History.</entry>
+                    </row>
+                    <row>
+                        <entry colname="col1">
+                            <codeph>/windows/window/buttons/@favorites</codeph>
+                        </entry>
+                        <entry colname="col02"><codeph>no</codeph></entry>
+                        <entry colname="col2">Include button in toolbar: Favorites.</entry>
+                    </row>
+                    <row>
+                        <entry colname="col1">
+                            <codeph>/windows/window/buttons/@jump1</codeph>
+                        </entry>
+                        <entry colname="col02"><codeph>no</codeph></entry>
+                        <entry colname="col2">Include button in toolbar: Jump 1.<p>If the <codeph
+                                    >@jump1topic</codeph> or <codeph>@jump1text</codeph> attributes
+                                are set, this button is included.</p></entry>
+                    </row>
+                    <row>
+                        <entry colname="col1">
+                            <codeph>/windows/window/buttons/@jump2</codeph>
+                        </entry>
+                        <entry colname="col02"><codeph>no</codeph></entry>
+                        <entry colname="col2">Include button in toolbar: Jump 2.<p>If the <codeph
+                                    >@jump2topic</codeph> or <codeph>@jump2text</codeph> attributes
+                                are set, this button is included.</p></entry>
+                    </row>
+                    <row>
+                        <entry colname="col1">
+                            <codeph>/windows/window/buttons/@font</codeph>
+                        </entry>
+                        <entry colname="col02"><codeph>no</codeph></entry>
+                        <entry colname="col2">Include button in toolbar: Set the font size.<note
+                                type="attention">Setting the font size in HTML Help viewer changes
+                                the font size in all Internet Explorer windows.</note></entry>
+                    </row>
+                    <row>
+                        <entry colname="col1">
+                            <codeph>/windows/window/buttons/@nextcontents</codeph>
+                        </entry>
+                        <entry colname="col02"><codeph>no</codeph></entry>
+                        <entry colname="col2">Include button in toolbar: Go to next topic in
+                        ToC.</entry>
+                    </row>
+                    <row>
+                        <entry colname="col1">
+                            <codeph>/windows/window/buttons/@prevcontents</codeph>
+                        </entry>
+                        <entry colname="col02"><codeph>no</codeph></entry>
+                        <entry colname="col2">Include button in toolbar: Go to previous topic in
+                        ToC</entry>
+                    </row>
+                </tbody>
+            </tgroup>
+        </table>
+    </refbody></reference>

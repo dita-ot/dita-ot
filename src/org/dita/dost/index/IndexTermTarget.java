@@ -12,17 +12,17 @@ package org.dita.dost.index;
 import org.dita.dost.util.Constants;
 
 /**
- * This class represent the target of the index term.
+ * This class represent the target of an index term.
  * 
  * @version 1.0 2005-05-11
  * 
  * @author Wu, Zhi Qiang
  */
 public class IndexTermTarget {
-    /** Name of the target */
+    /** Name (title) of the target topic. */
     private String targetName = null;
 
-    /** URI of the target */
+    /** URI of the target topic. */
     private String targetURI = null;
 
     /**
@@ -32,7 +32,7 @@ public class IndexTermTarget {
     }
 
     /**
-     * Get the target's name.
+     * Get the target topic's name (title).
      * 
      * @return Returns the targetName.
      */
@@ -41,17 +41,15 @@ public class IndexTermTarget {
     }
 
     /**
-     * Set the target's name.
-     * 
-     * @param name
-     *            The targetName to set.
+     * Set the target topic's name (title).
+     * @param name The targetName to set.         
      */
     public void setTargetName(String name) {
         this.targetName = name;
     }
 
     /**
-     * Get the target's target uri.
+     * Get the target topic's URI.
      * 
      * @return Returns the targetURI.
      */
@@ -60,19 +58,18 @@ public class IndexTermTarget {
     }
 
     /**
-     * Set the target url.
-     * 
-     * @param uri
-     *            The targetURI to set.
+     * Set the target topic's URI.
+     * @param uri The targetURI to set.
      */
     public void setTargetURI(String uri) {
         this.targetURI = uri;
     }
 
     /**
-     * The index term target will be equal if they have same name and uri value.
+     * The index term targets will be equal if the target topics have same name and URI value.
      * 
-     * @param obj
+     * @param obj object to compare
+     * @return boolean true if equals
      */
     public boolean equals(Object obj) {
         if (obj instanceof IndexTermTarget) {
@@ -88,7 +85,8 @@ public class IndexTermTarget {
     }
     
     /**
-     * Generate hash code for IndexTerm
+     * Generate hash code for IndexTermTarget.
+     * @return has code.
      */
     public int hashCode() {
         int result = Constants.INT_17;
@@ -100,8 +98,9 @@ public class IndexTermTarget {
     }
 
 	/** 
-	 * Generate String for IndexTerm
+	 * Generate String for IndexTermTarget, with the format "{Target name: name, Target URL: uri}".
 	 * @see java.lang.Object#toString()
+	 * @return string
 	 */
 	public String toString() {
 		return new StringBuffer("{Target name: ").append(targetName).append(

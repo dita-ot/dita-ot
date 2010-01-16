@@ -25,10 +25,10 @@ public interface AbstractPipelineModule {
 	/**
 	 * Start the process of this module with the input.
 	 * 
-	 * @param input
-	 * @return
+	 * @param input input
+	 * @return output
 	 * @author Lian, Li
-	 * @throws DITAOTException
+	 * @throws DITAOTException DITAOTException
 	 */
 	AbstractPipelineOutput execute(AbstractPipelineInput input)
 			throws DITAOTException;

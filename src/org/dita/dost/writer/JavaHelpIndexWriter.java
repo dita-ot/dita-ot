@@ -29,12 +29,12 @@ import org.dita.dost.module.Content;
  * 
  * @author Wu, Zhi Qiang
  */
-public class JavaHelpIndexWriter implements AbstractWriter {
+public class JavaHelpIndexWriter implements AbstractWriter, IDitaTranstypeIndexWriter {
 	/** List of indexterms */
 	private List termList = null;
 	
 	/**
-	 * Default constructor
+	 * Default constructor.
 	 */
 	public JavaHelpIndexWriter() {
 	}
@@ -51,8 +51,8 @@ public class JavaHelpIndexWriter implements AbstractWriter {
 	/**
 	 * Output the java help index to the output stream.
      * 
-	 * @param outputStream
-	 * @throws UnsupportedEncodingException 
+	 * @param outputStream outputStream
+	 * @throws UnsupportedEncodingException encoding not supported exception
 	 */
 	public void write(OutputStream outputStream) throws UnsupportedEncodingException {
 		PrintWriter printWriter = null;
@@ -82,7 +82,7 @@ public class JavaHelpIndexWriter implements AbstractWriter {
 		}
 	}
 	
-	/** (non-Javadoc)
+	/**
 	 * @see org.dita.dost.writer.AbstractWriter#write(java.lang.String)
 	 */
 	public void write(String filename) throws DITAOTException {		
@@ -143,6 +143,19 @@ public class JavaHelpIndexWriter implements AbstractWriter {
 			}
 		}		
 		
+	}
+	/**
+	 * Get index file name.
+	 * @param outputFileRoot root
+	 * @return index file name
+	 */
+	public String getIndexFileName(String outputFileRoot) {
+		StringBuffer indexFilename;
+		
+		indexFilename = new StringBuffer(outputFileRoot);
+		indexFilename.append("_index.xml");
+		// TODO Auto-generated method stub
+		return indexFilename.toString();
 	}
 
 }

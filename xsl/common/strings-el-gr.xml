@@ -56,6 +56,14 @@
 <str name="Prerequisites">Προϋποθέσεις</str>
 <str name="or">ή</str>
 
+<!--Task section labels -->
+<str name="task_context">Σχετικά με αυτή την εργασία</str>
+<str name="task_example">Παράδειγμα</str>
+<str name="task_postreq">Επόμενες ενέργειες</str>
+<str name="task_prereq">Πριν ξεκινήσετε</str>
+<str name="task_procedure">Διαδικασία</str>
+<str name="task_results">Αποτελέσματα</str>
+
 <str name="Copyright">Copyright</str>
 
 <!-- Symbols -->

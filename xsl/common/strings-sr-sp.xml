@@ -3,8 +3,10 @@
     Sourceforge.net. See the accompanying license.txt file for 
     applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
+<!-- Note that this file is used when the toolkit encounters
+     xml:lang="sr-sp" as well as xml:lang="sr-rs" -->
 
-<strings xml:lang="sr-sp">        <!-- Serbian -->
+<strings xml:lang="sr">        <!-- Serbian -->
 
 <!-- various labels (not author controlled) -->
 <str name="Figure">Илустрација</str>
@@ -55,6 +57,14 @@
 <str name="Prerequisite">Предуслов</str>
 <str name="Prerequisites">Предуслови</str>
 <str name="or">or</str>
+
+<!--Task section labels -->
+<str name="task_context">О овом задатку</str>
+<str name="task_example">Пример</str>
+<str name="task_postreq">Шта урадити следеће</str>
+<str name="task_prereq">Пре него што почнете</str>
+<str name="task_procedure">Поступак</str>
+<str name="task_results">Резултат</str>
 
 <str name="Copyright">Copyright</str>
 

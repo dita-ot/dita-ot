@@ -5,6 +5,12 @@
 <!-- (c) Copyright IBM Corp. 2006 All Rights Reserved. -->
 <project name="ditaot-preprocess" basedir=".">
 
+  <!-- Set to "true" if you get out-of-memory errors during preprocess
+       while processing very large (thousands of files) document sets. -->
+  <condition property="dita.preprocess.reloadstylesheet" value="false">
+    <not><isset property="dita.preprocess.reloadstylesheet"/></not>
+  </condition>
+
   <target name="preprocess"
     depends="start-preprocess,clean-temp,gen-list,debug-filter,copy-files,conref,move-meta-entries,mapref,mappull,chunk,maplink,move-links,topicpull"
     description="Preprocessing ended" />
@@ -88,9 +94,13 @@
 
   <target name="conref" unless="noConref" depends="debug-filter"
     description="Resolve conref in input files">
+    <condition property="dita.preprocess.reloadstylesheet.conref" value="${dita.preprocess.reloadstylesheet}">
+      <not><isset property="dita.preprocess.reloadstylesheet.conref"/></not>
+    </condition>
     <xslt processor="trax" basedir="${dita.temp.dir}"
-      destdir="${dita.temp.dir}" includes="${conreflist}"
+      destdir="${dita.temp.dir}" includesfile="${dita.temp.dir}${file.separator}${conreffile}"
       classpathref="dost.class.path"
+      reloadstylesheet="${dita.preprocess.reloadstylesheet.conref}"
       style="${dita.script.dir}${file.separator}preprocess${file.separator}conref.xsl">
       <mapper type="glob" from="*" to="*.cnrf" />
       <param name="DITAEXT" expression="${dita.ext}" />
@@ -103,14 +113,18 @@
   
   <target name="mapref" unless="noMap" depends="move-meta-entries"
     description="Resolve mapref in ditamap">
+    <condition property="dita.preprocess.reloadstylesheet.mapref" value="${dita.preprocess.reloadstylesheet}">
+      <not><isset property="dita.preprocess.reloadstylesheet.mapref"/></not>
+    </condition>
     <dirname property="mapref.workdir"
       file="${dita.temp.dir}${file.separator}${user.input.file}" />
     <xslt processor="trax"
     	basedir="${dita.temp.dir}"
     	destdir="${dita.temp.dir}"
-    	includes="${fullditamaplist}"
+        includesfile="${dita.temp.dir}${file.separator}${fullditamapfile}"
     	extension=".ditamap.ref"
         classpathref="dost.class.path"
+        reloadstylesheet="${dita.preprocess.reloadstylesheet.mapref}"
       style="${dita.script.dir}${file.separator}preprocess${file.separator}mapref.xsl">
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
       <param name="TRANSTYPE" expression="${transtype}" />
@@ -125,12 +139,16 @@
     description="Pull the navtitle and topicmeta from topics to ditamap">
     <dirname property="mappull.workdir"
       file="${dita.temp.dir}${file.separator}${user.input.file}" />
+    <condition property="dita.preprocess.reloadstylesheet.mappull" value="${dita.preprocess.reloadstylesheet}">
+      <not><isset property="dita.preprocess.reloadstylesheet.mappull"/></not>
+    </condition>
     <xslt processor="trax"
   	    basedir="${dita.temp.dir}"
     	destdir="${dita.temp.dir}"
-  	    includes="${fullditamaplist}"
+        includesfile="${dita.temp.dir}${file.separator}${fullditamapfile}"
     	extension=".ditamap.pull"
         classpathref="dost.class.path"
+        reloadstylesheet="${dita.preprocess.reloadstylesheet.mappull}"
       style="${dita.script.dir}${file.separator}preprocess${file.separator}mappull.xsl">
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
       <param name="TRANSTYPE" expression="${transtype}" />
@@ -154,10 +172,14 @@
     description="Find and generate related link information">
     <dirname property="maplink.workdir"
       file="${dita.temp.dir}/${user.input.file}" />
+    <condition property="dita.preprocess.reloadstylesheet.maplink" value="${dita.preprocess.reloadstylesheet}">
+      <not><isset property="dita.preprocess.reloadstylesheet.maplink"/></not>
+    </condition>
     <xslt processor="trax"
       in="${dita.temp.dir}${file.separator}${user.input.file}"
       out="${maplink.workdir}${file.separator}maplinks.unordered"
       classpathref="dost.class.path"
+      reloadstylesheet="${dita.preprocess.reloadstylesheet.maplink}"
       style="${dita.script.dir}${file.separator}preprocess${file.separator}maplink.xsl">
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
       <param name="INPUTMAP" expression="${user.input.file}" />
@@ -173,10 +195,15 @@
 
   <target name="topicpull" unless="noTopic" depends="debug-filter"
     description="Pull metadata for link and xref element">
+    <condition property="dita.preprocess.reloadstylesheet.topicpull" value="${dita.preprocess.reloadstylesheet}">
+      <not><isset property="dita.preprocess.reloadstylesheet.topicpull"/></not>
+    </condition>
     <xslt processor="trax" basedir="${dita.temp.dir}"
-      destdir="${dita.temp.dir}" includes="${fullditatopiclist} ${chunkedtopiclist}"
+      destdir="${dita.temp.dir}" includesfile="${dita.temp.dir}${file.separator}${fullditatopicfile}"
       classpathref="dost.class.path"
+      reloadstylesheet="${dita.preprocess.reloadstylesheet.topicpull}"
       style="${dita.script.dir}${file.separator}preprocess${file.separator}topicpull.xsl">
+      <includesfile name="${dita.temp.dir}${file.separator}${chunkedtopicfile}" if="chunkedtopicfile"/>
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
       <param name="ONLYTOPICINMAP" expression="${onlytopic.in.map}" if="onlytopic.in.map"/>
       <mapper type="glob" from="*" to="*.pull" />

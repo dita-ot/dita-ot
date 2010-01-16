@@ -27,13 +27,13 @@ public class DITAOTFailTask extends Exit {
 	private Properties prop = null;
 
 	/**
-	 * Default Construtor
+	 * Default Construtor.
 	 *
 	 */
 	public DITAOTFailTask(){
 	}
 	/**
-	 * Set the id
+	 * Set the id.
 	 * @param identifier The id to set.
 	 * 
 	 */
@@ -56,7 +56,8 @@ public class DITAOTFailTask extends Exit {
 	}
 
 	/**
-	 * Task execute point
+	 * Task execute point.
+	 * @throws BuildException exception
 	 * @see org.apache.tools.ant.taskdefs.Exit#execute()
 	 */
 	public void execute() throws BuildException {

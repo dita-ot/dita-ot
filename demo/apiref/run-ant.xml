@@ -3,7 +3,9 @@
  | (C) Copyright IBM Corporation 2005 - 2006. All Rights Reserved.
  *-->
 <project name="apiref" default="all" basedir="..\..">
-    <import file="${basedir}${file.separator}conductor.xml"/>
+    <import file="${basedir}${file.separator}build.xml"/>
+
+    <dirname property="apiref.dir" file="${ant.file.apiref}"/>
 
 	<target name="all"
         description="build all API Reference sample output"
@@ -13,37 +15,37 @@
 	<target name="apirefSample2xhtml"
         description="build HTML for the API Reference samples"
         depends="use-init">
-      <mkdir dir="${basedir}${file.separator}demo${file.separator}apiref${file.separator}out" />
-      <mkdir dir="${basedir}${file.separator}demo${file.separator}apiref${file.separator}out${file.separator}sample" />
+      <mkdir dir="${apiref.dir}${file.separator}out" />
+      <mkdir dir="${apiref.dir}${file.separator}out${file.separator}sample" />
 
       <antcall target="apiref2xhtml">
 		<param name="dita.extname" value=".dita"/>
 		<param name="transtype"    value="xhtml"/>
 		<param name="args.input"
-            value="${basedir}${file.separator}demo${file.separator}apiref${file.separator}sample${file.separator}apiPackage1.ditamap"/>
+            value="${apiref.dir}${file.separator}sample${file.separator}apiPackage1.ditamap"/>
 		<param name="output.dir"
-            value="${basedir}${file.separator}demo${file.separator}apiref${file.separator}out${file.separator}sample"/>
+            value="${apiref.dir}${file.separator}out${file.separator}sample"/>
       </antcall>
 
-      <copy file="${basedir}${file.separator}demo${file.separator}apiref${file.separator}sample${file.separator}frameset.html"
-          todir="${basedir}${file.separator}demo${file.separator}apiref${file.separator}out${file.separator}sample"/>
+      <copy file="${apiref.dir}${file.separator}sample${file.separator}frameset.html"
+          todir="${apiref.dir}${file.separator}out${file.separator}sample"/>
 	</target>
 
 	<target name="apirefSampleClean"
         description="Delete the sample output files from the build">
-      <delete dir="${basedir}${file.separator}demo${file.separator}apiref${file.separator}out${file.separator}sample" />
+      <delete dir="${apiref.dir}${file.separator}out${file.separator}sample" />
 	</target>
 
     <!-- documentation targets -->
 	<target name="apirefDoc2xhtml"
         description="build the HTML documentation for the specialization"
         depends="use-init">
-      <mkdir dir="${basedir}${file.separator}demo${file.separator}apiref${file.separator}out" />
+      <mkdir dir="${apiref.dir}${file.separator}out" />
       <antcall target="dita2xhtml">
 		<param name="args.input"
-            value="${basedir}${file.separator}demo${file.separator}apiref${file.separator}doc${file.separator}apiRefDoc.ditamap"/>
+            value="${apiref.dir}${file.separator}doc${file.separator}apiRefDoc.ditamap"/>
 		<param name="output.dir"
-            value="${basedir}${file.separator}demo${file.separator}apiref${file.separator}out${file.separator}doc"/>
+            value="${apiref.dir}${file.separator}out${file.separator}doc"/>
 		<param name="dita.extname"
             value=".dita"/>
       </antcall>
@@ -51,6 +53,6 @@
 
 	<target name="apirefDocClean"
         description="Delete the documentation output files from the build">
-      <delete dir="${basedir}${file.separator}demo${file.separator}apiref${file.separator}out${file.separator}doc" />
+      <delete dir="${apiref.dir}${file.separator}out${file.separator}doc" />
 	</target>
 </project>

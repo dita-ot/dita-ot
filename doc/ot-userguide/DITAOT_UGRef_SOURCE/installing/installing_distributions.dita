@@ -9,6 +9,7 @@ See the accompanying license.txt file for applicable licenses.
 	<prolog>
 		<author type="creator">Richard Johnson</author>
 		<author type="contributor">Anna van Raaphorst</author>
+		<author type="contributor">Youyi Zhou</author>
 		<publisher>OASIS (Organization for the Advancement of Structured Information Standards)</publisher>
 		<copyright>
 			<copyryear year="2007"/>
@@ -17,6 +18,7 @@ See the accompanying license.txt file for applicable licenses.
 		<critdates>
 			<created date="2006-September-26"/>
 			<revised modified="2007-March-06"/>
+			<revised modified="2009-March-16"/>
 		</critdates>
 		<metadata>
 			<keywords>

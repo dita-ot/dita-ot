@@ -160,7 +160,10 @@
     <xsl:call-template name="setStandardAttr">
       <xsl:with-param name="IDPrefix" select="'pblshr'"/>
     </xsl:call-template>
+   <!-- dhjohnso: publisher must be inside publishername -->
+   <publishername>
     <xsl:apply-templates/>
+   </publishername>
   </publisher>
 </xsl:template>
 
@@ -189,6 +192,16 @@
     </xsl:call-template>
     <xsl:apply-templates/>
   </holder>
+</xsl:template>
+
+<!-- dhjohnso: template added for missing year element -->
+<xsl:template match="*[contains(@class,' topic/copyryear ')]">
+  <year>
+    <xsl:call-template name="setStandardAttr">
+      <xsl:with-param name="IDPrefix" select="'cpryear'"/>
+    </xsl:call-template>
+    <xsl:value-of select="@year" />
+  </year>
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' topic/critdates ')]">
@@ -521,7 +534,26 @@
     <xsl:call-template name="setStandardAttr">
       <xsl:with-param name="IDPrefix" select="'dle'"/>
     </xsl:call-template>
-    <xsl:apply-templates/>
+    <xsl:choose>
+      <xsl:when test="*[contains(@class,' topic/dd ')][2]">
+        <xsl:apply-templates select="*[contains(@class,' topic/dt ')]"/>
+        <listitem>
+          <xsl:for-each select="*[contains(@class,' topic/dd ')]">
+           <orderedlist>
+             <listitem>
+               <xsl:call-template name="setStandardAttr">
+                 <xsl:with-param name="IDPrefix" select="'dd'"/>
+               </xsl:call-template>
+               <xsl:call-template name="makeBlock"/>
+             </listitem>
+           </orderedlist>
+          </xsl:for-each>
+        </listitem>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:apply-templates/>
+      </xsl:otherwise>
+    </xsl:choose>
   </varlistentry>
 </xsl:template>
 
@@ -551,6 +583,15 @@
     <xsl:apply-templates select="@compact" mode="deflate"/>
     <xsl:apply-templates/>
   </simplelist>
+</xsl:template>
+
+<xsl:template match="*[contains(@class,' topic/sli ')]">
+  <member>
+    <xsl:call-template name="setStandardAttr">
+      <xsl:with-param name="IDPrefix" select="'sli'"/>
+    </xsl:call-template>
+    <xsl:apply-templates/>
+  </member>
 </xsl:template>
 
 

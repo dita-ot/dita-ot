@@ -554,6 +554,14 @@
                   />
                 </xsl:attribute>
               </xsl:when>
+              <xsl:when test="not(document($file,/)//*[contains(@class, 'topic')][@id=$topicid])">
+                <!-- topicid does not point to a valid topic -->
+                <xsl:call-template name="output-message">
+                  <xsl:with-param name="msgnum">061</xsl:with-param>
+                  <xsl:with-param name="msgsev">W</xsl:with-param>
+                  <xsl:with-param name="msgparams">%1=<xsl:value-of select="$topicid"/></xsl:with-param>
+                </xsl:call-template>
+              </xsl:when>
               <xsl:otherwise>
                 <!-- do nothing - omit attribute-->
               </xsl:otherwise>
@@ -581,6 +589,14 @@
       <!-- Type is set locally for a dita topic; warn if it is not correct. -->
       <xsl:when
         test="contains($file,$DITAEXT) and $scope!='external' and $scope!='peer' and ($format='#none#' or $format='dita' or $format='DITA')">
+        <xsl:if test="not(document($file,/)//*[contains(@class, 'topic')][@id=$topicid])">
+          <!-- topicid does not point to a valid topic -->
+          <xsl:call-template name="output-message">
+            <xsl:with-param name="msgnum">061</xsl:with-param>
+            <xsl:with-param name="msgsev">W</xsl:with-param>
+            <xsl:with-param name="msgparams">%1=<xsl:value-of select="$topicid"/></xsl:with-param>
+          </xsl:call-template>
+        </xsl:if>
         <xsl:choose>
           <!--finding type based on name of the target element in a particular topic in another file-->
           <xsl:when

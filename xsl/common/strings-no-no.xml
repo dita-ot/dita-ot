@@ -56,6 +56,14 @@
 <str name="Prerequisites">Krav</str>
 <str name="or">or</str>
 
+<!--Task section labels -->
+<str name="task_context">Om denne oppgaven</str>
+<str name="task_example">Eksempel</str>
+<str name="task_postreq">Neste oppgave</str>
+<str name="task_prereq">Før du begynner</str>
+<str name="task_procedure">Prosedyre</str>
+<str name="task_results">Resultater</str>
+
 <str name="Copyright">Copyright</str>
 
 <!-- Symbols -->

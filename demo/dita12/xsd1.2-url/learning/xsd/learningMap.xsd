@@ -1,0 +1,92 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!-- ============================================================= -->
+<!-- HEADER -->
+<!-- ============================================================= -->
+<!-- MODULE:    DITA Learning  Map  -->
+<!-- VERSION:   1.2 -->
+<!-- DATE:      February 2008 -->
+<!---->
+<!-- ============================================================= -->
+
+<!-- ============================================================= -->
+<!-- SYSTEM:     Darwin Information Typing Architecture (DITA) -->
+<!---->
+<!-- PURPOSE:    XSD to describe DITA Learning map  -->
+<!---->
+<!-- ORIGINAL CREATION DATE: -->
+<!-- MAy 2007 -->
+<!---->
+<!-- (C) Copyright OASIS Open 2007, 2008. -->
+<!-- All Rights Reserved. -->
+<!---->
+<!-- UPDATES: -->
+<!-- ============================================================= -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
+    attributeFormDefault="unqualified"
+    xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
+    <!-- ======= INCLUDE ======= -->
+    <xs:include schemaLocation="../../base/xsd/mapGroupMod.xsd" />
+    <xs:include schemaLocation="../../base/xsd/indexingDomain.xsd" />
+    <xs:include schemaLocation="learningMapDomain.xsd"/>
+    <xs:include schemaLocation="learningMetadataDomain.xsd"/>
+    <xs:include schemaLocation="../../base/xsd/delayResolutionDomain.xsd" />
+
+
+    <!--  ================ GROUP DEFINITIONS =====================  -->
+  <xs:include schemaLocation="../../base/xsd/tblDeclGrp.xsd"/>
+
+    <!-- =================  MODULE INLCUDE DEFINITION  ==================  -->
+  <xs:include schemaLocation="../../base/xsd/commonElementMod.xsd"/>
+    <!-- ======== Table elements ======== -->
+  <xs:include schemaLocation="../../base/xsd/tblDeclMod.xsd"/>    
+    <!-- ======= MetaData elements, plus keyword and indexterm ======= -->
+  <xs:include schemaLocation="../../base/xsd/metaDeclMod.xsd"/>
+
+  <xs:redefine schemaLocation="../../base/xsd/mapGrp.xsd">
+        <xs:group name="topicref">
+            <xs:choice>
+                <xs:group ref="topicref"/>
+                <xs:group ref="mapgroup-d-topicref"/>
+                <xs:group ref="learningmap-d-topicref"/>
+            </xs:choice>
+        </xs:group>
+    </xs:redefine>
+
+    <xs:redefine schemaLocation="../../base/xsd/commonElementGrp.xsd">
+        <xs:group name="index-base">
+            <xs:choice>
+                <xs:group ref="index-base"/>
+                <xs:group ref="indexing-d-index-base"/>
+            </xs:choice>
+        </xs:group>
+
+    </xs:redefine>
+
+
+    <xs:redefine schemaLocation="../../base/xsd/metaDeclGrp.xsd">
+        <xs:group name="metadata">
+            <xs:choice>
+                <xs:group ref="metadata"/>
+                <xs:group ref="learningmeta-d-metadata"/>
+            </xs:choice>
+        </xs:group>
+        <xs:group name="keywords">
+            <xs:choice>
+                <xs:group ref="keywords"/>
+                <xs:group ref="delay-d-keywords"/>
+            </xs:choice>
+        </xs:group>
+    </xs:redefine>
+
+
+    <xs:include schemaLocation="../../base/xsd/mapMod.xsd" />
+
+
+    <xs:attributeGroup name="domains-att">
+        <xs:attribute name="domains" type="xs:string"
+            default="(map mapgroup-d) (topic delay-d)  (topic indexing-d) (topic learningmeta-d) (topic+ut-d learning-d) "
+        />
+    </xs:attributeGroup>
+
+
+</xs:schema>

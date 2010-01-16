@@ -4,8 +4,8 @@
      applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2006 All Rights Reserved. -->
 <project name="ditaot-init" basedir=".">
-  <import file="catalog-ant.xml"/>
-    
+  <!--<import file="catalog-ant.xml"/>-->
+
   <dirname property="ant.file.ditaot-init.dir" file="${ant.file.ditaot-init}" />
 
   <!-- First try to initialize ${dita.dir} using the special 
@@ -35,9 +35,21 @@
     classname="org.dita.dost.invoker.AntInvoker">
     <classpath refid="dost.jar.path" />
   </taskdef>
+
+  <taskdef name="ext-pipeline"
+    classname="org.dita.dost.invoker.ExtensibleAntInvoker">
+    <classpath refid="dost.jar.path" />
+  </taskdef>
+
   <taskdef name="config-logger"
     classname="org.dita.dost.log.LogConfigTask">
     <classpath refid="dost.jar.path" />
+  </taskdef>
+
+  <!-- Add by Alan to refacter:URIResolver Date2009-08-07 -->
+  <taskdef name="config-URIResolver"
+  	classname="org.dita.dost.resolver.URIResolverConfigTask">
+  	<classpath refid="dost.jar.path"/>
   </taskdef>
 
   <taskdef name="dita-ot-echo"
@@ -64,7 +76,11 @@
     classname="org.dita.dost.util.IsAbsolute">
     <classpath refid="dost.jar.path" />
   </typedef>
-  <property name="dita.temp.dir" value="temp" />
+  <tstamp>
+    <format property="current.date" pattern="yyyyMMddHHmmssSSS"/>
+  </tstamp>
+  <property name="base.temp.dir" value="temp"/>
+  <property name="dita.temp.dir" value="${base.temp.dir}${file.separator}temp${current.date}" />
   <property name="output.dir" value="out" />
   <property name="dita.extname" value="xml" />
   <property name="dita.script.dir"
@@ -77,14 +93,20 @@
     value="${dita.dir}${file.separator}resource${file.separator}messages.xml" />
   <!-- property values end -->
 
+  <!-- Changed by Alan to refacter:URIResolver Date2009-08-07 -->
   <target name="build-init"
-    depends="start-process, init-logger, use-init, check-arg, output-msg" />
+    depends="start-process, init-logger, init-URIResolver, use-init, check-arg, output-msg" />
     
   <target name="start-process" description="Processing started" />
 
   <target name="init-logger"
     description="Initialize log directory and file name">
     <config-logger />
+  </target>
+  
+  <!-- Add by Alan to refacter:URIResolver Date2009-08-07 -->
+  <target name="init-URIResolver">
+  	<config-URIResolver basedir="${basedir}" tempdir="${dita.temp.dir}"/>
   </target>
   
   <target name="use-init.envhhcdir" if="env.HHCDIR">
@@ -101,9 +123,13 @@
   </target>
   
   <target name="use-init" depends="use-init.envhhcdir,use-init.hhcdir">
-    <available classname="com.icl.saxon.StyleSheet" property="hasSaxon" />
-    <available classname="org.apache.fop.tools.anttasks.Fop"
-      property="hasFOP" />    
+    <available classname="net.sf.saxon.StyleSheet" property="hasSaxon" />
+    <available classname="net.sf.saxon.Transform" property="hasSaxon" />
+    <available classname="org.apache.fop.tools.anttasks.Fop" property="hasFOP">
+      <classpath>
+        <pathelement location="${dita.dir}/demo/legacypdf/lib/fop.jar"/>
+      </classpath>
+    </available>
   </target>
 
   <!-- property value validation begin -->
@@ -260,8 +286,17 @@
         <contains string="${args.fo.img.ext}" substring="." />
       </and>
     </condition>
-
-    <condition property="clean_temp">
+  	
+	<!--Added by William on 2009-11-17 for bug:2893493 start-->
+  	<condition property="clean.temp"
+      value="true">
+	      <not>
+	        <isset property="clean.temp" />
+	      </not>
+  	</condition>
+  	<!--Added by William on 2009-11-17 for bug:2893493 start-->
+    
+  	<condition property="clean_temp">
       <and>
         <isset property="clean.temp" />
         <equals arg1="${clean.temp}" arg2="no" casesensitive="false" />

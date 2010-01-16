@@ -13,6 +13,7 @@ See the accompanying license.txt file for applicable licenses.
 		<author type="creator">Kylene Bruski</author>
 		<author type="contributor">Anna van Raaphorst</author>
 		<author type="contributor">Richard Johnson</author>
+		<author type="contributor">Youyi Zhou</author>
 		<publisher>OASIS (Organization for the Advancement of Structured Information Standards)</publisher>
 		<copyright>
 			<copyryear year="2005"/>
@@ -21,6 +22,7 @@ See the accompanying license.txt file for applicable licenses.
 		<critdates>
 			<created date="2005-November-01"/>
 			<revised modified="2006-October-12"/>
+			<revised modified="2009-March-16"/>
 		</critdates>
 		<metadata>
 			<keywords>
@@ -50,11 +52,11 @@ See the accompanying license.txt file for applicable licenses.
 			</step>
 			<step>
 				<cmd>From SAXON: The XSLT and XQuery Processor page, scroll to find the 
-          heading <uicontrol>Saxon 6.5.5</uicontrol>
+          heading <uicontrol>Saxon-B 9.1</uicontrol>
 				</cmd>
 			</step>
 			<step>
-				<cmd>Select <uicontrol>Download (3265 Kbytes)</uicontrol>. </cmd>
+				<cmd>Select <uicontrol>Download for Java</uicontrol>. </cmd>
 				<stepresult>The SourceForge.net page opens with a list of download 
           options.</stepresult>
 			</step>
@@ -67,12 +69,12 @@ See the accompanying license.txt file for applicable licenses.
           	</info>
 			</step>
 			<step>
-				<cmd>Download and unzip the <filepath>Saxon6.5.5.zip</filepath> file and save it to a Linux 
+				<cmd>Download and unzip the <filepath>Saxonb9-1-0-5.zip</filepath> file and save it to a Linux 
           home directory.</cmd>
 			</step>
 			<step>
 				<cmd>Add Saxon to your <varname>CLASSPATH</varname> environment variable:
-				<userinput>export CLASSPATH=${CLASSPATH}:${saxon_dir}/saxon.jar </userinput>
+				<userinput>export CLASSPATH=${CLASSPATH}:${saxon_dir}/saxon9.jar:${saxon_dir}/saxon9-dom.jar:${saxon_dir}/saxon9-dom4j.jar:${saxon_dir}/saxon9-jdom.jar:${saxon_dir}/saxon9-s9api.jar:${saxon_dir}/saxon9-sql.jar:${saxon_dir}/saxon9-xom.jar:${saxon_dir}/saxon9-xpath.jar:${saxon_dir}/saxon9-xqj.jar </userinput>
 				</cmd>
 			</step>
 		</steps>

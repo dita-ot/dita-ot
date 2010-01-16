@@ -16,12 +16,10 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Properties;
 import java.util.StringTokenizer;
 
 import org.dita.dost.log.DITAOTJavaLogger;
-import org.dita.dost.log.MessageUtils;
-import org.dita.dost.module.DebugAndFilterModule;
+
 
 /**
  * Class description goes here.
@@ -37,21 +35,45 @@ public class FileUtils {
 	}
 
 	/**
-	 * Return if the file is a html file by extension
-	 * @param lcasefn
-	 * @return
+	 * Return if the file is a html file by extension.
+	 * @param lcasefn file name
+	 * @return true if is html file and false otherwise
 	 */
 	public static boolean isHTMLFile(String lcasefn) {
 		return (lcasefn.endsWith(Constants.FILE_EXTENSION_HTML) || lcasefn
 				.endsWith(Constants.FILE_EXTENSION_HTM));
 	}
-
+	
 	/**
-	 * Return if the file is a dita file by extension
-	 * @param lcasefn
-	 * @return
+	 * Return if the file is a pdf file by its extension.
+	 * @param lcasefn File name in lower case.
+	 * @return <code>TRUE</code> if lcasefn contains an extension of "pdf",
+	 *         <code>FALSE</code> otherwise.
+	 */
+	public static boolean isPDFFile(String lcasefn) {
+		return (lcasefn.endsWith(Constants.FILE_EXTENSION_PDF));
+	}
+	
+	//Added by William on 2009-10-10 for resources bug:2873560 start
+	/**
+	 * Return if the file is a swf file by its extension.
+	 * @param lcasefn File name in lower case.
+	 * @return <code>TRUE</code> if lcasefn contains an extension of "swf",
+	 *         <code>FALSE</code> otherwise.
+	 */
+	public static boolean isSWFile(String lcasefn) {
+		return (lcasefn.endsWith(Constants.FILE_EXTENSION_SWF));
+	}
+	//Added by William on 2009-10-10 for resources bug:2873560 end
+	
+	/**
+	 * Return if the file is a dita file by extension.
+	 * @param lcasefn file name
+	 * @return ture if is DITA file and false otherwise
 	 */
 	public static boolean isDITAFile(String lcasefn) {
+		if(lcasefn == null)
+			return false;
 		if (lcasefn.contains(Constants.SHARP)){
 			lcasefn = lcasefn.substring(0, lcasefn.indexOf(Constants.SHARP));
 		}
@@ -60,9 +82,9 @@ public class FileUtils {
 	}
 
 	/**
-	 * Return if the file is a dita topic file by extension
-	 * @param lcasefn
-	 * @return
+	 * Return if the file is a dita topic file by extension.
+	 * @param lcasefn file name
+	 * @return true if is dita file and false otherwise
 	 */
 	public static boolean isDITATopicFile(String lcasefn) {
 		return lcasefn.endsWith(Constants.FILE_EXTENSION_DITA)
@@ -70,18 +92,18 @@ public class FileUtils {
 	}
 
 	/**
-	 * Return if the file is a dita map file by extension
-	 * @param lcasefn
-	 * @return
+	 * Return if the file is a dita map file by extension.
+	 * @param lcasefn file name
+	 * @return true if is ditamap file and false otherwise
 	 */
 	public static boolean isDITAMapFile(String lcasefn) {
 		return lcasefn.endsWith(Constants.FILE_EXTENSION_DITAMAP);
 	}
 
 	/**
-	 * Return if the file is a supported image file by extension
-	 * @param lcasefn
-	 * @return
+	 * Return if the file is a supported image file by extension.
+	 * @param lcasefn filename
+	 * @return true if is supported image and false otherwise
 	 */
 	public static boolean isSupportedImageFile(String lcasefn) {
 		return lcasefn.endsWith(Constants.FILE_EXTENSION_JPG)
@@ -95,9 +117,9 @@ public class FileUtils {
 	}
 
 	/**
-	 * Return if the file is a topic file by extension
-	 * @param lcasefn
-	 * @return
+	 * Return if the file is a topic file by extension.
+	 * @param lcasefn filename
+	 * @return true if is topic file and false otherwise
 	 */
 	public static boolean isTopicFile(String lcasefn) {
 		if(StringUtils.isEmptyString(lcasefn)){
@@ -108,19 +130,17 @@ public class FileUtils {
 	}
 
 	/**
-	 * Return if the file is a valid target file by extension
-	 * @param lcasefn
-	 * @return
+	 * Return if the file is a valid target file by extension.
+	 * @param lcasefn filename
+	 * @return true is the target is valid and false otherwise
 	 */
 	public static boolean isValidTarget(String lcasefn) {
-		DITAOTJavaLogger logger = new DITAOTJavaLogger();
-		Properties params = new Properties();
-		
-		if(lcasefn.indexOf(Constants.STRING_BLANK)!=-1){
+		/*		DITA-OT can support space in file names from 6.5 2008
+ * 		if(lcasefn.indexOf(Constants.STRING_BLANK)!=-1){
 			params.put("%1", lcasefn);
 			logger.logWarn(MessageUtils.getMessage("DOTJ027W", params).toString());
 		}
-		
+*/		
 		return lcasefn.endsWith(Constants.FILE_EXTENSION_DITA)
 				|| lcasefn.endsWith(Constants.FILE_EXTENSION_DITAMAP)
 				|| lcasefn.endsWith(Constants.FILE_EXTENSION_XML)
@@ -132,15 +152,17 @@ public class FileUtils {
 				|| lcasefn.endsWith(Constants.FILE_EXTENSION_PNG)
 				|| lcasefn.endsWith(Constants.FILE_EXTENSION_SVG)
 				|| lcasefn.endsWith(Constants.FILE_EXTENSION_TIFF)
-				|| lcasefn.endsWith(Constants.FILE_EXTENSION_TIF);
+				|| lcasefn.endsWith(Constants.FILE_EXTENSION_TIF)
+				|| lcasefn.endsWith(Constants.FILE_EXTENSION_PDF)
+				|| lcasefn.endsWith(Constants.FILE_EXTENSION_SWF);
 	}
 
 	/**
 	 * Get the path of topicFile relative to the input map.
 	 * 
-	 * @param mapFilePathName
-	 * @param topicFilePathName
-	 * @return
+	 * @param mapFilePathName map file with file path
+	 * @param topicFilePathName topic file with file path
+	 * @return relative path
 	 */
 	public static String getRelativePathFromMap(String mapFilePathName,
 			String topicFilePathName) {
@@ -199,8 +221,9 @@ public class FileUtils {
 	}
 	
 	/**
-	 * Get path2Project from the relative path of a file
-	 * @param relativePath
+	 * Get path2Project from the relative path of a file.
+	 * @param relativePath relative path
+	 * @return path relative to project
 	 */
 	public static String getPathtoProject (String relativePath){
 		StringTokenizer tokenizer = new StringTokenizer(relativePath, Constants.SLASH);
@@ -222,9 +245,9 @@ public class FileUtils {
 	 * replacing "\\" and "\" with File.separator, and removing ".", ".."
 	 * from the file path, with no change to substring behind "#".  
 	 * 
-	 * @param rootPath
-	 * @param relativePath
-	 * @return
+	 * @param rootPath root path
+	 * @param relativePath relative path
+	 * @return resolved topic file
 	 */
 	public static String resolveTopic(String rootPath, String relativePath) {
 		String begin = relativePath;
@@ -243,9 +266,9 @@ public class FileUtils {
 	 * replacing "\\" and "\" with File.separator, and removing ".", "..","#"
 	 * from the file path.  
 	 * 
-	 * @param rootPath
-	 * @param relativePath
-	 * @return
+	 * @param rootPath root path
+	 * @param relativePath relative path
+	 * @return resolved topic file
 	 */
 	public static String resolveFile(String rootPath, String relativePath) {
 		String begin = relativePath;
@@ -262,8 +285,9 @@ public class FileUtils {
 	 * File.seperator, and removing '..' from the directory.
 	 * 
 	 * Note: the substring behind "#" will be removed. 
-	 * @param basedir
-	 * @param filepath
+	 * @param basedir base dir
+	 * @param filepath file path
+	 * @return normalized path
 	 */
 	public static String normalizeDirectory(String basedir, String filepath) {
 		String normilizedPath = null;
@@ -285,8 +309,8 @@ public class FileUtils {
 	/**
 	 * Removing redundant names ".." and "." from the given path.
 	 * 
-	 * @param path
-	 * @return
+	 * @param path input path
+	 * @return processed path
 	 */
 	public static String removeRedundantNames(String path) {
 		return removeRedundantNames(path, File.separator);
@@ -296,15 +320,15 @@ public class FileUtils {
 	/**
 	 * Removing redundant names ".." and "." from the given path.
 	 * 
-	 * @param path
-	 * @param separator
-	 * @return
+	 * @param path input path
+	 * @param separator file separator
+	 * @return processed path
 	 */
 	public static String removeRedundantNames(String path, String separator) {
         StringTokenizer tokenizer = null;
         StringBuffer buff = new StringBuffer(path.length());
-        List dirs = new LinkedList();
-        Iterator iter = null;
+        List<String> dirs = new LinkedList<String>();
+        Iterator<String> iter = null;
         int dirNum = 0;
         int i = 0;
     
@@ -361,9 +385,9 @@ public class FileUtils {
 	
 
     /** 
-     * Return if the path is absolute
-     * @param path
-     * @return
+     * Return if the path is absolute.
+     * @param path test path
+     * @return true if path is absolute and false otherwise.
      */
     public static boolean isAbsolutePath (String path) {
     	if (path == null || Constants.STRING_EMPTY.equals(path.trim())) {
@@ -382,9 +406,9 @@ public class FileUtils {
     }
 
     /**
-     * Copy file from src to target, overwrite if needed
-     * @param src
-     * @param target
+     * Copy file from src to target, overwrite if needed.
+     * @param src source file
+     * @param target target file
      */
     public static void copyFile(File src, File target) {
 		FileInputStream fis = null;
@@ -401,8 +425,10 @@ public class FileUtils {
 			fos.flush();
 		} catch (IOException ex) {
 			DITAOTJavaLogger logger = new DITAOTJavaLogger();
-			logger.logWarn("Failed to copy file from '" + src + "' to '"
-					+ target + "'");
+			//removed by Alan on Date:2009-11-02 for Work Item:#1590 start
+			/*logger.logWarn("Failed to copy file from '" + src + "' to '"
+					+ target + "'");*/
+			//removed by Alan on Date:2009-11-02 for Work Item:#1590 end
 			logger.logException(ex);
 			
 		} finally {
@@ -421,11 +447,12 @@ public class FileUtils {
 	}
     
     /**
-     * Replace the file extension
-     * @param attValue
-     * @return
+     * Replace the file extension.
+     * @param attValue value to be replaced
+     * @param extName value used to replace with
+     * @return replaced value
      */
-    public static String replaceExtName(String attValue){
+    public static String replaceExtName(String attValue, String extName){
     	String fileName;
         int fileExtIndex;
         int index;
@@ -438,19 +465,19 @@ public class FileUtils {
     		fileName = attValue.substring(0,index); 
     		fileExtIndex = fileName.lastIndexOf(Constants.DOT);
     		return (fileExtIndex != -1)
-    			? fileName.substring(0, fileExtIndex) + DebugAndFilterModule.extName + attValue.substring(index)
+    			? fileName.substring(0, fileExtIndex) + extName + attValue.substring(index)
     			: attValue;
     	} else {
     		fileExtIndex = attValue.lastIndexOf(Constants.DOT);
     		return (fileExtIndex != -1)
-    			? (attValue.substring(0, fileExtIndex) + DebugAndFilterModule.extName) 
+    			? (attValue.substring(0, fileExtIndex) + extName) 
     			: attValue;
     	}
     }
     
     /**
      * Check whether a file exists on the local file systmem.
-     * @param filename
+     * @param filename filename
      * @return boolean  true if the file exists, false otherwise
      */
     public static boolean fileExists (String filename){  //Eric

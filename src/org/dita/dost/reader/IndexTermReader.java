@@ -12,7 +12,6 @@ package org.dita.dost.reader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Stack;
 
@@ -51,51 +50,59 @@ public class IndexTermReader extends AbstractXMLReader {
 	private boolean insideSortingAs = false;
 	
 	/** Stack used to store index term */
-	private Stack termStack = null;
+	private Stack<IndexTerm> termStack = null;
 	
 	/** Stack used to store topic id */
-	private Stack topicIdStack = null;
+	private Stack<String> topicIdStack = null;
 
 	/** List used to store all the specialized index terms */
-	private List indexTermSpecList = null;
+	private List<String> indexTermSpecList = null;
 	
 	/** List used to store all the specialized index-see */
-	private List indexSeeSpecList = null;
+	private List<String> indexSeeSpecList = null;
 	
 	/** List used to store all the specialized index-see-also */
-	private List indexSeeAlsoSpecList = null;
+	private List<String> indexSeeAlsoSpecList = null;
 	
 	/** List used to store all the specialized index-sort-as */
-	private List indexSortAsSpecList = null;
+	private List<String> indexSortAsSpecList = null;
 	
 	/** List used to store all the specialized topics */
-	private List topicSpecList;
+	private List<String> topicSpecList;
 	
 	/** List used to store all specialized titles */
-	private List titleSpecList;
+	private List<String> titleSpecList;
 	
 	/** List used to store all the indexterm found in this topic file */
-	private List indexTermList;
+	private List<IndexTerm> indexTermList;
 	
 	/** Map used to store the title info accessed by its topic id*/
-	private Map titleMap;
+	private Map<String, String> titleMap;
 	
+	/** Stack for "@processing-role" value */
+	private Stack<String> processRoleStack;
+	
+	/** Depth inside a "@processing-role" parent */
+    private int processRoleLevel = 0;
+    
 	private DITAOTJavaLogger javaLogger = null;
 
 	/**
-	 * Constructor
+	 * Constructor.
 	 */
 	public IndexTermReader() {
-		termStack = new Stack();
-		topicIdStack = new Stack();
-		indexTermSpecList = new ArrayList(Constants.INT_16);
-		indexSeeSpecList = new ArrayList(Constants.INT_16);
-		indexSeeAlsoSpecList = new ArrayList(Constants.INT_16);
-		indexSortAsSpecList = new ArrayList(Constants.INT_16);
-		topicSpecList = new ArrayList(Constants.INT_16);
-		titleSpecList = new ArrayList(Constants.INT_16);
-		indexTermList = new ArrayList(Constants.INT_256);		
-		titleMap = new HashMap(Constants.INT_256);
+		termStack = new Stack<IndexTerm>();
+		topicIdStack = new Stack<String>();
+		indexTermSpecList = new ArrayList<String>(Constants.INT_16);
+		indexSeeSpecList = new ArrayList<String>(Constants.INT_16);
+		indexSeeAlsoSpecList = new ArrayList<String>(Constants.INT_16);
+		indexSortAsSpecList = new ArrayList<String>(Constants.INT_16);
+		topicSpecList = new ArrayList<String>(Constants.INT_16);
+		titleSpecList = new ArrayList<String>(Constants.INT_16);
+		indexTermList = new ArrayList<IndexTerm>(Constants.INT_256);		
+		titleMap = new HashMap<String, String>(Constants.INT_256);
+		processRoleStack = new Stack<String>();
+		processRoleLevel = 0;
 		javaLogger = new DITAOTJavaLogger();
 	}
 
@@ -115,6 +122,8 @@ public class IndexTermReader extends AbstractXMLReader {
 		indexSortAsSpecList.clear();
 		topicSpecList.clear();
 		indexTermList.clear();
+		processRoleStack.clear();
+		processRoleLevel = 0;
 		titleMap.clear();
 	}
 
@@ -123,28 +132,63 @@ public class IndexTermReader extends AbstractXMLReader {
 	 */
 	public void characters(char[] ch, int start, int length)
 			throws SAXException {
-		String temp = new String(ch, start, length).trim();
-		boolean withSpace = (ch[start] == '\n' || temp.startsWith(Constants.LINE_SEPARATOR));
-
-		if (temp.length() == 0) {
-			return;
+		//SF Bug 2010062: Do not trim white space from text nodes. Convert newline
+		//                to space, but leave all spaces. Also do not drop space-only nodes.
+		//String temp = new String(ch, start, length).trim();
+		//boolean withSpace = (ch[start] == '\n' || temp.startsWith(Constants.LINE_SEPARATOR));
+		String temp = new String(ch, start, length);
+		if (ch[start] == '\n' || temp.startsWith(Constants.LINE_SEPARATOR)) {
+			temp = " " + temp.substring(1);
 		}
+		//TODO Added by William on 2009-05-22 for space bug:2793836 start
+		//used for store the space
+		char[] chars = temp.toCharArray();
+		char flag = '\n';
+		//used for store the new String
+		StringBuffer sb = new StringBuffer();
+		for(char c : chars){
+			//when a whitespace is met
+			if(c==' '){
+				//this is the first whitespace
+				if(flag!=' '){
+					//put it in the result string
+					sb.append(c);
+					//store the space in the flag
+					flag = c;
+				}else{
+					//abundant space, ignore it
+					continue;
+				}
+			//the consecutive whitespace is interrupted
+			}else{
+				//put it in the result string
+				sb.append(c);
+				//clear the flag
+				flag = c;	
+			}
+		}
+		temp = sb.toString();
+		//TODO Added by William on 2009-05-22 for space bug:2793836 end
 		
 		/*
 		 * For title info
 		 */
-		if (!insideSortingAs && !termStack.empty()) {
-			IndexTerm indexTerm = (IndexTerm) termStack.peek();
-			temp = StringUtils.restoreEntity(temp);
-			indexTerm.setTermName(StringUtils.setOrAppend(indexTerm.getTermName(), temp, withSpace));
-		} else if (insideSortingAs && temp.length() > 0) {
-			IndexTerm indexTerm = (IndexTerm) termStack.peek();
-			temp = StringUtils.restoreEntity(temp);
-			indexTerm.setTermKey(StringUtils.setOrAppend(indexTerm.getTermKey(), temp, withSpace));
-		} else if (inTitleElement) {
-			temp = StringUtils.restoreEntity(temp);
-			//Always append space if: <title>abc<ph/>df</title>
-			title = StringUtils.setOrAppend(title, temp, true);
+		if (processRoleStack.isEmpty() || 
+				!Constants.ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equalsIgnoreCase(processRoleStack.peek())) {
+			if (!insideSortingAs && !termStack.empty()) {
+				IndexTerm indexTerm = (IndexTerm) termStack.peek();
+				temp = StringUtils.restoreEntity(temp);
+				indexTerm.setTermName(StringUtils.setOrAppend(indexTerm.getTermName(), temp, false));
+			} else if (insideSortingAs && temp.length() > 0) {
+				IndexTerm indexTerm = (IndexTerm) termStack.peek();
+				temp = StringUtils.restoreEntity(temp);
+				indexTerm.setTermKey(StringUtils.setOrAppend(indexTerm.getTermKey(), temp, false));
+			} else if (inTitleElement) {
+				temp = StringUtils.restoreEntity(temp);
+				//Always append space if: <title>abc<ph/>df</title>
+				//Updated with SF 2010062 - should only add space if one is in source
+				title = StringUtils.setOrAppend(title, temp, false);
+			}
 		}
 	}
 	
@@ -166,11 +210,26 @@ public class IndexTermReader extends AbstractXMLReader {
 	 */
 	public void endElement(String uri, String localName, String qName)
 			throws SAXException {
-		// Check to see it the indexterm element or a specialized version is 
+		
+		//Skip the topic if @processing-role="resource-only"
+		if (processRoleLevel > 0) {
+			String role = processRoleStack.peek();
+			if (processRoleLevel == processRoleStack.size()) {
+				role = processRoleStack.pop();
+			}
+			processRoleLevel--;
+			if (Constants.ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY
+					.equalsIgnoreCase(role)) {
+				return;
+			}
+		}
+		
+		// Check to see if the indexterm element or a specialized version is 
 		// in the list.
 		if (indexTermSpecList.contains(localName)) {
 			IndexTerm term = (IndexTerm) termStack.pop();
-			if (term.getTermName() == null){ 
+			//SF Bug 2010062: Also set to *** when the term is only white-space.
+			if (term.getTermName() == null || term.getTermName().trim().equals("")){
 				if(term.getEndAttribute() != null && !term.hasSubTerms()){
 					return;
 				} else{
@@ -194,8 +253,10 @@ public class IndexTermReader extends AbstractXMLReader {
 			}
 				
 			if (termStack.empty()) {
+				//most parent indexterm
 				indexTermList.add(term);
 			} else {
+				//Assign parent indexterm to 
 				IndexTerm parentTerm = (IndexTerm) termStack.peek();
 				parentTerm.addSubTerm(term);
 			}
@@ -271,6 +332,25 @@ public class IndexTermReader extends AbstractXMLReader {
 	 */
 	public void startElement(String uri, String localName, String qName,
 			Attributes attributes) throws SAXException {
+		
+		//Skip the topic if @processing-role="resource-only"
+		String attrValue = attributes
+				.getValue(Constants.ATTRIBUTE_NAME_PROCESSING_ROLE);
+		if (attrValue != null) {
+			processRoleStack.push(attrValue);
+			processRoleLevel++;
+			if (Constants.ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY
+					.equals(attrValue)) {
+				return;
+			}
+		} else if (processRoleLevel > 0) {
+			processRoleLevel++;
+			if (Constants.ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY
+					.equals(processRoleStack.peek())) {
+				return;
+			}
+		}
+		
 		String classAttr = attributes.getValue(Constants.ATTRIBUTE_NAME_CLASS);
 		
 		handleSpecialization(localName, classAttr);
@@ -285,13 +365,6 @@ public class IndexTermReader extends AbstractXMLReader {
 					.getValue(Constants.ATTRIBUTE_NAME_XML_LANG);
 			
 			if (xmlLang != null) {
-				Locale locale;
-//				if (xmlLang.length() == 5) {
-//					locale = new Locale(xmlLang.substring(0, 2).toLowerCase(),
-//							xmlLang.substring(3, 5).toUpperCase());
-//				} else {
-//					locale = new Locale(xmlLang.substring(0, 2).toLowerCase());
-//				}
 				IndexTerm.setTermLocale(StringUtils.getLocale(xmlLang));
 			}
 		}
@@ -361,8 +434,6 @@ public class IndexTermReader extends AbstractXMLReader {
 			IndexTerm indexTerm = new IndexTerm();
 			indexTerm.setStartAttribute(attributes.getValue(Constants.ATTRIBUTE_NAME_END));
 			indexTerm.setEndAttribute(attributes.getValue(Constants.ATTRIBUTE_NAME_END));
-//			IndexTermTarget target = new IndexTermTarget();
-//			String fragment = null;
 			
 			IndexTerm parentTerm = null;
 			if(!termStack.isEmpty()){
@@ -372,22 +443,6 @@ public class IndexTermReader extends AbstractXMLReader {
 				}
 			}
 			
-//			if(topicIdStack.peek() == null){
-//				fragment = null;
-//			}else{
-//				fragment = topicIdStack.peek().toString();
-//			}
-//
-//			if (title != null) {
-//				target.setTargetName(title);
-//			} else {
-//				target.setTargetName(targetFile);
-//			}
-//			if(fragment != null)
-//				target.setTargetURI(targetFile + Constants.SHARP + fragment);
-//			else
-//				target.setTargetURI(targetFile);
-//			indexTerm.addTarget(target);
 			termStack.push(indexTerm);
 		}
 	}
@@ -441,10 +496,8 @@ public class IndexTermReader extends AbstractXMLReader {
 	}
 
 	/**
-	 * Set the current parsing file
-	 * 
-	 * @param target
-	 *            The parsingFile to set.
+	 * Set the current parsing file.
+	 * @param target The parsingFile to set.
 	 */
 	public void setTargetFile(String target) {
 		this.targetFile = target;
@@ -466,7 +519,7 @@ public class IndexTermReader extends AbstractXMLReader {
 	}
 	
 	/**
-	 * Update the target name of each IndexTerm, recursively
+	 * Update the target name of each IndexTerm, recursively.
 	 * @param indexterm
 	 */
 	private void updateIndexTermTargetName(IndexTerm indexterm){

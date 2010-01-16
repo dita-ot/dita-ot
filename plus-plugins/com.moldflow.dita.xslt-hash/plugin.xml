@@ -1,0 +1,3 @@
+<plugin id="com.moldflow.dita.xslt-hash">
+  <feature extension="dita.conductor.lib.import" value="lib/xslt-hash.jar" type="file"/>
+</plugin>

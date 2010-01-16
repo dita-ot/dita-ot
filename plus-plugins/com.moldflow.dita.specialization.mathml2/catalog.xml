@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE catalog PUBLIC "-//OASIS//DTD Entity Resolution XML Catalog V1.0//EN" "http://www.oasis-open.org/committees/entity/release/1.0/catalog.dtd">
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" prefer="public">
+
+    <!-- Specialization files. -->
+    <public publicId="-//Moldflow//ENTITIES DITA 1.1 MathML Domain 1//EN" uri="dtd/mathmlDomain1.ent"/>
+    <system systemId="http://www.moldflow.com/schema/dtd/dita/1.1/mathml/1/mathmlDomain1.ent" uri="dtd/mathmlDomain1.ent"/>
+    <public publicId="-//Moldflow//ELEMENTS DITA 1.1 MathML Domain 1//EN"  uri="dtd/mathmlDomain1.mod"/>
+    <system systemId="http://www.moldflow.com/schema/dtd/dita/1.1/mathml/1/mathmlDomain1.mod" uri="dtd/mathmlDomain1.mod"/>
+    <public publicId="-//Moldflow//ENTITIES DITA 1.1 MathML Domain 2//EN" uri="dtd/mathmlDomain2.ent"/>
+    <system systemId="http://www.moldflow.com/schema/dtd/dita/1.1/mathml/2/mathmlDomain2.ent" uri="dtd/mathmlDomain2.ent"/>
+    <public publicId="-//Moldflow//ELEMENTS DITA 1.1 MathML Domain 2//EN"  uri="dtd/mathmlDomain2.mod"/>
+    <system systemId="http://www.moldflow.com/schema/dtd/dita/1.1/mathml/2/mathmlDomain2.mod" uri="dtd/mathmlDomain2.mod"/>
+
+    <!-- Local copies of MathML2 DTDs. -->
+    <public publicId="-//W3C//DTD MathML 2.0//EN" uri="dtd/mathml2/mathml2.dtd"/>
+    <system systemId="http://www.w3.org/Math/DTD/mathml2/mathml2.dtd" uri="dtd/mathml2/mathml2.dtd"/>
+
+</catalog>

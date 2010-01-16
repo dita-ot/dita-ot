@@ -56,6 +56,14 @@
 <str name="Prerequisites">Esitiedot</str>
 <str name="or">tai</str>
 
+<!--Task section labels -->
+<str name="task_context">Tietoja tästä tehtävästä</str>
+<str name="task_example">Esimerkki</str>
+<str name="task_postreq">Seuraavat toimet</str>
+<str name="task_prereq">Ennen aloitusta</str>
+<str name="task_procedure">Toimintosarja</str>
+<str name="task_results">Tulokset</str>
+
 <str name="Copyright">Copyright</str>
 
 <!-- Symbols -->

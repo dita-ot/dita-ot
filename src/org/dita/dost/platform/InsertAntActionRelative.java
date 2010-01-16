@@ -10,7 +10,6 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.dita.dost.util.FileUtils;
 import java.io.File;
-import java.net.URI;
 
 /**
  * InsertAntActionRelative inserts the children of the root element of an XML document
@@ -25,10 +24,15 @@ import java.net.URI;
 public class InsertAntActionRelative extends InsertActionRelative implements
 		IAction {
 
+	/**
+	 * Constructor.
+	 */
 	public InsertAntActionRelative() {
 		super();
 	}
-
+	/**
+	 * @see org.xml.sax.ContentHandler#startElement(java.lang.String, java.lang.String, java.lang.String, org.xml.sax.Attributes)
+	 */
 	public void startElement(String uri, String localName, String qName,
 			Attributes attributes) throws SAXException {
 		if(elemLevel != 0){

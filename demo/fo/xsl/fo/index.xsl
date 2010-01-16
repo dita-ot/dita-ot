@@ -231,12 +231,19 @@ See the accompanying license.txt file for applicable licenses.
             </xsl:choose>
 			<!--Insert simple index entry marker-->
 			<xsl:choose>
-				<xsl:when test="opentopic-index:index.entry"/>
-				<xsl:otherwise>
-					<xsl:for-each select="child::opentopic-index:refID[last()]">
-						<fo:inline index-key="{@value}"/>
-					</xsl:for-each>
-				</xsl:otherwise>
+	              <!-- edited by william on 2009-07-13 for bug:2819853 start-->
+	              <!--xsl:when test="opentopic-index:index.entry"/-->
+	              <xsl:when test="opentopic-index:index.entry">
+	                  <xsl:for-each select="child::opentopic-index:refID[last()]">
+	                      <fo:inline index-key="{@value}"/>
+	                  </xsl:for-each>
+	              </xsl:when>
+	              <!-- edited by william on 2009-07-13 for bug:2819853 end -->
+				  <xsl:otherwise>
+					  <xsl:for-each select="child::opentopic-index:refID[last()]">
+						  <fo:inline index-key="{@value}"/>
+					  </xsl:for-each>
+				  </xsl:otherwise>
 			</xsl:choose>
 
 			<xsl:apply-templates/>
@@ -558,6 +565,15 @@ See the accompanying license.txt file for applicable licenses.
 			<exslf:result select="$entries[opentopic-index:refID/@value = $refID]"/>
 		</xsl:for-each>
 	</exslf:function>
+	
+	<xsl:function version="2.0" name="opentopic-func:getIndexEntry">
+		<xsl:param name="value"/>
+		<xsl:param name="refID"/>
 
-
+		<xsl:for-each select="$index-entries">
+			<xsl:variable name="entries" select="key('index-key',$value)"/>
+			<xsl:value-of select="$entries[opentopic-index:refID/@value = $refID]"/>
+		</xsl:for-each>
+	</xsl:function>
+	
 </xsl:stylesheet>

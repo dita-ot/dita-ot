@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- (C) Copyright IBM Corporation-->
+ <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "../../../dtd/technicalContent/dtd/task.dtd">
+ <task id="test1" domains="(topic)" xml:lang="en-us">
+     <title>test 1 <sup>3</sup></title>
+     <taskbody>
+         <steps>
+             <step conkeyref="componentAconfig/step1"><cmd/></step>
+             <step conkeyref="componentAconfig/step1.5"><cmd/></step>
+             <step conkeyref="commonconfig/step2"><cmd/></step>
+             <step conkeyref="commonconfig/step2.5"><cmd/></step>
+             <step><cmd>And that is the end of that</cmd></step>
+         </steps>
+     </taskbody>
+     <task id="b" conref="componentA/configA.dita#configA">
+         <title>this is b</title>
+          </task>
+ </task>

@@ -1,33 +1,25 @@
-Welcome to Idiom's FO output for the DITA Open Toolkit
+Welcome to Idiom FO output for the DITA Open Toolkit
 ======================================================
 
-Idiom Technologies has donated its production quality PDF output for use with 
-the DITA Open Toolkit. This has been integrated into the Toolkit as a plugin. 
-Features of this code include:
+Apache FOP (Formatting Objects Processor) is a print formatter driven 
+by XSL formatting objects (XSL-FO) and an output independent formatter. 
+It is a Java application that reads a formatting object (FO) tree and 
+renders the resulting pages to a specified output. Output formats  
+currently supported include PDF, PS, PCL, AFP, XML (area tree representation), 
+Print, AWT and PNG, and to a lesser extent, RTF and TXT. The primary 
+output target is PDF. 
 
-- Index (with extensions) and table of contents generation
-- Font mapping: characters can be remapped to different fonts. This is 
-  particularly useful for CJK font support, and is configured per-locale.
-- Extensive customization of publishing output by setting variables
-  (67 of them) and attribute-sets (391 of them).
-- A catalog-based customization framework where you can customize variables, 
-  attribute-sets and XSLs without modifying Open Toolkit code: your custom 
-  settings live in files in a separate customization hierarchy.
-- Bookmap/bookinfo support.
-
-This plugin has only been tested with Sun's JDK 1.4 and may not work
-with the IBM JDK due to a conflict with XEP's crimson.jar.
-
-Building and installing Idiom's FO output
+Installing Idiom FO output
 =========================================
 
-You will need the following software, which we cannot include with
-this plugin due to licensing and redistribution restrictions:
+* If you are using a full-easy-install package, you don't need to do additional
+  work to run pdf conversion. Just use the pdf transtype to build your pdf output.
 
-- RenderX XEP: Idiom's FO output currently requires RenderX XEP to
-  convert FO to PDF. The personal edition of XEP can be obtained for
-  free from RenderX (http://www.renderx.com). XEP comes with Saxon
-  6.5.3, which this plugin also needs. But if you are using JDK 1.5 or 
+* If you are NOT using a full-easy-install package, some additional efforts are
+  needed to get pdf conversion run. You will need the following software:
+
+- Apache FOP: Apache FOP can be obtained from http://xmlgraphics.apache.org/fop/
+  This plugin also requires Saxon 6.5.3. But if you are using JDK 1.5 or 
   newer, you will need Saxon 6.5.5 or newer which has fixes for JDK 1.5
   compatibility. Download Saxon 6.5.5 from http://saxon.sourceforge.net.
 
@@ -40,18 +32,25 @@ this plugin due to licensing and redistribution restrictions:
 1. Install the DITA Open Toolkit.
 2. Unzip this plugin into an Open Toolkit installation's
    demo directory.
-3. Install XEP personal edition and license into demo/fo/lib/xep.
-4. If you are using JDK 1.5, install saxon.jar in demo/fo/lib/xep/lib.
-5. Install the ICU4j jar (optional) as demo/fo/lib/icu4j.jar
-6. From the Open Toolkit directory, run "ant -f integrator.xml"
+3. Install Apache FOP into demo/fo/fop. The minimum requirements are to place
+   fop.jar into demo/fo/fop/build/ and all library jar files provided in Apache
+   FOP package into demo/fo/fop/lib/.
+4. Copy "fop.xconf", which is shipped together within the Apache FOP package
+   in the conf directory, to demo/fo/fop/conf/.
+5. Edit the copied fop.xconf, add this line:
+   <strict-validation>false</strict-validation>
+   below the line "<base>.</base>". Save and close fop.xconf.
+6. If you are using JDK 1.5, install saxon.jar in FO plug-in's library directory demo/fo/lib/.
+7. Install the ICU4j jar (optional) into OT's library directory lib/icu4j.jar
+8. From the Open Toolkit directory, run "ant -f integrator.xml"
 
 At this point, the FO output is fully integrated into the Open
 Toolkit's pipeline. The plugin infrastructure will detect the FO
-plugin in step 5 and provide a "pdf2" output: this will invoke this FO
+plugin and provide a "pdf" output: this will invoke this FO
 output instead of the previous FOP-based output. Invoke with a command
 line like:
 
-java -jar lib/dost.jar /i:doc/DITA-readme.ditamap /transtype:pdf2
+java -jar lib/dost.jar /i:doc/DITA-readme.ditamap /transtype:pdf
 
 If you are using the startcmd.bat/sh script, make sure the classpath in that 
 script lists saxon.jar before xalan.jar. 
@@ -132,6 +131,17 @@ To modify these settings, copy "build.properties.orig" to
 
 History
 =======
+
+FO Plugin Release 1.4.3
+Available since
+
+Sourceforge bug fixes:
+- 1803111: Idiom plug fails when processing bookmap with DITA composite
+- 1930201: FO 1.4.2 doesn't fail correctly when called from Ant
+- 1829816: Value of otherprops is written as a text element
+- 1942252: <notices> should come before TOC in PDF output
+
+----------------------------------------------------------------------------
 
 FO Plugin Release 1.4.2
 Available since Feb 26, 2008
@@ -226,7 +236,7 @@ Available since Feb. 23, 2006
 
 ============================================================================
 
-Copyright © 2005 by Idiom Technologies, Inc. All rights reserved. 
+Copyright ?2005 by Idiom Technologies, Inc. All rights reserved. 
 IDIOM is a registered trademark of Idiom Technologies, Inc. and WORLDSERVER
 and WORLDSTART are trademarks of Idiom Technologies, Inc. All other 
 trademarks are the property of their respective owners. 

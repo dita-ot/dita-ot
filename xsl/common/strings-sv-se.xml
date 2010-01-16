@@ -56,6 +56,14 @@
 <str name="Prerequisites">Läs detta först</str>
 <str name="or">or</str>
 
+<!--Task section labels -->
+<str name="task_context">Den här uppgiften</str>
+<str name="task_example">Exempel</str>
+<str name="task_postreq">Och sedan då?</str>
+<str name="task_prereq">Innan du börjar</str>
+<str name="task_procedure">Arbetsordning</str>
+<str name="task_results">Resultat</str>
+
 <str name="Copyright">Copyright</str>
 
 <!-- Symbols -->

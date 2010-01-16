@@ -1,0 +1,22 @@
+
+<xs:annotation xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:appinfo>
+    <dita:domainsModule xmlns:dita="http://dita.oasis-open.org/architecture/2005/">(topic task+taskreq-d machineryTaskbody-c)</dita:domainsModule>
+  </xs:appinfo>
+  <xs:documentation> 
+    
+  </xs:documentation>
+</xs:annotation>
+
+<xs:group name="prereq" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:choice>
+    <xs:group ref="taskreq-d-prereq"/>
+  </xs:choice>
+</xs:group>
+
+<xs:group name="postreq" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:choice>
+    <xs:group ref="taskreq-d-postreq"/>
+  </xs:choice>
+</xs:group>
+

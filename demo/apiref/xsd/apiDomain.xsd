@@ -33,6 +33,7 @@
           <xs:enumeration value="local"/>
           <xs:enumeration value="peer"/>
           <xs:enumeration value="external"/>
+          <xs:enumeration value="-dita-use-conref-target"/>
         </xs:restriction>
       </xs:simpleType>
     </xs:attribute>
@@ -57,6 +58,7 @@
           <xs:enumeration value="local"/>
           <xs:enumeration value="peer"/>
           <xs:enumeration value="external"/>
+          <xs:enumeration value="-dita-use-conref-target"/>
         </xs:restriction>
       </xs:simpleType>
     </xs:attribute>
@@ -81,6 +83,7 @@
           <xs:enumeration value="local"/>
           <xs:enumeration value="peer"/>
           <xs:enumeration value="external"/>
+          <xs:enumeration value="-dita-use-conref-target"/>
         </xs:restriction>
       </xs:simpleType>
     </xs:attribute>
@@ -105,6 +108,7 @@
           <xs:enumeration value="local"/>
           <xs:enumeration value="peer"/>
           <xs:enumeration value="external"/>
+          <xs:enumeration value="-dita-use-conref-target"/>
         </xs:restriction>
       </xs:simpleType>
     </xs:attribute>

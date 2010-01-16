@@ -40,6 +40,9 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
      also be used to add support for languages that use different orders.
      Note also the TABLELINK and FIGURELINK parameters.
      -->
+<!-- 20090903 RDA: added <?ditaot gentext?> and <?ditaot linktext?> PIs for RFE 1367897.
+                   Allows downstream processes to identify original text vs. generated link text. -->
+          
 <xsl:stylesheet version="1.0" 
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:xalan="http://xml.apache.org/xalan"
@@ -76,7 +79,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
            match="*[contains(@class, ' topic/table ')][*[contains(@class, ' topic/title ')]]"
            use="'include'"/>
 
-  <xsl:template match="processing-instruction('workdir')" mode="get-work-dir">
+  <xsl:template match="processing-instruction('workdir')[1]" mode="get-work-dir">
     <xsl:value-of select="."/>
     <xsl:text>/</xsl:text>
   </xsl:template>
@@ -124,6 +127,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
 
       <xsl:choose>
         <xsl:when test="@type and *[contains(@class, ' topic/linktext ')] and *[contains(@class, ' topic/desc ')]">
+          <xsl:apply-templates select="." mode="topicpull:add-usertext-PI"/>
           <xsl:apply-templates/>
         </xsl:when>
         <xsl:otherwise>
@@ -218,11 +222,19 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
   <!-- Process an in-line cross reference. Retrieve link text, type, and
        description if possible (and not already specified locally). -->
   <xsl:template match="*[contains(@class, ' topic/xref ')]">
-    <xsl:if test="@href=''">
-      <xsl:apply-templates select="." mode="ditamsg:empty-href"/>
-    </xsl:if>
-    <xsl:call-template name="verify-href-attribute"/>
+    <!--<xsl:call-template name="verify-href-attribute"/>-->
     <xsl:choose>
+      <xsl:when test="normalize-space(@href)='' or not(@href)">
+        <xsl:if test="not(@keyref)">
+          <!-- If keyref is specified, keyref code can generate message about unresolved key -->
+          <xsl:apply-templates select="." mode="ditamsg:empty-href"/>
+        </xsl:if>
+        <xsl:copy>
+          <xsl:apply-templates select="@*"/>
+          <xsl:apply-templates select="." mode="topicpull:add-usertext-PI"/>
+          <xsl:apply-templates select="*|comment()|processing-instruction()|text()"/>
+        </xsl:copy>
+      </xsl:when>
       <!-- replace "*|text()" with "normalize-space()" to handle xref without 
         valid link content, in this situation, the xref linktext should be 
         grabbed from href target. -->
@@ -230,7 +242,9 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
            and a <desc> for hover help, do not try to retrieve anything. -->
       <xsl:when test="(text()|*[not(contains(@class,' topic/desc '))]) and *[contains(@class,' topic/desc ')]">
         <xsl:copy>
-          <xsl:apply-templates select="*|@*|comment()|processing-instruction()|text()"/>
+          <xsl:apply-templates select="@*"/>
+          <xsl:apply-templates select="." mode="topicpull:add-usertext-PI"/>
+          <xsl:apply-templates select="*|comment()|processing-instruction()|text()"/>
         </xsl:copy>
       </xsl:when>
       <xsl:when test="@href and not(@href='')">
@@ -272,6 +286,11 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
       <!-- Ignore <xref></xref>, <xref href=""></xref> -->
       <xsl:otherwise>
         <xsl:apply-templates select="." mode="ditamsg:missing-href"/>
+        <xsl:copy>
+          <xsl:apply-templates select="@*"/>
+          <xsl:apply-templates select="." mode="topicpull:add-usertext-PI"/>
+          <xsl:apply-templates select="*|comment()|processing-instruction()|text()"/>
+        </xsl:copy>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
@@ -295,8 +314,15 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
       </xsl:choose>
     </xsl:variable>
     <!--the file name of the target, if any-->
-    <xsl:variable name="file">
+    <xsl:variable name="file-origin">
       <xsl:apply-templates select="." mode="topicpull:get-stuff_file"/>
+    </xsl:variable>
+    <xsl:variable name="file">
+      <xsl:call-template name="replace-blank">
+        <xsl:with-param name="file-origin">
+          <xsl:value-of select="translate($file-origin,'\','/')"/>
+        </xsl:with-param>
+      </xsl:call-template>
     </xsl:variable>
     <!--the position of the target topic relative to the current one: in the same file, referenced by id in another file, or referenced as the first topic in another file-->
     <xsl:variable name="topicpos">
@@ -372,6 +398,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
     </xsl:choose>
   </xsl:template>
   
+  
   <!-- Verify that a locally specified type attribute matches the determined target type.
        If it does not, generate a message. -->
   <xsl:template match="*" mode="topicpull:verify-type-attribute">
@@ -410,8 +437,15 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
     <xsl:param name="scope">#none#</xsl:param>
     <xsl:param name="format">#none#</xsl:param>
     <!--the file name of the target, if any-->
-    <xsl:variable name="file"><xsl:apply-templates select="." mode="topicpull:get-stuff_file"/></xsl:variable>
-
+    <xsl:variable name="file-origin"><xsl:apply-templates select="." mode="topicpull:get-stuff_file"/></xsl:variable>
+    <xsl:variable name="file">
+      <xsl:call-template name="replace-blank">
+        <xsl:with-param name="file-origin">
+          <xsl:value-of select="translate($file-origin,'\','/')"/>
+        </xsl:with-param>
+      </xsl:call-template>
+    </xsl:variable>
+    
     <!--the position of the target topic relative to the current one: in the same file, referenced by id in another file, or referenced as the first topic in another file-->
     <xsl:variable name="topicpos"><xsl:apply-templates select="." mode="topicpull:get-stuff_topicpos"/></xsl:variable>
 
@@ -497,9 +531,28 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
 
   <!-- Get the file name for a reference that goes out of the file -->
   <xsl:template match="*" mode="topicpull:get-stuff_file">
-    <xsl:param name="WORKDIR">
+  	<!-- edited by Alan on Date: 2009-11-02 for Bug:#2887331 begin -->
+    <!--xsl:param name="WORKDIR">
       <xsl:apply-templates select="/processing-instruction()" mode="get-work-dir"/>
-    </xsl:param>
+    </xsl:param-->
+    <xsl:param name="WORKDIR">
+	    <xsl:choose>
+	        <xsl:when test="contains(@class, ' topic/link ')">
+	          <xsl:choose>
+	            <xsl:when test="./preceding::processing-instruction('workdir')[1]">
+	              <xsl:apply-templates select="./preceding::processing-instruction('workdir')[1]" mode="get-work-dir"/>
+	            </xsl:when>
+	            <xsl:otherwise>
+	              <xsl:apply-templates select="/processing-instruction()" mode="get-work-dir"/>
+	            </xsl:otherwise>
+	          </xsl:choose>
+	        </xsl:when>
+	        <xsl:otherwise>
+	            <xsl:apply-templates select="/processing-instruction()" mode="get-work-dir"/>
+	        </xsl:otherwise>
+	    </xsl:choose>
+	</xsl:param>
+	<!-- edited by Alan on Date: 2009-11-02 for Bug:#2887331 end -->
     <xsl:choose>
       <xsl:when test="contains(@href,'://') and contains(@href,'#')">
         <xsl:value-of select="substring-before(@href,'#')"/>
@@ -866,9 +919,11 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
     <xsl:param name="classval"/>
     <xsl:choose>
       <xsl:when test="contains(@class,' topic/link ') and *[not(contains(@class, ' topic/desc '))]">
+        <xsl:apply-templates select="." mode="topicpull:add-usertext-PI"/>
         <xsl:apply-templates select="*[not(contains(@class, ' topic/desc '))]|comment()|processing-instruction()"/>
       </xsl:when>
       <xsl:when test="contains(@class,' topic/xref ') and (normalize-space(text())!='' or *[not(contains(@class, ' topic/desc '))])">
+        <xsl:apply-templates select="." mode="topicpull:add-usertext-PI"/>
         <xsl:apply-templates select="text()|*[not(contains(@class, ' topic/desc '))]|comment()|processing-instruction()"/>
       </xsl:when>
       <xsl:otherwise>
@@ -908,9 +963,11 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
         </xsl:variable>
         <xsl:if test="not($linktext='#none#') and contains(@class, ' topic/xref ')">
           <!-- need to avoid flattening complex markup here-->
+          <xsl:apply-templates select="." mode="topicpull:add-gentext-PI"/>
           <xsl:value-of select="$linktext"/>
         </xsl:if>
         <xsl:if test="not($linktext='#none#') and contains(@class, ' topic/link ')">
+          <xsl:apply-templates select="." mode="topicpull:add-gentext-PI"/>
           <linktext class="- topic/linktext ">
             <xsl:value-of select="$linktext"/>
           </linktext>
@@ -2133,6 +2190,29 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
     <xsl:copy>
       <xsl:apply-templates select="*|@*|comment()|processing-instruction()|text()" mode="specialize-foreign-unknown"/>
     </xsl:copy>
+  </xsl:template>
+
+  <!-- Added for RFE 1367897. Ensure that if a value was passed in from the map,
+       we respect that value, otherwise, use the value determined by this program. -->
+  <xsl:template match="*" mode="topicpull:add-gentext-PI">
+    <xsl:choose>
+      <xsl:when test="processing-instruction()[name()='ditaot'][.='usertext' or .='gentext']">
+        <xsl:copy-of select="processing-instruction()[name()='ditaot'][.='usertext' or .='gentext']"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:processing-instruction name="ditaot">gentext</xsl:processing-instruction>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+  <xsl:template match="*" mode="topicpull:add-usertext-PI">
+    <xsl:choose>
+      <xsl:when test="processing-instruction()[name()='ditaot'][.='usertext' or .='gentext']">
+        <xsl:copy-of select="processing-instruction()[name()='ditaot'][.='usertext' or .='gentext']"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:processing-instruction name="ditaot">usertext</xsl:processing-instruction>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
   
 </xsl:stylesheet>

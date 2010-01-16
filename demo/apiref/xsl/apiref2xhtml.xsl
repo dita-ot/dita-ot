@@ -16,6 +16,7 @@
 <xsl:param name="APIREFCSS" select="'ibmapiref.css'"/>
 <xsl:param name="APIREFCSSRTL" select="'ibmapirefrtl.css'"/>
 
+<xsl:param name="FILEREF">file:/</xsl:param>
 <xsl:param name="WORKDIR" select="'./'"/>
 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -29,6 +30,9 @@
     <xsl:text>apiDef element found. Please either use apiSyntax or provide an XSLT extension to format apiDef for the specific programming language</xsl:text>
   </div>
 </xsl:template>
+<!-- Until P019897, the following rule in the javaRef code always overrode the previous rule.
+     It does not belong in JavaRef, adding it here so we do not start breaking people. -->
+<xsl:template match="*[contains(@class,' apiRef/apiDef ')]" priority="1"/>
 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
    - Alternatives to base processing
@@ -243,7 +247,7 @@
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' apiRef/apiDetail ')]">
-  <xsl:apply-imports/>
+  <xsl:call-template name="topic.body"/>
   <hr/>
 </xsl:template>
 
@@ -301,7 +305,10 @@
     </p>
   </xsl:if>
   <pre>
-    <xsl:apply-imports/>
+    <xsl:call-template name="commonattributes"/>
+    <xsl:call-template name="setscale"/>
+    <xsl:call-template name="setidaname"/>
+    <xsl:apply-templates/>
   </pre>
 </xsl:template>
 
@@ -323,14 +330,6 @@
     <xsl:apply-templates/>
   </span>
 </xsl:template>
-
-
-<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-   - General topic rules
-   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-<!--<xsl:template match="node()" mode="default">
-  <xsl:apply-imports/>
-</xsl:template>-->
 
 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -443,7 +442,6 @@
   <xsl:param name="stringName"/>
   <xsl:call-template name="getString">
     <xsl:with-param name="stringName" select="$stringName"/>
-    <xsl:with-param name="stringFileList">../../demo/apiref/xsl/apistrings.xml</xsl:with-param>
   </xsl:call-template>
 </xsl:template>
 

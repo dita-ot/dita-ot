@@ -14,7 +14,6 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.dita.dost.exception.DITAOTException;
@@ -31,17 +30,17 @@ import org.dita.dost.util.Constants;
  * 
  * @author Wu, Zhi Qiang
  */
-public class CHMIndexWriter implements AbstractWriter {
+public class CHMIndexWriter implements AbstractWriter, IDitaTranstypeIndexWriter {
     /** List of indexterms */
     private List termList = null;
 
     /**
-     * Default Constructor
+     * Default Constructor.
      */
     public CHMIndexWriter() {
     }
 
-    /** (non-Javadoc)
+    /**
      * @see org.dita.dost.writer.AbstractWriter#setContent(org.dita.dost.module.Content)
      */
     public void setContent(Content content) {
@@ -51,7 +50,8 @@ public class CHMIndexWriter implements AbstractWriter {
     /**
      * Write the index term into given OutputStream.
      * 
-     * @param outputStream
+     * @param outputStream outputStream
+     * @throws UnsupportedEncodingException The Character Encoding is not supported.
      */
     public void write(OutputStream outputStream) throws UnsupportedEncodingException{
         PrintWriter printWriter = null;
@@ -86,7 +86,7 @@ public class CHMIndexWriter implements AbstractWriter {
     }
     
 
-    /** (non-Javadoc)
+    /**
 	 * @see org.dita.dost.writer.AbstractWriter#write(java.lang.String)
 	 */
 	public void write(String filename) throws DITAOTException {		
@@ -168,11 +168,35 @@ public class CHMIndexWriter implements AbstractWriter {
 				IndexTerm subTerm = (IndexTerm) subTerms.get(i);
 				subTargets = subTerm.getTargetList();
 				if (subTargets != null && !subTargets.isEmpty()){
+				// edited by William on 2009-07-13 for indexterm bug:2819853 start
+					//findTargets(subTerm);
+					//add targets(child term)
+					term.addTargets(subTerm.getTargetList());
+				}else{
+					//term.addTargets(subTerm.getTargetList());
+					//recursive search child's child term
 					findTargets(subTerm);
 				}
+				//add target to parent indexterm
 				term.addTargets(subTerm.getTargetList());
-			}			
+				// edited by William on 2009-07-13 for indexterm bug:2819853 end
+			}
+			
 		}	
+	}
+
+	/**
+	 * Get index file name.
+	 * @param outputFileRoot root
+	 * @return index file name
+	 */
+	public String getIndexFileName(String outputFileRoot) {
+		StringBuffer indexFilename;
+		
+		indexFilename = new StringBuffer(outputFileRoot);
+		indexFilename.append(".hhk");
+		// TODO Auto-generated method stub
+		return indexFilename.toString();
 	}
 
 }

@@ -7,12 +7,14 @@
 <project name="build_DITA-OT_package" default="build-all-packages" 
             basedir=".">
   <description>Build source and binary packages for DITA Open Toolkit</description>
-
+  
   <property name="HTMLHelpCompiler" value="C:\Program Files\HTML Help Workshop\hhc.exe"/>  
   <property name="package.output.dir" location="build\"/>
   <property name="package.name.root" value="DITA-OT"/>
-  <property name="version" value="1.4.2.1"/>
-  
+  <property name="version" value="1.5"/>
+  <!--This property should be edited manually in each milestone release?-->
+  <property name="milestone" value="M25"/>
+	
   <property name="src.dir" location="src/"/>
   <property name="bin.dir" location="output2/"/>
   <property name="lib.dir" location="lib/"/>
@@ -55,10 +57,22 @@
   </target>
   
   <target name="build-java" depends="init-java">
-    <javac srcdir="${src.dir}" destdir="${bin.dir}" excludes="com/**"
+  	
+  	<!-- Copying the files to a build directory before we modify the files -->
+  	<copy todir="${bin.dir}/build">
+  		<fileset dir="${src.dir}" excludes="com/**,org/dita/dost/junit/**"/>
+  	</copy>
+  	
+  	<!-- Update the token so that we can find out what the version of DITA-OT users
+  	are using -->
+  	<replace file="${bin.dir}/build/org/dita/dost/util/Version.java" 
+  	             token="@@VERSION@@" value="${package.name.root} ${version}${milestone}"/>
+  	
+    <javac srcdir="${bin.dir}/build" destdir="${bin.dir}" excludes="com/**,org/dita/dost/junit/**"
       debug="on" source="1.5" target="1.5">
       <classpath location="lib/resolver.jar"></classpath>
     </javac>
+  	<delete dir="${bin.dir}/build" includeemptydirs="yes"/>
   </target>
   
   <target name="package-java" depends="build-java">
@@ -73,6 +87,15 @@
   </target>
   
   <patternset id="pattern.package.minimum">
+  	
+  	<exclude name="demo/fo/fop/build/" />
+	<exclude name="demo/fo/fop/conf/" />
+	<exclude name="demo/fo/fop/lib/" />
+	<exclude name="demo/fo/lib/icu4j.jar" />
+	<exclude name="build.log"/>
+  	<include name="demo/tocjs/**"/>
+  	<include name="demo/h2d/**"/>
+  	<include name="demo/fo/**" />
     <include name="*.*"/>
     <include name="css/**"/>
     <include name="dtd/**"/>
@@ -86,16 +109,22 @@
     <exclude name=".*"/>
   </patternset>
     
-  <patternset id="pattern.package.general">
+  <patternset id="pattern.package.full">
     <include name="*.*"/>
     <include name="ant/**"/>
     <include name="css/**"/>    
     <include name="demo/book/**"/>
   	<include name="demo/elementref/**"/>
+  	<include name="demo/eclipsemap/**"/>
    	<include name="demo/enote/**"/>
   	<include name="demo/faq/**"/>
   	<include name="demo/h2d/**"/>
   	<include name="demo/java/**"/>
+  	<include name="demo/dita11/**"/>
+  	<include name="demo/dita132/**"/>
+	<include name="demo/fo/**" />
+	<include name="demo/legacypdf/**" />
+  	<include name="demo/tocjs/**"/>
     <include name="doc/**"/>
     <include name="dtd/**"/>
     <include name="plugins/**"/>
@@ -106,11 +135,52 @@
     <include name="lib/APACHE-LICENSE-2_0.html"/>
     <include name="lib/resolver.jar"/>
     <include name="lib/CatalogManager.properties"/>
+  	<include name="lib/saxon/**" />
     <exclude name="doc/userguide-orig/**"/>
 	<exclude name="doc/ot-userguide/**"/>
     <exclude name="build.number"/>
     <exclude name=".*"/>
   </patternset>
+	
+	<patternset id="pattern.package.standard">
+			
+			<exclude name="demo/fo/fop/build/" />
+			<exclude name="demo/fo/fop/conf/" />
+			<exclude name="demo/fo/fop/lib/" />
+			<exclude name="demo/fo/lib/icu4j.jar" />
+			<exclude name="build.log"/>
+		
+			<include name="*.*"/>
+		    <include name="ant/**"/>
+		    <include name="css/**"/>    
+		    <include name="demo/book/**"/>
+		  	<include name="demo/elementref/**"/>
+		    <include name="demo/eclipsemap/**"/>
+		   	<include name="demo/enote/**"/>
+		  	<include name="demo/faq/**"/>
+		  	<include name="demo/h2d/**"/>
+		  	<include name="demo/java/**"/>
+		  	<include name="demo/dita11/**"/>
+		  	<include name="demo/dita132/**"/>
+			<include name="demo/fo/**" />
+			<include name="demo/legacypdf/**" />
+			<include name="demo/tocjs/**"/>
+		    <include name="doc/**"/>
+		    <include name="dtd/**"/>
+		    <include name="plugins/**"/>
+		    <include name="resource/**"/>
+		    <include name="samples/**"/>
+		    <include name="schema/**"/>      
+		    <include name="xsl/**"/>
+		    <include name="lib/APACHE-LICENSE-2_0.html"/>
+		    <include name="lib/resolver.jar"/>
+		    <include name="lib/CatalogManager.properties"/>
+		  	<exclude name="lib/saxon/**" />
+		    <exclude name="doc/userguide-orig/**"/>
+			<exclude name="doc/ot-userguide/**"/>
+		    <exclude name="build.number"/>
+		    <exclude name=".*"/>
+	</patternset>
 	
   <patternset id="pattern.package.ant">
   	<include name="tools/ant/*.*" />
@@ -121,9 +191,10 @@
   <target name="package-source">
     <zip destfile="${package.output.dir}/${param.out.file}${win32.zip.suffix}">
       <zipfileset dir="./" prefix="${package.name.root}${version}-src">
-        <patternset refid="pattern.package.general"/>
+        <patternset refid="pattern.package.standard"/>
         <include name="src/**"/>
       	<include name="lib/APACHE-LICENSE-2_0.html"/>
+      	<include name="lib/commons-logging-1.1.1.jar"/>
         <exclude name="files.txt"/>
         <exclude name="startcmd.*"/>
       </zipfileset>
@@ -131,9 +202,10 @@
     <tar destfile="${package.output.dir}/${param.out.file}${linux.zip.suffix}" 
       compression="gzip" longfile="gnu">
       <tarfileset dir="./" prefix="${package.name.root}${version}-src">
-        <patternset refid="pattern.package.general"/>
+        <patternset refid="pattern.package.standard"/>
         <include name="src/**"/>
       	<include name="lib/APACHE-LICENSE-2_0.html"/>
+      	<include name="lib/commons-logging-1.1.1.jar"/>
         <exclude name="files.txt"/>
         <exclude name="startcmd.*"/>
       </tarfileset>
@@ -141,31 +213,44 @@
   </target>
   
   <target name="package-binary-minimum">
-    <zip destfile="${package.output.dir}/${param.out.file}${win32.zip.suffix}">
-      <zipfileset dir="./" prefix="${package.name.root}${version}">
-        <patternset refid="pattern.package.minimum"/>
-        <include name="lib/dost.jar"/>
-        <exclude name="startcmd.*"/>
-        <exclude name="buildPackage.xml" />
-      </zipfileset>      
-    </zip>
-    
-    <tar destfile="${package.output.dir}/${param.out.file}${linux.zip.suffix}"
-      compression="gzip" longfile="gnu">
-      <tarfileset dir="./" prefix="${package.name.root}${version}">
-        <patternset refid="pattern.package.minimum"/>
-        <include name="lib/dost.jar"/>
-        <exclude name="startcmd.*"/>
-        <exclude name="buildPackage.xml" />
-      </tarfileset>      
-    </tar>
+  	<sequential>
+  		<delete failonerror="no" includeemptydirs="true">
+			<fileset dir="demo">
+				<exclude name="fo/"/>
+				<exclude name="tocjs/"/>
+				<exclude name="h2d/"/>
+			</fileset>
+  		</delete>
+	  	<ant antfile="integrator.xml" target="integrate" />
+	    <zip destfile="${package.output.dir}/${param.out.file}${win32.zip.suffix}">
+	      <zipfileset dir="./" prefix="${package.name.root}${version}">
+	        <patternset refid="pattern.package.minimum"/>
+	        <include name="lib/dost.jar"/>
+	      	<include name="lib/commons-logging-1.1.1.jar"/>
+	        <exclude name="startcmd.*"/>
+	        <exclude name="buildPackage.xml" />
+	      </zipfileset>      
+	    </zip>
+	    
+	    <tar destfile="${package.output.dir}/${param.out.file}${linux.zip.suffix}"
+	      compression="gzip" longfile="gnu">
+	      <tarfileset dir="./" prefix="${package.name.root}${version}">
+	        <patternset refid="pattern.package.minimum"/>
+	        <include name="lib/dost.jar"/>
+	      	<include name="lib/commons-logging-1.1.1.jar"/>
+	        <exclude name="startcmd.*"/>
+	        <exclude name="buildPackage.xml" />
+	      </tarfileset>      
+	    </tar>
+	 </sequential>
   </target>
   
-  <target name="package-binary-small">    
+  <target name="package-binary-standard">    
     <zip destfile="${package.output.dir}/${param.out.file}${win32.zip.suffix}">
       <zipfileset dir="./" prefix="${package.name.root}${version}">
-        <patternset refid="pattern.package.general"/>
+        <patternset refid="pattern.package.standard"/>
         <include name="lib/dost.jar"/>
+      	<include name="lib/commons-logging-1.1.1.jar"/>
       	<include name="lib/APACHE-LICENSE-2_0.html"/>
         <exclude name="startcmd.*"/>
 		<exclude name="buildPackage.xml" />
@@ -175,8 +260,9 @@
     <tar destfile="${package.output.dir}/${param.out.file}${linux.zip.suffix}" 
       compression="gzip" longfile="gnu">
       <tarfileset dir="./" prefix="${package.name.root}${version}">
-        <patternset refid="pattern.package.general"/>
+        <patternset refid="pattern.package.standard"/>
         <include name="lib/dost.jar"/>
+		<include name="lib/commons-logging-1.1.1.jar"/>
       	<include name="lib/APACHE-LICENSE-2_0.html"/>
         <exclude name="startcmd.*"/>
 		<exclude name="buildPackage.xml" />
@@ -184,10 +270,10 @@
     </tar>
   </target>
   
-  <target name="package-binary-big">    
+  <target name="package-binary-full">    
     <zip destfile="${package.output.dir}/${param.out.file}${win32.zip.suffix}">
       <zipfileset dir="./" prefix="${package.name.root}${version}">
-        <patternset refid="pattern.package.general"/>
+        <patternset refid="pattern.package.full"/>
         <include name="lib/*.jar"/>
       	<patternset refid="pattern.package.ant"/>
       	<include name="lib/APACHE-LICENSE-2_0.html"/>
@@ -199,12 +285,16 @@
     <tar destfile="${package.output.dir}/${param.out.file}${linux.zip.suffix}" 
       compression="gzip" longfile="gnu">
       <tarfileset dir="./" prefix="${package.name.root}${version}">
-        <patternset refid="pattern.package.general"/>
+        <patternset refid="pattern.package.full"/>
         <include name="lib/*.jar"/>
         <patternset refid="pattern.package.ant"/>
       	<include name="lib/APACHE-LICENSE-2_0.html"/>
 		<include name="lib/ICU_License.html"/>
 		<exclude name="buildPackage.xml" />
+		<exclude name="startcmd.sh"/>
+      </tarfileset>
+      <tarfileset mode="755" dir="./" prefix="${package.name.root}${version}">
+        <include name="startcmd.sh"/>
       </tarfileset>
     </tar>
   </target>
@@ -216,15 +306,17 @@
   </target>
   
   <target name="build-package-binary" depends="package-java, update-doc, copy-updated-doc">
-    <antcall target="package-binary-minimum">
-      <param name="param.out.file" value="${binary-min}"/>
-    </antcall>
-    <antcall target="package-binary-small">
-      <param name="param.out.file" value="${binary}"/>
-    </antcall>
-    <antcall target="package-binary-big">
-      <param name="param.out.file" value="${binary-big}"/>
-    </antcall>
+  	<sequential>
+	  	<antcall target="package-binary-full">
+	  	   <param name="param.out.file" value="${binary-big}"/>
+	  	</antcall>
+	    <antcall target="package-binary-standard">
+	      <param name="param.out.file" value="${binary}"/>
+	    </antcall>
+	  	<antcall target="package-binary-minimum">
+	  	  <param name="param.out.file" value="${binary-min}"/>
+	  	</antcall>
+  	</sequential>
   </target>
     
   <target name="build-package-binary-with-buildnum" 
@@ -233,21 +325,23 @@
     <tstamp>
       <format property="build.time" pattern="yyyyMMddhhmm"/>
     </tstamp>
-    <antcall target="package-binary-min">
-      <param name="param.out.file"
-        value="${package.name.root}${version}b${build.number}_minimal_bin.${build.time}"/>
-    </antcall>
-    <antcall target="package-binary-small">
-      <param name="param.out.file" 
-        value="${package.name.root}${version}b${build.number}_standard_bin.${build.time}"/>
-    </antcall>
-    <antcall target="package-binary-big">
-      <param name="param.out.file" 
-        value="${package.name.root}${version}b${build.number}_full_easy_install_bin.${build.time}"/>
-    </antcall>
+  	<sequential>
+  		<antcall target="package-binary-full">
+	      <param name="param.out.file" 
+	        value="${package.name.root}${version}b${build.number}_full_easy_install_bin.${build.time}"/>
+	    </antcall>
+	    <antcall target="package-binary-standard">
+	      <param name="param.out.file" 
+	        value="${package.name.root}${version}b${build.number}_standard_bin.${build.time}"/>
+	    </antcall>
+		<antcall target="package-binary-minimum">
+	      <param name="param.out.file"
+	        value="${package.name.root}${version}b${build.number}_minimal_bin.${build.time}"/>
+	    </antcall>
+  	</sequential>
   </target>
   
-  <target name="build-all-packages" depends="init-package, build-package-binary, build-package-source"/>
+  <target name="build-all-packages" depends="init-package, build-package-source, build-package-binary"/>
   
   <target name="update-doc">
     <ant antfile="integrator.xml" target="integrate"/> 

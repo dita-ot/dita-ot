@@ -26,7 +26,7 @@
       navtitle="Building DITA output with Java command line"/>
     <topicref href="DITA-log.xml" navtitle="Problem determination and log analysis"/>
     <topicref href="DITA-h2d.xml" navtitle="Migrating HTML to DITA"/>
-    <topicref href="dita2word.xml#dita2word/limitation" navtitle="Transfomring DITA to Word RTF"/>
+    <topicref href="dita2word.xml#dita2word" navtitle="Transfomring DITA to Word RTF"/>
     <topichead navtitle="Development Reference">
       <topicref href="dev_ref/dev_ref.ditamap" format="ditamap"/>
     </topichead>

@@ -19,6 +19,12 @@
 <!-- the main dita to xhtml converter -->
 <xsl:import href="xslhtml/dita2htmlImpl.xsl"/>
 
+<!-- the dita to xhtml converter for concept documents -->
+<xsl:import href="xslhtml/conceptdisplay.xsl"/>
+
+<!-- the dita to xhtml converter for glossentry documents -->
+<xsl:import href="xslhtml/glossdisplay.xsl"/>
+
 <!-- the dita to xhtml converter for task documents -->
 <xsl:import href="xslhtml/taskdisplay.xsl"/>
 
@@ -35,6 +41,8 @@
 <xsl:import href="xslhtml/ui-d.xsl"/>
 <!-- highlighting domain -->
 <xsl:import href="xslhtml/hi-d.xsl"/>
+<!-- abbreviated-form domain -->
+<xsl:import href="xslhtml/abbrev-d.xsl"/>
 
 <dita:extension id="dita.xsl.xhtml" behavior="org.dita.dost.platform.ImportXSLAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
 
@@ -53,7 +61,12 @@
 
 <!-- DITAEXT file extension name of dita topic file -->
 <xsl:param name="DITAEXT" select="'.xml'"/>
-
+<!-- added by William on 2009-06-24 for flag support start -->
+<xsl:param name="filename"/>
+<xsl:param name="filedir"/>
+<xsl:param name="CURRENTFILE" select="concat($filedir, '/', substring-before($filename, '.'), '.dita')"/>
+<!-- added by William on 2009-06-24 for flag support end -->     
+     
 <!-- root rule -->
 <xsl:template match="/">
   <xsl:apply-templates/>

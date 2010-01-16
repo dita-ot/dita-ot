@@ -125,7 +125,7 @@ See the accompanying license.txt file for applicable licenses.
                 <xsl:value-of select="$layout-masters"/>
             </xsl:comment>
 
-            <xsl:apply-templates select="document($layout-masters)/*" mode="layout-masters-processing"/>
+            <xsl:call-template name="createLayoutMasters"/>
 
             <xsl:call-template name="createBookmarks"/>
 

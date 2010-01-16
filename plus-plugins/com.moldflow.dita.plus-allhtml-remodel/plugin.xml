@@ -1,0 +1,14 @@
+<plugin id="com.moldflow.dita.plus-allhtml-remodel">
+  <require plugin="com.moldflow.dita.plus-anyhtml-topics-twopass"/>
+
+  <feature extension="xsl.plus-eclipsehelp-topics-twopass.stage1" value="xsl/stage1.xsl" type="file"/>
+  <feature extension="xsl.plus-htmlhelp-topics-twopass.stage1" value="xsl/stage1.xsl" type="file"/>
+  <feature extension="xsl.plus-html-topics-twopass.stage1" value="xsl/stage1.xsl" type="file"/>
+  <feature extension="xsl.plus-xhtml-topics-twopass.stage1" value="xsl/stage1.xsl" type="file"/>
+
+  <feature extension="xsl.plus-eclipsehelp-topics-twopass.stage2" value="xsl/remodel.xsl" type="file"/>
+  <feature extension="xsl.plus-htmlhelp-topics-twopass.stage2" value="xsl/remodel.xsl" type="file"/>
+  <feature extension="xsl.plus-html-topics-twopass.stage2" value="xsl/remodel.xsl" type="file"/>
+  <feature extension="xsl.plus-xhtml-topics-twopass.stage2" value="xsl/remodel.xsl" type="file"/>
+
+</plugin>

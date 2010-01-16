@@ -1,0 +1,31 @@
+<plugin id="com.moldflow.dita.plus-allhtml-svgobject">
+
+  <require plugin="com.moldflow.dita.plus-anyhtml-topics-twopass"/>
+  <require plugin="com.moldflow.dita.plus-allhtml-xhtml-namespace" importance="optional"/>
+
+  <template file="build_plus-allhtml-svgobject_template.xml"/>
+  <template file="xsl/svg2imagemap-shell_template.xsl"/>
+
+  <feature extension="dita.conductor.target.relative" value="build.xml" type="file"/>
+
+  <feature extension="dita.conductor.xhtml.param" value="insert-ant-topic-html-xslt.xml" type="file"/>
+
+  <feature extension="xsl.plus-xhtml-topics-twopass.stage1" value="xsl/stage1.xsl" type="file"/>
+  <feature extension="xsl.plus-html-topics-twopass.stage1" value="xsl/stage1.xsl" type="file"/>
+  <feature extension="xsl.plus-htmlhelp-topics-twopass.stage1" value="xsl/stage1.xsl" type="file"/>
+  <feature extension="xsl.plus-eclipsehelp-topics-twopass.stage1" value="xsl/stage1.xsl" type="file"/>
+
+  <feature extension="xsl.plus-xhtml-topics-twopass.stage2" value="xsl/fixup-xhtml.xsl" type="file"/>
+  <feature extension="xsl.plus-html-topics-twopass.stage2" value="xsl/fixup-html.xsl" type="file"/>
+  <feature extension="xsl.plus-htmlhelp-topics-twopass.stage2" value="xsl/fixup-html.xsl" type="file"/>
+  <feature extension="xsl.plus-eclipsehelp-topics-twopass.stage2" value="xsl/fixup-xhtml.xsl" type="file"/>
+
+  <feature extension="depend.plus-eclipsehelp-topics-twopass.stage1.pre" value="plus-allhtml-svgobject.before.stage1" type="text"/>
+  <feature extension="depend.plus-eclipsehelp-topics-twopass.stage1.post" value="plus-allhtml-svgobject.after.stage1" type="text"/>
+  <feature extension="depend.plus-htmlhelp-topics-twopass.stage1.pre" value="plus-allhtml-svgobject.before.stage1" type="text"/>
+  <feature extension="depend.plus-htmlhelp-topics-twopass.stage1.post" value="plus-allhtml-svgobject.after.stage1" type="text"/>
+  <feature extension="depend.plus-xhtml-topics-twopass.stage1.pre" value="plus-allhtml-svgobject.before.stage1" type="text"/>
+  <feature extension="depend.plus-xhtml-topics-twopass.stage1.post" value="plus-allhtml-svgobject.after.stage1" type="text"/>
+  <feature extension="depend.plus-html-topics-twopass.stage1.pre" value="plus-allhtml-svgobject.before.stage1" type="text"/>
+  <feature extension="depend.plus-html-topics-twopass.stage1.post" value="plus-allhtml-svgobject.after.stage1" type="text"/>
+</plugin>

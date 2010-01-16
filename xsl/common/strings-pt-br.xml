@@ -56,6 +56,14 @@
 <str name="Prerequisites">Prerequisites</str>
 <str name="or">or</str>
 
+<!--Task section labels -->
+<str name="task_context">Por Que e Quando Desempenhar Esta Tarefa</str>
+<str name="task_example">Exemplo</str>
+<str name="task_prereq">Antes de Iniciar</str>
+<str name="task_postreq">O que Fazer Depois</str>
+<str name="task_procedure">Procedimento</str>
+<str name="task_results">Resultados</str>
+
 <str name="Copyright">Copyright</str>
 
 <!-- Symbols -->

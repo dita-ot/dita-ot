@@ -35,6 +35,32 @@
       <xsl:with-param name="inputval" select="$ancestorlangUpper"/>
     </xsl:call-template>
   </xsl:template>
+
+  <xsl:template match="*" mode="get-first-topic-lang">
+    <xsl:variable name="first-topic-lang">
+      <xsl:choose>
+        <xsl:when test="/*[@xml:lang]"><xsl:value-of select="/*/@xml:lang"/></xsl:when>
+        <xsl:when test="/dita/*[@xml:lang]"><xsl:value-of select="/dita/*[@xml:lang][1]/@xml:lang"/></xsl:when>
+        <xsl:otherwise><xsl:value-of select="$DEFAULTLANG"/></xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:call-template name="convert-to-lower">
+      <xsl:with-param name="inputval" select="$first-topic-lang"/>
+    </xsl:call-template>
+  </xsl:template>
+
+  <xsl:template match="*" mode="get-render-direction">
+    <xsl:param name="lang">
+      <xsl:apply-templates select="/*" mode="get-first-topic-lang"/>
+    </xsl:param>
+    <xsl:choose>
+      <xsl:when test="$lang='ar-eg' or $lang='ar'">rtl</xsl:when>
+      <xsl:when test="$lang='he-il' or $lang='he'">rtl</xsl:when>
+      <xsl:when test="$lang='ur-pk' or $lang='ur'">rtl</xsl:when>
+      <xsl:otherwise>ltr</xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
   <!-- Function to get translated text for a common string.
      * Each language is stored in a unique file. The association between a language and
      its translations is stored in $stringFileList.
@@ -205,8 +231,54 @@
     </xsl:choose>
   </xsl:template>
   
+  <!-- replace all the blank in file name or directory with %20 -->
+  <xsl:template name="replace-blank">
+    <xsl:param name="file-origin"></xsl:param>
+    <xsl:choose>
+      <xsl:when test="contains($file-origin,' ')">
+        <xsl:call-template name="replace-blank">
+          <xsl:with-param name="file-origin">
+            <xsl:value-of select="substring-before($file-origin,' ')"/>%20<xsl:value-of select="substring-after($file-origin,' ')"/>
+          </xsl:with-param>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$file-origin"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
   
-  
+<!-- Return the portion of an HREF value up to the file's extension. This assumes
+     that the file has an extension, and that the topic and/or element ID does not
+     contain a period. Written to allow references such as com.example.dita.files/file.dita#topic -->
+<xsl:template match="*" mode="parseHrefUptoExtension">
+  <xsl:param name="href" select="@href"/>
+  <xsl:variable name="uptoDot"><xsl:value-of select="substring-before($href,'.')"/></xsl:variable>
+  <xsl:variable name="afterDot"><xsl:value-of select="substring-after($href,'.')"/></xsl:variable>
+  <xsl:value-of select="$uptoDot"/>
+  <xsl:choose>
+    <!-- No more periods, so this is at the extension -->
+    <xsl:when test="not(contains($afterDot,'.'))"/>
+    <!-- Multiple slashes; at least one must be a directory, so it's before the extension -->
+    <xsl:when test="contains(substring-after($afterDot,'/'),'/')">
+      <xsl:text>.</xsl:text>
+      <xsl:value-of select="substring-before($afterDot,'/')"/>
+      <xsl:text>/</xsl:text>
+      <xsl:apply-templates select="." mode="parseHrefUptoExtension"><xsl:with-param name="href" select="substring-after($afterDot,'/')"/></xsl:apply-templates>
+    </xsl:when>
+    <!-- Multiple periods, no slashes, no topic or element ID, so the file name contains more periods -->
+    <xsl:when test="not(contains($afterDot,'#'))">
+      <xsl:text>.</xsl:text>
+      <xsl:apply-templates select="." mode="parseHrefUptoExtension"><xsl:with-param name="href" select="$afterDot"/></xsl:apply-templates>
+    </xsl:when>
+    <!-- Multiple periods, no slashes, with #. Move to next period. Needs additional work to support
+         IDs containing periods. -->
+    <xsl:otherwise>
+      <xsl:text>.</xsl:text>
+      <xsl:apply-templates select="." mode="parseHrefUptoExtension"><xsl:with-param name="href" select="$afterDot"/></xsl:apply-templates>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
   
   
 </xsl:stylesheet>

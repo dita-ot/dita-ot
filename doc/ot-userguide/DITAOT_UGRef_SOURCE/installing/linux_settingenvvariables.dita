@@ -106,7 +106,7 @@ See the accompanying license.txt file for applicable licenses.
 					<p>(If you use SAXON) Set environment variables for SAXON:
     <ol>
 							<li>Set up CLASSPATH to include the saxon.jar file. For example:
-					<codeblock expanse="page">export CLASSPATH=${CLASSPATH}:${saxon_dir}/saxon.jar </codeblock>
+					<codeblock expanse="page">export CLASSPATH=${CLASSPATH}:${saxon_dir}/saxon9.jar:${saxon_dir}/saxon9-dom.jar:${saxon_dir}/saxon9-dom4j.jar:${saxon_dir}/saxon9-jdom.jar:${saxon_dir}/saxon9-s9api.jar:${saxon_dir}/saxon9-sql.jar:${saxon_dir}/saxon9-xom.jar:${saxon_dir}/saxon9-xpath.jar:${saxon_dir}/saxon9-xqj.jar </codeblock>
 							</li>
 							<li>Set up ANT_OPTS. For example: <codeblock>export ANT_OPTS=${ANT_OPTS} -Djavax.xml.transform.TransformerFactory=com.icl.saxon.TransformerFactoryImpl</codeblock>
 							</li>

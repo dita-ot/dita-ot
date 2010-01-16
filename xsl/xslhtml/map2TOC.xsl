@@ -70,9 +70,10 @@
   <xsl:param name="nodeID"/>
   <xsl:param name="outfile"/>
   <xsl:choose>
-  <xsl:when test="@navtitle">   
-    <xsl:value-of select="@navtitle"/>    
-  </xsl:when>
+    <xsl:when test="*[contains(@class,'- map/topicmeta ')]/*[contains(@class, '- topic/navtitle ')]">
+      <xsl:value-of select="*[contains(@class,'- map/topicmeta ')]/*[contains(@class, '- topic/navtitle ')]"/>
+    </xsl:when>
+    <xsl:when test="not(*[contains(@class,'- map/topicmeta ')]/*[contains(@class, '- topic/navtitle ')]) and @navtitle"><xsl:value-of select="@navtitle"/></xsl:when>
   <xsl:otherwise>
     <xsl:message>
       <xsl:text>neither title nor href</xsl:text>

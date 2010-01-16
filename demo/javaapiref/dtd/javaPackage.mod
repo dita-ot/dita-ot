@@ -1,5 +1,5 @@
 <!--
- | (C) Copyright IBM Corporation 2005 - 2006. All Rights Reserved.
+ | (C) Copyright IBM Corporation 2005, 2009. All Rights Reserved.
  *-->
 
 <!-- ============ Hooks for domain extension ============ -->
@@ -15,19 +15,19 @@
 
 
 <!-- ============ Topic specializations ============ -->
-<!ELEMENT javaPackage     ((%apiSyntax;)?, (%apiName;), (%shortdesc;), (%prolog;)?, (%javaPackageDetail;), (%related-links;)?, (%javaPackage-info-types;)*)>
+<!ELEMENT javaPackage     ((%apiName;), (%shortdesc; | %abstract;), (%prolog;)?, (%javaPackageDetail;), (%related-links;)?, (%javaPackage-info-types;)*)>
 <!ATTLIST javaPackage     id ID #REQUIRED
                           conref CDATA #IMPLIED
                           outputclass CDATA #IMPLIED
-                          xml:lang NMTOKEN #IMPLIED
+                          %localization-atts;
+                          %select-atts;
                           %arch-atts;
                           domains CDATA "&included-domains;"
 >
 
 <!ELEMENT javaPackageDetail      ((%apiDesc;)?, (%example;|%section;|%apiImpl;)*)>
 <!ATTLIST javaPackageDetail  %id-atts;
-                          translate (yes|no) #IMPLIED
-                          xml:lang NMTOKEN #IMPLIED
+                          %localization-atts;
                           outputclass CDATA #IMPLIED>
 
 

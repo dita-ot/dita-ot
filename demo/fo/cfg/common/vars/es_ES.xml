@@ -319,4 +319,7 @@ See the accompanying license.txt file for applicable licenses.
 
     <!-- The search by text button title in online-help output -->
     <variable id="Search text button title">Búsqueda</variable>
+    
+    <!--Label for a step with importance="optional"-->
+    <variable id="Optional Step">Opcional:</variable>
 </vars>

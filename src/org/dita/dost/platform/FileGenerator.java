@@ -25,7 +25,7 @@ import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.XMLReaderFactory;
 
 /**
- * Generate outputfile with templates
+ * Generate outputfile with templates.
  * @author Zhang, Yuan Peng
  */
 public class FileGenerator extends DefaultHandler {
@@ -33,21 +33,21 @@ public class FileGenerator extends DefaultHandler {
 	private XMLReader reader = null;
 	private DITAOTJavaLogger logger = null;
 	private OutputStreamWriter output = null;
-	private Hashtable featureTable = null;
+	private Hashtable<String,String> featureTable = null;
 	private String templateFileName = null;
 
 	/**
-	 * Default Constructor
+	 * Default Constructor.
 	 */
 	public FileGenerator() {
 		this(null);
 	}
 
 	/**
-	 * Constructor init featureTable
-	 * @param featureTbl
+	 * Constructor init featureTable.
+	 * @param featureTbl featureTbl
 	 */
-	public FileGenerator(Hashtable featureTbl) {
+	public FileGenerator(Hashtable<String,String> featureTbl) {
 		this.featureTable = featureTbl;
 		output = null;
 		templateFileName = null;	
@@ -71,8 +71,8 @@ public class FileGenerator extends DefaultHandler {
 	}
 	
 	/**
-	 * Generator the output file
-	 * @param fileName
+	 * Generator the output file.
+	 * @param fileName filename
 	 */
 	public void generate(String fileName){
 		FileOutputStream fileOutput = null;
@@ -101,7 +101,7 @@ public class FileGenerator extends DefaultHandler {
 	 */
 	public void characters(char[] ch, int start, int length) throws SAXException {
 		try{
-			output.write(ch,start,length);
+			output.write(StringUtils.escapeXML(ch,start,length));
 		}catch (Exception e) {
         	logger.logException(e);
         }

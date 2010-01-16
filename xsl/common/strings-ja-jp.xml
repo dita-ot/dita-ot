@@ -16,7 +16,7 @@
 <str name="Draft comment">ドラフト注釈</str>
 <str name="Option">オプション</str>
 <str name="Description">説明</str> 
-<str name="Optional">任意</str>
+<str name="Optional">オプション</str>
 <str name="Required">必須</str>
 <str name="Skip visual syntax diagram">構文図をスキップする</str>
 <str name="Read syntax diagram">構文図を読む</str>
@@ -55,6 +55,14 @@
 <str name="Prerequisite">前提条件</str>
 <str name="Prerequisites">前提条件</str>
 <str name="or">または</str>
+
+<!--Task section labels -->
+<str name="task_context">このタスクについて</str>
+<str name="task_example">例</str>
+<str name="task_prereq">始める前に</str>
+<str name="task_postreq">次のタスク</str>
+<str name="task_procedure">手順</str>
+<str name="task_results">タスクの結果</str>
 
 <str name="Copyright">Copyright</str>
 

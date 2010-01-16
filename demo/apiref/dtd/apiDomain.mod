@@ -1,5 +1,5 @@
 <!--
- | (C) Copyright IBM Corporation 2005 - 2006. All Rights Reserved.
+ | (C) Copyright IBM Corporation 2005, 2009. All Rights Reserved.
  *-->
 
 <!ENTITY % apipackage       "apipackage">
@@ -13,7 +13,7 @@
                       type   CDATA  #IMPLIED
                       %univ-atts;
                       format        CDATA   #IMPLIED
-                      scope (local | peer | external) #IMPLIED
+                      scope (local | peer | external | -dita-use-conref-target) #IMPLIED
                       outputclass CDATA #IMPLIED
 >
 
@@ -23,7 +23,7 @@
                       type   CDATA  #IMPLIED
                       %univ-atts;
                       format        CDATA   #IMPLIED
-                      scope (local | peer | external) #IMPLIED
+                      scope (local | peer | external | -dita-use-conref-target) #IMPLIED
                       outputclass CDATA #IMPLIED
 >
 
@@ -33,7 +33,7 @@
                       type   CDATA  #IMPLIED
                       %univ-atts;
                       format        CDATA   #IMPLIED
-                      scope (local | peer | external) #IMPLIED
+                      scope (local | peer | external | -dita-use-conref-target) #IMPLIED
                       outputclass CDATA #IMPLIED
 >
 
@@ -43,7 +43,7 @@
                       type   CDATA  #IMPLIED
                       %univ-atts;
                       format        CDATA   #IMPLIED
-                      scope (local | peer | external) #IMPLIED
+                      scope (local | peer | external | -dita-use-conref-target) #IMPLIED
                       outputclass CDATA #IMPLIED
 >
 

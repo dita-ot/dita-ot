@@ -9,23 +9,31 @@ import java.util.Iterator;
 
 import org.dita.dost.util.Constants;
 import org.dita.dost.util.FileUtils;
-
+/**
+ * ImportStringsAction class.
+ *
+ */
 public class ImportStringsAction extends ImportAction {
 
 	private StringBuffer retBuf = null;
-
+	/**
+	 * Constructor.
+	 */
 	public ImportStringsAction() {
 		super();
 		retBuf = new StringBuffer(Constants.INT_1024);
 	}
-	
+	/**
+	 * get result.
+	 * @return result
+	 */
 	public String getResult() {
-		Iterator iter;
-		String templateFilePath = (String)paramTable.get("template");
+		Iterator<String> iter;
+		String templateFilePath = paramTable.get("template");
 		String value = null;
 		iter = valueSet.iterator();
 		while(iter.hasNext()){
-			value = (String)iter.next();
+			value = iter.next();
 			retBuf.append(Constants.LINE_SEPARATOR);
 			retBuf.append("<stringfile>");				
 			retBuf.append(

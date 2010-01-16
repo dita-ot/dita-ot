@@ -10,13 +10,11 @@
 package org.dita.dost.module;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
-import java.util.StringTokenizer;
 
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTJavaLogger;
@@ -26,6 +24,8 @@ import org.dita.dost.pipeline.PipelineHashIO;
 import org.dita.dost.reader.MapIndexReader;
 import org.dita.dost.util.Constants;
 import org.dita.dost.util.FileUtils;
+import org.dita.dost.util.ListUtils;
+import org.dita.dost.util.StringUtils;
 import org.dita.dost.writer.DitaIndexWriter;
 
 /**
@@ -50,9 +50,13 @@ public class MoveIndexModule implements AbstractPipelineModule {
 
     }
 
-    /** (non-Javadoc)
-     * @see org.dita.dost.module.AbstractPipelineModule#execute(org.dita.dost.pipeline.AbstractPipelineInput)
-     */
+    /**
+	 * Entry point of MoveIndexModule.
+	 * @see org.dita.dost.module.AbstractPipelineModule#execute(org.dita.dost.pipeline.AbstractPipelineInput)
+	 * @param input Input parameters and resources.
+	 * @return null
+	 * @throws DITAOTException exception
+	 */
     public AbstractPipelineOutput execute(AbstractPipelineInput input) throws DITAOTException {
     	String mapFile;
     	Set mapSet;
@@ -62,42 +66,30 @@ public class MoveIndexModule implements AbstractPipelineModule {
 		DitaIndexWriter indexInserter = new DitaIndexWriter();
 		String baseDir = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_BASEDIR);
     	String tempDir = ((PipelineHashIO)input).getAttribute(Constants.ANT_INVOKER_PARAM_TEMPDIR);
-    	String inputMap = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_INPUTMAP);
-		File ditalist = null;
-    	File xmlDitalist=null;
-		Properties prop = new Properties();
-		StringTokenizer st = null;
     	
 		if (!new File(tempDir).isAbsolute()) {
         	tempDir = new File(baseDir, tempDir).getAbsolutePath();
         }
-		
+    	   		
 		indexReader.setMatch(new StringBuffer(Constants.ELEMENT_NAME_TOPICREF)
         .append(Constants.SLASH).append(Constants.ELEMENT_NAME_TOPICMETA)
         .append(Constants.SLASH).append(Constants.ELEMENT_NAME_KEYWORDS).toString());
 		
-		ditalist = new File(tempDir, Constants.FILE_NAME_DITA_LIST);
-		xmlDitalist=new File(tempDir,Constants.FILE_NAME_DITA_LIST_XML);
+		Properties properties = null;
 		try{
-			
-			if(xmlDitalist.exists())
-				prop.load(new FileInputStream(ditalist));
-			else
-				prop.loadFromXML(new FileInputStream(xmlDitalist));
-			
-		}catch(IOException ioe){
-			throw new DITAOTException(ioe);
+			properties = ListUtils.getDitaList();
+		}catch(IOException e){
+			throw new DITAOTException(e);
 		}
 		
-		st = new StringTokenizer(prop.getProperty(Constants.FULL_DITAMAP_LIST), Constants.COMMA);
-		while(st.hasMoreTokens()){
-			mapFile = new File(tempDir, st.nextToken()).getAbsolutePath();        	        
-	        indexReader.read(mapFile);
-		}		
+		Set<String> fullditamaplist = StringUtils.restoreSet(properties.getProperty(Constants.FULL_DITAMAP_LIST));
+		for(String fileName : fullditamaplist){
+			//FIXME: this reader needs parent directory for further process
+			indexReader.read(new File(tempDir, fileName).getAbsolutePath());  
+		}
 		
-        mapSet = (Set) indexReader.getContent().getCollection();
-
-        i = mapSet.iterator();
+		mapSet = (Set) indexReader.getContent().getCollection();
+		i = mapSet.iterator();
         while (i.hasNext()) {
             Map.Entry entry = (Map.Entry) i.next();
             targetFileName = (String) entry.getKey();

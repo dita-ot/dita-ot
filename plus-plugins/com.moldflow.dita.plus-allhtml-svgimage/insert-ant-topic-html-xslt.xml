@@ -1,0 +1,6 @@
+<xslt>
+
+      <!-- SVG image parameters. -->
+      <param name="plus-svgimage-format" expression="${plus.svgimage.format}" if="plus.svgimage.format"/>
+
+</xslt>

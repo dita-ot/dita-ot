@@ -35,7 +35,7 @@ public class ImgUtils {
 	private ImgUtils(){
 	}
 	/**
-	 * Get the image width
+	 * Get the image width.
 	 * @param dirName -
 	 * 				The directory name that will be added to the path 
 	 * 				of the image file.
@@ -60,7 +60,7 @@ public class ImgUtils {
 	}
 	
 	/**
-	 * Get the image height
+	 * Get the image height.
 	 * @param dirName -
 	 * 				The directory name that will be added to the path 
 	 * 				of the image file.
@@ -85,7 +85,7 @@ public class ImgUtils {
 	}
 	
 	/**
-	 * Get the image binary data, with hexical output
+	 * Get the image binary data, with hexical output.
 	 * @param dirName -
 	 * 				The directory name that will be added to the path 
 	 * 				of the image file.
@@ -127,7 +127,7 @@ public class ImgUtils {
 	}
 	
 	/**
-	 * Get the type of image file by extension
+	 * Get the type of image file by extension.
 	 * @param fileName -
 	 * 				The file name of the image file.
 	 * @return int -

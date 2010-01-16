@@ -9,6 +9,7 @@
  */
 package org.dita.dost.writer;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -31,7 +32,7 @@ import org.dita.dost.util.Constants;
  *  
  *  @version 1.0 2006-10-17
  */
-public class EclipseIndexWriter implements AbstractWriter {
+public class EclipseIndexWriter implements AbstractWriter, IDitaTranstypeIndexWriter  {
 	
 	/** List of indexterms */
 	private List termList = null;
@@ -41,7 +42,7 @@ public class EclipseIndexWriter implements AbstractWriter {
 	private DITAOTJavaLogger javaLogger = null;
 	
 	/**
-	 * Default constructor
+	 * Default constructor.
 	 */
 	public EclipseIndexWriter() {
 		javaLogger = new DITAOTJavaLogger();
@@ -77,8 +78,8 @@ public class EclipseIndexWriter implements AbstractWriter {
 	/**
 	 * Output the eclipse help index to the output stream.
      * 
-	 * @param outputStream
-	 * @throws UnsupportedEncodingException 
+	 * @param outputStream outputStream
+	 * @throws UnsupportedEncodingException UnsupportedEncodingException
 	 */
 	public void write(OutputStream outputStream) throws UnsupportedEncodingException {
 		PrintWriter printWriter = null;
@@ -105,16 +106,10 @@ public class EclipseIndexWriter implements AbstractWriter {
 		} finally {
 			printWriter.close();
 		}
-		if (getFilePath() != null){
-			addIndexExtension(getFilePath());
-		}else{
-			javaLogger.logError("The output file path to the file plugin.xml cannot be found. "+
-					"Unable to add Eclipse Index extension for this plugin");
-		}
 	
 	}
 	
-	/** (non-Javadoc)
+	/**
 	 * @see org.dita.dost.writer.AbstractWriter#write(java.lang.String)
 	 */
 	public void write(String filename) throws DITAOTException {			
@@ -190,9 +185,9 @@ public class EclipseIndexWriter implements AbstractWriter {
     }
     
     /**
-     * Replace the file extension
-     * @param aFileName
-     * @return
+     * Replace the file extension.
+     * @param aFileName file name to be replaced
+     * @return repaced file name
      */
     public String replaceExtName(String aFileName){
     	String fileName;
@@ -217,9 +212,24 @@ public class EclipseIndexWriter implements AbstractWriter {
     	}
     }
     
-    private void addIndexExtension(String filePath){
-    	
-    	
-    }
+    /**
+     * Get index file name.
+     * @param outputFileRoot root path
+     * @return index file name
+     */
+	public String getIndexFileName(String outputFileRoot) {
+		
+		StringBuffer indexFilename;
+		
+		File indexDir = new File(outputFileRoot).getParentFile();
+		// buff.delete(filepath, buff.length());
+		setFilePath(indexDir.getAbsolutePath());
+		// buff.insert(filepath, "\\index.xml");
+		indexFilename = new StringBuffer(new File(indexDir, "index.xml")
+				.getAbsolutePath());
+		
+		// TODO Auto-generated method stub
+		return indexFilename.toString();
+	}
 
 }

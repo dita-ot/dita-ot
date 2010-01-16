@@ -29,14 +29,15 @@ import org.dita.dost.util.StringUtils;
  */
 public class AntInvoker extends Task {
 
+	/**key value pair separator.*/
 	private final static String KEY_VALUE_PAIR_SEPARATOR = ";";
-
+	/**equal sign.*/
 	private final static String KEY_VALUE_EQUAL_SIGN = "=";
-
+	/**logger.*/
 	private DITAOTJavaLogger javaLogger = null;
-	
+	/**pipeline.*/
 	private PipelineFacade pipeline;
-
+	/**hashIO.*/
 	private PipelineHashIO pipelineInput;
 	
 	/**
@@ -50,7 +51,7 @@ public class AntInvoker extends Task {
 	}
 
 	/**
-	 * Set the "module" attribute for input
+	 * Set the "module" attribute for input.
 	 * @param module - The module to set.
 	 */
 	public void setModule(String module) {
@@ -58,7 +59,7 @@ public class AntInvoker extends Task {
 	}
 
 	/**
-	 * Set the "inputdata" attribute for input
+	 * Set the "inputdata" attribute for input.
 	 * @param inputdita - The inputdita to set.        
 	 */
 	public void setInputdita(String inputdita) {
@@ -66,7 +67,7 @@ public class AntInvoker extends Task {
 	}
 
 	/**
-	 * Set the "inputmap" attribute for input
+	 * Set the "inputmap" attribute for input.
 	 * @param inputmap - The inputmap to set.           
 	 */
 	public void setInputmap(String inputmap) {
@@ -74,7 +75,7 @@ public class AntInvoker extends Task {
 	}
 
 	/**
-	 * Set the "message" attribute for input
+	 * Set the "message" attribute for input.
 	 * @param msg -  The msg to set.        
 	 */
 	public void setMessage(String msg) {
@@ -82,7 +83,7 @@ public class AntInvoker extends Task {
 	}
 
 	/**
-	 * Set the "basedir" attribute for input
+	 * Set the "basedir" attribute for input.
 	 * @param baseDir - base dir to set.
 	 */
 	public void setBasedir(String baseDir) {
@@ -90,15 +91,15 @@ public class AntInvoker extends Task {
 	}
 
 	/**
-	 * Set the 'tempDir' attribute for input
-	 * @param tempdir
+	 * Set the 'tempDir' attribute for input.
+	 * @param tempdir temp
 	 */
 	public void setTempdir(String tempdir) {
 		pipelineInput.setAttribute("tempDir", tempdir);
 	}
 
 	/**
-	 * Set extra parameter values for input
+	 * Set extra parameter values for input.
 	 * @param extParam extended parameters string, key value pair string separated by
 	 *            ";" eg. extparam="maplinks=XXXX;other=YYYY"          
 	 */
@@ -142,8 +143,8 @@ public class AntInvoker extends Task {
 	}
 
 	/**
-	 * execution point of this invoker
-	 * @throws BuildException
+	 * execution point of this invoker.
+	 * @throws BuildException Exception
 	 */
 	public void execute() throws BuildException {
 		try {

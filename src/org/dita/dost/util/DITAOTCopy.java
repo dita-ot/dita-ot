@@ -30,14 +30,14 @@ public class DITAOTCopy extends Task {
 	private DITAOTJavaLogger logger = new DITAOTJavaLogger();
 	
 	/**
-	 * Default Constructor
+	 * Default Constructor.
 	 * 
 	 */
 	public DITAOTCopy(){
 	}
 	
 	/**
-	 * Set the copy files
+	 * Set the copy files.
 	 * @param incld The includes to set.
 	 */
 	public void setIncludes(String incld) {
@@ -53,16 +53,14 @@ public class DITAOTCopy extends Task {
     }
     
 	/**
-	 * Set the relative path from output dir.
-	 * 
-	 * @param relPaths
-	 *            the relative path .
+	 * Set the relative path from output directory.
+	 * @param relPaths the relative path .
 	 */
 	public void setRelativePaths(String relPaths) {
 		this.relativePaths = relPaths;
 	}
 
-	/** (non-Javadoc)
+	/**
 	 * @see org.apache.tools.ant.Task#execute()
 	 */
 	public void execute() throws BuildException {

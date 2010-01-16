@@ -19,7 +19,7 @@ import org.xml.sax.SAXException;
 
 /**
  * To change the template for this generated type comment go to
- * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
+ * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments.
  *
  * @author Zhang, Yuan Peng
  */
@@ -32,7 +32,7 @@ public class CatalogParser implements ContentHandler{
     private HashMap map;
     
     /**
-     * Automatically generated constructor: CatalogParser
+     * Automatically generated constructor: CatalogParser.
      */
     public CatalogParser() {
     	this(null, null);
@@ -42,8 +42,8 @@ public class CatalogParser implements ContentHandler{
     /**
      * Default constructor of CatalogParser class.
      * 
-     * @param catalogMap
-     * @param ditaDir
+     * @param catalogMap catalogMap
+     * @param ditaDir ditaDir
      */
     public CatalogParser(HashMap catalogMap, String ditaDir) {
         map = catalogMap;
@@ -51,20 +51,20 @@ public class CatalogParser implements ContentHandler{
         dtdBase = null;
     }
     
-    /** (non-Javadoc)
+    /** 
      * @see org.xml.sax.ContentHandler#characters(char[], int, int)
      */
     public void characters(char[] ch, int start, int length)
             throws SAXException {
     }
     
-    /** (non-Javadoc)
+    /** 
      * @see org.xml.sax.ContentHandler#endDocument()
      */
     public void endDocument() throws SAXException {
     }
     
-    /** (non-Javadoc)
+    /** 
      * @see org.xml.sax.ContentHandler#endElement(java.lang.String, java.lang.String, java.lang.String)
      */
     public void endElement(String uri, String localName, String qName)
@@ -74,42 +74,42 @@ public class CatalogParser implements ContentHandler{
         }
     }
     
-    /** (non-Javadoc)
+    /**
      * @see org.xml.sax.ContentHandler#endPrefixMapping(java.lang.String)
      */
     public void endPrefixMapping(String prefix) throws SAXException {
     }
     
-    /** (non-Javadoc)
+    /**
      * @see org.xml.sax.ContentHandler#ignorableWhitespace(char[], int, int)
      */
     public void ignorableWhitespace(char[] ch, int start, int length)
             throws SAXException {
     }
     
-    /** (non-Javadoc)
+    /**
      * @see org.xml.sax.ContentHandler#processingInstruction(java.lang.String, java.lang.String)
      */
     public void processingInstruction(String target, String data)
             throws SAXException {
     }
     
-    /** (non-Javadoc)
+    /**
      * @see org.xml.sax.ContentHandler#setDocumentLocator(org.xml.sax.Locator)
      */
     public void setDocumentLocator(Locator locator) {
     }
-    /** (non-Javadoc)
+    /**
      * @see org.xml.sax.ContentHandler#skippedEntity(java.lang.String)
      */
     public void skippedEntity(String name) throws SAXException {
     }
-    /** (non-Javadoc)
+    /**
      * @see org.xml.sax.ContentHandler#startDocument()
      */
     public void startDocument() throws SAXException {
     }
-    /** (non-Javadoc)
+    /**
      * @see org.xml.sax.ContentHandler#startElement(java.lang.String, java.lang.String, java.lang.String, org.xml.sax.Attributes)
      */
     public void startElement(String uri, String localName, String qName,
@@ -139,7 +139,7 @@ public class CatalogParser implements ContentHandler{
             map.put(atts.getValue("systemId"), absoluteLocalURI);
         }
     }
-    /** (non-Javadoc)
+    /**
      * @see org.xml.sax.ContentHandler#startPrefixMapping(java.lang.String, java.lang.String)
      */
     public void startPrefixMapping(String prefix, String uri)

@@ -30,9 +30,9 @@ import org.xml.sax.ext.LexicalHandler;
  */
 public abstract class AbstractXMLReader implements AbstractReader,
         ContentHandler, LexicalHandler, EntityResolver {
-
+	
     /**
-     * (non-Javadoc)
+     * (non-Javadoc).
      * 
      * @see org.dita.dost.reader.AbstractReader#read(java.lang.String)
      */
@@ -40,7 +40,7 @@ public abstract class AbstractXMLReader implements AbstractReader,
     }
 
     /**
-     * (non-Javadoc)
+     * (non-Javadoc).
      * 
      * @see org.dita.dost.reader.AbstractReader#getContent()
      */
@@ -49,7 +49,7 @@ public abstract class AbstractXMLReader implements AbstractReader,
     }
 
     /**
-     * (non-Javadoc)
+     * (non-Javadoc).
      * 
      * @see org.xml.sax.ContentHandler#setDocumentLocator(org.xml.sax.Locator)
      */
@@ -57,7 +57,7 @@ public abstract class AbstractXMLReader implements AbstractReader,
     }
 
     /**
-     * (non-Javadoc)
+     * (non-Javadoc).
      * 
      * @see org.xml.sax.ContentHandler#startDocument()
      */
@@ -65,7 +65,7 @@ public abstract class AbstractXMLReader implements AbstractReader,
     }
 
     /**
-     * (non-Javadoc)
+     * (non-Javadoc).
      * 
      * @see org.xml.sax.ContentHandler#endDocument()
      */
@@ -73,7 +73,7 @@ public abstract class AbstractXMLReader implements AbstractReader,
     }
 
     /**
-     * (non-Javadoc)
+     * (non-Javadoc).
      * 
      * @see org.xml.sax.ContentHandler#startPrefixMapping(java.lang.String,
      *      java.lang.String)
@@ -83,7 +83,7 @@ public abstract class AbstractXMLReader implements AbstractReader,
     }
 
     /**
-     * (non-Javadoc)
+     * (non-Javadoc).
      * 
      * @see org.xml.sax.ContentHandler#endPrefixMapping(java.lang.String)
      */
@@ -91,7 +91,7 @@ public abstract class AbstractXMLReader implements AbstractReader,
     }
 
     /**
-     * (non-Javadoc)
+     * (non-Javadoc).
      * 
      * @see org.xml.sax.ContentHandler#startElement(java.lang.String,
      *      java.lang.String, java.lang.String, org.xml.sax.Attributes)
@@ -101,7 +101,7 @@ public abstract class AbstractXMLReader implements AbstractReader,
     }
 
     /**
-     * (non-Javadoc)
+     * (non-Javadoc).
      * 
      * @see org.xml.sax.ContentHandler#endElement(java.lang.String,
      *      java.lang.String, java.lang.String)
@@ -111,7 +111,7 @@ public abstract class AbstractXMLReader implements AbstractReader,
     }
 
     /**
-     * (non-Javadoc)
+     * (non-Javadoc).
      * 
      * @see org.xml.sax.ContentHandler#characters(char[], int, int)
      */
@@ -120,7 +120,7 @@ public abstract class AbstractXMLReader implements AbstractReader,
     }
 
     /**
-     * (non-Javadoc)
+     * (non-Javadoc).
      * 
      * @see org.xml.sax.ContentHandler#ignorableWhitespace(char[], int, int)
      */
@@ -129,7 +129,7 @@ public abstract class AbstractXMLReader implements AbstractReader,
     }
 
     /**
-     * (non-Javadoc)
+     * (non-Javadoc).
      * 
      * @see org.xml.sax.ContentHandler#processingInstruction(java.lang.String,
      *      java.lang.String)
@@ -139,7 +139,7 @@ public abstract class AbstractXMLReader implements AbstractReader,
     }
 
     /**
-     * (non-Javadoc)
+     * (non-Javadoc).
      * 
      * @see org.xml.sax.ContentHandler#skippedEntity(java.lang.String)
      */
@@ -147,7 +147,7 @@ public abstract class AbstractXMLReader implements AbstractReader,
     }
 
     /**
-     * (non-Javadoc)
+     * (non-Javadoc).
      * 
      * @see org.xml.sax.ext.LexicalHandler#startDTD(java.lang.String,
      *      java.lang.String, java.lang.String)
@@ -157,7 +157,7 @@ public abstract class AbstractXMLReader implements AbstractReader,
     }
 
     /**
-     * (non-Javadoc)
+     * (non-Javadoc).
      * 
      * @see org.xml.sax.ext.LexicalHandler#endDTD()
      */
@@ -165,7 +165,7 @@ public abstract class AbstractXMLReader implements AbstractReader,
     }
 
     /**
-     * (non-Javadoc)
+     * (non-Javadoc).
      * 
      * @see org.xml.sax.ext.LexicalHandler#startEntity(java.lang.String)
      */
@@ -173,7 +173,7 @@ public abstract class AbstractXMLReader implements AbstractReader,
     }
 
     /**
-     * (non-Javadoc)
+     * (non-Javadoc).
      * 
      * @see org.xml.sax.ext.LexicalHandler#endEntity(java.lang.String)
      */
@@ -181,7 +181,7 @@ public abstract class AbstractXMLReader implements AbstractReader,
     }
 
     /**
-     * (non-Javadoc)
+     * (non-Javadoc).
      * 
      * @see org.xml.sax.ext.LexicalHandler#startCDATA()
      */
@@ -189,7 +189,7 @@ public abstract class AbstractXMLReader implements AbstractReader,
     }
 
     /**
-     * (non-Javadoc)
+     * (non-Javadoc).
      * 
      * @see org.xml.sax.ext.LexicalHandler#endCDATA()
      */
@@ -197,7 +197,7 @@ public abstract class AbstractXMLReader implements AbstractReader,
     }
 
     /**
-     * (non-Javadoc)
+     * (non-Javadoc).
      * 
      * @see org.xml.sax.ext.LexicalHandler#comment(char[], int, int)
      */
@@ -205,7 +205,7 @@ public abstract class AbstractXMLReader implements AbstractReader,
     }
 
     /**
-     * (non-Javadoc)
+     * (non-Javadoc).
      * 
      * @see org.xml.sax.EntityResolver#resolveEntity(java.lang.String,
      *      java.lang.String)

@@ -1,53 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- This file is part of the DITA Open Toolkit project hosted on 
-  Sourceforge.net. See the accompanying license.txt file for 
-  applicable licenses.-->
-<!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
+	<!--
+		This file is part of the DITA Open Toolkit project hosted on
+		Sourceforge.net. See the accompanying license.txt file for applicable
+		licenses.
+	-->
+	<!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="linux_install_fop" xml:lang="en-us">
-  <title>Installing Apache FOP</title>
-  <titlealts>
-    <searchtitle>Installing Apache FOP (Linux)</searchtitle>
-  </titlealts>
-  <shortdesc>Formatting Objects Processor (FOP) is a print formatter. It uses 
-    XSL formatting objects (XSL-FO) to produce portable document format (PDF) 
-    or direct-printable files. You can use it to format and produce PDF output 
-    from XML.</shortdesc>
-  <taskbody>
-    <steps>
-      <step>
-        <cmd>Enter the URL: <xref format="html" 
-          href="http://archive.apache.org/dist/xmlgraphics/fop/binaries/" 
-          scope="external">http://archive.apache.org/dist/xmlgraphics/fop/binaries/</xref></cmd>
-      </step>
-      <step>
-        <cmd>From the FOP page, in the Name column, select <uicontrol><image 
-          href="pic/compressed.gif"></image>"fop-0.20.5-bin.tar.gz" 
-          </uicontrol></cmd>
-      </step>
-      <step>
-        <cmd>Save and extract the package file into a Linux home directory. 
+	<title>Installing Apache FOP</title>
+	<titlealts>
+		<searchtitle>Installing Apache FOP (Linux)</searchtitle>
+	</titlealts>
+	<shortdesc>Formatting Objects Processor (FOP) is a print
+		formatter. It uses
+		XSL formatting objects (XSL-FO) to produce portable document format (PDF)
+		or direct-printable files. You can use it to format and produce PDF
+		output
+		from XML.</shortdesc>
+	<taskbody>
+		<steps>
+			<step>
+				<cmd>
+					Enter the URL:
+					<xref format="html"
+						href="http://archive.apache.org/dist/xmlgraphics/fop/binaries/"
+						scope="external">http://archive.apache.org/dist/xmlgraphics/fop/binaries/
+					</xref>
+				</cmd>
+			</step>
+			<step>
+				<cmd>
+					From the FOP page, in the Name column, select
+					<uicontrol>
+						<image href="pic/compressed.gif"></image>
+						"fop-0.95-bin.tar.gz"
+					</uicontrol>
+				</cmd>
+			</step>
+			<step>
+				<cmd>Save and extract the package file into a Linux home
+					directory. 
           </cmd>
-      </step>
-      <step>
-        <cmd>Set the <varname>CLASSPATH </varname><xref 
-          href="linux_settingenvironmentvariables.xml" 
-          scope="local">environment variable</xref> for the following jar 
-          files:</cmd>
-        <info>
-          <sl>
-            <sli>
-              <filepath>build/fop.jar</filepath>
-            </sli>
-            <sli>
-              <filepath>lib/batik.jar</filepath>
-            </sli>
-            <sli>
-              <filepath>lib/avalon-framework-cvs-20020806.jar</filepath>
-            </sli>
-          </sl>
-        </info>
-      </step>
-    </steps>
-  </taskbody>
+			</step>
+			<step>
+				<cmd>
+					Set the
+					<varname>CLASSPATH </varname>
+					<xref href="linux_settingenvironmentvariables.xml" scope="local">
+						environment variable</xref>
+					for the following jar
+					files:
+				</cmd>
+				<info>
+					<sl>
+						<sli>
+							<filepath>build/fop.jar</filepath>
+						</sli>
+						<sli>
+							<filepath>lib/avalon-framework-4.2.0.jar
+							</filepath>
+						</sli>
+						<sli>
+							<filepath>lib/batik-all-1.7.jar</filepath>
+						</sli>
+						<sli>
+							<filepath>lib/commons-io-1.3.1.jar
+							</filepath>
+						</sli>
+						<sli>
+							<filepath>lib/commons-logging-1.0.4.jar
+							</filepath>
+						</sli>
+						<sli>
+							<filepath>lib/serializer-2.7.0.jar
+							</filepath>
+						</sli>
+						<sli>
+							<filepath>lib/servlet-2.2.jar</filepath>
+						</sli>
+						<sli>
+							<filepath>lib/xalan-2.7.0.jar</filepath>
+						</sli>
+						<sli>
+							<filepath>lib/xercesImpl-2.7.1.jar
+							</filepath>
+						</sli>
+						<sli>
+							<filepath>lib/xml-apis-ext-1.3.04.jar
+							</filepath>
+						</sli>
+						<sli>
+							<filepath>lib/xmlgraphics-commons-1.3.1.jar
+							</filepath>
+						</sli>
+					</sl>
+				</info>
+			</step>
+		</steps>
+	</taskbody>
 </task>

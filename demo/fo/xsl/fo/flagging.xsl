@@ -93,6 +93,19 @@ See the accompanying license.txt file for applicable licenses.
             </xsl:otherwise>
         </xsl:choose>
     </exslf:function>
+    
+    <xsl:function version="2.0" name="opentopic-func:checkIfFlaged">
+        <xsl:param name="name"/>
+        <xsl:param name="value"/>
+        <xsl:choose>
+            <xsl:when test="$flagsParams//prop[@att = $name][@val = $value]">
+                <xsl:value-of select="generate-id($flagsParams//prop[@att = $name][@val = $value])"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="''"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:function>
 
 
 

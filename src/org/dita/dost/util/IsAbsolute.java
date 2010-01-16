@@ -24,14 +24,14 @@ public class IsAbsolute implements Condition {
 	private String path = null;
 	
 	/**
-	 * Default Constructor
+	 * Default Constructor.
 	 *
 	 */
 	public IsAbsolute(){
 	}
 
 	/**
-	 * Set the path
+	 * Set the path.
 	 * @param pth The path to set.
 	 */
 	public void setPath(String pth) {

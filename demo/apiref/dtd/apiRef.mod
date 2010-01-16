@@ -1,5 +1,5 @@
 <!--
- | (C) Copyright IBM Corporation 2005 - 2006. All Rights Reserved.
+ | (C) Copyright IBM Corporation 2005, 2009. All Rights Reserved.
  *-->
 
 <!-- ============ Hooks for domain extension ============ -->
@@ -34,11 +34,12 @@
 
 <!-- ============ Element definitions ============ -->
 
-<!ELEMENT apiRef         ((%apiName;), (%shortdesc;), (%prolog;)?, (%apiDetail;), (%related-links;)?, ( %apiRef-info-types;)*)>
+<!ELEMENT apiRef         ((%apiName;), (%shortdesc; | %abstract;), (%prolog;)?, (%apiDetail;), (%related-links;)?, ( %apiRef-info-types;)*)>
 <!ATTLIST apiRef          id ID #REQUIRED
                           conref CDATA #IMPLIED
                           outputclass CDATA #IMPLIED
-                          xml:lang NMTOKEN #IMPLIED
+                          %localization-atts;
+                          %select-atts;
                           %arch-atts;
                           domains CDATA "&included-domains;"
 >
@@ -50,8 +51,7 @@
 
 <!ELEMENT apiDetail      ((%apiSyntax;)*, (%apiDef;)*, (%apiDesc;)*, (%example;|%section;|%apiImpl;)*)>
 <!ATTLIST apiDetail       %id-atts;
-                          translate (yes|no) #IMPLIED
-                          xml:lang NMTOKEN #IMPLIED
+                          %localization-atts;
                           outputclass CDATA #IMPLIED>
 
 <!ELEMENT apiSyntax      ((%apiSyntaxText;)+, (%apiSyntaxItem;)*) >
@@ -109,7 +109,7 @@
                           type   CDATA  #IMPLIED
                           %univ-atts;
                           format        CDATA   #IMPLIED
-                          scope (local | peer | external) #IMPLIED
+                          scope (local | peer | external | -dita-use-conref-target) #IMPLIED
                           outputclass CDATA #IMPLIED
 >
 
@@ -168,7 +168,7 @@
 <!ATTLIST apiDefItem   %global-atts;
     class  CDATA "- topic/ph reference/ph apiRef/apiDefItem ">
 <!ATTLIST apiQualifier   %global-atts;
-    class  CDATA "- topic/state reference/state apiRef/apiQualifier ">
+    class  CDATA "- topic/data reference/data apiRef/apiQualifier ">
 <!ATTLIST apiRelation   %global-atts;
     class  CDATA "- topic/xref reference/xref apiRef/apiRelation ">
 <!ATTLIST apiType   %global-atts;
