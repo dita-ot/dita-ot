@@ -13,7 +13,7 @@
   <property name="package.name.root" value="DITA-OT"/>
   <property name="version" value="1.5"/>
   <!--This property should be edited manually in each milestone release?-->
-  <property name="milestone" value="M25"/>
+  <property name="milestone" value=""/>
 	
   <property name="src.dir" location="src/"/>
   <property name="bin.dir" location="output2/"/>
@@ -92,6 +92,9 @@
 	<exclude name="demo/fo/fop/conf/" />
 	<exclude name="demo/fo/fop/lib/" />
 	<exclude name="demo/fo/lib/icu4j.jar" />
+	<exclude name="lib/saxon/*" />
+	<exclude name="lib/icu4j.jar" />
+	<exclude name="lib/log4j.properties" />
 	<exclude name="build.log"/>
   	<include name="demo/tocjs/**"/>
   	<include name="demo/h2d/**"/>
@@ -103,6 +106,7 @@
     <include name="schema/**"/>      
     <include name="xsl/**"/>
     <include name="lib/APACHE-LICENSE-2_0.html"/>
+  	<include name="lib/**" />
     <include name="lib/resolver.jar"/>
     <include name="lib/CatalogManager.properties"/>
     <exclude name="build.number"/>
@@ -148,6 +152,9 @@
 			<exclude name="demo/fo/fop/conf/" />
 			<exclude name="demo/fo/fop/lib/" />
 			<exclude name="demo/fo/lib/icu4j.jar" />
+			<exclude name="lib/saxon/*" />
+			<exclude name="lib/icu4j.jar" />
+			<exclude name="lib/log4j.properties" />
 			<exclude name="build.log"/>
 		
 			<include name="*.*"/>
@@ -172,10 +179,11 @@
 		    <include name="samples/**"/>
 		    <include name="schema/**"/>      
 		    <include name="xsl/**"/>
+		    <include name="lib/**"/>
 		    <include name="lib/APACHE-LICENSE-2_0.html"/>
 		    <include name="lib/resolver.jar"/>
 		    <include name="lib/CatalogManager.properties"/>
-		  	<exclude name="lib/saxon/**" />
+		  	<!--exclude name="lib/saxon/**" /-->
 		    <exclude name="doc/userguide-orig/**"/>
 			<exclude name="doc/ot-userguide/**"/>
 		    <exclude name="build.number"/>
@@ -195,6 +203,8 @@
         <include name="src/**"/>
       	<include name="lib/APACHE-LICENSE-2_0.html"/>
       	<include name="lib/commons-logging-1.1.1.jar"/>
+      	<exclude name="lib/dost.jar"/>
+      	<exclude name="lib/saxon/**"/>
         <exclude name="files.txt"/>
         <exclude name="startcmd.*"/>
       </zipfileset>
@@ -206,6 +216,8 @@
         <include name="src/**"/>
       	<include name="lib/APACHE-LICENSE-2_0.html"/>
       	<include name="lib/commons-logging-1.1.1.jar"/>
+      	<exclude name="lib/dost.jar"/>
+      	<exclude name="lib/saxon/**"/>
         <exclude name="files.txt"/>
         <exclude name="startcmd.*"/>
       </tarfileset>
