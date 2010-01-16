@@ -14,6 +14,10 @@
      * Use fileparameter in Ant 1.7 to replace processing instruction in 
        intermediate dita files
      * Determine the version of DITA-OT via the class org.dita.dost.util.Version
+     * Remove duplicate ids in PDF topicmerge
+     * Move Notices before the TOC, suppress in the TOC and suppress the second copy after the TOC
+     * Include @scope="peer" condition when creating rel-links.  
+     
        
      [SourceForge Enhancements Added]
      * 2859612 Add support for Serbian (Latin)
@@ -130,6 +134,9 @@
      * 2900047 map2htmtoc.xsl doesn't allow for extension of root template
      * 2900417 html transform does not use image/@scale properly
      * 2906957 Update Eclipse plugin DTDs and packaging
+     * 2796964 Use xml:lang for generated text in PDF
+     * 2860596 PullPrologIndexTerms selection too wide, Removed spurious pullPrologIndexTerms in section/title
+     * 1852733 Image "scale" attribute is ignored
 
 ====================================================================================
 
