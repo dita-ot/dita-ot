@@ -456,7 +456,7 @@ Children are displayed in a numbered list, with the target title as the cmd and 
   <xsl:choose>
     <xsl:when test="normalize-space(@href)='' or not(@href)"/>
     <!-- For non-DITA formats - use the href as is -->
-    <xsl:when test="(not(@format) and (@type='external' or @scope='external')) or (@format and not(@format='dita' or @format='DITA'))">
+    <xsl:when test="(not(@format) and (@type='external' or @scope='external' or @scope='peer')) or (@format and not(@format='dita' or @format='DITA'))">
       <xsl:value-of select="@href"/>
     </xsl:when>
     <!-- For DITA - process the internal href -->
