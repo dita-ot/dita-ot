@@ -171,6 +171,12 @@ See the accompanying license.txt file for applicable licenses.
                 <xsl:apply-templates select="*[contains(@class,' topic/topic ')]"/>
             </xsl:otherwise>
         </xsl:choose>
+        <xsl:apply-templates select="." mode="topicEpilog"/>
+    </xsl:template>
+
+    <xsl:template match="*" mode="topicEpilog">
+      <!-- Hook that allows common end-of-topic processing (after nested topics).
+           See SourceForge RFE 2928584: Add general model for end-of-topic processing in PDF -->
     </xsl:template>
 
     <xsl:template name="processUnknowTopic">
@@ -640,7 +646,12 @@ See the accompanying license.txt file for applicable licenses.
                             </xsl:if>
                             <xsl:apply-templates select="*[contains(@class,' topic/body ')]/*"/>
 
-							<!--<xsl:call-template name="buildRelationships"/>-->
+                            <!-- Added with RFE 2976463 to fix dropped links in topics with a mini-TOC. -->
+                            <xsl:if test="*[contains(@class,' topic/related-links ')]//
+                                          *[contains(@class,' topic/link ')][not(@role) or @role!='child']">
+                                <xsl:apply-templates select="*[contains(@class,' topic/related-links ')]"/>
+                            </xsl:if>
+
 						</fo:block>
                     </fo:table-cell>
                 </fo:table-row>
@@ -705,6 +716,16 @@ See the accompanying license.txt file for applicable licenses.
                     <xsl:with-param name="attrSet" select="$attrSet2"/>
                     <xsl:with-param name="path" select="'../../cfg/fo/attrs/commons-attr.xsl'"/>
                 </xsl:call-template>
+                <xsl:if test="$level = 1">
+                    <fo:marker marker-class-name="current-header">
+                        <xsl:call-template name="getTitle"/>
+                    </fo:marker>
+                </xsl:if>
+                <xsl:if test="$level = 2">
+                    <fo:marker marker-class-name="current-h2">
+                        <xsl:call-template name="getTitle"/>
+                    </fo:marker>
+                </xsl:if>
                 <fo:inline id="{parent::node()/@id}"/>
                 <fo:inline id="{concat('_OPENTOPIC_TOC_PROCESSING_', generate-id(..))}"/>
                 <!-- added by William on 2009-07-02 for indexterm bug:2815485 start-->
@@ -713,20 +734,6 @@ See the accompanying license.txt file for applicable licenses.
                 <xsl:call-template name="getTitle"/>
             </fo:block>
         </fo:block>
-        <xsl:if test="$level = 1">
-            <fo:block>
-                <fo:marker marker-class-name="current-header">
-                    <xsl:call-template name="getTitle"/>
-                </fo:marker>
-            </fo:block>
-        </xsl:if>
-        <xsl:if test="$level = 2">
-            <fo:block>
-                <fo:marker marker-class-name="current-h2">
-                    <xsl:call-template name="getTitle"/>
-                </fo:marker>
-            </fo:block>
-        </xsl:if>
     </xsl:template>
 
     <xsl:template name="createTopicAttrsName">
@@ -1291,8 +1298,9 @@ See the accompanying license.txt file for applicable licenses.
         <!--fo:block xsl:use-attribute-sets="shortdesc" id="{@id}">
             <xsl:apply-templates/>
         </fo:block-->
+        <!--Bug 2928540: use attribute set topic__shortdesc instead of shortdesc -->
         <!--compare the length of shortdesc with the got max chars-->
-        <fo:block xsl:use-attribute-sets="shortdesc" id="{@id}">
+        <fo:block xsl:use-attribute-sets="topic__shortdesc" id="{@id}">
             <!-- If the shortdesc is sufficiently short, add keep-with-next. -->
             <xsl:if test="string-length(.) &lt;= $maxCharsInShortDesc">
                 <!-- Low-strength keep to avoid conflict with keeps on titles. -->

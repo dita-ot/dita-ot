@@ -44,6 +44,7 @@
 <str name="Danger">ΚΙΝΔΥΝΟΣ</str>
 <str name="Remember">Υπενθύμιση</str>
 <str name="Restriction">Περιορισμός</str>
+<str name="Warning">Προειδοποίηση</str>
 
 <!-- default title text for section level generated sections -->
 <str name="Contents">Περιεχόμενα</str>

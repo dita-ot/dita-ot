@@ -69,7 +69,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Common Elements//EN"
 >%commonDefns;
 
 <!-- ============================================================= -->
-<!--                    COMMON ATTLIST SETS                        -->
+<!--                    COMMON ELEMENT SETS                        -->
 <!-- ============================================================= -->
 
 
@@ -559,7 +559,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Common Elements//EN"
                          -dita-use-conref-target) 
                                   #IMPLIED
               xml:lang 
-                        NMTOKEN 
+                        CDATA 
                                   #IMPLIED
               dir 
                         (lro | 
@@ -579,7 +579,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Common Elements//EN"
                          -dita-use-conref-target) 
                                   "no"
               xml:lang 
-                        NMTOKEN 
+                        CDATA 
                                   #IMPLIED
               dir 
                         (lro | 

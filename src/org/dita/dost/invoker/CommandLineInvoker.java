@@ -74,9 +74,13 @@ public class CommandLineInvoker {
 		paramMap.put("/eclipsehelptoc", "args.eclipsehelp.toc");
 		paramMap.put("/eclipsecontenttoc", "args.eclipsecontent.toc");
 		paramMap.put("/xhtmltoc", "args.xhtml.toc");
+		paramMap.put("/xhtmlclass", "args.xhtml.classattr");
+		paramMap.put("/usetasklabels", "args.gen.task.lbl");
 		paramMap.put("/logdir", "args.logdir");
 		paramMap.put("/ditalocale", "args.dita.locale");
 		paramMap.put("/fooutputrellinks", "args.fo.output.rel.links");
+		paramMap.put("/foincluderellinks", "args.fo.include.rellinks");
+		paramMap.put("/retaintopicfo", "retain.topic.fo");
 		paramMap.put("/version", "args.eclipse.version");
 		paramMap.put("/provider", "args.eclipse.provider");
 		paramMap.put("/fouserconfig", "args.fo.userconfig");
@@ -85,6 +89,7 @@ public class CommandLineInvoker {
 		paramMap.put("/outercontrol", "outer.control");
 		paramMap.put("/generateouter", "generate.copy.outer");
 		paramMap.put("/onlytopicinmap", "onlytopic.in.map");
+		paramMap.put("/debug", "args.debug");
 	}
 	/**propertyFile store input params.*/
 	private String propertyFile = null;
@@ -393,16 +398,23 @@ public class CommandLineInvoker {
         msg.append("  /outext:               specify the output file extension for generated xhtml files. Default is \".html\"" + lSep);
         msg.append("  /xsl:            	     specify the xsl file used to replace the default xsl file" + lSep);
         msg.append("  /cleantemp:            specify whether to clean the temp directory before each build. Valid values are \"no\" and \"yes\". Default is \"yes\"" + lSep);
-        msg.append("  /foimgext:             specify the extension of image file in pdf transformation. Default is \".jpg\"" + lSep);
+        msg.append("  /foimgext:             specify the extension of image file in legacy pdf transformation. Default is \".jpg\"" + lSep);
+        msg.append("  /fooutputrellinks      For legacy PDF transform: determine if links are included in the PDF. Values are \"no\" and \"yes\". Default is \"no\"." + lSep);
+        msg.append("  /foincluderellinks     For default PDF transform: determine which links are included in the PDF. Values are \"none\", \"all\", and \"nofamily\". Default is \"none\"." + lSep);
+        msg.append("  /retaintopicfo         specify that topic.fo file should be preserved in the output directory. Specify any value, such as \"yes\", to preserve the file." + lSep);
         msg.append("  /javahelptoc:          specify the root file name of the output javahelp toc file in javahelp transformation. Default is the name of the input ditamap file" + lSep);
         msg.append("  /javahelpmap:          specify the root file name of the output javahelp map file in javahelp transformation. Default is the name of the input ditamap file" + lSep);
         msg.append("  /eclipsehelptoc:       specify the root file name of the output eclipsehelp toc file in eclipsehelp transformation. Default is the name of the input ditamap file" + lSep);
         msg.append("  /eclipsecontenttoc:    specify the root file name of the output Eclipse content provider toc file in eclipsecontent transformation. Default is the name of the input ditamap file" + lSep);
         msg.append("  /xhtmltoc:             specify the root file name of the output xhtml toc file in xhtml transformation" + lSep);
+        msg.append("  /xhtmlclass:           specify whether DITA element names and ancestry are included in XHTML class attributes. Only \"yes\" and \"no\" are valid values. The default is no. " + lSep);
+        msg.append("  /usetasklabels:        specify whether DITA Task sections should get headings. Only \"YES\" and \"NO\" are valid values. The default is NO. " + lSep);
         msg.append("  /validate:             specify whether the ditamap/dita/xml files to be validated" + lSep);
         msg.append("  /outercontrol:         specify how to respond to the overflowing dita/topic files. Only \"fail\", \"warn\" and \"quiet\" are valid values. The default is warn. " + lSep);
-        msg.append("  /generateouter:        specify how to deal with the overflowing dita/topic files. Only \"1\", \"2\" and \"3\" are valid values. The default is 1. Option 1: Only generate/copy files that fit within the designated output directory. Option 2: Generate/copy all files, even those that will end up outside of the output directory. Option 3: the old solution,adjust the input.dir according to the referenced files. (not default option any more but keep this as the option of backward compatibility)." + lSep);
-		msg.append("  /onlytopicinmap:       specify whether the referenced dita/topic files which are not referenced by ditamap files should be resolved. Only \"true\" and \"false\" are valid values. The default is false. " + lSep);
+        msg.append("  /generateouter:        specify how to deal with the overflowing dita/topic files. Only \"1\", \"2\" and \"3\" are valid values. The default is 1. Option 1: Only generate/copy files that fit within the designated output directory. Option 2: Generate/copy all files, even those that will end up outside of the output directory. Option 3: the old solution,adjust the input.dir according to the referenced files" +
+        									 "(It is the most secure way to avoid broken links). (not default option any more but keep this as the option of backward compatibility)." + lSep);
+		msg.append("  /onlytopicinmap:       specify whether make dita processor only resolve dita/topic files which are referenced by primary ditamap files Only \"true\" and \"false\" are valid values. The default is false. " + lSep);
+		msg.append("  /debug:                specify whether extra debug information should be included in the log. Only \"yes\" and \"no\" are valid values. The default is no. " + lSep);
         System.out.println(msg.toString());
     }
     

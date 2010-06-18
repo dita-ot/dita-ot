@@ -44,6 +44,7 @@
 <str name="Danger">סכנה</str>
 <str name="Remember">נא לזכור</str>
 <str name="Restriction">מגבלה</str>
+<str name="Warning">אזהרה</str>
 
 <!-- default title text for section level generated sections -->
 <str name="Contents">תוכן</str>

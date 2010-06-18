@@ -385,4 +385,12 @@ See the accompanying license.txt file for applicable licenses.
 
     <!--Label for a step with importance="optional"-->
     <variable id="Optional Step">オプション:</variable>
+
+    <!--Labels for task sections-->
+    <variable id="Task Prereq">始める前に</variable>
+    <variable id="Task Context">このタスクについて</variable>
+    <variable id="Task Steps">手順</variable>
+    <variable id="Task Result">タスクの結果</variable>
+    <variable id="Task Example">例</variable>
+    <variable id="Task Postreq">次のタスク</variable>
 </vars>

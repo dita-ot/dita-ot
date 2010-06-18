@@ -41,6 +41,14 @@ See the accompanying license.txt file for applicable licenses.
     exclude-result-prefixes="opentopic exsl opentopic-index dita2xslfo"
     version="1.1">
 
+    <!-- Determines whether to generate titles for task sections. Values are YES and NO. -->
+    <xsl:param name="GENERATE-TASK-LABELS">
+        <xsl:choose>
+            <xsl:when test="$antArgsGenerateTaskLabels='YES'"><xsl:value-of select="$antArgsGenerateTaskLabels"/></xsl:when>
+            <xsl:otherwise>NO</xsl:otherwise>
+        </xsl:choose>
+    </xsl:param>
+
     <xsl:include href="../../cfg/fo/attrs/task-elements-attr.xsl"/>
 
     <xsl:template name="processTask">
@@ -61,12 +69,26 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:template match="*[contains(@class, ' task/prereq ')]">
         <fo:block xsl:use-attribute-sets="prereq" id="{@id}">
+            <xsl:apply-templates select="." mode="dita2xslfo:task-heading">
+                <xsl:with-param name="use-label">
+                    <xsl:call-template name="insertVariable">
+                        <xsl:with-param name="theVariableID" select="'Task Prereq'"/>
+                    </xsl:call-template>
+                </xsl:with-param>
+            </xsl:apply-templates>
             <xsl:apply-templates/>
         </fo:block>
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' task/context ')]">
         <fo:block xsl:use-attribute-sets="context" id="{@id}">
+            <xsl:apply-templates select="." mode="dita2xslfo:task-heading">
+                <xsl:with-param name="use-label">
+                    <xsl:call-template name="insertVariable">
+                        <xsl:with-param name="theVariableID" select="'Task Context'"/>
+                    </xsl:call-template>
+                </xsl:with-param>
+            </xsl:apply-templates>
             <xsl:apply-templates/>
         </fo:block>
     </xsl:template>
@@ -103,12 +125,39 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:template match="*[contains(@class, ' task/result ')]">
         <fo:block xsl:use-attribute-sets="result" id="{@id}">
+            <xsl:apply-templates select="." mode="dita2xslfo:task-heading">
+                <xsl:with-param name="use-label">
+                    <xsl:call-template name="insertVariable">
+                        <xsl:with-param name="theVariableID" select="'Task Result'"/>
+                    </xsl:call-template>
+                </xsl:with-param>
+            </xsl:apply-templates>
+            <xsl:apply-templates/>
+        </fo:block>
+    </xsl:template>
+
+    <xsl:template match="*[contains(@class, ' task/taskbody ')]/*[contains(@class, ' topic/example ')]">
+        <fo:block xsl:use-attribute-sets="example" id="{@id}">
+            <xsl:apply-templates select="." mode="dita2xslfo:task-heading">
+                <xsl:with-param name="use-label">
+                    <xsl:call-template name="insertVariable">
+                        <xsl:with-param name="theVariableID" select="'Task Example'"/>
+                    </xsl:call-template>
+                </xsl:with-param>
+            </xsl:apply-templates>
             <xsl:apply-templates/>
         </fo:block>
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' task/postreq ')]">
         <fo:block xsl:use-attribute-sets="postreq" id="{@id}">
+            <xsl:apply-templates select="." mode="dita2xslfo:task-heading">
+                <xsl:with-param name="use-label">
+                    <xsl:call-template name="insertVariable">
+                        <xsl:with-param name="theVariableID" select="'Task Postreq'"/>
+                    </xsl:call-template>
+                </xsl:with-param>
+            </xsl:apply-templates>
             <xsl:apply-templates/>
         </fo:block>
     </xsl:template>
@@ -121,9 +170,27 @@ See the accompanying license.txt file for applicable licenses.
 
     <!--Steps-->
     <xsl:template match="*[contains(@class, ' task/steps ')]">
-        <fo:list-block xsl:use-attribute-sets="steps" id="{@id}">
-            <xsl:apply-templates/>
-        </fo:list-block>
+        <xsl:choose>
+            <xsl:when test="$GENERATE-TASK-LABELS='YES'">
+              <fo:block>
+                  <xsl:apply-templates select="." mode="dita2xslfo:task-heading">
+                      <xsl:with-param name="use-label">
+                          <xsl:call-template name="insertVariable">
+                              <xsl:with-param name="theVariableID" select="'Task Steps'"/>
+                          </xsl:call-template>
+                      </xsl:with-param>
+                  </xsl:apply-templates>
+                  <fo:list-block xsl:use-attribute-sets="steps" id="{@id}">
+                      <xsl:apply-templates/>
+                  </fo:list-block>
+              </fo:block>
+            </xsl:when>
+            <xsl:otherwise>
+                <fo:list-block xsl:use-attribute-sets="steps" id="{@id}">
+                    <xsl:apply-templates/>
+                </fo:list-block>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' task/steps-unordered ')]">
@@ -133,6 +200,8 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' task/steps ')]/*[contains(@class, ' task/step ')]">
+        <!-- Switch to variable for the count rather than xsl:number, so that step specializations are also counted -->
+        <xsl:variable name="actual-step-count" select="number(count(preceding-sibling::*[contains(@class, ' task/step ')])+1)"/>
         <fo:list-item xsl:use-attribute-sets="steps.step">
             <fo:list-item-label xsl:use-attribute-sets="steps.step__label">
                 <xsl:if test="preceding-sibling::*[contains(@class, ' task/step ')] | following-sibling::*[contains(@class, ' task/step ')]">
@@ -142,7 +211,7 @@ See the accompanying license.txt file for applicable licenses.
                             <xsl:with-param name="theVariableID" select="'Ordered List Number'"/>
                             <xsl:with-param name="theParameters">
                                 <number>
-                                    <xsl:number/>
+                                    <xsl:value-of select="$actual-step-count"/>
                                 </number>
                             </xsl:with-param>
                         </xsl:call-template>
@@ -172,6 +241,23 @@ See the accompanying license.txt file for applicable licenses.
 
             <fo:list-item-body xsl:use-attribute-sets="steps-unordered.step__body">
                 <fo:block xsl:use-attribute-sets="steps-unordered.step__content">
+                    <xsl:apply-templates/>
+                </fo:block>
+            </fo:list-item-body>
+
+        </fo:list-item>
+    </xsl:template>
+
+    <xsl:template match="*[contains(@class, ' task/stepsection ')]">
+        <fo:list-item xsl:use-attribute-sets="stepsection">
+            <fo:list-item-label xsl:use-attribute-sets="stepsection__label">
+              <fo:block xsl:use-attribute-sets="stepsection__label__content">
+                  <fo:inline id="{@id}"/>
+              </fo:block>
+            </fo:list-item-label>
+
+            <fo:list-item-body xsl:use-attribute-sets="stepsection__body">
+                <fo:block xsl:use-attribute-sets="stepsection__content">
                     <xsl:apply-templates/>
                 </fo:block>
             </fo:list-item-body>
@@ -225,6 +311,15 @@ See the accompanying license.txt file for applicable licenses.
                 </fo:block>
             </fo:list-item-body>
         </fo:list-item>
+    </xsl:template>
+
+    <xsl:template match="*" mode="dita2xslfo:task-heading">
+        <xsl:param name="use-label"/>
+        <xsl:if test="$GENERATE-TASK-LABELS='YES'">
+            <fo:block xsl:use-attribute-sets="section.title">
+                <fo:inline><xsl:value-of select="$use-label"/></fo:inline>
+            </fo:block>
+        </xsl:if>
     </xsl:template>
 
 </xsl:stylesheet>

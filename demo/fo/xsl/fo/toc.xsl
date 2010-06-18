@@ -97,9 +97,10 @@ See the accompanying license.txt file for applicable licenses.
                 <xsl:call-template name="determineTopicType"/>
             </xsl:variable>
 
-            <xsl:variable name="parentTopicHead">
+            <!-- Removing this variable - it is not used and matches on an invalid class attribute. -->
+            <!--<xsl:variable name="parentTopicHead">
                 <xsl:copy-of select="$map//*[@id = $id]/parent::*[contains(@class, ' mapgroup/topichead ')]"/>
-            </xsl:variable>
+            </xsl:variable>-->
 
             <!--        <xsl:if test="(($mapTopic/*[position() = $topicNumber][@toc = 'yes' or not(@toc)]) or (not($mapTopic/*) and $include = 'true')) and not($parentTopicHead/*[position() = $topicNumber]/@toc = 'no')">-->
             <!-- added by William on 2009-05-11 for toc bug start -->

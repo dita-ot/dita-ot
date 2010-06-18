@@ -56,8 +56,8 @@
     <xs:annotation>
       <xs:documentation>
         The %topicref-atts-for-subjectScheme; parameter entity represents the set
-        of attributes used in the <ph><xref href="reltable.xml">reltable</xref></ph> map
-        element. The set is similar to those documented in <ph><xref href="topicref-atts.xml">topicref-atts</xref></ph> but
+        of attributes used in the <xref href="reltable.xml">reltable</xref> map
+        element. The set is similar to those documented in <xref href="topicref-atts.xml">topicref-atts</xref> but
         for &lt;<keyword>reltable</keyword>&gt; the <i><keyword>toc</keyword></i> attribute
         defaults to <q>no</q>. For the other elements that use the %topicref-atts;
         group declaration, the <i><keyword>toc</keyword></i> attribute doesn't have

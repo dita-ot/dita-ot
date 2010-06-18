@@ -70,7 +70,7 @@ public class TestDitaWriter {
 		pipelineInput.setAttribute("onlytopicinmap", "false");
 		pipelineInput.setAttribute("ditalist", tempDir + "/dita.list");
 		pipelineInput.setAttribute("maplinks", tempDir + "/maplinks.unordered");
-		
+		pipelineInput.setAttribute("transtype", "xhtml");
 		pipelineInput.setAttribute("ditaval", ditavalFile);
 		
 		

@@ -133,6 +133,29 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:attribute-set name="steps.step__content">
     </xsl:attribute-set>
 
+    <!-- Stepsection (new in DITA 1.2) -->
+    <xsl:attribute-set name="stepsection">
+        <xsl:attribute name="space-after.optimum">2pt</xsl:attribute>
+        <xsl:attribute name="space-before.optimum">2pt</xsl:attribute>
+    </xsl:attribute-set>
+
+    <xsl:attribute-set name="stepsection__label">
+        <xsl:attribute name="keep-together.within-line">always</xsl:attribute>
+        <xsl:attribute name="keep-with-next.within-line">always</xsl:attribute>
+        <xsl:attribute name="end-indent">label-end()</xsl:attribute>
+    </xsl:attribute-set>
+
+    <xsl:attribute-set name="stepsection__label__content">
+        <xsl:attribute name="text-align">left</xsl:attribute>
+    </xsl:attribute-set>
+
+    <xsl:attribute-set name="stepsection__body">
+        <xsl:attribute name="start-indent">9mm</xsl:attribute>
+    </xsl:attribute-set>
+
+    <xsl:attribute-set name="stepsection__content">
+    </xsl:attribute-set>
+
     <!--Substeps-->
     <xsl:attribute-set name="substeps">
         <xsl:attribute name="provisional-distance-between-starts">5mm</xsl:attribute>

@@ -43,6 +43,7 @@
 <str name="Danger">खतरा</str>
 <str name="Remember">याद करना</str>
 <str name="Restriction">प्रतिबंध</str>
+<str name="Warning">चेतावनी</str>
 
 <!-- default title text for section level generated sections -->
 <str name="Contents">सामग्री</str>

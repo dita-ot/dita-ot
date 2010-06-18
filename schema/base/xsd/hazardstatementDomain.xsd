@@ -155,7 +155,7 @@
     <xs:sequence>
       <xs:sequence>
       <xs:group ref="typeofhazard" />
-      <xs:group ref="consequence" maxOccurs="unbounded"/>
+      <xs:group ref="consequence" maxOccurs="unbounded" minOccurs="0"/>
       <xs:group ref="howtoavoid" maxOccurs="unbounded"/>
     </xs:sequence>
     </xs:sequence>
@@ -287,7 +287,7 @@
     </xs:complexType>
   </xs:element>
   
-  <xs:complexType name="howtoavoid.class">
+  <xs:complexType name="howtoavoid.class" mixed="true">
     <xs:sequence>
       <xs:group ref="howtoavoid.content"/>
     </xs:sequence>

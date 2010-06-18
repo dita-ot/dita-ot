@@ -16,13 +16,15 @@
       <title>Overview</title>
       <p>Currently, IBM is the sole Committer for the DITA Open Toolkit 
         project. The <xref href="http://www.opensource.org/licenses/cpl1.0.php" 
-        format="php">Common Public License</xref> (CPL), which is incorporated 
-        herein by reference, will serve as the primary license under which the 
+        format="html" scope="external">Common Public License</xref> (CPL) and
+        <xref href="http://www.apache.org/licenses/LICENSE-2.0" format="html"
+        scope="external">Apache License 2.0</xref>, which are incorporated 
+        herein by reference, will serve as the primary licenses under which the 
         Committer will accept contributions of software, documentation, 
         information (including, but not limited to, ideas, concepts, know-how 
         and techniques) and/or other materials (collectively 
         &quot;Content&quot;) to the project from Contributors. A copy of the 
-        CPL also can be found at the root directory of the DITA Open Toolkit 
+        CPL and Apache License 2.0 can be found at the root directory of the DITA Open Toolkit 
         deliverable package.</p>
       <p>This Contribution Policy should at all times be interpreted in a 
         manner that is consistent with the Purposes of the this project as set 
@@ -32,8 +34,7 @@
         this project through participation in this project, web-sites owned, 
         controlled, published and/or managed under the auspices of the this 
         project, or otherwise.</p>
-      <p>The Common Public License (&quot;<keyword 
-        id="License">CPL</keyword>&quot;) shall serve as the primary license 
+      <p>The Common Public License and Apache License 2.0 shall serve as the primary licenses 
         under which the Committer(s) shall accept software, documentation, 
         information (including, but not limited to, ideas, concepts, know-how 
         and techniques) and/or other materials (collectively 
@@ -66,7 +67,8 @@
           receive a signed <xref href="ContributionForm.xml">consent form</xref> (to be provided by the Committer) from 
           the contributor&apos;s employer confirming that the employer does not 
           object to the employee contributing the Content. </li> <li>Determine 
-          if the Content can be contributed under the terms of the CPL or the 
+          if the Content can be contributed under the terms of the CPL and
+          Apache License 2.0 or the 
           alternative terms and conditions supplied by the Contributor. This 
           can be done by asking the contributor questions such as; <ol> <li>Did 
           you develop all of the Content from scratch;</li> <li>If not, what 
@@ -96,7 +98,7 @@
       </ol>
       <p>If the applicable Committer has any doubts about the ability to 
         distribute the Content under terms and conditions that are consistent 
-        with the CPL or the proposed alternative terms and conditions, the 
+        with the CPL and Apache License 2.0 or the proposed alternative terms and conditions, the 
         Committer may not upload the code to the repository or otherwise 
         distribute the Content. The Committer(s) shall be responsible for 
         filing/maintaining the information collected for future reference as 
@@ -112,7 +114,7 @@
       <p>While the record keeping requirements do not apply to the items listed 
         above, Committers must conduct reasonable due diligence to satisfy 
         themselves that proposed Contributions can be licensed under the terms 
-        of the CPL .</p>
+        of the CPL and Apache License 2.0.</p>
     </section>
   </body>
 </topic>

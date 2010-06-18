@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--Arbortext, Inc., 1988-2009, v.4002-->
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+     Sourceforge.net. See the accompanying license.txt file in the
+     main toolkit package for applicable licenses.-->
+<!-- Copyright IBM Corporation 2010. All Rights Reserved. -->
+<!-- Originally created Oct. 2009 by Robert D. Anderson -->
 <!DOCTYPE songCollection PUBLIC "-//RDA//DTD DITA Song Reference//EN"
  "../../dtd/songCollection.dtd">
 <songCollection id="ld3e39739">

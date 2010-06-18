@@ -22,6 +22,7 @@ import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.Content;
 import org.dita.dost.util.Constants;
 import org.dita.dost.util.FileUtils;
+import org.dita.dost.util.MergeUtils;
 import org.dita.dost.util.StringUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -445,6 +446,10 @@ public class KeyrefPaser extends AbstractXMLWriter {
 								target = FileUtils.replaceExtName(target, extName);
 								if (new File(FileUtils.resolveFile(tempDir, target))
 										.exists()) {
+									//Added by William on 2010-05-26 for bug:3004060 start
+									File topicFile = new File(FileUtils.resolveFile(tempDir, target));
+									String topicId = this.getFirstTopicId(topicFile);
+									//Added by William on 2010-05-26 for bug:3004060 end
 									target_output = FileUtils
 											.getRelativePathFromMap(filepath,
 													new File(tempDir, target)
@@ -457,7 +462,7 @@ public class KeyrefPaser extends AbstractXMLWriter {
 									output.write(Constants.STRING_BLANK);
 									output.write(Constants.ATTRIBUTE_NAME_HREF);
 									output.write("=\"");
-									target_output = normalizeHrefValue(target_output, tail);
+									target_output = normalizeHrefValue(target_output, tail, topicId);
 									output.write(target_output);
 									output.write("\"");
 								} else {
@@ -708,8 +713,18 @@ public class KeyrefPaser extends AbstractXMLWriter {
 		for(int i=0; i<nodeList.getLength(); i++){
 			Node node = nodeList.item(i);
 			if(node.getNodeType() == Node.ELEMENT_NODE){
+				//Added by William on 2010-05-20 for bug:3004220 start
+				//special process for tm tag.
+				String classValue = node.getAttributes().getNamedItem(Constants.ATTRIBUTE_NAME_CLASS).getNodeValue();
+				if(classValue.contains(" topic/tm ")){
+					stringBuffer.append(nodeToString((Element)node, true));
+				}else{
+					// If the type of current node is ELEMENT_NODE, process current node.
+					stringBuffer.append(nodeToString((Element)node, flag));
+				}
+				//Added by William on 2010-05-20 for bug:3004220 end
 				// If the type of current node is ELEMENT_NODE, process current node.
-				stringBuffer.append(nodeToString((Element)node, flag));
+				//stringBuffer.append(nodeToString((Element)node, flag));
 			}
 			if(node.getNodeType() == Node.TEXT_NODE){
 				stringBuffer.append(node.getNodeValue());
@@ -751,4 +766,25 @@ public class KeyrefPaser extends AbstractXMLWriter {
 		}
 		return keyName + tail;
 	}
+	
+	//Added by William on 2010-05-26 for bug:3004060 start
+	//Get first topic id
+	private String getFirstTopicId(File topicFile) {
+		String path = topicFile.getParent();
+		String name = topicFile.getName();
+		MergeUtils util = MergeUtils.getInstance();
+		String topicId = util.getFirstTopicId(name, path, false);
+		return topicId;
+	}
+	//Insert topic id into href 
+	private static String normalizeHrefValue(String fileName, String tail, String topicId) {
+		int sharpIndex=fileName.indexOf(Constants.SHARP);
+		//Insert first topic id only when topicid is not set in keydef 
+		//and keyref has elementid
+		if(sharpIndex == -1 && !"".equals(tail)){
+			return fileName + Constants.SHARP + topicId + tail;
+		}
+		return fileName + tail;
+	}
+	//Added by William on 2010-05-26 for bug:3004060 end
 }

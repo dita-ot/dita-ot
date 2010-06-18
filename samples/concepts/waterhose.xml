@@ -5,12 +5,12 @@
 <!-- (C) Copyright IBM Corporation 2001, 2005. All Rights Reserved.
  *-->
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN"
- "../../dtd/concept.dtd">
+ "../../dtd/technicalContent/dtd/concept.dtd">
 <concept id="waterhoseconcept" xml:lang="en-us">
 <title>Water hose</title>
-<conbody><p>A water hose is useful for cleaning and gardening projects around the yard. 
-Keep the hose coiled on a large hook near a water spout.</p></conbody>
+<shortdesc>A water hose is useful for cleaning and gardening projects around the yard.</shortdesc>
+<conbody><p>Keep the hose coiled on a large hook near a water spout.</p></conbody>
 <related-links>
-<link href="../tasks/washingthecar.xml" format="dita" type="task"><linktext>Washing the car</linktext></link>
+<link href="../tasks/washingthecar.xml" format="dita" type="task"></link>
 </related-links>
 </concept>

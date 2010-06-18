@@ -24,7 +24,15 @@
 
 	<target name="all" description="build all output" 
 		depends="demo, samples">
-		<echo>output in the ${dita.output.dir} directory</echo>
+		<echo>Output from the demo build is in the directory
+${dita.output.dir}
+
+Previous releases also built a copy of the DITA 1.1 Language
+specification. The toolkit now fully supports DITA 1.2, but
+that specification is still undergoing last minute editing, so
+it is not included here. It will be added in DITA-OT 1.5.2.
+Until then, you can view the latest specification materials at
+http://wiki.oasis-open.org/dita/CD01</echo>
 	</target>
 	<!-- revise below here -->
 
@@ -43,7 +51,7 @@
 	<property name="dita.doc.dir"
 		value="${dita.dir}${file.separator}doc"/>
 	<property name="dita.doc.langref.dir"
-		value="${dita.doc.dir}${file.separator}langref"/>
+		value="${dita.doc.dir}${file.separator}langref-dita1.1"/>
 	<property name="dita.doc.articles.dir"
 		value="${dita.doc.dir}${file.separator}articles"/>
 
@@ -75,15 +83,15 @@
 	<property name="dita.output.demo.faq.dir"
 		value="${dita.output.demo.dir}${file.separator}faq"/>
 	<property name="dita.output.demo.langref.dir"
-		value="${dita.output.demo.dir}${file.separator}langref"/>
+		value="${dita.output.demo.dir}${file.separator}langref-dita1.1"/>
 
 	<property name="dita.output.demo.langrefhelp.dir"
-		value="${dita.output.demo.dir}${file.separator}langrefhelp"/>
+		value="${dita.output.demo.dir}${file.separator}langrefhelp-dita1.1"/>
 
 	<property name="dita.output.doc.dir"
 		value="${dita.output.dir}${file.separator}doc"/>
 	<property name="dita.output.doc.langref.dir"
-		value="${dita.output.doc.dir}${file.separator}langref"/>
+		value="${dita.output.doc.dir}${file.separator}langref-dita1.1"/>
 	<property name="dita.output.doc.articles.dir"
 		value="${dita.output.doc.dir}${file.separator}articles"/>
 
@@ -275,17 +283,20 @@
 		</xslt>
 	</target>
 
-	<target name="demo.langref"
-		description="build the Language Reference book as a demo"
-		depends="demo.langref.pdf">
+	<target name="demo.langref-dita1.1"
+		description="build the DITA 1.1 Language Reference book as a demo"
+		depends="demo.langref-dita1.1.pdf">
 	</target>
 
-	<target name="init.demo.langref" depends="init.demo">
+	<target name="demo.langref" depends="demo.langref.draftstatus.message">
+	</target>
+
+	<target name="init.demo.langref-dita1.1" depends="init.demo">
 		<mkdir dir="${dita.output.demo.langref.dir}"/>
 	</target>
 
 
-	<target name="demo.langref.pdf" depends="init.demo.langref">
+	<target name="demo.langref-dita1.1.pdf" depends="init.demo.langref-dita1.1">
 		<!-- DOST is the project name of imported build.xml-->
 		<antcall target="DOST.init">
 			<param name="args.input"      
@@ -297,8 +308,38 @@
 		</antcall>
 	</target>
 
-	<target name="demo.langref.compilehelp"
-		description="to build the Language Reference as HTML Help (not in all)"
+    <target name="demo.langref.draftstatus.message">
+      <echo>The language reference demo has been removed for DITA-OT 1.5.1
+because it used the DITA 1.1 language reference. The toolkit
+now fully supports DITA 1.2; DITA-OT 1.5.2 will include
+a new demo that uses the 1.2 specification. Those materials
+were still undergoing last minute editing when DITA-OT 1.5.1
+was frozen. For the latest pre-draft source, XHTML, and PDF
+versions of the DITA 1.2 specification, please visit
+see http://wiki.oasis-open.org/dita/CD01
+
+These targets are still available to build the DITA 1.1 materials:
+demo.langref-dita1.1.pdf
+demo.langref-dita1.1.compilehelp
+doc.langref-dita1.1.web
+doc.langref-dita1.1.pdf
+doc.langref-dita1.1.chm
+</echo>
+    </target>
+
+	<target name="demo.langref.pdf" depends="demo.langref.draftstatus.message">
+    </target>
+	<target name="demo.langref.compilehelp" depends="demo.langref.draftstatus.message">
+    </target>
+	<target name="doc.langref.web" depends="demo.langref.draftstatus.message">
+    </target>
+    <target name="doc.langref.chm" depends="demo.langref.draftstatus.message">
+    </target>
+    <target name="doc.langref.pdf" depends="demo.langref.draftstatus.message">
+    </target>
+
+	<target name="demo.langref-dita1.1.compilehelp"
+		description="to build the DITA 1.1 Language Reference as HTML Help (not in all)"
 		depends="init">
 		<antcall target="dita2htmlhelp">
 			<param name="args.input"
@@ -338,27 +379,27 @@
 		<delete dir="${dita.output.demo.faq.dir}"/>
 	</target>
 
-	<target name="clean.demo.langref"
+	<target name="clean.demo.langref-dita1.1"
 		description="remove the Language Reference demo output">
 		<delete dir="${dita.output.demo.langref.dir}"/>
 	</target>
 
-	<target name="clean.demo.langref.compilehelp"
+	<target name="clean.demo.langref-dita1.1.compilehelp"
 		description="remove the Language Reference as HTML Help output">
 		<delete dir="${dita.output.demo.langrefhelp.dir}"/>
 	</target>
 
 	<target name="doc"
 		description="build the documentation"
-		depends="init, doc.langref.web, doc.articles.web, doc.readme.web, doc.installguide.chm">      
+		depends="init, doc.articles.web, doc.readme.web, doc.installguide.chm">      
 	</target>
 	
-	<target name="init.doc.langref" depends="init">
+	<target name="init.doc.langref-dita1.1" depends="init">
 		<mkdir dir="${dita.output.doc.langref.dir}"/>
 	</target>
 	
-	<target name="doc.langref.web" depends="init.doc.langref"
-		description="Build the langref document.">
+	<target name="doc.langref-dita1.1.web" depends="init.doc.langref-dita1.1"
+		description="Build the DITA 1.1 Language Reference.">
 		<antcall target="dita2xhtml">
 			<param name="args.input"
 				value="${dita.doc.langref.dir}${file.separator}ditaref-alpha.ditamap"/>
@@ -374,8 +415,8 @@
         file="${dita.doc.langref.dir}${file.separator}resource${file.separator}index.html"/>		    
 	</target>
     
-    <target name="doc.langref.chm" depends="init.doc.langref"
-		description="Build the langref document.">
+    <target name="doc.langref-dita1.1.chm" depends="init.doc.langref-dita1.1"
+		description="Build the DITA 1.1 langref document to HTML Help.">
 		<antcall target="dita2htmlhelp">
 			<param name="args.input"
 				     value="${dita.doc.langref.dir}${file.separator}ditaref-alpha.ditamap"/>
@@ -388,8 +429,8 @@
 		</antcall>    
 	</target>
     
-    <target name="doc.langref.pdf" depends="init.doc.langref"
-		description="Build the langref document.">
+    <target name="doc.langref-dita1.1.pdf" depends="init.doc.langref-dita1.1"
+		description="Build the DITA 1.1 langref document to PDF.">
     	<!-- DOST is the project name of imported build.xml-->
 		<antcall target="DOST.init">
 			<param name="args.input"      
@@ -401,7 +442,7 @@
 		</antcall>
 	</target>
 	
-	<target name="clean.doc.langref"
+	<target name="clean.doc.langref-dita1.1"
 		description="Delete the langref directory in doc.">
 		<delete dir="${dita.output.doc.langref.dir}"></delete>
 	</target>

@@ -44,6 +44,7 @@
    <str name="Danger">NEBEZPEČENSTVO</str>
    <str name="Remember">Zapamätajte si</str>
    <str name="Restriction">Obmedzenie</str>
+   <str name="Warning">Varovanie</str>
 
    <!-- default title text for section level generated sections -->
    <str name="Contents">Obsah</str>

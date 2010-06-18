@@ -250,8 +250,10 @@
       <xs:documentation>When your DITA topic is transformed to XHTML, the &lt;<keyword>searchtitle</keyword>>
         element is used to create a title element at the top of the resulting HTML
         file. This title is normally used in search result summaries by some search
-        engines, such as that in Eclipse (<ph><xref format="html" href="http://eclipse.org"
-          scope="external">http://eclipse.org</xref></ph>); if not set, the XHTML's
+        engines, such as that in Eclipse (
+          <xref format="html" href="http://eclipse.org"
+          scope="external">http://eclipse.org</xref>
+        ); if not set, the XHTML's
         title element defaults to the source topic's title content (which may not
         be as well optimized for search summaries)
       </xs:documentation>
@@ -657,7 +659,7 @@
     <xs:annotation>
       <xs:documentation>
         The &lt;<keyword>linkinfo</keyword>> element allows you to place
-        a descriptive paragraph following a list of links in a <ph><xref href="linklist.xml">linklist</xref></ph> element. 
+        a descriptive paragraph following a list of links in a <xref href="linklist.xml">linklist</xref>  element. 
       </xs:documentation>
     </xs:annotation>
     <xs:complexType mixed="true">

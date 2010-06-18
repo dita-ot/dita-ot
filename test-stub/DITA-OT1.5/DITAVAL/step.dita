@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
 
-<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA 1.1 Task//EN" "file:/C:/DITA-OT1.4/dtd/task.dtd">
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA 1.1 Task//EN" "./dtd/technicalContent/dtd/task.dtd">
 <task id="step" xml:lang="en-us">
 <title>step</title>
 <shortdesc>As with any major program, you will need to run setup in order

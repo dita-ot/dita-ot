@@ -33,7 +33,7 @@ import org.dita.dost.util.Constants;
  * these will be sorted based on locale as long as the xml:lang attribute is used.)
  *
  */
-public class HTMLIndexWriter implements AbstractWriter, IDitaTranstypeIndexWriter {
+public class HTMLIndexWriter extends AbstractExtendDitaWriter implements AbstractWriter, IDitaTranstypeIndexWriter {
     /** List of indexterms */
     private List termList = null;
 

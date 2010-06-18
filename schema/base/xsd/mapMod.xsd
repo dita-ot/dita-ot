@@ -49,8 +49,8 @@
       <xs:documentation>
         The %topicref-atts; parameter entity represents a group of attributes
         used in numerous map elements: map, topicref, relcolspec, relcell, topichead,
-        and topicgroup. The set is similar to those documented in <ph><xref href="topicref-atts-no-toc.xml">topicref-atts-no-toc</xref></ph> but
-        includes the <i><keyword>toc</keyword></i> attribute.
+        and topicgroup. The set is similar to those documented in <xref href="topicref-atts-no-toc.xml">topicref-atts-no-toc</xref>
+        but includes the <i><keyword>toc</keyword></i> attribute.
       </xs:documentation>
     </xs:annotation>
      <xs:attribute name="collection-type" type="collection-type.class"/>
@@ -91,8 +91,12 @@
     <xs:annotation>
       <xs:documentation>
         The %topicref-atts-no-toc; parameter entity represents the set
-        of attributes used in the <ph><xref href="reltable.xml">reltable</xref></ph> map
-        element. The set is similar to those documented in <ph><xref href="topicref-atts.xml">topicref-atts</xref></ph> but
+        of attributes used in the 
+          <xref href="reltable.xml">reltable</xref>
+         map
+        element. The set is similar to those documented in 
+          <xref href="topicref-atts.xml">topicref-atts</xref>
+         but
         for &lt;<keyword>reltable</keyword>&gt; the <i><keyword>toc</keyword></i> attribute
         defaults to <q>no</q>. For the other elements that use the %topicref-atts;
         group declaration, the <i><keyword>toc</keyword></i> attribute doesn't have
@@ -603,8 +607,7 @@
         When your DITA topic is transformed to XHTML, the &lt;<keyword>searchtitle</keyword>&gt;
         element is used to create a title element at the top of the resulting HTML
         file. This title is normally used in search result summaries by some search
-        engines, such as that in Eclipse (<ph><xref format="html" href="http://eclipse.org"
-          scope="external">http://eclipse.org</xref></ph>); if not set, the XHTML's
+        engines, such as that in Eclipse (<xref format="html" href="http://eclipse.org"  scope="external">http://eclipse.org</xref>); if not set, the XHTML's
         title element defaults to the source topic's title content (which may not
         be as well optimized for search summaries)
       </xs:documentation>

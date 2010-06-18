@@ -44,6 +44,7 @@
 <str name="Danger">อันตราย</str>
 <str name="Remember">เตือนความจำ</str>
 <str name="Restriction">ข้อจำกัด</str>
+<str name="Warning">คำเตือน</str>
 
 <!-- default title text for section level generated sections -->
 <str name="Contents">สารบัญ</str>

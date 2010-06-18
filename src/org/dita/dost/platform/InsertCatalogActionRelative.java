@@ -69,7 +69,17 @@ public class InsertCatalogActionRelative extends InsertActionRelative implements
 					retBuf.append(attributes.getValue(i)).append("\"");
 				}
 			}
-			retBuf.append(">");
+			//Added by William on 2010-03-23 for bug:2974667 start
+			if(("public".equals(localName) ||
+					"system".equals(localName) ||
+					"uri".equals(localName))){
+				retBuf.append("/>");
+			}
+			//Added by William on 2010-03-23 for bug:2974667 end
+			else{
+				retBuf.append(">");
+			}
+			
 		}
 		elemLevel ++;
 	}

@@ -35,9 +35,15 @@ public class KeyrefModule implements AbstractPipelineModule {
 			throws DITAOTException {
 		String tempDir = ((PipelineHashIO)input).getAttribute(Constants.ANT_INVOKER_PARAM_TEMPDIR);
 		
+		//Added by William on 2010-03-30 for bug:2978858 start
+		//get basedir
+		String baseDir = ((PipelineHashIO)input).getAttribute(Constants.ANT_INVOKER_PARAM_BASEDIR);
+		//Added by William on 2010-03-30 for bug:2978858 end
+		
 		if (! new File(tempDir).isAbsolute()){
-			tempDir = new File(tempDir).getAbsolutePath();
+			tempDir = new File(baseDir, tempDir).getAbsolutePath();
 		}
+		
 		//Added by Alan Date:2009-08-04 --begin
 		String ext = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_DITAEXT);
 		String extName = ext.startsWith(Constants.DOT) ? ext : (Constants.DOT + ext);
@@ -53,7 +59,7 @@ public class KeyrefModule implements AbstractPipelineModule {
 
 		// maps of keyname and target 
 		Map<String, String> keymap =new HashMap<String, String>();
-		// store the key name defined in a map
+		// store the key name defined in a map(keyed by ditamap file)
 		Hashtable<String, HashSet<String>> maps = new Hashtable<String, HashSet<String>>();
 		
 		// get the key definitions from the dita.list, and the ditamap where it is defined

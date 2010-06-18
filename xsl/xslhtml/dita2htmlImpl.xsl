@@ -104,7 +104,11 @@
 <!-- the file name (file name and extension only - no path) of the document being transformed.
      Needed to help with debugging.
      default is 'myfile.xml')-->
+<!-- added by William on 2009-06-24 for flag support start -->
 <xsl:param name="FILENAME"/>
+<xsl:param name="FILEDIR"/>
+<xsl:param name="CURRENTFILE" select="concat($FILEDIR, '/', substring-before($FILENAME, '.'), $DITAEXT)"/>
+<!-- added by William on 2009-06-24 for flag support end --> 
 
 <!-- the file name containing filter/flagging/revision information
      (file name and extension only - no path).  - testfile: revflag.dita -->
@@ -629,6 +633,10 @@
 </xsl:template>
 
 <!-- Fixed SF Bug 1405184 "Note template for XHTML should be easier to override" -->
+<!-- RFE 2703335 reduces duplicated code by adding common processing rules.
+     To override all notes, match the note element's class attribute directly, as in this rule.
+     To override a single note type, match the class with mode="process.note.(selected-type)"
+     To override all notes except danger and caution, match the class with mode="process.note.common-processing" -->
 <xsl:template match="*[contains(@class,' topic/note ')]" name="topic.note">
   <xsl:call-template name="spec-title"/>
   <xsl:choose>
@@ -659,6 +667,9 @@
     <xsl:when test="@type='danger'">
       <xsl:apply-templates select="." mode="process.note.danger"/>
     </xsl:when>
+    <xsl:when test="@type='warning'">
+      <xsl:apply-templates select="." mode="process.note.warning"/>
+    </xsl:when>
     <xsl:when test="@type='other'">
       <xsl:apply-templates select="." mode="process.note.other"/>
     </xsl:when>
@@ -669,29 +680,37 @@
   <xsl:value-of select="$newline"/>
 </xsl:template>
 
-<xsl:template match="*" mode="process.note">
+<xsl:template match="*" mode="process.note.common-processing">
+  <xsl:param name="type" select="@type"/>
+  <xsl:param name="title">
+    <xsl:call-template name="getString">
+      <!-- For the parameter, turn "note" into "Note", caution => Caution, etc -->
+      <xsl:with-param name="stringName"
+           select="concat(translate(substring($type, 1, 1),'abcdefghijklmnopqrstuvwxyz','ABCDEFGHIJKLMNOPQRSTUVWXYZ'),
+                          substring($type, 2))"/>
+      </xsl:call-template>
+  </xsl:param>
   <xsl:variable name="flagrules">
     <xsl:call-template name="getrules"/>
   </xsl:variable>
-  <div class="note">
+  <div class="{$type}">
     <xsl:call-template name="commonattributes">
-      <xsl:with-param name="default-output-class" select="'note'"/>
+      <xsl:with-param name="default-output-class" select="$type"/>
     </xsl:call-template>
     <xsl:call-template name="gen-style">
       <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
     </xsl:call-template>
     <xsl:call-template name="setidaname"/>
-    <span class="notetitle">
-      <xsl:call-template name="getString">
-        <xsl:with-param name="stringName" select="'Note'"/>
-      </xsl:call-template>
-      <xsl:call-template name="getString">
-        <xsl:with-param name="stringName" select="'ColonSymbol'"/>
-      </xsl:call-template>
-    </span><xsl:text> </xsl:text>
     <xsl:call-template name="start-flagit">
       <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
     </xsl:call-template>
+    <span class="{$type}title">
+      <xsl:value-of select="$title"/>
+      <xsl:call-template name="getString">
+        <xsl:with-param name="stringName" select="'ColonSymbol'"/>
+      </xsl:call-template>
+    </span>
+    <xsl:text> </xsl:text>
     <xsl:call-template name="revblock">
       <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param> 
     </xsl:call-template>
@@ -699,200 +718,62 @@
       <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param> 
     </xsl:call-template>
   </div>
+</xsl:template>
+
+<xsl:template match="*" mode="process.note">
+  <xsl:apply-templates select="." mode="process.note.common-processing">
+    <!-- Force the type to note, in case new unrecognized values are added
+         before translations exist (such as Warning) -->
+    <xsl:with-param name="type" select="'note'"/>
+  </xsl:apply-templates>
 </xsl:template>
 
 <xsl:template match="*" mode="process.note.tip">
-  <xsl:variable name="flagrules">
-    <xsl:call-template name="getrules"/>
-  </xsl:variable>
-  <div class="tip">
-    <xsl:call-template name="commonattributes">
-      <xsl:with-param name="default-output-class" select="'tip'"/>
-    </xsl:call-template>
-    <xsl:call-template name="setidaname"/>
-    <xsl:call-template name="gen-style">
-      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
-    </xsl:call-template>
-    <span class="tiptitle">
-      <xsl:call-template name="getString">
-        <xsl:with-param name="stringName" select="'Tip'"/>
-      </xsl:call-template>
-      <xsl:call-template name="getString">
-        <xsl:with-param name="stringName" select="'ColonSymbol'"/>
-      </xsl:call-template>
-    </span><xsl:text> </xsl:text>
-    <xsl:call-template name="start-flagit">
-      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
-    </xsl:call-template>
-    <xsl:call-template name="revblock">
-      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param> 
-    </xsl:call-template>
-    <xsl:call-template name="end-flagit">
-      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param> 
-    </xsl:call-template>
-  </div>
+  <xsl:apply-templates select="." mode="process.note.common-processing"/>
 </xsl:template>
 
 <xsl:template match="*" mode="process.note.fastpath">
-  <xsl:variable name="flagrules">
-    <xsl:call-template name="getrules"/>
-  </xsl:variable>
-  <div class="fastpath">
-    <xsl:call-template name="commonattributes">
-      <xsl:with-param name="default-output-class" select="'fastpath'"/>
-    </xsl:call-template>
-    <xsl:call-template name="gen-style">
-      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
-    </xsl:call-template>
-    <xsl:call-template name="setidaname"/>
-    <span class="fastpathtitle">
-      <xsl:call-template name="getString">
-        <xsl:with-param name="stringName" select="'Fastpath'"/>
-      </xsl:call-template>
-      <xsl:call-template name="getString">
-        <xsl:with-param name="stringName" select="'ColonSymbol'"/>
-      </xsl:call-template>
-    </span><xsl:text> </xsl:text>
-    <xsl:call-template name="start-flagit">
-      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
-    </xsl:call-template>
-    <xsl:call-template name="revblock">
-      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param> 
-    </xsl:call-template>
-    <xsl:call-template name="end-flagit">
-      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param> 
-    </xsl:call-template>
-  </div>
+  <xsl:apply-templates select="." mode="process.note.common-processing"/>
 </xsl:template>
 
 <xsl:template match="*" mode="process.note.important">
-  <xsl:variable name="flagrules">
-    <xsl:call-template name="getrules"/>
-  </xsl:variable>
-  <div class="important">
-    <xsl:call-template name="commonattributes">
-      <xsl:with-param name="default-output-class" select="'important'"/>
-    </xsl:call-template>
-    <xsl:call-template name="gen-style">
-      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
-    </xsl:call-template>
-    <xsl:call-template name="setidaname"/>
-    <span class="importanttitle">
-      <xsl:call-template name="getString">
-        <xsl:with-param name="stringName" select="'Important'"/>
-      </xsl:call-template>
-      <xsl:call-template name="getString">
-        <xsl:with-param name="stringName" select="'ColonSymbol'"/>
-      </xsl:call-template>
-    </span><xsl:text> </xsl:text>
-    <xsl:call-template name="start-flagit">
-      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
-    </xsl:call-template>
-    <xsl:call-template name="revblock">
-      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param> 
-    </xsl:call-template>
-    <xsl:call-template name="end-flagit">
-      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param> 
-    </xsl:call-template>
-  </div>
+  <xsl:apply-templates select="." mode="process.note.common-processing"/>
 </xsl:template>
 
 <xsl:template match="*" mode="process.note.remember">
-  <xsl:variable name="flagrules">
-    <xsl:call-template name="getrules"/>
-  </xsl:variable>
-  <div class="remember">
-    <xsl:call-template name="commonattributes">
-      <xsl:with-param name="default-output-class" select="'remember'"/>
-    </xsl:call-template>
-    <xsl:call-template name="gen-style">
-      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
-    </xsl:call-template>
-    <xsl:call-template name="setidaname"/>
-    <span class="remembertitle">
-      <xsl:call-template name="getString">
-        <xsl:with-param name="stringName" select="'Remember'"/>
-      </xsl:call-template>
-      <xsl:call-template name="getString">
-        <xsl:with-param name="stringName" select="'ColonSymbol'"/>
-      </xsl:call-template>
-    </span><xsl:text> </xsl:text>
-    <xsl:call-template name="start-flagit">
-      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
-    </xsl:call-template>
-    <xsl:call-template name="revblock">
-      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
-    </xsl:call-template>
-    <xsl:call-template name="end-flagit">
-      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param> 
-    </xsl:call-template>
-  </div>
+  <xsl:apply-templates select="." mode="process.note.common-processing"/>
 </xsl:template>
 
 <xsl:template match="*" mode="process.note.restriction">
-  <xsl:variable name="flagrules">
-    <xsl:call-template name="getrules"/>
-  </xsl:variable>
-  <div class="restriction">
-    <xsl:call-template name="commonattributes">
-      <xsl:with-param name="default-output-class" select="'restriction'"/>
-    </xsl:call-template>
-    <xsl:call-template name="gen-style">
-      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
-    </xsl:call-template>
-    <xsl:call-template name="setidaname"/>
-    <span class="restrictiontitle">
-      <xsl:call-template name="getString">
-        <xsl:with-param name="stringName" select="'Restriction'"/>
-      </xsl:call-template>
-      <xsl:call-template name="getString">
-        <xsl:with-param name="stringName" select="'ColonSymbol'"/>
-      </xsl:call-template>
-    </span><xsl:text> </xsl:text>
-    <xsl:call-template name="start-flagit">
-      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
-    </xsl:call-template>
-    <xsl:call-template name="revblock">
-      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
-    </xsl:call-template>
-    <xsl:call-template name="end-flagit">
-      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param> 
-    </xsl:call-template>
-  </div>
+  <xsl:apply-templates select="." mode="process.note.common-processing"/>
+</xsl:template>
+
+<xsl:template match="*" mode="process.note.warning">
+  <xsl:apply-templates select="." mode="process.note.common-processing"/>
 </xsl:template>
 
 <xsl:template match="*" mode="process.note.attention">
-  <xsl:variable name="flagrules">
-    <xsl:call-template name="getrules"/>
-  </xsl:variable>
-  <div class="attention">
-    <xsl:call-template name="commonattributes">
-      <xsl:with-param name="default-output-class" select="'attention'"/>
-    </xsl:call-template>
-    <xsl:call-template name="gen-style">
-      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
-    </xsl:call-template>
-    <xsl:call-template name="setidaname"/>
-    <xsl:call-template name="start-flagit">
-      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
-    </xsl:call-template>
-    <span class="attentiontitle">      
-      <xsl:call-template name="getString">
-        <xsl:with-param name="stringName" select="'Attention'"/>
-      </xsl:call-template>
-      <xsl:call-template name="getString">
-        <xsl:with-param name="stringName" select="'ColonSymbol'"/>
-      </xsl:call-template>
-    </span><xsl:text> </xsl:text>
-    <xsl:call-template name="revblock">
-      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
-    </xsl:call-template>
-    <xsl:call-template name="end-flagit">
-      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param> 
-    </xsl:call-template>
-  </div>
+  <xsl:apply-templates select="." mode="process.note.common-processing"/>
 </xsl:template>
 
+<xsl:template match="*" mode="process.note.other">
+  <xsl:choose>
+    <xsl:when test="@othertype">
+      <xsl:apply-templates select="." mode="process.note.common-processing">
+        <xsl:with-param name="type" select="'note'"/>
+        <xsl:with-param name="title" select="@othertype"/>
+      </xsl:apply-templates>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:apply-templates select="." mode="process.note.common-processing">
+        <xsl:with-param name="type" select="'note'"/>
+      </xsl:apply-templates>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+<!-- Caution and Danger both use a div for the title, so they do not
+     use the common note processing template. -->
 <xsl:template match="*" mode="process.note.caution">
   <xsl:variable name="flagrules">
     <xsl:call-template name="getrules"/>
@@ -901,6 +782,9 @@
     <xsl:call-template name="commonattributes"/>
     <xsl:attribute name="class">cautiontitle</xsl:attribute>
     <xsl:call-template name="setidaname"/>    
+    <xsl:call-template name="start-flagit">
+      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
+    </xsl:call-template>
     <xsl:call-template name="getString">
       <xsl:with-param name="stringName" select="'Caution'"/>
     </xsl:call-template>
@@ -914,9 +798,6 @@
     </xsl:call-template>
     <xsl:call-template name="gen-style">
       <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
-    </xsl:call-template>
-    <xsl:call-template name="start-flagit">
-      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
     </xsl:call-template>
     <xsl:call-template name="revblock">
       <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
@@ -935,6 +816,9 @@
     <xsl:call-template name="commonattributes"/>
     <xsl:attribute name="class">dangertitle</xsl:attribute>
     <xsl:call-template name="setidaname"/>
+    <xsl:call-template name="start-flagit">
+      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
+    </xsl:call-template>
     <xsl:call-template name="getString">
       <xsl:with-param name="stringName" select="'Danger'"/>
     </xsl:call-template>
@@ -946,9 +830,6 @@
     <xsl:call-template name="gen-style">
       <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
     </xsl:call-template>
-    <xsl:call-template name="start-flagit">
-      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
-    </xsl:call-template>
     <xsl:call-template name="revblock">
       <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
     </xsl:call-template>
@@ -956,43 +837,6 @@
       <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param> 
     </xsl:call-template>
   </div>
-</xsl:template>
-
-<xsl:template match="*" mode="process.note.other">
-  <xsl:variable name="flagrules">
-    <xsl:call-template name="getrules"/>
-  </xsl:variable>
-  <xsl:choose>
-    <xsl:when test="@othertype">
-      <div class="note">
-        <xsl:call-template name="commonattributes">
-          <xsl:with-param name="default-output-class" select="'note'"/>
-        </xsl:call-template>
-        <xsl:call-template name="gen-style">
-          <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
-        </xsl:call-template>
-        <xsl:call-template name="setidaname"/>
-        <span class="notetitle">
-          <xsl:value-of select="@othertype"/>
-          <xsl:call-template name="getString">
-            <xsl:with-param name="stringName" select="'ColonSymbol'"/>
-          </xsl:call-template>
-        </span><xsl:text> </xsl:text>
-        <xsl:call-template name="start-flagit">
-          <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
-        </xsl:call-template>
-        <xsl:call-template name="revblock">
-          <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
-        </xsl:call-template>
-        <xsl:call-template name="end-flagit">
-          <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param> 
-        </xsl:call-template>
-      </div>
-    </xsl:when>
-    <xsl:otherwise>
-      <xsl:apply-templates select="." mode="process.note"/> <!-- otherwise, give them the standard note -->
-    </xsl:otherwise>
-  </xsl:choose>
 </xsl:template>
 
 <!-- long quote (bibliographic association).
@@ -1644,13 +1488,6 @@
 
   <xsl:apply-templates/> <!-- output the TM content -->
 
-  <xsl:variable name="Ltmclass">
-    <xsl:call-template name="convert-to-lower"> <!-- ensure lowercase for comparisons -->
-      <xsl:with-param name="inputval" select="@tmclass"/>
-    </xsl:call-template>
-  </xsl:variable>
-  <!-- If this is a good class, continue... -->
-  <xsl:if test="$Ltmclass='ibm' or $Ltmclass='ibmsub' or $Ltmclass='special'">
     <!-- Test for TM area's language -->
     <xsl:variable name="tmtest">
       <xsl:call-template name="tm-area"/>
@@ -1696,7 +1533,6 @@
         </xsl:choose>
       </xsl:if>
     </xsl:if>
- </xsl:if>
 </xsl:template>
 
 <!-- Test for in TM area: returns "tm" when parent's @xml:lang needs a trademark language;
@@ -1704,6 +1540,9 @@
      Use the TM for US English and the AP languages (Japanese, Korean, and both Chinese).
      Ignore the TM for all other languages. -->
 <xsl:template name="tm-area">
+  <xsl:apply-templates select="." mode="mark-tm-in-this-area"/>
+</xsl:template>
+<xsl:template match="*" mode="mark-tm-in-this-area">
  <xsl:variable name="parentlang">
   <xsl:call-template name="getLowerCaseLang"/>
  </xsl:variable>

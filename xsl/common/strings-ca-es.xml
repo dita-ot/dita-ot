@@ -44,6 +44,7 @@
 <str name="Danger">PERILL</str>
 <str name="Remember">Recordeu</str>
 <str name="Restriction">Restricció</str>
+<str name="Warning">Avís</str>
 
 <!-- default title text for section level generated sections -->
 <str name="Contents">Contingut</str>

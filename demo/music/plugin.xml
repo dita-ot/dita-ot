@@ -27,7 +27,7 @@
   <feature extension="package.support.email" value="robander@us.ibm.com"/>
 
   <!-- Provide a version (default is 1.0 if not specified) -->
-  <feature extension="package.version" value="1.1.0"/>
+  <feature extension="package.version" value="1.2.0"/>
 
   <!-- Extend the toolkit catalog to include your DTDs. -->
   <feature extension="dita.specialization.catalog.relative"

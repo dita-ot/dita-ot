@@ -322,4 +322,12 @@ See the accompanying license.txt file for applicable licenses.
     
     <!--Label for a step with importance="optional"-->
     <variable id="Optional Step">可选：</variable>
+
+    <!--Labels for task sections-->
+    <variable id="Task Prereq">开始之前</variable>
+    <variable id="Task Context">关于此任务</variable>
+    <variable id="Task Steps">过程</variable>
+    <variable id="Task Result">结果</variable>
+    <variable id="Task Example">示例</variable>
+    <variable id="Task Postreq">下一步做什么</variable>
 </vars>

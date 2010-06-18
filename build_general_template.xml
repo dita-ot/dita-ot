@@ -31,8 +31,10 @@
   	<xslt processor="trax" basedir="${dita.temp.dir}"
       destdir="${output.dir}" includesfile="${dita.temp.dir}${file.separator}${fullditatopicfile}" 
       classpathref="dost.class.path"
-      extension="${out.ext}" style="${args.xsl}">
-    	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
+      extension="${out.ext}" style="${args.xsl}"
+  	  filenameparameter="FILENAME"
+  	  filedirparameter="FILEDIR">
+      <excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
       <includesfile name="${dita.temp.dir}${file.separator}${chunkedtopicfile}" if="chunkedtopicfile"/>
       <param name="TRANSTYPE" expression="${transtype}" />
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
@@ -81,7 +83,9 @@
     <xslt processor="trax" basedir="${dita.temp.dir}"
       destdir="${output.dir}" includesfile="${dita.temp.dir}${file.separator}${fullditatopicfile}"
       classpathref="dost.class.path"
-      extension="${out.ext}" style="${args.xsl}">
+      extension="${out.ext}" style="${args.xsl}"
+      filenameparameter="FILENAME"
+      filedirparameter="FILEDIR">
     	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
       <includesfile name="${dita.temp.dir}${file.separator}${chunkedtopicfile}" if="chunkedtopicfile"/>
       <param name="TRANSTYPE" expression="${transtype}" />
@@ -140,8 +144,8 @@
       destdir="${output.dir}" includesfile="${dita.temp.dir}${file.separator}${fullditatopicfile}"
       classpathref="dost.class.path"
       extension="${out.ext}" style="${args.xsl}"
-      filenameparameter="filename"
-      filedirparameter="filedir">
+      filenameparameter="FILENAME"
+      filedirparameter="FILEDIR">
     	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
       <includesfile name="${dita.temp.dir}${file.separator}${chunkedtopicfile}" if="chunkedtopicfile"/>
       <param name="TRANSTYPE" expression="${transtype}" />
@@ -195,7 +199,9 @@
     <xslt processor="trax" basedir="${dita.temp.dir}"
       destdir="${output.dir}" includesfile="${dita.temp.dir}${file.separator}${fullditatopicfile}"
       classpathref="dost.class.path"
-      extension="${out.ext}" style="${args.xsl}">
+      extension="${out.ext}" style="${args.xsl}"
+      filenameparameter="FILENAME"
+      filedirparameter="FILEDIR">
     	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
       <includesfile name="${dita.temp.dir}${file.separator}${chunkedtopicfile}" if="chunkedtopicfile"/>
       <param name="TRANSTYPE" expression="${transtype}" />
@@ -271,7 +277,9 @@
     <xslt processor="trax" basedir="${dita.temp.dir}"
       destdir="${output.dir}${file.separator}${uplevels}" includesfile="${dita.temp.dir}${file.separator}${outditafilesfile}"
       classpathref="dost.class.path"
-      extension="${out.ext}" style="${args.xsl}">
+      extension="${out.ext}" style="${args.xsl}"
+      filenameparameter="FILENAME"
+      filedirparameter="FILEDIR">
     	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
       <param name="TRANSTYPE" expression="${transtype}" />
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
@@ -320,7 +328,9 @@
     <xslt processor="trax" basedir="${dita.temp.dir}"
       destdir="${output.dir}${file.separator}${uplevels}" includesfile="${dita.temp.dir}${file.separator}${outditafilesfile}"
       classpathref="dost.class.path"
-      extension="${out.ext}" style="${args.xsl}">
+      extension="${out.ext}" style="${args.xsl}"
+      filenameparameter="FILENAME"
+      filedirparameter="FILEDIR">
     	<excludesfile name="${dita.temp.dir}${file.separator}${resourceonlyfile}" if="resourceonlyfile"/>
       <param name="TRANSTYPE" expression="${transtype}" />
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />

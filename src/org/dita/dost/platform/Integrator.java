@@ -57,6 +57,8 @@ public class Integrator {
 		templateSet.add("xsl/common/allstrings_template.xml");
 		templateSet.add("xsl/dita2xhtml_template.xsl");
 		templateSet.add("xsl/dita2rtf_template.xsl");
+		templateSet.add("xsl/dita2odt_template.xsl");
+		templateSet.add("xsl/dita2dynamicdita_template.xsl");
 		templateSet.add("xsl/dita2fo-shell_template.xsl");
 		templateSet.add("xsl/dita2docbook_template.xsl");
 		templateSet.add("xsl/preprocess/maplink_template.xsl");

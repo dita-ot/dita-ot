@@ -322,7 +322,7 @@ PUBLIC "-//OASIS//DTD DITA 1.2 Composite//EN"                      -->
 <!ATTLIST dita
               %arch-atts;
               xml:lang   
-                        NMTOKEN                            
+                        CDATA                            
                                   #IMPLIED
               %global-atts;
 >

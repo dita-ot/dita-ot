@@ -44,6 +44,7 @@
 <str name="Danger">HÆTTA</str>
 <str name="Remember">Mundu</str>
 <str name="Restriction">Takmörkun</str>
+<str name="Warning">Viðvörun</str>
 
 <!-- default title text for section level generated sections -->
 <str name="Contents">Efnisyfirlit</str>

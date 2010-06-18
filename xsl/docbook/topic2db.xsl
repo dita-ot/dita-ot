@@ -230,7 +230,7 @@
   <revision>
     <revnumber/>
     <date>
-      <xsl:value-of select="@date"/>
+      <xsl:value-of select="../@date"/>
     </date>
     <revremark>
       <xsl:choose>
@@ -383,14 +383,70 @@
 <xsl:template match="*[contains(@class,' topic/link ')]">
   <listitem>
     <para>
-      <ulink url="{@href}">
-        <xsl:apply-templates select="*[contains(@class,' topic/linktext ')]"/>
-      </ulink>
+      <xsl:choose>
+        <xsl:when test="(not(@format) or @format='dita' or @format='DITA') and
+                        (not(@scope)  or @scope='local') and
+                        @href and (
+                             substring(@href, string-length(@href) - 4) = '.dita' or
+                             contains(@href,'.dita#') or
+                             substring(@href, string-length(@href) - 3) = '.xml' or
+                             contains(@href,'.xml#'))">
+          <xsl:apply-templates select="." mode="make-xref-from-link"/>
+        </xsl:when>
+        <xsl:when test="((@format and @format!='dita' and @format!='DITA') or
+                         (@scope  and @scope!='local') or
+                         (@href   and
+                               substring(@href, string-length(@href) - 4) != '.dita' and
+                               not (contains(@href,'.dita#')) and
+                               substring(@href, string-length(@href) - 3) != '.xml') and
+                               not (contains(@href,'.xml#')))">
+          <xsl:apply-templates select="." mode="make-ulink-from-link"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:apply-templates select="." mode="make-ulink-from-link"/>
+        </xsl:otherwise>
+      </xsl:choose>
     </para>
     <xsl:apply-templates select="*[contains(@class,' topic/desc ')]"/>
   </listitem>
 </xsl:template>
 
+<xsl:template match="*" mode="make-ulink-from-link">
+  <ulink url="{@href}">
+    <xsl:apply-templates select="*[contains(@class,' topic/linktext ')]"/>
+  </ulink>
+</xsl:template>
+
+<xsl:template match="*" mode="make-xref-from-link">
+  <xsl:variable name="linkID">
+    <xsl:call-template name="getLinkID"/>
+  </xsl:variable>
+  <xref linkend="{$linkID}">
+    <xsl:call-template name="setStandardAttr">
+      <xsl:with-param name="IDPrefix" select="'xref'"/>
+    </xsl:call-template>
+  </xref>
+</xsl:template>
+
+<!-- Provided by Erik Hennum and dcramer in SF bug report 1385654.
+     For use with targets already identified as DITA.
+     Does not yet support linking to sub-topic elements; all links go to topic. -->
+<xsl:template name="getLinkID">
+  <xsl:param name="href" select="@href"/>
+  <xsl:variable name="hasID" select="contains($href,'#')"/>
+  <xsl:choose>
+    <xsl:when test="contains($href,'#') and contains(substring-after($href,'#'),'/')">
+      <xsl:value-of select="substring-before(substring-after(@href,'#'),'/')"/>
+    </xsl:when>
+    <xsl:when test="contains($href,'#')">
+      <xsl:value-of select="substring-after(@href,'#')"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:value-of
+        select="document($href, /)/*[contains(@class,' topic/topic ')]/@id"/>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
    - SECTIONS
@@ -745,12 +801,40 @@ DATA-TYPE PHRASES: date time currency char num bin oct dec hex ???
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
    - LINKING PHRASES
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-<xsl:template match="*[contains(@class,' topic/xref ') and (
-      (@format and @format!='dita') or
+<xsl:template match="*[contains(@class,' topic/xref ')]">
+  <xsl:choose>
+    <xsl:when test="(not(@format) or @format='dita' or @format='DITA') and
+	                (not(@scope)  or @scope='local') and
+	                @href and (
+	                      substring(@href, string-length(@href) - 4) = '.dita' or
+                          contains(@href,'.dita#') or
+	                      substring(@href, string-length(@href) - 3) = '.xml' or
+                          contains(@href,'.xml#'))">
+      <xsl:apply-templates select="." mode="make-xref-from-xref"/>
+    </xsl:when>
+    <xsl:when test="((@format and @format!='dita' and @format!='DITA') or
+	                 (@scope  and @scope!='local') or
+	                 (@href   and
+	                      substring(@href, string-length(@href) - 4) != '.dita' and
+                          not (contains(@href,'.dita#')) and
+	                      substring(@href, string-length(@href) - 3) != '.xml' and
+                          not (contains(@href,'.xml#')) ))">
+      <xsl:apply-templates select="." mode="make-ulink-from-xref"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <!-- Unable to handle at this time -->
+      <xsl:apply-templates select="." mode="deflate"/>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+<!--<xsl:template match="*[contains(@class,' topic/xref ') and (
+      (@format and @format!='dita' and @format!='DITA') or
 	  (@scope  and @scope!='local') or
 	  (@href   and
 	      substring(@href, string-length(@href) - 5) != '.dita' and
-	      substring(@href, string-length(@href) - 4) != '.xml'))]">
+	      substring(@href, string-length(@href) - 4) != '.xml'))]">-->
+<xsl:template match="*" mode="make-ulink-from-xref">
   <ulink url="{@href}" type="{@type}">
     <xsl:call-template name="setStandardAttr">
       <xsl:with-param name="IDPrefix" select="'link'"/>
@@ -759,13 +843,17 @@ DATA-TYPE PHRASES: date time currency char num bin oct dec hex ???
   </ulink>
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/xref ') and
+<!--<xsl:template match="*[contains(@class,' topic/xref ') and
       (not(@format) or @format='dita' or @format='DITA') and
 	  (not(@scope)  or @scope='local') and
 	  @href and (
 	      substring(@href, string-length(@href) - 5) = '.dita' or
-	      substring(@href, string-length(@href) - 4) = '.xml')]">
-  <xref linkend="{@href}">
+	      substring(@href, string-length(@href) - 4) = '.xml')]">-->
+<xsl:template match="*" mode="make-xref-from-xref">
+  <xsl:variable name="linkID">
+    <xsl:call-template name="getLinkID"/>
+  </xsl:variable>
+  <xref linkend="{$linkID}">
     <xsl:call-template name="setStandardAttr">
       <xsl:with-param name="IDPrefix" select="'xref'"/>
     </xsl:call-template>

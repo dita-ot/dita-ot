@@ -14,6 +14,7 @@
   <import file="build_dita2eclipsecontent.xml"/>
   <import file="build_dita2pdf.xml"/>
   <import file="build_dita2wordrtf.xml"/>
+  <import file="build_dita2odt.xml"/>
   <import file="build_dita2docbook.xml"/>
   <import file="build_dita2troff.xml"/>
         
@@ -52,6 +53,9 @@
           </not>
           <not>
             <equals arg1="${transtype}" arg2="wordrtf" casesensitive="false"/>
+          </not>
+          <not>
+            <equals arg1="${transtype}" arg2="odt" casesensitive="false"/>
           </not>
           <dita:extension id="dita.conductor.transtype.check" behavior="org.dita.dost.platform.CheckTranstypeAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
         </and>

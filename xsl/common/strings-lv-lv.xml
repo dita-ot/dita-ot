@@ -44,6 +44,7 @@
 <str name="Danger">BĪSTAMI</str>
 <str name="Remember">Atcerieties</str>
 <str name="Restriction">Ierobežojums</str>
+<str name="Warning">Brīdinājums</str>
 
 <!-- default title text for section level generated sections -->
 <str name="Contents">Saturs</str>

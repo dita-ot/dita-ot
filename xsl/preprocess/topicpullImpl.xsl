@@ -882,6 +882,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
     <xsl:choose>
       <!--if there's already a desc, copy it-->
       <xsl:when test="*[contains(@class, ' topic/desc ')]">
+        <xsl:apply-templates select="." mode="topicpull:add-usershortdesc-PI"/>
         <xsl:apply-templates select="*[contains(@class, ' topic/desc ')]"/>
       </xsl:when>
       <!--if the target is inaccessible, don't do anything - shortdesc is optional -->
@@ -898,6 +899,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
           </xsl:apply-templates>
         </xsl:variable>
         <xsl:if test="not($shortdesc='#none#')">
+          <xsl:apply-templates select="." mode="topicpull:add-genshortdesc-PI"/>
           <desc class="- topic/desc ">
             <xsl:apply-templates select="exsl:node-set($shortdesc)"/>
           </desc>
@@ -2215,4 +2217,26 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
     </xsl:choose>
   </xsl:template>
   
+  <!-- Added for RFE 3001750. -->
+  <xsl:template match="*" mode="topicpull:add-genshortdesc-PI">
+    <xsl:choose>
+      <xsl:when test="processing-instruction()[name()='ditaot'][.='usershortdesc' or .='genshortdesc']">
+        <xsl:copy-of select="processing-instruction()[name()='ditaot'][.='usershortdesc' or .='genshortdesc']"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:processing-instruction name="ditaot">genshortdesc</xsl:processing-instruction>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+  <xsl:template match="*" mode="topicpull:add-usershortdesc-PI">
+    <xsl:choose>
+      <xsl:when test="processing-instruction()[name()='ditaot'][.='usershortdesc' or .='genshortdesc']">
+        <xsl:copy-of select="processing-instruction()[name()='ditaot'][.='usershortdesc' or .='genshortdesc']"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:processing-instruction name="ditaot">usershortdesc</xsl:processing-instruction>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
 </xsl:stylesheet>

@@ -3,13 +3,14 @@
      Sourceforge.net. See the accompanying license.txt file for 
      applicable licenses.-->
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN"
- "../../dtd/task.dtd">
+ "../../dtd/technicalContent/dtd/task.dtd">
 <!-- (C) Copyright IBM Corporation 2001, 2005. All Rights Reserved.
  *-->
 <task id="washcar" xml:lang="en-us">
 <title>Washing the car</title>
+<shortdesc>Keep your car looking great by washing it regularly.</shortdesc>
 <taskbody>
-<context><p>Keep your car looking great by washing it regularly.</p></context>
+<!--<context><p></p></context>-->
 <steps>
 <step><cmd>Move the car onto the driveway.</cmd>
 </step>
@@ -27,7 +28,6 @@ from the hose.</cmd></step>
 width="249"/></p></result>
 </taskbody>
 <related-links>
-<link href="../concepts/waterhose.xml" format="dita" type="concept"><linktext>Water hose</linktext>
-</link>
+<link href="../concepts/waterhose.xml" format="dita" type="concept"></link>
 </related-links>
 </task>

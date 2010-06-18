@@ -106,7 +106,7 @@
       <xs:documentation>
         The %topicref-atts-without-format; parameter entity represents a group of attributes
         used in numerous map elements: mapref,
-        and topicgroup. The set is similar to those documented in <ph><xref href="topicref-atts.xml">topicref-atts</xref></ph> but
+        and topicgroup. The set is similar to those documented in <xref href="topicref-atts.xml">topicref-atts</xref> but
         excludes the <i><keyword>format</keyword></i> attribute.
       </xs:documentation>
     </xs:annotation>
@@ -117,7 +117,7 @@
     <xs:attribute name="locktitle" type="yesno-att.class"/>
     <xs:attribute name="linking" type="linkingtypes.class"/>
     <xs:attribute name="toc" type="yesno-att.class"/>
-    <xs:attribute name="print" type="yesno-att.class"/>
+    <xs:attribute name="print" type="print-att.class"/>
     <xs:attribute name="search" type="yesno-att.class"/>
     <xs:attribute name="chunk" type="xs:string"/>
   </xs:attributeGroup>
@@ -373,7 +373,7 @@
     <xs:attribute name="format" type="xs:string"/>
     <xs:attribute name="linking" type="linkingtypes.class"/>
     <xs:attribute name="toc" type="yesno-att.class"/>
-    <xs:attribute name="print" type="yesno-att.class"/>
+    <xs:attribute name="print" type="print-att.class"/>
     <xs:attribute name="search" type="yesno-att.class"/>
     <xs:attribute name="chunk" type="xs:string" default="to-navigation"/>
     <xs:attribute name="id" type="xs:NMTOKEN" use="required"/>
@@ -435,7 +435,7 @@
     <xs:attribute name="format" type="xs:string" default="ditamap"/>
     <xs:attribute name="linking" type="linkingtypes.class"/>
     <xs:attribute name="toc" type="yesno-att.class"/>
-    <xs:attribute name="print" type="yesno-att.class"/>
+    <xs:attribute name="print" type="print-att.class"/>
     <xs:attribute name="search" type="yesno-att.class"/>
     <xs:attribute name="chunk" type="xs:string" />
     <xs:attributeGroup ref="univ-atts"/>
@@ -487,16 +487,15 @@
     <xs:attribute name="query" type="xs:string"/>
     <xs:attribute name="copy-to" type="xs:string"/>
     <xs:attribute name="outputclass" type="xs:string"/>
-    <!-- topic-ref-att plus chuck defaulted to "to-navigation" -->
     <xs:attribute name="collection-type" type="collection-type.class"/>
     <xs:attribute name="processing-role" type="processing-role-att.class" default="resource-only"/>
     <xs:attribute name="type" type="xs:string"/>
     <xs:attribute name="scope" type="scope-att.class"/>
     <xs:attribute name="locktitle" type="yesno-att.class"/>
     <xs:attribute name="format" type="xs:string"/>
-    <xs:attribute name="linking" type="linkingtypes.class" default="none"/>
-    <xs:attribute name="toc" type="yesno-att.class" default="no"/>
-    <xs:attribute name="print" type="yesno-att.class" default="no"/>
+    <xs:attribute name="linking" type="linkingtypes.class" />
+    <xs:attribute name="toc" type="yesno-att.class" />
+    <xs:attribute name="print" type="print-att.class" />
     <xs:attribute name="search" type="yesno-att.class"/>
     <xs:attribute name="chunk" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>

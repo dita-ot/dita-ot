@@ -5,8 +5,9 @@
 <!-- (C) Copyright IBM Corporation 2001, 2005. All Rights Reserved.
  *-->
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN"
- "../../dtd/concept.dtd">
+ "../../dtd/technicalContent/dtd/concept.dtd">
 <concept id="conceptconcept" xml:lang="en-us">
 <title>Garage Concepts</title>
-<conbody><p>A well-stocked garage can be the envy of the neighborhood.</p></conbody>
+<shortdesc>A well-stocked garage can be the envy of the neighborhood.</shortdesc>
+<conbody></conbody>
 </concept>

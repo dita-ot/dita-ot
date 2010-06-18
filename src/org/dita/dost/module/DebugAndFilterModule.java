@@ -16,6 +16,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -34,6 +35,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.dita.dost.exception.DITAOTException;
+import org.dita.dost.log.DITAOTFileLogger;
 import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.pipeline.AbstractPipelineInput;
@@ -46,6 +48,7 @@ import org.dita.dost.util.Constants;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.FilterUtils;
 import org.dita.dost.util.StringUtils;
+import org.dita.dost.util.TimingUtils;
 import org.dita.dost.writer.DitaWriter;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -151,6 +154,8 @@ public class DebugAndFilterModule implements AbstractPipelineModule {
 	private String ditaDir = null;
 	
 	private String inputDir = null;
+	
+	private DITAOTFileLogger fileLogger = DITAOTFileLogger.getInstance();
 	/**
 	 * Default Construtor.
 	 *
@@ -163,141 +168,160 @@ public class DebugAndFilterModule implements AbstractPipelineModule {
      * 
      */
     public AbstractPipelineOutput execute(AbstractPipelineInput input) throws DITAOTException {
-        String baseDir = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_BASEDIR);
-        String ditavalFile = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_DITAVAL);
-        tempDir = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_TEMPDIR);
-        String ext = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_DITAEXT);
-        ditaDir=((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_EXT_PARAM_DITADIR);
-        //Added by William on 2009-07-18 for req #12014 start
-        //get transtype
-        String transtype = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_EXT_PARAM_TRANSTYPE);
-        //Added by William on 2009-07-18 for req #12014 start
-        
-        inputDir = null;
-        String filePathPrefix = null;
-        ListReader listReader = new ListReader();
-        LinkedList<String> parseList = null;
-        Content content;
-        DitaWriter fileWriter;
+    	
+    	Date executeStartTime = TimingUtils.getNowTime();
+    	String msg = "DebugAndFilterModule.execute(): Starting...";
+    	fileLogger.logInfo(msg);
+    	
+        try {
+			String baseDir = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_BASEDIR);
+			String ditavalFile = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_DITAVAL);
+			tempDir = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_TEMPDIR);
+			String ext = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_DITAEXT);
+			ditaDir=((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_EXT_PARAM_DITADIR);
+			//Added by William on 2009-07-18 for req #12014 start
+			//get transtype
+			String transtype = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_EXT_PARAM_TRANSTYPE);
+			//Added by William on 2009-07-18 for req #12014 start
+			
+			inputDir = null;
+			String filePathPrefix = null;
+			ListReader listReader = new ListReader();
+			LinkedList<String> parseList = null;
+			Content content;
+			DitaWriter fileWriter;
 
 
-		extName = ext.startsWith(Constants.DOT) ? ext : (Constants.DOT + ext);
-        if (!new File(tempDir).isAbsolute()) {
-        	tempDir = new File(baseDir, tempDir).getAbsolutePath();
-        }
-        if (ditavalFile != null && !new File(ditavalFile).isAbsolute()) {
-			ditavalFile = new File(baseDir, ditavalFile).getAbsolutePath();
+			extName = ext.startsWith(Constants.DOT) ? ext : (Constants.DOT + ext);
+			if (!new File(tempDir).isAbsolute()) {
+				tempDir = new File(baseDir, tempDir).getAbsolutePath();
+			}
+			if (ditavalFile != null && !new File(ditavalFile).isAbsolute()) {
+				ditavalFile = new File(baseDir, ditavalFile).getAbsolutePath();
+			}
+
+			//null means default path: tempdir/dita.xml.properties
+			listReader.read(null);
+
+			parseList = (LinkedList<String>) listReader.getContent().getCollection();
+			inputDir = (String) listReader.getContent().getValue();
+			inputMap = new File(inputDir + File.separator + listReader.getInputMap()).getAbsolutePath();
+			
+			// Output subject schemas
+			this.outputSubjectScheme();
+			
+			if (!new File(inputDir).isAbsolute()) {
+				inputDir = new File(baseDir, inputDir).getAbsolutePath();
+			}
+			DitaValReader filterReader = new DitaValReader();
+			
+			if (ditavalFile!=null){
+			    filterReader.read(ditavalFile);
+			    content = filterReader.getContent();
+			    FilterUtils.setFilterMap(filterReader.getFilterMap());
+			}else{
+			    content = new ContentImpl();
+			    //FilterUtils.setFilterMap(null);
+			}
+			try{
+				String valueOfValidate=((PipelineHashIO) input).getAttribute("validate");
+				if(valueOfValidate!=null){
+					if("false".equalsIgnoreCase(valueOfValidate))
+						xmlValidate=false;
+					else
+						xmlValidate=true;
+				}
+				DitaWriter.initXMLReader(ditaDir,xmlValidate);
+			} catch (SAXException e) {
+				throw new DITAOTException(e.getMessage(), e);
+			}
+
+			fileWriter = new DitaWriter();
+			content.setValue(tempDir);
+			fileWriter.setContent(content);
+			
+			//Added by Alan Date:2009-08-04 --begin
+			fileWriter.setExtName(extName);
+			
+			//added by William on 2009-07-18 for req #12014 start
+			//set transtype
+			fileWriter.setTranstype(transtype);
+			//added by William on 2009-07-18 for req #12014 end
+			if(inputDir != null){
+			    filePathPrefix = inputDir + Constants.STICK;
+			}
+			
+			Map<String, Set<String>> dic = readMapFromXML(Constants.FILE_NAME_SUBJECT_DICTIONARY);
+			
+			while (!parseList.isEmpty()) {
+				String filename = (String) parseList.removeLast();
+				String message = "DebugAndFilterModule.execute(): Handling file " + filename + "...";
+				fileLogger.logInfo(message);
+				
+				Set<String> schemaSet = dic.get(filename);
+				filterReader.reset();
+				if (schemaSet != null) {
+			        Iterator<String> iter = schemaSet.iterator();
+			        while (iter.hasNext()) {
+			        	filterReader.loadSubjectScheme(FileUtils.resolveFile(
+			        			DebugAndFilterModule.tempDir, iter.next())+".subm");
+			        }
+			        if (ditavalFile!=null){
+			        	filterReader.filterReset();
+			            filterReader.read(ditavalFile);
+			            FilterUtils.setFilterMap(filterReader.getFilterMap());
+			        } else {
+			        	FilterUtils.setFilterMap(null);
+			        }
+			        
+			        fileWriter.setValidateMap(filterReader.getValidValuesMap());
+			        fileWriter.setDefaultValueMap(filterReader.getDefaultValueMap());
+				} else {
+					if (ditavalFile!=null){
+			            FilterUtils.setFilterMap(filterReader.getFilterMap());
+			        } else {
+			        	FilterUtils.setFilterMap(null);
+			        }
+				}
+				
+				if (!new File(inputDir, filename).exists()) {
+					// This is an copy-to target file, ignore it
+					System.out.println("   Ignoring a copy-to file.");
+					continue;
+				}
+				
+			    /*
+			     * Usually the writer's argument for write() is used to pass in the
+			     * ouput file name. But in this case, the input file name is same as
+			     * output file name so we can use this argument to pass in the input
+			     * file name. "|" is used to separate the path information that is
+			     * not necessary to be kept (baseDir) and the path information that
+			     * need to be kept in the temp directory.
+			     */        	
+				fileWriter.write(
+						new StringBuffer().append(filePathPrefix)
+							.append(filename).toString());
+			}
+			
+			updateList(tempDir);
+			//Added by William on 2010-04-16 for cvf flag support start
+			//update dictionary.
+			updateDictionary(tempDir);
+			//Added by William on 2010-04-16 for cvf flag support end
+			
+			// reload the property for processing of copy-to
+			File xmlListFile=new File(tempDir, Constants.FILE_NAME_DITA_LIST_XML);
+			if(xmlListFile.exists())
+				listReader.read(xmlListFile.getAbsolutePath());
+			else
+				listReader.read(new File(tempDir, Constants.FILE_NAME_DITA_LIST).getAbsolutePath());
+			performCopytoTask(tempDir, listReader.getCopytoMap());
+		} catch (Exception e) {
+			System.err.println("Exception doing debug and filter module processing: ");
+			e.printStackTrace();
+		} finally {
+			fileLogger.logInfo("Execution time: " + TimingUtils.reportElapsedTime(executeStartTime));
 		}
-
-        //null means default path: tempdir/dita.xml.properties
-        listReader.read(null);
-
-        parseList = (LinkedList<String>) listReader.getContent().getCollection();
-        inputDir = (String) listReader.getContent().getValue();
-        inputMap = new File(inputDir + File.separator + listReader.getInputMap()).getAbsolutePath();
-        
-        // Output subject schemas
-        this.outputSubjectScheme();
-        
-        if (!new File(inputDir).isAbsolute()) {
-        	inputDir = new File(baseDir, inputDir).getAbsolutePath();
-        }
-        DitaValReader filterReader = new DitaValReader();
-        
-        if (ditavalFile!=null){
-            filterReader.read(ditavalFile);
-            content = filterReader.getContent();
-            FilterUtils.setFilterMap(filterReader.getFilterMap());
-        }else{
-            content = new ContentImpl();
-            //FilterUtils.setFilterMap(null);
-        }
-        try{
-    		String valueOfValidate=((PipelineHashIO) input).getAttribute("validate");
-    		if(valueOfValidate!=null){
-    			if("false".equalsIgnoreCase(valueOfValidate))
-    				xmlValidate=false;
-    			else
-    				xmlValidate=true;
-    		}
-        	DitaWriter.initXMLReader(ditaDir,xmlValidate);
-		} catch (SAXException e) {
-			throw new DITAOTException(e.getMessage(), e);
-		}
-
-        fileWriter = new DitaWriter();
-        content.setValue(tempDir);
-        fileWriter.setContent(content);
-		
-		//Added by Alan Date:2009-08-04 --begin
-        fileWriter.setExtName(extName);
-		
-        //added by William on 2009-07-18 for req #12014 start
-        //set transtype
-        fileWriter.setTranstype(transtype);
-        //added by William on 2009-07-18 for req #12014 end
-        if(inputDir != null){
-            filePathPrefix = inputDir + Constants.STICK;
-        }
-        
-        Map<String, Set<String>> dic = readMapFromXML(Constants.FILE_NAME_SUBJECT_DICTIONARY);
-        
-        while (!parseList.isEmpty()) {
-        	String filename = (String) parseList.removeLast();
-        	
-        	Set<String> schemaSet = dic.get(filename);
-        	filterReader.reset();
-        	if (schemaSet != null) {
-	            Iterator<String> iter = schemaSet.iterator();
-	            while (iter.hasNext()) {
-	            	filterReader.loadSubjectScheme(FileUtils.resolveFile(
-	            			DebugAndFilterModule.tempDir, iter.next())+".subm");
-	            }
-	            if (ditavalFile!=null){
-	            	filterReader.filterReset();
-	                filterReader.read(ditavalFile);
-	                FilterUtils.setFilterMap(filterReader.getFilterMap());
-	            } else {
-	            	FilterUtils.setFilterMap(null);
-	            }
-	            
-	            fileWriter.setValidateMap(filterReader.getValidValuesMap());
-	            fileWriter.setDefaultValueMap(filterReader.getDefaultValueMap());
-        	} else {
-        		if (ditavalFile!=null){
-	                FilterUtils.setFilterMap(filterReader.getFilterMap());
-	            } else {
-	            	FilterUtils.setFilterMap(null);
-	            }
-        	}
-        	
-        	if (!new File(inputDir, filename).exists()) {
-        		// This is an copy-to target file, ignore it
-        		continue;
-        	}
-        	
-            /*
-             * Usually the writer's argument for write() is used to pass in the
-             * ouput file name. But in this case, the input file name is same as
-             * output file name so we can use this argument to pass in the input
-             * file name. "|" is used to separate the path information that is
-             * not necessary to be kept (baseDir) and the path information that
-             * need to be kept in the temp directory.
-             */        	
-			fileWriter.write(
-        			new StringBuffer().append(filePathPrefix)
-        				.append(filename).toString());
-            
-        }
-        
-        updateList(tempDir);
-        // reload the property for processing of copy-to
-        File xmlListFile=new File(tempDir, Constants.FILE_NAME_DITA_LIST_XML);
-        if(xmlListFile.exists())
-        	listReader.read(xmlListFile.getAbsolutePath());
-        else
-        	listReader.read(new File(tempDir, Constants.FILE_NAME_DITA_LIST).getAbsolutePath());
-        performCopytoTask(tempDir, listReader.getCopytoMap());
 
         return null;
     }
@@ -571,5 +595,52 @@ public class DebugAndFilterModule implements AbstractPipelineModule {
     	}
     	
     }
+    
+    //Added by William on 2010-04-16 for cvf flag support start
+    private void updateDictionary(String tempDir){
+    	//orignal map
+    	Map<String, Set<String>> dic = readMapFromXML(Constants.FILE_NAME_SUBJECT_DICTIONARY);
+    	//result map
+    	Map<String, Set<String>> resultMap = new HashMap<String, Set<String>>();
+    	//Iterate the orignal map
+    	Iterator<Map.Entry<String, Set<String>>> itr = dic.entrySet().iterator();
+    	while (itr.hasNext()) {
+			Map.Entry<String, java.util.Set<String>> entry =  itr.next();
+			//filename will be checked.
+			String filename = entry.getKey();
+			if(FileUtils.isTopicFile(filename)){
+				//Replace extension name.
+				filename = FileUtils.replaceExtName(filename, extName);
+			}
+			//put the updated value into the result map
+			resultMap.put(filename, entry.getValue());
+		}
+    	
+    	//Write the updated map into the dictionary file
+    	this.writeMapToXML(resultMap, Constants.FILE_NAME_SUBJECT_DICTIONARY);
+    	//File inputFile = new File(tempDir, Constants.FILE_NAME_SUBJECT_DICTIONARY);
+    		
+    }
+    //Method for writing a map into xml file.
+    private void writeMapToXML(Map<String, Set<String>> m, String filename) {
+		if (m == null) return;
+		Properties prop = new Properties();
+		Iterator<Map.Entry<String, Set<String>>> iter = m.entrySet().iterator();
+		while (iter.hasNext()) {
+			Map.Entry<String, Set<String>> entry = iter.next();
+			String key = entry.getKey();
+			String value = StringUtils.assembleString(entry.getValue(), Constants.COMMA);
+			prop.setProperty(key, value);
+		}
+		File outputFile = new File(tempDir, filename);
+		try {
+			FileOutputStream os = new FileOutputStream(outputFile, false);
+			prop.storeToXML(os, null);
+			os.close();
+		} catch (IOException e) {
+			this.javaLogger.logException(e);
+		}
+	}
+    //Added by William on 2010-04-16 for cvf flag support end
 
 }

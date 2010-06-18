@@ -30,8 +30,11 @@ import org.dita.dost.util.Constants;
  * 
  * @author Wu, Zhi Qiang
  */
-public class CHMIndexWriter implements AbstractWriter, IDitaTranstypeIndexWriter {
-    /** List of indexterms */
+public class CHMIndexWriter extends AbstractExtendDitaWriter implements AbstractWriter, IDitaTranstypeIndexWriter {
+    
+	//RFE 2987769 Eclipse index-see - Added extends AbstractExtendedDitaWriter
+	
+	/** List of indexterms */
     private List termList = null;
 
     /**

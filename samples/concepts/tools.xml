@@ -5,11 +5,11 @@
 <!-- (C) Copyright IBM Corporation 2001, 2005. All Rights Reserved.
  *-->
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN"
- "../../dtd/concept.dtd">
+ "../../dtd/technicalContent/dtd/concept.dtd">
 <concept id="toolsconcept" xml:lang="en-us">
 <title>Tools</title>
-<conbody><p>Invest in a good set of tools for doing all kinds of tasks around the house. 
-Useful tools include the following items:</p>
+<shortdesc>Invest in a good set of tools for doing all kinds of tasks around the house.</shortdesc>
+<conbody><p>Useful tools include the following items:</p>
 <ul>
   <li>Hammer</li>
   <li>Screw driver set</li>
@@ -21,9 +21,10 @@ Useful tools include the following items:</p>
   <li>Air pressure guage</li>
   <li>Spade</li>
   <li>Rake</li>
-</ul><p>Keep your tools organized in a tool box.</p></conbody>
+</ul>
+<p>Keep your tools organized in a tool box.</p></conbody>
 <related-links>
-<link href="toolbox.xml" format="dita" type="concept"><linktext>Tool box</linktext></link>
-<link href="../tasks/organizing.xml" format="dita" type="task"><linktext>Organizing the workbench and tools</linktext></link>
+<link href="toolbox.xml" format="dita" type="concept"></link>
+<link href="../tasks/organizing.xml" format="dita" type="task"></link>
 </related-links>
 </concept>

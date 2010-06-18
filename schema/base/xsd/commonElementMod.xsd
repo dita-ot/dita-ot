@@ -683,11 +683,9 @@
 	</xs:attributeGroup>
 	<xs:element name="keyword">
 		<xs:annotation>
-			<xs:documentation>The &lt;<keyword>keyword</keyword>> element identifies a keyword
+            <xs:documentation>The &lt;<keyword>keyword</keyword>> element identifies a keyword
                 or token, such as a single value from an enumerated list, the name of a command
-                or parameter, or a lookup key for a message (contrast with <ph>
-					<xref href="term.xml">term</xref>
-				</ph>).
+                or parameter, or a lookup key for a message (contrast with <xref href="term.xml">term</xref>).
             </xs:documentation>
 		</xs:annotation>
 		<xs:complexType mixed="true">
@@ -901,15 +899,14 @@
 	</xs:simpleType>
 	<xs:element name="boolean">
 		<xs:annotation>
-			<xs:documentation>( Deprecated ) - The &lt;<keyword>boolean</keyword>&gt; element is used to express
+      <xs:documentation>( Deprecated ) - The &lt;<keyword>boolean</keyword>&gt; element is used to express
         one of two opposite values, such as yes or no, on or off, true or false, high
         or low, and so forth. The element itself is empty; the value of the element
         is stored in its <keyword>state</keyword> attribute, and
         the semantic associated with the value is typically in a specialized name
         derived from this element. If you need more than two values (for example,
-        "yes," "no" and "don&apos;t care") use the <ph>
-					<xref href="state.xml">&lt;<keyword>state</keyword>></xref>
-				</ph> element instead. This element is primarily for specialization, where
+        "yes," "no" and "don&apos;t care") use the <xref href="state.xml">&lt;<keyword>state</keyword>></xref> 
+         element instead. This element is primarily for specialization, where
         it can be used to require a logical true or false designation in a particular
         part of the document.
       </xs:documentation>
@@ -2050,10 +2047,9 @@
 	</xs:attributeGroup>
 	<xs:element name="strow">
 		<xs:annotation>
-			<xs:documentation>The &lt;<keyword>simpletable</keyword>> row (&lt;<keyword>strow</keyword>>)
-        element specifies a row in a simple table, like row in a conventional <ph>
-					<xref href="table.xml">table</xref>
-				</ph>.
+      <xs:documentation>The &lt;<keyword>simpletable</keyword>> row (&lt;<keyword>strow</keyword>>)
+        element specifies a row in a simple table, like row in a conventional <xref
+          href="table.xml">table</xref>.
       </xs:documentation>
 		</xs:annotation>
 		<xs:complexType>
@@ -2084,14 +2080,10 @@
 	</xs:attributeGroup>
 	<xs:element name="stentry">
 		<xs:annotation>
-			<xs:documentation>The simpletable entry (&lt;stentry>) element represents a single
+      <xs:documentation>The simpletable entry (&lt;stentry>) element represents a single
         table cell, like &lt;entry> in &lt;table>. You can place any number of stentry
-        cells in either an <ph>
-					<xref href="sthead.xml">sthead</xref>
-				</ph> element
-        (for headings) or <ph>
-					<xref href="strow.xml">strow</xref>
-				</ph> element (for
+        cells in either an <xref href="sthead.xml">sthead</xref> element
+        (for headings) or <xref href="strow.xml">strow</xref> element (for
         rows of data).
       </xs:documentation>
 		</xs:annotation>
@@ -2444,8 +2436,7 @@
 	</xs:attributeGroup>
 	<xs:element name="data-about">
 		<xs:annotation>
-			<xs:documentation>
-				<p>The &lt;<keyword>data-about</keyword>> element identifies the subject
+        <xs:documentation><p>The &lt;<keyword>data-about</keyword>> element identifies the subject
           of a property when the subject isn't associated with the context in which
           the property is specified. The property itself is expressed by the &lt;<keyword>data</keyword>>
           element. The &lt;<keyword>data-about</keyword>> element handles exception
@@ -2453,12 +2444,10 @@
           subject of the property. The &lt;<keyword>data-about</keyword>> element is
           particularly useful as a basis for specialization in combination with the &lt;<keyword>data</keyword>>
           element.</p>
-				<p>
-					<note type="important">Don't use the &lt;<keyword>data-about</keyword>>
+          <p><note type="important">Don't use the &lt;<keyword>data-about</keyword>>
             element to identify the object of a property. The <keyword>href</keyword> attribute
-            of the &lt;<keyword>data</keyword>> element serves that purpose.</note>
-				</p>
-			</xs:documentation>
+            of the &lt;<keyword>data</keyword>> element serves that purpose.</note></p>
+        </xs:documentation>
 		</xs:annotation>
 		<xs:complexType>
 			<xs:complexContent>

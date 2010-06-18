@@ -27,7 +27,7 @@
     xmlns:dita="http://dita-ot.sourceforge.net"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     description="Clean temp directory">
-    <delete includeemptydirs="true">
+    <delete includeemptydirs="true" failonerror="no">
       <fileset dir="${dita.temp.dir}"/>
     </delete>
   </target>
@@ -205,7 +205,7 @@
       destdir="${dita.temp.dir}" includesfile="${dita.temp.dir}${file.separator}${conreffile}"
       classpathref="dost.class.path"
       reloadstylesheet="${dita.preprocess.reloadstylesheet.conref}"
-      style="${dita.script.dir}${file.separator}preprocess${file.separator}conref.xsl">
+      style="${dita.script.dir}${file.separator}preprocess${file.separator}conref.xsl" filenameparameter="file-being-processed">
       <mapper type="glob" from="*" to="*.cnrf" />
       <param name="DITAEXT" expression="${dita.ext}" />
       <!-- added by William on 2009-06-26 for req #12014 start -->
@@ -271,6 +271,9 @@
       style="${dita.script.dir}${file.separator}preprocess${file.separator}mapref.xsl">
       <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
       <param name="TRANSTYPE" expression="${transtype}" />
+      <!--Added by William on 2010-04-14 for bug:2982485 start -->
+      <param name="FILEREF" expression="file:"/>
+      <!--Added by William on 2010-04-14 for bug:2982485 end -->
       <dita:extension id="dita.preprocess.mapref.param" behavior="org.dita.dost.platform.InsertAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
     </xslt>
     <move overwrite="true" todir="${dita.temp.dir}">

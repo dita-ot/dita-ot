@@ -178,7 +178,7 @@ See the accompanying license.txt file for applicable licenses.
 						<p>If <filepath>${args.csspath}</filepath> is a URL, <filepath>${args.css}</filepath> must be a filepath relative to the URL.</p>
 					</stentry>
 					<stentry>
-						<p>&nbsp;</p>
+						<p></p>
 					</stentry>
 				</strow>
 				<strow>
@@ -226,7 +226,7 @@ See the accompanying license.txt file for applicable licenses.
 								</p>
 					</stentry>
 					<stentry>
-						<p>&nbsp;</p>
+						<p></p>
 					</stentry>
 				</strow>
 				<strow>
@@ -363,7 +363,7 @@ See the accompanying license.txt file for applicable licenses.
 						</p>
 					</stentry>
 					<stentry>
-						<p>&nbsp;</p>
+						<p></p>
 					</stentry>
 				</strow>
 				<strow>
@@ -481,7 +481,7 @@ See the accompanying license.txt file for applicable licenses.
 						<p/>
 					</stentry>
 					<stentry>
-						<p>&nbsp;</p>
+						<p></p>
 					</stentry>
 				</strow>
 				<strow>

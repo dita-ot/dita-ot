@@ -31,6 +31,9 @@ This file is part of the DITA Open Toolkit project hosted on Sourceforge.net.
 See the accompanying license.txt file for applicable licenses.
 -->
 
+<!-- UPDATES: 20100524: SF Bug 2385466, disallow font-family="inherit" due to 
+                        lack of support in renderers. -->
+
 <xsl:stylesheet version="1.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:opentopic-i18n="http://www.idiominc.com/opentopic/i18n"
@@ -54,7 +57,7 @@ See the accompanying license.txt file for applicable licenses.
 		<xsl:value-of select="."/>
 	</xsl:template>
 
-    <xsl:template match="*[@font-family]" priority="+1">
+    <xsl:template match="*[@font-family][not(@font-family='inherit')]" priority="+1">
         <xsl:variable name="currFontFam" select="@font-family"/>
         <xsl:variable name="realFontName">
 			<xsl:choose>
@@ -95,14 +98,14 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:template match="*[opentopic-i18n:text-fragment]">
         <xsl:copy>
-            <xsl:copy-of select="@*"/>
+            <xsl:apply-templates select="@*"/>
             <xsl:attribute name="line-height-shift-adjustment">disregard-shifts</xsl:attribute>
             <xsl:apply-templates/>
         </xsl:copy>
     </xsl:template>
 
     <xsl:template match="opentopic-i18n:text-fragment">
-        <xsl:variable name="fontFace" select="ancestor::*[@font-family][1]/@font-family"/>
+        <xsl:variable name="fontFace" select="ancestor::*[@font-family][not(@font-family = 'inherit')][1]/@font-family"/>
         <xsl:variable name="charSet" select="@char-set"/>
 
         <xsl:variable name="realFontName">
@@ -158,16 +161,17 @@ See the accompanying license.txt file for applicable licenses.
 
     </xsl:template>
 
-    <xsl:template match="node()" priority="-1">
+    <xsl:template match="*" priority="-1">
        <xsl:copy>
-          <xsl:copy-of select="@*" />
-          <xsl:apply-templates />
+          <xsl:apply-templates select="@* | node()" />
        </xsl:copy>
     </xsl:template>
 
-    <xsl:template match="comment()|processing-instruction()" priority="-1">
+    <xsl:template match="@*|comment()|processing-instruction()" priority="-1">
        <xsl:copy />
     </xsl:template>
 
+    <!-- XEP doesn't like to see font-family="inherit", though it's allowed by the XSLFO spec. -->
+    <xsl:template match="@font-family[. = 'inherit']"/>
 
 </xsl:stylesheet>

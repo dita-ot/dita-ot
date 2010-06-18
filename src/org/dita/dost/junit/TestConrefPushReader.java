@@ -47,7 +47,7 @@ public class TestConrefPushReader {
 			assertTrue(table.containsKey("#X/B|pushafter"));
 			assertEquals(table.get("#X/B|pushafter"), "<step class=\"- topic/li task/step \"><cmd class=\"- topic/ph task/cmd \">after</cmd></step>");
 			assertTrue(table.containsKey("#X/C|pushreplace"));
-			assertEquals(table.get("#X/C|pushreplace"), "<step class=\"- topic/li task/step \"><cmd class=\"- topic/ph task/cmd \">replace</cmd></step>");
+			assertEquals( "<step class=\"- topic/li task/step \" id=\"C\"><cmd class=\"- topic/ph task/cmd \">replace</cmd></step>",table.get("#X/C|pushreplace"));
 			
 		}
 	}

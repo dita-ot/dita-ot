@@ -86,7 +86,18 @@ public class IndexTermReader extends AbstractXMLReader {
     private int processRoleLevel = 0;
     
 	private DITAOTJavaLogger javaLogger = null;
-
+	
+	//Added by William on 2010-04-26 for ref:2990783 start
+	private IndexTermCollection result = IndexTermCollection.getInstantce();
+	//Added by William on 2010-04-26 for ref:2990783 end
+	
+	//Added by William on 2010-04-26 for ref:2990783 start
+	public IndexTermReader(IndexTermCollection result) {
+ 		this();
+ 		this.result = result;
+	}
+	//Added by William on 2010-04-26 for ref:2990783 end
+	
 	/**
 	 * Constructor.
 	 */
@@ -200,7 +211,10 @@ public class IndexTermReader extends AbstractXMLReader {
 		updateIndexTermTargetName();
 		for(int i=0; i<size; i++){
 			IndexTerm indexterm = (IndexTerm)indexTermList.get(i);
-			IndexTermCollection.getInstantce().addTerm(indexterm);
+			//IndexTermCollection.getInstantce().addTerm(indexterm);
+			//Added by William on 2010-04-26 for ref:2990783 start
+			result.addTerm(indexterm);
+			//Added by William on 2010-04-26 for ref:2990783 end
 		}
 	}
 

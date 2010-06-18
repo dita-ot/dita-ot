@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.Set;
 import org.dita.dost.module.Content;
 import org.dita.dost.reader.KeyrefReader;
+import org.dita.dost.resolver.DitaURIResolverFactory;
 import org.junit.Test;
 
 public class TestKeyrefReader {
@@ -20,6 +21,9 @@ public class TestKeyrefReader {
 	@Test
 	public void TestKeyrefReader() throws FileNotFoundException
 	{
+	    String path=System.getProperty("user.dir");
+		DitaURIResolverFactory.setPath(path);
+		String filename = "test-stub/keyrefreader.xml";
 		try{
 			reader=new BufferedReader(new FileReader(keyrefreadercompare));
 			String line;
@@ -42,14 +46,12 @@ public class TestKeyrefReader {
 				e.printStackTrace();
 			}
 		}
-		String filename = "../test-stub/keyrefreader.xml";
-		keyrefreader.read(filename);
 		set.add("blatview");
 		set.add("blatfeference");
 		set.add("blatintro");
 		keyrefreader.setKeys(set);
-		Content content = keyrefreader.getContent();
 		keyrefreader.read(filename);
+		Content content = keyrefreader.getContent();
 		keyrefreader.getContent();
         String string1;
         string1=content.getValue().toString();

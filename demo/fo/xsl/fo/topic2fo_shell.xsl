@@ -42,6 +42,8 @@
     
     <xsl:param name="antArgsBookmarkStyle"></xsl:param>
     <xsl:param name="antArgsChapterLayout"></xsl:param>
+    <xsl:param name="antArgsIncludeRelatedLinks"></xsl:param>
+    <xsl:param name="antArgsGenerateTaskLabels"></xsl:param>
 
     
     <xsl:param name="tocMaximumLevel" select="'4'"></xsl:param>

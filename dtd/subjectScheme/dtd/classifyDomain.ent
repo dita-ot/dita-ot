@@ -33,6 +33,7 @@ PUBLIC "-//OASIS//ENTITIES DITA Map Subject Classification Domain//EN"
 <!--                                                               -->
 <!--  UPDATES:                                                     -->
 <!--    2008.02.13 RDA: Created file based upon prototype from IBM -->
+<!--    2010.01.21 RDA: Add topicapply as topicref extension       -->
 <!-- ============================================================= -->
 
 <!-- ============================================================= -->
@@ -40,7 +41,7 @@ PUBLIC "-//OASIS//ENTITIES DITA Map Subject Classification Domain//EN"
 <!-- ============================================================= -->
 
 <!ENTITY % classify-d-topicref
-              "topicsubject"
+              "topicsubject | topicapply"
 >
 <!ENTITY % classify-d-reltable 
               "topicSubjectTable"

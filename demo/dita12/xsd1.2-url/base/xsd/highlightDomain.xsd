@@ -4,7 +4,7 @@
 <!-- ============================================================= -->
 <!--  MODULE:    DITA Highlight Domain                             -->
 <!--  VERSION:   1.2                                             -->
-<!--  DATE:      November 2008                                     -->
+<!--  DATE:      November 2009                                     -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -17,12 +17,23 @@
 <!-- ORIGINAL CREATION DATE:                                       -->
 <!--             March 2001                                        -->
 <!--                                                               -->
-<!--             (C) Copyright OASIS-Open.org 2005, 2008            -->
+<!--             (C) Copyright OASIS-Open.org 2005, 2009            -->
 <!--             (C) Copyright IBM Corporation 2001, 2004.         -->
 <!--             All Rights Reserved.                              -->
 <!-- ============================================================= -->
 
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+  
+    <xs:annotation>
+      <xs:appinfo>
+        <dita:domainsModule xmlns:dita="http://dita.oasis-open.org/architecture/2005/">(topic hi-d)</dita:domainsModule>
+      </xs:appinfo>
+      <xs:documentation>
+      
+      </xs:documentation>
+    </xs:annotation>
+
+
   <xs:group name="hi-d-ph">
     <xs:choice>
       <xs:element ref="sup" />
@@ -90,9 +101,8 @@
         be superscripted, or vertically raised in relationship to the surrounding
         text.  Superscripts are usually a smaller font than the surrounding text.
         Use this element only when there is not some other more proper tag. For example,
-        for specific items such as GUI controls, use the <ph>
-          <xref href="uicontrol.xml">uicontrol</xref>
-        </ph> tag. This element is part of the DITA highlighting
+        for specific items such as GUI controls, use the
+          <xref href="uicontrol.xml">uicontrol</xref> tag. This element is part of the DITA highlighting
         domain.
       </xs:documentation>
     </xs:annotation>
@@ -173,9 +183,7 @@
         The teletype (&lt;<keyword>tt</keyword>&gt;) element is used to apply monospaced
         highlighting to the content of the element.  Use this element only when there
         is not some other more proper tag. For example, for specific items such as
-        GUI controls, use the <ph>
-          <xref href="uicontrol.xml">uicontrol</xref>
-        </ph> tag.
+        GUI controls, use the <xref href="uicontrol.xml">uicontrol</xref> tag.
         This element is part of the DITA highlighting domain.
       </xs:documentation>
     </xs:annotation>
@@ -216,9 +224,7 @@
         The bold (&lt;<keyword>b</keyword>&gt;) element is used to apply bold highlighting
         to the content of the element. Use this element only when there is not some
         other more proper tag. For example, for specific items such as GUI controls,
-        use the <ph>
-          <xref href="uicontrol.xml">uicontrol</xref>
-        </ph> tag.
+        use the <xref href="uicontrol.xml">uicontrol</xref> tag.
         This element is part of the DITA highlighting domain.
       </xs:documentation>
     </xs:annotation>
@@ -259,9 +265,7 @@
         The underline (&lt;<keyword>u</keyword>&gt;) element is used to apply
         underline highlighting to the content of the element.  Use this element only
         when there is not some other more proper tag. For example, for specific items
-        such as GUI controls, use the <ph>
-          <xref href="uicontrol.xml">uicontrol</xref>
-        </ph> tag.
+        such as GUI controls, use the <xref href="uicontrol.xml">uicontrol</xref> tag.
         This element is part of the DITA highlighting domain.
       </xs:documentation>
     </xs:annotation>
@@ -302,9 +306,7 @@
         The italic (&lt;i&gt;) element is used to apply italic highlighting
         to the content of the element. Use this element only when there
         is not some other more proper tag. For example, for specific items such as
-        GUI controls, use the <ph>
-          <xref href="uicontrol.xml">uicontrol</xref>
-        </ph> tag.
+        GUI controls, use the <xref href="uicontrol.xml">uicontrol</xref> tag.
         Italic highlighting generally means a font that is slanted for emphasis, but
         this may vary depending on your output formatting process. This element is
         part of the DITA highlighting domain.

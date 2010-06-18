@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
 
-<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA 1.2 Topic//EN" "file:/C:/DITA-OT1.5/DITA-OT1.5/dtd/technicalContent/dtd/topic.dtd">
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA 1.2 Topic//EN" "./dtd/technicalContent/dtd/topic.dtd">
 <topic id="keyword" xml:lang="en-us">
 <title>keyword</title>
 <shortdesc>You maintain your solution to ensure that all components

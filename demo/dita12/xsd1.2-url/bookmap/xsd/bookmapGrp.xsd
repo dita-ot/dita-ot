@@ -4,7 +4,7 @@
 <!-- ============================================================= -->
 <!--  MODULE:    DITA Book Map XSD Group Decleration                -->
 <!--  VERSION:   1.2                                             -->
-<!--  DATE:      November 2008                                     -->
+<!--  DATE:      November 2009                                     -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -17,7 +17,7 @@
 <!-- ORIGINAL CREATION DATE:                                       -->
 <!--             June 2006                                        -->
 <!--                                                               -->
-<!--             (C) Copyright OASIS-Open.org 2006, 2008                -->
+<!--             (C) Copyright OASIS-Open.org 2006, 2009                -->
 <!--             All Rights Reserved.                              -->
 <!-- ============================================================= -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
@@ -46,6 +46,7 @@
             <xs:element ref="appendices"/>
         </xs:sequence>
     </xs:group>
+  
     <xs:group name="appendix">
         <xs:sequence>
             <xs:element ref="appendix"/>

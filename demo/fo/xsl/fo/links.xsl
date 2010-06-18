@@ -52,11 +52,25 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:template name="insertLinkShortDesc">
 		<xsl:param name="destination"/>
 		<xsl:param name="element"/>
-        <xsl:if test="$element/*[contains(@class, ' topic/shortdesc ')]">
-            <fo:block xsl:use-attribute-sets="link__shortdesc">
-                <xsl:apply-templates select="$element/*[contains(@class, ' topic/shortdesc ')]"/>
-            </fo:block>
-        </xsl:if>
+		<xsl:param name="linkScope"/>
+        <xsl:choose>
+            <!-- User specified description (from map or topic): use that. -->
+            <xsl:when test="*[contains(@class,' topic/desc ')] and
+                            processing-instruction()[name()='ditaot'][.='usershortdesc']">
+                <fo:block xsl:use-attribute-sets="link__shortdesc">
+                    <xsl:apply-templates select="*[contains(@class, ' topic/desc ')]"/>
+                </fo:block>
+            </xsl:when>
+            <!-- External: do not attempt to retrieve. -->
+            <xsl:when test="$linkScope='external'">
+            </xsl:when>
+            <!-- When the target has a short description and no local override, use the target -->
+            <xsl:when test="$element/*[contains(@class, ' topic/shortdesc ')]">
+                <fo:block xsl:use-attribute-sets="link__shortdesc">
+                    <xsl:apply-templates select="$element/*[contains(@class, ' topic/shortdesc ')]"/>
+                </fo:block>
+            </xsl:when>
+        </xsl:choose>
     </xsl:template>
 
     <xsl:template name="insertLinkDesc">
@@ -112,6 +126,11 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:variable name="referenceContent">
             <xsl:choose>
                 <xsl:when test="not($element) or ($destination = '')">
+                    <xsl:text>#none#</xsl:text>
+                </xsl:when>
+                <xsl:when test="contains($element/@class,' topic/li ') and 
+                                contains($element/parent::*/@class,' topic/ol ')">
+                    <!-- SF Bug 1839827: This causes preprocessor text to be used for links to OL/LI -->
                     <xsl:text>#none#</xsl:text>
                 </xsl:when>
                 <xsl:otherwise>
@@ -292,19 +311,39 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' topic/related-links ')]">
-        <xsl:if test="$disableRelatedLinks = 'no'">
-            <fo:block xsl:use-attribute-sets="related-links">
+        <xsl:if test="$disableRelatedLinks = 'no' or
+                      $includeRelatedLinks!='none'">
+            <xsl:variable name="topicType">
+                <xsl:for-each select="parent::*">
+                    <xsl:call-template name="determineTopicType"/>
+                </xsl:for-each>
+            </xsl:variable>
 
-				<fo:block xsl:use-attribute-sets="related-links.title">
-					<xsl:call-template name="insertVariable">
-						<xsl:with-param name="theVariableID" select="'Related Links'"/>
-					</xsl:call-template>
-				</fo:block>
+            <xsl:variable name="collectedLinks">
+                <xsl:apply-templates>
+                    <xsl:with-param name="topicType" select="$topicType"/>
+                </xsl:apply-templates>
+            </xsl:variable>
 
-				<fo:block xsl:use-attribute-sets="related-links__content">
-                    <xsl:apply-templates/>
+            <xsl:variable name="linkTextContent">
+                <xsl:value-of select="$collectedLinks"/>
+            </xsl:variable>
+
+            <xsl:if test="normalize-space($linkTextContent)!=''">
+                <fo:block xsl:use-attribute-sets="related-links">
+
+    				<fo:block xsl:use-attribute-sets="related-links.title">
+	    				<xsl:call-template name="insertVariable">
+		    				<xsl:with-param name="theVariableID" select="'Related Links'"/>
+			    		</xsl:call-template>
+				    </fo:block>
+
+				    <fo:block xsl:use-attribute-sets="related-links__content">
+                        <xsl:copy-of select="$collectedLinks"/>
+                    </fo:block>
                 </fo:block>
-            </fo:block>
+            </xsl:if>
+
         </xsl:if>
     </xsl:template>
 
@@ -324,8 +363,32 @@ See the accompanying license.txt file for applicable licenses.
         </xsl:choose>
     </xsl:template>
 
+    <!-- 20100323: Update to be aware of new includeRelatedLinks parameter.
+         Move main processing of link into a mode template; this allows customized
+         code to easily match links without the need to copy processing logic. -->
     <xsl:template match="*[contains(@class,' topic/link ')]">
+      <xsl:param name="topicType">
+          <xsl:for-each select="ancestor::*[contains(@class,' topic/topic ')][1]">
+              <xsl:call-template name="determineTopicType"/>
+          </xsl:for-each>
+      </xsl:param>
+      <xsl:choose>
+        <xsl:when test="$includeRelatedLinks='nofamily' and
+                        (@role='parent' or @role='child' or @role='ancestor' or @role='descendant' or
+                         @role='next' or @role='previous' or @role='sibling' or @role='cousin')">
+          <!-- Skip link; family links are ignored for 'nofamily' -->
+        </xsl:when>
+        <xsl:when test="@role='child' and $chapterLayout='MINITOC' and
+                        ($topicType='topicChapter' or $topicType='topicAppendix' or $topicType='topicPart')">
+          <!-- When a minitoc already links to children, do not add them here -->
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:apply-templates select="." mode="processLink"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:template>
 
+    <xsl:template match="*[contains(@class,' topic/link ')]" mode="processLink">
 		<xsl:variable name="destination" select="opentopic-func:getDestinationId(@href)"/>
 		<xsl:variable name="element" select="key('key_anchor',$destination)[1]"/>
 
@@ -378,12 +441,15 @@ See the accompanying license.txt file for applicable licenses.
                 <xsl:call-template name="insertLinkDesc"/>
             </xsl:if>
 -->
-            <xsl:if test="not($linkScope = 'external')">
+            <!-- Previously: skip if linkSope = external. New processing: pass
+                 linkscope to the template, let the template decide. -->
+            <!--<xsl:if test="not($linkScope = 'external')">-->
                 <xsl:call-template name="insertLinkShortDesc">
 					<xsl:with-param name="destination" select="$destination"/>
 					<xsl:with-param name="element" select="$element"/>
+					<xsl:with-param name="linkScope" select="$linkScope"/>
 				</xsl:call-template>
-            </xsl:if>
+            <!--</xsl:if>-->
         </fo:block>
     </xsl:template>
 
@@ -482,8 +548,11 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' topic/linkpool ')]">
+        <xsl:param name="topicType"/>
         <fo:block xsl:use-attribute-sets="linkpool">
-            <xsl:apply-templates/>
+            <xsl:apply-templates>
+                <xsl:with-param name="topicType" select="$topicType"/>
+            </xsl:apply-templates>
         </fo:block>
     </xsl:template>
 

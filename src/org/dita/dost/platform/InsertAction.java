@@ -124,7 +124,16 @@ public class InsertAction extends DefaultHandler implements IAction, LexicalHand
 				retBuf.append(" ").append(attributes.getQName(i)).append("=\"");
 				retBuf.append(attributes.getValue(i)).append("\"");
 			}
-			retBuf.append(">");
+			//Added by Jason on 2010-05-09 for bug:2974667 start
+			if(("public".equals(localName) ||
+					"system".equals(localName) ||
+					"uri".equals(localName))){
+				retBuf.append("/>");
+			}
+			//Added by Jason on 2010-05-09 for bug:2974667 end
+			else{
+				retBuf.append(">");
+			}
 		}
 		elemLevel ++;
 	}
@@ -141,7 +150,13 @@ public class InsertAction extends DefaultHandler implements IAction, LexicalHand
 	 */
 	public void endElement(String uri, String localName, String qName) throws SAXException {
 		elemLevel --;
-		if(elemLevel != 0){
+		//edited by william on 2010-03-23 for bug:2974667 start
+		if(elemLevel != 0 && 
+				(!"public".equals(localName) &&
+				 !"system".equals(localName) &&
+				 !"uri".equals(localName))
+		){
+		//edited by william on 2010-03-23 for bug:2974667 start
 			retBuf.append(Constants.LINE_SEPARATOR);
 			retBuf.append("</"+qName+">");
 		}

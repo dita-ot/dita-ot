@@ -19,7 +19,9 @@ import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.module.Content;
 import org.dita.dost.module.ContentImpl;
+import org.dita.dost.pipeline.PipelineHashIO;
 import org.dita.dost.util.Constants;
+import org.dita.dost.writer.AbstractExtendDitaWriter;
 import org.dita.dost.writer.AbstractWriter;
 import org.dita.dost.writer.CHMIndexWriter;
 import org.dita.dost.writer.EclipseIndexWriter;
@@ -49,6 +51,10 @@ public class IndexTermCollection {
 	private String outputFileRoot = null;
 	/** The logger. */
 	private DITAOTJavaLogger javaLogger = null;
+	
+	//RFE 2987769 Eclipse index-see
+	/* Parameters passed in from ANT module */
+	private PipelineHashIO pipelineHashIO = null;
 
 	/**
 	 * Private constructor used to forbid instance.
@@ -189,6 +195,18 @@ public class IndexTermCollection {
 				abstractWriter = (AbstractWriter)anIndexClass.newInstance();
 				indexWriter = (IDitaTranstypeIndexWriter)anIndexClass.newInstance();
 				
+				//RFE 2987769 Eclipse index-see
+				try{
+					
+					((AbstractExtendDitaWriter) abstractWriter).setPipelineHashIO(this.getPipelineHashIO());
+		
+				}catch (ClassCastException e){
+					javaLogger.logInfo(e.getMessage());
+					javaLogger.logInfo(e.toString());
+					e.printStackTrace();
+					
+				}
+				
 				
 				buff = new StringBuffer(indexWriter.getIndexFileName(this.outputFileRoot));
 				
@@ -249,5 +267,24 @@ public class IndexTermCollection {
 	public void setOutputFileRoot(String fileRoot) {
 		this.outputFileRoot = fileRoot;
 	}
+
+	//RFE 2987769 Eclipse index-see
+	/**
+	*  Get input parameters from ANT pipeline module.
+    *  @return PipelineHashIO The hashmap containing some module parameters.
+    */
+	public PipelineHashIO getPipelineHashIO() {
+		return pipelineHashIO;
+	}
+
+	/**
+	 * Set the hashmap cotaining parameters from ANT pipeline module.
+	 * @param hashIO The hashmap to set.
+	 */
+	public void setPipelineHashIO(PipelineHashIO hashIO) {
+		this.pipelineHashIO = hashIO;
+	}
+	
+	
 
 }

@@ -10,15 +10,24 @@
 package org.dita.dost.reader;
 
 import java.io.IOException;
+import java.util.HashMap;
 
+import org.apache.xerces.xni.grammars.XMLGrammarPool;
+import org.dita.dost.log.DITAOTJavaLogger;
+import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.Content;
+import org.dita.dost.util.CatalogUtils;
+import org.dita.dost.util.Constants;
+import org.dita.dost.util.StringUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
 import org.xml.sax.ext.LexicalHandler;
+import org.xml.sax.helpers.XMLReaderFactory;
 
 /**
  * This class extends AbstractReader, implement SAX's ContentHandler, 
@@ -31,7 +40,87 @@ import org.xml.sax.ext.LexicalHandler;
 public abstract class AbstractXMLReader implements AbstractReader,
         ContentHandler, LexicalHandler, EntityResolver {
 	
-    /**
+    /** XMLReader instance for parsing dita file */
+	protected static XMLReader reader = null;
+	/** Map of XML catalog info */
+	protected static HashMap<String, String> catalogMap = null;
+
+	/**
+	 * @param validate
+	 * @param transtype 
+	 * @param rootFile 
+	 * @param grammarPool
+	 * @throws SAXException 
+	 */
+	public static XMLReader initXMLReaderBase(String ditaDir, boolean validate,			
+		XMLGrammarPool inGrammarPool) throws SAXException {		
+		// FIXME: WEK: This is my attempt to factor out common reader initialization
+		//             code for the GenListModuleReader and the Debug and filter reader.
+		
+		XMLGrammarPool grammarPool = null;
+		
+		if (inGrammarPool == null) {
+			grammarPool = GrammarPoolManager.getGrammarPool();
+		} else {
+			grammarPool = inGrammarPool;
+		}
+	
+		DITAOTJavaLogger javaLogger=new DITAOTJavaLogger();
+		if (System.getProperty(Constants.SAX_DRIVER_PROPERTY) == null) {
+			// The default sax driver is set to xerces's sax driver
+			StringUtils.initSaxDriver();
+		}
+		XMLReader reader = XMLReaderFactory.createXMLReader();
+		reader.setFeature(Constants.FEATURE_NAMESPACE_PREFIX, true);
+		if(validate==true){
+			reader.setFeature(Constants.FEATURE_VALIDATION, true);
+			reader.setFeature(Constants.FEATURE_VALIDATION_SCHEMA, true);
+		}else{
+			String msg=MessageUtils.getMessage("DOTJ037W").toString();
+			javaLogger.logWarn(msg);
+		}
+		setGrammarPool(reader, grammarPool);
+	
+		CatalogUtils.setDitaDir(ditaDir);
+		catalogMap = CatalogUtils.getCatalog(ditaDir);
+		return reader;
+	}
+
+	/**
+	 * Sets the grammar pool on the parser. Note that this is a Xerces-specific
+	 * feature.
+	 * @param reader
+	 * @param grammarPool
+	 */
+	public static void setGrammarPool(XMLReader reader, XMLGrammarPool grammarPool) {
+		
+		DITAOTJavaLogger logger = new DITAOTJavaLogger();
+		if (grammarPool == null) {
+			grammarPool = GrammarPoolManager.getGrammarPool();
+		}
+		if (grammarPool != null) {
+			try {
+				reader.setProperty(
+								"http://apache.org/xml/properties/internal/grammar-pool",
+								grammarPool);
+				
+				String msg = "Using Xerces grammar pool for DTD and schema caching.";
+				logger.logInfo(msg);
+				
+			} catch (Exception e) {
+				String msg = "Failed to setXerces grammar pool for parser: "
+					+ e.getMessage();
+				logger.logInfo(msg);
+			}
+		} else {
+			String msg = "grammar pool is null";
+			logger.logInfo(msg);
+		}
+	}
+	
+	protected DITAOTJavaLogger javaLogger = null;
+
+	/**
      * (non-Javadoc).
      * 
      * @see org.dita.dost.reader.AbstractReader#read(java.lang.String)

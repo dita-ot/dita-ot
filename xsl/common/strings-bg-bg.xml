@@ -44,6 +44,7 @@
 <str name="Danger">ОПАСНО</str>
 <str name="Remember">Запомнете</str>
 <str name="Restriction">Ограничение</str>
+<str name="Warning">Предупреждение</str>
 
 <!-- default title text for section level generated sections -->
 <str name="Contents">Съдържание</str>

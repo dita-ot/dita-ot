@@ -44,6 +44,7 @@
 <str name="Danger">Pericolo</str>
 <str name="Remember">Attenzione</str>
 <str name="Restriction">Limitazione</str>
+<str name="Warning">Avvertenza</str>
 
 <!-- default title text for section level generated sections -->
 <str name="Contents">Indice</str>

@@ -46,6 +46,7 @@
   <xs:group name="classify-d-topicref">
     <xs:sequence>
       <xs:group ref="topicsubject"/>
+      <xs:group ref="topicapply"/>
     </xs:sequence>
   </xs:group>
 
@@ -402,11 +403,9 @@
   <xs:group name="subjectCell.content">
     <xs:sequence>
       <xs:sequence>
-        <xs:group minOccurs="0" ref="topicsubject"/>
         <xs:choice minOccurs="0" maxOccurs="unbounded">
           <xs:group ref="data.elements.incl"/>
           <xs:group ref="subjectref"/>
-          <xs:group ref="topicapply"/>
           <xs:group ref="topicref"/>
         </xs:choice>
       </xs:sequence>

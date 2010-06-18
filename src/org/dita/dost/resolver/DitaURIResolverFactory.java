@@ -20,8 +20,8 @@ import org.xml.sax.InputSource;
  * 
  */
 public class DitaURIResolverFactory {
-	private static URIResolver resolver;
-	private static String path="";
+	private static URIResolver resolver = null;
+	private static String path = null;
 	static {
 		// DITA-OT default URIResolver
 		/**
@@ -41,7 +41,7 @@ public class DitaURIResolverFactory {
 						parentDir=path;
 					}
 					else{
-						parentDir=new File(parentDir).getAbsolutePath();
+						parentDir=new File(base).getAbsolutePath();
 					}
 					file = new File(parentDir, href);
 				}

@@ -32,6 +32,8 @@ PUBLIC "-//OASIS//ELEMENTS DITA Map Subject Classification Domain//EN"
 <!--                                                               -->
 <!--  UPDATES:                                                     -->
 <!--    2008.02.13 RDA: Created file based upon prototype from IBM -->
+<!--    2010.01.21 RDA: Update subjectCell content to remove       -->
+<!--                    duplicate element inclusion                -->
 <!-- ============================================================= -->
 
 
@@ -293,10 +295,8 @@ PUBLIC "-//OASIS//ELEMENTS DITA Map Subject Classification Domain//EN"
 
 <!--                    LONG NAME: Topic Subject Cell              -->
 <!ENTITY % subjectCell.content
-                       "((%topicsubject;)?,
-                         (%data.elements.incl; |
+                       "((%data.elements.incl; |
                           %subjectref; |
-                          %topicapply; |
                           %topicref;)*)"
 >
 <!ENTITY % subjectCell.attributes

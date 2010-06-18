@@ -27,8 +27,11 @@ import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.Content;
 import org.dita.dost.module.DebugAndFilterModule;
+import org.dita.dost.reader.AbstractXMLReader;
+import org.dita.dost.reader.GrammarPoolManager;
 import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.Constants;
+import org.dita.dost.util.DITAAttrUtils;
 import org.dita.dost.util.DelayConrefUtils;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.FilterUtils;
@@ -207,6 +210,15 @@ public class DitaWriter extends AbstractXMLWriter {
             	String topic = attValue.substring(sharp_index);
             	if(!path.equals(Constants.STRING_EMPTY)){
             		String relativePath;
+            		//Added by William on 2010-01-05 for bug:2926417 start
+            		if(path.startsWith("file:/") && path.indexOf("file://") == -1){
+            			path = path.substring("file:/".length());
+            			//Unix like OS
+                		if(Constants.SLASH.equals(File.separator)){
+                			path = Constants.SLASH + path;
+            			}
+            		}
+            		//Added by William on 2010-01-05 for bug:2926417 end
             		File target = new File(path);
             		if(target.isAbsolute()){
             			relativePath = FileUtils.getRelativePathFromMap(OutputUtils.getInputMapPathName(), path);
@@ -215,6 +227,15 @@ public class DitaWriter extends AbstractXMLWriter {
 
             	}
             }else{
+            	//Added by William on 2010-01-05 for bug:2926417 start
+        		if(attValue.startsWith("file:/") && attValue.indexOf("file://") == -1){
+        			attValue = attValue.substring("file:/".length());
+        			//Unix like OS
+            		if(Constants.SLASH.equals(File.separator)){
+            			attValue = Constants.SLASH + attValue;
+        			}
+        		}
+        		//Added by William on 2010-01-05 for bug:2926417 end
             	File target = new File(attValue);
             	if(target.isAbsolute()){
             		attValue = FileUtils.getRelativePathFromMap(OutputUtils.getInputMapPathName(), attValue);
@@ -278,6 +299,15 @@ public class DitaWriter extends AbstractXMLWriter {
 
     private Map<String, String> keys = null;
     
+    //Added by William on 2010-02-25 for bug:2957456 start
+    private String inputFile = null;
+    //Added by William on 2010-02-25 for bug:2957456 end
+    
+    //Added by William on 2010-06-01 for bug:3005748 start
+    //Get DITAAttrUtil
+    private DITAAttrUtils ditaAttrUtils = DITAAttrUtils.getInstance();
+    //Added by William on 2010-06-01 for bug:3005748 end
+    
     private HashMap<String, HashMap<String, HashSet<String>>> validateMap = null;
 	private HashMap<String, HashMap<String, String>> defaultValueMap = null;
     
@@ -319,8 +349,6 @@ public class DitaWriter extends AbstractXMLWriter {
         logger = new DITAOTJavaLogger();
         reader.setContentHandler(this);
         
-        
-        
         try {
 			reader.setProperty(Constants.LEXICAL_HANDLER_PROPERTY,this);
 			//Edited by william on 2009-11-8 for ampbug:2893664 start
@@ -353,7 +381,8 @@ public class DitaWriter extends AbstractXMLWriter {
 		try {
 			
 			reader = XMLReaderFactory.createXMLReader();
-			
+			AbstractXMLReader.setGrammarPool(reader, null);
+ 			
             reader.setFeature(Constants.FEATURE_NAMESPACE_PREFIX, true);
             if(validate==true){
             	reader.setFeature(Constants.FEATURE_VALIDATION, true);
@@ -363,6 +392,7 @@ public class DitaWriter extends AbstractXMLWriter {
 		} catch (Exception e) {
 			logger.logException(e);
 		}
+		AbstractXMLReader.setGrammarPool(reader, GrammarPoolManager.getGrammarPool());
 		CatalogUtils.setDitaDir(ditaDir);
 		catalogMap = CatalogUtils.getCatalog(ditaDir);
 	}
@@ -469,13 +499,14 @@ public class DitaWriter extends AbstractXMLWriter {
 		    			//target = FileUtils.replaceExtName(target);
 		    			//Added by William on 2009-06-25 for #12014 start
 		    			//get key's href
-		    			String href = keys.get(key);
+		    			String value = keys.get(key);
+		    			String href = value.substring(0, value.lastIndexOf(Constants.LEFT_BRACKET));
 		    			
-		    			//href = FileUtils.getRelativePathFromMap(tempDir, href);
-		    			//remove "#", change for "\\", "/" to File.Seperator
-		    			href = FileUtils.normalizeDirectory(null, href);
-		    			href = href.replace(Constants.BACK_SLASH, Constants.SLASH);
-			    		//get element/topic id
+		    			//Added by William on 2010-02-25 for bug:2957456 start
+		    			String updatedHref = updateHref(href);
+		    			//Added by William on 2010-02-25 for bug:2957456 end
+			    		
+		    			//get element/topic id
 			    		String id = attValue.substring(keyIndex+1);
 			    		
 			    		boolean idExported = false;
@@ -494,8 +525,11 @@ public class DitaWriter extends AbstractXMLWriter {
 		    			//Added by William on 2009-06-25 for #12014 end
 		    			}else {
 		    				//normal process
-		    				target = keys.get(key);
-			    			target = FileUtils.replaceExtName(target, extName);
+		    				target = updatedHref;
+		    				//Added by William on 2010-05-17 for conkeyrefbug:3001705 start
+		    				//only replace extension name of topic files.
+		    				target = replaceExtName(target);
+			    			//Added by William on 2010-05-17 for conkeyrefbug:3001705 end
 			    			String tail ;
 			    			if(sharpIndex == -1 ){
 			    				if(target.indexOf(Constants.SHARP) == -1)
@@ -524,10 +558,13 @@ public class DitaWriter extends AbstractXMLWriter {
 		    		//conkeyref just has keyref
 		    		if(keys.containsKey(attValue)){
 		    			//get key's href
-		    			String href = keys.get(attValue);
-		    			//remove "#", change for "\\", "/" to "File.Seperator"
-		    			href = FileUtils.normalizeDirectory(null, href);
-		    			href = href.replace(Constants.BACK_SLASH, Constants.SLASH);
+		    			String value = keys.get(attValue);
+		    			String href = value.substring(0, value.lastIndexOf(Constants.LEFT_BRACKET));
+		    			
+		    			//Added by William on 2010-02-25 for bug:2957456 start
+		    			String updatedHref = updateHref(href);
+		    			//Added by William on 2010-02-25 for bug:2957456 end
+		
 		    			//Added by William on 2009-06-25 for #12014 start
 		    			String id = null;
 		    			
@@ -540,8 +577,12 @@ public class DitaWriter extends AbstractXMLWriter {
 		    			//Added by William on 2009-06-25 for #12014 end
 		    			}else{
 		    				//e.g conref = c.xml
-		    				String target = keys.get(attValue);
-		    				copyAttribute("conref", FileUtils.replaceExtName(target, extName));
+		    				String target = updatedHref;
+		    				//Added by William on 2010-05-17 for conkeyrefbug:3001705 start
+		    				target = replaceExtName(target);
+		    				//Added by William on 2010-05-17 for conkeyrefbug:3001705 end
+		    				copyAttribute("conref", target);
+			    			
 			    			conkeyrefValid = true;
 		    			}
 		    		}else{
@@ -576,6 +617,47 @@ public class DitaWriter extends AbstractXMLWriter {
 			conref = StringUtils.escapeXML(conref);
 			copyAttribute("conref", conref);
 		}
+	}
+
+	/** Repalce extestion name for non-ditamap file
+	 * @param target String
+	 * @return String
+	 */
+	private String replaceExtName(String target) {
+		String fileName = FileUtils.resolveFile("", target);
+		if(FileUtils.isDITATopicFile(fileName)){
+			target = FileUtils.replaceExtName(target, extName);
+		}
+		return target;
+	}
+
+	/**
+	 * Upate href.
+	 * @param href String key's href
+	 * @return
+	 */
+	private String updateHref(String href) {
+		
+		//Added by William on 2010-05-18 for bug:3001705 start
+		String filePath = new File(tempDir, this.inputFile).getAbsolutePath();
+		
+		String keyValue = new File(tempDir, href).getAbsolutePath();
+		
+		String updatedHref = FileUtils.getRelativePathFromMap(filePath, keyValue);
+		//Added by William on 2010-05-18 for bug:3001705 end
+		
+		
+		//String updatedHref = null;
+		/*prefix = new File(prefix).getParent();
+		if(StringUtils.isEmptyString(prefix)){
+			updatedHref = href;
+			updatedHref = updatedHref.replace(Constants.BACK_SLASH, Constants.SLASH);
+		}else{
+			updatedHref = prefix + Constants.SLASH +href;
+			updatedHref = updatedHref.replace(Constants.BACK_SLASH, Constants.SLASH);
+		}*/
+		
+		return updatedHref;
 	}
 	
 	/**
@@ -740,6 +822,11 @@ public class DitaWriter extends AbstractXMLWriter {
         } catch (Exception e) {
         	logger.logException(e);
         }
+        
+        //Added by William on 2010-06-01 for bug:3005748 start
+        //@print
+        ditaAttrUtils.reset();
+		//Added by William on 2010-06-01 for bug:3005748 end
     }
 
     
@@ -747,6 +834,17 @@ public class DitaWriter extends AbstractXMLWriter {
 	@Override
     public void endElement(String uri, String localName, String qName)
             throws SAXException {
+		
+		//Added by William on 2010-06-01 for bug:3005748 start
+		//need to skip the tag
+		if(ditaAttrUtils.needExcludeForPrintAttri(transtype)){
+			//decrease level
+			ditaAttrUtils.decreasePrintLevel();
+			//don't write the end tag
+			return;
+		}
+		//Added by William on 2010-06-01 for bug:3005748 end
+		
     	if (foreignLevel > 0){
     		foreignLevel --;
     	}
@@ -767,7 +865,8 @@ public class DitaWriter extends AbstractXMLWriter {
             }
         }
         //Added by William on 2009-11-27 for bug:1846993 embedded table bug start
-        if(Constants.ELEMENT_NAME_TGROUP.equals(qName)){
+        //note the tag shouldn't be excluded by filter file(bug:2925636 )
+        if(Constants.ELEMENT_NAME_TGROUP.equals(qName) && !exclude){
         	colSpecStack.pop();
         	//has tgroup tag
         	if(!colSpecStack.isEmpty()){
@@ -920,7 +1019,17 @@ public class DitaWriter extends AbstractXMLWriter {
         String domains = null;
 		Properties params = new Properties();
 		String attrValue = atts.getValue(Constants.ATTRIBUTE_NAME_CLASS);
-        
+		
+		//Added by William on 2010-06-01 for bug:3005748 start
+		String printValue = atts.getValue(Constants.ATTRIBUTE_NAME_PRINT);
+		//increase element level for nested tags.
+		ditaAttrUtils.increasePrintLevel(printValue);
+		
+		if(ditaAttrUtils.needExcludeForPrintAttri(transtype)){
+			return;
+		}
+		//Added by William on 2010-06-01 for bug:3005748 end
+		
         if (foreignLevel > 0){
         	foreignLevel ++;
         }else if( foreignLevel == 0){
@@ -1009,6 +1118,9 @@ public class DitaWriter extends AbstractXMLWriter {
 		FileOutputStream fileOutput = null;
         exclude = false;
         needResolveEntity = true;
+        
+        inputFile = filename.substring(filename.lastIndexOf(Constants.STICK) + 1);
+        
         if(null == keys){
         	keys = new HashMap<String, String>();
         	Properties prop = new Properties();
@@ -1028,6 +1140,7 @@ public class DitaWriter extends AbstractXMLWriter {
     		}catch (Exception e) {
     			logger.logException(e);
     		}
+    		
     		if(prop.getProperty(Constants.KEY_LIST) != ""){
 	    		String[] keylist = prop.getProperty(Constants.KEY_LIST).split(Constants.COMMA);
 	    		String key;
@@ -1035,9 +1148,13 @@ public class DitaWriter extends AbstractXMLWriter {
 	    		for(String keyinfo: keylist){
 	    			//get the key name
 	    			key = keyinfo.substring(0, keyinfo.indexOf(Constants.EQUAL));
-	    			//get the href value
-	    			value = keyinfo.substring(keyinfo.indexOf(Constants.EQUAL)+1, keyinfo.indexOf("("));
 	    			
+	    			//Edited by William on 2010-02-25 for bug:2957456 start
+	    			//value = keyinfo.substring(keyinfo.indexOf(Constants.EQUAL)+1, keyinfo.indexOf("("));
+	    			//get the href value and source file name
+	    			//e.g topics/target-topic-a.xml(maps/root-map-01.ditamap)
+	    			value = keyinfo.substring(keyinfo.indexOf(Constants.EQUAL)+1);
+	    			//Edited by William on 2010-02-25 for bug:2957456 end
 	    			keys.put(key, value);
 	    		}
 

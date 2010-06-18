@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE dita PUBLIC "-//IBM//DTD DITA Composite//EN"
- "C:\DITA-OT1.4\dtd\ditabase.dtd">
-<?Pub Inc?>
+ "./dtd/technicalContent/dtd/ditabase.dtd">
+ <?Pub Inc?>
 <dita>
 <topic id="topic" conref="lang-common.dita#topic" xml:lang="ca-es">
 <title>conref</title>

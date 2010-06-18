@@ -4,7 +4,7 @@
 <!-- ============================================================= -->
 <!--  MODULE:    DITA Utilities Domain                             -->
 <!--  VERSION:   1.2                                             -->
-<!--  DATE:      November 2008                                     -->
+<!--  DATE:      November 2009                                     -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -17,12 +17,21 @@
 <!-- ORIGINAL CREATION DATE:                                       -->
 <!--             March 2001                                        -->
 <!--                                                               -->
-<!--             (C) Copyright OASIS-Open.org 2005, 2008                -->
+<!--             (C) Copyright OASIS-Open.org 2005, 2009                -->
 <!--             (C) Copyright IBM Corporation 2001, 2004.         -->
 <!--             All Rights Reserved.                              -->
 <!-- ============================================================= -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
   <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="../../base/xsd/xml.xsd"/>
+
+  <xs:annotation>
+    <xs:appinfo>
+      <dita:domainsModule xmlns:dita="http://dita.oasis-open.org/architecture/2005/">(topic ut-d)</dita:domainsModule>
+    </xs:appinfo>
+    <xs:documentation> 
+    
+    </xs:documentation>
+  </xs:annotation>
 
   <xs:group name="ut-d-fig">
     <xs:choice>

@@ -28,6 +28,10 @@
 <xsl:param name="PROJDIR" select="'.'"/>
 <xsl:param name="DBG" select="no"/>
 <xsl:param name="FILEREF">file://</xsl:param>
+  
+<!--Added by William on 2010-04-26 for bug:2990162 start-->
+<xsl:param name="file-being-processed"/>  
+<!--Added by William on 2010-04-26 for bug:2990162 end-->
 
 <xsl:variable name="ORIGINAL-DOMAINS" select="/*/@domains|/dita/*[@domains][1]/@domains"/>
 
@@ -1404,6 +1408,11 @@
   <xsl:param name="file-prefix"/>
   <xsl:value-of select="$file-prefix"/>    
   <xsl:choose>
+    <!--Added by William on 2010-04-26 for bug:2990162 start-->
+    <xsl:when test="starts-with($href,'#')">
+      <xsl:value-of select="$file-being-processed"/>
+    </xsl:when>    
+    <!--Added by William on 2010-04-26 for bug:2990162 end-->
     <xsl:when test="contains($href,'#')">
       <xsl:value-of select="substring-before($href,'#')"/>
     </xsl:when>

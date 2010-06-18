@@ -78,7 +78,7 @@
         complex relationships of tabular information. This standard table markup allows
         column or row spanning and table captions or descriptions. A optional title
         allowed inside the table element provides a caption to describe the table.
-        See <ph><xref href="simpletable.xml">simpletable</xref></ph> for a simplified
+        See <xref href="simpletable.xml">simpletable</xref> for a simplified
         table model that can be specialized to represent more regular relationships
         of data.
       </xs:documentation>

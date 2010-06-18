@@ -80,7 +80,7 @@
 <!-- If the element has a compact=yes attribute, assert it in contextually correct form. -->
 <!-- (assumes that no compaction is default) -->
 <xsl:template match="@compact">
-  <xsl:if test="@compact = 'yes'">
+  <xsl:if test=". = 'yes'">
    <!--xsl:attribute name="compact">compact</xsl:attribute-->
    <!-- NOOP for FO for now; must use padding attributes in block context -->
   </xsl:if>

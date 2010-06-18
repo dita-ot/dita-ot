@@ -159,7 +159,7 @@ public class FileUtils {
 
 	/**
 	 * Get the path of topicFile relative to the input map.
-	 * 
+	 * In fact this method can be used to calculate any path of topicFile related to the first parameter.
 	 * @param mapFilePathName map file with file path
 	 * @param topicFilePathName topic file with file path
 	 * @return relative path

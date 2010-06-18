@@ -108,41 +108,33 @@
     <!-- <!ELEMENT learningGroup ( (%topicmeta;)?,  (%learningPlanRef;)?,   ((%learningOverviewRef;) | (%learningAssessmentRef;))*,   ((%learningObject;) | (%learningGroup;))*,    ((%learningAssessmentRef;) | (%learningSummaryRef;))*     )   >-->
   
     <xs:attributeGroup name="learningDomain-topicref-atts">
-          <xs:attributeGroup ref="learningContentRef.attributes"/>
+          <xs:attributeGroup ref="learningDomain-topicref-atts-no-chunk"/>
           <xs:attribute name="chunk" type="xs:string"/>
     </xs:attributeGroup>
-  
-   <xs:attributeGroup name="learningDomain-topicref-atts">
-          <xs:attributeGroup ref="learningContentRef.attributes"/>
-          <xs:attribute name="chunk" type="xs:string"/>
-   </xs:attributeGroup>
-  
+    
   <xs:attributeGroup name="learningObjectComponent-topicref-atts">
-          <xs:attributeGroup ref="learningContentRef.attributes"/>
+          <xs:attributeGroup ref="learningDomain-topicref-atts-no-chunk"/>
           <xs:attribute name="chunk" type="xs:string" default="to-content"/>
    </xs:attributeGroup>
-  
   
   
     
     <xs:attributeGroup name="learningDomain-topicref-atts-no-chunk">
           <xs:attribute name="navtitle" type="xs:string"/>  
-          <xs:attribute name="id" type="xs:ID"/>
           <xs:attribute name="href" type="xs:string"/>
           <xs:attribute name="keyref" type="xs:string"/>  
           <xs:attribute name="keys" type="xs:string"/>
           <xs:attribute name="query" type="xs:string"/>
-          <xs:attributeGroup ref="conref-atts" />
           <xs:attribute name="copy-to" type="xs:string"/>          
           <xs:attribute name="outputclass" type="xs:string"/>    
           <xs:attribute name="scope" type="scope-att.class"/>
           <xs:attribute name="processing-role" type="processing-role-att.class" />
+          <xs:attribute name="loctitle" type="yesno-att.class"/>
           <xs:attribute name="linking" type="linkingtypes.class"/>
           <xs:attribute name="toc" type="yesno-att.class"/>
-          <xs:attribute name="print" type="yesno-att.class"/>
+          <xs:attribute name="print" type="print-att.class"/>
           <xs:attribute name="search" type="yesno-att.class"/>
-          <xs:attributeGroup ref="select-atts" />
-          <xs:attributeGroup ref="localization-atts" />          
+          <xs:attributeGroup ref="univ-atts" />          
     </xs:attributeGroup>
   
   

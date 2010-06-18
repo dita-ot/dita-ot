@@ -32,14 +32,14 @@
  <xsl:variable name="flagrules">
   <xsl:call-template name="getrules"/>
  </xsl:variable>
- <tt class="msgph">
+ <samp class="msgph">
   <xsl:call-template name="commonattributes"/>
   <xsl:call-template name="setidaname"/>
   <xsl:call-template name="flagcheck"/>
   <xsl:call-template name="revtext">
    <xsl:with-param name="flagrules" select="$flagrules"/>
   </xsl:call-template>
-  </tt>
+  </samp>
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' sw-d/userinput ')]" name="topic.sw-d.userinput">
@@ -60,14 +60,14 @@
  <xsl:variable name="flagrules">
   <xsl:call-template name="getrules"/>
  </xsl:variable>
- <tt class="sysout">
+ <samp class="sysout">
   <xsl:call-template name="commonattributes"/>
   <xsl:call-template name="setidaname"/>
   <xsl:call-template name="flagcheck"/>
   <xsl:call-template name="revtext">
    <xsl:with-param name="flagrules" select="$flagrules"/>
   </xsl:call-template>
-  </tt>
+  </samp>
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' sw-d/cmdname ')]" name="topic.sw-d.cmdname">

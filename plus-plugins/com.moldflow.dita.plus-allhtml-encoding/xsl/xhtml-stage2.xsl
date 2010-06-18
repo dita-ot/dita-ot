@@ -15,6 +15,12 @@
                           <xsl:attribute name="content"><xsl:text>text/html; charset=shift_jis</xsl:text></xsl:attribute>
                         </xsl:element>
                     </xsl:when>
+                    <xsl:when test="$ENCODING = 'x-windows-950'">
+                        <xsl:element name="meta" namespace="{$XHTML-NAMESPACE}">
+                          <xsl:attribute name="http-equiv"><xsl:text>Content-Type</xsl:text></xsl:attribute>
+                          <xsl:attribute name="content"><xsl:text>text/html; charset=Big5</xsl:text></xsl:attribute>
+                        </xsl:element>
+                    </xsl:when>
                     <xsl:when test="$ENCODING = 'MS936'">
                         <xsl:element name="meta" namespace="{$XHTML-NAMESPACE}">
                           <xsl:attribute name="http-equiv"><xsl:text>Content-Type</xsl:text></xsl:attribute>

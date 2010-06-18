@@ -4,7 +4,7 @@
 <!-- ============================================================= -->
 <!--  MODULE:    DITA Task XSD                                     -->
 <!--  VERSION:   1.2                                             -->
-<!--  DATE:      November 2008                                     -->
+<!--  DATE:      November 2009                                     -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -17,7 +17,7 @@
 <!-- ORIGINAL CREATION DATE:                                       -->
 <!--             March 2001                                        -->
 <!--                                                               -->
-<!--             (C) Copyright OASIS-Open.org 2005, 2008                -->
+<!--             (C) Copyright OASIS-Open.org 2005, 2009                -->
 <!--             (C) Copyright IBM Corporation 2001, 2004.         -->
 <!--             All Rights Reserved.                              -->
 <!-- ============================================================= -->
@@ -120,7 +120,8 @@
 
   
   <xs:include schemaLocation="strictTaskbodyConstraintMod.xsd" />
-  <xs:include schemaLocation="../../base/xsd/topicMod.xsd"/>
+  
+  <xs:include schemaLocation="../../base/xsd/topicMod.xsd" />  
 
   <xs:attributeGroup name="domains-att">
      <xs:attribute name="domains" type="xs:string" default="(topic ui-d) (topic hi-d) (topic sw-d) (topic pr-d) (topic ut-d) (topic indexing-d) (topic hazard-d) (topic task) (topic task strictTaskbody-c)  (topic abbrev-d)"/>

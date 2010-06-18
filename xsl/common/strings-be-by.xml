@@ -41,6 +41,7 @@
   <str name="Danger">НЕБЯСПЕКА</str> 
   <str name="Remember">Напамін</str> 
   <str name="Restriction">Абмежаванне</str> 
+  <str name="Warning">Папярэджанне</str> 
   <!-- default title text for section level generated sections --> 
   <str name="Contents">Змест</str> 
   <str name="Related concepts">Адпаведныя канцэпцыі</str> 

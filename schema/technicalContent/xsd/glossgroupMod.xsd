@@ -37,7 +37,7 @@
      <xs:complexType>
        <xs:complexContent>
          <xs:extension base="glossgroup.class">
-           <xs:attribute name="class" default="- topic/topic concept/concept glossgroup/glossgroup"/>
+           <xs:attribute name="class" default="- topic/topic concept/concept glossgroup/glossgroup "/>
          </xs:extension>
        </xs:complexContent>
      </xs:complexType>

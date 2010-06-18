@@ -44,6 +44,7 @@
    <str name="Danger">PERICOL</str>
    <str name="Remember">De reţinut</str>
    <str name="Restriction">Restricţie</str>
+   <str name="Warning">Avertisment</str>
 
    <!-- default title text for section level generated sections -->
    <str name="Contents">Cuprins</str>

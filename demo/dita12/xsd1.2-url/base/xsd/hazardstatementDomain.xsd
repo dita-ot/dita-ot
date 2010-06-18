@@ -5,7 +5,7 @@
 <!-- ============================================================= -->
 <!--  MODULE:    DITA Hazard Statement Domain                  -->
 <!--  VERSION:   1.2                                             -->
-<!--  DATE:      November 2008                                     -->
+<!--  DATE:      November 2009                                     -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -15,12 +15,21 @@
 <!-- PURPOSE:    W3C XML Schema to describe Hazard domains    -->
 <!--                                                               -->
 <!-- ORIGINAL CREATION DATE:                                       -->
-<!--             September  2008                                        -->
+<!--             September  2009                                        -->
 <!--                                                               -->
-<!--             (C) Copyright OASIS-Open.org 2008                -->
+<!--             (C) Copyright OASIS-Open.org 2009                -->
 <!--             All Rights Reserved.                              -->
 <!-- ============================================================= -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  
+  <xs:annotation>
+    <xs:appinfo>
+      <dita:domainsModule xmlns:dita="http://dita.oasis-open.org/architecture/2005/">(topic hazard-d)</dita:domainsModule>
+    </xs:appinfo>
+    <xs:documentation>
+      
+    </xs:documentation>
+  </xs:annotation>
     
     <xs:group name="hazard-d-note">
         <xs:choice>
@@ -146,7 +155,7 @@
     <xs:sequence>
       <xs:sequence>
       <xs:group ref="typeofhazard" />
-      <xs:group ref="consequence" maxOccurs="unbounded"/>
+      <xs:group ref="consequence" maxOccurs="unbounded" minOccurs="0"/>
       <xs:group ref="howtoavoid" maxOccurs="unbounded"/>
     </xs:sequence>
     </xs:sequence>
@@ -187,7 +196,7 @@
   
   <xs:attributeGroup name="hazardsymbol.attributes">
       <xs:attribute name="href" type="xs:string" use="required"/>
-    <xs:attribute name="keyref" type="xs:NMTOKEN"/>
+    <xs:attribute name="keyref" type="xs:string"/>
     <!-- <xs:attribute name="alt" type="xs:string"/> -->
     <xs:attribute name="longdescref" type="xs:string"/>
     <xs:attribute name="height" type="xs:NMTOKEN"/>
@@ -278,7 +287,7 @@
     </xs:complexType>
   </xs:element>
   
-  <xs:complexType name="howtoavoid.class">
+  <xs:complexType name="howtoavoid.class" mixed="true">
     <xs:sequence>
       <xs:group ref="howtoavoid.content"/>
     </xs:sequence>

@@ -44,6 +44,7 @@
 <str name="Danger">PAVOJINGA</str>
 <str name="Remember">Atminkite</str>
 <str name="Restriction">APRIBOJIMAS</str>
+<str name="Warning">Įspėjimas</str>
 
 <!-- default title text for section level generated sections -->
 <str name="Contents">Turinys</str>

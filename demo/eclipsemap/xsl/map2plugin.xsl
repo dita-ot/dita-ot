@@ -13,6 +13,7 @@
   
   <xsl:import href="../../../xsl/common/output-message.xsl"/>
   <xsl:variable name="msgprefix">DOTX</xsl:variable>
+  <!-- <xsl:param name="version">1.0.0</xsl:param> -->
 
   <xsl:param name="PLUGINFILE" select="'plugin.xml'"/>
   <xsl:param name="DITAMAPEXT" select="'ditamap'"/>
@@ -366,15 +367,15 @@
     
   </xsl:template>
   
-  <xsl:template name="eclipse.manifest.init" mode="eclipse.manifest" match="*">
+  <xsl:template name="eclipse.manifest.init">
     <xsl:text>Manifest-Version: 1.0</xsl:text><xsl:value-of select="$newline"/>
     <xsl:text>Bundle-ManifestVersion: 2</xsl:text><xsl:value-of select="$newline"/>
     <xsl:text>Bundle-Localization: plugin</xsl:text><xsl:value-of select="$newline"/>
     <xsl:text>Bundle-Name: %name</xsl:text><xsl:value-of select="$newline"/>
     <!--  Fix for Eclipse defect 2871017 -->
-  <xsl:if test="not(*[contains(@class,' eclipsemap/pluginmeta ')]/*[contains(@class,' eclipsemap/plugininfo ')]/*[contains(@class,' topic/vrmlist ')]/*[contains(@class,' topic/vrm ')][position() = 1]/@version > 0)">
-      <xsl:text>Bundle-Version: 1.0.0</xsl:text><xsl:value-of select="$newline"/>
-  </xsl:if>
+    <xsl:if test="not(*[contains(@class,' eclipsemap/pluginmeta ')]/*[contains(@class,' eclipsemap/plugininfo ')]/*[contains(@class,' topic/vrmlist ')]/*[contains(@class,' topic/vrm ')][position() = 1]/@version > 0)">
+      <xsl:text>Bundle-Version: </xsl:text><xsl:value-of select="$version"/><xsl:value-of select="$newline"/>
+    </xsl:if>
     
     <xsl:text>Bundle-Vendor: %providerName</xsl:text><xsl:value-of select="$newline"/>
     <xsl:choose>

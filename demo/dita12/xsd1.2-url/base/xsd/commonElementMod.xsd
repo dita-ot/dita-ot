@@ -1,9 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!-- ============================================================= -->
 <!--                    HEADER                                     -->
 <!-- ============================================================= -->
 <!--  MODULE:    DITA Common Elements XSD Module                           -->
 <!--  VERSION:   1.2                                             -->
-<!--  DATE:      Octoober  2008                                    -->
+<!--  DATE:      Octoober  2009                                    -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -16,13 +17,13 @@
 <!-- ORIGINAL CREATION DATE:                                       -->
 <!--             June  2006                                        -->
 <!--                                                               -->
-<!--             (C) Copyright OASIS-Open.org 2006, 2008                -->
+<!--             (C) Copyright OASIS-Open.org 2006, 2009                -->
 <!--             All Rights Reserved.                              -->
 <!--  UPDATES:                                                     -->
-<!--    2008.05.05 EAS:  Added navtitle element.  Moved shortdesc element declaration to mapMod.xsd and topicMod.xsd.  -->
- <!--    2008.05.05 EAS:  Moved metadata to metaDeclMod.xsd  -->
+<!--    2009.05.05 EAS:  Added navtitle element.  Moved shortdesc element declaration to mapMod.xsd and topicMod.xsd.  -->
+ <!--    2009.05.05 EAS:  Moved metadata to metaDeclMod.xsd  -->
 <!-- ============================================================= -->
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xml="http://www.w3.org/XML/1998/namespace">
 
     <!--  Import the XML Schema that contains the defiinitions for xml:lang and xml:space attributes -->
   <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="../../base/xsd/xml.xsd"/>
@@ -722,7 +723,7 @@
             </xs:documentation>
         </xs:annotation>
       <xs:complexType mixed="true">
-          <xs:complexContent>
+          <xs:complexContent mixed="true">
             <xs:extension base="title.class">
               <xs:attribute ref="class" default="- topic/title "/>
             </xs:extension>
@@ -757,20 +758,21 @@
         <xs:annotation>
             <xs:documentation>The &lt;<keyword>keyword</keyword>> element identifies a keyword
                 or token, such as a single value from an enumerated list, the name of a command
-                or parameter, or a lookup key for a message (contrast with <ph><xref href="term.xml">term</xref></ph>).
+                or parameter, or a lookup key for a message (contrast with <xref href="term.xml">term</xref>).
             </xs:documentation>
         </xs:annotation>
       <xs:complexType mixed="true">
-        <xs:complexContent>
+        <xs:complexContent mixed="true">
           <xs:extension base="keyword.class">
             <xs:attribute ref="class" default="- topic/keyword "/>
           </xs:extension>
         </xs:complexContent>
       </xs:complexType>
     </xs:element>
+  
     <xs:complexType name="keyword.class" mixed="true">
         <xs:sequence>
-      <xs:group ref="keyword.content"></xs:group>
+			<xs:group ref="keyword.content"/>
     </xs:sequence>
     <xs:attributeGroup ref="keyword.attributes"/>
   </xs:complexType>
@@ -802,7 +804,7 @@
             </xs:documentation>
         </xs:annotation>
       <xs:complexType mixed="true">
-        <xs:complexContent>
+        <xs:complexContent mixed="true">
           <xs:extension base="desc.class">
             <xs:attribute ref="class" default="- topic/desc "/>
           </xs:extension>
@@ -1007,8 +1009,8 @@
         is stored in its <keyword>state</keyword> attribute, and
         the semantic associated with the value is typically in a specialized name
         derived from this element. If you need more than two values (for example,
-        "yes," "no" and "don&apos;t care") use the <ph>       <xref href="state.xml">&lt;<keyword>state</keyword>></xref> 
-        </ph> element instead. This element is primarily for specialization, where
+        "yes," "no" and "don&apos;t care") use the <xref href="state.xml">&lt;<keyword>state</keyword>></xref> 
+         element instead. This element is primarily for specialization, where
         it can be used to require a logical true or false designation in a particular
         part of the document.
       </xs:documentation>
@@ -1084,6 +1086,7 @@
       </xs:complexContent>
     </xs:complexType>
   </xs:element>
+  
   <xs:complexType name="p.class" mixed="true">
      <xs:sequence>
       <xs:group ref="p.content"/>
@@ -1173,8 +1176,7 @@
   </xs:complexType>
   
   <xs:group name="longquoteref.content">
-    <xs:sequence>
-    </xs:sequence>
+    <xs:sequence/>
   </xs:group>
     
   <xs:attributeGroup name="longquoteref.attributes">
@@ -1241,8 +1243,6 @@
     <xs:restriction base="xs:string">
       <xs:enumeration value="attention"/>
       <xs:enumeration value="caution"/>
-      <xs:enumeration value="caution1"/>
-      <xs:enumeration value="caution2"/>
       <xs:enumeration value="danger"/>
       <xs:enumeration value="fastpath"/>
       <xs:enumeration value="important"/>
@@ -1267,6 +1267,8 @@
         from the surrounding text.
       </xs:documentation>
     </xs:annotation>
+    
+    
     <xs:complexType mixed="true">
       <xs:complexContent>
         <xs:extension base="q.class">
@@ -1275,6 +1277,8 @@
       </xs:complexContent>
     </xs:complexType>
   </xs:element>
+  
+  
   <xs:complexType name="q.class" mixed="true">
      <xs:sequence>
       <xs:group ref="q.content"/>
@@ -2020,7 +2024,7 @@
    </xs:group>
   
   <xs:attributeGroup name="image.attributes">
-    <xs:attribute name="href" type="xs:string" use="required"/>
+    <xs:attribute name="href" type="xs:string" />
     <xs:attribute name="keyref" type="xs:string"/>
     <xs:attribute name="alt" type="xs:string"/>
     <xs:attribute name="longdescref" type="xs:string"/>
@@ -2273,8 +2277,8 @@
   <xs:element name="strow">
     <xs:annotation>
       <xs:documentation>The &lt;<keyword>simpletable</keyword>> row (&lt;<keyword>strow</keyword>>)
-        element specifies a row in a simple table, like row in a conventional <ph><xref
-          href="table.xml">table</xref></ph>.
+        element specifies a row in a simple table, like row in a conventional <xref
+          href="table.xml">table</xref>.
       </xs:documentation>
     </xs:annotation>
     <xs:complexType>
@@ -2311,8 +2315,8 @@
     <xs:annotation>
       <xs:documentation>The simpletable entry (&lt;stentry>) element represents a single
         table cell, like &lt;entry> in &lt;table>. You can place any number of stentry
-        cells in either an <ph><xref href="sthead.xml">sthead</xref></ph> element
-        (for headings) or <ph><xref href="strow.xml">strow</xref></ph> element (for
+        cells in either an <xref href="sthead.xml">sthead</xref> element
+        (for headings) or <xref href="strow.xml">strow</xref> element (for
         rows of data).
       </xs:documentation>
     </xs:annotation>
@@ -2422,7 +2426,7 @@
      <xs:group name="required-cleanup.content">
        <xs:sequence>
          <xs:choice minOccurs="0" maxOccurs="unbounded">
-            <xs:any processContents="skip" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:any processContents="skip" minOccurs="0" maxOccurs="unbounded"/>
         </xs:choice>
        </xs:sequence>
      </xs:group>
@@ -2548,7 +2552,7 @@
           <xs:documentation>Use the cross-reference (&lt;<keyword>xref</keyword>&gt;) element
                 to link to a different location within the current topic, or a different topic
                 within the same help system or DITA document. You can also point to external
-            sources, such as Web pages, or to a location in another topic as well. The <keyword><i>href</i></keyword> attribute
+            sources, such as Web pages, or to a location in another topic as well. The <keyword>href</keyword> attribute
               on the &lt;<keyword>xref</keyword>&gt; element is used to create the link pointer,
                 or URL.
             </xs:documentation>
@@ -2590,8 +2594,6 @@
   
   
     <xs:element name="longdescref">
-        <xs:annotation>
-        </xs:annotation>
       <xs:complexType>
         <xs:complexContent>
           <xs:extension base="longdescref.class">
@@ -2601,15 +2603,14 @@
       </xs:complexType>
     </xs:element>
     <xs:complexType name="longdescref.class">
-        <!--<xs:sequence>
+        <xs:sequence>
           <xs:group ref="longdescref.content"/>
-        </xs:sequence>-->
+        </xs:sequence>
         <xs:attributeGroup ref="longdescref.attributes"/>
     </xs:complexType>
   
     <xs:group name="longdescref.content">
-      <xs:sequence>
-      </xs:sequence>
+      <xs:sequence/>
     </xs:group>
   
     <xs:attributeGroup name="longdescref.attributes">
@@ -2635,6 +2636,7 @@
             <xs:enumeration value="-dita-use-conref-target"/>
         </xs:restriction>
     </xs:simpleType>
+
   <xs:simpleType name="processing-role-att.class">
         <xs:restriction base="xs:string">
             <xs:enumeration value="normal"/>
@@ -2642,6 +2644,7 @@
             <xs:enumeration value="-dita-use-conref-target"/>
         </xs:restriction>
     </xs:simpleType>
+
     <xs:simpleType name="valuetype-att.class">
         <xs:restriction base="xs:string">
             <xs:enumeration value="data"/>
@@ -2837,8 +2840,8 @@
         <xs:documentation>The &lt;index-base&gt; element allows indexing extensions to be added by specializing off this
         element. It does not in itself have any meaning and should be ignored in processing.</xs:documentation>          
       </xs:annotation>
-      <xs:complexType>
-        <xs:complexContent mixed="true">
+      <xs:complexType mixed="true">
+        <xs:complexContent>
           <xs:extension base="index-base.class">
             <xs:attribute ref="class" default="- topic/index-base "/>
           </xs:extension>

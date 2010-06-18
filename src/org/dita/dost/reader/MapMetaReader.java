@@ -117,6 +117,11 @@ public class MapMetaReader implements AbstractReader {
 		metaPos.add(Constants.ATTR_CLASS_VALUE_MAP_LINKTEXT);
 		metaPos.add(Constants.ATTR_CLASS_VALUE_MAP_SHORTDESC);
 		//Added by William on 2009-07-25 for bug:2826143 end
+		//Added by William on 2009-12-21 for bug:2916469 start
+		metaPos.add(Constants.ATTR_CLASS_VALUE_NAVTITLE);
+		metaPos.add(Constants.ATTR_CLASS_VALUE_METADATA);
+		metaPos.add(Constants.ATTR_CLASS_VALUE_EXPORTANCHORS);
+		//Added by William on 2009-12-21 for bug:2916469 end
 	}
 
 	private DITAOTJavaLogger javaLogger = null;
@@ -279,7 +284,9 @@ public class MapMetaReader implements AbstractReader {
 			}
 			
 			//edited by william on 2009-08-06 for bug:2832696 start
-			if(formatAttr == null || Constants.ATTR_FORMAT_VALUE_DITA.equalsIgnoreCase(formatAttr.getNodeValue())){
+			if((formatAttr == null || Constants.ATTR_FORMAT_VALUE_DITA.equalsIgnoreCase(formatAttr.getNodeValue()))
+				&&(scopeAttr == null || Constants.ATTR_SCOPE_VALUE_LOCAL.equalsIgnoreCase(scopeAttr.getNodeValue()))
+				&&(hrefAttr.getNodeValue().indexOf(INTERNET_LINK_MARK) == -1)){
 				if(resultTable.containsKey(topicPath)){
 	    			//if the result table already contains some result
 	    			//metadata for current topic path.

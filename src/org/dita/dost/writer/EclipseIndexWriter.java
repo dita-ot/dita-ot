@@ -15,12 +15,15 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.index.IndexTerm;
 import org.dita.dost.index.IndexTermTarget;
 import org.dita.dost.log.DITAOTJavaLogger;
+import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.Content;
 import org.dita.dost.util.Constants;
 
@@ -32,7 +35,7 @@ import org.dita.dost.util.Constants;
  *  
  *  @version 1.0 2006-10-17
  */
-public class EclipseIndexWriter implements AbstractWriter, IDitaTranstypeIndexWriter  {
+public class EclipseIndexWriter extends AbstractExtendDitaWriter implements AbstractWriter, IDitaTranstypeIndexWriter {
 	
 	/** List of indexterms */
 	private List termList = null;
@@ -40,6 +43,15 @@ public class EclipseIndexWriter implements AbstractWriter, IDitaTranstypeIndexWr
 	private String filepath = null;
 	
 	private DITAOTJavaLogger javaLogger = null;
+	
+	/** 
+     * Boolean to indicate when we are processing indexsee and child elements
+	 */
+	private boolean inIndexsee = false;
+	
+	/** List of index terms used to search for see references. */ 
+	private List termCloneList = null;
+	
 	
 	/**
 	 * Default constructor.
@@ -85,6 +97,16 @@ public class EclipseIndexWriter implements AbstractWriter, IDitaTranstypeIndexWr
 		PrintWriter printWriter = null;
 		int termNum = termList.size();
 		
+		//boolean for processing indexsee the new markup (Eclipse 3.6 feature).
+		boolean indexsee = false;
+		
+		//RFE 2987769 Eclipse index-see
+		if (((AbstractExtendDitaWriter)this).getPipelineHashIO() != null){
+			
+        	indexsee = new Boolean(((AbstractExtendDitaWriter)this).getPipelineHashIO().getAttribute("eclipse.indexsee")).booleanValue();
+        	
+        }
+		
 		try {
 			printWriter = new PrintWriter(new OutputStreamWriter(
 					outputStream, "UTF-8"));
@@ -93,11 +115,13 @@ public class EclipseIndexWriter implements AbstractWriter, IDitaTranstypeIndexWr
 			printWriter.print(System.getProperty("line.separator"));
 			printWriter.print("<index>");
 			printWriter.print(System.getProperty("line.separator"));
+			
+			//Clone the list of indexterms so we can look for see references
+			termCloneList = cloneIndextermList(termList);
 
 			for (int i = 0; i < termNum; i++) {
 				IndexTerm term = (IndexTerm) termList.get(i);
-				
-				outputIndexTerm(term, printWriter);
+				outputIndexTerm(term, printWriter, indexsee);
 			}
 
 			printWriter.print("</index>");
@@ -115,7 +139,9 @@ public class EclipseIndexWriter implements AbstractWriter, IDitaTranstypeIndexWr
 	public void write(String filename) throws DITAOTException {			
 		try {
 			write(new FileOutputStream(filename));
-		} catch (Exception e) {
+		} catch (Exception e) {			
+			javaLogger.logError(e.getMessage());
+			e.printStackTrace(); 
 			throw new DITAOTException(e);
 		}
 	}
@@ -125,69 +151,36 @@ public class EclipseIndexWriter implements AbstractWriter, IDitaTranstypeIndexWr
      * 
 	 * @param term
 	 * @param printWriter
+	 * @param indexsee
+	 * 
+	 * RFE 2987769 - Added indexsee parameter to keep track of the processing pipeline.
 	 */
-    private void outputIndexTerm(IndexTerm term, PrintWriter printWriter) {
-        List targets = term.getTargetList();
-        List subTerms = term.getSubTerms();
-        int targetNum = targets.size();
-        int subTermNum = subTerms.size();
-        String termPrefix = term.getTermPrefix();
-
-        printWriter.print("<entry keyword=\"");
-        printWriter.print(term.getTermFullName());
-        printWriter.print("\">");
-        printWriter.print(System.getProperty("line.separator"));
+    private void outputIndexTerm(IndexTerm term, PrintWriter printWriter, boolean indexsee) {
         
-        //Index-see and index-see-also terms should also generate links to its target
-        //Otherwise, the term won't be displayed in the index tab.
-        if (targets != null && !targets.isEmpty()){
-	        for (int i = 0; i < targetNum; i++) {
-	            IndexTermTarget target = (IndexTermTarget) targets.get(i);
-	        	String targetUri = target.getTargetURI();
-	        	String targetName = target.getTargetName();
-	        	if (targetUri == null) {
-	        		javaLogger.logDebug("Term for " + target.getTargetName() + " does not have a target");
-	            	printWriter.print("<topic");
-	                printWriter.print(" title=\"");
-	                printWriter.print(target.getTargetName());
-	                printWriter.print("\"/>");
-	                printWriter.print(System.getProperty("line.separator"));
-	        	}
-	        	else if (targetName != null){
-//	        		if (subTerms != null && subTermNum == 0){ //Eric
-	        			printWriter.print("<topic href=\"");
-	        			printWriter.print(replaceExtName(targetUri)); //Eric
-	                    printWriter.print("\"");
-	                    if (targetName.trim().length() > 0){
-	                    	printWriter.print(" title=\"");
-	                    	printWriter.print(target.getTargetName());
-	                    	printWriter.print("\"");
-	                    }
-	                    printWriter.print("/>");
-	                    printWriter.print(System.getProperty("line.separator"));       		
-//	        		}
-	                
-	        	}
-	        }
-        }
-
+    	List subTerms = term.getSubTerms();
+        int subTermNum = subTerms.size();
+        
+        outputIndexTermStartElement (term, printWriter, indexsee);
+        
         if (subTerms != null && subTermNum > 0) {
 
             for (int i = 0; i < subTermNum; i++) {
                 IndexTerm subTerm = (IndexTerm) subTerms.get(i);
-                outputIndexTerm(subTerm, printWriter);
+                
+                outputIndexTerm(subTerm, printWriter, indexsee);
+                
             }
 
         }
-
-        printWriter.print("</entry>");
-        printWriter.print(System.getProperty("line.separator"));
+        
+        outputIndexTermEndElement (term, printWriter, indexsee);
+        
     }
     
     /**
      * Replace the file extension.
      * @param aFileName file name to be replaced
-     * @return repaced file name
+     * @return replaced file name
      */
     public String replaceExtName(String aFileName){
     	String fileName;
@@ -230,6 +223,287 @@ public class EclipseIndexWriter implements AbstractWriter, IDitaTranstypeIndexWr
 		
 		// TODO Auto-generated method stub
 		return indexFilename.toString();
+	}
+	
+	/*
+	 * Method for see references in Eclipse. This version does not have a 
+	 * dependency on a specific Eclipse version.
+	 * 
+	 * @param term  The indexterm to be processed.
+	 * @param printWriter The Writer used for writing content to disk.
+	 */
+	private void outputIndexEntry(IndexTerm term, PrintWriter printWriter) {
+
+		List targets = term.getTargetList();
+		int targetNum = targets.size();
+		
+		boolean foundIndexTerm = false;
+		boolean foundIndexsee = false;
+		
+		String indexSeeRefTerm = null;
+
+		/*
+		 * Use the cloned List to find the index-see reference in the list. If
+		 * found use that target URI for the href value, otherwise return a
+		 * warning to the build. RFE 2987769 Eclipse index-see
+		 */
+
+		int termCloneNum = termCloneList.size();
+
+		// Index-see and index-see-also terms should also generate links to its
+		// target
+		// Otherwise, the term won't be displayed in the index tab.
+		if (targets != null && !targets.isEmpty()) {
+			for (int i = 0; i < targetNum; i++) {
+				IndexTermTarget target = (IndexTermTarget) targets.get(i);
+				String targetUri = target.getTargetURI();
+				String targetName = target.getTargetName();
+				if (targetUri == null) {
+					printWriter.print("<topic");
+					printWriter.print(" title=\"");
+					printWriter.print(target.getTargetName());
+					printWriter.print("\"/>");
+					printWriter.print(System.getProperty("line.separator"));
+				} else if (targetName != null && targetName.trim().length() > 0) {
+
+					/*
+					 * Check to see if the target Indexterm is a "see"
+					 * reference.Added inIndexsee so we know that we are still
+					 * processing contentfrom a referenced indexterm.
+					 */
+					if (term.getTermPrefix() != null || inIndexsee) {
+						indexSeeRefTerm = term.getTermName();
+						inIndexsee = true;
+						foundIndexsee = true;						
+
+						// Find the term with an href.
+
+						for (int j = 0; j < termCloneNum; j++) {
+							IndexTerm termClone = (IndexTerm) termCloneList
+									.get(j);
+
+							if (term.getTermName().equals(
+									termClone.getTermName())) {
+								foundIndexTerm = true;
+
+								if (termClone.getTargetList().size() > 0) {
+									printWriter.print("<topic href=\"");
+									printWriter
+											.print(replaceExtName(((IndexTermTarget) termClone
+													.getTargetList().get(0))
+													.getTargetURI())); // Eric
+									printWriter.print("\"");
+									if (targetName.trim().length() > 0) {
+										printWriter.print(" title=\"");
+										printWriter
+												.print(((IndexTermTarget) termClone
+														.getTargetList().get(0))
+														.getTargetName());
+										printWriter.print("\"");
+									}
+									printWriter.print("/>");
+									printWriter.print(System
+											.getProperty("line.separator"));
+								}
+								/*
+								 * We found the term we are looking for, but it
+								 * does not have a target name (title). We need
+								 * to take a look at the subterms for the
+								 * redirect and
+								 */
+								termCloneList = termClone.getSubTerms();
+								break;
+
+							}
+
+						}// end for
+						// If there are no subterms, then we are done.
+						if (term.getSubTerms().size() == 0)
+							inIndexsee = false;
+
+					} else {
+						printWriter.print("<topic href=\"");
+						printWriter.print(replaceExtName(targetUri)); // Eric
+						printWriter.print("\"");
+						if (targetName.trim().length() > 0) {
+							printWriter.print(" title=\"");
+							printWriter.print(target.getTargetName());
+							printWriter.print("\"");
+						}
+						printWriter.print("/>");
+						printWriter.print(System.getProperty("line.separator"));
+					}
+
+				}
+			}//end for
+			
+			if (!foundIndexTerm && foundIndexsee && indexSeeRefTerm != null && !indexSeeRefTerm.equals("***")){
+				Properties prop=new Properties();
+				prop.put("%1", indexSeeRefTerm.trim());
+				javaLogger.logWarn(MessageUtils.getMessage("DOTJ050W", prop).toString());
+				
+			}
+		}
+
+	}
+
+	/*
+	 * Specific method for new markup for see references in Eclipse. Depends on
+	 * Eclipse 3.6.
+	 * 
+	 * @param term The indexterm to be processed.
+	 * @param printWriter The Writer used for writing content to disk.
+	 */
+
+	private void outputIndexEntryEclipseIndexsee(IndexTerm term,
+			PrintWriter printWriter) {
+		List targets = term.getTargetList();
+		int targetNum = targets.size();
+
+		// Index-see and index-see-also terms should also generate links to its
+		// target
+		// Otherwise, the term won't be displayed in the index tab.
+		if (targets != null && !targets.isEmpty()) {
+			for (int i = 0; i < targetNum; i++) {
+				IndexTermTarget target = (IndexTermTarget) targets.get(i);
+				String targetUri = target.getTargetURI();
+				String targetName = target.getTargetName();
+				if (targetUri == null) {
+
+					printWriter.print("<topic");
+					printWriter.print(" title=\"");
+					printWriter.print(target.getTargetName());
+					printWriter.print("\"/>");
+					printWriter.print(System.getProperty("line.separator"));
+				}
+//				
+				else {
+					printWriter.print("<topic href=\"");
+					printWriter.print(replaceExtName(targetUri)); // Eric
+					printWriter.print("\"");
+					if (targetName.trim().length() > 0) {
+						printWriter.print(" title=\"");
+						printWriter.print(target.getTargetName());
+						printWriter.print("\"");
+					}
+					printWriter.print("/>");
+					printWriter.print(System.getProperty("line.separator"));
+				}
+			}
+		}// end for
+
+	}
+	
+	/*
+	 * Clone a list used for comparison against the original list.
+	 * 
+	 * @param  List A list to be deep cloned 
+	 * @return List The deep cloned list 
+	 */
+	
+	private List cloneIndextermList (List termList){
+		 List termListClone = new ArrayList (termList.size());
+	        
+	        
+	     if (termList != null && !termList.isEmpty()){
+		    for (int i = 0; i < termList.size(); i++) {
+		     	termListClone.add((IndexTerm) termList.get(i));
+	         }
+	     }
+	    return termListClone;
+	}
+	
+	/*
+	 * Logic for adding various start index entry elements for Eclipse help.
+	 * 
+	 * @param term  The indexterm to be processed.
+	 * @param printWriter The Writer used for writing content to disk.
+	 * @param indexsee Boolean value for using the new markup for see references.
+	 */
+	private void outputIndexTermStartElement (IndexTerm term, PrintWriter printWriter, boolean indexsee){
+		
+				
+		//RFE 2987769 Eclipse index-see
+        if (indexsee){
+        	if (term.getTermPrefix() != null){
+        		inIndexsee = true;
+	        	printWriter.print("<see keyword=\"");
+	
+	            printWriter.print(term.getTermName());
+	            printWriter.print("\"");	
+	           
+	            if (term.getSubTerms() == null || term.getSubTerms().size() == 0){
+	            	printWriter.print("/");
+	            }
+	            printWriter.print(">");
+	            
+	            printWriter.print(System.getProperty("line.separator"));
+	            
+	            
+        	}
+        	//subterm of an indexsee.
+        	else if (term.getTermPrefix() == null && inIndexsee){
+        		printWriter.print("<subpath keyword=\"");
+        		
+	            printWriter.print(term.getTermName());
+                printWriter.print("\"/>");
+	
+        	}
+        	else {
+        		printWriter.print("<entry keyword=\"");
+        		
+	            printWriter.print(term.getTermName());
+	            printWriter.print("\">");
+	            printWriter.print(System.getProperty("line.separator"));
+	            outputIndexEntryEclipseIndexsee(term, printWriter);
+
+        	}
+        	
+        	
+        }
+        
+        else {
+        	printWriter.print("<entry keyword=\"");
+
+            printWriter.print(term.getTermFullName());
+            printWriter.print("\">");
+            printWriter.print(System.getProperty("line.separator"));
+        	outputIndexEntry(term, printWriter);
+        	
+        	
+        }
+	}
+	
+	/*
+	 * Logic for adding various end index entry elements for Eclipse help.
+	 * 
+	 * @param term  The indexterm to be processed.
+	 * @param printWriter The Writer used for writing content to disk.
+	 * @param indexsee Boolean value for using the new markup for see references.
+	 */
+	private void outputIndexTermEndElement (IndexTerm term, PrintWriter printWriter, boolean indexsee){
+		
+		
+        if (indexsee){
+			if (term.getTermPrefix() != null){
+	        	if (term.getSubTerms() != null || term.getSubTerms().size() > 0){
+	        		printWriter.print("</see>");
+	        		printWriter.print(System.getProperty("line.separator"));
+	        	}
+	            inIndexsee = false;
+	        }
+	        else if (term.getTermPrefix() == null && inIndexsee){
+	        	printWriter.print(System.getProperty("line.separator"));
+	        }
+	        else {
+	        	printWriter.print("</entry>");
+	            printWriter.print(System.getProperty("line.separator"));
+	        }
+	    }
+        else {
+        	printWriter.print("</entry>");
+            printWriter.print(System.getProperty("line.separator"));
+        }
 	}
 
 }

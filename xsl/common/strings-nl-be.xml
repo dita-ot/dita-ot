@@ -44,6 +44,7 @@
 <str name="Danger">GEVAAR!</str>
 <str name="Remember">Let op</str>
 <str name="Restriction">Beperking</str>
+<str name="Warning">Waarschuwing</str>
 
 <!-- default title text for section level generated sections -->
 <str name="Contents">Inhoudsopgave</str>

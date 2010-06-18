@@ -4,7 +4,7 @@
 <!-- ============================================================= -->
 <!--  MODULE:    XML EXCHANGE TABLE MODEL DECLARATION MODULE       -->
 <!--  VERSION:   1.2                                             -->
-<!--  DATE:      November 2008                                     -->
+<!--  DATE:      November 2009                                     -->
 <!--                                                               -->
 <!-- ============================================================= -->
 <!-- ============================================================= -->
@@ -15,7 +15,7 @@
 <!-- ORIGINAL CREATION DATE:                                       -->
 <!--             Derived from OASIS Exchange Table Model base      -->
 <!--                                                               -->
-<!--             (C) Copyright OASIS-Open.org 2005, 2008                -->
+<!--             (C) Copyright OASIS-Open.org 2005, 2009                -->
 <!--             (C) Copyright IBM Corporation 2001, 2004.         -->
 <!--             All Rights Reserved.                              -->
 <!--                                                               -->
@@ -78,7 +78,7 @@
         complex relationships of tabular information. This standard table markup allows
         column or row spanning and table captions or descriptions. A optional title
         allowed inside the table element provides a caption to describe the table.
-        See <ph><xref href="simpletable.xml">simpletable</xref></ph> for a simplified
+        See <xref href="simpletable.xml">simpletable</xref> for a simplified
         table model that can be specialized to represent more regular relationships
         of data.
       </xs:documentation>
@@ -112,7 +112,7 @@
   
   <xs:attributeGroup name="table.attributes">
     <xs:attributeGroup ref="colrowsep-atts"/>
-    <xs:attribute name="pgwide" type="yesno-att.class"/>
+    <xs:attribute name="pgwide" type="xs:NMTOKEN"/>
     <xs:attribute name="scale" type="scale-atts.class"/>
     <xs:attribute name="frame" type="frame-att.class"/>
     <xs:attribute name="rowheader" type="rowheader-att.class"/>
@@ -172,8 +172,8 @@
   </xs:attributeGroup>
   
   <xs:attributeGroup name="colrowsep-atts">
-    <xs:attribute name="colsep" type="yesno-att.class"/>
-    <xs:attribute name="rowsep" type="yesno-att.class"/>
+    <xs:attribute name="colsep" type="xs:NMTOKEN"/>
+    <xs:attribute name="rowsep" type="xs:NMTOKEN"/>
   </xs:attributeGroup>
   
   <xs:element name="colspec">

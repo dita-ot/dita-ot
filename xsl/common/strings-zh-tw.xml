@@ -44,6 +44,7 @@
 <str name="Danger">危險</str>
 <str name="Remember">記住</str>
 <str name="Restriction">限制</str>
+<str name="Warning">警告</str>
 
 <!-- default title text for section level generated sections -->
 <str name="Contents">目錄</str>

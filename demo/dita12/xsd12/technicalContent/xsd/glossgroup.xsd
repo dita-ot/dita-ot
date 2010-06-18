@@ -4,7 +4,7 @@
 <!-- ============================================================= -->
 <!--  MODULE:    DITA Concept XSD                                  -->
 <!--  VERSION:   1.2                                             -->
-<!--  DATE:      November 2008                                     -->
+<!--  DATE:      November 2009                                     -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -15,9 +15,9 @@
 <!-- PURPOSE:    W3C XML Schema to describe DITA concepts          -->
 <!--                                                               -->
 <!-- ORIGINAL CREATION DATE:                                       -->
-<!--             September 2008                                       -->
+<!--             September 2009                                       -->
 <!--                                                               -->
-<!--             (C) Copyright OASIS-Open.org 2008                -->
+<!--             (C) Copyright OASIS-Open.org 2009                -->
 <!--             All Rights Reserved.                              -->
 <!-- ============================================================= -->
 
@@ -39,7 +39,7 @@
   <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:metaDeclGrp.xsd:1.2"/>
   <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:tblDeclGrp.xsd:1.2"/>
   <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:topicGrp.xsd:1.2"/>
-  <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:glossaryGrp.xsd:1.2"/>
+  <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:glossentryGrp.xsd:1.2"/>
   
   <!-- =================  MODULE INLCUDE DEFINITION  ==================  -->
   <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:commonElementMod.xsd:1.2"/>
@@ -122,7 +122,7 @@
   
   <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:topicMod.xsd:1.2" />  
   <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:conceptMod.xsd:1.2" />
-  <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:glossaryMod.xsd:1.2" />
+  <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:glossentryMod.xsd:1.2" />
   <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:glossgroupMod.xsd:1.2" />
   	
 

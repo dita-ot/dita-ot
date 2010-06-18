@@ -44,6 +44,7 @@
 <str name="Danger">VAARA</str>
 <str name="Remember">Muistutus</str>
 <str name="Restriction">Rajoitus</str>
+<str name="Warning">Huomautus</str>
 
 <!-- default title text for section level generated sections -->
 <str name="Contents">Sisältö</str>

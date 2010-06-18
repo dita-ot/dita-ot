@@ -44,6 +44,7 @@
 <str name="Danger">DANGER</str>
 <str name="Remember">Remember</str>
 <str name="Restriction">Restriction</str>
+<str name="Warning">Warning</str>
 
 <!-- default title text for section level generated sections -->
 <str name="Contents">Contents</str>

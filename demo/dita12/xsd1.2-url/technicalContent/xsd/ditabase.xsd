@@ -4,7 +4,7 @@
 <!-- ============================================================= -->
 <!--  MODULE:    DITA BASE XSD                                     -->
 <!--  VERSION:   1.2                                             -->
-<!--  DATE:      March 2008                                     -->
+<!--  DATE:      March 2009                                     -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -17,12 +17,12 @@
 <!-- ORIGINAL CREATION DATE:                                       -->
 <!--             March 2001                                        -->
 <!--                                                               -->
-<!--             (C) Copyright OASIS-Open.org 2005, 2008                -->
+<!--             (C) Copyright OASIS-Open.org 2005, 2009                -->
 <!--             (C) Copyright IBM Corporation 2001, 2004.         -->
 <!--             All Rights Reserved.                              -->
 <!--                                                               -->
 <!--  UPDATES                                           -->
-<!--  2008.03.20 EAS: Added xml:lang and DITAArchVersion attribute to dita element   -->
+<!--  2009.03.20 EAS: Added xml:lang and DITAArchVersion attribute to dita element   -->
 <!-- ============================================================= -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
   <!-- Add the domains to the base topic XML Schema -->
@@ -39,7 +39,8 @@
   <xs:include schemaLocation="referenceGrp.xsd" />
   <xs:include schemaLocation="taskGrp.xsd" />
   <xs:include schemaLocation="conceptGrp.xsd" />
-  <xs:include schemaLocation="glossaryGrp.xsd" />
+  <xs:include schemaLocation="glossentryGrp.xsd" />
+  <xs:include schemaLocation="glossgroupGrp.xsd" />
   <xs:include schemaLocation="../../base/xsd/metaDeclGrp.xsd"/>
   <xs:include schemaLocation="../../base/xsd/tblDeclGrp.xsd"/>
   <xs:include schemaLocation="../../base/xsd/topicGrp.xsd"/>
@@ -118,13 +119,6 @@
 
   <!--  ================ INFO TYPES =====================  -->
   <xs:redefine schemaLocation="../../base/xsd/topicMod.xsd" >
-   <!-- <xs:complexType name="topic.class">
-      <xs:complexContent>
-        <xs:extension base="topic.class">
-          <xs:attribute name="domains" type="xs:string" default="(topic ui-d) (topic hi-d) (topic sw-d) (topic pr-d) (topic ut-d) (topic indexing-d)"/>
-        </xs:extension>
-      </xs:complexContent>
-    </xs:complexType>-->
     
     <xs:group name="topic-info-types">
       <xs:choice>
@@ -134,14 +128,7 @@
   </xs:redefine>
 
   <xs:redefine schemaLocation="conceptMod.xsd" >
-   <!-- <xs:complexType name="concept.class">
-      <xs:complexContent>
-        <xs:extension base="concept.class">
-          <xs:attribute name="domains" type="xs:string" default="(topic ui-d) (topic hi-d) (topic sw-d) (topic pr-d) (topic ut-d) (topic indexing-d)"/>
-        </xs:extension>
-      </xs:complexContent>
-    </xs:complexType>-->
-    
+  
     <xs:group name="concept-info-types">
       <xs:choice>
         <xs:group ref="info-types"/>
@@ -149,15 +136,7 @@
     </xs:group>
   </xs:redefine>
 
-  <xs:redefine schemaLocation="taskMod.xsd" >
-    <!--<xs:complexType name="task.class">
-      <xs:complexContent>
-        <xs:extension base="task.class">
-          <xs:attribute name="domains" type="xs:string" default="(topic ui-d) (topic hi-d) (topic sw-d) (topic pr-d) (topic ut-d) (topic indexing-d)"/>
-        </xs:extension>
-      </xs:complexContent>
-    </xs:complexType>-->
-    
+  <xs:redefine schemaLocation="strictTaskbodyConstraintMod.xsd" >
     <xs:group name="task-info-types">
       <xs:choice>
         <xs:group ref="info-types"/>
@@ -174,14 +153,23 @@
     </xs:group>
   </xs:redefine>
   
-  <xs:redefine schemaLocation="glossaryMod.xsd" >
+  <xs:redefine schemaLocation="glossentryMod.xsd" >
     
     <xs:group name="glossentry-info-types">
       <xs:choice>
         <xs:group ref="no-topic-nesting"/>
       </xs:choice>
     </xs:group>
+ 
+  </xs:redefine>
+  
+   <xs:redefine schemaLocation="glossgroupMod.xsd" >
     
+    <xs:group name="glossgroup-info-types">
+      <xs:choice>
+        <xs:group ref="info-types"/>
+      </xs:choice>
+    </xs:group>
   </xs:redefine>
 
   <xs:group name="ditabase-info-types">
@@ -197,6 +185,7 @@
       <xs:element ref="concept"/>
       <xs:element ref="reference"/>
       <xs:element ref="glossentry"/>
+      <xs:element ref="glossgroup"/>
     </xs:choice>
   </xs:group>
 
@@ -220,7 +209,7 @@
   </xs:complexType>
   
   <xs:attributeGroup name="domains-att">
-    <xs:attribute name="domains" type="xs:string" default="(topic ui-d) (topic hi-d) (topic sw-d) (topic pr-d) (topic ut-d) (topic indexing-d) (topic hazard-d) (topic concept) (topic reference) (topic task)"/>
+    <xs:attribute name="domains" type="xs:string" default="(topic ui-d) (topic hi-d) (topic sw-d) (topic pr-d) (topic ut-d) (topic indexing-d) (topic hazard-d) (topic concept) (topic reference) (topic task) (topic task strictTaskbody-c) (topic concept glossentry) (topic concept glossgroup)"/>
   </xs:attributeGroup>
 
 </xs:schema>

@@ -929,6 +929,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
     <xsl:param name="classval"/>
     <xsl:choose>
       <xsl:when test="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/shortdesc ')]">
+        <xsl:apply-templates select="." mode="mappull:add-usershortdesc-PI"/>
         <xsl:apply-templates
           select="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/shortdesc ')]"/>
       </xsl:when>
@@ -941,6 +942,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
         <xsl:if
             test="(document($file,/)//*[contains(@class, $classval)][@id=$topicid])[1]/*[contains(@class, ' topic/shortdesc ')]|
                   (document($file,/)//*[contains(@class, $classval)][@id=$topicid])[1]/*[contains(@class, ' topic/abstract ')]/*[contains(@class, ' topic/shortdesc ')]">
+          <xsl:apply-templates select="." mode="mappull:add-genshortdesc-PI"/>
           <shortdesc class="- map/shortdesc ">
             <xsl:apply-templates select="(document($file,/)//*[contains(@class, $classval)][@id=$topicid])[1]/*[contains(@class, ' topic/shortdesc ')] |
                                          (document($file,/)//*[contains(@class, $classval)][@id=$topicid])[1]/*[contains(@class, ' topic/abstract ')]/*[contains(@class, ' topic/shortdesc ')]" mode="copy-shortdesc"/>
@@ -952,6 +954,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
         <xsl:if
             test="(document($file,/)//*[contains(@class, ' topic/topic ')])[1]/*[contains(@class, ' topic/shortdesc ')]|
                   (document($file,/)//*[contains(@class, ' topic/topic ')])[1]/*[contains(@class, ' topic/abstract ')]/*[contains(@class, ' topic/shortdesc ')]">
+          <xsl:apply-templates select="." mode="mappull:add-genshortdesc-PI"/>
           <shortdesc class="- map/shortdesc ">
             <xsl:apply-templates
               select="(document($file,/)//*[contains(@class, ' topic/topic ')])[1]/*[contains(@class, ' topic/shortdesc ')]|
@@ -1271,6 +1274,13 @@ Other modes can be found within the code, and may or may not prove useful for ov
   </xsl:template>
   <xsl:template match="*" mode="mappull:add-usertext-PI">
     <xsl:processing-instruction name="ditaot">usertext</xsl:processing-instruction>
+  </xsl:template>
+  <!-- Shortdesc version added for RFE 3001750 -->
+  <xsl:template match="*" mode="mappull:add-genshortdesc-PI">
+    <xsl:processing-instruction name="ditaot">genshortdesc</xsl:processing-instruction>
+  </xsl:template>
+  <xsl:template match="*" mode="mappull:add-usershortdesc-PI">
+    <xsl:processing-instruction name="ditaot">usershortdesc</xsl:processing-instruction>
   </xsl:template>
   
 

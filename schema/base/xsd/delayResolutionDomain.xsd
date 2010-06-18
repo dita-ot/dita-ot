@@ -109,7 +109,7 @@
   
   <xs:attributeGroup name="anchorid.attributes">
     <xs:attribute name="keyref" type="xs:string"/>
-    <xs:attribute name="id" type="xs:string" use="required"/>
+    <xs:attribute name="id" type="xs:NMTOKEN" use="required"/>
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="localization-atts"/>
     <xs:attributeGroup ref="select-atts"/>
@@ -121,7 +121,7 @@
     <xs:annotation>
       <xs:documentation>The &lt;<keyword>keyword</keyword>> element identifies a keyword
         or token, such as a single value from an enumerated list, the name of a command
-        or parameter, or a lookup key for a message (contrast with <ph><xref href="term.xml">term</xref></ph>).
+        or parameter, or a lookup key for a message (contrast with <xref href="term.xml">term</xref>).
       </xs:documentation>
     </xs:annotation>
     <xs:complexType>
@@ -137,7 +137,7 @@
   </xs:complexType>
   
   <xs:attributeGroup name="anchorkey.attributes">
-    <xs:attribute name="keyref" type="xs:string"/>
+    <xs:attribute name="keyref" type="xs:string" use="required"/>
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>

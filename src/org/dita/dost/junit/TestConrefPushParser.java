@@ -129,7 +129,7 @@ public class TestConrefPushParser {
 							while(node.getNodeType()!=Node.ELEMENT_NODE){
 								node = node.getNextSibling();
 							}
-							assertEquals("<li class=\"- topic/li task/step \"><ph class=\"- topic/ph task/cmd \">replace</ph></li>", nodeToString((Element)node));
+							assertEquals("<li class=\"- topic/li task/step \" id=\"C\"><ph class=\"- topic/ph task/cmd \">replace</ph></li>", nodeToString((Element)node));
 						}
 					}
 				}

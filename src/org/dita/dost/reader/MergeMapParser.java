@@ -240,7 +240,7 @@ public class MergeMapParser extends AbstractXMLReader {
 	        	property.loadFromXML(new FileInputStream(xmlDitalist));
 	        else 
 	        	property.loadFromXML(new FileInputStream(ditalist));
-	        String hrefTargetList = property.getProperty("hreftargetslist");
+	        String hrefTargetList = property.getProperty(Constants.HREF_TARGET_LIST);
 	        String resourceOnlySet = property.getProperty(Constants.RESOURCE_ONLY_LIST);
 	        resourceOnlySet = (resourceOnlySet == null ? "" : resourceOnlySet);
 	        String skipTopicSet = property.getProperty(Constants.CHUNK_TOPIC_LIST);

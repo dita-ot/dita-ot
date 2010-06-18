@@ -43,6 +43,7 @@
 <str name="Danger">خطرناک</str>
 <str name="Remember">یاد رکھیں</str>
 <str name="Restriction">پابندی</str>
+<str name="Warning">انتباہ</str>
 
 <!-- default title text for section level generated sections -->
 <str name="Contents">فہرست</str>

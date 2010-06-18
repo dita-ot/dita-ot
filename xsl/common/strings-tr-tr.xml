@@ -44,6 +44,7 @@
 <str name="Danger">TEHLİKE</str>
 <str name="Remember">Unutmayın</str>
 <str name="Restriction">Sınırlama</str>
+<str name="Warning">Uyarı</str>
 
 <!-- default title text for section level generated sections -->
 <str name="Contents">İçindekiler</str>

@@ -18,9 +18,6 @@
 <!-- All Rights Reserved. -->
 <!---->
 <!-- ============================================================= -->
-<!DOCTYPE xs:schema [ 
-    <!ENTITY machineryConstraint    SYSTEM "machineryTaskbodyConstraintMod.xsd">
-]>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
   
   <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:highlightDomain.xsd:1.2"/>
@@ -33,8 +30,8 @@
   <!--  ================ GROUP DEFINITIONS =====================  -->
   <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:metaDeclGrp.xsd:1.2"/>
   <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:tblDeclGrp.xsd:1.2"/>
-  <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:topicGrp.xsd:1.2"/> 
-  
+  <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:topicGrp.xsd:1.2"/>
+    
   <!-- =================  MODULE INLCUDE DEFINITION  ==================  -->
   <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:commonElementMod.xsd:1.2"/>
   <!-- ======== Table elements ======== -->
@@ -98,13 +95,8 @@
       </xs:choice>
     </xs:group>
   </xs:redefine>
-  
- 
-  <xs:redefine schemaLocation="urn:oasis:names:tc:dita:spec:machinery:xsd:machineryTaskbodyConstraintIntMod.xsd:1.2" >
-   
-  &machineryConstraint;
-    
-  </xs:redefine>
+
+  <xs:include schemaLocation="urn:oasis:names:tc:dita:spec:machinery:xsd:machineryTaskbodyConstraintMod.xsd:1.2"/>
   
   <!-- ============================================================= -->
   <!-- DOMAIN ATTRIBUTE EXTENSIONS -->

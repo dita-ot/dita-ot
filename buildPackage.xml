@@ -9,26 +9,30 @@
   <description>Build source and binary packages for DITA Open Toolkit</description>
   
   <property name="HTMLHelpCompiler" value="C:\Program Files\HTML Help Workshop\hhc.exe"/>  
-  <property name="package.output.dir" location="build\"/>
+  <property name="package.output.dir" location="${basedir}/build\"/>
   <property name="package.name.root" value="DITA-OT"/>
-  <property name="version" value="1.5"/>
+  <property name="version" value="1.5.1"/>
   <!--This property should be edited manually in each milestone release?-->
-  <property name="milestone" value=""/>
+  <property name="milestone" value="M08"/>
 	
-  <property name="src.dir" location="src/"/>
-  <property name="bin.dir" location="output2/"/>
-  <property name="lib.dir" location="lib/"/>
-  <property name="doc.dir" location="doc/"/>
-  <property name="dtd.dir" location="dtd/"/>
-  <property name="schema.dir" location="schema/"/>
-  <property name="xsl.dir" location="xsl/"/>
-  <property name="demo.dir" location="demo/"/>
-  <property name="sample.dir" location="samples/"/>
-  <property name="css.dir" location="css/"/>
-  <property name="ant.dir" location="ant/"/>
-  <property name="resource.dir" location="resource/"/>
-  <property name="out.dir" location="out/"/>
-  <property name="doc.out.dir" location="out/doc"/>
+  <property name="src.dir" location="${basedir}"/>
+  <property name="java.dir" location="${src.dir}/src/"/>
+  <property name="lib.dir" location="${src.dir}/lib/"/>
+  <property name="doc.dir" location="${src.dir}/doc/"/>
+  <property name="dtd.dir" location="${src.dir}/dtd/"/>
+  <property name="schema.dir" location="${src.dir}/schema/"/>
+  <property name="xsl.dir" location="${src.dir}/xsl/"/>
+  <property name="demo.dir" location="${src.dir}/demo/"/>
+  <property name="sample.dir" location="${src.dir}/samples/"/>
+  <property name="css.dir" location="${src.dir}/css/"/>
+  <property name="ant.dir" location="${src.dir}/ant/"/>
+  <property name="resource.dir" location="${src.dir}/resource/"/>
+
+  <property name="top.work.dir" location="${basedir}"/>
+  <property name="bin.dir" location="${top.work.dir}/output2/"/>
+  <property name="build.dir" location="${bin.dir}/build"/>
+  <property name="out.dir" location="${top.work.dir}/out/"/>
+  <property name="doc.out.dir" location="${top.work.dir}/out/doc"/>
   
   <property name="dost.jar" location="${lib.dir}/dost.jar" />
   <property name="binary-min" value="DITA-OT${version}_minimal_bin"/>
@@ -59,28 +63,29 @@
   <target name="build-java" depends="init-java">
   	
   	<!-- Copying the files to a build directory before we modify the files -->
-  	<copy todir="${bin.dir}/build">
-  		<fileset dir="${src.dir}" excludes="com/**,org/dita/dost/junit/**"/>
+  	<copy todir="${build.dir}">
+  		<fileset dir="${java.dir}" excludes="com/**,org/dita/dost/junit/**"/>
   	</copy>
   	
   	<!-- Update the token so that we can find out what the version of DITA-OT users
   	are using -->
-  	<replace file="${bin.dir}/build/org/dita/dost/util/Version.java" 
+  	<replace file="${build.dir}/org/dita/dost/util/Version.java" 
   	             token="@@VERSION@@" value="${package.name.root} ${version}${milestone}"/>
   	
-    <javac srcdir="${bin.dir}/build" destdir="${bin.dir}" excludes="com/**,org/dita/dost/junit/**"
+    <javac srcdir="${build.dir}" destdir="${bin.dir}" 
+      excludes="com/**,org/dita/dost/junit/**, org/dita/dost/invoker/JavaInvoker.java"
       debug="on" source="1.5" target="1.5">
-      <classpath location="lib/resolver.jar"></classpath>
+      <classpath location="${lib.dir}/resolver.jar"></classpath>
     </javac>
-  	<delete dir="${bin.dir}/build" includeemptydirs="yes"/>
+  	<delete dir="${build.dir}" includeemptydirs="yes"/>
   </target>
   
   <target name="package-java" depends="build-java">
 	<copy todir="${bin.dir}/resource/">
-		<fileset dir="resource" includes="messages.*"/>
+		<fileset dir="${resource.dir}" includes="messages.*"/>
 	</copy>
     <copy todir="${bin.dir}">
-      <fileset dir="${src.dir}" includes="**/*.properties"/>
+    	<fileset dir="${java.dir}" includes="**/*.properties"/>
     </copy>
     <jar destfile="${dost.jar}" basedir="${bin.dir}" manifest="manifest.mf"
            includes="**" />
@@ -197,12 +202,14 @@
   </patternset>
     
   <target name="package-source">
+  	<fail unless="param.out.file">param.out.file not defined</fail>
     <zip destfile="${package.output.dir}/${param.out.file}${win32.zip.suffix}">
-      <zipfileset dir="./" prefix="${package.name.root}${version}-src">
+      <zipfileset dir="${basedir}" prefix="${package.name.root}${version}-src">
         <patternset refid="pattern.package.standard"/>
         <include name="src/**"/>
       	<include name="lib/APACHE-LICENSE-2_0.html"/>
       	<include name="lib/commons-logging-1.1.1.jar"/>
+      	<exclude name="src/org/dita/dost/invoker/JavaInvoker.java"/>
       	<exclude name="lib/dost.jar"/>
       	<exclude name="lib/saxon/**"/>
         <exclude name="files.txt"/>
@@ -211,11 +218,12 @@
     </zip>
     <tar destfile="${package.output.dir}/${param.out.file}${linux.zip.suffix}" 
       compression="gzip" longfile="gnu">
-      <tarfileset dir="./" prefix="${package.name.root}${version}-src">
+      <tarfileset dir="${basedir}" prefix="${package.name.root}${version}-src">
         <patternset refid="pattern.package.standard"/>
         <include name="src/**"/>
       	<include name="lib/APACHE-LICENSE-2_0.html"/>
       	<include name="lib/commons-logging-1.1.1.jar"/>
+      	<exclude name="src/org/dita/dost/invoker/JavaInvoker.java"/>
       	<exclude name="lib/dost.jar"/>
       	<exclude name="lib/saxon/**"/>
         <exclude name="files.txt"/>
@@ -225,17 +233,18 @@
   </target>
   
   <target name="package-binary-minimum">
+  	<fail unless="param.out.file">param.out.file not defined</fail>
   	<sequential>
   		<delete failonerror="no" includeemptydirs="true">
-			<fileset dir="demo">
+  			<fileset dir="${demo.dir}">
 				<exclude name="fo/"/>
 				<exclude name="tocjs/"/>
 				<exclude name="h2d/"/>
 			</fileset>
   		</delete>
-	  	<ant antfile="integrator.xml" target="integrate" />
+  		<ant antfile="${basedir}/integrator.xml" target="integrate" />
 	    <zip destfile="${package.output.dir}/${param.out.file}${win32.zip.suffix}">
-	      <zipfileset dir="./" prefix="${package.name.root}${version}">
+	      <zipfileset dir="${basedir}" prefix="${package.name.root}${version}">
 	        <patternset refid="pattern.package.minimum"/>
 	        <include name="lib/dost.jar"/>
 	      	<include name="lib/commons-logging-1.1.1.jar"/>
@@ -246,7 +255,7 @@
 	    
 	    <tar destfile="${package.output.dir}/${param.out.file}${linux.zip.suffix}"
 	      compression="gzip" longfile="gnu">
-	      <tarfileset dir="./" prefix="${package.name.root}${version}">
+	      <tarfileset dir="${basedir}" prefix="${package.name.root}${version}">
 	        <patternset refid="pattern.package.minimum"/>
 	        <include name="lib/dost.jar"/>
 	      	<include name="lib/commons-logging-1.1.1.jar"/>
@@ -257,9 +266,10 @@
 	 </sequential>
   </target>
   
-  <target name="package-binary-standard">    
+  <target name="package-binary-standard">
+  	<fail unless="param.out.file">param.out.file not defined</fail>
     <zip destfile="${package.output.dir}/${param.out.file}${win32.zip.suffix}">
-      <zipfileset dir="./" prefix="${package.name.root}${version}">
+      <zipfileset dir="${basedir}" prefix="${package.name.root}${version}">
         <patternset refid="pattern.package.standard"/>
         <include name="lib/dost.jar"/>
       	<include name="lib/commons-logging-1.1.1.jar"/>
@@ -271,7 +281,7 @@
     
     <tar destfile="${package.output.dir}/${param.out.file}${linux.zip.suffix}" 
       compression="gzip" longfile="gnu">
-      <tarfileset dir="./" prefix="${package.name.root}${version}">
+      <tarfileset dir="${basedir}" prefix="${package.name.root}${version}">
         <patternset refid="pattern.package.standard"/>
         <include name="lib/dost.jar"/>
 		<include name="lib/commons-logging-1.1.1.jar"/>
@@ -282,9 +292,10 @@
     </tar>
   </target>
   
-  <target name="package-binary-full">    
+  <target name="package-binary-full">
+  	<fail unless="param.out.file">param.out.file not defined</fail>
     <zip destfile="${package.output.dir}/${param.out.file}${win32.zip.suffix}">
-      <zipfileset dir="./" prefix="${package.name.root}${version}">
+      <zipfileset dir="${basedir}" prefix="${package.name.root}${version}">
         <patternset refid="pattern.package.full"/>
         <include name="lib/*.jar"/>
       	<patternset refid="pattern.package.ant"/>
@@ -296,7 +307,7 @@
     
     <tar destfile="${package.output.dir}/${param.out.file}${linux.zip.suffix}" 
       compression="gzip" longfile="gnu">
-      <tarfileset dir="./" prefix="${package.name.root}${version}">
+      <tarfileset dir="${basedir}" prefix="${package.name.root}${version}">
         <patternset refid="pattern.package.full"/>
         <include name="lib/*.jar"/>
         <patternset refid="pattern.package.ant"/>
@@ -305,7 +316,7 @@
 		<exclude name="buildPackage.xml" />
 		<exclude name="startcmd.sh"/>
       </tarfileset>
-      <tarfileset mode="755" dir="./" prefix="${package.name.root}${version}">
+      <tarfileset mode="755" dir="${basedir}" prefix="${package.name.root}${version}">
         <include name="startcmd.sh"/>
       </tarfileset>
     </tar>
@@ -356,20 +367,20 @@
   <target name="build-all-packages" depends="init-package, build-package-source, build-package-binary"/>
   
   <target name="update-doc">
-    <ant antfile="integrator.xml" target="integrate"/> 
-    <ant antfile="build_demo.xml" target="doc.articles.web"/>
-    <ant antfile="build_demo.xml" target="doc.articles.chm"/>
-    <ant antfile="build_demo.xml" target="doc.articles.pdf">
+    <ant antfile="${basedir}/integrator.xml" target="integrate"/> 
+    <ant antfile="${basedir}/build_demo.xml" target="doc.articles.web"/>
+    <ant antfile="${basedir}/build_demo.xml" target="doc.articles.chm"/>
+    <ant antfile="${basedir}/build_demo.xml" target="doc.articles.pdf">
       <property name="args.fo.img.ext" value=".gif"/>
     </ant>
-    <ant antfile="build_demo.xml" target="doc.installguide.web"/>
-    <ant antfile="build_demo.xml" target="doc.installguide.pdf">
+    <ant antfile="${basedir}/build_demo.xml" target="doc.installguide.web"/>
+    <ant antfile="${basedir}/build_demo.xml" target="doc.installguide.pdf">
       <property name="args.fo.img.ext" value=".gif"/>
     </ant>
-    <ant antfile="build_demo.xml" target="doc.installguide.chm"/>
-    <ant antfile="build_demo.xml" target="doc.readme.web"/>
-    <ant antfile="build_demo.xml" target="doc.readme.chm"/>
-    <ant antfile="build_demo.xml" target="doc.readme.pdf">
+    <ant antfile="${basedir}/build_demo.xml" target="doc.installguide.chm"/>
+    <ant antfile="${basedir}/build_demo.xml" target="doc.readme.web"/>
+    <ant antfile="${basedir}/build_demo.xml" target="doc.readme.chm"/>
+    <ant antfile="${basedir}/build_demo.xml" target="doc.readme.pdf">
       <property name="args.fo.img.ext" value=".jpg"/>
     </ant>
   </target>

@@ -106,6 +106,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Learning Map Domain//EN"
               print
                         (yes|
                          no | 
+                         printonly |
                          -dita-use-conref-target)
                                    #IMPLIED
               search

@@ -12,6 +12,7 @@ package org.dita.dost.util;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
 
@@ -19,6 +20,8 @@ import javax.imageio.ImageIO;
 
 import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.log.MessageUtils;
+
+import sun.misc.BASE64Encoder;
 
 /**
  * Image utility to get the width, height, type and binary data from 
@@ -49,7 +52,7 @@ public class ImgUtils {
 		File imgInput = new File(dirName+File.separatorChar+fileName);
 		try {
 			BufferedImage img = ImageIO.read(imgInput);
-			return img.getHeight();
+			return img.getWidth();
 		}catch (Exception e){
 			Properties prop = new Properties();
         	prop.put("%1", dirName+File.separatorChar+fileName);
@@ -74,7 +77,7 @@ public class ImgUtils {
 		File imgInput = new File(dirName+File.separatorChar+fileName);
 		try {
 			BufferedImage img = ImageIO.read(imgInput);
-			return img.getWidth();
+			return img.getHeight();
 		}catch (Exception e){
 			Properties prop = new Properties();
         	prop.put("%1", dirName+File.separatorChar+fileName);
@@ -124,6 +127,43 @@ public class ImgUtils {
 				logger.logException(ioe);
 			}
 		}
+	}
+	/**
+	 * Get Base64 encoding content.
+	 * @param dirName -
+	 * 				The directory name that will be added to the path 
+	 * 				of the image file.
+	 * @param fileName -
+	 * 				The file name of the image file.
+	 * @return base64 encoded binary data.
+	 */
+	public static String getBASE64(String dirName, String fileName) {
+		DITAOTJavaLogger logger = new DITAOTJavaLogger();
+		File imgInput = new File(dirName+File.separatorChar+fileName);
+		BASE64Encoder encoder = new BASE64Encoder();
+		byte   buff[]=new   byte[(int)imgInput.length()];
+		FileInputStream file = null;
+		try {
+			file = new FileInputStream(imgInput);
+			file.read(buff);
+			String ret = encoder.encode(buff);
+			return ret;
+		} catch (FileNotFoundException e) {
+			logger.logError(MessageUtils.getMessage("DOTJ023E").toString());
+			logger.logException(e);
+			return null;
+		} catch (IOException e) {
+			logger.logError(MessageUtils.getMessage("DOTJ023E").toString());
+			logger.logException(e);
+			return null;
+		}finally{
+			try{
+				file.close();
+			}catch(IOException ioe){
+				logger.logException(ioe);
+			}
+		}
+		
 	}
 	
 	/**

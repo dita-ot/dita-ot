@@ -5,7 +5,7 @@
 <!-- ============================================================= -->
 <!--  MODULE:    DITA MAP XSD                                      -->
 <!--  VERSION:   1.2                                             -->
-<!--  DATE:      November 2008                                     -->
+<!--  DATE:      November 2009                                     -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -17,7 +17,7 @@
 <!-- ORIGINAL CREATION DATE:                                       -->
 <!--             March 2001                                        -->
 <!--                                                               -->
-<!--             (C) Copyright OASIS-Open.org 2005, 2008                -->
+<!--             (C) Copyright OASIS-Open.org 2005, 2009                -->
 <!--             (C) Copyright IBM Corporation 2001, 2004.         -->
 <!--             All Rights Reserved.                              -->
 <!--                                                               -->
@@ -47,9 +47,9 @@
  <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:tblDeclGrp.xsd:1.2"/>
  
  <!-- =================  MODULE INLCUDE DEFINITION  ==================  -->
-  <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:commonElementMod.xsd:1.2"/>
+ <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:commonElementMod.xsd:1.2"/>
  <!-- ======== Table elements ======== -->
- <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:tblDeclMod.xsd:1.2"/>    
+<xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:tblDeclMod.xsd:1.2"/>
  <!-- ======= MetaData elements, plus keyword and indexterm ======= -->
  <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:metaDeclMod.xsd:1.2"/>
     
@@ -75,14 +75,6 @@
  </xs:redefine>
 
  <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:mapMod.xsd:1.2" />
-  	<!--<xs:complexType name="map.class">
-  		<xs:complexContent>
-  			<xs:extension base="map.class">
-  			 <xs:attribute name="domains" type="xs:string" default="(map mapgroup-d) (topic indexing-d)"/>
-  			</xs:extension>
-  		</xs:complexContent>
-  	</xs:complexType>
-  </xs:redefine>-->
 
   <xs:attributeGroup name="domains-att">
     <xs:attribute name="domains" type="xs:string" default="(map mapgroup-d) (topic indexing-d) (topic delay-d) (map glossref-d)"/>

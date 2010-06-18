@@ -44,6 +44,7 @@
 <str name="Danger">FARE!</str>
 <str name="Remember">Husk</str>
 <str name="Restriction">Begrensning</str>
+<str name="Warning">ADVARSEL</str>
 
 <!-- default title text for section level generated sections -->
 <str name="Contents">Innhold</str>

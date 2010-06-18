@@ -44,6 +44,7 @@
 <str name="Danger">Varning - livsfara</str>
 <str name="Remember">Glöm inte</str>
 <str name="Restriction">Begränsning</str>
+<str name="Warning">Varning - risk för maskinskada</str>
 
 <!-- default title text for section level generated sections -->
 <str name="Contents">Innehåll</str>

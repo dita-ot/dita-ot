@@ -3,7 +3,7 @@
      specialization working design. It is a work-in-progress by
      the OASIS DITA learning and training content specialization 
      sub-committee.-->
-<!--             (C) Copyright OASIS Open 2007, 2008                    -->
+<!--             (C) Copyright OASIS Open 2007, 2009                    -->
 <!--             All Rights Reserved.                              -->
 <!-- ============================================================= -->
 <!--                    HEADER                                     -->
@@ -24,19 +24,22 @@
 <!-- ============================================================= -->
 
 <xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema'>
+  
+  <xs:annotation>
+    <xs:appinfo>
+      <dita:domainsModule xmlns:dita="http://dita.oasis-open.org/architecture/2005/">(map learningmap-d)</dita:domainsModule>
+    </xs:appinfo>
+    <xs:documentation> 
+    
+    </xs:documentation>
+  </xs:annotation>
      
      <xs:group name="learningmap-d-topicref">
           <xs:choice>
                <xs:element ref="learningObject" />
-          </xs:choice>
-     </xs:group>
-     
-     <xs:group name="learningmap-d-group">
-          <xs:choice>
                <xs:element ref="learningGroup" />
           </xs:choice>
      </xs:group>
-     
      <xs:group name="learningObject">
           <xs:choice>
   	  <xs:element ref="learningObject" />
@@ -61,7 +64,13 @@
           </xs:choice>
      </xs:group>
      
-     <xs:group name="learningPreAssessmentRef">
+  <xs:group name="learningContentComponentRef">
+    <xs:choice>
+      <xs:element ref="learningContentComponentRef" />
+    </xs:choice>
+  </xs:group>
+  
+  <xs:group name="learningPreAssessmentRef">
           <xs:sequence>
                <xs:element ref="learningPreAssessmentRef" />
           </xs:sequence>
@@ -84,29 +93,6 @@
                <xs:element ref="learningPlanRef" />
           </xs:choice>
      </xs:group>
-     
-     <!--<xs:group name="learningmap-d-topicmeta">
-          <xs:choice>
-               <xs:group ref="lcMapLom" />
-          </xs:choice>        
-     </xs:group>
-     
-     <xs:group name="lcMapLom">
-          <xs:choice>
-               <xs:element ref="lcMapLom" />
-          </xs:choice>
-     </xs:group>
-     
-     <xs:element name="lcMapLom">
-          <xs:complexType>
-               <xs:complexContent>
-                    <xs:extension base="lcMapLom.class">
-                         <xs:attribute ref="class" default="+ map/topicmeta learningmap-d/lcMapLom "/>
-                    </xs:extension>
-               </xs:complexContent>
-          </xs:complexType>
-     </xs:element>-->
-     
      <xs:element name="learningGroup">
           <xs:complexType>
                <xs:complexContent>
@@ -117,54 +103,41 @@
           </xs:complexType>
      </xs:element>     
      
-    <!-- <xs:complexType name="lcMapLom.class">
-          <xs:choice minOccurs="0" maxOccurs="unbounded">
-               <xs:group ref="lomStructure"/>
-               <xs:group ref="lomCoverage"/>
-               <xs:group ref="lomAggregationLevel"/>
-               <xs:group ref="lomTechRequirement"/>
-               <xs:group ref="lomInstallationRemarks"/>
-               <xs:group ref="lomOtherPlatformRequirements"/>
-               <xs:group ref="lomInteractivityType"/>
-               <xs:group ref="lomLearningResourceType"/>
-               <xs:group ref="lomInteractivityLevel"/>
-               <xs:group ref="lomSemanticDensity"/>
-               <xs:group ref="lomIntendedUserRole"/>
-               <xs:group ref="lomContext"/>
-               <xs:group ref="lomTypicalAgeRange"/>
-               <xs:group ref="lomDifficulty"/>
-               <xs:group ref="lomTypicalLearningTime"/>
-               <xs:group ref="data"/>
-          </xs:choice>
-          <xs:attribute name="lockmeta" type="yesno-att.class"/>
-          <xs:attributeGroup ref="univ-atts"/>
-          <xs:attributeGroup ref="global-atts" />
-     </xs:complexType>
-     -->
      
      
     <!-- <!ELEMENT learningGroup ( (%topicmeta;)?,  (%learningPlanRef;)?,   ((%learningOverviewRef;) | (%learningAssessmentRef;))*,   ((%learningObject;) | (%learningGroup;))*,    ((%learningAssessmentRef;) | (%learningSummaryRef;))*     )   >-->
   
     <xs:attributeGroup name="learningDomain-topicref-atts">
+          <xs:attributeGroup ref="learningDomain-topicref-atts-no-chunk"/>
+          <xs:attribute name="chunk" type="xs:string"/>
+    </xs:attributeGroup>
+    
+  <xs:attributeGroup name="learningObjectComponent-topicref-atts">
+          <xs:attributeGroup ref="learningDomain-topicref-atts-no-chunk"/>
+          <xs:attribute name="chunk" type="xs:string" default="to-content"/>
+   </xs:attributeGroup>
+  
+  
+    
+    <xs:attributeGroup name="learningDomain-topicref-atts-no-chunk">
           <xs:attribute name="navtitle" type="xs:string"/>  
-          <xs:attribute name="id" type="xs:ID"/>
           <xs:attribute name="href" type="xs:string"/>
           <xs:attribute name="keyref" type="xs:string"/>  
           <xs:attribute name="keys" type="xs:string"/>
           <xs:attribute name="query" type="xs:string"/>
-          <xs:attributeGroup ref="conref-atts" />
           <xs:attribute name="copy-to" type="xs:string"/>          
           <xs:attribute name="outputclass" type="xs:string"/>    
           <xs:attribute name="scope" type="scope-att.class"/>
           <xs:attribute name="processing-role" type="processing-role-att.class" />
+          <xs:attribute name="loctitle" type="yesno-att.class"/>
           <xs:attribute name="linking" type="linkingtypes.class"/>
           <xs:attribute name="toc" type="yesno-att.class"/>
-          <xs:attribute name="print" type="yesno-att.class"/>
+          <xs:attribute name="print" type="print-att.class"/>
           <xs:attribute name="search" type="yesno-att.class"/>
-          <xs:attribute name="chunk" type="xs:string"/>
-          <xs:attributeGroup ref="select-atts" />
-          <xs:attributeGroup ref="localization-atts" />
+          <xs:attributeGroup ref="univ-atts" />          
     </xs:attributeGroup>
+  
+  
      
      <xs:complexType name="learningGroup.class">
           <xs:sequence>
@@ -274,7 +247,7 @@
       </xs:group>
   
       <xs:attributeGroup name="learningPlanRef.attributes">
-          <xs:attributeGroup ref="learningDomain-topicref-atts"/>
+          <xs:attributeGroup ref="learningObjectComponent-topicref-atts"/>
           <xs:attribute name="type" type="xs:string" default="learningPlan"/>
           <xs:attribute name="format" type="xs:string" default="dita"/>
           <xs:attributeGroup ref="global-atts" />
@@ -305,7 +278,7 @@
       </xs:group>
   
       <xs:attributeGroup name="learningOverviewRef.attributes">
-          <xs:attributeGroup ref="learningDomain-topicref-atts"/>
+          <xs:attributeGroup ref="learningObjectComponent-topicref-atts"/>
           <xs:attribute name="type" type="xs:string" default="learningOverview"/>
           <xs:attribute name="format" type="xs:string" default="dita"/>          
           <xs:attributeGroup ref="global-atts" />
@@ -331,6 +304,7 @@
           <xs:sequence>
             <xs:sequence>
                <xs:group ref="topicmeta" minOccurs="0"/>
+               <xs:group ref="learningContentComponentRef" minOccurs="0" maxOccurs="unbounded"/>
           </xs:sequence>
           </xs:sequence>
       </xs:group>
@@ -342,7 +316,39 @@
           <xs:attributeGroup ref="global-atts" />
       </xs:attributeGroup>
      
-     <xs:element name="learningPreAssessmentRef">
+  <xs:element name="learningContentComponentRef">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="learningContentComponentRef.class">
+          <xs:attribute ref="class" default="+ map/topicref learningmap-d/learningContentComponentRef " />
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:complexType name="learningContentComponentRef.class">
+    <xs:sequence>
+      <xs:group ref="learningContentComponentRef.content"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="learningContentComponentRef.attributes"/>
+  </xs:complexType>
+  
+  <xs:group name="learningContentComponentRef.content">
+    <xs:sequence>
+      <xs:sequence>
+        <xs:group ref="topicmeta" minOccurs="0"/>
+        <xs:group ref="learningContentComponentRef" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:sequence>
+  </xs:group>
+  
+  <xs:attributeGroup name="learningContentComponentRef.attributes">
+    <xs:attributeGroup ref="learningDomain-topicref-atts"/>
+    <xs:attribute name="type" type="xs:string"/>
+    <xs:attribute name="format" type="xs:string" default="dita"/>
+    <xs:attributeGroup ref="global-atts" />
+  </xs:attributeGroup>
+  
+  <xs:element name="learningPreAssessmentRef">
           <xs:complexType>
                <xs:complexContent>
                     <xs:extension base="learningPreAssessmentRef.class">
@@ -368,7 +374,7 @@
       </xs:group>
      
      <xs:attributeGroup name="learningPreAssessmentRef.attributes">
-          <xs:attributeGroup ref="learningDomain-topicref-atts"/>  
+          <xs:attributeGroup ref="learningObjectComponent-topicref-atts"/>  
           <xs:attribute name="type" type="xs:string" default="learningAssessment"/>
           <xs:attribute name="format" type="xs:string" default="dita"/>   
           <xs:attributeGroup ref="global-atts" />
@@ -402,7 +408,7 @@
       </xs:group>
      
      <xs:attributeGroup name="learningPostAssessmentRef.attributes">
-          <xs:attributeGroup ref="learningDomain-topicref-atts"/>     
+          <xs:attributeGroup ref="learningObjectComponent-topicref-atts"/>     
           <xs:attribute name="type" type="xs:string" default="learningAssessment"/>
           <xs:attribute name="format" type="xs:string" default="dita"/>       
           <xs:attributeGroup ref="global-atts" />
@@ -433,7 +439,7 @@
       </xs:group>
   
       <xs:attributeGroup name="learningSummaryRef.attributes">
-        <xs:attributeGroup ref="learningDomain-topicref-atts"/>
+        <xs:attributeGroup ref="learningObjectComponent-topicref-atts"/>
           <xs:attribute name="type" type="xs:string" default="learningSummary"/>
           <xs:attribute name="format" type="xs:string" default="dita"/>   
           <xs:attributeGroup ref="global-atts" />

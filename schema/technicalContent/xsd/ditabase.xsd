@@ -136,32 +136,7 @@
     </xs:group>
   </xs:redefine>
 
-  <xs:redefine schemaLocation="urn:oasis:names:tc:dita:xsd:taskMod.xsd:1.2" >
-    
-    <!-- ===== CONTENTS OF strictTaskbodyConstraint.xsd === START  ===== -->
-     <xs:group name="taskPreStep">
-      <xs:sequence>
-        <xs:choice> 
-        <xs:sequence>
-          <xs:group ref="prereq"  minOccurs="0"/>
-          <xs:group ref="context"  minOccurs="0"/>
-        </xs:sequence>
-      </xs:choice>
-      </xs:sequence>
-    </xs:group>
-
-    <xs:group name="taskPostStep">
-      <xs:sequence>
-        <xs:sequence>
-          <xs:group ref="result"  minOccurs="0"/>
-          <xs:group ref="example"  minOccurs="0"/>
-          <xs:group ref="postreq"  minOccurs="0"/>
-        </xs:sequence>
-        </xs:sequence>
-    </xs:group>
-    
-    <!-- ===== CONTENTS OF strictTaskbodyConstraint.xsd === END  ===== -->
-    
+  <xs:redefine schemaLocation="urn:oasis:names:tc:dita:xsd:strictTaskbodyConstraintMod.xsd:1.2">
     <xs:group name="task-info-types">
       <xs:choice>
         <xs:group ref="info-types"/>

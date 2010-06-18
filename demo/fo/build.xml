@@ -212,6 +212,29 @@ with those set forth herein.
             <not><isset property="formatter.specific.ext"></isset></not>
         </condition>
 
+        <condition property="args.bookmark.style" value="">
+            <not><isset property="args.bookmark.style"></isset></not>
+        </condition>
+
+        <condition property="args.chapter.layout" value="">
+            <not><isset property="args.chapter.layout"></isset></not>
+        </condition>
+
+        <condition property="args.fo.include.rellinks" value="">
+            <not><isset property="args.fo.include.rellinks"></isset></not>
+        </condition>
+
+        <condition property="publish.required.cleanup" value="${args.draft}">
+          <and>
+            <not><isset property="publish.required.cleanup"/></not>
+            <isset property="args.draft"/>
+          </and>
+        </condition>
+
+        <condition property="args.gen.task.lbl" value="">
+            <not><isset property="args.gen.task.lbl"></isset></not>
+        </condition>
+
         <condition property="temp.transformation.file" value="${xsl.fo.dir}/topic2fo_shell_1.0${formatter.specific.ext}.xsl">
     		<or>
 	            <equals arg1="${ws.runtime.publishing.map.dita.version}" arg2="1.0"/>
@@ -257,6 +280,8 @@ with those set forth herein.
             <arg line='"disableRelatedLinks=${disableRelatedLinks}"'/>
             <arg line='"antArgsBookmarkStyle=${args.bookmark.style}"'/>
             <arg line='"antArgsChapterLayout=${args.chapter.layout}"'/>
+            <arg line='"antArgsIncludeRelatedLinks=${args.fo.include.rellinks}"'/>
+            <arg line='"antArgsGenerateTaskLabels=${args.gen.task.lbl}"'/>
         	<arg line='"pdfFormatter=${pdf.formatter}"'/>
             <sysproperty key="xml.catalog.files" value="${xml.catalog.files}"/>
         </java>

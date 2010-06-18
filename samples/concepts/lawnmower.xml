@@ -5,9 +5,10 @@
 <!-- (C) Copyright IBM Corporation 2001, 2005. All Rights Reserved.
  *-->
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN"
- "../../dtd/concept.dtd">
+ "../../dtd/technicalContent/dtd/concept.dtd">
 <concept id="lawnmowerconcept" xml:lang="en-us">
 <title>Lawnmower</title>
-<conbody><p>The lawnmower is a machine used to cut grass in the yard. Lawnmowers can be 
+<shortdesc>The lawnmower is a machine used to cut grass in the yard.</shortdesc>
+<conbody><p>Lawnmowers can be 
 electric, gas-powered, or manual.</p></conbody>
 </concept>

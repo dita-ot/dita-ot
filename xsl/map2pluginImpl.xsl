@@ -8,7 +8,7 @@
   
   <xsl:import href="common/output-message.xsl"/>
   
-  <xsl:param name="version">1.0</xsl:param>
+  <xsl:param name="version">1.0.0</xsl:param>
   <xsl:param name="provider">DITA</xsl:param>
   <xsl:param name="TOCROOT">toc</xsl:param>
   

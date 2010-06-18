@@ -23,7 +23,6 @@ public class TestDitaValReader {
 	@BeforeClass
 	public static void setUp() throws Exception{
 		reader = new DitaValReader();
-
 		//Create the temp dir
 		File dir = new File(baseDir, tempDir);
 		if(!dir.exists()){
@@ -52,7 +51,7 @@ public class TestDitaValReader {
 		pipelineInput.setAttribute("onlytopicinmap", "false");
 		pipelineInput.setAttribute("ditalist", tempDir + "/dita.list");
 		pipelineInput.setAttribute("maplinks", tempDir + "/maplinks.unordered");
-		
+		pipelineInput.setAttribute("transtype", "xhtml");
 		facade.execute("GenMapAndTopicList", pipelineInput);
 		
 		
@@ -61,8 +60,7 @@ public class TestDitaValReader {
 	@Test
 	public void testRead() throws DITAOTException{
 		
-		reader.read(baseDir+"/DITAVAL/DITAVAL_1.ditaval");
-		
+		reader.read(baseDir+"/DITAVAL/DITAVAL_1.ditaval");		
 		HashMap map = reader.getFilterMap();
 		assertEquals("include", map.get("audience=Cindy"));
 		assertEquals("flag", map.get("produt=p1"));

@@ -352,7 +352,10 @@
       type="file" />
     <basename property="args.css.file.temp" file="${args.css}" />
     <condition property="args.css.file" value="${args.css.file.temp}">
-      <isset property="args.css.present" />
+    	<or>
+    		<isset property="args.css.present" />
+    		<isset property="user.csspath.url" />
+    	</or>
     </condition>
     <!-- end to check and init css relevant parameters -->
 
@@ -434,17 +437,17 @@
     </condition>
     
     <!-- output parameters info -->
-    <echo>*****************************************************************</echo>
-    <echo>* basedir = ${basedir}</echo>
-    <echo>* dita.dir = ${dita.dir}</echo>
-    <echo>* input = ${args.input}</echo>
-    <echo>* transtype = ${transtype}</echo>
-    <echo>* tempdir = ${dita.temp.dir}</echo>
-    <echo>* outputdir = ${output.dir}</echo>
-    <echo>* extname = ${dita.ext}</echo>
-    <echo>* clean.temp = ${clean.temp}</echo>
-    <echo>* xslt.parser = ${xslt.parser}</echo>
-    <echo>*****************************************************************</echo>
+    <echo level="info">*****************************************************************</echo>
+    <echo level="info">* basedir = ${basedir}</echo>
+    <echo level="info">* dita.dir = ${dita.dir}</echo>
+    <echo level="info">* input = ${args.input}</echo>
+    <echo level="info">* transtype = ${transtype}</echo>
+    <echo level="info">* tempdir = ${dita.temp.dir}</echo>
+    <echo level="info">* outputdir = ${output.dir}</echo>
+    <echo level="info">* extname = ${dita.ext}</echo>
+    <echo level="info">* clean.temp = ${clean.temp}</echo>
+    <echo level="info">* xslt.parser = ${xslt.parser}</echo>
+    <echo level="info">*****************************************************************</echo>
   </target>
 
   <target name="output-msg" depends="output-deprecated-msg, output-css-warn-message"/>

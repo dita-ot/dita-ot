@@ -37,6 +37,14 @@ PUBLIC "-//OASIS//ELEMENTS DITA Map//EN" "map.mod"
 PUBLIC "-//OASIS//ELEMENTS DITA 1.x Map//EN" "map.mod"
 PUBLIC "-//OASIS//ELEMENTS DITA 1.2 Map//EN" "map.mod"
 
+PUBLIC "-//OASIS//DTD DITA Base Topic//EN" "basetopic.dtd"
+PUBLIC "-//OASIS//DTD DITA 1.x Base Topic//EN" "basetopic.dtd"
+PUBLIC "-//OASIS//DTD DITA 1.2 Base Topic//EN" "basetopic.dtd"
+
+PUBLIC "-//OASIS//DTD DITA Base Map//EN" "basemap.dtd"
+PUBLIC "-//OASIS//DTD DITA 1.x Base Map//EN" "basemap.dtd"
+PUBLIC "-//OASIS//DTD DITA 1.2 Base Map//EN" "basemap.dtd"
+
 PUBLIC "-//OASIS//ELEMENTS DITA Common Elements//EN" "commonElements.mod"
 PUBLIC "-//OASIS//ENTITIES DITA Common Elements//EN" "commonElements.ent"
 PUBLIC "-//OASIS//ELEMENTS DITA 1.x Common Elements//EN" "commonElements.mod"
@@ -268,8 +276,8 @@ PUBLIC "-//OASIS//ENTITIES DITA 1.x Subject Scheme Map//EN" "subjectScheme.ent"
 PUBLIC "-//OASIS//ENTITIES DITA 1.2 Subject Scheme Map//EN" "subjectScheme.ent"
 
 PUBLIC "-//OASIS//DTD DITA Classification Map//EN" "classifyMap.dtd"
-PUBLIC "-//OASIS//DTD DITA 1.x Subject Classification Map//EN" "classifyMap.dtd"
-PUBLIC "-//OASIS//DTD DITA 1.2 Subject Classification Map//EN" "classifyMap.dtd"
+PUBLIC "-//OASIS//DTD DITA 1.x Classification Map//EN" "classifyMap.dtd"
+PUBLIC "-//OASIS//DTD DITA 1.2 Classification Map//EN" "classifyMap.dtd"
 
 PUBLIC "-//OASIS//ENTITIES DITA Map Subject Classification Domain//EN" "classifyDomain.ent"
 PUBLIC "-//OASIS//ELEMENTS DITA Map Subject Classification Domain//EN" "classifyDomain.mod"

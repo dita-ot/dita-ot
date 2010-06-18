@@ -181,6 +181,13 @@ public class FileGenerator extends DefaultHandler {
 					{
 						// Ignore xmlns:dita.
 					}
+					//Added by William on 2010-02-22 for bug:2950588 start
+					else if(attributes.getValue(i).contains("\"")){
+						output.write(" ");
+						output.write(new StringBuffer(attributes.getQName(i)).append("='").
+								append(attributes.getValue(i)).append("'").toString());
+					}
+					//Added by William on 2010-02-22 for bug:2950588 end
 					else
 					{
 						// Normal attribute.
@@ -208,6 +215,12 @@ public class FileGenerator extends DefaultHandler {
 		}
 		
 	}
+	@Override
+	public void skippedEntity(String name) throws SAXException {
+		// TODO Auto-generated method stub
+		System.out.println(name);
+	}
+	
 
 	
 }

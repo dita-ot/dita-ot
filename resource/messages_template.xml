@@ -8,7 +8,7 @@
   <!-- Begin of Ant Messages -->
   <message id="DOTA001F" type="FATAL">
     <reason>Invalid transformation type.</reason>
-    <response>Please provide the correct transormation types using Ant parameter 'transtype':  xhtml, eclipsehelp, eclipsecontent, javahelp, htmlhelp, pdf, pdf2, troff, docbook, wordrtf.</response>
+    <response>Please provide the correct transormation types using Ant parameter 'transtype':  xhtml, eclipsehelp, eclipsecontent, javahelp, htmlhelp, pdf, pdf2, troff, docbook, wordrtf, odt.</response>
   </message>
   
   <message id="DOTA002F" type="FATAL">
@@ -305,6 +305,11 @@
   <message id="DOTJ049W" type="WARN">
   	<reason>Attribute "%1" in element "%2" has been assigned a value of "%3" which does not comply with its subject scheme.</reason>
   	<response>The attribute value should be one of "%4" as defined in subject schema.</response>
+  </message>
+  
+  <message id="DOTJ050W" type="WARN">
+    <reason>The index-see reference '%1' was not found in the plugin. </reason>
+    <response>Please make sure that the appropriate index entry is created or manually update the index.xml file.</response>
   </message>
   
   <!-- End of Java Messages -->
@@ -640,6 +645,8 @@
     <reason>The copy-to attribute [href="%1" copy-to="%2"] points to another copy-to target, so this attribute is ignored.</reason>
     <response>Please make sure that this attribute value is unique within your project.</response>
   </message>
+  
+  
   <!-- added by Alan on Date:2009-11-02 for Work Item:#1590 end   -->
   
   <!-- Add any messages defined by plugins. -->

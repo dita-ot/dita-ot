@@ -44,6 +44,7 @@
 <str name="Danger">VESZÉLY!</str>
 <str name="Remember">Ne feledje</str>
 <str name="Restriction">Korlátozás</str>
+<str name="Warning">Figyelmeztetés</str>
 
 <!-- default title text for section level generated sections -->
 <str name="Contents">Tartalom</str>

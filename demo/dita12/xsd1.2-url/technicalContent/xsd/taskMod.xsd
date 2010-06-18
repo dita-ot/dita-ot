@@ -4,7 +4,7 @@
 <!-- ============================================================= -->
 <!--  VERSION:   1.2                                             -->
 <!--  DATE:      July 2007                                     -->
-<!--  DATE:      November 2008                                     -->
+<!--  DATE:      November 2009                                     -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -16,26 +16,35 @@
 <!-- ORIGINAL CREATION DATE:                                       -->
 <!--             March 2001                                        -->
 <!--                                                               -->
-<!--             (C) Copyright OASIS-Open.org 2005, 2008                -->
+<!--             (C) Copyright OASIS-Open.org 2005, 2009                -->
 <!--             (C) Copyright IBM Corporation 2001, 2004.         -->
 <!--             All Rights Reserved.                              -->
 <!-- ============================================================= -->
- <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
   <!-- ==================== Import Section ======================= -->
-   <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="../../base/xsd/xml.xsd"/>
-   <xs:import namespace="http://dita.oasis-open.org/architecture/2005/" schemaLocation="../../base/xsd/ditaarch.xsd"/>
+  <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="../../base/xsd/xml.xsd"/>
+  <xs:import namespace="http://dita.oasis-open.org/architecture/2005/" schemaLocation="../../base/xsd/ditaarch.xsd"/>
+
+  <xs:annotation>
+    <xs:appinfo>
+      <dita:domainsModule xmlns:dita="http://dita.oasis-open.org/architecture/2005/">(topic task)</dita:domainsModule>
+    </xs:appinfo>
+    <xs:documentation> 
+    
+    </xs:documentation>
+  </xs:annotation>
 
   <!-- Base type: univ-atts -->
   <xs:attributeGroup name="univ-atts-no-importance-task">
     <xs:attributeGroup ref="id-atts"/>
-    <xs:attribute name="base" type="xs:string" />
+    <xs:attribute name="base" type="xs:string"/>
     <xs:attributeGroup ref="base-attribute-extensions"/>
     <xs:attributeGroup ref="filter-atts"/>
     <xs:attribute name="rev" type="xs:string"/>
     <xs:attribute name="status" type="status-atts.class"/>
-    <xs:attributeGroup ref="localization-atts" />
+    <xs:attributeGroup ref="localization-atts"/>
   </xs:attributeGroup>
-   
+
   <!-- Base type: importance-atts.class -->
   <xs:simpleType name="importance-att-nodefault-task.class">
     <xs:restriction base="importance-atts.class">
@@ -44,7 +53,7 @@
       <xs:enumeration value="-dita-use-conref-target"/>
     </xs:restriction>
   </xs:simpleType>
-   
+
   <!-- Element declarations for task.mod -->
   <xs:element name="task">
     <xs:annotation>
@@ -66,7 +75,7 @@
       </xs:complexContent>
     </xs:complexType>
   </xs:element>
-   
+
   <xs:element name="taskbody">
     <xs:annotation>
       <xs:documentation>
@@ -85,7 +94,7 @@
       </xs:complexContent>
     </xs:complexType>
   </xs:element>
-   
+
   <xs:element name="prereq">
     <xs:annotation>
       <xs:documentation>
@@ -104,7 +113,7 @@
       </xs:complexContent>
     </xs:complexType>
   </xs:element>
-   
+
   <xs:element name="context">
     <xs:annotation>
       <xs:documentation>
@@ -124,7 +133,7 @@
       </xs:complexContent>
     </xs:complexType>
   </xs:element>
-   
+
   <xs:element name="result">
     <xs:annotation>
       <xs:documentation>
@@ -140,7 +149,7 @@
       </xs:complexContent>
     </xs:complexType>
   </xs:element>
-   
+
   <xs:element name="postreq">
     <xs:annotation>
       <xs:documentation>
@@ -158,7 +167,7 @@
       </xs:complexContent>
     </xs:complexType>
   </xs:element>
-   
+
   <xs:element name="choice">
     <xs:annotation>
       <xs:documentation>
@@ -174,7 +183,7 @@
       </xs:complexContent>
     </xs:complexType>
   </xs:element>
-   
+
   <xs:element name="step">
     <xs:annotation>
       <xs:documentation>
@@ -196,8 +205,8 @@
       </xs:complexContent>
     </xs:complexType>
   </xs:element>
-   
-   <xs:element name="stepsection">
+
+  <xs:element name="stepsection">
     <xs:annotation>
       <xs:documentation>
         
@@ -211,7 +220,7 @@
       </xs:complexContent>
     </xs:complexType>
   </xs:element>
-   
+
   <xs:element name="substep">
     <xs:annotation>
       <xs:documentation>
@@ -228,10 +237,10 @@
       </xs:complexContent>
     </xs:complexType>
   </xs:element>
-  
-   <xs:element name="steps-unordered">
-     <xs:annotation>
-       <xs:documentation>
+
+  <xs:element name="steps-unordered">
+    <xs:annotation>
+      <xs:documentation>
          Like the &lt;<keyword>steps</keyword>> element, the &lt;<keyword>steps-unordered</keyword>>
          section of a task provides the main content of the task topic, but particularly
          for cases in which the order of steps may vary from one situation to another.
@@ -240,33 +249,33 @@
          form. One or more steps is required inside the &lt;<keyword>steps-unordered</keyword>>
          section.
        </xs:documentation>
-     </xs:annotation>
-     <xs:complexType>
-       <xs:complexContent>
-         <xs:extension base="steps-unordered.class">
-           <xs:attribute ref="class" default="- topic/ul     task/steps-unordered "/>
-         </xs:extension>
-       </xs:complexContent>
-     </xs:complexType>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="steps-unordered.class">
+          <xs:attribute ref="class" default="- topic/ul     task/steps-unordered "/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
-  
-   <xs:element name="choices">
-     <xs:annotation>
-       <xs:documentation>
+
+  <xs:element name="choices">
+    <xs:annotation>
+      <xs:documentation>
          The &lt;<keyword>choices</keyword>> element contains a list of
          &lt;<keyword>choice</keyword>> elements. It is used when the user will need
          to choose one of several actions while performing the steps of a task.
        </xs:documentation>
-     </xs:annotation>
-     <xs:complexType>
-       <xs:complexContent>
-         <xs:extension base="choices.class">
-           <xs:attribute ref="class" default="- topic/ul     task/choices "/>
-         </xs:extension>
-       </xs:complexContent>
-     </xs:complexType>
-   </xs:element>
-   
+    </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="choices.class">
+          <xs:attribute ref="class" default="- topic/ul     task/choices "/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+
   <xs:element name="steps">
     <xs:annotation>
       <xs:documentation>
@@ -284,7 +293,7 @@
       </xs:complexContent>
     </xs:complexType>
   </xs:element>
-   
+
   <xs:element name="substeps">
     <xs:annotation>
       <xs:documentation>
@@ -303,7 +312,7 @@
       </xs:complexContent>
     </xs:complexType>
   </xs:element>
-  
+
   <xs:element name="cmd">
     <xs:annotation>
       <xs:documentation>
@@ -311,7 +320,7 @@
         the first element inside a &lt;<keyword>step</keyword>>. It provides the active
         voice instruction to the user for completing the step, and should not be more
         than one sentence. If the step needs additional explanation, this can follow
-        the &lt;<keyword>cmd</keyword>> element inside an <ph><xref href="info.xml">info</xref></ph> element.
+        the &lt;<keyword>cmd</keyword>> element inside an <xref  href="info.xml">info</xref>  element.
       </xs:documentation>
     </xs:annotation>
     <xs:complexType mixed="true">
@@ -322,7 +331,7 @@
       </xs:complexContent>
     </xs:complexType>
   </xs:element>
-   
+
   <xs:element name="info">
     <xs:annotation>
       <xs:documentation>
@@ -339,7 +348,7 @@
       </xs:complexContent>
     </xs:complexType>
   </xs:element>
-   
+
   <xs:element name="tutorialinfo">
     <xs:annotation>
       <xs:documentation>
@@ -360,7 +369,7 @@
       </xs:complexContent>
     </xs:complexType>
   </xs:element>
-   
+
   <xs:element name="stepxmp">
     <xs:annotation>
       <xs:documentation>
@@ -377,7 +386,7 @@
       </xs:complexContent>
     </xs:complexType>
   </xs:element>
-   
+
   <xs:element name="stepresult">
     <xs:annotation>
       <xs:documentation>
@@ -396,7 +405,7 @@
       </xs:complexContent>
     </xs:complexType>
   </xs:element>
-   
+
   <xs:element name="choicetable">
     <xs:annotation>
       <xs:documentation>
@@ -412,61 +421,61 @@
       </xs:complexContent>
     </xs:complexType>
   </xs:element>
-  
-   <xs:element name="chhead">
-     <xs:annotation>
-       <xs:documentation>
+
+  <xs:element name="chhead">
+    <xs:annotation>
+      <xs:documentation>
          The &lt;<keyword>chhead</keyword>> element is a container inside
          the &lt;<keyword>choicetable</keyword>> element that provides specific heading
          text to override the default <b>Options</b> and <b>Description</b> headings.
-         The &lt;<keyword>chhead</keyword>> element contains both a <ph><xref href="choptionhd.xml">choptionhd</xref></ph> and <ph><xref
-           href="chdeschd.xml">chdeschd</xref></ph> element as a pair.
+         The &lt;<keyword>chhead</keyword>> element contains both a <xref  href="choptionhd.xml">choptionhd</xref>
+          and <xref href="chdeschd.xml">chdeschd</xref>  element as a pair.
        </xs:documentation>
-     </xs:annotation>
-     <xs:complexType>
-       <xs:complexContent>
-         <xs:extension base="chhead.class">
-           <xs:attribute ref="class" default="- topic/sthead task/chhead "/>
-         </xs:extension>
-       </xs:complexContent>
-     </xs:complexType>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="chhead.class">
+          <xs:attribute ref="class" default="- topic/sthead task/chhead "/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
-  
-   <xs:element name="chrow">
-     <xs:annotation>
-       <xs:documentation>
+
+  <xs:element name="chrow">
+    <xs:annotation>
+      <xs:documentation>
          The &lt;<keyword>chrow</keyword>> element is a container inside
          the &lt;<keyword>choicetable</keyword>> element. The &lt;<keyword>chrow</keyword>>
          element contains both a &lt;<keyword>choption</keyword>> and &lt;<keyword>chdesc</keyword>>
          element as a pair.
        </xs:documentation>
-     </xs:annotation>
-     <xs:complexType>
-       <xs:complexContent>
-         <xs:extension base="chrow.class">
-           <xs:attribute ref="class" default="- topic/strow task/chrow "/>
-         </xs:extension>
-       </xs:complexContent>
-     </xs:complexType>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="chrow.class">
+          <xs:attribute ref="class" default="- topic/strow task/chrow "/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
   </xs:element>
-  
-   <xs:element name="choptionhd">
-     <xs:annotation>
-       <xs:documentation>
+
+  <xs:element name="choptionhd">
+    <xs:annotation>
+      <xs:documentation>
          The &lt;<keyword>choptionhd</keyword>> element provides a specific
          label for the list of options that a user chooses from to accomplish a step.
          The default label for options is <b>Option</b>.
        </xs:documentation>
-     </xs:annotation>
-     <xs:complexType mixed="true">
-       <xs:complexContent>
-         <xs:extension base="choptionhd.class">
-           <xs:attribute ref="class" default="- topic/stentry task/choptionhd "/>
-         </xs:extension>
-       </xs:complexContent>
-     </xs:complexType>
-   </xs:element>
-   
+    </xs:annotation>
+    <xs:complexType mixed="true">
+      <xs:complexContent>
+        <xs:extension base="choptionhd.class">
+          <xs:attribute ref="class" default="- topic/stentry task/choptionhd "/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+
   <xs:element name="chdeschd">
     <xs:annotation>
       <xs:documentation>
@@ -484,7 +493,7 @@
       </xs:complexContent>
     </xs:complexType>
   </xs:element>
-   
+
   <xs:element name="choption">
     <xs:annotation>
       <xs:documentation>
@@ -501,27 +510,27 @@
       </xs:complexContent>
     </xs:complexType>
   </xs:element>
-  
-   <xs:element name="chdesc">
-     <xs:annotation>
-       <xs:documentation>
+
+  <xs:element name="chdesc">
+    <xs:annotation>
+      <xs:documentation>
          The &lt;<keyword>chdesc</keyword>> element is a description of
          an option that a user chooses while performing a step to accomplish a task.
          It explains why the user would choose that option, and might explain the result
          of the choice when it is not immediately obvious.
        </xs:documentation>
-     </xs:annotation>
-     <xs:complexType mixed="true">
-       <xs:complexContent>
-         <xs:extension base="chdesc.class">
-           <xs:attribute ref="class" default="- topic/stentry task/chdesc "/>
-         </xs:extension>
-       </xs:complexContent>
-     </xs:complexType>
-   </xs:element>
-   
-   <xs:element name="steps-informal">
-     <xs:complexType mixed="true">
+    </xs:annotation>
+    <xs:complexType mixed="true">
+      <xs:complexContent>
+        <xs:extension base="chdesc.class">
+          <xs:attribute ref="class" default="- topic/stentry task/chdesc "/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="steps-informal">
+    <xs:complexType mixed="true">
       <xs:complexContent>
         <xs:extension base="steps-informal.class">
           <xs:attribute ref="class" default="- topic/section task/steps-informal "/>
@@ -535,16 +544,16 @@
     </xs:sequence>
     <xs:attributeGroup ref="steps-informal.attributes"/>
   </xs:complexType>
-  
+
   <xs:group name="steps-informal.content">
     <xs:sequence>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
-      <xs:group ref="section.notitle.cnt" minOccurs="0"/>
-    </xs:choice>  
+        <xs:group ref="section.notitle.cnt" minOccurs="0"/>
+      </xs:choice>
     </xs:sequence>
   </xs:group>
 
-<xs:attributeGroup name="steps-informal.attributes">
+  <xs:attributeGroup name="steps-informal.attributes">
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
@@ -558,42 +567,42 @@
     </xs:choice>
   </xs:group>
 
-   <!-- Base type: topic.class -->
+  <!-- Base type: topic.class -->
   <xs:complexType name="task.class">
-   <xs:sequence>
-     <xs:group ref="task.content"/>
-   </xs:sequence>
+    <xs:sequence>
+      <xs:group ref="task.content"/>
+    </xs:sequence>
     <xs:attributeGroup ref="task.attributes"/>
   </xs:complexType>
-   
-   <xs:group name="task.content">
-     <xs:sequence>
-        <xs:sequence>
-      <xs:group ref="title"/>
-      <xs:group ref="titlealts" minOccurs="0"/>
-      <xs:choice minOccurs="0">
-        <xs:group ref="shortdesc" minOccurs="0"/>
-        <xs:group ref="abstract" minOccurs="0"/>
-      </xs:choice>
-      <xs:group ref="prolog" minOccurs="0"/>
-      <xs:group ref="taskbody" minOccurs="0"/>
-      <xs:group ref="related-links" minOccurs="0"/>
-      <xs:group ref="task-info-types" minOccurs="0" maxOccurs="unbounded"/>
+
+  <xs:group name="task.content">
+    <xs:sequence>
+      <xs:sequence>
+        <xs:group ref="title"/>
+        <xs:group ref="titlealts" minOccurs="0"/>
+        <xs:choice minOccurs="0">
+          <xs:group ref="shortdesc" minOccurs="0"/>
+          <xs:group ref="abstract" minOccurs="0"/>
+        </xs:choice>
+        <xs:group ref="prolog" minOccurs="0"/>
+        <xs:group ref="taskbody" minOccurs="0"/>
+        <xs:group ref="related-links" minOccurs="0"/>
+        <xs:group ref="task-info-types" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
     </xs:sequence>
-     </xs:sequence>
-   </xs:group>
-   
-   <xs:attributeGroup name="task.attributes">
-     <xs:attribute name="id" type="xs:ID" use="required"/>
-    <xs:attributeGroup ref="conref-atts" />
+  </xs:group>
+
+  <xs:attributeGroup name="task.attributes">
+    <xs:attribute name="id" type="xs:ID" use="required"/>
+    <xs:attributeGroup ref="conref-atts"/>
     <xs:attributeGroup ref="select-atts"/>
     <xs:attribute ref="ditaarch:DITAArchVersion"/>
     <xs:attributeGroup ref="domains-att"/>
     <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="localization-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-   </xs:attributeGroup>
-<!--
+  </xs:attributeGroup>
+  <!--
 <!ENTITY % taskbody.content
 "(((%prereq;) | 
 (%context;) |
@@ -613,8 +622,8 @@
     </xs:choice>
     <xs:attributeGroup ref="taskbody.attributes"/>
   </xs:complexType>
-   
-   <xs:group name="taskbody.content">
+
+  <xs:group name="taskbody.content">
     <xs:sequence>
       <xs:group ref="taskPreStep"/>
       <xs:group ref="taskStep"/>
@@ -626,7 +635,7 @@
     <xs:sequence>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
         <xs:group ref="context" minOccurs="0"/>
-        <xs:group ref="prereq"  minOccurs="0"/>
+        <xs:group ref="prereq" minOccurs="0"/>
         <xs:group ref="section" minOccurs="0"/>
       </xs:choice>
     </xs:sequence>
@@ -634,52 +643,52 @@
 
   <xs:group name="taskPostStep">
     <xs:sequence>
-      <xs:group ref="result"  minOccurs="0"/>
-      <xs:group ref="postreq"  minOccurs="0" maxOccurs="unbounded"/>  
-      <xs:group ref="example"  minOccurs="0" maxOccurs="unbounded"/>
+      <xs:group ref="result" minOccurs="0"/>
+      <xs:group ref="example" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:group ref="postreq" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
   </xs:group>
-  
+
   <xs:group name="taskStep">
     <xs:sequence>
-       <xs:choice minOccurs="0" maxOccurs="1">
-       <xs:group ref="steps" />
-       <xs:group ref="steps-unordered" />
-       <xs:group ref="steps-informal" />
-     </xs:choice>
+      <xs:choice minOccurs="0" maxOccurs="1">
+        <xs:group ref="steps"/>
+        <xs:group ref="steps-unordered"/>
+        <xs:group ref="steps-informal"/>
+      </xs:choice>
     </xs:sequence>
   </xs:group>
-   
-   <xs:attributeGroup name="taskbody.attributes">
-     <xs:attribute name="outputclass" type="xs:string"/>
-    <xs:attribute name="base" type="xs:string" />
+
+  <xs:attributeGroup name="taskbody.attributes">
+    <xs:attribute name="outputclass" type="xs:string"/>
+    <xs:attribute name="base" type="xs:string"/>
     <xs:attributeGroup ref="base-attribute-extensions"/>
     <xs:attributeGroup ref="id-atts"/>
-    <xs:attributeGroup ref="localization-atts" />
+    <xs:attributeGroup ref="localization-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-   </xs:attributeGroup>
+  </xs:attributeGroup>
 
-   <!-- Base type: section.class -->
+  <!-- Base type: section.class -->
   <xs:complexType name="prereq.class" mixed="true">
     <xs:sequence>
       <xs:group ref="prereq.content"/>
     </xs:sequence>
     <xs:attributeGroup ref="prereq.attributes"/>
   </xs:complexType>
-   
-   <xs:group name="prereq.content">
-     <xs:sequence>
-       <xs:choice minOccurs="0" maxOccurs="unbounded">
-      <xs:group ref="section.notitle.cnt" minOccurs="0"/>
-    </xs:choice>
-     </xs:sequence>
-   </xs:group>
-   
-    <xs:attributeGroup name="prereq.attributes">
-     <xs:attribute name="outputclass" type="xs:string"/>
+
+  <xs:group name="prereq.content">
+    <xs:sequence>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:group ref="section.notitle.cnt" minOccurs="0"/>
+      </xs:choice>
+    </xs:sequence>
+  </xs:group>
+
+  <xs:attributeGroup name="prereq.attributes">
+    <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-   </xs:attributeGroup>
+  </xs:attributeGroup>
 
   <!-- Base type: section.class -->
   <xs:complexType name="context.class" mixed="true">
@@ -688,20 +697,20 @@
     </xs:sequence>
     <xs:attributeGroup ref="context.attributes"/>
   </xs:complexType>
-   
-   <xs:group name="context.content">
-     <xs:sequence>
-       <xs:choice minOccurs="0" maxOccurs="unbounded">
-      <xs:group ref="section.notitle.cnt" minOccurs="0"/>
-    </xs:choice>
-     </xs:sequence>
-   </xs:group>
-   
-    <xs:attributeGroup name="context.attributes">
-     <xs:attribute name="outputclass" type="xs:string"/>
+
+  <xs:group name="context.content">
+    <xs:sequence>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:group ref="section.notitle.cnt" minOccurs="0"/>
+      </xs:choice>
+    </xs:sequence>
+  </xs:group>
+
+  <xs:attributeGroup name="context.attributes">
+    <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-   </xs:attributeGroup>
+  </xs:attributeGroup>
 
   <!-- Base type: ol.class -->
   <xs:complexType name="steps.class">
@@ -710,75 +719,75 @@
     </xs:sequence>
     <xs:attributeGroup ref="steps.attributes"/>
   </xs:complexType>
-   
-   <xs:group name="steps.content">
+
+  <xs:group name="steps.content">
      <xs:sequence>
-       <xs:choice>
-      <xs:group ref="stepsection" minOccurs="0"/>
-      <xs:group ref="step" maxOccurs="unbounded"/>
-    </xs:choice>
+       <xs:sequence maxOccurs="unbounded">
+         <xs:group ref="stepsection" minOccurs="0"/>
+         <xs:group ref="step" />
+       </xs:sequence>
      </xs:sequence>
-   </xs:group>
-   
-    <xs:attributeGroup name="steps.attributes">
-     <xs:attribute name="outputclass" type="xs:string"/>
+  </xs:group>
+
+  <xs:attributeGroup name="steps.attributes">
+    <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-   </xs:attributeGroup>
+  </xs:attributeGroup>
 
   <!-- Base type: ul.class -->
   <xs:complexType name="steps-unordered.class">
     <xs:sequence>
       <xs:group ref="steps-unordered.content"/>
     </xs:sequence>
-   <xs:attributeGroup ref="steps-unordered.attributes"/>
+    <xs:attributeGroup ref="steps-unordered.attributes"/>
   </xs:complexType>
-   
-   <xs:group name="steps-unordered.content">
-     <xs:sequence>
-       <xs:choice minOccurs="1" maxOccurs="unbounded">
-      <xs:group ref="step" />
-    </xs:choice>
-     </xs:sequence>
-   </xs:group>
-   
-    <xs:attributeGroup name="steps-unordered.attributes">
-     <xs:attribute name="outputclass" type="xs:string"/>
+
+  <xs:group name="steps-unordered.content">
+    <xs:sequence>
+      <xs:choice minOccurs="1" maxOccurs="unbounded">
+        <xs:group ref="step"/>
+      </xs:choice>
+    </xs:sequence>
+  </xs:group>
+
+  <xs:attributeGroup name="steps-unordered.attributes">
+    <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-   </xs:attributeGroup>
+  </xs:attributeGroup>
 
   <!-- Base type: li.class -->
   <xs:complexType name="step.class">
-      <xs:sequence>
-        <xs:group ref="step.content"/>
-      </xs:sequence>
-      <xs:attributeGroup ref="step.attributes"/>
-  </xs:complexType>
-   
-   <xs:group name="step.content">
-     <xs:sequence>
-       <xs:sequence>
-      <xs:group ref="cmd"/>
-      <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:group ref="info"/>
-        <xs:group ref="substeps"/>
-        <xs:group ref="tutorialinfo"/>
-        <xs:group ref="stepxmp"/>
-        <xs:group ref="choicetable"/>
-        <xs:group ref="choices"/>
-      </xs:choice>
-      <xs:group ref="stepresult" minOccurs="0"/>
+    <xs:sequence>
+      <xs:group ref="step.content"/>
     </xs:sequence>
-     </xs:sequence>
-   </xs:group>
-   
-    <xs:attributeGroup name="step.attributes">
-      <xs:attribute name="importance" type="importance-att-nodefault-task.class"/>
-     <xs:attribute name="outputclass" type="xs:string"/>
+    <xs:attributeGroup ref="step.attributes"/>
+  </xs:complexType>
+
+  <xs:group name="step.content">
+    <xs:sequence>
+      <xs:sequence>
+        <xs:group ref="cmd"/>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:group ref="info"/>
+          <xs:group ref="substeps"/>
+          <xs:group ref="tutorialinfo"/>
+          <xs:group ref="stepxmp"/>
+          <xs:group ref="choicetable"/>
+          <xs:group ref="choices"/>
+        </xs:choice>
+        <xs:group ref="stepresult" minOccurs="0"/>
+      </xs:sequence>
+    </xs:sequence>
+  </xs:group>
+
+  <xs:attributeGroup name="step.attributes">
+    <xs:attribute name="importance" type="importance-att-nodefault-task.class"/>
+    <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts-no-importance-task"/>
     <xs:attributeGroup ref="global-atts"/>
-   </xs:attributeGroup>
+  </xs:attributeGroup>
 
   <!-- Base type: ph.class -->
   <xs:complexType name="cmd.class" mixed="true">
@@ -787,21 +796,21 @@
     </xs:sequence>
     <xs:attributeGroup ref="cmd.attributes"/>
   </xs:complexType>
-   
-   <xs:group name="cmd.content">
-     <xs:sequence>
-       <xs:choice minOccurs="0" maxOccurs="unbounded">
-      <xs:group ref="ph.cnt" minOccurs="0"/>
-    </xs:choice>
-     </xs:sequence>
-   </xs:group>
-   
-    <xs:attributeGroup name="cmd.attributes">
-      <xs:attribute name="keyref" type="xs:string"/>
-     <xs:attribute name="outputclass" type="xs:string"/>
+
+  <xs:group name="cmd.content">
+    <xs:sequence>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:group ref="ph.cnt" minOccurs="0"/>
+      </xs:choice>
+    </xs:sequence>
+  </xs:group>
+
+  <xs:attributeGroup name="cmd.attributes">
+    <xs:attribute name="keyref" type="xs:string"/>
+    <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-   </xs:attributeGroup>
+  </xs:attributeGroup>
 
 
   <!-- Base type: itemgroup.class -->
@@ -809,22 +818,22 @@
     <xs:sequence>
       <xs:group ref="info.content"/>
     </xs:sequence>
-   <xs:attributeGroup ref="info.attributes"/>
+    <xs:attributeGroup ref="info.attributes"/>
   </xs:complexType>
-   
-   <xs:group name="info.content">
-     <xs:sequence>
-       <xs:choice minOccurs="0" maxOccurs="unbounded">
-      <xs:group ref="itemgroup.cnt" minOccurs="0"/>
-    </xs:choice>
-     </xs:sequence>
-   </xs:group>
-   
-    <xs:attributeGroup name="info.attributes">
-     <xs:attribute name="outputclass" type="xs:string"/>
+
+  <xs:group name="info.content">
+    <xs:sequence>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:group ref="itemgroup.cnt" minOccurs="0"/>
+      </xs:choice>
+    </xs:sequence>
+  </xs:group>
+
+  <xs:attributeGroup name="info.attributes">
+    <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-   </xs:attributeGroup>
+  </xs:attributeGroup>
 
   <!-- Base type: ol.class -->
   <xs:complexType name="substeps.class">
@@ -833,20 +842,20 @@
     </xs:sequence>
     <xs:attributeGroup ref="choices.attributes"/>
   </xs:complexType>
-   
-   <xs:group name="substeps.content">
-     <xs:sequence>
-       <xs:choice maxOccurs="unbounded">
-      <xs:group ref="substep" />
-    </xs:choice>
-     </xs:sequence>
-   </xs:group>
-   
-    <xs:attributeGroup name="substeps.attributes">
-     <xs:attribute name="outputclass" type="xs:string"/>
+
+  <xs:group name="substeps.content">
+    <xs:sequence>
+      <xs:choice maxOccurs="unbounded">
+        <xs:group ref="substep"/>
+      </xs:choice>
+    </xs:sequence>
+  </xs:group>
+
+  <xs:attributeGroup name="substeps.attributes">
+    <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-   </xs:attributeGroup>
+  </xs:attributeGroup>
 
   <!-- Base type: li.class -->
   <xs:complexType name="substep.class">
@@ -855,27 +864,27 @@
     </xs:sequence>
     <xs:attributeGroup ref="substep.attributes"/>
   </xs:complexType>
-   
-   <xs:group name="substep.content">
-     <xs:sequence>
-       <xs:sequence>
-      <xs:group ref="cmd"/>
-      <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:group ref="info" />
-        <xs:group ref="tutorialinfo" />
-        <xs:group ref="stepxmp" />
-      </xs:choice>
-      <xs:group ref="stepresult"  minOccurs="0"/>
+
+  <xs:group name="substep.content">
+    <xs:sequence>
+      <xs:sequence>
+        <xs:group ref="cmd"/>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:group ref="info"/>
+          <xs:group ref="tutorialinfo"/>
+          <xs:group ref="stepxmp"/>
+        </xs:choice>
+        <xs:group ref="stepresult" minOccurs="0"/>
+      </xs:sequence>
     </xs:sequence>
-     </xs:sequence>
-   </xs:group>
-   
-   <xs:attributeGroup name="substep.attributes">
-      <xs:attribute name="importance" type="importance-att-nodefault-task.class"/>
-     <xs:attribute name="outputclass" type="xs:string"/>
+  </xs:group>
+
+  <xs:attributeGroup name="substep.attributes">
+    <xs:attribute name="importance" type="importance-att-nodefault-task.class"/>
+    <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts-no-importance-task"/>
     <xs:attributeGroup ref="global-atts"/>
-   </xs:attributeGroup>
+  </xs:attributeGroup>
 
   <!-- Base type: itemgroup.class -->
   <xs:complexType name="tutorialinfo.class" mixed="true">
@@ -884,42 +893,42 @@
     </xs:sequence>
     <xs:attributeGroup ref="tutorialinfo.attributes"/>
   </xs:complexType>
-   
-   <xs:group name="tutorialinfo.content">
-     <xs:sequence>
-       <xs:choice minOccurs="0" maxOccurs="unbounded">
-      <xs:group ref="itemgroup.cnt" minOccurs="0"/>
-    </xs:choice>
-     </xs:sequence>
-   </xs:group>
-   
-    <xs:attributeGroup name="tutorialinfo.attributes">
-     <xs:attribute name="outputclass" type="xs:string"/>
+
+  <xs:group name="tutorialinfo.content">
+    <xs:sequence>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:group ref="itemgroup.cnt" minOccurs="0"/>
+      </xs:choice>
+    </xs:sequence>
+  </xs:group>
+
+  <xs:attributeGroup name="tutorialinfo.attributes">
+    <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-   </xs:attributeGroup>
+  </xs:attributeGroup>
 
   <!-- Base type: itemgroup.class -->
   <xs:complexType name="stepxmp.class" mixed="true">
-     <xs:sequence>
+    <xs:sequence>
       <xs:group ref="stepxmp.content"/>
     </xs:sequence>
     <xs:attributeGroup ref="stepxmp.attributes"/>
   </xs:complexType>
-   
-   <xs:group name="stepxmp.content">
-     <xs:sequence>
-       <xs:choice minOccurs="0" maxOccurs="unbounded">
-      <xs:group ref="itemgroup.cnt" minOccurs="0"/>
-    </xs:choice>
-     </xs:sequence>
-   </xs:group>
-   
-    <xs:attributeGroup name="stepxmp.attributes">
-     <xs:attribute name="outputclass" type="xs:string"/>
+
+  <xs:group name="stepxmp.content">
+    <xs:sequence>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:group ref="itemgroup.cnt" minOccurs="0"/>
+      </xs:choice>
+    </xs:sequence>
+  </xs:group>
+
+  <xs:attributeGroup name="stepxmp.attributes">
+    <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-   </xs:attributeGroup>
+  </xs:attributeGroup>
 
   <!-- Base type: ul.class -->
   <xs:complexType name="choices.class">
@@ -928,20 +937,20 @@
     </xs:sequence>
     <xs:attributeGroup ref="choices.attributes"/>
   </xs:complexType>
-   
-   <xs:group name="choices.content">
-     <xs:sequence>
-       <xs:choice maxOccurs="unbounded">
-      <xs:group ref="choice" />
-    </xs:choice>
-     </xs:sequence>
-   </xs:group>
-   
-    <xs:attributeGroup name="choices.attributes">
-     <xs:attribute name="outputclass" type="xs:string"/>
+
+  <xs:group name="choices.content">
+    <xs:sequence>
+      <xs:choice maxOccurs="unbounded">
+        <xs:group ref="choice"/>
+      </xs:choice>
+    </xs:sequence>
+  </xs:group>
+
+  <xs:attributeGroup name="choices.attributes">
+    <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-   </xs:attributeGroup>
+  </xs:attributeGroup>
 
   <xs:complexType name="choice.class" mixed="true">
     <xs:sequence>
@@ -949,129 +958,129 @@
     </xs:sequence>
     <xs:attributeGroup ref="choice.attributes"/>
   </xs:complexType>
-   
-   <xs:group name="choice.content">
-     <xs:sequence>
-       <xs:choice minOccurs="0" maxOccurs="unbounded">
-      <xs:group ref="listitem.cnt" minOccurs="0"/>
-    </xs:choice>
-     </xs:sequence>
-   </xs:group>
-   
-    <xs:attributeGroup name="choice.attributes">
-     <xs:attribute name="outputclass" type="xs:string"/>
+
+  <xs:group name="choice.content">
+    <xs:sequence>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:group ref="listitem.cnt" minOccurs="0"/>
+      </xs:choice>
+    </xs:sequence>
+  </xs:group>
+
+  <xs:attributeGroup name="choice.attributes">
+    <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-    </xs:attributeGroup>
-   
-   <xs:complexType name="stepsection.class" mixed="true">
+  </xs:attributeGroup>
+
+  <xs:complexType name="stepsection.class" mixed="true">
     <xs:sequence>
       <xs:group ref="stepsection.content"/>
     </xs:sequence>
     <xs:attributeGroup ref="stepsection.attributes"/>
   </xs:complexType>
-   
-   <xs:group name="stepsection.content">
-     <xs:sequence>
-       <xs:choice minOccurs="0" maxOccurs="unbounded">
-      <xs:group ref="listitem.cnt" minOccurs="0"/>
-    </xs:choice>
-     </xs:sequence>
-   </xs:group>
-   
-    <xs:attributeGroup name="stepsection.attributes">
-     <xs:attribute name="outputclass" type="xs:string"/>
+
+  <xs:group name="stepsection.content">
+    <xs:sequence>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:group ref="listitem.cnt" minOccurs="0"/>
+      </xs:choice>
+    </xs:sequence>
+  </xs:group>
+
+  <xs:attributeGroup name="stepsection.attributes">
+    <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-   </xs:attributeGroup>
+  </xs:attributeGroup>
 
 
   <!-- Base type: itemgroup.class -->
   <xs:complexType name="stepresult.class" mixed="true">
-   <xs:sequence>
+    <xs:sequence>
       <xs:group ref="stepresult.content"/>
     </xs:sequence>
     <xs:attributeGroup ref="stepresult.attributes"/>
   </xs:complexType>
-   
-   <xs:group name="stepresult.content">
-     <xs:sequence>
-       <xs:choice minOccurs="0" maxOccurs="unbounded">
-      <xs:group ref="itemgroup.cnt" minOccurs="0"/>
-    </xs:choice>
-     </xs:sequence>
-   </xs:group>
-   
-    <xs:attributeGroup name="stepresult.attributes">
-     <xs:attribute name="outputclass" type="xs:string"/>
+
+  <xs:group name="stepresult.content">
+    <xs:sequence>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:group ref="itemgroup.cnt" minOccurs="0"/>
+      </xs:choice>
+    </xs:sequence>
+  </xs:group>
+
+  <xs:attributeGroup name="stepresult.attributes">
+    <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-   </xs:attributeGroup>
+  </xs:attributeGroup>
 
-   <!-- Base type: section.class -->
+  <!-- Base type: section.class -->
   <xs:complexType name="result.class" mixed="true">
     <xs:sequence>
       <xs:group ref="result.content"/>
     </xs:sequence>
     <xs:attributeGroup ref="result.attributes"/>
   </xs:complexType>
-   
-   <xs:group name="result.content">
-     <xs:sequence>
-       <xs:choice minOccurs="0" maxOccurs="unbounded">
-      <xs:group ref="section.notitle.cnt" minOccurs="0"/>
-    </xs:choice>
-     </xs:sequence>
-   </xs:group>
-   
-   <xs:attributeGroup name="result.attributes">
-     <xs:attribute name="outputclass" type="xs:string"/>
+
+  <xs:group name="result.content">
+    <xs:sequence>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:group ref="section.notitle.cnt" minOccurs="0"/>
+      </xs:choice>
+    </xs:sequence>
+  </xs:group>
+
+  <xs:attributeGroup name="result.attributes">
+    <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-   </xs:attributeGroup>
+  </xs:attributeGroup>
 
-   <!-- Base type: section.class -->
+  <!-- Base type: section.class -->
   <xs:complexType name="postreq.class" mixed="true">
     <xs:sequence>
       <xs:group ref="postreq.content"/>
     </xs:sequence>
     <xs:attributeGroup ref="postreq.attributes"/>
   </xs:complexType>
-   
-   <xs:group name="postreq.content">
-     <xs:sequence>
-       <xs:choice minOccurs="0" maxOccurs="unbounded">
-      <xs:group ref="section.notitle.cnt" minOccurs="0"/>
-    </xs:choice>
-     </xs:sequence>
-   </xs:group>
-    
-    <xs:attributeGroup name="postreq.attributes">
-     <xs:attribute name="outputclass" type="xs:string"/>
+
+  <xs:group name="postreq.content">
+    <xs:sequence>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:group ref="section.notitle.cnt" minOccurs="0"/>
+      </xs:choice>
+    </xs:sequence>
+  </xs:group>
+
+  <xs:attributeGroup name="postreq.attributes">
+    <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-   </xs:attributeGroup>
-   
+  </xs:attributeGroup>
 
-   <!-- Base type: simpletable.class -->
+
+  <!-- Base type: simpletable.class -->
   <xs:complexType name="choicetable.class">
     <xs:sequence>
       <xs:group ref="choicetable.content"/>
     </xs:sequence>
     <xs:attributeGroup ref="choicetable.attributes"/>
   </xs:complexType>
-    
-    <xs:group name="choicetable.content">
-      <xs:sequence>
-        <xs:sequence>
-      <xs:group ref="chhead" minOccurs="0"/>
-      <xs:group ref="chrow" minOccurs="0" maxOccurs="unbounded"/>
-    </xs:sequence>
-      </xs:sequence>
-    </xs:group>
 
-    <xs:attributeGroup name="choicetable.attributes">
-      <xs:attribute name="relcolwidth" type="xs:string"/>
+  <xs:group name="choicetable.content">
+    <xs:sequence>
+      <xs:sequence>
+        <xs:group ref="chhead" minOccurs="0"/>
+        <xs:group ref="chrow" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:sequence>
+  </xs:group>
+
+  <xs:attributeGroup name="choicetable.attributes">
+    <xs:attribute name="relcolwidth" type="xs:string"/>
     <xs:attribute name="keycol" type="xs:NMTOKEN" default="1"/>
     <xs:attribute name="refcols" type="xs:NMTOKENS"/>
     <xs:attributeGroup ref="display-atts"/>
@@ -1079,143 +1088,143 @@
     <xs:attribute name="spectitle" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-    </xs:attributeGroup>
+  </xs:attributeGroup>
 
-   <!-- Base type: sthead.class -->
+  <!-- Base type: sthead.class -->
   <xs:complexType name="chhead.class">
     <xs:sequence>
       <xs:group ref="chhead.content"/>
     </xs:sequence>
     <xs:attributeGroup ref="chhead.attributes"/>
   </xs:complexType>
-   
-    <xs:group name="chhead.content">
-     <xs:sequence>
-       <xs:sequence>
-      <xs:group ref="choptionhd" />
-      <xs:group ref="chdeschd" />
-    </xs:sequence>
-     </xs:sequence>
-   </xs:group>
 
-   <xs:attributeGroup name="chhead.attributes">
-     <xs:attribute name="outputclass" type="xs:string"/>
+  <xs:group name="chhead.content">
+    <xs:sequence>
+      <xs:sequence>
+        <xs:group ref="choptionhd"/>
+        <xs:group ref="chdeschd"/>
+      </xs:sequence>
+    </xs:sequence>
+  </xs:group>
+
+  <xs:attributeGroup name="chhead.attributes">
+    <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-   </xs:attributeGroup>
+  </xs:attributeGroup>
 
-   <xs:complexType name="choptionhd.class" mixed="true">
+  <xs:complexType name="choptionhd.class" mixed="true">
     <xs:sequence>
       <xs:group ref="choptionhd.content"/>
     </xs:sequence>
     <xs:attributeGroup ref="choptionhd.attributes"/>
-   </xs:complexType>
-   
-   <xs:group name="choptionhd.content">
-     <xs:sequence>
-       <xs:choice minOccurs="0" maxOccurs="unbounded">
-      <xs:group ref="tblcell.cnt" minOccurs="0"/>
-    </xs:choice>
-     </xs:sequence>
-   </xs:group>
-   
-   <xs:attributeGroup name="choptionhd.attributes">
-     <xs:attribute name="outputclass" type="xs:string"/>
+  </xs:complexType>
+
+  <xs:group name="choptionhd.content">
+    <xs:sequence>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:group ref="tblcell.cnt" minOccurs="0"/>
+      </xs:choice>
+    </xs:sequence>
+  </xs:group>
+
+  <xs:attributeGroup name="choptionhd.attributes">
+    <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attribute name="specentry" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-   </xs:attributeGroup>
+  </xs:attributeGroup>
 
 
-<xs:complexType name="chdeschd.class" mixed="true">
-  <xs:sequence>
-    <xs:group ref="chdeschd.content"/>
-  </xs:sequence>
-  <xs:attributeGroup ref="chdeschd.attributes"/>
-</xs:complexType>
+  <xs:complexType name="chdeschd.class" mixed="true">
+    <xs:sequence>
+      <xs:group ref="chdeschd.content"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="chdeschd.attributes"/>
+  </xs:complexType>
 
-<xs:group name="chdeschd.content">
-  <xs:sequence>
-    <xs:choice minOccurs="0" maxOccurs="unbounded">
-      <xs:group ref="tblcell.cnt" minOccurs="0"/>
-    </xs:choice>
-  </xs:sequence>
-</xs:group>
+  <xs:group name="chdeschd.content">
+    <xs:sequence>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:group ref="tblcell.cnt" minOccurs="0"/>
+      </xs:choice>
+    </xs:sequence>
+  </xs:group>
 
-<xs:attributeGroup name="chdeschd.attributes">
-  <xs:attribute name="outputclass" type="xs:string"/>
-  <xs:attribute name="specentry" type="xs:string"/>
-  <xs:attributeGroup ref="univ-atts"/>
-  <xs:attributeGroup ref="global-atts"/>
-</xs:attributeGroup>
+  <xs:attributeGroup name="chdeschd.attributes">
+    <xs:attribute name="outputclass" type="xs:string"/>
+    <xs:attribute name="specentry" type="xs:string"/>
+    <xs:attributeGroup ref="univ-atts"/>
+    <xs:attributeGroup ref="global-atts"/>
+  </xs:attributeGroup>
 
 
-   <xs:complexType name="chrow.class">
+  <xs:complexType name="chrow.class">
     <xs:sequence>
       <xs:group ref="chrow.content"/>
     </xs:sequence>
     <xs:attributeGroup ref="chrow.attributes"/>
-   </xs:complexType>
-   
-   <xs:group name="chrow.content">
-     <xs:sequence>
-       <xs:sequence>
-      <xs:group ref="choption" />
-      <xs:group ref="chdesc" />
-    </xs:sequence>
-     </xs:sequence>
-   </xs:group>
+  </xs:complexType>
 
-   <xs:attributeGroup name="chrow.attributes">
-     <xs:attribute name="outputclass" type="xs:string"/>
+  <xs:group name="chrow.content">
+    <xs:sequence>
+      <xs:sequence>
+        <xs:group ref="choption"/>
+        <xs:group ref="chdesc"/>
+      </xs:sequence>
+    </xs:sequence>
+  </xs:group>
+
+  <xs:attributeGroup name="chrow.attributes">
+    <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-   </xs:attributeGroup>
-  
+  </xs:attributeGroup>
 
-   <xs:complexType name="choption.class" mixed="true">
+
+  <xs:complexType name="choption.class" mixed="true">
     <xs:sequence>
       <xs:group ref="choption.content"/>
     </xs:sequence>
     <xs:attributeGroup ref="choption.attributes"/>
-   </xs:complexType>
-   
-   <xs:group name="choption.content">
-     <xs:sequence>
-       <xs:choice minOccurs="0" maxOccurs="unbounded">
-      <xs:group ref="tblcell.cnt" minOccurs="0"/>
-    </xs:choice>
-     </xs:sequence>
-   </xs:group>
-   
-   <xs:attributeGroup name="choption.attributes">
-     <xs:attribute name="outputclass" type="xs:string"/>
+  </xs:complexType>
+
+  <xs:group name="choption.content">
+    <xs:sequence>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:group ref="tblcell.cnt" minOccurs="0"/>
+      </xs:choice>
+    </xs:sequence>
+  </xs:group>
+
+  <xs:attributeGroup name="choption.attributes">
+    <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attribute name="specentry" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-   </xs:attributeGroup>
+  </xs:attributeGroup>
 
 
-   <xs:complexType name="chdesc.class" mixed="true">
+  <xs:complexType name="chdesc.class" mixed="true">
     <xs:sequence>
       <xs:group ref="chdesc.content"/>
     </xs:sequence>
     <xs:attributeGroup ref="chdesc.attributes"/>
-   </xs:complexType>
-   
-   <xs:group name="chdesc.content">
-     <xs:sequence>
-       <xs:choice minOccurs="0" maxOccurs="unbounded">
-      <xs:group ref="tblcell.cnt" minOccurs="0"/>
-    </xs:choice>
-     </xs:sequence>
-   </xs:group>
-   
-   <xs:attributeGroup name="chdesc.attributes">
-     <xs:attribute name="outputclass" type="xs:string"/>
+  </xs:complexType>
+
+  <xs:group name="chdesc.content">
+    <xs:sequence>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:group ref="tblcell.cnt" minOccurs="0"/>
+      </xs:choice>
+    </xs:sequence>
+  </xs:group>
+
+  <xs:attributeGroup name="chdesc.attributes">
+    <xs:attribute name="outputclass" type="xs:string"/>
     <xs:attribute name="specentry" type="xs:string"/>
     <xs:attributeGroup ref="univ-atts"/>
     <xs:attributeGroup ref="global-atts"/>
-   </xs:attributeGroup>
+  </xs:attributeGroup>
 
 </xs:schema>

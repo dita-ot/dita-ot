@@ -480,18 +480,18 @@ PUBLIC "-//OASIS//ELEMENTS DITA Map Group Domain//EN"
                          sourceonly | 
                          targetonly |
                          -dita-use-conref-target) 
-                                  'none'
+                                  #IMPLIED
               toc 
                         (no | 
                          yes | 
                          -dita-use-conref-target) 
-                                  'no'
+                                  #IMPLIED
               print 
                         (no | 
                          printonly | 
                          yes | 
                          -dita-use-conref-target) 
-                                  'no'
+                                  #IMPLIED
               search 
                         (no | 
                          yes | 

@@ -4,7 +4,7 @@
 <!-- ============================================================= -->
 <!--  VERSION:   1.2                                             -->
 <!--  DATE:      July 2007                                     -->
-<!--  DATE:      November 2008                                     -->
+<!--  DATE:      November 2009                                     -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -16,7 +16,7 @@
 <!-- ORIGINAL CREATION DATE:                                       -->
 <!--             March 2001                                        -->
 <!--                                                               -->
-<!--             (C) Copyright OASIS-Open.org 2005, 2008                -->
+<!--             (C) Copyright OASIS-Open.org 2005, 2009                -->
 <!--             (C) Copyright IBM Corporation 2001, 2004.         -->
 <!--             All Rights Reserved.                              -->
 <!-- ============================================================= -->
@@ -25,6 +25,15 @@
    <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="urn:oasis:names:tc:dita:xsd:xml.xsd:1.2"/>
    <xs:import namespace="http://dita.oasis-open.org/architecture/2005/" schemaLocation="urn:oasis:names:tc:dita:xsd:ditaarch.xsd:1.2"/>
 
+    <xs:annotation>
+    <xs:appinfo>
+      <dita:domainsModule xmlns:dita="http://dita.oasis-open.org/architecture/2005/">(topic task)</dita:domainsModule>
+    </xs:appinfo>
+    <xs:documentation> 
+    
+    </xs:documentation>
+    </xs:annotation>
+   
   <!-- Base type: univ-atts -->
   <xs:attributeGroup name="univ-atts-no-importance-task">
     <xs:attributeGroup ref="id-atts"/>
@@ -311,7 +320,7 @@
         the first element inside a &lt;<keyword>step</keyword>>. It provides the active
         voice instruction to the user for completing the step, and should not be more
         than one sentence. If the step needs additional explanation, this can follow
-        the &lt;<keyword>cmd</keyword>> element inside an <ph><xref href="info.xml">info</xref></ph> element.
+        the &lt;<keyword>cmd</keyword>> element inside an <xref href="info.xml">info</xref> element.
       </xs:documentation>
     </xs:annotation>
     <xs:complexType mixed="true">
@@ -419,8 +428,8 @@
          The &lt;<keyword>chhead</keyword>> element is a container inside
          the &lt;<keyword>choicetable</keyword>> element that provides specific heading
          text to override the default <b>Options</b> and <b>Description</b> headings.
-         The &lt;<keyword>chhead</keyword>> element contains both a <ph><xref href="choptionhd.xml">choptionhd</xref></ph> and <ph><xref
-           href="chdeschd.xml">chdeschd</xref></ph> element as a pair.
+         The &lt;<keyword>chhead</keyword>> element contains both a <xref  href="choptionhd.xml">choptionhd</xref>
+          and <xref href="chdeschd.xml">chdeschd</xref>  element as a pair.
        </xs:documentation>
      </xs:annotation>
      <xs:complexType>
@@ -567,20 +576,20 @@
   </xs:complexType>
    
    <xs:group name="task.content">
-     <xs:sequence>
-        <xs:sequence>
-      <xs:group ref="title"/>
-      <xs:group ref="titlealts" minOccurs="0"/>
-      <xs:choice minOccurs="0">
-        <xs:group ref="shortdesc" minOccurs="0"/>
-        <xs:group ref="abstract" minOccurs="0"/>
-      </xs:choice>
-      <xs:group ref="prolog" minOccurs="0"/>
-      <xs:group ref="taskbody" minOccurs="0"/>
-      <xs:group ref="related-links" minOccurs="0"/>
-      <xs:group ref="task-info-types" minOccurs="0" maxOccurs="unbounded"/>
+    <xs:sequence>
+      <xs:sequence>
+        <xs:group ref="title"/>
+        <xs:group ref="titlealts" minOccurs="0"/>
+        <xs:choice minOccurs="0">
+          <xs:group ref="shortdesc" minOccurs="0"/>
+          <xs:group ref="abstract" minOccurs="0"/>
+        </xs:choice>
+        <xs:group ref="prolog" minOccurs="0"/>
+        <xs:group ref="taskbody" minOccurs="0"/>
+        <xs:group ref="related-links" minOccurs="0"/>
+        <xs:group ref="task-info-types" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
     </xs:sequence>
-     </xs:sequence>
    </xs:group>
    
    <xs:attributeGroup name="task.attributes">
@@ -635,18 +644,18 @@
   <xs:group name="taskPostStep">
     <xs:sequence>
       <xs:group ref="result"  minOccurs="0"/>
-      <xs:group ref="postreq"  minOccurs="0" maxOccurs="unbounded"/>  
       <xs:group ref="example"  minOccurs="0" maxOccurs="unbounded"/>
+      <xs:group ref="postreq"  minOccurs="0" maxOccurs="unbounded"/>  
     </xs:sequence>
   </xs:group>
   
   <xs:group name="taskStep">
     <xs:sequence>
-       <xs:choice minOccurs="0" maxOccurs="1">
-       <xs:group ref="steps" />
-       <xs:group ref="steps-unordered" />
-       <xs:group ref="steps-informal" />
-     </xs:choice>
+      <xs:choice minOccurs="0" maxOccurs="1">
+        <xs:group ref="steps" />
+        <xs:group ref="steps-unordered" />
+        <xs:group ref="steps-informal" />
+      </xs:choice>
     </xs:sequence>
   </xs:group>
    
@@ -713,10 +722,10 @@
    
    <xs:group name="steps.content">
      <xs:sequence>
-       <xs:choice>
-      <xs:group ref="stepsection" minOccurs="0"/>
-      <xs:group ref="step" maxOccurs="unbounded"/>
-    </xs:choice>
+       <xs:sequence maxOccurs="unbounded">
+         <xs:group ref="stepsection" minOccurs="0"/>
+         <xs:group ref="step" />
+       </xs:sequence>
      </xs:sequence>
    </xs:group>
    
@@ -757,20 +766,20 @@
   </xs:complexType>
    
    <xs:group name="step.content">
-     <xs:sequence>
-       <xs:sequence>
-      <xs:group ref="cmd"/>
-      <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:group ref="info"/>
-        <xs:group ref="substeps"/>
-        <xs:group ref="tutorialinfo"/>
-        <xs:group ref="stepxmp"/>
-        <xs:group ref="choicetable"/>
-        <xs:group ref="choices"/>
-      </xs:choice>
-      <xs:group ref="stepresult" minOccurs="0"/>
+    <xs:sequence>
+      <xs:sequence>
+        <xs:group ref="cmd"/>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:group ref="info"/>
+          <xs:group ref="substeps"/>
+          <xs:group ref="tutorialinfo"/>
+          <xs:group ref="stepxmp"/>
+          <xs:group ref="choicetable"/>
+          <xs:group ref="choices"/>
+        </xs:choice>
+        <xs:group ref="stepresult" minOccurs="0"/>
+      </xs:sequence>
     </xs:sequence>
-     </xs:sequence>
    </xs:group>
    
     <xs:attributeGroup name="step.attributes">
@@ -857,17 +866,17 @@
   </xs:complexType>
    
    <xs:group name="substep.content">
-     <xs:sequence>
-       <xs:sequence>
-      <xs:group ref="cmd"/>
-      <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:group ref="info" />
-        <xs:group ref="tutorialinfo" />
-        <xs:group ref="stepxmp" />
-      </xs:choice>
-      <xs:group ref="stepresult"  minOccurs="0"/>
+    <xs:sequence>
+      <xs:sequence>
+        <xs:group ref="cmd"/>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:group ref="info"/>
+          <xs:group ref="tutorialinfo"/>
+          <xs:group ref="stepxmp"/>
+        </xs:choice>
+        <xs:group ref="stepresult" minOccurs="0"/>
+      </xs:sequence>
     </xs:sequence>
-     </xs:sequence>
    </xs:group>
    
    <xs:attributeGroup name="substep.attributes">
@@ -1062,12 +1071,12 @@
   </xs:complexType>
     
     <xs:group name="choicetable.content">
+    <xs:sequence>
       <xs:sequence>
-        <xs:sequence>
-      <xs:group ref="chhead" minOccurs="0"/>
-      <xs:group ref="chrow" minOccurs="0" maxOccurs="unbounded"/>
-    </xs:sequence>
+        <xs:group ref="chhead" minOccurs="0"/>
+        <xs:group ref="chrow" minOccurs="0" maxOccurs="unbounded"/>
       </xs:sequence>
+    </xs:sequence>
     </xs:group>
 
     <xs:attributeGroup name="choicetable.attributes">
@@ -1090,12 +1099,12 @@
   </xs:complexType>
    
     <xs:group name="chhead.content">
-     <xs:sequence>
-       <xs:sequence>
-      <xs:group ref="choptionhd" />
-      <xs:group ref="chdeschd" />
+    <xs:sequence>
+      <xs:sequence>
+        <xs:group ref="choptionhd"/>
+        <xs:group ref="chdeschd"/>
+      </xs:sequence>
     </xs:sequence>
-     </xs:sequence>
    </xs:group>
 
    <xs:attributeGroup name="chhead.attributes">
@@ -1158,12 +1167,12 @@
    </xs:complexType>
    
    <xs:group name="chrow.content">
-     <xs:sequence>
-       <xs:sequence>
-      <xs:group ref="choption" />
-      <xs:group ref="chdesc" />
+    <xs:sequence>
+      <xs:sequence>
+        <xs:group ref="choption"/>
+        <xs:group ref="chdesc"/>
+      </xs:sequence>
     </xs:sequence>
-     </xs:sequence>
    </xs:group>
 
    <xs:attributeGroup name="chrow.attributes">

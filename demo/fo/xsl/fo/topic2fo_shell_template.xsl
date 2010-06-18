@@ -85,6 +85,8 @@ See the accompanying license.txt file for applicable licenses.
          change defaults for related XSLT parameters. -->
     <xsl:param name="antArgsBookmarkStyle"/>
     <xsl:param name="antArgsChapterLayout"/>
+    <xsl:param name="antArgsIncludeRelatedLinks"/>
+    <xsl:param name="antArgsGenerateTaskLabels"/>
 
     <!-- Remaining parameters are not passed in with the default Ant code. -->
     <xsl:param name="tocMaximumLevel" select="'4'"/>

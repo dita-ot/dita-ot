@@ -590,6 +590,7 @@
   <!-- create a template to get child nodes and text -->
   <xsl:template match="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/shortdesc ')]" name="node">
        <!--xsl:copy-of select="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/shortdesc ')]"/-->
+       <xsl:copy-of select="../processing-instruction()[name()='ditaot'][.='usershortdesc' or .='genshortdesc']"/>
        <desc class="- topic/desc ">
        	<!-- get child node and text -->
        	<xsl:copy-of select="node()"/>

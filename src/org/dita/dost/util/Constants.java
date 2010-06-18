@@ -228,7 +228,9 @@ public abstract class Constants {
     public static final String ATTRIBUTE_NAME_PROCESSING_ROLE = "processing-role";
     /**toc attribute.*/
     public static final String ATTRIBUTE_NAME_TOC = "toc";
-    
+    /**print attribute.*/
+    public static final String ATTRIBUTE_NAME_PRINT = "print";
+        
     /**
      * Constant for value of attribute format in dita files.
      */
@@ -240,7 +242,18 @@ public abstract class Constants {
     public static final String INDEX_TYPE_HTMLHELP = "htmlhelp";
     /** Constants for index type(eclipsehelp).*/
     public static final String INDEX_TYPE_ECLIPSEHELP = "eclipsehelp";
-
+    
+    /** Constants for transform type(xhtml).*/
+    public static final String TRANS_TYPE_XHTML = "xhtml";
+    /** Constants for transform type(eclipsehelp).*/
+    public static final String TRANS_TYPE_ECLIPSEHELP = "eclipsehelp";
+    /** Constants for transform type(javahelp).*/
+    public static final String TRANS_TYPE_JAVAHELP = "javahelp";
+    /** Constants for transform type(htmlhelp).*/
+    public static final String TRANS_TYPE_HTMLHELP = "htmlhelp";
+    /** Constants for transform type(eclipsecontent).*/
+    public static final String TRANS_TYPE_ECLIPSECONTENT = "eclipsecontent";
+    
     /** Constant for generated property file name(dita.list).*/
     public static final String FILE_NAME_DITA_LIST = "dita.list";
     /** Constant for generated property file name(dita.xml.properties).*/
@@ -363,6 +376,10 @@ public abstract class Constants {
      */
     /**STRING_EMPTY.*/
     public static final String STRING_EMPTY = "";
+    /**LEFT_BRACKET.*/
+    public static final String LEFT_BRACKET = "(";
+    /**RIGHT_BRACKET.*/
+    public static final String RIGHT_BRACKET = ")";
     /**SLASH.*/
     public static final String SLASH = "/";    
     /**BACK_SLASH.*/
@@ -465,6 +482,8 @@ public abstract class Constants {
 	public static final String ATTR_SCOPE_VALUE_LOCAL = "local";
 	/**ATTR_SCOPE_VALUE_EXTERNAL.*/
 	public static final String ATTR_SCOPE_VALUE_EXTERNAL = "external";
+	/**ATTR_SCOPE_VALUE_PEER.*/
+	public static final String ATTR_SCOPE_VALUE_PEER = "peer";
 	/**ATTR_FORMAT_VALUE_DITA.*/
 	public static final String ATTR_FORMAT_VALUE_DITA = "dita";
 	//added by william on 2009-08-06 for bug:2832696 start
@@ -489,6 +508,11 @@ public abstract class Constants {
 	/**ATTR_CLASS_VALUE_ANCHORID.*/
 	public static final String ATTR_CLASS_VALUE_ANCHORID = " delay-d/anchorid ";
 	//Added by William on 2009-06-24 for req #12014 end
+	
+	//Added by William on 2009-12-21 for bug:2916469 start
+	/**ATTR_CLASS_VALUE_NAVTITLE.*/
+	public static final String ATTR_CLASS_VALUE_NAVTITLE = " topic/navtitle ";
+	//Added by William on 2009-12-21 for bug:2916469 end
 	/**ATTR_CLASS_VALUE_AUTHOR.*/
 	public static final String ATTR_CLASS_VALUE_AUTHOR = " topic/author ";
 	/**ATTR_CLASS_VALUE_SOURCE.*/
@@ -575,6 +599,13 @@ public abstract class Constants {
 	public static final String ATTR_PROCESSING_ROLE_VALUE_NORMAL = "normal";
 	/**ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.*/
 	public static final String ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY = "resource-only";
+	
+	/**ATTR_PRINT_VALUE_YES.*/
+	public static final String ATTR_PRINT_VALUE_YES = "yes";
+	/**ATTR_PRINT_VALUE_NO.*/
+	public static final String ATTR_PRINT_VALUE_NO = "no";
+	/**ATTR_PRINT_VALUE_PRINT_ONLY.*/
+	public static final String ATTR_PRINT_VALUE_PRINT_ONLY = "printonly";
 
 	
     /**

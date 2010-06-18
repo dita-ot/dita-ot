@@ -15,7 +15,7 @@
 <!-- ORIGINAL CREATION DATE: -->
 <!-- March 2001 -->
 <!---->
-<!-- (C) Copyright OASIS Open 2005,  2008. -->
+<!-- (C) Copyright OASIS Open 2005,  2009. -->
 <!-- (C) Copyright IBM Corporation 2001, 2004. -->
 <!-- All Rights Reserved. -->
 <!---->
@@ -23,9 +23,9 @@
 <!-- ============================================================= -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
   <xs:include schemaLocation="../../base/xsd/mapGroupMod.xsd" />
-  <xs:include schemaLocation="../../base/xsd/tblDeclGrp.xsd"/>
   <xs:include schemaLocation="../../base/xsd/indexingDomain.xsd" />
   <xs:include schemaLocation="../../base/xsd/delayResolutionDomain.xsd" />
+  <xs:include schemaLocation="../../base/xsd/tblDeclGrp.xsd"/>
  
  <!-- =================  MODULE INLCUDE DEFINITION  ==================  -->
   <xs:include schemaLocation="../../base/xsd/commonElementMod.xsd"/>
@@ -76,7 +76,7 @@
   <xs:include schemaLocation="classifyDomain.xsd" />
   
   <xs:attributeGroup name="domains-att">
-    <xs:attribute name="domains" type="xs:string" default="(map mapgroup-d) (topic indexing-d) (topic delay-d)"/>
+    <xs:attribute name="domains" type="xs:string" default="(map mapgroup-d) (topic indexing-d) (topic delay-d) (map classify-d)"/>
   </xs:attributeGroup>
   
 </xs:schema>

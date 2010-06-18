@@ -21,11 +21,6 @@
 <!--             (C) Copyright IBM Corporation 2001, 2004.         -->
 <!--             All Rights Reserved.                              -->
 <!-- ============================================================= -->
- 
-<!DOCTYPE xs:schema [ 
-    <!ENTITY taskConstraint SYSTEM "urn:oasis:names:tc:dita:xsd:strictTaskbodyConstraintMod.xsd:1.2">
-]>
-
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
 
   <!-- Add the domains to the base topic XML Schema -->
@@ -122,11 +117,7 @@
   </xs:redefine>
 
   
-  <xs:redefine schemaLocation="urn:oasis:names:tc:dita:xsd:taskMod.xsd:1.2" >
-    
-    &taskConstraint;
-    
-  </xs:redefine>
+  <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:strictTaskbodyConstraintMod.xsd:1.2" />
   
   <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:topicMod.xsd:1.2" />  
 

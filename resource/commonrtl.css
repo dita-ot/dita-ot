@@ -42,7 +42,7 @@
 .relref { margin-top: 1em; margin-bottom: 1em }
 .relinfo { margin-top: 1em; margin-bottom: 1em }
 .breadcrumb { font-size : smaller; margin-bottom: 1em }
-.prereq { margin-right : 20px;}
+dt.prereq { margin-right : 20px;}
 
 /* Set heading sizes, getting smaller for deeper nesting */
 .topictitle1 { margin-top: 0pc; margin-bottom: .1em; font-size: 1.34em; }
@@ -77,6 +77,8 @@ h2.tasklabel, h3.tasklabel, h4.tasklabel, h5.tasklabel, h6.tasklabel { font-size
 .danger { margin-top: 1em; margin-bottom : 1em;}
 .cautiontitle { font-weight: bold }
 .caution { font-weight: bold; margin-bottom : 1em; }
+.warning { margin-top: 1em; margin-bottom : 1em;}
+.warningtitle { font-weight: bold }
 
 /* Simple lists do not get a bullet */
 ul.simple { list-style-type: none }

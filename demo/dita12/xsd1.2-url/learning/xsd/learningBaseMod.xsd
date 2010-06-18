@@ -3,14 +3,14 @@
      specialization working design. It is a work-in-progress by
      the OASIS DITA learning and training content specialization 
      sub-committee.-->
-<!--             (C) Copyright OASIS Open 2007, 2008                    -->
+<!--             (C) Copyright OASIS Open 2007, 2009                    -->
 <!--             All Rights Reserved.                              -->
 <!-- ============================================================= -->
 <!--                    HEADER                                     -->
 <!-- ============================================================= -->
 <!--  MODULE:    DITA learningBase XSD                             -->
 <!--  VERSION:   0.1                                               -->
-<!--  DATE:      August  2008                                        -->
+<!--  DATE:      August  2009                                        -->
 <!--                                                               -->
 <!-- ============================================================= -->
 <!-- SYSTEM:     Darwin Information Typing Architecture (DITA)     -->
@@ -21,12 +21,21 @@
 <!--             May 2007                                          -->
 <!--                                                               -->
 <!--  UPDATES:                                                     -->
-<!--  EAS:  20080729 -  Updating the design pattern for the content models  -->
+<!--  EAS:  20090729 -  Updating the design pattern for the content models  -->
 <!-- ============================================================= -->
  <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
   <!-- ==================== Import Section ======================= -->
   <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="../../base/xsd/xml.xsd"/>
    <xs:import namespace="http://dita.oasis-open.org/architecture/2005/" schemaLocation="../../base/xsd/ditaarch.xsd"/>
+
+   <xs:annotation>
+    <xs:appinfo>
+      <dita:domainsModule xmlns:dita="http://dita.oasis-open.org/architecture/2005/">(topic learningBase+learningInteractionBase-d)</dita:domainsModule>
+    </xs:appinfo>
+    <xs:documentation> 
+    
+    </xs:documentation>
+  </xs:annotation>
 
   <!-- Base type: univ-atts -->
   <xs:attributeGroup name="univ-atts-no-importance-learningBase">
@@ -367,6 +376,18 @@
    <xs:group name="learningBasebody.content">
      <xs:sequence>
        <xs:choice minOccurs="0" maxOccurs="unbounded">
+         <xs:group ref="lcAudience"/>
+         <xs:group ref="lcChallenge"/>
+         <xs:group ref="lcDuration"/>
+         <xs:group ref="lcInstruction"/>
+         <xs:group ref="lcInteraction"/>
+         <xs:group ref="lcIntro"/>
+         <xs:group ref="lcNextSteps"/>
+         <xs:group ref="lcObjectives"/>
+         <xs:group ref="lcPrereqs"/>
+         <xs:group ref="lcResources"/>
+         <xs:group ref="lcReview"/>
+         <xs:group ref="lcSummary"/>
       <xs:group ref="section.cnt"/>
     </xs:choice>
      </xs:sequence>

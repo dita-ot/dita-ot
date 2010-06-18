@@ -3,7 +3,7 @@
      specialization working design. It is a work-in-progress by
      the OASIS DITA learning and training content specialization 
      sub-committee.-->
-<!--             (C) Copyright OASIS Open 2007, 2008                    -->
+<!--             (C) Copyright OASIS Open 2007, 2009                    -->
 <!--             All Rights Reserved.                              -->
 <!-- ============================================================= -->
 <!--                    HEADER                                     -->
@@ -27,14 +27,12 @@
 
   <!-- Add the domains to the base topic XML Schema -->
   <!--  ================ TOPIC DOMAINS =====================  -->
-  <xs:include schemaLocation="../../technicalContent/xsd/uiDomain.xsd"/>
-  <xs:include schemaLocation="../../technicalContent/xsd/softwareDomain.xsd"/>
   <xs:include schemaLocation="../../base/xsd/highlightDomain.xsd"/>
-  <xs:include schemaLocation="../../technicalContent/xsd/programmingDomain.xsd"/>
   <xs:include schemaLocation="../../base/xsd/utilitiesDomain.xsd"/>
   <xs:include schemaLocation="../../base/xsd/indexingDomain.xsd"/>
-  <xs:include schemaLocation="learningDomain.xsd"/>
-  <xs:include schemaLocation="learningMetadataDomain.xsd" />
+    <xs:include schemaLocation="learningInteractionBaseDomain.xsd"/>
+    <xs:include schemaLocation="learningDomain.xsd"/>
+    <xs:include schemaLocation="learningMetadataDomain.xsd"/>
   
   
   <!--  ================ GROUP DEFINITIONS =====================  -->
@@ -49,51 +47,28 @@
   <xs:include schemaLocation="../../base/xsd/metaDeclMod.xsd"/>
   
     <xs:redefine schemaLocation="../../base/xsd/commonElementGrp.xsd">
-    <xs:group name="keyword">
-      <xs:choice>
-        <xs:group ref="keyword"/>
-        <xs:group ref="pr-d-keyword" />
-        <xs:group ref="ui-d-keyword" />
-        <xs:group ref="sw-d-keyword" />
-      </xs:choice>
-    </xs:group>
 
     <xs:group name="ph">
       <xs:choice>
         <xs:group ref="ph"/>
-        <xs:group ref="pr-d-ph" />
-        <xs:group ref="ui-d-ph" />
         <xs:group ref="hi-d-ph" />
-        <xs:group ref="sw-d-ph" />
       </xs:choice>
     </xs:group>
 
-    <xs:group name="pre">
+     <xs:group name="lcInteractionBase">
       <xs:choice>
-        <xs:group ref="pre"/>
-        <xs:group ref="pr-d-pre" />
-        <xs:group ref="ui-d-pre" />
-        <xs:group ref="sw-d-pre" />
+        <xs:group ref="lcInteractionBase"/> 
+        <xs:group ref="learning-d-lcInteractionBase"/>
       </xs:choice>
     </xs:group>
-
-
-    <xs:group name="dl">
-      <xs:choice>
-        <xs:group ref="dl"/>
-        <xs:group ref="pr-d-dl"/>
-      </xs:choice >
-    </xs:group >
-
-
+    
     <xs:group name="fig">
       <xs:choice>
         <xs:group ref="fig"/>
-        <xs:group ref="pr-d-fig"/>
-        <xs:group ref="ut-d-fig" />
-        <xs:group ref="learning-d-fig" />
+        <xs:group ref="ut-d-fig"/>
+        <xs:group ref="learning-d-fig"/>        
       </xs:choice>
-    </xs:group >
+    </xs:group>
     
     <xs:group name="index-base">
       <xs:choice>
@@ -134,7 +109,7 @@
   </xs:group>
     
     <xs:attributeGroup name="domains-att">
-    <xs:attribute name="domains" type="xs:string" default="(topic ui-d) (topic hi-d) (topic sw-d) (topic pr-d) (topic ut-d) (topic indexing-d) (topic learningmeta-d) (topic+ut-d learning-d) (topic learningBase learningOverview)  (topic learningBase) "/>
+    <xs:attribute name="domains" type="xs:string" default="(topic hi-d)  (topic ut-d) (topic indexing-d) (topic learningmeta-d) (topic learningInteractionBase-d learning-d) (topic learningBase+learningInteractionBase-d learningOverview)  (topic learningBase+learningInteractionBase-d)"/>
   </xs:attributeGroup>
 
 </xs:schema>

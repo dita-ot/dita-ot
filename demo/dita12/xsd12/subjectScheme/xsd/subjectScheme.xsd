@@ -4,7 +4,7 @@
 <!-- ============================================================= -->
 <!-- MODULE:    DITA Subject Scheme Map XSD  -->
 <!-- VERSION:   1.2 -->
-<!-- DATE:      February 2008 -->
+<!-- DATE:      February 2009 -->
 <!---->
 <!-- ============================================================= -->
 
@@ -14,9 +14,9 @@
 <!-- PURPOSE:    XSD to describe DITA Subject Scheme maps -->
 <!---->
 <!-- ORIGINAL CREATION DATE: -->
-<!-- February 2008 -->
+<!-- February 2009 -->
 <!---->
-<!-- (C) Copyright OASIS Open 2008. -->
+<!-- (C) Copyright OASIS Open 2009. -->
 <!-- (C) Copyright IBM Corporation 2005, 2007. -->
 <!-- All Rights Reserved. -->
 <!---->
@@ -51,7 +51,7 @@
   <xs:include schemaLocation="urn:oasis:names:tc:dita:spec:classification:xsd:subjectSchemeGrp.xsd:1.2" />
   
   <xs:attributeGroup name="domains-att">
-    <xs:attribute name="domains" type="xs:string" default="(map mapgroup-d)"/>
+    <xs:attribute name="domains" type="xs:string" default="(map mapgroup-d) (map subjectScheme)"/>
   </xs:attributeGroup>
   
 </xs:schema>

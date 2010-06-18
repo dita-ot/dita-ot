@@ -510,8 +510,8 @@
   <xs:element name="keywords">
     <xs:annotation>
       <xs:documentation>The &lt;<keyword>keywords</keyword>> element contains a list of
-        keyword entries (using <ph><xref href="indexterm.xml">indexterm</xref></ph> or <ph><xref
-          href="keyword.xml">keyword</xref></ph> markup) that can be used by a search
+        keyword entries (using        <xref href="indexterm.xml">indexterm</xref>  or 
+        <xref  href="keyword.xml">keyword</xref> markup) that can be used by a search
         engine. 
       </xs:documentation>
     </xs:annotation>
@@ -646,7 +646,8 @@
   <xs:element name="brand">
     <xs:annotation>
       <xs:documentation>The &lt;<keyword>brand</keyword>> element indicates the manufacturer
-        or brand associated with the product described by the parent  <ph><xref href="prodinfo.xml">&lt;<keyword>prodinfo</keyword>></xref></ph> element.
+        or brand associated with the product described by the parent  <xref href="prodinfo.xml">&lt;prodinfo</xref>
+         element.
       </xs:documentation>
     </xs:annotation>
     <xs:complexType mixed="true">

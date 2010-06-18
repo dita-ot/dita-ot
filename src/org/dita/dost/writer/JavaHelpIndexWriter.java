@@ -29,7 +29,10 @@ import org.dita.dost.module.Content;
  * 
  * @author Wu, Zhi Qiang
  */
-public class JavaHelpIndexWriter implements AbstractWriter, IDitaTranstypeIndexWriter {
+public class JavaHelpIndexWriter extends AbstractExtendDitaWriter implements AbstractWriter, IDitaTranstypeIndexWriter {
+	
+	//RFE 2987769 Eclipse index-see - Added extends AbstractExtendedDitaWriter
+	
 	/** List of indexterms */
 	private List termList = null;
 	

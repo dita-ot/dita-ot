@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <!--Arbortext, Inc., 1988-2004, v.4002-->
 <!DOCTYPE dita PUBLIC "-//IBM//DTD DITA Composite//EN"
- "../dtd/ditabase.dtd">
+ "./dtd/technicalContent/dtd/ditabase.dtd">
 <?Pub Inc?>
 <dita>
 <topic id="topic" xml:lang="en-us">

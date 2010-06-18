@@ -4,7 +4,7 @@
 <!-- ============================================================= -->
 <!--  MODULE:    DITA Abbreviated Form Domain                      -->
 <!--  VERSION:   1.2                                               -->
-<!--  DATE:      October 2008                                         -->
+<!--  DATE:      October 2009                                         -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -15,15 +15,24 @@
 <!--             attributes for the Abbreviated Form Domain        -->
 <!--                                                               -->
 <!-- ORIGINAL CREATION DATE:                                       -->
-<!--             September 2008                                         -->
+<!--             September 2009                                         -->
 <!--                                                               -->
-<!--             (C) Copyright OASIS Open 2008.                    -->
+<!--             (C) Copyright OASIS Open 2009.                    -->
 <!--             All Rights Reserved.                              -->
 <!--                                                               -->
 <!--  UPDATES:                                                     -->
 <!-- ============================================================= -->
 
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  
+  <xs:annotation>
+    <xs:appinfo>
+      <dita:domainsModule xmlns:dita="http://dita.oasis-open.org/architecture/2005/">(topic abbrev-d)</dita:domainsModule>
+    </xs:appinfo>
+    <xs:documentation>
+      
+    </xs:documentation>
+  </xs:annotation>
   
   <xs:group name="abbrev-d-term">
     <xs:choice>

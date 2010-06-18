@@ -54,7 +54,12 @@ public class DitamapIndexTermReader extends AbstractXMLReader {
 	private String mapPath = null;
 
 	private DITAOTJavaLogger javaLogger = null;
-
+	//Added by William on 2010-04-26 for ref:2990783 start
+	private IndexTermCollection result = IndexTermCollection.getInstantce();
+	// assumes index terms have been moved by preprocess
+	private boolean indexMoved = true; 
+	//Added by William on 2010-04-26 for ref:2990783 end
+	
 	/**
 	 * Create a new instance of sax handler for ditamap.
 	 */
@@ -67,6 +72,13 @@ public class DitamapIndexTermReader extends AbstractXMLReader {
 		indexSeeAlsoSpecList = new ArrayList(Constants.INT_16);
 		javaLogger = new DITAOTJavaLogger();
 	}
+	//Added by William on 2010-04-26 for ref:2990783 start
+	public DitamapIndexTermReader(IndexTermCollection result, boolean indexMoved) {
+		this();
+		this.result = result;
+ 		this.indexMoved = indexMoved;
+	}
+	//Added by William on 2010-04-26 for ref:2990783 end
 
 	/**
 	 * @see org.xml.sax.helpers.DefaultHandler#characters(char[], int, int)
@@ -161,7 +173,12 @@ public class DitamapIndexTermReader extends AbstractXMLReader {
 			if (obj instanceof TopicrefElement) {
 				if(((TopicrefElement)obj).getHref()!=null){
 					genTargets(indexTerm, (TopicrefElement)obj);
-					IndexTermCollection.getInstantce().addTerm(indexTerm);
+					//IndexTermCollection.getInstantce().addTerm(indexTerm);
+					//Added by William on 2010-04-26 for ref:2990783 start
+					result.addTerm(indexTerm);
+					//Added by William on 2010-04-26 for ref:2990783 end
+					
+					
 				}				
 			} else {
 				IndexTerm parentTerm = (IndexTerm) obj;
@@ -364,7 +381,9 @@ public class DitamapIndexTermReader extends AbstractXMLReader {
 //			return ((TopicrefElement) elementStack.peek()).needExtractTerm();
 			// for dita files the indexterm has been moved to its <prolog>
 			// therefore we don't need to collect these terms again.
-			if (FileUtils.isDITAFile(((TopicrefElement) elementStack.peek()).getHref())){
+			//Edited by William on 2010-04-26 for ref:2990783 start
+			if (indexMoved && FileUtils.isDITAFile(((TopicrefElement) elementStack.peek()).getHref())){
+			//Edited by William on 2010-04-26 for ref:2990783 end
 				return false;
 			}
 		}

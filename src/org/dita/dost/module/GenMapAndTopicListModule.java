@@ -15,6 +15,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -29,6 +30,7 @@ import java.util.Map.Entry;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.dita.dost.exception.DITAOTException;
+import org.dita.dost.log.DITAOTFileLogger;
 import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.log.MessageBean;
 import org.dita.dost.log.MessageUtils;
@@ -43,6 +45,7 @@ import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.FilterUtils;
 import org.dita.dost.util.OutputUtils;
 import org.dita.dost.util.StringUtils;
+import org.dita.dost.util.TimingUtils;
 import org.dita.dost.writer.PropertiesWriter;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
@@ -183,7 +186,18 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 	//Added by William on 2009-07-18 for req #12014 start
 	private String transtype;
 	//Added by William on 2009-07-18 for req #12014 end
-
+	
+	//Added by William on 2010-06-09 for bug:3013079 start
+	private Map<String, String> exKeyDefMap = null;
+	//Added by William on 2010-06-09 for bug:3013079 end
+	
+	private DITAOTFileLogger fileLogger = DITAOTFileLogger.getInstance();
+	
+	private String moduleStartMsg = "GenMapAndTopicListModule.execute(): Starting...";
+	
+	private String moduleEndMsg = "GenMapAndTopicListModule.execute(): Execution time: ";
+	
+	
 	/**
 	 * Create a new instance and do the initialization.
 	 * 
@@ -217,6 +231,7 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 		relFlagImagesSet=new LinkedHashSet<String>(Constants.INT_128);
 		conrefpushSet = new HashSet<String>(Constants.INT_128);
 		keysDefMap = new HashMap<String, String>();
+		exKeyDefMap = new HashMap<String, String>();
 		keyrefSet = new HashSet<String>(Constants.INT_128);
 		coderefSet = new HashSet<String>(Constants.INT_128);
 		
@@ -231,7 +246,10 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
      */
 	public AbstractPipelineOutput execute(AbstractPipelineInput input)
 			throws DITAOTException {
+		Date startTime = TimingUtils.getNowTime();
+		
 		try {
+			fileLogger.logInfo(moduleStartMsg);
 			parseInputParameters(input);
 
 			GenListModuleReader.initXMLReader(ditaDir,xmlValidate,rootFile);
@@ -267,6 +285,10 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 			throw new DITAOTException(e.getMessage(), e);
 		} catch(Exception e){
 			throw new DITAOTException(e.getMessage(), e);
+		} finally {
+			
+			fileLogger.logInfo(moduleEndMsg + TimingUtils.reportElapsedTime(startTime));
+
 		}
 
 		return null;
@@ -323,16 +345,24 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 		}
 		if (!new File(tempDir).isAbsolute()) {
 			tempDir = new File(basedir, tempDir).getAbsolutePath();
+		}else{
+			tempDir = FileUtils.removeRedundantNames(tempDir);
 		}
 		if (!new File(ditaDir).isAbsolute()) {
 			ditaDir = new File(basedir, ditaDir).getAbsolutePath();
+		}else{
+			ditaDir = FileUtils.removeRedundantNames(ditaDir);
 		}
 		if (ditavalFile != null && !new File(ditavalFile).isAbsolute()) {
 			ditavalFile = new File(basedir, ditavalFile).getAbsolutePath();
 		}
 
 		baseInputDir = new File(inFile.getAbsolutePath()).getParent();
+		baseInputDir = FileUtils.removeRedundantNames(baseInputDir);
+		
 		rootFile=inFile.getAbsolutePath();
+		rootFile = FileUtils.removeRedundantNames(rootFile);
+		
 		inputFile = inFile.getName();
 		try {
 			keydef = new OutputStreamWriter(new FileOutputStream(new File(tempDir,"keydef.xml")));
@@ -375,12 +405,21 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 		reader.setTranstype(transtype);
 		//Added by William on 2009-07-18 for req #12014 end
 		
+		if(FileUtils.isDITAMapFile(inputFile)){
+			reader.setPrimaryDitamap(inputFile);
+		}
+		
+		
 		while (!waitList.isEmpty()) {
 			processFile((String) waitList.remove(0));
 		}
 	}
 
 	private void processFile(String currentFile) throws DITAOTException {
+		
+		String logMsg = "GenMapAndTopicListModule.processFile(): Processing file " + currentFile + "...";
+		fileLogger.logInfo(logMsg);
+		
 		File fileToParse;
 		File file=new File(currentFile);
 		if(file.isAbsolute()){
@@ -398,8 +437,10 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 			fileToParse = fileToParse.getCanonicalFile();
 			if (FileUtils.isValidTarget(currentFile.toLowerCase()))
 			{
+				reader.setTranstype(transtype);
 				reader.setCurrentDir(new File(currentFile).getParent());
 				reader.parse(fileToParse);
+				
 			}else{
 				//edited by Alan on Date:2009-11-02 for Work Item:#1590 start
 				/*javaLogger.logWarn("Input file name is not valid DITA file name.");*/
@@ -417,7 +458,7 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 				javaLogger.logWarn(MessageUtils.getMessage("DOTJ021W", params).toString());
 			}	
 		}catch(SAXParseException sax){
-			sax.printStackTrace();
+			
 			// To check whether the inner third level is DITAOTBuildException
 			// :FATALERROR
 				Exception inner = sax.getException();
@@ -439,7 +480,7 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 				javaLogger.logError(buff.toString());
 		}
 		catch (Exception e) {
-			e.printStackTrace();
+			
 			if (currentFile.equals(inputFile)) {
 				// stop the build if exception thrown when parsing input file.
 				MessageBean msgBean=MessageUtils.getMessage("DOTJ012F", params);
@@ -470,6 +511,7 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 		
 		doneList.add(currentFile);
 		reader.reset();
+
 	}
 
 	/**
@@ -479,6 +521,11 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 		Iterator<String> iter = reader.getNonCopytoResult().iterator();
 		Map<String, String> cpMap = reader.getCopytoMap();
 		Map<String, String> kdMap = reader.getKeysDMap();
+		//Added by William on 2010-06-09 for bug:3013079 start
+		//the reader's reset method will clear the map.
+		Map<String, String> exKdMap = reader.getExKeysDefMap();
+		exKeyDefMap.putAll(exKdMap);
+		//Added by William on 2010-06-09 for bug:3013079 end
 		
 		/*
 		 * Category non-copyto result and update uplevels accordingly
@@ -591,6 +638,7 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 		Set<String> hrfSet = reader.getHrefTargets();
 		Set<String> children = null;
 		if (reader.getSchemeSet() != null && reader.getSchemeSet().size() > 0) {
+			
 			children = this.schemeDictionary.get(currentFile);
 			if (children == null)
 				children = new HashSet<String>();
@@ -602,6 +650,7 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 			Iterator<String> it = hrfSet.iterator();
 			while (it.hasNext()) {
 				String filename = it.next();
+				
 				//for Linux support
 				filename = filename.replace(Constants.BACK_SLASH, Constants.SLASH);
 				
@@ -668,6 +717,13 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 		}else{
 			lcasefn = file.toLowerCase();
 		}
+		
+		//Added by William on 2010-03-04 for bug:2957938 start
+		//avoid files referred by coderef being added into wait list
+		if(subsidiarySet.contains(lcasefn)){
+			return;
+		}
+		//Added by William on 2010-03-04 for bug:2957938 end
 		
 		if (FileUtils.isDITAFile(lcasefn)
 			&& (format == null ||
@@ -985,7 +1041,7 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 		writeMapToXML(this.schemeDictionary, Constants.FILE_NAME_SUBJECT_DICTIONARY);
 		
 		//added by Willam on 2009-07-17 for req #12014 start
-		if(transtype.equals(Constants.INDEX_TYPE_ECLIPSEHELP)){
+		if(Constants.INDEX_TYPE_ECLIPSEHELP.equals(transtype)){
 			// Output plugin id
 			File pluginIdFile = new File(tempDir, Constants.FILE_NAME_PLUGIN_XML);
 			DelayConrefUtils.getInstance().writeMapToXML(reader.getPluginMap(),pluginIdFile);
@@ -1045,29 +1101,37 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 						//TODO Added by William on 2009-05-14 for keyref bug start
 						//When generating key.list
 						if(Constants.KEY_LIST.equals(key)){
-						String repStr = FileUtils.removeRedundantNames(new StringBuffer(prefix).append(to).toString())
-						.replaceAll(Constants.DOUBLE_BACK_SLASH,
-								Constants.SLASH) + Constants.EQUAL +
-								FileUtils.removeRedundantNames(new StringBuffer(prefix).append(source).toString())
-						.replaceAll(Constants.DOUBLE_BACK_SLASH,
-								Constants.SLASH);
-						
-						//move the prefix position
-						//maps/target_topic_1=topics/target-topic-a.xml(root-map-01.ditamap)-->
-						//target_topic_1=topics/target-topic-a.xml(maps/root-map-01.ditamap)
-						if(!"".equals(prefix)){
-							String prefix1 = prefix.replace("\\", "/");
-							if(repStr.indexOf(prefix1)!=-1){
-								StringBuffer sb = new StringBuffer();
-								sb.append(repStr.substring(prefix1.length()));
-								sb.insert(sb.lastIndexOf("(")+1, prefix1);
-								newSet.add(sb.toString());
-								//System.out.println("kk");
+							
+							String repStr = FileUtils.removeRedundantNames(new StringBuffer(prefix).append(to).toString())
+							.replaceAll(Constants.DOUBLE_BACK_SLASH,
+									Constants.SLASH) + Constants.EQUAL +
+									FileUtils.removeRedundantNames(new StringBuffer(prefix).append(source).toString())
+							.replaceAll(Constants.DOUBLE_BACK_SLASH,
+									Constants.SLASH);
+							
+							//move the prefix position
+							//maps/target_topic_1=topics/target-topic-a.xml(root-map-01.ditamap)-->
+							//target_topic_1=topics/target-topic-a.xml(maps/root-map-01.ditamap)
+							if(!"".equals(prefix)){
+								String prefix1 = prefix.replace("\\", "/");
+								if(repStr.indexOf(prefix1)!=-1){
+									StringBuffer sb = new StringBuffer();
+									sb.append(repStr.substring(prefix1.length()));
+									sb.insert(sb.lastIndexOf("(")+1, prefix1);
+									//Added by William on 2010-06-08 for bug:3013079 start
+									//if this key definition refer to a external resource
+									if(exKeyDefMap.containsKey(to)){
+										int pos = sb.indexOf(prefix1);
+										sb.delete(pos, pos + prefix1.length());
+									}
+									//Added by William on 2010-06-08 for bug:3013079 end
+									
+									newSet.add(sb.toString());
+								}
+							}else{
+								//no prefix
+								newSet.add(repStr);
 							}
-						}else{
-							//no prefix
-							newSet.add(repStr);
-						}
 						//TODO Added by William on 2009-05-14 for keyref bug end
 					}else{
 						//other case do nothing

@@ -322,4 +322,12 @@ See the accompanying license.txt file for applicable licenses.
     
     <!--Label for a step with importance="optional"-->
     <variable id="Optional Step">Opzionale:</variable>
+
+    <!--Labels for task sections-->
+    <variable id="Task Prereq">Prima di iniziare</variable>
+    <variable id="Task Context">Informazioni su questa attività</variable>
+    <variable id="Task Steps">Procedura</variable>
+    <variable id="Task Result">Risultati</variable>
+    <variable id="Task Example">Esempio</variable>
+    <variable id="Task Postreq">Operazioni successive</variable>
 </vars>

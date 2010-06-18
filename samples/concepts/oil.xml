@@ -5,12 +5,12 @@
 <!-- (C) Copyright IBM Corporation 2001, 2005. All Rights Reserved.
  *-->
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN"
- "../../dtd/concept.dtd">
+ "../../dtd/technicalContent/dtd/concept.dtd">
 <concept id="oilconcept" xml:lang="en-us">
 <title>Oil</title>
-<prolog>
-</prolog><conbody><p>Motor oil keeps your car's engine running smoothly. Oil should be changed 
+<shortdesc>Motor oil keeps your car's engine running smoothly.</shortdesc>
+<conbody><p>Oil should be changed 
 every 6000 kilometers.</p></conbody>
 <related-links>
-<link href="../tasks/changingtheoil.xml" format="dita" type="task"><linktext>Changing the oil</linktext></link>
+<link href="../tasks/changingtheoil.xml" format="dita" type="task"></link>
 </related-links></concept>

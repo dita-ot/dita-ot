@@ -5,7 +5,7 @@
 <!-- ============================================================= -->
 <!--  MODULE:    DITA MAP XSD                                      -->
 <!--  VERSION:   1.2                                             -->
-<!--  DATE:      November 2008                                     -->
+<!--  DATE:      November 2009                                     -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -17,7 +17,7 @@
 <!-- ORIGINAL CREATION DATE:                                       -->
 <!--             March 2001                                        -->
 <!--                                                               -->
-<!--             (C) Copyright OASIS-Open.org 2005, 2008                -->
+<!--             (C) Copyright OASIS-Open.org 2005, 2009                -->
 <!--             (C) Copyright IBM Corporation 2001, 2004.         -->
 <!--             All Rights Reserved.                              -->
 <!--                                                               -->
@@ -34,16 +34,18 @@
   <xs:include schemaLocation="../../base/xsd/delayResolutionDomain.xsd" />
   <xs:include schemaLocation="glossrefDomain.xsd"/>
 
-  
  <!--  ================ GROUP DEFINITIONS =====================  -->
  <xs:redefine schemaLocation="../../base/xsd/metaDeclGrp.xsd">
-       <xs:group name="keywords">
-      <xs:choice>
-        <xs:group ref="keywords"/>
-        <xs:group ref="delay-d-keywords" />
-      </xs:choice>
-    </xs:group>
-  </xs:redefine>
+   <xs:group name="keywords">
+      <xs:sequence>
+         <xs:choice>
+            <xs:group ref="keywords"/>
+            <xs:group ref="delay-d-keywords" />
+         </xs:choice>
+      </xs:sequence>
+   </xs:group>
+ </xs:redefine>
+  
   <xs:include schemaLocation="../../base/xsd/tblDeclGrp.xsd"/>
  
  <!-- =================  MODULE INLCUDE DEFINITION  ==================  -->
@@ -54,8 +56,8 @@
   <xs:include schemaLocation="../../base/xsd/metaDeclMod.xsd"/>
     
   
-  <xs:redefine schemaLocation="../../base/xsd/mapGrp.xsd">
-  <xs:group name="topicref">
+<xs:redefine schemaLocation="../../base/xsd/mapGrp.xsd">
+ <xs:group name="topicref">
    <xs:choice>
     <xs:group ref="topicref"/>
     <xs:group ref="mapgroup-d-topicref"/>
@@ -74,9 +76,12 @@
  </xs:redefine>
 
  <xs:include schemaLocation="../../base/xsd/mapMod.xsd" />
+  
 
   <xs:attributeGroup name="domains-att">
     <xs:attribute name="domains" type="xs:string" default="(map mapgroup-d) (topic indexing-d) (topic delay-d) (map glossref-d)"/>
   </xs:attributeGroup>
+  
+  
 
 </xs:schema>

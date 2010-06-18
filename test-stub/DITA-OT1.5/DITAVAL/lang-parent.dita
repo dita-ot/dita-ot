@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--ArborText, Inc., 1988-2002, v.4002-->
 <!DOCTYPE topic PUBLIC "-//IBM//DTD DITA Topic//EN"
- "../dtd/topic.dtd">
-<!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved.
+ "./dtd/technicalContent/dtd/topic.dtd">
+ <!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved.
  -->
 <topic id="parent" xml:lang="en-us">
 <title>Parent topic for linking</title>

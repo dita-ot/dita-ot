@@ -166,6 +166,8 @@ public class IndexTermExtractModule implements AbstractPipelineModule {
 		IndexTermCollection.getInstantce().setOutputFileRoot(outputRoot);
 		IndexTermCollection.getInstantce().setIndexType(indextype);
 		IndexTermCollection.getInstantce().setIndexClass(indexclass);
+		//RFE 2987769 Eclipse index-see 
+		IndexTermCollection.getInstantce().setPipelineHashIO(hashIO);
 
 		if (encoding != null && encoding.trim().length() > 0) {
 			IndexTerm.setTermLocale(StringUtils.getLocale(encoding));

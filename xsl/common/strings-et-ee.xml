@@ -44,6 +44,7 @@
 <str name="Danger">OHT</str>
 <str name="Remember">Pidage meeles</str>
 <str name="Restriction">Piirang</str>
+<str name="Warning">Hoiatus</str>
 
 <!-- default title text for section level generated sections -->
 <str name="Contents">Sisukord</str>

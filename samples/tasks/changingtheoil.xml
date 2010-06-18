@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN"
- "../../dtd/task.dtd">
+ "../../dtd/technicalContent/dtd/task.dtd">
 <!-- This file is part of the DITA Open Toolkit project hosted on 
      Sourceforge.net. See the accompanying license.txt file for 
      applicable licenses.-->
@@ -8,12 +8,13 @@
  *-->
 <task id="changeoil" xml:lang="en-us">
 <title>Changing the oil in your car</title>
-<prolog></prolog>
+<shortdesc>Once every 6000 kilometers or three months, change the oil in
+your car.</shortdesc>
 <taskbody>
-<context><p>Once every 6000 kilometers or three months, change the oil in
-your car.  This 
-will help keep the engine in good condition. </p><p>To change the oil:</p></context>
+<context><p>Changing the oil regularly 
+will help keep the engine in good condition. </p></context>
 <steps>
+<stepsection>To change the oil:</stepsection>
 <step><cmd>Remove the old oil filter.</cmd></step>
 <step><cmd>Drain the old oil.</cmd></step>
 <step><cmd>Install a new oil filter and gasket.</cmd></step>
@@ -23,9 +24,7 @@ will help keep the engine in good condition. </p><p>To change the oil:</p></cont
 </steps>
 </taskbody>
 <related-links>
-<link href="../concepts/oil.xml" format="dita" type="concept"><linktext>Oil</linktext>
-</link>
-<link href="../concepts/wwfluid.xml" format="dita" type="concept"><linktext>Windshield
-washer fluid</linktext></link>
+<link href="../concepts/oil.xml" format="dita" type="concept"></link>
+<link href="../concepts/wwfluid.xml" format="dita" type="concept"></link>
 </related-links>
 </task>
