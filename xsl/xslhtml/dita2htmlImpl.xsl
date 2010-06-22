@@ -16,10 +16,11 @@
 
 <xsl:stylesheet version="1.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
                 xmlns:dita2html="http://dita-ot.sourceforge.net/ns/200801/dita2html"
                 xmlns:ditamsg="http://dita-ot.sourceforge.net/ns/200704/ditamsg"
                 xmlns:exsl="http://exslt.org/common"
-                exclude-result-prefixes="dita2html ditamsg exsl java"
+                exclude-result-prefixes="dita-ot dita2html ditamsg exsl java"
                 xmlns:java="org.dita.dost.util.ImgUtils">
 
 
@@ -28,6 +29,7 @@
 <xsl:import href="../common/output-message.xsl"/>
 <xsl:import href="../common/dita-utilities.xsl"/>
 <xsl:import href="../common/related-links.xsl"/>
+<xsl:import href="../common/dita-textonly.xsl"/>
 <xsl:import href="flag-old.xsl"/>
 <xsl:include href="get-meta.xsl"/>
 <xsl:include href="rel-links.xsl"/>
@@ -3739,9 +3741,6 @@
    </xsl:choose>
  </xsl:if>
 </xsl:template>
-<!-- Index terms which may be inside of ph elements should not appear in text-only mode -->
-<xsl:template match="*[contains(@class,' topic/indexterm ')]" mode="text-only"/>
-
 
 <xsl:template match="*[contains(@class,' topic/indextermref ')]"/>
 
@@ -4075,31 +4074,9 @@
 <!-- named templates for labels and titles related to topic structures -->
 
 <!-- test processors for HTML title element -->
-<xsl:template match="*" mode="text-only">
-  <xsl:apply-templates select="text()|*" mode="text-only"/>
-</xsl:template>
-<!-- for artwork in a title, get the alt text -->
-<xsl:template match="*[contains(@class,' topic/image ')]" mode="text-only">
-  <xsl:choose>
-    <xsl:when test="*[contains(@class,' topic/alt ')]"><xsl:apply-templates mode="text-only"/></xsl:when>
-    <xsl:when test="@alt"><xsl:value-of select="@alt"/></xsl:when>
-  </xsl:choose>
-</xsl:template>
-<!-- for boolean in a title, set the text -->
-<xsl:template match="*[contains(@class,' topic/boolean ')]" mode="text-only">
-  <xsl:value-of select="name()"/><xsl:text>: </xsl:text><xsl:value-of select="@state"/>
-</xsl:template>
-<!-- for state in a title, set the text -->
-<xsl:template match="*[contains(@class,' topic/state ')]" mode="text-only">
-  <xsl:value-of select="name()"/><xsl:text>: </xsl:text><xsl:value-of select="@name"/><xsl:text>=</xsl:text><xsl:value-of select="@value"/>
-</xsl:template>
-<!-- Footnote as text-only should just create the number -->
-<xsl:template match="*[contains(@class,' topic/fn ')]" mode="text-only">
-  <xsl:variable name="fnid"><xsl:number from="/" level="any"/></xsl:variable>
-  <xsl:choose>
-    <xsl:when test="@callout">(<xsl:value-of select="@callout"/>)</xsl:when>
-    <xsl:otherwise>(<xsl:value-of select="$fnid"/>)</xsl:otherwise>
-  </xsl:choose>
+<xsl:template match="*|text()|processing-instruction()" mode="text-only">
+  <!-- Redirect to common dita-ot module -->
+  <xsl:apply-templates select="." mode="dita-ot:text-only"/>
 </xsl:template>
 
 <!-- Process a section heading - H4 based on: 1) title element 2) @spectitle attr -->
@@ -4718,12 +4695,12 @@
     <title>
       <xsl:call-template name="gen-user-panel-title-pfx"/> <!-- hook for a user-XSL title prefix -->
       <!-- use the searchtitle unless there's no value - else use title -->
-      <xsl:variable name="schtitle"><xsl:value-of select="/*[contains(@class,' topic/topic ')]/*[contains(@class,' topic/titlealts ')]/*[contains(@class,' topic/searchtitle ')]"/></xsl:variable>
-      <xsl:variable name="ditaschtitle"><xsl:value-of select="/dita/*[contains(@class,' topic/topic ')][1]/*[contains(@class,' topic/titlealts ')]/*[contains(@class,' topic/searchtitle ')]"/></xsl:variable>
+      <xsl:variable name="schtitle"><xsl:apply-templates select="/*[contains(@class,' topic/topic ')]/*[contains(@class,' topic/titlealts ')]/*[contains(@class,' topic/searchtitle ')]" mode="text-only"/></xsl:variable>
+      <xsl:variable name="ditaschtitle"><xsl:apply-templates select="/dita/*[contains(@class,' topic/topic ')][1]/*[contains(@class,' topic/titlealts ')]/*[contains(@class,' topic/searchtitle ')]" mode="text-only"/></xsl:variable>
       <xsl:variable name="maintitle"><xsl:apply-templates select="/*[contains(@class,' topic/topic ')]/*[contains(@class,' topic/title ')]" mode="text-only"/></xsl:variable>
       <xsl:variable name="ditamaintitle"><xsl:apply-templates select="/dita/*[contains(@class,' topic/topic ')][1]/*[contains(@class,' topic/title ')]" mode="text-only"/></xsl:variable>
       <!-- edited by William on 2009-05-18 for searchtitle bug start -->
-      <xsl:variable name="mapschtitle"><xsl:value-of select="/*[contains(@class,' topic/topic ')]/*[contains(@class,' topic/titlealts ')]/*[contains(@class,' map/searchtitle ')]"/></xsl:variable>
+      <xsl:variable name="mapschtitle"><xsl:apply-templates select="/*[contains(@class,' topic/topic ')]/*[contains(@class,' topic/titlealts ')]/*[contains(@class,' map/searchtitle ')]" mode="text-only"/></xsl:variable>
       <!-- edited by William on 2009-05-18 for searchtitile bug end -->
       <xsl:choose>
         <xsl:when test="string-length($schtitle)>'0'"><xsl:value-of select="normalize-space($schtitle)"/></xsl:when>

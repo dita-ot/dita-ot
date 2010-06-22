@@ -47,11 +47,13 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:xalan="http://xml.apache.org/xalan"
                 xmlns:exsl="http://exslt.org/common"
+                xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
                 xmlns:topicpull="http://dita-ot.sourceforge.net/ns/200704/topicpull"
                 xmlns:ditamsg="http://dita-ot.sourceforge.net/ns/200704/ditamsg"
-                exclude-result-prefixes="topicpull ditamsg xalan exsl">
+                exclude-result-prefixes="dita-ot topicpull ditamsg xalan exsl">
   <xsl:import href="../common/dita-utilities.xsl"/>
   <xsl:import href="../common/output-message.xsl"/>
+  <xsl:import href="../common/dita-textonly.xsl"/>
   <!-- Define the error message prefix identifier -->
   <xsl:variable name="msgprefix">DOTX</xsl:variable>
 
@@ -1788,33 +1790,9 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
     </xsl:choose>
   </xsl:template>
 
-  <!-- mode="text-only" is used to determine contents for context where only plain text may be used -->
-  <xsl:template match="*[contains(@class,' topic/image ')]" mode="text-only">
-    <xsl:choose>
-      <xsl:when test="*[contains(@class,' topic/alt ')]">
-        <xsl:apply-templates mode="text-only"/>
-      </xsl:when>
-      <xsl:when test="@alt">
-        <xsl:value-of select="@alt"/>
-      </xsl:when>
-    </xsl:choose>
-  </xsl:template>
-  <xsl:template match="*[contains(@class,' topic/boolean ')]" mode="text-only">
-    <xsl:value-of select="name()"/>
-    <xsl:text>: </xsl:text>
-    <xsl:value-of select="@state"/>
-  </xsl:template>
-  <xsl:template match="*[contains(@class,' topic/state ')]" mode="text-only">
-    <xsl:value-of select="name()"/>
-    <xsl:text>: </xsl:text>
-    <xsl:value-of select="@name"/>
-    <xsl:text>=</xsl:text>
-    <xsl:value-of select="@value"/>
-  </xsl:template>
-  <xsl:template match="*[contains(@class,' topic/indexterm ')]" mode="text-only"/>
-  <xsl:template match="*[contains(@class,' topic/draft-comment ') or contains(@class,' topic/required-cleanup ')]" mode="text-only"/>
-  <xsl:template match="*" mode="text-only">
-    <xsl:apply-templates select="text()|*" mode="text-only"/>
+  <xsl:template match="*|text()|processing-instruction()" mode="text-only">
+    <!-- Redirect to common dita-ot module -->
+    <xsl:apply-templates select="." mode="dita-ot:text-only"/>
   </xsl:template>
   <xsl:template match="*|@*|comment()|processing-instruction()|text()">
     <xsl:copy>

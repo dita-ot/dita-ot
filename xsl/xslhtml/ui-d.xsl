@@ -125,15 +125,4 @@
   </span>
 </xsl:template>
 
-<xsl:template match="*[contains(@class, ' ui-d/menucascade ')]" mode="text-only">
-  <xsl:apply-templates select="*" mode="text-only"/>
-</xsl:template>
-
-<xsl:template match="*[contains(@class, ' ui-d/uicontrol ')]" mode="text-only">
-  <xsl:if test="parent::*[contains(@class,' ui-d/menucascade ')] and preceding-sibling::*[contains(@class, ' ui-d/uicontrol ')]">
-    <xsl:text> > </xsl:text>
-  </xsl:if>
-  <xsl:apply-templates select="*|text()" mode="text-only"/>
-</xsl:template>
-
 </xsl:stylesheet>
