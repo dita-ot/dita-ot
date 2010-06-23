@@ -5,9 +5,12 @@
 <!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
 
 <xsl:stylesheet version="1.0"
-                xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+                xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                exclude-result-prefixes="dita-ot">
 
 <xsl:import href="common/output-message.xsl"/>
+<xsl:import href="common/dita-textonly.xsl"/>
 
 <xsl:output indent="yes"/>
 
@@ -176,35 +179,42 @@
       <xsl:apply-templates/>
     </xsl:when>
     <xsl:otherwise>
-	<topic>
-		<xsl:attribute name="label">
-			<xsl:choose>
-    		  <xsl:when test="*[contains(@class,'- map/topicmeta ')]/*[contains(@class, '- topic/navtitle ')]">
-    		    <xsl:value-of select="*[contains(@class,'- map/topicmeta ')]/*[contains(@class, '- topic/navtitle ')]"/>
-    		  </xsl:when>
-    		  <xsl:when test="not(*[contains(@class,'- map/topicmeta ')]/*[contains(@class, '- topic/navtitle ')]) and @navtitle"><xsl:value-of select="@navtitle"/></xsl:when>			  
-				<xsl:when test="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/linktext ')]"><xsl:value-of select="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/linktext ')]"/></xsl:when>
-				<xsl:otherwise>
-                    			<xsl:choose>
-		                         <xsl:when test="@type='external' or not(not(@format) or @format='dita' or @format='DITA')"><xsl:value-of select="@href"/></xsl:when> <!-- adding local -->
-                		         <xsl:when test="starts-with(@href,'#')"><xsl:value-of select="@href"/></xsl:when>
-		                         <xsl:when test="contains(@copy-to, $DITAEXT)">
-                		              <xsl:value-of select="substring-before(@copy-to, $DITAEXT)"/><xsl:value-of select="$OUTEXT"/>
-		                         </xsl:when>
-		                         <xsl:when test="contains(@href, $DITAEXT)">
-                		              <xsl:value-of select="substring-before(@href, $DITAEXT)"/><xsl:value-of select="$OUTEXT"/><xsl:value-of select="substring-after(@href, $DITAEXT)"/>
-		                         </xsl:when>
-                                         <xsl:when test="not(@href) or @href=''"/> <!-- P017000: error generated in prior step -->
-                		         <xsl:otherwise><xsl:value-of select="@href"/><xsl:call-template name="output-message">
+	  <topic>
+        <xsl:attribute name="label">
+          <xsl:choose>
+            <xsl:when test="*[contains(@class,'- map/topicmeta ')]/*[contains(@class, '- topic/navtitle ')]">
+              <xsl:apply-templates select="*[contains(@class,'- map/topicmeta ')]/*[contains(@class, '- topic/navtitle ')]" mode="dita-ot:text-only"/>
+            </xsl:when>
+            <xsl:when test="not(*[contains(@class,'- map/topicmeta ')]/*[contains(@class, '- topic/navtitle ')]) and @navtitle">
+              <xsl:value-of select="@navtitle"/>
+            </xsl:when>			  
+            <xsl:when test="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/linktext ')]">
+              <xsl:apply-templates select="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/linktext ')]" mode="dita-ot:text-only"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:choose>
+                <xsl:when test="@type='external' or not(not(@format) or @format='dita' or @format='DITA')"><xsl:value-of select="@href"/></xsl:when> <!-- adding local -->
+                <xsl:when test="starts-with(@href,'#')"><xsl:value-of select="@href"/></xsl:when>
+                <xsl:when test="contains(@copy-to, $DITAEXT)">
+                  <xsl:value-of select="substring-before(@copy-to, $DITAEXT)"/><xsl:value-of select="$OUTEXT"/>
+                </xsl:when>
+                <xsl:when test="contains(@href, $DITAEXT)">
+                  <xsl:value-of select="substring-before(@href, $DITAEXT)"/><xsl:value-of select="$OUTEXT"/><xsl:value-of select="substring-after(@href, $DITAEXT)"/>
+                </xsl:when>
+                <xsl:when test="not(@href) or @href=''"/> <!-- P017000: error generated in prior step -->
+                <xsl:otherwise>
+                  <xsl:value-of select="@href"/>
+                  <xsl:call-template name="output-message">
                        <xsl:with-param name="msgnum">005</xsl:with-param>
                        <xsl:with-param name="msgsev">E</xsl:with-param>
                 		   <xsl:with-param name="msgparams">%1=<xsl:value-of select="@href"/></xsl:with-param>
-                     </xsl:call-template></xsl:otherwise>
-					</xsl:choose>
-				</xsl:otherwise>
-			</xsl:choose>
-		</xsl:attribute>
-		<xsl:if test="@href and not(@href='')">
+                  </xsl:call-template>
+                </xsl:otherwise>
+              </xsl:choose>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:attribute>
+        <xsl:if test="@href and not(@href='')">
                   <xsl:attribute name="href">
                     <xsl:choose>
                       <xsl:when test="@type='external' or (@scope='external' and not(@format)) or not(not(@format) or @format='dita' or @format='DITA')"><xsl:value-of select="@href"/></xsl:when> <!-- adding local -->
