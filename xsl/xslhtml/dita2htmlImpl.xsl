@@ -152,7 +152,7 @@
             <xsl:text>file://</xsl:text><xsl:value-of select="concat($BASEDIR, '/', $OUTPUTDIR, '/')"/>
           </xsl:when>
           <xsl:otherwise>
-            <xsl:text>file:/</xsl:text><xsl:value-of select="concat($BASEDIR, '/', $OUTPUTDIR, '/')"/>
+            <xsl:text>file:/</xsl:text><xsl:value-of select="translate(concat($BASEDIR, '/', $OUTPUTDIR, '/'), '\', '/')"/>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:otherwise>
