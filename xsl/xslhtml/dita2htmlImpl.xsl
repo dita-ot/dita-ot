@@ -300,15 +300,26 @@
 </xsl:template>
 
 <xsl:template name="gen-topic">
+  <xsl:param name="nestlevel">
+      <xsl:choose>
+          <!-- Limit depth for historical reasons, could allow any depth. Previously limit was 5. -->
+          <xsl:when test="count(ancestor::*[contains(@class,' topic/topic ')]) > 9">9</xsl:when>
+          <xsl:otherwise><xsl:value-of select="count(ancestor::*[contains(@class,' topic/topic ')])"/></xsl:otherwise>
+      </xsl:choose>
+  </xsl:param>
   <xsl:variable name="flagrules">
     <xsl:call-template name="getrules"/>
   </xsl:variable>
  <xsl:choose>
    <xsl:when test="parent::dita and not(preceding-sibling::*)">
      <!-- Do not reset xml:lang if it is already set on <html> -->
-     <xsl:apply-templates select="." mode="set-output-class"/>
+     <!-- Moved outputclass to the body tag -->
    </xsl:when>
-   <xsl:otherwise><xsl:call-template name="commonattributes"/></xsl:otherwise>
+   <xsl:otherwise>
+     <xsl:call-template name="commonattributes">
+       <xsl:with-param name="default-output-class" select="concat('nested',$nestlevel)"/>
+     </xsl:call-template>
+   </xsl:otherwise>
  </xsl:choose>
  <xsl:call-template name="gen-toc-id"/>
   <xsl:call-template name="gen-style">
@@ -1085,24 +1096,25 @@
     <xsl:call-template name="getrules"/>
   </xsl:variable>
 <li>
- <!-- handle non-compact list items -->
- <xsl:if test="parent::*/@compact='no'">
-  <xsl:attribute name="class">liexpand</xsl:attribute>
- </xsl:if>
-  <xsl:call-template name="commonattributes"/>
+  <xsl:choose>
+    <xsl:when test="parent::*/@compact='no'">
+      <xsl:attribute name="class">liexpand</xsl:attribute>
+      <!-- handle non-compact list items -->
+      <xsl:call-template name="commonattributes">
+        <xsl:with-param name="default-output-class" select="'liexpand'"/>
+      </xsl:call-template>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:call-template name="commonattributes"/>
+    </xsl:otherwise>
+  </xsl:choose>
   <xsl:call-template name="gen-style">
     <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
   </xsl:call-template>
   <xsl:call-template name="setidaname"/>
-  <xsl:call-template name="start-flagit">
-    <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
-  </xsl:call-template>
-  <xsl:call-template name="revblock">
+  <xsl:apply-templates select="." mode="outputContentsWithFlags">
     <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
-  </xsl:call-template>
-  <xsl:call-template name="end-flagit">
-    <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param> 
-  </xsl:call-template>
+  </xsl:apply-templates>
 </li><xsl:value-of select="$newline"/>
 </xsl:template>
 <!-- simple list item -->
@@ -1128,15 +1140,9 @@
     <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
   </xsl:call-template>
   <xsl:call-template name="setidaname"/>
-  <xsl:call-template name="start-flagit">
-    <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
-  </xsl:call-template>
-  <xsl:call-template name="revblock">
+  <xsl:apply-templates select="." mode="outputContentsWithFlags">
     <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
-  </xsl:call-template>
-  <xsl:call-template name="end-flagit">
-    <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param> 
-  </xsl:call-template>
+  </xsl:apply-templates>
 </li><xsl:value-of select="$newline"/>
 </xsl:template>
 
@@ -2358,6 +2364,7 @@
    </xsl:otherwise>
  </xsl:choose>
 </xsl:template>
+
 <xsl:template match="*[contains(@class,' topic/table ')]" mode="table-fmt">
   <xsl:value-of select="$newline"/>
   <!-- special case for IE & NS for frame & no rules - needs to be a double table -->
@@ -2870,7 +2877,7 @@
   <xsl:choose>
     <!-- When entry is empty, output a blank -->
     <xsl:when test="not(*|text()|processing-instruction())">
-      <xsl:text disable-output-escaping="yes">&amp;#xA0;</xsl:text>  <!-- nbsp -->
+      <xsl:text>&#160;</xsl:text>  <!-- nbsp -->
     </xsl:when>
     <xsl:otherwise>
       <xsl:variable name="revtest">
@@ -2918,6 +2925,8 @@
   </xsl:choose>
 </xsl:template>
 
+<!-- Starting with the first colspec, add up the total width for
+     this table. Width of a column is given in units: 1*, 43* 5*, etc -->
 <xsl:template match="*[contains(@class,' topic/colspec ')]" mode="count-colwidth">
   <xsl:param name="totalwidth">0</xsl:param> <!-- Total counted width so far -->
   <xsl:variable name="thiswidth">            <!-- Width of this column -->
@@ -3008,7 +3017,13 @@
       <xsl:with-param name="startposition" select="$entrystartpos"/>
     </xsl:call-template>
   </xsl:variable>
-
+  <!-- The test cell can be any of the following:
+       * completely before the header range (ignore id)
+       * completely after the header range (ignore id)
+       * completely within the header range (save id)
+       * partially before, partially within (save id)
+       * partially within, partially after (save id)
+       * completely surrounding the header range (save id) -->
   <xsl:choose>
     <!-- Ignore this header cell if it  starts after the tbody cell we are testing -->
     <xsl:when test="number($endmatch) &lt; number($entrystartpos)"/>
@@ -3272,7 +3287,12 @@
   </tr><xsl:value-of select="$newline"/>
 </xsl:template>
 
-
+<!-- Output the ID for a simpletable entry, when it is specified. If no ID is specified,
+     and this is a header row, generate an ID. The entry is considered a header entry
+     when the it is inside <sthead>, or when it is in the column specified in the keycol
+     attribute on <simpletable>
+     NOTE: It references simpletable with parent::*/parent::* in order to avoid problems
+     with nested simpletables. -->
 <xsl:template name="output-stentry-id">
   <!-- Find the position in this row -->
   <xsl:variable name="thiscolnum"><xsl:number level="single" count="*"/></xsl:variable>
@@ -3288,7 +3308,13 @@
   </xsl:choose>
 </xsl:template>
 
-
+<!-- Output the headers attribute for screen readers. If specified, it should match both
+     of the following:
+     * the <stentry> with the same position in the sthead
+     * the <stentry> that is in the key column (specified in @keycol on simpletable)
+     Note: This function is not called within sthead, so sthead never gets headers.
+     NOTE: I reference simpletable with parent::*/parent::* in order to avoid problems
+     with nested simpletables. -->
 <xsl:template name="set.stentry.headers">
   <xsl:if test="parent::*/parent::*/@keycol | parent::*/parent::*/*[contains(@class,' topic/sthead ')]">
       <xsl:variable name="thiscolnum"><xsl:number level="single" count="*"/></xsl:variable>
@@ -3542,7 +3568,7 @@
    <xsl:value-of select="@specentry"/>
   </xsl:when>
   <xsl:when test="not(*|text()|processing-instruction())">
-    <xsl:text disable-output-escaping="yes">&amp;#xA0;</xsl:text>  <!-- nbsp -->
+    <xsl:text>&#160;</xsl:text>  <!-- nbsp -->
   </xsl:when>
   <xsl:otherwise>
    <xsl:apply-templates/>
@@ -4156,7 +4182,9 @@
   </xsl:param>
   <xsl:element name="{$headLevel}">
     <xsl:attribute name="class">sectiontitle</xsl:attribute>
-    <xsl:call-template name="commonattributes"/>
+    <xsl:call-template name="commonattributes">
+      <xsl:with-param name="default-output-class" select="'sectiontitle'"/>
+    </xsl:call-template>
     <xsl:apply-templates/>
   </xsl:element>
 </xsl:template>
@@ -4472,7 +4500,7 @@
     <img src="tip-ing.jpg" alt="tip-ing.jpg"/> <!-- this should be an xsl:choose with the approved list and a selection method-->
     <!-- add any other required positioning controls, if needed, but must be valid in the location
          from which the call to this template was made -->
-    <xsl:text disable-output-escaping="yes">&amp;#xA0;</xsl:text>
+    <xsl:text>&#160;</xsl:text>  <!-- nbsp -->
   </xsl:if>
 </xsl:template>
 
@@ -4757,6 +4785,10 @@
       <xsl:call-template name="generateBreadcrumbs"/>
       <xsl:call-template name="gen-user-header"/>  <!-- include user's XSL running header here -->
       <xsl:call-template name="processHDR"/>
+      <xsl:if test="$INDEXSHOW='yes'">
+        <xsl:apply-templates select="/*/*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/metadata ')]/*[contains(@class,' topic/keywords ')]/*[contains(@class,' topic/indexterm ')] |
+                                     /dita/*[1]/*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/metadata ')]/*[contains(@class,' topic/keywords ')]/*[contains(@class,' topic/indexterm ')]"/>
+      </xsl:if>
       <!-- Include a user's XSL call here to generate a toc based on what's a child of topic -->
       <xsl:call-template name="gen-user-sidetoc"/>
       <xsl:apply-templates/> <!-- this will include all things within topic; therefore, -->
