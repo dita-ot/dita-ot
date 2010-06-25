@@ -124,6 +124,11 @@ public class GenListModuleReader extends AbstractXMLReader {
     /** chunk nesting level */
     private int chunkLevel = 0;
     
+    //Added by William on 2010-06-17 for bug:3016739 start
+    /** mark topics in reltables */
+    private int relTableLevel = 0;
+    //Added by William on 2010-06-17 for bug:3016739 end
+    
     /** chunk to-navigation level */
     private int chunkToNavLevel = 0;
 	
@@ -335,6 +340,7 @@ public class GenListModuleReader extends AbstractXMLReader {
 		excludedLevel = 0;
 		foreignLevel = 0;
 		chunkLevel = 0;
+		relTableLevel = 0;
 		chunkToNavLevel = 0;
 		topicGroupLevel = 0;
 		isValidInput = false;
@@ -783,6 +789,15 @@ public class GenListModuleReader extends AbstractXMLReader {
 		} else if(atts.getValue(Constants.ATTRIBUTE_NAME_CHUNK) != null) {
 			chunkLevel++;
 		}
+		//Added by William on 2010-6-17 for bug:3016739 start
+		if(relTableLevel > 0) {
+			relTableLevel ++;
+		} else if(attrValue != null && 
+				attrValue.indexOf(Constants.ATTR_CLASS_VALUE_RELTABLE) != -1){
+			relTableLevel++;
+		}
+		//Added by William on 2010-6-17 for bug:3016739 end
+		
 		
 		if(chunkToNavLevel > 0) {
 			chunkToNavLevel++;
@@ -1112,6 +1127,12 @@ public class GenListModuleReader extends AbstractXMLReader {
 			chunkLevel--;
 		}
 		
+		//Added by William on 2010-06-17 for bug:3016739 start
+		if (relTableLevel > 0) {
+			relTableLevel--;
+		}
+		//Added by William on 2010-06-17 for bug:3016739 end
+		
 		if (chunkToNavLevel > 0) {
 			chunkToNavLevel--;
 		}
@@ -1390,7 +1411,7 @@ public class GenListModuleReader extends AbstractXMLReader {
 			hrefTargets.add(new File(filename).getPath());
 			toOutFile(new File(filename).getPath());
 			String pathWithoutID = FileUtils.resolveFile(currentDir, attrValue);
-			if (chunkLevel > 0 && chunkToNavLevel == 0 && topicGroupLevel == 0) {
+			if (chunkLevel > 0 && chunkToNavLevel == 0 && topicGroupLevel == 0 && relTableLevel == 0) {
 				chunkTopicSet.add(pathWithoutID);
 			} else {
 				hrefTopicSet.add(pathWithoutID);
