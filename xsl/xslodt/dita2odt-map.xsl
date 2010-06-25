@@ -38,7 +38,162 @@
   <xsl:strip-space elements="*"/>
 
   <!-- up to now opentopic:map tag is ignored -->
-  <xsl:template match="opentopic:map"/>
+  <xsl:template match="opentopic:map">
+    <text:table-of-content text:style-name="Sect1" text:protected="true"
+      text:name="Table of Contents1">
+      <text:table-of-content-source text:outline-level="10" text:use-index-marks="false"
+        text:use-index-source-styles="true">
+        <text:index-title-template text:style-name="Contents_20_Heading_TOC">Table of
+          Contents</text:index-title-template>
+        <text:table-of-content-entry-template text:outline-level="1" text:style-name="Contents_20_1_a">
+          <text:index-entry-link-start/>
+          <text:index-entry-chapter/>
+          <text:index-entry-text/>
+          <text:index-entry-tab-stop style:type="right" style:leader-char="."/>
+          <text:index-entry-page-number/>
+          <text:index-entry-link-end/>
+        </text:table-of-content-entry-template>
+        <text:table-of-content-entry-template text:outline-level="2" text:style-name="Contents_20_2_a">
+          <text:index-entry-link-start/>
+          <text:index-entry-chapter/>
+          <text:index-entry-text/>
+          <text:index-entry-tab-stop style:type="right" style:leader-char="."/>
+          <text:index-entry-page-number/>
+          <text:index-entry-link-end/>
+        </text:table-of-content-entry-template>
+        <text:table-of-content-entry-template text:outline-level="3" text:style-name="Contents_20_3_a">
+          <text:index-entry-link-start/>
+          <text:index-entry-chapter/>
+          <text:index-entry-text/>
+          <text:index-entry-tab-stop style:type="right" style:leader-char="."/>
+          <text:index-entry-page-number/>
+          <text:index-entry-link-end/>
+        </text:table-of-content-entry-template>
+        <text:table-of-content-entry-template text:outline-level="4" text:style-name="Contents_20_4_a">
+          <text:index-entry-link-start/>
+          <text:index-entry-chapter/>
+          <text:index-entry-span> </text:index-entry-span>
+          <text:index-entry-text/>
+          <text:index-entry-tab-stop style:type="right" style:leader-char="."/>
+          <text:index-entry-page-number/>
+          <text:index-entry-link-end/>
+        </text:table-of-content-entry-template>
+        <text:table-of-content-entry-template text:outline-level="5" text:style-name="Contents_20_5_a">
+          <text:index-entry-link-start/>
+          <text:index-entry-chapter/>
+          <text:index-entry-span> </text:index-entry-span>
+          <text:index-entry-text/>
+          <text:index-entry-tab-stop style:type="right" style:leader-char="."/>
+          <text:index-entry-page-number/>
+          <text:index-entry-link-end/>
+        </text:table-of-content-entry-template>
+        <text:table-of-content-entry-template text:outline-level="6" text:style-name="Contents_20_6_a">
+          <text:index-entry-link-start/>
+          <text:index-entry-chapter/>
+          <text:index-entry-span> </text:index-entry-span>
+          <text:index-entry-text/>
+          <text:index-entry-tab-stop style:type="right" style:leader-char="."/>
+          <text:index-entry-page-number/>
+          <text:index-entry-link-end/>
+        </text:table-of-content-entry-template>
+        <text:table-of-content-entry-template text:outline-level="7" text:style-name="Contents_20_7_a">
+          <text:index-entry-link-start/>
+          <text:index-entry-chapter/>
+          <text:index-entry-span> </text:index-entry-span>
+          <text:index-entry-text/>
+          <text:index-entry-tab-stop style:type="right" style:leader-char="."/>
+          <text:index-entry-page-number/>
+          <text:index-entry-link-end/>
+        </text:table-of-content-entry-template>
+        <text:table-of-content-entry-template text:outline-level="8" text:style-name="Contents_20_8_a">
+          <text:index-entry-link-start/>
+          <text:index-entry-chapter/>
+          <text:index-entry-span> </text:index-entry-span>
+          <text:index-entry-text/>
+          <text:index-entry-tab-stop style:type="right" style:leader-char="."/>
+          <text:index-entry-page-number/>
+          <text:index-entry-link-end/>
+        </text:table-of-content-entry-template>
+        <text:table-of-content-entry-template text:outline-level="9" text:style-name="Contents_20_9_a">
+          <text:index-entry-link-start/>
+          <text:index-entry-chapter/>
+          <text:index-entry-span> </text:index-entry-span>
+          <text:index-entry-text/>
+          <text:index-entry-tab-stop style:type="right" style:leader-char="."/>
+          <text:index-entry-page-number/>
+          <text:index-entry-link-end/>
+        </text:table-of-content-entry-template>
+        <text:table-of-content-entry-template text:outline-level="10" text:style-name="Contents_20_10_a">
+          <text:index-entry-link-start/>
+          <text:index-entry-chapter/>
+          <text:index-entry-span> </text:index-entry-span>
+          <text:index-entry-text/>
+          <text:index-entry-tab-stop style:type="right" style:leader-char="."/>
+          <text:index-entry-page-number/>
+          <text:index-entry-link-end/>
+        </text:table-of-content-entry-template>
+        <text:index-source-styles text:outline-level="1">
+          <text:index-source-style text:style-name="Appendix_20_Heading"/>
+        </text:index-source-styles>
+      </text:table-of-content-source>
+      <text:index-body>
+        <text:index-title text:style-name="Sect1" text:name="Table of Contents1_Head">
+          <text:p text:style-name="Contents_20_Heading">Table of Contents</text:p>
+        </text:index-title>
+        <xsl:apply-templates select="child::*[contains(@class, ' map/topicref ')]"/>
+      </text:index-body>
+    </text:table-of-content>
+    <!-- page break. -->
+    <text:p text:style-name="PX"/>
+  </xsl:template>
   
+  <xsl:template match="*[contains(@class, ' map/topicref ')]">
+    <xsl:if test="@href">
+      <!-- topicref depth -->
+      <xsl:variable name="depth" select="count(ancestor-or-self::*[contains(@class, ' map/topicref ')])"/>
+      <!-- navtitle value -->
+      <xsl:variable name="navtitle">
+        <xsl:value-of select="child::*[contains(@class, ' map/topicmeta ')]/child::*[contains(@class, ' topic/navtitle ')]"/>      
+      </xsl:variable>
+      <!-- href value -->
+      <xsl:variable name="href" select="@href"/>
+      <!-- 
+        <text:p text:style-name="P10">
+          <text:a xlink:type="simple" xlink:href="#Heading_10">Heading 10<text:tab/>
+          <text:bookmark-ref text:reference-format="page" text:ref-name="Heading_10"/>
+          </text:a>
+        </text:p>
+      -->
+      <xsl:variable name="level">
+        <xsl:choose>
+          <xsl:when test="$depth &gt; 10">
+            <xsl:value-of select="10"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="$depth"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:variable>
+      <xsl:element name="text:p">
+        <xsl:attribute name="text:style-name">
+          <xsl:value-of select="concat('P', $level)"/>
+        </xsl:attribute>
+        <xsl:element name="text:a">
+          <xsl:attribute name="xlink:type">simple</xsl:attribute>
+          <xsl:attribute name="text:style-name">underline_none</xsl:attribute>
+          <xsl:attribute name="xlink:href">
+            <xsl:value-of select="concat($href, '')"/>
+          </xsl:attribute>
+          <xsl:value-of select="$navtitle"/>
+          <xsl:element name="text:tab"/>
+          <xsl:element name="text:bookmark-ref">
+            <xsl:attribute name="text:reference-format">page</xsl:attribute>
+            <xsl:attribute name="text:ref-name"><xsl:value-of select="substring-after($href, '#')"/></xsl:attribute>
+          </xsl:element>
+        </xsl:element>
+      </xsl:element>
+    </xsl:if>
+    <xsl:apply-templates select="child::*[contains(@class, ' map/topicref ')]"/>
+  </xsl:template>
   
 </xsl:stylesheet>

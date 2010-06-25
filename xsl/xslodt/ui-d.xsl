@@ -167,6 +167,7 @@
 <xsl:template match="*[contains(@class,' ui-d/uicontrol ')]" priority="2">
  
      <xsl:choose>
+      <!-- nested by li -->
       <xsl:when test="parent::*[contains(@class, ' topic/li ')]">
        <xsl:element name="text:p">
         <!-- insert an arrow with leading/trailing spaces before all but the first uicontrol in a menucascade -->
@@ -274,7 +275,6 @@
        </xsl:if>
        <xsl:element name="text:span">
         <xsl:attribute name="text:style-name">bold</xsl:attribute>
-        <xsl:element name="text:line-break"/>
         <xsl:apply-templates/>
        </xsl:element>
       </xsl:otherwise>

@@ -81,15 +81,8 @@
     <!-- for tags that are not allowed under list -->
     <xsl:when test="contains(@class, ' topic/p ') or contains(@class, ' topic/note ') or contains(@class, ' topic/table ') 
       or contains(@class, ' topic/simpletable ') or contains(@class, ' task/choicetable ')">
-        <xsl:if test=". = ../*[1]">
-          <!-- for list item number calculation. -->
-          <!-- 
-          <xsl:element name="text:p"/>
-          -->
-       </xsl:if>
       <xsl:apply-templates select="."/>
     </xsl:when>
-    
     <xsl:otherwise>
         <xsl:apply-templates select="."/>
     </xsl:otherwise>

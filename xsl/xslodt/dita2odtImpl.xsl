@@ -53,12 +53,6 @@
   <xsl:output indent="yes"/>
   <xsl:strip-space elements="*"/>
 
-  <xsl:param name="DRAFT" select="'no'"/>
-  <xsl:param name="OUTPUTDIR" select="''"/>
-  <xsl:param name="FILTERFILE"/>
-  
-  <xsl:param name="FILEREF">file:///</xsl:param>
-
   <xsl:variable name="msgprefix">DOTX</xsl:variable>
   
   <!-- =========== DEFAULT VALUES FOR EXTERNALLY MODIFIABLE PARAMETERS =========== -->
@@ -813,28 +807,60 @@
     <xsl:attribute name="text:outline-level">
       <xsl:value-of select="$depth"/>
     </xsl:attribute>
-    
     <xsl:choose>
       <xsl:when test="$depth='1'">
-        <xsl:call-template name="block-title-h1"/>
+        <xsl:attribute name="text:style-name">Heading_20_1</xsl:attribute>
+        <!-- create start bookmark -->
+        <xsl:call-template name="gen-bookmark">
+          <xsl:with-param name="flag" select="0"/>
+        </xsl:call-template>
+        <xsl:apply-templates/>
       </xsl:when>
       <xsl:when test="$depth='2'">
-        <xsl:call-template name="block-title-h2"/>
+        <xsl:attribute name="text:style-name">Heading_20_2</xsl:attribute>
+        <!-- create start bookmark -->
+        <xsl:call-template name="gen-bookmark">
+          <xsl:with-param name="flag" select="0"/>
+        </xsl:call-template>
+        <xsl:apply-templates/>
       </xsl:when>
       <xsl:when test="$depth='3'">
-        <xsl:call-template name="block-title-h3"/>
+        <xsl:attribute name="text:style-name">Heading_20_3</xsl:attribute>
+        <!-- create start bookmark -->
+        <xsl:call-template name="gen-bookmark">
+          <xsl:with-param name="flag" select="0"/>
+        </xsl:call-template>
+        <xsl:apply-templates/>
       </xsl:when>
       <xsl:when test="$depth='4'">
-        <xsl:call-template name="block-title-h4"/>
+        <xsl:attribute name="text:style-name">Heading_20_4</xsl:attribute>
+        <!-- create start bookmark -->
+        <xsl:call-template name="gen-bookmark">
+          <xsl:with-param name="flag" select="0"/>
+        </xsl:call-template>
+        <xsl:apply-templates/>
       </xsl:when>
       <xsl:when test="$depth='5'">
-        <xsl:call-template name="block-title-h5"/>
+        <xsl:attribute name="text:style-name">Heading_20_5</xsl:attribute>
+        <!-- create start bookmark -->
+        <xsl:call-template name="gen-bookmark">
+          <xsl:with-param name="flag" select="0"/>
+        </xsl:call-template>
+        <xsl:apply-templates/>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:call-template name="block-title-h6"/>
+        <xsl:attribute name="text:style-name">Heading_20_6</xsl:attribute>
+        <!-- create start bookmark -->
+        <xsl:call-template name="gen-bookmark">
+          <xsl:with-param name="flag" select="0"/>
+        </xsl:call-template>
+        <xsl:apply-templates/>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:call-template name="gen-bookmark"/>
+    <!-- create end bookmark -->
+    <xsl:call-template name="gen-bookmark">
+      <xsl:with-param name="flag" select="1"/>
+    </xsl:call-template>
     
   </xsl:element>
 </xsl:template>
@@ -1100,16 +1126,27 @@
 <!-- generate bookmark with parent's topic id -->
 <xsl:template name="gen-bookmark">
   <xsl:param name="flag"/>
-  
-  
   <xsl:if test="parent::*[contains(@class, ' topic/topic ')]/@id">
     <xsl:variable name="id" select="parent::*[contains(@class, ' topic/topic ')]/@id"/>
+    <xsl:choose>
+      <!-- if $flag is 0 create bookmark-start -->
+      <xsl:when test="$flag = 0">
+        <xsl:element name="text:bookmark-start">
+          <xsl:attribute name="text:name">
+            <xsl:value-of select="$id"/>
+          </xsl:attribute>
+        </xsl:element>
+      </xsl:when>
+      <!-- otherwise create bookmark-end -->
+      <xsl:otherwise>
+        <xsl:element name="text:bookmark-end">
+          <xsl:attribute name="text:name">
+            <xsl:value-of select="$id"/>
+          </xsl:attribute>
+        </xsl:element>
+      </xsl:otherwise>
+    </xsl:choose>
     
-    <xsl:element name="text:bookmark">
-      <xsl:attribute name="text:name">
-        <xsl:value-of select="$id"/>
-      </xsl:attribute>
-    </xsl:element>
   </xsl:if>
   
 </xsl:template>

@@ -60,8 +60,14 @@
   <xsl:include href="xslodt/flag.xsl"/>
   
 <dita:extension id="dita.xsl.odt" behavior="org.dita.dost.platform.ImportXSLAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
-<xsl:param name="disableRelatedLinks" select="'no'"/>
 
+<xsl:param name="disableRelatedLinks" select="'no'"/>
+<xsl:param name="DRAFT" select="'no'"/>
+<xsl:param name="OUTPUTDIR" select="''"/>
+<xsl:param name="FILTERFILE"/>
+
+<xsl:param name="FILEREF">file:///</xsl:param>
+  
 <xsl:output method="xml" encoding="UTF-8" indent="yes"/>
 <xsl:strip-space elements="*"/>
 
