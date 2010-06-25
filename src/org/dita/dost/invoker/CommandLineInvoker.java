@@ -407,7 +407,7 @@ public class CommandLineInvoker {
         msg.append("  /eclipsehelptoc:       specify the root file name of the output eclipsehelp toc file in eclipsehelp transformation. Default is the name of the input ditamap file" + lSep);
         msg.append("  /eclipsecontenttoc:    specify the root file name of the output Eclipse content provider toc file in eclipsecontent transformation. Default is the name of the input ditamap file" + lSep);
         msg.append("  /xhtmltoc:             specify the root file name of the output xhtml toc file in xhtml transformation" + lSep);
-        msg.append("  /xhtmlclass:           specify whether DITA element names and ancestry are included in XHTML class attributes. Only \"yes\" and \"no\" are valid values. The default is no. " + lSep);
+        msg.append("  /xhtmlclass:           specify whether DITA element names and ancestry are included in XHTML class attributes. Only \"yes\" and \"no\" are valid values. The default is yes. " + lSep);
         msg.append("  /usetasklabels:        specify whether DITA Task sections should get headings. Only \"YES\" and \"NO\" are valid values. The default is NO. " + lSep);
         msg.append("  /validate:             specify whether the ditamap/dita/xml files to be validated" + lSep);
         msg.append("  /outercontrol:         specify how to respond to the overflowing dita/topic files. Only \"fail\", \"warn\" and \"quiet\" are valid values. The default is warn. " + lSep);

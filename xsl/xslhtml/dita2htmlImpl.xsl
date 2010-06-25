@@ -58,7 +58,7 @@
 <xsl:param name="CSSPATH"/>
 
 <!-- Preserve DITA class ancestry in XHTML output; values are 'yes' or 'no' -->
-<xsl:param name="PRESERVE-DITA-CLASS" select="'no'"/>
+<xsl:param name="PRESERVE-DITA-CLASS" select="'yes'"/>
 
 <!-- the file name containing XHTML to be placed in the HEAD area
      (file name and extension only - no path). -->
