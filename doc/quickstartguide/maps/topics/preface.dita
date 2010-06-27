@@ -1,0 +1,66 @@
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="preface" xml:lang="en-us">
+<title>Preface</title>
+<shortdesc>Explains purpose of this guide, describes the intended audiences, and
+lists requirements.</shortdesc>
+<body>
+<section>
+<p>This guide provides a quick start for technical writers who are new to both the DITA Open Toolkit and Ant. DITA-OT is first true single-source documentation solution; writers can produce multiple document types from the same XML source files.  DITA files are just XML files that conform to the DITA standard.  DITA Open Toolkit 1.5 ships with all the DTD and XSD files
+needed to verify that your DITA-based XML meets the standard. Once you author content that is DITA-compliant, you can include that content in a range of document types.</p>
+<p>Ant is a popular build tool used both by software engineers to run software and documentation builds.  DITA-OT uses Ant to programatically
+generate documentation.  Most technical writers, and certainly any that write
+for developer audiences, should learn the basics of Ant.  Such an introduction
+to the tool is beyond the scope of this guide.  Rather, the purpose here is
+to provide just enough working knowledge of Ant to edit and ran DITA-OT
+builds.</p>
+</section>
+<section>
+<title>Audience</title>
+<p>The primary audience for the guide is technical writers with no experience using the Ant build tool, but have been tasked with evaluating
+or implementing the use of the DITA Open Toolkit for their organization's documentation.  No prior experience with the DITA-OT is assumed.</p>
+   <p>This audience is assumed, however, to have knowledge of the following technologies:
+	 <ul>
+		<li>XML
+		</li> 
+		<li>XSL
+		</li> 
+		<li>DTD
+		</li>
+		<li>XSD
+		</li>
+	 </ul>
+	</p> 
+<p>The secondary audience is engineers tasked with providing one or more build scripts for a Technical Publications
+   department.  They may already be familiar with Ant, but they do not know which Ant properties are relevant to DITA-OT.</p>
+</section>
+<section>
+<title>Required Software</title>
+<p>
+<ul>
+<li>DITA-OT 1.5 Full Easy Install, available at http://sourceforge.net/projects/dita-ot/</li>
+<li>A text editor</li>
+</ul>
+</p>
+<p>You do not need to install Ant separately; DITA-OT ships with the required version of Ant.</p>
+</section> 
+<section>
+<title>Guide Overview</title>
+<p>The first chapter introduces DITA-OT and Ant and describes when you should consider using the toolkit. The
+second chapter describes how to edit and write your own Ant build file for documentation projects, provides a reference of Ant properties
+specific to DITA-OT, and how to generate DITA-based documents from the command line.  The third chapter provides tips for debugging transformation
+errors. A list of recommended practices for writing your build files and a short glossary are also provided.</p>
+<p>
+This guide was written using Notepad++, Gimp2, and DITA-OT 1.5.  No proprietary software was used.</p> 
+</section>
+<section>
+<title>Related Documentation</title>
+<p>
+<ul>
+<li>DITA Open Toolkit User Guide</li>
+<li>DITA 1.1 Language Specification</li>
+<li>Apache Ant 1.7.1 Manual</li>
+</ul>
+</p>
+</section>
+</body>
+</topic>

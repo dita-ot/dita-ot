@@ -1,0 +1,147 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference id="dita-ot-ant-properties"> 
+  <title>Ant Properties for DITA-OT</title>
+  <shortdesc>Reference list of DITA-specific ant properties.
+  </shortdesc> 
+  <refbody>
+    <section>
+	<p>DITA-OT processes your documentation project as an Ant project, which requires several Ant build
+	properties specific to DITA-OT.  Ant properties can be placed in three different places:
+	</p>
+	 <ul>
+		<li>Project-specific</li>
+		<li>Target-specific</li>
+		<li>Task-specific</li>
+	 </ul> 
+	<p>Project-specific properties apply to all target defined in your documentation project.
+	Target-specific properties apply only to the output target for which they are defined.
+	Task-specific properties are defined in DITA-OT's scripts and should not be modified.
+	</p>
+	<p>Although you can use most of the Toolkit's ant properties as either project or target-specific, this guide
+	provides recommendations for where to place them based on criteria such as the directory structure of your content files. debugging
+	considerations, and known issues with DITA-OT 1.5.</p>
+	<p>The following table describes basic project and task-specific Ant properties 
+	that appear in most DITA-OT projects.
+	</p>
+	</section>
+	<section>
+	<table>
+	<tgroup cols="3">
+		<colspec colname="COLSPEC0" colwidth="100	*"/>
+		<colspec colname="COLSPEC1" colwidth="75*"/>
+		<colspec colname="COLSPEC2" colwidth="200*"/>
+	 <thead>
+	 <row> 
+		<entry>Ant Property</entry>
+		<entry>Property Type</entry>
+		<entry>Description</entry>
+	 </row>
+	 </thead>
+	 <tbody>
+	<row>
+		<entry><codeph>args.ftr</codeph></entry>
+		<entry>Target-specific: all except PDF2</entry>
+		<entry>Defines the location of a file containing your custom document footer.</entry>
+	</row>
+	<row>
+		<entry><codeph>args.fo.userconfig</codeph></entry>
+		<entry>Target-specific: PDF2</entry>
+		<entry>Defines the location of a configuration file for the FO Plugin used by the DITA-OT to generate PDF output.</entry>
+	</row>
+	<row>
+		<entry><codeph>args.hdr</codeph></entry>
+		<entry>Target-specific: all except PDF2</entry>
+		<entry>Defines the location of a file containing your custom document header.</entry>
+	</row>
+	 <row>
+		<entry><codeph>args.input</codeph></entry>
+		<entry>Project-specific</entry>
+		<entry>Defines the location of the .ditamap file for your documentation project.  DITA-OT reads
+			this file to find the .dita files that comprise the content for the documentation project.</entry>
+	 </row>
+	 <row>
+		<entry><codeph>args.input.valfile</codeph></entry>
+		<entry>Project-specific</entry>
+		<entry>Defines the location of a DITA-OT filter file.  Filter files are used to define which topics are not included in the generated document.
+		Alternatively, you can filter topics from your output by creating a different <codeph>.ditamap</codeph> file for each version of the document.</entry>
+	</row>
+	 <row>
+		<entry><codeph>args.logdir</codeph></entry>
+		<entry>Project-specific</entry>
+		<entry>Defines the location where DITA-OT places a log file for your documentation project.</entry>
+	 </row>
+	 <row>
+		<entry><codeph>args.xsl</codeph></entry>
+		<entry>Target-specific: XHTML</entry>
+		<entry>Specificies the loctation of the xsl scripts used for transforming your content files.  Overrides the default value 
+		of <codeph>toolkitdir/xsl</codeph>.</entry>
+	 </row>
+	 <row>
+		<entry><codeph>basedir</codeph></entry>
+		<entry>Project-specific</entry>
+		<entry>The directory where your project's ant build script resides.  The DITA-OT will look for your
+			.dita files relative to this directory.  DITA-OT's default build script sets this as an attribute
+			of the project, but you can also define it as a project property.</entry>
+	</row>
+	<row id="cleantemp"><entry><codeph>clean.temp</codeph></entry>
+		 <entry>Target-specific: all</entry>
+		 <entry>Specifies whether DITA-OT should delete the files in the temporary directory, <codeph>dita.temp.dir</codeph>, when
+		 it finishes a build.</entry>
+	</row>
+	<row>
+		<entry><codeph>dita.extname</codeph></entry>
+		<entry>Project-specific</entry>
+		<entry>Defines the file extension for your DITA content files.  The default DITA-OT script defines this 
+			as <codeph>.dita</codeph>, however you may also set it to <codeph>.xml</codeph> if you want to write your
+			content in free XML editor that does not understand the .dita format.</entry>
+	</row>
+	<row>
+		<entry><codeph>dita.temp.dir</codeph></entry>
+		<entry>Target-specific</entry>
+		<entry>Defines the directory where DITA-OT places temporary files generated during
+			the transformation process.  The default value is the directory beneath the build
+			script.  If you generate more than one output type for your documentation, you might want to use
+			a separate temporary directory for each output type to facilitate your debugging efforts.</entry>
+	</row>
+	<row>
+		<entry><codeph>DITA_DIR</codeph></entry>
+		<entry>Project-specific</entry>
+		<entry>The location of your DITA-OT installation.  Set in the <codeph>startcmd.bat</codeph> script that
+			you should run before running the ant script for your documentation project.</entry>
+	</row>
+	<row>
+		<entry><codeph>outer.control</codeph></entry>
+		<entry>Target-specific: all</entry>
+		<entry>Specifies whether the content files are located outside the directory where your <codeph>.ditamap</codeph> file resides.
+		The default value is "no".  The <codeph>gen-list-without-flagging</codeph> Ant task generates a harmless warning for content outside
+		the map directory; you can suppress these warnings by setting the <codeph>outer.control</codeph> property to "true".
+		<p><image href="../images/warning.gif"/> Microsoft HTML Help Compiler cannot produce HTMLHelp for documentation projects that use outer content.  Your content files must reside in or below the directory containing the <codeph>.ditamap</codeph> file, and the map file cannot specifiy  ".." at the start
+		of <codeph>href</codeph> attributes for <codeph>topicref</codeph> elements.</p>
+		</entry>
+	</row>
+	<row>
+		<entry><codeph>transtype</codeph></entry>
+		<entry>Target-specific</entry>
+		<entry>Defines the output type for a specific Ant target.  The value of this property must be one of 
+			of the following DITA-supported values:
+				<ul>
+					<li>dita2pdf2</li>
+					<li>dita2xhtml</li>
+					<li>dita2eclipsehelp</li>
+					<li>dita2eclipsecontent</li>
+					<li>dita2troff</li>
+					<li>dita2rtf</li>
+					<li>dita2javahelp</li>
+				</ul>
+		</entry>
+	</row>
+	</tbody>
+	</tgroup>
+	</table>
+	</section>
+  </refbody>
+  <related-links>
+     <link href="../concepts/about_pdftransformation.dita"/>
+  </related-links>
+</reference> 
