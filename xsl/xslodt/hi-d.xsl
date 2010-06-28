@@ -34,10 +34,49 @@
 <xsl:strip-space elements="*"/>
 
 <xsl:template match="*[contains(@class,' hi-d/b ')]">
-     <xsl:element name="text:span">
-          <xsl:attribute name="text:style-name">bold</xsl:attribute>
-          <xsl:apply-templates/>
-     </xsl:element>
+     
+     <xsl:choose>
+          <xsl:when test="parent::*[contains(@class, ' topic/li ')]">
+               <xsl:element name="text:p">
+                    <xsl:element name="text:span">
+                         <xsl:attribute name="text:style-name">bold</xsl:attribute>
+                         <xsl:apply-templates/>
+                    </xsl:element>
+               </xsl:element>
+          </xsl:when>
+          <!-- nested by entry -->
+          <xsl:when test="parent::*[contains(@class, ' topic/entry ')]">
+               <!-- create p tag -->
+               <xsl:element name="text:p">
+                    <!-- alignment styles -->
+                    <xsl:if test="parent::*[contains(@class, ' topic/entry ')]/@align">
+                         <xsl:call-template name="set_align_value"/>
+                    </xsl:if>
+                    
+                    <xsl:element name="text:span">
+                         <xsl:attribute name="text:style-name">bold</xsl:attribute>
+                         <xsl:apply-templates/>
+                    </xsl:element>
+               </xsl:element>
+          </xsl:when>
+          <!-- nested by stentry -->
+          <xsl:when test="parent::*[contains(@class, ' topic/stentry ')]">
+               <xsl:element name="text:p">
+                    <xsl:element name="text:span">
+                         <xsl:attribute name="text:style-name">bold</xsl:attribute>
+                         <xsl:apply-templates/>
+                    </xsl:element>
+               </xsl:element>
+          </xsl:when>
+          <!-- nested by other tags -->
+          <xsl:otherwise>
+               <xsl:element name="text:span">
+                    <xsl:attribute name="text:style-name">bold</xsl:attribute>
+                    <xsl:apply-templates/>
+               </xsl:element>
+          </xsl:otherwise>
+     </xsl:choose>
+     
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' hi-d/i ')]">
