@@ -1,8 +1,0 @@
-<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
-<topic id="dummychapter1" xml:lang="en-us">
-<title>Writing Your Own Build Files</title>
-<shortdesc>Learning about DITA-specific Ant properties.</shortdesc>
-<body>
-<p>Generating documents using Ant from the command line. Understanding which Ant properties must be present in an Ant build file for the DITA Open Toolkit.</p>
-</body>
-</topic>
