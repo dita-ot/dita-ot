@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="concept_introduction"> 
+  <title>Overview</title> 
+  <shortdesc>Introducing the most important authoring tool since FrameMaker.</shortdesc> 
+  <conbody>
+	 <p>DITA-based writers gain numerous advantages using this powerful,
+		single-source, document solution. Indeed, I think of DITA as the Holy Grail of
+		technical documentation, the object for which many a manager has sent me on
+		long, fruitless searches in the past, only to return with half-hearted
+		recommendations for a combination of tools that required hours of manual
+		tweaking to reproduce a document in just one alternative format.	 
+	 </p> 
+	 <p>Today, I can tell my manager that the Grail has been found, and I can
+		produce a handful of different document output types simultaneously. This is a breakthrough technology
+		for technical writers. In industry jargon, "single source" has previously meant writing in FrameMaker, then
+		importing your source into another expensive application to produce a second output format, typically online help.
+		To gain just a second format from the source often required tedious hours, sometimes days, massaging the text
+		after it had been "translated" into an online help system. DITA-OT allows technical writers to produce seven output formats
+		at the same time.</p>
+	<p>However, several technologies make this magic happen.
+		Motivated, or just curious, writers will want a more advanced
+		understanding of what makes DITA tick.  To do so, you will need to learn how
+		to write Ant build scripts for the DITA-OT and invoke them from the command line.
+	</p> 
+	 <ul> 
+	    <li><xref href="about_ant.dita">Ant</xref>
+		</li>
+		<li><xref href="about_dita-ot.dita">DITA Open Toolkit</xref> 
+		</li> 
+	 </ul>
+	  <p>Hopefully, this guide will motivate you to study DITA-OT further and encourage your publications team to implement a
+		single-source, DITA-based documentation solution.
+	 </p>
+  </conbody>
+</concept> 
