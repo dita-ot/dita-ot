@@ -155,22 +155,15 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:variable name="topicrefShortdesc">
             <xsl:call-template name="getTopicrefShortdesc"/>
         </xsl:variable>
-        <xsl:choose>
-            <xsl:when test="$topicrefShortdesc/*">
-                <xsl:apply-templates select="*[contains(@class, ' topic/title ')]"/>
-                <xsl:apply-templates select="$topicrefShortdesc/*"/>
-                <xsl:apply-templates select="*[not(contains(@class, ' topic/title '))
-                                                and not(contains(@class, ' topic/shortdesc '))
-                                                and not(contains(@class, ' topic/topic '))]"/>
-                <xsl:call-template name="buildRelationships"/>
-                <xsl:apply-templates select="*[contains(@class,' topic/topic ')]"/>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:apply-templates select="*[not(contains(@class, ' topic/topic '))]"/>
-                <xsl:call-template name="buildRelationships"/>
-                <xsl:apply-templates select="*[contains(@class,' topic/topic ')]"/>
-            </xsl:otherwise>
-        </xsl:choose>
+        <xsl:apply-templates select="*[contains(@class, ' topic/title ')]"/>
+        <xsl:apply-templates select="*[contains(@class, ' topic/prolog ')]"/>
+        <xsl:apply-templates select="$topicrefShortdesc/*"/>
+        <xsl:apply-templates select="*[not(contains(@class, ' topic/title ')) and
+                                       not(contains(@class, ' topic/prolog ')) and
+                                       not(contains(@class, ' topic/shortdesc ')) and
+                                       not(contains(@class, ' topic/topic '))]"/>
+        <xsl:call-template name="buildRelationships"/>
+        <xsl:apply-templates select="*[contains(@class,' topic/topic ')]"/>
         <xsl:apply-templates select="." mode="topicEpilog"/>
     </xsl:template>
 
