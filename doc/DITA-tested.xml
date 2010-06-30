@@ -19,9 +19,9 @@ the DITA      processing system.</shortdesc>
 </strow>
 <strow>
 <stentry>Tested XSLT processor:</stentry>
-<stentry>Xalan-J 2.6, Saxon 6.5, Saxon 9<note>XSLT 2.0 standard is
-not officially supported yet, due to the reliance by some users on
-Xalan.</note></stentry>
+<stentry>Xalan-J 2.6, Xalan-J 2.7, Saxon 6.5, Saxon 9<note>XSLT 2.0
+standard is not officially supported yet, due to the reliance by some
+users on Xalan.</note></stentry><?Pub Caret 24?>
 </strow>
 <strow>
 <stentry>Tested JDK:</stentry>
@@ -29,9 +29,9 @@ Xalan.</note></stentry>
 </strow>
 <strow>
 <stentry>Tested Ant:</stentry>
-<stentry>Ant 1.7.1</stentry><?Pub Caret -1?>
+<stentry>Ant 1.7.1</stentry>
 </strow>
 </simpletable>
 </body>
 </topic>
-<?Pub *0000001100?>
+<?Pub *0000001113?>

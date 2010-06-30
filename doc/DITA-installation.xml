@@ -12,9 +12,9 @@
 <shortdesc>This topic explains how to install the DITA Toolkit processing
      environment.</shortdesc>
 <taskbody>
-<prereq>       <b>Prerequisite for installation:</b>       <p>The
-recommended use of the DITA Toolkit components is inside of the  
-       Java environment because its <xref
+<prereq><b>Prerequisite for installation:</b><p>The recommended use
+of the DITA Toolkit components is inside of the          Java environment
+because its <xref
 href="DITA-usingtransforms.xml#ditausingxform/preprocess">pre-process
          architecture</xref> needs Java and Java-based tools. Therefore,
 before          installing the DITA Toolkit processing environment,
@@ -22,7 +22,8 @@ ensure that you          have installed the following prerequisite
 tools :<note>See <xref href="DITA-tested.xml">Tested platforms and
 tools</xref> for detailed          information about versions of these
 tools that have been successfully          tested with the current
-toolkit release.</note></p>       <dl><dlentry id="Prereq">
+toolkit release.</note></p><?Pub Caret -2?>       <dl><dlentry
+id="Prereq">
 <dt id="jdk">Java runtime or development environment</dt>
 <dd>Provides the basic environment for most tools used in this   
           toolkit. <p>You can download and install the Java Development
@@ -32,12 +33,12 @@ href="http://java.sun.com/j2se/index.jsp" scope="external"></xref>)
 </dlentry><dlentry id="XSLT">
 <dt id="xslt">XSLT 1.0 compliant transformation engine</dt>
 <dd>Provides the main transformation services via the advanced XSLT
-             processor Saxon 6.5 (or greater) or Xalan-J 2.6 in the
-toolkit.<p>You can download and extract Saxon (available at <xref
+             processor Saxon 6.5 (or greater) or Xalan-J 2.6 (or greater)
+in the toolkit.<p>You can download and extract Saxon (available at <xref
 format="html" href="http://saxon.sourceforge.net/" scope="external"></xref>)
 or the Xalan-J (available at <xref format="html"
 href="http://xml.apache.org/xalan-j/downloads.html" scope="external"></xref>)
-into a directory of your              choice.</p><?Pub Caret 86?></dd>
+into a directory of your choice.</p></dd>
 </dlentry><dlentry id="antbuild">
 <dt>Ant 1.7.1 build tool</dt>
 <dd>Provides the standard setup and sequencing of processing     
@@ -260,4 +261,4 @@ DITA Toolkit when you                complete above steps.</xref>
 </taskbody>
 </task>
 </task>
-<?Pub *0000014680?>
+<?Pub *0000014666?>
