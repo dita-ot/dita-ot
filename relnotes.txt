@@ -1,5 +1,33 @@
 (c) Copyright IBM Corp. 2004, 2010 All Rights Reserved.
 
+     DITA OT release 1.5.2 latest build (Milestone 1)
+     
+     Release 1.5.2 will be a maintenance release based on the final
+     version of the DITA 1.2 standard. Release 1.5.2 will contain many
+     fixes and minor enhancements, to be determined as development
+     continues
+     
+     Release 1.5.2 is being developed using a series of test builds 
+     released to the community every three weeks. Each item in the list
+     below indicates which test build first contained the update.
+
+     [General Enhancements]
+     * Updates to the prototype Open Document Format transform (transtype="odt")
+       The ODF output is updated in each milestone.
+     
+     [SourceForge Enhancements Added]
+     * 3019853 Create new "textonly" output method for use by any transform (Milestone 1)
+     * 3012392 PDF transformation should allow args.xsl style override (Milestone 1)
+     * 3021544 Preserve DITA elements in XHTML class by default (Milestone 1)
+
+     [ SourceForge Patches Added]
+
+     [SourceForge Bugs Fixed] 
+     * 3016739 Chunking mixes up <link> to topic in reltable (Milestone 1)
+     * 2928582 commonTopicProcessing template prolog proessing out of order (Milestone 1)
+     
+====================================================================================
+
      DITA OT release 1.5.1
      
      Release 1.5.1 is a maintenance release based on Committee Draft 01
