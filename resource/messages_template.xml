@@ -646,8 +646,14 @@
     <response>Please make sure that this attribute value is unique within your project.</response>
   </message>
   
-  
   <!-- added by Alan on Date:2009-11-02 for Work Item:#1590 end   -->
+  
+  <!-- Added by William on 2010-06-21 for bug:3012392 start  -->
+  <message id="DOTA066F" type="FATAL">
+    <reason>Can't find the user specified stylesheet '%1'.</reason>
+    <response>Please provide the correct sytlesheet using Ant parameter 'args.xsl.pdf'.</response>
+  </message>
+  <!-- Added by William on 2010-06-21 for bug:3012392 start -->
   
   <!-- Add any messages defined by plugins. -->
   <dita:extension xmlns:dita="http://dita-ot.sourceforge.net"

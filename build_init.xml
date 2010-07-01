@@ -180,7 +180,20 @@
         </and>
       </condition>
     </dita-ot-fail>
-
+  	
+  	<!--Added by William on 2010-06-21 for bug:3012392 start -->
+    <dita-ot-fail id="DOTA066F" params="%1=${args.xsl.pdf}">
+      <condition>
+        <and>
+          <isset property="args.xsl.pdf" />
+          <not>
+            <available file="${args.xsl.pdf}" type="file" />
+          </not>
+        </and>
+      </condition>
+    </dita-ot-fail>
+  	<!--Added by William on 2010-06-21 for bug:3012392 start -->
+  	
     <dita-ot-fail id="DOTA004F" params="%1=${dita.extname}">
       <condition>
         <not>

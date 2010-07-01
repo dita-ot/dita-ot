@@ -234,13 +234,24 @@ with those set forth herein.
         <condition property="args.gen.task.lbl" value="">
             <not><isset property="args.gen.task.lbl"></isset></not>
         </condition>
-
+    	<!--Added by William on 2010-06-21 for bug:3012392 start -->
+    	<!-- use customized xsl file for pdf transform.-->
+    	<condition property="temp.transformation.file" value="${caller.dir}/${args.xsl.pdf}">
+    		<isset property="args.xsl.pdf"/>
+    	</condition>
+    	<!--Added by William on 2010-06-21 for bug:3012392 end -->
+    	
         <condition property="temp.transformation.file" value="${xsl.fo.dir}/topic2fo_shell_1.0${formatter.specific.ext}.xsl">
-    		<or>
-	            <equals arg1="${ws.runtime.publishing.map.dita.version}" arg2="1.0"/>
-	            <equals arg1="${ws.runtime.publishing.map.dita.version}" arg2="1.1"/>
-	            <equals arg1="${ws.runtime.publishing.map.dita.version}" arg2="1.2"/>
-			</or>
+    		<and>
+	        	<not>
+	    			<isset property="temp.transformation.file"/>
+	    		</not>
+	        	<or>
+		            <equals arg1="${ws.runtime.publishing.map.dita.version}" arg2="1.0"/>
+		            <equals arg1="${ws.runtime.publishing.map.dita.version}" arg2="1.1"/>
+		            <equals arg1="${ws.runtime.publishing.map.dita.version}" arg2="1.2"/>
+				</or>
+    	    </and>
         </condition>
 
         <condition property="temp.transformation.file" value="${xsl.fo.dir}/topic2fo_shell${formatter.specific.ext}.xsl">

@@ -66,6 +66,9 @@ public class CommandLineInvoker {
 		paramMap.put("/outext", "args.outext");
 		paramMap.put("/copycss", "args.copycss");
 		paramMap.put("/xsl", "args.xsl");
+		//Added by William on 2010-06-21 for bug:3012392 start
+		paramMap.put("/xslpdf", "args.xsl.pdf");
+		//Added by William on 2010-06-21 for bug:3012392 end 
 		paramMap.put("/tempdir", "dita.temp.dir");
 		paramMap.put("/cleantemp", "clean.temp");
 		paramMap.put("/foimgext", "args.fo.img.ext");
@@ -397,6 +400,7 @@ public class CommandLineInvoker {
         msg.append("  /indexshow:            specify whether each index entry should display within the body of the text itself. Valid values are \"no\" and \"yes\"" + lSep);
         msg.append("  /outext:               specify the output file extension for generated xhtml files. Default is \".html\"" + lSep);
         msg.append("  /xsl:            	     specify the xsl file used to replace the default xsl file" + lSep);
+        msg.append("  /xslpdf:            	 specify the xsl file used to replace the default xsl file when transforming pdf" + lSep);
         msg.append("  /cleantemp:            specify whether to clean the temp directory before each build. Valid values are \"no\" and \"yes\". Default is \"yes\"" + lSep);
         msg.append("  /foimgext:             specify the extension of image file in legacy pdf transformation. Default is \".jpg\"" + lSep);
         msg.append("  /fooutputrellinks      For legacy PDF transform: determine if links are included in the PDF. Values are \"no\" and \"yes\". Default is \"no\"." + lSep);
