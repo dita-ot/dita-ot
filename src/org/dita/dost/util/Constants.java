@@ -101,6 +101,12 @@ public abstract class Constants {
     public static final String ELEMENT_NAME_TOPICREF = "topicref";
     /**topicmeta element.*/
     public static final String ELEMENT_NAME_TOPICMETA = "topicmeta";
+    /**linktext element.*/
+    public static final String ELEMENT_NAME_LINKTEXT = "linktext";
+    /**navtitle element.*/
+    public static final String ELEMENT_NAME_NAVTITLE = "navtitle";
+    /**shortdesc element.*/
+    public static final String ELEMENT_NAME_SHORTDESC = "shortdesc";
     /**keywords element.*/
     public static final String ELEMENT_NAME_KEYWORDS = "keywords";
     /**maplinks element.*/
@@ -541,6 +547,10 @@ public abstract class Constants {
 	public static final String ATTR_CLASS_VALUE_DATA = " topic/data ";
 	/**ATTR_CLASS_VALUE_DATAABOUT.*/
 	public static final String ATTR_CLASS_VALUE_DATAABOUT = " topic/data-about ";
+	/**ATTR_CLASS_VALUE_DRAFTCOMMENT.*/
+	public static final String ATTR_CLASS_VALUE_DRAFTCOMMENT = " topic/draft-comment ";
+	/**ATTR_CLASS_VALUE_REQUIREDCLEANUP.*/
+	public static final String ATTR_CLASS_VALUE_REQUIREDCLEANUP = " topic/required-cleanup ";
 	/**ATTR_CLASS_VALUE_FOREIGN.*/
 	public static final String ATTR_CLASS_VALUE_FOREIGN = " topic/foreign ";
 	/**ATTR_CLASS_VALUE_UNKNOWN.*/

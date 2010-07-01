@@ -32,12 +32,14 @@ import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.Content;
 import org.dita.dost.util.Constants;
+import org.dita.dost.util.DITAAttrUtils;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.StringUtils;
 import org.dita.dost.util.TopicIdParser;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.w3c.dom.Text;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
@@ -60,6 +62,10 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 	private Hashtable<String,String> conflictTable = null;
 	
 	private Element elem = null;
+	
+	//Added by William on 20100628 for bug:3020314 start
+	private Element topicDoc = null;
+	//Added by William on 20100628 for bug:3020314 end
 	
 	private boolean separate = false;
 	
@@ -277,6 +283,14 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 		try{
 			if(classValue!=null && classValue.indexOf(Constants.ATTR_CLASS_VALUE_TOPIC)!=-1){
 				topicSpecSet.add(qName);
+				//Added by William on 20100628 for bug:3020314 start
+				String id = atts.getValue(Constants.ATTRIBUTE_NAME_ID);
+				//search node by id.
+				Element element = DITAAttrUtils.getInstance().
+				searchForNode(topicDoc, id, Constants.ATTRIBUTE_NAME_ID, Constants.ATTR_CLASS_VALUE_TOPIC);
+				//Added by William on 20100628 for bug:3020314 end
+				
+				//only by topic
 				if (separate && include && !"select-topic".equals(selectMethod)){
 					//chunk="by-topic" and next topic element found
 					fileWriterStack.push(output);
@@ -322,6 +336,11 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 					newChild.setAttribute(Constants.ATTRIBUTE_NAME_CLASS,
 							"-" + Constants.ATTR_CLASS_VALUE_TOPICREF);
 					newChild.setAttribute(Constants.ATTRIBUTE_NAME_XTRF, "generated_by_chunk");
+					
+					//Added by William on 20100628 for bug:3020314 start
+					createTopicMeta(element, newChild);
+					//Added by William on 20100628 for bug:3020314 end
+					
 					if(stub!=null){
 						if (includelevel == 0 && siblingStub != null){
 							//if it is the following sibling topic to the first topic in ditabase
@@ -368,9 +387,7 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 					}
 				} else if(skip) {
 					skipLevel = 1;
-				}
-				
-				else if(!include && idValue!=null &&
+				} else if(!include && idValue!=null &&
 						(idValue.equals(targetTopicId) ||
 								startFromFirstTopic)){	
 					//if the target topic has not been found and 
@@ -653,6 +670,11 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 						selectMethod = "select-branch";
 					} else if (chunkValue.contains("select-document")) {
 						firstTopicID = this.getFirstTopicId(FileUtils.resolveFile(filePath, parseFilePath));
+						
+						//Added by William on 20100628 for bug:3020314 start
+						topicDoc = DITAAttrUtils.getInstance().getTopicDoc(FileUtils.resolveFile(filePath, parseFilePath));
+						//Added by William on 20100628 for bug:3020314 end
+						
 						if (!StringUtils.isEmptyString(firstTopicID)) {
 							outputFileName = FileUtils.resolveFile(filePath, firstTopicID) + ditaext;
 							this.targetTopicId = firstTopicID;
@@ -670,6 +692,11 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 					}
 				} else {
 					firstTopicID = this.getFirstTopicId(FileUtils.resolveFile(filePath, parseFilePath));
+					
+					//Added by William on 20100628 for bug:3020314 start
+					topicDoc = DITAAttrUtils.getInstance().getTopicDoc(FileUtils.resolveFile(filePath, parseFilePath));
+					//Added by William on 20100628 for bug:3020314 end
+					
 					if (!StringUtils.isEmptyString(firstTopicID)) {
 						outputFileName = FileUtils.resolveFile(filePath, firstTopicID) + ditaext;
 						this.targetTopicId = firstTopicID;
@@ -715,6 +742,7 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 									,outputFileName) + "#" + firstTopicID);
 				}
 				include = false;
+				//just a mark?
 				stub = element.getOwnerDocument().createElement("stub");
 				siblingStub = element.getOwnerDocument().createElement("stub");
 				//<element>
@@ -725,7 +753,25 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 				//...
 				//Place stub
 				if(element.hasChildNodes()){
-					element.insertBefore(stub,element.getFirstChild());
+					//Added by William on 2010-06-24 for bug:3020313 start
+					NodeList list = element.getElementsByTagName(Constants.ELEMENT_NAME_TOPICMETA);
+					if(list.getLength() > 0){
+						Node node = list.item(0);
+						Node nextSibling = node.getNextSibling();
+						//no sibling so node is the last child
+						if(nextSibling == null){
+							node.getParentNode().appendChild(stub);
+						}else{
+							//has sibling node
+							node.getParentNode().insertBefore(stub, nextSibling);
+						}
+					}else{
+						//no topicmeta tag.
+						element.insertBefore(stub,element.getFirstChild());
+					}
+					//Added by William on 2010-06-24 for bug:3020313 end
+					
+					//element.insertBefore(stub,element.getFirstChild());
 				}else{
 					element.appendChild(stub);
 				}
@@ -1113,5 +1159,124 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 		return firstTopicId.toString();
 		
 	}
+	
+	/**
+	 * Create topicmeta node.
+	 * @param element document element of a topic file.
+	 * @param newChild node to be appended by topicmeta.
+	 */
+	private void createTopicMeta(Element element, Element newChild) {
+		
+		//create topicmeta element
+		Element topicmeta = elem.getOwnerDocument()
+		.createElement(Constants.ELEMENT_NAME_TOPICMETA);
+		topicmeta.setAttribute(Constants.ATTRIBUTE_NAME_CLASS,
+				"-" + Constants.ATTR_CLASS_VALUE_TOPICMETA);
+		newChild.appendChild(topicmeta);
+		
+		DITAAttrUtils utils = DITAAttrUtils.getInstance();
+		
+		//iterate the node.
+		if(element != null){
+			//search for navtitle tag
+			NodeList list = element.getChildNodes();
+			Node title = null;
+			Node navtitle = null;
+			for (int i = 0; i < list.getLength(); i++) {
+				Node node = list.item(i);
+				if(node.getNodeType() == Node.ELEMENT_NODE){
+					Element childNode = (Element)node;
+					
+					if(childNode.getAttribute(Constants.ATTRIBUTE_NAME_CLASS).
+							contains(Constants.ATTR_CLASS_VALUE_TITLE)){
+						//title node
+						title = childNode;
+					}
+					
+					if(childNode.getAttribute(Constants.ATTRIBUTE_NAME_CLASS).
+							contains(Constants.ATTR_CLASS_VALUE_TITLEALTS)){
+						NodeList subList = childNode.getChildNodes();
+						for(int j = 0; j < subList.getLength(); j ++ ){
+							Node subNode = subList.item(j);
+							if(subNode.getNodeType() == Node.ELEMENT_NODE){
+								Element subChildNode = (Element)subNode;
+								if(subChildNode.getAttribute(Constants.ATTRIBUTE_NAME_CLASS).
+										contains(Constants.ATTR_CLASS_VALUE_NAVTITLE)){
+									//navtitle node
+									navtitle = subChildNode;	
+								}
+							}
+						}
+					}
+				}
+			}
+			//shordesc node
+			Node shortDesc = null;
+			NodeList nodeList = element.getChildNodes();
+			for (int i = 0; i < nodeList.getLength(); i++) {
+				Node node = nodeList.item(i);
+				if (node.getNodeType() == Node.ELEMENT_NODE) {
+					Element elem = (Element) node;
+					String clazzValue = elem
+							.getAttribute(Constants.ATTRIBUTE_NAME_CLASS);
+					//if needed node is found
+					if (clazzValue != null && clazzValue.contains(Constants.ATTR_CLASS_VALUE_SHORTDESC)) {
+							shortDesc = elem;
+					}
+				}
+			}
+			
+			Element navtitleNode = elem.getOwnerDocument()
+			.createElement(Constants.ELEMENT_NAME_NAVTITLE);
+			navtitleNode.setAttribute(Constants.ATTRIBUTE_NAME_CLASS,
+					"-" + Constants.ATTR_CLASS_VALUE_NAVTITLE);
+			//navtitle node
+			if(navtitle != null){
+				String text = utils.getText(navtitle);
+				Text titleText = elem.getOwnerDocument().createTextNode(text);
+				navtitleNode.appendChild(titleText);
+				topicmeta.appendChild(navtitleNode);
+				
+			}else{
+				String text = utils.getText(title);
+				Text titleText = elem.getOwnerDocument().createTextNode(text);
+				navtitleNode.appendChild(titleText);
+				topicmeta.appendChild(navtitleNode);
+			}
+			
+			//gentext pi
+			Node pi = elem.getOwnerDocument()
+			.createProcessingInstruction("ditaot", "gentext");
+			topicmeta.appendChild(pi);
+			
+			//linktext
+			Element linkTextNode = elem.getOwnerDocument()
+			.createElement(Constants.ELEMENT_NAME_LINKTEXT);
+			linkTextNode.setAttribute(Constants.ATTRIBUTE_NAME_CLASS,
+					"-" + Constants.ATTR_CLASS_VALUE_MAP_LINKTEXT);
+			String text = utils.getText(title);
+			Text textNode = elem.getOwnerDocument().createTextNode(text);
+			linkTextNode.appendChild(textNode);
+			topicmeta.appendChild(linkTextNode);
+			
+			//genshortdesc pi
+			Node pii = elem.getOwnerDocument()
+			.createProcessingInstruction("ditaot", "genshortdesc");
+			topicmeta.appendChild(pii);
+			
+			//shortdesc
+			Element shortDescNode = elem.getOwnerDocument()
+			.createElement(Constants.ELEMENT_NAME_SHORTDESC);
+			shortDescNode.setAttribute(Constants.ATTRIBUTE_NAME_CLASS,
+					"-" + Constants.ATTR_CLASS_VALUE_MAP_SHORTDESC);
+			String shortDescText = utils.getText(shortDesc);
+			Text shortDescTextNode = elem.getOwnerDocument().createTextNode(shortDescText);
+			shortDescNode.appendChild(shortDescTextNode);
+			topicmeta.appendChild(shortDescNode);
+			
+		}
+	}
+	//Added by William on 20100628 for bug:3020314 end
+	
 
 }
