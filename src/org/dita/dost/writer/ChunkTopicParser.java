@@ -1178,7 +1178,7 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 		
 		//iterate the node.
 		if(element != null){
-			//search for navtitle tag
+			//search for title and navtitle tag
 			NodeList list = element.getChildNodes();
 			Node title = null;
 			Node navtitle = null;
@@ -1189,10 +1189,10 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 					
 					if(childNode.getAttribute(Constants.ATTRIBUTE_NAME_CLASS).
 							contains(Constants.ATTR_CLASS_VALUE_TITLE)){
-						//title node
+						//set title node
 						title = childNode;
 					}
-					
+					//navtitle node
 					if(childNode.getAttribute(Constants.ATTRIBUTE_NAME_CLASS).
 							contains(Constants.ATTR_CLASS_VALUE_TITLEALTS)){
 						NodeList subList = childNode.getChildNodes();
@@ -1202,7 +1202,7 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 								Element subChildNode = (Element)subNode;
 								if(subChildNode.getAttribute(Constants.ATTRIBUTE_NAME_CLASS).
 										contains(Constants.ATTR_CLASS_VALUE_NAVTITLE)){
-									//navtitle node
+									//set navtitle node
 									navtitle = subChildNode;	
 								}
 							}
@@ -1230,45 +1230,49 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 			.createElement(Constants.ELEMENT_NAME_NAVTITLE);
 			navtitleNode.setAttribute(Constants.ATTRIBUTE_NAME_CLASS,
 					"-" + Constants.ATTR_CLASS_VALUE_NAVTITLE);
-			//navtitle node
+			//append navtitle node
 			if(navtitle != null){
+				//Get text value
 				String text = utils.getText(navtitle);
 				Text titleText = elem.getOwnerDocument().createTextNode(text);
 				navtitleNode.appendChild(titleText);
 				topicmeta.appendChild(navtitleNode);
 				
 			}else{
+				//Get text value
 				String text = utils.getText(title);
 				Text titleText = elem.getOwnerDocument().createTextNode(text);
 				navtitleNode.appendChild(titleText);
 				topicmeta.appendChild(navtitleNode);
 			}
 			
-			//gentext pi
+			//append  gentext pi
 			Node pi = elem.getOwnerDocument()
 			.createProcessingInstruction("ditaot", "gentext");
 			topicmeta.appendChild(pi);
 			
-			//linktext
+			//append  linktext
 			Element linkTextNode = elem.getOwnerDocument()
 			.createElement(Constants.ELEMENT_NAME_LINKTEXT);
 			linkTextNode.setAttribute(Constants.ATTRIBUTE_NAME_CLASS,
 					"-" + Constants.ATTR_CLASS_VALUE_MAP_LINKTEXT);
+			//Get text value
 			String text = utils.getText(title);
 			Text textNode = elem.getOwnerDocument().createTextNode(text);
 			linkTextNode.appendChild(textNode);
 			topicmeta.appendChild(linkTextNode);
 			
-			//genshortdesc pi
+			//append  genshortdesc pi
 			Node pii = elem.getOwnerDocument()
 			.createProcessingInstruction("ditaot", "genshortdesc");
 			topicmeta.appendChild(pii);
 			
-			//shortdesc
+			//append  shortdesc
 			Element shortDescNode = elem.getOwnerDocument()
 			.createElement(Constants.ELEMENT_NAME_SHORTDESC);
 			shortDescNode.setAttribute(Constants.ATTRIBUTE_NAME_CLASS,
 					"-" + Constants.ATTR_CLASS_VALUE_MAP_SHORTDESC);
+			//Get text value
 			String shortDescText = utils.getText(shortDesc);
 			Text shortDescTextNode = elem.getOwnerDocument().createTextNode(shortDescText);
 			shortDescNode.appendChild(shortDescTextNode);
