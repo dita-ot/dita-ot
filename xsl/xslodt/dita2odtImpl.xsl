@@ -249,8 +249,6 @@
         </xsl:element>
       </xsl:otherwise>
     </xsl:choose>
-    
-    <xsl:apply-templates/>
   </xsl:template>
 
   <xsl:template match="*[contains(@class,' topic/topic ')]/*[contains(@class,' topic/title ')]">
@@ -442,11 +440,13 @@
     
   </xsl:template>
   
-  <xsl:template match="*[contains(@class,' topic/fig ')]/*[contains(@class,' topic/desc ')]">
+  <xsl:template match="*[contains(@class,' topic/fig ')]/*[contains(@class,' topic/desc ')]" priority="2">
     
-      <xsl:element name="text:line-break"/>
+    <xsl:element name="text:line-break"/>
+    
+    <xsl:element name="text:span">
       <xsl:apply-templates/>
-    
+    </xsl:element>
   </xsl:template>  
 
   <!-- =========== block things ============ -->
@@ -455,7 +455,7 @@
     
     <xsl:choose>
       <!-- nested by body or list -->
-      <xsl:when test="parent::*[contains(@class, ' topic/body')] or 
+      <xsl:when test="parent::*[contains(@class, ' topic/body ')] or 
                       parent::*[contains(@class, ' topic/li ')]">
         <xsl:element name="text:p">
           <xsl:attribute name="text:style-name">indent_paragraph_style</xsl:attribute>
@@ -1227,7 +1227,7 @@
   
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' topic/desc ')]">
+<xsl:template match="*[contains(@class,' topic/desc ')]" priority="0">
   <xsl:element name="text:span">
     <!-- 
     <xsl:apply-templates select="text()"/>

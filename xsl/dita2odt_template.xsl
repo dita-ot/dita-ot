@@ -39,6 +39,7 @@
   <xsl:import href="common/output-message.xsl"/>
   <xsl:import href="common/dita-utilities.xsl"/>
   <xsl:import href="common/related-links.xsl"/>
+  <xsl:import href="common/dita-textonly.xsl"/>
   <xsl:import href="xslodt/flag-old.xsl"/>
   <xsl:import href="xslodt/dita2odt-utilities.xsl"/>
   <xsl:import href="xslodt/dita2odt-table.xsl"/>
@@ -55,8 +56,15 @@
   <xsl:import href="xslodt/pr-d.xsl"/>
   <xsl:import href="xslodt/sw-d.xsl"/>
   <xsl:import href="xslodt/ui-d.xsl"/>
+  <!--
+  <xsl:import href="xslodt/common/vars.xsl"/>
+  <xsl:import href="xslodt/commons.xsl"/>
+  -->
   
+  <xsl:include href="xslodt/dita2odt-links.xsl"/>
+  <!-- 
   <xsl:include href="xslodt/dita2odt-relinks.xsl"/>
+  -->
   <xsl:include href="xslodt/flag.xsl"/>
   
 <dita:extension id="dita.xsl.odt" behavior="org.dita.dost.platform.ImportXSLAction" xmlns:dita="http://dita-ot.sourceforge.net"/>

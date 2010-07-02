@@ -101,7 +101,7 @@
   
   <xsl:choose>
     <!-- nested by body or list -->
-    <xsl:when test="parent::*[contains(@class, ' topic/body')] or 
+    <xsl:when test="parent::*[contains(@class, ' topic/body ')] or 
       parent::*[contains(@class, ' topic/li ')]">
       <xsl:element name="text:p">
         <xsl:call-template name="draw_image">

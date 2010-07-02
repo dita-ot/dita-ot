@@ -36,6 +36,29 @@
   <xsl:output method="xml"/>
   <xsl:output indent="yes"/>
   <xsl:strip-space elements="*"/>
+  
+  
+  <xsl:variable name="mapType">
+    <xsl:choose>
+      <xsl:when test="/*[contains(@class, ' map/map ') and contains(@class, ' bookmap/bookmap ')]">
+        <xsl:value-of select="'bookmap'"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="'ditamap'"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  
+  <xsl:variable name="map" select="//opentopic:map"/>
+  
+  <xsl:variable name="topicNumbers">
+    <xsl:for-each select="//*[contains(@class, ' topic/topic ') and not(contains(@class, ' bkinfo/bkinfo '))]">
+      <topic id="{@id}" guid="{generate-id()}"/>
+    </xsl:for-each>
+  </xsl:variable>
+  
+  <xsl:variable name="relatedTopicrefs" select="//*[contains(@class, ' map/reltable ')]//*[contains(@class, ' map/topicref ')]"/>
+  
 
   <!-- up to now opentopic:map tag is ignored -->
   <xsl:template match="opentopic:map">

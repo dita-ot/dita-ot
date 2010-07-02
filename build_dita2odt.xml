@@ -4,12 +4,15 @@
      applicable licenses.-->
 <!-- (c) Copyright IBM Corp. 2006 All Rights Reserved. -->
 <project name="dita2odt" default="dita2odt">
-  <property name="transtype" value="odt"/>
-  
-  <property name="odt.suffix" value=".odt" />
-  
+	
   <import file="build_init.xml" />
-  <import file="build_preprocess.xml" />
+  <import file="build_preprocess.xml" />	
+  
+  <property name="transtype" value="odt"/>
+  <property name="odt.suffix" value=".odt" />
+  <property name="args.fo.include.rellinks" value="all"/>
+	
+  
 <!--  
   <target name="dita2odt"
     depends="build-init, preprocess, map2odt, topic2odt,
@@ -55,8 +58,6 @@
   <!-- Build odt content.xml from DITA -->
   <target name="dita.map.odt" description="Build odt content.xml file">
   	
-  	<property name="disableRelatedLinks" value="yes"/>
-  	
     <condition property="args.xsl"
       value="${dita.script.dir}${file.separator}dita2odt.xsl">
       <not>
@@ -89,7 +90,7 @@
       <param name="DRAFT" expression="${args.draft}" if="args.draft" />
       <param name="FILTERFILE" expression="${dita.input.valfile.url}" if="dita.input.valfile" />
       <param name="OUTPUTDIR" expression="${dita.odt.outputdir}" />
-      <param name="disableRelatedLinks" expression="${disableRelatedLinks}"/>
+      <param name="disableRelatedLinks" expression="${args.fo.include.rellinks}"/>
       <!--<xmlcatalog refid="dita.catalog" />-->
     </xslt>
   </target>
@@ -110,6 +111,7 @@
       <param name="DRAFT" expression="${args.draft}" if="args.draft" />
       <param name="FILTERFILE" expression="${dita.input.valfile.url}" if="dita.input.valfile" />
       <param name="OUTPUTDIR" expression="${dita.odt.outputdir}" />
+      <param name="disableRelatedLinks" expression="${args.fo.include.rellinks}"/>
       <!--<xmlcatalog refid="dita.catalog" />-->
     </xslt>
   </target>
@@ -135,7 +137,7 @@
   </target>
 	
   <target name="dita.out.odt.manifest.file"
-    description="Build odt Manifest.xml file">
+    description="Build odt manifest.xml file">
     <xslt processor="trax"
       in="${dita.temp.dir}${file.separator}${user.input.file}"
       out="${dita.map.output.dir}${file.separator}META-INF${file.separator}manifest.xml"

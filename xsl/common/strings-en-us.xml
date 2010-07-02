@@ -71,5 +71,13 @@
 <str name="OpenQuote">"</str>
 <str name="CloseQuote">"</str>
 <str name="ColonSymbol">:</str>
+ 
+<!-- For odt transform -->
+<str name="On the page">On the page</str>
+<str name="Related Links">Related Links</str>
+<str name="List item">List item</str>
+<str name="Foot note">Foot note</str>
+<str name="Page">Page</str>
+<str name="Unordered List bullet">Unordered List bullet</str>
 
 </strings>

@@ -90,6 +90,12 @@
           fo:text-indent="0in" style:auto-text-indent="false"/>
       </style:style>
       
+      <style:style style:name="indent_text_style" style:display-name="indent_text_style"
+        style:family="text" style:class="text" style:parent-style-name="default_text_style">
+        <style:paragraph-properties fo:margin-left="0.25in" fo:margin-right="0in"
+          fo:text-indent="0in" style:auto-text-indent="false"/>
+      </style:style>
+      
       <style:style style:name="Default_20_Text" style:family="paragraph">
         <style:text-properties fo:font-size="10.5pt" style:font-size-asian="10.5pt"
           style:font-size-complex="10.5pt"/>

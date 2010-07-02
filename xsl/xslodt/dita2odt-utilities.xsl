@@ -764,4 +764,121 @@
     </xsl:choose>
   </xsl:template>
   
+  
+  <!-- functions for related-links. -->
+  <!-- same file or not -->
+  <xsl:template name="check_file_location">
+    <xsl:choose>
+      <xsl:when test="@href and starts-with(@href,'#')">
+        <xsl:value-of select="'true'"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="'false'"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+  
+  <xsl:template name="format_href_value">
+    <xsl:choose>
+      <xsl:when test="@href and starts-with(@href,'#')">
+        <xsl:choose>
+          <!-- get element id -->
+          <xsl:when test="contains(@href,'/')">
+            <xsl:value-of select="concat('#', substring-after(@href,'/'))"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="@href"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:when>
+      <xsl:when test="@href and contains(@href,'#')">
+        <xsl:value-of select="substring-before(@href,'#')"/>
+      </xsl:when>
+      <xsl:when test="@href and not(@href='')">
+        <xsl:value-of select="@href"/>
+      </xsl:when>
+    </xsl:choose>
+  </xsl:template>
+  <!-- create related links -->
+  <xsl:template name="create_related_links">
+    <xsl:param name="samefile"/>
+    <xsl:param name="text"/>
+    <xsl:param name="href-value"/>
+    
+    <xsl:choose>
+      <xsl:when test="@href and not(@href='')">
+        <xsl:element name="text:a">
+          <xsl:choose>
+            <xsl:when test="$samefile='true'">
+              <xsl:attribute name="xlink:href">
+                <xsl:value-of select="$href-value"/>
+              </xsl:attribute>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:variable name="NORMAMLIZEDOUTPUT" select="translate($OUTPUTDIR, '\', '/')"/>
+              <xsl:attribute name="xlink:href">
+                <xsl:value-of select="concat($FILEREF, $NORMAMLIZEDOUTPUT, '/', $href-value)"/>
+              </xsl:attribute>
+            </xsl:otherwise>
+          </xsl:choose>
+          <xsl:call-template name="gen-linktxt"/>
+          <xsl:if test="contains(@class,' topic/link ')">
+            <xsl:apply-templates select="*[contains(@class,' topic/desc ')]"/>
+            <xsl:element name="text:line-break"/>
+          </xsl:if>
+        </xsl:element>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:call-template name="output-message">
+          <xsl:with-param name="msgnum">028</xsl:with-param>
+          <xsl:with-param name="msgsev">E</xsl:with-param>
+        </xsl:call-template>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+  
+  <xsl:template name="gen-linktxt">
+    <xsl:choose>
+      <xsl:when test="contains(@class,' topic/xref ')">
+        <xsl:choose>
+          <xsl:when test="text() or *">
+            <xsl:apply-templates/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:call-template name="get-ascii">
+              <xsl:with-param name="txt">
+                <xsl:value-of select="@href"/>
+              </xsl:with-param>
+            </xsl:call-template>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:when>
+      <xsl:when test="contains(@class,' topic/link ')">
+        <xsl:choose>
+          <xsl:when test="*[contains(@class,' topic/linktext ')]">
+            <xsl:call-template name="get-ascii">
+              <xsl:with-param name="txt">
+                <xsl:value-of select="*[contains(@class,' topic/linktext ')]"/>
+              </xsl:with-param>
+            </xsl:call-template>
+          </xsl:when>
+          <xsl:when test="text()">
+            <xsl:call-template name="get-ascii">
+              <xsl:with-param name="txt">
+                <xsl:value-of select="text()"/>
+              </xsl:with-param>
+            </xsl:call-template>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:call-template name="get-ascii">
+              <xsl:with-param name="txt">
+                <xsl:value-of select="@href"/>
+              </xsl:with-param>
+            </xsl:call-template>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:when>
+    </xsl:choose>
+  </xsl:template>
+  
 </xsl:stylesheet>
