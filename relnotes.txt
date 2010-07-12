@@ -23,8 +23,13 @@
      [ SourceForge Patches Added]
 
      [SourceForge Bugs Fixed] 
-     * 3016739 Chunking mixes up <link> to topic in reltable (Milestone 1)
      * 2928582 commonTopicProcessing template prolog proessing out of order (Milestone 1)
+     * 2823221 version of Xalan-J inconsistent (Milestone 1)
+     * 3023642 Invalid @colname generated in nested table (Milestone 1)
+     * 3016739 Chunking mixes up <link> to topic in reltable (Milestone 1)
+     * 3020314 Chunk output includes index terms in navtitles (Milestone 1)
+     * 3020313 Chunk processor adds <topicref> before <topicmeta> (Milestone 1)
+
      
 ====================================================================================
 
