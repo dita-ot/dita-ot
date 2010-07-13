@@ -168,9 +168,12 @@ with those set forth herein.
     </target>
     
     <target name="publish.map.pdf">
+    	<echo message="current target:publish.map.pdf"/>
+    	<!--
     	<echo message="dita.temp.dir=${dita.temp.dir} work.dir=${work.dir}"/>
     	<echo message="dita.dir=${dita.dir}"/>
     	<echo message="basedir=${basedir}"/>
+    	-->
         <antcall target="transform.topic2pdf">
             <param name="inputFile" value="${work.dir}/${merged.file}"/>
             <param name="outputFile" 
@@ -329,9 +332,13 @@ with those set forth herein.
         <antcall target="copyCoreArtwork">
             <param name="coreArtworkDestinationDir" value="${artwork.dir}"/>
         </antcall>
-        
+    	
+    	
+    	<!--Change path of ${inputFile} into url-->
+    	<makeurl file="${inputFile}" property="inputfile.url" validate="true"/>
+    	
         <antcall target="transform.topic2fo">
-            <param name="inputFile" value="${file.protocol.prefix}${inputFile}"/>
+            <param name="inputFile" value="${inputfile.url}"/>
             <param name="outputFile" value="${dita.map.output.dir}/topic.fo"/>
             <param name="buildDir" value="${buildDir}"/>
             <param name="artworkPrefix" value="${artworkPrefix}"/>
