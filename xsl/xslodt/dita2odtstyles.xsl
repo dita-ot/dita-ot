@@ -80,7 +80,7 @@
           style:language-complex="none" style:country-complex="none" fo:hyphenate="false"/>
       </style:default-style>
       <!-- page break style -->
-      <style:style style:name="PX" style:family="paragraph">
+      <style:style style:name="PB" style:family="paragraph">
         <style:paragraph-properties fo:break-after="page"/>
       </style:style>
       
@@ -92,7 +92,7 @@
       
       <style:style style:name="indent_text_style" style:display-name="indent_text_style"
         style:family="text" style:class="text" style:parent-style-name="default_text_style">
-        <style:paragraph-properties fo:margin-left="0.25in" fo:margin-right="0in"
+        <style:text-properties fo:margin-left="0.25in" fo:margin-right="0in"
           fo:text-indent="0in" style:auto-text-indent="false"/>
       </style:style>
       
@@ -126,6 +126,26 @@
           <style:background-image/>
         </style:paragraph-properties>
       </style:style>
+      <!-- code and screen style -->
+      <style:style style:name="Code_Text" style:family="text" style:parent-style-name="indent_text_style">
+        <style:text-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0cm" fo:keep-together="always" fo:text-indent="0cm" style:auto-text-indent="false" fo:background-color="#d9d9d9" fo:padding-left="0cm" fo:padding-right="0cm" fo:padding-top="0.106cm" fo:padding-bottom="0.106cm" fo:border-left="none" fo:border-right="none" fo:border-top="0.002cm solid #000000" fo:border-bottom="0.002cm solid #000000">
+          <style:tab-stops>
+            <style:tab-stop style:position="0.75cm"/>
+            <style:tab-stop style:position="1.499cm"/>
+            <style:tab-stop style:position="2.251cm"/>
+            <style:tab-stop style:position="3cm"/>
+            <style:tab-stop style:position="3.75cm"/>
+            <style:tab-stop style:position="4.5cm"/>
+            <style:tab-stop style:position="5.249cm"/>
+            <style:tab-stop style:position="6.001cm"/>
+            <style:tab-stop style:position="6.75cm"/>
+            <style:tab-stop style:position="7.5cm"/>
+            <style:tab-stop style:position="8.25cm"/>
+            <style:tab-stop style:position="8.999cm"/>
+          </style:tab-stops>
+          <style:background-image/>
+        </style:text-properties>
+      </style:style>
       
       <style:style style:name="Code_Style_Paragraph" style:family="paragraph" style:parent-style-name="Code_Paragraph">
         <style:paragraph-properties text:number-lines="true" text:line-number="0"/>
@@ -152,8 +172,6 @@
         style:text-underline-style="solid"
         fo:font-weight="bold"/>
       -->
-      <xsl:comment>Font style</xsl:comment>
-      <xsl:value-of select="$newline"/>
       <style:style style:name="bold" style:family="text" style:parent-style-name="default_text_style">
         <style:text-properties fo:font-weight="bold" style:font-weight-asian="bold"
           style:font-weight-complex="bold"/>
@@ -202,6 +220,29 @@
       <text:notes-configuration text:note-class="endnote" style:num-format="i" text:start-value="0"/>
       <text:linenumbering-configuration text:number-lines="false" text:offset="0.1965in"
       style:num-format="1" text:number-position="left" text:increment="5"/>
+      
+      <!-- standard style -->
+      <style:style style:name="Standard" style:family="paragraph" style:class="text">
+        <style:paragraph-properties 
+        fo:margin-top="0.141cm" fo:margin-bottom="0.141cm" fo:orphans="2" 
+        fo:widows="2" text:number-lines="false" text:line-number="0"/>
+        <style:text-properties 
+        style:use-window-font-color="true" style:font-name="Arial" fo:font-size="10pt" fo:language="en" fo:country="US" 
+        style:font-name-asian="Times New Roman" style:font-size-asian="10pt" style:font-name-complex="Times New Roman" 
+        style:font-size-complex="12pt" style:language-complex="ar" style:country-complex="SA"/>
+      </style:style>
+      <!-- book title style -->
+      <style:style style:name="Title" style:family="paragraph" style:parent-style-name="Standard" style:class="chapter">
+        <style:paragraph-properties 
+          fo:margin-top="0.423cm" fo:margin-bottom="0.423cm" fo:padding-left="0cm" fo:padding-right="0cm" 
+          fo:padding-top="0.035cm" fo:padding-bottom="0cm" fo:border-left="none" fo:border-right="none" 
+          fo:border-top="0.002cm solid #000000" fo:border-bottom="none"/>
+        <style:text-properties 
+          fo:color="#333399" fo:font-size="20pt" fo:font-weight="bold" style:letter-kerning="true" 
+          style:font-size-asian="24pt" style:font-weight-asian="bold" style:font-name-complex="Arial" 
+          style:font-size-complex="16pt" style:font-weight-complex="bold"/>
+      </style:style>
+      
       
       <!-- Styles used in toc -->
       <style:style style:name="Index" style:family="paragraph"

@@ -1233,22 +1233,6 @@
 		</xsl:call-template>
 	</xsl:template>
 	
-	<xsl:template name="determineTopicType">
-		<xsl:variable name="id" select="ancestor-or-self::*[contains(@class, ' topic/topic ')][1]/@id"/>
-		<xsl:variable name="gid" select="generate-id(ancestor-or-self::*[contains(@class, ' topic/topic ')][1])"/>
-		<xsl:variable name="topicNumber" select="count(exsl:node-set($topicNumbers)/topic[@id = $id][following-sibling::topic[@guid = $gid]]) + 1"/>
-		<xsl:variable name="mapTopic">
-			<xsl:copy-of select="$map//*[@id = $id]"/>
-		</xsl:variable>
-		<xsl:variable name="foundTopicType">
-			<xsl:apply-templates select="$mapTopic/*[position() = $topicNumber]" mode="determineTopicType"/>
-		</xsl:variable>
-		<xsl:choose>
-			<xsl:when test="$foundTopicType!=''"><xsl:value-of select="$foundTopicType"/></xsl:when>
-			<xsl:otherwise>topicSimple</xsl:otherwise>
-		</xsl:choose>
-	</xsl:template>
-	
 	<!--create prerequisite links with all dups eliminated. -->
 	<!-- Omit prereq links from unordered related-links (handled by mode="prereqs" template). -->
 	<xsl:key name="omit-from-unordered-links" match="*[@importance='required' and (not(@role) or @role='sibling' or @role='friend' or @role='cousin')]" use="1"/>

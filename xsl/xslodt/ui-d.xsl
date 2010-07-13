@@ -53,7 +53,7 @@
      <xsl:when test="parent::*[contains(@class, ' topic/entry ')]
       /parent::*[contains(@class, ' topic/row ')]/parent::*[contains(@class, ' topic/thead ')]">
       <xsl:element name="text:span">
-       <xsl:attribute name="text:style-name">bold</xsl:attribute>
+       <xsl:attribute name="text:style-name">Code_Text</xsl:attribute>
        <xsl:apply-templates/>
       </xsl:element>
      </xsl:when>
@@ -71,7 +71,7 @@
      <xsl:when test="parent::*[contains(@class, ' topic/stentry ')]/
       parent::*[contains(@class, ' topic/sthead ')]">
       <xsl:element name="text:span">
-       <xsl:attribute name="text:style-name">bold</xsl:attribute>
+       <xsl:attribute name="text:style-name">Code_Text</xsl:attribute>
        <xsl:apply-templates/>
       </xsl:element>
      </xsl:when>
@@ -98,6 +98,7 @@
   <!-- other tags -->
   <xsl:otherwise>
    <xsl:element name="text:span">
+     <xsl:attribute name="text:style-name">Code_Text</xsl:attribute>
      <xsl:apply-templates/>
    </xsl:element>
   </xsl:otherwise>

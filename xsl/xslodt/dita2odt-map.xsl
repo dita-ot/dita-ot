@@ -28,10 +28,11 @@
   xmlns:smil="urn:oasis:names:tc:opendocument:xmlns:smil-compatible:1.0"
   xmlns:prodtools="http://www.ibm.com/xmlns/prodtools"
   xmlns:opentopic="http://www.idiominc.com/opentopic"
+  xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
   version="1.0" 
   xmlns:random="org.dita.dost.util.RandomUtils"
   xmlns:related-links="http://dita-ot.sourceforge.net/ns/200709/related-links"
-  exclude-result-prefixes="random related-links">
+  exclude-result-prefixes="random related-links dita-ot opentopic">
   
   <xsl:output method="xml"/>
   <xsl:output indent="yes"/>
@@ -62,6 +63,8 @@
 
   <!-- up to now opentopic:map tag is ignored -->
   <xsl:template match="opentopic:map">
+    <!-- page break. -->
+    <text:p text:style-name="PB"/>
     <text:table-of-content text:style-name="Sect1" text:protected="true"
       text:name="Table of Contents1">
       <text:table-of-content-source text:outline-level="10" text:use-index-marks="false"
@@ -167,7 +170,7 @@
       </text:index-body>
     </text:table-of-content>
     <!-- page break. -->
-    <text:p text:style-name="PX"/>
+    <text:p text:style-name="PB"/>
   </xsl:template>
   
   <xsl:template match="*[contains(@class, ' map/topicref ')]">
@@ -218,5 +221,57 @@
     </xsl:if>
     <xsl:apply-templates select="child::*[contains(@class, ' map/topicref ')]"/>
   </xsl:template>
+  
+  <!-- create book title -->
+  <xsl:template name="create_book_title">
+    <xsl:apply-templates select="//opentopic:map/*[contains(@class, ' bookmap/booktitle ')]" mode="create_book_title"/>
+  </xsl:template>
+  
+  <xsl:template match="*[contains(@class, ' bookmap/booktitle ')]" mode="create_book_title">
+    <xsl:element name="text:p">
+      <xsl:attribute name="text:style-name">Title</xsl:attribute>
+      <xsl:apply-templates select="*[contains(@class, ' bookmap/booklibrary ')]" mode="dita-ot:text-only"/>
+      <xsl:element name="text:line-break"/>
+      <xsl:apply-templates select="*[contains(@class, ' bookmap/mainbooktitle ')]" mode="dita-ot:text-only"/>
+      <xsl:element name="text:line-break"/>
+      <xsl:apply-templates select="*[contains(@class, ' bookmap/booktitlealt ')]" mode="dita-ot:text-only"/>
+    </xsl:element>
+    <!-- page break. -->
+    <text:p text:style-name="PB"/>
+  </xsl:template>
+  
+  <xsl:template name="create_book_abstract">
+    <xsl:apply-templates select="*[contains(@class, ' bookmap/bookmap ')]
+      /*[contains(@class, ' topic/topic ')]" mode="create_book_abstract"/>
+  </xsl:template>
+    
+  <xsl:template match="*[contains(@class, ' topic/topic ')]" mode="create_book_abstract">
+    <xsl:variable name="topicType">
+      <xsl:call-template name="determineTopicType"/>
+    </xsl:variable>
+    
+    <xsl:if test="$topicType = 'topicAbstract'">
+      <xsl:apply-templates/>
+    </xsl:if>
+    
+  </xsl:template>
+  
+  <xsl:template name="create_book_notices">
+    <xsl:apply-templates select="*[contains(@class, ' bookmap/bookmap ')]
+      /*[contains(@class, ' topic/topic ')]" mode="create_book_notices"/>
+  </xsl:template>
+    
+  <xsl:template match="*[contains(@class, ' topic/topic ')]" mode="create_book_notices">
+    <xsl:variable name="topicType">
+      <xsl:call-template name="determineTopicType"/>
+    </xsl:variable>
+    
+    <xsl:if test="$topicType = 'topicNotices'">
+      <xsl:apply-templates/>
+    </xsl:if>
+    
+  </xsl:template>
+  
+  
   
 </xsl:stylesheet>

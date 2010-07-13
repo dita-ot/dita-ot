@@ -10,7 +10,9 @@
   
   <property name="transtype" value="odt"/>
   <property name="odt.suffix" value=".odt" />
-  <property name="args.fo.include.rellinks" value="all"/>
+  <condition property="args.fo.include.rellinks.odt" value="none">
+     <not><isset property="args.fo.include.rellinks.odt"></isset></not>
+  </condition>
 	
   
 <!--  
@@ -90,7 +92,8 @@
       <param name="DRAFT" expression="${args.draft}" if="args.draft" />
       <param name="FILTERFILE" expression="${dita.input.valfile.url}" if="dita.input.valfile" />
       <param name="OUTPUTDIR" expression="${dita.odt.outputdir}" />
-      <param name="disableRelatedLinks" expression="${args.fo.include.rellinks}"/>
+      <param name="disableRelatedLinks" expression="${args.fo.include.rellinks.odt}"/>
+      <param name="INDEXSHOW" expression="${args.indexshow}" if="args.indexshow"/>
       <!--<xmlcatalog refid="dita.catalog" />-->
     </xslt>
   </target>
@@ -111,7 +114,8 @@
       <param name="DRAFT" expression="${args.draft}" if="args.draft" />
       <param name="FILTERFILE" expression="${dita.input.valfile.url}" if="dita.input.valfile" />
       <param name="OUTPUTDIR" expression="${dita.odt.outputdir}" />
-      <param name="disableRelatedLinks" expression="${args.fo.include.rellinks}"/>
+      <param name="disableRelatedLinks" expression="${args.fo.include.rellinks.odt}"/>
+      <param name="INDEXSHOW" expression="${args.indexshow}" if="args.indexshow"/>
       <!--<xmlcatalog refid="dita.catalog" />-->
     </xslt>
   </target>

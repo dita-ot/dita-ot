@@ -218,7 +218,40 @@
   <xsl:template match="*[contains(@class,' topic/no-topic-nesting ')]"/>
   
   <xsl:template match="*[contains(@class,' topic/topic ')]">
-    <xsl:apply-templates/>
+    <!-- 
+      <xsl:apply-templates/>
+    -->
+    <xsl:variable name="topicType">
+      <xsl:call-template name="determineTopicType"/>
+    </xsl:variable>
+    
+    <xsl:choose>
+      <xsl:when test="$topicType = 'topicChapter'">
+        <xsl:call-template name="processTopicChapter"/>
+      </xsl:when>
+      <xsl:when test="$topicType = 'topicAppendix'">
+        <xsl:apply-templates/>
+      </xsl:when>
+      <xsl:when test="$topicType = 'topicPart'">
+        <xsl:apply-templates/>
+      </xsl:when>
+      <xsl:when test="$topicType = 'topicPreface'">
+        <xsl:apply-templates/>
+      </xsl:when>
+      <xsl:when test="$topicType = 'topicNotices'">
+        <!-- Suppressed in normal processing, since it goes at the beginning of the book. -->
+        <!-- <xsl:call-template name="processTopicNotices"/> -->
+      </xsl:when>
+      <xsl:when test="$topicType = 'topicSimple'">
+        <xsl:apply-templates/>
+      </xsl:when>
+      <!--BS: skipp abstract (copyright) from usual content. It will be processed from the front-matter-->
+      <xsl:when test="$topicType = 'topicAbstract'"/>
+      <xsl:otherwise>
+        <xsl:apply-templates/>
+      </xsl:otherwise>
+    </xsl:choose>
+    
   </xsl:template>
   
   <xsl:template match="*[contains(@class, ' topic/body ')]">
@@ -307,7 +340,7 @@
     <xsl:element name="text:line-break"/>
   </xsl:template>
   
-  <xsl:template match="*[contains(@class,' topic/section ')]/*[contains(@class,' topic/note ')]">
+  <xsl:template match="*[contains(@class,' topic/section ')]/*[contains(@class,' topic/note ')]" priority="1">
     <xsl:element name="text:span">
       <xsl:apply-templates/>
     </xsl:element>
@@ -1303,7 +1336,7 @@
           </xsl:element>
   </xsl:template>
   
-<xsl:template match="*[contains(@class,' topic/note ')]" name="topic.note">
+<xsl:template match="*[contains(@class,' topic/note ')]" name="topic.note" priority="0">
   
   <xsl:choose>
     <!-- has child tags -->
@@ -2037,58 +2070,60 @@
 <!-- Indexterm tag -->
 <xsl:template match="*[contains(@class, ' topic/indexterm ')]">
   
-  <xsl:choose>
-    <xsl:when test="parent::*[contains(@class, ' topic/li ')]">
-      <xsl:element name="text:p">
-        <xsl:call-template name="create_indexterm_content"/>
-      </xsl:element>
-    </xsl:when>
-    <!-- nested by entry -->
-    <xsl:when test="parent::*[contains(@class, ' topic/entry ')]">
-      <!-- create p tag -->
-      <xsl:element name="text:p">
-        <!-- alignment styles -->
-        <xsl:if test="parent::*[contains(@class, ' topic/entry ')]/@align">
-          <xsl:call-template name="set_align_value"/>
-        </xsl:if>
-        <!-- cell belongs to thead -->
-        <xsl:choose>
-          <xsl:when test="parent::*[contains(@class, ' topic/entry ')]
-            /parent::*[contains(@class, ' topic/row ')]/parent::*[contains(@class, ' topic/thead ')]">
-            <xsl:element name="text:span">
-              <xsl:attribute name="text:style-name">bold</xsl:attribute>
+  <xsl:if test="$INDEXSHOW='yes'">
+    <xsl:choose>
+      <xsl:when test="parent::*[contains(@class, ' topic/li ')]">
+        <xsl:element name="text:p">
+          <xsl:call-template name="create_indexterm_content"/>
+        </xsl:element>
+      </xsl:when>
+      <!-- nested by entry -->
+      <xsl:when test="parent::*[contains(@class, ' topic/entry ')]">
+        <!-- create p tag -->
+        <xsl:element name="text:p">
+          <!-- alignment styles -->
+          <xsl:if test="parent::*[contains(@class, ' topic/entry ')]/@align">
+            <xsl:call-template name="set_align_value"/>
+          </xsl:if>
+          <!-- cell belongs to thead -->
+          <xsl:choose>
+            <xsl:when test="parent::*[contains(@class, ' topic/entry ')]
+              /parent::*[contains(@class, ' topic/row ')]/parent::*[contains(@class, ' topic/thead ')]">
+              <xsl:element name="text:span">
+                <xsl:attribute name="text:style-name">bold</xsl:attribute>
+                  <xsl:call-template name="create_indexterm_content"/>
+              </xsl:element>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:call-template name="create_indexterm_content"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:element>
+      </xsl:when>
+      <!-- nested by stentry -->
+      <xsl:when test="parent::*[contains(@class, ' topic/stentry ')]">
+        <xsl:element name="text:p">
+          <!-- cell belongs to sthead -->
+          <xsl:choose>
+            <xsl:when test="parent::*[contains(@class, ' topic/stentry ')]/
+              parent::*[contains(@class, ' topic/sthead ')]">
+              <xsl:element name="text:span">
+                <xsl:attribute name="text:style-name">bold</xsl:attribute>
                 <xsl:call-template name="create_indexterm_content"/>
-            </xsl:element>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:call-template name="create_indexterm_content"/>
-          </xsl:otherwise>
-        </xsl:choose>
-      </xsl:element>
-    </xsl:when>
-    <!-- nested by stentry -->
-    <xsl:when test="parent::*[contains(@class, ' topic/stentry ')]">
-      <xsl:element name="text:p">
-        <!-- cell belongs to sthead -->
-        <xsl:choose>
-          <xsl:when test="parent::*[contains(@class, ' topic/stentry ')]/
-            parent::*[contains(@class, ' topic/sthead ')]">
-            <xsl:element name="text:span">
-              <xsl:attribute name="text:style-name">bold</xsl:attribute>
-              <xsl:call-template name="create_indexterm_content"/>
-            </xsl:element>
-          </xsl:when>
-          <xsl:otherwise>
-              <xsl:call-template name="create_indexterm_content"/>
-          </xsl:otherwise>
-        </xsl:choose>
-      </xsl:element>
-    </xsl:when>
-    <!-- nested by other tags -->
-    <xsl:otherwise>
-      <xsl:call-template name="create_indexterm_content"/>
-    </xsl:otherwise>
-  </xsl:choose>
+              </xsl:element>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:call-template name="create_indexterm_content"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:element>
+      </xsl:when>
+      <!-- nested by other tags -->
+      <xsl:otherwise>
+        <xsl:call-template name="create_indexterm_content"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:if>
 </xsl:template>
 
 <xsl:template name="create_indexterm_content">

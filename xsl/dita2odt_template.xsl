@@ -58,21 +58,23 @@
   <xsl:import href="xslodt/ui-d.xsl"/>
   <!--
   <xsl:import href="xslodt/common/vars.xsl"/>
-  <xsl:import href="xslodt/commons.xsl"/>
   -->
-  
-  <xsl:include href="xslodt/dita2odt-links.xsl"/>
+  <xsl:import href="xslodt/commons.xsl"/>
+  <xsl:import href="xslodt/dita2odt-links.xsl"/>
   <!-- 
   <xsl:include href="xslodt/dita2odt-relinks.xsl"/>
   -->
   <xsl:include href="xslodt/flag.xsl"/>
   
+  
 <dita:extension id="dita.xsl.odt" behavior="org.dita.dost.platform.ImportXSLAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
 
-<xsl:param name="disableRelatedLinks" select="'no'"/>
+<xsl:param name="disableRelatedLinks" select="'none'"/>
 <xsl:param name="DRAFT" select="'no'"/>
 <xsl:param name="OUTPUTDIR" select="''"/>
 <xsl:param name="FILTERFILE"/>
+<!-- default "hide index entries" processing parameter ('no' = hide them)-->
+<xsl:param name="INDEXSHOW" select="'no'"/><!-- "no" and "yes" are valid values; non-'yes' is ignored -->
 
 <xsl:param name="FILEREF">file:///</xsl:param>
   
@@ -108,6 +110,13 @@
           <text:sequence-decl text:display-outline-level="0" text:name="Text"/>
           <text:sequence-decl text:display-outline-level="0" text:name="Drawing"/>
         </text:sequence-decls>
+        
+        <xsl:call-template name="create_book_title"/>
+     
+        <xsl:call-template name="create_book_abstract"/>
+        
+        <xsl:call-template name="create_book_notices"/>
+        
         <xsl:apply-templates/>
       </office:text>
     </office:body>
