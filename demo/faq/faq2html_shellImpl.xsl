@@ -27,8 +27,9 @@
 <!-- override the body template to place this toc in the expected location -->
 <xsl:template match="*[contains(@class,' topic/body ')]" name="topbody">
   <div>
-    <xsl:comment>topic body</xsl:comment>
     <xsl:call-template name="commonattributes"/>
+    
+    <xsl:comment>topic body</xsl:comment>
     <xsl:apply-templates select="@id"/>
     <!-- here, you can generate a toc based on what's a child of body -->
     <xsl:call-template name="gen-qatoc"/>
