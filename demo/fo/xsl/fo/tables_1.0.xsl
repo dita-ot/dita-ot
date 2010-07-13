@@ -309,8 +309,8 @@ See the accompanying license.txt file for applicable licenses.
         <xsl:choose>
             <xsl:when test="@colname">
                 <xsl:variable name="colname" select="@colname"/>
-                <xsl:if test="ancestor::*[contains(@class, ' topic/tgroup ')]/*[contains(@class,' topic/colspec ')][@colname = $colname]">
-                  <xsl:number select="ancestor::*[contains(@class, ' topic/tgroup ')]/*[contains(@class,' topic/colspec ')][@colname = $colname]"/>
+                <xsl:if test="ancestor::*[contains(@class, ' topic/tgroup ')][1]/*[contains(@class,' topic/colspec ')][@colname = $colname]">
+                  <xsl:number select="ancestor::*[contains(@class, ' topic/tgroup ')][1]/*[contains(@class,' topic/colspec ')][@colname = $colname]"/>
                 </xsl:if>
             </xsl:when>
             <xsl:when test="@colnum">

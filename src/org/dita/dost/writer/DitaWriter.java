@@ -270,6 +270,18 @@ public class DitaWriter extends AbstractXMLWriter {
     private Stack<List> colSpecStack; 
     //Added by William on 2009-11-27 for bug:1846993 embedded table bug end
     
+    //Added by William on 2010-07-01 for bug:3023642 start
+    //stack to store rowNum
+    private Stack<Integer> rowNumStack;
+    //stack to store columnNumber
+    private Stack<Integer> columnNumberStack;
+    //stack to store columnNumberEnd
+    private Stack<Integer> columnNumberEndStack;
+    //stack to store rowsMap
+    private Stack<Map<String, Integer>> rowsMapStack;
+    //Added by William on 2010-07-01 for bug:3023642 end
+    
+    
     //Added by William on 2009-06-30 for colname bug:2811358 start
     //store row number
     private int rowNumber;
@@ -343,6 +355,12 @@ public class DitaWriter extends AbstractXMLWriter {
         colSpec = null;
         //initial the stack
         colSpecStack = new Stack<List>();
+        //added by William on 20100701 for bug:3023642 start
+        rowNumStack = new Stack<Integer>();
+        columnNumberStack = new Stack<Integer>();
+        columnNumberEndStack = new Stack<Integer>();
+        rowsMapStack = new Stack<Map<String,Integer>>();
+        //added by William on 20100701 for bug:3023642 end
         
         props = null;
         validateMap = null;
@@ -669,12 +687,24 @@ public class DitaWriter extends AbstractXMLWriter {
 		//copy the element name
 		output.write(Constants.LESS_THAN + qName);
 		if (Constants.ELEMENT_NAME_TGROUP.equals(qName)){
-			columnNumber = 1; // initialize the column number
-		    columnNumberEnd = 0;//totally columns
+			
 		    //Edited by William on 2009-11-27 for bug:1846993 start
+		    //push into the stack.
+		    if(colSpec!=null){
+		    	colSpecStack.push(colSpec);
+			    rowNumStack.push(rowNumber);
+			    columnNumberStack.push(columnNumber);
+			    columnNumberEndStack.push(columnNumberEnd);
+			    rowsMapStack.push(rowsMap);
+		    }
+		    
+		    columnNumber = 1; // initialize the column number
+		    columnNumberEnd = 0;//totally columns
+		    rowsMap = new HashMap<String, Integer>();
+		    //new table initialize the col list
 		    colSpec = new ArrayList<String>(Constants.INT_16);
-		    //pushed into the stack.
-		    colSpecStack.push(colSpec);
+		    //new table initialize the col list
+		    rowNumber = 0;
 		    //Edited by William on 2009-11-27 for bug:1846993 end
 		}else if(Constants.ELEMENT_NAME_ROW.equals(qName)) {
 		    columnNumber = 1; // initialize the column number
@@ -867,13 +897,30 @@ public class DitaWriter extends AbstractXMLWriter {
         //Added by William on 2009-11-27 for bug:1846993 embedded table bug start
         //note the tag shouldn't be excluded by filter file(bug:2925636 )
         if(Constants.ELEMENT_NAME_TGROUP.equals(qName) && !exclude){
-        	colSpecStack.pop();
+        	//colSpecStack.pop();
+        	//rowNumStack.pop();
         	//has tgroup tag
         	if(!colSpecStack.isEmpty()){
+        		
         		colSpec = colSpecStack.peek();
+        		rowNumber = rowNumStack.peek().intValue();
+        		columnNumber = columnNumberStack.peek().intValue();
+        		columnNumberEnd = columnNumberEndStack.peek().intValue();
+        		rowsMap = rowsMapStack.peek();
+        		
+        		colSpecStack.pop();
+            	rowNumStack.pop();
+            	columnNumberStack.pop();
+            	columnNumberEndStack.pop();
+            	rowsMapStack.pop();
+            	
         	}else{
         		//no more tgroup tag
         		colSpec = null;
+        		rowNumber = 0;
+        		columnNumber = 1;
+        		columnNumberEnd = 0;
+        		rowsMap = null;
         	}
         }
         //Added by William on 2009-11-27 for bug:1846993 embedded table bug end
