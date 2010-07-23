@@ -27,6 +27,7 @@
      xmlns:anim="urn:oasis:names:tc:opendocument:xmlns:animation:1.0"
      xmlns:smil="urn:oasis:names:tc:opendocument:xmlns:smil-compatible:1.0"
      xmlns:prodtools="http://www.ibm.com/xmlns/prodtools"
+     xmlns:string="org.dita.dost.util.StyleUtils" exclude-result-prefixes="string"
      version="1.0">
 
 <xsl:output method="xml"/>
@@ -38,10 +39,7 @@
      <xsl:choose>
           <xsl:when test="parent::*[contains(@class, ' topic/li ')]">
                <xsl:element name="text:p">
-                    <xsl:element name="text:span">
-                         <xsl:attribute name="text:style-name">bold</xsl:attribute>
-                         <xsl:apply-templates/>
-                    </xsl:element>
+                     <xsl:apply-templates/>
                </xsl:element>
           </xsl:when>
           <!-- nested by entry -->
@@ -52,28 +50,25 @@
                     <xsl:if test="parent::*[contains(@class, ' topic/entry ')]/@align">
                          <xsl:call-template name="set_align_value"/>
                     </xsl:if>
-                    
-                    <xsl:element name="text:span">
-                         <xsl:attribute name="text:style-name">bold</xsl:attribute>
-                         <xsl:apply-templates/>
-                    </xsl:element>
+                    <xsl:apply-templates/>
                </xsl:element>
           </xsl:when>
           <!-- nested by stentry -->
           <xsl:when test="parent::*[contains(@class, ' topic/stentry ')]">
                <xsl:element name="text:p">
-                    <xsl:element name="text:span">
-                         <xsl:attribute name="text:style-name">bold</xsl:attribute>
-                         <xsl:apply-templates/>
-                    </xsl:element>
+                    <xsl:apply-templates/>
                </xsl:element>
           </xsl:when>
           <!-- nested by other tags -->
           <xsl:otherwise>
+               <!-- 
                <xsl:element name="text:span">
                     <xsl:attribute name="text:style-name">bold</xsl:attribute>
+               -->     
                     <xsl:apply-templates/>
+               <!-- 
                </xsl:element>
+               -->
           </xsl:otherwise>
      </xsl:choose>
      
@@ -84,10 +79,7 @@
      <xsl:choose>
           <xsl:when test="parent::*[contains(@class, ' topic/li ')]">
                <xsl:element name="text:p">
-                    <xsl:element name="text:span">
-                         <xsl:attribute name="text:style-name">italic</xsl:attribute>
                          <xsl:apply-templates/>
-                    </xsl:element>
                </xsl:element>
           </xsl:when>
           <!-- nested by entry -->
@@ -104,17 +96,11 @@
                               /parent::*[contains(@class, ' topic/row ')]/parent::*[contains(@class, ' topic/thead ')]">
                               <xsl:element name="text:span">
                                    <xsl:attribute name="text:style-name">bold</xsl:attribute>
-                                   <xsl:element name="text:span">
-                                        <xsl:attribute name="text:style-name">italic</xsl:attribute>
                                         <xsl:apply-templates/>
-                                   </xsl:element>
                               </xsl:element>
                          </xsl:when>
                          <xsl:otherwise>
-                              <xsl:element name="text:span">
-                                   <xsl:attribute name="text:style-name">italic</xsl:attribute>
                                    <xsl:apply-templates/>
-                              </xsl:element>
                          </xsl:otherwise>
                     </xsl:choose>
                </xsl:element>
@@ -128,27 +114,24 @@
                               parent::*[contains(@class, ' topic/sthead ')]">
                               <xsl:element name="text:span">
                                    <xsl:attribute name="text:style-name">bold</xsl:attribute>
-                                   <xsl:element name="text:span">
-                                        <xsl:attribute name="text:style-name">italic</xsl:attribute>
                                         <xsl:apply-templates/>
-                                   </xsl:element>
                               </xsl:element>
                          </xsl:when>
                          <xsl:otherwise>
-                              <xsl:element name="text:span">
-                                   <xsl:attribute name="text:style-name">italic</xsl:attribute>
                                    <xsl:apply-templates/>
-                              </xsl:element>
                          </xsl:otherwise>
                     </xsl:choose>
                </xsl:element>
           </xsl:when>
           <!-- nested by other tags -->
           <xsl:otherwise>
+               <!-- 
                <xsl:element name="text:span">
                     <xsl:attribute name="text:style-name">italic</xsl:attribute>
                     <xsl:apply-templates/>
                </xsl:element>
+               -->
+               <xsl:apply-templates/>
           </xsl:otherwise>
      </xsl:choose>
      
@@ -159,10 +142,7 @@
      <xsl:choose>
           <xsl:when test="parent::*[contains(@class, ' topic/li ')]">
                <xsl:element name="text:p">
-                    <xsl:element name="text:span">
-                         <xsl:attribute name="text:style-name">underline</xsl:attribute>
-                         <xsl:apply-templates/>
-                    </xsl:element>
+                    <xsl:apply-templates/>
                </xsl:element>
           </xsl:when>
           <!-- nested by entry -->
@@ -179,17 +159,11 @@
                               /parent::*[contains(@class, ' topic/row ')]/parent::*[contains(@class, ' topic/thead ')]">
                               <xsl:element name="text:span">
                                    <xsl:attribute name="text:style-name">bold</xsl:attribute>
-                                   <xsl:element name="text:span">
-                                        <xsl:attribute name="text:style-name">underline</xsl:attribute>
                                         <xsl:apply-templates/>
-                                   </xsl:element>
                               </xsl:element>
                          </xsl:when>
                          <xsl:otherwise>
-                              <xsl:element name="text:span">
-                                   <xsl:attribute name="text:style-name">underline</xsl:attribute>
                                    <xsl:apply-templates/>
-                              </xsl:element>
                          </xsl:otherwise>
                     </xsl:choose>
                </xsl:element>
@@ -203,27 +177,24 @@
                               parent::*[contains(@class, ' topic/sthead ')]">
                               <xsl:element name="text:span">
                                    <xsl:attribute name="text:style-name">bold</xsl:attribute>
-                                   <xsl:element name="text:span">
-                                        <xsl:attribute name="text:style-name">underline</xsl:attribute>
                                         <xsl:apply-templates/>
-                                   </xsl:element>
                               </xsl:element>
                          </xsl:when>
                          <xsl:otherwise>
-                              <xsl:element name="text:span">
-                                   <xsl:attribute name="text:style-name">underline</xsl:attribute>
                                    <xsl:apply-templates/>
-                              </xsl:element>
                          </xsl:otherwise>
                     </xsl:choose>
                </xsl:element>
           </xsl:when>
           <!-- nested by other tags -->
           <xsl:otherwise>
+               <!-- 
                <xsl:element name="text:span">
                     <xsl:attribute name="text:style-name">underline</xsl:attribute>
                     <xsl:apply-templates/>
                </xsl:element>
+               -->
+               <xsl:apply-templates/>
           </xsl:otherwise>
      </xsl:choose>
      
@@ -234,10 +205,7 @@
      <xsl:choose>
           <xsl:when test="parent::*[contains(@class, ' topic/li ')]">
                <xsl:element name="text:p">
-                    <xsl:element name="text:span">
-                         <xsl:attribute name="text:style-name">bold</xsl:attribute>
                          <xsl:apply-templates/>
-                    </xsl:element>
                </xsl:element>
           </xsl:when>
           <!-- nested by entry -->
@@ -248,28 +216,24 @@
                     <xsl:if test="parent::*[contains(@class, ' topic/entry ')]/@align">
                          <xsl:call-template name="set_align_value"/>
                     </xsl:if>
-                    
-                    <xsl:element name="text:span">
-                         <xsl:attribute name="text:style-name">bold</xsl:attribute>
                          <xsl:apply-templates/>
-                    </xsl:element>
                </xsl:element>
           </xsl:when>
           <!-- nested by stentry -->
           <xsl:when test="parent::*[contains(@class, ' topic/stentry ')]">
                <xsl:element name="text:p">
-                    <xsl:element name="text:span">
-                         <xsl:attribute name="text:style-name">bold</xsl:attribute>
-                         <xsl:apply-templates/>
-                    </xsl:element>
+                     <xsl:apply-templates/>
                </xsl:element>
           </xsl:when>
           <!-- nested by other tags -->
           <xsl:otherwise>
+               <!-- 
                <xsl:element name="text:span">
                     <xsl:attribute name="text:style-name">bold</xsl:attribute>
                     <xsl:apply-templates/>
                </xsl:element>
+               -->
+               <xsl:apply-templates/>
           </xsl:otherwise>
      </xsl:choose>
      
@@ -280,10 +244,7 @@
      <xsl:choose>
           <xsl:when test="parent::*[contains(@class, ' topic/li ')]">
                <xsl:element name="text:p">
-                    <xsl:element name="text:span">
-                         <xsl:attribute name="text:style-name">sup</xsl:attribute>
-                         <xsl:apply-templates/>
-                    </xsl:element>
+                     <xsl:apply-templates/>
                </xsl:element>
           </xsl:when>
           <!-- nested by entry -->
@@ -300,17 +261,11 @@
                               /parent::*[contains(@class, ' topic/row ')]/parent::*[contains(@class, ' topic/thead ')]">
                               <xsl:element name="text:span">
                                    <xsl:attribute name="text:style-name">bold</xsl:attribute>
-                                   <xsl:element name="text:span">
-                                        <xsl:attribute name="text:style-name">sup</xsl:attribute>
                                         <xsl:apply-templates/>
-                                   </xsl:element>
                               </xsl:element>
                          </xsl:when>
                          <xsl:otherwise>
-                              <xsl:element name="text:span">
-                                   <xsl:attribute name="text:style-name">sup</xsl:attribute>
                                    <xsl:apply-templates/>
-                              </xsl:element>
                          </xsl:otherwise>
                     </xsl:choose>
                </xsl:element>
@@ -324,27 +279,24 @@
                               parent::*[contains(@class, ' topic/sthead ')]">
                               <xsl:element name="text:span">
                                    <xsl:attribute name="text:style-name">bold</xsl:attribute>
-                                   <xsl:element name="text:span">
-                                        <xsl:attribute name="text:style-name">sup</xsl:attribute>
                                         <xsl:apply-templates/>
-                                   </xsl:element>
                               </xsl:element>
                          </xsl:when>
                          <xsl:otherwise>
-                              <xsl:element name="text:span">
-                                   <xsl:attribute name="text:style-name">sup</xsl:attribute>
                                    <xsl:apply-templates/>
-                              </xsl:element>
                          </xsl:otherwise>
                     </xsl:choose>
                </xsl:element>
           </xsl:when>
           <!-- nested by other tags -->
           <xsl:otherwise>
+               <!-- 
                <xsl:element name="text:span">
                     <xsl:attribute name="text:style-name">sup</xsl:attribute>
                     <xsl:apply-templates/>
                </xsl:element>
+               -->
+               <xsl:apply-templates/>
           </xsl:otherwise>
      </xsl:choose>
      
@@ -355,10 +307,7 @@
      <xsl:choose>
           <xsl:when test="parent::*[contains(@class, ' topic/li ')]">
                <xsl:element name="text:p">
-                    <xsl:element name="text:span">
-                         <xsl:attribute name="text:style-name">sub</xsl:attribute>
-                         <xsl:apply-templates/>
-                    </xsl:element>
+                    <xsl:apply-templates/>
                </xsl:element>
           </xsl:when>
           <!-- nested by entry -->
@@ -375,17 +324,11 @@
                               /parent::*[contains(@class, ' topic/row ')]/parent::*[contains(@class, ' topic/thead ')]">
                               <xsl:element name="text:span">
                                    <xsl:attribute name="text:style-name">bold</xsl:attribute>
-                                   <xsl:element name="text:span">
-                                        <xsl:attribute name="text:style-name">sub</xsl:attribute>
                                         <xsl:apply-templates/>
-                                   </xsl:element>
                               </xsl:element>
                          </xsl:when>
                          <xsl:otherwise>
-                              <xsl:element name="text:span">
-                                   <xsl:attribute name="text:style-name">sub</xsl:attribute>
                                    <xsl:apply-templates/>
-                              </xsl:element>
                          </xsl:otherwise>
                     </xsl:choose>
                </xsl:element>
@@ -399,29 +342,101 @@
                               parent::*[contains(@class, ' topic/sthead ')]">
                               <xsl:element name="text:span">
                                    <xsl:attribute name="text:style-name">bold</xsl:attribute>
-                                   <xsl:element name="text:span">
-                                        <xsl:attribute name="text:style-name">sub</xsl:attribute>
                                         <xsl:apply-templates/>
-                                   </xsl:element>
                               </xsl:element>
                          </xsl:when>
                          <xsl:otherwise>
-                              <xsl:element name="text:span">
-                                   <xsl:attribute name="text:style-name">sub</xsl:attribute>
                                    <xsl:apply-templates/>
-                              </xsl:element>
                          </xsl:otherwise>
                     </xsl:choose>
                </xsl:element>
           </xsl:when>
           <!-- nested by other tags -->
           <xsl:otherwise>
+               <!-- 
                <xsl:element name="text:span">
                     <xsl:attribute name="text:style-name">sub</xsl:attribute>
                     <xsl:apply-templates/>
                </xsl:element>
+               -->
+               <xsl:apply-templates/>
           </xsl:otherwise>
      </xsl:choose>    
+</xsl:template>
+     
+<xsl:template match="text()" mode="create_hi_style">
+     <xsl:variable name="style_name">
+          <xsl:call-template name="get_style_name"/> 
+     </xsl:variable>
+     
+     <xsl:variable name="hasStyleName">
+          <xsl:value-of select="string:insertHiStyleName($style_name)"/>
+     </xsl:variable>
+     
+     
+     
+     <xsl:if test="$style_name != '' and $hasStyleName = 'false'">
+          <xsl:element name="style:style">
+               <xsl:attribute name="style:name">
+                    <xsl:value-of select="$style_name"/>
+               </xsl:attribute>
+               <xsl:attribute name="style:family">text</xsl:attribute>
+               <xsl:attribute name="style:parent-style-name">default_text_style</xsl:attribute>
+               <xsl:element name="style:text-properties">
+                    <!-- bold-->
+                    <xsl:if test="contains($style_name, 'bold')">
+                         <xsl:attribute name="fo:font-weight">bold</xsl:attribute>
+                         <xsl:attribute name="style:font-weight-asian">bold</xsl:attribute>
+                         <xsl:attribute name="style:font-weight-complex">bold</xsl:attribute>
+                    </xsl:if>                    
+                    <!-- italic -->
+                    <xsl:if test="contains($style_name, 'italic')">
+                         <xsl:attribute name="fo:font-style">italic</xsl:attribute>
+                         <xsl:attribute name="style:font-style-asian">italic</xsl:attribute>
+                         <xsl:attribute name="style:font-style-complex">italic</xsl:attribute>
+                    </xsl:if>
+                    <!-- underline -->
+                    <xsl:if test="contains($style_name, 'underline')">
+                         <xsl:attribute name="style:text-underline-style">solid</xsl:attribute>
+                         <xsl:attribute name="style:text-underline-type">single</xsl:attribute>
+                         <xsl:attribute name="style:text-underline-width">auto</xsl:attribute>
+                         <xsl:attribute name="style:text-underline-color">font-color</xsl:attribute>
+                    </xsl:if>
+                    <!-- sub -->
+                    <xsl:if test="contains($style_name, 'sub')">
+                         <xsl:attribute name="style:text-position">sub 58%</xsl:attribute>
+                    </xsl:if>
+                    <!-- sup -->
+                    <xsl:if test="contains($style_name, 'sup')">
+                         <xsl:attribute name="style:text-position">super 58%</xsl:attribute>
+                    </xsl:if>
+               </xsl:element>
+          </xsl:element>
+     </xsl:if>
+     
+</xsl:template>
+
+<xsl:template name="get_style_name">
+     
+     <xsl:if test="ancestor::*[contains(@class, ' hi-d/i ')]">
+         <xsl:value-of select="'italic'"/> 
+     </xsl:if>
+     
+     <xsl:if test="ancestor::*[contains(@class, ' hi-d/u ')]">
+          <xsl:value-of select="'underline'"/>
+     </xsl:if>
+     
+     <xsl:if test="ancestor::*[contains(@class, ' hi-d/b ')]|ancestor::*[contains(@class, ' hi-d/tt ')]">
+          <xsl:value-of select="'bold'"/>
+     </xsl:if>
+     
+     <xsl:if test="ancestor::*[contains(@class, ' hi-d/sub ')]">
+          <xsl:value-of select="'sub'"/>
+     </xsl:if>
+     
+     <xsl:if test="ancestor::*[contains(@class, ' hi-d/sup ')]">
+          <xsl:value-of select="'sup'"/>
+     </xsl:if>
      
 </xsl:template>
 

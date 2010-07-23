@@ -83,6 +83,7 @@ public class CommandLineInvoker {
 		paramMap.put("/ditalocale", "args.dita.locale");
 		paramMap.put("/fooutputrellinks", "args.fo.output.rel.links");
 		paramMap.put("/foincluderellinks", "args.fo.include.rellinks");
+		paramMap.put("/odtincluderellinks", "args.fo.include.rellinks.odt");
 		paramMap.put("/retaintopicfo", "retain.topic.fo");
 		paramMap.put("/version", "args.eclipse.version");
 		paramMap.put("/provider", "args.eclipse.provider");
@@ -405,6 +406,7 @@ public class CommandLineInvoker {
         msg.append("  /foimgext:             specify the extension of image file in legacy pdf transformation. Default is \".jpg\"" + lSep);
         msg.append("  /fooutputrellinks      For legacy PDF transform: determine if links are included in the PDF. Values are \"no\" and \"yes\". Default is \"no\"." + lSep);
         msg.append("  /foincluderellinks     For default PDF transform: determine which links are included in the PDF. Values are \"none\", \"all\", and \"nofamily\". Default is \"none\"." + lSep);
+        msg.append("  /odtincluderellinks    For default ODT transform: determine which links are included in the ODT. Values are \"none\", \"all\", and \"nofamily\". Default is \"none\"." + lSep);
         msg.append("  /retaintopicfo         specify that topic.fo file should be preserved in the output directory. Specify any value, such as \"yes\", to preserve the file." + lSep);
         msg.append("  /javahelptoc:          specify the root file name of the output javahelp toc file in javahelp transformation. Default is the name of the input ditamap file" + lSep);
         msg.append("  /javahelpmap:          specify the root file name of the output javahelp map file in javahelp transformation. Default is the name of the input ditamap file" + lSep);

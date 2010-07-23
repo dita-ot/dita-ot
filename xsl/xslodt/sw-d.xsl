@@ -120,7 +120,7 @@
           <xsl:when test="parent::*[contains(@class, ' topic/li ')]">
                <xsl:element name="text:p">
                     <xsl:element name="text:span">
-                         <xsl:attribute name="text:style-name">italic</xsl:attribute>
+                         <xsl:attribute name="text:style-name">Courier_New</xsl:attribute>
                          <xsl:apply-templates/>
                     </xsl:element>
                </xsl:element>
@@ -140,14 +140,14 @@
                               <xsl:element name="text:span">
                                    <xsl:attribute name="text:style-name">bold</xsl:attribute>
                                    <xsl:element name="text:span">
-                                        <xsl:attribute name="text:style-name">italic</xsl:attribute>
+                                        <xsl:attribute name="text:style-name">Courier_New</xsl:attribute>
                                         <xsl:apply-templates/>
                                    </xsl:element>
                               </xsl:element>
                          </xsl:when>
                          <xsl:otherwise>
                               <xsl:element name="text:span">
-                                   <xsl:attribute name="text:style-name">italic</xsl:attribute>
+                                   <xsl:attribute name="text:style-name">Courier_New</xsl:attribute>
                                    <xsl:apply-templates/>
                               </xsl:element>
                          </xsl:otherwise>
@@ -164,14 +164,14 @@
                               <xsl:element name="text:span">
                                    <xsl:attribute name="text:style-name">bold</xsl:attribute>
                                    <xsl:element name="text:span">
-                                        <xsl:attribute name="text:style-name">italic</xsl:attribute>
+                                        <xsl:attribute name="text:style-name">Courier_New</xsl:attribute>
                                         <xsl:apply-templates/>
                                    </xsl:element>
                               </xsl:element>
                          </xsl:when>
                          <xsl:otherwise>
                               <xsl:element name="text:span">
-                                   <xsl:attribute name="text:style-name">italic</xsl:attribute>
+                                   <xsl:attribute name="text:style-name">Courier_New</xsl:attribute>
                                    <xsl:apply-templates/>
                               </xsl:element>
                          </xsl:otherwise>
@@ -181,7 +181,7 @@
           <!-- nested by other tags -->
           <xsl:otherwise>
                <xsl:element name="text:span">
-                    <xsl:attribute name="text:style-name">italic</xsl:attribute>
+                    <xsl:attribute name="text:style-name">Courier_New</xsl:attribute>
                     <xsl:apply-templates/>
                </xsl:element>
           </xsl:otherwise>

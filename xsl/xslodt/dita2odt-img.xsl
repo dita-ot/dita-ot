@@ -190,15 +190,69 @@
     </xsl:choose>
   </xsl:template>
   
+  
+  <xsl:template name="draw_image_odt">
+    <xsl:param name="type"/>
+    <xsl:param name="height"/>
+    <xsl:param name="width"/>
+    <xsl:param name="imgsrc"/>
+    <xsl:param name="alttext"/>
+    <xsl:choose>
+      <xsl:when test="not(contains($imgsrc,'://')) and $type and not($type='other') and ($height &gt; 0) and ($width &gt; 0)">
+        <xsl:element name="draw:frame">  
+          <xsl:attribute name="text:anchor-type">as-char</xsl:attribute>
+          <xsl:attribute name="svg:y">-0.18in</xsl:attribute>
+          <xsl:attribute name="svg:width">
+            <xsl:choose>
+              <xsl:when test="$width &gt; 6">6</xsl:when>
+              <xsl:otherwise>
+                <xsl:value-of select="$width"/>
+              </xsl:otherwise>
+            </xsl:choose>
+            <xsl:value-of select="'in'"/>
+          </xsl:attribute>
+          <xsl:attribute name="svg:height"><xsl:value-of select="$height"/>in</xsl:attribute>       
+          <xsl:element name="draw:image">  
+            <xsl:element name="office:binary-data">
+              <xsl:value-of select="java:getBASE64($OUTPUTDIR, string($imgsrc))" disable-output-escaping="yes"/>
+            </xsl:element>
+          </xsl:element>
+        </xsl:element>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:call-template name="gen-img-txt">
+          <xsl:with-param name="alttext" select="$alttext"/>
+        </xsl:call-template>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+  
 
 <xsl:template name="gen-img-txt">
+  <xsl:param name="alttext"/>
     <xsl:choose>
     <xsl:when test="*[contains(@class,' topic/alt ')]">
     <xsl:text>[PIC]</xsl:text><xsl:value-of select="*[contains(@class,' topic/alt ')]"/>
     </xsl:when>
-    <xsl:when test="@alt and not(@alt='')"><xsl:text>[PIC]</xsl:text><xsl:value-of select="@alt"/></xsl:when>
-    <xsl:when test="text() or *"><xsl:text>[PIC]</xsl:text><xsl:apply-templates/></xsl:when>
-    <xsl:otherwise><xsl:text>[PIC]</xsl:text><xsl:value-of select="@href"/></xsl:otherwise>
+      
+    <xsl:when test="startflag/alt-text">
+      <xsl:value-of select="startflag/alt-text"/>
+    </xsl:when>
+    
+    <xsl:when test="@alt and not(@alt='')">
+      <xsl:text>[PIC]</xsl:text><xsl:value-of select="@alt"/>
+    </xsl:when>
+    <xsl:when test="text() or *">
+      <xsl:text>[PIC]</xsl:text><xsl:apply-templates/>
+    </xsl:when>
+    <xsl:when test="@href">
+      <xsl:text>[PIC]</xsl:text><xsl:value-of select="@href"/>
+    </xsl:when>
+      <xsl:otherwise>
+        <xsl:call-template name="getStringODT">
+          <xsl:with-param name="stringName" select="$alttext"/>
+        </xsl:call-template>
+      </xsl:otherwise>
     </xsl:choose>
   
 </xsl:template>

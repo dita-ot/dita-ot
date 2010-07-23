@@ -109,6 +109,7 @@
       <!-- code and screen style -->
       <style:style style:name="Code_Paragraph" style:family="paragraph" style:parent-style-name="indent_paragraph_style">
         <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0cm" fo:keep-together="always" fo:text-indent="0cm" style:auto-text-indent="false" fo:background-color="#d9d9d9" fo:padding-left="0cm" fo:padding-right="0cm" fo:padding-top="0.106cm" fo:padding-bottom="0.106cm" fo:border-left="none" fo:border-right="none" fo:border-top="0.002cm solid #000000" fo:border-bottom="0.002cm solid #000000">
+          <!-- 
           <style:tab-stops>
             <style:tab-stop style:position="0.75cm"/>
             <style:tab-stop style:position="1.499cm"/>
@@ -123,12 +124,14 @@
             <style:tab-stop style:position="8.25cm"/>
             <style:tab-stop style:position="8.999cm"/>
           </style:tab-stops>
+          -->
           <style:background-image/>
         </style:paragraph-properties>
       </style:style>
       <!-- code and screen style -->
       <style:style style:name="Code_Text" style:family="text" style:parent-style-name="indent_text_style">
         <style:text-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0cm" fo:keep-together="always" fo:text-indent="0cm" style:auto-text-indent="false" fo:background-color="#d9d9d9" fo:padding-left="0cm" fo:padding-right="0cm" fo:padding-top="0.106cm" fo:padding-bottom="0.106cm" fo:border-left="none" fo:border-right="none" fo:border-top="0.002cm solid #000000" fo:border-bottom="0.002cm solid #000000">
+          <!-- 
           <style:tab-stops>
             <style:tab-stop style:position="0.75cm"/>
             <style:tab-stop style:position="1.499cm"/>
@@ -143,6 +146,7 @@
             <style:tab-stop style:position="8.25cm"/>
             <style:tab-stop style:position="8.999cm"/>
           </style:tab-stops>
+          -->
           <style:background-image/>
         </style:text-properties>
       </style:style>
@@ -172,6 +176,11 @@
         style:text-underline-style="solid"
         fo:font-weight="bold"/>
       -->
+      <style:style style:name="bold_paragraph" style:family="paragraph" style:parent-style-name="indent_paragraph_style">
+        <style:text-properties fo:font-weight="bold" style:font-weight-asian="bold"
+          style:font-weight-complex="bold"/>
+      </style:style>
+      
       <style:style style:name="bold" style:family="text" style:parent-style-name="default_text_style">
         <style:text-properties fo:font-weight="bold" style:font-weight-asian="bold"
           style:font-weight-complex="bold"/>
@@ -867,7 +876,7 @@
   <xsl:template name="create-font">
     <xsl:comment>font style</xsl:comment>
     <xsl:value-of select="$newline"/>
-    <style:style style:name="Courier_New" style:family="text">
+    <style:style style:name="Courier_New" style:family="text" style:parent-style-name="default_text_style">
       <style:text-properties style:font-name="Courier New"/>
     </style:style>
   </xsl:template>

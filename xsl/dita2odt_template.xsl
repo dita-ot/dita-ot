@@ -41,6 +41,7 @@
   <xsl:import href="common/related-links.xsl"/>
   <xsl:import href="common/dita-textonly.xsl"/>
   <xsl:import href="xslodt/flag-old.xsl"/>
+  
   <xsl:import href="xslodt/dita2odt-utilities.xsl"/>
   <xsl:import href="xslodt/dita2odt-table.xsl"/>
   <xsl:import href="xslodt/dita2odt-lists.xsl"/>
@@ -61,14 +62,15 @@
   -->
   <xsl:import href="xslodt/commons.xsl"/>
   <xsl:import href="xslodt/dita2odt-links.xsl"/>
+  <xsl:import href="xslodt/flag.xsl"/>
   <!-- 
   <xsl:include href="xslodt/dita2odt-relinks.xsl"/>
   -->
-  <xsl:include href="xslodt/flag.xsl"/>
   
   
 <dita:extension id="dita.xsl.odt" behavior="org.dita.dost.platform.ImportXSLAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
 
+<!-- =========== DEFAULT VALUES FOR EXTERNALLY MODIFIABLE PARAMETERS =========== -->
 <xsl:param name="disableRelatedLinks" select="'none'"/>
 <xsl:param name="DRAFT" select="'no'"/>
 <xsl:param name="OUTPUTDIR" select="''"/>
@@ -77,6 +79,51 @@
 <xsl:param name="INDEXSHOW" select="'no'"/><!-- "no" and "yes" are valid values; non-'yes' is ignored -->
 
 <xsl:param name="FILEREF">file:///</xsl:param>
+  
+<!-- Transform type, such as 'xhtml', 'htmlhelp', or 'eclipsehelp' -->
+<xsl:param name="TRANSTYPE" select="'odt'"/>
+
+<!-- for now, disable breadcrumbs pending link group descision -->
+<xsl:param name="BREADCRUMBS" select="'no'"/> <!-- "no" and "yes" are valid values; non-'yes' is ignored -->
+
+<!-- the year for the copyright -->
+<xsl:param name="YEAR" select="'2010'"/>
+
+<!-- the working directory that contains the document being transformed.
+  Needed as a directory prefix for the @conref "document()" function calls.
+  default is '../doc/')-->
+<xsl:param name="WORKDIR">
+  <xsl:apply-templates select="/processing-instruction()" mode="get-work-dir"/>
+</xsl:param>
+
+<!-- the path back to the project. Used for c.gif, delta.gif, css to allow user's to have
+  these files in 1 location. -->
+<xsl:param name="PATH2PROJ">
+  <xsl:apply-templates select="/processing-instruction('path2project')" mode="get-path2project"/>
+</xsl:param>
+
+<!-- the file name (file name and extension only - no path) of the document being transformed.
+  Needed to help with debugging.
+  default is 'myfile.xml')-->
+<!-- added by William on 2009-06-24 for flag support start -->
+<xsl:param name="FILENAME"/>
+<xsl:param name="FILEDIR"/>
+<xsl:param name="CURRENTFILE" select="concat($FILEDIR, '/', substring-before($FILENAME, '.'), $DITAEXT)"/>
+<!-- added by William on 2009-06-24 for flag support end --> 
+
+<!-- Debug mode - enables XSL debugging xsl-messages.
+  Needed to help with debugging.
+  default is 'no')-->
+<xsl:param name="DBG" select="'no'"/> <!-- "no" and "yes" are valid values; non-'yes' is ignored -->
+
+<!-- DITAEXT file extension name of dita topic file -->
+<xsl:param name="DITAEXT" select="'.xml'"/>
+
+<!-- Name of the keyref file that contains key definitions -->
+<xsl:param name="KEYREF-FILE" select="concat($WORKDIR,$PATH2PROJ,'keydef.xml')"/>
+
+<xsl:param name="BASEDIR"/>
+  
   
 <xsl:output method="xml" encoding="UTF-8" indent="yes"/>
 <xsl:strip-space elements="*"/>
@@ -94,14 +141,17 @@
   <xsl:template name="root">
     <!--xsl:call-template name="gen-list-table"/-->
     <office:scripts/>
-    <xsl:choose>
-      <xsl:when
+    <office:automatic-styles>
+      <xsl:if
         test="//*[contains(@class, ' topic/table ')]|//*[contains(@class, ' topic/simpletable ')]">
-        <office:automatic-styles>
           <xsl:call-template name="create_table_cell_styles"/>
-        </office:automatic-styles>
-      </xsl:when>
-    </xsl:choose>
+      </xsl:if>
+      
+      <xsl:apply-templates select="//text()" mode="create_hi_style"/>
+      
+      <xsl:call-template name="create_flagging_styles"/>
+      
+    </office:automatic-styles>
     <office:body>
       <office:text>
         <text:sequence-decls>

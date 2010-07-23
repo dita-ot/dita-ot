@@ -34,7 +34,11 @@
   xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xmlns:anim="urn:oasis:names:tc:opendocument:xmlns:animation:1.0"
   xmlns:smil="urn:oasis:names:tc:opendocument:xmlns:smil-compatible:1.0"
-  xmlns:prodtools="http://www.ibm.com/xmlns/prodtools" xmlns:random="org.dita.dost.util.RandomUtils" exclude-result-prefixes="random" version="1.0">
+  xmlns:prodtools="http://www.ibm.com/xmlns/prodtools" 
+  xmlns:random="org.dita.dost.util.RandomUtils"
+  xmlns:styleUtils="org.dita.dost.util.StyleUtils" 
+  exclude-result-prefixes="styleUtils random"
+  version="1.0">
   <!-- 
   <xsl:import href="../common/output-message.xsl"/>
   <xsl:import href="../common/dita-utilities.xsl"/>
@@ -55,77 +59,7 @@
 
   <xsl:variable name="msgprefix">DOTX</xsl:variable>
   
-  <!-- =========== DEFAULT VALUES FOR EXTERNALLY MODIFIABLE PARAMETERS =========== -->
-  
-  <!-- Transform type, such as 'xhtml', 'htmlhelp', or 'eclipsehelp' -->
-  <xsl:param name="TRANSTYPE" select="'odt'"/>
-  
-  <!-- Preserve DITA class ancestry in XHTML output; values are 'yes' or 'no' -->
-  <xsl:param name="PRESERVE-DITA-CLASS" select="'no'"/>
-  
-  <!-- the file name containing XHTML to be placed in the HEAD area
-    (file name and extension only - no path). -->
-  <xsl:param name="HDF"/>
-  
-  <!-- the file name containing XHTML to be placed in the BODY running-heading area
-    (file name and extension only - no path). -->
-  <xsl:param name="HDR"/>
-  
-  <!-- the file name containing XHTML to be placed in the BODY running-footing area
-    (file name and extension only - no path). -->
-  <xsl:param name="FTR"/>
-  
-  <!-- default "output artwork filenames" processing parameter ('no')-->
-  <xsl:param name="ARTLBL" select="'no'"/><!-- "no" and "yes" are valid values; non-'yes' is ignored -->
-  
-  <!-- default "hide index entries" processing parameter ('no' = hide them)-->
-  <xsl:param name="INDEXSHOW" select="'no'"/><!-- "no" and "yes" are valid values; non-'yes' is ignored -->
-  
-  <!-- for now, disable breadcrumbs pending link group descision -->
-  <xsl:param name="BREADCRUMBS" select="'no'"/> <!-- "no" and "yes" are valid values; non-'yes' is ignored -->
-  
-  <!-- the year for the copyright -->
-  <xsl:param name="YEAR" select="'2005'"/>
-  
-  <!-- the working directory that contains the document being transformed.
-    Needed as a directory prefix for the @conref "document()" function calls.
-    default is '../doc/')-->
-  <xsl:param name="WORKDIR">
-    <xsl:apply-templates select="/processing-instruction()" mode="get-work-dir"/>
-  </xsl:param>
-  
-  <!-- the path back to the project. Used for c.gif, delta.gif, css to allow user's to have
-    these files in 1 location. -->
-  <xsl:param name="PATH2PROJ">
-    <xsl:apply-templates select="/processing-instruction('path2project')" mode="get-path2project"/>
-  </xsl:param>
-  
-  <!-- the file name (file name and extension only - no path) of the document being transformed.
-    Needed to help with debugging.
-    default is 'myfile.xml')-->
-  <!-- added by William on 2009-06-24 for flag support start -->
-  <xsl:param name="FILENAME"/>
-  <xsl:param name="FILEDIR"/>
-  <xsl:param name="CURRENTFILE" select="concat($FILEDIR, '/', substring-before($FILENAME, '.'), $DITAEXT)"/>
-  <!-- added by William on 2009-06-24 for flag support end --> 
-  
-  <!-- Debug mode - enables XSL debugging xsl-messages.
-    Needed to help with debugging.
-    default is 'no')-->
-  <xsl:param name="DBG" select="'no'"/> <!-- "no" and "yes" are valid values; non-'yes' is ignored -->
-  
-  <!-- DITAEXT file extension name of dita topic file -->
-  <xsl:param name="DITAEXT" select="'.xml'"/>
-  
-  <!-- Switch to enable or disable the generation of default meta message in html header -->
-  <xsl:param name="genDefMeta" select="'no'"/>
-  
-  <!-- Name of the keyref file that contains key definitions -->
-  <xsl:param name="KEYREF-FILE" select="concat($WORKDIR,$PATH2PROJ,'keydef.xml')"/>
-  
-  <xsl:param name="BASEDIR"/>
-  
-  <!-- =========== "GLOBAL" DECLARATIONS (see 35) =========== -->
+  <!-- =========== "GLOBAL" DECLARATIONS =========== -->
   
   <!-- The document tree of filterfile returned by document($FILTERFILE,/)-->
   <xsl:variable name="FILTERFILEURL">
@@ -154,9 +88,10 @@
   </xsl:text></xsl:variable>
   
   <!--Check the file Url Definition of HDF HDR FTR-->
+  <!-- 
   <xsl:variable name="HDFFILE">
     <xsl:choose>
-      <xsl:when test="not($HDF)"/> <!-- If no filterfile leave empty -->
+      <xsl:when test="not($HDF)"/>
       <xsl:when test="starts-with($HDF,'file:')">
         <xsl:value-of select="$HDF"/>
       </xsl:when>
@@ -175,7 +110,7 @@
   
   <xsl:variable name="HDRFILE">
     <xsl:choose>
-      <xsl:when test="not($HDR)"/> <!-- If no filterfile leave empty -->
+      <xsl:when test="not($HDR)"/> 
       <xsl:when test="starts-with($HDR,'file:')">
         <xsl:value-of select="$HDR"/>
       </xsl:when>
@@ -194,7 +129,7 @@
   
   <xsl:variable name="FTRFILE">
     <xsl:choose>
-      <xsl:when test="not($FTR)"/> <!-- If no filterfile leave empty -->
+      <xsl:when test="not($FTR)"/> 
       <xsl:when test="starts-with($FTR,'file:')">
         <xsl:value-of select="$FTR"/>
       </xsl:when>
@@ -210,7 +145,7 @@
       </xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
-  
+  -->
   <!-- Filler for A-name anchors  - was &nbsp;-->
   <xsl:variable name="afill"></xsl:variable>
   
@@ -348,16 +283,84 @@
   </xsl:template>
 
   <xsl:template match="*[contains(@class,' topic/example ')]">
+    <!-- get flagging style name. -->
+    <xsl:variable name="flagStyleName">
+      <xsl:call-template name="getFlagStyleName"/>
+    </xsl:variable>
+    
+    <xsl:variable name="flagrules">
+      <xsl:call-template name="getrules"/>
+    </xsl:variable>
+    
     <xsl:choose>
       <!-- parent is body -->
       <xsl:when test="parent::*[contains(@class, ' topic/body ')]">
         <xsl:element name="text:p">
-          <xsl:apply-templates/>
+          <xsl:element name="text:span">
+            <!-- add flagging styles -->
+            <xsl:if test="$flagStyleName != ''">
+              <xsl:attribute name="text:style-name">
+                <xsl:value-of select="$flagStyleName"/>
+              </xsl:attribute>
+            </xsl:if>
+            
+            <xsl:call-template name="start-flagit">
+              <xsl:with-param name="flagrules" select="$flagrules"/>     
+            </xsl:call-template>
+            
+            <xsl:if test="@rev and not($FILTERFILE='') and ($DRAFT='yes') ">
+              <xsl:call-template name="start-mark-rev">
+                <xsl:with-param name="revvalue" select="@rev"/>
+                <xsl:with-param name="flagrules" select="$flagrules"/> 
+              </xsl:call-template>
+            </xsl:if>
+            <xsl:apply-templates/>
+            <xsl:if test="@rev and not($FILTERFILE='') and ($DRAFT='yes')">
+              <xsl:call-template name="end-mark-rev">
+                <xsl:with-param name="revvalue" select="@rev"/>
+                <xsl:with-param name="flagrules" select="$flagrules"/> 
+              </xsl:call-template>
+            </xsl:if>
+            
+            <xsl:call-template name="end-flagit">
+              <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param> 
+            </xsl:call-template>
+          </xsl:element>		
         </xsl:element>
       </xsl:when>
       <xsl:otherwise>
         <xsl:element name="text:span">
+          <!-- add flagging styles -->
+          <xsl:if test="$flagStyleName != ''">
+            <xsl:attribute name="text:style-name">
+              <xsl:value-of select="$flagStyleName"/>
+            </xsl:attribute>
+          </xsl:if>
+          
+          <xsl:call-template name="start-flagit">
+            <xsl:with-param name="flagrules" select="$flagrules"/>     
+          </xsl:call-template>
+          
+          <xsl:if test="@rev and not($FILTERFILE='') and ($DRAFT='yes') ">
+            <xsl:call-template name="start-mark-rev">
+              <xsl:with-param name="revvalue" select="@rev"/>
+              <xsl:with-param name="flagrules" select="$flagrules"/> 
+            </xsl:call-template>
+          </xsl:if>
+          
           <xsl:apply-templates/>
+          
+          <xsl:if test="@rev and not($FILTERFILE='') and ($DRAFT='yes')">
+            <xsl:call-template name="end-mark-rev">
+              <xsl:with-param name="revvalue" select="@rev"/>
+              <xsl:with-param name="flagrules" select="$flagrules"/> 
+            </xsl:call-template>
+          </xsl:if>
+          
+          <xsl:call-template name="end-flagit">
+            <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param> 
+          </xsl:call-template>
+          
         </xsl:element>        
       </xsl:otherwise>
     </xsl:choose>
@@ -486,13 +489,51 @@
 
   <xsl:template match="*[contains(@class,' topic/p ')]">
     
+    <xsl:variable name="flagStyleName">
+      <xsl:call-template name="getFlagStyleName"/>
+    </xsl:variable>
+    
+    <xsl:variable name="flagrules">
+      <xsl:call-template name="getrules"/>
+    </xsl:variable>
+    
+    
     <xsl:choose>
       <!-- nested by body or list -->
       <xsl:when test="parent::*[contains(@class, ' topic/body ')] or 
                       parent::*[contains(@class, ' topic/li ')]">
         <xsl:element name="text:p">
           <xsl:attribute name="text:style-name">indent_paragraph_style</xsl:attribute>
-          <xsl:apply-templates/>
+          <xsl:element name="text:span">
+            <!-- add flagging styles -->
+            <xsl:if test="$flagStyleName != ''">
+              <xsl:attribute name="text:style-name">
+                <xsl:value-of select="$flagStyleName"/>
+              </xsl:attribute>
+            </xsl:if>
+            <xsl:call-template name="start-flagit">
+              <xsl:with-param name="flagrules" select="$flagrules"/>     
+            </xsl:call-template>
+            <xsl:if test="@rev and not($FILTERFILE='') and ($DRAFT='yes') ">
+              <xsl:call-template name="start-mark-rev">
+                <xsl:with-param name="revvalue" select="@rev"/>
+                <xsl:with-param name="flagrules" select="$flagrules"/> 
+              </xsl:call-template>
+            </xsl:if>
+            
+            <xsl:apply-templates/>
+            
+            <xsl:if test="@rev and not($FILTERFILE='') and ($DRAFT='yes')">
+              <xsl:call-template name="end-mark-rev">
+                <xsl:with-param name="revvalue" select="@rev"/>
+                <xsl:with-param name="flagrules" select="$flagrules"/> 
+              </xsl:call-template>
+            </xsl:if>
+            
+            <xsl:call-template name="end-flagit">
+              <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param> 
+            </xsl:call-template>
+          </xsl:element>            
         </xsl:element>
       </xsl:when>
       <!-- nested by entry -->
@@ -503,20 +544,47 @@
           <xsl:if test="parent::*[contains(@class, ' topic/entry ')]/@align">
             <xsl:call-template name="set_align_value"/>
           </xsl:if>
-
-          <!-- cell belongs to thead -->
-          <xsl:choose>
-            <xsl:when test="parent::*[contains(@class, ' topic/entry ')]
-              /parent::*[contains(@class, ' topic/row ')]/parent::*[contains(@class, ' topic/thead ')]">
-              <xsl:element name="text:span">
-                <xsl:attribute name="text:style-name">bold</xsl:attribute>
-                <xsl:apply-templates/>
-              </xsl:element>
-            </xsl:when>
-            <xsl:otherwise>
-              <xsl:apply-templates/>
-            </xsl:otherwise>
-          </xsl:choose>
+          <xsl:element name="text:span">
+            <!-- add flagging styles -->
+            <xsl:if test="$flagStyleName != ''">
+              <xsl:attribute name="text:style-name">
+                <xsl:value-of select="$flagStyleName"/>
+              </xsl:attribute>
+            </xsl:if>
+            
+            <xsl:call-template name="start-flagit">
+              <xsl:with-param name="flagrules" select="$flagrules"/>     
+            </xsl:call-template>
+            
+            <xsl:if test="@rev and not($FILTERFILE='') and ($DRAFT='yes') ">
+              <xsl:call-template name="start-mark-rev">
+                <xsl:with-param name="revvalue" select="@rev"/>
+                <xsl:with-param name="flagrules" select="$flagrules"/> 
+              </xsl:call-template>
+            </xsl:if>
+              <!-- cell belongs to thead -->
+              <xsl:choose>
+                <xsl:when test="parent::*[contains(@class, ' topic/entry ')]
+                  /parent::*[contains(@class, ' topic/row ')]/parent::*[contains(@class, ' topic/thead ')]">
+                  <xsl:element name="text:span">
+                    <xsl:attribute name="text:style-name">bold</xsl:attribute>
+                    <xsl:apply-templates/>
+                  </xsl:element>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:apply-templates/>
+                </xsl:otherwise>
+              </xsl:choose>
+            <xsl:if test="@rev and not($FILTERFILE='') and ($DRAFT='yes')">
+              <xsl:call-template name="end-mark-rev">
+                <xsl:with-param name="revvalue" select="@rev"/>
+                <xsl:with-param name="flagrules" select="$flagrules"/> 
+              </xsl:call-template>
+            </xsl:if>
+            <xsl:call-template name="end-flagit">
+              <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param> 
+            </xsl:call-template>
+          </xsl:element>
         </xsl:element>
       </xsl:when>
       <!-- nested by stentry -->
@@ -526,13 +594,67 @@
           <xsl:choose>
             <xsl:when test="parent::*[contains(@class, ' topic/stentry ')]/
               parent::*[contains(@class, ' topic/sthead ')]">
+                <xsl:attribute name="text:style-name">bold_paragraph</xsl:attribute>
               <xsl:element name="text:span">
-                <xsl:attribute name="text:style-name">bold</xsl:attribute>
-                <xsl:apply-templates/>
-              </xsl:element>
+                <!-- add flagging styles -->
+                <xsl:if test="$flagStyleName != ''">
+                  <xsl:attribute name="text:style-name">
+                    <xsl:value-of select="$flagStyleName"/>
+                  </xsl:attribute>
+                </xsl:if>
+                <xsl:call-template name="start-flagit">
+                  <xsl:with-param name="flagrules" select="$flagrules"/>     
+                </xsl:call-template>
+                <xsl:if test="@rev and not($FILTERFILE='') and ($DRAFT='yes') ">
+                  <xsl:call-template name="start-mark-rev">
+                    <xsl:with-param name="revvalue" select="@rev"/>
+                    <xsl:with-param name="flagrules" select="$flagrules"/> 
+                  </xsl:call-template>
+                </xsl:if>
+                
+                  <xsl:apply-templates/>
+                
+                <xsl:if test="@rev and not($FILTERFILE='') and ($DRAFT='yes')">
+                  <xsl:call-template name="end-mark-rev">
+                    <xsl:with-param name="revvalue" select="@rev"/>
+                    <xsl:with-param name="flagrules" select="$flagrules"/> 
+                  </xsl:call-template>
+                </xsl:if>
+                <xsl:call-template name="end-flagit">
+                  <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param> 
+                </xsl:call-template>
+              </xsl:element>	
             </xsl:when>
             <xsl:otherwise>
-              <xsl:apply-templates/>
+              <xsl:element name="text:span">
+                <!-- add flagging styles -->
+                <xsl:if test="$flagStyleName != ''">
+                  <xsl:attribute name="text:style-name">
+                    <xsl:value-of select="$flagStyleName"/>
+                  </xsl:attribute>
+                </xsl:if>
+                <xsl:call-template name="start-flagit">
+                  <xsl:with-param name="flagrules" select="$flagrules"/>     
+                </xsl:call-template>
+                <xsl:if test="@rev and not($FILTERFILE='') and ($DRAFT='yes') ">
+                  <xsl:call-template name="start-mark-rev">
+                    <xsl:with-param name="revvalue" select="@rev"/>
+                    <xsl:with-param name="flagrules" select="$flagrules"/> 
+                  </xsl:call-template>
+                </xsl:if>
+                
+                <xsl:apply-templates/>
+                
+                <xsl:if test="@rev and not($FILTERFILE='') and ($DRAFT='yes')">
+                  <xsl:call-template name="end-mark-rev">
+                    <xsl:with-param name="revvalue" select="@rev"/>
+                    <xsl:with-param name="flagrules" select="$flagrules"/> 
+                  </xsl:call-template>
+                </xsl:if>
+                <xsl:call-template name="end-flagit">
+                  <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param> 
+                </xsl:call-template>
+              </xsl:element>
             </xsl:otherwise>
           </xsl:choose>
         </xsl:element>
@@ -540,7 +662,33 @@
       <!-- nested by other tags -->
       <xsl:otherwise>
         <xsl:element name="text:span">
+          <!-- add flagging styles -->
+          <xsl:if test="$flagStyleName != ''">
+            <xsl:attribute name="text:style-name">
+              <xsl:value-of select="$flagStyleName"/>
+            </xsl:attribute>
+          </xsl:if>
+          <xsl:call-template name="start-flagit">
+            <xsl:with-param name="flagrules" select="$flagrules"/>     
+          </xsl:call-template>
+          <xsl:if test="@rev and not($FILTERFILE='') and ($DRAFT='yes') ">
+            <xsl:call-template name="start-mark-rev">
+              <xsl:with-param name="revvalue" select="@rev"/>
+              <xsl:with-param name="flagrules" select="$flagrules"/> 
+            </xsl:call-template>
+          </xsl:if>
+          
           <xsl:apply-templates/>
+        
+          <xsl:if test="@rev and not($FILTERFILE='') and ($DRAFT='yes')">
+            <xsl:call-template name="end-mark-rev">
+              <xsl:with-param name="revvalue" select="@rev"/>
+              <xsl:with-param name="flagrules" select="$flagrules"/> 
+            </xsl:call-template>
+          </xsl:if>
+          <xsl:call-template name="end-flagit">
+            <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param> 
+          </xsl:call-template>
         </xsl:element>
       </xsl:otherwise>
     </xsl:choose>
@@ -665,6 +813,7 @@
       <xsl:when test="parent::*[contains(@class, ' topic/body ')] or 
                       parent::*[contains(@class, ' topic/li ')]">
         <xsl:element name="text:p">
+          <xsl:attribute name="text:style-name">Code_Style_Paragraph</xsl:attribute>
           <xsl:apply-templates/>
         </xsl:element>
       </xsl:when>
@@ -1003,32 +1152,6 @@
   </xsl:variable>
   
   <xsl:choose>
-    <!-- nested by p or note 
-    or desc or itemgroup or fig or section-->
-    <!-- 
-    <xsl:when test="parent::*[contains(@class, ' topic/p ')] or 
-      parent::*[contains(@class, ' topic/note ')] or parent::*[contains(@class, ' topic/desc ')]
-      or parent::*[contains(@class, ' topic/itemgroup ')] or parent::*[contains(@class, ' topic/fig ')]
-      or parent::*[contains(@class, ' topic/section ')] or parent::*[contains(@class, ' topic/abstract ')]">
-      <xsl:element name="text:span">
-        <xsl:apply-templates select="text()"/>
-      </xsl:element>
-      <xsl:apply-templates select="*"/>
-      <xsl:call-template name="create_lq_content">
-        <xsl:with-param name="samefile" select="$samefile"/>
-        <xsl:with-param name="href-value" select="$href-value"/>
-      </xsl:call-template>
-    </xsl:when>
-    <xsl:otherwise>
-      <xsl:element name="text:p">
-        <xsl:apply-templates/>
-        <xsl:call-template name="create_lq_content">
-          <xsl:with-param name="samefile" select="$samefile"/>
-          <xsl:with-param name="href-value" select="$href-value"/>
-        </xsl:call-template>
-      </xsl:element>
-    </xsl:otherwise>
-    -->
     <!-- parent is body & li -->
     <xsl:when test="parent::*[contains(@class, ' topic/body ')] or 
                     parent::*[contains(@class, ' topic/li ')]">
@@ -1327,16 +1450,27 @@
   
   <!-- called shortdesc processing when it is in abstract -->
   <xsl:template match="*[contains(@class,' topic/shortdesc ')]" mode="outofline.abstract">
-          <xsl:element name="text:line-break"/>
           <xsl:element name="text:span">
             <xsl:if test="preceding-sibling::* | preceding-sibling::text()">
+              <!-- 
               <text:s/>
+              -->
             </xsl:if>
             <xsl:apply-templates select="." mode="outputContentsWithFlagsAndStyle"/>
           </xsl:element>
   </xsl:template>
   
 <xsl:template match="*[contains(@class,' topic/note ')]" name="topic.note" priority="0">
+  
+  <!-- get flagging style name. -->
+  <xsl:variable name="flagStyleName">
+    <xsl:call-template name="getFlagStyleName"/>
+  </xsl:variable>
+  
+  <xsl:variable name="flagrules">
+    <xsl:call-template name="getrules"/>
+  </xsl:variable>
+  
   
   <xsl:choose>
     <!-- has child tags -->
@@ -1345,21 +1479,49 @@
         <!-- if the parent tag is body or li-->
         <xsl:when test="parent::*[contains(@class, ' topic/body ')] 
           or parent::*[contains(@class, ' topic/li ')]">
-          <xsl:choose>
-            <!-- for hazardstatement -->
-            <xsl:when test="contains(@class,' hazard-d/hazardstatement ')">
-              <xsl:element name="text:p">
-                  <xsl:attribute name="text:style-name">indent_paragraph_style</xsl:attribute>
-                  <xsl:call-template name="create_hazards_content"/>
-               </xsl:element>
-            </xsl:when>
-            <xsl:otherwise>
-              <xsl:element name="text:p">
-                <xsl:attribute name="text:style-name">indent_paragraph_style</xsl:attribute>
-                <xsl:call-template name="create_note_content"/>
-              </xsl:element>
-            </xsl:otherwise>
-          </xsl:choose>
+          <xsl:element name="text:p">
+            <xsl:attribute name="text:style-name">indent_paragraph_style</xsl:attribute>
+            <xsl:element name="text:span">
+              <!-- add flagging styles -->
+              <xsl:if test="$flagStyleName != ''">
+                <xsl:attribute name="text:style-name">
+                  <xsl:value-of select="$flagStyleName"/>
+                </xsl:attribute>
+              </xsl:if>
+              
+              <xsl:call-template name="start-flagit">
+                <xsl:with-param name="flagrules" select="$flagrules"/>     
+              </xsl:call-template>
+              
+              <xsl:if test="@rev and not($FILTERFILE='') and ($DRAFT='yes') ">
+                <xsl:call-template name="start-mark-rev">
+                  <xsl:with-param name="revvalue" select="@rev"/>
+                  <xsl:with-param name="flagrules" select="$flagrules"/> 
+                </xsl:call-template>
+              </xsl:if>
+            
+              <xsl:choose>
+                <!-- for hazardstatement -->
+                <xsl:when test="contains(@class,' hazard-d/hazardstatement ')">
+                      <xsl:call-template name="create_hazards_content"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:call-template name="create_note_content"/>
+                </xsl:otherwise>
+              </xsl:choose>
+              
+              <xsl:if test="@rev and not($FILTERFILE='') and ($DRAFT='yes')">
+                <xsl:call-template name="end-mark-rev">
+                  <xsl:with-param name="revvalue" select="@rev"/>
+                  <xsl:with-param name="flagrules" select="$flagrules"/> 
+                </xsl:call-template>
+              </xsl:if>
+              
+              <xsl:call-template name="end-flagit">
+                <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param> 
+              </xsl:call-template>
+            </xsl:element>
+          </xsl:element>
         </xsl:when>
         <!-- nested by entry -->
         <xsl:when test="parent::*[contains(@class, ' topic/entry ')]">
@@ -1375,27 +1537,90 @@
                 /parent::*[contains(@class, ' topic/row ')]/parent::*[contains(@class, ' topic/thead ')]">
                 <xsl:element name="text:span">
                   <xsl:attribute name="text:style-name">bold</xsl:attribute>
-                  <xsl:choose>
-                    <!-- for hazardstatement -->
-                    <xsl:when test="contains(@class,' hazard-d/hazardstatement ')">
-                        <xsl:call-template name="create_hazards_content"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:call-template name="create_note_content"/>
-                    </xsl:otherwise>
-                  </xsl:choose>
+                  <xsl:element name="text:span">
+                    <!-- add flagging styles -->
+                    <xsl:if test="$flagStyleName != ''">
+                      <xsl:attribute name="text:style-name">
+                        <xsl:value-of select="$flagStyleName"/>
+                      </xsl:attribute>
+                    </xsl:if>
+                    
+                    <xsl:call-template name="start-flagit">
+                      <xsl:with-param name="flagrules" select="$flagrules"/>     
+                    </xsl:call-template>
+                    
+                    <xsl:if test="@rev and not($FILTERFILE='') and ($DRAFT='yes') ">
+                      <xsl:call-template name="start-mark-rev">
+                        <xsl:with-param name="revvalue" select="@rev"/>
+                        <xsl:with-param name="flagrules" select="$flagrules"/> 
+                      </xsl:call-template>
+                    </xsl:if>
+                  
+                  
+                    <xsl:choose>
+                      <!-- for hazardstatement -->
+                      <xsl:when test="contains(@class,' hazard-d/hazardstatement ')">
+                          <xsl:call-template name="create_hazards_content"/>
+                      </xsl:when>
+                      <xsl:otherwise>
+                          <xsl:call-template name="create_note_content"/>
+                      </xsl:otherwise>
+                    </xsl:choose>
+                    
+                    <xsl:if test="@rev and not($FILTERFILE='') and ($DRAFT='yes')">
+                      <xsl:call-template name="end-mark-rev">
+                        <xsl:with-param name="revvalue" select="@rev"/>
+                        <xsl:with-param name="flagrules" select="$flagrules"/> 
+                      </xsl:call-template>
+                    </xsl:if>
+                  
+                    <xsl:call-template name="end-flagit">
+                      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param> 
+                    </xsl:call-template>
+                    </xsl:element>
+                  
                 </xsl:element>
               </xsl:when>
               <xsl:otherwise>
-                <xsl:choose>
-                  <!-- for hazardstatement -->
-                  <xsl:when test="contains(@class,' hazard-d/hazardstatement ')">
-                    <xsl:call-template name="create_hazards_content"/>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <xsl:call-template name="create_note_content"/>
-                  </xsl:otherwise>
-                </xsl:choose>
+                <xsl:element name="text:span">
+                  <!-- add flagging styles -->
+                  <xsl:if test="$flagStyleName != ''">
+                    <xsl:attribute name="text:style-name">
+                      <xsl:value-of select="$flagStyleName"/>
+                    </xsl:attribute>
+                  </xsl:if>
+                  
+                  <xsl:call-template name="start-flagit">
+                    <xsl:with-param name="flagrules" select="$flagrules"/>     
+                  </xsl:call-template>
+                  
+                  <xsl:if test="@rev and not($FILTERFILE='') and ($DRAFT='yes') ">
+                    <xsl:call-template name="start-mark-rev">
+                      <xsl:with-param name="revvalue" select="@rev"/>
+                      <xsl:with-param name="flagrules" select="$flagrules"/> 
+                    </xsl:call-template>
+                  </xsl:if>
+                
+                  <xsl:choose>
+                    <!-- for hazardstatement -->
+                    <xsl:when test="contains(@class,' hazard-d/hazardstatement ')">
+                      <xsl:call-template name="create_hazards_content"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <xsl:call-template name="create_note_content"/>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                  <xsl:if test="@rev and not($FILTERFILE='') and ($DRAFT='yes')">
+                    <xsl:call-template name="end-mark-rev">
+                      <xsl:with-param name="revvalue" select="@rev"/>
+                      <xsl:with-param name="flagrules" select="$flagrules"/> 
+                    </xsl:call-template>
+                  </xsl:if>
+                  
+                  <xsl:call-template name="end-flagit">
+                    <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param> 
+                  </xsl:call-template>
+                </xsl:element>
               </xsl:otherwise>
             </xsl:choose>
           </xsl:element>
@@ -1409,27 +1634,89 @@
                 parent::*[contains(@class, ' topic/sthead ')]">
                 <xsl:element name="text:span">
                   <xsl:attribute name="text:style-name">bold</xsl:attribute>
-                  <xsl:choose>
-                    <!-- for hazardstatement -->
-                    <xsl:when test="contains(@class,' hazard-d/hazardstatement ')">
-                      <xsl:call-template name="create_hazards_content"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <xsl:call-template name="create_note_content"/>
-                    </xsl:otherwise>
-                  </xsl:choose>
+                  <xsl:element name="text:span">
+                    <!-- add flagging styles -->
+                    <xsl:if test="$flagStyleName != ''">
+                      <xsl:attribute name="text:style-name">
+                        <xsl:value-of select="$flagStyleName"/>
+                      </xsl:attribute>
+                    </xsl:if>
+                    
+                    <xsl:call-template name="start-flagit">
+                      <xsl:with-param name="flagrules" select="$flagrules"/>     
+                    </xsl:call-template>
+                    
+                    <xsl:if test="@rev and not($FILTERFILE='') and ($DRAFT='yes') ">
+                      <xsl:call-template name="start-mark-rev">
+                        <xsl:with-param name="revvalue" select="@rev"/>
+                        <xsl:with-param name="flagrules" select="$flagrules"/> 
+                      </xsl:call-template>
+                    </xsl:if>
+                  
+                      <xsl:choose>
+                        <!-- for hazardstatement -->
+                        <xsl:when test="contains(@class,' hazard-d/hazardstatement ')">
+                          <xsl:call-template name="create_hazards_content"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                          <xsl:call-template name="create_note_content"/>
+                        </xsl:otherwise>
+                      </xsl:choose>
+                    
+                    <xsl:if test="@rev and not($FILTERFILE='') and ($DRAFT='yes')">
+                      <xsl:call-template name="end-mark-rev">
+                        <xsl:with-param name="revvalue" select="@rev"/>
+                        <xsl:with-param name="flagrules" select="$flagrules"/> 
+                      </xsl:call-template>
+                    </xsl:if>
+                    
+                    <xsl:call-template name="end-flagit">
+                      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param> 
+                    </xsl:call-template>
+                  </xsl:element>
                 </xsl:element>
               </xsl:when>
               <xsl:otherwise>
-                <xsl:choose>
-                  <!-- for hazardstatement -->
-                  <xsl:when test="contains(@class,' hazard-d/hazardstatement ')">
-                    <xsl:call-template name="create_hazards_content"/>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <xsl:call-template name="create_note_content"/>
-                  </xsl:otherwise>
-                </xsl:choose>
+                <xsl:element name="text:span">
+                  <!-- add flagging styles -->
+                  <xsl:if test="$flagStyleName != ''">
+                    <xsl:attribute name="text:style-name">
+                      <xsl:value-of select="$flagStyleName"/>
+                    </xsl:attribute>
+                  </xsl:if>
+                  
+                  <xsl:call-template name="start-flagit">
+                    <xsl:with-param name="flagrules" select="$flagrules"/>     
+                  </xsl:call-template>
+                  
+                  <xsl:if test="@rev and not($FILTERFILE='') and ($DRAFT='yes') ">
+                    <xsl:call-template name="start-mark-rev">
+                      <xsl:with-param name="revvalue" select="@rev"/>
+                      <xsl:with-param name="flagrules" select="$flagrules"/> 
+                    </xsl:call-template>
+                  </xsl:if>
+                  
+                    <xsl:choose>
+                      <!-- for hazardstatement -->
+                      <xsl:when test="contains(@class,' hazard-d/hazardstatement ')">
+                        <xsl:call-template name="create_hazards_content"/>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <xsl:call-template name="create_note_content"/>
+                      </xsl:otherwise>
+                    </xsl:choose>
+                  
+                  <xsl:if test="@rev and not($FILTERFILE='') and ($DRAFT='yes')">
+                    <xsl:call-template name="end-mark-rev">
+                      <xsl:with-param name="revvalue" select="@rev"/>
+                      <xsl:with-param name="flagrules" select="$flagrules"/> 
+                    </xsl:call-template>
+                  </xsl:if>
+                  
+                  <xsl:call-template name="end-flagit">
+                    <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param> 
+                  </xsl:call-template>
+                </xsl:element>
               </xsl:otherwise>
             </xsl:choose>
           </xsl:element>
@@ -1438,6 +1725,24 @@
         <xsl:otherwise>
           <xsl:element name="text:line-break"/>
           <xsl:element name="text:span">
+            <!-- add flagging styles -->
+            <xsl:if test="$flagStyleName != ''">
+              <xsl:attribute name="text:style-name">
+                <xsl:value-of select="$flagStyleName"/>
+              </xsl:attribute>
+            </xsl:if>
+            
+            <xsl:call-template name="start-flagit">
+              <xsl:with-param name="flagrules" select="$flagrules"/>     
+            </xsl:call-template>
+            
+            <xsl:if test="@rev and not($FILTERFILE='') and ($DRAFT='yes') ">
+              <xsl:call-template name="start-mark-rev">
+                <xsl:with-param name="revvalue" select="@rev"/>
+                <xsl:with-param name="flagrules" select="$flagrules"/> 
+              </xsl:call-template>
+            </xsl:if>
+            
             <xsl:choose>
               <!-- for hazardstatement -->
               <xsl:when test="contains(@class,' hazard-d/hazardstatement ')">
@@ -1447,6 +1752,17 @@
                   <xsl:call-template name="create_note_content"/>
               </xsl:otherwise>
             </xsl:choose>
+            
+            <xsl:if test="@rev and not($FILTERFILE='') and ($DRAFT='yes')">
+              <xsl:call-template name="end-mark-rev">
+                <xsl:with-param name="revvalue" select="@rev"/>
+                <xsl:with-param name="flagrules" select="$flagrules"/> 
+              </xsl:call-template>
+            </xsl:if>
+            
+            <xsl:call-template name="end-flagit">
+              <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param> 
+            </xsl:call-template>
           </xsl:element>
         </xsl:otherwise>
       </xsl:choose>
@@ -1467,14 +1783,12 @@
         </xsl:call-template>
         <xsl:text> </xsl:text>
       </xsl:element>
-      <xsl:element name="text:line-break"/>  
       <xsl:if
         test="ancestor::*[contains(@class,' topic/table ') 
       or contains(@class,' topic/simpletable ')]">
         <xsl:element name="text:tab"/>
       </xsl:if>
       <xsl:apply-templates/>
-      <xsl:element name="text:line-break"/>
     </xsl:when>
     <xsl:when test="@type='tip'">
       <xsl:element name="text:span">
@@ -1487,11 +1801,7 @@
         </xsl:call-template>
         <xsl:text> </xsl:text>
       </xsl:element>
-      <xsl:if test="child::text()">
-        <xsl:element name="text:line-break"/>  
-      </xsl:if>
       <xsl:apply-templates/>
-      <xsl:element name="text:line-break"/>
     </xsl:when>
     <xsl:when test="@type='fastpath'">
       <xsl:element name="text:span">
@@ -1504,11 +1814,7 @@
         </xsl:call-template>
         <xsl:text> </xsl:text>
       </xsl:element>
-      <xsl:if test="child::text()">
-        <xsl:element name="text:line-break"/>  
-      </xsl:if>
       <xsl:apply-templates/>
-      <xsl:element name="text:line-break"/>
     </xsl:when>
     <xsl:when test="@type='important'">
       <xsl:element name="text:span">
@@ -1521,11 +1827,7 @@
         </xsl:call-template>
         <xsl:text> </xsl:text>
       </xsl:element>
-      <xsl:if test="child::text()">
-        <xsl:element name="text:line-break"/>  
-      </xsl:if>
       <xsl:apply-templates/>
-      <xsl:element name="text:line-break"/>
     </xsl:when>
     <xsl:when test="@type='remember'">
       <xsl:element name="text:span">
@@ -1538,11 +1840,7 @@
         </xsl:call-template>
         <xsl:text> </xsl:text>
       </xsl:element>
-      <xsl:if test="child::text()">
-        <xsl:element name="text:line-break"/>  
-      </xsl:if>
       <xsl:apply-templates/>
-      <xsl:element name="text:line-break"/>
     </xsl:when>
     <xsl:when test="@type='restriction'">
       <xsl:element name="text:span">
@@ -1555,11 +1853,7 @@
         </xsl:call-template>
         <xsl:text> </xsl:text>
       </xsl:element>
-      <xsl:if test="child::text()">
-        <xsl:element name="text:line-break"/>  
-      </xsl:if>
       <xsl:apply-templates/>
-      <xsl:element name="text:line-break"/>
     </xsl:when>
     <xsl:when test="@type='attention'">
       <xsl:element name="text:span">
@@ -1572,11 +1866,7 @@
         </xsl:call-template>
         <xsl:text> </xsl:text>
       </xsl:element>
-      <xsl:if test="child::text()">
-        <xsl:element name="text:line-break"/>  
-      </xsl:if>
       <xsl:apply-templates/>
-      <xsl:element name="text:line-break"/>
     </xsl:when>
     <xsl:when test="@type='caution'">
       <xsl:element name="text:span">
@@ -1589,11 +1879,7 @@
         </xsl:call-template>
         <xsl:text> </xsl:text>
       </xsl:element>
-      <xsl:if test="child::text()">
-        <xsl:element name="text:line-break"/>  
-      </xsl:if>
       <xsl:apply-templates/>
-      <xsl:element name="text:line-break"/>
     </xsl:when>
     <xsl:when test="@type='danger'">
       <xsl:element name="text:span">
@@ -1606,11 +1892,7 @@
         </xsl:call-template>
         <xsl:text> </xsl:text>
       </xsl:element>
-      <xsl:if test="child::text()">
-        <xsl:element name="text:line-break"/>  
-      </xsl:if>
       <xsl:apply-templates/>
-      <xsl:element name="text:line-break"/>
     </xsl:when>
     <xsl:when test="@type='other'">
       <xsl:element name="text:span">
@@ -1633,11 +1915,12 @@
         </xsl:call-template>
         <xsl:text> </xsl:text>
       </xsl:element>
+      <!-- 
       <xsl:if test="child::text()">
         <xsl:element name="text:line-break"/>  
       </xsl:if>
+      -->
       <xsl:apply-templates/>
-      <xsl:element name="text:line-break"/>
     </xsl:when>
     <xsl:otherwise>
       <xsl:apply-templates/>
@@ -1825,7 +2108,7 @@
       <xsl:call-template name="gen-txt2">
         <xsl:with-param name="txt" select="substring-before($txt,'\')"/>
       </xsl:call-template>
-      <xsl:text>\\</xsl:text>
+      <xsl:text>\</xsl:text>
       <xsl:call-template name="gen-txt1">
         <xsl:with-param name="txt" select="substring-after($txt,'\')"/>
       </xsl:call-template>
@@ -1845,7 +2128,7 @@
       <xsl:call-template name="gen-txt3">
         <xsl:with-param name="txt" select="substring-before($txt,'{')"/>
       </xsl:call-template>
-      <xsl:text>\{</xsl:text>
+      <xsl:text>{</xsl:text>
       <xsl:call-template name="gen-txt2">
         <xsl:with-param name="txt" select="substring-after($txt,'{')"/>
       </xsl:call-template>
@@ -1865,7 +2148,7 @@
       <xsl:call-template name="gen-txt">
         <xsl:with-param name="txt" select="substring-before($txt,'}')"/>
       </xsl:call-template>
-      <xsl:text>\}</xsl:text>
+      <xsl:text>}</xsl:text>
       <xsl:call-template name="gen-txt3">
         <xsl:with-param name="txt" select="substring-after($txt,'}')"/>
       </xsl:call-template>
@@ -1900,6 +2183,15 @@
 
 <xsl:template match="text()">
   
+  <xsl:variable name="style_name">
+    <xsl:call-template name="get_style_name"/> 
+  </xsl:variable>
+  
+  <xsl:variable name="trueStyleName">
+    <xsl:value-of select="styleUtils:getHiStyleName($style_name)"/>
+  </xsl:variable>
+  
+  
   <xsl:choose>
     <!-- parent is entry, stentry, li add p tag otherwise text is invaild. -->
     <xsl:when test="parent::*[contains(@class, ' topic/entry ')] or
@@ -1912,18 +2204,39 @@
             ancestor::*[contains(@class, ' topic/sthead')]">
             <xsl:element name="text:span">
               <xsl:attribute name="text:style-name">bold</xsl:attribute>
-              <xsl:call-template name="gen_txt_content"/>
+              <xsl:element name="text:span">
+                <xsl:if test="$trueStyleName!=''">
+                  <xsl:attribute name="text:style-name">
+                    <xsl:value-of select="$trueStyleName"/>
+                  </xsl:attribute>
+                </xsl:if>
+                <xsl:call-template name="gen_txt_content"/>
+              </xsl:element>
             </xsl:element>
           </xsl:when>
           <xsl:otherwise>
-            <xsl:call-template name="gen_txt_content"/>
+            <xsl:element name="text:span">
+              <xsl:if test="$trueStyleName!=''">
+                <xsl:attribute name="text:style-name">
+                  <xsl:value-of select="$trueStyleName"/>
+                </xsl:attribute>
+              </xsl:if>
+              <xsl:call-template name="gen_txt_content"/>
+            </xsl:element>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:element>
     </xsl:when>
     <!-- for other tags -->
     <xsl:otherwise>
-      <xsl:call-template name="gen_txt_content"/>
+      <xsl:element name="text:span">
+        <xsl:if test="$trueStyleName!=''">
+          <xsl:attribute name="text:style-name">
+            <xsl:value-of select="$trueStyleName"/>
+          </xsl:attribute>
+        </xsl:if>
+        <xsl:call-template name="gen_txt_content"/>
+      </xsl:element>
     </xsl:otherwise>
   </xsl:choose>
   

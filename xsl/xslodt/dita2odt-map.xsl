@@ -63,8 +63,6 @@
 
   <!-- up to now opentopic:map tag is ignored -->
   <xsl:template match="opentopic:map">
-    <!-- page break. -->
-    <text:p text:style-name="PB"/>
     <text:table-of-content text:style-name="Sect1" text:protected="true"
       text:name="Table of Contents1">
       <text:table-of-content-source text:outline-level="10" text:use-index-marks="false"
