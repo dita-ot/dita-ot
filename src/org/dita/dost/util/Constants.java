@@ -133,6 +133,12 @@ public abstract class Constants {
     public static final String ELEMENT_NAME_PRODUCT = "product";
     /**otherprops element.*/
     public static final String ELEMENT_NAME_OTHERPROPS = "otherprops";
+    //Added by William on 2010-07-16 for bug:3030317 start	
+    /**props element.*/
+    public static final String ELEMENT_NAME_PROPS = "props";
+    /**rev element.*/
+    public static final String ELEMENT_NAME_REV = "rev";
+    //Added by William on 2010-07-16 for bug:3030317 start	
     /**tgroup element.*/
     public static final String ELEMENT_NAME_TGROUP = "tgroup";
     /**row element.*/
