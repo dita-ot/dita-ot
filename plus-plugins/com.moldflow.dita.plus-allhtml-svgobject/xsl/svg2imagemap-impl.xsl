@@ -24,33 +24,33 @@
     <xsl:variable name="regex-skewY" select="concat('skewX\s*\(\s*', $regex-number, '\s*\)')"/>
     
     <!-- Trigonometric functions. -->
-    <xsl:function name="f:degree-to-radian" as="xs:float" use-when="function-available('math:constant')">
-        <xsl:param name="x" as="xs:float"/>
+    <xsl:function name="f:degree-to-radian" as="xs:double" use-when="function-available('math:constant')">
+        <xsl:param name="x" as="xs:double"/>
         <xsl:sequence select="$x * math:constant('PI', 10) div 180.0"/>
     </xsl:function>
     
-    <xsl:function name="f:cos" as="xs:float" use-when="function-available('math:cos')">
-        <xsl:param name="x" as="xs:float"/>
+    <xsl:function name="f:cos" as="xs:double" use-when="function-available('math:cos')">
+        <xsl:param name="x" as="xs:double"/>
         <xsl:sequence select="math:cos(f:degree-to-radian($x))"/>
     </xsl:function>
 
-    <xsl:function name="f:sin" as="xs:float" use-when="function-available('math:sin')">
-        <xsl:param name="x" as="xs:float"/>
+    <xsl:function name="f:sin" as="xs:double" use-when="function-available('math:sin')">
+        <xsl:param name="x" as="xs:double"/>
         <xsl:sequence select="math:sin(f:degree-to-radian($x))"/>
     </xsl:function>
 
-    <xsl:function name="f:tan" as="xs:float" use-when="function-available('math:tan')">
-        <xsl:param name="x" as="xs:float"/>
+    <xsl:function name="f:tan" as="xs:double" use-when="function-available('math:tan')">
+        <xsl:param name="x" as="xs:double"/>
         <xsl:sequence select="math:tan(f:degree-to-radian($x))"/>
     </xsl:function>
     
     <!-- Convert the first item in @transform into a transformation matrix. -->
-    <xsl:function name="f:matrix-of-single-transform" as="xs:float+">
+    <xsl:function name="f:matrix-of-single-transform" as="xs:double+">
         <xsl:param name="transform" as="xs:string"/>
 
-        <xsl:variable name="numbers" as="xs:float+">
+        <xsl:variable name="numbers" as="xs:double+">
             <xsl:for-each select="tokenize(substring-before(substring-after($transform, '('), ')'), '\s+,?\s*|,\s*')">
-                <xsl:sequence select="xs:float(.)"/>
+                <xsl:sequence select="xs:double(.)"/>
             </xsl:for-each>
         </xsl:variable>
         
@@ -85,7 +85,7 @@
     </xsl:function>
     
     <!-- Compute the effective transform of a cumulative chain of transforms in one @transform attribute. -->
-    <xsl:function name="f:matrix-of-transform-series" as="xs:float+">
+    <xsl:function name="f:matrix-of-transform-series" as="xs:double+">
         <xsl:param name="transform" as="xs:string"/>
         
         <xsl:choose>
@@ -103,8 +103,8 @@
             <xsl:otherwise>
                 <!-- Premultiply the first transform with the remaining transforms. -->
                 <xsl:call-template name="multiply-matrix">
-                    <xsl:with-param name="L" as="xs:float+" select="f:matrix-of-single-transform(concat(substring-before($transform, ')'), ')'))"/>
-                    <xsl:with-param name="R" as="xs:float+">
+                    <xsl:with-param name="L" as="xs:double+" select="f:matrix-of-single-transform(concat(substring-before($transform, ')'), ')'))"/>
+                    <xsl:with-param name="R" as="xs:double+">
                         <xsl:variable name="remainder" as="xs:string" select="substring-after($transform, ')')"/>
                         <xsl:choose>
                             <!-- Comma or space separation allowed. -->
@@ -122,9 +122,9 @@
     </xsl:function>
     
     <!-- Multiply transforms.  Top 2/3 of a 3x3 matrix multiplication. -->
-    <xsl:template name="multiply-matrix" as="xs:float+">
-        <xsl:param name="L" as="xs:float+"/>
-        <xsl:param name="R" as="xs:float+"/>
+    <xsl:template name="multiply-matrix" as="xs:double+">
+        <xsl:param name="L" as="xs:double+"/>
+        <xsl:param name="R" as="xs:double+"/>
         
         <xsl:sequence select="$L[1] * $R[1] + $L[3] * $R[2]"/>
         <xsl:sequence select="$L[2] * $R[1] + $L[4] * $R[2]"/>
@@ -134,9 +134,9 @@
         <xsl:sequence select="$L[2] * $R[5] + $L[4] * $R[6] + $L[6]"/>
     </xsl:template>
 
-    <xsl:template name="transform-point" as="xs:float+">
-        <xsl:param name="T" as="xs:float+"/>
-        <xsl:param name="V" as="xs:float+"/>
+    <xsl:template name="transform-point" as="xs:double+">
+        <xsl:param name="T" as="xs:double+"/>
+        <xsl:param name="V" as="xs:double+"/>
         
         <xsl:sequence select="$T[1] * $V[1] + $T[3] * $V[2] + $T[5]"/>
         <xsl:sequence select="$T[2] * $V[1] + $T[4] * $V[2] + $T[6]"/>
@@ -146,7 +146,7 @@
     <xsl:template match="/">
         <map>
             <xsl:apply-templates mode="traverse">
-                <xsl:with-param name="current-transform" as="xs:float+" select="(1, 0, 0, 1, 0, 0)" tunnel="yes"/>
+                <xsl:with-param name="current-transform" as="xs:double+" select="(1, 0, 0, 1, 0, 0)" tunnel="yes"/>
             </xsl:apply-templates>
         </map>
     </xsl:template>
@@ -168,13 +168,13 @@
     
     <!-- If a transform attribute is encountered, apply this transform to this and descendants. -->
     <xsl:template match="svg:*[@transform]" mode="traverse" priority="3">
-        <xsl:param name="current-transform" tunnel="yes" as="xs:float+"/>
+        <xsl:param name="current-transform" tunnel="yes" as="xs:double+"/>
         
        <xsl:next-match>
-            <xsl:with-param name="current-transform" as="xs:float+" tunnel="yes">
+            <xsl:with-param name="current-transform" as="xs:double+" tunnel="yes">
                 <xsl:call-template name="multiply-matrix">
-                    <xsl:with-param name="L" as="xs:float+" select="$current-transform"/>
-                    <xsl:with-param name="R" as="xs:float+" select="f:matrix-of-transform-series(string(@transform))"/>
+                    <xsl:with-param name="L" as="xs:double+" select="$current-transform"/>
+                    <xsl:with-param name="R" as="xs:double+" select="f:matrix-of-transform-series(string(@transform))"/>
                 </xsl:call-template>
             </xsl:with-param>
         </xsl:next-match>
@@ -189,17 +189,17 @@
     
     <!-- svg element with viewbox. -->
     <xsl:template match="svg:svg[@viewBox]" priority="4">
-        <xsl:param name="current-transform" tunnel="yes" as="xs:float+"/>
+        <xsl:param name="current-transform" tunnel="yes" as="xs:double+"/>
         
         <!-- Get viewbox coordinates. -->
-        <xsl:variable name="numbers" as="xs:float+">
+        <xsl:variable name="numbers" as="xs:double+">
             <xsl:for-each select="tokenize(string(@viewBox), '\s+,?\s*|,\s*')">
-                <xsl:sequence select="xs:float(.)"/>
+                <xsl:sequence select="xs:double(.)"/>
             </xsl:for-each>
         </xsl:variable>
         
         <!-- Get intrinsic width/height in pixels. -->
-        <xsl:variable name="width" as="xs:float">
+        <xsl:variable name="width" as="xs:double">
             <xsl:choose>
                 <xsl:when test="matches(@width, '^.*px$')">
                     <xsl:sequence select="number(substring-before(@width, 'px'))"/>
@@ -218,7 +218,7 @@
             </xsl:choose>
         </xsl:variable>
 
-        <xsl:variable name="height" as="xs:float">
+        <xsl:variable name="height" as="xs:double">
             <xsl:choose>
                 <xsl:when test="matches(@height, '^.*px$')">
                     <xsl:sequence select="number(substring-before(@height, 'px'))"/>
@@ -238,10 +238,10 @@
         </xsl:variable>
         
         <xsl:next-match>
-            <xsl:with-param name="current-transform" as="xs:float+" tunnel="yes">
+            <xsl:with-param name="current-transform" as="xs:double+" tunnel="yes">
                 <xsl:call-template name="multiply-matrix">
-                    <xsl:with-param name="L" as="xs:float+" select="$current-transform"/>
-                    <xsl:with-param name="R" as="xs:float+" select="$width div $numbers[3], 0, 0, $height div $numbers[4], -$numbers[1]*($width div $numbers[3]), -$numbers[2]*($height div $numbers[4])"/>
+                    <xsl:with-param name="L" as="xs:double+" select="$current-transform"/>
+                    <xsl:with-param name="R" as="xs:double+" select="$width div $numbers[3], 0, 0, $height div $numbers[4], -$numbers[1]*($width div $numbers[3]), -$numbers[2]*($height div $numbers[4])"/>
                 </xsl:call-template>
             </xsl:with-param>
         </xsl:next-match>

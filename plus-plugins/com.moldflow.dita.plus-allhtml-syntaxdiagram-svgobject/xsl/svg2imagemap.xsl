@@ -10,17 +10,17 @@
     
     <!-- Fragment references.  Link to the defining fragment. -->
     <xsl:template match="svg:a[@syntaxdiagram2svg:element='fragref']">
-        <xsl:param name="current-transform" as="xs:float+" tunnel="yes"/>
+        <xsl:param name="current-transform" as="xs:double+" tunnel="yes"/>
         <xsl:param name="current-href" as="xs:string" tunnel="yes" select="''"/>
         <area href="{$current-href}" shape="rect">
             <xsl:attribute name="coords" separator=",">
                 <xsl:call-template name="transform-point">
-                    <xsl:with-param name="T" as="xs:float+" select="$current-transform"/>
-                    <xsl:with-param name="V" as="xs:float+" select="(0, 0 - number(@syntaxdiagram2svg:heightAbove))"/>
+                    <xsl:with-param name="T" as="xs:double+" select="$current-transform"/>
+                    <xsl:with-param name="V" as="xs:double+" select="(0, 0 - number(@syntaxdiagram2svg:heightAbove))"/>
                 </xsl:call-template>
                 <xsl:call-template name="transform-point">
-                    <xsl:with-param name="T" as="xs:float+" select="$current-transform"/>
-                    <xsl:with-param name="V" as="xs:float+" select="(number(@syntaxdiagram2svg:width), number(@syntaxdiagram2svg:heightBelow))"/>
+                    <xsl:with-param name="T" as="xs:double+" select="$current-transform"/>
+                    <xsl:with-param name="V" as="xs:double+" select="(number(@syntaxdiagram2svg:width), number(@syntaxdiagram2svg:heightBelow))"/>
                 </xsl:call-template>
             </xsl:attribute>
         </area>
@@ -28,47 +28,47 @@
 
     <!-- Note callouts.  Link to the matching footnote. -->
     <xsl:template match="svg:a[@syntaxdiagram2svg:dispatch='note']">
-        <xsl:param name="current-transform" as="xs:float+" tunnel="yes"/>
+        <xsl:param name="current-transform" as="xs:double+" tunnel="yes"/>
         <xsl:param name="current-href" as="xs:string" tunnel="yes" select="''"/>
         <area href="{$current-href}" shape="rect">
             <xsl:attribute name="coords" separator=",">
                 <xsl:call-template name="transform-point">
-                    <xsl:with-param name="T" as="xs:float+" select="$current-transform"/>
-                    <xsl:with-param name="V" as="xs:float+" select="(0, 0 - number(@syntaxdiagram2svg:heightAbove))"/>
+                    <xsl:with-param name="T" as="xs:double+" select="$current-transform"/>
+                    <xsl:with-param name="V" as="xs:double+" select="(0, 0 - number(@syntaxdiagram2svg:heightAbove))"/>
                 </xsl:call-template>
                 <xsl:call-template name="transform-point">
-                    <xsl:with-param name="T" as="xs:float+" select="$current-transform"/>
-                    <xsl:with-param name="V" as="xs:float+" select="(number(@syntaxdiagram2svg:width), number(@syntaxdiagram2svg:heightBelow))"/>
+                    <xsl:with-param name="T" as="xs:double+" select="$current-transform"/>
+                    <xsl:with-param name="V" as="xs:double+" select="(number(@syntaxdiagram2svg:width), number(@syntaxdiagram2svg:heightBelow))"/>
                 </xsl:call-template>
             </xsl:attribute>
         </area>
     </xsl:template>
     
 <!--    <xsl:template match="svg:rect" >
-        <xsl:param name="current-transform" as="xs:float+" tunnel="yes"/>
+        <xsl:param name="current-transform" as="xs:double+" tunnel="yes"/>
         <xsl:param name="current-href" as="xs:string" tunnel="yes" select="''"/>
         <xsl:if test="$current-href">
             <area href="{$current-href}" shape="poly">
                 <xsl:attribute name="coords" separator=",">
                     <xsl:call-template name="transform-point">
-                        <xsl:with-param name="T" as="xs:float+" select="$current-transform"/>
-                        <xsl:with-param name="V" as="xs:float+" select="(number(@x), number(@y))"/>
+                        <xsl:with-param name="T" as="xs:double+" select="$current-transform"/>
+                        <xsl:with-param name="V" as="xs:double+" select="(number(@x), number(@y))"/>
                     </xsl:call-template>
                     <xsl:call-template name="transform-point">
-                        <xsl:with-param name="T" as="xs:float+" select="$current-transform"/>
-                        <xsl:with-param name="V" as="xs:float+" select="(number(@x)+number(@width), number(@y))"/>
+                        <xsl:with-param name="T" as="xs:double+" select="$current-transform"/>
+                        <xsl:with-param name="V" as="xs:double+" select="(number(@x)+number(@width), number(@y))"/>
                     </xsl:call-template>
                     <xsl:call-template name="transform-point">
-                        <xsl:with-param name="T" as="xs:float+" select="$current-transform"/>
-                        <xsl:with-param name="V" as="xs:float+" select="(number(@x)+number(@width), number(@y)+number(@height))"/>
+                        <xsl:with-param name="T" as="xs:double+" select="$current-transform"/>
+                        <xsl:with-param name="V" as="xs:double+" select="(number(@x)+number(@width), number(@y)+number(@height))"/>
                     </xsl:call-template>
                     <xsl:call-template name="transform-point">
-                        <xsl:with-param name="T" as="xs:float+" select="$current-transform"/>
-                        <xsl:with-param name="V" as="xs:float+" select="(number(@x), number(@y)+number(@height))"/>
+                        <xsl:with-param name="T" as="xs:double+" select="$current-transform"/>
+                        <xsl:with-param name="V" as="xs:double+" select="(number(@x), number(@y)+number(@height))"/>
                     </xsl:call-template>
                     <xsl:call-template name="transform-point">
-                        <xsl:with-param name="T" as="xs:float+" select="$current-transform"/>
-                        <xsl:with-param name="V" as="xs:float+" select="(number(@x), number(@y))"/>
+                        <xsl:with-param name="T" as="xs:double+" select="$current-transform"/>
+                        <xsl:with-param name="V" as="xs:double+" select="(number(@x), number(@y))"/>
                     </xsl:call-template>
                 </xsl:attribute>
             </area>
