@@ -2183,19 +2183,17 @@
 <!-- Add by Alan for Bug:#2900417 on Date: 2009-11-23 begin -->
 <!-- AM: handling for scale attribute -->
 <xsl:template match="*[contains(@class,' topic/image ')]/@scale">
-    <xsl:variable name="height">
+    <xsl:variable name="width">
       <xsl:choose>
         <xsl:when test="not(contains(../@href,'://'))">
-          <!-- AM: currently dost.jar returns the height in function getWidth instead of width -->
           <xsl:value-of select="java:getWidth($OUTPUTDIR, string(../@href))"/>
         </xsl:when>
         <xsl:otherwise/>
       </xsl:choose>
     </xsl:variable>
-    <xsl:variable name="width">
+    <xsl:variable name="height">
       <xsl:choose>
         <xsl:when test="not(contains(../@href,'://'))">
-          <!-- AM: currently dost.jar returns the width in function getHeight instead of height -->
           <xsl:value-of select="java:getHeight($OUTPUTDIR, string(../@href))"/>
         </xsl:when>
         <xsl:otherwise/>
