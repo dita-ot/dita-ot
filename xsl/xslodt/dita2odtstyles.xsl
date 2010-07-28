@@ -169,6 +169,11 @@
           style:font-name-complex="Tahoma" style:font-size-complex="14pt"/>
       </style:style>
       
+      <!-- Table Style -->
+      <style:style style:name="table_style" style:family="table">
+        <style:table-properties fo:keep-with-next="true"/>
+      </style:style>
+      
       <!-- Font style -->
       <!-- 
       <style:text-properties

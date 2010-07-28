@@ -1143,7 +1143,7 @@
    <xsl:variable name="height">
     <xsl:choose>
      <xsl:when test="not(contains($imgsrc,'://'))">
-      <xsl:value-of select="number(imgUtils:getHeight($OUTPUTDIR, string($imgsrc)) div 100)"/>
+      <xsl:value-of select="number(imgUtils:getHeight($OUTPUTDIR, string($imgsrc)) div 96)"/>
      </xsl:when>
      <xsl:otherwise/>
     </xsl:choose>
@@ -1151,7 +1151,7 @@
    <xsl:variable name="width">
     <xsl:choose>
      <xsl:when test="not(contains($imgsrc,'://'))">
-      <xsl:value-of select="number(imgUtils:getWidth($OUTPUTDIR, string($imgsrc)) div 100)"/>
+      <xsl:value-of select="number(imgUtils:getWidth($OUTPUTDIR, string($imgsrc)) div 96)"/>
      </xsl:when>
      <xsl:otherwise/>
     </xsl:choose>
@@ -1177,15 +1177,7 @@
 <!-- output the ending revision graphic & ALT text -->
 <xsl:template name="end-rev-art">
  <xsl:param name="deltaname"/>
- <!-- 
- <img src="{$PATH2PROJ}{$deltaname}">
-  <xsl:attribute name='alt'>
-   <xsl:call-template name="getString">
-    <xsl:with-param name="stringName" select="'End of change'"/>
-   </xsl:call-template>
-  </xsl:attribute>
- </img>
- -->
+ 
  <xsl:choose> <!-- Ensure there's an image to get, otherwise don't insert anything -->
   <xsl:when test="$deltaname">
    <xsl:variable name="imgsrc" select="$deltaname"/>
@@ -1202,7 +1194,7 @@
    <xsl:variable name="height">
     <xsl:choose>
      <xsl:when test="not(contains($imgsrc,'://'))">
-      <xsl:value-of select="number(imgUtils:getHeight($OUTPUTDIR, string($imgsrc)) div 100)"/>
+      <xsl:value-of select="number(imgUtils:getHeight($OUTPUTDIR, string($imgsrc)) div 96)"/>
      </xsl:when>
      <xsl:otherwise/>
     </xsl:choose>
@@ -1210,7 +1202,7 @@
    <xsl:variable name="width">
     <xsl:choose>
      <xsl:when test="not(contains($imgsrc,'://'))">
-      <xsl:value-of select="number(imgUtils:getWidth($OUTPUTDIR, string($imgsrc)) div 100)"/>
+      <xsl:value-of select="number(imgUtils:getWidth($OUTPUTDIR, string($imgsrc)) div 96)"/>
      </xsl:when>
      <xsl:otherwise/>
     </xsl:choose>
@@ -1470,7 +1462,7 @@
     <xsl:variable name="height">
      <xsl:choose>
       <xsl:when test="not(contains($imgsrc,'://'))">
-       <xsl:value-of select="number(imgUtils:getHeight($OUTPUTDIR, string($imgsrc)) div 100)"/>
+       <xsl:value-of select="number(imgUtils:getHeight($OUTPUTDIR, string($imgsrc)) div 96)"/>
       </xsl:when>
       <xsl:otherwise/>
      </xsl:choose>
@@ -1478,7 +1470,7 @@
     <xsl:variable name="width">
      <xsl:choose>
       <xsl:when test="not(contains($imgsrc,'://'))">
-       <xsl:value-of select="number(imgUtils:getWidth($OUTPUTDIR, string($imgsrc)) div 100)"/>
+       <xsl:value-of select="number(imgUtils:getWidth($OUTPUTDIR, string($imgsrc)) div 96)"/>
       </xsl:when>
       <xsl:otherwise/>
      </xsl:choose>
@@ -1525,7 +1517,7 @@
     <xsl:variable name="height">
      <xsl:choose>
       <xsl:when test="not(contains($imgsrc,'://'))">
-       <xsl:value-of select="number(imgUtils:getHeight($OUTPUTDIR, string($imgsrc)) div 100)"/>
+       <xsl:value-of select="number(imgUtils:getHeight($OUTPUTDIR, string($imgsrc)) div 96)"/>
       </xsl:when>
       <xsl:otherwise/>
      </xsl:choose>
@@ -1533,7 +1525,7 @@
     <xsl:variable name="width">
      <xsl:choose>
       <xsl:when test="not(contains($imgsrc,'://'))">
-       <xsl:value-of select="number(imgUtils:getWidth($OUTPUTDIR, string($imgsrc)) div 100)"/>
+       <xsl:value-of select="number(imgUtils:getWidth($OUTPUTDIR, string($imgsrc)) div 96)"/>
       </xsl:when>
       <xsl:otherwise/>
      </xsl:choose>

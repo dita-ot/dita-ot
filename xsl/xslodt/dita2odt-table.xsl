@@ -66,12 +66,16 @@
       <xsl:attribute name="table:name">
         <xsl:value-of select="concat('Table', $tablenameId)"/>
       </xsl:attribute>
+      <xsl:attribute name="table:style-name">table_style</xsl:attribute>
+      
       <xsl:call-template name="create_columns_for_table">
         <xsl:with-param name="column" select="$columnNum"/>
       </xsl:call-template>
       <xsl:call-template name="dotable"/> 
     </xsl:element>
+    <!-- 
     <text:p/>
+    -->
   </xsl:template>
   
   
@@ -567,6 +571,8 @@
     <xsl:attribute name="table:name">
       <xsl:value-of select="concat('Table', $tablenameId)"/>
     </xsl:attribute>
+    <xsl:attribute name="table:style-name">table_style</xsl:attribute>
+    
     <xsl:variable name="colnumNum">
       <xsl:call-template name="count_columns_for_simpletable"/>
     </xsl:variable>

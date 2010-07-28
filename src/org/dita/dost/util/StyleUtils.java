@@ -114,9 +114,12 @@ public class StyleUtils {
 		}
 	}
 	
-	//method for get css colors
+	//method for get css colors.
+	//keyword colors:
+	//aqua, black, blue, fuchsia, gray, green, lime, maroon, 
+	//navy, olive, purple, red, silver, teal, white, and yellow
 	public static String getColor(String colorName){
-		
+				
 				Map<String, String> colorMap = new HashMap<String, String>();
 				//Store all css colors
 				colorMap.put("aliceblue", "f0f8ff");     

@@ -167,6 +167,9 @@
         
         <xsl:call-template name="create_book_notices"/>
         
+        <xsl:call-template name="create_toc"/>
+        
+        
         <xsl:apply-templates/>
       </office:text>
     </office:body>

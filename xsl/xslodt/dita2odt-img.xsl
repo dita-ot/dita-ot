@@ -43,11 +43,17 @@
 
 <xsl:template match="*[contains(@class,' topic/image ')]">
 <xsl:if test="@href and not(@href='')">
-  <!-- break p tag -->
-  <!-- 
-  <xsl:text disable-output-escaping="yes">&lt;/text:p&gt;</xsl:text>
-  <text:p text:style-name="Default_20_Text">
-  -->
+  
+    <!-- flagging styles -->
+    <xsl:variable name="flagStyleName">
+      <xsl:call-template name="getFlagStyleName"/>
+    </xsl:variable>
+  
+    <xsl:variable name="flagrules">
+      <xsl:call-template name="getrules"/>
+    </xsl:variable>
+    
+    <!-- image meta data -->
     <xsl:variable name="type">
       <xsl:choose>
         <xsl:when test="not(contains(@href,'://'))">
@@ -56,23 +62,47 @@
         <xsl:otherwise/>
       </xsl:choose>
     </xsl:variable>
+    <xsl:variable name="scale">
+      <xsl:choose>
+        <xsl:when test="@scale">
+          <xsl:value-of select="@scale div 100"/>
+        </xsl:when>
+        <xsl:otherwise>1</xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
     <xsl:variable name="height">
       <xsl:choose>
         <xsl:when test="@height">
           <xsl:choose>
             <xsl:when test="contains(@height, 'in')">
-              <xsl:value-of select="substring-before(@height, 'in')"/>
+              <xsl:value-of select="substring-before(@height, 'in') * $scale"/>
             </xsl:when>
             <xsl:when test="contains(@height, 'cm')">
-              <xsl:value-of select="number(substring-before(@height, 'cm')) div 2.54"/>
+              <xsl:value-of select="number(round(substring-before(@height, 'cm') div 2.54)) * $scale"/>
             </xsl:when>
+            <xsl:when test="contains(@height, 'mm')">
+              <xsl:value-of select="number(round(substring-before(@height, 'mm') div 25.4)) * $scale"/>
+            </xsl:when>
+            <xsl:when test="contains(@height, 'pt')">
+              <xsl:value-of select="number(round(substring-before(@height, 'pt') div 72)) * $scale"/>
+            </xsl:when>
+            <xsl:when test="contains(@height, 'pc')">
+              <xsl:value-of select="number(round(substring-before(@height, 'pc') div 6)) * $scale"/>
+            </xsl:when>
+            <xsl:when test="contains(@height, 'px')">
+              <xsl:value-of select="number(round(substring-before(@height, 'px') div 96)) * $scale"/>
+            </xsl:when>
+            <xsl:when test="contains(@height, 'em')">
+              <xsl:value-of select="number(round(substring-before(@height, 'em') div 6)) * $scale"/>
+            </xsl:when>
+            <!-- default is px -->
             <xsl:otherwise>
-              <xsl:value-of select="number(@height div 100)"/>
+              <xsl:value-of select="number(@height div 96) * $scale"/>
             </xsl:otherwise>
           </xsl:choose>
         </xsl:when>
         <xsl:when test="not(contains(@href,'://'))">
-          <xsl:value-of select="number(java:getHeight($OUTPUTDIR, string(@href)) div 100)"/>
+          <xsl:value-of select="number(java:getHeight($OUTPUTDIR, string(@href)) div 96) * $scale"/>
         </xsl:when>
         <xsl:otherwise/>
       </xsl:choose>
@@ -82,18 +112,34 @@
         <xsl:when test="@width">
           <xsl:choose>
             <xsl:when test="contains(@width, 'in')">
-              <xsl:value-of select="substring-before(@width, 'in')"/>
+              <xsl:value-of select="substring-before(@width, 'in') * $scale"/>
             </xsl:when>
             <xsl:when test="contains(@width, 'cm')">
-              <xsl:value-of select="number(substring-before(@width, 'cm')) div 2.54"/>
+              <xsl:value-of select="number(round(substring-before(@width, 'cm') div 2.54)) * $scale"/>
             </xsl:when>
+            <xsl:when test="contains(@width, 'mm')">
+              <xsl:value-of select="number(round(substring-before(@width, 'mm') div 25.4)) * $scale"/>
+            </xsl:when>
+            <xsl:when test="contains(@width, 'pt')">
+              <xsl:value-of select="number(round(substring-before(@width, 'pt') div 72)) * $scale"/>
+            </xsl:when>
+            <xsl:when test="contains(@width, 'pc')">
+              <xsl:value-of select="number(round(substring-before(@width, 'pc') div 6)) * $scale"/>
+            </xsl:when>
+            <xsl:when test="contains(@width, 'px')">
+              <xsl:value-of select="number(round(substring-before(@width, 'px') div 96)) * $scale"/>
+            </xsl:when>
+            <xsl:when test="contains(@width, 'em')">
+              <xsl:value-of select="number(round(substring-before(@width, 'em') div 6)) * $scale"/>
+            </xsl:when>
+            <!-- default is px -->
             <xsl:otherwise>
-              <xsl:value-of select="number(@width div 100)"/>
+              <xsl:value-of select="number(@width div 96) * $scale"/>
             </xsl:otherwise>
           </xsl:choose>
         </xsl:when>
         <xsl:when test="not(contains(@href,'://'))">
-          <xsl:value-of select="number(java:getWidth($OUTPUTDIR, string(@href)) div 100)"/>
+          <xsl:value-of select="number(java:getWidth($OUTPUTDIR, string(@href)) div 96) * $scale"/>
         </xsl:when>
         <xsl:otherwise/>
       </xsl:choose>
@@ -104,53 +150,99 @@
     <xsl:when test="parent::*[contains(@class, ' topic/body ')] or 
       parent::*[contains(@class, ' topic/li ')]">
       <xsl:element name="text:p">
-        <xsl:call-template name="draw_image">
-          <xsl:with-param name="height" select="$height"/>
-          <xsl:with-param name="type" select="$type"/>
-          <xsl:with-param name="width" select="$width"/>
-        </xsl:call-template>
+        <xsl:element name="text:span">
+          <!-- add flagging styles -->
+          <xsl:call-template name="start_flagging">
+            <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
+            <xsl:with-param name="flagrules" select="$flagrules"/>
+          </xsl:call-template>
+          
+          <xsl:call-template name="draw_image">
+            <xsl:with-param name="height" select="$height"/>
+            <xsl:with-param name="type" select="$type"/>
+            <xsl:with-param name="width" select="$width"/>
+          </xsl:call-template>
+          
+          <xsl:call-template name="end_flagging">
+            <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
+            <xsl:with-param name="flagrules" select="$flagrules"/>
+          </xsl:call-template>
+        </xsl:element>
       </xsl:element>
     </xsl:when>
     <!-- nested by entry -->
     <xsl:when test="parent::*[contains(@class, ' topic/entry ')]">
       <!-- create p tag -->
       <xsl:element name="text:p">
+        <xsl:element name="text:span">
+          <!-- add flagging styles -->
+          <xsl:call-template name="start_flagging">
+            <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
+            <xsl:with-param name="flagrules" select="$flagrules"/>
+          </xsl:call-template>
+          
           <xsl:call-template name="draw_image">
             <xsl:with-param name="height" select="$height"/>
             <xsl:with-param name="type" select="$type"/>
             <xsl:with-param name="width" select="$width"/>
           </xsl:call-template>
+          
+          <xsl:call-template name="end_flagging">
+            <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
+            <xsl:with-param name="flagrules" select="$flagrules"/>
+          </xsl:call-template>
+        </xsl:element>
       </xsl:element>
     </xsl:when>
     <!-- nested by stentry -->
     <xsl:when test="parent::*[contains(@class, ' topic/stentry ')]">
       <xsl:element name="text:p">
+        <xsl:element name="text:span">
+          <!-- add flagging styles -->
+          <xsl:call-template name="start_flagging">
+            <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
+            <xsl:with-param name="flagrules" select="$flagrules"/>
+          </xsl:call-template>
+          
           <xsl:call-template name="draw_image">
             <xsl:with-param name="height" select="$height"/>
             <xsl:with-param name="type" select="$type"/>
             <xsl:with-param name="width" select="$width"/>
           </xsl:call-template>
+          
+          <xsl:call-template name="end_flagging">
+            <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
+            <xsl:with-param name="flagrules" select="$flagrules"/>
+          </xsl:call-template>
+        </xsl:element>
       </xsl:element>
     </xsl:when>
     <!-- nested by other tags -->
     <xsl:otherwise>
+      <xsl:element name="text:span">
+        <!-- add flagging styles -->
+        <xsl:call-template name="start_flagging">
+          <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
+          <xsl:with-param name="flagrules" select="$flagrules"/>
+        </xsl:call-template>
+        
         <xsl:call-template name="draw_image">
           <xsl:with-param name="height" select="$height"/>
           <xsl:with-param name="type" select="$type"/>
           <xsl:with-param name="width" select="$width"/>
         </xsl:call-template>
+        
+        <xsl:call-template name="end_flagging">
+          <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
+          <xsl:with-param name="flagrules" select="$flagrules"/>
+        </xsl:call-template>
+      </xsl:element>
     </xsl:otherwise>
   </xsl:choose>
-    
-  <!-- 
-  </text:p>
-  -->
-  <!-- start p tag again -->
-  <!-- 
-  <xsl:text disable-output-escaping="yes">&lt;text:p&gt;</xsl:text>
-  -->
+
 </xsl:if>
 </xsl:template>
+  
   <xsl:template name="draw_image">
     <xsl:param name="type"/>
     <xsl:param name="height"/>

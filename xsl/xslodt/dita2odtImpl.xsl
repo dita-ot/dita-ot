@@ -297,70 +297,32 @@
       <xsl:when test="parent::*[contains(@class, ' topic/body ')]">
         <xsl:element name="text:p">
           <xsl:element name="text:span">
-            <!-- add flagging styles -->
-            <xsl:if test="$flagStyleName != ''">
-              <xsl:attribute name="text:style-name">
-                <xsl:value-of select="$flagStyleName"/>
-              </xsl:attribute>
-            </xsl:if>
-            
-            <xsl:call-template name="start-flagit">
-              <xsl:with-param name="flagrules" select="$flagrules"/>     
+            <xsl:call-template name="start_flagging">
+              <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
+              <xsl:with-param name="flagrules" select="$flagrules"/>
             </xsl:call-template>
-            
-            <xsl:if test="@rev and not($FILTERFILE='') and ($DRAFT='yes') ">
-              <xsl:call-template name="start-mark-rev">
-                <xsl:with-param name="revvalue" select="@rev"/>
-                <xsl:with-param name="flagrules" select="$flagrules"/> 
-              </xsl:call-template>
-            </xsl:if>
             <xsl:apply-templates/>
-            <xsl:if test="@rev and not($FILTERFILE='') and ($DRAFT='yes')">
-              <xsl:call-template name="end-mark-rev">
-                <xsl:with-param name="revvalue" select="@rev"/>
-                <xsl:with-param name="flagrules" select="$flagrules"/> 
-              </xsl:call-template>
-            </xsl:if>
-            
-            <xsl:call-template name="end-flagit">
-              <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param> 
+            <xsl:call-template name="end_flagging">
+              <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
+              <xsl:with-param name="flagrules" select="$flagrules"/>
             </xsl:call-template>
           </xsl:element>		
         </xsl:element>
       </xsl:when>
+      <!-- nested by other tags. -->
       <xsl:otherwise>
         <xsl:element name="text:span">
-          <!-- add flagging styles -->
-          <xsl:if test="$flagStyleName != ''">
-            <xsl:attribute name="text:style-name">
-              <xsl:value-of select="$flagStyleName"/>
-            </xsl:attribute>
-          </xsl:if>
-          
-          <xsl:call-template name="start-flagit">
-            <xsl:with-param name="flagrules" select="$flagrules"/>     
-          </xsl:call-template>
-          
-          <xsl:if test="@rev and not($FILTERFILE='') and ($DRAFT='yes') ">
-            <xsl:call-template name="start-mark-rev">
-              <xsl:with-param name="revvalue" select="@rev"/>
-              <xsl:with-param name="flagrules" select="$flagrules"/> 
+          <xsl:element name="text:span">
+            <xsl:call-template name="start_flagging">
+              <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
+              <xsl:with-param name="flagrules" select="$flagrules"/>
             </xsl:call-template>
-          </xsl:if>
-          
-          <xsl:apply-templates/>
-          
-          <xsl:if test="@rev and not($FILTERFILE='') and ($DRAFT='yes')">
-            <xsl:call-template name="end-mark-rev">
-              <xsl:with-param name="revvalue" select="@rev"/>
-              <xsl:with-param name="flagrules" select="$flagrules"/> 
+            <xsl:apply-templates/>
+            <xsl:call-template name="end_flagging">
+              <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
+              <xsl:with-param name="flagrules" select="$flagrules"/>
             </xsl:call-template>
-          </xsl:if>
-          
-          <xsl:call-template name="end-flagit">
-            <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param> 
-          </xsl:call-template>
-          
+          </xsl:element>        
         </xsl:element>        
       </xsl:otherwise>
     </xsl:choose>
@@ -506,33 +468,15 @@
           <xsl:attribute name="text:style-name">indent_paragraph_style</xsl:attribute>
           <xsl:element name="text:span">
             <!-- add flagging styles -->
-            <xsl:if test="$flagStyleName != ''">
-              <xsl:attribute name="text:style-name">
-                <xsl:value-of select="$flagStyleName"/>
-              </xsl:attribute>
-            </xsl:if>
-            <xsl:call-template name="start-flagit">
-              <xsl:with-param name="flagrules" select="$flagrules"/>     
+            <xsl:call-template name="start_flagging">
+              <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
+              <xsl:with-param name="flagrules" select="$flagrules"/>
             </xsl:call-template>
-            <xsl:if test="@rev and not($FILTERFILE='') and ($DRAFT='yes') ">
-              <xsl:call-template name="start-mark-rev">
-                <xsl:with-param name="revvalue" select="@rev"/>
-                <xsl:with-param name="flagrules" select="$flagrules"/> 
-              </xsl:call-template>
-            </xsl:if>
-            
             <xsl:apply-templates/>
-            
-            <xsl:if test="@rev and not($FILTERFILE='') and ($DRAFT='yes')">
-              <xsl:call-template name="end-mark-rev">
-                <xsl:with-param name="revvalue" select="@rev"/>
-                <xsl:with-param name="flagrules" select="$flagrules"/> 
-              </xsl:call-template>
-            </xsl:if>
-            
-            <xsl:call-template name="end-flagit">
-              <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param> 
-            </xsl:call-template>
+            <xsl:call-template name="end_flagging">
+              <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
+              <xsl:with-param name="flagrules" select="$flagrules"/>
+            </xsl:call-template>	
           </xsl:element>            
         </xsl:element>
       </xsl:when>
@@ -546,22 +490,10 @@
           </xsl:if>
           <xsl:element name="text:span">
             <!-- add flagging styles -->
-            <xsl:if test="$flagStyleName != ''">
-              <xsl:attribute name="text:style-name">
-                <xsl:value-of select="$flagStyleName"/>
-              </xsl:attribute>
-            </xsl:if>
-            
-            <xsl:call-template name="start-flagit">
-              <xsl:with-param name="flagrules" select="$flagrules"/>     
+            <xsl:call-template name="start_flagging">
+              <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
+              <xsl:with-param name="flagrules" select="$flagrules"/>
             </xsl:call-template>
-            
-            <xsl:if test="@rev and not($FILTERFILE='') and ($DRAFT='yes') ">
-              <xsl:call-template name="start-mark-rev">
-                <xsl:with-param name="revvalue" select="@rev"/>
-                <xsl:with-param name="flagrules" select="$flagrules"/> 
-              </xsl:call-template>
-            </xsl:if>
               <!-- cell belongs to thead -->
               <xsl:choose>
                 <xsl:when test="parent::*[contains(@class, ' topic/entry ')]
@@ -575,15 +507,10 @@
                   <xsl:apply-templates/>
                 </xsl:otherwise>
               </xsl:choose>
-            <xsl:if test="@rev and not($FILTERFILE='') and ($DRAFT='yes')">
-              <xsl:call-template name="end-mark-rev">
-                <xsl:with-param name="revvalue" select="@rev"/>
-                <xsl:with-param name="flagrules" select="$flagrules"/> 
-              </xsl:call-template>
-            </xsl:if>
-            <xsl:call-template name="end-flagit">
-              <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param> 
-            </xsl:call-template>
+            <xsl:call-template name="end_flagging">
+              <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
+              <xsl:with-param name="flagrules" select="$flagrules"/>
+            </xsl:call-template>	
           </xsl:element>
         </xsl:element>
       </xsl:when>
@@ -597,62 +524,28 @@
                 <xsl:attribute name="text:style-name">bold_paragraph</xsl:attribute>
               <xsl:element name="text:span">
                 <!-- add flagging styles -->
-                <xsl:if test="$flagStyleName != ''">
-                  <xsl:attribute name="text:style-name">
-                    <xsl:value-of select="$flagStyleName"/>
-                  </xsl:attribute>
-                </xsl:if>
-                <xsl:call-template name="start-flagit">
-                  <xsl:with-param name="flagrules" select="$flagrules"/>     
+                <xsl:call-template name="start_flagging">
+                  <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
+                  <xsl:with-param name="flagrules" select="$flagrules"/>
                 </xsl:call-template>
-                <xsl:if test="@rev and not($FILTERFILE='') and ($DRAFT='yes') ">
-                  <xsl:call-template name="start-mark-rev">
-                    <xsl:with-param name="revvalue" select="@rev"/>
-                    <xsl:with-param name="flagrules" select="$flagrules"/> 
-                  </xsl:call-template>
-                </xsl:if>
-                
                   <xsl:apply-templates/>
-                
-                <xsl:if test="@rev and not($FILTERFILE='') and ($DRAFT='yes')">
-                  <xsl:call-template name="end-mark-rev">
-                    <xsl:with-param name="revvalue" select="@rev"/>
-                    <xsl:with-param name="flagrules" select="$flagrules"/> 
-                  </xsl:call-template>
-                </xsl:if>
-                <xsl:call-template name="end-flagit">
-                  <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param> 
-                </xsl:call-template>
+                <xsl:call-template name="end_flagging">
+                  <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
+                  <xsl:with-param name="flagrules" select="$flagrules"/>
+                </xsl:call-template>	
               </xsl:element>	
             </xsl:when>
             <xsl:otherwise>
               <xsl:element name="text:span">
                 <!-- add flagging styles -->
-                <xsl:if test="$flagStyleName != ''">
-                  <xsl:attribute name="text:style-name">
-                    <xsl:value-of select="$flagStyleName"/>
-                  </xsl:attribute>
-                </xsl:if>
-                <xsl:call-template name="start-flagit">
-                  <xsl:with-param name="flagrules" select="$flagrules"/>     
+                <xsl:call-template name="start_flagging">
+                  <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
+                  <xsl:with-param name="flagrules" select="$flagrules"/>
                 </xsl:call-template>
-                <xsl:if test="@rev and not($FILTERFILE='') and ($DRAFT='yes') ">
-                  <xsl:call-template name="start-mark-rev">
-                    <xsl:with-param name="revvalue" select="@rev"/>
-                    <xsl:with-param name="flagrules" select="$flagrules"/> 
-                  </xsl:call-template>
-                </xsl:if>
-                
                 <xsl:apply-templates/>
-                
-                <xsl:if test="@rev and not($FILTERFILE='') and ($DRAFT='yes')">
-                  <xsl:call-template name="end-mark-rev">
-                    <xsl:with-param name="revvalue" select="@rev"/>
-                    <xsl:with-param name="flagrules" select="$flagrules"/> 
-                  </xsl:call-template>
-                </xsl:if>
-                <xsl:call-template name="end-flagit">
-                  <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param> 
+                <xsl:call-template name="end_flagging">
+                  <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
+                  <xsl:with-param name="flagrules" select="$flagrules"/>
                 </xsl:call-template>
               </xsl:element>
             </xsl:otherwise>
@@ -662,33 +555,18 @@
       <!-- nested by other tags -->
       <xsl:otherwise>
         <xsl:element name="text:span">
-          <!-- add flagging styles -->
-          <xsl:if test="$flagStyleName != ''">
-            <xsl:attribute name="text:style-name">
-              <xsl:value-of select="$flagStyleName"/>
-            </xsl:attribute>
-          </xsl:if>
-          <xsl:call-template name="start-flagit">
-            <xsl:with-param name="flagrules" select="$flagrules"/>     
-          </xsl:call-template>
-          <xsl:if test="@rev and not($FILTERFILE='') and ($DRAFT='yes') ">
-            <xsl:call-template name="start-mark-rev">
-              <xsl:with-param name="revvalue" select="@rev"/>
-              <xsl:with-param name="flagrules" select="$flagrules"/> 
+          <xsl:element name="text:span">
+            <!-- add flagging styles -->
+            <xsl:call-template name="start_flagging">
+              <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
+              <xsl:with-param name="flagrules" select="$flagrules"/>
             </xsl:call-template>
-          </xsl:if>
-          
-          <xsl:apply-templates/>
-        
-          <xsl:if test="@rev and not($FILTERFILE='') and ($DRAFT='yes')">
-            <xsl:call-template name="end-mark-rev">
-              <xsl:with-param name="revvalue" select="@rev"/>
-              <xsl:with-param name="flagrules" select="$flagrules"/> 
+              <xsl:apply-templates/>
+            <xsl:call-template name="end_flagging">
+              <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
+              <xsl:with-param name="flagrules" select="$flagrules"/>
             </xsl:call-template>
-          </xsl:if>
-          <xsl:call-template name="end-flagit">
-            <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param> 
-          </xsl:call-template>
+          </xsl:element>
         </xsl:element>
       </xsl:otherwise>
     </xsl:choose>
@@ -801,20 +679,67 @@
   </xsl:template>
   
   <xsl:template match="*[contains(@class, ' topic/pre ')]">
+    
+    <!-- get flagging style name. -->
+    <xsl:variable name="flagStyleName">
+      <xsl:call-template name="getFlagStyleName"/>
+    </xsl:variable>
+    
+    <xsl:variable name="flagrules">
+      <xsl:call-template name="getrules"/>
+    </xsl:variable>
+    
 
     <xsl:choose>
       <xsl:when test="contains(@class, ' pr-d/codeblock ')">
-        <xsl:call-template name="create_codeblock"/>
+        <xsl:element name="text:span">
+          <xsl:call-template name="start_flagging">
+            <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
+            <xsl:with-param name="flagrules" select="$flagrules"/>
+          </xsl:call-template>
+          
+          <xsl:call-template name="create_codeblock"/>
+          
+          <xsl:call-template name="end_flagging">
+            <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
+            <xsl:with-param name="flagrules" select="$flagrules"/>
+          </xsl:call-template>
+        </xsl:element>
       </xsl:when>
       <xsl:when test="contains(@class, ' sw-d/msgblock ')">
-        <xsl:call-template name="create_msgblock"/>
+        <xsl:element name="text:span">
+          <xsl:call-template name="start_flagging">
+            <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
+            <xsl:with-param name="flagrules" select="$flagrules"/>
+          </xsl:call-template>
+          
+          <xsl:call-template name="create_msgblock"/>
+          
+          <xsl:call-template name="end_flagging">
+            <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
+            <xsl:with-param name="flagrules" select="$flagrules"/>
+          </xsl:call-template>
+        </xsl:element>
       </xsl:when>
       <!-- nested by body, li -->
       <xsl:when test="parent::*[contains(@class, ' topic/body ')] or 
                       parent::*[contains(@class, ' topic/li ')]">
         <xsl:element name="text:p">
           <xsl:attribute name="text:style-name">Code_Style_Paragraph</xsl:attribute>
-          <xsl:apply-templates/>
+          <xsl:element name="text:span">
+            <xsl:call-template name="start_flagging">
+              <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
+              <xsl:with-param name="flagrules" select="$flagrules"/>
+            </xsl:call-template>
+            
+            <xsl:apply-templates/>
+            
+            <xsl:call-template name="end_flagging">
+              <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
+              <xsl:with-param name="flagrules" select="$flagrules"/>
+            </xsl:call-template> 
+          
+          </xsl:element>
         </xsl:element>
       </xsl:when>
       <!-- nested by entry -->
@@ -832,11 +757,36 @@
               /parent::*[contains(@class, ' topic/row ')]/parent::*[contains(@class, ' topic/thead ')]">
               <xsl:element name="text:span">
                 <xsl:attribute name="text:style-name">bold</xsl:attribute>
-                <xsl:apply-templates/>
+                <xsl:element name="text:span">
+                  <xsl:call-template name="start_flagging">
+                    <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
+                    <xsl:with-param name="flagrules" select="$flagrules"/>
+                  </xsl:call-template>
+                  
+                  <xsl:apply-templates/>
+                  
+                  <xsl:call-template name="end_flagging">
+                    <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
+                    <xsl:with-param name="flagrules" select="$flagrules"/>
+                  </xsl:call-template> 
+                </xsl:element>
               </xsl:element>
             </xsl:when>
             <xsl:otherwise>
-              <xsl:apply-templates/>
+              <xsl:element name="text:span">
+                <xsl:call-template name="start_flagging">
+                  <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
+                  <xsl:with-param name="flagrules" select="$flagrules"/>
+                </xsl:call-template>
+                
+                <xsl:apply-templates/>
+                
+                <xsl:call-template name="end_flagging">
+                  <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
+                  <xsl:with-param name="flagrules" select="$flagrules"/>
+                </xsl:call-template> 
+                
+              </xsl:element>
             </xsl:otherwise>
           </xsl:choose>
         </xsl:element>
@@ -850,11 +800,38 @@
               parent::*[contains(@class, ' topic/sthead ')]">
               <xsl:element name="text:span">
                 <xsl:attribute name="text:style-name">bold</xsl:attribute>
-                <xsl:apply-templates/>
+                <xsl:element name="text:span">
+                  <xsl:call-template name="start_flagging">
+                    <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
+                    <xsl:with-param name="flagrules" select="$flagrules"/>
+                  </xsl:call-template>
+                  
+                  <xsl:apply-templates/>
+                  
+                  <xsl:call-template name="end_flagging">
+                    <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
+                    <xsl:with-param name="flagrules" select="$flagrules"/>
+                  </xsl:call-template> 
+                  
+                </xsl:element>
               </xsl:element>
             </xsl:when>
             <xsl:otherwise>
-              <xsl:apply-templates/>
+              <xsl:element name="text:span">
+                
+                  <xsl:call-template name="start_flagging">
+                    <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
+                    <xsl:with-param name="flagrules" select="$flagrules"/>
+                  </xsl:call-template>
+                  
+                  <xsl:apply-templates/>
+                  
+                  <xsl:call-template name="end_flagging">
+                    <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
+                    <xsl:with-param name="flagrules" select="$flagrules"/>
+                  </xsl:call-template> 
+                  
+              </xsl:element>
             </xsl:otherwise>
           </xsl:choose>
         </xsl:element>
@@ -862,7 +839,19 @@
       <!-- other tags -->
       <xsl:otherwise>
         <xsl:element name="text:span">
-          <xsl:apply-templates/>
+          
+            <xsl:call-template name="start_flagging">
+              <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
+              <xsl:with-param name="flagrules" select="$flagrules"/>
+            </xsl:call-template>
+            
+            <xsl:apply-templates/>
+            
+            <xsl:call-template name="end_flagging">
+              <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
+              <xsl:with-param name="flagrules" select="$flagrules"/>
+            </xsl:call-template> 
+            
         </xsl:element>
         <!-- 
         <xsl:call-template name="block-pre"/>
@@ -1120,6 +1109,15 @@
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' topic/lq ')]" name="topic.lq">
+  <!-- get flagging style name. -->
+  <xsl:variable name="flagStyleName">
+    <xsl:call-template name="getFlagStyleName"/>
+  </xsl:variable>
+  
+  <xsl:variable name="flagrules">
+    <xsl:call-template name="getrules"/>
+  </xsl:variable>
+  
   <xsl:variable name="samefile">
     <xsl:choose>
       <xsl:when test="@href and starts-with(@href,'#')">
@@ -1156,11 +1154,24 @@
     <xsl:when test="parent::*[contains(@class, ' topic/body ')] or 
                     parent::*[contains(@class, ' topic/li ')]">
       <xsl:element name="text:p">
-        <xsl:apply-templates/>
-        <xsl:call-template name="create_lq_content">
-          <xsl:with-param name="samefile" select="$samefile"/>
-          <xsl:with-param name="href-value" select="$href-value"/>
-        </xsl:call-template>
+        <xsl:element name="text:span">
+          <!-- add flagging styles -->
+          <xsl:call-template name="start_flagging">
+            <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
+            <xsl:with-param name="flagrules" select="$flagrules"/>
+          </xsl:call-template>
+        
+          <xsl:apply-templates/>
+          <xsl:call-template name="create_lq_content">
+            <xsl:with-param name="samefile" select="$samefile"/>
+            <xsl:with-param name="href-value" select="$href-value"/>
+          </xsl:call-template>
+          
+          <xsl:call-template name="end_flagging">
+            <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
+            <xsl:with-param name="flagrules" select="$flagrules"/>
+          </xsl:call-template>
+        </xsl:element>
       </xsl:element>
     </xsl:when>
     <!-- nested by entry -->
@@ -1178,11 +1189,33 @@
             /parent::*[contains(@class, ' topic/row ')]/parent::*[contains(@class, ' topic/thead ')]">
             <xsl:element name="text:span">
               <xsl:attribute name="text:style-name">bold</xsl:attribute>
-              <xsl:apply-templates/>
+              <xsl:element name="text:span">
+                <!-- add flagging styles -->
+                <xsl:call-template name="start_flagging">
+                  <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
+                  <xsl:with-param name="flagrules" select="$flagrules"/>
+                </xsl:call-template>
+                <xsl:apply-templates/>
+                <xsl:call-template name="end_flagging">
+                  <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
+                  <xsl:with-param name="flagrules" select="$flagrules"/>
+                </xsl:call-template>
+              </xsl:element>
             </xsl:element>
           </xsl:when>
           <xsl:otherwise>
-            <xsl:apply-templates/>
+            <xsl:element name="text:span">
+              <!-- add flagging styles -->
+              <xsl:call-template name="start_flagging">
+                <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
+                <xsl:with-param name="flagrules" select="$flagrules"/>
+              </xsl:call-template>
+              <xsl:apply-templates/>
+              <xsl:call-template name="end_flagging">
+                <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
+                <xsl:with-param name="flagrules" select="$flagrules"/>
+              </xsl:call-template>
+            </xsl:element>	
           </xsl:otherwise>
         </xsl:choose>
       </xsl:element>
@@ -1196,11 +1229,29 @@
             parent::*[contains(@class, ' topic/sthead ')]">
             <xsl:element name="text:span">
               <xsl:attribute name="text:style-name">bold</xsl:attribute>
+              <xsl:call-template name="start_flagging">
+                <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
+                <xsl:with-param name="flagrules" select="$flagrules"/>
+              </xsl:call-template>
               <xsl:apply-templates/>
+              <xsl:call-template name="end_flagging">
+                <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
+                <xsl:with-param name="flagrules" select="$flagrules"/>
+              </xsl:call-template>
             </xsl:element>
           </xsl:when>
           <xsl:otherwise>
-            <xsl:apply-templates/>
+            <xsl:element name="text:span">
+              <xsl:call-template name="start_flagging">
+                <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
+                <xsl:with-param name="flagrules" select="$flagrules"/>
+              </xsl:call-template>
+              <xsl:apply-templates/>
+              <xsl:call-template name="end_flagging">
+                <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
+                <xsl:with-param name="flagrules" select="$flagrules"/>
+              </xsl:call-template>
+            </xsl:element>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:element>
@@ -1208,11 +1259,21 @@
     <!-- other tags -->
     <xsl:otherwise>
       <xsl:element name="text:span">
-        <xsl:call-template name="create_lq_content">
-          <xsl:with-param name="samefile" select="$samefile"/>
-          <xsl:with-param name="href-value" select="$href-value"/>
-        </xsl:call-template>
-        <xsl:apply-templates/>
+        <xsl:element name="text:span">
+          <xsl:call-template name="start_flagging">
+            <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
+            <xsl:with-param name="flagrules" select="$flagrules"/>
+          </xsl:call-template>
+          <xsl:call-template name="create_lq_content">
+            <xsl:with-param name="samefile" select="$samefile"/>
+            <xsl:with-param name="href-value" select="$href-value"/>
+          </xsl:call-template>
+          <xsl:apply-templates/>
+          <xsl:call-template name="end_flagging">
+            <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
+            <xsl:with-param name="flagrules" select="$flagrules"/>
+          </xsl:call-template>	
+        </xsl:element>
       </xsl:element>
     </xsl:otherwise>
   </xsl:choose>
@@ -1471,7 +1532,6 @@
     <xsl:call-template name="getrules"/>
   </xsl:variable>
   
-  
   <xsl:choose>
     <!-- has child tags -->
     <xsl:when test="child::*|text()">
@@ -1483,23 +1543,10 @@
             <xsl:attribute name="text:style-name">indent_paragraph_style</xsl:attribute>
             <xsl:element name="text:span">
               <!-- add flagging styles -->
-              <xsl:if test="$flagStyleName != ''">
-                <xsl:attribute name="text:style-name">
-                  <xsl:value-of select="$flagStyleName"/>
-                </xsl:attribute>
-              </xsl:if>
-              
-              <xsl:call-template name="start-flagit">
-                <xsl:with-param name="flagrules" select="$flagrules"/>     
+              <xsl:call-template name="start_flagging">
+                <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
+                <xsl:with-param name="flagrules" select="$flagrules"/>
               </xsl:call-template>
-              
-              <xsl:if test="@rev and not($FILTERFILE='') and ($DRAFT='yes') ">
-                <xsl:call-template name="start-mark-rev">
-                  <xsl:with-param name="revvalue" select="@rev"/>
-                  <xsl:with-param name="flagrules" select="$flagrules"/> 
-                </xsl:call-template>
-              </xsl:if>
-            
               <xsl:choose>
                 <!-- for hazardstatement -->
                 <xsl:when test="contains(@class,' hazard-d/hazardstatement ')">
@@ -1509,16 +1556,9 @@
                     <xsl:call-template name="create_note_content"/>
                 </xsl:otherwise>
               </xsl:choose>
-              
-              <xsl:if test="@rev and not($FILTERFILE='') and ($DRAFT='yes')">
-                <xsl:call-template name="end-mark-rev">
-                  <xsl:with-param name="revvalue" select="@rev"/>
-                  <xsl:with-param name="flagrules" select="$flagrules"/> 
-                </xsl:call-template>
-              </xsl:if>
-              
-              <xsl:call-template name="end-flagit">
-                <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param> 
+              <xsl:call-template name="end_flagging">
+                <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
+                <xsl:with-param name="flagrules" select="$flagrules"/>
               </xsl:call-template>
             </xsl:element>
           </xsl:element>
@@ -1539,24 +1579,10 @@
                   <xsl:attribute name="text:style-name">bold</xsl:attribute>
                   <xsl:element name="text:span">
                     <!-- add flagging styles -->
-                    <xsl:if test="$flagStyleName != ''">
-                      <xsl:attribute name="text:style-name">
-                        <xsl:value-of select="$flagStyleName"/>
-                      </xsl:attribute>
-                    </xsl:if>
-                    
-                    <xsl:call-template name="start-flagit">
-                      <xsl:with-param name="flagrules" select="$flagrules"/>     
+                    <xsl:call-template name="start_flagging">
+                      <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
+                      <xsl:with-param name="flagrules" select="$flagrules"/>
                     </xsl:call-template>
-                    
-                    <xsl:if test="@rev and not($FILTERFILE='') and ($DRAFT='yes') ">
-                      <xsl:call-template name="start-mark-rev">
-                        <xsl:with-param name="revvalue" select="@rev"/>
-                        <xsl:with-param name="flagrules" select="$flagrules"/> 
-                      </xsl:call-template>
-                    </xsl:if>
-                  
-                  
                     <xsl:choose>
                       <!-- for hazardstatement -->
                       <xsl:when test="contains(@class,' hazard-d/hazardstatement ')">
@@ -1566,41 +1592,19 @@
                           <xsl:call-template name="create_note_content"/>
                       </xsl:otherwise>
                     </xsl:choose>
-                    
-                    <xsl:if test="@rev and not($FILTERFILE='') and ($DRAFT='yes')">
-                      <xsl:call-template name="end-mark-rev">
-                        <xsl:with-param name="revvalue" select="@rev"/>
-                        <xsl:with-param name="flagrules" select="$flagrules"/> 
-                      </xsl:call-template>
-                    </xsl:if>
-                  
-                    <xsl:call-template name="end-flagit">
-                      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param> 
-                    </xsl:call-template>
-                    </xsl:element>
-                  
+                    <xsl:call-template name="end_flagging">
+                      <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
+                      <xsl:with-param name="flagrules" select="$flagrules"/>
+                    </xsl:call-template>	
+                   </xsl:element>
                 </xsl:element>
               </xsl:when>
               <xsl:otherwise>
                 <xsl:element name="text:span">
-                  <!-- add flagging styles -->
-                  <xsl:if test="$flagStyleName != ''">
-                    <xsl:attribute name="text:style-name">
-                      <xsl:value-of select="$flagStyleName"/>
-                    </xsl:attribute>
-                  </xsl:if>
-                  
-                  <xsl:call-template name="start-flagit">
-                    <xsl:with-param name="flagrules" select="$flagrules"/>     
+                  <xsl:call-template name="start_flagging">
+                    <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
+                    <xsl:with-param name="flagrules" select="$flagrules"/>
                   </xsl:call-template>
-                  
-                  <xsl:if test="@rev and not($FILTERFILE='') and ($DRAFT='yes') ">
-                    <xsl:call-template name="start-mark-rev">
-                      <xsl:with-param name="revvalue" select="@rev"/>
-                      <xsl:with-param name="flagrules" select="$flagrules"/> 
-                    </xsl:call-template>
-                  </xsl:if>
-                
                   <xsl:choose>
                     <!-- for hazardstatement -->
                     <xsl:when test="contains(@class,' hazard-d/hazardstatement ')">
@@ -1610,16 +1614,10 @@
                       <xsl:call-template name="create_note_content"/>
                     </xsl:otherwise>
                   </xsl:choose>
-                  <xsl:if test="@rev and not($FILTERFILE='') and ($DRAFT='yes')">
-                    <xsl:call-template name="end-mark-rev">
-                      <xsl:with-param name="revvalue" select="@rev"/>
-                      <xsl:with-param name="flagrules" select="$flagrules"/> 
-                    </xsl:call-template>
-                  </xsl:if>
-                  
-                  <xsl:call-template name="end-flagit">
-                    <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param> 
-                  </xsl:call-template>
+                  <xsl:call-template name="end_flagging">
+                    <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
+                    <xsl:with-param name="flagrules" select="$flagrules"/>
+                  </xsl:call-template>	
                 </xsl:element>
               </xsl:otherwise>
             </xsl:choose>
@@ -1636,23 +1634,10 @@
                   <xsl:attribute name="text:style-name">bold</xsl:attribute>
                   <xsl:element name="text:span">
                     <!-- add flagging styles -->
-                    <xsl:if test="$flagStyleName != ''">
-                      <xsl:attribute name="text:style-name">
-                        <xsl:value-of select="$flagStyleName"/>
-                      </xsl:attribute>
-                    </xsl:if>
-                    
-                    <xsl:call-template name="start-flagit">
-                      <xsl:with-param name="flagrules" select="$flagrules"/>     
+                    <xsl:call-template name="start_flagging">
+                      <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
+                      <xsl:with-param name="flagrules" select="$flagrules"/>
                     </xsl:call-template>
-                    
-                    <xsl:if test="@rev and not($FILTERFILE='') and ($DRAFT='yes') ">
-                      <xsl:call-template name="start-mark-rev">
-                        <xsl:with-param name="revvalue" select="@rev"/>
-                        <xsl:with-param name="flagrules" select="$flagrules"/> 
-                      </xsl:call-template>
-                    </xsl:if>
-                  
                       <xsl:choose>
                         <!-- for hazardstatement -->
                         <xsl:when test="contains(@class,' hazard-d/hazardstatement ')">
@@ -1662,40 +1647,20 @@
                           <xsl:call-template name="create_note_content"/>
                         </xsl:otherwise>
                       </xsl:choose>
-                    
-                    <xsl:if test="@rev and not($FILTERFILE='') and ($DRAFT='yes')">
-                      <xsl:call-template name="end-mark-rev">
-                        <xsl:with-param name="revvalue" select="@rev"/>
-                        <xsl:with-param name="flagrules" select="$flagrules"/> 
-                      </xsl:call-template>
-                    </xsl:if>
-                    
-                    <xsl:call-template name="end-flagit">
-                      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param> 
-                    </xsl:call-template>
+                    <xsl:call-template name="end_flagging">
+                      <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
+                      <xsl:with-param name="flagrules" select="$flagrules"/>
+                    </xsl:call-template>	
                   </xsl:element>
                 </xsl:element>
               </xsl:when>
               <xsl:otherwise>
                 <xsl:element name="text:span">
                   <!-- add flagging styles -->
-                  <xsl:if test="$flagStyleName != ''">
-                    <xsl:attribute name="text:style-name">
-                      <xsl:value-of select="$flagStyleName"/>
-                    </xsl:attribute>
-                  </xsl:if>
-                  
-                  <xsl:call-template name="start-flagit">
-                    <xsl:with-param name="flagrules" select="$flagrules"/>     
+                  <xsl:call-template name="start_flagging">
+                    <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
+                    <xsl:with-param name="flagrules" select="$flagrules"/>
                   </xsl:call-template>
-                  
-                  <xsl:if test="@rev and not($FILTERFILE='') and ($DRAFT='yes') ">
-                    <xsl:call-template name="start-mark-rev">
-                      <xsl:with-param name="revvalue" select="@rev"/>
-                      <xsl:with-param name="flagrules" select="$flagrules"/> 
-                    </xsl:call-template>
-                  </xsl:if>
-                  
                     <xsl:choose>
                       <!-- for hazardstatement -->
                       <xsl:when test="contains(@class,' hazard-d/hazardstatement ')">
@@ -1705,16 +1670,9 @@
                         <xsl:call-template name="create_note_content"/>
                       </xsl:otherwise>
                     </xsl:choose>
-                  
-                  <xsl:if test="@rev and not($FILTERFILE='') and ($DRAFT='yes')">
-                    <xsl:call-template name="end-mark-rev">
-                      <xsl:with-param name="revvalue" select="@rev"/>
-                      <xsl:with-param name="flagrules" select="$flagrules"/> 
-                    </xsl:call-template>
-                  </xsl:if>
-                  
-                  <xsl:call-template name="end-flagit">
-                    <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param> 
+                  <xsl:call-template name="end_flagging">
+                    <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
+                    <xsl:with-param name="flagrules" select="$flagrules"/>
                   </xsl:call-template>
                 </xsl:element>
               </xsl:otherwise>
@@ -1725,24 +1683,12 @@
         <xsl:otherwise>
           <xsl:element name="text:line-break"/>
           <xsl:element name="text:span">
+            <xsl:element name="text:span">
             <!-- add flagging styles -->
-            <xsl:if test="$flagStyleName != ''">
-              <xsl:attribute name="text:style-name">
-                <xsl:value-of select="$flagStyleName"/>
-              </xsl:attribute>
-            </xsl:if>
-            
-            <xsl:call-template name="start-flagit">
-              <xsl:with-param name="flagrules" select="$flagrules"/>     
+            <xsl:call-template name="start_flagging">
+              <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
+              <xsl:with-param name="flagrules" select="$flagrules"/>
             </xsl:call-template>
-            
-            <xsl:if test="@rev and not($FILTERFILE='') and ($DRAFT='yes') ">
-              <xsl:call-template name="start-mark-rev">
-                <xsl:with-param name="revvalue" select="@rev"/>
-                <xsl:with-param name="flagrules" select="$flagrules"/> 
-              </xsl:call-template>
-            </xsl:if>
-            
             <xsl:choose>
               <!-- for hazardstatement -->
               <xsl:when test="contains(@class,' hazard-d/hazardstatement ')">
@@ -1752,17 +1698,11 @@
                   <xsl:call-template name="create_note_content"/>
               </xsl:otherwise>
             </xsl:choose>
-            
-            <xsl:if test="@rev and not($FILTERFILE='') and ($DRAFT='yes')">
-              <xsl:call-template name="end-mark-rev">
-                <xsl:with-param name="revvalue" select="@rev"/>
-                <xsl:with-param name="flagrules" select="$flagrules"/> 
-              </xsl:call-template>
-            </xsl:if>
-            
-            <xsl:call-template name="end-flagit">
-              <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param> 
+            <xsl:call-template name="end_flagging">
+              <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
+              <xsl:with-param name="flagrules" select="$flagrules"/>
             </xsl:call-template>
+            </xsl:element>
           </xsl:element>
         </xsl:otherwise>
       </xsl:choose>
@@ -2362,19 +2302,58 @@
   
 <!-- itemgroup tag -->
 <xsl:template match="*[contains(@class, ' topic/itemgroup ')]">
+  <!-- get flagging style name. -->
+  <xsl:variable name="flagStyleName">
+    <xsl:call-template name="getFlagStyleName"/>
+  </xsl:variable>
+  
+  <xsl:variable name="flagrules">
+    <xsl:call-template name="getrules"/>
+  </xsl:variable>
+  
   <xsl:choose>
     
     <xsl:when test="parent::*[contains(@class, ' topic/dd ')]">
-      <xsl:apply-templates/>
+      <xsl:element name="text:span">
+        <xsl:call-template name="start_flagging">
+          <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
+          <xsl:with-param name="flagrules" select="$flagrules"/>
+        </xsl:call-template>
+        <xsl:apply-templates/>
+        <xsl:call-template name="end_flagging">
+          <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
+          <xsl:with-param name="flagrules" select="$flagrules"/>
+        </xsl:call-template>	
+      </xsl:element>
     </xsl:when>
     
     <xsl:when test="parent::*[contains(@class, ' topic/li')]">
       <xsl:element name="text:p">
-        <xsl:apply-templates/>
+        <xsl:element name="text:span">
+          <xsl:call-template name="start_flagging">
+            <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
+            <xsl:with-param name="flagrules" select="$flagrules"/>
+          </xsl:call-template>
+          <xsl:apply-templates/>
+          <xsl:call-template name="end_flagging">
+            <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
+            <xsl:with-param name="flagrules" select="$flagrules"/>
+          </xsl:call-template>	
+        </xsl:element>
       </xsl:element>
     </xsl:when>
     <xsl:otherwise>
-      <xsl:apply-templates/>
+      <xsl:element name="text:span">
+        <xsl:call-template name="start_flagging">
+          <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
+          <xsl:with-param name="flagrules" select="$flagrules"/>
+        </xsl:call-template>
+        <xsl:apply-templates/>
+        <xsl:call-template name="end_flagging">
+          <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
+          <xsl:with-param name="flagrules" select="$flagrules"/>
+        </xsl:call-template>	
+      </xsl:element>
     </xsl:otherwise>
   </xsl:choose>
   

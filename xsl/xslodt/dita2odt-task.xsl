@@ -882,6 +882,8 @@
               <xsl:attribute name="table:name">
                 <xsl:value-of select="concat('Table', $tablenameId)"/>
               </xsl:attribute>
+              <xsl:attribute name="table:style-name">table_style</xsl:attribute>
+              
               <xsl:variable name="colnumNum">
                 <xsl:call-template name="count_columns_for_simpletable"/>
               </xsl:variable>
@@ -994,9 +996,30 @@
   </xsl:template>
   
   <xsl:template match="*[contains(@class,' task/info ')]" name="topic.task.info">
+    <!-- get flagging style name. -->
+    <xsl:variable name="flagStyleName">
+      <xsl:call-template name="getFlagStyleName"/>
+    </xsl:variable>
+    
+    <xsl:variable name="flagrules">
+      <xsl:call-template name="getrules"/>
+    </xsl:variable>
+    
     <xsl:element name="text:p">
       <xsl:attribute name="text:style-name">indent_paragraph_style</xsl:attribute>
-      <xsl:apply-templates/>
+      <xsl:element name="text:span">
+        <xsl:call-template name="start_flagging">
+          <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
+          <xsl:with-param name="flagrules" select="$flagrules"/>
+        </xsl:call-template>
+        
+        <xsl:apply-templates/>
+        
+        <xsl:call-template name="end_flagging">
+          <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
+          <xsl:with-param name="flagrules" select="$flagrules"/>
+        </xsl:call-template>
+      </xsl:element>
     </xsl:element>
   </xsl:template>
   

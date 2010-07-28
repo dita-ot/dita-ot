@@ -41,7 +41,7 @@
             <xsl:copy-of select="$map//*[@id = $id]"/>
         </xsl:variable>
         <xsl:variable name="foundTopicType">
-            <xsl:apply-templates select="$mapTopic/*[position() = $topicNumber]" mode="determineTopicType"/>
+            <xsl:apply-templates select="exsl:node-set($mapTopic)/*[position() = $topicNumber]" mode="determineTopicType"/>
         </xsl:variable>
         <xsl:choose>
             <xsl:when test="$foundTopicType!=''"><xsl:value-of select="$foundTopicType"/></xsl:when>

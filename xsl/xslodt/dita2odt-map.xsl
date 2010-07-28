@@ -29,10 +29,11 @@
   xmlns:prodtools="http://www.ibm.com/xmlns/prodtools"
   xmlns:opentopic="http://www.idiominc.com/opentopic"
   xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
+  xmlns:exsl="http://exslt.org/common"
   version="1.0" 
   xmlns:random="org.dita.dost.util.RandomUtils"
   xmlns:related-links="http://dita-ot.sourceforge.net/ns/200709/related-links"
-  exclude-result-prefixes="random related-links dita-ot opentopic">
+  exclude-result-prefixes="random related-links dita-ot opentopic exsl">
   
   <xsl:output method="xml"/>
   <xsl:output indent="yes"/>
@@ -60,9 +61,8 @@
   
   <xsl:variable name="relatedTopicrefs" select="//*[contains(@class, ' map/reltable ')]//*[contains(@class, ' map/topicref ')]"/>
   
-
-  <!-- up to now opentopic:map tag is ignored -->
-  <xsl:template match="opentopic:map">
+  
+  <xsl:template name="create_toc">
     <text:table-of-content text:style-name="Sect1" text:protected="true"
       text:name="Table of Contents1">
       <text:table-of-content-source text:outline-level="10" text:use-index-marks="false"
@@ -164,14 +164,25 @@
         <text:index-title text:style-name="Sect1" text:name="Table of Contents1_Head">
           <text:p text:style-name="Contents_20_Heading">Table of Contents</text:p>
         </text:index-title>
-        <xsl:apply-templates select="child::*[contains(@class, ' map/topicref ')]"/>
+        <xsl:choose>
+          <xsl:when test="$map and not($map = '')">
+            <xsl:apply-templates select="exsl:node-set($map)/child::*[contains(@class, ' map/topicref ')]" mode="toc"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:apply-templates select="child::*[contains(@class, ' topic/topic ')]" mode="toc"/>
+          </xsl:otherwise>
+        </xsl:choose>
       </text:index-body>
     </text:table-of-content>
     <!-- page break. -->
     <text:p text:style-name="PB"/>
   </xsl:template>
   
-  <xsl:template match="*[contains(@class, ' map/topicref ')]">
+  <xsl:template match="opentopic:map"/>
+
+  
+  
+  <xsl:template match="*[contains(@class, ' map/topicref ')]" mode="toc">
     <xsl:if test="@href">
       <!-- topicref depth -->
       <xsl:variable name="depth" select="count(ancestor-or-self::*[contains(@class, ' map/topicref ')])"/>
@@ -217,7 +228,57 @@
         </xsl:element>
       </xsl:element>
     </xsl:if>
-    <xsl:apply-templates select="child::*[contains(@class, ' map/topicref ')]"/>
+    <xsl:apply-templates select="child::*[contains(@class, ' map/topicref ')]" mode="toc"/>
+  </xsl:template>
+  
+  
+  <xsl:template match="*[contains(@class, ' topic/topic ')]" mode="toc">
+    <xsl:if test="*[contains(@class, ' topic/title ')]">
+      <!-- topicref depth -->
+      <xsl:variable name="depth" select="count(ancestor-or-self::*[contains(@class, ' topic/topic ')])"/>
+      <!-- title value -->
+      <xsl:variable name="title">
+        <xsl:value-of select="child::*[contains(@class, ' topic/title ')]"/>      
+      </xsl:variable>
+      <!-- href value -->
+      <xsl:variable name="href" select="concat('#', @id)"/>
+      <!-- 
+        <text:p text:style-name="P10">
+          <text:a xlink:type="simple" xlink:href="#Heading_10">Heading 10<text:tab/>
+          <text:bookmark-ref text:reference-format="page" text:ref-name="Heading_10"/>
+          </text:a>
+        </text:p>
+      -->
+      <xsl:variable name="level">
+        <xsl:choose>
+          <xsl:when test="$depth &gt; 10">
+            <xsl:value-of select="10"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="$depth"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:variable>
+      <xsl:element name="text:p">
+        <xsl:attribute name="text:style-name">
+          <xsl:value-of select="concat('P', $level)"/>
+        </xsl:attribute>
+        <xsl:element name="text:a">
+          <xsl:attribute name="xlink:type">simple</xsl:attribute>
+          <xsl:attribute name="text:style-name">underline_none</xsl:attribute>
+          <xsl:attribute name="xlink:href">
+            <xsl:value-of select="concat($href, '')"/>
+          </xsl:attribute>
+          <xsl:value-of select="$title"/>
+          <xsl:element name="text:tab"/>
+          <xsl:element name="text:bookmark-ref">
+            <xsl:attribute name="text:reference-format">page</xsl:attribute>
+            <xsl:attribute name="text:ref-name"><xsl:value-of select="substring-after($href, '#')"/></xsl:attribute>
+          </xsl:element>
+        </xsl:element>
+      </xsl:element>
+    </xsl:if>
+    <xsl:apply-templates select="child::*[contains(@class, ' topic/topic ')]" mode="toc"/>
   </xsl:template>
   
   <!-- create book title -->

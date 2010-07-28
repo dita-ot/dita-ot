@@ -73,31 +73,21 @@
     </xsl:variable>
     
     <xsl:variable name="lq_count">
-      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/lq ')]) - 
-                            count(ancestor::*[contains(@class, ' topic/entry ')][1]
-                            /ancestor::*[contains(@class, ' topic/lq ')])"/>
+      <xsl:value-of select="(count(ancestor::*[contains(@class, ' topic/lq ')]) - 
+        count(ancestor::*[contains(@class, ' topic/entry ')][1]
+        /ancestor::*[contains(@class, ' topic/lq ')])) * 2"/>
     </xsl:variable>
     
     <xsl:variable name="note_count">
-      <xsl:choose>
-        <xsl:when test="ancestor::*[contains(@class, ' topic/note ')]">
-          <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/note ')]) - 
-            count(ancestor::*[contains(@class, ' topic/entry ')][1]
-            /ancestor::*[contains(@class, ' topic/note ')]) + 1"/>
-        </xsl:when>
-        <xsl:otherwise>0</xsl:otherwise>
-      </xsl:choose>
+      <xsl:value-of select="(count(ancestor::*[contains(@class, ' topic/note ')]) - 
+        count(ancestor::*[contains(@class, ' topic/entry ')][1]
+        /ancestor::*[contains(@class, ' topic/note ')])) * 2"/>
     </xsl:variable>
     
     <xsl:variable name="p_count">
-      <xsl:choose>
-        <xsl:when test="ancestor::*[contains(@class, ' topic/p ')]">
-          <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/p ')]) - 
-            count(ancestor::*[contains(@class, ' topic/entry ')][1]
-            /ancestor::*[contains(@class, ' topic/p ')]) + 1"/>
-        </xsl:when>
-        <xsl:otherwise>0</xsl:otherwise>
-      </xsl:choose>
+      <xsl:value-of select="(count(ancestor::*[contains(@class, ' topic/p ')]) - 
+        count(ancestor::*[contains(@class, ' topic/entry ')][1]
+        /ancestor::*[contains(@class, ' topic/p ')])) * 2"/>
     </xsl:variable>
     
     <xsl:variable name="draft-comment_count">
@@ -138,31 +128,21 @@
     </xsl:variable>
     
     <xsl:variable name="lq_count">
-      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/lq ')]) - 
-                            count(ancestor::*[contains(@class, ' topic/stentry ')][1]
-                            /ancestor::*[contains(@class, ' topic/lq ')])"/>
+      <xsl:value-of select="(count(ancestor::*[contains(@class, ' topic/lq ')]) - 
+        count(ancestor::*[contains(@class, ' topic/stentry ')][1]
+        /ancestor::*[contains(@class, ' topic/lq ')])) * 2"/>
     </xsl:variable>
     
     <xsl:variable name="note_count">
-      <xsl:choose>
-        <xsl:when test="ancestor::*[contains(@class, ' topic/note ')]">
-          <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/note ')]) - 
-            count(ancestor::*[contains(@class, ' topic/stentry ')][1]
-            /ancestor::*[contains(@class, ' topic/note ')]) + 1"/>
-        </xsl:when>
-        <xsl:otherwise>0</xsl:otherwise>
-      </xsl:choose>
+      <xsl:value-of select="(count(ancestor::*[contains(@class, ' topic/note ')]) - 
+        count(ancestor::*[contains(@class, ' topic/stentry ')][1]
+        /ancestor::*[contains(@class, ' topic/note ')])) * 2"/>
     </xsl:variable>
     
     <xsl:variable name="p_count">
-      <xsl:choose>
-        <xsl:when test="ancestor::*[contains(@class, ' topic/p ')]">
-          <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/p ')]) - 
-            count(ancestor::*[contains(@class, ' topic/stentry ')][1]
-            /ancestor::*[contains(@class, ' topic/p ')]) + 1"/>
-        </xsl:when>
-        <xsl:otherwise>0</xsl:otherwise>
-      </xsl:choose>
+      <xsl:value-of select="(count(ancestor::*[contains(@class, ' topic/p ')]) - 
+        count(ancestor::*[contains(@class, ' topic/stentry ')][1]
+        /ancestor::*[contains(@class, ' topic/p ')])) * 2"/>
     </xsl:variable>
     
     <xsl:variable name="draft-comment_count">
@@ -202,37 +182,27 @@
     </xsl:variable>
     
     <xsl:variable name="lq_count">
-      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/lq ')]) - 
-                            count(ancestor::*[contains(@class, $list_class)][1]
-                            /ancestor::*[contains(@class, ' topic/lq ')])"/>
+      <xsl:value-of select="(count(ancestor::*[contains(@class, ' topic/lq ')]) - 
+        count(ancestor::*[contains(@class, $list_class)][1]
+        /ancestor::*[contains(@class, ' topic/lq ')])) * 2"/>
     </xsl:variable>
     
     <xsl:variable name="note_count">
-      <xsl:choose>
-        <xsl:when test="ancestor::*[contains(@class, ' topic/note ')]">
-          <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/note ')]) - 
-            count(ancestor::*[contains(@class, $list_class)][1]
-            /ancestor::*[contains(@class, ' topic/note ')]) + 1"/>
-        </xsl:when>
-        <xsl:otherwise>0</xsl:otherwise>
-      </xsl:choose>
+      <xsl:value-of select="(count(ancestor::*[contains(@class, ' topic/note ')]) - 
+        count(ancestor::*[contains(@class, $list_class)][1]
+        /ancestor::*[contains(@class, ' topic/note ')])) * 2"/>
     </xsl:variable>
     
     <xsl:variable name="itemgroup_count">
-      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/itemgroup ')]) - 
+      <xsl:value-of select="(count(ancestor::*[contains(@class, ' topic/itemgroup ')]) - 
                             count(ancestor::*[contains(@class, $list_class)][1]
-                            /ancestor::*[contains(@class, ' topic/itemgroup ')])"/>
+                            /ancestor::*[contains(@class, ' topic/itemgroup ')])) * 2"/>
     </xsl:variable>
     
     <xsl:variable name="p_count">
-      <xsl:choose>
-        <xsl:when test="ancestor::*[contains(@class, ' topic/p ')]">
-          <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/p ')]) - 
-            count(ancestor::*[contains(@class, $list_class)][1]
-            /ancestor::*[contains(@class, ' topic/p ')]) + 1"/>
-        </xsl:when>
-        <xsl:otherwise>0</xsl:otherwise>
-      </xsl:choose>
+      <xsl:value-of select="(count(ancestor::*[contains(@class, ' topic/p ')]) - 
+        count(ancestor::*[contains(@class, $list_class)][1]
+        /ancestor::*[contains(@class, ' topic/p ')])) * 2"/>
     </xsl:variable>
     
     <xsl:variable name="draft-comment_count">
@@ -279,28 +249,16 @@
     </xsl:variable>
     
     <xsl:variable name="lq_count">
-      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/lq ')])"/>
+      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/lq ')]) * 2"/>
     </xsl:variable>
     
     <xsl:variable name="note_count">
       <!-- Add 1 for flagging sytles -->
-      <xsl:choose>
-        <xsl:when test="ancestor::*[contains(@class, ' topic/note ')]">
-          <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/note ')]) + 1"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:value-of select="0"/>
-        </xsl:otherwise>
-      </xsl:choose>
+      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/note ')]) * 2"/>
     </xsl:variable>
     
     <xsl:variable name="p_count">
-      <xsl:choose>
-        <xsl:when test="ancestor::*[contains(@class, ' topic/p ')]">
-          <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/p ')]) + 1"/>
-        </xsl:when>
-        <xsl:otherwise>0</xsl:otherwise>
-      </xsl:choose>
+      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/p ')]) * 2"/>
     </xsl:variable>
     
     <xsl:variable name="draft-comment_count">
@@ -312,7 +270,7 @@
     </xsl:variable>
     
     <xsl:variable name="itemgroup_count">
-      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/itemgroup ')])"/>
+      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/itemgroup ')]) * 2"/>
     </xsl:variable>
     
     <xsl:variable name="dd_count">
@@ -342,7 +300,7 @@
     <xsl:variable name="example_count">
       <xsl:choose>
         <xsl:when test="ancestor::*[contains(@class, ' topic/example ')]">
-          <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/example ')]) + 1"/>
+          <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/example ')]) * 2"/>
         </xsl:when>
         <xsl:otherwise>0</xsl:otherwise>
       </xsl:choose>
@@ -1227,6 +1185,45 @@
         </xsl:if>
       </xsl:otherwise>
     </xsl:choose>
+  </xsl:template>
+  
+  <xsl:template name="start_flagging">
+    <xsl:param name="flagStyleName"/>
+    <xsl:param name="flagrules"/>
+    
+    <!-- add flagging styles -->
+    <xsl:if test="$flagStyleName != ''">
+      <xsl:attribute name="text:style-name">
+        <xsl:value-of select="$flagStyleName"/>
+      </xsl:attribute>
+    </xsl:if>
+    
+    <xsl:call-template name="start-flagit">
+      <xsl:with-param name="flagrules" select="$flagrules"/>     
+    </xsl:call-template>
+    
+    <xsl:if test="@rev and not($FILTERFILE='') and ($DRAFT='yes') ">
+      <xsl:call-template name="start-mark-rev">
+        <xsl:with-param name="revvalue" select="@rev"/>
+        <xsl:with-param name="flagrules" select="$flagrules"/> 
+      </xsl:call-template>
+    </xsl:if>
+  </xsl:template>
+  
+  <xsl:template name="end_flagging">
+    <xsl:param name="flagStyleName"/>
+    <xsl:param name="flagrules"/>
+    
+    <xsl:if test="@rev and not($FILTERFILE='') and ($DRAFT='yes')">
+      <xsl:call-template name="end-mark-rev">
+        <xsl:with-param name="revvalue" select="@rev"/>
+        <xsl:with-param name="flagrules" select="$flagrules"/> 
+      </xsl:call-template>
+    </xsl:if>
+    
+    <xsl:call-template name="end-flagit">
+      <xsl:with-param name="flagrules" select="$flagrules"/> 
+    </xsl:call-template>
   </xsl:template>
   
 </xsl:stylesheet>
