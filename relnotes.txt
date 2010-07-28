@@ -29,7 +29,12 @@
      * 3016739 Chunking mixes up <link> to topic in reltable (Milestone 1)
      * 3020314 Chunk output includes index terms in navtitles (Milestone 1)
      * 3020313 Chunk processor adds <topicref> before <topicmeta> (Milestone 1)
-
+     * 3031513 Nested table processing in pdf2 (Milestone 2)
+     * 3030317 Filtering doesn't work on @rev or @props attributes (Milestone 2)
+     * 3028650 Replace xs:float with xs:double in Plus plugins (Milestone 2)
+     * 3022847 PDF transform gives Java exceptions for spaces in dir name (Milestone 2)     
+     * 3032950 Scale is not correctly computed in XHTML transforms (Milestone 2)
+     * 3033141 dita.xml.properties file not closed after generating (Milestone 2)
      
 ====================================================================================
 
