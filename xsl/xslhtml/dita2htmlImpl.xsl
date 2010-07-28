@@ -2201,10 +2201,10 @@
     </xsl:variable>
     <xsl:if test="not(../@width) and not(../@height)">
       <xsl:attribute name="height">
-        <xsl:value-of select="number($height) * number(.) div 100"/>
+        <xsl:value-of select="floor(number($height) * number(.) div 100)"/>
       </xsl:attribute>
       <xsl:attribute name="width">
-        <xsl:value-of select="number($width) * number(.) div 100"/>
+        <xsl:value-of select="floor(number($width) * number(.) div 100)"/>
       </xsl:attribute>
     </xsl:if>
 </xsl:template>
