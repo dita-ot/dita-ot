@@ -1,6 +1,6 @@
 (c) Copyright IBM Corp. 2004, 2010 All Rights Reserved.
 
-     DITA OT release 1.5.2 latest build (Milestone 1)
+     DITA OT release 1.5.2 latest build (Milestone 3)
      
      Release 1.5.2 will be a maintenance release based on the final
      version of the DITA 1.2 standard. Release 1.5.2 will contain many
@@ -35,6 +35,7 @@
      * 3022847 PDF transform gives Java exceptions for spaces in dir name (Milestone 2)     
      * 3032950 Scale is not correctly computed in XHTML transforms (Milestone 2)
      * 3033141 dita.xml.properties file not closed after generating (Milestone 2)
+     * 3038933 Troff output drops prereq links (Milestone 3)
      
 ====================================================================================
 
