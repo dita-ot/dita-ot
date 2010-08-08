@@ -17,8 +17,8 @@
 			 <p><image align="left" height="300" width="400"
 				href="file:///C:/DITA-SANDBOX/xsldebugging/maps/images/DITA-OTCommandPromptLogFileName.gif"></image> 
 			 </p>
-			 <p>In this example, the log file name is <codeph>dita-ot-xsl-debugging_pdf2.log</codeph>.
-			    DITA-OT appends its internal name for the target, <codeph>_pdf2</codeph> to the name of
+			 <p>In this example, the log file name is <codeph>dita-ot-xsl-debugging_PDF.log</codeph>.
+			    DITA-OT appends its internal name for the target, <codeph>_PDF</codeph> to the name of
 				your ditamap to name the log file. If the target had been xhtml, the example log file would be
 				named <codeph>dita-ot-xsl-debugging_xhtml.log</codeph>.  The file contains the same data
 				as the ouput on the console, but you may find it easier to debug xsl transformation 

@@ -2,139 +2,415 @@
 <!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
 <reference id="dita-ot-ant-properties"> 
   <title>Ant Properties for DITA-OT</title>
-  <shortdesc>Reference list of DITA-specific ant properties.
+  <shortdesc>Reference list of DITA-specific Ant properties.
   </shortdesc> 
   <refbody>
     <section>
 	<p>DITA-OT processes your documentation project as an Ant project, which requires several Ant build
-	properties specific to DITA-OT.  Ant properties can be placed in three different places:
+	properties specific to DITA-OT and your project.  These properties can be divided into three categories:
 	</p>
 	 <ul>
-		<li>Project-specific</li>
-		<li>Target-specific</li>
-		<li>Task-specific</li>
-	 </ul> 
-	<p>Project-specific properties apply to all target defined in your documentation project.
-	Target-specific properties apply only to the output target for which they are defined.
-	Task-specific properties are defined in DITA-OT's scripts and should not be modified.
+		<li>Properties specific to your documentation project</li>
+		<li>Properties specific to the DITA Open Toolkit that you may override</li>
+		<li>Properties specific to the DITA Open Toolkit that you should never override</li>
+	 </ul>
+	<p>The following tables describes the first group of properties, those specific to your documentation project. The tables also
+	indicate the Java command line option corresponding to the property, if available.  Each table describes the properties for one of the following transformation types:
+		<ul>
+			<li>PDF</li>
+			<li>XHTML</li>
+			<li>HTMLHelp</li>
+			<li>WordRTF</li>
+			<li>troff</li>
+			<li>docbook</li>
+			<li>JavaHelp</li>
+			<li>eclipsehelp</li>
+		</ul>
 	</p>
-	<p>Although you can use most of the Toolkit's ant properties as either project or target-specific, this guide
-	provides recommendations for where to place them based on criteria such as the directory structure of your content files. debugging
-	considerations, and known issues with DITA-OT 1.5.</p>
-	<p>The following table describes basic project and task-specific Ant properties 
-	that appear in most DITA-OT projects.
-	</p>
-	</section>
-	<section>
+	<p>The first table describes Ant parameters that are relevant to all transformation types.</p>
+	<note type="tip">The <codeph>args.debug</codeph> and <codeph>args.draft</codeph>, <codeph>args.input</codeph>, <codeph>args.input.valdir</codeph>, and <codeph>args.logdir</codeph> parameters described in this table apply to all transformation types, including PDF. The other
+	parameters have no effect on PDF transformations.</note>
 	<table>
 	<tgroup cols="3">
-		<colspec colname="COLSPEC0" colwidth="100	*"/>
-		<colspec colname="COLSPEC1" colwidth="75*"/>
-		<colspec colname="COLSPEC2" colwidth="200*"/>
+		<colspec colname="COLSPEC0" colwidth="150*"/>
+		<colspec colname="COLSPEC2" colwidth="125*"/>
+		<colspec colname="COLSPEC3" colwidth="275*"/>
 	 <thead>
 	 <row> 
-		<entry>Ant Property</entry>
-		<entry>Property Type</entry>
+		<entry>Project Ant Property</entry>
+		<entry>Java Option</entry>
 		<entry>Description</entry>
 	 </row>
 	 </thead>
 	 <tbody>
 	<row>
-		<entry><codeph>args.ftr</codeph></entry>
-		<entry>Target-specific: all except PDF2</entry>
-		<entry>Defines the location of a file containing your custom document footer.</entry>
+		<entry><codeph>args.artlbl</codeph></entry>
+		<entry><codeph>/artlbl</codeph></entry>
+		<entry>Adds a label to each image containing the image's filename.</entry>
+	</row>	
+	<row>
+		<entry><codeph>args.copycss</codeph></entry>
+		<entry><codeph>/copycss</codeph></entry>
+		<entry>Indicates whether you want to copy your own .css file to the output directory.</entry>
 	</row>
 	<row>
-		<entry><codeph>args.fo.userconfig</codeph></entry>
-		<entry>Target-specific: PDF2</entry>
-		<entry>Defines the location of a configuration file for the FO Plugin used by the DITA-OT to generate PDF output.</entry>
+		<entry><codeph>args.css</codeph></entry>
+		<entry><codeph>args.css</codeph></entry>
+		<entry>The name of your custom .css file.</entry>
+	</row>
+	<row>
+		<entry><codeph>args.csspath</codeph></entry>
+		<entry><codeph>/csspath</codeph></entry>
+		<entry>The location of your copied .css file relative to the output directory</entry>
+	</row>
+	<row>
+		<entry><codeph>args.cssroot</codeph></entry>
+		<entry><codeph>/cssroot</codeph></entry>
+		<entry>The directory that contains your custom .css file.  DITA-OT will copy the file from this location.</entry>
+	</row>
+	<row>
+		<entry><codeph>args.debug</codeph></entry>
+		<entry><codeph>/debug</codeph></entry>
+		<entry>Specifies that DITA-OT print debugging information for  your project.</entry>
+	</row>
+	<row>
+		<entry><codeph>args.draft</codeph></entry>
+		<entry><codeph>/draft</codeph></entry>
+		<entry>Indicates whether draft-comment and required-cleanup elements are included in the generated file. Corresponds to XSLT parameter DRAFT in most XSLT modules. Default value is "no". if <codeph>${publish.required.cleanup}</codeph> is not set, <codeph>${args.draft}</codeph> will be used.
+		<note type="tip">The <codeph>${publish.required.cleanup}</codeph> property is a legacy property that applies only to PDF transformations.</note>
+		</entry>
+	</row>
+	
+	<row>
+		<entry><codeph>args.ftr</codeph></entry>
+		<entry><codeph>/ftr</codeph></entry>
+		<entry>Specifies the location of a well-formed XML file containing your custom running-footer for the document body.</entry>
+	</row>
+	<row>
+		<entry><codeph>args.hdf</codeph></entry>
+		<entry><codeph>/hdf</codeph></entry>
+		<entry>Specifies the location of a well-formed XML file to be placed in the document head.</entry>
 	</row>
 	<row>
 		<entry><codeph>args.hdr</codeph></entry>
-		<entry>Target-specific: all except PDF2</entry>
-		<entry>Defines the location of a file containing your custom document header.</entry>
+		<entry><codeph>/hdr</codeph></entry>
+		<entry>Specifies the location of a well-formed XML file containing your custom running-header for the document body.</entry>
+	</row>
+	<row>
+		<entry><codeph>args.indexshow</codeph></entry>
+		<entry><codeph>/indexshow</codeph></entry>
+		<entry>Indicates whether <codeph>indexterm</codeph> element should appear in the output.</entry>
 	</row>
 	 <row>
 		<entry><codeph>args.input</codeph></entry>
-		<entry>Project-specific</entry>
-		<entry>Defines the location of the .ditamap file for your documentation project.  DITA-OT reads
+		<entry><codeph>/i</codeph></entry>
+		<entry>Typically defines the location of the .ditamap file for your documentation project.  However, the propery can be set to a .dita file, as well. DITA-OT reads
 			this file to find the .dita files that comprise the content for the documentation project.</entry>
 	 </row>
 	 <row>
 		<entry><codeph>args.input.valfile</codeph></entry>
-		<entry>Project-specific</entry>
-		<entry>Defines the location of a DITA-OT filter file.  Filter files are used to define which topics are not included in the generated document.
-		Alternatively, you can filter topics from your output by creating a different <codeph>.ditamap</codeph> file for each version of the document.</entry>
+		<entry><codeph>/filter</codeph></entry>
+		<entry>Defines the location of your project's filter file.  Filter files end with the <codeph>.ditaval</codeph> suffix and are used to filter, include and exclude, content in the generated document. Alternatively, you can create multiple versions of your document by creating a different <codeph>.ditamap</codeph> file for each version.</entry>
 	</row>
 	 <row>
 		<entry><codeph>args.logdir</codeph></entry>
-		<entry>Project-specific</entry>
-		<entry>Defines the location where DITA-OT places a log file for your documentation project.</entry>
+		<entry><codeph>/logdir</codeph></entry>
+		<entry>Defines the location where DITA-OT places log files for your project.</entry>
 	 </row>
 	 <row>
+		<entry><codeph>args.outext</codeph></entry>
+		<entry><codeph>/outext</codeph></entry>
+		<entry>Specifies the file extension for HTML files in your project's output.</entry>
+	</row>
+	<row>
 		<entry><codeph>args.xsl</codeph></entry>
-		<entry>Target-specific: XHTML</entry>
-		<entry>Specificies the loctation of the xsl scripts used for transforming your content files.  Overrides the default value 
-		of <codeph>toolkitdir/xsl</codeph>.</entry>
-	 </row>
+		<entry><codeph>/xsl</codeph></entry>
+		<entry>Specifies an XSL file that is used rather than the default
+  XSL transform, located in <codeph>toolkitdir\xsl\dita2xhtml.xsl</codeph>. Property must specify the full path and XSL file name.</entry>
+	</row>
 	 <row>
 		<entry><codeph>basedir</codeph></entry>
-		<entry>Project-specific</entry>
+		<entry><codeph>/basedir</codeph></entry>
 		<entry>The directory where your project's ant build script resides.  The DITA-OT will look for your
 			.dita files relative to this directory.  DITA-OT's default build script sets this as an attribute
 			of the project, but you can also define it as a project property.</entry>
 	</row>
-	<row id="cleantemp"><entry><codeph>clean.temp</codeph></entry>
-		 <entry>Target-specific: all</entry>
-		 <entry>Specifies whether DITA-OT should delete the files in the temporary directory, <codeph>dita.temp.dir</codeph>, when
-		 it finishes a build.</entry>
-	</row>
 	<row>
-		<entry><codeph>dita.extname</codeph></entry>
-		<entry>Project-specific</entry>
-		<entry>Defines the file extension for your DITA content files.  The default DITA-OT script defines this 
-			as <codeph>.dita</codeph>, however you may also set it to <codeph>.xml</codeph> if you want to write your
-			content in free XML editor that does not understand the .dita format.</entry>
-	</row>
-	<row>
-		<entry><codeph>dita.temp.dir</codeph></entry>
-		<entry>Target-specific</entry>
-		<entry>Defines the directory where DITA-OT places temporary files generated during
-			the transformation process.  The default value is the directory beneath the build
-			script.  If you generate more than one output type for your documentation, you might want to use
-			a separate temporary directory for each output type to facilitate your debugging efforts.</entry>
-	</row>
-	<row>
-		<entry><codeph>DITA_DIR</codeph></entry>
-		<entry>Project-specific</entry>
-		<entry>The location of your DITA-OT installation.  Set in the <codeph>startcmd.bat</codeph> script that
-			you should run before running the ant script for your documentation project.</entry>
+		<entry><codeph>generate.copy.outer</codeph></entry>
+		<entry><codeph>/generateouter</codeph></entry>
+		<entry>Specifies whether to generate files for content files that are not located in or beneath the directory containing your <codeph>ditmap</codeph> file.</entry>
 	</row>
 	<row>
 		<entry><codeph>outer.control</codeph></entry>
-		<entry>Target-specific: all</entry>
-		<entry>Specifies whether the content files are located outside the directory where your <codeph>.ditamap</codeph> file resides.
-		The default value is "no".  The <codeph>gen-list-without-flagging</codeph> Ant task generates a harmless warning for content outside
+		<entry><codeph>/outercontrol</codeph></entry>
+		<entry>Specifies whether content files are located in or below the directory containing your <codeph>.ditamap</codeph> file.
+		The default value is "no."  The <codeph>gen-list-without-flagging</codeph> Ant task generates a harmless warning for content outside
 		the map directory; you can suppress these warnings by setting the <codeph>outer.control</codeph> property to "true".
 		<p><image href="../images/warning.gif"/> Microsoft HTML Help Compiler cannot produce HTMLHelp for documentation projects that use outer content.  Your content files must reside in or below the directory containing the <codeph>.ditamap</codeph> file, and the map file cannot specifiy  ".." at the start
 		of <codeph>href</codeph> attributes for <codeph>topicref</codeph> elements.</p>
 		</entry>
 	</row>
 	<row>
+		<entry><codeph>output.dir</codeph></entry>
+		<entry><codeph>/outdir</codeph></entry>
+		<entry>The location of the directory to hold output from your documentation project.</entry>
+	</row>
+	<row>
 		<entry><codeph>transtype</codeph></entry>
-		<entry>Target-specific</entry>
-		<entry>Defines the output type for a specific Ant target.  The value of this property must be one of 
-			of the following DITA-supported values:
+		<entry><codeph>/transtype</codeph></entry>
+		<entry>Defines the output type for a specific Ant target.
 				<ul>
-					<li>dita2pdf2</li>
-					<li>dita2xhtml</li>
-					<li>dita2eclipsehelp</li>
-					<li>dita2eclipsecontent</li>
-					<li>dita2troff</li>
-					<li>dita2rtf</li>
-					<li>dita2javahelp</li>
+					<li>PDF</li>
+					<li>xhtml</li>
+					<li>eclipsehelp</li>
+					<li>eclipsecontent</li>
+					<li>troff</li>
+					<li>rtf</li>
+					<li>javahelp</li>
+					<li>legacypdf</li>
+					<li>docbook</li>
 				</ul>
 		</entry>
+	</row>
+	<row>
+		<entry><codeph>validate</codeph></entry>
+		<entry><codeph>/validate</codeph></entry>
+		<entry>Specifies whether DITA-OT should validate your content files. The default value is "yes".</entry>
+	</row>
+	</tbody>
+	</tgroup>
+	</table>
+	</section>
+	<section>
+	<title>XHTML-specific Ant Properties</title>
+	<p>The following table describes Ant properties that are specific to the XHTML transformation type.</p>
+	<table>
+	<tgroup cols="3">
+		<colspec colname="COLSPEC0" colwidth="150*"/>
+		<colspec colname="COLSPEC2" colwidth="125*"/>
+		<colspec colname="COLSPEC3" colwidth="200*"/>
+	 <thead>
+	 <row> 
+		<entry>Project Ant Property</entry>
+		<entry>Java Option</entry>
+		<entry>Description</entry>
+	 </row>
+	 </thead>
+	 <tbody>
+	 	<row>
+		<entry><codeph>onlytopic.in.map</codeph></entry>
+		<entry><codeph>/onlytopicinmap</codeph></entry>
+		<entry>Specifies whether files that are
+  linked to, or referenced with a conref attribute, should generate
+  output. If set to "yes", only files that are referenced directly from
+  the map will generate output files.</entry>
+	</row>
+	<row>
+		<entry><codeph>args.breadcrumbs</codeph></entry>
+		<entry>NA</entry>
+		<entry>Specifies whether to generate breadcrumb links. Corresponds to the XSLT parameter  BREADCRUMBS. Allowed values are "yes" and "no". Default is "no".</entry>
+	</row>
+	<row>
+		<entry><codeph>args.figurelink.style</codeph></entry>
+		<entry>NA</entry>
+		<entry>Specifies how cross references to figures are styled.  Allowed values are "NUMBER" and "TITLE". NUMBER results in "Figure 5", TITLE results in the title of the figure. Corresponds to the XSLT parameter FIGURELINK.</entry>
+	</row>
+	</tbody>
+	</tgroup>
+	</table>
+    </section>
+	<section>
+	<title>PDF-specific Ant Properties</title>
+	<p>The following table describes Ant properties that are specific to the PDF transformation type.</p>
+	<table>
+	<tgroup cols="3">
+		<colspec colname="COLSPEC0" colwidth="150*"/>
+		<colspec colname="COLSPEC2" colwidth="125*"/>
+		<colspec colname="COLSPEC3" colwidth="200*"/>
+	 <thead>
+	 <row> 
+		<entry>Project Ant Property</entry>
+		<entry>Java Option</entry>
+		<entry>Description</entry>
+	 </row>
+	 </thead>
+	 <tbody>
+	<row>
+		<entry><codeph>args.fo.output.rel.links</codeph></entry>
+		<entry><codeph>/fooutputrellinks</codeph></entry>
+		<entry>Specifies whether to show links in your project's output.</entry>
+	</row>
+	<row>
+		<entry><codeph>args.xsl.pdf</codeph></entry>
+		<entry><codeph>/xslpdf</codeph></entry>
+		<entry>Specifies an XSL file that is used in place of the default XSL transform at <codeph>toolkitdir\xsl\dita2xhtml.xsl</codeph>. You must specify the full path and XSL file name.</entry>
+	</row>
+	<row>
+		<entry><codeph>retain.topic.fo</codeph></entry>
+		<entry><codeph>/retaintopicfo</codeph></entry>
+		<entry>Specifies whether to leave the generated FO file for a PDF project.</entry>
+	</row>
+	 </tbody>
+	 </tgroup>
+	 </table>
+	 </section>
+	 <section>
+	 <title>EclipseHelp and EclipseContent-specific Ant Properties</title>
+	 <p>The following table describes Ant properties that are specific to the EclipseHelp and EclipseContent transformation types.</p>
+	<table>
+	<tgroup cols="3">
+		<colspec colname="COLSPEC0" colwidth="150*"/>
+		<colspec colname="COLSPEC2" colwidth="125*"/>
+		<colspec colname="COLSPEC3" colwidth="200*"/>
+	 <thead>
+	 <row> 
+		<entry>Project Ant Property</entry>
+		<entry>Java Option</entry>
+		<entry>Description</entry>
+	 </row>
+	 </thead>
+	 <tbody>
+	 <row>
+		<entry><codeph>args.eclipsecontent.toc</codeph></entry>
+		<entry>/eclipsecontenttoc</entry>
+		<entry>Specifies the name of the TOC file for an Eclipse Content project.</entry>
+	</row>
+	<row>
+		<entry><codeph>args.eclipsehelp.toc</codeph></entry>
+		<entry><codeph>/eclipsehelptoc</codeph></entry>
+		<entry>Specifies the name of the TOC file for an Eclipse Help project.</entry>
+	</row>
+	<row>
+		<entry><codeph>args.eclipse.country</codeph></entry>
+		<entry>NA</entry>
+		<entry>Specifies the more specifc region for the language specified with <codeph>args.eclipse.language</codeph> For example, US, CA and GB would clarify a value of "en" for <codeph>args.eclipse.language</codeph>.</entry>
+	</row>
+	<row>
+		<entry><codeph>args.eclipse.language</codeph></entry>
+		<entry>NA</entry>
+		<entry>Specifies the base language for translated content, such as "en" for English.</entry>
+	</row>
+	<row>
+		<entry><codeph>args.eclipse.provider</codeph></entry>
+		<entry><codeph>/provider</codeph></entry>
+		<entry>Specifies the name of the person or organization providing an Eclipse Help project.</entry>
+	</row>
+	<row>
+		<entry><codeph>args.eclipse.version</codeph></entry>
+		<entry>/version</entry>
+		<entry>Specifies the version number to include in the output for an Eclipse Help project.</entry>
+	</row>
+	 </tbody>
+	 </tgroup>
+	 </table>
+	 </section>
+	 <section>
+	 <title>JavaHelp-specific Ant Properties</title>
+	 <p>The following table describes Ant properties that are specific to the JavaHelp transformation target.</p>
+	 <table>
+	<tgroup cols="3">
+		<colspec colname="COLSPEC0" colwidth="150*"/>
+		<colspec colname="COLSPEC2" colwidth="125*"/>
+		<colspec colname="COLSPEC3" colwidth="200*"/>
+	 <thead>
+	 <row> 
+		<entry>Project Ant Property</entry>
+		<entry>Java Option</entry>
+		<entry>Description</entry>
+	 </row>
+	 </thead>
+	 <tbody>
+	 <row>
+		<entry><codeph>args.javahelp.map</codeph></entry>
+		<entry><codeph>/javahelpmap</codeph></entry>
+		<entry>Specifies the name of the ditamap file for a JavaHelp project.</entry>
+	</row>
+	<row>
+		<entry><codeph>args.javahelp.toc</codeph></entry>
+		<entry><codeph>/javahelptoc</codeph></entry>
+		<entry>Specifies the name of the file contaning the TOC in your JavaHelp output.  The default value is the name of the ditamap file for your project.</entry>
+	</row>
+	 </tbody>
+	 </tgroup>
+	 </table>
+	 </section>
+	 <section>
+	 <title>Toolkit-specific Ant Properties</title>
+	<p>The following table describes Ant properties specific to the DITA Open Toolkit that you may override.  You should not override a DITA-OT Ant property if it does not appear in this table.</p>
+	<table>
+	<tgroup cols="3">
+		<colspec colname="COLNAME0" colwidth="100*"/>
+		<colspec colname="COLNAME2" colwidth="100*"/>
+		<colspec colname="COLNAME3" colwidth="200*"/>
+	 <thead>
+	 <row> 
+		<entry>DITA Ant Property</entry>
+		<entry>Java Option</entry>
+		<entry>Description</entry>
+	 </row>
+	 </thead>
+	 <tbody>
+	<row>
+		<entry><codeph>dita.temp.dir</codeph></entry>
+		<entry><codeph>/tempdir</codeph></entry>
+		<entry>Defines the directory where DITA-OT will create a temporary directory to place temporary files generated during
+			the transformation process.</entry>
+	</row>
+	<row>
+		<entry><codeph>dita.extname</codeph></entry>
+		<entry><codeph>/ditaext</codeph></entry>
+		<entry>Deprecated. Defines the file extension for content files in the directory specified with the <codeph>dita.temp.dir</codeph> property.</entry>
+	</row>
+	<row>
+		<entry><codeph>dita.dir</codeph></entry>
+		<entry><codeph>/ditadir</codeph></entry>
+		<entry>The location of your DITA-OT installation. Also referred to as <codeph>toolkit_dir</codeph> in the sample ant scripts. Verify that your project's build script points to the correct location.</entry>
+	</row>
+	<row id="cleantemp">
+		 <entry><codeph>clean.temp</codeph></entry>
+		 <entry><codeph>/cleantemp</codeph></entry>
+		 <entry>Specifies whether DITA-OT should delete the files in the temporary directory, <codeph>dita.temp.dir</codeph>, when
+		 it finishes a build.</entry>
+	</row>
+	<row>
+		<entry><codeph>args.gen.default.meta</codeph></entry>
+		<entry>NA</entry>
+		<entry>Specifies whether to generate extra metadata that targets parental control scanners, meta elements with name="security" and name="Robots". Allowd values are "yes" and "no". The default is "no". Corresponds to the XSLT parameter genDefMeta.</entry>
+	</row>
+	<row>
+		<entry><codeph>args.gen.task.lbl</codeph></entry>
+		<entry>NA</entry>
+		<entry>Specifies whether to generate locale-based default headings for sections within task topics. Allowed values are "yes" and "no". Default is "no". Corresponds to the XSLT parameter GENERATE-TASK-LABELS</entry>
+	</row>
+	<row>
+		<entry><codeph>args.hide.parent.link</codeph></entry>
+		<entry>NA</entry>
+		<entry>Specifies whether to hide links to parent topics in the rendered XHTML. Corresponds to the XSLT parameter NOPARENTLINK. Allowed values are "yes" and "no".  Default is "no".</entry>
+	</row>
+	<row>
+		<entry><codeph>args.tablelink.style</codeph></entry>
+		<entry>NA</entry>
+		<entry>Specifies how cross references to tables are styled. Allowed values are "NUMBER" or "TITLE".  The default is "NUMBER", which produces results such as "Table 5". TITLE results in the title of the table. Corresponds to the XSLT parameter TABLELINK.</entry>
+	</row>
+	<row>
+		<entry><codeph>args.xhtml.classattr</codeph></entry>
+		<entry><codeph>/xhtmlclass</codeph></entry>
+		<entry>Specifies whether to include DITA class ancestry inside generated XHTML elements. Allowed values are "no" and "yes". Default is "yes". For example, the prereq element in a task would generate "<codeph>class="section prereq</codeph>". Corresponds to the XSLT parameter PRESERVE-DITA-CLASS.</entry>
+	</row>
+	<row>
+		<entry><codeph>args.xhtml.toc</codeph></entry>
+		<entry><codeph>/xhtmltoc</codeph></entry>
+		<entry>Specifies the name of the entry point for an XHTML project. The default value is <codeph>index.html</codeph></entry>
+	</row>
+	<row>
+		<entry><codeph>args.htmlhelp.includefile</codeph></entry>
+		<entry><codeph>/htmlhelpincludefile</codeph></entry>
+		<entry>Specifies the name of a file that you want included in an HTMLHelp project.</entry>
+	</row>
+	<row>
+		<entry><codeph>args.dita.locale</codeph></entry>
+		<entry><codeph>/ditalocale</codeph></entry>
+		<entry>Specifies the language locale file to use for sorting index entries. The JavaHelp transformation type also uses this parameter.</entry>
 	</row>
 	</tbody>
 	</tgroup>

@@ -64,7 +64,7 @@
 						  the document project. DITA Open Toolkit supports the following targets: 
 						  <p> 
 						  <ul> 
-							 <li><codeph>dita2pdf2 
+							 <li><codeph>dita2PDF 
 								</codeph> 
 							 </li> 
 							 <li><codeph>dita2xhtml</codeph> 

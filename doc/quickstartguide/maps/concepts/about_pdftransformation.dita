@@ -61,7 +61,7 @@
   </tgroup>
   </table>
   <p>Examine the content of these files to determine the cause of PDF transformation errors.</p>
-  <p><image href="../images/warning.gif"/> The Apache FOP formatter does not support the <codeph>indexlist</codeph> element for PDF2.
+  <p><image href="../images/warning.gif"/> The Apache FOP formatter does not support the <codeph>indexlist</codeph> element for PDF.
   You can try using a different PDF renderer or engine by specifying a different value for the <codeph>
   pdf.formatter</codeph> ant property in the FO plugin build file, or add a <codeph>topicref</codeph> element
   in your build file with that links to a manually-created index file.</p>
