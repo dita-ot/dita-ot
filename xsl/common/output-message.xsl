@@ -130,14 +130,14 @@
       <xsl:param name="match"/>
       <xsl:param name="replacement"/>
       <xsl:choose>
-        <xsl:when test="contains($string, $match)">
-          <xsl:variable name="newstring">
-            <xsl:value-of select="concat(substring-before($string, $match), concat($replacement, substring-after($string, $match)))"/>
-          </xsl:variable>
+        <xsl:when test="contains($string,$match)">
+          <xsl:value-of select="substring-before($string,$match)"/>
+          <xsl:value-of select="$replacement"/>
           <xsl:call-template name="replaceString">
-            <xsl:with-param name="string" select="$newstring"/>
+            <xsl:with-param name="string"
+              select="substring-after($string,$match)"/>
+            <xsl:with-param name="replacement" select="$replacement"/>
             <xsl:with-param name="match" select="$match"/>
-            <xsl:with-param name="replacement" select="$replacement"/>                    
           </xsl:call-template>
         </xsl:when>
         <xsl:otherwise>
