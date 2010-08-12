@@ -190,29 +190,68 @@
 </xsl:template>
      
 <xsl:template match="*[contains(@class,' sw-d/msgblock ')]" name="create_msgblock">
+     
+     <!-- get flagging style name. -->
+     <xsl:variable name="flagStyleName">
+          <xsl:call-template name="getFlagStyleName"/>
+     </xsl:variable>
+     
+     <xsl:variable name="flagrules">
+          <xsl:call-template name="getrules"/>
+     </xsl:variable>
 
      <xsl:choose>
           <xsl:when test="parent::*[contains(@class, ' topic/body ')]">
                <xsl:element name="text:p">
-                    <xsl:call-template name="create_msgblock_content"/>
-                    <xsl:apply-templates/>
+                    <xsl:element name="text:span">
+                         <xsl:call-template name="start_flagging">
+                              <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
+                              <xsl:with-param name="flagrules" select="$flagrules"/>
+                         </xsl:call-template>
+                         
+                         <xsl:call-template name="create_msgblock_content"/>
+                         <xsl:apply-templates/>
+                         
+                         <xsl:call-template name="end_flagging">
+                              <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
+                              <xsl:with-param name="flagrules" select="$flagrules"/>
+                         </xsl:call-template>
+                    </xsl:element>
                </xsl:element>
           </xsl:when>
           <xsl:when test="parent::*[contains(@class, ' topic/li ')]">
                <xsl:element name="text:p">
-                    <xsl:call-template name="create_msgblock_content"/>
-                    <xsl:apply-templates/>
+                    <xsl:element name="text:span">
+                         <xsl:call-template name="start_flagging">
+                              <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
+                              <xsl:with-param name="flagrules" select="$flagrules"/>
+                         </xsl:call-template>
+                         
+                         <xsl:call-template name="create_msgblock_content"/>
+                         <xsl:apply-templates/>
+                         
+                         <xsl:call-template name="end_flagging">
+                              <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
+                              <xsl:with-param name="flagrules" select="$flagrules"/>
+                         </xsl:call-template>
+                    </xsl:element>
                </xsl:element>
           </xsl:when>
           <xsl:when test="parent::*[contains(@class, ' topic/linkinfo ')]">
-               <!-- 
-               <xsl:element name="text:p">
-               -->
+               <xsl:element name="text:span">
+                    <xsl:call-template name="start_flagging">
+                         <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
+                         <xsl:with-param name="flagrules" select="$flagrules"/>
+                    </xsl:call-template>
+                    
                     <xsl:call-template name="create_msgblock_content"/>
                     <xsl:apply-templates/>
-               <!-- 
+                    
+                    <xsl:call-template name="end_flagging">
+                         <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
+                         <xsl:with-param name="flagrules" select="$flagrules"/>
+                    </xsl:call-template>
                </xsl:element>
-               -->
           </xsl:when>
           <!-- nested by entry -->
           <xsl:when test="parent::*[contains(@class, ' topic/entry ')]">
@@ -229,13 +268,37 @@
                               /parent::*[contains(@class, ' topic/row ')]/parent::*[contains(@class, ' topic/thead ')]">
                               <xsl:element name="text:span">
                                    <xsl:attribute name="text:style-name">bold</xsl:attribute>
-                                   <xsl:call-template name="create_msgblock_content"/>
-                                   <xsl:apply-templates/>
+                                   <xsl:element name="text:span">
+                                        <xsl:call-template name="start_flagging">
+                                             <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
+                                             <xsl:with-param name="flagrules" select="$flagrules"/>
+                                        </xsl:call-template>
+                                        
+                                        <xsl:call-template name="create_msgblock_content"/>
+                                        <xsl:apply-templates/>
+                                        
+                                        <xsl:call-template name="end_flagging">
+                                             <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
+                                             <xsl:with-param name="flagrules" select="$flagrules"/>
+                                        </xsl:call-template>
+                                   </xsl:element>
                               </xsl:element>
                          </xsl:when>
                          <xsl:otherwise>
-                              <xsl:call-template name="create_msgblock_content"/>
-                              <xsl:apply-templates/>
+                              <xsl:element name="text:span">
+                                   <xsl:call-template name="start_flagging">
+                                        <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
+                                        <xsl:with-param name="flagrules" select="$flagrules"/>
+                                   </xsl:call-template>
+                                   
+                                   <xsl:call-template name="create_msgblock_content"/>
+                                   <xsl:apply-templates/>
+                                   
+                                   <xsl:call-template name="end_flagging">
+                                        <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
+                                        <xsl:with-param name="flagrules" select="$flagrules"/>
+                                   </xsl:call-template>
+                              </xsl:element>
                          </xsl:otherwise>
                     </xsl:choose>
                </xsl:element>
@@ -249,21 +312,58 @@
                               parent::*[contains(@class, ' topic/sthead ')]">
                               <xsl:element name="text:span">
                                    <xsl:attribute name="text:style-name">bold</xsl:attribute>
-                                   <xsl:call-template name="create_msgblock_content"/>
-                                   <xsl:apply-templates/>
+                                   <xsl:element name="text:span">
+                                        <xsl:call-template name="start_flagging">
+                                             <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
+                                             <xsl:with-param name="flagrules" select="$flagrules"/>
+                                        </xsl:call-template>
+                                        
+                                        <xsl:call-template name="create_msgblock_content"/>
+                                        <xsl:apply-templates/>
+                                        
+                                        <xsl:call-template name="end_flagging">
+                                             <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
+                                             <xsl:with-param name="flagrules" select="$flagrules"/>
+                                        </xsl:call-template>
+                                   </xsl:element>
                               </xsl:element>
                          </xsl:when>
                          <xsl:otherwise>
-                              <xsl:call-template name="create_msgblock_content"/>
-                              <xsl:apply-templates/>
+                              <xsl:element name="text:span">
+                                   <xsl:call-template name="start_flagging">
+                                        <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
+                                        <xsl:with-param name="flagrules" select="$flagrules"/>
+                                   </xsl:call-template>
+                                   
+                                   <xsl:call-template name="create_msgblock_content"/>
+                                   <xsl:apply-templates/>
+                                   
+                                   <xsl:call-template name="end_flagging">
+                                        <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
+                                        <xsl:with-param name="flagrules" select="$flagrules"/>
+                                   </xsl:call-template>
+                              </xsl:element>
                          </xsl:otherwise>
                     </xsl:choose>
                </xsl:element>
           </xsl:when>
           <!-- other tags -->
           <xsl:otherwise>
-               <xsl:call-template name="create_msgblock_content"/>
-               <xsl:apply-templates/>
+               <xsl:element name="text:span">
+                    <xsl:call-template name="start_flagging">
+                         <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
+                         <xsl:with-param name="flagrules" select="$flagrules"/>
+                    </xsl:call-template>
+                    
+                    <xsl:call-template name="create_msgblock_content"/>
+                    <xsl:apply-templates/>
+                    
+                    <xsl:call-template name="end_flagging">
+                         <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
+                         <xsl:with-param name="flagrules" select="$flagrules"/>
+                    </xsl:call-template>
+               </xsl:element>
+               <xsl:element name="text:line-break"/>
           </xsl:otherwise>
      </xsl:choose>
 </xsl:template>

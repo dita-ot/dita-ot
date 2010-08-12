@@ -67,9 +67,9 @@
     <xsl:param name="isDlist" select="0"/>
     <!-- entry's children that can be parent of a list-->
     <xsl:variable name="fig_count">
-      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/fig ')]) - 
+      <xsl:value-of select="(count(ancestor::*[contains(@class, ' topic/fig ')]) - 
                             count(ancestor::*[contains(@class, ' topic/entry ')][1]
-                            /ancestor::*[contains(@class, ' topic/fig ')])"/>
+                            /ancestor::*[contains(@class, ' topic/fig ')])) * 2"/>
     </xsl:variable>
     
     <xsl:variable name="lq_count">
@@ -91,24 +91,31 @@
     </xsl:variable>
     
     <xsl:variable name="draft-comment_count">
-      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/draft-comment ')]) - 
+      <xsl:value-of select="(count(ancestor::*[contains(@class, ' topic/draft-comment ')]) - 
                             count(ancestor::*[contains(@class, ' topic/entry ')][1]
-                            /ancestor::*[contains(@class, ' topic/draft-comment ')])"/>
+                            /ancestor::*[contains(@class, ' topic/draft-comment ')])) * 2"/>
     </xsl:variable>
     
     <xsl:variable name="required-cleanup_count">
-      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/required-cleanup ')]) - 
+      <xsl:value-of select="(count(ancestor::*[contains(@class, ' topic/required-cleanup ')]) - 
                             count(ancestor::*[contains(@class, ' topic/entry ')][1]
-                            /ancestor::*[contains(@class, ' topic/required-cleanup ')])"/>
+                            /ancestor::*[contains(@class, ' topic/required-cleanup ')])) * 2"/>
+    </xsl:variable>
+    
+    <!-- thead count important! -->
+    <xsl:variable name="thead_count">
+      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/thead ')]) - 
+        count(ancestor::*[contains(@class, ' topic/tentry ')][1]
+        /ancestor::*[contains(@class, ' topic/thead ')])"/>
     </xsl:variable>
     
     <xsl:variable name="total_count" select="$fig_count + $lq_count + 
-      $note_count + $p_count + $draft-comment_count + $required-cleanup_count"/>
+      $note_count + $p_count + $draft-comment_count + $required-cleanup_count + $thead_count"/>
     
     <xsl:choose>
       <!-- not dlist -->
       <xsl:when test="$isDlist = 0">
-        <!-- remove the first one rendered by text:p -->
+        <!-- remove the immediate child after tentry since it is rendered by text:p -->
         <xsl:value-of select="$total_count - 1"/>
       </xsl:when>
       <xsl:otherwise>
@@ -122,9 +129,9 @@
     <!-- take care of flagging span -->
     <!-- stentry's children that can be parent of a list-->
     <xsl:variable name="fig_count">
-      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/fig ')]) - 
+      <xsl:value-of select="(count(ancestor::*[contains(@class, ' topic/fig ')]) - 
                             count(ancestor::*[contains(@class, ' topic/stentry ')][1]
-                            /ancestor::*[contains(@class, ' topic/fig ')])"/>
+                            /ancestor::*[contains(@class, ' topic/fig ')])) * 2"/>
     </xsl:variable>
     
     <xsl:variable name="lq_count">
@@ -146,24 +153,31 @@
     </xsl:variable>
     
     <xsl:variable name="draft-comment_count">
-      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/draft-comment ')]) - 
+      <xsl:value-of select="(count(ancestor::*[contains(@class, ' topic/draft-comment ')]) - 
                             count(ancestor::*[contains(@class, ' topic/stentry ')][1]
-                            /ancestor::*[contains(@class, ' topic/draft-comment ')])"/>
+                            /ancestor::*[contains(@class, ' topic/draft-comment ')])) * 2"/>
     </xsl:variable>
     
     <xsl:variable name="required-cleanup_count">
-      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/required-cleanup ')]) - 
+      <xsl:value-of select="(count(ancestor::*[contains(@class, ' topic/required-cleanup ')]) - 
                             count(ancestor::*[contains(@class, ' topic/stentry ')][1]
-                            /ancestor::*[contains(@class, ' topic/required-cleanup ')])"/>
+                            /ancestor::*[contains(@class, ' topic/required-cleanup ')])) * 2"/>
+    </xsl:variable>
+    
+    <!-- sthead count important! -->
+    <xsl:variable name="sthead_count">
+      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/sthead ')]) - 
+        count(ancestor::*[contains(@class, ' topic/stentry ')][1]
+        /ancestor::*[contains(@class, ' topic/sthead ')])"/>
     </xsl:variable>
     
     <xsl:variable name="total_count" select="$fig_count + $lq_count + 
-      $note_count + $p_count + $draft-comment_count + $required-cleanup_count"/>
+      $note_count + $p_count + $draft-comment_count + $required-cleanup_count + $sthead_count"/>
     
     <xsl:choose>
       <!-- not dlist -->
       <xsl:when test="$isDlist = 0">
-        <!-- remove the first one rendered by text:p -->
+        <!-- remove the immediate child after tentry since it is rendered by text:p -->
         <xsl:value-of select="$total_count - 1"/>
       </xsl:when>
       <xsl:otherwise>
@@ -176,9 +190,9 @@
   <xsl:template name="calculate_span_depth_for_list">
     <xsl:param name="list_class" select="' topic/li '"/>
     <xsl:variable name="fig_count">
-      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/fig ')]) - 
+      <xsl:value-of select="(count(ancestor::*[contains(@class, ' topic/fig ')]) - 
                             count(ancestor::*[contains(@class, $list_class)][1]
-                            /ancestor::*[contains(@class, ' topic/fig ')])"/>
+                            /ancestor::*[contains(@class, ' topic/fig ')])) * 2"/>
     </xsl:variable>
     
     <xsl:variable name="lq_count">
@@ -206,15 +220,15 @@
     </xsl:variable>
     
     <xsl:variable name="draft-comment_count">
-      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/draft-comment ')]) - 
+      <xsl:value-of select="(count(ancestor::*[contains(@class, ' topic/draft-comment ')]) - 
                             count(ancestor::*[contains(@class, $list_class)][1]
-                            /ancestor::*[contains(@class, ' topic/draft-comment ')])"/>
+                            /ancestor::*[contains(@class, ' topic/draft-comment ')])) * 2"/>
     </xsl:variable>
     
     <xsl:variable name="required-cleanup_count">
-      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/required-cleanup ')]) - 
+      <xsl:value-of select="(count(ancestor::*[contains(@class, ' topic/required-cleanup ')]) - 
                             count(ancestor::*[contains(@class, $list_class)][1]
-                            /ancestor::*[contains(@class, ' topic/required-cleanup ')])"/>
+                            /ancestor::*[contains(@class, ' topic/required-cleanup ')])) * 2"/>
     </xsl:variable>
     
     <xsl:variable name="total_count" select="$fig_count + $lq_count + 
@@ -241,11 +255,11 @@
     </xsl:variable>
     
     <xsl:variable name="fig_count">
-      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/fig ')])"/>
+      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/fig ')]) * 2"/>
     </xsl:variable>
     
     <xsl:variable name="figgroup_count">
-      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/figgroup ')])"/>
+      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/figgroup ')]) * 2"/>
     </xsl:variable>
     
     <xsl:variable name="lq_count">
@@ -262,11 +276,11 @@
     </xsl:variable>
     
     <xsl:variable name="draft-comment_count">
-      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/draft-comment ')])"/>
+      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/draft-comment ')]) * 2"/>
     </xsl:variable>
     
     <xsl:variable name="required-cleanup_count">
-      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/required-cleanup ')])"/>
+      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/required-cleanup ')]) * 2"/>
     </xsl:variable>
     
     <xsl:variable name="itemgroup_count">
@@ -290,7 +304,7 @@
     </xsl:variable>
     
     <xsl:variable name="section_count">
-      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/section ')])"/>
+      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/section ')]) * 2"/>
     </xsl:variable>
     
     <xsl:variable name="sectiondiv_count">

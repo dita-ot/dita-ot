@@ -32,8 +32,7 @@
 	xmlns:exslf="http://exslt.org/functions"
 	xmlns:opentopic-func="http://www.idiominc.com/opentopic/exsl/function"
 	exclude-result-prefixes="opentopic-mapmerge opentopic-func exslf exsl dita-ot"
-	
-	version="1.0">
+	version="1.1">
 	
 	<!-- added by William on 2009-10-26 for bug:1880097 start -->
 	<xsl:import href="../../xsl/common/output-message.xsl"/>

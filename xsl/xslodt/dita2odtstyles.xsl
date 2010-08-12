@@ -174,13 +174,11 @@
         <style:table-properties fo:keep-with-next="true"/>
       </style:style>
       
-      <!-- Font style -->
-      <!-- 
-      <style:text-properties
-        style:text-position="super 58%" fo:font-style="italic"
-        style:text-underline-style="solid"
-        fo:font-weight="bold"/>
-      -->
+      <!-- required-cleanup style -->
+      <style:style style:name="required_cleanup_style" style:family="text" style:parent-style-name="indent_paragraph_style">
+        <style:text-properties fo:color="#cc3333"/>
+      </style:style>
+      
       <style:style style:name="bold_paragraph" style:family="paragraph" style:parent-style-name="indent_paragraph_style">
         <style:text-properties fo:font-weight="bold" style:font-weight-asian="bold"
           style:font-weight-complex="bold"/>
@@ -258,7 +256,7 @@
       </style:style>
       
       
-      <!-- Styles used in toc -->
+      <!-- Styles used in toc  start-->
       <style:style style:name="Index" style:family="paragraph"
         style:parent-style-name="Default_20_Text" style:class="index">
         <style:paragraph-properties text:number-lines="false" text:line-number="0"/>
@@ -481,6 +479,8 @@
           <style:columns fo:column-count="1" fo:column-gap="0in"/>
         </style:section-properties>
       </style:style>
+      <!-- Styles used in toc  end-->
+      
       <!-- Footer style -->
       <style:style style:name="Footer" style:family="paragraph"
         style:parent-style-name="Default_20_Text" style:class="extra">

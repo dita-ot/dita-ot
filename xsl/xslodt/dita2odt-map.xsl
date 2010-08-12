@@ -178,10 +178,11 @@
     <text:p text:style-name="PB"/>
   </xsl:template>
   
+  
+  <!-- compress the opentopic:map tag since it has alreay been parsed for creating toc -->
   <xsl:template match="opentopic:map"/>
 
-  
-  
+
   <xsl:template match="*[contains(@class, ' map/topicref ')]" mode="toc">
     <xsl:if test="@href">
       <!-- topicref depth -->
