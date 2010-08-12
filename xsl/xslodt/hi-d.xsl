@@ -376,6 +376,7 @@
      
      
      <xsl:if test="$style_name != '' and $hasStyleName = 'false'">
+          <!-- common hi style -->
           <xsl:element name="style:style">
                <xsl:attribute name="style:name">
                     <xsl:value-of select="$style_name"/>
@@ -404,11 +405,132 @@
                     </xsl:if>
                     <!-- sub -->
                     <xsl:if test="contains($style_name, 'sub')">
-                         <xsl:attribute name="style:text-position">sub 58%</xsl:attribute>
+                         <xsl:choose>
+                              <xsl:when test="contains($style_name ,'sub1')">
+                                   <xsl:attribute name="style:text-position">-10% 58%</xsl:attribute>
+                              </xsl:when>
+                              <xsl:when test="contains($style_name ,'sub2')">
+                                   <xsl:attribute name="style:text-position">-20% 58%</xsl:attribute>
+                              </xsl:when>
+                              <xsl:when test="contains($style_name ,'sub3')">
+                                   <xsl:attribute name="style:text-position">-30% 58%</xsl:attribute>
+                              </xsl:when>
+                              <xsl:when test="contains($style_name ,'sub4')">
+                                   <xsl:attribute name="style:text-position">-40% 58%</xsl:attribute>
+                              </xsl:when>
+                              <xsl:when test="contains($style_name ,'sub5')">
+                                   <xsl:attribute name="style:text-position">-50% 58%</xsl:attribute>
+                              </xsl:when>
+                              <xsl:otherwise>
+                                   <xsl:attribute name="style:text-position">-60% 58%</xsl:attribute>
+                              </xsl:otherwise>
+                         </xsl:choose>
                     </xsl:if>
                     <!-- sup -->
                     <xsl:if test="contains($style_name, 'sup')">
-                         <xsl:attribute name="style:text-position">super 58%</xsl:attribute>
+                         <xsl:choose>
+                              <xsl:when test="contains($style_name ,'sup1')">
+                                   <xsl:attribute name="style:text-position">40% 58%</xsl:attribute>
+                              </xsl:when>
+                              <xsl:when test="contains($style_name ,'sup2')">
+                                   <xsl:attribute name="style:text-position">50% 58%</xsl:attribute>
+                              </xsl:when>
+                              <xsl:when test="contains($style_name ,'sup3')">
+                                   <xsl:attribute name="style:text-position">60% 58%</xsl:attribute>
+                              </xsl:when>
+                              <xsl:when test="contains($style_name ,'sup4')">
+                                   <xsl:attribute name="style:text-position">70% 58%</xsl:attribute>
+                              </xsl:when>
+                              <xsl:when test="contains($style_name ,'sup5')">
+                                   <xsl:attribute name="style:text-position">80% 58%</xsl:attribute>
+                              </xsl:when>
+                              <xsl:otherwise>
+                                   <xsl:attribute name="style:text-position">90% 58%</xsl:attribute>
+                              </xsl:otherwise>
+                         </xsl:choose>
+                    </xsl:if>
+                    <!-- codeblock/screen -->
+                    <xsl:if test="contains($style_name, 'code')">
+                         <xsl:attribute name="fo:background-color">#d9d9d9</xsl:attribute>
+                    </xsl:if>
+               </xsl:element>
+          </xsl:element>
+          <!-- boolean hi style -->
+          <xsl:element name="style:style">
+               <xsl:attribute name="style:name">
+                    <xsl:value-of select="concat('boolean_', $style_name)"/>
+               </xsl:attribute>
+               <xsl:attribute name="style:family">text</xsl:attribute>
+               <xsl:attribute name="style:parent-style-name">boolean_style</xsl:attribute>
+               <xsl:element name="style:text-properties">
+                    <!-- bold-->
+                    <xsl:if test="contains($style_name, 'bold')">
+                         <xsl:attribute name="fo:font-weight">bold</xsl:attribute>
+                         <xsl:attribute name="style:font-weight-asian">bold</xsl:attribute>
+                         <xsl:attribute name="style:font-weight-complex">bold</xsl:attribute>
+                    </xsl:if>                    
+                    <!-- italic -->
+                    <xsl:if test="contains($style_name, 'italic')">
+                         <xsl:attribute name="fo:font-style">italic</xsl:attribute>
+                         <xsl:attribute name="style:font-style-asian">italic</xsl:attribute>
+                         <xsl:attribute name="style:font-style-complex">italic</xsl:attribute>
+                    </xsl:if>
+                    <!-- underline -->
+                    <xsl:if test="contains($style_name, 'underline')">
+                         <xsl:attribute name="style:text-underline-style">solid</xsl:attribute>
+                         <xsl:attribute name="style:text-underline-type">single</xsl:attribute>
+                         <xsl:attribute name="style:text-underline-width">auto</xsl:attribute>
+                         <xsl:attribute name="style:text-underline-color">font-color</xsl:attribute>
+                    </xsl:if>
+                    <!-- sub -->
+                    <xsl:if test="contains($style_name, 'sub')">
+                         <xsl:choose>
+                              <xsl:when test="contains($style_name ,'sub1')">
+                                   <xsl:attribute name="style:text-position">-10% 58%</xsl:attribute>
+                              </xsl:when>
+                              <xsl:when test="contains($style_name ,'sub2')">
+                                   <xsl:attribute name="style:text-position">-20% 58%</xsl:attribute>
+                              </xsl:when>
+                              <xsl:when test="contains($style_name ,'sub3')">
+                                   <xsl:attribute name="style:text-position">-30% 58%</xsl:attribute>
+                              </xsl:when>
+                              <xsl:when test="contains($style_name ,'sub4')">
+                                   <xsl:attribute name="style:text-position">-40% 58%</xsl:attribute>
+                              </xsl:when>
+                              <xsl:when test="contains($style_name ,'sub5')">
+                                   <xsl:attribute name="style:text-position">-50% 58%</xsl:attribute>
+                              </xsl:when>
+                              <xsl:otherwise>
+                                   <xsl:attribute name="style:text-position">-60% 58%</xsl:attribute>
+                              </xsl:otherwise>
+                         </xsl:choose>
+                    </xsl:if>
+                    <!-- sup -->
+                    <xsl:if test="contains($style_name, 'sup')">
+                         <xsl:choose>
+                              <xsl:when test="contains($style_name ,'sup1')">
+                                   <xsl:attribute name="style:text-position">40% 58%</xsl:attribute>
+                              </xsl:when>
+                              <xsl:when test="contains($style_name ,'sup2')">
+                                   <xsl:attribute name="style:text-position">50% 58%</xsl:attribute>
+                              </xsl:when>
+                              <xsl:when test="contains($style_name ,'sup3')">
+                                   <xsl:attribute name="style:text-position">60% 58%</xsl:attribute>
+                              </xsl:when>
+                              <xsl:when test="contains($style_name ,'sup4')">
+                                   <xsl:attribute name="style:text-position">70% 58%</xsl:attribute>
+                              </xsl:when>
+                              <xsl:when test="contains($style_name ,'sup5')">
+                                   <xsl:attribute name="style:text-position">80% 58%</xsl:attribute>
+                              </xsl:when>
+                              <xsl:otherwise>
+                                   <xsl:attribute name="style:text-position">90% 58%</xsl:attribute>
+                              </xsl:otherwise>
+                         </xsl:choose>
+                    </xsl:if>
+                    <!-- codeblock/screen -->
+                    <xsl:if test="contains($style_name, 'code')">
+                         <xsl:attribute name="fo:background-color">#d9d9d9</xsl:attribute>
                     </xsl:if>
                </xsl:element>
           </xsl:element>
@@ -418,7 +540,8 @@
 
 <xsl:template name="get_style_name">
      
-     <xsl:if test="ancestor::*[contains(@class, ' hi-d/i ')]">
+     <xsl:if test="ancestor::*[contains(@class, ' hi-d/i ')] | ancestor::*[contains(@class, ' topic/term ')] | 
+          ancestor::*[contains(@class, ' topic/cite ')]">
          <xsl:value-of select="'italic'"/> 
      </xsl:if>
      
@@ -432,10 +555,16 @@
      
      <xsl:if test="ancestor::*[contains(@class, ' hi-d/sub ')]">
           <xsl:value-of select="'sub'"/>
+          <xsl:value-of select="count(ancestor::*[contains(@class, ' hi-d/sub ')])"/>
      </xsl:if>
      
      <xsl:if test="ancestor::*[contains(@class, ' hi-d/sup ')]">
           <xsl:value-of select="'sup'"/>
+          <xsl:value-of select="count(ancestor::*[contains(@class, ' hi-d/sup ')])"/>
+     </xsl:if>
+     
+     <xsl:if test="ancestor::*[contains(@class, ' ui-d/screen ')] | ancestor::*[contains(@class, ' pr-d/codeblock ')]">
+          <xsl:value-of select="'code'"/>
      </xsl:if>
      
 </xsl:template>

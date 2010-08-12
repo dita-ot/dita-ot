@@ -31,6 +31,8 @@
   xmlns:stringUtils="org.dita.dost.util.StringUtils" 
   xmlns:styleUtils="org.dita.dost.util.StyleUtils" 
   exclude-result-prefixes="stringUtils styleUtils ditamsg">
+  
+  <!-- =========== I18N RELATED TEMPLATES, ODT REUSES RESOURCE FILES OF XHTML===============-->
     <xsl:template name="get-ascii">
       <xsl:param name="txt"></xsl:param>
       <xsl:variable name="ancestorlang">
@@ -57,6 +59,9 @@
     </xsl:call-template>
   </xsl:template>
   
+  
+  <!-- =========== TEMPLATES FOR CALCULATING NESTED TAGS 
+      NOTE:SOME TAGS' NUMBER ARE MULTPLIED BY TWO FOR FLAGGING STYLES.=========== -->
   <xsl:template name="calculate_list_depth">
     <xsl:param name="list_class" select="' topic/li '"/>
     
@@ -1172,6 +1177,11 @@
       </xsl:when>
       <!-- parent tag is fn -->
       <xsl:when test="parent::*[contains(@class, ' topic/fn ')]">
+        <!-- break span tag(for flagging)-->
+        <xsl:call-template name="break_span_tags">
+          <xsl:with-param name="depth" select="1"/>
+          <xsl:with-param name="order" select="'0'"/>
+        </xsl:call-template>
         <!-- break p tag -->
         <xsl:text disable-output-escaping="yes">&lt;/text:p&gt;</xsl:text>
         <!-- start render list -->
@@ -1181,6 +1191,11 @@
         </xsl:element>
         <!-- start p tag again -->
         <xsl:text disable-output-escaping="yes">&lt;text:p&gt;</xsl:text>
+        <!--  start render span tags again-->
+        <xsl:call-template name="break_span_tags">
+          <xsl:with-param name="depth" select="1"/>
+          <xsl:with-param name="order" select="'1'"/>
+        </xsl:call-template>
       </xsl:when>
       
       <!-- nearest ancestor tag is table -->
@@ -1321,8 +1336,7 @@
     </xsl:choose>
   </xsl:template>
   
-  
-  <!-- functions for related-links. -->
+  <!-- =========== FUNCTIONS FOR RELATED-LINKS =========== -->
   <!-- same file or not -->
   <xsl:template name="check_file_location">
     <xsl:choose>
@@ -1438,6 +1452,8 @@
     </xsl:choose>
   </xsl:template>
   
+  
+  <!-- =========== TEMPLATES FOR ODT FLAGGING =========== -->
   <xsl:template name="create_flagging_styles">
     <xsl:apply-templates select="$FILTERDOC/val/prop[@action='flag']" mode="create_flagging_styles"/>
     
@@ -1637,13 +1653,17 @@
       <xsl:with-param name="flagrules" select="$flagrules"/>     
     </xsl:call-template>
     <!-- add rev style -->
+    <xsl:call-template name="start-add-odt-revflags">
+      <xsl:with-param name="flagrules" select="$flagrules"/>
+    </xsl:call-template>
+    <!-- 
     <xsl:if test="@rev and not($FILTERFILE='') and ($DRAFT='yes') ">
       <xsl:call-template name="start-mark-rev">
         <xsl:with-param name="revvalue" select="@rev"/>
         <xsl:with-param name="flagrules" select="$flagrules"/> 
       </xsl:call-template>
     </xsl:if>
-    
+    -->
   </xsl:template>
   
   <xsl:template match="*" mode="end-add-odt-flags">
@@ -1652,12 +1672,10 @@
       <xsl:call-template name="getrules"/>
     </xsl:variable>
     <!-- add rev style -->
-    <xsl:if test="@rev and not($FILTERFILE='') and ($DRAFT='yes')">
-      <xsl:call-template name="end-mark-rev">
-        <xsl:with-param name="revvalue" select="@rev"/>
-        <xsl:with-param name="flagrules" select="$flagrules"/> 
-      </xsl:call-template>
-    </xsl:if>
+    <xsl:call-template name="end-add-odt-revflags">
+      <xsl:with-param name="flagrules" select="$flagrules"/>
+    </xsl:call-template>
+    
     <!-- add images -->
     <xsl:call-template name="end-flagit">
       <xsl:with-param name="flagrules" select="$flagrules"/> 
@@ -1665,35 +1683,71 @@
     
   </xsl:template>
   
-  <xsl:template match="*" mode="start-add-odt-revflags">
-    <!-- get style rules -->
-    <xsl:variable name="flagrules">
+  <xsl:template match="*" mode="start-add-odt-revflags" name="start-add-odt-revflags">
+    <xsl:param name="flagrules">
       <xsl:call-template name="getrules"/>
-    </xsl:variable>
+    </xsl:param>
     <!-- add rev style -->
-    <xsl:if test="@rev and not($FILTERFILE='') and ($DRAFT='yes') ">
-      <xsl:call-template name="start-mark-rev">
-        <xsl:with-param name="revvalue" select="@rev"/>
-        <xsl:with-param name="flagrules" select="$flagrules"/> 
-      </xsl:call-template>
-    </xsl:if>
-    
-    
+    <xsl:choose>
+      <!-- draft rev mode, add div w/ rev attr value -->
+      <xsl:when test="@rev and not($FILTERFILE='') and ($DRAFT='yes')"> 
+        <xsl:variable name="revtest"> 
+          <xsl:call-template name="find-active-rev-flag">
+            <xsl:with-param name="allrevs" select="@rev"/>
+          </xsl:call-template>
+        </xsl:variable>
+        <xsl:choose>
+          <xsl:when test="$revtest=1">
+            <xsl:call-template name="start-mark-rev">
+              <xsl:with-param name="revvalue" select="@rev"/>
+              <xsl:with-param name="flagrules" select="$flagrules"/> 
+            </xsl:call-template>
+          </xsl:when>
+          <xsl:otherwise/>
+        </xsl:choose>
+      </xsl:when>
+      <xsl:when test="@rev and not($FILTERFILE='')">    <!-- normal rev mode -->
+        <xsl:call-template name="start-mark-rev">
+          <xsl:with-param name="revvalue" select="@rev"/>
+          <xsl:with-param name="flagrules" select="$flagrules"/> 
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise/>
+    </xsl:choose>
+
   </xsl:template>
   
-  <xsl:template match="*" mode="end-add-odt-revflags">
-    <!-- get style rules -->
-    <xsl:variable name="flagrules">
+  <xsl:template match="*" mode="end-add-odt-revflags" name="end-add-odt-revflags">
+    <xsl:param name="flagrules">
       <xsl:call-template name="getrules"/>
-    </xsl:variable>
+    </xsl:param>
     <!-- add rev style -->
-    <xsl:if test="@rev and not($FILTERFILE='') and ($DRAFT='yes') ">
-      <xsl:call-template name="end-mark-rev">
-        <xsl:with-param name="revvalue" select="@rev"/>
-        <xsl:with-param name="flagrules" select="$flagrules"/> 
-      </xsl:call-template>
-    </xsl:if>
-    
+    <xsl:choose>
+      <!-- draft rev mode, add div w/ rev attr value -->
+      <xsl:when test="@rev and not($FILTERFILE='') and ($DRAFT='yes')"> 
+        <xsl:variable name="revtest"> 
+          <xsl:call-template name="find-active-rev-flag">
+            <xsl:with-param name="allrevs" select="@rev"/>
+          </xsl:call-template>
+        </xsl:variable>
+        <xsl:choose>
+          <xsl:when test="$revtest=1">
+            <xsl:call-template name="end-mark-rev">
+              <xsl:with-param name="revvalue" select="@rev"/>
+              <xsl:with-param name="flagrules" select="$flagrules"/> 
+            </xsl:call-template>
+          </xsl:when>
+          <xsl:otherwise/>
+        </xsl:choose>
+      </xsl:when>
+      <xsl:when test="@rev and not($FILTERFILE='')">    <!-- normal rev mode -->
+        <xsl:call-template name="end-mark-rev">
+          <xsl:with-param name="revvalue" select="@rev"/>
+          <xsl:with-param name="flagrules" select="$flagrules"/> 
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise/>
+    </xsl:choose>
   </xsl:template>
   
 </xsl:stylesheet>

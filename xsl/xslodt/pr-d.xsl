@@ -35,7 +35,13 @@
                <xsl:element name="text:p">
                     <xsl:element name="text:span">
                          <xsl:attribute name="text:style-name">Courier_New</xsl:attribute>
-                         <xsl:apply-templates/>
+                         <xsl:element name="text:span">
+                              <!-- start add rev flagging styles -->
+                              <xsl:apply-templates select="." mode="start-add-odt-revflags"/>
+                              <xsl:apply-templates/>
+                              <!-- end add rev flagging styles -->
+                              <xsl:apply-templates select="." mode="end-add-odt-revflags"/>
+                         </xsl:element>
                     </xsl:element>
                </xsl:element>
           </xsl:when>
@@ -55,14 +61,26 @@
                                    <xsl:attribute name="text:style-name">bold</xsl:attribute>
                                    <xsl:element name="text:span">
                                         <xsl:attribute name="text:style-name">Courier_New</xsl:attribute>
-                                        <xsl:apply-templates/>
+                                        <xsl:element name="text:span">
+                                             <!-- start add rev flagging styles -->
+                                             <xsl:apply-templates select="." mode="start-add-odt-revflags"/>
+                                             <xsl:apply-templates/>
+                                             <!-- end add rev flagging styles -->
+                                             <xsl:apply-templates select="." mode="end-add-odt-revflags"/>
+                                        </xsl:element>
                                    </xsl:element>
                               </xsl:element>
                          </xsl:when>
                          <xsl:otherwise>
                               <xsl:element name="text:span">
                                    <xsl:attribute name="text:style-name">Courier_New</xsl:attribute>
-                                   <xsl:apply-templates/>
+                                   <xsl:element name="text:span">
+                                        <!-- start add rev flagging styles -->
+                                        <xsl:apply-templates select="." mode="start-add-odt-revflags"/>
+                                        <xsl:apply-templates/>
+                                        <!-- end add rev flagging styles -->
+                                        <xsl:apply-templates select="." mode="end-add-odt-revflags"/>
+                                   </xsl:element>
                               </xsl:element>
                          </xsl:otherwise>
                     </xsl:choose>
@@ -79,14 +97,26 @@
                                    <xsl:attribute name="text:style-name">bold</xsl:attribute>
                                    <xsl:element name="text:span">
                                         <xsl:attribute name="text:style-name">Courier_New</xsl:attribute>
-                                        <xsl:apply-templates/>
+                                        <xsl:element name="text:span">
+                                             <!-- start add rev flagging styles -->
+                                             <xsl:apply-templates select="." mode="start-add-odt-revflags"/>
+                                             <xsl:apply-templates/>
+                                             <!-- end add rev flagging styles -->
+                                             <xsl:apply-templates select="." mode="end-add-odt-revflags"/>
+                                        </xsl:element>
                                    </xsl:element>
                               </xsl:element>
                          </xsl:when>
                          <xsl:otherwise>
                               <xsl:element name="text:span">
                                    <xsl:attribute name="text:style-name">Courier_New</xsl:attribute>
-                                   <xsl:apply-templates/>
+                                   <xsl:element name="text:span">
+                                        <!-- start add rev flagging styles -->
+                                        <xsl:apply-templates select="." mode="start-add-odt-revflags"/>
+                                        <xsl:apply-templates/>
+                                        <!-- end add rev flagging styles -->
+                                        <xsl:apply-templates select="." mode="end-add-odt-revflags"/>
+                                   </xsl:element>
                               </xsl:element>
                          </xsl:otherwise>
                     </xsl:choose>
@@ -96,7 +126,13 @@
           <xsl:otherwise>
                <xsl:element name="text:span">
                     <xsl:attribute name="text:style-name">Courier_New</xsl:attribute>
-                    <xsl:apply-templates/>
+                    <xsl:element name="text:span">
+                         <!-- start add rev flagging styles -->
+                         <xsl:apply-templates select="." mode="start-add-odt-revflags"/>
+                         <xsl:apply-templates/>
+                         <!-- end add rev flagging styles -->
+                         <xsl:apply-templates select="." mode="end-add-odt-revflags"/>
+                    </xsl:element>
                </xsl:element>
           </xsl:otherwise>
      </xsl:choose>
@@ -231,7 +267,6 @@
                        <xsl:apply-templates select="." mode="end-add-odt-flags"/>
                   </xsl:element>
              </xsl:element>
-             <xsl:element name="text:line-break"/>
         </xsl:otherwise>
    </xsl:choose>
    
@@ -254,7 +289,13 @@
 <xsl:template match="*[contains(@class,' pr-d/var ')]">
      <xsl:element name="text:span">
           <xsl:attribute name="text:style-name">italic</xsl:attribute>
-          <xsl:apply-templates/>
+          <xsl:element name="text:span">
+               <!-- start add rev flagging styles -->
+               <xsl:apply-templates select="." mode="start-add-odt-revflags"/>
+               <xsl:apply-templates/>
+               <!-- end add rev flagging styles -->
+               <xsl:apply-templates select="." mode="end-add-odt-revflags"/>
+          </xsl:element>
      </xsl:element>
 </xsl:template>
 

@@ -689,7 +689,6 @@
             <xsl:apply-templates select="." mode="end-add-odt-revflags"/>
           </xsl:element>
         </xsl:element>
-        <xsl:element name="text:line-break"/>
       </xsl:when>
       <!-- nested by entry -->
       <xsl:when test="parent::*[contains(@class, ' topic/entry ')]">
@@ -706,7 +705,6 @@
             <!-- end add rev flagging styles -->
             <xsl:apply-templates select="." mode="end-add-odt-revflags"/> 
           </xsl:element>
-          <xsl:element name="text:line-break"/>
         </xsl:element>
       </xsl:when>
       <!-- nested by stentry -->
@@ -719,7 +717,6 @@
             <!-- end add rev flagging styles -->
             <xsl:apply-templates select="." mode="end-add-odt-revflags"/>
           </xsl:element>
-          <xsl:element name="text:line-break"/>
         </xsl:element>
       </xsl:when>
       <xsl:otherwise>
@@ -730,7 +727,6 @@
           <!-- end add rev flagging styles -->
           <xsl:apply-templates select="." mode="end-add-odt-revflags"/>
         </xsl:element>
-        <xsl:element name="text:line-break"/>
       </xsl:otherwise>
     </xsl:choose>
     
@@ -1044,14 +1040,28 @@
   
   <xsl:template name="create_q_content">
     
-    <xsl:call-template name="getStringODT">
-      <xsl:with-param name="stringName" select="'OpenQuote'"/>
-    </xsl:call-template>
-    <xsl:apply-templates/>
-    <xsl:call-template name="getStringODT">
-      <xsl:with-param name="stringName" select="'CloseQuote'"/>
-    </xsl:call-template>
+    <xsl:variable name="style_name">
+      <xsl:call-template name="get_style_name"/> 
+    </xsl:variable>
     
+    <xsl:variable name="trueStyleName">
+      <xsl:value-of select="styleUtils:getHiStyleName($style_name)"/>
+    </xsl:variable>
+    
+    <xsl:element name="text:span">
+      <xsl:if test="$trueStyleName!=''">
+        <xsl:attribute name="text:style-name">
+          <xsl:value-of select="$trueStyleName"/>
+        </xsl:attribute>
+      </xsl:if>
+      <xsl:call-template name="getStringODT">
+        <xsl:with-param name="stringName" select="'OpenQuote'"/>
+      </xsl:call-template>
+      <xsl:apply-templates/>
+      <xsl:call-template name="getStringODT">
+        <xsl:with-param name="stringName" select="'CloseQuote'"/>
+      </xsl:call-template>
+    </xsl:element>
   </xsl:template>
 
 
@@ -2227,9 +2237,22 @@
     <xsl:otherwise>
       <xsl:element name="text:span">
         <xsl:if test="$trueStyleName!=''">
-          <xsl:attribute name="text:style-name">
-            <xsl:value-of select="$trueStyleName"/>
-          </xsl:attribute>
+          <xsl:choose>
+            <xsl:when test="ancestor::*[contains(@class, ' topic/title ')][1]
+              /parent::*[contains(@class, ' topic/topic ')]">
+              <xsl:if test="$trueStyleName = 'italic'">
+                <xsl:variable name="depth" select="count(ancestor::*[contains(@class, ' topic/topic ')])"/>
+                <xsl:attribute name="text:style-name">
+                  <xsl:value-of select="concat($trueStyleName, '_heading_', $depth)"/>
+                </xsl:attribute>
+              </xsl:if>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:attribute name="text:style-name">
+                <xsl:value-of select="$trueStyleName"/>
+              </xsl:attribute>
+            </xsl:otherwise>
+          </xsl:choose>
         </xsl:if>
         <xsl:call-template name="gen_txt_content"/>
       </xsl:element>
@@ -2264,6 +2287,15 @@
 
 
 <xsl:template match="*[contains(@class,' topic/boolean ')]">
+  
+  <xsl:variable name="style_name">
+    <xsl:call-template name="get_style_name"/> 
+  </xsl:variable>
+  
+  <xsl:variable name="trueStyleName">
+    <xsl:value-of select="styleUtils:getHiStyleName($style_name)"/>
+  </xsl:variable>
+  
   <xsl:choose>
     <!-- parent is li -->
     <xsl:when test="parent::*[contains(@class, ' topic/li ')]">
@@ -2336,7 +2368,16 @@
     <!-- nested by other tags -->
     <xsl:otherwise>
       <xsl:element name="text:span">
-        <xsl:attribute name="text:style-name">boolean_style</xsl:attribute>
+        <xsl:choose>
+          <xsl:when test="$trueStyleName!=''">
+            <xsl:attribute name="text:style-name">
+              <xsl:value-of select="concat('boolean_', $trueStyleName)"/>
+            </xsl:attribute>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:attribute name="text:style-name">boolean_style</xsl:attribute>
+          </xsl:otherwise>
+        </xsl:choose>
         <xsl:text>boolean:</xsl:text>
         <xsl:value-of select="@state"/>
       </xsl:element>

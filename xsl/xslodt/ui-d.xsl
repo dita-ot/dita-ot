@@ -140,7 +140,6 @@
       <xsl:apply-templates select="." mode="end-add-odt-flags"/>
      </xsl:element>
    </xsl:element>
-   <xsl:element name="text:line-break"/>
   </xsl:otherwise>
  </xsl:choose>
 </xsl:template>
@@ -152,7 +151,13 @@
   <xsl:choose>
    <xsl:when test="parent::*[contains(@class, ' topic/li ')]">
     <xsl:element name="text:p">
+     <xsl:element name="text:span">
+      <!-- start add rev flagging styles -->
+      <xsl:apply-templates select="." mode="start-add-odt-revflags"/>
       <xsl:apply-templates/>
+      <!-- end add rev flagging styles -->
+      <xsl:apply-templates select="." mode="end-add-odt-revflags"/>
+     </xsl:element>
     </xsl:element>
    </xsl:when>
    <!-- nested by entry -->
@@ -169,11 +174,23 @@
        /parent::*[contains(@class, ' topic/row ')]/parent::*[contains(@class, ' topic/thead ')]">
        <xsl:element name="text:span">
         <xsl:attribute name="text:style-name">bold</xsl:attribute>
+        <xsl:element name="text:span">
+         <!-- start add rev flagging styles -->
+         <xsl:apply-templates select="." mode="start-add-odt-revflags"/>
          <xsl:apply-templates/>
+         <!-- end add rev flagging styles -->
+         <xsl:apply-templates select="." mode="end-add-odt-revflags"/>
+        </xsl:element>
        </xsl:element>
       </xsl:when>
       <xsl:otherwise>
+       <xsl:element name="text:span">
+        <!-- start add rev flagging styles -->
+        <xsl:apply-templates select="." mode="start-add-odt-revflags"/>
         <xsl:apply-templates/>
+        <!-- end add rev flagging styles -->
+        <xsl:apply-templates select="." mode="end-add-odt-revflags"/>
+       </xsl:element>
       </xsl:otherwise>
      </xsl:choose>
     </xsl:element>
@@ -187,21 +204,38 @@
        parent::*[contains(@class, ' topic/sthead ')]">
        <xsl:element name="text:span">
         <xsl:attribute name="text:style-name">bold</xsl:attribute>
+        <xsl:element name="text:span">
+         <!-- start add rev flagging styles -->
+         <xsl:apply-templates select="." mode="start-add-odt-revflags"/>
          <xsl:apply-templates/>
+         <!-- end add rev flagging styles -->
+         <xsl:apply-templates select="." mode="end-add-odt-revflags"/>
+        </xsl:element>
        </xsl:element>
       </xsl:when>
       <xsl:otherwise>
+       <xsl:element name="text:span">
+        <!-- start add rev flagging styles -->
+        <xsl:apply-templates select="." mode="start-add-odt-revflags"/>
         <xsl:apply-templates/>
+        <!-- end add rev flagging styles -->
+        <xsl:apply-templates select="." mode="end-add-odt-revflags"/>
+       </xsl:element>
       </xsl:otherwise>
      </xsl:choose>
     </xsl:element>
    </xsl:when>
    <!-- nested by other tags -->
    <xsl:otherwise>
+    <xsl:element name="text:span">
+     <!-- start add rev flagging styles -->
+     <xsl:apply-templates select="." mode="start-add-odt-revflags"/>
      <xsl:apply-templates/>
+     <!-- end add rev flagging styles -->
+     <xsl:apply-templates select="." mode="end-add-odt-revflags"/>
+    </xsl:element>
    </xsl:otherwise>
   </xsl:choose>
-  
   
  </xsl:template>
 
@@ -220,7 +254,13 @@
         </xsl:if>
         <xsl:element name="text:span">
          <xsl:attribute name="text:style-name">bold</xsl:attribute>
-         <xsl:apply-templates/>
+         <xsl:element name="text:span">
+          <!-- start add rev flagging styles -->
+          <xsl:apply-templates select="." mode="start-add-odt-revflags"/>
+          <xsl:apply-templates/>
+          <!-- end add rev flagging styles -->
+          <xsl:apply-templates select="." mode="end-add-odt-revflags"/>
+         </xsl:element>
         </xsl:element>
        </xsl:element>
       </xsl:when>
@@ -247,7 +287,13 @@
            </xsl:if>
            <xsl:element name="text:span">
             <xsl:attribute name="text:style-name">bold</xsl:attribute>
-            <xsl:apply-templates/>
+            <xsl:element name="text:span">
+             <!-- start add rev flagging styles -->
+             <xsl:apply-templates select="." mode="start-add-odt-revflags"/>
+             <xsl:apply-templates/>
+             <!-- end add rev flagging styles -->
+             <xsl:apply-templates select="." mode="end-add-odt-revflags"/>
+            </xsl:element>
            </xsl:element>
           </xsl:element>
          </xsl:when>
@@ -261,7 +307,13 @@
           </xsl:if>
           <xsl:element name="text:span">
            <xsl:attribute name="text:style-name">bold</xsl:attribute>
-           <xsl:apply-templates/>
+           <xsl:element name="text:span">
+            <!-- start add rev flagging styles -->
+            <xsl:apply-templates select="." mode="start-add-odt-revflags"/>
+            <xsl:apply-templates/>
+            <!-- end add rev flagging styles -->
+            <xsl:apply-templates select="." mode="end-add-odt-revflags"/>
+           </xsl:element>
           </xsl:element>
          </xsl:otherwise>
         </xsl:choose>
@@ -285,7 +337,13 @@
            </xsl:if>
            <xsl:element name="text:span">
             <xsl:attribute name="text:style-name">bold</xsl:attribute>
-            <xsl:apply-templates/>
+            <xsl:element name="text:span">
+             <!-- start add rev flagging styles -->
+             <xsl:apply-templates select="." mode="start-add-odt-revflags"/>
+             <xsl:apply-templates/>
+             <!-- end add rev flagging styles -->
+             <xsl:apply-templates select="." mode="end-add-odt-revflags"/>
+            </xsl:element>
            </xsl:element>
           </xsl:element>
          </xsl:when>
@@ -299,7 +357,13 @@
           </xsl:if>
           <xsl:element name="text:span">
            <xsl:attribute name="text:style-name">bold</xsl:attribute>
-           <xsl:apply-templates/>
+           <xsl:element name="text:span">
+            <!-- start add rev flagging styles -->
+            <xsl:apply-templates select="." mode="start-add-odt-revflags"/>
+            <xsl:apply-templates/>
+            <!-- end add rev flagging styles -->
+            <xsl:apply-templates select="." mode="end-add-odt-revflags"/>
+           </xsl:element>
           </xsl:element>
          </xsl:otherwise>
         </xsl:choose>
@@ -316,7 +380,13 @@
        </xsl:if>
        <xsl:element name="text:span">
         <xsl:attribute name="text:style-name">bold</xsl:attribute>
-        <xsl:apply-templates/>
+        <xsl:element name="text:span">
+         <!-- start add rev flagging styles -->
+         <xsl:apply-templates select="." mode="start-add-odt-revflags"/>
+         <xsl:apply-templates/>
+         <!-- end add rev flagging styles -->
+         <xsl:apply-templates select="." mode="end-add-odt-revflags"/>
+        </xsl:element>
        </xsl:element>
       </xsl:otherwise>
      </xsl:choose>

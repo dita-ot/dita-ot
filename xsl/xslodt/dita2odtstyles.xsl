@@ -130,7 +130,7 @@
       </style:style>
       <!-- code and screen style -->
       <style:style style:name="Code_Text" style:family="text" style:parent-style-name="indent_text_style">
-        <style:text-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0cm" fo:keep-together="always" fo:text-indent="0cm" style:auto-text-indent="false" fo:background-color="#d9d9d9" fo:padding-left="0cm" fo:padding-right="0cm" fo:padding-top="0.106cm" fo:padding-bottom="0.106cm" fo:border-left="none" fo:border-right="none" fo:border-top="0.002cm solid #000000" fo:border-bottom="0.002cm solid #000000">
+        <style:text-properties fo:keep-together="always" style:auto-text-indent="false" fo:background-color="#d9d9d9" fo:padding-top="0.106cm" fo:padding-bottom="0.106cm">
           <!-- 
           <style:tab-stops>
             <style:tab-stop style:position="0.75cm"/>
@@ -198,6 +198,15 @@
         <style:text-properties style:text-underline-style="solid"
           style:text-underline-type="single" style:text-underline-width="auto"
           style:text-underline-color="font-color"/>
+      </style:style>
+      <style:style style:name="double-underline" style:family="text" style:parent-style-name="default_text_style">
+        <style:text-properties style:text-underline-style="solid"
+          style:text-underline-type="double" style:text-underline-width="auto"
+          style:text-underline-color="font-color"/>
+      </style:style>
+      <style:style style:name="overline" style:family="text" style:parent-style-name="default_text_style">
+        <style:text-properties style:text-overline-style="solid"
+          style:text-overline-width="auto" style:text-overline-color="font-color"/>
       </style:style>
       <style:style style:name="italic" style:family="text" style:parent-style-name="default_text_style">
         <style:text-properties fo:font-style="italic" style:font-style-asian="italic"
@@ -586,9 +595,9 @@
         <xsl:when test="$depth='1'">
           <xsl:attribute name="style:display-name">Heading 1</xsl:attribute>
           <xsl:attribute name="style:name">Heading_20_1</xsl:attribute>
-          <style:text-properties fo:font-size="115%" fo:font-weight="bold"
-            style:font-size-asian="115%" style:font-weight-asian="bold"
-            style:font-size-complex="115%" style:font-weight-complex="bold"
+          <style:text-properties fo:font-size="16pt" fo:font-weight="bold"
+            style:font-size-asian="16pt" style:font-weight-asian="bold"
+            style:font-size-complex="16pt" style:font-weight-complex="bold"
             style:text-underline-style="solid"
             style:text-underline-type="single" style:text-underline-width="auto"
             style:text-underline-color="font-color"/>
@@ -596,37 +605,82 @@
         <xsl:when test="$depth='2'">
           <xsl:attribute name="style:display-name">Heading 2</xsl:attribute>
           <xsl:attribute name="style:name">Heading_20_2</xsl:attribute>
-          <style:text-properties fo:font-size="100%" fo:font-weight="bold"
-            style:font-size-asian="100%" style:font-weight-asian="bold"
-            style:font-size-complex="100%" style:font-weight-complex="bold"/>
+          <style:text-properties fo:font-size="15pt" fo:font-weight="bold"
+            style:font-size-asian="15pt" style:font-weight-asian="bold"
+            style:font-size-complex="15pt" style:font-weight-complex="bold"/>
         </xsl:when>
         <xsl:when test="$depth='3'">
           <xsl:attribute name="style:display-name">Heading 3</xsl:attribute>
           <xsl:attribute name="style:name">Heading_20_3</xsl:attribute>
-          <style:text-properties fo:font-size="85%" fo:font-weight="bold"
-            style:font-size-asian="85%" style:font-weight-asian="bold"
-            style:font-size-complex="85%" style:font-weight-complex="bold"/>
+          <style:text-properties fo:font-size="14pt" fo:font-weight="bold"
+            style:font-size-asian="14pt" style:font-weight-asian="bold"
+            style:font-size-complex="14pt" style:font-weight-complex="bold"/>
         </xsl:when>
         <xsl:when test="$depth='4'">
           <xsl:attribute name="style:display-name">Heading 4</xsl:attribute>
           <xsl:attribute name="style:name">Heading_20_4</xsl:attribute>
-          <style:text-properties fo:font-size="70%" fo:font-weight="bold"
-            style:font-size-asian="70%" style:font-weight-asian="bold"
-            style:font-size-complex="115%" style:font-weight-complex="bold"/>
+          <style:text-properties fo:font-size="13pt" fo:font-weight="bold"
+            style:font-size-asian="13pt" style:font-weight-asian="bold"
+            style:font-size-complex="13pt" style:font-weight-complex="bold"/>
         </xsl:when>
         <xsl:when test="$depth='5'">
           <xsl:attribute name="style:display-name">Heading 5</xsl:attribute>
           <xsl:attribute name="style:name">Heading_20_5</xsl:attribute>
-          <style:text-properties fo:font-size="55%" fo:font-weight="bold"
-            style:font-size-asian="55%" style:font-weight-asian="bold"
-            style:font-size-complex="55%" style:font-weight-complex="bold"/>
+          <style:text-properties fo:font-size="12pt" fo:font-weight="bold"
+            style:font-size-asian="12pt" style:font-weight-asian="bold"
+            style:font-size-complex="12pt" style:font-weight-complex="bold"/>
         </xsl:when>
         <xsl:otherwise>
           <xsl:attribute name="style:display-name">Heading 6</xsl:attribute>
           <xsl:attribute name="style:name">Heading_20_6</xsl:attribute>
-          <style:text-properties fo:font-size="40%" fo:font-weight="bold"
-            style:font-size-asian="40%" style:font-weight-asian="bold"
-            style:font-size-complex="40%" style:font-weight-complex="bold"/>
+          <style:text-properties fo:font-size="11pt" fo:font-weight="bold"
+            style:font-size-asian="11pt" style:font-weight-asian="bold"
+            style:font-size-complex="11pt" style:font-weight-complex="bold"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:element>
+    <xsl:value-of select="$newline"/>
+    <xsl:element name="style:style">
+      <xsl:attribute name="style:family">
+        <xsl:value-of select="'text'"/>
+      </xsl:attribute>
+      <!-- create book mark -->
+      <xsl:choose>
+        <xsl:when test="$depth='1'">
+          <xsl:attribute name="style:name">italic_heading_1</xsl:attribute>
+          <style:text-properties fo:font-style="italic" style:font-style-asian="italic"
+            style:font-style-complex="italic" fo:font-size="16pt" style:font-size-asian="16pt"
+            style:font-size-complex="16pt"/>
+        </xsl:when>
+        <xsl:when test="$depth='2'">
+          <xsl:attribute name="style:name">italic_heading_2</xsl:attribute>
+          <style:text-properties fo:font-style="italic" style:font-style-asian="italic"
+            style:font-style-complex="italic" fo:font-size="15pt" style:font-size-asian="15pt"
+            style:font-size-complex="15pt"/>
+        </xsl:when>
+        <xsl:when test="$depth='3'">
+          <xsl:attribute name="style:name">italic_heading_3</xsl:attribute>
+          <style:text-properties fo:font-style="italic" style:font-style-asian="italic"
+            style:font-style-complex="italic" fo:font-size="14pt" style:font-size-asian="14pt"
+            style:font-size-complex="14pt"/>
+        </xsl:when>
+        <xsl:when test="$depth='4'">
+          <xsl:attribute name="style:name">italic_heading_4</xsl:attribute>
+          <style:text-properties fo:font-style="italic" style:font-style-asian="italic"
+            style:font-style-complex="italic" fo:font-size="13pt" style:font-size-asian="13pt"
+            style:font-size-complex="13pt"/>
+        </xsl:when>
+        <xsl:when test="$depth='5'">
+          <xsl:attribute name="style:name">italic_heading_5</xsl:attribute>
+          <style:text-properties fo:font-style="italic" style:font-style-asian="italic"
+            style:font-style-complex="italic" fo:font-size="12pt" style:font-size-asian="12pt"
+            style:font-size-complex="12pt"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:attribute name="style:name">italic_heading_6</xsl:attribute>
+          <style:text-properties fo:font-style="italic" style:font-style-asian="italic"
+            style:font-style-complex="italic" fo:font-size="11pt" style:font-size-asian="11pt"
+            style:font-size-complex="11pt"/>
         </xsl:otherwise>
       </xsl:choose>
     </xsl:element>
@@ -865,7 +919,7 @@
   <xsl:template name="create-boolean-style">
     <xsl:comment>boolean style</xsl:comment>
     <xsl:value-of select="$newline"/>
-    <style:style style:name="boolean_style" style:family="text">
+    <style:style style:name="boolean_style" style:family="text" style:parent-style-name="default_text_style">
       <style:text-properties fo:color="#00ff00" style:font-name="Arial1"
         style:font-name-complex="Arial1"/>
     </style:style>

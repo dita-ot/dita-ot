@@ -189,17 +189,14 @@
       <xsl:variable name="depth" select="count(ancestor-or-self::*[contains(@class, ' map/topicref ')])"/>
       <!-- navtitle value -->
       <xsl:variable name="navtitle">
-        <xsl:value-of select="child::*[contains(@class, ' map/topicmeta ')]/child::*[contains(@class, ' topic/navtitle ')]"/>      
+        <!-- 
+        <xsl:value-of select="child::*[contains(@class, ' map/topicmeta ')]/child::*[contains(@class, ' topic/navtitle ')]"/>
+        -->
+        <xsl:apply-templates select="child::*[contains(@class, ' map/topicmeta ')]/child::*[contains(@class, ' topic/navtitle ')]" 
+          mode="dita-ot:text-only"/>
       </xsl:variable>
       <!-- href value -->
       <xsl:variable name="href" select="@href"/>
-      <!-- 
-        <text:p text:style-name="P10">
-          <text:a xlink:type="simple" xlink:href="#Heading_10">Heading 10<text:tab/>
-          <text:bookmark-ref text:reference-format="page" text:ref-name="Heading_10"/>
-          </text:a>
-        </text:p>
-      -->
       <xsl:variable name="level">
         <xsl:choose>
           <xsl:when test="$depth &gt; 10">
@@ -235,21 +232,17 @@
   
   <xsl:template match="*[contains(@class, ' topic/topic ')]" mode="toc">
     <xsl:if test="*[contains(@class, ' topic/title ')]">
-      <!-- topicref depth -->
+      <!-- topic depth -->
       <xsl:variable name="depth" select="count(ancestor-or-self::*[contains(@class, ' topic/topic ')])"/>
       <!-- title value -->
       <xsl:variable name="title">
-        <xsl:value-of select="child::*[contains(@class, ' topic/title ')]"/>      
+        <!-- 
+        <xsl:value-of select="child::*[contains(@class, ' topic/title ')]"/>
+        -->
+        <xsl:apply-templates select="child::*[contains(@class, ' topic/title ')]" mode="dita-ot:text-only"/>
       </xsl:variable>
       <!-- href value -->
       <xsl:variable name="href" select="concat('#', @id)"/>
-      <!-- 
-        <text:p text:style-name="P10">
-          <text:a xlink:type="simple" xlink:href="#Heading_10">Heading 10<text:tab/>
-          <text:bookmark-ref text:reference-format="page" text:ref-name="Heading_10"/>
-          </text:a>
-        </text:p>
-      -->
       <xsl:variable name="level">
         <xsl:choose>
           <xsl:when test="$depth &gt; 10">

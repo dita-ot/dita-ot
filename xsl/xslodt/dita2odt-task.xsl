@@ -950,7 +950,13 @@
   <xsl:template match="*[contains(@class, ' task/cmd ')]">
     <xsl:element name="text:p">
       <xsl:attribute name="text:style-name">indent_paragraph_style</xsl:attribute>
-      <xsl:apply-templates/>
+      <xsl:element name="text:span">
+        <!-- start add rev flagging styles -->
+        <xsl:apply-templates select="." mode="start-add-odt-revflags"/>
+        <xsl:apply-templates/>
+        <!-- end add rev flagging styles -->
+        <xsl:apply-templates select="." mode="end-add-odt-revflags"/>
+      </xsl:element>
     </xsl:element>
   </xsl:template>
 
@@ -960,13 +966,13 @@
     <xsl:element name="text:p">
       <xsl:attribute name="text:style-name">indent_paragraph_style</xsl:attribute>
       <xsl:element name="text:span">
-        <!-- start add flagging styles -->
-        <xsl:apply-templates select="." mode="start-add-odt-flags"/>
+        <!-- start add rev flagging styles -->
+        <xsl:apply-templates select="." mode="start-add-odt-revflags"/>
         
         <xsl:apply-templates/>
         
-        <!-- end add flagging styles -->
-        <xsl:apply-templates select="." mode="end-add-odt-flags"/>
+        <!-- end add rev flagging styles -->
+        <xsl:apply-templates select="." mode="end-add-odt-revflags"/>
       </xsl:element>
     </xsl:element>
   </xsl:template>
@@ -976,13 +982,13 @@
     <xsl:element name="text:p">
       <xsl:attribute name="text:style-name">indent_paragraph_style</xsl:attribute>
       <xsl:element name="text:span">
-        <!-- start add flagging styles -->
-        <xsl:apply-templates select="." mode="start-add-odt-flags"/>
+        <!-- start add rev flagging styles -->
+        <xsl:apply-templates select="." mode="start-add-odt-revflags"/>
         
         <xsl:apply-templates/>
         
-        <!-- end add flagging styles -->
-        <xsl:apply-templates select="." mode="end-add-odt-flags"/>
+        <!-- end add rev flagging styles -->
+        <xsl:apply-templates select="." mode="end-add-odt-revflags"/>
       </xsl:element>
     </xsl:element>
   </xsl:template>
@@ -1011,13 +1017,13 @@
     <xsl:element name="text:p">
       <xsl:attribute name="text:style-name">indent_paragraph_style</xsl:attribute>
       <xsl:element name="text:span">
-        <!-- start add flagging styles -->
-        <xsl:apply-templates select="." mode="start-add-odt-flags"/>
+        <!-- start add rev flagging styles -->
+        <xsl:apply-templates select="." mode="start-add-odt-revflags"/>
         
         <xsl:apply-templates/>
         
-        <!-- end add flagging styles -->
-        <xsl:apply-templates select="." mode="end-add-odt-flags"/>
+        <!-- end add rev flagging styles -->
+        <xsl:apply-templates select="." mode="end-add-odt-revflags"/>
       </xsl:element>
     </xsl:element>
   </xsl:template>

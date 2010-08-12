@@ -15,7 +15,7 @@
   </xsl:template>
 
   <xsl:template match="text()" mode="dita-ot:text-only">
-    <xsl:value-of select="."/>
+    <xsl:value-of select="concat(., ' ')"/>
   </xsl:template>
 
   <xsl:template match="processing-instruction()" mode="dita-ot:text-only"/>
