@@ -43,15 +43,6 @@
 
 <xsl:template match="*[contains(@class,' topic/image ')]">
 <xsl:if test="@href and not(@href='')">
-  
-    <!-- flagging styles -->
-    <xsl:variable name="flagStyleName">
-      <xsl:call-template name="getFlagStyleName"/>
-    </xsl:variable>
-  
-    <xsl:variable name="flagrules">
-      <xsl:call-template name="getrules"/>
-    </xsl:variable>
     
     <!-- image meta data -->
     <xsl:variable name="type">
@@ -151,11 +142,8 @@
       parent::*[contains(@class, ' topic/li ')]">
       <xsl:element name="text:p">
         <xsl:element name="text:span">
-          <!-- add flagging styles -->
-          <xsl:call-template name="start_flagging">
-            <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
-            <xsl:with-param name="flagrules" select="$flagrules"/>
-          </xsl:call-template>
+          <!-- start add flagging styles -->
+          <xsl:apply-templates select="." mode="start-add-odt-flags"/>
           
           <xsl:call-template name="draw_image">
             <xsl:with-param name="height" select="$height"/>
@@ -163,10 +151,8 @@
             <xsl:with-param name="width" select="$width"/>
           </xsl:call-template>
           
-          <xsl:call-template name="end_flagging">
-            <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
-            <xsl:with-param name="flagrules" select="$flagrules"/>
-          </xsl:call-template>
+          <!-- end add flagging styles -->
+          <xsl:apply-templates select="." mode="end-add-odt-flags"/>
         </xsl:element>
       </xsl:element>
     </xsl:when>
@@ -175,11 +161,8 @@
       <!-- create p tag -->
       <xsl:element name="text:p">
         <xsl:element name="text:span">
-          <!-- add flagging styles -->
-          <xsl:call-template name="start_flagging">
-            <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
-            <xsl:with-param name="flagrules" select="$flagrules"/>
-          </xsl:call-template>
+          <!-- start add flagging styles -->
+          <xsl:apply-templates select="." mode="start-add-odt-flags"/>
           
           <xsl:call-template name="draw_image">
             <xsl:with-param name="height" select="$height"/>
@@ -187,10 +170,8 @@
             <xsl:with-param name="width" select="$width"/>
           </xsl:call-template>
           
-          <xsl:call-template name="end_flagging">
-            <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
-            <xsl:with-param name="flagrules" select="$flagrules"/>
-          </xsl:call-template>
+          <!-- end add flagging styles -->
+          <xsl:apply-templates select="." mode="end-add-odt-flags"/>
         </xsl:element>
       </xsl:element>
     </xsl:when>
@@ -198,11 +179,8 @@
     <xsl:when test="parent::*[contains(@class, ' topic/stentry ')]">
       <xsl:element name="text:p">
         <xsl:element name="text:span">
-          <!-- add flagging styles -->
-          <xsl:call-template name="start_flagging">
-            <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
-            <xsl:with-param name="flagrules" select="$flagrules"/>
-          </xsl:call-template>
+          <!-- start add flagging styles -->
+          <xsl:apply-templates select="." mode="start-add-odt-flags"/>
           
           <xsl:call-template name="draw_image">
             <xsl:with-param name="height" select="$height"/>
@@ -210,21 +188,16 @@
             <xsl:with-param name="width" select="$width"/>
           </xsl:call-template>
           
-          <xsl:call-template name="end_flagging">
-            <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
-            <xsl:with-param name="flagrules" select="$flagrules"/>
-          </xsl:call-template>
+          <!-- end add flagging styles -->
+          <xsl:apply-templates select="." mode="end-add-odt-flags"/>
         </xsl:element>
       </xsl:element>
     </xsl:when>
     <!-- nested by other tags -->
     <xsl:otherwise>
       <xsl:element name="text:span">
-        <!-- add flagging styles -->
-        <xsl:call-template name="start_flagging">
-          <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
-          <xsl:with-param name="flagrules" select="$flagrules"/>
-        </xsl:call-template>
+        <!-- start add flagging styles -->
+        <xsl:apply-templates select="." mode="start-add-odt-flags"/>
         
         <xsl:call-template name="draw_image">
           <xsl:with-param name="height" select="$height"/>
@@ -232,10 +205,8 @@
           <xsl:with-param name="width" select="$width"/>
         </xsl:call-template>
         
-        <xsl:call-template name="end_flagging">
-          <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
-          <xsl:with-param name="flagrules" select="$flagrules"/>
-        </xsl:call-template>
+        <!-- end add flagging styles -->
+        <xsl:apply-templates select="." mode="end-add-odt-flags"/>
       </xsl:element>
     </xsl:otherwise>
   </xsl:choose>

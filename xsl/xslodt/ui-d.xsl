@@ -31,14 +31,6 @@
 
 <!-- Screen -->
 <xsl:template match="*[contains(@class,' ui-d/screen ')]">
- <!-- get flagging style name. -->
- <xsl:variable name="flagStyleName">
-  <xsl:call-template name="getFlagStyleName"/>
- </xsl:variable>
- 
- <xsl:variable name="flagrules">
-  <xsl:call-template name="getrules"/>
- </xsl:variable>
  
  
  <xsl:choose>
@@ -48,18 +40,11 @@
    <xsl:element name="text:p">
     <xsl:attribute name="text:style-name">Code_Style_Paragraph</xsl:attribute>
     <xsl:element name="text:span">
-     <xsl:call-template name="start_flagging">
-      <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-     </xsl:call-template>
-    
+     <!-- start add flagging styles -->
+     <xsl:apply-templates select="." mode="start-add-odt-flags"/>
      <xsl:apply-templates/>
-    
-     <xsl:call-template name="end_flagging">
-      <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-     </xsl:call-template>
-    
+     <!-- end add flagging styles -->
+     <xsl:apply-templates select="." mode="end-add-odt-flags"/>
     </xsl:element>
    </xsl:element>
   </xsl:when>
@@ -80,36 +65,22 @@
        <xsl:element name="text:span">
         <xsl:attribute name="text:style-name">Code_Text</xsl:attribute>
         <xsl:element name="text:span">
-         <xsl:call-template name="start_flagging">
-          <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
-          <xsl:with-param name="flagrules" select="$flagrules"/>
-         </xsl:call-template>
-         
+         <!-- start add flagging styles -->
+         <xsl:apply-templates select="." mode="start-add-odt-flags"/>
          <xsl:apply-templates/>
-         
-         <xsl:call-template name="end_flagging">
-          <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
-          <xsl:with-param name="flagrules" select="$flagrules"/>
-         </xsl:call-template>
-         
+         <!-- end add flagging styles -->
+         <xsl:apply-templates select="." mode="end-add-odt-flags"/>
         </xsl:element>
        </xsl:element>
       </xsl:element>
      </xsl:when>
      <xsl:otherwise>
       <xsl:element name="text:span">
-       <xsl:call-template name="start_flagging">
-        <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
-        <xsl:with-param name="flagrules" select="$flagrules"/>
-       </xsl:call-template>
-       
+       <!-- start add flagging styles -->
+       <xsl:apply-templates select="." mode="start-add-odt-flags"/>
        <xsl:apply-templates/>
-       
-       <xsl:call-template name="end_flagging">
-        <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
-        <xsl:with-param name="flagrules" select="$flagrules"/>
-       </xsl:call-template>
-       
+       <!-- end add flagging styles -->
+       <xsl:apply-templates select="." mode="end-add-odt-flags"/>
       </xsl:element>
      </xsl:otherwise>
     </xsl:choose>
@@ -125,35 +96,21 @@
       <xsl:element name="text:span">
        <xsl:attribute name="text:style-name">Code_Text</xsl:attribute>
        <xsl:element name="text:span">
-        <xsl:call-template name="start_flagging">
-         <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
-         <xsl:with-param name="flagrules" select="$flagrules"/>
-        </xsl:call-template>
-        
+        <!-- start add flagging styles -->
+        <xsl:apply-templates select="." mode="start-add-odt-flags"/>
         <xsl:apply-templates/>
-        
-        <xsl:call-template name="end_flagging">
-         <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
-         <xsl:with-param name="flagrules" select="$flagrules"/>
-        </xsl:call-template>
-        
+        <!-- end add flagging styles -->
+        <xsl:apply-templates select="." mode="end-add-odt-flags"/>
        </xsl:element>
       </xsl:element>
      </xsl:when>
      <xsl:otherwise>
       <xsl:element name="text:span">
-       <xsl:call-template name="start_flagging">
-        <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
-        <xsl:with-param name="flagrules" select="$flagrules"/>
-       </xsl:call-template>
-       
+       <!-- start add flagging styles -->
+       <xsl:apply-templates select="." mode="start-add-odt-flags"/>
        <xsl:apply-templates/>
-       
-       <xsl:call-template name="end_flagging">
-        <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
-        <xsl:with-param name="flagrules" select="$flagrules"/>
-       </xsl:call-template>
-       
+       <!-- end add flagging styles -->
+       <xsl:apply-templates select="." mode="end-add-odt-flags"/>
       </xsl:element>
      </xsl:otherwise>
     </xsl:choose>
@@ -163,46 +120,24 @@
   <xsl:when test="parent::*[contains(@class, ' topic/linkinfo ')]">
    <xsl:element name="text:span">
     <xsl:element name="text:span">
-     <xsl:call-template name="start_flagging">
-      <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-     </xsl:call-template>
-     
+     <!-- start add flagging styles -->
+     <xsl:apply-templates select="." mode="start-add-odt-flags"/>
      <xsl:apply-templates/>
-     
-     <xsl:call-template name="end_flagging">
-      <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-     </xsl:call-template>
-     
+     <!-- end add flagging styles -->
+     <xsl:apply-templates select="." mode="end-add-odt-flags"/>
     </xsl:element>
    </xsl:element>
   </xsl:when>
-  
-  <!-- 
-  <xsl:when test="parent::*[contains(@class, ' topic/itemgroup ')]">
-   <xsl:element name="text:p">
-    <xsl:apply-templates/>
-   </xsl:element>
-  </xsl:when>
-  -->
   <!-- other tags -->
   <xsl:otherwise>
    <xsl:element name="text:span">
      <xsl:attribute name="text:style-name">Code_Text</xsl:attribute>
      <xsl:element name="text:span">
-      <xsl:call-template name="start_flagging">
-       <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
-       <xsl:with-param name="flagrules" select="$flagrules"/>
-      </xsl:call-template>
-      
+      <!-- start add flagging styles -->
+      <xsl:apply-templates select="." mode="start-add-odt-flags"/>
       <xsl:apply-templates/>
-      
-      <xsl:call-template name="end_flagging">
-       <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
-       <xsl:with-param name="flagrules" select="$flagrules"/>
-      </xsl:call-template>
-      
+      <!-- end add flagging styles -->
+      <xsl:apply-templates select="." mode="end-add-odt-flags"/>
      </xsl:element>
    </xsl:element>
    <xsl:element name="text:line-break"/>
@@ -388,17 +323,20 @@
  
 </xsl:template>
 
-<xsl:template match="*[contains(@class,' ui-d/wintitle ')]">
- <xsl:element name="text:span">
-  <xsl:attribute name="text:style-name">bold</xsl:attribute>
-  <xsl:apply-templates/>
- </xsl:element>
-</xsl:template>
-
 <xsl:template match="*[contains(@class,' ui-d/shortcut ')]" name="topic.ui-d.shortcut">
+ 
+ 
  <xsl:element name="text:span">
   <xsl:attribute name="text:style-name">underline</xsl:attribute>
-  <xsl:apply-templates/>
+  <xsl:element name="text:span">
+    <!-- start add rev flagging styles -->
+    <xsl:apply-templates select="." mode="start-add-odt-revflags"/>
+    
+    <xsl:apply-templates/>
+   
+    <!-- end add rev flagging styles -->
+    <xsl:apply-templates select="." mode="end-add-odt-revflags"/>
+  </xsl:element>
  </xsl:element>
 </xsl:template>
 

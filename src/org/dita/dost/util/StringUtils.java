@@ -461,4 +461,32 @@ public class StringUtils {
 		}
 		//added by William on 2009-11-26 for bug:1628937 end
 		
+		/**
+		 * Get minimal value.
+		 */
+		public static String getMax(String fn_depth, String list_depth, String dlist_depth, String table_depth, String stable_depth){
+			
+			int fnDepth = Integer.parseInt(fn_depth);
+			int listDepth = Integer.parseInt(list_depth);
+			int dlistDepth = Integer.parseInt(dlist_depth);
+			int tableDepth = Integer.parseInt(table_depth);
+			int stableDepth = Integer.parseInt(stable_depth);
+			
+			int max = fnDepth;
+			if(listDepth > max){
+				max = listDepth;
+			}
+			if(dlistDepth > max){
+				max = dlistDepth;
+			}
+			if(tableDepth > max){
+				max = tableDepth;
+			}
+			if(stableDepth > max){
+				max = stableDepth;
+			}
+			
+			return String.valueOf(max);
+			
+		}
 }

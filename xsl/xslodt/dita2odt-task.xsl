@@ -69,35 +69,19 @@
   </xsl:template>
 
   <xsl:template match="*[contains(@class,' task/prereq ')]" mode="prereq-fmt">
-    <!-- get flagging style name. -->
-    <xsl:variable name="flagStyleName">
-      <xsl:call-template name="getFlagStyleName"/>
-    </xsl:variable>
-    
-    <xsl:variable name="flagrules">
-      <xsl:call-template name="getrules"/>
-    </xsl:variable>
     
     <!-- Title is not allowed now, but if we add it, make sure it is processed as in section -->
     <xsl:element name="text:p">
       <xsl:element name="text:span">
-        <xsl:if test="@rev and not($FILTERFILE='') and ($DRAFT='yes') ">
-          <xsl:call-template name="start-mark-rev">
-            <xsl:with-param name="revvalue" select="@rev"/>
-            <xsl:with-param name="flagrules" select="$flagrules"/> 
-          </xsl:call-template>
-        </xsl:if>
+        <!-- start add rev flagging styles -->
+        <xsl:apply-templates select="." mode="start-add-odt-revflags"/>
         
         <xsl:apply-templates
           select="*[not(contains(@class,' topic/title '))] | text() | comment() | processing-instruction()"
         />
         
-        <xsl:if test="@rev and not($FILTERFILE='') and ($DRAFT='yes')">
-          <xsl:call-template name="end-mark-rev">
-            <xsl:with-param name="revvalue" select="@rev"/>
-            <xsl:with-param name="flagrules" select="$flagrules"/> 
-          </xsl:call-template>
-        </xsl:if>
+        <!-- end add rev flagging styles -->
+        <xsl:apply-templates select="." mode="end-add-odt-revflags"/>
       </xsl:element>
     </xsl:element>
     <!-- Insert pre-req links - after prereq section -->
@@ -971,89 +955,50 @@
   </xsl:template>
 
   <xsl:template match="*[contains(@class, ' task/stepresult ')]">
-    <!-- get flagging style name. -->
-    <xsl:variable name="flagStyleName">
-      <xsl:call-template name="getFlagStyleName"/>
-    </xsl:variable>
-    <xsl:variable name="flagrules">
-      <xsl:call-template name="getrules"/>
-    </xsl:variable>
+    
     
     <xsl:element name="text:p">
       <xsl:attribute name="text:style-name">indent_paragraph_style</xsl:attribute>
       <xsl:element name="text:span">
-        <xsl:call-template name="start_flagging">
-          <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
-          <xsl:with-param name="flagrules" select="$flagrules"/>
-        </xsl:call-template>
+        <!-- start add flagging styles -->
+        <xsl:apply-templates select="." mode="start-add-odt-flags"/>
         
         <xsl:apply-templates/>
         
-        <xsl:call-template name="end_flagging">
-          <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
-          <xsl:with-param name="flagrules" select="$flagrules"/>
-        </xsl:call-template>
+        <!-- end add flagging styles -->
+        <xsl:apply-templates select="." mode="end-add-odt-flags"/>
       </xsl:element>
     </xsl:element>
   </xsl:template>
   
   <xsl:template match="*[contains(@class,' task/info ')]" name="topic.task.info">
-    <!-- get flagging style name. -->
-    <xsl:variable name="flagStyleName">
-      <xsl:call-template name="getFlagStyleName"/>
-    </xsl:variable>
-    
-    <xsl:variable name="flagrules">
-      <xsl:call-template name="getrules"/>
-    </xsl:variable>
     
     <xsl:element name="text:p">
       <xsl:attribute name="text:style-name">indent_paragraph_style</xsl:attribute>
       <xsl:element name="text:span">
-        <xsl:call-template name="start_flagging">
-          <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
-          <xsl:with-param name="flagrules" select="$flagrules"/>
-        </xsl:call-template>
+        <!-- start add flagging styles -->
+        <xsl:apply-templates select="." mode="start-add-odt-flags"/>
         
         <xsl:apply-templates/>
         
-        <xsl:call-template name="end_flagging">
-          <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
-          <xsl:with-param name="flagrules" select="$flagrules"/>
-        </xsl:call-template>
+        <!-- end add flagging styles -->
+        <xsl:apply-templates select="." mode="end-add-odt-flags"/>
       </xsl:element>
     </xsl:element>
   </xsl:template>
   
   <xsl:template match="*[contains(@class,' task/tutorialinfo ')]" name="topic.task.tutorialinfo">
     
-    <!-- get flagging style name. -->
-    <xsl:variable name="flagStyleName">
-      <xsl:call-template name="getFlagStyleName"/>
-    </xsl:variable>
-    
-    <xsl:variable name="flagrules">
-      <xsl:call-template name="getrules"/>
-    </xsl:variable>
-    
     <xsl:element name="text:p">
       <xsl:attribute name="text:style-name">indent_paragraph_style</xsl:attribute>
        <xsl:element name="text:span">
-         <xsl:if test="@rev and not($FILTERFILE='') and ($DRAFT='yes') ">
-           <xsl:call-template name="start-mark-rev">
-             <xsl:with-param name="revvalue" select="@rev"/>
-             <xsl:with-param name="flagrules" select="$flagrules"/> 
-           </xsl:call-template>
-         </xsl:if>
+         <!-- start add rev flagging styles -->
+         <xsl:apply-templates select="." mode="start-add-odt-revflags"/>
          
           <xsl:apply-templates/>
          
-         <xsl:if test="@rev and not($FILTERFILE='') and ($DRAFT='yes')">
-           <xsl:call-template name="end-mark-rev">
-             <xsl:with-param name="revvalue" select="@rev"/>
-             <xsl:with-param name="flagrules" select="$flagrules"/> 
-           </xsl:call-template>
-         </xsl:if>
+         <!-- end add rev flagging styles -->
+         <xsl:apply-templates select="." mode="end-add-odt-revflags"/>
        </xsl:element>
     </xsl:element>
   </xsl:template>
@@ -1062,28 +1007,17 @@
   
   <!-- these para-like items need a leading space -->
   <xsl:template match="*[contains(@class,' task/stepxmp ')]" name="topic.task.stepxmp">
-    <!-- get flagging style name. -->
-    <xsl:variable name="flagStyleName">
-      <xsl:call-template name="getFlagStyleName"/>
-    </xsl:variable>
-    <xsl:variable name="flagrules">
-      <xsl:call-template name="getrules"/>
-    </xsl:variable>
     
     <xsl:element name="text:p">
       <xsl:attribute name="text:style-name">indent_paragraph_style</xsl:attribute>
       <xsl:element name="text:span">
-        <xsl:call-template name="start_flagging">
-          <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
-          <xsl:with-param name="flagrules" select="$flagrules"/>
-        </xsl:call-template>
+        <!-- start add flagging styles -->
+        <xsl:apply-templates select="." mode="start-add-odt-flags"/>
         
         <xsl:apply-templates/>
         
-        <xsl:call-template name="end_flagging">
-          <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
-          <xsl:with-param name="flagrules" select="$flagrules"/>
-        </xsl:call-template>
+        <!-- end add flagging styles -->
+        <xsl:apply-templates select="." mode="end-add-odt-flags"/>
       </xsl:element>
     </xsl:element>
   </xsl:template>
@@ -1126,15 +1060,6 @@
   
   <xsl:template match="*[contains(@class,' task/context ')]">
     
-    <!-- get flagging style name. -->
-    <xsl:variable name="flagStyleName">
-      <xsl:call-template name="getFlagStyleName"/>
-    </xsl:variable>
-    
-    <xsl:variable name="flagrules">
-      <xsl:call-template name="getrules"/>
-    </xsl:variable>
-    
     <xsl:apply-templates select="." mode="generate-task-label">
       <xsl:with-param name="use-label">
         <xsl:call-template name="getStringODT">
@@ -1146,31 +1071,19 @@
     <xsl:element name="text:p">
       <xsl:attribute name="text:style-name">indent_paragraph_style</xsl:attribute>
       <xsl:element name="text:span">
-        <xsl:call-template name="start_flagging">
-          <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
-          <xsl:with-param name="flagrules" select="$flagrules"/>
-        </xsl:call-template>
+        <!-- start add flagging styles -->
+        <xsl:apply-templates select="." mode="start-add-odt-flags"/>
         
         <xsl:apply-templates/>
         
-        <xsl:call-template name="end_flagging">
-          <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
-          <xsl:with-param name="flagrules" select="$flagrules"/>
-        </xsl:call-template>	
+        <!-- end add flagging styles -->
+        <xsl:apply-templates select="." mode="end-add-odt-flags"/>	
       </xsl:element>
     </xsl:element>
   </xsl:template>
   
   <xsl:template match="*[contains(@class,' task/result ')]">
     
-    <!-- get flagging style name. -->
-    <xsl:variable name="flagStyleName">
-      <xsl:call-template name="getFlagStyleName"/>
-    </xsl:variable>
-    
-    <xsl:variable name="flagrules">
-      <xsl:call-template name="getrules"/>
-    </xsl:variable>
     
     <xsl:apply-templates select="." mode="generate-task-label">
       <xsl:with-param name="use-label">
@@ -1182,31 +1095,19 @@
     
     <xsl:element name="text:p">
       <xsl:element name="text:span">
-        <xsl:call-template name="start_flagging">
-          <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
-          <xsl:with-param name="flagrules" select="$flagrules"/>
-        </xsl:call-template>
+        <!-- start add flagging styles -->
+        <xsl:apply-templates select="." mode="start-add-odt-flags"/>
         
         <xsl:apply-templates/>
         
-        <xsl:call-template name="end_flagging">
-          <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
-          <xsl:with-param name="flagrules" select="$flagrules"/>
-        </xsl:call-template>	
+        <!-- end add flagging styles -->
+        <xsl:apply-templates select="." mode="end-add-odt-flags"/>	
       </xsl:element>
     </xsl:element>
   </xsl:template>
   
   <xsl:template match="*[contains(@class,' task/postreq ')]">
     
-    <!-- get flagging style name. -->
-    <xsl:variable name="flagStyleName">
-      <xsl:call-template name="getFlagStyleName"/>
-    </xsl:variable>
-    
-    <xsl:variable name="flagrules">
-      <xsl:call-template name="getrules"/>
-    </xsl:variable>
     
     <xsl:apply-templates select="." mode="generate-task-label">
       <xsl:with-param name="use-label">
@@ -1218,17 +1119,13 @@
     
     <xsl:element name="text:p">
       <xsl:element name="text:span">
-      <xsl:call-template name="start_flagging">
-        <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
-        <xsl:with-param name="flagrules" select="$flagrules"/>
-      </xsl:call-template>
+        <!-- start add flagging styles -->
+        <xsl:apply-templates select="." mode="start-add-odt-flags"/>
       
       <xsl:apply-templates/>
       
-      <xsl:call-template name="end_flagging">
-        <xsl:with-param name="flagStyleName" select="$flagStyleName"/>
-        <xsl:with-param name="flagrules" select="$flagrules"/>
-      </xsl:call-template>	
+      <!-- end add flagging styles -->
+      <xsl:apply-templates select="." mode="end-add-odt-flags"/>	
         
       </xsl:element>
     </xsl:element>

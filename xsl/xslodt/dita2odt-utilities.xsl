@@ -26,10 +26,11 @@
   xmlns:anim="urn:oasis:names:tc:opendocument:xmlns:animation:1.0"
   xmlns:smil="urn:oasis:names:tc:opendocument:xmlns:smil-compatible:1.0"
   xmlns:prodtools="http://www.ibm.com/xmlns/prodtools"
-  version="1.0" 
+  version="1.0"
+  xmlns:ditamsg="http://dita-ot.sourceforge.net/ns/200704/ditamsg"
   xmlns:stringUtils="org.dita.dost.util.StringUtils" 
   xmlns:styleUtils="org.dita.dost.util.StyleUtils" 
-  exclude-result-prefixes="stringUtils styleUtils">
+  exclude-result-prefixes="stringUtils styleUtils ditamsg">
     <xsl:template name="get-ascii">
       <xsl:param name="txt"></xsl:param>
       <xsl:variable name="ancestorlang">
@@ -231,14 +232,22 @@
                             /ancestor::*[contains(@class, ' topic/required-cleanup ')])) * 2"/>
     </xsl:variable>
     
+    <xsl:variable name="dd_count">
+      <xsl:value-of select="(count(ancestor::*[contains(@class, ' topic/dd ')]) - 
+                            count(ancestor::*[contains(@class, $list_class)][1]
+                            /ancestor::*[contains(@class, ' topic/dd ')])) * 2"/>
+    </xsl:variable>
+    
+    
+    
     <xsl:variable name="total_count" select="$fig_count + $lq_count + 
-      $note_count + $itemgroup_count + $p_count + $draft-comment_count + $required-cleanup_count"/>
+      $note_count + $itemgroup_count + $p_count + $draft-comment_count + $required-cleanup_count + $dd_count"/>
     
     
     <xsl:choose>
-      <!-- dlist has dt & dd-->
+      <!-- remove the first one rendered by text:p-->
       <xsl:when test="$list_class = ' topic/dlentry '">
-        <xsl:value-of select="$total_count"/>
+        <xsl:value-of select="$total_count - 1"/>
       </xsl:when>
       <xsl:otherwise>
         <!-- remove the first one rendered by text:p -->
@@ -288,11 +297,11 @@
     </xsl:variable>
     
     <xsl:variable name="dd_count">
-      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/dd ')])"/>
+      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/dd ')]) * 2"/>
     </xsl:variable>
     
     <xsl:variable name="fn_count">
-      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/fn ')])"/>
+      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/fn ')]) * 2"/>
     </xsl:variable>
     
     <xsl:variable name="abstract_count">
@@ -390,8 +399,9 @@
           <xsl:text disable-output-escaping="yes">&lt;text:list text:continue-numbering="true" text:style-name="list_style"&gt;</xsl:text>
         </xsl:otherwise>
       </xsl:choose>
-      
+      <!-- render list item -->
       <xsl:text disable-output-escaping="yes">&lt;text:list-item&gt;</xsl:text>
+      
       <xsl:call-template name="create_items_for_list">
         <xsl:with-param name="depth" select="$depth - 1"/>
         <xsl:with-param name="order" select="$order"/>
@@ -425,6 +435,30 @@
       count(ancestor::*[contains(@class, ' topic/li ')][1]
       /ancestor::*[contains(@class, ' topic/dlentry ')])"/>
     
+    <xsl:variable name="fn_depth">
+      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/fn ')][1]/ancestor::*)"/>
+    </xsl:variable>
+    
+    <xsl:variable name="list_depth">
+      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/li ')][1]/ancestor::*)"/>
+    </xsl:variable>
+    
+    <xsl:variable name="dlist_depth">
+      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/dlentry ')][1]/ancestor::*)"/>
+    </xsl:variable>
+    
+    <xsl:variable name="table_depth">
+      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/entry ')][1]/ancestor::*)"/>
+    </xsl:variable>
+    
+    <xsl:variable name="stable_depth">
+      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/stentry ')][1]/ancestor::*)"/>
+    </xsl:variable>
+    
+    <xsl:variable name="max_depth">
+      <xsl:value-of select="stringUtils:getMax($fn_depth, $list_depth, $dlist_depth, $table_depth, $stable_depth)"/>
+    </xsl:variable>
+    
     <!-- if the table is under p(direct child) -->
     <xsl:choose>
       <!-- parent tag is body -->
@@ -433,90 +467,237 @@
       </xsl:when>
       <!-- nested by list -->
       <xsl:when test="ancestor::*[contains(@class, ' topic/li ')] and $dlentry_count_for_list = 0">
-        <!-- caculate list depth -->
-        <xsl:variable name="depth">
-          <xsl:call-template name="calculate_list_depth"/>
-        </xsl:variable>
-        <!-- caculate span tag depth -->
-        <xsl:variable name="span_depth">
-          <xsl:call-template name="calculate_span_depth_for_list"/>
-        </xsl:variable>
-        <!-- break span tags -->
-        <xsl:call-template name="break_span_tags">
-          <xsl:with-param name="depth" select="$span_depth"/>
-          <xsl:with-param name="order" select="'0'"/>
-        </xsl:call-template>
-        <!-- break first p tag if there are span tags -->
-        <xsl:if test="$span_depth &gt;= 0">
-          <xsl:text disable-output-escaping="yes">&lt;/text:p&gt;</xsl:text>
-        </xsl:if>
-        <!-- break list tag -->
-        <xsl:call-template name="create_items_for_list">
-          <xsl:with-param name="depth" select="$depth"/>
-          <xsl:with-param name="order" select="'0'"/>
-        </xsl:call-template>
-        <!-- start render table -->
-        <xsl:call-template name="create_simpletable"/>
-        <!-- start list tag again -->
-        <xsl:call-template name="create_items_for_list">
-          <xsl:with-param name="depth" select="$depth"/>
-          <xsl:with-param name="order" select="'1'"/>
-        </xsl:call-template>
-        <!-- start p tag again if there are span tags-->
-        <xsl:if test="$span_depth &gt;= 0">
-          <xsl:text disable-output-escaping="yes">&lt;text:p&gt;</xsl:text>
-        </xsl:if>
-        <!--  span tags span tags again-->
-        <xsl:call-template name="break_span_tags">
-          <xsl:with-param name="depth" select="$span_depth"/>
-          <xsl:with-param name="order" select="'1'"/>
-        </xsl:call-template>
+        
+        <xsl:choose>
+          <!-- nearest tag is list -->
+          <xsl:when test="$max_depth = $list_depth">
+            <!-- caculate list depth -->
+            <xsl:variable name="depth">
+              <xsl:call-template name="calculate_list_depth"/>
+            </xsl:variable>
+            <!-- caculate span tag depth -->
+            <xsl:variable name="span_depth">
+              <xsl:call-template name="calculate_span_depth_for_list"/>
+            </xsl:variable>
+            <!-- break span tags -->
+            <xsl:call-template name="break_span_tags">
+              <xsl:with-param name="depth" select="$span_depth"/>
+              <xsl:with-param name="order" select="'0'"/>
+            </xsl:call-template>
+            <!-- break first p tag if there are span tags -->
+            <xsl:if test="$span_depth &gt;= 0">
+              <xsl:text disable-output-escaping="yes">&lt;/text:p&gt;</xsl:text>
+            </xsl:if>
+            <!-- break list tag -->
+            <xsl:call-template name="create_items_for_list">
+              <xsl:with-param name="depth" select="$depth"/>
+              <xsl:with-param name="order" select="'0'"/>
+            </xsl:call-template>
+            <!-- start render table -->
+            <xsl:call-template name="create_simpletable"/>
+            <!-- start list tag again -->
+            <xsl:call-template name="create_items_for_list">
+              <xsl:with-param name="depth" select="$depth"/>
+              <xsl:with-param name="order" select="'1'"/>
+            </xsl:call-template>
+            <!-- start p tag again if there are span tags-->
+            <xsl:if test="$span_depth &gt;= 0">
+              <xsl:text disable-output-escaping="yes">&lt;text:p&gt;</xsl:text>
+            </xsl:if>
+            <!--  start render span tags again-->
+            <xsl:call-template name="break_span_tags">
+              <xsl:with-param name="depth" select="$span_depth"/>
+              <xsl:with-param name="order" select="'1'"/>
+            </xsl:call-template>
+          </xsl:when>
+          <!-- nearest tag is fn -->
+          <xsl:when test="$max_depth = $fn_depth">
+            <!-- normal process -->
+            <xsl:variable name="span_depth">
+              <xsl:call-template name="calculate_span_depth"/>
+            </xsl:variable>
+            <!-- break span tags -->
+            <xsl:call-template name="break_span_tags">
+              <xsl:with-param name="depth" select="$span_depth"/>
+              <xsl:with-param name="order" select="'0'"/>
+            </xsl:call-template>
+            <!-- break first p tag if there are span tags -->
+            <xsl:text disable-output-escaping="yes">&lt;/text:p&gt;</xsl:text>
+            <!-- start render table -->
+            <xsl:call-template name="create_simpletable"/>
+            <!-- start p tag again if there are span tags-->
+            <xsl:text disable-output-escaping="yes">&lt;text:p&gt;</xsl:text>
+            <!--  start render span tags again-->
+            <xsl:call-template name="break_span_tags">
+              <xsl:with-param name="depth" select="$span_depth"/>
+              <xsl:with-param name="order" select="'1'"/>
+            </xsl:call-template>
+          </xsl:when>
+          <!-- nearest tag is table -->
+          <xsl:when test="$max_depth = $table_depth">
+            <xsl:variable name="span_depth">
+              <xsl:call-template name="calculate_span_depth_for_table"/>
+            </xsl:variable>
+            <!-- break span tags -->
+            <xsl:call-template name="break_span_tags">
+              <xsl:with-param name="depth" select="$span_depth"/>
+              <xsl:with-param name="order" select="'0'"/>
+            </xsl:call-template>
+            <!-- break first p tag if there are span tags -->
+            <xsl:text disable-output-escaping="yes">&lt;/text:p&gt;</xsl:text>
+            <!-- start render table -->
+            <xsl:call-template name="create_simpletable"/>
+            <!-- start p tag again if there are span tags-->
+            <xsl:text disable-output-escaping="yes">&lt;text:p&gt;</xsl:text>
+            <!--  start render span tags again-->
+            <xsl:call-template name="break_span_tags">
+              <xsl:with-param name="depth" select="$span_depth"/>
+              <xsl:with-param name="order" select="'1'"/>
+            </xsl:call-template>
+          </xsl:when>
+          <!-- nearest tag is simpletable -->
+          <xsl:when test="$max_depth = $stable_depth">
+            <xsl:variable name="span_depth">
+              <xsl:call-template name="calculate_span_depth_for_simpletable"/>
+            </xsl:variable>
+            <!-- break span tags -->
+            <xsl:call-template name="break_span_tags">
+              <xsl:with-param name="depth" select="$span_depth"/>
+              <xsl:with-param name="order" select="'0'"/>
+            </xsl:call-template>
+            <!-- break first p tag if there are span tags -->
+            <xsl:text disable-output-escaping="yes">&lt;/text:p&gt;</xsl:text>
+            <!-- start render table -->
+            <xsl:call-template name="create_simpletable"/>
+            <!-- start p tag again if there are span tags-->
+            <xsl:text disable-output-escaping="yes">&lt;text:p&gt;</xsl:text>
+            <!--  start render span tags again-->
+            <xsl:call-template name="break_span_tags">
+              <xsl:with-param name="depth" select="$span_depth"/>
+              <xsl:with-param name="order" select="'1'"/>
+            </xsl:call-template>
+          </xsl:when>
+        </xsl:choose>
+        
       </xsl:when>
       
       <!-- nested by dlist -->
       <xsl:when test="ancestor::*[contains(@class, ' topic/dlentry ')]">
-        <!-- caculate list depth -->
-        <xsl:variable name="depth">
-          <xsl:call-template name="calculate_list_depth">
-            <xsl:with-param name="list_class" select="' topic/dlentry '"/>
-          </xsl:call-template>
-        </xsl:variable>
-        <!-- caculate span tag depth -->
-        <xsl:variable name="span_depth">
-          <xsl:call-template name="calculate_span_depth_for_list">
-            <xsl:with-param name="list_class" select="' topic/dlentry '"/>
-          </xsl:call-template>
-        </xsl:variable>
-        <!-- break span tags -->
-        <xsl:call-template name="break_span_tags">
-          <xsl:with-param name="depth" select="$span_depth"/>
-          <xsl:with-param name="order" select="'0'"/>
-        </xsl:call-template>
-        <!-- break first p tag if there are span tags -->
-        <xsl:if test="$span_depth &gt;= 0">
-          <xsl:text disable-output-escaping="yes">&lt;/text:p&gt;</xsl:text>
-        </xsl:if>
-        <!-- break list tag -->
-        <xsl:call-template name="create_items_for_list">
-          <xsl:with-param name="depth" select="$depth"/>
-          <xsl:with-param name="order" select="'0'"/>
-        </xsl:call-template>
-        <!-- start render table -->
-        <xsl:call-template name="create_simpletable"/>
-        <!-- start list tag again -->
-        <xsl:call-template name="create_items_for_list">
-          <xsl:with-param name="depth" select="$depth"/>
-          <xsl:with-param name="order" select="'1'"/>
-        </xsl:call-template>
-        <!-- start p tag again if there are span tags-->
-        <xsl:if test="$span_depth &gt;= 0">
-          <xsl:text disable-output-escaping="yes">&lt;text:p&gt;</xsl:text>
-        </xsl:if>
-        <!--  span tags span tags again-->
-        <xsl:call-template name="break_span_tags">
-          <xsl:with-param name="depth" select="$span_depth"/>
-          <xsl:with-param name="order" select="'1'"/>
-        </xsl:call-template>
+        
+        <xsl:choose>
+          <!-- nearest tag is dlist -->
+          <xsl:when test="$max_depth = $dlist_depth">
+            <!-- caculate list depth -->
+            <xsl:variable name="depth">
+              <xsl:call-template name="calculate_list_depth">
+                <xsl:with-param name="list_class" select="' topic/dlentry '"/>
+              </xsl:call-template>
+            </xsl:variable>
+            <!-- caculate span tag depth -->
+            <xsl:variable name="span_depth">
+              <xsl:call-template name="calculate_span_depth_for_list">
+                <xsl:with-param name="list_class" select="' topic/dlentry '"/>
+              </xsl:call-template>
+            </xsl:variable>
+            <!-- break span tags -->
+            <xsl:call-template name="break_span_tags">
+              <xsl:with-param name="depth" select="$span_depth"/>
+              <xsl:with-param name="order" select="'0'"/>
+            </xsl:call-template>
+            <!-- break first p tag if there are span tags -->
+            <xsl:if test="$span_depth &gt;= 0">
+              <xsl:text disable-output-escaping="yes">&lt;/text:p&gt;</xsl:text>
+            </xsl:if>
+            <!-- break list tag -->
+            <xsl:call-template name="create_items_for_list">
+              <xsl:with-param name="depth" select="$depth"/>
+              <xsl:with-param name="order" select="'0'"/>
+            </xsl:call-template>
+            <!-- start render table -->
+            <xsl:call-template name="create_simpletable"/>
+            <!-- start list tag again -->
+            <xsl:call-template name="create_items_for_list">
+              <xsl:with-param name="depth" select="$depth"/>
+              <xsl:with-param name="order" select="'1'"/>
+            </xsl:call-template>
+            <!-- start p tag again if there are span tags-->
+            <xsl:if test="$span_depth &gt;= 0">
+              <xsl:text disable-output-escaping="yes">&lt;text:p&gt;</xsl:text>
+            </xsl:if>
+            <!--  start render span tags again-->
+            <xsl:call-template name="break_span_tags">
+              <xsl:with-param name="depth" select="$span_depth"/>
+              <xsl:with-param name="order" select="'1'"/>
+            </xsl:call-template>
+          </xsl:when>
+          <!-- nearest tag is fn -->
+          <xsl:when test="$max_depth = $fn_depth">
+            <!-- normal process -->
+            <xsl:variable name="span_depth">
+              <xsl:call-template name="calculate_span_depth"/>
+            </xsl:variable>
+            <!-- break span tags -->
+            <xsl:call-template name="break_span_tags">
+              <xsl:with-param name="depth" select="$span_depth"/>
+              <xsl:with-param name="order" select="'0'"/>
+            </xsl:call-template>
+            <!-- break first p tag if there are span tags -->
+            <xsl:text disable-output-escaping="yes">&lt;/text:p&gt;</xsl:text>
+            <!-- start render table -->
+            <xsl:call-template name="create_simpletable"/>
+            <!-- start p tag again if there are span tags-->
+            <xsl:text disable-output-escaping="yes">&lt;text:p&gt;</xsl:text>
+            <!--  start render span tags again-->
+            <xsl:call-template name="break_span_tags">
+              <xsl:with-param name="depth" select="$span_depth"/>
+              <xsl:with-param name="order" select="'1'"/>
+            </xsl:call-template>
+          </xsl:when>
+          <!-- nearest tag is simpletable -->
+          <xsl:when test="$max_depth = $stable_depth">
+            <xsl:variable name="span_depth">
+              <xsl:call-template name="calculate_span_depth_for_simpletable"/>
+            </xsl:variable>
+            <!-- break span tags -->
+            <xsl:call-template name="break_span_tags">
+              <xsl:with-param name="depth" select="$span_depth"/>
+              <xsl:with-param name="order" select="'0'"/>
+            </xsl:call-template>
+            <!-- break first p tag if there are span tags -->
+            <xsl:text disable-output-escaping="yes">&lt;/text:p&gt;</xsl:text>
+            <!-- start render table -->
+            <xsl:call-template name="create_simpletable"/>
+            <!-- start p tag again if there are span tags-->
+            <xsl:text disable-output-escaping="yes">&lt;text:p&gt;</xsl:text>
+            <!--  start render span tags again-->
+            <xsl:call-template name="break_span_tags">
+              <xsl:with-param name="depth" select="$span_depth"/>
+              <xsl:with-param name="order" select="'1'"/>
+            </xsl:call-template>
+          </xsl:when>
+          <!-- nearest tag is table -->
+          <xsl:when test="$max_depth = $table_depth">
+            <xsl:variable name="span_depth">
+              <xsl:call-template name="calculate_span_depth_for_table"/>
+            </xsl:variable>
+            <!-- break span tags -->
+            <xsl:call-template name="break_span_tags">
+              <xsl:with-param name="depth" select="$span_depth"/>
+              <xsl:with-param name="order" select="'0'"/>
+            </xsl:call-template>
+            <!-- break first p tag if there are span tags -->
+            <xsl:text disable-output-escaping="yes">&lt;/text:p&gt;</xsl:text>
+            <!-- start render table -->
+            <xsl:call-template name="create_simpletable"/>
+            <!-- start p tag again if there are span tags-->
+            <xsl:text disable-output-escaping="yes">&lt;text:p&gt;</xsl:text>
+            <!--  start render span tags again-->
+            <xsl:call-template name="break_span_tags">
+              <xsl:with-param name="depth" select="$span_depth"/>
+              <xsl:with-param name="order" select="'1'"/>
+            </xsl:call-template>
+          </xsl:when>
+        </xsl:choose>
       </xsl:when>
       <!-- nested by simpletable -->
       <xsl:when test="ancestor::*[contains(@class, ' topic/simpletable ')]">
@@ -534,7 +715,7 @@
         <xsl:call-template name="create_simpletable"/>
         <!-- start p tag again if there are span tags-->
         <xsl:text disable-output-escaping="yes">&lt;text:p&gt;</xsl:text>
-        <!--  span tags span tags again-->
+        <!--  start render span tags again-->
         <xsl:call-template name="break_span_tags">
           <xsl:with-param name="depth" select="$span_depth"/>
           <xsl:with-param name="order" select="'1'"/>
@@ -556,7 +737,7 @@
         <xsl:call-template name="create_simpletable"/>
         <!-- start p tag again if there are span tags-->
         <xsl:text disable-output-escaping="yes">&lt;text:p&gt;</xsl:text>
-        <!--  span tags span tags again-->
+        <!--  start render span tags again-->
         <xsl:call-template name="break_span_tags">
           <xsl:with-param name="depth" select="$span_depth"/>
           <xsl:with-param name="order" select="'1'"/>
@@ -579,7 +760,7 @@
         <xsl:call-template name="create_simpletable"/>
         <!-- start p tag again if there are span tags-->
         <xsl:text disable-output-escaping="yes">&lt;text:p&gt;</xsl:text>
-        <!--  span tags span tags again-->
+        <!--  start render span tags again-->
         <xsl:call-template name="break_span_tags">
           <xsl:with-param name="depth" select="$span_depth"/>
           <xsl:with-param name="order" select="'1'"/>
@@ -595,6 +776,31 @@
       count(ancestor::*[contains(@class, ' topic/li ')][1]
       /ancestor::*[contains(@class, ' topic/dlentry ')])"/>
     
+    <xsl:variable name="fn_depth">
+      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/fn ')][1]/ancestor::*)"/>
+    </xsl:variable>
+    
+    <xsl:variable name="list_depth">
+      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/li ')][1]/ancestor::*)"/>
+    </xsl:variable>
+    
+    <xsl:variable name="dlist_depth">
+      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/dlentry ')][1]/ancestor::*)"/>
+    </xsl:variable>
+    
+    <xsl:variable name="table_depth">
+      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/entry ')][1]/ancestor::*)"/>
+    </xsl:variable>
+    
+    <xsl:variable name="stable_depth">
+      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/stentry ')][1]/ancestor::*)"/>
+    </xsl:variable>
+    
+    <xsl:variable name="max_depth">
+      <xsl:value-of select="stringUtils:getMax($fn_depth, $list_depth, $dlist_depth, $table_depth, $stable_depth)"/>
+    </xsl:variable>
+    
+    
     <!-- if the table is under p(direct child) -->
     <xsl:choose>
       <!-- parent tag is body -->
@@ -603,92 +809,238 @@
       </xsl:when>
       <!-- nested by list -->
       <xsl:when test="ancestor::*[contains(@class, ' topic/li ')] and $dlentry_count_for_list = 0">
-        <!-- caculate list depth -->
-        <xsl:variable name="depth">
-          <xsl:call-template name="calculate_list_depth"/>
-        </xsl:variable>
-        <!-- caculate span tag depth -->
-        <xsl:variable name="span_depth">
-          <xsl:call-template name="calculate_span_depth_for_list"/>
-        </xsl:variable>
-        <!-- break span tags -->
-        <xsl:call-template name="break_span_tags">
-          <xsl:with-param name="depth" select="$span_depth"/>
-          <xsl:with-param name="order" select="'0'"/>
-        </xsl:call-template>
-        <!-- break first p tag if there are span tags -->
-        <xsl:if test="$span_depth &gt;= 0">
-          <xsl:text disable-output-escaping="yes">&lt;/text:p&gt;</xsl:text>
-        </xsl:if>
-        <!-- break list tag -->
-        <xsl:call-template name="create_items_for_list">
-          <xsl:with-param name="depth" select="$depth"/>
-          <xsl:with-param name="order" select="'0'"/>
-        </xsl:call-template>
-        <!-- start render table -->
-        <xsl:apply-templates/>
-        <!-- start list tag again -->
-        <xsl:call-template name="create_items_for_list">
-          <xsl:with-param name="depth" select="$depth"/>
-          <xsl:with-param name="order" select="'1'"/>
-        </xsl:call-template>
-        <!-- start p tag again if there are span tags-->
-        <xsl:if test="$span_depth &gt;= 0">
-          <xsl:text disable-output-escaping="yes">&lt;text:p&gt;</xsl:text>
-        </xsl:if>
-        <!--  span tags span tags again-->
-        <xsl:call-template name="break_span_tags">
-          <xsl:with-param name="depth" select="$span_depth"/>
-          <xsl:with-param name="order" select="'1'"/>
-        </xsl:call-template>
+        <!-- nearest tag is list -->
+        <xsl:choose>
+          <xsl:when test="$max_depth = $list_depth">
+            <!-- caculate list depth -->
+            <xsl:variable name="depth">
+              <xsl:call-template name="calculate_list_depth"/>
+            </xsl:variable>
+            <!-- caculate span tag depth -->
+            <xsl:variable name="span_depth">
+              <xsl:call-template name="calculate_span_depth_for_list"/>
+            </xsl:variable>
+            <!-- break span tags -->
+            <xsl:call-template name="break_span_tags">
+              <xsl:with-param name="depth" select="$span_depth"/>
+              <xsl:with-param name="order" select="'0'"/>
+            </xsl:call-template>
+            <!-- break first p tag if there are span tags -->
+            <xsl:if test="$span_depth &gt;= 0">
+              <xsl:text disable-output-escaping="yes">&lt;/text:p&gt;</xsl:text>
+            </xsl:if>
+            <!-- break list tag -->
+            <xsl:call-template name="create_items_for_list">
+              <xsl:with-param name="depth" select="$depth"/>
+              <xsl:with-param name="order" select="'0'"/>
+            </xsl:call-template>
+            <!-- start render table -->
+            <xsl:apply-templates/>
+            <!-- start list tag again -->
+            <xsl:call-template name="create_items_for_list">
+              <xsl:with-param name="depth" select="$depth"/>
+              <xsl:with-param name="order" select="'1'"/>
+            </xsl:call-template>
+            <!-- start p tag again if there are span tags-->
+            <xsl:if test="$span_depth &gt;= 0">
+              <xsl:text disable-output-escaping="yes">&lt;text:p&gt;</xsl:text>
+            </xsl:if>
+            <!--  start render span tags again-->
+            <xsl:call-template name="break_span_tags">
+              <xsl:with-param name="depth" select="$span_depth"/>
+              <xsl:with-param name="order" select="'1'"/>
+            </xsl:call-template>
+          </xsl:when>
+          <!-- nearest tag is fn -->
+          <xsl:when test="$max_depth = $fn_depth">
+            <!-- normal process -->
+            <xsl:variable name="span_depth">
+              <xsl:call-template name="calculate_span_depth"/>
+            </xsl:variable>
+            <!-- break span tags -->
+            <xsl:call-template name="break_span_tags">
+              <xsl:with-param name="depth" select="$span_depth"/>
+              <xsl:with-param name="order" select="'0'"/>
+            </xsl:call-template>
+            <!-- break first p tag -->
+            <xsl:text disable-output-escaping="yes">&lt;/text:p&gt;</xsl:text>
+            <!-- start render table -->
+            <xsl:apply-templates/>
+            <!-- start first p tag again -->
+            <xsl:text disable-output-escaping="yes">&lt;text:p&gt;</xsl:text>
+            <!--  start render span tags again-->
+            <xsl:call-template name="break_span_tags">
+              <xsl:with-param name="depth" select="$span_depth"/>
+              <xsl:with-param name="order" select="'1'"/>
+            </xsl:call-template>
+          </xsl:when>
+          <!-- nearest tag is table -->
+          <xsl:when test="$max_depth = $table_depth">
+            <xsl:variable name="span_depth">
+              <xsl:call-template name="calculate_span_depth_for_table"/>
+            </xsl:variable>
+            <!-- break span tags -->
+            <xsl:call-template name="break_span_tags">
+              <xsl:with-param name="depth" select="$span_depth"/>
+              <xsl:with-param name="order" select="'0'"/>
+            </xsl:call-template>
+            <!-- break first p tag if there are span tags -->
+            <xsl:text disable-output-escaping="yes">&lt;/text:p&gt;</xsl:text>
+            <!-- start render table -->
+            <xsl:apply-templates/>
+            <!-- start p tag again if there are span tags-->
+            <xsl:text disable-output-escaping="yes">&lt;text:p&gt;</xsl:text>
+            <!--  start render span tags again-->
+            <xsl:call-template name="break_span_tags">
+              <xsl:with-param name="depth" select="$span_depth"/>
+              <xsl:with-param name="order" select="'1'"/>
+            </xsl:call-template>
+          </xsl:when>
+          <!-- nearest tag is simpletable -->
+          <xsl:when test="$max_depth = $stable_depth">
+            <xsl:variable name="span_depth">
+              <xsl:call-template name="calculate_span_depth_for_simpletable"/>
+            </xsl:variable>
+            <!-- break span tags -->
+            <xsl:call-template name="break_span_tags">
+              <xsl:with-param name="depth" select="$span_depth"/>
+              <xsl:with-param name="order" select="'0'"/>
+            </xsl:call-template>
+            <!-- break first p tag if there are span tags -->
+            <xsl:text disable-output-escaping="yes">&lt;/text:p&gt;</xsl:text>
+            <!-- start render table -->
+            <xsl:apply-templates/>
+            <!-- start p tag again if there are span tags-->
+            <xsl:text disable-output-escaping="yes">&lt;text:p&gt;</xsl:text>
+            <!--  start render span tags again-->
+            <xsl:call-template name="break_span_tags">
+              <xsl:with-param name="depth" select="$span_depth"/>
+              <xsl:with-param name="order" select="'1'"/>
+            </xsl:call-template>
+          </xsl:when>
+        </xsl:choose>
       </xsl:when>
       
       <!-- nested by dlist -->
       <xsl:when test="ancestor::*[contains(@class, ' topic/dlentry ')]">
-        <!-- caculate list depth -->
-        <xsl:variable name="depth">
-          <xsl:call-template name="calculate_list_depth">
-            <xsl:with-param name="list_class" select="' topic/dlentry '"/>
-          </xsl:call-template>
-        </xsl:variable>
-        <!-- caculate span tag depth -->
-        <xsl:variable name="span_depth">
-          <xsl:call-template name="calculate_span_depth_for_list">
-            <xsl:with-param name="list_class" select="' topic/dlentry '"/>
-          </xsl:call-template>
-        </xsl:variable>
-        <!-- break span tags -->
-        <xsl:call-template name="break_span_tags">
-          <xsl:with-param name="depth" select="$span_depth"/>
-          <xsl:with-param name="order" select="'0'"/>
-        </xsl:call-template>
-        <!-- break first p tag if there are span tags -->
-        <xsl:if test="$span_depth &gt;= 0">
-          <xsl:text disable-output-escaping="yes">&lt;/text:p&gt;</xsl:text>
-        </xsl:if>
-        <!-- break list tag -->
-        <xsl:call-template name="create_items_for_list">
-          <xsl:with-param name="depth" select="$depth"/>
-          <xsl:with-param name="order" select="'0'"/>
-        </xsl:call-template>
-        <!-- start render table -->
-        <xsl:apply-templates/>
-        <!-- start list tag again -->
-        <xsl:call-template name="create_items_for_list">
-          <xsl:with-param name="depth" select="$depth"/>
-          <xsl:with-param name="order" select="'1'"/>
-        </xsl:call-template>
-        <!-- start p tag again if there are span tags-->
-        <xsl:if test="$span_depth &gt;= 0">
-          <xsl:text disable-output-escaping="yes">&lt;text:p&gt;</xsl:text>
-        </xsl:if>
-        <!--  span tags span tags again-->
-        <xsl:call-template name="break_span_tags">
-          <xsl:with-param name="depth" select="$span_depth"/>
-          <xsl:with-param name="order" select="'1'"/>
-        </xsl:call-template>
+        
+        <!-- nearest tag is dlist -->
+        <xsl:choose>
+          <!-- nearest tag is dlist -->
+          <xsl:when test="$max_depth &gt; $dlist_depth">
+            <!-- caculate list depth -->
+            <xsl:variable name="depth">
+              <xsl:call-template name="calculate_list_depth">
+                <xsl:with-param name="list_class" select="' topic/dlentry '"/>
+              </xsl:call-template>
+            </xsl:variable>
+            <!-- caculate span tag depth -->
+            <xsl:variable name="span_depth">
+              <xsl:call-template name="calculate_span_depth_for_list">
+                <xsl:with-param name="list_class" select="' topic/dlentry '"/>
+              </xsl:call-template>
+            </xsl:variable>
+            <!-- break span tags -->
+            <xsl:call-template name="break_span_tags">
+              <xsl:with-param name="depth" select="$span_depth"/>
+              <xsl:with-param name="order" select="'0'"/>
+            </xsl:call-template>
+            <!-- break first p tag if there are span tags -->
+            <xsl:if test="$span_depth &gt;= 0">
+              <xsl:text disable-output-escaping="yes">&lt;/text:p&gt;</xsl:text>
+            </xsl:if>
+            <!-- break list tag -->
+            <xsl:call-template name="create_items_for_list">
+              <xsl:with-param name="depth" select="$depth"/>
+              <xsl:with-param name="order" select="'0'"/>
+            </xsl:call-template>
+            <!-- start render table -->
+            <xsl:apply-templates/>
+            <!-- start list tag again -->
+            <xsl:call-template name="create_items_for_list">
+              <xsl:with-param name="depth" select="$depth"/>
+              <xsl:with-param name="order" select="'1'"/>
+            </xsl:call-template>
+            <!-- start p tag again if there are span tags-->
+            <xsl:if test="$span_depth &gt;= 0">
+              <xsl:text disable-output-escaping="yes">&lt;text:p&gt;</xsl:text>
+            </xsl:if>
+            <!--  start render span tags again-->
+            <xsl:call-template name="break_span_tags">
+              <xsl:with-param name="depth" select="$span_depth"/>
+              <xsl:with-param name="order" select="'1'"/>
+            </xsl:call-template>
+          </xsl:when>
+          <!-- nearest tag is fn -->
+          <xsl:when test="$max_depth = $fn_depth">
+            <!-- normal process -->
+            <xsl:variable name="span_depth">
+              <xsl:call-template name="calculate_span_depth"/>
+            </xsl:variable>
+            <!-- break span tags -->
+            <xsl:call-template name="break_span_tags">
+              <xsl:with-param name="depth" select="$span_depth"/>
+              <xsl:with-param name="order" select="'0'"/>
+            </xsl:call-template>
+            <!-- break first p tag -->
+            <xsl:text disable-output-escaping="yes">&lt;/text:p&gt;</xsl:text>
+            <!-- start render table -->
+            <xsl:apply-templates/>
+            <!-- start first p tag again -->
+            <xsl:text disable-output-escaping="yes">&lt;text:p&gt;</xsl:text>
+            <!--  start render span tags again-->
+            <xsl:call-template name="break_span_tags">
+              <xsl:with-param name="depth" select="$span_depth"/>
+              <xsl:with-param name="order" select="'1'"/>
+            </xsl:call-template>
+          </xsl:when>
+          <!-- nearest tag is  table -->
+          <xsl:when test="$max_depth = $table_depth">
+            <xsl:variable name="span_depth">
+              <xsl:call-template name="calculate_span_depth_for_table"/>
+            </xsl:variable>
+            <!-- break span tags -->
+            <xsl:call-template name="break_span_tags">
+              <xsl:with-param name="depth" select="$span_depth"/>
+              <xsl:with-param name="order" select="'0'"/>
+            </xsl:call-template>
+            <!-- break first p tag if there are span tags -->
+            <xsl:text disable-output-escaping="yes">&lt;/text:p&gt;</xsl:text>
+            <!-- start render table -->
+            <xsl:apply-templates/>
+            <!-- start p tag again if there are span tags-->
+            <xsl:text disable-output-escaping="yes">&lt;text:p&gt;</xsl:text>
+            <!--  start render span tags again-->
+            <xsl:call-template name="break_span_tags">
+              <xsl:with-param name="depth" select="$span_depth"/>
+              <xsl:with-param name="order" select="'1'"/>
+            </xsl:call-template>
+          </xsl:when>
+          <!-- nearst tag is simpletable -->
+          <xsl:when test="$max_depth = $stable_depth">
+            <xsl:variable name="span_depth">
+              <xsl:call-template name="calculate_span_depth_for_simpletable"/>
+            </xsl:variable>
+            <!-- break span tags -->
+            <xsl:call-template name="break_span_tags">
+              <xsl:with-param name="depth" select="$span_depth"/>
+              <xsl:with-param name="order" select="'0'"/>
+            </xsl:call-template>
+            <!-- break first p tag if there are span tags -->
+            <xsl:text disable-output-escaping="yes">&lt;/text:p&gt;</xsl:text>
+            <!-- start render table -->
+            <xsl:apply-templates/>
+            <!-- start p tag again if there are span tags-->
+            <xsl:text disable-output-escaping="yes">&lt;text:p&gt;</xsl:text>
+            <!--  start render span tags again-->
+            <xsl:call-template name="break_span_tags">
+              <xsl:with-param name="depth" select="$span_depth"/>
+              <xsl:with-param name="order" select="'1'"/>
+            </xsl:call-template>
+          </xsl:when>
+        </xsl:choose>
+        
       </xsl:when>
-      
       <!-- nested by simpletable -->
       <xsl:when test="ancestor::*[contains(@class, ' topic/simpletable ')]">
         <xsl:variable name="span_depth">
@@ -702,10 +1054,10 @@
         <!-- break first p tag if there are span tags -->
         <xsl:text disable-output-escaping="yes">&lt;/text:p&gt;</xsl:text>
         <!-- start render table -->
-        <xsl:call-template name="create_simpletable"/>
+        <xsl:apply-templates/>
         <!-- start p tag again if there are span tags-->
         <xsl:text disable-output-escaping="yes">&lt;text:p&gt;</xsl:text>
-        <!--  span tags span tags again-->
+        <!--  start render span tags again-->
         <xsl:call-template name="break_span_tags">
           <xsl:with-param name="depth" select="$span_depth"/>
           <xsl:with-param name="order" select="'1'"/>
@@ -724,10 +1076,10 @@
         <!-- break first p tag if there are span tags -->
         <xsl:text disable-output-escaping="yes">&lt;/text:p&gt;</xsl:text>
         <!-- start render table -->
-        <xsl:call-template name="create_simpletable"/>
+        <xsl:apply-templates/>
         <!-- start p tag again if there are span tags-->
         <xsl:text disable-output-escaping="yes">&lt;text:p&gt;</xsl:text>
-        <!--  span tags span tags again-->
+        <!--  start render span tags again-->
         <xsl:call-template name="break_span_tags">
           <xsl:with-param name="depth" select="$span_depth"/>
           <xsl:with-param name="order" select="'1'"/>
@@ -750,7 +1102,7 @@
         <xsl:apply-templates/>
         <!-- start first p tag again -->
         <xsl:text disable-output-escaping="yes">&lt;text:p&gt;</xsl:text>
-        <!--  span tags span tags again-->
+        <!--  start render span tags again-->
         <xsl:call-template name="break_span_tags">
           <xsl:with-param name="depth" select="$span_depth"/>
           <xsl:with-param name="order" select="'1'"/>
@@ -851,7 +1203,7 @@
         </xsl:element>
         <!-- start first p tag again -->
         <xsl:text disable-output-escaping="yes">&lt;text:p&gt;</xsl:text>
-        <!--  span tags span tags again-->
+        <!--  start render span tags again-->
         <xsl:call-template name="break_span_tags">
           <xsl:with-param name="depth" select="$span_depth"/>
           <xsl:with-param name="order" select="'1'"/>
@@ -879,7 +1231,7 @@
         </xsl:element>
         <!-- start first p tag again -->
         <xsl:text disable-output-escaping="yes">&lt;text:p&gt;</xsl:text>
-        <!--  span tags span tags again-->
+        <!--  start render span tags again-->
         <xsl:call-template name="break_span_tags">
           <xsl:with-param name="depth" select="$span_depth"/>
           <xsl:with-param name="order" select="'1'"/>
@@ -905,7 +1257,7 @@
         </xsl:element>
         <!-- start first p tag again -->
         <xsl:text disable-output-escaping="yes">&lt;text:p&gt;</xsl:text>
-        <!--  span tags span tags again-->
+        <!--  start render span tags again-->
         <xsl:call-template name="break_span_tags">
           <xsl:with-param name="depth" select="$span_depth"/>
           <xsl:with-param name="order" select="'1'"/>
@@ -933,7 +1285,7 @@
         </xsl:element>
         <!-- start first p tag again -->
         <xsl:text disable-output-escaping="yes">&lt;text:p&gt;</xsl:text>
-        <!--  span tags span tags again-->
+        <!--  start render span tags again-->
         <xsl:call-template name="break_span_tags">
           <xsl:with-param name="depth" select="$span_depth"/>
           <xsl:with-param name="order" select="'1'"/>
@@ -959,7 +1311,7 @@
         </xsl:element>
         <!-- start first p tag again -->
         <xsl:text disable-output-escaping="yes">&lt;text:p&gt;</xsl:text>
-        <!--  span tags span tags again-->
+        <!--  start render span tags again-->
         <xsl:call-template name="break_span_tags">
           <xsl:with-param name="depth" select="$span_depth"/>
           <xsl:with-param name="order" select="'1'"/>
@@ -1088,7 +1440,34 @@
   
   <xsl:template name="create_flagging_styles">
     <xsl:apply-templates select="$FILTERDOC/val/prop[@action='flag']" mode="create_flagging_styles"/>
+    
+    <xsl:apply-templates select="$FILTERDOC/val/style-conflict" mode="create_conflict_flagging_styles"/>
   </xsl:template>
+  
+  <xsl:template match="style-conflict" mode="create_conflict_flagging_styles">
+    
+    <xsl:element name="style:style">
+      <xsl:attribute name="style:name">
+        <xsl:value-of select="'conflict_style'"/>
+      </xsl:attribute>
+      <xsl:attribute name="style:family">text</xsl:attribute>
+      <xsl:attribute name="style:parent-style-name">indent_text_style</xsl:attribute>
+      <xsl:element name="style:text-properties">
+        <xsl:if test="@background-conflict-color and not(@background-conflict-color = '')">
+          <xsl:attribute name="fo:background-color">
+            <xsl:value-of select="styleUtils:getColor(@background-conflict-color)"/>
+          </xsl:attribute>
+        </xsl:if>
+        <xsl:if test="@foreground-conflict-color and not(@foreground-conflict-color = '')">
+          <xsl:attribute name="fo:color">
+            <xsl:value-of select="styleUtils:getColor(@foreground-conflict-color)"/>
+          </xsl:attribute>
+        </xsl:if>
+      </xsl:element>
+    </xsl:element>
+    
+  </xsl:template>
+  
   
   <xsl:template  match="prop[@action='flag']" mode="create_flagging_styles">
     
@@ -1099,7 +1478,27 @@
           <xsl:value-of select="$styleName"/>
         </xsl:attribute>
         <xsl:attribute name="style:family">text</xsl:attribute>
-        <xsl:attribute name="style:parent-style-name">indent_text_style</xsl:attribute>
+        <xsl:choose>
+          <xsl:when test="@style = 'underline'">
+            <xsl:attribute name="style:parent-style-name">underline</xsl:attribute>
+          </xsl:when>
+          <xsl:when test="@style = 'bold'">
+            <xsl:attribute name="style:parent-style-name">bold</xsl:attribute>
+          </xsl:when>
+          <xsl:when test="@style = 'italics'">
+            <xsl:attribute name="style:parent-style-name">italic</xsl:attribute>
+          </xsl:when>
+          <xsl:when test="@style = 'double-underline'">
+            <xsl:attribute name="style:parent-style-name">double-underline</xsl:attribute>
+          </xsl:when>
+          <xsl:when test="@style = 'overline'">
+            <xsl:attribute name="style:parent-style-name">overline</xsl:attribute>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:attribute name="style:parent-style-name">indent_text_style</xsl:attribute>
+          </xsl:otherwise>
+        </xsl:choose>
+        
         <xsl:element name="style:text-properties">
           <xsl:if test="@backcolor and not(@backcolor = '')">
             <xsl:attribute name="fo:background-color">
@@ -1201,43 +1600,100 @@
     </xsl:choose>
   </xsl:template>
   
-  <xsl:template name="start_flagging">
-    <xsl:param name="flagStyleName"/>
-    <xsl:param name="flagrules"/>
+  <xsl:template match="*" mode="start-add-odt-flags">
+    <!-- get flagging style name. -->
+    <xsl:variable name="flagStyleName">
+      <xsl:call-template name="getFlagStyleName"/>
+    </xsl:variable>
+    <!-- get style rules -->
+    <xsl:variable name="flagrules">
+      <xsl:call-template name="getrules"/>
+    </xsl:variable>
+    <!-- check style conflict -->
+    <xsl:variable name="conflictexist">
+      <xsl:call-template name="conflict-check">
+        <xsl:with-param name="flagrules" select="$flagrules"/>
+      </xsl:call-template>
+    </xsl:variable>
     
     <!-- add flagging styles -->
-    <xsl:if test="$flagStyleName != ''">
-      <xsl:attribute name="text:style-name">
-        <xsl:value-of select="$flagStyleName"/>
-      </xsl:attribute>
-    </xsl:if>
-    
+    <xsl:choose>
+      <!-- no conflict -->
+      <xsl:when test="$conflictexist = 'false' and $flagStyleName != ''">
+        <xsl:attribute name="text:style-name">
+          <xsl:value-of select="$flagStyleName"/>
+        </xsl:attribute>
+      </xsl:when>
+      <!-- there are conflict -->
+      <xsl:when test="$conflictexist = 'true'">
+        <xsl:apply-templates select="." mode="ditamsg:conflict-text-style-applied"/>
+        <xsl:attribute name="text:style-name">
+          <xsl:value-of select="'conflict_style'"/>
+        </xsl:attribute>
+      </xsl:when>
+    </xsl:choose>
+    <!-- add images -->
     <xsl:call-template name="start-flagit">
       <xsl:with-param name="flagrules" select="$flagrules"/>     
     </xsl:call-template>
-    
+    <!-- add rev style -->
     <xsl:if test="@rev and not($FILTERFILE='') and ($DRAFT='yes') ">
       <xsl:call-template name="start-mark-rev">
         <xsl:with-param name="revvalue" select="@rev"/>
         <xsl:with-param name="flagrules" select="$flagrules"/> 
       </xsl:call-template>
     </xsl:if>
+    
   </xsl:template>
   
-  <xsl:template name="end_flagging">
-    <xsl:param name="flagStyleName"/>
-    <xsl:param name="flagrules"/>
-    
+  <xsl:template match="*" mode="end-add-odt-flags">
+    <!-- get style rules -->
+    <xsl:variable name="flagrules">
+      <xsl:call-template name="getrules"/>
+    </xsl:variable>
+    <!-- add rev style -->
     <xsl:if test="@rev and not($FILTERFILE='') and ($DRAFT='yes')">
       <xsl:call-template name="end-mark-rev">
         <xsl:with-param name="revvalue" select="@rev"/>
         <xsl:with-param name="flagrules" select="$flagrules"/> 
       </xsl:call-template>
     </xsl:if>
-    
+    <!-- add images -->
     <xsl:call-template name="end-flagit">
       <xsl:with-param name="flagrules" select="$flagrules"/> 
     </xsl:call-template>
+    
+  </xsl:template>
+  
+  <xsl:template match="*" mode="start-add-odt-revflags">
+    <!-- get style rules -->
+    <xsl:variable name="flagrules">
+      <xsl:call-template name="getrules"/>
+    </xsl:variable>
+    <!-- add rev style -->
+    <xsl:if test="@rev and not($FILTERFILE='') and ($DRAFT='yes') ">
+      <xsl:call-template name="start-mark-rev">
+        <xsl:with-param name="revvalue" select="@rev"/>
+        <xsl:with-param name="flagrules" select="$flagrules"/> 
+      </xsl:call-template>
+    </xsl:if>
+    
+    
+  </xsl:template>
+  
+  <xsl:template match="*" mode="end-add-odt-revflags">
+    <!-- get style rules -->
+    <xsl:variable name="flagrules">
+      <xsl:call-template name="getrules"/>
+    </xsl:variable>
+    <!-- add rev style -->
+    <xsl:if test="@rev and not($FILTERFILE='') and ($DRAFT='yes') ">
+      <xsl:call-template name="end-mark-rev">
+        <xsl:with-param name="revvalue" select="@rev"/>
+        <xsl:with-param name="flagrules" select="$flagrules"/> 
+      </xsl:call-template>
+    </xsl:if>
+    
   </xsl:template>
   
 </xsl:stylesheet>
