@@ -1656,14 +1656,6 @@
     <xsl:call-template name="start-add-odt-revflags">
       <xsl:with-param name="flagrules" select="$flagrules"/>
     </xsl:call-template>
-    <!-- 
-    <xsl:if test="@rev and not($FILTERFILE='') and ($DRAFT='yes') ">
-      <xsl:call-template name="start-mark-rev">
-        <xsl:with-param name="revvalue" select="@rev"/>
-        <xsl:with-param name="flagrules" select="$flagrules"/> 
-      </xsl:call-template>
-    </xsl:if>
-    -->
   </xsl:template>
   
   <xsl:template match="*" mode="end-add-odt-flags">

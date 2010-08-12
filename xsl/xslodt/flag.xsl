@@ -1481,6 +1481,7 @@
      <xsl:with-param name="type" select="$type"/>
      <xsl:with-param name="width" select="$width"/>
      <xsl:with-param name="imgsrc" select="$imgsrc"/>
+     <xsl:with-param name="alttext" select="startflag/alt-text"/>
     </xsl:call-template>
    </xsl:when>
    
@@ -1536,6 +1537,7 @@
      <xsl:with-param name="type" select="$type"/>
      <xsl:with-param name="width" select="$width"/>
      <xsl:with-param name="imgsrc" select="$imgsrc"/>
+     <xsl:with-param name="alttext" select="endflag/alt-text"/>
     </xsl:call-template>
    </xsl:when>
    <xsl:when test="endflag/alt-text">

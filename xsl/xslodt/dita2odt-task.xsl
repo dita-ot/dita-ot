@@ -509,10 +509,10 @@
         <xsl:call-template name="start-flagit">
           <xsl:with-param name="flagrules" select="$flagrules"/>
         </xsl:call-template>
-        -->
         <xsl:call-template name="start-revflag">
           <xsl:with-param name="flagrules" select="$flagrules"/>
         </xsl:call-template>
+        -->
         <xsl:if test="@importance='optional'">
           <xsl:element name="text:p">
               <xsl:element name="text:span">

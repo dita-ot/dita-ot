@@ -42,6 +42,8 @@
   <xsl:template name="root">
     <!--xsl:call-template name="gen-list-table"/-->
     <office:font-face-decls>
+      <style:font-face style:name="Courier" svg:font-family="Courier"
+        style:font-family-generic="modern"/>
       <style:font-face style:name="Courier New" svg:font-family="&apos;Courier New&apos;"
         style:font-family-generic="modern" style:font-pitch="fixed"/>
       <style:font-face style:name="Tahoma1" svg:font-family="Tahoma"/>
@@ -937,6 +939,10 @@
     <xsl:value-of select="$newline"/>
     <style:style style:name="Courier_New" style:family="text" style:parent-style-name="default_text_style">
       <style:text-properties style:font-name="Courier New"/>
+    </style:style>
+    
+    <style:style style:name="Courier" style:family="text" style:parent-style-name="bold">
+      <style:text-properties style:font-name="Courier" />
     </style:style>
   </xsl:template>
   

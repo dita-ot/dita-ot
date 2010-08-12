@@ -205,7 +205,10 @@
      <xsl:choose>
           <xsl:when test="parent::*[contains(@class, ' topic/li ')]">
                <xsl:element name="text:p">
+                    <xsl:element name="text:span">
+                         <xsl:attribute name="text:style-name">Courier</xsl:attribute>
                          <xsl:apply-templates/>
+                    </xsl:element>
                </xsl:element>
           </xsl:when>
           <!-- nested by entry -->
@@ -216,24 +219,27 @@
                     <xsl:if test="parent::*[contains(@class, ' topic/entry ')]/@align">
                          <xsl:call-template name="set_align_value"/>
                     </xsl:if>
+                    <xsl:element name="text:span">
+                         <xsl:attribute name="text:style-name">Courier</xsl:attribute>
                          <xsl:apply-templates/>
+                    </xsl:element>
                </xsl:element>
           </xsl:when>
           <!-- nested by stentry -->
           <xsl:when test="parent::*[contains(@class, ' topic/stentry ')]">
                <xsl:element name="text:p">
-                     <xsl:apply-templates/>
+                    <xsl:element name="text:span">
+                         <xsl:attribute name="text:style-name">Courier</xsl:attribute>
+                         <xsl:apply-templates/>
+                    </xsl:element>
                </xsl:element>
           </xsl:when>
           <!-- nested by other tags -->
           <xsl:otherwise>
-               <!-- 
                <xsl:element name="text:span">
-                    <xsl:attribute name="text:style-name">bold</xsl:attribute>
+                    <xsl:attribute name="text:style-name">Courier</xsl:attribute>
                     <xsl:apply-templates/>
                </xsl:element>
-               -->
-               <xsl:apply-templates/>
           </xsl:otherwise>
      </xsl:choose>
      
@@ -468,7 +474,7 @@
                          <xsl:attribute name="fo:font-weight">bold</xsl:attribute>
                          <xsl:attribute name="style:font-weight-asian">bold</xsl:attribute>
                          <xsl:attribute name="style:font-weight-complex">bold</xsl:attribute>
-                    </xsl:if>                    
+                    </xsl:if>
                     <!-- italic -->
                     <xsl:if test="contains($style_name, 'italic')">
                          <xsl:attribute name="fo:font-style">italic</xsl:attribute>
@@ -549,7 +555,7 @@
           <xsl:value-of select="'underline'"/>
      </xsl:if>
      
-     <xsl:if test="ancestor::*[contains(@class, ' hi-d/b ')]|ancestor::*[contains(@class, ' hi-d/tt ')]">
+     <xsl:if test="ancestor::*[contains(@class, ' hi-d/b ')]">
           <xsl:value-of select="'bold'"/>
      </xsl:if>
      

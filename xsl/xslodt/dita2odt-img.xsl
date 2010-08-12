@@ -293,7 +293,7 @@
 
 <xsl:template name="gen-img-txt">
   <xsl:param name="alttext"/>
-    <xsl:choose>
+   <xsl:choose>
     <xsl:when test="*[contains(@class,' topic/alt ')]">
     <xsl:text>[PIC]</xsl:text><xsl:value-of select="*[contains(@class,' topic/alt ')]"/>
     </xsl:when>
@@ -311,12 +311,12 @@
     <xsl:when test="@href">
       <xsl:text>[PIC]</xsl:text><xsl:value-of select="@href"/>
     </xsl:when>
-      <xsl:otherwise>
-        <xsl:call-template name="getStringODT">
-          <xsl:with-param name="stringName" select="$alttext"/>
-        </xsl:call-template>
-      </xsl:otherwise>
-    </xsl:choose>
+    <xsl:otherwise>
+      <xsl:call-template name="getStringODT">
+        <xsl:with-param name="stringName" select="$alttext"/>
+      </xsl:call-template>
+    </xsl:otherwise>
+   </xsl:choose>
   
 </xsl:template>
 

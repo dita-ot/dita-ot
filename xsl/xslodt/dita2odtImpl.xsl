@@ -2238,15 +2238,27 @@
       <xsl:element name="text:span">
         <xsl:if test="$trueStyleName!=''">
           <xsl:choose>
+            <!-- title case -->
             <xsl:when test="ancestor::*[contains(@class, ' topic/title ')][1]
               /parent::*[contains(@class, ' topic/topic ')]">
-              <xsl:if test="$trueStyleName = 'italic'">
-                <xsl:variable name="depth" select="count(ancestor::*[contains(@class, ' topic/topic ')])"/>
-                <xsl:attribute name="text:style-name">
-                  <xsl:value-of select="concat($trueStyleName, '_heading_', $depth)"/>
-                </xsl:attribute>
-              </xsl:if>
+              <xsl:choose>
+                <!-- keep font size with the title -->
+                <xsl:when test="$trueStyleName = 'italic' or $trueStyleName = 'italicbold' or $trueStyleName = 'bolditalic'">
+                  <xsl:variable name="depth" select="count(ancestor::*[contains(@class, ' topic/topic ')])"/>
+                  <xsl:attribute name="text:style-name">
+                    <xsl:value-of select="concat($trueStyleName, '_heading_', $depth)"/>
+                  </xsl:attribute>
+                </xsl:when>
+                <xsl:when test="$trueStyleName = 'bold'"/>
+                <!-- other style is okay -->
+                <xsl:otherwise>
+                  <xsl:attribute name="text:style-name">
+                    <xsl:value-of select="$trueStyleName"/>
+                  </xsl:attribute>
+                </xsl:otherwise>
+              </xsl:choose>
             </xsl:when>
+            <!-- other case -->
             <xsl:otherwise>
               <xsl:attribute name="text:style-name">
                 <xsl:value-of select="$trueStyleName"/>

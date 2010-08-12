@@ -40,8 +40,10 @@
   <xsl:import href="common/dita-utilities.xsl"/>
   <xsl:import href="common/related-links.xsl"/>
   <xsl:import href="common/dita-textonly.xsl"/>
+  <xsl:import href="common/flag.xsl"/>
+  <!--
   <xsl:import href="xslodt/flag-old.xsl"/>
-  
+  -->
   <xsl:import href="xslodt/dita2odt-utilities.xsl"/>
   <xsl:import href="xslodt/dita2odt-table.xsl"/>
   <xsl:import href="xslodt/dita2odt-lists.xsl"/>
@@ -62,7 +64,9 @@
   -->
   <xsl:import href="xslodt/commons.xsl"/>
   <xsl:import href="xslodt/dita2odt-links.xsl"/>
+  <!-- 
   <xsl:import href="xslodt/flag.xsl"/>
+  -->
   <!-- 
   <xsl:include href="xslodt/dita2odt-relinks.xsl"/>
   -->
