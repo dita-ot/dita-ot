@@ -563,13 +563,13 @@
   </xsl:template>
 
   <xsl:template match="*[contains(@class,' eclipsemap/pluginname ')]" mode="eclipse.properties">
-    <xsl:text>name=</xsl:text><xsl:value-of select="."/><xsl:value-of select="$newline"/>
+    <xsl:text>name=</xsl:text><xsl:value-of select="normalize-space(.)"/><xsl:value-of select="$newline"/>
   </xsl:template>
   <xsl:template match="*[contains(@class,' eclipsemap/providerName ')]" mode="eclipse.properties">
-    <xsl:text>providerName=</xsl:text><xsl:value-of select="."/><xsl:value-of select="$newline"/>
+    <xsl:text>providerName=</xsl:text><xsl:value-of select="normalize-space(.)"/><xsl:value-of select="$newline"/>
   </xsl:template>
   <xsl:template match="*[contains(@class,' eclipsemap/productName ')]" mode="eclipse.properties">
-    <xsl:text>productName=</xsl:text><xsl:value-of select="."/><xsl:value-of select="$newline"/>
+    <xsl:text>productName=</xsl:text><xsl:value-of select="normalize-space(.)"/><xsl:value-of select="$newline"/>
   </xsl:template>
   
   <xsl:template match="*[contains(@class,' eclipsemap/pluginProperties ')]" mode="eclipse.properties">
