@@ -66,8 +66,8 @@
       <xsl:attribute name="name">
         <xsl:choose>
           <xsl:when test="*[contains(@class, ' topic/title ')]">
-            <xsl:value-of select="*[contains(@class, ' topic/title ')]"/>
-          </xsl:when>
+            <xsl:apply-templates select="*[contains(@class,' topic/title ')]" mode="text-only"/>
+      </xsl:when>
           <xsl:when test="@title">
             <xsl:value-of select="@title"/>
           </xsl:when>
@@ -191,6 +191,9 @@
       <xsl:choose>
         <xsl:when test="@title"><xsl:attribute name="name">%name</xsl:attribute>
         </xsl:when>
+        <xsl:when test="*[contains(@class, ' topic/title ')]">
+            <xsl:apply-templates select="*[contains(@class,' topic/title ')]" mode="text-only"/>
+        </xsl:when>
         <xsl:otherwise><xsl:attribute name="name">Sample Title</xsl:attribute>
         </xsl:otherwise>
       </xsl:choose>
@@ -242,6 +245,9 @@
     <xsl:choose>
       <xsl:when test="@title">
         <xsl:text>name=</xsl:text><xsl:value-of select="@title"/>
+      </xsl:when>
+      <xsl:when test="*[contains(@class, ' topic/title ')]">
+        <xsl:text>name=</xsl:text><xsl:apply-templates select="*[contains(@class,' topic/title ')]" mode="text-only"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:text>name=Sample Title</xsl:text>
