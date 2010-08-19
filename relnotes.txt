@@ -35,7 +35,15 @@
      * 3022847 PDF transform gives Java exceptions for spaces in dir name (Milestone 2)     
      * 3032950 Scale is not correctly computed in XHTML transforms (Milestone 2)
      * 3033141 dita.xml.properties file not closed after generating (Milestone 2)
-     * 3038933 Troff output drops prereq links (Milestone 3)
+     * 3036985 Infinite recursivity in replaceString template (Milestone 3)
+     * 3035816 When creating .chm, .hhp-file is missing a line-break (Milestone 3)
+     * 3036222 RTF transform not editable with Word 2007 (Milestone 3)
+     * 3034445 "CURRENDIR" typo in plus-plugins (Milestone 3)
+     * 3034489 Remove all occurrences of <xmlcatalog> from plus-plugins (Milestone 3)
+     * 3038941 Link with &amp; breaks in abstract (Milestone 3)
+     * 3039017 Comments in PDF plugin files are confusing (Milestone 3)
+     * 3038933 Troff output drops prereq links (Milestone 4)
+     
      
 ====================================================================================
 
