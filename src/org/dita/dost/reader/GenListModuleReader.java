@@ -1246,7 +1246,12 @@ public class GenListModuleReader extends AbstractXMLReader {
 				target = copy_to;
 			}
 			//Added by Alan for bug ID: 2870935 on Date: 2009-10-10 end
-			
+			//Added on 20100825 for bug:3052904 start
+			//avoid NullPointException
+			if(target == null){
+				target = "";
+			}
+			//Added on 20100825 for bug:3052904 end
 			//store the target
 			String temp = target;
 			
