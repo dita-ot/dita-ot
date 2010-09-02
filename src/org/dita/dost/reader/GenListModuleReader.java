@@ -1220,7 +1220,11 @@ public class GenListModuleReader extends AbstractXMLReader {
 		String attrScope = atts.getValue(Constants.ATTRIBUTE_NAME_SCOPE);
 		String attrFormat = atts.getValue(Constants.ATTRIBUTE_NAME_FORMAT);
 		String attrType = atts.getValue(Constants.ATTRIBUTE_NAME_TYPE);
-
+		
+		//Added on 20100830 for bug:3052156 start
+		String codebase = atts.getValue(Constants.ATTRIBUTE_NAME_CODEBASE);
+		//Added on 20100830 for bug:3052156 end
+		
 		if (attrValue == null) {
 			return;
 		}
@@ -1341,11 +1345,22 @@ public class GenListModuleReader extends AbstractXMLReader {
 		}
 		//Added by William on 2010-01-05 for bug:2926417 end
 		File target=new File(attrValue);
-		if(target.isAbsolute()){
+		if(target.isAbsolute() && 
+			!Constants.ATTRIBUTE_NAME_DATA.equals(attrName)){
 			attrValue=FileUtils.getRelativePathFromMap(rootFilePath,attrValue);
+		//for object tag bug:3052156
+		}else if(Constants.ATTRIBUTE_NAME_DATA.equals(attrName)){
+			if(!StringUtils.isEmptyString(codebase)){
+				filename = FileUtils.normalizeDirectory(codebase, attrValue);
+			}else{
+				filename = FileUtils.normalizeDirectory(currentDir, attrValue);	
+			}
+		}else{
+			//noraml process.
+			filename = FileUtils.normalizeDirectory(currentDir, attrValue);
 		}
 		
-		filename = FileUtils.normalizeDirectory(currentDir, attrValue);
+		
 		try{
 			filename = URLDecoder.decode(filename, Constants.UTF8);
 		}catch(UnsupportedEncodingException e){
@@ -1442,9 +1457,9 @@ public class GenListModuleReader extends AbstractXMLReader {
 		
 		//Added on 20100827 for bug:3052156 start
 		//add a warning message for outer files refered by @data
-		if(Constants.ATTRIBUTE_NAME_DATA.equals(attrName)){
+		/*if(Constants.ATTRIBUTE_NAME_DATA.equals(attrName)){
 			toOutFile(new File(filename).getPath());
-		}
+		}*/
 		//Added on 20100827 for bug:3052156 end
 		
 		/*
@@ -1552,7 +1567,7 @@ public class GenListModuleReader extends AbstractXMLReader {
 				//get multi-level keys
 				 List<String> keysList = getKeysList(key, keysRefMap);
 				 for (String multikey : keysList) {
-					//update tempMap
+					 //update tempMap
 					 tempMap.put(multikey, value);
 				}
 			}

@@ -220,6 +220,8 @@ public abstract class Constants {
     public static final String ATTRIBUTE_NAME_COPY_TO = "copy-to";
     /**data attribute.*/
     public static final String ATTRIBUTE_NAME_DATA = "data";
+    /**codebase attribute.*/
+    public static final String ATTRIBUTE_NAME_CODEBASE = "codebase";
     /**imageref attribute.*/
     public static final String ATTRIBUTE_NAME_IMAGEREF = "imageref";
     /**start attribute.*/
