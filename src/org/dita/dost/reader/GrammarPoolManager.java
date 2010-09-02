@@ -13,10 +13,15 @@ import org.dita.dost.util.XMLGrammarPoolImplUtils;
  */
 public class GrammarPoolManager {
 	
+	//flag whether use grammar caching.
+	private static String gramCache;
+
 	public static XMLGrammarPool initializeGrammarPool() {
 		XMLGrammarPool pool = null;
 		try {
-		    pool = new XMLGrammarPoolImplUtils();
+		    pool = new XMLGrammarPoolImplUtils(gramCache);
+		    //set grammar caching flag
+		    
 		}
 		catch (Exception e) {
 			System.out.println("Failed to create Xerces grammar pool for caching DTDs and schemas");
@@ -48,6 +53,9 @@ public class GrammarPoolManager {
 		return pool;
 	}
 
+	public static void setGramCache(String gramCache) {
+		GrammarPoolManager.gramCache = gramCache;
+	}
 
 }
 	  	 

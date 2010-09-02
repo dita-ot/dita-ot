@@ -308,7 +308,15 @@
 	      </not>
   	</condition>
   	<!--Added by William on 2009-11-17 for bug:2893493 start-->
-    
+  	<!-- Added on 2010-08-24 for bug:2994593 enable grammar pool caching by default start-->
+  	<condition property="args.grammar.cache"
+  	      value="yes">
+  		      <not>
+  		        <isset property="args.grammar.cache" />
+  		      </not>
+  	</condition> 	
+  	<!-- Added on 2010-08-24 for bug:2994593 enable grammar pool caching by default end-->
+  	
   	<condition property="clean_temp">
       <and>
         <isset property="clean.temp" />

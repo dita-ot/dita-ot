@@ -39,6 +39,7 @@ import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.pipeline.PipelineHashIO;
 import org.dita.dost.reader.DitaValReader;
 import org.dita.dost.reader.GenListModuleReader;
+import org.dita.dost.reader.GrammarPoolManager;
 import org.dita.dost.util.Constants;
 import org.dita.dost.util.DelayConrefUtils;
 import org.dita.dost.util.FileUtils;
@@ -197,6 +198,11 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 	
 	private String moduleEndMsg = "GenMapAndTopicListModule.execute(): Execution time: ";
 	
+	//Added on 2010-08-24 for bug:2994593 start
+	/** use grammar pool cache */
+	private String gramcache = "yes";
+	//Added on 2010-08-24 for bug:2994593 end
+	
 	
 	/**
 	 * Create a new instance and do the initialization.
@@ -251,6 +257,9 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 		try {
 			fileLogger.logInfo(moduleStartMsg);
 			parseInputParameters(input);
+			
+			//set grammar pool flag
+			GrammarPoolManager.setGramCache(gramcache);
 
 			GenListModuleReader.initXMLReader(ditaDir,xmlValidate,rootFile);
 			
@@ -311,6 +320,8 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
         //get transtype
         transtype = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_EXT_PARAM_TRANSTYPE);
         //Added by William on 2009-07-18 for req #12014 start
+        
+        gramcache = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_EXT_PARAM_GRAMCACHE);
         
 		if(valueOfValidate!=null){
 			if("false".equalsIgnoreCase(valueOfValidate))

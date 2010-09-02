@@ -373,6 +373,8 @@ public abstract class Constants {
     public static final String ANT_INVOKER_EXT_PARAM_VALIDATE="validate";
     /**Constants for extensive params used in ant invoker(outputdir).*/
     public static final String ANT_INVOKER_EXT_PARAM_OUTPUTDIR="outputdir";
+    /**Constants for extensive params used in ant invoker(gramcache).*/
+    public static final String ANT_INVOKER_EXT_PARAM_GRAMCACHE="gramcache";
     /**Constants for file separator.*/
     public static final String FILE_SEPARATOR = File.separator;
     /**Constants for line separator.*/

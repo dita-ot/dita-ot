@@ -94,6 +94,11 @@ public class CommandLineInvoker {
 		paramMap.put("/generateouter", "generate.copy.outer");
 		paramMap.put("/onlytopicinmap", "onlytopic.in.map");
 		paramMap.put("/debug", "args.debug");
+		//added on 20100824 to disable grammar pool caching start
+		paramMap.put("/grammarcache", "args.grammar.cache");
+		//added on 20100824 to disable grammar pool caching end
+		
+		
 	}
 	/**propertyFile store input params.*/
 	private String propertyFile = null;
@@ -421,6 +426,7 @@ public class CommandLineInvoker {
         									 "(It is the most secure way to avoid broken links). (not default option any more but keep this as the option of backward compatibility)." + lSep);
 		msg.append("  /onlytopicinmap:       specify whether make dita processor only resolve dita/topic files which are referenced by primary ditamap files Only \"true\" and \"false\" are valid values. The default is false. " + lSep);
 		msg.append("  /debug:                specify whether extra debug information should be included in the log. Only \"yes\" and \"no\" are valid values. The default is no. " + lSep);
+		msg.append("  /grammarcache:            specify whether grammar pool caching is used when parsing dita files. Only \"yes\" and \"no\" are valid values. The default is yes. " + lSep);
         System.out.println(msg.toString());
     }
     
