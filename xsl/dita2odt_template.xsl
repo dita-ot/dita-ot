@@ -64,9 +64,9 @@
   -->
   <xsl:import href="xslodt/commons.xsl"/>
   <xsl:import href="xslodt/dita2odt-links.xsl"/>
-  <!-- 
-  <xsl:import href="xslodt/flag.xsl"/>
-  -->
+
+  <xsl:import href="xslodt/dita2odt-flagging.xsl"/>
+
   <!-- 
   <xsl:include href="xslodt/dita2odt-relinks.xsl"/>
   -->

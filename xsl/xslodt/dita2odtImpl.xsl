@@ -1616,12 +1616,11 @@
   <!-- called shortdesc processing when it is in abstract -->
   <xsl:template match="*[contains(@class,' topic/shortdesc ')]" mode="outofline.abstract">
           <xsl:element name="text:span">
-            <xsl:if test="preceding-sibling::* | preceding-sibling::text()">
-              <!-- 
-              <text:s/>
-              -->
-            </xsl:if>
-            <xsl:apply-templates select="." mode="outputContentsWithFlagsAndStyle"/>
+            <!-- start add flagging styles -->
+            <xsl:apply-templates select="." mode="start-add-odt-flags"/>
+            <xsl:apply-templates/>
+            <!-- end add flagging styles -->
+            <xsl:apply-templates select="." mode="end-add-odt-flags"/>
           </xsl:element>
   </xsl:template>
   
@@ -2233,6 +2232,9 @@
         </xsl:choose>
       </xsl:element>
     </xsl:when>
+    <!-- text is not allowed under these tags -->
+    <xsl:when test="parent::*[contains(@class,' topic/ul ')] | parent::*[contains(@class,' topic/ol ')]
+      | parent::*[contains(@class,' topic/sl ')] | parent::*[contains(@class,' topic/dl ')]"/>
     <!-- for other tags -->
     <xsl:otherwise>
       <xsl:element name="text:span">
@@ -3315,161 +3317,6 @@
   MathML and SVG with <unknown> (#35) " in DITA 1.1 -->
   <xsl:template match="*[contains(@class,' topic/foreign ') or contains(@class,' topic/unknown ')]"/>
   
-  <!-- ===================================================================== -->
   
-  <!-- ================= COMMON ATTRIBUTE PROCESSORS ====================== -->
-  
-  <!-- If the element has an ID, set it as an ID and anchor-->
-  <!-- Set ID and output A-name -->
-  <xsl:template name="setidaname">
-    <xsl:if test="@id">
-      <xsl:call-template name="setidattr">
-        <xsl:with-param name="idvalue" select="@id"/>
-      </xsl:call-template>
-      <xsl:call-template name="setanametag">
-        <xsl:with-param name="idvalue" select="@id"/>
-      </xsl:call-template>
-    </xsl:if>
-  </xsl:template>
-  
-  <!-- Set ID only -->
-  <xsl:template name="setid">
-    <xsl:if test="@id">
-      <xsl:call-template name="setidattr">
-        <xsl:with-param name="idvalue" select="@id"/>
-      </xsl:call-template>
-    </xsl:if>
-  </xsl:template>
-  
-  <!-- Set A-name only -->
-  <xsl:template name="setaname">
-    <xsl:if test="@id">
-      <xsl:call-template name="setanametag">
-        <xsl:with-param name="idvalue" select="@id"/>
-      </xsl:call-template>
-    </xsl:if>
-  </xsl:template>
-  
-  <!-- Set the A-NAME attr for NS -->
-  <xsl:template name="setanametag">
-    <xsl:param name="idvalue"/>
-    
-  </xsl:template>
-  
-  <!-- Set the ID attr for IE -->
-  <xsl:template name="setidattr">
-    <xsl:param name="idvalue"/>
-    <xsl:attribute name="id">
-      <!-- If we're in the body, prefix the ID with the topic's ID & two "_" -->
-      <xsl:if test="ancestor::*[contains(@class,' topic/body ')]">
-        <xsl:value-of select="ancestor::*[contains(@class,' topic/body ')]/parent::*/@id"/><xsl:text>__</xsl:text>
-      </xsl:if>
-      <xsl:value-of select="$idvalue"/>
-    </xsl:attribute>
-  </xsl:template>
-  
-  <!-- Create & insert an ID for the generated table of contents -->
-  <xsl:template name="gen-toc-id">
-    
-  </xsl:template>
-  
-  <!-- Process standard attributes that may appear anywhere. Previously this was "setclass" -->
-  <xsl:template name="commonattributes">
-    <xsl:param name="default-output-class"/>
-    <xsl:apply-templates select="@xml:lang"/>
-    <xsl:apply-templates select="@dir"/>
-    <xsl:apply-templates select="." mode="set-output-class">
-      <xsl:with-param name="default" select="$default-output-class"/>
-    </xsl:apply-templates>
-  </xsl:template>
-  
-  <!-- If an element has @outputclass, create a class value -->
-  <xsl:template match="@outputclass">
-    <xsl:attribute name="class"><xsl:value-of select="."/></xsl:attribute>
-  </xsl:template>
-  <!-- Determine what @outputclass value goes into XHTML's @class. If the value should
-    NOT fall through, override this template to remove it. -->
-  <xsl:template match="@outputclass" mode="get-value-for-class">
-    <xsl:value-of select="."/>
-  </xsl:template>
-  
-  <!-- Most elements don't get a class attribute. -->
-  <xsl:template match="*" mode="get-output-class"/>
-  
-  <!-- Get the ancestry of the current element (name only, not module) -->
-  <xsl:template match="*" mode="get-element-ancestry">
-    <xsl:param name="checkclass" select="@class"/>
-    <xsl:if test="contains($checkclass,'/')">
-      <xsl:variable name="lastpair">
-        <xsl:call-template name="get-last-class-pair">
-          <xsl:with-param name="checkclass" select="$checkclass"/>
-        </xsl:call-template>
-      </xsl:variable>
-      <!-- If there are any module/element pairs before the last one, process them and add a space -->
-      <xsl:if test="contains(substring-before($checkclass,$lastpair),'/')">
-        <xsl:apply-templates select="." mode="get-element-ancestry">
-          <xsl:with-param name="checkclass" select="substring-before($checkclass,$lastpair)"/>
-        </xsl:apply-templates>
-        <xsl:text> </xsl:text>
-      </xsl:if>
-      <xsl:value-of select="substring-after($lastpair,'/')"/>
-    </xsl:if>
-  </xsl:template>
-  
-  <!-- Find the last module/element pair in a class string -->
-  <xsl:template name="get-last-class-pair">
-    <xsl:param name="checkclass" select="@class"/>
-    <xsl:choose>
-      <xsl:when test="contains(substring-after($checkclass,' '),'/')">
-        <xsl:call-template name="get-last-class-pair">
-          <xsl:with-param name="checkclass" select="substring-after($checkclass,' ')"/>
-        </xsl:call-template>
-      </xsl:when>
-      <xsl:when test="contains($checkclass,'/')">
-        <xsl:value-of select="normalize-space($checkclass)"/>
-      </xsl:when>
-      <xsl:otherwise><!-- Error condition --></xsl:otherwise>
-    </xsl:choose>
-  </xsl:template>
-  
-  <!-- If an element has @xml:lang, copy it to the output -->
-  <xsl:template match="@xml:lang">
-    <xsl:attribute name="xml:lang"><xsl:value-of select="."/></xsl:attribute>
-  </xsl:template>
-  
-  <!-- If an element has @dir, copy it to the output -->
-  <xsl:template match="@dir">
-    <xsl:attribute name="dir"><xsl:value-of select="."/></xsl:attribute>
-  </xsl:template>
-  
-  <!-- if the element has a compact=yes attribute, assert it in XHTML form -->
-  <xsl:template match="@compact">
-    <xsl:if test=". = 'yes'">
-      <xsl:attribute name="compact">compact</xsl:attribute><!-- assumes that no compaction is default -->
-    </xsl:if>
-  </xsl:template>
-  
-  <xsl:template name="setscale">
-    <xsl:if test="@scale">
-      <!--    <xsl:attribute name="style">font-size: <xsl:value-of select="@scale"/>%;</xsl:attribute> -->
-    </xsl:if>
-  </xsl:template>
-  
-  <!-- Test for in BIDI area: returns "bidi" when parent's @xml:lang is a bidi language;
-    Otherwise, leave blank -->
-  <xsl:template name="bidi-area">
-    <xsl:param name="parentlang">
-      <xsl:call-template name="getLowerCaseLang"/>
-    </xsl:param>
-    <xsl:variable name="direction">
-      <xsl:apply-templates select="." mode="get-render-direction">
-        <xsl:with-param name="lang" select="$parentlang"/>
-      </xsl:apply-templates>
-    </xsl:variable>
-    <xsl:choose>
-      <xsl:when test="$direction='rtl'">bidi</xsl:when>
-      <xsl:otherwise/>
-    </xsl:choose>
-  </xsl:template>
 
 </xsl:stylesheet>

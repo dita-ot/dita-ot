@@ -19,5 +19,7 @@
 
   <xsl:import href="topic2textonly.xsl"/>
   <xsl:import href="ui-d2textonly.xsl"/>
+  <xsl:import href="dita-utilities.xsl"/>
+     
   
 </xsl:stylesheet>

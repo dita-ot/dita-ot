@@ -285,11 +285,13 @@
 
   <xsl:template match="*[contains(@class,' task/stepsection ')]">
     
-      <!-- 
-      <xsl:call-template name="commonattributes"/>
-      <xsl:call-template name="setid"/>
-      -->
-      <xsl:apply-templates select="." mode="outputContentsWithFlagsAndStyle"/>
+    <xsl:element name="text:span">
+      <!-- start add flagging styles -->
+      <xsl:apply-templates select="." mode="start-add-odt-flags"/>
+      <xsl:apply-templates/>
+      <!-- end add flagging styles -->
+      <xsl:apply-templates select="." mode="end-add-odt-flags"/>
+    </xsl:element>
       
   </xsl:template>
 

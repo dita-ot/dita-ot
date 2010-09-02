@@ -15,8 +15,20 @@
   </xsl:template>
 
   <xsl:template match="text()" mode="dita-ot:text-only">
-    <xsl:value-of select="concat(., ' ')"/>
+    <xsl:value-of select="."/>
   </xsl:template>
+  
+  <!-- add "'" for q -->
+  <xsl:template match="*[contains(@class,' topic/q ')]" mode="dita-ot:text-only">
+    <xsl:call-template name="getString">
+      <xsl:with-param name="stringName" select="'OpenQuote'"/>
+    </xsl:call-template>
+    <xsl:apply-templates mode="dita-ot:text-only"/>
+    <xsl:call-template name="getString">
+      <xsl:with-param name="stringName" select="'CloseQuote'"/>
+    </xsl:call-template>
+  </xsl:template>
+  
 
   <xsl:template match="processing-instruction()" mode="dita-ot:text-only"/>
 

@@ -263,6 +263,80 @@
     
   </xsl:template>
   
+  <xsl:template name="calculate_span_depth_for_tag">
+    <xsl:param name="list_class" select="' topic/li '"/>
+    <xsl:param name="tag_class" select="' topic/fn '"/>
+    
+    <xsl:variable name="fig_count">
+      <xsl:value-of select="(count(ancestor::*[contains(@class, ' topic/fig ')]) - 
+                             count(ancestor::*[contains(@class, $tag_class)][1]
+                            /ancestor::*[contains(@class, ' topic/fig ')])) * 2"/>
+    </xsl:variable>
+    
+    <xsl:variable name="lq_count">
+      <xsl:value-of select="(count(ancestor::*[contains(@class, ' topic/lq ')]) - 
+        count(ancestor::*[contains(@class, $tag_class)][1]
+        /ancestor::*[contains(@class, ' topic/lq ')])) * 2"/>
+    </xsl:variable>
+    
+    <xsl:variable name="note_count">
+      <xsl:value-of select="(count(ancestor::*[contains(@class, ' topic/note ')]) - 
+        count(ancestor::*[contains(@class, $tag_class)][1]
+        /ancestor::*[contains(@class, ' topic/note ')])) * 2"/>
+    </xsl:variable>
+    
+    <xsl:variable name="itemgroup_count">
+      <xsl:value-of select="(count(ancestor::*[contains(@class, ' topic/itemgroup ')]) - 
+                            count(ancestor::*[contains(@class, $tag_class)][1]
+                            /ancestor::*[contains(@class, ' topic/itemgroup ')])) * 2"/>
+    </xsl:variable>
+    
+    <xsl:variable name="p_count">
+      <xsl:value-of select="(count(ancestor::*[contains(@class, ' topic/p ')]) - 
+        count(ancestor::*[contains(@class, $tag_class)][1]
+        /ancestor::*[contains(@class, ' topic/p ')])) * 2"/>
+    </xsl:variable>
+    
+    <xsl:variable name="draft-comment_count">
+      <xsl:value-of select="(count(ancestor::*[contains(@class, ' topic/draft-comment ')]) - 
+                            count(ancestor::*[contains(@class, $tag_class)][1]
+                            /ancestor::*[contains(@class, ' topic/draft-comment ')])) * 2"/>
+    </xsl:variable>
+    
+    <xsl:variable name="required-cleanup_count">
+      <xsl:value-of select="(count(ancestor::*[contains(@class, ' topic/required-cleanup ')]) - 
+                            count(ancestor::*[contains(@class, $tag_class)][1]
+                            /ancestor::*[contains(@class, ' topic/required-cleanup ')])) * 2"/>
+    </xsl:variable>
+    
+    <xsl:variable name="dd_count">
+      <xsl:value-of select="(count(ancestor::*[contains(@class, ' topic/dd ')]) - 
+                            count(ancestor::*[contains(@class, $tag_class)][1]
+                            /ancestor::*[contains(@class, ' topic/dd ')])) * 2"/>
+    </xsl:variable>
+    
+    
+    
+    <xsl:variable name="total_count" select="$fig_count + $lq_count + 
+      $note_count + $itemgroup_count + $p_count + $draft-comment_count + $required-cleanup_count + $dd_count"/>
+    
+    
+    
+    
+    <xsl:choose>
+      <!-- fn is rendered as text:p plus flagging styles-->
+      <xsl:when test="$tag_class = ' topic/fn '">
+        <xsl:value-of select="$total_count + 1"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <!-- 1st one is rendered as p -->
+        <xsl:value-of select="$total_count - 1"/>
+      </xsl:otherwise>
+    </xsl:choose>
+    
+    
+  </xsl:template>
+  
   <xsl:template name="calculate_span_depth">
     <xsl:variable name="desc_count">
       <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/desc ')])"/>
@@ -1141,7 +1215,6 @@
       /ancestor::*[contains(@class, ' topic/dlentry ')])"/>
     
     
-    
     <xsl:choose>
       <!-- parent tag is body -->
       <xsl:when test="parent::*[contains(@class, ' topic/body ')]">
@@ -1190,7 +1263,7 @@
           <xsl:apply-templates/>
         </xsl:element>
         <!-- start p tag again -->
-        <xsl:text disable-output-escaping="yes">&lt;text:p&gt;</xsl:text>
+        <xsl:text disable-output-escaping="yes">&lt;text:p text:style-name="footnote"&gt;</xsl:text>
         <!--  start render span tags again-->
         <xsl:call-template name="break_span_tags">
           <xsl:with-param name="depth" select="1"/>
@@ -1306,9 +1379,33 @@
           <xsl:with-param name="order" select="'1'"/>
         </xsl:call-template>
       </xsl:when>
-      
+      <!-- nearest ancestor tag is fn -->
+      <xsl:when test="ancestor::*[contains(@class, ' topic/fn ')]">
+        <xsl:variable name="span_depth">
+          <xsl:call-template name="calculate_span_depth_for_tag"/>
+        </xsl:variable>
+        <!-- break span tags -->
+        <xsl:call-template name="break_span_tags">
+          <xsl:with-param name="depth" select="$span_depth"/>
+          <xsl:with-param name="order" select="'0'"/>
+        </xsl:call-template>
+        <!-- break first p tag -->
+        <xsl:text disable-output-escaping="yes">&lt;/text:p&gt;</xsl:text>
+        <!-- render list -->
+        <xsl:element name="text:list">
+          <xsl:attribute name="text:style-name"><xsl:value-of select="$list_style"/></xsl:attribute>
+          <xsl:apply-templates/>
+        </xsl:element>
+        <!-- start first p tag again -->
+        <xsl:text disable-output-escaping="yes">&lt;text:p text:style-name="footnote"&gt;</xsl:text>
+        <!--  start render span tags again-->
+        <xsl:call-template name="break_span_tags">
+          <xsl:with-param name="depth" select="$span_depth"/>
+          <xsl:with-param name="order" select="'1'"/>
+        </xsl:call-template>
+      </xsl:when>
+      <!-- nested by other tags. -->
       <xsl:otherwise>
-        
         <xsl:variable name="span_depth">
           <xsl:call-template name="calculate_span_depth"/>
         </xsl:variable>
@@ -1449,296 +1546,6 @@
           </xsl:otherwise>
         </xsl:choose>
       </xsl:when>
-    </xsl:choose>
-  </xsl:template>
-  
-  
-  <!-- =========== TEMPLATES FOR ODT FLAGGING =========== -->
-  <xsl:template name="create_flagging_styles">
-    <xsl:apply-templates select="$FILTERDOC/val/prop[@action='flag']" mode="create_flagging_styles"/>
-    
-    <xsl:apply-templates select="$FILTERDOC/val/style-conflict" mode="create_conflict_flagging_styles"/>
-  </xsl:template>
-  
-  <xsl:template match="style-conflict" mode="create_conflict_flagging_styles">
-    
-    <xsl:element name="style:style">
-      <xsl:attribute name="style:name">
-        <xsl:value-of select="'conflict_style'"/>
-      </xsl:attribute>
-      <xsl:attribute name="style:family">text</xsl:attribute>
-      <xsl:attribute name="style:parent-style-name">indent_text_style</xsl:attribute>
-      <xsl:element name="style:text-properties">
-        <xsl:if test="@background-conflict-color and not(@background-conflict-color = '')">
-          <xsl:attribute name="fo:background-color">
-            <xsl:value-of select="styleUtils:getColor(@background-conflict-color)"/>
-          </xsl:attribute>
-        </xsl:if>
-        <xsl:if test="@foreground-conflict-color and not(@foreground-conflict-color = '')">
-          <xsl:attribute name="fo:color">
-            <xsl:value-of select="styleUtils:getColor(@foreground-conflict-color)"/>
-          </xsl:attribute>
-        </xsl:if>
-      </xsl:element>
-    </xsl:element>
-    
-  </xsl:template>
-  
-  
-  <xsl:template  match="prop[@action='flag']" mode="create_flagging_styles">
-    
-    <xsl:variable name="styleName" select="styleUtils:insertFlagStyleName(concat(@att, @val))"/>
-    
-    <xsl:element name="style:style">
-        <xsl:attribute name="style:name">
-          <xsl:value-of select="$styleName"/>
-        </xsl:attribute>
-        <xsl:attribute name="style:family">text</xsl:attribute>
-        <xsl:choose>
-          <xsl:when test="@style = 'underline'">
-            <xsl:attribute name="style:parent-style-name">underline</xsl:attribute>
-          </xsl:when>
-          <xsl:when test="@style = 'bold'">
-            <xsl:attribute name="style:parent-style-name">bold</xsl:attribute>
-          </xsl:when>
-          <xsl:when test="@style = 'italics'">
-            <xsl:attribute name="style:parent-style-name">italic</xsl:attribute>
-          </xsl:when>
-          <xsl:when test="@style = 'double-underline'">
-            <xsl:attribute name="style:parent-style-name">double-underline</xsl:attribute>
-          </xsl:when>
-          <xsl:when test="@style = 'overline'">
-            <xsl:attribute name="style:parent-style-name">overline</xsl:attribute>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:attribute name="style:parent-style-name">indent_text_style</xsl:attribute>
-          </xsl:otherwise>
-        </xsl:choose>
-        
-        <xsl:element name="style:text-properties">
-          <xsl:if test="@backcolor and not(@backcolor = '')">
-            <xsl:attribute name="fo:background-color">
-              <xsl:value-of select="styleUtils:getColor(@backcolor)"/>
-            </xsl:attribute>
-          </xsl:if>
-          <xsl:if test="@color and not(@color = '')">
-            <xsl:attribute name="fo:color">
-              <xsl:value-of select="styleUtils:getColor(@color)"/>
-            </xsl:attribute>
-          </xsl:if>
-        </xsl:element>
-    </xsl:element>
-    
-  </xsl:template>
-  
-  <!-- get flagging style name -->
-  <xsl:template name="getFlagStyleName">
-    
-    <xsl:variable name="domains">
-      <xsl:value-of select="normalize-space(ancestor-or-self::*[contains(@class,' topic/topic ')][1]/@domains)"/>
-    </xsl:variable>
-    <xsl:variable name="tmp_props">
-      <xsl:call-template name="getExtProps">
-        <xsl:with-param name="domains" select="$domains"/>
-      </xsl:call-template>
-    </xsl:variable>
-    <xsl:variable name="props">
-      <xsl:value-of select="substring-after($tmp_props, ',')"/>
-    </xsl:variable>
-    <!-- Test for the flagging attributes. If found, call 'gen-prop' with the values to use. Otherwise return -->
-    <xsl:if test="@audience and not($FILTERFILE='')">
-      
-      <xsl:value-of select="styleUtils:getFlagStyleName(concat('audience', @audience))"/>
-      
-    </xsl:if>
-    <xsl:if test="@platform and not($FILTERFILE='')">
-      
-      <xsl:value-of select="styleUtils:getFlagStyleName(concat('platform', @platform))"/>
-      
-    </xsl:if>
-    <xsl:if test="@product and not($FILTERFILE='')">
-      
-      <xsl:value-of select="styleUtils:getFlagStyleName(concat('product', @product))"/>
-      
-    </xsl:if>
-    <xsl:if test="@otherprops and not($FILTERFILE='')">
-      <xsl:value-of select="styleUtils:getFlagStyleName(concat('otherprops', @otherprops))"/>
-    </xsl:if>
-    
-    <xsl:if test="@rev and not($FILTERFILE='')">
-      <xsl:value-of select="styleUtils:getFlagStyleName(concat('rev', @rev))"/>
-    </xsl:if>
-    
-    <xsl:if test="not($props='') and not($FILTERFILE='')">
-      <xsl:call-template name="ext-getFlagStyleName">
-        <xsl:with-param name="props" select="$props"/>
-      </xsl:call-template>
-    </xsl:if>
-    
-  </xsl:template>
-  
-  <xsl:template name="ext-getFlagStyleName">
-    <xsl:param name="props"/>
-    <xsl:choose>
-      <xsl:when test="contains($props,',')">
-        <xsl:variable name="propsValue">
-          <xsl:call-template name="getPropsValue">
-            <xsl:with-param name="propsPath" select="substring-before($props,',')"/>
-          </xsl:call-template>
-        </xsl:variable>
-        <xsl:variable name="propName">
-          <xsl:call-template name="getLastPropName">
-            <xsl:with-param name="propsPath" select="substring-before($props,',')"/>
-          </xsl:call-template>
-        </xsl:variable>
-        <xsl:if test="not($propsValue='')">
-          <xsl:value-of select="styleUtils:getFlagStyleName(concat($propName, $propsValue))"/>
-        </xsl:if>
-        <xsl:call-template name="ext-getFlagStyleName">
-          <xsl:with-param name="props" select="substring-after($props,',')"/>
-        </xsl:call-template>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:variable name="propsValue">
-          <xsl:call-template name="getPropsValue">
-            <xsl:with-param name="propsPath" select="$props"/>
-          </xsl:call-template>
-        </xsl:variable>
-        <xsl:variable name="propName">
-          <xsl:call-template name="getLastPropName">
-            <xsl:with-param name="propsPath" select="$props"/>
-          </xsl:call-template>
-        </xsl:variable>
-        <xsl:if test="not($propsValue='')">
-          <xsl:value-of select="styleUtils:getFlagStyleName(concat($propName, $propsValue))"/>
-        </xsl:if>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:template>
-  
-  <xsl:template match="*" mode="start-add-odt-flags">
-    <!-- get flagging style name. -->
-    <xsl:variable name="flagStyleName">
-      <xsl:call-template name="getFlagStyleName"/>
-    </xsl:variable>
-    <!-- get style rules -->
-    <xsl:variable name="flagrules">
-      <xsl:call-template name="getrules"/>
-    </xsl:variable>
-    <!-- check style conflict -->
-    <xsl:variable name="conflictexist">
-      <xsl:call-template name="conflict-check">
-        <xsl:with-param name="flagrules" select="$flagrules"/>
-      </xsl:call-template>
-    </xsl:variable>
-    
-    <!-- add flagging styles -->
-    <xsl:choose>
-      <!-- no conflict -->
-      <xsl:when test="$conflictexist = 'false' and $flagStyleName != ''">
-        <xsl:attribute name="text:style-name">
-          <xsl:value-of select="$flagStyleName"/>
-        </xsl:attribute>
-      </xsl:when>
-      <!-- there are conflict -->
-      <xsl:when test="$conflictexist = 'true'">
-        <xsl:apply-templates select="." mode="ditamsg:conflict-text-style-applied"/>
-        <xsl:attribute name="text:style-name">
-          <xsl:value-of select="'conflict_style'"/>
-        </xsl:attribute>
-      </xsl:when>
-    </xsl:choose>
-    <!-- add images -->
-    <xsl:call-template name="start-flagit">
-      <xsl:with-param name="flagrules" select="$flagrules"/>     
-    </xsl:call-template>
-    <!-- add rev style -->
-    <xsl:call-template name="start-add-odt-revflags">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:call-template>
-  </xsl:template>
-  
-  <xsl:template match="*" mode="end-add-odt-flags">
-    <!-- get style rules -->
-    <xsl:variable name="flagrules">
-      <xsl:call-template name="getrules"/>
-    </xsl:variable>
-    <!-- add rev style -->
-    <xsl:call-template name="end-add-odt-revflags">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:call-template>
-    
-    <!-- add images -->
-    <xsl:call-template name="end-flagit">
-      <xsl:with-param name="flagrules" select="$flagrules"/> 
-    </xsl:call-template>
-    
-  </xsl:template>
-  
-  <xsl:template match="*" mode="start-add-odt-revflags" name="start-add-odt-revflags">
-    <xsl:param name="flagrules">
-      <xsl:call-template name="getrules"/>
-    </xsl:param>
-    <!-- add rev style -->
-    <xsl:choose>
-      <!-- draft rev mode, add div w/ rev attr value -->
-      <xsl:when test="@rev and not($FILTERFILE='') and ($DRAFT='yes')"> 
-        <xsl:variable name="revtest"> 
-          <xsl:call-template name="find-active-rev-flag">
-            <xsl:with-param name="allrevs" select="@rev"/>
-          </xsl:call-template>
-        </xsl:variable>
-        <xsl:choose>
-          <xsl:when test="$revtest=1">
-            <xsl:call-template name="start-mark-rev">
-              <xsl:with-param name="revvalue" select="@rev"/>
-              <xsl:with-param name="flagrules" select="$flagrules"/> 
-            </xsl:call-template>
-          </xsl:when>
-          <xsl:otherwise/>
-        </xsl:choose>
-      </xsl:when>
-      <xsl:when test="@rev and not($FILTERFILE='')">    <!-- normal rev mode -->
-        <xsl:call-template name="start-mark-rev">
-          <xsl:with-param name="revvalue" select="@rev"/>
-          <xsl:with-param name="flagrules" select="$flagrules"/> 
-        </xsl:call-template>
-      </xsl:when>
-      <xsl:otherwise/>
-    </xsl:choose>
-
-  </xsl:template>
-  
-  <xsl:template match="*" mode="end-add-odt-revflags" name="end-add-odt-revflags">
-    <xsl:param name="flagrules">
-      <xsl:call-template name="getrules"/>
-    </xsl:param>
-    <!-- add rev style -->
-    <xsl:choose>
-      <!-- draft rev mode, add div w/ rev attr value -->
-      <xsl:when test="@rev and not($FILTERFILE='') and ($DRAFT='yes')"> 
-        <xsl:variable name="revtest"> 
-          <xsl:call-template name="find-active-rev-flag">
-            <xsl:with-param name="allrevs" select="@rev"/>
-          </xsl:call-template>
-        </xsl:variable>
-        <xsl:choose>
-          <xsl:when test="$revtest=1">
-            <xsl:call-template name="end-mark-rev">
-              <xsl:with-param name="revvalue" select="@rev"/>
-              <xsl:with-param name="flagrules" select="$flagrules"/> 
-            </xsl:call-template>
-          </xsl:when>
-          <xsl:otherwise/>
-        </xsl:choose>
-      </xsl:when>
-      <xsl:when test="@rev and not($FILTERFILE='')">    <!-- normal rev mode -->
-        <xsl:call-template name="end-mark-rev">
-          <xsl:with-param name="revvalue" select="@rev"/>
-          <xsl:with-param name="flagrules" select="$flagrules"/> 
-        </xsl:call-template>
-      </xsl:when>
-      <xsl:otherwise/>
     </xsl:choose>
   </xsl:template>
   
