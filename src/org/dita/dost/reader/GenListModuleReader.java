@@ -1539,6 +1539,8 @@ public class GenListModuleReader extends AbstractXMLReader {
 		
 		String key = null;
 		String value = null;
+		//tempMap storing values to avoid ConcurrentModificationException
+		Map<String, String> tempMap = new HashMap<String, String>();
 		Iterator<Entry<String, String>> iter = keysDefMap.entrySet().iterator();
 		
 		while (iter.hasNext()) {
@@ -1550,11 +1552,13 @@ public class GenListModuleReader extends AbstractXMLReader {
 				//get multi-level keys
 				 List<String> keysList = getKeysList(key, keysRefMap);
 				 for (String multikey : keysList) {
-					 //update keysDefMap
-					 keysDefMap.put(multikey, value);
+					//update tempMap
+					 tempMap.put(multikey, value);
 				}
 			}
 		}
+		//update keysDefMap.
+		keysDefMap.putAll(tempMap);
 	}
 	//Added on 20100826 for bug:3052913 end
 
