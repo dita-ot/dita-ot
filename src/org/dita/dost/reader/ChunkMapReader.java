@@ -378,7 +378,8 @@ public class ChunkMapReader implements AbstractReader {
 			processChildTopicref(node);
 		//chunk "to-content"
 		} else if(chunkValue != null &&
-				chunkValue.indexOf("to-content") != -1 && hrefAttr != null){
+				//edited on 20100818 for bug:3042978
+				chunkValue.indexOf("to-content") != -1 && (hrefAttr != null || copytoAttr != null || node.hasChildNodes())){
 			//if this is the start point of the content chunk
 			//TODO very important start point(to-content).
 			processChunk((Element)node,false, chunkByTopic);

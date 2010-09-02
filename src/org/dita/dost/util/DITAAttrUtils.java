@@ -26,7 +26,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 /**
- * This util is used for check attributes of elements.
+ * This util is used for check attributes/nodes of elements.
  * @author william
  *
  */
@@ -217,7 +217,12 @@ public class DITAAttrUtils {
 		
 	}
 	
-	//get the document node of a topic file
+	
+	/**
+	 * get the document node of a topic file.
+	 * @param absolutePathToFile topic file
+	 * @return element.
+	 */
 	public Element getTopicDoc(String absolutePathToFile){
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder builder;
@@ -239,5 +244,61 @@ public class DITAAttrUtils {
 		}
 		return null;
 		
+	}
+	
+	
+	/**
+	 * get topicmeta's child(e.g navtitle, shortdesc) tag's value(text-only).
+	 * @param element input element
+	 * @return text value
+	 */
+	public String getChildElementValueOfTopicmeta(Element element, String classValue) {
+		
+		//navtitle
+		String returnValue = null;
+		//has child nodes
+		if(element.hasChildNodes()){
+			//Get topicmeta element node
+			Element topicMeta = getElementNode(element, Constants.ATTR_CLASS_VALUE_TOPICMETA);
+			//no topicmeta node
+			if(topicMeta == null){
+				return returnValue;
+			}
+			//Get element node
+			Element elem = getElementNode(topicMeta, classValue);
+			//no navtitle node
+			if(elem == null){
+				return returnValue;
+			}
+			//get text value
+			returnValue = this.getText(elem);
+		}
+		return returnValue;
+	}
+	
+	/**
+	 * Get specific element node from child nodes.
+	 * @param element parent node
+	 * @param classValue @class
+	 * @return element node.
+	 */
+	public Element getElementNode(Element element, String classValue) {
+		
+		//Element child = null;
+		
+		NodeList list = element.getChildNodes();
+		
+		for(int i = 0; i < list.getLength(); i++){
+			Node node = list.item(i);
+			if(node.getNodeType() == Node.ELEMENT_NODE){
+				Element child = (Element) node;
+				//node found
+				if(child.getAttribute(Constants.ATTRIBUTE_NAME_CLASS).contains(classValue)){
+					return child;
+					//break;
+				}
+			}
+		}
+		return null;
 	}
 }

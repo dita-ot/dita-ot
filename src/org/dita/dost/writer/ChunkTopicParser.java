@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
+import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.HashMap;
@@ -41,6 +42,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
@@ -827,6 +829,14 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 		String scopeValue = element.getAttribute(Constants.ATTRIBUTE_NAME_SCOPE);
 		String classValue = element.getAttribute(Constants.ATTRIBUTE_NAME_CLASS);
 		String processRoleValue = element.getAttribute(Constants.ATTRIBUTE_NAME_PROCESSING_ROLE);
+		//Added on 20100818 for bug:3042978 start
+		//Get id value
+		String id = element.getAttribute(Constants.ATTRIBUTE_NAME_ID);
+		//Get navtitle value
+		String navtitle = element.getAttribute(Constants.ATTRIBUTE_NAME_NAVTITLE);
+		//Added on 20100818 for bug:3042978 end
+		
+		
 		//file which will be parsed
 		String parseFilePath = null;
 		String outputFileName = outputFile;
@@ -853,7 +863,8 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 			
 			// if @copy-to is processed in chunk module, the list file needs to be updated. 
 			// Because @copy-to should be included in fulltopiclist, and the source of coyy-to should be excluded in fulltopiclist.
-			if(!copytoValue.equals(Constants.STRING_EMPTY) && chunkValue.contains("to-content")){
+			if(!copytoValue.equals(Constants.STRING_EMPTY) && chunkValue.contains("to-content") 
+				&& ! hrefValue.equals(Constants.STRING_EMPTY)){
 				copyto.add(copytoValue);
 				if(hrefValue.indexOf(Constants.SHARP) != -1){
 					copytoSource.add(hrefValue.substring(0, hrefValue.indexOf(Constants.SHARP)));
@@ -985,7 +996,90 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 					//restore the currentParsingFile
 					currentParsingFile = tempPath;
 				}
-			
+				
+				//Added on 20100818 for bug:3042978 start
+				//use @copy-to value(dita spec v1.2)
+				if(outputFileName == null){
+					if (!StringUtils.isEmptyString(copytoValue)){
+						outputFileName = FileUtils.resolveFile(filePath,
+								copytoValue);
+					//use id value	
+					}else if(!StringUtils.isEmptyString(id)){
+						outputFileName = FileUtils.resolveFile(filePath,
+								id + ditaext);
+					}else{
+						// use randomly generated file name
+						Random random = new Random();
+						outputFileName = FileUtils.resolveFile(filePath,"Chunk"
+								+new Integer(Math.abs(random.nextInt())).toString())+ditaext;
+						// Check if there is any conflict
+						if(FileUtils.fileExists(outputFileName)
+						   && !classValue.contains(Constants.ATTR_CLASS_VALUE_MAP)) {
+							String t = outputFileName;
+							outputFileName = FileUtils.resolveFile(filePath,"Chunk"
+									+new Integer(Math.abs(random.nextInt())).toString())+ditaext;
+							conflictTable.put(outputFileName, t);
+						}
+					}
+				
+					//if topicref has child node or topicref has @navtitle
+					if(element.hasChildNodes() || !StringUtils.isEmptyString(navtitle)){
+						
+						DITAAttrUtils utils = DITAAttrUtils.getInstance();
+						
+						String navtitleValue = null;
+						String shortDescValue = null;
+						//get navtitle value.
+						navtitleValue = utils.getChildElementValueOfTopicmeta(element, Constants.ATTR_CLASS_VALUE_NAVTITLE);
+						//get shortdesc value
+						shortDescValue = utils.getChildElementValueOfTopicmeta(element, Constants.ATTR_CLASS_VALUE_MAP_SHORTDESC);
+						//no navtitle tag exists.
+						if(navtitleValue == null){
+							//use @navtitle
+							navtitleValue = navtitle;
+						}
+						
+						
+						// add newly generated file to changTable
+						// the new entry in changeTable has same key and value
+						// in order to indicate it is a newly generated file
+						changeTable.put(outputFileName,outputFileName);
+						// update current element's @href value
+						//create a title-only topic when there is a title
+						if(!StringUtils.isEmptyString(navtitleValue)){
+							element.setAttribute(Constants.ATTRIBUTE_NAME_HREF,
+							FileUtils.getRelativePathFromMap(filePath+Constants.SLASH+"stub.ditamap", outputFileName));
+							//manually create a new topic chunk
+							StringBuffer buffer = new StringBuffer();
+							buffer.append("<topic id=\"topic\" class=\"- topic/topic \">")
+							.append("<title class=\"- topic/title \">")
+							.append(navtitleValue).append("</title>");
+							//has shortdesc value
+							if(shortDescValue != null){
+								buffer.append("<shortdesc class=\"- topic/shortdesc \">")
+								.append(shortDescValue).append("</shortdesc>");
+							}
+							buffer.append("</topic>");
+					
+							StringReader rder = new StringReader(buffer.toString());
+							InputSource source = new InputSource(rder);
+							
+							//for recursive
+							String tempPath = currentParsingFile;
+							currentParsingFile = outputFileName;
+							//insert not append the nested topic
+							parseFilePath = outputFileName;
+							//create chunk
+							reader.parse(source);
+							//restore the currentParsingFile
+							currentParsingFile = tempPath;
+						}
+						
+					}
+						
+				}
+				//Added 20100818 for bug:3042978 end
+				
 				if (element.hasChildNodes()){
 					//if current element has child nodes and chunk results for this element has value
 					//which means current element makes sense for chunk action.

@@ -97,9 +97,11 @@
     <condition property="noMap">
       <equals arg1="${fullditamaplist}" arg2="" />
     </condition>
+  	<!--
     <condition property="noTopic">
       <equals arg1="${fullditatopiclist}" arg2="" />
     </condition>
+    -->
     <condition property="noImagelist">
       <equals arg1="${imagelist}" arg2="" />
     </condition>
@@ -355,7 +357,11 @@
       basedir="${basedir}" inputmap="${user.input.file}"
       tempdir="${dita.temp.dir}" 
       extparam="ditaext=${dita.ext};transtype=${transtype}"/>
-    <property file="${dita.temp.dir}${file.separator}dita.list" />
+  	
+  	<xmlpropertyreader file="${dita.temp.dir}${file.separator}dita.xml.properties"/>
+  	<condition property="noTopic">
+  	  	<equals arg1="${fullditatopiclist}" arg2="" />
+  	</condition>
   </target>
 
   <target name="chunk-check">
