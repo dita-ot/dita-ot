@@ -1092,7 +1092,7 @@ public class GenListModuleReader extends AbstractXMLReader {
 			shouldAppendEndTag = false;
 		}
 		//Added by William on 2009-07-15 for req #12014 end
-		//update keysDefMap for multi-level keys
+		//update keysDefMap for multi-level keys for bug:3052913
 		checkMultiLevelKeys(keysDefMap, keysRefMap);
 	}
 
@@ -1220,7 +1220,6 @@ public class GenListModuleReader extends AbstractXMLReader {
 		String attrScope = atts.getValue(Constants.ATTRIBUTE_NAME_SCOPE);
 		String attrFormat = atts.getValue(Constants.ATTRIBUTE_NAME_FORMAT);
 		String attrType = atts.getValue(Constants.ATTRIBUTE_NAME_TYPE);
-		
 
 		if (attrValue == null) {
 			return;
@@ -1441,6 +1440,13 @@ public class GenListModuleReader extends AbstractXMLReader {
 			}
 		}
 		
+		//Added on 20100827 for bug:3052156 start
+		//add a warning message for outer files refered by @data
+		if(Constants.ATTRIBUTE_NAME_DATA.equals(attrName)){
+			toOutFile(new File(filename).getPath());
+		}
+		//Added on 20100827 for bug:3052156 end
+		
 		/*
 		 * Collect only conref target topic files.
 		 */
@@ -1539,10 +1545,12 @@ public class GenListModuleReader extends AbstractXMLReader {
 			Map.Entry<String, String> entry = iter.next();
 			key = entry.getKey();
 			value = entry.getValue();
-			//there is multi-leve keys exist.
+			//there is multi-level keys exist.
 			if(keysRefMap.containsValue(key)){
+				//get multi-level keys
 				 List<String> keysList = getKeysList(key, keysRefMap);
 				 for (String multikey : keysList) {
+					 //update keysDefMap
 					 keysDefMap.put(multikey, value);
 				}
 			}
