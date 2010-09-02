@@ -18,6 +18,7 @@ import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -25,6 +26,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.Stack;
+import java.util.Map.Entry;
 
 import org.apache.xerces.xni.grammars.XMLGrammarPool;
 import org.dita.dost.exception.DITAOTException;
@@ -108,6 +110,11 @@ public class GenListModuleReader extends AbstractXMLReader {
 	
 	/** Map of key definitions */
 	private Map<String, String> keysDefMap = null;
+	
+	//Added on 20100826 for bug:3052913 start
+	//Map to store multi-level keyrefs
+	private Map<String, String>keysRefMap = null;
+	//Added on 20100826 for bug:3052913 end
 	
 	/** Flag for conrefpush   */
 	private boolean hasconaction = false;  
@@ -252,6 +259,7 @@ public class GenListModuleReader extends AbstractXMLReader {
 		ignoredCopytoSourceSet = new HashSet<String>(Constants.INT_16);
 		outDitaFilesSet=new HashSet<String>(Constants.INT_64);
 		keysDefMap = new HashMap<String, String>();
+		keysRefMap = new HashMap<String, String>();
 		
 		exKeysDefMap = new HashMap<String, String>();
 		
@@ -354,6 +362,7 @@ public class GenListModuleReader extends AbstractXMLReader {
 		ignoredCopytoSourceSet.clear();
 		outDitaFilesSet.clear();
 		keysDefMap.clear();
+		keysRefMap.clear();
 		exKeysDefMap.clear();
 		schemeSet.clear();
 		schemeRefSet.clear();
@@ -1083,6 +1092,8 @@ public class GenListModuleReader extends AbstractXMLReader {
 			shouldAppendEndTag = false;
 		}
 		//Added by William on 2009-07-15 for req #12014 end
+		//update keysDefMap for multi-level keys
+		checkMultiLevelKeys(keysDefMap, keysRefMap);
 	}
 
 	/**
@@ -1209,6 +1220,7 @@ public class GenListModuleReader extends AbstractXMLReader {
 		String attrScope = atts.getValue(Constants.ATTRIBUTE_NAME_SCOPE);
 		String attrFormat = atts.getValue(Constants.ATTRIBUTE_NAME_FORMAT);
 		String attrType = atts.getValue(Constants.ATTRIBUTE_NAME_TYPE);
+		
 
 		if (attrValue == null) {
 			return;
@@ -1234,6 +1246,9 @@ public class GenListModuleReader extends AbstractXMLReader {
 		if(Constants.ATTRIBUTE_NAME_KEYS.equals(attrName) && !attrValue.equals(Constants.STRING_EMPTY)){
 			
 			String target = atts.getValue(Constants.ATTRIBUTE_NAME_HREF);
+			
+			String keyRef = atts.getValue(Constants.ATTRIBUTE_NAME_KEYREF);
+			
 			//Added by William on 2009-10-15 for ampersand bug:2878492 start
 			if(target != null){
 				target = StringUtils.escapeXML(target);
@@ -1276,6 +1291,9 @@ public class GenListModuleReader extends AbstractXMLReader {
 							target = FileUtils.normalizeDirectory(currentDir, target);
 							keysDefMap.put(key, target + tail);
 						}
+					}else if(!StringUtils.isEmptyString(keyRef)){
+						//store multi-level keys.
+						keysRefMap.put(key, keyRef);
 					}else{
 						// target is null or empty, it is useful in the future when consider the content of key definition
 						keysDefMap.put(key, "");
@@ -1483,6 +1501,55 @@ public class GenListModuleReader extends AbstractXMLReader {
 		}
 	}
 	
+	//Added on 20100826 for bug:3052913 start
+	//get multi-level keys list
+	private List<String> getKeysList(String key, Map<String, String> keysRefMap) {
+		
+		List<String> list = new ArrayList<String>();
+		
+		//Iterate the map to look for multi-level keys
+		Iterator<Entry<String, String>> iter = keysRefMap.entrySet().iterator();
+		while (iter.hasNext()) {
+			Map.Entry<String, String> entry = iter.next();
+			//Multi-level key found
+			if(entry.getValue().equals(key)){
+				//add key into the list
+				String entryKey = entry.getKey();
+				list.add(entryKey);
+				//still have multi-level keys
+				if(keysRefMap.containsValue(entryKey)){
+					//rescuive point
+					List<String> tempList = getKeysList(entryKey, keysRefMap);
+					list.addAll(tempList);
+				}
+			}
+		}
+		
+		return list;
+	}
+	//update keysDefMap for multi-level keys
+	private void checkMultiLevelKeys(Map<String, String> keysDefMap,
+			Map<String, String> keysRefMap) {
+		
+		String key = null;
+		String value = null;
+		Iterator<Entry<String, String>> iter = keysDefMap.entrySet().iterator();
+		
+		while (iter.hasNext()) {
+			Map.Entry<String, String> entry = iter.next();
+			key = entry.getKey();
+			value = entry.getValue();
+			//there is multi-leve keys exist.
+			if(keysRefMap.containsValue(key)){
+				 List<String> keysList = getKeysList(key, keysRefMap);
+				 for (String multikey : keysList) {
+					 keysDefMap.put(multikey, value);
+				}
+			}
+		}
+	}
+	//Added on 20100826 for bug:3052913 end
+
 	private boolean isOutFile(String toCheckPath) {
 		if (!toCheckPath.startsWith(".."))
 			return false;
