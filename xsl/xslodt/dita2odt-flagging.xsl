@@ -8,11 +8,13 @@
   xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
   xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
   xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+  xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0"
   xmlns:exsl="http://exslt.org/common" 
   xmlns:ditamsg="http://dita-ot.sourceforge.net/ns/200704/ditamsg"
   xmlns:styleUtils="org.dita.dost.util.StyleUtils"
+  xmlns:stringUtils="org.dita.dost.util.StringUtils" 
   xmlns:imgUtils="org.dita.dost.util.ImgUtils"
-  exclude-result-prefixes="exsl ditamsg styleUtils imgUtils">
+  exclude-result-prefixes="exsl ditamsg styleUtils imgUtils stringUtils">
   
   <!-- =========== TEMPLATES FOR ODT FLAGGING =========== -->
   <xsl:template name="create_flagging_styles">
@@ -49,7 +51,7 @@
   <xsl:template  match="prop[@action='flag']" mode="create_flagging_styles">
     
     <xsl:variable name="styleName" select="styleUtils:insertFlagStyleName(concat(@att, @val))"/>
-    
+    <!-- text/p flagging style -->
     <xsl:element name="style:style">
         <xsl:attribute name="style:name">
           <xsl:value-of select="$styleName"/>
@@ -89,7 +91,25 @@
           </xsl:if>
         </xsl:element>
     </xsl:element>
-    
+    <!-- table flagging style -->
+    <xsl:element name="style:style">
+        <xsl:attribute name="style:name">
+          <xsl:value-of select="concat($styleName, '_table_attr')"/>
+        </xsl:attribute>
+        <xsl:attribute name="style:family">table</xsl:attribute>
+         <xsl:element name="style:table-properties">
+            <xsl:if test="@backcolor and not(@backcolor = '')">
+              <xsl:attribute name="fo:background-color">
+                <xsl:value-of select="styleUtils:getColor(@backcolor)"/>
+              </xsl:attribute>
+            </xsl:if>
+            <xsl:if test="@color and not(@color = '')">
+              <xsl:attribute name="fo:color">
+                <xsl:value-of select="styleUtils:getColor(@color)"/>
+              </xsl:attribute>
+            </xsl:if>
+         </xsl:element>
+    </xsl:element>
   </xsl:template>
   
   <!-- get flagging style name -->
@@ -178,6 +198,11 @@
   </xsl:template>
   
   <xsl:template match="*" mode="start-add-odt-flags">
+    
+    <xsl:param name="family" select="''"/>
+    <xsl:param name="type" select="''"/>
+    
+    
     <!-- get flagging style name. -->
     <xsl:variable name="flagStyleName">
       <xsl:call-template name="getFlagStyleName"/>
@@ -192,47 +217,95 @@
         <xsl:with-param name="flagrules" select="$flagrules"/>
       </xsl:call-template>
     </xsl:variable>
+      
+    <!-- ordinary tag(not list, not render table properties) -->
+    <xsl:if test="$family = '' or $family = '_table_attr'">    
+      <!-- add flagging styles -->
+      <xsl:choose>
+        <!-- no conflict -->
+        <xsl:when test="$conflictexist = 'false' and $flagStyleName != ''">
+          <xsl:choose>
+            <!-- ordinary style -->
+            <xsl:when test="$family = ''">
+              <xsl:attribute name="text:style-name">
+                <xsl:value-of select="concat($flagStyleName, $family)"/>
+              </xsl:attribute>
+            </xsl:when>
+            <!-- table style -->
+            <xsl:otherwise>
+              <xsl:attribute name="table:style-name">
+                <xsl:value-of select="concat($flagStyleName, $family)"/>
+              </xsl:attribute>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:when>
+        <!-- there are conflict -->
+        <xsl:when test="$conflictexist = 'true'">
+          <xsl:apply-templates select="." mode="ditamsg:conflict-text-style-applied"/>
+          <xsl:attribute name="text:style-name">
+            <xsl:value-of select="'conflict_style'"/>
+          </xsl:attribute>
+        </xsl:when>
+      </xsl:choose>
+    </xsl:if>
     
-    <!-- add flagging styles -->
-    <xsl:choose>
-      <!-- no conflict -->
-      <xsl:when test="$conflictexist = 'false' and $flagStyleName != ''">
-        <xsl:attribute name="text:style-name">
-          <xsl:value-of select="$flagStyleName"/>
-        </xsl:attribute>
-      </xsl:when>
-      <!-- there are conflict -->
-      <xsl:when test="$conflictexist = 'true'">
-        <xsl:apply-templates select="." mode="ditamsg:conflict-text-style-applied"/>
-        <xsl:attribute name="text:style-name">
-          <xsl:value-of select="'conflict_style'"/>
-        </xsl:attribute>
-      </xsl:when>
-    </xsl:choose>
-    <!-- add images -->
-    <xsl:call-template name="start-flagit">
-      <xsl:with-param name="flagrules" select="$flagrules"/>     
-    </xsl:call-template>
-    <!-- add rev style -->
-    <xsl:call-template name="start-add-odt-revflags">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:call-template>
+    
+    <!-- for table/list flagging styles -->
+    <xsl:if test="$family != '' and $family != '_table_attr'">
+      <!-- render p and span tag -->
+      <xsl:text disable-output-escaping="yes">&lt;text:p&gt;</xsl:text>
+    </xsl:if>
+    
+    <!-- avoid text under li/entry and table attr styles-->
+    <xsl:if test="$type = '' and $family != '_table_attr'">
+      <!-- add images -->
+      <xsl:call-template name="start-flagit">
+        <xsl:with-param name="flagrules" select="$flagrules"/>     
+      </xsl:call-template>
+      <!-- add rev style -->
+      <xsl:call-template name="start-add-odt-revflags">
+        <xsl:with-param name="flagrules" select="$flagrules"/>
+      </xsl:call-template>
+    </xsl:if>
+    
+    <!-- for table/list flagging styles -->
+    <xsl:if test="$family != '' and $family != '_table_attr'">
+      <xsl:text disable-output-escaping="yes">&lt;/text:p&gt;</xsl:text>
+    </xsl:if>
+    
   </xsl:template>
   
   <xsl:template match="*" mode="end-add-odt-flags">
+    <xsl:param name="family" select="''"/>
+    <xsl:param name="type" select="''"/>
+    
     <!-- get style rules -->
     <xsl:variable name="flagrules">
       <xsl:call-template name="getrules"/>
     </xsl:variable>
-    <!-- add rev style -->
-    <xsl:call-template name="end-add-odt-revflags">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:call-template>
     
-    <!-- add images -->
-    <xsl:call-template name="end-flagit">
-      <xsl:with-param name="flagrules" select="$flagrules"/> 
-    </xsl:call-template>
+    <!-- for table/list flagging styles -->
+    <xsl:if test="$family != ''">
+      <!-- render p and span tag -->
+      <xsl:text disable-output-escaping="yes">&lt;text:p&gt;</xsl:text>
+    </xsl:if>
+    
+    <!-- avoid text under li/entry-->
+    <xsl:if test="$type = ''">
+      <!-- add rev style -->
+      <xsl:call-template name="end-add-odt-revflags">
+        <xsl:with-param name="flagrules" select="$flagrules"/>
+      </xsl:call-template>
+      <!-- add images -->
+      <xsl:call-template name="end-flagit">
+        <xsl:with-param name="flagrules" select="$flagrules"/> 
+      </xsl:call-template>
+    </xsl:if>
+    
+    <!-- for table/list flagging styles -->
+    <xsl:if test="$family != ''">
+      <xsl:text disable-output-escaping="yes">&lt;/text:p&gt;</xsl:text>
+    </xsl:if>
     
   </xsl:template>
   
@@ -600,6 +673,128 @@
         </xsl:call-template>
       </xsl:otherwise>
     </xsl:choose>
+  </xsl:template>
+  
+  <xsl:template name="start_flagging_text_of_table_or_list">
+    
+    <xsl:variable name="ul_depth" select="count(ancestor::*[contains(@class, ' topic/ul ')][1]/ancestor::*)"/>
+    <xsl:variable name="ol_depth" select="count(ancestor::*[contains(@class, ' topic/ol ')][1]/ancestor::*)"/>
+    <xsl:variable name="sl_depth" select="count(ancestor::*[contains(@class, ' topic/sl ')][1]/ancestor::*)"/>
+    <xsl:variable name="dl_depth" select="count(ancestor::*[contains(@class, ' topic/dl ')][1]/ancestor::*)"/>
+    <xsl:variable name="table_depth" select="count(ancestor::*[contains(@class, ' topic/table ')][1]/ancestor::*)"/>
+    <xsl:variable name="stable_depth" select="count(ancestor::*[contains(@class, ' topic/simpletable ')][1]/ancestor::*)"/>
+    <!-- get closest tag -->
+    <xsl:variable name="max_depth">
+      <xsl:value-of select="stringUtils:getMax($ul_depth, $ol_depth, $sl_depth, 
+        $dl_depth, $table_depth, $stable_depth)"/>
+    </xsl:variable>
+    <xsl:if test="$max_depth != 0 ">
+      <xsl:choose>
+        <!-- closest tag is ul -->
+        <xsl:when test="$max_depth = $ul_depth">
+          <xsl:apply-templates select="ancestor::*[contains(@class, ' topic/ul ')][1]" 
+            mode="start-add-odt-flags">
+            <xsl:with-param name="type" select="'list'"/>
+          </xsl:apply-templates>
+        </xsl:when>
+        <!-- closest tag is ol -->
+        <xsl:when test="$max_depth = $ol_depth">
+          <xsl:apply-templates select="ancestor::*[contains(@class, ' topic/ol ')][1]" 
+            mode="start-add-odt-flags">
+            <xsl:with-param name="type" select="'list'"/>
+          </xsl:apply-templates>
+        </xsl:when>
+        <!-- closest tag is sl -->
+        <xsl:when test="$max_depth = $sl_depth">
+          <xsl:apply-templates select="ancestor::*[contains(@class, ' topic/sl ')][1]" 
+            mode="start-add-odt-flags">
+            <xsl:with-param name="type" select="'list'"/>
+          </xsl:apply-templates>
+        </xsl:when>
+        <!-- closest tag is dl -->
+        <xsl:when test="$max_depth = $dl_depth">
+          <xsl:apply-templates select="ancestor::*[contains(@class, ' topic/dl ')][1]" 
+            mode="start-add-odt-flags">
+            <xsl:with-param name="type" select="'list'"/>
+          </xsl:apply-templates>
+        </xsl:when>
+        <!-- closest tag is table -->
+        <xsl:when test="$max_depth = $table_depth">
+          <xsl:apply-templates select="ancestor::*[contains(@class, ' topic/table ')][1]" 
+            mode="start-add-odt-flags">
+            <xsl:with-param name="type" select="'table'"/>
+          </xsl:apply-templates>
+        </xsl:when>
+        <!-- closest tag is stable -->
+        <xsl:when test="$max_depth = $stable_depth">
+          <xsl:apply-templates select="ancestor::*[contains(@class, ' topic/simpletable ')][1]" 
+            mode="start-add-odt-flags">
+            <xsl:with-param name="type" select="'stable'"/>
+          </xsl:apply-templates>
+        </xsl:when>
+      </xsl:choose>
+    </xsl:if>
+  </xsl:template>
+  
+  <xsl:template name="end_flagging_text_of_table_or_list">
+    
+    <xsl:variable name="ul_depth" select="count(ancestor::*[contains(@class, ' topic/ul ')][1]/ancestor::*)"/>
+    <xsl:variable name="ol_depth" select="count(ancestor::*[contains(@class, ' topic/ol ')][1]/ancestor::*)"/>
+    <xsl:variable name="sl_depth" select="count(ancestor::*[contains(@class, ' topic/sl ')][1]/ancestor::*)"/>
+    <xsl:variable name="dl_depth" select="count(ancestor::*[contains(@class, ' topic/dl ')][1]/ancestor::*)"/>
+    <xsl:variable name="table_depth" select="count(ancestor::*[contains(@class, ' topic/table ')][1]/ancestor::*)"/>
+    <xsl:variable name="stable_depth" select="count(ancestor::*[contains(@class, ' topic/simpletable ')][1]/ancestor::*)"/>
+    <!-- get closest tag -->
+    <xsl:variable name="max_depth">
+      <xsl:value-of select="stringUtils:getMax($ul_depth, $ol_depth, $sl_depth, 
+        $dl_depth, $table_depth, $stable_depth)"/>
+    </xsl:variable>
+    <xsl:if test="$max_depth != 0 ">
+      <xsl:choose>
+        <!-- closest tag is ul -->
+        <xsl:when test="$max_depth = $ul_depth">
+          <xsl:apply-templates select="ancestor::*[contains(@class, ' topic/ul ')][1]" 
+            mode="end-add-odt-flags">
+            <xsl:with-param name="type" select="'list'"/>
+          </xsl:apply-templates>
+        </xsl:when>
+        <!-- closest tag is ol -->
+        <xsl:when test="$max_depth = $ol_depth">
+          <xsl:apply-templates select="ancestor::*[contains(@class, ' topic/ol ')][1]" 
+            mode="end-add-odt-flags">
+            <xsl:with-param name="type" select="'list'"/>
+          </xsl:apply-templates>
+        </xsl:when>
+        <!-- closest tag is sl -->
+        <xsl:when test="$max_depth = $sl_depth">
+          <xsl:apply-templates select="ancestor::*[contains(@class, ' topic/sl ')][1]" 
+            mode="end-add-odt-flags">
+            <xsl:with-param name="type" select="'list'"/>
+          </xsl:apply-templates>
+        </xsl:when>
+        <!-- closest tag is dl -->
+        <xsl:when test="$max_depth = $dl_depth">
+          <xsl:apply-templates select="ancestor::*[contains(@class, ' topic/dl ')][1]" 
+            mode="end-add-odt-flags">
+            <xsl:with-param name="type" select="'list'"/>
+          </xsl:apply-templates>
+        </xsl:when>
+        <!-- closest tag is table -->
+        <xsl:when test="$max_depth = $table_depth">
+          <xsl:apply-templates select="ancestor::*[contains(@class, ' topic/table ')][1]" 
+            mode="end-add-odt-flags">
+            <xsl:with-param name="type" select="'table'"/>
+          </xsl:apply-templates>
+        </xsl:when>
+        <!-- closest tag is stable -->
+        <xsl:when test="$max_depth = $stable_depth">
+          <xsl:apply-templates select="ancestor::*[contains(@class, ' topic/simpletable ')][1]" 
+            mode="end-add-odt-flags">
+            <xsl:with-param name="type" select="'stable'"/>
+          </xsl:apply-templates>
+        </xsl:when>
+      </xsl:choose>
+    </xsl:if>
   </xsl:template>
   
   

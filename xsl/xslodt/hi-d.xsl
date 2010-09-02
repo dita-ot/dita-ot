@@ -388,7 +388,6 @@
                     <xsl:value-of select="$style_name"/>
                </xsl:attribute>
                <xsl:attribute name="style:family">text</xsl:attribute>
-               <xsl:attribute name="style:parent-style-name">default_text_style</xsl:attribute>
                <xsl:element name="style:text-properties">
                     <!-- bold-->
                     <xsl:if test="contains($style_name, 'bold')">
@@ -561,12 +560,28 @@
      
      <xsl:if test="ancestor::*[contains(@class, ' hi-d/sub ')]">
           <xsl:value-of select="'sub'"/>
-          <xsl:value-of select="count(ancestor::*[contains(@class, ' hi-d/sub ')])"/>
+          <xsl:variable name="depth" select="count(ancestor::*[contains(@class, ' hi-d/sub ')])"/>
+          <xsl:choose>
+               <xsl:when test="$depth &gt; 5">
+                    <xsl:value-of select="6"/>
+               </xsl:when>
+               <xsl:otherwise>
+                    <xsl:value-of select="$depth"/>
+               </xsl:otherwise>
+          </xsl:choose>
      </xsl:if>
      
      <xsl:if test="ancestor::*[contains(@class, ' hi-d/sup ')]">
           <xsl:value-of select="'sup'"/>
-          <xsl:value-of select="count(ancestor::*[contains(@class, ' hi-d/sup ')])"/>
+          <xsl:variable name="depth" select="count(ancestor::*[contains(@class, ' hi-d/sup ')])"/>
+          <xsl:choose>
+               <xsl:when test="$depth &gt; 5">
+                    <xsl:value-of select="6"/>
+               </xsl:when>
+               <xsl:otherwise>
+                    <xsl:value-of select="$depth"/>
+               </xsl:otherwise>
+          </xsl:choose>
      </xsl:if>
      
      <xsl:if test="ancestor::*[contains(@class, ' ui-d/screen ')] | ancestor::*[contains(@class, ' pr-d/codeblock ')]">

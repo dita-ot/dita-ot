@@ -110,45 +110,29 @@
       
       <!-- code and screen style -->
       <style:style style:name="Code_Paragraph" style:family="paragraph" style:parent-style-name="indent_paragraph_style">
-        <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0cm" fo:keep-together="always" fo:text-indent="0cm" style:auto-text-indent="false" fo:background-color="#d9d9d9" fo:padding-left="0cm" fo:padding-right="0cm" fo:padding-top="0.106cm" fo:padding-bottom="0.106cm" fo:border-left="none" fo:border-right="none" fo:border-top="0.002cm solid #000000" fo:border-bottom="0.002cm solid #000000">
-          <!-- 
-          <style:tab-stops>
-            <style:tab-stop style:position="0.75cm"/>
-            <style:tab-stop style:position="1.499cm"/>
-            <style:tab-stop style:position="2.251cm"/>
-            <style:tab-stop style:position="3cm"/>
-            <style:tab-stop style:position="3.75cm"/>
-            <style:tab-stop style:position="4.5cm"/>
-            <style:tab-stop style:position="5.249cm"/>
-            <style:tab-stop style:position="6.001cm"/>
-            <style:tab-stop style:position="6.75cm"/>
-            <style:tab-stop style:position="7.5cm"/>
-            <style:tab-stop style:position="8.25cm"/>
-            <style:tab-stop style:position="8.999cm"/>
-          </style:tab-stops>
-          -->
+        <style:paragraph-properties 
+          fo:margin-left="0cm" 
+          fo:margin-right="0cm" 
+          fo:margin-top="0cm" 
+          fo:margin-bottom="0cm" 
+          fo:keep-together="always" 
+          fo:text-indent="0cm" 
+          style:auto-text-indent="false" 
+          fo:background-color="#d9d9d9" 
+          fo:padding-left="0cm" 
+          fo:padding-right="0cm" 
+          fo:padding-top="0.106cm" 
+          fo:padding-bottom="0.106cm" 
+          fo:border-left="none" 
+          fo:border-right="none" 
+          fo:border-top="0.002cm solid #000000" 
+          fo:border-bottom="0.002cm solid #000000">
           <style:background-image/>
         </style:paragraph-properties>
       </style:style>
       <!-- code and screen style -->
       <style:style style:name="Code_Text" style:family="text" style:parent-style-name="indent_text_style">
         <style:text-properties fo:keep-together="always" style:auto-text-indent="false" fo:background-color="#d9d9d9" fo:padding-top="0.106cm" fo:padding-bottom="0.106cm">
-          <!-- 
-          <style:tab-stops>
-            <style:tab-stop style:position="0.75cm"/>
-            <style:tab-stop style:position="1.499cm"/>
-            <style:tab-stop style:position="2.251cm"/>
-            <style:tab-stop style:position="3cm"/>
-            <style:tab-stop style:position="3.75cm"/>
-            <style:tab-stop style:position="4.5cm"/>
-            <style:tab-stop style:position="5.249cm"/>
-            <style:tab-stop style:position="6.001cm"/>
-            <style:tab-stop style:position="6.75cm"/>
-            <style:tab-stop style:position="7.5cm"/>
-            <style:tab-stop style:position="8.25cm"/>
-            <style:tab-stop style:position="8.999cm"/>
-          </style:tab-stops>
-          -->
           <style:background-image/>
         </style:text-properties>
       </style:style>
@@ -172,9 +156,11 @@
       </style:style>
       
       <!-- Table Style -->
+      <!-- 
       <style:style style:name="table_style" style:family="table">
         <style:table-properties fo:keep-with-next="true"/>
       </style:style>
+      -->
       
       <!-- required-cleanup style -->
       <style:style style:name="required_cleanup_style" style:family="text" style:parent-style-name="indent_paragraph_style">
@@ -190,11 +176,41 @@
         <style:text-properties fo:font-weight="bold" style:font-weight-asian="bold"
           style:font-weight-complex="bold"/>
       </style:style>
-      <style:style style:name="sub" style:family="text" style:parent-style-name="default_text_style">
-        <style:text-properties style:text-position="sub 58%"/>
+      <style:style style:name="sub1" style:family="text" style:parent-style-name="default_text_style">
+        <style:text-properties style:text-position="-10% 58%"/>
       </style:style>
-      <style:style style:name="sup" style:family="text" style:parent-style-name="default_text_style">
-        <style:text-properties style:text-position="super 58%"/>
+      <style:style style:name="sub2" style:family="text" style:parent-style-name="default_text_style">
+        <style:text-properties style:text-position="-20% 58%"/>
+      </style:style>
+      <style:style style:name="sub3" style:family="text" style:parent-style-name="default_text_style">
+        <style:text-properties style:text-position="-30% 58%"/>
+      </style:style>
+      <style:style style:name="sub4" style:family="text" style:parent-style-name="default_text_style">
+        <style:text-properties style:text-position="-40% 58%"/>
+      </style:style>
+      <style:style style:name="sub5" style:family="text" style:parent-style-name="default_text_style">
+        <style:text-properties style:text-position="-50% 58%"/>
+      </style:style>
+      <style:style style:name="sub6" style:family="text" style:parent-style-name="default_text_style">
+        <style:text-properties style:text-position="-60% 58%"/>
+      </style:style>
+      <style:style style:name="sup1" style:family="text" style:parent-style-name="default_text_style">
+        <style:text-properties style:text-position="40% 58%"/>
+      </style:style>
+      <style:style style:name="sup2" style:family="text" style:parent-style-name="default_text_style">
+        <style:text-properties style:text-position="50% 58%"/>
+      </style:style>
+      <style:style style:name="sup3" style:family="text" style:parent-style-name="default_text_style">
+        <style:text-properties style:text-position="60% 58%"/>
+      </style:style>
+      <style:style style:name="sup4" style:family="text" style:parent-style-name="default_text_style">
+        <style:text-properties style:text-position="70% 58%"/>
+      </style:style>
+      <style:style style:name="sup5" style:family="text" style:parent-style-name="default_text_style">
+        <style:text-properties style:text-position="80% 58%"/>
+      </style:style>
+      <style:style style:name="sup6" style:family="text" style:parent-style-name="default_text_style">
+        <style:text-properties style:text-position="90% 58%"/>
       </style:style>
       <style:style style:name="underline" style:family="text" style:parent-style-name="default_text_style">
         <style:text-properties style:text-underline-style="solid"
@@ -257,9 +273,9 @@
       <!-- book title style -->
       <style:style style:name="Title" style:family="paragraph" style:parent-style-name="Standard" style:class="chapter">
         <style:paragraph-properties 
-          fo:margin-top="0.423cm" fo:margin-bottom="0.423cm" fo:padding-left="0cm" fo:padding-right="0cm" 
+          fo:margin-top="8cm" fo:margin-bottom="0.423cm" fo:padding-left="0cm" fo:padding-right="0cm" 
           fo:padding-top="0.035cm" fo:padding-bottom="0cm" fo:border-left="none" fo:border-right="none" 
-          fo:border-top="0.002cm solid #000000" fo:border-bottom="none"/>
+          fo:border-top="none" fo:border-bottom="none"/>
         <style:text-properties 
           fo:color="#333399" fo:font-size="20pt" fo:font-weight="bold" style:letter-kerning="true" 
           style:font-size-asian="24pt" style:font-weight-asian="bold" style:font-name-complex="Arial" 
@@ -641,51 +657,6 @@
         </xsl:otherwise>
       </xsl:choose>
     </xsl:element>
-    <xsl:value-of select="$newline"/>
-    <xsl:element name="style:style">
-      <xsl:attribute name="style:family">
-        <xsl:value-of select="'text'"/>
-      </xsl:attribute>
-      <!-- create book mark -->
-      <xsl:choose>
-        <xsl:when test="$depth='1'">
-          <xsl:attribute name="style:name">italic_heading_1</xsl:attribute>
-          <style:text-properties fo:font-style="italic" style:font-style-asian="italic"
-            style:font-style-complex="italic" fo:font-size="16pt" style:font-size-asian="16pt"
-            style:font-size-complex="16pt"/>
-        </xsl:when>
-        <xsl:when test="$depth='2'">
-          <xsl:attribute name="style:name">italic_heading_2</xsl:attribute>
-          <style:text-properties fo:font-style="italic" style:font-style-asian="italic"
-            style:font-style-complex="italic" fo:font-size="15pt" style:font-size-asian="15pt"
-            style:font-size-complex="15pt"/>
-        </xsl:when>
-        <xsl:when test="$depth='3'">
-          <xsl:attribute name="style:name">italic_heading_3</xsl:attribute>
-          <style:text-properties fo:font-style="italic" style:font-style-asian="italic"
-            style:font-style-complex="italic" fo:font-size="14pt" style:font-size-asian="14pt"
-            style:font-size-complex="14pt"/>
-        </xsl:when>
-        <xsl:when test="$depth='4'">
-          <xsl:attribute name="style:name">italic_heading_4</xsl:attribute>
-          <style:text-properties fo:font-style="italic" style:font-style-asian="italic"
-            style:font-style-complex="italic" fo:font-size="13pt" style:font-size-asian="13pt"
-            style:font-size-complex="13pt"/>
-        </xsl:when>
-        <xsl:when test="$depth='5'">
-          <xsl:attribute name="style:name">italic_heading_5</xsl:attribute>
-          <style:text-properties fo:font-style="italic" style:font-style-asian="italic"
-            style:font-style-complex="italic" fo:font-size="12pt" style:font-size-asian="12pt"
-            style:font-size-complex="12pt"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:attribute name="style:name">italic_heading_6</xsl:attribute>
-          <style:text-properties fo:font-style="italic" style:font-style-asian="italic"
-            style:font-style-complex="italic" fo:font-size="11pt" style:font-size-asian="11pt"
-            style:font-size-complex="11pt"/>
-        </xsl:otherwise>
-      </xsl:choose>
-    </xsl:element>
   </xsl:template>
   
   <!--Create styles for list-->
@@ -937,11 +908,11 @@
   <xsl:template name="create-font">
     <xsl:comment>font style</xsl:comment>
     <xsl:value-of select="$newline"/>
-    <style:style style:name="Courier_New" style:family="text" style:parent-style-name="default_text_style">
+    <style:style style:name="Courier_New" style:family="text">
       <style:text-properties style:font-name="Courier New"/>
     </style:style>
     
-    <style:style style:name="Courier" style:family="text" style:parent-style-name="bold">
+    <style:style style:name="Courier" style:family="text">
       <style:text-properties style:font-name="Courier" />
     </style:style>
   </xsl:template>
@@ -962,7 +933,7 @@
         fo:text-indent="-0.1965in" style:auto-text-indent="false" text:number-lines="false"
         text:line-number="0"/>
       <style:text-properties fo:font-size="10pt" style:font-size-asian="10pt"
-        style:font-size-complex="10pt"/>
+        style:font-size-complex="10pt" style:font-name="Courier"/>
     </style:style>
     
     <style:style style:name="footnote_symbol" style:display-name="Footnote Symbol"

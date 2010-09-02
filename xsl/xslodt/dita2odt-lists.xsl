@@ -26,27 +26,32 @@
   xmlns:anim="urn:oasis:names:tc:opendocument:xmlns:animation:1.0"
   xmlns:smil="urn:oasis:names:tc:opendocument:xmlns:smil-compatible:1.0"
   xmlns:prodtools="http://www.ibm.com/xmlns/prodtools"
+  xmlns:random="org.dita.dost.util.RandomUtils" exclude-result-prefixes="random"
   version="1.0">
 
 <xsl:template match="*[contains(@class,' topic/ul ')]">
-  
-  <xsl:call-template name="render_list">
-    <xsl:with-param name="list_style" select="'list_style'"/>
-  </xsl:call-template>
-  
+
+        <!-- render list -->
+        <xsl:call-template name="render_list">
+          <xsl:with-param name="list_style" select="'list_style'"/>
+        </xsl:call-template>
+        
 </xsl:template>
   
 <xsl:template match="*[contains(@class,' topic/ol ')]">
   
+  <!-- render list -->
   <xsl:call-template name="render_list">
-    <xsl:with-param name="list_style" select="'ordered_list_style'"></xsl:with-param>
+    <xsl:with-param name="list_style" select="'ordered_list_style'"/>
   </xsl:call-template>
   
 </xsl:template>
   
 <xsl:template match="*[contains(@class,' topic/sl ')]">
+  
+  <!-- render list -->
   <xsl:call-template name="render_list">
-    <xsl:with-param name="list_style" select="'list_style'"></xsl:with-param>
+    <xsl:with-param name="list_style" select="'list_style'"/>
   </xsl:call-template>
   
 </xsl:template>
@@ -92,6 +97,7 @@
 <!-- definition list -->
 <xsl:template match="*[contains(@class,' topic/dl ')]">
   
+  <!-- render list -->
   <xsl:call-template name="render_list">
     <xsl:with-param name="list_style" select="'list_style'"/>
   </xsl:call-template>

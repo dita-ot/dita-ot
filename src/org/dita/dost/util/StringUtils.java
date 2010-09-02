@@ -462,15 +462,49 @@ public class StringUtils {
 		//added by William on 2009-11-26 for bug:1628937 end
 		
 		/**
-		 * Get minimal value.
+		 * Get max value.
 		 */
-		public static String getMax(String fn_depth, String list_depth, String dlist_depth, String table_depth, String stable_depth){
+		public static Integer getMax(Integer ul_depth, Integer ol_depth, Integer sl_depth, 
+				Integer dl_depth, Integer table_depth, Integer stable_depth){
 			
-			int fnDepth = Integer.parseInt(fn_depth);
-			int listDepth = Integer.parseInt(list_depth);
-			int dlistDepth = Integer.parseInt(dlist_depth);
-			int tableDepth = Integer.parseInt(table_depth);
-			int stableDepth = Integer.parseInt(stable_depth);
+			int unDepth = ul_depth;
+			int olDepth = ol_depth;
+			int slDepth = sl_depth;
+			int dlDepth = dl_depth;
+			int tableDepth = table_depth;
+			int stableDepth = stable_depth;
+			
+			int max = unDepth;
+			if(olDepth > max){
+				max = olDepth;
+			}
+			if(slDepth > max){
+				max = slDepth;
+			}
+			if(dlDepth > max){
+				max = dlDepth;
+			}
+			if(tableDepth > max){
+				max = tableDepth;
+			}
+			if(stableDepth > max){
+				max = stableDepth;
+			}
+			
+			return max;
+			
+		}
+		
+		/**
+		 * Get max value.
+		 */
+		public static Integer getMax(Integer fn_depth, Integer list_depth, Integer dlist_depth, Integer table_depth, Integer stable_depth){
+			
+			int fnDepth = fn_depth;
+			int listDepth = list_depth;
+			int dlistDepth = dlist_depth;
+			int tableDepth = table_depth;
+			int stableDepth = stable_depth;
 			
 			int max = fnDepth;
 			if(listDepth > max){
@@ -486,7 +520,7 @@ public class StringUtils {
 				max = stableDepth;
 			}
 			
-			return String.valueOf(max);
+			return max;
 			
 		}
 }

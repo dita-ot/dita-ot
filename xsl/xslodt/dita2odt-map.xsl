@@ -45,8 +45,11 @@
       <xsl:when test="/*[contains(@class, ' map/map ') and contains(@class, ' bookmap/bookmap ')]">
         <xsl:value-of select="'bookmap'"/>
       </xsl:when>
-      <xsl:otherwise>
+      <xsl:when test="/*[contains(@class, ' map/map ')]">
         <xsl:value-of select="'ditamap'"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="'topic'"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
@@ -273,6 +276,25 @@
       </xsl:element>
     </xsl:if>
     <xsl:apply-templates select="child::*[contains(@class, ' topic/topic ')]" mode="toc"/>
+  </xsl:template>
+  
+  <!-- create map title -->
+  <xsl:template name="create_map_title">
+    <xsl:apply-templates select="//opentopic:map/*[contains(@class, ' topic/title ')]" mode="create_title"/>
+  </xsl:template>
+  
+  <!-- create topic title -->
+  <xsl:template name="create_topic_title">
+    <xsl:apply-templates select="/*[contains(@class, ' topic/topic ')]/*[contains(@class, ' topic/title ')]" mode="create_title"/>
+  </xsl:template>
+  
+  <xsl:template match="*[contains(@class, ' topic/title ')]" mode="create_title">
+    <xsl:element name="text:p">
+      <xsl:attribute name="text:style-name">Title</xsl:attribute>
+      <xsl:apply-templates select="." mode="dita-ot:text-only"/>
+    </xsl:element>
+    <!-- page break. -->
+    <text:p text:style-name="PB"/>
   </xsl:template>
   
   <!-- create book title -->

@@ -107,48 +107,19 @@
       <!-- set & save step_expand=yes/no for expanding/compacting list items -->
       <xsl:apply-templates select="." mode="make-steps-compact"/>
     </xsl:variable>
-    <xsl:variable name="flagrules">
-      <xsl:call-template name="getrules"/>
-    </xsl:variable>
-    <!-- 
-  <xsl:call-template name="start-flagit">
-    <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
-  </xsl:call-template>
-  <xsl:call-template name="start-revflag">
-    <xsl:with-param name="flagrules" select="$flagrules"/>
-  </xsl:call-template>
-  -->
-    <xsl:variable name="revtest">
-      <xsl:if test="@rev and not($FILTERFILE='') and ($DRAFT='yes')">
-        <!-- revision? -->
-        <xsl:call-template name="find-active-rev-flag">
-          <!-- active? (revtest will be 1 when active)-->
-          <xsl:with-param name="allrevs" select="@rev"/>
-        </xsl:call-template>
-      </xsl:if>
-    </xsl:variable>
-    <xsl:choose>
-      <xsl:when test="$revtest=1">
-        <!-- Rev is active - add the DIV -->
-        <xsl:apply-templates select="." mode="steps-fmt">
-          <xsl:with-param name="step_expand" select="$step_expand"/>
-        </xsl:apply-templates>
-      </xsl:when>
-      <xsl:otherwise>
-        <!-- Rev wasn't active - process normally -->
-        <xsl:apply-templates select="." mode="steps-fmt">
-          <xsl:with-param name="step_expand" select="$step_expand"/>
-        </xsl:apply-templates>
-      </xsl:otherwise>
-    </xsl:choose>
-    <!-- 
-    <xsl:call-template name="end-revflag">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:call-template>
-    <xsl:call-template name="end-flagit">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:call-template>
-    -->
+    
+    <!-- start flagging -->
+    <xsl:apply-templates select="." mode="start-add-odt-flags">
+      <xsl:with-param name="family" select="'_list'"/>
+    </xsl:apply-templates>
+    <xsl:apply-templates select="." mode="steps-fmt">
+      <xsl:with-param name="step_expand" select="$step_expand"/>
+    </xsl:apply-templates>
+    <!-- end flagging -->
+    <xsl:apply-templates select="." mode="end-add-odt-flags">
+      <xsl:with-param name="family" select="'_list'"/>
+    </xsl:apply-templates>
+    
   </xsl:template>
 
   <xsl:template
@@ -163,9 +134,7 @@
         <xsl:otherwise>list_style</xsl:otherwise>
       </xsl:choose>
     </xsl:param>
-    <xsl:variable name="flagrules">
-      <xsl:call-template name="getrules"/>
-    </xsl:variable>
+    
     <xsl:apply-templates select="." mode="generate-task-label">
       <xsl:with-param name="use-label">
         <xsl:call-template name="getStringODT">
@@ -302,49 +271,20 @@
       <!-- set & save step_expand=yes/no for expanding/compacting list items -->
       <xsl:apply-templates select="." mode="make-steps-compact"/>
     </xsl:variable>
-    <xsl:variable name="flagrules">
-      <xsl:call-template name="getrules"/>
-    </xsl:variable>
-    <!-- 
-    <xsl:call-template name="start-flagit">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:call-template>
-    <xsl:call-template name="start-revflag">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:call-template>
-    -->
     
-    <xsl:variable name="revtest">
-      <xsl:if test="@rev and not($FILTERFILE='') and ($DRAFT='yes')">
-        <!-- revision? -->
-        <xsl:call-template name="find-active-rev-flag">
-          <!-- active? (revtest will be 1 when active)-->
-          <xsl:with-param name="allrevs" select="@rev"/>
-        </xsl:call-template>
-      </xsl:if>
-    </xsl:variable>
-    <xsl:choose>
-      <xsl:when test="$revtest=1">
-        <!-- Rev is active - add the DIV -->
-          <xsl:apply-templates select="." mode="stepsunord-fmt">
-            <xsl:with-param name="step_expand" select="$step_expand"/>
-          </xsl:apply-templates>
-      </xsl:when>
-      <xsl:otherwise>
-        <!-- Rev wasn't active - process normally -->
-        <xsl:apply-templates select="." mode="stepsunord-fmt">
-          <xsl:with-param name="step_expand" select="$step_expand"/>
-        </xsl:apply-templates>
-      </xsl:otherwise>
-    </xsl:choose>
-    <!-- 
-    <xsl:call-template name="end-revflag">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:call-template>
-    <xsl:call-template name="end-flagit">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:call-template>
-    -->
+    <!-- start flagging -->
+    <xsl:apply-templates select="." mode="start-add-odt-flags">
+      <xsl:with-param name="family" select="'_list'"/>
+    </xsl:apply-templates>
+    <!-- render list -->
+    <xsl:apply-templates select="." mode="stepsunord-fmt">
+      <xsl:with-param name="step_expand" select="$step_expand"/>
+    </xsl:apply-templates>
+    <!-- end flagging -->
+    <xsl:apply-templates select="." mode="end-add-odt-flags">
+      <xsl:with-param name="family" select="'_list'"/>
+    </xsl:apply-templates>
+     
   </xsl:template>
 
   <xsl:template match="*[contains(@class,' task/steps ')]" mode="steps-fmt">
@@ -366,33 +306,9 @@
   <!-- only 1 step - output as a para -->
   <xsl:template match="*[contains(@class,' task/step ')]" mode="onestep">
     <xsl:param name="step_expand"/>
-    <xsl:variable name="revtest">
-      <xsl:if test="@rev and not($FILTERFILE='') and ($DRAFT='yes')">
-        <xsl:call-template name="find-active-rev-flag">
-          <xsl:with-param name="allrevs" select="@rev"/>
-        </xsl:call-template>
-      </xsl:if>
-    </xsl:variable>
-    <xsl:choose>
-      <xsl:when test="$revtest=1">
-        <!-- Rev is active - add the DIV -->
-        <!-- 
-        <div class="{@rev}">
-        -->
-          <xsl:apply-templates select="." mode="onestep-fmt">
-            <xsl:with-param name="step_expand" select="$step_expand"/>
-          </xsl:apply-templates>
-        <!-- 
-        </div>
-        -->
-      </xsl:when>
-      <xsl:otherwise>
-        <!-- Rev wasn't active - process normally -->
-        <xsl:apply-templates select="." mode="onestep-fmt">
-          <xsl:with-param name="step_expand" select="$step_expand"/>
-        </xsl:apply-templates>
-      </xsl:otherwise>
-    </xsl:choose>
+      <xsl:apply-templates select="." mode="onestep-fmt">
+        <xsl:with-param name="step_expand" select="$step_expand"/>
+      </xsl:apply-templates>
   </xsl:template>
   
   <xsl:template match="*[contains(@class,' task/step ')]" mode="onestep-fmt">
@@ -403,21 +319,6 @@
     <xsl:element name="text:list">
       <xsl:attribute name="text:style-name">list_style</xsl:attribute>
       <xsl:element name="text:list-item">
-        <!-- 
-        <xsl:call-template name="commonattributes">
-          <xsl:with-param name="default-output-class" select="'p'"/>
-        </xsl:call-template>
-        <xsl:call-template name="gen-style">
-          <xsl:with-param name="flagrules" select="$flagrules"/>
-        </xsl:call-template>
-        <xsl:call-template name="setidaname"/>
-        <xsl:call-template name="start-flagit">
-          <xsl:with-param name="flagrules" select="$flagrules"/>
-        </xsl:call-template>
-        <xsl:call-template name="start-revflag">
-          <xsl:with-param name="flagrules" select="$flagrules"/>
-        </xsl:call-template>
-        -->
           <xsl:if test="@importance='optional'">
             <xsl:element name="text:p">
               <xsl:element name="text:span">
@@ -450,14 +351,6 @@
         <xsl:apply-templates mode="create_list_item"/>
       </xsl:element>
     </xsl:element>
-    <!-- 
-    <xsl:call-template name="end-revflag">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:call-template>
-    <xsl:call-template name="end-flagit">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:call-template>
-    -->
   </xsl:template>
 
   <!-- multiple steps - output as list items -->
@@ -492,9 +385,7 @@
   <xsl:template match="*[contains(@class,' task/step ')]" mode="steps-fmt">
     <xsl:param name="step_expand"/>
     <xsl:param name="start-value">0</xsl:param>
-    <xsl:variable name="flagrules">
-      <xsl:call-template name="getrules"/>
-    </xsl:variable>
+    
     <xsl:element name="text:list-item">
       <xsl:if test="$start-value &gt; 0">
         <xsl:attribute name="text:start-value">
@@ -502,19 +393,6 @@
         </xsl:attribute>
       </xsl:if>
       
-        <!-- 
-        <xsl:call-template name="commonattributes"/>
-        <xsl:call-template name="gen-style">
-          <xsl:with-param name="flagrules" select="$flagrules"/>
-        </xsl:call-template>
-        <xsl:call-template name="setidaname"/>
-        <xsl:call-template name="start-flagit">
-          <xsl:with-param name="flagrules" select="$flagrules"/>
-        </xsl:call-template>
-        <xsl:call-template name="start-revflag">
-          <xsl:with-param name="flagrules" select="$flagrules"/>
-        </xsl:call-template>
-        -->
         <xsl:if test="@importance='optional'">
           <xsl:element name="text:p">
               <xsl:element name="text:span">
@@ -544,18 +422,6 @@
           </xsl:element>
         </xsl:if>
       
-      <!--
-      <xsl:apply-templates>
-        <xsl:with-param name="step_expand" select="$step_expand"/>
-      </xsl:apply-templates>
-      
-      <xsl:call-template name="end-revflag">
-        <xsl:with-param name="flagrules" select="$flagrules"/>
-      </xsl:call-template>
-      <xsl:call-template name="end-flagit">
-        <xsl:with-param name="flagrules" select="$flagrules"/>
-      </xsl:call-template>
-      -->
         <xsl:apply-templates mode="create_list_item"/>
       </xsl:element>
   </xsl:template>
@@ -567,53 +433,11 @@
       <!-- set & save sub_step_expand=yes/no for expanding/compacting list items -->
       <xsl:apply-templates select="." mode="make-steps-compact"/>
     </xsl:variable>
-    <xsl:variable name="flagrules">
-      <xsl:call-template name="getrules"/>
-    </xsl:variable>
-    <!-- 
-    <xsl:call-template name="start-flagit">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:call-template>
-    <xsl:call-template name="start-revflag">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:call-template>
-    -->
     
-    <xsl:variable name="revtest">
-      <xsl:if test="@rev and not($FILTERFILE='') and ($DRAFT='yes')">
-        <xsl:call-template name="find-active-rev-flag">
-          <xsl:with-param name="allrevs" select="@rev"/>
-        </xsl:call-template>
-      </xsl:if>
-    </xsl:variable>
-    <xsl:choose>
-      <xsl:when test="$revtest=1">
-        <!-- Rev is active - add the DIV -->
-        <!-- 
-        <div class="{@rev}">
-        -->
-          <xsl:apply-templates select="." mode="substeps-fmt">
-            <xsl:with-param name="sub_step_expand" select="$sub_step_expand"/>
-          </xsl:apply-templates>
-        <!-- 
-        </div>
-        -->
-      </xsl:when>
-      <xsl:otherwise>
-        <!-- Rev wasn't active - process normally -->
-        <xsl:apply-templates select="." mode="substeps-fmt">
-          <xsl:with-param name="sub_step_expand" select="$sub_step_expand"/>
-        </xsl:apply-templates>
-      </xsl:otherwise>
-    </xsl:choose>
-    <!-- 
-    <xsl:call-template name="end-revflag">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:call-template>
-    <xsl:call-template name="end-flagit">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:call-template>
-    -->
+    <xsl:apply-templates select="." mode="substeps-fmt">
+      <xsl:with-param name="sub_step_expand" select="$sub_step_expand"/>
+    </xsl:apply-templates>
+    
   </xsl:template>
 
   <xsl:template match="*[contains(@class,' task/substeps ')]" mode="substeps-fmt">
@@ -634,13 +458,6 @@
         <!-- yup, letter these steps -->
       </xsl:if>
       <!-- otherwise, default to numbered -->
-      <!-- 
-      <xsl:call-template name="commonattributes"/>
-      <xsl:call-template name="gen-style">
-        <xsl:with-param name="flagrules" select="$flagrules"/>
-      </xsl:call-template>
-      <xsl:call-template name="setid"/>
-      -->
       <xsl:apply-templates>
         <xsl:with-param name="sub_step_expand" select="$sub_step_expand"/>
       </xsl:apply-templates>
@@ -771,37 +588,12 @@
     <xsl:variable name="flagrules">
       <xsl:call-template name="getrules"/>
     </xsl:variable>
-    <!-- 
-    <xsl:call-template name="start-flagit">
-      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
-    </xsl:call-template>
-    <xsl:call-template name="start-revflag">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:call-template>
-    <xsl:call-template name="setaname"/>
-    -->
-      
-    <!-- 
-    <xsl:call-template name="commonattributes"/>
-    <xsl:call-template name="gen-style">
-      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
-    </xsl:call-template>
-    <xsl:call-template name="setid"/>
-    -->
     
     <xsl:element name="text:list">
       <xsl:attribute name="text:style-name">list_style</xsl:attribute>
       <xsl:apply-templates/>
     </xsl:element>
     
-    <!-- 
-    <xsl:call-template name="end-revflag">
-      <xsl:with-param name="flagrules" select="$flagrules"/>
-    </xsl:call-template>
-    <xsl:call-template name="end-flagit">
-      <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param> 
-    </xsl:call-template>
-    -->
   </xsl:template>
 
   <!-- task choice table -->
@@ -826,7 +618,9 @@
         </xsl:variable>
         <!-- caculate span tag depth -->
         <xsl:variable name="span_depth">
-          <xsl:call-template name="calculate_span_depth_for_list"/>
+          <xsl:call-template name="calculate_span_depth_for_tag">
+            <xsl:with-param name="tag_class" select="' topic/li '"/>
+          </xsl:call-template>
         </xsl:variable>
         <!-- break span tags -->
         <xsl:call-template name="break_span_tags">
@@ -842,16 +636,23 @@
           <xsl:with-param name="depth" select="$depth"/>
           <xsl:with-param name="order" select="0"/>
         </xsl:call-template>
+        <!-- normal process -->
         <!-- start render table -->
         <xsl:variable name="tablenameId" select="random:getRandomNum()"/>
         <xsl:choose>
           <xsl:when test="not(./*[contains(@class,' task/chhead ')])">
+            <!-- start flagging -->
+            <xsl:apply-templates select="." mode="start-add-odt-flags">
+              <xsl:with-param name="family" select="'_table'"/>
+            </xsl:apply-templates>
             <xsl:element name="table:table">
               <xsl:attribute name="table:name">
                 <xsl:value-of select="concat('Table', $tablenameId)"/>
               </xsl:attribute>
-              <xsl:attribute name="table:style-name">table_style</xsl:attribute>
-              
+              <!-- table background flagging -->
+              <xsl:apply-templates select="." mode="start-add-odt-flags">
+                <xsl:with-param name="family" select="'_table_attr'"/>
+              </xsl:apply-templates>
               <xsl:variable name="colnumNum">
                 <xsl:call-template name="count_columns_for_simpletable"/>
               </xsl:variable>
@@ -861,11 +662,16 @@
               <xsl:call-template name="create_head_for_choicetable"/>
               <xsl:apply-templates/>
             </xsl:element>
+            <!-- end flagging -->
+            <xsl:apply-templates select="." mode="end-add-odt-flags">
+              <xsl:with-param name="family" select="'_table'"/>
+            </xsl:apply-templates>
           </xsl:when>
           <xsl:otherwise>
             <xsl:call-template name="create_simpletable"/>
           </xsl:otherwise>
         </xsl:choose>
+        
         <!-- start list tag again -->
         <xsl:call-template name="create_items_for_list">
           <xsl:with-param name="depth" select="$depth"/>
@@ -1029,42 +835,6 @@
       </xsl:element>
     </xsl:element>
   </xsl:template>
-  
-  <!--
-  <xsl:template match="*[contains(@class, ' task/substep ')]">
-    <xsl:element name="text:list-item">
-      <xsl:if test="@importance='optional'">
-        <xsl:element name="text:p">
-          <xsl:element name="text:span">
-            <xsl:attribute name="text:style-name">bold</xsl:attribute>
-            <xsl:call-template name="getStringODT">
-              <xsl:with-param name="stringName" select="'Optional'"/>
-            </xsl:call-template>
-            <xsl:call-template name="getStringODT">
-              <xsl:with-param name="stringName" select="'ColonSymbol'"/>
-            </xsl:call-template>
-            <xsl:text> </xsl:text>
-          </xsl:element>
-        </xsl:element>
-      </xsl:if>
-      <xsl:if test="@importance='required'">
-        <xsl:element name="text:p">
-          <xsl:element name="text:span">
-            <xsl:attribute name="text:style-name">bold</xsl:attribute>
-            <xsl:call-template name="getStringODT">
-              <xsl:with-param name="stringName" select="'Required'"/>
-            </xsl:call-template>
-            <xsl:call-template name="getStringODT">
-              <xsl:with-param name="stringName" select="'ColonSymbol'"/>
-            </xsl:call-template>
-            <xsl:text> </xsl:text>
-          </xsl:element>
-        </xsl:element>
-      </xsl:if>
-      <xsl:apply-templates mode="create_list_item"/>
-    </xsl:element>
-  </xsl:template>
-  -->
   
   <xsl:template match="*[contains(@class,' task/context ')]">
     

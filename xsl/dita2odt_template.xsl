@@ -165,11 +165,29 @@
           <text:sequence-decl text:display-outline-level="0" text:name="Drawing"/>
         </text:sequence-decls>
         
-        <xsl:call-template name="create_book_title"/>
-     
-        <xsl:call-template name="create_book_abstract"/>
         
-        <xsl:call-template name="create_book_notices"/>
+        
+        
+        <xsl:choose>
+          <!-- bookmap -->
+          <xsl:when test="$mapType = 'bookmap'">
+            <xsl:call-template name="create_book_title"/>
+            
+            <xsl:call-template name="create_book_abstract"/>
+            
+            <xsl:call-template name="create_book_notices"/>
+          </xsl:when>
+          <!-- normal map -->
+          <xsl:when test="$mapType = 'ditamap'">
+            <xsl:call-template name="create_map_title"/>
+          </xsl:when>
+          <!-- topic -->
+          <xsl:otherwise>
+            <xsl:call-template name="create_topic_title"/>
+          </xsl:otherwise>
+          
+        </xsl:choose>
+        
         
         <xsl:call-template name="create_toc"/>
         

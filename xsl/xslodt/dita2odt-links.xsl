@@ -275,6 +275,10 @@
 				<xsl:with-param name="element" select="$element"/>
 			</xsl:call-template>
 		</xsl:variable>
+    	
+    	<xsl:if test="parent::*[contains(@class,' topic/li ')]">
+    		<xsl:text disable-output-escaping="yes">&lt;text:p&gt;</xsl:text>
+    	</xsl:if>
 
 		<text:a>
 			<xsl:call-template name="buildBasicLinkDestination">
@@ -322,6 +326,10 @@
                   </xsl:call-template>
             </xsl:if>
 		</xsl:if>
+    	
+    	<xsl:if test="parent::*[contains(@class,' topic/li ')]">
+    		<xsl:text disable-output-escaping="yes">&lt;/text:p&gt;</xsl:text>
+    	</xsl:if>
 
     </xsl:template>
 

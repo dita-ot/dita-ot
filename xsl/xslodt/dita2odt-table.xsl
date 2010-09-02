@@ -36,7 +36,10 @@
 
 <!-- =========== CALS (OASIS) TABLE =========== -->
 <xsl:template match="*[contains(@class,' topic/table ')]" name="topic.table">
+  
+  <!-- render table -->
   <xsl:call-template name="render_table"/>
+  
 </xsl:template>
 
   
@@ -54,29 +57,37 @@
   <xsl:apply-templates/>
 </xsl:template>
 
-  <xsl:template match="*[contains(@class,' topic/tgroup ')]" name="topic.tgroup">
-    <xsl:variable name="tablenameId" select="random:getRandomNum()"/>
-    
-    <xsl:variable name="columnNum">
-      <xsl:call-template name="count_columns_for_table"/>
-    </xsl:variable>
-    
-    
-    <xsl:element name="table:table">
-      <xsl:attribute name="table:name">
-        <xsl:value-of select="concat('Table', $tablenameId)"/>
-      </xsl:attribute>
-      <xsl:attribute name="table:style-name">table_style</xsl:attribute>
-      
-      <xsl:call-template name="create_columns_for_table">
-        <xsl:with-param name="column" select="$columnNum"/>
-      </xsl:call-template>
-      <xsl:call-template name="dotable"/> 
-    </xsl:element>
-    <!-- 
-    <text:p/>
-    -->
-  </xsl:template>
+<xsl:template match="*[contains(@class,' topic/tgroup ')]" name="topic.tgroup">
+  <xsl:variable name="tablenameId" select="random:getRandomNum()"/>
+  
+  <xsl:variable name="columnNum">
+    <xsl:call-template name="count_columns_for_table"/>
+  </xsl:variable>
+  
+  <!-- start flagging -->
+  <xsl:apply-templates select="parent::*[contains(@class, ' topic/table ')]" mode="start-add-odt-flags">
+    <xsl:with-param name="family" select="'_table'"/>
+  </xsl:apply-templates>
+  
+  <xsl:element name="table:table">
+    <xsl:attribute name="table:name">
+      <xsl:value-of select="concat('Table', $tablenameId)"/>
+    </xsl:attribute>
+    <!-- table background flagging -->
+    <xsl:apply-templates select="parent::*[contains(@class, ' topic/table ')]" mode="start-add-odt-flags">
+      <xsl:with-param name="family" select="'_table_attr'"/>
+    </xsl:apply-templates>
+    <xsl:call-template name="create_columns_for_table">
+      <xsl:with-param name="column" select="$columnNum"/>
+    </xsl:call-template>
+    <xsl:call-template name="dotable"/> 
+  </xsl:element>
+  <!-- end flagging -->
+  <xsl:apply-templates select="parent::*[contains(@class, ' topic/table ')]" mode="end-add-odt-flags">
+    <xsl:with-param name="family" select="'_table'"/>
+  </xsl:apply-templates>
+
+</xsl:template>
   
   
   <xsl:template name="count_columns_for_table">
@@ -557,9 +568,7 @@
 <!-- Simple Table -->
 <xsl:template match="*[contains(@class,' topic/simpletable ')]" name="topic.simpletable">
   
-  <!-- 
-  <xsl:call-template name="create_simpletable"/>
-  -->
+  <!-- render stable -->
   <xsl:call-template name="render_simpletable"/>
   
 </xsl:template>
@@ -567,12 +576,20 @@
 <xsl:template name="create_simpletable">
 
   <xsl:variable name="tablenameId" select="random:getRandomNum()"/>
+  
+  <!-- start flagging -->
+  <xsl:apply-templates select="." mode="start-add-odt-flags">
+    <xsl:with-param name="family" select="'_table'"/>
+  </xsl:apply-templates>
+  
   <xsl:element name="table:table">
     <xsl:attribute name="table:name">
       <xsl:value-of select="concat('Table', $tablenameId)"/>
     </xsl:attribute>
-    <xsl:attribute name="table:style-name">table_style</xsl:attribute>
-    
+    <!-- table background flagging -->
+    <xsl:apply-templates select="." mode="start-add-odt-flags">
+      <xsl:with-param name="family" select="'_table_attr'"/>
+    </xsl:apply-templates>
     <xsl:variable name="colnumNum">
       <xsl:call-template name="count_columns_for_simpletable"/>
     </xsl:variable>
@@ -581,7 +598,11 @@
     </xsl:call-template>
     <xsl:call-template name="dotable"/> 
   </xsl:element>
-  <text:p/>
+  <!-- end flagging -->
+  <xsl:apply-templates select="." mode="end-add-odt-flags">
+    <xsl:with-param name="family" select="'_table'"/>
+  </xsl:apply-templates>
+  
 </xsl:template>
 
 <xsl:template name="count_columns_for_simpletable">

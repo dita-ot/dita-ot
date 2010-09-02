@@ -39,19 +39,6 @@
   xmlns:styleUtils="org.dita.dost.util.StyleUtils" 
   exclude-result-prefixes="styleUtils random"
   version="1.0">
-  <!-- 
-  <xsl:import href="../common/output-message.xsl"/>
-  <xsl:import href="../common/dita-utilities.xsl"/>
-  <xsl:import href="../common/related-links.xsl"/>
-  <xsl:import href="flag-old.xsl"/>
-  <xsl:import href="dita2odt-utilities.xsl"/>
-  <xsl:import href="dita2odt-table.xsl"/>
-  <xsl:import href="dita2odt-lists.xsl"/>
-  <xsl:import href="dita2odt-img.xsl"/>
-  
-  <xsl:include href="dita2odt-relinks.xsl"/>
-  <xsl:include href="flag.xsl"/>
-  -->
   
   <xsl:output method="xml"/>
   <xsl:output indent="yes"/>
@@ -2076,31 +2063,6 @@
   </xsl:choose>
 </xsl:template>
 
-<!-- 
-<xsl:template match="text()[contains(.,'\') or contains(.,'{') or contains(.,'}')]">
-  <xsl:variable name="gentext">
-    <xsl:call-template name="gen-txt1">
-      <xsl:with-param name="txt" select="."/>
-    </xsl:call-template>
-  </xsl:variable>
-  <xsl:choose>
-    <xsl:when
-      test="ancestor::*[contains(@class,' topic/pre ')] or ancestor::*[contains(@class,' topic/lines ')]">
-      <xsl:value-of select="$gentext"/>
-    </xsl:when>
-    <xsl:otherwise>
-      <xsl:if test="starts-with($gentext,' ')">
-        <xsl:text> </xsl:text>
-      </xsl:if>
-      <xsl:value-of select="normalize-space($gentext)"/>
-      <xsl:if test="substring($gentext,string-length($gentext))=' '">
-        <xsl:text> </xsl:text>
-      </xsl:if>
-    </xsl:otherwise>
-  </xsl:choose>
-</xsl:template>
--->
-
 <xsl:template name="gen-txt1">
   <xsl:param name="txt"/>
   <xsl:choose>
@@ -2196,7 +2158,6 @@
     <xsl:value-of select="styleUtils:getHiStyleName($style_name)"/>
   </xsl:variable>
   
-  
   <xsl:choose>
     <!-- parent is entry, stentry, li add p tag otherwise text is invaild. -->
     <xsl:when test="parent::*[contains(@class, ' topic/entry ')] or
@@ -2221,12 +2182,18 @@
           </xsl:when>
           <xsl:otherwise>
             <xsl:element name="text:span">
-              <xsl:if test="$trueStyleName!=''">
-                <xsl:attribute name="text:style-name">
-                  <xsl:value-of select="$trueStyleName"/>
-                </xsl:attribute>
-              </xsl:if>
-              <xsl:call-template name="gen_txt_content"/>
+              <xsl:call-template name="start_flagging_text_of_table_or_list"/>
+              
+              <xsl:element name="text:span">
+                <xsl:if test="$trueStyleName!=''">
+                  <xsl:attribute name="text:style-name">
+                    <xsl:value-of select="$trueStyleName"/>
+                  </xsl:attribute>
+                </xsl:if>
+                <xsl:call-template name="gen_txt_content"/>
+              </xsl:element>
+              
+              <xsl:call-template name="end_flagging_text_of_table_or_list"/>
             </xsl:element>
           </xsl:otherwise>
         </xsl:choose>
@@ -2245,12 +2212,14 @@
               /parent::*[contains(@class, ' topic/topic ')]">
               <xsl:choose>
                 <!-- keep font size with the title -->
-                <xsl:when test="$trueStyleName = 'italic' or $trueStyleName = 'italicbold' or $trueStyleName = 'bolditalic'">
+                <!-- 
+                <xsl:when test="contains($trueStyleName, 'italic')">
                   <xsl:variable name="depth" select="count(ancestor::*[contains(@class, ' topic/topic ')])"/>
                   <xsl:attribute name="text:style-name">
-                    <xsl:value-of select="concat($trueStyleName, '_heading_', $depth)"/>
+                    <xsl:value-of select="concat('italic', '_heading_', $depth)"/>
                   </xsl:attribute>
                 </xsl:when>
+                -->
                 <xsl:when test="$trueStyleName = 'bold'"/>
                 <!-- other style is okay -->
                 <xsl:otherwise>
