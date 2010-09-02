@@ -542,6 +542,25 @@ doc.langref-dita1.1.chm
       		<param name="transtype" value="pdf"/>
 		</antcall>
 	</target>
+	
+	<target name="doc.quickstartguide.chm" depends="init">
+		<antcall target="dita2htmlhelp">
+			<param name="args.input"
+				value="${dita.doc.dir}${file.separator}quickstartguide${file.separator}maps${file.separator}ant-quick-start-guide-for-ditaot.ditamap"/>
+			<param name="output.dir" value="${dita.output.doc.dir}${file.separator}quickstartguide"/>
+      <param name="transtype" value="htmlhelp"/>
+		</antcall>
+	</target>
+  
+	<target name="doc.quickstartguide.pdf" depends="init">
+		<!-- DOST is the project name of imported build.xml-->
+		<antcall target="DOST.init">
+			<param name="args.input"
+				value="${dita.doc.dir}${file.separator}quickstartguide${file.separator}maps${file.separator}ant-quick-start-guide-for-ditaot.ditamap"/>
+			<param name="output.dir" value="${dita.output.doc.dir}${file.separator}quickstartguide"/>
+      		<param name="transtype" value="pdf"/>
+		</antcall>
+	</target>
 
 	<target name="clean.doc"
 		description="remove the documentation output">
@@ -682,10 +701,10 @@ doc.langref-dita1.1.chm
 		<!-- The prompt strings should be externalized in a properties file 
 	     so they can be localized. -->
 		<echo>Please enter the filename for the DITA map that you 
-want to build including the directory path (if any).
-The filename must have the .ditamap extension.
-Note that relative paths that climb (..) are not supported yet.
-To build the sample, press return without entering anything.</echo>
+			want to build including the directory path (if any).
+			The filename must have the .ditamap extension.
+			Note that relative paths that climb (..) are not supported yet.
+			To build the sample, press return without entering anything.</echo>
 		<input message="The DITA map filename: "
 			addproperty="prompt.ditamap.filename"
 			defaultvalue="${dita.samples.dir}${file.separator}hierarchy.ditamap"/>
@@ -707,15 +726,15 @@ To build the sample, press return without entering anything.</echo>
 		<dirname property="prompt.ditamap.directory"
 			file="${prompt.ditamap.filename}"/>
 		<echo>
-Please enter the name of the output directory or press return
-to accept the default.</echo>
+			Please enter the name of the output directory or press return
+			to accept the default.</echo>
 		<input message="The output directory (out): "
 			addproperty="prompt.output.directory"
 			defaultvalue="out"/>
 		<echo>
- Please enter the type of output to generate.
- Options include: eclipse, htmlhelp, javahelp, pdf, or web
- Use lowercase letters.
+			Please enter the type of output to generate.
+			Options include: eclipse, htmlhelp, javahelp, pdf, or web
+			Use lowercase letters.
 		</echo>
 		<input message="The output type: "
 			addproperty="prompt.output.type"
@@ -740,8 +759,8 @@ to accept the default.</echo>
 			<equals arg1="${prompt.output.type}" arg2="docbook"/>
 		</condition>
 		<echo>
- Ready to build ${prompt.ditamap.filename}
- for ${prompt.output.type} in ${prompt.output.directory}
+			Ready to build ${prompt.ditamap.filename}
+			for ${prompt.output.type} in ${prompt.output.directory}
 		</echo>
 		<input message="Continue? "
 			addproperty="prompt.output.confirm"
@@ -757,9 +776,9 @@ to accept the default.</echo>
 		</fail>
 		<antcall target="prompt.output"/>
 	    <echo>
-The output is in the ${prompt.output.directory} directory
+			output in the ${prompt.output.directory} directory
     		
-Before rebuilding, please delete the output or the directory.</echo>
+			Before rebuilding, please delete the output or the directory.</echo>
 	</target>
 
 	<target name="prompt.init">
