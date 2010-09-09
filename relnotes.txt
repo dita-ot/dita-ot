@@ -1,6 +1,6 @@
 (c) Copyright IBM Corp. 2004, 2010 All Rights Reserved.
 
-     DITA OT release 1.5.2 latest build (Milestone 3)
+     DITA OT release 1.5.2 latest build (Milestone 4)
      
      Release 1.5.2 will be a maintenance release based on the final
      version of the DITA 1.2 standard. Release 1.5.2 will contain many
@@ -53,6 +53,7 @@
 	 * 3058124 Toolkit Allows Unescaped URLs, doesn't handle escaped ones (Milestone 4)
 	 * 3056939 Conref of keyref-based xref results in xref with no href (Milestone 4)
 	 * 3052904 Keydef with no href causes hard failure (Milestone 4)
+	 * 3028894 no support for title (Milestone 4)
      * 3038933 Troff output drops prereq links (Milestone 5)
      
      
