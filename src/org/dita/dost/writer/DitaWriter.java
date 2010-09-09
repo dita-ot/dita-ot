@@ -14,6 +14,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -481,11 +482,15 @@ public class DitaWriter extends AbstractXMLWriter {
 		        	attValue = atts.getValue(i);		        	
 		        }else{
 		        	attValue = replaceHREF(attQName, atts);
+		        	//added on 2010-09-02 for bug:3058124(decode escaped string)
+		        	attValue = URLDecoder.decode(attValue, Constants.UTF8);
 		        }
 		        
 		    } else if (Constants.ATTRIBUTE_NAME_CONREF.equals(attQName)){
 		                                    
 		        attValue = replaceCONREF(atts);
+		        //added on 2010-09-02 for bug:3058124(decode escaped string)
+		        attValue = URLDecoder.decode(attValue, Constants.UTF8);
 		    } else {
 		        attValue = atts.getValue(i);
 		    }

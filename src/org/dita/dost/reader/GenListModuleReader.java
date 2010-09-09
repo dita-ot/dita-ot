@@ -1447,11 +1447,12 @@ public class GenListModuleReader extends AbstractXMLReader {
 				&& FileUtils.isTopicFile(filename) && canResolved()) {
 			hrefTargets.add(new File(filename).getPath());
 			toOutFile(new File(filename).getPath());
-			String pathWithoutID = FileUtils.resolveFile(currentDir, attrValue);
+			//use filename instead(It has already been resolved before-hand) bug:3058124
+			//String pathWithoutID = FileUtils.resolveFile(currentDir, attrValue);
 			if (chunkLevel > 0 && chunkToNavLevel == 0 && topicGroupLevel == 0 && relTableLevel == 0) {
-				chunkTopicSet.add(pathWithoutID);
+				chunkTopicSet.add(filename);
 			} else {
-				hrefTopicSet.add(pathWithoutID);
+				hrefTopicSet.add(filename);
 			}
 		}
 		
