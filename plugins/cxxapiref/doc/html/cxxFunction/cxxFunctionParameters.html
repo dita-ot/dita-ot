@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta name="copyright" content="(C) Copyright 2005"/>
+<meta name="DC.rights.owner" content="(C) Copyright 2005"/>
+<meta name="DC.Type" content="reference"/>
+<meta name="DC.Title" content="cxxFunctionParameters"/>
+<meta name="abstract" content="Element that contains information about the function parameter-declaration-clause."/>
+<meta name="description" content="Element that contains information about the function parameter-declaration-clause."/>
+<meta name="DC.Relation" scheme="URI" content="../cxxFunction/cxxFunction_module.html"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="cxxFunctionParameters"/>
+<meta name="DC.Language" content="en-us"/>
+<link rel="stylesheet" type="text/css" href="../commonltr.css"/>
+<title>cxxFunctionParameters</title>
+<link rel="stylesheet" type="text/css" href="../nokiacxxref.css"/></head>
+<body class="element" id="cxxFunctionParameters"><a name="cxxFunctionParameters"><!-- --></a>
+
+
+    <h1 class="topictitle1">cxxFunctionParameters</h1>
+
+    
+    <div><p>Element that contains information about the function <em>parameter-declaration-clause</em>.</p>
+
+        <div class="section" id="cxxFunctionParameters__section_ECD16DFA14C4446D832BFA86259E7F46"><a name="cxxFunctionParameters__section_ECD16DFA14C4446D832BFA86259E7F46"><!-- --></a><h2 class="sectiontitle">Description</h2>
+            <p>This element that contains information about the function <em>parameter-declaration-clause</em> that describes any function parameters.
+            </p>
+<p>See ISO/IEC 14882:2003(E) 8.3.5 Functions [dcl.fct]</p>
+
+        </div>
+
+        <div class="example" id="cxxFunctionParameters__example_5010C29323334FAABBF69B680B70A5A5"><a name="cxxFunctionParameters__example_5010C29323334FAABBF69B680B70A5A5"><!-- --></a><h2 class="sectiontitle">Example</h2>
+            <p>Given this code:</p>
+
+            <pre class="codeblock">/*!
+ Copies bytes from a source memory area to a destination memory area,
+ where both areas may not overlap.
+ @param dest The memory area to copy to.
+ @param src  The memory area to copy from.
+ @param n    The number of bytes to copy
+ */
+void memcpy(void *dest, const void *src, size_t n); 
+            </pre>
+<p>Then function <tt>memcpy</tt> would have the <tt>cxxFunctionParameters</tt>
+element:</p>
+
+            <pre class="codeblock">&lt;cxxFunctionParameters&gt;
+  &lt;cxxFunctionParameter&gt;
+    &lt;cxxFunctionParameterDeclaredType&gt;void *&lt;/cxxFunctionParameterDeclaredType&gt;
+    &lt;cxxFunctionParameterDeclarationName&gt;dest&lt;/cxxFunctionParameterDeclarationName&gt;
+    &lt;apiDefNote&gt;The memory area to copy to. &lt;/apiDefNote&gt;
+  &lt;/cxxFunctionParameter&gt;
+  &lt;cxxFunctionParameter&gt;
+    &lt;cxxFunctionParameterDeclaredType&gt;const void *&lt;/cxxFunctionParameterDeclaredType&gt;
+    &lt;cxxFunctionParameterDeclarationName&gt;src&lt;/cxxFunctionParameterDeclarationName&gt;
+    &lt;apiDefNote&gt;The memory area to copy from. &lt;/apiDefNote&gt;
+  &lt;/cxxFunctionParameter&gt;
+  &lt;cxxFunctionParameter&gt;
+    &lt;cxxFunctionParameterDeclaredType&gt;size_t&lt;/cxxFunctionParameterDeclaredType&gt;
+    &lt;cxxFunctionParameterDeclarationName&gt;n&lt;/cxxFunctionParameterDeclarationName&gt;
+    &lt;apiDefNote&gt;The number of bytes to copy &lt;/apiDefNote&gt;
+  &lt;/cxxFunctionParameter&gt;
+&lt;/cxxFunctionParameters&gt;
+            </pre>
+
+        </div>
+
+        <div class="elementContainedBy"><h2 class="sectiontitle">Contained by</h2>
+
+<p id="cxxFunctionParameters__d5618e7708"><a name="cxxFunctionParameters__d5618e7708"><!-- --></a>
+<a href="cxxFunctionDefinition.html" title="Describes all of the details of a C++ function declaration.">cxxFunctionDefinition</a> 
+</p>
+
+</div>
+
+        <div class="elementContains"><h2 class="sectiontitle">Contains</h2>
+
+<p id="cxxFunctionParameters__d5618e7720"><a name="cxxFunctionParameters__d5618e7720"><!-- --></a>
+<a href="cxxFunctionParameter.html" title="Describes a function parameter">cxxFunctionParameter</a> 
+</p>
+
+</div>
+
+        <div class="elementContentModel"><h2 class="sectiontitle">Content Model</h2>
+
+<p id="cxxFunctionParameters__d5618e7732"><a name="cxxFunctionParameters__d5618e7732"><!-- --></a>
+<a href="cxxFunctionParameter.html" title="Describes a function parameter">cxxFunctionParameter</a> 
+(<em>any number</em>)
+</p>
+
+</div>
+
+        <div class="elementAttList"/>
+
+        <div class="elementClassValue"><h2 class="sectiontitle">Inheritance</h2>
+
+<p id="cxxFunctionParameters__d5618e7749"><a name="cxxFunctionParameters__d5618e7749"><!-- --></a>
+ topic/<span class="keyword">ph</span> reference/<span class="keyword">ph</span> apiRef/<span class="keyword">apiDefItem</span> apiOperation/<span class="keyword">apiDefItem</span> cxxFunction/<span class="keyword">cxxFunctionParameters</span></p>
+
+</div>
+
+    </div>
+
+<div>
+<div class="familylinks">
+<div class="parentlink"><strong>Parent topic:</strong> <a href="../cxxFunction/cxxFunction_module.html" title="The cxxFunction module describes C++ functions, including member functions.">cxxFunction module</a></div>
+</div>
+</div>
+
+</body>
+</html>

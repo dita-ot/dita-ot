@@ -1,0 +1,521 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ================================================================= -->
+<!-- HEADER -->
+<!-- ================================================================= -->
+<!-- MODULE:    C++ Union DTD -->
+<!-- VERSION:   0.6.0 -->
+<!-- DATE:      May 2009 -->
+<!---->
+<!-- ================================================================= -->
+<!-- ================================================================= -->
+<!-- PUBLIC DOCUMENT TYPE DEFINITION -->
+<!-- TYPICAL INVOCATION -->
+<!---->
+<!--
+  Refer to this file by the following public identifier or an 
+        appropriate system identifier 
+  PUBLIC "-//NOKIA//DTD DITA C++ API Union Reference Type v0.6.0//EN"
+        Delivered as file "cxxUnion.dtd"
+-->
+<!-- ================================================================= -->
+<!-- SYSTEM:     Darwin Information Typing Architecture (DITA) -->
+<!---->
+<!-- PURPOSE:    C++ API Reference for Unions -->
+<!---->
+<!-- ORIGINAL CREATION DATE: -->
+<!-- November 2009 -->
+<!---->
+<!-- Copyright (c) 2009-2010 Nokia Corporation and/or its subsidiary(-ies). -->
+<!-- All rights reserved. -->
+<!---->
+<!-- Change History (latest at top): -->
+<!-- +++++++++++++++++++++++++++++++ -->
+<!-- 2010-05-14 PaulRoss: Fixed templates. -->
+<!-- 2010-02-16 VOG: Updated. -->
+<!-- 2010-02-10 PaulRoss: Updated. -->
+<!-- 2009-11-16 PaulRoss: Initial design. -->
+<!---->
+<!-- ================================================================= -->
+<!--
+  Copyright (c) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
+  All rights reserved.
+-->
+<!-- ============ Hooks for domain extension ============ -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
+  <xs:import namespace="http://dita.oasis-open.org/architecture/2005/" schemaLocation="../../../schema/base/xsd/ditaarch.xsd"/>
+  <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="../../../schema/base/xsd/xml.xsd"/>
+  <xs:group name="cxxUnionDetail">
+    <xs:sequence>
+      <xs:element ref="cxxUnionDetail"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxUnionDefinition">
+    <xs:sequence>
+      <xs:element ref="cxxUnionDefinition"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxUnionAbstract">
+    <xs:sequence>
+      <xs:element ref="cxxUnionAbstract"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxUnionAccessSpecifier">
+    <xs:sequence>
+      <xs:element ref="cxxUnionAccessSpecifier"/>
+    </xs:sequence>
+  </xs:group>
+  <!--
+    union has no inheritance  
+    <!ENTITY % cxxUnionDerivations                  "cxxUnionDerivations">
+    <!ENTITY % cxxUnionDerivation                   "cxxUnionDerivation">
+  -->
+  <xs:group name="cxxUnionTemplateParameters">
+    <xs:sequence>
+      <xs:element ref="cxxUnionTemplateParameters"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxUnionTemplateParameter">
+    <xs:sequence>
+      <xs:element ref="cxxUnionTemplateParameter"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxUnionTemplateParameterType">
+    <xs:sequence>
+      <xs:element ref="cxxUnionTemplateParameterType"/>
+    </xs:sequence>
+  </xs:group>
+  <!-- Derivation -->
+  <!--
+    union has no inheritance  
+    <!ENTITY % cxxUnionDerivationAccessSpecifier    "cxxUnionDerivationAccessSpecifier">
+    <!ENTITY % cxxUnionDerivationVirtual            "cxxUnionDerivationVirtual">
+    <!ENTITY % cxxUnionBaseClass                    "cxxUnionBaseClass">
+    <!ENTITY % cxxUnionBaseStruct                   "cxxUnionBaseStruct">
+    <!ENTITY % cxxUnionBaseUnion                    "cxxUnionBaseUnion">
+    <!ENTITY % cxxUnionInherits                     "cxxUnionInherits">
+    <!ENTITY % cxxUnionInheritsDetail               "cxxUnionInheritsDetail">
+    
+    <!ENTITY % cxxUnionFunctionInherited            "cxxUnionFunctionInherited">
+    <!ENTITY % cxxUnionVariableInherited            "cxxUnionVariableInherited">
+    <!ENTITY % cxxUnionEnumerationInherited         "cxxUnionEnumerationInherited">
+  -->
+  <!-- Nested members -->
+  <xs:group name="cxxUnionNestedDetail">
+    <xs:sequence>
+      <xs:element ref="cxxUnionNestedDetail"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxUnionNestedClass">
+    <xs:sequence>
+      <xs:element ref="cxxUnionNestedClass"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxUnionNestedStruct">
+    <xs:sequence>
+      <xs:element ref="cxxUnionNestedStruct"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxUnionNestedUnion">
+    <xs:sequence>
+      <xs:element ref="cxxUnionNestedUnion"/>
+    </xs:sequence>
+  </xs:group>
+  <!-- Location elements -->
+  <xs:group name="cxxUnionAPIItemLocation">
+    <xs:sequence>
+      <xs:element ref="cxxUnionAPIItemLocation"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxUnionDeclarationFile">
+    <xs:sequence>
+      <xs:element ref="cxxUnionDeclarationFile"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxUnionDeclarationFileLine">
+    <xs:sequence>
+      <xs:element ref="cxxUnionDeclarationFileLine"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxUnionDefinitionFile">
+    <xs:sequence>
+      <xs:element ref="cxxUnionDefinitionFile"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxUnionDefinitionFileLineStart">
+    <xs:sequence>
+      <xs:element ref="cxxUnionDefinitionFileLineStart"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxUnionDefinitionFileLineEnd">
+    <xs:sequence>
+      <xs:element ref="cxxUnionDefinitionFileLineEnd"/>
+    </xs:sequence>
+  </xs:group>
+  <!-- ============ Hooks for shell DTD ============ -->
+  <xs:group name="cxxUnion-types-default">
+    <xs:choice>
+      <xs:element ref="cxxUnionNested"/>
+      <xs:element ref="cxxFunction"/>
+      <xs:element ref="cxxDefine"/>
+      <xs:element ref="cxxVariable"/>
+      <xs:element ref="cxxEnumeration"/>
+      <xs:element ref="cxxTypedef"/>
+    </xs:choice>
+  </xs:group>
+  <xs:group name="cxxUnion-info-types">
+    <xs:sequence>
+      <xs:group ref="cxxUnion-types-default"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxUnionNested-types-default">
+    <xs:sequence>
+      <xs:element ref="no-topic-nesting"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="cxxUnionNested-info-types">
+    <xs:sequence>
+      <xs:group ref="cxxUnionNested-types-default"/>
+    </xs:sequence>
+  </xs:group>
+  <!-- ============ Topic specializations ============ -->
+  <xs:element name="cxxUnion">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:group ref="apiName"/>
+        <xs:group minOccurs="0" ref="shortdesc"/>
+        <xs:group minOccurs="0" ref="prolog"/>
+        <xs:group ref="cxxUnionDetail"/>
+        <xs:group minOccurs="0" ref="related-links"/>
+        <xs:group minOccurs="0" maxOccurs="unbounded" ref="cxxUnion-info-types"/>
+      </xs:sequence>
+      <xs:attribute name="id" use="required" type="xs:ID"/>
+      <xs:attribute name="conref"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attribute ref="xml:lang"/>
+      <xs:attributeGroup ref="arch-atts"/>
+      <xs:attribute name="domains" default="(topic ui-d) (topic hi-d) (topic pr-d) (topic sw-d)                            (topic ut-d) (topic pr-d api-d) (topic pr-d api-d cxxapi-d)"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/topic reference/reference apiRef/apiRef apiClassifier/apiClassifier cxxUnion/cxxUnion "/>
+    </xs:complexType>
+  </xs:element>
+  <!-- union has no inheritance    (%cxxUnionInherits;)* -->
+  <xs:element name="cxxUnionDetail">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:group minOccurs="0" ref="cxxUnionDefinition"/>
+        <xs:group minOccurs="0" ref="apiDesc"/>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:group ref="example"/>
+          <xs:group ref="section"/>
+          <xs:group ref="apiImpl"/>
+        </xs:choice>
+      </xs:sequence>
+      <xs:attributeGroup ref="id-atts"/>
+      <xs:attribute name="translate">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute ref="xml:lang"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/body reference/refbody apiRef/apiDetail apiClassifier/apiClassifierDetail cxxUnion/cxxUnionDetail "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxUnionDefinition">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:group minOccurs="0" ref="cxxUnionAccessSpecifier"/>
+        <xs:group minOccurs="0" ref="cxxUnionAbstract"/>
+        <xs:group minOccurs="0" ref="cxxUnionTemplateParameters"/>
+        <xs:group ref="cxxUnionAPIItemLocation"/>
+      </xs:sequence>
+      <xs:attribute name="spectitle"/>
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/section reference/section apiRef/apiDef apiClassifier/apiClassifierDef cxxUnion/cxxUnionDefinition "/>
+    </xs:complexType>
+  </xs:element>
+  <!-- union has no inheritance       (%cxxUnionDerivations;)?, -->
+  <xs:element name="cxxUnionAccessSpecifier">
+    <xs:complexType>
+      <xs:attribute name="name" default="access">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="access"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="value" default="public">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="public"/>
+            <xs:enumeration value="protected"/>
+            <xs:enumeration value="private"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/state reference/state apiRef/apiQualifier apiClassifier/apiQualifier cxxUnion/cxxUnionAccessSpecifier "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxUnionAbstract">
+    <xs:complexType>
+      <xs:attribute name="name" default="abstract">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="abstract"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="value" default="abstract">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="abstract"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/state reference/state apiRef/apiQualifier apiClassifier/apiQualifier cxxUnion/cxxUnionAbstract "/>
+    </xs:complexType>
+  </xs:element>
+  <!--  Templates -->
+  <xs:element name="cxxUnionTemplateParameters">
+    <xs:complexType>
+      <xs:group maxOccurs="unbounded" ref="cxxUnionTemplateParameter"/>
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/ph reference/ph apiRef/apiDefItem apiClassifier/apiDefItem cxxUnion/cxxUnionTemplateParameters "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxUnionTemplateParameter">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:group ref="cxxUnionTemplateParameterType"/>
+        <xs:group minOccurs="0" ref="apiDefNote"/>
+      </xs:sequence>
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/ph reference/ph apiRef/apiDefItem apiClassifier/apiDefItem cxxUnion/cxxUnionTemplateParameter "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxUnionTemplateParameterType">
+    <xs:complexType mixed="true">
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/ph reference/ph apiRef/apiDefItem apiClassifier/apiDefItem cxxUnion/cxxUnionTemplateParameterType "/>
+    </xs:complexType>
+  </xs:element>
+  <!-- Location -->
+  <xs:element name="cxxUnionAPIItemLocation">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:group ref="cxxUnionDeclarationFile"/>
+        <xs:group ref="cxxUnionDeclarationFileLine"/>
+        <xs:group minOccurs="0" ref="cxxUnionDefinitionFile"/>
+        <xs:group minOccurs="0" ref="cxxUnionDefinitionFileLineStart"/>
+        <xs:group minOccurs="0" ref="cxxUnionDefinitionFileLineEnd"/>
+      </xs:sequence>
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/ph reference/ph apiRef/apiDefItem apiClassifier/apiDefItem cxxUnion/cxxUnionAPIItemLocation "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxUnionDeclarationFile">
+    <xs:complexType>
+      <xs:attribute name="name" default="filePath">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="filePath"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="value" use="required"/>
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/state reference/state apiRef/apiQualifier apiClassifier/apiQualifier cxxUnion/cxxUnionDeclarationFile "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxUnionDeclarationFileLine">
+    <xs:complexType>
+      <xs:attribute name="name" default="lineNumber">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="lineNumber"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="value" use="required"/>
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/state reference/state apiRef/apiQualifier apiClassifier/apiQualifier cxxUnion/cxxUnionDeclarationFileLine "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxUnionDefinitionFile">
+    <xs:complexType>
+      <xs:attribute name="name" default="filePath">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="filePath"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="value" use="required"/>
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/state reference/state apiRef/apiQualifier apiClassifier/apiQualifier cxxUnion/cxxUnionDefinitionFile "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxUnionDefinitionFileLineStart">
+    <xs:complexType>
+      <xs:attribute name="name" default="lineNumber">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="lineNumber"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="value" use="required"/>
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/state reference/state apiRef/apiQualifier apiClassifier/apiQualifier cxxUnion/cxxUnionDefinitionFileLineStart "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxUnionDefinitionFileLineEnd">
+    <xs:complexType>
+      <xs:attribute name="name" default="lineNumber">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="lineNumber"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="value" use="required"/>
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/state reference/state apiRef/apiQualifier apiClassifier/apiQualifier cxxUnion/cxxUnionDefinitionFileLineEnd "/>
+    </xs:complexType>
+  </xs:element>
+  <!-- Nested members -->
+  <xs:element name="cxxUnionNested">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:group ref="cxxUnionNestedDetail"/>
+        <xs:group minOccurs="0" maxOccurs="unbounded" ref="cxxUnionNested-info-types"/>
+      </xs:sequence>
+      <xs:attribute name="conref"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attribute ref="xml:lang"/>
+      <xs:attributeGroup ref="arch-atts"/>
+      <xs:attribute name="domains" default="(topic ui-d) (topic hi-d) (topic pr-d) (topic sw-d)                            (topic ut-d) (topic pr-d api-d) (topic pr-d api-d cxxapi-d)"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/topic reference/reference apiRef/apiRef apiClassifier/apiClassifier cxxUnion/cxxUnionNested "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxUnionNestedDetail">
+    <xs:complexType>
+      <xs:choice maxOccurs="unbounded">
+        <xs:group ref="cxxUnionNestedClass"/>
+        <xs:group ref="cxxUnionNestedStruct"/>
+        <xs:group ref="cxxUnionNestedUnion"/>
+      </xs:choice>
+      <xs:attributeGroup ref="id-atts"/>
+      <xs:attribute name="translate">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute ref="xml:lang"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/body reference/refbody apiRef/apiDetail apiClassifier/apiDetail cxxUnion/cxxUnionNestedDetail "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxUnionNestedClass">
+    <xs:complexType mixed="true">
+      <xs:attribute name="href"/>
+      <xs:attribute name="keyref"/>
+      <xs:attribute name="type"/>
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="format"/>
+      <xs:attribute name="scope">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="local"/>
+            <xs:enumeration value="peer"/>
+            <xs:enumeration value="external"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/xref reference/xref apiRef/apiRelation apiClassifier/apiRelation cxxUnion/cxxUnionNestedClass "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxUnionNestedStruct">
+    <xs:complexType mixed="true">
+      <xs:attribute name="href"/>
+      <xs:attribute name="keyref"/>
+      <xs:attribute name="type"/>
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="format"/>
+      <xs:attribute name="scope">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="local"/>
+            <xs:enumeration value="peer"/>
+            <xs:enumeration value="external"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/xref reference/xref apiRef/apiRelation apiClassifier/apiRelation cxxUnion/cxxUnionNestedStruct "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxUnionNestedUnion">
+    <xs:complexType mixed="true">
+      <xs:attribute name="href"/>
+      <xs:attribute name="keyref"/>
+      <xs:attribute name="type"/>
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="format"/>
+      <xs:attribute name="scope">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="local"/>
+            <xs:enumeration value="peer"/>
+            <xs:enumeration value="external"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/xref reference/xref apiRef/apiRelation apiClassifier/apiRelation cxxUnion/cxxUnionNestedUnion "/>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
+<!-- ============ Class attributes for type ancestry ============ -->
+<!-- Templates -->
+<!-- Nested members -->
+<!-- Location elements -->

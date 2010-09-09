@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxFileDeclarationFile">
+    <title>cxxFileDeclarationFile</title>
+    <shortdesc>The &lt;cxxFileDeclarationFile&gt; element defines the location of the 
+    declaration file described in this document.</shortdesc>
+    <refbody>
+        <section>
+            <title>Description</title>
+            <p>The &lt;cxxFileDeclarationFile&gt; element is contained by the &lt;cxxFileAPIItemLocation&gt; 
+            element. The location of the file is described using the mandatory attributes <i>name</i> and <i>value</i>.
+            <i>name</i> contains the default value "filepath" and value contains the full path to the declaration file.</p>
+        </section>
+        <example><title>Example</title>
+        <codeblock>	&lt;cxxFileAPIItemLocation&gt;
+		&lt;cxxFileDeclarationFile name="filePath" value="C:/src/include/cfshared.h" /&gt;
+	&lt;/cxxFileAPIItemLocation&gt;</codeblock>
+        </example>
+        <section conref="../packagedef.dita#cxxFileDeclarationFile-reference/cxxFileDeclarationFile-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxFileDeclarationFile-reference/cxxFileDeclarationFile-contains-section"/>
+        <section conref="../packagedef.dita#cxxFileDeclarationFile-reference/cxxFileDeclarationFile-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxFileDeclarationFile-reference/cxxFileDeclarationFile-attList-section"/>
+        <section conref="../packagedef.dita#cxxFileDeclarationFile-reference/cxxFileDeclarationFile-classValue-section"/>
+    </refbody>
+</reference>

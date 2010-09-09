@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "..\..\..\reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxStructDerivationAccessSpecifier">
+	<title>cxxStructDerivationAccessSpecifier</title>
+	<shortdesc>The &lt;cxxStructDerivationAccessSpecifier&gt; element indicates the access specifier used when a struct inherits from another struct.</shortdesc>
+	<refbody>
+		<section>
+			<title>Description</title>
+			<p>The &lt;cxxStructDerivationAccessSpecifier&gt; element is contained within a &lt;cxxStructDerivation&gt; element. 
+            The value attribute is set to public, protected or private to describe the access the struct has on the members of the base that is being derived from. 
+            The base referered to by the &lt;cxxStructDerivationAccessSpecifier&gt; element is indicated by using either a &lt;cxxStructBaseStruct&gt;, &lt;cxxStructBaseStruct&gt; or &lt;cxxStructBaseUnion&gt; element as a sibling of &lt;cxxStructDerivationAccessSpecifier&gt;.</p>
+		</section>
+		<example><title>Example</title>
+		<codeblock>&lt;cxxStructDerivation&gt;
+	&lt;cxxStructDerivationAccessSpecifier value="public"/&gt;
+	&lt;cxxStructBaseStruct href="struct_base"&gt;Base&lt;/cxxStructBaseStruct&gt;
+&lt;/cxxStructDerivation&gt;
+</codeblock>
+		</example>
+		<section conref="../packagedef.dita#cxxStructDerivationAccessSpecifier-reference/cxxStructDerivationAccessSpecifier-containedBy-section"/>
+		<section conref="../packagedef.dita#cxxStructDerivationAccessSpecifier-reference/cxxStructDerivationAccessSpecifier-contains-section"/>
+		<section conref="../packagedef.dita#cxxStructDerivationAccessSpecifier-reference/cxxStructDerivationAccessSpecifier-contentModel-section"/>
+		<section conref="../packagedef.dita#cxxStructDerivationAccessSpecifier-reference/cxxStructDerivationAccessSpecifier-attList-section"/>
+		<section conref="../packagedef.dita#cxxStructDerivationAccessSpecifier-reference/cxxStructDerivationAccessSpecifier-classValue-section"/>
+	</refbody>
+</reference>

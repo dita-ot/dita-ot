@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta name="copyright" content="(C) Copyright 2005"/>
+<meta name="DC.rights.owner" content="(C) Copyright 2005"/>
+<meta name="DC.Type" content="reference"/>
+<meta name="DC.Title" content="cxxFunctionAPIItemLocation"/>
+<meta name="abstract" content="Describes the location of a function in the original C++ source code."/>
+<meta name="description" content="Describes the location of a function in the original C++ source code."/>
+<meta name="DC.Relation" scheme="URI" content="../cxxFunction/cxxFunction_module.html"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="cxxFunctionAPIItemLocation"/>
+<meta name="DC.Language" content="en-us"/>
+<link rel="stylesheet" type="text/css" href="../commonltr.css"/>
+<title>cxxFunctionAPIItemLocation</title>
+<link rel="stylesheet" type="text/css" href="../nokiacxxref.css"/></head>
+<body class="element" id="cxxFunctionAPIItemLocation"><a name="cxxFunctionAPIItemLocation"><!-- --></a>
+
+
+    <h1 class="topictitle1">cxxFunctionAPIItemLocation</h1>
+
+    
+    <div><p>Describes the location of a function in the original C++ source code.</p>
+
+        <div class="section" id="cxxFunctionAPIItemLocation__section_58479B29DC4E4A5DB978B65C636F387A"><a name="cxxFunctionAPIItemLocation__section_58479B29DC4E4A5DB978B65C636F387A"><!-- --></a><h2 class="sectiontitle">Description</h2>
+            <p>Describes the location of a function in the original C++ source code.</p>
+
+        </div>
+
+        <div class="example" id="cxxFunctionAPIItemLocation__example_85FA9ADE455D48D9A46A4FFDE65EBF81"><a name="cxxFunctionAPIItemLocation__example_85FA9ADE455D48D9A46A4FFDE65EBF81"><!-- --></a><h2 class="sectiontitle">Example</h2>
+            <p>Given this code in <span class="filepath">inc/a.h</span>:</p>
+
+            <pre class="codeblock">/**
+@param aBuf The buffer
+*/
+void g(const char* aBuf=0);
+            </pre>
+<p>And this code in <span class="filepath">src/a.cpp</span>:</p>
+
+            <pre class="codeblock">#include "a.h"
+
+void g(const char* aBuffer)
+{
+	// Implementation
+}
+            </pre>
+
+            <p>Then function <tt>g</tt> would have the <tt>cxxFunctionAPIItemLocation</tt>
+element:</p>
+
+            <pre class="codeblock">&lt;cxxFunctionAPIItemLocation&gt;
+  &lt;cxxFunctionDeclarationFile name="filePath" value="inc/a.h"/&gt;
+  &lt;cxxFunctionDeclarationFileLine name="lineNumber" value="5"/&gt;
+  &lt;cxxFunctionDefinitionFile name="filePath" value="src/a.cpp"/&gt;
+  &lt;cxxFunctionDefinitionFileLineStart name="lineNumber" value="4"/&gt;
+  &lt;cxxFunctionDefinitionFileLineEnd name="lineNumber" value="7"/&gt;
+&lt;/cxxFunctionAPIItemLocation&gt;
+            </pre>
+
+        </div>
+
+        <div class="elementContainedBy"><h2 class="sectiontitle">Contained by</h2>
+
+<p id="cxxFunctionAPIItemLocation__d5618e6030"><a name="cxxFunctionAPIItemLocation__d5618e6030"><!-- --></a>
+<a href="cxxFunctionDefinition.html" title="Describes all of the details of a C++ function declaration.">cxxFunctionDefinition</a> 
+</p>
+
+</div>
+
+        <div class="elementContains"><h2 class="sectiontitle">Contains</h2>
+
+<p id="cxxFunctionAPIItemLocation__d5618e6042"><a name="cxxFunctionAPIItemLocation__d5618e6042"><!-- --></a>
+<a href="cxxFunctionDeclarationFile.html" title="Identifies the path to the file that contains the declaration of the function.">cxxFunctionDeclarationFile</a> 
+<a href="cxxFunctionDeclarationFileLine.html" title="Identifies the line number in file that contains the declaration of the function.">cxxFunctionDeclarationFileLine</a> 
+<a href="cxxFunctionDefinitionFile.html" title="Identifies the path to the file that contains the definition of the function.">cxxFunctionDefinitionFile</a> 
+<a href="cxxFunctionDefinitionFileLineEnd.html" title="Identifies the line number in file that contains the end of the definition of the function.">cxxFunctionDefinitionFileLineEnd</a> 
+<a href="cxxFunctionDefinitionFileLineStart.html" title="Identifies the line number in file that contains the start of the definition of the function.">cxxFunctionDefinitionFileLineStart</a> 
+</p>
+
+</div>
+
+        <div class="elementContentModel"><h2 class="sectiontitle">Content Model</h2>
+
+<p id="cxxFunctionAPIItemLocation__d5618e6066"><a name="cxxFunctionAPIItemLocation__d5618e6066"><!-- --></a>
+(<a href="cxxFunctionDeclarationFile.html" title="Identifies the path to the file that contains the declaration of the function.">cxxFunctionDeclarationFile</a> 
+  then  
+<a href="cxxFunctionDeclarationFileLine.html" title="Identifies the line number in file that contains the declaration of the function.">cxxFunctionDeclarationFileLine</a> 
+  then  
+<a href="cxxFunctionDefinitionFile.html" title="Identifies the path to the file that contains the definition of the function.">cxxFunctionDefinitionFile</a> 
+(<em>optional</em>)
+  then  
+<a href="cxxFunctionDefinitionFileLineStart.html" title="Identifies the line number in file that contains the start of the definition of the function.">cxxFunctionDefinitionFileLineStart</a> 
+(<em>optional</em>)
+  then  
+<a href="cxxFunctionDefinitionFileLineEnd.html" title="Identifies the line number in file that contains the end of the definition of the function.">cxxFunctionDefinitionFileLineEnd</a> 
+(<em>optional</em>)
+)</p>
+
+</div>
+
+        <div class="elementAttList"/>
+
+        <div class="elementClassValue"><h2 class="sectiontitle">Inheritance</h2>
+
+<p id="cxxFunctionAPIItemLocation__d5618e6102"><a name="cxxFunctionAPIItemLocation__d5618e6102"><!-- --></a>
+ topic/<span class="keyword">ph</span> reference/<span class="keyword">ph</span> apiRef/<span class="keyword">apiDefItem</span> apiOperation/<span class="keyword">apiDefItem</span> cxxFunction/<span class="keyword">cxxFunctionAPIItemLocation</span></p>
+
+</div>
+
+    </div>
+
+<div>
+<div class="familylinks">
+<div class="parentlink"><strong>Parent topic:</strong> <a href="../cxxFunction/cxxFunction_module.html" title="The cxxFunction module describes C++ functions, including member functions.">cxxFunction module</a></div>
+</div>
+</div>
+
+</body>
+</html>

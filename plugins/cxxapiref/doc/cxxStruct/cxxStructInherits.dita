@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxStructInherits">
+    <title>cxxStructInherits</title>
+    <shortdesc>
+        The &lt;cxxStructInherits&gt; element within &lt;cxxStruct&gt; contains &lt;cxxStructInheritsDetail&gt; which gives details of inherited members of this C++ struct
+    </shortdesc>
+    <refbody>
+        <section>
+            <title>Description</title>
+            <p>
+                &lt;cxxStructInherits&gt; contains one mandatory &lt;cxxStructInheritsDetail&gt; element and no attributes.
+            </p>
+        </section>
+        <example>
+            <title>Example</title>
+            <codeblock>	&lt;cxxStructInherits&gt;
+		&lt;cxxStructInheritsDetail&gt;
+			&lt;cxxStructFunctionInherited href=&quot;GUID-7ACD666B-ABB9-3E78-9B16-784E2645856D.xml&quot;&gt;TMediaPswdNotifyBase::MmcPassword&lt;/cxxStructFunctionInherited&gt;        
+			&lt;cxxStructEnumeratorInherited href=&quot;GUID-7ACD666B-ABB9-3E78-9B16-784E2645856D.xml&quot;&gt;TMediaPswdNotifyBase::ECTMmcPassword&lt;/cxxStructEnumeratorInherited&gt;
+			&lt;cxxStructVariableInherited href=&quot;GUID-7ACD666B-ABB9-3E78-9B16-784E2645856D.xml&quot;&gt;TMediaPswdNotifyBase::iCT&lt;/cxxStructVariableInherited&gt;
+			&lt;cxxStructEnumerationInherited href=&quot;GUID-7ACD666B-ABB9-3E78-9B16-784E2645856D.xml&quot;&gt;TMediaPswdNotifyBase:TCardType&lt;/cxxStructEnumerationInherited&gt;
+		&lt;/cxxStructInheritsDetail&gt;
+	&lt;/cxxStructInherits&gt;</codeblock>
+        </example>  
+        <section conref="../packagedef.dita#cxxStructInherits-reference/cxxStructInherits-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxStructInherits-reference/cxxStructInherits-contains-section"/>
+        <section conref="../packagedef.dita#cxxStructInherits-reference/cxxStructInherits-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxStructInherits-reference/cxxStructInherits-attList-section"/>
+        <section conref="../packagedef.dita#cxxStructInherits-reference/cxxStructInherits-classValue-section"/>
+    </refbody>
+</reference>

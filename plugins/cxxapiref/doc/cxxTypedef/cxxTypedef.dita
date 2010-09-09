@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxTypedef">
+    <title>cxxTypedef</title>
+    <shortdesc>The &lt;cxxTypedef&gt; element provides the name of the C++ API
+typedef, all the elements necessary to describe the members that are introduced
+by the typedef declaration.</shortdesc>
+    <refbody>
+        <section>
+            <title>Description</title>
+            <p>The &lt;cxxTypedef&gt; element requires
+an ID attribute as an anchor point; this ID must always be specified. The
+ID attribute is referenced by the <i>conref</i> attribute and internal applications
+that refer to the  &lt;cxxTypedef&gt; element content. The elements &lt;apiName&gt; 
+and &lt;cxxTypedefDetail&gt; are required for this top-level container. </p>
+        </section>
+        <example>
+            <title>Example</title>
+            <codeblock>&lt;cxxTypedef id=&quot;GUID-D02ABE8F-2F4B-3625-8472-2ACAF38F47F1&quot;&gt;
+		&lt;apiName&gt;TRBuf&lt;/apiName&gt;
+		&lt;cxxTypedefDetail&gt;
+			&lt;cxxTypedefDefinition&gt;
+				&lt;cxxTypedefAccessSpecifier value=&quot;public&quot; /&gt;
+				&lt;cxxTypedefDeclaredType&gt;TRBuf16&lt;/cxxTypedefDeclaredType&gt;
+				&lt;cxxTypedefScopedName&gt;Elements&lt;/cxxTypedefScopedName&gt;
+				&lt;cxxTypedefPrototype&gt;TRBuf16 TRBuf&lt;/cxxTypedefPrototype&gt;
+				&lt;cxxTypedefNameLookup&gt;Elements::TRBuf&lt;/cxxTypedefNameLookup&gt;
+				&lt;cxxTypedefAPIItemLocation&gt;
+					&lt;cxxTypedefDeclarationFile name=&quot;filePath&quot; value=&quot;s:/epoc32/include/platform/elements/h_trbuf.h&quot; /&gt;
+					&lt;cxxTypedefDeclarationFileLine name=&quot;lineNumber&quot; value=&quot;104&quot; /&gt;
+				&lt;/cxxTypedefAPIItemLocation&gt;
+			&lt;/cxxTypedefDefinition&gt;
+			&lt;apiDesc /&gt;
+		&lt;/cxxTypedefDetail&gt;
+	&lt;/cxxTypedef&gt;
+            </codeblock>
+        </example>        
+        <section conref="../packagedef.dita#cxxTypedef-reference/cxxTypedef-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxTypedef-reference/cxxTypedef-contains-section"/>
+        <section conref="../packagedef.dita#cxxTypedef-reference/cxxTypedef-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxTypedef-reference/cxxTypedef-attList-section"/>
+        <section conref="../packagedef.dita#cxxTypedef-reference/cxxTypedef-classValue-section"/>
+    </refbody>
+</reference>

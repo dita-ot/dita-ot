@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxDefineParameterDeclarationName">
+    <title>cxxDefineParameterDeclarationName</title>
+    <shortdesc>The &lt;cxxDefineParameterDeclarationName&gt; element specifies the name of the 
+    parameter used in the declaration of the define.</shortdesc>
+    <refbody>
+        <section>
+            <title>Description</title>
+            <p>The name of the parameter used in the declaration of the define.</p>
+            <p>This element has no child elements.</p>
+        </section>
+        <example>
+            <title>Example</title>
+            <codeblock>&lt;cxxDefineDefinition&gt;
+    &lt;cxxDefineAccessSpecifier value="public"/&gt;
+    &lt;cxxDefinePrototype&gt;#define MSG_PRM(prmIndex)&lt;/cxxDefinePrototype&gt;
+    &lt;cxxDefineNameLookup&gt;MSG_PRM&lt;/cxxDefineNameLookup&gt;
+    &lt;cxxDefineParameters&gt;
+        &lt;cxxDefineParameter&gt;
+            &lt;cxxDefineParameterDeclarationName&gt;prmIndex&lt;/cxxDefineParameterDeclarationName&gt;
+            &lt;apiDefNote/&gt;
+        &lt;/cxxDefineParameter&gt;
+    &lt;/cxxDefineParameters&gt;
+    ...
+&lt;/cxxDefineDefinition&gt;</codeblock>
+        </example>
+        <section conref="../packagedef.dita#cxxDefineParameterDeclarationName-reference/cxxDefineParameterDeclarationName-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxDefineParameterDeclarationName-reference/cxxDefineParameterDeclarationName-contains-section"/>
+        <section conref="../packagedef.dita#cxxDefineParameterDeclarationName-reference/cxxDefineParameterDeclarationName-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxDefineParameterDeclarationName-reference/cxxDefineParameterDeclarationName-attList-section"/>
+        <section conref="../packagedef.dita#cxxDefineParameterDeclarationName-reference/cxxDefineParameterDeclarationName-classValue-section"/>
+    </refbody>
+</reference>

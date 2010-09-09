@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  (C) Copyright Nokia Corporation and/or its subsidiary(-ies) 2009  - 2010. All rights reserved.
+ *-->
+<xs:schema elementFormDefault="qualified"
+           targetNamespace="http://www.w3.org/XML/1998/namespace"
+           xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="cxxClass.xsd" />
+  <xs:import schemaLocation="cxxFile.xsd" />
+  <xs:import schemaLocation="cxxAPIMap.xsd" />
+  <xs:import schemaLocation="cxxStruct.xsd" />
+  <xs:import schemaLocation="cxxUnion.xsd" />
+  <xs:import namespace="http://dita.oasis-open.org/architecture/2005/"
+             schemaLocation="../../../schema/base/xsd/ditaarch.xsd" />
+  <xs:attribute name="lang"
+                type="xs:NMTOKEN" />
+  <xs:attribute name="space">
+    <xs:simpleType>
+      <xs:restriction base="xs:token">
+        <xs:enumeration value="preserve" />
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:attribute>
+</xs:schema>

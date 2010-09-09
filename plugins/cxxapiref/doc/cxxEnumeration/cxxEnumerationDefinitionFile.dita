@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxEnumerationDefinitionFile">
+    <title>cxxEnumerationDefinitionFile</title>
+    <shortdesc>The &lt;cxxEnumerationDefinitionFile&gt; element is defined within &lt;cxxEnumerationAPIItemLocation&gt;. 
+    &lt;cxxEnumerationDefinitionFile&gt; specifies the file in which the API definition is present.</shortdesc>
+    <refbody>
+        <section>
+            <title>Description</title>
+            <p>The element &lt;cxxEnumerationDefinitionFile&gt; is empty but for the required 
+            attributes <i>name</i> and <i>value</i>. <i>name</i> is always "filePath" and <i>value</i> is the actual file path.</p>
+        </section>
+        <example><title>Example</title>
+        <codeblock>&lt;cxxEnumerationAPIItemLocation&gt;
+    &lt;cxxEnumerationDeclarationFile name=&quot;filePath&quot; value=&quot;C:/src/include/gdi.h&quot;/&gt;
+    &lt;cxxEnumerationDeclarationFileLine name=&quot;lineNumber&quot; value=&quot;1720&quot;/&gt;
+    &lt;cxxEnumerationDefinitionFile name=&quot;filePath&quot; value=&quot;C:/src/master/sf/mw/animation/src/SpriteAnimationServer.cpp&quot;/&gt;
+    &lt;cxxEnumerationDefinitionFileLineStart name=&quot;lineNumber&quot; value=&quot;1719&quot;/&gt;
+    &lt;cxxEnumerationDefinitionFileLineEnd name=&quot;lineNumber&quot; value=&quot;1727&quot;/&gt;
+&lt;/cxxEnumerationAPIItemLocation&gt;</codeblock>
+        </example>          
+        <section conref="../packagedef.dita#cxxEnumerationDefinitionFile-reference/cxxEnumerationDefinitionFile-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxEnumerationDefinitionFile-reference/cxxEnumerationDefinitionFile-contains-section"/>
+        <section conref="../packagedef.dita#cxxEnumerationDefinitionFile-reference/cxxEnumerationDefinitionFile-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxEnumerationDefinitionFile-reference/cxxEnumerationDefinitionFile-attList-section"/>
+        <section conref="../packagedef.dita#cxxEnumerationDefinitionFile-reference/cxxEnumerationDefinitionFile-classValue-section"/>
+    </refbody>
+</reference>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference id="cxxFile_module" outputclass="module" xml:lang="en-us">
+	<title>cxxFile module</title>
+	<shortdesc>The cxxFile module defines a top-level container for all the elements necessary to describe the global APIs of a component</shortdesc>
+	<refbody>
+		<section>
+			<title>Description</title>	
+            <p>The &lt;cxxFile&gt; topic type contains elements necessary to show the name of the file, and also the global 
+            variables, functions, defines, enumerations and typedefs contained within.</p>
+            <p>The cxxFile topic contains the following elements:</p>        
+		</section>
+	</refbody>
+</reference>

@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta name="copyright" content="(C) Copyright 2005"/>
+<meta name="DC.rights.owner" content="(C) Copyright 2005"/>
+<meta name="DC.Type" content="reference"/>
+<meta name="DC.Title" content="cxxEnumerator"/>
+<meta name="abstract" content="The &lt;cxxEnumerator&gt; element within the &lt;cxxEnumerators&gt; element provides the details of an enumerator defined within an enumeration."/>
+<meta name="description" content="The &lt;cxxEnumerator&gt; element within the &lt;cxxEnumerators&gt; element provides the details of an enumerator defined within an enumeration."/>
+<meta name="DC.Relation" scheme="URI" content="../cxxEnumeration/cxxEnumeration_module.html"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="cxxEnumerator"/>
+<meta name="DC.Language" content="en-us"/>
+<link rel="stylesheet" type="text/css" href="../commonltr.css"/>
+<title>cxxEnumerator</title>
+<link rel="stylesheet" type="text/css" href="../nokiacxxref.css"/></head>
+<body class="element" id="cxxEnumerator"><a name="cxxEnumerator"><!-- --></a>
+
+
+    <h1 class="topictitle1">cxxEnumerator</h1>
+
+    
+    <div><p>The &lt;cxxEnumerator&gt; element within the &lt;cxxEnumerators&gt; element provides the details of an 
+    enumerator defined within an enumeration.</p>
+
+        <div class="section"><h2 class="sectiontitle">Description</h2>
+            
+            <p>The &lt;cxxEnumerator&gt; element contains &lt;cxxEnumeratorScopedName&gt;, &lt;cxxEnumeratorPrototype&gt;, &lt;cxxEnumeratorNameLookup&gt;, &lt;cxxEnumeratorInitialiser&gt; and &lt;cxxEnumeratorAPIItemLocation&gt; to describe the details of the enumerator.</p>
+
+        </div>
+
+        <div class="example"><h2 class="sectiontitle">Example</h2>
+        <pre class="codeblock">&lt;cxxEnumerators&gt;
+    &lt;cxxEnumerator id="class_c_graphics_context_1aa83437963ec92f7c4bef2ca1fe1d841faa74134e0c09d1d944bd4ef7c274511ae"&gt;
+        &lt;apiName&gt;ELeft&lt;/apiName&gt;
+        &lt;cxxEnumeratorScopedName&gt;CGraphicsContext&lt;/cxxEnumeratorScopedName&gt;
+        &lt;cxxEnumeratorPrototype&gt;ELeft&lt;/cxxEnumeratorPrototype&gt;
+        &lt;cxxEnumeratorNameLookup&gt;CGraphicsContext::ELeft&lt;/cxxEnumeratorNameLookup&gt;
+        &lt;cxxEnumeratorAPIItemLocation&gt;
+            &lt;cxxEnumeratorDeclarationFile name="filePath" value="C:/src/include/gdi.h"/&gt;
+            &lt;cxxEnumeratorDeclarationFileLine name="lineNumber" value="1722"/&gt;
+        &lt;/cxxEnumeratorAPIItemLocation&gt;
+        &lt;apiDesc&gt;
+            &lt;p&gt;Text is left-aligned. &lt;/p&gt;
+        &lt;/apiDesc&gt;
+    &lt;/cxxEnumerator&gt;
+    &lt;cxxEnumerator id="class_c_graphics_context_1aa83437963ec92f7c4bef2ca1fe1d841faf9bbbaae3b62083e453a204ca381aff7"&gt;
+        ...
+    &lt;/cxxEnumerator&gt;
+    &lt;cxxEnumerator id="class_c_graphics_context_1aa83437963ec92f7c4bef2ca1fe1d841fa6567b3e91e6ce82151d21d2617ac1694"&gt;
+        ...
+    &lt;/cxxEnumerator&gt;
+&lt;/cxxEnumerators&gt;</pre>
+
+        </div>
+        
+        <div class="elementContainedBy"><h2 class="sectiontitle">Contained by</h2>
+
+<p id="cxxEnumerator__d4000e4834"><a name="cxxEnumerator__d4000e4834"><!-- --></a>
+<a href="cxxEnumerators.html" title="The &lt;cxxEnumerators&gt; element contains a &lt;cxxEnumerator&gt; element for each enumerator in an enumeration">cxxEnumerators</a> 
+</p>
+
+</div>
+
+        <div class="elementContains"><h2 class="sectiontitle">Contains</h2>
+
+<p id="cxxEnumerator__d4000e4846"><a name="cxxEnumerator__d4000e4846"><!-- --></a>
+<span class="keyword">apiDesc</span>, 
+<span class="keyword">apiName</span>, 
+<a href="cxxEnumeratorAPIItemLocation.html" title="The &lt;cxxEnumeratorAPIItemLocation&gt; element is defined within &lt;cxxEnumerator&gt;. &lt;cxxEnumeratorAPIItemLocation&gt; specifies the location of the API.">cxxEnumeratorAPIItemLocation</a> 
+<a href="cxxEnumeratorInitialiser.html" title="The &lt;cxxEnumeratorInitialiser&gt; element specifies the initial value of the enumerator.">cxxEnumeratorInitialiser</a> 
+<a href="cxxEnumeratorNameLookup.html" title="Provides a unique identifier of the enumerator.">cxxEnumeratorNameLookup</a> 
+<a href="cxxEnumeratorPrototype.html" title="Provides a &#34;visual&#34; representation of the enumerator declaration.">cxxEnumeratorPrototype</a> 
+<a href="cxxEnumeratorScopedName.html" title="The scope of the enumerator i.e. the declaration of the enclosing namespace/class/struct/union.">cxxEnumeratorScopedName</a> 
+</p>
+
+</div>
+
+        <div class="elementContentModel"><h2 class="sectiontitle">Content Model</h2>
+
+<p id="cxxEnumerator__d4000e4877"><a name="cxxEnumerator__d4000e4877"><!-- --></a>
+(<span class="keyword">apiName</span>, 
+  then  
+<a href="cxxEnumeratorScopedName.html" title="The scope of the enumerator i.e. the declaration of the enclosing namespace/class/struct/union.">cxxEnumeratorScopedName</a> 
+(<em>optional</em>)
+  then  
+<a href="cxxEnumeratorPrototype.html" title="Provides a &#34;visual&#34; representation of the enumerator declaration.">cxxEnumeratorPrototype</a> 
+(<em>optional</em>)
+  then  
+<a href="cxxEnumeratorNameLookup.html" title="Provides a unique identifier of the enumerator.">cxxEnumeratorNameLookup</a> 
+(<em>optional</em>)
+  then  
+<a href="cxxEnumeratorInitialiser.html" title="The &lt;cxxEnumeratorInitialiser&gt; element specifies the initial value of the enumerator.">cxxEnumeratorInitialiser</a> 
+(<em>optional</em>)
+  then  
+<a href="cxxEnumeratorAPIItemLocation.html" title="The &lt;cxxEnumeratorAPIItemLocation&gt; element is defined within &lt;cxxEnumerator&gt;. &lt;cxxEnumeratorAPIItemLocation&gt; specifies the location of the API.">cxxEnumeratorAPIItemLocation</a> 
+(<em>optional</em>)
+  then  
+<span class="keyword">apiDesc</span>, 
+)</p>
+
+</div>
+
+        <div class="elementAttList"/>
+
+        <div class="elementClassValue"><h2 class="sectiontitle">Inheritance</h2>
+
+<p id="cxxEnumerator__d4000e4926"><a name="cxxEnumerator__d4000e4926"><!-- --></a>
+ topic/<span class="keyword">ph</span> reference/<span class="keyword">ph</span> apiRef/<span class="keyword">apiDefItem</span> apiValue/<span class="keyword">apiDefItem</span> cxxEnumeration/<span class="keyword">cxxEnumerator</span></p>
+
+</div>
+
+    </div>
+
+<div>
+<div class="familylinks">
+<div class="parentlink"><strong>Parent topic:</strong> <a href="../cxxEnumeration/cxxEnumeration_module.html" title="Defines a top-level container for all the elements necessary to describe an C++ API enumeration.">cxxEnumeration module</a></div>
+</div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "..\..\..\reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxClassBaseUnion">
+	<title>cxxClassBaseUnion</title>
+	<shortdesc>The &lt;cxxClassBaseUnion&gt; element declares inheritance from a base union in a class derivation.</shortdesc>
+	<refbody>
+		<section>
+			<title>Description</title>
+			<p>Used within a &lt;cxxClassDerivation&gt; element to declare inheritance from a base union.</p>
+		</section>
+		<example><title>Example</title>
+		<codeblock>&lt;cxxClassDerivation&gt;
+    &lt;cxxClassDerivationAccessSpecifier value="public"/&gt;
+    &lt;cxxClassBaseUnion href="union_base"&gt;Base&lt;/cxxClassBaseUnion&gt;
+&lt;/cxxClassDerivation&gt;</codeblock>
+		</example>
+		<section conref="../packagedef.dita#cxxClassBaseUnion-reference/cxxClassBaseUnion-containedBy-section"/>
+		<section conref="../packagedef.dita#cxxClassBaseUnion-reference/cxxClassBaseUnion-contains-section"/>
+		<section conref="../packagedef.dita#cxxClassBaseUnion-reference/cxxClassBaseUnion-contentModel-section"/>
+		<section conref="../packagedef.dita#cxxClassBaseUnion-reference/cxxClassBaseUnion-attList-section"/>
+		<section conref="../packagedef.dita#cxxClassBaseUnion-reference/cxxClassBaseUnion-classValue-section"/>
+	</refbody>
+</reference>

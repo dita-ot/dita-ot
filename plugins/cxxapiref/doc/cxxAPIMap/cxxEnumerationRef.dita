@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxEnumerationRef">
+    <title>cxxEnumerationRef</title>
+    <shortdesc>This element provides a C++ enumeration topic type as a link in a DITA map. </shortdesc>
+    <refbody>
+        <section>
+            <title>Description</title>
+            <p>A &lt;cxxEnumerationRef&gt; element can contain &lt;topicref&gt;
+and &lt;topicmeta&gt; elements, allowing you to express navigation or table-of-contents
+hierarchies, as well as implying relationships between the containing topicref
+and its children. </p>
+        </section>
+        <example>
+            <title>Example</title>
+            <codeblock>&lt;cxxAPIMap id=&quot;GUID-A1E43BB6-B43A-38A0-870F-29A553C534EC&quot; title=&quot;AMap&quot;&gt;
+            &lt;cxxStructRef href=&quot;GUID-4D736120-454B-3952-ADFA-FEC7BDDE18F2.xml&quot; navtitle=&quot;AClass::AStruct&quot; /&gt;
+            &lt;cxxClassRef href=&quot;GUID-1F65F1EB-791C-32A4-A05E-3262BA816EF6.xml&quot; navtitle=&quot;AClass&quot; /&gt;
+            &lt;cxxFileRef href=&quot;GUID-15161A9C-9AC4-3B34-AADE-5294E5C7CCC2.xml&quot; navtitle=&quot;AFile.h&quot; /&gt;    
+            &lt;cxxEnumRef href=&quot;GUID-4C504F67-7737-33A7-AA99-6F030423E4CB.xml&quot; navtitle=&quot;AClass::anEnum&quot; /&gt;
+            &lt;cxxFunctionRef href=&quot;GUID-1390F0BC-18FA-3E68-A5F7-25347A52A08C.xml&quot; navtitle=&quot;AClass::aFunction(aParam,anotherParam)&quot; /&gt;
+            &lt;cxxTypedefRef href=&quot;GUID-CB589BED-4E77-3CD9-83A8-516A4B47C223.xml&quot; navtitle=&quot;AClass::aTypeDef&quot; /&gt;
+            &lt;cxxUnionRef href=&quot;GUID-A6375D7C-47D4-38BB-946C-BF042C16F4BD.xml&quot; navtitle=&quot;AClass::uAUnion&quot; /&gt;
+            &lt;cxxDefineRef href=&quot;GUID-1EA4FECD-61BB-3D49-99B5-B4003993D383.xml&quot; navtitle=&quot;AClass::aDefine&quot; /&gt;    
+            &lt;cxxVariableRef href=&quot;GUID-57906A69-F9F1-39FC-8A3E-6EC67BFBCFBA.xml&quot; navtitle=&quot;AClass::aVariable&quot; /&gt;
+        &lt;/cxxAPIMap&gt;</codeblock>
+        </example>          
+        <section conref="../packagedef.dita#cxxEnumerationRef-reference/cxxEnumerationRef-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxEnumerationRef-reference/cxxEnumerationRef-contains-section"/>
+        <section conref="../packagedef.dita#cxxEnumerationRef-reference/cxxEnumerationRef-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxEnumerationRef-reference/cxxEnumerationRef-attList-section"/>
+        <section conref="../packagedef.dita#cxxEnumerationRef-reference/cxxEnumerationRef-classValue-section"/>
+    </refbody>
+</reference>

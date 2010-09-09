@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- ================================================================= -->
+<!-- HEADER -->
+<!-- ================================================================= -->
+<!-- MODULE:    C++ File DTD -->
+<!-- VERSION:   0.5.0 -->
+<!-- DATE:      February 2009 -->
+<!---->
+<!-- ================================================================= -->
+<!-- ================================================================= -->
+<!-- PUBLIC DOCUMENT TYPE DEFINITION -->
+<!-- TYPICAL INVOCATION -->
+<!---->
+<!--
+  Refer to this file by the following public identifier or an 
+        appropriate system identifier 
+  PUBLIC "-//NOKIA//DTD DITA C++ API File Reference Type v0.5.0//EN"
+        Delivered as file "cxxFile.dtd"
+-->
+<!-- ================================================================= -->
+<!-- SYSTEM:     Darwin Information Typing Architecture (DITA) -->
+<!---->
+<!-- PURPOSE:    C++ API Reference for Files -->
+<!---->
+<!-- ORIGINAL CREATION DATE: -->
+<!-- November 2009 -->
+<!---->
+<!-- Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies). -->
+<!-- All rights reserved. -->
+<!---->
+<!-- Change History (latest at top): -->
+<!-- +++++++++++++++++++++++++++++++ -->
+<!-- 2010-02-10 PaulRoss: Updated. -->
+<!-- 2009-11-16 PaulRoss: Initial design. -->
+<!---->
+<!-- ================================================================= -->
+<!-- <!DOCTYPE cxxFile PUBLIC "-//NOKIA//DTD DITA C++ API File Reference Type v0.5.0//EN" "dtd/cxxFile.dtd"   > -->
+<!--
+  Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+  All rights reserved.
+-->
+<!-- vocabulary declarations -->
+<xs:schema elementFormDefault="qualified"
+           xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:include schemaLocation="../../../schema/technicalContent/xsd/programmingDomain.xsd" />
+  <xs:include schemaLocation="../../../schema/technicalContent/xsd/softwareDomain.xsd" />
+  <xs:include schemaLocation="../../../schema/technicalContent/xsd/uiDomain.xsd" />
+  <xs:include schemaLocation="../../../schema/base/xsd/utilitiesDomain.xsd" />
+  <xs:include schemaLocation="../../../schema/base/xsd/highlightDomain.xsd" />
+  <xs:include schemaLocation="../../apiref/xsd/apiDomain.xsd" />
+  <xs:include schemaLocation="cxxAPIDomain.ent.xsd" />
+  <xs:include schemaLocation="../../../schema/base/xsd/topicGrp.xsd" />
+
+  <xs:include schemaLocation="../../../schema/technicalContent/xsd/referenceGrp.xsd" />
+  <xs:include schemaLocation="../../apiref/xsd/apiRefGrp.xsd" />
+  
+
+  <xs:include schemaLocation="../../../schema/base/xsd/topicMod.xsd" />
+  <xs:include schemaLocation="../../../schema/technicalContent/xsd/referenceMod.xsd" />
+  <xs:include schemaLocation="../../apiref/xsd/apiRefMod.xsd" />  
+  
+  <xs:include schemaLocation="apiPackage.mod.xsd" />
+  <xs:include schemaLocation="cxxFile.mod.xsd" />
+  <xs:include schemaLocation="cxxFunction.mod.xsd" />
+  <xs:include schemaLocation="cxxDefine.mod.xsd" />
+  <xs:include schemaLocation="cxxVariable.mod.xsd" />
+  <xs:include schemaLocation="cxxEnumeration.mod.xsd" />
+  <xs:include schemaLocation="cxxTypedef.mod.xsd" />
+  <xs:include schemaLocation="cxxAPIDomain.mod.xsd" />
+  <xs:import namespace="http://dita.oasis-open.org/architecture/2005/"
+             schemaLocation="../../../schema/base/xsd/ditaarch.xsd" />
+  <xs:import namespace="http://www.w3.org/XML/1998/namespace"
+             schemaLocation="../../../schema/base/xsd/xml.xsd" />
+  <!-- vocabulary substitution -->
+  <xs:group name="pre">
+    <xs:choice>
+      <xs:element ref="pre" />
+      <xs:element ref="pr-d-pre" />
+      <xs:element ref="sw-d-pre" />
+      <xs:element ref="ui-d-pre" />
+    </xs:choice>
+  </xs:group>
+  <xs:group name="keyword">
+    <xs:choice>
+      <xs:element ref="keyword" />
+      <xs:element ref="pr-d-keyword" />
+      <xs:element ref="sw-d-keyword" />
+      <xs:element ref="ui-d-keyword" />
+    </xs:choice>
+  </xs:group>
+  <xs:group name="ph">
+    <xs:choice>
+      <xs:element ref="ph" />
+      <xs:element ref="pr-d-ph" />
+      <xs:element ref="sw-d-ph" />
+      <xs:element ref="hi-d-ph" />
+      <xs:element ref="ui-d-ph" />
+    </xs:choice>
+  </xs:group>
+  <xs:group name="fig">
+    <xs:choice>
+      <xs:element ref="fig" />
+      <xs:element ref="pr-d-fig" />
+      <xs:element ref="ut-d-fig" />
+    </xs:choice>
+  </xs:group>
+  <xs:group name="dl">
+    <xs:choice>
+      <xs:element ref="dl" />
+      <xs:element ref="pr-d-dl" />
+    </xs:choice>
+  </xs:group>
+  <xs:group name="xref">
+    <xs:choice>
+      <xs:element ref="xref" />
+      <xs:element ref="api-d-xref" />
+      <xs:element ref="cxxapi-d-xref" />
+    </xs:choice>
+  </xs:group>
+  <!-- Declare the domains -->
+  <!-- Topic nesting uses defaults -->
+  <!-- Embed the base topic module to define the base elements -->
+  <!-- Embed the base reference module to define the base elements -->
+  <!-- Embed the base API module to define the base elements -->
+  <!-- Embed the base package module to define the base elements -->
+  <!-- Embed the cxx Class API module to get the cxx File elements -->
+  <!-- Embed the cxx Function API module to get the cxx Function elements -->
+  <!-- Embed the cxx Define API module to get the cxx Define elements -->
+  <!-- Embed the cxx Variable API module to get the cxx Variable elements -->
+  <!-- Embed the cxx Enumeration API module to get the cxx Enumeration elements -->
+  <!-- Embed the cxx Typedef API module to get the cxx Typedef elements -->
+  <!-- vocabulary definitions -->
+  <xs:complexType mixed="true"
+                  name="any">
+    <xs:sequence>
+      <xs:any maxOccurs="unbounded"
+              minOccurs="0"
+              processContents="strict" />
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxClassNestedUnion">
+    <title>cxxClassNestedUnion</title>
+    <shortdesc>The &lt;cxxClassNestedUnion&gt; element within &lt;cxxClassNestedDetail&gt; provides the name of a nested union.</shortdesc>
+    <refbody>
+        <section>
+            <title>Description</title>
+            <p>The text in this element is the fully qualified name of the union that has been nested. There are no mandatory attributes.</p>
+        </section>
+        <example>
+            <title>Example</title>
+            <codeblock>&lt;cxxClassNested&gt;
+    &lt;cxxClassNestedDetail&gt;
+        &lt;cxxClassNestedUnion href=&quot;GUID-D2E1A4E9-C8AB-34C3-827D-FB83D065899D.xml&quot;&gt;CommsFW::TCFMessageBase::TCFMessageData&lt;/cxxClassNestedUnion&gt;
+        &lt;cxxClassNestedClass href=&quot;GUID-FAF214B2-1CCA-385A-882F-AEB031273917.xml&quot;&gt;RMobileSmsMessaging::TMobileSmsSendAttributesV1&lt;/cxxClassNestedClass&gt;
+        &lt;cxxClassNestedStruct href=&quot;GUID-98F21850-A483-3C81-A2F2-72032E0F9448.xml&quot;&gt;RFax::TProgress&lt;/cxxClassNestedStruct&gt;            
+    &lt;/cxxClassNestedDetail&gt;
+&lt;/cxxClassNested&gt;</codeblock>
+        </example>          
+        <section conref="../packagedef.dita#cxxClassNestedUnion-reference/cxxClassNestedUnion-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxClassNestedUnion-reference/cxxClassNestedUnion-contains-section"/>
+        <section conref="../packagedef.dita#cxxClassNestedUnion-reference/cxxClassNestedUnion-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxClassNestedUnion-reference/cxxClassNestedUnion-attList-section"/>
+        <section conref="../packagedef.dita#cxxClassNestedUnion-reference/cxxClassNestedUnion-classValue-section"/>
+    </refbody>
+</reference>

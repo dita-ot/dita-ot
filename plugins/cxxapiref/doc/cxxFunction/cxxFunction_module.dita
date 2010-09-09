@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference id="cxxFunction_module" outputclass="module" xml:lang="en-us">
+    <title>cxxFunction module</title>
+    <shortdesc>The cxxFunction module describes C++ functions, including member functions.</shortdesc>
+    <refbody>
+        <section id="section_DF124565B560436995322409A261D2EB">
+            <title>Description</title>	
+            <p>The &lt;cxxFunction&gt; topic type contains elements necessary to show 
+            the name of the function, a short description and define the function.</p>
+            <p>Common elements used to describe a function are:
+                <ul>
+                    <li>cxxFunctionAccessSpecifier</li>
+                    <li>cxxFunctionDeclaredType</li>
+                    <li>cxxFunctionScopedName</li>
+                    <li>cxxFunctionPrototype</li>
+                    <li>cxxFunctionNameLookup</li>
+                    <li>cxxFunctionAPIItemLocation</li>
+                </ul>
+            </p>
+            <p>The cxxFunction topic contains the following elements: </p>    
+        </section>
+    </refbody>
+</reference>

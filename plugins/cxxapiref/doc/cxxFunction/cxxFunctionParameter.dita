@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxFunctionParameter">
+    <title>cxxFunctionParameter</title>
+    <shortdesc>Describes a function parameter</shortdesc>
+    <refbody>
+        <section id="section_6C88CF050D7842A79A8DC78019CDFE69">
+            <title>Description</title><p>This element describes a single function <i>parameter-declaration</i> in a  <i>parameter-declaration-clause</i>.</p><p>See ISO/IEC 14882:2003(E) 8.3.5 Functions [dcl.fct]</p>
+        </section>
+        <example id="example_C84A9A190114486A9B1B13C6B677B105">
+            <title>Example</title><p>Given this code, note parameter name change between declaration and definition:</p>
+            <codeblock>/**
+@param aBuf The buffer, default as 0.
+*/
+void g(const char* aBuf=0);
+
+void g(const char* aBuffer)
+{
+	// Implementation
+}
+            </codeblock><p>Then function <tt>g</tt> would have a <tt>cxxFunctionParameter</tt>
+element:</p>
+            <codeblock>&lt;cxxFunctionParameter&gt;
+  &lt;cxxFunctionParameterDeclaredType&gt;const char *&lt;/cxxFunctionParameterDeclaredType&gt;
+  &lt;cxxFunctionParameterDeclarationName&gt;aBuf&lt;/cxxFunctionParameterDeclarationName&gt;
+  &lt;cxxFunctionParameterDefinitionName&gt;aBuffer&lt;/cxxFunctionParameterDefinitionName&gt;
+  &lt;cxxFunctionParameterDefaultValue&gt;0&lt;/cxxFunctionParameterDefaultValue&gt;
+  &lt;apiDefNote&gt;The buffer, default as 0.&lt;/apiDefNote&gt;
+&lt;/cxxFunctionParameter&gt;
+            </codeblock>
+        </example>
+        <section conref="../packagedef.dita#cxxFunctionParameter-reference/cxxFunctionParameter-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxFunctionParameter-reference/cxxFunctionParameter-contains-section"/>
+        <section conref="../packagedef.dita#cxxFunctionParameter-reference/cxxFunctionParameter-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxFunctionParameter-reference/cxxFunctionParameter-attList-section"/>
+        <section conref="../packagedef.dita#cxxFunctionParameter-reference/cxxFunctionParameter-classValue-section"/>
+    </refbody>
+</reference>

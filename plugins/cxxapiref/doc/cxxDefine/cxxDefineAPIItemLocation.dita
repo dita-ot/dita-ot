@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxDefineAPIItemLocation">
+    <title>cxxDefineAPIItemLocation</title>
+    <shortdesc>The &lt;cxxDefineAPIItemLocation&gt; element is defined within &lt;cxxDefineDefinition&gt;. 
+    &lt;cxxDefineAPIItemLocation&gt; specifies the location of the API.</shortdesc>
+    <refbody>
+        <section>
+            <title>Description</title>
+            <p>The &lt;cxxDefineAPIItemLocation&gt; element must contain the location of the 
+            API declaration using &lt;cxxDefineDeclarationFile&gt; and &lt;cxxDefineDeclarationFileLine&gt;; 
+            the location of the API definition is optional.</p>
+        </section>
+        <example>
+            <title>Example</title>
+            <codeblock>&lt;cxxDefineAPIItemLocation&gt;
+    &lt;cxxDefineDeclarationFile name="filePath" value="C:/EPOC/master/sf/os/commsfw/commsfwsupport/commselements/commsfw/src/cfperfmetrics.cpp"/&gt;
+    &lt;cxxDefineDeclarationFileLine name="lineNumber" value="17"/&gt;
+&lt;/cxxDefineAPIItemLocation&gt;</codeblock>
+        </example>
+        <section conref="../packagedef.dita#cxxDefineAPIItemLocation-reference/cxxDefineAPIItemLocation-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxDefineAPIItemLocation-reference/cxxDefineAPIItemLocation-contains-section"/>
+        <section conref="../packagedef.dita#cxxDefineAPIItemLocation-reference/cxxDefineAPIItemLocation-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxDefineAPIItemLocation-reference/cxxDefineAPIItemLocation-attList-section"/>
+        <section conref="../packagedef.dita#cxxDefineAPIItemLocation-reference/cxxDefineAPIItemLocation-classValue-section"/>
+    </refbody>
+</reference>

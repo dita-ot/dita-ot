@@ -1,0 +1,58 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<!DOCTYPE cxxStruct PUBLIC "-//NOKIA//DTD DITA C++ API Struct Reference Type v0.6.0//EN" "dtd/cxxStruct.dtd" >
+<cxxStruct id="struct_point">
+	<apiName>Point</apiName>
+	<cxxStructDetail>
+		<cxxStructDefinition>
+			<cxxStructAccessSpecifier value="public"/>
+			<cxxStructAPIItemLocation>
+				<cxxStructDeclarationFile name="filePath" value="C:/wip/sysdoc/tools/Doxygen/branches/DITA/test/PaulRo/cxxApiExamples/src/test_class.h"/>
+				<cxxStructDeclarationFileLine name="lineNumber" value="17"/>
+				<cxxStructDefinitionFile name="filePath" value="C:/wip/sysdoc/tools/Doxygen/branches/DITA/test/PaulRo/cxxApiExamples/src/test_class.h"/>
+				<cxxStructDefinitionFileLineStart name="lineNumber" value="17"/>
+				<cxxStructDefinitionFileLineEnd name="lineNumber" value="22"/>
+			</cxxStructAPIItemLocation>
+		</cxxStructDefinition>
+		<apiDesc>
+			<p>A structure that represents a single point. </p>
+		</apiDesc>
+	</cxxStructDetail>
+	<cxxVariable id="struct_point_1a8c779e11e694b20e0946105a9f5de842">
+		<apiName>x</apiName>
+		<cxxVariableDetail>
+			<cxxVariableDefinition>
+				<cxxVariableAccessSpecifier value="public"/>
+				<cxxVariableDeclaredType>int</cxxVariableDeclaredType>
+				<cxxVariableScopedName>Point</cxxVariableScopedName>
+				<cxxVariablePrototype>int x</cxxVariablePrototype>
+				<cxxVariableNameLookup>Point::x</cxxVariableNameLookup>
+				<cxxVariableAPIItemLocation>
+					<cxxVariableDeclarationFile name="filePath" value="C:/wip/sysdoc/tools/Doxygen/branches/DITA/test/PaulRo/cxxApiExamples/src/test_class.h"/>
+					<cxxVariableDeclarationFileLine name="lineNumber" value="19"/>
+				</cxxVariableAPIItemLocation>
+			</cxxVariableDefinition>
+			<apiDesc>
+				<p>The X value. </p>
+			</apiDesc>
+		</cxxVariableDetail>
+	</cxxVariable>
+	<cxxVariable id="struct_point_1a2e1b5fb2b2a83571f5c0bc0f66a73cf7">
+		<apiName>y</apiName>
+		<cxxVariableDetail>
+			<cxxVariableDefinition>
+				<cxxVariableAccessSpecifier value="public"/>
+				<cxxVariableDeclaredType>int</cxxVariableDeclaredType>
+				<cxxVariableScopedName>Point</cxxVariableScopedName>
+				<cxxVariablePrototype>int y</cxxVariablePrototype>
+				<cxxVariableNameLookup>Point::y</cxxVariableNameLookup>
+				<cxxVariableAPIItemLocation>
+					<cxxVariableDeclarationFile name="filePath" value="C:/wip/sysdoc/tools/Doxygen/branches/DITA/test/PaulRo/cxxApiExamples/src/test_class.h"/>
+					<cxxVariableDeclarationFileLine name="lineNumber" value="21"/>
+				</cxxVariableAPIItemLocation>
+			</cxxVariableDefinition>
+			<apiDesc>
+				<p>The Y value. </p>
+			</apiDesc>
+		</cxxVariableDetail>
+	</cxxVariable>
+</cxxStruct>

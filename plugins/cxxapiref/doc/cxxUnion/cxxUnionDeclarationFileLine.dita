@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxUnionDeclarationFileLine">
+    <title>cxxUnionDeclarationFileLine</title>
+    <shortdesc>The &lt;cxxUnionDeclarationFileLine&gt; element is defined within &lt;cxxUnionAPIItemLocation&gt;. 
+    &lt;cxxUnionDeclarationFileLine&gt; specifies the line on which the API is declared</shortdesc>
+    <refbody>
+        <section>
+            <title>Description</title>
+            <p>The element &lt;cxxUnionDeclarationFileLine&gt; is empty but for the required 
+            attributes <i>name</i> and <i>value</i>. Name is always <i>lineNumber</i></p>
+        </section>
+        <example><title>Example</title>
+        <codeblock>&lt;cxxUnionDeclarationFileLine name=&quot;lineNumber&quot; value=&quot;59&quot;/&gt;</codeblock>
+        </example>        
+        <section conref="../packagedef.dita#cxxUnionDeclarationFileLine-reference/cxxUnionDeclarationFileLine-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxUnionDeclarationFileLine-reference/cxxUnionDeclarationFileLine-contains-section"/>
+        <section conref="../packagedef.dita#cxxUnionDeclarationFileLine-reference/cxxUnionDeclarationFileLine-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxUnionDeclarationFileLine-reference/cxxUnionDeclarationFileLine-attList-section"/>
+        <section conref="../packagedef.dita#cxxUnionDeclarationFileLine-reference/cxxUnionDeclarationFileLine-classValue-section"/>
+    </refbody>
+</reference>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxStructVariableInherited">
+    <title>cxxStructVariableInherited</title>
+    <shortdesc>The &lt;cxxStructVariableInherited&gt; element within &lt;cxxStructInheritsDetail&gt; provides the name of variable inherited by a struct.</shortdesc>
+    <refbody>
+        <section>
+            <title>Description</title>
+            <p>The text in this element is the fully qualified name of the variable that has been inherited. There are no mandatory attributes.</p>
+        </section>
+        <example>
+            <title>Example</title>
+            <codeblock>	&lt;cxxStructInherits&gt;
+		&lt;cxxStructInheritsDetail&gt;
+			&lt;cxxStructFunctionInherited href=&quot;GUID-7ACD666B-ABB9-3E78-9B16-784E2645856D.xml&quot;&gt;TMediaPswdNotifyBase::MmcPassword&lt;/cxxStructFunctionInherited&gt;        
+			&lt;cxxStructEnumeratorInherited href=&quot;GUID-7ACD666B-ABB9-3E78-9B16-784E2645856D.xml&quot;&gt;TMediaPswdNotifyBase::ECTMmcPassword&lt;/cxxStructEnumeratorInherited&gt;
+			&lt;cxxStructVariableInherited href=&quot;GUID-7ACD666B-ABB9-3E78-9B16-784E2645856D.xml&quot;&gt;TMediaPswdNotifyBase::iCT&lt;/cxxStructVariableInherited&gt;
+			&lt;cxxStructEnumerationInherited href=&quot;GUID-7ACD666B-ABB9-3E78-9B16-784E2645856D.xml&quot;&gt;TMediaPswdNotifyBase:TCardType&lt;/cxxStructEnumerationInherited&gt;
+		&lt;/cxxStructInheritsDetail&gt;
+	&lt;/cxxStructInherits&gt;</codeblock>
+        </example>	        
+        <section conref="../packagedef.dita#cxxStructVariableInherited-reference/cxxStructVariableInherited-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxStructVariableInherited-reference/cxxStructVariableInherited-contains-section"/>
+        <section conref="../packagedef.dita#cxxStructVariableInherited-reference/cxxStructVariableInherited-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxStructVariableInherited-reference/cxxStructVariableInherited-attList-section"/>
+        <section conref="../packagedef.dita#cxxStructVariableInherited-reference/cxxStructVariableInherited-classValue-section"/>
+    </refbody>
+</reference>

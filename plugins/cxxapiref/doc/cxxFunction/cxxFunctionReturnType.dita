@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxFunctionReturnType">
+    <title>cxxFunctionReturnType</title>
+    <shortdesc>Deprecated, use <tt>cxxFunctionDeclaredType</tt>.</shortdesc>
+    <refbody>
+        <section id="section_2BC4B26538AD4436AD4061D844194BC9">
+            <title>Description</title><p>Deprecated, use <tt>cxxFunctionDeclaredType</tt>.
+            </p>
+        </section>
+        <section conref="../packagedef.dita#cxxFunctionReturnType-reference/cxxFunctionReturnType-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxFunctionReturnType-reference/cxxFunctionReturnType-contains-section"/>
+        <section conref="../packagedef.dita#cxxFunctionReturnType-reference/cxxFunctionReturnType-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxFunctionReturnType-reference/cxxFunctionReturnType-attList-section"/>
+        <section conref="../packagedef.dita#cxxFunctionReturnType-reference/cxxFunctionReturnType-classValue-section"/>
+    </refbody>
+</reference>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxFunctionDetail">
+    <title>cxxFunctionDetail</title>
+    <shortdesc>Contains the  declaration of a C++ function and any documention about that function.</shortdesc>
+    <refbody>
+        <section id="section_3B0F8AFDA40F4165BCFE135DA465DB1C">
+            <title>Description</title>The <tt>&lt;cxxFunctionDetail&gt;</tt>
+element contains a mandatory <tt>&lt;cxxFunctionDefinition&gt;</tt> and a optional <tt>&lt;apiDesc&gt;</tt> 
+that can be used to document the operation of the function.</section>
+        <section conref="../packagedef.dita#cxxFunctionDetail-reference/cxxFunctionDetail-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxFunctionDetail-reference/cxxFunctionDetail-contains-section"/>
+        <section conref="../packagedef.dita#cxxFunctionDetail-reference/cxxFunctionDetail-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxFunctionDetail-reference/cxxFunctionDetail-attList-section"/>
+        <section conref="../packagedef.dita#cxxFunctionDetail-reference/cxxFunctionDetail-classValue-section"/>
+    </refbody>
+</reference>

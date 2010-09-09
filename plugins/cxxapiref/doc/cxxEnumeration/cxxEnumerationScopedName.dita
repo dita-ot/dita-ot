@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxEnumerationScopedName">
+    <title>cxxEnumerationScopedName</title>
+    <shortdesc>The scope of the enumeration i.e. the declaration of the enclosing namespace/class/struct/union.</shortdesc>
+    <refbody>
+        <section>
+            <title>Description</title>
+            <p>This element describe the declaration (qualified name lookup) of the enclosing namespace/class/struct/union.</p>
+            <p>See ISO/IEC 14882:2003(E) Section 3.3 Declarative regions and scopes [basic.scope]</p>
+        </section>
+        <example><title>Example</title>
+        <codeblock>&lt;cxxEnumerationDefinition&gt;
+    &lt;cxxEnumerationAccessSpecifier value=&quot;public&quot;/&gt;
+    &lt;cxxEnumerationScopedName&gt;CGraphicsContext&lt;/cxxEnumerationScopedName&gt;
+    &lt;cxxEnumerationPrototype&gt;TTextAlign&lt;/cxxEnumerationPrototype&gt;
+    &lt;cxxEnumerationNameLookup&gt;CGraphicsContext:TTextAlign&lt;/cxxEnumerationNameLookup&gt;
+    &lt;cxxEnumerators&gt;
+        ...
+    &lt;/cxxEnumerators&gt;
+&lt;/cxxEnumerationDefinition&gt;</codeblock>
+        </example>        
+        <section conref="../packagedef.dita#cxxEnumerationScopedName-reference/cxxEnumerationScopedName-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxEnumerationScopedName-reference/cxxEnumerationScopedName-contains-section"/>
+        <section conref="../packagedef.dita#cxxEnumerationScopedName-reference/cxxEnumerationScopedName-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxEnumerationScopedName-reference/cxxEnumerationScopedName-attList-section"/>
+        <section conref="../packagedef.dita#cxxEnumerationScopedName-reference/cxxEnumerationScopedName-classValue-section"/>
+    </refbody>
+</reference>

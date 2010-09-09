@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxUnionTemplateParameter">
+    <title>cxxUnionTemplateParameter</title>
+    <shortdesc>The &lt;cxxUnionTemplateParameter&gt; element describes a union parameter.</shortdesc>
+    <refbody>
+        <section>
+            <title>Description</title>
+            <p>One or more &lt;cxxUnionTemplateParameter&gt; elements reside within the 
+            &lt;cxxUnionTemplateParameters&gt; container. &lt;cxxUnionTemplateParameter&gt; 
+            requires the child element &lt;cxxUnionTemplateParameterType&gt;; that describes 
+            the type of parameter. &lt;cxxUnionTemplateParameter&gt; may also contain the 
+            child element &lt;apiDefNote&gt; to describe the parameter further.</p>
+        </section>
+        <section conref="../packagedef.dita#cxxUnionTemplateParameter-reference/cxxUnionTemplateParameter-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxUnionTemplateParameter-reference/cxxUnionTemplateParameter-contains-section"/>
+        <section conref="../packagedef.dita#cxxUnionTemplateParameter-reference/cxxUnionTemplateParameter-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxUnionTemplateParameter-reference/cxxUnionTemplateParameter-attList-section"/>
+        <section conref="../packagedef.dita#cxxUnionTemplateParameter-reference/cxxUnionTemplateParameter-classValue-section"/>
+    </refbody>
+</reference>

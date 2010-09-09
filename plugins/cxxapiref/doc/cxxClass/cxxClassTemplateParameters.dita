@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxClassTemplateParameters">
+    <title>cxxClassTemplateParameters</title>
+    <shortdesc>The &lt;cxxClassTemplateParameters&gt; element contains a set of class parameters.</shortdesc>
+    <refbody>
+        <section>
+            <title>Description</title>
+            <p>The &lt;cxxClassTemplateParameters&gt; element contains one or more &lt;cxxClassTemplateParameter&gt; 
+            elements. Each of which describes a class parameter. &lt;cxxClassTemplateParameters&gt; is declared within 
+            &lt;cxxClassDefinition&gt;</p>
+        </section>
+        <example>
+            <title>Example</title>
+            <codeblock>&lt;cxxClassTemplateParameters&gt;
+  &lt;cxxClassTemplateParameter&gt;
+    &lt;cxxClassTemplateParameterType&gt;typename T&lt;/cxxClassTemplateParameterType&gt;
+    &lt;apiDefNote&gt;The type of the first function object. &lt;/apiDefNote&gt;
+  &lt;/cxxClassTemplateParameter&gt;
+  &lt;cxxClassTemplateParameter&gt;
+    &lt;cxxClassTemplateParameterType&gt;typename U&lt;/cxxClassTemplateParameterType&gt;
+    &lt;apiDefNote&gt;The type of the second function object. &lt;/apiDefNote&gt;
+  &lt;/cxxClassTemplateParameter&gt;
+&lt;/cxxClassTemplateParameters&gt;</codeblock>
+        </example>           
+        <section conref="../packagedef.dita#cxxClassTemplateParameters-reference/cxxClassTemplateParameters-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxClassTemplateParameters-reference/cxxClassTemplateParameters-contains-section"/>
+        <section conref="../packagedef.dita#cxxClassTemplateParameters-reference/cxxClassTemplateParameters-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxClassTemplateParameters-reference/cxxClassTemplateParameters-attList-section"/>
+        <section conref="../packagedef.dita#cxxClassTemplateParameters-reference/cxxClassTemplateParameters-classValue-section"/>
+    </refbody>
+</reference>

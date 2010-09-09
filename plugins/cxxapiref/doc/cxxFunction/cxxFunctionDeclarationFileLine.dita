@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxFunctionDeclarationFileLine">
+    <title>cxxFunctionDeclarationFileLine</title>
+    <shortdesc>Identifies the line number in file that contains the declaration of the function.</shortdesc>
+    <refbody>
+        <section id="section_425BC5081A2A4C46A6459369C80621A1">
+            <title>Description</title><p>This identifies the line number in file that contains the declaration of the function.
+This has two attributes; name (always has a value "lineNumber
+") and value.</p><p>Note: ISO/IEC 14882:2003(E) 16.4 Line control [cpp.line] means that line numbers start from 1.</p>
+        </section>
+        <example id="example_65FFE782490B4B8F86E1CCC3F5883364">
+            <title>Example</title><p/>
+            <codeblock>&lt;cxxFunctionDeclarationFileLine name="lineNumber" value="5"/&gt;</codeblock>
+        </example>
+        <section conref="../packagedef.dita#cxxFunctionDeclarationFileLine-reference/cxxFunctionDeclarationFileLine-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxFunctionDeclarationFileLine-reference/cxxFunctionDeclarationFileLine-contains-section"/>
+        <section conref="../packagedef.dita#cxxFunctionDeclarationFileLine-reference/cxxFunctionDeclarationFileLine-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxFunctionDeclarationFileLine-reference/cxxFunctionDeclarationFileLine-attList-section"/>
+        <section conref="../packagedef.dita#cxxFunctionDeclarationFileLine-reference/cxxFunctionDeclarationFileLine-classValue-section"/>
+    </refbody>
+</reference>

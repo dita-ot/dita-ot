@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference id="cxxDefine_module" outputclass="module" xml:lang="en-us">
+	<title>cxxDefine module</title>
+	<shortdesc>Defines a top-level container for all the elements necessary to describe a define. </shortdesc>
+	<refbody>
+		<section>
+			<title>Description</title>	
+            <p>The &lt;cxxDefine&gt; topic type contains elements necessary to show 
+            the name of the define, the define syntax, and the usage description of the define. This topic type module also 
+            contains all the elements necessary to describe the component variables and functions. </p>
+            <p>The cxxDefine topic contains the following elements: </p>            
+		</section>
+	</refbody>
+</reference>

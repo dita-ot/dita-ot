@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxDefine">
+    <title>cxxDefine</title>
+    <shortdesc>The &lt;cxxDefine&gt; element provides the name of the C++ API
+    define, all the elements necessary to describe the members that are introduced
+    by the define declaration.</shortdesc>
+    <refbody>
+        <section>
+            <title>Description</title>
+            <p>The &lt;cxxDefine&gt; element requires
+        an id attribute as an anchor point; this id must always be specified. The
+        id attribute is referenced by the <i>conref</i> attribute and internal applications
+        that refer to the  &lt;cxxDefine&gt; element content. The elements &lt;apiName&gt; 
+        and &lt;cxxDefineDetail&gt; are required for this top-level container. </p>
+        </section>
+        <example>
+            <title>Example</title>
+            <codeblock>&lt;cxxFile id="cfperfmetrics_8cpp"&gt;
+	&lt;apiName&gt;cfperfmetrics.cpp&lt;/apiName&gt;
+	&lt;cxxDefine id="cfperfmetrics_8cpp_1aaf45a4d8cdebb244b0f01672cd981fb2"&gt;
+		&lt;apiName&gt;SYMBIAN_ENABLE_NETWORKING_PERFMETRICS&lt;/apiName&gt;
+		&lt;cxxDefineDetail&gt;
+			&lt;cxxDefineDefinition&gt;
+				&lt;cxxDefineAccessSpecifier value="public"/&gt;
+				&lt;cxxDefinePrototype&gt;#define SYMBIAN_ENABLE_NETWORKING_PERFMETRICS&lt;/cxxDefinePrototype&gt;
+				&lt;cxxDefineNameLookup&gt;SYMBIAN_ENABLE_NETWORKING_PERFMETRICS&lt;/cxxDefineNameLookup&gt;
+				&lt;cxxDefineParameters/&gt;
+				&lt;cxxDefineAPIItemLocation&gt;
+					&lt;cxxDefineDeclarationFile name="filePath" value="C:/EPOC/master/sf/os/commsfw/commsfwsupport/commselements/commsfw/src/cfperfmetrics.cpp"/&gt;
+					&lt;cxxDefineDeclarationFileLine name="lineNumber" value="17"/&gt;
+				&lt;/cxxDefineAPIItemLocation&gt;
+			&lt;/cxxDefineDefinition&gt;
+			&lt;apiDesc/&gt;
+		&lt;/cxxDefineDetail&gt;
+	&lt;/cxxDefine&gt;
+	&lt;cxxVariable id="cfperfmetrics_8cpp_1a8b57c8f405cbc5de5ad9caf2e1610d0f"&gt;
+		...
+	&lt;/cxxVariable&gt;
+	&lt;cxxEnumeration id="cfperfmetrics_8cpp_1a3a00212a28f7e4e2af6d5d57db53f4d3"&gt;
+		...
+	&lt;/cxxEnumeration&gt;
+	&lt;cxxFileAPIItemLocation&gt;
+		&lt;cxxFileDeclarationFile name="filePath" value="C:/EPOC/master/sf/os/commsfw/commsfwsupport/commselements/commsfw/src/cfperfmetrics.cpp"/&gt;
+	&lt;/cxxFileAPIItemLocation&gt;
+&lt;/cxxFile&gt;</codeblock>
+        </example>
+        <section conref="../packagedef.dita#cxxDefine-reference/cxxDefine-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxDefine-reference/cxxDefine-contains-section"/>
+        <section conref="../packagedef.dita#cxxDefine-reference/cxxDefine-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxDefine-reference/cxxDefine-attList-section"/>
+        <section conref="../packagedef.dita#cxxDefine-reference/cxxDefine-classValue-section"/>
+    </refbody>
+</reference>

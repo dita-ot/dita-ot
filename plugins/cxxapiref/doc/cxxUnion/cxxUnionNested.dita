@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxUnionNested">
+    <title>cxxUnionNested</title>
+    <shortdesc>
+     The &lt;cxxUnionNested&gt; element within &lt;cxxUnion&gt; contains &lt;cxxUnionNestedDetail&gt; which gives details of nested members of this c++ union
+    </shortdesc>
+    <refbody>
+        <section>
+            <title>Description</title>
+            <p>&lt;cxxUnionNested&gt; contains one mandatory &lt;cxxUnionNestedDetail&gt; element and no attributes.</p>
+        </section>
+        <example><title>Example</title>
+        <codeblock>&lt;cxxUnionNested&gt;
+    &lt;cxxUnionNestedDetail&gt;
+        &lt;cxxUnionNestedStruct href=&quot;struct_comms.xml#struct_comms_package&quot;&gt;CommsFW::TCFLegacyMessagePacker::TUnion::TLegacyPackage&lt;/cxxUnionNestedStruct&gt;
+        &lt;cxxUnionNestedStruct href=&quot;struct_comms.xml#struct_comms_package&quot;&gt;CommsFW::TCFLegacyMessagePacker::TUnion::TPackage&lt;/cxxUnionNestedStruct&gt;
+    &lt;/cxxUnionNestedDetail&gt;
+&lt;/cxxUnionNested&gt;</codeblock>
+        </example>        
+        <section conref="../packagedef.dita#cxxUnionNested-reference/cxxUnionNested-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxUnionNested-reference/cxxUnionNested-contains-section"/>
+        <section conref="../packagedef.dita#cxxUnionNested-reference/cxxUnionNested-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxUnionNested-reference/cxxUnionNested-attList-section"/>
+        <section conref="../packagedef.dita#cxxUnionNested-reference/cxxUnionNested-classValue-section"/>
+    </refbody>
+</reference>

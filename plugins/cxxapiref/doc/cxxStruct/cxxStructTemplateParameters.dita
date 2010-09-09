@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxStructTemplateParameters">
+    <title>cxxStructTemplateParameters</title>
+    <shortdesc>The &lt;cxxStructTemplateParameters&gt; element contains a set of struct parameters.</shortdesc>
+    <refbody>
+        <section>
+            <title>Description</title>
+            <p>The &lt;cxxStructTemplateParameters&gt; element contains one or more &lt;cxxStructTemplateParameter&gt; 
+            elements. Each of which describes a struct parameter. &lt;cxxStructTemplateParameters&gt; is declared within 
+            &lt;cxxStructDefinition&gt;</p>
+        </section>
+        <example>
+            <title>Example</title>
+            <codeblock>&lt;cxxStructTemplateParameters&gt;
+  &lt;cxxStructTemplateParameter&gt;
+    &lt;cxxStructTemplateParameterType&gt;typename T&lt;/cxxStructTemplateParameterType&gt;
+    &lt;apiDefNote&gt;The type of the first function object. &lt;/apiDefNote&gt;
+  &lt;/cxxStructTemplateParameter&gt;
+  &lt;cxxStructTemplateParameter&gt;
+    &lt;cxxStructTemplateParameterType&gt;typename U&lt;/cxxStructTemplateParameterType&gt;
+    &lt;apiDefNote&gt;The type of the second function object. &lt;/apiDefNote&gt;
+  &lt;/cxxStructTemplateParameter&gt;
+&lt;/cxxStructTemplateParameters&gt;
+            </codeblock>
+        </example>        
+        <section conref="../packagedef.dita#cxxStructTemplateParameters-reference/cxxStructTemplateParameters-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxStructTemplateParameters-reference/cxxStructTemplateParameters-contains-section"/>
+        <section conref="../packagedef.dita#cxxStructTemplateParameters-reference/cxxStructTemplateParameters-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxStructTemplateParameters-reference/cxxStructTemplateParameters-attList-section"/>
+        <section conref="../packagedef.dita#cxxStructTemplateParameters-reference/cxxStructTemplateParameters-classValue-section"/>
+    </refbody>
+</reference>

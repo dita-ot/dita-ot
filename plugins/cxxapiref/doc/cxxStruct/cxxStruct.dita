@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxStruct">
+    <title>cxxStruct</title>
+    <shortdesc>The &lt;cxxStruct&gt; element provides the name of the C++ API
+struct, all the elements necessary to describe the members that are introduced
+by the struct declaration, and the members inherited from the direct base struct.</shortdesc>
+    <refbody>
+        <section>
+            <title>Description</title>
+            <p>The &lt;cxxStruct&gt; element requires
+an ID attribute as an anchor point; this ID must always be specified. The
+ID attribute is referenced by the <i>conref</i> attribute and internal applications
+that refer to the  &lt;cxxStruct&gt; element content. The elements &lt;apiName&gt; 
+and &lt;cxxStructDetail&gt; are required for this top-level container. </p>
+        </section>
+        <example>
+            <title>Example</title>
+            <codeblock>&lt;cxxClass id=&quot;GUID-697DBFB2-9EB6-3C22-BB12-92FDF3A03DF4&quot;&gt;
+	&lt;apiName&gt;CSocketServer&lt;/apiName&gt;
+	&lt;cxxClassDetail&gt;
+		&lt;cxxClassDefinition&gt;
+			&lt;cxxClassAccessSpecifier value=&quot;public&quot; /&gt;
+			&lt;cxxClassAPIItemLocation&gt;
+				&lt;cxxClassDeclarationFile name=&quot;filePath&quot; value=&quot;s:/sf/os/commsfw/datacommsserver/esockserver/inc/ss_std.h&quot; /&gt;
+				&lt;cxxClassDeclarationFileLine name=&quot;lineNumber&quot; value=&quot;309&quot; /&gt;
+			&lt;/cxxClassAPIItemLocation&gt;
+		&lt;/cxxClassDefinition&gt;
+		&lt;apiDesc /&gt;
+	&lt;/cxxClassDetail&gt;
+&lt;/cxxClass&gt;
+            </codeblock>
+        </example>       
+        <section conref="../packagedef.dita#cxxStruct-reference/cxxStruct-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxStruct-reference/cxxStruct-contains-section"/>
+        <section conref="../packagedef.dita#cxxStruct-reference/cxxStruct-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxStruct-reference/cxxStruct-attList-section"/>
+        <section conref="../packagedef.dita#cxxStruct-reference/cxxStruct-classValue-section"/>
+    </refbody>
+</reference>

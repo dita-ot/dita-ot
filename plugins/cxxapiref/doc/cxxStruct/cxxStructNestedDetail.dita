@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxStructNestedDetail">
+    <title>cxxStructNestedDetail</title>
+    <shortdesc>The &lt;cxxStructNestedDetail&gt; element provides details about the nested members of a C++ struct.</shortdesc>
+    <refbody>
+        <section>
+            <title>Description</title>
+            <p>
+                In the &lt;cxxStructNestedDetail&gt; element, the &lt;cxxStructNestedClass&gt;, &lt;cxxStructNestedStruct&gt; and &lt;cxxStructNestedUnion&gt; elements are provided to indicate all members that can be nested by a C++ struct. &lt;cxxStructNestedDetail&gt; must have at least one of these child elements and each one can occur multiple times.            
+            </p>
+        </section>
+        <example>
+            <title>Example</title>
+            <codeblock>	&lt;cxxStructNested&gt;
+    &lt;cxxStructNestedDetail&gt;
+        &lt;cxxStructNestedClass href=&quot;GUID-A7A472B9-220C-3068-B459-625D6D48456F.xml&quot;&gt;RMobileSmsMessaging::TMobileSmsAttributesV1&lt;/cxxStructNestedClass&gt;
+        &lt;cxxStructNestedStruct href=&quot;GUID-4617BF7F-C631-376C-8D14-522D71A61188.xml&quot;&gt;RMobileSmsMessaging::TMobileSmsCapsV1&lt;/cxxStructNestedClass&gt;
+        &lt;cxxStructNestedUnion href=&quot;GUID-1252BF3C-4BCC-327E-8734-107D85B5C066.xml&quot;&gt;RMobileSmsMessaging::TMobileSmsCdmaSendAttributesV4&lt;/cxxStructNestedClass&gt;
+    &lt;/cxxStructNestedDetail&gt;
+&lt;/cxxStructNested&gt;</codeblock>
+        </example>        
+        <section conref="../packagedef.dita#cxxStructNestedDetail-reference/cxxStructNestedDetail-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxStructNestedDetail-reference/cxxStructNestedDetail-contains-section"/>
+        <section conref="../packagedef.dita#cxxStructNestedDetail-reference/cxxStructNestedDetail-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxStructNestedDetail-reference/cxxStructNestedDetail-attList-section"/>
+        <section conref="../packagedef.dita#cxxStructNestedDetail-reference/cxxStructNestedDetail-classValue-section"/>
+    </refbody>
+</reference>

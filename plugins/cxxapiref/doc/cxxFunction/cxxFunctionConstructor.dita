@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxFunctionConstructor">
+    <title>cxxFunctionConstructor</title>
+    <shortdesc>Identifies a function as a constructor.</shortdesc>
+    <refbody>
+        <section id="section_1A728C24CD45452AA4CA7D7C31CD6633">
+            <title>Description</title><p>This element is present when the function is a constructor. This has two mandatory attributes; name and value 
+that default to <tt>"constructor"</tt>
+            </p><p>A function that uses the <tt>cxxFunctionConstructor</tt> element shall not use the <tt>cxxFunctionDestructor</tt> element
+            </p><p>See ISO/IEC 14882:2003(E) 12.1 Constructors [class.ctor]</p>
+        </section>
+        <section conref="../packagedef.dita#cxxFunctionConstructor-reference/cxxFunctionConstructor-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxFunctionConstructor-reference/cxxFunctionConstructor-contains-section"/>
+        <section conref="../packagedef.dita#cxxFunctionConstructor-reference/cxxFunctionConstructor-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxFunctionConstructor-reference/cxxFunctionConstructor-attList-section"/>
+        <section conref="../packagedef.dita#cxxFunctionConstructor-reference/cxxFunctionConstructor-classValue-section"/>
+    </refbody>
+</reference>

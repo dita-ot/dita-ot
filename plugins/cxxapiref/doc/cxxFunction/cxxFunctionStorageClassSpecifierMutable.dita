@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxFunctionStorageClassSpecifierMutable">
+    <title>cxxFunctionStorageClassSpecifierMutable</title>
+    <shortdesc>Describes functions that have a mutable <i>storage-class-specifier</i>.</shortdesc>
+    <refbody>
+        <section id="section_136136B23CA94FC4A176F6F3086780EB">
+            <title>Description</title><p>This element is present when the function is mutable. it has two mandatory attributes; name and value (see example below).</p><p>See ISO/IEC 14882:2003(E) 7.1.1 Storage class specifiers [dcl.stc]</p>
+            <p>The mutable specifier can be applied only to names of class data members and cannot be applied to names declared <tt>const</tt> or <tt>static</tt>, and cannot be applied to reference members.</p><p/>
+        </section>
+        <example id="example_AACBFC6CF999477FBA517ADBB45B3107">
+            <title>Example</title><p>Given this code:</p>
+            <codeblock>class X {
+mutable const int* p;
+};</codeblock><p>Then function <tt>X::p</tt> would have the
+element:</p>
+            <codeblock>&lt;cxxFunctionStorageClassSpecifierMutable/&gt;</codeblock><p>If the mandatory attributes are present they must be set thus:</p>
+            <codeblock>&lt;cxxFunctionStorageClassSpecifierMutable name="mutable" value="mutable"/&gt;</codeblock>
+        </example>
+        <section conref="../packagedef.dita#cxxFunctionStorageClassSpecifierMutable-reference/cxxFunctionStorageClassSpecifierMutable-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxFunctionStorageClassSpecifierMutable-reference/cxxFunctionStorageClassSpecifierMutable-contains-section"/>
+        <section conref="../packagedef.dita#cxxFunctionStorageClassSpecifierMutable-reference/cxxFunctionStorageClassSpecifierMutable-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxFunctionStorageClassSpecifierMutable-reference/cxxFunctionStorageClassSpecifierMutable-attList-section"/>
+        <section conref="../packagedef.dita#cxxFunctionStorageClassSpecifierMutable-reference/cxxFunctionStorageClassSpecifierMutable-classValue-section"/>
+    </refbody>
+</reference>

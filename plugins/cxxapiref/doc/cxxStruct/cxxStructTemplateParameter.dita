@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxStructTemplateParameter">
+    <title>cxxStructTemplateParameter</title>
+    <shortdesc>The &lt;cxxStructTemplateParameter&gt; element describes a struct parameter.</shortdesc>
+    <refbody>
+        <section>
+            <title>Description</title>
+            <p>One or more &lt;cxxStructTemplateParameter&gt; elements reside within the 
+            &lt;cxxStructTemplateParameters&gt; container. &lt;cxxStructTemplateParameter&gt; 
+            requires the child element &lt;cxxStructTemplateParameterType&gt;; that describes 
+            the type of parameter. &lt;cxxStructTemplateParameter&gt; may also contain the 
+            child element &lt;apiDefNote&gt; to describe the parameter further.</p>
+        </section>
+        <section conref="../packagedef.dita#cxxStructTemplateParameter-reference/cxxStructTemplateParameter-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxStructTemplateParameter-reference/cxxStructTemplateParameter-contains-section"/>
+        <section conref="../packagedef.dita#cxxStructTemplateParameter-reference/cxxStructTemplateParameter-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxStructTemplateParameter-reference/cxxStructTemplateParameter-attList-section"/>
+        <section conref="../packagedef.dita#cxxStructTemplateParameter-reference/cxxStructTemplateParameter-classValue-section"/>
+    </refbody>
+</reference>

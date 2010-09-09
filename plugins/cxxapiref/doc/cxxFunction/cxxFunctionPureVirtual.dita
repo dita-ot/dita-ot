@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxFunctionPureVirtual">
+    <title>cxxFunctionPureVirtual</title>
+    <shortdesc>Identifies a function as <i>pure virtual</i>.
+    </shortdesc>
+    <refbody>
+        <section id="section_B2EAFCF878584AB0B179AE3D20AF9334">
+            <title>Description</title><p>A function that uses the <i>pure-specifier</i> is a pure virtual function.This element has two mandatory attributes; name and value 
+that default to <tt>"pure virtual"</tt>.
+            </p><p>See: ISO/IEC 14882:2003(E) 10.4 Abstract classes [class.abstract]</p>
+        </section>
+        <section conref="../packagedef.dita#cxxFunctionPureVirtual-reference/cxxFunctionPureVirtual-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxFunctionPureVirtual-reference/cxxFunctionPureVirtual-contains-section"/>
+        <section conref="../packagedef.dita#cxxFunctionPureVirtual-reference/cxxFunctionPureVirtual-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxFunctionPureVirtual-reference/cxxFunctionPureVirtual-attList-section"/>
+        <section conref="../packagedef.dita#cxxFunctionPureVirtual-reference/cxxFunctionPureVirtual-classValue-section"/>
+    </refbody>
+</reference>

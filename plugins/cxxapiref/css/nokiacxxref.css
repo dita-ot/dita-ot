@@ -1,0 +1,91 @@
+/*
+h4.sectiontitle {
+  font-size: smaller;
+}
+span.platformSyntax {
+  color: black;
+}
+pre.apiSyntaxText {
+  padding-left: 1.2em;
+}
+span.itemname {
+  font-style: italic;
+}
+table.itemdefs {
+  border-collapse: collapse;
+  padding: 0.1em;
+  border: 0;
+}
+tr.itemdefs {
+}
+td.itemdefname {
+  padding-left: 1.2em;
+  padding-right: 1em;
+  padding-top: 0.33em;
+  text-align: right;
+  font-style: italic;
+}
+td.itemdefnote {
+}
+tr.platformItem td {
+  color: black;
+}
+span.platformItem {
+  color: black;
+}
+p.platformExample {
+  padding-left: 1.2em;
+  padding-bottom: 0em;
+  margin-bottom: 0em;
+  font-weight: bold;
+  font-size: smaller;
+  color: black;
+}
+div.example pre {
+  padding-left: 1.2em;
+}
+*/
+
+.code {
+  font-family: monospace;
+}
+
+.signature,
+table.parameters,
+table.enumerators {
+  margin-left: 1em;
+}
+
+.signature {
+  font-family: monospace;
+  background-color: #EEE !important;
+  padding: 5px;
+} 
+table.signature {
+  border-collapse: separate;
+}
+table.signature td {
+  padding: 0 2px;
+}
+
+table.member-index {
+  border-collapse: collapse;
+  min-width: 800px;
+  font-family: monospace;
+}
+table.member-index tr {
+  border-top: solid 1px silver;
+  border-bottom: solid 1px silver;
+}
+table.member-index td {
+  vertical-align: top;
+  padding-left: 1em;
+}
+
+.parameters .parameter {
+  font-family: monospace;
+}
+
+table.enumerators td {
+  padding-right: 1em;
+} 

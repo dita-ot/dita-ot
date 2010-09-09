@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ================================================================= -->
+<!-- HEADER -->
+<!-- ================================================================= -->
+<!-- MODULE:    C++ File DTD -->
+<!-- VERSION:   0.6.0 -->
+<!-- DATE:      May 2009 -->
+<!---->
+<!-- ================================================================= -->
+<!-- ================================================================= -->
+<!-- PUBLIC DOCUMENT TYPE DEFINITION -->
+<!-- TYPICAL INVOCATION -->
+<!---->
+<!--
+  Refer to this file by the following public identifier or an 
+        appropriate system identifier 
+  PUBLIC "-//NOKIA//DTD DITA C++ API File Reference Type v0.6.0//EN"
+        Delivered as file "cxxFile.dtd"
+-->
+<!-- ================================================================= -->
+<!-- SYSTEM:     Darwin Information Typing Architecture (DITA) -->
+<!---->
+<!-- PURPOSE:    C++ API Reference for Files -->
+<!---->
+<!-- ORIGINAL CREATION DATE: -->
+<!-- November 2009 -->
+<!---->
+<!-- Copyright (c) 2009-2010 Nokia Corporation and/or its subsidiary(-ies). -->
+<!-- All rights reserved. -->
+<!---->
+<!-- Change History (latest at top): -->
+<!-- +++++++++++++++++++++++++++++++ -->
+<!-- 2010-02-18 VOG: Updated -->
+<!-- 2010-02-10 PaulRoss: Updated. -->
+<!-- 2009-11-16 PaulRoss: Initial design. -->
+<!---->
+<!-- ================================================================= -->
+<!--
+  Copyright (c) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
+  All rights reserved.
+-->
+<!-- ============ Hooks for domain extension ============ -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
+  <xs:import namespace="http://dita.oasis-open.org/architecture/2005/" schemaLocation="../../../schema/base/xsd/ditaarch.xsd"/>
+  <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="../../../schema/base/xsd/xml.xsd"/>
+  <xs:group name="cxxFileAPIItemLocation">
+    <xs:sequence>
+      <xs:element ref="cxxFileAPIItemLocation"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:complexType name="cxxFileDeclarationFile">
+    <xs:complexContent>
+      <xs:extension base="cxxFileDeclarationFile.element"/>
+    </xs:complexContent>
+  </xs:complexType>
+  <!-- we use the rest from apiRef -->
+  <!-- ============ Hooks for shell DTD ============ -->
+  <xs:element name="cxxFile-types-default" abstract="true" substitutionGroup="cxxFile-info-types"/>
+  <xs:element name="cxxFile-info-types" abstract="true"/>
+  <!-- ============ Topic specializations ============ -->
+  <xs:element name="cxxFile">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:group minOccurs="0" ref="apiSyntax"/>
+        <xs:group ref="apiName"/>
+        <xs:group minOccurs="0" ref="shortdesc"/>
+        <xs:group minOccurs="0" ref="prolog"/>
+        <xs:group minOccurs="0" ref="related-links"/>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="cxxFile-info-types"/>
+        <xs:group ref="cxxFileAPIItemLocation"/>
+      </xs:sequence>
+      <xs:attribute name="id" use="required" type="xs:ID"/>
+      <xs:attribute name="conref"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attribute ref="xml:lang"/>
+      <xs:attributeGroup ref="arch-atts"/>
+      <xs:attribute name="domains" default="(topic ui-d) (topic hi-d) (topic pr-d) (topic sw-d)                            (topic ut-d) (topic pr-d api-d) (topic pr-d api-d cxxapi-d)"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/topic reference/reference apiRef/apiRef apiPackage/apiPackage cxxFile/cxxFile "/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cxxFileAPIItemLocation">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="cxxFileDeclarationFile">
+          <xs:attributeGroup ref="univ-atts"/>
+          <xs:attribute name="outputclass"/>
+          <xs:attributeGroup ref="global-atts"/>
+          <xs:attribute name="class" default="- topic/ph reference/ph apiRef/apiDefItem apiPackage/apiDefItem cxxFile/cxxFileAPIItemLocation "/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:complexType name="cxxFileDeclarationFile.element">
+    <xs:sequence>
+      <xs:element ref="cxxFileDeclarationFile"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="cxxFileDeclarationFile">
+    <xs:complexType>
+      <xs:attribute name="name" default="filePath">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="filePath"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="value" use="required"/>
+      <xs:attributeGroup ref="univ-atts"/>
+      <xs:attribute name="outputclass"/>
+      <xs:attributeGroup ref="global-atts"/>
+      <xs:attribute name="class" default="- topic/state reference/state apiRef/apiQualifier apiPackage/apiQualifier cxxFile/cxxFileDeclarationFile "/>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
+<!-- ============ Class attributes for type ancestry ============ -->

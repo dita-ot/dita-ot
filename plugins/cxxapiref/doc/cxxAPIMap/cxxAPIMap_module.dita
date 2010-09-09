@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference id="cxxAPIMap_module" outputclass="module" xml:lang="en-us">
+    <title>cxxAPIMap module</title>
+    <shortdesc>Provides the relationships among a set of C++ API topic types,
+and can be used to create a Table of Contents (TOC), aggregate C++ API topics
+into a PDF document, or to create links between topics in output.</shortdesc>
+    <refbody>
+        <section>
+            <title>Description</title>
+            <p>Maps provide a way to express relationships among a set of C++ API topic types in a single common 
+            format for the C++ API reference that can be used for different outputs. The cxxAPIMap module organizes 
+            your DITA files into a hierarchy. It can also create relationship links between your topics. Use 
+            &lt;cxxAPIMap&gt; to organize your work, and to create and edit C++ API DITA files.</p>
+            <p>The cxxAPIMap topic contains the following elements: </p>
+        </section>
+    </refbody>
+</reference>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxDefineDetail">
+    <title>cxxDefineDetail</title>
+    <shortdesc>The &lt;cxxDefineDetail&gt; element provides detailed information
+    about the structure and behaviors of the C++ define. </shortdesc>
+    <refbody>
+        <section>
+            <title>Description</title>
+            <p>The &lt;cxxDefineDetail&gt; element is defined within &lt;cxxDefine&gt;. 
+            In &lt;cxxDefineDetail&gt; the &lt;example&gt; and &lt;section&gt; 
+            elements are provided to support the current specific C++ API reference.</p>
+        </section>
+        <section conref="../packagedef.dita#cxxDefineDetail-reference/cxxDefineDetail-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxDefineDetail-reference/cxxDefineDetail-contains-section"/>
+        <section conref="../packagedef.dita#cxxDefineDetail-reference/cxxDefineDetail-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxDefineDetail-reference/cxxDefineDetail-attList-section"/>
+        <section conref="../packagedef.dita#cxxDefineDetail-reference/cxxDefineDetail-classValue-section"/>
+    </refbody>
+</reference>

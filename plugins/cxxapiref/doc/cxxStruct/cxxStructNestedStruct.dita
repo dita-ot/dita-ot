@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxStructNestedStruct">
+    <title>cxxStructNestedStruct</title>
+    <shortdesc>The &lt;cxxStructNestedStruct&gt; element within &lt;cxxStructNestedDetail&gt; provides the name of a struct nested in a struct.</shortdesc>
+    <refbody>
+        <section>
+            <title>Description</title>
+            <p>The text in this element is the fully qualified name of the struct that has been nested in a struct. There are no mandatory attributes.</p>
+        </section>
+        <example>
+            <title>Example</title>
+            <codeblock>	&lt;cxxStructNested&gt;
+    &lt;cxxStructNestedDetail&gt;
+        &lt;cxxStructNestedClass href=&quot;GUID-A7A472B9-220C-3068-B459-625D6D48456F.xml&quot;&gt;RMobileSmsMessaging::TMobileSmsAttributesV1&lt;/cxxStructNestedClass&gt;
+        &lt;cxxStructNestedStruct href=&quot;GUID-4617BF7F-C631-376C-8D14-522D71A61188.xml&quot;&gt;RMobileSmsMessaging::TMobileSmsCapsV1&lt;/cxxStructNestedClass&gt;
+        &lt;cxxStructNestedUnion href=&quot;GUID-1252BF3C-4BCC-327E-8734-107D85B5C066.xml&quot;&gt;RMobileSmsMessaging::TMobileSmsCdmaSendAttributesV4&lt;/cxxStructNestedClass&gt;
+    &lt;/cxxStructNestedDetail&gt;
+&lt;/cxxStructNested&gt;</codeblock>
+        </example>        
+        <section conref="../packagedef.dita#cxxStructNestedStruct-reference/cxxStructNestedStruct-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxStructNestedStruct-reference/cxxStructNestedStruct-contains-section"/>
+        <section conref="../packagedef.dita#cxxStructNestedStruct-reference/cxxStructNestedStruct-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxStructNestedStruct-reference/cxxStructNestedStruct-attList-section"/>
+        <section conref="../packagedef.dita#cxxStructNestedStruct-reference/cxxStructNestedStruct-classValue-section"/>
+    </refbody>
+</reference>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxTypedefDefinition">
+    <title>cxxTypedefDefinition</title>
+    <shortdesc>The &lt;cxxTypedefDefinition&gt; element is defined within &lt;cxxTypedefDetail&gt;. 
+    &lt;cxxTypedefDefinition&gt; represents the C++ typedef declaration.</shortdesc>
+    <refbody>
+        <section>
+            <title>Description</title><p>A typedef declaration specifies a new named reference type. 
+            A typedef declaration can include the following members: <i>public</i>, <i>protected</i> 
+            or <i>private</i>, this is represented by the &lt;cxxTypedefAccessSpecifier&gt; element.</p>
+            <p>&lt;cxxTypedefDefinition&gt; requires the element &lt;cxxTypedefAPIItemLocation&gt; as its child.</p>
+        </section>
+        <example><title>Example</title>
+        <codeblock>&lt;cxxTypedefDefinition&gt;
+			&lt;cxxTypedefAccessSpecifier value="public"/&gt;
+			&lt;cxxTypedefDerivations&gt;
+				&lt;cxxTypedefDerivation&gt;
+					&lt;cxxTypedefDerivationAccessSpecifier value="public"/&gt;
+					&lt;cxxTypedefBaseTypedef href="typedef_c_base.xml#typedef_c_base"&gt;CBase&lt;/cxxTypedefBaseTypedef&gt;
+				&lt;/cxxTypedefDerivation&gt;
+			&lt;/cxxTypedefDerivations&gt;
+			&lt;cxxTypedefAPIItemLocation&gt;
+				&lt;cxxTypedefDeclarationFile name="filePath" value="C:/src/include/e32base.h"/&gt;
+				&lt;cxxTypedefDeclarationFileLine name="lineNumber" value="2812"/&gt;
+				&lt;cxxTypedefDefinitionFile name="filePath" value="C:/src/include/e32base.h"/&gt;
+				&lt;cxxTypedefDefinitionFileLineStart name="lineNumber" value="2784"/&gt;
+				&lt;cxxTypedefDefinitionFileLineEnd name="lineNumber" value="2854"/&gt;
+			&lt;/cxxTypedefAPIItemLocation&gt;
+		&lt;/cxxTypedefDefinition&gt;</codeblock>
+        </example>
+        <section conref="../packagedef.dita#cxxTypedefDefinition-reference/cxxTypedefDefinition-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxTypedefDefinition-reference/cxxTypedefDefinition-contains-section"/>
+        <section conref="../packagedef.dita#cxxTypedefDefinition-reference/cxxTypedefDefinition-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxTypedefDefinition-reference/cxxTypedefDefinition-attList-section"/>
+        <section conref="../packagedef.dita#cxxTypedefDefinition-reference/cxxTypedefDefinition-classValue-section"/>
+    </refbody>
+</reference>

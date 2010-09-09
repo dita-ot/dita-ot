@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxClassEnumeratorInherited">
+    <title>cxxClassEnumeratorInherited</title>
+    <shortdesc>The &lt;cxxClassEnumeratorInherited&gt; element within &lt;cxxClassInheritsDetail&gt; provides the name of an enumerator inherited by a class.</shortdesc>
+    <refbody>
+        <section>
+            <title>Description</title>
+            <p>The text in this element is the fully qualified name of the enumerator that has been inherited. There are no mandatory attributes.</p>
+        </section>
+        <example>
+            <title>Example</title>
+            <codeblock>&lt;cxxClassInherits&gt;
+    &lt;cxxClassInheritsDetail&gt;
+        &lt;cxxClassEnumeratorInherited href=&quot;file.xml&quot;&gt;CActive::EPriorityUserInput&lt;/cxxClassEnumeratorInherited&gt;
+    &lt;/cxxClassInheritsDetail&gt;
+&lt;/cxxClassInherits&gt;</codeblock>
+        </example>               
+        <section conref="../packagedef.dita#cxxClassEnumeratorInherited-reference/cxxClassEnumeratorInherited-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxClassEnumeratorInherited-reference/cxxClassEnumeratorInherited-contains-section"/>
+        <section conref="../packagedef.dita#cxxClassEnumeratorInherited-reference/cxxClassEnumeratorInherited-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxClassEnumeratorInherited-reference/cxxClassEnumeratorInherited-attList-section"/>
+        <section conref="../packagedef.dita#cxxClassEnumeratorInherited-reference/cxxClassEnumeratorInherited-classValue-section"/>
+    </refbody>
+</reference>

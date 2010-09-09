@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta name="copyright" content="(C) Copyright 2005"/>
+<meta name="DC.rights.owner" content="(C) Copyright 2005"/>
+<meta name="DC.Type" content="reference"/>
+<meta name="DC.Title" content="cxxFunction"/>
+<meta name="abstract" content="Contains all the elements needed to describe the declaration of a C++ function (or member function)."/>
+<meta name="description" content="Contains all the elements needed to describe the declaration of a C++ function (or member function)."/>
+<meta name="DC.Relation" scheme="URI" content="../cxxFunction/cxxFunction_module.html"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="cxxFunction"/>
+<meta name="DC.Language" content="en-us"/>
+<link rel="stylesheet" type="text/css" href="../commonltr.css"/>
+<title>cxxFunction</title>
+<link rel="stylesheet" type="text/css" href="../nokiacxxref.css"/></head>
+<body class="element" id="cxxFunction"><a name="cxxFunction"><!-- --></a>
+
+
+    <h1 class="topictitle1">cxxFunction</h1>
+
+    
+    <div><p>Contains all the elements needed to describe the declaration of a   C++ function (or <em>member</em> function).</p>
+
+        <div class="section" id="cxxFunction__section_B20A7D521E3842829C774491FDD670A5"><a name="cxxFunction__section_B20A7D521E3842829C774491FDD670A5"><!-- --></a><h2 class="sectiontitle">Description</h2>
+            <p>The <tt>&lt;cxxFunction&gt;</tt> element requires
+an ID attribute as an anchor point; this ID must always be specified. The
+ID attribute is referenced by the <em>conref</em> attribute from internal applications
+that refer to the  <tt>&lt;cxxFunctiion&gt;</tt> element content. The elements <tt>&lt;apiName&gt;</tt> 
+and <tt>&lt;cxxFunctionDetail&gt;</tt> are required for this top-level container. 
+            </p>
+<p>
+                
+            </p>
+
+        </div>
+
+        <div class="example" id="cxxFunction__example_F38D1539002D4528B2FBC2B42EB2AECA"><a name="cxxFunction__example_F38D1539002D4528B2FBC2B42EB2AECA"><!-- --></a><h2 class="sectiontitle">Example</h2>
+            <p>The following illustrates a typical (global) function:</p>
+
+            <pre class="codeblock">&lt;cxxFunction id="test__class_8h_1a27a789a5aabed6e0e0d79ce0fd02b937"&gt;
+  &lt;apiName&gt;SearchBuffer&lt;/apiName&gt;
+  &lt;cxxFunctionDetail&gt;
+    &lt;cxxFunctionDefinition&gt;
+      &lt;cxxFunctionAccessSpecifier value="public"/&gt;
+      &lt;cxxFunctionStorageClassSpecifierStatic/&gt;
+      &lt;cxxFunctionDeclaredType&gt;int&lt;/cxxFunctionDeclaredType&gt;
+      &lt;cxxFunctionScopedName/&gt;
+      &lt;cxxFunctionPrototype&gt;static int SearchBuffer(const char *aBuffer, char c, int i)&lt;/cxxFunctionPrototype&gt;
+      &lt;cxxFunctionNameLookup&gt;SearchBuffer(const char *,char,int)&lt;/cxxFunctionNameLookup&gt;
+      &lt;cxxFunctionParameters&gt;
+        &lt;cxxFunctionParameter&gt;
+          &lt;cxxFunctionParameterDeclaredType&gt;const char *&lt;/cxxFunctionParameterDeclaredType&gt;
+          &lt;cxxFunctionParameterDeclarationName&gt;aBuffer&lt;/cxxFunctionParameterDeclarationName&gt;
+          &lt;apiDefNote&gt;The buffer to search. &lt;/apiDefNote&gt;
+        &lt;/cxxFunctionParameter&gt;
+        &lt;cxxFunctionParameter&gt;
+          &lt;cxxFunctionParameterDeclaredType&gt;char&lt;/cxxFunctionParameterDeclaredType&gt;
+          &lt;cxxFunctionParameterDeclarationName&gt;c&lt;/cxxFunctionParameterDeclarationName&gt;
+          &lt;apiDefNote&gt;the character to search for. &lt;/apiDefNote&gt;
+        &lt;/cxxFunctionParameter&gt;
+        &lt;cxxFunctionParameter&gt;
+          &lt;cxxFunctionParameterDeclaredType&gt;int&lt;/cxxFunctionParameterDeclaredType&gt;
+          &lt;cxxFunctionParameterDeclarationName&gt;i&lt;/cxxFunctionParameterDeclarationName&gt;
+          &lt;apiDefNote&gt;The start position. &lt;/apiDefNote&gt;
+        &lt;/cxxFunctionParameter&gt;
+      &lt;/cxxFunctionParameters&gt;
+      &lt;apiDefNote&gt;The index in the buffer or -1 if not found or i is &amp;gt;= the buffer length. &lt;/apiDefNote&gt;
+      &lt;cxxFunctionAPIItemLocation&gt;
+        &lt;cxxFunctionDeclarationFile name="filePath" value="C:/wip/sysdoc/tools/Doxygen/branches/DITA/test/PaulRo/cxxApiExamples/src/test_class.h"/&gt;
+        &lt;cxxFunctionDeclarationFileLine name="lineNumber" value="14"/&gt;
+      &lt;/cxxFunctionAPIItemLocation&gt;
+    &lt;/cxxFunctionDefinition&gt;
+    &lt;apiDesc&gt;
+      &lt;p&gt;Searches a buffer for a character from a start position in the buffer. &lt;/p&gt;
+    &lt;/apiDesc&gt;
+  &lt;/cxxFunctionDetail&gt;
+&lt;/cxxFunction&gt;
+            </pre>
+
+        </div>
+
+        <div class="elementContainedBy"><h2 class="sectiontitle">Contained by</h2>
+
+<p id="cxxFunction__d5618e5922"><a name="cxxFunction__d5618e5922"><!-- --></a>
+<a href="../cxxUnion/cxxUnion.html" title="The &lt;cxxUnion&gt; element provides the name of the C++ API union, all the elements necessary to describe the members that are introduced by the union declaration.">cxxUnion</a> 
+<a href="../cxxClass/cxxClass.html" title="The &lt;cxxClass&gt; element provides the name of the C++ API class, all the elements necessary to describe the members that are introduced by the class declaration, and the members inherited from the direct base class.">cxxClass</a> 
+<a href="../cxxStruct/cxxStruct.html" title="The &lt;cxxStruct&gt; element provides the name of the C++ API struct, all the elements necessary to describe the members that are introduced by the struct declaration, and the members inherited from the direct base struct.">cxxStruct</a> 
+</p>
+
+</div>
+
+        <div class="elementContains"><h2 class="sectiontitle">Contains</h2>
+
+<p id="cxxFunction__d5618e5940"><a name="cxxFunction__d5618e5940"><!-- --></a>
+<span class="keyword">apiName</span>, 
+<a href="cxxFunctionDetail.html" title="Contains the declaration of a C++ function and any documention about that function.">cxxFunctionDetail</a> 
+<span class="keyword">no-topic-nesting</span>, 
+<span class="keyword">prolog</span>, 
+<span class="keyword">related-links</span>, 
+<span class="keyword">shortdesc</span>, 
+</p>
+
+</div>
+
+        <div class="elementContentModel"><h2 class="sectiontitle">Content Model</h2>
+
+<p id="cxxFunction__d5618e5968"><a name="cxxFunction__d5618e5968"><!-- --></a>
+(<span class="keyword">apiName</span>, 
+  then  
+<span class="keyword">shortdesc</span>, 
+  then  
+<span class="keyword">prolog</span>, 
+  then  
+<a href="cxxFunctionDetail.html" title="Contains the declaration of a C++ function and any documention about that function.">cxxFunctionDetail</a> 
+  then  
+<span class="keyword">related-links</span>, 
+  then  
+(<span class="keyword">no-topic-nesting</span>, 
+
+))</p>
+
+</div>
+
+        <div class="elementAttList"/>
+
+        <div class="elementClassValue"><h2 class="sectiontitle">Inheritance</h2>
+
+<p id="cxxFunction__d5618e5998"><a name="cxxFunction__d5618e5998"><!-- --></a>
+ topic/<span class="keyword">topic</span> reference/<span class="keyword">reference</span> apiRef/<span class="keyword">apiRef</span> apiOperation/<span class="keyword">apiOperation</span> cxxFunction/<span class="keyword">cxxFunction</span></p>
+
+</div>
+
+    </div>
+
+<div>
+<div class="familylinks">
+<div class="parentlink"><strong>Parent topic:</strong> <a href="../cxxFunction/cxxFunction_module.html" title="The cxxFunction module describes C++ functions, including member functions.">cxxFunction module</a></div>
+</div>
+</div>
+
+</body>
+</html>

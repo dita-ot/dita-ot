@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxEnumeratorScopedName">
+    <title>cxxEnumeratorScopedName</title>
+    <shortdesc>The scope of the enumerator i.e. the declaration of the enclosing namespace/class/struct/union.</shortdesc>
+    <refbody>
+        <section>
+            <title>Description</title><p>This element describe the declaration (qualified name lookup) of the enclosing namespace/class/struct/union.</p><p>See ISO/IEC 14882:2003(E) Section 3.3 Declarative regions and scopes [basic.scope]</p>
+        </section>
+        <example><title>Example</title>
+        <codeblock>&lt;cxxEnumerator id=&quot;class_c_graphics_context_1aa83437963ec92f7c4bef2ca1fe1d841fa6567b3e91e6ce82151d21d2617ac1694&quot;&gt;
+    &lt;apiName&gt;ERight&lt;/apiName&gt;
+    &lt;cxxEnumeratorScopedName&gt;CGraphicsContext&lt;/cxxEnumeratorScopedName&gt;
+    &lt;cxxEnumeratorPrototype&gt;ERight&lt;/cxxEnumeratorPrototype&gt;
+    &lt;cxxEnumeratorNameLookup&gt;CGraphicsContext::ERight&lt;/cxxEnumeratorNameLookup&gt;
+    &lt;cxxEnumeratorAPIItemLocation&gt;
+        &lt;cxxEnumeratorDeclarationFile name=&quot;filePath&quot; value=&quot;C:/src/include/gdi.h&quot;/&gt;
+        &lt;cxxEnumeratorDeclarationFileLine name=&quot;lineNumber&quot; value=&quot;1727&quot;/&gt;
+    &lt;/cxxEnumeratorAPIItemLocation&gt;
+    &lt;apiDesc&gt;
+        &lt;p&gt;Text is right-aligned. &lt;/p&gt;
+    &lt;/apiDesc&gt;
+&lt;/cxxEnumerator&gt;</codeblock>
+        </example>
+        <section conref="../packagedef.dita#cxxEnumeratorScopedName-reference/cxxEnumeratorScopedName-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxEnumeratorScopedName-reference/cxxEnumeratorScopedName-contains-section"/>
+        <section conref="../packagedef.dita#cxxEnumeratorScopedName-reference/cxxEnumeratorScopedName-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxEnumeratorScopedName-reference/cxxEnumeratorScopedName-attList-section"/>
+        <section conref="../packagedef.dita#cxxEnumeratorScopedName-reference/cxxEnumeratorScopedName-classValue-section"/>
+    </refbody>
+</reference>

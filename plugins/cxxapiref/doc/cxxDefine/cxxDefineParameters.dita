@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxDefineParameters">
+    <title>cxxDefineParameters</title>
+    <shortdesc>Element that contains information about the define <i>identifier-list</i>.</shortdesc>
+    <refbody>
+        <section>
+            <title>Description</title>
+            <p>This element contains information about the define <i>identifier-list</i> 
+            that identifies any parameters in the function-like macro.</p>
+        </section>
+        <example>
+            <title>Example</title>
+            <codeblock>&lt;cxxDefineParameters&gt;
+    &lt;cxxDefineParameter&gt;
+        &lt;cxxDefineParameterDeclarationName&gt;prmIndex&lt;/cxxDefineParameterDeclarationName&gt;
+        &lt;apiDefNote/&gt;
+    &lt;/cxxDefineParameter&gt;
+&lt;/cxxDefineParameters&gt;</codeblock>
+        </example>
+        <section conref="../packagedef.dita#cxxDefineParameters-reference/cxxDefineParameters-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxDefineParameters-reference/cxxDefineParameters-contains-section"/>
+        <section conref="../packagedef.dita#cxxDefineParameters-reference/cxxDefineParameters-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxDefineParameters-reference/cxxDefineParameters-attList-section"/>
+        <section conref="../packagedef.dita#cxxDefineParameters-reference/cxxDefineParameters-classValue-section"/>
+    </refbody>
+</reference>

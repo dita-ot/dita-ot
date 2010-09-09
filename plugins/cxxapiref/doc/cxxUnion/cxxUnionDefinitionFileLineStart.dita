@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxUnionDefinitionFileLineStart">
+    <title>cxxUnionDefinitionFileLineStart</title>
+    <shortdesc>The &lt;cxxUnionDefinitionFileLineStart&gt; element specifies the beginning of the union definition.</shortdesc>
+    <refbody>
+        <section>
+            <title>Description</title><p>The &lt;cxxUnionDefinitionFileLineStart&gt; element is defined within &lt;cxxUnionAPIItemLocation&gt;. 
+            It contains the line number that the union definition begins on. The element is empty but for the required attributes <i>name</i> 
+            and <i>value</i>. The attribute <i>name</i> must be set to "lineNumber". The attribute <i>value</i> is set to the line number 
+            where union definition begins.</p>
+        </section>
+        <example><title>Example</title>
+        <codeblock>&lt;cxxUnionDefinitionFileLineStart name=&quot;lineNumber&quot; value=&quot;58&quot;/&gt;</codeblock>
+        </example>        
+        <section conref="../packagedef.dita#cxxUnionDefinitionFileLineStart-reference/cxxUnionDefinitionFileLineStart-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxUnionDefinitionFileLineStart-reference/cxxUnionDefinitionFileLineStart-contains-section"/>
+        <section conref="../packagedef.dita#cxxUnionDefinitionFileLineStart-reference/cxxUnionDefinitionFileLineStart-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxUnionDefinitionFileLineStart-reference/cxxUnionDefinitionFileLineStart-attList-section"/>
+        <section conref="../packagedef.dita#cxxUnionDefinitionFileLineStart-reference/cxxUnionDefinitionFileLineStart-classValue-section"/>
+    </refbody>
+</reference>

@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<!DOCTYPE cxxClass PUBLIC "-//NOKIA//DTD DITA C++ API Class Reference Type v0.6.0//EN" "dtd/cxxClass.dtd" >
+<cxxClass id="class_test_class_1_1inner">
+	<apiName>TestClass::inner</apiName>
+	<cxxClassDetail>
+		<cxxClassDefinition>
+			<cxxClassAccessSpecifier value="public"/>
+			<cxxClassAPIItemLocation>
+				<cxxClassDeclarationFile name="filePath" value="C:/wip/sysdoc/tools/Doxygen/branches/DITA/test/PaulRo/cxxApiExamples/src/test_class.h"/>
+				<cxxClassDeclarationFileLine name="lineNumber" value="114"/>
+				<cxxClassDefinitionFile name="filePath" value="C:/wip/sysdoc/tools/Doxygen/branches/DITA/test/PaulRo/cxxApiExamples/src/test_class.h"/>
+				<cxxClassDefinitionFileLineStart name="lineNumber" value="114"/>
+				<cxxClassDefinitionFileLineEnd name="lineNumber" value="120"/>
+			</cxxClassAPIItemLocation>
+		</cxxClassDefinition>
+		<apiDesc>
+			<p>Nested class declaration From: ISO/IEC 14882:2003(E) 9.7 Nested class declarations [class.nest] </p>
+		</apiDesc>
+	</cxxClassDetail>
+	<cxxVariable id="class_test_class_1_1inner_1aa7cdc40a5d3b8b3175ccc469555ac4dc">
+		<apiName>x</apiName>
+		<cxxVariableDetail>
+			<cxxVariableDefinition>
+				<cxxVariableAccessSpecifier value="public"/>
+				<cxxVariableStorageClassSpecifierStatic/>
+				<cxxVariableDeclaredType>int</cxxVariableDeclaredType>
+				<cxxVariableScopedName>TestClass::inner</cxxVariableScopedName>
+				<cxxVariablePrototype>static int x</cxxVariablePrototype>
+				<cxxVariableNameLookup>TestClass::inner::x</cxxVariableNameLookup>
+				<cxxVariableAPIItemLocation>
+					<cxxVariableDeclarationFile name="filePath" value="C:/wip/sysdoc/tools/Doxygen/branches/DITA/test/PaulRo/cxxApiExamples/src/test_class.h"/>
+					<cxxVariableDeclarationFileLine name="lineNumber" value="117"/>
+				</cxxVariableAPIItemLocation>
+			</cxxVariableDefinition>
+			<apiDesc>
+				<p>A public integer. </p>
+			</apiDesc>
+		</cxxVariableDetail>
+	</cxxVariable>
+	<cxxFunction id="class_test_class_1_1inner_1ab5a5c9acfccf085170f9475d1110c1d6">
+		<apiName>f</apiName>
+		<cxxFunctionDetail>
+			<cxxFunctionDefinition>
+				<cxxFunctionAccessSpecifier value="public"/>
+				<cxxFunctionDeclaredType>void</cxxFunctionDeclaredType>
+				<cxxFunctionScopedName>TestClass::inner</cxxFunctionScopedName>
+				<cxxFunctionPrototype>void f(int i)</cxxFunctionPrototype>
+				<cxxFunctionNameLookup>TestClass::inner::f(int)</cxxFunctionNameLookup>
+				<cxxFunctionParameters>
+					<cxxFunctionParameter>
+						<cxxFunctionParameterDeclaredType>int</cxxFunctionParameterDeclaredType>
+						<cxxFunctionParameterDeclarationName>i</cxxFunctionParameterDeclarationName>
+						<apiDefNote/>
+					</cxxFunctionParameter>
+				</cxxFunctionParameters>
+				<apiDefNote/>
+				<cxxFunctionAPIItemLocation>
+					<cxxFunctionDeclarationFile name="filePath" value="C:/wip/sysdoc/tools/Doxygen/branches/DITA/test/PaulRo/cxxApiExamples/src/test_class.h"/>
+					<cxxFunctionDeclarationFileLine name="lineNumber" value="119"/>
+				</cxxFunctionAPIItemLocation>
+			</cxxFunctionDefinition>
+			<apiDesc>
+				<p>Does somenthing. </p>
+			</apiDesc>
+		</cxxFunctionDetail>
+	</cxxFunction>
+</cxxClass>

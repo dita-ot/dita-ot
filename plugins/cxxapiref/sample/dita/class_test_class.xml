@@ -1,0 +1,367 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<!DOCTYPE cxxClass PUBLIC "-//NOKIA//DTD DITA C++ API Class Reference Type v0.6.0//EN" "dtd/cxxClass.dtd" >
+<cxxClass id="class_test_class">
+	<apiName>TestClass</apiName>
+	<cxxClassDetail>
+		<cxxClassDefinition>
+			<cxxClassAccessSpecifier value="public"/>
+			<cxxClassAbstract/>
+			<cxxClassAPIItemLocation>
+				<cxxClassDeclarationFile name="filePath" value="C:/wip/sysdoc/tools/Doxygen/branches/DITA/test/PaulRo/cxxApiExamples/src/test_class.h"/>
+				<cxxClassDeclarationFileLine name="lineNumber" value="31"/>
+				<cxxClassDefinitionFile name="filePath" value="C:/wip/sysdoc/tools/Doxygen/branches/DITA/test/PaulRo/cxxApiExamples/src/test_class.h"/>
+				<cxxClassDefinitionFileLineStart name="lineNumber" value="30"/>
+				<cxxClassDefinitionFileLineEnd name="lineNumber" value="121"/>
+			</cxxClassAPIItemLocation>
+		</cxxClassDefinition>
+		<apiDesc>
+			<p>A test class. </p>
+		</apiDesc>
+	</cxxClassDetail>
+	<cxxClassNested>
+		<cxxClassNestedDetail>
+			<cxxClassNestedClass href="class_test_class_1_1inner.xml#class_test_class_1_1inner">TestClass::inner</cxxClassNestedClass>
+		</cxxClassNestedDetail>
+	</cxxClassNested>
+	<cxxEnumeration id="class_test_class_1ac6874ec6cf80c7cd584ac7a0443323f7">
+		<apiName>TEnum</apiName>
+		<cxxEnumerationDetail>
+			<cxxEnumerationDefinition>
+				<cxxEnumerationAccessSpecifier value="public"/>
+				<cxxEnumerationScopedName>TestClass</cxxEnumerationScopedName>
+				<cxxEnumerationPrototype>TEnum</cxxEnumerationPrototype>
+				<cxxEnumerationNameLookup>TestClass:TEnum</cxxEnumerationNameLookup>
+				<cxxEnumerators>
+					<cxxEnumerator id="class_test_class_1ac6874ec6cf80c7cd584ac7a0443323f7aa1c98612d78a98a0b119af4d414a6650">
+						<apiName>TVal1</apiName>
+						<cxxEnumeratorScopedName>TestClass</cxxEnumeratorScopedName>
+						<cxxEnumeratorPrototype>TVal1</cxxEnumeratorPrototype>
+						<cxxEnumeratorNameLookup>TestClass::TVal1</cxxEnumeratorNameLookup>
+						<cxxEnumeratorAPIItemLocation>
+							<cxxEnumeratorDeclarationFile name="filePath" value="C:/wip/sysdoc/tools/Doxygen/branches/DITA/test/PaulRo/cxxApiExamples/src/test_class.h"/>
+							<cxxEnumeratorDeclarationFileLine name="lineNumber" value="38"/>
+						</cxxEnumeratorAPIItemLocation>
+						<apiDesc>
+							<p>enum value TVal1. </p>
+						</apiDesc>
+					</cxxEnumerator>
+					<cxxEnumerator id="class_test_class_1ac6874ec6cf80c7cd584ac7a0443323f7afdc29c3c2ab260829d36fca31eb02c06">
+						<apiName>TVal2</apiName>
+						<cxxEnumeratorScopedName>TestClass</cxxEnumeratorScopedName>
+						<cxxEnumeratorPrototype>TVal2</cxxEnumeratorPrototype>
+						<cxxEnumeratorNameLookup>TestClass::TVal2</cxxEnumeratorNameLookup>
+						<cxxEnumeratorAPIItemLocation>
+							<cxxEnumeratorDeclarationFile name="filePath" value="C:/wip/sysdoc/tools/Doxygen/branches/DITA/test/PaulRo/cxxApiExamples/src/test_class.h"/>
+							<cxxEnumeratorDeclarationFileLine name="lineNumber" value="39"/>
+						</cxxEnumeratorAPIItemLocation>
+						<apiDesc>
+							<p>enum value TVal2. </p>
+						</apiDesc>
+					</cxxEnumerator>
+					<cxxEnumerator id="class_test_class_1ac6874ec6cf80c7cd584ac7a0443323f7ab7af044d065f02ffdc5e426bdb34a6b2">
+						<apiName>TVal3</apiName>
+						<cxxEnumeratorScopedName>TestClass</cxxEnumeratorScopedName>
+						<cxxEnumeratorPrototype>TVal3</cxxEnumeratorPrototype>
+						<cxxEnumeratorNameLookup>TestClass::TVal3</cxxEnumeratorNameLookup>
+						<cxxEnumeratorAPIItemLocation>
+							<cxxEnumeratorDeclarationFile name="filePath" value="C:/wip/sysdoc/tools/Doxygen/branches/DITA/test/PaulRo/cxxApiExamples/src/test_class.h"/>
+							<cxxEnumeratorDeclarationFileLine name="lineNumber" value="41"/>
+						</cxxEnumeratorAPIItemLocation>
+						<apiDesc>
+							<p>enum value TVal3. </p>
+						</apiDesc>
+					</cxxEnumerator>
+				</cxxEnumerators>
+				<cxxEnumerationAPIItemLocation>
+					<cxxEnumerationDeclarationFile name="filePath" value="C:/wip/sysdoc/tools/Doxygen/branches/DITA/test/PaulRo/cxxApiExamples/src/test_class.h"/>
+					<cxxEnumerationDeclarationFileLine name="lineNumber" value="37"/>
+					<cxxEnumerationDefinitionFile name="filePath" value="C:/wip/sysdoc/tools/Doxygen/branches/DITA/test/PaulRo/cxxApiExamples/src/test_class.h"/>
+					<cxxEnumerationDefinitionFileLineStart name="lineNumber" value="37"/>
+					<cxxEnumerationDefinitionFileLineEnd name="lineNumber" value="41"/>
+				</cxxEnumerationAPIItemLocation>
+			</cxxEnumerationDefinition>
+			<apiDesc>
+				<p>An enum. More detailed enum description. </p>
+			</apiDesc>
+		</cxxEnumerationDetail>
+	</cxxEnumeration>
+	<cxxVariable id="class_test_class_1aed575608782fe8a8de1e6f30260b3170">
+		<apiName>enumPtr</apiName>
+		<cxxVariableDetail>
+			<cxxVariableDefinition>
+				<cxxVariableAccessSpecifier value="public"/>
+				<cxxVariableDeclaredType>enum <apiRelation href="class_test_class.xml#class_test_class_1ac6874ec6cf80c7cd584ac7a0443323f7">TestClass::TEnum</apiRelation> *</cxxVariableDeclaredType>
+				<cxxVariableScopedName>TestClass</cxxVariableScopedName>
+				<cxxVariablePrototype>enum TestClass::TEnum * enumPtr</cxxVariablePrototype>
+				<cxxVariableNameLookup>TestClass::enumPtr</cxxVariableNameLookup>
+				<cxxVariableAPIItemLocation>
+					<cxxVariableDeclarationFile name="filePath" value="C:/wip/sysdoc/tools/Doxygen/branches/DITA/test/PaulRo/cxxApiExamples/src/test_class.h"/>
+					<cxxVariableDeclarationFileLine name="lineNumber" value="42"/>
+				</cxxVariableAPIItemLocation>
+			</cxxVariableDefinition>
+			<apiDesc>
+				<p>An enum. More detailed enum description. enum pointer. Details. </p>
+			</apiDesc>
+		</cxxVariableDetail>
+	</cxxVariable>
+	<cxxVariable id="class_test_class_1ad88d5e75b1854b28726355707c3beb4d">
+		<apiName>enumVar</apiName>
+		<cxxVariableDetail>
+			<cxxVariableDefinition>
+				<cxxVariableAccessSpecifier value="public"/>
+				<cxxVariableDeclaredType>enum <apiRelation href="class_test_class.xml#class_test_class_1ac6874ec6cf80c7cd584ac7a0443323f7">TestClass::TEnum</apiRelation></cxxVariableDeclaredType>
+				<cxxVariableScopedName>TestClass</cxxVariableScopedName>
+				<cxxVariablePrototype>enum TestClass::TEnum enumVar</cxxVariablePrototype>
+				<cxxVariableNameLookup>TestClass::enumVar</cxxVariableNameLookup>
+				<cxxVariableAPIItemLocation>
+					<cxxVariableDeclarationFile name="filePath" value="C:/wip/sysdoc/tools/Doxygen/branches/DITA/test/PaulRo/cxxApiExamples/src/test_class.h"/>
+					<cxxVariableDeclarationFileLine name="lineNumber" value="43"/>
+				</cxxVariableAPIItemLocation>
+			</cxxVariableDefinition>
+			<apiDesc>
+				<p>enum variable. Details. </p>
+			</apiDesc>
+		</cxxVariableDetail>
+	</cxxVariable>
+	<cxxFunction id="class_test_class_1a09903432ed60c7c38f1beccc4cf18987">
+		<apiName>TestClass</apiName>
+		<cxxFunctionDetail>
+			<cxxFunctionDefinition>
+				<cxxFunctionAccessSpecifier value="public"/>
+				<cxxFunctionConstructor/>
+				<cxxFunctionDeclaredType/>
+				<cxxFunctionScopedName>TestClass</cxxFunctionScopedName>
+				<cxxFunctionPrototype>TestClass()</cxxFunctionPrototype>
+				<cxxFunctionNameLookup>TestClass::TestClass()</cxxFunctionNameLookup>
+				<apiDefNote/>
+				<cxxFunctionAPIItemLocation>
+					<cxxFunctionDeclarationFile name="filePath" value="C:/wip/sysdoc/tools/Doxygen/branches/DITA/test/PaulRo/cxxApiExamples/src/test_class.h"/>
+					<cxxFunctionDeclarationFileLine name="lineNumber" value="47"/>
+				</cxxFunctionAPIItemLocation>
+			</cxxFunctionDefinition>
+			<apiDesc>
+				<p>The default constructor. </p>
+			</apiDesc>
+		</cxxFunctionDetail>
+	</cxxFunction>
+	<cxxFunction id="class_test_class_1a9aff6dc0cd63f08d311d436087a38317">
+		<apiName>TestClass</apiName>
+		<cxxFunctionDetail>
+			<cxxFunctionDefinition>
+				<cxxFunctionAccessSpecifier value="public"/>
+				<cxxFunctionConstructor/>
+				<cxxFunctionDeclaredType/>
+				<cxxFunctionScopedName>TestClass</cxxFunctionScopedName>
+				<cxxFunctionPrototype>TestClass(int aInt)</cxxFunctionPrototype>
+				<cxxFunctionNameLookup>TestClass::TestClass(int)</cxxFunctionNameLookup>
+				<cxxFunctionParameters>
+					<cxxFunctionParameter>
+						<cxxFunctionParameterDeclaredType>int</cxxFunctionParameterDeclaredType>
+						<cxxFunctionParameterDeclarationName>aInt</cxxFunctionParameterDeclarationName>
+						<apiDefNote/>
+					</cxxFunctionParameter>
+				</cxxFunctionParameters>
+				<apiDefNote/>
+				<cxxFunctionAPIItemLocation>
+					<cxxFunctionDeclarationFile name="filePath" value="C:/wip/sysdoc/tools/Doxygen/branches/DITA/test/PaulRo/cxxApiExamples/src/test_class.h"/>
+					<cxxFunctionDeclarationFileLine name="lineNumber" value="53"/>
+				</cxxFunctionAPIItemLocation>
+			</cxxFunctionDefinition>
+			<apiDesc>
+				<p>A constructor with an integer argument. Have a look at <xref href="class_test_class.xml#class_test_class_1a09903432ed60c7c38f1beccc4cf18987">TestClass()</xref> for the default constructor. </p>
+			</apiDesc>
+		</cxxFunctionDetail>
+	</cxxFunction>
+	<cxxFunction id="class_test_class_1a0440024d8bc48168a39ae4683c73194e">
+		<apiName>~TestClass</apiName>
+		<cxxFunctionDetail>
+			<cxxFunctionDefinition>
+				<cxxFunctionAccessSpecifier value="public"/>
+				<cxxFunctionVirtual/>
+				<cxxFunctionDestructor/>
+				<cxxFunctionDeclaredType/>
+				<cxxFunctionScopedName>TestClass</cxxFunctionScopedName>
+				<cxxFunctionPrototype>virtual ~TestClass()</cxxFunctionPrototype>
+				<cxxFunctionNameLookup>TestClass::~TestClass()</cxxFunctionNameLookup>
+				<apiDefNote/>
+				<cxxFunctionAPIItemLocation>
+					<cxxFunctionDeclarationFile name="filePath" value="C:/wip/sysdoc/tools/Doxygen/branches/DITA/test/PaulRo/cxxApiExamples/src/test_class.h"/>
+					<cxxFunctionDeclarationFileLine name="lineNumber" value="60"/>
+				</cxxFunctionAPIItemLocation>
+			</cxxFunctionDefinition>
+			<apiDesc>
+				<p>A destructor. Its virtual because, well, that is good practice when we have virtuals. A more elaborate description of the destructor. </p>
+			</apiDesc>
+		</cxxFunctionDetail>
+	</cxxFunction>
+	<cxxFunction id="class_test_class_1a49b608e82195dea4dfea4b4a2a45836a">
+		<apiName>testMe</apiName>
+		<cxxFunctionDetail>
+			<cxxFunctionDefinition>
+				<cxxFunctionAccessSpecifier value="public"/>
+				<cxxFunctionDeclaredType>int</cxxFunctionDeclaredType>
+				<cxxFunctionScopedName>TestClass</cxxFunctionScopedName>
+				<cxxFunctionPrototype>int testMe(int a, const char *s)</cxxFunctionPrototype>
+				<cxxFunctionNameLookup>TestClass::testMe(int,const char *)</cxxFunctionNameLookup>
+				<cxxFunctionParameters>
+					<cxxFunctionParameter>
+						<cxxFunctionParameterDeclaredType>int</cxxFunctionParameterDeclaredType>
+						<cxxFunctionParameterDeclarationName>a</cxxFunctionParameterDeclarationName>
+						<apiDefNote>an integer argument. </apiDefNote>
+					</cxxFunctionParameter>
+					<cxxFunctionParameter>
+						<cxxFunctionParameterDeclaredType>const char *</cxxFunctionParameterDeclaredType>
+						<cxxFunctionParameterDeclarationName>s</cxxFunctionParameterDeclarationName>
+						<apiDefNote>a constant character pointer. </apiDefNote>
+					</cxxFunctionParameter>
+				</cxxFunctionParameters>
+				<apiDefNote>The test results </apiDefNote>
+				<cxxFunctionAPIItemLocation>
+					<cxxFunctionDeclarationFile name="filePath" value="C:/wip/sysdoc/tools/Doxygen/branches/DITA/test/PaulRo/cxxApiExamples/src/test_class.h"/>
+					<cxxFunctionDeclarationFileLine name="lineNumber" value="72"/>
+				</cxxFunctionAPIItemLocation>
+			</cxxFunctionDefinition>
+			<apiDesc>
+				<p>a normal member taking two arguments and returning an integer value. Test() ~Test() <xref href="class_test_class.xml#class_test_class_1a4997863f0c3e5785626d252c97ddcc10">testMeToo()</xref> <xref href="class_test_class.xml#class_test_class_1aef7d437521d1e795ad362b8c113f944d">publicVar()</xref> </p>
+			</apiDesc>
+		</cxxFunctionDetail>
+	</cxxFunction>
+	<cxxFunction id="class_test_class_1a4997863f0c3e5785626d252c97ddcc10">
+		<apiName>testMeToo</apiName>
+		<cxxFunctionDetail>
+			<cxxFunctionDefinition>
+				<cxxFunctionAccessSpecifier value="public"/>
+				<cxxFunctionPureVirtual/>
+				<cxxFunctionDeclaredType>void</cxxFunctionDeclaredType>
+				<cxxFunctionScopedName>TestClass</cxxFunctionScopedName>
+				<cxxFunctionPrototype>virtual void testMeToo(char c1, char c2)=0</cxxFunctionPrototype>
+				<cxxFunctionNameLookup>TestClass::testMeToo(char,char)</cxxFunctionNameLookup>
+				<cxxFunctionParameters>
+					<cxxFunctionParameter>
+						<cxxFunctionParameterDeclaredType>char</cxxFunctionParameterDeclaredType>
+						<cxxFunctionParameterDeclarationName>c1</cxxFunctionParameterDeclarationName>
+						<apiDefNote>the first argument. </apiDefNote>
+					</cxxFunctionParameter>
+					<cxxFunctionParameter>
+						<cxxFunctionParameterDeclaredType>char</cxxFunctionParameterDeclaredType>
+						<cxxFunctionParameterDeclarationName>c2</cxxFunctionParameterDeclarationName>
+						<apiDefNote>the second argument. </apiDefNote>
+					</cxxFunctionParameter>
+				</cxxFunctionParameters>
+				<apiDefNote/>
+				<cxxFunctionAPIItemLocation>
+					<cxxFunctionDeclarationFile name="filePath" value="C:/wip/sysdoc/tools/Doxygen/branches/DITA/test/PaulRo/cxxApiExamples/src/test_class.h"/>
+					<cxxFunctionDeclarationFileLine name="lineNumber" value="80"/>
+				</cxxFunctionAPIItemLocation>
+			</cxxFunctionDefinition>
+			<apiDesc>
+				<p>A pure virtual member. <xref href="class_test_class.xml#class_test_class_1a49b608e82195dea4dfea4b4a2a45836a">testMe()</xref> </p>
+			</apiDesc>
+		</cxxFunctionDetail>
+	</cxxFunction>
+	<cxxVariable id="class_test_class_1aef7d437521d1e795ad362b8c113f944d">
+		<apiName>publicVar</apiName>
+		<cxxVariableDetail>
+			<cxxVariableDefinition>
+				<cxxVariableAccessSpecifier value="public"/>
+				<cxxVariableDeclaredType>int</cxxVariableDeclaredType>
+				<cxxVariableScopedName>TestClass</cxxVariableScopedName>
+				<cxxVariablePrototype>int publicVar</cxxVariablePrototype>
+				<cxxVariableNameLookup>TestClass::publicVar</cxxVariableNameLookup>
+				<cxxVariableAPIItemLocation>
+					<cxxVariableDeclarationFile name="filePath" value="C:/wip/sysdoc/tools/Doxygen/branches/DITA/test/PaulRo/cxxApiExamples/src/test_class.h"/>
+					<cxxVariableDeclarationFileLine name="lineNumber" value="86"/>
+				</cxxVariableAPIItemLocation>
+			</cxxVariableDefinition>
+			<apiDesc>
+				<p>A public variable. TODO: Make this protected or private and add a get and set function like privateVar and <xref href="class_test_class.xml#class_test_class_1ad202ba4fbb77f10c14a1086a85760203">PrivateVar()</xref> </p>
+			</apiDesc>
+		</cxxVariableDetail>
+	</cxxVariable>
+	<cxxVariable id="class_test_class_1af1d8ccc78818a98140c10eac99c522aa">
+		<apiName>handler</apiName>
+		<cxxVariableDetail>
+			<cxxVariableDefinition>
+				<cxxVariableAccessSpecifier value="public"/>
+				<cxxVariableDeclaredType>int(*</cxxVariableDeclaredType>
+				<cxxVariableScopedName>TestClass</cxxVariableScopedName>
+				<cxxVariablePrototype>int(* handler)(int a, int b)</cxxVariablePrototype>
+				<cxxVariableNameLookup>TestClass::handler</cxxVariableNameLookup>
+				<cxxVariableAPIItemLocation>
+					<cxxVariableDeclarationFile name="filePath" value="C:/wip/sysdoc/tools/Doxygen/branches/DITA/test/PaulRo/cxxApiExamples/src/test_class.h"/>
+					<cxxVariableDeclarationFileLine name="lineNumber" value="92"/>
+				</cxxVariableAPIItemLocation>
+			</cxxVariableDefinition>
+			<apiDesc>
+				<p>a function variable. Details. </p>
+			</apiDesc>
+		</cxxVariableDetail>
+	</cxxVariable>
+	<cxxVariable id="class_test_class_1a10ed4801f29a6e21ccdb8bc9fe4cb982">
+		<apiName>privateVar</apiName>
+		<cxxVariableDetail>
+			<cxxVariableDefinition>
+				<cxxVariableAccessSpecifier value="private"/>
+				<cxxVariableDeclaredType>int</cxxVariableDeclaredType>
+				<cxxVariableScopedName>TestClass</cxxVariableScopedName>
+				<cxxVariablePrototype>int privateVar</cxxVariablePrototype>
+				<cxxVariableNameLookup>TestClass::privateVar</cxxVariableNameLookup>
+				<cxxVariableAPIItemLocation>
+					<cxxVariableDeclarationFile name="filePath" value="C:/wip/sysdoc/tools/Doxygen/branches/DITA/test/PaulRo/cxxApiExamples/src/test_class.h"/>
+					<cxxVariableDeclarationFileLine name="lineNumber" value="98"/>
+				</cxxVariableAPIItemLocation>
+			</cxxVariableDefinition>
+			<apiDesc>
+				<p>A private variable set by <xref href="class_test_class.xml#class_test_class_1ad202ba4fbb77f10c14a1086a85760203">PrivateVar(int)</xref> and obtained by <xref href="class_test_class.xml#class_test_class_1a88a7d96f63e3e33282d98c4089cbdb68">PrivateVar() const</xref>. </p>
+			</apiDesc>
+		</cxxVariableDetail>
+	</cxxVariable>
+	<cxxFunction id="class_test_class_1ad202ba4fbb77f10c14a1086a85760203">
+		<apiName>PrivateVar</apiName>
+		<cxxFunctionDetail>
+			<cxxFunctionDefinition>
+				<cxxFunctionAccessSpecifier value="public"/>
+				<cxxFunctionDeclaredType>int</cxxFunctionDeclaredType>
+				<cxxFunctionScopedName>TestClass</cxxFunctionScopedName>
+				<cxxFunctionPrototype>int PrivateVar(int aVal)</cxxFunctionPrototype>
+				<cxxFunctionNameLookup>TestClass::PrivateVar(int)</cxxFunctionNameLookup>
+				<cxxFunctionParameters>
+					<cxxFunctionParameter>
+						<cxxFunctionParameterDeclaredType>int</cxxFunctionParameterDeclaredType>
+						<cxxFunctionParameterDeclarationName>aVal</cxxFunctionParameterDeclarationName>
+						<apiDefNote>The value to set. </apiDefNote>
+					</cxxFunctionParameter>
+				</cxxFunctionParameters>
+				<apiDefNote>The value of privateVar </apiDefNote>
+				<cxxFunctionAPIItemLocation>
+					<cxxFunctionDeclarationFile name="filePath" value="C:/wip/sysdoc/tools/Doxygen/branches/DITA/test/PaulRo/cxxApiExamples/src/test_class.h"/>
+					<cxxFunctionDeclarationFileLine name="lineNumber" value="105"/>
+				</cxxFunctionAPIItemLocation>
+			</cxxFunctionDefinition>
+			<apiDesc>
+				<p>A setting function for privateVar. </p>
+			</apiDesc>
+		</cxxFunctionDetail>
+	</cxxFunction>
+	<cxxFunction id="class_test_class_1a88a7d96f63e3e33282d98c4089cbdb68">
+		<apiName>PrivateVar</apiName>
+		<cxxFunctionDetail>
+			<cxxFunctionDefinition>
+				<cxxFunctionAccessSpecifier value="public"/>
+				<cxxFunctionConst/>
+				<cxxFunctionDeclaredType>int</cxxFunctionDeclaredType>
+				<cxxFunctionScopedName>TestClass</cxxFunctionScopedName>
+				<cxxFunctionPrototype>int PrivateVar() const </cxxFunctionPrototype>
+				<cxxFunctionNameLookup>TestClass::PrivateVar()const</cxxFunctionNameLookup>
+				<apiDefNote>The value of privateVar </apiDefNote>
+				<cxxFunctionAPIItemLocation>
+					<cxxFunctionDeclarationFile name="filePath" value="C:/wip/sysdoc/tools/Doxygen/branches/DITA/test/PaulRo/cxxApiExamples/src/test_class.h"/>
+					<cxxFunctionDeclarationFileLine name="lineNumber" value="110"/>
+				</cxxFunctionAPIItemLocation>
+			</cxxFunctionDefinition>
+			<apiDesc>
+				<p>A getting function for privateVar. </p>
+			</apiDesc>
+		</cxxFunctionDetail>
+	</cxxFunction>
+</cxxClass>

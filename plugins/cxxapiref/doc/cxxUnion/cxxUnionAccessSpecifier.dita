@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxUnionAccessSpecifier">
+    <title>cxxUnionAccessSpecifier</title>
+    <shortdesc>The &lt;cxxUnionAccessSpecifier&gt; element describes the level of access the union allows.</shortdesc>
+    <refbody>
+        <section>
+            <title>Description</title>
+            <p>The &lt;cxxUnionAccessSpecifier&gt; element does not have any children. &lt;cxxUnionAccessSpecifier&gt; 
+            uses the attribute <i>value</i> to describe the level of access a union has. <i>value</i> 
+            can be set to "public", "protected" or "private"; the default is "public". </p>
+        </section>
+        <example>
+            <title>Example</title>
+            <codeblock>&lt;cxxUnionAccessSpecifier value="public"/&gt;</codeblock>
+        </example>
+        <section conref="../packagedef.dita#cxxUnionAccessSpecifier-reference/cxxUnionAccessSpecifier-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxUnionAccessSpecifier-reference/cxxUnionAccessSpecifier-contains-section"/>
+        <section conref="../packagedef.dita#cxxUnionAccessSpecifier-reference/cxxUnionAccessSpecifier-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxUnionAccessSpecifier-reference/cxxUnionAccessSpecifier-attList-section"/>
+        <section conref="../packagedef.dita#cxxUnionAccessSpecifier-reference/cxxUnionAccessSpecifier-classValue-section"/>
+    </refbody>
+</reference>

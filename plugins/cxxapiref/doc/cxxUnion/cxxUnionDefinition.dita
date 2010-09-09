@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxUnionDefinition">
+    <title>cxxUnionDefinition</title>
+    <shortdesc>The &lt;cxxUnionDefinition&gt; element is defined within &lt;cxxUnionDetail&gt;. 
+    &lt;cxxUnionDefinition&gt; represents the C++ union declaration.</shortdesc>
+    <refbody>
+        <section>
+            <title>Description</title><p>A union declaration specifies a new named reference type. 
+            A union declaration can include the following members: <i>public</i>, <i>protected</i> 
+            or <i>private</i>, this is represented by the &lt;cxxUnionAccessSpecifier&gt; element.</p>
+            <p>&lt;cxxUnionDefinition&gt; requires the element &lt;cxxUnionAPIItemLocation&gt; as its child.</p>
+        </section>
+        <example><title>Example</title>
+        <codeblock>&lt;cxxUnionDefinition&gt;
+			&lt;cxxUnionAccessSpecifier value="public"/&gt;
+			&lt;cxxUnionAPIItemLocation&gt;
+				&lt;cxxUnionDeclarationFile name="filePath" value="C:/src/include/e32base.h"/&gt;
+				&lt;cxxUnionDeclarationFileLine name="lineNumber" value="2812"/&gt;
+				&lt;cxxUnionDefinitionFile name="filePath" value="C:/src/include/e32base.h"/&gt;
+				&lt;cxxUnionDefinitionFileLineStart name="lineNumber" value="2784"/&gt;
+				&lt;cxxUnionDefinitionFileLineEnd name="lineNumber" value="2854"/&gt;
+			&lt;/cxxUnionAPIItemLocation&gt;
+		&lt;/cxxUnionDefinition&gt;</codeblock>
+        </example>
+        <section conref="../packagedef.dita#cxxUnionDefinition-reference/cxxUnionDefinition-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxUnionDefinition-reference/cxxUnionDefinition-contains-section"/>
+        <section conref="../packagedef.dita#cxxUnionDefinition-reference/cxxUnionDefinition-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxUnionDefinition-reference/cxxUnionDefinition-attList-section"/>
+        <section conref="../packagedef.dita#cxxUnionDefinition-reference/cxxUnionDefinition-classValue-section"/>
+    </refbody>
+</reference>

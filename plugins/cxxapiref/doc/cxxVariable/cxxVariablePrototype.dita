@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxVariablePrototype">
+    <title>cxxVariablePrototype</title>
+    <shortdesc>The &lt;cxxVariablePrototype&gt; element provides a representation of the variable declaration.</shortdesc>
+    <refbody>
+        <section>
+            <title>Description</title>
+            <p>The optional &lt;cxxVariablePrototype&gt; element has no children and does not require any default attributes.</p>
+        </section>
+        <example>
+            <title>Example</title>
+            <codeblock>&lt;cxxVariablePrototype&gt;TRequestStatus iStatus&lt;/cxxVariablePrototype&gt;</codeblock>
+        </example>
+        <section conref="../packagedef.dita#cxxVariablePrototype-reference/cxxVariablePrototype-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxVariablePrototype-reference/cxxVariablePrototype-contains-section"/>
+        <section conref="../packagedef.dita#cxxVariablePrototype-reference/cxxVariablePrototype-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxVariablePrototype-reference/cxxVariablePrototype-attList-section"/>
+        <section conref="../packagedef.dita#cxxVariablePrototype-reference/cxxVariablePrototype-classValue-section"/>
+    </refbody>
+</reference>

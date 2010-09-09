@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxTypedefNameLookup">
+    <title>cxxTypedefNameLookup</title>
+    <shortdesc>Provides a unique identifier of the typedef.</shortdesc>
+    <refbody>
+        <section>
+            <title>Description</title><p>This element provides a way of  uniquely identifying a typedef in a body of DITA XML that describes a body of C++ source code.</p><p>Implementations are free to write what they want in this elements PCDATA but a "good" implementation would place some premium on the following:<ul>
+                    <li>The text would be unique within a set of DITA XML files.</li>
+                    <li>The text would be human readable.</li>
+                    <li>The text would generally follow the lookup techniques use in the C++ standard (ISO/IEC 14882:2003(E)).</li>
+                    <li>Any encoding used would be reversible.</li>
+                </ul>
+            </p>
+        </section>
+        <section conref="../packagedef.dita#cxxTypedefNameLookup-reference/cxxTypedefNameLookup-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxTypedefNameLookup-reference/cxxTypedefNameLookup-contains-section"/>
+        <section conref="../packagedef.dita#cxxTypedefNameLookup-reference/cxxTypedefNameLookup-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxTypedefNameLookup-reference/cxxTypedefNameLookup-attList-section"/>
+        <section conref="../packagedef.dita#cxxTypedefNameLookup-reference/cxxTypedefNameLookup-classValue-section"/>
+    </refbody>
+</reference>

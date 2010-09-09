@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxFunctionParameterDeclarationName">
+    <title>cxxFunctionParameterDeclarationName</title>
+    <shortdesc>Describes the name of the parameter used in the declaration of the function.</shortdesc>
+    <refbody>
+        <section id="section_52DAE10528D24470A15BEBEB9261F4A0">
+            <title>Description</title><p>Describes the name of the parameter used in the declaration of the function.
+            </p><p>See ISO/IEC 14882:2003(E) 8.3.5 Functions [dcl.fct]</p>
+        </section>
+        <section conref="../packagedef.dita#cxxFunctionParameterDeclarationName-reference/cxxFunctionParameterDeclarationName-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxFunctionParameterDeclarationName-reference/cxxFunctionParameterDeclarationName-contains-section"/>
+        <section conref="../packagedef.dita#cxxFunctionParameterDeclarationName-reference/cxxFunctionParameterDeclarationName-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxFunctionParameterDeclarationName-reference/cxxFunctionParameterDeclarationName-attList-section"/>
+        <section conref="../packagedef.dita#cxxFunctionParameterDeclarationName-reference/cxxFunctionParameterDeclarationName-classValue-section"/>
+    </refbody>
+</reference>

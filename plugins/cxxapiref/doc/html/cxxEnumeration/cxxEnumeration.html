@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta name="copyright" content="(C) Copyright 2005"/>
+<meta name="DC.rights.owner" content="(C) Copyright 2005"/>
+<meta name="DC.Type" content="reference"/>
+<meta name="DC.Title" content="cxxEnumeration"/>
+<meta name="abstract" content="The &lt;cxxEnumeration&gt; element contains all the elements needed to describe the declaration of a C++ enumeration."/>
+<meta name="description" content="The &lt;cxxEnumeration&gt; element contains all the elements needed to describe the declaration of a C++ enumeration."/>
+<meta name="DC.Relation" scheme="URI" content="../cxxEnumeration/cxxEnumeration_module.html"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="cxxEnumeration"/>
+<meta name="DC.Language" content="en-us"/>
+<link rel="stylesheet" type="text/css" href="../commonltr.css"/>
+<title>cxxEnumeration</title>
+<link rel="stylesheet" type="text/css" href="../nokiacxxref.css"/></head>
+<body class="element" id="cxxEnumeration"><a name="cxxEnumeration"><!-- --></a>
+
+
+    <h1 class="topictitle1">cxxEnumeration</h1>
+
+    
+    <div><p>The &lt;cxxEnumeration&gt; element contains all the elements needed to describe the declaration of a C++ enumeration.</p>
+
+        <div class="section"><h2 class="sectiontitle">Description</h2>
+            
+            <p>The &lt;cxxEnumeration&gt; element requires
+an <em>id</em> attribute as an anchor point; id must always be specified. The
+id attribute is referenced by the <em>conref</em> attribute from internal applications
+that refer to the &lt;cxxFunctiion&gt; element content. The elements &lt;apiName&gt; 
+and &lt;cxxEnumerationDetail&gt; are required for this top-level container. </p>
+
+        </div>
+
+        <div class="example"><h2 class="sectiontitle">Example</h2>
+            
+            <pre class="codeblock">&lt;cxxEnumeration id="class_b_trace_1a289a8c50777f50be7f2d0535670c1e8d"&gt;
+    &lt;apiName&gt;THeaderStructure&lt;/apiName&gt;
+    &lt;cxxEnumerationDetail&gt;
+        &lt;cxxEnumerationDefinition&gt;
+            &lt;cxxEnumerationAccessSpecifier value="public"/&gt;
+            &lt;cxxEnumerationScopedName&gt;BTrace&lt;/cxxEnumerationScopedName&gt;
+            &lt;cxxEnumerationPrototype&gt;THeaderStructure&lt;/cxxEnumerationPrototype&gt;
+            &lt;cxxEnumerationNameLookup&gt;BTrace:THeaderStructure&lt;/cxxEnumerationNameLookup&gt;
+            &lt;cxxEnumerators&gt;
+                &lt;cxxEnumerator id="class_b_trace_1a289a8c50777f50be7f2d0535670c1e8daacb3d2fc73e5d51e0cfe218fe61a4a64"&gt;
+                    &lt;apiName&gt;ESizeIndex&lt;/apiName&gt;
+                    &lt;cxxEnumeratorScopedName&gt;BTrace&lt;/cxxEnumeratorScopedName&gt;
+                    &lt;cxxEnumeratorPrototype&gt;ESizeIndex = 0&lt;/cxxEnumeratorPrototype&gt;
+                    &lt;cxxEnumeratorNameLookup&gt;BTrace::ESizeIndex&lt;/cxxEnumeratorNameLookup&gt;
+                    &lt;cxxEnumeratorInitialiser value="0"/&gt;
+                    &lt;cxxEnumeratorAPIItemLocation&gt;
+                        &lt;cxxEnumeratorDeclarationFile name="filePath" value="C:/src/include/e32btrace.h"/&gt;
+                        &lt;cxxEnumeratorDeclarationFileLine name="lineNumber" value="177"/&gt;
+                    &lt;/cxxEnumeratorAPIItemLocation&gt;
+                    &lt;apiDesc&gt;
+                        &lt;p&gt;Size of record in bytes. &lt;/p&gt;
+                    &lt;/apiDesc&gt;
+                &lt;/cxxEnumerator&gt;
+                &lt;cxxEnumerator id="class_b_trace_1a289a8c50777f50be7f2d0535670c1e8da88aa2174423cbfd0a14b6bc857e06745"&gt;
+                    &lt;apiName&gt;EFlagsIndex&lt;/apiName&gt;
+                    &lt;cxxEnumeratorScopedName&gt;BTrace&lt;/cxxEnumeratorScopedName&gt;
+                    &lt;cxxEnumeratorPrototype&gt;EFlagsIndex = 1&lt;/cxxEnumeratorPrototype&gt;
+                    &lt;cxxEnumeratorNameLookup&gt;BTrace::EFlagsIndex&lt;/cxxEnumeratorNameLookup&gt;
+                    &lt;cxxEnumeratorInitialiser value="1"/&gt;
+                    &lt;cxxEnumeratorAPIItemLocation&gt;
+                        &lt;cxxEnumeratorDeclarationFile name="filePath" value="C:/src/include/e32btrace.h"/&gt;
+                        &lt;cxxEnumeratorDeclarationFileLine name="lineNumber" value="190"/&gt;
+                    &lt;/cxxEnumeratorAPIItemLocation&gt;
+                    &lt;apiDesc&gt;
+                        &lt;p&gt;Bitfield of flags from enum TFlags. E.g. to detect if a timestamp is present in the record, code like this could be used. &lt;codeblock&gt;			TUint8* record; // pointer to trace record
+        if(record[BTrace::EFlagsIndex]&amp;BTrace::ETimestampPresent)
+            TimestampPresent();
+        else
+            TimestampNotPresent();&lt;/codeblock&gt; &lt;/p&gt;
+                    &lt;/apiDesc&gt;
+                &lt;/cxxEnumerator&gt;
+            &lt;/cxxEnumerators&gt;
+            &lt;cxxEnumerationAPIItemLocation&gt;
+                &lt;cxxEnumerationDeclarationFile name="filePath" value="C:/src/include/e32btrace.h"/&gt;
+                &lt;cxxEnumerationDeclarationFileLine name="lineNumber" value="173"/&gt;
+                &lt;cxxEnumerationDefinitionFile name="filePath" value="C:/EPOC/master/sf/os/commsfw/serialserver/c32serialserver/CCOMM/CC_CLI.CPP"/&gt;
+                &lt;cxxEnumerationDefinitionFileLineStart name="lineNumber" value="172"/&gt;
+                &lt;cxxEnumerationDefinitionFileLineEnd name="lineNumber" value="201"/&gt;
+            &lt;/cxxEnumerationAPIItemLocation&gt;
+        &lt;/cxxEnumerationDefinition&gt;
+        &lt;apiDesc&gt;
+            &lt;p&gt;Byte indices into the trace header for specific fields. &lt;/p&gt;
+        &lt;/apiDesc&gt;
+    &lt;/cxxEnumerationDetail&gt;
+&lt;/cxxEnumeration&gt;</pre>
+
+        </div>
+
+        <div class="elementContainedBy"><h2 class="sectiontitle">Contained by</h2>
+
+<p id="cxxEnumeration__d4000e3686"><a name="cxxEnumeration__d4000e3686"><!-- --></a>
+<a href="../cxxUnion/cxxUnion.html" title="The &lt;cxxUnion&gt; element provides the name of the C++ API union, all the elements necessary to describe the members that are introduced by the union declaration.">cxxUnion</a> 
+<a href="../cxxClass/cxxClass.html" title="The &lt;cxxClass&gt; element provides the name of the C++ API class, all the elements necessary to describe the members that are introduced by the class declaration, and the members inherited from the direct base class.">cxxClass</a> 
+<a href="../cxxStruct/cxxStruct.html" title="The &lt;cxxStruct&gt; element provides the name of the C++ API struct, all the elements necessary to describe the members that are introduced by the struct declaration, and the members inherited from the direct base struct.">cxxStruct</a> 
+</p>
+
+</div>
+
+        <div class="elementContains"><h2 class="sectiontitle">Contains</h2>
+
+<p id="cxxEnumeration__d4000e3704"><a name="cxxEnumeration__d4000e3704"><!-- --></a>
+<span class="keyword">apiName</span>, 
+<a href="cxxEnumerationDetail.html" title="The &lt;cxxEnumerationDetail&gt; element provides detailed information about the structure and behaviors of the C++ enumeration.">cxxEnumerationDetail</a> 
+<span class="keyword">no-topic-nesting</span>, 
+<span class="keyword">prolog</span>, 
+<span class="keyword">related-links</span>, 
+<span class="keyword">shortdesc</span>, 
+</p>
+
+</div>
+
+        <div class="elementContentModel"><h2 class="sectiontitle">Content Model</h2>
+
+<p id="cxxEnumeration__d4000e3732"><a name="cxxEnumeration__d4000e3732"><!-- --></a>
+(<span class="keyword">apiName</span>, 
+  then  
+<span class="keyword">shortdesc</span>, 
+  then  
+<span class="keyword">prolog</span>, 
+  then  
+<a href="cxxEnumerationDetail.html" title="The &lt;cxxEnumerationDetail&gt; element provides detailed information about the structure and behaviors of the C++ enumeration.">cxxEnumerationDetail</a> 
+  then  
+<span class="keyword">related-links</span>, 
+  then  
+(<span class="keyword">no-topic-nesting</span>, 
+
+))</p>
+
+</div>
+
+        <div class="elementAttList"/>
+
+        <div class="elementClassValue"><h2 class="sectiontitle">Inheritance</h2>
+
+<p id="cxxEnumeration__d4000e3762"><a name="cxxEnumeration__d4000e3762"><!-- --></a>
+ topic/<span class="keyword">topic</span> reference/<span class="keyword">reference</span> apiRef/<span class="keyword">apiRef</span> apiValue/<span class="keyword">apiValue</span> cxxEnumeration/<span class="keyword">cxxEnumeration</span></p>
+
+</div>
+
+    </div>
+
+<div>
+<div class="familylinks">
+<div class="parentlink"><strong>Parent topic:</strong> <a href="../cxxEnumeration/cxxEnumeration_module.html" title="Defines a top-level container for all the elements necessary to describe an C++ API enumeration.">cxxEnumeration module</a></div>
+</div>
+</div>
+
+</body>
+</html>

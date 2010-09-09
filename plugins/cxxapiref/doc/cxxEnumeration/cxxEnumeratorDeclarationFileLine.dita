@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxEnumeratorDeclarationFileLine">
+    <title>cxxEnumeratorDeclarationFileLine</title>
+    <shortdesc>The &lt;cxxEnumeratorDeclarationFileLine&gt; element is defined within &lt;cxxEnumeratorAPIItemLocation&gt;. 
+    &lt;cxxEnumeratorDeclarationFileLine&gt; specifies the line on which the API is declared</shortdesc>
+    <refbody>
+        <section>
+            <title>Description</title>
+            <p>The element &lt;cxxEnumeratorDeclarationFileLine&gt; is empty but for the required 
+            attributes <i>name</i> and <i>value</i>. Name is always <i>lineNumber</i></p>
+        </section>
+        <example><title>Example</title>
+        <codeblock>&lt;cxxEnumeratorAPIItemLocation&gt;
+    &lt;cxxEnumeratorDeclarationFile name=&quot;filePath&quot; value=&quot;C:/src/include/gdi.h&quot;/&gt;
+    &lt;cxxEnumeratorDeclarationFileLine name=&quot;lineNumber&quot; value=&quot;1722&quot;/&gt;
+&lt;/cxxEnumeratorAPIItemLocation&gt;</codeblock>
+        </example>        
+        <section conref="../packagedef.dita#cxxEnumeratorDeclarationFileLine-reference/cxxEnumeratorDeclarationFileLine-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxEnumeratorDeclarationFileLine-reference/cxxEnumeratorDeclarationFileLine-contains-section"/>
+        <section conref="../packagedef.dita#cxxEnumeratorDeclarationFileLine-reference/cxxEnumeratorDeclarationFileLine-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxEnumeratorDeclarationFileLine-reference/cxxEnumeratorDeclarationFileLine-attList-section"/>
+        <section conref="../packagedef.dita#cxxEnumeratorDeclarationFileLine-reference/cxxEnumeratorDeclarationFileLine-classValue-section"/>
+    </refbody>
+</reference>

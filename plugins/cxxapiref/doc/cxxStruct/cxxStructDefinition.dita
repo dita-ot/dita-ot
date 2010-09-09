@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxStructDefinition">
+    <title>cxxStructDefinition</title>
+    <shortdesc>The &lt;cxxStructDefinition&gt; element is defined within &lt;cxxStructDetail&gt;. 
+    &lt;cxxStructDefinition&gt; represents the C++ struct declaration.</shortdesc>
+    <refbody>
+        <section>
+            <title>Description</title><p>A struct declaration specifies a new named reference type. 
+            A struct declaration can include the following members: <i>public</i>, <i>protected</i> 
+            or <i>private</i>, this is represented by the &lt;cxxStructAccessSpecifier&gt; element.</p>
+            <p>&lt;cxxStructDefinition&gt; requires the element &lt;cxxStructAPIItemLocation&gt; as its child.</p>
+        </section>
+        <example><title>Example</title>
+        <codeblock>&lt;cxxStructDefinition&gt;
+			&lt;cxxStructAccessSpecifier value="public"/&gt;
+			&lt;cxxStructDerivations&gt;
+				&lt;cxxStructDerivation&gt;
+					&lt;cxxStructDerivationAccessSpecifier value="public"/&gt;
+					&lt;cxxStructBaseStruct href="struct_c_base.xml#struct_c_base"&gt;CBase&lt;/cxxStructBaseStruct&gt;
+				&lt;/cxxStructDerivation&gt;
+			&lt;/cxxStructDerivations&gt;
+			&lt;cxxStructAPIItemLocation&gt;
+				&lt;cxxStructDeclarationFile name="filePath" value="C:/src/include/e32base.h"/&gt;
+				&lt;cxxStructDeclarationFileLine name="lineNumber" value="2812"/&gt;
+				&lt;cxxStructDefinitionFile name="filePath" value="C:/src/include/e32base.h"/&gt;
+				&lt;cxxStructDefinitionFileLineStart name="lineNumber" value="2784"/&gt;
+				&lt;cxxStructDefinitionFileLineEnd name="lineNumber" value="2854"/&gt;
+			&lt;/cxxStructAPIItemLocation&gt;
+		&lt;/cxxStructDefinition&gt;</codeblock>
+        </example>
+        <section conref="../packagedef.dita#cxxStructDefinition-reference/cxxStructDefinition-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxStructDefinition-reference/cxxStructDefinition-contains-section"/>
+        <section conref="../packagedef.dita#cxxStructDefinition-reference/cxxStructDefinition-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxStructDefinition-reference/cxxStructDefinition-attList-section"/>
+        <section conref="../packagedef.dita#cxxStructDefinition-reference/cxxStructDefinition-classValue-section"/>
+    </refbody>
+</reference>

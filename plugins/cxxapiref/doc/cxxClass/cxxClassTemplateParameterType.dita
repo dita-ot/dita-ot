@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxClassTemplateParameterType">
+    <title>cxxClassTemplateParameterType</title>
+    <shortdesc>The &lt;cxxClassTemplateParameterType&gt; element specifies the parameter type.</shortdesc>
+    <refbody>
+        <section>
+            <title>Description</title>
+            <p>The &lt;cxxClassTemplateParameterType&gt; element is defined within the 
+            &lt;cxxClassTemplateParameter&gt; element.</p>
+        </section>
+        <section conref="../packagedef.dita#cxxClassTemplateParameterType-reference/cxxClassTemplateParameterType-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxClassTemplateParameterType-reference/cxxClassTemplateParameterType-contains-section"/>
+        <section conref="../packagedef.dita#cxxClassTemplateParameterType-reference/cxxClassTemplateParameterType-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxClassTemplateParameterType-reference/cxxClassTemplateParameterType-attList-section"/>
+        <section conref="../packagedef.dita#cxxClassTemplateParameterType-reference/cxxClassTemplateParameterType-classValue-section"/>
+    </refbody>
+</reference>

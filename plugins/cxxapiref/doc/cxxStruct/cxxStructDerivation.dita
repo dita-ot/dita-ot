@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "..\..\..\reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxStructDerivation">
+	<title>cxxStructDerivation</title>
+	<shortdesc>The &lt;cxxStructDerivation&gt; element specifies a single struct derivation within a list of struct derivations.</shortdesc>
+	<refbody>
+		<section>
+			<title>Description</title>
+			<p>Used within a &lt;cxxStructDerivations&gt; element to specify a single struct derivation. Must contain a &lt;cxxStructDerivationAccessSpecifier&gt;
+			and either a &lt;cxxStructBaseStruct&gt;, &lt;cxxStructBaseStruct&gt; or &lt;cxxStructBaseUnion&gt;.</p>
+		</section>
+		<example><title>Example</title>
+		<codeblock>&lt;cxxStructDerivations&gt;
+	&lt;cxxStructDerivation&gt;
+		&lt;cxxStructDerivationAccessSpecifier value="public"/&gt;
+		&lt;cxxStructBaseStruct href="struct_base"&gt;Base&lt;/cxxStructBaseStruct&gt;
+	&lt;/cxxStructDerivation&gt;
+	...
+&lt;/cxxStructDerivations&gt;</codeblock>
+		</example>		
+		<section conref="../packagedef.dita#cxxStructDerivation-reference/cxxStructDerivation-containedBy-section"/>
+		<section conref="../packagedef.dita#cxxStructDerivation-reference/cxxStructDerivation-contains-section"/>
+		<section conref="../packagedef.dita#cxxStructDerivation-reference/cxxStructDerivation-contentModel-section"/>
+		<section conref="../packagedef.dita#cxxStructDerivation-reference/cxxStructDerivation-attList-section"/>
+		<section conref="../packagedef.dita#cxxStructDerivation-reference/cxxStructDerivation-classValue-section"/>
+	</refbody>
+</reference>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "..\..\..\reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxClassDerivations">
+	<title>cxxClassDerivations</title>
+	<shortdesc>The &lt;cxxClassDerivations&gt; element specifies a list of class derivations for a class.</shortdesc>
+	<refbody>
+		<section>
+			<title>Description</title>
+			<p>Used within a &lt;cxxClassDefinition&gt; element to specify any class derivations (base classes etc.) for a class.
+			Must contain at least one &lt;cxxClassDerivation&gt; or &lt;cxxStructDerivation&gt; element.</p>
+		</section>
+		<example><title>Example</title>
+		<codeblock>&lt;cxxClassDefinition&gt;
+	&lt;cxxClassDerivations&gt;
+		&lt;cxxClassDerivation&gt;
+			...
+		&lt;/cxxClassDerivation&gt;
+		...
+	&lt;/cxxClassDerivations&gt;
+	&lt;cxxClassAPIItemLocation&gt;
+		...
+	&lt;/cxxClassAPIItemLocation&gt;
+&lt;cxxClassDefinition&gt;</codeblock>
+		</example>
+		<section conref="../packagedef.dita#cxxClassDerivations-reference/cxxClassDerivations-containedBy-section"/>
+		<section conref="../packagedef.dita#cxxClassDerivations-reference/cxxClassDerivations-contains-section"/>
+		<section conref="../packagedef.dita#cxxClassDerivations-reference/cxxClassDerivations-contentModel-section"/>
+		<section conref="../packagedef.dita#cxxClassDerivations-reference/cxxClassDerivations-attList-section"/>
+		<section conref="../packagedef.dita#cxxClassDerivations-reference/cxxClassDerivations-classValue-section"/>
+	</refbody>
+</reference>

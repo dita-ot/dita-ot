@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "..\..\..\reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxStructDerivations">
+	<title>cxxStructDerivations</title>
+	<shortdesc>The &lt;cxxStructDerivations&gt; element specifies a list of struct derivations for a struct.</shortdesc>
+	<refbody>
+		<section>
+			<title>Description</title>
+			<p>Used within a &lt;cxxStructDefinition&gt; element to specify any struct derivations (base structes etc.) for a struct.
+			Must contain at least one &lt;cxxStructDerivation&gt; or &lt;cxxStructDerivation&gt; element.</p>
+		</section>
+		<example><title>Example</title>
+		<codeblock>&lt;cxxStructDefinition&gt;
+	&lt;cxxStructDerivations&gt;
+		&lt;cxxStructDerivation&gt;
+			...
+		&lt;/cxxStructDerivation&gt;
+		...
+	&lt;/cxxStructDerivations&gt;
+	&lt;cxxStructAPIItemLocation&gt;
+		...
+	&lt;/cxxStructAPIItemLocation&gt;
+&lt;cxxStructDefinition&gt;</codeblock>
+		</example>
+		<section conref="../packagedef.dita#cxxStructDerivations-reference/cxxStructDerivations-containedBy-section"/>
+		<section conref="../packagedef.dita#cxxStructDerivations-reference/cxxStructDerivations-contains-section"/>
+		<section conref="../packagedef.dita#cxxStructDerivations-reference/cxxStructDerivations-contentModel-section"/>
+		<section conref="../packagedef.dita#cxxStructDerivations-reference/cxxStructDerivations-attList-section"/>
+		<section conref="../packagedef.dita#cxxStructDerivations-reference/cxxStructDerivations-classValue-section"/>
+	</refbody>
+</reference>

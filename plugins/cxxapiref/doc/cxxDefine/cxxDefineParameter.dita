@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxDefineParameter">
+    <title>cxxDefineParameter</title>
+    <shortdesc>The &lt;cxxDefineParameter&gt; element describes a define parameter.</shortdesc>
+    <refbody>
+        <section>
+            <title>Description</title>
+            <p>The &lt;cxxDefineParameter&gt; element describes a single parameter in an identifier-list.</p>
+        </section>
+        <example>
+            <title>Example</title>
+            <codeblock>&lt;cxxDefineDefinition&gt;
+    &lt;cxxDefineAccessSpecifier value="public"/&gt;
+    &lt;cxxDefinePrototype&gt;#define MergeModes(a, b)&lt;/cxxDefinePrototype&gt;
+    &lt;cxxDefineNameLookup&gt;MergeModes&lt;/cxxDefineNameLookup&gt;
+    &lt;cxxDefineParameters&gt;
+        &lt;cxxDefineParameter&gt;
+            &lt;cxxDefineParameterDeclarationName&gt;a&lt;/cxxDefineParameterDeclarationName&gt;
+            &lt;apiDefNote/&gt;
+        &lt;/cxxDefineParameter&gt;
+        &lt;cxxDefineParameter&gt;
+            &lt;cxxDefineParameterDeclarationName&gt;b&lt;/cxxDefineParameterDeclarationName&gt;
+            &lt;apiDefNote/&gt;
+        &lt;/cxxDefineParameter&gt;
+    &lt;/cxxDefineParameters&gt;
+    &lt;cxxDefineAPIItemLocation&gt;
+        &lt;cxxDefineDeclarationFile name="filePath" value="C:/EPOC/master/sf/os/commsfw/serialserver/c32serialserver/SCOMM/CS_PORT.CPP"/&gt;
+        &lt;cxxDefineDeclarationFileLine name="lineNumber" value="126"/&gt;
+    &lt;/cxxDefineAPIItemLocation&gt;
+&lt;/cxxDefineDefinition&gt;</codeblock>
+        </example>
+        <section conref="../packagedef.dita#cxxDefineParameter-reference/cxxDefineParameter-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxDefineParameter-reference/cxxDefineParameter-contains-section"/>
+        <section conref="../packagedef.dita#cxxDefineParameter-reference/cxxDefineParameter-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxDefineParameter-reference/cxxDefineParameter-attList-section"/>
+        <section conref="../packagedef.dita#cxxDefineParameter-reference/cxxDefineParameter-classValue-section"/>
+    </refbody>
+</reference>

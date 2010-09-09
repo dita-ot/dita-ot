@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta name="copyright" content="(C) Copyright 2005"/>
+<meta name="DC.rights.owner" content="(C) Copyright 2005"/>
+<meta name="DC.Type" content="reference"/>
+<meta name="DC.Title" content="cxxFunctionParameter"/>
+<meta name="abstract" content="Describes a function parameter"/>
+<meta name="description" content="Describes a function parameter"/>
+<meta name="DC.Relation" scheme="URI" content="../cxxFunction/cxxFunction_module.html"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="cxxFunctionParameter"/>
+<meta name="DC.Language" content="en-us"/>
+<link rel="stylesheet" type="text/css" href="../commonltr.css"/>
+<title>cxxFunctionParameter</title>
+<link rel="stylesheet" type="text/css" href="../nokiacxxref.css"/></head>
+<body class="element" id="cxxFunctionParameter"><a name="cxxFunctionParameter"><!-- --></a>
+
+
+    <h1 class="topictitle1">cxxFunctionParameter</h1>
+
+    
+    <div><p>Describes a function parameter</p>
+
+        <div class="section" id="cxxFunctionParameter__section_6C88CF050D7842A79A8DC78019CDFE69"><a name="cxxFunctionParameter__section_6C88CF050D7842A79A8DC78019CDFE69"><!-- --></a><h2 class="sectiontitle">Description</h2>
+            <p>This element describes a single function <em>parameter-declaration</em> in a  <em>parameter-declaration-clause</em>.</p>
+<p>See ISO/IEC 14882:2003(E) 8.3.5 Functions [dcl.fct]</p>
+
+        </div>
+
+        <div class="example" id="cxxFunctionParameter__example_C84A9A190114486A9B1B13C6B677B105"><a name="cxxFunctionParameter__example_C84A9A190114486A9B1B13C6B677B105"><!-- --></a><h2 class="sectiontitle">Example</h2>
+            <p>Given this code, note parameter name change between declaration and definition:</p>
+
+            <pre class="codeblock">/**
+@param aBuf The buffer, default as 0.
+*/
+void g(const char* aBuf=0);
+
+void g(const char* aBuffer)
+{
+	// Implementation
+}
+            </pre>
+<p>Then function <tt>g</tt> would have a <tt>cxxFunctionParameter</tt>
+element:</p>
+
+            <pre class="codeblock">&lt;cxxFunctionParameter&gt;
+  &lt;cxxFunctionParameterDeclaredType&gt;const char *&lt;/cxxFunctionParameterDeclaredType&gt;
+  &lt;cxxFunctionParameterDeclarationName&gt;aBuf&lt;/cxxFunctionParameterDeclarationName&gt;
+  &lt;cxxFunctionParameterDefinitionName&gt;aBuffer&lt;/cxxFunctionParameterDefinitionName&gt;
+  &lt;cxxFunctionParameterDefaultValue&gt;0&lt;/cxxFunctionParameterDefaultValue&gt;
+  &lt;apiDefNote&gt;The buffer, default as 0.&lt;/apiDefNote&gt;
+&lt;/cxxFunctionParameter&gt;
+            </pre>
+
+        </div>
+
+        <div class="elementContainedBy"><h2 class="sectiontitle">Contained by</h2>
+
+<p id="cxxFunctionParameter__d5618e7335"><a name="cxxFunctionParameter__d5618e7335"><!-- --></a>
+<a href="cxxFunctionParameters.html" title="Element that contains information about the function parameter-declaration-clause.">cxxFunctionParameters</a> 
+</p>
+
+</div>
+
+        <div class="elementContains"><h2 class="sectiontitle">Contains</h2>
+
+<p id="cxxFunctionParameter__d5618e7347"><a name="cxxFunctionParameter__d5618e7347"><!-- --></a>
+<span class="keyword">apiDefNote</span>, 
+<a href="cxxFunctionParameterDeclarationName.html" title="Describes the name of the parameter used in the declaration of the function.">cxxFunctionParameterDeclarationName</a> 
+<a href="cxxFunctionParameterDeclaredType.html" title="Describes the type of a function parameter.">cxxFunctionParameterDeclaredType</a> 
+<a href="cxxFunctionParameterDefaultValue.html" title="Describes any default value that the function parameter has.">cxxFunctionParameterDefaultValue</a> 
+<a href="cxxFunctionParameterDefinitionName.html" title="Describes the name of the parameter used in the definition of the function.">cxxFunctionParameterDefinitionName</a> 
+</p>
+
+</div>
+
+        <div class="elementContentModel"><h2 class="sectiontitle">Content Model</h2>
+
+<p id="cxxFunctionParameter__d5618e7371"><a name="cxxFunctionParameter__d5618e7371"><!-- --></a>
+(<a href="cxxFunctionParameterDeclaredType.html" title="Describes the type of a function parameter.">cxxFunctionParameterDeclaredType</a> 
+  then  
+<a href="cxxFunctionParameterDeclarationName.html" title="Describes the name of the parameter used in the declaration of the function.">cxxFunctionParameterDeclarationName</a> 
+(<em>optional</em>)
+  then  
+<a href="cxxFunctionParameterDefinitionName.html" title="Describes the name of the parameter used in the definition of the function.">cxxFunctionParameterDefinitionName</a> 
+(<em>optional</em>)
+  then  
+<a href="cxxFunctionParameterDefaultValue.html" title="Describes any default value that the function parameter has.">cxxFunctionParameterDefaultValue</a> 
+(<em>optional</em>)
+  then  
+<span class="keyword">apiDefNote</span>, 
+)</p>
+
+</div>
+
+        <div class="elementAttList"/>
+
+        <div class="elementClassValue"><h2 class="sectiontitle">Inheritance</h2>
+
+<p id="cxxFunctionParameter__d5618e7407"><a name="cxxFunctionParameter__d5618e7407"><!-- --></a>
+ topic/<span class="keyword">ph</span> reference/<span class="keyword">ph</span> apiRef/<span class="keyword">apiDefItem</span> apiOperation/<span class="keyword">apiDefItem</span> cxxFunction/<span class="keyword">cxxFunctionParameter</span></p>
+
+</div>
+
+    </div>
+
+<div>
+<div class="familylinks">
+<div class="parentlink"><strong>Parent topic:</strong> <a href="../cxxFunction/cxxFunction_module.html" title="The cxxFunction module describes C++ functions, including member functions.">cxxFunction module</a></div>
+</div>
+</div>
+
+</body>
+</html>

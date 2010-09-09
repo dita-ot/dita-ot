@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta name="copyright" content="(C) Copyright 2005"/>
+<meta name="DC.rights.owner" content="(C) Copyright 2005"/>
+<meta name="DC.Type" content="reference"/>
+<meta name="DC.Title" content="cxxAPIMap"/>
+<meta name="abstract" content="The &lt;cxxAPIMap&gt; element provides the name of the C++ API Reference and all the elements necessary to describe the package, or set of packages, and its components."/>
+<meta name="description" content="The &lt;cxxAPIMap&gt; element provides the name of the C++ API Reference and all the elements necessary to describe the package, or set of packages, and its components."/>
+<meta name="DC.Relation" scheme="URI" content="../cxxAPIMap/cxxAPIMap_module.html"/>
+<meta name="DC.Format" content="XHTML"/>
+<meta name="DC.Identifier" content="cxxAPIMap"/>
+<meta name="DC.Language" content="en-us"/>
+<link rel="stylesheet" type="text/css" href="../commonltr.css"/>
+<title>cxxAPIMap</title>
+<link rel="stylesheet" type="text/css" href="../nokiacxxref.css"/></head>
+<body class="element" id="cxxAPIMap"><a name="cxxAPIMap"><!-- --></a>
+
+
+    <h1 class="topictitle1">cxxAPIMap</h1>
+
+    
+    <div><p>The &lt;cxxAPIMap&gt; element provides the name of the C++ API Reference
+and all the elements necessary to describe the package, or set of packages,
+and its components.</p>
+
+        <div class="section"><h2 class="sectiontitle">Description</h2>
+            
+            <p>The containing element for a map is the &lt;cxxAPIMap&gt; element. 
+            &lt;cxxAPIMap&gt; requires title and id attributes. </p>
+ 
+            <p>&lt;cxxAPIMap&gt; can also contain any number of the elements &lt;cxxFileRef&gt;, 
+            &lt;cxxClassRef&gt;, &lt;cxxStructRef&gt; and &lt;cxxUnionRef&gt; to add references 
+            to topics.</p>
+
+        </div>
+
+        <div class="example"><h2 class="sectiontitle">Example</h2>
+            
+            <pre class="codeblock">&lt;cxxAPIMap id="GUID-A1E43BB6-B43A-38A0-870F-29A553C534EC" title="AMap"&gt;
+            &lt;cxxStructRef href="GUID-4D736120-454B-3952-ADFA-FEC7BDDE18F2.xml" navtitle="AClass::AStruct" /&gt;
+            &lt;cxxClassRef href="GUID-1F65F1EB-791C-32A4-A05E-3262BA816EF6.xml" navtitle="AClass" /&gt;
+            &lt;cxxFileRef href="GUID-15161A9C-9AC4-3B34-AADE-5294E5C7CCC2.xml" navtitle="AFile.h" /&gt;    
+            &lt;cxxEnumRef href="GUID-4C504F67-7737-33A7-AA99-6F030423E4CB.xml" navtitle="AClass::anEnum" /&gt;
+            &lt;cxxFunctionRef href="GUID-1390F0BC-18FA-3E68-A5F7-25347A52A08C.xml" navtitle="AClass::aFunction(aParam,anotherParam)" /&gt;
+            &lt;cxxTypedefRef href="GUID-CB589BED-4E77-3CD9-83A8-516A4B47C223.xml" navtitle="AClass::aTypeDef" /&gt;
+            &lt;cxxUnionRef href="GUID-A6375D7C-47D4-38BB-946C-BF042C16F4BD.xml" navtitle="AClass::uAUnion" /&gt;
+            &lt;cxxDefineRef href="GUID-1EA4FECD-61BB-3D49-99B5-B4003993D383.xml" navtitle="AClass::aDefine" /&gt;    
+            &lt;cxxVariableRef href="GUID-57906A69-F9F1-39FC-8A3E-6EC67BFBCFBA.xml" navtitle="AClass::aVariable" /&gt;
+        &lt;/cxxAPIMap&gt;</pre>
+
+        </div>
+        
+        <div class="elementContainedBy"><h2 class="sectiontitle">Contained by</h2>
+
+<p id="cxxAPIMap__d616e20"><a name="cxxAPIMap__d616e20"><!-- --></a>
+</p>
+
+</div>
+
+        <div class="elementContains"><h2 class="sectiontitle">Contains</h2>
+
+<p id="cxxAPIMap__d616e29"><a name="cxxAPIMap__d616e29"><!-- --></a>
+<a href="cxxClassRef.html" title="This element provides a C++ class topic type as a link in a DITA map.">cxxClassRef</a> 
+<a href="cxxFileRef.html" title="This element provides a C++ file topic type as a link in a DITA map.">cxxFileRef</a> 
+<a href="cxxStructRef.html" title="This element provides a C++ struct topic type as a link in a DITA map.">cxxStructRef</a> 
+<a href="cxxUnionRef.html" title="This element provides a C++ union topic type as a link in a DITA map.">cxxUnionRef</a> 
+<span class="keyword">mapgroup-d-topicref</span>, 
+<span class="keyword">reltable</span>, 
+<span class="keyword">topicmeta</span>, 
+<span class="keyword">topicref</span>, 
+</p>
+
+</div>
+
+        <div class="elementContentModel"><h2 class="sectiontitle">Content Model</h2>
+
+<p id="cxxAPIMap__d616e63"><a name="cxxAPIMap__d616e63"><!-- --></a>
+(<span class="keyword">topicmeta</span>, 
+  then  
+((<span class="keyword">topicref</span>, 
+ or 
+<span class="keyword">mapgroup-d-topicref</span>, 
+(any number)
+)  or  
+<a href="cxxFileRef.html" title="This element provides a C++ file topic type as a link in a DITA map.">cxxFileRef</a> 
+  or  
+<a href="cxxClassRef.html" title="This element provides a C++ class topic type as a link in a DITA map.">cxxClassRef</a> 
+  or  
+<a href="cxxStructRef.html" title="This element provides a C++ struct topic type as a link in a DITA map.">cxxStructRef</a> 
+  or  
+<a href="cxxUnionRef.html" title="This element provides a C++ union topic type as a link in a DITA map.">cxxUnionRef</a> 
+<em>(any number)</em>
+)  then  
+<span class="keyword">reltable</span>, 
+)</p>
+
+</div>
+
+        <div class="elementAttList"/>
+
+        <div class="elementClassValue"><h2 class="sectiontitle">Inheritance</h2>
+
+<p id="cxxAPIMap__d616e102"><a name="cxxAPIMap__d616e102"><!-- --></a>
+ map/<span class="keyword">map</span> apiMap/<span class="keyword">apiMap</span> cxxAPIMap/<span class="keyword">cxxAPIMap</span></p>
+
+</div>
+
+    </div>
+
+<div>
+<div class="familylinks">
+<div class="parentlink"><strong>Parent topic:</strong> <a href="../cxxAPIMap/cxxAPIMap_module.html" title="Provides the relationships among a set of C++ API topic types, and can be used to create a Table of Contents (TOC), aggregate C++ API topics into a PDF document, or to create links between topics in output.">cxxAPIMap module</a></div>
+</div>
+</div>
+
+</body>
+</html>

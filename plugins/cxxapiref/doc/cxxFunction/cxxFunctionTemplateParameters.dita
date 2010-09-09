@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxFunctionTemplateParameters">
+    <title>cxxFunctionTemplateParameters</title>
+    <shortdesc>Collects together the template parameters for template functions.</shortdesc>
+    <refbody>
+        <section id="section_BB16EAA97F01427CAFFFB15C63DEAC8D">
+            <title>Description</title><p>Collects together the template parameters for template functions.</p><p>See ISO/IEC 14882:2003(E) 14.1 Template parameters [temp.param]</p>
+        </section>
+        <example id="example_7637310D62AB4BDB88913D5B7CC94BDC">
+            <title>Example</title><p>Given this code:</p>
+            <codeblock>/**
+ @tparam T The type of the first function object.
+ @tparam U The type of the second function object.
+ @return 1 on success, 0 on failure.
+ */
+template&lt;typename T, typename U&gt;
+int templateFunction(T&amp; x, U&amp; y)
+{
+} 
+            </codeblock><p>Then function <tt>templateFunction
+                </tt> would have the <tt>cxxFunctionTemplateParameters</tt>
+element:</p>
+            <codeblock>&lt;cxxFunctionTemplateParameters&gt;
+  &lt;cxxFunctionTemplateParameter&gt;
+    &lt;cxxFunctionTemplateParameterType&gt;typename T&lt;/cxxFunctionTemplateParameterType&gt;
+    &lt;apiDefNote&gt;The type of the first function object. &lt;/apiDefNote&gt;
+  &lt;/cxxFunctionTemplateParameter&gt;
+  &lt;cxxFunctionTemplateParameter&gt;
+    &lt;cxxFunctionTemplateParameterType&gt;typename U&lt;/cxxFunctionTemplateParameterType&gt;
+    &lt;apiDefNote&gt;The type of the second function object. &lt;/apiDefNote&gt;
+  &lt;/cxxFunctionTemplateParameter&gt;
+&lt;/cxxFunctionTemplateParameters&gt;
+            </codeblock><p>If the mandatory attributes are present they must be set thus:</p>
+            <codeblock>&lt;cxxFunctionStorageClassSpecifierExtern name="extern" value="extern"/&gt;</codeblock>
+        </example>
+        <section conref="../packagedef.dita#cxxFunctionTemplateParameters-reference/cxxFunctionTemplateParameters-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxFunctionTemplateParameters-reference/cxxFunctionTemplateParameters-contains-section"/>
+        <section conref="../packagedef.dita#cxxFunctionTemplateParameters-reference/cxxFunctionTemplateParameters-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxFunctionTemplateParameters-reference/cxxFunctionTemplateParameters-attList-section"/>
+        <section conref="../packagedef.dita#cxxFunctionTemplateParameters-reference/cxxFunctionTemplateParameters-classValue-section"/>
+    </refbody>
+</reference>

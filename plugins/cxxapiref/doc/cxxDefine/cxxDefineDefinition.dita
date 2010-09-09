@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxDefineDefinition">
+    <title>cxxDefineDefinition</title>
+    <shortdesc>The &lt;cxxDefineDefinition&gt; element is defined within &lt;cxxDefineDetail&gt;. 
+    &lt;cxxDefineDefinition&gt; represents the C++ define declaration.</shortdesc>
+    <refbody>
+        <section>
+            <title>Description</title>
+            <p>A define declaration specifies a new named reference type. 
+            A define declaration can include <i>public</i> members which is 
+            represented by the &lt;cxxDefineAccessSpecifier&gt; element.</p>
+        </section>
+        <example>
+            <title>Example</title>
+            <codeblock>&lt;cxxDefineDefinition&gt;
+    &lt;cxxDefineAccessSpecifier value="public"/&gt;
+    &lt;cxxDefinePrototype&gt;#define ENABLE_NETWORKING_PERFMETRICS&lt;/cxxDefinePrototype&gt;
+    &lt;cxxDefineNameLookup&gt;ENABLE_NETWORKING_PERFMETRICS&lt;/cxxDefineNameLookup&gt;
+    &lt;cxxDefineParameters/&gt;
+    &lt;cxxDefineAPIItemLocation&gt;
+        &lt;cxxDefineDeclarationFile name="filePath" value="C:/EPOC/master/sf/os/commsfw/src/cfperfmetrics.cpp"/&gt;
+        &lt;cxxDefineDeclarationFileLine name="lineNumber" value="17"/&gt;
+    &lt;/cxxDefineAPIItemLocation&gt;
+&lt;/cxxDefineDefinition&gt;</codeblock>
+        </example>
+        <section conref="../packagedef.dita#cxxDefineDefinition-reference/cxxDefineDefinition-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxDefineDefinition-reference/cxxDefineDefinition-contains-section"/>
+        <section conref="../packagedef.dita#cxxDefineDefinition-reference/cxxDefineDefinition-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxDefineDefinition-reference/cxxDefineDefinition-attList-section"/>
+        <section conref="../packagedef.dita#cxxDefineDefinition-reference/cxxDefineDefinition-classValue-section"/>
+    </refbody>
+</reference>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2010 Nokia Corporation and/or its subsidiary(-ies).
+All rights reserved.		
+		-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference xml:lang="en-us" outputclass="element" id="cxxapi-d-xref">
+    <title>cxxapi-d-xref</title>
+    <shortdesc>The &lt;cxxapi-d-xref&gt; element is a reference to a C++ file.</shortdesc>
+    <refbody>
+        <section>
+            <title>Description</title>
+            <p>The &lt;cxxapi-d-xref&gt; element can be used to reference a C++ file from another topic type. </p>
+        </section>
+        <section conref="../packagedef.dita#cxxapi-d-xref-reference/cxxapi-d-xref-containedBy-section"/>
+        <section conref="../packagedef.dita#cxxapi-d-xref-reference/cxxapi-d-xref-contains-section"/>
+        <section conref="../packagedef.dita#cxxapi-d-xref-reference/cxxapi-d-xref-contentModel-section"/>
+        <section conref="../packagedef.dita#cxxapi-d-xref-reference/cxxapi-d-xref-attList-section"/>
+        <section conref="../packagedef.dita#cxxapi-d-xref-reference/cxxapi-d-xref-classValue-section"/>
+    </refbody>
+</reference>
