@@ -840,8 +840,10 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 		//file which will be parsed
 		String parseFilePath = null;
 		String outputFileName = outputFile;
-		Writer tempWriter = null;
-		Set<String> tempTopicID = null;
+		//Writer tempWriter = null;
+		Writer tempWriter = new StringWriter();
+		//Set<String> tempTopicID = null;
+		Set<String> tempTopicID = new HashSet<String>();
 		
 		targetTopicId = null;
 		selectMethod = "select-document";
