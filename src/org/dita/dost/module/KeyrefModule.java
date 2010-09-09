@@ -92,6 +92,11 @@ public class KeyrefModule implements AbstractPipelineModule {
 		Content content = reader.getContent();
 		//get files which have keyref attr
 		Set<String> parseList = StringUtils.restoreSet(properties.getProperty(Constants.KEYREF_LIST));
+		//Conref Module will change file's content, it is possible that tags with @keyref are copied in
+		//while keyreflist is hard update with xslt.
+		//bug:3056939
+		Set<String> conrefList = StringUtils.restoreSet(properties.getProperty(Constants.CONREF_LIST));
+		parseList.addAll(conrefList);
 		for(String file: parseList){
 			KeyrefPaser parser = new KeyrefPaser();
 			parser.setContent(content);
