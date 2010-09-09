@@ -77,6 +77,9 @@ PUBLIC "-//OASIS//ELEMENTS DITA Map Group Domain//EN"
               keys 
                         CDATA 
                                   #IMPLIED
+              copy-to 
+                        CDATA 
+                                  #IMPLIED
               %topicref-atts;
               %univ-atts;"
 >

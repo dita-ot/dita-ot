@@ -3,8 +3,8 @@
 <!--                    HEADER                                     -->
 <!-- ============================================================= -->
 <!--  MODULE:    DITA Map Group Domain                             -->
-<!--  VERSION:   1.1                                               -->
-<!--  DATE:      November 2006                                     -->
+<!--  VERSION:   1.2                                               -->
+<!--  DATE:      November 2009                                     -->
 <!--                                                               -->
 <!-- ============================================================= -->
 
@@ -26,7 +26,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Map Group Domain//EN"
 <!-- ORIGINAL CREATION DATE:                                       -->
 <!--             March 2001                                        -->
 <!--                                                               -->
-<!--             (C) Copyright OASIS Open 2005, 2006.              -->
+<!--             (C) Copyright OASIS Open 2005, 2009.              -->
 <!--             (C) Copyright IBM Corporation 2001, 2004.         -->
 <!--             All Rights Reserved.                              -->
 <!--                                                               -->
@@ -72,6 +72,12 @@ PUBLIC "-//OASIS//ELEMENTS DITA Map Group Domain//EN"
                         CDATA 
                                   #IMPLIED
               outputclass 
+                        CDATA 
+                                  #IMPLIED
+              keys 
+                        CDATA 
+                                  #IMPLIED
+              copy-to 
                         CDATA 
                                   #IMPLIED
               %topicref-atts;
@@ -453,7 +459,7 @@ PUBLIC "-//OASIS//ELEMENTS DITA Map Group Domain//EN"
                         (normal |
                          resource-only |
                          -dita-use-conref-target)
-                                  #IMPLIED
+                                  'resource-only'
               type 
                         CDATA 
                                   #IMPLIED
@@ -477,18 +483,18 @@ PUBLIC "-//OASIS//ELEMENTS DITA Map Group Domain//EN"
                          sourceonly | 
                          targetonly |
                          -dita-use-conref-target) 
-                                  'none'
+                                  #IMPLIED
               toc 
                         (no | 
                          yes | 
                          -dita-use-conref-target) 
-                                  'no'
+                                  #IMPLIED
               print 
                         (no | 
                          printonly | 
                          yes | 
                          -dita-use-conref-target) 
-                                  'no'
+                                  #IMPLIED
               search 
                         (no | 
                          yes | 
