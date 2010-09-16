@@ -215,7 +215,7 @@ Children are displayed in a numbered list, with the target title as the cmd and 
 -->
 <xsl:template name="ol-child-links">
      <xsl:if test="descendant::*[contains(@class, ' topic/link ')][@role='child' or @role='descendant'][parent::*/@collection-type='sequence'][not(ancestor::*[contains(@class, ' topic/linklist ')])]">
-     <xsl:value-of select="$newline"/><ol><xsl:value-of select="$newline"/>
+     <xsl:value-of select="$newline"/><ol class="olchildlinks"><xsl:value-of select="$newline"/>
        <!--once you've tested that at least one child/descendant exists, apply templates to only the unique ones-->
           <xsl:apply-templates select="descendant::*
           [generate-id(.)=generate-id(key('link',concat(ancestor::*[contains(@class, ' topic/related-links ')]/parent::*[contains(@class, ' topic/topic ')]/@id, ' ', @href,@type,@role,@platform,@audience,@importance,@outputclass,@keyref,@scope,@format,@otherrole,@product,@otherprops,@rev,@class,child::*))[1])]
