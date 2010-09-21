@@ -30,6 +30,7 @@ PUBLIC "-//OASIS//DTD DITA Classification Map//EN"
 <!--             All Rights Reserved.                              -->
 <!--                                                               -->
 <!--  UPDATES:                                                     -->
+<!--    2010.09.21 RDA: Added base topic domains                   -->
 <!-- ============================================================= -->
 
 
@@ -62,6 +63,20 @@ PUBLIC "-//OASIS//DTD DITA Classification Map//EN"
          "classifyDomain.ent"                                                       
 >%classify-d-dec;
 
+<!ENTITY % hi-d-dec     
+  PUBLIC "-//OASIS//ENTITIES DITA 1.2 Highlight Domain//EN" 
+         "../../base/dtd/highlightDomain.ent"
+>%hi-d-dec;
+
+<!ENTITY % ut-d-dec     
+  PUBLIC "-//OASIS//ENTITIES DITA 1.2 Utilities Domain//EN" 
+         "../../base/dtd/utilitiesDomain.ent"                                                
+>%ut-d-dec;
+
+<!ENTITY % hazard-d-dec     
+  PUBLIC "-//OASIS//ENTITIES DITA 1.2 Hazard Statement Domain//EN" 
+         "../../base/dtd/hazardstatementDomain.ent"
+>%hazard-d-dec;
 
 <!-- ============================================================= -->
 <!--                    DOMAIN ATTRIBUTE DECLARATIONS              -->
@@ -87,6 +102,15 @@ PUBLIC "-//OASIS//DTD DITA Classification Map//EN"
 <!ENTITY % index-base   "index-base | 
                          %indexing-d-index-base;
                         ">
+<!ENTITY % ph           "ph | 
+                         %hi-d-ph;
+                        ">
+<!ENTITY % fig          "fig |
+                         %ut-d-fig;
+                        ">
+<!ENTITY % note         "note | 
+                         %hazard-d-note;
+                        ">
 
 <!-- ============================================================= -->
 <!--                    DOMAIN ATTRIBUTE EXTENSIONS                -->
@@ -109,6 +133,9 @@ PUBLIC "-//OASIS//DTD DITA Classification Map//EN"
                          &mapgroup-d-att; 
                          &indexing-d-att;
                          &classify-d-att;
+                         &hi-d-att; 
+                         &ut-d-att; 
+                         &hazard-d-att;
                         ">
 
 <!-- ============================================================= -->
@@ -148,5 +175,19 @@ PUBLIC "-//OASIS//DTD DITA Classification Map//EN"
          "classifyDomain.mod"                                                       
 >%classify-d-def;
 
+<!ENTITY % hi-d-def     
+  PUBLIC "-//OASIS//ELEMENTS DITA 1.2 Highlight Domain//EN" 
+         "../../base/dtd/highlightDomain.mod"
+>%hi-d-def;
+
+<!ENTITY % ut-d-def     
+  PUBLIC "-//OASIS//ELEMENTS DITA 1.2 Utilities Domain//EN" 
+         "../../base/dtd/utilitiesDomain.mod"
+>%ut-d-def;
+
+<!ENTITY % hazard-d-def     
+  PUBLIC "-//OASIS//ELEMENTS DITA 1.2 Hazard Statement Domain//EN" 
+         "../../base/dtd/hazardstatementDomain.mod"
+>%hazard-d-def;
 
 <!-- ================== End DITA Classification Map DTD  ========= -->

@@ -37,6 +37,7 @@ PUBLIC "-//OASIS//DTD DITA 1.2 BookMap//EN"                        -->
 <!--    2008.02.01 RDA: Added reference to bookmap.ent             -->
 <!--    2008.02.12 RDA: Modify imbeds to use specific 1.2 version  -->
 <!--    2008.04.15 RDA: Added delay resolution domain              -->
+<!--    2010.09.21 RDA: Added base and tec. content topic domains  -->
 <!-- ============================================================= -->
 
 <!-- ============================================================= -->
@@ -71,8 +72,43 @@ PUBLIC "-//OASIS//DTD DITA 1.2 BookMap//EN"                        -->
 <!ENTITY % xnaldomain-d-dec 
                         PUBLIC 
 "-//OASIS//ENTITIES DITA 1.2 XNAL Domain//EN" 
-"../../xnal/dtd/xnalDomain.ent"                                      >
-%xnaldomain-d-dec;
+"../../xnal/dtd/xnalDomain.ent"
+>%xnaldomain-d-dec;
+
+<!ENTITY % hi-d-dec     
+  PUBLIC "-//OASIS//ENTITIES DITA 1.2 Highlight Domain//EN" 
+         "../../base/dtd/highlightDomain.ent"
+>%hi-d-dec;
+
+<!ENTITY % ut-d-dec     
+  PUBLIC "-//OASIS//ENTITIES DITA 1.2 Utilities Domain//EN" 
+         "../../base/dtd/utilitiesDomain.ent"                                                
+>%ut-d-dec;
+
+<!ENTITY % hazard-d-dec     
+  PUBLIC "-//OASIS//ENTITIES DITA 1.2 Hazard Statement Domain//EN" 
+         "../../base/dtd/hazardstatementDomain.ent"
+>%hazard-d-dec;
+
+<!ENTITY % abbrev-d-dec     
+  PUBLIC "-//OASIS//ENTITIES DITA 1.2 Abbreviated Form Domain//EN" 
+         "../../technicalContent/dtd/abbreviateDomain.ent"
+>%abbrev-d-dec;
+
+<!ENTITY % pr-d-dec     
+  PUBLIC "-//OASIS//ENTITIES DITA 1.2 Programming Domain//EN" 
+         "../../technicalContent/dtd/programmingDomain.ent"                                              
+>%pr-d-dec;
+
+<!ENTITY % sw-d-dec     
+  PUBLIC "-//OASIS//ENTITIES DITA 1.2 Software Domain//EN" 
+         "../../technicalContent/dtd/softwareDomain.ent"                                                 
+>%sw-d-dec;
+
+<!ENTITY % ui-d-dec     
+  PUBLIC "-//OASIS//ENTITIES DITA 1.2 User Interface Domain//EN" 
+         "../../technicalContent/dtd/uiDomain.ent"                                                       
+>%ui-d-dec;
 
 <!-- ============================================================= -->
 <!--                    DOMAIN ATTRIBUTE DECLARATIONS              -->
@@ -95,7 +131,34 @@ PUBLIC "-//OASIS//DTD DITA 1.2 BookMap//EN"                        -->
                          %indexing-d-index-base;
                         ">
 <!ENTITY % keywords     "keywords | 
-                         %delay-d-keywords;
+                         %delay-d-keywords; |
+                         %pr-d-keyword; | 
+                         %sw-d-keyword; |
+                         %ui-d-keyword;
+                        ">
+<!ENTITY % pre          "pre | 
+                         %pr-d-pre; | 
+                         %sw-d-pre; | 
+                         %ui-d-pre;
+                        ">
+<!ENTITY % ph           "ph | 
+                         %hi-d-ph; | 
+                         %pr-d-ph; | 
+                         %sw-d-ph; | 
+                         %ui-d-ph;
+                        ">
+<!ENTITY % term         "term | 
+                         %abbrev-d-term;
+                        ">
+<!ENTITY % fig          "fig |
+                         %pr-d-fig; |
+                         %ut-d-fig;
+                        ">
+<!ENTITY % dl           "dl | 
+                         %pr-d-dl;
+                        ">
+<!ENTITY % note         "note | 
+                         %hazard-d-note;
                         ">
 
 <!-- ============================================================= -->
@@ -115,6 +178,13 @@ PUBLIC "-//OASIS//DTD DITA 1.2 BookMap//EN"                        -->
                          &mapgroup-d-att;
                          &indexing-d-att; 
                          &xnal-d-att;
+                         &hi-d-att; 
+                         &ut-d-att; 
+                         &hazard-d-att;
+                         &abbrev-d-att;
+                         &pr-d-att; 
+                         &sw-d-att;
+                         &ui-d-att;
                         ">
 
 <!-- ============================================================= -->
@@ -155,7 +225,42 @@ PUBLIC "-//OASIS//DTD DITA 1.2 BookMap//EN"                        -->
 <!ENTITY % xnaldomain-d-def  
                         PUBLIC 
 "-//OASIS//ELEMENTS DITA 1.2 XNAL Domain//EN" 
-"../../xnal/dtd/xnalDomain.mod"                                      >
-%xnaldomain-d-def;
+"../../xnal/dtd/xnalDomain.mod"
+>%xnaldomain-d-def;
+
+<!ENTITY % hi-d-def     
+  PUBLIC "-//OASIS//ELEMENTS DITA 1.2 Highlight Domain//EN" 
+         "../../base/dtd/highlightDomain.mod"
+>%hi-d-def;
+
+<!ENTITY % ut-d-def     
+  PUBLIC "-//OASIS//ELEMENTS DITA 1.2 Utilities Domain//EN" 
+         "../../base/dtd/utilitiesDomain.mod"
+>%ut-d-def;
+
+<!ENTITY % hazard-d-def     
+  PUBLIC "-//OASIS//ELEMENTS DITA 1.2 Hazard Statement Domain//EN" 
+         "../../base/dtd/hazardstatementDomain.mod"
+>%hazard-d-def;
+
+<!ENTITY % abbrev-d-def     
+  PUBLIC "-//OASIS//ELEMENTS DITA 1.2 Abbreviated Form Domain//EN" 
+         "../../technicalContent/dtd/abbreviateDomain.mod"
+>%abbrev-d-def;
+
+<!ENTITY % ui-d-def     
+  PUBLIC "-//OASIS//ELEMENTS DITA 1.2 User Interface Domain//EN" 
+         "../../technicalContent/dtd/uiDomain.mod"
+>%ui-d-def;
+
+<!ENTITY % pr-d-def     
+  PUBLIC "-//OASIS//ELEMENTS DITA 1.2 Programming Domain//EN" 
+         "../../technicalContent/dtd/programmingDomain.mod"
+>%pr-d-def;
+
+<!ENTITY % sw-d-def     
+  PUBLIC "-//OASIS//ELEMENTS DITA 1.2 Software Domain//EN" 
+         "../../technicalContent/dtd/softwareDomain.mod"
+>%sw-d-def;
 
 <!-- ================== End DITA Bookmap DTD  ==================== -->

@@ -18,6 +18,7 @@
 <!--                                                               -->
 <!--  UPDATES:                                                     -->
 <!--    2007.05.01 JPH: Original creation                          -->
+<!--    2010.09.21 RDA: Added base topic domains                   -->
 <!-- ============================================================= -->
 <!-- ============================================================= -->
 <!--                    DOMAIN ENTITY DECLARATIONS                 -->
@@ -48,6 +49,21 @@
          "../../base/dtd/delayResolutionDomain.ent"                                                       
 >%delay-d-dec;
 
+<!ENTITY % hi-d-dec     
+  PUBLIC "-//OASIS//ENTITIES DITA 1.2 Highlight Domain//EN" 
+         "../../base/dtd/highlightDomain.ent"
+>%hi-d-dec;
+
+<!ENTITY % ut-d-dec     
+  PUBLIC "-//OASIS//ENTITIES DITA 1.2 Utilities Domain//EN" 
+         "../../base/dtd/utilitiesDomain.ent"                                                
+>%ut-d-dec;
+
+<!ENTITY % hazard-d-dec     
+  PUBLIC "-//OASIS//ENTITIES DITA 1.2 Hazard Statement Domain//EN" 
+         "../../base/dtd/hazardstatementDomain.ent"
+>%hazard-d-dec;
+
 <!-- ============================================================= -->
 <!--                    DOMAIN EXTENSIONS                          -->
 <!-- ============================================================= -->
@@ -66,6 +82,15 @@
                         ">
 <!ENTITY % keywords     "keywords | 
                          %delay-d-keywords;
+                        ">
+<!ENTITY % ph           "ph | 
+                         %hi-d-ph;
+                        ">
+<!ENTITY % fig          "fig |
+                         %ut-d-fig;
+                        ">
+<!ENTITY % note         "note | 
+                         %hazard-d-note;
                         ">
 
 <!-- ============================================================= -->
@@ -86,6 +111,9 @@
                          &indexing-d-att;
                          &learningmap-d-att;
                          &learningmeta-d-att;
+                         &hi-d-att; 
+                         &ut-d-att; 
+                         &hazard-d-att;
                         ">
 
 <!-- ============================================================= -->
@@ -126,5 +154,20 @@
 "-//OASIS//ELEMENTS DITA 1.2 Learning Metadata Domain//EN" 
 "learningMetadataDomain.mod">
   %learningmeta-d-def;
+
+<!ENTITY % hi-d-def     
+  PUBLIC "-//OASIS//ELEMENTS DITA 1.2 Highlight Domain//EN" 
+         "../../base/dtd/highlightDomain.mod"
+>%hi-d-def;
+
+<!ENTITY % ut-d-def     
+  PUBLIC "-//OASIS//ELEMENTS DITA 1.2 Utilities Domain//EN" 
+         "../../base/dtd/utilitiesDomain.mod"
+>%ut-d-def;
+
+<!ENTITY % hazard-d-def     
+  PUBLIC "-//OASIS//ELEMENTS DITA 1.2 Hazard Statement Domain//EN" 
+         "../../base/dtd/hazardstatementDomain.mod"
+>%hazard-d-def;
 
 <!-- ================== End DITA Learning Map DTD ================ -->
