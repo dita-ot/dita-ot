@@ -15,7 +15,7 @@ import org.junit.Test;
 public class TestKeyrefReader {
 	public static KeyrefReader keyrefreader = new KeyrefReader();
 	Set <String> set=new HashSet<String> ();
-	File keyrefreadercompare=new File("test-stub/keyrefreaderCompare.xml");
+	File keyrefreadercompare=new File("test-stub" + File.separator + "keyrefreaderCompare.xml");
 	BufferedReader reader=null;
 	String content1;
 	@Test
@@ -23,7 +23,7 @@ public class TestKeyrefReader {
 	{
 	    String path=System.getProperty("user.dir");
 		DitaURIResolverFactory.setPath(path);
-		String filename = "test-stub/keyrefreader.xml";
+		String filename = "test-stub" + File.separator + "keyrefreader.xml";
 		try{
 			reader=new BufferedReader(new FileReader(keyrefreadercompare));
 			String line;

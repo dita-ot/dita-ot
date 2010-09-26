@@ -22,8 +22,8 @@ public class TestTopicMergeModule {
 	private static AbstractFacade facade;
 	
 	private static PipelineHashIO pipelineInput;
-	File ditalistfile=new File ("test-stub/TestTopicMergeModule/compare.xml");
-	File tobecomparefile=new File ("test-stub/TestTopicMergeModule/out/tobecompared.xml");
+	File ditalistfile=new File ("test-stub" + File.separator + "TestTopicMergeModule" + File.separator + "compare.xml");
+	File tobecomparefile=new File ("test-stub" + File.separator + "TestTopicMergeModule" + File.separator + "out" + File.separator + "tobecompared.xml");
 	
 	@BeforeClass
 	public static void setUp(){
@@ -33,14 +33,14 @@ public class TestTopicMergeModule {
 		facade = new PipelineFacade();
 		pipelineInput = new PipelineHashIO();
 		
-		String baseDir = "test-stub/TestTopicMergeModule";
-		String tempDir = "test-stub/TestTopicMergeModule/temp";
-		String inputDir = "test-stub/TestTopicMergeModule/input";
+		String baseDir = "test-stub" + File.separator + "TestTopicMergeModule";
+		String tempDir = "test-stub" + File.separator + "TestTopicMergeModule" + File.separator + "temp";
+		String inputDir = "test-stub" + File.separator + "TestTopicMergeModule" + File.separator + "input";
 		
-		String inputMap = inputDir + "/test.ditamap";
+		String inputMap = inputDir + File.separator + "test.ditamap";
 		
-		String outDir = "test-stub/TestTopicMergeModule/out";
-		String outputmap=outDir+"/tobecompared.xml";
+		String outDir = "test-stub" + File.separator + "TestTopicMergeModule" + File.separator + "out";
+		String outputmap=outDir + File.separator + "tobecompared.xml";
 		//Create the temp dir
 		File dir = new File(baseDir, tempDir);
 		if(!dir.exists()){
@@ -62,8 +62,8 @@ public class TestTopicMergeModule {
 		pipelineInput.setAttribute("generatecopyouter", "1");
 		pipelineInput.setAttribute("outercontrol", "warn");
 		pipelineInput.setAttribute("onlytopicinmap", "false");
-		pipelineInput.setAttribute("ditalist", tempDir + "/dita.list");
-		pipelineInput.setAttribute("maplinks", tempDir + "/maplinks.unordered");
+		pipelineInput.setAttribute("ditalist", tempDir + File.separator + "dita.list");
+		pipelineInput.setAttribute("maplinks", tempDir + File.separator + "maplinks.unordered");
 		
 	}
 	

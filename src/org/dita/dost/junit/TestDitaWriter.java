@@ -32,12 +32,12 @@ public class TestDitaWriter {
 	//get catalog file.
 	//private static String ditaDir = "C:/jia/DITA-OT1.5";
 	
-	private static String baseDir = "test-stub/DITA-OT1.5";
-	private static String tempDir = "DITAVAL/temp";
+	private static String baseDir = "test-stub" + File.separator + "DITA-OT1.5";
+	private static String tempDir = "DITAVAL" + File.separator + "temp";
 	private static String inputDir = "DITAVAL";
-	private static String inputMap = "DITAVAL/DITAVAL_testdata1.ditamap";
-	private static String outDir = "DITAVAL/out";
-	private static String ditavalFile = inputDir + "/DITAVAL_1.ditaval";
+	private static String inputMap = "DITAVAL" + File.separator + "DITAVAL_testdata1.ditamap";
+	private static String outDir = "DITAVAL" + File.separator + "out";
+	private static String ditavalFile = inputDir + File.separator + "DITAVAL_1.ditaval";
 	
 	
 	private static PipelineHashIO pipelineInput;
@@ -68,8 +68,8 @@ public class TestDitaWriter {
 		pipelineInput.setAttribute("generatecopyouter", "1");
 		pipelineInput.setAttribute("outercontrol", "warn");
 		pipelineInput.setAttribute("onlytopicinmap", "false");
-		pipelineInput.setAttribute("ditalist", tempDir + "/dita.list");
-		pipelineInput.setAttribute("maplinks", tempDir + "/maplinks.unordered");
+		pipelineInput.setAttribute("ditalist", tempDir + File.separator + "dita.list");
+		pipelineInput.setAttribute("maplinks", tempDir + File.separator + "maplinks.unordered");
 		pipelineInput.setAttribute("transtype", "xhtml");
 		pipelineInput.setAttribute("ditaval", ditavalFile);
 		
@@ -114,7 +114,7 @@ public class TestDitaWriter {
 		writer.setContent(content);
 		//C:\jia\DITA-OT1.5\DITAVAL|img.dita
 		String filePathPrefix = new File(baseDir, inputDir).getAbsolutePath() + Constants.STICK;
-		String filePath = new File(baseDir, inputDir + "/keyword.dita").getAbsolutePath();
+		String filePath = new File(baseDir, inputDir + File.separator + "keyword.dita").getAbsolutePath();
 		DebugAndFilterModule.extName = ".xml";
 		writer.write(filePathPrefix + "keyword.dita");
 		
@@ -145,7 +145,7 @@ public class TestDitaWriter {
 		
 		try {
 			builder = factory.newDocumentBuilder();
-			String filePath1 = new File(baseDir, tempDir + "/keyword.xml").getAbsolutePath();
+			String filePath1 = new File(baseDir, tempDir + File.separator + "keyword.xml").getAbsolutePath();
 			Document document = builder.parse(filePath1);
 			Element elem = document.getDocumentElement();
 			NodeList nodeList = elem.getElementsByTagName("keyword");

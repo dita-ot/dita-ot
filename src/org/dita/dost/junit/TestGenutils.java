@@ -12,7 +12,7 @@ public class TestGenutils {
 	public void testflush()
 	{
 		GenUtils.clear();
-		GenUtils.setOutput("test-stub\\genutils.xml");
+		GenUtils.setOutput("test-stub" + File.separator + "genutils.xml");
 		GenUtils.startElement("topic");
 		
 		GenUtils.addAttr("id", "this is a id");
@@ -20,7 +20,7 @@ public class TestGenutils {
 		GenUtils.endElement("topic");
 		GenUtils.flush();
 		
-		 String FileName="test-stub\\genutils.xml";
+		 String FileName="test-stub" + File.separator + "genutils.xml";
 	      
 	       File myFile=new File(FileName);
 	       

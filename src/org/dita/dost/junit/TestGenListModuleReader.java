@@ -4,8 +4,8 @@
 package org.dita.dost.junit;
 
 
-import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,10 +26,10 @@ import org.xml.sax.SAXException;
 public class TestGenListModuleReader {
 	
 	public static GenListModuleReader reader;
-	private static String baseDir = "test-stub/DITA-OT1.5";
+	private static String baseDir = "test-stub" + File.separator + "DITA-OT1.5";
 	
-	private static String inputDir = "keyrefs/maps_parallel_to_topics/maps";
-	private static String rootFile = inputDir + "/root-map-01.ditamap";
+	private static String inputDir = "keyrefs" + File.separator + "maps_parallel_to_topics" + File.separator + "maps";
+	private static String rootFile = inputDir + File.separator + "root-map-01.ditamap";
 	
 	@BeforeClass
 	public static void setUp(){
@@ -81,34 +81,34 @@ public class TestGenListModuleReader {
 			
 			assertEquals(0, copytoMap.size());
 			
-			assertTrue(hrefTargets.contains("..\\topics\\xreffin-topic-1.xml"));
-			assertTrue(hrefTargets.contains("..\\topics\\target-topic-c.xml"));
-			assertTrue(hrefTargets.contains("..\\topics\\target-topic-a.xml"));
+			assertTrue(hrefTargets.contains(".." + File.separator + "topics" + File.separator + "xreffin-topic-1.xml"));
+			assertTrue(hrefTargets.contains(".." + File.separator + "topics" + File.separator + "target-topic-c.xml"));
+			assertTrue(hrefTargets.contains(".." + File.separator + "topics" + File.separator + "target-topic-a.xml"));
 			
-			assertTrue(hrefTopic.contains("..\\topics\\xreffin-topic-1.xml"));
-			assertTrue(hrefTopic.contains("..\\topics\\target-topic-c.xml"));
-			assertTrue(hrefTopic.contains("..\\topics\\target-topic-a.xml"));
+			assertTrue(hrefTopic.contains(".." + File.separator + "topics" + File.separator + "xreffin-topic-1.xml"));
+			assertTrue(hrefTopic.contains(".." + File.separator + "topics" + File.separator + "target-topic-c.xml"));
+			assertTrue(hrefTopic.contains(".." + File.separator + "topics" + File.separator + "target-topic-a.xml"));
 			
 			assertEquals(0, copytoSet.size());
 			
-			assertEquals("..\\topics\\target-topic-c.xml",keyDMap.get("target_topic_2"));
-			assertEquals("..\\topics\\target-topic-a.xml",keyDMap.get("target_topic_1"));
+			assertEquals(".." + File.separator + "topics" + File.separator + "target-topic-c.xml",keyDMap.get("target_topic_2"));
+			assertEquals(".." + File.separator + "topics" + File.separator + "target-topic-a.xml",keyDMap.get("target_topic_1"));
 			
-			assertTrue(nonConref.contains("..\\topics\\xreffin-topic-1.xml"));
-			assertTrue(nonConref.contains("..\\topics\\target-topic-c.xml"));
-			assertTrue(nonConref.contains("..\\topics\\target-topic-a.xml"));
+			assertTrue(nonConref.contains(".." + File.separator + "topics" + File.separator + "xreffin-topic-1.xml"));
+			assertTrue(nonConref.contains(".." + File.separator + "topics" + File.separator + "target-topic-c.xml"));
+			assertTrue(nonConref.contains(".." + File.separator + "topics" + File.separator + "target-topic-a.xml"));
 			
-			assertTrue(nonCopyTo.contains("..\\topics\\xreffin-topic-1.xml"));
-			assertTrue(nonCopyTo.contains("..\\topics\\target-topic-c.xml"));
-			assertTrue(nonCopyTo.contains("..\\topics\\target-topic-a.xml"));
+			assertTrue(nonCopyTo.contains(".." + File.separator + "topics" + File.separator + "xreffin-topic-1.xml"));
+			assertTrue(nonCopyTo.contains(".." + File.separator + "topics" + File.separator + "target-topic-c.xml"));
+			assertTrue(nonCopyTo.contains(".." + File.separator + "topics" + File.separator + "target-topic-a.xml"));
 			
-			assertTrue(outDita.contains("..\\topics\\xreffin-topic-1.xml"));
-			assertTrue(outDita.contains("..\\topics\\target-topic-c.xml"));
-			assertTrue(outDita.contains("..\\topics\\target-topic-a.xml"));
+			assertTrue(outDita.contains(".." + File.separator + "topics" + File.separator + "xreffin-topic-1.xml"));
+			assertTrue(outDita.contains(".." + File.separator + "topics" + File.separator + "target-topic-c.xml"));
+			assertTrue(outDita.contains(".." + File.separator + "topics" + File.separator + "target-topic-a.xml"));
 			
-			assertTrue(outFiles.contains("..\\topics\\xreffin-topic-1.xml"));
-			assertTrue(outFiles.contains("..\\topics\\target-topic-c.xml"));
-			assertTrue(outFiles.contains("..\\topics\\target-topic-a.xml"));
+			assertTrue(outFiles.contains(".." + File.separator + "topics" + File.separator + "xreffin-topic-1.xml"));
+			assertTrue(outFiles.contains(".." + File.separator + "topics" + File.separator + "target-topic-c.xml"));
+			assertTrue(outFiles.contains(".." + File.separator + "topics" + File.separator + "target-topic-a.xml"));
 			
 			assertEquals(0, resourceOnlySet.size());
 			

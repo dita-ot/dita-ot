@@ -1,5 +1,6 @@
 package org.dita.dost.junit;
 
+import java.io.File;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
@@ -33,7 +34,7 @@ public class TestConrefPushReader {
 		 *	 <step conref="conrefpush_stub2.xml#X/C" conaction="pushreplace"><cmd>replace</cmd></step>
          *	</steps>
 		 */
-		String filename = "test-stub/conrefpush_stub.xml";
+		String filename = "test-stub" + File.separator + "conrefpush_stub.xml";
 		pushReader.read(filename);
 		Content content = pushReader.getContent();
 		Set<Map.Entry<String, Hashtable<String,String>>> pushSet =(Set<Map.Entry<String, Hashtable<String,String>>>) content.getCollection();
