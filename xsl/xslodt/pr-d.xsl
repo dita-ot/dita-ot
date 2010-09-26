@@ -31,7 +31,7 @@
      
 <xsl:template match="*[contains(@class,' pr-d/codeph ')]">
      <xsl:choose>
-          <xsl:when test="parent::*[contains(@class, ' topic/li ')]">
+          <xsl:when test="parent::*[contains(@class, ' topic/li ')] or parent::*[contains(@class, ' topic/sli ')]">
                <xsl:element name="text:p">
                     <xsl:element name="text:span">
                          <xsl:attribute name="text:style-name">Courier_New</xsl:attribute>
@@ -153,7 +153,7 @@
              </xsl:element>
              <xsl:element name="text:line-break"/>
         </xsl:when>
-        <xsl:when test="parent::*[contains(@class, ' topic/li ')]">
+        <xsl:when test="parent::*[contains(@class, ' topic/li ')] or parent::*[contains(@class, ' topic/sli ')]">
              <xsl:element name="text:p">
                   <xsl:attribute name="text:style-name">Code_Style_Paragraph</xsl:attribute>
                   <xsl:element name="text:span">
@@ -306,7 +306,7 @@
      <xsl:choose>
           <!-- parent is body, li... -->
           <xsl:when test="parent::*[contains(@class, ' topic/body ')] or 
-               parent::*[contains(@class, ' topic/li ')]">
+               parent::*[contains(@class, ' topic/li ')] or parent::*[contains(@class, ' topic/sli ')]">
                <xsl:element name="text:p">
                     <xsl:attribute name="text:style-name">border_paragraph</xsl:attribute>
                     <xsl:element name="text:span">
@@ -479,7 +479,7 @@
                      *[contains(@class, ' pr-d/cmdname ')]">
      
      <xsl:choose>
-          <xsl:when test="parent::*[contains(@class, ' topic/li ')]">
+          <xsl:when test="parent::*[contains(@class, ' topic/li ')] or parent::*[contains(@class, ' topic/sli ')]">
                <xsl:element name="text:p">
                     <xsl:element name="text:span">
                          <!-- start add rev flagging styles -->

@@ -42,7 +42,7 @@
 <xsl:template match="*[contains(@class,' sw-d/msgph ')]|*[contains(@class,' sw-d/systemoutput ')]">
      
      <xsl:choose>
-          <xsl:when test="parent::*[contains(@class, ' topic/li ')]">
+          <xsl:when test="parent::*[contains(@class, ' topic/li ')] or parent::*[contains(@class, ' topic/sli ')]">
                <xsl:element name="text:p">
                     <xsl:element name="text:span">
                          <xsl:attribute name="text:style-name">Courier_New</xsl:attribute>
@@ -153,7 +153,7 @@
 <xsl:template match="*[contains(@class,' sw-d/varname ')]|*[contains(@class,' sw-d/filepath ')]">
      
      <xsl:choose>
-          <xsl:when test="parent::*[contains(@class, ' topic/li ')]">
+          <xsl:when test="parent::*[contains(@class, ' topic/li ')] or parent::*[contains(@class, ' topic/sli ')]">
                <xsl:element name="text:p">
                     <xsl:element name="text:span">
                          <xsl:attribute name="text:style-name">Courier_New</xsl:attribute>
@@ -277,7 +277,7 @@
                     </xsl:element>
                </xsl:element>
           </xsl:when>
-          <xsl:when test="parent::*[contains(@class, ' topic/li ')]">
+          <xsl:when test="parent::*[contains(@class, ' topic/li ')] or parent::*[contains(@class, ' topic/sli ')]">
                <xsl:element name="text:p">
                     <xsl:element name="text:span">
                          <!-- start add flagging styles -->
@@ -425,7 +425,7 @@
 <xsl:template match="*[contains(@class, ' sw-d/msgnum ')]|*[contains(@class, ' sw-d/cmdname ')]">
      
      <xsl:choose>
-          <xsl:when test="parent::*[contains(@class, ' topic/li ')]">
+          <xsl:when test="parent::*[contains(@class, ' topic/li ')] or parent::*[contains(@class, ' topic/sli ')]">
                <xsl:element name="text:p">
                     <xsl:element name="text:span">
                          <!-- start add rev flagging styles -->

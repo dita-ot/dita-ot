@@ -117,6 +117,8 @@
   Needed to help with debugging.
   default is 'no')-->
 <xsl:param name="DBG" select="'no'"/> <!-- "no" and "yes" are valid values; non-'yes' is ignored -->
+<!--embedding images as binary data -->
+<xsl:param name="BINARYIMAGE" select="'yes'"/>
 
 <!-- DITAEXT file extension name of dita topic file -->
 <xsl:param name="DITAEXT" select="'.xml'"/>

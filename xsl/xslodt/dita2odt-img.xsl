@@ -139,9 +139,25 @@
   <xsl:choose>
     <!-- nested by body or list -->
     <xsl:when test="parent::*[contains(@class, ' topic/body ')] or 
-      parent::*[contains(@class, ' topic/li ')]">
+      parent::*[contains(@class, ' topic/li ')] or parent::*[contains(@class, ' topic/sli ')]">
       <xsl:element name="text:p">
         <xsl:element name="text:span">
+          <xsl:choose>
+            <xsl:when test="parent::fig[contains(@frame,'top ')]">
+              <!-- NOP if there is already a break implied by a parent property -->
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:choose>
+                <xsl:when test="(@placement='break')">
+                  <!-- start add flagging styles -->
+                  <xsl:apply-templates select="." mode="start-add-odt-flags"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:call-template name="flagcheck"/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </xsl:otherwise>
+          </xsl:choose>
           
           <xsl:call-template name="draw_image">
             <xsl:with-param name="height" select="$height"/>
@@ -149,6 +165,8 @@
             <xsl:with-param name="width" select="$width"/>
           </xsl:call-template>
           
+          <!-- end add flagging styles -->
+          <xsl:apply-templates select="." mode="end-add-odt-flags"/>
         </xsl:element>
       </xsl:element>
     </xsl:when>
@@ -230,17 +248,26 @@
             <xsl:value-of select="'in'"/>
           </xsl:attribute>
           <xsl:attribute name="svg:height"><xsl:value-of select="$height"/>in</xsl:attribute>       
-          <xsl:element name="draw:image">  
-            <xsl:element name="office:binary-data">
-              <xsl:value-of select="java:getBASE64($OUTPUTDIR, string(@href))" disable-output-escaping="yes"/>
-            </xsl:element>
+          <xsl:element name="draw:image">
+            <xsl:choose>
+              <xsl:when test="$BINARYIMAGE = 'yes'">
+                <xsl:element name="office:binary-data">
+                  <xsl:value-of select="java:getBASE64($OUTPUTDIR, string(@href))" disable-output-escaping="yes"/>
+                </xsl:element>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:attribute name="xlink:href">
+                  <xsl:value-of select="translate(@href, '\', '/')"/>
+                </xsl:attribute>  
+              </xsl:otherwise>
+            </xsl:choose>
           </xsl:element>
         </xsl:element>
       </xsl:when>
       <xsl:otherwise>
         <xsl:element name="text:a">
           <xsl:attribute name="xlink:href">
-            <xsl:value-of select="@href"/>
+            <xsl:value-of select="translate(@href, '\', '/')"/>
           </xsl:attribute>
           <xsl:attribute name="xlink:type">simple</xsl:attribute>
           <xsl:call-template name="gen-img-txt"/>
@@ -271,17 +298,32 @@
             <xsl:value-of select="'in'"/>
           </xsl:attribute>
           <xsl:attribute name="svg:height"><xsl:value-of select="$height"/>in</xsl:attribute>       
-          <xsl:element name="draw:image">  
-            <xsl:element name="office:binary-data">
-              <xsl:value-of select="java:getBASE64($OUTPUTDIR, string($imgsrc))" disable-output-escaping="yes"/>
-            </xsl:element>
+          <xsl:element name="draw:image">
+            <xsl:choose>
+              <xsl:when test="$BINARYIMAGE = 'yes'">
+                <xsl:element name="office:binary-data">
+                  <xsl:value-of select="java:getBASE64($OUTPUTDIR, string($imgsrc))" disable-output-escaping="yes"/>
+                </xsl:element>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:attribute name="xlink:href">
+                  <xsl:value-of select="translate($imgsrc, '\', '/')"/>
+                </xsl:attribute>
+              </xsl:otherwise>
+            </xsl:choose>
           </xsl:element>
         </xsl:element>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:call-template name="gen-img-txt">
-          <xsl:with-param name="alttext" select="$alttext"/>
-        </xsl:call-template>
+        <xsl:element name="text:a">
+          <xsl:attribute name="xlink:href">
+            <xsl:value-of select="translate($imgsrc, '\', '/')"/>
+          </xsl:attribute>
+          <xsl:attribute name="xlink:type">simple</xsl:attribute>
+          <xsl:call-template name="gen-img-txt">
+            <xsl:with-param name="alttext" select="$alttext"/>
+          </xsl:call-template>
+        </xsl:element>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>

@@ -37,7 +37,7 @@
 <xsl:template match="*[contains(@class,' hi-d/b ')]">
      
      <xsl:choose>
-          <xsl:when test="parent::*[contains(@class, ' topic/li ')]">
+          <xsl:when test="parent::*[contains(@class, ' topic/li ')] or parent::*[contains(@class, ' topic/sli ')]">
                <xsl:element name="text:p">
                      <xsl:apply-templates/>
                </xsl:element>
@@ -77,7 +77,7 @@
 <xsl:template match="*[contains(@class,' hi-d/i ')]">
      
      <xsl:choose>
-          <xsl:when test="parent::*[contains(@class, ' topic/li ')]">
+          <xsl:when test="parent::*[contains(@class, ' topic/li ')] or parent::*[contains(@class, ' topic/sli ')]">
                <xsl:element name="text:p">
                          <xsl:apply-templates/>
                </xsl:element>
@@ -140,7 +140,7 @@
 <xsl:template match="*[contains(@class,' hi-d/u ')]">
      
      <xsl:choose>
-          <xsl:when test="parent::*[contains(@class, ' topic/li ')]">
+          <xsl:when test="parent::*[contains(@class, ' topic/li ')] or parent::*[contains(@class, ' topic/sli ')]">
                <xsl:element name="text:p">
                     <xsl:apply-templates/>
                </xsl:element>
@@ -203,7 +203,7 @@
 <xsl:template match="*[contains(@class,' hi-d/tt ')]">
      
      <xsl:choose>
-          <xsl:when test="parent::*[contains(@class, ' topic/li ')]">
+          <xsl:when test="parent::*[contains(@class, ' topic/li ')] or parent::*[contains(@class, ' topic/sli ')]">
                <xsl:element name="text:p">
                     <xsl:element name="text:span">
                          <xsl:attribute name="text:style-name">Courier</xsl:attribute>
@@ -248,7 +248,7 @@
 <xsl:template match="*[contains(@class,' hi-d/sup ')]">
      
      <xsl:choose>
-          <xsl:when test="parent::*[contains(@class, ' topic/li ')]">
+          <xsl:when test="parent::*[contains(@class, ' topic/li ')] or parent::*[contains(@class, ' topic/sli ')]">
                <xsl:element name="text:p">
                      <xsl:apply-templates/>
                </xsl:element>
@@ -311,7 +311,7 @@
 <xsl:template match="*[contains(@class,' hi-d/sub ')]">
      
      <xsl:choose>
-          <xsl:when test="parent::*[contains(@class, ' topic/li ')]">
+          <xsl:when test="parent::*[contains(@class, ' topic/li ')] or parent::*[contains(@class, ' topic/sli ')]">
                <xsl:element name="text:p">
                     <xsl:apply-templates/>
                </xsl:element>

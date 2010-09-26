@@ -610,7 +610,7 @@
         <xsl:text disable-output-escaping="yes">&lt;text:p&gt;</xsl:text>
       </xsl:when>
       <!-- nested by list -->
-      <xsl:when test="parent::*[contains(@class, ' topic/li ')]">
+      <xsl:when test="parent::*[contains(@class, ' topic/li ')] or parent::*[contains(@class, ' topic/sli ')]">
         
         <!-- caculate list depth -->
         <xsl:variable name="depth">

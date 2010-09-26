@@ -711,6 +711,91 @@
   </xsl:choose>
  </xsl:template>
  
+ <!-- No flagging attrs allowed to process in phrases - output a message when in debug mode. -->
+ <xsl:template name="flagcheck">
+  
+  <xsl:variable name="domains">
+   <xsl:value-of select="normalize-space(ancestor-or-self::*[contains(@class,' topic/topic ')][1]/@domains)"/>
+  </xsl:variable>
+  <xsl:variable name="props">
+   <xsl:if test="contains($domains, 'a(props')">
+    <xsl:value-of select="normalize-space(substring-before(substring-after($domains,'a(props'), ')'))"/>
+   </xsl:if>
+  </xsl:variable>
+  
+  <xsl:if test="$DBG='yes' and not($FILTERFILE='')">
+   <xsl:if test="@audience">
+    <xsl:apply-templates select="." mode="ditamsg:cannot-flag-inline-element">
+     <xsl:with-param name="attr-name" select="'audience'"/>
+    </xsl:apply-templates>
+   </xsl:if>
+   <xsl:if test="@platform">
+    <xsl:apply-templates select="." mode="ditamsg:cannot-flag-inline-element">
+     <xsl:with-param name="attr-name" select="'platform'"/>
+    </xsl:apply-templates>
+   </xsl:if>
+   <xsl:if test="@product">
+    <xsl:apply-templates select="." mode="ditamsg:cannot-flag-inline-element">
+     <xsl:with-param name="attr-name" select="'product'"/>
+    </xsl:apply-templates>
+   </xsl:if>
+   <xsl:if test="@otherprops">
+    <xsl:apply-templates select="." mode="ditamsg:cannot-flag-inline-element">
+     <xsl:with-param name="attr-name" select="'otherprops'"/>
+    </xsl:apply-templates>
+   </xsl:if>
+   <xsl:if test="not($props='')">
+    <xsl:call-template name="ext-flagcheck">
+     <xsl:with-param name="props" select="$props"/>
+    </xsl:call-template>
+   </xsl:if>
+  </xsl:if>
+ </xsl:template>
+ 
+ <xsl:template name="ext-flagcheck">
+  <xsl:param name="props"/>
+  <xsl:choose>
+   <xsl:when test="contains($props,',')">
+    <xsl:variable name="propsValue">
+     <xsl:call-template name="getPropsValue">
+      <xsl:with-param name="propsPath" select="substring-before($props,',')"/>
+     </xsl:call-template>
+    </xsl:variable>
+    <xsl:variable name="propName">
+     <xsl:call-template name="getLastPropName">
+      <xsl:with-param name="propsPath" select="substring-before($props,',')"/>
+     </xsl:call-template>
+    </xsl:variable>
+    <xsl:if test="not($propsValue='')">
+     <xsl:apply-templates select="." mode="ditamsg:cannot-flag-inline-element">
+      <xsl:with-param name="attr-name" select="$propName"/>
+     </xsl:apply-templates>
+    </xsl:if>
+    
+    <xsl:call-template name="ext-flagcheck">
+     <xsl:with-param name="props" select="substring-after($props,',')"/>
+    </xsl:call-template>
+   </xsl:when>
+   <xsl:otherwise>
+    <xsl:variable name="propsValue">
+     <xsl:call-template name="getPropsValue">
+      <xsl:with-param name="propsPath" select="$props"/>
+     </xsl:call-template>
+    </xsl:variable>
+    <xsl:variable name="propName">
+     <xsl:call-template name="getLastPropName">
+      <xsl:with-param name="propsPath" select="$props"/>
+     </xsl:call-template>
+    </xsl:variable>
+    <xsl:if test="not($propsValue='')">
+     <xsl:apply-templates select="." mode="ditamsg:cannot-flag-inline-element">
+      <xsl:with-param name="attr-name" select="$propName"/>
+     </xsl:apply-templates>
+    </xsl:if>
+   </xsl:otherwise>
+  </xsl:choose>
+ </xsl:template>
+ 
 
 <!-- ===================================================================== -->
 </xsl:stylesheet>

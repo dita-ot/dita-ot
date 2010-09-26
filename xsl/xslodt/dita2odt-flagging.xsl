@@ -320,6 +320,8 @@
     </xsl:choose>
   </xsl:template>
   
+  
+  <!-- add flagging images, rev images and flagging styles -->
   <xsl:template match="*" mode="start-add-odt-flags">
     <!-- param for table background color -->
     <xsl:param name="family" select="''"/>
@@ -458,6 +460,117 @@
     
   </xsl:template>
   
+  
+  <!-- add flagging images and rev images in a seperate paragraph -->
+  <xsl:template match="*" mode="start-add-odt-imgrevflags">
+    
+      <!-- get style rules -->
+      <xsl:variable name="flagrules">
+        <xsl:call-template name="getrules"/>
+      </xsl:variable>
+      
+      <xsl:variable name="revtest">
+        <xsl:call-template name="find-active-rev-flag">
+          <xsl:with-param name="allrevs" select="@rev"/>
+        </xsl:call-template>
+      </xsl:variable>
+      
+      <!-- for table/list flagging styles -->
+      <xsl:if test="(exsl:node-set($flagrules)/prop[1]/startflag/@imageref or $revtest = 1)">
+        <!-- render p and span tag -->
+        <xsl:text disable-output-escaping="yes">&lt;text:p&gt;</xsl:text>
+      </xsl:if>
+      
+      <!-- add images -->
+      <xsl:call-template name="start-flagit">
+        <xsl:with-param name="flagrules" select="$flagrules"/>     
+      </xsl:call-template>
+      <!-- add rev style -->
+      <xsl:call-template name="start-add-odt-revflags">
+        <xsl:with-param name="flagrules" select="$flagrules"/>
+      </xsl:call-template>
+    
+    <!-- for table/list flagging styles -->
+    <xsl:if test="(exsl:node-set($flagrules)/prop[1]/startflag/@imageref or $revtest = 1)">
+      <xsl:text disable-output-escaping="yes">&lt;/text:p&gt;</xsl:text>
+    </xsl:if>
+    
+  </xsl:template>
+  
+  <xsl:template match="*" mode="end-add-odt-imgrevflags">
+    
+    <!-- get style rules -->
+    <xsl:variable name="flagrules">
+      <xsl:call-template name="getrules"/>
+    </xsl:variable>
+    
+    <xsl:variable name="revtest">
+      <xsl:call-template name="find-active-rev-flag">
+        <xsl:with-param name="allrevs" select="@rev"/>
+      </xsl:call-template>
+    </xsl:variable>
+    
+    <!-- for table/list flagging styles -->
+    <xsl:if test="(exsl:node-set($flagrules)/prop[last()]/startflag/@imageref or $revtest = 1)">
+      <!-- render p and span tag -->
+      <xsl:text disable-output-escaping="yes">&lt;text:p&gt;</xsl:text>
+    </xsl:if>
+    
+      <!-- add rev style -->
+      <xsl:call-template name="end-add-odt-revflags">
+        <xsl:with-param name="flagrules" select="$flagrules"/>
+      </xsl:call-template>
+      <!-- add images -->
+      <xsl:call-template name="end-flagit">
+        <xsl:with-param name="flagrules" select="$flagrules"/> 
+      </xsl:call-template>
+    
+    <!-- for table/list flagging styles -->
+    <xsl:if test="(exsl:node-set($flagrules)/prop[last()]/startflag/@imageref or $revtest = 1)">
+      <xsl:text disable-output-escaping="yes">&lt;/text:p&gt;</xsl:text>
+    </xsl:if>
+    
+  </xsl:template>
+  
+  <!-- only add flagging styles -->
+  <xsl:template match="*" mode="add-odt-flagging">
+    
+    <!-- get flagging style name. -->
+    <xsl:variable name="flagStyleName">
+      <xsl:call-template name="getFlagStyleName"/>
+    </xsl:variable>
+    <!-- get style rules -->
+    <xsl:variable name="flagrules">
+      <xsl:call-template name="getrules"/>
+    </xsl:variable>
+    <!-- check style conflict -->
+    <xsl:variable name="conflictexist">
+      <xsl:call-template name="conflict-check">
+        <xsl:with-param name="flagrules" select="$flagrules"/>
+      </xsl:call-template>
+    </xsl:variable>
+    
+      <!-- add flagging styles -->
+      <xsl:choose>
+        <!-- no conflict -->
+        <xsl:when test="$conflictexist = 'false' and $flagStyleName != ''">
+            <!-- ordinary style -->
+            <xsl:attribute name="text:style-name">
+              <xsl:value-of select="$flagStyleName"/>
+            </xsl:attribute>
+        </xsl:when>
+        <!-- there are conflict -->
+        <xsl:when test="$conflictexist = 'true'">
+          <xsl:apply-templates select="." mode="ditamsg:conflict-text-style-applied"/>
+          <xsl:attribute name="text:style-name">
+            <xsl:value-of select="'conflict_style'"/>
+          </xsl:attribute>
+        </xsl:when>
+      </xsl:choose>
+    
+  </xsl:template>
+  
+  <!-- only add rev images -->
   <xsl:template match="*" mode="start-add-odt-revflags" name="start-add-odt-revflags">
     <xsl:param name="flagrules">
       <xsl:call-template name="getrules"/>
@@ -524,6 +637,9 @@
       <xsl:otherwise/>
     </xsl:choose>
   </xsl:template>
+  
+  
+  
   
   <xsl:template match="prop" mode="start-flagit">  
     <xsl:choose> <!-- Ensure there's an image to get, otherwise don't insert anything -->

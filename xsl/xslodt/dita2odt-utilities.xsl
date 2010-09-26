@@ -1097,7 +1097,7 @@
         </xsl:apply-templates>
       </xsl:when>
       <!-- parent by list -->
-      <xsl:when test="parent::*[contains(@class, ' topic/li ')]">
+      <xsl:when test="parent::*[contains(@class, ' topic/li ')] or parent::*[contains(@class, ' topic/sli ')]">
         <!-- start flagging -->
         <xsl:apply-templates select="." mode="start-add-odt-flags">
           <xsl:with-param name="family" select="'_list'"/>

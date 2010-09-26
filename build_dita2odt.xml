@@ -67,15 +67,7 @@
       </not>
     </condition>
     <dirname file="${output}" property="dita.odt.outputdir" />
-  	<!--create topic merge file -->
-  	<!--
-  	<xslt processor="trax" in="${input}"
-  	      out="${dita.temp.dir}${file.separator}${dita.map.filename.root}_MERGED.xml"
-  	      classpathref="dost.class.path"
-  	      style="${dita.script.dir}${file.separator}topicmerge.xsl">
-  	      
-  	</xslt>
-  	-->  	
+  	<!--create topic merge file -->  	
   	<dirname property="dita.temp.dir.fullpath" file="${dita.temp.dir}${file.separator}dummy.file"/>
   	<pipeline message="topicmerge" module="TopicMerge"
   	              inputmap="${dita.temp.dir.fullpath}${file.separator}${user.input.file}"
@@ -99,6 +91,8 @@
       <param name="OUTPUTDIR" expression="${dita.odt.outputdir}" />
       <param name="disableRelatedLinks" expression="${args.fo.include.rellinks.odt}"/>
       <param name="INDEXSHOW" expression="${args.indexshow}" if="args.indexshow"/>
+      <param name="DBG" expression="${args.debug}" if="args.debug"/>
+      <param name="BINARYIMAGE" expression="${odt.image.embedded}" if="odt.image.embedded"/>
       <!--<xmlcatalog refid="dita.catalog" />-->
     </xslt>
   </target>
@@ -126,6 +120,8 @@
       <param name="OUTPUTDIR" expression="${dita.odt.outputdir}" />
       <param name="disableRelatedLinks" expression="${args.fo.include.rellinks.odt}"/>
       <param name="INDEXSHOW" expression="${args.indexshow}" if="args.indexshow"/>
+      <param name="DBG" expression="${args.debug}" if="args.debug"/>
+      <param name="BINARYIMAGE" expression="${odt.image.embedded}" if="odt.image.embedded"/>
       <!--<xmlcatalog refid="dita.catalog" />-->
     </xslt>
   </target>
@@ -165,8 +161,7 @@
      description="Package into odt file">
 	   	<zip destfile="${dita.map.output.dir}/${dita.topic.filename.root}${odt.suffix}"
 	   		basedir="${dita.map.output.dir}" 
-	   		excludes="**/*.list, **/*.log, **/*.temp, **/*.properties, **/*.odt, 
-	   		**/*.jpg, **/*.gif, **/*.png">
+	   		excludes="**/*.list, **/*.log, **/*.temp, **/*.properties, **/*.odt">
 	   	</zip>
    </target>
    <target name="dita.odt.package.map" unless="noMap" depends="map2odt, 
@@ -174,8 +169,7 @@
     description="Package into odt file">
 	   	<zip destfile="${dita.map.output.dir}/${dita.map.filename.root}${odt.suffix}"
 	   		basedir="${dita.map.output.dir}"
-	   		excludes="**/*.list, **/*.log, **/*.temp, **/*.properties, **/*.odt, 
-	   		**/*.jpg, **/*.gif, **/*.png"/>
+	   		excludes="**/*.list, **/*.log, **/*.temp, **/*.properties, **/*.odt"/>
    </target>
    <target name="clean-up-out-dir">
    	<delete failonerror="yes" includeemptydirs="true" dir="${dita.map.output.dir}"
