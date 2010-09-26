@@ -151,7 +151,7 @@
           <xsl:call-template name="create_table_cell_styles"/>
       </xsl:if>
       
-      <xsl:apply-templates select="//text()" mode="create_hi_style"/>
+      <xsl:apply-templates select="//text()|//*[contains(@class, ' topic/state ')]" mode="create_hi_style"/>
       
       <xsl:call-template name="create_flagging_styles"/>
       

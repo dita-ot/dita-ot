@@ -2370,14 +2370,31 @@
   
 
   <xsl:template match="*[contains(@class,' topic/state ')]">
+    
+    <xsl:variable name="style_name">
+      <xsl:call-template name="get_style_name"/> 
+    </xsl:variable>
+    
+    <xsl:variable name="trueStyleName">
+      <xsl:value-of select="styleUtils:getHiStyleName($style_name)"/>
+    </xsl:variable>
+    
     <xsl:element name="text:span">
-      <xsl:attribute name="text:style-name">state_style</xsl:attribute>
-      <xsl:value-of select="name()"/>
-      <xsl:text>: </xsl:text>
-      <xsl:value-of select="@name"/>
-      <xsl:text>=</xsl:text>
-      <xsl:value-of select="@value"/>
+      <xsl:if test="$trueStyleName!=''">
+        <xsl:attribute name="text:style-name">
+          <xsl:value-of select="$trueStyleName"/>
+        </xsl:attribute>
+      </xsl:if>
+      <xsl:element name="text:span">
+        <xsl:attribute name="text:style-name">state_style</xsl:attribute>
+        <xsl:value-of select="name()"/>
+        <xsl:text>: </xsl:text>
+        <xsl:value-of select="@name"/>
+        <xsl:text>=</xsl:text>
+        <xsl:value-of select="@value"/>
+      </xsl:element>
     </xsl:element>
+    
   </xsl:template>
   
 <!-- itemgroup tag -->

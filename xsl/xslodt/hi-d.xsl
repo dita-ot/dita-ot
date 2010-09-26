@@ -370,7 +370,7 @@
      </xsl:choose>    
 </xsl:template>
      
-<xsl:template match="text()" mode="create_hi_style">
+<xsl:template match="text()|*[contains(@class, ' topic/state ')]" mode="create_hi_style">
      <xsl:variable name="style_name">
           <xsl:call-template name="get_style_name"/> 
      </xsl:variable>

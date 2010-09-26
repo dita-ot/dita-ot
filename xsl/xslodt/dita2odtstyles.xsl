@@ -172,7 +172,7 @@
           style:font-weight-complex="bold"/>
       </style:style>
       
-      <style:style style:name="bold" style:family="text" style:parent-style-name="default_text_style">
+      <style:style style:name="bold" style:family="text">
         <style:text-properties fo:font-weight="bold" style:font-weight-asian="bold"
           style:font-weight-complex="bold"/>
       </style:style>
@@ -226,7 +226,7 @@
         <style:text-properties style:text-overline-style="solid"
           style:text-overline-width="auto" style:text-overline-color="font-color"/>
       </style:style>
-      <style:style style:name="italic" style:family="text" style:parent-style-name="default_text_style">
+      <style:style style:name="italic" style:family="text">
         <style:text-properties fo:font-style="italic" style:font-style-asian="italic"
           style:font-style-complex="italic"/>
       </style:style>
@@ -273,7 +273,7 @@
       <!-- book title style -->
       <style:style style:name="Title" style:family="paragraph" style:parent-style-name="Standard" style:class="chapter">
         <style:paragraph-properties 
-          fo:margin-top="8cm" fo:margin-bottom="0.423cm" fo:padding-left="0cm" fo:padding-right="0cm" 
+          fo:margin-top="7cm" fo:margin-bottom="0.423cm" fo:padding-left="0cm" fo:padding-right="0cm" 
           fo:padding-top="0.035cm" fo:padding-bottom="0cm" fo:border-left="none" fo:border-right="none" 
           fo:border-top="none" fo:border-bottom="none"/>
         <style:text-properties 

@@ -249,9 +249,15 @@
       </xsl:choose>
     </xsl:if>
     
+    <xsl:variable name="revtest">
+      <xsl:call-template name="find-active-rev-flag">
+        <xsl:with-param name="allrevs" select="@rev"/>
+      </xsl:call-template>
+    </xsl:variable>
     
     <!-- for table/list flagging styles -->
-    <xsl:if test="$family != '' and $family != '_table_attr'">
+    <xsl:if test="$family != '' and $family != '_table_attr' and 
+      (exsl:node-set($flagrules)/prop[1]/startflag/@imageref or $revtest = 1)">
       <!-- render p and span tag -->
       <xsl:text disable-output-escaping="yes">&lt;text:p&gt;</xsl:text>
     </xsl:if>
@@ -269,7 +275,8 @@
     </xsl:if>
     
     <!-- for table/list flagging styles -->
-    <xsl:if test="$family != '' and $family != '_table_attr'">
+    <xsl:if test="$family != '' and $family != '_table_attr' and 
+      (exsl:node-set($flagrules)/prop[1]/startflag/@imageref or $revtest = 1)">
       <xsl:text disable-output-escaping="yes">&lt;/text:p&gt;</xsl:text>
     </xsl:if>
     
@@ -284,8 +291,14 @@
       <xsl:call-template name="getrules"/>
     </xsl:variable>
     
+    <xsl:variable name="revtest">
+      <xsl:call-template name="find-active-rev-flag">
+        <xsl:with-param name="allrevs" select="@rev"/>
+      </xsl:call-template>
+    </xsl:variable>
+    
     <!-- for table/list flagging styles -->
-    <xsl:if test="$family != ''">
+    <xsl:if test="$family != '' and (exsl:node-set($flagrules)/prop[last()]/startflag/@imageref or $revtest = 1)">
       <!-- render p and span tag -->
       <xsl:text disable-output-escaping="yes">&lt;text:p&gt;</xsl:text>
     </xsl:if>
@@ -303,7 +316,7 @@
     </xsl:if>
     
     <!-- for table/list flagging styles -->
-    <xsl:if test="$family != ''">
+    <xsl:if test="$family != '' and (exsl:node-set($flagrules)/prop[last()]/startflag/@imageref or $revtest = 1)">
       <xsl:text disable-output-escaping="yes">&lt;/text:p&gt;</xsl:text>
     </xsl:if>
     
