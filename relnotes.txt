@@ -23,7 +23,7 @@
      * 3021544 Preserve DITA elements in XHTML class by default (Milestone 1)
 
      [ SourceForge Patches Added]
-	 * 3058008 Refactor chunk module for cleaner code (Milestone 4)
+     * 3058008 Refactor chunk module for cleaner code (Milestone 4)
      [SourceForge Bugs Fixed] 
      * 2928582 commonTopicProcessing template prolog proessing out of order (Milestone 1)
      * 2823221 version of Xalan-J inconsistent (Milestone 1)
@@ -45,15 +45,15 @@
      * 3038941 Link with &amp; breaks in abstract (Milestone 3)
      * 3039017 Comments in PDF plugin files are confusing (Milestone 3)
      * 3052156 Object with data that starts with slash breaks image copying (Milestone 4)
-	 * 3052913 Multiple levels of keyref in map not resolved (Milestone 4)
-	 * 3016994 The included-domains entity cannot be used in document (Milestone 4)
-	 * 2994593 Transformation breaks when DITA Topics contain entity refs (Milestone 4)
-	 * 3044861 Inappropriate warning for resource-only topic to graphic (Milestone 4)
-	 * 3042978 @copy-to and @chunk on topichead gives file not found (Milestone 4)
-	 * 3058124 Toolkit Allows Unescaped URLs, doesn't handle escaped ones (Milestone 4)
-	 * 3056939 Conref of keyref-based xref results in xref with no href (Milestone 4)
-	 * 3052904 Keydef with no href causes hard failure (Milestone 4)
-	 * 3028894 no support for title (Milestone 4)
+     * 3052913 Multiple levels of keyref in map not resolved (Milestone 4)
+     * 3016994 The included-domains entity cannot be used in document (Milestone 4)
+     * 2994593 Transformation breaks when DITA Topics contain entity refs (Milestone 4)
+     * 3044861 Inappropriate warning for resource-only topic to graphic (Milestone 4)
+     * 3042978 @copy-to and @chunk on topichead gives file not found (Milestone 4)
+     * 3058124 Toolkit Allows Unescaped URLs, doesn't handle escaped ones (Milestone 4)
+     * 3056939 Conref of keyref-based xref results in xref with no href (Milestone 4)
+     * 3052904 Keydef with no href causes hard failure (Milestone 4)
+     * 3028894 no support for title (Milestone 4)
      * 3038933 Troff output drops prereq links (Milestone 5)
      
      
