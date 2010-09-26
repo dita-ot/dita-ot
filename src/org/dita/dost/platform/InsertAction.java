@@ -156,8 +156,9 @@ public class InsertAction extends DefaultHandler implements IAction, LexicalHand
 				 !"system".equals(localName) &&
 				 !"uri".equals(localName))
 		){
-		//edited by william on 2010-03-23 for bug:2974667 start
-			retBuf.append(Constants.LINE_SEPARATOR);
+		//edited by william on 2010-03-23 for bug:2974667 end
+			//remove line break bug:3062912
+			//retBuf.append(Constants.LINE_SEPARATOR);
 			retBuf.append("</"+qName+">");
 		}
 	}
