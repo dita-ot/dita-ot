@@ -6,6 +6,7 @@
 package org.dita.dost.platform;
 
 import org.dita.dost.util.Constants;
+import org.dita.dost.util.StringUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.dita.dost.util.FileUtils;
@@ -50,11 +51,11 @@ public class InsertAntActionRelative extends InsertActionRelative implements
 				    		(String) paramTable.get("template"),
 				    		targetFile.toString());
 					retBuf.append(" ").append(attributes.getQName(i)).append("=\"");
-					retBuf.append(pastedURI).append("\"");
+					retBuf.append(StringUtils.escapeXML(pastedURI)).append("\"");
 				}
 				else {
 					retBuf.append(" ").append(attributes.getQName(i)).append("=\"");
-					retBuf.append(attributes.getValue(i)).append("\"");
+					retBuf.append(StringUtils.escapeXML(attributes.getValue(i))).append("\"");
 				}
 			}
 			retBuf.append(">");

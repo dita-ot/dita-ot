@@ -9,6 +9,7 @@ import java.util.Iterator;
 
 import org.dita.dost.util.Constants;
 import org.dita.dost.util.FileUtils;
+import org.dita.dost.util.StringUtils;
 /**
  * ImportStringsAction class.
  *
@@ -36,9 +37,9 @@ public class ImportStringsAction extends ImportAction {
 			value = iter.next();
 			retBuf.append(Constants.LINE_SEPARATOR);
 			retBuf.append("<stringfile>");				
-			retBuf.append(
+			retBuf.append(StringUtils.escapeXML(
 					FileUtils.getRelativePathFromMap(
-							templateFilePath, value));
+							templateFilePath, value)));
 			retBuf.append("</stringfile>");
 		}
 		return retBuf.toString();
