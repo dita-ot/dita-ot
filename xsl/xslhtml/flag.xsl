@@ -609,7 +609,7 @@
      <xsl:param name="flag"/>
      <xsl:param name="cvffilename" select="@source"/>
      <xsl:param name="childnodes"/>
-    <!--get the location of dita.xml.properties-->
+    <!--get the location of subject_scheme.dictionary-->
     <xsl:variable name="INITIAL-PROPERTIES-FILE">
      <xsl:value-of select="translate(concat($WORKDIR , $PATH2PROJ , 'subject_scheme.dictionary'), '\', '/')"/>
     </xsl:variable>
