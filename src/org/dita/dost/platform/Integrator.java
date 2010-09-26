@@ -107,7 +107,9 @@ public class Integrator {
  
 		  for (int i=0; (pluginFiles != null) && (i < pluginFiles.length); i++){
 			File descFile = new File(pluginFiles[i],"plugin.xml");
-			if (pluginFiles[i].isDirectory() && descFile.exists()){
+			//not to inculde cxxapiref plugin
+			String name = pluginFiles[i].getName();
+			if (pluginFiles[i].isDirectory() && !"cxxapiref".equals(name) && descFile.exists()){
 				descSet.add(descFile);
 			}
 		  }
