@@ -49,6 +49,8 @@
   
   
   <xsl:template  match="prop[@action='flag']" mode="create_flagging_styles">
+    <xsl:variable name="att" select="@att"/>
+    <xsl:variable name="val" select="@val"/>
     
     <xsl:variable name="styleName" select="styleUtils:insertFlagStyleName(concat(@att, @val))"/>
     <!-- text/p flagging style -->
@@ -110,7 +112,128 @@
             </xsl:if>
          </xsl:element>
     </xsl:element>
+    <!-- for subject schema -->
+    <!-- get the location of schemekeydef.xml -->
+    <xsl:variable name="KEYDEF-FILE">
+      <xsl:value-of select="concat($WORKDIR,$PATH2PROJ,'schemekeydef.xml')"/>
+    </xsl:variable>
+    <!--keydef.xml contains the val  -->
+    <xsl:if test="(document($KEYDEF-FILE, /)//*[@keys=$val])">
+      <xsl:apply-templates select="(document($KEYDEF-FILE, /)//*[@keys=$val])" mode="create_subject_scheme_style">
+        <xsl:with-param name="att" select="$att"/>
+        <xsl:with-param name="val" select="$val"/>
+        <xsl:with-param name="prop" select="."/>
+      </xsl:apply-templates>
+    </xsl:if>
   </xsl:template>
+  
+  <xsl:template match="*" mode="create_subject_scheme_style">
+    <xsl:param name="att"/>
+    <xsl:param name="val"/>
+    <xsl:param name="prop"/>
+    <xsl:param name="cvffilename" select="@source"/>
+    <!--get the location of subject_scheme.dictionary-->
+    <xsl:variable name="INITIAL-PROPERTIES-FILE">
+      <xsl:value-of select="translate(concat($WORKDIR , $PATH2PROJ , 'subject_scheme.dictionary'), '\', '/')"/>
+    </xsl:variable>
+    
+    <xsl:variable name="PROPERTIES-FILE">
+      <xsl:choose>
+        <xsl:when test="starts-with($INITIAL-PROPERTIES-FILE,'/')">
+          <xsl:text>file://</xsl:text><xsl:value-of select="$INITIAL-PROPERTIES-FILE"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:text>file:/</xsl:text><xsl:value-of select="$INITIAL-PROPERTIES-FILE"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <!-- get the scheme list -->
+    <!-- check CURRENT File -->
+    <xsl:variable name="editedFileName">
+      <xsl:call-template name="checkFile">
+        <xsl:with-param name="in" select="$CURRENTFILE"/>
+      </xsl:call-template>
+    </xsl:variable>
+    <xsl:variable name="schemeList">
+      <xsl:apply-templates select="document($PROPERTIES-FILE,/)//*[@key=$editedFileName]" mode="check"/>
+    </xsl:variable>
+    <xsl:if test="contains($schemeList, $cvffilename)">
+      <!-- get the path of scheme file -->
+      <xsl:variable name="submfile">
+        <xsl:value-of select="$cvffilename"/><xsl:text>.subm</xsl:text>
+      </xsl:variable>
+      <xsl:variable name="cvffilepath">
+        <xsl:value-of select="concat($WORKDIR,$PATH2PROJ,$submfile)"/>
+      </xsl:variable>
+      <xsl:if test="document($cvffilepath,/)//*[@keys=$val]">
+        <!-- copy the child node for flag and just copy the first element whose keys=$flag-->
+        <!--xsl:for-each select="document($cvffilepath,/)//*[@keys=$value]/*"-->
+        <xsl:for-each select="document($cvffilepath,/)//*[@keys=$val]//*">
+          <xsl:variable name="styleName" select="styleUtils:insertFlagStyleName(concat($att, @keys))"/>
+          <!-- text/p flagging style -->
+          <xsl:element name="style:style">
+            <xsl:attribute name="style:name">
+              <xsl:value-of select="$styleName"/>
+            </xsl:attribute>
+            <xsl:attribute name="style:family">text</xsl:attribute>
+            <xsl:choose>
+              <xsl:when test="exsl:node-set($prop)/@style = 'underline'">
+                <xsl:attribute name="style:parent-style-name">underline</xsl:attribute>
+              </xsl:when>
+              <xsl:when test="exsl:node-set($prop)/@style = 'bold'">
+                <xsl:attribute name="style:parent-style-name">bold</xsl:attribute>
+              </xsl:when>
+              <xsl:when test="exsl:node-set($prop)/@style = 'italics'">
+                <xsl:attribute name="style:parent-style-name">italic</xsl:attribute>
+              </xsl:when>
+              <xsl:when test="exsl:node-set($prop)/@style = 'double-underline'">
+                <xsl:attribute name="style:parent-style-name">double-underline</xsl:attribute>
+              </xsl:when>
+              <xsl:when test="exsl:node-set($prop)/@style = 'overline'">
+                <xsl:attribute name="style:parent-style-name">overline</xsl:attribute>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:attribute name="style:parent-style-name">indent_text_style</xsl:attribute>
+              </xsl:otherwise>
+            </xsl:choose>
+            
+            <xsl:element name="style:text-properties">
+              <xsl:if test="exsl:node-set($prop)/@backcolor and not(exsl:node-set($prop)/@backcolor = '')">
+                <xsl:attribute name="fo:background-color">
+                  <xsl:value-of select="styleUtils:getColor(exsl:node-set($prop)/@backcolor)"/>
+                </xsl:attribute>
+              </xsl:if>
+              <xsl:if test="exsl:node-set($prop)/@color and not(exsl:node-set($prop)/@color = '')">
+                <xsl:attribute name="fo:color">
+                  <xsl:value-of select="styleUtils:getColor(exsl:node-set($prop)/@color)"/>
+                </xsl:attribute>
+              </xsl:if>
+            </xsl:element>
+          </xsl:element>
+          <!-- table flagging style -->
+          <xsl:element name="style:style">
+            <xsl:attribute name="style:name">
+              <xsl:value-of select="concat($styleName, '_table_attr')"/>
+            </xsl:attribute>
+            <xsl:attribute name="style:family">table</xsl:attribute>
+            <xsl:element name="style:table-properties">
+              <xsl:if test="exsl:node-set($prop)/@backcolor and not(exsl:node-set($prop)/@backcolor = '')">
+                <xsl:attribute name="fo:background-color">
+                  <xsl:value-of select="styleUtils:getColor(exsl:node-set($prop)/@backcolor)"/>
+                </xsl:attribute>
+              </xsl:if>
+              <xsl:if test="exsl:node-set($prop)/@color and not(exsl:node-set($prop)/@color = '')">
+                <xsl:attribute name="fo:color">
+                  <xsl:value-of select="styleUtils:getColor(exsl:node-set($prop)/@color)"/>
+                </xsl:attribute>
+              </xsl:if>
+            </xsl:element>
+          </xsl:element>
+        </xsl:for-each>
+      </xsl:if>
+    </xsl:if>
+  </xsl:template>
+  
   
   <!-- get flagging style name -->
   <xsl:template name="getFlagStyleName">
@@ -218,7 +341,7 @@
       </xsl:call-template>
     </xsl:variable>
       
-    <!-- ordinary tag(not list, not render table properties) -->
+    <!-- ordinary tag(not list, or render table background color) -->
     <xsl:if test="$family = '' or $family = '_table_attr'">    
       <!-- add flagging styles -->
       <xsl:choose>

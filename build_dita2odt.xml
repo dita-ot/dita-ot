@@ -85,10 +85,15 @@
   	<!--create content.xml -->
   	<!--Change path of ${dita.input.valfile} into url-->
   	<makeurl file="${dita.input.valfile}" property="dita.input.valfile.url" validate="no"/>
-    <xslt processor="trax"
+    <xslt processor="trax" basedir="${dita.temp.dir}"
       in="${dita.temp.dir}${file.separator}${dita.map.filename.root}_MERGED.xml"
       classpathref="dost.class.path"
-      out="${output}" style="${args.xsl}">
+      out="${output}" style="${args.xsl}" 
+      filenameparameter="FILENAME"
+      filedirparameter="FILEDIR">
+      <param name="BASEDIR" expression="${basedir}"/>
+      <param name="TEMPDIR" expression="${dita.temp.dir}"/>
+      <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
       <param name="DRAFT" expression="${args.draft}" if="args.draft" />
       <param name="FILTERFILE" expression="${dita.input.valfile.url}" if="dita.input.valfile" />
       <param name="OUTPUTDIR" expression="${dita.odt.outputdir}" />
@@ -108,9 +113,14 @@
     <dirname file="${output}" property="dita.odt.outputdir" />
   	<!--Change path of ${dita.input.valfile} into url-->
   	<makeurl file="${dita.input.valfile}" property="dita.input.valfile.url" validate="no"/>
-    <xslt processor="trax" in="${input}" out="${output}"
+    <xslt processor="trax" in="${input}" out="${output}" basedir="${dita.temp.dir}"
       classpathref="dost.class.path"
-      style="${args.xsl}">
+      style="${args.xsl}"
+      filenameparameter="FILENAME"
+      filedirparameter="FILEDIR">
+      <param name="BASEDIR" expression="${basedir}"/>
+      <param name="TEMPDIR" expression="${dita.temp.dir}"/>
+      <param name="DITAEXT" expression="${dita.ext}" if="dita.ext" />
       <param name="DRAFT" expression="${args.draft}" if="args.draft" />
       <param name="FILTERFILE" expression="${dita.input.valfile.url}" if="dita.input.valfile" />
       <param name="OUTPUTDIR" expression="${dita.odt.outputdir}" />

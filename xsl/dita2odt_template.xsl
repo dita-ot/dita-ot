@@ -93,27 +93,25 @@
 <!-- the year for the copyright -->
 <xsl:param name="YEAR" select="'2010'"/>
 
-<!-- the working directory that contains the document being transformed.
-  Needed as a directory prefix for the @conref "document()" function calls.
-  default is '../doc/')-->
-<xsl:param name="WORKDIR">
-  <xsl:apply-templates select="/processing-instruction()" mode="get-work-dir"/>
-</xsl:param>
-
-<!-- the path back to the project. Used for c.gif, delta.gif, css to allow user's to have
-  these files in 1 location. -->
-<xsl:param name="PATH2PROJ">
-  <xsl:apply-templates select="/processing-instruction('path2project')" mode="get-path2project"/>
-</xsl:param>
-
 <!-- the file name (file name and extension only - no path) of the document being transformed.
   Needed to help with debugging.
   default is 'myfile.xml')-->
-<!-- added by William on 2009-06-24 for flag support start -->
+
 <xsl:param name="FILENAME"/>
 <xsl:param name="FILEDIR"/>
-<xsl:param name="CURRENTFILE" select="concat($FILEDIR, '/', substring-before($FILENAME, '.'), $DITAEXT)"/>
-<!-- added by William on 2009-06-24 for flag support end --> 
+<xsl:param name="CURRENTFILE">
+  <xsl:choose>
+    <!-- ditamap -->
+    <xsl:when test="contains($FILENAME, '_MERGED')">
+      <xsl:value-of select="concat($FILEDIR, '/', substring-before($FILENAME, '_MERGED'), '.ditamap')"/>
+    </xsl:when>
+    <!-- topic -->
+    <xsl:otherwise>
+      <xsl:value-of select="concat($FILEDIR, '/', substring-before($FILENAME, '.'), $DITAEXT)"/>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:param>
+  
 
 <!-- Debug mode - enables XSL debugging xsl-messages.
   Needed to help with debugging.
@@ -127,8 +125,44 @@
 <xsl:param name="KEYREF-FILE" select="concat($WORKDIR,$PATH2PROJ,'keydef.xml')"/>
 
 <xsl:param name="BASEDIR"/>
+
+<xsl:param name="TEMPDIR"/>
   
+<xsl:variable name="tempfiledir">
+  <xsl:choose>
+    <xsl:when test="contains($TEMPDIR, ':\') or contains($TEMPDIR, ':/')">
+      <!--xsl:value-of select="concat($FILEREF,'/')"/-->
+      <xsl:value-of select="'file:/'"/><xsl:value-of select="concat($TEMPDIR, '/')"/>
+    </xsl:when>
+    <xsl:when test="starts-with($TEMPDIR, '/')">
+      <xsl:value-of select="'file://'"/><xsl:value-of select="concat($TEMPDIR, '/')"/>
+    </xsl:when>
+    <xsl:when test="starts-with($BASEDIR, '/')">
+      <xsl:value-of select="'file://'"/><xsl:value-of select="concat($BASEDIR, '/')"/><xsl:value-of select="concat($TEMPDIR, '/')"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <!--xsl:value-of select="concat($FILEREF,'/')"/-->
+      <xsl:value-of select="'file:/'"/><xsl:value-of select="concat($BASEDIR, '/')"/><xsl:value-of select="concat($TEMPDIR, '/')"/>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:variable>
   
+<!-- current file with path -->
+<xsl:variable name="currentfile" select="concat($tempfiledir, $CURRENTFILE)"/>
+<!-- the working directory that contains the document being transformed.
+  Needed as a directory prefix for the @conref "document()" function calls.
+  default is '../doc/')-->
+<xsl:variable name="WORKDIR">
+  <xsl:apply-templates select="document($currentfile, /)/processing-instruction('workdir')[1]" mode="get-work-dir"/>
+</xsl:variable>
+
+<!-- the path back to the project. Used for c.gif, delta.gif, css to allow user's to have
+  these files in 1 location. -->
+<xsl:variable name="PATH2PROJ">
+  <xsl:apply-templates select="document($currentfile, /)/processing-instruction('path2project')[1]" mode="get-path2project"/>
+</xsl:variable>
+
+
 <xsl:output method="xml" encoding="UTF-8" indent="yes"/>
 <xsl:strip-space elements="*"/>
 
@@ -197,9 +231,33 @@
     </office:body>
   </xsl:template>
   
-<!-- 
-<xsl:template match="/">
-  <xsl:apply-imports/>
-</xsl:template>
--->
+  <xsl:template match="processing-instruction('workdir')" mode="get-work-dir">
+    <xsl:value-of select="."/><xsl:text>/</xsl:text>
+  </xsl:template>
+  
+  <xsl:template match="processing-instruction('path2project')" mode="get-path2project">
+    <xsl:call-template name="get-path2project">
+      <xsl:with-param name="s" select="."/>
+    </xsl:call-template>
+  </xsl:template>
+  
+  <xsl:template name="get-path2project">
+    <!-- Deal with being handed a Windows backslashed path by accident. -->
+    <!-- This code only changes \ to / and doesn't handle the many other situations
+      where a URI differs from a file path.  Hopefully they don't occur in path2proj anyway. -->
+    <xsl:param name="s"/>
+    <xsl:choose>
+      <xsl:when test="contains($s, '\')">
+        <xsl:value-of select="substring-before($s, '\')"/>
+        <xsl:text>/</xsl:text>
+        <xsl:call-template name="get-path2project">
+          <xsl:with-param name="s" select="substring-after($s, '\')"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$s"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+  
 </xsl:stylesheet>
