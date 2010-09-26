@@ -87,9 +87,7 @@
   
 <xsl:template name="block-sli">
   <xsl:element name="text:list-item">
-    <xsl:element name="text:p">
       <xsl:apply-templates/>
-    </xsl:element>
   </xsl:element>
 </xsl:template>
   
@@ -169,7 +167,6 @@
       <!-- end add flagging styles -->
       <xsl:apply-templates select="." mode="end-add-odt-flags"/>
     </xsl:element>
-    <xsl:element name="text:line-break"/>
   </xsl:element>
   
 </xsl:template>
@@ -189,7 +186,6 @@
         <!-- end add flagging styles -->
         <xsl:apply-templates select="." mode="end-add-odt-flags"/>
       </xsl:element>
-    <xsl:element name="text:line-break"/>
   </xsl:element>
 </xsl:template>
 

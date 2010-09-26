@@ -281,8 +281,14 @@
           style:font-size-asian="24pt" style:font-weight-asian="bold" style:font-name-complex="Arial" 
           style:font-size-complex="16pt" style:font-weight-complex="bold"/>
       </style:style>
-      
-      
+      <!-- borderde paragraph -->
+      <style:style style:name="border_paragraph" style:family="paragraph" style:parent-style-name="Standard"
+        style:class="chapter">
+        <style:paragraph-properties fo:border-left="0.0007in solid #000000"
+          fo:border-right="0.0007in solid #000000"
+          fo:border-top="0.0007in solid #000000"
+          fo:border-bottom="0.0007in solid #000000"/>
+      </style:style>
       <!-- Styles used in toc  start-->
       <style:style style:name="Index" style:family="paragraph"
         style:parent-style-name="Default_20_Text" style:class="index">

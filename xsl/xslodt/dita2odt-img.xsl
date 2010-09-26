@@ -142,8 +142,6 @@
       parent::*[contains(@class, ' topic/li ')]">
       <xsl:element name="text:p">
         <xsl:element name="text:span">
-          <!-- start add flagging styles -->
-          <xsl:apply-templates select="." mode="start-add-odt-flags"/>
           
           <xsl:call-template name="draw_image">
             <xsl:with-param name="height" select="$height"/>
@@ -151,8 +149,6 @@
             <xsl:with-param name="width" select="$width"/>
           </xsl:call-template>
           
-          <!-- end add flagging styles -->
-          <xsl:apply-templates select="." mode="end-add-odt-flags"/>
         </xsl:element>
       </xsl:element>
     </xsl:when>
@@ -223,7 +219,7 @@
       <xsl:when test="not(contains(@href,'://')) and $type and not($type='other') and ($height &gt; 0) and ($width &gt; 0)">
         <xsl:element name="draw:frame">  
           <xsl:attribute name="text:anchor-type">as-char</xsl:attribute>
-          <xsl:attribute name="svg:y">-0.18in</xsl:attribute>
+          <xsl:attribute name="svg:y">-0.1in</xsl:attribute>
           <xsl:attribute name="svg:width">
             <xsl:choose>
               <xsl:when test="$width &gt; 6">6</xsl:when>
@@ -264,7 +260,7 @@
       <xsl:when test="not(contains($imgsrc,'://')) and $type and not($type='other') and ($height &gt; 0) and ($width &gt; 0)">
         <xsl:element name="draw:frame">  
           <xsl:attribute name="text:anchor-type">as-char</xsl:attribute>
-          <xsl:attribute name="svg:y">-0.18in</xsl:attribute>
+          <xsl:attribute name="svg:y">-0.1in</xsl:attribute>
           <xsl:attribute name="svg:width">
             <xsl:choose>
               <xsl:when test="$width &gt; 6">6</xsl:when>

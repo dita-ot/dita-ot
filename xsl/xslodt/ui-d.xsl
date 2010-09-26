@@ -127,6 +127,7 @@
      <xsl:apply-templates select="." mode="end-add-odt-flags"/>
     </xsl:element>
    </xsl:element>
+   <xsl:element name="text:line-break"/>
   </xsl:when>
   <!-- other tags -->
   <xsl:otherwise>
@@ -140,6 +141,7 @@
       <xsl:apply-templates select="." mode="end-add-odt-flags"/>
      </xsl:element>
    </xsl:element>
+   <xsl:element name="text:line-break"/>
   </xsl:otherwise>
  </xsl:choose>
 </xsl:template>

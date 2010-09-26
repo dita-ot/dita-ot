@@ -321,8 +321,9 @@
   </xsl:template>
   
   <xsl:template match="*" mode="start-add-odt-flags">
-    
+    <!-- param for table background color -->
     <xsl:param name="family" select="''"/>
+    <!-- param for text under list/entry tags -->
     <xsl:param name="type" select="''"/>
     
     
@@ -354,7 +355,7 @@
                 <xsl:value-of select="concat($flagStyleName, $family)"/>
               </xsl:attribute>
             </xsl:when>
-            <!-- table style -->
+            <!-- table background style -->
             <xsl:otherwise>
               <xsl:attribute name="table:style-name">
                 <xsl:value-of select="concat($flagStyleName, $family)"/>
@@ -386,15 +387,21 @@
     </xsl:if>
     
     <!-- avoid text under li/entry and table attr styles-->
-    <xsl:if test="$type = '' and $family != '_table_attr'">
+    <xsl:if test="($type = '' or $type = 'note' or $type = 'keyword') and $family != '_table_attr'">
       <!-- add images -->
-      <xsl:call-template name="start-flagit">
-        <xsl:with-param name="flagrules" select="$flagrules"/>     
-      </xsl:call-template>
+      <!-- keyword do not have flagging images -->
+      <xsl:if test="$type != 'keyword'">
+        <xsl:call-template name="start-flagit">
+          <xsl:with-param name="flagrules" select="$flagrules"/>     
+        </xsl:call-template>
+      </xsl:if>
       <!-- add rev style -->
-      <xsl:call-template name="start-add-odt-revflags">
-        <xsl:with-param name="flagrules" select="$flagrules"/>
-      </xsl:call-template>
+      <!-- note tag is specail -->
+      <xsl:if test="$type != 'note'">
+        <xsl:call-template name="start-add-odt-revflags">
+          <xsl:with-param name="flagrules" select="$flagrules"/>
+        </xsl:call-template>
+      </xsl:if>
     </xsl:if>
     
     <!-- for table/list flagging styles -->
@@ -427,15 +434,21 @@
     </xsl:if>
     
     <!-- avoid text under li/entry-->
-    <xsl:if test="$type = ''">
+    <xsl:if test="$type = '' or $type = 'note' or $type = 'keyword'">
       <!-- add rev style -->
-      <xsl:call-template name="end-add-odt-revflags">
-        <xsl:with-param name="flagrules" select="$flagrules"/>
-      </xsl:call-template>
+      <!-- note tag is special -->
+      <xsl:if test="$type != 'note'">
+        <xsl:call-template name="end-add-odt-revflags">
+          <xsl:with-param name="flagrules" select="$flagrules"/>
+        </xsl:call-template>
+      </xsl:if>
       <!-- add images -->
-      <xsl:call-template name="end-flagit">
-        <xsl:with-param name="flagrules" select="$flagrules"/> 
-      </xsl:call-template>
+      <!-- keyword do not have flagging images -->
+      <xsl:if test="$type != 'keyword'">
+        <xsl:call-template name="end-flagit">
+          <xsl:with-param name="flagrules" select="$flagrules"/> 
+        </xsl:call-template>
+      </xsl:if>
     </xsl:if>
     
     <!-- for table/list flagging styles -->

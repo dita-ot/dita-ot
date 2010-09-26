@@ -61,7 +61,7 @@
   
   
   <!-- =========== TEMPLATES FOR CALCULATING NESTED TAGS 
-      NOTE:SOME TAGS' NUMBER ARE MULTPLIED BY TWO FOR FLAGGING STYLES.=========== -->
+      NOTE:SOME TAGS' NUMBER ARE MULTPLIED BY A NUMBER FOR FLAGGING STYLES.=========== -->
   <xsl:template name="calculate_list_depth">
     <xsl:param name="list_class" select="' topic/li '"/>
     
@@ -87,7 +87,7 @@
     <xsl:variable name="note_count">
       <xsl:value-of select="(count(ancestor::*[contains(@class, ' topic/note ')]) - 
         count(ancestor::*[contains(@class, $tag_class)][1]
-        /ancestor::*[contains(@class, ' topic/note ')])) * 2"/>
+        /ancestor::*[contains(@class, ' topic/note ')])) * 3"/>
     </xsl:variable>
     
     <xsl:variable name="itemgroup_count">
@@ -120,24 +120,31 @@
                             /ancestor::*[contains(@class, ' topic/dd ')])) * 2"/>
     </xsl:variable>
     
-    <!-- sthead count important! -->
-    <xsl:variable name="sthead_count">
-      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/sthead ')]) - 
-        count(ancestor::*[contains(@class, $tag_class)][1]
-        /ancestor::*[contains(@class, ' topic/sthead ')])"/>
+    <!-- sthead/thead count important! -->
+    <xsl:variable name="thead_count">
+      <xsl:choose>
+        <xsl:when test="ancestor::*[contains(@class, ' topic/sthead ')]">
+          <xsl:value-of select="1"/>
+        </xsl:when>
+        <xsl:when test="ancestor::*[contains(@class, ' topic/thead ')]">
+          <xsl:value-of select="1"/>
+        </xsl:when>
+        <xsl:otherwise>0</xsl:otherwise>
+      </xsl:choose>
     </xsl:variable>
     
     <!-- thead count important! -->
+    <!-- 
     <xsl:variable name="thead_count">
       <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/thead ')]) - 
         count(ancestor::*[contains(@class, $tag_class)][1]
         /ancestor::*[contains(@class, ' topic/thead ')])"/>
     </xsl:variable>
-    
+    -->
     
     <xsl:variable name="total_count" select="$fig_count + $lq_count + 
       $note_count + $itemgroup_count + $p_count + $draft-comment_count + 
-      $required-cleanup_count + $dd_count + $sthead_count + $thead_count"/>
+      $required-cleanup_count + $dd_count + $thead_count"/>
     
     
     <xsl:choose>
@@ -177,7 +184,7 @@
     
     <xsl:variable name="note_count">
       <!-- Add 1 for flagging sytles -->
-      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/note ')]) * 2"/>
+      <xsl:value-of select="count(ancestor::*[contains(@class, ' topic/note ')]) * 3"/>
     </xsl:variable>
     
     <xsl:variable name="p_count">

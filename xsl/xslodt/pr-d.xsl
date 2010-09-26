@@ -151,6 +151,7 @@
                   <!-- end add flagging styles -->
                   <xsl:apply-templates select="." mode="end-add-odt-flags"/>
              </xsl:element>
+             <xsl:element name="text:line-break"/>
         </xsl:when>
         <xsl:when test="parent::*[contains(@class, ' topic/li ')]">
              <xsl:element name="text:p">
@@ -267,6 +268,7 @@
                        <xsl:apply-templates select="." mode="end-add-odt-flags"/>
                   </xsl:element>
              </xsl:element>
+             <xsl:element name="text:line-break"/>
         </xsl:otherwise>
    </xsl:choose>
    
@@ -306,6 +308,7 @@
           <xsl:when test="parent::*[contains(@class, ' topic/body ')] or 
                parent::*[contains(@class, ' topic/li ')]">
                <xsl:element name="text:p">
+                    <xsl:attribute name="text:style-name">border_paragraph</xsl:attribute>
                     <xsl:element name="text:span">
                          <!-- start add flagging styles -->
                          <xsl:apply-templates select="." mode="start-add-odt-flags"/>
@@ -470,6 +473,63 @@
                <xsl:apply-templates select="." mode="end-add-odt-revflags"/>
           </xsl:element>
      </xsl:element>
+</xsl:template>
+     
+<xsl:template match="*[contains(@class, ' pr-d/apiname ')]|*[contains(@class, ' pr-d/option ')]|
+                     *[contains(@class, ' pr-d/cmdname ')]">
+     
+     <xsl:choose>
+          <xsl:when test="parent::*[contains(@class, ' topic/li ')]">
+               <xsl:element name="text:p">
+                    <xsl:element name="text:span">
+                         <!-- start add rev flagging styles -->
+                         <xsl:apply-templates select="." mode="start-add-odt-revflags"/>
+                         <xsl:apply-templates/>
+                         <!-- end add rev flagging styles -->
+                         <xsl:apply-templates select="." mode="end-add-odt-revflags"/>
+                    </xsl:element>
+               </xsl:element>
+          </xsl:when>
+          <!-- nested by entry -->
+          <xsl:when test="parent::*[contains(@class, ' topic/entry ')]">
+               <!-- create p tag -->
+               <xsl:element name="text:p">
+                    <!-- alignment styles -->
+                    <xsl:if test="parent::*[contains(@class, ' topic/entry ')]/@align">
+                         <xsl:call-template name="set_align_value"/>
+                    </xsl:if>
+                    <xsl:element name="text:span">
+                         <!-- start add rev flagging styles -->
+                         <xsl:apply-templates select="." mode="start-add-odt-revflags"/>
+                         <xsl:apply-templates/>
+                         <!-- end add rev flagging styles -->
+                         <xsl:apply-templates select="." mode="end-add-odt-revflags"/> 
+                    </xsl:element>
+               </xsl:element>
+          </xsl:when>
+          <!-- nested by stentry -->
+          <xsl:when test="parent::*[contains(@class, ' topic/stentry ')]">
+               <xsl:element name="text:p">
+                    <xsl:element name="text:span">
+                         <!-- start add rev flagging styles -->
+                         <xsl:apply-templates select="." mode="start-add-odt-revflags"/>
+                         <xsl:apply-templates/>
+                         <!-- end add rev flagging styles -->
+                         <xsl:apply-templates select="." mode="end-add-odt-revflags"/>
+                    </xsl:element>
+               </xsl:element>
+          </xsl:when>
+          <xsl:otherwise>
+               <xsl:element name="text:span">
+                    <!-- start add rev flagging styles -->
+                    <xsl:apply-templates select="." mode="start-add-odt-revflags"/>
+                    <xsl:apply-templates/>
+                    <!-- end add rev flagging styles -->
+                    <xsl:apply-templates select="." mode="end-add-odt-revflags"/>
+               </xsl:element>
+          </xsl:otherwise>
+     </xsl:choose>
+     
 </xsl:template>
 
 </xsl:stylesheet>

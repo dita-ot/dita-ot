@@ -280,13 +280,13 @@
   
   <!-- create map title -->
   <xsl:template name="create_map_title">
-    <xsl:apply-templates select="//opentopic:map/*[contains(@class, ' map/topicref ')]/*[contains(@class, ' map/topicmeta ')]
+    <xsl:apply-templates select="//opentopic:map/*[contains(@class, ' map/topicref ')][1]/*[contains(@class, ' map/topicmeta ')]
       /*[contains(@class, ' topic/navtitle ')]" mode="create_title"/>
   </xsl:template>
   
   <!-- create topic title -->
   <xsl:template name="create_topic_title">
-    <xsl:apply-templates select="/*[contains(@class, ' topic/topic ')]/*[contains(@class, ' topic/title ')]" mode="create_title"/>
+    <xsl:apply-templates select="/*[contains(@class, ' topic/topic ')][1]/*[contains(@class, ' topic/title ')]" mode="create_title"/>
   </xsl:template>
   
   <xsl:template match="*[contains(@class, ' topic/title ')]|*[contains(@class, ' topic/navtitle ')]" mode="create_title">
