@@ -97,7 +97,7 @@
 <xsl:template match="*[contains(@class,' topic/boolean ')]/@state" mode="get-source-attribute" priority="10"/>
 <xsl:template match="*[contains(@class,' topic/state ')]/@name" mode="get-source-attribute" priority="10"/>
 <xsl:template match="*[contains(@class,' topic/state ')]/@value" mode="get-source-attribute" priority="10"/>
-<xsl:template match="*[contains(@class,' map/topichead ')]/@navtitle" mode="get-source-attribute" priority="10"/>
+<xsl:template match="*[contains(@class,' mapgroup-d/topichead ')]/@navtitle" mode="get-source-attribute" priority="10"/>
 
     
 <!-- targetTopic contains the domains value from the topic that this conref points to. 
@@ -1058,9 +1058,13 @@
     </xsl:if>
 </xsl:template>
 
-<!-- If an element is required, it must be specified on the original source element to avoid parsing errors.
+<!-- If an attribute is required, it must be specified on the original source element to avoid parsing errors.
      Such attributes should NOT be copied from the source. Conref should also not be copied. 
      NOTE: if a new specialized element requires attributes, it should be added here. -->
+
+<!-- DITA 1.1 added the key -dita-use-conref-target, which can be used on required attributes
+     to be sure they do not override the same attribute on a target element. -->
+<xsl:template match="@*[.='-dita-use-conref-target']" mode="original-attributes" priority="11"/>
 
 <xsl:template match="@conrefend" mode="original-attributes" priority="10"/>
 <xsl:template match="@xtrc|@xtrf" mode="original-attributes" priority="10"/>
@@ -1071,7 +1075,7 @@
 <xsl:template match="*[contains(@class,' topic/state ')]/@name" mode="original-attributes" priority="10"/>
 <xsl:template match="*[contains(@class,' topic/state ')]/@value" mode="original-attributes" priority="10"/>
 <!-- topichead is specialized from topicref, and requires @navtitle -->
-<xsl:template match="*[contains(@class,' map/topichead ')]/@navtitle" mode="original-attributes" priority="10"/>
+<xsl:template match="*[contains(@class,' mapgroup-d/topichead ')]/@navtitle" mode="original-attributes" priority="10"/>
 
 <xsl:template match="@href">
   <xsl:param name="current-relative-path"/>
