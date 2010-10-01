@@ -35,10 +35,16 @@
 <!-- Machine Industry Taskbody ENTITIES -->
 <!-- ============================================================= -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
+    <xs:annotation>
+		<xs:appinfo>
+			<dita:domainsModule xmlns:dita="http://dita.oasis-open.org/architecture/2005/">(topic task+taskreq-d machineryTaskbody-c)</dita:domainsModule>
+		</xs:appinfo>
+		<xs:documentation> 
     
-    
-  <xs:redefine schemaLocation="urn:oasis:names:tc:dita:xsd:taskGrp.xsd:1.2">
-    
+    </xs:documentation>
+	</xs:annotation>
+	
+   <xs:redefine schemaLocation="urn:oasis:names:tc:dita:xsd:taskGrp.xsd:1.2">  
     <xs:group name="prereq">
       <xs:choice>
         <xs:group ref="prereq"/>

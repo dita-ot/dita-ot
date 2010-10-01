@@ -23,8 +23,6 @@
 <!-- ============================================================= -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
     
-    <!--  Import the XML Schema that contains the defiinitions for xml:lang and xml:space attributes -->
-    <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="urn:oasis:names:tc:dita:xsd:xml.xsd:1.2"/>
     
     <!-- <!ENTITY % learning-d-att "(topic learningInteractionBase-d learning-d)"> -->
   <xs:annotation>
@@ -43,7 +41,7 @@
     </xs:group>
        
     
-    <xs:group name="learning-d-fig">
+    <xs:group name="learning-d-lcInteractionBase">
         <xs:choice>
             <xs:group ref="lcTrueFalse" />
             <xs:group ref="lcSingleSelect" />
@@ -55,21 +53,7 @@
         </xs:choice>        
     </xs:group>
       
-      <xs:group name="learning-d-lcInteractionBase">
-        <xs:choice>
-            <xs:group ref="lcTrueFalse" />
-            <xs:group ref="lcSingleSelect" />
-            <xs:group ref="lcMultipleSelect" />
-            <xs:group ref="lcSequencing" />
-            <xs:group ref="lcMatching" />
-            <xs:group ref="lcHotspot" />
-            <xs:group ref="lcOpenQuestion" />
-        </xs:choice>        
-    </xs:group>
-  
-                        
-    
-    <xs:group name="lcInstructornote">
+ <xs:group name="lcInstructornote">
         <xs:choice>
             <xs:element ref="lcInstructornote" />
         </xs:choice>
@@ -708,7 +692,7 @@
     <xs:complexType mixed="true">
       <xs:complexContent>
         <xs:extension base="lcAreaCoords.class">
-          <xs:attribute ref="class" default="+ topic/ph learningInteractionBase-d/p learning-d/lcAreaCoords"/>
+          <xs:attribute ref="class" default="+ topic/ph learningInteractionBase-d/ph learning-d/lcAreaCoords "/>
         </xs:extension>
       </xs:complexContent>
     </xs:complexType>

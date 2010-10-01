@@ -133,7 +133,18 @@
 
 <!--  ================ DOMAINS ATTRIBUTE DEFINITION =====================  -->
   <xs:attributeGroup name="domains-att">
-    <xs:attribute name="domains" type="xs:string" default="(topic ui-d) (topic hi-d) (topic sw-d) (topic pr-d) (topic ut-d) (topic indexing-d) (topic hazard-d) (topic concept) (topic concept glossgroup) (topic concept glossentry) (topic abbrev-d)"/>
+    <xs:attribute name="domains" type="xs:string" 
+                          default="(topic abbrev-d)
+                                          (topic hazard-d)
+                                          (topic hi-d)
+                                          (topic indexing-d)                                           
+                                          (topic pr-d) 
+                                          (topic sw-d)
+                                          (topic ui-d) 
+                                          (topic ut-d)
+                                          (topic concept) 
+                                          (topic concept glossentry)
+                                          (topic concept glossgroup)"/>
   </xs:attributeGroup>
    
 </xs:schema>

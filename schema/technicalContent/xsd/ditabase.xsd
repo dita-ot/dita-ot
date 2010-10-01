@@ -51,10 +51,7 @@
   <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:tblDeclMod.xsd:1.2"/>    
   <!-- ======= MetaData elements, plus keyword and indexterm ======= -->
   <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:metaDeclMod.xsd:1.2"/>
-  
-  <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="urn:oasis:names:tc:dita:xsd:xml.xsd:1.2"/>
-  <xs:import namespace="http://dita.oasis-open.org/architecture/2005/" schemaLocation="urn:oasis:names:tc:dita:xsd:ditaarch.xsd:1.2"/>
-  
+   
   <xs:redefine schemaLocation="urn:oasis:names:tc:dita:xsd:commonElementGrp.xsd:1.2">
     <xs:group name="keyword">
       <xs:choice>
@@ -172,6 +169,8 @@
     </xs:group>
     
   </xs:redefine>
+  
+  <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:ditabaseMod.xsd"/>  
 
   <xs:group name="ditabase-info-types">
     <xs:choice>
@@ -189,28 +188,23 @@
       <xs:element ref="glossgroup"/>
     </xs:choice>
   </xs:group>
-
-  <xs:annotation>
-    <xs:documentation>The &lt;<keyword>dita</keyword>&gt; element provides a top-level container
-      for multiple topics when you create documents using the ditabase XSD. The
-      &lt;<keyword>dita</keyword>&gt; element lets you create any sequence of concept,
-      task, and reference topics, and the ditabase XSD lets you further nest these
-      topic types inside each other. The &lt;<keyword>dita</keyword>&gt; element has
-      no particular output implications; it simply allows you to create multiple
-      topics of different types at the same level in a single document.</xs:documentation>
-  </xs:annotation>
-  <xs:element name="dita" type="dita.class"/>
-  <xs:complexType name="dita.class">
-    <xs:choice maxOccurs="unbounded">
-      <xs:group ref="ditabase-info-types"/>
-    </xs:choice>
-    <xs:attribute ref="ditaarch:DITAArchVersion"/>
-    <xs:attribute ref="xml:lang"/>
-     <xs:attributeGroup ref="global-atts"/>
-  </xs:complexType>
   
   <xs:attributeGroup name="domains-att">
-    <xs:attribute name="domains" type="xs:string" default="(topic ui-d) (topic hi-d) (topic sw-d) (topic pr-d) (topic ut-d) (topic indexing-d) (topic hazard-d) (topic concept) (topic reference) (topic task) (topic task strictTaskbody-c) (topic concept glossentry) (topic concept glossgroup)"/>
+    <xs:attribute name="domains" type="xs:string" 
+      default="(topic hazard-d) 
+                      (topic hi-d) 
+                      (topic indexing-d)
+                      (topic sw-d) 
+                      (topic pr-d) 
+                      (topic ui-d)
+                      (topic ut-d)
+                      (topic concept) 
+                      (topic concept glossentry) 
+                      (topic concept glossgroup)
+                      (topic reference) 
+                      (topic task) 
+                      (topic task strictTaskbody-c) 
+                      "/>
   </xs:attributeGroup>
 
 </xs:schema>

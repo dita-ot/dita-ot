@@ -113,7 +113,15 @@
   <!-- DOMAINS ATTRIBUTE OVERRIDE -->
   <!-- ============================================================= -->
   <xs:attributeGroup name="domains-att">
-    <xs:attribute name="domains" type="xs:string" default="(topic ui-d) (topic hi-d) (topic ut-d)  (topic indexing-d) (topic hazard-d) (topic task) (topic task taskreq-d) (topic task+taskreq-d machineryTaskbody-c)"/>
+    <xs:attribute name="domains" type="xs:string" 
+                          default="(topic hazard-d)
+                                          (topic hi-d)
+                                          (topic indexing-d)                                           
+                                          (topic ui-d) 
+                                          (topic ut-d)
+                                          (topic task) 
+                                          (topic task taskreq-d) 
+                                          (topic task+taskreq-d machineryTaskbody-c)"/>
   </xs:attributeGroup>
   
   <xs:group name="info-types">

@@ -23,7 +23,6 @@
 
  <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
      <!-- ==================== Import Section ======================= -->
-     <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="urn:oasis:names:tc:dita:xsd:xml.xsd:1.2"/>
      <xs:import namespace="http://dita.oasis-open.org/architecture/2005/" schemaLocation="urn:oasis:names:tc:dita:xsd:ditaarch.xsd:1.2"/>
    
    <xs:annotation>
@@ -94,9 +93,9 @@
      <xs:sequence>
         <xs:sequence>
              <xs:group ref="glossterm"/>
-             <xs:group ref="glossdef" />
-             <xs:group ref="prolog" />
-             <xs:group ref="glossBody" />
+             <xs:group ref="glossdef"  minOccurs="0"/>
+             <xs:group ref="prolog"  minOccurs="0"/>
+             <xs:group ref="glossBody"  minOccurs="0"/>
              <xs:group ref="related-links" minOccurs="0"/>
              <xs:group ref="glossentry-info-types" minOccurs="0" maxOccurs="unbounded"/>
          </xs:sequence>

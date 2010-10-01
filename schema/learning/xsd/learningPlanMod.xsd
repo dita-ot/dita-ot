@@ -25,12 +25,11 @@
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
   attributeFormDefault="unqualified" xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
   <!-- ==================== Import Section ======================= -->
-  <xs:import namespace="http://www.w3.org/XML/1998/namespace"     schemaLocation="urn:oasis:names:tc:dita:xsd:xml.xsd:1.2"/>
   <xs:import namespace="http://dita.oasis-open.org/architecture/2005/"     schemaLocation="urn:oasis:names:tc:dita:xsd:ditaarch.xsd:1.2"/>
 
   <xs:annotation>
     <xs:appinfo>
-      <dita:domainsModule xmlns:dita="http://dita.oasis-open.org/architecture/2005/">(topic learningBase+learningInteractionBase-dlearningPlan)</dita:domainsModule>
+      <dita:domainsModule xmlns:dita="http://dita.oasis-open.org/architecture/2005/">(topic learningBase+learningInteractionBase-d learningPlan)</dita:domainsModule>
     </xs:appinfo>
     <xs:documentation> 
     
@@ -149,7 +148,7 @@
       <xs:complexContent>
         <xs:extension base="lcProject.class">
           <xs:attribute ref="class"
-            default="- topic/section learningBase/p  learningPlan/lcProject "/>
+            default="- topic/section learningBase/section  learningPlan/lcProject "/>
         </xs:extension>
       </xs:complexContent>
     </xs:complexType>

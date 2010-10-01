@@ -25,11 +25,17 @@
     attributeFormDefault="unqualified"
     xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/">
     <!-- ======= INCLUDE ======= -->
+     <!-- Learning Map domains -->
     <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:mapGroupMod.xsd:1.2"/>
     <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:indexingDomain.xsd:1.2"/>
     <xs:include schemaLocation="urn:oasis:names:tc:dita:spec:learning:xsd:learningMapDomain.xsd:1.2"/>
     <xs:include schemaLocation="urn:oasis:names:tc:dita:spec:learning:xsd:learningMetadataDomain.xsd:1.2" />
     <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:delayResolutionDomain.xsd:1.2"/>
+  
+     <!-- base domains -->
+  <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:highlightDomain.xsd:1.2"/>
+  <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:utilitiesDomain.xsd:1.2"/>
+  <xs:include schemaLocation="urn:oasis:names:tc:dita:xsd:hazardstatementDomain.xsd:1.2"/>
 
 
     <!--  ================ GROUP DEFINITIONS =====================  -->
@@ -59,6 +65,28 @@
                 <xs:group ref="indexing-d-index-base"/>
             </xs:choice>
         </xs:group>
+      
+      <xs:group name="ph">
+        <xs:choice>
+          <xs:group ref="ph"/>
+          <xs:group ref="hi-d-ph" />
+        </xs:choice>
+      </xs:group>
+      
+      
+      <xs:group name="fig">
+        <xs:choice>
+          <xs:group ref="fig"/>
+          <xs:group ref="ut-d-fig" />
+        </xs:choice>
+      </xs:group >
+      
+      <xs:group name="note">
+        <xs:choice>
+          <xs:group ref="note"/>
+          <xs:group ref="hazard-d-note"/>
+        </xs:choice>
+      </xs:group >
 
     </xs:redefine>
 
@@ -84,8 +112,15 @@
 
     <xs:attributeGroup name="domains-att">
         <xs:attribute name="domains" type="xs:string"
-            default="(map mapgroup-d) (topic delay-d)  (topic indexing-d) (topic learningmeta-d) (map learningmap-d) "
-        />
+            default="(map learningmap-d)
+            (map mapgroup-d) 
+            (topic delay-d)  
+            (topic hazard-d)
+            (topic hi-d)  
+            (topic indexing-d) 
+            (topic learningmeta-d) 
+            (topic ut-d)
+            "/>
     </xs:attributeGroup>
 
 
