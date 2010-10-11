@@ -11,6 +11,7 @@ package org.dita.dost.platform;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -93,10 +94,16 @@ public class Integrator {
                 {
                   // Set reasonable defaults.
                   properties.setProperty("plugindirs", "plugins;demo");
+                  properties.setProperty("plugin.ignores", "");
                 }
         
                 // Get the list of plugin directories from the properties.
                 String[] pluginDirs = properties.getProperty("plugindirs").split(";");
+                
+                Set<String> pluginIgnores = new HashSet<String>();
+                if (properties.getProperty("plugin.ignores") != null) {
+                	pluginIgnores.addAll(Arrays.asList(properties.getProperty("plugin.ignores").split(";")));
+                }
                 
                 for (int j = 0; j < pluginDirs.length; j++)
                 {
@@ -106,10 +113,9 @@ public class Integrator {
 		  pluginFiles = pluginDir.listFiles();
  
 		  for (int i=0; (pluginFiles != null) && (i < pluginFiles.length); i++){
+			File f = pluginFiles[i]; 
 			File descFile = new File(pluginFiles[i],"plugin.xml");
-			//not to inculde cxxapiref plugin
-			String name = pluginFiles[i].getName();
-			if (pluginFiles[i].isDirectory() && !"cxxapiref".equals(name) && descFile.exists()){
+			if (pluginFiles[i].isDirectory() && !pluginIgnores.contains(f.getName()) && descFile.exists()){
 				descSet.add(descFile);
 			}
 		  }
