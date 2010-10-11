@@ -17,6 +17,7 @@ import java.util.StringTokenizer;
 
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.DITAOTJavaLogger;
+import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.Content;
 import org.dita.dost.module.ContentImpl;
 import org.dita.dost.util.Constants;
@@ -257,8 +258,18 @@ public class MergeMapParser extends AbstractXMLReader {
 				if(!util.isVisited(element)){
 					util.visit(element);
 					if (!resourceOnlySet.contains(element) && (chunkedTopicSet.contains(element)
-							|| !skipTopicSet.contains(element)))
-						topicParser.parse(element, dirPath);
+							|| !skipTopicSet.contains(element))){
+						//ensure the file exists
+						if(new File(dirPath, element).exists()){
+							topicParser.parse(element, dirPath);
+						}else{
+							String fileName = new File(dirPath, element).getAbsolutePath();
+							Properties prop = new Properties();
+			            	prop.put("%1", fileName);
+			            	logger.logWarn(MessageUtils.getMessage("DOTX008W", prop).toString());
+						}
+					}
+						
 				}
 			}
         }catch (Exception e){
