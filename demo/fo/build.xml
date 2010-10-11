@@ -281,7 +281,11 @@ with those set forth herein.
         
     	<!-- must fork or catalog resolution will fail due to sharing of -->
     	<!-- resolver and catalogs with the Open Toolkit -->
-        <java classname="${fo.saxon.classname}" classpathref="project.class.path" fork="true">
+  			<echo message="Java maximum memory=${maxJavaMemory}"/>
+        <java classname="${fo.saxon.classname}" classpathref="project.class.path" fork="true"
+        	maxmemory="${maxJavaMemory}"
+        	>
+        	  <jvmarg line="${baseJVMArgLine}"/>
             <arg line='-o "${buildDir}/stage2.fo"'/>
             <arg line="${saxon.resolver.command.line}"/>
             <arg line='"${buildDir}/stage1.xml"'/>
@@ -319,7 +323,11 @@ with those set forth herein.
             catalogs="${xml.catalog.files}">
         </i18n-preprocess>
 
-        <java classname="${fo.saxon.classname}" classpathref="project.class.path" fork="true">
+
+        <java classname="${fo.saxon.classname}" classpathref="project.class.path" fork="true"
+        	maxmemory="${maxJavaMemory}"
+				>
+      	  	<jvmarg line="${baseJVMArgLine}"/>
             <arg line='-o "${outputFile}"'/>
             <arg line="${saxon.resolver.command.line}"/>
             <arg line='"${buildDir}/stage3.fo"'/>
@@ -383,7 +391,10 @@ with those set forth herein.
 	<target name="transform.fo2pdf.xep" if="use.xep.pdf.formatter">
         <java classname="com.idiominc.ws.opentopic.fo.xep.Runner" 
             resultproperty="errCode" failonerror="${xep.failOnError}" 
-        	fork="true"	maxmemory="256m">
+        	fork="true"
+        	maxmemory="${maxJavaMemory}"
+				>
+      	  <jvmarg line="${baseJVMArgLine}"/>
             <arg line='"${inputFile}" "${outputFile}" failOnError=${xep.failOnError}'/>
             <classpath refid="xep.class.path"/>
             <sysproperty key="com.renderx.xep.CONFIG" value="${xep.config.file}"/>
