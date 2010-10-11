@@ -97,7 +97,7 @@ public class CommandLineInvoker {
 		//added on 20100824 to disable grammar pool caching start
 		paramMap.put("/grammarcache", "args.grammar.cache");
 		//added on 20100824 to disable grammar pool caching end
-		paramMap.put("/binaryimage", "odt.image.embedded");
+		paramMap.put("/odtimgembed", "args.odt.img.embed");
 		
 		
 	}
@@ -428,7 +428,7 @@ public class CommandLineInvoker {
 		msg.append("  /onlytopicinmap:       specify whether make dita processor only resolve dita/topic files which are referenced by primary ditamap files Only \"true\" and \"false\" are valid values. The default is false. " + lSep);
 		msg.append("  /debug:                specify whether extra debug information should be included in the log. Only \"yes\" and \"no\" are valid values. The default is no. " + lSep);
 		msg.append("  /grammarcache:            specify whether grammar pool caching is used when parsing dita files. Only \"yes\" and \"no\" are valid values. The default is yes. " + lSep);
-		msg.append("  /binaryimage:            specify whether embedding images as binary data in odt transform. Only \"yes\" and \"no\" are valid values. The default is yes. " + lSep);
+		msg.append("  /odtimgembed:            specify whether embedding images as binary data in odt transform. Only \"yes\" and \"no\" are valid values. The default is yes. " + lSep);
         System.out.println(msg.toString());
     }
     

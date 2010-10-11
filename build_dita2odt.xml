@@ -92,7 +92,7 @@
       <param name="disableRelatedLinks" expression="${args.fo.include.rellinks.odt}"/>
       <param name="INDEXSHOW" expression="${args.indexshow}" if="args.indexshow"/>
       <param name="DBG" expression="${args.debug}" if="args.debug"/>
-      <param name="BINARYIMAGE" expression="${odt.image.embedded}" if="odt.image.embedded"/>
+      <param name="ODTIMGEMBED" expression="${args.odt.img.embed}" if="args.odt.img.embed"/>
       <!--<xmlcatalog refid="dita.catalog" />-->
     </xslt>
   </target>
@@ -121,7 +121,7 @@
       <param name="disableRelatedLinks" expression="${args.fo.include.rellinks.odt}"/>
       <param name="INDEXSHOW" expression="${args.indexshow}" if="args.indexshow"/>
       <param name="DBG" expression="${args.debug}" if="args.debug"/>
-      <param name="BINARYIMAGE" expression="${odt.image.embedded}" if="odt.image.embedded"/>
+      <param name="ODTIMGEMBED" expression="${args.odt.img.embed}" if="args.odt.img.embed"/>
       <!--<xmlcatalog refid="dita.catalog" />-->
     </xslt>
   </target>

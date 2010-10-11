@@ -250,7 +250,7 @@
           <xsl:attribute name="svg:height"><xsl:value-of select="$height"/>in</xsl:attribute>       
           <xsl:element name="draw:image">
             <xsl:choose>
-              <xsl:when test="$BINARYIMAGE = 'yes'">
+              <xsl:when test="$ODTIMGEMBED = 'yes'">
                 <xsl:element name="office:binary-data">
                   <xsl:value-of select="java:getBASE64($OUTPUTDIR, string(@href))" disable-output-escaping="yes"/>
                 </xsl:element>
@@ -300,7 +300,7 @@
           <xsl:attribute name="svg:height"><xsl:value-of select="$height"/>in</xsl:attribute>       
           <xsl:element name="draw:image">
             <xsl:choose>
-              <xsl:when test="$BINARYIMAGE = 'yes'">
+              <xsl:when test="$ODTIMGEMBED = 'yes'">
                 <xsl:element name="office:binary-data">
                   <xsl:value-of select="java:getBASE64($OUTPUTDIR, string($imgsrc))" disable-output-escaping="yes"/>
                 </xsl:element>

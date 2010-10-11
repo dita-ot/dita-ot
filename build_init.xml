@@ -316,10 +316,10 @@
   		      </not>
   	</condition> 	
   	<!-- Added on 2010-08-24 for bug:2994593 enable grammar pool caching by default end-->
-  	<condition property="odt.image.embedded"
+  	<condition property="args.odt.img.embed"
   	  	      value="yes">
   	  		      <not>
-  	  		        <isset property="odt.image.embedded"/>
+  	  		        <isset property="args.odt.img.embed"/>
   	  		      </not>
   	</condition>
   	<condition property="clean_temp">
