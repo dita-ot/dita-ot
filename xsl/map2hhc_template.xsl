@@ -10,6 +10,8 @@
 <!-- Import the main ditamap to HTML Help Contents conversion -->
 <xsl:import href="map2htmlhelp/map2hhcImpl.xsl"/>
 
+<dita:extension id="dita.xsl.htmlhelp.map2hhc" behavior="org.dita.dost.platform.ImportXSLAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
+
 <xsl:output method="xml"
             encoding="UTF-8"
             indent="no"

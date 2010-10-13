@@ -65,6 +65,10 @@ public class Integrator {
 		templateSet.add("xsl/preprocess/maplink_template.xsl");
 		templateSet.add("xsl/preprocess/mapref_template.xsl");
 		templateSet.add("xsl/preprocess/mappull_template.xsl");
+		templateSet.add("xsl/map2eclipse_template.xsl");
+		templateSet.add("xsl/map2hhc_template.xsl");
+		templateSet.add("xsl/map2hhp_template.xsl");
+		templateSet.add("xsl/map2htmtoc_template.xsl");
 		templateSet.add("xsl/map2plugin_template.xsl");
 		templateSet.add("xsl/preprocess/conref_template.xsl");
 		templateSet.add("xsl/preprocess/topicpull_template.xsl");

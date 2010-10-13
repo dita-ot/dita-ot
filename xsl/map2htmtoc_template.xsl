@@ -7,8 +7,10 @@
 <xsl:stylesheet version="1.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
-<!-- Import the main ditamap to HTML Help Contents conversion -->
-<xsl:import href="map2htmlhelp/map2hhcImpl.xsl"/>
+<!-- Import the main ditamap to HTML TOC conversion -->
+<xsl:import href="map2htmtoc/map2htmtocImpl.xsl"/>
+
+<dita:extension id="dita.xsl.htmltoc" behavior="org.dita.dost.platform.ImportXSLAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
 
 <xsl:output method="xml"
             encoding="UTF-8"
