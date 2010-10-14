@@ -114,6 +114,7 @@
   	<include name="lib/**" />
     <include name="lib/resolver.jar"/>
     <include name="lib/CatalogManager.properties"/>
+  	<exclude name="plugins/cxxapiref/" />
     <exclude name="build.number"/>
     <exclude name=".*"/>
   </patternset>
@@ -145,6 +146,7 @@
     <include name="lib/resolver.jar"/>
     <include name="lib/CatalogManager.properties"/>
   	<include name="lib/saxon/**" />
+  	<exclude name="plugins/cxxapiref/" />
     <exclude name="doc/userguide-orig/**"/>
 	<exclude name="doc/ot-userguide/**"/>
     <exclude name="build.number"/>
@@ -157,6 +159,7 @@
 			<exclude name="demo/fo/fop/conf/" />
 			<exclude name="demo/fo/fop/lib/" />
 			<exclude name="demo/fo/lib/icu4j.jar" />
+			<exclude name="plugins/cxxapiref/" />
 			<exclude name="lib/saxon/*" />
 			<exclude name="lib/icu4j.jar" />
 			<exclude name="lib/log4j.properties" />
