@@ -353,7 +353,7 @@
       	<exclude name="plugincustomization.ini"/>
       </fileset>
     </move>
-  	<move file="${output.dir}${file.separator}plugin.properties" tofile="${output.dir}${file.separator}plugin_${fragment.property.name}.properties"/>
+  	<move file="${output.dir}${file.separator}plugin.properties" tofile="${output.dir}${file.separator}plugin_${fragment.property.name}.properties" failonerror="no"/>
 
   	
   </target>
@@ -377,7 +377,7 @@
       	<exclude name="plugincustomization.ini"/>
       </fileset>
     </move>
-  	<move file="${output.dir}${file.separator}plugin.properties" tofile="${output.dir}${file.separator}plugin_${fragment.property.name}.properties"/>
+  	<move file="${output.dir}${file.separator}plugin.properties" tofile="${output.dir}${file.separator}plugin_${fragment.property.name}.properties" failonerror="no"/>
   </target>
   
   <!--<target name="dita.map.eclipse"
