@@ -699,6 +699,10 @@
     <uri name="urn:oasis:names:tc:dita:xsd:topicMod.xsd:1.x" uri="topicMod.xsd"/>
     <uri name="urn:oasis:names:tc:dita:xsd:topicMod.xsd:1.2" uri="topicMod.xsd"/>
     
+    <uri name="basetopic.xsd" uri="basetopic.xsd"/>
+    <uri name="urn:oasis:names:tc:dita:xsd:basetopic.xsd" uri="basetopic.xsd"/>
+    <uri name="urn:oasis:names:tc:dita:xsd:basetopic.xsd:1.x" uri="basetopic.xsd"/>
+    <uri name="urn:oasis:names:tc:dita:xsd:basetopic.xsd:1.2" uri="basetopic.xsd"/>
     <uri name="topicGrp.xsd" uri="topicGrp.xsd"/>
     <uri name="urn:oasis:names:tc:dita:xsd:topicGrp.xsd" uri="topicGrp.xsd"/>
     <uri name="urn:oasis:names:tc:dita:xsd:topicGrp.xsd:1.x" uri="topicGrp.xsd"/>
@@ -960,6 +964,10 @@
     <uri name="urn:oasis:names:tc:dita:xsd:ditabase.xsd" uri="ditabase.xsd"/>
     <uri name="urn:oasis:names:tc:dita:xsd:ditabase.xsd:1.x" uri="ditabase.xsd"/>
     <uri name="urn:oasis:names:tc:dita:xsd:ditabase.xsd:1.2" uri="ditabase.xsd"/>
+    <uri name="ditabaseMod.xsd" uri="ditabaseMod.xsd" />
+    <uri name="urn:oasis:names:tc:dita:xsd:ditabaseMod.xsd" uri="ditabaseMod.xsd" />
+    <uri name="urn:oasis:names:tc:dita:xsd:ditabaseMod.xsd:1.x" uri="ditabaseMod.xsd" />
+    <uri name="urn:oasis:names:tc:dita:xsd:ditabaseMod.xsd:1.2" uri="ditabaseMod.xsd" />
 
     <uri name="concept.xsd" uri="concept.xsd"/>
     <uri name="urn:oasis:names:tc:dita:xsd:concept.xsd" uri="concept.xsd"/>
@@ -1331,10 +1339,10 @@
     <uri name="urn:oasis:names:tc:dita:spec:learning:xsd:learningContentMod.xsd:1.x"      uri="learningContentMod.xsd"/>
     <uri name="urn:oasis:names:tc:dita:spec:learning:xsd:learningContentMod.xsd:1.2"      uri="learningContentMod.xsd"/>
     
-    <uri name="learningDitabase.xsd"      uri="learningBookmap.xsd"/>
-    <uri name="urn:oasis:names:tc:dita:spec:learning:xsd:learningDitabase.xsd"      uri="learningBookmap.xsd"/>
-    <uri name="urn:oasis:names:tc:dita:spec:learning:xsd:learningDitabase.xsd:1.x"      uri="learningBookmap.xsd"/>
-    <uri name="urn:oasis:names:tc:dita:spec:learning:xsd:learningDitabase.xsd:1.2"      uri="learningBookmap.xsd"/>
+    <uri name="learningBookmap.xsd"      uri="learningBookmap.xsd"/>
+    <uri name="urn:oasis:names:tc:dita:spec:learning:xsd:learningBookmap.xsd"      uri="learningBookmap.xsd"/>
+    <uri name="urn:oasis:names:tc:dita:spec:learning:xsd:learningBookmap.xsd:1.x"      uri="learningBookmap.xsd"/>
+    <uri name="urn:oasis:names:tc:dita:spec:learning:xsd:learningBookmap.xsd:1.2"      uri="learningBookmap.xsd"/>
     
     <uri name="learningMap.xsd"      uri="learningMap.xsd"/>
     <uri name="urn:oasis:names:tc:dita:spec:learning:xsd:learningMap.xsd"      uri="learningMap.xsd"/>
