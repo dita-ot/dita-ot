@@ -380,7 +380,7 @@
        </xsl:call-template>
      </xsl:when>
     <xsl:when test="*[contains(@class,' topic/alt ')]">
-    <xsl:text>[PIC]</xsl:text><xsl:value-of select="*[contains(@class,' topic/alt ')]"/>
+      <xsl:value-of select="*[contains(@class,' topic/alt ')]"/>
     </xsl:when>
       
     <xsl:when test="startflag/alt-text">
@@ -388,13 +388,13 @@
     </xsl:when>
     
     <xsl:when test="@alt and not(@alt='')">
-      <xsl:text>[PIC]</xsl:text><xsl:value-of select="@alt"/>
+      <xsl:value-of select="@alt"/>
     </xsl:when>
     <xsl:when test="text() or *">
-      <xsl:text>[PIC]</xsl:text><xsl:apply-templates/>
+      <xsl:apply-templates/>
     </xsl:when>
     <xsl:when test="@href">
-      <xsl:text>[PIC]</xsl:text><xsl:value-of select="@href"/>
+      <xsl:value-of select="@href"/>
     </xsl:when>
     <xsl:otherwise/>
     
