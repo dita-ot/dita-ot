@@ -371,6 +371,7 @@ public class ConvertLang extends Task {
 		langMap.put("en-uk-", "0x0809 English (UNITED KINGDOM)");
 		langMap.put("en-us-", "0x0409 English (United States)");
 		langMap.put("en-", "0x0409 English (United States)");
+		langMap.put("en", "0x0409 English (United States)");
 		langMap.put("es-", "0x040a Spanish (Spain)");
 		langMap.put("et-", "0x0425 Estonian");
 		langMap.put("fi-", "0x040b Finnish");
@@ -559,8 +560,10 @@ public class ConvertLang extends Task {
 				//only for element node
 				if(node.getNodeType() == Node.ELEMENT_NODE){
 					Element e = (Element)node;
+					String lang = e.getAttribute(Constants.ATTRIBUTE_NAME_LANG);
 					//node found
-					if(langcode.equalsIgnoreCase(e.getAttribute(Constants.ATTRIBUTE_NAME_LANG))){
+					if(langcode.equalsIgnoreCase(lang)||
+					   lang.startsWith(langcode)){
 						//store the value into a map
 						//charsetMap = new HashMap<String, String>();
 						//iterate child nodes skip the 1st one
@@ -579,6 +582,11 @@ public class ConvertLang extends Task {
 						break;
 					}
 				}
+			}
+			//no matched charset is found set default value en-us
+			if(charsetMap.size() == 0){
+				charsetMap.put(Constants.ATTRIBUTE_FORMAT_VALUE_HTML, "iso-8859-1");
+				charsetMap.put(Constants.ATTRIBUTE_FORMAT_VALUE_WINDOWS, "windows-1252");
 			}
         } catch (Exception e) {
             /* Since an exception is used to stop parsing when the search

@@ -17,9 +17,7 @@
         <antcall target="dita.map.htmlhelp"></antcall>
     	
         <antcall target="dita.htmlhelp.convertlang"></antcall>
-		<!--
-        <antcall target="dita.htmlhelp.convertlang"></antcall>
-		-->
+		
     	<antcall target="compile.HTML.Help"></antcall>
     </target>
 
