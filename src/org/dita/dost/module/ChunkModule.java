@@ -67,7 +67,6 @@ public class ChunkModule implements AbstractPipelineModule {
 	@SuppressWarnings("unchecked")
 	public AbstractPipelineOutput execute(AbstractPipelineInput input)
 			throws DITAOTException {
-	    String baseDir = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_BASEDIR);
 		String tempDir = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_TEMPDIR);
 		String ditaext = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_DITAEXT);
 		String transtype = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_EXT_PARAM_TRANSTYPE);
@@ -75,6 +74,7 @@ public class ChunkModule implements AbstractPipelineModule {
 	    DITAOTJavaLogger javaLogger = new DITAOTJavaLogger();
 	    
         if (!new File(tempDir).isAbsolute()) {
+    	    String baseDir = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_BASEDIR);
         	tempDir = new File(baseDir, tempDir).getAbsolutePath();
         }
         //change to xml property
@@ -85,10 +85,11 @@ public class ChunkModule implements AbstractPipelineModule {
 		
 	    Properties prop = new Properties();
 	    try{
-	    	if(xmlDitalist.exists())
-	    		prop.loadFromXML(new FileInputStream(xmlDitalist));
-	    	else 
-	    		prop.load(new FileInputStream(ditalist));
+	    	if(xmlDitalist.exists()) {
+				prop.loadFromXML(new FileInputStream(xmlDitalist));
+			} else {
+				prop.load(new FileInputStream(ditalist));
+			}
 		}catch(IOException ioe){
 			throw new DITAOTException(ioe);
 		}
@@ -127,7 +128,7 @@ public class ChunkModule implements AbstractPipelineModule {
 	}
 	//update the href in ditamap and topic files
 	private void updateRefOfDita(Content changeTable, Hashtable<String, String> conflictTable, AbstractPipelineInput input){
-	    org.dita.dost.log.DITAOTJavaLogger logger=new org.dita.dost.log.DITAOTJavaLogger();
+	    DITAOTJavaLogger logger=new DITAOTJavaLogger();
 	    String tempDir = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_TEMPDIR);
         if (!new File(tempDir).isAbsolute()) {
     	    String baseDir = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_BASEDIR);
@@ -137,10 +138,11 @@ public class ChunkModule implements AbstractPipelineModule {
         File xmlDitalist=new File(tempDir, Constants.FILE_NAME_DITA_LIST_XML);
 	    Properties prop = new Properties();
 	    try{
-	    	if(xmlDitalist.exists())
-	    		prop.loadFromXML(new FileInputStream(xmlDitalist));
-	    	else 
-	    		prop.load(new FileInputStream(ditalist));
+	    	if(xmlDitalist.exists()) {
+				prop.loadFromXML(new FileInputStream(xmlDitalist));
+			} else {
+				prop.load(new FileInputStream(ditalist));
+			}
 	    }catch(IOException io){
 	    	logger.logError(io.getMessage());
 	    }
@@ -160,12 +162,7 @@ public class ChunkModule implements AbstractPipelineModule {
 	
 	
 	private void updateList(LinkedHashMap<String, String> changeTable, Hashtable<String, String> conflictTable, AbstractPipelineInput input){
-		
-	    HashSet<String> chunkedTopicSet=new LinkedHashSet<String>(Constants.INT_128);
-	    HashSet<String> chunkedDitamapSet=new LinkedHashSet<String>(Constants.INT_128);
-	    org.dita.dost.log.DITAOTJavaLogger logger=new org.dita.dost.log.DITAOTJavaLogger();
-		PropertiesWriter writer = new PropertiesWriter();
-		Content content = new ContentImpl();
+	    DITAOTJavaLogger logger=new DITAOTJavaLogger();
 		String tempDir = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_TEMPDIR);
         if (!new File(tempDir).isAbsolute()) {
     		String baseDir = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_BASEDIR);
@@ -176,185 +173,147 @@ public class ChunkModule implements AbstractPipelineModule {
 	    File xmlDitalist=new File(tempDir,Constants.FILE_NAME_DITA_LIST_XML);
 	    Properties prop = new Properties();
 		try{
-	    	if(xmlDitalist.exists())
+	    	if(xmlDitalist.exists()) {
 	    		prop.loadFromXML(new FileInputStream(xmlDitalist));
-	    	else 
+	    	} else { 
 	    		prop.load(new FileInputStream(ditalist));
+	    	}
 		}catch(IOException ex){
 			logger.logException(ex);
 		}
 		
 		Set<String> hrefTopics = StringUtils.restoreSet((String)prop.getProperty(Constants.HREF_TOPIC_LIST));
 		Set<String> chunkTopics = StringUtils.restoreSet((String)prop.getProperty(Constants.CHUNK_TOPIC_LIST));
-		if (hrefTopics != null && chunkTopics != null) {
-			for (String s : chunkTopics) {
-				if (!StringUtils.isEmptyString(s) && !s.contains(Constants.SHARP)) {
-					// This entry does not have an anchor, we assume that this topic will
-					// be fully chunked. Thus it should not produce any output. 
-					Iterator<String> hrefit = hrefTopics.iterator();
-					while(hrefit.hasNext()) {
-						String ent = hrefit.next();
-						if (FileUtils.resolveFile(tempDir, ent).equalsIgnoreCase(
-								FileUtils.resolveFile(tempDir, s)))  {
-							// The entry in hrefTopics points to the same target
-							// as entry in chunkTopics, it should be removed.
-							hrefit.remove();
-						}
+		for (String s : chunkTopics) {
+			if (!StringUtils.isEmptyString(s) && !s.contains(Constants.SHARP)) {
+				// This entry does not have an anchor, we assume that this topic will
+				// be fully chunked. Thus it should not produce any output. 
+				Iterator<String> hrefit = hrefTopics.iterator();
+				while(hrefit.hasNext()) {
+					String ent = hrefit.next();
+					if (FileUtils.resolveFile(tempDir, ent).equalsIgnoreCase(
+							FileUtils.resolveFile(tempDir, s)))  {
+						// The entry in hrefTopics points to the same target
+						// as entry in chunkTopics, it should be removed.
+						hrefit.remove();
 					}
-				} else if (!StringUtils.isEmptyString(s) && hrefTopics.contains(s)) {
-					hrefTopics.remove(s);
 				}
+			} else if (!StringUtils.isEmptyString(s) && hrefTopics.contains(s)) {
+				hrefTopics.remove(s);
 			}
 		}
 		
 		Set<String> topicList = new LinkedHashSet<String>(Constants.INT_128);
 		Set<String> oldTopicList = StringUtils.restoreSet((String)prop.getProperty(Constants.FULL_DITA_TOPIC_LIST));
-		if (hrefTopics != null && hrefTopics.size() > 0) {
-			for (String t : hrefTopics) {
-				if (t.lastIndexOf(Constants.SHARP) != -1) {
-					t = t.substring(0, t.lastIndexOf(Constants.SHARP));
+		for (String t : hrefTopics) {
+			if (t.lastIndexOf(Constants.SHARP) != -1) {
+				t = t.substring(0, t.lastIndexOf(Constants.SHARP));
+			}
+			if (t.lastIndexOf(Constants.FILE_EXTENSION_DITAMAP) == -1) {
+				String ditaext = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_DITAEXT);
+				t = changeExtName(t, ditaext, ditaext);
+			}
+			t = FileUtils.getRelativePathFromMap(xmlDitalist.getAbsolutePath(), FileUtils.resolveFile(tempDir, t));
+			topicList.add(t);
+			if (oldTopicList.contains(t)) {
+				oldTopicList.remove(t);
+			}
+		}
+		
+	    HashSet<String> chunkedTopicSet=new LinkedHashSet<String>(Constants.INT_128);
+	    HashSet<String> chunkedDitamapSet=new LinkedHashSet<String>(Constants.INT_128);
+		Set<String> ditamapList = StringUtils.restoreSet((String)prop.getProperty(Constants.FULL_DITAMAP_LIST));
+		for (Map.Entry<String, String> entry: changeTable.entrySet()) {
+			String oldFile=entry.getKey();
+			if(entry.getValue().toString().equals(oldFile)){
+				//newly chunked file
+				String newChunkedFile=entry.getValue().toString();
+				newChunkedFile=FileUtils.getRelativePathFromMap(xmlDitalist.getAbsolutePath(), newChunkedFile);
+				String extName=getExtName(newChunkedFile);
+				if(extName!=null && !extName.equalsIgnoreCase("DITAMAP")){
+					chunkedTopicSet.add(newChunkedFile);
+					if (!topicList.contains(newChunkedFile)) {
+						topicList.add(newChunkedFile);
+						if (oldTopicList.contains(newChunkedFile)) {
+							//newly chunked file shouldn't be deleted
+							oldTopicList.remove(newChunkedFile);
+						}
+					}
+				}else{
+					if (!ditamapList.contains(newChunkedFile)) {
+						ditamapList.add(newChunkedFile);
+						if (oldTopicList.contains(newChunkedFile)) {
+							oldTopicList.remove(newChunkedFile);
+						}
+					}
+					chunkedDitamapSet.add(newChunkedFile);
 				}
-				if (t.lastIndexOf(Constants.FILE_EXTENSION_DITAMAP) == -1) {
-					String ditaext = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_PARAM_DITAEXT);
-					t = changeExtName(t, ditaext, ditaext);
-				}
-				t = FileUtils.getRelativePathFromMap(xmlDitalist.getAbsolutePath(), FileUtils.resolveFile(tempDir, t));
-				topicList.add(t);
-				if (oldTopicList.contains(t)) {
-					oldTopicList.remove(t);
+			
+			}
+		}
+		//removed extra topic files
+		for (String s : oldTopicList) {
+			if (!StringUtils.isEmptyString(s)) {
+				File f = new File(tempDir, s);
+				if(f.exists()) {
+					f.delete();
 				}
 			}
 		}
 		
-		Set<String> ditamapList = StringUtils.restoreSet((String)prop.getProperty(Constants.FULL_DITAMAP_LIST));
+		//TODO we have refined topic list and removed extra topic files, next we need to clean up
+		// conflictTable and try to resolve file name conflicts.
+		for (Map.Entry<String,String> entry: changeTable.entrySet()) {
+			String oldFile = entry.getKey();
+			if (entry.getValue().toString().equals(oldFile)) {
+				// original topic file
+				String targetPath = conflictTable.get(entry.getKey());
+				if (targetPath != null) {
+					File target = new File(targetPath);
+					if (!FileUtils.fileExists(target.getAbsolutePath())) {
+						// newly chunked file
+						File from = new File(entry.getValue().toString());
+						String relativePath = FileUtils.getRelativePathFromMap(xmlDitalist.getAbsolutePath(), from.getAbsolutePath());
+						//ensure the rename
+						target.delete();
+						//ensure the newly chunked file to the old one
+						from.renameTo(target);
+						if (topicList.contains(relativePath)) {
+							topicList.remove(relativePath);
+						}
+						if (chunkedTopicSet.contains(relativePath)){
+							chunkedTopicSet.remove(relativePath);
+						}
+						relativePath = FileUtils.getRelativePathFromMap(xmlDitalist.getAbsolutePath(), target.getAbsolutePath());
+						topicList.add(relativePath);
+						chunkedTopicSet.add(relativePath);
+					} else {
+						conflictTable.remove(entry.getKey());
+					}
+				}
+			}
+		}
+		
+		//TODO Remove newly generated files from resource-only list, these new files should not
+		//     excluded from the final outputs.
 		Set<String> resourceOnlySet = StringUtils.restoreSet(prop.getProperty(Constants.RESOURCE_ONLY_LIST));
-		if(topicList!=null){
-			String newChunkedFile=null;
-			Iterator<Map.Entry<String, String>> it=changeTable.entrySet().iterator();
-			File topic_list=new File(tempDir, Constants.FULL_DITA_TOPIC_LIST.substring(0, Constants.FULL_DITA_TOPIC_LIST.lastIndexOf("list"))+".list");
-			File map_list=new File(tempDir, Constants.FULL_DITAMAP_LIST.substring(0, Constants.FULL_DITAMAP_LIST.lastIndexOf("list"))+".list");
-			File all_list=new File(tempDir, Constants.FULL_DITAMAP_TOPIC_LIST.substring(0, Constants.FULL_DITAMAP_TOPIC_LIST.lastIndexOf("list"))+".list");
-			while(it.hasNext()){
-				Map.Entry<String, String> entry = it.next();
-				String oldFile=(String)entry.getKey();
-				if(entry.getValue().toString().equals(oldFile)){
-					//newly chunked file
-					newChunkedFile=entry.getValue().toString();
-					newChunkedFile=FileUtils.getRelativePathFromMap(xmlDitalist.getAbsolutePath(), newChunkedFile);
-					String extName=getExtName(newChunkedFile);
-					if(extName!=null && !extName.equalsIgnoreCase("DITAMAP")){
-						chunkedTopicSet.add(newChunkedFile);
-						if (!topicList.contains(newChunkedFile)) {
-							topicList.add(newChunkedFile);
-							if (oldTopicList.contains(newChunkedFile)) {
-								//newly chunked file shouldn't be deleted
-								oldTopicList.remove(newChunkedFile);
-							}
-						}
-					}else{
-						if (!ditamapList.contains(newChunkedFile)) {
-							ditamapList.add(newChunkedFile);
-							if (oldTopicList.contains(newChunkedFile)) {
-								oldTopicList.remove(newChunkedFile);
-							}
-						}
-						chunkedDitamapSet.add(newChunkedFile);
-					}
-				
-				}
-			}
-			//removed extra topic files
-			for (String s : oldTopicList) {
-				if (!StringUtils.isEmptyString(s)) {
-					File f = new File(tempDir, s);
-					if(f.exists())
-						f.delete();
-				}
-			}
-			
-			//TODO we have refined topic list and removed extra topic files, next we need to clean up
-			// conflictTable and try to resolve file name conflicts.
-			Iterator<Map.Entry<String,String>> iter = changeTable.entrySet().iterator();
-			while(iter.hasNext()) {
-				Map.Entry<String,String> entry = iter.next();
-				String oldFile = (String)entry.getKey();
-				if (entry.getValue().toString().equals(oldFile)) {
-					// original topic file
-					String targetPath = ((String)conflictTable.get((String)entry.getKey()));
-					if (targetPath != null) {
-						File target = new File(targetPath);
-						if (!FileUtils.fileExists(target.getAbsolutePath())) {
-							// newly chunked file
-							File from = new File(entry.getValue().toString());
-							String relativePath = FileUtils.getRelativePathFromMap(xmlDitalist.getAbsolutePath(), from.getAbsolutePath());
-							//ensure the rename
-							target.delete();
-							//ensure the newly chunked file to the old one
-							from.renameTo(target);
-							if (topicList.contains(relativePath)) {
-								topicList.remove(relativePath);
-							}
-							if (chunkedTopicSet.contains(relativePath)){
-								chunkedTopicSet.remove(relativePath);
-							}
-							relativePath = FileUtils.getRelativePathFromMap(xmlDitalist.getAbsolutePath(), target.getAbsolutePath());
-							topicList.add(relativePath);
-							chunkedTopicSet.add(relativePath);
-						} else {
-							conflictTable.remove(entry.getKey());
-						}
-					}
-				}
-			}
-			
-			//TODO Remove newly generated files from resource-only list, these new files should not
-			//     excluded from the final outputs.
-			resourceOnlySet.removeAll(chunkedTopicSet);
-			resourceOnlySet.removeAll(chunkedDitamapSet);
-			
-			prop.setProperty(Constants.RESOURCE_ONLY_LIST, StringUtils.assembleString(resourceOnlySet, Constants.COMMA));
-			prop.setProperty(Constants.FULL_DITA_TOPIC_LIST,StringUtils.assembleString(topicList, Constants.COMMA));
-			prop.setProperty(Constants.FULL_DITAMAP_LIST, StringUtils.assembleString(ditamapList, Constants.COMMA));
-			topicList.addAll(ditamapList);
-			prop.setProperty(Constants.FULL_DITAMAP_TOPIC_LIST, StringUtils.assembleString(topicList, Constants.COMMA));
-			
-			String topics[]=((String)prop.getProperty(Constants.FULL_DITA_TOPIC_LIST)).split(Constants.COMMA);
-			String maps[]=((String)prop.getProperty(Constants.FULL_DITAMAP_LIST)).split(Constants.COMMA);
-			String all[]=((String)prop.getProperty(Constants.FULL_DITAMAP_TOPIC_LIST)).split(Constants.COMMA);
-			
-			try {
-			BufferedWriter topicWriter = new BufferedWriter(
-					new OutputStreamWriter(new FileOutputStream(topic_list)));
-			BufferedWriter mapWriter = new BufferedWriter(
-					new OutputStreamWriter(new FileOutputStream(map_list)));
-			BufferedWriter allWriter = new BufferedWriter(
-					new OutputStreamWriter(new FileOutputStream(all_list)));
-			for (int i = 0; i < topics.length; i++){
-				topicWriter.write(topics[i]);
-				if (i < topics.length - 1) {
-					topicWriter.write("\n");
-				}
-				topicWriter.flush();
-			}
-			for (int i = 0; i < maps.length; i++){
-				mapWriter.write(maps[i]);
-				if (i < maps.length - 1) {
-					mapWriter.write("\n");
-				}
-				mapWriter.flush();
-			}
-			for (int i = 0; i < all.length; i++){
-				allWriter.write(all[i]);
-				if (i < all.length -1){
-					allWriter.write("\n");
-				}
-				allWriter.flush();
-			}
-			} catch (FileNotFoundException e) {
-				logger.logException(e);
-			} catch (IOException e) {
-				logger.logException(e);
-			}
+		resourceOnlySet.removeAll(chunkedTopicSet);
+		resourceOnlySet.removeAll(chunkedDitamapSet);
+		
+		prop.setProperty(Constants.RESOURCE_ONLY_LIST, StringUtils.assembleString(resourceOnlySet, Constants.COMMA));
+		prop.setProperty(Constants.FULL_DITA_TOPIC_LIST,StringUtils.assembleString(topicList, Constants.COMMA));
+		prop.setProperty(Constants.FULL_DITAMAP_LIST, StringUtils.assembleString(ditamapList, Constants.COMMA));
+		topicList.addAll(ditamapList);
+		prop.setProperty(Constants.FULL_DITAMAP_TOPIC_LIST, StringUtils.assembleString(topicList, Constants.COMMA));
+	
+		try {
+			writeList(prop, tempDir, Constants.FULL_DITA_TOPIC_LIST);
+			writeList(prop, tempDir, Constants.FULL_DITAMAP_LIST);
+			writeList(prop, tempDir, Constants.FULL_DITAMAP_TOPIC_LIST);
+		} catch (FileNotFoundException e) {
+			logger.logException(e);
+		} catch (IOException e) {
+			logger.logException(e);
 		}
 		
 		/*
@@ -363,16 +322,19 @@ public class ChunkModule implements AbstractPipelineModule {
 		String[] keys={Constants.CHUNKED_DITAMAP_LIST, Constants.CHUNKED_TOPIC_LIST, Constants.RESOURCE_ONLY_LIST};
 		Set sets[] = {chunkedDitamapSet, chunkedTopicSet, resourceOnlySet};
 		for(int i=0;i<keys.length;i++){
-			String fileKey=keys[i].substring(0,keys[i].lastIndexOf("list"))+"file";
-			prop.put(fileKey, keys[i].substring(0, keys[i].lastIndexOf("list"))+".list");
+			String key = keys[i];
+			String fileKey=key.substring(0,key.lastIndexOf("list"))+"file";
+			prop.put(fileKey, key.substring(0, key.lastIndexOf("list"))+".list");
 			File list = new File(tempDir, prop.getProperty(fileKey));
+			BufferedWriter bufferedWriter=null;
 			try {
-				BufferedWriter bufferedWriter=new BufferedWriter(new OutputStreamWriter(new FileOutputStream(list)));
+				bufferedWriter=new BufferedWriter(new OutputStreamWriter(new FileOutputStream(list)));
 				Iterator<String> it= sets[i].iterator();
 				while(it.hasNext()){
-					bufferedWriter.write((String)it.next());
-					if(it.hasNext())
+					bufferedWriter.write(it.next());
+					if(it.hasNext()) {
 						bufferedWriter.write("\n");
+					}
 				}
 				bufferedWriter.flush();
 				bufferedWriter.close();
@@ -380,13 +342,23 @@ public class ChunkModule implements AbstractPipelineModule {
 				e.printStackTrace();
 			} catch (IOException e) {
 				e.printStackTrace();
+			} finally {
+				if (bufferedWriter != null) {
+					try {
+						bufferedWriter.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
 			}
 		}
 
 
 		addSetToProperties(prop,Constants.CHUNKED_DITAMAP_LIST,chunkedDitamapSet);
 		addSetToProperties(prop,Constants.CHUNKED_TOPIC_LIST,chunkedTopicSet);
+		Content content = new ContentImpl();
 		content.setValue(prop);
+		PropertiesWriter writer = new PropertiesWriter();
 		writer.setContent(content);
 		try{
 			writer.write(ditalist.getAbsolutePath());
@@ -396,7 +368,41 @@ public class ChunkModule implements AbstractPipelineModule {
 		}
 
 	}
+
+	/**
+	 * Write a property value to a list file.
+	 * 
+	 * @param prop source properties
+	 * @param tempDir temporary directory
+	 * @param list name of the list
+	 */
+	private void writeList(Properties prop, String tempDir, String list) throws FileNotFoundException,
+			IOException {
+		File topic_list=new File(tempDir, list.substring(0, list.lastIndexOf("list"))+".list");
+		BufferedWriter topicWriter = null;
+		try {
+			topicWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(topic_list)));
+			String topics[]=((String)prop.getProperty(list)).split(Constants.COMMA);
+			for (int i = 0; i < topics.length; i++){
+				topicWriter.write(topics[i]);
+				if (i < topics.length - 1) {
+					topicWriter.write("\n");
+				}
+				topicWriter.flush();
+			}
+		} finally {
+			if (topicWriter != null) {
+				topicWriter.close();
+			}
+		}
+	}
 	
+	/**
+	 * Get file extension
+	 * 
+	 * @param file filename, may contain a URL fragment
+	 * @return file extensions
+	 */
 	private String getExtName(String file){
 		int index = file.indexOf(Constants.SHARP);
 
@@ -414,20 +420,41 @@ public class ChunkModule implements AbstractPipelineModule {
 		}
 	}
 	
+	/**
+	 * Change file extension.
+	 * 
+	 * @param filename original file name, may be <code>null</code>
+	 * @param from source extension, may be <code>null</code>
+	 * @param to destination extension, may be <code>null</code>
+	 * @return filename with changed file extension, <code>null</code> if empty input
+	 */
 	private String changeExtName(String filename, String from, String to) {
 		if (StringUtils.isEmptyString(filename)) {
 			return null;
 		}
-		if (filename.indexOf(to) != -1) return filename;
-		if (from == null) from = "";
-		if (to == null) to = "";
+		if (filename.indexOf(to) != -1) {
+			return filename;
+		}
+		if (from == null) {
+			from = "";
+		}
+		if (to == null) {
+			to = "";
+		}
 		if (filename.lastIndexOf(from) != -1) {
 			return filename.substring(0, filename.lastIndexOf(from)) + to; 
 		} else {
 			return filename + to;
 		}
 	}
-	
+
+	/**
+	 * Add strings to set as a comma delimited list and clear input value set.
+	 * 
+	 * @param prop properties to add value to
+	 * @param key key to add
+	 * @param set set of values
+	 */
 	private void addSetToProperties(Properties prop, String key, Set<String> set) {
 		String value = StringUtils.assembleString(set, Constants.COMMA);
 		prop.put(key, value);
