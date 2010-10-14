@@ -43,6 +43,32 @@ public class FileUtils {
 		return (lcasefn.endsWith(Constants.FILE_EXTENSION_HTML) || lcasefn
 				.endsWith(Constants.FILE_EXTENSION_HTM));
 	}
+	/**
+	 * Return if the file is a hhp file by extension.
+	 * @param lcasefn file name
+	 * @return true if is hhp file and false otherwise
+	 */
+	public static boolean isHHPFile(String lcasefn) {
+		return (lcasefn.endsWith(Constants.FILE_EXTENSION_HHP));
+	}
+	/**
+	 * Return if the file is a hhc file by extension.
+	 * @param lcasefn file name
+	 * @return true if is hhc file and false otherwise
+	 */
+	public static boolean isHHCFile(String lcasefn) {
+		return (lcasefn.endsWith(Constants.FILE_EXTENSION_HHC));
+	}
+	/**
+	 * Return if the file is a hhk file by extension.
+	 * @param lcasefn file name
+	 * @return true if is hhk file and false otherwise
+	 */
+	public static boolean isHHKFile(String lcasefn) {
+		return (lcasefn.endsWith(Constants.FILE_EXTENSION_HHK));
+	}
+	
+	
 	
 	/**
 	 * Return if the file is a pdf file by its extension.

@@ -62,6 +62,12 @@ public abstract class Constants {
     public static final String FILE_EXTENSION_HTML = ".html";
     /**.htm extension.*/
     public static final String FILE_EXTENSION_HTM = ".htm";
+    /**.hhp extension.*/
+    public static final String FILE_EXTENSION_HHP = ".hhp";
+    /**.hhc extension.*/
+    public static final String FILE_EXTENSION_HHC = ".hhc";
+    /**.hhk extension.*/
+    public static final String FILE_EXTENSION_HHK = ".hhk";
     /**.jpg extension.*/
     public static final String FILE_EXTENSION_JPG = ".jpg";
     //Added by William on 2009-10-10 for resources bug:2873560 start
@@ -186,6 +192,10 @@ public abstract class Constants {
     public static final String ATTRIBUTE_NAME_NAVTITLE = "navtitle";
     /**format attribute.*/
     public static final String ATTRIBUTE_NAME_FORMAT = "format";
+    /**charset attribute.*/
+    public static final String ATTRIBUTE_NAME_CHARSET = "charset";
+    /**charset attribute.*/
+    public static final String ATTRIBUTE_NAME_LANG = "lang";
     /**att attribute.*/
     public static final String ATTRIBUTE_NAME_ATT = "att";
     /**val attribute.*/
@@ -248,7 +258,12 @@ public abstract class Constants {
     /**
      * Constant for value of attribute format in dita files.
      */
-    public static final String ATTRIBUTE_FORMAT_VALUE_DITA = "dita";    
+    /** Constants for format attribute value dita*/
+    public static final String ATTRIBUTE_FORMAT_VALUE_DITA = "dita";
+    /** Constants for format attribute value html*/
+    public static final String ATTRIBUTE_FORMAT_VALUE_HTML = "html";
+    /** Constants for format attribute value windows*/
+    public static final String ATTRIBUTE_FORMAT_VALUE_WINDOWS = "windows";
     
     /** Constants for index type(javahelp).*/
     public static final String INDEX_TYPE_JAVAHELP = "javahelp";
@@ -427,7 +442,9 @@ public abstract class Constants {
     /**CDATA_HEAD.*/
     public static final String CDATA_HEAD = "<![CDATA[";    
     /**CDATA_END.*/
-    public static final String CDATA_END = "]]>";    
+    public static final String CDATA_END = "]]>";
+    /**DOCTYPE_HEAD.*/
+    public static final String DOCTYPE_HEAD = "<!DOCTYPE ";
     /**META_HEAD.*/
     public static final String META_HEAD = "<metadata class=\"- topic/metadata \">";    
     /**META_END.*/
