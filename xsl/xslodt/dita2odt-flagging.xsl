@@ -20,14 +20,18 @@
   <xsl:template name="create_flagging_styles">
     <xsl:apply-templates select="$FILTERDOC/val/prop[@action='flag']" mode="create_flagging_styles"/>
     
+    <xsl:apply-templates select="$FILTERDOC/val/revprop[@action='flag']" mode="create_flagging_styles">
+      <xsl:with-param name="att" select="'rev'"/>
+    </xsl:apply-templates>
+    
     <xsl:apply-templates select="$FILTERDOC/val/style-conflict" mode="create_conflict_flagging_styles"/>
   </xsl:template>
   
-  <xsl:template  match="prop[@action='flag']" mode="create_flagging_styles">
-    <xsl:variable name="att" select="@att"/>
-    <xsl:variable name="val" select="@val"/>
+  <xsl:template match="prop[@action='flag']|revprop[@action='flag']" mode="create_flagging_styles">
+    <xsl:param name="att" select="@att"/>
+    <xsl:param name="val" select="@val"/>
     
-    <xsl:variable name="styleName" select="styleUtils:insertFlagStyleName(concat(@att, @val))"/>
+    <xsl:variable name="styleName" select="styleUtils:insertFlagStyleName(concat($att, $val))"/>
     <!-- text/p flagging style -->
     <xsl:element name="style:style">
         <xsl:attribute name="style:name">
@@ -420,7 +424,7 @@
       <xsl:call-template name="getrules"/>
     </xsl:variable>
     <!-- current node has flagging attribute add images-->
-    <xsl:if test="$flagRulesOfCurrentNode != ''">
+    <xsl:if test="exsl:node-set($flagRulesOfCurrentNode)">
       <!-- for table/list flagging styles images should be rendered in p tag-->
       <xsl:if test="$family != '' and $family != '_table_attr' and 
         (exsl:node-set($flagrules)/prop[1]/startflag/@imageref or $revtest = 1)">
@@ -1116,7 +1120,7 @@
       <xsl:call-template name="getrules"/>
     </xsl:variable>
     <xsl:choose>
-      <xsl:when test="$flaggingRules != '' or not(parent::*)">
+      <xsl:when test="exsl:node-set($flaggingRules) or not(parent::*)">
         <xsl:copy-of select="exsl:node-set($flaggingRules)"/>
       </xsl:when>
       <xsl:otherwise>

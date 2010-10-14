@@ -233,7 +233,7 @@ public class ImgUtils {
 			return "pngblip";
 		}
     	prop.put("%1", fileName);
-		logger.logError(MessageUtils.getMessage("DOTJ024W", prop).toString());
+		logger.logWarn(MessageUtils.getMessage("DOTJ024W", prop).toString());
 		return "other";
 	}
 }

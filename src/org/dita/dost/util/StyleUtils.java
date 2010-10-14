@@ -266,6 +266,9 @@ public class StyleUtils {
 				String key = colorName.toLowerCase();
 				if(colorMap.containsKey(key)){
 					return colorMap.get(key);
+				}else if(key.startsWith(Constants.SHARP)){
+					//#rrggbb format
+					return key;
 				}else{
 					return "";
 				}

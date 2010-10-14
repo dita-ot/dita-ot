@@ -93,7 +93,7 @@
           </xsl:choose>
         </xsl:when>
         <xsl:when test="not(contains(@href,'://'))">
-          <xsl:value-of select="number(java:getHeight($OUTPUTDIR, string(@href)) div 96) * $scale"/>
+          <xsl:value-of select="number(java:getHeightODT($OUTPUTDIR, string(@href)) div 96) * $scale"/>
         </xsl:when>
         <xsl:otherwise/>
       </xsl:choose>
@@ -130,7 +130,7 @@
           </xsl:choose>
         </xsl:when>
         <xsl:when test="not(contains(@href,'://'))">
-          <xsl:value-of select="number(java:getWidth($OUTPUTDIR, string(@href)) div 96) * $scale"/>
+          <xsl:value-of select="number(java:getWidthODT($OUTPUTDIR, string(@href)) div 96) * $scale"/>
         </xsl:when>
         <xsl:otherwise/>
       </xsl:choose>
@@ -175,8 +175,22 @@
       <!-- create p tag -->
       <xsl:element name="text:p">
         <xsl:element name="text:span">
-          <!-- start add flagging styles -->
-          <xsl:apply-templates select="." mode="start-add-odt-flags"/>
+          <xsl:choose>
+            <xsl:when test="parent::fig[contains(@frame,'top ')]">
+              <!-- NOP if there is already a break implied by a parent property -->
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:choose>
+                <xsl:when test="(@placement='break')">
+                  <!-- start add flagging styles -->
+                  <xsl:apply-templates select="." mode="start-add-odt-flags"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:call-template name="flagcheck"/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </xsl:otherwise>
+          </xsl:choose>
           
           <xsl:call-template name="draw_image">
             <xsl:with-param name="height" select="$height"/>
@@ -193,8 +207,22 @@
     <xsl:when test="parent::*[contains(@class, ' topic/stentry ')]">
       <xsl:element name="text:p">
         <xsl:element name="text:span">
-          <!-- start add flagging styles -->
-          <xsl:apply-templates select="." mode="start-add-odt-flags"/>
+          <xsl:choose>
+            <xsl:when test="parent::fig[contains(@frame,'top ')]">
+              <!-- NOP if there is already a break implied by a parent property -->
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:choose>
+                <xsl:when test="(@placement='break')">
+                  <!-- start add flagging styles -->
+                  <xsl:apply-templates select="." mode="start-add-odt-flags"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:call-template name="flagcheck"/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </xsl:otherwise>
+          </xsl:choose>
           
           <xsl:call-template name="draw_image">
             <xsl:with-param name="height" select="$height"/>
@@ -210,8 +238,22 @@
     <!-- nested by other tags -->
     <xsl:otherwise>
       <xsl:element name="text:span">
-        <!-- start add flagging styles -->
-        <xsl:apply-templates select="." mode="start-add-odt-flags"/>
+        <xsl:choose>
+          <xsl:when test="parent::fig[contains(@frame,'top ')]">
+            <!-- NOP if there is already a break implied by a parent property -->
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:choose>
+              <xsl:when test="(@placement='break')">
+                <!-- start add flagging styles -->
+                <xsl:apply-templates select="." mode="start-add-odt-flags"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:call-template name="flagcheck"/>
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:otherwise>
+        </xsl:choose>
         
         <xsl:call-template name="draw_image">
           <xsl:with-param name="height" select="$height"/>
@@ -332,6 +374,11 @@
 <xsl:template name="gen-img-txt">
   <xsl:param name="alttext"/>
    <xsl:choose>
+     <xsl:when test="$alttext != ''">
+       <xsl:call-template name="getStringODT">
+         <xsl:with-param name="stringName" select="$alttext"/>
+       </xsl:call-template>
+     </xsl:when>
     <xsl:when test="*[contains(@class,' topic/alt ')]">
     <xsl:text>[PIC]</xsl:text><xsl:value-of select="*[contains(@class,' topic/alt ')]"/>
     </xsl:when>
@@ -349,11 +396,8 @@
     <xsl:when test="@href">
       <xsl:text>[PIC]</xsl:text><xsl:value-of select="@href"/>
     </xsl:when>
-    <xsl:otherwise>
-      <xsl:call-template name="getStringODT">
-        <xsl:with-param name="stringName" select="$alttext"/>
-      </xsl:call-template>
-    </xsl:otherwise>
+    <xsl:otherwise/>
+    
    </xsl:choose>
   
 </xsl:template>
