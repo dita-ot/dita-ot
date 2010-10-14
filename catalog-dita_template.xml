@@ -816,7 +816,12 @@
     <system systemId="urn:oasis:names:tc:dita:xsd:ditabase.xsd" uri="ditabase.xsd"/>
     <system systemId="urn:oasis:names:tc:dita:xsd:ditabase.xsd:1.x" uri="ditabase.xsd"/>
     <system systemId="urn:oasis:names:tc:dita:xsd:ditabase.xsd:1.2" uri="ditabase.xsd"/>
-
+    
+    <system systemId="ditabaseMod.xsd" uri="ditabaseMod.xsd" />
+    <system systemId="urn:oasis:names:tc:dita:xsd:ditabaseMod.xsd" uri="ditabaseMod.xsd" />
+    <system systemId="urn:oasis:names:tc:dita:xsd:ditabaseMod.xsd:1.x" uri="ditabaseMod.xsd" />
+    <system systemId="urn:oasis:names:tc:dita:xsd:ditabaseMod.xsd:1.2" uri="ditabaseMod.xsd" />
+    
     <system systemId="concept.xsd" uri="concept.xsd"/>
     <system systemId="urn:oasis:names:tc:dita:xsd:concept.xsd" uri="concept.xsd"/>
     <system systemId="urn:oasis:names:tc:dita:xsd:concept.xsd:1.x" uri="concept.xsd"/>
