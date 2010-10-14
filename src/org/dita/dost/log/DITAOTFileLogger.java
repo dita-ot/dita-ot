@@ -17,11 +17,11 @@ import java.io.PrintWriter;
 import org.dita.dost.util.Constants;
 
 /**
- * Class description goes here.
+ * Logger to a log file.
  * 
  * @author Wu, Zhi Qiang
  */
-public class DITAOTFileLogger {
+public class DITAOTFileLogger implements DITAOTLogger {
 	private static DITAOTFileLogger logger = null;
 	
 	private File tmpLogFile = null;
@@ -139,6 +139,14 @@ public class DITAOTFileLogger {
 	 * @param msg msg
 	 */
 	public void logError(String msg) {
+		logMessage(msg);
+	}
+	
+	/**
+	 * Log the message at fatal level.
+	 * @param msg msg
+	 */
+	public void logFatal(String msg) {
 		logMessage(msg);
 	}
 
