@@ -23,31 +23,6 @@
     <xsl:apply-templates select="$FILTERDOC/val/style-conflict" mode="create_conflict_flagging_styles"/>
   </xsl:template>
   
-  <xsl:template match="style-conflict" mode="create_conflict_flagging_styles">
-    
-    <xsl:element name="style:style">
-      <xsl:attribute name="style:name">
-        <xsl:value-of select="'conflict_style'"/>
-      </xsl:attribute>
-      <xsl:attribute name="style:family">text</xsl:attribute>
-      <xsl:attribute name="style:parent-style-name">indent_text_style</xsl:attribute>
-      <xsl:element name="style:text-properties">
-        <xsl:if test="@background-conflict-color and not(@background-conflict-color = '')">
-          <xsl:attribute name="fo:background-color">
-            <xsl:value-of select="styleUtils:getColor(@background-conflict-color)"/>
-          </xsl:attribute>
-        </xsl:if>
-        <xsl:if test="@foreground-conflict-color and not(@foreground-conflict-color = '')">
-          <xsl:attribute name="fo:color">
-            <xsl:value-of select="styleUtils:getColor(@foreground-conflict-color)"/>
-          </xsl:attribute>
-        </xsl:if>
-      </xsl:element>
-    </xsl:element>
-    
-  </xsl:template>
-  
-  
   <xsl:template  match="prop[@action='flag']" mode="create_flagging_styles">
     <xsl:variable name="att" select="@att"/>
     <xsl:variable name="val" select="@val"/>
@@ -125,6 +100,50 @@
         <xsl:with-param name="prop" select="."/>
       </xsl:apply-templates>
     </xsl:if>
+  </xsl:template>
+  
+  <xsl:template match="style-conflict" mode="create_conflict_flagging_styles">
+    <!-- common styles -->
+    <xsl:element name="style:style">
+      <xsl:attribute name="style:name">
+        <xsl:value-of select="'conflict_style'"/>
+      </xsl:attribute>
+      <xsl:attribute name="style:family">text</xsl:attribute>
+      <xsl:attribute name="style:parent-style-name">indent_text_style</xsl:attribute>
+      <xsl:element name="style:text-properties">
+        <xsl:if test="@background-conflict-color and not(@background-conflict-color = '')">
+          <xsl:attribute name="fo:background-color">
+            <xsl:value-of select="styleUtils:getColor(@background-conflict-color)"/>
+          </xsl:attribute>
+        </xsl:if>
+        <xsl:if test="@foreground-conflict-color and not(@foreground-conflict-color = '')">
+          <xsl:attribute name="fo:color">
+            <xsl:value-of select="styleUtils:getColor(@foreground-conflict-color)"/>
+          </xsl:attribute>
+        </xsl:if>
+      </xsl:element>
+    </xsl:element>
+    <!-- table styles -->
+    <xsl:element name="style:style">
+      <xsl:attribute name="style:name">
+        <xsl:value-of select="'conflict_style_table'"/>
+      </xsl:attribute>
+      <xsl:attribute name="style:family">table</xsl:attribute>
+      <xsl:element name="style:table-properties">
+        <xsl:if test="@background-conflict-color and not(@background-conflict-color = '')">
+          <xsl:attribute name="fo:background-color">
+            <xsl:value-of select="styleUtils:getColor(@background-conflict-color)"/>
+          </xsl:attribute>
+        </xsl:if>
+        <xsl:if test="@foreground-conflict-color and not(@foreground-conflict-color = '')">
+          <xsl:attribute name="fo:color">
+            <xsl:value-of select="styleUtils:getColor(@foreground-conflict-color)"/>
+          </xsl:attribute>
+        </xsl:if>
+      </xsl:element>
+    </xsl:element>
+    
+    
   </xsl:template>
   
   <xsl:template match="*" mode="create_subject_scheme_style">
@@ -234,7 +253,6 @@
     </xsl:if>
   </xsl:template>
   
-  
   <!-- get flagging style name -->
   <xsl:template name="getFlagStyleName">
     
@@ -331,11 +349,17 @@
     
     <!-- get flagging style name. -->
     <xsl:variable name="flagStyleName">
+      <xsl:apply-templates select="." mode="getFlaggingStyleName"/>
+      <!-- 
       <xsl:call-template name="getFlagStyleName"/>
+      -->
     </xsl:variable>
     <!-- get style rules -->
     <xsl:variable name="flagrules">
+      <xsl:apply-templates select="." mode="getFlaggingRules"/>
+      <!-- 
       <xsl:call-template name="getrules"/>
+      -->
     </xsl:variable>
     <!-- check style conflict -->
     <xsl:variable name="conflictexist">
@@ -368,9 +392,20 @@
         <!-- there are conflict -->
         <xsl:when test="$conflictexist = 'true'">
           <xsl:apply-templates select="." mode="ditamsg:conflict-text-style-applied"/>
-          <xsl:attribute name="text:style-name">
-            <xsl:value-of select="'conflict_style'"/>
-          </xsl:attribute>
+          <xsl:choose>
+            <!-- ordinary conflict style -->
+            <xsl:when test="$family = ''">
+              <xsl:attribute name="text:style-name">
+                <xsl:value-of select="'conflict_style'"/>
+              </xsl:attribute>
+            </xsl:when>
+            <!-- table conflict style -->
+            <xsl:otherwise>
+              <xsl:attribute name="text:style-name">
+                <xsl:value-of select="'conflict_style_table'"/>
+              </xsl:attribute>
+            </xsl:otherwise>
+          </xsl:choose>
         </xsl:when>
       </xsl:choose>
     </xsl:if>
@@ -381,35 +416,41 @@
       </xsl:call-template>
     </xsl:variable>
     
-    <!-- for table/list flagging styles -->
-    <xsl:if test="$family != '' and $family != '_table_attr' and 
-      (exsl:node-set($flagrules)/prop[1]/startflag/@imageref or $revtest = 1)">
-      <!-- render p and span tag -->
-      <xsl:text disable-output-escaping="yes">&lt;text:p&gt;</xsl:text>
-    </xsl:if>
-    
-    <!-- avoid text under li/entry and table attr styles-->
-    <xsl:if test="($type = '' or $type = 'note' or $type = 'keyword') and $family != '_table_attr'">
-      <!-- add images -->
-      <!-- keyword do not have flagging images -->
-      <xsl:if test="$type != 'keyword'">
-        <xsl:call-template name="start-flagit">
-          <xsl:with-param name="flagrules" select="$flagrules"/>     
-        </xsl:call-template>
+    <xsl:variable name="flagRulesOfCurrentNode">
+      <xsl:call-template name="getrules"/>
+    </xsl:variable>
+    <!-- current node has flagging attribute add images-->
+    <xsl:if test="$flagRulesOfCurrentNode != ''">
+      <!-- for table/list flagging styles images should be rendered in p tag-->
+      <xsl:if test="$family != '' and $family != '_table_attr' and 
+        (exsl:node-set($flagrules)/prop[1]/startflag/@imageref or $revtest = 1)">
+        <!-- render p and span tag -->
+        <xsl:text disable-output-escaping="yes">&lt;text:p&gt;</xsl:text>
       </xsl:if>
-      <!-- add rev style -->
-      <!-- note tag is specail -->
-      <xsl:if test="$type != 'note'">
-        <xsl:call-template name="start-add-odt-revflags">
-          <xsl:with-param name="flagrules" select="$flagrules"/>
-        </xsl:call-template>
+      
+      <!-- avoid text under li/entry and table attr styles-->
+      <xsl:if test="($type = '' or $type = 'note' or $type = 'keyword') and $family != '_table_attr'">
+        <!-- add images -->
+        <!-- keyword do not have flagging images -->
+        <xsl:if test="$type != 'keyword'">
+          <xsl:call-template name="start-flagit">
+            <xsl:with-param name="flagrules" select="$flagrules"/>     
+          </xsl:call-template>
+        </xsl:if>
+        <!-- add rev style -->
+        <!-- note tag is specail -->
+        <xsl:if test="$type != 'note'">
+          <xsl:call-template name="start-add-odt-revflags">
+            <xsl:with-param name="flagrules" select="$flagrules"/>
+          </xsl:call-template>
+        </xsl:if>
       </xsl:if>
-    </xsl:if>
-    
-    <!-- for table/list flagging styles -->
-    <xsl:if test="$family != '' and $family != '_table_attr' and 
-      (exsl:node-set($flagrules)/prop[1]/startflag/@imageref or $revtest = 1)">
-      <xsl:text disable-output-escaping="yes">&lt;/text:p&gt;</xsl:text>
+      
+      <!-- for table/list flagging styles images should be rendered in p tag-->
+      <xsl:if test="$family != '' and $family != '_table_attr' and 
+        (exsl:node-set($flagrules)/prop[1]/startflag/@imageref or $revtest = 1)">
+        <xsl:text disable-output-escaping="yes">&lt;/text:p&gt;</xsl:text>
+      </xsl:if>
     </xsl:if>
     
   </xsl:template>
@@ -430,7 +471,7 @@
     </xsl:variable>
     
     <!-- for table/list flagging styles -->
-    <xsl:if test="$family != '' and (exsl:node-set($flagrules)/prop[last()]/startflag/@imageref or $revtest = 1)">
+    <xsl:if test="$family != '' and (exsl:node-set($flagrules)/prop[last()]/endflag/@imageref or $revtest = 1)">
       <!-- render p and span tag -->
       <xsl:text disable-output-escaping="yes">&lt;text:p&gt;</xsl:text>
     </xsl:if>
@@ -454,7 +495,7 @@
     </xsl:if>
     
     <!-- for table/list flagging styles -->
-    <xsl:if test="$family != '' and (exsl:node-set($flagrules)/prop[last()]/startflag/@imageref or $revtest = 1)">
+    <xsl:if test="$family != '' and (exsl:node-set($flagrules)/prop[last()]/endflag/@imageref or $revtest = 1)">
       <xsl:text disable-output-escaping="yes">&lt;/text:p&gt;</xsl:text>
     </xsl:if>
     
@@ -511,7 +552,7 @@
     </xsl:variable>
     
     <!-- for table/list flagging styles -->
-    <xsl:if test="(exsl:node-set($flagrules)/prop[last()]/startflag/@imageref or $revtest = 1)">
+    <xsl:if test="(exsl:node-set($flagrules)/prop[last()]/endflag/@imageref or $revtest = 1)">
       <!-- render p and span tag -->
       <xsl:text disable-output-escaping="yes">&lt;text:p&gt;</xsl:text>
     </xsl:if>
@@ -526,7 +567,7 @@
       </xsl:call-template>
     
     <!-- for table/list flagging styles -->
-    <xsl:if test="(exsl:node-set($flagrules)/prop[last()]/startflag/@imageref or $revtest = 1)">
+    <xsl:if test="(exsl:node-set($flagrules)/prop[last()]/endflag/@imageref or $revtest = 1)">
       <xsl:text disable-output-escaping="yes">&lt;/text:p&gt;</xsl:text>
     </xsl:if>
     
@@ -658,7 +699,7 @@
         <xsl:variable name="height">
           <xsl:choose>
             <xsl:when test="not(contains($imgsrc,'://'))">
-              <xsl:value-of select="number(imgUtils:getHeight($OUTPUTDIR, string($imgsrc)) div 96)"/>
+              <xsl:value-of select="number(imgUtils:getHeightODT($OUTPUTDIR, string($imgsrc)) div 96)"/>
             </xsl:when>
             <xsl:otherwise/>
           </xsl:choose>
@@ -666,7 +707,7 @@
         <xsl:variable name="width">
           <xsl:choose>
             <xsl:when test="not(contains($imgsrc,'://'))">
-              <xsl:value-of select="number(imgUtils:getWidth($OUTPUTDIR, string($imgsrc)) div 96)"/>
+              <xsl:value-of select="number(imgUtils:getWidthODT($OUTPUTDIR, string($imgsrc)) div 96)"/>
             </xsl:when>
             <xsl:otherwise/>
           </xsl:choose>
@@ -707,7 +748,7 @@
         <xsl:variable name="height">
           <xsl:choose>
             <xsl:when test="not(contains($imgsrc,'://'))">
-              <xsl:value-of select="number(imgUtils:getHeight($OUTPUTDIR, string($imgsrc)) div 96)"/>
+              <xsl:value-of select="number(imgUtils:getHeightODT($OUTPUTDIR, string($imgsrc)) div 96)"/>
             </xsl:when>
             <xsl:otherwise/>
           </xsl:choose>
@@ -715,7 +756,7 @@
         <xsl:variable name="width">
           <xsl:choose>
             <xsl:when test="not(contains($imgsrc,'://'))">
-              <xsl:value-of select="number(imgUtils:getWidth($OUTPUTDIR, string($imgsrc)) div 96)"/>
+              <xsl:value-of select="number(imgUtils:getWidthODT($OUTPUTDIR, string($imgsrc)) div 96)"/>
             </xsl:when>
             <xsl:otherwise/>
           </xsl:choose>
@@ -762,7 +803,7 @@
         <xsl:variable name="height">
           <xsl:choose>
             <xsl:when test="not(contains($imgsrc,'://'))">
-              <xsl:value-of select="number(imgUtils:getHeight($OUTPUTDIR, string($imgsrc)) div 96)"/>
+              <xsl:value-of select="number(imgUtils:getHeightODT($OUTPUTDIR, string($imgsrc)) div 96)"/>
             </xsl:when>
             <xsl:otherwise/>
           </xsl:choose>
@@ -770,7 +811,7 @@
         <xsl:variable name="width">
           <xsl:choose>
             <xsl:when test="not(contains($imgsrc,'://'))">
-              <xsl:value-of select="number(imgUtils:getWidth($OUTPUTDIR, string($imgsrc)) div 96)"/>
+              <xsl:value-of select="number(imgUtils:getWidthODT($OUTPUTDIR, string($imgsrc)) div 96)"/>
             </xsl:when>
             <xsl:otherwise/>
           </xsl:choose>
@@ -811,7 +852,7 @@
         <xsl:variable name="height">
           <xsl:choose>
             <xsl:when test="not(contains($imgsrc,'://'))">
-              <xsl:value-of select="number(imgUtils:getHeight($OUTPUTDIR, string($imgsrc)) div 96)"/>
+              <xsl:value-of select="number(imgUtils:getHeightODT($OUTPUTDIR, string($imgsrc)) div 96)"/>
             </xsl:when>
             <xsl:otherwise/>
           </xsl:choose>
@@ -819,7 +860,7 @@
         <xsl:variable name="width">
           <xsl:choose>
             <xsl:when test="not(contains($imgsrc,'://'))">
-              <xsl:value-of select="number(imgUtils:getWidth($OUTPUTDIR, string($imgsrc)) div 96)"/>
+              <xsl:value-of select="number(imgUtils:getWidthODT($OUTPUTDIR, string($imgsrc)) div 96)"/>
             </xsl:when>
             <xsl:otherwise/>
           </xsl:choose>
@@ -858,7 +899,7 @@
         <xsl:variable name="height">
           <xsl:choose>
             <xsl:when test="not(contains($imgsrc,'://'))">
-              <xsl:value-of select="number(imgUtils:getHeight($OUTPUTDIR, string($imgsrc)) div 96)"/>
+              <xsl:value-of select="number(imgUtils:getHeightODT($OUTPUTDIR, string($imgsrc)) div 96)"/>
             </xsl:when>
             <xsl:otherwise/>
           </xsl:choose>
@@ -866,7 +907,7 @@
         <xsl:variable name="width">
           <xsl:choose>
             <xsl:when test="not(contains($imgsrc,'://'))">
-              <xsl:value-of select="number(imgUtils:getWidth($OUTPUTDIR, string($imgsrc)) div 96)"/>
+              <xsl:value-of select="number(imgUtils:getWidthODT($OUTPUTDIR, string($imgsrc)) div 96)"/>
             </xsl:when>
             <xsl:otherwise/>
           </xsl:choose>
@@ -909,7 +950,7 @@
         <xsl:variable name="height">
           <xsl:choose>
             <xsl:when test="not(contains($imgsrc,'://'))">
-              <xsl:value-of select="number(imgUtils:getHeight($OUTPUTDIR, string($imgsrc)) div 96)"/>
+              <xsl:value-of select="number(imgUtils:getHeightODT($OUTPUTDIR, string($imgsrc)) div 96)"/>
             </xsl:when>
             <xsl:otherwise/>
           </xsl:choose>
@@ -917,7 +958,7 @@
         <xsl:variable name="width">
           <xsl:choose>
             <xsl:when test="not(contains($imgsrc,'://'))">
-              <xsl:value-of select="number(imgUtils:getWidth($OUTPUTDIR, string($imgsrc)) div 96)"/>
+              <xsl:value-of select="number(imgUtils:getWidthODT($OUTPUTDIR, string($imgsrc)) div 96)"/>
             </xsl:when>
             <xsl:otherwise/>
           </xsl:choose>
@@ -1001,6 +1042,12 @@
     </xsl:if>
   </xsl:template>
   
+  <!-- flagging text in the table cell or list item 
+  e.g
+  <ul>
+    <li>text</li>
+  </ul>
+  -->
   <xsl:template name="end_flagging_text_of_table_or_list">
     
     <xsl:variable name="ul_depth" select="count(ancestor::*[contains(@class, ' topic/ul ')][1]/ancestor::*)"/>
@@ -1060,6 +1107,38 @@
         </xsl:when>
       </xsl:choose>
     </xsl:if>
+  </xsl:template>
+  
+  <!-- recusive template to get flagging rules -->
+  <xsl:template  match="*" mode="getFlaggingRules" name="getFlaggingRules">
+    
+    <xsl:variable name="flaggingRules">
+      <xsl:call-template name="getrules"/>
+    </xsl:variable>
+    <xsl:choose>
+      <xsl:when test="$flaggingRules != '' or not(parent::*)">
+        <xsl:copy-of select="exsl:node-set($flaggingRules)"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:apply-templates select="parent::*" mode="getFlaggingRules"/>
+      </xsl:otherwise>
+    </xsl:choose>
+    
+  </xsl:template>
+  
+  <!-- recusive template to get flagging name -->
+  <xsl:template match="*" name="getFlaggingStyleName" mode="getFlaggingStyleName">
+    <xsl:variable name="flaggingStyleName">
+      <xsl:call-template name="getFlagStyleName"/>
+    </xsl:variable>
+    <xsl:choose>
+      <xsl:when test="$flaggingStyleName != '' or not(parent::*)">
+        <xsl:value-of select="$flaggingStyleName"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:apply-templates select="parent::*" mode="getFlaggingStyleName"/>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
   
   

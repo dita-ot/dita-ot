@@ -88,6 +88,56 @@ public class ImgUtils {
 	}
 	
 	/**
+	 * Get the image width(ODT Transform).
+	 * @param dirName -
+	 * 				The directory name that will be added to the path 
+	 * 				of the image file.
+	 * @param fileName -
+	 * 				The file name of the image file.
+	 * @return int -
+	 * 				The width of the picture in pixels.
+	 */
+	public static int getWidthODT (String dirName, String fileName){
+		DITAOTJavaLogger logger = new DITAOTJavaLogger();
+		File imgInput = new File(dirName+File.separatorChar+fileName);
+		try {
+			BufferedImage img = ImageIO.read(imgInput);
+			return img.getWidth();
+		}catch (Exception e){
+			Properties prop = new Properties();
+			prop.put("%1", dirName+File.separatorChar+fileName);
+			logger.logError(MessageUtils.getMessage("DOTJ021E", prop).toString());
+			logger.logException(e);
+			return -1;
+		}
+	}
+	
+	/**
+	 * Get the image height(ODT Transform).
+	 * @param dirName -
+	 * 				The directory name that will be added to the path 
+	 * 				of the image file.
+	 * @param fileName -
+	 * 				The file name of the image file.
+	 * @return int -
+	 * 				The height of the picture in pixels.
+	 */
+	public static int getHeightODT (String dirName, String fileName){
+		DITAOTJavaLogger logger = new DITAOTJavaLogger();
+		File imgInput = new File(dirName+File.separatorChar+fileName);
+		try {
+			BufferedImage img = ImageIO.read(imgInput);
+			return img.getHeight();
+		}catch (Exception e){
+			Properties prop = new Properties();
+			prop.put("%1", dirName+File.separatorChar+fileName);
+			logger.logError(MessageUtils.getMessage("DOTJ021E", prop).toString());
+			logger.logException(e);
+			return -1;
+		}
+	}
+	
+	/**
 	 * Get the image binary data, with hexical output.
 	 * @param dirName -
 	 * 				The directory name that will be added to the path 
@@ -117,7 +167,7 @@ public class ImgUtils {
 			}
 			return ret.toString();
 		}catch (Exception e){
-			logger.logError(MessageUtils.getMessage("DOTJ023E").toString());
+			logger.logError(MessageUtils.getMessage("DOTJ021E").toString());
 			logger.logException(e);
 			return null;
 		}finally{
