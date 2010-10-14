@@ -470,6 +470,7 @@
     <xsl:apply-templates select="*[contains(@class,' eclipsemap/versionGreaterThanMin ')]" mode="eclipse.manifest"/>
     <xsl:apply-templates select="*[contains(@class,' eclipsemap/versionMax ')]" mode="eclipse.manifest"/>
     <xsl:apply-templates select="*[contains(@class,' eclipsemap/versionLessThanMax ')]" mode="eclipse.manifest"/>
+    <xsl:text>"</xsl:text>
   </xsl:template>
   
   <xsl:template match="*[contains(@class,' topic/vrmlist ')]" mode="eclipse.manifest">
