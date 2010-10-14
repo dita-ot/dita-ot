@@ -126,6 +126,11 @@
   	classname="org.dita.dost.resolver.URIResolverConfigTask">
   	<classpath refid="dost.jar.path"/>
   </taskdef>
+	
+  <taskdef name="dita-ot-version"
+  	classname="org.dita.dost.util.Version">
+  	<classpath refid="dost.jar.path"/>
+  </taskdef>
 
   <taskdef name="dita-ot-echo"
     classname="org.dita.dost.log.DITAOTEchoTask">
@@ -170,7 +175,7 @@
 
   <!-- Changed by Alan to refacter:URIResolver Date2009-08-07 -->
   <target name="build-init"
-    depends="start-process, init-logger, init-URIResolver, use-init, check-arg, output-msg" />
+    depends="start-process, init-logger, init-URIResolver, use-init, output-version, check-arg, output-msg" />
     
   <target name="start-process" description="Processing started" />
 
@@ -205,6 +210,11 @@
         <pathelement location="${dita.dir}/demo/legacypdf/lib/fop.jar"/>
       </classpath>
     </available>
+  </target>
+	
+  <target name="output-version">
+  	<dita-ot-version/>
+  	<echo level="info">Version: ${otversion} ${milestone}</echo>
   </target>
 
   <!-- property value validation begin -->

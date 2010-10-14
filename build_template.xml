@@ -81,7 +81,7 @@
       ant all -f build_demo.xml</echo>
   </target>
   
-  <target name="dita-preprocess" depends="start-process, init-logger, init-URIResolver, check-arg, output-deprecated-msg, output-css-warn-message, preprocess"/>
+  <target name="dita-preprocess" depends="start-process, init-logger, init-URIResolver, output-version, check-arg, output-deprecated-msg, output-css-warn-message, preprocess"/>
 
   <dita:extension id="dita.conductor.target" behavior="org.dita.dost.platform.InsertAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
   <dita:extension id="dita.conductor.target.relative" behavior="org.dita.dost.platform.InsertAntActionRelative" xmlns:dita="http://dita-ot.sourceforge.net"/>
