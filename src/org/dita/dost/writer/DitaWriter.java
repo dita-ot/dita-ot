@@ -513,106 +513,115 @@ public class DitaWriter extends AbstractXMLWriter {
 		    	}else if(slashIndex != -1){
 		    		keyIndex = slashIndex;
 		    	}
-		    	if(keyIndex != -1){
-		    		//get keyref value
-		    		String key = attValue.substring(0,keyIndex);
-		    		String target;
-		    		if(!key.equals(Constants.STRING_EMPTY) && keys.containsKey(key)){
-		    			
-		    			//target = FileUtils.replaceExtName(target);
-		    			//Added by William on 2009-06-25 for #12014 start
-		    			//get key's href
-		    			String value = keys.get(key);
-		    			String href = value.substring(0, value.lastIndexOf(Constants.LEFT_BRACKET));
-		    			
-		    			//Added by William on 2010-02-25 for bug:2957456 start
-		    			String updatedHref = updateHref(href);
-		    			//Added by William on 2010-02-25 for bug:2957456 end
-			    		
-		    			//get element/topic id
-			    		String id = attValue.substring(keyIndex+1);
-			    		
-			    		boolean idExported = false;
-			    		boolean keyrefExported = false;
-			    		List<Boolean> list = null;
-			    		if(transtype.equals(Constants.INDEX_TYPE_ECLIPSEHELP)){
-				    		 list = DelayConrefUtils.getInstance().checkExport(href, id, key, tempDir);
-				    		 idExported = list.get(0).booleanValue();
-				    		 keyrefExported = list.get(1).booleanValue();
-			    		}
-			    		//both id and key are exported and transtype is eclipsehelp
-		    			if(idExported && keyrefExported 
-		    					&& transtype.equals(Constants.INDEX_TYPE_ECLIPSEHELP)){
-		    			//remain the conkeyref attribute.
-		    				copyAttribute("conkeyref", attValue);
-		    			//Added by William on 2009-06-25 for #12014 end
-		    			}else {
-		    				//normal process
-		    				target = updatedHref;
-		    				//Added by William on 2010-05-17 for conkeyrefbug:3001705 start
-		    				//only replace extension name of topic files.
-		    				target = replaceExtName(target);
-			    			//Added by William on 2010-05-17 for conkeyrefbug:3001705 end
-			    			String tail ;
-			    			if(sharpIndex == -1 ){
-			    				if(target.indexOf(Constants.SHARP) == -1)
-			    					//change to topic id
-			    					tail = attValue.substring(keyIndex).replaceAll(Constants.SLASH, Constants.SHARP);
-			    				else
-			    					//change to element id
-			    					tail = attValue.substring(keyIndex);
-			    			}else {
-			    				//change to topic id
-			    				tail = attValue.substring(keyIndex);
-			    				//replace the topic id defined in the key's href 
-			    				if(target.indexOf(Constants.SHARP) != -1){
-			    					target = target.substring(0,target.indexOf(Constants.SHARP));
-			    				}
-			    			}
-			    			copyAttribute("conref", target + tail);
-			    			conkeyrefValid = true;
-		    			}
-		    		}else{
-		    			Properties prop = new Properties();
-		    			prop.setProperty("%1", attValue);
-		    			logger.logError(MessageUtils.getMessage("DOTJ046E", prop).toString());
-		    		}
-		    	}else{
-		    		//conkeyref just has keyref
-		    		if(keys.containsKey(attValue)){
-		    			//get key's href
-		    			String value = keys.get(attValue);
-		    			String href = value.substring(0, value.lastIndexOf(Constants.LEFT_BRACKET));
-		    			
-		    			//Added by William on 2010-02-25 for bug:2957456 start
-		    			String updatedHref = updateHref(href);
-		    			//Added by William on 2010-02-25 for bug:2957456 end
-		
-		    			//Added by William on 2009-06-25 for #12014 start
-		    			String id = null;
-		    			
-		    			List<Boolean> list = DelayConrefUtils.getInstance().checkExport(href, id, attValue, tempDir);
-		    			boolean keyrefExported = list.get(1).booleanValue();
-		    			//key is exported and transtype is eclipsehelp
-		    			if(keyrefExported && transtype.equals(Constants.INDEX_TYPE_ECLIPSEHELP)){
-		    			//remain the conkeyref attribute.
-		    				copyAttribute("conkeyref", attValue);
-		    			//Added by William on 2009-06-25 for #12014 end
-		    			}else{
-		    				//e.g conref = c.xml
-		    				String target = updatedHref;
-		    				//Added by William on 2010-05-17 for conkeyrefbug:3001705 start
-		    				target = replaceExtName(target);
-		    				//Added by William on 2010-05-17 for conkeyrefbug:3001705 end
-		    				copyAttribute("conref", target);
+		    	//conkeyref only accept values such as "key" or "key/id"
+		    	//bug:3081597
+		    	if(sharpIndex == -1){
+			    	if(keyIndex != -1){
+			    		//get keyref value
+			    		String key = attValue.substring(0,keyIndex);
+			    		String target;
+			    		if(!key.equals(Constants.STRING_EMPTY) && keys.containsKey(key)){
 			    			
-			    			conkeyrefValid = true;
-		    			}
-		    		}else{
-		    			Properties prop = new Properties();
-		    			prop.setProperty("%1", attValue);
-		    			logger.logError(MessageUtils.getMessage("DOTJ046E", prop).toString());
-		    		}	
+			    			//target = FileUtils.replaceExtName(target);
+			    			//Added by William on 2009-06-25 for #12014 start
+			    			//get key's href
+			    			String value = keys.get(key);
+			    			String href = value.substring(0, value.lastIndexOf(Constants.LEFT_BRACKET));
+			    			
+			    			//Added by William on 2010-02-25 for bug:2957456 start
+			    			String updatedHref = updateHref(href);
+			    			//Added by William on 2010-02-25 for bug:2957456 end
+				    		
+			    			//get element/topic id
+				    		String id = attValue.substring(keyIndex+1);
+				    		
+				    		boolean idExported = false;
+				    		boolean keyrefExported = false;
+				    		List<Boolean> list = null;
+				    		if(transtype.equals(Constants.INDEX_TYPE_ECLIPSEHELP)){
+					    		 list = DelayConrefUtils.getInstance().checkExport(href, id, key, tempDir);
+					    		 idExported = list.get(0).booleanValue();
+					    		 keyrefExported = list.get(1).booleanValue();
+				    		}
+				    		//both id and key are exported and transtype is eclipsehelp
+			    			if(idExported && keyrefExported 
+			    					&& transtype.equals(Constants.INDEX_TYPE_ECLIPSEHELP)){
+			    			//remain the conkeyref attribute.
+			    				copyAttribute("conkeyref", attValue);
+			    			//Added by William on 2009-06-25 for #12014 end
+			    			}else {
+			    				//normal process
+			    				target = updatedHref;
+			    				//Added by William on 2010-05-17 for conkeyrefbug:3001705 start
+			    				//only replace extension name of topic files.
+			    				target = replaceExtName(target);
+				    			//Added by William on 2010-05-17 for conkeyrefbug:3001705 end
+				    			String tail ;
+				    			if(sharpIndex == -1 ){
+				    				if(target.indexOf(Constants.SHARP) == -1)
+				    					//change to topic id
+				    					tail = attValue.substring(keyIndex).replaceAll(Constants.SLASH, Constants.SHARP);
+				    				else
+				    					//change to element id
+				    					tail = attValue.substring(keyIndex);
+				    			}else {
+				    				//change to topic id
+				    				tail = attValue.substring(keyIndex);
+				    				//replace the topic id defined in the key's href 
+				    				if(target.indexOf(Constants.SHARP) != -1){
+				    					target = target.substring(0,target.indexOf(Constants.SHARP));
+				    				}
+				    			}
+				    			copyAttribute("conref", target + tail);
+				    			conkeyrefValid = true;
+			    			}
+			    		}else{
+			    			Properties prop = new Properties();
+			    			prop.setProperty("%1", attValue);
+			    			logger.logError(MessageUtils.getMessage("DOTJ046E", prop).toString());
+			    		}
+			    	}else{
+			    		//conkeyref just has keyref
+			    		if(keys.containsKey(attValue)){
+			    			//get key's href
+			    			String value = keys.get(attValue);
+			    			String href = value.substring(0, value.lastIndexOf(Constants.LEFT_BRACKET));
+			    			
+			    			//Added by William on 2010-02-25 for bug:2957456 start
+			    			String updatedHref = updateHref(href);
+			    			//Added by William on 2010-02-25 for bug:2957456 end
+			
+			    			//Added by William on 2009-06-25 for #12014 start
+			    			String id = null;
+			    			
+			    			List<Boolean> list = DelayConrefUtils.getInstance().checkExport(href, id, attValue, tempDir);
+			    			boolean keyrefExported = list.get(1).booleanValue();
+			    			//key is exported and transtype is eclipsehelp
+			    			if(keyrefExported && transtype.equals(Constants.INDEX_TYPE_ECLIPSEHELP)){
+			    			//remain the conkeyref attribute.
+			    				copyAttribute("conkeyref", attValue);
+			    			//Added by William on 2009-06-25 for #12014 end
+			    			}else{
+			    				//e.g conref = c.xml
+			    				String target = updatedHref;
+			    				//Added by William on 2010-05-17 for conkeyrefbug:3001705 start
+			    				target = replaceExtName(target);
+			    				//Added by William on 2010-05-17 for conkeyrefbug:3001705 end
+			    				copyAttribute("conref", target);
+				    			
+				    			conkeyrefValid = true;
+			    			}
+			    		}else{
+			    			Properties prop = new Properties();
+			    			prop.setProperty("%1", attValue);
+			    			logger.logError(MessageUtils.getMessage("DOTJ046E", prop).toString());
+			    		}	
+			    	}
+		    	}else{
+		    		//invalid conkeyref value
+		    		Properties prop = new Properties();
+	    			prop.setProperty("%1", attValue);
+	    			logger.logError(MessageUtils.getMessage("DOTJ046E", prop).toString());
 		    	}
 		    }
 		    
