@@ -85,6 +85,7 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:param name="artworkPrefix"/>
     <xsl:param name="fileProtocolPrefix"/>
     <xsl:param name="publishRequiredCleanup"/>
+    <xsl:param name="DRAFT"/>
     <xsl:param name="disableRelatedLinks" select="'yes'"/>
     <xsl:param name="pdfFormatter" select="'fop'"/>
 

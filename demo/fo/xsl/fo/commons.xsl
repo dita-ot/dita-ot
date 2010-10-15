@@ -641,6 +641,7 @@ See the accompanying license.txt file for applicable licenses.
                         and abstract might indent the text.  Here, the topic body is in a table cell, and should
                         not be indented, so each element is handled specially.-->
                         <fo:block>
+                            <xsl:apply-templates select="*[contains(@class,' topic/titlealts ')]"/>
                             <xsl:if test="*[contains(@class,' topic/shortdesc ')
                                   or contains(@class, ' topic/abstract ')]/node()">
                               <fo:block xsl:use-attribute-sets="p">
@@ -1229,9 +1230,13 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' topic/titlealts ')]">
-        <fo:block xsl:use-attribute-sets="titlealts" id="{@id}">
+      <xsl:if test="$DRAFT='yes'">
+        <xsl:if test="*">
+          <fo:block xsl:use-attribute-sets="titlealts" id="{@id}">
             <xsl:apply-templates/>
-        </fo:block>
+          </fo:block>
+        </xsl:if>
+      </xsl:if>
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' topic/navtitle ')]">
@@ -1240,25 +1245,28 @@ See the accompanying license.txt file for applicable licenses.
                 <xsl:call-template name="insertVariable">
                     <xsl:with-param name="theVariableID" select="'Navigation title'"/>
                 </xsl:call-template>
-                <xsl:text>:</xsl:text>
+                <xsl:text>: </xsl:text>
             </fo:inline>
             <xsl:apply-templates/>
         </fo:block>
     </xsl:template>
 
-    <xsl:template match="*[contains(@class,' topic/searchtitle ')]">
+    <!-- Map uses map/searchtitle, topic uses topic/searchtitle. This will likely be changed
+         to a single value in DITA 2.0, but for now, recognize both. -->
+    <xsl:template match="*[contains(@class,' topic/titlealts ')]/*[contains(@class,' topic/searchtitle ')] | 
+                         *[contains(@class,' topic/titlealts ')]/*[contains(@class,' map/searchtitle ')]">
         <fo:block xsl:use-attribute-sets="searchtitle" id="{@id}">
             <fo:inline xsl:use-attribute-sets="searchtitle__label">
                 <xsl:call-template name="insertVariable">
                     <xsl:with-param name="theVariableID" select="'Search title'"/>
                 </xsl:call-template>
-                <xsl:text>:</xsl:text>
+                <xsl:text>: </xsl:text>
             </fo:inline>
             <xsl:apply-templates/>
         </fo:block>
     </xsl:template>
 
-    <xsl:template match="*[contains(@class,' map/searchtitle ')]"/>
+    <xsl:template match="*[contains(@class,' map/topicmeta ')]/*[contains(@class,' map/searchtitle ')]"/>
 
     <xsl:template match="*[contains(@class,' topic/abstract ')]">
         <fo:block id="{@id}">
@@ -1933,7 +1941,7 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' topic/draft-comment ')]">
-        <xsl:if test="$publishRequiredCleanup = 'yes'">
+        <xsl:if test="$publishRequiredCleanup = 'yes' or $DRAFT='yes'">
             <fo:block xsl:use-attribute-sets="draft-comment" id="{@id}">
                 <fo:block xsl:use-attribute-sets="draft-comment__label">
             Disposition:
@@ -1947,7 +1955,7 @@ See the accompanying license.txt file for applicable licenses.
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' topic/required-cleanup ')]">
-        <xsl:if test="$publishRequiredCleanup = 'yes'">
+        <xsl:if test="$publishRequiredCleanup = 'yes' or $DRAFT='yes'">
             <fo:inline xsl:use-attribute-sets="required-cleanup" id="{@id}">
                 <fo:inline xsl:use-attribute-sets="required-cleanup__label">
                     <xsl:call-template name="insertVariable">

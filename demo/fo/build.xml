@@ -227,6 +227,10 @@ with those set forth herein.
             <not><isset property="args.fo.include.rellinks"></isset></not>
         </condition>
 
+        <condition property="args.draft" value="no">
+            <not><isset property="args.draft"></isset></not>
+        </condition>
+
         <condition property="publish.required.cleanup" value="${args.draft}">
           <and>
             <not><isset property="publish.required.cleanup"/></not>
@@ -292,6 +296,7 @@ with those set forth herein.
             <arg line='"${temp.transformation.file}"'/>
             <arg line='"locale=${document.locale}"'/>
             <arg line='"customizationDir=${customization.dir}"'/>
+            <arg line='"DRAFT=${args.draft}"'/>
             <arg line='"artworkPrefix=${artworkPrefixUrl}"'/>
             <arg line='"fileProtocolPrefix=${file.protocol.prefix}"'/>
             <arg line='"publishRequiredCleanup=${publish.required.cleanup}"'/>
