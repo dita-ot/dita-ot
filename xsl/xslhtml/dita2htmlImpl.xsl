@@ -3663,17 +3663,30 @@
 
 <!-- =========== REQUIRED CLEANUP and REVIEW COMMENT =========== -->
 
+<xsl:template match="*[contains(@class,' topic/required-cleanup ')]" mode="default-required-cleanup-style">
+  <xsl:attribute name="style">
+    <xsl:text>background-color: #FFFF99; color:#CC3333; border: 1pt black solid;</xsl:text>
+  </xsl:attribute>
+</xsl:template>
+
+<xsl:template match="*[contains(@class,' topic/draft-comment ')]" mode="default-draft-comment-style">
+  <xsl:attribute name="style">
+    <xsl:text>background-color: #99FF99; border: 1pt black solid;</xsl:text>
+  </xsl:attribute>
+</xsl:template>
+
 <xsl:template match="*[contains(@class,' topic/required-cleanup ')]" name="topic.required-cleanup">
  <xsl:if test="$DRAFT='yes'">
    <xsl:variable name="flagrules">
      <xsl:call-template name="getrules"/>
    </xsl:variable>
    <xsl:apply-templates select="." mode="ditamsg:required-cleanup-in-content"/>
-  <div style="background-color: #FFFF99; color:#CC3333; border: 1pt black solid;">
+  <div>
    <xsl:call-template name="commonattributes"/>
     <xsl:call-template name="gen-style">
       <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
     </xsl:call-template>
+    <xsl:apply-templates select="." mode="default-required-cleanup-style"/>
     <xsl:call-template name="setidaname"/>
     <xsl:call-template name="start-flagit">
       <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
@@ -3704,11 +3717,12 @@
      <xsl:call-template name="getrules"/>
    </xsl:variable>
    <xsl:apply-templates select="." mode="ditamsg:draft-comment-in-content"/>
-  <div style="background-color: #99FF99; border: 1pt black solid;">
+  <div>
     <xsl:call-template name="commonattributes"/>
     <xsl:call-template name="gen-style">
       <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>
     </xsl:call-template>
+    <xsl:apply-templates select="." mode="default-draft-comment-style"/>
     <xsl:call-template name="setidaname"/>
     <xsl:call-template name="start-flagit">
       <xsl:with-param name="flagrules" select="$flagrules"></xsl:with-param>     
