@@ -16,10 +16,12 @@
   
 <xsl:stylesheet version="1.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
+                xmlns:ditamsg="http://dita-ot.sourceforge.net/ns/200704/ditamsg"
                 xmlns:saxon="http://icl.com/saxon"
                 extension-element-prefixes="saxon"
                 xmlns:java="org.dita.dost.util.StringUtils"
-                exclude-result-prefixes="java"
+                exclude-result-prefixes="java dita-ot ditamsg"
                 >
 
 <!-- map2htmltoc.xsl   main stylesheet
@@ -36,7 +38,7 @@
 
 <!-- Include error message template -->
 <xsl:import href="../common/output-message.xsl"/>
-<xsl:import href="../common/dita-utilities.xsl"/>
+<xsl:import href="../common/dita-textonly.xsl"/>
 
 <xsl:output method="html" indent="no" encoding="UTF-8"/>
 
@@ -207,7 +209,7 @@
 <xsl:template match="*[contains(@class, ' map/topicref ')][not(@toc='no')][not(@processing-role='resource-only')]">
   <xsl:param name="pathFromMaplist"/>
   <xsl:variable name="title">
-    <xsl:call-template name="navtitle"/>
+    <xsl:apply-templates select="." mode="get-navtitle"/>
   </xsl:variable>
   <xsl:choose>
     <xsl:when test="$title and $title!=''">
@@ -294,7 +296,11 @@
   <xsl:value-of select="."/><xsl:text>/</xsl:text>
 </xsl:template>  
 
+<!-- Deprecating the named template in favor of the mode template. -->
 <xsl:template name="navtitle">
+  <xsl:apply-templates select="." mode="get-navtitle"/>
+</xsl:template>
+<xsl:template match="*" mode="get-navtitle">
   <xsl:variable name="WORKDIR">
     <xsl:value-of select="$FILEREF"/>
     <xsl:apply-templates select="/processing-instruction()" mode="get-work-dir"/>
@@ -303,7 +309,9 @@
 
     <!-- If navtitle is specified, use it (!?but it should only be used when locktitle=yes is specifed?!) -->
     <xsl:when test="*[contains(@class,'- map/topicmeta ')]/*[contains(@class, '- topic/navtitle ')]">
-      <xsl:value-of select="*[contains(@class,'- map/topicmeta ')]/*[contains(@class, '- topic/navtitle ')]"/>
+      <xsl:apply-templates 
+        select="*[contains(@class,'- map/topicmeta ')]/*[contains(@class, '- topic/navtitle ')]" 
+        mode="dita-ot:text-only"/>
     </xsl:when>
     <xsl:when test="not(*[contains(@class,'- map/topicmeta ')]/*[contains(@class, '- topic/navtitle ')]) and @navtitle"><xsl:value-of select="@navtitle"/></xsl:when>
 
@@ -314,88 +322,103 @@
                     not ((ancestor-or-self::*/@scope)[last()]='peer') and
                     not ((ancestor-or-self::*/@type)[last()]='external') and
                     not ((ancestor-or-self::*/@type)[last()]='local')">
-      <!-- Need to worry about targeting a nested topic? Not for now. -->
-      <!--<xsl:variable name="FileWithPath"><xsl:value-of select="$WORKDIR"/><xsl:choose>-->
-      <xsl:variable name="FileWithPath">
-	    <xsl:choose>
-	      <xsl:when test="@copy-to and not(contains(@chunk, 'to-content'))">
-	        <xsl:value-of select="$WORKDIR"/><xsl:value-of select="@copy-to"/>
-	        <xsl:if test="not(contains(@copy-to, '#')) and contains(@href, '#')">
-	          <xsl:value-of select="concat('#', substring-after(@href, '#'))"/>
-	        </xsl:if>
-	      </xsl:when>
-	      <xsl:when test="contains(@href,'#')">
-	        <xsl:value-of select="$WORKDIR"/><xsl:value-of select="substring-before(@href,'#')"/>
-	      </xsl:when>
-	      <xsl:otherwise>
-	        <xsl:value-of select="$WORKDIR"/><xsl:value-of select="@href"/>
-	      </xsl:otherwise>
-	    </xsl:choose>
-      </xsl:variable>
-      <xsl:variable name="TargetFile" select="document($FileWithPath,/)"/>
-
-      <xsl:choose>
-        <xsl:when test="not($TargetFile)">   <!-- DITA file does not exist -->
-          <xsl:choose>
-            <xsl:when test="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/linktext ')]">  <!-- attempt to recover by using linktext -->
-              <xsl:value-of select="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/linktext ')]"/>
-            </xsl:when>
-            <xsl:otherwise>
-              <xsl:call-template name="output-message">
-                <xsl:with-param name="msgnum">008</xsl:with-param>
-                <xsl:with-param name="msgsev">W</xsl:with-param>
-                <xsl:with-param name="msgparams">%1=<xsl:value-of select="@href"/></xsl:with-param>
-               </xsl:call-template>
-            </xsl:otherwise>
-          </xsl:choose>
-        </xsl:when>
-        <!-- First choice for navtitle: topic/titlealts/navtitle -->
-        <xsl:when test="$TargetFile/*[contains(@class,' topic/topic ')]/*[contains(@class,' topic/titlealts ')]/*[contains(@class,' topic/navtitle ')]">
-          <xsl:value-of select="$TargetFile/*[contains(@class,' topic/topic ')]/*[contains(@class,' topic/titlealts ')]/*[contains(@class,' topic/navtitle ')]"/>
-        </xsl:when>
-        <!-- Second choice for navtitle: topic/title -->
-        <xsl:when test="$TargetFile/*[contains(@class,' topic/topic ')]/*[contains(@class,' topic/title ')]">
-          <xsl:value-of select="$TargetFile/*[contains(@class,' topic/topic ')]/*[contains(@class,' topic/title ')]"/>
-        </xsl:when>
-        <!-- This might be a combo article; modify the same queries: dita/topic/titlealts/navtitle -->
-        <xsl:when test="$TargetFile/dita/*[contains(@class,' topic/topic ')]/*[contains(@class,' topic/titlealts ')]/*[contains(@class,' topic/navtitle ')]">
-          <xsl:value-of select="$TargetFile/dita/*[contains(@class,' topic/topic ')]/*[contains(@class,' topic/titlealts ')]/*[contains(@class,' topic/navtitle ')]"/>
-        </xsl:when>
-        <!-- Second choice: dita/topic/title -->
-        <xsl:when test="$TargetFile/dita/*[contains(@class,' topic/topic ')]/*[contains(@class,' topic/title ')]">
-          <xsl:value-of select="$TargetFile/dita/*[contains(@class,' topic/topic ')]/*[contains(@class,' topic/title ')]"/>
-        </xsl:when>
-        <!-- Last choice: use the linktext specified within the topicref -->
-        <xsl:when test="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/linktext ')]">
-          <xsl:value-of select="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/linktext ')]"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:call-template name="output-message">
-            <xsl:with-param name="msgnum">009</xsl:with-param>
-            <xsl:with-param name="msgsev">W</xsl:with-param>
-            <xsl:with-param name="msgparams">%1=<xsl:value-of select="@TargetFile"/>;%2=***</xsl:with-param>
-          </xsl:call-template>
-          <xsl:text>***</xsl:text>
-        </xsl:otherwise>
-      </xsl:choose>
+      <xsl:apply-templates select="." mode="getNavtitleFromTopic">
+        <xsl:with-param name="WORKDIR" select="$WORKDIR"/>
+      </xsl:apply-templates>
     </xsl:when>
 
     <!-- If there is no title and none can be retrieved, check for <linktext> -->
     <xsl:when test="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/linktext ')]">
-      <xsl:value-of select="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/linktext ')]"/>
+      <xsl:apply-templates 
+        select="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/linktext ')]"
+        mode="dita-ot:text-only"/>
     </xsl:when>
 
     <!-- No local title, and not targeting a DITA file. Could be just a container setting
          metadata, or a file reference with no title. Issue message for the second case. -->
     <xsl:otherwise>
       <xsl:if test="@href and not(@href='')">
-          <xsl:call-template name="output-message">
-            <xsl:with-param name="msgnum">009</xsl:with-param>
-            <xsl:with-param name="msgsev">W</xsl:with-param>
-            <xsl:with-param name="msgparams">%1=<xsl:value-of select="@href"/>;%2=<xsl:value-of select="@href"/></xsl:with-param>
-          </xsl:call-template>
+          <xsl:apply-templates select="." mode="ditamsg:could-not-retrieve-navtitle-using-fallback">
+            <xsl:with-param name="target" select="@href"/>
+            <xsl:with-param name="fallback" select="@href"/>
+          </xsl:apply-templates>
           <xsl:value-of select="@href"/>
       </xsl:if>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+<xsl:template match="*" mode="getNavtitleFromTopic">
+  <xsl:param name="WORKDIR"/>
+  <!-- Need to worry about targeting a nested topic? Not for now. -->
+  <xsl:variable name="FileWithPath">
+    <xsl:choose>
+      <xsl:when test="@copy-to and not(contains(@chunk, 'to-content'))">
+        <xsl:value-of select="$WORKDIR"/><xsl:value-of select="@copy-to"/>
+        <xsl:if test="not(contains(@copy-to, '#')) and contains(@href, '#')">
+          <xsl:value-of select="concat('#', substring-after(@href, '#'))"/>
+        </xsl:if>
+      </xsl:when>
+      <xsl:when test="contains(@href,'#')">
+        <xsl:value-of select="$WORKDIR"/><xsl:value-of select="substring-before(@href,'#')"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$WORKDIR"/><xsl:value-of select="@href"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
+  <xsl:variable name="TargetFile" select="document($FileWithPath,/)"/>
+
+  <xsl:choose>
+    <xsl:when test="not($TargetFile)">   <!-- DITA file does not exist -->
+      <xsl:choose>
+        <xsl:when test="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/linktext ')]">  <!-- attempt to recover by using linktext -->
+          <xsl:apply-templates
+             select="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/linktext ')]"
+             mode="dita-ot:text-only"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:apply-templates select="." mode="ditamsg:missing-target-file-no-navtitle"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:when>
+    <!-- First choice for navtitle: topic/titlealts/navtitle -->
+    <xsl:when test="$TargetFile/*[contains(@class,' topic/topic ')]/*[contains(@class,' topic/titlealts ')]/*[contains(@class,' topic/navtitle ')]">
+      <xsl:apply-templates 
+        select="$TargetFile/*[contains(@class,' topic/topic ')]/*[contains(@class,' topic/titlealts ')]/*[contains(@class,' topic/navtitle ')]"
+        mode="dita-ot:text-only"/>
+    </xsl:when>
+    <!-- Second choice for navtitle: topic/title -->
+    <xsl:when test="$TargetFile/*[contains(@class,' topic/topic ')]/*[contains(@class,' topic/title ')]">
+      <xsl:apply-templates 
+        select="$TargetFile/*[contains(@class,' topic/topic ')]/*[contains(@class,' topic/title ')]"
+        mode="dita-ot:text-only"/>
+    </xsl:when>
+    <!-- This might be a combo article; modify the same queries: dita/topic/titlealts/navtitle -->
+    <xsl:when test="$TargetFile/dita/*[contains(@class,' topic/topic ')]/*[contains(@class,' topic/titlealts ')]/*[contains(@class,' topic/navtitle ')]">
+      <xsl:apply-templates 
+        select="$TargetFile/dita/*[contains(@class,' topic/topic ')]/*[contains(@class,' topic/titlealts ')]/*[contains(@class,' topic/navtitle ')]"
+        mode="dita-ot:text-only"/>
+    </xsl:when>
+    <!-- Second choice: dita/topic/title -->
+    <xsl:when test="$TargetFile/dita/*[contains(@class,' topic/topic ')]/*[contains(@class,' topic/title ')]">
+      <xsl:apply-templates 
+        select="$TargetFile/dita/*[contains(@class,' topic/topic ')]/*[contains(@class,' topic/title ')]"
+        mode="dita-ot:text-only"/>
+    </xsl:when>
+    <!-- Last choice: use the linktext specified within the topicref -->
+    <xsl:when test="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/linktext ')]">
+      <xsl:apply-templates 
+        select="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' map/linktext ')]"
+        mode="dita-ot:text-only"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:apply-templates select="." mode="ditamsg:could-not-retrieve-navtitle-using-fallback">
+        <xsl:with-param name="target" select="$FileWithPath"/>
+        <xsl:with-param name="fallback" select="'***'"/>
+      </xsl:apply-templates>
+      <xsl:text>***</xsl:text>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
@@ -528,6 +551,24 @@
       </xsl:call-template>
     </xsl:when>
   </xsl:choose>
+</xsl:template>
+
+<xsl:template match="*" mode="ditamsg:missing-target-file-no-navtitle">
+  <xsl:call-template name="output-message">
+    <xsl:with-param name="msgnum">008</xsl:with-param>
+    <xsl:with-param name="msgsev">W</xsl:with-param>
+    <xsl:with-param name="msgparams">%1=<xsl:value-of select="@href"/></xsl:with-param>
+   </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="*" mode="ditamsg:could-not-retrieve-navtitle-using-fallback">
+  <xsl:param name="target"/>
+  <xsl:param name="fallback"/>
+  <xsl:call-template name="output-message">
+    <xsl:with-param name="msgnum">009</xsl:with-param>
+    <xsl:with-param name="msgsev">W</xsl:with-param>
+    <xsl:with-param name="msgparams">%1=<xsl:value-of select="$target"/>;%2=<xsl:value-of select="$fallback"/></xsl:with-param>
+  </xsl:call-template>
 </xsl:template>
 
 </xsl:stylesheet>
