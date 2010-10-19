@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+     Sourceforge.net. See the accompanying license.txt file for 
+     applicable licenses.-->
+<!-- (c) Copyright IBM Corp. 2005, 2006 All Rights Reserved. -->
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN"
+ "..\dtd\task.dtd">
+<task id="jcomm" xml:lang="en-us">
+<title>Transforming DITA to Word with <tm tmclass="special" tmowner="Sun Microsystems, Inc."
+tmtype="tm" trademark="Java">Java</tm> command</title>
+<taskbody>
+<context><b>Running Example</b></context>
+<steps>
+<step id="jcstep1"><cmd>On the command line, enter the command <userinput>java
+-jar lib\dost.jar /i:&lt;input> /outdir:&lt;out> /transtype:wordrtf</userinput>.</cmd>
+</step>
+<step><cmd>After processing and generating, a single output file in ".rft"
+format occurs in the specified directory, such as in e:/output/diat2word..</cmd>
+</step>
+<step><cmd>You can use <tm tmclass="special" tmowner="Microsoft Corporation"
+tmtype="reg" trademark="Microsoft">Microsoft</tm> word to open the output
+file.</cmd></step>
+<step><cmd>You can also further edit the output file by using tools in <tm
+tmclass="special" tmowner="Microsoft Corporation" tmtype="reg" trademark="Microsoft">Microsoft</tm> Word.</cmd>
+</step>
+</steps>
+<postreq><note>In <xref href="#jcomm/jcstep1">step</xref>, <userinput>&lt;input></userinput> means
+the name of ditamap file to be transformed, and <userinput>&lt;out></userinput> means
+the output directory.</note></postreq>
+</taskbody>
+</task>

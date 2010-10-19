@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Arbortext, Inc., 1988-2010, v.4002-->
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN"
+ "reference.dtd">
+<?Pub Sty _display FontColor="red"?>
+<reference id="runant" xml:lang="en-us">
+<title>Running Ant</title>
+<shortdesc>After setting up the Ant environment, you can build the
+DITA      output by running the <codeph>ant</codeph> command. </shortdesc>
+<refbody>
+<example>Here are some samples to explain how to use Ant to build
+sample        output in the DITA directory. <note> To run the Ant
+demo properly, you        should switch to the <b>DITA installation
+directory</b> under the command        prompt. If you are using the
+"Full Easy Install" package, running the "startcmd" batch file in
+that directory will give you a prompt that is already set up for the
+following commands.</note><ul>
+<li>You can build all demos in the DITA directory <p>Input <codeph>ant
+all -f build_demo.xml</codeph></p><p>The building process        will
+create an <b>/out/</b> directory and put the output files in     
+  subdirectories that parallel the source directory. </p></li>
+<li>You can        also rebuild specific DITA sample files after running
+the full demo.<p>First you need        to remove part of the output
+by specifying a        "<codeph>clean</codeph>" target, and then rebuild
+the output. For        example: To rebuild FAQ demo, run the following
+two commands: <codeblock>ant clean.demo.faq -f build_demo.xml
+ant demo.faq -f build_demo.xml</codeblock></p><note>To find out the
+complete list of targets you can clean and build, check the <i>name</i> attributes
+for the target elements within the        <i>build_demo.xml</i> file.
+Or, input <codeph>ant -projecthelp -f build_demo.xml</codeph> for
+a full list information.</note> </li>
+<li>You can also build your own selections using a prompted build. <p>Input <codeph>ant
+-f build_demo.xml</codeph></p><p>Ant will prompt you for the input
+file, output directory, and transform type. Values on these parameters
+are case sensitive.</p></li>
+</ul><p>To set up your own reusable Ant builds, with access to the
+full range of DITA-OT parameters, start by using the samples provided
+in <filepath>samples/ant_samples/</filepath>. That directory contains
+a sample Ant script for each common output format.</p><note>To   
+    troubleshoot problems in setting up Java, Ant, Saxon, or FOP,
+you will        get better information from the communities for those
+components rather        than the communities for the DITA. Of course,
+if you find issues relevant        to the DITA XSLT scripts (or have
+ideas for improving them), you are        encouraged to engage the
+DITA community.</note> </example>
+</refbody>
+</reference><?Pub Caret -3?>
+<?Pub *0000002759?>

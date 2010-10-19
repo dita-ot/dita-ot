@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+     Sourceforge.net. See the accompanying license.txt file for 
+     applicable licenses.-->
+<!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved. -->
+
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference id="testing" xml:lang="en-us">
+  <title>Testing some tweaks</title>
+  <refbody>
+    <section>
+      <p>This section makes use of several tweak-controllable features. It 
+        contains a draft comment, a required cleanup container, a figure whose 
+        title can be shifted over or under the figure upon output, and a 
+        section title that can be augmented with a graphical information 
+        navigation icon or <i>ing</i> (see <i>do-place-ing</i> under 
+        <i>behavior</i>).</p>
+      <note type="note">This document will appear differently depending on 
+        which stylesheet you use. If you view or process the document with a 
+        standard shell (<i>dita2xhtml.xsl</i> or <i>dita2fo_shell.xsl</i>), the 
+        special features will not be turned on. But if you process it into HTML 
+        (or view it directly in Internet Explorer 6.0) using the 
+        <i>myoverrides.xsl</i> demo stylesheet, the special features will be 
+        enabled, resulting in different output styles. </note>
+      <note type="tip">If you code your note type as <i>tip</i> and turn on the 
+        <i>do-place-ing</i> behavior, as with this note, the output should 
+        include a graphical icon alongside the text label.</note>
+      <draft-comment>The following footnote is unrelated to the current 
+        discussion. However, we are exploring both draft-comment and 
+        required-cleanup markup here. Draft comments allow authors to share 
+        comments between levels of a draft. Required cleanup sequesters 
+        potentially faulty contents from output.</draft-comment>
+      <fn callout="^">This is a footnote with a special callout character.</fn>
+      <fig frame="all">
+        <title>This is a <i>wild</i> title</title>
+        <desc>A good <i>figure</i> doesn&apos;t need a thousand words unless it 
+          is a technical description, in which case you probably can&apos;t say 
+          enough.</desc>
+        <image href="articles/image/basediag.gif"></image>
+      </fig>
+    </section>
+  </refbody>
+</reference>

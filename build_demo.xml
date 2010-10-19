@@ -652,7 +652,7 @@ doc.langref-dita1.1.chm
 
 		<antcall target="dita2docbook">
 			<param name="args.input"
-				value="${dita.doc.dir}${file.separator}DITA-readme.xml"/>
+				value="${dita.doc.dir}${file.separator}readme${file.separator}DITA-readme.xml"/>
 			<param name="output.dir"
 				value="${dita.output.docbook.dir}"/>
       <param name="transtype" value="docbook"/>

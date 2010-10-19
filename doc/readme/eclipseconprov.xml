@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Arbortext, Inc., 1988-2010, v.4002-->
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN"
+ "concept.dtd">
+<concept id="eclipseconprov" xml:lang="en-us">
+<title>Eclipse Content Provider</title>
+<conbody>
+<p>The Eclipse Content Provider was introduced in the DITA-OT Release
+1.1. With the Eclipse        Content Provider, you do not need to
+transform DITA files completely to HTML before loading them in Eclipse.
+This new function will preprocess DITA files and dynamically transform
+them into HTML at runtime.</p>
+<p>During the building process, the Eclipse Content Provider generates
+the file <filepath>plugin.xml</filepath>. The file <filepath>plugin.xml</filepath> provides
+the definition of one or more tables of contents and locates the contents
+to display.</p>
+<p>Here is an example of creating an output for the Eclipse Content
+Provider and view the output in specially designed Eclipse on Windows
+XP. This assumes that your environment is already set up to run DITA-OT
+transformations.<ol>
+<li>Start the Windows command line interface.</li>
+<li>Switch to the directory <b>c:\DITA-OT\</b> (or to your own install
+directory for the toolkit).</li>
+<li>Enter the following command to build:<codeblock>java -jar lib\dost.jar /i:samples/sequence.ditamap 
+      /outdir:out /transtype:eclipsecontent </codeblock></li>
+<li>Then view all        the files under <b>c:\DITA-OT\out\</b> and
+copy these files to the        corresponding directory under the plugin
+directory for Eclipse.</li>
+<li>Call the specially designed Eclipse to view the output.</li>
+</ol></p>
+</conbody>
+</concept><?Pub Caret -1?>
+<?Pub *0000001668?>
