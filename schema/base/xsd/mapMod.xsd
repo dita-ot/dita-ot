@@ -155,16 +155,16 @@
    <xs:group name="map.content">
      <xs:sequence>
        <xs:sequence>
-      <xs:group ref="title" minOccurs="0" />
-      <xs:group ref="topicmeta" minOccurs="0" />
-      <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:group ref="navref" />
-        <xs:group ref="anchor" />
-        <xs:group ref="topicref" />
-        <xs:group ref="reltable" />
-        <xs:group ref="data.elements.incl" />
-      </xs:choice>      
-    </xs:sequence>
+         <xs:group ref="title" minOccurs="0" />
+         <xs:group ref="topicmeta" minOccurs="0" />
+         <xs:choice minOccurs="0" maxOccurs="unbounded">
+           <xs:group ref="navref" />
+           <xs:group ref="anchor" />
+           <xs:group ref="topicref" />
+           <xs:group ref="reltable" />
+           <xs:group ref="data.elements.incl" />
+         </xs:choice>      
+       </xs:sequence>
      </xs:sequence>
    </xs:group>
    

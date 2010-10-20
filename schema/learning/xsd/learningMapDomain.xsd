@@ -129,7 +129,7 @@
           <xs:attribute name="outputclass" type="xs:string"/>    
           <xs:attribute name="scope" type="scope-att.class"/>
           <xs:attribute name="processing-role" type="processing-role-att.class" />
-          <xs:attribute name="loctitle" type="yesno-att.class"/>
+          <xs:attribute name="locktitle" type="yesno-att.class"/>
           <xs:attribute name="linking" type="linkingtypes.class"/>
           <xs:attribute name="toc" type="yesno-att.class"/>
           <xs:attribute name="print" type="print-att.class"/>
@@ -418,7 +418,7 @@
           <xs:complexType>
                <xs:complexContent>
                     <xs:extension base="learningSummaryRef.class">
-                         <xs:attribute ref="class" default="- map/topicref learningmap-d/learningSummaryRef " />
+                         <xs:attribute ref="class" default="+ map/topicref learningmap-d/learningSummaryRef " />
                     </xs:extension>
                </xs:complexContent>               
           </xs:complexType>
