@@ -289,6 +289,12 @@
           fo:border-top="0.0007in solid #000000"
           fo:border-bottom="0.0007in solid #000000"/>
       </style:style>
+      <!-- draft-comment paragraph -->
+      <style:style style:name="draftcomment_paragraph" style:family="paragraph" style:parent-style-name="border_paragraph"
+        style:class="chapter">
+        <style:paragraph-properties fo:background-color="#99ff99"/>
+      </style:style>
+      
       <!-- Styles used in toc  start-->
       <style:style style:name="Index" style:family="paragraph"
         style:parent-style-name="Default_20_Text" style:class="index">

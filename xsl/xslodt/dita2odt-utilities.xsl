@@ -1506,4 +1506,18 @@
     </xsl:choose>
   </xsl:template>
   
+  <xsl:template match="*" mode="ditamsg:draft-comment-in-content">
+    <xsl:call-template name="output-message">
+      <xsl:with-param name="msgnum">040</xsl:with-param>
+      <xsl:with-param name="msgsev">I</xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
+  
+  <xsl:template match="*" mode="ditamsg:required-cleanup-in-content">
+    <xsl:call-template name="output-message">
+      <xsl:with-param name="msgnum">039</xsl:with-param>
+      <xsl:with-param name="msgsev">W</xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
+  
 </xsl:stylesheet>

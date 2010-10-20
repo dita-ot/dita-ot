@@ -27,7 +27,7 @@
      xmlns:anim="urn:oasis:names:tc:opendocument:xmlns:animation:1.0"
      xmlns:smil="urn:oasis:names:tc:opendocument:xmlns:smil-compatible:1.0"
      xmlns:prodtools="http://www.ibm.com/xmlns/prodtools"
-     xmlns:string="org.dita.dost.util.StyleUtils" exclude-result-prefixes="string"
+     xmlns:styleUtils="org.dita.dost.util.StyleUtils" exclude-result-prefixes="styleUtils"
      version="1.0">
 
 <xsl:output method="xml"/>
@@ -371,12 +371,13 @@
 </xsl:template>
      
 <xsl:template match="text()|*[contains(@class, ' topic/state ')]" mode="create_hi_style">
+     <!-- generating style name based on the styles used on the text. -->
      <xsl:variable name="style_name">
           <xsl:call-template name="get_style_name"/> 
      </xsl:variable>
      
      <xsl:variable name="hasStyleName">
-          <xsl:value-of select="string:insertHiStyleName($style_name)"/>
+          <xsl:value-of select="styleUtils:insertHiStyleName($style_name)"/>
      </xsl:variable>
      
      

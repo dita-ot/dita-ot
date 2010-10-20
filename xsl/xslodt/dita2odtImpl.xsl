@@ -36,8 +36,9 @@
   xmlns:smil="urn:oasis:names:tc:opendocument:xmlns:smil-compatible:1.0"
   xmlns:prodtools="http://www.ibm.com/xmlns/prodtools" 
   xmlns:random="org.dita.dost.util.RandomUtils"
-  xmlns:styleUtils="org.dita.dost.util.StyleUtils" 
-  exclude-result-prefixes="styleUtils random"
+  xmlns:styleUtils="org.dita.dost.util.StyleUtils"
+  xmlns:ditamsg="http://dita-ot.sourceforge.net/ns/200704/ditamsg"
+  exclude-result-prefixes="styleUtils random ditamsg"
   version="1.0">
   
   <xsl:output method="xml"/>
@@ -2780,12 +2781,13 @@
 
 <xsl:template match="*[contains(@class,' topic/draft-comment ')]">
   <xsl:if test="$DRAFT='yes'">
-    
+    <xsl:apply-templates select="." mode="ditamsg:draft-comment-in-content"/>
     <xsl:choose>
       <!-- parent is p or list -->
       <xsl:when test="parent::*[contains(@class, ' topic/body ')] or
                       parent::*[contains(@class, ' topic/li ')] or parent::*[contains(@class, ' topic/sli ')]">
         <xsl:element name="text:p">
+          <xsl:attribute name="text:style-name">draftcomment_paragraph</xsl:attribute>
           <xsl:element name="text:span">
             <!-- start add flagging styles -->
             <xsl:apply-templates select="." mode="start-add-odt-flags"/>
@@ -2798,7 +2800,16 @@
               <xsl:call-template name="getStringODT">
                 <xsl:with-param name="stringName" select="'ColonSymbol'"/>
               </xsl:call-template>
-              <xsl:text> </xsl:text>
+              <xsl:if test="@author">
+                <xsl:value-of select="@author"/><xsl:text> </xsl:text>
+              </xsl:if>
+              <xsl:if test="@disposition">
+                <xsl:value-of select="@disposition"/><xsl:text> </xsl:text>
+              </xsl:if>
+              <xsl:if test="@time">
+                <xsl:value-of select="@time"/>
+              </xsl:if>
+              <xsl:element name="text:line-break"/>
             </xsl:element>
             <xsl:apply-templates/>
             
@@ -2806,7 +2817,6 @@
             <xsl:apply-templates select="." mode="end-add-odt-flags"/>
           
           </xsl:element>
-          <xsl:element name="text:line-break"/>
         </xsl:element>
       </xsl:when>
       <!-- nested by entry -->
@@ -2835,7 +2845,16 @@
                     <xsl:call-template name="getStringODT">
                       <xsl:with-param name="stringName" select="'ColonSymbol'"/>
                     </xsl:call-template>
-                    <xsl:text> </xsl:text>
+                    <xsl:if test="@author">
+                      <xsl:value-of select="@author"/><xsl:text> </xsl:text>
+                    </xsl:if>
+                    <xsl:if test="@disposition">
+                      <xsl:value-of select="@disposition"/><xsl:text> </xsl:text>
+                    </xsl:if>
+                    <xsl:if test="@time">
+                      <xsl:value-of select="@time"/>
+                    </xsl:if>
+                    <xsl:element name="text:line-break"/>
                   </xsl:element>
                   <xsl:apply-templates/>
                   <!-- end add flagging styles -->
@@ -2856,7 +2875,16 @@
                   <xsl:call-template name="getStringODT">
                     <xsl:with-param name="stringName" select="'ColonSymbol'"/>
                   </xsl:call-template>
-                  <xsl:text> </xsl:text>
+                  <xsl:if test="@author">
+                    <xsl:value-of select="@author"/><xsl:text> </xsl:text>
+                  </xsl:if>
+                  <xsl:if test="@disposition">
+                    <xsl:value-of select="@disposition"/><xsl:text> </xsl:text>
+                  </xsl:if>
+                  <xsl:if test="@time">
+                    <xsl:value-of select="@time"/>
+                  </xsl:if>
+                  <xsl:element name="text:line-break"/>
                 </xsl:element>
                 <xsl:apply-templates/>
                 
@@ -2888,7 +2916,16 @@
                     <xsl:call-template name="getStringODT">
                       <xsl:with-param name="stringName" select="'ColonSymbol'"/>
                     </xsl:call-template>
-                    <xsl:text> </xsl:text>
+                    <xsl:if test="@author">
+                      <xsl:value-of select="@author"/><xsl:text> </xsl:text>
+                    </xsl:if>
+                    <xsl:if test="@disposition">
+                      <xsl:value-of select="@disposition"/><xsl:text> </xsl:text>
+                    </xsl:if>
+                    <xsl:if test="@time">
+                      <xsl:value-of select="@time"/>
+                    </xsl:if>
+                    <xsl:element name="text:line-break"/>
                   </xsl:element>
                   <xsl:apply-templates/>
                   
@@ -2910,7 +2947,16 @@
                   <xsl:call-template name="getStringODT">
                     <xsl:with-param name="stringName" select="'ColonSymbol'"/>
                   </xsl:call-template>
-                  <xsl:text> </xsl:text>
+                  <xsl:if test="@author">
+                    <xsl:value-of select="@author"/><xsl:text> </xsl:text>
+                  </xsl:if>
+                  <xsl:if test="@disposition">
+                    <xsl:value-of select="@disposition"/><xsl:text> </xsl:text>
+                  </xsl:if>
+                  <xsl:if test="@time">
+                    <xsl:value-of select="@time"/>
+                  </xsl:if>
+                  <xsl:element name="text:line-break"/>
                 </xsl:element>
                 <xsl:apply-templates/>
                 
@@ -2936,7 +2982,16 @@
               <xsl:call-template name="getStringODT">
                 <xsl:with-param name="stringName" select="'ColonSymbol'"/>
               </xsl:call-template>
-              <xsl:text> </xsl:text>
+              <xsl:if test="@author">
+                <xsl:value-of select="@author"/><xsl:text> </xsl:text>
+              </xsl:if>
+              <xsl:if test="@disposition">
+                <xsl:value-of select="@disposition"/><xsl:text> </xsl:text>
+              </xsl:if>
+              <xsl:if test="@time">
+                <xsl:value-of select="@time"/>
+              </xsl:if>
+              <xsl:element name="text:line-break"/>
             </xsl:element>
             <xsl:apply-templates/>
             
@@ -2952,7 +3007,7 @@
   
 <xsl:template match="*[contains(@class,' topic/required-cleanup ')]">
   <xsl:if test="$DRAFT='yes'">
-    
+    <xsl:apply-templates select="." mode="ditamsg:required-cleanup-in-content"/>
     <xsl:choose>
       <!-- parent is p or list -->
       <xsl:when test="parent::*[contains(@class, ' topic/body ')] or
