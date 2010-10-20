@@ -108,7 +108,12 @@ public class DitaValReader extends AbstractXMLReader {
 
 		try {
 			reader.setErrorHandler(new DITAOTXMLErrorHandler(ditaVal));
-			reader.parse(new InputSource(new FileInputStream(input)));
+			
+			File file = new File(input);
+			InputSource is = new InputSource(new FileInputStream(file));
+			//set system id bug:3086552
+			is.setSystemId(file.toURI().toURL().toString());
+			reader.parse(is);
 		} catch (Exception e) {
 			logger.logException(e);
 		}

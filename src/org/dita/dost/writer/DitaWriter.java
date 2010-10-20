@@ -1284,7 +1284,14 @@ public class DitaWriter extends AbstractXMLWriter {
             // start to parse the file and direct to output in the temp
             // directory
             reader.setErrorHandler(new DITAOTXMLErrorHandler(traceFilename));
-            reader.parse(new InputSource(new FileInputStream(new File(traceFilename))));
+            
+            File file = new File(traceFilename);
+            
+            InputSource is = new InputSource(new FileInputStream(file));
+    		//set system id bug:3086552
+    		is.setSystemId(file.toURI().toURL().toString());
+            
+            reader.parse(is);
             
             output.close();
         } catch (Exception e) {

@@ -574,7 +574,12 @@ public class GenListModuleReader extends AbstractXMLReader {
 		currentFile=file.getAbsolutePath();
 		
 		reader.setErrorHandler(new DITAOTXMLErrorHandler(file.getName()));
-		reader.parse(new InputSource(new FileInputStream(file)));	
+		
+		InputSource is = new InputSource(new FileInputStream(file));
+		//set system id bug:3086552
+		is.setSystemId(file.toURI().toURL().toString());
+		
+		reader.parse(is);	
 	}
 
 	@Override
