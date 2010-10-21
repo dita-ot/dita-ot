@@ -10,8 +10,8 @@
   
   <property name="transtype" value="odt"/>
   <property name="odt.suffix" value=".odt" />
-  <condition property="args.fo.include.rellinks.odt" value="none">
-     <not><isset property="args.fo.include.rellinks.odt"></isset></not>
+  <condition property="args.odt.include.rellinks" value="none">
+     <not><isset property="args.odt.include.rellinks"></isset></not>
   </condition>
 	
   
@@ -89,7 +89,7 @@
       <param name="DRAFT" expression="${args.draft}" if="args.draft" />
       <param name="FILTERFILE" expression="${dita.input.valfile.url}" if="dita.input.valfile" />
       <param name="OUTPUTDIR" expression="${dita.odt.outputdir}" />
-      <param name="disableRelatedLinks" expression="${args.fo.include.rellinks.odt}"/>
+      <param name="disableRelatedLinks" expression="${args.odt.include.rellinks}"/>
       <param name="INDEXSHOW" expression="${args.indexshow}" if="args.indexshow"/>
       <param name="DBG" expression="${args.debug}" if="args.debug"/>
       <param name="ODTIMGEMBED" expression="${args.odt.img.embed}" if="args.odt.img.embed"/>
@@ -118,7 +118,7 @@
       <param name="DRAFT" expression="${args.draft}" if="args.draft" />
       <param name="FILTERFILE" expression="${dita.input.valfile.url}" if="dita.input.valfile" />
       <param name="OUTPUTDIR" expression="${dita.odt.outputdir}" />
-      <param name="disableRelatedLinks" expression="${args.fo.include.rellinks.odt}"/>
+      <param name="disableRelatedLinks" expression="${args.odt.include.rellinks}"/>
       <param name="INDEXSHOW" expression="${args.indexshow}" if="args.indexshow"/>
       <param name="DBG" expression="${args.debug}" if="args.debug"/>
       <param name="ODTIMGEMBED" expression="${args.odt.img.embed}" if="args.odt.img.embed"/>

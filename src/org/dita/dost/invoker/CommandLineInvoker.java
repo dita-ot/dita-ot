@@ -83,7 +83,7 @@ public class CommandLineInvoker {
 		paramMap.put("/ditalocale", "args.dita.locale");
 		paramMap.put("/fooutputrellinks", "args.fo.output.rel.links");
 		paramMap.put("/foincluderellinks", "args.fo.include.rellinks");
-		paramMap.put("/odtincluderellinks", "args.fo.include.rellinks.odt");
+		paramMap.put("/odtincluderellinks", "args.odt.include.rellinks");
 		paramMap.put("/retaintopicfo", "retain.topic.fo");
 		paramMap.put("/version", "args.eclipse.version");
 		paramMap.put("/provider", "args.eclipse.provider");
