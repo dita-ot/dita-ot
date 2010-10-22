@@ -10,6 +10,11 @@ as an alternative for users with little knowledge of Ant. Most parameters
 available to the Ant builds are also available using the Java command
 line.</shortdesc>
 <conbody>
+<note>This information is currently being integrated with the parameter
+information in the Ant Quick Start Guide. Newer information on Java
+and Ant parameters can be found in that document here: <xref
+href="../quickstartguide/maps/reference/dita-ot_ant_properties.dita"></xref></note><?Pub
+Caret 153?>
 <note>The Java command line interface is simply a wrapper around the
 Ant interface; it takes the simplified parameters as input, converts
 them to Ant parameters, and then runs an Ant build. This means that
@@ -318,7 +323,7 @@ line from the         command line help by using the following commands: <lines>
         </lines>       </p>       <p rev="r5">You can see the brief
 description of the supported parameters in the command line      
   window when you type a specific command. For example, <codeph rev="r3">java
--jar lib/dost.jar <b>-h</b></codeph></p><?Pub Caret -1?>     </section>
+-jar lib/dost.jar <b>-h</b></codeph></p>     </section>
 </conbody>
 </concept>
-<?Pub *0000013464?>
+<?Pub *0000013750?>
