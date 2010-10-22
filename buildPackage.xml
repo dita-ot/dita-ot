@@ -69,11 +69,11 @@
   	
   	<!-- Update the token so that we can find out what the version of DITA-OT users
   	are using -->
-  	<replace file="${src.dir}/org/dita/dost/util/Version.java" 
+  	<replace file="${build.dir}/org/dita/dost/util/Version.java" 
   		  	     token="@@VERSION@@" value="${package.name.root} ${version} M${milestone}"/>
-  	<replace file="${src.dir}/org/dita/dost/util/Version.java" 
+  	<replace file="${build.dir}/org/dita/dost/util/Version.java" 
   		  	     token="@@OTVERSION@@" value="${version}"/>
-  	<replace file="${src.dir}/org/dita/dost/util/Version.java" 
+  	<replace file="${build.dir}/org/dita/dost/util/Version.java" 
   		  	     token="@@MILESTONE@@" value="${milestone}"/>
   	
     <javac srcdir="${build.dir}" destdir="${bin.dir}" 
