@@ -23,6 +23,7 @@ import org.xml.sax.SAXException;
  *
  * @author Zhang, Yuan Peng
  */
+
 public class CatalogParser implements ContentHandler{
     private String catalogDir;
 
@@ -114,7 +115,7 @@ public class CatalogParser implements ContentHandler{
      */
     public void startElement(String uri, String localName, String qName,
             Attributes atts) throws SAXException {
-        if ("group".equals(qName)){
+        /*if ("group".equals(qName)){
         	String xmlBase = atts.getValue("xml:base");
         	if(xmlBase!=null){
         		if (xmlBase.indexOf("dtd")!=-1){
@@ -123,15 +124,30 @@ public class CatalogParser implements ContentHandler{
         			schemaBase = atts.getValue("xml:base");
         		}
         	}
-        }
+        }*/
         
         if ("public".equals(qName)){
+        	
+        	String xmlBase = atts.getValue("xml:base");
+        	if(xmlBase!=null){
+        		if (xmlBase.indexOf("dtd")!=-1){
+        			dtdBase = atts.getValue("xml:base");
+        		}
+        	}
             String localURI;
             String absoluteLocalURI;
             localURI = (dtdBase != null) ? dtdBase+File.separatorChar+atts.getValue("uri") : atts.getValue("uri");
             absoluteLocalURI = (catalogDir != null) ? catalogDir + File.separatorChar + localURI : localURI;
             map.put(atts.getValue("publicId"), absoluteLocalURI);
         }else if("system".equals(qName)){
+        	
+        	String xmlBase = atts.getValue("xml:base");
+        	if(xmlBase!=null){
+        		if (xmlBase.indexOf("schema")!=-1){
+        			schemaBase = atts.getValue("xml:base");
+        		}
+        	}
+        	
         	String localURI;
             String absoluteLocalURI;
             localURI = (schemaBase != null) ? schemaBase+File.separatorChar+atts.getValue("uri") : atts.getValue("uri");
