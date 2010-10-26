@@ -294,6 +294,16 @@
         style:class="chapter">
         <style:paragraph-properties fo:background-color="#99ff99"/>
       </style:style>
+      <!-- syntaxdiagram style -->
+      <style:style style:name="syntaxdiagram_paragraph" style:family="paragraph" style:parent-style-name="Standard"
+        style:class="chapter">
+        <style:paragraph-properties fo:color="#800000"/>
+        <style:text-properties fo:color="#800000"/>
+      </style:style>
+      <style:style style:name="syntaxdiagram_text" style:family="text" style:parent-style-name="default_text_style"
+        style:class="chapter">
+        <style:text-properties fo:color="#800000"/>
+      </style:style>
       
       <!-- Styles used in toc  start-->
       <style:style style:name="Index" style:family="paragraph"
