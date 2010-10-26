@@ -128,7 +128,7 @@
   </taskdef>
 	
   <taskdef name="dita-ot-version"
-  	classname="org.dita.dost.util.Version">
+  	classname="org.dita.dost.util.AntVersion">
   	<classpath refid="dost.jar.path"/>
   </taskdef>
 

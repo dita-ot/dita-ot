@@ -71,9 +71,9 @@
   	are using -->
   	<replace file="${build.dir}/org/dita/dost/util/Version.java" 
   		  	     token="@@VERSION@@" value="${package.name.root} ${version} M${milestone}"/>
-  	<replace file="${build.dir}/org/dita/dost/util/Version.java" 
+  	<replace file="${build.dir}/org/dita/dost/util/VersionUtil.java" 
   		  	     token="@@OTVERSION@@" value="${version}"/>
-  	<replace file="${build.dir}/org/dita/dost/util/Version.java" 
+  	<replace file="${build.dir}/org/dita/dost/util/VersionUtil.java" 
   		  	     token="@@MILESTONE@@" value="${milestone}"/>
   	
     <javac srcdir="${build.dir}" destdir="${bin.dir}" 
