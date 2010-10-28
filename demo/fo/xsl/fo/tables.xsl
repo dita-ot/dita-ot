@@ -1553,8 +1553,42 @@ See the accompanying license.txt file for applicable licenses.
         </fo:table>
     </xsl:template>
 
+    <!-- If there is no "type" column, value is in column 1 -->
+    <xsl:template match="*" mode="get-propvalue-position">
+      <xsl:choose>
+        <xsl:when test="../*[contains(@class, ' reference/property ')]/*[contains(@class, ' reference/proptype ')] |
+                        ../*[contains(@class, ' reference/prophead ')]/*[contains(@class, ' reference/propheadhd ')]">
+          <xsl:text>2</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>1</xsl:otherwise>
+      </xsl:choose>
+    </xsl:template>
+
+    <!-- If there is a type and value column, desc is 3;
+         Otherwise, if there is type or value, desc is 2;
+         Otherwise, desc is the only column. -->
+    <xsl:template match="*" mode="get-propdesc-position">
+      <xsl:choose>
+        <xsl:when test="../*/*[contains(@class, ' reference/proptype ') or contains(@class, ' reference/proptypehd ')] and
+                        ../*/*[contains(@class, ' reference/propvalue ') or contains(@class, ' reference/propvaluehd ')]">
+          <xsl:text>3</xsl:text>
+        </xsl:when>
+        <xsl:when test="../*/*[contains(@class, ' reference/proptype ') or contains(@class, ' reference/proptypehd ')] |
+                        ../*/*[contains(@class, ' reference/propvalue ') or contains(@class, ' reference/propvaluehd ')]">
+          <xsl:text>2</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>1</xsl:otherwise>
+      </xsl:choose>
+    </xsl:template>
+
     <xsl:template match="*[contains(@class, ' reference/property ')]">
         <fo:table-row xsl:use-attribute-sets="property" id="{@id}">
+            <xsl:variable name="valuePos">
+              <xsl:apply-templates select="." mode="get-propvalue-position"/>
+            </xsl:variable>
+            <xsl:variable name="descPos">
+              <xsl:apply-templates select="." mode="get-propdesc-position"/>
+            </xsl:variable>
             <xsl:variable name="frame" select="ancestor::*[contains(@class, ' reference/properties ')][1]/@frame"/>
             <xsl:variable name="keyCol" select="number(ancestor::*[contains(@class, ' reference/properties ')][1]/@keycol)"/>
             <xsl:variable name="hasHorisontalBorder">
@@ -1574,7 +1608,7 @@ See the accompanying license.txt file for applicable licenses.
                         <xsl:with-param name="entryCol" select="1"/>
                     </xsl:apply-templates>
                 </xsl:when>
-                <xsl:otherwise>
+                <xsl:when test="../*/*[contains(@class, ' reference/proptype ') or contains(@class, ' reference/proptypehd ')]">
                     <xsl:call-template name="createEmptyPropertyEntry">
                         <xsl:with-param name="entryCol" select="1"/>
                         <xsl:with-param name="keyCol" select="$keyCol"/>
@@ -1582,39 +1616,39 @@ See the accompanying license.txt file for applicable licenses.
                         <xsl:with-param name="hasVerticalBorder" select="'yes'"/>
                         <xsl:with-param name="frame" select="$frame"/>
                     </xsl:call-template>
-                </xsl:otherwise>
+                </xsl:when>
             </xsl:choose>
             <xsl:choose>
                 <xsl:when test="*[contains(@class, ' reference/propvalue ')]">
                     <xsl:apply-templates select="*[contains(@class, ' reference/propvalue ')]">
-                        <xsl:with-param name="entryCol" select="2"/>
+                        <xsl:with-param name="entryCol" select="$valuePos"/>
                     </xsl:apply-templates>
                 </xsl:when>
-                <xsl:otherwise>
+                <xsl:when test="../*/*[contains(@class, ' reference/propvalue ') or contains(@class, ' reference/propvaluehd ')]">
                     <xsl:call-template name="createEmptyPropertyEntry">
-                        <xsl:with-param name="entryCol" select="2"/>
+                        <xsl:with-param name="entryCol" select="$valuePos"/>
                         <xsl:with-param name="keyCol" select="$keyCol"/>
                         <xsl:with-param name="hasHorisontalBorder" select="$hasHorisontalBorder"/>
                         <xsl:with-param name="hasVerticalBorder" select="'yes'"/>
                         <xsl:with-param name="frame" select="$frame"/>
                     </xsl:call-template>
-                </xsl:otherwise>
+                </xsl:when>
             </xsl:choose>
             <xsl:choose>
                 <xsl:when test="*[contains(@class, ' reference/propdesc ')]">
                     <xsl:apply-templates select="*[contains(@class, ' reference/propdesc ')]">
-                        <xsl:with-param name="entryCol" select="3"/>
+                        <xsl:with-param name="entryCol" select="$descPos"/>
                     </xsl:apply-templates>
                 </xsl:when>
-                <xsl:otherwise>
+                <xsl:when test="../*/*[contains(@class, ' reference/propdesc ') or contains(@class, ' reference/propdeschd ')]">
                     <xsl:call-template name="createEmptyPropertyEntry">
-                        <xsl:with-param name="entryCol" select="3"/>
+                        <xsl:with-param name="entryCol" select="$descPos"/>
                         <xsl:with-param name="keyCol" select="$keyCol"/>
                         <xsl:with-param name="hasHorisontalBorder" select="$hasHorisontalBorder"/>
                         <xsl:with-param name="hasVerticalBorder" select="'no'"/>
                         <xsl:with-param name="frame" select="$frame"/>
                     </xsl:call-template>
-                </xsl:otherwise>
+                </xsl:when>
             </xsl:choose>
         </fo:table-row>
     </xsl:template>
