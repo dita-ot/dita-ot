@@ -24,6 +24,8 @@
      * 3012392 PDF transformation should allow args.xsl style override (Milestone 1)
      * 3021544 Preserve DITA elements in XHTML class by default (Milestone 1)
 	 * 3079610 Add current OT version to log (Milestone 6)
+     * 3086936 Add extension points for TOC output (Milestone 6)
+     * 1520909 HTML Help requires new codepage (Milestone 6)
      
      [ SourceForge Patches Added]
      * 3058008 Refactor chunk module for cleaner code (Milestone 4)
@@ -72,12 +74,17 @@
      * 3063533 Adjacent words get glued together using DITA to RTF (Milestone 5)
      * 3062912 Messages extension damages custom message formatting (Milestone 5)
      * 3059256 Peer links break with missing format or wrong extension (Milestone 5)
-     * 3038933 Troff output drops prereq links (Milestone 6)
-     * 3081597 conkeyref accepts values in conref style (Milestone 6) 
+	 * 3079676 <navtitle> contents included in PDF output (Milestone 6)
+     * 3081597 conkeyref accepts values in conref style (Milestone 6)
+     * 3088314 Need to clarify many error messages (Milestone 6)
      * 3081459 fragment generation without plugin fails (Milestone 6) 
      * 3073262 missing terminating quote (Milestone 6)
      * 3060269 Problem displaying French content TOC in CHM (Milestone 6)  
-     * 3086552 XMLReader.parse does not correctly receive the XML system ID (Milestone 6)  
+     * 2972393 Need to parameterize maxmemory and VM args for forked JVMs (Milestone 6)
+     * 2794487 No Easy Way to Override/Extend HTML Navtitle Generation (Milestone 6)
+     * 2832863 <group> elements in catalogs don't work for all editors (Milestone 6)
+     * 3086552 XMLReader.parse does not correctly receive the XML system ID (Milestone 7)  
+     * 3038933 Troff output drops prereq links (Milestone 7)
      
 ====================================================================================
 
