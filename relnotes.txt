@@ -83,6 +83,7 @@
      * 2972393 Need to parameterize maxmemory and VM args for forked JVMs (Milestone 6)
      * 2794487 No Easy Way to Override/Extend HTML Navtitle Generation (Milestone 6)
      * 2832863 <group> elements in catalogs don't work for all editors (Milestone 6)
+     * 3004895 XHTML output for <draft-comment> should use class attribute (Milestone 6)
      * 3086552 XMLReader.parse does not correctly receive the XML system ID (Milestone 7)  
      * 3038933 Troff output drops prereq links (Milestone 7)
      
