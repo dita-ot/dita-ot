@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Arbortext, Inc., 1988-2010, v.4002-->
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN"
+ "task.dtd">
+<task id="using_DITAOTBuildLogger" xml:lang="en-us">
+<title>Writing the Build Log to File</title>
+<shortdesc>How to use the DITA OT build logger</shortdesc>
+<taskbody>
+<steps>
+<step><cmd>Enter the following command at the command prompt.  		
+ </cmd><stepresult>
+			 <codeblock><codeph>ant -f <i>buildfile target</i> -logger org.dita.dost.log.DITAOTBuildLogger</codeph>
+			 </codeblock>
+			 <p>DITA-OT prints the usual build messages to the console, but
+also informs you of the name of 			 the log file it generated, as
+shown in the following figure. 			 </p>
+			 <p><image align="left" height="300"
+href="../images/DITA-OTCommandPromptLogFileName.gif" width="400">
+</image>  			 </p><?Pub Caret 1?>
+			 <p>In this example, the log file name is <codeph>dita-ot-xsl-debugging_PDF.log</codeph>.
+			    DITA-OT appends its internal name for the target, <codeph>_PDF</codeph> to
+the name of 				your ditamap to name the log file. If the target had
+been xhtml, the example log file would be 				named <codeph>dita-ot-xsl-debugging_xhtml.log</codeph>.
+ The file contains the same data 				as the ouput on the console,
+but you may find it easier to debug xsl transformation  				errors
+this way. 			 </p>
+			</stepresult></step>
+</steps>
+</taskbody>
+</task>
+<?Pub *0000001416?>

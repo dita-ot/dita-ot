@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Arbortext, Inc., 1988-2010, v.4002-->
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
+ "topic.dtd">
+<?Pub Sty _display FontColor="red"?>
+<topic id="ditaotarch" xml:lang="en-us">
+<title>DITA Open Toolkit Architecture</title>
+<shortdesc>The DITA Open Toolkit is an open source implementation
+of the      OASIS DITA Technical Committee's specification for Darwin
+Information      Typing Architecture (DITA) DTDs and schemas. The
+toolkit is a major upgrade      from its predecessor, the developerWorks
+version known as "dita132." The      toolkit uses open source solution
+of ANT, XSLT (currently 1.0) and Java to      implement transformation
+functions from DITA content (maps and topics) into      different
+deliverable formats </shortdesc>
+<body>
+<section>       <title>Pipeline structure</title>       <p></p>  
+    <p>There are 2 stages of transformation, </p>       <ol>
+<li>           <xref href="DITA-OTPreprocess.xml">Pre-processing</xref> 
+       </li>
+<li>Main transformation</li>
+</ol>       <p>The whole process works like a pipeline. The pipeline
+input is DITA          map, DITA XML files and property files. And
+the pipeline output is          XHTML, Eclipse help, PDF, JavaHelp,
+etc. depending on what output user          selects. The pipeline
+consists of various modules which performs          different functions.
+Interface between modules are files in different          format.
+Here is the overview chart of the two-stage          transformation.</p> 
+     <p>         <image href="mainarch.gif"></image>       </p>  
+    <p>The whole pipeline is now controlled by one major Ant script
+named          'conductor.xml'. Pipeline modules are implemented using
+Ant tasks, XSLT          stylesheet or a Java Program. Most modules
+are implemented using XSLT          stylesheet. For those modules
+in the pipeline which are impossible or          very difficult to
+be implemented using XSLT stylesheet and Ant tasks,          we choose
+to use Java to implement them. </p>       <p></p>     </section>
+<section>       <title>Ant script</title>     </section>
+<p>There are four main Ant script files in DITA-OT. The relationship
+of the        files is illustrated as below.</p>
+<p>       <image href="ant_call.gif"></image>     </p>
+<p>Conductor.xml acts as the interface that user customized Ant script
+can        call the targets in it. <table><title>Targets in conductor.xml</title>
+<tgroup cols="2"><colspec colname="col1"/><colspec colname="col2"/>
+<thead>
+<row valign="bottom">
+<entry colname="col1">Target Name</entry>
+<entry colname="col2">Usage</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry colname="col1">dita2pdf</entry>
+<entry colname="col2">Transform DITA to        PDF output (need FOP)</entry>
+</row>
+<row>
+<entry colname="col1">dita2docbook</entry>
+<entry colname="col2">Transform DITA        files to DOCBOOK</entry>
+</row>
+<row>
+<entry colname="col1">dita2xhtml</entry>
+<entry colname="col2">Transform DITA to        XHTML output</entry>
+</row>
+<row>
+<entry colname="col1">dita2javahelp</entry>
+<entry colname="col2">Transform DITA        to Java help output (based
+on HTML and need Java help builder)</entry>
+</row>
+<row>
+<entry colname="col1">dita2eclipsehelp</entry>
+<entry colname="col2">Transform DITA to eclipse help output (based
+on        HTML)</entry>
+</row>
+<row>
+<entry colname="col1">dita2htmlhelp</entry>
+<entry colname="col2">Transform DITA to HTML help </entry>
+</row>
+</tbody>
+</tgroup>
+</table>Conductor.xml calls the targets in the        following three
+Ant script files.</p>
+<p>Pretargets.xml contains all the targets that run in the preprocess.</p>
+<p>Ditatargets.xml contains all the targets that run in the main 
+      transformation.</p>
+<p>Catalog-Ant.xml contains the xml catalog in Ant's style which is
+used by        Ant.</p>
+<section>       <title>XSLT modules</title>     </section>
+<p>Here is the XSLT modules structure. </p>
+<p>       <image href="xsl_call.gif"></image>     </p>
+<p>The shell xsl files act like an interface for users or for Ant
+to call.        All of the shell xsl files lies in xsl directory.
+They are        dita2docbook.xsl, dita2fo-shell.xsl, dita2html.xsl,
+dita2xhtml.xsl,        topic2fo-shell.xsl and map2docbook.xsl.</p>
+<p>The xsl files which are responsible for Implentation and specialized
+       transformation are in the following directories under xsl directory.</p>
+<p>       <table><title></title>
+<tgroup cols="2"><colspec colname="col1"/><colspec colname="col2"/>
+<thead>
+<row valign="bottom">
+<entry colname="col1">Directory Name</entry>
+<entry colname="col2">Specification</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry colname="col1">xslhtml</entry>
+<entry colname="col2">Contains the files that implement the      
+           transformation to html</entry>
+</row>
+<row>
+<entry colname="col1">xslfo</entry>
+<entry colname="col2">Contains the files that implement the      
+           transformation to XSL-FO</entry>
+</row>
+<row>
+<entry colname="col1">docbook</entry>
+<entry colname="col2">Contains the files that implement the      
+           transformation to docbook</entry>
+</row>
+</tbody>
+</tgroup>
+</table>     </p>
+<p> Implementation files are responsible for transforming normal elements
+       and specialized transformation files are responsible for transforming
+       elements which are only specified in different domains.</p>
+<p>Common utility is contained in common directory under xsl directory.
+It        provides common function that will be called in transformation
+to each        output such as output error message, convert string
+to lower or upper        case and convert specified string to different
+language.</p>
+<p>Other xsl files in the xsl directory<table><title>Other xsl   
+    files</title>
+<tgroup cols="2"><colspec colname="col1"/><colspec colname="col2"/>
+<thead>
+<row valign="bottom">
+<entry colname="col1">File        Name or Directory Name</entry>
+<entry colname="col2">Usage</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry colname="col1">generalize.xsl</entry>
+<entry colname="col2">Generalize a DITA topic file. For example, making
+a        concept file back to topic file.</entry>
+</row>
+<row>
+<entry colname="col1">normalize.xsl</entry>
+<entry colname="col2">Make the        hidden attributes, such as class
+attribute, appear in the topic        file.</entry>
+</row>
+<row>
+<entry colname="col1">pretty.xsl</entry>
+<entry colname="col2">The reverse action to normalize.</entry>
+</row>
+<row>
+<entry colname="col1">specialize.xsl</entry>
+<entry colname="col2">The reverse action to generalize.</entry>
+</row>
+<row>
+<entry colname="col1">topicmerge.xsl</entry>
+<entry colname="col2">Merge        the ditamap and topic files into
+one big topic file. (Used in        transforming a ditamap to PDF)</entry>
+</row>
+<row>
+<entry colname="col1">map2eclipse.xsl</entry>
+<entry colname="col2">Transform        the ditamap file to table of
+content file in eclipse help output.</entry>
+</row>
+<row>
+<entry colname="col1">map2hhc.xsl</entry>
+<entry colname="col2">Transform the ditamap file to hhc file in HTML
+help        output.</entry>
+</row>
+<row>
+<entry colname="col1">map2hhp.xsl</entry>
+<entry colname="col2">Transform the ditamap file to hhp file in HTML
+help        output.</entry>
+</row>
+<row>
+<entry colname="col1">map2htmtoc.xsl</entry>
+<entry colname="col2">Transform the ditamap file to the table of content
+       file in XHTML output.</entry>
+</row>
+<row>
+<entry colname="col1">map2JavaHelpMap.xsl</entry>
+<entry colname="col2">Transform the ditamap file to jhm file in Java
+help        output.</entry>
+</row>
+<row>
+<entry colname="col1">map2JavaHelpTOC.xsl</entry>
+<entry colname="col2">Transform the ditamap file to table of content
+file in        Java help output.</entry>
+</row>
+<row>
+<entry colname="col1">preprocess        (directory)</entry>
+<entry colname="col2">This directory contains the xsl        files
+that used in preprocess as preprocess modules.</entry>
+</row>
+</tbody>
+</tgroup>
+</table></p>
+<section>       <title>Java modules</title>       <p>Java modules
+are organized loosely by a Java class named          'PiepleFacade'
+which acts as an interface to enable modules can be          called
+from command line, another Java program or Ant script.</p>       <p>Here
+is a detail description of how a <xref href="DITA-OTGenListModule.xml">GenList
+module</xref> in the          preprocessing stage is implemented in
+Java</p><?Pub Caret -3?>     </section>
+</body>
+</topic>
+<?Pub *0000008495?>

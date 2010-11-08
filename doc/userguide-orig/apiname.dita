@@ -1,24 +1,29 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- (c) Copyright IBM Corp. 2004, 2006 All Rights Reserved. -->
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Arbortext, Inc., 1988-2010, v.4002-->
 <!DOCTYPE reference PUBLIC "-//IBM//DTD DITA Reference//EN"
- "..\dtd\reference.dtd">
+ "reference.dtd">
+<?Pub Sty _display FontColor="red"?>
 <reference id="apiname" xml:lang="en-us">
 <title><keyword>apiname</keyword></title>
-<shortdesc>The &lt;<keyword>apiname</keyword>&gt; element provides the name
-of an application programming interface (API) such as a Java class name or
-method name. This element is part of the DITA programming domain, a special
-set of DITA elements designed to document programming tasks, concepts and
-reference information.</shortdesc>
+<shortdesc>The &lt;<keyword>apiname</keyword>&gt; element provides
+the name of an application programming interface (API) such as a Java
+class name or method name. This element is part of the DITA programming
+domain, a special set of DITA elements designed to document programming
+tasks, concepts and reference information.</shortdesc>
 <prolog><metadata>
-<keywords><indexterm>apiname<indexterm>application programming interface name</indexterm> </indexterm>
-<indexterm>application programming interface name</indexterm><indexterm>application
-programming interface, name</indexterm><indexterm>Domain elements<indexterm>apiname</indexterm> </indexterm>
+<keywords><indexterm>apiname<indexterm>application programming interface
+name</indexterm> </indexterm><indexterm>application programming interface
+name</indexterm><indexterm>application programming interface, name</indexterm>
+<indexterm>Domain elements<indexterm>apiname</indexterm> </indexterm>
 <indexterm>apiname</indexterm></keywords>
 </metadata></prolog>
 <refbody>
-<section conref="ibm-ditabase-contains.dita#commonCMdefs/apiname-containedby"></section>
-<section conref="ibm-ditabase-contains.dita#commonCMdefs/apiname-contains"></section>
-<section> <title>Attributes</title> <simpletable id="apiname_attr" relcolwidth="2* 3* 1* 1* 1*">
+<section
+conref="ibm-ditabase-contains.dita#commonCMdefs/apiname-containedby"></section>
+<section
+conref="ibm-ditabase-contains.dita#commonCMdefs/apiname-contains"></section>
+<section> <title>Attributes</title> <simpletable id="apiname_attr"
+relcolwidth="2* 3* 1* 1* 1*">
 <sthead>
 <stentry>Name</stentry>
 <stentry>Description</stentry>
@@ -65,4 +70,5 @@ programming interface, name</indexterm><indexterm>Domain elements<indexterm>apin
 <example> <codeblock>&lt;p&gt;Use the &lt;apiname&gt;document.write&lt;/apiname&gt; method to create text 
 output in the dynamically constructed view.&lt;/p&gt;</codeblock> </example>
 </refbody>
-</reference>
+</reference><?Pub Caret -2?>
+<?Pub *0000002551?>

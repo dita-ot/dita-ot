@@ -13,7 +13,7 @@ line.</shortdesc>
 <note>This information is currently being integrated with the parameter
 information in the Ant Quick Start Guide. Newer information on Java
 and Ant parameters can be found in that document here: <xref
-href="../quickstartguide/maps/reference/dita-ot_ant_properties.dita"></xref></note><?Pub
+href="../quickstartguide/reference/dita-ot_ant_properties.dita"></xref></note><?Pub
 Caret 153?>
 <note>The Java command line interface is simply a wrapper around the
 Ant interface; it takes the simplified parameters as input, converts

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This file is part of the DITA Open Toolkit project hosted on 
+     Sourceforge.net. See the accompanying license.txt file for 
+     applicable licenses.-->
+<!-- (C) Copyright IBM Corporation 2005, 2006. All Rights Reserved. -->
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN"
+ "..\..\..\dtd\concept.dtd">
+<concept id="createplugin" xml:lang="en-us">
+<title>Create plug-in architecture</title>
+<conbody>
+<p>DITA Open Toolkit 1.2 and above provides a new function to help developers
+create new plug-ins for DITA Open Toolkit.</p>
+<section><title>How to create a new plug-in</title><p>The developer can create
+plug-ins for DITA Open Toolkit and provide users to use it. See<xref href="createnewp.xml#createnewp"></xref> for
+detailed information.</p></section>
+<section id="extpoint"><title>Extension point</title><p>The following table
+lists the extension points which can be extended by your plug-ins. You need
+to specify the extension points in your plugin.xml file.</p><table>
+<title>Table of extension point</title>
+<tgroup cols="4"><colspec colname="col1"/><colspec colname="COLSPEC1" colwidth="1*"/>
+<colspec colname="col2"/><colspec colname="col3"/>
+<thead>
+<row valign="bottom">
+<entry colname="col1">Extension point</entry>
+<entry colname="COLSPEC1">Description</entry>
+<entry colname="col2">Location</entry>
+<entry colname="col3">Behavior</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry colname="col1">dita.specialization.catalog </entry>
+<entry colname="COLSPEC1">It points where to provide catalog information for
+your plug-ins.</entry>
+<entry colname="col2">catalog-dita_template.xml</entry>
+<entry colname="col3"><tt>org.dita.dost.platform.InsertAction</tt><p>It inserts
+the content of the file that you provide into catalog-dita.xml. The provided
+file must be xml and the root element is not to be inserted into extension
+point.</p></entry>
+</row>
+<row>
+<entry colname="col1">dita.conductor.lib.import </entry>
+<entry colname="COLSPEC1">It points where to import your own built Java library
+and to make it available for the transformation process.</entry>
+<entry colname="col2">conductor_template.xml</entry>
+<entry colname="col3"><tt>org.dita.dost.platform.ImportAction</tt><p> It imports
+the Java library that is built and provided into the generated <tt>conductor.xml</tt>.</p></entry>
+</row>
+<row>
+<entry colname="col1">dita.conductor.target </entry>
+<entry colname="COLSPEC1">It points where to provide your own ant script targets
+for transformation.</entry>
+<entry colname="col2">conductor_template.xml</entry>
+<entry colname="col3"><tt>org.dita.dost.platform.InsertAction</tt><p> It inserts
+the content of the file that you provide into <tt>conductor.xml</tt>. The
+provided file must be xml and the root element is not to be inserted into
+extension point.</p></entry>
+</row>
+<row>
+<entry colname="col1">dita.xsl.fo </entry>
+<entry colname="COLSPEC1">It points where to provide your extension xsl code
+of fo transformation. </entry>
+<entry colname="col2">dita2fo-shell_template.xml</entry>
+<entry colname="col3"><tt>org.dita.dost.platform.ImportAction</tt> <p>It imports
+the xsl file that you provide into the generated <tt>dita2fo-shell.xsl</tt>.</p></entry>
+</row>
+<row>
+<entry colname="col1">dita.xsl.rtf </entry>
+<entry colname="COLSPEC1">It points where to provide your extension xsl code
+of fo transformation. </entry>
+<entry colname="col2">dita2rtf_template.xml</entry>
+<entry colname="col3"><tt>org.dita.dost.platform.ImportAction</tt> <p>It imports
+the xsl file that you provide into the generated <tt>dita2rtf.xsl</tt></p>.</entry>
+</row>
+<row>
+<entry colname="col1">dita.xsl.xhtml </entry>
+<entry colname="COLSPEC1">It points where to provide your extension xsl code
+of fo transformation. </entry>
+<entry colname="col2">dita2xhtml_template.xml</entry>
+<entry colname="col3"><tt>org.dita.dost.platform.ImportAction</tt> <p>It imports
+the xsl file that you provide into the generated <tt>dita2xhtml.xsl</tt>.</p></entry>
+</row>
+<row>
+<entry colname="col1">dita.xsl.docbook</entry>
+<entry colname="COLSPEC1">It points where to provide your extension xsl code
+of fo transformation. </entry>
+<entry colname="col2">dita2docbook_template.xml</entry>
+<entry colname="col3"><tt>org.dita.dost.platform.ImportAction</tt> <p>It imports
+the xsl file that you provide into the generated <tt>dita2docbook.xsl</tt>.</p></entry>
+</row>
+</tbody>
+</tgroup>
+</table></section>
+</conbody>
+</concept>
