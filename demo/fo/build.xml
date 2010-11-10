@@ -134,7 +134,7 @@ with those set forth herein.
     <!-- WS runtime properties -->
     <property file="${cfg.common.dir}/properties/${document.locale}.properties"/>
 
-    <property name="saxon.resolver.command.line" value="-w0 -x org.apache.xml.resolver.tools.ResolvingXMLReader -y org.apache.xml.resolver.tools.ResolvingXMLReader -r org.apache.xml.resolver.tools.CatalogResolver"/>
+	<property name="saxon.resolver.command.line" value="-warnings:silent -x:org.apache.xml.resolver.tools.ResolvingXMLReader -y:org.apache.xml.resolver.tools.ResolvingXMLReader -r:org.apache.xml.resolver.tools.CatalogResolver"/>
 
     <path id="project.class.path">
         <pathelement path="${java.class.path}"/>
@@ -290,7 +290,7 @@ with those set forth herein.
         	maxmemory="${maxJavaMemory}"
         	>
         	  <jvmarg line="${baseJVMArgLine}"/>
-            <arg line='-o "${buildDir}/stage2.fo"'/>
+            <arg line='-o:"${buildDir}/stage2.fo"'/>
             <arg line="${saxon.resolver.command.line}"/>
             <arg line='"${buildDir}/stage1.xml"'/>
             <arg line='"${temp.transformation.file}"'/>
@@ -333,7 +333,7 @@ with those set forth herein.
         	maxmemory="${maxJavaMemory}"
 				>
       	  	<jvmarg line="${baseJVMArgLine}"/>
-            <arg line='-o "${outputFile}"'/>
+            <arg line='-o:"${outputFile}"'/>
             <arg line="${saxon.resolver.command.line}"/>
             <arg line='"${buildDir}/stage3.fo"'/>
             <arg line='"${xsl.fo.dir}/i18n-postprocess.xsl"'/>
