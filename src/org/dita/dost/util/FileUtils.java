@@ -10,18 +10,15 @@
 package org.dita.dost.util;
 
 import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
-import java.util.ResourceBundle;
 import java.util.StringTokenizer;
 
 import org.dita.dost.log.DITAOTJavaLogger;
