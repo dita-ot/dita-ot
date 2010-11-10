@@ -669,6 +669,13 @@ public abstract class Constants {
 	public static final String FILE_NAME_PLUGIN_XML = "pluginId.xml";
 	//Added by William on 2009-06-24 for req #12014 start
 	
+	// Added on 2010-11-09 for bug 3102827: Allow a way to specify recognized image extensions -- start
+	/** Configuration filename. */
+	public static final String CONF_PROPERTIES = "configuration.properties";
+	/** Property name for supported image extensions. */
+	public static final String CONF_SUPPORTED_IMAGE_EXTENSIONS = "supported_image_extensions";
+	// Added on 2010-11-09 for bug 3102827: Allow a way to specify recognized image extensions -- end
+	
     /**
      * Instances should NOT be constructed in standard programming.
      */

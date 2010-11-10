@@ -9,12 +9,18 @@
  */
 package org.dita.dost.platform;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
@@ -45,7 +51,9 @@ public class Integrator {
 	private DITAOTJavaLogger logger;
 	private Set<String> loadedPlugin = null;
 	private Hashtable<String,String> featureTable = null;
-        private File propertiesFile = null;
+    private File propertiesFile = null;
+        
+    private Properties properties = null;
 	
 	private void initTemplateSet(){
 		templateSet = new HashSet<String>(Constants.INT_16);
@@ -83,7 +91,7 @@ public class Integrator {
 		}
 
                 // Read the properties file, if it exists.
-                Properties properties = new Properties();
+		        properties = new Properties();
                 if (propertiesFile != null) {
                   try {
                     FileInputStream propertiesStream = new FileInputStream(propertiesFile);
@@ -147,7 +155,38 @@ public class Integrator {
 			templateFile = new File(ditaDir,(String) setIter.next());
 			fileGen.generate(templateFile.getAbsolutePath());
 		}
+		
+		// Added on 2010-11-09 for bug 3102827: Allow a way to specify recognized image extensions -- start
+		// generate configuration properties
+		final Properties configuration = new Properties();
+		final List<String> imgExts = new ArrayList<String>();
+		
+		for (final String ext: properties.getProperty(Constants.CONF_SUPPORTED_IMAGE_EXTENSIONS, "").split(";")) {
+			final String e = ext.trim();
+			if (e.length() != 0) {
+				imgExts.add(e);
+			} 
+		}
+		configuration.put(Constants.CONF_SUPPORTED_IMAGE_EXTENSIONS, StringUtils.assembleString(imgExts, ";"));
+		OutputStream out = null;
+		try {
+			out = new BufferedOutputStream(new FileOutputStream(
+					new File(ditaDir, "lib" + File.separator + Constants.CONF_PROPERTIES)));
+			configuration.store(out, "DITA-OT runtime configuration");
+		} catch (Exception e) {
+			logger.logException(e);
+			throw new RuntimeException("Failed to write configuration properties: " + e.getMessage(), e);
+		} finally {
+			if (out != null) {
+				try {
+					out.close();
+				} catch (IOException e) {
+					logger.logException(e);
+				}
+			}
+		}
 	}
+	// Added on 2010-11-09 for bug 3102827: Allow a way to specify recognized image extensions -- end
 	
 	//load the plug-ins and aggregate them by feature and fill into feature table
 	private boolean loadPlugin (String plugin)
