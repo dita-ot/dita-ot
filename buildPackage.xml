@@ -153,6 +153,10 @@
   	<exclude name="plugins/cxxapiref/" />
     <exclude name="doc/userguide-orig/**"/>
 	<exclude name="doc/ot-userguide/**"/>
+	<exclude name="doc/archive/**"/>
+	<exclude name="doc/langref-dita1.1/**"/>
+	<exclude name="doc/ditaref-book.chm" />
+	<exclude name="doc/ditaref-book.pdf" />
     <exclude name="build.number"/>
     <exclude name=".*"/>
   </patternset>
@@ -198,6 +202,10 @@
 		  	<!--exclude name="lib/saxon/**" /-->
 		    <exclude name="doc/userguide-orig/**"/>
 			<exclude name="doc/ot-userguide/**"/>
+			<exclude name="doc/archive/**"/>
+			<exclude name="doc/langref-dita1.1/**"/>
+			<exclude name="doc/ditaref-book.chm" />
+			<exclude name="doc/ditaref-book.pdf" />
 		    <exclude name="build.number"/>
 		    <exclude name=".*"/>
 	</patternset>
@@ -389,11 +397,25 @@
   	  <property name="args.fo.img.ext" value=".gif" />
   	</ant>
   	<ant antfile="build_demo.xml" target="doc.quickstartguide.chm"/>
-    <ant antfile="${basedir}/build_demo.xml" target="doc.readme.web"/>
+    <!--ant antfile="${basedir}/build_demo.xml" target="doc.readme.web"/-->
     <ant antfile="${basedir}/build_demo.xml" target="doc.readme.chm"/>
     <ant antfile="${basedir}/build_demo.xml" target="doc.readme.pdf">
       <property name="args.fo.img.ext" value=".jpg"/>
     </ant>
+  	
+	<delete failonerror="yes" includeemptydirs="true" dir="${doc.out.dir}${file.separator}articles" excludes="**/*.chm,**/*.pdf,**/*.html,**/*.css,image/*.*">
+	</delete>
+
+	<delete failonerror="yes" includeemptydirs="true" dir="${doc.out.dir}" excludes="**/*.chm,**/*.pdf,**/*.html,**/*.css,**/image/*.*,**/images/*.*,**/pic/*.*,*.gif,**/*.jpg">
+	</delete>
+
+	<delete failonerror="yes" includeemptydirs="true" dir="${doc.out.dir}${file.separator}readme"
+							excludes="**/*.chm,**/*.pdf,**/*.css,images/*.*">
+	</delete>
+
+	<delete failonerror="yes" includeemptydirs="true" dir="${doc.out.dir}${file.separator}quickstartguide" excludes="**/*.chm,**/*.pdf,**/*.css,images/*.*">
+	</delete>
+  	
   </target>
   
   <target name="copy-updated-doc">

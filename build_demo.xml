@@ -546,8 +546,8 @@ doc.langref-dita1.1.chm
 	<target name="doc.quickstartguide.chm" depends="init">
 		<antcall target="dita2htmlhelp">
 			<param name="args.input"
-				value="${dita.doc.dir}${file.separator}quickstartguide${file.separator}maps${file.separator}ant-quick-start-guide-for-ditaot.ditamap"/>
-			<param name="output.dir" value="${dita.output.doc.dir}${file.separator}quickstartguide"/>
+				value="${dita.doc.dir}${file.separator}ant-quick-start-guide-for-ditaot.ditamap"/>
+			<param name="output.dir" value="${dita.output.doc.dir}"/>
       <param name="transtype" value="htmlhelp"/>
 		</antcall>
 	</target>
@@ -556,8 +556,8 @@ doc.langref-dita1.1.chm
 		<!-- DOST is the project name of imported build.xml-->
 		<antcall target="DOST.init">
 			<param name="args.input"
-				value="${dita.doc.dir}${file.separator}quickstartguide${file.separator}maps${file.separator}ant-quick-start-guide-for-ditaot.ditamap"/>
-			<param name="output.dir" value="${dita.output.doc.dir}${file.separator}quickstartguide"/>
+				value="${dita.doc.dir}${file.separator}ant-quick-start-guide-for-ditaot.ditamap"/>
+			<param name="output.dir" value="${dita.output.doc.dir}"/>
       		<param name="transtype" value="pdf"/>
 		</antcall>
 	</target>
