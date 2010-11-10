@@ -53,7 +53,9 @@ public class FileUtils {
 	static {
 		BufferedInputStream configurationInputStream = null;
 		try {
-			configurationInputStream = new BufferedInputStream(new FileInputStream(new File("lib"+ File.separator + Constants.CONF_PROPERTIES)));
+			File configurationFile = new File("lib"+ File.separator + Constants.CONF_PROPERTIES);
+			if(configurationFile.exists()) 
+				configurationInputStream = new BufferedInputStream(new FileInputStream(configurationFile));
 			
 			if (configurationInputStream != null) {
 				configuration.load(configurationInputStream);
