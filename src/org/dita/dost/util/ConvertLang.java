@@ -42,6 +42,11 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
 public class ConvertLang extends Task {
+	// Added on 2010-11-05 for bug Unnecessary XML declaration in HHP and HHC - ID: 3101964 start
+	private static final String tag1 = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+	private static final String tag2 = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>[OPTIONS]";
+	private static final String tag3 = "&lt;?xml version=\"1.0\" encoding=\"utf-8\"?&gt;";
+	// Added on 2010-11-05 for bug Unnecessary XML declaration in HHP and HHC - ID: 3101964 end
 
     private String basedir;
     
@@ -595,13 +600,23 @@ public class ConvertLang extends Task {
             logger.logException(e);
         }
 	}
+	
+	// Added on 2010-11-05 for bug Unnecessary XML declaration in HHP and HHC - ID: 3101964 start
+	private String replaceXmlTag(String source,String tag){
+		int startPos = source.indexOf(tag);
+		int endPos = startPos + tag.length();
+		StringBuilder sb = new StringBuilder();
+		sb.append(source.substring(0,startPos)).append(source.substring(endPos));
+		return sb.toString();
+	}
+	// Added on 2010-11-05 for bug Unnecessary XML declaration in HHP and HHC - ID: 3101964 end
 
 	private void convertHtmlCharset() {
 		File outputDir = new File(outputdir);
 		File[] files = outputDir.listFiles();
-		for (int i = 0; i < files.length; i++) {
-			//Recursive method
-			convertCharset(files[i]);
+			for (int i = 0; i < files.length; i++) {
+				//Recursive method
+				convertCharset(files[i]);
 		}
 		
 	}
@@ -643,6 +658,16 @@ public class ConvertLang extends Task {
 						//add line break
 						writer.write(Constants.LINE_SEPARATOR);
 					}else{
+						// Added on 2010-11-05 for bug Unnecessary XML declaration in HHP and HHC - ID: 3101964 start
+						if(value.contains(tag1)){
+							value = replaceXmlTag(value,tag1);
+						}else if(value.contains(tag2)){
+							value = replaceXmlTag(value,tag2);
+						}else if(value.contains(tag3)){
+							value = replaceXmlTag(value,tag3);
+						}
+						// Added on 2010-11-05 for bug Unnecessary XML declaration in HHP and HHC - ID: 3101964 end
+						
 						//other values
 						writer.write(value);
 						writer.write(Constants.LINE_SEPARATOR);
@@ -730,6 +755,16 @@ public class ConvertLang extends Task {
 				
 				String value = reader.readLine();
 				while(value != null){
+					// Added on 2010-11-05 for bug Unnecessary XML declaration in HHP and HHC - ID: 3101964 start
+					if(value.contains(tag1)){
+						value = replaceXmlTag(value,tag1);
+					}else if(value.contains(tag2)){
+						value = replaceXmlTag(value,tag2);
+					}else if(value.contains(tag3)){
+						value = replaceXmlTag(value,tag3);
+					}
+					// Added on 2010-11-05 for bug Unnecessary XML declaration in HHP and HHC - ID: 3101964 end
+					
 					//meta tag contains charset found
 					if(value.contains("Language=")){
 						int insertPoint = value.indexOf("Language=") + "Language=".length();
@@ -865,7 +900,7 @@ public class ConvertLang extends Task {
 		//prepare for the input and output
 		FileInputStream inputStream;
 		try {
-			inputStream = new FileInputStream("C:\\20100925\\DITA-OT1.5.2\\ftrbug\\out\\test.hhp");
+			inputStream = new FileInputStream("C:/20101102/build3/DITA-OT1.5.2/odt_LineBreak/chmOut/DITA-articles.hhp");
 			InputStreamReader streamReader = new InputStreamReader(inputStream, Constants.UTF8);
 			BufferedReader reader = new BufferedReader(streamReader);
 			
@@ -880,7 +915,7 @@ public class ConvertLang extends Task {
 		}
 		
 		ConvertLang conv = new ConvertLang();
-		conv.setOutputdir("C:\\20100925\\DITA-OT1.5.2\\ftrbug\\outh");
+		conv.setOutputdir("C:/20101102/build3/DITA-OT1.5.2/odt_LineBreak/chmOut/chmOutTest");
 		conv.setMessage("test");
 		conv.setLangcode("fr-fr");
 		conv.execute();
