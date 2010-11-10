@@ -152,7 +152,7 @@
              <xsl:with-param name="classVal"> reference/proptypehd </xsl:with-param>
              <xsl:with-param name="elementType">type</xsl:with-param>
            </xsl:call-template>
-           <xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text>
+           <xsl:text disable-output-escaping="no">&#xA0;</xsl:text>
          </td><xsl:value-of select="$newline"/>
        </xsl:when>
      </xsl:choose>
@@ -168,7 +168,7 @@
              <xsl:with-param name="classVal"> reference/propvaluehd </xsl:with-param>
              <xsl:with-param name="elementType">value</xsl:with-param>
            </xsl:call-template>
-           <xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text>
+           <xsl:text disable-output-escaping="no">&#xA0;</xsl:text>
          </td><xsl:value-of select="$newline"/>
        </xsl:when>
      </xsl:choose>
@@ -184,7 +184,7 @@
              <xsl:with-param name="classVal"> reference/propdeschd </xsl:with-param>
              <xsl:with-param name="elementType">desc</xsl:with-param>
            </xsl:call-template>
-           <xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text>
+           <xsl:text disable-output-escaping="no">&#xA0;</xsl:text>
          </td><xsl:value-of select="$newline"/>
        </xsl:when>
      </xsl:choose>
@@ -322,7 +322,7 @@
    <xsl:value-of select="@specentry"/>
   </xsl:when>
   <xsl:otherwise>
-    <xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text>  <!-- nbsp -->
+    <xsl:text disable-output-escaping="no">&#xA0;</xsl:text>  <!-- nbsp -->
   </xsl:otherwise>
  </xsl:choose>
 </xsl:template>
