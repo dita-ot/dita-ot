@@ -4,7 +4,8 @@
  "concept.dtd">
 <?Pub Sty _display FontColor="red"?>
 <concept id="evaluating" xml:lang="en-us">
-<title>Evaluating the DITA Open Toolkit (Full Easy Install)</title>
+<title>Evaluating the DITA Open Toolkit (Full Easy Install)</title><?Pub
+Caret -2?>
 <shortdesc>The most common scenario for first users of the DITA Open
 Toolkit is to evaluate how it functions. Previous versions of the
 Toolkit required a number of preliminary installation steps for components
@@ -15,7 +16,7 @@ only), standard package (minimal plus docs and demos), and a &quot;full
 easy install package&quot; that basically installs everything you
 need to enable quick and easy evaluation of the Toolkit. This topic
 deals with installing and using the full easy install package for
-the first time.</shortdesc><?Pub Caret -2?>
+the first time.</shortdesc>
 <conbody>
 <note>This topic explains how to use the Full Easy Install on Windows;
 the three versions are also available on all other supported platforms.
@@ -54,7 +55,9 @@ Focus Area</xref> at http://dita.xml.org .</p>
 <section><title>Demo targets</title><p>Here are the individual demo
 targets that you can try while evaluating the DITA Open Toolkit. Note
 that most are subcomponents of larger operations--you can use any
-of these individually.</p><pre>
+of these individually. Earlier releases also contained demo targets
+for building the DITA 1.1 Language Specification, but that was removed
+in DITA-OT 1.5.2 because it was superseded by the DITA 1.2 specification.</p><pre>
  all                             Build all output
  clean                           Delete all output
    clean.demo                      Remove the demo output
@@ -62,11 +65,8 @@ of these individually.</p><pre>
      clean.demo.elementref           Remove the Element Reference demo output
      clean.demo.enote                Remove the eNote demo output
      clean.demo.faq                  Remove the FAQ demo output
-     clean.demo.langref-dita1.1      Remove the DITA 1.1 Language Reference demo output
-     clean.demo.langref-dita1.1.compilehelp Remove the 1.1 Language Reference as CHM output
    clean.doc                       Remove the documentation output
      clean.doc.articles              Delete the articles directory in doc.
-     clean.doc.langref-dita1.1       Delete the 1.1 langref directory in doc.
    clean.docbook                   Remove the docbook output
    clean.samples                   Remove the sample output
      clean.samples.eclipse           Remove the sample Eclipse output
@@ -79,15 +79,10 @@ of these individually.</p><pre>
    demo.elementref                 Build the element reference demo
    demo.enote                      Build the eNote demo
    demo.faq                        Build the FAQ demo
-   demo.langref-dita1.1.pdf        Build the DITA 1.1 Language Reference book as a demo
-   demo.langref-dita1.1.compilehelp Build the 1.1 Language Reference as HTML Help
  doc                             Build the documentation
    doc.articles.chm                Build the articles of dita as document.
    doc.articles.pdf                Build the articles of dita as document.
    doc.articles.web                Build the articles of dita as document.
-   doc.langref-dita1.1.chm         Build the DITA 1.1 Language Specification document.
-   doc.langref-dita1.1.pdf         Build the DITA 1.1 Language Specification  document.
-   doc.langref-dita1.1.web         Build the DITA 1.1 Language Specification  document.
  docbook                         Transform the samples to DocBook
  prompt                          Prompt to build anything
  samples                         Build the sample output
@@ -113,4 +108,4 @@ process in other ways. See the documentation for Ant parameters to
 learn more about processing options.</p></section>
 </conbody>
 </concept>
-<?Pub *0000007447?>
+<?Pub *0000006946?>
