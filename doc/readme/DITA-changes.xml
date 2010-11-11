@@ -4,7 +4,7 @@
  "../dtd/topic.dtd">
 <?Pub Sty _display FontColor="red"?>
 <topic id="ditareleasehistory" xml:lang="en-us">
-<title>DITA complete release history</title><?Pub Caret -2?>
+<title>DITA complete release history</title>
 <shortdesc>This document lists major changes and new features by release,
 going back to the beginning of the toolkit. </shortdesc>
 <body>
@@ -21,32 +21,27 @@ released as the DITA-OT 1.5.2 final stable build.</p><p>[General Enhancements]</
 <li>Minor updates to DITA 1.2 support added in earlier releases, to
 ensure compliance with the final standard</li>
 <li>Overhaul of documentation to remove outdated material</li>
+<li>Reorganization of doc directory to highlight new and important
+info</li>
 </ol><p>[SourceForge Enhancements Added]</p><ol>
 <li>2797337 Support for ODF output transform (Prototype added in version
-1.5.1, updates in each 1.5.2 Milestone, final version complete in
-Milestone 7)</li>
+1.5.1, updates in each 1.5.2 Milestone, transform complete in Milestone
+7)</li>
+<li>3021544 Preserve DITA elements in XHTML class by default (Milestone
+1) </li>
+<li>3019853 Create new "textonly" output method for use by any transform
+(Milestone 1) </li>
+<li>3012392 PDF transformation should allow args.xsl style override
+(Milestone 1) </li>
 <li>2882123 Add Ant Quick Start Guide to DITA-OT (Updated in each
 Milestone after 3)</li>
-<li>3021544 Preserve DITA elements in XHTML class by default (Milestone
-1)
-</li>
-<li>3019853 Create new "textonly" output method for use by any transform
-(Milestone 1)
-</li>
-<li>3012392 PDF transformation should allow args.xsl style override
-(Milestone 1)
-</li>
 <li>3086936 Add extension points for TOC output (Eclipse TOC, HTML
-Help TOC and Project, HTML TOC) (Milestone 6)
-</li>
-<li>3079610  Add current OT version to log (Milestone 6)
-</li>
-<li>1520909 HTML Help requires appropriate codepage (Milestone 6)
-</li>
+Help TOC and Project, HTML TOC) (Milestone 6) </li>
+<li>3079610  Add current OT version to log (Milestone 6) </li>
+<li>1520909 HTML Help requires appropriate codepage (Milestone 6) </li>
 </ol><p>[SourceForge Patches Added]</p><ol>
-<li> 3058008 Refactor chunk module for cleaner code (Milestone 4)
- 3067681  Add class to ordered child links (Milestone 5)
-</li>
+<li>3058008 Refactor chunk module for cleaner code (Milestone 4)  </li>
+<li>3067681  Add class to ordered child links (Milestone 5) </li>
 <li>3064412  Integrator fails to escape XML correctly (Milestone 5)
  </li>
 <li>3062765  Fix unit test file paths to be platform dependent (Milestone
@@ -56,10 +51,9 @@ Help TOC and Project, HTML TOC) (Milestone 6)
 <li>3077935 Plug-in ignore in Integrator (Milestone 6)  </li>
 <li>3065050 Common logging interface (Milestone 6)  </li>
 <li>3063318 ChunkModule refactoring (Milestone 6)  </li>
-<li>3061100 Define AbstractPipelineInput's function (Milestone 6)
-</li>
+<li>3061100 Define AbstractPipelineInput's function (Milestone 6) </li>
 </ol><p>[SourceForge Bugs Fixed]</p><ol>
-<li>2928582 commonTopicProcessing template prolog proessing out of
+<li>2928582 commonTopicProcessing template prolog processing out of
 order (Milestone 1)   </li>
 <li>2823221 version of Xalan-J inconsistent (Milestone 1)   </li>
 <li>3023642 Invalid @colname generated in nested table (Milestone
@@ -73,12 +67,14 @@ order (Milestone 1)   </li>
 <li>3031513 Nested table processing in pdf2 (Milestone 2)   </li>
 <li>3030317 Filtering doesn't work on @rev or @props attributes (Milestone
 2)   </li>
+<li>3028650 Replace xs:float with xs:double in Plus plugins (Milestone
+2)</li>
 <li>3022847 PDF transform gives Java exceptions for spaces in dir
 name (Milestone 2)   </li>
 <li>3032950 Scale is not correctly computed in XHTML transforms (Milestone
 2)   </li>
 <li>3033141 dita.xml.properties file not closed after generating (Milestone
-2)   </li>
+2)</li>
 <li>3034445 "CURRENDIR" typo in plus-plugins ( Checked in to CVS during
 Milestone 3)   </li>
 <li>3034489 Remove all occurrences of &lt;xmlcatalog> from plus-plugins
@@ -89,7 +85,8 @@ Milestone 3)   </li>
   </li>
 <li>3036985 Infinite recursivity in replaceString template (Milestone
 3)   </li>
-<li>3038941 Link with &amp; breaks in abstract (Milestone 3)   </li>
+<li>3038941 Link with &amp;amp; breaks in abstract (Milestone 3) 
+ </li>
 <li>3039017 Comments in PDF plugin files are confusing (Milestone
 3)   </li>
 <li>3058124 Toolkit Allows Unescaped URLs, doesn't handle escaped
@@ -147,6 +144,11 @@ is set to 'yes') (Milestone 6)   </li>
 6)   </li>
 <li>2832863 &lt;group> elements in catalogs don't work for all editors
 (Milestone 6) </li>
+<li>3086552 XMLReader.parse does not correctly receive the XML system
+ID (Milestone 7)</li>
+<li>3038933 Troff output drops prereq links (Milestone 7)</li>
+<li>3098975 Disable Output Escaping Should Not Be Used (Milestone
+7)</li>
 </ol><note>SourceForge bugs, patches, and RFEs listed above can be
 found in SourceForge Bugs, Patches, and RFE tracker pages: <ul>
 <li>Bugs tracker: <pre>http://sourceforge.net/tracker/?group_id=132728&amp;atid=725074
@@ -155,7 +157,7 @@ found in SourceForge Bugs, Patches, and RFE tracker pages: <ul>
 </pre></li>
 <li>RFE tracker: <pre>http://sourceforge.net/tracker/?group_id=132728&amp;atid=725077
 </pre></li>
-</ul></note></section>
+</ul></note></section><?Pub Caret -2?>
 <section id="rel1.5.1"><title>DITA OT Release 1.5.1</title><p>Release
 1.5.1 is a maintenance release based on Committee Draft 01 of the
 DITA 1.2 standard. This is the same version of the standard used for
@@ -1265,4 +1267,4 @@ Downloads</xref> Change logs for those versions are within the Readme
 files in each distribution.</p>     </section>
 </body>
 </topic>
-<?Pub *0000072095?>
+<?Pub *0000072487?>
