@@ -13,7 +13,7 @@ navtitle="News" scope="external"></topicref>
 </topicref>
 <topichead navtitle="Ant Quick Start Guide">
 <topicref format="ditamap"
-href="ant-quick-start-guide-for-ditaot.ditamap"></topicref><?Pub Caret -1?>
+href="ant-quick-start-guide-for-ditaot.ditamap"></topicref>
 </topichead>
 <topichead navtitle="Additional introductory material">
 <topicref conref="DITA-readme.ditamap#DITA-doc"></topicref>
@@ -21,8 +21,8 @@ href="ant-quick-start-guide-for-ditaot.ditamap"></topicref><?Pub Caret -1?>
 <topichead navtitle="Development Documents">
 <topicref href="dev_ref/DITA-OTArchitecture.xml" locktitle="yes"
 navtitle="Complete Process Architecture"></topicref>
-<topicref href="dev_ref/DITA-preprocessarch.xml" locktitle="yes"
-navtitle="Preprocess Architecture"></topicref>
+<topicref href="dev_ref/DITA-OTPreprocess.xml" locktitle="yes"
+navtitle="Preprocess Architecture"></topicref><?Pub Caret -2?>
 <topicref href="dev_ref/DITA-OTGenListModule.xml" locktitle="yes"
 navtitle="Java Module Architecture"></topicref>
 <topicref format="ditamap" href="dev_ref/doc.ditamap" locktitle="yes"
@@ -50,4 +50,4 @@ navtitle="OASIS DITA Technical Committee " scope="external"></topicref>
 navtitle="DITA developerWorks articles"></topicref>
 </topichead>
 </map>
-<?Pub *0000002409?>
+<?Pub *0000002407?>

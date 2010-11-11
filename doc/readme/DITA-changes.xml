@@ -8,15 +8,27 @@
 <shortdesc>This document lists major changes and new features by release,
 going back to the beginning of the toolkit. </shortdesc>
 <body>
-<section id="rel1.5.2"><title>DITA Open Toolkit Release 1.5.2</title><p>Release
-1.5.2 is a maintenance release based on the final version of the DITA
-1.2 standard. In addition to tweaks to match late changes in the standard,
-version 1.5.2 contains many enhancements, user patches, bug fixes,
-and significant updates to the documentation.</p><p>Release 1.5.2
-was developed using a series of test builds released to the community
-every three weeks. Each item in the list below indicates which test
-build first contained the update. The eighth build was the final build,
-released as the DITA-OT 1.5.2 final stable build.</p><p>[General Enhancements]</p><ol>
+<section id="rel1.5.2"><title>DITA Open Toolkit Release 1.5.2</title><ul>
+<li><b>To be released</b>: approximately December 10, 2010</li>
+<li><b>Supports</b>: DITA 1.0 through 1.2</li>
+<li><b>Latest test build available at</b>: <xref format="html"
+href="http://sourceforge.net/projects/dita-ot/files/DITA-OT%20Latest%20Test%20Build/"
+scope="external">DITA-OT Latest Test Build</xref></li>
+<li><b>After release, download at</b>: <xref format="html"
+href="http://sourceforge.net/projects/dita-ot/files/DITA-OT%20Stable%20Release/"
+scope="external">DITA-OT Latest Stable Build</xref></li>
+<li><b>Which package is for me?</b> See <xref format="html"
+href="http://dita.xml.org/freelinking/DITA-OT%2520Packages"
+scope="external">DITA-OT Packages</xref>. </li>
+</ul><p>Release 1.5.2 is a maintenance release based on the final
+version of the DITA 1.2 standard. In addition to tweaks to match late
+changes in the standard, version 1.5.2 contains many enhancements,
+user patches, bug fixes, and significant updates to the documentation.</p><p>Release
+1.5.2 was developed using a series of test builds released to the
+community every three weeks. Each item in the list below indicates
+which test build first contained the update. The eighth build was
+the final build, released as the DITA-OT 1.5.2 final stable build.</p><p>[General
+Enhancements]</p><ol>
 <li>Include final version of DITA 1.2 schemas and DTDs</li>
 <li>Minor updates to DITA 1.2 support added in earlier releases, to
 ensure compliance with the final standard</li>
@@ -158,16 +170,25 @@ found in SourceForge Bugs, Patches, and RFE tracker pages: <ul>
 <li>RFE tracker: <pre>http://sourceforge.net/tracker/?group_id=132728&amp;atid=725077
 </pre></li>
 </ul></note></section><?Pub Caret -2?>
-<section id="rel1.5.1"><title>DITA OT Release 1.5.1</title><p>Release
-1.5.1 is a maintenance release based on Committee Draft 01 of the
-DITA 1.2 standard. This is the same version of the standard used for
-the DITA 1.2 Public Review. Release 1.5.1 contains many fixes and
-minor enhancements. It also includes a preview of a new output transform
-to the Open Document Format; this transform will be completed in a
-later release.</p><p>Release 1.5.1 was developed using a series of
-test builds released to the community every three weeks. Each item
-in the list below indicates which test build first contained the update.
-There were seven total test builds.</p><p>[General Enhancements]</p><ol>
+<section id="rel1.5.1"><title>DITA OT Release 1.5.1</title><ul>
+<li><b>Release date</b>: June 18, 2010</li>
+<li><b>Supports</b>: DITA 1.0 through 1.2 (Committee Draft 02 level)</li>
+<li><b>Download at</b>: <xref format="html"
+href="http://sourceforge.net/projects/dita-ot/files/DITA-OT%20Stable%20Release/"
+scope="external">DITA-OT Latest Stable Build</xref></li>
+<li><b>Which package is for me?</b> See <xref format="html"
+href="http://dita.xml.org/freelinking/DITA-OT%2520Packages"
+scope="external">DITA-OT Packages</xref>. </li>
+</ul><p>Release 1.5.1 is a maintenance release based on Committee
+Draft 01 of the DITA 1.2 standard. This is the same version of the
+standard used for the DITA 1.2 Public Review. Release 1.5.1 contains
+many fixes and minor enhancements. It also includes a preview of a
+new output transform to the Open Document Format; this transform will
+be completed in a later release.</p><p>Release 1.5.1 was developed
+using a series of test builds released to the community every three
+weeks. Each item in the list below indicates which test build first
+contained the update. There were seven total test builds.</p><p>[General
+Enhancements]</p><ol>
 <li>Update to latest copy of DITA 1.2 Draft DTDs and Schemas (last
 update in Milestone 5)</li>
 </ol><p>[14 SourceForge Enhancements Added]</p><ol>
@@ -1267,4 +1288,4 @@ Downloads</xref> Change logs for those versions are within the Readme
 files in each distribution.</p>     </section>
 </body>
 </topic>
-<?Pub *0000072487?>
+<?Pub *0000073655?>

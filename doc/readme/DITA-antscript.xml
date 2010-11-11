@@ -496,12 +496,12 @@ is the name of input ditamap file.</ph>                     </entry>
 </tbody>
 </tgroup>
 </table></p><p><b>RTF output</b>: The transform from DITA to Word
-RTF does not support the <tt>args.artlbl</tt> parameter from the the
-general parameters table.</p><p><b>Legacy PDF output</b>: The default
-PDF output, which was initially developed as a plug-in to the toolkit,
-is not described here. The following parameters are only for the older
-PDF transform, now known as the "legacypdf" transform. <table><title>Parameters
-to the LEGACY PDF TRANSFORM dita2legacypdf</title>
+RTF does not support the <tt>args.artlbl</tt> parameter from the general
+parameters table.</p><?Pub Caret 104?><p><b>Legacy PDF output</b>:
+The default PDF output, which was initially developed as a plug-in
+to the toolkit, is not described here. The following parameters are
+only for the older PDF transform, now known as the "legacypdf" transform. <table>
+<title>Parameters to the LEGACY PDF TRANSFORM dita2legacypdf</title>
 <tgroup cols="3"><colspec align="center" colname="col1" colwidth="1*"/>
 <colspec align="center" colname="col2" colwidth="4*"/><colspec
 align="center" colname="col3" colwidth="1*"/>
@@ -585,7 +585,7 @@ calls the Ant script "build.xml", which is a common entry point for
 DITA-OT builds; it in turn imports all of the scripts mentioned above.</p><note>To
 get a more accurate error reporting about the transformation, you
 may add the command-line option <codeph>-logger org.dita.dost.log.DITAOTBuildLogger</codeph> after
-your Ant command.</note>     </section><?Pub Caret -2?>
+your Ant command.</note>     </section>
 </refbody>
 </reference>
-<?Pub *0000024650?>
+<?Pub *0000024648?>

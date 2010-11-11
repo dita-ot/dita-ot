@@ -4,8 +4,7 @@
  "concept.dtd">
 <?Pub Sty _display FontColor="red"?>
 <concept id="evaluating" xml:lang="en-us">
-<title>Evaluating the DITA Open Toolkit (Full Easy Install)</title><?Pub
-Caret -2?>
+<title>Evaluating the DITA Open Toolkit (Full Easy Install)</title>
 <shortdesc>The most common scenario for first users of the DITA Open
 Toolkit is to evaluate how it functions. Previous versions of the
 Toolkit required a number of preliminary installation steps for components
@@ -98,10 +97,10 @@ try your hand at modifying some of the sample scripts in the ant directory.
 These represent the kind of driver files that you would create for
 your own projects. You can easily adapt these to process your own
 test DITA files, for example. Call the other ant samples after this
-example: </p><pre>c:\DITA-OT1.5.1>ant -f samples/ant_sample/sample_xhtml.xml</pre><p>(This
-is basically the same as running <codeph>ant samples.web -f build_demo.xml</codeph>,
-but intended for you to modify.) </p><p>You will find the output for
-this exercise in the <filepath>samples/ant_sample/</filepath> directory
+example: </p><pre>c:\DITA-OT1.5.2>ant -f samples/ant_sample/sample_xhtml.xml</pre><?Pub
+Caret 15?><p>(This is basically the same as running <codeph>ant samples.web
+-f build_demo.xml</codeph>, but intended for you to modify.) </p><p>You
+will find the output for this exercise in the <filepath>samples/ant_sample/</filepath> directory
 itself. You can add parameters to the <filepath>sample_xhtml.xml</filepath> file
 to change where your outputs end up, and also to modify the build
 process in other ways. See the documentation for Ant parameters to

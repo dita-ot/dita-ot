@@ -11,9 +11,9 @@ navtitle="Evaluating the DITA Open Toolkit"></topicref>
 <topicref href="readme/DITA-relnotes.xml" navtitle="DITA release notes">
 </topicref>
 <topicref href="readme/DITA-changes.xml" navtitle="DITA release history">
-</topicref>
-<topicref href="specification/DITA1-2.xml" navtitle="DITA 1.2">
 </topicref><?Pub Caret -1?>
+<topicref href="specification/DITA1-2.xml" navtitle="DITA 1.2">
+</topicref>
 <topicref href="readme/DITA-tested.xml"
 navtitle="Tested platforms and tools" toc="no"></topicref>
 <topicref href="readme/DITA-usingtransforms.xml"
