@@ -267,10 +267,20 @@ with those set forth herein.
             </not>
         </condition>
     	
+        <condition property="index.config.file" value="${customization.dir}/common/index/${document.locale}.xml">
+            <available file="${customization.dir}/common/index/${document.locale}.xml"/>
+        </condition>
+        
+        <condition property="index.config.file" value="${cfg.dir}/common/index/${document.locale}.xml">
+            <not>
+                <isset property="index.config.file"/>
+            </not>
+        </condition>
+        
         <index-preprocess
             input="${inputFile}"
             output="${buildDir}/stage1.xml"
-            indexConfig="${cfg.dir}/common/index/${document.locale}.xml"
+            indexConfig="${index.config.file}"
             locale="${document.locale}"
             catalogs="${xml.catalog.files}">
         </index-preprocess>
