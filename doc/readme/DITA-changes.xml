@@ -1,22 +1,171 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--Arbortext, Inc., 1988-2010, v.4002-->
 <!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
  "../dtd/topic.dtd">
+<?Pub Sty _display FontColor="red"?>
 <topic id="ditareleasehistory" xml:lang="en-us">
-<title>DITA complete release history</title>
+<title>DITA complete release history</title><?Pub Caret -2?>
 <shortdesc>This document lists major changes and new features by release,
 going back to the beginning of the toolkit. </shortdesc>
 <body>
-<section conref="" id="rel1.5.1"><title>DITA OT Release 1.5.1</title><p>Release
-1.5.1 is a maintenance release based on Committee
-Draft 01 of the DITA 1.2 standard. This is the same version of the
-standard used for the DITA 1.2 Public Review. Release 1.5.1 contains
-many fixes and minor enhancements. It also includes a preview of a
-new output transform to the Open Document Format; this transform will
-be completed in a later release.</p><p>Release 1.5.1 was developed
-using a series of test builds released to the community every three
-weeks. Each item in the list below indicates which test build first
-contained the update. There were seven total test builds.</p><p>[General
-Enhancements]</p><ol>
+<section id="rel1.5.2"><title>DITA Open Toolkit Release 1.5.2</title><p>Release
+1.5.2 is a maintenance release based on the final version of the DITA
+1.2 standard. In addition to tweaks to match late changes in the standard,
+version 1.5.2 contains many enhancements, user patches, bug fixes,
+and significant updates to the documentation.</p><p>Release 1.5.2
+was developed using a series of test builds released to the community
+every three weeks. Each item in the list below indicates which test
+build first contained the update. The eighth build was the final build,
+released as the DITA-OT 1.5.2 final stable build.</p><p>[General Enhancements]</p><ol>
+<li>Include final version of DITA 1.2 schemas and DTDs</li>
+<li>Minor updates to DITA 1.2 support added in earlier releases, to
+ensure compliance with the final standard</li>
+<li>Overhaul of documentation to remove outdated material</li>
+</ol><p>[SourceForge Enhancements Added]</p><ol>
+<li>2797337 Support for ODF output transform (Prototype added in version
+1.5.1, updates in each 1.5.2 Milestone, final version complete in
+Milestone 7)</li>
+<li>2882123 Add Ant Quick Start Guide to DITA-OT (Updated in each
+Milestone after 3)</li>
+<li>3021544 Preserve DITA elements in XHTML class by default (Milestone
+1)
+</li>
+<li>3019853 Create new "textonly" output method for use by any transform
+(Milestone 1)
+</li>
+<li>3012392 PDF transformation should allow args.xsl style override
+(Milestone 1)
+</li>
+<li>3086936 Add extension points for TOC output (Eclipse TOC, HTML
+Help TOC and Project, HTML TOC) (Milestone 6)
+</li>
+<li>3079610  Add current OT version to log (Milestone 6)
+</li>
+<li>1520909 HTML Help requires appropriate codepage (Milestone 6)
+</li>
+</ol><p>[SourceForge Patches Added]</p><ol>
+<li> 3058008 Refactor chunk module for cleaner code (Milestone 4)
+ 3067681  Add class to ordered child links (Milestone 5)
+</li>
+<li>3064412  Integrator fails to escape XML correctly (Milestone 5)
+ </li>
+<li>3062765  Fix unit test file paths to be platform dependent (Milestone
+5)  </li>
+<li>2949860 PDF build.xml with args for JVM memory and architecture
+(Milestone 6)  </li>
+<li>3077935 Plug-in ignore in Integrator (Milestone 6)  </li>
+<li>3065050 Common logging interface (Milestone 6)  </li>
+<li>3063318 ChunkModule refactoring (Milestone 6)  </li>
+<li>3061100 Define AbstractPipelineInput's function (Milestone 6)
+</li>
+</ol><p>[SourceForge Bugs Fixed]</p><ol>
+<li>2928582 commonTopicProcessing template prolog proessing out of
+order (Milestone 1)   </li>
+<li>2823221 version of Xalan-J inconsistent (Milestone 1)   </li>
+<li>3023642 Invalid @colname generated in nested table (Milestone
+1)   </li>
+<li>3016739 Chunking mixes up &lt;link> to topic in reltable (Milestone
+1)   </li>
+<li>3020314 Chunk output includes index terms in navtitles (Milestone
+1)   </li>
+<li>3020313 Chunk processor adds &lt;topicref> before &lt;topicmeta>
+(Milestone 1)   </li>
+<li>3031513 Nested table processing in pdf2 (Milestone 2)   </li>
+<li>3030317 Filtering doesn't work on @rev or @props attributes (Milestone
+2)   </li>
+<li>3022847 PDF transform gives Java exceptions for spaces in dir
+name (Milestone 2)   </li>
+<li>3032950 Scale is not correctly computed in XHTML transforms (Milestone
+2)   </li>
+<li>3033141 dita.xml.properties file not closed after generating (Milestone
+2)   </li>
+<li>3034445 "CURRENDIR" typo in plus-plugins ( Checked in to CVS during
+Milestone 3)   </li>
+<li>3034489 Remove all occurrences of &lt;xmlcatalog> from plus-plugins
+( Checked in to CVS during Milestone 3)   </li>
+<li>3035816 When creating .chm, .hhp-file is missing a line-break
+(Milestone 3)   </li>
+<li>3036222 RTF transform not editable with Word 2007 (Milestone 3)
+  </li>
+<li>3036985 Infinite recursivity in replaceString template (Milestone
+3)   </li>
+<li>3038941 Link with &amp; breaks in abstract (Milestone 3)   </li>
+<li>3039017 Comments in PDF plugin files are confusing (Milestone
+3)   </li>
+<li>3058124 Toolkit Allows Unescaped URLs, doesn't handle escaped
+ones (Milestone 4)   </li>
+<li>3056939 Conref of keyref-based xref results in xref with no href
+(Milestone 4)   </li>
+<li>3052913 Multiple levels of keyref in map not resolved (Milestone
+4)   </li>
+<li>3052904 Keydef with no href causes hard failure (Milestone 4)
+  </li>
+<li>3052156 Object with data that starts with slash breaks image copying
+(Milestone 4)   </li>
+<li>3044861 Inappropriate warning for resource-only topic to graphic
+(Milestone 4)   </li>
+<li>3042978 @copy-to and @chunk on topichead gives file not found
+(Milestone 4)   </li>
+<li>3016994 The included-domains entity cannot be used in document
+(Milestone 4)   </li>
+<li>2994593 Transformation breaks when DITA Topics contain entity
+refs (Milestone 4)   </li>
+<li>3028894 no support for title in plugin.xml file (Milestone 4)
+  </li>
+<li>3065853  Indent from &lt;title> gets displayed in TOC (PDF) (Milestone
+5)   </li>
+<li>3065486  CURRENTFILE not aware of DITAEXT (Milestone 5)   </li>
+<li>3065422  Wrong filename and filedir parameters for eclipse xsl
+(Milestone 5)   </li>
+<li>3063533  Adjacent words get glued together using DITA to RTF (Milestone
+5)   </li>
+<li>3062912  Messages extension damages custom message formatting
+(Milestone 5)   </li>
+<li>3059256  Peer links break with missing format or wrong extension
+(Milestone 5)   </li>
+<li>2972393 Need to parameterize maxmemory and VM args for forked
+JVMs (Milestone 6)   </li>
+<li>3060269 Problem displaying French content TOC in CHM output (Milestone
+6)   </li>
+<li>3038412 zh-CN file for PDF puts English strings in output (partial
+fix) (Milestone 6)   </li>
+<li>3079676 &lt;navtitle> contents included in PDF output (Updated
+so that &lt;navtitle> in a topic will only appear when the draft parameter
+is set to 'yes') (Milestone 6)   </li>
+<li>3004895 XHTML output for &lt;draft-comment> should use class attribute
+(Milestone 6)   </li>
+<li>2794487 No Easy Way to Override/Extend HTML TOC Navtitle Generation
+(Milestone 6)   </li>
+<li>3088314 Need to clarify many error messages (Milestone 6)   </li>
+<li>3095233 Shortdesc metadata missing when using abstract (Milestone
+6)   </li>
+<li>3081597 conkeyref accepts values in conref style (Milestone 6)
+  </li>
+<li>3081459 fragment generation without plugin fails (Milestone 6)
+  </li>
+<li>3073262 missing terminating quote in bundle version (Milestone
+6)   </li>
+<li>2832863 &lt;group> elements in catalogs don't work for all editors
+(Milestone 6) </li>
+</ol><note>SourceForge bugs, patches, and RFEs listed above can be
+found in SourceForge Bugs, Patches, and RFE tracker pages: <ul>
+<li>Bugs tracker: <pre>http://sourceforge.net/tracker/?group_id=132728&amp;atid=725074
+</pre></li>
+<li>Patches tracker: <pre>http://sourceforge.net/tracker/?group_id=132728&amp;atid=725076
+</pre></li>
+<li>RFE tracker: <pre>http://sourceforge.net/tracker/?group_id=132728&amp;atid=725077
+</pre></li>
+</ul></note></section>
+<section id="rel1.5.1"><title>DITA OT Release 1.5.1</title><p>Release
+1.5.1 is a maintenance release based on Committee Draft 01 of the
+DITA 1.2 standard. This is the same version of the standard used for
+the DITA 1.2 Public Review. Release 1.5.1 contains many fixes and
+minor enhancements. It also includes a preview of a new output transform
+to the Open Document Format; this transform will be completed in a
+later release.</p><p>Release 1.5.1 was developed using a series of
+test builds released to the community every three weeks. Each item
+in the list below indicates which test build first contained the update.
+There were seven total test builds.</p><p>[General Enhancements]</p><ol>
 <li>Update to latest copy of DITA 1.2 Draft DTDs and Schemas (last
 update in Milestone 5)</li>
 </ol><p>[14 SourceForge Enhancements Added]</p><ol>
@@ -1116,3 +1265,4 @@ Downloads</xref> Change logs for those versions are within the Readme
 files in each distribution.</p>     </section>
 </body>
 </topic>
+<?Pub *0000072095?>
