@@ -161,6 +161,14 @@ ID (Milestone 7)</li>
 <li>3038933 Troff output drops prereq links (Milestone 7)</li>
 <li>3098975 Disable Output Escaping Should Not Be Used (Milestone
 7)</li>
+<li>3102827 Allow a way to specify recognized image extensions (Milestone
+7)</li>
+<li>3102219 Unexpected character code in Japanese string definition
+(Milestone 7)</li>
+<li>3101964 Unnecessary XML declaration in HHP and HHC (Milestone
+7)</li>
+<li>3095233 Shortdesc metadata missing when using abstract (Milestone
+7)</li>
 </ol><note>SourceForge bugs, patches, and RFEs listed above can be
 found in SourceForge Bugs, Patches, and RFE tracker pages: <ul>
 <li>Bugs tracker: <pre>http://sourceforge.net/tracker/?group_id=132728&amp;atid=725074
@@ -169,7 +177,7 @@ found in SourceForge Bugs, Patches, and RFE tracker pages: <ul>
 </pre></li>
 <li>RFE tracker: <pre>http://sourceforge.net/tracker/?group_id=132728&amp;atid=725077
 </pre></li>
-</ul></note></section><?Pub Caret -2?>
+</ul></note><?Pub Caret -2?></section>
 <section id="rel1.5.1"><title>DITA OT Release 1.5.1</title><ul>
 <li><b>Release date</b>: June 18, 2010</li>
 <li><b>Supports</b>: DITA 1.0 through 1.2 (Committee Draft 02 level)</li>
@@ -1288,4 +1296,4 @@ Downloads</xref> Change logs for those versions are within the Readme
 files in each distribution.</p>     </section>
 </body>
 </topic>
-<?Pub *0000073655?>
+<?Pub *0000073976?>
