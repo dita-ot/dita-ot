@@ -119,6 +119,10 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 	
 	private HashMap<String,String>	copytotarget2source;
 	
+	// Added on 2010-11-12 for bug 3090803 start
+	private HashMap<String, String> currentParsingFileTopicIDChangeTable;
+	// Added on 2010-11-12 for bug 3090803 end
+	
 	private final String ditaarchNSQName = "xmlns:ditaarch";
 	private final String ditaarchNSValue = "http://dita.oasis-open.org/architecture/2005/";
 	/**
@@ -420,9 +424,15 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 					if(Constants.ATTRIBUTE_NAME_ID.equals(attrName) && classValue.indexOf(Constants.ATTR_CLASS_VALUE_TOPIC)!=-1){
 						//change topic @id if there are conflicts. 
 						if(topicID.contains(attrValue)){
+							// Added on 2010-11-12 for bug 3090803 start
+							String oldAttrValue = attrValue;
+							// Added on 2010-11-12 for bug 3090803 end
 							Random random = new Random();
 							attrValue = "unique_"+new Integer(Math.abs(random.nextInt())).toString();
 							topicID.add(attrValue);
+							// Added on 2010-11-12 for bug 3090803 start
+							currentParsingFileTopicIDChangeTable.put(oldAttrValue, attrValue);
+							// Added on 2010-11-12 for bug 3090803 end
 						}else
 							topicID.add(attrValue);
 					}
@@ -992,9 +1002,35 @@ public class ChunkTopicParser extends AbstractXMLWriter {
 					String tempPath = currentParsingFile;
 					currentParsingFile = FileUtils.resolveFile(filePath,parseFilePath);
 					
-					if ( !Constants.ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equalsIgnoreCase(processRoleValue))
+					if ( !Constants.ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equalsIgnoreCase(processRoleValue)) {
+						
+						// Added on 2010-11-12 for bug 3090803 start
+						currentParsingFileTopicIDChangeTable = new HashMap<String, String>();
+						// Added on 2010-11-12 for bug 3090803 end
 						//TODO recursive point
 						reader.parse(currentParsingFile);
+						// Added on 2010-11-12 for bug 3090803 start
+						if(currentParsingFileTopicIDChangeTable.size()>0) {
+							String href = element.getAttribute(Constants.ATTRIBUTE_NAME_HREF);
+							href = href.replaceAll(Constants.DOUBLE_BACK_SLASH,
+									Constants.SLASH);
+							String pathtoElem = 
+								href.contains(Constants.SHARP) ? href.substring(href.indexOf(Constants.SHARP)+1) : "";
+							
+							String old_elementid =  pathtoElem.contains(Constants.SLASH) ? pathtoElem.substring(0, pathtoElem.indexOf(Constants.SLASH)) : pathtoElem;
+							
+							if(old_elementid.length()>0) {
+								String new_elementid = currentParsingFileTopicIDChangeTable.get(old_elementid);
+								if(new_elementid!=null&&new_elementid.length()>0) {
+									href = href.replaceFirst(Constants.SHARP + old_elementid, Constants.SHARP + new_elementid);
+									element.setAttribute(Constants.ATTRIBUTE_NAME_HREF, href);
+								}
+								
+							}
+						}
+						currentParsingFileTopicIDChangeTable = null;
+						// Added on 2010-11-12 for bug 3090803 end
+					}
 					//restore the currentParsingFile
 					currentParsingFile = tempPath;
 				}
