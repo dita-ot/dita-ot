@@ -672,6 +672,8 @@ public abstract class Constants {
 	// Added on 2010-11-09 for bug 3102827: Allow a way to specify recognized image extensions -- start
 	/** Configuration filename. */
 	public static final String CONF_PROPERTIES = "configuration.properties";
+	/** Configuration value separator. */
+	public static final String CONF_LIST_SEPARATOR = ";";
 	/** Property name for supported image extensions. */
 	public static final String CONF_SUPPORTED_IMAGE_EXTENSIONS = "supported_image_extensions";
 	// Added on 2010-11-09 for bug 3102827: Allow a way to specify recognized image extensions -- end

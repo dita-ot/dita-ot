@@ -39,6 +39,11 @@ import org.xml.sax.helpers.XMLReaderFactory;
  * @author Zhang, Yuan Peng
  */
 public class Integrator {
+		
+	/** Feature name for supported image extensions. */
+	public static final String FEAT_IMAGE_EXTENSIONS = "dita.image.extensions";
+	public static final String FEAT_VALUE_SEPARATOR = ",";
+	
 	/**
 	 * Plugin table which contains detected plugins.
 	 */
@@ -159,15 +164,24 @@ public class Integrator {
 		// Added on 2010-11-09 for bug 3102827: Allow a way to specify recognized image extensions -- start
 		// generate configuration properties
 		final Properties configuration = new Properties();
-		final List<String> imgExts = new ArrayList<String>();
+		//image extensions
+		final Set<String> imgExts = new HashSet<String>();
 		
-		for (final String ext: properties.getProperty(Constants.CONF_SUPPORTED_IMAGE_EXTENSIONS, "").split(";")) {
+		for (final String ext: properties.getProperty(Constants.CONF_SUPPORTED_IMAGE_EXTENSIONS, "").split(Constants.CONF_LIST_SEPARATOR)) {
 			final String e = ext.trim();
 			if (e.length() != 0) {
 				imgExts.add(e);
 			} 
 		}
-		configuration.put(Constants.CONF_SUPPORTED_IMAGE_EXTENSIONS, StringUtils.assembleString(imgExts, ";"));
+		if (featureTable.containsKey(FEAT_IMAGE_EXTENSIONS)) {
+			for (final String ext: featureTable.get(FEAT_IMAGE_EXTENSIONS).split(FEAT_VALUE_SEPARATOR)) {
+				final String e = ext.trim();
+				if (e.length() != 0) {
+					imgExts.add(e);
+				}
+			}
+		}
+		configuration.put(Constants.CONF_SUPPORTED_IMAGE_EXTENSIONS, StringUtils.assembleString(imgExts, Constants.CONF_LIST_SEPARATOR));
 		OutputStream out = null;
 		try {
 			out = new BufferedOutputStream(new FileOutputStream(
