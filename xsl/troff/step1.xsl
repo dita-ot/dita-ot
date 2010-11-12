@@ -7,7 +7,9 @@
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:saxon="http://icl.com/saxon"
                 xmlns:exsl="http://exslt.org/common"
+                xmlns:related-links="http:// dita-ot.sourceforge.net/ns/200709/related-links"
                 extension-element-prefixes="saxon"
+                exclude-result-prefixes="related-links exsl"
                 >
 
 <!--
@@ -109,6 +111,7 @@
     <block position="center"><xsl:call-template name="debug"/>
       <text style="bold"><xsl:call-template name="debug"/><xsl:apply-templates/></text>
     </block>
+    <xsl:apply-templates select="." mode="check-for-prereq"/>
 </xsl:template>
 
 <!-- These block elements do not get special formatting (though the children may);
@@ -118,6 +121,9 @@
                      *[contains(@class,' topic/fig ')]">
     <!-- save frame on figure? -->
   <block><xsl:call-template name="debug"/><xsl:apply-templates/></block>
+  <xsl:if test="contains(@class,' topic/shortdesc ')">
+    <xsl:apply-templates select="." mode="check-for-prereq"/>
+  </xsl:if>
 </xsl:template>
 
 <!-- These titles should come out as bold -->
@@ -466,7 +472,11 @@
 <xsl:template match="*[contains(@class,' topic/prolog ')] | *[contains(@class,' topic/titlealts ')]"/>
 
 <xsl:template match="*[contains(@class,' topic/body ')]">
-    <block><xsl:call-template name="debug"/><xsl:apply-templates/></block>
+    <block>
+      <xsl:call-template name="debug"/>
+      <xsl:apply-templates select="." mode="check-for-prereq"/>
+      <xsl:apply-templates/>
+    </block>
 </xsl:template>
 
 <!-- Only use required cleanup when $DRAFT=yes. Output a heading before, and a marker
@@ -591,6 +601,25 @@
      Related links is processed using rel-links. Each section is placed in a variable.
      The contents of the variable are then processed, and the XHTML coding is
      converted to the proper block or text intermediate format. -->
+<!-- Override this template to ensure that prereq links are grouped with other links. -->
+<!--<xsl:apply-templates select="." mode="related-links:group-unordered-links">
+    <xsl:with-param name="nodes" select="descendant::*[contains(@class, ' topic/link ')]
+      [count(. | key('omit-from-unordered-links', 1)) != count(key('omit-from-unordered-links', 1))]
+      [generate-id(.)=generate-id((key('hideduplicates', concat(ancestor::*[contains(@class, ' topic/related-links ')]/parent::*[contains(@class, ' topic/topic ')]/@id, ' ',@href,@scope,@audience,@platform,@product,@otherprops,@rev,@type,normalize-space(child::*))))[1])]
+      |
+      descendant::*[contains(@class, ' topic/link ')]
+      [@importance='required' and (not(@role) or @role='sibling' or @role='friend' or @role='cousin')]
+      [generate-id(.)=generate-id((key('hideduplicates', concat(ancestor::*[contains(@class, ' topic/related-links ')]/parent::*[contains(@class, ' topic/topic ')]/@id, ' ',@href,@scope,@audience,@platform,@product,@otherprops,@rev,@type,normalize-space(child::*))))[1])]"/>
+</xsl:apply-templates>  -->
+
+<xsl:template match="*" mode="check-for-prereq">
+  <xsl:if test="following-sibling::*[1][contains(@class,' topic/related-links ')]">
+    <xsl:variable name="prereqs">
+      <xsl:apply-templates select="following-sibling::*[1][contains(@class,' topic/related-links ')]" mode="prereqs"/>
+    </xsl:variable>
+      <xsl:apply-templates select="exsl:node-set($prereqs)" mode="reformat-links"/>
+  </xsl:if>
+</xsl:template>
 
 <xsl:template match="*[contains(@class,' topic/related-links ')]">
   <xsl:variable name="ul-children">
@@ -707,6 +736,20 @@
 
 <xsl:template match="div" mode="reformat-links">
     <block compact="yes"><xsl:apply-templates mode="reformat-links"/></block>
+</xsl:template>
+
+<xsl:template match="dl[contains(@class,'prereqlinks')]" mode="reformat-links">
+  <block compact="yes"><xsl:apply-templates mode="reformat-links"/></block>
+</xsl:template>
+<xsl:template match="dt[contains(@class,'prereq')]" mode="reformat-links">
+    <block compact="yes">
+      <text style="bold">
+        <xsl:apply-templates mode="reformat-links"/>
+      </text>
+    </block>
+</xsl:template>
+<xsl:template match="dl[contains(@class,'prereqlinks')]/dd" mode="reformat-links">
+  <block indent="9" compact="yes"><xsl:apply-templates mode="reformat-links"/></block>
 </xsl:template>
 
 <!-- If something already fell through to the ordinary processor, copy it as-is -->
