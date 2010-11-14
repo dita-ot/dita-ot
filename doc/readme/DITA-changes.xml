@@ -156,8 +156,6 @@ is set to 'yes') (Milestone 6)   </li>
 6)   </li>
 <li>2832863 &lt;group> elements in catalogs don't work for all editors
 (Milestone 6) </li>
-<li>3086552 XMLReader.parse does not correctly receive the XML system
-ID (Milestone 7)</li>
 <li>3038933 Troff output drops prereq links (Milestone 7)</li>
 <li>3098975 Disable Output Escaping Should Not Be Used (Milestone
 7)</li>
@@ -169,6 +167,12 @@ ID (Milestone 7)</li>
 7)</li>
 <li>3095233 Shortdesc metadata missing when using abstract (Milestone
 7)</li>
+<li>3097409 PDF should skip empty columns in property tables (Milestone 7)</li>
+<li>3090803 PDF fails when chunk specified and topic appears twice (Milestone 7)</li>
+<li>3102845 Japanese character-set definition (Milestone 7)</li>
+<li>3103488 Update Saxon command line args for IDIOM PDF build.xml (Milestone 7)</li>
+<li>3086552 XMLReader.parse does not correctly receive the XML system
+ID (Milestone 8)</li>
 </ol><note>SourceForge bugs, patches, and RFEs listed above can be
 found in SourceForge Bugs, Patches, and RFE tracker pages: <ul>
 <li>Bugs tracker: <pre>http://sourceforge.net/tracker/?group_id=132728&amp;atid=725074
