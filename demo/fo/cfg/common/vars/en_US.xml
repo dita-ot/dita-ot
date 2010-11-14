@@ -389,4 +389,29 @@ See the accompanying license.txt file for applicable licenses.
     <variable id="Task Result">Results</variable>
     <variable id="Task Example">Example</variable>
     <variable id="Task Postreq">What to do next</variable>
+    
+    <!--Glossary Variables-->
+    <!-- The footer that appears on the odd-numbered glossary pages. -->
+    <variable id="Glossary odd footer"/>
+
+    <!-- The footer that appears on the even-numbered glossary pages. -->
+    <variable id="Glossary even footer"/>
+
+    <!-- The header that appears on the odd-numbered glossary pages. -->
+    <variable id="Glossary odd header">
+        <param ref-name="prodname"/>&#xA0;|&#xA0;Glossary&#xA0;|&#xA0;<param ref-name="pagenum"/>
+    </variable>
+
+    <!-- The header that appears on the even-numbered glossary pages. -->
+    <variable id="Glossary even header">
+        <param ref-name="pagenum"/>&#xA0;|&#xA0;<param ref-name="prodname"/>&#xA0;|&#xA0;Glossary
+    </variable>
+    
+    <!-- The header that appears on the even-numbered glossary pages. -->
+    <variable id="Glossary even header">
+        <param ref-name="pagenum"/>&#xA0;|&#xA0;<param ref-name="prodname"/>&#xA0;|&#xA0;Glossary
+    </variable>
+    
+    <!-- The heading string to put at the top of the Glossary -->
+    <variable id="Glossary">Glossary</variable>
 </vars>

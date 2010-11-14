@@ -125,6 +125,7 @@ See the accompanying license.txt file for applicable licenses.
                         </xsl:variable>
                         <xsl:apply-templates select="$topicType" mode="toc-topic-text">
                             <xsl:with-param name="tocItemContent" select="$tocItemContent"/>
+                            <xsl:with-param name="currentNode" select="."/>
                         </xsl:apply-templates>
                     </fo:block>
                     <!-- In a future version, suppressing Notices in the TOC should not be hard-coded. -->
@@ -215,30 +216,42 @@ See the accompanying license.txt file for applicable licenses.
 
     <xsl:template match="text()[. = 'topicChapter']" mode="toc-topic-text">
         <xsl:param name="tocItemContent"/>
+        <xsl:param name="currentNode"/>
+        <xsl:for-each select="$currentNode">
         <fo:block xsl:use-attribute-sets="__toc__chapter__content">
             <xsl:copy-of select="$tocItemContent"/>
         </fo:block>
+        </xsl:for-each>
     </xsl:template>
     
     <xsl:template match="text()[. = 'topicAppendix']" mode="toc-topic-text">
         <xsl:param name="tocItemContent"/>
+        <xsl:param name="currentNode"/>
+        <xsl:for-each select="$currentNode">
         <fo:block xsl:use-attribute-sets="__toc__appendix__content">
             <xsl:copy-of select="$tocItemContent"/>
         </fo:block>
+        </xsl:for-each>
     </xsl:template>
     
     <xsl:template match="text()[. = 'topicPart']" mode="toc-topic-text">
         <xsl:param name="tocItemContent"/>
+        <xsl:param name="currentNode"/>
+        <xsl:for-each select="$currentNode">
         <fo:block xsl:use-attribute-sets="__toc__part__content">
             <xsl:copy-of select="$tocItemContent"/>
         </fo:block>
+        </xsl:for-each>
     </xsl:template>
     
     <xsl:template match="text()[. = 'topicPreface']" mode="toc-topic-text">
         <xsl:param name="tocItemContent"/>
+        <xsl:param name="currentNode"/>
+        <xsl:for-each select="$currentNode">
         <fo:block xsl:use-attribute-sets="__toc__preface__content">
             <xsl:copy-of select="$tocItemContent"/>
         </fo:block>
+        </xsl:for-each>
     </xsl:template>
     
     <xsl:template match="text()[. = 'topicNotices']" mode="toc-topic-text">
@@ -251,9 +264,12 @@ See the accompanying license.txt file for applicable licenses.
     
     <xsl:template match="node()" mode="toc-topic-text">
         <xsl:param name="tocItemContent"/>
+        <xsl:param name="currentNode"/>
+        <xsl:for-each select="$currentNode">
         <fo:block xsl:use-attribute-sets="__toc__topic__content">
             <xsl:copy-of select="$tocItemContent"/>
         </fo:block>
+        </xsl:for-each>
     </xsl:template>
 
     <xsl:template match="node()" mode="toc">

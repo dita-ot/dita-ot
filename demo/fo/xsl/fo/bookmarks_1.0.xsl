@@ -39,8 +39,9 @@ See the accompanying license.txt file for applicable licenses.
                 xmlns:opentopic-index="http://www.idiominc.com/opentopic/index"
                 xmlns:exslf="http://exslt.org/functions"
                 xmlns:opentopic-func="http://www.idiominc.com/opentopic/exsl/function"
+                xmlns:ot-placeholder="http://suite-sol.com/namespaces/ot-placeholder"
                 extension-element-prefixes="exsl"
-                exclude-result-prefixes="opentopic-index opentopic exslf opentopic-func"
+                exclude-result-prefixes="opentopic-index opentopic exslf opentopic-func ot-placeholder"
                 version='1.1'>
 
     <xsl:variable name="map" select="//opentopic:map"/>
@@ -104,6 +105,21 @@ See the accompanying license.txt file for applicable licenses.
                 </xsl:if>
             </fo:bookmark-tree>
         </xsl:if>
+    </xsl:template>
+
+    <xsl:template match="ot-placeholder:glossarylist" mode="bookmark">
+        <fo:bookmark internal-destination="ID_GLOSSARY_00-0F-EA-40-0D-4D">
+            <xsl:if test="$bookmarkStyle!='EXPANDED'">
+                <xsl:attribute name="starting-state">hide</xsl:attribute>
+            </xsl:if>
+            <fo:bookmark-title>
+                <xsl:call-template name="insertVariable">
+                    <xsl:with-param name="theVariableID" select="'Glossary'"/>
+                </xsl:call-template>
+            </fo:bookmark-title>
+
+            <xsl:apply-templates mode="bookmark"/>
+        </fo:bookmark>
     </xsl:template>
 
     <!--<xsl:template match="*[contains(@class, ' topic/topic ')][opentopic-func:determineTopicType() = 'topicTocList']" mode="bookmark" priority="10"/>-->
