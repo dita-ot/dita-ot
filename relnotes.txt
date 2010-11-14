@@ -43,6 +43,7 @@
      * 3065050 Common logging interface (Milestone 6)
      * 3077935 Plug-in ignore in Integrator (Milestone 6) 
      * 2949860 PDF build.xml with args for JVM memory and architecture (Milestone 6) 
+     * 3102905 Move supported image extensions to configuration file (Milestone 7)
       
      [SourceForge Bugs Fixed] 
      * 2928582 commonTopicProcessing template prolog processing out of order (Milestone 1)
@@ -88,18 +89,20 @@
      * 3004895 XHTML output for <draft-comment> should use class attribute (Milestone 6)
      * 2794487 No Easy Way to Override/Extend HTML Navtitle Generation (Milestone 6)
      * 3088314 Need to clarify many error messages (Milestone 6)
-     * 3095233 Shortdesc metadata missing when using abstract (Milestone 6)
      * 3081597 conkeyref accepts values in conref style (Milestone 6)
      * 3081459 fragment generation without plugin fails (Milestone 6) 
      * 3073262 missing terminating quote in bundle version (Milestone 6)
      * 2832863 <group> elements in catalogs don't work for all editors (Milestone 6)
-     * 3086552 XMLReader.parse does not correctly receive the XML system ID (Milestone 7)  
      * 3038933 Troff output drops prereq links (Milestone 7)
      * 3098975 Disable Output Escaping Should Not Be Used (Milestone 7)
      * 3102827 Allow a way to specify recognized image extensions (Milestone 7)
      * 3102219 Unexpected character code in Japanese string definition (Milestone 7)
+     * 3102845 Japanese character-set definition (Milestone 7)
+     * 3103488 Update Saxon command line args for IDIOM PDF build.xml (Milestone 7)
      * 3101964 Unnecessary XML declaration in HHP and HHC (Milestone 7)
      * 3095233 Shortdesc metadata missing when using abstract (Milestone 7)
+     * 3097409 PDF should skip empty columns in property tables (Milestone 7)
+     * 3090803 PDF fails when chunk specified and topic appears twice (Milestone 7)
      
      
 ====================================================================================
