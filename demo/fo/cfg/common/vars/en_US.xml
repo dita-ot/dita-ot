@@ -407,11 +407,6 @@ See the accompanying license.txt file for applicable licenses.
         <param ref-name="pagenum"/>&#xA0;|&#xA0;<param ref-name="prodname"/>&#xA0;|&#xA0;Glossary
     </variable>
     
-    <!-- The header that appears on the even-numbered glossary pages. -->
-    <variable id="Glossary even header">
-        <param ref-name="pagenum"/>&#xA0;|&#xA0;<param ref-name="prodname"/>&#xA0;|&#xA0;Glossary
-    </variable>
-    
     <!-- The heading string to put at the top of the Glossary -->
     <variable id="Glossary">Glossary</variable>
 </vars>
