@@ -103,6 +103,7 @@
      * 3095233 Shortdesc metadata missing when using abstract (Milestone 7)
      * 3097409 PDF should skip empty columns in property tables (Milestone 7)
      * 3090803 PDF fails when chunk specified and topic appears twice (Milestone 7)
+     * 3026627 side-col-width variable has no effect (Milestone 7)
      
      
 ====================================================================================
