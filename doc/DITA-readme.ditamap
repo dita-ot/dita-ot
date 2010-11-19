@@ -11,9 +11,9 @@ navtitle="Evaluating the DITA Open Toolkit"></topicref>
 <topicref href="readme/DITA-relnotes.xml" navtitle="DITA release notes">
 </topicref>
 <topicref href="readme/DITA-changes.xml" navtitle="DITA release history">
-</topicref><?Pub Caret -1?>
-<topicref href="specification/DITA1-2.xml" navtitle="DITA 1.2">
 </topicref>
+<topicref href="specification/DITA1-2.xml"
+navtitle="DITA 1.2 Specification Support"></topicref>
 <topicref href="readme/DITA-tested.xml"
 navtitle="Tested platforms and tools" toc="no"></topicref>
 <topicref href="readme/DITA-usingtransforms.xml"
@@ -31,19 +31,19 @@ navtitle="Ant tasks and scripts" toc="no"></topicref>
 navtitle="Building DITA output with Java command line"></topicref>
 <topicref href="readme/DITA-log.xml"
 navtitle="Problem determination and log analysis"></topicref>
+<topicref href="readme/DITA-troubleshooting.xml"
+navtitle="Troubleshooting"></topicref>
+<topicref href="readme/DITA-limitations.xml" navtitle="Known limitations">
+</topicref>
+<topicref href="readme/dita2word.xml#dita2word"
+navtitle="Transfomring DITA to Word RTF"></topicref><?Pub Caret -1?>
 <topicref href="readme/DITA-h2d.xml" navtitle="Migrating HTML to DITA">
 <topicref href="readme/DITA-h2d-ant.xml"></topicref>
 <topicref href="readme/DITA-h2d-java.xml"></topicref>
 </topicref>
-<topicref href="readme/dita2word.xml#dita2word"
-navtitle="Transfomring DITA to Word RTF"></topicref>
 <topichead navtitle="Development Reference">
 <topicref format="ditamap" href="dev_ref/dev_ref.ditamap"></topicref>
 </topichead>
-<topicref href="readme/DITA-limitations.xml" navtitle="Known limitations">
-</topicref>
-<topicref href="readme/DITA-troubleshooting.xml"
-navtitle="Troubleshooting"></topicref>
 </topicref>
 </map>
-<?Pub *0000002145?>
+<?Pub *0000002166?>

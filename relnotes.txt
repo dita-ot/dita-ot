@@ -1,6 +1,6 @@
 (c) Copyright IBM Corp. 2004, 2010 All Rights Reserved.
 
-     DITA OT release 1.5.2 latest build (Milestone 7)
+     DITA OT release 1.5.2
      
      Release 1.5.2 is a maintenance release based on the final
      version of the DITA 1.2 standard.  In addition to tweaks to 
@@ -8,11 +8,11 @@
      many enhancements, user patches, bug fixes, and significant 
      updates to the documentation.
      
-     Release 1.5.2 is being developed using a series of test builds 
+     Release 1.5.2 was developed using a series of test builds 
      released to the community every three weeks. Each item in the list
      below indicates which test build first contained the update.  The
-     eighth build will be the final build, released as the DITA-OT 1.5.2
-     final stable build.
+     eighth public build was the final build, released as the 
+     DITA-OT 1.5.2 final stable build.
 
      [General Enhancements]
      * Include final version of DITA 1.2 schemas and DTDs
