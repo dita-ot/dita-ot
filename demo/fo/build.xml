@@ -446,6 +446,29 @@ with those set forth herein.
             </or>
           </and>
         </condition>
+        <!-- NOTE: At present, there is no Antenna House V6 or V53, and the OT developers
+             do not know of a plan for either. They are added here so that if either
+             one is released, the Antenna House detection here will continue to work.
+             This plan is based on the V52 update, which caused some OT users to lose 
+             Antenna House function until this code was updated. -->
+        <condition property="axf.path" value="C:\Program Files\AntennaHouse\AHFormatterV6">
+          <and>
+            <not><isset property="axf.path"/></not>
+            <available file="C:\Program Files\AntennaHouse\AHFormatterV6\AHFCmd.exe"/>
+          </and>
+        </condition>
+        <condition property="axf.path" value="C:\Program Files\AntennaHouse\AHFormatterV53">
+          <and>
+            <not><isset property="axf.path"/></not>
+            <available file="C:\Program Files\AntennaHouse\AHFormatterV53\AHFCmd.exe"/>
+          </and>
+        </condition>
+        <condition property="axf.path" value="C:\Program Files\AntennaHouse\AHFormatterV52">
+          <and>
+            <not><isset property="axf.path"/></not>
+            <available file="C:\Program Files\AntennaHouse\AHFormatterV52\AHFCmd.exe"/>
+          </and>
+        </condition>
         <condition property="axf.path" value="C:\Program Files\AntennaHouse\AHFormatterV51">
           <and>
             <not><isset property="axf.path"/></not>
@@ -474,6 +497,54 @@ with those set forth herein.
           <and>
             <not><isset property="axf.path"/></not>
             <available file="C:\Program Files\Antenna\XSLFormatterV41\XSLCmd.exe"/>
+          </and>
+        </condition>
+        <!-- NOTE: Adding V6 and V53 as a guess where the next version will install,
+                   to try and make this code forward compatible. Basing it on the
+                   known install location of V52. Also adding V51 based on the 
+                   known V52 location (V51 support was missing as of the V52 release).
+                   The _64 values are used for 64 bit machines, and values without _64
+                   are for 32 bit machines. -->
+        <condition property="axf.path" value="/usr/AHFormatterV6_64">
+          <and>
+            <not><isset property="axf.path"/></not>
+            <available file="/usr/AHFormatterV6_64/run.sh" value="/usr/AHFormatterV6_64"/>
+          </and>
+        </condition>
+        <condition property="axf.path" value="/usr/AHFormatterV6">
+          <and>
+            <not><isset property="axf.path"/></not>
+            <available file="/usr/AHFormatterV6/run.sh" value="/usr/AHFormatterV6"/>
+          </and>
+        </condition>
+        <condition property="axf.path" value="/usr/AHFormatterV53_64">
+          <and>
+            <not><isset property="axf.path"/></not>
+            <available file="/usr/AHFormatterV53_64/run.sh" value="/usr/AHFormatterV53_64"/>
+          </and>
+        </condition>
+        <condition property="axf.path" value="/usr/AHFormatterV53">
+          <and>
+            <not><isset property="axf.path"/></not>
+            <available file="/usr/AHFormatterV53/run.sh" value="/usr/AHFormatterV53"/>
+          </and>
+        </condition>
+        <condition property="axf.path" value="/usr/AHFormatterV52_64">
+          <and>
+            <not><isset property="axf.path"/></not>
+            <available file="/usr/AHFormatterV52_64/run.sh" value="/usr/AHFormatterV52_64"/>
+          </and>
+        </condition>
+        <condition property="axf.path" value="/usr/AHFormatterV52">
+          <and>
+            <not><isset property="axf.path"/></not>
+            <available file="/usr/AHFormatterV52/run.sh" value="/usr/AHFormatterV52"/>
+          </and>
+        </condition>
+        <condition property="axf.path" value="/usr/AHFormatterV51">
+          <and>
+            <not><isset property="axf.path"/></not>
+            <available file="/usr/AHFormatterV51/run.sh" value="/usr/AHFormatterV51"/>
           </and>
         </condition>
         <condition property="axf.path" value="/usr/AHFormatterV5">
