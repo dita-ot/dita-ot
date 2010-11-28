@@ -17,6 +17,7 @@
 
   <xsl:param name="PLUGINFILE" select="'plugin.xml'"/>
   <xsl:param name="DITAMAPEXT" select="'ditamap'"/>
+  <xsl:param name="indexFilename" select="'index.xml'"/>
   <xsl:param name="FULL-DITAMAPEXT">
     <xsl:choose>
       <xsl:when test="starts-with($DITAMAPEXT,'.')"><xsl:value-of select="$DITAMAPEXT"/></xsl:when>
@@ -107,8 +108,8 @@
             <index file="{$DEFAULTINDEX}"/>
           </extension>
         </xsl:if>
-        <xsl:apply-templates select="*[contains(@class,' eclipsemap/indexExtension ')] |
-                                     *[contains(@class,' eclipsemap/contextExtension ')] | 
+        <xsl:call-template name="indexExtension"/>
+        <xsl:apply-templates select="*[contains(@class,' eclipsemap/contextExtension ')] | 
                                      *[contains(@class,' eclipsemap/contentExtension ')] |
                                      *[contains(@class,' eclipsemap/extension ')]"/>
       </plugin>
@@ -161,7 +162,7 @@
     <xsl:attribute name="extradir"><xsl:value-of select="@content"/></xsl:attribute>
   </xsl:template>
 
-  <xsl:template match="*[contains(@class,' eclipsemap/indexExtension ')][@href]">
+  <xsl:template  name="indexExtension" match="*[contains(@class,' eclipsemap/indexExtension ')][@href]">
     <xsl:variable name="indexname">
       <xsl:choose>
         <xsl:when test="contains(@href,$FULL-DITAEXT)"><xsl:value-of select="substring-before(@href,$FULL-DITAEXT)"/>.xml</xsl:when>
@@ -171,7 +172,7 @@
     </xsl:variable>
     <xsl:value-of select="$newline"/>
     <extension point="org.eclipse.help.index">
-      <index file="{$indexname}"/>
+      <index file="{$indexFilename}"/>
     </extension>
   </xsl:template>
 
@@ -470,6 +471,7 @@
     <xsl:apply-templates select="*[contains(@class,' eclipsemap/versionGreaterThanMin ')]" mode="eclipse.manifest"/>
     <xsl:apply-templates select="*[contains(@class,' eclipsemap/versionMax ')]" mode="eclipse.manifest"/>
     <xsl:apply-templates select="*[contains(@class,' eclipsemap/versionLessThanMax ')]" mode="eclipse.manifest"/>
+    <xsl:text>"</xsl:text>
   </xsl:template>
   
   <xsl:template match="*[contains(@class,' topic/vrmlist ')]" mode="eclipse.manifest">
@@ -477,14 +479,40 @@
   </xsl:template>
   
   <xsl:template match="*[contains(@class,' topic/vrm ')]" mode="eclipse.manifest">
-    <xsl:text>Bundle-Version: </xsl:text><xsl:value-of select="@version"/><xsl:apply-templates select="@release" mode="eclipse.manifest"/><xsl:apply-templates select="@modification" mode="eclipse.manifest"/><xsl:apply-templates select="../../*[contains(@class,' eclipsemap/qualifier ')]" mode="eclipse.manifest"/><xsl:value-of select="$newline"/>   
+     <xsl:text>Bundle-Version: </xsl:text><xsl:apply-templates select="@version" mode="eclipse.manifest"/><xsl:apply-templates select="@release" mode="eclipse.manifest"/><xsl:apply-templates select="@modification" mode="eclipse.manifest"/><xsl:apply-templates select="../../*[contains(@class,' eclipsemap/qualifier ')]" mode="eclipse.manifest"/><xsl:value-of select="$newline"/>
+  </xsl:template>
+  
+  <xsl:template match="@version" mode="eclipse.manifest">
+    <xsl:choose>
+      <xsl:when test="(string(number(.)) &lt; 0) or (string(number(.)) = 'NaN')  or (normalize-space(.)='') ">
+          <xsl:text>0</xsl:text>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="floor(.)"/>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
   
   <xsl:template match="@release" mode="eclipse.manifest">
-    <xsl:text>.</xsl:text><xsl:value-of select="."/>
+    <xsl:choose>
+      <xsl:when test="(string(number(.)) &lt; 0) or (string(number(.)) = 'NaN')  or (normalize-space(.)='') ">
+          <xsl:text>.</xsl:text><xsl:text>0</xsl:text>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:text>.</xsl:text><xsl:value-of select="floor(.)"/>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
+  
   <xsl:template match="@modification" mode="eclipse.manifest">
-    <xsl:text>.</xsl:text><xsl:value-of select="."/>
+    <xsl:choose>
+      <xsl:when test="(string(number(.)) &lt; 0) or (string(number(.)) = 'NaN')  or (normalize-space(.)='') ">
+          <xsl:text>.</xsl:text><xsl:text>0</xsl:text>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:text>.</xsl:text><xsl:value-of select="floor(.)"/>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
   <xsl:template match="*[contains(@class,' eclipsemap/qualifier ')]" mode="eclipse.manifest">
     <xsl:text>.</xsl:text><xsl:value-of select="."/>
@@ -526,23 +554,23 @@
     <xsl:if test="following-sibling::*[contains(@class,' eclipsemap/versionMax ')] or following-sibling::*[contains(@class,' eclipsemap/versionLessThanMax ')]">
       <xsl:text>[</xsl:text>
     </xsl:if>
-    <xsl:value-of select="@version"/><xsl:apply-templates select="@release" mode="eclipse.manifest"/><xsl:apply-templates select="@modification" mode="eclipse.manifest"/>
+    <xsl:apply-templates select="@version" mode="eclipse.manifest"/><xsl:apply-templates select="@release" mode="eclipse.manifest"/><xsl:apply-templates select="@modification" mode="eclipse.manifest"/>
   </xsl:template>
   
   <xsl:template match="*[contains(@class,' eclipsemap/versionGreaterThanMin ')]" mode="eclipse.manifest" priority="2">
     <xsl:text>(</xsl:text>
-    <xsl:value-of select="@version"/><xsl:apply-templates select="@release" mode="eclipse.manifest"/><xsl:apply-templates select="@modification" mode="eclipse.manifest"/>
+    <xsl:apply-templates select="@version" mode="eclipse.manifest"/><xsl:apply-templates select="@release" mode="eclipse.manifest"/><xsl:apply-templates select="@modification" mode="eclipse.manifest"/>
   </xsl:template>
   
   <xsl:template match="*[contains(@class,' eclipsemap/versionMax ')]" mode="eclipse.manifest" priority="2">
     <xsl:text>, </xsl:text>
-    <xsl:value-of select="@version"/><xsl:apply-templates select="@release" mode="eclipse.manifest"/><xsl:apply-templates select="@modification" mode="eclipse.manifest"/>
+    <xsl:apply-templates select="@version" mode="eclipse.manifest"/><xsl:apply-templates select="@release" mode="eclipse.manifest"/><xsl:apply-templates select="@modification" mode="eclipse.manifest"/>
     <xsl:text>]</xsl:text>
   </xsl:template>
   
   <xsl:template match="*[contains(@class,' eclipsemap/versionLessThanMax ')]" mode="eclipse.manifest" priority="2">
     <xsl:text>, </xsl:text>
-    <xsl:value-of select="@version"/><xsl:apply-templates select="@release" mode="eclipse.manifest"/><xsl:apply-templates select="@modification" mode="eclipse.manifest"/>
+    <xsl:apply-templates select="@version" mode="eclipse.manifest"/><xsl:apply-templates select="@release" mode="eclipse.manifest"/><xsl:apply-templates select="@modification" mode="eclipse.manifest"/>
     <xsl:text>)</xsl:text>
   </xsl:template>
   
