@@ -13,8 +13,7 @@
   
   <xsl:import href="../../../xsl/common/output-message.xsl"/>
   <xsl:variable name="msgprefix">DOTX</xsl:variable>
-  <!-- <xsl:param name="version">1.0.0</xsl:param> -->
-
+  
   <xsl:param name="PLUGINFILE" select="'plugin.xml'"/>
   <xsl:param name="DITAMAPEXT" select="'ditamap'"/>
   <xsl:param name="indexFilename" select="'index.xml'"/>
