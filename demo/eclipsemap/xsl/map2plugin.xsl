@@ -13,10 +13,10 @@
   
   <xsl:import href="../../../xsl/common/output-message.xsl"/>
   <xsl:variable name="msgprefix">DOTX</xsl:variable>
-  <!-- <xsl:param name="version">1.0.0</xsl:param> -->
-
+  
   <xsl:param name="PLUGINFILE" select="'plugin.xml'"/>
   <xsl:param name="DITAMAPEXT" select="'ditamap'"/>
+  <xsl:param name="indexFilename" select="'index.xml'"/>
   <xsl:param name="FULL-DITAMAPEXT">
     <xsl:choose>
       <xsl:when test="starts-with($DITAMAPEXT,'.')"><xsl:value-of select="$DITAMAPEXT"/></xsl:when>
@@ -107,8 +107,8 @@
             <index file="{$DEFAULTINDEX}"/>
           </extension>
         </xsl:if>
-        <xsl:apply-templates select="*[contains(@class,' eclipsemap/indexExtension ')] |
-                                     *[contains(@class,' eclipsemap/contextExtension ')] | 
+        <xsl:call-template name="indexExtension"/>
+        <xsl:apply-templates select="*[contains(@class,' eclipsemap/contextExtension ')] | 
                                      *[contains(@class,' eclipsemap/contentExtension ')] |
                                      *[contains(@class,' eclipsemap/extension ')]"/>
       </plugin>
@@ -161,7 +161,7 @@
     <xsl:attribute name="extradir"><xsl:value-of select="@content"/></xsl:attribute>
   </xsl:template>
 
-  <xsl:template match="*[contains(@class,' eclipsemap/indexExtension ')][@href]">
+  <xsl:template  name="indexExtension" match="*[contains(@class,' eclipsemap/indexExtension ')][@href]">
     <xsl:variable name="indexname">
       <xsl:choose>
         <xsl:when test="contains(@href,$FULL-DITAEXT)"><xsl:value-of select="substring-before(@href,$FULL-DITAEXT)"/>.xml</xsl:when>
@@ -171,7 +171,7 @@
     </xsl:variable>
     <xsl:value-of select="$newline"/>
     <extension point="org.eclipse.help.index">
-      <index file="{$indexname}"/>
+      <index file="{$indexFilename}"/>
     </extension>
   </xsl:template>
 
@@ -372,6 +372,11 @@
     <xsl:text>Bundle-ManifestVersion: 2</xsl:text><xsl:value-of select="$newline"/>
     <xsl:text>Bundle-Localization: plugin</xsl:text><xsl:value-of select="$newline"/>
     <xsl:text>Bundle-Name: %name</xsl:text><xsl:value-of select="$newline"/>
+    <!--  Fix for Eclipse defect 2871017 -->
+    <xsl:if test="not(*[contains(@class,' eclipsemap/pluginmeta ')]/*[contains(@class,' eclipsemap/plugininfo ')]/*[contains(@class,' topic/vrmlist ')]/*[contains(@class,' topic/vrm ')][position() = 1]/@version > 0)">
+      <xsl:text>Bundle-Version: </xsl:text><xsl:value-of select="$version"/><xsl:value-of select="$newline"/>
+    </xsl:if>
+    
     <xsl:text>Bundle-Vendor: %providerName</xsl:text><xsl:value-of select="$newline"/>
     <xsl:choose>
       <xsl:when test="$plugin='true'">
@@ -508,7 +513,6 @@
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
-  
   <xsl:template match="*[contains(@class,' eclipsemap/qualifier ')]" mode="eclipse.manifest">
     <xsl:text>.</xsl:text><xsl:value-of select="."/>
   </xsl:template>
