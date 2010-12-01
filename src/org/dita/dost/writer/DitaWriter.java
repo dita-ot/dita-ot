@@ -73,6 +73,10 @@ public class DitaWriter extends AbstractXMLWriter {
     
     private Document root = null;
     
+  //Added on 2010-08-24 for bug:3086552 start
+    private static boolean setSystemid = true;
+  //Added on 2010-08-24 for bug:3086552 end
+    
     private static boolean checkDITAHREF(Attributes atts){
     	String classValue = atts.getValue(Constants.ATTRIBUTE_NAME_CLASS);
     	String scopeValue = atts.getValue(Constants.ATTRIBUTE_NAME_SCOPE);
@@ -390,7 +394,7 @@ public class DitaWriter extends AbstractXMLWriter {
      * @param validate whether validate
      * @throws SAXException SAXException
      */
-	public static void initXMLReader(String ditaDir,boolean validate) throws SAXException {
+	public static void initXMLReader(String ditaDir,boolean validate, boolean arg_setSystemid) throws SAXException {
 		DITAOTJavaLogger logger=new DITAOTJavaLogger();
 		if (System.getProperty(Constants.SAX_DRIVER_PROPERTY) == null) {
 			// The default sax driver is set to xerces's sax driver
@@ -414,6 +418,7 @@ public class DitaWriter extends AbstractXMLWriter {
 		AbstractXMLReader.setGrammarPool(reader, GrammarPoolManager.getGrammarPool());
 		CatalogUtils.setDitaDir(ditaDir);
 		catalogMap = CatalogUtils.getCatalog(ditaDir);
+		setSystemid= arg_setSystemid;
 	}
     
 	@Override
@@ -1284,15 +1289,16 @@ public class DitaWriter extends AbstractXMLWriter {
             // start to parse the file and direct to output in the temp
             // directory
             reader.setErrorHandler(new DITAOTXMLErrorHandler(traceFilename));
-            
+          //Added on 2010-08-24 for bug:3086552 start
             File file = new File(traceFilename);
-            
             InputSource is = new InputSource(new FileInputStream(file));
     		//set system id bug:3086552
-    		is.setSystemId(file.toURI().toURL().toString());
-            
+            if(setSystemid)
+            	//is.setSystemId(URLUtil.correct(file).toString());
+            	is.setSystemId(file.toURI().toURL().toString());
+            	
+          //Added on 2010-08-24 for bug:3086552 end
             reader.parse(is);
-            
             output.close();
         } catch (Exception e) {
         	e.printStackTrace();

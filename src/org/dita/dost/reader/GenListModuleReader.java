@@ -158,6 +158,10 @@ public class GenListModuleReader extends AbstractXMLReader {
 	
 	private static String rootFilePath=null;
 	
+	//Added on 2010-08-24 for bug:3086552 start
+	private static boolean setSystemid = true;
+	//Added on 2010-08-24 for bug:3086552 end
+	
     private Stack<String> processRoleStack; // stack for @processing-role value
     private int processRoleLevel; // Depth inside a @processing-role parent
     private Set<String> resourceOnlySet; // Topics with role of "resource-only"
@@ -306,7 +310,7 @@ public class GenListModuleReader extends AbstractXMLReader {
      * @param rootFile input file
 	 * @throws SAXException parsing exception
      */
-	public static void initXMLReader(String ditaDir,boolean validate,String rootFile) throws SAXException {
+	public static void initXMLReader(String ditaDir,boolean validate,String rootFile, boolean arg_setSystemid) throws SAXException {
 		DITAOTJavaLogger javaLogger=new DITAOTJavaLogger();
 		if (System.getProperty(Constants.SAX_DRIVER_PROPERTY) == null) {
 			// The default sax driver is set to xerces's sax driver
@@ -332,6 +336,9 @@ public class GenListModuleReader extends AbstractXMLReader {
 		
 		CatalogUtils.setDitaDir(ditaDir);
 		catalogMap = CatalogUtils.getCatalog(ditaDir);
+		//Added on 2010-08-24 for bug:3086552 start
+		setSystemid= arg_setSystemid;
+		//Added on 2010-08-24 for bug:3086552 end
 	}
 
 	/**
@@ -574,12 +581,14 @@ public class GenListModuleReader extends AbstractXMLReader {
 		currentFile=file.getAbsolutePath();
 		
 		reader.setErrorHandler(new DITAOTXMLErrorHandler(file.getName()));
-		
+		//Added on 2010-08-24 for bug:3086552 start
 		InputSource is = new InputSource(new FileInputStream(file));
-		//set system id bug:3086552
-		is.setSystemId(file.toURI().toURL().toString());
-		
-		reader.parse(is);	
+		//Set the system ID
+		if(setSystemid)
+			//is.setSystemId(URLUtil.correct(file).toString());
+		    is.setSystemId(file.toURI().toURL().toString());
+		//Added on 2010-08-24 for bug:3086552 end
+		reader.parse(is); 
 	}
 
 	@Override

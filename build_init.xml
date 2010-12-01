@@ -401,6 +401,16 @@
   		      </not>
   	</condition> 	
   	<!-- Added on 2010-08-24 for bug:2994593 enable grammar pool caching by default end-->
+  	
+  	<!-- Added on 2010-11-16 for bug:3086552 enable system id setting in XMLReader.parse start-->
+  	<condition property="args.xml.systemid.set"
+  	      value="yes">
+  		      <not>
+  		        <isset property="args.xml.systemid.set" />
+  		      </not>
+  	</condition> 	
+  	<!-- Added on 2010-11-16 for bug:3086552 enable system id setting in XMLReader.parse end-->
+  	
   	<condition property="args.odt.img.embed"
   	  	      value="yes">
   	  		      <not>

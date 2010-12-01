@@ -41,7 +41,7 @@ public class TestGenListModuleReader {
 		boolean validate = false;
 		
 		try {
-			reader.initXMLReader(ditaDir, validate, new File(baseDir, rootFile).getCanonicalPath());
+			reader.initXMLReader(ditaDir, validate, new File(baseDir, rootFile).getCanonicalPath(), true);
 		} catch (SAXException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

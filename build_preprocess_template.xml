@@ -47,7 +47,7 @@
     unless="preprocess.gen-list-without-flagging.skip">
     <pipeline message="Generate list." module="GenMapAndTopicList"
       basedir="${basedir}" inputmap="${args.input}"
-      tempdir="${dita.temp.dir}" extparam="ditadir=${dita.dir};validate=${validate};generatecopyouter=${generate.copy.outer};outercontrol=${outer.control};onlytopicinmap=${onlytopic.in.map};outputdir=${output.dir};transtype=${transtype};gramcache=${args.grammar.cache}" />
+      tempdir="${dita.temp.dir}" extparam="ditadir=${dita.dir};validate=${validate};generatecopyouter=${generate.copy.outer};outercontrol=${outer.control};onlytopicinmap=${onlytopic.in.map};outputdir=${output.dir};transtype=${transtype};gramcache=${args.grammar.cache};setsystemid=${args.xml.systemid.set}" />
   </target>
 
   <target name="gen-list-with-flagging"
@@ -56,7 +56,7 @@
     <pipeline message="Generate list." module="GenMapAndTopicList"
       basedir="${basedir}" inputmap="${args.input}"
       tempdir="${dita.temp.dir}"
-      extparam="ditadir=${dita.dir};ditaval=${dita.input.valfile};validate=${validate};generatecopyouter=${generate.copy.outer};outercontrol=${outer.control};onlytopicinmap=${onlytopic.in.map};outputdir=${output.dir};transtype=${transtype};gramcache=${args.grammar.cache}" />
+      extparam="ditadir=${dita.dir};ditaval=${dita.input.valfile};validate=${validate};generatecopyouter=${generate.copy.outer};outercontrol=${outer.control};onlytopicinmap=${onlytopic.in.map};outputdir=${output.dir};transtype=${transtype};gramcache=${args.grammar.cache};setsystemid=${args.xml.systemid.set}" />
   </target>
 
   <target name="gen-list-flag-check">
@@ -125,7 +125,7 @@
     description="Debug input files">
     <pipeline message="Debug and filtering." module="DebugAndFilter"
       basedir="${basedir}" tempdir="${dita.temp.dir}"
-      extparam="ditaext=${dita.extname};ditadir=${dita.dir};validate=${validate};transtype=${transtype}"/>
+      extparam="ditaext=${dita.extname};ditadir=${dita.dir};validate=${validate};transtype=${transtype};setsystemid=${args.xml.systemid.set}"/>
   </target>
 
   <target name="debug-and-filter"
@@ -134,7 +134,7 @@
     description="Debug and filter input files">
     <pipeline message="Debug and filtering." module="DebugAndFilter"
       basedir="${basedir}" tempdir="${dita.temp.dir}"
-      extparam="ditaval=${dita.input.valfile};ditaext=${dita.extname};ditadir=${dita.dir};validate=${validate};transtype=${transtype}" />
+      extparam="ditaval=${dita.input.valfile};ditaext=${dita.extname};ditadir=${dita.dir};validate=${validate};transtype=${transtype};setsystemid=${args.xml.systemid.set}" />
   </target>
 
   <target name="debug-filter-flag-check">

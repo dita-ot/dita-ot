@@ -78,7 +78,7 @@ public class TestDitaWriter {
 		facade.execute("GenMapAndTopicList", pipelineInput);
 		
 		String ditaDir = new File(baseDir, "").getAbsolutePath();
-		DitaWriter.initXMLReader(ditaDir, false);
+		DitaWriter.initXMLReader(ditaDir, false, true);
 		
 		writer = new DitaWriter();
 	}

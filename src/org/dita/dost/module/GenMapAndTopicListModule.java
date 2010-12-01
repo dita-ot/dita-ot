@@ -203,7 +203,9 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 	private String gramcache = "yes";
 	//Added on 2010-08-24 for bug:2994593 end
 	
-	
+	//Added on 2010-08-24 for bug:3086552 start
+	private boolean setSystemid = true; 
+	//Added on 2010-08-24 for bug:3086552 end
 	/**
 	 * Create a new instance and do the initialization.
 	 * 
@@ -261,7 +263,10 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 			//set grammar pool flag
 			GrammarPoolManager.setGramCache(gramcache);
 
-			GenListModuleReader.initXMLReader(ditaDir,xmlValidate,rootFile);
+			GenListModuleReader.initXMLReader(ditaDir,xmlValidate,rootFile, setSystemid);
+			//Added on 2010-08-24 for bug:3086552 start
+			DitaValReader.initXMLReader(setSystemid);
+			//Added on 2010-08-24 for bug:3086552 end
 			
 			// first parse filter file for later use
 			parseFilterFile();
@@ -329,6 +334,15 @@ public class GenMapAndTopicListModule implements AbstractPipelineModule {
 			else
 				xmlValidate=true;
 		}
+		
+		//Added on 2010-08-24 for bug:3086552 start
+		String setSystemid_tmp = ((PipelineHashIO) input).getAttribute(Constants.ANT_INVOKER_EXT_PARAN_SETSYSTEMID);
+		if(setSystemid_tmp.equals("yes")) {
+			setSystemid = true;
+		} else {
+			setSystemid = false;
+		}
+		//Added on 2010-08-24 for bug:3086552 end
 		
 		//For the output control
 		OutputUtils.setGeneratecopyouter(hashIO.getAttribute(Constants.ANT_INVOKER_EXT_PARAM_GENERATECOPYOUTTER));
