@@ -15,12 +15,10 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
@@ -189,7 +187,7 @@ public class Integrator {
 			configuration.store(out, "DITA-OT runtime configuration");
 		} catch (Exception e) {
 			logger.logException(e);
-			throw new RuntimeException("Failed to write configuration properties: " + e.getMessage(), e);
+			//throw new RuntimeException("Failed to write configuration properties: " + e.getMessage(), e);
 		} finally {
 			if (out != null) {
 				try {

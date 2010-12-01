@@ -149,6 +149,7 @@
     <include name="lib/APACHE-LICENSE-2_0.html"/>
     <include name="lib/resolver.jar"/>
     <include name="lib/CatalogManager.properties"/>
+  	<include name="lib/configuration.properties"/>
   	<include name="lib/saxon/**" />
   	<exclude name="plugins/cxxapiref/" />
     <exclude name="doc/userguide-orig/**"/>
@@ -413,6 +414,10 @@
 	</delete>
 
 	<delete failonerror="yes" includeemptydirs="true" dir="${doc.out.dir}${file.separator}readme"
+							excludes="**/*.chm,**/*.pdf,**/*.css,images/*.*">
+	</delete>
+  	
+	<delete failonerror="yes" includeemptydirs="true" dir="${doc.out.dir}${file.separator}specification"
 							excludes="**/*.chm,**/*.pdf,**/*.css,images/*.*">
 	</delete>
 
