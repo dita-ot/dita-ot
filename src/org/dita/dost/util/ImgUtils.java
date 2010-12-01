@@ -21,7 +21,7 @@ import javax.imageio.ImageIO;
 import org.dita.dost.log.DITAOTJavaLogger;
 import org.dita.dost.log.MessageUtils;
 
-import sun.misc.BASE64Encoder;
+import org.apache.commons.codec.binary.Base64;
 
 /**
  * Image utility to get the width, height, type and binary data from 
@@ -190,13 +190,15 @@ public class ImgUtils {
 	public static String getBASE64(String dirName, String fileName) {
 		DITAOTJavaLogger logger = new DITAOTJavaLogger();
 		File imgInput = new File(dirName+File.separatorChar+fileName);
-		BASE64Encoder encoder = new BASE64Encoder();
+		//BASE64Encoder encoder = new BASE64Encoder();
+		Base64 encoder = new Base64();
 		byte   buff[]=new   byte[(int)imgInput.length()];
 		FileInputStream file = null;
 		try {
 			file = new FileInputStream(imgInput);
 			file.read(buff);
-			String ret = encoder.encode(buff);
+			//String ret = encoder.encode(buff);
+			String ret = encoder.encodeToString(buff);
 			return ret;
 		} catch (FileNotFoundException e) {
 			logger.logError(MessageUtils.getMessage("DOTJ023E").toString());
