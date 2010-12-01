@@ -559,6 +559,8 @@
     <echo level="info">* clean.temp = ${clean.temp}</echo>
     <echo level="info">* xslt.parser = ${xslt.parser}</echo>
     <echo level="info">*****************************************************************</echo>
+  	<echoproperties regex="^(arg|preprocess|dita)" taskname="echo" failonerror="false"/>
+  	<echo level="info">*****************************************************************</echo>
   </target>
 
   <target name="output-msg" depends="output-deprecated-msg, output-css-warn-message"/>
