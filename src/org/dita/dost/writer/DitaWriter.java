@@ -760,17 +760,12 @@ public class DitaWriter extends AbstractXMLWriter {
 			}
 			columnNumberEnd = getEndNumber(atts, columnNumber);*/
 			
+			
+			
 			//Added by William on 2009-06-30 for colname bug:2811358 start
+			//Changed on 2010-11-19 for duplicate colname bug:3110418 start
 			columnNumber = getStartNumber(atts, columnNumberEnd);
-			//if has morerows attribute
-			if(atts.getValue(Constants.ATTRIBUTE_NAME_MOREROWS)!=null){
-				String pos = String.valueOf(rowNumber) + String.valueOf(columnNumber);
-				//total span rows
-				int total = Integer.parseInt(atts.getValue(Constants.ATTRIBUTE_NAME_MOREROWS))+
-				rowNumber;
-				rowsMap.put(pos, Integer.valueOf(total));
-				
-			}
+
 			
 			if(columnNumber > columnNumberEnd){
 				//The first row
@@ -787,68 +782,52 @@ public class DitaWriter extends AbstractXMLWriter {
 					//flag show whether former row spans rows
 					boolean spanRows = false;
 					int offset = 0;
-					//search from first row
-					for(int row=1;row<rowNumber;row++){
-						String pos = String.valueOf(row) + String.valueOf(columnNumber);
-						if(rowsMap.containsKey(pos)){
-							//get total span rows
-							int totalSpanRows = rowsMap.get(pos).intValue();
-							if(rowNumber <= totalSpanRows){
-								spanRows = true;
-								offset ++;
-								break;
+					int currentCol = columnNumber;
+					while(currentCol<=totalColumns) {
+						int previous_offset=offset;
+						//search from first row
+						for(int row=1;row<rowNumber;row++){
+							String pos = String.valueOf(row) + String.valueOf(currentCol);
+							if(rowsMap.containsKey(pos)){
+								//get total span rows
+								int totalSpanRows = rowsMap.get(pos).intValue();
+								if(rowNumber <= totalSpanRows){
+									spanRows = true;
+									offset ++;
+								}
 							}
 						}
+						
+						if(offset>previous_offset) {
+							currentCol = columnNumber + offset;
+							previous_offset=offset;
+						} else {
+							break;
+						}
+	
 					}
-					//if former row doesn't span rows
-					if(!spanRows){
-						copyAttribute(Constants.ATTRIBUTE_NAME_COLNAME, COLUMN_NAME_COL+columnNumber);
-						if (atts.getValue(Constants.ATTRIBUTE_NAME_NAMEST) != null){
-							copyAttribute(Constants.ATTRIBUTE_NAME_NAMEST, COLUMN_NAME_COL+columnNumber);
-						}
-						if (atts.getValue(Constants.ATTRIBUTE_NAME_NAMEEND) != null){
-							copyAttribute(Constants.ATTRIBUTE_NAME_NAMEEND, COLUMN_NAME_COL+getEndNumber(atts, columnNumber));
-						}
-					//if former row spans rows	
-					}else{
-						//neigbouring column may also span rows
-						//flag show whether meet nearest column which doesn't span rows
-						boolean shouldStopSearch = false;
-						for(int col = columnNumber + 1; col <= totalColumns; col++){
-							if(shouldStopSearch){
-								break;
-							}
-							for(int row = 1; row < rowNumber; row++){
-								String pos = String.valueOf(row) + String.valueOf(col);
-								if(rowsMap.containsKey(pos)){
-									//get total span rows
-									int totalSpanRows = rowsMap.get(pos).intValue();
-									if(rowNumber <= totalSpanRows){
-										offset ++;
-										//move to the next colum
-										break;
-									}
-								}
-								//meet the first column span no rows
-								if(row == rowNumber -1){
-									//should stop search
-									shouldStopSearch = true; 
-								}
-							}
-							
-						}
-						//adjust the col name
-						copyAttribute(Constants.ATTRIBUTE_NAME_COLNAME, COLUMN_NAME_COL+(columnNumber+offset));
-						if (atts.getValue(Constants.ATTRIBUTE_NAME_NAMEST) != null){
-							copyAttribute(Constants.ATTRIBUTE_NAME_NAMEST, COLUMN_NAME_COL+(columnNumber+offset));
-						}
-						if (atts.getValue(Constants.ATTRIBUTE_NAME_NAMEEND) != null){
-							copyAttribute(Constants.ATTRIBUTE_NAME_NAMEEND, COLUMN_NAME_COL+getEndNumber(atts, (columnNumber+offset)));
-						}
+					columnNumber = columnNumber+offset;
+					//if has morerows attribute
+					if(atts.getValue(Constants.ATTRIBUTE_NAME_MOREROWS)!=null){
+						String pos = String.valueOf(rowNumber) + String.valueOf(columnNumber);
+						//total span rows
+						int total = Integer.parseInt(atts.getValue(Constants.ATTRIBUTE_NAME_MOREROWS))+
+						rowNumber;
+						rowsMap.put(pos, Integer.valueOf(total));
+						
+					}
+					
+					copyAttribute(Constants.ATTRIBUTE_NAME_COLNAME, COLUMN_NAME_COL+columnNumber);
+					if (atts.getValue(Constants.ATTRIBUTE_NAME_NAMEST) != null){
+						copyAttribute(Constants.ATTRIBUTE_NAME_NAMEST, COLUMN_NAME_COL+columnNumber);
+					}
+					if (atts.getValue(Constants.ATTRIBUTE_NAME_NAMEEND) != null){
+						copyAttribute(Constants.ATTRIBUTE_NAME_NAMEEND, COLUMN_NAME_COL+getEndNumber(atts, columnNumber));
 					}
 				}
 			}
 			columnNumberEnd = getEndNumber(atts, columnNumber);
+			//Changed on 2010-11-19 for duplicate colname bug:3110418 end
 			//Added by William on 2009-06-30 for colname bug:2811358 end
 		}
 	}
