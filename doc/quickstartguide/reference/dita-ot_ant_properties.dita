@@ -46,36 +46,48 @@ colwidth="275*"/>
 <entry><codeph>args.debug</codeph></entry>
 <entry><codeph>/debug</codeph></entry>
 <entry>Specifies that DITA-OT print debugging information for your
-project.</entry>
+project.  Allowed values are "yes" and "no". Default value is "no".</entry>
 </row>
 <row>
 <entry><codeph>args.draft</codeph></entry>
 <entry><codeph>/draft</codeph></entry>
 <entry>Indicates whether draft-comment and required-cleanup elements
 are included in the generated file. Corresponds to XSLT parameter
-DRAFT in most XSLT modules. Default value is "no". f <codeph>${publish.required.cleanup}</codeph> is
-not set, <codeph>${args.draft}</codeph> will be used. 		<note type="tip">The <codeph>${publish.required.cleanup}</codeph> property
-is a legacy property that applies only to PDF transformations. The <codeph>args.draft</codeph> parameter
-should be used instead.</note><note type="tip">For PDF output, setting <codeph>${args.draft}</codeph> to
-"yes" will also cause the contents of <codeph>&lt;titlealts></codeph> to
-appear below the title.</note> 		</entry>
+DRAFT in most XSLT modules. Allowed values are "yes" and "no". Default
+value is "no". If <codeph>${publish.required.cleanup}</codeph> is
+not set, <codeph>${args.draft}</codeph> will be used. <note type="tip"
+>The <codeph>${publish.required.cleanup}</codeph> property is a legacy
+property that applies only to PDF transformations. The <codeph>args.draft</codeph
+> parameter should be used instead.</note><note type="tip">For PDF
+output, setting <codeph>${args.draft}</codeph> to "yes" will also
+cause the contents of <codeph>&lt;titlealts></codeph> to appear below
+the title.</note>               </entry>
+</row>
+<row>
+<entry colname="COLSPEC0"><codeph>args.figurelink.style</codeph></entry>
+<entry colname="COLSPEC2">NA</entry>
+<entry colname="COLSPEC3">Specifies how cross references to figures
+are styled. Allowed values are "NUMBER" and "TITLE". NUMBER results
+in "Figure 5", TITLE results in the title of the figure. Corresponds
+to the XSLT parameter FIGURELINK.<note>This parameter is available
+for all except the PDF transform.</note></entry>
 </row>
 <row>
 <entry colname="COLSPEC0"><codeph>args.grammar.cache</codeph></entry>
 <entry colname="COLSPEC2"><codeph>/grammarcache</codeph></entry>
 <entry colname="COLSPEC3">Specifies whether to use the grammar caching
-feature of the XML parser. Values are "yes" and "no". The default
-is "yes".<note>For most users, this is an important option that dramatically
-speeds up processing time. However, there is a known problem with
-using this feature for documents that use XML Entities. If your build
-fails with parser errors about entity resolution, try setting this
-parameter to "no".</note></entry>
+feature of the XML parser. Allowed values are "yes" and "no". Default
+value is "yes".<note>For most users, this is an important option that
+dramatically speeds up processing time. However, there is a known
+problem with using this feature for documents that use XML Entities.
+If your build fails with parser errors about entity resolution, try
+setting this parameter to "no".</note></entry>
 </row>
 <row>
 <entry><codeph>args.input</codeph></entry>
 <entry><codeph>/i</codeph></entry>
 <entry>Typically defines the location of the .ditamap file for your
-documentation project.  However, the propery can be set to a .dita
+documentation project.  However, the property can be set to a .dita
 file, as well. DITA-OT reads this file to find the .dita files that
 comprise the content for the documentation project.</entry>
 </row>
@@ -88,8 +100,17 @@ project.</entry>
 <row>
 <entry><codeph>args.outext</codeph></entry>
 <entry><codeph>/outext</codeph></entry>
-<entry>Specifies the file extension for HTML files in your project's
-output.</entry>
+<entry>Specifies the file extension for HTML files in your project's output. Corresponds to XHTML parameter OUTEXT. Default values is ".html".</entry>
+</row>
+<row>
+<entry colname="COLSPEC0"><codeph>args.tablelink.style</codeph></entry>
+<entry colname="COLSPEC2">NA</entry>
+<entry colname="COLSPEC3">Specifies how cross references to tables
+are styled. Allowed values are "NUMBER" or "TITLE". The default is
+"NUMBER", which produces results such as "Table 5". TITLE results
+in the title of the table. Corresponds to the XSLT parameter TABLELINK.<note
+>This parameter is available for all except the PDF transform.</note
+></entry>
 </row>
 <row>
 <entry><codeph>basedir</codeph></entry>
@@ -97,7 +118,14 @@ output.</entry>
 <entry>The directory where your project's ant build script resides.
  The DITA-OT will look for your .dita files relative to this directory.
  DITA-OT's default build script sets this as an attribute of the project,
-but you can also define it as a project property.</entry>
+but you can also define it as a project property.</entry><?Pub Caret 143?>
+</row>
+<row>
+<entry><codeph>dita.ext</codeph></entry>
+<entry>NA</entry>
+<entry>Specifies an extension to use for DITA topics; All DITA topics
+will use this single extension in the temp directory.  Corresponds
+to XSLT parameter DITAEXT. Default value is ".xml"</entry>
 </row>
 <row>
 <entry colname="COLSPEC0"><codeph>dita.input.valfile</codeph></entry>
@@ -138,14 +166,14 @@ are available:<ul>
 <entry><codeph>validate</codeph></entry>
 <entry><codeph>/validate</codeph></entry>
 <entry>Specifies whether DITA-OT should validate your content files.
-The default value is "yes".</entry>
+Allowed values are "yes" and "no". Default value is "yes".</entry>
 </row>
 </tbody>
 </tgroup>
 </table></section>
-<section><title>Parameters available for all XHTML based transforms</title><p>The
-following parameters are available for all output types that are based
-on the XHTML transform type, including: <ul>
+<section><title>Parameters available for all XHTML based transforms</title
+><p>The following parameters are available for all output types that
+are based on the XHTML transform type, including: <ul>
 <li>XHTML</li>
 <li>HTMLHelp</li>
 <li>JavaHelp</li>
@@ -166,7 +194,7 @@ colwidth="200*"/>
 <entry colname="COLSPEC0"><codeph>args.artlbl</codeph></entry>
 <entry colname="COLSPEC2"><codeph>/artlbl</codeph></entry>
 <entry colname="COLSPEC3">Adds a label to each image containing the
-image's filename.</entry>
+image's filename. Allowed values are "yes" and "no". Default is "no".</entry>
 </row>
 <row>
 <entry colname="COLSPEC0"><codeph>args.breadcrumbs</codeph></entry>
@@ -190,7 +218,7 @@ own .css file to the output directory.</entry>
 <entry colname="COLSPEC0"><codeph>args.csspath</codeph></entry>
 <entry colname="COLSPEC2"><codeph>/csspath</codeph></entry>
 <entry colname="COLSPEC3">The location of your copied .css file relative
-to the output directory</entry>
+to the output directory. Corresponds to XSLT parameter CSSPATH.</entry>
 </row>
 <row>
 <entry colname="COLSPEC0"><codeph>args.cssroot</codeph></entry>
@@ -199,26 +227,21 @@ to the output directory</entry>
 .css file.  DITA-OT will copy the file from this location.</entry>
 </row>
 <row>
-<entry colname="COLSPEC0"><codeph>args.figurelink.style</codeph></entry>
-<entry colname="COLSPEC2">NA</entry>
-<entry colname="COLSPEC3">Specifies how cross references to figures
-are styled.  Allowed values are "NUMBER" and "TITLE". NUMBER results
-in "Figure 5", TITLE results in the title of the figure. Corresponds
-to the XSLT parameter FIGURELINK.</entry>
-</row>
-<row>
 <entry colname="COLSPEC0"><codeph>args.ftr</codeph></entry>
 <entry colname="COLSPEC2"><codeph>/ftr</codeph></entry>
 <entry colname="COLSPEC3">Specifies the location of a well-formed
-XML file containing your custom running-footer for the document body.</entry>
+XML file containing your custom running-footer for the document body.
+Corresponds to XSLT parameter FTR.<note>The fragment must be valid
+XML, with a single root element, common practice is to place all content
+into &lt;div>.</note></entry>
 </row>
 <row>
 <entry colname="COLSPEC0"><codeph>args.gen.default.meta</codeph></entry>
 <entry colname="COLSPEC2">NA</entry>
 <entry colname="COLSPEC3">Specifies whether to generate extra metadata
 that targets parental control scanners, meta elements with name="security"
-and name="Robots". Allowd values are "yes" and "no". The default is
-"no". Corresponds to the XSLT parameter genDefMeta.</entry>
+and name="Robots". Allowed values are "yes" and "no". Default value
+is "no". Corresponds to the XSLT parameter genDefMeta.</entry>
 </row>
 <row>
 <entry colname="COLSPEC0"><codeph>args.gen.task.lbl</codeph></entry>
@@ -239,7 +262,10 @@ XML file to be placed in the document head.</entry>
 <entry colname="COLSPEC0"><codeph>args.hdr</codeph></entry>
 <entry colname="COLSPEC2"><codeph>/hdr</codeph></entry>
 <entry colname="COLSPEC3">Specifies the location of a well-formed
-XML file containing your custom running-header for the document body.</entry>
+XML file containing your custom running-header for the document body.
+Corresponds to XSLT parameter HDR.<note>The fragment must be valid
+XML, with a single root element, common practice is to place all content
+into &lt;div>.</note></entry>
 </row>
 <row>
 <entry colname="COLSPEC0"><codeph>args.hide.parent.link</codeph></entry>
@@ -251,16 +277,15 @@ Allowed values are "yes" and "no".  Default is "no".</entry>
 <row>
 <entry colname="COLSPEC0"><codeph>args.indexshow</codeph></entry>
 <entry colname="COLSPEC2"><codeph>/indexshow</codeph></entry>
-<entry colname="COLSPEC3">Indicates whether <codeph>indexterm</codeph> element
-should appear in the output.</entry>
+<entry colname="COLSPEC3">Indicates whether <codeph>indexterm</codeph
+> element should appear in the output. Allowed values are "yes" and
+"no". Default is "no".</entry>
 </row>
 <row>
-<entry colname="COLSPEC0"><codeph>args.tablelink.style</codeph></entry>
-<entry colname="COLSPEC2">NA</entry>
-<entry colname="COLSPEC3">Specifies how cross references to tables
-are styled. Allowed values are "NUMBER" or "TITLE".  The default is
-"NUMBER", which produces results such as "Table 5". TITLE results
-in the title of the table. Corresponds to the XSLT parameter TABLELINK.</entry>
+<entry><codeph>args.xhtml.class</codeph></entry>
+<entry>NA</entry>
+<entry>String for a CSS class name attribute applied to the TOC (x)HTML
+output's &lt;body> element.  Found in map2htmltoc.xsl.</entry>
 </row>
 <row>
 <entry colname="COLSPEC0"><codeph>args.xhtml.classattr</codeph></entry>
@@ -269,15 +294,15 @@ in the title of the table. Corresponds to the XSLT parameter TABLELINK.</entry>
 ancestry inside generated XHTML elements. Allowed values are "no"
 and "yes"; the default is "yes" in release 1.5.2 (it was "no" in 1.5
 and 1.5.1). For example, the prereq element in a task (which is specialized
-from section) would generate "<codeph>class="section prereq</codeph>".
-Corresponds to the XSLT parameter PRESERVE-DITA-CLASS.</entry>
+from section) would generate "<codeph>class="section prereq</codeph
+>". Corresponds to the XSLT parameter PRESERVE-DITA-CLASS.</entry>
 </row>
 <row>
 <entry colname="COLSPEC0"><codeph>args.xsl</codeph></entry>
 <entry colname="COLSPEC2"><codeph>/xsl</codeph></entry>
 <entry colname="COLSPEC3">Specifies an XSL file that is used rather
-than the default   XSL transform, located in <codeph>toolkitdir\xsl\dita2xhtml.xsl</codeph>.
-Property must specify the full path and XSL file name.</entry>
+than the default   XSL transform, located in <codeph>toolkitdir\xsl\dita2xhtml.xsl</codeph
+>. Property must specify the full path and XSL file name.</entry>
 </row>
 <row>
 <entry colname="COLSPEC0"><codeph>generate.copy.outer</codeph></entry>
@@ -298,16 +323,17 @@ map will generate output files.</entry>
 <entry colname="COLSPEC0"><codeph>outer.control</codeph></entry>
 <entry colname="COLSPEC2"><codeph>/outercontrol</codeph></entry>
 <entry colname="COLSPEC3">Specifies whether content files are located
-in or below the directory containing your <codeph>.ditamap</codeph> file.
-		The default value is "no."  The <codeph>gen-list-without-flagging</codeph> Ant
-task generates a harmless warning for content outside 		the map directory;
-you can suppress these warnings by setting the <codeph>outer.control</codeph> property
-to "true". 		<p><image href="../images/warning.gif"></image> Microsoft
-HTML Help Compiler cannot produce HTMLHelp for documentation projects
-that use outer content.  Your content files must reside in or below
-the directory containing the <codeph>.ditamap</codeph> file, and the
-map file cannot specifiy  ".." at the start 		of <codeph>href</codeph> attributes
-for <codeph>topicref</codeph> elements.</p> 		</entry>
+in or below the directory containing your <codeph>.ditamap</codeph
+> file. 		The default value is "no."  The <codeph>gen-list-without-flagging</codeph
+> Ant task generates a harmless warning for content outside 		the
+map directory; you can suppress these warnings by setting the <codeph
+>outer.control</codeph> property to "true". 		<p><image
+href="../images/warning.gif"></image> Microsoft HTML Help Compiler
+cannot produce HTMLHelp for documentation projects that use outer
+content.  Your content files must reside in or below the directory
+containing the <codeph>.ditamap</codeph> file, and the map file cannot
+specify  ".." at the start		of <codeph>href</codeph> attributes for <codeph
+>topicref</codeph> elements.</p> 		</entry>
 </row>
 </tbody>
 </tgroup>
@@ -327,7 +353,8 @@ colwidth="200*"/>
 </thead>
 <tbody>
 <row>
-<entry colname="COLSPEC0"><codeph>args.fo.include.rellinks</codeph></entry>
+<entry colname="COLSPEC0"><codeph>args.fo.include.rellinks</codeph
+></entry>
 <entry colname="COLSPEC2"><codeph>/foincluderellinks</codeph></entry>
 <entry colname="COLSPEC3">Specifies which links to include in the
 PDF file. Values are:<ul>
@@ -338,20 +365,21 @@ Parent, child, next, and previous links are not included.</li>
 </ul></entry>
 </row>
 <row>
-<entry colname="COLSPEC0"><codeph>args.fo.output.rel.links</codeph></entry>
+<entry colname="COLSPEC0"><codeph>args.fo.output.rel.links</codeph
+></entry>
 <entry colname="COLSPEC2"><codeph>/fooutputrellinks</codeph></entry>
 <entry colname="COLSPEC3"><note>This parameter is deprecated in favor
 of <codeph>${args.fo.include.rellinks}</codeph>.</note>Specifies whether
 to show links in your project's output. Values are "yes" (include
-all links) and "no" (the default, include no links). If <codeph>${args.fo.include.rellinks}</codeph> is
-specified, this parameter is ignored.</entry>
+all links) and "no" (the default, include no links). If <codeph>${args.fo.include.rellinks}</codeph
+> is specified, this parameter is ignored.</entry>
 </row>
 <row>
 <entry colname="COLSPEC0"><codeph>args.gen.task.lbl</codeph></entry>
 <entry colname="COLSPEC2"><codeph>/usetasklabels</codeph></entry>
 <entry colname="COLSPEC3">Specifies whether to generate locale-based
 default headings for sections within task topics. Allowed values are
-"YES" and "NO". Default is "NO". Corresponds to the XSLT parameter
+"yes" and "no". Default is "no". Corresponds to the XSLT parameter
 GENERATE-TASK-LABELS. <i>This parameter is also available for the
 XHTML based transforms.</i></entry>
 </row>
@@ -359,8 +387,8 @@ XHTML based transforms.</i></entry>
 <entry><codeph>args.xsl.pdf</codeph></entry>
 <entry><codeph>/xslpdf</codeph></entry>
 <entry>Specifies an XSL file that is used in place of the default
-XSL transform at <codeph>toolkitdir\demo\fo\xsl\fo\topic2fo_shell.xsl</codeph>.
-You must specify the full path and XSL file name.</entry>
+XSL transform at <codeph>toolkitdir\demo\fo\xsl\fo\topic2fo_shell.xsl</codeph
+>. You must specify the full path and XSL file name.</entry>
 </row>
 <row>
 <entry><codeph>retain.topic.fo</codeph></entry>
@@ -469,32 +497,46 @@ colwidth="200*"/>
 <row>
 <entry><codeph>args.eclipsehelp.toc</codeph></entry>
 <entry><codeph>/eclipsehelptoc</codeph></entry>
-<entry>Specifies the name of the TOC file for an Eclipse Help project.</entry>
+<entry>Specifies the name of the TOC file.</entry>
 </row>
 <row>
 <entry><codeph>args.eclipse.country</codeph></entry>
 <entry>NA</entry>
-<entry>Specifies the more specifc region for the language specified
+<entry>Specifies the more specific region for the language specified
 with <codeph>args.eclipse.language</codeph> For example, US, CA and
-GB would clarify a value of "en" for <codeph>args.eclipse.language</codeph>.</entry>
+GB would clarify a value of "en" for <codeph>args.eclipse.language</codeph
+>. The content will be moved into the appropriate directory structure
+for an Eclipse fragment.</entry>
 </row>
 <row>
 <entry><codeph>args.eclipse.language</codeph></entry>
 <entry>NA</entry>
 <entry>Specifies the base language for translated content, such as
-"en" for English.</entry>
+"en" for English. This parameter is a prerequisite for <codeph>args.eclipse.country</codeph
+>.  The content will be moved into the appropriate directory structure
+for an Eclipse fragment.</entry>
 </row>
 <row>
 <entry><codeph>args.eclipse.provider</codeph></entry>
 <entry><codeph>/provider</codeph></entry>
 <entry>Specifies the name of the person or organization providing
-an Eclipse Help project.</entry>
+an Eclipse Help project. Default value is <codeph>DITA</codeph>. - <b
+>DITA Map only</b></entry>
 </row>
 <row>
 <entry><codeph>args.eclipse.version</codeph></entry>
-<entry>/version</entry>
-<entry>Specifies the version number to include in the output for an
-Eclipse Help project.</entry>
+<entry><codeph>/version</codeph></entry>
+<entry>Specifies the version number to include in the output. Default
+value is <codeph>0.0.0</codeph>. - <b>DITA Map only</b></entry>
+</row>
+<row>
+<entry><codeph>args.eclipse.symbolic.name</codeph></entry>
+<entry>NA</entry>
+<entry>Specifies the symbolic name (aka plugin ID) in the output for
+an Eclipse Help project. The @id value from the DITA map or the Eclipse
+map collection (Eclipse help specialization) is the symbolic name
+for the plugin in Eclipse. By default, the value org.sample.help.doc.- <b
+>DITA Map only</b></entry>
 </row>
 </tbody>
 </tgroup>
@@ -514,7 +556,8 @@ colwidth="200*"/>
 </thead>
 <tbody>
 <row>
-<entry colname="COLSPEC0"><codeph>args.htmlhelp.includefile</codeph></entry>
+<entry colname="COLSPEC0"><codeph>args.htmlhelp.includefile</codeph
+></entry>
 <entry colname="COLSPEC2"><codeph>/htmlhelpincludefile</codeph></entry>
 <entry colname="COLSPEC3">Specifies the name of a file that you want
 included in an HTMLHelp project.</entry>
@@ -544,7 +587,7 @@ colwidth="200*"/>
 <row>
 <entry><codeph>args.javahelp.toc</codeph></entry>
 <entry><codeph>/javahelptoc</codeph></entry>
-<entry>Specifies the name of the file contaning the TOC in your JavaHelp
+<entry>Specifies the name of the file containing the TOC in your JavaHelp
 output.  The default value is the name of the ditamap file for your
 project.</entry>
 </row>
@@ -579,7 +622,7 @@ process.</entry>
 <entry><codeph>/ditaext</codeph></entry>
 <entry>Deprecated. Defines the file extension for content files in
 the directory specified with the <codeph>dita.temp.dir</codeph> property.
-Valid values are ".xml" and ".dita"; the default is ".xml".</entry>
+Allowed values are ".xml" and ".dita"; Default is ".xml".</entry>
 </row>
 <row>
 <entry><codeph>dita.dir</codeph></entry>
@@ -592,7 +635,8 @@ that your project's build script points to the correct location.</entry>
 <entry><codeph>clean.temp</codeph></entry>
 <entry><codeph>/cleantemp</codeph></entry>
 <entry>Specifies whether DITA-OT should delete the files in the temporary
-directory, <codeph>dita.temp.dir</codeph>, when it finishes a build.</entry>
+directory, <codeph>dita.temp.dir</codeph>, when it finishes a build.
+Allowed values are "yes" and "no". Default value is "yes".</entry>
 </row>
 <row>
 <entry><codeph>args.dita.locale</codeph></entry>
